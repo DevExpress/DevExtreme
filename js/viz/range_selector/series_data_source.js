@@ -87,7 +87,7 @@ SeriesDataSource = function(options) {
     that._series = that._calculateSeries(options, templatedSeries);
 
     negativesAsZeroes = themeManager.getOptions("negativesAsZeroes");
-    negativesAsZeros = themeManager.getOptions("negativesAsZeros"); //misspelling case
+    negativesAsZeros = themeManager.getOptions("negativesAsZeros"); // misspelling case
 
     that._seriesFamilies = processSeriesFamilies(that._series,
         themeManager.getOptions('equalBarWidth'),
@@ -142,9 +142,9 @@ SeriesDataSource.prototype = {
             data = particularSeriesOptions.data || options.dataSource;
 
             seriesTheme = chartThemeManager.getOptions("series", particularSeriesOptions, allSeriesOptions.length);
-            seriesTheme.argumentField = seriesTheme.argumentField || options.dataSourceField;//B253068
+            seriesTheme.argumentField = seriesTheme.argumentField || options.dataSourceField;// B253068
             if(data && data.length > 0) {
-                //TODO
+                // TODO
                 newSeries = new seriesModule.Series({
                     renderer: options.renderer,
                     argumentAxis: options.argumentAxis,
@@ -223,7 +223,7 @@ SeriesDataSource.prototype = {
             maxIndent = valueAxis.inverted ? that._indent.bottom : that._indent.top;
             rangeYSize = valRange.max - valRange.min;
             rangeVisibleSizeY = (typeUtils.isNumeric(valRange.maxVisible) ? valRange.maxVisible : valRange.max) - (typeUtils.isNumeric(valRange.minVisible) ? valRange.minVisible : valRange.min);
-            //B253717
+            // B253717
             if(typeUtils.isDate(valRange.min)) {
                 valRange.min = new Date(valRange.min.valueOf() - rangeYSize * minIndent);
             } else {

@@ -55,25 +55,25 @@ var teardownModule = function() {
 QUnit.module("Selection", { beforeEach: setupModule, afterEach: teardownModule });
 
 QUnit.test("Select row", function(assert) {
-   //arrange
+   // arrange
     var data = { id: 1, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
         $testElement = $('#treeList');
 
     this.setupTreeList();
     this.rowsView.render($testElement);
 
-    //act
+    // act
     var key = this.keyOf(data);
     this.selectRows(key);
 
-    //assert
+    // assert
     assert.deepEqual(this.getSelectedRowKeys(), [1]);
     assert.deepEqual(this.option("selectedRowKeys"), [1]);
     assert.ok(this.dataController.items()[0].isSelected);
 });
 
 QUnit.test("Select row when store hasn't key", function(assert) {
-//arrange
+// arrange
     var data = this.options.dataSource,
         $testElement = $('#treeList');
 
@@ -86,38 +86,38 @@ QUnit.test("Select row when store hasn't key", function(assert) {
     this.setupTreeList();
     this.rowsView.render($testElement);
 
-    //act
+    // act
     this.selectRows(1);
 
-    //assert
+    // assert
     assert.deepEqual(this.getSelectedRowKeys(), [1], "selected row keys");
     assert.ok($testElement.find(".dx-data-row").first().hasClass("dx-selection"), "first row is selected");
 });
 
 QUnit.test("Select all rows", function(assert) {
-   //arrange
+   // arrange
     var $testElement = $('#treeList');
 
     this.setupTreeList();
     this.rowsView.render($testElement);
 
-    //act
+    // act
     this.selectAll();
 
-    //assert
+    // assert
     assert.deepEqual(this.getController("selection").isSelectAll(), true, "select all state");
     assert.deepEqual(this.getSelectedRowKeys(), [1], "only visible rows are selected");
     assert.deepEqual(this.option("selectedRowKeys"), [1], "only visible rows are selected");
 
-    //act
+    // act
     this.expandRow(1);
 
-    //assert
+    // assert
     assert.deepEqual(this.getController("selection").isSelectAll(), undefined, "select all state is changed after expand");
 });
 
 QUnit.test("Deselect all rows", function(assert) {
-   //arrange
+   // arrange
     var $testElement = $('#treeList');
 
     this.options.selectedRowKeys = [1, 2];
@@ -125,17 +125,17 @@ QUnit.test("Deselect all rows", function(assert) {
     this.setupTreeList();
     this.rowsView.render($testElement);
 
-    //act
+    // act
     this.deselectAll();
 
-    //assert
+    // assert
     assert.deepEqual(this.getController("selection").isSelectAll(), false, "select all state");
     assert.deepEqual(this.getSelectedRowKeys(), [2], "visible rows are deselected");
     assert.deepEqual(this.option("selectedRowKeys"), [2], "visible rows are deselected");
 });
 
 QUnit.test("Select all rows if autoExpandAll is true", function(assert) {
-   //arrange
+   // arrange
     var $testElement = $('#treeList');
 
     this.options.autoExpandAll = true;
@@ -143,16 +143,16 @@ QUnit.test("Select all rows if autoExpandAll is true", function(assert) {
     this.setupTreeList();
     this.rowsView.render($testElement);
 
-    //act
+    // act
     this.selectAll();
 
-    //assert
+    // assert
     assert.deepEqual(this.getSelectedRowKeys(), [1, 2], "all visible rows are selected");
     assert.deepEqual(this.option("selectedRowKeys"), [1, 2], "all visible rows are selected");
 });
 
 QUnit.test("Select all rows if filter is applied", function(assert) {
-   //arrange
+   // arrange
     var $testElement = $('#treeList');
 
     this.options.dataSource.push({ id: 3, parentId: 1, field1: 'test3', field2: 3, field3: new Date(2002, 1, 3) });
@@ -163,17 +163,17 @@ QUnit.test("Select all rows if filter is applied", function(assert) {
     this.setupTreeList();
     this.rowsView.render($testElement);
 
-    //act
+    // act
     this.selectAll();
 
-    //assert
+    // assert
     assert.deepEqual(this.getController("selection").isSelectAll(), true, "select all state");
     assert.deepEqual(this.getSelectedRowKeys(), [1, 2], "all visible rows are selected");
     assert.deepEqual(this.option("selectedRowKeys"), [1, 2], "all visible rows are selected");
 });
 
 QUnit.test("getSelectedRowKeys with non-recursive selection", function(assert) {
-   //arrange
+   // arrange
     var $testElement = $('#treeList');
 
     this.options.dataSource = [
@@ -188,13 +188,13 @@ QUnit.test("getSelectedRowKeys with non-recursive selection", function(assert) {
     this.setupTreeList();
     this.rowsView.render($testElement);
 
-    //act, assert
+    // act, assert
     assert.deepEqual(this.getSelectedRowKeys(), [1, 2, 4], "right selection");
     assert.deepEqual(this.getSelectedRowKeys("leaves"), [1, 2, 4], "right selection");
 });
 
 QUnit.test("Checkboxes should be rendered in right place", function(assert) {
-   //arrange
+   // arrange
     var $testElement = $('#treeList');
 
     this.options.selection = { mode: "multiple", showCheckBoxesMode: "always" };
@@ -204,13 +204,13 @@ QUnit.test("Checkboxes should be rendered in right place", function(assert) {
 
     var $gridCell = $testElement.find(".dx-treelist-cell-expandable").eq(0);
 
-    //assert
+    // assert
     assert.equal($gridCell.find(".dx-select-checkbox").length, 1, "Select checkbox was rendered in right place");
     assert.ok($gridCell.find(".dx-select-checkbox").parent().hasClass("dx-treelist-icon-container"), "Checkbox inside icon container");
 });
 
 QUnit.test("Checkboxes should not be rendered if selection is not multiple", function(assert) {
-   //arrange
+   // arrange
     var $testElement = $('#treeList');
 
     this.options.selection = { mode: "single", showCheckBoxesMode: "always" };
@@ -220,12 +220,12 @@ QUnit.test("Checkboxes should not be rendered if selection is not multiple", fun
 
     var $gridCell = $testElement.find(".dx-treelist-cell-expandable").eq(0);
 
-    //assert
+    // assert
     assert.equal($gridCell.find(".dx-select-checkbox").length, 0, "Select checkbox was not rendered");
 });
 
 QUnit.test("Click on select checkbox should works correctly", function(assert) {
-    //arrange
+    // arrange
     var $testElement = $('#treeList');
 
     this.options.selection = { mode: "multiple", showCheckBoxesMode: "always" };
@@ -233,18 +233,18 @@ QUnit.test("Click on select checkbox should works correctly", function(assert) {
     this.setupTreeList();
     this.rowsView.render($testElement);
 
-    //act
+    // act
     var $selectCheckbox = $testElement.find(".dx-treelist-cell-expandable").eq(0).find(".dx-select-checkbox").eq(0);
     $selectCheckbox.trigger("dxclick");
 
-    //assert
+    // assert
     assert.equal($selectCheckbox.dxCheckBox("instance").option("value"), true, "Select checkbox value is OK");
     assert.deepEqual(this.option("selectedRowKeys"), [1], "Right row is selected");
     assert.ok(this.dataController.items()[0].isSelected, "Right row is selected");
 });
 
 QUnit.test("Click on selectAll checkbox should works correctly", function(assert) {
-   //arrange
+   // arrange
     var $testElement = $('#treeList');
 
     this.options.showColumnHeaders = true;
@@ -253,17 +253,17 @@ QUnit.test("Click on selectAll checkbox should works correctly", function(assert
     this.columnHeadersView.render($testElement);
     this.rowsView.render($testElement);
 
-    //act
+    // act
     var $checkbox = $('.dx-header-row').find('.dx-checkbox');
     $checkbox.trigger("dxclick");
 
-    //assert
+    // assert
     assert.equal($checkbox.dxCheckBox("instance").option("value"), true, "SelectAll checkbox value is OK");
     assert.deepEqual(this.option("selectedRowKeys"), [1], "Right rows are selected");
 });
 
 QUnit.test("Click on selectAll checkbox should works correctly when sorting is enabled", function(assert) {
-   //arrange
+   // arrange
     var $testElement = $('#treeList'),
         clock = sinon.useFakeTimers();
 
@@ -277,19 +277,19 @@ QUnit.test("Click on selectAll checkbox should works correctly when sorting is e
     this.columnHeadersView.render($testElement);
     this.rowsView.render($testElement);
 
-    //act
+    // act
     var $checkbox = $('.dx-header-row').find('.dx-checkbox');
     $checkbox.trigger("dxclick");
     clock.tick();
 
-    //assert
+    // assert
     assert.equal($checkbox.dxCheckBox("instance").option("value"), true, "SelectAll checkbox value is OK");
     assert.equal($testElement.find("tbody > tr > td").first().find(".dx-sort-up, .dx-sort-down").length, 0, "sort not applied");
     clock.restore();
 });
 
 QUnit.test("Click on selectAll checkbox should check row checkboxes", function(assert) {
-   //arrange
+   // arrange
     var $testElement = $('#treeList');
 
     this.options.showColumnHeaders = true;
@@ -298,17 +298,17 @@ QUnit.test("Click on selectAll checkbox should check row checkboxes", function(a
     this.columnHeadersView.render($testElement);
     this.rowsView.render($testElement);
 
-    //act
+    // act
     var $checkbox = $('.dx-header-row').find('.dx-checkbox');
     $checkbox.trigger("dxclick");
 
-    //assert
+    // assert
     var $selectCheckbox = $testElement.find(".dx-treelist-cell-expandable").eq(0).find(".dx-select-checkbox").eq(0);
     assert.equal($selectCheckbox.dxCheckBox("instance").option("value"), true, "Select checkbox value is OK");
 });
 
 QUnit.test("Reordering column, selection", function(assert) {
-    //arrange
+    // arrange
     var $testElement = $('#treeList');
     this.options.allowColumnReordering = true;
     this.options.showColumnHeaders = true;
@@ -317,18 +317,18 @@ QUnit.test("Reordering column, selection", function(assert) {
     this.columnHeadersView.render($testElement);
     this.rowsView.render($testElement);
 
-    //act
+    // act
     var $checkbox = $('.dx-header-row').find('.dx-checkbox');
     $checkbox.trigger("dxclick");
     this.columnsController.moveColumn(0, 3);
 
-    //assert
+    // assert
     var $selectCheckbox = $testElement.find(".dx-treelist-cell-expandable").eq(0).find(".dx-select-checkbox").eq(0);
     assert.equal($selectCheckbox.dxCheckBox("instance").option("value"), true, "Select checkbox value is OK");
 });
 
 QUnit.test("Checking state selectAll checkbox - deselect row after select All", function(assert) {
-   //arrange
+   // arrange
     var $selectAllCheckBox,
         $testElement = $('#treeList');
 
@@ -351,20 +351,20 @@ QUnit.test("Checking state selectAll checkbox - deselect row after select All", 
     this.rowsView.render($testElement);
     this.selectAll();
 
-    //assert
+    // assert
     $selectAllCheckBox = $testElement.find(".dx-header-row").children().first().find(".dx-select-checkbox");
     assert.ok($selectAllCheckBox.hasClass("dx-checkbox-checked"), "selectAll checkbox is checked");
 
-    //act
+    // act
     this.deselectRows(2);
 
-    //assert
+    // assert
     $selectAllCheckBox = $testElement.find(".dx-header-row").children().first().find(".dx-select-checkbox");
     assert.ok($selectAllCheckBox.hasClass("dx-checkbox-indeterminate"), "selectAll checkbox is indeterminate");
 });
 
 QUnit.test("Checking state selectAll checkbox - select all when there is filter", function(assert) {
-   //arrange
+   // arrange
     var $selectAllCheckBox,
         $testElement = $("#treeList");
 
@@ -386,31 +386,31 @@ QUnit.test("Checking state selectAll checkbox - select all when there is filter"
     this.columnHeadersView.render($testElement);
     this.rowsView.render($testElement);
 
-    //act
+    // act
     this.selectAll();
 
-    //assert
+    // assert
     $selectAllCheckBox = $testElement.find(".dx-header-row").children().first().find(".dx-select-checkbox");
     assert.ok($selectAllCheckBox.hasClass("dx-checkbox-checked"), "selectAll checkbox is checked");
 });
 
 QUnit.test("Not select row when click by expanding icon", function(assert) {
-   //arrange
+   // arrange
     var $testElement = $('#treeList');
 
     this.setupTreeList();
     this.rowsView.render($testElement);
 
-    //act
+    // act
     $testElement.find("tbody > tr").first().find(".dx-treelist-collapsed").trigger("dxclick");
 
-    //assert
+    // assert
     assert.equal(this.option("selectedRowKeys"), undefined, "checking the 'selectedRowKeys' option - should be empty");
     assert.notOk(this.dataController.items()[0].isSelected, "row isn't selected");
 });
 
 QUnit.testInActiveWindow("Focused border is not displayed around expandable cell when row is selected", function(assert) {
-    //arrange
+    // arrange
     var clock = sinon.useFakeTimers();
     var $testElement = $('#treeList');
 
@@ -423,14 +423,14 @@ QUnit.testInActiveWindow("Focused border is not displayed around expandable cell
     this.setupTreeList();
     this.rowsView.render($testElement);
 
-    //act
+    // act
     var $expandableCell = $testElement.find(".dx-treelist-cell-expandable").first(),
         $selectCheckbox = $expandableCell.find(".dx-select-checkbox").first();
 
     $selectCheckbox.focus();
     clock.tick();
 
-    //assert
+    // assert
     assert.ok(!$expandableCell.hasClass("dx-focused"));
     clock.restore();
 });
@@ -447,7 +447,7 @@ QUnit.module("Recursive selection", {
 });
 
 QUnit.test("Selecting row", function(assert) {
-   //arrange
+   // arrange
     var items,
         $testElement = $('#treeList');
 
@@ -455,10 +455,10 @@ QUnit.test("Selecting row", function(assert) {
     this.setupTreeList();
     this.rowsView.render($testElement);
 
-    //act
+    // act
     this.selectRows(1);
 
-    //assert
+    // assert
     items = this.dataController.items();
     assert.deepEqual(this.option("selectedRowKeys"), [1], "selected row keys");
     assert.ok(items[0].isSelected, "first item is selected");
@@ -466,7 +466,7 @@ QUnit.test("Selecting row", function(assert) {
 });
 
 QUnit.test("Deselecting row", function(assert) {
-   //arrange
+   // arrange
     var items,
         $testElement = $('#treeList');
 
@@ -482,10 +482,10 @@ QUnit.test("Deselecting row", function(assert) {
     this.setupTreeList();
     this.rowsView.render($testElement);
 
-    //act
+    // act
     this.deselectRows(2);
 
-    //assert
+    // assert
     items = this.dataController.items();
     assert.deepEqual(this.option("selectedRowKeys"), [3, 4], "selected row keys");
     assert.strictEqual(items[0].isSelected, undefined, "selection state of the first item is indeterminate");
@@ -495,7 +495,7 @@ QUnit.test("Deselecting row", function(assert) {
 });
 
 QUnit.test("Selecting a row when several of his children are selected", function(assert) {
-   //arrange
+   // arrange
     var items,
         $testElement = $('#treeList');
 
@@ -510,10 +510,10 @@ QUnit.test("Selecting a row when several of his children are selected", function
     this.setupTreeList();
     this.rowsView.render($testElement);
 
-    //act
+    // act
     this.selectRows(1);
 
-    //assert
+    // assert
     items = this.dataController.items();
     assert.deepEqual(this.option("selectedRowKeys"), [1], "selected row keys");
     assert.ok(items[0].isSelected, "first item is selected");
@@ -523,7 +523,7 @@ QUnit.test("Selecting a row when several of his children are selected", function
 });
 
 QUnit.test("Deselecting the row when all children are selected", function(assert) {
-   //arrange
+   // arrange
     var items,
         $testElement = $('#treeList');
 
@@ -537,10 +537,10 @@ QUnit.test("Deselecting the row when all children are selected", function(assert
     this.setupTreeList();
     this.rowsView.render($testElement);
 
-    //act
+    // act
     this.deselectRows(1);
 
-    //assert
+    // assert
     items = this.dataController.items();
     assert.deepEqual(this.option("selectedRowKeys"), [], "selected row keys");
     assert.notOk(items[0].isSelected, "first item isn't selected");
@@ -549,7 +549,7 @@ QUnit.test("Deselecting the row when all children are selected", function(assert
 });
 
 QUnit.test("Select All", function(assert) {
-   //arrange
+   // arrange
     var items,
         $testElement = $('#treeList');
 
@@ -564,10 +564,10 @@ QUnit.test("Select All", function(assert) {
     this.setupTreeList();
     this.rowsView.render($testElement);
 
-    //act
+    // act
     this.selectAll();
 
-    //assert
+    // assert
     items = this.dataController.items();
     assert.deepEqual(this.option("selectedRowKeys"), [1, 5], "selected row keys");
     assert.ok(items[0].isSelected, "first item is selected");
@@ -578,7 +578,7 @@ QUnit.test("Select All", function(assert) {
 });
 
 QUnit.test("Select All when several rows are selected", function(assert) {
-   //arrange
+   // arrange
     var items,
         $testElement = $('#treeList');
 
@@ -594,10 +594,10 @@ QUnit.test("Select All when several rows are selected", function(assert) {
     this.setupTreeList();
     this.rowsView.render($testElement);
 
-    //act
+    // act
     this.selectAll();
 
-    //assert
+    // assert
     items = this.dataController.items();
     assert.deepEqual(this.option("selectedRowKeys"), [1, 5], "selected row keys");
     assert.ok(items[0].isSelected, "first item is selected");
@@ -608,7 +608,7 @@ QUnit.test("Select All when several rows are selected", function(assert) {
 });
 
 QUnit.test("Deselect All", function(assert) {
-   //arrange
+   // arrange
     var items,
         $testElement = $('#treeList');
 
@@ -623,10 +623,10 @@ QUnit.test("Deselect All", function(assert) {
     this.setupTreeList();
     this.rowsView.render($testElement);
 
-    //act
+    // act
     this.deselectAll();
 
-    //assert
+    // assert
     items = this.dataController.items();
     assert.deepEqual(this.option("selectedRowKeys"), [], "selected row keys");
     assert.notOk(items[0].isSelected, "first item isn't selected");
@@ -636,7 +636,7 @@ QUnit.test("Deselect All", function(assert) {
 });
 
 QUnit.test("Checking arguments of the 'onSelectionChanged' event when select row", function(assert) {
-   //arrange
+   // arrange
     var selectionChangedArgs = [],
         $testElement = $('#treeList'),
         items = [
@@ -657,10 +657,10 @@ QUnit.test("Checking arguments of the 'onSelectionChanged' event when select row
 
     assert.deepEqual(this.option("selectedRowKeys"), [2], "selected row keys");
 
-    //act
+    // act
     this.selectRows(1);
 
-    //assert
+    // assert
     assert.strictEqual(selectionChangedArgs.length, 1, "count call 'onSelectionChanged' event");
     assert.deepEqual(selectionChangedArgs[0].selectedRowKeys, [1], "selected row keys");
     assert.deepEqual(selectionChangedArgs[0].selectedRowsData, [items[0]], "selected rows data");
@@ -669,7 +669,7 @@ QUnit.test("Checking arguments of the 'onSelectionChanged' event when select row
 });
 
 QUnit.test("Checking arguments of the 'onSelectionChanged' event when deselect row", function(assert) {
-   //arrange
+   // arrange
     var selectionChangedArgs = [],
         $testElement = $('#treeList'),
         items = [
@@ -690,10 +690,10 @@ QUnit.test("Checking arguments of the 'onSelectionChanged' event when deselect r
 
     assert.deepEqual(this.option("selectedRowKeys"), [1], "selected row keys");
 
-    //act
+    // act
     this.deselectRows(2);
 
-    //assert
+    // assert
     assert.strictEqual(selectionChangedArgs.length, 1, "count call 'onSelectionChanged' event");
     assert.deepEqual(selectionChangedArgs[0].selectedRowKeys, [3, 4], "selected row keys");
     assert.deepEqual(selectionChangedArgs[0].selectedRowsData, [items[2], items[3]], "selected rows data");
@@ -702,7 +702,7 @@ QUnit.test("Checking arguments of the 'onSelectionChanged' event when deselect r
 });
 
 QUnit.test("Checking arguments of the 'onSelectionChanged' event when select/deselect all rows", function(assert) {
-   //arrange
+   // arrange
     var selectionChangedArgs = [],
         $testElement = $('#treeList'),
         items = [
@@ -720,20 +720,20 @@ QUnit.test("Checking arguments of the 'onSelectionChanged' event when select/des
     this.setupTreeList();
     this.rowsView.render($testElement);
 
-    //act
+    // act
     this.selectAll();
 
-    //assert
+    // assert
     assert.strictEqual(selectionChangedArgs.length, 1, "count call 'onSelectionChanged' event");
     assert.deepEqual(selectionChangedArgs[0].selectedRowKeys, [1], "selected row keys");
     assert.deepEqual(selectionChangedArgs[0].selectedRowsData, [items[0]], "selected rows data");
     assert.deepEqual(selectionChangedArgs[0].currentSelectedRowKeys, [1], "current selected row keys");
     assert.deepEqual(selectionChangedArgs[0].currentDeselectedRowKeys, [], "current deselected row keys");
 
-    //act
+    // act
     this.deselectAll();
 
-    //assert
+    // assert
     assert.strictEqual(selectionChangedArgs.length, 2, "count call 'onSelectionChanged' event");
     assert.deepEqual(selectionChangedArgs[1].selectedRowKeys, [], "selected row keys");
     assert.deepEqual(selectionChangedArgs[1].selectedRowsData, [], "selected rows data");
@@ -742,7 +742,7 @@ QUnit.test("Checking arguments of the 'onSelectionChanged' event when select/des
 });
 
 QUnit.test("getSelectedRowKeys with 'leavesOnly' parameter", function(assert) {
-   //arrange
+   // arrange
     var $testElement = $('#treeList');
 
     this.options.dataSource = [
@@ -757,13 +757,13 @@ QUnit.test("getSelectedRowKeys with 'leavesOnly' parameter", function(assert) {
     this.setupTreeList();
     this.rowsView.render($testElement);
 
-    //act, assert
-    assert.deepEqual(this.getSelectedRowKeys(true), [2, 5], "leaves"); //deprecated in 18.1
+    // act, assert
+    assert.deepEqual(this.getSelectedRowKeys(true), [2, 5], "leaves"); // deprecated in 18.1
     assert.deepEqual(this.getSelectedRowKeys("leaves"), [2, 5], "leaves");
 });
 
 QUnit.test("getSelectedRowKeys with 'all' parameter", function(assert) {
-   //arrange
+   // arrange
     var $testElement = $('#treeList');
 
     this.options.dataSource = [
@@ -778,12 +778,12 @@ QUnit.test("getSelectedRowKeys with 'all' parameter", function(assert) {
     this.setupTreeList();
     this.rowsView.render($testElement);
 
-    //act, assert
+    // act, assert
     assert.deepEqual(this.getSelectedRowKeys("all"), [1, 2, 3, 4, 5], "all");
 });
 
 QUnit.test("Selection state of rows should be updated on loadDescendants", function(assert) {
-   //arrange
+   // arrange
     var clock = sinon.useFakeTimers(),
         $testElement = $('#treeList');
 
@@ -801,20 +801,20 @@ QUnit.test("Selection state of rows should be updated on loadDescendants", funct
 
     this.rowsView.render($testElement);
 
-    //assert
+    // assert
     assert.deepEqual(this.getSelectedRowKeys("leaves"), [], "leaves");
 
-    //act
+    // act
     this.loadDescendants();
     clock.tick();
 
-    //assert
+    // assert
     assert.deepEqual(this.getSelectedRowKeys("leaves"), [2, 3, 4], "leaves");
     clock.restore();
 });
 
 QUnit.test("Checkbox of the parent node should be in an indeterminate state when deselecting child node", function(assert) {
-   //arrange
+   // arrange
     var items,
         $testElement = $('#treeList');
 
@@ -830,17 +830,17 @@ QUnit.test("Checkbox of the parent node should be in an indeterminate state when
     this.setupTreeList();
     this.rowsView.render($testElement);
 
-    //act
+    // act
     this.deselectRows(2);
 
-    //assert
+    // assert
     items = this.dataController.items();
     assert.strictEqual(items[0].isSelected, undefined, "selection state of the first item is indeterminate");
     assert.ok($testElement.find(".dx-checkbox").first().hasClass("dx-checkbox-indeterminate"), "Checkbox of the first row in an indeterminate state");
 });
 
 QUnit.test("Update selection after expanding node when 'remoteOperations' is true", function(assert) {
-   //arrange
+   // arrange
     var items,
         $testElement = $('#treeList');
 
@@ -849,15 +849,15 @@ QUnit.test("Update selection after expanding node when 'remoteOperations' is tru
     this.setupTreeList();
     this.rowsView.render($testElement);
 
-    //assert
+    // assert
     items = this.dataController.items();
     assert.strictEqual(items.length, 1, "count item");
     assert.ok(items[0].isSelected, "first item is selected");
 
-    //act
+    // act
     this.expandRow(1);
 
-    //assert
+    // assert
     items = this.dataController.items();
     assert.deepEqual(this.option("selectedRowKeys"), [1], "selected row keys");
     assert.strictEqual(items.length, 2, "count item");
@@ -866,7 +866,7 @@ QUnit.test("Update selection after expanding node when 'remoteOperations' is tru
 });
 
 QUnit.test("Changing recursive option at runtime - Deselecting row when all rows are selected", function(assert) {
-    //arrange
+    // arrange
     var $testElement = $('#treeList');
 
     this.options.selection.recursive = false;
@@ -882,17 +882,17 @@ QUnit.test("Changing recursive option at runtime - Deselecting row when all rows
 
     this.selectAll();
 
-    //act
+    // act
     this.options.selection.recursive = true;
     this.selectionController.optionChanged({ name: "selection" });
     this.deselectRows(3);
 
-    //assert
+    // assert
     assert.deepEqual(this.option("selectedRowKeys"), [4], "selectedRowKeys");
 });
 
 QUnit.test("Deselecting child node when all nodes are selected", function(assert) {
-    //arrange
+    // arrange
     var items,
         $testElement = $('#treeList');
 
@@ -910,10 +910,10 @@ QUnit.test("Deselecting child node when all nodes are selected", function(assert
     this.setupTreeList();
     this.rowsView.render($testElement);
 
-    //act
+    // act
     this.deselectRows(4);
 
-    //assert
+    // assert
     items = this.dataController.items();
     assert.deepEqual(this.option("selectedRowKeys"), [1, 2, 5, 6], "selected row keys");
     assert.ok(items[0].isSelected, "first item is selected");
@@ -924,9 +924,9 @@ QUnit.test("Deselecting child node when all nodes are selected", function(assert
     assert.ok(items[5].isSelected, "sixth item is selected");
 });
 
-//T550090
+// T550090
 QUnit.test("Select all when end nodes are selected", function(assert) {
-    //arrange
+    // arrange
     var $testElement = $('#treeList');
 
     this.options.dataSource = [
@@ -941,16 +941,16 @@ QUnit.test("Select all when end nodes are selected", function(assert) {
     this.setupTreeList();
     this.rowsView.render($testElement);
 
-    //act
+    // act
     this.selectAll();
 
-    //assert
+    // assert
     assert.deepEqual(this.option("selectedRowKeys"), [2, 3, 4, 5], "selected row keys");
 });
 
-//T550090
+// T550090
 QUnit.test("Deselect all after deselecting  -> selecting a nested node", function(assert) {
-    //arrange
+    // arrange
     var $testElement = $('#treeList');
 
     this.options.dataSource = [
@@ -968,16 +968,16 @@ QUnit.test("Deselect all after deselecting  -> selecting a nested node", functio
     this.deselectRows(2);
     this.selectRows(2);
 
-    //act
+    // act
     this.deselectAll();
 
-    //assert
+    // assert
     assert.deepEqual(this.option("selectedRowKeys"), [], "selected row keys");
 });
 
-//T557278
+// T557278
 QUnit.test("SelectRows - onSelectionChanged event should be fired before resolving the Deferred object", function(assert) {
-    //arrange
+    // arrange
     var $testElement = $('#treeList'),
         done = assert.async(),
         onSelectionChangedFired;
@@ -1006,7 +1006,7 @@ QUnit.test("SelectRows - onSelectionChanged event should be fired before resolvi
     this.setupTreeList();
     this.rowsView.render($testElement);
 
-    //act
+    // act
     this.selectRows(1, true).done(function() {
         assert.ok(onSelectionChangedFired, "onSelectionChanged event fired");
         done();
@@ -1014,7 +1014,7 @@ QUnit.test("SelectRows - onSelectionChanged event should be fired before resolvi
 });
 
 QUnit.test("Selecting a node and its child node", function(assert) {
-    //arrange
+    // arrange
     var items,
         $testElement = $('#treeList');
 
@@ -1027,10 +1027,10 @@ QUnit.test("Selecting a node and its child node", function(assert) {
     this.setupTreeList();
     this.rowsView.render($testElement);
 
-    //act
+    // act
     this.selectRows([1, 2]);
 
-    //assert
+    // assert
     items = this.dataController.items();
     assert.deepEqual(this.option("selectedRowKeys"), [1, 2], "selected row keys");
     assert.ok(items[0].isSelected, "first item is selected");
@@ -1038,9 +1038,9 @@ QUnit.test("Selecting a node and its child node", function(assert) {
     assert.ok(items[2].isSelected, "third item is selected");
 });
 
-//T560463
+// T560463
 QUnit.test("Select all after filtering data", function(assert) {
-    //arrange
+    // arrange
     var $testElement = $('#treeList');
 
     this.options.dataSource = [
@@ -1056,16 +1056,16 @@ QUnit.test("Select all after filtering data", function(assert) {
     this.setupTreeList();
     this.rowsView.render($testElement);
 
-    //act
+    // act
     this.selectAll();
 
-    //assert
+    // assert
     assert.deepEqual(this.option("selectedRowKeys"), [1, 4, 5], "selected row keys");
 });
 
-//T558153
+// T558153
 QUnit.test("Selection state should be updated correctly after options are changed", function(assert) {
-    //arrange
+    // arrange
     var items,
         $testElement = $('#treeList'),
         clock = sinon.useFakeTimers();
@@ -1083,12 +1083,12 @@ QUnit.test("Selection state should be updated correctly after options are change
             { id: 4, parentId: 3, field1: 'test4', field2: 4, field3: new Date(2002, 1, 4) }
         ];
 
-        //act
+        // act
         this.selectionController.optionChanged({ name: "selectedRowKeys", value: this.options.selectedRowKeys });
         this.dataController.optionChanged({ name: "dataSource" });
         clock.tick(30);
 
-        //assert
+        // assert
         items = this.dataController.items();
         assert.strictEqual(items.length, 2, "count row");
         assert.ok(items[0].isSelected, "first row is selected");
@@ -1099,7 +1099,7 @@ QUnit.test("Selection state should be updated correctly after options are change
 });
 
 QUnit.test("Check selectedRowKeys after deselecting nested node", function(assert) {
-    //arrange
+    // arrange
     var $testElement = $('#treeList');
 
     this.options.dataSource = [
@@ -1115,9 +1115,9 @@ QUnit.test("Check selectedRowKeys after deselecting nested node", function(asser
     this.setupTreeList();
     this.rowsView.render($testElement);
 
-    //act
+    // act
     this.deselectRows(4);
 
-    //assert
+    // assert
     assert.deepEqual(this.option("selectedRowKeys"), [5], "selected row keys");
 });

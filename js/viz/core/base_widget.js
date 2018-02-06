@@ -317,7 +317,7 @@ module.exports = DOMComponent.inherit({
             canvas = that._calculateCanvas();
 
         that._renderer.fixPlacement();
-        if(areCanvasesDifferent(that._canvas, canvas) || that.__forceRender /*for charts*/) {
+        if(areCanvasesDifferent(that._canvas, canvas) || that.__forceRender /* for charts */) {
             that._canvas = canvas;
             that._renderer.resize(canvas.width, canvas.height);
             that._change(["LAYOUT"]);
@@ -421,7 +421,7 @@ module.exports = DOMComponent.inherit({
     _getActionForUpdating: function(args) {
         var that = this;
 
-        return that._deprecatedOptionsSuppressed ? function() { //T479911
+        return that._deprecatedOptionsSuppressed ? function() { // T479911
             that._suppressDeprecatedWarnings();
             _option.apply(that, args);
             that._resumeDeprecatedWarnings();

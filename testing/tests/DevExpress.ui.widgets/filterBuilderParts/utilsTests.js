@@ -993,7 +993,7 @@ QUnit.module("Lookup Value", function() {
         });
     });
 
-    //T597637
+    // T597637
     QUnit.test("lookup with ODataStore shouldn't send getValueText query when value is empty", function(assert) {
         var fakeStore = {
             load: function() {

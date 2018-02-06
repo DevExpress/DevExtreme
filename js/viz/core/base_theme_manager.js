@@ -14,7 +14,7 @@ var Class = require("../../core/class"),
     _extend = extend,
     _each = each;
 
-//register themes
+// register themes
 require("./themes/generic.light");
 require("./themes/generic.dark");
 require("./themes/generic.contrast");
@@ -35,7 +35,7 @@ function getThemePart(theme, path) {
     return _theme;
 }
 
-exports.BaseThemeManager = Class.inherit({//TODO: test hack
+exports.BaseThemeManager = Class.inherit({// TODO: test hack
     ctor: function() {
         _addCacheItem(this);
     },

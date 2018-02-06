@@ -1,6 +1,6 @@
 "use strict";
 
-//there are pie, doughnut
+// there are pie, doughnut
 var noop = require("../../core/utils/common").noop,
     each = require("../../core/utils/iterator").each,
     scatterSeries = require("./scatter_series"),
@@ -201,7 +201,7 @@ exports.pie = _extend({}, barSeries, {
 
     _removePoint: function(point) {
         var points = this.getPointsByArg(point.argument);
-        points.splice(points.indexOf(point), 1); //T485210
+        points.splice(points.indexOf(point), 1); // T485210
         point.dispose();
     },
 

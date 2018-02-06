@@ -6,7 +6,7 @@ var callOnce = require("./call_once");
 var callbacks = [];
 
 var isReady = function() {
-    //NOTE: we can't use document.readyState === "interactive" because of ie9/ie10 support
+    // NOTE: we can't use document.readyState === "interactive" because of ie9/ie10 support
     return domAdapter.getReadyState() === "complete" || (domAdapter.getReadyState() !== "loading" && !domAdapter.getDocumentElement().doScroll);
 };
 

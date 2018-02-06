@@ -255,7 +255,7 @@ module.exports = _extend({}, symbolPoint, {
         }
     },
 
-    //TODO check & rework
+    // TODO check & rework
     _translate: function() {
         var that = this,
             rotated = that._options.rotated,

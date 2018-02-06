@@ -1353,7 +1353,7 @@ QUnit.test("toggle visibility by 'visible' option - 2", function(assert) {
     assert.strictEqual(this.renderer.text.callCount, 0, "text count");
 });
 
-//T378407
+// T378407
 QUnit.test("creation widget on non-appended container", function(assert) {
     common.createWidget({
         dataSource: [{ value: 1, name: "text" }]
@@ -1363,7 +1363,7 @@ QUnit.test("creation widget on non-appended container", function(assert) {
     assert.equal(this.renderer.unlock.callCount, 1);
 });
 
-//T381966
+// T381966
 QUnit.test("labels with small widget height", function(assert) {
     this.renderer.bBoxTemplate = { x: 0, y: 0, width: 4, height: 15 };
     common.createWidget({
@@ -1376,7 +1376,7 @@ QUnit.test("labels with small widget height", function(assert) {
     assert.strictEqual(this.renderer.text.lastCall.returnValue.attr.lastCall.args[0].visibility, "hidden");
 });
 
-//T381966
+// T381966
 QUnit.test("labels with small widget width", function(assert) {
     this.renderer.bBoxTemplate = { x: 0, y: 0, width: 20, height: 5 };
     common.createWidget({

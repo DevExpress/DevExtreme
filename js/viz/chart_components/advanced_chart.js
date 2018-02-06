@@ -152,7 +152,7 @@ var AdvancedChart = BaseChart.inherit({
             });
 
         });
-        //that's it. For now
+        // that's it. For now
         that._valueAxes = valueAxes;
         that._argumentAxes = argumentAxes;
     },
@@ -207,7 +207,7 @@ var AdvancedChart = BaseChart.inherit({
 
     _appendAdditionalSeriesGroups: function() {
         this._crosshairCursorGroup.linkAppend();
-        //this._legendGroup.linkAppend();
+        // this._legendGroup.linkAppend();
         this._scrollBar && this._scrollBarGroup.linkAppend();   // TODO: Must be appended in the same place where removed (chart)
     },
     _getLegendTargets: function() {
@@ -232,10 +232,10 @@ var AdvancedChart = BaseChart.inherit({
         for(i = 0; i < that.series.length; ++i) {
             that.series[i].drawTrackers();
         }
-        //TODO we don't need it
-        //if (that._legend) {
+        // TODO we don't need it
+        // if (that._legend) {
         //    legendHasInsidePosition && that._legendGroup.append(that._renderer.root);
-        //}
+        // }
     },
 
     _specialProcessSeries: function() {
@@ -249,7 +249,7 @@ var AdvancedChart = BaseChart.inherit({
             paneSeries,
             themeManager = that._themeManager,
             negativesAsZeroes = themeManager.getOptions("negativesAsZeroes"),
-            negativesAsZeros = themeManager.getOptions("negativesAsZeros"), //misspelling case
+            negativesAsZeros = themeManager.getOptions("negativesAsZeros"), // misspelling case
             familyOptions = {
                 equalBarWidth: themeManager.getOptions("equalBarWidth"),
                 minBubbleSize: themeManager.getOptions("minBubbleSize"),
@@ -453,7 +453,7 @@ var AdvancedChart = BaseChart.inherit({
 
         this._valueAxes.forEach(function(axis) {
             if(axesWithFullStackedFormat.indexOf(axis) === -1) {
-                axis.resetAutoLabelFormat();  //B239299
+                axis.resetAutoLabelFormat();  // B239299
             }
         });
     },

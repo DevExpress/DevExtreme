@@ -2480,7 +2480,7 @@ QUnit.testInActiveWindow("Value should be null after input is cleared and enter 
     assert.ok(!selectBox.option("opened"), "popup is closed");
 });
 
-//T494140
+// T494140
 QUnit.testInActiveWindow("Value should not be changed after input is cleared and enter key is tapped if allowClearing is false", function(assert) {
     var items = [1, 2],
         valueChangedHandler = sinon.spy(),
@@ -2656,7 +2656,7 @@ QUnit.module("search substitution", {
     }
 });
 
-//T434197
+// T434197
 QUnit.test("search timeout should be cleared if new search have been initiated", function(assert) {
     var loadHandler = sinon.spy(),
         clock = sinon.useFakeTimers(),
@@ -4289,7 +4289,7 @@ QUnit.test("input keep focus when popup is opened by click on button", function(
     assert.ok(this.$element.hasClass(STATE_FOCUSED_CLASS), "element is steel focused");
 });
 
-//T409774
+// T409774
 QUnit.test("widget disposing in focusOut event handler", function(assert) {
     var focusOutCallCount = 0;
 
@@ -4305,10 +4305,10 @@ QUnit.test("widget disposing in focusOut event handler", function(assert) {
 
     $input.focusin();
 
-    //act
+    // act
     $input.focusout();
 
-    //assert
+    // assert
     assert.equal(focusOutCallCount, 1, "onFocusOut called once");
 });
 
@@ -4321,14 +4321,14 @@ QUnit.test("selectbox should not focus disabled item after the search", function
         items: [{ text: "a" }, { text: "b", disabled: true }, { text: "b1" }]
     });
 
-    //act
+    // act
     var $input = this.$element.find("input");
     keyboardMock($input).type("b");
 
     this.clock.tick(TIME_TO_WAIT);
     var $item = $(".dx-list-item").eq(1);
 
-    //assert
+    // assert
     assert.ok($item.hasClass(STATE_FOCUSED_CLASS), "first non disabled item is focused");
 });
 

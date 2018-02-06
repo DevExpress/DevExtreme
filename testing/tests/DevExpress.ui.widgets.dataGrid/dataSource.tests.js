@@ -183,10 +183,10 @@ QUnit.test("reload do not reset pageIndex", function(assert) {
     source.load();
     source.pageIndex(1);
 
-    //act
+    // act
     source.reload();
 
-    //assert
+    // assert
     assert.equal(source.pageIndex(), 1);
     assert.equal(source.items().length, 3);
     assert.equal(source.items()[0], 4);
@@ -202,9 +202,9 @@ QUnit.test("reload full reset isLoaded", function(assert) {
 
     source.load().done(function() {
         assert.ok(source.isLoaded());
-        //act
+        // act
         source.reload(true);
-        //assert
+        // assert
         assert.ok(!source.isLoaded());
 
         finalized = true;
@@ -241,7 +241,7 @@ QUnit.test("reload calls before last load complete", function(assert) {
     this.clock.tick();
 
 
-    //act
+    // act
     source.reload().done(function() {
         reloaded = true;
     });
@@ -253,7 +253,7 @@ QUnit.test("reload calls before last load complete", function(assert) {
 
     this.clock.tick();
 
-    //assert
+    // assert
     assert.ok(!loaded);
     assert.ok(reloaded);
     assert.equal(source.totalCount(), 3);
@@ -266,14 +266,14 @@ QUnit.test("pageIndex in dataSource options", function(assert) {
         pageIndex: 1
     });
 
-    //act
+    // act
     source.load();
 
-    //assert
+    // assert
     assert.equal(source.pageIndex(), 1);
 });
 
-//B233043
+// B233043
 QUnit.test("pageIndex greater then pageCount in dataSource options", function(assert) {
     var source = createDataSource({
         store: TEN_NUMBERS,
@@ -282,14 +282,14 @@ QUnit.test("pageIndex greater then pageCount in dataSource options", function(as
         requireTotalCount: true
     });
 
-    //act
+    // act
     source.load();
 
-    //assert
+    // assert
     assert.equal(source.pageIndex(), 3);
 });
 
-//B233043
+// B233043
 QUnit.test("pageIndex equals pageCount in dataSource options", function(assert) {
     var source = createDataSource({
         store: TEN_NUMBERS,
@@ -298,10 +298,10 @@ QUnit.test("pageIndex equals pageCount in dataSource options", function(assert) 
         requireTotalCount: true
     });
 
-    //act
+    // act
     source.load();
 
-    //assert
+    // assert
     assert.equal(source.pageIndex(), 3);
 });
 
@@ -318,12 +318,12 @@ QUnit.test("pageIndex correction before change event", function(assert) {
         changeCallCount++;
     });
 
-    //act
+    // act
     source.load();
 
     this.clock.tick();
 
-    //assert
+    // assert
     assert.equal(changeCallCount, 1);
     assert.equal(source.pageIndex(), 3);
 });
@@ -337,11 +337,11 @@ QUnit.test("change pageIndex to greater then pageSize", function(assert) {
     });
     source.load();
 
-    //act
+    // act
     source.pageIndex(5);
     source.load();
 
-    //assert
+    // assert
     assert.equal(source.pageIndex(), 3);
 });
 
@@ -352,10 +352,10 @@ QUnit.test("itemsCount calculation", function(assert) {
         requireTotalCount: true
     });
 
-    //act
+    // act
     source.load();
 
-    //assert
+    // assert
     assert.equal(source.itemsCount(), 3);
 });
 
@@ -367,10 +367,10 @@ QUnit.test("pageCount calculation", function(assert) {
         requireTotalCount: true
     });
 
-    //act
+    // act
     source.load();
 
-    //assert
+    // assert
     assert.equal(source.pageCount(), 4);
 });
 
@@ -381,15 +381,15 @@ QUnit.test("pageCount calculation after change pageSize", function(assert) {
         requireTotalCount: true
     });
 
-    //act
+    // act
     source.load();
     source.pageSize(5);
 
-    //assert
+    // assert
     assert.equal(source.pageCount(), 2);
 });
 
-//B237822
+// B237822
 QUnit.test("pageCount calculation after reload when query count resolved after enumerate", function(assert) {
     var dataSource = createDataSource({
             store: TEN_NUMBERS,
@@ -444,7 +444,7 @@ QUnit.test("pageCount calculation after reload when query count resolved after e
             return 9;
         };
 
-        //act
+        // act
         dataSource.reload().done(function() {
             finalized = true;
         });
@@ -452,7 +452,7 @@ QUnit.test("pageCount calculation after reload when query count resolved after e
 
     this.clock.tick();
 
-    //assert
+    // assert
     assert.ok(finalized);
     assert.equal(dataSource.pageCount(), 3);
     assert.equal(dataSource.totalItemsCount(), 9);
@@ -466,10 +466,10 @@ QUnit.test("isLastPage and hasKnownLastPage for first page", function(assert) {
         requireTotalCount: true
     });
 
-    //act
+    // act
     source.load();
 
-    //assert
+    // assert
     assert.ok(!source.isLastPage());
     assert.ok(source.hasKnownLastPage());
 });
@@ -489,10 +489,10 @@ QUnit.test("isLastPage for first page when totalCount = -1", function(assert) {
         requireTotalCount: true
     });
 
-    //act
+    // act
     source.load();
 
-    //assert
+    // assert
     assert.ok(!source.isLastPage());
     assert.ok(!source.hasKnownLastPage());
 });
@@ -506,38 +506,38 @@ QUnit.test("isLastPage and hasKnownLastPage for last page", function(assert) {
         requireTotalCount: true
     });
 
-    //act
+    // act
     source.load();
 
-    //assert
+    // assert
     assert.ok(source.isLastPage());
     assert.ok(source.hasKnownLastPage());
 });
 
 QUnit.test("groupingHelper when remoteOperations is auto and ArrayStore", function(assert) {
-    //act
+    // act
     var dataSource = createDataSource({
         store: TEN_NUMBERS,
         remoteOperations: 'auto'
     });
 
-    //assert
+    // assert
     assert.ok(dataSource._grouping instanceof CollapsedGroupingHelper);
 });
 
 QUnit.test("groupingHelper when remoteOperations is auto and CustomStore", function(assert) {
-    //act
+    // act
     var dataSource = createDataSource({
         load: function() { },
         remoteOperations: 'auto'
     });
 
-    //assert
+    // assert
     assert.ok(dataSource._grouping instanceof CollapsedGroupingHelper);
 });
 
 QUnit.test("groupingHelper when remoteOperations is auto and ODataStore", function(assert) {
-    //act
+    // act
     var dataSource = createDataSource({
         store: {
             type: "odata",
@@ -546,11 +546,11 @@ QUnit.test("groupingHelper when remoteOperations is auto and ODataStore", functi
         remoteOperations: 'auto'
     });
 
-    //assert
+    // assert
     assert.ok(dataSource._grouping instanceof ExpandedGroupingHelper);
 });
 
-//T298483
+// T298483
 QUnit.test("ODataStore customQueryParams/select when remoteOperations false", function(assert) {
     var store = new ODataStore({
             url: "test"
@@ -568,10 +568,10 @@ QUnit.test("ODataStore customQueryParams/select when remoteOperations false", fu
         return $.Deferred().resolve(TEN_NUMBERS);
     });
 
-    //act
+    // act
     source.load();
 
-    //assert
+    // assert
     assert.ok(!source.isLastPage());
     assert.ok(source.hasKnownLastPage());
     assert.equal(store.load.callCount, 1);
@@ -579,7 +579,7 @@ QUnit.test("ODataStore customQueryParams/select when remoteOperations false", fu
     assert.deepEqual(store.load.firstCall.args[0].select, ["field1", "field2"]);
 });
 
-//T298483
+// T298483
 QUnit.test("ODataStore customQueryParams when remoteOperations true", function(assert) {
     var store = new ODataStore({
             url: "test"
@@ -596,10 +596,10 @@ QUnit.test("ODataStore customQueryParams when remoteOperations true", function(a
         return $.Deferred().resolve([0, 1, 2], { totalCount: 3 });
     });
 
-    //act
+    // act
     source.load();
 
-    //assert
+    // assert
     assert.ok(!source.isLastPage());
     assert.ok(source.hasKnownLastPage());
     assert.equal(store.load.callCount, 1);
@@ -608,24 +608,24 @@ QUnit.test("ODataStore customQueryParams when remoteOperations true", function(a
     assert.strictEqual(store.load.firstCall.args[0].take, 3);
 });
 
-//T474591
+// T474591
 QUnit.test("No error when store returned non-array", function(assert) {
-    //arrange
+    // arrange
     var source = createDataSource({
         load: function() {
             return $.Deferred().resolve({ /* no data property */ });
         }
     });
 
-    //act
+    // act
     source.load();
 
-    //assert
+    // assert
     assert.ok(true, "There are no exceptions");
 });
 
 QUnit.test("createOffsetFilter should generate filters with =/<> filter operations for boolean values", function(assert) {
-    //arrange
+    // arrange
 
     var booleanValues = [null, false, true];
     var descValues = [false, true];
@@ -664,10 +664,10 @@ QUnit.module("DataSource when not requireTotalCount", {
 
 QUnit.test("isLastPage and hasKnownLastPagefor first page", function(assert) {
     var source = this.dataSource;
-    //act
+    // act
     source.load();
 
-    //assert
+    // assert
     assert.ok(!source.isLastPage());
     assert.ok(!source.hasKnownLastPage());
 });
@@ -675,10 +675,10 @@ QUnit.test("isLastPage and hasKnownLastPagefor first page", function(assert) {
 QUnit.test("isLastPage and hasKnownLastPage for last page", function(assert) {
     var source = this.dataSource;
     source.pageIndex(3);
-    //act
+    // act
     source.load();
 
-    //assert
+    // assert
     assert.ok(source.isLastPage());
     assert.ok(source.hasKnownLastPage());
 });
@@ -688,51 +688,51 @@ QUnit.test("isLastPage and hasKnownLastPage for first page after last page", fun
     source.pageIndex(3);
     source.load();
 
-    //act
+    // act
     source.pageIndex(0);
     source.load();
 
-    //assert
+    // assert
     assert.ok(!source.isLastPage());
     assert.ok(source.hasKnownLastPage());
 });
 
 QUnit.test("totalCount for first page", function(assert) {
     var source = this.dataSource;
-    //act
+    // act
     source.load();
 
-    //assert
+    // assert
     assert.equal(source.totalCount(), 3);
 });
 
 QUnit.test("totalCount for last page", function(assert) {
     var source = this.dataSource;
     source.pageIndex(3);
-    //act
+    // act
     source.load();
 
-    //assert
+    // assert
     assert.equal(source.totalCount(), 10);
 });
 
 QUnit.test("totalCount for page after last", function(assert) {
     var source = this.dataSource;
     source.pageIndex(5);
-    //act
+    // act
     source.load();
 
-    //assert
+    // assert
     assert.equal(source.totalCount(), 15);
 });
 
 QUnit.test("pageIndex greater then pages count", function(assert) {
     var source = this.dataSource;
     source.pageIndex(5);
-    //act
+    // act
     source.load();
 
-    //assert
+    // assert
     assert.equal(source.pageIndex(), 4);
 });
 
@@ -740,10 +740,10 @@ QUnit.test("pageIndex equals pages count when last page has items count equals p
     var source = this.dataSource;
     source.pageSize(5);
     source.pageIndex(2);
-    //act
+    // act
     source.load();
 
-    //assert
+    // assert
     assert.equal(source.pageIndex(), 1);
     assert.equal(source.items().length, 5);
 });
@@ -769,10 +769,10 @@ QUnit.test("first load", function(assert) {
         }
     });
 
-    //act
+    // act
     source.load();
 
-    //assert
+    // assert
     assert.equal(loadedCount, 1);
 });
 
@@ -788,11 +788,11 @@ QUnit.test("load next page", function(assert) {
 
     source.load();
 
-    //act
+    // act
     source.pageIndex(1);
     source.load();
 
-    //assert
+    // assert
     assert.strictEqual(source.pageIndex(), 1);
     assert.strictEqual(loadedCount, 2);
 });
@@ -812,11 +812,11 @@ QUnit.test("second load page", function(assert) {
         }
     });
 
-    //act
+    // act
     source.pageIndex(0);
     source.load();
 
-    //assert
+    // assert
     assert.strictEqual(loadedCount, 1);
 });
 
@@ -826,11 +826,11 @@ QUnit.test("integer pageIndex", function(assert) {
 
     source.load();
 
-    //act
+    // act
     source.pageIndex(1);
     source.load();
 
-    //assert
+    // assert
     assert.strictEqual(source.pageIndex(), 1);
     assert.strictEqual(source.items().length, 3);
     assert.deepEqual(source.items(), [4, 5, 6]);
@@ -865,7 +865,7 @@ QUnit.test("grouping without paginate", function(assert) {
         paginate: false
     });
 
-    //act
+    // act
     source.load();
     assert.equal(source.totalItemsCount(), 4);
     assert.deepEqual(source.items(), [{
@@ -879,7 +879,7 @@ QUnit.test("grouping without paginate", function(assert) {
     }]);
 });
 
-//T137160
+// T137160
 QUnit.test("collapse group with undefined value when grouping without paginate", function(assert) {
     var source = this.createDataSource({
         paginate: false,
@@ -890,7 +890,7 @@ QUnit.test("collapse group with undefined value when grouping without paginate",
     var changeRowExpandResult = source.changeRowExpand([undefined]);
     source.load();
 
-    //act
+    // act
     assert.equal(source.totalItemsCount(), 1);
     assert.deepEqual(source.items(), [{
         key: undefined, items: null
@@ -898,7 +898,7 @@ QUnit.test("collapse group with undefined value when grouping without paginate",
     assert.ok(changeRowExpandResult && changeRowExpandResult.done);
 });
 
-//T136667
+// T136667
 QUnit.test("collapse group with date value when grouping without paginate", function(assert) {
     var source = this.createDataSource({
         store: [
@@ -914,7 +914,7 @@ QUnit.test("collapse group with date value when grouping without paginate", func
     source.changeRowExpand([new Date(2012, 1, 5)]);
     source.load();
 
-    //act
+    // act
     assert.equal(source.totalItemsCount(), 2);
     assert.deepEqual(source.items(), [{
         key: new Date(2012, 1, 5), items: null
@@ -929,7 +929,7 @@ QUnit.test("keys for items in groups", function(assert) {
         paginate: false
     });
 
-    //act
+    // act
     source.load();
 
     assert.equal(source.totalItemsCount(), 4);
@@ -949,7 +949,7 @@ QUnit.test("keys for items in groups", function(assert) {
 QUnit.test("grouping with pageSize more items count", function(assert) {
     var source = this.createDataSource();
 
-    //act
+    // act
     source.load();
 
     assert.equal(source.totalItemsCount(), 4);
@@ -966,7 +966,7 @@ QUnit.test("grouping with pageSize more items count", function(assert) {
     assert.equal(source.itemsCount(), 6);
 });
 
-//T105748
+// T105748
 QUnit.test("grouping with sorting", function(assert) {
     var source = this.createDataSource({
         sort: 'field3',
@@ -985,10 +985,10 @@ QUnit.test("grouping with sorting", function(assert) {
         ]
     });
 
-    //act
+    // act
     source.load();
 
-    //assert
+    // assert
     assert.equal(source.totalItemsCount(), 11);
     assert.deepEqual(source.items(), [{
         key: 1, items: [
@@ -1016,7 +1016,7 @@ QUnit.test("grouping with pageSize less items count", function(assert) {
         pageSize: 2
     });
 
-    //act
+    // act
     source.load();
 
     assert.equal(source.totalItemsCount(), 4);
@@ -1035,7 +1035,7 @@ QUnit.test("grouping with pageSize less items count. Continue group parameter", 
         pageIndex: 1
     });
 
-    //act
+    // act
     source.load();
 
     assert.equal(source.totalItemsCount(), 4);
@@ -1056,7 +1056,7 @@ QUnit.test("grouping with pageSize less items count. Continue group parameter wh
         scrolling: { mode: 'virtual', preventPreload: true }
     });
 
-    //act
+    // act
     source.load();
 
     assert.equal(source.totalItemsCount(), 4);
@@ -1076,19 +1076,19 @@ QUnit.test("collapse group on first page after loading second page", function(as
         scrolling: { mode: 'virtual', preventPreload: true }
     });
 
-    //act
+    // act
     source.load();
     source.pageIndex(1);
     source.load();
 
-    //assert
+    // assert
     assert.equal(source.itemsCount(), 6);
 
-    //act
+    // act
     source.changeRowExpand([1]);
     source.load();
 
-    //assert
+    // assert
     assert.equal(source.totalItemsCount(), 2);
     assert.deepEqual(source.items(), [{
         key: 1, items: null
@@ -1110,10 +1110,10 @@ QUnit.test("changed callback fired after changeRowExpand", function(assert) {
         ]
     });
 
-    //act
+    // act
     source.load();
     source.changed.add(function() {
-        //assert
+        // assert
         assert.equal(source.itemsCount(), 5);
         assert.deepEqual(source.items(), [{
             key: 1, items: null,
@@ -1124,7 +1124,7 @@ QUnit.test("changed callback fired after changeRowExpand", function(assert) {
         }]);
     });
 
-    //act
+    // act
     source.changeRowExpand([1]);
     source.load();
 });
@@ -1148,11 +1148,11 @@ QUnit.test("changed callback fired after changeRowExpand when no groups", functi
         isChanged = true;
     });
 
-    //act
+    // act
     source.changeRowExpand([1]);
     source.load();
 
-    //assert
+    // assert
     assert.ok(isChanged, 'changed called');
 });
 
@@ -1167,7 +1167,7 @@ QUnit.test("grouping with pageSize less items count. Continue group parameter no
         ]
     });
 
-    //act
+    // act
     source.load();
     source.changeRowExpand([2]);
     source.pageIndex(1);
@@ -1185,7 +1185,7 @@ QUnit.test("grouping with pageSize less items count. Continue group parameter no
         pageIndex: 1
     });
 
-    //act
+    // act
     source.load();
 
     assert.equal(source.totalItemsCount(), 4);
@@ -1199,7 +1199,7 @@ QUnit.test("grouping with pageSize less items count. Continue on next page group
         pageSize: 2
     });
 
-    //act
+    // act
     source.load();
 
     assert.equal(source.totalItemsCount(), 4);
@@ -1223,7 +1223,7 @@ QUnit.test("grouping with pageSize less items count. Continue on next page group
         ]
     });
 
-    //act
+    // act
     source.load();
     source.changeRowExpand([1]);
     source.load();
@@ -1242,7 +1242,7 @@ QUnit.test("grouping with pageSize less items count. Not Continue on next page g
         pageSize: 3
     });
 
-    //act
+    // act
     source.load();
 
     assert.equal(source.totalItemsCount(), 4);
@@ -1353,13 +1353,13 @@ QUnit.test("grouping with paginate. Collapse group when remote sorting and local
 
     source.load();
 
-    //act
+    // act
     source.changeRowExpand(["ES"]);
     source.load();
     source.changeRowExpand(["Göd"]);
     source.load();
 
-    //assert
+    // assert
     assert.deepEqual(source.items(), [{
         key: "ES", items: null
     }, {
@@ -1371,11 +1371,11 @@ QUnit.test("grouping with paginate. Collapse group when remote sorting and local
         ]
     }]);
 
-    //act
+    // act
     source.changeRowExpand(["Győr"]);
     source.load();
 
-    //assert
+    // assert
     assert.deepEqual(source.items(), [{
         key: "ES", items: null
     }, {
@@ -1506,7 +1506,7 @@ QUnit.test("grouping with paginate. Update group offsets after expand by correct
     source.load();
     source.changeRowExpand([3]);
     source.load();
-    //act
+    // act
     source.changeRowExpand([2]);
     source.load();
     source.pageIndex(1);
@@ -1514,7 +1514,7 @@ QUnit.test("grouping with paginate. Update group offsets after expand by correct
     source.changeRowExpand([3]);
     source.load();
 
-    assert.deepEqual(source.getGroupsInfo(), [ //TODO make public method for test
+    assert.deepEqual(source.getGroupsInfo(), [ // TODO make public method for test
         { key: 1, children: [], offset: 0, data: { count: 3, offset: 0, path: [1], isExpanded: false } },
         { key: 2, children: [], offset: 3, data: { count: 2, offset: 3, path: [2], isExpanded: true } },
         { key: 3, children: [], offset: 5, data: { count: 1, offset: 5, path: [3], isExpanded: true } }
@@ -1548,7 +1548,7 @@ QUnit.test("sort group on add groupsInfo", function(assert) {
     assert.deepEqual(offsets, [0, 2, 3, 7]);
 });
 
-//T231326
+// T231326
 QUnit.test("grouping with paginate. Update group offsets after expand by correct page offset 2", function(assert) {
     var array = [
         { field1: 1, field2: 1, field3: 1 },
@@ -1670,7 +1670,7 @@ QUnit.test("grouping with paginate. Update group offsets after expand by correct
     source.pageIndex(3);
     source.load();
 
-    //act
+    // act
     source.changeRowExpand([1, 4]);
     source.load();
 
@@ -1691,7 +1691,7 @@ QUnit.test("grouping with paginate. Update group offsets after expand by correct
     }]);
 });
 
-//B254194, T310036
+// B254194, T310036
 QUnit.test("hide collapsed group when after filtering group has no elements", function(assert) {
     var arrayStore = new ArrayStore(this.array);
 
@@ -1724,13 +1724,13 @@ QUnit.test("hide collapsed group when after filtering group has no elements", fu
 
     this.clock.tick();
 
-    //act
+    // act
     source.filter(['field2', '>', 3]);
     source.reload();
 
     this.clock.tick();
 
-    //assert
+    // assert
     assert.equal(source.totalItemsCount(), 1, 'total items count');
     assert.deepEqual(source.items(), [{
         key: 2, items: [
@@ -1747,11 +1747,11 @@ QUnit.test("collapseAll when no grouped columns", function(assert) {
     });
     source.load();
 
-    //act
+    // act
     source.collapseAll();
     source.load();
 
-    //assert
+    // assert
     assert.equal(source.pageCount(), 2, "pageCount");
     assert.deepEqual(source.items(), [
         { field1: 1, field2: 2, field3: 3 },
@@ -1766,11 +1766,11 @@ QUnit.test("expandAll when no grouped columns", function(assert) {
     });
     source.load();
 
-    //act
+    // act
     source.expandAll();
     source.load();
 
-    //assert
+    // assert
     assert.equal(source.pageCount(), 2, "pageCount");
     assert.deepEqual(source.items(), [
         { field1: 1, field2: 2, field3: 3 },
@@ -1792,7 +1792,7 @@ QUnit.test("loadTotalCount for CustomStore when totalCount in extra", function(a
         }
     });
 
-    //T329728
+    // T329728
     if(store._customLoadOptions) {
         store._customLoadOptions = function() {
             return ["param1"];
@@ -1809,18 +1809,18 @@ QUnit.test("loadTotalCount for CustomStore when totalCount in extra", function(a
 
     var totalCount;
 
-    //act
+    // act
     loadTotalCount(dataSource, { filter: ['this', '>=', 5] }).done(function(e) {
         totalCount = e;
     });
 
-    //assert
+    // assert
     assert.deepEqual(lastLoadOptions, {
         skip: 0,
         take: 1,
         requireTotalCount: true,
         filter: ['this', '>=', 5],
-        param1: 1, //T329728
+        param1: 1, // T329728
     });
     assert.strictEqual(totalCount, 10);
 });
@@ -1848,12 +1848,12 @@ QUnit.test("loadTotalCount for CustomStore when no totalCount in extra", functio
 
     var totalCount;
 
-    //act
+    // act
     loadTotalCount(dataSource, { filter: ['this', '>=', 5] }).done(function(e) {
         totalCount = e;
     });
 
-    //assert
+    // assert
     assert.deepEqual(lastLoadOptions, {
         skip: 0,
         take: 1,
@@ -1869,9 +1869,9 @@ QUnit.test("loadTotalCount for CustomStore when no totalCount in extra", functio
     assert.strictEqual(totalCount, 10);
 });
 
-//T545211
+// T545211
 QUnit.test("Ungrouping with custom store - there are no exceptions when remote paging", function(assert) {
-    //arrange
+    // arrange
     var that = this,
         dataSource = createDataSource({
             load: function() {
@@ -1889,14 +1889,14 @@ QUnit.test("Ungrouping with custom store - there are no exceptions when remote p
     dataSource.load();
 
     try {
-        //act
+        // act
         dataSource.group(null);
         dataSource.load();
 
-        //assert
+        // assert
         assert.ok(true, "There are no exceptions");
     } catch(error) {
-        //assert
+        // assert
         assert.ok(false, "exception was threw:" + error);
     }
 });
@@ -1931,7 +1931,7 @@ QUnit.test("grouping with paginate", function(assert) {
         pageSize: 3
     });
 
-    //act
+    // act
     source.load();
 
     assert.equal(source.totalItemsCount(), 5);
@@ -1949,7 +1949,7 @@ QUnit.test("grouping with paginate", function(assert) {
     }]);
 });
 
-//T134180
+// T134180
 QUnit.test("grouping with paginate and totalCount from extra", function(assert) {
     var array = this.array;
     var source = this.createDataSource({
@@ -1959,7 +1959,7 @@ QUnit.test("grouping with paginate and totalCount from extra", function(assert) 
         pageSize: 3
     });
 
-    //act
+    // act
     source.load();
 
     assert.equal(source.totalItemsCount(), 5);
@@ -1982,7 +1982,7 @@ QUnit.test("grouping without paginate", function(assert) {
         paginate: false
     });
 
-    //act
+    // act
     source.load();
 
     assert.equal(source.totalItemsCount(), 5);
@@ -2057,13 +2057,13 @@ QUnit.test("change group order when remote data", function(assert) {
     source.load();
     this.clock.tick();
 
-    //act
+    // act
     source.group(['field1', { selector: 'field2', desc: true }]);
 
     source.reload();
     this.clock.tick();
 
-    //assert
+    // assert
     assert.equal(source.totalItemsCount(), 3);
     assert.deepEqual(source.items(), [{
         key: 1, items: [
@@ -2089,7 +2089,7 @@ QUnit.test("Continue group parameter for first group level only", function(asser
         pageIndex: 1
     });
 
-    //act
+    // act
     source.load();
 
     assert.equal(source.totalItemsCount(), 5);
@@ -2109,7 +2109,7 @@ QUnit.test("Continue group parameter for both group levels", function(assert) {
         pageIndex: 1
     });
 
-    //act
+    // act
     source.load();
 
     assert.equal(source.totalItemsCount(), 5);
@@ -2129,7 +2129,7 @@ QUnit.test("Continue on next page group parameter for first group level only", f
         pageSize: 2
     });
 
-    //act
+    // act
     source.load();
 
     assert.equal(source.totalItemsCount(), 5);
@@ -2151,7 +2151,7 @@ QUnit.test("Continue on next page group parameter for both group levels", functi
         pageSize: 3
     });
 
-    //act
+    // act
     source.load();
 
     assert.equal(source.totalItemsCount(), 5);
@@ -2178,7 +2178,7 @@ QUnit.test("Collapse second level group", function(assert) {
         pageSize: 4
     });
 
-    //act
+    // act
     source.load();
 
     source.changeRowExpand([1, 3]);
@@ -2207,7 +2207,7 @@ QUnit.test("Collapse second level group and first level group", function(assert)
         pageSize: 4
     });
 
-    //act
+    // act
     source.load();
 
     source.changeRowExpand([1, 3]);
@@ -2227,7 +2227,7 @@ QUnit.test("Collapse second level group and first level group", function(assert)
     }]);
 });
 
-//T406350
+// T406350
 QUnit.test("Collapse second level group and first level group when scrolling mode is virtual", function(assert) {
     this.array = [
             { field1: 1, field2: 1, field3: 1 },
@@ -2246,7 +2246,7 @@ QUnit.test("Collapse second level group and first level group when scrolling mod
 
     source.viewportSize(5);
 
-    //act
+    // act
     source.load();
 
     source.changeRowExpand([1, 1]);
@@ -2266,7 +2266,7 @@ QUnit.test("Collapse second level group and first level group when scrolling mod
     }]);
 });
 
-//T371565
+// T371565
 QUnit.test("Collapse several second level groups", function(assert) {
     this.array = [
             { field1: 1, field2: 2, field3: 3 },
@@ -2283,7 +2283,7 @@ QUnit.test("Collapse several second level groups", function(assert) {
         pageSize: 4
     });
 
-    //act
+    // act
     source.load();
 
     source.changeRowExpand([1, 2]);
@@ -2309,7 +2309,7 @@ QUnit.test("Collapse state of items restore after expand", function(assert) {
         pageSize: 4
     });
 
-    //act
+    // act
     source.load();
 
     source.changeRowExpand([1, 3]);
@@ -2345,7 +2345,7 @@ QUnit.test("change sortOrder of group", function(assert) {
         pageSize: 4
     });
 
-    //act
+    // act
     source.load();
     source.changeRowExpand([1, 2]);
     source.load();
@@ -2356,7 +2356,7 @@ QUnit.test("change sortOrder of group", function(assert) {
     });
     source.reload();
 
-    //assert
+    // assert
     assert.equal(source.totalItemsCount(), 5);
     assert.deepEqual(source.items(), [{
         key: 3, items: [{
@@ -2374,7 +2374,7 @@ QUnit.test("change sortOrder of group", function(assert) {
         }
         ]
     }]);
-    //T197066
+    // T197066
     assert.equal(loadingChangedCount, 2, 'first - update collapsed group info, second - load data');
     assert.ok(!source.isLoading(), 'load completed');
 });
@@ -2386,7 +2386,7 @@ QUnit.test("reset groups info when change group fields", function(assert) {
         pageSize: 4
     });
 
-    //act
+    // act
     source.load();
     source.changeRowExpand([1, 2]);
     source.load();
@@ -2403,7 +2403,7 @@ QUnit.test("reset groups info when clear group fields", function(assert) {
         pageSize: 4
     });
 
-    //act
+    // act
     source.load();
     source.changeRowExpand([1, 2]);
     source.load();
@@ -2420,7 +2420,7 @@ QUnit.test("clear second level groups info when change second level group field"
         pageSize: 4
     });
 
-    //act
+    // act
     source.load();
     source.changeRowExpand([1, 2]);
     source.load();
@@ -2448,7 +2448,7 @@ QUnit.test("clear second level groups info when change change groups count to on
         pageSize: 4
     });
 
-    //act
+    // act
     source.load();
     source.changeRowExpand([1, 2]);
     source.load();
@@ -2469,9 +2469,9 @@ QUnit.test("clear second level groups info when change change groups count to on
     ]);
 });
 
-//T307341
+// T307341
 QUnit.test("Update group offset for expanded grouped row of the first level when change sortOrder of the first level group field", function(assert) {
-    //arrange
+    // arrange
     this.array = [
             { field1: 1, field2: 2, field3: 3 },
             { field1: 1, field2: 2, field3: 4 },
@@ -2500,11 +2500,11 @@ QUnit.test("Update group offset for expanded grouped row of the first level when
     source.changeRowExpand([4]);
     source.load();
 
-    //act
+    // act
     source.group([{ selector: 'field1', desc: true, isExpanded: true }, { selector: 'field2', isExpanded: true }]);
     source.reload();
     window.test = source;
-    //assert
+    // assert
     assert.equal(source.totalItemsCount(), 5);
     assert.deepEqual(source.items(), [{
         key: 4, items: null
@@ -2522,7 +2522,7 @@ QUnit.test("Update group offset for expanded grouped row of the first level when
     }]);
 });
 
-//T318433, T318206
+// T318433, T318206
 QUnit.test("change filter after collapse second level group", function(assert) {
     var source = this.createDataSource({
         pageSize: 3
@@ -2537,11 +2537,11 @@ QUnit.test("change filter after collapse second level group", function(assert) {
         loadArgs.push(e);
     });
 
-    //act
+    // act
     source.filter(["field1", ">=", 1]);
     source.load();
 
-    //assert
+    // assert
     assert.equal(source.totalItemsCount(), 4);
     assert.deepEqual(source.items(), [{
         key: 1, items: [{
@@ -2662,7 +2662,7 @@ QUnit.test("Load collapsed group", function(assert) {
 
     assert.equal(dataSource.totalItemsCount(), 4, "total items count");
     assert.strictEqual(loadingChanged.callCount, 1);
-    //assert.deepEqual(loadingChanged.lastCall.args[0].group, "field2");
+    // assert.deepEqual(loadingChanged.lastCall.args[0].group, "field2");
     assert.strictEqual(loadingChanged.lastCall.args[0].requireTotalCount, true);
     assert.strictEqual(loadingChanged.lastCall.args[0].requireGroupCount, true);
     assert.strictEqual(loadingChanged.lastCall.args[0].skip, 0);
@@ -2708,7 +2708,7 @@ QUnit.test("Load collapsed group and expand first item", function(assert) {
     assert.strictEqual(loadingChanged.getCall(1).args[0].take, 2, "take for second level");
 });
 
-//T511907
+// T511907
 QUnit.test("Load collapsed group and expand group item that contain items with white space at the end", function(assert) {
     var loadStub = sinon.stub(),
         dataSource = this.createDataSource({
@@ -2736,10 +2736,10 @@ QUnit.test("Load collapsed group and expand group item that contain items with w
 
     dataSource.changeRowExpand(["test1"]);
 
-    //act
+    // act
     dataSource.load();
 
-    //assert
+    // assert
     assert.deepEqual(dataSource.items(), [
         {
             key: "test1",
@@ -2815,7 +2815,7 @@ QUnit.test("Send count query on row expand when next level is group", function(a
     assert.strictEqual(loadingChanged.getCall(0).args[0].take, 1, "take");
 });
 
-//T493778
+// T493778
 QUnit.test("Send count query on row expand when next level is group if use native promises", function(assert) {
     var dataSource = this.createDataSource({
             group: ["field2", "field1"],
@@ -2931,7 +2931,7 @@ QUnit.test("Load collapsed groups, expand second big item and go to third page w
 
     dataSource.load();
 
-    //act
+    // act
     dataSource.changeRowExpand([2]);
     dataSource.load();
 
@@ -2941,7 +2941,7 @@ QUnit.test("Load collapsed groups, expand second big item and go to third page w
     dataSource.pageIndex(2);
     dataSource.load();
 
-    //assert
+    // assert
     assert.deepEqual(dataSource.items(), [
         {
             isContinuation: true,
@@ -2977,7 +2977,7 @@ QUnit.test("Load collapsed groups, expand second level item, expand third level 
 
     dataSource.load();
 
-    //act
+    // act
     dataSource.changeRowExpand([2]);
     dataSource.load();
 
@@ -2990,7 +2990,7 @@ QUnit.test("Load collapsed groups, expand second level item, expand third level 
     dataSource.pageIndex(2);
     dataSource.load();
 
-    //assert
+    // assert
     assert.deepEqual(dataSource.items(), [
         {
             isContinuation: true,
@@ -3090,7 +3090,7 @@ QUnit.test("Load collapsed group and expand second level item", function(assert)
             }]
         }], "items");
 
-    assert.equal(dataSource.totalItemsCount(), 10, "total items count"); //?
+    assert.equal(dataSource.totalItemsCount(), 10, "total items count"); // ?
     assert.strictEqual(loadingChanged.callCount, 3, "loading count");
 
     assert.deepEqual(loadingChanged.getCall(0).args[0].group, [{ "desc": false, "selector": "field1" }], "group by for second level loading");
@@ -3111,7 +3111,7 @@ QUnit.test("Load collapsed group and expand second level item", function(assert)
     assert.strictEqual(loadingChanged.getCall(2).args[0].take, 1, "take for second level");
 });
 
-//T452323
+// T452323
 QUnit.test("Reload dataSource when one expanded group and two group levels exist", function(assert) {
     var dataSource = this.createDataSource({
             group: ["field1", "field2"],
@@ -3126,7 +3126,7 @@ QUnit.test("Reload dataSource when one expanded group and two group levels exist
 
     dataSource.store().on("loading", loadingChanged);
 
-    //act
+    // act
     dataSource.reload(true);
 
     assert.deepEqual(dataSource.items(), [
@@ -3152,7 +3152,7 @@ QUnit.test("Reload dataSource when one expanded group and two group levels exist
     assert.strictEqual(loadingChanged.getCall(0).args[0].skip, 0, "skip for group count request");
     assert.strictEqual(loadingChanged.getCall(0).args[0].take, 1, "take for group count request");
 
-    assert.deepEqual(loadingChanged.getCall(1).args[0].group, ["field1"], "group for group offset request"); //T452323, T477410
+    assert.deepEqual(loadingChanged.getCall(1).args[0].group, ["field1"], "group for group offset request"); // T452323, T477410
     assert.deepEqual(loadingChanged.getCall(1).args[0].filter, ["field1", "<", 1], "filter for group offset request");
     assert.strictEqual(loadingChanged.getCall(1).args[0].requireTotalCount, false, "require total count is not passed for group offset request");
     assert.strictEqual(loadingChanged.getCall(1).args[0].requireGroupCount, true, "require group count is passed for group offset request");
@@ -3173,7 +3173,7 @@ QUnit.test("Reload dataSource when one expanded group and two group levels exist
     assert.strictEqual(loadingChanged.getCall(3).args[0].take, 2, "take for second level");
 });
 
-//T477410
+// T477410
 QUnit.test("Reload dataSource when one expanded group and one group level exist", function(assert) {
     var dataSource = this.createDataSource({
             group: ["field1"],
@@ -3188,7 +3188,7 @@ QUnit.test("Reload dataSource when one expanded group and one group level exist"
 
     dataSource.store().on("loading", loadingChanged);
 
-    //act
+    // act
     dataSource.reload(true);
 
     assert.deepEqual(dataSource.items(), [
@@ -3211,7 +3211,7 @@ QUnit.test("Reload dataSource when one expanded group and one group level exist"
     assert.strictEqual(loadingChanged.getCall(0).args[0].skip, 0, "skip for group count request");
     assert.strictEqual(loadingChanged.getCall(0).args[0].take, 1, "take for group count request");
 
-    assert.deepEqual(loadingChanged.getCall(1).args[0].group, ["field1"], "group for group offset request"); //T452323, T477410
+    assert.deepEqual(loadingChanged.getCall(1).args[0].group, ["field1"], "group for group offset request"); // T452323, T477410
     assert.deepEqual(loadingChanged.getCall(1).args[0].filter, ["field1", "<", 1], "filter for group offset request");
     assert.strictEqual(loadingChanged.getCall(1).args[0].requireTotalCount, false, "require total count is not passed for group offset request");
     assert.strictEqual(loadingChanged.getCall(1).args[0].requireGroupCount, true, "require group count is passed for group offset request");
@@ -3232,14 +3232,14 @@ QUnit.test("Reload dataSource when one expanded group and one group level exist"
     assert.strictEqual(loadingChanged.getCall(3).args[0].take, 2, "take for second level");
 });
 
-//T454240
+// T454240
 QUnit.test("Exception when store not returned groupCount", function(assert) {
-    //arrange
+    // arrange
     var dataSource = this.createDataSource({
         group: "field2"
     }, { skipGroupCount: true });
 
-    //act
+    // act
     try {
         dataSource.load();
         assert.ok(false, "exception should be rised");
@@ -3248,9 +3248,9 @@ QUnit.test("Exception when store not returned groupCount", function(assert) {
     }
 });
 
-//T477410
+// T477410
 QUnit.test("Exception when store not returned groupCount during expand not last level group", function(assert) {
-    //arrange
+    // arrange
     var brokeOptions = {};
     var dataSource = this.createDataSource({
         group: ["field1", "field2"]
@@ -3258,7 +3258,7 @@ QUnit.test("Exception when store not returned groupCount during expand not last 
 
     dataSource.load();
 
-    //act
+    // act
     brokeOptions.skipGroupCount = true;
 
     try {
@@ -3269,9 +3269,9 @@ QUnit.test("Exception when store not returned groupCount during expand not last 
     }
 });
 
-//T477410
+// T477410
 QUnit.test("Exception when store not returned totalCount after full reload", function(assert) {
-    //arrange
+    // arrange
     var brokeOptions = {};
     var dataSource = this.createDataSource({
         group: ["field1"]
@@ -3281,7 +3281,7 @@ QUnit.test("Exception when store not returned totalCount after full reload", fun
     dataSource.changeRowExpand([1]);
     dataSource.load();
 
-    //act
+    // act
     try {
         brokeOptions.skipTotalCount = true;
         dataSource.reload(true);
@@ -3379,10 +3379,10 @@ $.each(["Grouping without remoteOperations", "Grouping with remoteOperations", "
 
             assert.equal(loadArgs.length, 1);
 
-            //act
+            // act
             clock.tick(10);
 
-            //assert
+            // assert
             assert.equal(loadArgs.length, 2);
 
             assert.deepEqual(loadArgs[0].group, [{ selector: "field2", isExpanded: false, desc: false }]);
@@ -3392,7 +3392,7 @@ $.each(["Grouping without remoteOperations", "Grouping with remoteOperations", "
             assert.strictEqual(loadArgs[0].take, undefined);
 
             assert.deepEqual(loadArgs[1].group, null);
-            assert.deepEqual(loadArgs[1].select, ["field2", "field3"]); //T328457
+            assert.deepEqual(loadArgs[1].select, ["field2", "field3"]); // T328457
             assert.deepEqual(loadArgs[1].filter, ["field2", "=", 2]);
             assert.strictEqual(loadArgs[1].skip, undefined);
             assert.strictEqual(loadArgs[1].take, 2);
@@ -3401,10 +3401,10 @@ $.each(["Grouping without remoteOperations", "Grouping with remoteOperations", "
             assert.equal(source.totalItemsCount(), -1);
             assert.deepEqual(this.processItems(source.items()), []);
 
-            //act
+            // act
             clock.tick(10);
 
-            //assert
+            // assert
             assert.equal(changedCount, 1);
             assert.equal(source.totalItemsCount(), 8);
             assert.deepEqual(this.processItems(source.items()), [{
@@ -3435,10 +3435,10 @@ $.each(["Grouping without remoteOperations", "Grouping with remoteOperations", "
 
             assert.equal(loadArgs.length, 1);
 
-            //act
+            // act
             clock.tick(10);
 
-            //assert
+            // assert
             assert.equal(loadArgs.length, 2);
 
             assert.deepEqual(loadArgs[0].group, [{ selector: "field1", isExpanded: true, desc: false }, { selector: "field2", isExpanded: false, desc: false }], "isExpanded is false for last group");
@@ -3459,7 +3459,7 @@ $.each(["Grouping without remoteOperations", "Grouping with remoteOperations", "
             paginate: false
         });
 
-        //act
+        // act
         source.load();
         assert.equal(source.totalItemsCount(), 3);
         assert.deepEqual(this.processItems(source.items()), [{
@@ -3479,7 +3479,7 @@ $.each(["Grouping without remoteOperations", "Grouping with remoteOperations", "
             }
         });
 
-        //act
+        // act
         source.load();
         assert.equal(source.totalItemsCount(), 3);
         assert.deepEqual(source.items(), [{
@@ -3495,7 +3495,7 @@ $.each(["Grouping without remoteOperations", "Grouping with remoteOperations", "
     QUnit.test("grouping with pageSize more items count", function(assert) {
         var source = this.createDataSource();
 
-        //act
+        // act
         source.load();
 
         assert.equal(source.totalItemsCount(), 3);
@@ -3514,7 +3514,7 @@ $.each(["Grouping without remoteOperations", "Grouping with remoteOperations", "
             pageSize: 2
         });
 
-        //act
+        // act
         source.load();
 
         assert.equal(source.totalItemsCount(), 3);
@@ -3526,7 +3526,7 @@ $.each(["Grouping without remoteOperations", "Grouping with remoteOperations", "
         assert.equal(source.itemsCount(), 2);
     });
 
-//T356413
+// T356413
     QUnit.test("grouping with pageSize less items count. Change pageSize at runtime", function(assert) {
         var source = this.createDataSource({
             group: "group",
@@ -3542,7 +3542,7 @@ $.each(["Grouping without remoteOperations", "Grouping with remoteOperations", "
             pageSize: 3
         });
 
-    //act
+    // act
         source.load();
 
         source.changeRowExpand([1]);
@@ -3553,7 +3553,7 @@ $.each(["Grouping without remoteOperations", "Grouping with remoteOperations", "
         source.pageIndex(2);
         source.load();
 
-    //assert
+    // assert
         assert.equal(source.totalItemsCount(), 10);
         assert.deepEqual(this.processItems(source.items()), [{
             key: 1, isContinuation: true, items: [
@@ -3564,7 +3564,7 @@ $.each(["Grouping without remoteOperations", "Grouping with remoteOperations", "
         assert.equal(source.itemsCount(), 3);
     });
 
-    //B254928
+    // B254928
     QUnit.test("grouping with pageSize less items count when no requireTotalCount", function(assert) {
         var source = this.createDataSource({
             pageSize: 5,
@@ -3572,16 +3572,16 @@ $.each(["Grouping without remoteOperations", "Grouping with remoteOperations", "
             requireTotalCount: false
         });
 
-        //act
+        // act
         source.load();
 
-        //assert
+        // assert
         assert.equal(source.totalItemsCount(), 5);
         assert.equal(source.itemsCount(), 5);
         assert.ok(!source.isLastPage());
         assert.ok(!source.hasKnownLastPage());
 
-        //act
+        // act
         source.pageIndex(1);
         source.load();
         assert.equal(source.totalItemsCount(), 7);
@@ -3590,7 +3590,7 @@ $.each(["Grouping without remoteOperations", "Grouping with remoteOperations", "
         assert.ok(source.hasKnownLastPage());
     });
 
-    //B239382
+    // B239382
     QUnit.test("grouping with isExpanded group on previous page and isExpanded current group that continues on the next page", function(assert) {
         var source = this.createDataSource({
             pageSize: 4,
@@ -3611,7 +3611,7 @@ $.each(["Grouping without remoteOperations", "Grouping with remoteOperations", "
             requireTotalCount: true
         });
 
-        //act
+        // act
         source.load();
         source.changeRowExpand([2]);
         source.load();
@@ -3632,7 +3632,7 @@ $.each(["Grouping without remoteOperations", "Grouping with remoteOperations", "
         assert.equal(source.itemsCount(), 4);
     });
 
-    //B239382
+    // B239382
     QUnit.test("grouping on last page when group continued from several pages", function(assert) {
         var source = this.createDataSource({
             pageSize: 3,
@@ -3649,7 +3649,7 @@ $.each(["Grouping without remoteOperations", "Grouping with remoteOperations", "
             requireTotalCount: true
         });
 
-        //act
+        // act
         source.load();
         var changeRowExpandResult = source.changeRowExpand([1]);
         source.load();
@@ -3673,7 +3673,7 @@ $.each(["Grouping without remoteOperations", "Grouping with remoteOperations", "
 
         source.load();
 
-        //act
+        // act
         source.changeRowExpand([2]);
         source.pageIndex(1);
         source.load();
@@ -3704,7 +3704,7 @@ $.each(["Grouping without remoteOperations", "Grouping with remoteOperations", "
 
         source.load();
 
-        //act
+        // act
         source.changeRowExpand([2]);
         source.load();
         source.pageIndex(1);
@@ -3733,7 +3733,7 @@ $.each(["Grouping without remoteOperations", "Grouping with remoteOperations", "
 
         source.load();
 
-        //act
+        // act
         source.changeRowExpand([2]);
         source.pageIndex(1);
         source.load();
@@ -3756,7 +3756,7 @@ $.each(["Grouping without remoteOperations", "Grouping with remoteOperations", "
 
         source.load();
 
-        //act
+        // act
         source.changeRowExpand([2]);
         source.load();
 
@@ -3776,7 +3776,7 @@ $.each(["Grouping without remoteOperations", "Grouping with remoteOperations", "
         });
         source.load();
 
-        //act
+        // act
         assert.equal(source.totalItemsCount(), 3);
         assert.deepEqual(this.processItems(source.items()), [{
             key: 4, items: null
@@ -3857,7 +3857,7 @@ $.each(["Grouping without remoteOperations", "Grouping with remoteOperations", "
 
         source.load();
 
-        //act
+        // act
         source.changeRowExpand([true]);
         source.load();
         source.changeRowExpand([undefined]);
@@ -3929,11 +3929,11 @@ $.each(["Grouping without remoteOperations", "Grouping with remoteOperations", "
             });
             source.load();
 
-    //act
+    // act
             source.collapseAll();
             source.load();
 
-    //assert
+    // assert
             assert.equal(source.pageCount(), 2, "pageCount");
             assert.deepEqual(source.items(), [
         { field1: 1, field2: 2, field3: 3 },
@@ -3941,9 +3941,9 @@ $.each(["Grouping without remoteOperations", "Grouping with remoteOperations", "
             ], "items");
         });
 
-//T112478
+// T112478
         QUnit.test("collapseAll for remote data", function(assert) {
-    //arrange
+    // arrange
             var source = this.createDataSource({
                     load: function() { return [{ group: "group 1", text: "text 1" }, { group: "group 1", text: "text 2" }, { group: "group 2", text: "text 3" }]; },
                     totalCount: function() { return -1; },
@@ -3962,11 +3962,11 @@ $.each(["Grouping without remoteOperations", "Grouping with remoteOperations", "
             assert.ok(source._grouping instanceof ExpandedGroupingHelper, "expanded grouping helper");
 
 
-    //act
+    // act
             source.collapseAll();
             source.load();
 
-    //assert
+    // assert
             assert.ok(source._grouping instanceof CollapsedGroupingHelper, "collapsed grouping helper");
             assert.ok(!messageError, "no error");
             assert.deepEqual(this.processItems(source.items()), [{ key: "group 1", items: null }, { key: "group 2", items: null }]);
@@ -3979,11 +3979,11 @@ $.each(["Grouping without remoteOperations", "Grouping with remoteOperations", "
             });
             source.load();
 
-    //act
+    // act
             source.expandAll();
             source.load();
 
-    //assert
+    // assert
             assert.equal(source.pageCount(), 2, "pageCount");
             assert.deepEqual(source.items(), [
         { field1: 1, field2: 2, field3: 3 },
@@ -3991,7 +3991,7 @@ $.each(["Grouping without remoteOperations", "Grouping with remoteOperations", "
             ], "items");
         });
 
-//T183365
+// T183365
         QUnit.test("change grouping and reload with custom store", function(assert) {
             var source = this.createDataSource({
                 load: function() {
@@ -4006,11 +4006,11 @@ $.each(["Grouping without remoteOperations", "Grouping with remoteOperations", "
             });
             source.load();
 
-    //act
+    // act
             source.group('name');
             source.reload();
 
-    //assert
+    // assert
             assert.equal(source.totalItemsCount(), 3);
             assert.deepEqual(source.items(), [{
                 key: 'Chai', items: null
@@ -4022,7 +4022,7 @@ $.each(["Grouping without remoteOperations", "Grouping with remoteOperations", "
             assert.equal(source.itemsCount(), 3);
         });
 
-//T266248
+// T266248
         QUnit.test("change sortOrder of group", function(assert) {
             var source = this.createDataSource({
                 pageSize: 5,
@@ -4030,11 +4030,11 @@ $.each(["Grouping without remoteOperations", "Grouping with remoteOperations", "
             });
             source.load();
 
-    //act
+    // act
             source.group([{ selector: "field1", isExpanded: true, desc: true }]);
             source.reload();
 
-    //assert
+    // assert
             assert.equal(source.pageCount(), 2, "pageCount");
             assert.deepEqual(source.items(), [
                 {
@@ -4096,7 +4096,7 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
             pageSize: 2
         });
 
-        //act
+        // act
         source.load();
 
         assert.equal(source.totalItemsCount(), 2);
@@ -4120,7 +4120,7 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
         source.load();
         loadCount = 0;
 
-        //act
+        // act
         source.changeRowExpand([1]);
         source.load();
 
@@ -4145,7 +4145,7 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
             pageSize: 5
         });
 
-        //act
+        // act
         source.load();
         source.changeRowExpand([2]);
         source.load();
@@ -4170,7 +4170,7 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
             paginate: false
         });
 
-        //act
+        // act
         source.load();
 
         assert.equal(source.totalItemsCount(), 2);
@@ -4186,7 +4186,7 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
             paginate: false
         });
 
-        //act
+        // act
         source.load();
         source.changeRowExpand([1]);
         source.load();
@@ -4208,7 +4208,7 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
             pageSize: 2
         });
 
-        //act
+        // act
         source.load();
         source.changeRowExpand([1]);
         source.pageIndex(1);
@@ -4228,7 +4228,7 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
             scrolling: { mode: 'virtual', preventPreload: true }
         });
 
-        //act
+        // act
         source.load();
         source.changeRowExpand([1]);
         source.pageIndex(1);
@@ -4249,7 +4249,7 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
             pageSize: 2
         });
 
-        //act
+        // act
         source.load();
         source.changeRowExpand([2]);
         source.load();
@@ -4270,7 +4270,7 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
             pageSize: 3
         });
 
-        //act
+        // act
         source.load();
         source.changeRowExpand([1]);
         source.load();
@@ -4295,7 +4295,7 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
             scrolling: { mode: 'virtual', preventPreload: true }
         });
 
-        //act
+        // act
         source.load();
         source.changeRowExpand([1]);
         source.load();
@@ -4331,7 +4331,7 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
             pageSize: 5
         });
 
-        //act
+        // act
         source.load();
 
         source.changeRowExpand([1]);
@@ -4363,7 +4363,7 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
 
             source.load();
 
-            //act
+            // act
             source.changeRowExpand([1]);
             source.load();
             source.changeRowExpand([1, 3]);
@@ -4385,7 +4385,7 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
 
             source.load();
 
-            //act
+            // act
             source.changeRowExpand([1]);
             source.load();
             source.changeRowExpand([1, 3]);
@@ -4417,7 +4417,7 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
             pageSize: 5
         });
 
-        //act
+        // act
         source.load();
 
         source.changeRowExpand([1]);
@@ -4449,7 +4449,7 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
 
         source.expandAll();
 
-        //act
+        // act
         source.load();
 
         assert.equal(source.totalItemsCount(), 15);
@@ -4473,7 +4473,7 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
         source.load();
         source.changeRowExpand([1]);
         source.load();
-        //act
+        // act
         source.expandAll(0);
         source.load();
 
@@ -4494,7 +4494,7 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
 
         source.load();
         source.changeRowExpand([1]);
-        //act
+        // act
         source.collapseAll();
         source.load();
 
@@ -4515,11 +4515,11 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
         source.changeRowExpand([1]);
         source.changeRowExpand([1, 3]);
 
-        //act
+        // act
         source.collapseAll(1);
         source.reload();
 
-        //assert
+        // assert
         assert.ok(!source.group()[0].isExpanded);
         assert.ok(!source.group()[1].isExpanded);
         assert.equal(source.totalItemsCount(), 4);
@@ -4540,11 +4540,11 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
 
         source.load();
 
-        //act
+        // act
         source.collapseAll(1);
         source.reload();
 
-        //assert
+        // assert
         assert.ok(source.group()[0].isExpanded);
         assert.ok(!source.group()[1].isExpanded);
         assert.equal(source.totalItemsCount(), 5);
@@ -4563,7 +4563,7 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
             group: [{ selector: 'field1', isExpanded: true }, 'field2']
         });
 
-        //act
+        // act
         source.load();
 
         assert.equal(source.totalItemsCount(), 5);
@@ -4576,7 +4576,7 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
         }]);
     });
 
-    //B254818
+    // B254818
     QUnit.test("isExpanded group parameters. Apply filter", function(assert) {
         var source = this.createDataSource({
             pageSize: 5,
@@ -4585,7 +4585,7 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
 
         source.load();
 
-        //act
+        // act
         source.filter(['field2', '=', 2]);
         source.reload();
 
@@ -4607,7 +4607,7 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
             pageSize: 3
         });
 
-        //act
+        // act
         source.load();
         source.changeRowExpand([1]);
         source.load();
@@ -4630,7 +4630,7 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
             pageSize: 3
         });
 
-        //act
+        // act
         source.load();
         source.changeRowExpand([1]);
         source.group([{ selector: 'field1' }, { selector: 'field2', desc: true }]);
@@ -4646,7 +4646,7 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
         }]);
     });
 
-//T382926
+// T382926
     QUnit.test("change sortOrder for second group level when all groups expanded", function(assert) {
         var array = [
             { field1: 1, field2: 2, field3: 1 },
@@ -4664,7 +4664,7 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
             group: [{ selector: 'field1', desc: false, isExpanded: true }, { selector: 'field2', desc: false, isExpanded: true }]
         });
 
-    //act
+    // act
         source.load();
 
         source.group([{ selector: 'field1', desc: false, isExpanded: true }, { selector: 'field2', desc: true, isExpanded: true }]);
@@ -4683,13 +4683,13 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
         }]);
     });
 
-    //B254110
+    // B254110
     QUnit.test("change isExpanded for first group level", function(assert) {
         var source = this.createDataSource({
             pageSize: 3
         });
 
-        //act
+        // act
         source.load();
         source.group([{ selector: 'field1', isExpanded: true }, 'field2']);
         source.reload();
@@ -4709,14 +4709,14 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
         }]);
     });
 
-    //B254110
+    // B254110
     QUnit.test("change isExpanded for second group level", function(assert) {
         var source = this.createDataSource({
             pageSize: 3,
             group: [{ selector: 'field1', isExpanded: true }, { selector: 'field2', isExpanded: true }]
         });
 
-        //act
+        // act
         source.load();
         source.group([{ selector: 'field1', isExpanded: true }, { selector: 'field2', isExpanded: false }]);
         source.reload();
@@ -4753,7 +4753,7 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
 
         source.load();
 
-        //act
+        // act
         source.expandAll();
         source.pageIndex(1);
         source.load();
@@ -4762,7 +4762,7 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
         assert.deepEqual(this.processItems(source.items()), [{
             key: 1,
             isContinuation: true,
-            //isContinuationOnNextPage: true,
+            // isContinuationOnNextPage: true,
             items: [{
                 key: 2,
                 isContinuation: true,
@@ -4790,7 +4790,7 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
 
         source.load();
 
-        //act
+        // act
         source.expandAll();
         source.pageIndex(8);
         source.load();
@@ -4799,7 +4799,7 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
         assert.deepEqual(this.processItems(source.items()), [{
             key: 1,
             isContinuation: true,
-            //isContinuationOnNextPage: true,
+            // isContinuationOnNextPage: true,
             items: [{
                 key: 2,
                 isContinuation: true,
@@ -4812,11 +4812,11 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
             }]
         }]);
 
-        //act
+        // act
         source.pageIndex(9);
         source.load();
 
-        //assert
+        // assert
         assert.deepEqual(this.processItems(source.items()), [{
             key: 1,
             isContinuation: true,
@@ -4834,11 +4834,11 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
             items: []
         }]);
 
-        //act
+        // act
         source.pageIndex(10);
         source.load();
 
-        //assert
+        // assert
         assert.deepEqual(this.processItems(source.items()), [{
             key: 2,
             isContinuation: true,
@@ -4871,7 +4871,7 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
 
         source.load();
 
-        //act
+        // act
         source.expandAll();
         source.pageIndex(2);
         source.load();
@@ -4880,7 +4880,7 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
         assert.deepEqual(this.processItems(source.items()), [{
             key: 1,
             isContinuation: true,
-            //isContinuationOnNextPage: true,
+            // isContinuationOnNextPage: true,
             items: [{
                 key: 2,
                 isContinuation: true,
@@ -4915,7 +4915,7 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
 
         source.load();
 
-        //act
+        // act
         source.expandAll();
         source.pageIndex(2);
         source.load();
@@ -4960,7 +4960,7 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
 
         source.load();
 
-        //act
+        // act
         source.expandAll();
         source.pageIndex(2);
         source.load();
@@ -5001,11 +5001,11 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
 
         source.load();
 
-        //act
+        // act
         source.expandAll();
         source.load();
 
-        //assert
+        // assert
         assert.equal(source.totalItemsCount(), 18);
         assert.deepEqual(this.processItems(source.items()), [{
             key: 1,
@@ -5024,11 +5024,11 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
             }]
         }]);
 
-        //act
+        // act
         source.pageIndex(1);
         source.load();
 
-        //assert
+        // assert
         assert.equal(source.totalItemsCount(), 18);
         assert.deepEqual(this.processItems(source.items()), [{
             key: 2,
@@ -5063,11 +5063,11 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
 
         source.load();
 
-        //act
+        // act
         source.expandAll();
         source.load();
 
-        //assert
+        // assert
         assert.equal(source.totalItemsCount(), 15);
         assert.deepEqual(this.processItems(source.items()), [{
             key: 1,
@@ -5084,11 +5084,11 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
             items: []
         }]);
 
-        //act
+        // act
         source.pageIndex(1);
         source.load();
 
-        //assert
+        // assert
         assert.equal(source.totalItemsCount(), 15);
         assert.deepEqual(this.processItems(source.items()), [{
             key: 2,
@@ -5105,7 +5105,7 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
         }]);
     });
 
-    //T180076
+    // T180076
     QUnit.test("Four groups with paging", function(assert) {
         var array = [
                 { field1: 1, field2: 2, field3: 3, field4: 4, field5: 5 },
@@ -5118,7 +5118,7 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
                 pageSize: 10
             });
 
-        //act
+        // act
         source.pageIndex(1);
         source.load();
 
@@ -5134,7 +5134,7 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
         }]);
     });
 
-    //T180076
+    // T180076
     QUnit.test("Four groups with paging after collapse group", function(assert) {
         var array = [
                 { field1: 1, field2: 2, field3: 3, field4: 4, field5: 5 },
@@ -5147,7 +5147,7 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
                 pageSize: 10
             });
 
-        //act
+        // act
         source.pageIndex(1);
         source.load();
         source.changeRowExpand([1]);
@@ -5190,10 +5190,10 @@ QUnit.test("Total summary without grouping", function(assert) {
         }]
     });
 
-    //act
+    // act
     dataSource.load();
 
-    //assert
+    // assert
     assert.strictEqual(dataSource.items().length, 3);
     assert.deepEqual(dataSource.totalAggregates(), [10, 55]);
 });
@@ -5214,10 +5214,10 @@ QUnit.test("Total summary and group summary", function(assert) {
         }]
     });
 
-    //act
+    // act
     dataSource.load();
 
-    //assert
+    // assert
     assert.strictEqual(dataSource.items().length, 3);
     assert.deepEqual(dataSource.items()[0], { key: 1, aggregates: [1], items: null });
     assert.deepEqual(dataSource.totalAggregates(), [10, 55]);
@@ -5242,10 +5242,10 @@ QUnit.test("Total summary and group summary when map defines", function(assert) 
         }]
     });
 
-    //act
+    // act
     dataSource.load();
 
-    //assert
+    // assert
     assert.strictEqual(dataSource.items().length, 3);
     assert.deepEqual(dataSource.items()[0], { key: 1, aggregates: [1], items: null });
     assert.deepEqual(dataSource.totalAggregates(), [10, 55]);
@@ -5276,10 +5276,10 @@ QUnit.test("Total summary with CustomStore when remoteOperations filtering and s
         }]
     });
 
-    //act
+    // act
     dataSource.load();
 
-    //assert
+    // assert
     assert.ok(storeLoadOptions.filter);
     assert.ok(storeLoadOptions.sort);
     assert.strictEqual(dataSource.items().length, 3);
@@ -5308,10 +5308,10 @@ QUnit.test("Total summary with CustomStore when remoteOperations false", functio
         }]
     });
 
-    //act
+    // act
     dataSource.load();
 
-    //assert
+    // assert
     assert.ok(!storeLoadOptions.filter);
     assert.ok(!storeLoadOptions.sort);
     assert.strictEqual(dataSource.items().length, 3);
@@ -5340,10 +5340,10 @@ QUnit.test("Total summary and group summary with CustomStore", function(assert) 
         }]
     });
 
-    //act
+    // act
     dataSource.load();
 
-    //assert
+    // assert
     assert.strictEqual(dataSource.items().length, 3);
     assert.deepEqual(dataSource.items()[0], { key: 1, aggregates: [1], items: null });
     assert.deepEqual(dataSource.totalAggregates(), [10, 55]);
@@ -5381,11 +5381,11 @@ QUnit.test("no caching when all remoteOperations", function(assert) {
     });
     dataSource.load();
 
-    //act
+    // act
     dataSource.load();
     dataSource.reload();
 
-    //assert
+    // assert
     assert.deepEqual(this.loadingCount, 3, "three loading");
 });
 
@@ -5395,11 +5395,11 @@ QUnit.test("no caching when cacheEnabled false", function(assert) {
     });
     dataSource.load();
 
-    //act
+    // act
     dataSource.load();
     dataSource.reload();
 
-    //assert
+    // assert
     assert.deepEqual(this.loadingCount, 3, "three loading");
 });
 
@@ -5407,12 +5407,12 @@ QUnit.test("second load from cache after change filter/sort", function(assert) {
     var dataSource = this.createDataSource({});
     dataSource.load();
 
-    //act
+    // act
     dataSource.sort({ selector: "this", desc: true });
     dataSource.filter(["this", ">", 5]);
     dataSource.load();
 
-    //assert
+    // assert
     assert.strictEqual(dataSource.items().length, 3, "item Count");
     assert.strictEqual(dataSource.items()[0], 10, "first item");
     assert.deepEqual(dataSource.totalCount(), 5, "totalCount");
@@ -5423,11 +5423,11 @@ QUnit.test("full reload reset cache", function(assert) {
     var dataSource = this.createDataSource({});
     dataSource.load();
 
-    //act
+    // act
     dataSource.filter(["this", ">", 5]);
     dataSource.reload(true);
 
-    //assert
+    // assert
     assert.deepEqual(dataSource.totalCount(), 5, "totalCount");
     assert.deepEqual(this.loadingCount, 2, "two loading");
 });
@@ -5436,11 +5436,11 @@ QUnit.test("reload from original dataSource reset cache", function(assert) {
     var dataSource = this.createDataSource({});
     dataSource.load();
 
-    //act
+    // act
     dataSource.filter(["this", ">", 5]);
     dataSource._dataSource.reload();
 
-    //assert
+    // assert
     assert.deepEqual(dataSource.totalCount(), 5, "totalCount");
     assert.deepEqual(this.loadingCount, 2, "two loading");
 });
@@ -5454,12 +5454,12 @@ QUnit.test("load from cache when remote filtering is not changed and pageIndex i
     dataSource.filter(["this", "<", 5]);
     dataSource.load();
 
-    //act
+    // act
     dataSource.filter(["this", "<", 5]);
     dataSource.pageIndex(1);
     dataSource.load();
 
-    //assert
+    // assert
     assert.deepEqual(dataSource.items()[0], 4, "first item on page");
     assert.deepEqual(this.loadingCount, 1, "one loading");
 });
@@ -5472,17 +5472,17 @@ QUnit.test("load from cache when pageSize and pageIndex is changed", function(as
     });
     dataSource.load();
 
-    //act
+    // act
     dataSource.pageSize(4);
     dataSource.pageIndex(1);
     dataSource.reload();
 
-    //assert
+    // assert
     assert.deepEqual(dataSource.items()[0], 5, "first item on page");
     assert.deepEqual(this.loadingCount, 1, "one loading");
 });
 
-//T328467
+// T328467
 QUnit.test("load from cache when remote paging but summary exists and pageIndex is changed", function(assert) {
     var dataSource = this.createDataSource({
         remoteOperations: {
@@ -5504,12 +5504,12 @@ QUnit.test("load from cache when remote paging but summary exists and pageIndex 
     dataSource.load();
     assert.deepEqual(this.loadingCount, 1, "one loading");
 
-    //act
+    // act
     dataSource.pageSize(4);
     dataSource.pageIndex(1);
     dataSource.reload();
 
-    //assert
+    // assert
     assert.deepEqual(dataSource.items()[0], 5, "first item on page");
     assert.deepEqual(this.loadingCount, 1, "one loading");
     assert.deepEqual(dataSource.totalAggregates(), [10, 55], "total aggregates");
@@ -5525,11 +5525,11 @@ QUnit.test("reset cache when remote filtering is changed", function(assert) {
     dataSource.filter(["this", ">", 5]);
     dataSource.load();
 
-    //act
+    // act
     dataSource.filter(["this", ">", 6]);
     dataSource.reload();
 
-    //assert
+    // assert
     assert.deepEqual(dataSource.items()[0], 7, "first item on page");
     assert.deepEqual(dataSource.totalCount(), 4, "totalCount");
     assert.deepEqual(this.loadingCount, 2, "one loading");
@@ -5543,11 +5543,11 @@ QUnit.test("reset cache when remote sorting is changed", function(assert) {
     });
     dataSource.load();
 
-    //act
+    // act
     dataSource.sort({ selector: "this", desc: true });
     dataSource.reload();
 
-    //assert
+    // assert
     assert.deepEqual(dataSource.items()[0], 10, "first item on page");
     assert.deepEqual(dataSource.totalCount(), 10, "totalCount");
     assert.deepEqual(this.loadingCount, 2, "one loading");
@@ -5561,11 +5561,11 @@ QUnit.test("reset cache when remote sorting is not changed and grouping is chang
     });
     dataSource.load();
 
-    //act
+    // act
     dataSource.group({ selector: "this", desc: true });
     dataSource.reload();
 
-    //assert
+    // assert
     assert.deepEqual(dataSource.items()[0], { key: 10, items: null }, "first item on page");
     assert.deepEqual(dataSource.totalCount(), 10, "totalCount");
     assert.deepEqual(this.loadingCount, 1, "one loading");
@@ -5602,7 +5602,7 @@ QUnit.module("Custom Load", {
     }
 });
 
-//T344031
+// T344031
 QUnit.test("load when loadingTimeout is defined", function(assert) {
     var dataSource = this.createDataSource({
         loadingTimeout: 10
@@ -5625,7 +5625,7 @@ QUnit.test("load when loadingTimeout is defined", function(assert) {
 
     var customLoadData = false;
 
-    //act
+    // act
     dataSource.load({
         filter: ["this", ">", 8]
     }).done(function(data) {
@@ -5634,14 +5634,14 @@ QUnit.test("load when loadingTimeout is defined", function(assert) {
 
     this.clock.tick(9);
 
-    //assert
+    // assert
     assert.ok(!customLoadData, "custom load data is not loaded");
     assert.deepEqual(loadingChangedArgs, [true], "loadingChanged args when data is not loaded");
 
-    //act
+    // act
     this.clock.tick(1);
 
-    //assert
+    // assert
     assert.deepEqual(customLoadData, [9, 10], "custom load data");
     assert.deepEqual(loadingChangedArgs, [true, false], "loadingChanged args");
 });
@@ -5666,7 +5666,7 @@ QUnit.test("load without cache with group/filter/paging options", function(asser
 
     var customLoadData = false;
 
-    //act
+    // act
     dataSource.load({
         filter: ["this", ">", "1"],
         group: "this",
@@ -5677,7 +5677,7 @@ QUnit.test("load without cache with group/filter/paging options", function(asser
     });
 
 
-    //assert
+    // assert
     assert.deepEqual(customLoadData, [{ key: 4, items: [4] }, { key: 5, items: [5] }], "custom load data");
     assert.ok(!changedArgs.length, "changed is not fired");
     assert.deepEqual(loadingChangedArgs, [true, false], "loadingChanged args");
@@ -5687,7 +5687,7 @@ QUnit.test("load without cache with group/filter/paging options", function(asser
     assert.deepEqual(this.loadingCount, 2, "loading count");
 });
 
-//T317818
+// T317818
 QUnit.test("load from cache with group/filter/paging options", function(assert) {
     var dataSource = this.createDataSource({
         filter: ["this", ">", "5"],
@@ -5708,7 +5708,7 @@ QUnit.test("load from cache with group/filter/paging options", function(assert) 
 
     var customLoadData = false;
 
-    //act
+    // act
     dataSource.load({
         filter: ["this", ">", "5"],
         group: "this",
@@ -5719,7 +5719,7 @@ QUnit.test("load from cache with group/filter/paging options", function(assert) 
     });
 
 
-    //assert
+    // assert
     assert.deepEqual(customLoadData, [{ key: 8, items: [8] }, { key: 9, items: [9] }], "custom load data");
     assert.ok(!changedArgs.length, "changed is not fired");
     assert.deepEqual(loadingChangedArgs, [true, false], "loadingChanged args");
@@ -5729,7 +5729,7 @@ QUnit.test("load from cache with group/filter/paging options", function(assert) 
     assert.deepEqual(this.loadingCount, 1, "loading count");
 });
 
-//T341843
+// T341843
 QUnit.test("load from cache with group as function options", function(assert) {
     var dataSource = this.createDataSource({
         group: [{ selector: "this", desc: false }],
@@ -5750,7 +5750,7 @@ QUnit.test("load from cache with group as function options", function(assert) {
 
     var customLoadData = false;
 
-    //act
+    // act
     dataSource.load({
         group: function(data) { return data % 2; }
     }).done(function(data) {
@@ -5758,7 +5758,7 @@ QUnit.test("load from cache with group as function options", function(assert) {
     });
 
 
-    //assert
+    // assert
     assert.deepEqual(customLoadData, [{ key: 0, items: [2, 4, 6, 8, 10] }, { key: 1, items: [1, 3, 5, 7, 9] }], "custom load data");
     assert.ok(!changedArgs.length, "changed is not fired");
     assert.deepEqual(loadingChangedArgs, [true, false], "loadingChanged args");
@@ -5788,7 +5788,7 @@ QUnit.test("load when remote grouping and not isLoadingAll", function(assert) {
 
     var customLoadData = false;
     this.loadingCount = 0;
-    //act
+    // act
     dataSource.load({
         filter: ["this", ">", "5"],
         group: "this",
@@ -5799,7 +5799,7 @@ QUnit.test("load when remote grouping and not isLoadingAll", function(assert) {
     });
 
 
-    //assert
+    // assert
     assert.deepEqual(customLoadData, [{ key: 8, items: null, count: 1 }, { key: 9, items: null, count: 1 }], "custom load data");
     assert.ok(!changedArgs.length, "changed is not fired");
     assert.deepEqual(loadingChangedArgs, [true, false], "loadingChanged args");
@@ -5809,7 +5809,7 @@ QUnit.test("load when remote grouping and not isLoadingAll", function(assert) {
     assert.deepEqual(this.loadingCount, 1, "loading count");
 });
 
-//T368828
+// T368828
 QUnit.test("load when remote grouping and first page", function(assert) {
     var dataSource = this.createDataSource({
         group: "this",
@@ -5831,7 +5831,7 @@ QUnit.test("load when remote grouping and first page", function(assert) {
 
     var customLoadData = false;
     this.loadingCount = 0;
-    //act
+    // act
     dataSource.load({
         group: "this",
         skip: 0,
@@ -5841,7 +5841,7 @@ QUnit.test("load when remote grouping and first page", function(assert) {
     });
 
 
-    //assert
+    // assert
     assert.deepEqual(customLoadData, [{ key: 1, items: null, count: 1 }, { key: 2, items: null, count: 1 }, { key: 3, items: null, count: 1 }], "custom load data");
     assert.ok(!changedArgs.length, "changed is not fired");
     assert.deepEqual(loadingChangedArgs, [true, false], "loadingChanged args");
@@ -5851,7 +5851,7 @@ QUnit.test("load when remote grouping and first page", function(assert) {
     assert.deepEqual(this.loadingCount, 0, "loading count");
 });
 
-//T368828
+// T368828
 QUnit.test("load when remote grouping and second page", function(assert) {
     var dataSource = this.createDataSource({
         group: "this",
@@ -5872,7 +5872,7 @@ QUnit.test("load when remote grouping and second page", function(assert) {
 
     var customLoadData = false;
     this.loadingCount = 0;
-    //act
+    // act
 
     dataSource.load({
         group: "this",
@@ -5883,7 +5883,7 @@ QUnit.test("load when remote grouping and second page", function(assert) {
     });
 
 
-    //assert
+    // assert
     assert.deepEqual(customLoadData, [{ key: 3, items: null, count: 1 }, { key: 4, items: null, count: 1 }], "custom load data");
     assert.ok(!changedArgs.length, "changed is not fired");
     assert.deepEqual(loadingChangedArgs, [true, false], "loadingChanged args");
@@ -5893,7 +5893,7 @@ QUnit.test("load when remote grouping and second page", function(assert) {
     assert.deepEqual(this.loadingCount, 1, "loading count");
 });
 
-//T368875
+// T368875
 QUnit.test("load when remote grouping and groupInterval is defined", function(assert) {
     var dataSource = this.createDataSource({
         group: "this",
@@ -5915,7 +5915,7 @@ QUnit.test("load when remote grouping and groupInterval is defined", function(as
 
     var customLoadData = false;
     this.loadingCount = 0;
-    //act
+    // act
     dataSource.load({
         group: [{ selector: "this", groupInterval: 2 }],
         skip: 0,
@@ -5925,7 +5925,7 @@ QUnit.test("load when remote grouping and groupInterval is defined", function(as
     });
 
 
-    //assert
+    // assert
     assert.deepEqual(customLoadData, [{ key: 0, items: null, count: 1 }, { key: 1, items: null, count: 2 }, { key: 2, items: null, count: 2 }], "custom load data");
     assert.ok(!changedArgs.length, "changed is not fired");
     assert.deepEqual(loadingChangedArgs, [true, false], "loadingChanged args");
@@ -5935,7 +5935,7 @@ QUnit.test("load when remote grouping and groupInterval is defined", function(as
     assert.deepEqual(this.loadingCount, 1, "loading count");
 });
 
-//T375388
+// T375388
 QUnit.test("load when remote summary and summary is not defined", function(assert) {
     var dataSource = this.createDataSource({
         remoteOperations: { summary: true }
@@ -5943,7 +5943,7 @@ QUnit.test("load when remote summary and summary is not defined", function(asser
     dataSource.load();
 
     var customLoadData = false;
-    //act
+    // act
     dataSource.load({
         filter: ["this", ">=", "5"],
         group: "this",
@@ -5953,14 +5953,14 @@ QUnit.test("load when remote summary and summary is not defined", function(asser
     });
 
 
-    //assert
+    // assert
     assert.deepEqual(customLoadData, [{ key: 5, items: [5] }, { key: 6, items: [6] }], "custom load data");
 
     assert.deepEqual(dataSource.items(), [1, 2, 3], "items on page");
     assert.deepEqual(dataSource.totalCount(), 10, "totalCount");
 });
 
-//T344271
+// T344271
 QUnit.test("load when remote grouping and not isLoadingAll and expand one item", function(assert) {
     var dataSource = this.createDataSource({
         filter: ["this", ">", "5"],
@@ -5990,12 +5990,12 @@ QUnit.test("load when remote grouping and not isLoadingAll and expand one item",
         loadingArgs.push(e);
     });
 
-    //act
+    // act
     dataSource.load().done(function(data) {
         customLoadData = data;
     });
 
-    //assert
+    // assert
     assert.deepEqual(customLoadData, [{ key: 6, items: [6], count: 1 }, { key: 7, items: null, collapsedItems: null, count: 1 }], "custom load data");
     assert.equal(changedArgs.length, 1, "changed is fired");
     assert.deepEqual(loadingChangedArgs, [true, false, true, false], "loadingChanged args");
@@ -6012,7 +6012,7 @@ QUnit.test("load when remote grouping and not isLoadingAll and expand one item",
     assert.deepEqual(this.loadingCount, 1, "loading count");
 });
 
-//T324247
+// T324247
 QUnit.test("load when remote grouping and isLoadingAll", function(assert) {
     var dataSource = this.createDataSource({
         filter: ["this", ">", "5"],
@@ -6034,7 +6034,7 @@ QUnit.test("load when remote grouping and isLoadingAll", function(assert) {
     var customLoadData = false;
     this.loadingCount = 0;
 
-    //act
+    // act
     dataSource.load({
         isLoadingAll: true,
         filter: ["this", ">", "5"],
@@ -6043,7 +6043,7 @@ QUnit.test("load when remote grouping and isLoadingAll", function(assert) {
         customLoadData = data;
     });
 
-    //assert
+    // assert
     assert.deepEqual(customLoadData, [6, 7, 8, 9, 10].map(function(key) {
         return { key: key, items: [key], count: 1 };
     }), "custom load data");
@@ -6056,7 +6056,7 @@ QUnit.test("load when remote grouping and isLoadingAll", function(assert) {
     assert.deepEqual(this.loadingCount, 2, "loading count");
 });
 
-//T359403
+// T359403
 QUnit.test("load with group and paging options", function(assert) {
     var loadingCount = 0,
         dataSource = this.createDataSource({
@@ -6086,7 +6086,7 @@ QUnit.test("load with group and paging options", function(assert) {
 
     var customLoadData = false;
 
-    //act
+    // act
     dataSource.load({
         group: "this",
         skip: 2,
@@ -6096,7 +6096,7 @@ QUnit.test("load with group and paging options", function(assert) {
     });
 
 
-    //assert
+    // assert
     assert.deepEqual(customLoadData, [{ key: 3, items: [3, 3] }, { key: 4, items: [4, 4] }], "custom load data");
     assert.ok(!changedArgs.length, "changed is not fired");
     assert.deepEqual(loadingChangedArgs, [true, false], "loadingChanged args");

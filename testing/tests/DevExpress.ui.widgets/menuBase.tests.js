@@ -265,30 +265,30 @@ QUnit.test("item container should not have dx-menu-no-icons class when at least 
 });
 
 QUnit.test('Change item content in runtime', function(assert) {
-    //arrange
+    // arrange
     var menuBase = createMenu({ items: [{ text: "item" }] }),
         $item;
 
-    //act
+    // act
     menuBase.instance.option("items[0].icon", "add");
     $item = menuBase.element.find('.' + DX_MENU_ITEM_WRAPPER_CLASS).children();
 
-    //assert
+    // assert
     assert.ok($item.hasClass(DX_ITEM_HAS_ICON), 'item has dx-menu-item-has-icon class');
 });
 
 QUnit.test('Remove extra classes from item frame if content is changed', function(assert) {
-    //arrange
+    // arrange
     var menuBase = createMenu({ items: [{ text: "item" }] }),
         $item = menuBase.element.find('.' + DX_MENU_ITEM_WRAPPER_CLASS).children();
 
     assert.ok($item.hasClass(DX_ITEM_HAS_TEXT), 'item has dx-menu-item-has-text class');
 
-    //act
+    // act
     menuBase.instance.option("items[0]", { text: "", icon: "add" });
     $item = menuBase.element.find('.' + DX_MENU_ITEM_WRAPPER_CLASS).children();
 
-    //assert
+    // assert
     assert.notOk($item.hasClass(DX_ITEM_HAS_TEXT), 'dx-menu-item-has-text class was removed');
 });
 
@@ -302,7 +302,7 @@ QUnit.module('Menu tests', {
     }
 });
 
-//T428079
+// T428079
 QUnit.test("Menu should work properly with key fields", function(assert) {
     createMenu({ items: [{ text: "Item 1" }, { text: "Item 2", id: 1 }] });
     assert.ok(true, "menu was rendered without exceptions");

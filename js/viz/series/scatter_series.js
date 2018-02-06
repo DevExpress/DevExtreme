@@ -52,8 +52,8 @@ function sum(array) {
 }
 
 function isErrorBarTypeCorrect(type) {
-    //TODO why UNDEFINED is here
-    //return inArray(type, [FIXED, PERCENT, VARIANCE, STANDARD_DEVIATION, STANDARD_ERROR, UNDEFINED]) !== -1;
+    // TODO why UNDEFINED is here
+    // return inArray(type, [FIXED, PERCENT, VARIANCE, STANDARD_DEVIATION, STANDARD_ERROR, UNDEFINED]) !== -1;
     return inArray(type, [FIXED, PERCENT, VARIANCE, STANDARD_DEVIATION, STANDARD_ERROR]) !== -1;
 }
 
@@ -140,7 +140,7 @@ var baseScatterMethods = {
         var that = this,
             settings = that._createPointStyles(that._getMarkerGroupOptions()).normal;
         settings["class"] = "dxc-markers";
-        settings.opacity = 1; //T172577
+        settings.opacity = 1; // T172577
         that._applyMarkerClipRect(settings);
         that._markersGroup.attr(settings);
     },
@@ -441,7 +441,7 @@ var baseScatterMethods = {
                     item[highValueField] = value + error;
                 };
                 break;
-            case UNDEFINED: //TODO: rework this
+            case UNDEFINED: // TODO: rework this
                 processDataItem = function(_, item) {
                     item[lowValueField] = item[ORIGINAL + lowValueField];
                     item[highValueField] = item[ORIGINAL + highValueField];

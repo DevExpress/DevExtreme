@@ -795,7 +795,7 @@ var ContextMenu = MenuBase.inherit((function() {
             return position;
         },
 
-        //TODO: try to simplify it
+        // TODO: try to simplify it
         _updateSubmenuVisibilityOnClick: function(actionArgs) {
             if(!actionArgs.args.length) return;
 
@@ -817,7 +817,7 @@ var ContextMenu = MenuBase.inherit((function() {
                 return;
             }
 
-            //T238943. Give the workaround with e.cancel and remove this hack
+            // T238943. Give the workaround with e.cancel and remove this hack
             var notCloseMenuOnItemClick = itemData && itemData.closeMenuOnClick === false;
             if(!itemData || itemData.disabled || notCloseMenuOnItemClick) {
                 return;

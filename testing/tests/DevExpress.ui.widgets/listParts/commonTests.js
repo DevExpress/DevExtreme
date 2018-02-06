@@ -2693,7 +2693,7 @@ QUnit.test("Search when searchMode is specified", function(assert) {
     assert.strictEqual(instance.getDataSource().searchOperation(), "startswith", "search operation");
 });
 
-//T582179
+// T582179
 QUnit.test("Selection should not be cleared after searching", function(assert) {
     var $element = $("#list").dxList({
             dataSource: [1, 2, 3],

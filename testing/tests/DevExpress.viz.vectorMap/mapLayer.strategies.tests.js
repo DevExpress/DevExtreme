@@ -73,7 +73,7 @@ QUnit.test("Selecting", function(assert) {
     assert.deepEqual(selectStrategy({ elementType: "image" }, createData(1, [1])), pointImageStrategy, "image strategy");
 });
 
-//QUnit.test("Project", function (assert) {
+// QUnit.test("Project", function (assert) {
 //    var projection = {
 //        project: function (coordinates) {
 //            return coordinates + "-proj";
@@ -117,9 +117,9 @@ QUnit.test("Selecting", function(assert) {
 //        ["p6-proj"]
 //    ], "line multilinestring");
 //    assert.deepEqual(pointDotStrategy.project(projection, ["p"]), "p-proj", "point");
-//});
+// });
 
-//QUnit.test("Project area label", function (assert) {
+// QUnit.test("Project area label", function (assert) {
 //    var data = areaStrategyPolygon.projectLabel([
 //        [[10, 20], [10, 40], [30, 40], [40, 20]],
 //        [[30, 50], [30, 60], [40, 70], [50, 20]]
@@ -129,9 +129,9 @@ QUnit.test("Selecting", function(assert) {
 //    assert.roughEqual(data[0][1], 28.6666, 0.0001, "coordinate 1");
 //    assert.roughEqual(data[1][0], 22.3607, 0.0001, "size 0");
 //    assert.roughEqual(data[1][1], 22.3607, 0.0001, "size 1");
-//});
+// });
 
-//QUnit.test("Project line label", function (assert) {
+// QUnit.test("Project line label", function (assert) {
 //    var data = lineStrategyLineString.projectLabel([
 //        [[10, 20], [10, 40], [30, 40], [40, 20], [50, 20]],
 //        [[30, 50], [30, 60], [40, 70]]
@@ -142,9 +142,9 @@ QUnit.test("Selecting", function(assert) {
 //    assert.roughEqual(data[1][0], 40, 0.0001, "size 0");
 //    assert.roughEqual(data[1][1], 20, 0.0001, "size 1");
 //    assert.roughEqual(data[2], 72.3607, 0.0001, "length");
-//});
+// });
 
-//QUnit.test("Transform area", function (assert) {
+// QUnit.test("Transform area", function (assert) {
 //    var figure = { root: new vizMocks.Element() },
 //        projection = {
 //            transform: function (coordinates) {
@@ -163,9 +163,9 @@ QUnit.test("Selecting", function(assert) {
 //            ["p3-tr"]
 //        ]
 //    }]);
-//});
+// });
 
-//QUnit.test("Transform area label", function (assert) {
+// QUnit.test("Transform area label", function (assert) {
 //    var figure = { text: new vizMocks.Element(), size: [10, 20] },
 //        projection = {
 //            transform: function (coordinates) {
@@ -185,9 +185,9 @@ QUnit.test("Selecting", function(assert) {
 //    areaStrategyPolygon.transformLabel(figure, projection, [[100, 200], [0.05, 0.05]]);
 //
 //    assert.deepEqual(figure.text.attr.getCall(3).args, [{ visibility: "hidden" }], "visibility 2");
-//});
+// });
 
-//QUnit.test("Transform line", function (assert) {
+// QUnit.test("Transform line", function (assert) {
 //    var figure = { root: new vizMocks.Element() },
 //        projection = {
 //            transform: function (coordinates) {
@@ -206,9 +206,9 @@ QUnit.test("Selecting", function(assert) {
 //            ["p3-tr"]
 //        ]
 //    }]);
-//});
+// });
 
-//QUnit.test("Transform line label", function (assert) {
+// QUnit.test("Transform line label", function (assert) {
 //    var figure = { text: new vizMocks.Element(), size: [10, 20] },
 //        projection = {
 //            transform: function (coordinates) {
@@ -228,9 +228,9 @@ QUnit.test("Selecting", function(assert) {
 //    lineStrategyLineString.transformLabel(figure, projection, [[100, 200], [0.05, 0.05]]);
 //
 //    assert.deepEqual(figure.text.attr.getCall(3).args, [{ visibility: "hidden" }], "visibility 2");
-//});
+// });
 
-//QUnit.test("Transform point", function (assert) {
+// QUnit.test("Transform point", function (assert) {
 //    var figure = { root: new vizMocks.Element() },
 //        projection = {
 //            transform: function (coordinates) {
@@ -241,7 +241,7 @@ QUnit.test("Selecting", function(assert) {
 //    pointDotStrategy.transform(figure, projection, [100, 200]);
 //
 //    assert.deepEqual(figure.root.attr.lastCall.args, [{ translateX: 110, translateY: 180 }]);
-//});
+// });
 
 QUnit.test("Perform grouping", function(assert) {
     var set = sinon.spy(),
@@ -1084,7 +1084,7 @@ QUnit.test("Draw", function(assert) {
     assert.deepEqual(this.renderer.image.lastCall.args, [null, null, null, null, null, "center"], "image is created");
     assert.strictEqual(figure.root, this.renderer.g.lastCall.returnValue, "root");
     assert.strictEqual(figure.image, this.renderer.image.lastCall.returnValue, "image");
-    assert.deepEqual(figure.image.attr.lastCall.args, [{ "pointer-events": "visible" }], "image settings");//T567545
+    assert.deepEqual(figure.image.attr.lastCall.args, [{ "pointer-events": "visible" }], "image settings");// T567545
     assert.deepEqual(figure.image.data.lastCall.args, ["data-key", "test-data"], "image data");
     assert.deepEqual(figure.image.append.lastCall.args, [figure.root], "image is appended");
 });

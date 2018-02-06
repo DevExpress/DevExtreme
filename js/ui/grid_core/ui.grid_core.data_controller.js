@@ -356,7 +356,7 @@ module.exports = {
                         this.updateItems(changes.length === 1 ? changes[0] : {});
                     }
                 },
-                //Handlers
+                // Handlers
                 _handleCustomizeStoreLoadOptions: function(e) {
                     var columnsController = this._columnsController,
                         dataSource = this._dataSource,
@@ -393,7 +393,7 @@ module.exports = {
                         filterValue,
                         filterValues;
 
-                    //B255430
+                    // B255430
                     var updateItemsHandler = function() {
                         that._columnsController.columnsChanged.remove(updateItemsHandler);
                         that.updateItems();
@@ -417,7 +417,7 @@ module.exports = {
                         }
 
                         if(!that._needApplyFilter && !gridCoreUtils.checkChanges(optionNames, ["width", "visibleWidth", "filterValue", "bufferedFilterValue", "selectedFilterOperation", "filterValues", "filterType"])) {
-                            //TODO remove resubscribing
+                            // TODO remove resubscribing
                             that._columnsController.columnsChanged.add(updateItemsHandler);
                         }
 

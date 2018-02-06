@@ -955,7 +955,7 @@ var PivotGrid = Widget.inherit({
     },
 
     _optionValuesEqual: function(name, oldValue, newValue) {
-        //T266402
+        // T266402
         if(name === "dataSource" && (newValue instanceof PivotGridDataSource) && (oldValue instanceof PivotGridDataSource)) {
             return newValue === oldValue;
         }
@@ -1851,7 +1851,7 @@ var PivotGrid = Widget.inherit({
 
                 rowsArea.groupHeight(that._hasHeight ? groupHeight : "auto");
                 rowsArea.processScrollBarSpacing(hasColumnsScroll ? scrollBarWidth : 0);
-                //B232690
+                // B232690
                 rowsArea.setColumnsWidth(rowsAreaColumnWidths);
                 rowsArea.setRowsHeight(resultHeights);
 
@@ -1865,7 +1865,7 @@ var PivotGrid = Widget.inherit({
                 dataAreaCell.toggleClass(BOTTOM_BORDER_CLASS, !hasRowsScroll);
                 rowAreaCell.toggleClass(BOTTOM_BORDER_CLASS, !hasRowsScroll);
 
-                //T317921
+                // T317921
                 if(!that._hasHeight && (elementWidth !== that.$element().width())) {
                     var diff = elementWidth - that.$element().width();
                     if(!hasColumnsScroll) {

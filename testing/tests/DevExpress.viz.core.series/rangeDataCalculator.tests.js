@@ -1468,10 +1468,10 @@ QUnit.module("Get range data. Fullstacked series", {
 
         series.updateData(data);
 
-        //act
+        // act
         rangeData = series.getRangeData();
 
-        //assert
+        // assert
         assert.ok(rangeData, "Range data should be created");
         assert.strictEqual(rangeData.arg.min, undefined, "Min x should be undefined");
         assert.strictEqual(rangeData.arg.max, undefined, "Max x should be undefined");
@@ -1486,10 +1486,10 @@ QUnit.module("Get range data. Fullstacked series", {
         series.updateData(data1);
         series.getRangeData();
         series.updateData(data2);
-        //act
+        // act
         rangeData = series.getRangeData();
 
-        //assert
+        // assert
         assert.ok(rangeData, "Range data should be created");
         assert.strictEqual(rangeData.arg.min, minArg, "Min x should be undefined");
         assert.strictEqual(rangeData.arg.max, maxArg, "Max x should be undefined");
@@ -2298,7 +2298,7 @@ QUnit.test("Numeric. zooming args between points.", function(assert) {
 });
 
 
-//T583086
+// T583086
 QUnit.test("Zooming points with null values", function(assert) {
     var data = getOriginalData([{ arg: 1, val: null }, { arg: 1, val: 16 }, { arg: 2, val: 90 }, { arg: 3, val: 100 }, { arg: 4, val: 100 }]),
         rangeData,
@@ -2330,7 +2330,7 @@ QUnit.test("Numeric. Area", function(assert) {
     assert.ok(rangeData, "Returned object");
     assert.equal(rangeData.min, 0, "min y");
     assert.equal(rangeData.max, 45, "max y");
-    //assert.strictEqual(rangeData.arg.interval, 1);
+    // assert.strictEqual(rangeData.arg.interval, 1);
 });
 
 
@@ -2409,7 +2409,7 @@ QUnit.test("Datetime argument. String value.", function(assert) {
 
     assert.strictEqual(rangeData.min, undefined, "min Visible Y");
     assert.strictEqual(rangeData.max, undefined, "max Visible Y");
-    //assert.deepEqual(rangeData.categories, ["30", "40", "50"?], "CategoriesY");
+    // assert.deepEqual(rangeData.categories, ["30", "40", "50"?], "CategoriesY");
 });
 
 QUnit.test("Discrete argument axis.", function(assert) {
@@ -2427,7 +2427,7 @@ QUnit.test("Discrete argument axis.", function(assert) {
     assert.equal(rangeData.min, undefined, "min y");
     assert.equal(rangeData.max, undefined, "max y");
     assert.strictEqual(rangeData.interval, undefined);
-    //should include values inside of range AND neighbour points
+    // should include values inside of range AND neighbour points
     assert.strictEqual(rangeData.minVisible, undefined, "no min Visible Y");
     assert.strictEqual(rangeData.maxVisible, undefined, "no max Visible Y");
     assert.deepEqual(rangeData.categories, undefined, "No categories");

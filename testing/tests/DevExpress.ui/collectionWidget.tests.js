@@ -546,10 +546,10 @@ QUnit.test("render items with multiple templates, jquery scenario", function(ass
                 template: "secondTemplate"
             },
             {
-                text: "eraser" //no template - use default
+                text: "eraser" // no template - use default
             },
             {
-                text: "note", //not defined template - render template name
+                text: "note", // not defined template - render template name
                 template: "abc"
             },
             {

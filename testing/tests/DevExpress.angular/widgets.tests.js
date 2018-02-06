@@ -299,7 +299,7 @@ QUnit.test("dxDataGrid - highlight timer was cleared on disposing for dataGrid w
     initMarkup($markup, controller, this);
 });
 
-//T576310
+// T576310
 QUnit.test("dxDataGrid - row template should rendered correctly with grouping", function(assert) {
     var $markup = $(
         "<div dx-data-grid=\"gridOptions\" dx-item-alias=\"employee\"></div>\
@@ -432,12 +432,12 @@ QUnit.test("Two-way binding", function(assert) {
     assert.equal($rows.eq(0).children().eq(0).text(), "1");
     assert.equal($rows.eq(1).children().eq(0).text(), "3");
 
-    //act
+    // act
     scope.$apply(function() {
         scope.gridOptions.dataSource[0].field1 = 666;
     });
 
-    //assert
+    // assert
     $rows = $markup.find(".dx-data-row");
     assert.equal($rows.length, 2, "row count");
     assert.equal($rows.eq(0).children().eq(0).text(), "666");
@@ -445,7 +445,7 @@ QUnit.test("Two-way binding", function(assert) {
     assert.equal(calcWatchersCount(), initialWatchersCount + 2, "watchers count");
 });
 
-//T285727
+// T285727
 QUnit.test("Two-way binding when columnFixing", function(assert) {
     var initialWatchersCount = 1; // NOTE: One uncleared watcher created for dxDigestCallbacks service
 
@@ -471,12 +471,12 @@ QUnit.test("Two-way binding when columnFixing", function(assert) {
     assert.equal($rows.eq(0).children().eq(0).text(), "1");
     assert.equal($rows.eq(1).children().eq(0).text(), "3");
 
-    //act
+    // act
     scope.$apply(function() {
         scope.gridOptions.dataSource[0].field1 = 666;
     });
 
-    //assert
+    // assert
     $rows = $markup.find(".dx-datagrid-content-fixed .dx-data-row");
     assert.equal($rows.length, 2, "row count");
     assert.equal($rows.eq(0).children().eq(0).text(), "666");
@@ -484,7 +484,7 @@ QUnit.test("Two-way binding when columnFixing", function(assert) {
     assert.equal(calcWatchersCount(), initialWatchersCount + 2, "watchers count");
 });
 
-//T352960
+// T352960
 QUnit.test("Two-way binding does not work for inserted rows", function(assert) {
     var initialWatchersCount = 1; // NOTE: One uncleared watcher created for dxDigestCallbacks service
 
@@ -508,18 +508,18 @@ QUnit.test("Two-way binding does not work for inserted rows", function(assert) {
 
     this.clock.tick(30);
 
-    //act
+    // act
     scope.$apply(function() {
         scope.grid.addRow();
     });
 
-    //assert
+    // assert
     var $rows = $markup.find(".dx-data-row");
     assert.equal($rows.length, 3, "row count");
     assert.equal(calcWatchersCount(), initialWatchersCount + 2, "watchers count. Inserted row is ignored");
 });
 
-    //T429370
+    // T429370
 QUnit.test("Assign selectedRowKeys option via binding", function(assert) {
     var $markup = $("<div dx-data-grid=\"gridOptions\"></div>");
 
@@ -547,19 +547,19 @@ QUnit.test("Assign selectedRowKeys option via binding", function(assert) {
     var scope = $markup.scope();
 
     this.clock.tick(30);
-    //act
+    // act
     scope.$apply(function() {
         scope.selectedRowKeys = [{ field1: 1, field2: 2 }];
         scope.selectedRowKeysInstance = scope.selectedRowKeys;
     });
 
-    //assert
+    // assert
     var $selectedRows = $markup.find(".dx-data-row.dx-selection");
     assert.equal($selectedRows.length, 1, "one row is selected");
     assert.notEqual(scope.selectedRowKeysInstance, scope.selectedRowKeys, "selectedRowKeys instance is not changed");
 });
 
-//T427432
+// T427432
 QUnit.test("Change selection.mode option via binding and refresh", function(assert) {
     var $markup = $("<div id=\"grid\" dx-data-grid=\"gridOptions\"></div>");
     var controller = function($scope) {
@@ -589,7 +589,7 @@ QUnit.test("Change selection.mode option via binding and refresh", function(asse
     this.clock.tick(30);
 
 
-    //act
+    // act
     $($markup.find(".dx-data-row").eq(0).children().first()).trigger("dxclick");
 
     this.clock.tick(30);
@@ -604,7 +604,7 @@ QUnit.test("Change selection.mode option via binding and refresh", function(asse
     this.clock.tick(30);
 
 
-    //assert
+    // assert
     assert.equal($markup.find(".dx-header-row").eq(0).children().length, 2, "two cells in header row");
     assert.equal($markup.find(".dx-data-row").eq(0).children().length, 2, "two cells in data row");
 });
@@ -937,7 +937,7 @@ QUnit.module("date box", {
     }
 });
 
-//T533858
+// T533858
 QUnit.test("dxDateBox with list strategy automatically scrolls to selected item on opening", function(assert) {
     var $markup = $("\
         <div dx-date-box=\"{\
@@ -1038,7 +1038,7 @@ QUnit.test("Custom store with ISO8601 dates", function(assert) {
 
     initMarkup($markup, controller, this);
 
-    //act
+    // act
     this.clock.tick(0);
 
     assert.equal($markup.find(".dx-scheduler-appointment").length, 1, "appointment count");

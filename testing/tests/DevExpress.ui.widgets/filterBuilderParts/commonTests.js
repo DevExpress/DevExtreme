@@ -26,7 +26,7 @@ var getSelectedMenuText = function() {
 };
 
 var clickByOutside = function() {
-    $("body").trigger("dxpointerdown"); //use dxpointerdown because T600142
+    $("body").trigger("dxpointerdown"); // use dxpointerdown because T600142
 };
 
 var selectMenuItem = function(menuItemIndex) {
@@ -162,7 +162,7 @@ QUnit.module("Rendering", function() {
                 dataField: "CompanyName"
             }, {
                 dataField: "Budget",
-                visible: false //this is unavailable property but it available in grid. See T579785.
+                visible: false // this is unavailable property but it available in grid. See T579785.
             }]
         });
 
@@ -214,7 +214,7 @@ QUnit.module("Rendering", function() {
             fields: fields
         });
 
-        //act
+        // act
         companyNameValueField = $("." + FILTER_BUILDER_ITEM_VALUE_CLASS).eq(0);
         companyNameValueField.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).trigger("dxclick");
     });
@@ -503,7 +503,7 @@ QUnit.module("Rendering", function() {
         assert.notOk(container.find("input").length, "hasn't input");
     });
 
-    //T588221
+    // T588221
     QUnit.testInActiveWindow("click by dropdownbox specified editorTemplate", function(assert) {
         var container = $("#container"),
             INNER_ELEMENT_CLASS = "test-inner-element",
@@ -591,7 +591,7 @@ QUnit.module("Rendering", function() {
         assert.deepEqual(instance.option("value"), ["State", "<>", "Test"]);
     });
 
-    //T589531
+    // T589531
     QUnit.test("datebox returns null when a date value is specified as an empty string", function(assert) {
         $("#container").dxFilterBuilder({
             value: ["Date", "=", ""],
@@ -602,7 +602,7 @@ QUnit.module("Rendering", function() {
         assert.equal($(".dx-datebox").dxDateBox("instance").option("value"), null);
     });
 
-    //T589341
+    // T589341
     QUnit.test("the formatter is applied to a field with the date type", function(assert) {
         if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "This test is not actual for mobile devices");
@@ -626,7 +626,7 @@ QUnit.module("Rendering", function() {
         assert.equal($("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).text(), "12.12.2017");
     });
 
-    //T589341
+    // T589341
     QUnit.test('NumberBox with custom format', function(assert) {
         var $container = $("#container");
 
@@ -643,7 +643,7 @@ QUnit.module("Rendering", function() {
 
         $("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).trigger("dxclick");
 
-        //assert
+        // assert
         assert.equal($container.find(".dx-texteditor-input").val(), "3.14 kg", 'numberbox formatted value');
     });
 });
@@ -879,7 +879,7 @@ QUnit.module("on value changed", function() {
         clickByButtonAndSelectMenuItem($("." + FILTER_BUILDER_IMAGE_ADD_CLASS).eq(1), 0);
         assert.notEqual(instance.option("value"), value);
 
-        //remove group
+        // remove group
         value = instance.option("value");
         clickByButtonAndSelectMenuItem($("." + FILTER_BUILDER_IMAGE_REMOVE_CLASS).eq(1), 0);
         assert.notEqual(instance.option("value"), value);
@@ -899,7 +899,7 @@ QUnit.module("on value changed", function() {
 
         assert.notEqual(instance.option("value"), value);
 
-        //remove condition
+        // remove condition
         value = instance.option("value");
         clickByButtonAndSelectMenuItem($("." + FILTER_BUILDER_IMAGE_REMOVE_CLASS).eq(1), 0);
 
@@ -917,7 +917,7 @@ QUnit.module("on value changed", function() {
 
         assert.deepEqual(instance.option("value"), ["Field", "contains", ""]);
 
-        //remove condition
+        // remove condition
         clickByButtonAndSelectMenuItem($("." + FILTER_BUILDER_IMAGE_REMOVE_CLASS).eq(0), 0);
 
         assert.deepEqual(instance.option("value"), null);
@@ -936,7 +936,7 @@ QUnit.module("on value changed", function() {
 
         assert.equal(instance.option("value"), value);
 
-        //remove condition
+        // remove condition
         value = instance.option("value");
         clickByButtonAndSelectMenuItem($("." + FILTER_BUILDER_IMAGE_REMOVE_CLASS).eq(1), 0);
 

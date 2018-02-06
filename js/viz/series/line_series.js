@@ -1,6 +1,6 @@
 "use strict";
 
-//there are line, stepline, stackedline, fullstackedline, spline
+// there are line, stepline, stackedline, fullstackedline, spline
 var series = require("./scatter_series"),
     chartScatterSeries = series.chart,
     polarScatterSeries = series.polar,
@@ -264,7 +264,7 @@ exports.chart["spline"] = _extend({}, exports.chart["line"], {
                 y1 = prevPoint.y;
                 y2 = nextPoint.y;
 
-                //check for extremum
+                // check for extremum
                 curIsExtremum = !!((!rotated && ((yCur <= prevPoint.y && yCur <= nextPoint.y)
                             || (yCur >= prevPoint.y && yCur >= nextPoint.y)))
                         || (rotated && ((xCur <= prevPoint.x && xCur <= nextPoint.x)
@@ -313,7 +313,7 @@ exports.chart["spline"] = _extend({}, exports.chart["line"], {
                     leftControlY = (yCur + lambda * y1) / (1 + lambda);
                 }
 
-                //check control points for extremum
+                // check control points for extremum
                 if(!rotated) {
                     leftControlY = checkExtremum(prevPoint.y, yCur, leftControlY);
                     rightControlY = checkExtremum(nextPoint.y, yCur, rightControlY);
@@ -354,7 +354,7 @@ exports.polar.line = _extend({}, polarScatterSeries, lineMethods, {
             for(i = 1; i < points.length; i++) {
                 preparedPoints = preparedPoints.concat(this._getTangentPoints(points[i], points[i - 1], centerPoint));
             }
-            if(!preparedPoints.length) { //T174220
+            if(!preparedPoints.length) { // T174220
                 preparedPoints = points;
             }
         } else {

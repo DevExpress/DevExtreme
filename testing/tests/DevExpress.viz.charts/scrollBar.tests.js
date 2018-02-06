@@ -59,9 +59,9 @@ QUnit.module("dxChart scrollBar", environment);
 
 QUnit.test("create scrollBar", function(assert) {
     var group = new vizMocks.Element(),
-        //act
+        // act
         scrollBar = new ScrollBar(this.renderer, group);
-    //assert
+    // assert
     assert.ok(scrollBar);
     assert.ok(translator2DModule.Translator2D.calledOnce);
     assert.deepEqual(translator2DModule.Translator2D.lastCall.args, [{}, {}, {}]);
@@ -77,9 +77,9 @@ QUnit.test("init scrollBar", function(assert) {
     var group = new vizMocks.Element(),
         scrollBar = new ScrollBar(this.renderer, group);
     scrollBar.update(this.options).updateSize(canvas);
-    //act
+    // act
     scrollBar.init(range, false);
-    //Assert
+    // Assert
     assert.ok(translator2DModule.Translator2D.calledOnce);
     var scrollTranslator = translator2DModule.Translator2D.lastCall.returnValue;
 
@@ -107,9 +107,9 @@ QUnit.test("init scrollBar. Rotated", function(assert) {
         scrollBar = new ScrollBar(this.renderer, group);
     this.options.rotated = true;
     scrollBar.update(this.options).updateSize(canvas);
-    //act
+    // act
     scrollBar.init(range, false);
-    //Assert
+    // Assert
     assert.ok(translator2DModule.Translator2D.calledOnce);
     var scrollTranslator = translator2DModule.Translator2D.lastCall.returnValue;
 
@@ -135,9 +135,9 @@ QUnit.test("init scrollBar. Rotated", function(assert) {
 QUnit.test("update scrollBar", function(assert) {
     var group = new vizMocks.Element(),
         scrollBar = new ScrollBar(this.renderer, group);
-    //act
+    // act
     scrollBar.update(this.options);
-    //Assert
+    // Assert
     assert.deepEqual(group.children[0]._stored_settings, {
         fill: "fill",
         rotate: -90,
@@ -159,9 +159,9 @@ QUnit.test("update scrollBar. Rotated", function(assert) {
     var group = new vizMocks.Element(),
         scrollBar = new ScrollBar(this.renderer, group);
     this.options.rotated = true;
-    //act
+    // act
     scrollBar.update(this.options);
-    //Assert
+    // Assert
 
     assert.deepEqual(group.children[0]._stored_settings, {
         fill: "fill",
@@ -191,9 +191,9 @@ QUnit.test("setPosition by arguments. Both arguments in range", function(assert)
         min: 10,
         max: 100
     });
-    //act
+    // act
     scrollBar.setPosition("40", "70");
-    //Assert
+    // Assert
     assert.deepEqual(group.children[0]._stored_settings, {
         y: 45,
         height: 30
@@ -222,9 +222,9 @@ QUnit.test("setPosition by arguments. Discrete axis. stick false", function(asse
         min: 10,
         max: 100
     });
-    //act
+    // act
     scrollBar.setPosition("40", "70");
-    //Assert
+    // Assert
     assert.deepEqual(group.children[0].attr.lastCall.args[0], {
         y: 40,
         height: 40
@@ -253,9 +253,9 @@ QUnit.test("setPosition by arguments. Discrete axis. stick true", function(asser
         min: 10,
         max: 100
     });
-    //act
+    // act
     scrollBar.setPosition("40", "70");
-    //Assert
+    // Assert
     assert.deepEqual(group.children[0].attr.lastCall.args[0], {
         y: 45,
         height: 30
@@ -282,9 +282,9 @@ QUnit.test("setPosition by arguments. Stick false", function(assert) {
         min: 10,
         max: 100
     });
-    //act
+    // act
     scrollBar.setPosition("40", "70");
-    //Assert
+    // Assert
     assert.deepEqual(group.children[0].attr.lastCall.args[0], {
         y: 45,
         height: 30
@@ -311,9 +311,9 @@ QUnit.test("setPosition by arguments.Stick true", function(assert) {
         min: 10,
         max: 100
     });
-    //act
+    // act
     scrollBar.setPosition("40", "70");
-    //Assert
+    // Assert
     assert.deepEqual(group.children[0].attr.lastCall.args[0], {
         y: 45,
         height: 30
@@ -337,9 +337,9 @@ QUnit.test("setPosition by arguments. Both arguments are undefined", function(as
         max: 100
     });
 
-    //act
+    // act
     scrollBar.setPosition(undefined, undefined);
-    //Assert
+    // Assert
     assert.deepEqual(group.children[0]._stored_settings, {
         y: 10,
         height: 90
@@ -362,9 +362,9 @@ QUnit.test("setPosition by arguments. Both arguments out of canvas", function(as
         max: 100
     });
 
-    //act
+    // act
     scrollBar.setPosition("40", "70");
-    //Assert
+    // Assert
     assert.deepEqual(group.children[0]._stored_settings, {
         y: 10,
         height: 90
@@ -382,9 +382,9 @@ QUnit.test("setPosition by arguments. min = max", function(assert) {
         min: 10,
         max: 100
     });
-    //act
+    // act
     scrollBar.setPosition("40", "40");
-    //Assert
+    // Assert
     assert.deepEqual(group.children[0]._stored_settings, {
         y: 45,
         height: 2
@@ -403,9 +403,9 @@ QUnit.test("setPosition by arguments. minSize", function(assert) {
         min: 10,
         max: 100
     });
-    //act
+    // act
     scrollBar.setPosition("40", "41");
-    //Assert
+    // Assert
     assert.deepEqual(group.children[0]._stored_settings, {
         y: 45,
         height: 2
@@ -431,9 +431,9 @@ QUnit.test("Apply transform. Scale>1", function(assert) {
     });
     scrollBar.setPosition("40", "70");
 
-    //act
+    // act
     scrollBar.transform(15, 2);
-    //Assert
+    // Assert
     assert.deepEqual(group.children[0]._stored_settings, {
         y: 10 + (10 - 10 * 2 + 15) / 2,
         height: 90 / 2
@@ -459,9 +459,9 @@ QUnit.test("Apply transform, Scale<1", function(assert) {
     });
     scrollBar.setPosition("40", "70");
 
-    //act
+    // act
     scrollBar.transform(15, 2);
-    //Assert
+    // Assert
     assert.deepEqual(group.children[0]._stored_settings, {
         y: 10 + (10 - 10 * 2 + 15) / 2,
         height: 90 / 2
@@ -488,9 +488,9 @@ QUnit.test("apply transform, when offset!=0, scale>1", function(assert) {
     });
     scrollBar.setPosition("40", "70");
 
-    //act
+    // act
     scrollBar.transform(15, 2);
-    //Assert
+    // Assert
     assert.deepEqual(group.children[0]._stored_settings, {
         y: 20 + (10 - 10 * 2 + 15) / (2 * 2),
         height: 100 / (2 * 2)
@@ -517,9 +517,9 @@ QUnit.test("apply transform, when offset!=0, scale<1", function(assert) {
     });
     scrollBar.setPosition("40", "70");
 
-    //act
+    // act
     scrollBar.transform(15, 4);
-    //Assert
+    // Assert
     assert.deepEqual(group.children[0]._stored_settings, {
         y: 20 + (10 - 10 * 4 + 15) / (0.5 * 4),
         height: 100 / (0.5 * 4)
@@ -545,9 +545,9 @@ QUnit.test("Apply transform, when offset!=0, scale>1. Result scrollBar > canvas"
     });
     scrollBar.setPosition("40", "70");
 
-    //act
+    // act
     scrollBar.transform(-40, 0.2);
-    //Assert
+    // Assert
     assert.deepEqual(group.children[0]._stored_settings, {
         y: 10,
         height: 100
@@ -572,9 +572,9 @@ QUnit.test("Apply transform. Big positive translate", function(assert) {
         max: 100
     });
     scrollBar.setPosition("40", "70");
-    //act
+    // act
     scrollBar.transform(1000, 1);
-    //Assert
+    // Assert
     assert.deepEqual(group.children[0]._stored_settings, {
         y: scrollTranslator.getCanvasVisibleArea().max,
         height: 2
@@ -599,9 +599,9 @@ QUnit.test("Apply transform. Big negative translate", function(assert) {
         max: 100
     });
     scrollBar.setPosition("40", "70");
-    //act
+    // act
     scrollBar.transform(-1000, 1);
-    //Assert
+    // Assert
     assert.deepEqual(group.children[0]._stored_settings, {
         y: scrollTranslator.getCanvasVisibleArea().min,
         height: 2
@@ -612,9 +612,9 @@ QUnit.test("Disposing", function(assert) {
     var group = new vizMocks.Element(),
         scrollBar = new ScrollBar(this.renderer, group);
 
-    //act
+    // act
     scrollBar.dispose();
-    //Assert
+    // Assert
     assert.ok(!this.renderer.stub("dispose").called);
 
     assert.ok(!group.children.length);
@@ -681,11 +681,11 @@ QUnit.test("move scroll when scale = 1", function(assert) {
     this.scrollTranslator.translate.withArgs(70).returns(100);
 
     this.scrollBar.setPosition(40, 70);
-    //act
+    // act
     $(this.group.children[0].element).trigger(new $.Event("dxpointerdown", { pageX: 100, pageY: 200 }));
     $(document).trigger(new $.Event("dxpointermove", { pageX: 130, pageY: 270 }));
     $(document).trigger(new $.Event("dxpointermove", { pageX: 80, pageY: 120, preventDefault: preventDefault }));
-    //assert
+    // assert
     assert.ok(this.startEventsHandler.calledOnce);
     assert.deepEqual(this.startEventsHandler.lastCall.args[0].pointers, [{
         pageX: 100,
@@ -714,11 +714,11 @@ QUnit.test("move scroll when scale != 1", function(assert) {
     this.scrollTranslator.getScale.withArgs(40, 70).returns(2);
 
     this.scrollBar.setPosition(40, 70);
-    //act
+    // act
     $(this.group.children[0].element).trigger(new $.Event("dxpointerdown", { pageX: 100, pageY: 200 }));
     $(document).trigger(new $.Event("dxpointermove", { pageX: 130, pageY: 270 }));
     $(document).trigger(new $.Event("dxpointermove", { pageX: 80, pageY: 120 }));
-    //assert
+    // assert
     assert.ok(this.startEventsHandler.calledOnce);
     assert.deepEqual(this.startEventsHandler.lastCall.args[0].pointers, [{
         pageX: 100,
@@ -745,10 +745,10 @@ QUnit.test("scroll moving after pointerup", function(assert) {
     $(this.group.children[0].element).trigger(new $.Event("dxpointerdown", { pageX: 100, pageY: 200 }));
     $(document).trigger(new $.Event("dxpointermove", { pageX: 130, pageY: 270 }));
 
-    //act
+    // act
     $(document).trigger(new $.Event("dxpointerup", { pageX: 130, pageY: 270 }));
     $(document).trigger(new $.Event("dxpointermove", { pageX: 80, pageY: 120 }));
-    //assert
+    // assert
     assert.ok(this.moveEventsHandler.calledOnce);
 
     assert.deepEqual(this.moveEventsHandler.firstCall.args[0].pointers, [{
@@ -773,7 +773,7 @@ QUnit.module("scrollBar layouting", {
 
 QUnit.test("Set position for horizontal scrollBar", function(assert) {
     var scrollBar = new ScrollBar(this.renderer, this.group);
-    //act
+    // act
     var pos1 = scrollBar.update(this.getOptions({})).getOptions().position,
         pos2 = scrollBar.update(this.getOptions({ position: "top" })).getOptions().position,
         pos3 = scrollBar.update(this.getOptions({ position: "bottom" })).getOptions().position,
@@ -781,7 +781,7 @@ QUnit.test("Set position for horizontal scrollBar", function(assert) {
         pos5 = scrollBar.update(this.getOptions({ position: "right" })).getOptions().position,
         pos6 = scrollBar.update(this.getOptions({ position: "invalid" })).getOptions().position;
 
-    //Assert
+    // Assert
     assert.strictEqual(pos1, "top");
     assert.strictEqual(pos2, "top");
     assert.strictEqual(pos3, "bottom");
@@ -793,7 +793,7 @@ QUnit.test("Set position for horizontal scrollBar", function(assert) {
 QUnit.test("Set position for vertical scrollBar", function(assert) {
     this.options.rotated = true;
     var scrollBar = new ScrollBar(this.renderer, this.group);
-    //act
+    // act
     var pos1 = scrollBar.update(this.getOptions({})).getOptions().position,
         pos2 = scrollBar.update(this.getOptions({ position: "top" })).getOptions().position,
         pos3 = scrollBar.update(this.getOptions({ position: "bottom" })).getOptions().position,
@@ -801,7 +801,7 @@ QUnit.test("Set position for vertical scrollBar", function(assert) {
         pos5 = scrollBar.update(this.getOptions({ position: "right" })).getOptions().position,
         pos6 = scrollBar.update(this.getOptions({ position: "invalid" })).getOptions().position;
 
-    //Assert
+    // Assert
     assert.strictEqual(pos1, "right");
     assert.strictEqual(pos2, "right");
     assert.strictEqual(pos3, "right");
@@ -914,7 +914,7 @@ QUnit.test("Apply layout. Rotated", function(assert) {
 QUnit.test("getMultipleAxesSpacing", function(assert) {
     this.options.rotated = true;
     var scrollBar = new ScrollBar(this.renderer, this.group),
-        //act
+        // act
         res = scrollBar.getMultipleAxesSpacing();
 
     assert.strictEqual(res, 0);

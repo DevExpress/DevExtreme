@@ -60,7 +60,7 @@ core.registerPalette = require("../../../viz/palette").registerPalette;
 viz.BaseWidget = require("../../../viz/core/base_widget");
 
 viz.findTheme = require("../../../viz/themes").findTheme;
-//We need to keep this method as we suggested it to users
+// We need to keep this method as we suggested it to users
 viz.refreshAll = require("../../../viz/themes").refreshTheme;
 
 viz.refreshPaths = require("../../../viz/utils").refreshPaths;

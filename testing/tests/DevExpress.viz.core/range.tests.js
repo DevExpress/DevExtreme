@@ -5,10 +5,10 @@ var rangeModule = require("viz/translators/range");
 QUnit.module('Life cycle');
 
 QUnit.test('Create empty', function(assert) {
-    //act
+    // act
     var range = new rangeModule.Range();
 
-    //assert
+    // assert
     assert.ok(range);
     assert.strictEqual(range.min, undefined);
     assert.strictEqual(range.max, undefined);
@@ -19,7 +19,7 @@ QUnit.test('Create empty', function(assert) {
 });
 
 QUnit.test('Create with range', function(assert) {
-    //act
+    // act
     var range = new rangeModule.Range({
         min: 0,
         max: 100,
@@ -29,7 +29,7 @@ QUnit.test('Create with range', function(assert) {
         alwaysCorrectMin: false
     });
 
-    //assert
+    // assert
     assert.ok(range);
     assert.strictEqual(range.min, 0);
     assert.strictEqual(range.max, 100);
@@ -51,13 +51,13 @@ QUnit.test('Merge invert', function(assert) {
     var that = this;
 
     var checkRules = function(rangeInverted, otherRangeInverted, expected) {
-        //arrange
+        // arrange
         that.createRange({ invert: rangeInverted });
 
-        //act
+        // act
         var returnValue = that.range.addRange({ invert: otherRangeInverted });
 
-        //assert
+        // assert
         assert.strictEqual(that.range, returnValue);
         assert.strictEqual(that.range.invert, expected);
     };
@@ -72,13 +72,13 @@ QUnit.test('Merge axis type', function(assert) {
     var that = this;
 
     var checkRules = function(rangeAxisType, otherRangeAxisType, expected) {
-        //arrange
+        // arrange
         that.createRange({ axisType: rangeAxisType });
 
-        //act
+        // act
         var returnValue = that.range.addRange({ axisType: otherRangeAxisType });
 
-        //assert
+        // assert
         assert.strictEqual(that.range, returnValue);
         assert.strictEqual(that.range.axisType, expected);
     };
@@ -93,13 +93,13 @@ QUnit.test('Merge data type', function(assert) {
     var that = this;
 
     var checkRules = function(rangeDataType, otherRangeDataType, expected) {
-        //arrange
+        // arrange
         that.createRange({ dataType: rangeDataType });
 
-        //act
+        // act
         var returnValue = that.range.addRange({ dataType: otherRangeDataType });
 
-        //assert
+        // assert
         assert.strictEqual(that.range, returnValue);
         assert.strictEqual(that.range.dataType, expected);
     };
@@ -114,13 +114,13 @@ QUnit.test('Merge isSpacedMargin', function(assert) {
     var that = this;
 
     var checkRules = function(isSpacedMargin, otherIsSpacedMargin, expected) {
-        //arrange
+        // arrange
         that.createRange({ isSpacedMargin: isSpacedMargin });
 
-        //act
+        // act
         var returnValue = that.range.addRange({ isSpacedMargin: otherIsSpacedMargin });
 
-        //assert
+        // assert
         assert.strictEqual(that.range, returnValue);
         assert.strictEqual(that.range.isSpacedMargin, expected);
     };
@@ -135,13 +135,13 @@ QUnit.test('Merge checkMinDataVisibility', function(assert) {
     var that = this;
 
     var checkRules = function(checkMinDataVisibility, otherCheckMinDataVisibility, expected) {
-        //arrange
+        // arrange
         that.createRange({ checkMinDataVisibility: checkMinDataVisibility });
 
-        //act
+        // act
         var returnValue = that.range.addRange({ checkMinDataVisibility: otherCheckMinDataVisibility });
 
-        //assert
+        // assert
         assert.strictEqual(that.range, returnValue);
         assert.strictEqual(that.range.checkMinDataVisibility, expected);
     };
@@ -156,13 +156,13 @@ QUnit.test('Merge checkMaxDataVisibility', function(assert) {
     var that = this;
 
     var checkRules = function(checkMaxDataVisibility, otherCheckMaxDataVisibility, expected) {
-        //arrange
+        // arrange
         that.createRange({ checkMaxDataVisibility: checkMaxDataVisibility });
 
-        //act
+        // act
         var returnValue = that.range.addRange({ checkMaxDataVisibility: otherCheckMaxDataVisibility });
 
-        //assert
+        // assert
         assert.strictEqual(that.range, returnValue);
         assert.strictEqual(that.range.checkMaxDataVisibility, expected);
     };
@@ -177,16 +177,16 @@ QUnit.test('Merge base', function(assert) {
     var that = this;
 
     var checkRules = function(rangeAxisType, rangeBase, otherRangeBase, expected) {
-        //arrange
+        // arrange
         that.createRange({
             axisType: rangeAxisType,
             base: rangeBase
         });
 
-        //act
+        // act
         var returnValue = that.range.addRange({ base: otherRangeBase });
 
-        //assert
+        // assert
         assert.strictEqual(that.range, returnValue);
         assert.strictEqual(that.range.base, expected);
     };
@@ -202,13 +202,13 @@ QUnit.test('Merge min', function(assert) {
     var that = this;
 
     var checkRules = function(rangeMin, otherRangeMin, expected) {
-        //arrange
+        // arrange
         that.createRange({ min: rangeMin });
 
-        //act
+        // act
         var returnValue = that.range.addRange({ min: otherRangeMin });
 
-        //assert
+        // assert
         assert.strictEqual(that.range, returnValue);
         assert.strictEqual(that.range.min, expected);
     };
@@ -224,13 +224,13 @@ QUnit.test('Merge minVisible', function(assert) {
     var that = this;
 
     var checkRules = function(rangeMinVisible, otherRangeMinVisible, expected) {
-        //arrange
+        // arrange
         that.createRange({ minVisible: rangeMinVisible });
 
-        //act
+        // act
         var returnValue = that.range.addRange({ minVisible: otherRangeMinVisible });
 
-        //assert
+        // assert
         assert.strictEqual(that.range, returnValue);
         assert.strictEqual(that.range.minVisible, expected);
     };
@@ -246,13 +246,13 @@ QUnit.test('Merge max', function(assert) {
     var that = this;
 
     var checkRules = function(rangeMax, otherRangeMax, expected) {
-        //arrange
+        // arrange
         that.createRange({ max: rangeMax });
 
-        //act
+        // act
         var returnValue = that.range.addRange({ max: otherRangeMax });
 
-        //assert
+        // assert
         assert.strictEqual(that.range, returnValue);
         assert.strictEqual(that.range.max, expected);
     };
@@ -268,13 +268,13 @@ QUnit.test('Merge maxVisible', function(assert) {
     var that = this;
 
     var checkRules = function(rangeMaxVisible, otherRangeMaxVisible, expected) {
-        //arrange
+        // arrange
         that.createRange({ maxVisible: rangeMaxVisible });
 
-        //act
+        // act
         var returnValue = that.range.addRange({ maxVisible: otherRangeMaxVisible });
 
-        //assert
+        // assert
         assert.strictEqual(that.range, returnValue);
         assert.strictEqual(that.range.maxVisible, expected);
     };
@@ -290,13 +290,13 @@ QUnit.test('Merge interval', function(assert) {
     var that = this;
 
     var checkRules = function(rangeInterval, otherRangeInterval, expected) {
-        //arrange
+        // arrange
         that.createRange({ interval: rangeInterval });
 
-        //act
+        // act
         var returnValue = that.range.addRange({ interval: otherRangeInterval });
 
-        //assert
+        // assert
         assert.strictEqual(that.range, returnValue);
         assert.strictEqual(that.range.interval, expected);
     };
@@ -312,13 +312,13 @@ QUnit.test('Merge categories', function(assert) {
     var that = this;
 
     var checkRules = function(rangeCategories, otherRangeCategories, expected, message) {
-    //arrange
+    // arrange
         that.createRange({ categories: rangeCategories });
 
-    //act
+    // act
         var returnValue = that.range.addRange({ categories: otherRangeCategories });
 
-    //assert
+    // assert
         assert.strictEqual(that.range, returnValue);
         assert.deepEqual(that.range.categories, expected, message);
     };
@@ -342,13 +342,13 @@ QUnit.test('Merge min', function(assert) {
     var that = this;
 
     var checkRules = function(rangeMin, otherRangeMin, expected) {
-        //arrange
+        // arrange
         that.createRange({ min: rangeMin });
 
-        //act
+        // act
         var returnValue = that.range.addRange({ min: otherRangeMin });
 
-        //assert
+        // assert
         assert.strictEqual(that.range, returnValue);
         assert.deepEqual(that.range.min, expected);
     };
@@ -364,13 +364,13 @@ QUnit.test('Merge minVisible', function(assert) {
     var that = this;
 
     var checkRules = function(rangeMinVisible, otherRangeMinVisible, expected) {
-        //arrange
+        // arrange
         that.createRange({ minVisible: rangeMinVisible });
 
-        //act
+        // act
         var returnValue = that.range.addRange({ minVisible: otherRangeMinVisible });
 
-        //assert
+        // assert
         assert.strictEqual(that.range, returnValue);
         assert.deepEqual(that.range.minVisible, expected);
     };
@@ -386,13 +386,13 @@ QUnit.test('Merge max', function(assert) {
     var that = this;
 
     var checkRules = function(rangeMax, otherRangeMax, expected) {
-        //arrange
+        // arrange
         that.createRange({ max: rangeMax });
 
-        //act
+        // act
         var returnValue = that.range.addRange({ max: otherRangeMax });
 
-        //assert
+        // assert
         assert.strictEqual(that.range, returnValue);
         assert.deepEqual(that.range.max, expected);
     };
@@ -408,13 +408,13 @@ QUnit.test('Merge maxVisible', function(assert) {
     var that = this;
 
     var checkRules = function(rangeMaxVisible, otherRangeMaxVisible, expected) {
-        //arrange
+        // arrange
         that.createRange({ maxVisible: rangeMaxVisible });
 
-        //act
+        // act
         var returnValue = that.range.addRange({ maxVisible: otherRangeMaxVisible });
 
-        //assert
+        // assert
         assert.strictEqual(that.range, returnValue);
         assert.deepEqual(that.range.maxVisible, expected);
     };
@@ -430,13 +430,13 @@ QUnit.test('Merge categories', function(assert) {
     var that = this;
 
     var checkRules = function(rangeCategories, otherRangeCategories, expected, message) {
-    //arrange
+    // arrange
         that.createRange({ categories: rangeCategories, dataType: "datetime" });
 
-    //act
+    // act
         var returnValue = that.range.addRange({ categories: otherRangeCategories });
 
-    //assert
+    // assert
         assert.strictEqual(that.range, returnValue);
         assert.deepEqual(that.range.categories, expected, message);
     };
@@ -472,19 +472,19 @@ QUnit.module('Add range. Extend by visible range. Numeric', {
 });
 
 QUnit.test('min < minVisible, maxVisible < max', function(assert) {
-    //arrange
+    // arrange
     this.createRange({
         min: 10,
         max: 100
     });
 
-    //act
+    // act
     var returnValue = this.range.addRange({
         minVisible: 20,
         maxVisible: 80
     });
 
-    //assert
+    // assert
     assert.strictEqual(this.range, returnValue);
     this.checkRanges(assert, {
         min: 10,
@@ -495,19 +495,19 @@ QUnit.test('min < minVisible, maxVisible < max', function(assert) {
 });
 
 QUnit.test('minVisible < min, maxVisible < max', function(assert) {
-    //arrange
+    // arrange
     this.createRange({
         min: 10,
         max: 100
     });
 
-    //act
+    // act
     var returnValue = this.range.addRange({
         minVisible: 5,
         maxVisible: 80
     });
 
-    //assert
+    // assert
     assert.strictEqual(this.range, returnValue);
     this.checkRanges(assert, {
         min: 5,
@@ -518,19 +518,19 @@ QUnit.test('minVisible < min, maxVisible < max', function(assert) {
 });
 
 QUnit.test('min < minVisible, max < maxVisible', function(assert) {
-    //arrange
+    // arrange
     this.createRange({
         min: 10,
         max: 100
     });
 
-    //act
+    // act
     var returnValue = this.range.addRange({
         minVisible: 20,
         maxVisible: 110
     });
 
-    //assert
+    // assert
     assert.strictEqual(this.range, returnValue);
     this.checkRanges(assert, {
         min: 10,
@@ -541,19 +541,19 @@ QUnit.test('min < minVisible, max < maxVisible', function(assert) {
 });
 
 QUnit.test('minVisible < min, max < maxVisible', function(assert) {
-    //arrange
+    // arrange
     this.createRange({
         min: 10,
         max: 100
     });
 
-    //act
+    // act
     var returnValue = this.range.addRange({
         minVisible: 5,
         maxVisible: 110
     });
 
-    //assert
+    // assert
     assert.strictEqual(this.range, returnValue);
     this.checkRanges(assert, {
         min: 5,
@@ -564,19 +564,19 @@ QUnit.test('minVisible < min, max < maxVisible', function(assert) {
 });
 
 QUnit.test('min < max < minVisible < maxVisible', function(assert) {
-    //arrange
+    // arrange
     this.createRange({
         min: 10,
         max: 100
     });
 
-    //act
+    // act
     var returnValue = this.range.addRange({
         minVisible: 110,
         maxVisible: 130
     });
 
-    //assert
+    // assert
     assert.strictEqual(this.range, returnValue);
     this.checkRanges(assert, {
         min: 10,
@@ -587,18 +587,18 @@ QUnit.test('min < max < minVisible < maxVisible', function(assert) {
 });
 
 QUnit.test('min < max < minVisible, maxVisible = undefined', function(assert) {
-    //arrange
+    // arrange
     this.createRange({
         min: 10,
         max: 100
     });
 
-    //act
+    // act
     var returnValue = this.range.addRange({
         minVisible: 110
     });
 
-    //assert
+    // assert
     assert.strictEqual(this.range, returnValue);
     this.checkRanges(assert, {
         min: 10,
@@ -608,19 +608,19 @@ QUnit.test('min < max < minVisible, maxVisible = undefined', function(assert) {
 });
 
 QUnit.test('minVisible < maxVisible < min < max', function(assert) {
-    //arrange
+    // arrange
     this.createRange({
         min: 10,
         max: 100
     });
 
-    //act
+    // act
     var returnValue = this.range.addRange({
         minVisible: 1,
         maxVisible: 5
     });
 
-    //assert
+    // assert
     assert.strictEqual(this.range, returnValue);
     this.checkRanges(assert, {
         min: 1,
@@ -631,18 +631,18 @@ QUnit.test('minVisible < maxVisible < min < max', function(assert) {
 });
 
 QUnit.test('minVisible = undefined, maxVisible < min < max', function(assert) {
-    //arrange
+    // arrange
     this.createRange({
         min: 10,
         max: 100
     });
 
-    //act
+    // act
     var returnValue = this.range.addRange({
         maxVisible: 5
     });
 
-    //assert
+    // assert
     assert.strictEqual(this.range, returnValue);
     this.checkRanges(assert, {
         min: 5,
@@ -675,19 +675,19 @@ QUnit.module('Add range. Extend by visible range. DateTime', {
 });
 
 QUnit.test('min < minVisible, maxVisible < max', function(assert) {
-    //arrange
+    // arrange
     this.createRange({
         min: new Date(10000),
         max: new Date(100000)
     });
 
-    //act
+    // act
     var returnValue = this.range.addRange({
         minVisible: new Date(20000),
         maxVisible: new Date(80000)
     });
 
-    //assert
+    // assert
     assert.strictEqual(this.range, returnValue);
     this.checkRanges(assert, {
         min: new Date(10000),
@@ -698,19 +698,19 @@ QUnit.test('min < minVisible, maxVisible < max', function(assert) {
 });
 
 QUnit.test('minVisible < min, maxVisible < max', function(assert) {
-    //arrange
+    // arrange
     this.createRange({
         min: new Date(10000),
         max: new Date(100000)
     });
 
-    //act
+    // act
     var returnValue = this.range.addRange({
         minVisible: new Date(5000),
         maxVisible: new Date(80000)
     });
 
-    //assert
+    // assert
     assert.strictEqual(this.range, returnValue);
     this.checkRanges(assert, {
         min: new Date(5000),
@@ -721,19 +721,19 @@ QUnit.test('minVisible < min, maxVisible < max', function(assert) {
 });
 
 QUnit.test('min < minVisible, max < maxVisible', function(assert) {
-    //arrange
+    // arrange
     this.createRange({
         min: new Date(10000),
         max: new Date(100000)
     });
 
-    //act
+    // act
     var returnValue = this.range.addRange({
         minVisible: new Date(20000),
         maxVisible: new Date(110000)
     });
 
-    //assert
+    // assert
     assert.strictEqual(this.range, returnValue);
     this.checkRanges(assert, {
         min: new Date(10000),
@@ -744,19 +744,19 @@ QUnit.test('min < minVisible, max < maxVisible', function(assert) {
 });
 
 QUnit.test('minVisible < min, max < maxVisible', function(assert) {
-    //arrange
+    // arrange
     this.createRange({
         min: new Date(10000),
         max: new Date(100000)
     });
 
-    //act
+    // act
     var returnValue = this.range.addRange({
         minVisible: new Date(5000),
         maxVisible: new Date(110000)
     });
 
-    //assert
+    // assert
     assert.strictEqual(this.range, returnValue);
     this.checkRanges(assert, {
         min: new Date(5000),
@@ -767,19 +767,19 @@ QUnit.test('minVisible < min, max < maxVisible', function(assert) {
 });
 
 QUnit.test('min < max < minVisible < maxVisible', function(assert) {
-    //arrange
+    // arrange
     this.createRange({
         min: new Date(10000),
         max: new Date(100000)
     });
 
-    //act
+    // act
     var returnValue = this.range.addRange({
         minVisible: new Date(110000),
         maxVisible: new Date(130000)
     });
 
-    //assert
+    // assert
     assert.strictEqual(this.range, returnValue);
     this.checkRanges(assert, {
         min: new Date(10000),
@@ -790,18 +790,18 @@ QUnit.test('min < max < minVisible < maxVisible', function(assert) {
 });
 
 QUnit.test('min < max < minVisible, maxVisible = undefined', function(assert) {
-    //arrange
+    // arrange
     this.createRange({
         min: new Date(10000),
         max: new Date(100000)
     });
 
-    //act
+    // act
     var returnValue = this.range.addRange({
         minVisible: new Date(110000)
     });
 
-    //assert
+    // assert
     assert.strictEqual(this.range, returnValue);
     this.checkRanges(assert, {
         min: new Date(10000),
@@ -811,19 +811,19 @@ QUnit.test('min < max < minVisible, maxVisible = undefined', function(assert) {
 });
 
 QUnit.test('minVisible < maxVisible < min < max', function(assert) {
-    //arrange
+    // arrange
     this.createRange({
         min: new Date(10000),
         max: new Date(100000)
     });
 
-    //act
+    // act
     var returnValue = this.range.addRange({
         minVisible: new Date(1000),
         maxVisible: new Date(5000)
     });
 
-    //assert
+    // assert
     assert.strictEqual(this.range, returnValue);
     this.checkRanges(assert, {
         min: new Date(1000),
@@ -834,18 +834,18 @@ QUnit.test('minVisible < maxVisible < min < max', function(assert) {
 });
 
 QUnit.test('minVisible = undefined, maxVisible < min < max', function(assert) {
-    //arrange
+    // arrange
     this.createRange({
         min: new Date(10000),
         max: new Date(100000)
     });
 
-    //act
+    // act
     var returnValue = this.range.addRange({
         maxVisible: new Date(5000)
     });
 
-    //assert
+    // assert
     assert.strictEqual(this.range, returnValue);
     this.checkRanges(assert, {
         min: new Date(5000),
@@ -878,18 +878,18 @@ QUnit.module('Add range. Extend by visible range. Special cases for RS. Min/max 
 });
 
 QUnit.test('min = undefined, minVisible/max/maxVisible != undefined', function(assert) {
-    //arrange
+    // arrange
     this.createRange({
         max: 100
     });
 
-    //act
+    // act
     var returnValue = this.range.addRange({
         minVisible: 10,
         maxVisible: 100
     });
 
-    //assert
+    // assert
     assert.strictEqual(this.range, returnValue);
     this.checkRanges(assert, {
         minVisible: 10,
@@ -899,18 +899,18 @@ QUnit.test('min = undefined, minVisible/max/maxVisible != undefined', function(a
 });
 
 QUnit.test('min/minVisible/maxVisible != undefined, max = undefined', function(assert) {
-    //arrange
+    // arrange
     this.createRange({
         min: 10
     });
 
-    //act
+    // act
     var returnValue = this.range.addRange({
         minVisible: 20,
         maxVisible: 100
     });
 
-    //assert
+    // assert
     assert.strictEqual(this.range, returnValue);
     this.checkRanges(assert, {
         min: 10,
@@ -943,18 +943,18 @@ QUnit.module('Add range. Extend by visible range. Special cases for RS. Min/max 
 });
 
 QUnit.test('min = undefined, minVisible/max/maxVisible != undefined', function(assert) {
-    //arrange
+    // arrange
     this.createRange({
         max: new Date(100000)
     });
 
-    //act
+    // act
     var returnValue = this.range.addRange({
         minVisible: new Date(10000),
         maxVisible: new Date(100000)
     });
 
-    //assert
+    // assert
     assert.strictEqual(this.range, returnValue);
     this.checkRanges(assert, {
         minVisible: new Date(10000),
@@ -964,18 +964,18 @@ QUnit.test('min = undefined, minVisible/max/maxVisible != undefined', function(a
 });
 
 QUnit.test('min/minVisible/maxVisible != undefined, max = undefined', function(assert) {
-    //arrange
+    // arrange
     this.createRange({
         min: new Date(10000)
     });
 
-    //act
+    // act
     var returnValue = this.range.addRange({
         minVisible: new Date(20000),
         maxVisible: new Date(100000)
     });
 
-    //assert
+    // assert
     assert.strictEqual(this.range, returnValue);
     this.checkRanges(assert, {
         min: new Date(10000),
@@ -993,53 +993,53 @@ QUnit.module('isDefined functionality', {
 });
 
 QUnit.test('Empty', function(assert) {
-    //arrange
+    // arrange
     this.createRange();
 
-    //act/assert
+    // act/assert
     assert.ok(!this.range.isDefined());
 });
 
 QUnit.test('With min and without max', function(assert) {
-    //arrange
+    // arrange
     this.createRange({ min: 0 });
 
-    //act/assert
+    // act/assert
     assert.ok(!this.range.isDefined());
 });
 
 QUnit.test('Without min and with max', function(assert) {
-    //arrange
+    // arrange
     this.createRange({ max: 10 });
 
-    //act/assert
+    // act/assert
     assert.ok(!this.range.isDefined());
 });
 
 QUnit.test('With min and max', function(assert) {
-    //arrange
+    // arrange
     this.createRange({ min: 0, max: 10 });
 
-    //act/assert
+    // act/assert
     assert.ok(this.range.isDefined());
 });
 
 QUnit.test('With categories', function(assert) {
-    //arrange
+    // arrange
     this.createRange({});
 
-//act
+// act
     this.range.addRange({ categories: ['a', 'b'] });
 
-//assert
+// assert
     assert.ok(this.range.isDefined());
 });
 
 QUnit.test('With categories that is empty', function(assert) {
-    //arrange
+    // arrange
     this.createRange({ categories: [] });
 
-    //act/assert
+    // act/assert
     assert.ok(!this.range.isDefined());
 });
 
@@ -1050,10 +1050,10 @@ QUnit.module('StubData functionality', {
 });
 
 QUnit.test('Set StubData without dataType', function(assert) {
-    //act
+    // act
     var returnValue = this.range.setStubData();
 
-    //assert
+    // assert
     assert.strictEqual(this.range, returnValue);
     assert.strictEqual(this.range.max, 10);
     assert.strictEqual(this.range.min, 0);
@@ -1061,10 +1061,10 @@ QUnit.test('Set StubData without dataType', function(assert) {
 });
 
 QUnit.test('Set StubData with dataType = numeric', function(assert) {
-    //act
+    // act
     var returnValue = this.range.setStubData('numeric');
 
-    //assert
+    // assert
     assert.strictEqual(this.range, returnValue);
     assert.strictEqual(this.range.max, 10);
     assert.strictEqual(this.range.min, 0);
@@ -1074,10 +1074,10 @@ QUnit.test('Set StubData with dataType = numeric', function(assert) {
 QUnit.test('Set StubData with dataType = datetime', function(assert) {
     var year = new Date().getFullYear() - 1;
 
-    //act
+    // act
     var returnValue = this.range.setStubData('datetime');
 
-    //assert
+    // assert
     assert.strictEqual(this.range, returnValue);
     assert.deepEqual(this.range.max, new Date(year, 11, 31));
     assert.deepEqual(this.range.min, new Date(year, 0, 1));
@@ -1086,10 +1086,10 @@ QUnit.test('Set StubData with dataType = datetime', function(assert) {
 
 QUnit.test('Set StubData with logarithmic axis type', function(assert) {
     this.range.axisType = 'logarithmic';
-    //act
+    // act
     var returnValue = this.range.setStubData();
 
-    //assert
+    // assert
     assert.strictEqual(this.range, returnValue);
     assert.strictEqual(this.range.max, 10);
     assert.strictEqual(this.range.min, 1);
@@ -1100,10 +1100,10 @@ QUnit.test('Set StubData with discrete axis type without dataType', function(ass
     var originalType = this.range.axisType;
 
     this.range.axisType = 'discrete';
-    //act
+    // act
     var returnValue = this.range.setStubData();
 
-    //assert
+    // assert
     assert.strictEqual(this.range, returnValue);
     assert.strictEqual(this.range.max, undefined);
     assert.strictEqual(this.range.min, undefined);
@@ -1118,10 +1118,10 @@ QUnit.test('Set StubData with discrete axis type with dataType = datetime', func
     var originalType = this.range.axisType;
 
     this.range.axisType = 'discrete';
-    //act
+    // act
     var returnValue = this.range.setStubData('datetime');
 
-    //assert
+    // assert
     assert.strictEqual(this.range, returnValue);
     assert.strictEqual(this.range.max, undefined);
     assert.strictEqual(this.range.min, undefined);
@@ -1135,10 +1135,10 @@ QUnit.test('Set StubData with discrete axis type with dataType = numeric', funct
     var originalType = this.range.axisType;
 
     this.range.axisType = 'discrete';
-    //act
+    // act
     var returnValue = this.range.setStubData('numeric');
 
-    //assert
+    // assert
     assert.strictEqual(this.range, returnValue);
     assert.strictEqual(this.range.max, undefined);
     assert.strictEqual(this.range.min, undefined);
@@ -1164,13 +1164,13 @@ QUnit.module('Correct Zero level functionality', {
         }
 
         this.checkRanges = function(assert, template, expected) {
-            //arrange
+            // arrange
             var range = createRange(template);
 
-            //act
+            // act
             range.correctValueZeroLevel();
 
-            //assert
+            // assert
             assert.equal(range.min.valueOf(), expected.min, 'min');
             assert.equal(range.max.valueOf(), expected.max, 'max');
             assert.equal(range.minVisible.valueOf(), expected.minVisible, 'minVisible');
@@ -1283,34 +1283,34 @@ QUnit.test('min < 0, max < 0, minVisible < 0, maxVisible < 0. Logarithmic axis',
 QUnit.module('discrete zooming');
 
 QUnit.test('min/max categories after create range with min and max categories', function(assert) {
-    //arrange,act
+    // arrange,act
     var range = new rangeModule.Range({ minVisible: 'someStartCategories', maxVisible: 'someEndCategories', axisType: "discrete" });
 
-    //arrange
+    // arrange
     assert.strictEqual(range.minVisible, 'someStartCategories');
     assert.strictEqual(range.maxVisible, 'someEndCategories');
 });
 
 QUnit.test('min/max categories after call add range (create without min/max categories)', function(assert) {
-    //arrange
+    // arrange
     var range = new rangeModule.Range({ axisType: "discrete" });
 
-    //act
+    // act
     range.addRange({ minVisible: 'someStartCategories', maxVisible: 'someEndCategories' });
 
-    //assert
+    // assert
     assert.strictEqual(range.minVisible, 'someStartCategories');
     assert.strictEqual(range.maxVisible, 'someEndCategories');
 });
 
 QUnit.test('min/max categories after call add range (create with min/max categories)', function(assert) {
-    //arrange
+    // arrange
     var range = new rangeModule.Range({ minVisible: 'someStartCategories', maxVisible: 'someEndCategories', axisType: "discrete" });
 
-    //act
+    // act
     range.addRange({ minVisible: 'anotherStartCategories', maxVisible: 'someEndCategories' });
 
-    //assert
+    // assert
     assert.strictEqual(range.minVisible, 'someStartCategories');
     assert.strictEqual(range.maxVisible, 'someEndCategories');
 });

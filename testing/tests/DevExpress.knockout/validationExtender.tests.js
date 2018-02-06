@@ -37,10 +37,10 @@ QUnit.test("Engine can subscribe to validate group", function(assert) {
             }
         })
     };
-    //act
+    // act
     ValidationEngine.registerModelForValidation(vm);
 
-    //assert
+    // assert
     var groupConfig = ValidationEngine.getGroupConfig(vm);
     assert.ok(groupConfig, "Config should be retrieved");
     assert.equal(groupConfig.validators.length, 1, "Single validator should be registered");
@@ -56,10 +56,10 @@ QUnit.test("Engine can validate model", function(assert) {
         })
     };
     ValidationEngine.registerModelForValidation(vm);
-    //act
+    // act
     var result = ValidationEngine.validateModel(vm);
 
-    //assert
+    // assert
     assert.ok(result, "Result should be retrieved");
     assert.strictEqual(result.isValid, false, "Validation should not pass");
     assert.strictEqual(ValidationEngine.validateGroup, ValidationEngine.validateModel, "Completely incorrect test of technical implementation");
@@ -97,10 +97,10 @@ QUnit.test("validated handler should be called", function(assert) {
         },
         validatedHandler = sinon.stub();
     vm.login.dxValidator.on("validated", validatedHandler);
-    //act
+    // act
     vm.login.dxValidator.validate();
 
-    //assert
+    // assert
     assert.ok(validatedHandler.calledOnce, "Handler should be called");
     var args = validatedHandler.getCall(0).args;
     assert.ok(args, "Args should be passed");
@@ -121,10 +121,10 @@ QUnit.test("changing observable value should cause validation", function(assert)
         },
         validatedHandler = sinon.stub();
     vm.login.dxValidator.on("validated", validatedHandler);
-    //act
+    // act
     vm.login("new value");
 
-    //assert
+    // assert
     assert.ok(validatedHandler.calledOnce, "Handler should be called");
     var args = validatedHandler.getCall(0).args;
     assert.ok(args, "Args should be passed");
@@ -139,9 +139,9 @@ QUnit.test("Model should be found as a validation group", function(assert) {
                 .appendTo(FIXTURE_ELEMENT);
 
     ko.applyBindings(vm, $buttonContainer[0]);
-    //act
+    // act
     var group = $buttonContainer.dxButton("_findGroup");
-    //assert
+    // assert
     assert.strictEqual(group, vm, "View model should be found as a group");
 });
 
@@ -157,9 +157,9 @@ QUnit.test("dxValidationGroup should win Model", function(assert) {
 
     ko.applyBindings(vm, $groupContainer[0]);
     var groupInstance = new ValidationGroup($groupContainer);
-    //act
+    // act
     var group = $buttonContainer.dxButton("_findGroup");
-    //assert
+    // assert
     assert.strictEqual(group, groupInstance, "dxValidationGroup should be found as a group");
 });
 
@@ -171,9 +171,9 @@ QUnit.test("validationGroup string key should win Model", function(assert) {
 
 
     ko.applyBindings(vm, $buttonContainer[0]);
-    //act
+    // act
     var group = $buttonContainer.dxButton("_findGroup");
-    //assert
+    // assert
     assert.strictEqual(group, "uniqueGroupKey", "validationGroup option should be found as a group");
 });
 
@@ -192,7 +192,7 @@ QUnit.test("dxValidator binding handler should be evaluated after editor binding
 });
 
 QUnit.test("Validator can be reset", function(assert) {
-    //arrange
+    // arrange
     var vm = {
         login: ko.observable("testuser").extend({
             dxValidator: {
@@ -202,9 +202,9 @@ QUnit.test("Validator can be reset", function(assert) {
     };
     var validator = vm.login.dxValidator;
     validator.validate();
-    //act
+    // act
     validator.reset();
-    //assert
+    // assert
     assert.strictEqual(validator.isValid(), true, "isValid - Validation should be restored in valid state");
     assert.strictEqual(validator.validationError(), null, "validationRule - Validation should be restored in valid state");
     assert.strictEqual(vm.login(), null, "Value should be reset");

@@ -418,14 +418,14 @@ var browser, focused;
             },
 
             press: function(keysString, actionCallback) {
-                //NOTE: we should separate symbol '+' that concats other keys and key '+' to support commands like the 'ctrl++'
+                // NOTE: we should separate symbol '+' that concats other keys and key '+' to support commands like the 'ctrl++'
                 var keys = keysString.replace(/^\+/g, 'plus').replace(/\+\+/g, '+plus').split('+');
 
                 $.map(keys, function(key, index) {
                     keys[index] = key.replace('plus', '+');
                 });
 
-                //NOTE: check 'shift' modifier in keys
+                // NOTE: check 'shift' modifier in keys
                 for(var i = 0; i < keys.length; i++) {
                     var key = keys[i];
 

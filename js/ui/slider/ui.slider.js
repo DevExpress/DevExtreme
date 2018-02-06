@@ -574,7 +574,7 @@ var Slider = TrackBar.inherit({
         }
 
         step = parseFloat(step.toFixed(5));
-        //TODO or exception?
+        // TODO or exception?
         if(step === 0) {
             step = 0.00001;
         }

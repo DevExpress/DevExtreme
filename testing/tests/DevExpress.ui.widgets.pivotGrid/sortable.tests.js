@@ -93,7 +93,7 @@ QUnit.test("vertical dragging", function(assert) {
     var $item = $sortable.find(".test-item").eq(0);
     var offset = $item.offset();
 
-    //act
+    // act
     pointerMock($item)
         .start()
         .down()
@@ -101,7 +101,7 @@ QUnit.test("vertical dragging", function(assert) {
         .move(offset.left, offset.top + 22)
         .up();
 
-    //assert
+    // assert
     var $items = $sortable.find(".test-item");
 
     assert.equal($items.length, 4, "item count");
@@ -113,10 +113,10 @@ QUnit.test("vertical dragging", function(assert) {
     assert.equal(draggingArgs.length, 2, "fired two times");
 
     assert.strictEqual(draggingArgs[0].sourceIndex, 0, "source index");
-    assert.strictEqual(draggingArgs[0].targetIndex, -1, "target index"); //TODO: real index
+    assert.strictEqual(draggingArgs[0].targetIndex, -1, "target index"); // TODO: real index
 
     assert.strictEqual(draggingArgs[1].sourceIndex, 0, "source index");
-    assert.strictEqual(draggingArgs[1].targetIndex, -1, "target index"); //TODO: real index
+    assert.strictEqual(draggingArgs[1].targetIndex, -1, "target index"); // TODO: real index
 
     assert.strictEqual(changedArgs.sourceIndex, 0, "source index");
     assert.strictEqual(changedArgs.targetIndex, 2, "target index");
@@ -136,7 +136,7 @@ QUnit.test("set onChanged arg's fields", function(assert) {
     var $item = $sortable.find(".test-item").eq(0);
     var offset = $item.offset();
 
-    //act
+    // act
     pointerMock($item)
         .start()
         .down()
@@ -164,7 +164,7 @@ QUnit.test("horizontal dragging - right", function(assert) {
     var $item = $sortable.find(".test-item").eq(0);
     var offset = $item.offset();
 
-    //act
+    // act
     pointerMock($item)
         .start()
         .down()
@@ -172,7 +172,7 @@ QUnit.test("horizontal dragging - right", function(assert) {
         .move(offset.left + 400, offset.top)
         .up();
 
-    //assert
+    // assert
     var $items = $sortable.find(".test-item");
 
     assert.equal($items.length, 4, "item count");
@@ -182,7 +182,7 @@ QUnit.test("horizontal dragging - right", function(assert) {
     assert.equal($items.eq(3).text(), "4", "item 3 text");
 });
 
-//QUnit.test("horizontal dragging between lines", function(assert) {
+// QUnit.test("horizontal dragging between lines", function(assert) {
 //    createHorizontalMarkUp(HORIZONTAL_WIDTH, true);
 
 //    var $sortable = $("#sortable").dxSortable({
@@ -194,7 +194,7 @@ QUnit.test("horizontal dragging - right", function(assert) {
 //    var $item = $sortable.find(".test-item").eq(0);
 //    var offset = $item.offset();
 
-//    //act
+//    // act
 //    pointerMock($item)
 //        .start()
 //        .down()
@@ -202,7 +202,7 @@ QUnit.test("horizontal dragging - right", function(assert) {
 //        .move(offset.left + 350, offset.top + 15)
 //        .up();
 
-//    //assert
+//    // assert
 //    var $items = $sortable.find(".test-item");
 
 //    assert.equal($items.length, 6, "item count");
@@ -212,9 +212,9 @@ QUnit.test("horizontal dragging - right", function(assert) {
 //    assert.equal($items.eq(3).text(), "5", "item 3 text");
 //    assert.equal($items.eq(4).text(), "1", "item 4 text");
 //    assert.equal($items.eq(5).text(), "6", "item 5 text");
-//});
+// });
 
-//QUnit.test("horizontal dragging between lines to the end of the first line", function(assert) {
+// QUnit.test("horizontal dragging between lines to the end of the first line", function(assert) {
 //    createHorizontalMarkUp(HORIZONTAL_WIDTH, true);
 
 //    var $sortable = $("#sortable").dxSortable({
@@ -226,7 +226,7 @@ QUnit.test("horizontal dragging - right", function(assert) {
 //    var $item = $sortable.find(".test-item").eq(0);
 //    var offset = $item.offset();
 
-//    //act
+//    // act
 //    pointerMock($item)
 //        .start()
 //        .down()
@@ -234,7 +234,7 @@ QUnit.test("horizontal dragging - right", function(assert) {
 //        .move(offset.left + 551, offset.top)
 //        .up();
 
-//    //assert
+//    // assert
 //    var $items = $sortable.find(".test-item");
 
 //    assert.equal($items.length, 6, "item count");
@@ -244,7 +244,7 @@ QUnit.test("horizontal dragging - right", function(assert) {
 //    assert.equal($items.eq(3).text(), "4", "item 3 text");
 //    assert.equal($items.eq(4).text(), "5", "item 4 text");
 //    assert.equal($items.eq(5).text(), "6", "item 5 text");
-//});
+// });
 
 QUnit.test("dragging inside table", function(assert) {
     createHorizontalMarkUp(HORIZONTAL_WIDTH_LARGE, true, true);
@@ -266,7 +266,7 @@ QUnit.test("dragging inside table", function(assert) {
     var $item = $sortable.find(".test-item").eq(1);
     var offset = $item.offset();
 
-    //act
+    // act
     pointerMock($item)
         .start()
         .down()
@@ -279,10 +279,10 @@ QUnit.test("dragging inside table", function(assert) {
     assert.equal(draggingArgs.length, 2, "fired two times");
 
     assert.strictEqual(draggingArgs[0].sourceIndex, 1, "source index");
-    assert.strictEqual(draggingArgs[0].targetIndex, -1, "target index"); //TODO: real index
+    assert.strictEqual(draggingArgs[0].targetIndex, -1, "target index"); // TODO: real index
 
     assert.strictEqual(draggingArgs[1].sourceIndex, 1, "source index");
-    assert.strictEqual(draggingArgs[1].targetIndex, -1, "target index"); //TODO: real index
+    assert.strictEqual(draggingArgs[1].targetIndex, -1, "target index"); // TODO: real index
 
     assert.strictEqual(changedArgs.sourceIndex, 1, "source index");
     assert.strictEqual(changedArgs.targetIndex, 4, "target index");
@@ -309,7 +309,7 @@ QUnit.test("dragging move over half of item height", function(assert) {
     var $item = $sortable.find(".test-item").eq(0);
     var offset = $item.offset();
 
-    //act
+    // act
     pointerMock($item)
         .start()
         .down()
@@ -317,7 +317,7 @@ QUnit.test("dragging move over half of item height", function(assert) {
         .move(offset.left, offset.top + 25)
         .up();
 
-    //assert
+    // assert
     var $items = $sortable.find(".test-item");
 
     assert.equal($items.length, 4, "item count");
@@ -344,7 +344,7 @@ QUnit.test("dragging - to end of container", function(assert) {
     var $item = $sortable.find(".test-item").eq(0);
     var offset = $item.offset();
 
-    //act
+    // act
     pointerMock($item)
         .start()
         .down()
@@ -352,7 +352,7 @@ QUnit.test("dragging - to end of container", function(assert) {
         .move(offset.left, offset.top + 200)
         .up();
 
-    //assert
+    // assert
     var $items = $sortable.find(".test-item");
 
     assert.equal($items.length, 4, "item count");
@@ -378,14 +378,14 @@ QUnit.test("dragging - to end of container without dragend", function(assert) {
     var $item = $sortable.find(".test-item").eq(0);
     var offset = $item.offset();
 
-    //act
+    // act
     pointerMock($item)
         .start()
         .down()
         .move(offset.left + 5, offset.top + 5)
         .move(offset.left, offset.top + 200);
 
-    //assert
+    // assert
     var $items = $sortable.find(".test-item");
 
     assert.equal($items.length, 5, "item count");
@@ -418,7 +418,7 @@ QUnit.test("dragging - out from container", function(assert) {
     var $item = $sortable.find(".test-item").eq(0);
     var offset = $item.offset();
 
-    //act
+    // act
     pointerMock($item)
         .start()
         .down()
@@ -426,7 +426,7 @@ QUnit.test("dragging - out from container", function(assert) {
         .move(offset.left, offset.top - 400)
         .up();
 
-    //assert
+    // assert
     var $items = $sortable.find(".test-item");
 
     assert.equal($items.length, 4, "item count");
@@ -451,14 +451,14 @@ QUnit.test("dragging - out from container without dragend", function(assert) {
     var $item = $sortable.find(".test-item").eq(0);
     var offset = $item.offset();
 
-    //act
+    // act
     pointerMock($item)
         .start()
         .down()
         .move(offset.left + 5, offset.top + 5)
         .move(offset.left, offset.top - 400);
 
-    //assert
+    // assert
     var $items = $sortable.find(".test-item");
 
     assert.equal($items.length, 4, "item count");
@@ -488,7 +488,7 @@ QUnit.skip("dragging not allowed item", function(assert) {
     var $item = $sortable.find(".not-test-item").eq(0);
     var offset = $item.offset();
 
-    //act
+    // act
     pointerMock($item)
         .start()
         .down()
@@ -496,7 +496,7 @@ QUnit.skip("dragging not allowed item", function(assert) {
         .move(offset.left + 5, offset.top + 25)
         .up();
 
-    //assert
+    // assert
     var $items = $sortable.find(".test-item");
 
     assert.equal($items.length, 4, "item count");
@@ -522,7 +522,7 @@ QUnit.test("dragging when no itemContainer", function(assert) {
     var $item = $sortable.find(".test-item").eq(0);
     var offset = $item.offset();
 
-    //act
+    // act
     pointerMock($item)
         .start()
         .down()
@@ -530,7 +530,7 @@ QUnit.test("dragging when no itemContainer", function(assert) {
         .move(offset.left + 5, offset.top + 25)
         .up();
 
-    //assert
+    // assert
     var $items = $sortable.find(".test-item");
 
     assert.equal($items.length, 4, "item count");
@@ -560,7 +560,7 @@ QUnit.test("indicator is shown on right dragging", function(assert) {
         $targetItem = $sortable.find(".dx-drag-target");
     var offset = $item.offset();
 
-    //act
+    // act
     pointerMock($item)
         .start()
         .down()
@@ -593,7 +593,7 @@ QUnit.test("indicator should not be shown on small dragging", function(assert) {
     var $item = $sortable.find(".test-item").eq(1);
     var offset = $item.offset();
 
-    //act
+    // act
     pointerMock($item)
         .start()
         .down()
@@ -618,7 +618,7 @@ QUnit.test("indicator is shown on left dragging", function(assert) {
     var $item = $sortable.find(".test-item").eq(1);
     var offset = $item.offset();
 
-    //act
+    // act
     pointerMock($item)
         .start()
         .down()
@@ -646,7 +646,7 @@ QUnit.test("indicator is shown after last item dragging", function(assert) {
     var $item = $sortable.find(".test-item").eq(1);
     var offset = $item.offset();
 
-    //act
+    // act
     pointerMock($item)
         .start()
         .down()
@@ -673,7 +673,7 @@ QUnit.test("indicator was removed", function(assert) {
     var $item = $sortable.find(".test-item").eq(1);
     var offset = $item.offset();
 
-    //act
+    // act
     pointerMock($item)
         .start()
         .down()
@@ -697,7 +697,7 @@ QUnit.test("remove indicator when item dragged out from container", function(ass
     var $item = $sortable.find(".test-item").eq(1);
     var offset = $item.offset();
 
-    //act
+    // act
     pointerMock($item)
         .start()
         .down()
@@ -783,7 +783,7 @@ QUnit.test("dragging to empty group", function(assert) {
         .move(offset.left, offset.top + 20);
 
     indicator = $(".dx-position-indicator");
-    assert.ok(!indicator.length); //TODO: indicator should be shown
+    assert.ok(!indicator.length); // TODO: indicator should be shown
 
 });
 
@@ -798,14 +798,14 @@ QUnit.test("indicator is shown on bottom dragging", function(assert) {
     var $item = $sortable.find(".test-item").eq(0);
     var offset = $item.offset();
 
-    //act
+    // act
     pointerMock($item)
         .start()
         .down()
         .move(offset.left + 5, offset.top + 5)
         .move(offset.left, offset.top + 22);
 
-    //assert
+    // assert
     indicator = $(".dx-position-indicator");
 
     assert.ok(indicator.length, "indicator is rendered");
@@ -830,14 +830,14 @@ QUnit.test("indicator is shown on bottom dragging. RTL", function(assert) {
     var $item = $sortable.find(".test-item").eq(0);
     var offset = $item.offset();
 
-    //act
+    // act
     pointerMock($item)
         .start()
         .down()
         .move(offset.left + 5, offset.top + 5)
         .move(offset.left, offset.top + 22);
 
-    //assert
+    // assert
     indicator = $(".dx-position-indicator");
 
     assert.ok(indicator.length, "indicator is rendered");
@@ -861,14 +861,14 @@ QUnit.test("indicator is shown after last item bottom dragging", function(assert
     var $item = $sortable.find(".test-item").eq(0);
     var offset = $item.offset();
 
-    //act
+    // act
     pointerMock($item)
         .start()
         .down()
         .move(offset.left + 5, offset.top + 5)
         .move(offset.left, offset.top + 45);
 
-    //assert
+    // assert
     indicator = $(".dx-position-indicator");
 
     assert.ok(indicator.length, "indicator is rendered");
@@ -891,14 +891,14 @@ QUnit.test("indicator is shown after last item bottom dragging. RTL", function(a
     var $item = $sortable.find(".test-item").eq(0);
     var offset = $item.offset();
 
-    //act
+    // act
     pointerMock($item)
         .start()
         .down()
         .move(offset.left + 5, offset.top + 5)
         .move(offset.left, offset.top + 45);
 
-    //assert
+    // assert
     indicator = $(".dx-position-indicator");
 
     assert.ok(indicator.length, "indicator is rendered");
@@ -918,13 +918,13 @@ QUnit.test("drag without source element", function(assert) {
         $item = $sortable.find(".test-container"),
         offset = $sortable.find(".test-item").eq(0).offset();
 
-    //act
+    // act
     pointerMock($item)
         .start()
         .down()
         .move(offset.left + $item.width() / 2 + 10, offset.top);
 
-    //assert
+    // assert
     var indicator = $(".dx-position-indicator");
 
     assert.ok(!indicator.length);
@@ -971,7 +971,7 @@ QUnit.test("Indicator should not be shown on dragging to the same item at anothe
 
     var $item = sortableDown.find(".test-item").eq(1);
 
-    //act
+    // act
     pointerMock($item)
         .start()
         .down()
@@ -1014,7 +1014,7 @@ QUnit.test("dragging", function(assert) {
     var $item = $sortable.find(".test-item").eq(0);
     var offset = $item.offset();
 
-    //act
+    // act
     pointerMock($item)
         .start()
         .down()
@@ -1022,7 +1022,7 @@ QUnit.test("dragging", function(assert) {
         .move(offset.left, offset.top + 22)
         .up();
 
-    //assert
+    // assert
     var $items = $sortable.find(".test-item");
 
     assert.equal($items.length, 4, "item count");
@@ -1041,7 +1041,7 @@ QUnit.test("dragging move over half of item height", function(assert) {
     var $item = $sortable.find(".test-item").eq(0);
     var offset = $item.offset();
 
-    //act
+    // act
     pointerMock($item)
         .start()
         .down()
@@ -1049,7 +1049,7 @@ QUnit.test("dragging move over half of item height", function(assert) {
         .move(offset.left, offset.top + 25)
         .up();
 
-    //assert
+    // assert
     var $items = $sortable.find(".test-item");
 
     assert.equal($items.length, 4, "item count");
@@ -1068,7 +1068,7 @@ QUnit.test("dragging - to end of container", function(assert) {
     var $item = $sortable.find(".test-item").eq(0);
     var offset = $item.offset();
 
-    //act
+    // act
     pointerMock($item)
         .start()
         .down()
@@ -1076,7 +1076,7 @@ QUnit.test("dragging - to end of container", function(assert) {
         .move(offset.left, offset.top + 200)
         .up();
 
-    //assert
+    // assert
     var $items = $sortable.find(".test-item");
 
     assert.equal($items.length, 4, "item count");
@@ -1109,14 +1109,14 @@ QUnit.test("dragging - add element to empty container", function(assert) {
         $item = firstGroup.find(".test-item").eq(2),
         secondGroup = $("#second-group");
 
-    //act
+    // act
     pointerMock($item)
         .start()
         .down()
         .move(5, 155)
         .up();
 
-    //assert
+    // assert
     var $firstGroupItems = firstGroup.find(".test-item"),
         $secondGroupItems = secondGroup.find(".test-item"),
         onChangedArgs = $sortable.dxSortable("instance").option("onChanged").lastCall.args[0];
@@ -1161,14 +1161,14 @@ QUnit.test("dragging between different sortables by groupFilter callback to empt
         $item = firstGroup.find(".test-item").eq(2),
         secondGroup = $("#second-group");
 
-    //act
+    // act
     pointerMock($item)
         .start()
         .down()
         .move(5, 305)
         .up();
 
-    //assert
+    // assert
     var $firstGroupItems = firstGroup.find(".test-item"),
         $secondGroupItems = secondGroup.find(".test-item"),
         onChangedArgs = $sortable.dxSortable("instance").option("onChanged").lastCall.args[0];
@@ -1212,14 +1212,14 @@ QUnit.test("disable dragging between different sortables by groupFilter callback
     var firstGroup = $("#first-group"),
         $item = firstGroup.find(".test-item").eq(2);
 
-    //act
+    // act
     pointerMock($item)
         .start()
         .down()
         .move(5, 305)
         .up();
 
-    //assert
+    // assert
     var onChangedCalled = $sortable.dxSortable("instance").option("onChanged").called;
 
     assert.strictEqual(onChangedCalled, false, "onChanged is not called");
@@ -1252,14 +1252,14 @@ QUnit.test("dragging between different sortables by groupFilter callback to non-
         $item = firstGroup.find(".test-item").eq(2),
         secondGroup = $("#second-group");
 
-    //act
+    // act
     pointerMock($item)
         .start()
         .down()
         .move(400, 300)
         .up();
 
-    //assert
+    // assert
     var $firstGroupItems = firstGroup.find(".test-item"),
         $secondGroupItems = secondGroup.find(".test-item"),
         onChangedArgs = $sortable.dxSortable("instance").option("onChanged").lastCall.args[0];
@@ -1309,20 +1309,20 @@ QUnit.test("dragging between different sortables by groupFilter callback to non-
     var firstGroup = $("#first-group"),
         $item = firstGroup.find(".test-item").eq(2);
 
-    //act
+    // act
     var pointer = pointerMock($item)
         .start()
         .down()
         .move(400, 300);
 
 
-    //assert
+    // assert
     assert.strictEqual($(".dx-position-indicator").length, 1);
 
-    //act
+    // act
     pointer.up();
 
-    //assert
+    // assert
     assert.strictEqual($(".dx-position-indicator").length, 0);
 });
 
@@ -1372,7 +1372,7 @@ QUnit.test("dragging between different sortables positioned one on another", fun
     var $item = sortableDown.find(".test-item").eq(0);
     var offset = $item.offset();
 
-    //act
+    // act
     pointerMock($item)
         .start()
         .down()
@@ -1380,7 +1380,7 @@ QUnit.test("dragging between different sortables positioned one on another", fun
         .move(offset.left + 20, offset.top + 22)
         .up();
 
-    //assert
+    // assert
     var $items1 = sortableDown.find(".test-item"),
         $items2 = sortableUp.find(".test-item");
 
@@ -1396,7 +1396,7 @@ QUnit.test("Disable dragging", function(assert) {
         $item = $sortable.find(".test-item").eq(0),
         offset = $item.offset();
 
-    //act
+    // act
     pointerMock($item)
         .start()
         .down()
@@ -1404,7 +1404,7 @@ QUnit.test("Disable dragging", function(assert) {
         .move(offset.left, offset.top + 22)
         .up();
 
-    //assert
+    // assert
     assert.ok(!$sortable.dxSortable("instance").option("onChanged").called, "dragging should be disabled");
 });
 
@@ -1416,7 +1416,7 @@ QUnit.test("Enable dragging at runtime", function(assert) {
         offset = $item.offset();
 
     $sortable.dxSortable("option", "allowDragging", true);
-    //act
+    // act
     pointerMock($item)
         .start()
         .down()
@@ -1424,7 +1424,7 @@ QUnit.test("Enable dragging at runtime", function(assert) {
         .move(offset.left, offset.top + 22)
         .up();
 
-    //assert
+    // assert
     assert.ok($sortable.dxSortable("instance").option("onChanged").called, "dragging should be disabled");
 
     assert.deepEqual($sortable.dxSortable("instance").option("onChanged").lastCall.args[0].sourceIndex, 0);
@@ -1625,14 +1625,14 @@ QUnit.test("horizontal dragging - left", function(assert) {
         $item = $sortable.find(".test-item").eq(0),
         offset = $item.offset();
 
-    //act
+    // act
     pointerMock($item)
         .start()
         .down()
         .move(offset.left + $item.width() - 400, offset.top)
         .up();
 
-    //assert
+    // assert
     var $items = $sortable.find(".test-item");
 
     assert.equal($items.length, 4, "item count");
@@ -1645,21 +1645,21 @@ QUnit.test("horizontal dragging - left", function(assert) {
     assert.strictEqual(this.sortable.option("onChanged").lastCall.args[0].targetIndex, 2);
 });
 
-//QUnit.test("horizontal dragging between lines", function (assert) {
+// QUnit.test("horizontal dragging between lines", function (assert) {
 //    createHorizontalMarkUp(HORIZONTAL_WIDTH, true);
 
 //    var $sortable = this.createSortable({}),
 //        $item = $sortable.find(".test-item").eq(0),
 //        offset = $item.offset();
 
-//    //act
+//    // act
 //    pointerMock($item)
 //        .start()
 //        .down()
 //        .move(offset.left + $item.width() - 350, offset.top + 15)
 //        .up();
 
-//    //assert
+//    // assert
 //    var $items = $sortable.find(".test-item");
 
 //    assert.equal($items.length, 6, "item count");
@@ -1672,21 +1672,21 @@ QUnit.test("horizontal dragging - left", function(assert) {
 
 //    assert.strictEqual(this.sortable.option("onChanged").lastCall.args[0].sourceIndex, 0);
 //    assert.strictEqual(this.sortable.option("onChanged").lastCall.args[0].targetIndex, 5);
-//});
+// });
 
 QUnit.test("drag to the end of the container", function(assert) {
     var $sortable = this.createSortable({}),
         $item = $sortable.find(".test-item").eq(0),
         offset = $sortable.find(".test-item").eq(3).offset();
 
-    //act
+    // act
     pointerMock($item)
         .start()
         .down()
         .move(offset.left - 10, offset.top)
         .up();
 
-    //assert
+    // assert
     var $items = $sortable.find(".test-item");
 
     assert.equal($items.length, 4, "item count");
@@ -1704,14 +1704,14 @@ QUnit.test("drag to begin of the container", function(assert) {
         $item = $sortable.find(".test-item").eq(3),
         offset = $sortable.find(".test-item").eq(0).offset();
 
-    //act
+    // act
     pointerMock($item)
         .start()
         .down()
         .move(offset.left + $item.width() / 2 + 10, offset.top)
         .up();
 
-    //assert
+    // assert
     var $items = $sortable.find(".test-item");
 
     assert.equal($items.length, 4, "item count");
@@ -1731,13 +1731,13 @@ QUnit.test("horizontal dragging - left. Render Indicator", function(assert) {
         $item = $sortable.find(".test-item").eq(0),
         offset = $item.offset();
 
-    //act
+    // act
     pointerMock($item)
         .start()
         .down()
         .move(offset.left + $item.width() - 400, offset.top);
 
-    //assert
+    // assert
     var indicator = $(".dx-position-indicator");
 
     assert.ok(indicator.length);
@@ -1753,13 +1753,13 @@ QUnit.test("drag to the end of the container. Render Indicator", function(assert
         $item = $sortable.find(".test-item").eq(0),
         offset = $sortable.find(".test-item").eq(3).offset();
 
-    //act
+    // act
     pointerMock($item)
         .start()
         .down()
         .move(offset.left - 10, offset.top);
 
-    //assert
+    // assert
     var indicator = $(".dx-position-indicator");
 
     assert.ok(indicator.length);
@@ -1775,13 +1775,13 @@ QUnit.test("drag to begin of the container. Render Indicator", function(assert) 
         $item = $sortable.find(".test-item").eq(3),
         offset = $sortable.find(".test-item").eq(0).offset();
 
-    //act
+    // act
     pointerMock($item)
         .start()
         .down()
         .move(offset.left + $item.width() / 2 + 10, offset.top);
 
-    //assert
+    // assert
     var indicator = $(".dx-position-indicator");
 
     assert.ok(indicator.length);
@@ -1840,7 +1840,7 @@ QUnit.test("No scroll group content", function(assert) {
         $item = $sortable.find(".test-item").eq(3),
         offset = $sortable.find(".test-item").eq(0).offset();
 
-    //act
+    // act
     pointerMock($item)
         .start()
         .down()
@@ -1856,7 +1856,7 @@ QUnit.test("Scroll down group content", function(assert) {
         $item = $sortable.find(".test-item").eq(3),
         offset = $sortable.find(".test-container").eq(0).offset();
 
-    //act
+    // act
     pointerMock($item)
         .start()
         .down()
@@ -1872,7 +1872,7 @@ QUnit.test("Scroll down group content", function(assert) {
         $item = $sortable.find(".test-item").eq(3),
         offset = $sortable.find(".test-container").eq(0).offset();
 
-    //act
+    // act
     pointerMock($item)
         .start()
         .down()
@@ -1888,7 +1888,7 @@ QUnit.test("Scroll down group content second time after clock tick if pointer at
         $item = $sortable.find(".test-item").eq(3),
         offset = $sortable.find(".test-container").eq(0).offset();
 
-    //act
+    // act
     pointerMock($item)
         .start()
         .down()
@@ -1908,7 +1908,7 @@ QUnit.test("Scroll down group content while pointer at the bottom", function(ass
         $item = $sortable.find(".test-item").eq(3),
         offset = $sortable.find(".test-container").eq(0).offset();
 
-    //act
+    // act
     pointerMock($item)
         .start()
         .down()
@@ -1928,7 +1928,7 @@ QUnit.test("Scroll up group content", function(assert) {
 
     $sortable.find(".test-container").dxScrollable("scrollTo", 50);
     this.onScroll.reset();
-    //act
+    // act
     pointerMock($item)
         .start()
         .down()
@@ -1946,7 +1946,7 @@ QUnit.test("Scroll up group content to begin when pointer above area", function(
 
     $sortable.find(".test-container").dxScrollable("scrollTo", 50);
     this.onScroll.reset();
-    //act
+    // act
     pointerMock($item)
         .start()
         .down()
@@ -1975,7 +1975,7 @@ QUnit.test("Stop scrolling affer return pointer in the middle of group", functio
     this.clock.tick(20);
     this.onScroll.reset();
 
-    //act
+    // act
     pointer.move(offset.left, offset.top + 40);
     this.clock.tick(100);
 
@@ -1997,7 +1997,7 @@ QUnit.test("Stop scrolling affer drag end", function(assert) {
     this.clock.tick(20);
 
     this.onScroll.reset();
-    //act
+    // act
     pointer.up();
     this.clock.tick(100);
 
@@ -2013,7 +2013,7 @@ QUnit.test("Stop scrolling affer drag to another group", function(assert) {
 
     $sortable.find(".test-container").eq(0).dxScrollable("scrollTo", 50);
     this.onScroll.reset();
-    //act
+    // act
     var pointer = pointerMock($item)
         .start()
         .down()
@@ -2023,7 +2023,7 @@ QUnit.test("Stop scrolling affer drag to another group", function(assert) {
 
     this.onScroll.reset();
 
-    //act
+    // act
     var secondGroupOffset = $("#second-group").offset();
     pointer.move(secondGroupOffset.left + 10, secondGroupOffset.top + 15);
     this.clock.tick(100);
@@ -2040,7 +2040,7 @@ QUnit.test("Stop scrolling affer drag from emty space(no group) to another group
 
     $sortable.find(".test-container").eq(0).dxScrollable("scrollTo", 50);
     this.onScroll.reset();
-    //act
+    // act
     var pointer = pointerMock($item)
         .start()
         .down()
@@ -2050,7 +2050,7 @@ QUnit.test("Stop scrolling affer drag from emty space(no group) to another group
 
     this.onScroll.reset();
 
-    //act
+    // act
     var secondGroupOffset = $("#second-group").offset();
     pointer.move(secondGroupOffset.left + 10, secondGroupOffset.top + 15);
     this.clock.tick(100);

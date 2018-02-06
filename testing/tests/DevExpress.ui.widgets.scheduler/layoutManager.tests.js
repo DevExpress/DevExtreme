@@ -217,7 +217,7 @@ QUnit.test("Appointment has right sortedIndex", function(assert) {
     assert.equal(dataUtils.data($appointments.get(3), "dxAppointmentSettings").sortedIndex, 3, "app has right sortedIndex");
 });
 
-//NOTE: check sortedIndex for long appt parts
+// NOTE: check sortedIndex for long appt parts
 QUnit.test("Compact parts of long appointment shouldn't have sortedIndex", function(assert) {
     this.createInstance(
         {

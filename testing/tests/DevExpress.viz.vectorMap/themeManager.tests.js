@@ -55,18 +55,18 @@ QUnit.module('RTL support', {
 });
 
 QUnit.test("Do not patch theme", function(assert) {
-    //act
+    // act
     this.themeManager.setTheme('rtlTheme');
 
-    //assert
+    // assert
     assert.deepEqual(this.themeManager._theme.someOption, { rtl: false });
 });
 
 QUnit.test("Patch theme based on user options", function(assert) {
-    //act
+    // act
     this.themeManager.setTheme('rtlTheme', true);
 
-    //assert
+    // assert
     assert.deepEqual(this.themeManager._theme.someOption, { rtl: true });
 });
 
@@ -86,10 +86,10 @@ QUnit.test("Patch theme based on theme", function(assert) {
         }
     }, "desktop");
 
-    //act
+    // act
     this.themeManager.setTheme('rtlTheme1');
 
-    //assert
+    // assert
     assert.deepEqual(this.themeManager._theme.someOption, { rtl: true });
 });
 
@@ -109,9 +109,9 @@ QUnit.test("Do not patch theme (theme is rtl, options is ltr)", function(assert)
         }
     }, "desktop");
 
-    //act
+    // act
     this.themeManager.setTheme('rtlTheme1', false);
 
-    //assert
+    // assert
     assert.deepEqual(this.themeManager._theme.someOption, { rtl: false });
 });

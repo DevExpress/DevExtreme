@@ -542,7 +542,7 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
         return typeUtils.isObject(delay) ? delay[action] : delay;
     },
 
-    //TODO: try to simplify
+    // TODO: try to simplify
     _getItemElementByEventArgs: function(eventArgs) {
         var $target = $(eventArgs.target);
 
@@ -550,7 +550,7 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
             return $target;
         }
 
-        //TODO: move it to inheritors, menuBase don't know about dx-submenu
+        // TODO: move it to inheritors, menuBase don't know about dx-submenu
         while(!$target.hasClass(this._itemClass())) {
             $target = $target.parent();
             if($target.hasClass("dx-submenu")) {

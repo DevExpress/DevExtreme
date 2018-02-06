@@ -36,14 +36,14 @@ exports.fileSaver = {
         return "data:" + MIME_TYPES[format] + ";base64," + data;
     },
 
-    /*_cordovaDownloader: function(fileName, href, callback) {
+    /* _cordovaDownloader: function(fileName, href, callback) {
         var transfer = new FileTransfer(),
             fileAlert = function(res) {
                 navigator.notification.alert(res.nativeURL, null, DX.localization.message.format("dxFileSaver-fileExported"));
             };
 
         transfer.download(href, window.cordova.file.externalRootDirectory + fileName, fileAlert, fileAlert);
-    },*/
+    }, */
 
     _linkDownloader: function(fileName, href, clickHandler) {
         var exportLinkElement = domAdapter.createElement('a'),
@@ -139,9 +139,9 @@ exports.fileSaver = {
     saveAs: function(fileName, format, data, proxyURL, linkClick) {
         fileName += "." + FILE_EXTESIONS[format];
 
-        /*if(commonUtils.isDefined(window.cordova)) {
+        /* if(commonUtils.isDefined(window.cordova)) {
             return this._cordovaDownloader(fileName, this._getDataUri(format, data), linkClick);
-        }*/
+        } */
 
         if(typeUtils.isFunction(window.Blob)) {
             this._saveBlobAs(fileName, format, data);

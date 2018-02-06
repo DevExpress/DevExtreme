@@ -98,7 +98,7 @@ var messageLocalization = dependencyInjector({
             if(nodeItem.nodeType === 3) {
                 nodeItem.nodeValue = that.localizeString(nodeItem.nodeValue);
             } else {
-                if(!$(nodeItem).is("iframe")) { //T199912
+                if(!$(nodeItem).is("iframe")) { // T199912
                     each(nodeItem.attributes || [], function(index, attr) {
                         if(typeof attr.value === "string") {
                             var localizedValue = that.localizeString(attr.value);

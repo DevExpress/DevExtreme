@@ -361,9 +361,9 @@ var checkTwoGroups = function(assert, series) {
             renderer: this.renderer,
             seriesGroup: this.seriesGroup
         });
-        //act
+        // act
         series.draw(false);
-        //assert
+        // assert
 
         checkGroups(assert, series);
     });
@@ -381,9 +381,9 @@ var checkTwoGroups = function(assert, series) {
             pt.x = pt.argument;
             pt.y = pt.value;
         });
-        //act
+        // act
         series.draw(false);
-        //assert
+        // assert
         checkGroups(assert, series);
         assert.strictEqual(series._markersGroup._stored_settings.opacity, 1);
         $.each(series._points, function(i, p) {
@@ -405,9 +405,9 @@ var checkTwoGroups = function(assert, series) {
             pt.x = pt.argument;
             pt.y = pt.value;
         });
-        //act
+        // act
         series.draw(true);
-        //assert
+        // assert
         checkGroups(assert, series);
 
         assert.equal(series._labelsGroup._stored_settings.opacity, 0.001);
@@ -441,9 +441,9 @@ var checkTwoGroups = function(assert, series) {
             pt.y = pt.value;
         });
         series._points[2].isInVisibleArea.returns(false);
-        //act
+        // act
         series.draw(true);
-        //assert
+        // assert
         assert.ok(!series.getPointByPos(2).animate.called);
         assert.ok(series.getPointByPos(0).animate.called);
         assert.ok(series.getPointByPos(1).animate.called);
@@ -473,9 +473,9 @@ var checkTwoGroups = function(assert, series) {
 
         series.setClippingParams("clipId", "wideClipId", false);
 
-        //act
+        // act
         series.draw(false);
-        //assert
+        // assert
 
         assert.equal(this.renderer.stub("g").callCount, 4);
         assert.equal(this.renderer.stub("g").getCall(0).returnValue.stub("attr").firstCall.args[0]["class"], "dxc-series");
@@ -532,9 +532,9 @@ var checkTwoGroups = function(assert, series) {
 
         series.setClippingParams("clipId", "wideClipId", false);
 
-        //act
+        // act
         series.draw(true);
-        //assert
+        // assert
 
         assert.equal(this.renderer.stub("g").callCount, 4);
         assert.equal(this.renderer.stub("g").getCall(0).returnValue.stub("attr").firstCall.args[0]["class"], "dxc-series");
@@ -600,9 +600,9 @@ var checkTwoGroups = function(assert, series) {
 
         series.setClippingParams("clipId", "wideClipId", false);
 
-        //act
+        // act
         series.draw(true);
-        //assert
+        // assert
 
         assert.equal(this.renderer.stub("g").callCount, 4);
         assert.equal(this.renderer.stub("g").getCall(0).returnValue.stub("attr").firstCall.args[0]["class"], "dxc-series");
@@ -666,9 +666,9 @@ var checkTwoGroups = function(assert, series) {
 
         series.setClippingParams("clipId", "wideClipId", false);
 
-        //act
+        // act
         series.draw(false);
-        //assert
+        // assert
 
         assert.equal(this.renderer.stub("g").callCount, 4);
         assert.equal(this.renderer.stub("g").getCall(0).returnValue.stub("attr").firstCall.args[0]["class"], "dxc-series");
@@ -724,9 +724,9 @@ var checkTwoGroups = function(assert, series) {
 
         series.setClippingParams("clipId", "wideClipId", true);
 
-        //act
+        // act
         series.draw(false);
-        //assert
+        // assert
 
         assert.equal(this.renderer.stub("g").callCount, 4);
         assert.equal(this.renderer.stub("g").getCall(0).returnValue.stub("attr").firstCall.args[0]["class"], "dxc-series");
@@ -781,9 +781,9 @@ var checkTwoGroups = function(assert, series) {
         series.updateDataType({ valueAxisType: "discrete" });
         series.setClippingParams("clipId", "wideClipId", true);
 
-        //act
+        // act
         series.draw(false);
-        //assert
+        // assert
 
         checkGroups(assert, series);
 
@@ -810,9 +810,9 @@ var checkTwoGroups = function(assert, series) {
 
     QUnit.test("Draw without animation", function(assert) {
         var series = this.series;
-        //act
+        // act
         series.draw(false);
-        //assert
+        // assert
         $.each(series._points, function(i, p) {
             assert.ok(p.draw.calledOnce);
             assert.equal(p.draw.firstCall.args[0], series._renderer, "renderer pass to point " + i);
@@ -823,9 +823,9 @@ var checkTwoGroups = function(assert, series) {
 
     QUnit.test("Draw with animation", function(assert) {
         var series = this.series;
-        //act
+        // act
         series.draw(true);
-        //assert
+        // assert
         $.each(series._points, function(i, p) {
             assert.ok(p.draw.calledOnce);
             assert.equal(p.draw.firstCall.args[0], series._renderer, "renderer pass to point " + i);
@@ -844,12 +844,12 @@ var checkTwoGroups = function(assert, series) {
         series.resamplePoints = function() {
             this._points = aggregatedPoints;
         };
-        //act
+        // act
         series.resamplePoints();
-        //act
+        // act
         series.draw(true);
         series.drawTrackers();
-        //assert
+        // assert
         assert.ok(series._originalPoints.length);
         $.each(series._originalPoints, function(i, p) {
             assert.ok(!p.draw.callCount);
@@ -2395,9 +2395,9 @@ var checkTwoGroups = function(assert, series) {
             label: { visible: false }
 
         }, this.renderer);
-        //act
+        // act
         series.updateTemplateFieldNames();
-        //assert
+        // assert
         assert.equal(series._options.valueField, "valueFieldlineSeries");
         assert.equal(series._options.tagField, "tagFieldlineSeries");
     });
@@ -2410,9 +2410,9 @@ var checkTwoGroups = function(assert, series) {
             label: { visible: false }
 
         }, this.renderer);
-        //act
+        // act
         series.updateTemplateFieldNames();
-        //assert
+        // assert
         assert.equal(series._options.valueField, "vallineSeries");
         assert.equal(series._options.tagField, "taglineSeries");
     });

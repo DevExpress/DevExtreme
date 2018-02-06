@@ -771,7 +771,7 @@ QUnit.test("Values are converted according to 'fieldTypes' property", function(a
         fieldTypes: {
             id1: "Int64",
             name: "String",
-            total: "Decimal" //T566307
+            total: "Decimal" // T566307
         }
     })
         .filter([["id1", "=", 123], "and", ["id2", "=", 456], "and", ["name", "=", 789], "and", ["total", "=", null]])

@@ -1668,13 +1668,13 @@ QUnit.test("Appointment should have a correct template with custom timezone", fu
             dataSource: [
                 {
                     startDate: new Date(Date.UTC(2016, 4, 7, 5)),
-                    startDateTimeZone: "Asia/Qyzylorda", //+6:00
+                    startDateTimeZone: "Asia/Qyzylorda", // +6:00
                     endDateTimeZone: "Asia/Qyzylorda",
                     endDate: new Date(Date.UTC(2016, 4, 7, 5, 30)),
                     text: 'new Date sample'
                 }
             ],
-            timeZone: "Asia/Ashkhabad"//+5:00
+            timeZone: "Asia/Ashkhabad"// +5:00
         });
 
         var $appt = this.instance.$element().find(".dx-scheduler-appointment"),
@@ -4061,7 +4061,7 @@ QUnit.test("Appointment should be rendered correctly when custom timezone was se
 QUnit.test("Appointment should be rendered correctly when appointment timeZone was set", function(assert) {
     var appointments = [{
         startDate: new Date(2015, 1, 4, 5).toString(),
-        startDateTimeZone: "Asia/Calcutta", //+05:30
+        startDateTimeZone: "Asia/Calcutta", // +05:30
         endDateTimeZone: "Asia/Calcutta",
         endDate: new Date(2015, 1, 4, 6).toString(),
         text: "abc"

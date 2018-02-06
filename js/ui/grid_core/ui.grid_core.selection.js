@@ -834,7 +834,7 @@ module.exports = {
                                     var $row,
                                         isSelected;
 
-                                    //T108078
+                                    // T108078
                                     if(change.items[index]) {
                                         $row = that._getRowElements($(tableElement)).eq(index);
                                         isSelected = change.items[index].isSelected;
@@ -861,7 +861,7 @@ module.exports = {
 
                     if(selectionMode !== "none") {
                         if(that.option(SHOW_CHECKBOXES_MODE) === "onLongTap" || !support.touch) {
-                            //TODO Not working timeout by hold when it is larger than other timeouts by hold
+                            // TODO Not working timeout by hold when it is larger than other timeouts by hold
                             eventsEngine.on($table, eventUtils.addNamespace(holdEvent.name, "dxDataGridRowsView"), "." + DATA_ROW_CLASS, that.createAction(function(e) {
                                 processLongTap(that.component, e.event);
 

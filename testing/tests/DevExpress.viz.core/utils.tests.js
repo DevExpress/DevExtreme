@@ -185,20 +185,20 @@ QUnit.module('utils graphic', {
 });
 
 QUnit.test('getCategoriesInfo. Empty categories', function(assert) {
-    //arrange,act
+    // arrange,act
     var info = utils.getCategoriesInfo([]);
 
-    //assert
+    // assert
     assert.deepEqual(info, {
         categories: []
     });
 });
 
 QUnit.test('getCategoriesInfo (no inverted)', function(assert) {
-    //arrange,act
+    // arrange,act
     var info = utils.getCategoriesInfo(this.categories, 'a3', 'a5');
 
-    //assert
+    // assert
     assert.deepEqual(info, {
         start: 'a3',
         end: 'a5',
@@ -208,10 +208,10 @@ QUnit.test('getCategoriesInfo (no inverted)', function(assert) {
 });
 
 QUnit.test('getCategoriesInfo (inverted)', function(assert) {
-    //arrange,act
+    // arrange,act
     var info = utils.getCategoriesInfo(this.categories, 'a5', 'a3');
 
-    //assert
+    // assert
     assert.deepEqual(info, {
         start: 'a5',
         end: 'a3',
@@ -221,10 +221,10 @@ QUnit.test('getCategoriesInfo (inverted)', function(assert) {
 });
 
 QUnit.test('getCategoriesInfo. start categories is not set', function(assert) {
-    //arrange,act
+    // arrange,act
     var info = utils.getCategoriesInfo(this.categories, undefined, 'a3');
 
-    //assert
+    // assert
     assert.deepEqual(info, {
         categories: ['a1', 'a2', 'a3'],
         end: 'a3',
@@ -234,10 +234,10 @@ QUnit.test('getCategoriesInfo. start categories is not set', function(assert) {
 });
 
 QUnit.test('getCategoriesInfo. end categories is not set', function(assert) {
-    //arrange,act
+    // arrange,act
     var info = utils.getCategoriesInfo(this.categories, 'a3', undefined);
 
-    //assert
+    // assert
     assert.deepEqual(info, {
         categories: ['a3', 'a4', 'a5', 'a6', 'a7'],
         start: 'a3',
@@ -247,10 +247,10 @@ QUnit.test('getCategoriesInfo. end categories is not set', function(assert) {
 });
 
 QUnit.test('getCategoriesInfo. categories is not contains start categories', function(assert) {
-    //arrange,act
+    // arrange,act
     var info = utils.getCategoriesInfo(this.categories, 'someCategories', 'a3');
 
-    //assert
+    // assert
     assert.deepEqual(info, {
         categories: ['a1', 'a2', 'a3'],
         end: 'a3',
@@ -260,10 +260,10 @@ QUnit.test('getCategoriesInfo. categories is not contains start categories', fun
 });
 
 QUnit.test('getCategoriesInfo. categories is not contains end categories', function(assert) {
-    //arrange,act
+    // arrange,act
     var info = utils.getCategoriesInfo(this.categories, 'a5', 'someCategories');
 
-    //assert
+    // assert
     assert.deepEqual(info, {
         categories: ['a5', 'a6', 'a7'],
         end: 'a7',
@@ -349,7 +349,7 @@ QUnit.test('Two equal panes - vertical alignment', function(assert) {
     assert.ok(bottomPane.canvas, 'Canvas added to pane');
     assert.notEqual(this.canvas, bottomPane.canvas, 'Pane canvas should not reference the main object in memory');
 
-    //top pane - height 180, margin top - 10, margin bottom - 210
+    // top pane - height 180, margin top - 10, margin bottom - 210
     assert.strictEqual(topPane.canvas.left, this.canvas.left, 'Pane Canvas Left margin should be equal to main canvas');
     assert.strictEqual(topPane.canvas.right, this.canvas.right, 'Pane Canvas Right margin should be equal to main canvas');
     assert.strictEqual(topPane.canvas.top, this.canvas.top, 'Pane Canvas Top margin should be equal to main canvas');
@@ -360,7 +360,7 @@ QUnit.test('Two equal panes - vertical alignment', function(assert) {
     assert.strictEqual(topPane.canvas.originalTop, this.canvas.top, 'Pane Canvas Top margin should be equal to main canvas');
     assert.strictEqual(topPane.canvas.originalBottom, this.canvas.bottom + expectedPaneHeight + panePadding, 'Pane Canvas Bottom margin should change');
 
-    //bottom pane - height 180, margin top - 200, margin bottom - 20
+    // bottom pane - height 180, margin top - 200, margin bottom - 20
     assert.strictEqual(bottomPane.canvas.left, this.canvas.left, 'Pane Canvas Left margin should be equal to main canvas');
     assert.strictEqual(bottomPane.canvas.right, this.canvas.right, 'Pane Canvas Right margin should be equal to main canvas');
     assert.strictEqual(bottomPane.canvas.top, this.canvas.top + expectedPaneHeight + panePadding, 'Pane Canvas Top margin should change');
@@ -393,7 +393,7 @@ QUnit.test('Two equal panes - rotated, horizontal alignment', function(assert) {
 
     assert.ok(leftPane.canvas, 'Canvas added to pane');
     assert.notEqual(this.canvas, leftPane.canvas, 'Pane canvas should not reference the main object in memory');
-    //top pane - width 460, margin left - 30, margin right - 40
+    // top pane - width 460, margin left - 30, margin right - 40
     assert.strictEqual(leftPane.canvas.left, this.canvas.left, 'Pane Canvas Left margin should be equal to main canvas');
     assert.strictEqual(leftPane.canvas.right, this.canvas.right + expectedPaneWidth + panePadding, 'Pane Canvas Right margin should change');
     assert.strictEqual(leftPane.canvas.top, this.canvas.top, 'Pane Canvas Top margin should be equal to main canvas');
@@ -404,7 +404,7 @@ QUnit.test('Two equal panes - rotated, horizontal alignment', function(assert) {
     assert.strictEqual(leftPane.canvas.originalTop, this.canvas.top, 'Pane Canvas Top margin should be equal to main canvas');
     assert.strictEqual(leftPane.canvas.originalBottom, this.canvas.bottom, 'Pane Canvas Bottom margin should change');
 
-    //bottom pane - width 460, margin left - 200, margin right - 40
+    // bottom pane - width 460, margin left - 200, margin right - 40
     assert.strictEqual(rightPane.canvas.left, this.canvas.left + expectedPaneWidth + panePadding, 'Pane Canvas Left margin should change');
     assert.strictEqual(rightPane.canvas.right, this.canvas.right, 'Pane Canvas Right margin should be equal to main canvas');
     assert.strictEqual(rightPane.canvas.top, this.canvas.top, 'Pane Canvas Top margin should be equal to main canvas');

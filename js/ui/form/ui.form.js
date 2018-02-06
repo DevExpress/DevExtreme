@@ -665,7 +665,7 @@ var Form = Widget.inherit({
     },
 
     _getLabelWidthByText: function(text) {
-        //this code has slow performance
+        // this code has slow performance
         this._hiddenLabelText.innerHTML = text;
         return this._hiddenLabelText.offsetWidth;
     },

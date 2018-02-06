@@ -1310,7 +1310,7 @@ QUnit.test("Get Graphic Settings", function(assert) {
         renderer = new vizMocks.Renderer();
     point.graphic = renderer.rect(250, 100, 430, 133);
 
-    //act
+    // act
     var settings = point.getGraphicSettings();
 
     assert.equal(settings.x, 250);
@@ -2233,7 +2233,7 @@ QUnit.test("get radius", function(assert) {
     assert.equal(point.getPointRadius(), 0);
 });
 
-//Helpers
+// Helpers
 
 function createLabel(pointBBox) {
     var point = createPoint(this.series, this.data, this.options),

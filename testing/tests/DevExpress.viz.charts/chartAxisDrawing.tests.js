@@ -52,7 +52,7 @@ var environment = {
             var axis = new originalAxis(renderingSettings);
 
             for(var stubName in axesStubs[axisIndex]) {
-                /*axis[stubName] && */(axis[stubName] = axesStubs[axisIndex][stubName]);
+                /* axis[stubName] && */(axis[stubName] = axesStubs[axisIndex][stubName]);
             }
             axisIndex++;
             return axis;
@@ -120,7 +120,7 @@ QUnit.test("Pass canvas to axis' estimateMargins", function(assert) {
         legend: { visible: false }
     });
 
-    //assert
+    // assert
     assert.deepEqual(this.axisStub.getCall(0).returnValue.estimateMargins.lastCall.args[0], {
         left: 0,
         right: 0,
@@ -156,9 +156,9 @@ QUnit.test("Take into account max margin on each side of pane", function(assert)
         legend: { visible: false }
     });
 
-    //assert
-    //1. estimate horizontal axes margins
-    //2. draw vertical axes
+    // assert
+    // 1. estimate horizontal axes margins
+    // 2. draw vertical axes
     assert.deepEqual(this.axisStub.getCall(1).returnValue.createTicks_test_arg, {
         left: 10,
         right: 11,
@@ -174,7 +174,7 @@ QUnit.test("Take into account max margin on each side of pane", function(assert)
 
     assert.equal(this.axisStub.getCall(1).returnValue.draw.lastCall.args[0], false, "draw valAxis");
 
-    //3. draw horizontal axes
+    // 3. draw horizontal axes
     assert.deepEqual(this.axisStub.getCall(0).returnValue.draw_test_arg, {
         left: 18,
         right: 11,
@@ -188,7 +188,7 @@ QUnit.test("Take into account max margin on each side of pane", function(assert)
         height: 600
     }, "draw argAxis canvas");
 
-    //4. update horizontal axes size
+    // 4. update horizontal axes size
     assert.deepEqual(this.axisStub.getCall(0).returnValue.updateSize_test_arg, {
         left: 18,
         right: 20,
@@ -202,7 +202,7 @@ QUnit.test("Take into account max margin on each side of pane", function(assert)
         height: 600
     }, "updateSize argAxis canvas");
 
-    //5. update vertical axes size
+    // 5. update vertical axes size
     assert.deepEqual(this.axisStub.getCall(1).returnValue.updateSize_test_arg, {
         left: 18,
         right: 20,
@@ -249,10 +249,10 @@ QUnit.test("Multiple value axes - margins are accumulated on left and right", fu
         legend: { visible: false }
     });
 
-    //assert
-    //1. estimate horizontal axes margins
-    //2. draw vertical axes
-    //valAxis_inner
+    // assert
+    // 1. estimate horizontal axes margins
+    // 2. draw vertical axes
+    // valAxis_inner
     assert.deepEqual(this.axisStub.getCall(1).returnValue.createTicks_test_arg, {
         left: 10,
         right: 11,
@@ -268,7 +268,7 @@ QUnit.test("Multiple value axes - margins are accumulated on left and right", fu
 
     assert.equal(this.axisStub.getCall(1).returnValue.draw.lastCall.args[0], false, "draw valAxis_inner");
 
-    //valAxis_outer
+    // valAxis_outer
     assert.deepEqual(this.axisStub.getCall(2).returnValue.createTicks_test_arg, {
         left: 10,
         right: 11,
@@ -284,8 +284,8 @@ QUnit.test("Multiple value axes - margins are accumulated on left and right", fu
 
     assert.equal(this.axisStub.getCall(2).returnValue.draw.lastCall.args[0], false, "draw valAxis_outer canvas");
 
-    //3. draw horizontal axes
-    //argAxis
+    // 3. draw horizontal axes
+    // argAxis
     assert.deepEqual(this.axisStub.getCall(0).returnValue.draw_test_arg, {
         left: 31,
         right: 20,
@@ -299,8 +299,8 @@ QUnit.test("Multiple value axes - margins are accumulated on left and right", fu
         height: 600
     }, "draw argAxis canvas");
 
-    //4. update horizontal axes size
-    //argAxis
+    // 4. update horizontal axes size
+    // argAxis
     assert.deepEqual(this.axisStub.getCall(0).returnValue.updateSize_test_arg, {
         left: 31,
         right: 20,
@@ -314,8 +314,8 @@ QUnit.test("Multiple value axes - margins are accumulated on left and right", fu
         height: 600
     }, "updateSize argAxis canvas");
 
-    //5. update vertical axes size
-    //valAxis_inner
+    // 5. update vertical axes size
+    // valAxis_inner
     assert.deepEqual(this.axisStub.getCall(1).returnValue.updateSize_test_arg, {
         left: 31,
         right: 20,
@@ -329,7 +329,7 @@ QUnit.test("Multiple value axes - margins are accumulated on left and right", fu
         height: 600
     }, "updateSize valAxis_inner canvas");
 
-    //valAxis_outer
+    // valAxis_outer
     assert.deepEqual(this.axisStub.getCall(2).returnValue.updateSize_test_arg, {
         left: 31,
         right: 20,
@@ -381,10 +381,10 @@ QUnit.test("Rotated. Multiple value axes - margins are accumulated on top and bo
         legend: { visible: false }
     });
 
-    //assert
-    //1. estimate horizontal axes margins
-    //2. draw vertical axes
-    //argAxis
+    // assert
+    // 1. estimate horizontal axes margins
+    // 2. draw vertical axes
+    // argAxis
     assert.deepEqual(this.axisStub.getCall(0).returnValue.draw_test_arg, {
         left: 6,
         right: 4,
@@ -398,8 +398,8 @@ QUnit.test("Rotated. Multiple value axes - margins are accumulated on top and bo
         height: 600
     }, "draw argAxis canvas");
 
-    //3. draw horizontal axes
-    //valAxis_inner
+    // 3. draw horizontal axes
+    // valAxis_inner
     assert.deepEqual(this.axisStub.getCall(1).returnValue.createTicks_test_arg, {
         left: 13,
         right: 7,
@@ -415,7 +415,7 @@ QUnit.test("Rotated. Multiple value axes - margins are accumulated on top and bo
 
     assert.equal(this.axisStub.getCall(1).returnValue.draw.lastCall.args[0], false, "draw valAxis_inner");
 
-    //valAxis_outer
+    // valAxis_outer
     assert.deepEqual(this.axisStub.getCall(2).returnValue.createTicks_test_arg, {
         left: 13,
         right: 7,
@@ -431,8 +431,8 @@ QUnit.test("Rotated. Multiple value axes - margins are accumulated on top and bo
 
     assert.equal(this.axisStub.getCall(2).returnValue.draw.lastCall.args[0], false, "draw valAxis_outer");
 
-    //4. update horizontal axes size
-    //valAxis_inner
+    // 4. update horizontal axes size
+    // valAxis_inner
     assert.deepEqual(this.axisStub.getCall(1).returnValue.updateSize_test_arg, {
         left: 13,
         right: 15,
@@ -446,7 +446,7 @@ QUnit.test("Rotated. Multiple value axes - margins are accumulated on top and bo
         height: 600
     }, "updateSize valAxis_inner canvas");
 
-    //valAxis_outer
+    // valAxis_outer
     assert.deepEqual(this.axisStub.getCall(2).returnValue.updateSize_test_arg, {
         left: 13,
         right: 15,
@@ -460,8 +460,8 @@ QUnit.test("Rotated. Multiple value axes - margins are accumulated on top and bo
         height: 600
     }, "updateSize valAxis_outer canvas");
 
-    //5. update vertical axes size
-    //argAxis
+    // 5. update vertical axes size
+    // argAxis
     assert.deepEqual(this.axisStub.getCall(0).returnValue.updateSize_test_arg, {
         left: 13,
         right: 15,
@@ -532,10 +532,10 @@ QUnit.test("Multiple panes - individual margins on top and bottom, common margin
         legend: { visible: false }
     });
 
-    //assert
-    //1. estimate horizontal axes margins
-    //2. draw vertical axes
-    //valAxis_bottomPane_right_inner
+    // assert
+    // 1. estimate horizontal axes margins
+    // 2. draw vertical axes
+    // valAxis_bottomPane_right_inner
     assert.deepEqual(this.axisStub.getCall(2).returnValue.createTicks_test_arg, {
         left: 0,
         right: 0,
@@ -551,7 +551,7 @@ QUnit.test("Multiple panes - individual margins on top and bottom, common margin
 
     assert.equal(this.axisStub.getCall(2).returnValue.draw.lastCall.args[0], false, "draw valAxis_bottomPane_right_inner canvas");
 
-    //valAxis_bottomPane_right_outer
+    // valAxis_bottomPane_right_outer
     assert.deepEqual(this.axisStub.getCall(3).returnValue.createTicks_test_arg, {
         left: 0,
         right: 0,
@@ -599,8 +599,8 @@ QUnit.test("Multiple panes - individual margins on top and bottom, common margin
 
     assert.equal(this.axisStub.getCall(5).returnValue.draw.lastCall.args[0], false, "draw valAxis_topPane_left_outer canvas");
 
-    //3. draw horizontal axes
-    //argAxis_topPane
+    // 3. draw horizontal axes
+    // argAxis_topPane
     assert.deepEqual(this.axisStub.getCall(0).returnValue.draw_test_arg, {
         left: 20,
         right: 16,
@@ -614,7 +614,7 @@ QUnit.test("Multiple panes - individual margins on top and bottom, common margin
         height: 600
     }, "draw argAxis_topPane canvas");
 
-    //argAxis_bottomPane
+    // argAxis_bottomPane
     assert.deepEqual(this.axisStub.getCall(1).returnValue.draw_test_arg, {
         left: 20,
         right: 16,
@@ -628,8 +628,8 @@ QUnit.test("Multiple panes - individual margins on top and bottom, common margin
         height: 600
     }, "draw argAxis_bottomPane canvas");
 
-    //4. update horizontal axes size
-    //argAxis_topPane
+    // 4. update horizontal axes size
+    // argAxis_topPane
     assert.deepEqual(this.axisStub.getCall(0).returnValue.updateSize_test_arg, {
         left: 20,
         right: 16,
@@ -643,7 +643,7 @@ QUnit.test("Multiple panes - individual margins on top and bottom, common margin
         height: 600
     }, "updateSize argAxis_topPane canvas");
 
-    //argAxis_bottomPane
+    // argAxis_bottomPane
     assert.deepEqual(this.axisStub.getCall(1).returnValue.updateSize_test_arg, {
         left: 20,
         right: 16,
@@ -657,8 +657,8 @@ QUnit.test("Multiple panes - individual margins on top and bottom, common margin
         height: 600
     }, "updateSize argAxis_bottomPane canvas");
 
-    //5. update vertical axes size
-    //valAxis_bottomPane_right_inner
+    // 5. update vertical axes size
+    // valAxis_bottomPane_right_inner
     assert.deepEqual(this.axisStub.getCall(2).returnValue.updateSize_test_arg, {
         left: 20,
         right: 16,
@@ -672,7 +672,7 @@ QUnit.test("Multiple panes - individual margins on top and bottom, common margin
         height: 600
     }, "updateSize valAxis_bottomPane_right_inner canvas");
 
-    //valAxis_bottomPane_right_outer
+    // valAxis_bottomPane_right_outer
     assert.deepEqual(this.axisStub.getCall(3).returnValue.updateSize_test_arg, {
         left: 20,
         right: 16,
@@ -776,10 +776,10 @@ QUnit.test("Rotated. Multiple panes - individual margins on left and right, comm
         legend: { visible: false }
     });
 
-    //assert
-    //1. estimate horizontal axes margins
-    //2. draw vertical axes
-    //argAxis_leftPane
+    // assert
+    // 1. estimate horizontal axes margins
+    // 2. draw vertical axes
+    // argAxis_leftPane
     assert.deepEqual(this.axisStub.getCall(0).returnValue.draw_test_arg, {
         left: 0,
         right: 405,
@@ -793,7 +793,7 @@ QUnit.test("Rotated. Multiple panes - individual margins on left and right, comm
         height: 600
     }, "draw argAxis_leftPane canvas");
 
-    //argAxis_rightPane
+    // argAxis_rightPane
     assert.deepEqual(this.axisStub.getCall(1).returnValue.draw_test_arg, {
         left: 405,
         right: 0,
@@ -807,8 +807,8 @@ QUnit.test("Rotated. Multiple panes - individual margins on left and right, comm
         height: 600
     }, "draw argAxis_rightPane canvas");
 
-    //3. draw horizontal axes
-    //valAxis_leftPane_top_inner
+    // 3. draw horizontal axes
+    // valAxis_leftPane_top_inner
     assert.deepEqual(this.axisStub.getCall(2).returnValue.createTicks_test_arg, {
         left: 10,
         right: 410,
@@ -824,7 +824,7 @@ QUnit.test("Rotated. Multiple panes - individual margins on left and right, comm
 
     assert.equal(this.axisStub.getCall(2).returnValue.draw.lastCall.args[0], false, "draw valAxis_leftPane_top_inner canvas");
 
-    //valAxis_leftPane_top_outer
+    // valAxis_leftPane_top_outer
     assert.deepEqual(this.axisStub.getCall(3).returnValue.createTicks_test_arg, {
         left: 10,
         right: 410,
@@ -872,8 +872,8 @@ QUnit.test("Rotated. Multiple panes - individual margins on left and right, comm
 
     assert.equal(this.axisStub.getCall(5).returnValue.draw.lastCall.args[0], false, "draw valAxis_rightPane_bottom_outer canvas");
 
-    //4. update horizontal axes size
-    //argAxis_rightPane
+    // 4. update horizontal axes size
+    // argAxis_rightPane
     assert.deepEqual(this.axisStub.getCall(1).returnValue.updateSize_test_arg, {
         left: 411,
         right: 9,
@@ -887,7 +887,7 @@ QUnit.test("Rotated. Multiple panes - individual margins on left and right, comm
         height: 600
     }, "updateSize argAxis_rightPane canvas");
 
-    //argAxis_leftPane
+    // argAxis_leftPane
     assert.deepEqual(this.axisStub.getCall(0).returnValue.updateSize_test_arg, {
         left: 10,
         right: 410,
@@ -901,8 +901,8 @@ QUnit.test("Rotated. Multiple panes - individual margins on left and right, comm
         height: 600
     }, "updateSize argAxis_leftPane canvas");
 
-    //5. update vertical axes size
-    //valAxis_leftPane_top_inner
+    // 5. update vertical axes size
+    // valAxis_leftPane_top_inner
     assert.deepEqual(this.axisStub.getCall(2).returnValue.updateSize_test_arg, {
         left: 10,
         right: 410,
@@ -916,7 +916,7 @@ QUnit.test("Rotated. Multiple panes - individual margins on left and right, comm
         height: 600
     }, "updateSize valAxis_leftPane_top_inner canvas");
 
-    //valAxis_leftPane_top_outer
+    // valAxis_leftPane_top_outer
     assert.deepEqual(this.axisStub.getCall(3).returnValue.updateSize_test_arg, {
         left: 10,
         right: 410,
@@ -962,8 +962,8 @@ QUnit.test("Rotated. Multiple panes - individual margins on left and right, comm
 QUnit.module("Shift axes", environment);
 
 QUnit.test("Multiple axes - shift only to the right/left, multipleAxesSpacing is not passed directly to axis shift method", function(assert) {
-    //NOTE
-    //it is important to test 3 axes
+    // NOTE
+    // it is important to test 3 axes
     var argAxis = createAxisStubs(),
         valAxis_left_1 = createAxisStubs(),
         valAxis_left_2 = createAxisStubs(),
@@ -1003,9 +1003,9 @@ QUnit.test("Multiple axes - shift only to the right/left, multipleAxesSpacing is
         legend: { visible: false }
     });
 
-    //assert
-    //6. shift horizontal axes
-    //argAxis
+    // assert
+    // 6. shift horizontal axes
+    // argAxis
     assert.deepEqual(this.axisStub.getCall(0).returnValue.shift_test_arg, {
         top: 0,
         bottom: 0,
@@ -1013,8 +1013,8 @@ QUnit.test("Multiple axes - shift only to the right/left, multipleAxesSpacing is
         right: 0
     }, "shift argAxis");
 
-    //7. shift vertical axes
-    //valAxis_left_1
+    // 7. shift vertical axes
+    // valAxis_left_1
     assert.deepEqual(this.axisStub.getCall(1).returnValue.shift_test_arg, {
         top: 0,
         bottom: 0,
@@ -1022,7 +1022,7 @@ QUnit.test("Multiple axes - shift only to the right/left, multipleAxesSpacing is
         right: 0
     }, "shift valAxis_left_1");
 
-    //valAxis_left_2
+    // valAxis_left_2
     assert.deepEqual(this.axisStub.getCall(2).returnValue.shift_test_arg, {
         top: 0,
         bottom: 0,
@@ -1030,7 +1030,7 @@ QUnit.test("Multiple axes - shift only to the right/left, multipleAxesSpacing is
         right: 7
     }, "shift valAxis_left_2");
 
-    //valAxis_left_3
+    // valAxis_left_3
     assert.deepEqual(this.axisStub.getCall(3).returnValue.shift_test_arg, {
         top: 0,
         bottom: 0,
@@ -1048,8 +1048,8 @@ QUnit.test("Multiple axes - shift only to the right/left, multipleAxesSpacing is
 });
 
 QUnit.test("Rotated. Multiple axes - shift only to the top/bottom, multipleAxesSpacing is not passed directly to axis shift method", function(assert) {
-    //NOTE
-    //it is important to test 3 axes
+    // NOTE
+    // it is important to test 3 axes
     var argAxis = createAxisStubs(),
         valAxis_bottom_1 = createAxisStubs(),
         valAxis_bottom_2 = createAxisStubs(),
@@ -1090,9 +1090,9 @@ QUnit.test("Rotated. Multiple axes - shift only to the top/bottom, multipleAxesS
         legend: { visible: false }
     });
 
-    //assert
-    //6. shift horizontal axes
-    //argAxis
+    // assert
+    // 6. shift horizontal axes
+    // argAxis
     assert.deepEqual(this.axisStub.getCall(0).returnValue.shift_test_arg, {
         top: 0,
         bottom: 0,
@@ -1100,8 +1100,8 @@ QUnit.test("Rotated. Multiple axes - shift only to the top/bottom, multipleAxesS
         right: 0
     }, "shift argAxis");
 
-    //7. shift vertical axes
-    //valAxis_bottom_1
+    // 7. shift vertical axes
+    // valAxis_bottom_1
     assert.deepEqual(this.axisStub.getCall(1).returnValue.shift_test_arg, {
         top: 0,
         bottom: 0,
@@ -1109,7 +1109,7 @@ QUnit.test("Rotated. Multiple axes - shift only to the top/bottom, multipleAxesS
         right: 0
     }, "shift valAxis_bottom_1");
 
-    //valAxis_bottom_2
+    // valAxis_bottom_2
     assert.deepEqual(this.axisStub.getCall(2).returnValue.shift_test_arg, {
         top: 7,
         bottom: 6,
@@ -1117,7 +1117,7 @@ QUnit.test("Rotated. Multiple axes - shift only to the top/bottom, multipleAxesS
         right: 0
     }, "shift valAxis_bottom_2");
 
-    //valAxis_bottom_3
+    // valAxis_bottom_3
     assert.deepEqual(this.axisStub.getCall(3).returnValue.shift_test_arg, {
         top: 22,
         bottom: 20,
@@ -1192,8 +1192,8 @@ QUnit.test("Multiple panes - shift axes by panes", function(assert) {
         legend: { visible: false }
     });
 
-    //6. shift horizontal axes
-    //argAxis_topPane
+    // 6. shift horizontal axes
+    // argAxis_topPane
     assert.deepEqual(this.axisStub.getCall(0).returnValue.shift_test_arg, {
         top: 0,
         bottom: 0,
@@ -1201,7 +1201,7 @@ QUnit.test("Multiple panes - shift axes by panes", function(assert) {
         right: 0
     }, "shift argAxis_topPane");
 
-    //argAxis_bottomPane
+    // argAxis_bottomPane
     assert.deepEqual(this.axisStub.getCall(1).returnValue.shift_test_arg, {
         top: 0,
         bottom: 0,
@@ -1209,8 +1209,8 @@ QUnit.test("Multiple panes - shift axes by panes", function(assert) {
         right: 0
     }, "shift argAxis_bottomPane");
 
-    //7. shift vertical axes
-    //valAxis_bottomPane_left
+    // 7. shift vertical axes
+    // valAxis_bottomPane_left
     assert.deepEqual(this.axisStub.getCall(2).returnValue.shift_test_arg, {
         top: 0,
         bottom: 0,
@@ -1218,7 +1218,7 @@ QUnit.test("Multiple panes - shift axes by panes", function(assert) {
         right: 0
     }, "shift valAxis_bottomPane_left");
 
-    //valAxis_bottomPane_right_inner
+    // valAxis_bottomPane_right_inner
     assert.deepEqual(this.axisStub.getCall(3).returnValue.shift_test_arg, {
         top: 0,
         bottom: 0,
@@ -1226,7 +1226,7 @@ QUnit.test("Multiple panes - shift axes by panes", function(assert) {
         right: 7
     }, "shift valAxis_bottomPane_right_inner");
 
-    //valAxis_bottomPane_right_outer
+    // valAxis_bottomPane_right_outer
     assert.deepEqual(this.axisStub.getCall(4).returnValue.shift_test_arg, {
         top: 0,
         bottom: 0,
@@ -1289,7 +1289,7 @@ QUnit.test("Draw - pass correct pane borders", function(assert) {
         legend: { visible: false }
     });
 
-    //assert
+    // assert
     assert.strictEqual(argAxis_topPane.draw.lastCall.args[1].color, "red");
 
     assert.strictEqual(argAxis_bottomPane.draw.lastCall.args[1].color, "blue");
@@ -1339,7 +1339,7 @@ QUnit.test("Update panes canvases", function(assert) {
         legend: { visible: false }
     });
 
-    //assert
+    // assert
     assert.deepEqual(chart.panes[0].canvas, {
         left: 8,
         right: 6,
@@ -1412,10 +1412,10 @@ QUnit.test("Do not recalculate canvas on zooming - only draw axes in old canvas"
 
     scrollBar.updateSize.reset();
 
-    //act
+    // act
     chart.zoomArgument(2, 9);
 
-    //assert
+    // assert
     assert.deepEqual(valAxisStub.createTicks_test_arg, {
         left: 18,
         right: 20,
@@ -1483,7 +1483,7 @@ QUnit.test("synchronizeMultiAxes true - only value axes are synchronized", funct
         legend: { visible: false }
     });
 
-    //assert
+    // assert
     var valAxis1 = this.axisStub.getCall(1).returnValue,
         valAxis2 = this.axisStub.getCall(2).returnValue;
 
@@ -1527,7 +1527,7 @@ QUnit.test("synchronizeMultiAxes true - only value axes are synchronized. Rotate
         legend: { visible: false }
     });
 
-    //assert
+    // assert
     var valAxis1 = this.axisStub.getCall(1).returnValue,
         valAxis2 = this.axisStub.getCall(2).returnValue;
 
@@ -1570,7 +1570,7 @@ QUnit.test("synchronizeMultiAxes false - do not synchronize", function(assert) {
         legend: { visible: false }
     });
 
-    //assert
+    // assert
     assert.equal(synchronize.callCount, 0);
 });
 
@@ -1601,7 +1601,7 @@ QUnit.test("synchronizeMultiAxes false - do not synchronize. Rotated", function(
         legend: { visible: false }
     });
 
-    //assert
+    // assert
     assert.equal(synchronize.callCount, 0);
 });
 
@@ -1629,9 +1629,9 @@ QUnit.test("ScrollBar margins accumulated with argument axis margins", function(
         legend: { visible: false }
     });
 
-    //assert
-    //1. estimate horizontal axes margins
-    //2. draw vertical axes
+    // assert
+    // 1. estimate horizontal axes margins
+    // 2. draw vertical axes
     assert.deepEqual(this.axisStub.getCall(1).returnValue.createTicks_test_arg, {
         left: 0,
         right: 0,
@@ -1645,7 +1645,7 @@ QUnit.test("ScrollBar margins accumulated with argument axis margins", function(
         height: 600
     }, "createTicks valAxis canvas");
 
-    //3. draw horizontal axes
+    // 3. draw horizontal axes
     assert.deepEqual(this.axisStub.getCall(0).returnValue.draw_test_arg, {
         left: 0,
         right: 0,
@@ -1659,7 +1659,7 @@ QUnit.test("ScrollBar margins accumulated with argument axis margins", function(
         height: 600
     }, "draw argAxis canvas");
 
-    //4. update horizontal axes size
+    // 4. update horizontal axes size
     assert.deepEqual(this.axisStub.getCall(0).returnValue.updateSize_test_arg, {
         left: 0,
         right: 0,
@@ -1673,7 +1673,7 @@ QUnit.test("ScrollBar margins accumulated with argument axis margins", function(
         height: 600
     }, "updateSize argAxis canvas");
 
-    //5. update vertical axes size
+    // 5. update vertical axes size
     assert.deepEqual(this.axisStub.getCall(1).returnValue.updateSize_test_arg, {
         left: 0,
         right: 0,
@@ -1718,9 +1718,9 @@ QUnit.test("Multiple panes. ScrollBar on top. ScrollBar placed in correct pane",
         legend: { visible: false }
     });
 
-    //assert
-    //1. estimate horizontal axes margins
-    //2. draw vertical axes
+    // assert
+    // 1. estimate horizontal axes margins
+    // 2. draw vertical axes
     assert.deepEqual(this.axisStub.getCall(2).returnValue.createTicks_test_arg, {
         left: 0,
         right: 0,
@@ -1778,9 +1778,9 @@ QUnit.test("Multiple panes. ScrollBar on bottom. ScrollBar placed in correct pan
         legend: { visible: false }
     });
 
-    //assert
-    //1. estimate horizontal axes margins
-    //2. draw vertical axes
+    // assert
+    // 1. estimate horizontal axes margins
+    // 2. draw vertical axes
     assert.deepEqual(this.axisStub.getCall(2).returnValue.createTicks_test_arg, {
         left: 0,
         right: 0,
@@ -1835,8 +1835,8 @@ QUnit.test("Rotated. Multiple panes. ScrollBar on left. ScrollBar placed in corr
         legend: { visible: false }
     });
 
-    //assert
-    //3. draw horizontal axes
+    // assert
+    // 3. draw horizontal axes
     assert.deepEqual(this.axisStub.getCall(3).returnValue.createTicks_test_arg, {
         left: 30,
         right: 405,
@@ -1891,8 +1891,8 @@ QUnit.test("Rotated. Multiple panes. ScrollBar on right. ScrollBar placed in cor
         legend: { visible: false }
     });
 
-    //assert
-    //3. draw horizontal axes
+    // assert
+    // 3. draw horizontal axes
     assert.deepEqual(this.axisStub.getCall(3).returnValue.createTicks_test_arg, {
         left: 10,
         right: 405,
@@ -1935,9 +1935,9 @@ QUnit.test("ScrollBar on top. Shift argument axis by ScrollBar margin", function
         legend: { visible: false }
     });
 
-    //assert
-    //6. shift horizontal axes
-    //argAxis
+    // assert
+    // 6. shift horizontal axes
+    // argAxis
     assert.deepEqual(this.axisStub.getCall(0).returnValue.shift_test_arg, {
         top: 15,
         bottom: 0,
@@ -1961,9 +1961,9 @@ QUnit.test("ScrollBar on bottom. Shift argument axis by ScrollBar margin", funct
         legend: { visible: false }
     });
 
-    //assert
-    //6. shift horizontal axes
-    //argAxis
+    // assert
+    // 6. shift horizontal axes
+    // argAxis
     assert.deepEqual(this.axisStub.getCall(0).returnValue.shift_test_arg, {
         top: 0,
         bottom: 15,
@@ -1988,9 +1988,9 @@ QUnit.test("Rotated. ScrollBar on right. Shift argument axis by ScrollBar margin
         legend: { visible: false }
     });
 
-    //assert
-    //6. shift horizontal axes
-    //argAxis
+    // assert
+    // 6. shift horizontal axes
+    // argAxis
     assert.deepEqual(this.axisStub.getCall(0).returnValue.shift_test_arg, {
         top: 0,
         bottom: 0,
@@ -2015,9 +2015,9 @@ QUnit.test("Rotated. ScrollBar on left. Shift argument axis by ScrollBar margin"
         legend: { visible: false }
     });
 
-    //assert
-    //6. shift horizontal axes
-    //argAxis
+    // assert
+    // 6. shift horizontal axes
+    // argAxis
     assert.deepEqual(this.axisStub.getCall(0).returnValue.shift_test_arg, {
         top: 0,
         bottom: 0,
@@ -2048,7 +2048,7 @@ QUnit.test("UpdateSize - scrollBar gets canvas", function(assert) {
         legend: { visible: false }
     });
 
-    //assert
+    // assert
     assert.deepEqual(scrollBar.updateSize.lastCall.args, [{
         left: 0,
         right: 0,
@@ -2110,16 +2110,16 @@ QUnit.test("Multiple axes, vertical axes without titles are fit, horizontal axis
         legend: { visible: false }
     });
 
-    //assert
-    //valAxis_inner
+    // assert
+    // valAxis_inner
     assert.deepEqual(this.axisStub.getCall(1).returnValue.hideTitle.callCount, 1);
     assert.deepEqual(this.axisStub.getCall(1).returnValue.hideOuterElements.callCount, 0);
 
-    //valAxis_outer
+    // valAxis_outer
     assert.deepEqual(this.axisStub.getCall(2).returnValue.hideTitle.callCount, 1);
     assert.deepEqual(this.axisStub.getCall(2).returnValue.hideOuterElements.callCount, 0);
 
-    //argAxis
+    // argAxis
     assert.deepEqual(this.axisStub.getCall(0).returnValue.hideTitle.callCount, 1);
     assert.deepEqual(this.axisStub.getCall(0).returnValue.hideOuterElements.callCount, 1);
 });
@@ -2169,16 +2169,16 @@ QUnit.test("Multiple axes, horizontal axes without titles are fit, vertical axis
         legend: { visible: false }
     });
 
-    //assert
-    //valAxis_inner
+    // assert
+    // valAxis_inner
     assert.deepEqual(this.axisStub.getCall(1).returnValue.hideTitle.callCount, 1);
     assert.deepEqual(this.axisStub.getCall(1).returnValue.hideOuterElements.callCount, 1);
 
-    //valAxis_outer
+    // valAxis_outer
     assert.deepEqual(this.axisStub.getCall(2).returnValue.hideTitle.callCount, 1);
     assert.deepEqual(this.axisStub.getCall(2).returnValue.hideOuterElements.callCount, 1);
 
-    //argAxis
+    // argAxis
     assert.deepEqual(this.axisStub.getCall(0).returnValue.hideTitle.callCount, 1);
     assert.deepEqual(this.axisStub.getCall(0).returnValue.hideOuterElements.callCount, 0);
 });
@@ -2233,8 +2233,8 @@ QUnit.test("Update axes size and shift with new margins (there is also scrollBar
         legend: { visible: false }
     });
 
-    //assert
-    //valAxis_inner
+    // assert
+    // valAxis_inner
     assert.deepEqual(this.axisStub.getCall(1).returnValue.updateSize_test_arg, {
         left: 18,
         right: 0,
@@ -2266,9 +2266,9 @@ QUnit.test("Update axes size and shift with new margins (there is also scrollBar
         right: 0,
         top: 0,
         width: 220
-    }); //T587219
+    }); // T587219
 
-    //valAxis_outer
+    // valAxis_outer
     assert.deepEqual(this.axisStub.getCall(2).returnValue.updateSize_test_arg, {
         left: 18,
         right: 0,
@@ -2299,8 +2299,8 @@ QUnit.test("Update axes size and shift with new margins (there is also scrollBar
         right: 0,
         top: 0,
         width: 220
-    }); //T587219
-    //argAxis
+    }); // T587219
+    // argAxis
     assert.deepEqual(this.axisStub.getCall(0).returnValue.updateSize_test_arg, {
         left: 18,
         right: 0,
@@ -2344,5 +2344,5 @@ QUnit.test("Update axes size and shift with new margins (there is also scrollBar
         right: 0,
         top: 0,
         width: 220
-    }); //T587219
+    }); // T587219
 });

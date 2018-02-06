@@ -475,7 +475,7 @@ QUnit.test("the value should be passed to the hidden input in the correct format
     });
 });
 
-//T552313
+// T552313
 QUnit.test("the value should be passed to the hidden input in the correct format if dateSerializationFormat option is defined", function(assert) {
     var dateValue = new Date(Date.UTC(2016, 6, 15, 14, 30)),
         $element = $("#dateBox").dxDateBox({
@@ -1828,7 +1828,7 @@ QUnit.test("DateBox must update its value when a date is selected in the calenda
 
     this.fixture.dateBox.open();
     getInstanceWidget(this.fixture.dateBox).option("value", date);
-    //this.fixture.dateBox.close();
+    // this.fixture.dateBox.close();
     assert.strictEqual(this.fixture.dateBox.option("value"), date);
 });
 
@@ -3253,7 +3253,7 @@ QUnit.testInActiveWindow("onValueChanged fires after clearing and enter key pres
 
     $(".dx-calendar .dx-calendar-cell").eq(12).trigger("dxclick");
 
-    //attempt to simulate real clearing
+    // attempt to simulate real clearing
     $input.val("");
     this.dateBox.option("text", "");
 
@@ -3946,7 +3946,7 @@ QUnit.test("ISO strings support dateSerializationFormat", function(assert) {
     }
 });
 
-//T506146
+// T506146
 QUnit.test("enter value with big year if dateSerializationFormat is defined", function(assert) {
     var defaultForceIsoDateParsing = config().forceIsoDateParsing;
     config().forceIsoDateParsing = true;
@@ -3997,10 +3997,10 @@ QUnit.test("onValueChanged should not be fired when on popup opening", function(
             }
         }).dxDateBox("instance");
 
-    //act
+    // act
     dateBox.option("opened", true);
 
-    //assert
+    // assert
     assert.ok(!isValueChangedCalled, "onValueChanged is not called");
 });
 
@@ -4017,10 +4017,10 @@ QUnit.test("value should be changed on cell click in calendar with defined dateS
     var dateBox = $dateBox.dxDateBox("instance");
     dateBox.open();
 
-    //act
+    // act
     $(".dx-calendar-cell").eq(0).trigger("dxclick");
 
-    //assert
+    // assert
     assert.deepEqual(dateBox.option("value"), new Date(2017, 10, 26), "value is changed");
 
     Calendar.defaultOptions({

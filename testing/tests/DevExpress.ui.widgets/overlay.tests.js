@@ -1358,7 +1358,7 @@ QUnit.test("overlay should not be hidden after click inside was present", functi
     assert.equal(overlay.option("visible"), true, "overlay is not hidden");
 });
 
-//T494814
+// T494814
 QUnit.test("overlay should not be hidden after click in detached element", function(assert) {
     var overlay = $("#overlayBug").dxOverlay({
         closeOnOutsideClick: true,
@@ -1370,10 +1370,10 @@ QUnit.test("overlay should not be hidden after click in detached element", funct
         $("#content").replaceWith($("<div>").attr("id", "content"));
     });
 
-    //act
+    // act
     $("#content").trigger("dxpointerdown");
 
-    //assert
+    // assert
     assert.equal(overlay.option("visible"), true, "overlay is not hidden");
 });
 

@@ -172,7 +172,7 @@ QUnit.begin(function() {
         assert.deepEqual(this.renderer.resize.firstCall.args, [250, 30], 'Pass canvas width and height to renderer');
     });
 
-    //T124801
+    // T124801
     QUnit.test('Create canvas when container size is not defined', function(assert) {
         var container = $('<div style="width: 100px">').appendTo(this.$container);
 
@@ -2055,7 +2055,7 @@ QUnit.begin(function() {
         assert.ok(true, 'dxSparkline was not broken');
     });
 
-    //T422022
+    // T422022
     QUnit.test("sparkline contains export methods", function(assert) {
         var sparkline = this.createSparkline({});
 

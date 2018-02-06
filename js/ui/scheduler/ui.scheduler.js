@@ -319,7 +319,7 @@ var Scheduler = Widget.inherit({
                 * @type Enums.SchedulerViewType
                 * @default "day"
                 */
-            currentView: "day", //TODO: should we calculate currentView if views array contains only one item, for example 'month'?
+            currentView: "day", // TODO: should we calculate currentView if views array contains only one item, for example 'month'?
                 /**
                 * @name dxSchedulerOptions_currentDate
                 * @publicName currentDate
@@ -1244,7 +1244,7 @@ var Scheduler = Widget.inherit({
                 this.callBase(args);
                 break;
             case "width":
-                //TODO: replace with css
+                // TODO: replace with css
                 this._updateOption("header", name, value);
                 if(this.option("crossScrollingEnabled")) {
                     this._updateOption("workSpace", "width", value);
