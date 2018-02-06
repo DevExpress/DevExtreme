@@ -75,11 +75,22 @@ var widgets = {
 
 QUnit.module("Scripts loading");
 
-QUnit.test("Widgets", function(assert) {
-    for(var widget in widgets) {
-        assert.ok(widgets[widget], widget);
-    }
+Object.keys(widgets).forEach(function(widget) {
+    QUnit.test(widget, function(assert) {
+        assert.ok(widgets[widget], "it's possible to import " + widget);
+    });
 });
+
+
+var notDisposableWidgets = [
+    "ActionSheet",
+    "ContextMenu",
+    "Gallery",
+    "LoadIndicator",
+    "Lookup",
+    "ProgressBar",
+    "Toolbar"
+];
 
 QUnit.module("Widget creation", {
     beforeEach: function() {
@@ -88,11 +99,39 @@ QUnit.module("Widget creation", {
         fixture.appendChild(this.element);
     },
     afterEach: function() {
-        this.instance.dispose();
+        if(notDisposableWidgets.indexOf(this.instance.NAME.substr(2)) === -1) {
+            this.instance.dispose();
+        }
     }
 });
 
-QUnit.test("Button", function(assert) {
-    this.instance = new widgets.Button(this.element);
-    assert.ok(this.instance);
+Object.keys(widgets).forEach(function(widget) {
+    var excludedWidgets = [
+        "BarGauge",
+        "Bullet",
+        "Chart",
+        "CircularGauge",
+        "DataGrid",
+        "Funnel",
+        "LinearGauge",
+        "List",
+        "PieChart",
+        "PivotGrid",
+        "PolarChart",
+        "RangeSelector",
+        "ScrollView",
+        "Sparkline",
+        "TileView",
+        "Toast",
+        "TreeMap",
+        "Validator",
+        "VectorMap",
+    ];
+
+    if(excludedWidgets.indexOf(widget) > -1) return;
+
+    QUnit.test(widget, function(assert) {
+        this.instance = new widgets[widget](this.element);
+        assert.ok(true, "it's possible to create " + widget);
+    });
 });
