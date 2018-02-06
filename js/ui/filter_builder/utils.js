@@ -1,6 +1,7 @@
 "use strict";
 
 var dataErrors = require("../../data/errors").errors,
+    domAdapter = require("../../core/dom_adapter"),
     errors = require("../widget/ui.errors"),
     extend = require("../../core/utils/extend").extend,
     formatHelper = require("../../format_helper"),
@@ -523,6 +524,13 @@ function isValidCondition(condition, field) {
     return true;
 }
 
+function setFocusToBody() {
+    var doc = domAdapter.getDocument();
+    if(doc && doc.activeElement && doc.activeElement.nodeName.toLowerCase() !== "body") {
+        doc.activeElement.blur();
+    }
+}
+
 exports.isValidCondition = isValidCondition;
 exports.isEmptyGroup = isEmptyGroup;
 exports.getOperationFromAvailable = getOperationFromAvailable;
@@ -550,3 +558,4 @@ exports.getCurrentLookupValueText = getCurrentLookupValueText;
 exports.getFilterOperations = getFilterOperations;
 exports.getCaptionByOperation = getCaptionByOperation;
 exports.getOperationValue = getOperationValue;
+exports.setFocusToBody = setFocusToBody;
