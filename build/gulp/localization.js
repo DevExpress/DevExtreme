@@ -39,41 +39,20 @@ var getMessages = function(directory, locale) {
 };
 
 
-gulp.task('localization', ['localization-messages', 'localization-messages-legacy', 'localization-generated-sources']);
+gulp.task('localization', ['localization-messages', 'localization-generated-sources']);
 
 gulp.task('localization-messages', function() {
     return getLocales(DICTIONARY_SOURCE_FOLDER).map(locale => {
         return gulp
             .src('build/gulp/localization-template.jst')
             .pipe(template({
-                json: getMessages(DICTIONARY_SOURCE_FOLDER, locale),
-                isDeprecated: false
+                json: getMessages(DICTIONARY_SOURCE_FOLDER, locale)
             }))
             .pipe(rename(['dx', 'messages', locale, 'js'].join('.')))
             .pipe(compressionPipes.beautify())
             .pipe(headerPipes.useStrict())
             .pipe(headerPipes.bangLicense())
             .pipe(gulp.dest(RESULT_PATH));
-    });
-});
-
-gulp.task('localization-messages-legacy', function() {
-    return ['de', 'ja', 'ru'].map(locale => {
-        ['mobile', 'web', 'all'].forEach(distribution => {
-            return gulp
-                .src('build/gulp/localization-template.jst')
-                .pipe(template({
-                    json: getMessages(DICTIONARY_SOURCE_FOLDER, locale),
-                    isDeprecated: true,
-                    distribution: distribution,
-                    locale: locale
-                }))
-                .pipe(rename(['dx', distribution, locale, 'js'].join('.')))
-                .pipe(compressionPipes.beautify())
-                .pipe(headerPipes.useStrict())
-                .pipe(headerPipes.bangLicense())
-                .pipe(gulp.dest(RESULT_PATH));
-        });
     });
 });
 
