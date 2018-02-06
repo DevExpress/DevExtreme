@@ -73,8 +73,6 @@ var widgets = {
     VectorMap: require("viz/vector_map")
 };
 
-require("../DevExpress.ui.widgets/button.markup.tests.js");
-
 QUnit.module("Scripts loading");
 
 Object.keys(widgets).forEach(function(widget) {

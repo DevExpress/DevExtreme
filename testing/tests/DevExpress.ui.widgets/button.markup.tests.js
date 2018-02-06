@@ -11,7 +11,6 @@ QUnit.testStart(function() {
     var markup =
         '<div id="button"></div>\
         <div id="widget"></div>\
-        <div id="widthRootStyle" style="width: 300px;"></div>\
         <div id="buttonWithTemplate">\
             <div data-options="dxTemplate: { name: \'content\' }" data-bind="text: text"></div>\
         </div>\
@@ -177,84 +176,6 @@ QUnit.test("dxButton should render custom template with render function that ret
     });
 
     assert.equal($element.text(), "button text", "container is correct");
-});
-
-QUnit.test("T355000 - the 'onContentReady' action should be fired after widget is rendered entirely", function(assert) {
-    var buttonConfig = {
-        text: "Test button",
-        icon: "trash"
-    };
-
-    var areElementsEqual = function(first, second) {
-        if(first.length !== second.length) {
-            return false;
-        }
-
-        if(first.length === 0) {
-            return true;
-        }
-
-        if(first.text() !== second.text()) {
-            return false;
-        }
-
-        if(first.attr("class") !== second.attr("class")) {
-            return false;
-        }
-
-        var firstChildren = first.children(),
-            secondChildren = second.children();
-
-        for(var i = 0, n = first.length; i < n; i++) {
-            if(!areElementsEqual(firstChildren.eq(i), secondChildren.eq(i))) {
-                return false;
-            }
-        }
-
-        return true;
-    };
-
-    var $firstButton = $("#widget").dxButton(buttonConfig);
-
-    $("#button").dxButton($.extend({}, buttonConfig, {
-        onContentReady: function(e) {
-            assert.ok(areElementsEqual($firstButton, $(e.element)), "rendered widget and widget with fired action are equals");
-        }
-    }));
-});
-
-QUnit.module("Button widget sizing render");
-
-QUnit.test("default", function(assert) {
-    var $element = $("#widget").dxButton({ text: "ahoy!" });
-
-    assert.ok($element.outerWidth() > 0, "outer width of the element must be more than zero");
-});
-
-QUnit.test("constructor", function(assert) {
-    var $element = $("#widget").dxButton({ text: "ahoy!", width: 400 }),
-        instance = $element.dxButton("instance");
-
-    assert.strictEqual(instance.option("width"), 400);
-    assert.strictEqual($element.outerWidth(), 400, "outer width of the element must be equal to custom width");
-});
-
-QUnit.test("root with custom width", function(assert) {
-    var $element = $("#widthRootStyle").dxButton({ text: "ahoy!" }),
-        instance = $element.dxButton("instance");
-
-    assert.strictEqual(instance.option("width"), undefined);
-    assert.strictEqual($element.outerWidth(), 300, "outer width of the element must be equal to custom width");
-});
-
-QUnit.test("change width", function(assert) {
-    var $element = $("#widget").dxButton({ text: "ahoy!" }),
-        instance = $element.dxButton("instance"),
-        customWidth = 400;
-
-    instance.option("width", customWidth);
-
-    assert.strictEqual($element.outerWidth(), customWidth, "outer width of the element must be equal to custom width");
 });
 
 QUnit.module("aria accessibility");
