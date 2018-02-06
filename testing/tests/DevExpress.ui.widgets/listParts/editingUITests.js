@@ -506,7 +506,6 @@ QUnit.test("item swiping should not add delete ready class if widget is disabled
 });
 
 
-
 var SLIDE_MENU_WRAPPER_CLASS = "dx-list-slide-menu-wrapper",
 
     SLIDE_MENU_CONTENT_CLASS = "dx-list-slide-menu-content",

@@ -2370,8 +2370,6 @@ QUnit.test("resize on change height from fixed to auto", function(assert) {
     // act
     dataGrid.option("height", "auto");
 
-
-
     // assert
     assert.equal($dataGrid.find(".dx-datagrid-rowsview").get(0).style.height, "auto");
 });

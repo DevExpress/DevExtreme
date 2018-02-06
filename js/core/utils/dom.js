@@ -52,7 +52,6 @@ var closestCommonParent = function(startTarget, endTarget) {
 };
 
 
-
 var triggerVisibilityChangeEvent = function(eventName) {
     var VISIBILITY_CHANGE_SELECTOR = ".dx-visibility-change-handler";
 

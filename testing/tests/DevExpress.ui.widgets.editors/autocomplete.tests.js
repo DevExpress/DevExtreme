@@ -1362,7 +1362,6 @@ QUnit.test("B251208 - dxAutocomplete: cannot select text by keyboard", function(
 });
 
 
-
 QUnit.module("widget sizing render", {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();

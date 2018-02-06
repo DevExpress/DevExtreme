@@ -1062,7 +1062,6 @@ QUnit.test("Draw simple data with null values. Three null in row", function(asse
     }, "first segment drawn");
 
 
-
     assert.deepEqual(series.drawnSegments[1], {
         segment: [points[5]],
         num: 1,
