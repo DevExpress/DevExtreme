@@ -4034,6 +4034,23 @@ QUnit.test("Raise error if key field is missed", function(assert) {
     clock.restore();
 });
 
+QUnit.test("Not raise error if key field is null", function(assert) {
+    //act
+    var clock = sinon.useFakeTimers(),
+        dataGrid = createDataGrid({
+            columns: ["field1"],
+            keyExpr: "ID",
+            dataSource: [{ ID: 1, field1: "John" }, { ID: null, field1: "Olivia" }]
+        });
+
+    clock.tick();
+
+    //assert
+    var $errorRow = $($(dataGrid.$element()).find(".dx-error-row"));
+    assert.equal($errorRow.length, 0, "error row is not shown");
+    clock.restore();
+});
+
 //T481276
 QUnit.test("updateDimensions during grouping when fixed to right column exists", function(assert) {
     var loadResult = $.Deferred().resolve([{}]),
