@@ -10674,4 +10674,23 @@ QUnit.module("onOptionChanged", {
             assert.ok(that.option.withArgs("paging.pageIndex", 1).calledOnce, "onOptionChanged args");
         });
     });
+
+    QUnit.test("Checking pageSize of the dataSource when optionChanged is fired", function(assert) {
+        //arrange
+        var pageSize,
+            that = this;
+
+        that.option.restore();
+        sinon.stub(that, "option", function(optionName, value) {
+            if(optionName === "paging.pageSize" && value === 3) {
+                pageSize = that.dataController.dataSource().pageSize();
+            }
+        });
+
+        //act
+        that.dataController.pageSize(3).done(function() {
+            //assert
+            assert.strictEqual(pageSize, 3, "pageSize");
+        });
+    });
 });

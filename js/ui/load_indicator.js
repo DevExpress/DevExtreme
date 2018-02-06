@@ -148,9 +148,13 @@ var LoadIndicator = Widget.inherit({
         this.$element().addClass(LOADINDICATOR_CLASS);
     },
 
-    _render: function() {
+    _initMarkup: function() {
+        this.callBase();
         this._renderWrapper();
         this._renderIndicatorContent();
+    },
+
+    _render: function() {
         this._renderMarkup();
 
         this.callBase();

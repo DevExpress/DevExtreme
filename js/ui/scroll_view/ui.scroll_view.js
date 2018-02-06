@@ -116,7 +116,7 @@ var ScrollView = Scrollable.inherit({
         this._loadingIndicatorEnabled = true;
     },
 
-    _initMarkup: function() {
+    _initScrollableMarkup: function() {
         this.callBase();
         this.$element().addClass(SCROLLVIEW_CLASS);
 

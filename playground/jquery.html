@@ -21,6 +21,7 @@
     <script type="text/javascript" src="../vendor/globalize/globalize/number.js"></script>-->
 
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js"></script>
+   
 </head>
 
 <body>
@@ -30,9 +31,7 @@
         $(function() {
             $("#button").dxButton({
                 text: 'Click me!',
-                onClick: function() { 
-                    DevExpress.ui.dialog.confirm("123");
-                 }
+                onClick: function() { alert("clicked"); }
             });
         });
     </script>
