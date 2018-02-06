@@ -256,7 +256,7 @@ QUnit.test("item container should have dx-menu-no-icons class when menu level ha
 });
 
 QUnit.test("item container should not have dx-menu-no-icons class when at least one item have icon", function(assert) {
-    var menuBase = createMenu({ items: [{ text: "item 1" }, { text: "item 3", icon: "add" }] }),
+    var menuBase = createMenu({ items: [{ text: "item 1", icon: "add" }, { text: "item 3" }] }),
         $itemsContainer = $(menuBase.element.find("." + DX_MENU_ITEMS_CONTAINER_CLASS));
 
     assert.notOk($itemsContainer.hasClass(DX_MENU_NO_ICONS_CLASS), "item container has not icon class");
