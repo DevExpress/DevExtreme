@@ -1028,9 +1028,7 @@
                 return { min: min, max: max };
             }),
             getViewport: sinon.stub().returns({}),
-            resetZoom: function() {
-
-            },
+            resetZoom: sinon.spy(),
             resetTypes: sinon.spy()
         };
     };
