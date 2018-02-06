@@ -560,7 +560,7 @@ DataSourceAdapter = DataSourceAdapter.inherit((function() {
 
                 node && treeListCore.foreachNodes([node], function(childNode) {
                     if(!childNode.children.length && (!callBack || callBack(childNode))) {
-                        result.indexOf(childNode.key) < 0 && result.push(childNode.key);
+                        result.push(childNode.key);
                     }
                 });
             });

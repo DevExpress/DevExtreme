@@ -388,6 +388,19 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
                     return result;
                 },
 
+                _getLeafSelectedRowKeys: function(keys) {
+                    var that = this,
+                        result = [],
+                        dataController = that._dataController;
+
+                    keys.forEach(function(key) {
+                        var node = dataController.getNodeByKey(key);
+                        !node.hasChildren && result.push(key);
+                    });
+
+                    return result;
+                },
+
                 isRecursiveSelection: function() {
                     var selectionMode = this.option("selection.mode"),
                         isRecursive = this.option("selection.recursive");
@@ -435,19 +448,20 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
                     var that = this,
                         dataController = that._dataController,
                         selectedRowKeys = that.callBase.apply(that, arguments) || [];
-                    if(dataController) {
-                        if(that._isModeLeavesOnly(mode)) {
-                            if(mode === true) {
-                                errors.log("W0002", "dxTreeList", "getSelectedRowKeys(leavesOnly)", "18.1", "Use the 'getSelectedRowKeys(mode)' method with string parameter instead");
-                            }
 
-                            selectedRowKeys = dataController.getNodeLeafKeys(selectedRowKeys, function(childNode, nodes) {
-                                return !childNode.hasChildren && that.isRowSelected(childNode.key);
-                            });
+                    mode = mode || "excludeRecursive";
+
+                    if(dataController) {
+                        if(mode === true) {
+                            errors.log("W0002", "dxTreeList", "getSelectedRowKeys(leavesOnly)", "18.1", "Use the 'getSelectedRowKeys(mode)' method with a string parameter instead");
                         }
 
-                        if(this.isRecursiveSelection() && mode === "includeRecursive") {
+                        if(this.isRecursiveSelection() && mode !== "excludeRecursive") {
                             selectedRowKeys = this._getAllSelectedRowKeys(selectedRowKeys);
+                        }
+
+                        if(that._isModeLeavesOnly(mode)) {
+                            selectedRowKeys = that._getLeafSelectedRowKeys(selectedRowKeys);
                         }
                     }
 
