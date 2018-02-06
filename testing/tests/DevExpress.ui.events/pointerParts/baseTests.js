@@ -20,7 +20,7 @@ QUnit.module("base events", {
 
         $.each(TestEventMap, function(pointerEvent, originalEvents) {
             if(special[pointerEvent]) {
-                special[pointerEvent].dispose();
+                special[pointerEvent].dispose.apply(undefined);
             }
             registerEvent(pointerEvent, new BaseStrategy(pointerEvent, originalEvents));
         });

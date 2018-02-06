@@ -479,7 +479,7 @@ var ContextMenu = MenuBase.inherit((function() {
             if(this._showContextMenuEventHandler) {
                 eventsEngine.off(domAdapter.getDocument(), eventName, target, this._showContextMenuEventHandler);
             } else {
-                eventsEngine.off(target, eventName);
+                eventsEngine.off($(target), eventName);
             }
         },
 
