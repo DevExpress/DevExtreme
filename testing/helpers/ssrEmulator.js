@@ -25,9 +25,13 @@ var errorFunc = function() {
     throw new Error("Window fields using is prevented");
 };
 
+var windowGetter = function() {
+    return windowMock;
+};
+
 for(var field in window) {
     Object.defineProperty(windowMock, field, {
-        get: errorFunc,
+        get: field === "window" ? windowGetter : errorFunc,
         set: errorFunc
     });
 }

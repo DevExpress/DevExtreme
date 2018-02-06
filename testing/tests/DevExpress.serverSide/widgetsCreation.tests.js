@@ -110,19 +110,16 @@ Object.keys(widgets).forEach(function(widget) {
         "Bullet",
         "Chart",
         "CircularGauge",
-        "DataGrid",
         "Funnel",
         "LinearGauge",
         "PieChart",
-        "PivotGrid",
         "PolarChart",
         "RangeSelector",
         "Sparkline",
         "TileView",
-        "Toast",
         "TreeMap",
         "Validator",
-        "VectorMap",
+        "VectorMap"
     ];
 
     if(excludedWidgets.indexOf(widget) > -1) return;
