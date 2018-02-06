@@ -78,7 +78,6 @@ QUnit.module("Scripts loading");
 Object.keys(widgets).forEach(function(widget) {
     QUnit.test(widget, function(assert) {
         assert.ok(widgets[widget], "it's possible to import " + widget);
-
     });
 });
 

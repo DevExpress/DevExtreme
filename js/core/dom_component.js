@@ -139,17 +139,9 @@ var DOMComponent = Component.inherit({
 
     _renderComponent: function() {
         this._initMarkup();
-        this._mount();
-    },
-
-    _mount: function() {
-        if(this._isReadyToMount()) {
+        if(windowUtils.hasWindow()) {
             this._render();
         }
-    },
-
-    _isReadyToMount: function() {
-        return windowUtils.hasWindow();
     },
 
     _initMarkup: function() {
