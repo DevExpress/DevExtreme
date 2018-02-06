@@ -238,7 +238,6 @@ var Scrollable = DOMComponent.inherit({
     _init: function() {
         this.callBase();
         this._initScrollableMarkup();
-        this._attachNativeScrollbarsCustomizationCss();
         this._locked = false;
     },
 
@@ -284,9 +283,15 @@ var Scrollable = DOMComponent.inherit({
         }
     },
 
-    _render: function() {
+    _initMarkup: function() {
+        this.callBase();
         this._renderDirection();
         this._renderStrategy();
+    },
+
+    _render: function() {
+        this._attachNativeScrollbarsCustomizationCss();
+
         this._attachEventHandlers();
         this._renderDisabledState();
         this._createActions();
