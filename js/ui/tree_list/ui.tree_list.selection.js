@@ -5,6 +5,7 @@ var $ = require("../../core/renderer"),
     commonUtils = require("../../core/utils/common"),
     noop = require("../../core/utils/common").noop,
     selectionModule = require("../grid_core/ui.grid_core.selection"),
+    errors = require("../widget/ui.errors"),
     extend = require("../../core/utils/extend").extend;
 
 var TREELIST_SELECT_ALL_CLASS = "dx-treelist-select-all",
@@ -368,7 +369,7 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
                 },
 
                 _isModeLeavesOnly: function(mode) {
-                    return mode === "leaves" || mode === true;
+                    return mode === "leavesOnly" || mode === true;
                 },
 
                 _getAllSelectedRowKeys: function(parentKeys) {
@@ -382,6 +383,19 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
                         result.splice.apply(result, [insertIndex, 0].concat(parentKeys));
                         result.push(key);
                         result = result.concat(childKeys);
+                    });
+
+                    return result;
+                },
+
+                _getLeafSelectedRowKeys: function(keys) {
+                    var that = this,
+                        result = [],
+                        dataController = that._dataController;
+
+                    keys.forEach(function(key) {
+                        var node = dataController.getNodeByKey(key);
+                        !node.hasChildren && result.push(key);
                     });
 
                     return result;
@@ -418,8 +432,16 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
 
                 /**
                 * @name dxTreeListMethods_getSelectedRowKeys
+                * @publicName getSelectedRowKeys(leavesOnly)
+                * @param1 leavesOnly:boolean
+                * @return Array<any>
+                * @deprecated
+                */
+
+                /**
+                * @name dxTreeListMethods_getSelectedRowKeys
                 * @publicName getSelectedRowKeys(mode)
-                * @param1 mode:string|boolean
+                * @param1 mode:string
                 * @return Array<any>
                 */
                 getSelectedRowKeys: function(mode) {
@@ -427,15 +449,19 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
                         dataController = that._dataController,
                         selectedRowKeys = that.callBase.apply(that, arguments) || [];
 
-                    if(this.isRecursiveSelection() && dataController) {
-                        if(that._isModeLeavesOnly(mode)) {
-                            selectedRowKeys = dataController.getNodeLeafKeys(selectedRowKeys, function(childNode, nodes) {
-                                return !childNode.hasChildren && that.isRowSelected(childNode.key);
-                            });
+                    mode = mode || "excludeRecursive";
+
+                    if(dataController) {
+                        if(mode === true) {
+                            errors.log("W0002", "dxTreeList", "getSelectedRowKeys(leavesOnly)", "18.1", "Use the 'getSelectedRowKeys(mode)' method with a string parameter instead");
                         }
 
-                        if(mode === "all") {
+                        if(this.isRecursiveSelection() && mode !== "excludeRecursive") {
                             selectedRowKeys = this._getAllSelectedRowKeys(selectedRowKeys);
+                        }
+
+                        if(that._isModeLeavesOnly(mode)) {
+                            selectedRowKeys = that._getLeafSelectedRowKeys(selectedRowKeys);
                         }
                     }
 
