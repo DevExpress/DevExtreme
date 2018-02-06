@@ -513,6 +513,12 @@ function isValidCondition(condition, field) {
     return true;
 }
 
+function setFocusToBody() {
+    if(document.activeElement && document.activeElement.nodeName.toLowerCase() !== "body") {
+        document.activeElement.blur();
+    }
+}
+
 exports.isValidCondition = isValidCondition;
 exports.isEmptyGroup = isEmptyGroup;
 exports.getOperationFromAvailable = getOperationFromAvailable;
@@ -540,3 +546,4 @@ exports.getCurrentLookupValueText = getCurrentLookupValueText;
 exports.getFilterOperations = getFilterOperations;
 exports.getCaptionByOperation = getCaptionByOperation;
 exports.getOperationValue = getOperationValue;
+exports.setFocusToBody = setFocusToBody;

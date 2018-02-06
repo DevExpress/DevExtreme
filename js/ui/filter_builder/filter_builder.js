@@ -836,10 +836,10 @@ var FilterBuilder = Widget.inherit({
             value = item[2],
             removeEvents = function() {
                 eventsEngine.off(document, "keyup", documentKeyUpHandler);
-                eventsEngine.off(document, "dxclick", documentClickHandler);
+                eventsEngine.off(document, "dxpointerdown", documentClickHandler);
             },
-            isFocusOnEditorParts = function() {
-                var activeElement = document.activeElement;
+            isFocusOnEditorParts = function(target) {
+                var activeElement = target || document.activeElement;
                 return $(activeElement).closest($editor.children()).length
                     || $(activeElement).closest(".dx-dropdowneditor-overlay").length;
             },
@@ -865,13 +865,14 @@ var FilterBuilder = Widget.inherit({
         eventsEngine.trigger($editor.find("input"), "focus");
 
         var documentClickHandler = function(e) {
-            if(!isFocusOnEditorParts()) {
+            if(!isFocusOnEditorParts(e.target)) {
+                utils.setFocusToBody();
                 that._updateConditionValue(item, value, function() {
                     createValueText();
                 });
             }
         };
-        eventsEngine.on(document, "dxclick", documentClickHandler);
+        eventsEngine.on(document, "dxpointerdown", documentClickHandler);
 
         var documentKeyUpHandler = function(e) {
             if(e.keyCode === TAB_KEY) {

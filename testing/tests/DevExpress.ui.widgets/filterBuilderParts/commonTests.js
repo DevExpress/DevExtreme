@@ -26,8 +26,7 @@ var getSelectedMenuText = function() {
 };
 
 var clickByOutside = function() {
-    window.setFocusToBody();
-    $("body").trigger("dxclick");
+    $("body").trigger("dxpointerdown"); //use dxpointerdown because T600142
 };
 
 var selectMenuItem = function(menuItemIndex) {
