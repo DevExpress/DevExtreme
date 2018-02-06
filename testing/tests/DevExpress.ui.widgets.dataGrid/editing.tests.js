@@ -4403,7 +4403,6 @@ QUnit.test("Remove row when set onRowRemoving", function(assert) {
     };
 
 
-
     that.options.onRowRemoving = function(params) {
         assert.deepEqual(params.data, that.array[0], "parameter data");
         assert.deepEqual(params.key, that.array[0], "parameter key");

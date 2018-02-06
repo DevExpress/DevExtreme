@@ -9,7 +9,6 @@ QUnit.testStart(function() {
 });
 
 
-
 require("common.css!");
 
 var FieldsArea = require("ui/pivot_grid/ui.pivot_grid.fields_area").FieldsArea,

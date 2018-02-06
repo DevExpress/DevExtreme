@@ -441,8 +441,3 @@ QUnit.test("Create pie with group but w/o series. Do not ask for common layout. 
         done();
     }
 });
-
-
-
-
-

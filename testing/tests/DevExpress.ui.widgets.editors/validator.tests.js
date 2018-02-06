@@ -31,7 +31,6 @@ var Fixture = Class.inherit({
 });
 
 
-
 QUnit.module("General", {
     beforeEach: function() {
         this.fixture = new Fixture();
@@ -441,7 +440,6 @@ QUnit.test("Validation request should get value from editor", function(assert) {
 
 
     var result = validator.validate();
-
 
 
     assert.strictEqual(result.isValid, true, "result should be valid");

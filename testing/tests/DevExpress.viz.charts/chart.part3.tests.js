@@ -370,8 +370,6 @@ QUnit.test("T543486. Named value axis in non-existent pane should have crosshair
 });
 
 
-
-
 QUnit.test("Create Horizontal Continuous Axis, Vertical Continuous axis", function(assert) {
     //Arrange
     var stubSeries = new MockSeries({

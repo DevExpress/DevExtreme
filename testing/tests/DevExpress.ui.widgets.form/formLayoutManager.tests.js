@@ -2223,7 +2223,6 @@ QUnit.test("onEditorEnterKey", function(assert) {
 });
 
 
-
 QUnit.module("Render multiple columns");
 
 QUnit.test("Render layoutManager with 2 columns", function(assert) {

@@ -77,7 +77,6 @@ viewPort($("#qunit-fixture").addClass("dx-viewport"));
 devices.current("iPhone");
 
 
-
 QUnit.testStart(function() {
     var markup = '\
         <div id="scrollable" style="height: 50px; width: 50px;">\

@@ -25,7 +25,6 @@ var dataGridMocks = require("../../helpers/dataGridMocks.js"),
     setupDataGridModules = dataGridMocks.setupDataGridModules;
 
 
-
 QUnit.module('Context menu', {
     beforeEach: function() {
         this.element = function() {

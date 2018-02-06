@@ -700,7 +700,6 @@ QUnit.test("Workwheet XML content is valid", function(assert) {
 });
 
 
-
 QUnit.test("Generating worksheet with groups and three rows of the header", function(assert) {
     // arrange
     var done = assert.async();
@@ -726,8 +725,6 @@ QUnit.test("Generating worksheet with groups and three rows of the header", func
         }
     });
 });
-
-
 
 
 QUnit.test("Style XML content is valid", function(assert) {
