@@ -3,6 +3,7 @@
 var errors = require("../errors"),
     Class = require("../class"),
     objectUtils = require("./object"),
+    getKeyHash = require("./common").getKeyHash,
     typeUtils = require("./type"),
     each = require("./iterator").each,
     variableWrapper = require("./variable_wrapper"),
@@ -177,6 +178,120 @@ var toComparable = function(value, caseSensitive) {
     return value;
 };
 
+var selectionFilterCreator = function(keyExpr, selectedItemKeys, isSelectAll, equalKeys, keyOf, equalByReference) {
+
+    this.getLocalFilter = function() {
+        return functionFilter;
+    };
+
+    this.getExpr = function() {
+        if(!keyExpr) {
+            return;
+        }
+
+        var filterExpr;
+        for(var i = 0, length = selectedItemKeys.length; i < length; i++) {
+            filterExpr = filterExpr || [];
+
+            var itemKeyValue = selectedItemKeys[i],
+                filterExprPart;
+
+            if(i > 0) {
+                filterExpr.push(isSelectAll ? "and" : "or");
+            }
+
+            if(typeUtils.isString(keyExpr)) {
+                filterExprPart = getFilterForPlainKey(itemKeyValue);
+            } else {
+                filterExprPart = getFilterForCompositeKey(itemKeyValue);
+            }
+
+            filterExpr.push(filterExprPart);
+        }
+        if(filterExpr && filterExpr.length === 1) {
+            filterExpr = filterExpr[0];
+        }
+
+        this._filter = filterExpr;
+        return filterExpr;
+    };
+
+    this.getCombinedFilter = function(dataSourceFilter) {
+        var filterExpr = this.getExpr(),
+            combinedFilter = filterExpr;
+
+        if(isSelectAll && dataSourceFilter) {
+            if(filterExpr) {
+                combinedFilter = [];
+                combinedFilter.push(filterExpr);
+                combinedFilter.push(dataSourceFilter);
+            } else {
+                combinedFilter = dataSourceFilter;
+            }
+        }
+
+        return combinedFilter;
+    };
+
+    var selectedItemKeyHashesMap;
+
+    var getSelectedItemKeyHashesMap = function(selectedItemKeys) {
+        if(!selectedItemKeyHashesMap) {
+            selectedItemKeyHashesMap = {};
+            for(var i = 0; i < selectedItemKeys.length; i++) {
+                selectedItemKeyHashesMap[getKeyHash(selectedItemKeys[i])] = true;
+            }
+        }
+        return selectedItemKeyHashesMap;
+    };
+
+    var functionFilter = function(item) {
+        var key = keyOf(item),
+            keyHash,
+            i;
+
+        if(!equalByReference) {
+            keyHash = getKeyHash(key);
+            if(!typeUtils.isObject(keyHash)) {
+                var selectedKeyHashesMap = getSelectedItemKeyHashesMap(selectedItemKeys);
+                if(selectedKeyHashesMap[keyHash]) {
+                    return !isSelectAll;
+                }
+                return !!isSelectAll;
+            }
+        }
+
+        for(i = 0; i < selectedItemKeys.length; i++) {
+            if(equalKeys(selectedItemKeys[i], key)) {
+                return !isSelectAll;
+            }
+        }
+        return !!isSelectAll;
+    };
+
+    var getFilterForPlainKey = function(keyValue, key) {
+        return [key || keyExpr, isSelectAll ? "<>" : "=", keyValue];
+    };
+
+    var getFilterForCompositeKey = function(itemKeyValue) {
+        var filterExpr = [];
+
+        for(var i = 0, length = keyExpr.length; i < length; i++) {
+            if(i > 0) {
+                filterExpr.push(isSelectAll ? "or" : "and");
+            }
+            var currentKeyExpr = keyExpr[i],
+                currentKeyValue = itemKeyValue && itemKeyValue[currentKeyExpr],
+                filterExprPart = getFilterForPlainKey(currentKeyValue, currentKeyExpr);
+
+            filterExpr.push(filterExprPart);
+        }
+
+        return filterExpr;
+    };
+};
+
 exports.compileGetter = compileGetter;
 exports.compileSetter = compileSetter;
 exports.toComparable = toComparable;
+exports.selectionFilterCreator = selectionFilterCreator;
