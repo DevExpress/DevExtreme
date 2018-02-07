@@ -3,7 +3,6 @@
 var $ = require("../core/renderer"),
     eventsEngine = require("../events/core/events_engine"),
     dataUtils = require("../core/element_data"),
-    dataQuery = require("../data/query"),
     getPublicElement = require("../core/utils/dom").getPublicElement,
     devices = require("../core/devices"),
     commonUtils = require("../core/utils/common"),
@@ -813,20 +812,21 @@ var TagBox = SelectBox.inherit({
             filter = selectionFilterCreator.getCombinedFilter(this._dataSource.filter()),
             filterLength = encodeURI(JSON.stringify(filter)).length;
 
-        var selectedItems = (this._list && this._list.option("selectedItems")) || this.option("selectedItems"),
-            filteredItems;
+        var selectedItems = (this._list && this._list.option("selectedItems")) || this.option("selectedItems");
 
-        if(filterLength > 1500) {
-            filter = selectionFilterCreator.getLocalFilter();
-            filteredItems = selectedItems.filter(filter);
-        } else {
-            filteredItems = dataQuery(selectedItems).filter(filter).toArray();
-        }
+        var localFilter = selectionFilterCreator.getLocalFilter(),
+            filteredItems = selectedItems.filter(localFilter);
+
+        var d = new Deferred();
 
         if(filteredItems.length === values.length) {
-            return new Deferred().resolve(filteredItems).promise();
+            return d.resolve(filteredItems).promise();
         } else {
-            return this._dataSource.store().load({ filter: filter });
+            this._dataSource.store().load({ filter: filterLength > 1500 ? undefined : filter }).done(function(items) {
+                d.resolve(items.filter(localFilter));
+            });
+
+            return d.promise();
         }
 
     },
