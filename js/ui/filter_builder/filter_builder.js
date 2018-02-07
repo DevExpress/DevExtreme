@@ -441,8 +441,9 @@ var FilterBuilder = Widget.inherit({
 
     _updateFilter: function() {
         this._disableInvalidateForValue = true;
-        var value = extend(true, [], this._model);
-        this.option("value", utils.getNormalizedFilter(value, this.option("fields")));
+        var value = extend(true, [], this._model),
+            normalizedFields = utils.getNormalizedFields(this.option("fields"));
+        this.option("value", utils.getNormalizedFilter(value, normalizedFields));
         this._disableInvalidateForValue = false;
     },
 
