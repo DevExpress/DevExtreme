@@ -83,12 +83,9 @@ Object.keys(widgets).forEach(function(widget) {
 
 
 var notDisposableWidgets = [
-    "ActionSheet",
     "ContextMenu",
-    "Gallery",
     "Lookup",
-    "ProgressBar",
-    "Toolbar"
+    "ProgressBar"
 ];
 
 QUnit.module("Widget creation", {
