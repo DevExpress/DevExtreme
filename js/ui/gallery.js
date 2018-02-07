@@ -372,13 +372,17 @@ var Gallery = CollectionWidget.inherit({
         return this.option("rtlEnabled") ? -1 : 1;
     },
 
+    _initMarkup: function() {
+        this.callBase();
+        this._renderWrapper();
+        this._renderItemsContainer();
+    },
+
     _render: function() {
         this.$element().addClass(GALLERY_CLASS);
         this.$element().toggleClass(GALLERY_LOOP_CLASS, this.option("loop"));
 
         this._renderDragHandler();
-        this._renderWrapper();
-        this._renderItemsContainer();
 
         this.callBase();
         this._renderContainerPosition();
