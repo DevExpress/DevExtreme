@@ -373,6 +373,7 @@ var Gallery = CollectionWidget.inherit({
     },
 
     _initMarkup: function() {
+        this.callBase();
         this._renderWrapper();
         this._renderItemsContainer();
     },
