@@ -3,6 +3,7 @@
 var dataErrors = require("../../data/errors").errors,
     domAdapter = require("../../core/dom_adapter"),
     errors = require("../widget/ui.errors"),
+    filterUtils = require("../shared/filtering"),
     extend = require("../../core/utils/extend").extend,
     formatHelper = require("../../format_helper"),
     inflector = require("../../core/utils/inflector"),
@@ -36,7 +37,8 @@ var DEFAULT_DATA_TYPE = "string",
         "filterOperations",
         "format",
         "lookup",
-        "trueText"
+        "trueText",
+        "calculateFilterExpression"
     ];
 
 function isNegationGroup(group) {
@@ -319,6 +321,43 @@ function getNormalizedFields(fields) {
     }, []);
 }
 
+function getFilterExpression(value, fields) {
+    var result;
+
+    if(value === null) {
+        return null;
+    }
+
+    var criteria = getGroupCriteria(value),
+        getConditionFilterExpression = function(condition) {
+            var field = getField(condition[0], fields),
+                filterExpression = convertToInnerCondition(condition);
+            if(typeof field.calculateFilterExpression !== "undefined") {
+                return field.calculateFilterExpression.apply(field, [filterExpression[2], filterExpression[1]]);
+            } else {
+                return filterUtils.defaultCalculateFilterExpression.apply(field, [filterExpression[2], filterExpression[1]], "filterBuilder");
+            }
+        };
+
+    if(isCondition(criteria)) {
+        result = getConditionFilterExpression(criteria);
+    } else {
+        result = [];
+        for(var i = 0; i < criteria.length; i++) {
+            if(isGroup(criteria[i])) {
+                var filterExpression = getFilterExpression(criteria[i], fields);
+                result.push(filterExpression);
+            } else if(isCondition(criteria[i])) {
+                result.push(getConditionFilterExpression(criteria[i]));
+            } else {
+                result.push(criteria[i]);
+            }
+        }
+    }
+
+    return result;
+}
+
 function getNormalizedFilter(group, fields) {
     var criteria = getGroupCriteria(group),
         i;
@@ -552,3 +591,4 @@ exports.getFilterOperations = getFilterOperations;
 exports.getCaptionByOperation = getCaptionByOperation;
 exports.getOperationValue = getOperationValue;
 exports.setFocusToBody = setFocusToBody;
+exports.getFilterExpression = getFilterExpression;

@@ -440,11 +440,19 @@ var FilterBuilder = Widget.inherit({
         }
     },
 
+    getFilterExpression: function() {
+        var fields = this._getNormalizedFields();
+        return utils.getFilterExpression(utils.getNormalizedFilter(this.option("value"), fields), fields);
+    },
+
+    _getNormalizedFields: function() {
+        return utils.getNormalizedFields(this.option("fields"));
+    },
+
     _updateFilter: function() {
         this._disableInvalidateForValue = true;
-        var value = extend(true, [], this._model),
-            normalizedFields = utils.getNormalizedFields(this.option("fields"));
-        this.option("value", utils.getNormalizedFilter(value, normalizedFields));
+        var value = extend(true, [], this._model);
+        this.option("value", utils.getNormalizedFilter(value, this._getNormalizedFields()));
         this._disableInvalidateForValue = false;
     },
 
@@ -731,7 +739,7 @@ var FilterBuilder = Widget.inherit({
     _createConditionItem: function(condition, parent) {
         var that = this,
             $item = $("<div>").addClass(FILTER_BUILDER_GROUP_ITEM_CLASS),
-            fields = utils.getNormalizedFields(this.option("fields")),
+            fields = this._getNormalizedFields(),
             field = utils.getField(condition[0], fields);
 
         this._createRemoveButton(function() {

@@ -28,7 +28,8 @@ var $ = require("../../core/renderer"),
     when = deferredUtils.when,
     Deferred = deferredUtils.Deferred,
     DataSourceModule = require("../../data/data_source/data_source"),
-    normalizeDataSourceOptions = DataSourceModule.normalizeDataSourceOptions;
+    normalizeDataSourceOptions = DataSourceModule.normalizeDataSourceOptions,
+    filterUtils = require("../shared/filtering");
 
 var USER_STATE_FIELD_NAMES_15_1 = ["filterValues", "filterType", "fixed", "fixedPosition"],
     USER_STATE_FIELD_NAMES = ["visibleIndex", "dataField", "name", "dataType", "width", "visible", "sortOrder", "lastSortOrder", "sortIndex", "groupIndex", "filterValue", "selectedFilterOperation", "added"].concat(USER_STATE_FIELD_NAMES_15_1),
@@ -2619,7 +2620,7 @@ module.exports = {
                         calculatedColumnOptions.allowFiltering = !!columnOptions.calculateFilterExpression;
                     }
                     calculatedColumnOptions.calculateFilterExpression = function() {
-                        return gridCoreUtils.defaultCalculateFilterExpression.apply(this, arguments);
+                        return filterUtils.defaultCalculateFilterExpression.apply(this, arguments);
                     };
 
                     calculatedColumnOptions.createFilterExpression = function() {

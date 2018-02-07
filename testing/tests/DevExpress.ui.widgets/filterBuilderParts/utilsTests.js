@@ -868,6 +868,55 @@ QUnit.module("Filter normalization", function() {
     });
 });
 
+QUnit.module("getFilterExpression", function() {
+    QUnit.test("calculateFilterExpression for condition", function(assert) {
+        // arrange
+        var value = ["field", "1"],
+            fields = [{
+                dataField: "field",
+                calculateFilterExpression: function(filterValue, selectedFilterOperation) {
+                    return [this.dataField, "<>", filterValue];
+                }
+            }];
+
+        // act, assert
+        assert.deepEqual(utils.getFilterExpression(value, fields), ["field", "<>", "1"]);
+    });
+
+    QUnit.test("calculateFilterExpression for group", function(assert) {
+        // arrange
+        var value = [["field1", "1"], "and", [["field1", "=", "20"], "or", ["field2", "30"]]],
+            fields = [{
+                dataField: "field1",
+                calculateFilterExpression: function(filterValue, selectedFilterOperation) {
+                    return [
+                        [this.dataField, "<>", filterValue],
+                        "or",
+                        [this.dataField, "=", "10"]
+                    ];
+                }
+            },
+            {
+                dataField: "field2"
+            }];
+
+        // act, assert
+        assert.deepEqual(utils.getFilterExpression(value, fields), [
+            [
+                ["field1", "<>", "1"], "or", ["field1", "=", "10"]
+            ],
+            "and",
+            [
+                [
+                    ["field1", "<>", "20"], "or", ["field1", "=", "10"]
+                ],
+                "or",
+                ["field2", "=", "30"]
+            ]
+        ]);
+    });
+});
+
 QUnit.module("Formatting", function() {
     QUnit.test("empty string", function(assert) {
         var field = {},
