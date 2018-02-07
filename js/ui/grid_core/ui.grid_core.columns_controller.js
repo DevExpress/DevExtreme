@@ -32,6 +32,7 @@ var $ = require("../../core/renderer"),
 
 var USER_STATE_FIELD_NAMES_15_1 = ["filterValues", "filterType", "fixed", "fixedPosition"],
     USER_STATE_FIELD_NAMES = ["visibleIndex", "dataField", "name", "dataType", "width", "visible", "sortOrder", "lastSortOrder", "sortIndex", "groupIndex", "filterValue", "selectedFilterOperation", "added"].concat(USER_STATE_FIELD_NAMES_15_1),
+    IGNORE_COLUMN_OPTION_NAMES = { visibleWidth: true, bestFitWidth: true, bufferedFilterValue: true },
     COMMAND_EXPAND_CLASS = "dx-command-expand";
 
 module.exports = {
@@ -1155,14 +1156,28 @@ module.exports = {
                 }
             };
 
+            var fireOptionChanged = function(that, options) {
+                var fullOptionName,
+                    column = options.column,
+                    value = options.value,
+                    optionName = options.optionName,
+                    prevValue = options.prevValue;
+
+                if(!IGNORE_COLUMN_OPTION_NAMES[optionName]) {
+                    fullOptionName = getColumnFullPath(that, column);
+                    that._skipProcessingColumnsChange = true;
+                    that.component._notifyOptionChanged(fullOptionName + "." + optionName, value, prevValue);
+                    that._skipProcessingColumnsChange = false;
+                }
+            };
+
             var columnOptionCore = function(that, column, optionName, value, notFireEvent) {
                 var optionGetter = dataCoreUtils.compileGetter(optionName),
                     columnIndex = column.index,
                     prevValue,
                     optionSetter,
                     columns,
-                    changeType,
-                    fullOptionName;
+                    changeType;
 
                 if(arguments.length === 3) {
                     return optionGetter(column, { functionsAsIs: true });
@@ -1179,11 +1194,12 @@ module.exports = {
                     }
                     optionSetter = dataCoreUtils.compileSetter(optionName);
                     optionSetter(column, value, { functionsAsIs: true });
-
-                    fullOptionName = getColumnFullPath(that, column);
-                    that._skipProcessingColumnsChange = true;
-                    that.component._notifyOptionChanged(fullOptionName + "." + optionName, value, prevValue);
-                    that._skipProcessingColumnsChange = false;
+                    fireOptionChanged(that, {
+                        column: column,
+                        optionName: optionName,
+                        value: value,
+                        prevValue: prevValue
+                    });
 
                     if(!isDefined(prevValue) && !isDefined(value) && optionName.indexOf("buffer") !== 0) {
                         notFireEvent = true;

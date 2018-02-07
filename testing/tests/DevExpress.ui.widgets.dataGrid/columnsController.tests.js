@@ -8057,4 +8057,19 @@ QUnit.module("onOptionChanged", {
         //assert
         assert.deepEqual(this._notifyOptionChanged.getCall(0).args, ["columns[1].columns[1].columns[0].sortOrder", "desc", undefined], "onOptionChanged args");
     });
+
+    QUnit.test("Event should not be fired for a private column options", function(assert) {
+        //arrange
+        this.applyOptions({
+            columns: ["field1", "field2"]
+        });
+
+        //act
+        this.columnOption("field1", "visibleWidth", 100);
+        this.columnOption("field1", "bufferedFilterValue", "test");
+        this.columnOption("field1", "bestFitWidth", 80);
+
+        //assert
+        assert.strictEqual(this._notifyOptionChanged.callCount, 0, "onOptionChanged is not fired");
+    });
 });
