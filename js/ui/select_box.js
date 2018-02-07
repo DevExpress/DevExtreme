@@ -564,7 +564,7 @@ var SelectBox = DropDownList.inherit({
     },
 
     _restoreInputText: function() {
-        this._loadItemDeferred.always((function() {
+        this._loadItemDeferred && this._loadItemDeferred.always((function() {
             if(this.option("acceptCustomValue")) {
                 return;
             }
