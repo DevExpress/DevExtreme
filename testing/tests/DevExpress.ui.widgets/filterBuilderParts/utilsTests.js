@@ -460,6 +460,21 @@ QUnit.module("Utils", function() {
         field = utils.getField("State", [{ dataField: "State.Name" }, { dataField: "Company" }]);
         assert.equal(field.dataField, "State");
     });
+
+    //T603218
+    QUnit.test("getNormalizedFields", function(assert) {
+        var normalizedFields = utils.getNormalizedFields([{
+            dataField: "Weight",
+            dataType: 'number',
+            width: 100
+        }, {
+        }]);
+
+        assert.deepEqual(normalizedFields, [{
+            dataField: "Weight",
+            dataType: 'number'
+        }]);
+    });
 });
 
 QUnit.module("Add item", function() {
