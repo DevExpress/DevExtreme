@@ -1298,6 +1298,25 @@ QUnit.test("Long appointment parts data should be correct", function(assert) {
     assert.deepEqual(dataUtils.data($appointments.get(3), "dxItemData").settings.endDate, new Date(2016, 1, 27, 11, 30));
 });
 
+QUnit.test("Long appointment parts targetedAppointmentData should be correct", function(assert) {
+    this.createInstance({
+        views: ["agenda"],
+        currentView: "agenda",
+        currentDate: new Date(2016, 1, 25),
+        firstDayOfWeek: 1,
+        height: 300,
+        onAppointmentRendered: function(e) {
+            var targetedAppointmentData = e.targetedAppointmentData,
+                originalAppointmentData = e.appointmentData;
+
+            assert.deepEqual(targetedAppointmentData, originalAppointmentData, "Targeted appointment data is ok");
+        },
+        dataSource: [
+            { startDate: new Date(2016, 1, 24, 1), endDate: new Date(2016, 1, 27, 11, 30), text: "a" }
+        ]
+    });
+});
+
 QUnit.test("Long appointment parts popup should have original data", function(assert) {
     this.createInstance({
         views: ["agenda"],
