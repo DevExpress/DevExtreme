@@ -1497,7 +1497,7 @@ QUnit.test("calendar picker should be used on generic device by default and 'typ
         realDevice = devices.real();
 
     devices.real({ platform: "generic", deviceType: "desktop", phone: false });
-    devices.current({ platform: "generic" });
+    devices.current({ deviceType: "desktop" });
 
     try {
         var $dateBox = $("#dateBox").dxDateBox(),
@@ -1527,14 +1527,14 @@ QUnit.test("calendar picker should not be used on generic device by default and 
 });
 
 QUnit.test("calendar picker should not be used on mobile device by default", function(assert) {
-    var currentDevice = devices.current();
-    devices.current({ platform: "android" });
+    var realDevice = devices.real();
+    devices.real({ platform: "android" });
 
     try {
         var $dateBox = $("#dateBox").dxDateBox();
         assert.ok(!$dateBox.hasClass(DATEBOX_CLASS + "-calendar"));
     } finally {
-        devices.current(currentDevice);
+        devices.real(realDevice);
     }
 });
 
