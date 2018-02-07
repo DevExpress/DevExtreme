@@ -344,10 +344,14 @@ var TextEditorBase = Editor.inherit({
         return CONTROL_KEYS.indexOf(key) !== -1;
     },
 
+    _initMarkup: function() {
+        this.callBase();
+        this._renderInput();
+    },
+
     _render: function() {
         this.$element().addClass(TEXTEDITOR_CLASS);
 
-        this._renderInput();
         this._renderInputType();
         this._renderValue();
         this._renderProps();

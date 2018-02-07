@@ -82,12 +82,6 @@ Object.keys(widgets).forEach(function(widget) {
 });
 
 
-var notDisposableWidgets = [
-    "ContextMenu",
-    "Lookup",
-    "ProgressBar"
-];
-
 QUnit.module("Widget creation", {
     beforeEach: function() {
         var fixture = document.getElementById("qunit-fixture");
@@ -95,9 +89,7 @@ QUnit.module("Widget creation", {
         fixture.appendChild(this.element);
     },
     afterEach: function() {
-        if(notDisposableWidgets.indexOf(this.instance.NAME.substr(2)) === -1) {
-            this.instance.dispose();
-        }
+        this.instance.dispose();
     }
 });
 
