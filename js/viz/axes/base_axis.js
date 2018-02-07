@@ -1199,11 +1199,14 @@ Axis.prototype = {
             maxVisible = range.maxVisible,
             interval = range.interval,
             ticks = that._majorTicks,
-            length = ticks.length;
+            length = ticks.length,
+            translator = that._translator;
 
+        if(translator.getBusinessRange().isSynchronized) {
+            return;
+        }
         if(that._options.type !== constants.discrete) {
-            if(!range.isSynchronized &&
-                length &&
+            if(length &&
                 !that._options.skipViewportExtending &&
                 (!isDefined(that._zoomArgs) || !that.isArgumentAxis)) {
                 if(ticks[0].value < range.minVisible) {
@@ -1228,7 +1231,7 @@ Axis.prototype = {
         }
 
         range.breaks = that._correctedBreaks;
-        that._translator.updateBusinessRange(range);
+        translator.updateBusinessRange(range);
     },
 
     _getViewportRange: function() {
@@ -1410,7 +1413,7 @@ Axis.prototype = {
         var that = this;
 
         that.updateCanvas(canvas);
-        that._reinitTranslator(this._getViewportRange());
+        that._reinitTranslator(that._getViewportRange());
 
         var canvasStartEnd = that._getCanvasStartEnd();
 
