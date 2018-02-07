@@ -610,7 +610,10 @@ QUnit.test("date values. semidiscrete. getSelectedRange returns correct date typ
 
     this.setRange(new Date("02/01/2010"), new Date("05/01/2010"));
 
-    this.check(assert, [1157, 1764], [new Date("02/01/2010"), new Date("05/01/2010")]);
+    assert.deepEqual(this.controller.getSelectedRange(), {
+        startValue: new Date("02/01/2010"),
+        endValue: new Date("05/01/2010")
+    });
 });
 
 QUnit.module("Clouds processing", $.extend({}, environment, {
