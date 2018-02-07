@@ -829,6 +829,7 @@ var SelectBox = DropDownList.inherit({
 
     _dispose: function() {
         this._renderInputValueAsync = commonUtils.noop;
+        delete this._loadItemDeferred;
         this.callBase();
     },
 
