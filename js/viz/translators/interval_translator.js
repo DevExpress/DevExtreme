@@ -95,7 +95,7 @@ module.exports = {
         return true;
     },
 
-    parse: function(value) {
+    _parse: function(value) {
         return this._businessRange.dataType === "datetime" ? (isNumber(value) ? new Date(value) : value) : Number(value);
     },
 
