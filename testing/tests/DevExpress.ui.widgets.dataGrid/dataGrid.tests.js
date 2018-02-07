@@ -2581,7 +2581,7 @@ QUnit.test("max-height from styles", function(assert) {
 
     //assert
     assert.equal(Math.round($dataGrid.find(".dx-datagrid").height()), 400, "height is equal max-height");
-
+    assert.ok(dataGrid.getScrollable().$content().height() > dataGrid.getScrollable()._container().height(), "scroll is exists");
 
     //act
     dataGrid.searchByText("test");
@@ -2697,7 +2697,7 @@ QUnit.test("rowsview height should not be reseted during updateDimension when mi
 
     //assert
     var heightCalls = rowsView.height.getCalls().filter(function(call) { return call.args.length > 0; });
-    assert.equal(heightCalls.length, 0, "rowsview height is not assigned");
+    assert.equal(heightCalls.length, 2, "rowsview height is assigned twice");
 });
 
 //T108204
