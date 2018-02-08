@@ -15,7 +15,7 @@ require("generic_light.css!");
 
 var $ = require("jquery"),
     devices = require("core/devices"),
-    resizeCallbacks = require("core/utils/window").resizeCallbacks,
+    resizeCallbacks = require("core/utils/resize_callbacks"),
     dblclickEvent = require("events/dblclick"),
     fx = require("animation/fx"),
     Color = require("color"),
@@ -66,6 +66,20 @@ QUnit.test("Scheduler should have a right rendering strategy for agenda view", f
     var renderingStrategy = this.instance.getLayoutManager().getRenderingStrategyInstance();
 
     assert.ok(renderingStrategy instanceof AgendaAppointmentsStrategy, "Strategy is OK");
+});
+
+QUnit.test("showAllDayPanel option shouldn't have any effect on agenda", function(assert) {
+    this.createInstance({
+        views: ["agenda"],
+        currentView: "agenda",
+        currentDate: new Date(2016, 1, 22),
+        showAllDayPanel: false,
+        dataSource: [
+            { startDate: new Date(2016, 1, 22, 1), endDate: new Date(2016, 1, 24, 1, 30) }
+        ]
+    });
+
+    assert.equal(this.instance.$element().find(".dx-scheduler-appointment").length, 3, "Appointment count is OK");
 });
 
 QUnit.test("Appointments should not be resizable/draggable if current view is agenda", function(assert) {
@@ -1282,6 +1296,25 @@ QUnit.test("Long appointment parts data should be correct", function(assert) {
     assert.deepEqual(dataUtils.data($appointments.get(1), "dxItemData").settings.endDate, new Date(2016, 1, 25, 20));
     assert.deepEqual(dataUtils.data($appointments.get(2), "dxItemData").settings.endDate, new Date(2016, 1, 26, 20));
     assert.deepEqual(dataUtils.data($appointments.get(3), "dxItemData").settings.endDate, new Date(2016, 1, 27, 11, 30));
+});
+
+QUnit.test("Long appointment parts targetedAppointmentData should be correct", function(assert) {
+    this.createInstance({
+        views: ["agenda"],
+        currentView: "agenda",
+        currentDate: new Date(2016, 1, 25),
+        firstDayOfWeek: 1,
+        height: 300,
+        onAppointmentRendered: function(e) {
+            var targetedAppointmentData = e.targetedAppointmentData,
+                originalAppointmentData = e.appointmentData;
+
+            assert.deepEqual(targetedAppointmentData, originalAppointmentData, "Targeted appointment data is ok");
+        },
+        dataSource: [
+            { startDate: new Date(2016, 1, 24, 1), endDate: new Date(2016, 1, 27, 11, 30), text: "a" }
+        ]
+    });
 });
 
 QUnit.test("Long appointment parts popup should have original data", function(assert) {

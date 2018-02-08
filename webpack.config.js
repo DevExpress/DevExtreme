@@ -19,5 +19,14 @@ module.exports = {
         'globalize/currency': 'window.Globalize',
         'globalize/date': 'window.Globalize',
         'globalize/message': 'window.Globalize'
+    },
+    module: {
+        rules: [{
+            test: /\.js$/,
+            exclude: /(node_modules|bower_components)/,
+            use: {
+                loader: 'babel-loader'
+            }
+        }]
     }
 };

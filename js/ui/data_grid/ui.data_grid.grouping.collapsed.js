@@ -307,10 +307,20 @@ exports.GroupingHelper = groupingCore.GroupingHelper.inherit((function() {
             sort: groups.concat(normalizeSortingInfo(options.storeLoadOptions.sort || [])),
             filter: filter
         });
-        loadOptions.skip = expandedInfo.skip;
-        loadOptions.take = expandedInfo.take;
+
+        var isPagingLocal = that._dataSource.isLastLevelGroupItemsPagingLocal();
+
+        if(!isPagingLocal) {
+            loadOptions.skip = expandedInfo.skip;
+            loadOptions.take = expandedInfo.take;
+        }
 
         when(expandedInfo.take === 0 ? [] : that._dataSource.loadFromStore(loadOptions)).done(function(items, extra) {
+            if(isPagingLocal) {
+                items = that._dataSource.sortLastLevelGroupItems(items, groups, expandedInfo.paths);
+                items = expandedInfo.skip ? items.slice(expandedInfo.skip) : items;
+                items = expandedInfo.take ? items.slice(0, expandedInfo.take) : items;
+            }
             each(expandedInfo.items, function(index, item) {
                 var itemCount = item.count - (index === 0 && loadOptions.skip || 0),
                     expandedItems = items.splice(0, itemCount);
@@ -600,6 +610,14 @@ exports.GroupingHelper = groupingCore.GroupingHelper.inherit((function() {
         _processPaging: function(options, groupCount) {
             this._processSkips(options.data, options.skips, groupCount);
             this._processTakes(options.data, options.skips, options.takes, groupCount);
+        },
+
+        isLastLevelGroupItemsPagingLocal: function() {
+            return false;
+        },
+
+        sortLastLevelGroupItems: function(items) {
+            return items;
         },
 
         refresh: function(options, isReload, operationTypes) {

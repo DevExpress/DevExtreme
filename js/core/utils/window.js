@@ -2,138 +2,54 @@
 
 /* global window */
 
-var domAdapter = require("../dom_adapter"),
-    callOnce = require("./call_once"),
-    readyCallbacks = require("./ready_callbacks"),
-    Callbacks = require("./callbacks");
+var domAdapter = require("../dom_adapter");
 
-var hasWindow = function() {
-    return typeof window !== "undefined";
-};
+var hasWindow = typeof window !== "undefined";
+var windowObject = hasWindow ? window : {};
 
-var getWindow = function() {
-    return hasWindow() && window;
-};
+module.exports = {
+    hasWindow: function() {
+        return hasWindow;
+    },
 
-var hasProperty = function(prop) {
-    return hasWindow() && prop in window;
-};
+    getWindow: function() {
+        return windowObject;
+    },
 
-var resizeCallbacks = (function() {
-    var prevSize,
-        callbacks = Callbacks(),
-        originalCallbacksAdd = callbacks.add,
-        originalCallbacksRemove = callbacks.remove;
+    hasProperty: function(prop) {
+        return this.hasWindow() && prop in windowObject;
+    },
 
-    if(!hasWindow()) {
-        return callbacks;
-    }
+    defaultScreenFactorFunc: function(width) {
+        if(width < 768) {
+            return "xs";
+        } else if(width < 992) {
+            return "sm";
+        } else if(width < 1200) {
+            return "md";
+        } else {
+            return "lg";
+        }
+    },
 
-    var formatSize = function() {
-        var documentElement = domAdapter.getDocumentElement();
-        return {
-            width: documentElement.clientWidth,
-            height: documentElement.clientHeight
+    getCurrentScreenFactor: function(screenFactorCallback) {
+        var screenFactorFunc = screenFactorCallback || this.defaultScreenFactorFunc;
+        var windowWidth = domAdapter.getDocumentElement()["clientWidth"];
+
+        return screenFactorFunc(windowWidth);
+    },
+
+    openWindow: function() {
+        if(this.hasProperty("open")) {
+            return windowObject.open();
+        }
+
+        return null;
+    },
+
+    getNavigator: function() {
+        return this.hasWindow() ? windowObject.navigator : {
+            userAgent: ""
         };
-    };
-
-    var handleResize = function() {
-        var now = formatSize();
-        if(now.width === prevSize.width && now.height === prevSize.height) {
-            return;
-        }
-
-        var changedDimension;
-        if(now.width === prevSize.width) {
-            changedDimension = 'height';
-        }
-        if(now.height === prevSize.height) {
-            changedDimension = 'width';
-        }
-
-        prevSize = now;
-
-        callbacks.fire(changedDimension);
-    };
-
-    var setPrevSize = callOnce(function() {
-        prevSize = formatSize();
-    });
-
-    var removeListener;
-
-    callbacks.add = function() {
-        var result = originalCallbacksAdd.apply(callbacks, arguments);
-
-        setPrevSize();
-
-        readyCallbacks.add(function() {
-            if(!removeListener && callbacks.has()) {
-                removeListener = domAdapter.listen(getWindow(), "resize", handleResize);
-            }
-        });
-
-        return result;
-    };
-
-    callbacks.remove = function() {
-        var result = originalCallbacksRemove.apply(callbacks, arguments);
-
-        if(!callbacks.has() && removeListener) {
-            removeListener();
-            removeListener = undefined;
-        }
-        return result;
-    };
-
-    return callbacks;
-})();
-
-var defaultScreenFactorFunc = function(width) {
-    if(width < 768) {
-        return "xs";
-    } else if(width < 992) {
-        return "sm";
-    } else if(width < 1200) {
-        return "md";
-    } else {
-        return "lg";
     }
 };
-
-var getCurrentScreenFactor = function(screenFactorCallback) {
-    var screenFactorFunc = screenFactorCallback || defaultScreenFactorFunc;
-    var windowWidth = domAdapter.getDocumentElement()["clientWidth"];
-
-    return screenFactorFunc(windowWidth);
-};
-
-var openWindow = function() {
-    if("open" in window) {
-        return window.open();
-    }
-
-    return null;
-};
-
-var beforeActivateExists = callOnce(function() {
-    return domAdapter.getProperty(domAdapter.getDocument(), "onbeforeactivate") !== undefined;
-});
-
-var getNavigator = function() {
-    return hasWindow() ? getWindow().navigator : {
-        userAgent: ""
-    };
-};
-
-exports.resizeCallbacks = resizeCallbacks;
-exports.defaultScreenFactorFunc = defaultScreenFactorFunc;
-exports.getCurrentScreenFactor = getCurrentScreenFactor;
-exports.beforeActivateExists = beforeActivateExists;
-exports.openWindow = openWindow;
-exports.hasWindow = hasWindow;
-exports.hasProperty = hasProperty;
-exports.getNavigator = getNavigator;
-
-// TODO: get rid of method
-exports.getWindow = getWindow;

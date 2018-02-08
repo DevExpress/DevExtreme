@@ -10,7 +10,7 @@ var $ = require("../core/renderer"),
     Class = require("./class"),
     errors = require("./errors"),
     Callbacks = require("./utils/callbacks"),
-    resizeCallbacks = windowUtils.resizeCallbacks,
+    resizeCallbacks = require("./utils/resize_callbacks"),
     EventsMixin = require("./events_mixin"),
     SessionStorage = require("./utils/storage").sessionStorage,
     viewPort = require("./utils/view_port"),
@@ -336,7 +336,7 @@ var Devices = Class.inherit({
     isSimulator: function() {
         // NOTE: error may happen due to same-origin policy
         try {
-            return this._isSimulator || this._window.top !== this._window.self && this._window.top["dx-force-device"] || this.isRippleEmulator();
+            return this._isSimulator || windowUtils.hasWindow() && this._window.top !== this._window.self && this._window.top["dx-force-device"] || this.isRippleEmulator();
         } catch(e) {
             return false;
         }
@@ -374,7 +374,7 @@ var Devices = Class.inherit({
     _getDeviceOrNameFromWindowScope: function() {
         var result;
 
-        if(this._window.top["dx-force-device-object"] || this._window.top["dx-force-device"]) {
+        if(windowUtils.hasWindow() && (this._window.top["dx-force-device-object"] || this._window.top["dx-force-device"])) {
             result = this._window.top["dx-force-device-object"] || this._window.top["dx-force-device"];
         }
 

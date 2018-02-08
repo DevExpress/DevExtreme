@@ -1,7 +1,7 @@
 "use strict";
 
 var $ = require("jquery"),
-    resizeCallbacks = require("core/utils/window").resizeCallbacks,
+    resizeCallbacks = require("core/utils/resize_callbacks"),
     consoleUtils = require("core/utils/console"),
     responsiveBoxScreenMock = require("../../helpers/responsiveBoxScreenMock.js"),
     keyboardMock = require("../../helpers/keyboardMock.js"),
@@ -1031,10 +1031,10 @@ QUnit.test("Reset editor's value when the formData option is empty object", func
 
         //assert
     assert.equal(form.getEditor("name").option("value"), "", "editor for the name dataField");
-    assert.equal(form.getEditor("room").option("value"), "", "editor for the room dataField");
+    assert.equal(form.getEditor("room").option("value"), null, "editor for the room dataField");
 
     assert.deepEqual(values[0], { dataField: "name", value: "" }, "value of name dataField");
-    assert.deepEqual(values[3], { dataField: "room", value: "" }, "value of room dataField");
+    assert.deepEqual(values[3], { dataField: "room", value: null }, "value of room dataField");
 });
 
 QUnit.test("Reset editor's value when the formData option is null", function(assert) {
@@ -1052,7 +1052,7 @@ QUnit.test("Reset editor's value when the formData option is null", function(ass
 
         //assert
     assert.equal(form.getEditor("name").option("value"), "", "editor for the name dataField");
-    assert.equal(form.getEditor("room").option("value"), "", "editor for the room dataField");
+    assert.equal(form.getEditor("room").option("value"), null, "editor for the room dataField");
 });
 
 QUnit.test("Reset editor's value when the formData option is undefined", function(assert) {
@@ -1070,7 +1070,7 @@ QUnit.test("Reset editor's value when the formData option is undefined", functio
 
         //assert
     assert.equal(form.getEditor("name").option("value"), "", "editor for the name dataField");
-    assert.equal(form.getEditor("room").option("value"), "", "editor for the room dataField");
+    assert.equal(form.getEditor("room").option("value"), null, "editor for the room dataField");
 });
 
 QUnit.test("Reset editor's value with validation", function(assert) {
@@ -1134,6 +1134,42 @@ QUnit.test("Refresh form when visibility changed to 'true' in msie browser", fun
     //assert
     assert.equal(refreshStub.callCount, expectedRefreshCount, "Refresh on visibility changed to 'true' if browser is IE or Edge");
     refreshStub.restore();
+});
+
+QUnit.test("The formData is updated correctly when formData has 'undefined' value", function(assert) {
+    //arrange
+    var $testContainer = $("#form").dxForm({
+            formData: undefined,
+            items: [{ dataField: "City" }]
+        }),
+        form = $testContainer.dxForm("instance");
+
+    //act
+    var editor = form.getEditor("City");
+    editor.option("value", "New York");
+
+    //assert
+    var formData = form.option("formData");
+    assert.deepEqual(formData, { City: "New York" }, "updated formData");
+    assert.equal($testContainer.find(".dx-field-item").length, 1, "form item is rendered");
+});
+
+QUnit.test("The formData with composite object is updated correctly when formData has 'undefined' value", function(assert) {
+    //arrange
+    var $testContainer = $("#form").dxForm({
+            formData: undefined,
+            items: [{ dataField: "Employee.City" }]
+        }),
+        form = $testContainer.dxForm("instance");
+
+    //act
+    var editor = form.getEditor("Employee.City");
+    editor.option("value", "New York");
+
+    //assert
+    var formData = form.option("formData");
+    assert.deepEqual(formData, { Employee: { City: "New York" } }, "formData is updated");
+    assert.equal($testContainer.find(".dx-field-item").length, 1, "form item is rendered");
 });
 
 QUnit.module("Grouping");
@@ -3327,7 +3363,7 @@ QUnit.test("Reset editor's value", function(assert) {
         //assert
     assert.equal(form.getEditor("name").option("value"), "", "editor for the name dataField");
     assert.equal(form.getEditor("lastName").option("value"), "", "editor for the lastName dataField");
-    assert.equal(form.getEditor("room").option("value"), "", "editor for the room dataField");
+    assert.equal(form.getEditor("room").option("value"), null, "editor for the room dataField");
     assert.equal(form.getEditor("isDeveloper").option("value"), undefined, "editor for the isDeveloper dataField");
 });
 

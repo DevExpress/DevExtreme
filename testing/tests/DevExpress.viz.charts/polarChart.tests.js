@@ -282,18 +282,6 @@ QUnit.test("render", function(assert) {
     assert.ok(chart.getSeriesByPos(0).draw.called);
 });
 
-//T353612
-QUnit.test("useSpiderWeb changing", function(assert) {
-    var chart = this.createSimplePolarChart();
-
-    chart.getSeriesByPos(0).draw.reset();
-    axesIndex = 0;
-
-    chart.option("useSpiderWeb", true);
-
-    assert.ok(chart.getSeriesByPos(0).draw.called);
-});
-
 QUnit.test("draw series with correct translators and animation options", function(assert) {
     stubLayoutManager.needMoreSpaceForPanesCanvas.returns(true);
     stubThemeManager.getOptions.withArgs("adaptiveLayout").returns({ keepLabels: false });

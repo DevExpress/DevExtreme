@@ -2,7 +2,7 @@
 
 var $ = require("jquery"),
     Tooltip = require("ui/tooltip"),
-    resizeCallbacks = require("core/utils/window").resizeCallbacks,
+    resizeCallbacks = require("core/utils/resize_callbacks"),
     domUtils = require("core/utils/dom"),
     positionUtils = require("animation/position"),
     browser = require("core/utils/browser"),

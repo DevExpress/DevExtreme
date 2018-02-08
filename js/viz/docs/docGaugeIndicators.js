@@ -10,10 +10,8 @@ var commonIndicator = {
 	* @name commonIndicator_color
 	* @publicName color
 	* @type string
-	* @default '#C2C2C2' @for value_indicators
-	* @default '#8798a5' @for subvalue_indicators
 	*/
-    color: '#C2C2C2',
+    color: undefined,
     /**
 	* @name commonIndicator_baseValue
 	* @publicName baseValue
@@ -164,9 +162,8 @@ var commonIndicator = {
 	* @name commonIndicator_offset
 	* @publicName offset
 	* @type number
-	* @default 20
 	*/
-    offset: 20,
+    offset: undefined,
     /**
 	* @name commonIndicator_indentFromCenter
 	* @publicName indentFromCenter
@@ -244,7 +241,16 @@ var commonIndicator = {
 * @inherits CommonIndicator
 * @hidePropertyOf
 */
-var circularRectangleNeedle = {}
+var circularRectangleNeedle = {
+    /**
+    * @name circularRectangleNeedle_color
+    * @publicName color
+    * @type string
+    * @inheritdoc
+    * @default '#C2C2C2'
+    */
+    color: '#C2C2C2'
+}
 /**
 * @name circularTriangleNeedle
 * @section circularIndicators
@@ -253,7 +259,16 @@ var circularRectangleNeedle = {}
 * @inherits CommonIndicator
 * @hidePropertyOf
 */
-var circularTriangleNeedle = {}
+var circularTriangleNeedle = {
+    /**
+    * @name circularTriangleNeedle_color
+    * @publicName color
+    * @type string
+    * @inheritdoc
+    * @default '#C2C2C2'
+    */
+    color: '#C2C2C2'
+}
 /**
 * @name circularTwoColorNeedle
 * @section circularIndicators
@@ -262,7 +277,16 @@ var circularTriangleNeedle = {}
 * @inherits CommonIndicator
 * @hidePropertyOf
 */
-var circularTwoColorNeedle = {}
+var circularTwoColorNeedle = {
+    /**
+    * @name circularTwoColorNeedle_color
+    * @publicName color
+    * @type string
+    * @inheritdoc
+    * @default '#C2C2C2'
+    */
+    color: '#C2C2C2'
+}
 /**
 * @name circularRangeBar
 * @section circularIndicators
@@ -271,7 +295,24 @@ var circularTwoColorNeedle = {}
 * @inherits CommonIndicator
 * @hidePropertyOf
 */
-var circularRangeBar = {}
+var circularRangeBar = {
+    /**
+    * @name circularRangeBar_color
+    * @publicName color
+    * @type string
+    * @inheritdoc
+    * @default '#CBC5CF'
+    */
+    color: '#CBC5CF',
+    /**
+    * @name circularRangeBar_offset
+    * @publicName offset
+    * @type number
+    * @default 30
+    * @inheritdoc
+    */
+    offset: 30
+}
 /**
 * @name circularTriangleMarker
 * @section circularIndicators
@@ -281,6 +322,14 @@ var circularRangeBar = {}
 * @hidePropertyOf
 */
 var circularTriangleMarker = {
+    /**
+    * @name circularTriangleMarker_color
+    * @publicName color
+    * @type string
+    * @inheritdoc
+    * @default '#8798A5'
+    */
+    color: '#8798A5',
 	/**
 	* @name circularTriangleMarker_width
 	* @publicName width
@@ -297,6 +346,14 @@ var circularTriangleMarker = {
 	* @inheritdoc
 	*/
     length: 14,
+    /**
+     * @name circularTriangleMarker_offset
+     * @publicName offset
+     * @type number
+     * @default 6
+     * @inheritdoc
+     */
+     offset: 6
 }
 /**
 * @name circularTextCloud
@@ -307,6 +364,14 @@ var circularTriangleMarker = {
 * @hidePropertyOf
 */
 var circularTextCloud = {
+    /**
+    * @name circularTextCloud_color
+    * @publicName color
+    * @type string
+    * @inheritdoc
+    * @default '#679EC5'
+    */
+    color: '#679EC5',
     /**
 	* @name circularTextCloud_text
 	* @publicName text
@@ -338,7 +403,15 @@ var circularTextCloud = {
 			*/
             size: 18,
         }
-    }
+    },
+    /**
+     * @name circularTextCloud_offset
+     * @publicName offset
+     * @type number
+     * @default -6
+     * @inheritdoc
+     */
+     offset: -6
 };
 
 /**
@@ -350,6 +423,14 @@ var circularTextCloud = {
 * @hidePropertyOf
 */
 var linearRectangle = {
+    /**
+    * @name linearRectangle_color
+    * @publicName color
+    * @type string
+    * @inheritdoc
+    * @default '#C2C2C2'
+    */
+    color: '#C2C2C2',
 	/**
 	* @name linearRectangle_width
 	* @publicName width
@@ -361,11 +442,11 @@ var linearRectangle = {
 	/**
 	* @name linearRectangle_offset
 	* @publicName offset
-    * @type number
-	* @default 10 @for value_and_subvalue_indicators
+  * @type number
+	* @default 2.5
 	* @inheritdoc
 	*/
-    offset: 10
+    offset: 2.5
 }
 /**
 * @name linearCircle
@@ -376,14 +457,22 @@ var linearRectangle = {
 * @hidePropertyOf
 */
 var linearCircle = {
+    /**
+    * @name linearCircle_color
+    * @publicName color
+    * @type string
+    * @inheritdoc
+    * @default '#C2C2C2'
+    */
+    color: '#C2C2C2',
 	/**
 	* @name linearCircle_offset
 	* @publicName offset
-    * @type number
-	* @default 10 @for value_and_subvalue_indicators
+  * @type number
+	* @default 2.5
 	* @inheritdoc
 	*/
-    offset: 10
+    offset: 2.5
 }
 /**
 * @name linearRhombus
@@ -394,6 +483,14 @@ var linearCircle = {
 * @hidePropertyOf
 */
 var linearRhombus = {
+    /**
+    * @name linearRhombus_color
+    * @publicName color
+    * @type string
+    * @inheritdoc
+    * @default '#C2C2C2'
+    */
+    color: '#C2C2C2',
 	/**
 	* @name linearRhombus_width
 	* @publicName width
@@ -405,11 +502,11 @@ var linearRhombus = {
 	/**
 	* @name linearRhombus_offset
 	* @publicName offset
-    * @type number
-	* @default 10 @for value_and_subvalue_indicators
+  * @type number
+	* @default 2.5
 	* @inheritdoc
 	*/
-    offset: 10
+    offset: 2.5
 }
 /**
 * @name linearRangeBar
@@ -420,11 +517,19 @@ var linearRhombus = {
 * @hidePropertyOf
 */
 var linearRangeBar = {
+    /**
+    * @name linearRangeBar_color
+    * @publicName color
+    * @type string
+    * @default '#CBC5CF'
+    * @inheritdoc
+    */
+    color: '#CBC5CF',
 	/**
 	* @name linearRangeBar_offset
 	* @publicName offset
-    * @type number
-	* @default 10 @for value_and_subvalue_indicators
+  * @type number
+	* @default 10
 	* @inheritdoc
 	*/
     offset: 10
@@ -438,6 +543,14 @@ var linearRangeBar = {
 * @hidePropertyOf
 */
 var linearTriangleMarker = {
+    /**
+    * @name linearTriangleMarker_color
+    * @publicName color
+    * @type string
+    * @inheritdoc
+    * @default '#8798A5'
+    */
+    color: '#8798A5',
 	/**
 	* @name linearTriangleMarker_width
 	* @publicName width
@@ -457,8 +570,8 @@ var linearTriangleMarker = {
 	/**
 	* @name linearTriangleMarker_offset
 	* @publicName offset
-    * @type number
-	* @default 10 @for value_and_subvalue_indicators
+  * @type number
+	* @default 10
 	* @inheritdoc
 	*/
     offset: 10
@@ -472,6 +585,14 @@ var linearTriangleMarker = {
 * @hidePropertyOf
 */
 var linearTextCloud = {
+    /**
+    * @name linearTextCloud_color
+    * @publicName color
+    * @type string
+    * @inheritdoc
+    * @default '#679EC5'
+    */
+    color: '#679EC5',
 	/**
 	* @name linearTextCloud_text
 	* @publicName text
@@ -507,9 +628,9 @@ var linearTextCloud = {
 	/**
 	* @name linearTextCloud_offset
 	* @publicName offset
-    * @type number
-	* @default 10 @for value_indicators|subvalue_indicators
+  * @type number
+	* @default -1
 	* @inheritdoc
 	*/
-    offset: 10
+    offset: -1
 }

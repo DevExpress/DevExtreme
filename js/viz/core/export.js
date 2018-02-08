@@ -2,7 +2,7 @@
 
 var extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
-    openWindow = require("../../core/utils/window").openWindow,
+    windowUtils = require("../../core/utils/window"),
     patchFontOptions = require("./utils").patchFontOptions,
     _extend = extend,
 
@@ -60,7 +60,7 @@ function doExport(menu, markup, options) {
 }
 
 function print(data, backgroundColor) {
-    var vizWindow = openWindow(),
+    var vizWindow = windowUtils.openWindow(),
         svg;
 
     if(!vizWindow) {

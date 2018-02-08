@@ -396,6 +396,7 @@ var ResizingController = modules.ViewController.inherit({
         }
 
         return commonUtils.deferRender(function() {
+            that._rowsView.height("");
             if(that._dataController.isLoaded()) {
                 that._synchronizeColumns();
             }
@@ -429,6 +430,7 @@ var ResizingController = modules.ViewController.inherit({
             hasHeight = that._hasHeight || maxHeightHappened,
             height = that.option("height") || $rootElement.get(0).style.height,
             editorFactory = that.getController("editorFactory"),
+            rowsViewHeight = "",
             $testDiv;
 
         that.updateSize($rootElement);
@@ -441,8 +443,12 @@ var ResizingController = modules.ViewController.inherit({
 
         rowsView.element().toggleClass("dx-empty", !that._hasHeight && dataController.items().length === 0);
 
+        if(maxHeightHappened) {
+            rowsViewHeight = rowsView.height();
+        }
+
         commonUtils.deferRender(function() {
-            rowsView._hasHeight = hasHeight;
+            rowsView.height(rowsViewHeight, hasHeight);
 
             if(!dataController.isLoaded()) {
                 rowsView.setLoading(true);

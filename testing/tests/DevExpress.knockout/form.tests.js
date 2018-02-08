@@ -400,7 +400,7 @@ QUnit.test("Reset editor's value when the formData option is empty object", func
     assert.equal(form.getEditor("name").option("value"), "", "editor for the name dataField");
     assert.equal(form.getEditor("lastName").option("value"), "", "editor for the lastName dataField");
     assert.equal(form.getEditor("sex").option("value"), "", "editor for the sex dataField");
-    assert.equal(form.getEditor("room").option("value"), "", "editor for the room dataField");
+    assert.equal(form.getEditor("room").option("value"), null, "editor for the room dataField");
     assert.equal(form.getEditor("isDeveloper").option("value"), undefined, "editor for the isDeveloper dataField");
 });
 
@@ -553,4 +553,16 @@ QUnit.test("Tab template", function(assert) {
     //assert
     assert.equal($form.find("#tabTemplate").length, 1);
     assert.equal($form.find("#tabTemplate").first().text(), "Test tab template");
+});
+
+QUnit.test("The formData is empty object when formData has 'undefined' value", function(assert) {
+    //arrange
+    var viewModel = {
+        formData: ko.observable(),
+        items: [{ dataField: "City" }]
+    };
+    ko.applyBindings(viewModel, $("#formWithItems").get(0));
+
+    //assert
+    assert.deepEqual(viewModel.formData(), { });
 });

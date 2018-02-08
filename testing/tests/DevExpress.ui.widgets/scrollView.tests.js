@@ -2412,7 +2412,7 @@ QUnit.test("bottomPocket element depends on reachBottom event", function(assert)
 QUnit.test("scrollview events support chains", function(assert) {
     var $scrollView = $("#scrollView").dxScrollView({ useNative: false });
 
-    $($scrollView.dxScrollView("instance").on("reachBottom", noop)).on("pullDown", noop);
+    $scrollView.dxScrollView("instance").on("reachBottom", noop).on("pullDown", noop);
 
     assert.ok(true, "chains is supported");
 });

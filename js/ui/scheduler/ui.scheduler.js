@@ -1503,7 +1503,6 @@ var Scheduler = Widget.inherit({
         }, combinedDataAccessors);
 
         this._initActions();
-        this._processCurrentView();
 
         this._dropDownAppointments = new DropDownAppointments();
         this._subscribes = subscribes;
@@ -1722,6 +1721,7 @@ var Scheduler = Widget.inherit({
 
     _render: function() {
         this.callBase();
+        this._processCurrentView();
         this._renderHeader();
 
         this._layoutManager = new SchedulerLayoutManager(this, this._getAppointmentsRenderingStrategy());
@@ -2430,12 +2430,12 @@ var Scheduler = Widget.inherit({
             appointmentDuration = endDate.getTime() - startDate.getTime(),
             updatedStartDate;
 
-        if(typeUtils.isDefined($appointment)) {
+        if(typeUtils.isDefined($appointment) && this._needUpdateAppointmentData($appointment)) {
             var apptDataCalculator = this.getRenderingStrategyInstance().getAppointmentDataCalculator();
 
             if(typeUtils.isFunction(apptDataCalculator)) {
                 updatedStartDate = apptDataCalculator($appointment, startDate).startDate;
-            } else if(this._needUpdateAppointmentData($appointment)) {
+            } else {
                 var coordinates = translator.locate($appointment);
                 updatedStartDate = new Date(this._workSpace.getCellDataByCoordinates(coordinates, isAllDay).startDate);
 

@@ -4,6 +4,48 @@ var eventsEngine = require("events/core/events_engine");
 var keyboardMock = require("../../helpers/keyboardMock.js");
 var registerEvent = require("events/core/event_registrator");
 
+QUnit.module("base");
+
+QUnit.test("on/one/trigger/off", function(assert) {
+    var element = document.createElement("div");
+    var handlerSpy = sinon.spy();
+
+    eventsEngine.on(element, "myEvent", handlerSpy);
+    eventsEngine.trigger(element, "myEvent");
+
+    assert.ok(handlerSpy.calledOnce);
+
+    eventsEngine.off(element, "myEvent");
+    eventsEngine.trigger(element, "myEvent");
+
+    assert.ok(handlerSpy.calledOnce);
+
+    handlerSpy = sinon.spy();
+
+    eventsEngine.one(element, "myOneTimeEvent", handlerSpy);
+    eventsEngine.trigger(element, "myOneTimeEvent");
+    eventsEngine.trigger(element, "myOneTimeEvent");
+
+    assert.ok(handlerSpy.calledOnce);
+});
+
+QUnit.test("using the array of DOM elements", function(assert) {
+    var element1 = document.createElement("div");
+    var element2 = document.createElement("div");
+    var element3 = document.createElement("div");
+    var handlerSpy = sinon.spy();
+
+    eventsEngine.on([ element1, element2, element3 ], "myEvent", handlerSpy);
+    eventsEngine.trigger([ element1, element2 ], "myEvent");
+
+    assert.equal(handlerSpy.callCount, 2);
+
+    eventsEngine.off([ element2, element3 ], "myEvent");
+    eventsEngine.trigger([ element1, element2 ], "myEvent");
+
+    assert.equal(handlerSpy.callCount, 3);
+});
+
 QUnit.module("namespaces");
 
 QUnit.test("Event is not removed if 'off' has extra namespace", function(assert) {

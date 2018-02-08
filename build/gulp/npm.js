@@ -3,6 +3,7 @@
 "use strict";
 
 var gulp = require('gulp');
+var babel = require('gulp-babel');
 var footer = require('gulp-footer');
 var eol = require('gulp-eol');
 var replace = require('gulp-replace');
@@ -75,6 +76,7 @@ gulp.task('npm-sources', ['bundler-config', 'npm-dts-generator'], function() {
 
         gulp.src(SRC_GLOBS)
             .pipe(compressionPipes.removeDebug())
+            .pipe(babel())
             .pipe(addDefaultExport())
             .pipe(headerPipes.starLicense())
             .pipe(compressionPipes.beautify())

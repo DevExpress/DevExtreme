@@ -11,7 +11,7 @@ var $ = require("jquery"),
     trackerModule = require("viz/chart_components/tracker"),
     dxChart = require("viz/chart"),
     scrollBarClassModule = require("viz/chart_components/scroll_bar"),
-    resizeCallbacks = require("core/utils/window").resizeCallbacks,
+    resizeCallbacks = require("core/utils/resize_callbacks"),
     vizUtils = require("viz/core/utils");
 
 /* global MockSeries, seriesMockData, categories */

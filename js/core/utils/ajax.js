@@ -125,19 +125,19 @@ var postProcess = function(deferred, xhr, dataType) {
 
         case "script":
             evalScript(data);
-            deferred.resolve(data, SUCCESS);
+            deferred.resolve(data, SUCCESS, xhr);
             break;
 
         case "json":
             try {
-                deferred.resolve(JSON.parse(data), SUCCESS);
+                deferred.resolve(JSON.parse(data), SUCCESS, xhr);
             } catch(e) {
                 deferred.reject(xhr, PARSER_ERROR, e);
             }
             break;
 
         default:
-            deferred.resolve(data, SUCCESS);
+            deferred.resolve(data, SUCCESS, xhr);
     }
 };
 
@@ -240,9 +240,10 @@ var sendRequest = function(options) {
         timeoutId;
 
     options.crossDomain = isCrossDomain(options.url);
+    var needScriptEvaluation = dataType === "jsonp" || dataType === "script";
 
     if(options.cache === undefined) {
-        options.cache = dataType !== "jsonp" && dataType !== "script";
+        options.cache = !needScriptEvaluation;
     }
 
     var callbackName = getJsonpOptions(options),
@@ -253,18 +254,17 @@ var sendRequest = function(options) {
 
     if(callbackName) {
         window[callbackName] = function(data) {
-            d.resolve(data, SUCCESS);
+            d.resolve(data, SUCCESS, xhr);
         };
     }
 
-    if(options.crossDomain && !options.cache) {
-
+    if(options.crossDomain && needScriptEvaluation) {
         var reject = function() {
                 d.reject(xhr, ERROR);
             },
             resolve = function() {
                 if(dataType === "jsonp") return;
-                d.resolve(null, SUCCESS);
+                d.resolve(null, SUCCESS, xhr);
             };
 
         evalCrossDomainScript(url).then(resolve, reject);
@@ -295,7 +295,7 @@ var sendRequest = function(options) {
                 if(hasContent(xhr.status)) {
                     postProcess(d, xhr, dataType);
                 } else {
-                    d.resolve(null, NO_CONTENT);
+                    d.resolve(null, NO_CONTENT, xhr);
                 }
             } else {
                 d.reject(xhr, xhr.customStatus || ERROR);

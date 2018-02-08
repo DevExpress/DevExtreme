@@ -166,9 +166,10 @@ var clipboardText = function(event, text) {
 };
 
 var contains = function(container, element) {
-    if(element) {
-        element = domAdapter.isTextNode(element) ? element.parentNode : element;
+    if(!element) {
+        return false;
     }
+    element = domAdapter.isTextNode(element) ? element.parentNode : element;
 
     return domAdapter.isDocument(container) ? container.body.contains(element) : container.contains(element);
 };

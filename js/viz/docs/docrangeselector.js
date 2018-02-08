@@ -154,56 +154,56 @@ var dxRangeSelector = {
         * @publicName majorTickInterval
         * @type number|object|Enums.VizTimeInterval
         * @default undefined
-        * @deprecated dxrangeselectoroptions_scale_tickinterval
+        * @deprecated dxrangeselectoroptions_scale_tickInterval
         */
         majorTickInterval: {
             /**
             * @name dxrangeselectoroptions_scale_majortickinterval_years
             * @publicName years
             * @type number
-            * @deprecated dxrangeselectoroptions_scale_tickinterval
+            * @deprecated dxrangeselectoroptions_scale_tickInterval_years
             */
             years: undefined,
             /**
             * @name dxrangeselectoroptions_scale_majortickinterval_months
             * @publicName months
             * @type number
-            * @deprecated dxrangeselectoroptions_scale_tickinterval
+            * @deprecated dxrangeselectoroptions_scale_tickInterval_months
             */
             months: undefined,
             /**
             * @name dxrangeselectoroptions_scale_majortickinterval_days
             * @publicName days
             * @type number
-            * @deprecated dxrangeselectoroptions_scale_tickinterval
+            * @deprecated dxrangeselectoroptions_scale_tickInterval_days
             */
             days: undefined,
             /**
             * @name dxrangeselectoroptions_scale_majortickinterval_hours
             * @publicName hours
             * @type number
-            * @deprecated dxrangeselectoroptions_scale_tickinterval
+            * @deprecated dxrangeselectoroptions_scale_tickInterval_hours
             */
             hours: undefined,
             /**
             * @name dxrangeselectoroptions_scale_majortickinterval_minutes
             * @publicName minutes
             * @type number
-            * @deprecated dxrangeselectoroptions_scale_tickinterval
+            * @deprecated dxrangeselectoroptions_scale_tickInterval_minutes
             */
             minutes: undefined,
             /**
             * @name dxrangeselectoroptions_scale_majortickinterval_seconds
             * @publicName seconds
             * @type number
-            * @deprecated dxrangeselectoroptions_scale_tickinterval
+            * @deprecated dxrangeselectoroptions_scale_tickInterval_seconds
             */
             seconds: undefined,
             /**
             * @name dxrangeselectoroptions_scale_majortickinterval_milliseconds
             * @publicName milliseconds
             * @type number
-            * @deprecated dxrangeselectoroptions_scale_tickinterval
+            * @deprecated dxrangeselectoroptions_scale_tickInterval_milliseconds
             */
             milliseconds: undefined
         },
@@ -535,7 +535,7 @@ var dxRangeSelector = {
         * @publicName padding
         * @type number
         * @default 6
-        * @deprecated dxrangeselectoroptions_slidermarker_paddingleftright
+        * @deprecated
         */
         padding: 6,
         /**
@@ -571,7 +571,7 @@ var dxRangeSelector = {
         * @publicName placeholderSize
         * @type number|object
         * @default undefined
-        * @deprecated dxrangeselectoroptions_slidermarker_placeholderHeight
+        * @deprecated
         */
         placeholderSize: {
             /**
@@ -878,7 +878,7 @@ var dxRangeSelector = {
         /**
         * @name dxrangeselectoroptions_chart_commonseriessettings
         * @publicName commonSeriesSettings
-        * @type object
+        * @type dxChartOptions_commonSeriesSettings
         */
         commonSeriesSettings: undefined,
         /**
@@ -989,11 +989,34 @@ var dxRangeSelector = {
         /**
         * @name dxrangeselectoroptions_chart_series
         * @publicName series
-        * @type Object|Array<Object>
+        * @type dxChartOptions_series|Array<dxChartOptions_series>
         * @default undefined
         * @notUsedInTheme
         */
         series: undefined,
+        /**
+        * @name dxrangeselectoroptions_chart_seriestemplate
+        * @publicName seriesTemplate
+        * @type object
+        * @default undefined
+        */
+        seriesTemplate: {
+            /**
+            * @name dxrangeselectoroptions_chart_seriestemplate_nameField
+            * @publicName nameField
+            * @type string
+            * @default 'series'
+            */
+            nameField: 'series',
+            /**
+            * @name dxrangeselectoroptions_chart_seriestemplate_customizeSeries
+            * @publicName customizeSeries
+            * @type function(seriesName)
+            * @type_function_param1 seriesName:any
+            * @type_function_return dxChartOptions_series
+            */
+            customizeSeries: function() { }
+        },
         /**
         * @name dxrangeselectoroptions_chart_equalbarwidth
         * @publicName equalBarWidth
@@ -1092,29 +1115,6 @@ var dxRangeSelector = {
     * @default '#FFFFFF'
     */
     containerBackgroundColor: '#FFFFFF',
-    /**
-    * @name dxrangeselectoroptions_chart_seriestemplate
-    * @publicName seriesTemplate
-    * @type object
-    * @default undefined
-    */
-    seriesTemplate: {
-        /**
-        * @name dxrangeselectoroptions_chart_seriestemplate_nameField
-        * @publicName nameField
-        * @type string
-        * @default 'series'
-        */
-        nameField: 'series',
-        /**
-        * @name dxrangeselectoroptions_chart_seriestemplate_customizeSeries
-        * @publicName customizeSeries
-        * @type function(seriesName)
-        * @type_function_param1 seriesName:any
-        * @type_function_return dxChartOptions_series
-        */
-        customizeSeries: function() { }
-    },
     /**
     * @name dxrangeselectormethods_getSelectedRange
     * @publicName getSelectedRange()

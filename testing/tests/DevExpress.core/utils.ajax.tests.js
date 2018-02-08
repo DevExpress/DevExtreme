@@ -21,6 +21,24 @@ QUnit.module("sendRequest", {
     }
 });
 
+QUnit.test("cache=false for dataType=json (cross domain)", function(assert) {
+    var json = { foo: "bar" };
+    var crossDomainResult;
+
+    ajax.sendRequest({
+        url: "http://example.com/json-url",
+        dataType: "json",
+        cache: false
+    }).done(function(data) {
+        crossDomainResult = data;
+    });
+
+    var xhr = this.requests[0];
+    xhr.respond(200, { "Content-Type": "application/json" }, JSON.stringify(json));
+
+    assert.deepEqual(crossDomainResult, json);
+});
+
 QUnit.test("Get JSON", function(assert) {
     var json = { foo: "bar" };
     var result;
@@ -590,6 +608,32 @@ QUnit.test("cache=false for dataType=json", function(assert) {
     assert.ok(/_=\d+/.test(this.requests[0].url));
 });
 
+QUnit.test("xhr is available in done", function(assert) {
+    var xhrCount = 0;
+    var requests = this.requests;
+
+    function check(dataType, statusCode, responseText, options) {
+        options = options || { };
+        options.dataType = dataType;
+
+        ajax.sendRequest(options).done(function(data, statusText, xhr) {
+            if("getResponseHeader" in xhr) {
+                xhrCount++;
+            }
+        });
+
+        requests.pop().respond(statusCode, { }, responseText);
+    }
+
+    check("json", 200, "{}");
+    check("jsonp", 200, "cb({})", { jsonpCallback: "cb" });
+    check("script", 200, ";");
+    check("text", 200, "");
+    check(null, 204, null);
+
+    assert.equal(xhrCount, 5);
+});
+
 QUnit.module("sendRequest async tests");
 
 QUnit.test("Handle error", function(assert) {
@@ -638,4 +682,3 @@ QUnit.test("Script request (cross domain)", function(assert) {
     });
 
 });
-

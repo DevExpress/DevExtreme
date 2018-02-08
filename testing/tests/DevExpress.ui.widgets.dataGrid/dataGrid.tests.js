@@ -54,7 +54,7 @@ var DataGrid = require("ui/data_grid/ui.data_grid");
 var $ = require("jquery"),
     Class = require("core/class"),
     ODataUtils = require("data/odata/utils"),
-    resizeCallbacks = require("core/utils/window").resizeCallbacks,
+    resizeCallbacks = require("core/utils/resize_callbacks"),
     logger = require("core/utils/console").logger,
     errors = require("ui/widget/ui.errors"),
     commonUtils = require("core/utils/common"),
@@ -2581,7 +2581,7 @@ QUnit.test("max-height from styles", function(assert) {
 
     //assert
     assert.equal(Math.round($dataGrid.find(".dx-datagrid").height()), 400, "height is equal max-height");
-
+    assert.ok(dataGrid.getScrollable().$content().height() > dataGrid.getScrollable()._container().height(), "scroll is exists");
 
     //act
     dataGrid.searchByText("test");
@@ -2697,7 +2697,7 @@ QUnit.test("rowsview height should not be reseted during updateDimension when mi
 
     //assert
     var heightCalls = rowsView.height.getCalls().filter(function(call) { return call.args.length > 0; });
-    assert.equal(heightCalls.length, 0, "rowsview height is not assigned");
+    assert.equal(heightCalls.length, 2, "rowsview height is assigned twice");
 });
 
 //T108204
@@ -4013,6 +4013,41 @@ QUnit.test("Error on loading", function(assert) {
     assert.equal($errorRow.length, 1, "error row is shown");
     assert.equal($errorRow.children().attr("colspan"), "2", "error row colspan");
     assert.equal($errorRow.find(".dx-error-message").text(), "Test Error", "error row text");
+    clock.restore();
+});
+
+QUnit.test("Raise error if key field is missed", function(assert) {
+    //act
+    var clock = sinon.useFakeTimers(),
+        dataGrid = createDataGrid({
+            columns: ["field1"],
+            keyExpr: "ID",
+            dataSource: [{ ID: 1, field1: "John" }, { field1: "Olivia" }]
+        });
+
+    clock.tick();
+
+    //assert
+    var $errorRow = $($(dataGrid.$element()).find(".dx-error-row"));
+    assert.equal($errorRow.length, 1, "error row is shown");
+    assert.equal($errorRow.find(".dx-error-message").text().slice(0, 5), "E1046", "error number");
+    clock.restore();
+});
+
+QUnit.test("Not raise error if key field is null", function(assert) {
+    //act
+    var clock = sinon.useFakeTimers(),
+        dataGrid = createDataGrid({
+            columns: ["field1"],
+            keyExpr: "ID",
+            dataSource: [{ ID: 1, field1: "John" }, { ID: null, field1: "Olivia" }]
+        });
+
+    clock.tick();
+
+    //assert
+    var $errorRow = $($(dataGrid.$element()).find(".dx-error-row"));
+    assert.equal($errorRow.length, 0, "error row is not shown");
     clock.restore();
 });
 

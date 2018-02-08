@@ -3635,6 +3635,66 @@ QUnit.test("the search should be cleared after pressing the 'OK' button", functi
     assert.notOk(this.instance._dataSource.searchValue(), "The search value is cleared");
 });
 
+QUnit.test("value should keep initial tag order", function(assert) {
+    var items = this.instance.option("items"),
+        $listItems = this.$listItems;
+
+    $($listItems.eq(1)).trigger("dxclick");
+    $(this.$popupWrapper.find(".dx-popup-done")).trigger("dxclick");
+
+    this.instance.option("opened", true);
+
+    $($listItems.eq(0)).trigger("dxclick");
+    $(this.$popupWrapper.find(".dx-popup-done")).trigger("dxclick");
+
+    assert.deepEqual(this.instance.option("value"), [items[1], items[0]], "tags order is correct");
+});
+
+QUnit.test("value should keep initial tag order with object items", function(assert) {
+    this.reinit({
+        items: [{ id: 1, name: "Alex" }, { id: 2, name: "John" }, { id: 3, name: "Max" }],
+        valueExpr: "id",
+        displayExpr: "name",
+        opened: true
+    });
+
+    var items = this.instance.option("items"),
+        $listItems = this.$listItems;
+
+    $($listItems.eq(1)).trigger("dxclick");
+    $(this.$popupWrapper.find(".dx-popup-done")).trigger("dxclick");
+
+    this.instance.option("opened", true);
+
+    $($listItems.eq(0)).trigger("dxclick");
+    $(this.$popupWrapper.find(".dx-popup-done")).trigger("dxclick");
+
+    assert.deepEqual(this.instance.option("value"), [items[1].id, items[0].id], "tags order is correct");
+});
+
+
+QUnit.test("value should keep initial tag order with object items and 'this' valueExpr", function(assert) {
+    this.reinit({
+        items: [{ id: 1, name: "Alex" }, { id: 2, name: "John" }, { id: 3, name: "Max" }],
+        valueExpr: "this",
+        displayExpr: "name",
+        opened: true
+    });
+
+    var items = this.instance.option("items"),
+        $listItems = this.$listItems;
+
+    $($listItems.eq(1)).trigger("dxclick");
+    $(this.$popupWrapper.find(".dx-popup-done")).trigger("dxclick");
+
+    this.instance.option("opened", true);
+
+    $($listItems.eq(0)).trigger("dxclick");
+    $(this.$popupWrapper.find(".dx-popup-done")).trigger("dxclick");
+
+    assert.deepEqual(this.instance.option("value"), [items[1], items[0]], "tags order is correct");
+});
+
 
 QUnit.module("the 'onSelectAllValueChanged' option", {
     _init: function(options) {
@@ -4444,6 +4504,34 @@ QUnit.test("renderSubmitElement option", function(assert) {
     assert.equal($tagBox.find("select").length, 0, "submit element was removed");
 });
 
+
+QUnit.test("Unnecessary a load calls do not happen of custom store when item is selected", function(assert) {
+    var loadCallCounter = 0,
+        store = new CustomStore({
+            key: "id",
+            loadMode: "raw",
+            load: function() {
+                loadCallCounter++;
+                return [{ id: 1, text: "item 1" }, { id: 2, text: "item 2" }];
+            }
+        });
+
+    $("#tagBox").dxTagBox({
+        dataSource: {
+            store: store
+        },
+        valueExpr: "id",
+        displayExpr: "text",
+        opened: true,
+        hideSelectedItems: true
+    });
+
+    var $item = $(".dx-list-item").eq(0);
+
+    $item.trigger("dxclick");
+
+    assert.equal(loadCallCounter, 1);
+});
 
 QUnit.module("deprecated options");
 

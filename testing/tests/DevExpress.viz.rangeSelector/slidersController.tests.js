@@ -522,10 +522,8 @@ QUnit.test("data-like string values", function(assert) {
     this.check(assert, [1170, 1659], [new Date("02/01/2010"), new Date("05/01/2010")]);
 });
 
-QUnit.test("Start value in the scale break", function(assert) {
+QUnit.test("Start value in the scale break - start should be end of break", function(assert) {
     this.translator.update({
-        minVisible: 10,
-        maxVisible: 30,
         min: 10,
         max: 30,
         breaks: [{
@@ -539,7 +537,83 @@ QUnit.test("Start value in the scale break", function(assert) {
 
     this.setRange(15, 25);
 
-    this.check(assert, [1000, 2333], [10, 25]);
+    this.check(assert, [1267, 2333], [17, 25]);
+});
+
+QUnit.test("End value in the scale break - end should be start of break", function(assert) {
+    this.translator.update({
+        min: 10,
+        max: 30,
+        breaks: [{
+            from: 12,
+            to: 17,
+            cumulativeWidth: 0
+        }]
+    }, { left: 1000, width: 3000 }, { isHorizontal: true, breaksSize: 0 });
+
+    this.update();
+
+    this.setRange(11, 15);
+
+    this.check(assert, [1133, 1267], [11, 12]);
+});
+
+QUnit.test("Datetime. Start value in the scale break - start should be end of break", function(assert) {
+    this.translator.update({
+        min: new Date(2017, 2, 2),
+        max: new Date(2017, 10, 2),
+        axisType: "continuous",
+        dataType: "datetime",
+        breaks: [{
+            from: new Date(2017, 4, 2),
+            to: new Date(2017, 6, 2),
+            cumulativeWidth: 0
+        }]
+    }, { left: 1000, width: 3000 }, { isHorizontal: true, breaksSize: 0 });
+
+    this.update();
+
+    this.setRange(new Date(2017, 5, 2), new Date(2017, 8, 2));
+
+    this.check(assert, [1663, 2337], [new Date(2017, 6, 2), new Date(2017, 8, 2)]);
+});
+
+QUnit.test("Logarithmic. Start value in the scale break - start should be end of break", function(assert) {
+    this.translator.update({
+        min: 0.01,
+        max: 10000,
+        axisType: "logarithmic",
+        base: 10,
+        breaks: [{
+            from: 1,
+            to: 10,
+            cumulativeWidth: 0
+        }]
+    }, { left: 1000, width: 3000 }, { isHorizontal: true, breaksSize: 0 });
+
+    this.update();
+
+    this.setRange(5, 100);
+
+    this.check(assert, [1800, 2200], [10, 100]);
+});
+
+QUnit.test("date values. semidiscrete. getSelectedRange returns correct date type values", function(assert) {
+    this.translator.update({
+        min: new Date("01/01/2010"),
+        max: new Date("12/31/2010"),
+        axisType: "semidiscrete",
+        dataType: "datetime"
+    }, { left: 1000, width: 3000 }, { isHorizontal: true, interval: { "months": 1 } });
+
+    this.update();
+
+    this.setRange(new Date("02/01/2010"), new Date("05/01/2010"));
+
+    assert.deepEqual(this.controller.getSelectedRange(), {
+        startValue: new Date("02/01/2010"),
+        endValue: new Date("05/01/2010")
+    });
 });
 
 QUnit.module("Clouds processing", $.extend({}, environment, {

@@ -112,7 +112,7 @@ var FilterBuilder = Widget.inherit({
             /**
             * @name dxFilterBuilderField
             * @publicName dxFilterBuilderField
-            * @category Internal
+            * @type object
             */
 
             /**
@@ -442,8 +442,9 @@ var FilterBuilder = Widget.inherit({
 
     _updateFilter: function() {
         this._disableInvalidateForValue = true;
-        var value = extend(true, [], this._model);
-        this.option("value", utils.getNormalizedFilter(value, this.option("fields")));
+        var value = extend(true, [], this._model),
+            normalizedFields = utils.getNormalizedFields(this.option("fields"));
+        this.option("value", utils.getNormalizedFilter(value, normalizedFields));
         this._disableInvalidateForValue = false;
     },
 
@@ -838,10 +839,10 @@ var FilterBuilder = Widget.inherit({
             value = item[2],
             removeEvents = function() {
                 eventsEngine.off(document, "keyup", documentKeyUpHandler);
-                eventsEngine.off(document, "dxclick", documentClickHandler);
+                eventsEngine.off(document, "dxpointerdown", documentClickHandler);
             },
-            isFocusOnEditorParts = function() {
-                var activeElement = domAdapter.getActiveElement();
+            isFocusOnEditorParts = function(target) {
+                var activeElement = target || domAdapter.getActiveElement();
                 return $(activeElement).closest($editor.children()).length
                     || $(activeElement).closest(".dx-dropdowneditor-overlay").length;
             },
@@ -867,13 +868,14 @@ var FilterBuilder = Widget.inherit({
         eventsEngine.trigger($editor.find("input"), "focus");
 
         var documentClickHandler = function(e) {
-            if(!isFocusOnEditorParts()) {
+            if(!isFocusOnEditorParts(e.target)) {
+                utils.setFocusToBody();
                 that._updateConditionValue(item, value, function() {
                     createValueText();
                 });
             }
         };
-        eventsEngine.on(document, "dxclick", documentClickHandler);
+        eventsEngine.on(document, "dxpointerdown", documentClickHandler);
 
         var documentKeyUpHandler = function(e) {
             if(e.keyCode === TAB_KEY) {

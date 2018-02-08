@@ -239,7 +239,7 @@ var subscribes = {
     },
 
     getCompactAppointmentGroupMaxWidth: function() {
-        return this.getLayoutManager().getRenderingStrategyInstance().getCompactAppointmentGroupMaxWidth();
+        return this.getLayoutManager().getRenderingStrategyInstance().getCompactAppointmentGroupMaxWidth(this._getViewCountConfig().intervalCount);
     },
 
     getStartDate: function(appointmentData, skipNormalize) {

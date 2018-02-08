@@ -10,7 +10,7 @@ var $ = require("../../core/renderer"),
     getPublicElement = require("../../core/utils/dom").getPublicElement,
     windowUtils = require("../../core/utils/window"),
     navigator = windowUtils.getNavigator(),
-    beforeActivateExists = windowUtils.beforeActivateExists,
+    domAdapter = require("../../core/dom_adapter"),
     devices = require("../../core/devices"),
     registerComponent = require("../../core/component_registrator"),
     DOMComponent = require("../../core/dom_component"),
@@ -237,8 +237,7 @@ var Scrollable = DOMComponent.inherit({
 
     _init: function() {
         this.callBase();
-        this._initMarkup();
-        this._attachNativeScrollbarsCustomizationCss();
+        this._initScrollableMarkup();
         this._locked = false;
     },
 
@@ -253,13 +252,13 @@ var Scrollable = DOMComponent.inherit({
         }
     },
 
-    _initMarkup: function() {
+    _initScrollableMarkup: function() {
         var $element = this.$element().addClass(SCROLLABLE_CLASS),
             $container = this._$container = $("<div>").addClass(SCROLLABLE_CONTAINER_CLASS),
             $wrapper = this._$wrapper = $("<div>").addClass(SCROLLABLE_WRAPPER_CLASS),
             $content = this._$content = $("<div>").addClass(SCROLLABLE_CONTENT_CLASS);
 
-        if(beforeActivateExists()) {
+        if(domAdapter.hasDocumentProperty("onbeforeactivate") && browser.msie && browser.version < 12) {
             eventsEngine.on($element, eventUtils.addNamespace("beforeactivate", SCROLLABLE), function(e) {
                 if(!$(e.target).is(selectors.focusable)) {
                     e.preventDefault();
@@ -284,9 +283,15 @@ var Scrollable = DOMComponent.inherit({
         }
     },
 
-    _render: function() {
+    _initMarkup: function() {
+        this.callBase();
         this._renderDirection();
         this._renderStrategy();
+    },
+
+    _render: function() {
+        this._attachNativeScrollbarsCustomizationCss();
+
         this._attachEventHandlers();
         this._renderDisabledState();
         this._createActions();

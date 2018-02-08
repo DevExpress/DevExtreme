@@ -12,7 +12,7 @@ QUnit.module("touch events", {
 
         $.each(TouchStrategy.map, function(pointerEvent, originalEvents) {
             if(special[pointerEvent]) {
-                special[pointerEvent].dispose();
+                special[pointerEvent].dispose.apply(undefined);
             }
             registerEvent(pointerEvent, new TouchStrategy(pointerEvent, originalEvents));
         });

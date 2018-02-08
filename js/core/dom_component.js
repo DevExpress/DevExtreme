@@ -2,12 +2,12 @@
 
 var $ = require("../core/renderer"),
     eventsEngine = require("../events/core/events_engine"),
+    windowUtils = require("../core/utils/window"),
     extend = require("./utils/extend").extend,
     config = require("./config"),
     errors = require("./errors"),
     getPublicElement = require("../core/utils/dom").getPublicElement,
-    windowUtils = require("../core/utils/window"),
-    windowResizeCallbacks = windowUtils.resizeCallbacks,
+    windowResizeCallbacks = require("../core/utils/resize_callbacks"),
     commonUtils = require("./utils/common"),
     each = require("./utils/iterator").each,
     typeUtils = require("./utils/type"),
@@ -137,8 +137,18 @@ var DOMComponent = Component.inherit({
         return this._dimensionChanged !== abstract;
     },
 
-    _render: function() {
+    _renderComponent: function() {
+        this._initMarkup();
+        if(windowUtils.hasWindow()) {
+            this._render();
+        }
+    },
+
+    _initMarkup: function() {
         this._renderElementAttributes();
+    },
+
+    _render: function() {
         this._toggleRTLDirection(this.option("rtlEnabled"));
         this._renderVisibilityChange();
         this._renderDimensions();
@@ -240,7 +250,7 @@ var DOMComponent = Component.inherit({
 
     _refresh: function() {
         this._clean();
-        this._render();
+        this._renderComponent();
     },
 
     _dispose: function() {
@@ -383,7 +393,7 @@ var DOMComponent = Component.inherit({
 
         if(!this._updateLockCount) {
             if(requireRender) {
-                this._render();
+                this._renderComponent();
             } else if(this._requireRefresh) {
                 this._requireRefresh = false;
                 this._refresh();

@@ -4,6 +4,7 @@ var TreeList = require("./ui.tree_list.base");
 
 module.exports = TreeList;
 
+require("./ui.tree_list.state_storing");
 require("./ui.tree_list.column_chooser");
 require("./ui.tree_list.master_detail");
 require("./ui.tree_list.editing");

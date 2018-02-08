@@ -85,7 +85,8 @@ QUnit.module("Keyboard navigation", {
                         }
                         this.eventsInfo[name].unsubscribeFromEventCounter++;
                     },
-                    attr: function() { }
+                    attr: function() { },
+                    length: 0
                 };
 
                 return {
@@ -2726,6 +2727,7 @@ if(device.deviceType === "desktop") {
 
         this.dataController.store = function() {
             return {
+                key: function() { },
                 update: function(key, values) {
                     isStoreUpdated = true;
                     return $.Deferred().resolve(key, values);

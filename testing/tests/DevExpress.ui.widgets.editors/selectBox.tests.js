@@ -1706,6 +1706,27 @@ QUnit.testInActiveWindow("input value should be restored on focusout if clearing
     assert.equal(instance.option("value"), 1, "value have been restored");
 });
 
+QUnit.test("byKey should not be called on focusout if text was not changed", function(assert) {
+    var byKeyMock = sinon.stub().returnsArg(0),
+        loadMock = sinon.stub().returns(["Item 1", "Item 2", "Item 3"]),
+        $element = $("#selectBox").dxSelectBox({
+            deferRendering: true,
+            dataSource: {
+                load: loadMock,
+                byKey: byKeyMock
+            },
+            value: "Item 2"
+        }),
+        $input = $element.find("." + TEXTEDITOR_INPUT_CLASS);
+
+    assert.equal(loadMock.callCount, 0, "load should not be called on init if defer rendering is true");
+    assert.equal(byKeyMock.callCount, 1, "bykey should be called on init if value is specified");
+
+    $input.trigger("focusout");
+
+    assert.equal(byKeyMock.callCount, 1, "byKey should not be called after input text restoring");
+});
+
 QUnit.test("acceptCustomValue", function(assert) {
     var $selectBox = $("#selectBox").dxSelectBox({
         acceptCustomValue: true,
@@ -2457,6 +2478,53 @@ QUnit.testInActiveWindow("Value should be null after input is cleared and enter 
     assert.equal($input.val(), "", "input is cleared");
     assert.equal(selectBox.option("selectedItem"), null, "selectedItem is null");
     assert.ok(!selectBox.option("opened"), "popup is closed");
+});
+
+QUnit.testInActiveWindow("Value should not be null after focusOut during loading (T600537)", function(assert) {
+    var clock = sinon.useFakeTimers();
+
+    try {
+        var array = [
+            { id: 1, text: "Text 1" },
+            { id: 2, text: "Text 2" },
+            { id: 3, text: "Text 3" }
+        ];
+        var dataSource = new DataSource({
+            key: "id",
+            load: function() {
+                return array;
+            },
+            byKey: function(key) {
+                var d = $.Deferred();
+
+                setTimeout(function() {
+                    d.resolve(array.filter(function(item) {
+                        return item.id === key;
+                    })[0]);
+                }, 300);
+
+                return d.promise();
+            }
+        });
+        var $selectBox = $("#selectBox").dxSelectBox({
+                dataSource: dataSource,
+                value: 1,
+                valueExpr: "id",
+                displayExpr: "text",
+                allowClearing: true,
+                searchEnabled: true
+            }),
+            $input = $selectBox.find("." + TEXTEDITOR_INPUT_CLASS);
+
+        $input.focus();
+        $input.focusout();
+
+        clock.tick(300);
+
+        assert.equal($selectBox.dxSelectBox("option", "value"), 1, "value is not null");
+    } finally {
+        clock.restore();
+    }
 });
 
 //T494140

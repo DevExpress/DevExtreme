@@ -435,12 +435,13 @@ var DraggingHeaderView = modules.View.inherit({
             sourceColumnElement: options.columnElement,
             sourceLocation: options.sourceLocation
         };
-        that._onSelectStart = domAdapter.getProperty(domAdapter.getDocument(), "onselectstart");
 
-        var onSelectStart = function() {
+        var document = domAdapter.getDocument();
+        that._onSelectStart = document["onselectstart"];
+
+        document["onselectstart"] = function() {
             return false;
         };
-        domAdapter.setProperty(domAdapter.getDocument(), "onselectstart", onSelectStart);
 
         that._controller.drag(that._dropOptions);
 
@@ -556,7 +557,7 @@ var DraggingHeaderView = modules.View.inherit({
         that._dragOptions = null;
         that._dropOptions = null;
         that._isDragging = false;
-        domAdapter.setProperty(domAdapter.getDocument(), "onselectstart", that._onSelectStart || null);
+        domAdapter.getDocument()["onselectstart"] = that._onSelectStart || null;
     }
 });
 

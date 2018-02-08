@@ -256,7 +256,9 @@ RollingStock.prototype = {
         _each(this.labels, function(index, label) {
             var bBox = label.getBoundingRect(),
                 coords = shiftFunction(bBox, shiftLength);
-            label.shift(coords.x, coords.y);
+            if(!label.hideInsideLabel(coords)) {
+                label.shift(coords.x, coords.y);
+            }
         });
         this._bBox.end -= shiftLength;
         this._bBox.start -= shiftLength;
@@ -784,17 +786,17 @@ var BaseChart = BaseWidget.inherit({
             points = series[i].getVisiblePoints();
 
             for(j = 0; j < points.length; j++) {
-                labels = labels.concat(points[j].getLabels());
+                labels.push.apply(labels, points[j].getLabels());
             }
         }
 
         for(i = 0; i < labels.length; i++) {
             currentLabel = labels[i];
-            currentLabelRect = currentLabel.getBoundingRect();
-
             if(!currentLabel.isVisible()) {
                 continue;
             }
+
+            currentLabelRect = currentLabel.getBoundingRect();
 
             for(j = i + 1; j < labels.length; j++) {
                 nextLabel = labels[j];

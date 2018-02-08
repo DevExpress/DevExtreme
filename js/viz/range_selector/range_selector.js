@@ -778,7 +778,6 @@ var dxRangeSelector = require("../core/base_widget").inherit({
             option = that._rangeOption && that._rangeOption[SELECTED_RANGE];
         if(option) {
             that._options[SELECTED_RANGE] = option;
-            that._validateRange(option.startValue, option.endValue);
             that.setValue(parseSelectedRange(option));
         }
     },
@@ -788,7 +787,6 @@ var dxRangeSelector = require("../core/base_widget").inherit({
             option = that._rangeOption && that._rangeOption[VALUE];
         if(option) {
             that._options[VALUE] = option;
-            that._validateRange(option[0], option[1]);
             that.setValue(option);
         }
     },
@@ -1049,6 +1047,7 @@ var dxRangeSelector = require("../core/base_widget").inherit({
     setValue: function(value) {
         var current;
         if(!this._isUpdating && value) {
+            this._validateRange(value[0], value[1]);
             // TODO: Move the check inside the SlidersController
             current = this._slidersController.getSelectedRange();
             if(!current || current.startValue !== value[0] || current.endValue !== value[1]) {

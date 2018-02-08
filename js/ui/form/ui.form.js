@@ -782,8 +782,15 @@ var Form = Widget.inherit({
         this._removeHiddenElement();
     },
 
+    _prepareFormData: function() {
+        if(!typeUtils.isDefined(this.option("formData"))) {
+            this.option("formData", {});
+        }
+    },
+
     _render: function() {
         this._clearCachedInstances();
+        this._prepareFormData();
 
         this.callBase();
         this.$element().addClass(FORM_CLASS);
@@ -1637,7 +1644,7 @@ var Form = Widget.inherit({
     /**
      * @name dxFormMethods_validate
      * @publicName validate()
-     * @return object
+     * @return dxValidationGroupResult
      */
     validate: function() {
         try {

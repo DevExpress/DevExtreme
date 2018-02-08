@@ -19,10 +19,6 @@ var BOX_CLASS = "dx-box",
     BOX_ITEM_CLASS = "dx-box-item",
     BOX_ITEM_DATA_KEY = "dxBoxItemData";
 
-var flexGrowProp = styleUtils.styleProp("flexGrow");
-var flexShrinkProp = styleUtils.styleProp("flexShrink");
-var flexPropPrefix = styleUtils.stylePropPrefix("flexDirection");
-
 var MINSIZE_MAP = {
     "row": "minWidth",
     "col": "minHeight"
@@ -107,6 +103,10 @@ var FlexLayoutStrategy = Class.inherit({
     },
 
     renderItems: function($items) {
+        var flexGrowProp = styleUtils.styleProp("flexGrow");
+        var flexShrinkProp = styleUtils.styleProp("flexShrink");
+        var flexPropPrefix = styleUtils.stylePropPrefix("flexDirection");
+
         var direction = this._option("direction");
 
         each($items, function() {
@@ -127,8 +127,7 @@ var FlexLayoutStrategy = Class.inherit({
                     width: "auto",
                     height: "auto",
                     display: styleUtils.stylePropPrefix("flexDirection") + "flex",
-                    flexDirection: $item.children().css("flexDirection") || "column",
-                    flexBasis: 0
+                    flexDirection: $item.children().css("flexDirection") || "column"
                 });
 
                 // NOTE: workaround for jQuery version < 1.11.1 (T181692)

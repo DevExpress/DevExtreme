@@ -113,6 +113,7 @@ QUnit.module("selectedRange", function(hook) {
         });
 
         assert.deepEqual(this.rangeSelector.getSelectedRange(), { startValue: 1, endValue: 11 });
+        assert.equal(spy.callCount, 1);
         assert.deepEqual(spy.getCall(0).args[0].target.id, "E2203");
         assert.deepEqual(spy.getCall(0).args[0].target.text, "The range you are trying to set is invalid");
     });
@@ -181,6 +182,7 @@ QUnit.module("selectedRange", function(hook) {
         });
 
         assert.deepEqual(this.rangeSelector.getSelectedRange(), { startValue: 1, endValue: 11 });
+        assert.equal(spy.callCount, 1);
         assert.deepEqual(spy.getCall(0).args[0].target.id, "E2203");
         assert.deepEqual(spy.getCall(0).args[0].target.text, "The range you are trying to set is invalid");
     });
@@ -527,6 +529,7 @@ QUnit.module("Value", function(hook) {
         });
 
         assert.deepEqual(this.rangeSelector.getValue(), [1, 11]);
+        assert.equal(spy.callCount, 1);
         assert.deepEqual(spy.getCall(0).args[0].target.id, "E2203");
         assert.deepEqual(spy.getCall(0).args[0].target.text, "The range you are trying to set is invalid");
     });
@@ -570,8 +573,20 @@ QUnit.module("Value", function(hook) {
         });
 
         assert.deepEqual(this.rangeSelector.getValue(), [1, 11]);
+        assert.equal(spy.callCount, 1);
         assert.deepEqual(spy.getCall(0).args[0].target.id, "E2203");
         assert.deepEqual(spy.getCall(0).args[0].target.text, "The range you are trying to set is invalid");
+    });
+
+    QUnit.test("Warnings rising on using setValue method", function(assert) {
+        var spy = sinon.spy();
+        this.rangeSelector.option({
+            onIncidentOccurred: spy
+        });
+
+        this.rangeSelector.setValue([1, 12]);
+
+        assert.strictEqual(spy.getCall(0).args[0].target.id, "E2203");
     });
 });
 

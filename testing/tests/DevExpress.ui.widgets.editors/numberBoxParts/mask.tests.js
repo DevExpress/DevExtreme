@@ -222,12 +222,12 @@ QUnit.test("extra decimal points should be ignored", function(assert) {
     assert.equal(this.input.val(), "2.05", "text is correct");
 });
 
-QUnit.test("value should be rounded to the nearest digit on input an extra float digits", function(assert) {
+QUnit.test("value should be rounded to the low digit on input an extra float digits", function(assert) {
     this.instance.option("format", "#0.00");
 
     this.keyboard.type("2.057").change();
-    assert.equal(this.input.val(), "2.06", "text is correct");
-    assert.equal(this.instance.option("value"), 2.06, "value is correct");
+    assert.equal(this.input.val(), "2.05", "text is correct");
+    assert.equal(this.instance.option("value"), 2.05, "value is correct");
 });
 
 QUnit.test("required digits should be replaced on input", function(assert) {
@@ -286,7 +286,18 @@ QUnit.test("input with non-required digit", function(assert) {
     assert.equal(this.input.val(), "1.0", "zero should not be rounded");
 
     this.keyboard.type("56");
-    assert.equal(this.input.val(), "1.06", "extra digit should be rounded");
+    assert.equal(this.input.val(), "1.05", "extra digit should be rounded");
+});
+
+QUnit.test("extra zeros in the end should be prevented from input", function(assert) {
+    this.instance.option({
+        format: "#.##",
+        value: 1.52
+    });
+
+    this.keyboard.caret(4).type("0");
+
+    assert.equal(this.input.val(), "1.52", "extra zero input has been prevented");
 });
 
 QUnit.test("removed digits should not be replaced to 0 when they are not required", function(assert) {
@@ -422,7 +433,7 @@ QUnit.test("mask should work with arabic digit shaping", function(assert) {
 
 QUnit.test("invalid chars should be prevented on keydown", function(assert) {
     this.keyboard.type("12e*3.456");
-    assert.equal(this.input.val(), "123.46", "value is correct");
+    assert.equal(this.input.val(), "123.45", "value is correct");
 });
 
 QUnit.test("input should be correct with group separators", function(assert) {
@@ -461,6 +472,18 @@ QUnit.test("decimal point should move the caret before float part only", functio
 QUnit.test("ctrl+v should not be prevented", function(assert) {
     this.keyboard.keyDown("v", { ctrlKey: true });
     assert.strictEqual(this.keyboard.event.isDefaultPrevented(), false, "keydown event is not prevented");
+});
+
+QUnit.test("decimal point input should be prevented when it is restricted by the format", function(assert) {
+    this.instance.option({
+        format: "#0",
+        value: 123
+    });
+
+    this.keyboard.caret(1).type(".");
+
+    assert.equal(this.input.val(), "123", "value is correct");
+    assert.equal(this.keyboard.caret().start, 1, "caret should not be moved");
 });
 
 QUnit.test("incomplete input should not be prevented when there are stubs and zeros after the caret", function(assert) {
@@ -529,6 +552,7 @@ QUnit.test("valueChanged event fires on value apply", function(assert) {
 
     assert.ok(valueChangedSpy.calledOnce, "valueChanged event called once");
 });
+
 
 QUnit.module("format: percent format", moduleConfig);
 
@@ -627,6 +651,13 @@ QUnit.test("removing non required char with negative value", function(assert) {
     assert.equal(this.input.val(), "-123", "value is correct");
 });
 
+QUnit.test("removing non required zero should be possible", function(assert) {
+    this.instance.option("format", "#.##");
+    this.keyboard.type("1.50").press("backspace");
+
+    assert.equal(this.input.val(), "1.5", "zero has been removed");
+});
+
 QUnit.test("removing with group separators using delete key", function(assert) {
     this.instance.option({
         format: "$ #,##0.## d",
@@ -676,11 +707,11 @@ QUnit.test("removing with group separators using backspace key", function(assert
     assert.equal(this.input.val(), "$ 2,390 d", "value is correct");
 });
 
-QUnit.test("removing required last char should not replace it to 0", function(assert) {
+QUnit.test("removing required last char should replace it to 0", function(assert) {
     this.instance.option("value", 1);
     this.keyboard.caret(1).press("backspace");
 
-    assert.equal(this.input.val(), "", "value is correct");
+    assert.equal(this.input.val(), "0", "value is correct");
 });
 
 QUnit.test("removing required last char should replace it to 0 if percent format", function(assert) {
@@ -714,7 +745,7 @@ QUnit.test("removing integer digit using backspace if group separator is hiding"
     assert.deepEqual(this.keyboard.caret(), { start: 2, end: 2 }, "caret position is correct");
 });
 
-QUnit.test("removing all characters should change value to null", function(assert) {
+QUnit.test("removing all characters should change value to 0", function(assert) {
     this.instance.option({
         format: "$#0",
         value: 1
@@ -722,8 +753,8 @@ QUnit.test("removing all characters should change value to null", function(asser
 
     this.keyboard.caret({ start: 0, end: 2 }).press("backspace").change();
 
-    assert.strictEqual(this.input.val(), "", "value is correct");
-    assert.strictEqual(this.instance.option("value"), null, "value is reseted");
+    assert.strictEqual(this.input.val(), "$0", "value is correct");
+    assert.strictEqual(this.instance.option("value"), 0, "value is reseted");
 });
 
 QUnit.test("removing all digits but not all characters should change value to 0", function(assert) {

@@ -181,6 +181,32 @@ module.exports = {
     },
     controllers: {
         data: modules.Controller.inherit({}).include(DataHelperMixin).inherit((function() {
+            var changePaging = function(that, optionName, value) {
+                var dataSource = that._dataSource;
+
+                if(dataSource) {
+                    if(value !== undefined) {
+                        if(dataSource[optionName]() !== value) {
+                            if(optionName === "pageSize") {
+                                dataSource.pageIndex(0);
+                            }
+                            dataSource[optionName](value);
+
+                            that._skipProcessingPagingChange = true;
+                            that.option("paging." + optionName, value);
+                            that._skipProcessingPagingChange = false;
+
+                            return dataSource[optionName === "pageIndex" ? "load" : "reload"]()
+                                .done(that.pageChanged.fire.bind(that.pageChanged));
+                        }
+                        return Deferred().resolve().promise();
+                    }
+                    return dataSource[optionName]();
+                }
+
+                return 0;
+            };
+
             var members = {
                 init: function() {
                     var that = this;
@@ -268,7 +294,9 @@ module.exports = {
                         case "scrolling":
                         case "paging":
                             handled();
-                            reload();
+                            if(!that.skipProcessingPagingChange(args.fullName)) {
+                                reload();
+                            }
                             break;
                         case "rtlEnabled":
                             reload();
@@ -896,6 +924,7 @@ module.exports = {
                                 isCustomLoading: true,
                                 storeLoadOptions: {},
                                 loadOptions: {
+                                    filter: that.getCombinedFilter(),
                                     group: dataSource.group(),
                                     sort: dataSource.sort()
                                 }
@@ -1014,24 +1043,7 @@ module.exports = {
                 * @return Promise<void>
                 */
                 pageIndex: function(value) {
-                    var that = this,
-                        pagingOptions = that.option("paging"),
-                        dataSource = that._dataSource;
-
-                    if(dataSource) {
-                        if(value !== undefined) {
-                            if(dataSource.pageIndex() !== value) {
-                                dataSource.pageIndex(value);
-                                if(pagingOptions) {
-                                    pagingOptions.pageIndex = value;
-                                }
-                                return dataSource.load().done(that.pageChanged.fire.bind(that.pageChanged));
-                            }
-                            return Deferred().resolve().promise();
-                        }
-                        return dataSource.pageIndex();
-                    }
-                    return 0;
+                    return changePaging(this, "pageIndex", value);
                 },
                 /**
                 * @name dxDataGridMethods_pageSize
@@ -1044,23 +1056,7 @@ module.exports = {
                 * @param1 value:numeric
                 */
                 pageSize: function(value) {
-                    var that = this,
-                        pagingOptions = that.option("paging"),
-                        dataSource = that._dataSource;
-
-                    if(value === undefined) {
-                        return dataSource ? dataSource.pageSize() : 0;
-                    }
-                    if(dataSource) {
-                        if(dataSource.pageSize() !== value) {
-                            dataSource.pageIndex(0);
-                            dataSource.pageSize(value);
-                            if(pagingOptions) {
-                                pagingOptions.pageSize = value;
-                            }
-                            return dataSource.reload().done(that.pageChanged.fire.bind(that.pageChanged));
-                        }
-                    }
+                    return changePaging(this, "pageSize", value);
                 },
                 /**
                  * @name GridBaseMethods_beginCustomLoading
@@ -1121,6 +1117,18 @@ module.exports = {
                     if(rowIndexes.length > 1 || typeUtils.isDefined(rowIndexes[0])) {
                         this.updateItems({ changeType: "update", rowIndices: rowIndexes });
                     }
+                },
+
+                skipProcessingPagingChange: function(fullName) {
+                    return this._skipProcessingPagingChange && (fullName === "paging.pageIndex" || fullName === "paging.pageSize");
+                },
+
+                getUserState: function() {
+                    return {
+                        searchText: this.option("searchPanel.text"),
+                        pageIndex: this.pageIndex(),
+                        pageSize: this.pageSize()
+                    };
                 }
             };
 

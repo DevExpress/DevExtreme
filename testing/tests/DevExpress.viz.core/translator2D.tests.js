@@ -812,14 +812,6 @@ QUnit.test("Translate. Scale breaks. Values inside the breaks and shouldn't be t
     assert.strictEqual(translator.translate(620), null);
 });
 
-QUnit.test("isValid. Scale breaks.Values inside of the breaks should be not valid", function(assert) {
-    var breaks = [{ from: 150, to: 200 }, { from: 350, to: 370 }, { from: 590, to: 650 }],
-        translator = this.createTranslator({ min: 100, max: 700, breaks: breaks }, null, { breaksSize: 20 });
-
-    assert.strictEqual(translator.isValid(150), false);
-    assert.strictEqual(translator.isValid(120), true);
-});
-
 QUnit.test("Translate. Scale breaks. Inverted axis", function(assert) {
     var translator = createTranslatorWithScaleBreaks.call(this, {
         invert: true
