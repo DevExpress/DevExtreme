@@ -319,6 +319,73 @@ var FilterBuilder = Widget.inherit({
             },
 
             /**
+             * @name dxFilterBuilderOptions_customOperations
+             * @publicName customOperations
+             * @type Array<dxFilterBuilderCustomOperations>
+             * @default []
+             */
+            customOperations: [],
+
+
+            /**
+            * @name dxFilterBuilderCustomOperations_key
+            * @publicName key
+            * @type string
+            * @default undefined
+            */
+
+            /**
+            * @name dxFilterBuilderCustomOperations_caption
+            * @publicName caption
+            * @type string
+            * @default undefined
+            */
+
+            /**
+            * @name dxFilterBuilderCustomOperations_icon
+            * @publicName icon
+            * @type string
+            * @default undefined
+            */
+
+            /**
+            * @name dxFilterBuilderCustomOperations_dataTypes
+            * @publicName dataTypes
+            * @type Array<string>
+            * @default undefined
+            */
+
+            /**
+            * @name dxFilterBuilderCustomOperations_calculateFilterExpression
+            * @publicName calculateFilterExpression
+            * @type function(filterValue)
+            * @type_function_param1 filterValue:any
+            * @type_function_return Filter expression
+            */
+
+            /**
+            * @name dxFilterBuilderCustomOperations_editorTemplate
+            * @publicName editorTemplate
+            * @type template|function
+            * @type_function_param1 conditionInfo:object
+            * @type_function_param1_field1 value:string|number|date
+            * @type_function_param1_field2 field:dxFilterBuilderField
+            * @type_function_param1_field3 setValue:function
+            * @type_function_param2 container:dxElement
+            * @type_function_return string|Node|jQuery
+            */
+
+            /**
+             * @name dxFilterBuilderCustomOperations_customizeText
+             * @publicName customizeText
+             * @type function(fieldInfo)
+             * @type_function_param1 fieldInfo:object
+             * @type_function_param1_field1 value:string|number|date
+             * @type_function_param1_field2 valueText:string
+             * @type_function_return string
+             */
+
+            /**
              * @name dxFilterBuilderOptions_filterOperationDescriptions
              * @publicName filterOperationDescriptions
              * @type object
@@ -440,9 +507,15 @@ var FilterBuilder = Widget.inherit({
         }
     },
 
+    /**
+    * @name dxFilterBuilderMethods_getFilterExpression
+    * @publicName getFilterExpression()
+    * @return Filter expression
+    */
     getFilterExpression: function() {
-        var fields = this._getNormalizedFields();
-        return utils.getFilterExpression(utils.getNormalizedFilter(this.option("value"), fields), fields);
+        var fields = this._getNormalizedFields(),
+            value = extend(true, [], this._model);
+        return utils.getFilterExpression(utils.getNormalizedFilter(value, fields), fields);
     },
 
     _getNormalizedFields: function() {
@@ -649,7 +722,7 @@ var FilterBuilder = Widget.inherit({
 
     _createOperationButtonWithMenu: function(condition, field) {
         var that = this,
-            availableOperations = utils.getAvailableOperations(field, this.option("filterOperationDescriptions")),
+            availableOperations = utils.getAvailableOperations(field, this.option("filterOperationDescriptions"), this.option("customOperations")),
             currentOperation = utils.getOperationFromAvailable(utils.getOperationValue(condition), availableOperations),
             $operationButton = this._createButtonWithMenu({
                 caption: currentOperation.text,
@@ -919,9 +992,12 @@ var FilterBuilder = Widget.inherit({
     },
 
     _createValueEditor: function($container, field, options) {
-        var $editor = $("<div>").attr("tabindex", 0).appendTo($container);
-        if(field.editorTemplate) {
-            var template = this._getTemplate(field.editorTemplate);
+        var $editor = $("<div>").attr("tabindex", 0).appendTo($container),
+            customOperation = utils.getCustomOperationByKey(this.option("customOperations"), options.filterOperation),
+            editorTemplate = customOperation && customOperation.editorTemplate ? customOperation.editorTemplate : field.editorTemplate;
+
+        if(editorTemplate) {
+            var template = this._getTemplate(editorTemplate);
 
             template.render({
                 model: extend({ field: field }, options),

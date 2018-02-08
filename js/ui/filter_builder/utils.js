@@ -163,15 +163,40 @@ function getOperationFromAvailable(operation, availableOperations) {
     throw new errors.Error("E1048", operation);
 }
 
-function getAvailableOperations(field, filterOperationDescriptions) {
+function getCustomOperationByKey(customOperations, key) {
+    var filteredOperations = customOperations.filter(function(item) {
+        return item.key === key;
+    });
+    return filteredOperations.length ? filteredOperations[0] : null;
+}
+
+function getAvailableOperations(field, filterOperationDescriptions, customOperations) {
     var filterOperations = getFilterOperations(field);
 
+    customOperations.forEach(function(customOperation) {
+        if(!field.filterOperations && filterOperations.indexOf(customOperation.key) === -1) {
+            var dataTypes = customOperation && customOperation.dataTypes;
+            if(!dataTypes || dataTypes.indexOf(field.dataType || DEFAULT_DATA_TYPE) >= 0) {
+                filterOperations.push(customOperation.key);
+            }
+        }
+    });
+
     return filterOperations.map(function(operation) {
-        return {
-            icon: filterOperationsDictionary.getIconByFilterOperation(operation),
-            text: getCaptionByOperation(operation, filterOperationDescriptions),
-            value: operation
-        };
+        var customOperation = getCustomOperationByKey(customOperations, operation);
+        if(customOperation) {
+            return {
+                icon: customOperation.icon,
+                text: customOperation.caption || inflector.captionize(customOperation.key),
+                value: customOperation.key
+            };
+        } else {
+            return {
+                icon: filterOperationsDictionary.getIconByFilterOperation(operation),
+                text: getCaptionByOperation(operation, filterOperationDescriptions),
+                value: operation
+            };
+        }
     });
 }
 
@@ -592,3 +617,4 @@ exports.getCaptionByOperation = getCaptionByOperation;
 exports.getOperationValue = getOperationValue;
 exports.setFocusToBody = setFocusToBody;
 exports.getFilterExpression = getFilterExpression;
+exports.getCustomOperationByKey = getCustomOperationByKey;

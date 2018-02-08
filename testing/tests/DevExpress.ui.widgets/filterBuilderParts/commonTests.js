@@ -648,8 +648,8 @@ QUnit.module("Rendering", function() {
     });
 });
 
-QUnit.module("Create editor by field dataType", function() {
-    QUnit.test("number", function(assert) {
+QUnit.module("Create editor", function() {
+    QUnit.test("dataType - number", function(assert) {
         var container = $("#container");
 
         container.dxFilterBuilder({
@@ -662,7 +662,7 @@ QUnit.module("Create editor by field dataType", function() {
         assert.ok(valueField.find(".dx-numberbox").dxNumberBox("instance"));
     });
 
-    QUnit.test("string", function(assert) {
+    QUnit.test("dataType - string", function(assert) {
         var container = $("#container");
 
         container.dxFilterBuilder({
@@ -676,7 +676,7 @@ QUnit.module("Create editor by field dataType", function() {
         assert.ok(valueField.find(".dx-textbox").dxTextBox("instance"));
     });
 
-    QUnit.test("date", function(assert) {
+    QUnit.test("dataType - date", function(assert) {
         var container = $("#container"),
             dateBoxInstance;
 
@@ -692,7 +692,7 @@ QUnit.module("Create editor by field dataType", function() {
         assert.strictEqual(dateBoxInstance.option("type"), "date");
     });
 
-    QUnit.test("datetime", function(assert) {
+    QUnit.test("dataType - datetime", function(assert) {
         var container = $("#container"),
             dateBoxInstance;
 
@@ -708,7 +708,7 @@ QUnit.module("Create editor by field dataType", function() {
         assert.strictEqual(dateBoxInstance.option("type"), "datetime");
     });
 
-    QUnit.test("boolean", function(assert) {
+    QUnit.test("dataType - boolean", function(assert) {
         var container = $("#container");
 
         container.dxFilterBuilder({
@@ -722,7 +722,7 @@ QUnit.module("Create editor by field dataType", function() {
         assert.ok(valueField.find(".dx-selectbox").dxSelectBox("instance"));
     });
 
-    QUnit.test("object", function(assert) {
+    QUnit.test("dataType - object", function(assert) {
         var container = $("#container");
 
         container.dxFilterBuilder({
@@ -749,7 +749,7 @@ QUnit.module("Create editor by field dataType", function() {
         assert.ok(valueField.find(".dx-selectbox").dxSelectBox("instance"));
     });
 
-    QUnit.test("editorTemplate", function(assert) {
+    QUnit.test("field.editorTemplate", function(assert) {
         var args,
             fields = [{
                 dataField: "Field",
@@ -773,6 +773,37 @@ QUnit.module("Create editor by field dataType", function() {
 
         assert.strictEqual(args.value, "value", "filter value");
         assert.strictEqual(args.filterOperation, "=", "filter operation");
+        assert.deepEqual(args.field, fields[0], "field");
+        assert.ok(args.setValue, "has setValue");
+    });
+
+    QUnit.test("customOperation.editorTemplate", function(assert) {
+        var args,
+            fields = [{
+                dataField: "Field"
+            }];
+
+        $("#container").dxFilterBuilder({
+            value: [
+                ["Field", "lastDays", 2]
+            ],
+            fields: fields,
+            customOperations: [{
+                key: "lastDays",
+                editorTemplate: function(options, $container) {
+                    args = options;
+
+                    return $("<input/>").addClass("my-editor");
+                }
+            }]
+        });
+
+        var valueField = $("." + FILTER_BUILDER_ITEM_VALUE_CLASS).eq(0);
+        valueField.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).trigger("dxclick");
+        assert.ok(valueField.find("input").hasClass("my-editor"));
+
+        assert.strictEqual(args.value, 2, "filter value");
+        assert.strictEqual(args.filterOperation, "lastDays", "filter operation");
         assert.deepEqual(args.field, fields[0], "field");
         assert.ok(args.setValue, "has setValue");
     });
