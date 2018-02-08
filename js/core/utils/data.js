@@ -191,9 +191,11 @@ var selectionFilterCreator = function(selectedItemKeys, isSelectAll) {
             return;
         }
 
-        var filterExpr = [];
+        var filterExpr;
 
         selectedItemKeys.forEach(function(key, index) {
+            filterExpr = filterExpr || [];
+
             var filterExprPart;
 
             if(index > 0) {
