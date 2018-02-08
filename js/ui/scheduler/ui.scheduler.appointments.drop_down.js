@@ -155,11 +155,9 @@ var dropDownAppointments = Class.inherit({
                     }
 
                     var $item = args.itemElement,
-                        itemData = args.itemData,
-                        settings = itemData.settings;
+                        itemData = args.itemData;
 
-
-                    eventsEngine.on($item, DRAG_START_EVENT_NAME, that._dragStartHandler.bind(that, $item, itemData, settings, $menu));
+                    eventsEngine.on($item, DRAG_START_EVENT_NAME, that._dragStartHandler.bind(that, $item, itemData, itemData.settings, $menu));
 
                     eventsEngine.on($item, DRAG_UPDATE_EVENT_NAME, (function(e) {
                         DropDownMenu.getInstance($menu).close();
@@ -197,7 +195,7 @@ var dropDownAppointments = Class.inherit({
             return;
         }
 
-        this._$draggedItem = $items.length > 1 ? this._getRecurrencePart($items, appointmentData.settings[0].startDate) : $items[0];
+        this._$draggedItem = $items.length > 1 ? this._getRecurrencePart($items, itemData.settings[0].startDate) : $items[0];
 
         var menuPosition = translator.locate($menu),
             itemPosition = translator.locate(this._$draggedItem);

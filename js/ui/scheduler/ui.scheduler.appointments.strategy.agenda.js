@@ -15,10 +15,6 @@ var AgendaRenderingStrategy = BaseAppointmentsStrategy.inherit({
 
     getDeltaTime: noop,
 
-    keepAppointmentSettings: function() {
-        return true;
-    },
-
     getAppointmentGeometry: function(geometry) {
         return geometry;
     },
