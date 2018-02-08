@@ -529,6 +529,7 @@ var TagBox = SelectBox.inherit({
     _toggleSubmitElement: function(enabled) {
         if(enabled) {
             this._renderSubmitElement();
+            this._setSubmitValue();
         } else {
             this._$submitElement && this._$submitElement.remove();
             delete this._$submitElement;
