@@ -803,17 +803,10 @@ var TagBox = SelectBox.inherit({
     },
 
     _getFilteredItems: function(values) {
-        var creator = new FilterCreator(
-            this.option("valueExpr"),
-            values,
-            false,
-            commonUtils.equalByValue.bind(this),
-            this._valueGetter,
-            false
-        );
+        var creator = new FilterCreator(values);
 
         var selectedItems = (this._list && this._list.option("selectedItems")) || this.option("selectedItems"),
-            clientFilterFunction = creator.getLocalFilter(),
+            clientFilterFunction = creator.getLocalFilter(this._valueGetter),
             filteredItems = selectedItems.filter(clientFilterFunction),
             selectedItemsAlreadyLoaded = filteredItems.length === values.length,
             d = new Deferred();
@@ -821,7 +814,8 @@ var TagBox = SelectBox.inherit({
         if(selectedItemsAlreadyLoaded) {
             return d.resolve(filteredItems).promise();
         } else {
-            var filterExpr = creator.getCombinedFilter(this._dataSource.filter()),
+            var dataSourceFilter = this._dataSource.filter(),
+                filterExpr = creator.getCombinedFilter(this.option("valueExpr"), dataSourceFilter),
                 filterLength = encodeURI(JSON.stringify(filterExpr)).length,
                 resultFilter = filterLength > MAX_FILTER_LENGTH ? undefined : filterExpr;
 

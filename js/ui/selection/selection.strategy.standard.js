@@ -94,8 +94,8 @@ module.exports = SelectionStrategy.inherit({
             return deferred;
         }
 
-        var selectionFilterCreator = new SelectionFilterCreator(key(), keys, isSelectAll, this.equalKeys.bind(this), this.options.keyOf, this.options.equalByReference),
-            combinedFilter = selectionFilterCreator.getCombinedFilter(filter);
+        var selectionFilterCreator = new SelectionFilterCreator(keys, isSelectAll),
+            combinedFilter = selectionFilterCreator.getCombinedFilter(key(), filter);
 
         var deselectedItems = [];
         if(isDeselect) {
@@ -104,7 +104,7 @@ module.exports = SelectionStrategy.inherit({
 
         var filteredItems = deselectedItems.length ? deselectedItems : this.options.plainItems().filter(this.options.isSelectableItem).map(this.options.getItemData);
 
-        var localFilter = selectionFilterCreator.getLocalFilter();
+        var localFilter = selectionFilterCreator.getLocalFilter(this.options.keyOf, this.equalKeys.bind(this), this.options.equalByReference);
 
         filteredItems = filteredItems.filter(localFilter);
 

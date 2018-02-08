@@ -4,6 +4,7 @@ var errors = require("../errors"),
     Class = require("../class"),
     objectUtils = require("./object"),
     getKeyHash = require("./common").getKeyHash,
+    equalByValue = require("./common").equalByValue,
     typeUtils = require("./type"),
     each = require("./iterator").each,
     variableWrapper = require("./variable_wrapper"),
@@ -178,46 +179,45 @@ var toComparable = function(value, caseSensitive) {
     return value;
 };
 
-var selectionFilterCreator = function(keyExpr, selectedItemKeys, isSelectAll, equalKeys, keyOf, equalByReference) {
+var selectionFilterCreator = function(selectedItemKeys, isSelectAll) {
 
-    this.getLocalFilter = function() {
-        return functionFilter;
+    this.getLocalFilter = function(keyGetter, keyComparator, equalByReference) {
+        keyComparator = keyComparator === undefined ? equalByValue : keyComparator;
+        return functionFilter.bind(this, keyComparator, keyGetter, equalByReference);
     };
 
-    this.getExpr = function() {
+    this.getExpr = function(keyExpr) {
         if(!keyExpr) {
             return;
         }
 
-        var filterExpr;
-        for(var i = 0, length = selectedItemKeys.length; i < length; i++) {
-            filterExpr = filterExpr || [];
+        var filterExpr = [];
 
-            var itemKeyValue = selectedItemKeys[i],
-                filterExprPart;
+        selectedItemKeys.forEach(function(key, index) {
+            var filterExprPart;
 
-            if(i > 0) {
+            if(index > 0) {
                 filterExpr.push(isSelectAll ? "and" : "or");
             }
 
             if(typeUtils.isString(keyExpr)) {
-                filterExprPart = getFilterForPlainKey(itemKeyValue);
+                filterExprPart = getFilterForPlainKey(keyExpr, key);
             } else {
-                filterExprPart = getFilterForCompositeKey(itemKeyValue);
+                filterExprPart = getFilterForCompositeKey(keyExpr, key);
             }
 
             filterExpr.push(filterExprPart);
-        }
+        });
+
         if(filterExpr && filterExpr.length === 1) {
             filterExpr = filterExpr[0];
         }
 
-        this._filter = filterExpr;
         return filterExpr;
     };
 
-    this.getCombinedFilter = function(dataSourceFilter) {
-        var filterExpr = this.getExpr(),
+    this.getCombinedFilter = function(keyExpr, dataSourceFilter) {
+        var filterExpr = this.getExpr(keyExpr),
             combinedFilter = filterExpr;
 
         if(isSelectAll && dataSourceFilter) {
@@ -245,7 +245,7 @@ var selectionFilterCreator = function(keyExpr, selectedItemKeys, isSelectAll, eq
         return selectedItemKeyHashesMap;
     };
 
-    var functionFilter = function(item) {
+    var functionFilter = function(equalKeys, keyOf, equalByReference, item) {
         var key = keyOf(item),
             keyHash,
             i;
@@ -269,11 +269,11 @@ var selectionFilterCreator = function(keyExpr, selectedItemKeys, isSelectAll, eq
         return !!isSelectAll;
     };
 
-    var getFilterForPlainKey = function(keyValue, key) {
-        return [key || keyExpr, isSelectAll ? "<>" : "=", keyValue];
+    var getFilterForPlainKey = function(keyExpr, keyValue) {
+        return [keyExpr, isSelectAll ? "<>" : "=", keyValue];
     };
 
-    var getFilterForCompositeKey = function(itemKeyValue) {
+    var getFilterForCompositeKey = function(keyExpr, itemKeyValue) {
         var filterExpr = [];
 
         for(var i = 0, length = keyExpr.length; i < length; i++) {
