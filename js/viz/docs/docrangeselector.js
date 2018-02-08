@@ -154,56 +154,56 @@ var dxRangeSelector = {
         * @publicName majorTickInterval
         * @type number|object|Enums.VizTimeInterval
         * @default undefined
-        * @deprecated dxrangeselectoroptions_scale_tickInterval
+        * @deprecated dxrangeselectoroptions_scale_tickinterval
         */
         majorTickInterval: {
             /**
             * @name dxrangeselectoroptions_scale_majortickinterval_years
             * @publicName years
             * @type number
-            * @deprecated dxrangeselectoroptions_scale_tickInterval_years
+            * @deprecated dxrangeselectoroptions_scale_tickinterval
             */
             years: undefined,
             /**
             * @name dxrangeselectoroptions_scale_majortickinterval_months
             * @publicName months
             * @type number
-            * @deprecated dxrangeselectoroptions_scale_tickInterval_months
+            * @deprecated dxrangeselectoroptions_scale_tickinterval
             */
             months: undefined,
             /**
             * @name dxrangeselectoroptions_scale_majortickinterval_days
             * @publicName days
             * @type number
-            * @deprecated dxrangeselectoroptions_scale_tickInterval_days
+            * @deprecated dxrangeselectoroptions_scale_tickinterval
             */
             days: undefined,
             /**
             * @name dxrangeselectoroptions_scale_majortickinterval_hours
             * @publicName hours
             * @type number
-            * @deprecated dxrangeselectoroptions_scale_tickInterval_hours
+            * @deprecated dxrangeselectoroptions_scale_tickinterval
             */
             hours: undefined,
             /**
             * @name dxrangeselectoroptions_scale_majortickinterval_minutes
             * @publicName minutes
             * @type number
-            * @deprecated dxrangeselectoroptions_scale_tickInterval_minutes
+            * @deprecated dxrangeselectoroptions_scale_tickinterval
             */
             minutes: undefined,
             /**
             * @name dxrangeselectoroptions_scale_majortickinterval_seconds
             * @publicName seconds
             * @type number
-            * @deprecated dxrangeselectoroptions_scale_tickInterval_seconds
+            * @deprecated dxrangeselectoroptions_scale_tickinterval
             */
             seconds: undefined,
             /**
             * @name dxrangeselectoroptions_scale_majortickinterval_milliseconds
             * @publicName milliseconds
             * @type number
-            * @deprecated dxrangeselectoroptions_scale_tickInterval_milliseconds
+            * @deprecated dxrangeselectoroptions_scale_tickinterval
             */
             milliseconds: undefined
         },
