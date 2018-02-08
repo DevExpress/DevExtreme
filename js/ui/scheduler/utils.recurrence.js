@@ -705,7 +705,7 @@ var getDatesByCount = function(dateRules, startDate, recurrenceStartDate, rule) 
     var result = [],
         count = rule.count,
         counter = 0,
-        date = new Date(startDate);
+        date = new Date(startDate.setDate(1));
 
     while(counter < count) {
         var dates = getDatesByRules(dateRules, date, rule);
