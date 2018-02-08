@@ -3,7 +3,6 @@
 var $ = require("jquery");
 
 require("common.css!");
-require("generic_light.css!");
 require("ui/switch");
 
 QUnit.testStart(function() {
@@ -59,18 +58,18 @@ QUnit.test("markup", function(assert) {
     assert.ok(labelOffEl.hasClass(LABEL_OFF_CLASS));
 });
 
+QUnit.test("switch should have correct width by default", function(assert) {
+    var $element = $("#switch").dxSwitch();
+
+    assert.ok($element.outerWidth() > 0, "outer width of the element must be more than zero");
+});
+
 QUnit.test("a hidden input should be rendered", function(assert) {
     var $element = $("#switch").dxSwitch(),
         $input = $element.find("input");
 
     assert.equal($input.length, 1, "input is rendered");
     assert.equal($input.attr("type"), "hidden", "input type is 'hidden'");
-});
-
-QUnit.test("default", function(assert) {
-    var $element = $("#switch").dxSwitch();
-
-    assert.ok($element.outerWidth() > 0, "outer width of the element must be more than zero");
 });
 
 QUnit.test("root with custom width", function(assert) {

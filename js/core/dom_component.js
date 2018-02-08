@@ -146,10 +146,10 @@ var DOMComponent = Component.inherit({
 
     _initMarkup: function() {
         this._renderElementAttributes();
+        this._toggleRTLDirection(this.option("rtlEnabled"));
     },
 
     _render: function() {
-        this._toggleRTLDirection(this.option("rtlEnabled"));
         this._renderVisibilityChange();
         this._renderDimensions();
     },
