@@ -19,7 +19,7 @@ var $ = require("../core/renderer"),
     clickEvent = require("../events/click"),
     caret = require("./text_box/utils.caret"),
     browser = require("../core/utils/browser"),
-    SelectionFilterCreator = require("../core/utils/data").selectionFilterCreator,
+    FilterCreator = require("../core/utils/data").selectionFilterCreator,
     deferredUtils = require("../core/utils/deferred"),
     when = deferredUtils.when,
     Deferred = deferredUtils.Deferred,
@@ -46,7 +46,8 @@ var TAGBOX_CLASS = "dx-tagbox",
 
     TEXTEDITOR_CONTAINER_CLASS = "dx-texteditor-container";
 
-var TAGBOX_MOUSE_WHEEL_DELTA_MULTIPLIER = -0.3;
+var TAGBOX_MOUSE_WHEEL_DELTA_MULTIPLIER = -0.3,
+    MAX_FILTER_LENGTH = 1500;
 
 /**
 * @name dxTagBox
@@ -802,29 +803,30 @@ var TagBox = SelectBox.inherit({
     },
 
     _getFilteredItems: function(values) {
-        var selectionFilterCreator = new SelectionFilterCreator(
+        var creator = new FilterCreator(
             this.option("valueExpr"),
             values,
             false,
             commonUtils.equalByValue.bind(this),
             this._valueGetter,
             false
-            ),
-            filter = selectionFilterCreator.getCombinedFilter(this._dataSource.filter()),
-            filterLength = encodeURI(JSON.stringify(filter)).length;
+        );
 
-        var selectedItems = (this._list && this._list.option("selectedItems")) || this.option("selectedItems");
+        var selectedItems = (this._list && this._list.option("selectedItems")) || this.option("selectedItems"),
+            clientFilterFunction = creator.getLocalFilter(),
+            filteredItems = selectedItems.filter(clientFilterFunction),
+            selectedItemsAlreadyLoaded = filteredItems.length === values.length,
+            d = new Deferred();
 
-        var localFilter = selectionFilterCreator.getLocalFilter(),
-            filteredItems = selectedItems.filter(localFilter);
-
-        var d = new Deferred();
-
-        if(filteredItems.length === values.length) {
+        if(selectedItemsAlreadyLoaded) {
             return d.resolve(filteredItems).promise();
         } else {
-            this._dataSource.store().load({ filter: filterLength > 1500 ? undefined : filter }).done(function(items) {
-                d.resolve(items.filter(localFilter));
+            var filterExpr = creator.getCombinedFilter(this._dataSource.filter()),
+                filterLength = encodeURI(JSON.stringify(filterExpr)).length,
+                resultFilter = filterLength > MAX_FILTER_LENGTH ? undefined : filterExpr;
+
+            this._dataSource.store().load({ filter: resultFilter }).done(function(items) {
+                d.resolve(items.filter(clientFilterFunction));
             });
 
             return d.promise();
