@@ -11,7 +11,7 @@ var eventsEngine = require("./events/core/events_engine");
 * @name eventsHandler
 * @publicName handler(event, extraParameters)
 * @type function
-* @param1 element:dxElement
+* @param1 element:Node
 * @param2 extraParameters:object
 * @return boolean
 * @hidden
@@ -21,7 +21,7 @@ var eventsEngine = require("./events/core/events_engine");
 * @name eventsMethods_on
 * @publicName on(element, eventName, selector, data, handler)
 * @namespace DevExpress.events
-* @param1 element:dxElement
+* @param1 element:Node|Array<Node>
 * @param2 eventName:string
 * @param3 selector:string
 * @param4 data:object
@@ -36,7 +36,7 @@ exports.on = eventsEngine.on;
 * @name eventsMethods_one
 * @publicName one(element, eventName, selector, data, handler)
 * @namespace DevExpress.events
-* @param1 element:dxElement
+* @param1 element:Node|Array<Node>
 * @param2 eventName:string
 * @param3 selector:string
 * @param4 data:object
@@ -51,7 +51,7 @@ exports.one = eventsEngine.one;
 * @name eventsMethods_off
 * @publicName off(element, eventName, selector, handler)
 * @namespace DevExpress.events
-* @param1 element:dxElement
+* @param1 element:Node|Array<Node>
 * @param2 eventName:string
 * @param3 selector:string
 * @param4 handler:function
@@ -65,7 +65,7 @@ exports.off = eventsEngine.off;
 * @name eventsMethods_trigger
 * @publicName trigger(element, event, extraParameters)
 * @namespace DevExpress.events
-* @param1 element:dxElement
+* @param1 element:Node|Array<Node>
 * @param2 event:string|event
 * @param3 extraParameters:object
 * @module events
@@ -78,7 +78,7 @@ exports.trigger = eventsEngine.trigger;
 * @name eventsMethods_triggerHandler
 * @publicName triggerHandler(element, event, extraParameters)
 * @namespace DevExpress.events
-* @param1 element:dxElement
+* @param1 element:Node|Array<Node>
 * @param2 event:string|event
 * @param3 extraParameters:object
 * @module events
