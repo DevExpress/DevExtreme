@@ -105,13 +105,13 @@ var Switch = Editor.inherit({
 
             useOldRendering: false
 
-                /**
-                * @name dxSwitchOptions_name
-                * @publicName name
-                * @type string
-                * @hidden false
-                * @inheritdoc
-                */
+            /**
+            * @name dxSwitchOptions_name
+            * @publicName name
+            * @type string
+            * @hidden false
+            * @inheritdoc
+            */
         });
     },
 
@@ -155,25 +155,31 @@ var Switch = Editor.inherit({
     _feedbackHideTimeout: 0,
     _animating: false,
 
-    _render: function() {
+    _initMarkup: function() {
         this._renderSwitchInner();
         this._renderLabels();
         this._renderContainers();
-        this.option("useInkRipple") && this._renderInkRipple();
 
         this.$element()
             .addClass(SWITCH_CLASS)
             .append(this._$switchWrapper);
 
+        this._renderSubmitElement();
+
+        this.option("useInkRipple") && this._renderInkRipple();
+        this._renderClick();
+
         this.setAria("role", "button");
 
-        this._renderSubmitElement();
         this._renderSwipeable();
 
+        this.callBase();
+    },
+
+    _render: function() {
         this._renderHandleWidth();
         this._getHandleOffset = this.option("useOldRendering") ? this._getPixelOffset : this._getCalcOffset;
         this._renderValue();
-        this._renderClick();
 
         this.callBase();
     },

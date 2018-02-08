@@ -24,18 +24,12 @@ QUnit.testStart(function() {
 
 var SWITCH_CLASS = "dx-switch",
     SWITCH_ON_VALUE_CLASS = SWITCH_CLASS + "-on-value",
-    WRAPPER_CLASS = "dx-switch-wrapper",
-    CONTAINER_CLASS = "dx-switch-container",
     INNER_CLASS = "dx-switch-inner",
-    LABEL_ON_CLASS = "dx-switch-on",
-    LABEL_OFF_CLASS = "dx-switch-off",
     HANDLE_CLASS = "dx-switch-handle",
 
     DISABLED_CLASS = "dx-state-disabled",
 
     INNER_SELECTOR = "." + INNER_CLASS,
-    LABEL_ON_SELECTOR = "." + LABEL_ON_CLASS,
-    LABEL_OFF_SELECTOR = "." + LABEL_OFF_CLASS,
 
     MARGIN_RANGE = {
         left: "-24px",
@@ -81,35 +75,6 @@ QUnit.module("widget init", {
     }
 });
 
-QUnit.test("markup", function(assert) {
-    var element = $("#switch").dxSwitch();
-
-    assert.ok(element.hasClass(SWITCH_CLASS));
-
-    var wrapper = element.find("." + WRAPPER_CLASS);
-    assert.equal(wrapper.length, 1);
-
-    var container = wrapper.children();
-    assert.equal(container.length, 1);
-    assert.ok(container.hasClass(CONTAINER_CLASS));
-
-    var inner = container.children();
-    assert.equal(inner.length, 1);
-    assert.ok(inner.hasClass(INNER_CLASS));
-
-    var innerElems = inner.children();
-    assert.equal(innerElems.length, 3);
-
-    var labelOnEl = innerElems.eq(0);
-    assert.ok(labelOnEl.hasClass(LABEL_ON_CLASS));
-
-    var handleEl = innerElems.eq(1);
-    assert.ok(handleEl.hasClass(HANDLE_CLASS));
-
-    var labelOffEl = innerElems.eq(2);
-    assert.ok(labelOffEl.hasClass(LABEL_OFF_CLASS));
-});
-
 QUnit.test("onContentReady fired after the widget is fully ready", function(assert) {
     assert.expect(2);
 
@@ -122,20 +87,14 @@ QUnit.test("onContentReady fired after the widget is fully ready", function(asse
     });
 });
 
-QUnit.test("default options", function(assert) {
+QUnit.test("default ui state", function(assert) {
     var element = $("#switch").dxSwitch();
 
     var inner = element.find(INNER_SELECTOR);
     assert.ok(!UIState(inner));
-
-    var labelOnEl = inner.find(LABEL_ON_SELECTOR);
-    assert.equal($.trim(labelOnEl.text()), "ON");
-
-    var labelOffEl = inner.find(LABEL_OFF_SELECTOR);
-    assert.equal($.trim(labelOffEl.text()), "OFF");
 });
 
-QUnit.test("with options", function(assert) {
+QUnit.test("ui state with options", function(assert) {
     var element = $("#switch").dxSwitch({
         onText: "customOn",
         offText: "customOff",
@@ -144,15 +103,9 @@ QUnit.test("with options", function(assert) {
 
     var inner = element.find(INNER_SELECTOR);
     assert.equal(UIState(inner), true);
-
-    var textOnEl = inner.find(LABEL_ON_SELECTOR);
-    assert.equal($.trim(textOnEl.text()), "customOn");
-
-    var textOffEl = inner.find(LABEL_OFF_SELECTOR);
-    assert.equal($.trim(textOffEl.text()), "customOff");
 });
 
-QUnit.test("option 'onValueChanged'", function(assert) {
+QUnit.test("onValueChanged option", function(assert) {
     var count = 0;
 
     var $element = $("#switch").dxSwitch({
@@ -175,7 +128,7 @@ QUnit.test("option 'onValueChanged'", function(assert) {
     assert.equal(count, 3);
 });
 
-QUnit.test("regression test. Change value used option", function(assert) {
+QUnit.test("value option changing", function(assert) {
     var element = $("#switch").dxSwitch({
         onText: "customOn",
         offText: "customOff",
@@ -187,7 +140,7 @@ QUnit.test("regression test. Change value used option", function(assert) {
     assert.ok(element.hasClass("dx-switch-on-value"));
 });
 
-QUnit.test("regression test. Used non bool value", function(assert) {
+QUnit.test("value option changing - using non bool value", function(assert) {
     var element = $("#switch").dxSwitch();
 
     var instance = element.dxSwitch("instance");
@@ -199,9 +152,23 @@ QUnit.test("regression test. Used non bool value", function(assert) {
     assert.equal(element.dxSwitch("option", "value"), true);
 });
 
-QUnit.test("Changing the 'value' option must invoke the 'onValueChanged' action", function(assert) {
+QUnit.test("value option changing must invoke the 'onValueChanged' action", function(assert) {
     var switcher = $("#switch").dxSwitch({ onValueChanged: function() { assert.ok(true); } }).dxSwitch("instance");
     switcher.option("value", true);
+});
+
+QUnit.test("disabled option", function(assert) {
+    this.instance.option("disabled", true);
+    this.instance.option("value", true);
+
+    this.element.trigger("dxclick");
+    assert.equal(this.instance.option("value"), true, "value is not changed");
+});
+
+QUnit.test("disabled switch should have special class", function(assert) {
+    var element = $("#switch2").dxSwitch({ disabled: true });
+
+    assert.ok(element.hasClass(DISABLED_CLASS));
 });
 
 QUnit.module("invisible container", {
@@ -227,14 +194,6 @@ QUnit.test("the position of handle for invisible and visible switch should be eq
 });
 
 QUnit.module("hidden input");
-
-QUnit.test("a hidden input should be rendered", function(assert) {
-    var $element = $("#switch").dxSwitch(),
-        $input = $element.find("input");
-
-    assert.equal($input.length, 1, "input is rendered");
-    assert.equal($input.attr("type"), "hidden", "input type is 'hidden'");
-});
 
 QUnit.test("input should be able to get the 'true' value", function(assert) {
     var $element = $("#switch").dxSwitch({
@@ -268,7 +227,6 @@ QUnit.test("the hidden input should change its value on widget value change", fu
     assert.equal($input.val(), "true", "input value has been changed second time");
 });
 
-
 QUnit.module("the 'name' option");
 
 QUnit.test("widget input should get the 'name' attribute with a correct value", function(assert) {
@@ -280,7 +238,6 @@ QUnit.test("widget input should get the 'name' attribute with a correct value", 
 
     assert.equal($input.attr("name"), expectedName, "the input 'name' attribute has correct value");
 });
-
 
 QUnit.module("interaction", {
     beforeEach: function() {
@@ -429,7 +386,6 @@ QUnit.test("handle follow of mouse during swipe", function(assert) {
     assert.roughEqual(parseInt($innerWrapper.css("marginLeft")), -halfMargin, 1.01, "switch was swipe on half width");
 });
 
-
 QUnit.module("options changed callbacks", {
     beforeEach: function() {
         this.element = $("#switch").dxSwitch();
@@ -437,35 +393,7 @@ QUnit.module("options changed callbacks", {
     }
 });
 
-QUnit.test("disabled", function(assert) {
-    this.instance.option("disabled", true);
-    this.instance.option("value", true);
-
-    this.element.trigger("dxclick");
-    assert.equal(this.instance.option("value"), true, "value is not changed");
-});
-
-QUnit.test("onText/offText", function(assert) {
-    this.instance.option("onText", "1");
-    assert.equal(this.element.find("." + LABEL_ON_CLASS).text(), "1");
-    this.instance.option("onText", "11");
-    assert.equal(this.element.find("." + LABEL_ON_CLASS).text(), "11");
-
-    this.instance.option("offText", "0");
-    assert.equal(this.element.find("." + LABEL_OFF_CLASS).text(), "0");
-    this.instance.option("offText", "00");
-    assert.equal(this.element.find("." + LABEL_OFF_CLASS).text(), "00");
-});
-
-QUnit.module("regressions", {
-    beforeEach: function() {
-        this.element = $("#switch").dxSwitch();
-        this.instance = this.element.dxSwitch("instance");
-        this.mouse = pointerMock(this.element);
-    }
-});
-
-QUnit.test("B230372", function(assert) {
+QUnit.test("click on disaled switch has no effect", function(assert) {
     this.instance.option("disabled", true);
 
     this.element.trigger("dxclick");
@@ -473,12 +401,6 @@ QUnit.test("B230372", function(assert) {
 
     this.mouse.start().swipeStart().swipeEnd(-1);
     assert.ok(!UIState(this.element));
-});
-
-QUnit.test("B233565", function(assert) {
-    var element = $("#switch2").dxSwitch({ disabled: true });
-
-    assert.ok(element.hasClass(DISABLED_CLASS));
 });
 
 QUnit.module("RTL", {
@@ -519,26 +441,12 @@ QUnit.test("swipe switches state", function(assert) {
 
 QUnit.module("widget sizing render");
 
-QUnit.test("default", function(assert) {
-    var $element = $("#widget").dxSwitch();
-
-    assert.ok($element.outerWidth() > 0, "outer width of the element must be more than zero");
-});
-
 QUnit.test("constructor", function(assert) {
     var $element = $("#widget").dxSwitch({ width: 400 }),
         instance = $element.dxSwitch("instance");
 
     assert.strictEqual(instance.option("width"), 400);
     assert.strictEqual($element.outerWidth(), 400, "outer width of the element must be equal to custom width");
-});
-
-QUnit.test("root with custom width", function(assert) {
-    var $element = $("#widthRootStyle").dxSwitch(),
-        instance = $element.dxSwitch("instance");
-
-    assert.strictEqual(instance.option("width"), undefined);
-    assert.strictEqual($element.outerWidth(), 300, "outer width of the element must be equal to custom width");
 });
 
 QUnit.test("change width", function(assert) {
@@ -608,14 +516,7 @@ QUnit.test("state changes on right and left key press correctly in rtl mode", fu
     assert.equal(instance.option("value"), false, "value has been change");
 });
 
-
 QUnit.module("aria accessibility");
-
-QUnit.test("aria role", function(assert) {
-    var $element = $("#switch").dxSwitch({});
-
-    assert.equal($element.attr("role"), "button", "aria role is correct");
-});
 
 QUnit.test("aria properties", function(assert) {
     var $element = $("#switch").dxSwitch({
