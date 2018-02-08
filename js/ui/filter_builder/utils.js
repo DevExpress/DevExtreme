@@ -304,15 +304,18 @@ function convertToInnerStructure(value) {
 }
 
 function getNormalizedFields(fields) {
-    return fields.map(function(field) {
-        var normalizedField = {};
-        for(var key in field) {
-            if(field[key] && AVAILABLE_FIELD_PROPERTIES.indexOf(key) > -1) {
-                normalizedField[key] = field[key];
+    return fields.reduce(function(result, field) {
+        if(typeof field.dataField !== "undefined") {
+            var normalizedField = {};
+            for(var key in field) {
+                if(field[key] && AVAILABLE_FIELD_PROPERTIES.indexOf(key) > -1) {
+                    normalizedField[key] = field[key];
+                }
             }
+            result.push(normalizedField);
         }
-        return normalizedField;
-    });
+        return result;
+    }, []);
 }
 
 function getNormalizedFilter(group, fields) {
