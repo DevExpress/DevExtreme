@@ -142,6 +142,15 @@ var FilterBuilder = Widget.inherit({
             */
 
             /**
+             * @name dxFilterBuilderField_calculateFilterExpression
+             * @publicName calculateFilterExpression
+             * @type function(filterValue)
+             * @type_function_param1 filterValue:any
+             * @type_function_param2 selectedFilterOperation:string
+             * @type_function_return Filter expression
+             */
+
+            /**
             * @name dxFilterBuilderField_dataField
             * @publicName dataField
             * @type string
@@ -360,6 +369,7 @@ var FilterBuilder = Widget.inherit({
              * @publicName calculateFilterExpression
              * @type function(filterValue)
              * @type_function_param1 filterValue:any
+             * @type_function_param2 field:dxFilterBuilderField
              * @type_function_return Filter expression
              */
 
@@ -388,6 +398,7 @@ var FilterBuilder = Widget.inherit({
              * @type_function_param1 fieldInfo:object
              * @type_function_param1_field1 value:string|number|date
              * @type_function_param1_field2 valueText:string
+             * @type_function_param1_field3 field:dxFilterBuilderField
              * @type_function_return string
              */
 
