@@ -11,7 +11,7 @@ var eventsEngine = require("./events/core/events_engine");
 * @name eventsHandler
 * @publicName handler(event, extraParameters)
 * @type function
-* @param1 element:Node
+* @param1 event:dxEvent
 * @param2 extraParameters:object
 * @return boolean
 * @hidden
