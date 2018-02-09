@@ -181,8 +181,8 @@ QUnit.test('Custom palette by name', function(assert) {
         indicatingSet: ['d1', 'd2']
     });
 
-    this.checkPalette(assert, new this.Palette('Custom Palette', { extensionMode: "repeat" }), ['c1', 'c2', 'c3'], 'simpleSet');
-    this.checkPalette(assert, new this.Palette('Custom Palette', { type: 'indicatingSet', extensionMode: "repeat" }), ['d1', 'd2'], 'indicatingSet');
+    this.checkPalette(assert, new this.Palette('Custom Palette', { extensionMode: "alternate" }), ['c1', 'c2', 'c3'], 'simpleSet');
+    this.checkPalette(assert, new this.Palette('Custom Palette', { type: 'indicatingSet', extensionMode: "alternate" }), ['d1', 'd2'], 'indicatingSet');
 });
 
 QUnit.test('Custom palette by unknown name', function(assert) {
@@ -191,16 +191,16 @@ QUnit.test('Custom palette by unknown name', function(assert) {
         indicatingSet: ['d1', 'd2']
     });
 
-    this.checkPalette(assert, new this.Palette('Custom Palette 2', { extensionMode: "repeat" }), this.palettes['default'].simpleSet, 'simpleSet');
+    this.checkPalette(assert, new this.Palette('Custom Palette 2', { extensionMode: "alternate" }), this.palettes['default'].simpleSet, 'simpleSet');
 });
 
 QUnit.test('Custom palette by array', function(assert) {
-    this.checkPalette(assert, new this.Palette(['a1', 'a2', 'a3'], { extensionMode: "repeat" }), ['a1', 'a2', 'a3']);
+    this.checkPalette(assert, new this.Palette(['a1', 'a2', 'a3'], { extensionMode: "alternate" }), ['a1', 'a2', 'a3']);
 });
 
 QUnit.test('Lightening palette', function(assert) {
     //act
-    var palette = new this.Palette(['green', 'red'], { useHighlight: true, extensionMode: "repeat" });
+    var palette = new this.Palette(['green', 'red'], { useHighlight: true, extensionMode: "alternate" });
 
     //assert
     assert.strictEqual(palette.getNextColor(), 'green');
@@ -211,7 +211,7 @@ QUnit.test('Lightening palette', function(assert) {
 
 QUnit.test('Darkening palette after lightening', function(assert) {
     //act
-    var palette = new this.Palette(['green', 'red'], { useHighlight: true, extensionMode: "repeat" });
+    var palette = new this.Palette(['green', 'red'], { useHighlight: true, extensionMode: "alternate" });
 
     //assert
     assert.strictEqual(palette.getNextColor(), 'green');
@@ -308,7 +308,7 @@ QUnit.test('Blend with passing count. Keep last color in the end', function(asse
 
 QUnit.test('Lightening palette when color is too light', function(assert) {
     //act
-    var palette = new this.Palette(['white'], { useHighlight: true, extensionMode: "repeat" });
+    var palette = new this.Palette(['white'], { useHighlight: true, extensionMode: "alternate" });
 
     //assert
     assert.strictEqual(palette.getNextColor(), 'white');
@@ -317,7 +317,7 @@ QUnit.test('Lightening palette when color is too light', function(assert) {
 
 QUnit.test('Darken palette when color is too dark', function(assert) {
     //act
-    var palette = new this.Palette(['black'], { useHighlight: true, extensionMode: "repeat" });
+    var palette = new this.Palette(['black'], { useHighlight: true, extensionMode: "alternate" });
 
     //assert
     assert.strictEqual(palette.getNextColor(), 'black');
@@ -328,7 +328,7 @@ QUnit.test('Darken palette when color is too dark', function(assert) {
 
 QUnit.test('Reset palette', function(assert) {
     //arrange
-    var palette = new this.Palette(['green', 'red'], { useHighlight: true, extensionMode: "repeat" });
+    var palette = new this.Palette(['green', 'red'], { useHighlight: true, extensionMode: "alternate" });
     palette.getNextColor();
     palette.getNextColor();
     palette.getNextColor();
@@ -563,7 +563,7 @@ QUnit.test('Create palette with current case', function(assert) {
 
     this.currentPalette('Current Palette');
 
-    var p = new this.Palette(undefined, { extensionMode: "repeat" });
+    var p = new this.Palette(undefined, { extensionMode: "alternate" });
 
     assert.strictEqual(p.getNextColor(), 'c1');
 

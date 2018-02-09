@@ -790,7 +790,7 @@ QUnit.test("paletteExtensionMode option changed", function(assert) {
 
     //Act
     chart.option({
-        paletteExtensionMode: "repeat"
+        paletteExtensionMode: "alternate"
     });
     //assert
     assert.ok(chart._themeManager.updatePalette.calledOnce, "palette");
