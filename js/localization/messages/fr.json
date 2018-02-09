@@ -233,7 +233,7 @@
         "dxColorView-ariaHex": "Code couleur",
 
         "vizExport-printingButtonText": "Imprimer",
-        "vizExport-titleMenuText": "Exporterg/Imprimer",
+        "vizExport-titleMenuText": "Exporter/Imprimer",
         "vizExport-exportButtonText": "{0} fichier"
     }
 }
