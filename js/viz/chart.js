@@ -594,11 +594,12 @@ var dxChart = AdvancedChart.inherit({
 
     _seriesPopulatedHandlerCore: function() {
         var that = this,
-            animationOptions = that._getAnimationOptions();
+            animationMaxPointSupported = that._getAnimationOptions().maxPointCountSupported,
+            animationEnabled = that._renderer.animationEnabled();
 
         this.callBase();
         this.series.forEach(function(s) {
-            s.prepareToDrawing(s.getPoints().length <= animationOptions.maxPointCountSupported && that._renderer.animationEnabled());
+            s.prepareToDrawing(s.getPoints().length <= animationMaxPointSupported && animationEnabled);
         });
     },
 
