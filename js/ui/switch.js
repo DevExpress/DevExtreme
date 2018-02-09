@@ -156,8 +156,6 @@ var Switch = Editor.inherit({
     _animating: false,
 
     _initMarkup: function() {
-        this._renderSwitchInner();
-        this._renderLabels();
         this._renderContainers();
 
         this.$element()
@@ -177,6 +175,9 @@ var Switch = Editor.inherit({
     },
 
     _render: function() {
+        this._renderSwitchInner();
+        this._renderLabels();
+
         this._renderHandleWidth();
         this._getHandleOffset = this.option("useOldRendering") ? this._getPixelOffset : this._getCalcOffset;
         this._renderValue();
@@ -203,7 +204,10 @@ var Switch = Editor.inherit({
     },
 
     _renderSwitchInner: function() {
-        this._$switchInner = $("<div>").addClass(SWITCH_INNER_CLASS);
+        this._$switchInner = $("<div>")
+            .addClass(SWITCH_INNER_CLASS)
+            .appendTo(this._$switchContainer);
+
         this._$handle = $("<div>")
             .addClass(SWITCH_HANDLE_CLASS)
             .appendTo(this._$switchInner);
@@ -223,8 +227,7 @@ var Switch = Editor.inherit({
 
     _renderContainers: function() {
         this._$switchContainer = $("<div>")
-            .addClass(SWITCH_CONTAINER_CLASS)
-            .append(this._$switchInner);
+            .addClass(SWITCH_CONTAINER_CLASS);
 
         this._$switchWrapper = $("<div>")
             .addClass(SWITCH_WRAPPER_CLASS)
