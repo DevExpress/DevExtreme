@@ -272,6 +272,9 @@ var selectionFilterCreator = function(selectedItemKeys, isSelectAll) {
     };
 
     var getFilterForPlainKey = function(keyExpr, keyValue) {
+        if(keyValue === undefined) {
+            return;
+        }
         return [keyExpr, isSelectAll ? "<>" : "=", keyValue];
     };
 
@@ -279,12 +282,17 @@ var selectionFilterCreator = function(selectedItemKeys, isSelectAll) {
         var filterExpr = [];
 
         for(var i = 0, length = keyExpr.length; i < length; i++) {
+            var currentKeyExpr = keyExpr[i],
+                currentKeyValue = itemKeyValue && itemKeyValue[currentKeyExpr],
+                filterExprPart = getFilterForPlainKey(currentKeyExpr, currentKeyValue);
+
+            if(!filterExprPart) {
+                break;
+            }
+
             if(i > 0) {
                 filterExpr.push(isSelectAll ? "or" : "and");
             }
-            var currentKeyExpr = keyExpr[i],
-                currentKeyValue = itemKeyValue && itemKeyValue[currentKeyExpr],
-                filterExprPart = getFilterForPlainKey(currentKeyValue, currentKeyExpr);
 
             filterExpr.push(filterExprPart);
         }
