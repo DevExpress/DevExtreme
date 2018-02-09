@@ -5,7 +5,7 @@
 * @type text
 * @group base.typography
 */
-@base-font-family: 'Roboto', sans-serif;
+@base-font-family: "Roboto", "Helvetica", "Arial", sans-serif;
 
 /**
 * @name 50. Background color
@@ -33,7 +33,7 @@
 * @type color
 * @group base.common
 */
-@base-border-color: #ddd;
+@base-border-color: #e0e0e0;
 
 /**
 * @name 10. Border radius
@@ -49,8 +49,8 @@
 @base-inverted-bg: darken(@base-bg, 100%);
 @base-element-bg: @base-bg;
 
-@base-focus-color: @base-accent;
-@base-hover-color: darken(@base-bg, 4%);
+@base-focus-color: darken(@base-bg, 20%);
+@base-hover-color: darken(@base-bg, 10%);
 
 @base-shadow-color: @base-inverted-bg;
 
@@ -138,7 +138,7 @@
 * @type color
 * @group badges
 */
-@badge-bg: @base-accent;
+@badge-bg: #757575;
 
 /**
 * @name 20. Badge text color
@@ -631,7 +631,7 @@
 * @type color
 * @group list
 */
-@list-group-color: @list-normal-color;
+@list-group-color: rgba(0, 0, 0, 0.54);
 /**
 * @name 30. Hovered item background color
 * @type color
@@ -645,7 +645,7 @@
 * @group list
 * @paletteColorOpacity .25
 */
-@list-item-selected-bg: darken(@base-bg, 10%);
+@list-item-selected-bg: darken(@base-bg, 20%);
 /**
 * @name 30. Focused selected item state background color
 * @type color
@@ -663,8 +663,6 @@
 @list-item-color: @base-text-color;
 @list-item-hover-color: @list-item-color;
 @list-item-selected-color: @list-item-color;
-@list-item-focus-color: @base-inverted-text-color;
-@list-item-active-color: @base-inverted-text-color;
 
 /**
 * @name 40. Active state item background color
@@ -672,7 +670,7 @@
 * @group list
 * @paletteColorOpacity 1
 */
-@list-item-active-bg: @base-accent;
+@list-item-active-bg: darken(@base-bg, 20%);
 @list-holdmenu-bg: @base-bg;
 @list-holdmenu-border-color: @list-border-color;
 @list-holdmenu-shadow-color: fade(@base-shadow-color, 10%);
@@ -691,8 +689,7 @@
 
 @list-icon-color: @base-icon-color;
 
-@list-group-header-border-bottom: 2px solid @list-border-color;
-@list-group-header-default-padding-top: 20px;
+@list-group-header-default-padding-top: 14px;
 @list-group-header-compact-padding-top: 10px;
 @list-item-chevron-icon-color: @base-icon-color;
 

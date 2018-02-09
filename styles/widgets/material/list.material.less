@@ -1,8 +1,8 @@
 .dx-size-default() {
     @MATERIAL_LIST_BORDER_WIDTH: 1px;
 
-    @MATERIAL_LIST_ITEM_VERTICAL_PADDING: 10px;
-    @MATERIAL_LIST_ITEM_HORIZONTAL_PADDING: 10px;
+    @MATERIAL_LIST_ITEM_VERTICAL_PADDING: 13px;
+    @MATERIAL_LIST_ITEM_HORIZONTAL_PADDING: 16px;
     @MATERIAL_LIST_ITEM_BORDER_WIDTH: 1px;
     @MATERIAL_LIST_GROUP_HEADER_VERTICAL_PADDING: @list-group-header-default-padding-top;
 
@@ -13,6 +13,8 @@
     @MATERIAL_LIST_SELECT_ALL_LABEL_MARGIN_TOP: 3px;
 
     @MATERIAL_LIST_SEARCHBOX_MARGIN_BOTTOM: 5px;
+
+    @MATERIAL_LIST_MAIN_FONT_SIZE: 16px;
 }
 
 .dx-size-compact() {
@@ -76,7 +78,6 @@
 
     &.dx-state-focused {
         background-color: @list-focused-bg;
-        color: @list-item-focus-color;
 
         .dx-list-item-chevron {
             border-color: @list-chevron-focus-color;
@@ -90,11 +91,9 @@
 
     &.dx-state-active {
         background-color: @list-item-active-bg;
-        color: @list-item-active-color;
 
         .dx-list-slide-item-content {
             background-color: @list-item-active-bg;
-            color: @list-item-active-color;
         }
     }
 
@@ -134,6 +133,11 @@
                     }
                 }
             }
+
+            .dx-list-group-header {
+                margin-left: 72px;
+                padding-left: 0;
+            }
         }
 
         &:not(.dx-list-select-decorator-enabled) {
@@ -143,12 +147,19 @@
         }
     }
 
+    .dx-list-group {
+        &:not(:first-child) { 
+            .dx-list-group-header {
+                margin-top: 8px;
+            }
+        }
+    }
+
     .dx-list-group-header {
-        font-weight: bold;
-        padding: @MATERIAL_LIST_GROUP_HEADER_VERTICAL_PADDING @item_horizontal_padding @MATERIAL_LIST_ITEM_VERTICAL_PADDING @item_horizontal_padding;
+        font-weight: normal;
+        padding: @MATERIAL_LIST_GROUP_HEADER_VERTICAL_PADDING @item_horizontal_padding;
 
         border-top: @MATERIAL_LIST_ITEM_BORDER;
-        border-bottom: @list-group-header-border-bottom;
 
         background: @list-group-header-bg;
         color: @list-group-color;
@@ -196,7 +207,6 @@
 
     .dx-list-item,
     .dx-list .dx-empty-message {
-        border-top: @MATERIAL_LIST_ITEM_BORDER;
         color: @list-normal-color;
 
         .dx-list-item-separator-hidden & {
@@ -205,9 +215,13 @@
         }
     }
 
+    .dx-list-item-content {
+        font-size: @MATERIAL_LIST_MAIN_FONT_SIZE;
+    }
+
     .dx-list-item-content,
     .dx-list .dx-empty-message {
-        padding: @MATERIAL_LIST_ITEM_VERTICAL_PADDING @item_horizontal_padding;
+        padding: @MATERIAL_LIST_ITEM_VERTICAL_PADDING + 1px @item_horizontal_padding @MATERIAL_LIST_ITEM_VERTICAL_PADDING;
     }
 
     .dx-list-next-button .dx-button {
@@ -215,7 +229,7 @@
     }
 
     .dx-list-item-chevron-container {
-        width: 6px + @item_horizontal_padding;
+        width: 9px + @item_horizontal_padding;
     }
 
     .dx-list-border-visible {
@@ -233,7 +247,7 @@
 
         &.dx-list-select-checkbox-container,
         &.dx-list-select-radiobutton-container {
-            width: @item_horizontal_padding + 21px;
+            width: @item_horizontal_padding + 40px;
         }
 
         .dx-button.dx-list-toggle-delete-switch {
@@ -358,6 +372,10 @@
             margin-left: @item_horizontal_padding;
             margin-right: 0;
         }
+    }
+
+    .dx-list-item-badge-container {
+        padding-right: @item_horizontal_padding;
     }
 }
 
