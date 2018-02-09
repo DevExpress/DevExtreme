@@ -37,23 +37,6 @@ var baseBarSeriesMethods = {
         settings["clip-path"] = null;
     },
 
-    _clearingAnimation: function(drawComplete) {
-        var that = this,
-            settings = that._oldGetAffineCoordOptions() || that._getAffineCoordOptions();
-
-        that._labelsGroup && that._labelsGroup.animate({ opacity: 0.001 }, { duration: that._defaultDuration, partitionDuration: 0.5 }, function() {
-            that._markersGroup.animate(settings, { partitionDuration: 0.5 }, function() {
-                that._markersGroup.attr({
-                    scaleX: null,
-                    scaleY: null,
-                    translateX: 0,
-                    translateY: 0
-                });
-                drawComplete();
-            });
-        });
-    },
-
     _setGroupsSettings: function(animationEnabled, firstDrawing) {
         var that = this,
             settings = {};

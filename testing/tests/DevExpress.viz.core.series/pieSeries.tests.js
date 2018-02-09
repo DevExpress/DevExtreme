@@ -183,6 +183,30 @@ var checkTwoGroups = function(assert, series) {
         assert.equal(series._originalPoints.length, 0);
     });
 
+    QUnit.test("Update points by index", function(assert) {
+        var series = createSeries({
+            type: seriesType,
+            point: { visible: false }
+
+        });
+        //act
+        series.updateData([{ arg: 1, val: 10 }, { arg: 2, val: 10 }, { arg: 3, val: 4 }]);
+        series.draw(false);
+        series.updateData([{ arg: 2, val: 10 }, { arg: 3, val: 10 }]);
+        series.draw(false);
+        //assert
+
+        assert.equal(this.createPoint.callCount, 3);
+
+        assert.equal(this.createPoint.firstCall.returnValue.update.lastCall.args[0].argument, 2);
+        assert.ok(!this.createPoint.firstCall.returnValue.dispose.called);
+
+        assert.equal(this.createPoint.secondCall.returnValue.update.lastCall.args[0].argument, 3);
+        assert.ok(!this.createPoint.secondCall.returnValue.dispose.called);
+
+        assert.ok(this.createPoint.thirdCall.returnValue.dispose.called);
+    });
+
     //T102876
     QUnit.test("paintNullPoints is false & undefined value field", function(assert) {
         var series = createSeries({

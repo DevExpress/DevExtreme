@@ -55,10 +55,6 @@ exports.stock = _extend({}, scatterSeries, {
         scatterSeries._setGroupsSettings.call(this, false);
     },
 
-    _clearingAnimation: function(drawComplete) {
-        drawComplete();
-    },
-
     _getCreatingPointOptions: function() {
         var that = this,
             defaultPointOptions,

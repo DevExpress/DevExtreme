@@ -36,6 +36,16 @@ exports.pie = _extend({}, barSeries, {
         point.isSelected() && legendCallback();
     },
 
+    _getOldPoint: function(data, oldPointsByArgument, index) {
+        var point = (this._originalPoints || [])[index];
+        if(point) {
+            oldPointsByArgument[point.argument] = oldPointsByArgument[point.argument].filter(function(p) {
+                return p !== point;
+            });
+        }
+        return point;
+    },
+
     adjustLabels: function(moveLabelsFromCenter) {
         var that = this,
             points = that._points || [],
@@ -69,8 +79,6 @@ exports.pie = _extend({}, barSeries, {
 
     areErrorBarsVisible: _noop,
 
-    _prepareSeriesToDrawing: _noop,
-
     _getPointsCount: function() {
         return this._pointsCount;
     },
@@ -80,10 +88,6 @@ exports.pie = _extend({}, barSeries, {
             options = that._options;
 
         that._pointsCount = data.filter(function(d) { return that._checkData(that._getPointData(d, options)); }).length;
-    },
-
-    _endUpdateData: function() {
-        chartScatterSeries._prepareSeriesToDrawing.call(this);
     },
 
     drawLabelsWOPoints: function() {

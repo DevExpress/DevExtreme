@@ -109,6 +109,10 @@ var environmentWithSinonStubPoint = {
             stub.draw.reset();
             stub.animate.reset();
             stub.getCoords.returns({ x: data.argument, y: data.value });
+            stub.x = data.argument;
+            stub.y = data.value;
+            stub.index = data.index;
+            stub.minY = 0;
             return stub;
         });
     },
@@ -573,6 +577,68 @@ function setDiscreteType(series) {
         checkGroups(assert, series);
     });
 
+    QUnit.module("Area. Update Animation", {
+        beforeEach: function() {
+            environmentWithSinonStubPoint.beforeEach.call(this);
+            this.series = createSeries({
+                type: seriesType,
+                border: {
+                    visible: true
+                },
+                point: { visible: false }
+            }, {
+                renderer: this.renderer,
+                argumentAxis: new MockAxis({ renderer: this.renderer }),
+                valueAxis: new MockAxis({ renderer: this.renderer })
+            });
+        },
+        afterEach: function() {
+            environmentWithSinonStubPoint.afterEach.call(this);
+        }
+    });
+
+    QUnit.test("Draw old and new points in the right order", function(assert) {
+        this.series.updateData([{ arg: 1, val: 10 }, { arg: 2, val: 20 }]);
+        this.series.draw();
+
+        this.series.updateData([{ arg: -1, val: 20 }, { arg: 1, val: 20 }]);
+        this.series.prepareToDrawing(true);
+
+        var borderPoints = this.renderer.stub("path").firstCall.returnValue.animate.lastCall.args[0].points;
+        checkElementPoints(assert, borderPoints, [[-1, 20], [1, 10], [2, 20]], false, "drawn points");
+
+        var segmentPoints = this.renderer.stub("path").lastCall.returnValue.animate.lastCall.args[0].points;
+        checkElementPoints(assert, segmentPoints, [[-1, 20], [1, 10], [2, 20], [0, 0], [0, 0], [0, 0]], false, "drawn points");
+    });
+
+    QUnit.test("Apply only new points after animation", function(assert) {
+        this.series.updateData([{ arg: 1, val: 10 }, { arg: 2, val: 20 }]);
+
+        this.series.draw();
+
+        this.series.getAllPoints().forEach(function(p) {
+            p.update = function(data) {
+                p.index = data.index;
+            };
+        });
+
+        this.series.updateData([{ arg: -1, val: 20 }, { arg: 1, val: 20 }]);
+        this.series.prepareToDrawing(true);
+        var path = this.renderer.stub("path").lastCall.returnValue;
+        path.attr.reset();
+        this.series.draw(true);
+
+        var complete = path.animate.lastCall.args[2];
+
+        complete();
+
+        var borderPoints = this.renderer.stub("path").firstCall.returnValue.attr.lastCall.args[0].points;
+        checkElementPoints(assert, borderPoints, [[-1, 20], [1, 10]], false, "drawn points");
+
+        var segmentPoints = this.renderer.stub("path").lastCall.returnValue.attr.lastCall.args[0].points;
+        checkElementPoints(assert, segmentPoints, [[-1, 20], [1, 10], [0, 0], [0, 0]], false, "drawn points");
+    });
+
     QUnit.module("Area. Trackers", environment);
 
     QUnit.test("draw tracker.", function(assert) {
@@ -676,7 +742,7 @@ function setDiscreteType(series) {
         assert.strictEqual(series._labelsGroup._stored_settings.opacity, 0.001);
         assert.strictEqual(series._markersGroup._stored_settings.opacity, 0.001);
 
-        series._updateElement.lastCall.args[3].complete();
+        series._updateElement.lastCall.args[3]();
         assert.strictEqual(series._labelsGroup.stub("animate").lastCall.args[0].opacity, 1);
         assert.strictEqual(series._markersGroup.stub("animate").lastCall.args[0].opacity, 1);
     });
@@ -692,9 +758,9 @@ function setDiscreteType(series) {
         assert.strictEqual(series._markersGroup._stored_settings.opacity, 0.001);
 
         assert.equal(series._updateElement.callCount, 2);
-        assert.strictEqual(series._updateElement.firstCall.args[3].complete, undefined);
+        assert.strictEqual(series._updateElement.firstCall.args[3], undefined);
 
-        series._updateElement.secondCall.args[3].complete();
+        series._updateElement.secondCall.args[3]();
         assert.strictEqual(series._labelsGroup.stub("animate").lastCall.args[0].opacity, 1);
         assert.strictEqual(series._markersGroup.stub("animate").lastCall.args[0].opacity, 1);
     });
@@ -1048,106 +1114,6 @@ function setDiscreteType(series) {
             }
         });
     });
-
-    QUnit.module("Area. Update animation", {
-        createSeries: function() {
-            return createSeries({
-                type: "area"
-            }, {
-                renderer: this.renderer,
-                argumentAxis: new MockAxis({ renderer: this.renderer }),
-                valueAxis: new MockAxis({ renderer: this.renderer })
-            });
-        },
-        beforeEach: function() {
-            environment.beforeEach.call(this);
-            this.data = [{ arg: "arg1", val: "val1", tag: "tag1" }, { arg: "arg2", val: "val2", tag: "tag2" }];
-        },
-        afterEach: environment.afterEach
-    });
-
-    QUnit.test("Check label clearing", function(assert) {
-        var series = this.createSeries(),
-            newOptions = $.extend(true, {}, series.getOptions(), { type: "bar" });
-
-        series.updateData(this.data);
-        series.draw(false);
-        series.updateOptions(newOptions);
-
-        var clearingSpy = sinon.spy(series, "_oldClearingAnimation"),
-            labelSpy = series._labelsGroup.stub("animate");
-        series.draw(true);
-
-        assert.ok(clearingSpy.calledOnce);
-
-        assert.ok(labelSpy.calledOnce);
-        assert.equal(labelSpy.lastCall.args.length, 3);
-        assert.deepEqual(labelSpy.lastCall.args[0], { opacity: 0.001 });
-        assert.deepEqual(labelSpy.lastCall.args[1], { duration: 400, partitionDuration: 0.5 });
-        assert.ok(labelSpy.lastCall.args[2]);
-    });
-
-    QUnit.test("Check label clearing", function(assert) {
-        var series = this.createSeries(),
-            newOptions = $.extend(true, {}, series.getOptions(), { type: "bar" });
-
-        series.updateData(this.data);
-        series.draw(false);
-        series.updateOptions(newOptions);
-
-        var clearingSpy = sinon.spy(series, "_oldClearingAnimation"),
-            labelSpy = series._labelsGroup.stub("animate");
-        series.draw(true);
-
-        assert.ok(clearingSpy.calledOnce);
-
-        assert.ok(labelSpy.calledOnce);
-        assert.equal(labelSpy.lastCall.args.length, 3);
-        assert.deepEqual(labelSpy.lastCall.args[0], { opacity: 0.001 });
-        assert.deepEqual(labelSpy.lastCall.args[1], { duration: 400, partitionDuration: 0.5 });
-        assert.ok(labelSpy.lastCall.args[2]);
-    });
-
-    QUnit.test("Check marker clearing", function(assert) {
-        var series = this.createSeries(),
-            newOptions = $.extend(true, {}, series.getOptions(), { type: "bar" });
-
-        series.updateData(this.data);
-        series.draw(false);
-        series.updateOptions(newOptions);
-
-        series.draw(true);
-        var markerSpy = series._markersGroup.stub("animate");
-        series._labelsGroup.stub("animate").lastCall.args[2]();
-
-        assert.ok(markerSpy.calledOnce);
-        assert.equal(markerSpy.lastCall.args.length, 3);
-        assert.deepEqual(markerSpy.lastCall.args[0], { opacity: 0.001 });
-        assert.deepEqual(markerSpy.lastCall.args[1], { duration: 400, partitionDuration: 0.5 });
-        assert.ok(markerSpy.lastCall.args[2]);
-    });
-
-    QUnit.test("Check segment clearing", function(assert) {
-        var series = this.createSeries(),
-            newOptions = $.extend(true, {}, series.getOptions(), { type: "bar" });
-
-        series.updateData(this.data);
-        series.draw(false);
-        series.updateOptions(newOptions);
-
-        series.draw(true);
-        series._labelsGroup.stub("animate").lastCall.args[2]();
-        var updateSpy = sinon.spy(series, "_oldUpdateElement");
-        series._markersGroup.stub("animate").lastCall.args[2]();
-
-        assert.ok(updateSpy.calledOnce);
-        assert.equal(updateSpy.lastCall.args.length, 5);
-        assert.ok(updateSpy.lastCall.args[0]);
-        assert.ok(updateSpy.lastCall.args[1]);
-        assert.ok(updateSpy.lastCall.args[2]);
-        assert.ok(updateSpy.lastCall.args[4]);
-        assert.equal(updateSpy.lastCall.args[3].partitionDuration, 0.5);
-    });
 })();
 
 (function StepAreaElements() {
@@ -1486,106 +1452,6 @@ function setDiscreteType(series) {
         checkGroups(assert, series);
     });
 
-    QUnit.module("Steparea. Update animation", {
-        createSeries: function() {
-            return createSeries({
-                type: "steparea"
-            }, {
-                renderer: this.renderer,
-                argumentAxis: new MockAxis({ renderer: this.renderer }),
-                valueAxis: new MockAxis({ renderer: this.renderer })
-            });
-        },
-        beforeEach: function() {
-            environment.beforeEach.call(this);
-            this.data = [{ arg: "arg1", val: "val1", tag: "tag1" }, { arg: "arg2", val: "val2", tag: "tag2" }];
-        },
-        afterEach: environment.afterEach
-    });
-
-    QUnit.test("Check label clearing", function(assert) {
-        var series = this.createSeries(),
-            newOptions = $.extend(true, {}, series.getOptions(), { type: "bar" });
-
-        series.updateData(this.data);
-        series.draw(false);
-        series.updateOptions(newOptions);
-
-        var clearingSpy = sinon.spy(series, "_oldClearingAnimation"),
-            labelSpy = series._labelsGroup.stub("animate");
-        series.draw(true);
-
-        assert.ok(clearingSpy.calledOnce);
-
-        assert.ok(labelSpy.calledOnce);
-        assert.equal(labelSpy.lastCall.args.length, 3);
-        assert.deepEqual(labelSpy.lastCall.args[0], { opacity: 0.001 });
-        assert.deepEqual(labelSpy.lastCall.args[1], { duration: 400, partitionDuration: 0.5 });
-        assert.ok(labelSpy.lastCall.args[2]);
-    });
-
-    QUnit.test("Check label clearing", function(assert) {
-        var series = this.createSeries(),
-            newOptions = $.extend(true, {}, series.getOptions(), { type: "bar" });
-
-        series.updateData(this.data);
-        series.draw(false);
-        series.updateOptions(newOptions);
-
-        var clearingSpy = sinon.spy(series, "_oldClearingAnimation"),
-            labelSpy = series._labelsGroup.stub("animate");
-        series.draw(true);
-
-        assert.ok(clearingSpy.calledOnce);
-
-        assert.ok(labelSpy.calledOnce);
-        assert.equal(labelSpy.lastCall.args.length, 3);
-        assert.deepEqual(labelSpy.lastCall.args[0], { opacity: 0.001 });
-        assert.deepEqual(labelSpy.lastCall.args[1], { duration: 400, partitionDuration: 0.5 });
-        assert.ok(labelSpy.lastCall.args[2]);
-    });
-
-    QUnit.test("Check marker clearing", function(assert) {
-        var series = this.createSeries(),
-            newOptions = $.extend(true, {}, series.getOptions(), { type: "bar" });
-
-        series.updateData(this.data);
-        series.draw(false);
-        series.updateOptions(newOptions);
-
-        series.draw(true);
-        var markerSpy = series._markersGroup.stub("animate");
-        series._labelsGroup.stub("animate").lastCall.args[2]();
-
-        assert.ok(markerSpy.calledOnce);
-        assert.equal(markerSpy.lastCall.args.length, 3);
-        assert.deepEqual(markerSpy.lastCall.args[0], { opacity: 0.001 });
-        assert.deepEqual(markerSpy.lastCall.args[1], { duration: 400, partitionDuration: 0.5 });
-        assert.ok(markerSpy.lastCall.args[2]);
-    });
-
-    QUnit.test("Check segment clearing", function(assert) {
-        var series = this.createSeries(),
-            newOptions = $.extend(true, {}, series.getOptions(), { type: "bar" });
-
-        series.updateData(this.data);
-        series.draw(false);
-        series.updateOptions(newOptions);
-
-        series.draw(true);
-        series._labelsGroup.stub("animate").lastCall.args[2]();
-        var updateSpy = sinon.spy(series, "_oldUpdateElement");
-        series._markersGroup.stub("animate").lastCall.args[2]();
-
-        assert.ok(updateSpy.calledOnce);
-        assert.equal(updateSpy.lastCall.args.length, 5);
-        assert.ok(updateSpy.lastCall.args[0]);
-        assert.ok(updateSpy.lastCall.args[1]);
-        assert.ok(updateSpy.lastCall.args[2]);
-        assert.ok(updateSpy.lastCall.args[4]);
-        assert.equal(updateSpy.lastCall.args[3].partitionDuration, 0.5);
-    });
-
     QUnit.module("Styles. StepArea Series", {
         createSeries: function(options) {
             return createSeries(options, {
@@ -1694,6 +1560,45 @@ function setDiscreteType(series) {
         assert.equal(this.renderer.stub("path").callCount, 2);
         assert.equal(this.renderer.stub("path").getCall(0).args[1], "line");
         assert.equal(this.renderer.stub("path").getCall(1).args[1], "area");
+    });
+
+    QUnit.module("StepArea. Update Animation", {
+        beforeEach: function() {
+            environmentWithSinonStubPoint.beforeEach.call(this);
+            this.series = createSeries({
+                type: seriesType,
+                point: { visible: false }
+            }, {
+                renderer: this.renderer,
+                argumentAxis: new MockAxis({ renderer: this.renderer }),
+                valueAxis: new MockAxis({ renderer: this.renderer })
+            });
+        },
+        afterEach: function() {
+            environmentWithSinonStubPoint.afterEach.call(this);
+        }
+    });
+
+    QUnit.test("Draw old and new points in the right order", function(assert) {
+        this.series.updateData([{ arg: 1, val: 10 }, { arg: 2, val: 20 }]);
+        this.series.draw();
+
+        this.series.updateData([{ arg: -1, val: 20 }, { arg: 1, val: 20 }]);
+        this.series.prepareToDrawing(true);
+
+        var segmentPoints = this.renderer.stub("path").lastCall.returnValue.animate.lastCall.args[0].points;
+        checkElementPoints(assert, segmentPoints, [
+            [-1, 20],
+            [1, 10],
+            [1, 10],
+            [2, 20],
+            [2, 20],
+            [0, 0],
+            [0, 0],
+            [0, 0],
+            [0, 0],
+            [0, 0]
+        ], false, "drawn points");
     });
 })();
 
@@ -2349,7 +2254,7 @@ function setDiscreteType(series) {
         assert.strictEqual(series._labelsGroup._stored_settings.opacity, 0.001);
         assert.strictEqual(series._markersGroup._stored_settings.opacity, 0.001);
 
-        series._updateElement.lastCall.args[3].complete();
+        series._updateElement.lastCall.args[3]();
         assert.strictEqual(series._labelsGroup.stub("animate").lastCall.args[0].opacity, 1);
         assert.strictEqual(series._markersGroup.stub("animate").lastCall.args[0].opacity, 1);
     });
@@ -2365,111 +2270,56 @@ function setDiscreteType(series) {
         assert.strictEqual(series._markersGroup._stored_settings.opacity, 0.001);
 
         assert.equal(series._updateElement.callCount, 2);
-        assert.strictEqual(series._updateElement.firstCall.args[3].complete, undefined);
+        assert.strictEqual(series._updateElement.firstCall.args[3], undefined);
 
-        series._updateElement.secondCall.args[3].complete();
+        series._updateElement.secondCall.args[3]();
         assert.strictEqual(series._labelsGroup.stub("animate").lastCall.args[0].opacity, 1);
         assert.strictEqual(series._markersGroup.stub("animate").lastCall.args[0].opacity, 1);
     });
 
-    QUnit.module("Spline area. Update animation", {
-        createSeries: function() {
-            return createSeries({
-                type: "splinearea"
+    QUnit.module("SplineArea. Update Animation", {
+        beforeEach: function() {
+            environmentWithSinonStubPoint.beforeEach.call(this);
+            this.series = createSeries({
+                type: seriesType,
+                point: { visible: false }
             }, {
                 renderer: this.renderer,
                 argumentAxis: new MockAxis({ renderer: this.renderer }),
                 valueAxis: new MockAxis({ renderer: this.renderer })
             });
         },
-        beforeEach: function() {
-            environment.beforeEach.call(this);
-            this.data = [{ arg: "arg1", val: "val1", tag: "tag1" }, { arg: "arg2", val: "val2", tag: "tag2" }];
-        },
-        afterEach: environment.afterEach
+        afterEach: function() {
+            environmentWithSinonStubPoint.afterEach.call(this);
+        }
     });
 
-    QUnit.test("Check label clearing", function(assert) {
-        var series = this.createSeries(),
-            newOptions = $.extend(true, {}, series.getOptions(), { type: "bar" });
+    QUnit.test("Draw old and new points in the right order", function(assert) {
+        this.series.updateData([{ arg: 1, val: 10 }, { arg: 2, val: 20 }]);
+        this.series.draw();
 
-        series.updateData(this.data);
-        series.draw(false);
-        series.updateOptions(newOptions);
+        this.series.updateData([{ arg: -1, val: 20 }, { arg: 1, val: 20 }]);
+        this.series.prepareToDrawing(true);
 
-        var clearingSpy = sinon.spy(series, "_oldClearingAnimation"),
-            labelSpy = series._labelsGroup.stub("animate");
-        series.draw(true);
-
-        assert.ok(clearingSpy.calledOnce);
-
-        assert.ok(labelSpy.calledOnce);
-        assert.equal(labelSpy.lastCall.args.length, 3);
-        assert.deepEqual(labelSpy.lastCall.args[0], { opacity: 0.001 });
-        assert.deepEqual(labelSpy.lastCall.args[1], { duration: 400, partitionDuration: 0.5 });
-        assert.ok(labelSpy.lastCall.args[2]);
-    });
-
-    QUnit.test("Check label clearing", function(assert) {
-        var series = this.createSeries(),
-            newOptions = $.extend(true, {}, series.getOptions(), { type: "bar" });
-
-        series.updateData(this.data);
-        series.draw(false);
-        series.updateOptions(newOptions);
-
-        var clearingSpy = sinon.spy(series, "_oldClearingAnimation"),
-            labelSpy = series._labelsGroup.stub("animate");
-        series.draw(true);
-
-        assert.ok(clearingSpy.calledOnce);
-
-        assert.ok(labelSpy.calledOnce);
-        assert.equal(labelSpy.lastCall.args.length, 3);
-        assert.deepEqual(labelSpy.lastCall.args[0], { opacity: 0.001 });
-        assert.deepEqual(labelSpy.lastCall.args[1], { duration: 400, partitionDuration: 0.5 });
-        assert.ok(labelSpy.lastCall.args[2]);
-    });
-
-    QUnit.test("Check marker clearing", function(assert) {
-        var series = this.createSeries(),
-            newOptions = $.extend(true, {}, series.getOptions(), { type: "bar" });
-
-        series.updateData(this.data);
-        series.draw(false);
-        series.updateOptions(newOptions);
-
-        series.draw(true);
-        var markerSpy = series._markersGroup.stub("animate");
-        series._labelsGroup.stub("animate").lastCall.args[2]();
-
-        assert.ok(markerSpy.calledOnce);
-        assert.equal(markerSpy.lastCall.args.length, 3);
-        assert.deepEqual(markerSpy.lastCall.args[0], { opacity: 0.001 });
-        assert.deepEqual(markerSpy.lastCall.args[1], { duration: 400, partitionDuration: 0.5 });
-        assert.ok(markerSpy.lastCall.args[2]);
-    });
-
-    QUnit.test("Check segment clearing", function(assert) {
-        var series = this.createSeries(),
-            newOptions = $.extend(true, {}, series.getOptions(), { type: "bar" });
-
-        series.updateData(this.data);
-        series.draw(false);
-        series.updateOptions(newOptions);
-
-        series.draw(true);
-        series._labelsGroup.stub("animate").lastCall.args[2]();
-        var updateSpy = sinon.spy(series, "_oldUpdateElement");
-        series._markersGroup.stub("animate").lastCall.args[2]();
-
-        assert.ok(updateSpy.calledOnce);
-        assert.equal(updateSpy.lastCall.args.length, 5);
-        assert.ok(updateSpy.lastCall.args[0]);
-        assert.ok(updateSpy.lastCall.args[1]);
-        assert.ok(updateSpy.lastCall.args[2]);
-        assert.ok(updateSpy.lastCall.args[4]);
-        assert.equal(updateSpy.lastCall.args[3].partitionDuration, 0.5);
+        var segmentPoints = this.renderer.stub("path").lastCall.returnValue.animate.lastCall.args[0].points;
+        checkElementPoints(assert, segmentPoints, [
+            [-1, 20],
+            [-1, 20],
+            [1, 10],
+            [1, 10],
+            [1, 10],
+            [2, 20],
+            [2, 20],
+            [2, 20],
+            [0, 0],
+            [0, 0],
+            [0, 0],
+            [0, 0],
+            [0, 0],
+            [0, 0],
+            [0, 0],
+            [0, 0]
+        ], false, "drawn points");
     });
 })();
 
@@ -3081,6 +2931,41 @@ function setDiscreteType(series) {
         //assert
         assert.equal(seriesGroup.children.length, 1);
         assert.equal(seriesGroup.children[0].toBackground.callCount, 1);
+    });
+
+
+    QUnit.module("Area. Update Animation", {
+        beforeEach: function() {
+            environmentWithSinonStubPoint.beforeEach.call(this);
+            this.series = createSeries({
+                type: seriesType,
+                border: {
+                    visible: true
+                },
+                point: { visible: false }
+            }, {
+                renderer: this.renderer,
+                argumentAxis: new MockAxis({ renderer: this.renderer }),
+                valueAxis: new MockAxis({ renderer: this.renderer })
+            });
+        },
+        afterEach: function() {
+            environmentWithSinonStubPoint.afterEach.call(this);
+        }
+    });
+
+    QUnit.test("Draw old and new points in the right order", function(assert) {
+        this.series.updateData([{ arg: 1, val: 10 }, { arg: 2, val: 20 }]);
+        this.series.draw();
+
+        this.series.updateData([{ arg: -1, val: 20 }, { arg: 1, val: 20 }]);
+        this.series.prepareToDrawing(true);
+
+        var borderPoints = this.renderer.stub("path").firstCall.returnValue.animate.lastCall.args[0].points;
+        checkElementPoints(assert, borderPoints, [[-1, 20], [1, 10], [2, 20]], false, "drawn points");
+
+        var segmentPoints = this.renderer.stub("path").lastCall.returnValue.animate.lastCall.args[0].points;
+        checkElementPoints(assert, segmentPoints, [[-1, 20], [1, 10], [2, 20], [0, 0], [0, 0], [0, 0]], false, "drawn points");
     });
 })();
 

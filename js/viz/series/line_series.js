@@ -75,8 +75,11 @@ var lineMethods = {
         };
     },
 
-    _prepareSegment: function(points) {
-        return { line: points };
+    _prepareSegment: function(points, orderedPoints) {
+        return {
+            line: points,
+            orderedLine: orderedPoints
+        };
     },
 
     _parseLineOptions: function(options, defaultColor) {
@@ -107,33 +110,16 @@ var lineMethods = {
         element.line.remove();
     },
 
-    _generateDefaultSegments: function() {
-        var that = this;
-
-        return _map(that._segments || [], function(segment) {
-            return that._getDefaultSegment(segment);
-        });
-    },
-
-    _updateElement: function(element, segment, animate, animateParams, complete) {
-        var params = { points: segment.line },
+    _updateElement: function(element, segment, animate, animationComplete) {
+        var params = { points: segment.orderedLine ? segment.orderedLine : segment.line },
             lineElement = element.line;
-        animate ? lineElement.animate(params, animateParams, complete) : lineElement.attr(params);
-    },
 
-    _clearingAnimation: function(drawComplete) {
-        var that = this,
-            lastIndex = that._graphics.length - 1,
-            settings = { opacity: 0.001 },
-            options = { duration: that._defaultDuration, partitionDuration: 0.5 };
-
-        that._labelsGroup && that._labelsGroup.animate(settings, options, function() {
-            that._markersGroup && that._markersGroup.animate(settings, options, function() {
-                _each(that._defaultSegments || [], function(i, segment) {
-                    that._oldUpdateElement(that._graphics[i], segment, true, { partitionDuration: 0.5 }, i === lastIndex ? drawComplete : undefined);
-                });
-            });
-        });
+        animate ? lineElement.animate(params, {}, function() {
+            if(segment.orderedLine) {
+                lineElement.attr({ points: segment.line });
+            }
+            animationComplete && animationComplete();
+        }) : lineElement.attr(params);
     },
 
     _animateComplete: function() {
@@ -146,11 +132,13 @@ var lineMethods = {
         var that = this,
             lastIndex = that._graphics.length - 1;
         _each(that._graphics || [], function(i, elem) {
-            that._updateElement(elem, that._segments[i], true, {
-                complete: i === lastIndex ? function() {
+            var complete;
+            if(i === lastIndex) {
+                complete = function() {
                     that._animateComplete();
-                } : undefined
-            });
+                };
+            }
+            that._updateElement(elem, that._segments[i], true, complete);
         });
     },
 
@@ -162,14 +150,63 @@ var lineMethods = {
         return this._renderer.path(points, "line").attr(settings).sharp();
     },
 
+    _sortPoints: function(points, rotated) {
+        return rotated ? points.sort(function(p1, p2) {
+            return p2.y - p1.y;
+        }) : points.sort(function(p1, p2) {
+            return p1.x - p2.x;
+        });
+    },
+
+    _forceDefaultSegmentDrawing: function(points) {
+        var result = false,
+            alternatePointCount = 0,
+            oldPoints = this._oldPoints,
+            state = oldPoints.indexOf(points[0]) === -1;
+
+        for(var i = 1; i < points.length; i++) {
+            var s = oldPoints.indexOf(points[i]) === -1;
+            if(s !== state) {
+                alternatePointCount++;
+            }
+            if(alternatePointCount > 1) {
+                result = true;
+                break;
+            }
+            state = s;
+        }
+        return result;
+    },
+
     _drawSegment: function(points, animationEnabled, segmentCount, lastSegment) {
         var that = this,
-            segment = that._prepareSegment(points, that._options.rotated, lastSegment);
+            rotated = that._options.rotated,
+            orderedPoints,
+            forceDefaultSegment = false,
+            segment;
+
+        if(animationEnabled && that._oldPoints) {
+            orderedPoints = that._sortPoints(points.slice(), rotated);
+            forceDefaultSegment = this._forceDefaultSegmentDrawing(orderedPoints);
+            if(forceDefaultSegment) {
+                orderedPoints = null;
+            }
+            points = points.filter(function(p) {
+                return that._oldPoints.indexOf(p) === -1;
+            }).sort(function(p1, p2) {
+                return p1.index - p2.index;
+            });
+        }
+
+        segment = that._prepareSegment(points, orderedPoints, rotated, lastSegment);
+
         that._segments.push(segment);
         if(!that._graphics[segmentCount]) {
             that._graphics[segmentCount] = that._drawElement(animationEnabled ? that._getDefaultSegment(segment) : segment, that._elementsGroup);
         } else if(!animationEnabled) {
             that._updateElement(that._graphics[segmentCount], segment);
+        } else if(forceDefaultSegment) {
+            that._updateElement(that._graphics[segmentCount], that._getDefaultSegment(segment));
         }
     },
 
@@ -198,9 +235,9 @@ var lineMethods = {
     }
 };
 
-exports.chart["line"] = _extend({}, chartScatterSeries, lineMethods);
+var lineSeries = exports.chart["line"] = _extend({}, chartScatterSeries, lineMethods);
 
-exports.chart["stepline"] = _extend({}, exports.chart["line"], {
+exports.chart["stepline"] = _extend({}, lineSeries, {
     _calculateStepLinePoints: function(points) {
         var segment = [];
         _each(points, function(i, pt) {
@@ -223,12 +260,12 @@ exports.chart["stepline"] = _extend({}, exports.chart["line"], {
         return segment;
     },
 
-    _prepareSegment: function(points) {
-        return exports.chart["line"]._prepareSegment(this._calculateStepLinePoints(points));
+    _prepareSegment: function(points, orderedPoints) {
+        return lineSeries._prepareSegment(this._calculateStepLinePoints(points), orderedPoints && this._calculateStepLinePoints(orderedPoints));
     }
 });
 
-exports.chart["spline"] = _extend({}, exports.chart["line"], {
+exports.chart["spline"] = _extend({}, lineSeries, {
 
     _calculateBezierPoints: function(src, rotated) {
         var bezierPoints = [],
@@ -334,8 +371,8 @@ exports.chart["spline"] = _extend({}, exports.chart["line"], {
         return bezierPoints;
     },
 
-    _prepareSegment: function(points, rotated) {
-        return exports.chart["line"]._prepareSegment(this._calculateBezierPoints(points, rotated));
+    _prepareSegment: function(points, orderedPoints, rotated) {
+        return lineSeries._prepareSegment(this._calculateBezierPoints(points, rotated), orderedPoints && this._calculateBezierPoints(orderedPoints, rotated));
     },
 
     _createMainElement: function(points, settings) {
@@ -344,7 +381,11 @@ exports.chart["spline"] = _extend({}, exports.chart["line"], {
 });
 
 exports.polar.line = _extend({}, polarScatterSeries, lineMethods, {
-    _prepareSegment: function(points, rotated, lastSegment) {
+    _sortPoints: function(points) {
+        return points;
+    },
+
+    _prepareSegment: function(points, orderedPoints, rotated, lastSegment) {
         var preparedPoints = [],
             centerPoint = this.getValueAxis().getCenter(),
             i;
@@ -358,7 +399,7 @@ exports.polar.line = _extend({}, polarScatterSeries, lineMethods, {
                 preparedPoints = points;
             }
         } else {
-            return exports.chart["line"]._prepareSegment.apply(this, arguments);
+            return lineSeries._prepareSegment.call(this, points);
         }
 
         return { line: preparedPoints };
