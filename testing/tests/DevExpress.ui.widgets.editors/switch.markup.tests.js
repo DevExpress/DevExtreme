@@ -17,16 +17,7 @@ QUnit.testStart(function() {
 
 var SWITCH_CLASS = "dx-switch",
     WRAPPER_CLASS = "dx-switch-wrapper",
-    CONTAINER_CLASS = "dx-switch-container",
-    INNER_CLASS = "dx-switch-inner",
-    INNER_SELECTOR = "." + INNER_CLASS,
-    HANDLE_CLASS = "dx-switch-handle",
-    HANDLE_SELECTOR = "." + HANDLE_CLASS,
-
-    LABEL_ON_CLASS = "dx-switch-on",
-    LABEL_OFF_CLASS = "dx-switch-off",
-    LABEL_ON_SELECTOR = "." + LABEL_ON_CLASS,
-    LABEL_OFF_SELECTOR = "." + LABEL_OFF_CLASS;
+    CONTAINER_CLASS = "dx-switch-container";
 
 QUnit.module("Switch markup");
 
@@ -41,22 +32,6 @@ QUnit.test("markup", function(assert) {
     var container = wrapper.children();
     assert.equal(container.length, 1);
     assert.ok(container.hasClass(CONTAINER_CLASS));
-});
-
-QUnit.test("markup shouldn't have labels and handle", function(assert) {
-    var element = $("#switch").dxSwitch();
-
-    var inner = element.find(INNER_SELECTOR);
-    assert.notOk(inner.length, "Switch hasn't inner");
-
-    var labelOnEl = element.find(LABEL_ON_SELECTOR);
-    assert.notOk(labelOnEl.length, "Switch hasn't label");
-
-    var handleEl = element.find(HANDLE_SELECTOR);
-    assert.notOk(handleEl.length, "Switch hasn't handle");
-
-    var labelOffEl = element.find(LABEL_OFF_SELECTOR);
-    assert.notOk(labelOffEl.length, "Switch hasn't label");
 });
 
 QUnit.test("a hidden input should be rendered", function(assert) {
