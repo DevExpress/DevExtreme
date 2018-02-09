@@ -157,6 +157,7 @@ var Switch = Editor.inherit({
 
     _initMarkup: function() {
         this._renderContainers();
+        this.option("useInkRipple") && this._renderInkRipple();
 
         this.$element()
             .addClass(SWITCH_CLASS)
@@ -164,7 +165,6 @@ var Switch = Editor.inherit({
 
         this._renderSubmitElement();
 
-        this.option("useInkRipple") && this._renderInkRipple();
         this._renderClick();
 
         this.setAria("role", "button");

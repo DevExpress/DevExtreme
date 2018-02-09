@@ -480,10 +480,6 @@ var FilterBuilder = Widget.inherit({
         this.callBase();
     },
 
-    _render: function() {
-        this.callBase();
-    },
-
     _renderContentImpl: function() {
         this._model = utils.convertToInnerStructure(this.option("value"));
         this._createGroupElementByCriteria(this._model)

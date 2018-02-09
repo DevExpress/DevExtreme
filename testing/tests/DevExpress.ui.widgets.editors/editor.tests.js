@@ -168,6 +168,64 @@ var Fixture = Class.inherit({
     });
 })("Editor");
 
+(function() {
+    QUnit.module("the 'name' option", {
+        beforeEach: function() {
+            this.$element = $("<div>").appendTo("body");
+            this.EditorInheritor = Editor.inherit({
+                _initMarkup: function() {
+                    this._$submitElement = $("<input type='hidden'>").appendTo(this.$element());
+                    this.callBase();
+                },
+                _getSubmitElement: function() {
+                    return this._$submitElement;
+                }
+            });
+        },
+        afterEach: function() {
+            this.$element.remove();
+        }
+    });
+
+    QUnit.test("editor inheritor input should get the 'name' attribute with a correct value", function(assert) {
+        var expectedName = "some_name";
+
+        new this.EditorInheritor(this.$element, {
+            name: expectedName
+        });
+
+        var $input = this.$element.find("input[type='hidden']");
+        assert.equal($input.attr("name"), expectedName, "the input 'name' attribute has correct value");
+    });
+
+    QUnit.test("editor inheritor input should get correct 'name' attribute after the 'name' option is changed", function(assert) {
+        var expectedName = "new_name",
+            instance = new this.EditorInheritor(this.$element, {
+                name: "initial_name"
+            }),
+            $input = this.$element.find("input[type='hidden']");
+
+        instance.option("name", expectedName);
+        assert.equal($input.attr("name"), expectedName, "the input 'name' attribute has correct value ");
+    });
+
+    QUnit.test("the 'name' attribute should not be rendered if name is an empty string", function(assert) {
+        new this.EditorInheritor(this.$element);
+
+        var input = this.$element.find("input[type='hidden']").get(0);
+        assert.notOk(input.hasAttribute("name"), "there should be no 'name' attribute for hidden input");
+    });
+
+    QUnit.test("the 'name' attribute should be removed after name is changed to an empty string", function(assert) {
+        var instance = new this.EditorInheritor(this.$element, {
+                name: "some_name"
+            }),
+            input = this.$element.find("input[type='hidden']").get(0);
+
+        instance.option("name", "");
+        assert.notOk(input.hasAttribute("name"), "there should be no 'name' attribute for hidden input");
+    });
+})("the 'name' option");
 
 (function() {
     QUnit.module("Validation - UI", {
@@ -552,63 +610,6 @@ var Fixture = Class.inherit({
         assert.ok(!handler.called, "Validating handler should not be called");
     });
 })("Validation Events");
-
-QUnit.module("the 'name' option", {
-    beforeEach: function() {
-        this.$element = $("<div>").appendTo("body");
-        this.EditorInheritor = Editor.inherit({
-            _initMarkup: function() {
-                this._$submitElement = $("<input type='hidden'>").appendTo(this.$element());
-                this.callBase();
-            },
-            _getSubmitElement: function() {
-                return this._$submitElement;
-            }
-        });
-    },
-    afterEach: function() {
-        this.$element.remove();
-    }
-});
-
-QUnit.test("editor inheritor input should get the 'name' attribute with a correct value", function(assert) {
-    var expectedName = "some_name";
-
-    new this.EditorInheritor(this.$element, {
-        name: expectedName
-    });
-
-    var $input = this.$element.find("input[type='hidden']");
-    assert.equal($input.attr("name"), expectedName, "the input 'name' attribute has correct value");
-});
-
-QUnit.test("editor inheritor input should get correct 'name' attribute after the 'name' option is changed", function(assert) {
-    var expectedName = "new_name",
-        instance = new this.EditorInheritor(this.$element, {
-            name: "initial_name"
-        }),
-        $input = this.$element.find("input[type='hidden']");
-
-    instance.option("name", expectedName);
-    assert.equal($input.attr("name"), expectedName, "the input 'name' attribute has correct value ");
-});
-
-QUnit.test("the 'name' attribute should not be rendered if name is an empty string", function(assert) {
-    new this.EditorInheritor(this.$element);
-
-    var input = this.$element.find("input[type='hidden']").get(0);
-    assert.notOk(input.hasAttribute("name"), "there should be no 'name' attribute for hidden input");
-});
-
-QUnit.test("the 'name' attribute should be removed after name is changed to an empty string", function(assert) {
-    var instance = new this.EditorInheritor(this.$element, {
-            name: "some_name"
-        }),
-        input = this.$element.find("input[type='hidden']").get(0);
-
-    instance.option("name", "");
-    assert.notOk(input.hasAttribute("name"), "there should be no 'name' attribute for hidden input");
-});
 
 QUnit.module("aria accessibility", {
     beforeEach: function() {
