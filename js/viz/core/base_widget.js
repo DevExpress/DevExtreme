@@ -1,6 +1,7 @@
 "use strict";
 
 var noop = require("../../core/utils/common").noop,
+    windowUtils = require("../../core/utils/window"),
     each = require("../../core/utils/iterator").each,
     version = require("../../core/version"),
     _windowResizeCallbacks = require("../../core/utils/resize_callbacks"),
@@ -296,9 +297,11 @@ module.exports = DOMComponent.inherit({
             size = that.option("size") || {},
             margin = that.option("margin") || {},
             defaultCanvas = that._getDefaultSize() || {},
+            elementWidth = windowUtils.hasWindow() ? that._$element.width() : 0,
+            elementHeight = windowUtils.hasWindow() ? that._$element.height() : 0,
             canvas = {
-                width: size.width <= 0 ? 0 : _floor(pickPositiveValue(size.width, that._$element.width() || defaultCanvas.width)),
-                height: size.height <= 0 ? 0 : _floor(pickPositiveValue(size.height, that._$element.height() || defaultCanvas.height)),
+                width: size.width <= 0 ? 0 : _floor(pickPositiveValue(size.width, elementWidth || defaultCanvas.width)),
+                height: size.height <= 0 ? 0 : _floor(pickPositiveValue(size.height, elementHeight || defaultCanvas.height)),
                 left: pickPositiveValue(margin.left, defaultCanvas.left || 0),
                 top: pickPositiveValue(margin.top, defaultCanvas.top || 0),
                 right: pickPositiveValue(margin.right, defaultCanvas.right || 0),

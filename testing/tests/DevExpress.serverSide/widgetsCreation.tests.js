@@ -95,20 +95,8 @@ QUnit.module("Widget creation", {
 
 Object.keys(widgets).forEach(function(widget) {
     var excludedWidgets = [
-        "BarGauge",
-        "Bullet",
-        "Chart",
-        "CircularGauge",
-        "Funnel",
-        "LinearGauge",
-        "PieChart",
-        "PolarChart",
-        "RangeSelector",
-        "Sparkline",
         "TileView",
-        "TreeMap",
-        "Validator",
-        "VectorMap"
+        "Validator"
     ];
 
     if(excludedWidgets.indexOf(widget) > -1) return;
