@@ -1,30 +1,30 @@
 .dx-size-default() {
-    @GENERIC_TOAST_LINE_HEIGHT: 32px;
-    @GENERIC_TOAST_ICON_SIZE: 35px;
-    @GENERIC_TOAST_CONTENT_PADDING: 10px;
+    @MATERIAL_TOAST_LINE_HEIGHT: 32px;
+    @MATERIAL_TOAST_ICON_SIZE: 35px;
+    @MATERIAL_TOAST_CONTENT_PADDING: 10px;
 }
 .dx-size-compact() {
-    @GENERIC_TOAST_LINE_HEIGHT: 25px;
-    @GENERIC_TOAST_ICON_SIZE: 25px;
-    @GENERIC_TOAST_CONTENT_PADDING: 5px;
+    @MATERIAL_TOAST_LINE_HEIGHT: 25px;
+    @MATERIAL_TOAST_ICON_SIZE: 25px;
+    @MATERIAL_TOAST_CONTENT_PADDING: 5px;
 }
 
-@GENERIC_TOAST_SHADOW: 0px 2px 3px 0px @toast-shadow-color;
+@MATERIAL_TOAST_SHADOW: 0px 2px 3px 0px @toast-shadow-color;
 
 
 .dx-toast-content {
     color: @toast-color;
-    font-size: @GENERIC_BASE_FONT_SIZE;
+    font-size: @MATERIAL_BASE_FONT_SIZE;
     font-weight: 600;
-    line-height: @GENERIC_TOAST_LINE_HEIGHT;
-    padding: @GENERIC_TOAST_CONTENT_PADDING;
-    .box-shadow(@GENERIC_TOAST_SHADOW);
+    line-height: @MATERIAL_TOAST_LINE_HEIGHT;
+    padding: @MATERIAL_TOAST_CONTENT_PADDING;
+    .box-shadow(@MATERIAL_TOAST_SHADOW);
     .border-radius(@toast-border-radius);
 }
 
 .dx-toast-icon {
-    width: @GENERIC_TOAST_ICON_SIZE;
-    height: @GENERIC_TOAST_ICON_SIZE;
+    width: @MATERIAL_TOAST_ICON_SIZE;
+    height: @MATERIAL_TOAST_ICON_SIZE;
 }
 
 .dx-toast-info {

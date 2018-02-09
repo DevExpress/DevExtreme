@@ -1,14 +1,14 @@
-@GENERIC_BAR_HEIGHT: 6px;
-@GENERIC_BACKGROUND_WIDTH: 90%;
-@GENERIC_PROGRESSBAR_BORDER_RADIUS: 2px;
-@GENERIC_PROGRESSBAR_INTERDETERMINATE_STATE_GRADIENT: -90deg, transparent 5%, @progressbar-range-indeterminate-color, transparent 95%;
-@GENERIC_PROGRESS_BAR_BORDER: 1px solid @progressbar-border-color;
+@MATERIAL_BAR_HEIGHT: 6px;
+@MATERIAL_BACKGROUND_WIDTH: 90%;
+@MATERIAL_PROGRESSBAR_BORDER_RADIUS: 2px;
+@MATERIAL_PROGRESSBAR_INTERDETERMINATE_STATE_GRADIENT: -90deg, transparent 5%, @progressbar-range-indeterminate-color, transparent 95%;
+@MATERIAL_PROGRESS_BAR_BORDER: 1px solid @progressbar-border-color;
 
 .dx-progressbar-container {
-    height: @GENERIC_BAR_HEIGHT;
-    border: @GENERIC_PROGRESS_BAR_BORDER;
+    height: @MATERIAL_BAR_HEIGHT;
+    border: @MATERIAL_PROGRESS_BAR_BORDER;
     background-color: @progressbar-bg;
-    .border-radius(@GENERIC_PROGRESSBAR_BORDER_RADIUS);
+    .border-radius(@MATERIAL_PROGRESSBAR_BORDER_RADIUS);
 }
 
 .dx-progressbar-range {
@@ -18,20 +18,20 @@
     margin-top: -1px;
 
     .box-sizing(content-box);
-    .border-radius-top-left(@GENERIC_PROGRESSBAR_BORDER_RADIUS);
-    .border-radius-bottom-left(@GENERIC_PROGRESSBAR_BORDER_RADIUS);
+    .border-radius-top-left(@MATERIAL_PROGRESSBAR_BORDER_RADIUS);
+    .border-radius-bottom-left(@MATERIAL_PROGRESSBAR_BORDER_RADIUS);
 }
 
 .dx-progressbar-animating-container {
-    height: @GENERIC_BAR_HEIGHT;
+    height: @MATERIAL_BAR_HEIGHT;
     background-color: @progressbar-bg;
-    background-size: @GENERIC_BACKGROUND_WIDTH 5px;
-    border: @GENERIC_PROGRESS_BAR_BORDER;
+    background-size: @MATERIAL_BACKGROUND_WIDTH 5px;
+    border: @MATERIAL_PROGRESS_BAR_BORDER;
 
-    .border-radius(@GENERIC_PROGRESSBAR_BORDER_RADIUS);
+    .border-radius(@MATERIAL_PROGRESSBAR_BORDER_RADIUS);
 
     .animation(loader 2s linear infinite);
-    .gradient-linear(@GENERIC_PROGRESSBAR_INTERDETERMINATE_STATE_GRADIENT);
+    .gradient-linear(@MATERIAL_PROGRESSBAR_INTERDETERMINATE_STATE_GRADIENT);
     background-repeat: repeat;
 }
 
@@ -42,7 +42,7 @@
 
     .dx-progressbar-animating-container {
         .animation(none);
-        background-position-x: @GENERIC_BACKGROUND_WIDTH / 2;
+        background-position-x: @MATERIAL_BACKGROUND_WIDTH / 2;
     }
 }
 
@@ -50,7 +50,7 @@
     .dx-progressbar, &.dx-progressbar {
         .dx-progressbar-animating-container {
             .animation(loader-rtl 2s linear infinite);
-            .gradient-linear(@GENERIC_PROGRESSBAR_INTERDETERMINATE_STATE_GRADIENT);
+            .gradient-linear(@MATERIAL_PROGRESSBAR_INTERDETERMINATE_STATE_GRADIENT);
             background-repeat: repeat;
         }
     }

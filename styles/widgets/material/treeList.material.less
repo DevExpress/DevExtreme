@@ -1,11 +1,11 @@
 .grid-base(treelist);
 
 @TREELIST_EMPTY_SPACE_WIDTH: 14px;
-@TREELIST_SELECT_ALL_CHECKBOX_MARGIN_TOP: floor((round(@GENERIC_BASE_LINE_HEIGHT*@GENERIC_BASE_FONT_SIZE) - @GENERIC_GRID_BASE_CHECKBOX_ICON_SIZE)/2);
-@TREELIST_CHECKBOX_PADDING_LEFT: @TREELIST_EMPTY_SPACE_WIDTH + @GENERIC_GRID_BASE_CELL_PADDING;
-@TREELIST_CHECKBOX_MARGIN_LEFT: @TREELIST_CHECKBOX_PADDING_LEFT + @GENERIC_GRID_BASE_CHECKBOX_ICON_SIZE;
-@TREELIST_EDITOR_CELL_PADDING_LEFT: @TREELIST_CHECKBOX_MARGIN_LEFT + @GENERIC_GRID_BASE_CELL_PADDING;
-@TREELIST_ICON_CONTAINER_PADDING_RIGHT: @GENERIC_GRID_BASE_CHECKBOX_ICON_SIZE + @GENERIC_GRID_BASE_CELL_PADDING;
+@TREELIST_SELECT_ALL_CHECKBOX_MARGIN_TOP: floor((round(@MATERIAL_BASE_LINE_HEIGHT*@MATERIAL_BASE_FONT_SIZE) - @MATERIAL_GRID_BASE_CHECKBOX_ICON_SIZE)/2);
+@TREELIST_CHECKBOX_PADDING_LEFT: @TREELIST_EMPTY_SPACE_WIDTH + @MATERIAL_GRID_BASE_CELL_PADDING;
+@TREELIST_CHECKBOX_MARGIN_LEFT: @TREELIST_CHECKBOX_PADDING_LEFT + @MATERIAL_GRID_BASE_CHECKBOX_ICON_SIZE;
+@TREELIST_EDITOR_CELL_PADDING_LEFT: @TREELIST_CHECKBOX_MARGIN_LEFT + @MATERIAL_GRID_BASE_CELL_PADDING;
+@TREELIST_ICON_CONTAINER_PADDING_RIGHT: @MATERIAL_GRID_BASE_CHECKBOX_ICON_SIZE + @MATERIAL_GRID_BASE_CELL_PADDING;
 
 .dx-treelist-rowsview {
     .dx-treelist-table:not(.dx-treelist-table-fixed) {
@@ -27,7 +27,7 @@
 
     .dx-treelist-expanded span {
         .dx-icon-spindown;
-        .dx-icon-font-centered-sizing(@GENERIC_BASE_ICON_SIZE);
+        .dx-icon-font-centered-sizing(@MATERIAL_BASE_ICON_SIZE);
         cursor: pointer;
 
         &:before {
@@ -39,7 +39,7 @@
 
     .dx-treelist-collapsed span {
         .dx-icon-spinright;
-        .dx-icon-font-centered-sizing(@GENERIC_BASE_ICON_SIZE);
+        .dx-icon-font-centered-sizing(@MATERIAL_BASE_ICON_SIZE);
         cursor: pointer;
 
         &:before {
@@ -88,7 +88,7 @@
 
     .dx-checkbox {
         top: 50%;
-        margin-top: -@GENERIC_GRID_BASE_CHECKBOX_ICON_SIZE/2;
+        margin-top: -@MATERIAL_GRID_BASE_CHECKBOX_ICON_SIZE/2;
     }
 }
 
@@ -129,7 +129,7 @@
 
     .dx-treelist-headers .dx-header-row > .dx-treelist-select-all {
         padding-right: @TREELIST_EDITOR_CELL_PADDING_LEFT;
-        padding-left: @GENERIC_GRID_BASE_CELL_PADDING;
+        padding-left: @MATERIAL_GRID_BASE_CELL_PADDING;
     }
 
     .dx-treelist-icon-container.dx-editor-inline-block {

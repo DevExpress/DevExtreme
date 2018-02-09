@@ -1,45 +1,45 @@
 .dx-size-default() {
-    @GENERIC_RADIOBUTTON_SIZE: 22px;
-    @GENERIC_RADIOBUTTON_DOT_SIZE: 10px;
+    @MATERIAL_RADIOBUTTON_SIZE: 22px;
+    @MATERIAL_RADIOBUTTON_DOT_SIZE: 10px;
 }
 
 .dx-size-compact() {
-    @GENERIC_RADIOBUTTON_SIZE: 16px;
-    @GENERIC_RADIOBUTTON_DOT_SIZE: 8px;
+    @MATERIAL_RADIOBUTTON_SIZE: 16px;
+    @MATERIAL_RADIOBUTTON_DOT_SIZE: 8px;
 }
 
-@GENERIC_RADIOBUTTON_BORDER_WIDTH: 1px;
-@GENERIC_RADIOBUTTON_INNER_SIZE: @GENERIC_RADIOBUTTON_SIZE - @GENERIC_RADIOBUTTON_BORDER_WIDTH * 2;
+@MATERIAL_RADIOBUTTON_BORDER_WIDTH: 1px;
+@MATERIAL_RADIOBUTTON_INNER_SIZE: @MATERIAL_RADIOBUTTON_SIZE - @MATERIAL_RADIOBUTTON_BORDER_WIDTH * 2;
 
 .dx-radiobutton-icon {
-    width: @GENERIC_RADIOBUTTON_SIZE;
-    height: @GENERIC_RADIOBUTTON_SIZE;
+    width: @MATERIAL_RADIOBUTTON_SIZE;
+    height: @MATERIAL_RADIOBUTTON_SIZE;
 }
 
 .dx-radiobutton-icon:before {
     display: block;
-    width: @GENERIC_RADIOBUTTON_INNER_SIZE;
-    height: @GENERIC_RADIOBUTTON_INNER_SIZE;
-    border: @GENERIC_RADIOBUTTON_BORDER_WIDTH solid @radiogroup-border-color;
+    width: @MATERIAL_RADIOBUTTON_INNER_SIZE;
+    height: @MATERIAL_RADIOBUTTON_INNER_SIZE;
+    border: @MATERIAL_RADIOBUTTON_BORDER_WIDTH solid @radiogroup-border-color;
     background-color: @radiogroup-bg;
     content: "";
-    .border-radius(@GENERIC_RADIOBUTTON_SIZE / 2);
+    .border-radius(@MATERIAL_RADIOBUTTON_SIZE / 2);
     .box-sizing(content-box);
 }
 
 .dx-radiobutton-checked .dx-radiobutton-icon-dot {
     display: block;
-    margin-top: -@GENERIC_RADIOBUTTON_SIZE / 2 - @GENERIC_RADIOBUTTON_DOT_SIZE / 2;
-    margin-left: @GENERIC_RADIOBUTTON_SIZE / 2 - @GENERIC_RADIOBUTTON_DOT_SIZE / 2;
-    width: @GENERIC_RADIOBUTTON_DOT_SIZE;
-    height: @GENERIC_RADIOBUTTON_DOT_SIZE;
+    margin-top: -@MATERIAL_RADIOBUTTON_SIZE / 2 - @MATERIAL_RADIOBUTTON_DOT_SIZE / 2;
+    margin-left: @MATERIAL_RADIOBUTTON_SIZE / 2 - @MATERIAL_RADIOBUTTON_DOT_SIZE / 2;
+    width: @MATERIAL_RADIOBUTTON_DOT_SIZE;
+    height: @MATERIAL_RADIOBUTTON_DOT_SIZE;
     background: @radiogroup-checked-bg;
     content: "";
-    .border-radius(@GENERIC_RADIOBUTTON_DOT_SIZE / 2);
+    .border-radius(@MATERIAL_RADIOBUTTON_DOT_SIZE / 2);
 }
 
 .dx-radiobutton {
-    line-height: @GENERIC_RADIOBUTTON_SIZE;
+    line-height: @MATERIAL_RADIOBUTTON_SIZE;
 
     &.dx-state-readonly {
         .dx-radiobutton-icon:before {
@@ -65,7 +65,7 @@
 
         &:not(.dx-state-active) {
             .dx-radiobutton-icon:before {
-                border: @GENERIC_RADIOBUTTON_BORDER_WIDTH solid @radiobutton-focused-border-color;
+                border: @MATERIAL_RADIOBUTTON_BORDER_WIDTH solid @radiobutton-focused-border-color;
             }
         }
     }
@@ -94,7 +94,7 @@
 .dx-rtl .dx-radiobutton,
 .dx-rtl.dx-radiobutton {
     &.dx-radiobutton-checked .dx-radiobutton-icon-dot {
-        margin-right: @GENERIC_RADIOBUTTON_INNER_SIZE / 4 + @GENERIC_RADIOBUTTON_BORDER_WIDTH;
+        margin-right: @MATERIAL_RADIOBUTTON_INNER_SIZE / 4 + @MATERIAL_RADIOBUTTON_BORDER_WIDTH;
         margin-left: 0;
     }
 }

@@ -1,30 +1,30 @@
 .grid-base(datagrid);
 
 .dx-datagrid-group-panel {
-    font-size: @GENERIC_BASE_FONT_SIZE;
+    font-size: @MATERIAL_BASE_FONT_SIZE;
     .touch-action(pinch-zoom);
 
     .dx-group-panel-message {
         color: @datagrid-columnchooser-item-color;
         font-weight: @datagrid-columnchooser-font-weight;
-        padding: @GENERIC_DATAGRID_CELL_PADDING;
-        border-top: @GENERIC_GRID_BASE_BORDER_HIDDEN;
-        border-bottom: @GENERIC_GRID_BASE_BORDER_HIDDEN;
+        padding: @MATERIAL_DATAGRID_CELL_PADDING;
+        border-top: @MATERIAL_GRID_BASE_BORDER_HIDDEN;
+        border-bottom: @MATERIAL_GRID_BASE_BORDER_HIDDEN;
     }
 
     .dx-group-panel-item {
-        margin-right: @GENERIC_GRID_BASE_GROUPPANEL_ITEM_MARGIN;
+        margin-right: @MATERIAL_GRID_BASE_GROUPPANEL_ITEM_MARGIN;
         color: @datagrid-columnchooser-item-color;
         font-weight: @datagrid-columnchooser-font-weight;
         border: @datagrid-border;
-        padding: @GENERIC_DATAGRID_CELL_PADDING;
+        padding: @MATERIAL_DATAGRID_CELL_PADDING;
     }
 
     .dx-block-separator {
-        margin-right: @GENERIC_GRID_BASE_GROUPPANEL_ITEM_MARGIN;
+        margin-right: @MATERIAL_GRID_BASE_GROUPPANEL_ITEM_MARGIN;
         color: @datagrid-columnchooser-item-color;
         font-weight: @datagrid-columnchooser-font-weight;
-        padding: @GENERIC_DATAGRID_CELL_PADDING + 1;
+        padding: @MATERIAL_DATAGRID_CELL_PADDING + 1;
         background-color: @datagrid-block-separator-bg;
     }
 
@@ -44,21 +44,21 @@
         font-weight: bold;
 
         td {
-            border-top-color: @GENERIC_GRID_BASE_BORDER_COLOR;
-            border-bottom-color: @GENERIC_GRID_BASE_BORDER_COLOR;
+            border-top-color: @MATERIAL_GRID_BASE_BORDER_COLOR;
+            border-bottom-color: @MATERIAL_GRID_BASE_BORDER_COLOR;
         }
     }
 }
 
 .dx-datagrid-group-opened {
     .dx-icon-spindown;
-    .dx-icon-sizing(@GENERIC_BASE_ICON_SIZE);
+    .dx-icon-sizing(@MATERIAL_BASE_ICON_SIZE);
     color: @datagrid-spin-icon-color;
 }
 
 .dx-datagrid-group-closed {
     .dx-icon-spinright;
-    .dx-icon-sizing(@GENERIC_BASE_ICON_SIZE);
+    .dx-icon-sizing(@MATERIAL_BASE_ICON_SIZE);
     color: @datagrid-spin-icon-color;
 }
 
@@ -82,7 +82,7 @@
 .dx-rtl {
     .dx-datagrid-group-panel {
         .dx-group-panel-item, .dx-block-separator {
-            margin-left: @GENERIC_GRID_BASE_GROUPPANEL_ITEM_MARGIN;
+            margin-left: @MATERIAL_GRID_BASE_GROUPPANEL_ITEM_MARGIN;
         }
     }
 

@@ -1,18 +1,18 @@
 .dx-size-default() {
-    @GENERIC_ACCORDION_TITLE_PADDING: 9px 12px;
-    @GENERIC_ACCORDION_BODY_PADDING: 8px 12px 22px;
+    @MATERIAL_ACCORDION_TITLE_PADDING: 9px 12px;
+    @MATERIAL_ACCORDION_BODY_PADDING: 8px 12px 22px;
 
-    @GENERIC_ACCORDION_ARROW_LINE_HEIGHT: 24px;
+    @MATERIAL_ACCORDION_ARROW_LINE_HEIGHT: 24px;
 }
 
 .dx-size-compact() {
-    @GENERIC_ACCORDION_TITLE_PADDING: 5px 7px;
-    @GENERIC_ACCORDION_BODY_PADDING: 3px 7px 12px;
+    @MATERIAL_ACCORDION_TITLE_PADDING: 5px 7px;
+    @MATERIAL_ACCORDION_BODY_PADDING: 3px 7px 12px;
 
-    @GENERIC_ACCORDION_ARROW_LINE_HEIGHT: 21px;
+    @MATERIAL_ACCORDION_ARROW_LINE_HEIGHT: 21px;
 }
 
-@GENERIC_ACCORDION_DISABLED_OPACITY: .5;
+@MATERIAL_ACCORDION_DISABLED_OPACITY: .5;
 
 
 .dx-accordion {
@@ -77,23 +77,23 @@
 
 .dx-accordion-item-title {
     color: @accordion-title-color;
-    padding: @GENERIC_ACCORDION_TITLE_PADDING;
-    font-size: @GENERIC_S_FONT_SIZE;
+    padding: @MATERIAL_ACCORDION_TITLE_PADDING;
+    font-size: @MATERIAL_S_FONT_SIZE;
 
     &:before {
         font-weight: normal;
         color: @accordion-icon-color;
         content: "\f016";
         font-family: DXIcons;
-        font-size: @GENERIC_BASE_ICON_SIZE;
-        margin-left: @GENERIC_BASE_ICON_SIZE/2;
+        font-size: @MATERIAL_BASE_ICON_SIZE;
+        margin-left: @MATERIAL_BASE_ICON_SIZE/2;
         margin-right: 0;
-        line-height: @GENERIC_ACCORDION_ARROW_LINE_HEIGHT;
+        line-height: @MATERIAL_ACCORDION_ARROW_LINE_HEIGHT;
     }
 
     .dx-icon {
-        .dx-icon-sizing(@GENERIC_BASE_ICON_SIZE);
-        .dx-icon-margin(@GENERIC_BASE_ICON_SIZE/2);
+        .dx-icon-sizing(@MATERIAL_BASE_ICON_SIZE);
+        .dx-icon-margin(@MATERIAL_BASE_ICON_SIZE/2);
         display: inline-block;
         color: @accordion-icon-color;
     }
@@ -101,7 +101,7 @@
 
 .dx-state-disabled {
     &.dx-accordion-item {
-        opacity: @GENERIC_ACCORDION_DISABLED_OPACITY;
+        opacity: @MATERIAL_ACCORDION_DISABLED_OPACITY;
     }
 }
 
@@ -112,15 +112,15 @@
 }
 
 .dx-accordion-item-body {
-    padding: @GENERIC_ACCORDION_BODY_PADDING;
-    font-size: @GENERIC_BASE_FONT_SIZE;
+    padding: @MATERIAL_ACCORDION_BODY_PADDING;
+    font-size: @MATERIAL_BASE_FONT_SIZE;
 }
 
 .dx-rtl {
     .dx-accordion-item-title {
         &:before {
             margin-left: 0;
-            margin-right: @GENERIC_BASE_ICON_SIZE/2;
+            margin-right: @MATERIAL_BASE_ICON_SIZE/2;
         }
     }
 }

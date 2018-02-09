@@ -1,5 +1,5 @@
 .dx-theme-marker {
-    font-family: "dx.generic@{GENERIC_COLOR_POSTFIX}@{GENERIC_SIZE_POSTFIX}";
+    font-family: "dx.generic@{MATERIAL_COLOR_POSTFIX}@{MATERIAL_SIZE_POSTFIX}";
 }
 
 .dx-theme-accent-as-text-color {
@@ -57,13 +57,13 @@
 .dx-base-typography() {
     color: @typography-color;
     font-weight: normal;
-    font-size: @GENERIC_BASE_FONT_SIZE;
+    font-size: @MATERIAL_BASE_FONT_SIZE;
     font-family: @base-font-family;
-    line-height: @GENERIC_BASE_LINE_HEIGHT;
+    line-height: @MATERIAL_BASE_LINE_HEIGHT;
 
     input, textarea {
         font-family: @base-font-family;
-        line-height: @GENERIC_BASE_LINE_HEIGHT;
+        line-height: @MATERIAL_BASE_LINE_HEIGHT;
     }
 }
 
@@ -76,13 +76,13 @@
 
 
 .dx-size-default() {
-    @GENERIC_INVALID_BADGE_SIZE: @GENERIC_BASE_ICON_SIZE;
+    @MATERIAL_INVALID_BADGE_SIZE: @MATERIAL_BASE_ICON_SIZE;
 }
 .dx-size-compact() {
-    @GENERIC_INVALID_BADGE_SIZE: @GENERIC_BASE_ICON_SIZE + 2px;
+    @MATERIAL_INVALID_BADGE_SIZE: @MATERIAL_BASE_ICON_SIZE + 2px;
 }
-@GENERIC_INVALID_BADGE_HORIZONTAL_PADDING: (@GENERIC_BASE_INLINE_BORDEREDWIDGET_INNER_SIZE - @GENERIC_INVALID_BADGE_SIZE) / 2;
-@GENERIC_INVALID_BADGE_HALFHORIZONTAL_PADDING: @GENERIC_INVALID_BADGE_HORIZONTAL_PADDING / 2;
+@MATERIAL_INVALID_BADGE_HORIZONTAL_PADDING: (@MATERIAL_BASE_INLINE_BORDEREDWIDGET_INNER_SIZE - @MATERIAL_INVALID_BADGE_SIZE) / 2;
+@MATERIAL_INVALID_BADGE_HALFHORIZONTAL_PADDING: @MATERIAL_INVALID_BADGE_HORIZONTAL_PADDING / 2;
 
 .dx-invalid-generic-badge() {
     pointer-events: none;
@@ -92,11 +92,11 @@
     content: '!';
     position: absolute;
     top: 50%;
-    margin-top: -@GENERIC_INVALID_BADGE_SIZE/2;
-    width: @GENERIC_INVALID_BADGE_SIZE;
-    height: @GENERIC_INVALID_BADGE_SIZE;
+    margin-top: -@MATERIAL_INVALID_BADGE_SIZE/2;
+    width: @MATERIAL_INVALID_BADGE_SIZE;
+    height: @MATERIAL_INVALID_BADGE_SIZE;
     .border-radius(@radius: ~"50%");
     text-align: center;
-    line-height: @GENERIC_INVALID_BADGE_SIZE;
-    font-size: @GENERIC_BASE_FONT_SIZE - 1px;
+    line-height: @MATERIAL_INVALID_BADGE_SIZE;
+    font-size: @MATERIAL_BASE_FONT_SIZE - 1px;
 }

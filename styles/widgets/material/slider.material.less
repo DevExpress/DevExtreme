@@ -1,15 +1,15 @@
 .dx-size-default() {
-    @GENERIC_SLIDER_HEIGHT: 28px;
-    @GENERIC_SLIDER_WIDTH: 14px;
-    @GENERIC_SLIDER_TRACK_HEIGHT: 4px;
+    @MATERIAL_SLIDER_HEIGHT: 28px;
+    @MATERIAL_SLIDER_WIDTH: 14px;
+    @MATERIAL_SLIDER_TRACK_HEIGHT: 4px;
 }
 .dx-size-compact() {
-    @GENERIC_SLIDER_HEIGHT: 20px;
-    @GENERIC_SLIDER_WIDTH: 9px;
-    @GENERIC_SLIDER_TRACK_HEIGHT: 2px;
+    @MATERIAL_SLIDER_HEIGHT: 20px;
+    @MATERIAL_SLIDER_WIDTH: 9px;
+    @MATERIAL_SLIDER_TRACK_HEIGHT: 2px;
 }
 
-@GENERIC_SLIDER_RADIUS: 2px;
+@MATERIAL_SLIDER_RADIUS: 2px;
 
 
 .dx-slider {
@@ -21,25 +21,25 @@
 }
 
 .dx-slider-wrapper {
-    height: @GENERIC_SLIDER_HEIGHT;
+    height: @MATERIAL_SLIDER_HEIGHT;
 }
 
 .dx-slider-bar {
-    margin: @GENERIC_SLIDER_HEIGHT/2 @GENERIC_SLIDER_WIDTH / 2;
-    height: @GENERIC_SLIDER_TRACK_HEIGHT;
+    margin: @MATERIAL_SLIDER_HEIGHT/2 @MATERIAL_SLIDER_WIDTH / 2;
+    height: @MATERIAL_SLIDER_TRACK_HEIGHT;
     background: @slider-bar-bg;
-    .border-radius(@GENERIC_SLIDER_RADIUS);
+    .border-radius(@MATERIAL_SLIDER_RADIUS);
 }
 
 .dx-slider-range {
     border: 1px solid transparent;
-    height: @GENERIC_SLIDER_TRACK_HEIGHT - 2px;
+    height: @MATERIAL_SLIDER_TRACK_HEIGHT - 2px;
     .box-sizing(content-box);
 
     &.dx-slider-range-visible {
         border: 1px solid @slider-range-border-color;
         background: @slider-range-bg;
-        .border-radius(@GENERIC_SLIDER_RADIUS);
+        .border-radius(@MATERIAL_SLIDER_RADIUS);
     }
 }
 
@@ -57,10 +57,10 @@
 
 
 .dx-slider-handle {
-    margin-top: -@GENERIC_SLIDER_HEIGHT / 2;
-    margin-right: -@GENERIC_SLIDER_WIDTH / 2;
-    width: @GENERIC_SLIDER_WIDTH;
-    height: @GENERIC_SLIDER_HEIGHT;
+    margin-top: -@MATERIAL_SLIDER_HEIGHT / 2;
+    margin-right: -@MATERIAL_SLIDER_WIDTH / 2;
+    width: @MATERIAL_SLIDER_WIDTH;
+    height: @MATERIAL_SLIDER_HEIGHT;
     border: 1px solid @slider-handle-border-color;
     background-color: @slider-handle-bg;
     .border-radius(@slider-handle-border-radius);
@@ -100,6 +100,6 @@
 }
 
 .dx-rtl .dx-slider-handle {
-    margin-left: -(@GENERIC_SLIDER_WIDTH + 1px) / 2;
+    margin-left: -(@MATERIAL_SLIDER_WIDTH + 1px) / 2;
 }
 

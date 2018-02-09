@@ -1,4 +1,4 @@
-@GENERIC_MENU_POPUP_BORDER: 1px solid @menu-popup-border-color;
+@MATERIAL_MENU_POPUP_BORDER: 1px solid @menu-popup-border-color;
 
 .dx-context-menu {
     color: @menu-color;
@@ -9,13 +9,13 @@
 
     .dx-submenu {
         background-color: @menu-popup-bg;
-        border: @GENERIC_MENU_POPUP_BORDER;
+        border: @MATERIAL_MENU_POPUP_BORDER;
         .box-shadow(0 2px 2px @menu-container-shadow-color);
     }
 
     .dx-menu-item-popout {
         .dx-icon-spinright;
-        .dx-icon-font-centered-sizing(@GENERIC_BASE_ICON_SIZE);
+        .dx-icon-font-centered-sizing(@MATERIAL_BASE_ICON_SIZE);
     }
 
     .dx-menu-separator {
@@ -23,21 +23,21 @@
     }
 
     .dx-menu-no-icons > .dx-menu-item-wrapper > .dx-menu-item > .dx-menu-item-content .dx-menu-item-text {
-        padding-left: @GENERIC_MENU_ITEM_PADDING_BASE;
+        padding-left: @MATERIAL_MENU_ITEM_PADDING_BASE;
 
         .dx-rtl &,
         .dx-rtl& {
-            padding-right: @GENERIC_MENU_ITEM_PADDING_BASE;
-            padding-left: @GENERIC_MENU_PADDING_BIG;
+            padding-right: @MATERIAL_MENU_ITEM_PADDING_BASE;
+            padding-left: @MATERIAL_MENU_PADDING_BIG;
         }
     }
 
     &.dx-rtl {
         .dx-menu-item-content {
-            padding: @GENERIC_MENU_ITEM_PADDING_BASE @GENERIC_MENU_ITEM_PADDING_REDUCED @GENERIC_MENU_ITEM_PADDING_BASE @GENERIC_MENU_ITEM_PADDING_BASE;
+            padding: @MATERIAL_MENU_ITEM_PADDING_BASE @MATERIAL_MENU_ITEM_PADDING_REDUCED @MATERIAL_MENU_ITEM_PADDING_BASE @MATERIAL_MENU_ITEM_PADDING_BASE;
 
             .dx-menu-item-text {
-                padding: 0 @GENERIC_MENU_ITEM_PADDING_BASE + @GENERIC_BASE_ICON_SIZE @GENERIC_MENU_ITEM_PADDING_BASE @GENERIC_MENU_PADDING_BIG;
+                padding: 0 @MATERIAL_MENU_ITEM_PADDING_BASE + @MATERIAL_BASE_ICON_SIZE @MATERIAL_MENU_ITEM_PADDING_BASE @MATERIAL_MENU_PADDING_BIG;
             }
         }
     }

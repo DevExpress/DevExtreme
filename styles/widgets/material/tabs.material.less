@@ -1,23 +1,23 @@
 .dx-size-default() {
-    @GENERIC_TABS_ITEM_PADDING: 9px;
-    @GENERIC_TAB_TEXT_LINE_HEIGHT: 25px;
+    @MATERIAL_TABS_ITEM_PADDING: 9px;
+    @MATERIAL_TAB_TEXT_LINE_HEIGHT: 25px;
 
-    @GENERIC_TABS_NAV_BUTTON_POSITION: 4px 6px;
-    @GENERIC_TABS_NAV_BUTTON_SIZE: 20px;
+    @MATERIAL_TABS_NAV_BUTTON_POSITION: 4px 6px;
+    @MATERIAL_TABS_NAV_BUTTON_SIZE: 20px;
 }
 
 .dx-size-compact() {
-    @GENERIC_TABS_ITEM_PADDING: 4px;
-    @GENERIC_TAB_TEXT_LINE_HEIGHT: 21px;
+    @MATERIAL_TABS_ITEM_PADDING: 4px;
+    @MATERIAL_TAB_TEXT_LINE_HEIGHT: 21px;
 
-    @GENERIC_TABS_NAV_BUTTON_POSITION: 8px 5px;
-    @GENERIC_TABS_NAV_BUTTON_SIZE: 13px;
+    @MATERIAL_TABS_NAV_BUTTON_POSITION: 8px 5px;
+    @MATERIAL_TABS_NAV_BUTTON_SIZE: 13px;
 }
 
-@GENERIC_TABS_BORDER_WIDTH: @GENERIC_BASE_BORDER_WIDTH;
-@GENERIC_TABS_BORDER: 1px solid @tabs-border-color;
-@GENERIC_TABS_TRANSPARENT_BORDER: 1px solid @tabs-tab-bg;
-@GENERIC_TAB_FOCUS_BORDER: 1px solid @tabs-focused-border-color;
+@MATERIAL_TABS_BORDER_WIDTH: @MATERIAL_BASE_BORDER_WIDTH;
+@MATERIAL_TABS_BORDER: 1px solid @tabs-border-color;
+@MATERIAL_TABS_TRANSPARENT_BORDER: 1px solid @tabs-tab-bg;
+@MATERIAL_TAB_FOCUS_BORDER: 1px solid @tabs-focused-border-color;
 
 
 .dx-tabs-border-mixin(@border-horizontal, @border-vertical) {
@@ -38,19 +38,19 @@
 }
 
 .dx-tabs {
-    border: @GENERIC_TABS_BORDER;
+    border: @MATERIAL_TABS_BORDER;
 }
 
 .dx-tabs-scrollable {
-    margin: -@GENERIC_TABS_BORDER_WIDTH;
+    margin: -@MATERIAL_TABS_BORDER_WIDTH;
     height: calc(~"100% + 2px");
 
     .dx-tabs-wrapper {
-        border: @GENERIC_TABS_BORDER;
+        border: @MATERIAL_TABS_BORDER;
 
         .dx-tabs-nav-buttons & {
-            border-left: @GENERIC_TABS_TRANSPARENT_BORDER;
-            border-right: @GENERIC_TABS_TRANSPARENT_BORDER;
+            border-left: @MATERIAL_TABS_TRANSPARENT_BORDER;
+            border-right: @MATERIAL_TABS_TRANSPARENT_BORDER;
         }
     }
 }
@@ -79,15 +79,15 @@
 }
 
 .dx-tab {
-    padding: @GENERIC_TABS_ITEM_PADDING;
+    padding: @MATERIAL_TABS_ITEM_PADDING;
     background-color: @tabs-tab-bg;
 
     .dx-icon {
         color: @tabs-tab-icon-color;
         display: inline-block;
         vertical-align: middle;
-        .dx-icon-sizing(@GENERIC_BASE_ICON_SIZE);
-        .dx-icon-margin(@GENERIC_BASE_ICON_SIZE/2);
+        .dx-icon-sizing(@MATERIAL_BASE_ICON_SIZE);
+        .dx-icon-margin(@MATERIAL_BASE_ICON_SIZE/2);
     }
 
     &.dx-state-hover {
@@ -100,7 +100,7 @@
     }
 
     &.dx-state-focused {
-        .dx-tabs-border-mixin(@GENERIC_TAB_FOCUS_BORDER, @GENERIC_TAB_FOCUS_BORDER);
+        .dx-tabs-border-mixin(@MATERIAL_TAB_FOCUS_BORDER, @MATERIAL_TAB_FOCUS_BORDER);
     }
 
     &.dx-tab-selected {
@@ -110,7 +110,7 @@
 }
 
 .dx-tab-selected {
-    .dx-tabs-border-mixin(@GENERIC_TABS_BORDER, none);
+    .dx-tabs-border-mixin(@MATERIAL_TABS_BORDER, none);
 
     .dx-icon {
         color: @tabs-tab-icon-selected-color;
@@ -119,11 +119,11 @@
     &:not(.dx-state-focused) {
         & + & {
             &:after {
-                border-left: @GENERIC_TABS_TRANSPARENT_BORDER;
+                border-left: @MATERIAL_TABS_TRANSPARENT_BORDER;
 
                 .dx-rtl & {
-                    border-left: @GENERIC_TABS_BORDER;
-                    border-right: @GENERIC_TABS_TRANSPARENT_BORDER;
+                    border-left: @MATERIAL_TABS_BORDER;
+                    border-right: @MATERIAL_TABS_TRANSPARENT_BORDER;
                 }
             }
         }
@@ -132,7 +132,7 @@
 
 .dx-tab-text {
     vertical-align: middle;
-    line-height: @GENERIC_TAB_TEXT_LINE_HEIGHT;
+    line-height: @MATERIAL_TAB_TEXT_LINE_HEIGHT;
 }
 
 .dx-state-disabled {

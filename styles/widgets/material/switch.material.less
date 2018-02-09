@@ -1,29 +1,29 @@
 .dx-size-default() {
-    @GENERIC_SWITCH_HEIGHT: 24px;
-    @GENERIC_SWITCH_WIDTH: 44px;
-    @GENERIC_SWITCH_HANDLE_WIDTH: 14px;
-    @GENERIC_SWITCH_HANDLE_OFFSET: 2px;
-    @GENERIC_SWITCH_CONTAINER_ADJUSTMENT: 6px;
-    @GENERIC_SWITCH_FONT_SIZE: 9px;
-    @GENERIC_SWITCH_ON_OFF_ADDING_PADDING: 2px;
+    @MATERIAL_SWITCH_HEIGHT: 24px;
+    @MATERIAL_SWITCH_WIDTH: 44px;
+    @MATERIAL_SWITCH_HANDLE_WIDTH: 14px;
+    @MATERIAL_SWITCH_HANDLE_OFFSET: 2px;
+    @MATERIAL_SWITCH_CONTAINER_ADJUSTMENT: 6px;
+    @MATERIAL_SWITCH_FONT_SIZE: 9px;
+    @MATERIAL_SWITCH_ON_OFF_ADDING_PADDING: 2px;
 }
 
 .dx-size-compact() {
-    @GENERIC_SWITCH_HEIGHT: 18px;
-    @GENERIC_SWITCH_WIDTH: 36px;
-    @GENERIC_SWITCH_HANDLE_WIDTH: 14px;
-    @GENERIC_SWITCH_HANDLE_OFFSET: 1px;
-    @GENERIC_SWITCH_CONTAINER_ADJUSTMENT: 4px;
-    @GENERIC_SWITCH_FONT_SIZE: 9px;
-    @GENERIC_SWITCH_ON_OFF_ADDING_PADDING: 0;
+    @MATERIAL_SWITCH_HEIGHT: 18px;
+    @MATERIAL_SWITCH_WIDTH: 36px;
+    @MATERIAL_SWITCH_HANDLE_WIDTH: 14px;
+    @MATERIAL_SWITCH_HANDLE_OFFSET: 1px;
+    @MATERIAL_SWITCH_CONTAINER_ADJUSTMENT: 4px;
+    @MATERIAL_SWITCH_FONT_SIZE: 9px;
+    @MATERIAL_SWITCH_ON_OFF_ADDING_PADDING: 0;
 }
 
-@GENERIC_SWITCH_BORDER_WEIGHT: 1px;
-@GENERIC_SWITCH_INNER_SIZE: @GENERIC_SWITCH_HEIGHT - @GENERIC_SWITCH_BORDER_WEIGHT*2;
+@MATERIAL_SWITCH_BORDER_WEIGHT: 1px;
+@MATERIAL_SWITCH_INNER_SIZE: @MATERIAL_SWITCH_HEIGHT - @MATERIAL_SWITCH_BORDER_WEIGHT*2;
 
 .dx-switch {
-    width: @GENERIC_SWITCH_WIDTH;
-    height: @GENERIC_SWITCH_HEIGHT;
+    width: @MATERIAL_SWITCH_WIDTH;
+    height: @MATERIAL_SWITCH_HEIGHT;
 
     &.dx-state-readonly {
         .dx-switch-container {
@@ -75,10 +75,10 @@
 
 .dx-switch-container {
     overflow: hidden;
-    margin: 0 -@GENERIC_SWITCH_CONTAINER_ADJUSTMENT 0 0;
-    padding: 0 @GENERIC_SWITCH_HANDLE_OFFSET;
-    height: @GENERIC_SWITCH_HEIGHT;
-    border: @GENERIC_SWITCH_BORDER_WEIGHT solid @switch-border-color;
+    margin: 0 -@MATERIAL_SWITCH_CONTAINER_ADJUSTMENT 0 0;
+    padding: 0 @MATERIAL_SWITCH_HANDLE_OFFSET;
+    height: @MATERIAL_SWITCH_HEIGHT;
+    border: @MATERIAL_SWITCH_BORDER_WEIGHT solid @switch-border-color;
     background: @switch-bg;
     .border-radius(@switch-border-radius);
 }
@@ -92,17 +92,17 @@
 .dx-switch-off {
     float: left;
     width: 50%;
-    padding-right: @GENERIC_SWITCH_HANDLE_WIDTH + @GENERIC_SWITCH_ON_OFF_ADDING_PADDING;
-    line-height: @GENERIC_SWITCH_INNER_SIZE;
+    padding-right: @MATERIAL_SWITCH_HANDLE_WIDTH + @MATERIAL_SWITCH_ON_OFF_ADDING_PADDING;
+    line-height: @MATERIAL_SWITCH_INNER_SIZE;
     text-align: center;
-    font-size: @GENERIC_SWITCH_FONT_SIZE;
+    font-size: @MATERIAL_SWITCH_FONT_SIZE;
     font-weight: 600;
     .dx-overflow();
     .box-sizing();
 }
 
 .dx-switch-off {
-    padding-left: @GENERIC_SWITCH_HANDLE_OFFSET;
+    padding-left: @MATERIAL_SWITCH_HANDLE_OFFSET;
     color: @switch-off-color;
 }
 
@@ -113,10 +113,10 @@
 .dx-switch-handle {
     position: relative;
     float: left;
-    width: @GENERIC_SWITCH_HANDLE_WIDTH;
-    height: @GENERIC_SWITCH_INNER_SIZE - @GENERIC_SWITCH_HANDLE_OFFSET*2;
-    margin-top: @GENERIC_SWITCH_HANDLE_OFFSET;
-    margin-left: -@GENERIC_SWITCH_HANDLE_WIDTH;
+    width: @MATERIAL_SWITCH_HANDLE_WIDTH;
+    height: @MATERIAL_SWITCH_INNER_SIZE - @MATERIAL_SWITCH_HANDLE_OFFSET*2;
+    margin-top: @MATERIAL_SWITCH_HANDLE_OFFSET;
+    margin-left: -@MATERIAL_SWITCH_HANDLE_WIDTH;
     .box-sizing();
 
     &:before {
@@ -140,8 +140,8 @@
     .dx-switch-on,
     .dx-switch-off {
         float: right;
-        padding-left: @GENERIC_SWITCH_HANDLE_WIDTH + @GENERIC_SWITCH_ON_OFF_ADDING_PADDING;
-        padding-right: @GENERIC_SWITCH_HANDLE_OFFSET;
+        padding-left: @MATERIAL_SWITCH_HANDLE_WIDTH + @MATERIAL_SWITCH_ON_OFF_ADDING_PADDING;
+        padding-right: @MATERIAL_SWITCH_HANDLE_OFFSET;
     }
 
     .dx-switch-off {
@@ -151,10 +151,10 @@
     .dx-switch-handle {
         float: right;
         margin-left: 0;
-        margin-right: -@GENERIC_SWITCH_HANDLE_WIDTH;
+        margin-right: -@MATERIAL_SWITCH_HANDLE_WIDTH;
     }
 
     .dx-switch-container {
-        margin: 0 0 0 -@GENERIC_SWITCH_CONTAINER_ADJUSTMENT;
+        margin: 0 0 0 -@MATERIAL_SWITCH_CONTAINER_ADJUSTMENT;
     }
 }

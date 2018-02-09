@@ -1,13 +1,13 @@
 .dx-size-default() {
-    @GENERIC_NAVBAR_ICON_SIZE: 31px;
-    @GENERIC_NAVBAR_BADGE_TOP: ~"11%";
+    @MATERIAL_NAVBAR_ICON_SIZE: 31px;
+    @MATERIAL_NAVBAR_BADGE_TOP: ~"11%";
 }
 .dx-size-compact() {
-    @GENERIC_NAVBAR_ICON_SIZE: 26px;
-    @GENERIC_NAVBAR_BADGE_TOP: ~"6%";
+    @MATERIAL_NAVBAR_ICON_SIZE: 26px;
+    @MATERIAL_NAVBAR_BADGE_TOP: ~"6%";
 }
 
-@GENERIC_NAVBAR_FOCUSED_ITEM_SHADOW: inset 0 0 0 1px @navbar-tab-focused-border-color;
+@MATERIAL_NAVBAR_FOCUSED_ITEM_SHADOW: inset 0 0 0 1px @navbar-tab-focused-border-color;
 
 
 .dx-navbar {
@@ -22,7 +22,7 @@
     }
 
     .dx-navbar & .dx-icon {
-        .dx-icon-sizing(@GENERIC_NAVBAR_ICON_SIZE);
+        .dx-icon-sizing(@MATERIAL_NAVBAR_ICON_SIZE);
     }
 
     &.dx-tab-selected,
@@ -43,7 +43,7 @@
     }
 
     &.dx-state-focused {
-        .box-shadow(@GENERIC_NAVBAR_FOCUSED_ITEM_SHADOW);
+        .box-shadow(@MATERIAL_NAVBAR_FOCUSED_ITEM_SHADOW);
     }
 
     &.dx-state-disabled{
@@ -55,7 +55,7 @@
 
 .dx-navbar-item-badge {
     margin-right: -26px;
-    top: @GENERIC_NAVBAR_BADGE_TOP;
+    top: @MATERIAL_NAVBAR_BADGE_TOP;
 }
 
 .dx-rtl .dx-navbar-item-badge {
