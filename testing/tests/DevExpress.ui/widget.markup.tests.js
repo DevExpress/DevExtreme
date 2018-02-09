@@ -53,7 +53,7 @@ require("common.css!");
         assert.strictEqual($element[0].style.width, "50%");
     });
 
-    QUnit.test("option 'visible' - default", function(assert) {
+    QUnit.test("widget should be visible ny default", function(assert) {
         var element = $("#widget").dxWidget(),
             instance = element.dxWidget("instance");
 
@@ -65,7 +65,7 @@ require("common.css!");
         assert.ok(!element.is(":visible"));
     });
 
-    QUnit.test("option 'visible' - false on start", function(assert) {
+    QUnit.test("widget should not be visible is 'visible' option value = false", function(assert) {
         var element = $("#widget").dxWidget({ visible: false }),
             instance = element.dxWidget("instance");
 
@@ -74,11 +74,6 @@ require("common.css!");
         instance.option("visible", true);
 
         assert.ok(element.is(":visible"));
-    });
-
-    QUnit.test("'hint' option has 'undefined' value by default", function(assert) {
-        var instance = $("#widget").dxWidget().dxWidget("instance");
-        assert.equal(instance.option("hint"), undefined);
     });
 
     QUnit.test("'hint' option has 'title' value", function(assert) {

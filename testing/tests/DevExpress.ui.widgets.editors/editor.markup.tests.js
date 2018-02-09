@@ -34,18 +34,7 @@ QUnit.module("Editor markup", {
     }
 });
 
-QUnit.test("rendering", function(assert) {
-    var editor = this.fixture.createEditor();
-    assert.ok(editor);
-});
-
-QUnit.test("'readOnly' option has 'false' value by default", function(assert) {
-    var editor = this.fixture.createEditor();
-
-    assert.strictEqual(editor.option("readOnly"), false);
-});
-
-QUnit.test("'readOnly' option is set correctly on init", function(assert) {
+QUnit.test("editor should have 'dx-state-readonly' class depending on the 'readOnly' option on init", function(assert) {
     var editor = this.fixture.createEditor({
         readOnly: true
     });

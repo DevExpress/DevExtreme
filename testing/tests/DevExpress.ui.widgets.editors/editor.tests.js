@@ -42,6 +42,17 @@ var Fixture = Class.inherit({
         assert.ok(editor instanceof Editor);
     });
 
+    QUnit.test("rendering", function(assert) {
+        var editor = this.fixture.createEditor();
+        assert.ok(editor);
+    });
+
+    QUnit.test("'readOnly' option has 'false' value by default", function(assert) {
+        var editor = this.fixture.createEditor();
+
+        assert.strictEqual(editor.option("readOnly"), false);
+    });
+
     QUnit.test("Changing the 'value' option invokes the onValueChanged and passes the old and new values as arguments", function(assert) {
         var oldValue = "old",
             newValue = "new",

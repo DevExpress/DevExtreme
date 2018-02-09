@@ -365,6 +365,11 @@ require("common.css!");
         assert.ok(!$element.hasClass(RTL_CLASS));
     });
 
+    QUnit.test("'hint' option has 'undefined' value by default", function(assert) {
+        var instance = $("#widget").dxWidget().dxWidget("instance");
+        assert.equal(instance.option("hint"), undefined);
+    });
+
     QUnit.module("API", {
         beforeEach: function() {
             this.clock = sinon.useFakeTimers();
