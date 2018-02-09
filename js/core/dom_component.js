@@ -367,7 +367,13 @@ var DOMComponent = Component.inherit({
         var i = element.attributes.length - 1;
 
         for(; i >= 0; i--) {
-            var attributeName = element.attributes[i].name;
+            var attribute = element.attributes[i];
+
+            if(!attribute) {
+                return;
+            }
+
+            var attributeName = attribute.name;
 
             if(attributeName.indexOf("aria-") === 0 ||
                 attributeName.indexOf("dx-") !== -1 ||
