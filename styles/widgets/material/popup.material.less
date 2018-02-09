@@ -70,7 +70,15 @@
             .box-sizing(border-box);
         }
 
-        .dx-button-styling();
+        //TODO should be flat buttons
+        .dx-button-styling(
+            @button-normal-bg,
+            @button-normal-color,
+            @button-normal-hover-bg,
+            @button-normal-focused-bg,
+            @button-normal-active-bg,
+            @button-normal-icon-color
+        );
         .dx-button-styling-clear();
 
         .dx-closebutton-sizing(@size, @offset, @iconSize, @iconContainerSize) {
