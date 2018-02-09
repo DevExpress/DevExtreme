@@ -9,8 +9,7 @@ require("common.css!");
 (function() {
 
     var WIDGET_CLASS = "dx-widget",
-        DISABLED_STATE_CLASS = "dx-state-disabled",
-        RTL_CLASS = "dx-rtl";
+        DISABLED_STATE_CLASS = "dx-state-disabled";
 
     var DxWidget = Widget.inherit({});
     registerComponent("dxWidget", DxWidget);
@@ -75,26 +74,6 @@ require("common.css!");
         instance.option("visible", true);
 
         assert.ok(element.is(":visible"));
-    });
-
-    QUnit.test("option 'rtl'", function(assert) {
-        var $element = $("#widget").dxWidget(),
-            instance = $element.dxWidget("instance");
-
-        assert.ok(!$element.hasClass(RTL_CLASS));
-
-        instance.option("rtlEnabled", true);
-        assert.ok($element.hasClass(RTL_CLASS));
-    });
-
-    QUnit.test("init option 'rtl' is true", function(assert) {
-        var $element = $("#widget").dxWidget({ rtlEnabled: true }),
-            instance = $element.dxWidget("instance");
-
-        assert.ok($element.hasClass(RTL_CLASS));
-
-        instance.option("rtlEnabled", false);
-        assert.ok(!$element.hasClass(RTL_CLASS));
     });
 
     QUnit.test("'hint' option has 'undefined' value by default", function(assert) {

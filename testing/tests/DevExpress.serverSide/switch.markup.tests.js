@@ -11,6 +11,7 @@ QUnit.testStart(function() {
     var markup =
         '<div id="qunit-fixture">\
             <div id="switch"></div>\
+            <div id="widthRootStyle" style="width: 300px;"></div>\
         </div>';
 
     $("#qunit-fixture").html(markup);

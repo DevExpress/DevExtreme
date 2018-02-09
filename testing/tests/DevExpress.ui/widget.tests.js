@@ -22,7 +22,8 @@ require("common.css!");
         HOVER_STATE_CLASS = "dx-state-hover",
         FOCUSED_STATE_CLASS = "dx-state-focused",
         FEEDBACK_SHOW_TIMEOUT = 30,
-        FEEDBACK_HIDE_TIMEOUT = 400;
+        FEEDBACK_HIDE_TIMEOUT = 400,
+        RTL_CLASS = "dx-rtl";
 
     var DxWidget = Widget.inherit({});
     registerComponent("dxWidget", DxWidget);
@@ -342,6 +343,26 @@ require("common.css!");
         new DxWidget($element);
 
         assert.equal($element.css("display"), "block");
+    });
+
+    QUnit.test("option 'rtl'", function(assert) {
+        var $element = $("#widget").dxWidget(),
+            instance = $element.dxWidget("instance");
+
+        assert.ok(!$element.hasClass(RTL_CLASS));
+
+        instance.option("rtlEnabled", true);
+        assert.ok($element.hasClass(RTL_CLASS));
+    });
+
+    QUnit.test("init option 'rtl' is true", function(assert) {
+        var $element = $("#widget").dxWidget({ rtlEnabled: true }),
+            instance = $element.dxWidget("instance");
+
+        assert.ok($element.hasClass(RTL_CLASS));
+
+        instance.option("rtlEnabled", false);
+        assert.ok(!$element.hasClass(RTL_CLASS));
     });
 
     QUnit.module("API", {
