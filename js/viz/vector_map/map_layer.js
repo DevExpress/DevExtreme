@@ -569,7 +569,7 @@ strategiesByElementType[TYPE_MARKER] = {
             }
             if(count > 0) {
                 values = [];
-                palette = context.params.themeManager.createPalette(context.settings.palette, { useHighlight: true, extensionMode: "repeat" });
+                palette = context.params.themeManager.createPalette(context.settings.palette, { useHighlight: true, extensionMode: "alternate" });
                 for(i = 0; i < count; ++i) {
                     values.push(palette.getNextColor());
                 }
