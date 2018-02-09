@@ -486,6 +486,7 @@ var FilterBuilder = Widget.inherit({
             case "onValueChanged":
                 this._initActions();
                 break;
+            case "customOperations":
             case "fields":
             case "defaultGroupOperation":
             case "allowHierarchicalFields":
