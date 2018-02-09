@@ -807,6 +807,72 @@ QUnit.module("Create editor", function() {
         assert.deepEqual(args.field, fields[0], "field");
         assert.ok(args.setValue, "has setValue");
     });
+
+    QUnit.test("customOperation.editorTemplate has more priority than field.editorTemplate", function(assert) {
+        var event,
+            fields = [{
+                dataField: "Field",
+                editorTemplate: function(options, $container) {
+                    event = "field.editorTemplate";
+                }
+            }],
+            instance = $("#container").dxFilterBuilder({
+                value: [
+                    ["Field", "lastDays", 2]
+                ],
+                fields: fields,
+                customOperations: [{
+                    key: "lastDays",
+                    editorTemplate: function(options, $container) {
+                        event = "customOperation.editorTemplate";
+                    }
+                }]
+            }).dxFilterBuilder("instance");
+
+        var valueField = $("." + FILTER_BUILDER_ITEM_VALUE_CLASS).eq(0);
+        valueField.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).trigger("dxclick");
+        assert.equal(event, "customOperation.editorTemplate", "customOperation.editorTemplate is executed");
+
+        instance.option("value", ["Field", "=", 2]);
+        valueField = $("." + FILTER_BUILDER_ITEM_VALUE_CLASS).eq(0);
+        valueField.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).trigger("dxclick");
+        assert.equal(event, "field.editorTemplate", "field.editorTemplate is executed");
+    });
+
+    QUnit.test("customOperation.editorOptions has more priority than field.editorOptions", function(assert) {
+        var event,
+            fields = [{
+                dataField: "Field",
+                editorOptions: {
+                    onInitialized: function() {
+                        event = "field.editorOptions";
+                    }
+                }
+            }],
+            instance = $("#container").dxFilterBuilder({
+                value: [
+                    ["Field", "lastDays", 2]
+                ],
+                fields: fields,
+                customOperations: [{
+                    key: "lastDays",
+                    editorOptions: {
+                        onInitialized: function() {
+                            event = "customOperation.editorOptions";
+                        }
+                    }
+                }]
+            }).dxFilterBuilder("instance");
+
+        var valueField = $("." + FILTER_BUILDER_ITEM_VALUE_CLASS).eq(0);
+        valueField.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).trigger("dxclick");
+        assert.equal(event, "customOperation.editorOptions", "customOperation.editorOptions.onInitialized is executed");
+
+        instance.option("value", ["Field", "=", 2]);
+        valueField = $("." + FILTER_BUILDER_ITEM_VALUE_CLASS).eq(0);
+        valueField.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).trigger("dxclick");
+        assert.equal(event, "field.editorOptions", "field.editorOptions.onInitialized is executed");
+    });
 });
 
 QUnit.module("Short condition", function() {

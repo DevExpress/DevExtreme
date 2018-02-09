@@ -1015,7 +1015,7 @@ QUnit.module("Custom filter expressions", {
         var value = [];
 
         // act, assert
-        assert.deepEqual(utils.getFilterExpression(value, this.fields), []);
+        assert.deepEqual(utils.getFilterExpression(value, this.fields, []), []);
     });
 
     QUnit.test("calculateFilterExpression for value = null", function(assert) {
@@ -1023,7 +1023,7 @@ QUnit.module("Custom filter expressions", {
         var value = null;
 
         // act, assert
-        assert.deepEqual(utils.getFilterExpression(value, this.fields), null);
+        assert.deepEqual(utils.getFilterExpression(value, this.fields, []), null);
     });
 
     QUnit.test("calculateFilterExpression for condition", function(assert) {
@@ -1031,7 +1031,7 @@ QUnit.module("Custom filter expressions", {
         var value = ["field1", "1"];
 
         // act, assert
-        assert.deepEqual(utils.getFilterExpression(value, this.fields), [["field1", "<>", "1"], "or", ["field1", "=", "10"]]);
+        assert.deepEqual(utils.getFilterExpression(value, this.fields, []), [["field1", "<>", "1"], "or", ["field1", "=", "10"]]);
     });
 
     QUnit.test("calculateFilterExpression for group", function(assert) {
@@ -1047,7 +1047,7 @@ QUnit.module("Custom filter expressions", {
         ];
 
         // act, assert
-        assert.deepEqual(utils.getFilterExpression(value, this.fields), [
+        assert.deepEqual(utils.getFilterExpression(value, this.fields, []), [
             [
                 ["field1", "<>", "1"], "or", ["field1", "=", "10"]
             ],
@@ -1060,6 +1060,20 @@ QUnit.module("Custom filter expressions", {
                 ["field2", "=", "30"]
             ]
         ]);
+    });
+
+    QUnit.test("customOperation.calculateFilterExpression", function(assert) {
+        // arrange
+        var value = ["field1", "lastDays", "2"],
+            customOperations = [{
+                key: "lastDays",
+                calculateFilterExpression: function(filterValue, field) {
+                    return [field.dataField, ">", filterValue];
+                }
+            }];
+
+        // act, assert
+        assert.deepEqual(utils.getFilterExpression(value, this.fields, customOperations), ["field1", ">", "2"]);
     });
 });
 
@@ -1095,7 +1109,7 @@ QUnit.module("Formatting", function() {
         assert.equal(utils.getCurrentValueText(field, value), "False Text");
     });
 
-    QUnit.test("customizeText", function(assert) {
+    QUnit.test("field.customizeText", function(assert) {
         var field = {
                 customizeText: function(conditionInfo) {
                     return conditionInfo.valueText + "Test";
@@ -1103,6 +1117,21 @@ QUnit.module("Formatting", function() {
             },
             value = "MyValue";
         assert.equal(utils.getCurrentValueText(field, value), "MyValueTest");
+    });
+
+    QUnit.test("customOperation.customizeText", function(assert) {
+        var field = {
+                customizeText: function(conditionInfo) {
+                    return conditionInfo.valueText + "Test";
+                }
+            },
+            value = "MyValue",
+            customOperation = {
+                customizeText: function(conditionInfo) {
+                    return conditionInfo.valueText + "CustomOperation";
+                }
+            };
+        assert.equal(utils.getCurrentValueText(field, value, customOperation), "MyValueCustomOperation");
     });
 
     QUnit.test("default format for date", function(assert) {

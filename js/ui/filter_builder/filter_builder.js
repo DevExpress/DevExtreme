@@ -328,52 +328,58 @@ var FilterBuilder = Widget.inherit({
 
 
             /**
-            * @name dxFilterBuilderCustomOperations_key
-            * @publicName key
-            * @type string
-            * @default undefined
-            */
+             * @name dxFilterBuilderCustomOperations_key
+             * @publicName key
+             * @type string
+             * @default undefined
+             */
 
             /**
-            * @name dxFilterBuilderCustomOperations_caption
-            * @publicName caption
-            * @type string
-            * @default undefined
-            */
+             * @name dxFilterBuilderCustomOperations_caption
+             * @publicName caption
+             * @type string
+             * @default undefined
+             */
 
             /**
-            * @name dxFilterBuilderCustomOperations_icon
-            * @publicName icon
-            * @type string
-            * @default undefined
-            */
+             * @name dxFilterBuilderCustomOperations_icon
+             * @publicName icon
+             * @type string
+             * @default undefined
+             */
 
             /**
-            * @name dxFilterBuilderCustomOperations_dataTypes
-            * @publicName dataTypes
-            * @type Array<string>
-            * @default undefined
-            */
+             * @name dxFilterBuilderCustomOperations_dataTypes
+             * @publicName dataTypes
+             * @type Array<string>
+             * @default undefined
+             */
 
             /**
-            * @name dxFilterBuilderCustomOperations_calculateFilterExpression
-            * @publicName calculateFilterExpression
-            * @type function(filterValue)
-            * @type_function_param1 filterValue:any
-            * @type_function_return Filter expression
-            */
+             * @name dxFilterBuilderCustomOperations_calculateFilterExpression
+             * @publicName calculateFilterExpression
+             * @type function(filterValue)
+             * @type_function_param1 filterValue:any
+             * @type_function_return Filter expression
+             */
 
             /**
-            * @name dxFilterBuilderCustomOperations_editorTemplate
-            * @publicName editorTemplate
-            * @type template|function
-            * @type_function_param1 conditionInfo:object
-            * @type_function_param1_field1 value:string|number|date
-            * @type_function_param1_field2 field:dxFilterBuilderField
-            * @type_function_param1_field3 setValue:function
-            * @type_function_param2 container:dxElement
-            * @type_function_return string|Node|jQuery
-            */
+             * @name dxFilterBuilderCustomOperations_editorTemplate
+             * @publicName editorTemplate
+             * @type template|function
+             * @type_function_param1 conditionInfo:object
+             * @type_function_param1_field1 value:string|number|date
+             * @type_function_param1_field2 field:dxFilterBuilderField
+             * @type_function_param1_field3 setValue:function
+             * @type_function_param2 container:dxElement
+             * @type_function_return string|Node|jQuery
+             */
+
+            /**
+             * @name dxFilterBuilderCustomOperations_editorOptions
+             * @publicName editorOptions
+             * @type object
+             */
 
             /**
              * @name dxFilterBuilderCustomOperations_customizeText
@@ -516,7 +522,7 @@ var FilterBuilder = Widget.inherit({
     getFilterExpression: function() {
         var fields = this._getNormalizedFields(),
             value = extend(true, [], this._model);
-        return utils.getFilterExpression(utils.getNormalizedFilter(value, fields), fields);
+        return utils.getFilterExpression(utils.getNormalizedFilter(value, fields, this.option("customOperations")), fields);
     },
 
     _getNormalizedFields: function() {
@@ -891,7 +897,8 @@ var FilterBuilder = Widget.inherit({
                 setText(valueText);
             });
         } else {
-            setText(utils.getCurrentValueText(field, value));
+            var customOperation = utils.getCustomOperationByKey(that.option("customOperations"), item[1]);
+            setText(utils.getCurrentValueText(field, value, customOperation));
         }
 
         that._subscribeOnClickAndEnterKey($text, function(e) {
@@ -996,6 +1003,10 @@ var FilterBuilder = Widget.inherit({
         var $editor = $("<div>").attr("tabindex", 0).appendTo($container),
             customOperation = utils.getCustomOperationByKey(this.option("customOperations"), options.filterOperation),
             editorTemplate = customOperation && customOperation.editorTemplate ? customOperation.editorTemplate : field.editorTemplate;
+
+        if(customOperation && customOperation.editorOptions) {
+            extend(options, { editorOptions: customOperation.editorOptions });
+        }
 
         if(editorTemplate) {
             var template = this._getTemplate(editorTemplate);

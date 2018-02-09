@@ -346,7 +346,7 @@ function getNormalizedFields(fields) {
     }, []);
 }
 
-function getFilterExpression(value, fields) {
+function getFilterExpression(value, fields, customOperations) {
     var result;
 
     if(value === null) {
@@ -356,8 +356,12 @@ function getFilterExpression(value, fields) {
     var criteria = getGroupCriteria(value),
         getConditionFilterExpression = function(condition) {
             var field = getField(condition[0], fields),
-                filterExpression = convertToInnerCondition(condition);
-            if(typeof field.calculateFilterExpression !== "undefined") {
+                filterExpression = convertToInnerCondition(condition),
+                customOperation = customOperations.length && getCustomOperationByKey(customOperations, filterExpression[1]);
+
+            if(customOperation && customOperation.calculateFilterExpression) {
+                return customOperation.calculateFilterExpression.apply(customOperation, [filterExpression[2], field]);
+            } else if(field.calculateFilterExpression) {
                 return field.calculateFilterExpression.apply(field, [filterExpression[2], filterExpression[1]]);
             } else {
                 return filterUtils.defaultCalculateFilterExpression.apply(field, [filterExpression[2], filterExpression[1]], "filterBuilder");
@@ -370,7 +374,7 @@ function getFilterExpression(value, fields) {
         result = [];
         for(var i = 0; i < criteria.length; i++) {
             if(isGroup(criteria[i])) {
-                var filterExpression = getFilterExpression(criteria[i], fields);
+                var filterExpression = getFilterExpression(criteria[i], fields, customOperations);
                 result.push(filterExpression);
             } else if(isCondition(criteria[i])) {
                 result.push(getConditionFilterExpression(criteria[i]));
@@ -451,7 +455,7 @@ function getCurrentLookupValueText(field, value, handler) {
     });
 }
 
-function getCurrentValueText(field, value) {
+function getCurrentValueText(field, value, customOperation) {
     var valueText;
     if(value === true) {
         valueText = field.trueText || messageLocalization.format("dxDataGrid-trueText");
@@ -460,7 +464,13 @@ function getCurrentValueText(field, value) {
     } else {
         valueText = formatHelper.format(value, getFieldFormat(field));
     }
-    if(field.customizeText) {
+    if(customOperation && customOperation.customizeText) {
+        valueText = customOperation.customizeText.call(customOperation, {
+            value: value,
+            valueText: valueText,
+            field: field
+        });
+    } else if(field.customizeText) {
         valueText = field.customizeText.call(field, {
             value: value,
             valueText: valueText
