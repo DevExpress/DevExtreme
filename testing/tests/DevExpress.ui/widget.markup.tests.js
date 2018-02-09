@@ -53,7 +53,7 @@ require("common.css!");
         assert.strictEqual($element[0].style.width, "50%");
     });
 
-    QUnit.test("widget should be visible ny default", function(assert) {
+    QUnit.test("widget should be visible by default", function(assert) {
         var element = $("#widget").dxWidget(),
             instance = element.dxWidget("instance");
 
@@ -65,7 +65,7 @@ require("common.css!");
         assert.ok(!element.is(":visible"));
     });
 
-    QUnit.test("widget should not be visible is 'visible' option value = false", function(assert) {
+    QUnit.test("widget should not be visible if 'visible' option value = false", function(assert) {
         var element = $("#widget").dxWidget({ visible: false }),
             instance = element.dxWidget("instance");
 
