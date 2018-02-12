@@ -160,16 +160,19 @@ QUnit.test("checkbox icon must not resize according to the 'width' and 'height' 
     assert.equal($element.find(ICON_SELECTOR).height(), initHeight, "icon height is not resized");
 });
 
+QUnit.test("value option should be processed correctly (Q504139)", function(assert) {
+    var $element = $("#checkbox").dxCheckBox({ value: undefined }),
+        instance = $element.dxCheckBox("instance");
+    assert.ok(!$element.hasClass(CHECKED_CLASS));
+
+    instance.option({ value: null });
+    assert.ok(!$element.hasClass(CHECKED_CLASS));
+
+    instance.option({ value: 0 });
+    assert.ok(!$element.hasClass(CHECKED_CLASS));
+});
 
 QUnit.module("hidden input");
-
-QUnit.test("a hidden input should be rendered", function(assert) {
-    var $element = $("#checkbox").dxCheckBox(),
-        $input = $element.find("input");
-
-    assert.equal($input.length, 1, "input is rendered");
-    assert.equal($input.attr("type"), "hidden", "type attribute of hidden input");
-});
 
 QUnit.test("the hidden input has 'true' value", function(assert) {
     var $element = $("#checkbox").dxCheckBox({ value: true }),
@@ -213,21 +216,6 @@ QUnit.test("widget input should get the 'name' attribute with a correct value", 
 });
 
 
-QUnit.module("regressions");
-
-QUnit.test("Q504139", function(assert) {
-    var $element = $("#checkbox").dxCheckBox({ value: undefined }),
-        instance = $element.dxCheckBox("instance");
-    assert.ok(!$element.hasClass(CHECKED_CLASS));
-
-    instance.option({ value: null });
-    assert.ok(!$element.hasClass(CHECKED_CLASS));
-
-    instance.option({ value: 0 });
-    assert.ok(!$element.hasClass(CHECKED_CLASS));
-});
-
-
 QUnit.module("widget sizing render");
 
 QUnit.test("constructor", function(assert) {
@@ -236,14 +224,6 @@ QUnit.test("constructor", function(assert) {
 
     assert.strictEqual(instance.option("width"), 400);
     assert.strictEqual($element.outerWidth(), 400, "outer width of the element must be equal to custom width");
-});
-
-QUnit.test("root with custom width", function(assert) {
-    var $element = $("#widthRootStyle").dxCheckBox(),
-        instance = $element.dxCheckBox("instance");
-
-    assert.strictEqual(instance.option("width"), undefined);
-    assert.strictEqual($element.outerWidth(), 300, "outer width of the element must be equal to custom width");
 });
 
 QUnit.test("change width", function(assert) {
@@ -278,23 +258,3 @@ QUnit.test("check state changes on space press", function(assert) {
     assert.equal(instance.option("value"), true, "value has been change successfully");
 });
 
-
-QUnit.module("aria accessibility");
-
-QUnit.test("aria role", function(assert) {
-    var $element = $("#checkbox").dxCheckBox({});
-    assert.equal($element.attr("role"), "checkbox", "aria role is correct");
-});
-
-QUnit.test("aria checked attributes", function(assert) {
-    var $element = $("#checkbox").dxCheckBox({ value: true }),
-        instance = $element.dxCheckBox("instance");
-
-    assert.equal($element.attr("aria-checked"), "true", "checked state is correct");
-
-    instance.option("value", "");
-    assert.equal($element.attr("aria-checked"), "false", "unchecked state is correct");
-
-    instance.option("value", undefined);
-    assert.equal($element.attr("aria-checked"), "mixed", "mixed state is correct");
-});
