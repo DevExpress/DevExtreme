@@ -804,8 +804,8 @@ var dxRangeSelector = require("../core/base_widget").inherit({
     _validateRange: function(start, end) {
         var that = this,
             translator = that._axis.getTranslator();
-        if(start !== null && !translator.isValid(start) ||
-            end !== null && !translator.isValid(end)) {
+        if(_isDefined(start) && !translator.isValid(start) ||
+            _isDefined(end) && !translator.isValid(end)) {
             that._incidentOccurred("E2203");
         }
     },
