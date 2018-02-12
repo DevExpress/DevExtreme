@@ -11,7 +11,8 @@ var $ = require("../../core/renderer"),
     LoadPanel = require("../load_panel"),
     dataUtils = require("../../data/utils"),
     formatHelper = require("../../format_helper"),
-    objectUtils = require("../../core/utils/object");
+    objectUtils = require("../../core/utils/object"),
+    window = require("../core/utils/window").getWindow();
 
 var NO_DATA_CLASS = "nodata",
     DATE_INTERVAL_SELECTORS = {
