@@ -639,6 +639,29 @@ QUnit.test("xhr is available in done", function(assert) {
     assert.equal(xhrCount, 5);
 });
 
+QUnit.test("special values in data", function(assert) {
+    ajax.sendRequest({
+        url: "any",
+        data: {
+            a: undefined,
+            b: null,
+            c: NaN
+        }
+    });
+
+    var url = this.requests[0].url;
+
+    // undefined values are excluded
+    assert.ok(url.indexOf("a=") < 0);
+
+    // null values included as empty strings
+    assert.ok(url.indexOf("b=") > -1);
+    assert.ok(url.indexOf("b=null") < 0);
+
+    // NaN values are kept
+    assert.ok(url.indexOf("c=NaN") > -1);
+});
+
 QUnit.module("sendRequest async tests");
 
 QUnit.test("Handle error", function(assert) {
