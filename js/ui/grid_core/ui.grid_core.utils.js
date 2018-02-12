@@ -240,7 +240,10 @@ module.exports = (function() {
                     shading: false,
                     message: loadPanelOptions.text,
                     position: {
-                        of: $element
+                        of: function() {
+                            return $element.height() > $(window).height() ? $(window) : $element;
+                        },
+                        boundary: $element
                     },
                     container: $element
                 }, loadPanelOptions);
