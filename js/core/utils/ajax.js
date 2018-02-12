@@ -28,7 +28,17 @@ var paramsConvert = function(params) {
     var result = [];
 
     for(var name in params) {
-        result.push(encodeURIComponent(name) + "=" + encodeURIComponent(params[name]));
+        var value = params[name];
+
+        if(value === undefined) {
+            continue;
+        }
+
+        if(value === null) {
+            value = "";
+        }
+
+        result.push(encodeURIComponent(name) + "=" + encodeURIComponent(value));
     }
 
     return result.join("&");
