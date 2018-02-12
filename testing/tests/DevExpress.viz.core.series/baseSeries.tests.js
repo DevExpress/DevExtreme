@@ -1290,6 +1290,30 @@ QUnit.test("Draw aggragated points", function(assert) {
     assert.equal(series.getVisiblePoints().length, 5);
 });
 
+QUnit.test("Do not dispose new points on updateData after aggregation", function(assert) {
+    var series = createSeries({ type: "scatter" }, {
+            argumentAxis: this.argumentAxis,
+            valueAxis: new MockAxis({
+                renderer: this.renderer
+            })
+        }),
+        data = [];
+
+    for(var i = 0; i < 100; i++) {
+        data.push({ arg: i, val: i * 2 });
+    }
+
+    series.updateData(data);
+    this.setupAggregation(0, 99);
+    series.resamplePoints(10);
+
+    series.updateData(data);
+
+    assert.equal(series.getAllPoints().length, 100);
+    series.getAllPoints().forEach(function(p) {
+        assert.ok(!p.disposed);
+    });
+});
 
 QUnit.test("Style of marker group. Scatter", function(assert) {
     var series = this.series,
