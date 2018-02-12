@@ -12,7 +12,7 @@ var $ = require("../../core/renderer"),
     dataUtils = require("../../data/utils"),
     formatHelper = require("../../format_helper"),
     objectUtils = require("../../core/utils/object"),
-    window = require("../core/utils/window").getWindow();
+    window = require("../../core/utils/window").getWindow();
 
 var NO_DATA_CLASS = "nodata",
     DATE_INTERVAL_SELECTORS = {
