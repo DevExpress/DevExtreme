@@ -2588,7 +2588,11 @@ QUnit.test("max-height from styles", function(assert) {
 
     //assert
     assert.equal(dataGrid.totalCount(), 0, "no items");
-    assert.ok($dataGrid.find(".dx-datagrid").height() < 400, "height is less then max-height");
+    if(browser.msie && parseInt(browser.version) <= 11) {
+        assert.equal($dataGrid.find(".dx-datagrid").height(), 400, "height is equals max-height in IE11");
+    } else {
+        assert.ok($dataGrid.find(".dx-datagrid").height() < 400, "height is less then max-height");
+    }
 });
 
 //T412035
