@@ -46,7 +46,7 @@
 
 /**
  * @typedef {string} Enums.VizPaletteExtensionMode
- * @enum {'blend'|'extrapolate'|'alternate'}
+ * @enum {'alternate'|'blend'|'extrapolate'}
  */
 
 /**
