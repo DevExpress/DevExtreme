@@ -608,6 +608,9 @@ var Overlay = Widget.inherit({
 
     _normalizePosition: function() {
         this._position = this.option("position");
+        if(this._position && typeof this._position.of === "function") {
+            this._position = extend({}, this._position, { of: this._position.of() });
+        }
     },
 
     _getAnimationConfig: function() {
