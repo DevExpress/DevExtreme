@@ -119,13 +119,11 @@ var CheckBox = Editor.inherit({
 
     _feedbackHideTimeout: CHECKBOX_FEEDBACK_HIDE_TIMEOUT,
 
-    _render: function() {
+    _initMarkup: function() {
         this._renderSubmitElement();
-
         this._$container = $("<div>").addClass(CHECKBOX_CONTAINER_CLASS);
         this.setAria("role", "checkbox");
 
-        this._renderClick();
         this._renderValue();
         this._renderIcon();
         this._renderText();
@@ -134,6 +132,13 @@ var CheckBox = Editor.inherit({
         this.$element()
             .addClass(CHECKBOX_CLASS)
             .append(this._$container);
+
+        this.callBase();
+    },
+
+    _render: function() {
+        this._renderClick();
+
         this.callBase();
     },
 
