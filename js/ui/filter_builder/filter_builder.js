@@ -337,8 +337,8 @@ var FilterBuilder = Widget.inherit({
 
 
             /**
-             * @name dxFilterBuilderCustomOperations_key
-             * @publicName key
+             * @name dxFilterBuilderCustomOperations_name
+             * @publicName name
              * @type string
              * @default undefined
              */
@@ -365,6 +365,13 @@ var FilterBuilder = Widget.inherit({
              */
 
             /**
+             * @name dxFilterBuilderCustomOperations_hasValue
+             * @publicName hasValue
+             * @type boolean
+             * @default true
+             */
+
+            /**
              * @name dxFilterBuilderCustomOperations_calculateFilterExpression
              * @publicName calculateFilterExpression
              * @type function(filterValue)
@@ -383,12 +390,6 @@ var FilterBuilder = Widget.inherit({
              * @type_function_param1_field3 setValue:function
              * @type_function_param2 container:dxElement
              * @type_function_return string|Node|jQuery
-             */
-
-            /**
-             * @name dxFilterBuilderCustomOperations_editorOptions
-             * @publicName editorOptions
-             * @type object
              */
 
             /**
@@ -533,7 +534,7 @@ var FilterBuilder = Widget.inherit({
     getFilterExpression: function() {
         var fields = this._getNormalizedFields(),
             value = extend(true, [], this._model);
-        return utils.getFilterExpression(utils.getNormalizedFilter(value, fields, this.option("customOperations")), fields);
+        return utils.getFilterExpression(utils.getNormalizedFilter(value, fields), fields, this.option("customOperations"));
     },
 
     _getNormalizedFields: function() {
@@ -580,7 +581,7 @@ var FilterBuilder = Widget.inherit({
     },
 
     _renderContentImpl: function() {
-        this._model = utils.convertToInnerStructure(this.option("value"));
+        this._model = utils.convertToInnerStructure(this.option("value"), this.option("customOperations"));
         this._createGroupElementByCriteria(this._model)
             .appendTo(this.$element());
     },
@@ -633,7 +634,7 @@ var FilterBuilder = Widget.inherit({
             that._createGroupElement(newGroup, criteria).appendTo($groupContent);
         }, function() {
             var field = that.option("fields")[0],
-                newCondition = utils.createCondition(field);
+                newCondition = utils.createCondition(field, that.option("customOperations"));
             utils.addItem(newCondition, criteria);
             that._createConditionElement(newCondition, criteria).appendTo($groupContent);
             if(utils.isValidCondition(newCondition, field)) {
@@ -735,7 +736,10 @@ var FilterBuilder = Widget.inherit({
     },
 
     _hasValueButton: function(condition) {
-        return condition[2] !== null;
+        var customOperation = utils.getCustomOperation(this.option("customOperations"), condition[1]);
+        return customOperation ?
+            customOperation.hasValue !== false
+            : condition[2] !== null;
     },
 
     _createOperationButtonWithMenu: function(condition, field) {
@@ -753,7 +757,7 @@ var FilterBuilder = Widget.inherit({
                     onItemClick: function(e) {
                         if(currentOperation !== e.itemData) {
                             currentOperation = e.itemData;
-                            utils.updateConditionByOperation(condition, currentOperation.value);
+                            utils.updateConditionByOperation(condition, currentOperation.value, that.option("customOperations"));
                             if(that._hasValueButton(condition)) {
                                 if($operationButton.siblings().filter("." + FILTER_BUILDER_ITEM_VALUE_CLASS).length === 0) {
                                     that._createValueButton(condition, field).appendTo($operationButton.parent());
@@ -805,7 +809,7 @@ var FilterBuilder = Widget.inherit({
                         item = e.itemData;
                         condition[0] = item.dataField;
                         condition[2] = item.dataType === "object" ? null : "";
-                        utils.updateConditionByOperation(condition, utils.getDefaultOperation(item));
+                        utils.updateConditionByOperation(condition, utils.getDefaultOperation(item), that.option("customOperations"));
 
                         $fieldButton.siblings().filter("." + FILTER_BUILDER_ITEM_TEXT_CLASS).remove();
                         that._createOperationAndValueButtons(condition, item, $fieldButton.parent());
@@ -908,7 +912,7 @@ var FilterBuilder = Widget.inherit({
                 setText(valueText);
             });
         } else {
-            var customOperation = utils.getCustomOperationByKey(that.option("customOperations"), item[1]);
+            var customOperation = utils.getCustomOperation(that.option("customOperations"), item[1]);
             setText(utils.getCurrentValueText(field, value, customOperation));
         }
 
@@ -1012,12 +1016,8 @@ var FilterBuilder = Widget.inherit({
 
     _createValueEditor: function($container, field, options) {
         var $editor = $("<div>").attr("tabindex", 0).appendTo($container),
-            customOperation = utils.getCustomOperationByKey(this.option("customOperations"), options.filterOperation),
+            customOperation = utils.getCustomOperation(this.option("customOperations"), options.filterOperation),
             editorTemplate = customOperation && customOperation.editorTemplate ? customOperation.editorTemplate : field.editorTemplate;
-
-        if(customOperation && customOperation.editorOptions) {
-            extend(options, { editorOptions: customOperation.editorOptions });
-        }
 
         if(editorTemplate) {
             var template = this._getTemplate(editorTemplate);

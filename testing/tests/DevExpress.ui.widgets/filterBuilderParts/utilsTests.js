@@ -292,16 +292,28 @@ QUnit.module("Utils", function() {
     });
 
     QUnit.test("create condition", function(assert) {
-        var condition = utils.createCondition(fields[0]);
+        var condition = utils.createCondition(fields[0], []);
 
         assert.equal(condition[0], "CompanyName");
         assert.equal(condition[1], "contains");
         assert.equal(condition[2], "");
 
-        condition = utils.createCondition(fields[6]);
+        condition = utils.createCondition(fields[6], []);
         assert.equal(condition[0], "ObjectField");
         assert.equal(condition[1], "=");
         assert.equal(condition[2], null);
+    });
+
+    QUnit.test("create condition with custom operation", function(assert) {
+        var condition = utils.createCondition({
+            dataField: "OrderDate",
+            filterOperations: ["lastWeek"]
+        }, [{
+            name: "lastWeek",
+            hasValue: false
+        }]);
+
+        assert.deepEqual(condition, ["OrderDate", "lastWeek"]);
     });
 
     QUnit.test("getCaptionWithParents", function(assert) {
@@ -326,10 +338,32 @@ QUnit.module("Utils", function() {
     });
 
     QUnit.test("updateConditionByOperation", function(assert) {
-        assert.deepEqual(utils.updateConditionByOperation(["value", "=", "123"], "isblank"), ["value", "=", null]);
-        assert.deepEqual(utils.updateConditionByOperation(["value", "=", "123"], "isnotblank"), ["value", "<>", null]);
-        assert.deepEqual(utils.updateConditionByOperation(["value", "=", "123"], "<="), ["value", "<=", "123"]);
-        assert.deepEqual(utils.updateConditionByOperation(["value", "=", null], "<="), ["value", "<=", ""]);
+        assert.deepEqual(utils.updateConditionByOperation(["value", "=", "123"], "isblank", []), ["value", "=", null]);
+        assert.deepEqual(utils.updateConditionByOperation(["value", "=", "123"], "isnotblank", []), ["value", "<>", null]);
+        assert.deepEqual(utils.updateConditionByOperation(["value", "=", "123"], "<=", []), ["value", "<=", "123"]);
+        assert.deepEqual(utils.updateConditionByOperation(["value", "=", null], "<=", []), ["value", "<=", ""]);
+    });
+
+    QUnit.test("change operation from default to custom", function(assert) {
+        //arrange, act
+        var updatedCondition = utils.updateConditionByOperation(["value", "=", "123"], "lastDays", [{
+            name: "lastDays",
+            hasValue: false
+        }]);
+
+        //assert
+        assert.deepEqual(updatedCondition, ["value", "lastDays"]);
+    });
+
+    QUnit.test("change operation from custom to default", function(assert) {
+        //arrange, act
+        var updatedCondition = utils.updateConditionByOperation(["value", "lastDays"], "=", [{
+            name: "lastDays",
+            hasValue: false
+        }]);
+
+        //assert
+        assert.deepEqual(updatedCondition, ["value", "=", ""]);
     });
 
     QUnit.test("getOperationValue", function(assert) {
@@ -557,21 +591,21 @@ QUnit.module("Remove item", function() {
 
 QUnit.module("Convert to inner structure", function() {
     QUnit.test("from null", function(assert) {
-        assert.deepEqual(utils.convertToInnerStructure(null), ["and"]);
+        assert.deepEqual(utils.convertToInnerStructure(null, []), ["and"]);
     });
 
     QUnit.test("from empty array", function(assert) {
-        assert.deepEqual(utils.convertToInnerStructure([]), ["and"]);
+        assert.deepEqual(utils.convertToInnerStructure([], []), ["and"]);
     });
 
     QUnit.test("from condition", function(assert) {
-        var model = utils.convertToInnerStructure(condition1);
+        var model = utils.convertToInnerStructure(condition1, []);
         assert.deepEqual(model, [condition1, "and"]);
         assert.notEqual(model[0], condition1);
     });
 
     QUnit.test("from short group with two conditions", function(assert) {
-        var model = utils.convertToInnerStructure([condition1, condition2]);
+        var model = utils.convertToInnerStructure([condition1, condition2], []);
         assert.deepEqual(model, [condition1, "and", condition2, "and"]);
         assert.notEqual(model[0], condition1);
         assert.notEqual(model[2], condition2);
@@ -579,19 +613,19 @@ QUnit.module("Convert to inner structure", function() {
 
     QUnit.test("from short condition", function(assert) {
         var shortCondition = ["CompanyName", "DevExpress"],
-            model = utils.convertToInnerStructure(shortCondition);
+            model = utils.convertToInnerStructure(shortCondition, []);
         assert.deepEqual(model, [["CompanyName", "=", "DevExpress"], "and"]);
     });
 
     QUnit.test("from negative group with one condition", function(assert) {
-        var model = utils.convertToInnerStructure(["!", condition1]);
+        var model = utils.convertToInnerStructure(["!", condition1], []);
         assert.deepEqual(model, ["!", [condition1, "and"]]);
         assert.notEqual(model[1][0], condition1);
     });
 
     QUnit.test("from group with several conditions", function(assert) {
         var filter = [condition1, "or", condition2],
-            model = utils.convertToInnerStructure(filter);
+            model = utils.convertToInnerStructure(filter, []);
         assert.notEqual(model, filter);
         assert.deepEqual(model, [condition1, "or", condition2, "or"]);
         assert.notEqual(model[0], filter[0]);
@@ -600,7 +634,7 @@ QUnit.module("Convert to inner structure", function() {
 
     QUnit.test("from short group with several short conditions", function(assert) {
         var filter = [["CompanyName", "DevExpress"], ["CompanyName", "DevExpress"], ["!", ["CompanyName", "DevExpress"]]],
-            model = utils.convertToInnerStructure(filter);
+            model = utils.convertToInnerStructure(filter, []);
 
         assert.deepEqual(model, [
             ["CompanyName", "=", "DevExpress"],
@@ -616,7 +650,7 @@ QUnit.module("Convert to inner structure", function() {
 
     QUnit.test("check lowercase group", function(assert) {
         var filter = [condition1, "Or", condition2, "Or", [condition1, "And", ["!", [condition1, "Or", condition2]]]],
-            model = utils.convertToInnerStructure(filter);
+            model = utils.convertToInnerStructure(filter, []);
         assert.deepEqual(model, [
             condition1,
             "or",
@@ -634,6 +668,15 @@ QUnit.module("Convert to inner structure", function() {
                 "and"
             ],
             "or"
+        ]);
+    });
+
+    QUnit.test("with custom operation", function(assert) {
+        var filter = ["State", "lastWeek"],
+            model = utils.convertToInnerStructure(filter, [{ name: "lastWeek" }]);
+        assert.deepEqual(model, [
+            ["State", "lastWeek"],
+            "and"
         ]);
     });
 });
@@ -785,7 +828,7 @@ QUnit.module("Filter normalization", function() {
 QUnit.module("getAvailableOperations", {
     beforeEach: function() {
         this.customOperations = [{
-            key: "lastDays",
+            name: "lastDays",
             caption: "last days",
             icon: "add",
             dataTypes: ["date"]
@@ -887,7 +930,7 @@ QUnit.module("getAvailableOperations", {
         }, {
             equals: "="
         }, [{
-            key: "lastDays",
+            name: "lastDays",
             caption: "last days",
             icon: "add"
         }]);
@@ -909,7 +952,7 @@ QUnit.module("getAvailableOperations", {
         }, {
             equals: "="
         }, [{
-            key: "lastDays",
+            name: "lastDays",
             caption: "last days",
             icon: "add"
         }]);
@@ -984,7 +1027,7 @@ QUnit.module("getAvailableOperations", {
             dataField: "test",
             filterOperations: ["lastDays"]
         }, { }, [{
-            key: "lastDays"
+            name: "lastDays"
         }]);
 
         //assert
@@ -1066,7 +1109,7 @@ QUnit.module("Custom filter expressions", {
         // arrange
         var value = ["field1", "lastDays", "2"],
             customOperations = [{
-                key: "lastDays",
+                name: "lastDays",
                 calculateFilterExpression: function(filterValue, field) {
                     return [field.dataField, ">", filterValue];
                 }

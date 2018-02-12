@@ -312,197 +312,6 @@ QUnit.module("Rendering", function() {
         assert.equal(getSelectedMenuText(), "Greater than");
     });
 
-    QUnit.test("hide value field for isblank & isNotBlank", function(assert) {
-        var container = $("#container");
-
-        container.dxFilterBuilder({
-            value: [
-                ["State", "<>", "K&S Music"]
-            ],
-            fields: fields
-        });
-
-        assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS).length, 1);
-
-        // for is blank
-        var $operationButton = container.find("." + FILTER_BUILDER_ITEM_OPERATION_CLASS);
-
-        clickByButtonAndSelectMenuItem($operationButton, 6);
-        assert.equal($operationButton.text(), "Is blank");
-        assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS).length, 0);
-
-        clickByButtonAndSelectMenuItem($operationButton, 5);
-        assert.equal($operationButton.text(), "Does not equal");
-        assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS).length, 1);
-
-        // for is not blank
-        clickByButtonAndSelectMenuItem($operationButton, 7);
-        assert.equal($operationButton.text(), "Is not blank");
-        assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS).length, 0);
-
-        clickByButtonAndSelectMenuItem($operationButton, 4);
-        assert.equal($operationButton.text(), "Equals");
-        assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS).length, 1);
-    });
-
-    QUnit.test("hide filter value for field with object dataType", function(assert) {
-        var container = $("#container");
-
-        container.dxFilterBuilder({
-            value: [
-                ["State", "<>", "K&S Music"]
-            ],
-            fields: fields
-        });
-
-        var $fieldButton = container.find("." + FILTER_BUILDER_ITEM_FIELD_CLASS);
-
-        clickByButtonAndSelectMenuItem($fieldButton, 6);
-        assert.equal($fieldButton.text(), "Caption of Object Field");
-        assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS).length, 0);
-
-        clickByButtonAndSelectMenuItem($fieldButton, 2);
-        assert.equal($fieldButton.text(), "State");
-        assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS).length, 1);
-    });
-
-    QUnit.testInActiveWindow("value button loses focus after value change and outside click", function(assert) {
-        var container = $("#container");
-
-        container.dxFilterBuilder({
-            value: ["State", "<>", "K&S Music"],
-            fields: fields
-        }).dxFilterBuilder("instance");
-
-        container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).trigger("dxclick");
-
-        var textBoxInstance = $(".dx-textbox").dxTextBox("instance");
-        textBoxInstance.option("value", "Test");
-        clickByOutside();
-
-        var valueButton = container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS);
-        assert.notOk(valueButton.is(":focus"));
-    });
-
-    QUnit.testInActiveWindow("change filter value", function(assert) {
-        var container = $("#container"),
-            instance = container.dxFilterBuilder({
-                allowHierarchicalFields: true,
-                value: ["State", "<>", "K&S Music"],
-                fields: fields
-            }).dxFilterBuilder("instance");
-
-        var $valueButton = container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS);
-        $valueButton.trigger("dxclick");
-
-        var $textBoxContainer = container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS + " .dx-textbox"),
-            textBoxInstance = $textBoxContainer.dxTextBox("instance"),
-            $input = $textBoxContainer.find("input");
-        assert.ok($input.is(":focus"));
-
-        textBoxInstance.option("value", "Test");
-        $input.trigger("blur");
-        assert.ok(container.find("input").length, "has input");
-        assert.notDeepEqual(instance.option("value"), ["State", "<>", "Test"]);
-        clickByOutside();
-        assert.deepEqual(instance.option("value"), ["State", "<>", "Test"]);
-    });
-
-    QUnit.testInActiveWindow("change filter value in selectbox", function(assert) {
-        var $container = $("#container"),
-            instance = $container.dxFilterBuilder({
-                allowHierarchicalFields: true,
-                value: ["CompanyName", "<>", "KS Music"],
-                fields: fields
-            }).dxFilterBuilder("instance");
-
-        var $valueButton = $container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS);
-        $valueButton.trigger("dxclick");
-
-        var $input = $container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS).find("input");
-        assert.ok($input.is(":focus"));
-
-        var selectBoxInstance = $container.find(".dx-selectbox").dxSelectBox("instance");
-        selectBoxInstance.open();
-
-        $(".dx-list-item").eq(1).trigger("dxclick");
-
-        assert.ok($container.find("input").length, "has input");
-        assert.notDeepEqual(instance.option("value"), ["CompanyName", "<>", "Super Mart of the West"]);
-        clickByOutside();
-        assert.deepEqual(instance.option("value"), ["CompanyName", "<>", "Super Mart of the West"]);
-    });
-
-    QUnit.testInActiveWindow("change filter value in selectbox with different value and displayText", function(assert) {
-        var $container = $("#container"),
-            instance = $container.dxFilterBuilder({
-                allowHierarchicalFields: true,
-                value: ["Product", "=", 1],
-                fields: fields
-            }).dxFilterBuilder("instance");
-
-        assert.equal($container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).text(), "DataGrid");
-
-        var $valueButton = $container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS);
-        $valueButton.trigger("dxclick");
-
-        var selectBoxInstance = $container.find(".dx-selectbox").dxSelectBox("instance");
-        selectBoxInstance.open();
-        $(".dx-list-item").eq(1).trigger("dxclick");
-        clickByOutside();
-
-        assert.equal($container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).text(), "PivotGrid");
-        assert.deepEqual(instance.option("value"), ["Product", "=", 2]);
-    });
-
-    QUnit.testInActiveWindow("check default value for number", function(assert) {
-        var container = $("#container"),
-            instance = container.dxFilterBuilder({
-                allowHierarchicalFields: true,
-                value: ["Zipcode", "<>", 123],
-                fields: fields
-            }).dxFilterBuilder("instance");
-
-        container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).trigger("dxclick");
-
-        var editorInstance = container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS + " > div").dxNumberBox("instance");
-        editorInstance.option("value", 0);
-        clickByOutside();
-        assert.deepEqual(instance.option("value"), ["Zipcode", "<>", 0]);
-    });
-
-    QUnit.testInActiveWindow("change filter value when specified editorTemplate", function(assert) {
-        var container = $("#container"),
-            instance = container.dxFilterBuilder({
-                value: ["Field", "=", "Test1"],
-                fields: [{
-                    dataField: "Field",
-                    editorTemplate: function(options, $container) {
-                        $("<input/>").val(options.val).on("change", function(e) {
-                            options.setValue($(e.currentTarget).val());
-                        }).appendTo($container);
-                    }
-                }]
-            }).dxFilterBuilder("instance");
-
-        var $valueButton = container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS);
-        assert.strictEqual($valueButton.text(), "Test1", "filter value");
-
-        $valueButton.trigger("dxclick");
-
-        var $input = container.find("input");
-        assert.ok($input.is(":focus"));
-
-        $input.val("Test2");
-        $input.trigger("change");
-        clickByOutside();
-
-        $valueButton = container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS);
-        assert.strictEqual($valueButton.text(), "Test2", "filter value");
-        assert.deepEqual(instance.option("value"), ["Field", "=", "Test2"]);
-        assert.notOk(container.find("input").length, "hasn't input");
-    });
-
     //T588221
     QUnit.testInActiveWindow("click by dropdownbox specified editorTemplate", function(assert) {
         var container = $("#container"),
@@ -648,6 +457,217 @@ QUnit.module("Rendering", function() {
     });
 });
 
+QUnit.module("Filter value", function() {
+
+    QUnit.test("hide filter value for isblank & isNotBlank", function(assert) {
+        var container = $("#container");
+
+        container.dxFilterBuilder({
+            value: [
+                ["State", "<>", "K&S Music"]
+            ],
+            fields: fields
+        });
+
+        assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS).length, 1);
+
+        // for is blank
+        var $operationButton = container.find("." + FILTER_BUILDER_ITEM_OPERATION_CLASS);
+
+        clickByButtonAndSelectMenuItem($operationButton, 6);
+        assert.equal($operationButton.text(), "Is blank");
+        assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS).length, 0);
+
+        clickByButtonAndSelectMenuItem($operationButton, 5);
+        assert.equal($operationButton.text(), "Does not equal");
+        assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS).length, 1);
+
+        // for is not blank
+        clickByButtonAndSelectMenuItem($operationButton, 7);
+        assert.equal($operationButton.text(), "Is not blank");
+        assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS).length, 0);
+
+        clickByButtonAndSelectMenuItem($operationButton, 4);
+        assert.equal($operationButton.text(), "Equals");
+        assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS).length, 1);
+    });
+
+    QUnit.test("hide filter value for field with object dataType", function(assert) {
+        var container = $("#container");
+
+        container.dxFilterBuilder({
+            value: [
+                ["State", "<>", "K&S Music"]
+            ],
+            fields: fields
+        });
+
+        var $fieldButton = container.find("." + FILTER_BUILDER_ITEM_FIELD_CLASS);
+
+        clickByButtonAndSelectMenuItem($fieldButton, 6);
+        assert.equal($fieldButton.text(), "Caption of Object Field");
+        assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS).length, 0);
+
+        clickByButtonAndSelectMenuItem($fieldButton, 2);
+        assert.equal($fieldButton.text(), "State");
+        assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS).length, 1);
+    });
+
+    QUnit.test("hide filter value for customOperation", function(assert) {
+        var container = $("#container");
+
+        container.dxFilterBuilder({
+            value: [
+                ["State", "lastWeek"]
+            ],
+            customOperations: [{
+                name: "lastWeek",
+                hasValue: false
+            }],
+            fields: [{ dataField: "State" }]
+        });
+
+        assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS).length, 0);
+    });
+
+    QUnit.testInActiveWindow("value button loses focus after value change and outside click", function(assert) {
+        var container = $("#container");
+
+        container.dxFilterBuilder({
+            value: ["State", "<>", "K&S Music"],
+            fields: fields
+        }).dxFilterBuilder("instance");
+
+        container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).trigger("dxclick");
+
+        var textBoxInstance = $(".dx-textbox").dxTextBox("instance");
+        textBoxInstance.option("value", "Test");
+        clickByOutside();
+
+        var valueButton = container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS);
+        assert.notOk(valueButton.is(":focus"));
+    });
+
+    QUnit.testInActiveWindow("change filter value", function(assert) {
+        var container = $("#container"),
+            instance = container.dxFilterBuilder({
+                allowHierarchicalFields: true,
+                value: ["State", "<>", "K&S Music"],
+                fields: fields
+            }).dxFilterBuilder("instance");
+
+        var $valueButton = container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS);
+        $valueButton.trigger("dxclick");
+
+        var $textBoxContainer = container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS + " .dx-textbox"),
+            textBoxInstance = $textBoxContainer.dxTextBox("instance"),
+            $input = $textBoxContainer.find("input");
+        assert.ok($input.is(":focus"));
+
+        textBoxInstance.option("value", "Test");
+        $input.trigger("blur");
+        assert.ok(container.find("input").length, "has input");
+        assert.notDeepEqual(instance.option("value"), ["State", "<>", "Test"]);
+        clickByOutside();
+        assert.deepEqual(instance.option("value"), ["State", "<>", "Test"]);
+    });
+
+    QUnit.testInActiveWindow("change filter value in selectbox", function(assert) {
+        var $container = $("#container"),
+            instance = $container.dxFilterBuilder({
+                allowHierarchicalFields: true,
+                value: ["CompanyName", "<>", "KS Music"],
+                fields: fields
+            }).dxFilterBuilder("instance");
+
+        var $valueButton = $container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS);
+        $valueButton.trigger("dxclick");
+
+        var $input = $container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS).find("input");
+        assert.ok($input.is(":focus"));
+
+        var selectBoxInstance = $container.find(".dx-selectbox").dxSelectBox("instance");
+        selectBoxInstance.open();
+
+        $(".dx-list-item").eq(1).trigger("dxclick");
+
+        assert.ok($container.find("input").length, "has input");
+        assert.notDeepEqual(instance.option("value"), ["CompanyName", "<>", "Super Mart of the West"]);
+        clickByOutside();
+        assert.deepEqual(instance.option("value"), ["CompanyName", "<>", "Super Mart of the West"]);
+    });
+
+    QUnit.testInActiveWindow("change filter value in selectbox with different value and displayText", function(assert) {
+        var $container = $("#container"),
+            instance = $container.dxFilterBuilder({
+                allowHierarchicalFields: true,
+                value: ["Product", "=", 1],
+                fields: fields
+            }).dxFilterBuilder("instance");
+
+        assert.equal($container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).text(), "DataGrid");
+
+        var $valueButton = $container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS);
+        $valueButton.trigger("dxclick");
+
+        var selectBoxInstance = $container.find(".dx-selectbox").dxSelectBox("instance");
+        selectBoxInstance.open();
+        $(".dx-list-item").eq(1).trigger("dxclick");
+        clickByOutside();
+
+        assert.equal($container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).text(), "PivotGrid");
+        assert.deepEqual(instance.option("value"), ["Product", "=", 2]);
+    });
+
+    QUnit.testInActiveWindow("check default value for number", function(assert) {
+        var container = $("#container"),
+            instance = container.dxFilterBuilder({
+                allowHierarchicalFields: true,
+                value: ["Zipcode", "<>", 123],
+                fields: fields
+            }).dxFilterBuilder("instance");
+
+        container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).trigger("dxclick");
+
+        var editorInstance = container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS + " > div").dxNumberBox("instance");
+        editorInstance.option("value", 0);
+        clickByOutside();
+        assert.deepEqual(instance.option("value"), ["Zipcode", "<>", 0]);
+    });
+
+    QUnit.testInActiveWindow("change filter value when specified editorTemplate", function(assert) {
+        var container = $("#container"),
+            instance = container.dxFilterBuilder({
+                value: ["Field", "=", "Test1"],
+                fields: [{
+                    dataField: "Field",
+                    editorTemplate: function(options, $container) {
+                        $("<input/>").val(options.val).on("change", function(e) {
+                            options.setValue($(e.currentTarget).val());
+                        }).appendTo($container);
+                    }
+                }]
+            }).dxFilterBuilder("instance");
+
+        var $valueButton = container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS);
+        assert.strictEqual($valueButton.text(), "Test1", "filter value");
+
+        $valueButton.trigger("dxclick");
+
+        var $input = container.find("input");
+        assert.ok($input.is(":focus"));
+
+        $input.val("Test2");
+        $input.trigger("change");
+        clickByOutside();
+
+        $valueButton = container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS);
+        assert.strictEqual($valueButton.text(), "Test2", "filter value");
+        assert.deepEqual(instance.option("value"), ["Field", "=", "Test2"]);
+        assert.notOk(container.find("input").length, "hasn't input");
+    });
+});
+
 QUnit.module("Create editor", function() {
     QUnit.test("dataType - number", function(assert) {
         var container = $("#container");
@@ -789,7 +809,7 @@ QUnit.module("Create editor", function() {
             ],
             fields: fields,
             customOperations: [{
-                key: "lastDays",
+                name: "lastDays",
                 editorTemplate: function(options, $container) {
                     args = options;
 
@@ -822,7 +842,7 @@ QUnit.module("Create editor", function() {
                 ],
                 fields: fields,
                 customOperations: [{
-                    key: "lastDays",
+                    name: "lastDays",
                     editorTemplate: function(options, $container) {
                         event = "customOperation.editorTemplate";
                     }
@@ -837,41 +857,6 @@ QUnit.module("Create editor", function() {
         valueField = $("." + FILTER_BUILDER_ITEM_VALUE_CLASS).eq(0);
         valueField.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).trigger("dxclick");
         assert.equal(event, "field.editorTemplate", "field.editorTemplate is executed");
-    });
-
-    QUnit.test("customOperation.editorOptions has more priority than field.editorOptions", function(assert) {
-        var event,
-            fields = [{
-                dataField: "Field",
-                editorOptions: {
-                    onInitialized: function() {
-                        event = "field.editorOptions";
-                    }
-                }
-            }],
-            instance = $("#container").dxFilterBuilder({
-                value: [
-                    ["Field", "lastDays", 2]
-                ],
-                fields: fields,
-                customOperations: [{
-                    key: "lastDays",
-                    editorOptions: {
-                        onInitialized: function() {
-                            event = "customOperation.editorOptions";
-                        }
-                    }
-                }]
-            }).dxFilterBuilder("instance");
-
-        var valueField = $("." + FILTER_BUILDER_ITEM_VALUE_CLASS).eq(0);
-        valueField.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).trigger("dxclick");
-        assert.equal(event, "customOperation.editorOptions", "customOperation.editorOptions.onInitialized is executed");
-
-        instance.option("value", ["Field", "=", 2]);
-        valueField = $("." + FILTER_BUILDER_ITEM_VALUE_CLASS).eq(0);
-        valueField.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).trigger("dxclick");
-        assert.equal(event, "field.editorOptions", "field.editorOptions.onInitialized is executed");
     });
 });
 
@@ -1100,3 +1085,40 @@ QUnit.module("on value changed", function() {
     });
 });
 
+QUnit.module("Methods", function() {
+    QUnit.test("getFilterExpression", function(assert) {
+        // arrange
+        var instance = $("#container").dxFilterBuilder({
+            value: [
+                ["State", "<>", "K&S Music"],
+                "and",
+                ["OrderDate", "lastDay"]
+            ],
+            fields: [{
+                dataField: "State",
+                calculateFilterExpression: function(filterValue, selectedFieldOperation) {
+                    return [[this.dataField, selectedFieldOperation, filterValue], "and", [this.dataField, "=", "Some state"]];
+                }
+            }, {
+                dataField: "OrderDate"
+            }],
+            customOperations: [{
+                name: "lastDay",
+                calculateFilterExpression: function(filterValue, field) {
+                    return [field.dataField, ">", "1"];
+                }
+            }]
+        }).dxFilterBuilder("instance");
+
+        //act, assert
+        assert.deepEqual(instance.getFilterExpression(), [
+            [
+                ["State", "<>", "K&S Music"],
+                "and",
+                ["State", "=", "Some state"]
+            ],
+            "and",
+            ["OrderDate", ">", "1"]
+        ]);
+    });
+});

@@ -145,7 +145,8 @@ function getGroupValue(group) {
 }
 
 function getFilterOperations(field) {
-    return field.filterOperations || (field.lookup && LOOKUP_OPERATIONS) || DATATYPE_OPERATIONS[field.dataType || DEFAULT_DATA_TYPE];
+    var result = field.filterOperations || (field.lookup && LOOKUP_OPERATIONS) || DATATYPE_OPERATIONS[field.dataType || DEFAULT_DATA_TYPE];
+    return extend([], result);
 }
 
 function getCaptionByOperation(operation, filterOperationDescriptions) {
@@ -163,9 +164,9 @@ function getOperationFromAvailable(operation, availableOperations) {
     throw new errors.Error("E1048", operation);
 }
 
-function getCustomOperationByKey(customOperations, key) {
+function getCustomOperation(customOperations, name) {
     var filteredOperations = customOperations.filter(function(item) {
-        return item.key === key;
+        return item.name === name;
     });
     return filteredOperations.length ? filteredOperations[0] : null;
 }
@@ -174,21 +175,21 @@ function getAvailableOperations(field, filterOperationDescriptions, customOperat
     var filterOperations = getFilterOperations(field);
 
     customOperations.forEach(function(customOperation) {
-        if(!field.filterOperations && filterOperations.indexOf(customOperation.key) === -1) {
+        if(!field.filterOperations && filterOperations.indexOf(customOperation.name) === -1) {
             var dataTypes = customOperation && customOperation.dataTypes;
             if(!dataTypes || dataTypes.indexOf(field.dataType || DEFAULT_DATA_TYPE) >= 0) {
-                filterOperations.push(customOperation.key);
+                filterOperations.push(customOperation.name);
             }
         }
     });
 
     return filterOperations.map(function(operation) {
-        var customOperation = getCustomOperationByKey(customOperations, operation);
+        var customOperation = getCustomOperation(customOperations, operation);
         if(customOperation) {
             return {
                 icon: customOperation.icon,
-                text: customOperation.caption || inflector.captionize(customOperation.key),
-                value: customOperation.key
+                text: customOperation.caption || inflector.captionize(customOperation.name),
+                value: customOperation.name
             };
         } else {
             return {
@@ -204,11 +205,11 @@ function getDefaultOperation(field) {
     return field.defaultFilterOperation || getFilterOperations(field)[0];
 }
 
-function createCondition(field) {
+function createCondition(field, customOperations) {
     var condition = [field.dataField, "", ""],
         filterOperation = getDefaultOperation(field);
 
-    updateConditionByOperation(condition, filterOperation);
+    updateConditionByOperation(condition, filterOperation, customOperations);
 
     return condition;
 }
@@ -284,18 +285,19 @@ function isCondition(criteria) {
 
     return criteria.length > 1 && !criteria.some(function(item) {
         return Array.isArray(item);
+        // TODO: will not work in between
     });
 }
 
-function convertToInnerGroup(group) {
+function convertToInnerGroup(group, customOperations) {
     var groupOperation = getCriteriaOperation(group).toLowerCase() || AND_GROUP_OPERATION,
         innerGroup = [];
     for(var i = 0; i < group.length; i++) {
         if(isGroup(group[i])) {
-            innerGroup.push(convertToInnerStructure(group[i]));
+            innerGroup.push(convertToInnerStructure(group[i], customOperations));
             innerGroup.push(groupOperation);
         } else if(isCondition(group[i])) {
-            innerGroup.push(convertToInnerCondition(group[i]));
+            innerGroup.push(convertToInnerCondition(group[i], customOperations));
             innerGroup.push(groupOperation);
         }
     }
@@ -307,7 +309,16 @@ function convertToInnerGroup(group) {
     return innerGroup;
 }
 
-function convertToInnerCondition(condition) {
+function conditionHasCustomOperation(condition, customOperations) {
+    var customOperation = getCustomOperation(customOperations, condition[1]);
+    return customOperation && customOperation.name === condition[1];
+}
+
+function convertToInnerCondition(condition, customOperations) {
+    if(conditionHasCustomOperation(condition, customOperations)) {
+        return condition;
+    }
+
     if(condition.length < 3) {
         condition[2] = condition[1];
         condition[1] = "=";
@@ -315,7 +326,7 @@ function convertToInnerCondition(condition) {
     return condition;
 }
 
-function convertToInnerStructure(value) {
+function convertToInnerStructure(value, customOperations) {
     if(!value) {
         return [AND_GROUP_OPERATION];
     }
@@ -323,12 +334,14 @@ function convertToInnerStructure(value) {
     value = extend(true, [], value);
 
     if(isCondition(value)) {
-        return [convertToInnerCondition(value), AND_GROUP_OPERATION];
+        return [convertToInnerCondition(value, customOperations), AND_GROUP_OPERATION];
     }
     if(isNegationGroup(value)) {
-        return ["!", isCondition(value[1]) ? [convertToInnerCondition(value[1]), AND_GROUP_OPERATION] : convertToInnerGroup(value[1])];
+        return ["!", isCondition(value[1])
+            ? [convertToInnerCondition(value[1], customOperations), AND_GROUP_OPERATION]
+            : convertToInnerGroup(value[1], customOperations)];
     }
-    return convertToInnerGroup(value);
+    return convertToInnerGroup(value, customOperations);
 }
 
 function getNormalizedFields(fields) {
@@ -356,8 +369,8 @@ function getFilterExpression(value, fields, customOperations) {
     var criteria = getGroupCriteria(value),
         getConditionFilterExpression = function(condition) {
             var field = getField(condition[0], fields),
-                filterExpression = convertToInnerCondition(condition),
-                customOperation = customOperations.length && getCustomOperationByKey(customOperations, filterExpression[1]);
+                filterExpression = convertToInnerCondition(condition, customOperations),
+                customOperation = customOperations.length && getCustomOperation(customOperations, filterExpression[1]);
 
             if(customOperation && customOperation.calculateFilterExpression) {
                 return customOperation.calculateFilterExpression.apply(customOperation, [filterExpression[2], field]);
@@ -369,7 +382,7 @@ function getFilterExpression(value, fields, customOperations) {
         };
 
     if(isCondition(criteria)) {
-        result = getConditionFilterExpression(criteria);
+        result = getConditionFilterExpression(criteria, customOperations);
     } else {
         result = [];
         for(var i = 0; i < criteria.length; i++) {
@@ -554,7 +567,16 @@ function getCaptionWithParents(item, plainItems) {
     return item.caption;
 }
 
-function updateConditionByOperation(condition, operation) {
+function updateConditionByOperation(condition, operation, customOperations) {
+    var customOperation = getCustomOperation(customOperations, operation);
+    if(customOperation) {
+        if(customOperation.hasValue === false) {
+            condition[1] = operation;
+            condition.length = 2;
+        }
+        return condition;
+    }
+
     if(operation === "isblank") {
         condition[1] = "=";
         condition[2] = null;
@@ -562,7 +584,7 @@ function updateConditionByOperation(condition, operation) {
         condition[1] = "<>";
         condition[2] = null;
     } else {
-        if(condition[2] === null) {
+        if(condition.length === 2 || condition[2] === null) {
             condition[2] = "";
         }
         condition[1] = operation;
@@ -627,4 +649,4 @@ exports.getCaptionByOperation = getCaptionByOperation;
 exports.getOperationValue = getOperationValue;
 exports.setFocusToBody = setFocusToBody;
 exports.getFilterExpression = getFilterExpression;
-exports.getCustomOperationByKey = getCustomOperationByKey;
+exports.getCustomOperation = getCustomOperation;
