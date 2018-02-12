@@ -375,6 +375,12 @@ Series.prototype = {
             that._canRenderCompleteHandle = true;
         }
 
+        if(that._aggregatedPoints) {
+            that._allPoints = [];
+            that._disposePoints(that._originalPoints);
+            oldPointsByArgument = {};
+        }
+
         that._beginUpdateData(data);
 
         points = data.reduce(function(points, dataItem) {
