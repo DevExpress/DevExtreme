@@ -3910,6 +3910,19 @@ QUnit.test("GetRowsElements method is called once when opacity is applied to row
     assert.ok(rowsView._getRowElements.calledOnce, "GetRowsElements method should called once");
 });
 
+QUnit.test("loadPanel position correction if rowsView.height > window.height", function(assert) {
+    //arrange
+    var rowsView = this.createRowsView(this.items, null, null, null, { loadPanel: { enabled: true } }),
+        $testElement = $('#container');
+
+    //act
+    rowsView.render($testElement);
+    rowsView.height(10000);
+
+    //assert
+    assert.deepEqual(rowsView._loadPanel.option("position.of")().get(0), window);
+});
+
 QUnit.module('Rows view with real dataController and columnController', {
     beforeEach: function() {
         this.items = [
