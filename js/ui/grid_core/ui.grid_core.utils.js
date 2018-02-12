@@ -242,7 +242,7 @@ module.exports = (function() {
                     position: {
                         of: $element
                     },
-                    container: $element
+                    container: $container
                 }, loadPanelOptions);
 
                 that._loadPanel = that._createComponent($("<div>").appendTo($container), LoadPanel, loadPanelOptions);

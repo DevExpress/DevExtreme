@@ -5100,11 +5100,51 @@ QUnit.test("Show load panel after replace dataSource when scrolling mode is 'vir
     this.dataController.optionChanged({ name: "dataSource" });
 
     //assert
-    assert.ok($testElement.find(".dx-loadpanel-content").first().is(":visible"), "load panel is visible");
+    assert.ok($testElement.parent().find(".dx-loadpanel-content").first().is(":visible"), "load panel is visible");
     assert.ok(isDataLoading, "data loading");
     clock.tick(200);
-    assert.ok(!$testElement.find(".dx-loadpanel-content").first().is(":visible"), "load panel isn't visible");
+    assert.ok(!$testElement.parent().find(".dx-loadpanel-content").first().is(":visible"), "load panel isn't visible");
 
+    clock.restore();
+});
+
+//T604344
+QUnit.test("Scrollbar should be correct updated when specified a remote data", function(assert) {
+    //arrange
+    var that = this,
+        clock = sinon.useFakeTimers(),
+        $testElement = $("#container");
+
+    that.options.dataSource = {
+        load: function() {
+            var d = $.Deferred();
+
+            setTimeout(function() {
+                d.resolve([that.items[0]]);
+            }, 100);
+
+            return d.promise();
+        }
+    };
+    that.options.loadPanel = {
+        enabled: true
+    };
+    that.options.scrolling = {
+        useNative: false
+    };
+    that.options.columnAutoWidth = true;
+
+    that.setupDataGridModules();
+    that.rowsView.element = function() { return $testElement; };
+    that.rowsView.render($testElement);
+    that.rowsView.resize();
+    clock.tick(100);
+
+    //act
+    that.rowsView.resize();
+
+    //assert
+    assert.notOk(that.rowsView.getScrollable()._allowedDirection(), "scrollbars are hidden");
     clock.restore();
 });
 
@@ -6755,7 +6795,7 @@ QUnit.test('loadPanel options', function(assert) {
     assert.equal(rowsView._loadPanel.option('showIndicator'), false);
     assert.equal(rowsView._loadPanel.option('showPane'), true);
     assert.equal(rowsView._loadPanel.option('indicatorSrc'), 'test');
-    assert.deepEqual(rowsView._loadPanel.option('container'), rowsView.element());
+    assert.deepEqual(rowsView._loadPanel.option('container'), rowsView.element().parent());
 });
 
 QUnit.test('Load Panel is not visible when Bottom Load Panel is visible and pageIndex is more then 0', function(assert) {

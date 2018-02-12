@@ -316,7 +316,7 @@ QUnit.test("Loading DataSource", function(assert) {
     assert.ok(onContentReadyCallback.calledOnce, "contentReady should be called once");
     assert.ok(!pivotGrid._loadPanel.option("visible"), 'loadPanel should not be visible');
     assert.strictEqual(pivotGrid.isReady(), true);
-    assert.deepEqual(pivotGrid._loadPanel.option("container"), pivotGrid._dataArea.groupElement().parent());
+    assert.deepEqual(pivotGrid._loadPanel.option("container"), pivotGrid.element());
 });
 
 QUnit.test("Loading DataSource longer 1000 ms", function(assert) {
