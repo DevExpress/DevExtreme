@@ -6,6 +6,7 @@ var $ = require("jquery"),
     browser = require("core/utils/browser"),
     support = require("core/utils/support"),
     dateUtils = require("core/utils/date"),
+    commonUtils = require("core/utils/common"),
     uiDateUtils = require("ui/date_box/ui.date_utils"),
     devices = require("core/devices"),
     DateBox = require("ui/date_box"),
@@ -44,6 +45,7 @@ var currentDate = new Date(2015, 11, 31),
     BOX_CLASS = "dx-box",
     CALENDAR_CLASS = "dx-calendar",
     TIMEVIEW_CLASS = "dx-timeview",
+    TIMEVIEW_CLOCK_CLASS = "dx-timeview-clock",
     TEXTEDITOR_INPUT_CLASS = "dx-texteditor-input",
 
     DATEBOX_CLASS = "dx-datebox",
@@ -391,6 +393,25 @@ QUnit.test("T378630 - the displayFormat should not be changed if the type option
         }).dxDateBox("instance");
 
     assert.equal(instance.option("displayFormat"), displayFormat, "the displayFormat option is not changed");
+});
+
+QUnit.test("set maxWidth for time view when fallback strategy is used", function(assert) {
+    if(!browser.msie) {
+        assert.ok(true);
+        return;
+    }
+
+    var dateBox = $("#dateBox").dxDateBox({
+        type: "datetime",
+        pickerType: "calendarWithTime",
+        value: new Date()
+    }).dxDateBox("instance");
+
+    dateBox.option("opened", true);
+
+    var maxWidth = $("." + TIMEVIEW_CLASS).css("maxWidth");
+    assert.ok(commonUtils.isDefined(maxWidth), "maxWidth is defined");
+    assert.equal(maxWidth, $("." + TIMEVIEW_CLOCK_CLASS).css("minWidth"), "minWidth of time view clock should be equal maxWidth");
 });
 
 QUnit.test("the 'displayFormat' option should accept format objects (T378753)", function(assert) {
