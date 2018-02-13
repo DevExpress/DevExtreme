@@ -1,5 +1,5 @@
 {
-    "it-IT": {
+    "it": {
         "Yes": "Si",
         "No": "No",
         "Cancel": "Annulla",
@@ -86,7 +86,7 @@
         "dxDataGrid-editingCancelRowChanges": "Annulla",
         "dxDataGrid-editingDeleteRow": "Elimina",
         "dxDataGrid-editingUndeleteRow": "Ripristina",
-        "dxDataGrid-editingConfirmDeleteMessage": "Sei sicuro di voler eliminare questa registrazione?",/*"Sei sicuro di voler eliminare questa riga/record?"*/
+        "dxDataGrid-editingConfirmDeleteMessage": "Sei sicuro di voler eliminare questa registrazione?",
         "dxDataGrid-validationCancelChanges": "Annulla le modifiche",
         "dxDataGrid-groupPanelEmptyText": "Trascinare l'intestazione di una colonna qui per raggrupparla",
         "dxDataGrid-noDataText": "Nessun dato",
