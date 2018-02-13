@@ -1304,8 +1304,12 @@ Axis.prototype = {
 
             if(!isDefined(minValueMargin) || !isDefined(maxValueMargin)) {
                 if(isArgumentAxis && margins.checkInterval) {
-                    interval = that._calculateRangeInterval(maxMinDistance, range.interval);
-                    marginValue = interval / 2;
+                    if(maxMinDistance === 0) {
+                        interval = 0;
+                    } else {
+                        interval = that._calculateRangeInterval(maxMinDistance, range.interval);
+                        marginValue = interval / 2;
+                    }
                 }
 
                 if(marginSize) {
