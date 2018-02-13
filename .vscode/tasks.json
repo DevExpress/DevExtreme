@@ -1,0 +1,13 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "npm run build",
+      "type": "shell",
+      "command": "npm",
+      "args": [ "run", "build" ],
+      "group": "build",
+      "problemMatcher": []
+    }
+  ]
+}

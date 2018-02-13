@@ -1,0 +1,13 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Build Test Runner",
+      "type": "shell",
+      "command": "dotnet",
+      "args": [ "build" ],
+      "group": "build",
+      "problemMatcher": "$msCompile"
+    }
+  ]
+}

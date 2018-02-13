@@ -1,0 +1,14 @@
+{
+  "configurations": [
+    {
+      "name": "Debug",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "Build Test Runner",
+      "cwd": "${workspaceFolder}",
+      "program": "bin/runner.dll",
+      "stopAtEntry": false,
+      "console": "integratedTerminal"
+    }
+  ]
+}
