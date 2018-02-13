@@ -145,30 +145,30 @@ function clickedOnFieldsArea($targetElement) {
 */
 
 /**
- * @name dxPivotGridOptions_hoverStateEnabled
- * @publicName hoverStateEnabled
- * @hidden
+* @name dxPivotGridOptions_hoverStateEnabled
+* @publicName hoverStateEnabled
+* @hidden
 * @inheritdoc
 */
 
 /**
- * @name dxPivotGridOptions_focusStateEnabled
- * @publicName focusStateEnabled
- * @hidden
+* @name dxPivotGridOptions_focusStateEnabled
+* @publicName focusStateEnabled
+* @hidden
 * @inheritdoc
 */
 
 /**
- * @name dxPivotGridOptions_accessKey
- * @publicName accessKey
- * @hidden
+* @name dxPivotGridOptions_accessKey
+* @publicName accessKey
+* @hidden
 * @inheritdoc
 */
 
 /**
- * @name dxPivotGridMethods_registerKeyHandler
- * @publicName registerKeyHandler(key, handler)
- * @hidden
+* @name dxPivotGridMethods_registerKeyHandler
+* @publicName registerKeyHandler(key, handler)
+* @hidden
 * @inheritdoc
 */
 
