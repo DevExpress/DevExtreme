@@ -1997,6 +1997,50 @@ QUnit.test("updateSize - margins and interval are recalculated", function(assert
     assert.equal(range.interval, 30);
 });
 
+QUnit.test("updateSize, synchronized axis - do not recalculate margins/interval", function(assert) {
+    var axis = this.createAxis(true, {
+        valueMarginsEnabled: true
+    });
+
+    this.generatedTicks = [100, 200];
+    axis.setBusinessRange({
+        min: 90,
+        max: 210,
+        interval: 30
+    });
+    axis.setMarginOptions({
+        checkInterval: true,
+        size: 100
+    });
+
+    //act
+    //emulate synchronizer
+    this.translator.updateBusinessRange({
+        min: 50,
+        max: 250,
+        interval: 50,
+        isSynchronized: true
+    });
+    axis.draw(this.canvas);
+    this.translator.stub("updateBusinessRange").reset();
+
+    axis.updateSize({
+        top: 200,
+        bottom: 200,
+        left: 200,
+        right: 200,
+        width: 900,
+        height: 400
+    });
+
+    assert.deepEqual(this.translator.getBusinessRange(), {
+        min: 50,
+        max: 250,
+        interval: 50,
+        isSynchronized: true
+    });
+});
+
 QUnit.test("Margins and skipViewportExtending = true - do not extend range with margins to boundary ticks", function(assert) {
     this.testMargins(assert, {
         options: {

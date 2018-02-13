@@ -29,34 +29,30 @@ var getValueAxesPerPanes = function(valueAxes) {
 
 var linearConverter = {
     transform: function(v, b) {
-        return vizUtils.getLog(v, b);
+        return adjust(vizUtils.getLog(v, b));
     },
 
     addInterval: function(v, i) {
-        return v + i;
+        return adjust(v + i);
     },
 
     getInterval: function(base, tickInterval) {
         return tickInterval;
-    },
-
-    adjustValue: _floor
+    }
 };
 
 var logConverter = {
     transform: function(v, b) {
-        return vizUtils.raiseTo(v, b);
+        return adjust(vizUtils.raiseTo(v, b));
     },
 
     addInterval: function(v, i) {
-        return v * i;
+        return adjust(v * i);
     },
 
     getInterval: function(base, tickInterval) {
         return _math.pow(base, tickInterval);
-    },
-
-    adjustValue: adjust
+    }
 };
 
 var convertAxisInfo = function(axisInfo, converter) {
@@ -67,8 +63,7 @@ var convertAxisInfo = function(axisInfo, converter) {
         tickValues = axisInfo.tickValues,
         tick,
         ticks = [],
-        interval,
-        i;
+        interval;
 
     axisInfo.minValue = converter.transform(axisInfo.minValue, base);
     axisInfo.oldMinValue = converter.transform(axisInfo.oldMinValue, base);
@@ -81,10 +76,9 @@ var convertAxisInfo = function(axisInfo, converter) {
     }
 
     interval = converter.getInterval(base, axisInfo.tickInterval);
-
     tick = converter.transform(tickValues[0], base);
-    for(i = 0; i < tickValues.length; i++) {
-        ticks.push(converter.adjustValue(tick));
+    while(ticks.length < tickValues.length) {
+        ticks.push(tick);
         tick = converter.addInterval(tick, interval);
     }
 

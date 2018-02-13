@@ -1536,6 +1536,24 @@ QUnit.test("customTicks", function(assert) {
     assert.deepEqual(this.axis._minorTickInterval, 1);
 });
 
+QUnit.test("tickInterval > businessDelta, no data as multiplier of tickInterval (endOnTick == undefined), take 2 ticks always", function(assert) {
+    this.createAxis();
+    this.updateOptions({
+        argumentType: "numeric",
+        type: "logarithmic",
+        logarithmBase: 10,
+        tickInterval: 1
+    });
+
+    this.axis.setBusinessRange({ minVisible: 1638, maxVisible: 3166, addRange: function() { } });
+
+    //act
+    this.axis.createTicks(canvas(200));
+
+    assert.deepEqual(this.axis._majorTicks.map(value), [1000, 10000]);
+    assert.deepEqual(this.axis._tickInterval, 1);
+});
+
 QUnit.module("Logarithmic. Minor ticks", environment);
 
 QUnit.test("minorTickInterval as exponent, but ticks not", function(assert) {
@@ -1630,19 +1648,20 @@ QUnit.test("Minor ticks when there is only one major tick on min (big tickInterv
         argumentType: "numeric",
         type: "logarithmic",
         logarithmBase: 10,
-        tickInterval: 10,
+        tickInterval: 3,
         minorTick: {
             visible: true
         }
     });
 
-    this.axis.setBusinessRange({ minVisible: 0.1, maxVisible: 100, addRange: function() { } });
+    this.axis.setBusinessRange({ minVisible: 1, maxVisible: 800, addRange: function() { } });
 
     //act
     this.axis.createTicks(canvas(60));
 
-    assert.deepEqual(this.axis._minorTicks.map(value), [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]);
-    assert.deepEqual(this.axis._minorTickInterval, 1);
+    assert.deepEqual(this.axis._minorTicks.map(value), [250, 500, 750]);
+    assert.deepEqual(this.axis._majorTicks.map(value), [1]);
+    assert.deepEqual(this.axis._minorTickInterval, 0.75);
 });
 
 QUnit.test("Minor ticks when there is only one major tick in the middle (big tickInterval)", function(assert) {
@@ -1663,6 +1682,7 @@ QUnit.test("Minor ticks when there is only one major tick in the middle (big tic
     this.axis.createTicks(canvas(75));
 
     assert.deepEqual(this.axis._minorTicks.map(value), [60, 80, 200]);
+    assert.deepEqual(this.axis._majorTicks.map(value), [100]);
     assert.deepEqual(this.axis._minorTickInterval, 0.2);
 });
 
