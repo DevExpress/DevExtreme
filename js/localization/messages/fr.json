@@ -222,6 +222,7 @@
         "dxScheduler-confirmRecurrenceDeleteOccurrence": "Supprimer évenement",
 
         "dxScheduler-noTimezoneTitle": "Pas de fuseau horaire",
+        "dxScheduler-moreAppointments": "",
 
         "dxCalendar-todayButtonText": "Aujourd'hui",
         "dxCalendar-ariaWidgetName": "Calendrier",
@@ -232,8 +233,32 @@
         "dxColorView-ariaAlpha": "Transparence",
         "dxColorView-ariaHex": "Code couleur",
 
+        "dxTagBox-selected": "",
+        "dxTagBox-allSelected": "",
+        "dxTagBox-moreSelected": "",
+
         "vizExport-printingButtonText": "Imprimer",
         "vizExport-titleMenuText": "Exporter/Imprimer",
-        "vizExport-exportButtonText": "{0} fichier"
+        "vizExport-exportButtonText": "{0} fichier",
+
+        "dxFilterBuilder-and": "",
+        "dxFilterBuilder-or": "",
+        "dxFilterBuilder-notAnd": "",
+        "dxFilterBuilder-notOr": "",
+        "dxFilterBuilder-addCondition": "",
+        "dxFilterBuilder-addGroup": "",
+        "dxFilterBuilder-enterValueText": "",
+        "dxFilterBuilder-filterOperationEquals": "",
+        "dxFilterBuilder-filterOperationNotEquals": "",
+        "dxFilterBuilder-filterOperationLess": "",
+        "dxFilterBuilder-filterOperationLessOrEquals": "",
+        "dxFilterBuilder-filterOperationGreater": "",
+        "dxFilterBuilder-filterOperationGreaterOrEquals": "",
+        "dxFilterBuilder-filterOperationStartsWith": "",
+        "dxFilterBuilder-filterOperationContains": "",
+        "dxFilterBuilder-filterOperationNotContains": "",
+        "dxFilterBuilder-filterOperationEndsWith": "",
+        "dxFilterBuilder-filterOperationIsBlank": "",
+        "dxFilterBuilder-filterOperationIsNotBlank": ""
     }
 }
