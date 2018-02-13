@@ -402,6 +402,46 @@ QUnit.test("Row expand state should not be changed on row click when scrolling m
     assert.ok(dataGrid.isRowExpanded(["1"]), "first group row is expanded");
 });
 
+//T601360
+QUnit.test("Update cell after infinit scrolling and editing must processing after all pages has been loaded", function(assert) {
+    //arrange
+    var items = [{ value: "0" }, { value: "1" }, { value: "2" }, { value: "3" }],
+        clock = sinon.useFakeTimers(),
+        dataGrid = $("#dataGrid").dxDataGrid({
+            remoteOperations: true,
+            dataSource: {
+                load: function(options) {
+                    var d = $.Deferred();
+                    setTimeout(function() {
+                        d.resolve({
+                            data: items.slice(options.skip, options.skip + options.take),
+                            totalCount: items.length
+                        });
+                    }, 10);
+                    return d;
+                }
+            },
+            height: 50,
+            paging: { pageSize: 2 },
+            scrolling: { mode: "virtual" }
+        }).dxDataGrid("instance");
+
+    clock.tick(20);
+
+    items[0].value = "test";
+
+    var firstCellTextInDone;
+
+    //act
+    dataGrid.refresh().done(function() {
+        firstCellTextInDone = $(dataGrid.getCellElement(0, 0)).text();
+    });
+    clock.tick(20);
+
+    //assert
+    assert.equal(firstCellTextInDone, "test");
+});
+
 QUnit.test("cellClick/cellHoverChanged handler should be executed when define via 'on' method", function(assert) {
     var cellClickCount = 0,
         cellHoverChangedCount = 0,
