@@ -137,7 +137,7 @@ var CalendarWithTimeStrategy = CalendarStrategy.inherit({
                     if(this._box.option("layoutStrategy") === "fallback") {
                         var clockMinWidth = this._getPopup().$content().find(".dx-timeview-clock").css("minWidth");
 
-                        this._timeView.$element().css("minWidth", clockMinWidth);
+                        this._timeView.$element().css("maxWidth", clockMinWidth);
                     }
                 }).bind(this),
             });
