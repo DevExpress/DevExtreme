@@ -170,6 +170,13 @@ function clickedOnFieldsArea($targetElement) {
 * @inheritdoc
 */
 
+/**
+ * @name dxPivotGridMethods_registerKeyHandler
+ * @publicName registerKeyHandler(key, handler)
+ * @hidden
+* @inheritdoc
+*/
+
 var PivotGrid = Widget.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
