@@ -159,6 +159,16 @@
                 border-top-color: transparent;
             }
         }
+
+        .dx-list-item {
+            &:first-of-type {
+                margin-top: 0;
+            }
+
+            &:last-of-type {
+                margin-bottom: 0;
+            }
+        }
     }
 
     .dx-list-group-header {
@@ -185,10 +195,12 @@
     .dx-list-item {
         &:first-of-type {
             border-top: none;
+            margin-top: 8px;
         }
 
         &:last-of-type {
             border-bottom: none;
+            margin-bottom: 8px;
         }
 
         .dx-icon-toggle-delete {
