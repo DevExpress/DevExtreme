@@ -3920,7 +3920,7 @@ QUnit.test("loadPanel position correction if rowsView.height > window.height", f
     rowsView.height(10000);
 
     //assert
-    assert.deepEqual(rowsView._loadPanel.option("position.of")().get(0), window);
+    assert.deepEqual(rowsView._loadPanel.option("position.getPosition")().get(0), window);
 });
 
 QUnit.module('Rows view with real dataController and columnController', {
