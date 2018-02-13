@@ -1752,8 +1752,8 @@ QUnit.test('Synchronization two logarithmic Axis. Equal tick count', function(as
                     base: 10,
                     min: 1,
                     minVisible: 1,
-                    max: 31622.7766017,
-                    maxVisible: 31622.7766017
+                    max: 31622.7766,
+                    maxVisible: 31622.7766
                 },
                 tickValues: [100, 1000, 10000]
             }
@@ -1821,8 +1821,8 @@ QUnit.test('Synchronization logarithmic Axis with non logarithmic axis. B250542'
                     base: 10,
                     min: Number(Math.pow(10, -2.8).toFixed(7)),
                     minVisible: Number(Math.pow(10, -2.8).toFixed(7)),
-                    max: Number(Math.pow(10, 6.8).toFixed(7)),
-                    maxVisible: Number(Math.pow(10, 6.8).toFixed(7))
+                    max: Number(Math.pow(10, 6.8).toFixed(5)),
+                    maxVisible: Number(Math.pow(10, 6.8).toFixed(5))
                 },
                 tickValues: [10e-3, 10e-2, 10e-1, 10e0, 10e1, 10e2, 10e3, 10e4, 10e5]
             },
@@ -1836,6 +1836,46 @@ QUnit.test('Synchronization logarithmic Axis with non logarithmic axis. B250542'
                     maxVisible: 98
                 },
                 tickValues: [10, 20, 30, 40, 50, 60, 70, 80, 90]
+            }
+        ],
+        syncIndexes: [[0, 1]]
+    });
+});
+
+QUnit.test('Synchronization logarithmic Axis with non logarithmic axis. Ticks adjusting. T603397', function(assert) {
+    var tickValues1 = [1000, 10000, 100000],
+        tickValue2 = [0, 100, 200, 300, 400];
+    tickValues1.tickInterval = 1;
+    tickValue2.tickInterval = 100;
+
+    checkAxesSynchronization(assert, {
+        axesOptions: [
+            { type: 'logarithmic', range: { min: 1000, max: 100000, minVisible: 1000, base: 10, axisType: 'logarithmic' }, tickValues: tickValues1, tickInterval: 1 },
+            { type: 'continuous', range: { min: 0, max: 400, minVisible: 0, axisType: 'continuous' }, tickValues: tickValue2, tickInterval: 100 }
+        ],
+        axesOptionsAfterSync: [
+            {
+                range: {
+                    axisType: 'logarithmic',
+                    isSynchronized: true,
+                    base: 10,
+                    min: 1000,
+                    minVisible: 1000,
+                    max: 100000,
+                    maxVisible: 100000
+                },
+                tickValues: [1000, 10000, 100000]
+            },
+            {
+                range: {
+                    axisType: 'continuous',
+                    isSynchronized: true,
+                    min: 0,
+                    minVisible: 0,
+                    max: 400,
+                    maxVisible: 400
+                },
+                tickValues: [0, 100, 200, 300, 400]
             }
         ],
         syncIndexes: [[0, 1]]
