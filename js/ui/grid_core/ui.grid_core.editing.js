@@ -1966,7 +1966,7 @@ module.exports = {
                 },
                 repaintRows: function() {
                     if(this.getController("editing").isSaving()) return;
-                    return this.callBase(this, arguments);
+                    return this.callBase.apply(this, arguments);
                 },
                 changeRowExpand: function(key) {
                     var editingController = this.getController("editing");
