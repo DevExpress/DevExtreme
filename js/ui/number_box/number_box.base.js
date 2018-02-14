@@ -269,6 +269,8 @@ var NumberBoxBase = TextEditor.inherit({
 
         this._renderInputAddons();
         this.setAria("valuenow", value);
+
+        this.option("text", this._input().val());
     },
 
     _renderValueEventName: function() {
