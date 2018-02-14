@@ -343,10 +343,6 @@
 @button-focused-shadow-color: @button-shadow-color;
 @button-active-shadow-color: fadein(@button-shadow-color, 8%);
 
-@button-flat-hover-bg: darken(@base-element-bg, 8%);
-@button-flat-focused-bg: darken(@base-element-bg, 8%);
-@button-flat-active-bg: rgba(153, 153, 153, .4);
-
 // Normal button
 
 /**
@@ -492,6 +488,15 @@
 */
 @button-success-active-bg: darken(@button-success-bg, 12%);
 @button-success-icon-color: @button-inverted-icon-color;
+
+// Flat button
+
+/**
+* @name 10. Text color
+* @type color
+* @group buttons.flat
+*/
+@button-flat-color: @base-text-color;
 
 // Checkbox
 /**
