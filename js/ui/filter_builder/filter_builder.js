@@ -1009,7 +1009,7 @@ var FilterBuilder = Widget.inherit({
 
         var $editor = that._createValueEditor($container, field, options);
 
-        eventsEngine.trigger($editor.find("input:visible").eq(0), "focus");
+        eventsEngine.trigger($editor.find("input").not(':hidden').eq(0), "focus");
 
         var documentClickHandler = function(e) {
             if(!isFocusOnEditorParts(e.target)) {
