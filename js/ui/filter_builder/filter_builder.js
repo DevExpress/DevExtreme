@@ -590,22 +590,28 @@ var FilterBuilder = Widget.inherit({
         return function(conditionInfo, container) {
             var $editorStart = $("<div>").addClass(FILTER_BUILDER_RANGE_START_CLASS),
                 $editorEnd = $("<div>").addClass(FILTER_BUILDER_RANGE_END_CLASS),
-                values = conditionInfo.value || [];
+                values = conditionInfo.value || [],
+                getStartValue = function(values) {
+                    return values && values.length > 0 ? values[0] : null;
+                },
+                getEndValue = function(values) {
+                    return values && values.length === 2 ? values[1] : null;
+                };
 
             this._editorFactory.createEditor.call(this, $editorStart, extend({}, conditionInfo.field, conditionInfo, {
-                value: values && values.length > 0 ? values[0] : null,
+                value: getStartValue(values),
                 parentType: "filterBuilder",
                 setValue: function(value) {
-                    values = [value, values[1]];
+                    values = [value, getEndValue(values)];
                     conditionInfo.setValue(values);
                 }
             }));
 
             this._editorFactory.createEditor.call(this, $editorEnd, extend({}, conditionInfo.field, conditionInfo, {
-                value: values && values.length === 2 ? values[1] : null,
+                value: getEndValue(values),
                 parentType: "filterBuilder",
                 setValue: function(value) {
-                    values = [values[0], value];
+                    values = [getStartValue(values), value];
                     conditionInfo.setValue(values);
                 }
             }));

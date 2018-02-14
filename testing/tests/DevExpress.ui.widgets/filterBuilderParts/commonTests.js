@@ -35,6 +35,10 @@ var clickByOutside = function() {
     $("body").trigger("dxpointerdown"); //use dxpointerdown because T600142
 };
 
+var clickByValue = function(index) {
+    $("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).eq(index || 0).trigger("dxclick");
+};
+
 var selectMenuItem = function(menuItemIndex) {
     $(".dx-treeview-item").eq(menuItemIndex).trigger("dxclick");
 };
@@ -207,8 +211,7 @@ QUnit.module("Rendering", function() {
     });
 
     QUnit.test("editorElement argument of onEditorPreparing option is correct", function(assert) {
-        var container = $("#container"),
-            companyNameValueField;
+        var container = $("#container");
 
         container.dxFilterBuilder({
             value: [
@@ -221,8 +224,7 @@ QUnit.module("Rendering", function() {
         });
 
         //act
-        companyNameValueField = $("." + FILTER_BUILDER_ITEM_VALUE_CLASS).eq(0);
-        companyNameValueField.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).trigger("dxclick");
+        clickByValue();
     });
 
     QUnit.test("operations are changed after field change", function(assert) {
@@ -723,7 +725,7 @@ QUnit.module("Create editor", function() {
             fields: fields
         });
         var valueField = $("." + FILTER_BUILDER_ITEM_VALUE_CLASS).eq(0);
-        valueField.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).trigger("dxclick");
+        clickByValue();
         assert.ok(valueField.find(".dx-numberbox").dxNumberBox("instance"));
     });
 
@@ -752,7 +754,7 @@ QUnit.module("Create editor", function() {
         });
 
         var valueField = $("." + FILTER_BUILDER_ITEM_VALUE_CLASS).eq(0);
-        valueField.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).trigger("dxclick");
+        clickByValue();
         dateBoxInstance = valueField.find(".dx-datebox").dxDateBox("instance");
         assert.strictEqual(dateBoxInstance.option("type"), "date");
     });
@@ -768,7 +770,7 @@ QUnit.module("Create editor", function() {
         });
 
         var valueField = $("." + FILTER_BUILDER_ITEM_VALUE_CLASS).eq(0);
-        valueField.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).trigger("dxclick");
+        clickByValue();
         dateBoxInstance = valueField.find(".dx-datebox").dxDateBox("instance");
         assert.strictEqual(dateBoxInstance.option("type"), "datetime");
     });
@@ -783,7 +785,7 @@ QUnit.module("Create editor", function() {
         });
 
         var valueField = $("." + FILTER_BUILDER_ITEM_VALUE_CLASS).eq(0);
-        valueField.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).trigger("dxclick");
+        clickByValue();
         assert.ok(valueField.find(".dx-selectbox").dxSelectBox("instance"));
     });
 
@@ -810,7 +812,7 @@ QUnit.module("Create editor", function() {
         });
 
         var valueField = $("." + FILTER_BUILDER_ITEM_VALUE_CLASS).eq(0);
-        valueField.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).trigger("dxclick");
+        clickByValue();
         assert.ok(valueField.find(".dx-selectbox").dxSelectBox("instance"));
     });
 
@@ -833,7 +835,7 @@ QUnit.module("Create editor", function() {
         });
 
         var valueField = $("." + FILTER_BUILDER_ITEM_VALUE_CLASS).eq(0);
-        valueField.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).trigger("dxclick");
+        clickByValue();
         assert.ok(valueField.find("input").hasClass("my-editor"));
 
         assert.strictEqual(args.value, "value", "filter value");
@@ -864,7 +866,7 @@ QUnit.module("Create editor", function() {
         });
 
         var valueField = $("." + FILTER_BUILDER_ITEM_VALUE_CLASS).eq(0);
-        valueField.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).trigger("dxclick");
+        clickByValue();
         assert.ok(valueField.find("input").hasClass("my-editor"));
 
         assert.strictEqual(args.value, 2, "filter value");
@@ -894,13 +896,12 @@ QUnit.module("Create editor", function() {
                 }]
             }).dxFilterBuilder("instance");
 
-        var valueField = $("." + FILTER_BUILDER_ITEM_VALUE_CLASS).eq(0);
-        valueField.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).trigger("dxclick");
+
+        clickByValue();
         assert.equal(event, "customOperation.editorTemplate", "customOperation.editorTemplate is executed");
 
         instance.option("value", ["Field", "=", 2]);
-        valueField = $("." + FILTER_BUILDER_ITEM_VALUE_CLASS).eq(0);
-        valueField.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).trigger("dxclick");
+        clickByValue();
         assert.equal(event, "field.editorTemplate", "field.editorTemplate is executed");
     });
 
@@ -922,8 +923,7 @@ QUnit.module("Create editor", function() {
         });
 
         // act
-        var valueField = $("." + FILTER_BUILDER_ITEM_VALUE_CLASS).eq(0);
-        valueField.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).trigger("dxclick");
+        clickByValue();
 
         var $rangeContainer = $("." + FILTER_BUILDER_RANGE_CLASS),
             $editorStart = $rangeContainer.find("." + FILTER_BUILDER_RANGE_START_CLASS),
@@ -1161,6 +1161,45 @@ QUnit.module("on value changed", function() {
 
         assert.equal(instance.option("value"), value);
         assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).length, 1);
+    });
+
+    QUnit.test("change between value", function(assert) {
+        // arrange
+        var fields = [{
+                dataField: "Field",
+                dataType: "number"
+            }],
+            value = [
+                ["Field", "between", []]
+            ],
+            instance = $("#container").dxFilterBuilder({
+                value: value,
+                fields: fields,
+                customOperations: [{
+                    name: "between"
+                }]
+            }).dxFilterBuilder("instance");
+
+        // act
+        clickByValue();
+
+        var $editorStart = $("." + FILTER_BUILDER_RANGE_START_CLASS);
+        $editorStart.dxNumberBox("instance").option("value", 1);
+        clickByOutside();
+
+        // assert
+        assert.deepEqual(instance.option("value")[2], [1, null]);
+
+        //act
+        instance.option("value", value);
+        clickByValue();
+
+        var $editorEnd = $("." + FILTER_BUILDER_RANGE_END_CLASS);
+        $editorEnd.dxNumberBox("instance").option("value", 2);
+        clickByOutside();
+
+        // assert
+        assert.deepEqual(instance.option("value")[2], [null, 2]);
     });
 });
 
