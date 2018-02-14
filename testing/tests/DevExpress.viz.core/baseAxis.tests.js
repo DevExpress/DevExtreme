@@ -1036,6 +1036,34 @@ QUnit.test("minValueMargin - apply margins to the min", function(assert) {
     });
 });
 
+//T603177
+QUnit.test("Margins for one point (dateTime)", function(assert) {
+    var date = new Date('2018/05/02');
+
+    this.testMargins(assert, {
+        isArgumentAxis: true,
+        marginOptions: {
+            checkInterval: true
+        },
+        options: {
+            dataType: "datetime",
+            valueMarginsEnabled: true
+        },
+        ticks: [date],
+        range: {
+            min: date,
+            max: date
+        },
+        expectedRange: {
+            min: date,
+            max: date,
+            minVisible: date,
+            interval: 0,
+            maxVisible: date
+        }
+    });
+});
+
 QUnit.test("maxValueMargin - apply margins to the max", function(assert) {
     this.testMargins(assert, {
         options: {
