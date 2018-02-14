@@ -3910,6 +3910,23 @@ QUnit.test("GetRowsElements method is called once when opacity is applied to row
     assert.ok(rowsView._getRowElements.calledOnce, "GetRowsElements method should called once");
 });
 
+QUnit.test("loadPanel position correction if rowsView.height > window.height", function(assert) {
+    //arrange
+    var rowsView = this.createRowsView(this.items, null, null, null, { loadPanel: { enabled: true } }),
+        $testElement = $('#container');
+
+    //act
+    rowsView.render($testElement);
+    rowsView.height(10000);
+
+    //assert
+    var options = rowsView._loadPanel.option("position")();
+    assert.deepEqual(options.of[0], window);
+    // need when "grid.height > window.height" and grid places with vertical offset
+    assert.deepEqual(options.boundary[0], $testElement.find(".dx-datagrid-rowsview")[0]);
+    assert.deepEqual(options.collision, "fit");
+});
+
 QUnit.module('Rows view with real dataController and columnController', {
     beforeEach: function() {
         this.items = [

@@ -181,7 +181,7 @@ var Overlay = Widget.inherit({
             /**
             * @name dxOverlayOptions_position
             * @publicName position
-            * @type string|positionConfig
+            * @type string|positionConfig|function
             * @default { my: 'center', at: 'center', of: window }
             */
             position: {
@@ -607,7 +607,8 @@ var Overlay = Widget.inherit({
     },
 
     _normalizePosition: function() {
-        this._position = this.option("position");
+        var position = this.option("position");
+        this._position = typeof position === "function" ? position() : position;
     },
 
     _getAnimationConfig: function() {

@@ -239,8 +239,15 @@ module.exports = (function() {
                 loadPanelOptions = extend({
                     shading: false,
                     message: loadPanelOptions.text,
-                    position: {
-                        of: $element
+                    position: function() {
+                        if($element.height() > $(window).height()) {
+                            return {
+                                of: $(window),
+                                boundary: $element,
+                                collision: "fit"
+                            };
+                        }
+                        return { of: $element };
                     },
                     container: $container
                 }, loadPanelOptions);
