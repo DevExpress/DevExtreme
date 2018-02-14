@@ -240,11 +240,14 @@ module.exports = (function() {
                     shading: false,
                     message: loadPanelOptions.text,
                     position: function() {
-                        return {
-                            of: $element.height() > $(window).height() ? $(window) : $element,
-                            boundary: $element,
-                            collision: "flip"
-                        };
+                        if($element.height() > $(window).height()) {
+                            return {
+                                of: $(window),
+                                boundary: $element,
+                                collision: "fit"
+                            };
+                        }
+                        return { of: $element };
                     },
                     container: $element
                 }, loadPanelOptions);
