@@ -243,7 +243,7 @@ module.exports = (function() {
                         return {
                             of: $element.height() > $(window).height() ? $(window) : $element,
                             boundary: $element,
-                            collision: "fit"
+                            collision: "flip"
                         };
                     },
                     container: $element
