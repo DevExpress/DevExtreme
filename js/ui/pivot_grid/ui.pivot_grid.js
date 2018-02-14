@@ -133,7 +133,7 @@ function getCommonBorderWidth(elements, direction) {
         width = 0;
 
     each(elements, function(_, elem) {
-        var computedStyle = getComputedStyle(elem.get(0));
+        var computedStyle = window.getComputedStyle(elem.get(0));
         borderStyleNames.forEach(function(borderStyleName) {
             width += (parseFloat(computedStyle[borderStyleName]) || 0);
         });
