@@ -5,6 +5,7 @@ var dataErrors = require("../../data/errors").errors,
     errors = require("../widget/ui.errors"),
     filterUtils = require("../shared/filtering"),
     extend = require("../../core/utils/extend").extend,
+    isDefined = require("../../core/utils/type").isDefined,
     formatHelper = require("../../format_helper"),
     inflector = require("../../core/utils/inflector"),
     messageLocalization = require("../../localization/message"),
@@ -635,12 +636,12 @@ function getBetweenConfig(editorTemplate) {
                 endValue = conditionInfo.value[1],
                 fieldFormat = getFieldFormat(conditionInfo.field);
 
-            if(!startValue && !endValue) {
+            if(!isDefined(startValue) && !isDefined(endValue)) {
                 return messageLocalization.format("dxFilterBuilder-enterValueText");
             }
 
-            return (startValue ? formatHelper.format(startValue, fieldFormat) : "?") + " - "
-                        + (endValue ? formatHelper.format(endValue, fieldFormat) : "?");
+            return (isDefined(startValue) ? formatHelper.format(startValue, fieldFormat) : "?") + " - "
+                        + (isDefined(endValue) ? formatHelper.format(endValue, fieldFormat) : "?");
         }
     };
 }

@@ -1425,25 +1425,25 @@ QUnit.module("Between operation", function() {
         // act
         text = betweenOperation.customizeText({
             field: field,
-            value: [1]
+            value: [0]
         });
         // assert
-        assert.equal(text, "1 - ?", "text without endValue");
+        assert.equal(text, "0 - ?", "text without endValue");
 
         // act
         text = betweenOperation.customizeText({
             field: field,
-            value: [null, 2]
+            value: [null, 0]
         });
         // assert
-        assert.equal(text, "? - 2", "text without startValue");
+        assert.equal(text, "? - 0", "text without startValue");
 
         // act
         text = betweenOperation.customizeText({
             field: field,
-            value: [1, 2]
+            value: [0, 1]
         });
         // assert
-        assert.equal(text, "1 - 2", "text with startValue & endValue");
+        assert.equal(text, "0 - 1", "text with startValue & endValue");
     });
 });

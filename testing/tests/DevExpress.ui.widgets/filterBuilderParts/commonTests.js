@@ -1184,22 +1184,22 @@ QUnit.module("on value changed", function() {
         clickByValue();
 
         var $editorStart = $("." + FILTER_BUILDER_RANGE_START_CLASS);
-        $editorStart.dxNumberBox("instance").option("value", 1);
+        $editorStart.dxNumberBox("instance").option("value", 0);
         clickByOutside();
 
         // assert
-        assert.deepEqual(instance.option("value")[2], [1, null]);
+        assert.deepEqual(instance.option("value")[2], [0, null]);
 
         //act
         instance.option("value", value);
         clickByValue();
 
         var $editorEnd = $("." + FILTER_BUILDER_RANGE_END_CLASS);
-        $editorEnd.dxNumberBox("instance").option("value", 2);
+        $editorEnd.dxNumberBox("instance").option("value", 0);
         clickByOutside();
 
         // assert
-        assert.deepEqual(instance.option("value")[2], [null, 2]);
+        assert.deepEqual(instance.option("value")[2], [null, 0]);
     });
 });
 
