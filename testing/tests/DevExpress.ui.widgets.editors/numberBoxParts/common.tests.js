@@ -293,6 +293,21 @@ QUnit.test("regression test. Change value used option", function(assert) {
     assert.equal($input.val(), 200);
 });
 
+QUnit.test("'text' option should be correct", function(assert) {
+    assert.expect(2);
+
+    var element = $("#numberbox").dxNumberBox({
+        value: 100
+    });
+
+    var instance = element.dxNumberBox("instance");
+    assert.equal(instance.option("text"), "100", "Text is OK");
+
+    instance.option("value", 200);
+
+    assert.equal(instance.option("text"), "200", "Text is OK");
+});
+
 QUnit.test("placeholder is visible when value is invalid", function(assert) {
     var $element = $("#numberbox").dxNumberBox({
             placeholder: "Placeholder",
