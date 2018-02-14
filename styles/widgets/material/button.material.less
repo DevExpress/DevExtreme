@@ -114,6 +114,7 @@
                 border-radius: 50%;
                 background: fade(#fff, 20%);
                 transform: scale(1);
+                will-change: transform;
                 animation-direction: alternate;
                 animation-name: focus;
                 animation-duration: 1s;
@@ -184,11 +185,11 @@
         transparent,
         @button-color,
         none,
-        @button-flat-hover-bg,
+        fade(@button-color, 8%),
         none,
-        @button-flat-focused-bg,
+        fade(@button-color, 15%),
         none,
-        @button-flat-active-bg,
+        fade(@button-color, 20%),
         none,
         transparent,
         @button-color
@@ -258,7 +259,7 @@
 
 
 .dx-button-flat {
-    .dx-button-flat-styling(@button-normal-color);
+    .dx-button-flat-styling(@button-flat-color);
 
     &.dx-button-default {
         .dx-button-flat-styling(@button-default-bg);
