@@ -80,7 +80,7 @@
         "dxDataGrid-groupContinuedMessage": "Jatkoa edelliseltä sivulta",
         "dxDataGrid-groupHeaderText": "Ryhmittele tämän sarakkeen mukaan",
         "dxDataGrid-ungroupHeaderText": "Poista ryhmittely",
-        "dxDataGrid-ungroupAllText": "Poista ryhmittely",
+        "dxDataGrid-ungroupAllText": "Poista kaikki ryhmittymät",
         "dxDataGrid-editingEditRow": "Muokkaa",
         "dxDataGrid-editingSaveRowChanges": "Tallenna",
         "dxDataGrid-editingCancelRowChanges": "Peruuta",
