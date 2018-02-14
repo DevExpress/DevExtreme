@@ -129,11 +129,14 @@ function getScrollBarInfo(useNativeScrolling) {
 }
 
 function getCommonBorderWidth(elements, direction) {
-    var outerSize = direction === "width" ? "outerWidth" : "outerHeight",
+    var borderStyleNames = direction === "width" ? ["borderLeftWidth", "borderRightWidth"] : ["borderTopWidth", "borderBottomWidth"],
         width = 0;
 
     each(elements, function(_, elem) {
-        width += elem[outerSize]() - elem[direction]();
+        var computedStyle = window.getComputedStyle(elem.get(0));
+        borderStyleNames.forEach(function(borderStyleName) {
+            width += (parseFloat(computedStyle[borderStyleName]) || 0);
+        });
     });
 
     return width;
