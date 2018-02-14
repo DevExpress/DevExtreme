@@ -10,7 +10,6 @@ QUnit.testStart(function() {
     var markup =
         '<div id="qunit-fixture">\
             <div id="switch"></div>\
-            <div id="widthRootStyle" style="width: 300px;"></div>\
         </div>';
 
     $("#qunit-fixture").html(markup);
@@ -65,14 +64,6 @@ QUnit.test("a hidden input should be rendered", function(assert) {
 
     assert.equal($input.length, 1, "input is rendered");
     assert.equal($input.attr("type"), "hidden", "input type is 'hidden'");
-});
-
-QUnit.test("root with custom width", function(assert) {
-    var $element = $("#widthRootStyle").dxSwitch(),
-        instance = $element.dxSwitch("instance");
-
-    assert.strictEqual(instance.option("width"), undefined);
-    assert.strictEqual($element.outerWidth(), 300, "outer width of the element must be equal to custom width");
 });
 
 QUnit.test("aria role", function(assert) {

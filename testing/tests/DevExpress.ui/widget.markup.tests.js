@@ -33,18 +33,12 @@ require("common.css!");
         assert.ok(element.hasClass(WIDGET_CLASS));
     });
 
-    QUnit.test("widget should have correct width by default", function(assert) {
-        var $element = $("#widget").dxWidget();
-
-        assert.ok($element.outerWidth() > 0, "outer width of the element must be more than zero");
-    });
-
     QUnit.test("root with custom width", function(assert) {
         var $element = $("#widthRootStyle").dxWidget(),
             instance = $element.dxWidget("instance");
 
         assert.strictEqual(instance.option("width"), undefined);
-        assert.strictEqual($element.outerWidth(), 300, "outer width of the element must be equal to custom width");
+        assert.strictEqual($element[0].style.width, "300px", "outer width of the element must be equal to custom width");
     });
 
     QUnit.test("root with custom percent width", function(assert) {
@@ -58,22 +52,22 @@ require("common.css!");
             instance = element.dxWidget("instance");
 
         assert.ok(instance.option("visible"));
-        assert.ok(element.is(":visible"));
+        assert.ok(!element.hasClass("dx-state-invisible"));
 
         instance.option("visible", false);
 
-        assert.ok(!element.is(":visible"));
+        assert.ok(element.hasClass("dx-state-invisible"));
     });
 
     QUnit.test("widget should not be visible if 'visible' option value = false", function(assert) {
         var element = $("#widget").dxWidget({ visible: false }),
             instance = element.dxWidget("instance");
 
-        assert.ok(!element.is(":visible"));
+        assert.ok(element.hasClass("dx-state-invisible"));
 
         instance.option("visible", true);
 
-        assert.ok(element.is(":visible"));
+        assert.ok(!element.hasClass("dx-state-invisible"));
     });
 
     QUnit.test("'hint' option has 'title' value", function(assert) {
