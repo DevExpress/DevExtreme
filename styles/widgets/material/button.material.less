@@ -101,6 +101,29 @@
 
     &.dx-state-focused {
         background-color: @focused-background-color;
+
+        &:not(.dx-state-active){
+            &:before {
+                content: " ";
+                position: absolute;
+                width: 80%;
+                padding: 50% 0;
+                top: 50%;
+                left: 0;
+                margin: -50% 10%;
+                border-radius: 50%;
+                background: fade(#fff, 20%);
+                transform: scale(1);
+                animation-direction: alternate;
+                animation-name: focus;
+                animation-duration: 1s;
+                animation-timing-function: linear;
+                animation-iteration-count: infinite;
+                animation-fill-mode: backwards;
+                backface-visibility: hidden;
+            }
+        }
+
         .box-shadow(@focused-shadow-color);
     }
 
@@ -120,6 +143,10 @@
         .dx-button-text {
             color: @button-disabled-text-color;
         }
+    }
+
+    .dx-inkripple-wave {
+        background-color: fade(@text-color, 20%);
     }
 }
 
@@ -176,6 +203,15 @@
 
 .dx-button {
     height: @MATERIAL_BUTTON_HEIGHT;
+    position: relative;
+    overflow: hidden;
+
+    .dx-button-content {
+        position: relative;
+        .dx-inkripple {
+            overflow: hidden;
+        }
+    }
 
     .dx-button-styling(
         @button-normal-bg,
@@ -234,5 +270,15 @@
 
     &.dx-button-success {
         .dx-button-flat-styling(@button-success-bg);
+    }
+}
+
+@keyframes focus {
+    from {
+        transform: scale(1);
+    }
+
+    to {
+        transform: scale(1.06);
     }
 }
