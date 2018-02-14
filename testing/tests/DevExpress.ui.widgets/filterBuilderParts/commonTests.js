@@ -11,14 +11,20 @@ require("ui/filter_builder/filter_builder");
 require("ui/drop_down_box");
 require("ui/button");
 
-var FILTER_BUILDER_ITEM_FIELD_CLASS = "dx-filterbuilder-item-field",
-    FILTER_BUILDER_ITEM_OPERATION_CLASS = "dx-filterbuilder-item-operation",
-    FILTER_BUILDER_ITEM_VALUE_CLASS = "dx-filterbuilder-item-value",
-    FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS = "dx-filterbuilder-item-value-text",
-    FILTER_BUILDER_GROUP_CONTENT_CLASS = "dx-filterbuilder-group-content",
+var
+    FILTER_BUILDER_CLASS = "dx-filterbuilder",
+    FILTER_BUILDER_ITEM_FIELD_CLASS = FILTER_BUILDER_CLASS + "-item-field",
+    FILTER_BUILDER_ITEM_OPERATION_CLASS = FILTER_BUILDER_CLASS + "-item-operation",
+    FILTER_BUILDER_ITEM_VALUE_CLASS = FILTER_BUILDER_CLASS + "-item-value",
+    FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS = FILTER_BUILDER_CLASS + "-item-value-text",
+    FILTER_BUILDER_GROUP_CONTENT_CLASS = FILTER_BUILDER_CLASS + "-group-content",
+    FILTER_BUILDER_GROUP_OPERATION_CLASS = FILTER_BUILDER_CLASS + "-group-operation",
     FILTER_BUILDER_IMAGE_ADD_CLASS = "dx-icon-plus",
     FILTER_BUILDER_IMAGE_REMOVE_CLASS = "dx-icon-remove",
-    FILTER_BUILDER_GROUP_OPERATION_CLASS = "dx-filterbuilder-group-operation",
+    FILTER_BUILDER_RANGE_CLASS = FILTER_BUILDER_CLASS + "-range",
+    FILTER_BUILDER_RANGE_START_CLASS = FILTER_BUILDER_RANGE_CLASS + "-start",
+    FILTER_BUILDER_RANGE_END_CLASS = FILTER_BUILDER_RANGE_CLASS + "-end",
+    FILTER_BUILDER_RANGE_SEPARATOR_CLASS = FILTER_BUILDER_RANGE_CLASS + "-separator",
     ACTIVE_CLASS = "dx-state-active";
 
 var getSelectedMenuText = function() {
@@ -492,6 +498,30 @@ QUnit.module("Filter value", function() {
         assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS).length, 1);
     });
 
+    QUnit.test("change filter value text when customOperation is selected", function(assert) {
+        var container = $("#container");
+
+        container.dxFilterBuilder({
+            value: [
+                ["field", "=", "K&S Music"]
+            ],
+            customOperations: [{
+                name: "customOperation"
+            }],
+            fields: [{
+                dataField: "field",
+                filterOperations: ["=", "customOperation"]
+            }]
+        });
+
+        assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS).text(), "K&S Music");
+
+        var $operationButton = container.find("." + FILTER_BUILDER_ITEM_OPERATION_CLASS);
+        clickByButtonAndSelectMenuItem($operationButton, 1);
+
+        assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS).text(), "<enter a value>");
+    });
+
     QUnit.test("hide filter value for field with object dataType", function(assert) {
         var container = $("#container");
 
@@ -546,6 +576,21 @@ QUnit.module("Filter value", function() {
 
         var valueButton = container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS);
         assert.notOk(valueButton.is(":focus"));
+    });
+
+    QUnit.testInActiveWindow("range start editor has focus", function(assert) {
+        var container = $("#container");
+
+        container.dxFilterBuilder({
+            value: ["field", "between", [1, 2]],
+            fields: [{ dataField: "field", dataType: "number" }],
+            customOperations: [{ name: "between" }]
+        });
+
+        container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).trigger("dxclick");
+
+        var $rangeStartEditor = container.find("." + FILTER_BUILDER_RANGE_START_CLASS + " .dx-texteditor-input");
+        assert.ok($rangeStartEditor.is(":focus"));
     });
 
     QUnit.testInActiveWindow("change filter value", function(assert) {
@@ -857,6 +902,40 @@ QUnit.module("Create editor", function() {
         valueField = $("." + FILTER_BUILDER_ITEM_VALUE_CLASS).eq(0);
         valueField.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).trigger("dxclick");
         assert.equal(event, "field.editorTemplate", "field.editorTemplate is executed");
+    });
+
+    QUnit.test("between.editorTemplate", function(assert) {
+        // arrange
+        var fields = [{
+            dataField: "Field",
+            dataType: "number"
+        }];
+
+        $("#container").dxFilterBuilder({
+            value: [
+                ["Field", "between", [1, 2]]
+            ],
+            fields: fields,
+            customOperations: [{
+                name: "between"
+            }]
+        });
+
+        // act
+        var valueField = $("." + FILTER_BUILDER_ITEM_VALUE_CLASS).eq(0);
+        valueField.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).trigger("dxclick");
+
+        var $rangeContainer = $("." + FILTER_BUILDER_RANGE_CLASS),
+            $editorStart = $rangeContainer.find("." + FILTER_BUILDER_RANGE_START_CLASS),
+            $editorEnd = $rangeContainer.find("." + FILTER_BUILDER_RANGE_END_CLASS),
+            $separator = $rangeContainer.find("." + FILTER_BUILDER_RANGE_SEPARATOR_CLASS);
+
+        // assert
+        assert.equal($editorStart.length, 1, "Start editor is created");
+        assert.equal($editorEnd.length, 1, "End editor is created");
+        assert.equal($separator.length, 1, "Separator is created");
+        assert.equal($editorStart.dxNumberBox("instance").option("value"), 1, "Start editor value = 1");
+        assert.equal($editorEnd.dxNumberBox("instance").option("value"), 2, "End editor value = 2");
     });
 });
 

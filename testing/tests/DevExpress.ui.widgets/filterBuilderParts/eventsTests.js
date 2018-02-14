@@ -34,7 +34,44 @@ QUnit.module("Events", function() {
         assert.strictEqual(spy.callCount, 1, "onEditorPreparing is called");
         assert.strictEqual(args.dataField, "CompanyName", "args -> dataField");
         assert.strictEqual(args.value, "DevExpress", "args -> value");
+        assert.strictEqual(args.filterOperation, "=", "args -> filterOperation");
         assert.deepEqual(args.component, container.dxFilterBuilder("instance"), "args -> component");
+    });
+
+    QUnit.test("onEditorPreparing for between", function(assert) {
+        //arrange
+        var spy = sinon.spy(),
+            container = $("#container"),
+            companyNameValueField;
+
+        container.dxFilterBuilder({
+            value: [
+                ["Field", "between", [1, 2]]
+            ],
+            customOperations: [{
+                name: "between"
+            }],
+            fields: [{
+                dataField: "Field",
+                dataType: "number"
+            }],
+            onEditorPreparing: spy
+        });
+
+        //act
+        companyNameValueField = $("." + FILTER_BUILDER_ITEM_VALUE_CLASS).eq(0);
+        companyNameValueField.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).trigger("dxclick");
+
+        //assert
+        assert.strictEqual(spy.callCount, 2, "onEditorPreparing is called");
+
+        var startArgs = spy.args[0][0];
+        assert.strictEqual(startArgs.value, 1, "args -> value");
+        assert.strictEqual(startArgs.filterOperation, "between", "args -> filterOperation");
+
+        var endArgs = spy.args[1][0];
+        assert.strictEqual(endArgs.value, 2, "args -> value");
+        assert.strictEqual(endArgs.filterOperation, "between", "args -> filterOperation");
     });
 
     QUnit.test("onEditorPrepared", function(assert) {
@@ -61,7 +98,44 @@ QUnit.module("Events", function() {
         assert.strictEqual(spy.callCount, 1, "onEditorPrepared is called");
         assert.strictEqual(args.dataField, "CompanyName", "args -> dataField");
         assert.strictEqual(args.value, "DevExpress", "args -> value");
+        assert.strictEqual(args.filterOperation, "=", "args -> filterOperation");
         assert.deepEqual(args.component, container.dxFilterBuilder("instance"), "args -> component");
+    });
+
+    QUnit.test("onEditorPrepared for between", function(assert) {
+        //arrange
+        var spy = sinon.spy(),
+            container = $("#container"),
+            companyNameValueField;
+
+        container.dxFilterBuilder({
+            value: [
+                ["Field", "between", [1, 2]]
+            ],
+            customOperations: [{
+                name: "between"
+            }],
+            fields: [{
+                dataField: "Field",
+                dataType: "number"
+            }],
+            onEditorPrepared: spy
+        });
+
+        //act
+        companyNameValueField = $("." + FILTER_BUILDER_ITEM_VALUE_CLASS).eq(0);
+        companyNameValueField.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).trigger("dxclick");
+
+        //assert
+        assert.strictEqual(spy.callCount, 2, "onEditorPrepared is called");
+
+        var startArgs = spy.args[0][0];
+        assert.strictEqual(startArgs.value, 1, "args -> value");
+        assert.strictEqual(startArgs.filterOperation, "between", "args -> filterOperation");
+
+        var endArgs = spy.args[1][0];
+        assert.strictEqual(endArgs.value, 2, "args -> value");
+        assert.strictEqual(endArgs.filterOperation, "between", "args -> filterOperation");
     });
 
     QUnit.test("onValueChanged", function(assert) {

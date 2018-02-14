@@ -133,6 +133,7 @@ QUnit.module("Utils", function() {
         assert.ok(utils.isGroup([["and"], "and", ["and"], "and"]));
         assert.ok(utils.isGroup(["and"]));
         assert.ok(utils.isGroup([]));
+        assert.notOk(utils.isGroup(["value", "range", [1, 2]]));
     });
 
     QUnit.test("isEmptyGroup", function(assert) {
@@ -155,6 +156,7 @@ QUnit.module("Utils", function() {
         assert.notOk(utils.isCondition([[], "and", []]));
         assert.notOk(utils.isCondition(["and"]));
         assert.notOk(utils.isCondition("and"));
+        assert.ok(utils.isCondition(["Column1", "=", [1, 2]]));
     });
 
     QUnit.test("get group value", function(assert) {
@@ -344,7 +346,7 @@ QUnit.module("Utils", function() {
         assert.deepEqual(utils.updateConditionByOperation(["value", "=", null], "<=", []), ["value", "<=", ""]);
     });
 
-    QUnit.test("change operation from default to custom", function(assert) {
+    QUnit.test("change operation from default to custom without value", function(assert) {
         //arrange, act
         var updatedCondition = utils.updateConditionByOperation(["value", "=", "123"], "lastDays", [{
             name: "lastDays",
@@ -355,11 +357,31 @@ QUnit.module("Utils", function() {
         assert.deepEqual(updatedCondition, ["value", "lastDays"]);
     });
 
-    QUnit.test("change operation from custom to default", function(assert) {
+    QUnit.test("change operation from default to custom with value", function(assert) {
+        //arrange, act
+        var updatedCondition = utils.updateConditionByOperation(["value", "=", "123"], "range", [{
+            name: "range"
+        }]);
+
+        //assert
+        assert.deepEqual(updatedCondition, ["value", "range", ""]);
+    });
+
+    QUnit.test("change operation from custom without value to default", function(assert) {
         //arrange, act
         var updatedCondition = utils.updateConditionByOperation(["value", "lastDays"], "=", [{
             name: "lastDays",
             hasValue: false
+        }]);
+
+        //assert
+        assert.deepEqual(updatedCondition, ["value", "=", ""]);
+    });
+
+    QUnit.test("change operation from custom with value to default", function(assert) {
+        //arrange, act
+        var updatedCondition = utils.updateConditionByOperation(["value", "range", [1, 2]], "=", [{
+            name: "range"
         }]);
 
         //assert
@@ -1069,6 +1091,24 @@ QUnit.module("Custom filter expressions", {
         assert.deepEqual(utils.getFilterExpression(value, this.fields, []), null);
     });
 
+    QUnit.test("calculateFilterExpression for fieldValue = array", function(assert) {
+        // arrange
+        var value = ["field1", "range", [2, 3]],
+            customOperations = [{
+                name: "range",
+                calculateFilterExpression: function(filterValue, field) {
+                    return [[field.dataField, ">", filterValue[0]], "and", [field.dataField, "<", filterValue[1]]];
+                }
+            }];
+
+        // act, assert
+        assert.deepEqual(utils.getFilterExpression(value, this.fields, customOperations), [
+            ["field1", ">", 2],
+            "and",
+            ["field1", "<", 3]
+        ]);
+    });
+
     QUnit.test("calculateFilterExpression for condition", function(assert) {
         // arrange
         var value = ["field1", "1"];
@@ -1294,5 +1334,116 @@ QUnit.module("Lookup Value", function() {
         utils.getCurrentLookupValueText(field, value, function(r) {
             assert.equal(r, "");
         });
+    });
+});
+
+QUnit.module("Between operation", function() {
+    QUnit.test("between is enabled", function(assert) {
+        // arrange
+        var template = function() { },
+            customOperations = [{ name: "between", editorTemplate: template }, { name: "operation1" }];
+
+        // act
+        var mergedOperations = utils.getMergedOperations(customOperations, function() { });
+
+        // assert
+        assert.equal(mergedOperations.length, 2, "length == 2");
+        assert.equal(mergedOperations[0].caption, "Between");
+        assert.deepEqual(mergedOperations[0].dataTypes, ["number", "date", "datetime"]);
+        assert.equal(mergedOperations[0].editorTemplate, template);
+        assert.equal(mergedOperations[1].name, "operation1");
+    });
+
+    QUnit.test("between is disabled", function(assert) {
+        // arrange
+        var customOperations = [{ name: "operation1" }];
+
+        // act
+        var mergedOperations = utils.getMergedOperations(customOperations, function() { });
+
+        // assert
+        assert.equal(mergedOperations.length, 1, "length == 1");
+        assert.equal(mergedOperations[0].name, "operation1");
+    });
+
+    QUnit.test("override between options", function(assert) {
+        // arrange
+        var customOperations = [{ name: "between", caption: "My Between" }];
+
+        // act
+        var mergedOperations = utils.getMergedOperations(customOperations, function() { });
+
+        // assert
+        assert.equal(mergedOperations[0].caption, "My Between");
+    });
+
+    QUnit.test("between.calculateFilterExpression", function(assert) {
+        // arrange
+        var customOperations = [{ name: "between" }];
+
+        // act
+        var mergedOperations = utils.getMergedOperations(customOperations, function() { }),
+            filterExpression = mergedOperations[0].calculateFilterExpression([1, 2], { dataField: "field" });
+        // assert
+        assert.deepEqual(filterExpression, [["field", ">=", 1], "and", ["field", "<=", 2]]);
+
+        // act
+        filterExpression = mergedOperations[0].calculateFilterExpression([1], { dataField: "field" });
+        // assert
+        assert.deepEqual(filterExpression, null);
+
+        // act
+        filterExpression = mergedOperations[0].calculateFilterExpression([], { dataField: "field" });
+        // assert
+        assert.deepEqual(filterExpression, null);
+
+        // act
+        filterExpression = mergedOperations[0].calculateFilterExpression("", { dataField: "field" });
+        // assert
+        assert.deepEqual(filterExpression, null);
+
+        // act
+        filterExpression = mergedOperations[0].calculateFilterExpression(null, { dataField: "field" });
+        // assert
+        assert.deepEqual(filterExpression, null);
+    });
+
+    QUnit.test("between.customizeText", function(assert) {
+        // arrange
+        var customOperations = [{ name: "between" }],
+            field = { dataType: "number" };
+
+        // act
+        var betweenOperation = utils.getMergedOperations(customOperations, function() { })[0],
+            text = betweenOperation.customizeText({
+                field: field,
+                value: ""
+            });
+        // assert
+        assert.equal(text, "<enter a value>", "empty text is correct");
+
+        // act
+        text = betweenOperation.customizeText({
+            field: field,
+            value: [1]
+        });
+        // assert
+        assert.equal(text, "1 - ?", "text without endValue");
+
+        // act
+        text = betweenOperation.customizeText({
+            field: field,
+            value: [null, 2]
+        });
+        // assert
+        assert.equal(text, "? - 2", "text without startValue");
+
+        // act
+        text = betweenOperation.customizeText({
+            field: field,
+            value: [1, 2]
+        });
+        // assert
+        assert.equal(text, "1 - 2", "text with startValue & endValue");
     });
 });

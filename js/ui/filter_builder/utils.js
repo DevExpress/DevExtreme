@@ -273,9 +273,7 @@ function isGroup(criteria) {
         return false;
     }
 
-    return criteria.length < 2 || criteria.some(function(item) {
-        return Array.isArray(item);
-    });
+    return criteria.length < 2 || (Array.isArray(criteria[0]) || Array.isArray(criteria[1]));
 }
 
 function isCondition(criteria) {
@@ -283,10 +281,7 @@ function isCondition(criteria) {
         return false;
     }
 
-    return criteria.length > 1 && !criteria.some(function(item) {
-        return Array.isArray(item);
-        // TODO: will not work in between
-    });
+    return criteria.length > 1 && !Array.isArray(criteria[0]) && !Array.isArray(criteria[1]);
 }
 
 function convertToInnerGroup(group, customOperations) {
@@ -573,6 +568,9 @@ function updateConditionByOperation(condition, operation, customOperations) {
         if(customOperation.hasValue === false) {
             condition[1] = operation;
             condition.length = 2;
+        } else {
+            condition[1] = operation;
+            condition[2] = "";
         }
         return condition;
     }
@@ -584,7 +582,8 @@ function updateConditionByOperation(condition, operation, customOperations) {
         condition[1] = "<>";
         condition[2] = null;
     } else {
-        if(condition.length === 2 || condition[2] === null) {
+        customOperation = getCustomOperation(customOperations, condition[1]);
+        if(customOperation || (condition.length === 2 || condition[2] === null)) {
             condition[2] = "";
         }
         condition[1] = operation;
@@ -620,6 +619,47 @@ function setFocusToBody() {
     }
 }
 
+function getBetweenConfig(editorTemplate) {
+    return {
+        name: "between",
+        caption: messageLocalization.format("dxDataGrid-filterRowOperationBetween"),
+        icon: "range",
+        dataTypes: ["number", "date", "datetime"],
+        calculateFilterExpression: function(filterValue, field) {
+            if(!filterValue || filterValue.length < 2) return null;
+            return [[field.dataField, ">=", filterValue[0]], "and", [field.dataField, "<=", filterValue[1]]];
+        },
+        editorTemplate: editorTemplate,
+        customizeText: function(conditionInfo) {
+            var startValue = conditionInfo.value[0],
+                endValue = conditionInfo.value[1],
+                fieldFormat = getFieldFormat(conditionInfo.field);
+
+            if(!startValue && !endValue) {
+                return messageLocalization.format("dxFilterBuilder-enterValueText");
+            }
+
+            return (startValue ? formatHelper.format(startValue, fieldFormat) : "?") + " - "
+                        + (endValue ? formatHelper.format(endValue, fieldFormat) : "?");
+        }
+    };
+}
+
+function getMergedOperations(customOperations, betweenEditorTemplate) {
+    var result = extend(true, [], customOperations),
+        betweenIndex = -1;
+    result.some(function(customOperation, index) {
+        if(customOperation.name === "between") {
+            betweenIndex = index;
+            return true;
+        }
+    });
+    if(betweenIndex !== -1) {
+        result[betweenIndex] = extend(getBetweenConfig(betweenEditorTemplate), result[betweenIndex]);
+    }
+    return result;
+}
+
 exports.isValidCondition = isValidCondition;
 exports.isEmptyGroup = isEmptyGroup;
 exports.getOperationFromAvailable = getOperationFromAvailable;
@@ -650,3 +690,4 @@ exports.getOperationValue = getOperationValue;
 exports.setFocusToBody = setFocusToBody;
 exports.getFilterExpression = getFilterExpression;
 exports.getCustomOperation = getCustomOperation;
+exports.getMergedOperations = getMergedOperations;

@@ -14,24 +14,28 @@ var $ = require("../../core/renderer"),
     EditorFactoryMixin = require("../shared/ui.editor_factory_mixin");
 
 var FILTER_BUILDER_CLASS = "dx-filterbuilder",
-    FILTER_BUILDER_GROUP_CLASS = "dx-filterbuilder-group",
-    FILTER_BUILDER_GROUP_ITEM_CLASS = "dx-filterbuilder-group-item",
-    FILTER_BUILDER_GROUP_CONTENT_CLASS = "dx-filterbuilder-group-content",
-    FILTER_BUILDER_GROUP_OPERATION_CLASS = "dx-filterbuilder-group-operation",
-    FILTER_BUILDER_ACTION_CLASS = "dx-filterbuilder-action",
-    FILTER_BUILDER_IMAGE_CLASS = "dx-filterbuilder-action-icon",
+    FILTER_BUILDER_GROUP_CLASS = FILTER_BUILDER_CLASS + "-group",
+    FILTER_BUILDER_GROUP_ITEM_CLASS = FILTER_BUILDER_GROUP_CLASS + "-item",
+    FILTER_BUILDER_GROUP_CONTENT_CLASS = FILTER_BUILDER_GROUP_CLASS + "-content",
+    FILTER_BUILDER_GROUP_OPERATIONS_CLASS = FILTER_BUILDER_GROUP_CLASS + "-operations",
+    FILTER_BUILDER_GROUP_OPERATION_CLASS = FILTER_BUILDER_GROUP_CLASS + "-operation",
+    FILTER_BUILDER_ACTION_CLASS = FILTER_BUILDER_CLASS + "-action",
+    FILTER_BUILDER_IMAGE_CLASS = FILTER_BUILDER_ACTION_CLASS + "-icon",
     FILTER_BUILDER_IMAGE_ADD_CLASS = "dx-icon-plus",
     FILTER_BUILDER_IMAGE_REMOVE_CLASS = "dx-icon-remove",
-    FILTER_BUILDER_ITEM_TEXT_CLASS = "dx-filterbuilder-text",
-    FILTER_BUILDER_ITEM_FIELD_CLASS = "dx-filterbuilder-item-field",
-    FILTER_BUILDER_ITEM_OPERATION_CLASS = "dx-filterbuilder-item-operation",
-    FILTER_BUILDER_ITEM_VALUE_CLASS = "dx-filterbuilder-item-value",
-    FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS = "dx-filterbuilder-item-value-text",
-    FILTER_BUILDER_OVERLAY_CLASS = "dx-filterbuilder-overlay",
-    FILTER_BUILDER_FILTER_OPERATIONS_CLASS = "dx-filterbuilder-operations",
-    FILTER_BUILDER_GROUP_OPERATIONS_CLASS = "dx-filterbuilder-group-operations",
-    FILTER_BUILDER_FIELDS_CLASS = "dx-filterbuilder-fields",
-    FILTER_BUILDER_ADD_CONDITION_CLASS = "dx-filterbuilder-add-condition",
+    FILTER_BUILDER_ITEM_TEXT_CLASS = FILTER_BUILDER_CLASS + "-text",
+    FILTER_BUILDER_ITEM_FIELD_CLASS = FILTER_BUILDER_CLASS + "-item-field",
+    FILTER_BUILDER_ITEM_OPERATION_CLASS = FILTER_BUILDER_CLASS + "-item-operation",
+    FILTER_BUILDER_ITEM_VALUE_CLASS = FILTER_BUILDER_CLASS + "-item-value",
+    FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS = FILTER_BUILDER_CLASS + "-item-value-text",
+    FILTER_BUILDER_OVERLAY_CLASS = FILTER_BUILDER_CLASS + "-overlay",
+    FILTER_BUILDER_FILTER_OPERATIONS_CLASS = FILTER_BUILDER_CLASS + "-operations",
+    FILTER_BUILDER_FIELDS_CLASS = FILTER_BUILDER_CLASS + "-fields",
+    FILTER_BUILDER_ADD_CONDITION_CLASS = FILTER_BUILDER_CLASS + "-add-condition",
+    FILTER_BUILDER_RANGE_CLASS = FILTER_BUILDER_CLASS + "-range",
+    FILTER_BUILDER_RANGE_START_CLASS = FILTER_BUILDER_RANGE_CLASS + "-start",
+    FILTER_BUILDER_RANGE_END_CLASS = FILTER_BUILDER_RANGE_CLASS + "-end",
+    FILTER_BUILDER_RANGE_SEPARATOR_CLASS = FILTER_BUILDER_RANGE_CLASS + "-separator",
     ACTIVE_CLASS = "dx-state-active",
 
     TAB_KEY = 9,
@@ -72,11 +76,12 @@ var FilterBuilder = Widget.inherit({
               * @type_function_param1_field8 editorName:string
               * @type_function_param1_field9 editorOptions:object
               * @type_function_param1_field10 dataField:string
-              * @type_function_param1_field11 updateValueTimeout:number
-              * @type_function_param1_field12 width:number
-              * @type_function_param1_field13 readOnly:boolean
-              * @type_function_param1_field14 disabled:boolean
-              * @type_function_param1_field15 rtlEnabled:boolean
+              * @type_function_param1_field11 filterOperation:string
+              * @type_function_param1_field12 updateValueTimeout:number
+              * @type_function_param1_field13 width:number
+              * @type_function_param1_field14 readOnly:boolean
+              * @type_function_param1_field15 disabled:boolean
+              * @type_function_param1_field16 rtlEnabled:boolean
               * @extends Action
               * @action
              */
@@ -92,11 +97,12 @@ var FilterBuilder = Widget.inherit({
               * @type_function_param1_field6 editorElement:dxElement
               * @type_function_param1_field7 editorName:string
               * @type_function_param1_field8 dataField:string
-              * @type_function_param1_field9 updateValueTimeout:number
-              * @type_function_param1_field10 width:number
-              * @type_function_param1_field11 readOnly:boolean
-              * @type_function_param1_field12 disabled:boolean
-              * @type_function_param1_field13 rtlEnabled:boolean
+              * @type_function_param1_field9 filterOperation:string
+              * @type_function_param1_field10 updateValueTimeout:number
+              * @type_function_param1_field11 width:number
+              * @type_function_param1_field12 readOnly:boolean
+              * @type_function_param1_field13 disabled:boolean
+              * @type_function_param1_field14 rtlEnabled:boolean
               * @extends Action
               * @action
              */
@@ -534,7 +540,7 @@ var FilterBuilder = Widget.inherit({
     getFilterExpression: function() {
         var fields = this._getNormalizedFields(),
             value = extend(true, [], this._model);
-        return utils.getFilterExpression(utils.getNormalizedFilter(value, fields), fields, this.option("customOperations"));
+        return utils.getFilterExpression(utils.getNormalizedFilter(value, fields), fields, this._customOperations);
     },
 
     _getNormalizedFields: function() {
@@ -580,8 +586,40 @@ var FilterBuilder = Widget.inherit({
         this.callBase();
     },
 
+    _getBetweenEditorTemplate: function() {
+        return function(conditionInfo, container) {
+            var $editorStart = $("<div>").addClass(FILTER_BUILDER_RANGE_START_CLASS),
+                $editorEnd = $("<div>").addClass(FILTER_BUILDER_RANGE_END_CLASS),
+                values = conditionInfo.value || [];
+
+            this._editorFactory.createEditor.call(this, $editorStart, extend({}, conditionInfo.field, conditionInfo, {
+                value: values && values.length > 0 ? values[0] : null,
+                parentType: "filterBuilder",
+                setValue: function(value) {
+                    values = [value, values[1]];
+                    conditionInfo.setValue(values);
+                }
+            }));
+
+            this._editorFactory.createEditor.call(this, $editorEnd, extend({}, conditionInfo.field, conditionInfo, {
+                value: values && values.length === 2 ? values[1] : null,
+                parentType: "filterBuilder",
+                setValue: function(value) {
+                    values = [values[0], value];
+                    conditionInfo.setValue(values);
+                }
+            }));
+
+            container.append($editorStart);
+            container.append($("<span>").addClass(FILTER_BUILDER_RANGE_SEPARATOR_CLASS).text("-"));
+            container.append($editorEnd);
+            container.addClass(FILTER_BUILDER_RANGE_CLASS);
+        };
+    },
+
     _renderContentImpl: function() {
-        this._model = utils.convertToInnerStructure(this.option("value"), this.option("customOperations"));
+        this._customOperations = utils.getMergedOperations(this.option("customOperations"), this._getBetweenEditorTemplate());
+        this._model = utils.convertToInnerStructure(this.option("value"), this._customOperations);
         this._createGroupElementByCriteria(this._model)
             .appendTo(this.$element());
     },
@@ -634,7 +672,7 @@ var FilterBuilder = Widget.inherit({
             that._createGroupElement(newGroup, criteria).appendTo($groupContent);
         }, function() {
             var field = that.option("fields")[0],
-                newCondition = utils.createCondition(field, that.option("customOperations"));
+                newCondition = utils.createCondition(field, that._customOperations);
             utils.addItem(newCondition, criteria);
             that._createConditionElement(newCondition, criteria).appendTo($groupContent);
             if(utils.isValidCondition(newCondition, field)) {
@@ -736,7 +774,7 @@ var FilterBuilder = Widget.inherit({
     },
 
     _hasValueButton: function(condition) {
-        var customOperation = utils.getCustomOperation(this.option("customOperations"), condition[1]);
+        var customOperation = utils.getCustomOperation(this._customOperations, condition[1]);
         return customOperation ?
             customOperation.hasValue !== false
             : condition[2] !== null;
@@ -744,7 +782,7 @@ var FilterBuilder = Widget.inherit({
 
     _createOperationButtonWithMenu: function(condition, field) {
         var that = this,
-            availableOperations = utils.getAvailableOperations(field, this.option("filterOperationDescriptions"), this.option("customOperations")),
+            availableOperations = utils.getAvailableOperations(field, this.option("filterOperationDescriptions"), this._customOperations),
             currentOperation = utils.getOperationFromAvailable(utils.getOperationValue(condition), availableOperations),
             $operationButton = this._createButtonWithMenu({
                 caption: currentOperation.text,
@@ -757,13 +795,15 @@ var FilterBuilder = Widget.inherit({
                     onItemClick: function(e) {
                         if(currentOperation !== e.itemData) {
                             currentOperation = e.itemData;
-                            utils.updateConditionByOperation(condition, currentOperation.value, that.option("customOperations"));
+                            utils.updateConditionByOperation(condition, currentOperation.value, that._customOperations);
+                            var $valueButton = $operationButton.siblings().filter("." + FILTER_BUILDER_ITEM_VALUE_CLASS);
                             if(that._hasValueButton(condition)) {
-                                if($operationButton.siblings().filter("." + FILTER_BUILDER_ITEM_VALUE_CLASS).length === 0) {
-                                    that._createValueButton(condition, field).appendTo($operationButton.parent());
+                                if($valueButton.length !== 0) {
+                                    $valueButton.remove();
                                 }
+                                that._createValueButton(condition, field).appendTo($operationButton.parent());
                             } else {
-                                $operationButton.siblings().filter("." + FILTER_BUILDER_ITEM_VALUE_CLASS).remove();
+                                $valueButton.remove();
                             }
                             $operationButton.html(currentOperation.text);
                             that._updateFilter();
@@ -809,7 +849,7 @@ var FilterBuilder = Widget.inherit({
                         item = e.itemData;
                         condition[0] = item.dataField;
                         condition[2] = item.dataType === "object" ? null : "";
-                        utils.updateConditionByOperation(condition, utils.getDefaultOperation(item), that.option("customOperations"));
+                        utils.updateConditionByOperation(condition, utils.getDefaultOperation(item), that._customOperations);
 
                         $fieldButton.siblings().filter("." + FILTER_BUILDER_ITEM_TEXT_CLASS).remove();
                         that._createOperationAndValueButtons(condition, item, $fieldButton.parent());
@@ -912,7 +952,7 @@ var FilterBuilder = Widget.inherit({
                 setText(valueText);
             });
         } else {
-            var customOperation = utils.getCustomOperation(that.option("customOperations"), item[1]);
+            var customOperation = utils.getCustomOperation(that._customOperations, item[1]);
             setText(utils.getCurrentValueText(field, value, customOperation));
         }
 
@@ -969,7 +1009,7 @@ var FilterBuilder = Widget.inherit({
 
         var $editor = that._createValueEditor($container, field, options);
 
-        eventsEngine.trigger($editor.find("input"), "focus");
+        eventsEngine.trigger($editor.find("input:visible").eq(0), "focus");
 
         var documentClickHandler = function(e) {
             if(!isFocusOnEditorParts(e.target)) {
@@ -1016,7 +1056,7 @@ var FilterBuilder = Widget.inherit({
 
     _createValueEditor: function($container, field, options) {
         var $editor = $("<div>").attr("tabindex", 0).appendTo($container),
-            customOperation = utils.getCustomOperation(this.option("customOperations"), options.filterOperation),
+            customOperation = utils.getCustomOperation(this._customOperations, options.filterOperation),
             editorTemplate = customOperation && customOperation.editorTemplate ? customOperation.editorTemplate : field.editorTemplate;
 
         if(editorTemplate) {
