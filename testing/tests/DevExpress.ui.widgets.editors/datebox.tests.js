@@ -6,7 +6,7 @@ var $ = require("jquery"),
     browser = require("core/utils/browser"),
     support = require("core/utils/support"),
     dateUtils = require("core/utils/date"),
-    commonUtils = require("core/utils/common"),
+    typeUtils = require("core/utils/type"),
     uiDateUtils = require("ui/date_box/ui.date_utils"),
     devices = require("core/devices"),
     DateBox = require("ui/date_box"),
@@ -410,7 +410,7 @@ QUnit.test("set maxWidth for time view when fallback strategy is used", function
     dateBox.option("opened", true);
 
     var maxWidth = $("." + TIMEVIEW_CLASS).css("maxWidth");
-    assert.ok(commonUtils.isDefined(maxWidth), "maxWidth is defined");
+    assert.ok(typeUtils.isDefined(maxWidth), "maxWidth is defined");
     assert.equal(maxWidth, $("." + TIMEVIEW_CLOCK_CLASS).css("minWidth"), "minWidth of time view clock should be equal maxWidth");
 });
 
