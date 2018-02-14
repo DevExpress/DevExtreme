@@ -3922,6 +3922,9 @@ QUnit.test("loadPanel position correction if rowsView.height > window.height", f
     //assert
     var options = rowsView._loadPanel.option("position")();
     assert.deepEqual(options.of[0], window);
+    // need when "grid.height > window.height" and grid places with vertical offset
+    assert.deepEqual(options.boundary[0], $testElement.find(".dx-datagrid-rowsview")[0]);
+    assert.deepEqual(options.collision, "fit");
 });
 
 QUnit.module('Rows view with real dataController and columnController', {
