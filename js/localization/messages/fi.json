@@ -222,7 +222,6 @@
         "dxScheduler-confirmRecurrenceDeleteOccurrence": "Poista tapaaminen",
 
         "dxScheduler-noTimezoneTitle": "Ei aikavyöhyke",
-        "dxScheduler-moreAppointments": "{0} lisää",
 
         "dxCalendar-todayButtonText": "Tänään",
         "dxCalendar-ariaWidgetName": "Kalenteri",
@@ -233,32 +232,8 @@
         "dxColorView-ariaAlpha": "Läpinäkyvyys",
         "dxColorView-ariaHex": "Värikoodi",
 
-        "dxTagBox-selected": "{0} valittu",
-        "dxTagBox-allSelected": "Kaikki valitut ({0})",
-        "dxTagBox-moreSelected": "{0} lisää",
-
         "vizExport-printingButtonText": "Tulosta",
         "vizExport-titleMenuText": "Vienti/Tulostus",
-        "vizExport-exportButtonText": "{0} tiedosto",
-
-        "dxFilterBuilder-and": "Ja",
-        "dxFilterBuilder-or": "Tai",
-        "dxFilterBuilder-notAnd": "Ei ja",
-        "dxFilterBuilder-notOr": "Ei tai",
-        "dxFilterBuilder-addCondition": "Lisää ehto",
-        "dxFilterBuilder-addGroup": "Lisää ryhmä",
-        "dxFilterBuilder-enterValueText": "<anna arvo>",
-        "dxFilterBuilder-filterOperationEquals": "On sama kuin",
-        "dxFilterBuilder-filterOperationNotEquals": "Ei ole sama kuin",
-        "dxFilterBuilder-filterOperationLess": "Pienempi kuin",
-        "dxFilterBuilder-filterOperationLessOrEquals": "Pienempi tai yhtä suuri kuin",
-        "dxFilterBuilder-filterOperationGreater": "Suurempi kuin",
-        "dxFilterBuilder-filterOperationGreaterOrEquals": "Suurempi tai yhtä suuri kuin",
-        "dxFilterBuilder-filterOperationStartsWith": "Alkaa merkillä",
-        "dxFilterBuilder-filterOperationContains": "Sisältää",
-        "dxFilterBuilder-filterOperationNotContains": "Ei sisällä",
-        "dxFilterBuilder-filterOperationEndsWith": "Loppuu merkillä",
-        "dxFilterBuilder-filterOperationIsBlank": "On tyhjä",
-        "dxFilterBuilder-filterOperationIsNotBlank": "Ei ole tyhjä"
+        "vizExport-exportButtonText": "{0} tiedosto"
     }
 }
