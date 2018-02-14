@@ -242,7 +242,7 @@ DataSourceAdapter = DataSourceAdapter.inherit((function() {
             var parentIdsToLoad = [];
 
             for(var i = 0; i < parentIds.length; i++) {
-                if(!this._hasItemsMap[parentIds[i]]) {
+                if(this._hasItemsMap[parentIds[i]] === undefined) {
                     parentIdsToLoad.push(parentIds[i]);
                 }
             }
