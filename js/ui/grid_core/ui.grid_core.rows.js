@@ -527,7 +527,7 @@ module.exports = {
                             return dataController.generateDataValues(arg.data, arg.columns);
                         },
                         function() {
-                            dataController.updateItems({ changeType: "update", rowIndices: [arg.rowIndex] });
+                            dataController.repaintRows([arg.rowIndex]);
                         },
                         {
                             deep: true,

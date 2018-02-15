@@ -1148,6 +1148,10 @@ var EditingController = modules.ViewController.inherit((function() {
             return result.resolve().promise();
         },
 
+        isSaving: function() {
+            return this._saving;
+        },
+
         _updateEditColumn: function() {
             var that = this,
                 isEditColumnVisible = that._isEditColumnVisible();
@@ -1959,6 +1963,10 @@ module.exports = {
                     return d && d.done(function() {
                         editingController.resetRowAndPageIndices(true);
                     });
+                },
+                repaintRows: function() {
+                    if(this.getController("editing").isSaving()) return;
+                    return this.callBase.apply(this, arguments);
                 },
                 changeRowExpand: function(key) {
                     var editingController = this.getController("editing");
