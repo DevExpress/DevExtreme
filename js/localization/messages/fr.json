@@ -247,7 +247,7 @@
         "dxFilterBuilder-notOr": "Non Ou",
         "dxFilterBuilder-addCondition": "Ajouter une condition",
         "dxFilterBuilder-addGroup": "Ajouter un groupe",
-        "dxFilterBuilder-enterValueText": "",
+        "dxFilterBuilder-enterValueText": "<entrer une valeur>",
         "dxFilterBuilder-filterOperationEquals": "Est égal à",
         "dxFilterBuilder-filterOperationNotEquals": "Est différent de",
         "dxFilterBuilder-filterOperationLess": "Est plus petit que",
