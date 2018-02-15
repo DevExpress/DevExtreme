@@ -1730,6 +1730,34 @@ function createGridView(options, userOptions) {
         assert.strictEqual($colElements.get(3).style.width, "70px", "width of a fourth column");
         assert.strictEqual($colElements.get(4).style.width, "150px", "width of a fifth column");
     });
+
+    //T604970
+    QUnit.test("Column widths should be correctly updated when all columns have minWidth and the grid has a large width", function(assert) {
+        //arrange
+        var $colElements,
+            gridView = this.createGridView({}, {
+                columns: [
+                    { caption: "Column 1", minWidth: 100 },
+                    { caption: "Column 2", minWidth: 50 },
+                    { caption: "Column 3", minWidth: 20 },
+                    { caption: "Column 4", minWidth: 70 },
+                    { caption: "Column 5", minWidth: 150 }
+                ]
+            }),
+            $testElement = $("<div />").width(400).appendTo($("#container"));
+
+        //act
+        gridView.render($testElement);
+
+        //assert
+        $colElements = $testElement.find(".dx-datagrid-headers").find("col");
+
+        assert.strictEqual($colElements.get(0).style.width, "100px", "width of a first column");
+        assert.strictEqual($colElements.get(1).style.width, "50px", "width of a second column");
+        assert.strictEqual($colElements.get(2).style.width, "auto", "width of a third column");
+        assert.strictEqual($colElements.get(3).style.width, "70px", "width of a fourth column");
+        assert.strictEqual($colElements.get(4).style.width, "150px", "width of a fifth column");
+    });
 }());
 
 ///Fixed columns///

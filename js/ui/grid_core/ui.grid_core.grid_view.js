@@ -232,7 +232,7 @@ var ResizingController = modules.ViewController.inherit({
 
     _correctColumnWidths: function(resultWidths, visibleColumns) {
         var that = this,
-            i = 0,
+            i,
             hasPercentWidth = false,
             hasAutoWidth = false,
             isColumnWidthsCorrected = false,
@@ -241,7 +241,7 @@ var ResizingController = modules.ViewController.inherit({
             averageColumnsWidth,
             lastColumnIndex;
 
-        while(i < visibleColumns.length) {
+        for(i = 0; i < visibleColumns.length; i++) {
             var index = i,
                 column = visibleColumns[index],
                 isHiddenColumn = resultWidths[index] === HIDDEN_COLUMNS_WIDTH,
@@ -262,7 +262,6 @@ var ResizingController = modules.ViewController.inherit({
             if(isPercentWidth(column.width)) {
                 hasPercentWidth = true;
             }
-            i++;
         }
 
         if($element && that._maxWidth) {
