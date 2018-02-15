@@ -22,6 +22,11 @@ function editorTemplate(conditionInfo, container) {
             return values && values.length === 2 ? values[1] : null;
         };
 
+    container.append($editorStart);
+    container.append($("<span>").addClass(FILTER_BUILDER_RANGE_SEPARATOR_CLASS).text("-"));
+    container.append($editorEnd);
+    container.addClass(FILTER_BUILDER_RANGE_CLASS);
+
     this._editorFactory.createEditor.call(this, $editorStart, extend({}, conditionInfo.field, conditionInfo, {
         value: getStartValue(values),
         parentType: "filterBuilder",
@@ -39,11 +44,6 @@ function editorTemplate(conditionInfo, container) {
             conditionInfo.setValue(values);
         }
     }));
-
-    container.append($editorStart);
-    container.append($("<span>").addClass(FILTER_BUILDER_RANGE_SEPARATOR_CLASS).text("-"));
-    container.append($editorEnd);
-    container.addClass(FILTER_BUILDER_RANGE_CLASS);
 }
 
 function customizeText(conditionInfo) {

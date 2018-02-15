@@ -100,7 +100,7 @@ var EditorFactoryMixin = (function() {
             displayFormat: options.format,
             type: options.dataType,
             formatWidthCalculator: null,
-            width: "auto"
+            width: options.parentType === "filterBuilder" ? undefined : "auto"
         }, options);
     };
 
