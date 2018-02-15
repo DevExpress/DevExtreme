@@ -79,7 +79,6 @@ var dxBaseGauge = BaseWidget.inherit({
         that._valueChangingLocker = 0;
         that._translator = that._factory.createTranslator();
 
-        that._initDeltaIndicator();
         that._tracker = that._factory.createTracker({ renderer: that._renderer, container: root });
 
         that._setTrackerCallbacks();
@@ -93,37 +92,6 @@ var dxBaseGauge = BaseWidget.inherit({
     _endValueChanging: function() {
         if(--this._valueChangingLocker === 0) {
             this._drawn();
-        }
-    },
-
-    // For Dashboards
-    _initDeltaIndicator: function() {
-        var that = this,
-            DeltaIndicator = that._DeltaIndicator;
-        if(DeltaIndicator) {
-            that._deltaIndicator = new DeltaIndicator({ renderer: that._renderer, container: that._renderer.root });
-            that._deltaIndicator.layoutOptions = function() {
-                this.clean();
-                this.draw(that._getOption("indicator"));
-                var options = this.getLayoutOptions();
-                this._size = options ? [options.width, options.height] : null;
-                return options && { horizontalAlignment: options.horizontalAlignment || "center", verticalAlignment: options.verticalAlignment || "bottom" };
-            };
-            that._deltaIndicator.measure = function() {
-                return this._size;
-            };
-            that._deltaIndicator.move = function(rect) {
-                return this.shift(Math.round(rect[0]), Math.round(rect[1]));
-            };
-            that._layout.add(that._deltaIndicator);
-        }
-    },
-
-    // For Dashboards
-    _disposeDeltaIndicator: function() {
-        if(this._deltaIndicator) {
-            this._deltaIndicator.clean();
-            this._deltaIndicator.dispose();
         }
     },
 
@@ -164,7 +132,6 @@ var dxBaseGauge = BaseWidget.inherit({
         that._themeManager.dispose();
         that._tracker.dispose();
 
-        that._disposeDeltaIndicator();
         that._translator = that._tracker = null;
     },
 
