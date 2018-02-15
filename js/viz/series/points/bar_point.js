@@ -104,8 +104,8 @@ module.exports = _extend({}, symbolPoint, {
             labelBBox = label.getBoundingRect();
 
         if(this._options.resolveLabelsOverlapping) {
-            if(((coord.y < graphicBBox.y && coord.y + labelBBox.height > graphicBBox.y + graphicBBox.height) ||
-                (coord.x < graphicBBox.x && coord.x + labelBBox.width > graphicBBox.x + graphicBBox.width)) &&
+            if(((coord.y <= graphicBBox.y && coord.y + labelBBox.height >= graphicBBox.y + graphicBBox.height) ||
+                (coord.x <= graphicBBox.x && coord.x + labelBBox.width >= graphicBBox.x + graphicBBox.width)) &&
                 !(coord.y > graphicBBox.y + graphicBBox.height || coord.y + labelBBox.height < graphicBBox.y ||
                 coord.x > graphicBBox.x + graphicBBox.width || coord.x + labelBBox.width < graphicBBox.x)) {
                 label.draw(false);
