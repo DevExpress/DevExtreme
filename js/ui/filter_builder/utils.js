@@ -178,7 +178,7 @@ function getAvailableOperations(field, filterOperationDescriptions, customOperat
     customOperations.forEach(function(customOperation) {
         if(!field.filterOperations && filterOperations.indexOf(customOperation.name) === -1) {
             var dataTypes = customOperation && customOperation.dataTypes;
-            if(!dataTypes || dataTypes.indexOf(field.dataType || DEFAULT_DATA_TYPE) >= 0) {
+            if(dataTypes && dataTypes.indexOf(field.dataType || DEFAULT_DATA_TYPE) >= 0) {
                 filterOperations.push(customOperation.name);
             }
         }

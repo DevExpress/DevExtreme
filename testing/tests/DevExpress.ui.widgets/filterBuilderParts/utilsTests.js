@@ -945,7 +945,7 @@ QUnit.module("getAvailableOperations", {
         }]);
     });
 
-    QUnit.test("for custom operation", function(assert) {
+    QUnit.test("ignore custom operation if dataType is not set", function(assert) {
         // arrange, act
         var operations = utils.getAvailableOperations({
             dataField: "test"
@@ -958,11 +958,7 @@ QUnit.module("getAvailableOperations", {
         }]);
 
         // assert
-        assert.strictEqual(operations.length, 9, "9 operations");
-
-        assert.strictEqual(operations[0].value, "contains");
-
-        assert.strictEqual(operations[8].value, "lastDays");
+        assert.strictEqual(operations.length, 8, "custom operation is ignored");
     });
 
 

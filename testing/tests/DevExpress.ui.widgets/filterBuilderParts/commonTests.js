@@ -554,6 +554,7 @@ QUnit.module("Filter value", function() {
             ],
             customOperations: [{
                 name: "lastWeek",
+                dataTypes: ["string"],
                 hasValue: false
             }],
             fields: [{ dataField: "State" }]
@@ -857,6 +858,7 @@ QUnit.module("Create editor", function() {
             fields: fields,
             customOperations: [{
                 name: "lastDays",
+                dataTypes: ["string"],
                 editorTemplate: function(options, $container) {
                     args = options;
 
@@ -879,6 +881,7 @@ QUnit.module("Create editor", function() {
         var event,
             fields = [{
                 dataField: "Field",
+                dataType: "number",
                 editorTemplate: function(options, $container) {
                     event = "field.editorTemplate";
                 }
@@ -890,6 +893,7 @@ QUnit.module("Create editor", function() {
                 fields: fields,
                 customOperations: [{
                     name: "lastDays",
+                    dataTypes: ["number"],
                     editorTemplate: function(options, $container) {
                         event = "customOperation.editorTemplate";
                     }
@@ -1222,6 +1226,7 @@ QUnit.module("Methods", function() {
             }],
             customOperations: [{
                 name: "lastDay",
+                dataTypes: ["string"],
                 calculateFilterExpression: function(filterValue, field) {
                     return [field.dataField, ">", "1"];
                 }
