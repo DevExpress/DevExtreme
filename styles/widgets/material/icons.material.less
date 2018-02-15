@@ -3,13 +3,39 @@
   font-style: normal;
   font-weight: 400;
   src: local('Material Icons'),
-    local('MaterialIcons-Regular'),
-    url(material-font-icons/materialicons.woff2) format('woff2'),
-    url(material-font-icons/materialicons.woff) format('woff'),
-    url(material-font-icons/materialicons.ttf) format('truetype');
+    local('materialicons'),
+    url(~"icons/materialicons.woff2") format('woff2'),
+    url(~"icons/materialicons.woff") format('woff'),
+    url(~"icons/materialicons.ttf") format('truetype');
 }
 
-.dx-font-icons("materialicons");
+
+.dx-font-icons(@font-name: "materialicons") {
+    .dx-icon {
+        display: inline-block;
+        font-size: inherit;
+        text-rendering: auto;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        transform: translate(0, 0);
+    }
+
+    .dx-font-icon(@glyph) {
+          font-family: 'Material Icons';
+          display: inline-block;
+          line-height: 1;
+          text-transform: none;
+          letter-spacing: normal;
+          word-wrap: normal;
+          white-space: nowrap;
+          text-rendering: optimizeLegibility;
+          font-feature-settings: 'liga';
+    }
+
+    .dx-font-icons-list();
+}
+
+.dx-font-icons();
 
 .dx-font-icons-list() {
     .dx-icon-add        { .dx-font-icon("\f00b"); }
