@@ -1199,11 +1199,14 @@ Axis.prototype = {
             maxVisible = range.maxVisible,
             interval = range.interval,
             ticks = that._majorTicks,
-            length = ticks.length;
+            length = ticks.length,
+            translator = that._translator;
 
+        if(translator.getBusinessRange().isSynchronized) {
+            return;
+        }
         if(that._options.type !== constants.discrete) {
-            if(!range.isSynchronized &&
-                length &&
+            if(length &&
                 !that._options.skipViewportExtending &&
                 (!isDefined(that._zoomArgs) || !that.isArgumentAxis)) {
                 if(ticks[0].value < range.minVisible) {
@@ -1228,7 +1231,7 @@ Axis.prototype = {
         }
 
         range.breaks = that._correctedBreaks;
-        that._translator.updateBusinessRange(range);
+        translator.updateBusinessRange(range);
     },
 
     _getViewportRange: function() {
@@ -1304,8 +1307,12 @@ Axis.prototype = {
 
             if(!isDefined(minValueMargin) || !isDefined(maxValueMargin)) {
                 if(isArgumentAxis && margins.checkInterval) {
-                    interval = that._calculateRangeInterval(maxMinDistance, range.interval);
-                    marginValue = interval / 2;
+                    if(maxMinDistance === 0) {
+                        interval = 0;
+                    } else {
+                        interval = that._calculateRangeInterval(maxMinDistance, range.interval);
+                        marginValue = interval / 2;
+                    }
                 }
 
                 if(marginSize) {
@@ -1410,7 +1417,7 @@ Axis.prototype = {
         var that = this;
 
         that.updateCanvas(canvas);
-        that._reinitTranslator(this._getViewportRange());
+        that._reinitTranslator(that._getViewportRange());
 
         var canvasStartEnd = that._getCanvasStartEnd();
 
@@ -1779,7 +1786,8 @@ Axis.prototype = {
     },
 
     _updateTranslator: function() {
-        this._translator.update({}, {}, this._getTranslatorOptions());
+        var translator = this._translator;
+        translator.update(translator.getBusinessRange(), this._canvas || {}, this._getTranslatorOptions());
     },
 
     _getTranslatorOptions: function() {

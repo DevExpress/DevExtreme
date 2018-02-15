@@ -211,7 +211,7 @@ QUnit.test("Recurrence appointment dragging should work correctly", function(ass
         pointer = pointerMock($ddAppointment).start().dragStart(),
         $phantomAppointment = this.instance.$element().find(".dx-scheduler-appointment").eq(0);
 
-    assert.deepEqual($phantomAppointment.data("dxItemData").settings[0].startDate, new Date(2015, 1, 9, 13), "Date of phantom recurrence part is OK");
+    assert.deepEqual($phantomAppointment.data("dxAppointmentSettings").startDate, new Date(2015, 1, 9, 13), "Date of phantom recurrence part is OK");
 
     pointer.drag(0, -100).dragEnd();
 

@@ -402,6 +402,48 @@ QUnit.test("Row expand state should not be changed on row click when scrolling m
     assert.ok(dataGrid.isRowExpanded(["1"]), "first group row is expanded");
 });
 
+//T601360
+QUnit.test("Update cell after infinit scrolling and editing must processing after all pages has been loaded", function(assert) {
+    //arrange
+    var items = [{ value: "0" }, { value: "1" }, { value: "2" }, { value: "3" }],
+        clock = sinon.useFakeTimers(),
+        dataGrid = $("#dataGrid").dxDataGrid({
+            remoteOperations: true,
+            dataSource: {
+                load: function(options) {
+                    var d = $.Deferred();
+                    setTimeout(function() {
+                        d.resolve({
+                            data: items.slice(options.skip, options.skip + options.take),
+                            totalCount: items.length
+                        });
+                    }, 10);
+                    return d;
+                }
+            },
+            height: 50,
+            paging: { pageSize: 2 },
+            scrolling: { mode: "virtual" }
+        }).dxDataGrid("instance");
+
+    clock.tick(20);
+
+    items[0].value = "test";
+
+    var firstCellTextInDone;
+
+    //act
+    dataGrid.refresh().done(function() {
+        firstCellTextInDone = $(dataGrid.getCellElement(0, 0)).text();
+    });
+    clock.tick(20);
+
+    //assert
+    assert.equal(firstCellTextInDone, "test");
+
+    clock.restore();
+});
+
 QUnit.test("cellClick/cellHoverChanged handler should be executed when define via 'on' method", function(assert) {
     var cellClickCount = 0,
         cellHoverChangedCount = 0,
@@ -2581,14 +2623,18 @@ QUnit.test("max-height from styles", function(assert) {
 
     //assert
     assert.equal(Math.round($dataGrid.find(".dx-datagrid").height()), 400, "height is equal max-height");
-
+    assert.ok(dataGrid.getScrollable().$content().height() > dataGrid.getScrollable()._container().height(), "scroll is exists");
 
     //act
     dataGrid.searchByText("test");
 
     //assert
     assert.equal(dataGrid.totalCount(), 0, "no items");
-    assert.ok($dataGrid.find(".dx-datagrid").height() < 400, "height is less then max-height");
+    if(browser.msie && parseInt(browser.version) <= 11) {
+        assert.equal($dataGrid.find(".dx-datagrid").height(), 400, "height is equals max-height in IE11");
+    } else {
+        assert.ok($dataGrid.find(".dx-datagrid").height() < 400, "height is less then max-height");
+    }
 });
 
 //T412035
@@ -2697,7 +2743,7 @@ QUnit.test("rowsview height should not be reseted during updateDimension when mi
 
     //assert
     var heightCalls = rowsView.height.getCalls().filter(function(call) { return call.args.length > 0; });
-    assert.equal(heightCalls.length, 0, "rowsview height is not assigned");
+    assert.equal(heightCalls.length, 2, "rowsview height is assigned twice");
 });
 
 //T108204

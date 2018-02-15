@@ -5812,6 +5812,46 @@ QUnit.test("Height of rowsView should more than height of editor form when row i
     assert.ok($(".dx-datagrid-rowsview").height() >= $(".dx-datagrid-edit-form").height(), "height of rows view");
 });
 
+//T601360
+QUnit.test("repaintRows should be skipped on saving", function(assert) {
+    //arrange
+    var testElement = $('#container');
+
+    this.options.editing = {
+        allowUpdating: true,
+        mode: 'cell'
+    };
+
+    this.options.loadingTimeout = 0;
+
+    this.columns.push({ dataField: "selected", dataType: "boolean" });
+
+    this.columnsController.init();
+
+
+    this.clock.tick();
+
+    this.rowsView.render(testElement);
+
+    var changeCount = 0;
+    this.dataController.changed.add(function() {
+        changeCount++;
+    });
+
+    //act
+    this.cellValue(0, "selected", true);
+    this.repaintRows([0]);
+
+    //assert
+    assert.strictEqual(changeCount, 0, "data is not changed");
+
+    //act
+    this.clock.tick();
+
+    //assert
+    assert.strictEqual(changeCount, 1, "data is changed once");
+});
+
 if(device.ios || device.android) {
     //T322738
     QUnit.testInActiveWindow("Native click is used when allowUpdating is true", function(assert) {

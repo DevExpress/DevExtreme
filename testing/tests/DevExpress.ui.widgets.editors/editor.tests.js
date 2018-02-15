@@ -4,12 +4,9 @@ var $ = require("jquery"),
     Editor = require("ui/editor/editor"),
     Class = require("core/class"),
     ValidationEngine = require("ui/validation_engine"),
-    hoverEvents = require("events/hover"),
-    dataUtils = require("core/element_data");
+    hoverEvents = require("events/hover");
 
 require("common.css!");
-
-var READONLY_STATE_CLASS = "dx-state-readonly";
 
 var Fixture = Class.inherit({
     createEditor: function(options) {
@@ -40,14 +37,20 @@ var Fixture = Class.inherit({
         }
     });
 
-    QUnit.test("Editor is defined", function(assert) {
+    QUnit.test("Editor can be instantiated", function(assert) {
+        var editor = this.fixture.createEditor();
+        assert.ok(editor instanceof Editor);
+    });
+
+    QUnit.test("rendering", function(assert) {
         var editor = this.fixture.createEditor();
         assert.ok(editor);
     });
 
-    QUnit.test("Editor can be instantiated", function(assert) {
+    QUnit.test("'readOnly' option has 'false' value by default", function(assert) {
         var editor = this.fixture.createEditor();
-        assert.ok(editor instanceof Editor);
+
+        assert.strictEqual(editor.option("readOnly"), false);
     });
 
     QUnit.test("Changing the 'value' option invokes the onValueChanged and passes the old and new values as arguments", function(assert) {
@@ -62,59 +65,6 @@ var Fixture = Class.inherit({
         editor.option("value", oldValue);
         editor.option("onValueChanged", onValueChanged);
         editor.option("value", newValue);
-    });
-
-    QUnit.test("'readOnly' option has 'false' value by default", function(assert) {
-        var editor = this.fixture.createEditor();
-
-        assert.strictEqual(editor.option("readOnly"), false);
-    });
-
-    QUnit.test("'readOnly' option is set correctly on init", function(assert) {
-        var editor = this.fixture.createEditor({
-            readOnly: true
-        });
-
-        assert.ok(editor._$element.hasClass(READONLY_STATE_CLASS));
-    });
-
-    QUnit.test("'readOnly' option with 'true'/'false' value attaches/detaches 'dx-state-readonly' class", function(assert) {
-        var editor = this.fixture.createEditor();
-
-        editor.option("readOnly", true);
-
-        assert.ok(editor._$element.hasClass(READONLY_STATE_CLASS));
-
-        editor.option("readOnly", false);
-
-        assert.ok(!editor._$element.hasClass(READONLY_STATE_CLASS));
-    });
-
-    QUnit.test("'readOnly' option with 0 value should remove readonly class and should not add it", function(assert) {
-        var editor = this.fixture.createEditor();
-
-        editor.option("readOnly", 0);
-        editor.option("readOnly", 0);
-
-        assert.ok(!editor._$element.hasClass(READONLY_STATE_CLASS));
-    });
-
-    QUnit.test("'readOnly' option with undefined value should remove readonly class and should not add it", function(assert) {
-        var editor = this.fixture.createEditor();
-
-        editor.option("readOnly", undefined);
-        editor.option("readOnly", undefined);
-
-        assert.ok(!editor._$element.hasClass(READONLY_STATE_CLASS));
-    });
-
-    QUnit.test("'readOnly' option with null value should remove readonly class and should not add it", function(assert) {
-        var editor = this.fixture.createEditor();
-
-        editor.option("readOnly", null);
-        editor.option("readOnly", null);
-
-        assert.ok(!editor._$element.hasClass(READONLY_STATE_CLASS));
     });
 
     QUnit.test("Changing the 'value' option invokes the onValueChanged and passes the old and new values as arguments, 'readOnly' editor", function(assert) {
@@ -229,13 +179,12 @@ var Fixture = Class.inherit({
     });
 })("Editor");
 
-
 (function() {
     QUnit.module("the 'name' option", {
         beforeEach: function() {
             this.$element = $("<div>").appendTo("body");
             this.EditorInheritor = Editor.inherit({
-                _render: function() {
+                _initMarkup: function() {
                     this._$submitElement = $("<input type='hidden'>").appendTo(this.$element());
                     this.callBase();
                 },
@@ -288,31 +237,6 @@ var Fixture = Class.inherit({
         assert.notOk(input.hasAttribute("name"), "there should be no 'name' attribute for hidden input");
     });
 })("the 'name' option");
-
-
-(function() {
-    QUnit.module("Validation", {
-        beforeEach: function() {
-            this.fixture = new Fixture();
-        },
-        afterEach: function() {
-            this.fixture.teardown();
-        }
-    });
-
-    QUnit.test("Editor with ValidationHelper mixing can be created", function(assert) {
-        var editor = this.fixture.createEditor();
-        assert.ok(editor, "Editor was created");
-    });
-
-
-    QUnit.test("Container has dx-editor data mark", function(assert) {
-        var editor = this.fixture.createEditor();
-
-        assert.strictEqual(dataUtils.data(this.fixture.$element[0], "dx-validation-target"), editor, "Editor was saved");
-    });
-})("Validation");
-
 
 (function() {
     QUnit.module("Validation - UI", {
@@ -697,7 +621,6 @@ var Fixture = Class.inherit({
         assert.ok(!handler.called, "Validating handler should not be called");
     });
 })("Validation Events");
-
 
 QUnit.module("aria accessibility", {
     beforeEach: function() {

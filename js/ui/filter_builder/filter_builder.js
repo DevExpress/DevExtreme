@@ -577,7 +577,7 @@ var FilterBuilder = Widget.inherit({
         return action && action(options);
     },
 
-    _render: function() {
+    _initMarkup: function() {
         this.$element().addClass(FILTER_BUILDER_CLASS);
         this.callBase();
     },

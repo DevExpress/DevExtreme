@@ -147,7 +147,7 @@ function RingBuf(buf) {
     };
 }
 
-function RepeatColors(palette, parameters) {
+function AlternateColors(palette, parameters) {
     var stepHighlight = parameters.useHighlight ? HIGHLIGHTING_STEP : 0,
         paletteSteps = new RingBuf([0, stepHighlight, -stepHighlight]),
         currentPalette = [];
@@ -340,8 +340,8 @@ function Palette(palette, parameters, themeDefaultPalette) {
         keyPalette = selectPaletteOnSeniority(palette, themeDefaultPalette),
         colors = getPalette(keyPalette, { type: parameters.type || "simpleSet" });
 
-    if(extensionMode === "repeat") {
-        this._extensionStrategy = RepeatColors(colors, parameters);
+    if(extensionMode === "alternate") {
+        this._extensionStrategy = AlternateColors(colors, parameters);
     } else if(extensionMode === "extrapolate") {
         this._extensionStrategy = ExtrapolateColors(colors);
     } else {

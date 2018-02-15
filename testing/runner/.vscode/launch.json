@@ -1,18 +1,14 @@
 {
-  "version": "0.2.0",
   "configurations": [
     {
-      "name": ".NET Core Launch (web)",
+      "name": "Debug",
       "type": "coreclr",
       "request": "launch",
-      "preLaunchTask": "build",
-      "program": "${workspaceRoot}/bin/runner.dll",
-      "args": [],
-      "cwd": "${workspaceRoot}",
-      "externalConsole": true,
-      "sourceFileMap": {
-        "/Views": "${workspaceRoot}/Views"
-      }
+      "preLaunchTask": "Build Test Runner",
+      "cwd": "${workspaceFolder}",
+      "program": "bin/runner.dll",
+      "stopAtEntry": false,
+      "console": "integratedTerminal"
     }
   ]
 }

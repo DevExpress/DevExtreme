@@ -82,15 +82,6 @@ Object.keys(widgets).forEach(function(widget) {
 });
 
 
-var notDisposableWidgets = [
-    "ActionSheet",
-    "ContextMenu",
-    "Gallery",
-    "Lookup",
-    "ProgressBar",
-    "Toolbar"
-];
-
 QUnit.module("Widget creation", {
     beforeEach: function() {
         var fixture = document.getElementById("qunit-fixture");
@@ -98,28 +89,14 @@ QUnit.module("Widget creation", {
         fixture.appendChild(this.element);
     },
     afterEach: function() {
-        if(notDisposableWidgets.indexOf(this.instance.NAME.substr(2)) === -1) {
-            this.instance.dispose();
-        }
+        this.instance.dispose();
     }
 });
 
 Object.keys(widgets).forEach(function(widget) {
     var excludedWidgets = [
-        "BarGauge",
-        "Bullet",
-        "Chart",
-        "CircularGauge",
-        "Funnel",
-        "LinearGauge",
-        "PieChart",
-        "PolarChart",
-        "RangeSelector",
-        "Sparkline",
         "TileView",
-        "TreeMap",
-        "Validator",
-        "VectorMap"
+        "Validator"
     ];
 
     if(excludedWidgets.indexOf(widget) > -1) return;

@@ -275,6 +275,19 @@ QUnit.test("Set types", function(assert) {
     assert.equal(this.axis.getOptions().valueType, "someType");
 });
 
+
+QUnit.test("Update translator on setTypes pass old business range and canvas", function(assert) {
+    this.updateOptions();
+
+    var translator = translator2DModule.Translator2D.lastCall.returnValue;
+    this.axis.updateCanvas(this.canvas);
+    //act
+    this.axis.setTypes("someAxisType", "someType", "valueType");
+
+    assert.strictEqual(translator.update.lastCall.args[0], translator.getBusinessRange());
+    assert.deepEqual(translator.update.lastCall.args[1], this.canvas);
+});
+
 QUnit.test("set undefined types", function(assert) {
     this.updateOptions();
     this.axis.setTypes("someAxisType", "someType", "valueType");
@@ -1019,6 +1032,34 @@ QUnit.test("minValueMargin - apply margins to the min", function(assert) {
             max: 200,
             minVisible: 90,
             maxVisible: 200
+        }
+    });
+});
+
+//T603177
+QUnit.test("Margins for one point (dateTime)", function(assert) {
+    var date = new Date('2018/05/02');
+
+    this.testMargins(assert, {
+        isArgumentAxis: true,
+        marginOptions: {
+            checkInterval: true
+        },
+        options: {
+            dataType: "datetime",
+            valueMarginsEnabled: true
+        },
+        ticks: [date],
+        range: {
+            min: date,
+            max: date
+        },
+        expectedRange: {
+            min: date,
+            max: date,
+            minVisible: date,
+            interval: 0,
+            maxVisible: date
         }
     });
 });
@@ -1995,6 +2036,50 @@ QUnit.test("updateSize - margins and interval are recalculated", function(assert
     assert.equal(range.minVisible, 75);
     assert.equal(range.maxVisible, 225);
     assert.equal(range.interval, 30);
+});
+
+QUnit.test("updateSize, synchronized axis - do not recalculate margins/interval", function(assert) {
+    var axis = this.createAxis(true, {
+        valueMarginsEnabled: true
+    });
+
+    this.generatedTicks = [100, 200];
+    axis.setBusinessRange({
+        min: 90,
+        max: 210,
+        interval: 30
+    });
+    axis.setMarginOptions({
+        checkInterval: true,
+        size: 100
+    });
+
+    //act
+    //emulate synchronizer
+    this.translator.updateBusinessRange({
+        min: 50,
+        max: 250,
+        interval: 50,
+        isSynchronized: true
+    });
+    axis.draw(this.canvas);
+    this.translator.stub("updateBusinessRange").reset();
+
+    axis.updateSize({
+        top: 200,
+        bottom: 200,
+        left: 200,
+        right: 200,
+        width: 900,
+        height: 400
+    });
+
+    assert.deepEqual(this.translator.getBusinessRange(), {
+        min: 50,
+        max: 250,
+        interval: 50,
+        isSynchronized: true
+    });
 });
 
 QUnit.test("Margins and skipViewportExtending = true - do not extend range with margins to boundary ticks", function(assert) {

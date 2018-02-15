@@ -182,6 +182,12 @@ QUnit.test('getDatesByRecurrence should handle strings with BYMONTHDAY value = -
     assert.deepEqual(secondRecurrence, [new Date(2017, 2, 31), new Date(2017, 3, 30)], 'dates are right');
 });
 
+QUnit.test('getDatesByRecurrence should handle strings with COUNT, BYMONTHDAY=-1 and start in 31st', function(assert) {
+    var dates = recurrenceUtils.getDatesByRecurrence({ rule: 'FREQ=MONTHLY;BYMONTHDAY=-1;COUNT=10', start: new Date(2017, 6, 31), min: new Date(2017, 6, 31), max: new Date(2017, 10, 10) });
+
+    assert.deepEqual(dates, [new Date(2017, 6, 31), new Date(2017, 7, 31), new Date(2017, 8, 30), new Date(2017, 9, 31)], 'date are right');
+});
+
 QUnit.test('getDatesByRecurrence should handle strings with BYMONTHDAY value = -31', function(assert) {
     var dates = recurrenceUtils.getDatesByRecurrence({ rule: 'FREQ=MONTHLY;BYMONTHDAY=-31', start: new Date(2015, 0, 1), min: new Date(2015, 0, 1), max: new Date(2015, 6, 19) });
 

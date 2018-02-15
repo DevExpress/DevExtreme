@@ -82,19 +82,6 @@ exports.chart.bubble = _extend({}, scatterSeries, {
         options.tagField = that.getTagField() + name;
     },
 
-    _clearingAnimation: function(drawComplete) {
-        var that = this,
-            partitionDuration = 0.5,
-            lastPointIndex = that._drawnPoints.length - 1,
-            labelsGroup = that._labelsGroup;
-
-        labelsGroup && labelsGroup.animate({ opacity: 0.001 }, { duration: that._defaultDuration, partitionDuration: partitionDuration }, function() {
-            _each(that._drawnPoints || [], function(i, p) {
-                p.animate(i === lastPointIndex ? drawComplete : undefined, { r: 0 }, partitionDuration);
-            });
-        });
-    },
-
     _animate: function() {
         var that = this,
             lastPointIndex = that._drawnPoints.length - 1,
