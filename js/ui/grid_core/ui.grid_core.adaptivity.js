@@ -776,7 +776,7 @@ module.exports = {
             draggingHeader: {
                 _pointCreated: function(point, columns, location, sourceColumn) {
                     var result = this.callBase(point, columns, location, sourceColumn),
-                        column = columns[point.columnIndex] || {},
+                        column = columns[point.columnIndex - 1] || {},
                         hasAdaptiveHiddenWidth = column.visibleWidth === HIDDEN_COLUMNS_WIDTH;
 
                     return result || hasAdaptiveHiddenWidth;
