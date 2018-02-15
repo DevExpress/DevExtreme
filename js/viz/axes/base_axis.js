@@ -997,7 +997,7 @@ Axis.prototype = {
         }
     },
 
-    setBusinessRange: function(range, isMultipleAxes) {
+    setBusinessRange: function(range) {
         var that = this,
             validateBusinessRange = function(range, min, max) {
                 function validate(valueSelector, baseValueSelector, optionValue) {
@@ -1013,8 +1013,7 @@ Axis.prototype = {
 
         that._seriesData = new rangeModule.Range(validateBusinessRange(range, options.min, options.max));
 
-        that._breaks = !isMultipleAxes ? that._getScaleBreaks(options, that._seriesData, that._series, that.isArgumentAxis) : [];
-        that._disableBreaks = isMultipleAxes;
+        that._breaks = that._getScaleBreaks(options, that._seriesData, that._series, that.isArgumentAxis);
 
         that._translator.updateBusinessRange(that._seriesData);
     },
@@ -1507,10 +1506,10 @@ Axis.prototype = {
 
         that._zoomArgs = { min: min, max: max };
 
-        that._breaks = !that._disableBreaks ? that._getScaleBreaks(options, {
+        that._breaks = that._getScaleBreaks(options, {
             minVisible: min,
             maxVisible: max
-        }, that._series, that.isArgumentAxis) : [];
+        }, that._series, that.isArgumentAxis);
 
         if(translator.zoomArgsIsEqualCanvas(that._zoomArgs)) {
             that.resetZoom();

@@ -334,19 +334,13 @@ var AdvancedChart = BaseChart.inherit({
             argRange = new rangeModule.Range({ rotated: !!rotated }),
             argumentMarginOptions = {},
             bubbleSize = estimateBubbleSize(that.getSize(), that.panes.length, that._themeManager.getOptions("maxBubbleSize"), that._isRotated()),
-            groupsData = that._groupsData,
-            countAxesPerPane;
+            groupsData = that._groupsData;
 
         that.businessRanges = null;
 
         _each(argAxes, function(_, axis) {
             argRange.addRange(axis.getRangeData());
         });
-
-        countAxesPerPane = that._valueAxes.reduce(function(prev, axis) {
-            prev[axis.pane] = (prev[axis.pane] || 0) + 1;
-            return prev;
-        }, {});
 
         that._valueAxes.forEach(function(valueAxis) {
             var groupRange = new rangeModule.Range({
@@ -381,7 +375,7 @@ var AdvancedChart = BaseChart.inherit({
             }
 
             valueAxis.setGroupSeries(groupSeries);
-            valueAxis.setBusinessRange(groupRange, countAxesPerPane[valueAxis.pane] > 1);
+            valueAxis.setBusinessRange(groupRange);
             valueAxis.setMarginOptions(marginOptions);
 
             businessRanges.push({ val: groupRange, arg: argRange });
