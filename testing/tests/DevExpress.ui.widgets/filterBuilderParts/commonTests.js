@@ -524,6 +524,31 @@ QUnit.module("Filter value", function() {
         assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS).text(), "<enter a value>");
     });
 
+    QUnit.test("execute customOperation.customizeText for field with lookup", function(assert) {
+        var container = $("#container");
+
+        container.dxFilterBuilder({
+            value: [
+                ["field", "customOperation", "1"]
+            ],
+            customOperations: [{
+                name: "customOperation",
+                customizeText: function() {
+                    return "custom text";
+                }
+            }],
+            fields: [{
+                dataField: "field",
+                lookup: {
+                    dataSource: ["1", "2"]
+                },
+                filterOperations: ["customOperation"]
+            }]
+        });
+
+        assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS).text(), "custom text");
+    });
+
     QUnit.test("hide filter value for field with object dataType", function(assert) {
         var container = $("#container");
 

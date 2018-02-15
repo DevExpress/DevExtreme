@@ -912,12 +912,12 @@ var FilterBuilder = Widget.inherit({
                 $text.text(valueText || messageLocalization.format("dxFilterBuilder-enterValueText"));
             };
 
-        if(field.lookup) {
+        var customOperation = utils.getCustomOperation(that._customOperations, item[1]);
+        if(!customOperation && field.lookup) {
             utils.getCurrentLookupValueText(field, value, function(valueText) {
                 setText(valueText);
             });
         } else {
-            var customOperation = utils.getCustomOperation(that._customOperations, item[1]);
             setText(utils.getCurrentValueText(field, value, customOperation));
         }
 
