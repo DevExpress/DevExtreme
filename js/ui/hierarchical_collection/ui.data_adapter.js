@@ -86,7 +86,7 @@ var DataAdapter = Class.inherit({
         var that = this,
             array = [];
 
-        each(this._dataStructure, function(_, node) {
+        each(that._getDataStructure(), function(_, node) {
             if(!that._isNodeVisible(node)) {
                 return;
             }
@@ -102,6 +102,10 @@ var DataAdapter = Class.inherit({
         });
 
         return array;
+    },
+
+    _getDataStructure: function() {
+        return this.options.multipleSelection ? this._dataStructure : this._initialDataStructure;
     },
 
     _isNodeVisible: function(node) {
@@ -328,7 +332,7 @@ var DataAdapter = Class.inherit({
     },
 
     getNodeByKey: function(key) {
-        return this._getByKey(this._dataStructure, key);
+        return this._getByKey(this._getDataStructure(), key);
     },
 
     getTreeNodes: function() {
@@ -370,7 +374,8 @@ var DataAdapter = Class.inherit({
     },
 
     toggleSelection: function(key, state, selectRecursive) {
-        var node = this._getByKey(selectRecursive ? this._initialDataStructure : this._dataStructure, key);
+        var isSingleModeUnselect = this._isSingleModeUnselect(state),
+            node = this._getByKey(selectRecursive || isSingleModeUnselect ? this._initialDataStructure : this._dataStructure, key);
         this._setFieldState(node, SELECTED, state);
 
         if(this.options.recursiveSelection && !selectRecursive) {
@@ -379,6 +384,10 @@ var DataAdapter = Class.inherit({
         }
 
         this._selectedNodesKeys = this._updateNodesKeysArray(SELECTED);
+    },
+
+    _isSingleModeUnselect: function(selectionState) {
+        return !this.options.multipleSelection && !selectionState;
     },
 
     toggleNodeDisabledState: function(key, state) {
@@ -391,8 +400,9 @@ var DataAdapter = Class.inherit({
             return;
         }
 
-        var that = this;
-        each(this._dataStructure, function(_, node) {
+        var that = this,
+            dataStructure = that._isSingleModeUnselect(state) ? this._initialDataStructure : this._dataStructure;
+        each(dataStructure, function(_, node) {
             if(!that._isNodeVisible(node)) {
                 return;
             }
