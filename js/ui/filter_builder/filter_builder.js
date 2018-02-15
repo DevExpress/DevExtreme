@@ -150,7 +150,7 @@ var FilterBuilder = Widget.inherit({
             /**
              * @name dxFilterBuilderField_calculateFilterExpression
              * @publicName calculateFilterExpression
-             * @type function(filterValue)
+             * @type function(filterValue, selectedFilterOperation)
              * @type_function_param1 filterValue:any
              * @type_function_param2 selectedFilterOperation:string
              * @type_function_return Filter expression
@@ -380,7 +380,7 @@ var FilterBuilder = Widget.inherit({
             /**
              * @name dxFilterBuilderCustomOperations_calculateFilterExpression
              * @publicName calculateFilterExpression
-             * @type function(filterValue)
+             * @type function(filterValue, field)
              * @type_function_param1 filterValue:any
              * @type_function_param2 field:dxFilterBuilderField
              * @type_function_return Filter expression
