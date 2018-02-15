@@ -5,9 +5,9 @@ var dataErrors = require("../../data/errors").errors,
     errors = require("../widget/ui.errors"),
     filterUtils = require("../shared/filtering"),
     extend = require("../../core/utils/extend").extend,
-    isDefined = require("../../core/utils/type").isDefined,
-    formatHelper = require("../../format_helper"),
     inflector = require("../../core/utils/inflector"),
+    between = require("./between"),
+    formatUtils = require("./format_utils"),
     messageLocalization = require("../../localization/message"),
     DataSource = require("../../data/data_source/data_source").DataSource,
     filterOperationsDictionary = require("./ui.filter_operations_dictionary");
@@ -23,10 +23,6 @@ var DEFAULT_DATA_TYPE = "string",
         "object": ["isblank", "isnotblank"]
     },
     LOOKUP_OPERATIONS = ["=", "<>", "isblank", "isnotblank"],
-    DEFAULT_FORMAT = {
-        "date": "shortDate",
-        "datetime": "shortDateShortTime"
-    },
     AVAILABLE_FIELD_PROPERTIES = [
         "caption",
         "customizeText",
@@ -355,6 +351,20 @@ function getNormalizedFields(fields) {
     }, []);
 }
 
+function getConditionFilterExpression(condition, fields, customOperations) {
+    var field = getField(condition[0], fields),
+        filterExpression = convertToInnerCondition(condition, customOperations),
+        customOperation = customOperations.length && getCustomOperation(customOperations, filterExpression[1]);
+
+    if(customOperation && customOperation.calculateFilterExpression) {
+        return customOperation.calculateFilterExpression.apply(customOperation, [filterExpression[2], field]);
+    } else if(field.calculateFilterExpression) {
+        return field.calculateFilterExpression.apply(field, [filterExpression[2], filterExpression[1]]);
+    } else {
+        return filterUtils.defaultCalculateFilterExpression.apply(field, [filterExpression[2], filterExpression[1]], "filterBuilder");
+    }
+}
+
 function getFilterExpression(value, fields, customOperations) {
     var result;
 
@@ -362,23 +372,10 @@ function getFilterExpression(value, fields, customOperations) {
         return null;
     }
 
-    var criteria = getGroupCriteria(value),
-        getConditionFilterExpression = function(condition) {
-            var field = getField(condition[0], fields),
-                filterExpression = convertToInnerCondition(condition, customOperations),
-                customOperation = customOperations.length && getCustomOperation(customOperations, filterExpression[1]);
-
-            if(customOperation && customOperation.calculateFilterExpression) {
-                return customOperation.calculateFilterExpression.apply(customOperation, [filterExpression[2], field]);
-            } else if(field.calculateFilterExpression) {
-                return field.calculateFilterExpression.apply(field, [filterExpression[2], filterExpression[1]]);
-            } else {
-                return filterUtils.defaultCalculateFilterExpression.apply(field, [filterExpression[2], filterExpression[1]], "filterBuilder");
-            }
-        };
+    var criteria = getGroupCriteria(value);
 
     if(isCondition(criteria)) {
-        result = getConditionFilterExpression(criteria, customOperations);
+        result = getConditionFilterExpression(criteria, fields, customOperations);
     } else {
         result = [];
         for(var i = 0; i < criteria.length; i++) {
@@ -386,7 +383,7 @@ function getFilterExpression(value, fields, customOperations) {
                 var filterExpression = getFilterExpression(criteria[i], fields, customOperations);
                 result.push(filterExpression);
             } else if(isCondition(criteria[i])) {
-                result.push(getConditionFilterExpression(criteria[i]));
+                result.push(getConditionFilterExpression(criteria[i], fields, customOperations));
             } else {
                 result.push(criteria[i]);
             }
@@ -441,10 +438,6 @@ function getNormalizedFilter(group, fields) {
     return group;
 }
 
-function getFieldFormat(field) {
-    return field.format || DEFAULT_FORMAT[field.dataType];
-}
-
 function getCurrentLookupValueText(field, value, handler) {
     if(value === "") {
         handler("");
@@ -471,7 +464,7 @@ function getCurrentValueText(field, value, customOperation) {
     } else if(value === false) {
         valueText = field.falseText || messageLocalization.format("dxDataGrid-falseText");
     } else {
-        valueText = formatHelper.format(value, getFieldFormat(field));
+        valueText = formatUtils.getFormattedValueText(field, value);
     }
     if(customOperation && customOperation.customizeText) {
         valueText = customOperation.customizeText.call(customOperation, {
@@ -620,33 +613,7 @@ function setFocusToBody() {
     }
 }
 
-function getBetweenConfig(editorTemplate) {
-    return {
-        name: "between",
-        caption: messageLocalization.format("dxDataGrid-filterRowOperationBetween"),
-        icon: "range",
-        dataTypes: ["number", "date", "datetime"],
-        calculateFilterExpression: function(filterValue, field) {
-            if(!filterValue || filterValue.length < 2) return null;
-            return [[field.dataField, ">=", filterValue[0]], "and", [field.dataField, "<=", filterValue[1]]];
-        },
-        editorTemplate: editorTemplate,
-        customizeText: function(conditionInfo) {
-            var startValue = conditionInfo.value[0],
-                endValue = conditionInfo.value[1],
-                fieldFormat = getFieldFormat(conditionInfo.field);
-
-            if(!isDefined(startValue) && !isDefined(endValue)) {
-                return messageLocalization.format("dxFilterBuilder-enterValueText");
-            }
-
-            return (isDefined(startValue) ? formatHelper.format(startValue, fieldFormat) : "?") + " - "
-                        + (isDefined(endValue) ? formatHelper.format(endValue, fieldFormat) : "?");
-        }
-    };
-}
-
-function getMergedOperations(customOperations, betweenEditorTemplate) {
+function getMergedOperations(customOperations) {
     var result = extend(true, [], customOperations),
         betweenIndex = -1;
     result.some(function(customOperation, index) {
@@ -656,7 +623,7 @@ function getMergedOperations(customOperations, betweenEditorTemplate) {
         }
     });
     if(betweenIndex !== -1) {
-        result[betweenIndex] = extend(getBetweenConfig(betweenEditorTemplate), result[betweenIndex]);
+        result[betweenIndex] = extend(between.getConfig(), result[betweenIndex]);
     }
     return result;
 }

@@ -32,10 +32,6 @@ var FILTER_BUILDER_CLASS = "dx-filterbuilder",
     FILTER_BUILDER_FILTER_OPERATIONS_CLASS = FILTER_BUILDER_CLASS + "-operations",
     FILTER_BUILDER_FIELDS_CLASS = FILTER_BUILDER_CLASS + "-fields",
     FILTER_BUILDER_ADD_CONDITION_CLASS = FILTER_BUILDER_CLASS + "-add-condition",
-    FILTER_BUILDER_RANGE_CLASS = FILTER_BUILDER_CLASS + "-range",
-    FILTER_BUILDER_RANGE_START_CLASS = FILTER_BUILDER_RANGE_CLASS + "-start",
-    FILTER_BUILDER_RANGE_END_CLASS = FILTER_BUILDER_RANGE_CLASS + "-end",
-    FILTER_BUILDER_RANGE_SEPARATOR_CLASS = FILTER_BUILDER_RANGE_CLASS + "-separator",
     ACTIVE_CLASS = "dx-state-active",
 
     TAB_KEY = 9,
@@ -586,45 +582,8 @@ var FilterBuilder = Widget.inherit({
         this.callBase();
     },
 
-    _getBetweenEditorTemplate: function() {
-        return function(conditionInfo, container) {
-            var $editorStart = $("<div>").addClass(FILTER_BUILDER_RANGE_START_CLASS),
-                $editorEnd = $("<div>").addClass(FILTER_BUILDER_RANGE_END_CLASS),
-                values = conditionInfo.value || [],
-                getStartValue = function(values) {
-                    return values && values.length > 0 ? values[0] : null;
-                },
-                getEndValue = function(values) {
-                    return values && values.length === 2 ? values[1] : null;
-                };
-
-            this._editorFactory.createEditor.call(this, $editorStart, extend({}, conditionInfo.field, conditionInfo, {
-                value: getStartValue(values),
-                parentType: "filterBuilder",
-                setValue: function(value) {
-                    values = [value, getEndValue(values)];
-                    conditionInfo.setValue(values);
-                }
-            }));
-
-            this._editorFactory.createEditor.call(this, $editorEnd, extend({}, conditionInfo.field, conditionInfo, {
-                value: getEndValue(values),
-                parentType: "filterBuilder",
-                setValue: function(value) {
-                    values = [getStartValue(values), value];
-                    conditionInfo.setValue(values);
-                }
-            }));
-
-            container.append($editorStart);
-            container.append($("<span>").addClass(FILTER_BUILDER_RANGE_SEPARATOR_CLASS).text("-"));
-            container.append($editorEnd);
-            container.addClass(FILTER_BUILDER_RANGE_CLASS);
-        };
-    },
-
     _renderContentImpl: function() {
-        this._customOperations = utils.getMergedOperations(this.option("customOperations"), this._getBetweenEditorTemplate());
+        this._customOperations = utils.getMergedOperations(this.option("customOperations"));
         this._model = utils.convertToInnerStructure(this.option("value"), this._customOperations);
         this._createGroupElementByCriteria(this._model)
             .appendTo(this.$element());
