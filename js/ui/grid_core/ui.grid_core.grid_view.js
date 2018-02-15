@@ -231,6 +231,7 @@ var ResizingController = modules.ViewController.inherit({
 
     _correctColumnWidths: function(resultWidths, visibleColumns) {
         var that = this,
+            i,
             hasPercentWidth = false,
             hasAutoWidth = false,
             isColumnWidthsCorrected = false,
@@ -239,36 +240,28 @@ var ResizingController = modules.ViewController.inherit({
             averageColumnsWidth,
             lastColumnIndex;
 
-        each(visibleColumns, function(index) {
-            var isMinWidthApplied = false,
+        for(i = 0; i < visibleColumns.length; i++) {
+            var index = i,
+                column = visibleColumns[index],
                 isHiddenColumn = resultWidths[index] === HIDDEN_COLUMNS_WIDTH,
                 width = resultWidths[index];
 
-            if(width === undefined && this.minWidth) {
-                if(averageColumnsWidth === undefined) {
-                    averageColumnsWidth = that._getAverageColumnsWidth(resultWidths);
-                }
+            if(width === undefined && column.minWidth) {
+                averageColumnsWidth = that._getAverageColumnsWidth(resultWidths);
                 width = averageColumnsWidth;
             }
-
-            if(width < this.minWidth && !isHiddenColumn) {
-                resultWidths[index] = this.minWidth;
+            if(width < column.minWidth && !isHiddenColumn) {
+                resultWidths[index] = column.minWidth;
                 isColumnWidthsCorrected = true;
-                isMinWidthApplied = true;
+                i = -1;
             }
-            if(this.width !== "auto") {
-                if(this.width) {
-                    if(!isHiddenColumn && !isMinWidthApplied) {
-                        resultWidths[index] = this.width;
-                    }
-                } else {
-                    hasAutoWidth = true;
-                }
+            if(!column.width) {
+                hasAutoWidth = true;
             }
-            if(isPercentWidth(this.width)) {
+            if(isPercentWidth(column.width)) {
                 hasPercentWidth = true;
             }
-        });
+        }
 
         if($element && that._maxWidth) {
             delete that._maxWidth;
