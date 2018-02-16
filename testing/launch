@@ -16,7 +16,7 @@ var PORT = require("./../ports.json").qunit;
 if(parseInt(process.versions.node.split('.')[0]) < 6)
     throw "Node version is too low";
 
-gulp.start('transpile-test');
+gulp.start('transpile-watch');
 
 childProcess.spawn(
     "dotnet",
