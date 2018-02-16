@@ -376,14 +376,6 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
         }
     },
 
-    applyStylesForHiddenColumns: function(view) {
-        var that = this;
-        this._hiddenColumns.forEach(function(column) {
-            var visibleIndex = that._columnsController.getVisibleIndex(column.index);
-            that._addCssClassToViewColumn(view, that.addWidgetPrefix(HIDDEN_COLUMN_CLASS), visibleIndex);
-        });
-    },
-
     isFormEditMode: function() {
         var editMode = this._editingController.getEditMode();
 
@@ -717,9 +709,12 @@ module.exports = {
                     }
                 },
 
-                _cellPrepared: function() {
+                _cellPrepared: function($cell, options) {
                     this.callBase.apply(this, arguments);
-                    this._adaptiveColumnsController.applyStylesForHiddenColumns(this);
+
+                    if(options.column.visibleWidth === HIDDEN_COLUMNS_WIDTH) {
+                        $cell.addClass(this.addWidgetPrefix(HIDDEN_COLUMN_CLASS));
+                    }
                 },
 
                 _getCellElement: function(rowIndex, columnIdentifier) {
