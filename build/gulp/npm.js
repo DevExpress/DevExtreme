@@ -107,6 +107,7 @@ gulp.task('npm-sources', ['bundler-config', 'npm-dts-generator'], function() {
 
 var widgetNameByPath = require("./ts").widgetNameByPath;
 var generateJQueryAugmentation = require("./ts").generateJQueryAugmentation;
+var getAugmentationOptionsPath = require("./ts").getAugmentationOptionsPath;
 
 gulp.task('npm-dts-generator', function() {
     var tsModules = MODULES.map(function(moduleMeta) {
@@ -126,7 +127,15 @@ gulp.task('npm-dts-generator', function() {
                 if(jQueryAugmentation) {
                     jQueryAugmentation = `declare global {\n${jQueryAugmentation}}\n`;
                 }
-                return jQueryAugmentation + `export default DevExpress.${globalPath};`;
+
+                var result = jQueryAugmentation + `export default DevExpress.${globalPath};`;
+
+                var widgetOptionsPath = getAugmentationOptionsPath(globalPath);
+                if(widgetOptionsPath) {
+                    result += `\nexport type IOptions = DevExpress.${widgetOptionsPath};`;
+                }
+
+                return result;
             });
 
             exports = '\n\n' + exportProperties.join('\n');
