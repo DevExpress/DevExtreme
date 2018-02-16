@@ -23,22 +23,34 @@ var namedDebug = lazyPipe()
     });
 
 var BUNDLES = [
-    'js/bundles/dx.all.js',
-    'js/bundles/dx.mobile.js',
-    'js/bundles/dx.web.js',
-    'js/bundles/dx.viz.js',
-    'js/bundles/dx.viz-web.js'
+    '/bundles/dx.all.js',
+    '/bundles/dx.mobile.js',
+    '/bundles/dx.web.js',
+    '/bundles/dx.viz.js',
+    '/bundles/dx.viz-web.js'
 ];
 
 var DEBUG_BUNDLES = BUNDLES.concat([
-    'js/bundles/dx.custom.js'
+    '/bundles/dx.custom.js'
 ]);
+
+function processBundles(bundles) {
+    return bundles.map(function(bundle) {
+        return context.TRANSPILED_PATH + bundle;
+    });
+}
+
+function processDevBundles(bundles) {
+    return bundles.map(function(bundle) {
+        return "js" + bundle;
+    });
+}
 
 function muteWebPack() {
 }
 
-gulp.task('js-bundles-prod', function() {
-    return gulp.src(BUNDLES)
+gulp.task('js-bundles-prod', ['transpile'], function() {
+    return gulp.src(processBundles(BUNDLES))
         .pipe(named())
         .pipe(webpackStream(webpackConfig, webpack, muteWebPack))
         .pipe(headerPipes.useStrict())
@@ -47,16 +59,33 @@ gulp.task('js-bundles-prod', function() {
         .pipe(gulp.dest(context.RESULT_JS_PATH));
 });
 
+var babelModule = {
+    rules: [{
+        test: /\.js$/,
+        exclude: /(node_modules|bower_components)/,
+        use: {
+            loader: 'babel-loader'
+        }
+    }]
+};
+
 var createDebugBundlesStream = function(watch) {
     var debugConfig = Object.assign({}, webpackConfig);
     debugConfig.watch = watch;
+    var bundles;
+    if(watch) {
+        debugConfig.module = babelModule;
+        bundles = processDevBundles(DEBUG_BUNDLES);
+    } else {
+        bundles = processBundles(DEBUG_BUNDLES);
+    }
     debugConfig.output = Object.assign({}, webpackConfig.output);
     debugConfig.output['pathinfo'] = true;
     if(!context.uglify) {
         debugConfig.devtool = 'eval';
     }
 
-    return gulp.src(DEBUG_BUNDLES)
+    return gulp.src(bundles)
         .pipe(namedDebug())
         .pipe(gulpIf(watch, plumber({
             errorHandler: notify.onError('Error: <%= error.message %>')
@@ -70,10 +99,10 @@ var createDebugBundlesStream = function(watch) {
 };
 
 
-gulp.task('js-bundles-debug', ['bundler-config'], function() {
+gulp.task('js-bundles-debug', ['transpile'], function() {
     return createDebugBundlesStream(false);
 });
 
-gulp.task('js-bundles-dev', ['bundler-config'], function() {
+gulp.task('js-bundles-dev', function() {
     return createDebugBundlesStream(true);
 });

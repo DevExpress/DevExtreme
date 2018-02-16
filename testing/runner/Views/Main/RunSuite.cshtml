@@ -23,15 +23,15 @@
     IEnumerable<string> GetJQueryIntegrationImports() {
         if(!isSelfSufficientTest) {
             if(!Model.NoJQuery && !isNoJQueryTest) {
-                yield return Url.Content("~/js/integration/jquery.js");
+                yield return Url.Content("~/artifacts/transpiled/integration/jquery.js");
             } else {
                 yield return Url.Content("~/testing/helpers/jQueryEventsPatch.js");
                 yield return Url.Content("~/testing/helpers/dataPatch.js");
-                yield return Url.Content("~/js/integration/jquery/component_registrator.js");
+                yield return Url.Content("~/artifacts/transpiled/integration/jquery/component_registrator.js");
             }
         }
         if(isServerSideTest) {
-            yield return Url.Content("~/js/integration/jquery/component_registrator.js");
+            yield return Url.Content("~/artifacts/transpiled/jquery/component_registrator.js");
             yield return Url.Content("~/testing/helpers/ssrEmulator.js");
         }
     }
@@ -167,8 +167,7 @@
             }
 
             SystemJS.config({
-                baseURL: '@Url.Content("~/js")',
-                transpiler: 'plugin-babel',
+                baseURL: '@Url.Content("~/artifacts/transpiled")',
                 map: {
                     // Deps
                     'globalize': '@Url.Content("~/vendor/globalize/globalize")',
@@ -193,9 +192,7 @@
                     // SystemJS plugins
                     'css': '@Url.Content("~/node_modules/systemjs-plugin-css/css.js")',
                     'text': '@Url.Content("~/node_modules/systemjs-plugin-text/text.js")',
-                    'json': '@Url.Content("~/node_modules/systemjs-plugin-json/json.js")',
-                    'plugin-babel': '@Url.Content("~/node_modules/systemjs-plugin-babel/plugin-babel.js")',
-                    'systemjs-babel-build': '@Url.Content("~/node_modules/systemjs-plugin-babel/systemjs-babel-browser.js")'
+                    'json': '@Url.Content("~/node_modules/systemjs-plugin-json/json.js")'
                 },
                 packages: {
                     '': {
