@@ -2,6 +2,7 @@
 
 var eventsEngine = require("../../events/core/events_engine"),
     modules = require("./ui.grid_core.modules"),
+    filterUtils = require("../shared/filtering"),
     gridCoreUtils = require("./ui.grid_core.utils"),
     headerFilterCore = require("./ui.grid_core.header_filter_core"),
     headerFilterMixin = headerFilterCore.headerFilterMixin,
@@ -30,7 +31,7 @@ var DATE_INTERVAL_FORMATS = {
 
 var HeaderFilterController = modules.ViewController.inherit((function() {
     var getFormatOptions = function(value, column, currentLevel) {
-        var groupInterval = gridCoreUtils.getGroupInterval(column),
+        var groupInterval = filterUtils.getGroupInterval(column),
             result = gridCoreUtils.getFormatOptionsByColumn(column, "headerFilter");
 
         if(groupInterval) {
@@ -242,7 +243,7 @@ var HeaderFilterController = modules.ViewController.inherit((function() {
                 var visibleIndex = that._columnsController.getVisibleIndex(columnIndex),
                     view = isGroupPanel ? that.getView("headerPanel") : that.getView("columnHeadersView"),
                     $columnElement = view.getColumnElements().eq(isGroupPanel ? column.groupIndex : visibleIndex),
-                    groupInterval = gridCoreUtils.getGroupInterval(column);
+                    groupInterval = filterUtils.getGroupInterval(column);
 
                 var options = extend(column, {
                     type: groupInterval && groupInterval.length > 1 ? "tree" : "list",

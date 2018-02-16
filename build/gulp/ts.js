@@ -31,31 +31,35 @@ var OUTPUT_DIR = 'artifacts/ts';
 var MODULES = require('./modules_metadata.json');
 var TS = require('./ts_metadata.json');
 
-var widgetNameByPath = exports.widgetNameByPath = function(path) {
-    if(path.startsWith('ui.dx') || path.startsWith('viz.dx')) {
-        var parts = path.split('.');
+var widgetNameByPath = exports.widgetNameByPath = function(widgetPath) {
+    if(widgetPath.startsWith('ui.dx') || widgetPath.startsWith('viz.dx')) {
+        var parts = widgetPath.split('.');
         return parts.length === 2 ? parts[1] : '';
     }
 };
 
-var widgetOptionsPathByPath = function(path) {
-    var widgetName = widgetNameByPath(path);
-    var tsWidgetMetadata = TS.filter((d) => d.widgetName === widgetName)[0];
+exports.getAugmentationOptionsPath = function(widgetPath) {
+    var widgetName = widgetNameByPath(widgetPath);
 
-    return tsWidgetMetadata ? tsWidgetMetadata.optionsPath : `${path}Options`;
+    return widgetName ? getWidgetOptionsPath(widgetName, widgetPath) : '';
 };
 
-var generateJQueryAugmentation = exports.generateJQueryAugmentation = function(exportName, globalPath) {
-    var widgetName = widgetNameByPath(globalPath);
+var getWidgetOptionsPath = function(widgetName, widgetPath) {
+    var tsWidgetMetadata = TS.filter((d) => d.widgetName === widgetName)[0];
+
+    return tsWidgetMetadata ? tsWidgetMetadata.optionsPath : `${widgetPath}Options`;
+};
+
+var generateJQueryAugmentation = exports.generateJQueryAugmentation = function(exportName, globalWidgetPath) {
+    var widgetName = widgetNameByPath(globalWidgetPath);
     if(!widgetName) return '';
 
-    var widgetOptionsPath = widgetOptionsPathByPath(globalPath);
     return `interface JQuery {\n` +
            `    ${widgetName}(): JQuery;\n` +
-           `    ${widgetName}(options: "instance"): DevExpress.${globalPath};\n` +
+           `    ${widgetName}(options: "instance"): DevExpress.${globalWidgetPath};\n` +
            `    ${widgetName}(options: string): any;\n` +
            `    ${widgetName}(options: string, ...params: any[]): any;\n` +
-           `    ${widgetName}(options: DevExpress.${widgetOptionsPath}): JQuery;\n` +
+           `    ${widgetName}(options: DevExpress.${getWidgetOptionsPath(widgetName, globalWidgetPath)}): JQuery;\n` +
            `}\n`;
 };
 

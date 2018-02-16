@@ -2,6 +2,8 @@
 
 var noop = require("../../core/utils/common").noop,
     windowUtils = require("../../core/utils/window"),
+    domAdapter = require("../../core/dom_adapter"),
+    typeUtils = require("../../core/utils/type"),
     each = require("../../core/utils/iterator").each,
     version = require("../../core/version"),
     _windowResizeCallbacks = require("../../core/utils/resize_callbacks"),
@@ -10,6 +12,7 @@ var noop = require("../../core/utils/common").noop,
     extend = require("../../core/utils/extend").extend,
 
     _floor = Math.floor,
+    Class = require("../../core/class"),
     DOMComponent = require("../../core/dom_component"),
     helpers = require("./helpers"),
     _parseScalar = require("./utils").parseScalar,
@@ -20,6 +23,8 @@ var noop = require("../../core/utils/common").noop,
     _Layout = require("./layout"),
 
     OPTION_RTL_ENABLED = "rtlEnabled",
+
+    SIZED_ELEMENT_CLASS = "dx-sized-element",
 
     _option = DOMComponent.prototype.option;
 
@@ -72,8 +77,10 @@ var createIncidentOccurred = function(widgetName, eventTrigger) {
     }
 };
 
-function pickPositiveValue(value, defaultValue) {
-    return Number(value > 0 ? value : (defaultValue || 0));
+function pickPositiveValue(values) {
+    return values.reduce(function(result, value) {
+        return (value > 0 && !result) ? value : result;
+    }, 0);
 }
 
 // TODO - Changes handling
@@ -94,7 +101,37 @@ function pickPositiveValue(value, defaultValue) {
 //         }
 //     }]
 
-module.exports = DOMComponent.inherit({
+
+var getEmptyComponent = function() {
+    var emptyComponentConfig = {};
+
+    for(var field in DOMComponent.prototype) {
+        var prop = DOMComponent.prototype[field];
+
+        if(typeUtils.isFunction(prop) && field.substr(0, 1) !== "_") {
+            emptyComponentConfig[field] = noop;
+        }
+    }
+
+    emptyComponentConfig.ctor = function(element, options) {
+        var sizedElement = domAdapter.createElement("div");
+
+        var width = options && typeUtils.isNumeric(options.width) ? options.width + "px" : "100%";
+        var height = options && typeUtils.isNumeric(options.height) ? options.height + "px" : this._getDefaultSize().height + "px";
+
+        domAdapter.setStyle(sizedElement, "width", width);
+        domAdapter.setStyle(sizedElement, "height", height);
+
+        domAdapter.setClass(sizedElement, SIZED_ELEMENT_CLASS);
+        domAdapter.insertElement(element, sizedElement);
+    };
+
+    return Class.inherit(emptyComponentConfig);
+};
+
+var isServerSide = !windowUtils.hasWindow();
+
+module.exports = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
     _eventsMap: {
         "onIncidentOccurred": { name: "incidentOccurred" },
         "onDrawn": { name: "drawn" }
@@ -111,6 +148,9 @@ module.exports = DOMComponent.inherit({
     _init: function() {
         var that = this,
             linkTarget;
+
+        that._$element.children("." + SIZED_ELEMENT_CLASS).remove();
+
         that.callBase.apply(that, arguments);
         that._changesLocker = 0;
         that._changes = helpers.changes();
@@ -300,12 +340,12 @@ module.exports = DOMComponent.inherit({
             elementWidth = windowUtils.hasWindow() ? that._$element.width() : 0,
             elementHeight = windowUtils.hasWindow() ? that._$element.height() : 0,
             canvas = {
-                width: size.width <= 0 ? 0 : _floor(pickPositiveValue(size.width, elementWidth || defaultCanvas.width)),
-                height: size.height <= 0 ? 0 : _floor(pickPositiveValue(size.height, elementHeight || defaultCanvas.height)),
-                left: pickPositiveValue(margin.left, defaultCanvas.left || 0),
-                top: pickPositiveValue(margin.top, defaultCanvas.top || 0),
-                right: pickPositiveValue(margin.right, defaultCanvas.right || 0),
-                bottom: pickPositiveValue(margin.bottom, defaultCanvas.bottom || 0)
+                width: size.width <= 0 ? 0 : _floor(pickPositiveValue([size.width, elementWidth, defaultCanvas.width])),
+                height: size.height <= 0 ? 0 : _floor(pickPositiveValue([size.height, elementHeight, defaultCanvas.height])),
+                left: pickPositiveValue([margin.left, defaultCanvas.left]),
+                top: pickPositiveValue([margin.top, defaultCanvas.top]),
+                right: pickPositiveValue([margin.right, defaultCanvas.right]),
+                bottom: pickPositiveValue([margin.bottom, defaultCanvas.bottom])
             };
         // This for backward compatibility - widget was not rendered when canvas is empty.
         // Now it will be rendered but because of "width" and "height" of the root both set to 0 it will not be visible.

@@ -101,7 +101,7 @@ var EditorFactoryMixin = (function() {
             type: options.dataType,
             formatWidthCalculator: null,
             dateSerializationFormat: null,
-            width: "auto"
+            width: options.parentType === "filterBuilder" ? undefined : "auto"
         }, options);
     };
 

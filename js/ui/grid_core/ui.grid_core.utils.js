@@ -3,10 +3,10 @@
 var $ = require("../../core/renderer"),
     commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
+    filterUtils = require("../shared/filtering"),
     stringUtils = require("../../core/utils/string"),
     iteratorUtils = require("../../core/utils/iterator"),
     extend = require("../../core/utils/extend").extend,
-    inArray = require("../../core/utils/array").inArray,
     toComparable = require("../../core/utils/data").toComparable,
     LoadPanel = require("../load_panel"),
     dataUtils = require("../../data/utils"),
@@ -37,9 +37,7 @@ var NO_DATA_CLASS = "nodata",
         "second": function(value) {
             return value && value.getSeconds();
         }
-    },
-    DEFAULT_DATE_INTERVAL = ["year", "month", "day"],
-    DEFAULT_DATETIME_INTERVAL = ["year", "month", "day", "hour", "minute"];
+    };
 
 module.exports = (function() {
     var getIntervalSelector = function() {
@@ -56,132 +54,6 @@ module.exports = (function() {
         } else if(this.dataType === "number") {
             groupInterval = arguments[0];
             return Math.floor(Number(value) / groupInterval) * groupInterval;
-        }
-    };
-
-    var getDateValues = function(dateValue) {
-        if(typeUtils.isDate(dateValue)) {
-            return [dateValue.getFullYear(), dateValue.getMonth(), dateValue.getDate(), dateValue.getHours(), dateValue.getMinutes(), dateValue.getSeconds()];
-        }
-        return iteratorUtils.map(("" + dateValue).split("/"), function(value, index) {
-            return index === 1 ? Number(value) - 1 : Number(value);
-        });
-    };
-
-    var getFilterExpressionForDate = function(filterValue, selectedFilterOperation, target) {
-        var column = this,
-            dateStart,
-            dateEnd,
-            dateInterval,
-            values = getDateValues(filterValue),
-            selector = getFilterSelector(column, target);
-
-        if(target === "headerFilter") {
-            dateInterval = module.exports.getGroupInterval(column)[values.length - 1];
-        } else if(column.dataType === "datetime") {
-            dateInterval = "minute";
-        }
-
-        switch(dateInterval) {
-            case "year":
-                dateStart = new Date(values[0], 0, 1);
-                dateEnd = new Date(values[0] + 1, 0, 1);
-                break;
-            case "month":
-                dateStart = new Date(values[0], values[1], 1);
-                dateEnd = new Date(values[0], values[1] + 1, 1);
-                break;
-            case "quarter":
-                dateStart = new Date(values[0], 3 * values[1], 1);
-                dateEnd = new Date(values[0], 3 * values[1] + 3, 1);
-                break;
-            case "hour":
-                dateStart = new Date(values[0], values[1], values[2], values[3]);
-                dateEnd = new Date(values[0], values[1], values[2], values[3] + 1);
-                break;
-            case "minute":
-                dateStart = new Date(values[0], values[1], values[2], values[3], values[4]);
-                dateEnd = new Date(values[0], values[1], values[2], values[3], values[4] + 1);
-                break;
-            case "second":
-                dateStart = new Date(values[0], values[1], values[2], values[3], values[4], values[5]);
-                dateEnd = new Date(values[0], values[1], values[2], values[3], values[4], values[5] + 1);
-                break;
-            default:
-                dateStart = new Date(values[0], values[1], values[2]);
-                dateEnd = new Date(values[0], values[1], values[2] + 1);
-        }
-
-        switch(selectedFilterOperation) {
-            case "<":
-                return [selector, "<", dateStart];
-            case "<=":
-                return [selector, "<", dateEnd];
-            case ">":
-                return [selector, ">=", dateEnd];
-            case ">=":
-                return [selector, ">=", dateStart];
-            case "<>":
-                return [[selector, "<", dateStart], "or", [selector, ">=", dateEnd]];
-            default:
-                return [[selector, ">=", dateStart], "and", [selector, "<", dateEnd]];
-        }
-    };
-
-    var getFilterExpressionForNumber = function(filterValue, selectedFilterOperation, target) {
-        var column = this,
-            interval,
-            startFilterValue,
-            endFilterValue,
-            selector = getFilterSelector(column, target),
-            values = ("" + filterValue).split("/"),
-            value = Number(values[values.length - 1]),
-            isExclude = column.filterType === "exclude",
-            groupInterval = module.exports.getGroupInterval(column);
-
-        if(target === "headerFilter" && groupInterval && typeUtils.isDefined(filterValue)) {
-            interval = groupInterval[values.length - 1];
-            startFilterValue = [selector, isExclude ? "<" : ">=", value];
-            endFilterValue = [selector, isExclude ? ">=" : "<", value + interval];
-
-            return [startFilterValue, isExclude ? "or" : "and", endFilterValue];
-        }
-
-        return [selector, selectedFilterOperation || "=", filterValue];
-    };
-
-    var getFilterSelector = function(column, target) {
-        var selector = column.dataField || column.selector;
-        if(target === "search") {
-            selector = column.displayField || column.calculateDisplayValue || selector;
-        }
-        return selector;
-    };
-
-    var isZeroTime = function(date) {
-        return date.getHours() + date.getMinutes() + date.getSeconds() + date.getMilliseconds() < 1;
-    };
-
-    var getFilterExpressionByRange = function(filterValue) {
-        var column = this,
-            endFilterValue,
-            startFilterExpression,
-            endFilterExpression,
-            dataField = column.dataField;
-
-        if(Array.isArray(filterValue) && typeUtils.isDefined(filterValue[0]) && typeUtils.isDefined(filterValue[1])) {
-            startFilterExpression = [dataField, ">=", filterValue[0]];
-            endFilterExpression = [dataField, "<=", filterValue[1]];
-
-            if(isDateType(column.dataType)) {
-                if(isZeroTime(filterValue[1])) {
-                    endFilterValue = new Date(filterValue[1].getTime());
-                    endFilterValue.setDate(filterValue[1].getDate() + 1);
-                    endFilterExpression = [dataField, "<", endFilterValue];
-                }
-            }
-
-            return [startFilterExpression, "and", endFilterExpression];
         }
     };
 
@@ -429,37 +301,10 @@ module.exports = (function() {
             }
         },
 
-        defaultCalculateFilterExpression: function(filterValue, selectedFilterOperation, target) {
-            var column = this,
-                selector = getFilterSelector(column, target),
-                isSearchByDisplayValue = column.calculateDisplayValue && target === "search",
-                dataType = isSearchByDisplayValue && column.lookup && column.lookup.dataType || column.dataType,
-                filter = null;
-
-            if(target === "headerFilter" && filterValue === null) {
-                filter = [selector, selectedFilterOperation || "=", null];
-                if(dataType === "string") {
-                    filter = [filter, selectedFilterOperation === "=" ? "or" : "and", [selector, selectedFilterOperation || "=", ""]];
-                }
-            } else if(dataType === "string" && (!column.lookup || isSearchByDisplayValue)) {
-                filter = [selector, selectedFilterOperation || "contains", filterValue];
-            } else if(selectedFilterOperation === "between") {
-                return getFilterExpressionByRange.apply(column, arguments);
-            } else if(isDateType(dataType) && typeUtils.isDefined(filterValue)) {
-                return getFilterExpressionForDate.apply(column, arguments);
-            } else if(dataType === "number") {
-                return getFilterExpressionForNumber.apply(column, arguments);
-            } else if(dataType !== "object") {
-                filter = [selector, selectedFilterOperation || "=", filterValue];
-            }
-
-            return filter;
-        },
-
         getHeaderFilterGroupParameters: function(column, remoteGrouping) {
             var result = [],
                 dataField = column.dataField || column.name,
-                groupInterval = this.getGroupInterval(column);
+                groupInterval = filterUtils.getGroupInterval(column);
 
             if(groupInterval) {
                 iteratorUtils.each(groupInterval, function(index, interval) {
@@ -486,29 +331,6 @@ module.exports = (function() {
             }
 
             return result;
-        },
-
-        getGroupInterval: function(column) {
-            var index,
-                result = [],
-                dateIntervals = ["year", "month", "day", "hour", "minute", "second"],
-                groupInterval = column.headerFilter && column.headerFilter.groupInterval,
-                interval = groupInterval === "quarter" ? "month" : groupInterval;
-
-            if(isDateType(column.dataType)) {
-                result = column.dataType === "datetime" ? DEFAULT_DATETIME_INTERVAL : DEFAULT_DATE_INTERVAL;
-                index = inArray(interval, dateIntervals);
-
-                if(index >= 0) {
-                    result = dateIntervals.slice(0, index);
-                    result.push(groupInterval);
-                    return result;
-                }
-
-                return result;
-            } else if(typeUtils.isDefined(groupInterval)) {
-                return Array.isArray(groupInterval) ? groupInterval : [groupInterval];
-            }
         },
 
         equalSortParameters: function(sortParameters1, sortParameters2, ignoreIsExpanded) {
