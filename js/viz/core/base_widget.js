@@ -71,8 +71,10 @@ var createIncidentOccurred = function(widgetName, eventTrigger) {
     }
 };
 
-function pickPositiveValue(value, defaultValue) {
-    return Number(value > 0 ? value : (defaultValue || 0));
+function pickPositiveValue(values) {
+    return values.reduce(function(result, value) {
+        return (value > 0 && !result) ? value : result;
+    }, 0);
 }
 
 // TODO - Changes handling
@@ -298,12 +300,12 @@ module.exports = DOMComponent.inherit({
             margin = that.option("margin") || {},
             defaultCanvas = that._getDefaultSize() || {},
             canvas = {
-                width: size.width <= 0 ? 0 : _floor(pickPositiveValue(size.width, that._$element.width() || defaultCanvas.width)),
-                height: size.height <= 0 ? 0 : _floor(pickPositiveValue(size.height, that._$element.height() || defaultCanvas.height)),
-                left: pickPositiveValue(margin.left, defaultCanvas.left || 0),
-                top: pickPositiveValue(margin.top, defaultCanvas.top || 0),
-                right: pickPositiveValue(margin.right, defaultCanvas.right || 0),
-                bottom: pickPositiveValue(margin.bottom, defaultCanvas.bottom || 0)
+                width: size.width <= 0 ? 0 : _floor(pickPositiveValue([size.width, that._$element.width(), defaultCanvas.width])),
+                height: size.height <= 0 ? 0 : _floor(pickPositiveValue([size.height, that._$element.height(), defaultCanvas.height])),
+                left: pickPositiveValue([margin.left, defaultCanvas.left]),
+                top: pickPositiveValue([margin.top, defaultCanvas.top]),
+                right: pickPositiveValue([margin.right, defaultCanvas.right]),
+                bottom: pickPositiveValue([margin.bottom, defaultCanvas.bottom])
             };
         // This for backward compatibility - widget was not rendered when canvas is empty.
         // Now it will be rendered but because of "width" and "height" of the root both set to 0 it will not be visible.
