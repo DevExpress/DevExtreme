@@ -1076,7 +1076,7 @@ QUnit.module("Custom filter expressions", {
         var value = [];
 
         // act, assert
-        assert.deepEqual(utils.getFilterExpression(value, this.fields, []), []);
+        assert.deepEqual(utils.getFilterExpression(value, this.fields, []), null);
     });
 
     QUnit.test("calculateFilterExpression for value = null", function(assert) {
@@ -1153,6 +1153,35 @@ QUnit.module("Custom filter expressions", {
 
         // act, assert
         assert.deepEqual(utils.getFilterExpression(value, this.fields, customOperations), ["field1", ">", "2"]);
+    });
+
+
+    QUnit.test("customOperation.calculateFilterExpression with condition does not return a value", function(assert) {
+        // arrange
+        var value = ["field1", "lastDays", "2"],
+            customOperations = [{
+                name: "lastDays",
+                calculateFilterExpression: function(filterValue, field) {
+
+                }
+            }];
+
+        // act, assert
+        assert.deepEqual(utils.getFilterExpression(value, this.fields, customOperations), null);
+    });
+
+    QUnit.test("customOperation.calculateFilterExpression with group does not return a value", function(assert) {
+        // arrange
+        var value = [["field1", "lastDays", "2"], "or", ["field1", "lastDays", "1"]],
+            customOperations = [{
+                name: "lastDays",
+                calculateFilterExpression: function(filterValue, field) {
+
+                }
+            }];
+
+        // act, assert
+        assert.deepEqual(utils.getFilterExpression(value, this.fields, customOperations), null);
     });
 });
 

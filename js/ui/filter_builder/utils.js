@@ -366,8 +366,6 @@ function getConditionFilterExpression(condition, fields, customOperations) {
 }
 
 function getFilterExpression(value, fields, customOperations) {
-    var result;
-
     if(value === null) {
         return null;
     }
@@ -375,22 +373,23 @@ function getFilterExpression(value, fields, customOperations) {
     var criteria = getGroupCriteria(value);
 
     if(isCondition(criteria)) {
-        result = getConditionFilterExpression(criteria, fields, customOperations);
+        return getConditionFilterExpression(criteria, fields, customOperations) || null;
     } else {
-        result = [];
+        var result = [],
+            filterExpression;
         for(var i = 0; i < criteria.length; i++) {
             if(isGroup(criteria[i])) {
-                var filterExpression = getFilterExpression(criteria[i], fields, customOperations);
-                result.push(filterExpression);
+                filterExpression = getFilterExpression(criteria[i], fields, customOperations);
+                filterExpression && result.push(filterExpression);
             } else if(isCondition(criteria[i])) {
-                result.push(getConditionFilterExpression(criteria[i], fields, customOperations));
+                filterExpression = getConditionFilterExpression(criteria[i], fields, customOperations);
+                filterExpression && result.push(filterExpression);
             } else {
-                result.push(criteria[i]);
+                filterExpression && result.push(criteria[i]);
             }
         }
+        return result.length ? result : null;
     }
-
-    return result;
 }
 
 function getNormalizedFilter(group, fields) {
