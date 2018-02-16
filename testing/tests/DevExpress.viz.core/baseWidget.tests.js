@@ -602,6 +602,25 @@ QUnit.test('no options and container has no sizes', function(assert) {
     }
 });
 
+QUnit.test('no options and container has negative sizes - get default size (T607069)', function(assert) {
+    try {
+        sinon.stub(renderer.fn, 'width').returns(-2);
+        sinon.stub(renderer.fn, 'height').returns(-3);
+        this.onGetDefaultSize = function() {
+            return { width: 400, height: 300, left: 10, top: 20, right: 30, bottom: 40 };
+        };
+        this.createWidget();
+
+        assert.deepEqual(this.widget.DEBUG_getCanvas(), {
+            width: 400, height: 300,
+            left: 10, top: 20, right: 30, bottom: 40
+        }, 'canvas');
+    } finally {
+        renderer.fn.width.restore();
+        renderer.fn.height.restore();
+    }
+});
+
 QUnit.test('container is not visible', function(assert) {
     this.$container.hide();
     this.createWidget();
