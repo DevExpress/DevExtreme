@@ -2,7 +2,8 @@
 
 /* global fields */
 
-var utils = require("ui/filter_builder/utils");
+var utils = require("ui/filter_builder/utils"),
+    between = require("ui/filter_builder/between");
 
 var condition1 = ["CompanyName", "=", "Super Mart of the West"],
     condition2 = ["CompanyName", "=", "and"],
@@ -1141,6 +1142,61 @@ QUnit.module("Custom filter expressions", {
         ]);
     });
 
+    QUnit.test("calculateFilterExpression for short form of group", function(assert) {
+        // arrange
+        var value = [
+            ["field1", "1"],
+            [
+                ["field1", "=", "20"],
+                ["field2", "30"]
+            ]
+        ];
+
+        // act, assert
+        assert.deepEqual(utils.getFilterExpression(value, this.fields, []), [
+            [
+                ["field1", "<>", "1"], "or", ["field1", "=", "10"]
+            ],
+            "and",
+            [
+                [
+                    ["field1", "<>", "20"], "or", ["field1", "=", "10"]
+                ],
+                "and",
+                ["field2", "=", "30"]
+            ]
+        ]);
+    });
+
+    QUnit.test("calculateFilterExpression for group with between", function(assert) {
+        // arrange
+        var value = [
+            ["field2", "20"],
+            "or",
+            ["field2", "30"],
+            "or",
+            ["field1", "between", [null, null]]
+        ];
+
+        // act, assert
+        assert.deepEqual(utils.getFilterExpression(value, this.fields, [between.getConfig()]), [
+            ["field2", "=", "20"],
+            "or",
+            ["field2", "=", "30"]
+        ]);
+
+        value = [
+            ["field2", "20"],
+            ["field2", "30"],
+            ["field1", "between", [null, null]]
+        ];
+        assert.deepEqual(utils.getFilterExpression(value, this.fields, [between.getConfig()]), [
+            ["field2", "=", "20"],
+            "and",
+            ["field2", "=", "30"]
+        ]);
+    });
+
     QUnit.test("customOperation.calculateFilterExpression", function(assert) {
         // arrange
         var value = ["field1", "lastDays", "2"],
@@ -1429,6 +1485,11 @@ QUnit.module("Between operation", function() {
 
         // act
         filterExpression = mergedOperations[0].calculateFilterExpression(null, { dataField: "field" });
+        // assert
+        assert.deepEqual(filterExpression, null);
+
+        // act
+        filterExpression = mergedOperations[0].calculateFilterExpression([null, null], { dataField: "field" });
         // assert
         assert.deepEqual(filterExpression, null);
     });

@@ -376,16 +376,21 @@ function getFilterExpression(value, fields, customOperations) {
         return getConditionFilterExpression(criteria, fields, customOperations) || null;
     } else {
         var result = [],
-            filterExpression;
+            filterExpression,
+            groupValue = getGroupValue(criteria);
         for(var i = 0; i < criteria.length; i++) {
             if(isGroup(criteria[i])) {
                 filterExpression = getFilterExpression(criteria[i], fields, customOperations);
-                filterExpression && result.push(filterExpression);
+                if(filterExpression) {
+                    i && result.push(groupValue);
+                    result.push(filterExpression);
+                }
             } else if(isCondition(criteria[i])) {
                 filterExpression = getConditionFilterExpression(criteria[i], fields, customOperations);
-                filterExpression && result.push(filterExpression);
-            } else {
-                filterExpression && result.push(criteria[i]);
+                if(filterExpression) {
+                    i && result.push(groupValue);
+                    result.push(filterExpression);
+                }
             }
         }
         return result.length ? result : null;

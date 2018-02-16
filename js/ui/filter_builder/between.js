@@ -60,7 +60,13 @@ function customizeText(conditionInfo) {
 
 function calculateFilterExpression(filterValue, field) {
     if(!filterValue || filterValue.length < 2) return null;
-    return [[field.dataField, ">=", filterValue[0]], "and", [field.dataField, "<=", filterValue[1]]];
+
+    var startValue = filterValue[0],
+        endValue = filterValue[1];
+    if(!isDefined(startValue) && !isDefined(endValue)) {
+        return null;
+    }
+    return [[field.dataField, ">=", startValue], "and", [field.dataField, "<=", endValue]];
 }
 
 function getConfig() {
