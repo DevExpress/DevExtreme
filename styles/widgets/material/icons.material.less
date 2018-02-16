@@ -46,7 +46,7 @@
     .dx-icon-card       { .dx-font-icon("\f019"); }
     .dx-icon-cart       { .dx-font-icon("\f01a"); }
     .dx-icon-chart      { .dx-font-icon("\f01c"); }
-    .dx-icon-check      { .dx-font-icon("\f005"); }
+    .dx-icon-check      { .dx-font-icon("check"); }
     .dx-icon-clear      { .dx-font-icon("\f008"); }
     .dx-icon-clock      { .dx-font-icon("\f01d"); }
     .dx-icon-close      { .dx-font-icon("\f00a"); }
@@ -80,7 +80,7 @@
     .dx-icon-overflow   { .dx-font-icon("\f00d"); }
     .dx-icon-percent    { .dx-font-icon("\f039"); }
     .dx-icon-photo      { .dx-font-icon("\f03a"); }
-    .dx-icon-plus       { .dx-font-icon("\f00b"); }
+    .dx-icon-plus       { .dx-font-icon("add"); }
     .dx-icon-preferences { .dx-font-icon("\f03b"); }
     .dx-icon-product    { .dx-font-icon("\f03c"); }
     .dx-icon-pulldown   { .dx-font-icon("\f062"); }
@@ -122,11 +122,11 @@
     .dx-icon-chevronright { .dx-font-icon("keyboard_arrow_right"); }
     .dx-icon-chevronnext {
         .dx-icon-chevronright;
-        .dx-rtl &:before { content: "\f012"; } //.dx-icon-chevronleft
+        .dx-rtl &:before { content: "keyboard_arrow_left"; } //.dx-icon-chevronleft
     }
     .dx-icon-chevronprev {
         .dx-icon-chevronleft;
-        .dx-rtl &:before { content: "\f010"; } //.dx-icon-chevronright
+        .dx-rtl &:before { content: "keyboard_arrow_right"; } //.dx-icon-chevronright
     }
     .dx-icon-chevrondown { .dx-font-icon("\f016"); }
     .dx-icon-chevronup  { .dx-font-icon("\f014"); }
