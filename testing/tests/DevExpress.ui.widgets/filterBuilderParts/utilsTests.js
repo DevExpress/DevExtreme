@@ -972,8 +972,7 @@ QUnit.module("getAvailableOperations", {
             equals: "="
         }, [{
             name: "lastDays",
-            caption: "last days",
-            icon: "add"
+            caption: "last days"
         }]);
 
         // assert
@@ -981,6 +980,7 @@ QUnit.module("getAvailableOperations", {
 
         assert.strictEqual(operations[0].value, "equals");
         assert.strictEqual(operations[1].value, "lastDays");
+        assert.strictEqual(operations[1].icon, "context-menu-sort-none");
     });
 
     QUnit.test("custom operation by dataType", function(assert) {

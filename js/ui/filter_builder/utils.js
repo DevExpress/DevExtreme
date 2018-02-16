@@ -13,6 +13,7 @@ var dataErrors = require("../../data/errors").errors,
     filterOperationsDictionary = require("./ui.filter_operations_dictionary");
 
 var DEFAULT_DATA_TYPE = "string",
+    EMPTY_MENU_ICON = "context-menu-sort-none",
     AND_GROUP_OPERATION = "and",
     DATATYPE_OPERATIONS = {
         "number": ["=", "<>", "<", ">", "<=", ">=", "isblank", "isnotblank"],
@@ -184,13 +185,13 @@ function getAvailableOperations(field, filterOperationDescriptions, customOperat
         var customOperation = getCustomOperation(customOperations, operation);
         if(customOperation) {
             return {
-                icon: customOperation.icon,
+                icon: customOperation.icon || EMPTY_MENU_ICON,
                 text: customOperation.caption || inflector.captionize(customOperation.name),
                 value: customOperation.name
             };
         } else {
             return {
-                icon: filterOperationsDictionary.getIconByFilterOperation(operation),
+                icon: filterOperationsDictionary.getIconByFilterOperation(operation) || EMPTY_MENU_ICON,
                 text: getCaptionByOperation(operation, filterOperationDescriptions),
                 value: operation
             };
