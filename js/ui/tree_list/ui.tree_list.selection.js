@@ -435,7 +435,7 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
                 * @publicName getSelectedRowKeys(leavesOnly)
                 * @param1 leavesOnly:boolean
                 * @return Array<any>
-                * @deprecated
+                * @deprecated dxTreeListMethods_getSelectedRowKeys
                 */
 
                 /**
