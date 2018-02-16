@@ -980,7 +980,7 @@ QUnit.module("getAvailableOperations", {
 
         assert.strictEqual(operations[0].value, "equals");
         assert.strictEqual(operations[1].value, "lastDays");
-        assert.strictEqual(operations[1].icon, "context-menu-sort-none");
+        assert.strictEqual(operations[1].icon, "context-menu-icon-none");
     });
 
     QUnit.test("custom operation by dataType", function(assert) {

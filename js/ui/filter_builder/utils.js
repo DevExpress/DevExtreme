@@ -13,7 +13,7 @@ var dataErrors = require("../../data/errors").errors,
     filterOperationsDictionary = require("./ui.filter_operations_dictionary");
 
 var DEFAULT_DATA_TYPE = "string",
-    EMPTY_MENU_ICON = "context-menu-sort-none",
+    EMPTY_MENU_ICON = "context-menu-icon-none",
     AND_GROUP_OPERATION = "and",
     DATATYPE_OPERATIONS = {
         "number": ["=", "<>", "<", ">", "<=", ">=", "isblank", "isnotblank"],
