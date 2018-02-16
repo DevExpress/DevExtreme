@@ -91,6 +91,10 @@ var ResizingController = modules.ViewController.inherit({
     },
 
     _getBestFitWidths: function() {
+        if(this.option("advancedRendering") && this.option("columnAutoWidth")) {
+            return this._rowsView.getColumnWidths();
+        }
+
         var that = this,
             rowsColumnWidths,
             headerColumnWidths,
@@ -118,14 +122,46 @@ var ResizingController = modules.ViewController.inherit({
     },
 
     _toggleBestFitMode: function(isBestFit) {
-        var $element = this.component.$element();
+        var $element = this.component.$element(),
+            that = this;
 
-        $element.find("." + this.addWidgetPrefix(TABLE_CLASS)).toggleClass(this.addWidgetPrefix(TABLE_FIXED_CLASS), !isBestFit);
 
-        //B253906
-        $element.find(EDITORS_INPUT_SELECTOR).toggleClass(HIDDEN_CLASS, isBestFit);
-        $element.find(".dx-group-cell").toggleClass(HIDDEN_CLASS, isBestFit);
-        $element.find(".dx-header-row ." + this.addWidgetPrefix(TEXT_CONTENT_CLASS)).css("maxWidth", "");
+        if(this.option("advancedRendering") && this.option("columnAutoWidth")) {
+            var $rowsTable = that._rowsView._getTableElement();
+
+            $rowsTable.css("table-layout", isBestFit ? "auto" : "fixed");
+            $rowsTable.children("colgroup").css("display", isBestFit ? "none" : "");
+
+            var $headersTable = that._columnHeadersView._getTableElement();
+            var $footerTable = that._footerView._getTableElement();
+            var $headersBody;
+            if($headersTable) {
+                if(isBestFit) {
+                    $headersBody = $headersTable.children("tbody").appendTo($rowsTable);
+                } else {
+                    $headersBody = $rowsTable.children(".dx-head").appendTo($headersTable);
+                }
+                $headersBody.toggleClass("dx-head", isBestFit);
+                $headersBody.toggleClass(this.addWidgetPrefix("best-fit"), isBestFit);
+            }
+            var $footerBody;
+            if($footerTable) {
+                if(isBestFit) {
+                    $footerBody = $footerTable.children("tbody").appendTo($rowsTable);
+                } else {
+                    $footerBody = $rowsTable.children(".dx-footer").appendTo($footerTable);
+                }
+                $footerBody.toggleClass("dx-footer", isBestFit);
+                $footerBody.toggleClass(this.addWidgetPrefix("best-fit"), isBestFit);
+            }
+        } else {
+            $element.find("." + this.addWidgetPrefix(TABLE_CLASS)).toggleClass(this.addWidgetPrefix(TABLE_FIXED_CLASS), !isBestFit);
+
+            //B253906
+            $element.find(EDITORS_INPUT_SELECTOR).toggleClass(HIDDEN_CLASS, isBestFit);
+            $element.find(".dx-group-cell").toggleClass(HIDDEN_CLASS, isBestFit);
+            $element.find(".dx-header-row ." + this.addWidgetPrefix(TEXT_CONTENT_CLASS)).css("maxWidth", "");
+        }
     },
 
     _synchronizeColumns: function() {
@@ -206,7 +242,9 @@ var ResizingController = modules.ViewController.inherit({
 
             if(columnAutoWidth) {
                 normalizeWidthsByExpandColumns();
-                that._processStretch(resultWidths, visibleColumns);
+                if(!that.option("advancedRendering")) {
+                    that._processStretch(resultWidths, visibleColumns);
+                }
             }
 
             commonUtils.deferRender(function() {
@@ -496,6 +534,8 @@ var ResizingController = modules.ViewController.inherit({
                 this.component._renderDimensions();
                 this.resize();
                 /* falls through */
+            case "advancedRendering":
+                return;
             default:
                 this.callBase(args);
         }
@@ -549,7 +589,7 @@ var GridView = modules.View.inherit({
 
     init: function() {
         var that = this;
-        that._resizingController = this.getController("resizing");
+        that._resizingController = that.getController("resizing");
         that._dataController = that.getController("data");
     },
 
@@ -632,7 +672,8 @@ module.exports = {
              * @type boolean
              * @default false
              */
-            showBorders: false
+            showBorders: false,
+            advancedRendering: true
         };
     },
     controllers: {

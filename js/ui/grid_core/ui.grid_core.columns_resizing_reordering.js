@@ -999,7 +999,9 @@ var TablePositionViewController = modules.ViewController.inherit({
         that._pagerView = this.getView("pagerView");
 
         that._rowsView.resizeCompleted.add(function() {
-            that.update();
+            if(that.option("allowColumnResizing")) {
+                that.update();
+            }
         });
     },
 

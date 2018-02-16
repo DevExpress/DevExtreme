@@ -2388,12 +2388,10 @@ QUnit.test("resize column event when columnAutoWidth enabled", function(assert) 
             columnAutoWidth: true,
             dataSource: [{}],
             columns: [
-                {
-                    dataField: "field1", cssClass: "field1", resized: function(width) {
-                        resizedWidths.push(width);
-                    }
-                },
-                { dataField: "field2" },
+                { dataField: "field1" },
+                { dataField: "field2", resized: function(width) {
+                    resizedWidths.push(width);
+                } },
                 { dataField: "field3" },
                 { dataField: "field4" }
             ]

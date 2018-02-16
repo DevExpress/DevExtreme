@@ -1479,6 +1479,7 @@ function getEvent(options) {
     });
 
     QUnit.test('Update height of separator on resize', function(assert) {
+        this.options.allowColumnResizing = true;
         this.component._controllers.tablePosition = new columnResizingReordering.TablePositionViewController(this.component);
 
         //arrange

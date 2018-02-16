@@ -944,7 +944,7 @@ module.exports = {
                         this._updateScrollableForIE();
                     }
 
-                    return this.callBase(resultWidths, visibleColumns);
+                    return this.callBase.apply(this, arguments);
                 },
 
                 _toggleBestFitMode: function(isBestFit) {
