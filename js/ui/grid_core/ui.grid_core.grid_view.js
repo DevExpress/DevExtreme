@@ -535,6 +535,7 @@ var ResizingController = modules.ViewController.inherit({
                 this.resize();
                 /* falls through */
             case "advancedRendering":
+                args.handled = true;
                 return;
             default:
                 this.callBase(args);
