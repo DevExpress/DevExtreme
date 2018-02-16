@@ -9,7 +9,6 @@ QUnit.testStart(function() {
     var markup =
         '<div id="qunit-fixture">\
             <div id="checkbox"></div>\
-            <div id="widthRootStyle" style="width: 300px;"></div>\
         </div>';
 
     $("#qunit-fixture").html(markup);
@@ -35,14 +34,6 @@ QUnit.test("markup init", function(assert) {
     assert.ok(checkboxContent.hasClass(CHECKBOX_CONTAINER_CLASS), "checkbox has a container");
 
     assert.equal(checkboxContent.find(ICON_SELECTOR).length, 1, "checkbox has an icon");
-});
-
-QUnit.test("root with custom width", function(assert) {
-    var $element = $("#widthRootStyle").dxCheckBox(),
-        instance = $element.dxCheckBox("instance");
-
-    assert.strictEqual(instance.option("width"), undefined);
-    assert.strictEqual($element.outerWidth(), 300, "outer width of the element must be equal to custom width");
 });
 
 QUnit.test("checkbox should have correct text", function(assert) {
