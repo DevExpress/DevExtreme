@@ -159,4 +159,21 @@ QUnit.module("Events", function() {
         assert.deepEqual(args.previousValue, ["Zipcode", "=", "666"], "previous value");
         assert.deepEqual(args.value, ["CompanyName", "=", "DevExpress"], "current value");
     });
+
+    QUnit.test("onInitialized", function(assert) {
+        assert.expect(1);
+        $("#container").dxFilterBuilder({
+            value: ["Field", "between", [666, 777]],
+            fields: [{
+                dataField: "Field",
+                dataType: "number"
+            }],
+            customOperations: [{
+                name: "between"
+            }],
+            onInitialized: function(e) {
+                assert.deepEqual(e.component.getFilterExpression(), [["Field", ">=", 666], "and", ["Field", "<=", 777]]);
+            }
+        });
+    });
 });
