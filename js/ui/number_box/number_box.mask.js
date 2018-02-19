@@ -540,10 +540,15 @@ var NumberBoxMask = NumberBoxBase.inherit({
     _getCaretBoundaries: function(text) {
         text = text || this._getInputVal();
 
-        var startBorder = this._getDigitPositionByIndex(1, text),
+        var startBorder = /^[^1-9]*(\d)/.exec(text),
             endBorder = /\d[^0-9]*$/.exec(text);
 
-        endBorder = (endBorder && endBorder.index + 1) || text.length;
+        if(startBorder !== null) {
+            var delta = startBorder[1] === "0" ? 0 : -1;
+            startBorder = startBorder[0].length + delta;
+        }
+
+        endBorder = endBorder !== null ? endBorder.index + 1 : text.length;
 
         return { start: startBorder, end: endBorder };
     },

@@ -666,20 +666,15 @@ QUnit.test("removing with group separators using delete key", function(assert) {
 
     assert.equal(this.input.val(), "$ 1,234,567,890 d", "value is correct");
 
-    this.keyboard.caret(2).keyDown("del");
-    assert.notOk(this.keyboard.event.isDefaultPrevented(), "delete should not be prevented");
-    this.keyboard.input("del");
+    this.keyboard.caret(2).press("del");
     assert.equal(this.input.val(), "$ 234,567,890 d", "value is correct");
     assert.deepEqual(this.keyboard.caret(), { start: 2, end: 2 }, "caret is good");
 
-    this.keyboard.caret(5).keyDown("del");
-    assert.ok(this.keyboard.event.isDefaultPrevented(), "delete was prevented before separator");
+    this.keyboard.caret(5).press("del");
+    assert.equal(this.input.val(), "$ 234,567,890 d", "value is correct");
+    assert.deepEqual(this.keyboard.caret(), { start: 6, end: 6 }, "caret is good");
 
-    this.keyboard.caret({ start: 4, end: 11 }).keyDown("del");
-    assert.notOk(this.keyboard.event.isDefaultPrevented(), "delete should not be prevented");
-    this.input.val("$ 2390 d");
-    this.keyboard.caret({ start: 4, end: 4 });
-    this.keyboard.input("del");
+    this.keyboard.caret({ start: 4, end: 11 }).press("del");
     assert.equal(this.input.val(), "$ 2,390 d", "value is correct");
     assert.deepEqual(this.keyboard.caret(), { start: 5, end: 5 }, "caret is good after selection removing");
 });
