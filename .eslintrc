@@ -179,7 +179,6 @@
                     colorizers,
                     colspan,
                     colspans,
-                    comparator,
                     concat,
                     cond,
                     configs,

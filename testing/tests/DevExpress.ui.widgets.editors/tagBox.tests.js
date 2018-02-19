@@ -4454,7 +4454,7 @@ QUnit.test("Select All should use cache", function(assert) {
     assert.equal(isValueEqualsSpy.callCount, 0, "_isValueEquals is not called");
 });
 
-QUnit.test("load filter should not be a function when tagBox has a lot of initial values", function(assert) {
+QUnit.test("load filter should be undefined when tagBox has a lot of initial values", function(assert) {
     var load = sinon.stub();
 
     $("#tagBox").dxTagBox({
@@ -4466,7 +4466,22 @@ QUnit.test("load filter should not be a function when tagBox has a lot of initia
         displayExpr: "text"
     });
 
-    assert.notEqual(typeof load.getCall(0).args[0].filter, "function");
+    assert.strictEqual(load.getCall(0).args[0].filter, undefined);
+});
+
+QUnit.test("load filter should be array when tagBox has not a lot of initial values", function(assert) {
+    var load = sinon.stub();
+
+    $("#tagBox").dxTagBox({
+        dataSource: {
+            load: load
+        },
+        value: Array.apply(null, { length: 2 }).map(Number.call, Number),
+        valueExpr: "id",
+        displayExpr: "text"
+    });
+
+    assert.deepEqual(load.getCall(0).args[0].filter, [["id", "=", 0], "or", ["id", "=", 1]]);
 });
 
 QUnit.test("initial items value should be loaded when filter is not implemented in load method", function(assert) {
@@ -4483,10 +4498,10 @@ QUnit.test("initial items value should be loaded when filter is not implemented 
     assert.equal($tagBox.find("." + TAGBOX_TAG_CLASS).text(), "item 2item 3");
 });
 
-QUnit.test("renderSubmitElement option", function(assert) {
+QUnit.test("useSubmitBehavior option", function(assert) {
     var $tagBox = $("#tagBox").dxTagBox({
             items: [1, 2],
-            renderSubmitElement: false,
+            useSubmitBehavior: false,
             value: [1]
         }),
         instance = $tagBox.dxTagBox("instance");
@@ -4496,11 +4511,11 @@ QUnit.test("renderSubmitElement option", function(assert) {
     instance.option("value", [1, 2]);
     assert.equal($tagBox.find("select").length, 0, "submit element is not rendered after value change");
 
-    instance.option("renderSubmitElement", true);
+    instance.option("useSubmitBehavior", true);
     assert.equal($tagBox.find("select").length, 1, "submit element is rendered after option changed");
     assert.equal($tagBox.find("option").length, 2, "2 options was rendered");
 
-    instance.option("renderSubmitElement", false);
+    instance.option("useSubmitBehavior", false);
     assert.equal($tagBox.find("select").length, 0, "submit element was removed");
 });
 
