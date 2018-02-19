@@ -91,6 +91,10 @@ var ResizingController = modules.ViewController.inherit({
     },
 
     _getBestFitWidths: function() {
+        if(this.option("advancedRendering") && this.option("columnAutoWidth")) {
+            return this._rowsView.getColumnWidths();
+        }
+
         var that = this,
             rowsColumnWidths,
             headerColumnWidths,
@@ -117,15 +121,42 @@ var ResizingController = modules.ViewController.inherit({
         columnsController.endUpdate();
     },
 
+    _toggleBestFitModeForView: function(view, className, isBestFit) {
+        var $rowsTable = this._rowsView._getTableElement(),
+            $viewTable = view._getTableElement(),
+            $tableBody;
+
+        if($viewTable) {
+            if(isBestFit) {
+                $tableBody = $viewTable.children("tbody").appendTo($rowsTable);
+            } else {
+                $tableBody = $rowsTable.children("." + className).appendTo($viewTable);
+            }
+            $tableBody.toggleClass(className, isBestFit);
+            $tableBody.toggleClass(this.addWidgetPrefix("best-fit"), isBestFit);
+        }
+    },
+
     _toggleBestFitMode: function(isBestFit) {
-        var $element = this.component.$element();
+        var $element = this.component.$element(),
+            that = this;
 
-        $element.find("." + this.addWidgetPrefix(TABLE_CLASS)).toggleClass(this.addWidgetPrefix(TABLE_FIXED_CLASS), !isBestFit);
+        if(this.option("advancedRendering") && this.option("columnAutoWidth")) {
+            var $rowsTable = that._rowsView._getTableElement();
 
-        //B253906
-        $element.find(EDITORS_INPUT_SELECTOR).toggleClass(HIDDEN_CLASS, isBestFit);
-        $element.find(".dx-group-cell").toggleClass(HIDDEN_CLASS, isBestFit);
-        $element.find(".dx-header-row ." + this.addWidgetPrefix(TEXT_CONTENT_CLASS)).css("maxWidth", "");
+            $rowsTable.css("table-layout", isBestFit ? "auto" : "fixed");
+            $rowsTable.children("colgroup").css("display", isBestFit ? "none" : "");
+
+            that._toggleBestFitModeForView(that._columnHeadersView, "dx-header", isBestFit);
+            that._toggleBestFitModeForView(that._footerView, "dx-footer", isBestFit);
+        } else {
+            $element.find("." + this.addWidgetPrefix(TABLE_CLASS)).toggleClass(this.addWidgetPrefix(TABLE_FIXED_CLASS), !isBestFit);
+
+            //B253906
+            $element.find(EDITORS_INPUT_SELECTOR).toggleClass(HIDDEN_CLASS, isBestFit);
+            $element.find(".dx-group-cell").toggleClass(HIDDEN_CLASS, isBestFit);
+            $element.find(".dx-header-row ." + this.addWidgetPrefix(TEXT_CONTENT_CLASS)).css("maxWidth", "");
+        }
     },
 
     _synchronizeColumns: function() {
@@ -206,7 +237,9 @@ var ResizingController = modules.ViewController.inherit({
 
             if(columnAutoWidth) {
                 normalizeWidthsByExpandColumns();
-                that._processStretch(resultWidths, visibleColumns);
+                if(!that.option("advancedRendering")) {
+                    that._processStretch(resultWidths, visibleColumns);
+                }
             }
 
             commonUtils.deferRender(function() {
@@ -489,6 +522,9 @@ var ResizingController = modules.ViewController.inherit({
                 this.component._renderDimensions();
                 this.resize();
                 /* falls through */
+            case "advancedRendering":
+                args.handled = true;
+                return;
             default:
                 this.callBase(args);
         }
@@ -542,7 +578,7 @@ var GridView = modules.View.inherit({
 
     init: function() {
         var that = this;
-        that._resizingController = this.getController("resizing");
+        that._resizingController = that.getController("resizing");
         that._dataController = that.getController("data");
     },
 
@@ -625,7 +661,8 @@ module.exports = {
              * @type boolean
              * @default false
              */
-            showBorders: false
+            showBorders: false,
+            advancedRendering: true
         };
     },
     controllers: {

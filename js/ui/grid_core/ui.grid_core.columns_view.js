@@ -83,6 +83,11 @@ var subscribeToRowClick = function(that, $table) {
     }));
 };
 
+var getWidthStyle = function(width) {
+    if(width === "auto") return "";
+    return typeof width === "number" ? width + "px" : width;
+};
+
 exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
     _createScrollableOptions: function() {
         var that = this,
@@ -133,12 +138,21 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             $cell.addClass(this.addWidgetPrefix(GROUP_SPACE_CLASS));
         }
 
+        if(this.option("advancedRendering") && this.option("columnAutoWidth")) {
+            if(column.width || column.minWidth) {
+                cell.style.minWidth = getWidthStyle(column.minWidth || column.width);
+            }
+            if(column.width) {
+                cell.style.width = cell.style.maxWidth = getWidthStyle(column.width);
+            }
+        }
+
         column.colspan > 1 && $cell.attr("colSpan", column.colspan);
 
         return $cell;
     },
 
-    _createRow: function() {
+    _createRow: function(row) {
         return $("<tr>")
             .addClass(ROW_CLASS)
             .attr("role", "row");
@@ -654,7 +668,9 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         var $cols,
             i,
             width,
-            columnIndex;
+            minWidth,
+            columnIndex,
+            advancedRendering = this.option("advancedRendering") && this.option("columnAutoWidth");
 
         $tableElement = $tableElement || this._getTableElement();
 
@@ -664,6 +680,22 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             columns = columns || this.getColumns(null, $tableElement);
 
             for(i = 0; i < columns.length; i++) {
+                if(advancedRendering) {
+                    width = columns[i].width;
+
+                    if(width) {
+                        width = getWidthStyle(width);
+                        minWidth = getWidthStyle(columns[i].minWidth || width);
+                        var $rows = $tableElement.children().children(".dx-row");
+                        for(var rowIndex = 0; rowIndex < $rows.length; rowIndex++) {
+                            var cell = $rows[rowIndex].cells[i];
+                            if(cell) {
+                                cell.style.width = cell.style.maxWidth = width;
+                                cell.style.minWidth = minWidth;
+                            }
+                        }
+                    }
+                }
                 if(columns[i].colspan) {
                     columnIndex += columns[i].colspan;
                     continue;
