@@ -1777,28 +1777,6 @@ QUnit.test("useSimulatedScrollbar option dependence from useNative option", func
     assert.equal($scrollable.dxScrollable("option", "useSimulatedScrollbar"), devices.real().platform === "android", "useSimulatedScrollbar option was changed");
 });
 
-QUnit.test("Use native scrollbar for android devices in firefox browser", function(assert) {
-    if(!browser.mozilla) {
-        assert.ok(true);
-        return;
-    }
-
-    var originalSupportNativeScrolling = support.nativeScrolling;
-    support.nativeScrolling = true;
-
-    var originalDevice = devices.real();
-    devices.real({
-        platform: "android"
-    });
-
-    var $scrollable = $("#scrollable").dxScrollable();
-
-    support.nativeScrolling = originalSupportNativeScrolling;
-    devices.real(originalDevice);
-
-    assert.notOk($scrollable.dxScrollable("option", "useSimulatedScrollbar"), "on android devices useSimulatedScrollbar is false for firefox");
-});
-
 QUnit.test("scrollBar is not hoverable when scrollByThumb options is false", function(assert) {
     var $scrollable = $("#scrollable").dxScrollable({
         useNative: false,
