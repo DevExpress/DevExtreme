@@ -205,7 +205,7 @@ var Scrollable = DOMComponent.inherit({
         return this.callBase().concat(deviceDependentOptions(), [
             {
                 device: function() {
-                    return support.nativeScrolling && devices.real().platform === "android";
+                    return support.nativeScrolling && devices.real().platform === "android" && !browser.mozilla;
                 },
                 options: {
                     useSimulatedScrollbar: true
