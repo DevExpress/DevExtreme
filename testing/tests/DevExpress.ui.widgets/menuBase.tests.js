@@ -21,7 +21,6 @@ QUnit.testStart(function() {
 });
 
 var DX_MENU_CLASS = 'dx-menu',
-    DX_MENU_BASE_CLASS = 'dx-menu-base',
     DX_MENU_ITEM_CLASS = DX_MENU_CLASS + '-item',
     DX_MENU_ITEM_CONTENT_CLASS = DX_MENU_ITEM_CLASS + '-content',
     DX_MENU_ITEM_TEXT_CLASS = DX_MENU_ITEM_CLASS + '-text',
@@ -68,22 +67,8 @@ var isDeviceDesktop = function(assert) {
     return true;
 };
 
-QUnit.module('Menu initialization');
-
-QUnit.test('Create menu with default css', function(assert) {
-    var menuBase = createMenu();
-
-    assert.ok(menuBase.element.hasClass(DX_MENU_BASE_CLASS));
-});
-
 
 QUnit.module('Menu rendering');
-
-QUnit.test('Render custom CSS class', function(assert) {
-    var menu = createMenu({ cssClass: 'testCssClass' });
-
-    assert.ok(menu.element.hasClass('testCssClass'));
-});
 
 QUnit.test('Render root submenu group', function(assert) {
     var menuBase = createMenu({ items: [{ text: 'a' }, { text: 'b' }] }),

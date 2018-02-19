@@ -903,6 +903,7 @@ var ContextMenu = MenuBase.inherit((function() {
 
             switch(args.name) {
                 case "visible":
+                    this._toggleVisibility(args.value);
                     this._renderVisibility(args.value);
                     break;
                 case "showEvent":
@@ -1024,6 +1025,7 @@ var ContextMenu = MenuBase.inherit((function() {
 
             showing = showing === undefined ? !visible : showing;
 
+            this._toggleVisibility(showing);
             return this._renderVisibility(showing);
         },
 
