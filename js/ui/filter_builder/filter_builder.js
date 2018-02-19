@@ -367,7 +367,7 @@ var FilterBuilder = Widget.inherit({
             /**
              * @name dxFilterBuilderCustomOperation_dataTypes
              * @publicName dataTypes
-             * @type Array<string>
+             * @type Array<Enums.FilterBuilderFieldDataType>
              * @default undefined
              */
 
