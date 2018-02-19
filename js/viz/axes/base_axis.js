@@ -1447,7 +1447,6 @@ Axis.prototype = {
 
         updateGridsPosition(that._majorTicks);
         updateGridsPosition(that._minorTicks);
-        that.drawScaleBreaks();
     },
 
     applyClipRects: function(elementsClipID, canvasClipID) {

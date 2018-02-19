@@ -1455,6 +1455,36 @@ QUnit.test("Do not recalculate canvas on zooming - only draw axes in old canvas"
     assert.ok(argAxisStub.drawScaleBreaks.called, "draw scaleBreaks for argument axis");
 });
 
+QUnit.test("Draw scale breaks", function(assert) {
+    var argAxis = createAxisStubs(),
+        valAxis = createAxisStubs(),
+        scrollBar = this.setupScrollBar();
+
+    argAxis
+        .getMargins.returns({ left: 10, top: 7, right: 20, bottom: 13 });
+
+    valAxis
+        .getMargins.returns({ left: 18, top: 15, right: 10, bottom: 9 });
+
+    scrollBar
+        .getMargins.returns({ left: 0, top: 15, right: 0, bottom: 0 });
+
+    this.setupAxes([argAxis, valAxis]);
+
+    new dxChart(this.container, {
+        scrollBar: { visible: true },
+        series: [{}],
+        dataSource: [{ arg: 1, val: 10 }],
+        legend: { visible: false }
+    });
+
+    var argAxisStub = this.axisStub.getCall(0).returnValue,
+        valAxisStub = this.axisStub.getCall(1).returnValue;
+
+    assert.ok(valAxisStub.drawScaleBreaks.called, "draw scaleBreaks for value axis");
+    assert.ok(argAxisStub.drawScaleBreaks.called, "draw scaleBreaks for argument axis");
+});
+
 QUnit.module("Axes synchronization", environment);
 
 QUnit.test("synchronizeMultiAxes true - only value axes are synchronized", function(assert) {

@@ -666,6 +666,12 @@ var dxChart = AdvancedChart.inherit({
         vizUtils.updatePanesCanvases(this.panes, this._canvas, this._isRotated());
     },
 
+    _renderScaleBreaks: function() {
+        this._valueAxes.concat(this._argumentAxes).forEach(function(axis) {
+            axis.drawScaleBreaks();
+        });
+    },
+
     _renderAxes: function(drawOptions, panesBorderOptions) {
         var that = this,
             rotated = that._isRotated(),
@@ -687,9 +693,7 @@ var dxChart = AdvancedChart.inherit({
         if(!drawOptions.adjustAxes) {
             drawAxesWithTicks(verticalAxes, !rotated && synchronizeMultiAxes, panesCanvases, panesBorderOptions);
             drawAxesWithTicks(horizontalAxes, rotated && synchronizeMultiAxes, panesCanvases, panesBorderOptions);
-            that._valueAxes.concat(that._argumentAxes).forEach(function(axis) {
-                axis.drawScaleBreaks();
-            });
+            that._renderScaleBreaks();
             return;
         }
 
@@ -713,6 +717,8 @@ var dxChart = AdvancedChart.inherit({
 
         horizontalAxes.forEach(shiftAxis("top", "bottom"));
         verticalAxes.forEach(shiftAxis("left", "right"));
+
+        that._renderScaleBreaks();
 
         that.panes.forEach(function(pane) {
             _extend(pane.canvas, panesCanvases[pane.name]);

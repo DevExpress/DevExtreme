@@ -8960,6 +8960,8 @@ QUnit.test("Drawing scale breaks. Value axis. Elements creation.", function(asse
     this.translator.stub("isInverted").returns(true);
     this.axis.updateSize(this.canvas);
 
+    this.axis.drawScaleBreaks();
+
     elementsGroup = this.renderer.g.getCall(11).returnValue;
 
     //assert
@@ -8982,6 +8984,7 @@ QUnit.test("Attributes of elements. Straight break", function(assert) {
     this.translator.stub("translate").withArgs(20).returns(20);
     this.translator.stub("isInverted").returns(true);
     this.axis.updateSize(this.canvas);
+    this.axis.drawScaleBreaks();
 
     //assert
     assert.deepEqual(this.renderer.path.getCall(0).args[0], [10, 21, 90, 21]);
@@ -9009,6 +9012,7 @@ QUnit.test("Attributes of elements. Waved break", function(assert) {
 
     //act
     this.axis.updateSize(this.canvas);
+    this.axis.drawScaleBreaks();
 
     //assert
     assert.deepEqual(this.renderer.path.getCall(0).args[0], [10, 23, 16, 21, 16, 21, 22, 23, 28, 25, 28, 25, 34, 23]);
@@ -9034,6 +9038,7 @@ QUnit.test("Rotated chart. Straight line", function(assert) {
     this.translator.stub("translate").withArgs(20).returns(20);
     //act
     this.axis.updateSize(this.canvas);
+    this.axis.drawScaleBreaks();
 
     //assert
     assert.deepEqual(this.renderer.path.getCall(0).args[0], [18, 30, 18, 70]);
@@ -9056,6 +9061,7 @@ QUnit.test("Rotated chart. Waved break", function(assert) {
 
     //act
     this.axis.updateSize(this.canvas);
+    this.axis.drawScaleBreaks();
 
     //assert
     assert.deepEqual(this.renderer.path.getCall(0).args[0], [20, 30, 18, 36, 18, 36, 20, 42, 22, 48, 22, 48, 20, 54]);
@@ -9076,6 +9082,7 @@ QUnit.test("cliprect for breaks creation", function(assert) {
     //act
     this.translator.stub("translate").withArgs(20).returns(20);
     this.axis.updateSize(this.canvas);
+    this.axis.drawScaleBreaks();
 
     //assert
     assert.deepEqual(this.renderer.clipRect.lastCall.args, [10, 30, 80, 110]);
@@ -9094,6 +9101,7 @@ QUnit.test("Apply cliprect for breaks", function(assert) {
 
     //act
     this.axis.updateSize(this.canvas);
+    this.axis.drawScaleBreaks();
 
     //assert
     assert.strictEqual(this.renderer.g.getCall(10).returnValue.attr.lastCall.args[0]["clip-path"], this.renderer.clipRect.lastCall.returnValue.id);
@@ -9112,7 +9120,7 @@ QUnit.test("Apply cliprect for breaks. Rotated chart", function(assert) {
 
     //act
     this.axis.updateSize(this.canvas);
-
+    this.axis.drawScaleBreaks();
     //assert
     assert.deepEqual(this.renderer.clipRect.lastCall.args, [10, 30, 140, 40]);
 });
@@ -9127,9 +9135,10 @@ QUnit.test("Cliprect disposing", function(assert) {
     });
     this.translator.stub("isInverted").returns(false);
     this.translator.stub("translate").withArgs(20).returns(20);
+    this.axis.updateSize(this.canvas);
+    this.axis.drawScaleBreaks();
     //act
-    this.axis.updateSize(this.canvas);
-    this.axis.updateSize(this.canvas);
+    this.axis.drawScaleBreaks();
 
     assert.strictEqual(this.renderer.clipRect.firstCall.returnValue.dispose.callCount, 1);
 });
@@ -9194,7 +9203,7 @@ QUnit.test("Drawing scale breaks for value axis, axis is visible, position is le
     this.translator.stub("isInverted").returns(true);
     //act
     this.axis.updateSize(this.canvas);
-
+    this.axis.drawScaleBreaks();
     //assert
     assert.deepEqual(this.renderer.path.getCall(1).args[0], [7, 21, 90, 21]);
     assert.deepEqual(this.renderer.path.getCall(2).args[0], [7, 20, 90, 20]);
@@ -9216,6 +9225,7 @@ QUnit.test("Drawing scale breaks for value axis, axis is visible, position is ri
     this.translator.stub("isInverted").returns(true);
     //act
     this.axis.updateSize(this.canvas);
+    this.axis.drawScaleBreaks();
 
     //assert
     assert.deepEqual(this.renderer.path.getCall(1).args[0], [10, 21, 93, 21]);
@@ -9239,6 +9249,7 @@ QUnit.test("Drawing scale breaks for value axis, chart is rotated, axis is visib
     this.translator.stub("isInverted").returns(false);
     //act
     this.axis.updateSize(this.canvas);
+    this.axis.drawScaleBreaks();
 
     //assert
     assert.deepEqual(this.renderer.path.getCall(1).args[0], [18, 27, 18, 70]);
@@ -9262,6 +9273,7 @@ QUnit.test("Drawing scale breaks for value axis, chart is rotated, axis is visib
     this.translator.stub("isInverted").returns(false);
     //act
     this.axis.updateSize(this.canvas);
+    this.axis.drawScaleBreaks();
 
     //assert
     assert.deepEqual(this.renderer.path.getCall(1).args[0], [18, 30, 18, 73]);
@@ -9304,6 +9316,7 @@ QUnit.test("Create group for breaks if shifted axis", function(assert) {
     this.translator.stub("translate").withArgs(20).returns(20);
     //act
     this.axis.updateSize(this.canvas);
+    this.axis.drawScaleBreaks();
 
     //assert
     var additionGroup = this.renderer.g.getCall(11).returnValue;
@@ -9352,6 +9365,7 @@ QUnit.test("Recreate group for breaks if shifted axis", function(assert) {
     this.translator.stub("isInverted").returns(false);
     this.translator.stub("translate").withArgs(20).returns(20);
     this.axis.updateSize(this.canvas);
+    this.axis.drawScaleBreaks();
 
     var oldAdditionGroup = this.renderer.g.getCall(11).returnValue;
     var oldAdditionClipRect = this.renderer.clipRect.getCall(1).returnValue;
@@ -9387,6 +9401,7 @@ QUnit.test("The scale break shouldn't created without breaks", function(assert) 
     this.translator.stub("translate").withArgs(20).returns(20);
     //act
     this.axis.updateSize(this.canvas);
+    this.axis.drawScaleBreaks();
 
     //assert
     assert.strictEqual(this.renderer.stub("path").called, false);
@@ -9427,6 +9442,7 @@ QUnit.test("Datetime. Drawing user breaks with generated workday breaks. Should 
 
     //act
     this.axis.updateSize(this.canvas);
+    this.axis.drawScaleBreaks();
 
     //assert
     assert.equal(this.renderer.path.callCount, 3);
@@ -9449,6 +9465,7 @@ QUnit.test("Drawing scale breaks for shifted axis", function(assert) {
     this.translator.stub("isInverted").returns(true);
     //act
     this.axis.updateSize(this.canvas);
+    this.axis.drawScaleBreaks();
 
     //assert
     assert.deepEqual(this.renderer.path.getCall(1).args[0], [10, 21, 90, 21]);
