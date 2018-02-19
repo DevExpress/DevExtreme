@@ -417,13 +417,16 @@ var ContextMenu = MenuBase.inherit((function() {
             this.callBase();
         },
 
-        _render: function() {
+        _initMarkup: function() {
             this.$element()
                 .addClass(DX_HAS_CONTEXT_MENU_CLASS);
 
             this.callBase();
 
             this.setAria("role", "menu");
+        },
+
+        _render: function() {
             this._renderVisibility(this.option("visible"));
         },
 
