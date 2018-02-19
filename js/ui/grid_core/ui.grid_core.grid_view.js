@@ -121,10 +121,25 @@ var ResizingController = modules.ViewController.inherit({
         columnsController.endUpdate();
     },
 
+    _toggleBestFitModeForView: function(view, className, isBestFit) {
+        var $rowsTable = this._rowsView._getTableElement(),
+            $viewTable = view._getTableElement(),
+            $tableBody;
+
+        if($viewTable) {
+            if(isBestFit) {
+                $tableBody = $viewTable.children("tbody").appendTo($rowsTable);
+            } else {
+                $tableBody = $rowsTable.children("." + className).appendTo($viewTable);
+            }
+            $tableBody.toggleClass(className, isBestFit);
+            $tableBody.toggleClass(this.addWidgetPrefix("best-fit"), isBestFit);
+        }
+    },
+
     _toggleBestFitMode: function(isBestFit) {
         var $element = this.component.$element(),
             that = this;
-
 
         if(this.option("advancedRendering") && this.option("columnAutoWidth")) {
             var $rowsTable = that._rowsView._getTableElement();
@@ -132,28 +147,8 @@ var ResizingController = modules.ViewController.inherit({
             $rowsTable.css("table-layout", isBestFit ? "auto" : "fixed");
             $rowsTable.children("colgroup").css("display", isBestFit ? "none" : "");
 
-            var $headersTable = that._columnHeadersView._getTableElement();
-            var $footerTable = that._footerView._getTableElement();
-            var $headersBody;
-            if($headersTable) {
-                if(isBestFit) {
-                    $headersBody = $headersTable.children("tbody").appendTo($rowsTable);
-                } else {
-                    $headersBody = $rowsTable.children(".dx-head").appendTo($headersTable);
-                }
-                $headersBody.toggleClass("dx-head", isBestFit);
-                $headersBody.toggleClass(this.addWidgetPrefix("best-fit"), isBestFit);
-            }
-            var $footerBody;
-            if($footerTable) {
-                if(isBestFit) {
-                    $footerBody = $footerTable.children("tbody").appendTo($rowsTable);
-                } else {
-                    $footerBody = $rowsTable.children(".dx-footer").appendTo($footerTable);
-                }
-                $footerBody.toggleClass("dx-footer", isBestFit);
-                $footerBody.toggleClass(this.addWidgetPrefix("best-fit"), isBestFit);
-            }
+            that._toggleBestFitModeForView(that._columnHeadersView, "dx-header", isBestFit);
+            that._toggleBestFitModeForView(that._footerView, "dx-footer", isBestFit);
         } else {
             $element.find("." + this.addWidgetPrefix(TABLE_CLASS)).toggleClass(this.addWidgetPrefix(TABLE_FIXED_CLASS), !isBestFit);
 
