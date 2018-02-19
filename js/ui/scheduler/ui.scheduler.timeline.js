@@ -113,20 +113,28 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
     },
 
     _dateTableScrollableConfig: function() {
-        var that = this,
-            config = this.callBase(),
+        var headerScrollableOnScroll;
+
+        var config = this.callBase(),
             timelineConfig = {
                 direction: HORIZONTAL,
-                onScroll: function(e) {
-                    if(!that._dateTableScrollWasHandled) {
-                        that._headerScrollWasHandled = true;
-                        that._headerScrollable.scrollTo({
+                onStart: (function() {
+                    headerScrollableOnScroll = this._headerScrollable.onScroll;
+                    this._headerScrollable.onScroll = undefined;
+                }).bind(this),
+                onScroll: (function(e) {
+                    if(!this._dateTableScrollWasHandled) {
+                        this._headerScrollWasHandled = true;
+                        this._headerScrollable.scrollTo({
                             left: e.scrollOffset.left
                         });
                     } else {
-                        that._dateTableScrollWasHandled = false;
+                        this._dateTableScrollWasHandled = false;
                     }
-                }
+                }).bind(this),
+                onEnd: (function(e) {
+                    this._headerScrollable.onScroll = headerScrollableOnScroll;
+                }).bind(this)
             };
 
         return this.option("crossScrollingEnabled") ? config : extend(config, timelineConfig);
