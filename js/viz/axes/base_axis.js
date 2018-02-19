@@ -685,7 +685,6 @@ Axis.prototype = {
         };
 
         that._axisStripLabelGroup = renderer.g().attr({ "class": classSelector + "axis-labels" });
-        that._axisBreaksGroup = renderer.g().attr({ "class": classSelector + "breaks" });
     },
 
     _clearAxisGroups: function() {
@@ -697,7 +696,6 @@ Axis.prototype = {
         that._axisConstantLineGroups.inside.remove();
         that._axisConstantLineGroups.outside1.remove();
         that._axisConstantLineGroups.outside2.remove();
-        that._axisBreaksGroup.remove();
 
         that._axisGridGroup.remove();
 
@@ -706,12 +704,10 @@ Axis.prototype = {
 
         that._axisLineGroup && that._axisLineGroup.clear();
         that._axisStripGroup && that._axisStripGroup.clear();
-        that._axisGridGroup && that._axisGridGroup.clear();
         that._axisConstantLineGroups.inside.clear();
         that._axisConstantLineGroups.outside1.clear();
         that._axisConstantLineGroups.outside2.clear();
         that._axisStripLabelGroup && that._axisStripLabelGroup.clear();
-        that._axisBreaksGroup.clear();
     },
 
     _getLabelFormatObject: function(value, labelOptions, range, point, tickInterval, ticks) {
@@ -856,11 +852,13 @@ Axis.prototype = {
         return true;
     },
 
+    _disposeBreaksGroup: _noop,
+
     //public
     dispose: function() {
         var that = this;
 
-        [that._axisElementsGroup, that._axisStripGroup, that._axisGroup, that._axisBreaksGroup].forEach(function(g) { g.dispose(); });
+        [that._axisElementsGroup, that._axisStripGroup, that._axisGroup].forEach(function(g) { g.dispose(); });
 
         that._strips = that._title = null;
 
@@ -869,11 +867,10 @@ Axis.prototype = {
         that._axisGroup = that._axisTitleGroup = null;
         that._axesContainerGroup = that._stripsGroup = that._constantLinesGroup = null;
 
-        that._scaleBreaksGroup = null;
-
         that._renderer = that._options = that._textOptions = that._textFontStyles = null;
         that._translator = null;
         that._majorTicks = that._minorTicks = null;
+        that._disposeBreaksGroup();
     },
 
     getOptions: function() {
@@ -1374,7 +1371,6 @@ Axis.prototype = {
         that._labelAxesGroup && that._axisStripLabelGroup.append(that._labelAxesGroup);
         that._gridContainerGroup && that._axisGridGroup.append(that._gridContainerGroup);
         that._stripsGroup && that._axisStripGroup.append(that._stripsGroup);
-        that._scaleBreaksGroup && that._axisBreaksGroup.append(that._scaleBreaksGroup);
 
         if(that._constantLinesGroup) {
             that._axisConstantLineGroups.inside.append(that._constantLinesGroup);

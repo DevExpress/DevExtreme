@@ -3027,6 +3027,48 @@ QUnit.test("Datetime axis, breaks values are string", function(assert) {
     }]);
 });
 
+
+QUnit.test("Remove groups on disposing", function(assert) {
+    this.renderSettings.scaleBreaksGroup = this.renderer.g();
+    var axis = this.createAxis(this.renderSettings, $.extend(true, this.options, {
+        breaks: [
+            { startValue: 50, endValue: 100 },
+            { startValue: 70, endValue: 150 }
+        ],
+        breakStyle: {
+            color: "black",
+            line: "waved",
+            width: 10
+        },
+        min: 0,
+        max: 140
+    }));
+
+    this.translator.getBusinessRange.returns({
+        breaks: [
+            { startValue: 50, endValue: 100 },
+            { startValue: 70, endValue: 150 }
+        ]
+    });
+
+    axis.createTicks(this.canvas);
+
+    axis.shift({ left: -10 });
+    this.renderer.g.reset();
+
+    axis.drawScaleBreaks();
+    //act
+    axis.dispose();
+
+    //assert
+    assert.ok(this.renderer.g.getCall(0).returnValue.dispose.called);
+    assert.ok(this.renderer.clipRect.getCall(0).returnValue.dispose.called);
+
+    assert.ok(this.renderer.g.getCall(1).returnValue.dispose.called);
+    assert.ok(this.renderer.clipRect.getCall(1).returnValue.dispose.called);
+});
+
+
 QUnit.module("Datetime scale breaks. Weekends and holidays", $.extend({}, environment2DTranslator, {
     beforeEach: function() {
         var that = this;
