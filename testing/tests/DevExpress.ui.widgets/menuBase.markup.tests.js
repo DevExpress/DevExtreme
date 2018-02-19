@@ -7,8 +7,7 @@ require("common.css!");
 
 QUnit.testStart(function() {
     var markup =
-        '<div id="menu"></div>\
-        <div class="dx-viewport"></div>';
+        '<div id="menu"></div>';
 
     $("#qunit-fixture").html(markup);
 });
@@ -16,19 +15,9 @@ QUnit.testStart(function() {
 var DX_MENU_BASE_CLASS = 'dx-menu-base';
 
 
-var TestComponent = MenuBase.inherit({
-    NAME: "TestComponent",
-    _itemDataKey: function() {
-        return "123";
-    },
-    _itemContainer: function() {
-        return this.$element();
-    }
-});
-
 function createMenu(options) {
     var element = $("#menu"),
-        instance = new TestComponent(element, options);
+        instance = new MenuBase(element, options);
 
     return { instance: instance, element: element };
 }

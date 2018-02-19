@@ -3,7 +3,6 @@
 var $ = require("jquery"),
     ContextMenu = require("ui/context_menu");
 
-require("ui/button");
 require("common.css!");
 
 QUnit.testStart(function() {
