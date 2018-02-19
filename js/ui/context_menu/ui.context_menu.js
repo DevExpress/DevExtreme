@@ -428,6 +428,7 @@ var ContextMenu = MenuBase.inherit((function() {
         _render: function() {
             this.callBase();
             this._renderVisibility(this.option("visible"));
+            this._addWidgetClass();
         },
 
         _renderContentImpl: function() {
@@ -906,7 +907,6 @@ var ContextMenu = MenuBase.inherit((function() {
 
             switch(args.name) {
                 case "visible":
-                    this._toggleVisibility(args.value);
                     this._renderVisibility(args.value);
                     break;
                 case "showEvent":
@@ -930,6 +930,8 @@ var ContextMenu = MenuBase.inherit((function() {
         _renderVisibility: function(showing) {
             showing ? this._show() : this._hide();
         },
+
+        _toggleVisibility: noop,
 
         _show: function(event) {
             var args = { jQEvent: event },
@@ -1028,7 +1030,6 @@ var ContextMenu = MenuBase.inherit((function() {
 
             showing = showing === undefined ? !visible : showing;
 
-            this._toggleVisibility(showing);
             return this._renderVisibility(showing);
         },
 
