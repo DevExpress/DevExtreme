@@ -332,49 +332,54 @@ var FilterBuilder = Widget.inherit({
             /**
              * @name dxFilterBuilderOptions_customOperations
              * @publicName customOperations
-             * @type Array<dxFilterBuilderCustomOperations>
+             * @type Array<dxFilterBuilderCustomOperation>
              * @default []
              */
             customOperations: [],
 
+            /**
+             * @name dxFilterBuilderCustomOperation
+             * @publicName dxFilterBuilderCustomOperation
+             * @type object
+             */
 
             /**
-             * @name dxFilterBuilderCustomOperations_name
+             * @name dxFilterBuilderCustomOperation_name
              * @publicName name
              * @type string
              * @default undefined
              */
 
             /**
-             * @name dxFilterBuilderCustomOperations_caption
+             * @name dxFilterBuilderCustomOperation_caption
              * @publicName caption
              * @type string
              * @default undefined
              */
 
             /**
-             * @name dxFilterBuilderCustomOperations_icon
+             * @name dxFilterBuilderCustomOperation_icon
              * @publicName icon
              * @type string
              * @default undefined
              */
 
             /**
-             * @name dxFilterBuilderCustomOperations_dataTypes
+             * @name dxFilterBuilderCustomOperation_dataTypes
              * @publicName dataTypes
              * @type Array<string>
              * @default undefined
              */
 
             /**
-             * @name dxFilterBuilderCustomOperations_hasValue
+             * @name dxFilterBuilderCustomOperation_hasValue
              * @publicName hasValue
              * @type boolean
              * @default true
              */
 
             /**
-             * @name dxFilterBuilderCustomOperations_calculateFilterExpression
+             * @name dxFilterBuilderCustomOperation_calculateFilterExpression
              * @publicName calculateFilterExpression
              * @type function(filterValue, field)
              * @type_function_param1 filterValue:any
@@ -383,7 +388,7 @@ var FilterBuilder = Widget.inherit({
              */
 
             /**
-             * @name dxFilterBuilderCustomOperations_editorTemplate
+             * @name dxFilterBuilderCustomOperation_editorTemplate
              * @publicName editorTemplate
              * @type template|function
              * @type_function_param1 conditionInfo:object
@@ -395,7 +400,7 @@ var FilterBuilder = Widget.inherit({
              */
 
             /**
-             * @name dxFilterBuilderCustomOperations_customizeText
+             * @name dxFilterBuilderCustomOperation_customizeText
              * @publicName customizeText
              * @type function(fieldInfo)
              * @type_function_param1 fieldInfo:object
