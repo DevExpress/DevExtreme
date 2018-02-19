@@ -512,6 +512,9 @@ var FilterBuilder = Widget.inherit({
                 this._initActions();
                 break;
             case "customOperations":
+                this._customOperations = utils.getMergedOperations(args.value);
+                this._invalidate();
+                break;
             case "fields":
             case "defaultGroupOperation":
             case "allowHierarchicalFields":
@@ -521,6 +524,7 @@ var FilterBuilder = Widget.inherit({
                 break;
             case "value":
                 if(!this._disableInvalidateForValue) {
+                    this._model = utils.convertToInnerStructure(args.value, this._customOperations);
                     this._invalidate();
                 }
                 this.executeAction("onValueChanged", {
@@ -556,7 +560,8 @@ var FilterBuilder = Widget.inherit({
     },
 
     _init: function() {
-        this._model = null;
+        this._customOperations = utils.getMergedOperations(this.option("customOperations"));
+        this._model = utils.convertToInnerStructure(this.option("value"), this._customOperations);
         this._initEditorFactory();
         this._initActions();
         this.callBase();
@@ -588,8 +593,6 @@ var FilterBuilder = Widget.inherit({
     },
 
     _renderContentImpl: function() {
-        this._customOperations = utils.getMergedOperations(this.option("customOperations"));
-        this._model = utils.convertToInnerStructure(this.option("value"), this._customOperations);
         this._createGroupElementByCriteria(this._model)
             .appendTo(this.$element());
     },
