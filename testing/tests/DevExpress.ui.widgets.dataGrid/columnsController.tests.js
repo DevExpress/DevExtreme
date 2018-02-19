@@ -2584,6 +2584,9 @@ var createMockDataSource = function(items, loadOptions) {
         },
         items: function() {
             return items;
+        },
+        load: function() {
+            return items;
         }
     };
 };
