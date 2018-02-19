@@ -41,7 +41,7 @@ QUnit.module("indicator with browser animation", {
     }
 });
 
-QUnit.test("rendered markup", function(assert) {
+QUnit.test("render animated indicator markup", function(assert) {
     var $indicator = $("#loadIndicator"),
         loadIndicator = $indicator.dxLoadIndicator({ visible: false, viaImage: false }).dxLoadIndicator("instance");
 
@@ -52,17 +52,11 @@ QUnit.test("rendered markup", function(assert) {
     assert.equal($indicator.find("." + LOADINDICATOR_CONTENT_CLASS).length, 1, "content is created");
 });
 
-QUnit.test("shows on init if loading option is true", function(assert) {
-    var $element = $("#loadIndicator").dxLoadIndicator({ visible: true, viaImage: false });
-    assert.ok($element.is(":visible"));
-});
-
 QUnit.test("visible changes visibility option", function(assert) {
     var $indicator = $("#loadIndicator").dxLoadIndicator({
-        visible: false
-    });
-
-    var loadIndicator = $indicator.dxLoadIndicator("instance");
+            visible: false
+        }),
+        loadIndicator = $indicator.dxLoadIndicator("instance");
 
     assert.ok($indicator.is(":hidden"));
 
@@ -76,7 +70,8 @@ QUnit.test("visible changes visibility option", function(assert) {
     assert.ok($indicator.is(":hidden"));
 });
 
-QUnit.module("indicator with image", {
+
+QUnit.module("Static load indicator", {
     beforeEach: function() {
         // Override support styleProp
         this._defaultAnimation = support.animation;
@@ -88,36 +83,32 @@ QUnit.module("indicator with image", {
     }
 });
 
-QUnit.test("rendered markup", function(assert) {
+QUnit.test("basic render", function(assert) {
     var $indicator = $("#loadIndicator").dxLoadIndicator({ visible: false, viaImage: false }),
         $indicatorWrapper = $indicator.find("." + LOADINDICATOR_WRAPPER);
 
-    assert.ok($indicator.hasClass(LOADINDICATOR_CLASS), "Load Indicator initialized");
-
-    assert.ok($indicatorWrapper, "Wrapper class added");
-
     assert.ok($indicatorWrapper.hasClass(LOADINDICATOR_IMAGE), "Image class added");
-
     assert.equal($indicator.find("." + LOADINDICATOR_ICON).length, 0, "Icon div not created");
     assert.equal($indicator.find("." + LOADINDICATOR_SEGMENT).length, 0, "16 Segment not created");
     assert.equal($indicator.find("." + LOADINDICATOR_SEGMENTN + "1").length, 0, "Numerated segment not created");
 });
 
-
-QUnit.module("", {});
-
-QUnit.test("LoadIndicator with custom indicator", function(assert) {
+QUnit.test("custom indicator", function(assert) {
     var url = "../../testing/content/customLoadIndicator.png",
-        element = $("#loadIndicator").dxLoadIndicator({
+        $element = $("#loadIndicator").dxLoadIndicator({
             visible: true,
             indicatorSrc: url
         }),
-        $wrapper = element.find("." + LOADINDICATOR_WRAPPER);
-    var instance = $("#loadIndicator").dxLoadIndicator().dxLoadIndicator("instance");
+        $wrapper = $element.find("." + LOADINDICATOR_WRAPPER),
+        instance = $("#loadIndicator").dxLoadIndicator("instance");
+
     assert.ok(isIdenticalNamesInUrl($wrapper.css("background-image"), url), "custom indicator installed successfully as image");
     instance.option("indicatorSrc", "");
     assert.ok($wrapper.css("background-image") !== "", "custom indicator changed successfully as image");
 });
+
+
+QUnit.module("Events");
 
 QUnit.test("onContentReady fired after the widget is fully ready", function(assert) {
     var url = "../../testing/content/customLoadIndicator.png";
