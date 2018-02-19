@@ -1051,6 +1051,11 @@ module.exports = {
                     }
 
                     assignColumns(that, resultColumns);
+                    if(that._dataSourceApplied && that._dataSource) {
+                        that._dataSource.group(that.getGroupDataSourceParameters());
+                        that._dataSource.sort(that.getSortDataSourceParameters());
+                        that._dataSource.load();
+                    }
                 }
             };
 
