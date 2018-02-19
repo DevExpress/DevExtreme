@@ -424,6 +424,7 @@ var ContextMenu = MenuBase.inherit((function() {
             this.callBase();
 
             this.setAria("role", "menu");
+            this._renderVisibility(this.option("visible"));
         },
 
         _renderContentImpl: function() {
@@ -902,7 +903,7 @@ var ContextMenu = MenuBase.inherit((function() {
 
             switch(args.name) {
                 case "visible":
-                    this._toggleVisibility(args.value);
+                    this._renderVisibility(args.value);
                     break;
                 case "showEvent":
                 case "position":
@@ -922,7 +923,7 @@ var ContextMenu = MenuBase.inherit((function() {
             }
         },
 
-        _toggleVisibility: function(showing) {
+        _renderVisibility: function(showing) {
             showing ? this._show() : this._hide();
         },
 
@@ -1023,7 +1024,7 @@ var ContextMenu = MenuBase.inherit((function() {
 
             showing = showing === undefined ? !visible : showing;
 
-            return this._toggleVisibility(showing);
+            return this._renderVisibility(showing);
         },
 
         /**
