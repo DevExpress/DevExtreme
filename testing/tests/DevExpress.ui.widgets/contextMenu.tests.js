@@ -527,6 +527,21 @@ QUnit.test("Show context menu via api when position is undefined", function(asse
     assert.deepEqual(overlay.option("position.of").get(0), $("#menuTarget").get(0), "position is correct");
 });
 
+QUnit.test("Show/hide methods should return Deferred", function(assert) {
+    var instance = new ContextMenu(this.$element, {
+        target: $("#menuTarget"),
+        items: [{ text: "item 1" }],
+        visible: false
+    });
+
+    var d = instance.show();
+
+    assert.ok($.isFunction(d.promise), "type object is the Deferred");
+
+    d = instance.hide();
+
+    assert.ok($.isFunction(d.promise), "type object is the Deferred");
+});
 
 QUnit.module("Showing and hiding submenus", moduleConfig);
 
