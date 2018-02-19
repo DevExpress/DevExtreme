@@ -749,9 +749,13 @@ var Popup = Overlay.inherit({
                 this._createTitleRenderAction(args.value);
                 break;
             case "toolbarItems":
+                var isPartialUpdate = args.fullName.search(".options") !== -1;
                 this._renderTitle();
                 this._renderBottom();
-                this._renderGeometry();
+
+                if(!isPartialUpdate) {
+                    this._renderGeometry();
+                }
                 break;
             case "dragEnabled":
                 this._renderDrag();
