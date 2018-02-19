@@ -928,7 +928,7 @@ var ContextMenu = MenuBase.inherit((function() {
         },
 
         _renderVisibility: function(showing) {
-            showing ? this._show() : this._hide();
+            return showing ? this._show() : this._hide();
         },
 
         _toggleVisibility: noop,
