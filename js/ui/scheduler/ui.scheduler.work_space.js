@@ -637,7 +637,7 @@ var SchedulerWorkSpace = Widget.inherit({
 
         this._headerScrollable = this._createComponent($headerScrollable, Scrollable, {
             useKeyboard: false,
-            showScrollbar: 'onHover',
+            showScrollbar: false,
             direction: "horizontal",
             useNative: false,
             updateManually: true,
