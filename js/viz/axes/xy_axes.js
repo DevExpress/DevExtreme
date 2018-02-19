@@ -1136,7 +1136,7 @@ module.exports = {
 
             var mainGroup = this._createBreaksGroup(positionFrom, positionTo);
 
-            if(that._axisShift) {
+            if(that._axisShift && options.visible) {
                 additionBreakFrom = that._axisPosition - that._axisShift - SCALE_BREAK_OFFSET;
                 additionBreakTo = additionBreakFrom + SCALE_BREAK_OFFSET * 2;
                 additionGroup = this._createBreaksGroup(additionBreakFrom, additionBreakTo);
@@ -1146,7 +1146,7 @@ module.exports = {
                 if(!br.gapSize) {
                     var breakCoord = that._getTranslatedCoord(br.to);
                     that._drawBreak(breakCoord, positionFrom, positionTo, breakStyle.width, breakOptions, mainGroup);
-                    if(that._axisShift) {
+                    if(that._axisShift && options.visible) {
                         that._drawBreak(breakCoord, additionBreakFrom, additionBreakTo, breakStyle.width, breakOptions, additionGroup);
                     }
                 }

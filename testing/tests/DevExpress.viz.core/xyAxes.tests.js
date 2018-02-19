@@ -3027,7 +3027,6 @@ QUnit.test("Datetime axis, breaks values are string", function(assert) {
     }]);
 });
 
-
 QUnit.test("Remove groups on disposing", function(assert) {
     this.renderSettings.scaleBreaksGroup = this.renderer.g();
     var axis = this.createAxis(this.renderSettings, $.extend(true, this.options, {
@@ -3035,6 +3034,7 @@ QUnit.test("Remove groups on disposing", function(assert) {
             { startValue: 50, endValue: 100 },
             { startValue: 70, endValue: 150 }
         ],
+        visible: true,
         breakStyle: {
             color: "black",
             line: "waved",
