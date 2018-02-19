@@ -228,6 +228,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
         var char = text.slice(start, end);
 
         if(this._isStub(char)) {
+            this._moveCaret(this._isDeleteKey(e.key) ? 1 : -1);
             e.preventDefault();
             return;
         }
@@ -396,9 +397,10 @@ var NumberBoxMask = NumberBoxBase.inherit({
             return;
         }
 
-        var newCaret = this._getCaretWithOffset(this._caret(), offset);
+        var newCaret = this._getCaretWithOffset(this._caret(), offset),
+            adjustedCaret = this._adjustCaretToBoundaries(newCaret);
 
-        this._caret(newCaret);
+        this._caret(adjustedCaret);
     },
 
     _shouldHandleKey: function(e) {
