@@ -458,7 +458,7 @@ QUnit.module('State Storing with real controllers', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
         this.setupDataGridModules = function(options, ignoreClockTick) {
-            setupDataGridModules(this, ['data', 'columns', 'rows', 'gridView', 'stateStoring', 'filterRow', 'search', 'pager', 'selection'], {
+            setupDataGridModules(this, ['data', 'columns', 'rows', 'gridView', 'stateStoring', 'filterRow', 'headerFilter', 'search', 'pager', 'selection'], {
                 initDefaultOptions: true,
                 initViews: true,
                 options: options
@@ -569,6 +569,60 @@ QUnit.test('stateStoringController correctly loads after switch stateStoring.ena
     assert.equal(this.dataController.isLoaded(), true, "dataController is loaded");
     assert.equal(items.length, 2, "There is 2 items");
     assert.equal(items[0].data.id, 2222, "Sort state is applied");
+});
+
+// T605891
+QUnit.test('apply filterValues', function(assert) {
+    //arrange
+    var items,
+        data = [{ id: 1 }, { id: 2 }];
+
+    this.setupDataGridModules({
+        loadingTimeout: null,
+        dataSource: {
+            store: data
+        },
+        headerFilter: {
+            visible: true
+        }
+    });
+
+    // act
+    this.state({ columns: [{ dataField: "id", filterValues: ["2"], visible: true }] });
+    this.clock.tick();
+
+    //assert
+    items = this.dataController.items();
+    assert.equal(items.length, 1, "count item");
+    assert.deepEqual(items[0].data, data[1], "Apply filterValues");
+});
+
+QUnit.test('not apply filter for hidden column', function(assert) {
+    //arrange
+    var items,
+        data = [{ id: 1, name: "test1" }, { id: 2, name: "test2" }];
+
+    this.setupDataGridModules({
+        loadingTimeout: null,
+        dataSource: {
+            store: data
+        },
+        filterRow: {
+            visible: true
+        },
+        columnChooser: {
+            enabled: true
+        },
+        columns: ["id", { dataField: "name", filterValue: "test2" }]
+    });
+
+    // act
+    this.state({ columns: [{ dataField: "id", visible: true }, { dataField: "name", filterValue: "test2", visible: false }] });
+    this.clock.tick();
+
+    //assert
+    items = this.dataController.items();
+    assert.equal(items.length, 2, "count item");
 });
 
 QUnit.test('Load pageIndex from state', function(assert) {
