@@ -573,9 +573,18 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _createCrossScrollingConfig: function() {
-        var config = {};
+        var config = {},
+            headerScrollableOnScroll,
+            sidebarScrollableOnScroll;
 
         config.direction = "both";
+        config.onStart = (function(e) {
+            headerScrollableOnScroll = this._headerScrollable.onScroll;
+            sidebarScrollableOnScroll = this._sidebarScrollable.onScroll;
+
+            this._headerScrollable.onScroll = undefined;
+            this._sidebarScrollable.onScroll = undefined;
+        }).bind(this);
         config.onScroll = (function(e) {
             if(!this._dateTableScrollWasHandled) {
                 this._headerScrollWasHandled = true;
@@ -593,6 +602,8 @@ var SchedulerWorkSpace = Widget.inherit({
         }).bind(this);
         config.onEnd = (function() {
             this.notifyObserver("updateResizableArea", {});
+            this._headerScrollable.onScroll = headerScrollableOnScroll;
+            this._sidebarScrollable.onScroll = sidebarScrollableOnScroll;
         }).bind(this);
 
         return config;
@@ -623,18 +634,23 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _createHeaderScrollable: function() {
-        var $headerScrollable = $("<div>")
+        var dateTableScrollableOnScroll,
+            $headerScrollable = $("<div>")
             .addClass(SCHEDULER_HEADER_SCROLLABLE_CLASS)
             .appendTo(this.$element());
 
         this._headerScrollable = this._createComponent($headerScrollable, Scrollable, {
             useKeyboard: false,
-            showScrollbar: false,
+            showScrollbar: 'onHover',
             direction: "horizontal",
             useNative: false,
             updateManually: true,
             bounceEnabled: false,
             pushBackValue: 0,
+            onStart: (function(e) {
+                dateTableScrollableOnScroll = this._dateTableScrollable.onScroll;
+                this._dateTableScrollable.onScroll = undefined;
+            }).bind(this),
             onScroll: (function(e) {
                 if(!this._headerScrollWasHandled) {
                     this._dateTableScrollWasHandled = true;
@@ -644,12 +660,16 @@ var SchedulerWorkSpace = Widget.inherit({
                 } else {
                     this._headerScrollWasHandled = false;
                 }
+            }).bind(this),
+            onEnd: (function(e) {
+                this._dateTableScrollable.onScroll = dateTableScrollableOnScroll;
             }).bind(this)
         });
     },
 
     _createSidebarScrollable: function() {
-        var $timePanelScrollable = $("<div>")
+        var dateTableScrollableOnScroll,
+            $timePanelScrollable = $("<div>")
             .addClass(SCHEDULER_SIDEBAR_SCROLLABLE_CLASS)
             .appendTo(this.$element());
 
@@ -661,6 +681,10 @@ var SchedulerWorkSpace = Widget.inherit({
             updateManually: true,
             bounceEnabled: false,
             pushBackValue: 0,
+            onStart: (function(e) {
+                dateTableScrollableOnScroll = this._dateTableScrollable.onScroll;
+                this._dateTableScrollable.onScroll = undefined;
+            }).bind(this),
             onScroll: (function(e) {
                 if(!this._sideBarScrollWasHandled) {
                     this._dateTableScrollWasHandled = true;
@@ -670,6 +694,9 @@ var SchedulerWorkSpace = Widget.inherit({
                 } else {
                     this._sideBarScrollWasHandled = false;
                 }
+            }).bind(this),
+            onEnd: (function(e) {
+                this._dateTableScrollable.onScroll = dateTableScrollableOnScroll;
             }).bind(this)
         });
     },
