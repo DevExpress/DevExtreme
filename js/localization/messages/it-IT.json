@@ -40,7 +40,7 @@
         "dxList-nextButtonText": "Carica altri risultati",
         "dxList-selectAll": "Seleziona tutti",
         "dxListEditDecorator-delete": "Elimina",
-        "dxListEditDecorator-more": "More",
+        "dxListEditDecorator-more": "Ancora",
 
         "dxScrollView-pullingDownText": "Trascinare in basso per aggiornare...",
         "dxScrollView-pulledDownText": "Rilasciare per aggiornare...",
@@ -66,8 +66,8 @@
         "dxRangeSlider-ariaFrom": "Da",
         "dxRangeSlider-ariaTill": "fino a",
 
-        "dxSwitch-onText": "ON",
-        "dxSwitch-offText": "OFF",
+        "dxSwitch-onText": "Acceso",
+        "dxSwitch-offText": "Spento",
 
         "dxForm-optionalMark": "opzionale",
         "dxForm-requiredMessage": "{0} è richiesto",
@@ -95,7 +95,7 @@
         "dxDataGrid-filterRowResetOperationText": "Annulla",
         "dxDataGrid-filterRowOperationEquals": "Uguali",
         "dxDataGrid-filterRowOperationNotEquals": "Non uguale",
-        "dxDataGrid-filterRowOperationLess": "Inferiore di",
+        "dxDataGrid-filterRowOperationLess": "Minore di",
         "dxDataGrid-filterRowOperationLessOrEquals": "Minore o uguale a",
         "dxDataGrid-filterRowOperationGreater": "Maggiore di",
         "dxDataGrid-filterRowOperationGreaterOrEquals": "Maggiore o uguale a",
@@ -139,7 +139,7 @@
         "dxDataGrid-headerFilterCancel": "Annulla",
         "dxDataGrid-ariaColumn": "Colonna",
         "dxDataGrid-ariaValue": "Valore",
-        "dxDataGrid-ariaFilterCell": "Filter cell",
+        "dxDataGrid-ariaFilterCell": "Cella filtrante",
         "dxDataGrid-ariaCollapse": "Chiudi",
         "dxDataGrid-ariaExpand": "Espandi",
         "dxDataGrid-ariaDataGrid": "Griglia dati",
@@ -148,7 +148,7 @@
         "dxDataGrid-ariaSelectRow": "Seleziona riga",
 
         "dxTreeList-ariaTreeList": "Albero",
-        "dxTreeList-editingAddRowToNode": "Aggiugni",
+        "dxTreeList-editingAddRowToNode": "Aggiungi",
 
         "dxPager-infoText": "Pagina {0} di {1} ({2} elementi)",
         "dxPager-pagesCountText": "di",
@@ -177,7 +177,7 @@
         "dxScheduler-editorLabelStartDate": "Data inizio",
         "dxScheduler-editorLabelEndDate": "Data fine",
         "dxScheduler-editorLabelDescription": "Descrizione",
-        "dxScheduler-editorLabelRecurrence": "Riepti",
+        "dxScheduler-editorLabelRecurrence": "Ripeti",
 
         "dxScheduler-openAppointment": "Apri appuntamento",
 
