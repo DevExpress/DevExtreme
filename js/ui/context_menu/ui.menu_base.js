@@ -444,7 +444,7 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
 
     _initActions: commonUtils.noop,
 
-    _render: function() {
+    _initMarkup: function() {
         this.callBase();
         this._addCustomCssClass(this.$element());
         this.option("useInkRipple") && this._renderInkRipple();
