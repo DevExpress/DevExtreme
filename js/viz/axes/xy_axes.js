@@ -1071,8 +1071,8 @@ module.exports = {
                 clipRect = that._renderer.clipRect(from, canvas.top, clipWidth, canvas.height);
             }
 
-            that._breaksClipRects = that._breaksClipRects || [];
-            that._breaksClipRects.push(clipRect);
+            that._breaksElements = that._breaksElements || [];
+            that._breaksElements.push(clipRect);
 
             return clipRect.id;
         },
@@ -1084,20 +1084,17 @@ module.exports = {
                     "clip-path": that._createBreakClipRect(clipFrom, clipTo)
                 }).append(that._scaleBreaksGroup);
 
-            that._breaksGroup = that._breaksGroup || [];
-            that._breaksGroup.push(group);
+            that._breaksElements = that._breaksElements || [];
+            that._breaksElements.push(group);
             return group;
         },
 
         _disposeBreaksGroup: function() {
-            (this._breaksClipRects || []).forEach(function(clipRect) {
+            (this._breaksElements || []).forEach(function(clipRect) {
                 clipRect.dispose();
             });
-            (this._breaksGroup || []).forEach(function(g) {
-                g.dispose();
-            });
-            this._breaksClipRects = null;
-            this._breaksGroup = null;
+
+            this._breaksElements = null;
         },
 
         drawScaleBreaks: function(customCanvas) {
