@@ -14,20 +14,10 @@ QUnit.testStart(function() {
 });
 
 var LOADINDICATOR_CLASS = "dx-loadindicator",
-    LOADINDICATOR_WRAPPER = LOADINDICATOR_CLASS + "-wrapper",
     LOADINDICATOR_ICON = LOADINDICATOR_CLASS + "-icon",
     LOADINDICATOR_CONTENT_CLASS = "dx-loadindicator-content",
     LOADINDICATOR_SEGMENT = LOADINDICATOR_CLASS + "-segment",
-    LOADINDICATOR_SEGMENTN = LOADINDICATOR_CLASS + "-segment",
     LOADINDICATOR_IMAGE = "dx-loadindicator-image";
-
-var isIdenticalNamesInUrl = function(firstUrl, secondUrl) {
-    var firstName = firstUrl.split("/");
-    firstName = firstName[firstName.length - 1].replace(")", "").replace("\"", "");
-    var secondName = secondUrl.split("/");
-    secondName = secondName[secondName.length - 1];
-    return firstName === secondName;
-};
 
 QUnit.module("indicator with browser animation", {
     beforeEach: function() {
@@ -48,7 +38,7 @@ QUnit.test("render animated indicator markup", function(assert) {
     assert.ok($indicator.hasClass(LOADINDICATOR_CLASS), "Load Indicator initialized");
     assert.equal($indicator.find("." + LOADINDICATOR_ICON).length, 1, "Icon div created");
     assert.equal($indicator.find("." + LOADINDICATOR_SEGMENT).length, loadIndicator.option("_animatingSegmentCount") + 1, "Segments created");
-    assert.equal($indicator.find("." + LOADINDICATOR_SEGMENTN + "1").length, 1, "Numerated segment created");
+    assert.equal($indicator.find("." + LOADINDICATOR_SEGMENT + "1").length, 1, "Numerated segment created");
     assert.equal($indicator.find("." + LOADINDICATOR_CONTENT_CLASS).length, 1, "content is created");
 });
 
@@ -69,44 +59,6 @@ QUnit.test("visible changes visibility option", function(assert) {
     loadIndicator.option("visible", false);
     assert.ok($indicator.is(":hidden"));
 });
-
-
-QUnit.module("Static load indicator", {
-    beforeEach: function() {
-        // Override support styleProp
-        this._defaultAnimation = support.animation;
-        support.animation = function() { return false; };
-    },
-    afterEach: function() {
-        // Restoring support styleProp
-        support.animation = this._defaultAnimation;
-    }
-});
-
-QUnit.test("basic render", function(assert) {
-    var $indicator = $("#loadIndicator").dxLoadIndicator({ visible: false, viaImage: false }),
-        $indicatorWrapper = $indicator.find("." + LOADINDICATOR_WRAPPER);
-
-    assert.ok($indicatorWrapper.hasClass(LOADINDICATOR_IMAGE), "Image class added");
-    assert.equal($indicator.find("." + LOADINDICATOR_ICON).length, 0, "Icon div not created");
-    assert.equal($indicator.find("." + LOADINDICATOR_SEGMENT).length, 0, "16 Segment not created");
-    assert.equal($indicator.find("." + LOADINDICATOR_SEGMENTN + "1").length, 0, "Numerated segment not created");
-});
-
-QUnit.test("custom indicator", function(assert) {
-    var url = "../../testing/content/customLoadIndicator.png",
-        $element = $("#loadIndicator").dxLoadIndicator({
-            visible: true,
-            indicatorSrc: url
-        }),
-        $wrapper = $element.find("." + LOADINDICATOR_WRAPPER),
-        instance = $("#loadIndicator").dxLoadIndicator("instance");
-
-    assert.ok(isIdenticalNamesInUrl($wrapper.css("background-image"), url), "custom indicator installed successfully as image");
-    instance.option("indicatorSrc", "");
-    assert.ok($wrapper.css("background-image") !== "", "custom indicator changed successfully as image");
-});
-
 
 QUnit.module("Events");
 
