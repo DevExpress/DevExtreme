@@ -370,6 +370,20 @@ QUnit.test("the 'getCellIndexByCoordinates' method should return right coordinat
     assert.equal(cellIndex, 15, "Cell index is OK");
 });
 
+QUnit.test("the 'getCellIndexByCoordinates' method should return right coordinates for fractional value", function(assert) {
+    this.instance.option("groups", [
+        { name: "one", items: [{ id: 1, text: "a" }, { id: 2, text: "b" }] },
+        { name: "two", items: [{ id: 1, text: "1" }, { id: 2, text: "2" }] }
+    ]);
+
+    var cellWidth = this.instance.$element().find(".dx-scheduler-date-table-cell").eq(0).outerWidth(),
+        cellHeight = this.instance.$element().find(".dx-scheduler-date-table-cell").eq(0).outerHeight();
+
+    var cellIndex = this.instance.getCellIndexByCoordinates({ left: cellWidth * 15 + 0.656, top: cellHeight * 2 - 0.656 });
+
+    assert.equal(cellIndex, 111, "Cell index is OK");
+});
+
 QUnit.test("Timeline should not have time panel offset", function(assert) {
     var offset = this.instance.getTimePanelWidth();
 
