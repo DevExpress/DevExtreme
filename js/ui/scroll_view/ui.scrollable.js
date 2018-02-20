@@ -394,7 +394,7 @@ var Scrollable = DOMComponent.inherit({
     },
 
     _clean: function() {
-        this._strategy.dispose();
+        this._strategy && this._strategy.dispose();
     },
 
     _optionChanged: function(args) {
