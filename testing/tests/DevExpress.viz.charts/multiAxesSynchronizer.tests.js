@@ -1964,7 +1964,7 @@ QUnit.test('Do not syncronize axis with scalebreaks', function(assert) {
                 tickValues: [20, 30, 40, 50]
             }
         ],
-        syncIndexes: [[ 1, 2]]
+        syncIndexes: [[1, 2]]
     });
 });
 

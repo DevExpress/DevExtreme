@@ -1111,6 +1111,7 @@ module.exports = {
                 additionGroup,
                 additionBreakFrom,
                 additionBreakTo,
+                mainGroup,
                 breakOptions;
 
             that._disposeBreaksGroup();
@@ -1134,12 +1135,12 @@ module.exports = {
                 positionTo = that._orthogonalPositions.end + (options.visible && (position === "right" || position === "bottom") ? SCALE_BREAK_OFFSET : 0);
             }
 
-            var mainGroup = this._createBreaksGroup(positionFrom, positionTo);
+            mainGroup = that._createBreaksGroup(positionFrom, positionTo);
 
             if(that._axisShift && options.visible) {
                 additionBreakFrom = that._axisPosition - that._axisShift - SCALE_BREAK_OFFSET;
                 additionBreakTo = additionBreakFrom + SCALE_BREAK_OFFSET * 2;
-                additionGroup = this._createBreaksGroup(additionBreakFrom, additionBreakTo);
+                additionGroup = that._createBreaksGroup(additionBreakFrom, additionBreakTo);
             }
 
             breaks.forEach(function(br) {

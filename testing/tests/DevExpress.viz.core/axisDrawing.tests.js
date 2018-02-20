@@ -87,7 +87,11 @@ var environment = {
     },
     createAxisWithBreaks: function(options, group) {
         var scaleBreaksGroup = this.renderer.g();
-        this.createAxis({ scaleBreaksGroup: group || scaleBreaksGroup });
+        this.createAxis({
+            scaleBreaksGroup: group || scaleBreaksGroup,
+            widgetClass: "widget",
+            axisClass: "axis"
+        });
         this.updateOptions($.extend({
             isHorizontal: false,
             containerColor: "#ffffff",
@@ -9297,7 +9301,9 @@ QUnit.test("Create group for breaks", function(assert) {
     this.axis.drawScaleBreaks();
 
     //assert
-    assert.strictEqual(this.renderer.g.getCall(10).returnValue.append.lastCall.args[0], externalBreaksGroup);
+    var group = this.renderer.g.getCall(10).returnValue;
+    assert.strictEqual(group.append.lastCall.args[0], externalBreaksGroup);
+    assert.strictEqual(group.attr.lastCall.args[0]["class"], "widget-axis-breaks");
 });
 
 QUnit.test("Create group for breaks if shifted axis", function(assert) {
@@ -9322,6 +9328,7 @@ QUnit.test("Create group for breaks if shifted axis", function(assert) {
     var additionGroup = this.renderer.g.getCall(11).returnValue;
     assert.strictEqual(additionGroup.append.lastCall.args[0], externalBreaksGroup);
     assert.strictEqual(additionGroup.attr.lastCall.args[0]["clip-path"], this.renderer.clipRect.getCall(1).returnValue.id);
+    assert.strictEqual(additionGroup.attr.lastCall.args[0]["class"], "widget-axis-breaks");
     assert.deepEqual(this.renderer.clipRect.getCall(1).args, [17, 30, 6, 110]);
 });
 

@@ -3068,7 +3068,6 @@ QUnit.test("Remove groups on disposing", function(assert) {
     assert.ok(this.renderer.clipRect.getCall(1).returnValue.dispose.called);
 });
 
-
 QUnit.module("Datetime scale breaks. Weekends and holidays", $.extend({}, environment2DTranslator, {
     beforeEach: function() {
         var that = this;
