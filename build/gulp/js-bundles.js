@@ -13,6 +13,7 @@ var lazyPipe = require('lazypipe');
 var webpackStream = require('webpack-stream');
 
 var webpackConfig = require('../../webpack.config.js');
+var webpackConfigDev = require('../../playground/webpack.config.dev.js');
 var headerPipes = require('./header-pipes.js');
 var compressionPipes = require('./compression-pipes.js');
 var context = require('./context.js');
@@ -59,24 +60,14 @@ gulp.task('js-bundles-prod', ['transpile'], function() {
         .pipe(gulp.dest(context.RESULT_JS_PATH));
 });
 
-var babelModule = {
-    rules: [{
-        test: /\.js$/,
-        exclude: /(node_modules|bower_components)/,
-        use: {
-            loader: 'babel-loader'
-        }
-    }]
-};
 
 var createDebugBundlesStream = function(watch) {
-    var debugConfig = Object.assign({}, webpackConfig);
-    debugConfig.watch = watch;
-    var bundles;
+    var debugConfig, bundles;
     if(watch) {
-        debugConfig.module = babelModule;
+        debugConfig = Object.assign({}, webpackConfigDev);
         bundles = processDevBundles(DEBUG_BUNDLES);
     } else {
+        debugConfig = Object.assign({}, webpackConfig);
         bundles = processBundles(DEBUG_BUNDLES);
     }
     debugConfig.output = Object.assign({}, webpackConfig.output);
