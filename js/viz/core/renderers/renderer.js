@@ -1548,6 +1548,18 @@ Renderer.prototype = {
         }
     },
 
+    removePlacementFix: function() {
+        if(!browser.mozilla && !browser.msie) {
+            return;
+        }
+
+        if(browser.msie) {
+            this.root.css({ transform: "" });
+        } else if(browser.mozilla) {
+            this.root.attr({ transform: null });
+        }
+    },
+
     setOptions: function(options) {
         var that = this;
         that.rtl = !!options.rtl;
@@ -1632,7 +1644,10 @@ Renderer.prototype = {
     },
 
     svg: function() {
-        return this.root.markup();
+        this.removePlacementFix();
+        var markup = this.root.markup();
+        this.fixPlacement();
+        return markup;
     },
 
     getRootOffset: function() {
