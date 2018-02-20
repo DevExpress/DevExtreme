@@ -342,10 +342,10 @@ var NumberBoxMask = NumberBoxBase.inherit({
         if(separatorIsFirst) {
             return false;
         }
-        if(lastChar === decimalSeparator && onlyOneSeparatorExists) {
+        if(lastChar === decimalSeparator && onlyOneSeparatorExists && this._lastKey === decimalSeparator) {
             return true;
         }
-        if(lastChar !== "0") {
+        if(lastChar !== "0" || this._lastKey !== "0") {
             return false;
         }
 

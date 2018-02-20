@@ -553,6 +553,16 @@ QUnit.test("valueChanged event fires on value apply", function(assert) {
     assert.ok(valueChangedSpy.calledOnce, "valueChanged event called once");
 });
 
+QUnit.test("it should not be possible to input stubs when editor has 0 value", function(assert) {
+    this.instance.option({
+        format: "#0.##",
+        value: 0
+    });
+
+    this.keyboard.caret(1).type("asdf");
+
+    assert.equal(this.input.val(), "0", "value is correct");
+});
 
 QUnit.module("format: percent format", moduleConfig);
 
