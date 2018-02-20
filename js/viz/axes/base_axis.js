@@ -704,6 +704,7 @@ Axis.prototype = {
 
         that._axisLineGroup && that._axisLineGroup.clear();
         that._axisStripGroup && that._axisStripGroup.clear();
+        that._axisGridGroup && that._axisGridGroup.clear();
         that._axisConstantLineGroups.inside.clear();
         that._axisConstantLineGroups.outside1.clear();
         that._axisConstantLineGroups.outside2.clear();
