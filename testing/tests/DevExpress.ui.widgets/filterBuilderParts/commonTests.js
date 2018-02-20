@@ -345,6 +345,26 @@ QUnit.module("Rendering", function() {
         assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS).length, 1);
     });
 
+    //T603217
+    QUnit.test("Menu popup hasn't target", function(assert) {
+        // arrange
+        var $container = $("#container");
+
+        $container.dxFilterBuilder({
+            value: ["Weight", "=", 3.14],
+            fields: [{
+                dataField: "Weight",
+                dataType: 'number'
+            }]
+        });
+
+        // act
+        $("." + FILTER_BUILDER_GROUP_OPERATION_CLASS).trigger("dxclick");
+
+        // assert
+        assert.notOk($container.find(".dx-filterbuilder-overlay").dxPopup("instance").option("target"), "popup target shoud not be set");
+    });
+
     QUnit.test("hide filter value for field with object dataType", function(assert) {
         var container = $("#container");
 
