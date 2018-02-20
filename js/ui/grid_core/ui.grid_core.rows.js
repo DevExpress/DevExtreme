@@ -590,7 +590,10 @@ module.exports = {
                 _renderLoadPanel: gridCoreUtils.renderLoadPanel,
 
                 _renderContent: function(contentElement, tableElement) {
-                    contentElement.replaceWith($("<div>").addClass(this.addWidgetPrefix(CONTENT_CLASS)).append(tableElement));
+                    contentElement.replaceWith($("<div>")
+                        .addClass(this.addWidgetPrefix(CONTENT_CLASS))
+                        .attr("role", "presentation")
+                        .append(tableElement));
 
                     return this._findContentElement();
                 },
@@ -888,7 +891,9 @@ module.exports = {
                         $table,
                         $element = that.element();
 
-                    $element.addClass(that.addWidgetPrefix(ROWS_VIEW_CLASS)).toggleClass(that.addWidgetPrefix(NOWRAP_CLASS), !that.option("wordWrapEnabled"));
+                    $element.addClass(that.addWidgetPrefix(ROWS_VIEW_CLASS))
+                        .toggleClass(that.addWidgetPrefix(NOWRAP_CLASS), !that.option("wordWrapEnabled"))
+                        .attr("role", "presentation");
 
                     $table = that._renderTable({ change: change });
                     that._updateContent($table, change);

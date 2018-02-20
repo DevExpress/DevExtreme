@@ -143,6 +143,7 @@ module.exports = {
                         if(!isDefined(options.column.command)) {
                             this.setAria("role", "columnheader", $cell);
                             this.setAria("label", options.column.caption + " " + messageLocalization.format("dxDataGrid-ariaColumn"), $cell);
+                            this.setAria("colindex", options.column.index + 1, $cell);
                         }
                     }
 
@@ -169,6 +170,7 @@ module.exports = {
 
                     $container
                         .addClass(that.addWidgetPrefix(HEADERS_CLASS))
+                        .attr("role", "presentation")
                         .toggleClass(that.addWidgetPrefix(NOWRAP_CLASS), !that.option("wordWrapEnabled"))
                         .empty();
 

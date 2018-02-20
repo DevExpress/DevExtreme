@@ -144,16 +144,12 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             .attr("role", "row");
     },
 
-    _getTableRoleName: function() {
-        return "grid";
-    },
-
     _createTable: function(columns) {
         var that = this,
             $table = $("<table>")
                 .addClass(that.addWidgetPrefix(TABLE_CLASS))
                 .addClass(that.addWidgetPrefix(TABLE_FIXED_CLASS))
-                .attr("role", that._getTableRoleName());
+                .attr("role", "presentation");
 
         if(columns) {
             $table.append(that._createColGroup(columns));
@@ -163,7 +159,9 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             }
         }
 
-        $table.append("<tbody>");
+        var $body = $table.append("<tbody>");
+
+        that.component.setAria({ "role": "presentation" }, $body);
 
         //T138469
         if(browser.mozilla) {
@@ -264,6 +262,8 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         var i, j,
             colgroupElement = $("<colgroup>"),
             colspan;
+
+        colgroupElement.attr("role", "presentation");
 
         for(i = 0; i < columns.length; i++) {
             colspan = columns[i].colspan || 1;
@@ -410,6 +410,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         options.row.cells = [];
 
         $row = that._createRow(options.row);
+
         that._renderCells($row, options);
         that._appendRow($table, $row);
         that._rowPrepared($row, extend({ columns: options.columns }, options.row));
@@ -589,6 +590,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
         $scrollContainer.addClass(that.addWidgetPrefix(CONTENT_CLASS))
             .addClass(that.addWidgetPrefix(SCROLL_CONTAINER_CLASS))
+            .attr("role", "presentation")
             .append($table)
             .appendTo(that.element());
 
