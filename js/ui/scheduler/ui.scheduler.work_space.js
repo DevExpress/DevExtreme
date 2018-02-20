@@ -573,26 +573,31 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _createCrossScrollingConfig: function() {
-        var config = {};
+        var config = {},
+            headerScrollableOnScroll,
+            sidebarScrollableOnScroll;
 
         config.direction = "both";
-        config.onScroll = (function(e) {
-            if(!this._dateTableScrollWasHandled) {
-                this._headerScrollWasHandled = true;
-                this._sideBarScrollWasHandled = true;
+        config.onStart = (function(e) {
+            headerScrollableOnScroll = this._headerScrollable.option("onScroll");
+            sidebarScrollableOnScroll = this._sidebarScrollable.option("onScroll");
 
-                this._sidebarScrollable.scrollTo({
-                    top: e.scrollOffset.top
-                });
-                this._headerScrollable.scrollTo({
-                    left: e.scrollOffset.left
-                });
-            } else {
-                this._dateTableScrollWasHandled = false;
-            }
+            this._headerScrollable.option("onScroll", undefined);
+            this._sidebarScrollable.option("onScroll", undefined);
+        }).bind(this);
+        config.onScroll = (function(e) {
+            this._sidebarScrollable.scrollTo({
+                top: e.scrollOffset.top
+            });
+            this._headerScrollable.scrollTo({
+                left: e.scrollOffset.left
+            });
+
         }).bind(this);
         config.onEnd = (function() {
             this.notifyObserver("updateResizableArea", {});
+            this._headerScrollable.option("onScroll", headerScrollableOnScroll);
+            this._sidebarScrollable.option("onScroll", sidebarScrollableOnScroll);
         }).bind(this);
 
         return config;
@@ -623,7 +628,8 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _createHeaderScrollable: function() {
-        var $headerScrollable = $("<div>")
+        var dateTableScrollableOnScroll,
+            $headerScrollable = $("<div>")
             .addClass(SCHEDULER_HEADER_SCROLLABLE_CLASS)
             .appendTo(this.$element());
 
@@ -635,21 +641,24 @@ var SchedulerWorkSpace = Widget.inherit({
             updateManually: true,
             bounceEnabled: false,
             pushBackValue: 0,
+            onStart: (function(e) {
+                dateTableScrollableOnScroll = this._dateTableScrollable.option("onScroll");
+                this._dateTableScrollable.option("onScroll", undefined);
+            }).bind(this),
             onScroll: (function(e) {
-                if(!this._headerScrollWasHandled) {
-                    this._dateTableScrollWasHandled = true;
-                    this._dateTableScrollable.scrollTo({
-                        left: e.scrollOffset.left
-                    });
-                } else {
-                    this._headerScrollWasHandled = false;
-                }
+                this._dateTableScrollable.scrollTo({
+                    left: e.scrollOffset.left
+                });
+            }).bind(this),
+            onEnd: (function(e) {
+                this._dateTableScrollable.option("onScroll", dateTableScrollableOnScroll);
             }).bind(this)
         });
     },
 
     _createSidebarScrollable: function() {
-        var $timePanelScrollable = $("<div>")
+        var dateTableScrollableOnScroll,
+            $timePanelScrollable = $("<div>")
             .addClass(SCHEDULER_SIDEBAR_SCROLLABLE_CLASS)
             .appendTo(this.$element());
 
@@ -661,15 +670,17 @@ var SchedulerWorkSpace = Widget.inherit({
             updateManually: true,
             bounceEnabled: false,
             pushBackValue: 0,
+            onStart: (function(e) {
+                dateTableScrollableOnScroll = this._dateTableScrollable.option("onScroll");
+                this._dateTableScrollable.option("onScroll", undefined);
+            }).bind(this),
             onScroll: (function(e) {
-                if(!this._sideBarScrollWasHandled) {
-                    this._dateTableScrollWasHandled = true;
-                    this._dateTableScrollable.scrollTo({
-                        top: e.scrollOffset.top
-                    });
-                } else {
-                    this._sideBarScrollWasHandled = false;
-                }
+                this._dateTableScrollable.scrollTo({
+                    top: e.scrollOffset.top
+                });
+            }).bind(this),
+            onEnd: (function(e) {
+                this._dateTableScrollable.option("onScroll", dateTableScrollableOnScroll);
             }).bind(this)
         });
     },
