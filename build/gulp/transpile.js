@@ -8,17 +8,17 @@ var watch = require('gulp-watch');
 
 var context = require('./context.js');
 
-var JS_SRC = 'js/**/*.js';
+var SRC = 'js/**/*.*';
 
 gulp.task('transpile', ['bundler-config'], function() {
-    return gulp.src(JS_SRC)
+    return gulp.src(SRC)
         .pipe(babel())
         .pipe(gulp.dest(context.TRANSPILED_PATH));
 });
 
 
 gulp.task('transpile-watch', ['transpile'], function() {
-    return watch(JS_SRC)
+    return watch(SRC)
         .pipe(babel())
         .pipe(gulp.dest(context.TRANSPILED_PATH));
 });

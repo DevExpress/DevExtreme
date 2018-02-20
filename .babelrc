@@ -1,4 +1,7 @@
 {
     "presets": ["env"],
-    "plugins": ["transform-es2015-modules-commonjs", "add-module-exports"]
+    "plugins": ["transform-es2015-modules-commonjs", "add-module-exports"],
+    "ignore": [
+        "**/*.json"
+      ]
 }
