@@ -699,7 +699,6 @@
 @list-item-chevron-icon-color: @base-icon-color;
 
 // Overlay
-@overlay-content-shadow-color: fade(@base-shadow-color, 17.5%);
 @overlay-border-color: @base-border-color;
 /**
 * @name 10. Content background color
@@ -713,12 +712,6 @@
 * @group overlays.common
 */
 @overlay-shader-bg: fade(@base-bg, 80%);
-/**
-* @name 50. Focus border color
-* @type color
-* @group overlays.common
-*/
-@overlay-focus-border-color: @base-border-color;
 
 // Popup
 /**
@@ -733,7 +726,7 @@
 @popup-bottom-bg: @popup-title-bg;
 @popup-bottom-color: @base-text-color;
 
-@popup-border-radius: @base-border-radius-large;
+@popup-border-radius: @base-border-radius;
 
 // Popover
 @popover-arrow-bg: @overlay-content-bg;
