@@ -181,9 +181,8 @@ var Overlay = Widget.inherit({
             /**
             * @name dxOverlayOptions_position
             * @publicName position
-            * @type string|positionConfig|function
+            * @type Enums.Position|positionConfig|function
             * @default { my: 'center', at: 'center', of: window }
-            * @type_function_return string|positionConfig
             */
             position: {
                 my: "center",
