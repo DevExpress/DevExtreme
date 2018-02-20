@@ -366,7 +366,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
     },
 
     _setInputText: function(text) {
-        var newCaret = this._getCaretAfterFormat(text, this._getCaretDelta(text));
+        var newCaret = this._getCaretAfterFormat(text);
 
         this._input().val(number.convertDigits(text));
         this._formattedValue = text;
@@ -522,17 +522,27 @@ var NumberBoxMask = NumberBoxBase.inherit({
         return text.length;
     },
 
-    _getCaretAfterFormat: function(formatted, delta) {
-        delta = delta || 1;
-
+    _getCaretAfterFormat: function(formatted) {
         var caret = this._caret(),
             digitsBeforeCaret = this._getDigitCountBefore(caret.start),
-            digitPosition = this._getDigitPositionByIndex(digitsBeforeCaret, formatted);
+            digitPosition = this._getDigitPositionByIndex(digitsBeforeCaret, formatted),
+            delta = digitsBeforeCaret ? 1 : 0;
+
+        if(this._lastKey === "Backspace") {
+            var text = this._getInputVal(),
+                decimalSeparator = number.getDecimalSeparator(),
+                firstCaretAfterPoint = text.indexOf(decimalSeparator) + 1,
+                isCaretOnFloat = firstCaretAfterPoint && firstCaretAfterPoint <= caret.start;
+
+            if(!isCaretOnFloat && text.length < formatted.length) {
+                delta = 2;
+            }
+        }
 
         var newCaret = this._getCaretWithOffset({
             start: digitPosition,
             end: digitPosition
-        }, digitsBeforeCaret ? delta : 0);
+        }, delta);
 
         return this._adjustCaretToBoundaries(newCaret, formatted);
     },
@@ -558,18 +568,6 @@ var NumberBoxMask = NumberBoxBase.inherit({
             start: caret.start + offset,
             end: caret.end + offset
         };
-    },
-
-    _getCaretDelta: function(formatted) {
-        formatted = formatted || "";
-
-        var removeKeyPressed = this._isDeleteKey(this._lastKey) || this._lastKey === "Backspace";
-
-        if(removeKeyPressed && formatted.length === this._formattedValue.length) {
-            return this._isDeleteKey(this._lastKey) ? 2 : 0;
-        }
-
-        return 1;
     },
 
     _adjustCaretToBoundaries: function(caret, text) {
