@@ -222,7 +222,6 @@
         "dxScheduler-confirmRecurrenceDeleteOccurrence": "Elimina appuntamento",
 
         "dxScheduler-noTimezoneTitle": "Nessun fuso orario",
-        "dxScheduler-moreAppointments": "{0} ancora",
 
         "dxCalendar-todayButtonText": "Oggi",
         "dxCalendar-ariaWidgetName": "Calendario",
@@ -233,32 +232,8 @@
         "dxColorView-ariaAlpha": "Trasparenza",
         "dxColorView-ariaHex": "Colore",
 
-        "dxTagBox-selected": "{0} selezinati",
-        "dxTagBox-allSelected": "Tutti selezionati ({0})",
-        "dxTagBox-moreSelected": "{0} ancora",
-
         "vizExport-printingButtonText": "Stampa",
         "vizExport-titleMenuText": "Esportazione/Stampa",
-        "vizExport-exportButtonText": "{0} file",
-
-        "dxFilterBuilder-and": "E",
-        "dxFilterBuilder-or": "O",
-        "dxFilterBuilder-notAnd": "e non",
-        "dxFilterBuilder-notOr": "o non",
-        "dxFilterBuilder-addCondition": "Aggiungi condizione",
-        "dxFilterBuilder-addGroup": "Aggiungi gruppo",
-        "dxFilterBuilder-enterValueText": "<inserire un valore>",
-        "dxFilterBuilder-filterOperationEquals": "Uguale",
-        "dxFilterBuilder-filterOperationNotEquals": "Non è uguale",
-        "dxFilterBuilder-filterOperationLess": "Minore di",
-        "dxFilterBuilder-filterOperationLessOrEquals": "Minore o uguale a",
-        "dxFilterBuilder-filterOperationGreater": "Maggiore di",
-        "dxFilterBuilder-filterOperationGreaterOrEquals": "Maggiore o uguale a",
-        "dxFilterBuilder-filterOperationStartsWith": "Inizia con",
-        "dxFilterBuilder-filterOperationContains": "Contiene",
-        "dxFilterBuilder-filterOperationNotContains": "Non contiene",
-        "dxFilterBuilder-filterOperationEndsWith": "Termina con",
-        "dxFilterBuilder-filterOperationIsBlank": "E' vuoto",
-        "dxFilterBuilder-filterOperationIsNotBlank": "Non è vuoto"
+        "vizExport-exportButtonText": "{0} file"
     }
 }
