@@ -19,7 +19,7 @@ var $ = require("../core/renderer"),
     clickEvent = require("../events/click"),
     caret = require("./text_box/utils.caret"),
     browser = require("../core/utils/browser"),
-    FilterCreator = require("../core/utils/filter_creator").SelectionFilterCreator,
+    FilterCreator = require("../core/utils/selection_filter").SelectionFilterCreator,
     deferredUtils = require("../core/utils/deferred"),
     when = deferredUtils.when,
     Deferred = deferredUtils.Deferred,
@@ -867,10 +867,7 @@ var TagBox = SelectBox.inherit({
                 var items = this._createTagData(values, filteredItems);
                 tagData.resolve(items);
             }.bind(this))
-            .fail(function(filteredItems) {
-                var items = this._createTagData(values, filteredItems);
-                tagData.reject(items);
-            }.bind(this));
+            .fail(tagData.reject.bind(this));
 
         return tagData.promise();
     },
