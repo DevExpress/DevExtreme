@@ -3536,6 +3536,25 @@ QUnit.test("get filter and combinedFilter", function(assert) {
     ]);
 });
 
+
+QUnit.test("get combinedFilter with remote filtering", function(assert) {
+    this.dataSource = new DataSource({
+        load: function() {
+            return [{ name: "Alex", age: "20" }];
+        }
+    });
+
+    this.applyOptions({
+        remoteOperations: { filtering: true },
+        columns: [{ dataField: 'age', dataType: 'number', filterValue: 15 }],
+    });
+
+    this.dataController.setDataSource(this.dataSource);
+    this.dataSource.load();
+
+    assert.deepEqual(this.getCombinedFilter(true), ["age", "=", 15]);
+});
+
 QUnit.test("get combinedFilter for search when allowSearch false", function(assert) {
     this.dataSource = new DataSource({
         load: function() {

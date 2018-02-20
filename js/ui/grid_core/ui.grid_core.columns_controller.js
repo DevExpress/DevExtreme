@@ -827,7 +827,8 @@ module.exports = {
                             var parsedValue = parseFloat(value);
                             return isNaN(parsedValue) ? value : parsedValue;
                         };
-                        options.serializeValue = function(value) {
+                        options.serializeValue = function(value, target) {
+                            if(target === "filter") return value;
                             return isDefined(value) && this.serializationFormat === "string" ? value.toString() : value;
                         };
                     }
@@ -2325,7 +2326,7 @@ module.exports = {
 
                         if(remoteFiltering) {
                             if(config().forceIsoDateParsing && column && column.serializeValue && filter.length > 1) {
-                                filter[filter.length - 1] = column.serializeValue(filter[filter.length - 1]);
+                                filter[filter.length - 1] = column.serializeValue(filter[filter.length - 1], "filter");
                             }
                         } else {
                             if(column && column.selector) {
