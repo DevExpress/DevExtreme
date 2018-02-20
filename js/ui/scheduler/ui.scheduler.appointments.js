@@ -745,7 +745,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
 
                 that._$currentAppointment = $(args.element);
                 that._initialSize = { width: args.width, height: args.height };
-                correctCoordinates(that._$currentAppointment);
+
                 that._initialCoordinates = translator.locate(that._$currentAppointment);
             },
             onDrag: function(args) {
