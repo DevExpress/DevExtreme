@@ -774,6 +774,21 @@ QUnit.test("removing all digits but not all characters should change value to 0"
     assert.strictEqual(this.instance.option("value"), 0, "value is reseted");
 });
 
+QUnit.test("removing all digits with backspace should be possible when required zeros are in the end", function(assert) {
+    this.instance.option({
+        format: "#0.00",
+        value: 1
+    });
+
+    this.keyboard.caret(5)
+        .press("backspace")
+        .press("backspace")
+        .press("backspace")
+        .press("backspace");
+
+    assert.equal(this.input.val(), "0.00", "value is correct");
+});
+
 QUnit.test("removing all digits should save the sign", function(assert) {
     this.instance.option({
         format: "#0 kg",
@@ -829,7 +844,6 @@ QUnit.test("removing decimal separator should be possible if float part is not r
     });
 
     this.keyboard.caret(4)
-        .press("backspace")
         .press("backspace");
 
     assert.equal(this.input.val(), "12 kg", "decimal separator has been removed");

@@ -326,9 +326,10 @@ var NumberBoxMask = NumberBoxBase.inherit({
         }
 
         var formatParts = this._getFormatPattern().split(";")[0].split("."),
+            isRemoveKeyPressed = this._isDeleteKey(this._lastKey) || this._lastKey === "Backspace",
             isFloatPartAllowed = formatParts.length === 2;
 
-        if(!isFloatPartAllowed) {
+        if(!isFloatPartAllowed || isRemoveKeyPressed) {
             return false;
         }
 
