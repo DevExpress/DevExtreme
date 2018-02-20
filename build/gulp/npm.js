@@ -22,10 +22,10 @@ var version = require('../../package.json').version;
 
 var TRANSPILED_GLOBS = [
     context.TRANSPILED_PATH + '/**/*.js',
-    '!' + context.TRANSPILED_PATH + 'js/bundles/*.js',
-    '!' + context.TRANSPILED_PATH + 'js/bundles/modules/parts/*.js',
-    '!' + context.TRANSPILED_PATH + 'js/viz/vector_map.utils/*.js',
-    '!' + context.TRANSPILED_PATH + 'js/viz/docs/*.js'
+    '!' + context.TRANSPILED_PATH + '/bundles/*.js',
+    '!' + context.TRANSPILED_PATH + '/bundles/modules/parts/*.js',
+    '!' + context.TRANSPILED_PATH + '/viz/vector_map.utils/*.js',
+    '!' + context.TRANSPILED_PATH + '/viz/docs/*.js'
 ];
 
 var JSON_GLOBS = [
