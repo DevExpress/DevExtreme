@@ -1992,6 +1992,7 @@ declare module DevExpress.ui {
         showRowLines?: boolean;
         /** Configures runtime sorting. */
         sorting?: { mode?: string, ascendingText?: string, descendingText?: string, clearText?: string };
+        /** Configures state storing. */
         stateStoring?: { enabled?: boolean, storageKey?: string, type?: string, customLoad?: (() => Promise<any> | JQueryPromise<any>), customSave?: ((gridState: any) => any), savingTimeout?: number };
         /** Specifies whether to enable two-way data binding. */
         twoWayBindingEnabled?: boolean;
@@ -2169,7 +2170,9 @@ declare module DevExpress.ui {
         selectRowsByIndexes(indexes: Array<number>): Promise<any> & JQueryPromise<any>;
         /** Shows the column chooser. */
         showColumnChooser(): void;
+        /** Gets the current widget state. */
         state(): any;
+        /** Sets the widget state. */
         state(state: any): void;
         /** Recovers a row deleted in batch editing mode. */
         undeleteRow(rowIndex: number): void;
@@ -2512,6 +2515,7 @@ declare module DevExpress.ui {
     export interface dxFilterBuilderOptions extends WidgetOptions {
         /** Specifies whether the widget can display hierarchical data fields. */
         allowHierarchicalFields?: boolean;
+        customOperations?: Array<dxFilterBuilderCustomOperation>;
         /** Configures fields. */
         fields?: Array<dxFilterBuilderField>;
         /** Specifies filter operation descriptions. */
@@ -2519,9 +2523,9 @@ declare module DevExpress.ui {
         /** Specifies group operation descriptions. */
         groupOperationDescriptions?: { and?: string, or?: string, notAnd?: string, notOr?: string };
         /** A handler for the editorPrepared event. Executed after an editor is created. */
-        onEditorPrepared?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, value?: any, setValue?: any, editorElement?: DevExpress.core.dxElement, editorName?: string, dataField?: string, updateValueTimeout?: number, width?: number, readOnly?: boolean, disabled?: boolean, rtlEnabled?: boolean }) => any);
+        onEditorPrepared?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, value?: any, setValue?: any, editorElement?: DevExpress.core.dxElement, editorName?: string, dataField?: string, filterOperation?: string, updateValueTimeout?: number, width?: number, readOnly?: boolean, disabled?: boolean, rtlEnabled?: boolean }) => any);
         /** A handler for the editorPreparing event. Executed before an editor is created. */
-        onEditorPreparing?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, value?: any, setValue?: any, cancel?: boolean, editorElement?: DevExpress.core.dxElement, editorName?: string, editorOptions?: any, dataField?: string, updateValueTimeout?: number, width?: number, readOnly?: boolean, disabled?: boolean, rtlEnabled?: boolean }) => any);
+        onEditorPreparing?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, value?: any, setValue?: any, cancel?: boolean, editorElement?: DevExpress.core.dxElement, editorName?: string, editorOptions?: any, dataField?: string, filterOperation?: string, updateValueTimeout?: number, width?: number, readOnly?: boolean, disabled?: boolean, rtlEnabled?: boolean }) => any);
         /** A handler for the valueChanged event. Executed after the widget's value is changed. */
         onValueChanged?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, value?: any, previousValue?: any }) => any);
         /** Specifies the current filter expression. */
@@ -2531,6 +2535,7 @@ declare module DevExpress.ui {
     export class dxFilterBuilder extends Widget {
         constructor(element: Element, options?: dxFilterBuilderOptions)
         constructor(element: JQuery, options?: dxFilterBuilderOptions)
+        getFilterExpression(): string | Array<any> | Function;
     }
     export interface dxFormOptions extends WidgetOptions {
         /** Specifies whether or not all root item labels are aligned. */
@@ -3095,7 +3100,7 @@ declare module DevExpress.ui {
         /** A handler for the shown event. */
         onShown?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any }) => any);
         /** An object defining widget positioning options. */
-        position?: string | positionConfig;
+        position?: string | positionConfig | Function;
         /** A Boolean value specifying whether or not the main screen is inactive while the widget is active. */
         shading?: boolean;
         /** Specifies the shading color. */
@@ -4300,15 +4305,24 @@ declare module DevExpress.ui {
         /** Specifies the type of the current rule. */
         type?: string;
     }
+    /** A group validation result. */
     export interface dxValidationGroupResult {
+        /** Rules that failed to pass the check. */
         brokenRules?: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule>;
+        /** Indicates whether all the rules checked for the group are satisfied. */
         isValid?: boolean;
+        /** Validator widgets included in the validated group. */
         validators?: Array<any>;
     }
+    /** A validation result. */
     export interface dxValidatorResult {
+        /** A rule that failed to pass the check. */
         brokenRule?: RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule;
+        /** Indicates whether all the checked rules are satisfied. */
         isValid?: boolean;
+        /** Validation rules specified for the Validator. */
         validationRules?: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule>;
+        /** The value being validated. */
         value?: any;
     }
     export interface dxValidationGroupOptions extends DOMComponentOptions {
@@ -4624,6 +4638,7 @@ declare module DevExpress.ui {
     }
     /** The FilterBuilder's field structure. */
     export interface dxFilterBuilderField {
+        calculateFilterExpression?: ((filterValue: any, selectedFilterOperation: string) => string | Array<any> | Function);
         /** Specifies the data field's caption. */
         caption?: string;
         /** Customizes the input value's display text. */
@@ -4646,6 +4661,16 @@ declare module DevExpress.ui {
         lookup?: { dataSource?: Array<any> | DevExpress.data.DataSourceOptions, valueExpr?: string | Function, displayExpr?: string | ((data: any) => any), allowClearing?: boolean };
         /** Specifies the true value text. Applies only if dataType is "boolean". */
         trueText?: string;
+    }
+    export interface dxFilterBuilderCustomOperation {
+        calculateFilterExpression?: ((filterValue: any, field: dxFilterBuilderField) => string | Array<any> | Function);
+        caption?: string;
+        customizeText?: ((fieldInfo: { value?: string | number | Date, valueText?: string, field?: dxFilterBuilderField }) => string);
+        dataTypes?: Array<string>;
+        editorTemplate?: template | ((conditionInfo: { value?: string | number | Date, field?: dxFilterBuilderField, setValue?: Function }, container: DevExpress.core.dxElement) => string | Element | JQuery);
+        hasValue?: boolean;
+        icon?: string;
+        name?: string;
     }
     /** Specifies dependency between the screen factor and the count of columns. */
     export interface ColCountResponsible {
@@ -7056,13 +7081,13 @@ declare module DevExpress.viz {
     }
 }
 declare module DevExpress.events {
-    /** Attaches an event handler to the specified element. */
+    /** Attaches an event handler to the specified elements. */
     export function on(element: Element | Array<Element>, eventName: string, selector: string, data: any, handler: Function): void;
-    /** Attaches an event handler to be executed only once to the specified element. */
+    /** Attaches an event handler to be executed only once to the specified elements. */
     export function one(element: Element | Array<Element>, eventName: string, selector: string, data: any, handler: Function): void;
-    /** Detaches an event handler from the specified element. */
+    /** Detaches an event handler from the specified elements. */
     export function off(element: Element | Array<Element>, eventName: string, selector: string, handler: Function): void;
-    /** Executes all handlers of a given event type attached to the specified element. */
+    /** Executes all handlers of a given event type attached to the specified elements. */
     export function trigger(element: Element | Array<Element>, event: string | event, extraParameters: any): void;
     export function triggerHandler(element: Element | Array<Element>, event: string | event, extraParameters: any): void;
 }
