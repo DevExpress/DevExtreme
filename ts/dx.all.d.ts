@@ -2170,9 +2170,9 @@ declare module DevExpress.ui {
         selectRowsByIndexes(indexes: Array<number>): Promise<any> & JQueryPromise<any>;
         /** Shows the column chooser. */
         showColumnChooser(): void;
-        /** Gets the current {WidgetName} state. */
+        /** Gets the current widget state. */
         state(): any;
-        /** Sets the {WidgetName} state. */
+        /** Sets the widget state. */
         state(state: any): void;
         /** Recovers a row deleted in batch editing mode. */
         undeleteRow(rowIndex: number): void;
@@ -4305,15 +4305,24 @@ declare module DevExpress.ui {
         /** Specifies the type of the current rule. */
         type?: string;
     }
+    /** A group validation result. */
     export interface dxValidationGroupResult {
+        /** Rules that failed to pass the check. */
         brokenRules?: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule>;
+        /** Indicates whether all the rules checked for the group are satisfied. */
         isValid?: boolean;
+        /** Validator widgets included in the validated group. */
         validators?: Array<any>;
     }
+    /** A validation result. */
     export interface dxValidatorResult {
+        /** A rule that failed to pass the check. */
         brokenRule?: RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule;
+        /** Indicates whether all the checked rules are satisfied. */
         isValid?: boolean;
+        /** Validation rules specified for the Validator. */
         validationRules?: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule>;
+        /** The value being validated. */
         value?: any;
     }
     export interface dxValidationGroupOptions extends DOMComponentOptions {
