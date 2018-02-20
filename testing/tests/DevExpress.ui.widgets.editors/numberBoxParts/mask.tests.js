@@ -206,6 +206,18 @@ QUnit.test("focusout after inverting sign should not lead to value changing", fu
     assert.equal(this.instance.option("value"), 123, "value is correct");
 });
 
+QUnit.test("pressing minus button should revert selected number", function(assert) {
+    this.instance.option({
+        format: "$ #0.00",
+        value: 0
+    });
+
+    this.keyboard.caret({ start: 0, end: 5 }).keyDown(MINUS_KEY).type("-");
+    assert.equal(this.input.val(), "-$ 0.00", "text is correct");
+    assert.deepEqual(this.keyboard.caret(), { start: 7, end: 7 }, "caret is good");
+});
+
+
 QUnit.module("format: fixed point format", moduleConfig);
 
 QUnit.test("value should be formatted on first input", function(assert) {
@@ -651,11 +663,11 @@ QUnit.test("removing non required char with negative value", function(assert) {
     assert.equal(this.input.val(), "-123", "value is correct");
 });
 
-QUnit.test("removing non required zero should be possible", function(assert) {
+QUnit.test("last non required zero should not be typed", function(assert) {
     this.instance.option("format", "#.##");
-    this.keyboard.type("1.50").press("backspace");
+    this.keyboard.type("1.50");
 
-    assert.equal(this.input.val(), "1.5", "zero has been removed");
+    assert.equal(this.input.val(), "1.5", "zero type was prevented");
 });
 
 QUnit.test("removing with group separators using delete key", function(assert) {

@@ -179,15 +179,14 @@ var NumberBoxMask = NumberBoxBase.inherit({
     },
 
     _keyboardHandler: function(e) {
+        this._lastKey = number.convertDigits(e.originalEvent.key, true);
+
         if(!this._shouldHandleKey(e.originalEvent)) {
-            this._lastKey = null;
             return this.callBase(e);
         }
 
         var text = this._getInputVal(),
             caret = this._caret();
-
-        this._lastKey = number.convertDigits(e.originalEvent.key, true);
 
         var enteredChar = this._lastKey === MINUS ? "" : this._lastKey,
             newValue = this._tryParse(text, caret, enteredChar);
@@ -352,7 +351,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
 
         var caret = this._caret(),
             floatLength = clearedText.length - decimalSeparatorIndex - 1,
-            maxPrecisionOverflow = floatLength > this._getMaxPrecision(this._getFormatPattern(), clearedText),
+            maxPrecisionOverflow = floatLength >= this._getMaxPrecision(this._getFormatPattern(), clearedText),
             textAfterCaret = this._getInputVal().slice(caret.start);
 
         return !maxPrecisionOverflow && (!textAfterCaret || this._isStub(textAfterCaret, true));
@@ -405,9 +404,10 @@ var NumberBoxMask = NumberBoxBase.inherit({
 
     _shouldHandleKey: function(e) {
         var isSpecialChar = e.ctrlKey || e.shiftKey || e.altKey || !this._isChar(e.key),
+            isMinusKey = e.key === MINUS,
             useMaskBehavior = this._useMaskBehavior();
 
-        return useMaskBehavior && !isSpecialChar;
+        return useMaskBehavior && !isSpecialChar && !isMinusKey;
     },
 
     _renderInput: function() {
@@ -479,6 +479,11 @@ var NumberBoxMask = NumberBoxBase.inherit({
     _revertSign: function(e) {
         if(!this._useMaskBehavior()) {
             return;
+        }
+
+        var caret = this._caret();
+        if(caret.start !== caret.end) {
+            this._caret(this._adjustCaretToBoundaries({ start: 0, end: 0 }));
         }
 
         var newValue = -1 * ensureDefined(this._parsedValue, null);
