@@ -39,6 +39,8 @@ var SLIDER_CLASS = "dx-slider",
     FEEDBACK_HIDE_TIMEOUT = 400,
     SLIDER_HANDLE_WIDTH = 14,
 
+    POPUP_CONTENT_CLASS = "dx-popup-content",
+
     TOOLTIP_CLASS = "dx-tooltip",
     TOOLTIP_CONTENT_CLASS = "dx-overlay-content";
 
@@ -869,6 +871,27 @@ QUnit.test("'tooltip.format' as undefined (null, false) should render value as i
     assert.equal($.trim($tooltip.text()), "1");
 });
 
+QUnit.test("Update tooltip width when value is formatted", function(assert) {
+    var values = ["first", "second value", "third"],
+        $slider = $("#slider").dxSlider({
+            min: 0,
+            value: 1,
+            max: 3,
+            tooltip: {
+                enabled: true,
+                showMode: "always",
+                format: function(index) {
+                    return values[index - 1];
+                }
+            },
+            useInkRipple: false
+        }),
+        $handle = $slider.find("." + SLIDER_HANDLE_CLASS),
+        $tooltip = $handle.find("." + TOOLTIP_CLASS);
+
+    $slider.dxSlider("option", "value", 2);
+    assert.ok($tooltip.find("." + TOOLTIP_CONTENT_CLASS).width() >= $tooltip.find("." + POPUP_CONTENT_CLASS).width());
+});
 
 QUnit.module("labels", moduleOptions);
 
