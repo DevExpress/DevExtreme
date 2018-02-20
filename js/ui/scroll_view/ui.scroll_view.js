@@ -2,6 +2,7 @@
 
 var $ = require("../../core/renderer"),
     devices = require("../../core/devices"),
+    windowUtils = require("../../core/utils/window"),
     messageLocalization = require("../../localization/message"),
     registerComponent = require("../../core/component_registrator"),
     extend = require("../../core/utils/extend").extend,
@@ -33,7 +34,36 @@ var refreshStrategies = {
     simulated: SimulatedStrategy
 };
 
-var ScrollView = Scrollable.inherit({
+var isServerSide = !windowUtils.hasWindow();
+
+var getScrollViewServerComponent = function() {
+    var emptyComponentConfig = {};
+
+    // for(var field in DOMComponent.prototype) {
+    //     var prop = DOMComponent.prototype[field];
+
+    //     if(typeUtils.isFunction(prop) && field.substr(0, 1) !== "_") {
+    //         emptyComponentConfig[field] = noop;
+    //     }
+    // }
+
+    // emptyComponentConfig.ctor = function(element, options) {
+    //     var sizedElement = domAdapter.createElement("div");
+
+    //     var width = options && typeUtils.isNumeric(options.width) ? options.width + "px" : "100%";
+    //     var height = options && typeUtils.isNumeric(options.height) ? options.height + "px" : this._getDefaultSize().height + "px";
+
+    //     domAdapter.setStyle(sizedElement, "width", width);
+    //     domAdapter.setStyle(sizedElement, "height", height);
+
+    //     domAdapter.setClass(sizedElement, SIZED_ELEMENT_CLASS);
+    //     domAdapter.insertElement(element, sizedElement);
+    // };
+
+    return Scrollable.inherit(emptyComponentConfig);
+};
+
+var ScrollView = isServerSide ? getScrollViewServerComponent() : Scrollable.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {

@@ -286,10 +286,11 @@ var Scrollable = DOMComponent.inherit({
     _initMarkup: function() {
         this.callBase();
         this._renderDirection();
-        this._renderStrategy();
+        //this._renderStrategy();
     },
 
     _render: function() {
+        this._renderStrategy();
         this._attachNativeScrollbarsCustomizationCss();
 
         this._attachEventHandlers();
