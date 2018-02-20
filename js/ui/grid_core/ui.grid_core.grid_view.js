@@ -237,7 +237,7 @@ var ResizingController = modules.ViewController.inherit({
 
             if(columnAutoWidth) {
                 normalizeWidthsByExpandColumns();
-                if(!that.option("advancedRendering")) {
+                if(that._needStretch()) {
                     that._processStretch(resultWidths, visibleColumns);
                 }
             }
@@ -252,6 +252,10 @@ var ResizingController = modules.ViewController.inherit({
 
     _needBestFit: function() {
         return this.option("columnAutoWidth");
+    },
+
+    _needStretch: function() {
+        return !this.option("advancedRendering");
     },
 
     _getAverageColumnsWidth: function(resultWidths) {
