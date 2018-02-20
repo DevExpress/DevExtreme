@@ -463,6 +463,26 @@ QUnit.module("Rendering", function() {
         //assert
         assert.equal($container.find(".dx-texteditor-input").val(), "3.14 kg", 'numberbox formatted value');
     });
+
+    //T603217
+    QUnit.test("Menu popup hasn't target", function(assert) {
+        // arrange
+        var $container = $("#container");
+
+        $container.dxFilterBuilder({
+            value: ["Weight", "=", 3.14],
+            fields: [{
+                dataField: "Weight",
+                dataType: 'number'
+            }]
+        });
+
+        // act
+        $("." + FILTER_BUILDER_GROUP_OPERATION_CLASS).trigger("dxclick");
+
+        // assert
+        assert.notOk($container.find(".dx-filterbuilder-overlay").dxPopup("instance").option("target"), "popup target shoud not be set");
+    });
 });
 
 QUnit.module("Filter value", function() {
