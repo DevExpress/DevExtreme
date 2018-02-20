@@ -1344,7 +1344,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             node = this._getNodeByElement($item),
             value = e.value;
 
-        if(node.internalFields.selected === value) {
+        if(node && node.internalFields.selected === value) {
             return;
         }
 
