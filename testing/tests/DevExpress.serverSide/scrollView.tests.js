@@ -1,7 +1,6 @@
 "use strict";
 
-var $ = require("jquery"),
-    animationFrame = require("animation/frame");
+var $ = require("jquery");
 
 require("common.css!");
 require("ui/scroll_view");
@@ -11,31 +10,16 @@ var SCROLLABLE_CONTENT_CLASS = "dx-scrollable-content",
     SCROLLVIEW_TOP_POCKET_CLASS = "dx-scrollview-top-pocket",
     SCROLLVIEW_BOTTOM_POCKET_CLASS = "dx-scrollview-bottom-pocket";
 
-var moduleConfig = {
-    beforeEach: function() {
-        this.clock = sinon.useFakeTimers();
-        this._originalRequestAnimationFrame = animationFrame.requestAnimationFrame;
-        animationFrame.requestAnimationFrame = function(callback) {
-            callback();
-        };
-    },
-    afterEach: function() {
-        this.clock.restore();
-        animationFrame.requestAnimationFrame = this._originalRequestAnimationFrame;
-    }
-};
-
-
 QUnit.testStart(function() {
     var markup = '\
         <div id="scrollView" style="height: 50px; width: 50px;">\
-            <div class="content1" style="height: 100px; width: 100px;"></div>\
+            <div class="content1"></div>\
         </div>';
 
     $("#qunit-fixture").html(markup);
 });
 
-QUnit.module("ScrollView", moduleConfig);
+QUnit.module("ScrollView markup");
 
 QUnit.test("pockets should not be rendered in scrollView on server", function(assert) {
     var $scrollView = $("#scrollView").dxScrollView(),

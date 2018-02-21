@@ -286,7 +286,6 @@ var Scrollable = DOMComponent.inherit({
     _initMarkup: function() {
         this.callBase();
         this._renderDirection();
-        //this._renderStrategy();
     },
 
     _render: function() {
