@@ -1,24 +1,19 @@
 .dx-size-default() {
-    @MATERIAL_TAGBOX_TAG_CONTAINER_PADDING_BOTTOM: 4px;
-    @MATERIAL_TAGBOX_TAG_CONTENT_MARGIN: 4px 0 0 4px;
-    @MATERIAL_TAGBOX_TAG_CONTENT_PADDING_LEFT: 6px;
-    @MATERIAL_TAGBOX_TAG_CONTENT_PADDING_RIGHT: 25px;
-    @MATERIAL_TAGBOX_TAG_CONTENT_PADDING: 3px @MATERIAL_TAGBOX_TAG_CONTENT_PADDING_RIGHT 4px @MATERIAL_TAGBOX_TAG_CONTENT_PADDING_LEFT;
-    @MATERIAL_TAGBOX_REMOVE_BUTTON_RIGHT: 5px;
-    @MATERIAL_TAGBOX_REMOVE_BUTTON_WIDTH: 25px;
-    @MATERIAL_TAGBOX_INPUT_MARGIN_LEFT: 5px;
+    @MATERIAL_TAGBOX_TAG_CONTENT_PADDING_LEFT: 12px;
+    @MATERIAL_TAGBOX_TAG_CONTENT_PADDING_RIGHT: 32px;
+    @MATERIAL_TAGBOX_TAG_CONTENT_PADDING: 8px @MATERIAL_TAGBOX_TAG_CONTENT_PADDING_RIGHT 7px @MATERIAL_TAGBOX_TAG_CONTENT_PADDING_LEFT;
+    @MATERIAL_TAGBOX_REMOVE_BUTTON_RIGHT: 4px;
+    @MATERIAL_TAGBOX_REMOVE_BUTTON_WIDTH: 24px;
+    @MATERIAL_TAGBOX_REMOVE_BUTTON_ICON_SIZE: 14px;
     @MATERIAL_TAGBOX_SELECT_ALL_PADDING_BOTTOM: 12px;
     @MATERIAL_TAGBOX_SELECT_ALL_MARGIN_BOTTOM: 3px;
 }
 .dx-size-compact() {
-    @MATERIAL_TAGBOX_TAG_CONTAINER_PADDING_BOTTOM: 2px;
-    @MATERIAL_TAGBOX_TAG_CONTENT_MARGIN: 2px 0 0 2px;
     @MATERIAL_TAGBOX_TAG_CONTENT_PADDING_LEFT: 4px;
     @MATERIAL_TAGBOX_TAG_CONTENT_PADDING_RIGHT: 17px;
     @MATERIAL_TAGBOX_TAG_CONTENT_PADDING: 2px @MATERIAL_TAGBOX_TAG_CONTENT_PADDING_RIGHT 2px @MATERIAL_TAGBOX_TAG_CONTENT_PADDING_LEFT;
     @MATERIAL_TAGBOX_REMOVE_BUTTON_RIGHT: 3px;
     @MATERIAL_TAGBOX_REMOVE_BUTTON_WIDTH: 17px;
-    @MATERIAL_TAGBOX_INPUT_MARGIN_LEFT: 3px;
     @MATERIAL_TAGBOX_SELECT_ALL_PADDING_BOTTOM: 7px;
     @MATERIAL_TAGBOX_SELECT_ALL_MARGIN_BOTTOM: 1px;
 }
@@ -26,7 +21,6 @@
 .dx-tagbox:not(.dx-texteditor-empty) {
     .dx-texteditor-input {
         padding-left: 0;
-        margin-left: @MATERIAL_TAGBOX_INPUT_MARGIN_LEFT;
 
         .dx-rtl &,
         .dx-rtl& {
@@ -65,36 +59,43 @@
 }
 
 .dx-tag-content {
-    margin: @MATERIAL_TAGBOX_TAG_CONTENT_MARGIN;
+    margin: 0;
     padding: @MATERIAL_TAGBOX_TAG_CONTENT_PADDING;
     min-width: 40px;
     background-color: @tagbox-tag-bg;
     border-radius: @tagbox-tag-border-radius;
     color: @tagbox-tag-color;
+    .border-radius(500px);
 }
 
 .dx-tag-remove-button {
     width: @MATERIAL_TAGBOX_REMOVE_BUTTON_WIDTH;
     height: 100%;
+    right: @MATERIAL_TAGBOX_REMOVE_BUTTON_RIGHT;
 
-    &:before, &:after {
-        right: 4px + @MATERIAL_TAGBOX_REMOVE_BUTTON_RIGHT;
-        margin-top: -5px;
-        width: 3px;
-        height: 11px;
-        background: @tagbox-tag-button-remove-bg;
+    .dx-icon-clear;
+    .dx-icon-font-centered-sizing(@MATERIAL_TAGBOX_REMOVE_BUTTON_ICON_SIZE);
+
+    &:before {
+        width: 18px;
+        height: 18px;
+        margin-left: -9px;
+        margin-top: -9px;
+        line-height: 18px;
+        color: @tagbox-tag-bg;
+        background-color: @tagbox-tag-button-remove-bg;
+        .border-radius(50%);
+        .transform(none);
     }
+}
 
-    &:after {
-        right: @MATERIAL_TAGBOX_REMOVE_BUTTON_RIGHT;
-        margin-top: -1px;
-        width: 11px;
-        height: 3px;
-    }
+.dx-tag {
+    margin-bottom: 2px;
 
-    &:active {
-        &:before, &:after {
-            background: @tagbox-tag-button-remove-active-bg;
+    .dx-tag:hover {
+        .dx-tag-content {
+            background-color: @tagbox-tag-hover-bg;
+            color: @base-bg
         }
     }
 }

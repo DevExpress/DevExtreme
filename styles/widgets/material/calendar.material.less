@@ -1,7 +1,7 @@
 .dx-size-default() {
-    @MATERIAL_CALENDAR_CELL_FONT_SIZE: 15px;
+    @MATERIAL_CALENDAR_CELL_FONT_SIZE: 12px;
     @MATERIAL_CALENDAR_BODY_WIDTH: 282px;
-    @MATERIAL_CALENDAR_BODY_HEIGHT: 205px;
+    @MATERIAL_CALENDAR_BODY_HEIGHT: 215px;
     @MATERIAL_CALENDAR_BODY_TOP: 52px;
     @MATERIAL_CALENDAR_FOOTER_HEIGHT: 45px;
     @MATERIAL_CALENDAR_NAVIGATOR_VERTICAL_PADDING: 9px;
@@ -28,7 +28,8 @@
     @MATERIAL_CALENDAR_CAPTION_BUTTON_PADDING: 3px 3px;
 }
 
-@MATERIAL_CALENDAR_NAVIGATOR_FONTSIZE: @MATERIAL_H5_FONT_SIZE;
+@MATERIAL_CALENDAR_NAVIGATOR_ICON_FONTSIZE: @MATERIAL_BASE_ICON_SIZE;
+@MATERIAL_CALENDAR_NAVIGATOR_FONTSIZE: 14px;
 @MATERIAL_CALENDAR_NAVIGATOR_LINE_HEIGHT: 1.6;
 @MATERIAL_CALENDAR_WIDTH: @MATERIAL_CALENDAR_BODY_WIDTH;
 @MATERIAL_CALENDAR_HEIGHT: @MATERIAL_CALENDAR_BODY_HEIGHT + @MATERIAL_CALENDAR_NAVIGATOR_FONTSIZE * @MATERIAL_CALENDAR_NAVIGATOR_LINE_HEIGHT + @MATERIAL_CALENDAR_NAVIGATOR_VERTICAL_PADDING * 2;
@@ -55,14 +56,6 @@
             text-align: center;
             height: @MATERIAL_CALENDAR_FOOTER_HEIGHT;
             width: 100%;
-
-            .dx-button {
-                background: none;
-
-                &.dx-state-active {
-                    background-color: @calendar-button-footer-active-bg;
-                }
-            }
         }
     }
 }
@@ -79,8 +72,13 @@
         display: table-cell;
         border-color: @calendar-navigator-border-color;
 
+        .dx-button-text {
+            text-transform: none;
+        }
+
+
         .dx-icon {
-            font-size: @MATERIAL_CALENDAR_NAVIGATOR_FONTSIZE;
+            font-size: @MATERIAL_CALENDAR_NAVIGATOR_ICON_FONTSIZE;
         }
 
         &.dx-calendar-disabled-navigator-link {
@@ -105,17 +103,12 @@
 
     .dx-calendar-caption-button {
         font-size: @MATERIAL_CALENDAR_NAVIGATOR_FONTSIZE;
-        font-weight: bold;
         line-height: 1.2;
         text-transform: uppercase;
         right: @MATERIAL_NAV_BUTTON_WIDTH;
         left: @MATERIAL_NAV_BUTTON_WIDTH;
 
         &.dx-button {
-            &.dx-state-active {
-                background-color: @calendar-button-caption-active-bg;
-            }
-
             .dx-button-content {
                 padding: @MATERIAL_CALENDAR_CAPTION_BUTTON_PADDING;
             }
@@ -195,7 +188,6 @@
             padding-bottom: 10px;
 
             th {
-                .box-shadow(inset 0px -1px 0px @calendar-border-color);
                 color: @calendar-header-color;
             }
         }
@@ -215,10 +207,9 @@
 
 .dx-calendar-cell {
     text-align: center;
-    padding: 1px @MATERIAL_CALENDAR_CELL_HORIZONTAL_PADDING 2px;
+    padding: 12px @MATERIAL_CALENDAR_CELL_HORIZONTAL_PADDING;
     color: @calendar-color;
     font-size: @MATERIAL_CALENDAR_CELL_FONT_SIZE;
-    border: 1px double transparent;
     width: 39px;
     .border-radius(@calendar-cell-contoured-border-radius);
 
@@ -258,19 +249,11 @@
         }
     }
 
-    &.dx-calendar-contoured-date {
-        .box-shadow(inset 0px 0px 0px 1px @calendar-cell-contoured-border-color);
-    }
-
     &.dx-calendar-selected-date {
         &, &.dx-calendar-today {
             color: @base-selected-text-color;
             .box-shadow(inset 0px 0px 0px 1000px @calendar-cell-selected-bg);
             font-weight: normal;
-
-            &.dx-calendar-contoured-date {
-                box-shadow:  inset 0px 0px 0px 1px @calendar-cell-contoured-border-color, inset 0px 0px 0px 1000px @calendar-cell-selected-bg;
-            }
         }
     }
 }

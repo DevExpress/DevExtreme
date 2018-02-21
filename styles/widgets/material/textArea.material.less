@@ -1,6 +1,25 @@
 .dx-textarea {
     height: auto;
-    
+    border-radius: @texteditor-border-radius;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, .42);
+
+    &.dx-state-hover {
+        box-shadow: 0 0 0 2px @texteditor-color;
+    }
+
+    &.dx-state-focused, &.dx-state-active {
+        box-shadow: 0 0 0 2px @base-accent;
+    }
+
+    &.dx-state-disabled,
+    &.dx-state-readonly {
+        box-shadow: 0 0 0 2px rgba(0, 0, 0, .42);
+    }
+
+    .dx-texteditor-input {
+        padding: 8px;
+    }
+
     .dx-icon-clear {
         top: 0;
         margin-top: 0;

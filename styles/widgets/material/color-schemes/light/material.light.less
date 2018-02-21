@@ -44,7 +44,6 @@
 
 @base-border-radius-large: @base-border-radius + 2px;
 @base-border-radius-small: @base-border-radius - 1px;
-@base-border-radius-exsmall: @base-border-radius - 2px;
 
 @base-inverted-bg: darken(@base-bg, 100%);
 @base-element-bg: @base-bg;
@@ -116,8 +115,6 @@
 
 @VALIDATION_SUMMARY_COLOR: @base-invalid-color;
 
-@validation-overlay-border-radius: @base-border-radius;
-
 /**
 * @name 20. Selected state text color
 * @type color
@@ -178,7 +175,7 @@
 * @type color
 * @group editors.texteditors
 */
-@texteditor-hover-border-color: fade(@base-accent, 40%);
+
 
 /**
 * @name 50. Text color
@@ -188,7 +185,6 @@
 
 @texteditor-color: @base-text-color;
 @texteditor-disabled-opacity: .5;
-@texteditor-readonly-border-color: lighten(@texteditor-border-color, 9%);
 
 /**
 * @name 60. Placeholder text color
@@ -197,7 +193,9 @@
 */
 @texteditor-placeholder-color: lighten(@texteditor-color, 40%);
 
-@texteditor-button-clear-icon-color: lighten(@texteditor-color, 40%);
+@texteditor-button-clear-icon-color: lighten(@texteditor-color, 46%);
+
+@texteditor-button-clear-icon-color-bg: lighten(@texteditor-color, 76%);
 
 @texteditor-invalid-focused-border-color: @base-invalid-color;
 @texteditor-invalid-faded-border-color: @base-invalid-faded-border-color;
@@ -340,7 +338,7 @@
 
 @button-shadow-color: rgba(0, 0, 0, 0.24);
 @button-hover-shadow-color: @button-shadow-color;
-@button-focused-shadow-color: @button-shadow-color;
+@button-focused-shadow-color: fadein(@button-shadow-color, 8%);
 @button-active-shadow-color: fadein(@button-shadow-color, 8%);
 
 // Normal button
@@ -504,8 +502,8 @@
 * @type color
 * @group editors.checkbox
 */
-@checkbox-border-color: @base-border-color;
-@checkbox-checked-color: @base-accent;
+@checkbox-border-color: rgba(0, 0, 0, .54);
+@checkbox-checked-color: @base-element-bg;
 @checkbox-indeterminate-bg: @base-accent;
 
 /**
@@ -521,7 +519,7 @@
 * @type color
 * @group editors.checkbox
 */
-@checkbox-bg: @base-element-bg;
+@checkbox-bg: @base-accent;
 
 /**
 * @name 20. Hovered state border color
@@ -536,15 +534,10 @@
 * @type color
 * @group editors.checkbox
 */
-@checkbox-active-icon-bg: fade(darken(@checkbox-bg, 62.5%), 20%);
-
 @checkbox-invalid-focused-border-color: @base-invalid-color;
 @checkbox-invalid-faded-border-color: @base-invalid-faded-border-color;
 
-@checkbox-readonly-border-color: lighten(@checkbox-border-color, 9%);
-@checkbox-readonly-bg: @checkbox-bg;
-
-@checkbox-icon-border-radius: @base-border-radius-exsmall;
+@checkbox-icon-border-radius: @base-border-radius;
 
 // Fileuploader
 /**
@@ -752,22 +745,6 @@
 // DropDownEditor
 
 /**
-* @name 20. Dropdown button hovered state background color
-* @type color
-* @group editors.selectbox
-*/
-@dropdowneditor-button-hover-bg: @button-normal-hover-bg;
-@dropdowneditor-button-hover-border-color: transparent;
-
-/**
-* @name 30. Dropdown button active state background color
-* @type color
-* @group editors.selectbox
-*/
-@dropdowneditor-button-active-bg: @button-normal-active-bg;
-@dropdowneditor-button-active-border-color: transparent;
-
-/**
 * @name 80. Spin icon color
 * @type color
 * @group editors.texteditors
@@ -850,7 +827,8 @@
 * @group editors.tagbox
 * @paletteColorOpacity 0.3
 */
-@tagbox-tag-bg: darken(@base-bg, 13.5%);
+@tagbox-tag-bg: darken(@base-bg, 12%);
+@tagbox-tag-hover-bg: darken(@base-bg, 26%);
 /**
 * @name 40. Tag text color
 * @type color
@@ -865,11 +843,11 @@
 * @group editors.tagbox
 * @paletteColorOpacity 1
 */
-@tagbox-tag-button-remove-bg: darken(@tagbox-tag-bg, 20%);
+@tagbox-tag-button-remove-bg: rgba(0, 0, 0, .24);
 @tagbox-tag-button-remove-active-bg: lighten(@tagbox-tag-button-remove-bg, 20%);
 
-@tagbox-tag-focused-bg: darken(@tagbox-tag-bg, 7%);
-@tagbox-tag-focused-color: @tagbox-tag-color;
+@tagbox-tag-focused-bg: darken(@base-bg, 32%);
+@tagbox-tag-focused-color: @base-bg;
 @tagbox-tag-focused-button-remove-bg: @tagbox-tag-button-remove-bg;
 
 @tagbox-select-all-border-color: @base-border-color;
@@ -1043,7 +1021,6 @@
 * @group editors.switch
 * @paletteColorOpacity 1
 */
-@switch-on-color: @base-text-color;
 
 @switch-bg: @base-element-bg;
 @switch-handle-bg: @base-accent;
@@ -1053,42 +1030,9 @@
 * @type color
 * @group editors.switch
 */
-@switch-handle-active-bg: darken(@switch-handle-bg, 17%);
-@switch-handle-border-radius: @base-border-radius - 2px;
-
-/**
-* @name 50. Hovered state border color
-* @type color
-* @group editors.switch
-* @paletteColorOpacity 1
-*/
-@switch-hover-border-color: @base-accent;
-
-/**
-* @name 70. Focused state border color
-* @type color
-* @group editors.switch
-* @paletteColorOpacity 1
-*/
-@switch-focused-border-color: @base-focus-color;
-
-/**
-* @name 60. Focused state background color
-* @type color
-* @group editors.switch
-* @paletteColorOpacity 1
-*/
-@switch-container-active-bg: fade(darken(@switch-bg, 62.5%), 20%);
+@switch-handle-border-radius: 50%;
 
 @switch-hover-bg: transparent;
-
-/**
-* @name 80. Active state border color
-* @type color
-* @group editors.switch
-* @paletteColorOpacity 1
-*/
-@switch-active-border-color: @base-accent;
 
 /**
 * @name 30. 'OFF' label color
@@ -1096,14 +1040,8 @@
 * @group editors.switch
 * @paletteColorOpacity 1
 */
-@switch-off-color: lighten(@base-text-color, 40%);
 
-@switch-handle-off-bg: lighten(@switch-handle-bg, 15%);
-
-@switch-readonly-border-color: lighten(@switch-border-color, 9%);
-@switch-container-readonly-bg: @switch-bg;
-
-@switch-border-radius: @base-border-radius-exsmall;
+@switch-handle-off-bg: #FAFAFA;
 
 // Pager
 
@@ -1881,14 +1819,10 @@
 * @group editors.calendar
 */
 @calendar-navigator-hover-border-color: darken(@base-border-color, 12%);
-@calendar-cell-contoured-border-color: darken(@base-border-color, 12%);
-@calendar-cell-contoured-border-radius: @base-border-radius;
+@calendar-cell-contoured-border-radius: 50%;
 
 @calendar-invalid-focused-border-color: @base-invalid-color;
 @calendar-invalid-faded-border-color: @base-invalid-faded-border-color;
-
-@calendar-button-caption-active-bg: darken(@base-bg, 17%);
-@calendar-button-footer-active-bg: darken(@base-bg, 17%);
 
 /**
 * @name 110. Shevron icon color
@@ -1899,7 +1833,6 @@
 
 // DateBox
 
-@datebox-dropdowneditor-button-active-shadow-color: fade(@base-shadow-color, 16%);
 
 //Tooltip
 /**
@@ -1928,15 +1861,13 @@
 * @type color
 * @group editors.numberbox
 */
-@numberbox-spin-active-bg: @button-normal-active-bg;
-@numberbox-spin-active-color: @base-text-color;
+
 /**
 * @name 20. Hovered spin buttons border color
 * @type color
 * @group editors.numberbox
 */
-@numberbox-spin-hover-border-color: transparent;
-@numberbox-spin-hover-bg: @button-normal-hover-bg;
+
 
 @numberbox-spin-container-border-radius: @base-border-radius;
 @numberbox-spin-icon-border-radius: @base-border-radius-small;

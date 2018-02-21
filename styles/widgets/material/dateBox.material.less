@@ -1,7 +1,6 @@
 .dx-size-default() {
-    @MATERIAL_DATEBOX_OVERLAY_ITEM_MARGIN: 30px;
+    @MATERIAL_DATEBOX_OVERLAY_ITEM_MARGIN: 10px;
     @MATERIAL_DATEBOX_OVERLAY_ITEM_MARGIN_ADAPTIVE: 18px;
-    @MATERIAL_DATEBOX_OVERLAY_BUTTON_WIDTH: 85px;
     @MATERIAL_DATEBOX_POPUP_CONTENT_MARGIN: 0 34px;
     @MATERIAL_DATEBOX_INPUT_MIN_HEIGHT: 33px;
 }
@@ -9,7 +8,6 @@
 .dx-size-compact() {
     @MATERIAL_DATEBOX_OVERLAY_ITEM_MARGIN: 15px;
     @MATERIAL_DATEBOX_OVERLAY_ITEM_MARGIN_ADAPTIVE: 15px;
-    @MATERIAL_DATEBOX_OVERLAY_BUTTON_WIDTH: 60px;
     @MATERIAL_DATEBOX_POPUP_CONTENT_MARGIN: 0 14px;
     @MATERIAL_DATEBOX_INPUT_MIN_HEIGHT: 23px;
 }
@@ -28,7 +26,6 @@
 
     .dx-popup-bottom {
         .dx-button {
-            min-width: @MATERIAL_DATEBOX_OVERLAY_BUTTON_WIDTH;
             width: auto;
         }
     }
@@ -50,18 +47,13 @@
     }
 }
 
-@MATERIAL_DATEBOX_SHADOW_RADIUS: 7px;
-@MATERIAL_DATEBOX_SHADOW: 0px 1px @MATERIAL_DATEBOX_SHADOW_RADIUS @datebox-dropdowneditor-button-active-shadow-color;
-
 .dx-datebox-calendar {
     .dx-dropdowneditor-icon {
-        .dx-icon-event();
+        .dx-icon-spindown();
         .dx-dropdowneditor-button-icon();
     }
 
     &.dx-dropdowneditor-active {
-        .box-shadow(@MATERIAL_DATEBOX_SHADOW);
-
         .dx-texteditor-input {
             background: @texteditor-hover-bg; //TODO: Use active state const instead
         }
