@@ -214,7 +214,7 @@ QUnit.test("pressing minus button should revert selected number", function(asser
 
     this.keyboard.caret({ start: 0, end: 5 }).keyDown(MINUS_KEY).type("-");
     assert.equal(this.input.val(), "-$ 0.00", "text is correct");
-    assert.deepEqual(this.keyboard.caret(), { start: 7, end: 7 }, "caret is good");
+    assert.deepEqual(this.keyboard.caret(), { start: 4, end: 4 }, "caret is good");
 });
 
 
@@ -713,10 +713,14 @@ QUnit.test("removing with group separators using backspace key", function(assert
 });
 
 QUnit.test("removing required last char should replace it to 0", function(assert) {
-    this.instance.option("value", 1);
+    this.instance.option({
+        format: "#0.00",
+        value: 1
+    });
     this.keyboard.caret(1).press("backspace");
 
-    assert.equal(this.input.val(), "0", "value is correct");
+    assert.equal(this.input.val(), "0.00", "value is correct");
+    assert.deepEqual(this.keyboard.caret(), { start: 1, end: 1 }, "caret is good");
 });
 
 QUnit.test("removing required last char should replace it to 0 if percent format", function(assert) {

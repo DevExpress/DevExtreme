@@ -540,7 +540,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
                 firstCaretAfterPoint = text.indexOf(decimalSeparator) + 1,
                 isCaretOnFloat = firstCaretAfterPoint && firstCaretAfterPoint <= caret.start;
 
-            if(!isCaretOnFloat && text.length < formatted.length) {
+            if(digitPosition && !isCaretOnFloat && text.length < formatted.length) {
                 delta = 2;
             }
         }
@@ -556,7 +556,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
     _getCaretBoundaries: function(text) {
         text = text || this._getInputVal();
 
-        var startBorder = /^[^1-9]*(\d)/.exec(text),
+        var startBorder = /^[^0-9]*(\d)/.exec(text),
             endBorder = /\d[^0-9]*$/.exec(text);
 
         if(startBorder !== null) {
