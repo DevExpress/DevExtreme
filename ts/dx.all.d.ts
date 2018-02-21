@@ -506,7 +506,7 @@ declare module DevExpress {
         /** Gets the DataSource instance. */
         getDataSource(): DevExpress.data.DataSource;
     }
-    export function eventsHandler(element: DevExpress.core.dxElement, extraParameters: any): boolean;
+    export function eventsHandler(event: dxEvent, extraParameters: any): boolean;
     /** Describes dxEvent, a counterpart of the jQuery.Event to be used without jQuery. */
     export class dxEvent {
         /** The DOM element that initiated the event. */
@@ -801,6 +801,7 @@ declare module DevExpress {
         static getMarkup(widgetInstances: Array<DOMComponent>): string;
         /** Gets the color sets of a predefined or registered palette. */
         static getPalette(paletteName: string): any;
+        static getTheme(theme: string): any;
         /** The method to be called every time the active entry in the browser history is modified without reloading the current page. */
         static refreshPaths(): void;
         /** Refreshes the current theme and palette in all data visualization widgets on the page. */
@@ -2188,7 +2189,7 @@ declare module DevExpress.ui {
         grouping?: { groupContinuedMessage?: any, groupContinuesMessage?: any, autoExpandAll?: boolean, allowCollapsing?: boolean, contextMenuEnabled?: boolean, expandMode?: string, texts?: { groupContinuesMessage?: string, groupContinuedMessage?: string, groupByThisColumn?: string, ungroup?: string, ungroupAll?: string } };
         /** Configures the group panel. */
         groupPanel?: { visible?: boolean | string, emptyPanelText?: string, allowColumnDragging?: boolean };
-        /** Specifies which data field provides keys for data items. Applies only if data is a simple array. */
+        /** Specifies which data field provides data items' keys. Applies only if data is a JavaScript array. */
         keyExpr?: string | Array<string>;
         /** Allows you to build a master-detail interface in the grid. */
         masterDetail?: { enabled?: boolean, autoExpandAll?: boolean, template?: template | ((detailElement: DevExpress.core.dxElement, detailInfo: { key?: any, data?: any }) => any) };
@@ -3098,7 +3099,7 @@ declare module DevExpress.ui {
         /** A handler for the shown event. */
         onShown?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any }) => any);
         /** An object defining widget positioning options. */
-        position?: string | positionConfig;
+        position?: string | positionConfig | Function;
         /** A Boolean value specifying whether or not the main screen is inactive while the widget is active. */
         shading?: boolean;
         /** Specifies the shading color. */
@@ -4698,6 +4699,7 @@ declare module DevExpress.ui {
         items?: Array<dxFormSimpleItem | dxFormGroupItem | dxFormTabbedItem | dxFormEmptyItem>;
         /** Specifies the type of the current item. */
         itemType?: string;
+        name?: string;
         /** A template to be used for rendering a group item. */
         template?: template | ((data: { component?: dxForm, formData?: any }, itemElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /** Specifies whether or not the current form item is visible. */
@@ -4713,6 +4715,7 @@ declare module DevExpress.ui {
         cssClass?: string;
         /** Specifies the type of the current item. */
         itemType?: string;
+        name?: string;
         /** Holds a configuration object for the TabPanel widget used to display the current form item. */
         tabPanelOptions?: dxTabPanelOptions;
         /** An array of tab configuration objects. */
@@ -7039,15 +7042,15 @@ declare module DevExpress.viz {
     }
 }
 declare module DevExpress.events {
-    /** Attaches an event handler to the specified element. */
-    export function on(element: DevExpress.core.dxElement, eventName: string, selector: string, data: any, handler: Function): void;
-    /** Attaches an event handler to be executed only once to the specified element. */
-    export function one(element: DevExpress.core.dxElement, eventName: string, selector: string, data: any, handler: Function): void;
-    /** Detaches an event handler from the specified element. */
-    export function off(element: DevExpress.core.dxElement, eventName: string, selector: string, handler: Function): void;
-    /** Executes all handlers of a given event type attached to the specified element. */
-    export function trigger(element: DevExpress.core.dxElement, event: string | event, extraParameters: any): void;
-    export function triggerHandler(element: DevExpress.core.dxElement, event: string | event, extraParameters: any): void;
+    /** Attaches an event handler to the specified elements. */
+    export function on(element: Element | Array<Element>, eventName: string, selector: string, data: any, handler: Function): void;
+    /** Attaches an event handler to be executed only once to the specified elements. */
+    export function one(element: Element | Array<Element>, eventName: string, selector: string, data: any, handler: Function): void;
+    /** Detaches an event handler from the specified elements. */
+    export function off(element: Element | Array<Element>, eventName: string, selector: string, handler: Function): void;
+    /** Executes all handlers of a given event type attached to the specified elements. */
+    export function trigger(element: Element | Array<Element>, event: string | event, extraParameters: any): void;
+    export function triggerHandler(element: Element | Array<Element>, event: string | event, extraParameters: any): void;
 }
 declare module DevExpress.data.utils {
     /** Compiles a getter function from a getter expression. */
