@@ -618,6 +618,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
     _getWidths: function($cellElements) {
         var result = [],
+            advancedRendering = this.option("advancedRendering") && this.option("columnAutoWidth"),
             width,
             clientRect;
 
@@ -626,8 +627,8 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
                 width = item.offsetWidth;
                 if(item.getBoundingClientRect) {
                     clientRect = item.getBoundingClientRect();
-                    if(clientRect.width > width) {
-                        width = Math.ceil(clientRect.width);
+                    if(clientRect.width > width - 1) {
+                        width = advancedRendering ? clientRect.width : Math.ceil(clientRect.width);
                     }
                 }
 
