@@ -37,8 +37,8 @@ QUnit.testStart(function() {
 
 QUnit.module("ScrollView", moduleConfig);
 
-QUnit.test("pockets should not e rendered in scrollView on server", function(assert) {
-    var $scrollView = $("#scrollView").dxScrollView({ useNative: false }),
+QUnit.test("pockets should not be rendered in scrollView on server", function(assert) {
+    var $scrollView = $("#scrollView").dxScrollView(),
         $scrollableContent = $scrollView.find("." + SCROLLABLE_CONTENT_CLASS),
         $topPocket = $scrollableContent.find("." + SCROLLVIEW_TOP_POCKET_CLASS),
         $bottomPocket = $scrollableContent.find("." + SCROLLVIEW_BOTTOM_POCKET_CLASS);
@@ -47,9 +47,19 @@ QUnit.test("pockets should not e rendered in scrollView on server", function(ass
     assert.equal($bottomPocket.length, 0, "scrollView has no bottom-pocket on server");
 });
 
-QUnit.test("scrollbar should not be rendered in scrollView server", function(assert) {
-    var $scrollView = $("#scrollView").dxScrollView({ useNative: false }),
+QUnit.test("scrollbar should not be rendered in scrollView on server", function(assert) {
+    var $scrollView = $("#scrollView").dxScrollView(),
         $scrollbar = $scrollView.find("." + SCROLLABLE_SCROLLBAR_CLASS);
 
     assert.equal($scrollbar.length, 0, "scrollView has no scrollbar on server");
+});
+
+QUnit.test("scrollView should have correct size on init", function(assert) {
+    var $scrollView = $("#scrollView").dxScrollView({
+        width: 500,
+        height: 500
+    });
+
+    assert.equal($scrollView.get(0).style.width, "500px");
+    assert.equal($scrollView.get(0).style.height, "500px");
 });

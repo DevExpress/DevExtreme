@@ -6,6 +6,8 @@ var $ = require("../../core/renderer"),
     messageLocalization = require("../../localization/message"),
     registerComponent = require("../../core/component_registrator"),
     extend = require("../../core/utils/extend").extend,
+    domAdapter = require("../../core/dom_adapter"),
+    typeUtils = require("../../core/utils/type"),
     PullDownStrategy = require("./ui.scroll_view.native.pull_down"),
     SwipeDownStrategy = require("./ui.scroll_view.native.swipe_down"),
     SlideDownStrategy = require("./ui.scroll_view.native.slide_down"),
@@ -39,26 +41,18 @@ var isServerSide = !windowUtils.hasWindow();
 var getScrollViewServerComponent = function() {
     var emptyComponentConfig = {};
 
-    // for(var field in DOMComponent.prototype) {
-    //     var prop = DOMComponent.prototype[field];
+    emptyComponentConfig.ctor = function(element, options) {
+        this.callBase(element, options);
 
-    //     if(typeUtils.isFunction(prop) && field.substr(0, 1) !== "_") {
-    //         emptyComponentConfig[field] = noop;
-    //     }
-    // }
+        var width = options && typeUtils.isNumeric(options.width) ? options.width + "px" : "100%";
+        var height = options && typeUtils.isNumeric(options.height) ? options.height + "px" : "100%";
 
-    // emptyComponentConfig.ctor = function(element, options) {
-    //     var sizedElement = domAdapter.createElement("div");
+        domAdapter.setStyle(element, "width", width);
+        domAdapter.setStyle(element, "height", height);
 
-    //     var width = options && typeUtils.isNumeric(options.width) ? options.width + "px" : "100%";
-    //     var height = options && typeUtils.isNumeric(options.height) ? options.height + "px" : this._getDefaultSize().height + "px";
-
-    //     domAdapter.setStyle(sizedElement, "width", width);
-    //     domAdapter.setStyle(sizedElement, "height", height);
-
-    //     domAdapter.setClass(sizedElement, SIZED_ELEMENT_CLASS);
-    //     domAdapter.insertElement(element, sizedElement);
-    // };
+        // domAdapter.setClass(sizedElement, SIZED_ELEMENT_CLASS);
+        // domAdapter.insertElement(element, sizedElement);
+    };
 
     return Scrollable.inherit(emptyComponentConfig);
 };
