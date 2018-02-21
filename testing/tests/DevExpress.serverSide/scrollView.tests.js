@@ -20,7 +20,7 @@ QUnit.testStart(function() {
     $("#qunit-fixture").html(markup);
 });
 
-QUnit.module("ScrollView markup");
+QUnit.module("ScrollView server markup");
 
 QUnit.test("pockets should not be rendered in scrollView on server", function(assert) {
     var $scrollView = $("#scrollView").dxScrollView(),
