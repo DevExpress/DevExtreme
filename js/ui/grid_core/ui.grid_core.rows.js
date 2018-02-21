@@ -966,7 +966,12 @@ module.exports = {
                         column;
 
                     if(rowOptions) {
-                        column = this._columnsController.columnOption(columnIdentifier);
+                        if(typeUtils.isString(columnIdentifier)) {
+                            column = this._columnsController.columnOption(columnIdentifier);
+                        } else {
+                            column = this._columnsController.getVisibleColumns()[columnIdentifier];
+                        }
+
                         if(column) {
                             cellOptions = this._getCellOptions({
                                 value: column.calculateCellValue(rowOptions.data),

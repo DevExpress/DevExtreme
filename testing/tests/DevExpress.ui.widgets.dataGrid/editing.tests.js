@@ -5852,6 +5852,24 @@ QUnit.test("repaintRows should be skipped on saving", function(assert) {
     assert.strictEqual(changeCount, 1, "data is changed once");
 });
 
+//T607746
+QUnit.test("The cellValue method should work correctly with visible index", function(assert) {
+    //arrange
+    var $testElement = $("#container"),
+        visibleColumns;
+
+    this.options.columns = ["name", "age", { dataField: "lastName", visibleIndex: 0 }];
+    this.columnsController.optionChanged({ name: "columns", fullName: "columns" });
+    this.rowsView.render($testElement);
+    visibleColumns = this.columnsController.getVisibleColumns().map(function(column) {
+        return column.dataField;
+    });
+
+    //act, assert
+    assert.strictEqual(this.cellValue(0, 2), 15, "value of the third cell");
+    assert.deepEqual(visibleColumns, ["lastName", "name", "age"], "visible columns");
+});
+
 if(device.ios || device.android) {
     //T322738
     QUnit.testInActiveWindow("Native click is used when allowUpdating is true", function(assert) {
