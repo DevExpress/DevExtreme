@@ -86,7 +86,7 @@ var DataAdapter = Class.inherit({
         var that = this,
             array = [];
 
-        each(that._getDataStructure(), function(_, node) {
+        each(that._getDataBySelectionMode(), function(_, node) {
             if(!that._isNodeVisible(node)) {
                 return;
             }
@@ -104,8 +104,8 @@ var DataAdapter = Class.inherit({
         return array;
     },
 
-    _getDataStructure: function() {
-        return this.options.multipleSelection ? this._dataStructure : this._initialDataStructure;
+    _getDataBySelectionMode: function() {
+        return this.options.multipleSelection ? this.getData() : this.getFullData();
     },
 
     _isNodeVisible: function(node) {
@@ -332,7 +332,7 @@ var DataAdapter = Class.inherit({
     },
 
     getNodeByKey: function(key) {
-        return this._getByKey(this._getDataStructure(), key);
+        return this._getByKey(this._getDataBySelectionMode(), key);
     },
 
     getTreeNodes: function() {
