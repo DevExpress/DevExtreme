@@ -124,7 +124,13 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         cell.style.textAlign = alignment;
 
         var $cell = $(cell);
-        this.setAria("role", "gridcell", $cell);
+
+        this.component.setAria({
+            "role": "gridcell",
+            "colindex": column.index,
+            "selected": false
+        }, $cell);
+        $cell.attr("tabindex", -1);
 
         if(!typeUtils.isDefined(column.groupIndex) && column.cssClass) {
             $cell.addClass(column.cssClass);
@@ -138,10 +144,8 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         return $cell;
     },
 
-    _createRow: function() {
-        return $("<tr>")
-            .addClass(ROW_CLASS)
-            .attr("role", "row");
+    _createRow: function(rowObject) {
+        return $("<tr>").addClass(ROW_CLASS).attr("role", "row");
     },
 
     _createTable: function(columns) {
@@ -159,9 +163,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             }
         }
 
-        var $body = $table.append("<tbody>");
-
-        that.component.setAria({ "role": "presentation" }, $body);
+        $table.append("<tbody>");
 
         //T138469
         if(browser.mozilla) {
@@ -437,17 +439,11 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
     _renderCell: function($row, options) {
         var that = this,
             cellOptions = that._getCellOptions(options),
-            column = options.column,
             $cell;
 
         options.row.cells.push(cellOptions);
 
         $cell = that._createCell(cellOptions);
-
-        //TODO move to cellPrepared
-        if(!column.command) {
-            that.setAria("label", that.localize("dxDataGrid-ariaColumn") + " " + column.caption + ", " + that.localize("dxDataGrid-ariaValue") + " " + cellOptions.text, $cell);
-        }
 
         that._renderCellContent($cell, cellOptions);
 

@@ -510,6 +510,9 @@ module.exports = {
                             this.setAria("role", "rowgroup", $row);
                             this.setAria("expanded", isDefined(isRowExpanded) && isRowExpanded.toString(), $row);
                         }
+
+                        $row.attr("tabindex", -1);
+
                     }
 
                     return $row;
