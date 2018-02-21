@@ -345,20 +345,25 @@ var TextEditorBase = Editor.inherit({
     },
 
     _initMarkup: function() {
+        this.$element().addClass(TEXTEDITOR_CLASS);
+
         this._renderInput();
+        this._renderInputType();
+        this._renderInputValue();
+
+        this._renderPlaceholderMarkup();
+        this._renderProps();
+
         this.callBase();
     },
 
     _render: function() {
-        this.$element().addClass(TEXTEDITOR_CLASS);
-
-        this._renderInputType();
         this._renderValue();
-        this._renderProps();
-        this._renderPlaceholder();
 
+        this._attachPlaceholderEvents();
         this._refreshValueChangeEvent();
         this._renderEvents();
+
         this._renderEnterKeyAction();
         this._renderEmptinessEvent();
         this.callBase();
@@ -491,25 +496,31 @@ var TextEditorBase = Editor.inherit({
     },
 
     _renderPlaceholder: function() {
+        this._renderPlaceholderMarkup();
+        this._attachPlaceholderEvents();
+    },
+
+    _renderPlaceholderMarkup: function() {
         if(this._$placeholder) {
             this._$placeholder.remove();
             this._$placeholder = null;
         }
 
-        var that = this,
-            $input = that._input(),
-            placeholderText = that.option("placeholder"),
+        var $input = this._input(),
+            placeholderText = this.option("placeholder"),
             $placeholder = this._$placeholder = $('<div>')
-                .attr("data-dx_placeholder", placeholderText),
-            startEvent = eventUtils.addNamespace(pointerEvents.up, this.NAME);
-
-        eventsEngine.on($placeholder, startEvent, function() {
-            eventsEngine.trigger($input, "focus");
-        });
+                .attr("data-dx_placeholder", placeholderText);
 
         $placeholder.insertAfter($input);
-
         $placeholder.addClass(TEXTEDITOR_PLACEHOLDER_CLASS);
+    },
+
+    _attachPlaceholderEvents: function() {
+        var startEvent = eventUtils.addNamespace(pointerEvents.up, this.NAME);
+
+        eventsEngine.on(this._$placeholder, startEvent, function() {
+            eventsEngine.trigger(this._input(), "focus");
+        });
         this._toggleEmptinessEventHandler();
     },
 
