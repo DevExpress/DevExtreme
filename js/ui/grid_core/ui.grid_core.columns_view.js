@@ -704,6 +704,9 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
                 if(width === "adaptiveHidden") {
                     width = HIDDEN_COLUMNS_WIDTH;
                 }
+                if(typeof width === "number") {
+                    width = width.toFixed(3) + "px";
+                }
                 $cols.eq(columnIndex).css("width", width || "auto");
                 columnIndex++;
             }
