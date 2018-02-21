@@ -168,6 +168,7 @@
 
             SystemJS.config({
                 baseURL: '@Url.Content("~/artifacts/transpiled")',
+                transpiler: 'plugin-babel',
                 map: {
                     // Deps
                     'globalize': '@Url.Content("~/vendor/globalize/globalize")',
@@ -192,7 +193,9 @@
                     // SystemJS plugins
                     'css': '@Url.Content("~/node_modules/systemjs-plugin-css/css.js")',
                     'text': '@Url.Content("~/node_modules/systemjs-plugin-text/text.js")',
-                    'json': '@Url.Content("~/node_modules/systemjs-plugin-json/json.js")'
+                    'json': '@Url.Content("~/node_modules/systemjs-plugin-json/json.js")',
+                    'plugin-babel': '@Url.Content("~/node_modules/systemjs-plugin-babel/plugin-babel.js")',
+                    'systemjs-babel-build': '@Url.Content("~/node_modules/systemjs-plugin-babel/systemjs-babel-browser.js")'
                 },
                 packages: {
                     '': {
