@@ -599,13 +599,12 @@ var FilterBuilder = Widget.inherit({
             onHiding: function(e) {
                 $button.removeClass(ACTIVE_CLASS);
             },
-            position: { my: position + " top", at: position + " bottom", offset: "0 1" },
+            position: { my: position + " top", at: position + " bottom", offset: "0 1", of: $button },
             animation: null,
             onHidden: function() {
                 removeMenu();
             },
             cssClass: FILTER_BUILDER_OVERLAY_CLASS + " " + options.menu.cssClass,
-            target: $button,
             rtlEnabled: rtlEnabled
         });
 
@@ -617,7 +616,7 @@ var FilterBuilder = Widget.inherit({
                     if((e.type === "keydown" && e.keyCode === TAB_KEY)
                             || (e.type === "keyup" && (e.keyCode === ESCAPE_KEY || e.keyCode === ENTER_KEY))) {
                         info.component.hide();
-                        eventsEngine.trigger(options.menu.target, "focus");
+                        eventsEngine.trigger(options.menu.position.of, "focus");
                     }
                 });
 
@@ -930,7 +929,6 @@ var FilterBuilder = Widget.inherit({
             $popup = $("<div>")
                 .addClass(options.menu.cssClass).appendTo($container);
         this._createComponent($popup, Popup, {
-            target: options.menu.target,
             onHiding: options.menu.onHiding,
             onHidden: options.menu.onHidden,
             rtlEnabled: options.menu.rtlEnabled,
