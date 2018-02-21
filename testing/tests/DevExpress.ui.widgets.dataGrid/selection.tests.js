@@ -3187,7 +3187,7 @@ QUnit.test("changeRowSelection for edited data", function(assert) {
     that.setup();
     that.columnHeadersView.render($testElement);
     that.rowsView.render($testElement);
-    that.cellValue(0, 0, "Test");
+    that.cellValue(0, 1, "Test");
 
     //act
     that.selectionController.changeItemSelection(0);
