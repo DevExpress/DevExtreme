@@ -130,6 +130,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             "colindex": column.index,
             "selected": false
         }, $cell);
+
         $cell.attr("tabindex", -1);
 
         if(!typeUtils.isDefined(column.groupIndex) && column.cssClass) {
@@ -145,7 +146,14 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
     },
 
     _createRow: function(rowObject) {
-        return $("<tr>").addClass(ROW_CLASS).attr("role", "row");
+        var $element = $("<tr>").addClass(ROW_CLASS);
+        if(rowObject) {
+            this.component.setAria({
+                "role": "row",
+                "rowindex": rowObject.rowIndex + 1
+            }, $element);
+        }
+        return $element;
     },
 
     _createTable: function(columns) {
