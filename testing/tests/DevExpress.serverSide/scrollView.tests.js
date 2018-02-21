@@ -53,13 +53,3 @@ QUnit.test("scrollbar should not be rendered in scrollView on server", function(
 
     assert.equal($scrollbar.length, 0, "scrollView has no scrollbar on server");
 });
-
-QUnit.test("scrollView should have correct size on init", function(assert) {
-    var $scrollView = $("#scrollView").dxScrollView({
-        width: 500,
-        height: 500
-    });
-
-    assert.equal($scrollView.get(0).style.width, "500px");
-    assert.equal($scrollView.get(0).style.height, "500px");
-});

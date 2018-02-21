@@ -6,8 +6,7 @@ var $ = require("../../core/renderer"),
     messageLocalization = require("../../localization/message"),
     registerComponent = require("../../core/component_registrator"),
     extend = require("../../core/utils/extend").extend,
-    domAdapter = require("../../core/dom_adapter"),
-    typeUtils = require("../../core/utils/type"),
+    noop = require("../../core/utils/common").noop,
     PullDownStrategy = require("./ui.scroll_view.native.pull_down"),
     SwipeDownStrategy = require("./ui.scroll_view.native.swipe_down"),
     SlideDownStrategy = require("./ui.scroll_view.native.slide_down"),
@@ -38,26 +37,12 @@ var refreshStrategies = {
 
 var isServerSide = !windowUtils.hasWindow();
 
-var getScrollViewServerComponent = function() {
-    var emptyComponentConfig = {};
-
-    emptyComponentConfig.ctor = function(element, options) {
-        this.callBase(element, options);
-
-        var width = options && typeUtils.isNumeric(options.width) ? options.width + "px" : "100%";
-        var height = options && typeUtils.isNumeric(options.height) ? options.height + "px" : "100%";
-
-        domAdapter.setStyle(element, "width", width);
-        domAdapter.setStyle(element, "height", height);
-
-        // domAdapter.setClass(sizedElement, SIZED_ELEMENT_CLASS);
-        // domAdapter.insertElement(element, sizedElement);
-    };
-
-    return Scrollable.inherit(emptyComponentConfig);
+var scrollViewServerConfig = {
+    release: noop,
+    refresh: noop
 };
 
-var ScrollView = isServerSide ? getScrollViewServerComponent() : Scrollable.inherit({
+var ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
