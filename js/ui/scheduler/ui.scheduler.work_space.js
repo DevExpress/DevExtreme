@@ -579,25 +579,29 @@ var SchedulerWorkSpace = Widget.inherit({
 
         config.direction = "both";
         config.onStart = (function(e) {
-            headerScrollableOnScroll = this._headerScrollable.option("onScroll");
-            sidebarScrollableOnScroll = this._sidebarScrollable.option("onScroll");
+            if(this._headerScrollable) {
+                headerScrollableOnScroll = this._headerScrollable.option("onScroll");
+                this._headerScrollable.option("onScroll", undefined);
+            }
 
-            this._headerScrollable.option("onScroll", undefined);
-            this._sidebarScrollable.option("onScroll", undefined);
+            if(this._sidebarScrollable) {
+                sidebarScrollableOnScroll = this._sidebarScrollable.option("onScroll");
+                this._sidebarScrollable.option("onScroll", undefined);
+            }
         }).bind(this);
         config.onScroll = (function(e) {
-            this._sidebarScrollable.scrollTo({
+            this._sidebarScrollable && this._sidebarScrollable.scrollTo({
                 top: e.scrollOffset.top
             });
-            this._headerScrollable.scrollTo({
+            this._headerScrollable && this._headerScrollable.scrollTo({
                 left: e.scrollOffset.left
             });
 
         }).bind(this);
         config.onEnd = (function() {
             this.notifyObserver("updateResizableArea", {});
-            this._headerScrollable.option("onScroll", headerScrollableOnScroll);
-            this._sidebarScrollable.option("onScroll", sidebarScrollableOnScroll);
+            this._headerScrollable && this._headerScrollable.option("onScroll", headerScrollableOnScroll);
+            this._sidebarScrollable && this._sidebarScrollable.option("onScroll", sidebarScrollableOnScroll);
         }).bind(this);
 
         return config;

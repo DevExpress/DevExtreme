@@ -119,16 +119,18 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
             timelineConfig = {
                 direction: HORIZONTAL,
                 onStart: (function() {
-                    headerScrollableOnScroll = this._headerScrollable.option("onScroll");
-                    this._headerScrollable.option("onScroll", undefined);
+                    if(this._headerScrollable) {
+                        headerScrollableOnScroll = this._headerScrollable.option("onScroll");
+                        this._headerScrollable.option("onScroll", undefined);
+                    }
                 }).bind(this),
                 onScroll: (function(e) {
-                    this._headerScrollable.scrollTo({
+                    this._headerScrollable && this._headerScrollable.scrollTo({
                         left: e.scrollOffset.left
                     });
                 }).bind(this),
                 onEnd: (function(e) {
-                    this._headerScrollable.option("onScroll", headerScrollableOnScroll);
+                    this._headerScrollable && this._headerScrollable.option("onScroll", headerScrollableOnScroll);
                 }).bind(this)
             };
 
