@@ -13,7 +13,7 @@ var extend = require("../core/utils/extend").extend,
     nextCacheUid = 0,
     widgetsCache = {};
 
-function findTheme(themeName) {
+function getTheme(themeName) {
     var name = _normalizeEnum(themeName);
     return themes[name] || themes[themesMapping[name] || currentThemeName];
 }
@@ -58,7 +58,7 @@ function registerTheme(theme, baseThemeName) {
     var themeName = _normalizeEnum(theme && theme.name);
     if(themeName) {
         registerThemeName(themeName, themeName);
-        themes[themeName] = _extend(true, {}, findTheme(baseThemeName), patchTheme(theme));
+        themes[themeName] = _extend(true, {}, getTheme(baseThemeName), patchTheme(theme));
     }
 }
 
@@ -192,7 +192,7 @@ function refreshTheme() {
 _extend(exports, {
     currentTheme: currentTheme,
     registerTheme: registerTheme,
-    findTheme: findTheme,
+    getTheme: getTheme,
     registerThemeAlias: registerThemeAlias,
     registerThemeSchemeAlias: registerThemeSchemeAlias,
     refreshTheme: refreshTheme,
