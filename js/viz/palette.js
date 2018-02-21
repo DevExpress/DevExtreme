@@ -336,7 +336,7 @@ function BlendColors(palette, parameters) {
 function Palette(palette, parameters, themeDefaultPalette) {
     parameters = parameters || {};
 
-    var extensionMode = parameters.extensionMode,
+    var extensionMode = (parameters.extensionMode || "").toLowerCase(),
         keyPalette = selectPaletteOnSeniority(palette, themeDefaultPalette),
         colors = getPalette(keyPalette, { type: parameters.type || "simpleSet" });
 

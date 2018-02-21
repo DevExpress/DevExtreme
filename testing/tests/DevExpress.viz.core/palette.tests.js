@@ -308,7 +308,7 @@ QUnit.test('Blend with passing count. Keep last color in the end', function(asse
 
 QUnit.test('Lightening palette when color is too light', function(assert) {
     //act
-    var palette = new this.Palette(['white'], { useHighlight: true, extensionMode: "alternate" });
+    var palette = new this.Palette(['white'], { useHighlight: true, extensionMode: "Alternate" });
 
     //assert
     assert.strictEqual(palette.getNextColor(), 'white');
