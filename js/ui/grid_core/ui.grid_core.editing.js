@@ -435,7 +435,7 @@ var EditingController = modules.ViewController.inherit((function() {
             }
 
             insertKey.dataRowIndex = rows.filter(function(row, index) {
-                return index < insertKey.rowIndex && row.rowType === "data";
+                return index < insertKey.rowIndex && (row.rowType === "data" || row.rowType === "group");
             }).length;
         },
 
