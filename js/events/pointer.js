@@ -1,15 +1,14 @@
 "use strict";
 
-var support = require("../core/utils/support"),
+var jQuery = require("jquery"),
+    support = require("../core/utils/support"),
     each = require("../core/utils/iterator").each,
     devices = require("../core/devices"),
     registerEvent = require("./core/event_registrator"),
     TouchStrategy = require("./pointer/touch"),
     MsPointerStrategy = require("./pointer/mspointer"),
     MouseStrategy = require("./pointer/mouse"),
-    MouseAndTouchStrategy = require("./pointer/mouse_and_touch"),
-    jQuery = require("jquery"),
-    useJQuery = require("../integration/jquery/use_jquery")();
+    MouseAndTouchStrategy = require("./pointer/mouse_and_touch");
 
 /**
   * @name ui events_dxpointerdown
@@ -97,7 +96,7 @@ each(EventStrategy.map, function(pointerEvent, originalEvents) {
     registerEvent(pointerEvent, new EventStrategy(pointerEvent, originalEvents));
 });
 
-if(useJQuery && support.touch) {
+if(jQuery && support.touch) {
     each([TouchStrategy.map["dxpointerdown"], TouchStrategy.map["dxpointermove"]], function(_, eventName) {
         jQuery.event.special[eventName] = {
             setup: function(_, namespaces, handler) {
