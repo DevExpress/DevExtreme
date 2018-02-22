@@ -190,6 +190,7 @@ var Overlay = Widget.inherit({
             * @publicName position
             * @type string|positionConfig|function
             * @default { my: 'center', at: 'center', of: window }
+            * @acceptValues 'top'|'bottom'|'left'|'right'
             */
             position: {
                 my: "center",
