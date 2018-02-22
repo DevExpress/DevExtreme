@@ -2012,10 +2012,10 @@ QUnit.test("update scroll after change items", function(assert) {
 
     var scrollView = $list.dxScrollView("instance"),
         list = $list.dxList("instance"),
-        contentHeight = scrollView.content().height();
+        contentHeight = $(scrollView.content()).height();
 
     list.option("items", [1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0]);
-    var newHeight = scrollView.content().height();
+    var newHeight = $(scrollView.content()).height();
     assert.equal(newHeight, contentHeight * 2, "update after items was changed");
 });
 

@@ -95,7 +95,6 @@ QUnit.module("Widget creation", {
 
 Object.keys(widgets).forEach(function(widget) {
     var excludedWidgets = [
-        "TileView",
         "Validator"
     ];
 

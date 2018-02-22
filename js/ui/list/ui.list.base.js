@@ -617,7 +617,7 @@ var ListBase = CollectionWidget.inherit({
             useKeyboard: false
         });
 
-        this._$container = this._scrollView.content();
+        this._$container = $(this._scrollView.content());
 
         this._createScrollViewActions();
     },
