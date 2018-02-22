@@ -3,6 +3,7 @@
 /* global document, Node */
 
 var injector = require("./utils/dependency_injector");
+var noop = require("./utils/common").noop;
 
 var nativeDOMAdapterStrategy = {
     querySelectorAll: function(element, selector) {
@@ -160,10 +161,14 @@ var nativeDOMAdapterStrategy = {
     },
 
     listen: function(element, event, callback, useCapture) {
-        element && element.addEventListener(event, callback, useCapture);
+        if(!element || !element.addEventListener) {
+            return noop;
+        }
+
+        element.addEventListener(event, callback, useCapture);
 
         return function() {
-            element && element.removeEventListener(event, callback);
+            element.removeEventListener(event, callback);
         };
     }
 };
