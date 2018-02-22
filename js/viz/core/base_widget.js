@@ -12,7 +12,6 @@ var noop = require("../../core/utils/common").noop,
     extend = require("../../core/utils/extend").extend,
 
     _floor = Math.floor,
-    Class = require("../../core/class"),
     DOMComponent = require("../../core/dom_component"),
     helpers = require("./helpers"),
     _parseScalar = require("./utils").parseScalar,
@@ -105,15 +104,8 @@ function pickPositiveValue(values) {
 var getEmptyComponent = function() {
     var emptyComponentConfig = {};
 
-    for(var field in DOMComponent.prototype) {
-        var prop = DOMComponent.prototype[field];
-
-        if(typeUtils.isFunction(prop) && field.substr(0, 1) !== "_") {
-            emptyComponentConfig[field] = noop;
-        }
-    }
-
     emptyComponentConfig.ctor = function(element, options) {
+        this.callBase(element, options);
         var sizedElement = domAdapter.createElement("div");
 
         var width = options && typeUtils.isNumeric(options.width) ? options.width + "px" : "100%";
@@ -126,7 +118,20 @@ var getEmptyComponent = function() {
         domAdapter.insertElement(element, sizedElement);
     };
 
-    return Class.inherit(emptyComponentConfig);
+    var EmptyComponent = DOMComponent.inherit(emptyComponentConfig);
+    var originalInherit = EmptyComponent.inherit;
+
+    EmptyComponent.inherit = function(config) {
+        for(var field in config) {
+            if(typeUtils.isFunction(config[field]) && field.substr(0, 1) !== "_" || field === "_dispose") {
+                config[field] = noop;
+            }
+        }
+
+        return originalInherit.call(this, config);
+    };
+
+    return EmptyComponent;
 };
 
 var isServerSide = !windowUtils.hasWindow();
