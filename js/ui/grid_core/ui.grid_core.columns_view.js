@@ -131,8 +131,6 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             "selected": false
         }, $cell);
 
-        $cell.attr("tabindex", -1);
-
         if(!typeUtils.isDefined(column.groupIndex) && column.cssClass) {
             $cell.addClass(column.cssClass);
         }
