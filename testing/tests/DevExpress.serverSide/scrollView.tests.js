@@ -63,7 +63,7 @@ QUnit.test("root with custom size", function(assert) {
     assert.strictEqual(instance.option("height"), undefined);
 
     assert.strictEqual($scrollView[0].style.width, "50px", "outer width of the element must be equal to custom width");
-    assert.strictEqual($scrollView[0].style.height, "50px", "outer height of the element must be equal to custom width");
+    assert.strictEqual($scrollView[0].style.height, "50px", "outer height of the element must be equal to custom height");
 });
 
 
