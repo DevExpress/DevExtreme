@@ -1,24 +1,29 @@
 .dx-size-default() {
-    @MATERIAL_GRID_BASE_CELL_PADDING: 7px;
+    @MATERIAL_GRID_BASE_CELL_VERTICAL_PADDING: 15px;
+    @MATERIAL_GRID_BASE_CHECKBOX_SIZE: 18px;
+    @MATERIAL_GRID_BASE_CELL_HORIZONTAL_PADDING: 28px;
+    @MATERIAL_GRID_BASE_CELL_FIRST_COLUMN_PADDING: 24px;
     @MATERIAL_GRID_BASE_TEXTEDITOR_INPUT_PADDING: 32px;
-    @MATERIAL_GRID_BASE_HEADER_PANEL_MARGIN_BOTTOM: 10px;
+    @MATERIAL_GRID_BASE_HEADER_PANEL_MARGIN: 14px 0;
     @MATERIAL_GRID_BASE_MENU_ITEM_PADDING: 6px 5px 7px;
     @MATERIAL_GRID_BASE_COLUMN_CHOOSER_PADDING: 20px;
     @MATERIAL_GRID_BASE_COLUMN_CHOOSER_PADDINGS: 0px @MATERIAL_GRID_BASE_COLUMN_CHOOSER_PADDING @MATERIAL_GRID_BASE_COLUMN_CHOOSER_PADDING @MATERIAL_GRID_BASE_COLUMN_CHOOSER_PADDING;
     @MATERIAL_GRID_BASE_COLUMN_CHOOSER_ITEM_MARGIN: 10px;
     @MATERIAL_GRID_BASE_GROUPPANEL_ITEM_MARGIN: 10px;
-    @MATERIAL_GRID_BASE_COMMAND_SELECT_COLUMN_WIDTH: 70px;
+    @MATERIAL_GRID_BASE_HEADER_PANEL_PADDING: 0 14px 0 24px;
+    
     @MATERIAL_GRID_BASE_COMMAND_EDIT_COLUMN_WIDTH: 85px;
-    @MATERIAL_GRID_BASE_COMMAND_EXPAND_COLUMN_WIDTH: 30px;
     @MATERIAL_GRID_BASE_CHECKBOX_FONTSIZE: 12px;
     @MATERIAL_GRID_BASE_ADAPTIVE_TEXT_PADDING: 8px;
     @MATERIAL_GRID_BASE_TREEVIEW_SEARCH_MARGIN: 10px;
+    @MATERIAL_GRID_BASE_CELL_FONT_SIZE: 13px;
+    @MATERIAL_GRID_BASE_HEADER_CELL_FONT_SIZE: 12px;
 }
 
 .dx-size-compact() {
-    @MATERIAL_GRID_BASE_CELL_PADDING: 5px;
+    @MATERIAL_GRID_BASE_CELL_VERTICAL_PADDING: 5px;
     @MATERIAL_GRID_BASE_TEXTEDITOR_INPUT_PADDING: 24px;
-    @MATERIAL_GRID_BASE_HEADER_PANEL_MARGIN_BOTTOM: 5px;
+    @MATERIAL_GRID_BASE_HEADER_PANEL_MARGIN: 5px;
     @MATERIAL_GRID_BASE_MENU_ITEM_PADDING: 5px 3px 3px;
     @MATERIAL_GRID_BASE_COLUMN_CHOOSER_PADDING: 10px;
     @MATERIAL_GRID_BASE_COLUMN_CHOOSER_PADDINGS: 0px @MATERIAL_GRID_BASE_COLUMN_CHOOSER_PADDING @MATERIAL_GRID_BASE_COLUMN_CHOOSER_PADDING @MATERIAL_GRID_BASE_COLUMN_CHOOSER_PADDING;
@@ -39,7 +44,11 @@
     @MATERIAL_GRID_BASE_DRAG_HEADER_BORDER: 1px solid ~"@{@{widgetName}-drag-header-border-color}";
     @MATERIAL_GRID_BASE_DRAG_HEADER_FIRST_SHADOW: 0px 0px 1px ~"@{@{widgetName}-drag-header-shadow-color}";
     @MATERIAL_GRID_BASE_DRAG_HEADER_SECOND_SHADOW: 0px 1px 3px ~"@{@{widgetName}-drag-header-second-shadow-color}";
-    @MATERIAL_GRID_BASE_CHECKBOX_ICON_SIZE: 16px;
+    @MATERIAL_GRID_BASE_HEADER_CELL_VERTICAL_PADDING: @MATERIAL_GRID_BASE_CELL_VERTICAL_PADDING + 4px;
+    @MATERIAL_GRID_BASE_CELL_PADDING: @MATERIAL_GRID_BASE_CELL_VERTICAL_PADDING @MATERIAL_GRID_BASE_CELL_HORIZONTAL_PADDING;
+    @MATERIAL_GRID_BASE_FOOTER_FONT_SIZE: @MATERIAL_GRID_BASE_HEADER_CELL_FONT_SIZE;
+    @MATERIAL_GRID_BASE_COMMAND_SELECT_COLUMN_WIDTH: @MATERIAL_GRID_BASE_CHECKBOX_SIZE;
+    @MATERIAL_GRID_BASE_COMMAND_EXPAND_COLUMN_WIDTH: @MATERIAL_BASE_ICON_SIZE;
 
     .dx-set-checkbox-border-color-as-background() when (@MATERIAL_COLOR_POSTFIX = ".contrast") {
         .dx-selection .dx-checkbox-icon {
@@ -154,27 +163,37 @@
             border-bottom: ~"@{@{widgetName}-border}";
         }
 
-        .dx-column-lines > td {
-            border-left: ~"@{@{widgetName}-border}";
-            border-right: ~"@{@{widgetName}-border}";
-        }
-
         .dx-error-row {
             .dx-closebutton {
                 float: right;
-                margin: @MATERIAL_GRID_BASE_CELL_PADDING + 2px;
+                margin: @MATERIAL_GRID_BASE_CELL_VERTICAL_PADDING + 2px;
                 .dx-icon-close;
                 .dx-icon-sizing(14px);
             }
 
             .dx-error-message {
-                padding: @MATERIAL_GRID_BASE_CELL_PADDING;
+                padding: @MATERIAL_GRID_BASE_CELL_VERTICAL_PADDING;
                 padding-right: 35px;
             }
         }
 
-        .dx-row > td {
-            padding: @MATERIAL_GRID_BASE_CELL_PADDING;
+        .dx-row {
+            > td {
+                padding: @MATERIAL_GRID_BASE_CELL_PADDING;
+                font-size: @MATERIAL_GRID_BASE_CELL_FONT_SIZE;
+
+                &:first-of-type {
+                    padding-left: @MATERIAL_GRID_BASE_CELL_FIRST_COLUMN_PADDING;
+                }
+
+                &:last-of-type {
+                    padding-right: 14px;
+                }
+            }
+
+            > .dx-command-select + td, > .dx-command-expand + td, > .dx-datagrid-group-space + td {
+                padding-left: @MATERIAL_GRID_BASE_CELL_FIRST_COLUMN_PADDING;
+            }
         }
     }
 
@@ -185,7 +204,7 @@
     .dx-@{widgetName}-headers, .dx-@{widgetName}-rowsview {
         .dx-texteditor-input {
             padding: @MATERIAL_GRID_BASE_CELL_PADDING;
-            min-height: round(@MATERIAL_BASE_LINE_HEIGHT * @MATERIAL_BASE_FONT_SIZE) + 2 * @MATERIAL_GRID_BASE_CELL_PADDING
+            min-height: round(@MATERIAL_BASE_LINE_HEIGHT * @MATERIAL_BASE_FONT_SIZE) + 2 * @MATERIAL_GRID_BASE_CELL_VERTICAL_PADDING
         }
 
         .dx-lookup {
@@ -193,9 +212,9 @@
         }
 
         .dx-lookup-field {
-            padding-left: @MATERIAL_GRID_BASE_CELL_PADDING;
-            padding-top: @MATERIAL_GRID_BASE_CELL_PADDING;
-            padding-bottom: @MATERIAL_GRID_BASE_CELL_PADDING;
+            padding-left: @MATERIAL_GRID_BASE_CELL_HORIZONTAL_PADDING;
+            padding-top: @MATERIAL_GRID_BASE_CELL_VERTICAL_PADDING;
+            padding-bottom: @MATERIAL_GRID_BASE_CELL_VERTICAL_PADDING;
         }
 
         .dx-dropdowneditor-button-visible {
@@ -279,8 +298,8 @@
         }
 
         &.dx-editor-inline-block .dx-highlight-outline::before {
-            padding-top: @MATERIAL_GRID_BASE_CELL_PADDING;
-            padding-bottom: @MATERIAL_GRID_BASE_CELL_PADDING;
+            padding-top: @MATERIAL_GRID_BASE_CELL_VERTICAL_PADDING;
+            padding-bottom: @MATERIAL_GRID_BASE_CELL_VERTICAL_PADDING;
         }
     }
 
@@ -292,8 +311,8 @@
         }
 
         .dx-checkbox-icon {
-            height: @MATERIAL_GRID_BASE_CHECKBOX_ICON_SIZE;
-            width: @MATERIAL_GRID_BASE_CHECKBOX_ICON_SIZE;
+            height: @MATERIAL_GRID_BASE_CHECKBOX_SIZE;
+            width: @MATERIAL_GRID_BASE_CHECKBOX_SIZE;
         }
 
         &.dx-checkbox-indeterminate {
@@ -353,7 +372,7 @@
                     color: ~"@{@{widgetName}-columnchooser-item-color}";
                     font-weight: ~"@{@{widgetName}-columnchooser-font-weight}";
                     border: ~"@{@{widgetName}-border}";
-                    padding: @MATERIAL_GRID_BASE_CELL_PADDING;
+                    padding: @MATERIAL_GRID_BASE_CELL_HORIZONTAL_PADDING;
                     .box-shadow(0px 1px 3px -1px ~"@{@{widgetName}-columnchooser-shadow-color}");
                 }
             }
@@ -388,52 +407,60 @@
         border: 2px solid ~"@{@{widgetName}-focused-border-color}";
     }
 
-    .dx-@{widgetName}-table {
-        .dx-row {
-            .dx-command-select {
-                width: @MATERIAL_GRID_BASE_COMMAND_SELECT_COLUMN_WIDTH;
-                min-width: @MATERIAL_GRID_BASE_COMMAND_SELECT_COLUMN_WIDTH;
-            }
-
-            .dx-command-edit {
-                width: @MATERIAL_GRID_BASE_COMMAND_EDIT_COLUMN_WIDTH;
-                min-width: @MATERIAL_GRID_BASE_COMMAND_EDIT_COLUMN_WIDTH;
-            }
-
-            .dx-command-expand {
-                width: @MATERIAL_GRID_BASE_COMMAND_EXPAND_COLUMN_WIDTH;
-                min-width: @MATERIAL_GRID_BASE_COMMAND_EXPAND_COLUMN_WIDTH;
-            }
-        }
-
-        .dx-data-row.dx-state-hover {
-            &:not(.dx-selection):not(.dx-row-inserted):not(.dx-row-removed):not(.dx-edit-row) {
-                & > td:not(.dx-focused) {
-                    background-color: ~"@{@{widgetName}-hover-bg}";
-                    color: ~"@{@{widgetName}-row-hovered-color}";
-
-                    &.dx-@{widgetName}-group-space {
-                        border-right-color: ~"@{@{widgetName}-hover-bg}";
-                    }
+    .dx-@{widgetName}-content {
+        .dx-@{widgetName}-table {
+            .dx-row {
+                .dx-command-select {
+                    width: @MATERIAL_GRID_BASE_COMMAND_SELECT_COLUMN_WIDTH;
+                    min-width: @MATERIAL_GRID_BASE_COMMAND_SELECT_COLUMN_WIDTH;
+                    padding-left: @MATERIAL_GRID_BASE_CELL_FIRST_COLUMN_PADDING;
                 }
-
-                & > .dx-@{widgetName}-readonly .dx-texteditor {
-                    .dx-texteditor-input {
+    
+                .dx-command-edit {
+                    width: @MATERIAL_GRID_BASE_COMMAND_EDIT_COLUMN_WIDTH;
+                    min-width: @MATERIAL_GRID_BASE_COMMAND_EDIT_COLUMN_WIDTH;
+                }
+    
+                .dx-command-expand, .dx-@{widgetName}-group-space {
+                    width: @MATERIAL_GRID_BASE_COMMAND_EXPAND_COLUMN_WIDTH;
+                    min-width: @MATERIAL_GRID_BASE_COMMAND_EXPAND_COLUMN_WIDTH;
+                    padding-left: @MATERIAL_GRID_BASE_CHECKBOX_SIZE;
+                    padding-right: 0;
+                }
+            }
+    
+            .dx-data-row.dx-state-hover {
+                &:not(.dx-selection):not(.dx-row-inserted):not(.dx-row-removed):not(.dx-edit-row) {
+                    & > td:not(.dx-focused) {
                         background-color: ~"@{@{widgetName}-hover-bg}";
                         color: ~"@{@{widgetName}-row-hovered-color}";
+    
+                        &.dx-@{widgetName}-group-space {
+                            border-right-color: ~"@{@{widgetName}-hover-bg}";
+                        }
                     }
-                }
-
-                & > td.dx-pointer-events-none {
-                    background-color: transparent;
+    
+                    & > .dx-@{widgetName}-readonly .dx-texteditor {
+                        .dx-texteditor-input {
+                            background-color: ~"@{@{widgetName}-hover-bg}";
+                            color: ~"@{@{widgetName}-row-hovered-color}";
+                        }
+                    }
+    
+                    & > td.dx-pointer-events-none {
+                        background-color: transparent;
+                    }
                 }
             }
         }
     }
 
+    
+
     .dx-@{widgetName}-headers {
         color: ~"@{@{widgetName}-columnchooser-item-color}";
         font-weight: ~"@{@{widgetName}-columnchooser-font-weight}";
+        font-size: @MATERIAL_GRID_BASE_HEADER_CELL_FONT_SIZE;
         .touch-action(pinch-zoom);
         border-bottom: ~"@{@{widgetName}-border}";
 
@@ -446,8 +473,25 @@
                 border-bottom-width: 1px;
             }
 
-            .dx-row > td {
-                border-bottom: ~"@{@{widgetName}-border}";
+            .dx-row {
+                > td {
+                    border-bottom: ~"@{@{widgetName}-border}";
+                    padding-top: @MATERIAL_GRID_BASE_HEADER_CELL_VERTICAL_PADDING;
+                    padding-bottom: @MATERIAL_GRID_BASE_HEADER_CELL_VERTICAL_PADDING;
+    
+                    .dx-sort-indicator, .dx-sort {
+                        color: ~"@{@{widgetName}-base-color}";
+                    }
+
+                    &:hover {
+                        .dx-@{widgetName}-text-content {
+                            color: ~"@{@{widgetName}-base-color}";
+                        }
+                        .dx-sort {
+                            color: ~"@{@{widgetName}-columnchooser-hover-icon-color}";
+                        }
+                    }
+                }
             }
         }
     }
@@ -500,7 +544,7 @@
         }
 
         td .dx-editor-container .dx-filter-range-content {
-            padding: @MATERIAL_GRID_BASE_CELL_PADDING @MATERIAL_GRID_BASE_CELL_PADDING @MATERIAL_GRID_BASE_CELL_PADDING @MATERIAL_GRID_BASE_TEXTEDITOR_INPUT_PADDING;
+            padding: @MATERIAL_GRID_BASE_CELL_VERTICAL_PADDING @MATERIAL_GRID_BASE_CELL_HORIZONTAL_PADDING @MATERIAL_GRID_BASE_CELL_VERTICAL_PADDING @MATERIAL_GRID_BASE_TEXTEDITOR_INPUT_PADDING;
         }
     }
 
@@ -550,13 +594,19 @@
 
     .dx-@{widgetName}-header-panel {
         border-bottom: ~"@{@{widgetName}-border}";
+        padding: @MATERIAL_GRID_BASE_HEADER_PANEL_PADDING;
 
         .dx-toolbar {
-            margin-bottom: @MATERIAL_GRID_BASE_HEADER_PANEL_MARGIN_BOTTOM;
+            margin: @MATERIAL_GRID_BASE_HEADER_PANEL_MARGIN;
+            .dx-toolbar-button {
+                .dx-button {
+                    .dx-button-flat-styling(@button-normal-color);
+                }
+            }
         }
 
         .dx-apply-button {
-            .dx-button-styling( @button-success-bg, @button-success-color, @button-success-hover-bg, @button-success-focused-bg, @button-success-active-bg, @button-success-icon-color );
+            .dx-button-flat-styling(@button-success-color);
         }
     }
 
@@ -610,8 +660,6 @@
     }
 
     .dx-@{widgetName}-rowsview {
-        border-top: ~"@{@{widgetName}-border}";
-
         .dx-row {
             border-top: @MATERIAL_GRID_BASE_ROW_BORDER;
             border-bottom: @MATERIAL_GRID_BASE_ROW_BORDER;
@@ -625,6 +673,10 @@
                 border-top: ~"@{@{widgetName}-border}";
                 border-bottom: ~"@{@{widgetName}-border}";
             }
+        }
+
+        .dx-@{widgetName}-table .dx-freespace-row {
+            border-bottom: ~"@{@{widgetName}-border}";
         }
 
         .dx-master-detail-row {
@@ -729,11 +781,6 @@
                 border-top: 1px solid ~"@{@{widgetName}-selection-bg}";
             }
 
-            &.dx-column-lines > td {
-                border-left-color: ~"@{@{widgetName}-row-selected-border-color}";
-                border-right-color: ~"@{@{widgetName}-row-selected-border-color}";
-            }
-
             &.dx-row-lines > td {
                 border-bottom-color: ~"@{@{widgetName}-row-selected-border-color}";
             }
@@ -759,10 +806,9 @@
     }
 
     .dx-@{widgetName}-pager {
-        border-top: 3px double ~"@{@{widgetName}-border-color}";
-
         &.dx-widget {
-            color: ~"@{@{widgetName}-base-color}";
+            font-size: @MATERIAL_GRID_BASE_FOOTER_FONT_SIZE;
+            color: ~"@{@{widgetName}-columnchooser-item-color}";
         }
     }
 
@@ -785,7 +831,7 @@
             margin-left: 1px;
             .dx-button-styling( @button-danger-bg, @button-danger-color, @button-danger-hover-bg, @button-danger-focused-bg, @button-danger-active-bg, @button-danger-icon-color );
             > .dx-button-content {
-                padding: @MATERIAL_GRID_BASE_CELL_PADDING;
+                padding: @MATERIAL_GRID_BASE_CELL_VERTICAL_PADDING;
             }
 
 
@@ -836,7 +882,7 @@
             }
 
             .dx-@{widgetName}-filter-row td .dx-editor-container .dx-filter-range-content {
-                padding: @MATERIAL_GRID_BASE_CELL_PADDING @MATERIAL_GRID_BASE_TEXTEDITOR_INPUT_PADDING @MATERIAL_GRID_BASE_CELL_PADDING @MATERIAL_GRID_BASE_CELL_PADDING;
+                padding: @MATERIAL_GRID_BASE_CELL_VERTICAL_PADDING @MATERIAL_GRID_BASE_TEXTEDITOR_INPUT_PADDING @MATERIAL_GRID_BASE_CELL_VERTICAL_PADDING @MATERIAL_GRID_BASE_CELL_HORIZONTAL_PADDING;
             }
         }
 
