@@ -127,7 +127,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
         this.component.setAria({
             "role": "gridcell",
-            "colindex": column.index,
+            "colindex": column.index + 1,
             "selected": false
         }, $cell);
 
