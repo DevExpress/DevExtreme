@@ -240,8 +240,7 @@ var FilterBuilder = Widget.inherit({
             /**
              * @name dxFilterBuilderField_filterOperations
              * @publicName filterOperations
-             * @type Array<string>
-             * @acceptValues "=" | "<>" | "<" | "<=" | ">" | ">=" | "notcontains" | "contains" | "startswith" | "endswith" | "isblank" | "isnotblank"
+             * @type Array<Enums.FilterBuilderFieldFilterOperations, string>
              * @default undefined
              */
 
