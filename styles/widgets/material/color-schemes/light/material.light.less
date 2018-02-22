@@ -1159,7 +1159,8 @@
 * @type color
 * @group datagrid
 */
-@datagrid-columnchooser-item-color: lighten(@datagrid-base-color, 38.5%);
+@datagrid-columnchooser-item-color: fade(@datagrid-base-color, 54%);
+@datagrid-columnchooser-hover-icon-color: fade(@datagrid-base-color, 38%);
 @datagrid-block-separator-bg: darken(@datagrid-base-background-color, 6.5%);
 /**
 * @name 21. Header text weight
@@ -1167,7 +1168,7 @@
 * @typeValues normal|bold|light
 * @group datagrid
 */
-@datagrid-columnchooser-font-weight: normal;
+@datagrid-columnchooser-font-weight: bold;
 /**
 * @name 71. Draggable header border color
 * @type color
@@ -1186,7 +1187,7 @@
 * @group datagrid
 * @paletteColorOpacity 1
 */
-@datagrid-selection-bg: darken(@datagrid-base-background-color, 10%);
+@datagrid-selection-bg: darken(@datagrid-base-background-color, 4%);
 /**
 * @name 81. Selected row border color
 * @type color
@@ -1205,7 +1206,7 @@
 * @group datagrid
 * @paletteColorOpacity .15
 */
-@datagrid-hover-bg: @base-hover-color;
+@datagrid-hover-bg: darken(@datagrid-base-background-color, 6.5%);
 
 /**
 * @name 95. Hovered state text color
@@ -1379,14 +1380,15 @@
 * @type color
 * @group treelist
 */
-@treelist-columnchooser-item-color: lighten(@treelist-base-color, 38.5%);
+@treelist-columnchooser-item-color: fade(@treelist-base-color, 54%);
+@treelist-columnchooser-hover-icon-color: fade(@treelist-base-color, 38%);
 /**
 * @name 21. Header text weight
 * @type select
 * @typeValues normal|bold|light
 * @group treelist
 */
-@treelist-columnchooser-font-weight: normal;
+@treelist-columnchooser-font-weight: bold;
 /**
 * @name 71. Draggable header border color
 * @type color
@@ -1403,7 +1405,7 @@
 * @group treelist
 * @paletteColorOpacity 1
 */
-@treelist-selection-bg: darken(@treelist-base-background-color, 10%);
+@treelist-selection-bg: darken(@treelist-base-background-color, 4%);
 /**
 * @name 81. Selected row border color
 * @type color
@@ -1422,7 +1424,7 @@
 * @group treelist
 * @paletteColorOpacity .15
 */
-@treelist-hover-bg: @base-hover-color;
+@treelist-hover-bg: darken(@datagrid-base-background-color, 6.5%);
 
 /**
 * @name 95. Hovered state text color

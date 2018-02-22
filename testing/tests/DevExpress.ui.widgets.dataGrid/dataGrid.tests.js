@@ -69,6 +69,7 @@ var $ = require("jquery"),
     config = require("core/config"),
     keyboardMock = require("../../helpers/keyboardMock.js"),
     ajaxMock = require("../../helpers/ajaxMock.js"),
+    themes = require("ui/themes"),
 
     DX_STATE_HOVER_CLASS = "dx-state-hover",
     TEXTEDITOR_INPUT_SELECTOR = ".dx-texteditor-input";
@@ -3404,6 +3405,16 @@ QUnit.test("ShowRowLines for android platform", function(assert) {
 
     assert.ok(!dataGrid.option("showRowLines"), "showRowLines option");
     $.extend(devices, origDevices);
+});
+
+QUnit.test("Default options for Material theme", function(assert) {
+    var origCurrent = themes.current;
+    themes.current = function() { return "material"; };
+    var dataGrid = createDataGrid();
+
+    assert.ok(dataGrid.option("showRowLines"), "showRowLines option");
+    assert.ok(!dataGrid.option("showColumnLines"), "showColumnLines option");
+    themes.current = origCurrent;
 });
 
 QUnit.test("Keep horizontal scroller position after refresh with native scrolling", function(assert) {
