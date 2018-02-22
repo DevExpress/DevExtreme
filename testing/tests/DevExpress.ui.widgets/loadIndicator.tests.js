@@ -31,6 +31,11 @@ QUnit.module("indicator with browser animation", {
     }
 });
 
+QUnit.test("visibility of the LoadIndicator with initial value of the 'visible' option equal to 'true'", function(assert) {
+    var $element = $("#loadIndicator").dxLoadIndicator({ visible: true, viaImage: false });
+    assert.ok($element.is(":visible"));
+});
+
 QUnit.test("render animated indicator markup", function(assert) {
     var $indicator = $("#loadIndicator"),
         loadIndicator = $indicator.dxLoadIndicator({ visible: false, viaImage: false }).dxLoadIndicator("instance");

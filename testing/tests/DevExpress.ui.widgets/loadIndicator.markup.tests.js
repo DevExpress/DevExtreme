@@ -40,11 +40,6 @@ QUnit.test("Basic markup initialization", function(assert) {
     assert.equal($indicatorContent.length, 1, "Content is added");
 });
 
-QUnit.test("visibility of the LoadIndicator with initial value of the 'visible' option equal to 'true'", function(assert) {
-    var $element = $("#loadIndicator").dxLoadIndicator({ visible: true, viaImage: false });
-    assert.ok($element.is(":visible"));
-});
-
 
 QUnit.module("Static load indicator", {
     beforeEach: function() {
@@ -75,9 +70,10 @@ QUnit.test("custom indicator", function(assert) {
             indicatorSrc: url
         }),
         $wrapper = $element.find("." + LOADINDICATOR_WRAPPER),
-        instance = $("#loadIndicator").dxLoadIndicator("instance");
+        instance = $("#loadIndicator").dxLoadIndicator("instance"),
+        getBackgroundImage = function() { return $wrapper[0].style.backgroundImage; };
 
-    assert.ok(isIdenticalNamesInUrl($wrapper.css("background-image"), url), "custom indicator installed successfully as image");
+    assert.ok(isIdenticalNamesInUrl(getBackgroundImage(), url), "custom indicator installed successfully as image");
     instance.option("indicatorSrc", "");
-    assert.ok($wrapper.css("background-image") !== "", "custom indicator changed successfully as image");
+    assert.ok(getBackgroundImage() !== "", "custom indicator changed successfully as image");
 });
