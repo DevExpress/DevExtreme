@@ -129,6 +129,24 @@ function getViewportReducer(series) {
 }
 
 module.exports = {
+    getArgumentRange: function(series) {
+        var data = series._data || [],
+            range = {};
+        if(data.length) {
+            if(series.argumentAxisType === DISCRETE) {
+                range = {
+                    categories: data.map(function(item) { return item.argument; })
+                };
+            } else {
+                range = {
+                    min: data[0].argument,
+                    max: data[data.length - 1].argument
+                };
+            }
+        }
+        return range;
+    },
+
     getRangeData: function(series) {
         var points = series.getPoints(),
             argumentCalculator = getRangeCalculator(series.argumentAxisType, points.length > 1 && series.getArgumentAxis()),

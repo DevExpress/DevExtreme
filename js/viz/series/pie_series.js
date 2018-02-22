@@ -37,7 +37,7 @@ exports.pie = _extend({}, barSeries, {
     },
 
     _getOldPoint: function(data, oldPointsByArgument, index) {
-        var point = (this._originalPoints || [])[index];
+        var point = (this._points || [])[index];
         if(point) {
             oldPointsByArgument[point.argument] = oldPointsByArgument[point.argument].filter(function(p) {
                 return p !== point;
@@ -211,7 +211,7 @@ exports.pie = _extend({}, barSeries, {
 
     arrangePoints: function() {
         var that = this,
-            originalPoints = that._originalPoints || [],
+            originalPoints = that._points || [],
             minSegmentSize = that._options.minSegmentSize,
             minShownValue,
             total,
@@ -226,7 +226,7 @@ exports.pie = _extend({}, barSeries, {
             i++;
         }
 
-        points = that._originalPoints = that._points = _map(originalPoints, function(point) {
+        points = that._points = _map(originalPoints, function(point) {
             if(point.value === null || (!isAllPointsNegative && point.value < 0)) {
                 that._removePoint(point);
                 return null;
