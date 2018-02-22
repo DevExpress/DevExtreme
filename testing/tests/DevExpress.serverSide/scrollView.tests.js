@@ -14,7 +14,7 @@ var SCROLLABLE_CONTENT_CLASS = "dx-scrollable-content",
 QUnit.testStart(function() {
     var markup = '\
         <div id="scrollView" style="height: 50px; width: 50px;">\
-            <div class="content1"></div>\
+            <div class="content1">ScrollView content</div>\
         </div>';
 
     $("#qunit-fixture").html(markup);
@@ -44,4 +44,13 @@ QUnit.test("loadPanel should not be rendered in scrollView on server", function(
         $loadPanel = $scrollView.find("." + SCROLLVIEW_LOADPANEL_CLASS);
 
     assert.equal($loadPanel.length, 0, "scrollView has no loadPanel on server");
+});
+
+QUnit.test("scrollView content should be rendered on server", function(assert) {
+    var $scrollView = $("#scrollView").dxScrollView(),
+        $scrollableContent = $scrollView.find("." + SCROLLABLE_CONTENT_CLASS),
+        $content = $scrollableContent.children().eq(0);
+
+    assert.equal($content.length, 1, "scrollView has content on server");
+    assert.equal($content.text(), "ScrollView content", "scrollView content has right text");
 });
