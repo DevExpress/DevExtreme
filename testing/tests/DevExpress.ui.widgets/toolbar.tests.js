@@ -97,6 +97,22 @@ QUnit.test("items - label", function(assert) {
     assert.ok(label.hasClass(TOOLBAR_LABEL_CLASS));
 });
 
+QUnit.test("label correctly fits into container", function(assert) {
+    this.element.dxToolbar({
+        items: [
+            { location: 'before', text: 'Summary' }
+        ]
+    });
+
+    var labelElement = this.element.find("." + TOOLBAR_ITEM_CLASS)[0],
+        labelMaxWidth = parseInt(labelElement.style.maxWidth);
+
+    labelElement.style.maxWidth = "";
+
+    var labelWidth = labelElement.getBoundingClientRect().width;
+    assert.ok(labelWidth <= labelMaxWidth, "Real label width less or equal to the max width");
+});
+
 QUnit.test("items - long labels", function(assert) {
     this.element.dxToolbar({
         items: [
