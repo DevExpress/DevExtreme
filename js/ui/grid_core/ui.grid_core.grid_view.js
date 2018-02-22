@@ -143,10 +143,12 @@ var ResizingController = modules.ViewController.inherit({
             that = this;
 
         if(this.option("advancedRendering") && this.option("columnAutoWidth")) {
-            var $rowsTable = that._rowsView._getTableElement();
+            var $rowsTable = that._rowsView._getTableElement(),
+                $rowsFixedTable = that._rowsView.getTableElements().eq(1);
 
             $rowsTable.css("table-layout", isBestFit ? "auto" : "fixed");
             $rowsTable.children("colgroup").css("display", isBestFit ? "none" : "");
+            $rowsFixedTable.toggleClass(this.addWidgetPrefix(TABLE_FIXED_CLASS), !isBestFit);
 
             that._toggleBestFitModeForView(that._columnHeadersView, "dx-header", isBestFit);
             that._toggleBestFitModeForView(that._footerView, "dx-footer", isBestFit);
