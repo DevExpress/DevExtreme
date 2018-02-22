@@ -54,3 +54,16 @@ QUnit.test("scrollView content should be rendered on server", function(assert) {
     assert.equal($content.length, 1, "scrollView has content on server");
     assert.equal($content.text(), "ScrollView content", "scrollView content has right text");
 });
+
+QUnit.test("root with custom size", function(assert) {
+    var $scrollView = $("#scrollView").dxScrollView(),
+        instance = $scrollView.dxScrollView("instance");
+
+    assert.strictEqual(instance.option("width"), undefined);
+    assert.strictEqual(instance.option("height"), undefined);
+
+    assert.strictEqual($scrollView[0].style.width, "50px", "outer width of the element must be equal to custom width");
+    assert.strictEqual($scrollView[0].style.height, "50px", "outer height of the element must be equal to custom width");
+});
+
+
