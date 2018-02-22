@@ -534,14 +534,19 @@ var NumberBoxMask = NumberBoxBase.inherit({
             digitPosition = this._getDigitPositionByIndex(digitsBeforeCaret, formatted),
             delta = digitsBeforeCaret ? 1 : 0;
 
-        if(this._lastKey === "Backspace") {
-            var text = this._getInputVal(),
-                decimalSeparator = number.getDecimalSeparator(),
-                firstCaretAfterPoint = text.indexOf(decimalSeparator) + 1,
-                isCaretOnFloat = firstCaretAfterPoint && firstCaretAfterPoint <= caret.start;
+        var text = this._getInputVal(),
+            decimalSeparator = number.getDecimalSeparator(),
+            firstCaretAfterPoint = text.indexOf(decimalSeparator) + 1,
+            isCaretOnFloat = firstCaretAfterPoint && firstCaretAfterPoint <= caret.start;
 
-            if(digitPosition && !isCaretOnFloat && text.length < formatted.length) {
+        if(this._lastKey === "Backspace") {
+            if(digitsBeforeCaret && !isCaretOnFloat && text.length < formatted.length) {
                 delta = 2;
+            }
+        } else if(!this._isDeleteKey(this._lastKey) && !isCaretOnFloat) {
+            var firstCaretOnFloatFormatted = formatted.indexOf(decimalSeparator) + 1;
+            if(digitPosition + delta >= firstCaretOnFloatFormatted) {
+                delta += digitPosition + delta - firstCaretOnFloatFormatted - 1;
             }
         }
 

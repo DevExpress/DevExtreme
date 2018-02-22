@@ -470,7 +470,10 @@ QUnit.test("select and replace all text", function(assert) {
 });
 
 QUnit.test("decimal point should move the caret before float part only", function(assert) {
-    this.instance.option("value", 123.45);
+    this.instance.option({
+        format: "#0.00",
+        value: 123.45
+    });
     this.keyboard.caret(2).type(".");
 
     assert.equal(this.input.val(), "123.45", "value is right");
@@ -479,6 +482,17 @@ QUnit.test("decimal point should move the caret before float part only", functio
     this.keyboard.caret(3).type(".");
     assert.equal(this.input.val(), "123.45", "value is right");
     assert.deepEqual(this.keyboard.caret(), { start: 4, end: 4 }, "caret was moved to the float part");
+});
+
+QUnit.test("input after 0 should not move caret to float part", function(assert) {
+    this.instance.option({
+        format: "#0.00",
+        value: 0
+    });
+
+    this.keyboard.caret(1).type("1");
+
+    assert.equal(this.keyboard.caret().start, 1, "caret is good");
 });
 
 QUnit.test("ctrl+v should not be prevented", function(assert) {
@@ -722,6 +736,18 @@ QUnit.test("removing required last char should replace it to 0", function(assert
     assert.equal(this.input.val(), "0.00", "value is correct");
     assert.deepEqual(this.keyboard.caret(), { start: 1, end: 1 }, "caret is good");
 });
+
+QUnit.test("removing required last char should replace it to 0 if there are stubs before", function(assert) {
+    this.instance.option({
+        format: "$#0.00",
+        value: 1
+    });
+    this.keyboard.caret(2).press("backspace");
+
+    assert.equal(this.input.val(), "$0.00", "value is correct");
+    assert.equal(this.keyboard.caret().start, 2, "caret is good");
+});
+
 
 QUnit.test("removing required last char should replace it to 0 if percent format", function(assert) {
     this.instance.option("format", "#0%");
