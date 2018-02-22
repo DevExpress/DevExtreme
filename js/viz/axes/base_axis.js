@@ -1294,7 +1294,7 @@ Axis.prototype = {
             return value;
         }
 
-        if(valueMarginsEnabled) {
+        if(valueMarginsEnabled && maxMinDistance !== 0) {
             if(isDefined(minValueMargin)) {
                 minVisible = add(minVisible, -maxMinDistance * minValueMargin);
             }

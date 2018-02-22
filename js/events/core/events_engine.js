@@ -27,6 +27,7 @@ var NATIVE_EVENTS_TO_TRIGGER = {
     "focusout": "blur"
 };
 var NO_BUBBLE_EVENTS = ["blur", "focusout", "focus", "focusin", "load"];
+var NO_PASSIVE_EVENTS = ["touchstart", "touchmove"];
 
 var matchesSafe = function(target, selector) {
     return !isWindow(target) && target.nodeName !== "#document" && domAdapter.elementMatches(target, selector);
@@ -161,6 +162,7 @@ var getHandlersController = function(element, eventName) {
 
             var firstHandlerForTheType = eventData.handleObjects.length === 1;
             var shouldAddNativeListener = firstHandlerForTheType && eventNameIsDefined;
+            var nativeOptions = NO_PASSIVE_EVENTS.indexOf(eventName) > -1 ? { passive: false } : undefined;
 
             if(shouldAddNativeListener) {
                 shouldAddNativeListener = !special.callMethod(eventName, "setup", element, [ data, namespaces, handler ]);
@@ -168,7 +170,7 @@ var getHandlersController = function(element, eventName) {
 
             if(shouldAddNativeListener) {
                 eventData.nativeHandler = getNativeHandler(eventName);
-                eventData.removeListener = domAdapter.listen(element, NATIVE_EVENTS_TO_SUBSCRIBE[eventName] || eventName, eventData.nativeHandler);
+                eventData.removeListener = domAdapter.listen(element, NATIVE_EVENTS_TO_SUBSCRIBE[eventName] || eventName, eventData.nativeHandler, nativeOptions);
             }
 
             special.callMethod(eventName, "add", element, [ handleObject ]);

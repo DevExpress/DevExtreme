@@ -7,7 +7,9 @@ var support = require("../core/utils/support"),
     TouchStrategy = require("./pointer/touch"),
     MsPointerStrategy = require("./pointer/mspointer"),
     MouseStrategy = require("./pointer/mouse"),
-    MouseAndTouchStrategy = require("./pointer/mouse_and_touch");
+    MouseAndTouchStrategy = require("./pointer/mouse_and_touch"),
+    jQuery = require("jquery"),
+    useJQuery = require("../integration/jquery/use_jquery")();
 
 /**
   * @name ui events_dxpointerdown
@@ -94,6 +96,20 @@ var EventStrategy = (function() {
 each(EventStrategy.map, function(pointerEvent, originalEvents) {
     registerEvent(pointerEvent, new EventStrategy(pointerEvent, originalEvents));
 });
+
+if(useJQuery && support.touch) {
+    each([TouchStrategy.map["dxpointerdown"], TouchStrategy.map["dxpointermove"]], function(_, eventName) {
+        jQuery.event.special[eventName] = {
+            setup: function(_, namespaces, handler) {
+                if(namespaces.indexOf(TouchStrategy.POINTER_EVENTS_NAMESPACE) > -1) {
+                    this.addEventListener(eventName, handler, { passive: false });
+                } else {
+                    return false;
+                }
+            }
+        };
+    });
+}
 
 module.exports = {
     down: "dxpointerdown",

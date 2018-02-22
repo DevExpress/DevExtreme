@@ -131,6 +131,23 @@ QUnit.test("add single native handler for one element, handler removed", functio
     delListener.restore();
 });
 
+QUnit.test("add native handler on touchstart, touchmove events with options", function(assert) {
+    var element = document.createElement("div");
+
+    var addListener = sinon.spy(HTMLElement.prototype, "addEventListener");
+
+    var handler1 = function() { };
+
+    eventsEngine.on(element, "touchstart.dxPointerEvents", handler1);
+    eventsEngine.on(element, "touchmove.dxPointerEvents", handler1);
+
+    assert.ok(addListener.calledTwice);
+    assert.strictEqual(addListener.args[0][2].passive, false);
+    assert.strictEqual(addListener.args[1][2].passive, false);
+
+    addListener.restore();
+});
+
 QUnit.test("triggering 'click' event for checkbox calls native click method", function(assert) {
     var counter = 0;
 
