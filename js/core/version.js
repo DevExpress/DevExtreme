@@ -1,3 +1,3 @@
 "use strict";
 
-module.exports = "17.2.5"; /* DevExpress.VERSION */
+module.exports = "17.2.6"; /* DevExpress.VERSION */
