@@ -2,9 +2,11 @@
 
 var $ = require("../../core/renderer"),
     devices = require("../../core/devices"),
+    windowUtils = require("../../core/utils/window"),
     messageLocalization = require("../../localization/message"),
     registerComponent = require("../../core/component_registrator"),
     extend = require("../../core/utils/extend").extend,
+    noop = require("../../core/utils/common").noop,
     PullDownStrategy = require("./ui.scroll_view.native.pull_down"),
     SwipeDownStrategy = require("./ui.scroll_view.native.swipe_down"),
     SlideDownStrategy = require("./ui.scroll_view.native.slide_down"),
@@ -33,7 +35,14 @@ var refreshStrategies = {
     simulated: SimulatedStrategy
 };
 
-var ScrollView = Scrollable.inherit({
+var isServerSide = !windowUtils.hasWindow();
+
+var scrollViewServerConfig = {
+    release: noop,
+    refresh: noop
+};
+
+var ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {

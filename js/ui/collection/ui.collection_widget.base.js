@@ -653,7 +653,7 @@ var CollectionWidget = Widget.inherit({
     },
 
     _cleanItemContainer: function() {
-        this._itemContainer().empty();
+        $(this._itemContainer()).empty();
     },
 
     _dispose: function() {

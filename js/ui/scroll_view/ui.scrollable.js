@@ -286,10 +286,10 @@ var Scrollable = DOMComponent.inherit({
     _initMarkup: function() {
         this.callBase();
         this._renderDirection();
-        this._renderStrategy();
     },
 
     _render: function() {
+        this._renderStrategy();
         this._attachNativeScrollbarsCustomizationCss();
 
         this._attachEventHandlers();
@@ -393,7 +393,7 @@ var Scrollable = DOMComponent.inherit({
     },
 
     _clean: function() {
-        this._strategy.dispose();
+        this._strategy && this._strategy.dispose();
     },
 
     _optionChanged: function(args) {
