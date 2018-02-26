@@ -226,8 +226,18 @@ var DataGrid = Widget.inherit({
         }
     },
 
-    _renderContentImpl: function() {
+    _initMarkup: function() {
+        this.callBase.apply(this, arguments);
+        //TODO remove when _renderDimensions was moved to _initMarkup
+        this.$element().css({
+            width: this.option("width"),
+            height: this.option("height")
+        });
         this.getView("gridView").render(this.$element());
+    },
+
+    _renderContentImpl: function() {
+        this.getView("gridView").update();
     },
 
     _renderContent: function() {

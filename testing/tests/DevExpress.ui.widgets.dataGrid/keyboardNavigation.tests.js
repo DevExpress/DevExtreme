@@ -3240,6 +3240,7 @@ QUnit.testInActiveWindow("closeEditCell and reset focus on 'tab' if the current 
 
     //act
     this.gridView.render($("#container"));
+    this.gridView.update();
 
     this.editCell(1, 1);
     this.clock.tick();
@@ -3286,6 +3287,7 @@ QUnit.testInActiveWindow("closeEditCell and reset focus on 'tab' if the current 
 
     //act
     this.gridView.render($("#container"));
+    this.gridView.update();
 
     this.editCell(1, 1);
     this.clock.tick();

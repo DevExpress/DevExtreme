@@ -265,7 +265,7 @@ var appendElements = function(element, nextSibling) {
             container = this[0],
             wrapTR = container.tagName === "TABLE" && item.tagName === "TR";
 
-        if(wrapTR && container.tBodies.length) {
+        if(wrapTR && container.tBodies && container.tBodies.length) {
             container = container.tBodies[0];
         }
         domAdapter.insertElement(container, item.nodeType ? item : item[0], nextSibling);

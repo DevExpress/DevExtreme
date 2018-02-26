@@ -98,10 +98,19 @@ var TreeList = Widget.inherit({
         }
     },
 
-    _renderContentImpl: function() {
-        var $element = this.$element().addClass(TREELIST_CLASS);
+    _initMarkup: function() {
+        this.callBase.apply(this, arguments);
+        //TODO remove when _renderDimensions was moved to _initMarkup
+        this.$element().css({
+            width: this.option("width"),
+            height: this.option("height")
+        });
+        this.$element().addClass(TREELIST_CLASS);
+        this.getView("gridView").render(this.$element());
+    },
 
-        this.getView("gridView").render($element);
+    _renderContentImpl: function() {
+        this.getView("gridView").update();
     },
 
     _renderContent: function() {

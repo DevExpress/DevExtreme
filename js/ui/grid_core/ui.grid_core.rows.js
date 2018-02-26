@@ -29,6 +29,7 @@ var ROWS_VIEW_CLASS = "rowsview",
     COLUMN_LINES_CLASS = "dx-column-lines",
     ROW_ALTERNATION_CLASS = "dx-row-alt",
     LAST_ROW_BORDER = "dx-last-row-border",
+    EMPTY_CLASS = "dx-empty",
 
     LOADPANEL_HIDE_TIMEOUT = 200;
 
@@ -889,6 +890,7 @@ module.exports = {
                         $element = that.element();
 
                     $element.addClass(that.addWidgetPrefix(ROWS_VIEW_CLASS)).toggleClass(that.addWidgetPrefix(NOWRAP_CLASS), !that.option("wordWrapEnabled"));
+                    $element.toggleClass(EMPTY_CLASS, that._dataController.items().length === 0);
 
                     $table = that._renderTable({ change: change });
                     that._updateContent($table, change);
@@ -1018,11 +1020,11 @@ module.exports = {
                                 scrollingMode = that.option("scrolling.mode");
 
                                 if(freeSpaceRowCount > 0 && that._dataController.pageCount() > 1 && scrollingMode !== "virtual" && scrollingMode !== "infinite") {
-                                    freeSpaceRowElements.height(freeSpaceRowCount * that._rowHeight);
+                                    freeSpaceRowElements.css("height", freeSpaceRowCount * that._rowHeight);
                                     isFreeSpaceRowVisible = true;
                                 }
                                 if(!isFreeSpaceRowVisible && $table) {
-                                    freeSpaceRowElements.height(0);
+                                    freeSpaceRowElements.css("height", 0);
                                 } else {
                                     freeSpaceRowElements.toggle(isFreeSpaceRowVisible);
                                 }
@@ -1039,7 +1041,7 @@ module.exports = {
 
                                     if(showFreeSpaceRow) {
                                         commonUtils.deferRender(function() {
-                                            freeSpaceRowElements.height(resultHeight);
+                                            freeSpaceRowElements.css("height", resultHeight);
                                             isFreeSpaceRowVisible = true;
                                             freeSpaceRowElements.show();
                                         });
@@ -1050,7 +1052,7 @@ module.exports = {
                                 });
                             }
                         } else {
-                            freeSpaceRowElements.height(0);
+                            freeSpaceRowElements.css("height", 0);
                             freeSpaceRowElements.show();
                             that._updateLastRowBorder(true);
                         }

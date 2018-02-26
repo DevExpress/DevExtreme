@@ -3,6 +3,7 @@
 var $ = require("../../core/renderer"),
     modules = require("./ui.grid_core.modules"),
     commonUtils = require("../../core/utils/common"),
+    windowUtils = require("../../core/utils/window"),
     each = require("../../core/utils/iterator").each,
     typeUtils = require("../../core/utils/type"),
     messageLocalization = require("../../localization/message"),
@@ -71,7 +72,7 @@ var ResizingController = modules.ViewController.inherit({
                 } else if(changeType === "update") {
                     if((items.length > 1 || e.changeTypes[0] !== "insert") &&
                         !(items.length === 0 && e.changeTypes[0] === "remove")) {
-                        that._rowsView.resize();
+                        windowUtils.hasWindow() && that._rowsView.resize();
                     } else {
                         resizeDeferred = that.resize();
                     }
@@ -387,7 +388,7 @@ var ResizingController = modules.ViewController.inherit({
             width,
             importantMarginClass = that.addWidgetPrefix(IMPORTANT_MARGIN_CLASS);
 
-        if(that._hasHeight === undefined && $rootElement && $rootElement.is(":visible")) {
+        if(windowUtils.hasWindow() && that._hasHeight === undefined && $rootElement && $rootElement.is(":visible")) {
             $groupElement = $rootElement.children("." + that.getWidgetContainerClass());
             if($groupElement.length) {
                 $groupElement.detach();
@@ -424,7 +425,7 @@ var ResizingController = modules.ViewController.inherit({
         that._initPostRenderHandlers();
 
         //T335767
-        if(!that._checkSize(checkSize)) {
+        if(!windowUtils.hasWindow() || !that._checkSize(checkSize)) {
             return;
         }
 
@@ -475,8 +476,6 @@ var ResizingController = modules.ViewController.inherit({
             that._hasHeight = !!$testDiv.height();
             $testDiv.remove();
         }
-
-        rowsView.element().toggleClass("dx-empty", !that._hasHeight && dataController.items().length === 0);
 
         if(isMaxHeightApplied) {
             rowsViewHeight = rowsView.height();
@@ -640,8 +639,6 @@ var GridView = modules.View.inherit({
         }
 
         that._renderViews($groupElement);
-
-        that.update();
     },
 
     update: function() {
