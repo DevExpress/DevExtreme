@@ -10,9 +10,9 @@ require("ui/resizable");
 
 QUnit.testStart(function() {
     var markup =
-        '<div id="resizable" style="height: 50px; width: 50px; position: absolute"></div>\
-        <div id="resizableAutoSize" style="height: auto; width: auto; position: absolute"><div style="height: 50px; width: 50px;"></div></div>\
-        <div id="areaDiv" style="height: 100px; width:100px; position: absolute"></div>';
+        '<div id="resizable" style="height: 50px; width: 50px; position: absolute; box-sizing: border-box;"></div>\
+        <div id="resizableAutoSize" style="height: auto; width: auto; position: absolute"><div style="height: 50px; width: 50px; box-sizing: border-box;"></div></div>\
+        <div id="areaDiv" style="height: 100px; width:100px; position: absolute; box-sizing: border-box;"></div>';
 
     $("#qunit-fixture").html(markup);
 });
