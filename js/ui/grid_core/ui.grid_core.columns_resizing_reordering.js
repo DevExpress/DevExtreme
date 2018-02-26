@@ -8,7 +8,6 @@ var $ = require("../../core/renderer"),
     each = require("../../core/utils/iterator").each,
     extend = require("../../core/utils/extend").extend,
     eventUtils = require("../../events/utils"),
-    windowUtils = require("../../core/utils/window"),
     pointerEvents = require("../../events/pointer"),
     dragEvents = require("../../events/drag"),
     addNamespace = eventUtils.addNamespace,
@@ -276,9 +275,7 @@ var BlockSeparatorView = SeparatorView.inherit({
         this.callBase();
 
         this.getController("data").loadingChanged.add(function(isLoading) {
-            var element = that.element();
-
-            if(windowUtils.hasWindow() && !isLoading && element && element.css("display") !== "none") {
+            if(!isLoading) {
                 that.hide();
             }
         });
@@ -418,7 +415,7 @@ var DraggingHeaderView = modules.View.inherit({
         this.getController("data").loadingChanged.add(function(isLoading) {
             var element = that.element();
 
-            if(windowUtils.hasWindow() && !isLoading && element && element.css("display") !== "none") {
+            if(!isLoading && element) {
                 element.hide();
             }
         });
