@@ -170,6 +170,7 @@ var ListBase = CollectionWidget.inherit({
             * @publicName showScrollbar
             * @type Enums.ShowScrollbarMode
             * @default 'onScroll'
+            * @default 'onHover' @for desktop
             */
             showScrollbar: "onScroll",
 
@@ -180,6 +181,7 @@ var ListBase = CollectionWidget.inherit({
             * @publicName bounceEnabled
             * @type boolean
             * @default true
+            * @default false @for desktop
             */
             bounceEnabled: true,
 
@@ -188,6 +190,7 @@ var ListBase = CollectionWidget.inherit({
             * @publicName scrollByContent
             * @type boolean
             * @default true
+            * @default false @for non-touch_devices
             */
             scrollByContent: true,
 
@@ -196,6 +199,7 @@ var ListBase = CollectionWidget.inherit({
             * @publicName scrollByThumb
             * @type boolean
             * @default false
+            * @default true @for desktop
             */
             scrollByThumb: false,
 
