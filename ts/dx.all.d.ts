@@ -4655,7 +4655,7 @@ declare module DevExpress.ui {
         /** Specifies the false value text. Applies only if dataType is "boolean". */
         falseText?: string;
         /** Specifies a set of available filter operations. */
-        filterOperations?: Array<string | string>;
+        filterOperations?: Array<string>;
         /** Formats a value before it is displayed. */
         format?: format;
         /** Configures the lookup field. */
