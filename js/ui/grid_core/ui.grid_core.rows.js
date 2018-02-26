@@ -665,8 +665,10 @@ module.exports = {
                         .addClass(FREE_SPACE_CLASS)
                         .toggleClass(COLUMN_LINES_CLASS, that.option("showColumnLines"));
 
+                    that.component.setAria({ "role": "presentation" }, freeSpaceRowElement);
+
                     for(i = 0; i < columns.length; i++) {
-                        freeSpaceRowElement.append(that._createCell({ column: columns[i], rowType: "freeSpace" }));
+                        freeSpaceRowElement.append(that._createCell({ column: columns[i], rowType: "freeSpace", isRolePresentation: true }));
                     }
 
                     that._appendRow(tableElement, freeSpaceRowElement, appendFreeSpaceRowTemplate);

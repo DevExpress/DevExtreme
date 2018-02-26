@@ -78,12 +78,6 @@ var ResizingController = modules.ViewController.inherit({
                 }
 
                 if(changeType && changeType !== "updateSelection" && !isDelayed) {
-                    var ariaRowCount = that._columnHeadersView.getRowCount() + that.component.totalCount();
-                    that.component.setAria({
-                        "rowCount": ariaRowCount,
-                        "colCount": that.component.columnCount()
-                    }, that.component.$element());
-
                     when(resizeDeferred).done(function() {
                         that.component._fireContentReadyAction();
                     });
@@ -589,12 +583,13 @@ var GridView = modules.View.inherit({
 
         $groupElement.addClass(GRIDBASE_CONTAINER_CLASS);
         $groupElement.toggleClass(that.addWidgetPrefix(BORDERS_CLASS), !!that.option("showBorders"));
-        $groupElement.attr("role", "presentation");
+
+        that.component.setAria({ "role": "presentation" }, $rootElement);
 
         that.component.setAria({
             "role": "grid",
             "label": messageLocalization.format(that._getWidgetAriaLabel())
-        }, $rootElement);
+        }, $groupElement);
 
         that._rootElement = $rootElement || that._rootElement;
 

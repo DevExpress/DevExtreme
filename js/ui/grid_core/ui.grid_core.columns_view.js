@@ -118,18 +118,23 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
     _createCell: function(options) {
         var column = options.column,
-            alignment = column.alignment || getDefaultAlignment(this.option("rtlEnabled"));
+            alignment = column.alignment || getDefaultAlignment(this.option("rtlEnabled")),
+            isRolePresentation = options.isRolePresentation;
 
         var cell = domAdapter.createElement("td");
         cell.style.textAlign = alignment;
 
         var $cell = $(cell);
 
-        this.component.setAria({
-            "role": "gridcell",
-            "colindex": column.index + 1,
-            "selected": false
-        }, $cell);
+        if(!isRolePresentation) {
+            this.component.setAria({
+                "role": "gridcell",
+                "colindex": column.index + 1,
+                "selected": false
+            }, $cell);
+        } else {
+            this.component.setAria({ "role": "presentation" }, $cell);
+        }
 
         if(!typeUtils.isDefined(column.groupIndex) && column.cssClass) {
             $cell.addClass(column.cssClass);
