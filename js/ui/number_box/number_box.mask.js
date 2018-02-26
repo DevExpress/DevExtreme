@@ -7,6 +7,7 @@ var eventsEngine = require("../../events/core/events_engine"),
     inRange = require("../../core/utils/math").inRange,
     escapeRegExp = require("../../core/utils/common").escapeRegExp,
     number = require("../../localization/number"),
+    maskCaret = require("./number_box.caret"),
     getLDMLFormat = require("../../localization/ldml/number").getFormat,
     NumberBoxBase = require("./number_box.base"),
     eventUtils = require("../../events/utils"),
@@ -366,8 +367,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
     },
 
     _setInputText: function(text) {
-        var newCaret = this._getCaretAfterFormat(text);
-
+        var newCaret = maskCaret.getCaretAfterFormat(this._getInputVal(), text, this._caret(), this._getFormatPattern());
         this._input().val(number.convertDigits(text));
         this._formattedValue = text;
 
@@ -397,8 +397,8 @@ var NumberBoxMask = NumberBoxBase.inherit({
             return;
         }
 
-        var newCaret = this._getCaretWithOffset(this._caret(), offset),
-            adjustedCaret = this._adjustCaretToBoundaries(newCaret);
+        var newCaret = maskCaret.getCaretWithOffset(this._caret(), offset),
+            adjustedCaret = maskCaret.getCaretInBoundaries(newCaret, this._getInputVal(), this._getFormatPattern());
 
         this._caret(adjustedCaret);
     },
@@ -484,7 +484,10 @@ var NumberBoxMask = NumberBoxBase.inherit({
 
         var caret = this._caret();
         if(caret.start !== caret.end) {
-            this._caret(this._adjustCaretToBoundaries({ start: 0, end: 0 }));
+            this._caret(maskCaret.getCaretInBoundaries({
+                start: 0,
+                end: 0
+            }, this._getInputVal(), this._getFormatPattern()));
         }
 
         var newValue = -1 * ensureDefined(this._parsedValue, null);
@@ -496,99 +499,6 @@ var NumberBoxMask = NumberBoxBase.inherit({
                 eventsEngine.trigger(this._input(), INPUT_EVENT);
             }
         }
-    },
-
-    _getDigitCountBefore: function(index, text) {
-        index = ensureDefined(index, this._caret().start);
-        text = text || this._getInputVal();
-
-        var decimalSeparator = number.getDecimalSeparator(),
-            regExp = new RegExp("[^0-9" + escapeRegExp(decimalSeparator) + "]", "g"),
-            textBeforePosition = text.slice(0, index);
-
-        return textBeforePosition.replace(regExp, '').length;
-    },
-
-    _getDigitPositionByIndex: function(digitIndex, text) {
-        text = text || this._getInputVal();
-
-        var decimalSeparator = number.getDecimalSeparator(),
-            regExp = new RegExp("[0-9" + escapeRegExp(decimalSeparator) + "]", "g"),
-            counter = 1,
-            result = regExp.exec(text);
-
-        while(result) {
-            if(!digitIndex || counter === digitIndex) {
-                return result.index;
-            }
-            counter++;
-            result = regExp.exec(text);
-        }
-
-        return text.length;
-    },
-
-    _getCaretAfterFormat: function(formatted) {
-        var caret = this._caret(),
-            digitsBeforeCaret = this._getDigitCountBefore(caret.start),
-            digitPosition = this._getDigitPositionByIndex(digitsBeforeCaret, formatted),
-            delta = digitsBeforeCaret ? 1 : 0;
-
-        var text = this._getInputVal(),
-            decimalSeparator = number.getDecimalSeparator(),
-            firstCaretAfterPoint = text.indexOf(decimalSeparator) + 1,
-            isCaretOnFloat = firstCaretAfterPoint && firstCaretAfterPoint <= caret.start;
-
-        if(this._lastKey === "Backspace") {
-            if(digitsBeforeCaret && !isCaretOnFloat && text.length < formatted.length) {
-                delta = 2;
-            }
-        } else if(!this._isDeleteKey(this._lastKey) && !isCaretOnFloat) {
-            var firstCaretOnFloatFormatted = formatted.indexOf(decimalSeparator) + 1;
-            if(digitPosition + delta >= firstCaretOnFloatFormatted) {
-                delta += digitPosition + delta - firstCaretOnFloatFormatted - 1;
-            }
-        }
-
-        var newCaret = this._getCaretWithOffset({
-            start: digitPosition,
-            end: digitPosition
-        }, delta);
-
-        return this._adjustCaretToBoundaries(newCaret, formatted);
-    },
-
-    _getCaretBoundaries: function(text) {
-        text = text || this._getInputVal();
-
-        var startBorder = /^[^0-9]*(\d)/.exec(text),
-            endBorder = /\d[^0-9]*$/.exec(text);
-
-        if(startBorder !== null) {
-            var delta = startBorder[1] === "0" ? 0 : -1;
-            startBorder = startBorder[0].length + delta;
-        }
-
-        endBorder = endBorder !== null ? endBorder.index + 1 : text.length;
-
-        return { start: startBorder, end: endBorder };
-    },
-
-    _getCaretWithOffset: function(caret, offset) {
-        return {
-            start: caret.start + offset,
-            end: caret.end + offset
-        };
-    },
-
-    _adjustCaretToBoundaries: function(caret, text) {
-        var boundaries = this._getCaretBoundaries(text),
-            adjustedCaret = {
-                start: fitIntoRange(caret.start, boundaries.start, boundaries.end),
-                end: fitIntoRange(caret.end, boundaries.start, boundaries.end)
-            };
-
-        return adjustedCaret;
     },
 
     _removeMinusFromText: function(text, caret) {

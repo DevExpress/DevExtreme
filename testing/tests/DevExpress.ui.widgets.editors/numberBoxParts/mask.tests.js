@@ -214,7 +214,7 @@ QUnit.test("pressing minus button should revert selected number", function(asser
 
     this.keyboard.caret({ start: 0, end: 5 }).keyDown(MINUS_KEY).type("-");
     assert.equal(this.input.val(), "-$ 0.00", "text is correct");
-    assert.deepEqual(this.keyboard.caret(), { start: 4, end: 4 }, "caret is good");
+    assert.deepEqual(this.keyboard.caret(), { start: 3, end: 3 }, "caret is good");
 });
 
 
