@@ -22,50 +22,6 @@ var documentMock = (function() {
     return documentMock;
 })();
 
-(function emulateNoContains() {
-    var originalContains = Element.prototype.contains;
-    Element.prototype.contains = function(element) {
-        if(!element) {
-            throw new Error("element should be defined");
-        }
-
-        return originalContains.apply(this, arguments);
-    };
-})();
-
-(function emulateNoXMLNSAttr() {
-    // NOTE: Will be allowed soon https://github.com/fgnass/domino/commit/b16cb1923f83db096b7cd0638734474e54b3308d#diff-52cea43ae897a1705ec51162aed25f63
-    var originalSetAttribute = Element.prototype.setAttribute;
-    Element.prototype.setAttribute = function(name, value) {
-        if(name.toLowerCase().substring(0, 5) === 'xmlns') {
-            throw new Error("the operation is not allowed by Namespaces in XML");
-        }
-
-        return originalSetAttribute.apply(this, arguments);
-    };
-})();
-
-(function emulateNoElementSizes() {
-    var originalCreateElement = document.createElement;
-
-    document.createElement = function() {
-        var result = originalCreateElement.apply(this, arguments);
-
-        ["offsetWidth", "offsetHeight"].forEach(function(field) {
-            Object.defineProperty(result, field, {
-                get: function() {
-                    return undefined;
-                },
-                set: function() {}
-            });
-        });
-
-        return result;
-    };
-
-    Element.prototype.getClientRects = undefined;
-})();
-
 exports.set = function() {
     // Emulate Angular DOM Adapter considering it's restricitons
     domAdapter.inject({
@@ -93,13 +49,14 @@ exports.set = function() {
 
         listen: function(element, event, callback, useCapture) {
             var args = Array.prototype.slice.call(arguments, 0);
-            // Note: in Angular domAdapter it wiil be "window"
+
             if(element.isWindowMock) {
-                args[0] = window;
+                args[0] = {};
             }
             if(element.isDocumentMock) {
                 args[0] = document;
             }
+
             return this.callBase.apply(this, args);
         },
 
