@@ -161,7 +161,7 @@ var nativeDOMAdapterStrategy = {
     },
 
     listen: function(element, event, callback, useCapture) {
-        if(!element || !element.addEventListener) {
+        if(!element || !("addEventListener" in element)) {
             return noop;
         }
 
