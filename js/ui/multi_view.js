@@ -5,6 +5,7 @@ var $ = require("../core/renderer"),
     translator = require("../animation/translator"),
     mathUtils = require("../core/utils/math"),
     extend = require("../core/utils/extend").extend,
+    windowUtils = require("../core/utils/window"),
     noop = require("../core/utils/common").noop,
     isDefined = require("../core/utils/type").isDefined,
     devices = require("../core/devices"),
@@ -255,7 +256,9 @@ var MultiView = CollectionWidget.inherit({
     },
 
     _renderSelection: function(addedSelection) {
-        this._updateItems(addedSelection[0]);
+        if(windowUtils.hasWindow()) {
+            this._updateItems(addedSelection[0]);
+        }
     },
 
     _updateItems: function(selectedIndex, newIndex) {

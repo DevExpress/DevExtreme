@@ -8,6 +8,7 @@ var $ = require("../../core/renderer"),
     translator = require("../../animation/translator"),
     eventUtils = require("../../events/utils"),
     extend = require("../../core/utils/extend").extend,
+    windowUtils = require("../../core/utils/window"),
     each = require("../../core/utils/iterator").each,
     CollectionWidget = require("../collection/ui.collection_widget.edit"),
     config = require("../../core/config"),
@@ -479,7 +480,10 @@ var PivotTabs = CollectionWidget.inherit({
     _renderSelection: function(current) {
         this._calculateMaxOffsets(current);
 
-        this._updateTabsPositions();
+        if(windowUtils.hasWindow()) {
+            this._updateTabsPositions();
+        }
+
         this._itemElements().eq(current).addClass(PIVOT_TAB_SELECTED_CLASS);
     },
 

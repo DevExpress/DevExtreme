@@ -457,14 +457,17 @@ var Widget = DOMComponent.inherit({
         this._toggleVisibility(this.option("visible"));
 
         this._renderHint();
-        this._renderContent();
         this.callBase();
+
+        //this._initContent();
+        this._renderContent();
     },
 
     _render: function() {
         this.callBase();
-
         //this._renderContent();
+        this._fireContentReadyAction();
+
         this._renderFocusState();
         this._attachFeedbackEvents();
         this._attachHoverEvents();
@@ -474,6 +477,12 @@ var Widget = DOMComponent.inherit({
         domUtils.toggleAttr(this.$element(), "title", this.option("hint"));
     },
 
+    // _renderComponent: function() {
+    //     this._initMarkup();
+    //     if(windowUtils.hasWindow()) {
+    //         this._render();
+    //     }
+    // },
     _renderContent: function() {
         var that = this;
 
@@ -481,7 +490,7 @@ var Widget = DOMComponent.inherit({
             that._renderContentImpl();
         });
 
-        that._fireContentReadyAction();
+        //that._fireContentReadyAction();
     },
 
     _renderContentImpl: commonUtils.noop,

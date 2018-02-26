@@ -303,7 +303,7 @@ var ListEdit = ListBase.inherit({
         }
     },
 
-    _render: function() {
+    _initMarkup: function() {
         this._refreshEditProvider();
         this.callBase();
     },

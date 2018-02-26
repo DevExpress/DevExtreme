@@ -299,7 +299,7 @@ var CollectionWidget = BaseCollectionWidget.inherit({
         return indices;
     },
 
-    _render: function() {
+    _initMarkup: function() {
         this._rendering = true;
 
         if(!this._dataSource || !this._dataSource.isLoading()) {
@@ -307,13 +307,28 @@ var CollectionWidget = BaseCollectionWidget.inherit({
             this._normalizeSelectedItems();
         }
 
-        this.callBase();
-
         var selectedItemIndices = this._getSelectedItemIndices();
         this._renderSelection(selectedItemIndices, []);
 
         this._rendering = false;
+        this.callBase();
     },
+    // _render: function() {
+    //     debugger;
+    //     this._rendering = true;
+
+    //     if(!this._dataSource || !this._dataSource.isLoading()) {
+    //         this._syncSelectionOptions();
+    //         this._normalizeSelectedItems();
+    //     }
+
+    //     this.callBase();
+
+    //     var selectedItemIndices = this._getSelectedItemIndices();
+    //     this._renderSelection(selectedItemIndices, []);
+
+    //     this._rendering = false;
+    // },
 
     _fireContentReadyAction: function() {
         this._rendering = false;

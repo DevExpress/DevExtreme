@@ -704,12 +704,19 @@ var CollectionWidget = Widget.inherit({
         return this._itemContainer().find(this._itemSelector());
     },
 
-    _render: function() {
+    _initMarkup: function() {
+        this.callBase();
         this.onFocusedItemChanged = this._createActionByOption("onFocusedItemChanged");
 
-        this.callBase();
-
         this.$element().addClass(COLLECTION_CLASS);
+    },
+    _render: function() {
+        this.callBase();
+        // this.onFocusedItemChanged = this._createActionByOption("onFocusedItemChanged");
+
+        // this.callBase();
+
+        // this.$element().addClass(COLLECTION_CLASS);
 
         this._attachClickEvent();
         this._attachHoldEvent();

@@ -820,7 +820,7 @@ var ListBase = CollectionWidget.inherit({
         }
     },
 
-    _render: function() {
+    _initMarkup: function() {
         this._itemElementsCache = $();
 
         this.$element().addClass(LIST_CLASS);
@@ -828,6 +828,14 @@ var ListBase = CollectionWidget.inherit({
 
         this.option("useInkRipple") && this._renderInkRipple();
     },
+    // _render: function() {
+    //     this._itemElementsCache = $();
+
+    //     this.$element().addClass(LIST_CLASS);
+    //     this.callBase();
+
+    //     this.option("useInkRipple") && this._renderInkRipple();
+    // },
 
     _renderInkRipple: function() {
         this._inkRipple = inkRipple.render();
