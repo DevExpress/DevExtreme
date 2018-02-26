@@ -5298,7 +5298,7 @@ declare module DevExpress.ui {
         /** Creates a confirm dialog that contains "Yes" and "No" buttons. */
         static confirm(message: string, title: string): Promise<boolean> & JQueryPromise<boolean>;
         /** Creates a custom dialog. */
-        static custom(options: { title?: string, message?: string, buttons?: Array<any> }): any;
+        static custom(options: { title?: string, message?: string, buttons?: Array<any>, showTitle?: boolean }): any;
     }
     /** An object that serves as a namespace for the methods that work with DevExtreme CSS Themes. */
     export class themes {
