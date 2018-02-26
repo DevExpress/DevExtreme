@@ -6,6 +6,7 @@ var $ = require("../../core/renderer"),
     registerComponent = require("../../core/component_registrator"),
     getPublicElement = require("../../core/utils/dom").getPublicElement,
     stringUtils = require("../../core/utils/string"),
+    windowUtils = require("../../core/utils/window"),
     commonUtils = require("../../core/utils/common"),
     each = require("../../core/utils/iterator").each,
     isDefined = require("../../core/utils/type").isDefined,
@@ -1644,9 +1645,11 @@ var PivotGrid = Widget.inherit({
         });
 
         updateHandler = function() {
-            that.updateDimensions().done(function() {
-                that._subscribeToEvents(columnsArea, rowsArea, dataArea);
-            });
+            if(windowUtils.hasWindow()) {
+                that.updateDimensions().done(function() {
+                    that._subscribeToEvents(columnsArea, rowsArea, dataArea);
+                });
+            }
         };
 
         that._renderHeaders(rowHeaderContainer, columnHeaderContainer, filterHeaderContainer, dataHeaderContainer);

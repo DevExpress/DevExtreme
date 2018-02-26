@@ -5,6 +5,7 @@ var $ = require("../../core/renderer"),
     isDefined = require("../../core/utils/type").isDefined,
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
+    windowUtils = require("../../core/utils/window"),
     iteratorUtils = require("../../core/utils/iterator"),
     messageLocalization = require("../../localization/message"),
     registerComponent = require("../../core/component_registrator"),
@@ -313,41 +314,44 @@ var FieldChooser = BaseFieldChooser.inherit({
         that._dataChangedHandlers = [];
 
         that.callBase();
+        if(windowUtils.hasWindow()) {
+            if(layout === 0) {
+                $col1 = $(DIV).addClass("dx-col").appendTo($container);
+                $col2 = $(DIV).addClass("dx-col").appendTo($container);
 
-        if(layout === 0) {
-            $col1 = $(DIV).addClass("dx-col").appendTo($container);
-            $col2 = $(DIV).addClass("dx-col").appendTo($container);
+                that._renderArea($col1, "all");
+                that._renderArea($col1, "filter");
+                that._renderArea($col2, "row");
+                that._renderArea($col2, "column");
+                that._renderArea($col2, "data");
+            } else if(layout === 1) {
+                $col1 = $(DIV).addClass("dx-col").appendTo($container);
+                $col2 = $(DIV).addClass("dx-col").appendTo($container);
 
-            that._renderArea($col1, "all");
-            that._renderArea($col1, "filter");
-            that._renderArea($col2, "row");
-            that._renderArea($col2, "column");
-            that._renderArea($col2, "data");
-        } else if(layout === 1) {
-            $col1 = $(DIV).addClass("dx-col").appendTo($container);
-            $col2 = $(DIV).addClass("dx-col").appendTo($container);
+                that._renderArea($col1, "all");
+                that._renderArea($col2, "filter");
+                that._renderArea($col2, "row");
+                that._renderArea($col2, "column");
+                that._renderArea($col2, "data");
+            } else {
+                this._renderArea($container, "all");
 
-            that._renderArea($col1, "all");
-            that._renderArea($col2, "filter");
-            that._renderArea($col2, "row");
-            that._renderArea($col2, "column");
-            that._renderArea($col2, "data");
-        } else {
-            this._renderArea($container, "all");
+                $col1 = $(DIV).addClass("dx-col").appendTo($container);
+                $col2 = $(DIV).addClass("dx-col").appendTo($container);
 
-            $col1 = $(DIV).addClass("dx-col").appendTo($container);
-            $col2 = $(DIV).addClass("dx-col").appendTo($container);
+                that._renderArea($col1, "filter");
+                that._renderArea($col1, "row");
+                that._renderArea($col2, "column");
+                that._renderArea($col2, "data");
+            }
 
-            that._renderArea($col1, "filter");
-            that._renderArea($col1, "row");
-            that._renderArea($col2, "column");
-            that._renderArea($col2, "data");
+            that.renderSortable();
+
+            that.updateDimensions();
+
+            that._renderContextMenu();
         }
-        that.renderSortable();
 
-        that.updateDimensions();
-
-        that._renderContextMenu();
     },
 
     _fireContentReadyAction: function() {

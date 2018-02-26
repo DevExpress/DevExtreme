@@ -4,6 +4,7 @@ var $ = require("../core/renderer"),
     TrackBar = require("./track_bar"),
     extend = require("../core/utils/extend").extend,
     isFunction = require("../core/utils/type").isFunction,
+    windowUtils = require("../core/utils/window"),
     registerComponent = require("../core/component_registrator");
 
 var PROGRESSBAR_CLASS = "dx-progressbar",
@@ -133,12 +134,15 @@ var ProgressBar = TrackBar.inherit({
     _renderContentImpl: function() {
         this.$element().addClass(PROGRESSBAR_CLASS);
         this.setAria("role", "progressbar");
-        this._$wrapper.addClass(PROGRESSBAR_WRAPPER_CLASS);
-        this._$bar.addClass(PROGRESSBAR_CONTAINER_CLASS);
 
-        $("<div>").addClass(PROGRESSBAR_RANGE_CONTAINER_CLASS).appendTo(this._$wrapper).append(this._$bar);
-        this._$range.addClass(PROGRESSBAR_RANGE_CLASS);
-        this._toggleStatus(this.option("showStatus"));
+        if(windowUtils.hasWindow()) {
+            this._$wrapper.addClass(PROGRESSBAR_WRAPPER_CLASS);
+            this._$bar.addClass(PROGRESSBAR_CONTAINER_CLASS);
+
+            $("<div>").addClass(PROGRESSBAR_RANGE_CONTAINER_CLASS).appendTo(this._$wrapper).append(this._$bar);
+            this._$range.addClass(PROGRESSBAR_RANGE_CLASS);
+            this._toggleStatus(this.option("showStatus"));
+        }
 
         this.callBase();
     },

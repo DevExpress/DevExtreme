@@ -609,10 +609,12 @@ var Scrollable = DOMComponent.inherit({
     * @return Promise<void>
     */
     update: function() {
-        var that = this;
-        return when(that._strategy.update()).done(function() {
-            that._updateAllowedDirection();
-        });
+        if(windowUtils.hasWindow()) {
+            var that = this;
+            return when(that._strategy.update()).done(function() {
+                that._updateAllowedDirection();
+            });
+        }
     },
 
     /**
