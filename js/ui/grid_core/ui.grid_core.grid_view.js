@@ -72,7 +72,7 @@ var ResizingController = modules.ViewController.inherit({
                 } else if(changeType === "update") {
                     if((items.length > 1 || e.changeTypes[0] !== "insert") &&
                         !(items.length === 0 && e.changeTypes[0] === "remove")) {
-                        windowUtils.hasWindow() && that._rowsView.resize();
+                        that._rowsView.resize();
                     } else {
                         resizeDeferred = that.resize();
                     }
@@ -388,7 +388,7 @@ var ResizingController = modules.ViewController.inherit({
             width,
             importantMarginClass = that.addWidgetPrefix(IMPORTANT_MARGIN_CLASS);
 
-        if(windowUtils.hasWindow() && that._hasHeight === undefined && $rootElement && $rootElement.is(":visible")) {
+        if(that._hasHeight === undefined && $rootElement && $rootElement.is(":visible")) {
             $groupElement = $rootElement.children("." + that.getWidgetContainerClass());
             if($groupElement.length) {
                 $groupElement.detach();
@@ -425,7 +425,7 @@ var ResizingController = modules.ViewController.inherit({
         that._initPostRenderHandlers();
 
         //T335767
-        if(!windowUtils.hasWindow() || !that._checkSize(checkSize)) {
+        if(!that._checkSize(checkSize)) {
             return;
         }
 
@@ -634,7 +634,7 @@ var GridView = modules.View.inherit({
 
         if(isFirstRender) {
             that._groupElement = $groupElement;
-            that.getController("resizing").updateSize($rootElement);
+            windowUtils.hasWindow() && that.getController("resizing").updateSize($rootElement);
             $groupElement.appendTo($rootElement);
         }
 
