@@ -177,10 +177,10 @@ var RadioGroup = Editor.inherit({
         this.setAria("role", "radiogroup");
 
         this._renderLayout();
-        this._updateItemsSize();
 
         this.option("useInkRipple") && this._renderInkRipple();
         this.callBase();
+        this._updateItemsSize();
     },
 
     _renderInkRipple: function() {
@@ -281,11 +281,6 @@ var RadioGroup = Editor.inherit({
 
     itemElements: function() {
         return this._radios.itemElements();
-    },
-
-    _renderDimensions: function() {
-        this.callBase();
-        this._updateItemsSize();
     },
 
     _renderLayout: function() {

@@ -40,6 +40,14 @@ QUnit.test("Basic markup initialization", function(assert) {
     assert.equal($indicatorContent.length, 1, "Content is added");
 });
 
+QUnit.test("LoadIndicator width custom dimensions", function(assert) {
+    var $indicator = $("#loadIndicator").dxLoadIndicator({ width: 75, height: 75 }),
+        indicatorElement = $indicator.get(0);
+
+    assert.strictEqual(indicatorElement.style.width, "75px", "outer width of the element must be equal to custom width");
+    assert.strictEqual(indicatorElement.style.height, "75px", "outer height of the element must be equal to custom width");
+});
+
 
 QUnit.module("Static load indicator", {
     beforeEach: function() {
