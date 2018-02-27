@@ -645,7 +645,7 @@ var ListBase = CollectionWidget.inherit({
                     $container.text(data.key);
                 }
             } else {
-                $container.html(String(data));
+                $container.text(String(data));
             }
         }, ["key"], this.option("integrationOptions.watchMethod"));
     },
