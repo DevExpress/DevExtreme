@@ -200,10 +200,10 @@ var Overlay = Widget.inherit({
              * @name dxOverlayOptions_width
              * @publicName width
              * @type number|string|function
-             * @default function() {return $(window).width() * 0.8 }
+             * @default '80%'
              * @type_function_return number|string
              */
-            width: function() { return $(window).width() * 0.8; },
+            width: "80%",
 
             /**
              * @name dxOverlayOptions_minWidth
@@ -227,10 +227,10 @@ var Overlay = Widget.inherit({
              * @name dxOverlayOptions_height
              * @publicName height
              * @type number|string|function
-             * @default function() { return $(window).height() * 0.8 }
+             * @default '80%'
              * @type_function_return number|string
              */
-            height: function() { return $(window).height() * 0.8; },
+            height: "80%",
 
             /**
              * @name dxOverlayOptions_minHeight
@@ -412,14 +412,6 @@ var Overlay = Widget.inherit({
                         }
                     }
                 }
-            }
-        }, {
-            device: function() {
-                return !windowUtils.hasWindow();
-            },
-            options: {
-                width: "auto",
-                height: "auto"
             }
         }]);
     },
