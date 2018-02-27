@@ -750,6 +750,15 @@ QUnit.test("overlay should be correctly animated with custom 'animation.show.to'
     assert.deepEqual(positionUtils.setup($content), { top: expectedPosition.v.location, left: expectedPosition.h.location }, "overlay positioned correctly");
 });
 
+QUnit.test("position as function", function(assert) {
+    var instance = $("#overlay").dxOverlay({
+        visible: true,
+        position: function() { return { of: "body" }; }
+    }).dxOverlay("instance");
+
+    assert.equal(instance._position.of, "body");
+});
+
 
 QUnit.module("shading", moduleConfig);
 

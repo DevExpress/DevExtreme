@@ -36,7 +36,7 @@ QUnit.module("Misc", {
 QUnit.test("palette in repeat mode", function(assert) {
     this.create({
         values: [1, 2, 3, 4],
-        paletteExtensionMode: "repeat"
+        paletteExtensionMode: "alternate"
     });
     this.renderer.arc.reset();
 
@@ -72,7 +72,7 @@ QUnit.test("palette extension mode can be changed", function(assert) {
     });
     this.renderer.arc.reset();
 
-    this.widget.option({ paletteExtensionMode: "repeat" });
+    this.widget.option({ paletteExtensionMode: "alternate" });
 
     assert.deepEqual(this.bar(0).attr.getCall(2).args, [{ fill: "red" }], "bar 1 color");
     assert.deepEqual(this.bar(1).attr.getCall(2).args, [{ fill: "green" }], "bar 2 color");

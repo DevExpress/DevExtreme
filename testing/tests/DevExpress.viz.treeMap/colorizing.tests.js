@@ -24,7 +24,7 @@ QUnit.test("Discrete", function(assert) {
         colorizer: {
             type: "Discrete",
             palette: ["#020202", "#060606", "#0a0a0a"],
-            paletteExtensionMode: "repeat"
+            paletteExtensionMode: "alternate"
         }
     });
 
@@ -174,7 +174,7 @@ QUnit.test("Discrete group", function(assert) {
             type: "Discrete",
             palette: ["#020202", "#060606", "#0a0a0a"],
             colorizeGroups: true,
-            paletteExtensionMode: "repeat"
+            paletteExtensionMode: "alternate"
         }
     });
 
@@ -294,7 +294,7 @@ QUnit.test("Complex discrete group", function(assert) {
         colorizer: {
             colorizeGroups: true,
             palette: ["c1", "c2", "c3", "c4", "c5", "c6", "c7"],
-            paletteExtensionMode: "repeat"
+            paletteExtensionMode: "alternate"
         }
     });
 

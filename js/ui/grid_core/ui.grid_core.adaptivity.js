@@ -377,14 +377,6 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
         }
     },
 
-    applyStylesForHiddenColumns: function(view) {
-        var that = this;
-        this._hiddenColumns.forEach(function(column) {
-            var visibleIndex = that._columnsController.getVisibleIndex(column.index);
-            that._addCssClassToViewColumn(view, that.addWidgetPrefix(HIDDEN_COLUMN_CLASS), visibleIndex);
-        });
-    },
-
     isFormEditMode: function() {
         var editMode = this._editingController.getEditMode();
 
@@ -718,9 +710,12 @@ module.exports = {
                     }
                 },
 
-                _cellPrepared: function() {
+                _cellPrepared: function($cell, options) {
                     this.callBase.apply(this, arguments);
-                    this._adaptiveColumnsController.applyStylesForHiddenColumns(this);
+
+                    if(options.column.visibleWidth === HIDDEN_COLUMNS_WIDTH) {
+                        $cell.addClass(this.addWidgetPrefix(HIDDEN_COLUMN_CLASS));
+                    }
                 },
 
                 _getCellElement: function(rowIndex, columnIdentifier) {
@@ -776,7 +771,7 @@ module.exports = {
             draggingHeader: {
                 _pointCreated: function(point, columns, location, sourceColumn) {
                     var result = this.callBase(point, columns, location, sourceColumn),
-                        column = columns[point.columnIndex] || {},
+                        column = columns[point.columnIndex - 1] || {},
                         hasAdaptiveHiddenWidth = column.visibleWidth === HIDDEN_COLUMNS_WIDTH;
 
                     return result || hasAdaptiveHiddenWidth;
@@ -944,12 +939,21 @@ module.exports = {
                         this._updateScrollableForIE();
                     }
 
-                    return this.callBase(resultWidths, visibleColumns);
+                    return this.callBase.apply(this, arguments);
                 },
 
                 _toggleBestFitMode: function(isBestFit) {
                     isBestFit && this._adaptiveColumnsController._removeCssClassesFromColumns();
                     this.callBase(isBestFit);
+                    if(this.option("advancedRendering") && this.option("columnAutoWidth") && this._adaptiveColumnsController.getHidingColumnsQueue().length) {
+                        var $rowsTable = this._rowsView._getTableElement();
+                        $rowsTable.css("width", isBestFit ? "auto" : "");
+
+                    }
+                },
+
+                _needStretch: function() {
+                    return this.callBase.apply(this, arguments) || this._adaptiveColumnsController.getHidingColumnsQueue().length;
                 },
 
                 init: function() {

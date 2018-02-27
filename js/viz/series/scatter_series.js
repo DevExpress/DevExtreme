@@ -78,15 +78,6 @@ var baseScatterMethods = {
 
     _drawSegment: _noop,
 
-    _generateDefaultSegments: _noop,
-
-    _prepareSeriesToDrawing: function() {
-        var that = this;
-        that._deleteOldAnimationMethods();
-        that._disposePoints(that._oldPoints);
-        that._oldPoints = null;
-    },
-
     _appendInGroup: function() {
         this._group.append(this._extGroups.seriesGroup);
     },
@@ -300,16 +291,6 @@ var baseScatterMethods = {
         } else {
             point.setInvisibility();
         }
-    },
-
-    _clearingAnimation: function(drawComplete) {
-        var that = this,
-            params = { opacity: 0.001 },
-            options = { duration: that._defaultDuration, partitionDuration: 0.5 };
-
-        that._labelsGroup && that._labelsGroup.animate(params, options, function() {
-            that._markersGroup && that._markersGroup.animate(params, options, drawComplete);
-        });
     },
 
     _animateComplete: function() {

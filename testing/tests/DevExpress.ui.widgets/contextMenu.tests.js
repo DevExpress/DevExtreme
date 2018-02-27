@@ -33,8 +33,7 @@ var DX_CONTEXT_MENU_CLASS = "dx-context-menu",
     DX_MENU_ITEM_EXPANDED_CLASS = "dx-menu-item-expanded",
     DX_MENU_ITEM_POPOUT_CLASS = "dx-menu-item-popout",
     DX_SUBMENU_CLASS = "dx-submenu",
-    DX_HAS_SUBMENU_CLASS = "dx-menu-item-has-submenu",
-    DX_HAS_CONTEXT_MENU_CLASS = "dx-has-context-menu";
+    DX_HAS_SUBMENU_CLASS = "dx-menu-item-has-submenu";
 
 var isDeviceDesktop = function(assert) {
     if(devices.real().deviceType !== "desktop") {
@@ -66,12 +65,6 @@ var moduleConfig = {
 };
 
 QUnit.module("Rendering", moduleConfig);
-
-QUnit.test("context menu should have correct css class", function(assert) {
-    new ContextMenu(this.$element, {});
-
-    assert.ok(this.$element.hasClass(DX_HAS_CONTEXT_MENU_CLASS), "context menu have correct class");
-});
 
 QUnit.test("all items in root level should be wrapped in submenu", function(assert) {
     var instance = new ContextMenu(this.$element, { items: [{ text: "item1" }], visible: true }),
@@ -527,6 +520,21 @@ QUnit.test("Show context menu via api when position is undefined", function(asse
     assert.deepEqual(overlay.option("position.of").get(0), $("#menuTarget").get(0), "position is correct");
 });
 
+QUnit.test("show/hide methods should return Deferred", function(assert) {
+    var instance = new ContextMenu(this.$element, {
+        target: $("#menuTarget"),
+        items: [{ text: "item 1" }],
+        visible: false
+    });
+
+    var d = instance.show();
+
+    assert.ok($.isFunction(d.promise), "type object is the Deferred");
+
+    d = instance.hide();
+
+    assert.ok($.isFunction(d.promise), "type object is the Deferred");
+});
 
 QUnit.module("Showing and hiding submenus", moduleConfig);
 
@@ -1444,12 +1452,6 @@ QUnit.test("changing selection via selectedItem option", function(assert) {
 
 
 QUnit.module("Aria accessibility", moduleConfig);
-
-QUnit.test("aria role", function(assert) {
-    new ContextMenu(this.$element, {});
-
-    assert.equal(this.$element.attr("role"), "menu", "aria role is correct");
-});
 
 QUnit.test("aria-owns should pointed to overlay", function(assert) {
     var instance = new ContextMenu(this.$element, {}),

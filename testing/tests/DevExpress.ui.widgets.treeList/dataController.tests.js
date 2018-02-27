@@ -2190,3 +2190,54 @@ QUnit.test("Expand row", function(assert) {
     assert.equal(items.length, 3, "count item");
     assert.deepEqual(loadOptions[1].parentIds, [2], "parentIds");
 });
+
+// T604935
+QUnit.test("loadOptions.parendIds should be correct when expanding several nodes", function(assert) {
+    // arrange
+    var items,
+        loadOptions = [],
+        data = {
+            0: [
+                { id: 1, parentId: 0, field1: "test1", field2: "test2", field3: "test3" },
+                { id: 2, parentId: 0, field1: "test4", field2: "test5", field3: "test6" }
+            ],
+            1: [],
+            2: [{ id: 3, parentId: 2, field1: "test7", field2: "test8", field3: "test9" }]
+        };
+
+    this.setupTreeList({
+        dataSource: {
+            load: function(e) {
+                var d = $.Deferred(),
+                    result = [],
+                    parentIds = e.parentIds;
+
+                if(parentIds) {
+                    for(var i = 0; i < parentIds.length; i++) {
+                        result.push.apply(result, data[parentIds[i]]);
+                    }
+                }
+
+                loadOptions.push(e);
+
+                return d.resolve(result);
+            }
+        }
+    });
+
+    // act
+    this.expandRow(1);
+
+    // assert
+    items = this.dataController.items();
+    assert.equal(items.length, 2, "item count");
+    assert.deepEqual(loadOptions[1].parentIds, [1], "parentIds");
+
+    // act
+    this.expandRow(2);
+
+    // assert
+    items = this.dataController.items();
+    assert.equal(items.length, 3, "item count");
+    assert.deepEqual(loadOptions[2].parentIds, [2], "parentIds");
+});

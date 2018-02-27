@@ -527,7 +527,7 @@ module.exports = {
                             return dataController.generateDataValues(arg.data, arg.columns);
                         },
                         function() {
-                            dataController.updateItems({ changeType: "update", rowIndices: [arg.rowIndex] });
+                            dataController.repaintRows([arg.rowIndex]);
                         },
                         {
                             deep: true,
@@ -560,7 +560,7 @@ module.exports = {
                             }
                         }
 
-                        if(that.option("columnAutoWidth") || that._hasHeight || allColumnsHasWidth || that._columnsController._isColumnFixing()) {
+                        if(that.option("advancedRendering") || that.option("columnAutoWidth") || that._hasHeight || allColumnsHasWidth || that._columnsController._isColumnFixing()) {
                             that._renderScrollableCore($element);
                         }
                     }
@@ -652,7 +652,7 @@ module.exports = {
                     }
                 },
 
-                _renderFreeSpaceRow: function(tableElement) {
+                _renderFreeSpaceRow: function(tableElement, options) {
                     var that = this,
                         i,
                         freeSpaceRowElement = that._createRow(),
@@ -663,7 +663,7 @@ module.exports = {
                         .toggleClass(COLUMN_LINES_CLASS, that.option("showColumnLines"));
 
                     for(i = 0; i < columns.length; i++) {
-                        freeSpaceRowElement.append(that._createCell({ column: columns[i], rowType: "freeSpace" }));
+                        freeSpaceRowElement.append(that._createCell({ column: columns[i], rowType: "freeSpace", columnIndex: i, columns: columns }));
                     }
 
                     that._appendRow(tableElement, freeSpaceRowElement, appendFreeSpaceRowTemplate);
@@ -675,7 +675,7 @@ module.exports = {
                         keyExpr = that._dataController.store() && that._dataController.store().key();
 
                     keyExpr && rows.some(function(row) {
-                        if(row.rowType === "data" && !isDefined(row.key)) {
+                        if(row.rowType === "data" && row.key === undefined) {
                             that._dataController.dataErrorOccurred.fire(errors.Error("E1046", keyExpr));
                             return true;
                         }
@@ -967,7 +967,12 @@ module.exports = {
                         column;
 
                     if(rowOptions) {
-                        column = this._columnsController.columnOption(columnIdentifier);
+                        if(typeUtils.isString(columnIdentifier)) {
+                            column = this._columnsController.columnOption(columnIdentifier);
+                        } else {
+                            column = this._columnsController.getVisibleColumns()[columnIdentifier];
+                        }
+
                         if(column) {
                             cellOptions = this._getCellOptions({
                                 value: column.calculateCellValue(rowOptions.data),

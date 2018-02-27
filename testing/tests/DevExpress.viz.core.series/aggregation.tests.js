@@ -936,7 +936,15 @@ QUnit.test("Fusion points, point empty array", function(assert) {
 QUnit.module("Sampler points", {
     beforeEach: function() {
         this.createPoint = sinon.stub(pointModule, "Point", function(series, data, options) {
-            return { argument: data.argument, value: data.value, series: series, setInvisibility: sinon.stub(), hasValue: sinon.stub().returns(true), updateOptions: sinon.spy() };
+            return {
+                argument: data.argument,
+                value: data.value,
+                series: series,
+                setInvisibility: sinon.stub(),
+                hasValue: sinon.stub().returns(true),
+                updateOptions: sinon.spy(),
+                dispose: sinon.spy()
+            };
         });
 
         var that = this,
@@ -1076,6 +1084,19 @@ QUnit.test("getPointsByArg usage", function(assert) {
 
     // assert
     assert.strictEqual(this.series.getPointsByArg(1).length, initialPointsCountOnFirstArgument);
+});
+
+QUnit.test("Dispose old aggregation points", function(assert) {
+    this.series.updateData([{ arg: 1, val: 1 }, { arg: 2, val: 2 }]);
+    this.setup(1, 2);
+    this.series.resamplePoints(10);
+    var points = this.series.getPoints().slice();
+    // Act
+    this.series.resamplePoints(10);
+    // Assert
+    assert.equal(points.length, 2);
+    assert.ok(points[0].dispose.called);
+    assert.ok(points[1].dispose.called);
 });
 
 QUnit.test("10 points -> 10 points. All points", function(assert) {

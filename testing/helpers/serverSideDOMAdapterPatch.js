@@ -3,29 +3,24 @@
 var domAdapter = require("core/dom_adapter");
 var readyCallbacks = require("core/utils/ready_callbacks");
 
-var documentMock = {
-    isDocumentMock: true
-};
+var documentMock = (function() {
+    var documentMock = {
+        isDocumentMock: true
+    };
 
-var errorFunc = function() {
-    throw new Error("Document fields using is prevented");
-};
+    var errorFunc = function() {
+        throw new Error("Document fields using is prevented");
+    };
 
-var originalContains = Element.prototype.contains;
-Element.prototype.contains = function(element) {
-    if(!element) {
-        throw new Error("element should be defined");
+    for(var field in document) {
+        Object.defineProperty(documentMock, field, {
+            get: errorFunc,
+            set: errorFunc
+        });
     }
 
-    return originalContains.apply(this, arguments);
-};
-
-for(var field in document) {
-    Object.defineProperty(documentMock, field, {
-        get: errorFunc,
-        set: errorFunc
-    });
-}
+    return documentMock;
+})();
 
 exports.set = function() {
     // Emulate Angular DOM Adapter considering it's restricitons
@@ -33,6 +28,10 @@ exports.set = function() {
         // `document` should be used only as is
         getDocument: function() {
             return documentMock;
+        },
+
+        getDocumentElement: function() {
+            return undefined;
         },
 
         hasDocumentProperty: function() {
@@ -50,13 +49,14 @@ exports.set = function() {
 
         listen: function(element, event, callback, useCapture) {
             var args = Array.prototype.slice.call(arguments, 0);
-            // Note: in Angular domAdapter it wiil be "window"
+
             if(element.isWindowMock) {
-                args[0] = window;
+                args[0] = {};
             }
             if(element.isDocumentMock) {
                 args[0] = document;
             }
+
             return this.callBase.apply(this, args);
         },
 

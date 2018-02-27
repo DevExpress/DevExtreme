@@ -78,6 +78,14 @@ QUnit.module("selectedRange", function(hook) {
         assert.deepEqual(this.rangeSelector.getSelectedRange(), { startValue: 1, endValue: 11 });
     });
 
+    QUnit.test("Reset selected range", function(assert) {
+        var incidentOccurred = sinon.spy();
+        this.rangeSelector.option({ onIncidentOccurred: incidentOccurred });
+        this.rangeSelector.resetSelectedRange();
+
+        assert.equal(incidentOccurred.callCount, 0);
+    });
+
     QUnit.test("parse custom selected range", function(assert) {
         this.rangeSelector.option({
             dataSource: this.dataSource,

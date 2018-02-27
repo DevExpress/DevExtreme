@@ -242,7 +242,7 @@ DataSourceAdapter = DataSourceAdapter.inherit((function() {
             var parentIdsToLoad = [];
 
             for(var i = 0; i < parentIds.length; i++) {
-                if(!this._hasItemsMap[parentIds[i]]) {
+                if(this._hasItemsMap[parentIds[i]] === undefined) {
                     parentIdsToLoad.push(parentIds[i]);
                 }
             }
@@ -546,22 +546,17 @@ DataSourceAdapter = DataSourceAdapter.inherit((function() {
             }
         },
 
-        getNodeLeafKeys: function(keys, callBack) {
+        getNodeLeafKeys: function() {
             var that = this,
                 node,
-                result = [];
-
-            if(!typeUtils.isDefined(keys)) {
+                result = [],
                 keys = that._rootNode ? [that._rootNode.key] : [];
-            }
 
             keys.forEach(function(key) {
                 node = that.getNodeByKey(key);
 
                 node && treeListCore.foreachNodes([node], function(childNode) {
-                    if(!childNode.children.length && (!callBack || callBack(childNode))) {
-                        result.push(childNode.key);
-                    }
+                    !childNode.children.length && result.push(childNode.key);
                 });
             });
 

@@ -598,6 +598,24 @@ QUnit.test("Logarithmic. Start value in the scale break - start should be end of
     this.check(assert, [1800, 2200], [10, 100]);
 });
 
+QUnit.test("date values. semidiscrete. getSelectedRange returns correct date type values", function(assert) {
+    this.translator.update({
+        min: new Date("01/01/2010"),
+        max: new Date("12/31/2010"),
+        axisType: "semidiscrete",
+        dataType: "datetime"
+    }, { left: 1000, width: 3000 }, { isHorizontal: true, interval: { "months": 1 } });
+
+    this.update();
+
+    this.setRange(new Date("02/01/2010"), new Date("05/01/2010"));
+
+    assert.deepEqual(this.controller.getSelectedRange(), {
+        startValue: new Date("02/01/2010"),
+        endValue: new Date("05/01/2010")
+    });
+});
+
 QUnit.module("Clouds processing", $.extend({}, environment, {
     beforeEach: function() {
         environment.beforeEach.apply(this, arguments);

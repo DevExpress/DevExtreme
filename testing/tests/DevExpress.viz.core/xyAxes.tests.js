@@ -2900,18 +2900,6 @@ QUnit.test("Do not get scale break if viewport inside it", function(assert) {
     assert.deepEqual(breaks, []);
 });
 
-QUnit.test("Do not get scale break if multiple value axes", function(assert) {
-    this.updateOptions({
-        breaks: [{ startValue: 200, endValue: 500 }]
-    });
-    this.axis.setBusinessRange({ min: 0, max: 1000, addRange: function() { return this; } }, true);
-    this.axis.createTicks(this.canvas);
-
-    var breaks = this.tickGeneratorSpy.lastCall.args[7];
-
-    assert.deepEqual(breaks, []);
-});
-
 QUnit.test("Sorting of the breaks if user set not sorted breaks", function(assert) {
     this.updateOptions({
         breaks: [{ startValue: 200, endValue: 500 }, { startValue: 100, endValue: 150 }],
@@ -3037,6 +3025,47 @@ QUnit.test("Datetime axis, breaks values are string", function(assert) {
         to: new Date(2015, 4, 9),
         cumulativeWidth: 0
     }]);
+});
+
+QUnit.test("Remove groups on disposing", function(assert) {
+    this.renderSettings.scaleBreaksGroup = this.renderer.g();
+    var axis = this.createAxis(this.renderSettings, $.extend(true, this.options, {
+        breaks: [
+            { startValue: 50, endValue: 100 },
+            { startValue: 70, endValue: 150 }
+        ],
+        visible: true,
+        breakStyle: {
+            color: "black",
+            line: "waved",
+            width: 10
+        },
+        min: 0,
+        max: 140
+    }));
+
+    this.translator.getBusinessRange.returns({
+        breaks: [
+            { startValue: 50, endValue: 100 },
+            { startValue: 70, endValue: 150 }
+        ]
+    });
+
+    axis.createTicks(this.canvas);
+
+    axis.shift({ left: -10 });
+    this.renderer.g.reset();
+
+    axis.drawScaleBreaks();
+    // act
+    axis.dispose();
+
+    // assert
+    assert.ok(this.renderer.g.getCall(0).returnValue.dispose.called);
+    assert.ok(this.renderer.clipRect.getCall(0).returnValue.dispose.called);
+
+    assert.ok(this.renderer.g.getCall(1).returnValue.dispose.called);
+    assert.ok(this.renderer.clipRect.getCall(1).returnValue.dispose.called);
 });
 
 QUnit.module("Datetime scale breaks. Weekends and holidays", $.extend({}, environment2DTranslator, {
@@ -3916,30 +3945,6 @@ QUnit.test("Reset zoom", function(assert) {
     this.axis.createTicks(this.canvas);
 
     assert.deepEqual(this.tickGeneratorSpy.lastCall.args[7], [{ from: 10, to: 40, cumulativeWidth: 0 }, { from: 40, to: 80, cumulativeWidth: 0 }]);
-});
-
-QUnit.test("Do not generate scale breaks on zooming if multiple axis", function(assert) {
-    this.axis.setGroupSeries([
-        this.stubSeries([[3, 10, 40], []]),
-        this.stubSeries([[80, 120, 40], []])
-    ]);
-
-    this.updateOptions({
-        autoBreaksEnabled: true,
-        maxAutoBreakCount: 2
-    });
-    this.axis.setBusinessRange({ min: 2, max: 120, addRange: function() { return this; } }, true);
-    this.axis.createTicks(this.canvas);
-
-    this.axis.setGroupSeries([
-        this.stubSeries([[3, 10], []]),
-        this.stubSeries([[80, 120, 40], []])
-    ]);
-
-    this.axis.zoom(50, 100);
-    this.axis.createTicks(this.canvas);
-
-    assert.deepEqual(this.tickGeneratorSpy.lastCall.args[7], []);
 });
 
 QUnit.test("Generate the breaks take into account the edge points that out of the range", function(assert) {

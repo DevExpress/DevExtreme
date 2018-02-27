@@ -7,7 +7,8 @@ var noop = require("../../core/utils/common").noop,
 var MONTH_APPOINTMENT_HEIGHT_RATIO = 0.6,
     MONTH_APPOINTMENT_MIN_OFFSET = 26,
     MONTH_APPOINTMENT_MAX_OFFSET = 30,
-    MONTH_DROPDOWN_APPOINTMENT_RIGHT_OFFSET = 36;
+    MONTH_DROPDOWN_APPOINTMENT_MIN_RIGHT_OFFSET = 36,
+    MONTH_DROPDOWN_APPOINTMENT_MAX_RIGHT_OFFSET = 60;
 
 var HorizontalMonthRenderingStrategy = HorizontalMonthLineAppointmentsStrategy.inherit({
 
@@ -123,8 +124,9 @@ var HorizontalMonthRenderingStrategy = HorizontalMonthLineAppointmentsStrategy.i
         };
     },
 
-    getCompactAppointmentGroupMaxWidth: function() {
-        return this.getDefaultCellWidth() - MONTH_DROPDOWN_APPOINTMENT_RIGHT_OFFSET;
+    getCompactAppointmentGroupMaxWidth: function(intervalCount) {
+        var offset = intervalCount > 1 ? MONTH_DROPDOWN_APPOINTMENT_MAX_RIGHT_OFFSET : MONTH_DROPDOWN_APPOINTMENT_MIN_RIGHT_OFFSET;
+        return this.getDefaultCellWidth() - offset;
     }
 });
 

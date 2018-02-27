@@ -518,6 +518,7 @@
             getArgumentAxis: function() {
                 return this._argumentAxis;
             },
+            prepareToDrawing: sinon.spy(),
             draw: sinon.spy(function(animationEnabled, hideLayoutLabels, legendCallback) {
                 this.wasDrawn = true;
                 this.hideLayoutLabels = hideLayoutLabels;

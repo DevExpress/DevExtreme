@@ -34,10 +34,7 @@ var StubTranslator = vizMocks.stubClass(translator1DModule.Translator1D),
     StubTracker = vizMocks.stubClass(Tracker),
     // StubLayoutManager = null,
     StubTooltip = vizMocks.stubClass(tooltipModule.Tooltip, { isEnabled: function() { return "tooltip_enabled"; } }),
-    StubTitle = vizMocks.Title,
-    StubDeltaIndicator = vizMocks.stubClass(titleModule.Title);
-
-StubDeltaIndicator.prototype.clean = sinon.spy();
+    StubTitle = vizMocks.Title;
 
 StubThemeManager.prototype.setTheme = function() {
     vizMocks.forceThemeOptions(this);
@@ -64,12 +61,6 @@ titleModule.Title = function() {
     return currentTest().title;
 };
 
-$.extend(true, baseGaugeModule.dxBaseGauge.prototype, {
-    _DeltaIndicator: function() {
-        return currentTest().deltaIndicator;
-    }
-});
-
 $.extend(factory, {
     ThemeManager: sinon.spy(function() {
         return currentTest().themeManager;
@@ -95,7 +86,6 @@ var environment = {
         this.tracker = new StubTracker();
         // this.layoutManager = new StubLayoutManager();
         this.title = new StubTitle();
-        this.deltaIndicator = new StubDeltaIndicator();
         var baseMethods = this.baseMethods = {};
         $.each(BASE_METHODS, function(_, name) {
             baseMethods[name] = dxBaseGauge.prototype[name];
@@ -122,7 +112,6 @@ var environment = {
 
         this.tracker = null;
         this.title = null;
-        this.deltaIndicator = null;
 
         $.each(BASE_METHODS, function(_, name) {
             dxBaseGauge.prototype[name].reset();
@@ -133,7 +122,6 @@ var environment = {
         });
 
         rendererModule.Renderer.reset();
-        StubDeltaIndicator.prototype.clean.reset();
 
         factory.ThemeManager.reset();
         factory.createTranslator.reset();
@@ -181,7 +169,6 @@ QUnit.test("Components disposing", function(assert) {
     assert.deepEqual(this.themeManager.stub("dispose").lastCall.args, [], "theme manager");
     assert.deepEqual(this.tracker.stub("dispose").lastCall.args, [], "tracker");
     assert.deepEqual(this.title.stub("dispose").lastCall.args, [], "title");
-    assert.deepEqual(this.deltaIndicator.stub("dispose").lastCall.args, [], "delta indicator");
 });
 
 QUnit.test("Domain", function(assert) {
@@ -356,26 +343,6 @@ QUnit.test("Title is not rendered when text is empty", function(assert) {
     assert.deepEqual(this.title.stub("draw").callCount, 0);
 });
 
-QUnit.test("Delta indicator is rendered", function(assert) {
-    this.themeManager.stub("theme").withArgs("indicator").returns({
-        theme: "delta-indicator"
-    });
-    this.deltaIndicator.stub("getLayoutOptions").returns({
-        width: 20, height: 10,
-        horizontalAlignment: "left", verticalAlignment: "top"
-    });
-
-    this.createGauge({
-        indicator: {
-            tag: "delta-indicator"
-        }
-    });
-
-    assert.deepEqual(this.deltaIndicator.draw.lastCall.args, [{ theme: "delta-indicator", tag: "delta-indicator" }], "draw");
-    assert.deepEqual(this.deltaIndicator.getLayoutOptions.lastCall.args, [], "layout options");
-    assert.strictEqual(this.deltaIndicator.shift.callCount, 1, "shift");
-});
-
 QUnit.test("Tracker is activated", function(assert) {
     this.createGauge();
 
@@ -390,18 +357,6 @@ QUnit.test("Content is rendered", function(assert) {
     assert.deepEqual(_renderContent.args, [], "content");
     assert.ok(this.renderer.lock.lastCall.calledBefore(_renderContent) && this.renderer.unlock.lastCall.calledAfter(_renderContent), "lock");
 });
-
-// QUnit.test("Layout", function(assert) {
-//    // var rootRect = { tag: "root-rect" };
-//    // this.setAbstractField("_rootRect", rootRect);
-//
-//    this.createGauge();
-//
-//    assert.deepEqual(this.layoutManager.stub("beginLayout").lastCall.args[0].raw(), { left: 0, top: 0, right: 200, bottom: 100 }, "begin");
-//    assert.deepEqual(this.layoutManager.stub("applyLayout").getCall(0).args, [this.deltaIndicator], "delta indicator");
-//    assert.deepEqual(this.layoutManager.stub("applyLayout").getCall(1).args, [this.title], "title");
-//    assert.deepEqual(this.layoutManager.stub("endLayout").lastCall.args, [], "end");
-// });
 
 // T130599
 QUnit.test("Not rendered when value range is empty", function(assert) {

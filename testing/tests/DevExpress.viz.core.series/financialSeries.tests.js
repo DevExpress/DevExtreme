@@ -1448,34 +1448,6 @@ var checkGroups = function(assert, series) {
         assert.equal(series._points.length, 1);
     });
 
-    QUnit.module("Update animations", {
-        beforeEach: function() {
-            environment.beforeEach.call(this);
-            this.options = {
-                type: "stock"
-            };
-        },
-        afterEach: environment.afterEach
-    });
-
-    QUnit.test("Check draw complete", function(assert) {
-        var data = [{ date: 1, open: 1, close: 1, low: 1, high: null }],
-            series = createSeries(this.options, {
-                argumentAxis: new MockAxis({ renderer: this.renderer }),
-                valueAxis: new MockAxis({ renderer: this.renderer })
-            }),
-            newOptions = $.extend(true, {}, series.getOptions(), { type: "line" });
-
-        series.updateData(data);
-        series.draw(false);
-
-        series.updateOptions(newOptions);
-        var drawSpy = sinon.spy(series, "_draw");
-        series.draw(true);
-
-        assert.ok(drawSpy.calledOnce);
-    });
-
     QUnit.module("Series visibility", environment);
 
     QUnit.test("Hide visible series", function(assert) {

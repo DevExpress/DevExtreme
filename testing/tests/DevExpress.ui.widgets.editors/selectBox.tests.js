@@ -2480,6 +2480,53 @@ QUnit.testInActiveWindow("Value should be null after input is cleared and enter 
     assert.ok(!selectBox.option("opened"), "popup is closed");
 });
 
+QUnit.testInActiveWindow("Value should not be null after focusOut during loading (T600537)", function(assert) {
+    var clock = sinon.useFakeTimers();
+
+    try {
+        var array = [
+            { id: 1, text: "Text 1" },
+            { id: 2, text: "Text 2" },
+            { id: 3, text: "Text 3" }
+        ];
+        var dataSource = new DataSource({
+            key: "id",
+            load: function() {
+                return array;
+            },
+            byKey: function(key) {
+                var d = $.Deferred();
+
+                setTimeout(function() {
+                    d.resolve(array.filter(function(item) {
+                        return item.id === key;
+                    })[0]);
+                }, 300);
+
+                return d.promise();
+            }
+        });
+        var $selectBox = $("#selectBox").dxSelectBox({
+                dataSource: dataSource,
+                value: 1,
+                valueExpr: "id",
+                displayExpr: "text",
+                allowClearing: true,
+                searchEnabled: true
+            }),
+            $input = $selectBox.find("." + TEXTEDITOR_INPUT_CLASS);
+
+        $input.focus();
+        $input.focusout();
+
+        clock.tick(300);
+
+        assert.equal($selectBox.dxSelectBox("option", "value"), 1, "value is not null");
+    } finally {
+        clock.restore();
+    }
+});
+
 // T494140
 QUnit.testInActiveWindow("Value should not be changed after input is cleared and enter key is tapped if allowClearing is false", function(assert) {
     var items = [1, 2],

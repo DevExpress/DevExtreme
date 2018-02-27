@@ -296,10 +296,13 @@ var DropDownMenu = Widget.inherit({
         this._defaultTemplates["content"] = new ChildDefaultTemplate("content", this);
     },
 
-    _render: function() {
+    _initMarkup: function() {
         this._renderButton();
         this.callBase();
+    },
 
+    _render: function() {
+        this.callBase();
         this.setAria({
             "role": "menubar",
             "haspopup": true,

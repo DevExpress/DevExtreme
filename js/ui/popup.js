@@ -17,7 +17,8 @@ var $ = require("../core/renderer"),
     themes = require("./themes"),
     Overlay = require("./overlay"),
     EmptyTemplate = require("./widget/empty_template"),
-    domUtils = require("../core/utils/dom");
+    domUtils = require("../core/utils/dom"),
+    windowUtils = require("../core/utils/window");
 
 require("./toolbar/ui.toolbar.base");
 
@@ -698,7 +699,9 @@ var Popup = Overlay.inherit({
         } else {
             this.callBase.apply(this, arguments);
         }
-        this._renderFullscreenWidthClass();
+        if(windowUtils.hasWindow()) {
+            this._renderFullscreenWidthClass();
+        }
     },
 
     _renderFullscreenWidthClass: function() {
@@ -749,9 +752,13 @@ var Popup = Overlay.inherit({
                 this._createTitleRenderAction(args.value);
                 break;
             case "toolbarItems":
+                var isPartialUpdate = args.fullName.search(".options") !== -1;
                 this._renderTitle();
                 this._renderBottom();
-                this._renderGeometry();
+
+                if(!isPartialUpdate) {
+                    this._renderGeometry();
+                }
                 break;
             case "dragEnabled":
                 this._renderDrag();

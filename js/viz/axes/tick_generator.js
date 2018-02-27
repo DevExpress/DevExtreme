@@ -78,11 +78,11 @@ function correctMinValueByEndOnTick(floorFunc, ceilFunc, resolveEndOnTick, endOn
     if(typeUtils.isDefined(endOnTick)) {
         return endOnTick ? floorFunc : ceilFunc;
     }
-    return function(value, interval, businessViewInfo) {
+    return function(value, interval, businessViewInfo, forceEndOnTick) {
         var ceilTickValue = ceilFunc(value, interval),
             floorTickValue = floorFunc(value, interval);
 
-        if(value - floorTickValue === 0 || !typeUtils.isDefined(businessViewInfo) || resolveEndOnTick(value, floorTickValue, interval, businessViewInfo)) {
+        if(value - floorTickValue === 0 || !typeUtils.isDefined(businessViewInfo) || resolveEndOnTick(value, floorTickValue, interval, businessViewInfo) || forceEndOnTick) {
             return floorTickValue;
         }
         return ceilTickValue;
@@ -376,6 +376,10 @@ function calculateTicks(addInterval, correctMinValue, adjustInterval, resolveEnd
 
         if(cur > max) {
             cur = correctMinValue(min, adjustInterval(businessDelta / 2), businessViewInfo);
+            if(cur > max) {
+                endOnTick = true;
+                cur = correctMinValue(min, tickInterval, businessViewInfo, endOnTick);
+            }
         }
         cur = correctTickValue(cur);
 

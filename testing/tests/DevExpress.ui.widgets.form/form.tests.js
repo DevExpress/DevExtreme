@@ -3031,6 +3031,38 @@ QUnit.test("'itemOption' should get an group inner item located into tabbed item
     assert.deepEqual(innerGroupItem, { dataField: "FirstName" }, "corrected item received");
 });
 
+QUnit.test("'itemOption' should get item by composite path use the name option", function(assert) {
+    // arrange
+    var $testContainer = $("#form").dxForm({
+            formData: {
+                LastName: "Last Name"
+            },
+            items: [{
+                itemType: "group",
+                caption: "My Custom Group",
+                name: "testGroup",
+                items: [{
+                    itemType: "tabbed",
+                    tabs: [{
+                        title: "My Custom Tab",
+                        name: "tab1",
+                        items: [{
+                            name: "simpleItem",
+                            dataField: "LastName"
+                        }]
+                    }]
+                }]
+            }]
+        }),
+        form = $testContainer.dxForm("instance");
+
+    // act
+    var item = form.itemOption("testGroup.tab1.simpleItem");
+
+    // assert
+    assert.deepEqual(item.dataField, "LastName", "data field of item");
+});
+
 function getID(form, dataField) {
     return "dx_" + form.option("formID") + "_" + dataField;
 }

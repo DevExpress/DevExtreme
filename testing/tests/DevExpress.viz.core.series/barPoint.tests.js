@@ -1755,6 +1755,48 @@ QUnit.test("Outside, rotated, label under the point, label height > point height
     assert.equal(point._label.draw.callCount, 0);
 });
 
+// T605894
+QUnit.test("Label's border is equal of point's border", function(assert) {
+    this.label.getBoundingRect.returns({ width: 30, height: 15 });
+    this.options.resolveLabelsOverlapping = true;
+    this.data.value = 20;
+    this.options.label.position = "inside";
+
+    var point = createPoint(this.series, this.data, this.options),
+        label = point._label;
+
+    point.x = 33;
+    point.y = 22;
+    point.width = 35;
+    point.height = 15;
+
+    point.correctLabelPosition(label);
+
+    assert.equal(point._label.draw.callCount, 1);
+    assert.strictEqual(point._label.draw.lastCall.args[0], false);
+});
+
+// T605894
+QUnit.test("Label's border is equal of point's border. Rotated chart", function(assert) {
+    this.label.getBoundingRect.returns({ width: 30, height: 15 });
+    this.options.resolveLabelsOverlapping = true;
+    this.data.value = 20;
+    this.options.label.position = "inside";
+
+    var point = createPoint(this.series, this.data, this.options),
+        label = point._label;
+
+    point.x = 33;
+    point.y = 22;
+    point.width = 30;
+    point.height = 25;
+
+    point.correctLabelPosition(label);
+
+    assert.equal(point._label.draw.callCount, 1);
+    assert.strictEqual(point._label.draw.lastCall.args[0], false);
+});
+
 QUnit.test("Default, inside, not rotated with negative value", function(assert) {
     this.label.getBoundingRect.returns({ width: 9, height: 6 });
     this.options.label.position = "inside";

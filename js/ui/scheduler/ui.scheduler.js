@@ -1381,11 +1381,11 @@ var Scheduler = Widget.inherit({
             result = SchedulerTimezones
                     .getTimezoneOffsetById(timezone,
                 Date.UTC(
-                    date.getFullYear(),
-                    date.getMonth(),
-                    date.getDate(),
-                    date.getHours(),
-                    date.getMinutes())
+                    date.getUTCFullYear(),
+                    date.getUTCMonth(),
+                    date.getUTCDate(),
+                    date.getUTCHours(),
+                    date.getUTCMinutes())
                         );
         }
         return result;
@@ -2430,12 +2430,12 @@ var Scheduler = Widget.inherit({
             appointmentDuration = endDate.getTime() - startDate.getTime(),
             updatedStartDate;
 
-        if(typeUtils.isDefined($appointment)) {
+        if(typeUtils.isDefined($appointment) && this._needUpdateAppointmentData($appointment)) {
             var apptDataCalculator = this.getRenderingStrategyInstance().getAppointmentDataCalculator();
 
             if(typeUtils.isFunction(apptDataCalculator)) {
                 updatedStartDate = apptDataCalculator($appointment, startDate).startDate;
-            } else if(this._needUpdateAppointmentData($appointment)) {
+            } else {
                 var coordinates = translator.locate($appointment);
                 updatedStartDate = new Date(this._workSpace.getCellDataByCoordinates(coordinates, isAllDay).startDate);
 

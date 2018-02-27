@@ -271,19 +271,31 @@ var Toast = Overlay.inherit({
                     /**
                     * @name dxToastOptions_animation
                     * @publicName animation
-                    * @default {show: {type: 'slide', duration: 200, from: { top: $(window).height() }}, hide: { type: 'slide', duration: 200, to: { top: $(window).height()}}} @for Android
+                    * @default {show: {type: 'slide', duration: 200, from: { position: {my: 'top', at: 'bottom', of: window}}}, hide: { type: 'slide', duration: 200, to: { position: {my: 'top', at: 'bottom', of: window}}}} @for Android
                     * @inheritdoc
                     */
                     animation: {
                         show: {
                             type: "slide",
                             duration: 200,
-                            from: { top: $(window).height() }
+                            from: {
+                                position: {
+                                    my: "top",
+                                    at: "bottom",
+                                    of: window
+                                }
+                            },
                         },
                         hide: {
                             type: "slide",
                             duration: 200,
-                            to: { top: $(window).height() }
+                            to: {
+                                position: {
+                                    my: "top",
+                                    at: "bottom",
+                                    of: window
+                                }
+                            },
                         }
                     }
                 }

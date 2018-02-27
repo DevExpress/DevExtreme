@@ -21,7 +21,7 @@ QUnit.module("mspointer events", {
 
         $.each(MsPointerStrategy.map, function(pointerEvent, originalEvents) {
             if(special[pointerEvent]) {
-                special[pointerEvent].dispose();
+                special[pointerEvent].dispose.apply(undefined);
             }
             registerEvent(pointerEvent, new MsPointerStrategy(pointerEvent, originalEvents));
         });

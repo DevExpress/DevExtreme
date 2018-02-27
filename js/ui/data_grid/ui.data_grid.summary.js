@@ -757,7 +757,7 @@ gridCore.registerModule("summary", {
                             if(remoteOperations) {
                                 return {
                                     selector: summaryItem.column,
-                                    summaryType: summaryItem.summaryType
+                                    summaryType: aggregator
                                 };
                             } else {
                                 if(aggregator === "avg" || aggregator === "sum") {

@@ -21,7 +21,6 @@ QUnit.testStart(function() {
 });
 
 var DX_MENU_CLASS = 'dx-menu',
-    DX_MENU_BASE_CLASS = 'dx-menu-base',
     DX_MENU_ITEM_CLASS = DX_MENU_CLASS + '-item',
     DX_MENU_ITEM_CONTENT_CLASS = DX_MENU_ITEM_CLASS + '-content',
     DX_MENU_ITEM_TEXT_CLASS = DX_MENU_ITEM_CLASS + '-text',
@@ -68,22 +67,8 @@ var isDeviceDesktop = function(assert) {
     return true;
 };
 
-QUnit.module('Menu initialization');
-
-QUnit.test('Create menu with default css', function(assert) {
-    var menuBase = createMenu();
-
-    assert.ok(menuBase.element.hasClass(DX_MENU_BASE_CLASS));
-});
-
 
 QUnit.module('Menu rendering');
-
-QUnit.test('Render custom CSS class', function(assert) {
-    var menu = createMenu({ cssClass: 'testCssClass' });
-
-    assert.ok(menu.element.hasClass('testCssClass'));
-});
 
 QUnit.test('Render root submenu group', function(assert) {
     var menuBase = createMenu({ items: [{ text: 'a' }, { text: 'b' }] }),
@@ -258,7 +243,7 @@ QUnit.test("item container should have dx-menu-no-icons class when menu level ha
 });
 
 QUnit.test("item container should not have dx-menu-no-icons class when at least one item have icon", function(assert) {
-    var menuBase = createMenu({ items: [{ text: "item 1" }, { text: "item 3", icon: "add" }] }),
+    var menuBase = createMenu({ items: [{ text: "item 1", icon: "add" }, { text: "item 3" }] }),
         $itemsContainer = $(menuBase.element.find("." + DX_MENU_ITEMS_CONTAINER_CLASS));
 
     assert.notOk($itemsContainer.hasClass(DX_MENU_NO_ICONS_CLASS), "item container has not icon class");
@@ -292,6 +277,23 @@ QUnit.test('Remove extra classes from item frame if content is changed', functio
     assert.notOk($item.hasClass(DX_ITEM_HAS_TEXT), 'dx-menu-item-has-text class was removed');
 });
 
+QUnit.test("Encode text for default item template", function(assert) {
+    var menuBase = createMenu({
+            items: [{ text: "<b>Test item</b>" }]
+        }),
+        $element = menuBase.element;
+
+    assert.equal($element.find(".dx-menu-item-text").first().text(), "<b>Test item</b>");
+});
+
+QUnit.test("Encoding is not used for html parameter in default item template", function(assert) {
+    var menuBase = createMenu({
+            items: [{ html: "<b>Test item</b>" }]
+        }),
+        $element = menuBase.element;
+
+    assert.equal($element.find(".dx-menu-item-content").first().text(), "Test item");
+});
 
 QUnit.module('Menu tests', {
     beforeEach: function() {

@@ -188,7 +188,7 @@ var Overlay = Widget.inherit({
             /**
             * @name dxOverlayOptions_position
             * @publicName position
-            * @type string|positionConfig
+            * @type string|positionConfig|function
             * @default { my: 'center', at: 'center', of: window }
             */
             position: {
@@ -413,6 +413,14 @@ var Overlay = Widget.inherit({
                     }
                 }
             }
+        }, {
+            device: function() {
+                return !windowUtils.hasWindow();
+            },
+            options: {
+                width: null,
+                height: null
+            }
         }]);
     },
 
@@ -614,7 +622,8 @@ var Overlay = Widget.inherit({
     },
 
     _normalizePosition: function() {
-        this._position = this.option("position");
+        var position = this.option("position");
+        this._position = typeof position === "function" ? position() : position;
     },
 
     _getAnimationConfig: function() {
@@ -1261,9 +1270,10 @@ var Overlay = Widget.inherit({
             maxHeight: this._getOptionValue("maxHeight", content)
         });
 
-        this._$content
-            .outerWidth(this._getOptionValue("width", content))
-            .outerHeight(this._getOptionValue("height", content));
+        this._$content.css({
+            width: this._getOptionValue("width", content),
+            height: this._getOptionValue("height", content)
+        });
     },
 
     _renderPosition: function() {

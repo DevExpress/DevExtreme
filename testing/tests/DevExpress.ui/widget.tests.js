@@ -17,14 +17,13 @@ require("common.css!");
 
 (function() {
 
-    var WIDGET_CLASS = "dx-widget",
-        ACTIVE_STATE_CLASS = "dx-state-active",
+    var ACTIVE_STATE_CLASS = "dx-state-active",
         DISABLED_STATE_CLASS = "dx-state-disabled",
         HOVER_STATE_CLASS = "dx-state-hover",
         FOCUSED_STATE_CLASS = "dx-state-focused",
-        RTL_CLASS = "dx-rtl",
         FEEDBACK_SHOW_TIMEOUT = 30,
-        FEEDBACK_HIDE_TIMEOUT = 400;
+        FEEDBACK_HIDE_TIMEOUT = 400,
+        RTL_CLASS = "dx-rtl";
 
     var DxWidget = Widget.inherit({});
     registerComponent("dxWidget", DxWidget);
@@ -85,24 +84,6 @@ require("common.css!");
 
     QUnit.module("render");
 
-    QUnit.test("markup init", function(assert) {
-        var element = $("#widget").dxWidget();
-
-        assert.ok(element.hasClass(WIDGET_CLASS));
-    });
-
-    QUnit.test("option 'visible' - default", function(assert) {
-        var element = $("#widget").dxWidget(),
-            instance = element.dxWidget("instance");
-
-        assert.ok(instance.option("visible"));
-        assert.ok(element.is(":visible"));
-
-        instance.option("visible", false);
-
-        assert.ok(!element.is(":visible"));
-    });
-
     QUnit.test("visibility change handling works optimally", function(assert) {
         var hidingFired = 0;
         var shownFired = 0;
@@ -146,37 +127,6 @@ require("common.css!");
         component.option("visible", false);
 
         assert.equal(hidingFired, 1, "hidden is not fired if visible was changed after hiding");
-    });
-
-    QUnit.test("option 'rtl'", function(assert) {
-        var $element = $("#widget").dxWidget(),
-            instance = $element.dxWidget("instance");
-
-        assert.ok(!$element.hasClass(RTL_CLASS));
-
-        instance.option("rtlEnabled", true);
-        assert.ok($element.hasClass(RTL_CLASS));
-    });
-
-    QUnit.test("init option 'rtl' is true", function(assert) {
-        var $element = $("#widget").dxWidget({ rtlEnabled: true }),
-            instance = $element.dxWidget("instance");
-
-        assert.ok($element.hasClass(RTL_CLASS));
-
-        instance.option("rtlEnabled", false);
-        assert.ok(!$element.hasClass(RTL_CLASS));
-    });
-
-    QUnit.test("option 'visible' - false on start", function(assert) {
-        var element = $("#widget").dxWidget({ visible: false }),
-            instance = element.dxWidget("instance");
-
-        assert.ok(!element.is(":visible"));
-
-        instance.option("visible", true);
-
-        assert.ok(element.is(":visible"));
     });
 
     QUnit.test("option 'hoverStateEnabled' - default", function(assert) {
@@ -342,43 +292,6 @@ require("common.css!");
         assert.strictEqual(instance.option("disabled"), false);
     });
 
-    QUnit.test("'disabled' option with 'true' value atthaches 'dx-state-disabled' class", function(assert) {
-        var element = $("#widget").dxWidget({
-            disabled: true
-        });
-
-        assert.ok(element.hasClass(DISABLED_STATE_CLASS));
-    });
-
-    QUnit.test("'disabled' option with undefined value not attaches 'dx-state-disabled' class", function(assert) {
-        var element = $("#widget").dxWidget({
-            disabled: undefined
-        });
-
-        assert.ok(!element.hasClass(DISABLED_STATE_CLASS));
-    });
-
-    QUnit.test("'hint' option has 'undefined' value by default", function(assert) {
-        var instance = $("#widget").dxWidget().dxWidget("instance");
-        assert.equal(instance.option("hint"), undefined);
-    });
-
-    QUnit.test("'hint' option has 'title' value", function(assert) {
-        var hintText = 'titleText',
-            element = $("#widget").dxWidget({
-                hint: hintText
-            }),
-            instance = element.dxWidget("instance");
-
-        assert.equal(instance.option("hint"), hintText, 'Option hint is correct');
-        assert.equal(element.attr('title'), hintText, " 'title' attribute of widget is correct");
-
-        instance.option("hint", undefined);
-
-        assert.equal(instance.option("hint"), undefined, " hint option value is correct");
-        assert.equal(element.attr('title'), undefined, " 'title' attribute of widget is undefined");
-    });
-
     QUnit.test("accessKey option", function(assert) {
         var $widget = $("#widget").dxWidget({
             focusStateEnabled: true,
@@ -430,6 +343,31 @@ require("common.css!");
         new DxWidget($element);
 
         assert.equal($element.css("display"), "block");
+    });
+
+    QUnit.test("option 'rtl'", function(assert) {
+        var $element = $("#widget").dxWidget(),
+            instance = $element.dxWidget("instance");
+
+        assert.ok(!$element.hasClass(RTL_CLASS));
+
+        instance.option("rtlEnabled", true);
+        assert.ok($element.hasClass(RTL_CLASS));
+    });
+
+    QUnit.test("init option 'rtl' is true", function(assert) {
+        var $element = $("#widget").dxWidget({ rtlEnabled: true }),
+            instance = $element.dxWidget("instance");
+
+        assert.ok($element.hasClass(RTL_CLASS));
+
+        instance.option("rtlEnabled", false);
+        assert.ok(!$element.hasClass(RTL_CLASS));
+    });
+
+    QUnit.test("'hint' option has 'undefined' value by default", function(assert) {
+        var instance = $("#widget").dxWidget().dxWidget("instance");
+        assert.equal(instance.option("hint"), undefined);
     });
 
     QUnit.module("API", {
@@ -788,32 +726,12 @@ require("common.css!");
 
     QUnit.module("widget sizing render");
 
-    QUnit.test("default", function(assert) {
-        var $element = $("#widget").dxWidget();
-
-        assert.ok($element.outerWidth() > 0, "outer width of the element must be more than zero");
-    });
-
     QUnit.test("constructor", function(assert) {
         var $element = $("#widget").dxWidget({ width: 1234 }),
             instance = $element.dxWidget("instance");
 
         assert.strictEqual(instance.option("width"), 1234);
         assert.strictEqual($element.outerWidth(), 1234, "outer width of the element must be equal to custom width");
-    });
-
-    QUnit.test("root with custom width", function(assert) {
-        var $element = $("#widthRootStyle").dxWidget(),
-            instance = $element.dxWidget("instance");
-
-        assert.strictEqual(instance.option("width"), undefined);
-        assert.strictEqual($element.outerWidth(), 300, "outer width of the element must be equal to custom width");
-    });
-
-    QUnit.test("root with custom percent width", function(assert) {
-        var $element = $("#widthRootStylePercent").dxWidget();
-
-        assert.strictEqual($element[0].style.width, "50%");
     });
 
     QUnit.test("root with custom percent width and option", function(assert) {
@@ -1481,6 +1399,5 @@ require("common.css!");
             assert.equal($customTarget.attr("aria-test"), "test", "custom target with object");
 
         });
-
     })();
 })();

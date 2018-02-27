@@ -8,7 +8,8 @@ var objectUtils = require("../../core/utils/object"),
     chartLineSeries = lineSeries.chart.line,
     polarLineSeries = lineSeries.polar.line,
     _map = require("../core/utils").map,
-    _extend = extend;
+    _extend = extend,
+    calculateBezierPoints = lineSeries.chart["spline"]._calculateBezierPoints;
 
 exports.chart = {};
 exports.polar = {};
@@ -39,13 +40,19 @@ var baseAreaMethods = {
         return defaultSegment;
     },
 
-    _updateElement: function(element, segment, animate, animateParams, complete) {
-        var lineParams = { points: segment.line },
-            areaParams = { points: segment.area },
+    _updateElement: function(element, segment, animate, complete) {
+        var lineParams = { points: segment.orderedLine ? segment.orderedLine : segment.line },
+            areaParams = { points: segment.orderedArea ? segment.orderedArea : segment.area },
             borderElement = element.line;
         if(animate) {
-            borderElement && borderElement.animate(lineParams, animateParams);
-            element.area.animate(areaParams, animateParams, complete);
+            borderElement && borderElement.animate(lineParams);
+            element.area.animate(areaParams, {}, function() {
+                if(segment.orderedArea) {
+                    borderElement && borderElement.attr({ points: segment.line });
+                    element.area.attr({ points: segment.area });
+                }
+                complete && complete();
+            });
         } else {
             borderElement && borderElement.attr(lineParams);
             element.area.attr(areaParams);
@@ -110,21 +117,29 @@ var baseAreaMethods = {
     }
 };
 
-exports.chart["area"] = _extend({}, chartLineSeries, baseAreaMethods, {
-    _prepareSegment: function(points, rotated) {
-        var processedPoints = this._processSinglePointsAreaSegment(points, rotated);
+function createAreaPoints(points) {
+    return _map(points, function(pt) {
+        return pt.getCoords();
+    }).concat(_map(points.slice().reverse(), function(pt) {
+        return pt.getCoords(true);
+    }));
+}
+
+var areaSeries = exports.chart["area"] = _extend({}, chartLineSeries, baseAreaMethods, {
+    _prepareSegment: function(points, orderedPoints, rotated) {
+        var processedPoints = this._processSinglePointsAreaSegment(points, rotated),
+            processedOrderedPoints = orderedPoints && this._processSinglePointsAreaSegment(orderedPoints, rotated);
+
         return {
             line: processedPoints,
-            area: _map(processedPoints, function(pt) {
-                return pt.getCoords();
-            }).concat(_map(processedPoints.slice().reverse(), function(pt) {
-                return pt.getCoords(true);
-            })),
+            orderedLine: processedOrderedPoints,
+            orderedArea: orderedPoints && createAreaPoints(processedOrderedPoints),
+            area: createAreaPoints(processedPoints),
             singlePointSegment: processedPoints !== points
         };
     },
     _processSinglePointsAreaSegment: function(points, rotated) {
-        if(points.length === 1) {
+        if(points && points.length === 1) {
             var p = points[0],
                 p1 = objectUtils.clone(p);
             p1[rotated ? "y" : "x"] += 1;
@@ -136,10 +151,10 @@ exports.chart["area"] = _extend({}, chartLineSeries, baseAreaMethods, {
 });
 
 exports.polar["area"] = _extend({}, polarLineSeries, baseAreaMethods, {
-    _prepareSegment: function(points, rotated, lastSegment) {
+    _prepareSegment: function(points, orderedPoints, rotated, lastSegment) {
         lastSegment && polarLineSeries._closeSegment.call(this, points);
 
-        var preparedPoints = exports.chart["area"]._prepareSegment.call(this, points);
+        var preparedPoints = areaSeries._prepareSegment.call(this, points);
 
         return preparedPoints;
     },
@@ -148,14 +163,16 @@ exports.polar["area"] = _extend({}, polarLineSeries, baseAreaMethods, {
     }
 });
 
-exports.chart["steparea"] = _extend({}, exports.chart["area"], {
-    _prepareSegment: function(points, rotated) {
-        points = exports.chart["area"]._processSinglePointsAreaSegment(points, rotated);
-        return exports.chart["area"]._prepareSegment.call(this, lineSeries.chart["stepline"]._calculateStepLinePoints(points));
+exports.chart["steparea"] = _extend({}, areaSeries, {
+    _prepareSegment: function(points, orderedPoints, rotated) {
+        var stepLineSeries = lineSeries.chart["stepline"];
+        points = areaSeries._processSinglePointsAreaSegment(points, rotated);
+        orderedPoints = orderedPoints && areaSeries._processSinglePointsAreaSegment(orderedPoints, rotated);
+        return areaSeries._prepareSegment.call(this, stepLineSeries._calculateStepLinePoints(points), orderedPoints && stepLineSeries._calculateStepLinePoints(orderedPoints));
     }
 });
 
-exports.chart["splinearea"] = _extend({}, exports.chart["area"], {
+exports.chart["splinearea"] = _extend({}, areaSeries, {
     _areaPointsToSplineAreaPoints: function(areaPoints) {
         var previousMiddlePoint = areaPoints[areaPoints.length / 2 - 1],
             middlePoint = areaPoints[areaPoints.length / 2];
@@ -170,17 +187,17 @@ exports.chart["splinearea"] = _extend({}, exports.chart["area"], {
         ///#ENDDEBUG
     },
 
-    _prepareSegment: function(points, rotated) {
-        var areaSeries = exports.chart["area"],
-            processedPoints = areaSeries._processSinglePointsAreaSegment(points, rotated),
-            areaSegment = areaSeries._prepareSegment.call(this, lineSeries.chart["spline"]._calculateBezierPoints(processedPoints, rotated));
+    _prepareSegment: function(points, orderedPoints, rotated) {
+        var processedPoints = areaSeries._processSinglePointsAreaSegment(points, rotated),
+            areaSegment = areaSeries._prepareSegment.call(this, calculateBezierPoints(processedPoints, rotated), orderedPoints && calculateBezierPoints(orderedPoints, rotated));
         this._areaPointsToSplineAreaPoints(areaSegment.area);
+        areaSegment.orderedArea && this._areaPointsToSplineAreaPoints(areaSegment.orderedArea);
         areaSegment.singlePointSegment = processedPoints !== points;
         return areaSegment;
     },
 
     _getDefaultSegment: function(segment) {
-        var areaDefaultSegment = exports.chart["area"]._getDefaultSegment(segment);
+        var areaDefaultSegment = areaSeries._getDefaultSegment(segment);
         this._areaPointsToSplineAreaPoints(areaDefaultSegment.area);
         return areaDefaultSegment;
     },

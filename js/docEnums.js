@@ -46,7 +46,7 @@
 
 /**
  * @typedef {string} Enums.VizPaletteExtensionMode
- * @enum {'blend'|'extrapolate'|'repeat'}
+ * @enum {'alternate'|'blend'|'extrapolate'}
  */
 
 /**
@@ -272,6 +272,11 @@
 /**
  * @typedef {string} Enums.SortOrder
  * @enum {'asc'|'desc'}
+ */
+
+/**
+ * @typedef {string} Enums.FilterBuilderFieldFilterOperations
+ * @enum {'='|'<>'|'<'|'<='|'>'|'>='|'contains'|'endswith'|'isblank'|'isnotblank'|'notcontains'|'startswith'}
  */
 
 /**

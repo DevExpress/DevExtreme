@@ -980,8 +980,51 @@ QUnit.test("Skip a hidden columns from pointsByColumns when reordering is enable
     // assert
     assert.equal(this.draggingHeaderView._testPointsByColumns.length, 2, "points by columns count");
     assert.equal(this.draggingHeaderView._testPointsByColumns[0].index, 0, "first point index");
-    assert.equal(this.draggingHeaderView._testPointsByColumns[1].index, 3, "second point index");
+    assert.equal(this.draggingHeaderView._testPointsByColumns[1].index, 1, "second point index");
     assert.equal(this.adaptiveColumnsController.getHiddenColumns().length, 2, "hidden columns count");
+});
+
+QUnit.test("Reordering to the last column should be allowed when columnHidingEnabled = true", function(assert) {
+    // arrange
+    this.columns = [
+        { dataField: 'firstName', index: 0, allowReordering: true },
+        { dataField: 'lastName', index: 1, allowReordering: true }
+    ];
+
+    this.items = [
+        { firstName: 'Super', lastName: "Star" },
+        { firstName: 'Andrew', lastName: "K" }
+    ];
+
+    this.options = {
+        showColumnHeaders: true
+    };
+    setupDataGrid(this);
+    var $container = $("#container");
+    this.columnHeadersView.render($container);
+    this.rowsView.render($container);
+    this.draggingHeaderView.render($container);
+    this.resizingController.updateDimensions();
+    this.clock.tick();
+
+    // act
+    var that = this;
+    this.draggingHeaderView._dragOptions = {
+        rowIndex: 0,
+        sourceColumn: that.columns[0]
+    };
+    this.draggingHeaderView._dropOptions = {
+        targetLocation: {}
+    };
+    this.draggingHeaderView._getDraggingPanelByPos = function() {
+        return that.columnHeadersView;
+    };
+    this.draggingHeaderView.dockHeader({});
+
+    // assert
+    assert.equal(this.draggingHeaderView._testPointsByColumns.length, 3, "points by columns count");
+    assert.equal(this.draggingHeaderView._testPointsByColumns[2].index, 2, "last point index");
+    assert.equal(this.adaptiveColumnsController.getHiddenColumns().length, 0, "hidden columns count");
 });
 
 QUnit.test("Resize column when hidden columns are located in the middle ", function(assert) {

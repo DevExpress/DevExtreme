@@ -268,6 +268,11 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
             * @type String
             */
             /**
+             * @name dxMenuBaseItemTemplate_html
+             * @publicName html
+             * @type String
+             */
+            /**
             * @name dxMenuBaseItemTemplate_items
             * @publicName items
             * @type Array<dxMenuBaseItemTemplate>
@@ -385,7 +390,7 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
             $itemContainer = $('<span>').addClass(DX_MENU_ITEM_CAPTION_CLASS),
             itemContent = typeUtils.isPlainObject(itemData) ? itemText : String(itemData);
 
-        return itemText && $itemContainer.html(itemContent);
+        return itemText && $itemContainer.text(itemContent);
     },
 
     _getPopoutContainer: function(itemData) {
@@ -444,7 +449,7 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
 
     _initActions: commonUtils.noop,
 
-    _render: function() {
+    _initMarkup: function() {
         this.callBase();
         this._addCustomCssClass(this.$element());
         this.option("useInkRipple") && this._renderInkRipple();
@@ -652,7 +657,10 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
 
         // deprecated since 15.1 (itemData.iconSrc)
         $itemFrame.toggleClass(DX_ITEM_HAS_ICON, hasIcon);
-        this.hasIcons = hasIcon;
+
+        if(!this.hasIcons) {
+            this.hasIcons = hasIcon;
+        }
 
         $itemFrame.toggleClass(DX_ITEM_HAS_SUBMENU, hasSubmenu);
     },

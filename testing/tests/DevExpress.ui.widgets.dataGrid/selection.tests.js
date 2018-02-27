@@ -3206,7 +3206,7 @@ QUnit.test("changeRowSelection for edited data", function(assert) {
     that.setup();
     that.columnHeadersView.render($testElement);
     that.rowsView.render($testElement);
-    that.cellValue(0, 0, "Test");
+    that.cellValue(0, 1, "Test");
 
     // act
     that.selectionController.changeItemSelection(0);
@@ -3847,4 +3847,30 @@ QUnit.test("getSelectedRowData should not load data when selectionFilter is empt
     // assert
     assert.deepEqual(rowsData, [], "empty rows");
     assert.strictEqual(loadingCount, 0, "no loading count");
+});
+
+QUnit.test("SelectAll items with remote filtering and deferred selection", function(assert) {
+    // arrange, act
+    this.data = [
+        { id: 1, name: 'Alex', code: "13358" },
+        { id: 5, name: 'Sergey', code: "6798" }
+    ];
+    this.setupDataGrid({
+        dataSource: createDataSource(this.data, { key: "id" }),
+        remoteOperations: { filtering: true },
+        columns: [{ dataField: "code", filterValue: 50, dataType: "number", selectedFilterOperation: ">" }],
+        selection: { mode: "selectAll", deferred: true }
+    });
+
+    this.clock.tick();
+
+    var items = this.dataController.items();
+    assert.equal(items.length, 2, "filtered items");
+
+    this.selectionController.selectAll();
+
+    // assert
+    items = this.dataController.items();
+    assert.ok(items[0].isSelected, "first item is selected");
+    assert.ok(items[1].isSelected, "second item is selected");
 });

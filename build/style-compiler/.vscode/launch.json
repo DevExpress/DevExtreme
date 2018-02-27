@@ -1,15 +1,17 @@
 {
-  "version": "0.2.0",
   "configurations": [
     {
-      "name": ".NET Core Launch (console)",
+      "name": "Debug",
       "type": "coreclr",
       "request": "launch",
-      "preLaunchTask": "build",
-      "program": "${workspaceRoot}/bin/style-compiler.dll",
-      "args": [ "TODO" ],
-      "cwd": "${workspaceRoot}",
-      "externalConsole": true
+      "preLaunchTask": "Build Style Compiler",
+      "cwd": "${workspaceFolder}",
+      "program": "bin/style-compiler.dll",
+      "args": [
+        "TODO"
+      ],
+      "stopAtEntry": true,
+      "console": "integratedTerminal"
     }
   ]
 }

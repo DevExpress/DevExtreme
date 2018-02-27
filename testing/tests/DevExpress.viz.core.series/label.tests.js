@@ -746,6 +746,42 @@ QUnit.test("Use external connector strategy", function(assert) {
     assert.equal(prepareLabelPointsThisArg, label);
 });
 
+QUnit.test("Rotated label. RotatedAngle = 35", function(assert) {
+    this.options.rotationAngle = 35;
+    var label = this.createLabelWithBBox({ x: 0, y: 0, height: 10, width: 20 }, { x: 344, y: 322, width: 30, height: 20 });
+
+    label.shift(390, 341);
+
+    assert.deepEqual(label._connector._stored_settings.points, [374, 332, 402, 351]);
+});
+
+QUnit.test("Rotated label. RotatedAngle = 90", function(assert) {
+    this.options.rotationAngle = 90;
+    var label = this.createLabelWithBBox({ x: 0, y: 0, height: 10, width: 20 }, { x: 344, y: 322, width: 30, height: 20 });
+
+    label.shift(390, 341);
+
+    assert.deepEqual(label._connector._stored_settings.points, [374, 332, 390, 341]);
+});
+
+QUnit.test("Rotated label. RotatedAngle = 180", function(assert) {
+    this.options.rotationAngle = 180;
+    var label = this.createLabelWithBBox({ x: 0, y: 0, height: 10, width: 20 }, { x: 344, y: 322, width: 30, height: 20 });
+
+    label.shift(390, 341);
+
+    assert.deepEqual(label._connector._stored_settings.points, [374, 332, 390, 341]);
+});
+
+QUnit.test("Rotated label. RotatedAngle = 270", function(assert) {
+    this.options.rotationAngle = 270;
+    var label = this.createLabelWithBBox({ x: 0, y: 0, height: 10, width: 20 }, { x: 344, y: 322, width: 30, height: 20 });
+
+    label.shift(390, 341);
+
+    assert.deepEqual(label._connector._stored_settings.points, [374, 332, 390, 341]);
+});
+
 QUnit.module("Set options", $.extend({}, environment, {
     beforeEach: function() {
         this.renderer = new vizMocks.Renderer();

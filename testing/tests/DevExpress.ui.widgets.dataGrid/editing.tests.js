@@ -5812,6 +5812,64 @@ QUnit.test("Height of rowsView should more than height of editor form when row i
     assert.ok($(".dx-datagrid-rowsview").height() >= $(".dx-datagrid-edit-form").height(), "height of rows view");
 });
 
+// T601360
+QUnit.test("repaintRows should be skipped on saving", function(assert) {
+    // arrange
+    var testElement = $('#container');
+
+    this.options.editing = {
+        allowUpdating: true,
+        mode: 'cell'
+    };
+
+    this.options.loadingTimeout = 0;
+
+    this.columns.push({ dataField: "selected", dataType: "boolean" });
+
+    this.columnsController.init();
+
+
+    this.clock.tick();
+
+    this.rowsView.render(testElement);
+
+    var changeCount = 0;
+    this.dataController.changed.add(function() {
+        changeCount++;
+    });
+
+    // act
+    this.cellValue(0, "selected", true);
+    this.repaintRows([0]);
+
+    // assert
+    assert.strictEqual(changeCount, 0, "data is not changed");
+
+    // act
+    this.clock.tick();
+
+    // assert
+    assert.strictEqual(changeCount, 1, "data is changed once");
+});
+
+// T607746
+QUnit.test("The cellValue method should work correctly with visible index", function(assert) {
+    // arrange
+    var $testElement = $("#container"),
+        visibleColumns;
+
+    this.options.columns = ["name", "age", { dataField: "lastName", visibleIndex: 0 }];
+    this.columnsController.optionChanged({ name: "columns", fullName: "columns" });
+    this.rowsView.render($testElement);
+    visibleColumns = this.columnsController.getVisibleColumns().map(function(column) {
+        return column.dataField;
+    });
+
+    // act, assert
+    assert.strictEqual(this.cellValue(0, 2), 15, "value of the third cell");
+    assert.deepEqual(visibleColumns, ["lastName", "name", "age"], "visible columns");
+});
+
 if(device.ios || device.android) {
     // T322738
     QUnit.testInActiveWindow("Native click is used when allowUpdating is true", function(assert) {
@@ -9633,6 +9691,35 @@ QUnit.test("isEditing parameter of the row when there is grouping and edit mode 
     // assert
     assert.equal(this.editingController._editRowIndex, 1, "edit row index");
     assert.ok(this.dataController.items()[1].isEditing, "second item is edited");
+});
+
+// T607622
+QUnit.test("Editable data should not be reset in batch edit mode when collapsing a group row", function(assert) {
+    // arrange
+    var that = this,
+        $testElement = $('#container');
+
+    that.rowsView.render($testElement);
+    that.applyOptions({
+        editing: {
+            mode: "batch",
+            allowUpdating: true
+        },
+        columns: [{ dataField: "name", groupIndex: 0 }, "age", "lastName"]
+    });
+
+    that.editCell(1, 1);
+    that.cellValue(1, "lastName", "test");
+
+    // assert
+    assert.strictEqual(that.cellValue(1, "lastName"), "test", "value of the lastName column of the first row");
+
+    // act
+    that.collapseRow(["Alex"]);
+    that.expandRow(["Alex"]);
+
+    // assert
+    assert.strictEqual(that.cellValue(1, "lastName"), "test", "value of the lastName column of the first row");
 });
 
 var generateDataSource = function(countItem, countColumn) {

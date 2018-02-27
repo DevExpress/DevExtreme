@@ -28,10 +28,12 @@ var $ = require("../../core/renderer"),
     when = deferredUtils.when,
     Deferred = deferredUtils.Deferred,
     DataSourceModule = require("../../data/data_source/data_source"),
-    normalizeDataSourceOptions = DataSourceModule.normalizeDataSourceOptions;
+    normalizeDataSourceOptions = DataSourceModule.normalizeDataSourceOptions,
+    filterUtils = require("../shared/filtering");
 
 var USER_STATE_FIELD_NAMES_15_1 = ["filterValues", "filterType", "fixed", "fixedPosition"],
     USER_STATE_FIELD_NAMES = ["visibleIndex", "dataField", "name", "dataType", "width", "visible", "sortOrder", "lastSortOrder", "sortIndex", "groupIndex", "filterValue", "selectedFilterOperation", "added"].concat(USER_STATE_FIELD_NAMES_15_1),
+    IGNORE_COLUMN_OPTION_NAMES = { visibleWidth: true, bestFitWidth: true, bufferedFilterValue: true },
     COMMAND_EXPAND_CLASS = "dx-command-expand";
 
 module.exports = {
@@ -825,7 +827,8 @@ module.exports = {
                             var parsedValue = parseFloat(value);
                             return isNaN(parsedValue) ? value : parsedValue;
                         };
-                        options.serializeValue = function(value) {
+                        options.serializeValue = function(value, target) {
+                            if(target === "filter") return value;
                             return isDefined(value) && this.serializationFormat === "string" ? value.toString() : value;
                         };
                     }
@@ -1070,6 +1073,11 @@ module.exports = {
                     }
 
                     assignColumns(that, resultColumns);
+                    if(that._dataSourceApplied && that._dataSource) {
+                        that._dataSource.group(that.getGroupDataSourceParameters());
+                        that._dataSource.sort(that.getSortDataSourceParameters());
+                        that._dataSource.load();
+                    }
                 }
             };
 
@@ -1155,14 +1163,28 @@ module.exports = {
                 }
             };
 
+            var fireOptionChanged = function(that, options) {
+                var fullOptionName,
+                    column = options.column,
+                    value = options.value,
+                    optionName = options.optionName,
+                    prevValue = options.prevValue;
+
+                if(!IGNORE_COLUMN_OPTION_NAMES[optionName]) {
+                    fullOptionName = getColumnFullPath(that, column);
+                    that._skipProcessingColumnsChange = true;
+                    that.component._notifyOptionChanged(fullOptionName + "." + optionName, value, prevValue);
+                    that._skipProcessingColumnsChange = false;
+                }
+            };
+
             var columnOptionCore = function(that, column, optionName, value, notFireEvent) {
                 var optionGetter = dataCoreUtils.compileGetter(optionName),
                     columnIndex = column.index,
                     prevValue,
                     optionSetter,
                     columns,
-                    changeType,
-                    fullOptionName;
+                    changeType;
 
                 if(arguments.length === 3) {
                     return optionGetter(column, { functionsAsIs: true });
@@ -1179,11 +1201,12 @@ module.exports = {
                     }
                     optionSetter = dataCoreUtils.compileSetter(optionName);
                     optionSetter(column, value, { functionsAsIs: true });
-
-                    fullOptionName = getColumnFullPath(that, column);
-                    that._skipProcessingColumnsChange = true;
-                    that.component._notifyOptionChanged(fullOptionName + "." + optionName, value, prevValue);
-                    that._skipProcessingColumnsChange = false;
+                    fireOptionChanged(that, {
+                        column: column,
+                        optionName: optionName,
+                        value: value,
+                        prevValue: prevValue
+                    });
 
                     if(!isDefined(prevValue) && !isDefined(value) && optionName.indexOf("buffer") !== 0) {
                         notFireEvent = true;
@@ -2303,7 +2326,7 @@ module.exports = {
 
                         if(remoteFiltering) {
                             if(config().forceIsoDateParsing && column && column.serializeValue && filter.length > 1) {
-                                filter[filter.length - 1] = column.serializeValue(filter[filter.length - 1]);
+                                filter[filter.length - 1] = column.serializeValue(filter[filter.length - 1], "filter");
                             }
                         } else {
                             if(column && column.selector) {
@@ -2603,7 +2626,7 @@ module.exports = {
                         calculatedColumnOptions.allowFiltering = !!columnOptions.calculateFilterExpression;
                     }
                     calculatedColumnOptions.calculateFilterExpression = function() {
-                        return gridCoreUtils.defaultCalculateFilterExpression.apply(this, arguments);
+                        return filterUtils.defaultCalculateFilterExpression.apply(this, arguments);
                     };
 
                     calculatedColumnOptions.createFilterExpression = function() {

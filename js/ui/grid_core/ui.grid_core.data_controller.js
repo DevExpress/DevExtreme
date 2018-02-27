@@ -1121,6 +1121,14 @@ module.exports = {
 
                 skipProcessingPagingChange: function(fullName) {
                     return this._skipProcessingPagingChange && (fullName === "paging.pageIndex" || fullName === "paging.pageSize");
+                },
+
+                getUserState: function() {
+                    return {
+                        searchText: this.option("searchPanel.text"),
+                        pageIndex: this.pageIndex(),
+                        pageSize: this.pageSize()
+                    };
                 }
             };
 

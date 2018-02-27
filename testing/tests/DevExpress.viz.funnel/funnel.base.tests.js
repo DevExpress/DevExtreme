@@ -489,7 +489,7 @@ QUnit.test("Update paletteExtenstionMode", function(assert) {
         palette: ["green", "red"]
     });
 
-    funnel.option({ paletteExtensionMode: "repeat" });
+    funnel.option({ paletteExtensionMode: "alternate" });
 
     var items = this.items();
 

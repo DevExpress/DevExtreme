@@ -152,12 +152,7 @@ var LoadIndicator = Widget.inherit({
         this.callBase();
         this._renderWrapper();
         this._renderIndicatorContent();
-    },
-
-    _render: function() {
         this._renderMarkup();
-
-        this.callBase();
     },
 
     _renderWrapper: function() {
@@ -229,7 +224,7 @@ var LoadIndicator = Widget.inherit({
             this._$wrapper.css({
                 height: minDimension,
                 width: minDimension,
-                "font-size": minDimension
+                fontSize: minDimension
             });
         }
     },

@@ -484,6 +484,50 @@ QUnit.test('Compensate root coordinates on fixPlacement call', function(assert) 
     }
 });
 
+QUnit.test('Remove compensation before getting markup, compensate again after', function(assert) {
+    // arrange
+    var renderer = new Renderer({
+        container: this.container
+    });
+    this.boundingRect = { left: 123.34, top: 2.5 };
+    renderer.root.stub("attr").reset();
+    renderer.root.stub("css").reset();
+    renderer.root.stub("markup").reset();
+    renderer.root.stub("move").reset();
+
+    // act
+    renderer.svg();
+
+    // assert
+    if(browser.mozilla) {
+        assert.deepEqual(renderer.root.attr.callCount, 1);
+        assert.deepEqual(renderer.root.attr.getCall(0).args, [{ transform: null }]);
+
+        assert.strictEqual(renderer.root.markup.callCount, 1);
+        assert.ok(renderer.root.markup.getCall(0).calledAfter(renderer.root.attr.getCall(0)));
+
+        assert.deepEqual(renderer.root.move.callCount, 1);
+        assert.deepEqual(renderer.root.move.getCall(0).args, [-0.34, -0.5]);
+        assert.ok(renderer.root.move.getCall(0).calledAfter(renderer.root.markup.getCall(0)));
+
+    } else if(browser.msie) {
+        assert.deepEqual(renderer.root.css.callCount, 2);
+        assert.deepEqual(renderer.root.css.getCall(0).args, [{ transform: "" }]);
+
+        assert.strictEqual(renderer.root.markup.callCount, 1);
+        assert.ok(renderer.root.markup.getCall(0).calledAfter(renderer.root.css.getCall(0)));
+
+        assert.deepEqual(renderer.root.css.getCall(1).args, [{
+            transform: "translate(-0.34px,-0.5px)"
+        }]);
+        assert.ok(renderer.root.css.getCall(1).calledAfter(renderer.root.markup.getCall(0)));
+    } else {
+        assert.deepEqual(renderer.root.stub("move").callCount, 0);
+        assert.deepEqual(renderer.root.stub("css").callCount, 0);
+        assert.strictEqual(renderer.root.markup.callCount, 1);
+    }
+});
+
 QUnit.module('Renderer drawing API', {
     before: setMockElements,
 

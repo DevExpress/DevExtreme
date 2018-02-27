@@ -505,6 +505,8 @@ QUnit.test('Date editor', function(assert) {
     // assert
     assert.equal(editor.option('displayFormat'), 'shortDate', 'Widget format is correct');
     assert.deepEqual(value, new Date(2013), 'value after change');
+    // T601751
+    assert.equal(editor.option('dateSerializationFormat'), null, 'dateSerializationFormat is null');
 });
 
 QUnit.test("DateTime editor", function(assert) {

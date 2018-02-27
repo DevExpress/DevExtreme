@@ -3,7 +3,7 @@
 var $ = require("jquery"),
     DataController = require("ui/pivot_grid/ui.pivot_grid.data_controller").DataController,
     virtualScrolling = require("ui/grid_core/ui.grid_core.virtual_scrolling_core"),
-    stateStoring = require("ui/grid_core/ui.grid_core.state_storing"),
+    stateStoring = require("ui/grid_core/ui.grid_core.state_storing_core"),
     pivotGridUtils = require("ui/pivot_grid/ui.pivot_grid.utils"),
     PivotGridDataSource = require("ui/pivot_grid/data_source"),
     executeAsyncMock = require("../../helpers/executeAsyncMock.js");

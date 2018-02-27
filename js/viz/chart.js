@@ -592,6 +592,17 @@ var dxChart = AdvancedChart.inherit({
         return panesBorderOptions;
     },
 
+    _seriesPopulatedHandlerCore: function() {
+        var that = this,
+            animationMaxPointSupported = that._getAnimationOptions().maxPointCountSupported,
+            animationEnabled = that._renderer.animationEnabled();
+
+        this.callBase();
+        this.series.forEach(function(s) {
+            s.prepareToDrawing(s.getPoints().length <= animationMaxPointSupported && animationEnabled);
+        });
+    },
+
     _isLegendInside: function() {
         return this._legend && this._legend.getPosition() === "inside";
     },
@@ -655,6 +666,12 @@ var dxChart = AdvancedChart.inherit({
         vizUtils.updatePanesCanvases(this.panes, this._canvas, this._isRotated());
     },
 
+    _renderScaleBreaks: function() {
+        this._valueAxes.concat(this._argumentAxes).forEach(function(axis) {
+            axis.drawScaleBreaks();
+        });
+    },
+
     _renderAxes: function(drawOptions, panesBorderOptions) {
         var that = this,
             rotated = that._isRotated(),
@@ -676,9 +693,7 @@ var dxChart = AdvancedChart.inherit({
         if(!drawOptions.adjustAxes) {
             drawAxesWithTicks(verticalAxes, !rotated && synchronizeMultiAxes, panesCanvases, panesBorderOptions);
             drawAxesWithTicks(horizontalAxes, rotated && synchronizeMultiAxes, panesCanvases, panesBorderOptions);
-            that._valueAxes.concat(that._argumentAxes).forEach(function(axis) {
-                axis.drawScaleBreaks();
-            });
+            that._renderScaleBreaks();
             return;
         }
 
@@ -702,6 +717,8 @@ var dxChart = AdvancedChart.inherit({
 
         horizontalAxes.forEach(shiftAxis("top", "bottom"));
         verticalAxes.forEach(shiftAxis("left", "right"));
+
+        that._renderScaleBreaks();
 
         that.panes.forEach(function(pane) {
             _extend(pane.canvas, panesCanvases[pane.name]);

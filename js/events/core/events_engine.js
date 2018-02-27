@@ -10,6 +10,8 @@ var typeUtils = require("../../core/utils/type");
 var Callbacks = require("../../core/utils/callbacks");
 var isWindow = typeUtils.isWindow;
 var isFunction = typeUtils.isFunction;
+var isString = typeUtils.isString;
+var errors = require("../../core/errors");
 var WeakMap = require("../../core/polyfills/weak_map");
 var hookTouchProps = require("../../events/core/hook_touch_props");
 
@@ -59,13 +61,15 @@ var applyForEach = function(args, method) {
 
     if(domAdapter.isNode(element) || isWindow(element)) {
         method.apply(eventsEngine, args);
-    } else if(element.each) {
+    } else if(!isString(element) && "length" in element) {
         var itemArgs = Array.prototype.slice.call(args, 0);
 
-        element.each(function() {
-            itemArgs[0] = this;
+        Array.prototype.forEach.call(element, function(itemElement) {
+            itemArgs[0] = itemElement;
             applyForEach(itemArgs, method);
         });
+    } else {
+        throw errors.Error("E0025");
     }
 };
 
@@ -157,13 +161,14 @@ var getHandlersController = function(element, eventName) {
 
             var firstHandlerForTheType = eventData.handleObjects.length === 1;
             var shouldAddNativeListener = firstHandlerForTheType && eventNameIsDefined;
+            var nativeHandler = getNativeHandler(eventName);
 
             if(shouldAddNativeListener) {
-                shouldAddNativeListener = !special.callMethod(eventName, "setup", element, [ data, namespaces, handler ]);
+                shouldAddNativeListener = !special.callMethod(eventName, "setup", element, [ data, namespaces, nativeHandler ]);
             }
 
             if(shouldAddNativeListener) {
-                eventData.nativeHandler = getNativeHandler(eventName);
+                eventData.nativeHandler = nativeHandler;
                 eventData.removeListener = domAdapter.listen(element, NATIVE_EVENTS_TO_SUBSCRIBE[eventName] || eventName, eventData.nativeHandler);
             }
 

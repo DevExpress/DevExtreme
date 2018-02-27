@@ -41,7 +41,7 @@ QUnit.test("registerTheme", function(assert) {
         isCustomTheme1: true
     });
 
-    var theme = themeModule.findTheme("custom theme");
+    var theme = themeModule.getTheme("custom theme");
 
     assert.ok(theme);
     assert.ok(theme.isCustomTheme1);
@@ -58,7 +58,7 @@ QUnit.test("registerTheme based on theme", function(assert) {
         isCustomTheme2: true
     }, "platform");
 
-    var theme = themeModule.findTheme("custom theme 2");
+    var theme = themeModule.getTheme("custom theme 2");
 
     assert.ok(theme);
     assert.ok(theme.isCustomTheme);
@@ -77,7 +77,7 @@ QUnit.test("registerTheme with options", function(assert) {
     themeModule.registerTheme(lightTheme);
 
     $.each(lightTheme, function(key, value) {
-        assert.equal(themeModule.findTheme("platform5.light")[key], value);
+        assert.equal(themeModule.getTheme("platform5.light")[key], value);
     });
 });
 
@@ -119,7 +119,7 @@ QUnit.test("Patched properties on register theme", function(assert) {
     themeModule.registerTheme(theme);
 
     // assert
-    theme = themeModule.findTheme("custom theme");
+    theme = themeModule.getTheme("custom theme");
 
     // backgroundColor
     assert.strictEqual(theme.loadingIndicator.backgroundColor, theme.backgroundColor, "backgroundColor");
@@ -253,15 +253,15 @@ QUnit.test("Patched properties on register theme", function(assert) {
 
 QUnit.module("Themes functions");
 
-QUnit.test("findTheme", function(assert) {
-    var theme = themeModule.findTheme("platform1");
+QUnit.test("getTheme", function(assert) {
+    var theme = themeModule.getTheme("platform1");
 
     assert.ok(theme);
     assert.ok(theme.isCustomTheme);
 });
 
-QUnit.test("findTheme not exists", function(assert) {
-    assert.strictEqual(themeModule.findTheme("not exists").name, "generic.light");
+QUnit.test("getTheme not exists", function(assert) {
+    assert.strictEqual(themeModule.getTheme("not exists").name, "generic.light");
 });
 
 QUnit.module("currentTheme method.");

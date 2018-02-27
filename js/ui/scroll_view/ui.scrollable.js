@@ -205,7 +205,7 @@ var Scrollable = DOMComponent.inherit({
         return this.callBase().concat(deviceDependentOptions(), [
             {
                 device: function() {
-                    return support.nativeScrolling && devices.real().platform === "android";
+                    return support.nativeScrolling && devices.real().platform === "android" && !browser.mozilla;
                 },
                 options: {
                     useSimulatedScrollbar: true
@@ -238,14 +238,13 @@ var Scrollable = DOMComponent.inherit({
     _init: function() {
         this.callBase();
         this._initScrollableMarkup();
-        this._attachNativeScrollbarsCustomizationCss();
         this._locked = false;
     },
 
     _visibilityChanged: function(visible) {
         if(visible) {
             this.update();
-            this._toggleRTLDirection(this.option("rtlEnabled"));
+            this._updateRtlPosition(this.option("rtlEnabled"));
             this._savedScrollOffset && this.scrollTo(this._savedScrollOffset);
             delete this._savedScrollOffset;
         } else {
@@ -284,23 +283,27 @@ var Scrollable = DOMComponent.inherit({
         }
     },
 
-    _render: function() {
+    _initMarkup: function() {
+        this.callBase();
         this._renderDirection();
+    },
+
+    _render: function() {
         this._renderStrategy();
+        this._attachNativeScrollbarsCustomizationCss();
+
         this._attachEventHandlers();
         this._renderDisabledState();
         this._createActions();
         this.update();
 
         this.callBase();
-
-        this._toggleRTLDirection(this.option("rtlEnabled"));
+        this._updateRtlPosition(this.option("rtlEnabled"));
     },
 
-    _toggleRTLDirection: function(rtl) {
+    _updateRtlPosition: function(rtl) {
         var that = this;
 
-        this.callBase(rtl);
         this._updateBounds();
         if(rtl && this.option("direction") !== VERTICAL) {
             commonUtils.deferUpdate(function() {
@@ -388,7 +391,7 @@ var Scrollable = DOMComponent.inherit({
     },
 
     _clean: function() {
-        this._strategy.dispose();
+        this._strategy && this._strategy.dispose();
     },
 
     _optionChanged: function(args) {

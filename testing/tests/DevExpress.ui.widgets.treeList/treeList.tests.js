@@ -620,3 +620,20 @@ QUnit.test("Change expandedRowKeys", function(assert) {
     // assert
     assert.strictEqual(treeList.getVisibleRows().length, 3, "row count");
 });
+
+QUnit.test("TreeList with columnAutoWidth should be rendered", function(assert) {
+    // act
+    var treeList = createTreeList({
+        columnAutoWidth: true,
+        columns: ["name", "age"],
+        dataSource: [
+            { id: 1, parentId: 0, name: "Name 1", age: 19 }
+        ]
+    });
+
+    this.clock.tick();
+
+    // assert
+    assert.equal(treeList.$element().find(".dx-treelist-headers .dx-header-row").length, 1, "header row is rendered");
+    assert.equal(treeList.$element().find(".dx-treelist-rowsview .dx-data-row").length, 1, "data row is rendered");
+});

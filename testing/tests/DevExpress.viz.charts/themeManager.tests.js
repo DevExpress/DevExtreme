@@ -251,7 +251,7 @@ function createThemeManager(options, themeGroupName) {
         // arrange
         var themeManager = createThemeManager({
             palette: ["red", "green"],
-            paletteExtensionMode: "repeat"
+            paletteExtensionMode: "alternate"
         });
         themeManager.setTheme({});
         // act

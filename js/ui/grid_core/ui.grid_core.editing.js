@@ -1148,6 +1148,10 @@ var EditingController = modules.ViewController.inherit((function() {
             return result.resolve().promise();
         },
 
+        isSaving: function() {
+            return this._saving;
+        },
+
         _updateEditColumn: function() {
             var that = this,
                 isEditColumnVisible = that._isEditColumnVisible();
@@ -1960,11 +1964,17 @@ module.exports = {
                         editingController.resetRowAndPageIndices(true);
                     });
                 },
+                repaintRows: function() {
+                    if(this.getController("editing").isSaving()) return;
+                    return this.callBase.apply(this, arguments);
+                },
                 changeRowExpand: function(key) {
                     var editingController = this.getController("editing");
-                    if(editingController.isEditing()) {
+
+                    if(editingController.isEditing() && editingController.isRowEditMode()) {
                         editingController.cancelEditData();
                     }
+
                     return this.callBase.apply(this, arguments);
                 },
                 _updateItemsCore: function(change) {

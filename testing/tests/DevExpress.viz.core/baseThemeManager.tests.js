@@ -215,7 +215,7 @@ QUnit.test('customize custom theme', function(assert) {
 
 QUnit.test('global customized theme', function(assert) {
     // act
-    themeModule.findTheme('custom').chart.isGlobalCustomized = true;
+    themeModule.getTheme('custom').chart.isGlobalCustomized = true;
 
     this.themeManager._themeSection = 'chart';
     this.themeManager.setTheme('custom');
