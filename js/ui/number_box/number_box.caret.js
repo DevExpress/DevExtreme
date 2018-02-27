@@ -55,6 +55,10 @@ var getDigitPositionByIndex = function(digitIndex, text) {
 };
 
 var getCaretWithOffset = function(caret, offset) {
+    if(caret.start === undefined) {
+        caret = { start: caret, end: caret };
+    }
+
     return {
         start: caret.start + offset,
         end: caret.end + offset
@@ -62,6 +66,8 @@ var getCaretWithOffset = function(caret, offset) {
 };
 
 var getCaretAfterFormat = function(text, formatted, caret, format) {
+    caret = getCaretWithOffset(caret, 0);
+
     var point = number.getDecimalSeparator(),
         pointPosition = text.indexOf(point),
         newPointPosition = formatted.indexOf(point),
@@ -86,9 +92,7 @@ var getCaretAfterFormat = function(text, formatted, caret, format) {
 };
 
 var getCaretInBoundaries = function(caret, text, format) {
-    if(caret.start === undefined) {
-        caret = { start: caret, end: caret };
-    }
+    caret = getCaretWithOffset(caret, 0);
 
     var boundaries = getCaretBoundaries(text, format),
         adjustedCaret = {
@@ -102,6 +106,4 @@ var getCaretInBoundaries = function(caret, text, format) {
 exports.getCaretBoundaries = getCaretBoundaries;
 exports.getCaretWithOffset = getCaretWithOffset;
 exports.getCaretInBoundaries = getCaretInBoundaries;
-exports.getDigitCountBeforeIndex = getDigitCountBeforeIndex;
-exports.getDigitPositionByIndex = getDigitPositionByIndex;
 exports.getCaretAfterFormat = getCaretAfterFormat;
