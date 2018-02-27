@@ -142,39 +142,132 @@ QUnit.test("Boolean animation options. True", function(assert) {
 
 QUnit.test("actions sequence on render chart", function(assert) {
     // arrange
-    seriesMockData.series.push(new MockSeries({
-        range: {
-            val: {
-                min: 0,
-                max: 10
-            },
-            arg: {
-                min: 0,
-                max: 100
-            }
-        }
-    }));
+    seriesMockData.series.push(new MockSeries({}));
 
     var chart = this.createChart({
         dataSource: [],
-        useAggregation: true,
         series: [{ type: "line" }]
     });
 
-    var resamplePointsSpy = chart.series[0].resamplePoints,
-        layoutElementsSpy = chart.layoutManager.layoutElements,
+    var layoutElementsSpy = chart.layoutManager.layoutElements,
         updatePanesCanvasesSpy = vizUtils.updatePanesCanvases;
-
-    // act
-
-    // assert
-    assert.equal(resamplePointsSpy.callCount, 1);
-
+    //assert
     assert.equal(updatePanesCanvasesSpy.callCount, 2);
-    assert.ok(resamplePointsSpy.firstCall.calledAfter(updatePanesCanvasesSpy.firstCall), "resample points after first call updatePanes");
-    assert.equal(layoutElementsSpy.callCount, 1);
-    assert.ok(layoutElementsSpy.calledAfter(resamplePointsSpy), "draw title and legend after resample points");
     assert.ok(updatePanesCanvasesSpy.secondCall.calledAfter(layoutElementsSpy.firstCall), "second call updatePanes after draw title and legend");
+});
+
+QUnit.test("Actions sequence with series on render chart", function(assert) {
+    //arrange
+    var stubSeries = new MockSeries({
+            range: {
+                arg: {
+                    min: 0,
+                    max: 30
+                },
+                val: {
+                    min: 0,
+                    max: 20
+                }
+            }
+        }),
+        updateSeriesData = sinon.spy(stubSeries, "updateData"),
+        stubSeries1 = new MockSeries({});
+
+    seriesMockData.series.push(stubSeries, stubSeries1);
+
+    stubSeries.getArgumentRange.returns({
+        min: 10,
+        max: 20
+    });
+
+    stubSeries1.getArgumentRange.returns({
+        min: 5,
+        max: 15
+    });
+
+    var chart = this.createChart({
+            dataSource: [{}],
+            series: [{ type: "line" }, { type: "line" }]
+        }),
+        argumentAxis = chart._argumentAxes[0];
+
+    assert.ok(updateSeriesData.lastCall.calledBefore(argumentAxis.setBusinessRange.firstCall));
+    assert.deepEqual(argumentAxis.setBusinessRange.firstCall.args[0].min, 5);
+    assert.deepEqual(argumentAxis.setBusinessRange.firstCall.args[0].max, 20);
+    assert.deepEqual(argumentAxis.updateCanvas.firstCall.args[0], chart._canvas);
+
+    assert.ok(stubSeries.createPoints.lastCall.calledAfter(argumentAxis.updateCanvas.firstCall));
+    assert.ok(stubSeries.createPoints.lastCall.calledAfter(argumentAxis.setBusinessRange.firstCall));
+    assert.ok(argumentAxis.setBusinessRange.lastCall.calledAfter(stubSeries.createPoints.lastCall));
+    assert.deepEqual(argumentAxis.setBusinessRange.lastCall.args[0].min, 0);
+    assert.deepEqual(argumentAxis.setBusinessRange.lastCall.args[0].max, 30);
+});
+
+QUnit.test("Recreate series points on zooming if aggregation is enabled", function(assert) {
+    //arrange
+    seriesMockData.series.push(new MockSeries());
+
+    var chart = this.createChart({
+            dataSource: [{}],
+            useAggregation: true,
+            series: [{ type: "line" }]
+        }),
+        series = chart.getAllSeries()[0],
+        argumentAxis = chart._argumentAxes[0];
+
+    series.createPoints.reset();
+
+    chart.zoomArgument(0, 1);
+
+    assert.ok(series.createPoints.called);
+    assert.ok(series.createPoints.lastCall.calledAfter(argumentAxis.zoom.lastCall));
+});
+
+QUnit.test("Do not recreate series points on zooming if aggregation is not enabled", function(assert) {
+    //arrange
+    seriesMockData.series.push(new MockSeries());
+
+    var chart = this.createChart({
+            dataSource: [{}],
+            useAggregation: false,
+            series: [{ type: "line" }]
+        }),
+        series = chart.getAllSeries()[0];
+
+    series.createPoints.reset();
+
+    chart.zoomArgument(0, 1);
+
+    assert.ok(!series.createPoints.called);
+});
+
+QUnit.test("Recreate points on resize if aggregation is enabled", function(assert) {
+    //arrange
+    seriesMockData.series.push(new MockSeries());
+
+    var chart = this.createChart({
+            dataSource: [{}],
+            useAggregation: true,
+            series: [{ type: "line" }],
+            size: {
+                width: 300
+            }
+        }),
+        series = chart.getAllSeries()[0],
+        argumentAxis = chart._argumentAxes[0];
+
+    series.createPoints.reset();
+    argumentAxis.updateCanvas.reset();
+
+    chart.option({
+        size: {
+            width: 500
+        }
+    });
+
+    assert.equal(argumentAxis.updateCanvas.firstCall.args[0].width, 500);
+    assert.ok(series.createPoints.called);
+    assert.ok(argumentAxis.updateCanvas.firstCall.calledBefore(series.createPoints.lastCall));
 });
 
 QUnit.test("Transform argument", function(assert) {

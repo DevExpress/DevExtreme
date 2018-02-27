@@ -282,6 +282,16 @@ QUnit.test("render", function(assert) {
     assert.ok(chart.getSeriesByPos(0).draw.called);
 });
 
+QUnit.test("Actions sequence with series on render chart", function(assert) {
+    //arrange
+    var chart = this.createSimplePolarChart(),
+        argumentAxis = chart._argumentAxes[0],
+        series = chart.getAllSeries()[0];
+
+    assert.ok(series.updateData.lastCall.calledBefore(argumentAxis.setBusinessRange.firstCall));
+    assert.ok(argumentAxis.setBusinessRange.firstCall.calledAfter(series.createPoints.lastCall));
+});
+
 QUnit.test("draw series with correct translators and animation options", function(assert) {
     stubLayoutManager.needMoreSpaceForPanesCanvas.returns(true);
     stubThemeManager.getOptions.withArgs("adaptiveLayout").returns({ keepLabels: false });
