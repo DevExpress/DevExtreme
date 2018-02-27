@@ -249,12 +249,6 @@ var Popup = Overlay.inherit({
                     return device.phone && currentTheme === "win8";
                 },
                 options: {
-                    /**
-                    * @name dxPopupOptions_position
-                    * @publicName position
-                    * @type string|positionConfig
-                    * @inheritdoc
-                    */
                     position: {
                         my: "top center",
                         at: "top center",
