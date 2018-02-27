@@ -11,7 +11,6 @@ var $ = require("../../core/renderer"),
     TrackBar = require("../track_bar"),
     eventUtils = require("../../events/utils"),
     pointerEvents = require("../../events/pointer"),
-    windowUtils = require("../../core/utils/window"),
     feedbackEvents = require("../../events/core/emitter.feedback"),
     SliderHandle = require("./ui.slider_handle"),
     inkRipple = require("../widget/utils.ink_ripple"),
@@ -291,10 +290,7 @@ var Slider = TrackBar.inherit({
         this._renderStartHandler();
         this._renderAriaMinAndMax();
 
-        if(windowUtils.hasWindow()) {
-            this._repaintHandle();
-        }
-
+        this._repaintHandle();
         this.option("useInkRipple") && this._renderInkRipple();
         this.callBase();
     },

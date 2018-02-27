@@ -4,7 +4,6 @@ var $ = require("../../core/renderer"),
     registerComponent = require("../../core/component_registrator"),
     commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
-    windowUtils = require("../../core/utils/window"),
     each = require("../../core/utils/iterator").each,
     extend = require("../../core/utils/extend").extend,
     logger = require("../../core/utils/console").logger,
@@ -228,9 +227,7 @@ var DataGrid = Widget.inherit({
     },
 
     _renderContentImpl: function() {
-        if(windowUtils.hasWindow()) {
-            this.getView("gridView").render(this.$element());
-        }
+        this.getView("gridView").render(this.$element());
     },
 
     _renderContent: function() {

@@ -3,7 +3,6 @@
 var registerComponent = require("../../core/component_registrator"),
     commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
-    windowUtils = require("../../core/utils/window"),
     each = require("../../core/utils/iterator").each,
     extend = require("../../core/utils/extend").extend,
     Widget = require("../widget/ui.widget"),
@@ -101,9 +100,8 @@ var TreeList = Widget.inherit({
 
     _renderContentImpl: function() {
         var $element = this.$element().addClass(TREELIST_CLASS);
-        if(windowUtils.hasWindow()) {
-            this.getView("gridView").render($element);
-        }
+
+        this.getView("gridView").render($element);
     },
 
     _renderContent: function() {

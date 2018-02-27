@@ -5,7 +5,6 @@ var $ = require("../core/renderer"),
     Slider = require("./slider"),
     SliderHandle = require("./slider/ui.slider_handle"),
     registerComponent = require("../core/component_registrator"),
-    windowUtils = require("../core/utils/window"),
     extend = require("../core/utils/extend").extend,
     applyServerDecimalSeparator = require("../core/utils/common").applyServerDecimalSeparator,
     eventUtils = require("../events/utils"),
@@ -202,10 +201,7 @@ var RangeSlider = Slider.inherit({
     },
 
     _renderContentImpl: function() {
-        if(windowUtils.hasWindow()) {
-            this._callHandlerMethod("repaint");
-        }
-
+        this._callHandlerMethod("repaint");
         this.callBase();
     },
 
