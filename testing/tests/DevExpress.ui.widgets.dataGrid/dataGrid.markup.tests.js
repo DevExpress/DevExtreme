@@ -2,13 +2,7 @@
 
 var $ = require("jquery");
 
-var DataGrid = require("ui/data_grid");
-
-DataGrid.defaultOptions({
-    options: {
-        loadingTimeout: null
-    }
-});
+require("ui/data_grid");
 
 QUnit.testStart(function() {
     var markup =
@@ -17,7 +11,14 @@ QUnit.testStart(function() {
     $("#qunit-fixture").html(markup);
 });
 
-QUnit.module("DataGrid markup");
+QUnit.module("DataGrid markup", {
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+    },
+    afterEach: function() {
+        this.clock.restore();
+    }
+});
 
 QUnit.test("markup init", function(assert) {
     var $element = $("#dataGrid").dxDataGrid(),
@@ -36,9 +37,12 @@ QUnit.test("markup init", function(assert) {
 
 QUnit.test("markup with dataSource", function(assert) {
     var $element = $("#dataGrid").dxDataGrid({
-            dataSource: [{ id: 1, name: "Alex" }]
-        }),
-        $container = $element.children(),
+        dataSource: [{ id: 1, name: "Alex" }]
+    });
+
+    this.clock.tick(30);
+
+    var $container = $element.children(),
         $headersView = $container.children(".dx-datagrid-headers"),
         $rowsView = $container.children(".dx-datagrid-rowsview");
 
