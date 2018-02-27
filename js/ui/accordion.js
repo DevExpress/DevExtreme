@@ -212,7 +212,7 @@ var Accordion = CollectionWidget.inherit({
 
                 $container.append(iconUtils.getImageContainer(data.icon || data.iconSrc));
             } else {
-                $container.html(String(data));
+                $container.text(String(data));
             }
         }, ["title", "icon", "iconSrc"], this.option("integrationOptions.watchMethod"));
     },
