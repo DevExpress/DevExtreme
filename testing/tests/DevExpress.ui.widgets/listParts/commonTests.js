@@ -289,6 +289,16 @@ QUnit.test("items of group should be in a group body", function(assert) {
     assert.equal($groupBody.children("." + LIST_ITEM_CLASS).length, 1, "there are items in items wrapper");
 });
 
+QUnit.test("Value from plain data source is should be encoded inside group template", function(assert) {
+    var $list = this.element.dxList({
+            dataSource: ["<b>Test item</b>"],
+            grouped: true
+        }),
+        $titleTemplate = $list.find("." + LIST_GROUP_HEADER_CLASS);
+
+    assert.equal($titleTemplate.text(), "<b>Test item</b>");
+});
+
 
 QUnit.module("nested rendering", moduleSetup);
 
