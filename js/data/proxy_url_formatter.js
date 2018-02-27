@@ -32,7 +32,7 @@ var getUrlParser = callOnce(function() {
 
 var parseUrl = function(url) {
     var urlParser = getUrlParser();
-    urlParser(url);
+    return urlParser(url);
 };
 
 var extractProxyAppId = function() {
