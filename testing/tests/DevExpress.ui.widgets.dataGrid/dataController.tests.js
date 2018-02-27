@@ -6271,6 +6271,48 @@ QUnit.test("CustomStore load options when remote summary enabled", function(asse
     }], "footerItems");
 });
 
+//T607606
+QUnit.test("CustomStore load options if remote summary enabled and summaryType is not defined", function(assert) {
+    var storeLoadOptions;
+    this.options = {
+        dataSource: {
+            load: function(options) {
+                storeLoadOptions = options;
+                return $.Deferred().resolve([
+                    { name: 'Alex', age: 19 },
+                    { name: 'Dan', age: 25 }
+                ], {
+                    totalCount: 3,
+                    summary: [3]
+                });
+            },
+            pageSize: 2
+        },
+        summary: {
+            totalItems: [{
+                column: 'age'
+            }]
+        },
+        remoteOperations: {
+            paging: true,
+            summary: true
+        }
+    };
+
+    //act
+    this.setupDataGridModules();
+    this.clock.tick();
+
+    //assert
+    assert.deepEqual(storeLoadOptions.totalSummary, [{ selector: "age", summaryType: "count" }], "totalSummary option");
+    assert.deepEqual(this.dataController.footerItems(), [{
+        rowType: 'totalFooter', summaryCells: [[], [{
+            value: 3,
+            column: 'age'
+        }]]
+    }], "footerItems");
+});
+
 QUnit.test("CustomStore load options when all remoteOperations enabled and summary is defined", function(assert) {
     var storeLoadOptions;
     this.options = {
