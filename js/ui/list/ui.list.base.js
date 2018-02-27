@@ -706,6 +706,7 @@ var ListBase = CollectionWidget.inherit({
 
             this._forgetNextPageLoading();
             this._prepareContent();
+            this._fireContentReadyAction();
             this._renderFocusTarget();
         } else {
             this.option("items", newItems);
