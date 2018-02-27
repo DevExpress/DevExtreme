@@ -33,6 +33,7 @@ var FILTER_BUILDER_CLASS = "dx-filterbuilder",
     FILTER_BUILDER_FIELDS_CLASS = FILTER_BUILDER_CLASS + "-fields",
     FILTER_BUILDER_ADD_CONDITION_CLASS = FILTER_BUILDER_CLASS + "-add-condition",
     ACTIVE_CLASS = "dx-state-active",
+    SOURCE = "filterBuilder",
 
     TAB_KEY = 9,
     ENTER_KEY = 13,
@@ -543,7 +544,7 @@ var FilterBuilder = Widget.inherit({
     getFilterExpression: function() {
         var fields = this._getNormalizedFields(),
             value = extend(true, [], this._model);
-        return utils.getFilterExpression(utils.getNormalizedFilter(value, fields), fields, this._customOperations);
+        return utils.getFilterExpression(utils.getNormalizedFilter(value, fields), fields, this._customOperations, SOURCE);
     },
 
     _getNormalizedFields: function() {
@@ -1046,7 +1047,7 @@ var FilterBuilder = Widget.inherit({
             });
         } else {
             this._editorFactory.createEditor.call(this, $editor, extend({}, field, options, {
-                parentType: "filterBuilder"
+                parentType: SOURCE
             }));
         }
         return $editor;

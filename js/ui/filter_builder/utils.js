@@ -352,21 +352,21 @@ function getNormalizedFields(fields) {
     }, []);
 }
 
-function getConditionFilterExpression(condition, fields, customOperations) {
+function getConditionFilterExpression(condition, fields, customOperations, target) {
     var field = getField(condition[0], fields),
         filterExpression = convertToInnerCondition(condition, customOperations),
         customOperation = customOperations.length && getCustomOperation(customOperations, filterExpression[1]);
 
     if(customOperation && customOperation.calculateFilterExpression) {
-        return customOperation.calculateFilterExpression.apply(customOperation, [filterExpression[2], field]);
+        return customOperation.calculateFilterExpression.apply(customOperation, [filterExpression[2], field, target]);
     } else if(field.calculateFilterExpression) {
-        return field.calculateFilterExpression.apply(field, [filterExpression[2], filterExpression[1]]);
+        return field.calculateFilterExpression.apply(field, [filterExpression[2], filterExpression[1], target]);
     } else {
-        return filterUtils.defaultCalculateFilterExpression.apply(field, [filterExpression[2], filterExpression[1]], "filterBuilder");
+        return filterUtils.defaultCalculateFilterExpression.apply(field, [filterExpression[2], filterExpression[1], target]);
     }
 }
 
-function getFilterExpression(value, fields, customOperations) {
+function getFilterExpression(value, fields, customOperations, target) {
     if(value === null) {
         return null;
     }
@@ -374,7 +374,7 @@ function getFilterExpression(value, fields, customOperations) {
     var criteria = getGroupCriteria(value);
 
     if(isCondition(criteria)) {
-        return getConditionFilterExpression(criteria, fields, customOperations) || null;
+        return getConditionFilterExpression(criteria, fields, customOperations, target) || null;
     } else {
         var result = [],
             filterExpression,
@@ -387,7 +387,7 @@ function getFilterExpression(value, fields, customOperations) {
                     result.push(filterExpression);
                 }
             } else if(isCondition(criteria[i])) {
-                filterExpression = getConditionFilterExpression(criteria[i], fields, customOperations);
+                filterExpression = getConditionFilterExpression(criteria[i], fields, customOperations, target);
                 if(filterExpression) {
                     i && result.push(groupValue);
                     result.push(filterExpression);
