@@ -1099,7 +1099,7 @@
 */
 @datagrid-columnchooser-item-color: fade(@datagrid-base-color, 54%);
 @datagrid-columnchooser-hover-icon-color: fade(@datagrid-base-color, 38%);
-@datagrid-block-separator-bg: darken(@datagrid-base-background-color, 6.5%);
+@datagrid-block-separator-bg: darken(@datagrid-base-background-color, 9.5%);
 /**
 * @name 21. Header text weight
 * @type select
@@ -1107,18 +1107,12 @@
 * @group datagrid
 */
 @datagrid-columnchooser-font-weight: bold;
-/**
-* @name 71. Draggable header border color
-* @type color
-* @group datagrid
-*/
-@datagrid-drag-header-border-color: fade(@base-accent, 50%);
 @datagrid-drag-header-shadow-color: fade(@base-shadow-color, 10%);
 @datagrid-drag-header-second-shadow-color: fade(@base-shadow-color, 20%);
 @datagrid-header-drag-bg: @datagrid-base-background-color;
 
 @HEADER_FILTER_COLOR: @datagrid-columnchooser-item-color;
-@HEADER_FILTER_COLOR_EMPTY: fade(@datagrid-columnchooser-item-color, 50%);
+@HEADER_FILTER_COLOR_EMPTY: fade(@datagrid-columnchooser-item-color, 38%);
 /**
 * @name 80. Selected row background color
 * @type color
@@ -1144,7 +1138,7 @@
 * @group datagrid
 * @paletteColorOpacity .15
 */
-@datagrid-hover-bg: darken(@datagrid-base-background-color, 6.5%);
+@datagrid-hover-bg: darken(@datagrid-base-background-color, 5%);
 
 /**
 * @name 95. Hovered state text color
@@ -1189,14 +1183,14 @@
 * @type color
 * @group datagrid
 */
-@datagrid-group-row-color: lighten(@datagrid-base-color, 38.5%);
+@datagrid-group-row-color: fade(@datagrid-base-color, 54%);
 
 /**
 * @name 120. Group row background color
 * @type color
 * @group datagrid
 */
-@datagrid-group-row-bg: darken(@datagrid-base-background-color, 3%);
+@datagrid-group-row-bg: fade(@datagrid-base-background-color, 100%);
 
 @datagrid-master-detail-cell-bg: darken(@datagrid-base-background-color, 2%);
 
@@ -1249,7 +1243,7 @@
 * @group datagrid
 * @paletteColorOpacity 1
 */
-@datagrid-focused-border-color: @base-focus-color;
+@datagrid-focused-border-color: @base-accent;
 /**
 * @name 131. Editor background
 * @type color
@@ -1285,9 +1279,6 @@
 @datagrid-summary-bg: @datagrid-base-background-color;
 
 @datagrid-overlay-content-shadow-color: fade(@base-shadow-color, 15%);
-@datagrid-columnchooser-shadow-color: fade(@base-shadow-color, 20%);
-
-@datagrid-columnchooser-overlay-border-radius: @base-border-radius-large; //TODO: may be not need
 
 @datagrid-column-separator-bg: fade(@base-accent, 50%);
 
@@ -1327,12 +1318,6 @@
 * @group treelist
 */
 @treelist-columnchooser-font-weight: bold;
-/**
-* @name 71. Draggable header border color
-* @type color
-* @group treelist
-*/
-@treelist-drag-header-border-color: fade(@base-accent, 50%);
 @treelist-drag-header-shadow-color: fade(@base-shadow-color, 10%);
 @treelist-drag-header-second-shadow-color: fade(@base-shadow-color, 20%);
 @treelist-header-drag-bg: @treelist-base-background-color;
@@ -1362,7 +1347,7 @@
 * @group treelist
 * @paletteColorOpacity .15
 */
-@treelist-hover-bg: darken(@datagrid-base-background-color, 6.5%);
+@treelist-hover-bg: darken(@datagrid-base-background-color, 5%);
 
 /**
 * @name 95. Hovered state text color
@@ -1459,7 +1444,7 @@
 * @group treelist
 * @paletteColorOpacity 1
 */
-@treelist-focused-border-color: @base-focus-color;
+@treelist-focused-border-color: @base-accent;
 /**
 * @name 131. Editor background
 * @type color
@@ -1494,9 +1479,6 @@
 @treelist-columnchooser-message-color: lighten(@treelist-base-color, 40%);
 
 @treelist-overlay-content-shadow-color: fade(@base-shadow-color, 15%);
-@treelist-columnchooser-shadow-color: fade(@base-shadow-color, 20%);
-
-@treelist-columnchooser-overlay-border-radius: @base-border-radius-large; //TODO: may be not need
 
 @treelist-column-separator-bg: fade(@base-accent, 50%);
 

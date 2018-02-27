@@ -7,7 +7,7 @@
     .dx-group-panel-message {
         color: @datagrid-columnchooser-item-color;
         font-weight: @datagrid-columnchooser-font-weight;
-        padding: @MATERIAL_DATAGRID_CELL_PADDING;
+        padding: @MATERIAL_DATAGRID_CELL_PADDING 0;
         border-top: @MATERIAL_GRID_BASE_BORDER_HIDDEN;
         border-bottom: @MATERIAL_GRID_BASE_BORDER_HIDDEN;
     }
@@ -16,15 +16,18 @@
         margin-right: @MATERIAL_GRID_BASE_GROUPPANEL_ITEM_MARGIN;
         color: @datagrid-columnchooser-item-color;
         font-weight: @datagrid-columnchooser-font-weight;
-        border: @datagrid-border;
-        padding: @MATERIAL_DATAGRID_CELL_PADDING;
+        font-size: @MATERIAL_GRID_BASE_HEADER_CELL_FONT_SIZE;
+        line-height: @MATERIAL_GRID_BASE_HEADER_LINE_HEIGHT;
+        background: @datagrid-block-separator-bg;
+        border-radius: 16px;
+        padding: 4px 10px;
     }
 
     .dx-block-separator {
         margin-right: @MATERIAL_GRID_BASE_GROUPPANEL_ITEM_MARGIN;
         color: @datagrid-columnchooser-item-color;
         font-weight: @datagrid-columnchooser-font-weight;
-        padding: @MATERIAL_DATAGRID_CELL_PADDING + 1;
+        padding: @MATERIAL_DATAGRID_CELL_PADDING;
         background-color: @datagrid-block-separator-bg;
     }
 
@@ -41,6 +44,7 @@
     .dx-row.dx-group-row {
         color: @datagrid-group-row-color;
         background-color: @datagrid-group-row-bg;
+        font-size: @MATERIAL_GRID_BASE_HEADER_CELL_FONT_SIZE;
         font-weight: bold;
 
         td {
@@ -51,13 +55,13 @@
 }
 
 .dx-datagrid-group-opened {
-    .dx-icon-spindown;
+    .dx-icon-chevrondown;
     .dx-icon-sizing(@MATERIAL_BASE_ICON_SIZE);
     color: @datagrid-spin-icon-color;
 }
 
 .dx-datagrid-group-closed {
-    .dx-icon-spinright;
+    .dx-icon-chevronright;
     .dx-icon-sizing(@MATERIAL_BASE_ICON_SIZE);
     color: @datagrid-spin-icon-color;
 }
@@ -79,14 +83,6 @@
     .dx-datagrid-group-panel {
         .dx-group-panel-item, .dx-block-separator {
             margin-left: @MATERIAL_GRID_BASE_GROUPPANEL_ITEM_MARGIN;
-        }
-    }
-
-    .dx-datagrid-table-fixed {
-        .dx-row.dx-group-row {
-            td {
-                background-color: @datagrid-group-row-bg;
-            }
         }
     }
 }

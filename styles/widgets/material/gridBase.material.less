@@ -1,8 +1,15 @@
 .dx-size-default() {
-    @MATERIAL_GRID_BASE_CELL_VERTICAL_PADDING: 15px;
+    @MATERIAL_GRID_BASE_CELL_HEIGHT: 48px;
+    @MATERIAL_GRID_BASE_HEADER_HEIGHT: 56px;
+    @MATERIAL_GRID_BASE_HEADER_LINE_HEIGHT: 24px;
+    @MATERIAL_GRID_BASE_CELL_FONT_SIZE: 13px;
+    @MATERIAL_GRID_BASE_HEADER_CELL_FONT_SIZE: 12px;
+
     @MATERIAL_GRID_BASE_CHECKBOX_SIZE: 18px;
     @MATERIAL_GRID_BASE_CELL_HORIZONTAL_PADDING: 28px;
     @MATERIAL_GRID_BASE_CELL_FIRST_COLUMN_PADDING: 24px;
+    @MATERIAL_GRID_BASE_CELL_LAST_COLUMN_PADDING: 24px;
+
     @MATERIAL_GRID_BASE_TEXTEDITOR_INPUT_PADDING: 32px;
     @MATERIAL_GRID_BASE_HEADER_PANEL_MARGIN: 14px 0;
     @MATERIAL_GRID_BASE_MENU_ITEM_PADDING: 6px 5px 7px;
@@ -13,11 +20,8 @@
     @MATERIAL_GRID_BASE_HEADER_PANEL_PADDING: 0 14px 0 24px;
     
     @MATERIAL_GRID_BASE_COMMAND_EDIT_COLUMN_WIDTH: 85px;
-    @MATERIAL_GRID_BASE_CHECKBOX_FONTSIZE: 12px;
     @MATERIAL_GRID_BASE_ADAPTIVE_TEXT_PADDING: 8px;
     @MATERIAL_GRID_BASE_TREEVIEW_SEARCH_MARGIN: 10px;
-    @MATERIAL_GRID_BASE_CELL_FONT_SIZE: 13px;
-    @MATERIAL_GRID_BASE_HEADER_CELL_FONT_SIZE: 12px;
 }
 
 .dx-size-compact() {
@@ -32,7 +36,6 @@
     @MATERIAL_GRID_BASE_COMMAND_SELECT_COLUMN_WIDTH: 55px;
     @MATERIAL_GRID_BASE_COMMAND_EDIT_COLUMN_WIDTH: 70px;
     @MATERIAL_GRID_BASE_COMMAND_EXPAND_COLUMN_WIDTH: 15px;
-    @MATERIAL_GRID_BASE_CHECKBOX_FONTSIZE: 10px;
     @MATERIAL_GRID_BASE_ADAPTIVE_TEXT_PADDING: 6px;
     @MATERIAL_GRID_BASE_TREEVIEW_SEARCH_MARGIN: 5px;
 }
@@ -41,14 +44,14 @@
     @MATERIAL_GRID_BASE_BORDER_HIDDEN: 1px solid transparent;
     @MATERIAL_GRID_BASE_ROW_BORDER: 1px solid transparent;
     @MATERIAL_GRID_BASE_BORDER_COLOR: ~"@{@{widgetName}-border-color}";
-    @MATERIAL_GRID_BASE_DRAG_HEADER_BORDER: 1px solid ~"@{@{widgetName}-drag-header-border-color}";
     @MATERIAL_GRID_BASE_DRAG_HEADER_FIRST_SHADOW: 0px 0px 1px ~"@{@{widgetName}-drag-header-shadow-color}";
     @MATERIAL_GRID_BASE_DRAG_HEADER_SECOND_SHADOW: 0px 1px 3px ~"@{@{widgetName}-drag-header-second-shadow-color}";
-    @MATERIAL_GRID_BASE_HEADER_CELL_VERTICAL_PADDING: @MATERIAL_GRID_BASE_CELL_VERTICAL_PADDING + 4px;
+    @MATERIAL_GRID_BASE_HEADER_CELL_VERTICAL_PADDING: round((@MATERIAL_GRID_BASE_HEADER_HEIGHT - @MATERIAL_GRID_BASE_HEADER_LINE_HEIGHT) / 2);
     @MATERIAL_GRID_BASE_CELL_PADDING: @MATERIAL_GRID_BASE_CELL_VERTICAL_PADDING @MATERIAL_GRID_BASE_CELL_HORIZONTAL_PADDING;
     @MATERIAL_GRID_BASE_FOOTER_FONT_SIZE: @MATERIAL_GRID_BASE_HEADER_CELL_FONT_SIZE;
     @MATERIAL_GRID_BASE_COMMAND_SELECT_COLUMN_WIDTH: @MATERIAL_GRID_BASE_CHECKBOX_SIZE;
     @MATERIAL_GRID_BASE_COMMAND_EXPAND_COLUMN_WIDTH: @MATERIAL_BASE_ICON_SIZE;
+    @MATERIAL_GRID_BASE_CELL_VERTICAL_PADDING: round((@MATERIAL_GRID_BASE_CELL_HEIGHT - @MATERIAL_GRID_BASE_HEADER_LINE_HEIGHT)/2);
 
     .dx-set-checkbox-border-color-as-background() when (@MATERIAL_COLOR_POSTFIX = ".contrast") {
         .dx-selection .dx-checkbox-icon {
@@ -139,6 +142,7 @@
                     padding: @MATERIAL_GRID_BASE_MENU_ITEM_PADDING;
 
                     .dx-icon {
+                        .dx-icon-sizing(@MATERIAL_BASE_ICON_SIZE);
                         margin: 0px 3px;
                     }
                 }
@@ -181,13 +185,14 @@
             > td {
                 padding: @MATERIAL_GRID_BASE_CELL_PADDING;
                 font-size: @MATERIAL_GRID_BASE_CELL_FONT_SIZE;
+                line-height: @MATERIAL_GRID_BASE_HEADER_LINE_HEIGHT;
 
                 &:first-of-type {
                     padding-left: @MATERIAL_GRID_BASE_CELL_FIRST_COLUMN_PADDING;
                 }
 
                 &:last-of-type {
-                    padding-right: 14px;
+                    padding-right: @MATERIAL_GRID_BASE_CELL_LAST_COLUMN_PADDING;
                 }
             }
 
@@ -203,8 +208,7 @@
 
     .dx-@{widgetName}-headers, .dx-@{widgetName}-rowsview {
         .dx-texteditor-input {
-            padding: @MATERIAL_GRID_BASE_CELL_PADDING;
-            min-height: round(@MATERIAL_BASE_LINE_HEIGHT * @MATERIAL_BASE_FONT_SIZE) + 2 * @MATERIAL_GRID_BASE_CELL_VERTICAL_PADDING
+            min-height: @MATERIAL_GRID_BASE_CELL_HEIGHT;
         }
 
         .dx-lookup {
@@ -264,7 +268,9 @@
         }
     }
 
-    .dx-editor-cell {
+     .dx-editor-cell {
+         padding-top: 0;
+         padding-bottom: 0;
         .dx-numberbox-spin-button {
             background-color: transparent;
         }
@@ -274,10 +280,14 @@
         }
 
         .dx-texteditor {
-            background: ~"@{@{widgetName}-editor-bg}";
+            // background: ~"@{@{widgetName}-editor-bg}";
 
             .dx-texteditor-input {
-                background: ~"@{@{widgetName}-editor-bg}";
+                // background: ~"@{@{widgetName}-editor-bg}";
+            }
+
+            .dx-texteditor-container:after {
+                border-bottom: ~"@{@{widgetName}-border}";
             }
 
             &.dx-numberbox-spin .dx-texteditor-input {
@@ -300,28 +310,6 @@
         &.dx-editor-inline-block .dx-highlight-outline::before {
             padding-top: @MATERIAL_GRID_BASE_CELL_VERTICAL_PADDING;
             padding-bottom: @MATERIAL_GRID_BASE_CELL_VERTICAL_PADDING;
-        }
-    }
-
-    .dx-@{widgetName}-checkbox-size {
-        line-height: normal;
-
-        &.dx-checkbox-checked .dx-checkbox-icon {
-            font-size: @MATERIAL_GRID_BASE_CHECKBOX_FONTSIZE;
-        }
-
-        .dx-checkbox-icon {
-            height: @MATERIAL_GRID_BASE_CHECKBOX_SIZE;
-            width: @MATERIAL_GRID_BASE_CHECKBOX_SIZE;
-        }
-
-        &.dx-checkbox-indeterminate {
-            .dx-checkbox-icon:before {
-                width: 6px;
-                height: 6px;
-                left: 4px;
-                top: 4px;
-            }
         }
     }
 
@@ -356,8 +344,6 @@
 
         .dx-overlay-content {
             background-color: ~"@{@{widgetName}-columnchooser-bg}";
-            .border-radius(~"@{@{widgetName}-columnchooser-overlay-border-radius}");
-            .box-shadow(0px 1px 3px ~"@{@{widgetName}-columnchooser-shadow-color}");
 
             .dx-popup-title {
                 padding-top: 7px;
@@ -367,13 +353,14 @@
 
             .dx-popup-content {
                 .dx-column-chooser-item {
-                    margin-bottom: @MATERIAL_GRID_BASE_COLUMN_CHOOSER_ITEM_MARGIN;
+                    margin: 2px 2px @MATERIAL_GRID_BASE_COLUMN_CHOOSER_ITEM_MARGIN 2px;
                     background-color: ~"@{@{widgetName}-columnchooser-item-bg}";
                     color: ~"@{@{widgetName}-columnchooser-item-color}";
                     font-weight: ~"@{@{widgetName}-columnchooser-font-weight}";
-                    border: ~"@{@{widgetName}-border}";
-                    padding: @MATERIAL_GRID_BASE_CELL_HORIZONTAL_PADDING;
-                    .box-shadow(0px 1px 3px -1px ~"@{@{widgetName}-columnchooser-shadow-color}");
+                    font-size: @MATERIAL_GRID_BASE_HEADER_CELL_FONT_SIZE;
+                    padding: @MATERIAL_GRID_BASE_CELL_VERTICAL_PADDING;
+                    line-height: @MATERIAL_GRID_BASE_HEADER_LINE_HEIGHT;
+                    .box-shadow(@MATERIAL_GRID_BASE_DRAG_HEADER_FIRST_SHADOW, @MATERIAL_GRID_BASE_DRAG_HEADER_SECOND_SHADOW);
                 }
             }
         }
@@ -383,9 +370,10 @@
         .box-shadow(@MATERIAL_GRID_BASE_DRAG_HEADER_FIRST_SHADOW, @MATERIAL_GRID_BASE_DRAG_HEADER_SECOND_SHADOW);
         color: ~"@{@{widgetName}-columnchooser-item-color}";
         font-weight: ~"@{@{widgetName}-columnchooser-font-weight}";
-        padding: @MATERIAL_GRID_BASE_CELL_PADDING;
-        border: @MATERIAL_GRID_BASE_DRAG_HEADER_BORDER;
+        padding: @MATERIAL_GRID_BASE_CELL_VERTICAL_PADDING;
         background-color: ~"@{@{widgetName}-header-drag-bg}";
+        line-height: @MATERIAL_GRID_BASE_HEADER_LINE_HEIGHT;
+        font-size: @MATERIAL_GRID_BASE_HEADER_CELL_FONT_SIZE;
     }
 
     .dx-@{widgetName}-columns-separator {
@@ -404,28 +392,42 @@
     }
 
     .dx-@{widgetName}-focus-overlay {
-        border: 2px solid ~"@{@{widgetName}-focused-border-color}";
+        border-bottom: 2px solid ~"@{@{widgetName}-focused-border-color}";
     }
 
     .dx-@{widgetName}-content {
         .dx-@{widgetName}-table {
             .dx-row {
                 .dx-command-select {
+                    overflow: visible;
                     width: @MATERIAL_GRID_BASE_COMMAND_SELECT_COLUMN_WIDTH;
                     min-width: @MATERIAL_GRID_BASE_COMMAND_SELECT_COLUMN_WIDTH;
                     padding-left: @MATERIAL_GRID_BASE_CELL_FIRST_COLUMN_PADDING;
                 }
-    
+
                 .dx-command-edit {
                     width: @MATERIAL_GRID_BASE_COMMAND_EDIT_COLUMN_WIDTH;
                     min-width: @MATERIAL_GRID_BASE_COMMAND_EDIT_COLUMN_WIDTH;
                 }
-    
+
                 .dx-command-expand, .dx-@{widgetName}-group-space {
                     width: @MATERIAL_GRID_BASE_COMMAND_EXPAND_COLUMN_WIDTH;
                     min-width: @MATERIAL_GRID_BASE_COMMAND_EXPAND_COLUMN_WIDTH;
                     padding-left: @MATERIAL_GRID_BASE_CHECKBOX_SIZE;
                     padding-right: 0;
+                    line-height: 0;
+                }
+
+                .dx-editor-cell:not(.dx-command-select) {
+                    padding-right: @MATERIAL_GRID_BASE_CELL_HORIZONTAL_PADDING;
+                    padding-left: @MATERIAL_GRID_BASE_CELL_HORIZONTAL_PADDING;
+                    &:first-of-type {
+                        padding-left: @MATERIAL_GRID_BASE_CELL_FIRST_COLUMN_PADDING;
+                    }
+
+                    &:last-of-type {
+                        padding-right: @MATERIAL_GRID_BASE_CELL_LAST_COLUMN_PADDING;
+                    }
                 }
             }
     
@@ -455,12 +457,8 @@
         }
     }
 
-    
-
     .dx-@{widgetName}-headers {
         color: ~"@{@{widgetName}-columnchooser-item-color}";
-        font-weight: ~"@{@{widgetName}-columnchooser-font-weight}";
-        font-size: @MATERIAL_GRID_BASE_HEADER_CELL_FONT_SIZE;
         .touch-action(pinch-zoom);
         border-bottom: ~"@{@{widgetName}-border}";
 
@@ -478,9 +476,15 @@
                     border-bottom: ~"@{@{widgetName}-border}";
                     padding-top: @MATERIAL_GRID_BASE_HEADER_CELL_VERTICAL_PADDING;
                     padding-bottom: @MATERIAL_GRID_BASE_HEADER_CELL_VERTICAL_PADDING;
-    
+                    line-height: @MATERIAL_GRID_BASE_HEADER_LINE_HEIGHT;
+                    font-weight: ~"@{@{widgetName}-columnchooser-font-weight}";
+                    font-size: @MATERIAL_GRID_BASE_HEADER_CELL_FONT_SIZE;
+
                     .dx-sort-indicator, .dx-sort {
                         color: ~"@{@{widgetName}-base-color}";
+                    }
+                    .dx-column-indicators {
+                        height: @MATERIAL_GRID_BASE_HEADER_LINE_HEIGHT;
                     }
 
                     &:hover {
@@ -490,6 +494,10 @@
                         .dx-sort {
                             color: ~"@{@{widgetName}-columnchooser-hover-icon-color}";
                         }
+                    }
+
+                    &:hover:not(.dx-command-select):not(.dx-command-expand):not(.dx-editor-cell) {
+                        background-color:  ~"@{@{widgetName}-hover-bg}";
                     }
                 }
             }
@@ -574,16 +582,23 @@
 
     &.dx-filter-menu {
         .dx-menu-item-content {
-            .dx-icon.dx-icon-filter-operation-default {
-                margin-top: 2px;
+            .dx-icon {
+                .dx-icon-sizing(24px);
+                &.dx-icon-filter-operation-default {
+                    margin-top: 2px;
+                }
             }
         }
     }
 
-    .dx-editor-with-menu .dx-filter-menu {
+    .dx-editor-with-menu {
+        top: 1px;
         .dx-menu-item-content {
-            .dx-icon.dx-icon-filter-operation-default {
-                margin-top: 2px;
+            .dx-icon {
+                .dx-icon-sizing(24px);
+                &.dx-icon-filter-operation-default {
+                    margin-top: 2px;
+                }
             }
         }
     }
@@ -608,50 +623,47 @@
         .dx-apply-button {
             .dx-button-flat-styling(@button-success-color);
         }
+
+        .dx-column-indicators {
+            height: @MATERIAL_GRID_BASE_HEADER_LINE_HEIGHT;
+        }
     }
 
     .dx-icon-column-chooser {
         .dx-icon-columnchooser;
-        .dx-icon-sizing(@MATERIAL_BASE_ICON_SIZE);
     }
 
     .dx-@{widgetName}-addrow-button {
         .dx-icon-edit-button-addrow {
             .dx-icon-add;
-            .dx-icon-sizing(@MATERIAL_BASE_ICON_SIZE);
         }
     }
 
     .dx-@{widgetName}-cancel-button {
         .dx-icon-edit-button-cancel {
             .dx-icon-revert;
-            .dx-icon-sizing(@MATERIAL_BASE_ICON_SIZE);
         }
     }
 
     .dx-@{widgetName}-save-button {
         .dx-icon-edit-button-save {
             .dx-icon-save;
-            .dx-icon-sizing(@MATERIAL_BASE_ICON_SIZE);
         }
     }
 
     .dx-apply-button {
         .dx-icon-apply-filter {
             .dx-icon-filter;
-            .dx-icon-sizing(@MATERIAL_BASE_ICON_SIZE);
         }
     }
 
     .dx-@{widgetName}-export-button {
         .dx-icon-export-to {
             .dx-icon-export;
-            .dx-icon-sizing(@MATERIAL_BASE_ICON_SIZE);
         }
 
         .dx-icon-export-excel-button {
             .dx-icon-exportxlsx;
-            .dx-icon-sizing(@MATERIAL_BASE_ICON_SIZE);
         }
     }
 
@@ -806,6 +818,7 @@
     }
 
     .dx-@{widgetName}-pager {
+        // padding: @MATERIAL_GRID_BASE_HEADER_HEIGHT // TODO button height????
         &.dx-widget {
             font-size: @MATERIAL_GRID_BASE_FOOTER_FONT_SIZE;
             color: ~"@{@{widgetName}-columnchooser-item-color}";
@@ -817,7 +830,10 @@
     }
 
     .dx-@{widgetName}-total-footer {
-        border-top: ~"@{@{widgetName}-border}";
+        border-bottom: ~"@{@{widgetName}-border}";
+        > .dx-@{widgetName}-content {
+            padding: 0;
+        }
     }
 
     .dx-@{widgetName}-revert-tooltip {
