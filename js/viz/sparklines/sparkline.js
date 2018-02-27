@@ -10,8 +10,6 @@ var BaseSparkline = require("./base_sparkline"),
 
     DEFAULT_CANVAS_WIDTH = 250,
     DEFAULT_CANVAS_HEIGHT = 30,
-    DEFAULT_HORIZONTAL_MARGIN = 5,
-    DEFAULT_VERTICAL_MARGIN = 3,
 
     DEFAULT_POINT_BORDER = 2,
 
@@ -48,11 +46,7 @@ var dxSparkline = BaseSparkline.inherit({
 
     _defaultSize: {
         width: DEFAULT_CANVAS_WIDTH,
-        height: DEFAULT_CANVAS_HEIGHT,
-        left: DEFAULT_HORIZONTAL_MARGIN,
-        right: DEFAULT_HORIZONTAL_MARGIN,
-        top: DEFAULT_VERTICAL_MARGIN,
-        bottom: DEFAULT_VERTICAL_MARGIN
+        height: DEFAULT_CANVAS_HEIGHT
     },
 
     _initCore: function() {
@@ -95,13 +89,17 @@ var dxSparkline = BaseSparkline.inherit({
     _getCorrectCanvas: function() {
         var options = this._allOptions,
             canvas = this._canvas,
-            halfPointSize = Math.ceil(options.pointSize / 2) + DEFAULT_POINT_BORDER,
+            halfPointSize = options.pointSize && Math.ceil(options.pointSize / 2) + DEFAULT_POINT_BORDER,
             type = options.type;
-        if(type !== "bar" && type !== "winloss") {
-            canvas.left += halfPointSize;
-            canvas.right += halfPointSize;
-            canvas.top += halfPointSize;
-            canvas.bottom += halfPointSize;
+        if(type !== "bar" && type !== "winloss" && (options.showFirstLast || options.showMinMax)) {
+            return {
+                width: canvas.width,
+                height: canvas.height,
+                left: canvas.left + halfPointSize,
+                right: canvas.right + halfPointSize,
+                top: canvas.top + halfPointSize,
+                bottom: canvas.bottom + halfPointSize
+            };
         }
         return canvas;
     },
