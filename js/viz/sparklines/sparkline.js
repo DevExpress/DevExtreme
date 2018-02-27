@@ -13,6 +13,8 @@ var BaseSparkline = require("./base_sparkline"),
     DEFAULT_HORIZONTAL_MARGIN = 5,
     DEFAULT_VERTICAL_MARGIN = 3,
 
+    DEFAULT_POINT_BORDER = 2,
+
     ALLOWED_TYPES = {
         "line": true,
         "spline": true,
@@ -88,6 +90,20 @@ var dxSparkline = BaseSparkline.inherit({
             this._drawSeries();
             this._drawn();
         }
+    },
+
+    _getCorrectCanvas: function() {
+        var options = this._allOptions,
+            canvas = this._canvas,
+            halfPointSize = Math.ceil(options.pointSize / 2) + DEFAULT_POINT_BORDER,
+            type = options.type;
+        if(type !== "bar" && type !== "winloss") {
+            canvas.left += halfPointSize;
+            canvas.right += halfPointSize;
+            canvas.top += halfPointSize;
+            canvas.bottom += halfPointSize;
+        }
+        return canvas;
     },
 
     _prepareOptions: function() {
@@ -239,7 +255,7 @@ var dxSparkline = BaseSparkline.inherit({
                 symbol: options.pointSymbol,
                 border: {
                     visible: true,
-                    width: 2
+                    width: DEFAULT_POINT_BORDER
                 },
                 color: options.pointColor,
                 visible: false,

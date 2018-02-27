@@ -36,6 +36,8 @@ var $ = require("../../core/renderer"),
     SERIES_DATA = "chart-data-series",
     ARG_DATA = "chart-data-argument",
     DELAY = 100,
+    TOUCHSTART_TIMEOUT = 500,
+    SCROLL_THRESHOLD = 10,
 
     NONE_MODE = "none",
     ALL_ARGUMENT_POINTS_MODE = "allargumentpoints",
@@ -526,10 +528,6 @@ extend(ChartTracker.prototype, baseTrackerPrototype, {
     _prepare: function() {
         var that = this,
             root = that._renderer.root,
-            touchScrollingEnabled = that._scrollingMode === "all" || that._scrollingMode === "touch",
-            touchZoomingEnabled = that._zoomingMode === "all" || that._zoomingMode === "touch",
-            cssValue = ((!touchScrollingEnabled ? "pan-x pan-y " : "") + (!touchZoomingEnabled ? "pinch-zoom" : "")) || "none",
-            rootStyles = { "touch-action": cssValue, "-ms-touch-action": cssValue },
             wheelZoomingEnabled = that._zoomingMode === "all" || that._zoomingMode === "mouse";
 
         root.off(addNamespace([wheelEvent.name, "dxc-scroll-start", "dxc-scroll-move"], EVENT_NS));
@@ -548,26 +546,35 @@ extend(ChartTracker.prototype, baseTrackerPrototype, {
         wheelZoomingEnabled && root.on(addNamespace(wheelEvent.name, EVENT_NS), function(e) {
             var rootOffset = that._renderer.getRootOffset(),
                 x = that._rotated ? e.pageY - rootOffset.top : e.pageX - rootOffset.left,
-                scale = that._argumentAxis.getTranslator().getMinScale(e.delta > 0),
+                translator = that._argumentAxis.getTranslator(),
+                scale = translator.getMinScale(e.delta > 0),
                 translate = x - x * scale,
-                zoom = that._argumentAxis.getTranslator().zoom(-translate, scale);
+                isOriginalScale,
+                zoom = translator.zoom(-translate, scale);
             that._pointerOut();
 
+            if(scale < 1) {
+                isOriginalScale = translator.checkScrollForOriginalScale(SCROLL_THRESHOLD);
+            }
             that._eventTrigger(ZOOM_START);
             that._chart.zoomArgument(zoom.min, zoom.max, true);
-
-            e.preventDefault();
-            e.stopPropagation();    // T249548
+            if(scale > 1) {
+                isOriginalScale = translator.checkScrollForOriginalScale(SCROLL_THRESHOLD);
+            }
+            if(!isOriginalScale) {
+                that._stopEvent(e);
+            }
         });
 
         root.on(addNamespace("dxc-scroll-start", EVENT_NS), function(e) {
             that._startScroll = true;
             that._gestureStart(that._getGestureParams(e, { left: 0, top: 0 }));
         }).on(addNamespace("dxc-scroll-move", EVENT_NS), function(e) {
-            that._gestureChange(that._getGestureParams(e, { left: 0, top: 0 })) && e.preventDefault();
+            if(that._gestureChange(that._getGestureParams(e, { left: 0, top: 0 }))) {
+                that._chart._transformArgument(that._startGesture.scroll, that._startGesture.scale);
+                e.preventDefault();
+            }
         });
-
-        root.css(rootStyles);
     },
 
     _getGestureParams: function(e, offset) {
@@ -616,7 +623,7 @@ extend(ChartTracker.prototype, baseTrackerPrototype, {
         if(!startGesture) {
             return gestureChanged;
         }
-        if(startGesture.touches === 1 && Math.abs(startGesture.center - gestureParams.center) < 3) {
+        if(startGesture.touches === 1 && Math.abs(startGesture.center - gestureParams.center) < SCROLL_THRESHOLD) {
             that._gestureStart(gestureParams);
             return gestureChanged;
         }
@@ -637,7 +644,6 @@ extend(ChartTracker.prototype, baseTrackerPrototype, {
             }
 
             startGesture.changed = gestureChanged;
-            that._chart._transformArgument(startGesture.scroll, startGesture.scale);
         }
         return gestureChanged;
     },
@@ -730,13 +736,46 @@ extend(ChartTracker.prototype, baseTrackerPrototype, {
             if(canvas) {
                 that._startScroll = true;
                 that._gestureStart(that._getGestureParams(e, rootOffset));
+                that._handleStartScrollTimeout(e);
             }
         } else if(that._startGesture && canvas) {
             if(that._gestureChange(that._getGestureParams(e, rootOffset))) {
-                that._pointerOut();
-                e.preventDefault();
+                that._handleScrollGesture(e);
                 return true;
             }
+        }
+    },
+
+    _handleStartScrollTimeout: function(e) {
+        var that = this;
+        if(that._gestureStartTimeStamp && that._startGesture.touches === 1 && e.timeStamp - that._gestureStartTimeStamp < TOUCHSTART_TIMEOUT) {
+            that._stopEvent(e);
+            that._pointerOut();
+            that._startGesture.changed = false;
+            that._startScroll = false;
+        }
+        that._gestureStartTimeStamp = e.timeStamp;
+    },
+
+    _handleScrollGesture: function(e) {
+        var that = this,
+            scale = that._startGesture.scale,
+            scroll = that._startGesture.scroll,
+            touches = that._startGesture.touches;
+
+        that._pointerOut();
+        if(that._argumentAxis.getTranslator().checkGestureEventsForScaleEdges(SCROLL_THRESHOLD, scale, scroll, touches, that._argumentAxis._zoomArgs)) {
+            that._chart._transformArgument(that._startGesture.scroll, that._startGesture.scale);
+            that._stopEvent(e);
+        } else {
+            that._startGesture.changed = false;
+        }
+    },
+
+    _stopEvent: function(e) {
+        if(!isDefined(e.cancelable) || e.cancelable) {
+            e.preventDefault();
+            e.stopPropagation(); // T249548
         }
     },
 

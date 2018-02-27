@@ -1381,11 +1381,11 @@ var Scheduler = Widget.inherit({
             result = SchedulerTimezones
                     .getTimezoneOffsetById(timezone,
                 Date.UTC(
-                    date.getFullYear(),
-                    date.getMonth(),
-                    date.getDate(),
-                    date.getHours(),
-                    date.getMinutes())
+                    date.getUTCFullYear(),
+                    date.getUTCMonth(),
+                    date.getUTCDate(),
+                    date.getUTCHours(),
+                    date.getUTCMinutes())
                         );
         }
         return result;
