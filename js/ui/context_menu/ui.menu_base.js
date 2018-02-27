@@ -268,6 +268,11 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
             * @type String
             */
             /**
+             * @name dxMenuBaseItemTemplate_html
+             * @publicName html
+             * @type String
+             */
+            /**
             * @name dxMenuBaseItemTemplate_items
             * @publicName items
             * @type Array<dxMenuBaseItemTemplate>
@@ -385,7 +390,7 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
             $itemContainer = $('<span>').addClass(DX_MENU_ITEM_CAPTION_CLASS),
             itemContent = typeUtils.isPlainObject(itemData) ? itemText : String(itemData);
 
-        return itemText && $itemContainer.html(itemContent);
+        return itemText && $itemContainer.text(itemContent);
     },
 
     _getPopoutContainer: function(itemData) {
