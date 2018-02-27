@@ -1,10 +1,10 @@
 "use strict";
 
-var jQuery = require("jquery"),
-    support = require("../core/utils/support"),
+var support = require("../core/utils/support"),
     each = require("../core/utils/iterator").each,
     devices = require("../core/devices"),
     registerEvent = require("./core/event_registrator"),
+    domAdapter = require("../core/dom_adapter"),
     TouchStrategy = require("./pointer/touch"),
     MsPointerStrategy = require("./pointer/mspointer"),
     MouseStrategy = require("./pointer/mouse"),
@@ -96,17 +96,17 @@ each(EventStrategy.map, function(pointerEvent, originalEvents) {
     registerEvent(pointerEvent, new EventStrategy(pointerEvent, originalEvents));
 });
 
-if(jQuery && support.touch) {
+if(support.touch) {
     each([TouchStrategy.map["dxpointerdown"], TouchStrategy.map["dxpointermove"]], function(_, eventName) {
-        jQuery.event.special[eventName] = {
-            setup: function(_, namespaces, handler) {
+        registerEvent(eventName, {
+            setup: function(element, data, namespaces, handler) {
                 if(namespaces.indexOf(TouchStrategy.POINTER_EVENTS_NAMESPACE) > -1) {
-                    this.addEventListener(eventName, handler, { passive: false });
-                } else {
-                    return false;
+                    domAdapter.listen(element, eventName, handler, { passive: false });
+                    return true;
                 }
+                return false;
             }
-        };
+        });
     });
 }
 

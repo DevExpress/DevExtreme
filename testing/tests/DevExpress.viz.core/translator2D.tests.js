@@ -2245,7 +2245,6 @@ QUnit.test('scroll. Scrolling page at right side (right edge of the chart, event
 
     translator = new translator2DModule.Translator2D(range, canvas, { isHorizontal: true, breaksSize: 0 });
 
-    assert.ok(translator);
     assert.ok(!translator.checkGestureEventsForScaleEdges(SCROLL_THRESHOLD, 1, -23, 1, {}));
 });
 
@@ -2256,7 +2255,6 @@ QUnit.test('scroll. Scrolling chart at left side (right edge of the chart, event
 
     translator = new translator2DModule.Translator2D(range, canvas, { isHorizontal: true, breaksSize: 0 });
 
-    assert.ok(translator);
     assert.ok(translator.checkGestureEventsForScaleEdges(SCROLL_THRESHOLD, 1, 23, 1, {}));
 });
 
@@ -2267,7 +2265,6 @@ QUnit.test('scroll. Scrolling page at left side (left edge of the chart,event no
 
     translator = new translator2DModule.Translator2D(range, canvas, { isHorizontal: true, breaksSize: 0 });
 
-    assert.ok(translator);
     assert.ok(!translator.checkGestureEventsForScaleEdges(SCROLL_THRESHOLD, 1, 23, 1, {}));
 });
 
@@ -2278,7 +2275,6 @@ QUnit.test('scroll. Scrolling chart at right side (right edge of the chart, even
 
     translator = new translator2DModule.Translator2D(range, canvas, { isHorizontal: true, breaksSize: 0 });
 
-    assert.ok(translator);
     assert.ok(translator.checkGestureEventsForScaleEdges(SCROLL_THRESHOLD, 1, -23, 1, {}));
 });
 
@@ -2289,7 +2285,6 @@ QUnit.test('scroll. Rotated logarithmic chart. Scrolling page at bottom side (bo
 
     translator = new translator2DModule.Translator2D(range, canvas, { isHorizontal: true, breaksSize: 0 });
 
-    assert.ok(translator);
     assert.ok(!translator.checkGestureEventsForScaleEdges(SCROLL_THRESHOLD, 1, -23, 1, {}));
 });
 
@@ -2300,7 +2295,6 @@ QUnit.test('scroll. Rotated logarithmic chart. Scrolling chart at top side (bott
 
     translator = new translator2DModule.Translator2D(range, canvas, { isHorizontal: true, breaksSize: 0 });
 
-    assert.ok(translator);
     assert.ok(translator.checkGestureEventsForScaleEdges(SCROLL_THRESHOLD, 1, 23, 1, {}));
 });
 
@@ -2311,7 +2305,6 @@ QUnit.test('scroll. Rotated logarithmic chart with inverted axis. Scrolling page
 
     translator = new translator2DModule.Translator2D(range, canvas, { isHorizontal: true, breaksSize: 0 });
 
-    assert.ok(translator);
     assert.ok(!translator.checkGestureEventsForScaleEdges(SCROLL_THRESHOLD, 1, 23, 1, {}));
 });
 
@@ -2322,7 +2315,6 @@ QUnit.test('scroll. Rotated logarithmic chart with inverted axis. Scrolling char
 
     translator = new translator2DModule.Translator2D(range, canvas, { isHorizontal: true, breaksSize: 0 });
 
-    assert.ok(translator);
     assert.ok(translator.checkGestureEventsForScaleEdges(SCROLL_THRESHOLD, 1, -23, 1, {}));
 });
 
@@ -2333,7 +2325,6 @@ QUnit.test('scroll. Scrolling chart at center (event canceled)', function(assert
 
     translator = new translator2DModule.Translator2D(range, canvas, { isHorizontal: true, breaksSize: 0 });
 
-    assert.ok(translator);
     assert.ok(translator.checkGestureEventsForScaleEdges(SCROLL_THRESHOLD, 1, -23, 1, {}));
 });
 
@@ -2344,7 +2335,6 @@ QUnit.test('scroll. Scrolling chart at center by 2 fingers (event canceled)', fu
 
     translator = new translator2DModule.Translator2D(range, canvas, { isHorizontal: true, breaksSize: 0 });
 
-    assert.ok(translator);
     assert.ok(translator.checkGestureEventsForScaleEdges(SCROLL_THRESHOLD, 1, -23, 2, {}));
 });
 
@@ -2355,7 +2345,6 @@ QUnit.test('zoom. Zooming out chart (event canceled)', function(assert) {
 
     translator = new translator2DModule.Translator2D(range, canvas, { isHorizontal: true, breaksSize: 0 });
 
-    assert.ok(translator);
     assert.ok(translator.checkGestureEventsForScaleEdges(SCROLL_THRESHOLD, 0.8, 0, 2, {}));
 });
 
@@ -2366,7 +2355,6 @@ QUnit.test('zoom. Zooming in chart (event canceled)', function(assert) {
 
     translator = new translator2DModule.Translator2D(range, canvas, { isHorizontal: true, breaksSize: 0 });
 
-    assert.ok(translator);
     assert.ok(translator.checkGestureEventsForScaleEdges(SCROLL_THRESHOLD, 1.2, 0, 2, {}));
 });
 
@@ -2377,7 +2365,6 @@ QUnit.test('zoom. Zooming in chart (scale 1:1, event canceled)', function(assert
 
     translator = new translator2DModule.Translator2D(range, canvas, { isHorizontal: true, breaksSize: 0 });
 
-    assert.ok(translator);
     assert.ok(translator.checkGestureEventsForScaleEdges(SCROLL_THRESHOLD, 1.2, 0, 2, {}));
 });
 
@@ -2388,7 +2375,6 @@ QUnit.test('zoom. Zooming out page (scale 1:1, event not canceled)', function(as
 
     translator = new translator2DModule.Translator2D(range, canvas, { isHorizontal: true, breaksSize: 0 });
 
-    assert.ok(translator);
     assert.ok(!translator.checkGestureEventsForScaleEdges(SCROLL_THRESHOLD, 0.8, 0, 2, {}));
 });
 
