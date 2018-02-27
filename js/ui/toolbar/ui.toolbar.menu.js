@@ -13,7 +13,7 @@ var TOOLBAR_MENU_ACTION_CLASS = "dx-toolbar-menu-action",
 var ToolbarMenu = List.inherit({
     _activeStateUnit: "." + TOOLBAR_MENU_ACTION_CLASS,
 
-    _render: function() {
+    _initMarkup: function() {
         this._renderSections();
         this.callBase();
     },
