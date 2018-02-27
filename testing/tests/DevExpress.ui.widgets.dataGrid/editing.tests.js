@@ -9693,6 +9693,35 @@ QUnit.test("isEditing parameter of the row when there is grouping and edit mode 
     assert.ok(this.dataController.items()[1].isEditing, "second item is edited");
 });
 
+//T607622
+QUnit.test("Editable data should not be reset in batch edit mode when collapsing a group row", function(assert) {
+    //arrange
+    var that = this,
+        $testElement = $('#container');
+
+    that.rowsView.render($testElement);
+    that.applyOptions({
+        editing: {
+            mode: "batch",
+            allowUpdating: true
+        },
+        columns: [{ dataField: "name", groupIndex: 0 }, "age", "lastName"]
+    });
+
+    that.editCell(1, 1);
+    that.cellValue(1, "lastName", "test");
+
+    //assert
+    assert.strictEqual(that.cellValue(1, "lastName"), "test", "value of the lastName column of the first row");
+
+    //act
+    that.collapseRow(["Alex"]);
+    that.expandRow(["Alex"]);
+
+    //assert
+    assert.strictEqual(that.cellValue(1, "lastName"), "test", "value of the lastName column of the first row");
+});
+
 var generateDataSource = function(countItem, countColumn) {
     var items = [];
 

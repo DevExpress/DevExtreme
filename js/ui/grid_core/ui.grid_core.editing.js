@@ -1968,9 +1968,11 @@ module.exports = {
                 },
                 changeRowExpand: function(key) {
                     var editingController = this.getController("editing");
-                    if(editingController.isEditing()) {
+
+                    if(editingController.isEditing() && editingController.isRowEditMode()) {
                         editingController.cancelEditData();
                     }
+
                     return this.callBase.apply(this, arguments);
                 },
                 _updateItemsCore: function(change) {
