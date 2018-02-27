@@ -300,6 +300,7 @@ var CollectionWidget = BaseCollectionWidget.inherit({
     },
 
     _initMarkup: function() {
+        this._rendering = true;
         if(!this._dataSource || !this._dataSource.isLoading()) {
             this._syncSelectionOptions();
             this._normalizeSelectedItems();
@@ -308,8 +309,6 @@ var CollectionWidget = BaseCollectionWidget.inherit({
         this.callBase();
     },
     _render: function() {
-        this._rendering = true;
-
         this.callBase();
 
         var selectedItemIndices = this._getSelectedItemIndices();
