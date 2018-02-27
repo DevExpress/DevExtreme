@@ -300,26 +300,15 @@ var CollectionWidget = BaseCollectionWidget.inherit({
     },
 
     _initMarkup: function() {
-        this._rendering = true;
-
         if(!this._dataSource || !this._dataSource.isLoading()) {
             this._syncSelectionOptions();
             this._normalizeSelectedItems();
         }
 
-        // var selectedItemIndices = this._getSelectedItemIndices();
-        // this._renderSelection(selectedItemIndices, []);
-
-        // this._rendering = false;
         this.callBase();
     },
     _render: function() {
         this._rendering = true;
-
-        // if(!this._dataSource || !this._dataSource.isLoading()) {
-        //     this._syncSelectionOptions();
-        //     this._normalizeSelectedItems();
-        // }
 
         this.callBase();
 

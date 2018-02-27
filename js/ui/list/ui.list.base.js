@@ -697,20 +697,12 @@ var ListBase = CollectionWidget.inherit({
             this._scrollView && this._scrollView.scrollTo(0);
         }
 
-        var items = this.option("items");
-        if(this._initialized && items && this._shouldAppendItems()) {
-            this._renderedItemsCount = items.length;
-            if(!this._isLastPage() || this._startIndexForAppendedItems !== -1) {
-                this.option().items = items.concat(newItems.slice(this._startIndexForAppendedItems));
-            }
+        this.callBase(newItems);
+    },
 
-            this._forgetNextPageLoading();
-            this._prepareContent();
-            this._fireContentReadyAction();
-            this._renderFocusTarget();
-        } else {
-            this.option("items", newItems);
-        }
+    _refreshContent: function() {
+        this._prepareContent();
+        this._fireContentReadyAction();
     },
 
     _hideLoadingIfLoadIndicationOff: function() {
@@ -853,14 +845,6 @@ var ListBase = CollectionWidget.inherit({
     _renderContent: function() {
         this._fireContentReadyAction();
     },
-    // _render: function() {
-    //     this._itemElementsCache = $();
-
-    //     this.$element().addClass(LIST_CLASS);
-    //     this.callBase();
-
-    //     this.option("useInkRipple") && this._renderInkRipple();
-    // },
 
     _renderInkRipple: function() {
         this._inkRipple = inkRipple.render();

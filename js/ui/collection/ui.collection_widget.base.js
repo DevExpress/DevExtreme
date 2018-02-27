@@ -627,11 +627,15 @@ var CollectionWidget = Widget.inherit({
             }
 
             this._forgetNextPageLoading();
-            this._renderContent();
+            this._refreshContent();
             this._renderFocusTarget();
         } else {
             this.option("items", newItems);
         }
+    },
+
+    _refreshContent: function() {
+        this._renderContent();
     },
 
     _dataSourceLoadErrorHandler: function() {
@@ -712,11 +716,6 @@ var CollectionWidget = Widget.inherit({
     },
     _render: function() {
         this.callBase();
-        // this.onFocusedItemChanged = this._createActionByOption("onFocusedItemChanged");
-
-        // this.callBase();
-
-        // this.$element().addClass(COLLECTION_CLASS);
 
         this._attachClickEvent();
         this._attachHoldEvent();
