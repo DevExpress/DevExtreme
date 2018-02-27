@@ -7,7 +7,6 @@ var $ = require("../core/renderer"),
     fx = require("../animation/fx"),
     translator = require("../animation/translator"),
     Class = require("../core/class"),
-    windowUtils = require("../core/utils/window"),
     extend = require("../core/utils/extend").extend,
     inArray = require("../core/utils/array").inArray,
     each = require("../core/utils/iterator").each,
@@ -943,7 +942,7 @@ var Panorama = CollectionWidget.inherit({
     },
 
     _renderSelection: function() {
-        if(!this._indexChangeOnAnimation && windowUtils.hasWindow()) {
+        if(!this._indexChangeOnAnimation) {
             this._updatePositions();
         }
     },
