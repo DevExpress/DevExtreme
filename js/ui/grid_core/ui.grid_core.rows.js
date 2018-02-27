@@ -894,9 +894,8 @@ module.exports = {
                         $element = that.element();
 
                     $element.addClass(that.addWidgetPrefix(ROWS_VIEW_CLASS))
-                        .toggleClass(that.addWidgetPrefix(NOWRAP_CLASS), !that.option("wordWrapEnabled"));
-
-                    that.setAria("role", "presentation", $element);
+                        .toggleClass(that.addWidgetPrefix(NOWRAP_CLASS), !that.option("wordWrapEnabled"))
+                        .attr("role", "presentation");
 
                     $table = that._renderTable({ change: change });
                     that._updateContent($table, change);

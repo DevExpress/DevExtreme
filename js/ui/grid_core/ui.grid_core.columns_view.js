@@ -189,9 +189,8 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         var that = this,
             $table = $("<table>")
                 .addClass(that.addWidgetPrefix(TABLE_CLASS))
-                .addClass(that.addWidgetPrefix(TABLE_FIXED_CLASS));
-
-        this.setAria("role", "presentation", $table);
+                .addClass(that.addWidgetPrefix(TABLE_FIXED_CLASS))
+                .attr("role", "presentation");
 
         if(columns) {
             $table.append(that._createColGroup(columns));
