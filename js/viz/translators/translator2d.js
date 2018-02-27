@@ -132,16 +132,58 @@ function getCanvasBounds(range) {
     return { base: base, rangeMin: min, rangeMax: max, rangeMinVisible: minVisible, rangeMaxVisible: maxVisible };
 }
 
+function getEqualityCorrection(range) {
+    var isDateTime = typeUtils.isDate(range.min) || typeUtils.isDate(range.max);
+
+    return isDateTime ? DATETIME_EQUALITY_CORRECTION : NUMBER_EQUALITY_CORRECTION;
+}
+
 function zoomArgsIsEqualCanvas(zoomArgs) {
     var that = this,
         businessRange = that.getBusinessRange(),
         canvasOptions = getCanvasBounds(businessRange),
-        isDateTime = typeUtils.isDate(businessRange.min) || typeUtils.isDate(businessRange.max),
-        correctionPrecision = (isDateTime ? DATETIME_EQUALITY_CORRECTION : NUMBER_EQUALITY_CORRECTION) / 100;
+        correctionPrecision = getEqualityCorrection(businessRange) / 100;
 
     return zoomArgs && valuesIsDefinedAndEqual(businessRange.min, businessRange.max) &&
         _abs(zoomArgs.min - canvasOptions.rangeMin) <= correctionPrecision &&
         _abs(zoomArgs.max - canvasOptions.rangeMax) <= correctionPrecision;
+}
+
+function checkGestureEventsForScaleEdges(scrollThreshold, scale, scroll, touches, zoomArgs) {
+    var that = this,
+        businessRange = that.getBusinessRange(),
+        scrollBarNearMin = that.scrollHasExtremePosition(scrollThreshold, false),
+        scrollBarNearMax = that.scrollHasExtremePosition(scrollThreshold, true),
+        isOriginalScale = that.checkScrollForOriginalScale(scrollThreshold),
+        scalingEventAtMin = scrollBarNearMin && ((businessRange.rotated ? scroll > 0 : scroll < 0) || scale !== 1),
+        scalingEventAtMax = scrollBarNearMax && ((businessRange.rotated ? scroll < 0 : scroll > 0) || scale !== 1);
+
+    return (touches === 2 && scale === 1) || (zoomArgs && (!scrollBarNearMin && !scrollBarNearMax)) ||
+        (!isOriginalScale && (scalingEventAtMin || scalingEventAtMax)) || (isOriginalScale && scale > 1);
+}
+
+function checkScrollForOriginalScale(scrollThreshold) {
+    return this.scrollHasExtremePosition(scrollThreshold, false) && this.scrollHasExtremePosition(scrollThreshold, true);
+}
+
+function scrollHasExtremePosition(scrollThreshold, isMax) {
+    var that = this,
+        businessRange = that.getBusinessRange(),
+        isSinglePoint = businessRange.min === businessRange.max,
+        isMaxExtremum = (!businessRange.invert && isMax) || (businessRange.invert && !isMax),
+        axisExtremum = isMaxExtremum ? businessRange.max : businessRange.min,
+        scrollExtremum = isMaxExtremum ? businessRange.maxVisible : businessRange.minVisible,
+        equalityCorrection = axisExtremum.valueOf() === scrollExtremum.valueOf() ? 0 : getEqualityCorrection(businessRange),
+        distanceToExtremum;
+
+    if(businessRange.axisType === "logarithmic") {
+        axisExtremum = vizUtils.getLog(axisExtremum, businessRange.base);
+        scrollExtremum = vizUtils.getLog(scrollExtremum, businessRange.base);
+    }
+    distanceToExtremum = isSinglePoint ?
+        Math.abs((axisExtremum + ((isMaxExtremum ? 1 : -1) * equalityCorrection)) - scrollExtremum) :
+        Math.abs(axisExtremum - scrollExtremum);
+    return distanceToExtremum * that._canvasOptions.ratioOfCanvasRange < scrollThreshold;
 }
 
 function getCheckingMethodsAboutBreaks(inverted) {
@@ -425,6 +467,9 @@ _Translator2d.prototype = {
     zoom: _noop,
     getMinScale: _noop,
     zoomArgsIsEqualCanvas: zoomArgsIsEqualCanvas,
+    checkScrollForOriginalScale: checkScrollForOriginalScale,
+    scrollHasExtremePosition: scrollHasExtremePosition,
+    checkGestureEventsForScaleEdges: checkGestureEventsForScaleEdges,
 
     // dxRangeSelector specific
 

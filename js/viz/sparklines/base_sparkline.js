@@ -271,7 +271,6 @@ var mouseMoveEvents = {
 
 var active_touch_tooltip_widget = null,
     touchStartTooltipProcessing = function(event) {
-        event.preventDefault();
         var widget = active_touch_tooltip_widget;
         if(widget && widget !== event.data.widget) {
             widget._hideTooltip(DEFAULT_EVENTS_DELAY);
