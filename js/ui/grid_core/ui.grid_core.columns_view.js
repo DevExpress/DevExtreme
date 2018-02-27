@@ -151,12 +151,38 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
     _createRow: function(rowObject) {
         var $element = $("<tr>").addClass(ROW_CLASS);
         if(rowObject) {
-            this.component.setAria({
-                "role": "row",
-                "rowindex": rowObject.rowIndex + 1
-            }, $element);
+            var component = this.component,
+                accessibilityNavigation = component.option("accessibilityNavigation");
+            if(accessibilityNavigation && component.pageIndex) {
+                this.setRowAccessibilityAttributes(rowObject, $element);
+            } else {
+                this.component.setAria({ "role": "row" }, $element);
+            }
         }
         return $element;
+    },
+
+    setRowAccessibilityAttributes: function(rowObject, $element) {
+        var component = this.component,
+            isPagerMode = component.option("scrolling.mode") === "standard",
+            rowIndex = rowObject.rowIndex + 1,
+            lastPageIndex = component.pageIndex() * component.pageSize();
+        if(isPagerMode) {
+            rowIndex = lastPageIndex + rowIndex;
+        } else {
+            ///////////////////////////////////////////////////////////////////
+            // TODO remove and use it from the virtualScrollingController
+            if(rowObject.rowIndex < lastPageIndex) {
+                var pageLoaded = Math.ceil(rowObject.rowIndex / component.pageSize());
+                var pagesNotLoaded = component.pageIndex() - pageLoaded + 1;
+                var skippedPages = pagesNotLoaded * component.pageSize();
+                rowIndex = rowIndex + skippedPages;
+            }
+        }
+        this.component.setAria({
+            "role": "row",
+            "rowindex": rowIndex
+        }, $element);
     },
 
     _createTable: function(columns) {
