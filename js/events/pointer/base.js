@@ -96,6 +96,6 @@ var BaseStrategy = Class.inherit({
         eventsEngine.off(element, this._originalEvents);
     }
 });
-
+BaseStrategy.POINTER_EVENTS_NAMESPACE = POINTER_EVENTS_NAMESPACE;
 
 module.exports = BaseStrategy;

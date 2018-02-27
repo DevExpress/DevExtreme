@@ -413,6 +413,14 @@ var Overlay = Widget.inherit({
                     }
                 }
             }
+        }, {
+            device: function() {
+                return !windowUtils.hasWindow();
+            },
+            options: {
+                width: null,
+                height: null
+            }
         }]);
     },
 
@@ -1262,9 +1270,10 @@ var Overlay = Widget.inherit({
             maxHeight: this._getOptionValue("maxHeight", content)
         });
 
-        this._$content
-            .outerWidth(this._getOptionValue("width", content))
-            .outerHeight(this._getOptionValue("height", content));
+        this._$content.css({
+            width: this._getOptionValue("width", content),
+            height: this._getOptionValue("height", content)
+        });
     },
 
     _renderPosition: function() {

@@ -244,15 +244,21 @@ module.exports = {
 
                         that.callBase.apply(that, arguments);
 
-                        if(that._isFixedColumns && options.rowType === "detail" && options.column.command === "detail") {
+                        if(options.rowType === "detail" && options.column.command === "detail") {
                             $cell.find("." + that.getWidgetContainerClass()).each(function() {
                                 var dataGrid = $(this).parent().data("dxDataGrid");
 
                                 if(dataGrid) {
                                     dataGrid.on("contentReady", function() {
-                                        var $rows = $(component.getRowElement(options.rowIndex));
-                                        if($rows && $rows.length === 2 && $rows.eq(0).height() !== $rows.eq(1).height()) {
-                                            component.updateDimensions();
+                                        if(that._isFixedColumns) {
+                                            var $rows = $(component.getRowElement(options.rowIndex));
+                                            if($rows && $rows.length === 2 && $rows.eq(0).height() !== $rows.eq(1).height()) {
+                                                component.updateDimensions();
+                                            }
+                                        } else {
+                                            var scrollable = component.getScrollable();
+                                            //T607490
+                                            scrollable && scrollable.update();
                                         }
                                     });
                                 }

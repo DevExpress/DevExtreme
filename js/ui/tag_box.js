@@ -588,7 +588,6 @@ var TagBox = SelectBox.inherit({
             .toggleClass(TAGBOX_SINGLE_LINE_CLASS, isSingleLineMode);
 
         // TODO: texteditor render methods order research
-        this._toggleRTLDirection(this.option("rtlEnabled"));
         this._initTagTemplate();
 
         this.callBase();

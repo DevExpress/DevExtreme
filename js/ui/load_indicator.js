@@ -224,7 +224,7 @@ var LoadIndicator = Widget.inherit({
             this._$wrapper.css({
                 height: minDimension,
                 width: minDimension,
-                "font-size": minDimension
+                fontSize: minDimension
             });
         }
     },

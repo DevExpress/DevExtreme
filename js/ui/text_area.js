@@ -180,12 +180,11 @@ var TextArea = TextBox.inherit({
         var maxHeight = this.option("maxHeight");
 
         $element.css({
-            "minHeight": minHeight !== undefined ? minHeight : "",
-            "maxHeight": maxHeight !== undefined ? maxHeight : ""
+            minHeight: minHeight !== undefined ? minHeight : "",
+            maxHeight: maxHeight !== undefined ? maxHeight : "",
+            width: width,
+            height: height
         });
-
-        $element.outerWidth(width);
-        $element.outerHeight(height);
     },
 
     _resetDimensions: function() {

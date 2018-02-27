@@ -277,6 +277,23 @@ QUnit.test('Remove extra classes from item frame if content is changed', functio
     assert.notOk($item.hasClass(DX_ITEM_HAS_TEXT), 'dx-menu-item-has-text class was removed');
 });
 
+QUnit.test("Encode text for default item template", function(assert) {
+    var menuBase = createMenu({
+            items: [{ text: "<b>Test item</b>" }]
+        }),
+        $element = menuBase.element;
+
+    assert.equal($element.find(".dx-menu-item-text").first().text(), "<b>Test item</b>");
+});
+
+QUnit.test("Encoding is not used for html parameter in default item template", function(assert) {
+    var menuBase = createMenu({
+            items: [{ html: "<b>Test item</b>" }]
+        }),
+        $element = menuBase.element;
+
+    assert.equal($element.find(".dx-menu-item-content").first().text(), "Test item");
+});
 
 QUnit.module('Menu tests', {
     beforeEach: function() {

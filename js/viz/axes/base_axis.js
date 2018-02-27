@@ -1317,11 +1317,13 @@ Axis.prototype = {
                     marginValue = _max(marginValue, maxMinDistance * (marginSizeMultiplier > 1 ? marginSizeMultiplier / 10 : marginSizeMultiplier));
                 }
 
-                minVisible = addMargin(minVisible, -marginValue, minValueMargin);
-                maxVisible = addMargin(maxVisible, marginValue, maxValueMargin);
-                maxMinDistance = maxVisible - minVisible;
-                minVisible = correctMarginExtremum(minVisible, margins, maxMinDistance, _math.floor);
-                maxVisible = correctMarginExtremum(maxVisible, margins, maxMinDistance, _math.ceil);
+                if(maxMinDistance !== 0) {
+                    minVisible = addMargin(minVisible, -marginValue, minValueMargin);
+                    maxVisible = addMargin(maxVisible, marginValue, maxValueMargin);
+                    maxMinDistance = maxVisible - minVisible;
+                    minVisible = correctMarginExtremum(minVisible, margins, maxMinDistance, _math.floor);
+                    maxVisible = correctMarginExtremum(maxVisible, margins, maxMinDistance, _math.ceil);
+                }
             }
 
             range.addRange({

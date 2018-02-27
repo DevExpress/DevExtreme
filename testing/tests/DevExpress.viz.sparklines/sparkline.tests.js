@@ -119,6 +119,7 @@ QUnit.begin(function() {
     QUnit.test('Create canvas when size option is defined', function(assert) {
         this.createSparkline({
             dataSource: [1],
+            pointSize: 0,
             size: {
                 width: 250,
                 height: 30
@@ -128,8 +129,8 @@ QUnit.begin(function() {
         var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
             valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
 
-        assert.deepEqual(argTranslator.update.lastCall.args[1], { width: 250, height: 30, top: 3, bottom: 3, left: 5, right: 5 }, 'Canvas object is correct');
-        assert.deepEqual(valTranslator.update.lastCall.args[1], { width: 250, height: 30, top: 3, bottom: 3, left: 5, right: 5 }, 'Canvas object is correct');
+        assert.deepEqual(argTranslator.update.lastCall.args[1], { width: 250, height: 30, top: 0, bottom: 0, left: 0, right: 0 }, 'Canvas object is correct');
+        assert.deepEqual(valTranslator.update.lastCall.args[1], { width: 250, height: 30, top: 0, bottom: 0, left: 0, right: 0 }, 'Canvas object is correct');
         assert.equal(this.renderer.resize.callCount, 1);
         assert.deepEqual(this.renderer.resize.firstCall.args, [250, 30], 'Pass canvas width and height to renderer');
     });
@@ -152,37 +153,145 @@ QUnit.begin(function() {
         var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
             valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
 
-        assert.deepEqual(argTranslator.update.lastCall.args[1], { width: 250, height: 30, top: 1, bottom: 2, left: 3, right: 4 }, 'Canvas object is correct');
-        assert.deepEqual(valTranslator.update.lastCall.args[1], { width: 250, height: 30, top: 1, bottom: 2, left: 3, right: 4 }, 'Canvas object is correct');
+        assert.deepEqual(argTranslator.update.lastCall.args[1], { width: 250, height: 30, top: 5, bottom: 6, left: 7, right: 8 }, 'Canvas object is correct');
+        assert.deepEqual(valTranslator.update.lastCall.args[1], { width: 250, height: 30, top: 5, bottom: 6, left: 7, right: 8 }, 'Canvas object is correct');
         assert.equal(this.renderer.resize.callCount, 1);
         assert.deepEqual(this.renderer.resize.firstCall.args, [250, 30], 'Pass canvas width and height to renderer');
     });
 
     QUnit.test('Create canvas when container size is defined', function(assert) {
         this.createSparkline({
-            dataSource: [1]
+            dataSource: [1],
+            pointSize: 0
         });
 
         var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
             valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
 
-        assert.deepEqual(argTranslator.update.lastCall.args[1], { width: 250, height: 30, top: 3, bottom: 3, left: 5, right: 5 }, 'Canvas object is correct');
-        assert.deepEqual(valTranslator.update.lastCall.args[1], { width: 250, height: 30, top: 3, bottom: 3, left: 5, right: 5 }, 'Canvas object is correct');
+        assert.deepEqual(argTranslator.update.lastCall.args[1], { width: 250, height: 30, top: 0, bottom: 0, left: 0, right: 0 }, 'Canvas object is correct');
+        assert.deepEqual(valTranslator.update.lastCall.args[1], { width: 250, height: 30, top: 0, bottom: 0, left: 0, right: 0 }, 'Canvas object is correct');
         assert.equal(this.renderer.resize.callCount, 1);
         assert.deepEqual(this.renderer.resize.firstCall.args, [250, 30], 'Pass canvas width and height to renderer');
+    });
+
+    //T607927 start
+    QUnit.test("Create canvas with big point size - canvas should have margins for point size", function(assert) {
+        this.createSparkline({
+            dataSource: [1],
+            pointSize: 21,
+            showFirstLast: true,
+            showMinMax: true
+        });
+
+        var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
+            valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
+
+        assert.deepEqual(argTranslator.update.lastCall.args[1], { width: 250, height: 30, top: 13, bottom: 13, left: 13, right: 13 }, 'Canvas object is correct');
+        assert.deepEqual(valTranslator.update.lastCall.args[1], { width: 250, height: 30, top: 13, bottom: 13, left: 13, right: 13 }, 'Canvas object is correct');
+    });
+
+    QUnit.test("Create canvas with big point size and type is bar - canvas should not change default margins", function(assert) {
+        this.createSparkline({
+            dataSource: [1],
+            pointSize: 22,
+            type: "bar"
+        });
+
+        var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
+            valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
+
+        assert.deepEqual(argTranslator.update.lastCall.args[1], { width: 250, height: 30, top: 0, bottom: 0, left: 0, right: 0 }, 'Canvas object is correct');
+        assert.deepEqual(valTranslator.update.lastCall.args[1], { width: 250, height: 30, top: 0, bottom: 0, left: 0, right: 0 }, 'Canvas object is correct');
+    });
+
+    QUnit.test("Create canvas with big point size and type is winloss - canvas should not change default margins", function(assert) {
+        this.createSparkline({
+            dataSource: [1],
+            pointSize: 22,
+            type: "winloss"
+        });
+
+        var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
+            valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
+
+        assert.deepEqual(argTranslator.update.lastCall.args[1], { width: 250, height: 30, top: 0, bottom: 0, left: 0, right: 0 }, 'Canvas object is correct');
+        assert.deepEqual(valTranslator.update.lastCall.args[1], { width: 250, height: 30, top: 0, bottom: 0, left: 0, right: 0 }, 'Canvas object is correct');
+    });
+
+    QUnit.test("Create canvas with big point size, showFirstLast and showMinMax are false - canvas shouldn't have margins for point size", function(assert) {
+        this.createSparkline({
+            dataSource: [1],
+            pointSize: 21,
+            showFirstLast: false,
+            showMinMax: false
+        });
+
+        var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
+            valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
+
+        assert.deepEqual(argTranslator.update.lastCall.args[1], { width: 250, height: 30, top: 0, bottom: 0, left: 0, right: 0 }, 'Canvas object is correct');
+        assert.deepEqual(valTranslator.update.lastCall.args[1], { width: 250, height: 30, top: 0, bottom: 0, left: 0, right: 0 }, 'Canvas object is correct');
+    });
+
+    QUnit.test("Create canvas with big point size, showFirstLast is false, showMinMax is true - canvas should have margins for point size", function(assert) {
+        this.createSparkline({
+            dataSource: [1],
+            pointSize: 21,
+            showFirstLast: false,
+            showMinMax: true
+        });
+
+        var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
+            valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
+
+        assert.deepEqual(argTranslator.update.lastCall.args[1], { width: 250, height: 30, top: 13, bottom: 13, left: 13, right: 13 }, 'Canvas object is correct');
+        assert.deepEqual(valTranslator.update.lastCall.args[1], { width: 250, height: 30, top: 13, bottom: 13, left: 13, right: 13 }, 'Canvas object is correct');
+    });
+
+    QUnit.test("Create canvas with big point size, showMinMax is false, showFirstLast is true  - canvas should have margins for point size", function(assert) {
+        this.createSparkline({
+            dataSource: [1],
+            pointSize: 21,
+            showFirstLast: true,
+            showMinMax: false
+        });
+
+        var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
+            valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
+
+        assert.deepEqual(argTranslator.update.lastCall.args[1], { width: 250, height: 30, top: 13, bottom: 13, left: 13, right: 13 }, 'Canvas object is correct');
+        assert.deepEqual(valTranslator.update.lastCall.args[1], { width: 250, height: 30, top: 13, bottom: 13, left: 13, right: 13 }, 'Canvas object is correct');
+    });
+    //T607927 end
+
+    QUnit.test("Create canvas with big point size and update theme - canvas shouldn't decrease", function(assert) {
+        var sparkline = this.createSparkline({
+            dataSource: [1],
+            pointSize: 21,
+            showFirstLast: true,
+            showMinMax: true
+        });
+
+        sparkline.option({ theme: 'myTheme' });
+
+        var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
+            valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
+
+        assert.deepEqual(argTranslator.update.lastCall.args[1], { width: 250, height: 30, top: 13, bottom: 13, left: 13, right: 13 }, 'Canvas object is correct');
+        assert.deepEqual(valTranslator.update.lastCall.args[1], { width: 250, height: 30, top: 13, bottom: 13, left: 13, right: 13 }, 'Canvas object is correct');
     });
 
     //T124801
     QUnit.test('Create canvas when container size is not defined', function(assert) {
         var container = $('<div style="width: 100px">').appendTo(this.$container);
 
-        this.createSparkline({ dataSource: [1] }, container);
+        this.createSparkline({ dataSource: [1], pointSize: 0 }, container);
 
         var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
             valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
 
-        assert.deepEqual(argTranslator.update.lastCall.args[1], { width: 100, height: 30, top: 3, bottom: 3, left: 5, right: 5 }, 'Canvas object is correct');
-        assert.deepEqual(valTranslator.update.lastCall.args[1], { width: 100, height: 30, top: 3, bottom: 3, left: 5, right: 5 }, 'Canvas object is correct');
+        assert.deepEqual(argTranslator.update.lastCall.args[1], { width: 100, height: 30, top: 0, bottom: 0, left: 0, right: 0 }, 'Canvas object is correct');
+        assert.deepEqual(valTranslator.update.lastCall.args[1], { width: 100, height: 30, top: 0, bottom: 0, left: 0, right: 0 }, 'Canvas object is correct');
         assert.equal(this.renderer.resize.callCount, 1);
         assert.deepEqual(this.renderer.resize.firstCall.args, [100, 30], 'Pass canvas width and height to renderer');
     });
