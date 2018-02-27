@@ -248,6 +248,22 @@ var TestPointerElement = TestElement.inherit({
         assert.equal(axisModule.Axis.getCall(0).returnValue.updateOptions.getCall(1).args[0].label.indentFromAxis, -45, "indent");
     });
 
+    QUnit.test("Pass correct base value into indicator", function(assert) {
+        var gauge = new dxLinearGauge(this.container, {
+            scale: {
+                startValue: -1000,
+                endValue: 1000
+            },
+            valueIndicator: {
+                type: "rangebar",
+                baseValue: 0
+            },
+            value: 50,
+        });
+
+        assert.strictEqual(gauge._valueIndicator.options.baseValue, 0);
+    });
+
     QUnit.module("HorizontalGauge - positioning of elements", environment);
 
     QUnit.test("Default", function(assert) {

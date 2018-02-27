@@ -74,16 +74,19 @@ var dxLinearGauge = dxGauge.inherit({
     _setupCodomain: function() {
         var that = this,
             geometry = that.option('geometry') || {},
-            vertical = _normalizeEnum(geometry.orientation) === 'vertical';
+            vertical = _normalizeEnum(geometry.orientation) === 'vertical',
+            initialStartCoord = -100,
+            initialEndCoord = 100;
 
         that._area = {
             vertical: vertical,
             x: 0,
             y: 0,
-            startCoord: -100,
-            endCoord: 100
+            startCoord: initialStartCoord,
+            endCoord: initialEndCoord
         };
         that._rangeContainer.vertical = vertical;
+        that._translator.setCodomain(initialStartCoord, initialEndCoord);
     },
 
     _getScaleLayoutValue: function() {
