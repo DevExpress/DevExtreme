@@ -56,7 +56,11 @@ var OVERLAY_CLASS = "dx-overlay",
         "bottom": { my: "bottom center", at: "bottom center" },
         "right": { my: "right center", at: "right center" },
         "left": { my: "left center", at: "left center" },
-        "center": { my: 'center', at: 'center' }
+        "center": { my: 'center', at: 'center' },
+        "right bottom": { my: 'right bottom', at: 'right bottom' },
+        "right top": { my: 'right top', at: 'right top' },
+        "left bottom": { my: 'left bottom', at: 'left bottom' },
+        "left top": { my: 'left top', at: 'left top' }
     };
 
 var realDevice = devices.real(),
@@ -181,7 +185,7 @@ var Overlay = Widget.inherit({
             /**
             * @name dxOverlayOptions_position
             * @publicName position
-            * @type string|positionConfig|function
+            * @type Enums.PositionAlignment|positionConfig|function
             * @default { my: 'center', at: 'center', of: window }
             */
             position: {
