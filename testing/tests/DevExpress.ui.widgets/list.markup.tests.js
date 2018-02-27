@@ -10,30 +10,7 @@ require("common.css!");
 
 QUnit.testStart(function() {
     var markup =
-        '<style>\
-            .dx-scrollable-native-win8.dx-scrollable-native.dx-scrollview .dx-scrollable-container .dx-scrollview-content {\
-                height: auto !important;\
-            }\
-            \
-            .dx-list-item {\
-                height: 40px;\
-            }\
-            \
-            .dx-icon-remove {\
-                width: 20px;\
-            }\
-            \
-            .dx-inkripple {\
-                position: absolute;\
-                overflow: hidden;\
-            }\
-        </style>\
-        \
-        <div id="list"></div>\
-        \
-        <div id="templated-list">\
-            <div data-options="dxTemplate: { name: \'item\' }">Item Template</div>\
-        </div>';
+        '<div id="list"></div>';
 
     $("#qunit-fixture").html(markup);
 });
@@ -55,7 +32,7 @@ QUnit.test("rendering empty message for empty list", function(assert) {
     assert.equal(element.find(".dx-empty-message").length, 1, "empty message was rendered");
 });
 
-QUnit.test("default", function(assert) {
+QUnit.test("default markup", function(assert) {
     var element = $("#list").dxList({ items: ["0", "1"] });
     assert.ok(element.hasClass(LIST_CLASS));
 
@@ -200,6 +177,20 @@ QUnit.test("items of group should be in a group body", function(assert) {
     assert.equal($groupBody.length, 1, "group items wrapper exists");
     assert.equal($groupBody.children("." + LIST_ITEM_CLASS).length, 1, "there are items in items wrapper");
 });
+
+QUnit.test("next button showing", function(assert) {
+    $("#list").dxList({
+        dataSource: {
+            store: [1, 2, 3],
+            pageSize: 2
+        },
+        showNextButton: true
+    }).dxList("instance");
+    var nextButton = $(".dx-list-next-button ", this.element);
+
+    assert.equal(nextButton.length, 1, "nextButton is showed");
+});
+
 
 QUnit.module("nested rendering");
 

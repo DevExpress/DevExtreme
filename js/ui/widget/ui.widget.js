@@ -458,7 +458,6 @@ var Widget = DOMComponent.inherit({
 
         this._renderHint();
         this.callBase();
-        //this._renderContent();
     },
 
     _render: function() {
