@@ -82,11 +82,11 @@ var Toast = Overlay.inherit({
             /**
             * @name dxToastOptions_position
             * @publicName position
-            * @type positionConfig|string
-            * @default: "bottom center"
+            * @type Enums.PositionAlignment|positionConfig|string
+            * @default: "bottom"
             * @inheritdoc
             */
-            position: "bottom center",
+            position: "bottom",
 
             /**
             * @name dxToastOptions_animation
@@ -201,18 +201,7 @@ var Toast = Overlay.inherit({
                     return device.platform === "win" && device.version && device.version[0] === 8;
                 },
                 options: {
-                    /**
-                    * @name dxToastOptions_position
-                    * @publicName position
-                    * @inheritdoc
-                    */
                     position: "top center",
-
-                    /**
-                    * @name dxToastOptions_width
-                    * @publicName width
-                    * @inheritdoc
-                    */
                     width: function() { return $(window).width(); }
                 }
             },
@@ -224,10 +213,10 @@ var Toast = Overlay.inherit({
                    /**
                    * @name dxToastOptions_position
                    * @publicName position
-                   * @default 'bottom right' @for Windows_10_Mobile
+                   * @default 'right bottom' @for Windows_10_Mobile
                    * @inheritdoc
                    */
-                    position: "bottom right",
+                    position: "right bottom",
 
                     /**
                     * @name dxToastOptions_width
@@ -254,12 +243,12 @@ var Toast = Overlay.inherit({
                     /**
                     * @name dxToastOptions_position
                     * @publicName position
-                    * @default { at: 'bottom left', my: 'bottom left', offset: '20 -20'} @for Android
+                    * @default { at: 'left bottom', my: 'left bottom', offset: '20 -20'} @for Android
                     * @inheritdoc
                     */
                     position: {
-                        at: "bottom left",
-                        my: "bottom left",
+                        at: "left bottom",
+                        my: "left bottom",
                         offset: "20 -20"
                     },
 
@@ -303,12 +292,12 @@ var Toast = Overlay.inherit({
                     /**
                     * @name dxToastOptions_position
                     * @publicName position
-                    * @default { at: 'bottom center', my: 'bottom center', offset: '0 0' } @for phones_on_Android|phones_on_Windows_10_Mobile
+                    * @default { at: 'bottom', my: 'bottom', offset: '0 0' } @for phones_on_Android|phones_on_Windows_10_Mobile
                     * @inheritdoc
                     */
                     position: {
-                        at: "bottom center",
-                        my: "bottom center",
+                        at: "bottom",
+                        my: "bottom",
                         offset: "0 0"
                     }
                 }
