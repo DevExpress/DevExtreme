@@ -57,8 +57,8 @@ var NumberBoxMask = NumberBoxBase.inherit({
             minus: that._revertSign.bind(that),
             del: that._removeHandler.bind(that),
             backspace: that._removeHandler.bind(that),
-            leftArrow: that._arrowHandler.bind(that, MOVE_FORWARD),
-            rightArrow: that._arrowHandler.bind(that, MOVE_BACKWARD),
+            leftArrow: that._arrowHandler.bind(that, MOVE_BACKWARD),
+            rightArrow: that._arrowHandler.bind(that, MOVE_FORWARD),
             home: that._moveCaretToBoundary.bind(that, MOVE_FORWARD),
             enter: that._updateFormattedValue.bind(that),
             end: that._moveCaretToBoundary.bind(that, MOVE_BACKWARD)
@@ -92,34 +92,15 @@ var NumberBoxMask = NumberBoxBase.inherit({
             return;
         }
 
-        var text = this._input().val(),
-            caret = this._caret(),
-            start = step > 0 ? 0 : caret.start,
-            end = step > 0 ? caret.start : text.length,
-            chars = text.slice(start, end);
+        var text = this._getInputVal(),
+            format = this._getFormatPattern(),
+            nextCaret = maskCaret.getCaretWithOffset(this._caret(), step);
 
-        if(this._isStub(chars, true)) {
+        if(!maskCaret.isCaretInBoundaries(nextCaret, text, format)) {
+            nextCaret = step === MOVE_FORWARD ? nextCaret.end : nextCaret.start;
             e.preventDefault();
+            this._caret(maskCaret.getCaretInBoundaries(nextCaret, text, format));
         }
-
-        if(caret.end - caret.start === text.length) {
-            this._moveCaretToBoundary(step, e);
-        }
-    },
-
-    _getClosestNonStubIndex: function(direction, start) {
-        var text = this._input().val(),
-            index = start || (direction > 0 ? 0 : text.length);
-
-        if(direction === MOVE_BACKWARD) {
-            index--;
-        }
-
-        while(this._isStub(text.charAt(index))) {
-            index += direction;
-        }
-
-        return direction < 0 ? ++index : index;
     },
 
     _moveCaretToBoundary: function(direction, e) {
@@ -127,42 +108,12 @@ var NumberBoxMask = NumberBoxBase.inherit({
             return;
         }
 
-        var index = this._getClosestNonStubIndex(direction);
+        var boundaries = maskCaret.getCaretBoundaries(this._getInputVal(), this._getFormatPattern()),
+            newCaret = maskCaret.getCaretWithOffset(direction === MOVE_FORWARD ? boundaries.start : boundaries.end, 0);
 
-        this._caret({
-            start: index,
-            end: index
-        });
+        this._caret(newCaret);
 
         e && e.preventDefault();
-    },
-
-    _getDefaultCaretPosition: function() {
-        var formatted = number.format(1, this._getFormatPattern());
-        return formatted.indexOf("1");
-    },
-
-    _moveToClosestNonStub: function(position) {
-        position = isNumeric(position) ? { start: position, end: position } : position;
-
-        var caret = position || this._caret();
-
-        if(caret.start !== caret.end) {
-            return;
-        }
-
-        var text = this._input().val(),
-            startPosition = fitIntoRange(caret.start, 0, text.length),
-            index = this._getClosestNonStubIndex(MOVE_FORWARD, startPosition);
-
-        if(index >= text.length) {
-            index = this._getClosestNonStubIndex(MOVE_BACKWARD, startPosition) || this._getDefaultCaretPosition();
-        }
-
-        this._caret({
-            start: index,
-            end: index
-        });
     },
 
     _shouldMoveCaret: function(text, caret) {
@@ -433,7 +384,9 @@ var NumberBoxMask = NumberBoxBase.inherit({
         var $input = this._input();
 
         eventsEngine.on($input, eventUtils.addNamespace(INPUT_EVENT, NUMBER_FORMATTER_NAMESPACE), this._formatValue.bind(this));
-        eventsEngine.on($input, eventUtils.addNamespace("dxclick", NUMBER_FORMATTER_NAMESPACE), this._moveToClosestNonStub.bind(this, null));
+        eventsEngine.on($input, eventUtils.addNamespace("dxclick", NUMBER_FORMATTER_NAMESPACE), function() {
+            this._caret(maskCaret.getCaretInBoundaries(this._caret(), this._getInputVal(), this._getFormatPattern()));
+        }.bind(this));
     },
 
     _forceRefreshInputValue: function() {
@@ -484,10 +437,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
 
         var caret = this._caret();
         if(caret.start !== caret.end) {
-            this._caret(maskCaret.getCaretInBoundaries({
-                start: 0,
-                end: 0
-            }, this._getInputVal(), this._getFormatPattern()));
+            this._caret(maskCaret.getCaretInBoundaries(0, this._getInputVal(), this._getFormatPattern()));
         }
 
         var newValue = -1 * ensureDefined(this._parsedValue, null);

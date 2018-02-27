@@ -33,6 +33,14 @@ QUnit.test("getCaretInBoundaries", function(assert) {
     });
 });
 
+QUnit.test("isCaretInBoundaries", function(assert) {
+    assert.equal(maskCaret.isCaretInBoundaries(3, "$ 123 st", "$ #0 st"), true);
+    assert.equal(maskCaret.isCaretInBoundaries(2, "$ 123 st", "$ #0 st"), true);
+    assert.equal(maskCaret.isCaretInBoundaries(1, "$ 123 st", "$ #0 st"), false);
+    assert.equal(maskCaret.isCaretInBoundaries(5, "$ 123 st", "$ #0 st"), true);
+    assert.equal(maskCaret.isCaretInBoundaries(7, "$ 123 st", "$ #0 st"), false);
+});
+
 QUnit.test("getCaretAfterFormat with integer part", function(assert) {
     assert.deepEqual(maskCaret.getCaretAfterFormat("1234.15", "1,234.15", 2, "#,##0.##"), {
         start: 3,

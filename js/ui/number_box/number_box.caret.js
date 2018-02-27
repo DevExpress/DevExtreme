@@ -91,6 +91,13 @@ var getCaretAfterFormat = function(text, formatted, caret, format) {
     }
 };
 
+var isCaretInBoundaries = function(caret, text, format) {
+    caret = getCaretWithOffset(caret, 0);
+
+    var boundaries = getCaretInBoundaries(caret, text, format);
+    return caret.start >= boundaries.start && caret.end <= boundaries.end;
+};
+
 var getCaretInBoundaries = function(caret, text, format) {
     caret = getCaretWithOffset(caret, 0);
 
@@ -104,6 +111,7 @@ var getCaretInBoundaries = function(caret, text, format) {
 };
 
 exports.getCaretBoundaries = getCaretBoundaries;
+exports.isCaretInBoundaries = isCaretInBoundaries;
 exports.getCaretWithOffset = getCaretWithOffset;
 exports.getCaretInBoundaries = getCaretInBoundaries;
 exports.getCaretAfterFormat = getCaretAfterFormat;
