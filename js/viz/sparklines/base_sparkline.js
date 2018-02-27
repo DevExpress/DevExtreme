@@ -127,10 +127,11 @@ var BaseSparkline = BaseWidget.inherit({
     },
 
     _updateWidgetElements: function() {
+        var canvas = this._getCorrectCanvas();
         this._updateRange();
 
-        this._argumentAxis.update(this._ranges.arg, this._canvas, this._getStick());
-        this._valueAxis.update(this._ranges.val, this._canvas);
+        this._argumentAxis.update(this._ranges.arg, canvas, this._getStick());
+        this._valueAxis.update(this._ranges.val, canvas);
     },
 
     _getStick: function() { },
