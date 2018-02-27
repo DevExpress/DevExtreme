@@ -156,9 +156,10 @@ QUnit.module("Keyboard navigation", {
                 columnHeadersView: new View("columnHeadersView")
             },
             setAria: function(name, value, $target) {
-                $target = $target || that.$element();
-                if(!$target) return;
-                domUtils.toggleAttr($target, "aria-" + name, value);
+                $target = $target || that.$element && that.$element();
+                if($target) {
+                    domUtils.toggleAttr($target, "aria-" + name, value); // TODO check this attribute!!!
+                }
             },
             option: function(name) {
                 return that.options[name];
