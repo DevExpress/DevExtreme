@@ -676,7 +676,9 @@ var subscribes = {
             appointmentDuration = endDate.getTime() - startDate.getTime(),
             daylightDiff = startDate.getTimezoneOffset() - endDate.getTimezoneOffset();
 
-        if(daylightDiff !== 0) appointmentDuration += daylightDiff * toMs("minute");
+        if(daylightDiff !== 0) {
+            appointmentDuration += daylightDiff * toMs("minute");
+        }
 
         var dayDuration = toMs("day"),
             visibleDayDuration = this._getDayDuration() * toMs("hour"),
