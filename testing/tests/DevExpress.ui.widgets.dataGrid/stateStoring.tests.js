@@ -1183,6 +1183,7 @@ QUnit.test("Hide loading when dataSource is empty", function(assert) {
     }, true);
 
     this.gridView.render(this.$element());
+    this.gridView.update();
     this.clock.tick(200);
 
     // assert

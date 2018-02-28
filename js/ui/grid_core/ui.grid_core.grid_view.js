@@ -3,6 +3,7 @@
 var $ = require("../../core/renderer"),
     modules = require("./ui.grid_core.modules"),
     commonUtils = require("../../core/utils/common"),
+    windowUtils = require("../../core/utils/window"),
     each = require("../../core/utils/iterator").each,
     typeUtils = require("../../core/utils/type"),
     messageLocalization = require("../../localization/message"),
@@ -476,8 +477,6 @@ var ResizingController = modules.ViewController.inherit({
             $testDiv.remove();
         }
 
-        rowsView.element().toggleClass("dx-empty", !that._hasHeight && dataController.items().length === 0);
-
         if(isMaxHeightApplied) {
             rowsViewHeight = rowsView.height();
         }
@@ -635,13 +634,11 @@ var GridView = modules.View.inherit({
 
         if(isFirstRender) {
             that._groupElement = $groupElement;
-            that.getController("resizing").updateSize($rootElement);
+            windowUtils.hasWindow() && that.getController("resizing").updateSize($rootElement);
             $groupElement.appendTo($rootElement);
         }
 
         that._renderViews($groupElement);
-
-        that.update();
     },
 
     update: function() {

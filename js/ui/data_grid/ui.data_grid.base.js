@@ -226,8 +226,13 @@ var DataGrid = Widget.inherit({
         }
     },
 
-    _renderContentImpl: function() {
+    _initMarkup: function() {
+        this.callBase.apply(this, arguments);
         this.getView("gridView").render(this.$element());
+    },
+
+    _renderContentImpl: function() {
+        this.getView("gridView").update();
     },
 
     _renderContent: function() {

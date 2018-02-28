@@ -169,6 +169,7 @@ function createGridView(options, userOptions) {
 
         // act
         gridView.render(testElement, this.options);
+        gridView.update();
 
         // assert
         assert.strictEqual(resizeCallCount, 1, 'valid count call update method');
@@ -228,6 +229,7 @@ function createGridView(options, userOptions) {
         });
 
         gridView.render(testElement);
+        gridView.update();
 
         var scrollableDiv = testElement.find('.dx-scrollable');
         var scrollableHeight = scrollableDiv.height();
@@ -534,6 +536,7 @@ function createGridView(options, userOptions) {
             },
             disabled: false
         }));
+        gridView.update();
 
         gridView.getController("resizing").resize();
 
@@ -744,6 +747,7 @@ function createGridView(options, userOptions) {
             },
             disabled: false
         }));
+        gridView.update();
 
         // assert
 
@@ -787,6 +791,7 @@ function createGridView(options, userOptions) {
             },
             showColumnHeaders: true
         }));
+        gridView.update();
         dataController.changed.fire({
             changeType: 'refresh'
         });
@@ -889,6 +894,7 @@ function createGridView(options, userOptions) {
 
         // act
         gridView.render($('#container'));
+        gridView.update();
 
         // assert
         assert.ok($testElement.find(".dx-datagrid-rowsview").hasClass("dx-scrollable"), "has scrollable");
@@ -1001,6 +1007,7 @@ function createGridView(options, userOptions) {
 
         // act
         gridView.render(testElement);
+        gridView.update();
 
         defaultOptions.columnsController.columnsChanged.fire({
             changeTypes: { columns: true, length: 1 },
@@ -1034,6 +1041,7 @@ function createGridView(options, userOptions) {
 
         // act
         gridView.render(testElement);
+        gridView.update();
         defaultOptions.columnsController.columnsChanged.fire({
             changeTypes: { columns: true, length: 1 },
             optionNames: { visibleWidth: true, length: 1 }
@@ -1066,6 +1074,7 @@ function createGridView(options, userOptions) {
 
         // act
         gridView.render(testElement);
+        gridView.update();
         defaultOptions.columnsController.columnsChanged.fire({
             changeTypes: { columns: true, length: 1 },
             optionNames: { visibleWidth: true, length: 1 }
@@ -1126,6 +1135,7 @@ function createGridView(options, userOptions) {
 
         // act
         gridView.render(testElement);
+        gridView.update();
         defaultOptions.columnsController.columnsChanged.fire({
             changeTypes: { columns: true, length: 1 },
             optionNames: { visibleWidth: true, length: 1 }
@@ -1180,6 +1190,7 @@ function createGridView(options, userOptions) {
 
         // act
         gridView.render(testElement);
+        gridView.update();
         defaultOptions.columnsController.columnsChanged.fire({
             changeTypes: { columns: true, length: 1 },
             optionNames: { visibleWidth: true, length: 1 }
@@ -1264,6 +1275,7 @@ function createGridView(options, userOptions) {
 
         // act
         gridView.render(testElement);
+        gridView.update();
 
         // assert
         assert.ok(that.rowsView._getTableElement().find("td").eq(1).outerWidth(true) > 30, "width second column");
@@ -1283,6 +1295,7 @@ function createGridView(options, userOptions) {
 
         // act
         gridView.render(testElement);
+        gridView.update();
         defaultOptions.columnsController.columnsChanged.fire({
             changeTypes: { columns: true, length: 1 },
             optionNames: { visibleWidth: true, length: 1 }
@@ -1378,6 +1391,7 @@ function createGridView(options, userOptions) {
 
         // act
         gridView.render(testElement);
+        gridView.update();
         defaultOptions.columnsController.columnsChanged.fire({
             changeTypes: { columns: true, length: 1 },
             optionNames: { visibleWidth: true, length: 1 }
@@ -1661,6 +1675,7 @@ function createGridView(options, userOptions) {
         this.options.showColumnLines = true;
         gridView = this.createGridView(defaultOptions, this.options),
         gridView.render(testElement);
+        gridView.update();
         defaultOptions.columnsController.columnsChanged.fire({
             changeTypes: { columns: true, length: 1 },
             optionNames: { visibleWidth: true, length: 1 }
@@ -1698,6 +1713,7 @@ function createGridView(options, userOptions) {
 
         // act
         gridView.render(testElement);
+        gridView.update();
 
         // assert
         assert.ok(stub.calledOnce);
@@ -1720,6 +1736,7 @@ function createGridView(options, userOptions) {
 
         // act
         gridView.render($testElement);
+        gridView.update();
 
         // assert
         $colElements = $testElement.find(".dx-datagrid-headers").find("col");
@@ -1748,6 +1765,7 @@ function createGridView(options, userOptions) {
 
         // act
         gridView.render($testElement);
+        gridView.update();
 
         // assert
         $colElements = $testElement.find(".dx-datagrid-headers").find("col");
@@ -1804,6 +1822,7 @@ function createGridView(options, userOptions) {
 
             // act
             gridView.render(testElement);
+            gridView.update();
 
             // assert
             fixedContent = testElement.find(".dx-datagrid-rowsview").children(".dx-datagrid-content-fixed");
@@ -1837,6 +1856,7 @@ function createGridView(options, userOptions) {
 
         // act
         gridView.render($testElement);
+        gridView.update();
         gridView.resize();
 
         $colElements = $testElement.find(".dx-datagrid-headers").children(".dx-datagrid-content-fixed").find("col");
