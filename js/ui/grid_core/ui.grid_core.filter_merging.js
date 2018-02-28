@@ -36,8 +36,6 @@ var DataControllerFilterMergingExtender = {
                 this.callBase(args);
         }
     }
-
-
 };
 
 module.exports = {

@@ -126,24 +126,12 @@ QUnit.test("filterValues with one filter expressions and with filterType 'exclud
     });
 
     //assert
-    assert.deepEqual(that.getCombinedFilter(), [["Test", "<=", 2], "or", ["Test", ">=", 5]], "combined filter");
+    assert.deepEqual(that.getCombinedFilter(), ["!", [["Test", "<=", 2], "or", ["Test", ">=", 5]]], "combined filter");
 });
 
 //T345461
 QUnit.test("invertFilterExpression", function(assert) {
-    assert.deepEqual(invertFilterExpression(["Test", "=", 1]), ["Test", "<>", 1], "invert = operation");
-    assert.deepEqual(invertFilterExpression(["Test", "<>", 1]), ["Test", "=", 1], "invert <> operation");
-    assert.deepEqual(invertFilterExpression(["Test", "<", 1]), ["Test", ">=", 1], "invert < operation");
-    assert.deepEqual(invertFilterExpression(["Test", "<=", 1]), ["Test", ">", 1], "invert <= operation");
-    assert.deepEqual(invertFilterExpression(["Test", ">", 1]), ["Test", "<=", 1], "invert > operation");
-    assert.deepEqual(invertFilterExpression(["Test", ">=", 1]), ["Test", "<", 1], "invert >= operation");
-    assert.deepEqual(invertFilterExpression(["Test", "contains", 1]), ["Test", "notcontains", 1], "invert contains operation");
-    assert.deepEqual(invertFilterExpression(["Test", "notcontains", 1]), ["Test", "contains", 1], "invert notcontains operation");
-
-    assert.deepEqual(invertFilterExpression([["Test", ">", 1], ["Test", "<", 2]]), [["Test", "<=", 1], "or", ["Test", ">=", 2]], "default group operation");
-    assert.deepEqual(invertFilterExpression([["Test", ">", 1], "and", ["Test", "<", 2]]), [["Test", "<=", 1], "or", ["Test", ">=", 2]], "and group operation");
-    assert.deepEqual(invertFilterExpression([["Test", ">", 1], "or", ["Test", "<", 2]]), [["Test", "<=", 1], "and", ["Test", ">=", 2]], "and group operation");
-    assert.deepEqual(invertFilterExpression([["Test", ">", 1], "and", ["Test", "<", 2], "or", ["Test", "=", 3]]), [["Test", "<=", 1], "or", ["Test", ">=", 2], "and", ["Test", "<>", 3]], "and and or group operation");
+    assert.deepEqual(invertFilterExpression(["Test", "=", 1]), ["!", ["Test", "=", 1]], "invert = operation");
 });
 
 //T585671

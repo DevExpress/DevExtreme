@@ -9,7 +9,6 @@ var eventsEngine = require("../../events/core/events_engine"),
     messageLocalization = require("../../localization/message"),
     allowHeaderFiltering = headerFilterCore.allowHeaderFiltering,
     clickEvent = require("../../events/click"),
-    dataUtils = require("../../data/utils"),
     dataCoreUtils = require("../../core/utils/data"),
     each = require("../../core/utils/iterator").each,
     typeUtils = require("../../core/utils/type"),
@@ -364,44 +363,8 @@ var HeaderPanelHeaderFilterExtender = extend({}, headerFilterMixin, {
     }
 });
 
-var INVERTED_BINARY_OPERATIONS = {
-    "=": "<>",
-    "<>": "=",
-    ">": "<=",
-    ">=": "<",
-    "<": ">=",
-    "<=": ">",
-    "contains": "notcontains",
-    "notcontains": "contains",
-    "startswith": "notcontains", //TODO
-    "endswith": "notcontains" //TODO
-};
-
 function invertFilterExpression(filter) {
-    var i,
-        currentGroupOperation,
-        result;
-
-    if(Array.isArray(filter[0])) {
-        result = [];
-        for(i = 0; i < filter.length; i++) {
-            if(Array.isArray(filter[i])) {
-                if(currentGroupOperation) {
-                    result.push(currentGroupOperation);
-                }
-                result.push(invertFilterExpression(filter[i]));
-                currentGroupOperation = "or";
-            } else {
-                currentGroupOperation = dataUtils.isConjunctiveOperator(filter[i]) ? "or" : "and";
-            }
-        }
-        return result;
-    }
-
-    result = dataUtils.normalizeBinaryCriterion(filter);
-    result[1] = INVERTED_BINARY_OPERATIONS[result[1]] || result[1];
-
-    return result;
+    return ["!", filter];
 }
 
 var DataControllerFilterRowExtender = {
