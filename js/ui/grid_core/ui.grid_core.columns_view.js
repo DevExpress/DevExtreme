@@ -118,22 +118,19 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
     _createCell: function(options) {
         var column = options.column,
-            alignment = column.alignment || getDefaultAlignment(this.option("rtlEnabled")),
-            isRolePresentation = options.isRolePresentation;
+            alignment = column.alignment || getDefaultAlignment(this.option("rtlEnabled"));
 
         var cell = domAdapter.createElement("td");
         cell.style.textAlign = alignment;
 
         var $cell = $(cell);
 
-        if(!isRolePresentation) {
+        if(options.rowType !== "freeSpace") {
             this.component.setAria({
                 "role": "gridcell",
                 "colindex": column.index + 1,
                 "selected": false
             }, $cell);
-        } else {
-            this.component.setAria({ "role": "presentation" }, $cell);
         }
 
         if(!typeUtils.isDefined(column.groupIndex) && column.cssClass) {
@@ -155,7 +152,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             if(component.pageIndex) {
                 this.setRowAccessibilityAttributes(rowObject, $element);
             } else {
-                this.component.setAria({ "role": "row" }, $element);
+                this.setAria("role", "row", $element);
             }
         }
         return $element;

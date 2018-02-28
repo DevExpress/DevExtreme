@@ -592,8 +592,9 @@ module.exports = {
                 _renderContent: function(contentElement, tableElement) {
                     contentElement.replaceWith($("<div>")
                         .addClass(this.addWidgetPrefix(CONTENT_CLASS))
-                        .attr("role", "presentation")
                         .append(tableElement));
+
+                    this.setAria("role", "presentation", contentElement);
 
                     return this._findContentElement();
                 },
@@ -665,10 +666,10 @@ module.exports = {
                         .addClass(FREE_SPACE_CLASS)
                         .toggleClass(COLUMN_LINES_CLASS, that.option("showColumnLines"));
 
-                    that.component.setAria({ "role": "presentation" }, freeSpaceRowElement);
+                    that.setAria("hidden", true, freeSpaceRowElement);
 
                     for(i = 0; i < columns.length; i++) {
-                        freeSpaceRowElement.append(that._createCell({ column: columns[i], rowType: "freeSpace", isRolePresentation: true }));
+                        freeSpaceRowElement.append(that._createCell({ column: columns[i], rowType: "freeSpace" }));
                     }
 
                     that._appendRow(tableElement, freeSpaceRowElement, appendFreeSpaceRowTemplate);
