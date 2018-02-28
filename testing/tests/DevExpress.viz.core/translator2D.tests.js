@@ -2,7 +2,8 @@
 
 var $ = require("jquery"),
     translator2DModule = require("viz/translators/translator2d"),
-    adjust = require("core/utils/math").adjust;
+    adjust = require("core/utils/math").adjust,
+    SCROLL_THRESHOLD = 10;
 
 function prepareScaleBreaks(array, breakSize) {
     var breaks = [],
@@ -2236,6 +2237,146 @@ QUnit.test('All translators process special cases', function(assert) {
 });
 
 QUnit.module("Zooming and scrolling");
+
+QUnit.test('scroll. Scrolling page at right side (right edge of the chart, event not canceled)', function(assert) {
+    var range = $.extend({ minVisible: 70, maxVisible: 99.5, invert: false }, numericRange),
+        canvas = $.extend({}, canvasTemplate),
+        translator;
+
+    translator = new translator2DModule.Translator2D(range, canvas, { isHorizontal: true, breaksSize: 0 });
+
+    assert.ok(!translator.checkGestureEventsForScaleEdges(SCROLL_THRESHOLD, 1, -23, 1, {}));
+});
+
+QUnit.test('scroll. Scrolling chart at left side (right edge of the chart, event canceled)', function(assert) {
+    var range = $.extend({ minVisible: 70, maxVisible: 99.5, invert: false }, numericRange),
+        canvas = $.extend({}, canvasTemplate),
+        translator;
+
+    translator = new translator2DModule.Translator2D(range, canvas, { isHorizontal: true, breaksSize: 0 });
+
+    assert.ok(translator.checkGestureEventsForScaleEdges(SCROLL_THRESHOLD, 1, 23, 1, {}));
+});
+
+QUnit.test('scroll. Scrolling page at left side (left edge of the chart,event not canceled)', function(assert) {
+    var range = $.extend({ minVisible: 0.5, maxVisible: 90, invert: false }, numericRange),
+        canvas = $.extend({}, canvasTemplate),
+        translator;
+
+    translator = new translator2DModule.Translator2D(range, canvas, { isHorizontal: true, breaksSize: 0 });
+
+    assert.ok(!translator.checkGestureEventsForScaleEdges(SCROLL_THRESHOLD, 1, 23, 1, {}));
+});
+
+QUnit.test('scroll. Scrolling chart at right side (right edge of the chart, event canceled)', function(assert) {
+    var range = $.extend({ minVisible: 0.5, maxVisible: 90, invert: false }, numericRange),
+        canvas = $.extend({}, canvasTemplate),
+        translator;
+
+    translator = new translator2DModule.Translator2D(range, canvas, { isHorizontal: true, breaksSize: 0 });
+
+    assert.ok(translator.checkGestureEventsForScaleEdges(SCROLL_THRESHOLD, 1, -23, 1, {}));
+});
+
+QUnit.test('scroll. Rotated logarithmic chart. Scrolling page at bottom side (bottom edge of the chart,event not canceled)', function(assert) {
+    var range = $.extend({ minVisible: 9.8, maxVisible: 90, invert: false, rotated: true }, logarithmicRange),
+        canvas = $.extend({}, canvasTemplate),
+        translator;
+
+    translator = new translator2DModule.Translator2D(range, canvas, { isHorizontal: true, breaksSize: 0 });
+
+    assert.ok(!translator.checkGestureEventsForScaleEdges(SCROLL_THRESHOLD, 1, -23, 1, {}));
+});
+
+QUnit.test('scroll. Rotated logarithmic chart. Scrolling chart at top side (bottom edge of the chart, event canceled)', function(assert) {
+    var range = $.extend({ minVisible: 9.8, maxVisible: 90, invert: false, rotated: true }, logarithmicRange),
+        canvas = $.extend({}, canvasTemplate),
+        translator;
+
+    translator = new translator2DModule.Translator2D(range, canvas, { isHorizontal: true, breaksSize: 0 });
+
+    assert.ok(translator.checkGestureEventsForScaleEdges(SCROLL_THRESHOLD, 1, 23, 1, {}));
+});
+
+QUnit.test('scroll. Rotated logarithmic chart with inverted axis. Scrolling page at top side (top edge of the chart,event not canceled)', function(assert) {
+    var range = $.extend({ minVisible: 9.8, maxVisible: 90, invert: true, rotated: true }, logarithmicRange),
+        canvas = $.extend({}, canvasTemplate),
+        translator;
+
+    translator = new translator2DModule.Translator2D(range, canvas, { isHorizontal: true, breaksSize: 0 });
+
+    assert.ok(!translator.checkGestureEventsForScaleEdges(SCROLL_THRESHOLD, 1, 23, 1, {}));
+});
+
+QUnit.test('scroll. Rotated logarithmic chart with inverted axis. Scrolling chart at bottom side (top edge of the chart, event canceled)', function(assert) {
+    var range = $.extend({ minVisible: 9.8, maxVisible: 90, invert: true, rotated: true }, logarithmicRange),
+        canvas = $.extend({}, canvasTemplate),
+        translator;
+
+    translator = new translator2DModule.Translator2D(range, canvas, { isHorizontal: true, breaksSize: 0 });
+
+    assert.ok(translator.checkGestureEventsForScaleEdges(SCROLL_THRESHOLD, 1, -23, 1, {}));
+});
+
+QUnit.test('scroll. Scrolling chart at center (event canceled)', function(assert) {
+    var range = $.extend({ minVisible: 10, maxVisible: 90, invert: false }, numericRange),
+        canvas = $.extend({}, canvasTemplate),
+        translator;
+
+    translator = new translator2DModule.Translator2D(range, canvas, { isHorizontal: true, breaksSize: 0 });
+
+    assert.ok(translator.checkGestureEventsForScaleEdges(SCROLL_THRESHOLD, 1, -23, 1, {}));
+});
+
+QUnit.test('scroll. Scrolling chart at center by 2 fingers (event canceled)', function(assert) {
+    var range = $.extend({ minVisible: 10, maxVisible: 90, invert: false }, numericRange),
+        canvas = $.extend({}, canvasTemplate),
+        translator;
+
+    translator = new translator2DModule.Translator2D(range, canvas, { isHorizontal: true, breaksSize: 0 });
+
+    assert.ok(translator.checkGestureEventsForScaleEdges(SCROLL_THRESHOLD, 1, -23, 2, {}));
+});
+
+QUnit.test('zoom. Zooming out chart (event canceled)', function(assert) {
+    var range = $.extend({ minVisible: 10, maxVisible: 90, invert: false }, numericRange),
+        canvas = $.extend({}, canvasTemplate),
+        translator;
+
+    translator = new translator2DModule.Translator2D(range, canvas, { isHorizontal: true, breaksSize: 0 });
+
+    assert.ok(translator.checkGestureEventsForScaleEdges(SCROLL_THRESHOLD, 0.8, 0, 2, {}));
+});
+
+QUnit.test('zoom. Zooming in chart (event canceled)', function(assert) {
+    var range = $.extend({ minVisible: 10, maxVisible: 90, invert: false }, numericRange),
+        canvas = $.extend({}, canvasTemplate),
+        translator;
+
+    translator = new translator2DModule.Translator2D(range, canvas, { isHorizontal: true, breaksSize: 0 });
+
+    assert.ok(translator.checkGestureEventsForScaleEdges(SCROLL_THRESHOLD, 1.2, 0, 2, {}));
+});
+
+QUnit.test('zoom. Zooming in chart (scale 1:1, event canceled)', function(assert) {
+    var range = $.extend({ minVisible: 0, maxVisible: 100, invert: false }, numericRange),
+        canvas = $.extend({}, canvasTemplate),
+        translator;
+
+    translator = new translator2DModule.Translator2D(range, canvas, { isHorizontal: true, breaksSize: 0 });
+
+    assert.ok(translator.checkGestureEventsForScaleEdges(SCROLL_THRESHOLD, 1.2, 0, 2, {}));
+});
+
+QUnit.test('zoom. Zooming out page (scale 1:1, event not canceled)', function(assert) {
+    var range = $.extend({ minVisible: 0, maxVisible: 100, invert: false }, numericRange),
+        canvas = $.extend({}, canvasTemplate),
+        translator;
+
+    translator = new translator2DModule.Translator2D(range, canvas, { isHorizontal: true, breaksSize: 0 });
+
+    assert.ok(!translator.checkGestureEventsForScaleEdges(SCROLL_THRESHOLD, 0.8, 0, 2, {}));
+});
 
 QUnit.test('scroll', function(assert) {
     var range = $.extend({ minVisible: 10, maxVisible: 90, invert: false }, numericRange),

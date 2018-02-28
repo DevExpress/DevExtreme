@@ -7202,6 +7202,33 @@ QUnit.test("Row heights should be synchronized after expand master detail row wi
     assert.equal($rows.eq(0).height(), $rows.eq(1).height(), "row heights are synchronized");
 });
 
+//T607490
+QUnit.test("Scrollable should be updated after expand master detail row with nested DataGrid", function(assert) {
+    //arrange
+    var dataGrid = createDataGrid({
+        height: 200,
+        keyExpr: "id",
+        dataSource: [{ id: 1 }],
+        masterDetail: {
+            template: function(container) {
+                $("<div>").appendTo(container).dxDataGrid({
+                    dataSource: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }]
+                });
+            }
+        }
+    });
+
+    this.clock.tick();
+
+    //act
+    dataGrid.expandRow(1);
+    this.clock.tick();
+    dataGrid.getScrollable().scrollTo({ x: 0, y: 1000 });
+
+    //assert
+    assert.ok(dataGrid.getScrollable().scrollTop() > 100, "vertical scroll is exists");
+});
+
 
 QUnit.test("Column hiding should works with masterDetail and column fixing", function(assert) {
     //arrange

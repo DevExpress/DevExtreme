@@ -182,6 +182,10 @@ var dxBullet = BaseSparkline.inherit({
         };
     },
 
+    _getCorrectCanvas: function() {
+        return this._canvas;
+    },
+
     _getZeroLevelParams: function() {
         var that = this,
             translatorY = that._valueAxis.getTranslator(),

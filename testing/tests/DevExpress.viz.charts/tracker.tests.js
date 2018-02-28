@@ -102,6 +102,8 @@ var createTranslator = function() {
     var tr = new StubTranslator();
     tr.stub("zoom").returns({ min: "minArg", max: "maxArg", translate: 100, scale: 0 });
     tr.stub("getMinScale").returns(1.1);
+    tr.stub("checkGestureEventsForScaleEdges").returns(true);
+    tr.stub("checkScrollForOriginalScale").returns(false);
     return tr;
 };
 
@@ -2011,10 +2013,6 @@ QUnit.test("pointermove without pointerdown", function(assert) {
 
     assert.equal(this.options.chart._transformArgument.callCount, 0);
     assert.ok(!this.options.chart.zoomArgument.called);
-    assert.deepEqual(this.renderer.root.css.firstCall.args[0], {
-        "-ms-touch-action": "none",
-        "touch-action": "none"
-    });
 });
 
 QUnit.test("pointerdown, pointerup without gesture action", function(assert) {
@@ -2028,11 +2026,42 @@ QUnit.test("pointerdown, pointerup without gesture action", function(assert) {
     assert.ok(!this.tracker._pointerOut.called);
 });
 
+QUnit.test("pointerdown, pointerup with gesture action (page scrolling canceled)", function(assert) {
+    var moveEvent;
+    sinon.spy(this.tracker, "_pointerOut");
+    $(this.renderer.root.element).trigger(getEvent("dxpointerdown", { pageX: 78, pointers: [{ pageX: 78, pageY: 40 }] }));
+    moveEvent = getEvent("dxpointermove", { pageX: 88, pointers: [{ pageX: 88, pageY: 40 }], preventDefault: sinon.spy(), stopPropagation: sinon.spy() });
+    $(this.renderer.root.element).trigger(moveEvent);
+    $(document).trigger(getEvent("dxpointerup", { pageX: 95, pointers: [{ pageX: 95, pageY: 40 }] }));
+
+    assert.equal(this.options.chart._transformArgument.callCount, 1);
+    assert.ok(this.options.chart.zoomArgument.called);
+    assert.ok(this.tracker._pointerOut.called);
+    assert.strictEqual(moveEvent.preventDefault.callCount, 1, "prevent default");
+    assert.strictEqual(moveEvent.stopPropagation.callCount, 1, "stop propagation");
+});
+
+QUnit.test("pointerdown, pointerup without gesture action (page scrolling - maxVisible side)", function(assert) {
+    var moveEvent;
+    sinon.spy(this.tracker, "_pointerOut");
+    this.translator.stub("checkGestureEventsForScaleEdges").returns(false);
+    $(this.renderer.root.element).trigger(getEvent("dxpointerdown", { pageX: 98, pointers: [{ pageX: 98, pageY: 40 }] }));
+    moveEvent = getEvent("dxpointermove", { pageX: 85, pointers: [{ pageX: 85, pageY: 40 }], preventDefault: sinon.spy(), stopPropagation: sinon.spy() });
+    $(this.renderer.root.element).trigger(moveEvent);
+    $(document).trigger(getEvent("dxpointerup", { pageX: 79, pointers: [{ pageX: 79, pageY: 40 }] }));
+
+    assert.equal(this.options.chart._transformArgument.callCount, 0);
+    assert.ok(!this.options.chart.zoomArgument.called);
+    assert.ok(this.tracker._pointerOut.called);
+    assert.strictEqual(moveEvent.preventDefault.callCount, 0, "prevent default");
+    assert.strictEqual(moveEvent.stopPropagation.callCount, 0, "stop propagation");
+});
+
 QUnit.test("pointerdown, pointerup with gesture action", function(assert) {
     sinon.spy(this.tracker, "_pointerOut");
     $(this.renderer.root.element).trigger(getEvent("dxpointerdown", { pageX: 50, pointers: [{ pageX: 50, pageY: 40 }] }));
-    $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 53, pointers: [{ pageX: 53, pageY: 40 }] }));
-    $(document).trigger(getEvent("dxpointerup", { pageX: 60, pointers: [{ pageX: 60, pageY: 40 }] }));
+    $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 63, pointers: [{ pageX: 63, pageY: 40 }] }));
+    $(document).trigger(getEvent("dxpointerup", { pageX: 70, pointers: [{ pageX: 70, pageY: 40 }] }));
 
     assert.equal(this.options.chart._transformArgument.callCount, 1);
     assert.ok(this.options.chart.zoomArgument.called);
@@ -2194,10 +2223,6 @@ QUnit.test("scroll with disabled scroll interaction", function(assert) {
 
     assert.ok(!this.options.chart._transformArgument.called);
     assert.ok(!this.options.chart.zoomArgument.called);
-    assert.deepEqual(this.renderer.root.css.lastCall.args[0], {
-        "-ms-touch-action": "pan-x pan-y ",
-        "touch-action": "pan-x pan-y "
-    });
 
 });
 
@@ -2215,10 +2240,6 @@ QUnit.test("scroll with enabled only mouse scroll interaction. Mouse Event", fun
     assert.deepEqual(this.translator.stub("zoom").lastCall.args, [20, 1]);
     assert.ok(this.options.chart.zoomArgument.calledOnce);
     assert.deepEqual(this.options.chart.zoomArgument.lastCall.args, ["minArg", "maxArg", true]);
-    assert.deepEqual(this.renderer.root.css.lastCall.args[0], {
-        "-ms-touch-action": "pan-x pan-y ",
-        "touch-action": "pan-x pan-y "
-    });
 });
 
 QUnit.test("scroll with enabled only mouse scroll interaction. Touch Event", function(assert) {
@@ -2231,10 +2252,6 @@ QUnit.test("scroll with enabled only mouse scroll interaction. Touch Event", fun
 
     assert.ok(!this.options.chart._transformArgument.called);
     assert.ok(!this.options.chart.zoomArgument.called);
-    assert.deepEqual(this.renderer.root.css.lastCall.args[0], {
-        "-ms-touch-action": "pan-x pan-y ",
-        "touch-action": "pan-x pan-y "
-    });
 });
 
 QUnit.test("scroll with enabled only touch scroll interaction. Mouse Event", function(assert) {
@@ -2247,10 +2264,6 @@ QUnit.test("scroll with enabled only touch scroll interaction. Mouse Event", fun
 
     assert.ok(!this.options.chart._transformArgument.called);
     assert.ok(!this.options.chart.zoomArgument.called);
-    assert.deepEqual(this.renderer.root.css.lastCall.args[0], {
-        "-ms-touch-action": "none",
-        "touch-action": "none"
-    });
 });
 
 QUnit.test("scroll with enabled only mouse scroll interaction. Touch Event", function(assert) {
@@ -2267,11 +2280,6 @@ QUnit.test("scroll with enabled only mouse scroll interaction. Touch Event", fun
     assert.deepEqual(this.translator.stub("zoom").lastCall.args, [20, 1]);
     assert.ok(this.options.chart.zoomArgument.calledOnce);
     assert.deepEqual(this.options.chart.zoomArgument.lastCall.args, ["minArg", "maxArg", true]);
-
-    assert.deepEqual(this.renderer.root.css.lastCall.args[0], {
-        "-ms-touch-action": "none",
-        "touch-action": "none"
-    });
 });
 
 QUnit.test("scroll from scrollBar", function(assert) {
@@ -2366,6 +2374,25 @@ QUnit.test("zoom in with left scroll", function(assert) {
     assert.deepEqual(this.options.chart.zoomArgument.lastCall.args, ["minArg", "maxArg", true]);
 });
 
+QUnit.test("zoom in chart after full scale zoomed", function(assert) {
+    $(this.renderer.root.element).trigger(getEvent("dxpointerdown", { pointers: [{ pageX: 30, pageY: 40 }, { pageX: 40, pageY: 40 }] }));
+    $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pointers: [{ pageX: 20, pageY: 40 }, { pageX: 50, pageY: 40 }] }));
+    $(document).trigger(getEvent("dxpointerup", {}));
+
+    assert.ok(this.options.chart._transformArgument.called);
+    assert.ok(this.options.chart.zoomArgument.called);
+});
+
+QUnit.test("pinch-zoom. Zooming page after full scale zoomed", function(assert) {
+    this.translator.stub("checkGestureEventsForScaleEdges").returns(false);
+    $(this.renderer.root.element).trigger(getEvent("dxpointerdown", { pointers: [{ pageX: 20, pageY: 40 }, { pageX: 50, pageY: 40 }] }));
+    $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pointers: [{ pageX: 30, pageY: 40 }, { pageX: 40, pageY: 40 }] }));
+    $(document).trigger(getEvent("dxpointerup", {}));
+
+    assert.ok(!this.options.chart._transformArgument.called);
+    assert.ok(!this.options.chart.zoomArgument.called);
+});
+
 QUnit.test("pinch-zoom. Zooming interaction disabled", function(assert) {
     this.options.zoomingMode = 'none';
     this.tracker.update(this.options);
@@ -2376,10 +2403,6 @@ QUnit.test("pinch-zoom. Zooming interaction disabled", function(assert) {
 
     assert.ok(!this.options.chart._transformArgument.called);
     assert.ok(!this.options.chart.zoomArgument.called);
-    assert.deepEqual(this.renderer.root.css.lastCall.args[0], {
-        "-ms-touch-action": "pinch-zoom",
-        "touch-action": "pinch-zoom"
-    });
 });
 
 QUnit.test("Pinch-zoom. only touch", function(assert) {
@@ -2396,10 +2419,6 @@ QUnit.test("Pinch-zoom. only touch", function(assert) {
     assert.deepEqual(this.translator.stub("zoom").lastCall.args, [-14, 0.6]);
     assert.ok(this.options.chart.zoomArgument.calledOnce);
     assert.deepEqual(this.options.chart.zoomArgument.lastCall.args, ["minArg", "maxArg", true]);
-    assert.deepEqual(this.renderer.root.css.lastCall.args[0], {
-        "-ms-touch-action": "none",
-        "touch-action": "none"
-    });
 });
 
 QUnit.test("mousewheel with positive delta", function(assert) {
@@ -2499,11 +2518,6 @@ QUnit.test("mousewheel with only mouse interaction", function(assert) {
     assert.deepEqual(this.translator.getMinScale.lastCall.args, [true]);
     assert.deepEqual(this.options.chart.zoomArgument.lastCall.args, ["minArg", "maxArg", true]);
     assert.ok(this.tracker._pointerOut.called);
-
-    assert.deepEqual(this.renderer.root.css.lastCall.args[0], {
-        "-ms-touch-action": "pinch-zoom",
-        "touch-action": "pinch-zoom"
-    });
 });
 
 // T249548
@@ -2518,28 +2532,27 @@ QUnit.test("mousewheel event propagation is stopped", function(assert) {
     assert.strictEqual(event.stopPropagation.callCount, 1, "stop propagation");
 });
 
-QUnit.test("disable scrolling and zooming interaction", function(assert) {
-    this.options.scrollingMode = "none";
-    this.options.zoomingMode = "none";
+QUnit.test("mousewheel event propagated (chart zooming)", function(assert) {
+    var event = getEvent("dxmousewheel", { delta: 10, pageX: 40, preventDefault: sinon.spy(), stopPropagation: sinon.spy() });
 
     this.tracker.update(this.options);
 
-    assert.deepEqual(this.renderer.root.css.lastCall.args[0], {
-        "-ms-touch-action": "pan-x pan-y pinch-zoom",
-        "touch-action": "pan-x pan-y pinch-zoom"
-    });
+    $(this.renderer.root.element).trigger(event);
+
+    assert.strictEqual(event.preventDefault.callCount, 1, "prevent default");
+    assert.strictEqual(event.stopPropagation.callCount, 1, "stop propagation");
 });
 
-QUnit.test("disable scrolling and zooming interaction for touch devices", function(assert) {
-    this.options.scrollingMode = "mouse";
-    this.options.zoomingMode = "mouse";
+QUnit.test("mousewheel event not propagated (page scrolling)", function(assert) {
+    this.translator.stub("checkScrollForOriginalScale").returns(true);
+    var event = getEvent("dxmousewheel", { delta: 10, pageX: 40, preventDefault: sinon.spy(), stopPropagation: sinon.spy() });
 
     this.tracker.update(this.options);
 
-    assert.deepEqual(this.renderer.root.css.lastCall.args[0], {
-        "-ms-touch-action": "pan-x pan-y pinch-zoom",
-        "touch-action": "pan-x pan-y pinch-zoom"
-    });
+    $(this.renderer.root.element).trigger(event);
+
+    assert.strictEqual(event.preventDefault.callCount, 0, "prevent default");
+    assert.strictEqual(event.stopPropagation.callCount, 0, "stop propagation");
 });
 
 QUnit.test("mouse wheel with unknown zooming interaction", function(assert) {
