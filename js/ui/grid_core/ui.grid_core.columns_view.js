@@ -612,9 +612,10 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
         $scrollContainer.addClass(that.addWidgetPrefix(CONTENT_CLASS))
             .addClass(that.addWidgetPrefix(SCROLL_CONTAINER_CLASS))
-            .attr("role", "presentation")
             .append($table)
             .appendTo(that.element());
+
+        that.setAria("role", "presentation", $scrollContainer);
 
         return $scrollContainer;
     },

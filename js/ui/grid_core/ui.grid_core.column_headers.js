@@ -168,10 +168,10 @@ module.exports = {
 
                     $container
                         .addClass(that.addWidgetPrefix(HEADERS_CLASS))
-                        .attr("role", "presentation")
                         .toggleClass(that.addWidgetPrefix(NOWRAP_CLASS), !that.option("wordWrapEnabled"))
                         .empty();
 
+                    that.setAria("role", "presentation", $container);
 
                     that._updateContent(that._renderTable());
 
