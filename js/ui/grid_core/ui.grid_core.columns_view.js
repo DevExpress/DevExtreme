@@ -125,14 +125,6 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
         var $cell = $(cell);
 
-        if(options.rowType !== "freeSpace") {
-            this.component.setAria({
-                "role": "gridcell",
-                "colindex": column.index + 1,
-                "selected": false
-            }, $cell);
-        }
-
         if(!typeUtils.isDefined(column.groupIndex) && column.cssClass) {
             $cell.addClass(column.cssClass);
         }
@@ -470,6 +462,14 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         options.row.cells.push(cellOptions);
 
         $cell = that._createCell(cellOptions);
+
+        if(cellOptions.rowType !== "freeSpace") {
+            that.component.setAria({
+                "role": "gridcell",
+                "colindex": options.columnIndex + 1,
+                "selected": false
+            }, $cell);
+        }
 
         that._renderCellContent($cell, cellOptions);
 
