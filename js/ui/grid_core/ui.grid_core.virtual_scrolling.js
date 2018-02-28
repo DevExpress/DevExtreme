@@ -346,7 +346,7 @@ var VirtualScrollingRowsViewExtender = (function() {
                 commonUtils.deferRender(function() {
                     translator.move($contentTable, { left: 0, top: top });
 
-                    //TODO jsdmitry: Separate this functionality on render and resize
+                    // TODO jsdmitry: Separate this functionality on render and resize
                     isRenderVirtualTableContentRequired = that._contentHeight !== contentHeight || contentHeight === 0 ||
                         !that._isTableLinesDisplaysCorrect(virtualTable) ||
                         !that._isColumnElementsEqual($contentTable.find("col"), virtualTable.find("col"));

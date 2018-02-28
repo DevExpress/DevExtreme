@@ -185,13 +185,13 @@ QUnit.test("animate without graphic", function(assert) {
 });
 
 QUnit.test("pass diameter to correctCoordinates", function(assert) {
-    //arrange
+    // arrange
     var point = createPoint(this.series, { argument: 1, value: 2, size: 3 }, this.options),
         diameter = 10;
 
-    //act
+    // act
     point.correctCoordinates(diameter);
-    //assert
+    // assert
     assert.strictEqual(point.bubbleSize, diameter / 2);
 });
 

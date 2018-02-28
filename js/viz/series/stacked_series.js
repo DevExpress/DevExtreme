@@ -1,6 +1,6 @@
 "use strict";
 
-//there stackedline, fullstackedline, stackedbar, fullstackedbar, stackedarea, fullstackedarea
+// there stackedline, fullstackedline, stackedbar, fullstackedbar, stackedarea, fullstackedarea
 var _noop = require("../../core/utils/common").noop,
     _extend = require("../../core/utils/extend").extend,
     each = require("../../core/utils/iterator").each,

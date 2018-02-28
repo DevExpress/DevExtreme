@@ -40,7 +40,7 @@ QUnit.test("captionize", function(assert) {
     assert.equal(inflector.captionize("simple"), "Simple");
     assert.equal(inflector.captionize("buy-me-candy"), "Buy-me-candy");
     assert.equal(inflector.captionize("testField1"), "Test Field 1");
-    //T573115
+    // T573115
     assert.equal(inflector.captionize("CompanyName(test)"), "Company Name (test)");
 });
 

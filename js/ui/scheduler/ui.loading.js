@@ -28,7 +28,7 @@ exports.show = function(options) {
 };
 
 exports.hide = function() {
-    //todo: hot fix for case without viewport
+    // todo: hot fix for case without viewport
 
     if(!loading) {
         return new Deferred().resolve();

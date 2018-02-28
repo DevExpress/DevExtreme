@@ -186,7 +186,7 @@ exports.Translator2D = _Translator2d = function(businessRange, canvas, options) 
 _Translator2d.prototype = {
     constructor: _Translator2d,
     reinit: function() {
-        //TODO: parseInt canvas
+        // TODO: parseInt canvas
         var that = this,
             options = that._options,
             range = that._businessRange,
@@ -307,11 +307,11 @@ _Translator2d.prototype = {
             canvasOptions.startPoint = canvas.top;
             length = canvas.height;
             canvasOptions.endPoint = canvas.height - canvas.bottom;
-            canvasOptions.invert = !businessRange.invert;//axis inverted because display drawn to bottom
+            canvasOptions.invert = !businessRange.invert;// axis inverted because display drawn to bottom
         }
 
         that.canvasLength = canvasOptions.canvasLength = canvasOptions.endPoint - canvasOptions.startPoint;
-        canvasOptions.rangeDoubleError = Math.pow(10, getPower(canvasOptions.rangeMax - canvasOptions.rangeMin) - getPower(length) - 2); //B253861
+        canvasOptions.rangeDoubleError = Math.pow(10, getPower(canvasOptions.rangeMax - canvasOptions.rangeMin) - getPower(length) - 2); // B253861
         canvasOptions.ratioOfCanvasRange = canvasOptions.canvasLength / (canvasOptions.rangeMaxVisible - canvasOptions.rangeMinVisible);
 
         if(breaks !== undefined) {
@@ -370,7 +370,7 @@ _Translator2d.prototype = {
             canvas_position_center_middle;
 
         if(minVisible <= 0 && maxVisible >= 0) {
-            that.sc = {};//we can not call translate method without sc object
+            that.sc = {};// we can not call translate method without sc object
             canvas_position_default = that.translate(0);
         } else {
             invert = range.invert ^ (minVisible <= 0 && maxVisible <= 0);

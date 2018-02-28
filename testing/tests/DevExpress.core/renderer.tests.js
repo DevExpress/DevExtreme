@@ -140,7 +140,7 @@ QUnit.test("Set value", function(assert) {
 
     assert.equal(window.getComputedStyle(element[0])["position"], "fixed", "Set position with object of css values");
     assert.equal(window.getComputedStyle(element[0])["zIndex"], "2", "Set zIndex with object of css values");
-    var margin = window.getComputedStyle(element[0])["margin"] || window.getComputedStyle(element[0])["marginBottom"];//IE sets marginTop, marginBottom ... instead of margin
+    var margin = window.getComputedStyle(element[0])["margin"] || window.getComputedStyle(element[0])["marginBottom"];// IE sets marginTop, marginBottom ... instead of margin
     assert.equal(margin, "2px", "Set margin with object of css values");
 
     element = renderer("fake_element");

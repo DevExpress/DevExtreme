@@ -94,8 +94,8 @@ QUnit.module('Tracker - tooltip events', tooltipEnvironment);
 QUnit.test('"Show" is raised on mouseover after delay', function(assert) {
     var element = this.renderer.path([], "area"), target = {}, info = {};
     this.tracker.attach(element, target, info);
-    element.element["gauge-data-target"] = target; //emulate data attachment
-    element.element["gauge-data-info"] = info; //emulate data attachment
+    element.element["gauge-data-target"] = target; // emulate data attachment
+    element.element["gauge-data-info"] = info; // emulate data attachment
     this.onTooltipShow = sinon.spy(function() { return true; });
 
     this.trigger('mouseover', element);
@@ -110,8 +110,8 @@ QUnit.test('"Show" is raised on mouseover after delay', function(assert) {
 QUnit.test('"Show" is not raised until mousemove occurs', function(assert) {
     var element = this.renderer.path([], "area"), target = {}, info = {};
     this.tracker.attach(element, target, info);
-    element.element["gauge-data-target"] = target; //emulate data attachment
-    element.element["gauge-data-info"] = info; //emulate data attachment
+    element.element["gauge-data-target"] = target; // emulate data attachment
+    element.element["gauge-data-info"] = info; // emulate data attachment
     this.onTooltipShow = sinon.spy(function() { return true; });
     this.trigger('mouseover', element, 5, 5);
 
@@ -128,8 +128,8 @@ QUnit.test('"Show" is not raised until mousemove occurs', function(assert) {
 QUnit.test('"Show" is raised when small mousemove occurs', function(assert) {
     var element = this.renderer.path([], "area"), target = {}, info = {};
     this.tracker.attach(element, target, info);
-    element.element["gauge-data-target"] = target; //emulate data attachment
-    element.element["gauge-data-info"] = info; //emulate data attachment
+    element.element["gauge-data-target"] = target; // emulate data attachment
+    element.element["gauge-data-info"] = info; // emulate data attachment
     this.onTooltipShow = sinon.spy(function() { return true; });
     this.trigger('mouseover', element, 5, 5);
 
@@ -229,8 +229,8 @@ QUnit.test('"Show" is raised after delay on mouseover on other element if toolti
     var element1 = this.renderer.path([], "area"), target1 = {},
         element2 = this.renderer.path([], "area"), target2 = {};
     this.tracker.attach(element1, target1).attach(element2, target2);
-    element1.element["gauge-data-target"] = target1; //emulate data attachment
-    element2.element["gauge-data-target"] = target2; //emulate data attachment
+    element1.element["gauge-data-target"] = target1; // emulate data attachment
+    element2.element["gauge-data-target"] = target2; // emulate data attachment
     this.onTooltipShow = function(tar) {
         assert.strictEqual(tar, target1, 'target 1');
 
@@ -313,8 +313,8 @@ QUnit.test('"Show" is raised on touchstart after delay', function(assert) {
     assert.expect(3);
     var element = this.renderer.path([], "area"), target = {}, info = {};
     this.tracker.attach(element, target, info);
-    element.element["gauge-data-target"] = target; //emulate data attachment
-    element.element["gauge-data-info"] = info; //emulate data attachment
+    element.element["gauge-data-target"] = target; // emulate data attachment
+    element.element["gauge-data-info"] = info; // emulate data attachment
     this.onTooltipShow = function(tar, inf) {
         assert.strictEqual(tar, target, 'target');
         assert.strictEqual(inf, info, 'info');
@@ -379,8 +379,8 @@ QUnit.test('"Show" is raised after delay on touchstart on other element if toolt
     var element1 = this.renderer.path([], "area"), target1 = {},
         element2 = this.renderer.path([], "area"), target2 = {};
     this.tracker.attach(element1, target1).attach(element2, target2);
-    element1.element["gauge-data-target"] = target1; //emulate data attachment
-    element2.element["gauge-data-target"] = target2; //emulate data attachment
+    element1.element["gauge-data-target"] = target1; // emulate data attachment
+    element2.element["gauge-data-target"] = target2; // emulate data attachment
     this.onTooltipShow = function(tar) {
         assert.strictEqual(tar, target1, 'target 1');
         this.onTooltipShow = function(tar) {
@@ -401,7 +401,7 @@ QUnit.test('"Hide" is raised after delay on touchstart then touchend on other el
     var element1 = this.renderer.path([], "area"),
         element2 = this.renderer.path([], "area");
     this.tracker.attach(element1, element2);
-    element1.element["gauge-data-target"] = element2; //emulate data attachment
+    element1.element["gauge-data-target"] = element2; // emulate data attachment
     this.onTooltipShow = function() {
         this.trigger('touchstart', element2);
         this.triggerDocument('touchend');

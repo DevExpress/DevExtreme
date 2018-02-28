@@ -544,7 +544,7 @@ var DropDownList = DropDownEditor.inherit({
     _fireContentReadyAction: commonUtils.noop,
 
     _setAriaTargetForList: function() {
-        //TODO: make getAriaTarget option
+        // TODO: make getAriaTarget option
         this._list._getAriaTarget = this._getAriaTarget.bind(this);
         this._list.setAria("role", "combobox");
     },

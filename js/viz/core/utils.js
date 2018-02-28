@@ -251,7 +251,7 @@ extend(exports, {
         var fontOptions = {};
         each(options || {}, function(key, value) {
             if(/^(cursor|opacity)$/i.test(key)) {
-                //TODO check other properties, add tests
+                // TODO check other properties, add tests
             } else if(key === "color") {
                 key = "fill";
             } else {

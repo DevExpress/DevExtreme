@@ -1006,7 +1006,7 @@ registerTheme({
             color: BLACK,
             opacity: 0.1,
             showCustomBoundaryTicks: true,
-            showMinorTicks: true, //DEPRECATED IN 15_2
+            showMinorTicks: true, // DEPRECATED IN 15_2
             label: {
                 overlappingBehavior: "hide",
                 alignment: "center",

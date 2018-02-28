@@ -229,7 +229,7 @@ QUnit.test("Empty data", function(assert) {
     assert.strictEqual(groupsData.groups[0].valueAxis.validated, true);
 });
 
-//T416212, T416840
+// T416212, T416840
 QUnit.test("types for many groups", function(assert) {
     var groupData1 = createGroupsData({ argumentField: "arg", valueFields: ["dailyFeelingGood"] }),
         groupData2 = createGroupsData({ argumentField: "arg", valueFields: ["dailyFeelingPoor"] }),
@@ -628,7 +628,7 @@ QUnit.test("Numeric from numbers. logarithmic axis", function(assert) {
     assert.equal(incidentOccurred.getCall(4).args[1][0], "val");
 });
 
-//T463066
+// T463066
 QUnit.test("DataSource with null values. logarithmic axis", function(assert) {
     var incidentOccurred = sinon.spy();
     var parsedData = testValidateData([{ arg: 1, val: null }, { arg: 2, val: 22 }, { arg: null, val: 33 }, { arg: 4, val: 44 }, { arg: 5, val: 55 }],
@@ -1043,7 +1043,7 @@ QUnit.test("Can not parse Datetime arguments", function(assert) {
     assert.deepEqual(groups.argumentOptions.categories, [new Date(1000), new Date(2000), new Date(3000), new Date(5000)], "argument categories");
 });
 
-//T608785
+// T608785
 QUnit.test("Order of the series should be correct", function(assert) {
     var groups = createGroupsData({
             argumentType: "string",

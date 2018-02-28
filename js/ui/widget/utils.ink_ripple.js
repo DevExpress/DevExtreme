@@ -7,7 +7,7 @@ var INKRIPPLE_CLASS = "dx-inkripple",
     INKRIPPLE_HIDING_CLASS = "dx-inkripple-hiding";
 
 var DEFAULT_WAVE_SIZE_COEFFICIENT = 2,
-    MAX_WAVE_SIZE = 4000, //NOTE: incorrect scaling of ink with big size (T310238)
+    MAX_WAVE_SIZE = 4000, // NOTE: incorrect scaling of ink with big size (T310238)
     ANIMATION_DURATION = 300,
     HOLD_ANIMATION_DURATION = 1000,
     DEFAULT_WAVE_INDEX = 0;

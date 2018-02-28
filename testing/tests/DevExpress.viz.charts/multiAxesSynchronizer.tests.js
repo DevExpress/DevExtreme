@@ -80,10 +80,10 @@ function checkAxesSynchronization(assert, options) {
 
     axes = createAxes(axesOptions);
 
-    //act
+    // act
     multiAxesSynchronizer.synchronize(axes);
 
-    //assert
+    // assert
     $.each(axes, function(i, axis) {
         if(axesOptionsAfterSync[i].minorTickValues) {
             assert.deepEqual(axis.getTicksValues().minorTicksValues, axesOptionsAfterSync[i].minorTickValues, 'minorTicks after synchronization for axis ' + i);
@@ -355,7 +355,7 @@ QUnit.test('Synchronization for 2 axis if tickValues count = 1', function(assert
     });
 });
 
-//T153054 + T424487
+// T153054 + T424487
 QUnit.test('Synchronization for 2 axis if tickValues count = 1(min==max). tickValues greater than axis range', function(assert) {
     checkAxesSynchronization(assert, {
         axesOptions: [
@@ -390,7 +390,7 @@ QUnit.test('Synchronization for 2 axis if tickValues count = 1(min==max). tickVa
     });
 });
 
-//T153054
+// T153054
 QUnit.test('Synchronization for 2 axis if tickValues count = 1(min==max)', function(assert) {
     checkAxesSynchronization(assert, {
         axesOptions: [
@@ -425,7 +425,7 @@ QUnit.test('Synchronization for 2 axis if tickValues count = 1(min==max)', funct
     });
 });
 
-//T153054
+// T153054
 QUnit.test('Synchronization for 2 axis if tickValues count = 1(min==max) (in both axis)', function(assert) {
     checkAxesSynchronization(assert, {
         axesOptions: [
@@ -459,7 +459,7 @@ QUnit.test('Synchronization for 2 axis if tickValues count = 1(min==max) (in bot
         syncIndexes: [[1, 0]]
     });
 });
-//T153054
+// T153054
 QUnit.test('Synchronization for 2 axis if tickValues count = 1 (min==max) (negative values)', function(assert) {
     checkAxesSynchronization(assert, {
         axesOptions: [
@@ -493,7 +493,7 @@ QUnit.test('Synchronization for 2 axis if tickValues count = 1 (min==max) (negat
         syncIndexes: [[1, 0]]
     });
 });
-//T153054
+// T153054
 QUnit.test('Synchronization for 2 axis if tickValues count = 1 (min==max) (logarithmic axis)', function(assert) {
     checkAxesSynchronization(assert, {
         axesOptions: [
@@ -729,7 +729,7 @@ QUnit.test('Synchronization for 2 axis without paddings and with different tickV
     });
 });
 
-//B231235
+// B231235
 QUnit.test('Synchronization for 2 axis without paddings and with different tickValues count. First axis inverted', function(assert) {
     checkAxesSynchronization(assert, {
         axesOptions: [
@@ -765,7 +765,7 @@ QUnit.test('Synchronization for 2 axis without paddings and with different tickV
     });
 });
 
-//B231235
+// B231235
 QUnit.test('Synchronization for 2 axis without paddings and with different tickValues count. Second axis inverted', function(assert) {
     checkAxesSynchronization(assert, {
         axesOptions: [
@@ -801,7 +801,7 @@ QUnit.test('Synchronization for 2 axis without paddings and with different tickV
     });
 });
 
-//B231235
+// B231235
 QUnit.test('Synchronization for 2 axis without paddings and with different tickValues count. One axis inverted. No adding ticks after zero', function(assert) {
     checkAxesSynchronization(assert, {
         axesOptions: [
@@ -871,7 +871,7 @@ QUnit.test('Synchronization for 2 axis with paddings', function(assert) {
     });
 });
 
-//B231181
+// B231181
 QUnit.test('Synchronization for 2 axis with different tickValues count. Rounding generated values', function(assert) {
     checkAxesSynchronization(assert, {
         axesOptions: [
@@ -888,7 +888,7 @@ QUnit.test('Synchronization for 2 axis with different tickValues count. Rounding
                     max: 3.2,
                     maxVisible: 3.2
                 },
-                tickValues: [2, 2.3, 2.6, 2.9, 3.2/*3.199999 without round*/]
+                tickValues: [2, 2.3, 2.6, 2.9, 3.2 /* 3.199999 without round */]
             },
             {
                 range: {
@@ -906,7 +906,7 @@ QUnit.test('Synchronization for 2 axis with different tickValues count. Rounding
     });
 });
 
-//B231181
+// B231181
 QUnit.test('Synchronization for 2 axis with different tickValues with 2 miltiplier', function(assert) {
     checkAxesSynchronization(assert, {
         axesOptions: [
@@ -941,7 +941,7 @@ QUnit.test('Synchronization for 2 axis with different tickValues with 2 miltipli
     });
 });
 
-//B231181
+// B231181
 QUnit.test('Synchronization for 2 axis with different tickValues with 3 miltiplier', function(assert) {
     checkAxesSynchronization(assert, {
         axesOptions: [
@@ -1171,7 +1171,7 @@ QUnit.test('Synchronization for 3 axis with different tickValues count. B254389'
     });
 });
 
-//B231325
+// B231325
 QUnit.test('Synchronization for 3 axis when first with stubData', function(assert) {
     checkAxesSynchronization(assert, {
         axesOptions: [

@@ -34,7 +34,7 @@ var CommandManager = Class.inherit({
             for(var index in componentNames) {
                 var widgetName = componentNames[index];
                 if(widgetName in adapters) {
-                    //TODO return the adapter instance here
+                    // TODO return the adapter instance here
                     return adapters[widgetName];
                 }
             }
@@ -77,7 +77,7 @@ var CommandManager = Class.inherit({
         iteratorUtils.each(containers, function(k, container) {
             var commandInfos = [];
             iteratorUtils.each(commandHash, function(id, command) {
-                var commandId = id;//command.option("id")/* || command.option("location")*/;//TODO remove location check
+                var commandId = id;// command.option("id")/* || command.option("location") */;// TODO remove location check
                 var commandOptions = that.commandMapping.getCommandMappingForContainer(commandId, container.option("id"));
                 if(commandOptions) {
                     commandInfos.push({ command: command, options: commandOptions });

@@ -67,17 +67,17 @@ var teardownModule = function() {
 QUnit.module("Editing", { beforeEach: setupModule, afterEach: teardownModule });
 
 QUnit.test("Edit row", function(assert) {
-    //arrange
+    // arrange
     var $rowElement,
         $testElement = $('#treeList');
 
     this.setupTreeList();
     this.rowsView.render($testElement);
 
-    //act
+    // act
     this.editRow(0);
 
-    //assert
+    // assert
     $rowElement = $testElement.find("tbody > tr").first();
     assert.ok($rowElement.hasClass("dx-edit-row"), "edit row");
     assert.equal($rowElement.find(".dx-texteditor").length, 3, "count editor");
@@ -85,7 +85,7 @@ QUnit.test("Edit row", function(assert) {
 });
 
 QUnit.test("Edit cell when edit mode is 'batch'", function(assert) {
-    //arrange
+    // arrange
     var $cellElement,
         $rowElement,
         $testElement = $('#treeList');
@@ -97,10 +97,10 @@ QUnit.test("Edit cell when edit mode is 'batch'", function(assert) {
     this.setupTreeList();
     this.rowsView.render($testElement);
 
-    //act
+    // act
     this.editCell(0, 0);
 
-    //assert
+    // assert
     $rowElement = $testElement.find("tbody > tr").first();
     $cellElement = $rowElement.children().first();
     assert.equal($rowElement.find(".dx-texteditor").length, 1, "count editor");
@@ -110,7 +110,7 @@ QUnit.test("Edit cell when edit mode is 'batch'", function(assert) {
 });
 
 QUnit.test("Edit cell when edit mode is 'cell'", function(assert) {
-    //arrange
+    // arrange
     var $cellElement,
         $rowElement,
         $testElement = $('#treeList');
@@ -122,10 +122,10 @@ QUnit.test("Edit cell when edit mode is 'cell'", function(assert) {
     this.setupTreeList();
     this.rowsView.render($testElement);
 
-    //act
+    // act
     this.editCell(0, 0);
 
-    //assert
+    // assert
     $rowElement = $testElement.find("tbody > tr").first();
     $cellElement = $testElement.find("tbody > tr").first().children().first();
     assert.equal($rowElement.find(".dx-texteditor").length, 1, "count editor");
@@ -134,7 +134,7 @@ QUnit.test("Edit cell when edit mode is 'cell'", function(assert) {
 });
 
 QUnit.test("Edit form", function(assert) {
-    //arrange
+    // arrange
     var $rowElement,
         $testElement = $('#treeList');
 
@@ -145,10 +145,10 @@ QUnit.test("Edit form", function(assert) {
     this.setupTreeList();
     this.rowsView.render($testElement);
 
-    //act
+    // act
     this.editRow(0);
 
-    //assert
+    // assert
     $rowElement = $testElement.find("tbody > tr").first();
     assert.ok($rowElement.hasClass("dx-treelist-edit-form"), "edit form");
     assert.equal($rowElement.find(".dx-texteditor").length, 3, "count editor");
@@ -156,7 +156,7 @@ QUnit.test("Edit form", function(assert) {
 });
 
 QUnit.test("Edit popup", function(assert) {
-    //arrange
+    // arrange
     var $testElement = $('#treeList');
 
     this.options.editing = {
@@ -170,10 +170,10 @@ QUnit.test("Edit popup", function(assert) {
 
     this.rowsView.render($testElement);
 
-    //act
+    // act
     this.editRow(0);
 
-    //assert
+    // assert
     var $editPopup = $testElement.find(".dx-treelist-edit-popup"),
         editPopup = $editPopup.dxPopup("instance"),
         $editPopupContent = editPopup.$content();
@@ -185,7 +185,7 @@ QUnit.test("Edit popup", function(assert) {
 });
 
 QUnit.test("Insert row", function(assert) {
-    //arrange
+    // arrange
     var items,
         $rowElements,
         $testElement = $('#treeList');
@@ -193,20 +193,20 @@ QUnit.test("Insert row", function(assert) {
     this.setupTreeList();
     this.rowsView.render($testElement);
 
-    //act
+    // act
     this.insertRow();
 
-    //assert
+    // assert
     $rowElements = $testElement.find("tbody > .dx-data-row");
     assert.equal($rowElements.length, 2, "count data row");
     assert.ok($rowElements.first().hasClass("dx-row-inserted"), "insert row");
 
-    //act
+    // act
     $testElement.find('tbody > tr').first().find('input').first().val(666);
     $testElement.find('tbody > tr').first().find('input').first().trigger('change');
     this.saveEditData();
 
-    //assert
+    // assert
     $rowElements = $testElement.find("tbody > .dx-data-row:not(.dx-row-inserted)");
     assert.equal($rowElements.length, 2, "count data row");
 
@@ -220,7 +220,7 @@ QUnit.test("Insert row", function(assert) {
 });
 
 QUnit.test("Edit batch - add links should be rendered in rows when allowAdding is true", function(assert) {
-    //arrange, act
+    // arrange, act
     var $testElement = $('#treeList');
 
     this.options.editing = {
@@ -234,14 +234,14 @@ QUnit.test("Edit batch - add links should be rendered in rows when allowAdding i
     this.setupTreeList();
     this.rowsView.render($testElement);
 
-    //assert
+    // assert
     var $addLinks = $testElement.find(".dx-command-edit .dx-link-add");
     assert.equal($addLinks.length, 1, "link add is rendered");
     assert.equal($addLinks.text(), "Add", "Add link text");
 });
 
 QUnit.test("Add row to child should call addRow method with parentId", function(assert) {
-    //arrange
+    // arrange
     var $testElement = $('#treeList');
 
     this.options.editing.allowAdding = true;
@@ -252,17 +252,17 @@ QUnit.test("Add row to child should call addRow method with parentId", function(
 
     this.editingController.addRow = sinon.spy();
 
-    //act
+    // act
     $testElement.find(".dx-command-edit .dx-link-add").trigger("dxclick");
     this.clock.tick();
 
-    //assert
+    // assert
     assert.ok(this.editingController.addRow.calledOnce, "addRow is called");
     assert.ok(this.editingController.addRow.args[0], [1], "addRow arg is row key");
 });
 
 QUnit.test("AddRow method should expand row and add item after parent", function(assert) {
-    //arrange
+    // arrange
     var $testElement = $('#treeList');
 
     this.options.editing.allowAdding = true;
@@ -271,11 +271,11 @@ QUnit.test("AddRow method should expand row and add item after parent", function
     this.setupTreeList();
     this.rowsView.render($testElement);
 
-    //act
+    // act
     this.addRow(1);
     this.clock.tick();
 
-    //assert
+    // assert
     var rows = this.getVisibleRows();
 
     assert.strictEqual(rows.length, 3, "three rows are rendered");
@@ -289,9 +289,9 @@ QUnit.test("AddRow method should expand row and add item after parent", function
     assert.strictEqual(rows[2].node.parent.key, 1, "row 2 node parent");
 });
 
-//T553905
+// T553905
 QUnit.test("Add item in node without children (Angular)", function(assert) {
-    //arrange
+    // arrange
     var $testElement = $('#treeList');
 
     this.options.editing.allowAdding = true;
@@ -301,12 +301,12 @@ QUnit.test("Add item in node without children (Angular)", function(assert) {
     this.setupTreeList();
     this.rowsView.render($testElement);
 
-    //act
+    // act
     this.addRow(2);
     this.dataController.optionChanged({ name: "expandedRowKeys", value: [1, 2], previousValue: [1, 2] }); // simulate the call from ngDoCheck hook
     this.clock.tick(30);
 
-    //assert
+    // assert
     var rows = this.getVisibleRows();
     assert.strictEqual(rows.length, 3, "count row");
     assert.strictEqual(rows[0].key, 1, "key of the first row");
@@ -320,7 +320,7 @@ QUnit.test("Add item in node without children (Angular)", function(assert) {
 });
 
 QUnit.test("AddRow method witout parameters should add item at begin", function(assert) {
-    //arrange
+    // arrange
     var $testElement = $('#treeList');
 
     this.options.editing.allowAdding = true;
@@ -329,11 +329,11 @@ QUnit.test("AddRow method witout parameters should add item at begin", function(
     this.setupTreeList();
     this.rowsView.render($testElement);
 
-    //act
+    // act
     this.addRow();
     this.clock.tick();
 
-    //assert
+    // assert
     var rows = this.getVisibleRows();
 
     assert.strictEqual(rows.length, 2, "rows count");
@@ -346,7 +346,7 @@ QUnit.test("AddRow method witout parameters should add item at begin", function(
 });
 
 QUnit.test("AddRow method witout parameters should add item at begin if rootValue is defined", function(assert) {
-    //arrange
+    // arrange
     var $testElement = $('#treeList');
 
     this.options.rootValue = 0;
@@ -357,11 +357,11 @@ QUnit.test("AddRow method witout parameters should add item at begin if rootValu
     this.setupTreeList();
     this.rowsView.render($testElement);
 
-    //act
+    // act
     this.addRow();
     this.clock.tick();
 
-    //assert
+    // assert
     var rows = this.getVisibleRows();
 
     assert.strictEqual(rows.length, 2, "rows count");
@@ -374,7 +374,7 @@ QUnit.test("AddRow method witout parameters should add item at begin if rootValu
 });
 
 QUnit.test("Inserted row should be reseted after collapsing when editing mode is row", function(assert) {
-    //arrange
+    // arrange
     var $testElement = $('#treeList');
 
     this.options.editing.allowAdding = true;
@@ -383,13 +383,13 @@ QUnit.test("Inserted row should be reseted after collapsing when editing mode is
     this.setupTreeList();
     this.rowsView.render($testElement);
 
-    //act
+    // act
     this.addRow(1);
     this.clock.tick();
 
     this.collapseRow(1);
 
-    //assert
+    // assert
     var rows = this.getVisibleRows();
     assert.strictEqual(rows.length, 1, "one row is rendered");
     assert.strictEqual(rows[0].key, 1, "row 0 key");
@@ -398,7 +398,7 @@ QUnit.test("Inserted row should be reseted after collapsing when editing mode is
 });
 
 QUnit.test("Edit cell on row click", function(assert) {
-    //arrange
+    // arrange
     var $testElement = $('#treeList');
 
     this.options.editing = {
@@ -409,15 +409,15 @@ QUnit.test("Edit cell on row click", function(assert) {
     this.setupTreeList();
     this.rowsView.render($testElement);
 
-    //act
+    // act
     $testElement.find("tbody td").first().trigger("dxclick");
 
-    //assert
+    // assert
     assert.ok($testElement.find("tbody td").first().hasClass("dx-editor-cell"), "edit cell");
 });
 
 QUnit.test("Editing with validation - save edit data", function(assert) {
-    //arrange
+    // arrange
     var items,
         $cellElement,
         $testElement = $('#treeList');
@@ -429,11 +429,11 @@ QUnit.test("Editing with validation - save edit data", function(assert) {
     this.setupTreeList();
     this.rowsView.render($testElement);
 
-    //act
+    // act
     this.cellValue(0, 0, "666");
     this.saveEditData();
 
-    //assert
+    // assert
     items = this.getDataSource().items();
     $cellElement = $testElement.find("tbody > .dx-data-row").first().children().first();
     assert.notOk($cellElement.hasClass("dx-treelist-invalid"), "first cell value isn't valid");
@@ -441,7 +441,7 @@ QUnit.test("Editing with validation - save edit data", function(assert) {
 });
 
 QUnit.test("Editing with validation - not save edit data when there are invalid", function(assert) {
-    //arrange
+    // arrange
     var items,
         $cellElement,
         $testElement = $('#treeList');
@@ -453,11 +453,11 @@ QUnit.test("Editing with validation - not save edit data when there are invalid"
     this.setupTreeList();
     this.rowsView.render($testElement);
 
-    //act
+    // act
     this.cellValue(0, 0, "");
     this.saveEditData();
 
-    //assert
+    // assert
     items = this.getDataSource().items();
     $cellElement = $testElement.find("tbody > .dx-data-row").first().children().first();
     assert.ok($cellElement.hasClass("dx-treelist-invalid"), "first cell value isn't valid");
@@ -465,7 +465,7 @@ QUnit.test("Editing with validation - not save edit data when there are invalid"
 });
 
 QUnit.test("Editing with validation - show error row on save edit data", function(assert) {
-    //arrange
+    // arrange
     var $rowElements,
         $testElement = $('#treeList');
 
@@ -479,11 +479,11 @@ QUnit.test("Editing with validation - show error row on save edit data", functio
     this.setupTreeList();
     this.rowsView.render($testElement);
 
-    //act
+    // act
     this.cellValue(0, 0, "");
     this.saveEditData();
 
-    //assert
+    // assert
     $rowElements = $testElement.find('tbody > tr');
     assert.equal($rowElements.length, 3, "count row (data row + error row + freespace row)");
     assert.ok($rowElements.eq(0).hasClass("dx-data-row"), "data row");
@@ -492,7 +492,7 @@ QUnit.test("Editing with validation - show error row on save edit data", functio
 });
 
 QUnit.test("Save edit data - exception when key is not specified in a store", function(assert) {
-    //arrange
+    // arrange
     var $testElement = $('#treeList');
 
     this.options.editing = {
@@ -511,7 +511,7 @@ QUnit.test("Save edit data - exception when key is not specified in a store", fu
     this.rowsView.render($testElement);
     this.cellValue(0, 0, 666);
 
-    //act, assert
+    // act, assert
     try {
         this.saveEditData();
         assert.ok(false, "exception should be rised");
@@ -521,7 +521,7 @@ QUnit.test("Save edit data - exception when key is not specified in a store", fu
 });
 
 QUnit.test("Delete data - exception when key is not specified in a store", function(assert) {
-    //arrange
+    // arrange
     var $testElement = $('#treeList');
 
     this.options.editing = {
@@ -540,7 +540,7 @@ QUnit.test("Delete data - exception when key is not specified in a store", funct
     this.rowsView.render($testElement);
     this.deleteRow(0);
 
-    //act, assert
+    // act, assert
     try {
         this.saveEditData();
         assert.ok(false, "exception should be rised");
@@ -550,7 +550,7 @@ QUnit.test("Delete data - exception when key is not specified in a store", funct
 });
 
 QUnit.test("Insert data - no exception when key is not specified in a store", function(assert) {
-    //arrange
+    // arrange
     var $testElement = $('#treeList');
 
     this.options.rootValue = 0;
@@ -570,15 +570,15 @@ QUnit.test("Insert data - no exception when key is not specified in a store", fu
     this.rowsView.render($testElement);
     this.addRow();
 
-    //act
+    // act
     this.saveEditData();
 
-    //assert
+    // assert
     assert.ok(true, "not exception");
 });
 
 QUnit.test("Edit cell when edit mode is 'batch' and multiple selection is enabled", function(assert) {
-    //arrange
+    // arrange
     var $cellElement,
         $testElement = $('#treeList');
 
@@ -593,17 +593,17 @@ QUnit.test("Edit cell when edit mode is 'batch' and multiple selection is enable
     this.setupTreeList();
     this.rowsView.render($testElement);
 
-    //act
+    // act
     this.editCell(0, 0);
 
-    //assert
+    // assert
     $cellElement = $testElement.find("tbody > tr").first().children().first();
     assert.ok(!$cellElement.find(".dx-select-checkbox").length, "hasn't checkbox");
 });
 
-//T514550
+// T514550
 QUnit.test("Edit batch - inserted row should not have add link", function(assert) {
-    //arrange
+    // arrange
     var $commandEditCellElement,
         $testElement = $('#treeList');
 
@@ -615,17 +615,17 @@ QUnit.test("Edit batch - inserted row should not have add link", function(assert
     this.setupTreeList();
     this.rowsView.render($testElement);
 
-    //act
+    // act
     this.addRow();
 
-    //assert
+    // assert
     $commandEditCellElement = $testElement.find("tbody > .dx-row-inserted").first().find(".dx-command-edit");
     assert.equal($commandEditCellElement.length, 1, "has command edit cell");
     assert.equal($commandEditCellElement.find(".dx-link-add").length, 0, "link add isn't rendered");
 });
 
 QUnit.test("Edit batch - removed row should not have add link", function(assert) {
-    //arrange
+    // arrange
     var $commandEditCellElement,
         $testElement = $('#treeList');
 
@@ -637,10 +637,10 @@ QUnit.test("Edit batch - removed row should not have add link", function(assert)
     this.setupTreeList();
     this.rowsView.render($testElement);
 
-    //act
+    // act
     this.deleteRow(0);
 
-    //assert
+    // assert
     $commandEditCellElement = $testElement.find("tbody > .dx-row-removed").first().find(".dx-command-edit");
     assert.equal($commandEditCellElement.length, 1, "has command edit cell");
     assert.equal($commandEditCellElement.find(".dx-link-add").length, 0, "link add isn't rendered");

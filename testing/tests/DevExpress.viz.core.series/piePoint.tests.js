@@ -1004,14 +1004,14 @@ QUnit.test("columns if label in center", function(assert) {
 });
 
 QUnit.test("columns with maxLabelLength", function(assert) {
-    //arrange
+    // arrange
     var point = createPointWithStubLabel.call(this, { 0: 350, 10: 330, 20: 310 });
     point.setMaxLabelLength(30);
 
-    //act
+    // act
     var coord = point._correctLabelCoord({ x: 400, y: 10 });
 
-    //arrange
+    // arrange
     assert.deepEqual(coord, { x: 450, y: 10 }, "coords");
 });
 

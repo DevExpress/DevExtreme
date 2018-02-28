@@ -185,7 +185,7 @@ var HeaderFilterController = modules.ViewController.inherit((function() {
                     useDefaultSearch: true,
                     load: function(options) {
                         var d = new Deferred();
-                        //TODO remove in 16.1
+                        // TODO remove in 16.1
                         options.dataField = column.dataField || column.name;
 
                         dataSource.load(options).done(function(data) {
@@ -372,8 +372,8 @@ var INVERTED_BINARY_OPERATIONS = {
     "<=": ">",
     "contains": "notcontains",
     "notcontains": "contains",
-    "startswith": "notcontains", //TODO
-    "endswith": "notcontains" //TODO
+    "startswith": "notcontains", // TODO
+    "endswith": "notcontains" // TODO
 };
 
 function invertFilterExpression(filter) {

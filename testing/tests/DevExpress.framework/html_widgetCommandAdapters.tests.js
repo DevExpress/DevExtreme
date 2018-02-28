@@ -1250,5 +1250,5 @@ QUnit.test("T277325: Command highlighting and visibility change", function(asser
     manager.renderCommandsToContainers(commands, containers);
 
     commands[0].option("visible", true);
-    commands[0].option("highlighted", true);//T277325 exception was here. Fixed in T272871
+    commands[0].option("highlighted", true);// T277325 exception was here. Fixed in T272871
 });

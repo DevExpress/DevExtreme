@@ -50,7 +50,7 @@ QUnit.test("tooltip should be hidden on any target's parent scroll", function(as
     this.createChart();
     this.showTooltip();
 
-    //act
+    // act
     $(".tooltipInteraction .parentContainer").triggerHandler("scroll");
 
     assert.equal(this.tooltipHiddenSpy.calledOnce, true);
@@ -64,7 +64,7 @@ QUnit.test("tooltip should be hidden on window scroll event on desktop", functio
         this.createChart();
         this.showTooltip();
 
-        //act
+        // act
         $(window).triggerHandler("scroll");
 
         assert.equal(this.tooltipHiddenSpy.calledOnce, true);
@@ -82,7 +82,7 @@ QUnit.test("tooltip should not be hidden on window scroll event on mobile device
         this.createChart();
         this.showTooltip();
 
-        //act
+        // act
         $(window).triggerHandler("scroll");
 
         assert.equal(this.tooltipHiddenSpy.called, false);
@@ -99,7 +99,7 @@ QUnit.test("tooltip should not be hidden if target parent was changed (scroll on
     $chart.dxChart("instance").render({ force: true });
     this.showTooltip();
 
-    //act
+    // act
     $(".tooltipInteraction .parentContainer").triggerHandler("scroll");
 
     assert.equal(this.tooltipHiddenSpy.calledOnce, false);
@@ -113,7 +113,7 @@ QUnit.test("tooltip should be hidden if target parent was changed (scroll on new
     $chart.dxChart("instance").render({ force: true });
     this.showTooltip();
 
-    //act
+    // act
     $(".tooltipInteraction .newParentContainer").triggerHandler("scroll");
 
     assert.equal(this.tooltipHiddenSpy.calledOnce, true);
@@ -162,7 +162,7 @@ QUnit.test("Three stacked spline area series (one of which has null point) shoul
     assert.ok(true, "there should be no exceptions");
 });
 
-//T402081
+// T402081
 QUnit.test("number of rendering on updating dataSource", function(assert) {
     var drawn = sinon.spy(),
         data = new DataSource({
@@ -182,7 +182,7 @@ QUnit.test("number of rendering on updating dataSource", function(assert) {
     assert.equal(drawn.callCount, 2, "drawn only on changing dataSource & load");
 });
 
-//T600660
+// T600660
 QUnit.test("useSpiderWeb option changing", function(assert) {
     var polar = $("#chart").dxPolarChart({
             series: [{}]
@@ -225,60 +225,60 @@ QUnit.module("series API", {
 });
 
 QUnit.test("single series. select", function(assert) {
-    //arrange
+    // arrange
     this.options.onSeriesSelectionChanged = sinon.spy();
 
     var chart = this.createChart(this.options);
 
-    //act
+    // act
     chart.getAllSeries()[0].select();
 
-    //assert
+    // assert
     assert.equal(this.options.onSeriesSelectionChanged.callCount, 1);
 });
 
 QUnit.test("single series. double select", function(assert) {
-    //arrange
+    // arrange
     this.options.onSeriesSelectionChanged = sinon.spy();
 
     var chart = this.createChart(this.options);
 
     chart.getAllSeries()[0].select();
-    //act
+    // act
     chart.getAllSeries()[0].select();
 
-    //assert
+    // assert
     assert.equal(this.options.onSeriesSelectionChanged.callCount, 1);
 });
 
 QUnit.test("single series. clear selection selected series", function(assert) {
-    //arrage
+    // arrage
     this.options.onSeriesSelectionChanged = sinon.spy();
     var chart = this.createChart(this.options);
 
     chart.getAllSeries()[0].select();
 
-    //act
+    // act
     chart.getAllSeries()[0].clearSelection();
 
-    //assert
+    // assert
     assert.equal(this.options.onSeriesSelectionChanged.callCount, 2);
 });
 
 QUnit.test("single series. clear selection not selected series", function(assert) {
-    //arrage
+    // arrage
     this.options.onSeriesSelectionChanged = sinon.spy();
     this.createChart(this.options);
 
-    //act
+    // act
     this.chart.getAllSeries()[0].clearSelection();
 
-    //assert
+    // assert
     assert.equal(this.options.onSeriesSelectionChanged.callCount, 0);
 });
 
 QUnit.test("select second series with single selection mode", function(assert) {
-    //arrange
+    // arrange
     this.options.series.push({ argumentField: "arg", valueField: "val2" });
     this.options.onSeriesSelectionChanged = sinon.spy();
     this.options.seriesSelectionMode = "single";
@@ -288,32 +288,32 @@ QUnit.test("select second series with single selection mode", function(assert) {
 
     allSeries[0].select();
 
-    //act
+    // act
     allSeries[1].select();
 
-    //assert
+    // assert
     assert.strictEqual(allSeries[0].isSelected(), false);
     assert.strictEqual(allSeries[1].isSelected(), true);
     assert.equal(this.options.onSeriesSelectionChanged.callCount, 3);
 });
 
 QUnit.test("select series with two series", function(assert) {
-    //arrange
+    // arrange
     this.options.series.push({ argumentField: "arg", valueField: "val2" });
     this.options.seriesSelectionMode = "single";
     this.createChart(this.options);
 
     var allSeries = this.chart.getAllSeries();
 
-    //act
+    // act
     allSeries[0].select();
 
-    //assert
+    // assert
     assert.strictEqual(allSeries[0].isSelected(), true);
 });
 
 QUnit.test("select second series with multiple selection mode", function(assert) {
-    //arrange
+    // arrange
     this.options.series.push({ argumentField: "arg", valueField: "val2" });
     this.options.seriesSelectionMode = "multiple";
     this.createChart(this.options);
@@ -322,86 +322,86 @@ QUnit.test("select second series with multiple selection mode", function(assert)
 
     allSeries[0].select();
 
-    //act
+    // act
     allSeries[1].select();
 
-    //assert
+    // assert
     assert.strictEqual(allSeries[0].isSelected(), true);
     assert.strictEqual(allSeries[1].isSelected(), true);
 });
 
 QUnit.test("select point", function(assert) {
-    //arrange
+    // arrange
     var pointSelectionChanged = this.options.onPointSelectionChanged = sinon.spy();
 
     this.options.pointSelectionMode = "single";
     this.createChart(this.options);
 
-    //act
+    // act
     this.chart.getAllSeries()[0].getAllPoints()[0].select();
 
-    //assert
+    // assert
     assert.strictEqual(this.chart.getAllSeries()[0].getAllPoints()[0].isSelected(), true);
     assert.equal(pointSelectionChanged.callCount, 1);
 });
 
 QUnit.test("select selected point", function(assert) {
-    //arrange
+    // arrange
     var pointSelectionChanged = this.options.onPointSelectionChanged = sinon.spy();
 
     this.options.pointSelectionMode = "single";
     this.createChart(this.options);
     this.chart.getAllSeries()[0].getAllPoints()[0].select();
 
-    //act
+    // act
     this.chart.getAllSeries()[0].getAllPoints()[0].select();
 
-    //assert
+    // assert
     assert.equal(pointSelectionChanged.callCount, 1);
 });
 
 QUnit.test("clear selection of selected point", function(assert) {
-    //arrange
+    // arrange
     var pointSelectionChanged = this.options.onPointSelectionChanged = sinon.spy();
 
     this.options.pointSelectionMode = "single";
     this.createChart(this.options);
 
     this.chart.getAllSeries()[0].getAllPoints()[0].select();
-    //act
+    // act
     this.chart.getAllSeries()[0].getAllPoints()[0].clearSelection();
 
-    //assert
+    // assert
     assert.strictEqual(this.chart.getAllSeries()[0].getAllPoints()[0].isSelected(), false);
     assert.equal(pointSelectionChanged.callCount, 2);
 });
 
 QUnit.test("clear selection of unselected point", function(assert) {
-    //arrange
+    // arrange
     var pointSelectionChanged = this.options.onPointSelectionChanged = sinon.spy();
 
     this.options.pointSelectionMode = "single";
     this.createChart(this.options);
 
-    //act
+    // act
     this.chart.getAllSeries()[0].getAllPoints()[0].clearSelection();
 
-    //assert
+    // assert
     assert.equal(pointSelectionChanged.callCount, 0);
 });
 
 QUnit.test("select two points. single mode", function(assert) {
-    //arrange
+    // arrange
     var pointSelectionChanged = this.options.onPointSelectionChanged = sinon.spy();
 
     this.options.pointSelectionMode = "single";
     this.createChart(this.options);
 
-    //act
+    // act
     this.chart.getAllSeries()[0].getAllPoints()[0].select();
     this.chart.getAllSeries()[0].getAllPoints()[1].select();
 
-    //assert
+    // assert
     assert.strictEqual(this.chart.getAllSeries()[0].getAllPoints()[0].isSelected(), false);
     assert.strictEqual(this.chart.getAllSeries()[0].getAllPoints()[1].isSelected(), true);
     assert.equal(pointSelectionChanged.callCount, 3);
@@ -413,81 +413,81 @@ QUnit.test("select points in different series", function(assert) {
     this.options.pointSelectionMode = "single";
     this.createChart(this.options);
 
-    //act
+    // act
     this.chart.getAllSeries()[0].getAllPoints()[0].select();
     this.chart.getAllSeries()[1].getAllPoints()[0].select();
 
-    //assert
+    // assert
     assert.equal(this.chart.getAllSeries()[0].getAllPoints()[0].isSelected(), false);
 });
 
 QUnit.test("select two points with multiple mode", function(assert) {
-    //arrange
+    // arrange
     this.options.pointSelectionMode = "multiple";
     this.createChart(this.options);
 
-    //act
+    // act
     this.chart.getAllSeries()[0].getAllPoints()[0].select();
     this.chart.getAllSeries()[0].getAllPoints()[1].select();
 
-    //assert
+    // assert
     assert.equal(this.chart.getAllSeries()[0].getAllPoints()[0].isSelected(), true);
 });
 
 QUnit.test("hover", function(assert) {
-    //arrange
+    // arrange
     var hoverChanged = this.options.onSeriesHoverChanged = sinon.spy();
     this.createChart(this.options);
 
-    //act
+    // act
     this.chart.getAllSeries()[0].hover();
 
-    //assert
+    // assert
     assert.equal(hoverChanged.callCount, 1);
 });
 
 QUnit.test("clearHover", function(assert) {
-    //arrange
+    // arrange
     var hoverChanged = this.options.onSeriesHoverChanged = sinon.spy();
     this.createChart(this.options);
     this.chart.getAllSeries()[0].hover();
     hoverChanged.reset();
-    //act
+    // act
     this.chart.getAllSeries()[0].clearHover();
 
-    //assert
+    // assert
     assert.equal(hoverChanged.callCount, 1);
 });
 
 QUnit.test("hoverPoint", function(assert) {
-    //arrange
+    // arrange
     var pointHover = this.options.onPointHoverChanged = sinon.spy();
     this.createChart(this.options);
 
-    //act
+    // act
     this.chart.getAllSeries()[0].getAllPoints()[0].hover();
 
-    //assert
+    // assert
     assert.equal(pointHover.callCount, 1);
 });
 
 QUnit.test("clearPointHover", function(assert) {
-    //arrange
+    // arrange
     var pointHover = this.options.onPointHoverChanged = sinon.spy();
     this.createChart(this.options);
     this.chart.getAllSeries()[0].getAllPoints()[0].hover();
     pointHover.reset();
 
-    //act
+    // act
     this.chart.getAllSeries()[0].getAllPoints()[0].clearHover();
 
-    //assert
+    // assert
     assert.equal(pointHover.callCount, 1);
     assert.strictEqual(this.chart.getAllSeries()[0].getAllPoints()[0].isHovered(), false);
 });
 
 QUnit.test("Clean point hover after hover another point", function(assert) {
-    //arrange
+    // arrange
     var points,
         series;
 
@@ -495,25 +495,25 @@ QUnit.test("Clean point hover after hover another point", function(assert) {
     series = this.chart.getAllSeries()[0];
     points = series.getAllPoints();
 
-    //act
+    // act
     points[0].hover();
     points[1].hover();
 
-    //assert
+    // assert
     assert.strictEqual(points[0].isHovered(), false);
 });
 
 QUnit.test("onPointhoverChanged on hover second", function(assert) {
-    //arrange
+    // arrange
     var pointHover = this.options.onPointHoverChanged = sinon.spy();
 
     this.createChart(this.options);
     this.chart.getAllSeries()[0].getAllPoints()[0].hover();
     pointHover.reset();
-    //act
+    // act
     this.chart.getAllSeries()[0].getAllPoints()[1].hover();
 
-    //assert
+    // assert
     assert.strictEqual(pointHover.getCall(0).args[0].target, this.chart.getAllSeries()[0].getAllPoints()[0]);
 });
 
@@ -524,7 +524,7 @@ QUnit.module("axis grids hidding", {
 });
 
 QUnit.test("hide grids for first stub axis", function(assert) {
-    //act
+    // act
     var chart = this.createChart({
         dataSource: [{ arg: 1, val: 1 }],
         series: [{ axis: "a1" }, { argumentField: "argumentField" }],
@@ -557,7 +557,7 @@ QUnit.test("hide grids for first stub axis", function(assert) {
 });
 
 QUnit.test("hide grids for second axis", function(assert) {
-    //act
+    // act
     var chart = this.createChart({
         dataSource: [{ arg: 1, val: 1 }],
         series: [{ axis: "a1" }, { axis: "a2" }],
@@ -590,7 +590,7 @@ QUnit.test("hide grids for second axis", function(assert) {
 });
 
 QUnit.test("T570332. Do not show minor grid when it disabled and two stub axis", function(assert) {
-    //act
+    // act
     var chart = this.createChart({
         series: [{ axis: "a1" }, { axis: "a2" }],
         valueAxis: [{
@@ -619,7 +619,7 @@ QUnit.test("T570332. Do not show minor grid when it disabled and two stub axis",
 });
 
 QUnit.test("T570332. Make minor grid visible for first non stub axis", function(assert) {
-    //act
+    // act
     var chart = this.createChart({
         dataSource: [{ arg: 1, val: 1 }],
         series: [{ axis: "a1" }, { axis: "a2" }],
@@ -649,7 +649,7 @@ QUnit.test("T570332. Make minor grid visible for first non stub axis", function(
 });
 
 QUnit.test("two stub axis", function(assert) {
-    //act
+    // act
     var chart = this.createChart({
         dataSource: [{ arg: 1, val: 1 }],
         series: [{ argumentField: "a1" }, { argumentField: "a1" }],

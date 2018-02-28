@@ -297,7 +297,7 @@ QUnit.test("palette", function(assert) {
         useHighlight: true
     }, "useHighlight");
 
-    //teardown
+    // teardown
     paletteModule.Palette.restore();
 });
 

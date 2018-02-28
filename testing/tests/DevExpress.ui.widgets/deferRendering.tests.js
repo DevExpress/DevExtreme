@@ -501,7 +501,7 @@ QUnit.test("staggering animation with items that are outside the screen", functi
         $test = $("#staggering-animation")
         .clone()
         .appendTo($("body"))
-        .css("top", "-15px");//Hide the top item. It's of 10px height
+        .css("top", "-15px");// Hide the top item. It's of 10px height
 
     TransitionExecutorModule.TransitionExecutor = TransitionExecutorModule.TransitionExecutor.inherit({
         enter: function($el, config) {

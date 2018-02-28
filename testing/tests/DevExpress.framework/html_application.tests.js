@@ -56,7 +56,7 @@ function createThemeMarkerStyle(themeName) {
 
 var TestLayoutController = Class.inherit({
     ctor: function(options) {
-        this.log = noop;//is overridden by options.log
+        this.log = noop;// is overridden by options.log
         $.extend(this, options);
     },
     init: function() {

@@ -393,7 +393,7 @@ DataSourceAdapter = DataSourceAdapter.inherit((function() {
             level = level || 0;
             for(var i = 0; i < nodes.length; i++) {
                 var node = nodes[i];
-                //node.hasChildren = false;
+                // node.hasChildren = false;
                 this._fillNodes(nodes[i].children, options, expandedRowKeys, level + 1);
 
                 node.level = level;

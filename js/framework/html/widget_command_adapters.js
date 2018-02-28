@@ -44,7 +44,7 @@ var WidgetItemWrapperBase = Class.inherit({
 
 var WidgetAdapterBase = Class.inherit({
     ctor: function($widgetElement) {
-        this._commandToWidgetItemOptionNames = {};//TODO refactor widgets. Use 'text' instead of 'title' everywhere.
+        this._commandToWidgetItemOptionNames = {};// TODO refactor widgets. Use 'text' instead of 'title' everywhere.
         this.$widgetElement = $widgetElement;
         this.$widgetElement.data(DX_COMMAND_TO_WIDGET_ADAPTER, this);
 

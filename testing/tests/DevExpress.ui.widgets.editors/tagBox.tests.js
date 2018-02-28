@@ -2569,7 +2569,7 @@ QUnit.test("size of input is 1 when searchEnabled and editEnabled is false", fun
         editEnabled: false
     });
     var $input = $tagBox.find("input");
-    //NOTE: width should be 0.1 because of T393423
+    // NOTE: width should be 0.1 because of T393423
     assert.roughEqual($input.width(), 0.1, 0.1, "input has correct width");
 });
 
@@ -4021,8 +4021,8 @@ QUnit.test("focusOut should be prevented when tagContainer clicked - T454876", f
     var $inputWrapper = this.$element.find(".dx-dropdowneditor-input-wrapper");
 
     $inputWrapper.on("mousedown", function(e) {
-        //note: you should not prevent pointerdown because it will prevent click on ios real devices
-        //you must use preventDefault in code because it is possible to use .on('focusout', handler) instead of onFocusOut option
+        // note: you should not prevent pointerdown because it will prevent click on ios real devices
+        // you must use preventDefault in code because it is possible to use .on('focusout', handler) instead of onFocusOut option
         assert.ok(e.isDefaultPrevented(), "mousedown was prevented and lead to focusout prevent");
     });
 
@@ -4479,11 +4479,12 @@ QUnit.test("Select All should use cache", function(assert) {
 
     var isValueEqualsSpy = sinon.spy(tagBox, "_isValueEquals");
 
-    //act
+    // act
     keyGetterCounter = 0;
     $(".dx-list-select-all-checkbox").trigger("dxclick");
 
-    //assert
+
+    // assert
     assert.equal(keyGetterCounter, 144, "key getter call count");
     assert.equal(isValueEqualsSpy.callCount, 0, "_isValueEquals is not called");
 });

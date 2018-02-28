@@ -15,10 +15,10 @@ var MAX_LARGE_NUMBER_POWER = 4,
 var NUMERIC_FORMATS = ["currency", "fixedpoint", "exponential", "percent", "decimal"];
 
 var LargeNumberFormatPostfixes = {
-    1: 'K', //kilo
-    2: 'M', //mega
-    3: 'B', //billions
-    4: 'T' //tera
+    1: 'K', // kilo
+    2: 'M', // mega
+    3: 'B', // billions
+    4: 'T' // tera
 };
 
 var LargeNumberFormatPowers = {

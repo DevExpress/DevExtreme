@@ -383,7 +383,7 @@ var DefaultLayoutController = Class.inherit({
     },
 
     _findCommandContainers: function($markup) {
-        //TODO remove this (do that on start in viewEngine)
+        // TODO remove this (do that on start in viewEngine)
         return domUtils.createComponents($markup, ["dxCommandContainer"]);
     },
 
@@ -615,7 +615,7 @@ var DefaultLayoutController = Class.inherit({
     },
 
     _hideElements: function($elements) {
-        //we can't use $.hide/show because of B250423, T173009
+        // we can't use $.hide/show because of B250423, T173009
         $elements.addClass("dx-fast-hidden");
     },
 
@@ -653,7 +653,7 @@ var DefaultLayoutController = Class.inherit({
     _skipAnimation: function($elements) {
         $elements.addClass("dx-skip-animation");
         for(var i = 0; i < $elements.length; i++) {
-            $elements.eq(i).css("transform");//force css class to apply immediately
+            $elements.eq(i).css("transform");// force css class to apply immediately
         }
         $elements.removeClass("dx-skip-animation");
     },

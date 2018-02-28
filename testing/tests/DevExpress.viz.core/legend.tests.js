@@ -276,7 +276,7 @@ QUnit.test('Creates correct types of objects for series', function(assert) {
 
     assert.equal(elements.insideLegendGroup.append.firstCall.args[0], this.rootGroup, 'Series groups were added, trackers was added');
 
-    assert.equal(this.renderer.g.callCount, 1); //_insideLegendGroup
+    assert.equal(this.renderer.g.callCount, 1); // _insideLegendGroup
     assert.equal(elements.insideLegendGroup.children.length, this.data.length * 2);
     for(var i = 0; i < this.data.length; i++) {
         marker = this.renderer.rect.getCall(i).returnValue;
@@ -1370,20 +1370,20 @@ QUnit.test('coordsIn after erase', function(assert) {
     assert.ok(!legend.coordsIn(20, 45));
 });
 
-//T205280
+// T205280
 QUnit.test("coordsIn after update without data", function(assert) {
-    //arrange
+    // arrange
     var legend = this.createSimpleLegend(),
         legendSize = { width: 200, height: 200, top: 0, bottom: 0, left: 0, right: 0 };
 
     legend.draw(200, 200);
     legend.shift(10, 15);
 
-    //act
+    // act
     legend.update([], getLegendOptions());
     legend.draw(legendSize);
 
-    //assert
+    // assert
     assert.strictEqual(legend.coordsIn(10, 10), false);
 });
 
@@ -1736,7 +1736,7 @@ QUnit.test('resetItem from invisible series', function(assert) {
     assert.strictEqual(this.renderer.rect.getCall(1).returnValue.stub("smartAttr").callCount, 0);
 });
 
-//T164539
+// T164539
 QUnit.module('legend without data', $.extend({}, environment, {
     beforeEach: function() {
         this.legend = this.createSimpleLegend().draw(200, 200);

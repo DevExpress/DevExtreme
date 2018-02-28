@@ -28,7 +28,7 @@ var AnimationPresetCollection = Component.inherit({
             defaultAnimationDelay: 0,
             defaultStaggerAnimationDuration: 300,
             defaultStaggerAnimationDelay: 40,
-            defaultStaggerAnimationStartDelay: 500//hack for better animations on ipad mini
+            defaultStaggerAnimationStartDelay: 500 // hack for better animations on ipad mini
         });
     },
 
@@ -44,7 +44,7 @@ var AnimationPresetCollection = Component.inherit({
                     defaultStaggerAnimationStartDelay: 0
                 }
             },
-            {//T254756
+            {// T254756
                 device: function() {
                     return devices.current().android || devices.real.android;
                 },
@@ -59,7 +59,7 @@ var AnimationPresetCollection = Component.inherit({
         return optionPrefix + animationName;
     },
 
-    //T257755
+    // T257755
     _createAndroidSlideAnimationConfig: function(throughOpacity, widthMultiplier) {
         var that = this;
 
