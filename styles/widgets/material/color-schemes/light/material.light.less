@@ -1039,21 +1039,26 @@
 // Pager
 
 /**
-* @name 170. Pager selected item background color
+* @name 170. Pager hovered item background color
 * @type color
 * @group datagrid
 * @paletteColorOpacity 1
 */
-@pager-page-selected-bg: darken(@base-bg, 17%);
-@pager-page-selected-border-color: transparent;
+@pager-page-hovered-bg: @base-hover-color;
 /**
 * @name 175. Pager selected item text color
 * @type color
 * @group datagrid
 * @paletteColorOpacity 1
 */
-@pager-page-selected-color: @base-text-color;
-@pager-page-border-radius: @base-border-radius - 1px;
+@pager-page-selected-color: @base-inverted-text-color;
+/**
+* @name 180. Pager selected item background color
+* @type color
+* @group datagrid
+* @paletteColorOpacity 1
+*/
+@pager-page-selected-bg: @base-accent;
 
 // Color View
 /**

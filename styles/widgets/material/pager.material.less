@@ -1,11 +1,11 @@
 .dx-size-default() {
-    @MATERIAL_PAGER_PADDINGS: 9px;
+    @MATERIAL_PAGER_PADDINGS: 13px;
     @MATERIAL_PAGER_SEPARATOR_PADDINGS: 8px;
-    @MATERIAL_PAGER_PAGE_PADDING_LEFT_RIGHT: 9px;
-    @MATERIAL_PAGER_PAGE_PADDING_TOP: 7px;
-    @MATERIAL_PAGER_PAGE_PADDING_BOTTOM: 8px;
-    @MATERIAL_PAGER_NAVBUTTON_PADDINGS: @MATERIAL_PAGER_PADDINGS 13px;
-    @MATERIAL_PAGER_NAVBUTTON_HEIGHT: 17px;
+    @MATERIAL_PAGER_PAGE_PADDING: 9px 12px;
+    @MATERIAL_PAGER_PAGE_LINE_HEIGHT: 12px;
+    @MATERIAL_PAGER_PAGE_FONT_SIZE: 12px;
+    @MATERIAL_PAGER_NAVBUTTON_PADDINGS: @MATERIAL_PAGER_PAGE_PADDING;
+    @MATERIAL_PAGER_NAVBUTTON_HEIGHT: 12px;
     @MATERIAL_PAGER_PAGESIZE_PADDING_TOP: 7px;
     @MATERIAL_PAGER_PAGESIZE_PADDING_BOTTOM: 8px;
     @MATERIAL_PAGER_PAGESIZE_PADDING_LEFT: 10px;
@@ -14,11 +14,8 @@
 
 .dx-size-compact() {
     @MATERIAL_PAGER_PADDINGS: 5px;
-    @MATERIAL_PAGER_PAGE_PADDING_LEFT_RIGHT: 6px;
-    @MATERIAL_PAGER_PAGE_PADDING_TOP: 4px;
-    @MATERIAL_PAGER_PAGE_PADDING_BOTTOM: 5px;
     @MATERIAL_PAGER_SEPARATOR_PADDINGS: 4px;
-    @MATERIAL_PAGER_NAVBUTTON_PADDINGS: @MATERIAL_PAGER_PADDINGS 7px;
+    @MATERIAL_PAGER_NAVBUTTON_PADDINGS: @MATERIAL_PAGER_PAGE_PADDING;
     @MATERIAL_PAGER_NAVBUTTON_HEIGHT: 16px;
     @MATERIAL_PAGER_PAGESIZE_PADDING_TOP: 4px;
     @MATERIAL_PAGER_PAGESIZE_PADDING_BOTTOM: 5px;
@@ -27,8 +24,7 @@
 }
 
 .dx-pager {
-    padding-top: @MATERIAL_PAGER_PADDINGS;
-    padding-bottom: @MATERIAL_PAGER_PADDINGS;
+    padding: @MATERIAL_PAGER_PADDINGS 14px  @MATERIAL_PAGER_PADDINGS 24px;
 
     &.dx-light-mode {
         .dx-page-sizes {
@@ -42,7 +38,9 @@
 
     .dx-pages {
         .dx-page {
-            padding: @MATERIAL_PAGER_PAGE_PADDING_TOP @MATERIAL_PAGER_PAGE_PADDING_LEFT_RIGHT @MATERIAL_PAGER_PAGE_PADDING_BOTTOM;
+            padding: @MATERIAL_PAGER_PAGE_PADDING;
+            line-height: @MATERIAL_PAGER_PAGE_LINE_HEIGHT;
+            font-size: @MATERIAL_PAGER_PAGE_FONT_SIZE;
         }
 
         .dx-separator {
@@ -70,24 +68,26 @@
     }
 
     .dx-page, .dx-page-size {
-        .border-radius(@pager-page-border-radius);
-        border-style: solid;
-        border-width: 1px;
-        border-color: transparent;
+        &:hover {
+            background-color: @pager-page-hovered-bg;
+        }
+        .border-radius(20px);
     }
 
     .dx-page-sizes .dx-page-size {
-        padding-left: @MATERIAL_PAGER_PAGESIZE_PADDING_LEFT;
-        padding-right: @MATERIAL_PAGER_PAGESIZE_PADDING_RIGHT;
-        padding-top: @MATERIAL_PAGER_PAGESIZE_PADDING_TOP;
-        padding-bottom: @MATERIAL_PAGER_PAGESIZE_PADDING_BOTTOM;
+        padding: @MATERIAL_PAGER_PAGE_PADDING;
+        line-height: @MATERIAL_PAGER_PAGE_LINE_HEIGHT;
     }
 
     .dx-pages, .dx-page-sizes {
         .dx-selection {
-            color: @pager-page-selected-color;
-            border-color: @pager-page-selected-border-color;
+            font-weight: 500;
             background-color: @pager-page-selected-bg;
+            color: @pager-page-selected-color;
         }
+    }
+
+    .dx-page-sizes .dx-page-size:first-child {
+        margin-left: 0;
     }
 }
