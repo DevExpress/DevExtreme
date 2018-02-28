@@ -631,8 +631,7 @@ QUnit.module("Filter value", function() {
 
         container.dxFilterBuilder({
             value: ["field", "between", [1, 2]],
-            fields: [{ dataField: "field", dataType: "number" }],
-            customOperations: [{ name: "between" }]
+            fields: [{ dataField: "field", dataType: "number" }]
         });
 
         container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).trigger("dxclick");
@@ -965,10 +964,7 @@ QUnit.module("Create editor", function() {
             value: [
                 ["Field", "between", [1, 2]]
             ],
-            fields: fields,
-            customOperations: [{
-                name: "between"
-            }]
+            fields: fields
         });
 
         // act
@@ -1223,10 +1219,7 @@ QUnit.module("on value changed", function() {
             ],
             instance = $("#container").dxFilterBuilder({
                 value: value,
-                fields: fields,
-                customOperations: [{
-                    name: "between"
-                }]
+                fields: fields
             }).dxFilterBuilder("instance");
 
         // act
