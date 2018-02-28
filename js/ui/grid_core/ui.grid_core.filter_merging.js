@@ -4,20 +4,9 @@ var modules = require("./ui.grid_core.modules"),
     utils = require("../filter_builder/utils"),
     gridCoreUtils = require("./ui.grid_core.utils");
 
-var FilterMergingController = modules.ViewController.inherit((function() {
+var FilterMergingController = modules.Controller.inherit((function() {
     return {
         init: function() {
-        },
-
-        optionChanged: function(args) {
-            switch(args.name) {
-                case "filterValue":
-                    this._invalidate();
-                    args.handled = true;
-                    break;
-                default:
-                    this.callBase(args);
-            }
         }
     };
 })());
@@ -26,7 +15,7 @@ var DataControllerFilterMergingExtender = {
     _calculateAdditionalFilter: function() {
         var that = this,
             filters = [that.callBase()],
-            columns = that._columnsController.getVisibleColumns(),
+            columns = that._columnsController.getColumns(),
             filterValue = this.option("filterValue"),
             calculatedFilterValue = utils.getFilterExpression(filterValue, columns, [], "filterBuilder");
 
@@ -40,13 +29,15 @@ var DataControllerFilterMergingExtender = {
     optionChanged: function(args) {
         switch(args.name) {
             case "filterValue":
-                this._invalidate();
+                this._applyFilter();
                 args.handled = true;
                 break;
             default:
                 this.callBase(args);
         }
     }
+
+
 };
 
 module.exports = {
