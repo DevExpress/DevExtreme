@@ -234,7 +234,7 @@ var numberLocalization = dependencyInjector({
         });
     },
 
-    _getSign: function(text, format) {
+    getSign: function(text, format) {
         if(text.charAt(0) === "-") {
             return -1;
         }
@@ -312,7 +312,7 @@ var numberLocalization = dependencyInjector({
             return null;
         }
 
-        return parsed * this._getSign(text, format);
+        return parsed * this.getSign(text, format);
     }
 });
 
