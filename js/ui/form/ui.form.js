@@ -800,8 +800,12 @@ var Form = Widget.inherit({
         }
     },
 
-    _render: function() {
+    _initMarkup: function() {
         this._clearCachedInstances();
+        this.callBase();
+    },
+
+    _render: function() {
         this._prepareFormData();
 
         this.callBase();

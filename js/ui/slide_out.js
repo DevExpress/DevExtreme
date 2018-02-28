@@ -255,10 +255,13 @@ var SlideOut = CollectionWidget.inherit({
         }
     },
 
+    _initMarkup: function() {
+        this._renderList();
+        this.callBase();
+    },
     _render: function() {
         // TODO: remove this, needed for memory leak tests
         this._slideOutView._renderShield();
-        this._renderList();
         this._renderContentTemplate();
         this.callBase();
     },

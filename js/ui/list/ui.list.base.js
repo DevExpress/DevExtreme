@@ -700,6 +700,11 @@ var ListBase = CollectionWidget.inherit({
         this.callBase(newItems);
     },
 
+    _refreshContent: function() {
+        this._prepareContent();
+        this._fireContentReadyAction();
+    },
+
     _hideLoadingIfLoadIndicationOff: function() {
         if(!this.option("indicateLoading")) {
             this._dataSourceLoadingChangedHandler(false);
@@ -820,13 +825,25 @@ var ListBase = CollectionWidget.inherit({
         }
     },
 
-    _render: function() {
+    _initMarkup: function() {
         this._itemElementsCache = $();
 
         this.$element().addClass(LIST_CLASS);
         this.callBase();
-
+        this._prepareContent();
         this.option("useInkRipple") && this._renderInkRipple();
+    },
+
+    _prepareContent: function() {
+        var that = this;
+
+        commonUtils.deferRender(function() {
+            that._renderContentImpl();
+        });
+    },
+
+    _renderContent: function() {
+        this._fireContentReadyAction();
     },
 
     _renderInkRipple: function() {
