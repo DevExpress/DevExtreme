@@ -126,7 +126,7 @@ QUnit.test("filterValues with one filter expressions and with filterType 'exclud
     });
 
     //assert
-    assert.deepEqual(that.getCombinedFilter(), ["!", [["Test", "<=", 2], "or", ["Test", ">=", 5]]], "combined filter");
+    assert.deepEqual(that.getCombinedFilter(), ["!", [["Test", ">", 2], "and", ["Test", "<", 5]]], "combined filter");
 });
 
 //T345461
