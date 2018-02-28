@@ -780,6 +780,20 @@ var TagBox = SelectBox.inherit({
         return $tag;
     },
 
+    _loadItem: function() {
+        var dataSource = this._getDataSource(),
+            filter = dataSource && dataSource.filter(),
+            result;
+
+        filter && dataSource.filter(this._userFilter || null);
+
+        result = this.callBase.apply(this, arguments);
+
+        filter && dataSource.filter(filter);
+
+        return result;
+    },
+
     _loadTagData: function() {
         var values = this._getValue(),
             tagData = new Deferred(),
