@@ -1425,7 +1425,7 @@ QUnit.module("Between operation", function() {
             customOperations = [{ name: "between", editorTemplate: template }, { name: "operation1" }];
 
         // act
-        var mergedOperations = utils.getMergedOperations(customOperations, function() { });
+        var mergedOperations = utils.getMergedOperations(customOperations, "Between");
 
         // assert
         assert.equal(mergedOperations.length, 2, "length == 2");
@@ -1433,18 +1433,6 @@ QUnit.module("Between operation", function() {
         assert.deepEqual(mergedOperations[0].dataTypes, ["number", "date", "datetime"]);
         assert.equal(mergedOperations[0].editorTemplate, template);
         assert.equal(mergedOperations[1].name, "operation1");
-    });
-
-    QUnit.test("between is disabled", function(assert) {
-        // arrange
-        var customOperations = [{ name: "operation1" }];
-
-        // act
-        var mergedOperations = utils.getMergedOperations(customOperations, function() { });
-
-        // assert
-        assert.equal(mergedOperations.length, 1, "length == 1");
-        assert.equal(mergedOperations[0].name, "operation1");
     });
 
     QUnit.test("override between options", function(assert) {
