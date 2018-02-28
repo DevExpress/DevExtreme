@@ -152,13 +152,14 @@ function zoomArgsIsEqualCanvas(zoomArgs) {
 function checkGestureEventsForScaleEdges(scrollThreshold, scale, scroll, touches, zoomArgs) {
     var that = this,
         businessRange = that.getBusinessRange(),
+        isDiscreteAxis = businessRange.axisType === "discrete",
         scrollBarNearMin = that.scrollHasExtremePosition(scrollThreshold, false),
         scrollBarNearMax = that.scrollHasExtremePosition(scrollThreshold, true),
         isOriginalScale = that.checkScrollForOriginalScale(scrollThreshold),
         scalingEventAtMin = scrollBarNearMin && ((businessRange.rotated ? scroll > 0 : scroll < 0) || scale !== 1),
         scalingEventAtMax = scrollBarNearMax && ((businessRange.rotated ? scroll < 0 : scroll > 0) || scale !== 1);
 
-    return (touches === 2 && scale === 1) || (zoomArgs && (!scrollBarNearMin && !scrollBarNearMax)) ||
+    return (touches === 2 && scale === 1) || ((zoomArgs || isDiscreteAxis) && (!scrollBarNearMin && !scrollBarNearMax)) ||
         (!isOriginalScale && (scalingEventAtMin || scalingEventAtMax)) || (isOriginalScale && scale > 1);
 }
 
@@ -169,21 +170,30 @@ function checkScrollForOriginalScale(scrollThreshold) {
 function scrollHasExtremePosition(scrollThreshold, isMax) {
     var that = this,
         businessRange = that.getBusinessRange(),
-        isSinglePoint = businessRange.min === businessRange.max,
+        isDiscreteAxis = businessRange.axisType === "discrete",
+        min = isDiscreteAxis ? businessRange.categories[0] : businessRange.min,
+        max = isDiscreteAxis ? businessRange.categories[businessRange.categories.length - 1] : businessRange.max,
+        isSinglePoint = min === max,
         isMaxExtremum = (!businessRange.invert && isMax) || (businessRange.invert && !isMax),
-        axisExtremum = isMaxExtremum ? businessRange.max : businessRange.min,
+        axisExtremum = isMaxExtremum ? max : min,
         scrollExtremum = isMaxExtremum ? businessRange.maxVisible : businessRange.minVisible,
-        equalityCorrection = axisExtremum.valueOf() === scrollExtremum.valueOf() ? 0 : getEqualityCorrection(businessRange),
+        equalityCorrection,
         distanceToExtremum;
 
-    if(businessRange.axisType === "logarithmic") {
-        axisExtremum = vizUtils.getLog(axisExtremum, businessRange.base);
-        scrollExtremum = vizUtils.getLog(scrollExtremum, businessRange.base);
+    if(isDiscreteAxis) {
+        return axisExtremum.valueOf() === scrollExtremum.valueOf();
+    } else {
+        if(businessRange.axisType === "logarithmic") {
+            axisExtremum = vizUtils.getLog(axisExtremum, businessRange.base);
+            scrollExtremum = vizUtils.getLog(scrollExtremum, businessRange.base);
+        }
+
+        equalityCorrection = axisExtremum.valueOf() === scrollExtremum.valueOf() ? 0 : getEqualityCorrection(businessRange);
+        distanceToExtremum = isSinglePoint ?
+            Math.abs((axisExtremum + ((isMaxExtremum ? 1 : -1) * equalityCorrection)) - scrollExtremum) :
+            Math.abs(axisExtremum - scrollExtremum);
+        return distanceToExtremum * that._canvasOptions.ratioOfCanvasRange < scrollThreshold;
     }
-    distanceToExtremum = isSinglePoint ?
-        Math.abs((axisExtremum + ((isMaxExtremum ? 1 : -1) * equalityCorrection)) - scrollExtremum) :
-        Math.abs(axisExtremum - scrollExtremum);
-    return distanceToExtremum * that._canvasOptions.ratioOfCanvasRange < scrollThreshold;
 }
 
 function getCheckingMethodsAboutBreaks(inverted) {

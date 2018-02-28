@@ -184,10 +184,16 @@ var DOMComponent = Component.inherit({
         var width = this._getOptionValue("width", element);
         var height = this._getOptionValue("height", element);
 
-        $element.css({
-            width: width,
-            height: height
-        });
+        if(this._isCssUpdateRequired(element, height, width)) {
+            $element.css({
+                width: width,
+                height: height
+            });
+        }
+    },
+
+    _isCssUpdateRequired: function(element, height, width) {
+        return !!(width || height || element.style.width || element.style.height);
     },
 
     _attachDimensionChangeHandlers: function() {
