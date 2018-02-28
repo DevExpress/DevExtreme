@@ -477,7 +477,7 @@ var Slider = TrackBar.inherit({
     },
 
     _getBarMarginWidth: function() {
-        var margins = parseInt(this._$bar.css("marginLeft")) + parseInt(this._$bar.css("marginRight"));
+        var margins = parseFloat(this._$bar.css("marginLeft")) + parseFloat(this._$bar.css("marginRight"));
         return Math.abs(margins);
     },
 

@@ -172,6 +172,7 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
         // Though this relation is not ensured in code we will immediately know when it is broken - `loading indicator` will break on construction
         linkTarget && linkTarget.enableLinks().virtualLink("core").virtualLink("peripheral");
         that._renderVisibilityChange();
+        that._attachVisibilityChangeHandlers();
         that._initEventTrigger();
         that._incidentOccurred = createIncidentOccurred(that.NAME, that._eventTrigger);
         that._layout = new _Layout();
