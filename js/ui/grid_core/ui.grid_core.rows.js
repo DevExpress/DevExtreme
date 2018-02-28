@@ -507,7 +507,7 @@ module.exports = {
                         if(isGroup) {
                             $row.addClass(GROUP_ROW_CLASS);
                             isRowExpanded = row.isExpanded;
-                            this.setAria("role", "rowgroup", $row);
+                            this.setAria("role", "row", $row);
                             this.setAria("expanded", isDefined(isRowExpanded) && isRowExpanded.toString(), $row);
                         }
                     }
