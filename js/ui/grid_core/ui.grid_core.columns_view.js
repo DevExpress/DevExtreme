@@ -178,8 +178,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         var that = this,
             $table = $("<table>")
                 .addClass(that.addWidgetPrefix(TABLE_CLASS))
-                .addClass(that.addWidgetPrefix(TABLE_FIXED_CLASS))
-                .attr("role", "presentation");
+                .addClass(that.addWidgetPrefix(TABLE_FIXED_CLASS));
 
         if(columns) {
             $table.append(that._createColGroup(columns));
@@ -187,6 +186,9 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
                 //T198380
                 $table.append($("<thead>").append("<tr>"));
             }
+            that.setAria("role", "presentation", $table);
+        } else {
+            that.setAria("hidden", true, $table);
         }
 
         $table.append("<tbody>");
@@ -290,8 +292,6 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         var i, j,
             colgroupElement = $("<colgroup>"),
             colspan;
-
-        colgroupElement.attr("role", "presentation");
 
         for(i = 0; i < columns.length; i++) {
             colspan = columns[i].colspan || 1;

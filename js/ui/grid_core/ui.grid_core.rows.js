@@ -666,8 +666,6 @@ module.exports = {
                         .addClass(FREE_SPACE_CLASS)
                         .toggleClass(COLUMN_LINES_CLASS, that.option("showColumnLines"));
 
-                    that.setAria("hidden", true, freeSpaceRowElement);
-
                     for(i = 0; i < columns.length; i++) {
                         freeSpaceRowElement.append(that._createCell({ column: columns[i], rowType: "freeSpace" }));
                     }
