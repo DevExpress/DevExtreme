@@ -21,8 +21,8 @@
 }
 
 @MATERIAL_SWITCH_TRANSITION: all .4s cubic-bezier(0.23, 1, 0.32, 1);
-@MATERIAL_ON_VALUE_SWITCH_SHADOW: 0 0 0 15px fade(@switch-handle-bg, 10%);
-@MATERIAL_SWITCH_SHADOW: 0 0 0 15px fade(#000000, 10%);
+@MATERIAL_ON_VALUE_SWITCH_SHADOW: 0 0 0 15px fade(@switch-handle-on-bg, 10%);
+@MATERIAL_SWITCH_SHADOW: 0 0 0 15px fade(@base-text-color, 10%);
 
 .dx-switch-wrapper {
     position: relative;
@@ -35,16 +35,26 @@
     &.dx-state-readonly,
     &.dx-state-disabled {
         .dx-switch-handle:before {
-            background-color: #BDBDBD;
+            background-color: darken(@base-element-bg, 26%);
         }
 
         .dx-switch-container:before {
-            background-color: rgba(0, 0, 0, .12);
+            background-color: fade(@base-text-color, 12%);
         }
     }
 
     &.dx-state-active,
     &.dx-state-focused {
+        .dx-switch-handle:before {
+            .box-shadow(@MATERIAL_SWITCH_SHADOW);
+            .border-radius(50%)
+        }
+    }
+}
+
+.dx-switch-on-value,
+.dx-switch {
+    &.dx-state-readonly.dx-state-focused {
         .dx-switch-handle:before {
             .box-shadow(@MATERIAL_SWITCH_SHADOW);
             .border-radius(50%)
@@ -63,7 +73,7 @@
         width: 100%;
         height: 14px;
         .border-radius(500px);
-        background-color: darken(@switch-bg, 38%);
+        background-color: @switch-bg;
         margin: 3px 0;
     }
 }
@@ -80,7 +90,7 @@
     padding: 4px 0;
     width: 50%;
     height: @MATERIAL_SWITCH_HEIGHT;
-    color: rgba(0,0,0,0);
+    color: transparent;
     text-align: center;
     line-height: 100%;
 }
@@ -119,11 +129,11 @@
 
 .dx-switch-on-value {
     .dx-switch-container:before {
-        background-color: fade(@switch-handle-bg, 50%);
+        background-color: @switch-on-bg;
     }
 
     .dx-switch-handle:before {
-        background-color: @switch-handle-bg;
+        background-color: @switch-handle-on-bg;
     }
 
     &.dx-state-active,

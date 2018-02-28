@@ -4,7 +4,6 @@
     @MATERIAL_TAGBOX_TAG_CONTENT_PADDING: 8px @MATERIAL_TAGBOX_TAG_CONTENT_PADDING_RIGHT 7px @MATERIAL_TAGBOX_TAG_CONTENT_PADDING_LEFT;
     @MATERIAL_TAGBOX_REMOVE_BUTTON_RIGHT: 4px;
     @MATERIAL_TAGBOX_REMOVE_BUTTON_WIDTH: 24px;
-    @MATERIAL_TAGBOX_REMOVE_BUTTON_ICON_SIZE: 14px;
     @MATERIAL_TAGBOX_SELECT_ALL_PADDING_BOTTOM: 12px;
     @MATERIAL_TAGBOX_SELECT_ALL_MARGIN_BOTTOM: 3px;
 }
@@ -63,9 +62,8 @@
     padding: @MATERIAL_TAGBOX_TAG_CONTENT_PADDING;
     min-width: 40px;
     background-color: @tagbox-tag-bg;
-    border-radius: @tagbox-tag-border-radius;
     color: @tagbox-tag-color;
-    .border-radius(500px);
+    .border-radius(@tagbox-tag-border-radius);
 }
 
 .dx-tag-remove-button {
@@ -74,9 +72,15 @@
     right: @MATERIAL_TAGBOX_REMOVE_BUTTON_RIGHT;
 
     .dx-icon-clear;
-    .dx-icon-font-centered-sizing(@MATERIAL_TAGBOX_REMOVE_BUTTON_ICON_SIZE);
+
+
+    font-size: 14px;
 
     &:before {
+        display: block;
+        position: absolute;
+        top: 50%;
+        left: 49%;
         width: 18px;
         height: 18px;
         margin-left: -9px;
@@ -90,12 +94,17 @@
 }
 
 .dx-tag {
-    margin-bottom: 2px;
+    margin:0 10px 2px 0;
 
-    .dx-tag:hover {
+    &:hover {
         .dx-tag-content {
             background-color: @tagbox-tag-hover-bg;
             color: @base-bg
+        }
+
+        .dx-tag-remove-button:before {
+            color: @tagbox-tag-hover-bg;
+            background-color: @base-bg;
         }
     }
 }

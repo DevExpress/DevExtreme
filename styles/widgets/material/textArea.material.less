@@ -1,7 +1,7 @@
 .dx-textarea {
     height: auto;
     border-radius: @texteditor-border-radius;
-    box-shadow: 0 0 0 1px rgba(0, 0, 0, .42);
+    box-shadow: 0 0 0 1px fade(@texteditor-color, 42%);
 
     &.dx-state-hover {
         box-shadow: 0 0 0 2px @texteditor-color;
@@ -13,7 +13,7 @@
 
     &.dx-state-disabled,
     &.dx-state-readonly {
-        box-shadow: 0 0 0 2px rgba(0, 0, 0, .42);
+        box-shadow: 0 0 0 1px fade(@texteditor-color, 42%);
     }
 
     .dx-texteditor-input {

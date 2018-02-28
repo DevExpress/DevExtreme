@@ -49,9 +49,6 @@
 }
 
 .dx-texteditor {
-    background: @texteditor-bg;
-
-
     &:not(.dx-textarea) {
         .dx-texteditor-borders-position() {
             left: 0;
@@ -70,20 +67,20 @@
 
         .dx-texteditor-container:after {
             .dx-texteditor-borders-position();
-            border-bottom: 1px solid rgba(0, 0, 0, .42);
+            border-bottom: 1px solid @texteditor-border-color;
         }
 
         &.dx-state-hover {
             .dx-texteditor-container:after {
-                border-bottom: 1px solid @texteditor-color;
-                border-top: 1px solid @texteditor-color;
+                border-bottom: 1px solid @texteditor-hover-border-color;
+                border-top: 1px solid @texteditor-hover-border-color;
             }
         }
 
         &.dx-state-focused, &.dx-state-active {
             .dx-texteditor-container:before {
-                border-bottom: 1px solid @base-accent;
-                border-top: 1px solid @base-accent;
+                border-bottom: 1px solid @texteditor-focused-border-color;
+                border-top: 1px solid @texteditor-focused-border-color;
                 .scale(1);
                 .transition-transform(0.4s, cubic-bezier(0.4, 0, 0.02, 1));
             }
@@ -91,11 +88,11 @@
 
         &.dx-state-disabled, &.dx-state-readonly {
             .dx-texteditor-container:after {
-                border-bottom: 1px dotted rgba(0, 0, 0, .42);
+                border-bottom: 1px dotted @texteditor-border-color;
             }
 
             .dx-texteditor-input {
-                color: rgba(0, 0, 0, .38);
+                color: fade(@texteditor-color, 38%);
             }
         }
     }
@@ -155,20 +152,20 @@
 
     &.dx-state-hover {
         .dx-texteditor-container:after {
-            background-color: @texteditor-invalid-faded-border-color;
+            border-top: 1px solid @texteditor-invalid-faded-border-color;
+            border-bottom: 1px solid @texteditor-invalid-faded-border-color;
         }
     }
 
-    &.dx-state-focused {
+    &.dx-state-focused, &.dx-state-active {
         .dx-texteditor-container:before {
-            background-color: @texteditor-invalid-focused-border-color;
+            border-top: 1px solid @texteditor-invalid-focused-border-color;
+            border-bottom: 1px solid @texteditor-invalid-focused-border-color;
         }
     }
 
-    .dx-texteditor-container {
-        &:after {
-            background-color: @texteditor-invalid-faded-border-color;
-        }
+    .dx-texteditor-container:after {
+        border-bottom: 1px solid @texteditor-invalid-faded-border-color;
     }
 }
 

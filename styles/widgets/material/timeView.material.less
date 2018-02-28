@@ -1,11 +1,12 @@
 .dx-size-default() {
-    @MATERIAL_TIMEVIEW_CLOCK_MIN_SIZE: 191px;
-    @MATERIAL_TIMEVIEW_FIELD_MIN_HEIGHT: 50px;
+    @MATERIAL_TIMEVIEW_CLOCK_MIN_SIZE: 222px;
+    @MATERIAL_TIMEVIEW_CLOCK_IMAGE_MIN_SIZE: 205px;
+    @MATERIAL_TIMEVIEW_FIELD_MIN_HEIGHT: 35px;
     @MATERIAL_TIMEVIEW_ARROW_HEIGHT_REDUCE: 0px;
     @MATERIAL_TIMEVIEW_FIELD_NUMBERBOX_REDUCE: 0px;
     @MATERIAL_TIMEVIEW_CLOCK_ADDITIONAL_SIZE: 8px;
     @MATERIAL_TIMEVIEW_TIME_SEPARATOR_MARGIN: 5px;
-    @MATERIAL_TIMEVIEW_FORMAT12_WIDTH: 70px;
+    @MATERIAL_TIMEVIEW_FORMAT12_WIDTH: 58px;
 }
 .dx-size-compact() {
     @MATERIAL_TIMEVIEW_CLOCK_MIN_SIZE: 161px;
@@ -21,6 +22,7 @@
 .dx-timeview {
     height: auto;
     width: auto;
+    background-color: @timeview-bg
 }
 
 .dx-timeview-clock {
@@ -28,7 +30,7 @@
     min-width: @MATERIAL_TIMEVIEW_CLOCK_MIN_SIZE + @MATERIAL_TIMEVIEW_CLOCK_ADDITIONAL_SIZE;
 
     background: @timeview-clock-bg no-repeat 50% 50%;
-    background-size: @MATERIAL_TIMEVIEW_CLOCK_MIN_SIZE;
+    background-size: @MATERIAL_TIMEVIEW_CLOCK_IMAGE_MIN_SIZE;
 }
 
 .dx-timeview-hourarrow {
@@ -47,6 +49,10 @@
     margin-left: @MATERIAL_TIMEVIEW_TIME_SEPARATOR_MARGIN;
     margin-right: auto;
 
+    &.dx-dropdowneditor-button-visible .dx-texteditor-input {
+        padding-right: 25px;
+    }
+
     &.dx-rtl, .dx-rtl & {
         margin-left: auto;
         margin-right: @MATERIAL_TIMEVIEW_TIME_SEPARATOR_MARGIN;
@@ -62,7 +68,7 @@
 }
 
 .dx-timeview-field .dx-numberbox {
-    width: 70px - @MATERIAL_TIMEVIEW_FIELD_NUMBERBOX_REDUCE;
+    width: 50px - @MATERIAL_TIMEVIEW_FIELD_NUMBERBOX_REDUCE;
 
     &.dx-numberbox-spin-touch-friendly {
         width: 110px - @MATERIAL_TIMEVIEW_FIELD_NUMBERBOX_REDUCE;

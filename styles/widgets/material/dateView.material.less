@@ -90,6 +90,7 @@
 
 .dx-dateview-item-selected {
     font-size: 2.2em;
+    color: @base-accent;
 }
 
 .dx-rtl {
@@ -117,13 +118,11 @@
 
     &:before {
         top: -@MATERIAL_DATEVIEW_ROLLER_PADDING;
-        border-bottom: 1px solid @dateview-border-color;
         .gradient-linear(@dateview-shadow-up);
     }
 
     &:after {
         top: @MATERIAL_DATEVIEW_ROLLER_ITEM_HEIGHT;
-        border-top: 1px solid @dateview-border-color;
         .gradient-linear(@dateview-shadow-down);
     }
 }

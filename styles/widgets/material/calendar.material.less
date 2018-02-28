@@ -1,6 +1,6 @@
 .dx-size-default() {
     @MATERIAL_CALENDAR_CELL_FONT_SIZE: 12px;
-    @MATERIAL_CALENDAR_BODY_WIDTH: 282px;
+    @MATERIAL_CALENDAR_BODY_WIDTH: 320px;
     @MATERIAL_CALENDAR_BODY_HEIGHT: 215px;
     @MATERIAL_CALENDAR_BODY_TOP: 52px;
     @MATERIAL_CALENDAR_FOOTER_HEIGHT: 45px;
@@ -180,7 +180,6 @@
     thead {
         font-size: 10px;
         font-weight: bold;
-        text-transform: uppercase;
         line-height: 1.2;
 
         tr {
@@ -207,19 +206,36 @@
 
 .dx-calendar-cell {
     text-align: center;
-    padding: 12px @MATERIAL_CALENDAR_CELL_HORIZONTAL_PADDING;
+    //padding: 12px @MATERIAL_CALENDAR_CELL_HORIZONTAL_PADDING;
     color: @calendar-color;
     font-size: @MATERIAL_CALENDAR_CELL_FONT_SIZE;
     width: 39px;
     .border-radius(@calendar-cell-contoured-border-radius);
 
+    .dx-calendar-view-year &,
+    .dx-calendar-view-century & {
+        span {
+            line-height: 0px;
+        }
+    }
+
+    span {
+        display: inline-block;
+        width: 32px;
+        line-height: 32px;
+        border-radius: 50%;
+    }
+
     &.dx-calendar-today {
         font-weight: bold;
+        color: @calendar-cell-selected-bg;
     }
 
     &.dx-state-hover {
-        .box-shadow(inset 0px -1px 0px 1000px @calendar-hover-bg);
-        color: @calendar-cell-hover-color;
+        span {
+            background-color: @calendar-hover-bg;
+            color: @calendar-cell-hover-color;
+        }
     }
 
     &.dx-calendar-other-view,
@@ -244,16 +260,20 @@
     &.dx-state-active {
         &:not(.dx-calendar-empty-cell) {
             &:not(.dx-calendar-selected-date) {
-                .box-shadow(inset 0px -1px 0px 1000px @calendar-cell-active-bg);
+                span {
+                    background-color: @calendar-cell-active-bg;
+                }
             }
         }
     }
 
     &.dx-calendar-selected-date {
         &, &.dx-calendar-today {
-            color: @base-selected-text-color;
-            .box-shadow(inset 0px 0px 0px 1000px @calendar-cell-selected-bg);
-            font-weight: normal;
+            span {
+                color: @base-selected-text-color;
+                background-color: @calendar-cell-selected-bg;
+                font-weight: normal;
+            }
         }
     }
 }

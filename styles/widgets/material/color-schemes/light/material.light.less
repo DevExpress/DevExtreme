@@ -98,7 +98,7 @@
 * @group base.typography
 * @paletteColorOpacity 1
 */
-@base-icon-color: @base-text-color;
+@base-icon-color: fade(@base-text-color, 38%);
 
 @base-inverted-text-color: #fff;
 @base-inverted-icon-color: @base-inverted-text-color;
@@ -152,14 +152,14 @@
 * @type color
 * @group editors.texteditors
 */
-@texteditor-border-color: @base-border-color;
+@texteditor-border-color: fade(@texteditor-color, 42%);
 
 /**
 * @name 10. Background color
 * @type color
 * @group editors.texteditors
 */
-@texteditor-bg: @base-element-bg;
+@texteditor-bg: transparent;
 
 /**
 * @name 30. Focused border color
@@ -167,15 +167,15 @@
 * @group editors.texteditors
 * @paletteColorOpacity 1
 */
-@texteditor-focused-border-color: @base-focus-color;
-@texteditor-hover-bg: @base-bg;
+@texteditor-focused-border-color: @base-accent;
+@texteditor-hover-bg: @texteditor-bg;
 
 /**
 * @name 40. Hovered border color
 * @type color
 * @group editors.texteditors
 */
-
+@texteditor-hover-border-color: @texteditor-color;
 
 /**
 * @name 50. Text color
@@ -184,7 +184,7 @@
 */
 
 @texteditor-color: @base-text-color;
-@texteditor-disabled-opacity: .5;
+@texteditor-disabled-opacity: 1;
 
 /**
 * @name 60. Placeholder text color
@@ -502,7 +502,7 @@
 * @type color
 * @group editors.checkbox
 */
-@checkbox-border-color: rgba(0, 0, 0, .54);
+@checkbox-border-color: fade(@base-text-color, 54%);
 @checkbox-checked-color: @base-element-bg;
 @checkbox-indeterminate-bg: @base-accent;
 
@@ -821,14 +821,14 @@
 * @paletteColorOpacity 0.3
 */
 @tagbox-tag-bg: darken(@base-bg, 12%);
-@tagbox-tag-hover-bg: darken(@base-bg, 26%);
+@tagbox-tag-hover-bg: darken(@base-bg, 54%);
 /**
 * @name 40. Tag text color
 * @type color
 * @group editors.tagbox
 */
 @tagbox-tag-color: @base-text-color;
-@tagbox-tag-border-radius: @base-border-radius - 2px;
+@tagbox-tag-border-radius: 16px;
 
 /**
 * @name 50. Tag close button color
@@ -1002,39 +1002,43 @@
 // Switch
 
 /**
-* @name 10. Border color
+* @name 20. Track 'OFF' background color
 * @type color
 * @group editors.switch
+* @paletteColorOpacity 1
 */
-@switch-border-color: @base-border-color;
+@switch-bg: darken(@base-element-bg, 38%);
+
 
 /**
-* @name 20. 'ON' label color
+* @name 30. Handle 'OFF' background color
 * @type color
 * @group editors.switch
 * @paletteColorOpacity 1
 */
 
-@switch-bg: @base-element-bg;
-@switch-handle-bg: @base-accent;
+@switch-handle-off-bg: darken(@base-element-bg, 2%);
+
 
 /**
-* @name 40. Handle active state background color
+* @name 40. Track 'ON' background color
 * @type color
 * @group editors.switch
 */
-@switch-handle-border-radius: 50%;
 
+@switch-on-bg: fade(@base-accent, 50%);
+
+/**
+* @name 50. Handle 'ON' background color
+* @type color
+* @group editors.switch
+*/
+
+@switch-handle-on-bg: @base-accent;
+
+@switch-handle-border-radius: 50%;
 @switch-hover-bg: transparent;
 
-/**
-* @name 30. 'OFF' label color
-* @type color
-* @group editors.switch
-* @paletteColorOpacity 1
-*/
-
-@switch-handle-off-bg: #FAFAFA;
 
 // Pager
 
@@ -1930,14 +1934,14 @@
 @treeview-spin-icon-color: @base-icon-color;
 
 //TimeView
-@timeview-clock-bg: data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/generic/color-schemes/light/timeView/clock-bg.svg');
-@timeview-hourarrow-bg: data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/generic/color-schemes/light/timeView/hour-arrow.svg');
-@timeview-minutearrow-bg: data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/generic/color-schemes/light/timeView/min-arrow.svg');
+@timeview-bg: darken(@base-bg, 5%);
+@timeview-clock-bg: data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/material/color-schemes/light/timeView/clock-bg.svg');
+@timeview-hourarrow-bg: data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/material/color-schemes/light/timeView/hour-arrow.svg');
+@timeview-minutearrow-bg: data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/material/color-schemes/light/timeView/min-arrow.svg');
 
 // theme-depends shadow parameters
 
 //DateView
-@dateview-border-color: @base-border-color;
 @dateview-shadow-up: 0deg, fade(@base-bg, 0%) 0%, fade(@base-bg, 80%) 60%;
 @dateview-shadow-down: 180deg, fade(@base-bg, 0%) 0%, fade(@base-bg, 80%) 60%;
 @dateview-color: @base-text-color;
