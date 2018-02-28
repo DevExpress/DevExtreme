@@ -146,12 +146,15 @@ var DOMComponent = Component.inherit({
 
     _initMarkup: function() {
         this._renderElementAttributes();
-        this._renderDimensions();
         this._toggleRTLDirection(this.option("rtlEnabled"));
+        this._renderVisibilityChange();
+        this._renderDimensions();
     },
 
     _render: function() {
-        this._renderVisibilityChange();
+        if(this.$element().hasClass(VISIBILITY_CHANGE_CLASS)) {
+            this._attachVisibilityChangeHandlers();
+        }
     },
 
     _renderElementAttributes: function() {
@@ -175,7 +178,6 @@ var DOMComponent = Component.inherit({
         }
 
         this.$element().addClass(VISIBILITY_CHANGE_CLASS);
-        this._attachVisibilityChangeHandlers();
     },
 
     _renderDimensions: function() {
