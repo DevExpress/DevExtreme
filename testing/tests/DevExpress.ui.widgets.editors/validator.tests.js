@@ -25,7 +25,6 @@ var Fixture = Class.inherit({
     }
 });
 
-
 QUnit.module("General", {
     beforeEach: function() {
         this.fixture = new Fixture();
@@ -360,7 +359,6 @@ QUnit.test("validator.reset should fire event (to work correctly with dxValidati
     assert.strictEqual(params.isValid, true, "isValid was passed");
     assert.strictEqual(params.brokenRule, null, "Null should be passed as brokenRule ");
 });
-
 
 QUnit.module("Custom Adapters", {
     beforeEach: function() {
