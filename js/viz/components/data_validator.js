@@ -44,6 +44,18 @@ function processGroups(groups) {
     });
 }
 
+function sortValues(data, asc, selector) {
+    var func = asc ? function(a, b) { return a - b; } : function(a, b) { return b - a; };
+    data.sort(function(a, b) {
+        var valA = selector(a),
+            valB = selector(b),
+            aa = _isDefined(valA) ? 1 : 0,
+            bb = _isDefined(valB) ? 1 : 0;
+        return aa && bb ? func(valA, valB) : func(aa, bb);
+    });
+    return data;
+}
+
 function resetArgumentAxes(axes) {
     axes && axes.forEach(function(axis) {
         axis.resetTypes(ARGUMENT_TYPE);
@@ -222,12 +234,7 @@ function groupMinSlices(originalData, argumentField, valueField, smallValuesGrou
     others[argumentField] = String(smallValuesGrouping.groupName || "others");
     others[valueField] = 0;
 
-    data = originalData.slice();
-    data.sort(function(a, b) {
-        var isA = _isDefined(a[valueField]) ? 1 : 0,
-            isB = _isDefined(b[valueField]) ? 1 : 0;
-        return isA && isB ? b[valueField] - a[valueField] : isB - isA;
-    });
+    data = sortValues(originalData.slice(), false, function(a) { return a[valueField]; });
 
     groupingValues(data, others, valueField, mode === "smallValueThreshold" ? findIndexByThreshold(data, valueField, smallValuesGrouping.threshold) : smallValuesGrouping.topCount);
 
@@ -311,9 +318,7 @@ function getSortByCategories(categories) {
     });
 
     return function(data, argumentField) {
-        return data.slice().sort(function(a, b) {
-            return hash[a[argumentField]] - hash[b[argumentField]];
-        });
+        return sortValues(data.slice(), true, function(a) { return hash[a[argumentField]]; });
     };
 }
 

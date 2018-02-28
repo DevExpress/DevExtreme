@@ -1017,7 +1017,7 @@ QUnit.test("Can not parse Numeric arguments", function(assert) {
 
     checkParsedData(parsedData, {
         "arg": {
-            arg: [1, undefined, 3, undefined, 5]
+            arg: [undefined, undefined, 1, 3, 5]
         }
     }, { assert: assert });
 
@@ -1036,11 +1036,40 @@ QUnit.test("Can not parse Datetime arguments", function(assert) {
 
     checkParsedData(parsedData, {
         "arg": {
-            arg: [new Date(1000), new Date(2000), new Date(3000), undefined, new Date(5000), undefined]
+            arg: [undefined, undefined, new Date(1000), new Date(2000), new Date(3000), new Date(5000)]
         }
     }, { assert: assert, compare: "deepEqual" });
 
     assert.deepEqual(groups.argumentOptions.categories, [new Date(1000), new Date(2000), new Date(3000), new Date(5000)], "argument categories");
+});
+
+//T608785
+QUnit.test("Order of the series should be correct", function(assert) {
+    var groups = createGroupsData({
+            argumentType: "string",
+            argumentCategories: ["cat1", "cat2", "cat3", "cat4", "cat5", "cat6", "cat7", "cat8", "cat9"]
+        }),
+
+        parsedData = testValidateData(
+            [
+                { arg: "cat1", val: 3 },
+                { arg: "cat2", val: 4 },
+                { arg: "cat3", val: 5 },
+                { arg: "cat4", val: 5 },
+                { arg: "cat5", val: 4 },
+                { arg: "cat6", val: 5 },
+                { arg: "cat7", val: 5 },
+                { arg: "cat8", val: 5 },
+                { arg: "cat9", val: 5 },
+                { arg1: "cat6", val: 1 },
+                { arg1: "cat7", val: 2 }],
+            groups);
+
+    checkParsedData(parsedData, {
+        "arg": {
+            arg: [undefined, undefined, "cat1", "cat2", "cat3", "cat4", "cat5", "cat6", "cat7", "cat8", "cat9"]
+        }
+    }, { assert: assert, compare: "deepEqual" });
 });
 
 QUnit.test("T377440", function(assert) {
