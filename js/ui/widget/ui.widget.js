@@ -457,13 +457,14 @@ var Widget = DOMComponent.inherit({
         this._toggleVisibility(this.option("visible"));
 
         this._renderHint();
+
         this.callBase();
     },
 
     _render: function() {
         this.callBase();
-        this._renderContent();
 
+        this._renderContent();
         this._renderFocusState();
         this._attachFeedbackEvents();
         this._attachHoverEvents();
