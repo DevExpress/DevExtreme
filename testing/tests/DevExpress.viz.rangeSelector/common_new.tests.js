@@ -97,7 +97,7 @@ QUnit.test("There is no error when 'dataSource' is an empty array and scale is d
     assert.strictEqual(this.axis.setBusinessRange.lastCall.args[0].stubData, true);
 });
 
-//DEPRECATED IN 17.1 START
+// DEPRECATED IN 17.1 START
 QUnit.test("useTicksAutoArrangement is true", function(assert) {
     this.$container.dxRangeSelector({
         scale: {
@@ -119,7 +119,7 @@ QUnit.test("useTicksAutoArrangement is false", function(assert) {
     });
     assert.equal(this.axis.updateOptions.lastCall.args[0].label.overlappingBehavior.mode, "none");
 });
-//DEPRECATED IN 17.1 END
+// DEPRECATED IN 17.1 END
 
 QUnit.test("overlappingBehavior is set", function(assert) {
     this.$container.dxRangeSelector({

@@ -63,8 +63,8 @@ function getTickGenerator(options, incidentOccurred, skipTickGeneration) {
         firstDayOfWeek: options.workWeek && options.workWeek[0],
         skipTickGeneration: skipTickGeneration,
 
-        showCalculatedTicks: options.tick.showCalculatedTicks, //DEPRECATED IN 15_2
-        showMinorCalculatedTicks: options.minorTick.showCalculatedTicks //DEPRECATED IN 15_2
+        showCalculatedTicks: options.tick.showCalculatedTicks, // DEPRECATED IN 15_2
+        showMinorCalculatedTicks: options.minorTick.showCalculatedTicks // DEPRECATED IN 15_2
     });
 }
 
@@ -161,7 +161,7 @@ function removeInvalidTick(ticks, i) {
 }
 
 function getAddFunction(range, correctZeroLevel) {
-    //T170398
+    // T170398
     if(range.dataType === "datetime") {
         return function(rangeValue, marginValue) {
             return new Date(rangeValue.getTime() + marginValue);
@@ -727,12 +727,12 @@ Axis.prototype = {
                 point: point
             }) || "",
 
-            //B252346
+            // B252346
             min: range.minVisible,
             max: range.maxVisible
         };
 
-        //for crosshair's customizeText
+        // for crosshair's customizeText
         if(point) {
             formatObject.point = point;
         }
@@ -855,7 +855,7 @@ Axis.prototype = {
 
     _disposeBreaksGroup: _noop,
 
-    //public
+    // public
     dispose: function() {
         var that = this;
 
@@ -1339,7 +1339,7 @@ Axis.prototype = {
         return range;
     },
 
-    //DEPRECATED IN 15_2
+    // DEPRECATED IN 15_2
     correctTicksOnDeprecated: function() {
         var behavior = this._options.label.overlappingBehavior,
             majorTicks = this._majorTicks,
@@ -1657,8 +1657,8 @@ Axis.prototype = {
             labelOpt = that._options.label,
             displayMode = that._validateDisplayMode(labelOpt.displayMode),
             overlappingMode = that._validateOverlappingMode(labelOpt.overlappingBehavior.mode, displayMode),
-            rotationAngle = labelOpt.overlappingBehavior.rotationAngle, //DEPRECATED 17_1
-            staggeringSpacing = labelOpt.overlappingBehavior.staggeringSpacing, //DEPRECATED 17_1
+            rotationAngle = labelOpt.overlappingBehavior.rotationAngle, // DEPRECATED 17_1
+            staggeringSpacing = labelOpt.overlappingBehavior.staggeringSpacing, // DEPRECATED 17_1
             ignoreOverlapping = overlappingMode === "none" || overlappingMode === "ignore",
             behavior = {
                 rotationAngle: isDefined(rotationAngle) ? rotationAngle : labelOpt.rotationAngle,

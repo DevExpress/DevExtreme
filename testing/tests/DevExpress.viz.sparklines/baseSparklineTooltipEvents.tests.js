@@ -31,12 +31,12 @@ QUnit.begin(function() {
 var environment = {
     beforeEach: function() {
         baseSparkline._DEBUG_reset();
-        //this._originalRendererType = dxSparkline.prototype._rendererType;
+        // this._originalRendererType = dxSparkline.prototype._rendererType;
         this.$container = createTestContainer('#container');
         this.createSparkline = function(options) {
             return this.$container.dxSparkline(options).dxSparkline("instance");
         };
-        //dxSparkline.prototype._rendererType = vizMocks.Renderer;
+        // dxSparkline.prototype._rendererType = vizMocks.Renderer;
         this.triggerDocument = function(name) {
             var event = $.Event(name);
 
@@ -59,7 +59,7 @@ var environment = {
     },
     afterEach: function() {
         this.clock.restore();
-        //dxSparkline.prototype._rendererType = this._originalRendererType;
+        // dxSparkline.prototype._rendererType = this._originalRendererType;
         this.$container.remove();
     }
 };

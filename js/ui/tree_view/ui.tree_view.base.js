@@ -892,7 +892,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         return this.option("showCheckBoxesMode") === "selectAll";
     },
 
-    //todo: remove in 16.1 with deprecated showCheckBoxes and selectAllEnabled
+    // todo: remove in 16.1 with deprecated showCheckBoxes and selectAllEnabled
     _initCheckBoxesMode: function() {
         if(this._showCheckboxes()) {
             return;

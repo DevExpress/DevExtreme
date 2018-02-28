@@ -426,7 +426,7 @@ var ResourceManager = Class.inherit({
                     result[treeLeaves[i]] = [];
                 }
 
-                //NOTE: check appointment before pushing
+                // NOTE: check appointment before pushing
                 result[treeLeaves[i]].push(objectUtils.deepExtendArraySafe({}, appointment, true));
             }
         }).bind(this));

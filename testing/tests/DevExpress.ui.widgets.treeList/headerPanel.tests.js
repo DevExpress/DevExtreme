@@ -51,7 +51,7 @@ var teardownModule = function() {
 QUnit.module("Header panel", { beforeEach: setupModule, afterEach: teardownModule });
 
 QUnit.test("Draw edit buttons", function(assert) {
-    //arrange
+    // arrange
     var $testElement = $('#treeList');
 
     this.options.editing = {
@@ -61,17 +61,17 @@ QUnit.test("Draw edit buttons", function(assert) {
     };
     this.setupTreeList();
 
-    //act
+    // act
     this.headerPanel.render($testElement);
 
-    //assert
+    // assert
     assert.equal($testElement.find(".dx-treelist-addrow-button").length, 1, "cancel button");
     assert.equal($testElement.find(".dx-treelist-save-button").length, 1, "cancel button");
     assert.equal($testElement.find(".dx-treelist-cancel-button").length, 1, "cancel button");
 });
 
 QUnit.test("Draw column chooser button", function(assert) {
-    //arrange
+    // arrange
     var $testElement = $('#treeList');
 
     this.options.columnChooser = {
@@ -79,9 +79,9 @@ QUnit.test("Draw column chooser button", function(assert) {
     };
     this.setupTreeList();
 
-    //act
+    // act
     this.headerPanel.render($testElement);
 
-    //assert
+    // assert
     assert.equal($testElement.find(".dx-treelist-column-chooser-button").length, 1, "cancel button");
 });

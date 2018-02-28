@@ -83,7 +83,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
     },
 
     _isValueDirty: function() {
-        //https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/15181565/
+        // https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/15181565/
         return browser.msie && this._isInputTriggered;
     },
 
@@ -445,7 +445,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
         if(this._isValueInRange(newValue)) {
             this._parsedValue = newValue;
 
-            if(e.key === NUMPUD_MINUS_KEY_IE) { //Workaround for IE (T592690)
+            if(e.key === NUMPUD_MINUS_KEY_IE) { // Workaround for IE (T592690)
                 eventsEngine.trigger(this._input(), INPUT_EVENT);
             }
         }

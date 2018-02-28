@@ -61,7 +61,7 @@ var palettes = {
         gradientSet: ["#eeacc5", "#7b5685"]
     },
 
-    //generic color schemes related palettes
+    // generic color schemes related palettes
     "carmine": {
         simpleSet: ["#fb7764", "#73d47f", "#fed85e", "#d47683", "#dde392", "#757ab2"],
         indicatingSet: ["#5cb85c", "#f0ad4e", "#d9534f"],

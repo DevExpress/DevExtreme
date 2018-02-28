@@ -23,7 +23,7 @@ registerComponent("dxBaseGauge", dxBaseGauge);
 var factory = dxBaseGauge.prototype._factory;
 
 var BASE_METHODS = ["_invalidate", "_refresh"];
-//var ABSTRACT_FIELDS = ["_width", "_height", "_rootRect"];
+// var ABSTRACT_FIELDS = ["_width", "_height", "_rootRect"];
 var ABSTRACT_METHODS = ["_setupDomainCore", "_setupCodomain", "_getDefaultSize", "_cleanContent", "_renderContent", "_getApproximateScreenRange"];
 
 var CONTAINER_WIDTH = 200,
@@ -32,7 +32,7 @@ var CONTAINER_WIDTH = 200,
 var StubTranslator = vizMocks.stubClass(translator1DModule.Translator1D),
     StubThemeManager = vizMocks.stubClass(ThemeManager),
     StubTracker = vizMocks.stubClass(Tracker),
-    //StubLayoutManager = null,
+    // StubLayoutManager = null,
     StubTooltip = vizMocks.stubClass(tooltipModule.Tooltip, { isEnabled: function() { return "tooltip_enabled"; } }),
     StubTitle = vizMocks.Title;
 
@@ -84,7 +84,7 @@ var environment = {
         this.themeManager = new StubThemeManager();
         this.themeManager.stub("theme").returns({});
         this.tracker = new StubTracker();
-        //this.layoutManager = new StubLayoutManager();
+        // this.layoutManager = new StubLayoutManager();
         this.title = new StubTitle();
         var baseMethods = this.baseMethods = {};
         $.each(BASE_METHODS, function(_, name) {
@@ -95,12 +95,12 @@ var environment = {
             abstractMethods[name] = dxBaseGauge.prototype[name];
         });
         abstractMethods._getDefaultSize.returns({});
-        //$.each(ABSTRACT_FIELDS, function (_, name) {
+        // $.each(ABSTRACT_FIELDS, function (_, name) {
         //    delete dxBaseGauge.prototype[name];
-        //});
+        // });
         this.clock = sinon.useFakeTimers();
-        //this.setAbstractField("_width", 200);
-        //this.setAbstractField("_height", 100);
+        // this.setAbstractField("_width", 200);
+        // this.setAbstractField("_height", 100);
         loadingIndicatorModule.LoadingIndicator = vizMocks.LoadingIndicator;
     },
     afterEach: function() {
@@ -153,7 +153,7 @@ QUnit.test("Components creation", function(assert) {
     assert.deepEqual(factory.createTranslator.lastCall.args, [], "translator");
     assert.deepEqual(factory.ThemeManager.lastCall.args, [], "theme manager");
     assert.deepEqual(factory.createTracker.lastCall.args, [{ renderer: this.renderer, container: this.renderer.root }], "tracker");
-    //assert.deepEqual(factory.createLayoutManager.lastCall.args, [], "layout manager");
+    // assert.deepEqual(factory.createLayoutManager.lastCall.args, [], "layout manager");
 
     var arg = this.tracker.setCallbacks.lastCall.args[0];
     assert.ok(typeof arg["tooltip-show"] === "function", "show callback");

@@ -173,7 +173,7 @@ var baseTrackerPrototype = {
         this.hoveredSeries = series;
     },
 
-    _releaseHoveredSeries: function(needSetHoverView, hoveredPoint) { //hoveredPoint only for T273289
+    _releaseHoveredSeries: function(needSetHoverView, hoveredPoint) { // hoveredPoint only for T273289
         if(this.hoveredSeries) {
             this.hoveredSeries.clearHover();
             this.hoveredSeries = null;

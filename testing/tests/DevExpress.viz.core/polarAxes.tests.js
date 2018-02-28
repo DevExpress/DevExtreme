@@ -200,7 +200,7 @@ QUnit.test("Update translator on setTypes", function(assert) {
     });
     sinon.spy(translator, "update");
 
-    //act
+    // act
     axis.setTypes("discrete", "string", "valueType");
 
     assert.strictEqual(translator.update.lastCall.args[2].stick, false);
@@ -437,7 +437,7 @@ QUnit.test("Linear axis. axisDivisionMode is betweenLabels, valueMarginsEnabled 
         valueMarginsEnabled: false
     });
 
-    assert.equal(this.translator.translate.callCount, 8); //4 for labels
+    assert.equal(this.translator.translate.callCount, 8); // 4 for labels
     assert.deepEqual(this.translator.translate.getCall(0).args, ["c1", 1]);
     assert.deepEqual(this.translator.translate.getCall(2).args, ["c2", 1]);
     assert.deepEqual(this.translator.translate.getCall(4).args, ["c3", 1]);
@@ -452,7 +452,7 @@ QUnit.test("Linear axis. axisDivisionMode is betweenLabels, valueMarginsEnabled 
         valueMarginsEnabled: true
     });
 
-    assert.equal(this.translator.translate.callCount, 8); //4 for labels
+    assert.equal(this.translator.translate.callCount, 8); // 4 for labels
     assert.deepEqual(this.translator.translate.getCall(0).args, ["c1", 1]);
     assert.deepEqual(this.translator.translate.getCall(2).args, ["c2", 1]);
     assert.deepEqual(this.translator.translate.getCall(4).args, ["c3", 1]);
@@ -467,7 +467,7 @@ QUnit.test("Linear axis. axisDivisionMode is crossLabels, valueMarginsEnabled fa
         valueMarginsEnabled: false
     });
 
-    assert.equal(this.translator.translate.callCount, 8); //4 for labels
+    assert.equal(this.translator.translate.callCount, 8); // 4 for labels
     assert.deepEqual(this.translator.translate.getCall(0).args, ["c1", 0]);
     assert.deepEqual(this.translator.translate.getCall(2).args, ["c2", 0]);
     assert.deepEqual(this.translator.translate.getCall(4).args, ["c3", 0]);
@@ -482,7 +482,7 @@ QUnit.test("Linear axis. axisDivisionMode is crossLabels, valueMarginsEnabled tr
         valueMarginsEnabled: true
     });
 
-    assert.equal(this.translator.translate.callCount, 8); //4 for labels
+    assert.equal(this.translator.translate.callCount, 8); // 4 for labels
     assert.deepEqual(this.translator.translate.getCall(0).args, ["c1", 0]);
     assert.deepEqual(this.translator.translate.getCall(2).args, ["c2", 0]);
     assert.deepEqual(this.translator.translate.getCall(4).args, ["c3", 0]);
@@ -498,7 +498,7 @@ QUnit.test("Circular axis. axisDivisionMode is betweenLabels, valueMarginsEnable
         visible: false
     });
 
-    assert.equal(this.translator.translate.callCount, 8); //4 for labels
+    assert.equal(this.translator.translate.callCount, 8); // 4 for labels
     assert.deepEqual(this.translator.translate.getCall(0).args, ["c1", -1]);
     assert.deepEqual(this.translator.translate.getCall(2).args, ["c2", -1]);
     assert.deepEqual(this.translator.translate.getCall(4).args, ["c3", -1]);
@@ -513,7 +513,7 @@ QUnit.test("Circular axis. axisDivisionMode is betweenLabels, valueMarginsEnable
         valueMarginsEnabled: true
     });
 
-    assert.equal(this.translator.translate.callCount, 8); //4 for labels
+    assert.equal(this.translator.translate.callCount, 8); // 4 for labels
     assert.deepEqual(this.translator.translate.getCall(0).args, ["c1", -1]);
     assert.deepEqual(this.translator.translate.getCall(2).args, ["c2", -1]);
     assert.deepEqual(this.translator.translate.getCall(4).args, ["c3", -1]);
@@ -528,7 +528,7 @@ QUnit.test("Circular axis. axisDivisionMode is crossLabels, valueMarginsEnabled 
         valueMarginsEnabled: false
     });
 
-    assert.equal(this.translator.translate.callCount, 8); //4 for labels
+    assert.equal(this.translator.translate.callCount, 8); // 4 for labels
     assert.deepEqual(this.translator.translate.getCall(0).args, ["c1", 0]);
     assert.deepEqual(this.translator.translate.getCall(2).args, ["c2", 0]);
     assert.deepEqual(this.translator.translate.getCall(4).args, ["c3", 0]);
@@ -543,7 +543,7 @@ QUnit.test("Circular axis. axisDivisionMode is crossLabels, valueMarginsEnabled 
         valueMarginsEnabled: true
     });
 
-    assert.equal(this.translator.translate.callCount, 8); //4 for labels
+    assert.equal(this.translator.translate.callCount, 8); // 4 for labels
     assert.deepEqual(this.translator.translate.getCall(0).args, ["c1", 0]);
     assert.deepEqual(this.translator.translate.getCall(2).args, ["c2", 0]);
     assert.deepEqual(this.translator.translate.getCall(4).args, ["c3", 0]);
@@ -1313,7 +1313,7 @@ QUnit.test("Default", function(assert) {
     assert.ok(text.getCall(5).returnValue.remove.called, "5 text is removed");
 });
 
-//T504388
+// T504388
 QUnit.test("Labels have different length", function(assert) {
     var markersBBoxes = [
         { x: 0, y: 2, width: 1, height: 10 },
@@ -1659,7 +1659,7 @@ QUnit.test("deprecated 'ignore' mode", function(assert) {
     assert.equal(text.getCall(5).returnValue.stub("remove").called, false, "5 text is not removed");
 });
 
-//T497323
+// T497323
 QUnit.test("frequent tisks", function(assert) {
     var markersBBoxes = [
         { x: 0, y: 2, width: 20, height: 10 },
@@ -1919,7 +1919,7 @@ QUnit.test("deprecated 'ignore' mode", function(assert) {
     assert.equal(text.getCall(5).returnValue.stub("remove").called, false, "5 text is not removed");
 });
 
-//T497323
+// T497323
 QUnit.test("frequent ticks", function(assert) {
     this.renderer.text = spyRendererText.call(this, [
         { x: 1, y: 2, width: 20, height: 10 },

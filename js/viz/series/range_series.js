@@ -1,6 +1,6 @@
 "use strict";
 
-//there are rangebar, rangearea
+// there are rangebar, rangearea
 var extend = require("../../core/utils/extend").extend,
     _extend = extend,
     _isDefined = require("../../core/utils/type").isDefined,

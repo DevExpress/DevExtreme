@@ -28,7 +28,7 @@ function getExponent(value) {
     return Math.abs(parseInt(value.toExponential().split("e")[1]));
 }
 
-//T570217
+// T570217
 function _isEdgeBug() {
     var value = 0.0003,
         correctValue = "0.000300",
@@ -57,7 +57,7 @@ function adjust(value, interval) {
         value = value - Math.floor(value) + integerPart;
     }
 
-    precision = ((_isEdgeBug() && (getExponent(value) > 6)) || precision > 7) ? 15 : 7; //fix toPrecision() bug in Edge (T570217)
+    precision = ((_isEdgeBug() && (getExponent(value) > 6)) || precision > 7) ? 15 : 7; // fix toPrecision() bug in Edge (T570217)
 
     if(!isExponentValue) {
         separatedAdjustedValue = parseFloat(value.toPrecision(precision)).toString().split(".");

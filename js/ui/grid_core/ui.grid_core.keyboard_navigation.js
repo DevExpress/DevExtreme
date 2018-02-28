@@ -932,7 +932,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
 
         switch(args.name) {
             case "useKeyboard":
-                //TODO implement
+                // TODO implement
                 args.handled = true;
                 break;
             default:

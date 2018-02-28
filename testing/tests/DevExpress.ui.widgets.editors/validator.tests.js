@@ -84,11 +84,11 @@ QUnit.test("Returned value should contain state, name, validation errors and val
             type: "required"
         }]
     });
-    //act
+    // act
 
     this.fixture.stubAdapter.getValue.returns("");
     var result = validator.validate();
-    //assert
+    // assert
     assert.ok(result, "Result should be returned");
     assert.strictEqual(result.isValid, validator.option("isValid"), "isValid flag should be passed");
     assert.equal(result.name, "Login");
@@ -97,7 +97,7 @@ QUnit.test("Returned value should contain state, name, validation errors and val
 });
 
 QUnit.test("Validator with set validation group", function(assert) {
-    //arrange
+    // arrange
     var validationGroup = {},
         validator = this.fixture.createValidator({
             validationRules: [{
@@ -106,11 +106,11 @@ QUnit.test("Validator with set validation group", function(assert) {
             validationGroup: validationGroup
         });
 
-    //act
+    // act
     this.fixture.stubAdapter.getValue.returns("");
     var result = ValidationEngine.validateGroup(validationGroup);
 
-    //assert
+    // assert
     assert.ok(result, "Result should be returned");
     assert.strictEqual(result.isValid, validator.option("isValid"), "isValid flag should be passed");
     assert.ok(result.brokenRules[0], "Result should contain validation errors");
@@ -119,12 +119,12 @@ QUnit.test("Validator with set validation group", function(assert) {
 
 
 QUnit.test("Validator can be reset", function(assert) {
-    //arrange
+    // arrange
     var validator = this.fixture.createValidator({ validationRules: [{ type: "custom", validationCallback: function() { return false; } }] });
     validator.validate();
-    //act
+    // act
     validator.reset();
-    //assert
+    // assert
     assert.strictEqual(validator.option("isValid"), true, "isValid - Validation should be restored in valid state");
     assert.ok(this.fixture.stubAdapter.reset.calledOnce, "Editor should be reset");
 });
@@ -238,9 +238,9 @@ QUnit.module("Registration in groups", {
 
 
 QUnit.test("Widget should be registered in a group", function(assert) {
-    //act
+    // act
     var validator = this.fixture.createValidator();
-    //assert
+    // assert
     assert.ok(ValidationEngine.getGroupConfig(), "Group should be registered with default name");
     assert.strictEqual(ValidationEngine.getGroupConfig().validators[0], validator, "Validator should be registered");
 
@@ -249,30 +249,30 @@ QUnit.test("Widget should be registered in a group", function(assert) {
 QUnit.test("Widget should be deregistered after disposing", function(assert) {
     var validator = this.fixture.createValidator();
 
-    //act
+    // act
     validator._dispose();
-    //assert
+    // assert
     assert.strictEqual(ValidationEngine.getGroupConfig().validators.length, 0, "Validator reference should be removed from group");
 });
 
-//T453506
+// T453506
 QUnit.test("Validator should be created in the root group if group was not found", function(assert) {
     var validator = this.fixture.createValidator({
         modelByElement: function() { return "ViewModel"; }
     });
 
-    //act
+    // act
     validator._dispose();
-    //assert
+    // assert
     assert.strictEqual(ValidationEngine.groups.length, 1, "new group was not created");
 });
 
 QUnit.test("Widget should be able to reinit group registration", function(assert) {
     var validator = this.fixture.createValidator({ validationGroup: "123" });
 
-    //act
+    // act
     validator.option("validationGroup", "234");
-    //assert
+    // assert
     assert.strictEqual(ValidationEngine.getGroupConfig("234").validators[0], validator, "Validator should be re-registered in second group");
 
     assert.strictEqual(ValidationEngine.getGroupConfig("123"), undefined, "Validator should be de-registered in first group");
@@ -280,9 +280,9 @@ QUnit.test("Widget should be able to reinit group registration", function(assert
 
 QUnit.test("Widget should be able to reinit group registration", function(assert) {
     var validator = this.fixture.createValidator({ validationGroup: "123" });
-    //act
+    // act
     validator.option("validationGroup", undefined);
-    //assert
+    // assert
     assert.strictEqual(ValidationEngine.getGroupConfig().validators[0], validator, "Validator should be registered");
 });
 
@@ -311,9 +311,9 @@ QUnit.test("Validated event should fire", function(assert) {
     });
     expectedFailedValidationRule.validator = validator;
     this.fixture.stubAdapter.getValue.returns(value);
-    //act
+    // act
     validator.validate();
-    //assert
+    // assert
     assert.ok(handler.calledOnce, "Validated handler should be called");
     var params = handler.getCall(0).args[0];
     assert.ok(handler.calledOn(validator), "Correct context of action");
@@ -329,16 +329,16 @@ QUnit.test("Focused event should fire", function(assert) {
     var validator = this.fixture.createValidator({
     });
 
-    //act
+    // act
     validator.focus();
 
-    //assert
+    // assert
     assert.ok(this.fixture.stubAdapter.focus.calledOnce, "Validated handler should be called");
-    //assert.ok(handler.calledOn(validator), "Correct context of action");
+    // assert.ok(handler.calledOn(validator), "Correct context of action");
 });
 
 QUnit.test("validator.reset should fire event (to work correctly with dxValidationSummary)", function(assert) {
-    //arrange
+    // arrange
     var handler = sinon.stub(),
         validationRules = [{ type: "custom", validationCallback: function() { return false; } }],
         validator = this.fixture.createValidator({
@@ -347,14 +347,14 @@ QUnit.test("validator.reset should fire event (to work correctly with dxValidati
         });
     validator.validate();
 
-    //act
+    // act
     validator.reset();
-    //assert
+    // assert
     assert.ok(handler.calledTwice, "Validated handler should be called two times - first one for validation, and second one for reset()");
     var params = handler.getCall(1).args[0];
     assert.ok(handler.calledOn(validator), "Correct context of action");
-    //assert.equal(params.value, value, "Correct value was passed");
-    //assert.equal(params.name, name, "Name of Validator should be passed");
+    // assert.equal(params.value, value, "Correct value was passed");
+    // assert.equal(params.name, name, "Name of Validator should be passed");
     assert.strictEqual(params.validator, validator, "Validator reference should be passed");
     assert.strictEqual(params.isValid, true, "isValid was passed");
     assert.strictEqual(params.brokenRule, null, "Null should be passed as brokenRule ");
@@ -426,9 +426,9 @@ QUnit.test("Validation happens on firing callback, results are shown by our widg
     });
 
     adapter.getValue.returns("123");
-    //act
+    // act
     adapter.validationRequestsCallbacks.fire();
-    //assert
+    // assert
     assert.ok(adapter.getValue.calledOnce, "Value should be requested");
     assert.ok(validatedHandler.calledOnce, "Validated handler should be called");
 });
@@ -451,9 +451,9 @@ QUnit.test("Validation happens on firing callback, result are applied through cu
     });
 
     adapter.getValue.returns("123");
-    //act
+    // act
     adapter.validationRequestsCallbacks.fire();
-    //assert
+    // assert
     assert.ok(adapter.getValue.calledOnce, "Value should be requested");
     assert.ok(validatedHandler.calledOnce, "Validated handler should be called");
     assert.ok(adapter.applyValidationResults.calledOnce, "ApplyValidationResults function should be called");

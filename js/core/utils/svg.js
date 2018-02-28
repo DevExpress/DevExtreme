@@ -21,8 +21,8 @@ function fixIENamespaces(markup) {
         .replace(/NS1:xmlns:xlink="([\s\S]*?)"/gi, 'xmlns:xlink="$1"');
 }
 
-//T428345 we decode only restricted HTML entities, looks like other entities do not cause problems
-//as they presented as symbols itself, not named entities
+// T428345 we decode only restricted HTML entities, looks like other entities do not cause problems
+// as they presented as symbols itself, not named entities
 function decodeHtmlEntities(markup) {
     return markup.replace(/&quot;/gi, "&#34;")
         .replace(/&amp;/gi, "&#38;")

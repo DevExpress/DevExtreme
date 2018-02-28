@@ -154,9 +154,9 @@ var environmentWithSinonStubPoint = {
             label: { visible: false }
 
         }, { renderer: this.renderer });
-        //act
+        // act
         series.updateTemplateFieldNames();
-        //assert
+        // assert
         assert.equal(series._options.rangeValue1Field, "rangeValue1FieldrangeSeries");
         assert.equal(series._options.rangeValue2Field, "rangeValue2FieldrangeSeries");
         assert.equal(series._options.tagField, "tagFieldrangeSeries");
@@ -170,9 +170,9 @@ var environmentWithSinonStubPoint = {
             label: { visible: false }
 
         }, { renderer: this.renderer });
-        //act
+        // act
         series.updateTemplateFieldNames();
-        //assert
+        // assert
         assert.equal(series._options.rangeValue1Field, "val1rangeSeries");
         assert.equal(series._options.rangeValue2Field, "val2rangeSeries");
         assert.equal(series._options.tagField, "tagrangeSeries");
@@ -407,9 +407,9 @@ var environmentWithSinonStubPoint = {
             type: seriesType,
             point: { visible: false }
         });
-        //act
+        // act
         series.draw(false);
-        //assert
+        // assert
         assert.equal(this.renderer.stub("path").callCount, 0);
     });
 
@@ -429,9 +429,9 @@ var environmentWithSinonStubPoint = {
             pt.visibleTopMarker = true;
             pt.visibleBottomMarker = true;
         });
-        //act
+        // act
         series.draw(false);
-        //assert
+        // assert
         assert.equal(this.renderer.stub("path").callCount, 3);
         assert.equal(this.renderer.stub("path").getCall(0).args[1], "line");
         assert.equal(this.renderer.stub("path").getCall(1).args[1], "area");
@@ -456,7 +456,7 @@ var environmentWithSinonStubPoint = {
             pt.visibleBottomMarker = true;
         });
         series.draw(false);
-        //act
+        // act
         series.updateData([{ arg: 1, val1: 2, val2: 4 }, { arg: 2, val1: 1, val2: 2 }]);
         $.each(series._points, function(i, pt) {
             pt.x = pt.argument;
@@ -467,7 +467,7 @@ var environmentWithSinonStubPoint = {
         });
 
         series.draw(false);
-        //assert
+        // assert
         assert.equal(this.renderer.stub("path").callCount, 3);
 
         var element = this.renderer.stub("path").getCall(0).returnValue,
@@ -525,9 +525,9 @@ var environmentWithSinonStubPoint = {
             pt.visibleBottomMarker = true;
             sinon.spy(pt, "draw");
         });
-        //act
+        // act
         series.draw(true);
-        //assert
+        // assert
         assert.equal(this.renderer.stub("path").callCount, 3);
 
         var element = this.renderer.stub("path").getCall(0).returnValue,
@@ -586,7 +586,7 @@ var environmentWithSinonStubPoint = {
             element5 = this.renderer.stub("path").getCall(4).returnValue,
             element6 = this.renderer.stub("path").getCall(5).returnValue;
 
-        //act
+        // act
         series.updateData(this.data);
         $.each(series._points, function(i, pt) {
             pt.x = pt.argument;
@@ -596,7 +596,7 @@ var environmentWithSinonStubPoint = {
             pt.visibleBottomMarker = true;
         });
         series.draw(true);
-        //assert
+        // assert
         assert.equal(this.renderer.stub("path").callCount, 6);
         assert.equal(this.renderer.stub("path").getCall(0).args[1], "line");
         assert.equal(this.renderer.stub("path").getCall(1).args[1], "area");

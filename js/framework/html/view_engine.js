@@ -78,7 +78,7 @@ var ViewEngine = Class.inherit({
             $result;
 
         if(!component._isStaticComponentsCreated) {
-            domUtils.createComponents($template, ["dxContent", "dxContentPlaceholder", "dxTransition"/*, "dxCommandContainer"*/]);
+            domUtils.createComponents($template, ["dxContent", "dxContentPlaceholder", "dxTransition"/* , "dxCommandContainer" */]);
             component._isStaticComponentsCreated = true;
         }
 

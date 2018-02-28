@@ -251,10 +251,10 @@ var Fixture = Class.inherit({
     var INVALID_VALIDATION_CLASS = "dx-invalid";
 
     QUnit.test("Widget can be created as invalid", function(assert) {
-        //assign
+        // assign
         var message = "That is very bad editor";
 
-        //act
+        // act
         var editor = this.fixture.createEditor({
             value: "",
             isValid: false,
@@ -263,20 +263,20 @@ var Fixture = Class.inherit({
             }
         });
 
-        //assert
+        // assert
         assert.ok(editor, "Editor should be created");
         assert.ok(editor.$element().hasClass(INVALID_VALIDATION_CLASS), "Editor main element should be marked as invalid");
     });
 
 
     QUnit.test("Widget can be set in invalid state through options", function(assert) {
-        //assign
+        // assign
         var message = "That is very bad editor",
             editor = this.fixture.createEditor({
                 value: ""
             });
 
-        //act
+        // act
         editor.option({
             isValid: false,
             validationError: {
@@ -284,7 +284,7 @@ var Fixture = Class.inherit({
             }
         });
 
-        //assert
+        // assert
         assert.ok(editor.$element().hasClass(INVALID_VALIDATION_CLASS), "Editor main element should be marked as invalid");
     });
 
@@ -308,13 +308,13 @@ var Fixture = Class.inherit({
     });
 
     QUnit.test("Widget message (tooltip) should be created and always shown", function(assert) {
-        //assign
+        // assign
         var message = "That is very bad editor",
             editor = this.fixture.createEditor({
                 validationMessageMode: "always"
             });
 
-        //act
+        // act
         editor.option({
             isValid: false,
             validationError: {
@@ -322,7 +322,7 @@ var Fixture = Class.inherit({
             }
         });
 
-        //assert
+        // assert
         assert.ok(editor._$validationMessage, "Tooltip should be created");
         assert.ok(editor._$validationMessage.hasClass("dx-invalid-message"), "Tooltip should be marked with auto");
         assert.ok(editor._$validationMessage.hasClass("dx-invalid-message-always"), "Tooltip should be marked with always");
@@ -330,13 +330,13 @@ var Fixture = Class.inherit({
     });
 
     QUnit.test("Widget message (tooltip) should be created but never shown", function(assert) {
-        //assign
+        // assign
         var message = "That is very bad editor",
             editor = this.fixture.createEditor({
                 validationMessageMode: "none"
             });
 
-        //act
+        // act
         editor.option({
             isValid: false,
             validationError: {
@@ -344,7 +344,7 @@ var Fixture = Class.inherit({
             }
         });
 
-        //assert
+        // assert
         assert.ok(editor._$validationMessage, "Tooltip should be created");
         assert.ok(editor._$validationMessage.hasClass("dx-invalid-message"), "Tooltip should be marked with auto");
         assert.ok(!editor._$validationMessage.hasClass("dx-invalid-message-auto"), "Tooltip should not be marked as auto");
@@ -352,7 +352,7 @@ var Fixture = Class.inherit({
     });
 
     QUnit.test("Widget message (tooltip) should be destroyed after editor become valid", function(assert) {
-        //assign
+        // assign
         var message = "That is very bad editor",
             editor = this.fixture.createEditor({
                 validationMessageMode: "always"
@@ -365,10 +365,10 @@ var Fixture = Class.inherit({
             }
         });
 
-        //act
+        // act
         editor.option({ isValid: true });
 
-        //assert
+        // assert
         assert.ok(!editor._$validationMessage, "Tooltip should be destroyed; reference should be removed");
     });
 
@@ -386,11 +386,11 @@ var Fixture = Class.inherit({
             validationBoundary: $parent
         });
 
-        //act
+        // act
         editor.option({ isValid: false });
         var $validationMessage = $element.find(".dx-overlay-content");
 
-        //assert
+        // assert
         assert.ok($validationMessage.offset().top < $element.offset().top, "validation message was flipped");
     });
 
@@ -595,9 +595,9 @@ var Fixture = Class.inherit({
 
         editor.validationRequest.add(handler);
 
-        //act
+        // act
         editor.option("value", value);
-        //assert
+        // assert
         var params = handler.getCall(0).args[0];
         assert.ok(handler.calledOnce, "Validating handler should be called");
         assert.equal(params.value, value, "Correct value was passed");
@@ -615,9 +615,9 @@ var Fixture = Class.inherit({
 
         editor.validationRequest.add(handler);
 
-        //act
+        // act
         editor.option("value", nullValue);
-        //assert
+        // assert
         assert.ok(!handler.called, "Validating handler should not be called");
     });
 })("Validation Events");

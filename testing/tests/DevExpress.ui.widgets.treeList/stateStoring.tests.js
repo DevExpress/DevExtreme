@@ -54,10 +54,10 @@ QUnit.module("State Storing", {
 });
 
 QUnit.test("Apply state storing", function(assert) {
-    //arrange
+    // arrange
     var rows;
 
-    //act
+    // act
     this.setupDataGridModules({
         filterRow: { visible: true },
         stateStoring: {
@@ -89,10 +89,10 @@ QUnit.test("Apply state storing", function(assert) {
 });
 
 QUnit.test("Save user state", function(assert) {
-    //arrange
+    // arrange
     var state = {};
 
-    //act
+    // act
     this.setupDataGridModules({
         expandedRowKeys: [1],
         stateStoring: {
@@ -108,7 +108,7 @@ QUnit.test("Save user state", function(assert) {
         }
     });
 
-    //assert
+    // assert
     assert.deepEqual(state, {
         columns: [
             { dataField: "name", dataType: "string", visible: true, visibleIndex: 0 },
@@ -122,10 +122,10 @@ QUnit.test("Save user state", function(assert) {
 });
 
 QUnit.test("The expandRowKeys state should not persist when autoExpandAll is enabled", function(assert) {
-    //arrange
+    // arrange
     var state = {};
 
-    //act
+    // act
     this.setupDataGridModules({
         autoExpandAll: true,
         stateStoring: {
@@ -141,6 +141,6 @@ QUnit.test("The expandRowKeys state should not persist when autoExpandAll is ena
         }
     });
 
-    //assert
+    // assert
     assert.notOk(state.hasOwnProperty("expandedRowKeys"), "state doesn't have expandedRowKeys");
 });

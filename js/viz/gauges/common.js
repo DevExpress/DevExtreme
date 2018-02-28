@@ -184,7 +184,7 @@ exports.dxGauge = dxBaseGauge.inherit({
         if(_isString(overlappingBehavior)) {
             overlappingBehavior = { mode: overlappingBehavior };
         }
-        //DEPRECATED IN 15_2 start
+        // DEPRECATED IN 15_2 start
         if(scaleMajorTick) {
             scaleOptions.tick = _extend(scaleOptions.tick, scaleMajorTick);
             useAutoArrangement = _isDefined(scaleMajorTick.useTickAutoArrangement) ? scaleMajorTick.useTickAutoArrangement : useAutoArrangement;
@@ -215,7 +215,7 @@ exports.dxGauge = dxBaseGauge.inherit({
         } else {
             scaleMinorTick.showCalculatedTicks = false;
         }
-        //DEPRECATED IN 15_2 end
+        // DEPRECATED IN 15_2 end
 
         scaleOptions.label.indentFromAxis = 0;
         scaleOptions.isHorizontal = !that._area.vertical;

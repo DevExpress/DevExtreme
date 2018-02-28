@@ -115,13 +115,13 @@ QUnit.test("Patched properties on register theme", function(assert) {
     };
     themeModule.resetCurrentTheme();
 
-    //act
+    // act
     themeModule.registerTheme(theme);
 
-    //assert
+    // assert
     theme = themeModule.getTheme("custom theme");
 
-    //backgroundColor
+    // backgroundColor
     assert.strictEqual(theme.loadingIndicator.backgroundColor, theme.backgroundColor, "backgroundColor");
     assert.strictEqual(theme.chart.commonSeriesSettings.candlestick.innerColor, theme.backgroundColor, "backgroundColor");
     assert.strictEqual(theme.map.background.color, theme.backgroundColor, "backgroundColor");
@@ -138,19 +138,19 @@ QUnit.test("Patched properties on register theme", function(assert) {
     assert.strictEqual(theme.gauge.scale.tick.color, theme.backgroundColor, "backgroundColor");
     assert.strictEqual(theme.gauge.scale.minorTick.color, theme.backgroundColor, "backgroundColor");
 
-    //commonAxisSettings
+    // commonAxisSettings
     assert.deepEqual(theme.chart.commonAxisSettings, theme["chart:common:axis"], "commonAxisSettings");
     assert.deepEqual(theme.polar.commonAxisSettings, theme["chart:common:axis"], "commonAxisSettings");
 
-    //primaryTitleColor
+    // primaryTitleColor
     assert.strictEqual(theme.title.font.color, theme.primaryTitleColor, "primaryTitleColor");
 
-    //secondaryTitleColor
+    // secondaryTitleColor
     assert.strictEqual(theme.legend.font.color, theme.secondaryTitleColor, "secondaryTitleColor");
     assert.deepEqual(theme.chart.commonAxisSettings.title.font.color, theme.secondaryTitleColor, "secondaryTitleColor");
     assert.deepEqual(theme.polar.commonAxisSettings.title.font.color, theme.secondaryTitleColor, "secondaryTitleColor");
 
-    //axisColor
+    // axisColor
     assert.strictEqual(theme.legend.border.color, theme.axisColor, "axisColor");
     assert.deepEqual(theme.chart.commonAxisSettings.color, theme.axisColor, "axisColor");
     assert.deepEqual(theme.chart.commonAxisSettings.grid.color, theme.axisColor, "axisColor");
@@ -163,13 +163,13 @@ QUnit.test("Patched properties on register theme", function(assert) {
     assert.deepEqual(theme.polar.commonAxisSettings.tick.color, theme.axisColor, "axisColor");
     assert.deepEqual(theme.polar.commonAxisSettings.minorTick.color, theme.axisColor, "axisColor");
 
-    //axisLabelColor
+    // axisLabelColor
     assert.strictEqual(theme.gauge.scale.label.font.color, theme.axisLabelColor, "axisLabelColor");
     assert.strictEqual(theme.rangeSelector.scale.label.font.color, theme.axisLabelColor, "axisLabelColor");
     assert.deepEqual(theme.chart.commonAxisSettings.label.font.color, theme.axisLabelColor, "axisLabelColor");
     assert.deepEqual(theme.polar.commonAxisSettings.label.font.color, theme.axisLabelColor, "axisLabelColor");
 
-    //redrawOnResize
+    // redrawOnResize
     assert.strictEqual(theme.chart.redrawOnResize, theme.redrawOnResize, "redrawOnResize");
     assert.strictEqual(theme.pie.redrawOnResize, theme.redrawOnResize, "redrawOnResize");
     assert.strictEqual(theme.polar.redrawOnResize, theme.redrawOnResize, "redrawOnResize");
@@ -180,7 +180,7 @@ QUnit.test("Patched properties on register theme", function(assert) {
     assert.strictEqual(theme.sparkline.redrawOnResize, theme.redrawOnResize, "redrawOnResize");
     assert.strictEqual(theme.bullet.redrawOnResize, theme.redrawOnResize, "redrawOnResize");
 
-    //tooltip
+    // tooltip
     assert.deepEqual(theme.chart.tooltip, theme.tooltip, "tooltip");
     assert.deepEqual(theme.pie.tooltip, theme.tooltip, "tooltip");
     assert.deepEqual(theme.polar.tooltip, theme.tooltip, "tooltip");
@@ -191,7 +191,7 @@ QUnit.test("Patched properties on register theme", function(assert) {
     assert.deepEqual(theme.sparkline.tooltip, theme.tooltip, "tooltip");
     assert.deepEqual(theme.bullet.tooltip, theme.tooltip, "tooltip");
 
-    //loadingIndicator
+    // loadingIndicator
     assert.deepEqual(theme.chart.loadingIndicator, theme.loadingIndicator, "loadingIndicator");
     assert.deepEqual(theme.pie.loadingIndicator, theme.loadingIndicator, "loadingIndicator");
     assert.deepEqual(theme.polar.loadingIndicator, theme.loadingIndicator, "loadingIndicator");
@@ -200,7 +200,7 @@ QUnit.test("Patched properties on register theme", function(assert) {
     assert.deepEqual(theme.map.loadingIndicator, theme.loadingIndicator, "loadingIndicator");
     assert.deepEqual(theme.rangeSelector.loadingIndicator, theme.loadingIndicator, "loadingIndicator");
 
-    //export
+    // export
     assert.deepEqual(theme.chart.export, theme.export, "export");
     assert.deepEqual(theme.pie.export, theme.export, "export");
     assert.deepEqual(theme.polar.export, theme.export, "export");
@@ -209,7 +209,7 @@ QUnit.test("Patched properties on register theme", function(assert) {
     assert.deepEqual(theme.map.export, theme.export, "export");
     assert.deepEqual(theme.rangeSelector.export, theme.export, "export");
 
-    //legend
+    // legend
     assert.deepEqual(theme.chart.legend, theme.legend, "legend");
     assert.deepEqual(theme.pie.legend, theme.legend, "legend");
     assert.deepEqual(theme.polar.legend, theme.legend, "legend");
@@ -218,7 +218,7 @@ QUnit.test("Patched properties on register theme", function(assert) {
     assert.deepEqual(theme.map.legend, $.extend({}, theme.legend, { backgroundColor: theme.backgroundColor }), "legend");
     assert.deepEqual(theme.rangeSelector.legend, theme.legend, "legend");
 
-    //title
+    // title
     assert.deepEqual(theme.chart.title, theme.title, "title");
     assert.deepEqual(theme.pie.title, theme.title, "title");
     assert.deepEqual(theme.polar.title, theme.title, "title");
@@ -226,15 +226,15 @@ QUnit.test("Patched properties on register theme", function(assert) {
     assert.deepEqual(theme.barGauge.title, theme.title, "title");
     assert.deepEqual(theme.map.title, theme.title, "title");
 
-    //common chart settings
+    // common chart settings
     assert.deepEqual(theme.chart, $.extend(true, {}, theme.chart, theme["chart:common"]), "common chart settings");
     assert.deepEqual(theme.pie, $.extend(true, {}, theme.pie, theme["chart:common"]), "common chart settings");
     assert.deepEqual(theme.polar, $.extend(true, {}, theme.polar, theme["chart:common"]), "common chart settings");
 
-    //rangeSelector commonSeriesSettings
+    // rangeSelector commonSeriesSettings
     assert.deepEqual(theme.rangeSelector.chart.commonSeriesSettings, theme.chart.commonSeriesSettings, "rangeSelector commonSeriesSettings");
 
-    //rangeSelector dataPrepareSettings
+    // rangeSelector dataPrepareSettings
     assert.deepEqual(theme.rangeSelector.chart.dataPrepareSettings, theme.chart.dataPrepareSettings, "rangeSelector dataPrepareSettings");
 
     // map
@@ -439,7 +439,7 @@ QUnit.test("currentTheme returns theme from ui.themes", function(assert) {
     this.writeToFrame("<link rel='dx-theme' href='style1.css' data-theme='platform2' />");
     uiThemeModule.init({ theme: "platform2", context: this.frameDoc() });
 
-    //act
+    // act
     var currentTheme = themeModule.currentTheme();
 
     assert.strictEqual(currentTheme, "platform2");
@@ -450,7 +450,7 @@ QUnit.test("currentTheme returns previously set theme, regardles of what ui them
     uiThemeModule.init({ theme: "platform2", context: this.frameDoc() });
     themeModule.currentTheme("generic");
 
-    //act
+    // act
     var currentTheme = themeModule.currentTheme();
 
     assert.strictEqual(currentTheme, "generic.light");
@@ -464,7 +464,7 @@ QUnit.test("currentTheme returns default theme if ui theme returns wrong theme",
         isDefault: true
     });
 
-    //act
+    // act
     var currentTheme = themeModule.currentTheme();
 
     assert.strictEqual(currentTheme, "viz default theme");

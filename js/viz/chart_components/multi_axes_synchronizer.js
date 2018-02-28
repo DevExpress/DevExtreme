@@ -184,7 +184,7 @@ var updateTickValues = function(axesInfo) {
 };
 
 var getAxisRange = function(axisInfo) {
-    return (axisInfo.maxValue - axisInfo.minValue) || 1; //T153054
+    return (axisInfo.maxValue - axisInfo.minValue) || 1; // T153054
 };
 
 var getMainAxisInfo = function(axesInfo) {

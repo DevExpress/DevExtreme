@@ -348,44 +348,44 @@ QUnit.module("Utils", function() {
     });
 
     QUnit.test("change operation from default to custom without value", function(assert) {
-        //arrange, act
+        // arrange, act
         var updatedCondition = utils.updateConditionByOperation(["value", "=", "123"], "lastDays", [{
             name: "lastDays",
             hasValue: false
         }]);
 
-        //assert
+        // assert
         assert.deepEqual(updatedCondition, ["value", "lastDays"]);
     });
 
     QUnit.test("change operation from default to custom with value", function(assert) {
-        //arrange, act
+        // arrange, act
         var updatedCondition = utils.updateConditionByOperation(["value", "=", "123"], "range", [{
             name: "range"
         }]);
 
-        //assert
+        // assert
         assert.deepEqual(updatedCondition, ["value", "range", ""]);
     });
 
     QUnit.test("change operation from custom without value to default", function(assert) {
-        //arrange, act
+        // arrange, act
         var updatedCondition = utils.updateConditionByOperation(["value", "lastDays"], "=", [{
             name: "lastDays",
             hasValue: false
         }]);
 
-        //assert
+        // assert
         assert.deepEqual(updatedCondition, ["value", "=", ""]);
     });
 
     QUnit.test("change operation from custom with value to default", function(assert) {
-        //arrange, act
+        // arrange, act
         var updatedCondition = utils.updateConditionByOperation(["value", "range", [1, 2]], "=", [{
             name: "range"
         }]);
 
-        //assert
+        // assert
         assert.deepEqual(updatedCondition, ["value", "=", ""]);
     });
 
@@ -431,7 +431,7 @@ QUnit.module("Utils", function() {
         assert.equal(field.dataField, "State");
     });
 
-    //T603218
+    // T603218
     QUnit.test("getNormalizedFields", function(assert) {
         var normalizedFields = utils.getNormalizedFields([{
             dataField: "Weight",
@@ -1049,7 +1049,7 @@ QUnit.module("getAvailableOperations", {
             name: "lastDays"
         }]);
 
-        //assert
+        // assert
         assert.strictEqual(operations[0].text, "Last Days");
     });
 });
@@ -1396,7 +1396,7 @@ QUnit.module("Lookup Value", function() {
         });
     });
 
-    //T597637
+    // T597637
     QUnit.test("lookup with ODataStore shouldn't send getValueText query when value is empty", function(assert) {
         var fakeStore = {
             load: function() {

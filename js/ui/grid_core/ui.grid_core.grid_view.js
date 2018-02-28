@@ -83,7 +83,7 @@ var ResizingController = modules.ViewController.inherit({
                     });
                 }
             };
-            //TODO remove resubscribing
+            // TODO remove resubscribing
             that._dataController.changed.add(function() {
                 that._dataController.changed.add(that._refreshSizesHandler);
             });
@@ -155,7 +155,7 @@ var ResizingController = modules.ViewController.inherit({
         } else {
             $element.find("." + this.addWidgetPrefix(TABLE_CLASS)).toggleClass(this.addWidgetPrefix(TABLE_FIXED_CLASS), !isBestFit);
 
-            //B253906
+            // B253906
             $element.find(EDITORS_INPUT_SELECTOR).toggleClass(HIDDEN_CLASS, isBestFit);
             $element.find(".dx-group-cell").toggleClass(HIDDEN_CLASS, isBestFit);
             $element.find(".dx-header-row ." + this.addWidgetPrefix(TEXT_CONTENT_CLASS)).css("maxWidth", "");
@@ -423,7 +423,7 @@ var ResizingController = modules.ViewController.inherit({
 
         that._initPostRenderHandlers();
 
-        //T335767
+        // T335767
         if(!that._checkSize(checkSize)) {
             return;
         }
@@ -484,7 +484,7 @@ var ResizingController = modules.ViewController.inherit({
 
         commonUtils.deferRender(function() {
             rowsView.height(rowsViewHeight, hasHeight);
-            //IE11
+            // IE11
             if(maxHeightHappened && !isMaxHeightApplied) {
                 $(groupElement).css("height", maxHeight);
             }

@@ -197,7 +197,7 @@ QUnit.test("pressing '-' with different positive and negative parts", function(a
 QUnit.test("focusout after inverting sign should not lead to value changing", function(assert) {
     this.instance.option("value", -123);
 
-    //note: keyboard mock keyDown send wrong key for '-' and can not be used here
+    // note: keyboard mock keyDown send wrong key for '-' and can not be used here
     this.input.trigger($.Event("keydown", { keyCode: MINUS_KEY, which: MINUS_KEY, key: "-" }));
     this.keyboard.caret(3).input("-");
     this.keyboard.blur().change();
@@ -565,8 +565,8 @@ QUnit.testInActiveWindow("focusout should remove incomplete value chars from inp
 
 QUnit.test("valueChanged event fires on value apply", function(assert) {
     if(!browser.msie) {
-        //You can remove this test once issue noted below will resolved
-        //https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/15181565/
+        // You can remove this test once issue noted below will resolved
+        // https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/15181565/
         assert.ok(true, "It is IE and Edge specific test");
         return;
     }

@@ -28,7 +28,7 @@ QUnit.test("toComparable is used for compound keys", function(assert) {
     ));
 });
 
-//T364210
+// T364210
 QUnit.test("toComparable is used for EdmLiteral", function(assert) {
 
     var EdmLiteral = odataUtils.EdmLiteral,

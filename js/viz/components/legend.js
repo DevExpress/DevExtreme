@@ -364,7 +364,7 @@ extend(legendPrototype, {
     },
 
     draw: function(width, height) {
-        //TODO check multiple groups creation
+        // TODO check multiple groups creation
         var that = this,
             options = that._options,
             renderer = that._renderer,
@@ -379,7 +379,7 @@ extend(legendPrototype, {
 
         that._insideLegendGroup = renderer.g().append(that._legendGroup);
         that._createBackground();
-        //TODO review pass or process states in legend
+        // TODO review pass or process states in legend
         that._createItems(that._getItemData());
 
         that._locateElements(options);

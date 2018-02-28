@@ -101,7 +101,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             useKeyboard: false
         });
 
-        //TODO jsdmitry: This condition is for unit tests and testing scrollable
+        // TODO jsdmitry: This condition is for unit tests and testing scrollable
         if(useNativeScrolling === undefined) {
             useNativeScrolling = true;
         }
@@ -172,14 +172,14 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         if(columns) {
             $table.append(that._createColGroup(columns));
             if(devices.real().ios) {
-                //T198380
+                // T198380
                 $table.append($("<thead>").append("<tr>"));
             }
         }
 
         $table.append("<tbody>");
 
-        //T138469
+        // T138469
         if(browser.mozilla) {
             eventsEngine.on($table, "mousedown", "td", function(e) {
                 if(e.ctrlKey) {
@@ -214,7 +214,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
                         $element.data(CELL_HINT_VISIBLE, false);
                     }
 
-                    difference = $element[0].scrollWidth - $element[0].clientWidth - msieCorrection; //T598499
+                    difference = $element[0].scrollWidth - $element[0].clientWidth - msieCorrection; // T598499
                     if(difference > 0 && !typeUtils.isDefined($element.attr("title"))) {
                         $element.attr("title", $element.text());
                         $element.data(CELL_HINT_VISIBLE, true);
@@ -457,7 +457,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
         $cell = that._createCell(cellOptions);
 
-        //TODO move to cellPrepared
+        // TODO move to cellPrepared
         if(!column.command) {
             that.setAria("label", that.localize("dxDataGrid-ariaColumn") + " " + column.caption + ", " + that.localize("dxDataGrid-ariaValue") + " " + cellOptions.text, $cell);
         }

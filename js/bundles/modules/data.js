@@ -13,7 +13,7 @@ Object.defineProperty(DevExpress.data, 'errorHandler', {
     }
 });
 
-//TODO: try remove (plugins failed without this)
+// TODO: try remove (plugins failed without this)
 Object.defineProperty(DevExpress.data, '_errorHandler', {
     get: function() {
         return require("../../data/errors")._errorHandler;

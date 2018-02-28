@@ -100,7 +100,7 @@ var nativeDOMAdapterStrategy = {
                 } else {
                     element.classList.remove(className);
                 }
-            } else { //IE9
+            } else { // IE9
                 var classNames = element.className.split(" ");
                 var classIndex = classNames.indexOf(className);
                 if(isAdd && classIndex < 0) {

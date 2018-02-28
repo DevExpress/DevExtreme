@@ -219,7 +219,7 @@ var FallbackLayoutStrategy = Class.inherit({
             boxSize = this._$element[FALLBACK_MAIN_SIZE_MAP[direction]](),
             freeSpace = boxSize - totalItemSize;
 
-        //NOTE: clear margins
+        // NOTE: clear margins
         this._setItemsMargins($items, direction, 0);
 
         switch(align) {

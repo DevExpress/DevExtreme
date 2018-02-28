@@ -9,12 +9,12 @@ require("common.css!");
 require("ui/data_grid/ui.data_grid");
 
 var createDataGridMeasureFunction = function(options) {
-    //options.loadingTimeout = undefined;
+    // options.loadingTimeout = undefined;
     return function() {
-        //var clock = sinon.useFakeTimers();
+        // var clock = sinon.useFakeTimers();
         $("#container").dxDataGrid(options);
-        //clock.tick(1000);
-        //clock.restore();
+        // clock.tick(1000);
+        // clock.restore();
     };
 };
 

@@ -1134,7 +1134,7 @@ module.exports = {
                     return scrollbarWidth > 0 ? scrollbarWidth : 0;
                 },
 
-                //TODO remove this call, move _fireColumnResizedCallbacks functionality to columnsController
+                // TODO remove this call, move _fireColumnResizedCallbacks functionality to columnsController
                 _fireColumnResizedCallbacks: function() {
                     var that = this,
                         lastColumnWidths = that._lastColumnWidths || [],

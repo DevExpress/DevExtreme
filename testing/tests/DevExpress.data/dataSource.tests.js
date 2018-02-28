@@ -1362,7 +1362,7 @@ QUnit.test("requireTotalCount: success", function(assert) {
     });
 });
 
-//T401687
+// T401687
 QUnit.test("totalCount when CustomStore with Promise/A", function(assert) {
     var loadCallback,
         source = new DataSource({

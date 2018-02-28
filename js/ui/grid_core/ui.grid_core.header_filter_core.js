@@ -103,7 +103,7 @@ exports.HeaderFilterView = modules.View.inherit({
         }
 
         if(options.filterValues && !options.filterValues.length) {
-            options.filterValues = null; //T500956
+            options.filterValues = null; // T500956
         }
 
         options.apply();
@@ -143,7 +143,7 @@ exports.HeaderFilterView = modules.View.inherit({
                 my: alignment + " top",
                 at: alignment + " bottom",
                 of: $element,
-                collision: "flip fit"  //T291384
+                collision: "flip fit"  // T291384
             });
         }
     },
@@ -203,7 +203,7 @@ exports.HeaderFilterView = modules.View.inherit({
                 },
                 onInitialized: function(e) {
                     var component = e.component;
-                    //T321243
+                    // T321243
                     component.option("animation", component._getDefaultOptions().animation);
                 }
             };

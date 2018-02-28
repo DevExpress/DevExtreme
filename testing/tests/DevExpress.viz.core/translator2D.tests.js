@@ -552,7 +552,7 @@ QUnit.test('Can be reinited (recalculate canvas options)', function(assert) {
     canvas.left = 50;
     canvas.right = 150;
 
-    //act
+    // act
     translator.reinit();
 
     assert.ok(translator);
@@ -1560,7 +1560,7 @@ QUnit.test('GetInterval (Stick = true)', function(assert) {
     assert.equal(translator.getInterval(), 250);
 });
 
-//T111250
+// T111250
 QUnit.test('Without categories. stick = true', function(assert) {
     var translator = this.createTranslator({ categories: null }, undefined, { stick: true });
 
@@ -1847,7 +1847,7 @@ QUnit.test('Translate undefined/null value', function(assert) {
 });
 
 QUnit.test('Translate. Numeric, interval 5', function(assert) {
-    var translator = this.createTranslator({ min: 10, max: 30 }); //10, 15, 20, 25, 30
+    var translator = this.createTranslator({ min: 10, max: 30 }); // 10, 15, 20, 25, 30
 
     assert.equal(translator.translate(6.5), null, 'BP less than min');
     assert.equal(translator.translate(undefined), null, 'BP undefined');
@@ -1858,7 +1858,7 @@ QUnit.test('Translate. Numeric, interval 5', function(assert) {
 });
 
 QUnit.test('Translate with interval. Numeric, interval 5', function(assert) {
-    var translator = this.createTranslator({ min: 5, max: 20 }); //5, 10, 15, 20
+    var translator = this.createTranslator({ min: 5, max: 20 }); // 5, 10, 15, 20
 
     assert.equal(translator.translate(-6.5, undefined, 10), null, 'BP less than min');
     assert.equal(translator.translate(undefined, undefined, 10), null, 'BP undefined');
@@ -1904,9 +1904,9 @@ QUnit.test('Translate. Datetime, interval second', function(assert) {
     assert.equal(translator.translate(new Date(2015, 5, 1, 0, 0, 10, 0)), null, 'BP less than min');
     assert.equal(translator.translate(undefined), null, 'BP undefined');
     assert.equal(translator.translate(new Date(2015, 5, 1, 0, 0, 30, 0)), null, 'BP more than max');
-    assert.equal(translator.translate(new Date(2015, 5, 1, 0, 0, 19, 236)), 1000, 'BP inside range');//3
-    assert.equal(translator.translate(new Date(2015, 5, 1, 0, 0, 17, 236)), 600, 'BP on the min');//1
-    assert.equal(translator.translate(new Date(2015, 5, 1, 0, 0, 21, 236)), 1400, 'BP on the max');//5
+    assert.equal(translator.translate(new Date(2015, 5, 1, 0, 0, 19, 236)), 1000, 'BP inside range');// 3
+    assert.equal(translator.translate(new Date(2015, 5, 1, 0, 0, 17, 236)), 600, 'BP on the min');// 1
+    assert.equal(translator.translate(new Date(2015, 5, 1, 0, 0, 21, 236)), 1400, 'BP on the max');// 5
 });
 
 QUnit.test('Translate. Datetime, interval minute', function(assert) {
@@ -1919,9 +1919,9 @@ QUnit.test('Translate. Datetime, interval minute', function(assert) {
     assert.equal(translator.translate(new Date(2015, 5, 1, 0, 10, 0, 0)), null, 'BP less than min');
     assert.equal(translator.translate(undefined), null, 'BP undefined');
     assert.equal(translator.translate(new Date(2015, 5, 1, 0, 30, 0, 0)), null, 'BP more than max');
-    assert.equal(translator.translate(new Date(2015, 5, 1, 0, 19, 50, 236)), 1000, 'BP inside range');//3
-    assert.equal(translator.translate(new Date(2015, 5, 1, 0, 17, 50, 236)), 600, 'BP on the min');//1
-    assert.equal(translator.translate(new Date(2015, 5, 1, 0, 21, 50, 236)), 1400, 'BP on the max');//5
+    assert.equal(translator.translate(new Date(2015, 5, 1, 0, 19, 50, 236)), 1000, 'BP inside range');// 3
+    assert.equal(translator.translate(new Date(2015, 5, 1, 0, 17, 50, 236)), 600, 'BP on the min');// 1
+    assert.equal(translator.translate(new Date(2015, 5, 1, 0, 21, 50, 236)), 1400, 'BP on the max');// 5
 });
 
 QUnit.test('Translate. Datetime, interval hour', function(assert) {
@@ -1934,9 +1934,9 @@ QUnit.test('Translate. Datetime, interval hour', function(assert) {
     assert.equal(translator.translate(new Date(2015, 5, 1, 10, 0, 0, 0)), null, 'BP less than min');
     assert.equal(translator.translate(undefined), null, 'BP undefined');
     assert.equal(translator.translate(new Date(2015, 5, 1, 22, 0, 0, 0)), null, 'BP more than max');
-    assert.equal(translator.translate(new Date(2015, 5, 1, 19, 10, 50, 236)), 1000, 'BP inside range');//3
-    assert.equal(translator.translate(new Date(2015, 5, 1, 17, 10, 50, 236)), 600, 'BP on the min');//1
-    assert.equal(translator.translate(new Date(2015, 5, 1, 21, 10, 50, 236)), 1400, 'BP on the max');//5
+    assert.equal(translator.translate(new Date(2015, 5, 1, 19, 10, 50, 236)), 1000, 'BP inside range');// 3
+    assert.equal(translator.translate(new Date(2015, 5, 1, 17, 10, 50, 236)), 600, 'BP on the min');// 1
+    assert.equal(translator.translate(new Date(2015, 5, 1, 21, 10, 50, 236)), 1400, 'BP on the max');// 5
 });
 
 QUnit.test('Translate. Datetime, interval day', function(assert) {
@@ -1949,9 +1949,9 @@ QUnit.test('Translate. Datetime, interval day', function(assert) {
     assert.equal(translator.translate(new Date(2015, 5, 10, 0, 0, 0, 0)), null, 'BP less than min');
     assert.equal(translator.translate(undefined), null, 'BP undefined');
     assert.equal(translator.translate(new Date(2015, 5, 22, 0, 0, 0, 0)), null, 'BP more than max');
-    assert.equal(translator.translate(new Date(2015, 5, 19, 15, 10, 50, 236)), 1000, 'BP inside range');//3
-    assert.equal(translator.translate(new Date(2015, 5, 17, 15, 10, 50, 236)), 600, 'BP on the min');//1
-    assert.equal(translator.translate(new Date(2015, 5, 21, 15, 10, 50, 236)), 1400, 'BP on the max');//5
+    assert.equal(translator.translate(new Date(2015, 5, 19, 15, 10, 50, 236)), 1000, 'BP inside range');// 3
+    assert.equal(translator.translate(new Date(2015, 5, 17, 15, 10, 50, 236)), 600, 'BP on the min');// 1
+    assert.equal(translator.translate(new Date(2015, 5, 21, 15, 10, 50, 236)), 1400, 'BP on the max');// 5
 });
 
 QUnit.test('Translate. Datetime, interval week', function(assert) {
@@ -1964,9 +1964,9 @@ QUnit.test('Translate. Datetime, interval week', function(assert) {
     assert.equal(translator.translate(new Date(2015, 5, 1, 0, 0, 0, 0)), null, 'BP less than min');
     assert.equal(translator.translate(undefined), null, 'BP undefined');
     assert.equal(translator.translate(new Date(2015, 6, 13, 0, 0, 0, 0)), null, 'BP more than max');
-    assert.equal(translator.translate(new Date(2015, 5, 25, 15, 10, 50, 236)), 1000, 'BP inside range');//3
-    assert.equal(translator.translate(new Date(2015, 5, 9, 15, 10, 50, 236)), 600, 'BP on the min');//1
-    assert.equal(translator.translate(new Date(2015, 6, 7, 15, 10, 50, 236)), 1400, 'BP on the max');//5
+    assert.equal(translator.translate(new Date(2015, 5, 25, 15, 10, 50, 236)), 1000, 'BP inside range');// 3
+    assert.equal(translator.translate(new Date(2015, 5, 9, 15, 10, 50, 236)), 600, 'BP on the min');// 1
+    assert.equal(translator.translate(new Date(2015, 6, 7, 15, 10, 50, 236)), 1400, 'BP on the max');// 5
 });
 
 QUnit.test('Translate. Datetime, interval month', function(assert) {
@@ -1979,9 +1979,9 @@ QUnit.test('Translate. Datetime, interval month', function(assert) {
     assert.equal(translator.translate(new Date(2015, 4, 1, 0, 0, 0, 0)), null, 'BP less than min');
     assert.equal(translator.translate(undefined), null, 'BP undefined');
     assert.equal(translator.translate(new Date(2015, 10, 1, 0, 0, 0, 0)), null, 'BP more than max');
-    assert.equal(translator.translate(new Date(2015, 7, 11, 15, 10, 50, 236)), 1000, 'BP inside range');//3
-    assert.equal(translator.translate(new Date(2015, 5, 11, 15, 10, 50, 236)), 598 /*600*/, 'BP on the min');//1
-    assert.equal(translator.translate(new Date(2015, 9, 11, 15, 10, 50, 236)), 1398 /*1400*/, 'BP on the max');//5
+    assert.equal(translator.translate(new Date(2015, 7, 11, 15, 10, 50, 236)), 1000, 'BP inside range');// 3
+    assert.equal(translator.translate(new Date(2015, 5, 11, 15, 10, 50, 236)), 598 /* 600 */, 'BP on the min');// 1
+    assert.equal(translator.translate(new Date(2015, 9, 11, 15, 10, 50, 236)), 1398 /* 1400 */, 'BP on the max');// 5
 });
 
 QUnit.test('Translate. Datetime, interval quarter', function(assert) {
@@ -1994,9 +1994,9 @@ QUnit.test('Translate. Datetime, interval quarter', function(assert) {
     assert.equal(translator.translate(new Date(2014, 11, 1, 0, 0, 0, 0)), null, 'BP less than min');
     assert.equal(translator.translate(undefined), null, 'BP undefined');
     assert.equal(translator.translate(new Date(2016, 3, 1, 0, 0, 0, 0)), null, 'BP more than max');
-    assert.equal(translator.translate(new Date(2015, 8, 11, 15, 10, 50, 236)), 998 /*1000*/, 'BP inside range');//3
-    assert.equal(translator.translate(new Date(2015, 1, 11, 15, 10, 50, 236)), 598 /*600*/, 'BP on the min');//1
-    assert.equal(translator.translate(new Date(2016, 2, 11, 15, 10, 50, 236)), 1400, 'BP on the max');//5
+    assert.equal(translator.translate(new Date(2015, 8, 11, 15, 10, 50, 236)), 998 /* 1000 */, 'BP inside range');// 3
+    assert.equal(translator.translate(new Date(2015, 1, 11, 15, 10, 50, 236)), 598 /* 600 */, 'BP on the min');// 1
+    assert.equal(translator.translate(new Date(2016, 2, 11, 15, 10, 50, 236)), 1400, 'BP on the max');// 5
 });
 
 QUnit.test('Translate. Datetime, interval year', function(assert) {
@@ -2009,13 +2009,13 @@ QUnit.test('Translate. Datetime, interval year', function(assert) {
     assert.equal(translator.translate(new Date(2009, 0, 1, 0, 0, 0, 0)), null, 'BP less than min');
     assert.equal(translator.translate(undefined), null, 'BP undefined');
     assert.equal(translator.translate(new Date(2015, 0, 1, 0, 0, 0, 0)), null, 'BP more than max');
-    assert.equal(translator.translate(new Date(2012, 5, 11, 15, 10, 50, 236)), 1000, 'BP inside range');//3
-    assert.equal(translator.translate(new Date(2010, 5, 11, 15, 10, 50, 236)), 600, 'BP on the min');//1
-    assert.equal(translator.translate(new Date(2014, 5, 11, 15, 10, 50, 236)), 1400, 'BP on the max');//5
+    assert.equal(translator.translate(new Date(2012, 5, 11, 15, 10, 50, 236)), 1000, 'BP inside range');// 3
+    assert.equal(translator.translate(new Date(2010, 5, 11, 15, 10, 50, 236)), 600, 'BP on the min');// 1
+    assert.equal(translator.translate(new Date(2014, 5, 11, 15, 10, 50, 236)), 1400, 'BP on the max');// 5
 });
 
 QUnit.test('Translate. With direction', function(assert) {
-    var translator = this.createTranslator({ min: 10, max: 30 }); //10, 15, 20, 25, 30
+    var translator = this.createTranslator({ min: 10, max: 30 }); // 10, 15, 20, 25, 30
 
     assert.equal(translator.translate(24.6, -1), 900, 'BP inside range');
     assert.equal(translator.translate(24.6, 1), 1100, 'BP inside range');
@@ -2028,7 +2028,7 @@ QUnit.test('Translate. With direction', function(assert) {
 });
 
 QUnit.test('Translate with interval. With direction, Numeric, interval 5', function(assert) {
-    var translator = this.createTranslator({ min: 5, max: 20 }); //5, 10, 15, 20
+    var translator = this.createTranslator({ min: 5, max: 20 }); // 5, 10, 15, 20
 
     assert.equal(translator.translate(17.5, -1, 10), 750, 'BP inside range');
     assert.equal(translator.translate(17.5, 1, 10), 1250, 'BP inside range');
@@ -2041,7 +2041,7 @@ QUnit.test('Translate with interval. With direction, Numeric, interval 5', funct
 });
 
 QUnit.test('Untranslate.', function(assert) {
-    var translator = this.createTranslator({ min: 10, max: 30 }); //10, 15, 20, 25, 30
+    var translator = this.createTranslator({ min: 10, max: 30 }); // 10, 15, 20, 25, 30
 
     assert.equal(translator.untranslate(300), null, 'Coord less than min');
     assert.equal(translator.untranslate(1800), null, 'Coord more than min');

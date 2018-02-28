@@ -36,7 +36,7 @@ QUnit.module("Export", {
 });
 
 QUnit.test('Export method. Defined options', function(assert) {
-    //arrange
+    // arrange
     var exportFunc = clientExporter.export,
         exportedStub = sinon.spy(),
         exportingStub = sinon.spy(),
@@ -53,7 +53,7 @@ QUnit.test('Export method. Defined options', function(assert) {
 
     widget.$element().css("background-color", "#ff0000");
 
-    //act
+    // act
     widget.exportTo("testName", "jpeg");
 
     var firstExportCall = exportFunc.getCall(0);
@@ -61,7 +61,7 @@ QUnit.test('Export method. Defined options', function(assert) {
     firstExportCall.args[1].exportedAction();
     firstExportCall.args[1].fileSavingAction();
 
-    //assert
+    // assert
     assert.ok(exportFunc.callCount, 1, "export was called one time");
     assert.equal(firstExportCall.args[0], "testMarkup", "export data");
 
@@ -78,7 +78,7 @@ QUnit.test('Export method. Defined options', function(assert) {
 });
 
 QUnit.test('Export method. PNG format', function(assert) {
-    //arrange
+    // arrange
     var exportFunc = clientExporter.export,
         exportedStub = sinon.spy(),
         exportingStub = sinon.spy(),
@@ -94,17 +94,17 @@ QUnit.test('Export method. PNG format', function(assert) {
 
     widget.$element().css("background-color", "#ff0000");
 
-    //act
+    // act
     widget.exportTo("testName", "png");
 
-    //assert
+    // assert
     var firstExportCall = exportFunc.getCall(0);
     assert.ok(exportFunc.callCount, 1, "export was called one time");
     assert.equal(firstExportCall.args[1].format, "PNG", "format");
 });
 
 QUnit.test('Export method. JPEG format', function(assert) {
-    //arrange
+    // arrange
     var exportFunc = clientExporter.export,
         exportedStub = sinon.spy(),
         exportingStub = sinon.spy(),
@@ -120,17 +120,17 @@ QUnit.test('Export method. JPEG format', function(assert) {
 
     widget.$element().css("background-color", "#ff0000");
 
-    //act
+    // act
     widget.exportTo("testName", "jpeg");
 
-    //assert
+    // assert
     var firstExportCall = exportFunc.getCall(0);
     assert.ok(exportFunc.callCount, 1, "export was called one time");
     assert.equal(firstExportCall.args[1].format, "JPEG", "format");
 });
 
 QUnit.test('Export method. GIF format', function(assert) {
-    //arrange
+    // arrange
     var exportFunc = clientExporter.export,
         exportedStub = sinon.spy(),
         exportingStub = sinon.spy(),
@@ -146,17 +146,17 @@ QUnit.test('Export method. GIF format', function(assert) {
 
     widget.$element().css("background-color", "#ff0000");
 
-    //act
+    // act
     widget.exportTo("testName", "gif");
 
-    //assert
+    // assert
     var firstExportCall = exportFunc.getCall(0);
     assert.ok(exportFunc.callCount, 1, "export was called one time");
     assert.equal(firstExportCall.args[1].format, "GIF", "format");
 });
 
 QUnit.test('Export method. SVG format', function(assert) {
-    //arrange
+    // arrange
     var exportFunc = clientExporter.export,
         exportedStub = sinon.spy(),
         exportingStub = sinon.spy(),
@@ -172,17 +172,17 @@ QUnit.test('Export method. SVG format', function(assert) {
 
     widget.$element().css("background-color", "#ff0000");
 
-    //act
+    // act
     widget.exportTo("testName", "svg");
 
-    //assert
+    // assert
     var firstExportCall = exportFunc.getCall(0);
     assert.ok(exportFunc.callCount, 1, "export was called one time");
     assert.equal(firstExportCall.args[1].format, "SVG", "format");
 });
 
 QUnit.test('Export method. PDF format', function(assert) {
-    //arrange
+    // arrange
     var exportFunc = clientExporter.export,
         exportedStub = sinon.spy(),
         exportingStub = sinon.spy(),
@@ -198,17 +198,17 @@ QUnit.test('Export method. PDF format', function(assert) {
 
     widget.$element().css("background-color", "#ff0000");
 
-    //act
+    // act
     widget.exportTo("testName", "pdf");
 
-    //assert
+    // assert
     var firstExportCall = exportFunc.getCall(0);
     assert.ok(exportFunc.callCount, 1, "export was called one time");
     assert.equal(firstExportCall.args[1].format, "PDF", "format");
 });
 
 QUnit.test('Export method. invalid format', function(assert) {
-    //arrange
+    // arrange
     var exportFunc = clientExporter.export,
         exportedStub = sinon.spy(),
         exportingStub = sinon.spy(),
@@ -224,26 +224,26 @@ QUnit.test('Export method. invalid format', function(assert) {
 
     widget.$element().css("background-color", "#ff0000");
 
-    //act
+    // act
     widget.exportTo("testName", "abc");
 
-    //assert
+    // assert
     var firstExportCall = exportFunc.getCall(0);
     assert.ok(exportFunc.callCount, 1, "export was called one time");
     assert.equal(firstExportCall.args[1].format, "PNG", "format");
 });
 
 QUnit.test('Export method. Undefined options', function(assert) {
-    //arrange
+    // arrange
     var exportFunc = clientExporter.export,
         widget = this.createWidget();
 
     widget.$element().css("background-color", "rgba(0, 0, 0, 0)");
 
-    //act
+    // act
     widget.exportTo();
 
-    //assert
+    // assert
     var firstExportCall = exportFunc.getCall(0);
     assert.equal(firstExportCall.args[1].backgroundColor, "#ffffff", "backgroundColor");
     assert.equal(firstExportCall.args[1].fileName, "file", "fileName");
@@ -252,14 +252,14 @@ QUnit.test('Export method. Undefined options', function(assert) {
 });
 
 QUnit.test('Export menu creation', function(assert) {
-    //arrange, act
+    // arrange, act
     var incidentOccurred = sinon.spy();
     this.createWidget({
         incidentOccurred: incidentOccurred,
         rtlEnabled: "rtl option"
     });
 
-    //assert
+    // assert
     assert.equal(exportModule.ExportMenu.lastCall.args[0].renderer, this.renderer);
     assert.ok(typeof exportModule.ExportMenu.lastCall.args[0].svgMethod === "function");
     assert.ok(typeof exportModule.ExportMenu.lastCall.args[0].incidentOccurred === "function");
@@ -267,24 +267,24 @@ QUnit.test('Export menu creation', function(assert) {
 });
 
 QUnit.test("Export menu disposing", function(assert) {
-    //arrange
+    // arrange
     this.createWidget();
 
-    //act
+    // act
     this.$container.remove();
 
-    //assert
+    // assert
     assert.equal(this.exportMenu.dispose.callCount, 1, "disposing of export menu is called");
 });
 
 QUnit.test("export menu option", function(assert) {
-    //arrange
+    // arrange
     var widget = this.createWidget();
 
-    //act
+    // act
     widget.option("export", { tag: "options" });
 
-    //assert
+    // assert
     var exportOptions = this.exportMenu.setOptions.getCall(0).args[0].exportOptions;
 
     assert.equal(exportOptions.fileName, "file", "file name");
@@ -307,7 +307,7 @@ QUnit.test("Depends on theme", function(assert) {
 });
 
 QUnit.test('Print method', function(assert) {
-    //arrange
+    // arrange
     var widget = this.createWidget(),
         svgNode = { style: {} };
 
@@ -325,10 +325,10 @@ QUnit.test('Print method', function(assert) {
         };
     });
 
-    //act
+    // act
     widget.print();
 
-    //assert
+    // assert
     assert.ok(widget.svg.callCount, 1, "svg method");
     assert.deepEqual(svgNode.style, { backgroundColor: "#ffffff" });
 
