@@ -149,7 +149,8 @@ module.exports = {
 
     getRangeData: function(series) {
         var points = series.getPoints(),
-            argumentCalculator = getRangeCalculator(series.argumentAxisType, points.length > 1 && series.getArgumentAxis()),
+            useAggregation = series.getOptions().useAggregation,
+            argumentCalculator = !useAggregation ? getRangeCalculator(series.argumentAxisType, points.length > 1 && series.getArgumentAxis()) : noop,
             valueRangeCalculator = getRangeCalculator(series.valueAxisType),
             viewportReducer = getViewportReducer(series),
             range = points.reduce(function(range, point, index, points) {
@@ -166,6 +167,9 @@ module.exports = {
                 viewport: getInitialRange(series.valueAxisType, series.valueType, points.length ? series.getValueRangeInitialValue() : undefined)
             });
 
+        if(useAggregation) {
+            range.arg = this.getArgumentRange(series);
+        }
 
         processCategories(range.arg);
         processCategories(range.val);

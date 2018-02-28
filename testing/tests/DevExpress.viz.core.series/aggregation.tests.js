@@ -1732,6 +1732,7 @@ QUnit.test("10 points -> 5 points. All points", function(assert) {
     this.series.createPoints();
 
     checkResult(assert, this.series.getPoints(), fusionPoints, 5);
+    assert.deepEqual(this.series.getRangeData().arg.categories.length, 10, "range data should hava all categories");
 });
 
 QUnit.test("10 points -> 5 points. All points. ValueAxisType = discrete", function(assert) {
