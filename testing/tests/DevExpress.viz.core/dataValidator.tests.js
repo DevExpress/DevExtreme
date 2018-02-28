@@ -1043,7 +1043,7 @@ QUnit.test("Can not parse Datetime arguments", function(assert) {
     assert.deepEqual(groups.argumentOptions.categories, [new Date(1000), new Date(2000), new Date(3000), new Date(5000)], "argument categories");
 });
 
-//T608785
+// T608785
 QUnit.test("Order of the series should be correct", function(assert) {
     var groups = createGroupsData({
             argumentType: "string",
