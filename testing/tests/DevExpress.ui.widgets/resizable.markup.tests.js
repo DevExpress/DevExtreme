@@ -18,10 +18,11 @@ var RESIZABLE_CLASS = "dx-resizable",
 QUnit.module("markup");
 
 QUnit.test("resizable render", function(assert) {
-    var $resizable = $("#resizable").dxResizable({});
+    var $resizable = $("#resizable").dxResizable({}),
+        position = $resizable.get(0).style.position;
 
     assert.ok($resizable.hasClass(RESIZABLE_CLASS), "dx-resizable class attached");
-    assert.ok($resizable.css("position") !== "static", "position of element should not be static");
+    assert.ok(position !== "static", "position of element should not be static");
 });
 
 QUnit.test("resizable should have correct handle for handles", function(assert) {
