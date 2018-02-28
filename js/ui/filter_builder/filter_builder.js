@@ -415,6 +415,13 @@ var FilterBuilder = Widget.inherit({
              */
             filterOperationDescriptions: {
                 /**
+                 * @name dxFilterBuilderOptions_filterOperationDescriptions_between
+                 * @publicName between
+                 * @type string
+                 * @default "Between"
+                 */
+                between: messageLocalization.format("dxDataGrid-filterRowOperationBetween"),
+                /**
                  * @name dxFilterBuilderOptions_filterOperationDescriptions_equal
                  * @publicName equal
                  * @type string
@@ -570,7 +577,7 @@ var FilterBuilder = Widget.inherit({
     },
 
     _initCustomOperations: function() {
-        this._customOperations = utils.getMergedOperations(this.option("customOperations"));
+        this._customOperations = utils.getMergedOperations(this.option("customOperations"), this.option("operationDescriptions.between"));
     },
 
     _initModel: function() {

@@ -48,9 +48,6 @@ QUnit.module("Events", function() {
             value: [
                 ["Field", "between", [1, 2]]
             ],
-            customOperations: [{
-                name: "between"
-            }],
             fields: [{
                 dataField: "Field",
                 dataType: "number"
@@ -112,9 +109,6 @@ QUnit.module("Events", function() {
             value: [
                 ["Field", "between", [1, 2]]
             ],
-            customOperations: [{
-                name: "between"
-            }],
             fields: [{
                 dataField: "Field",
                 dataType: "number"
@@ -167,9 +161,6 @@ QUnit.module("Events", function() {
             fields: [{
                 dataField: "Field",
                 dataType: "number"
-            }],
-            customOperations: [{
-                name: "between"
             }],
             onInitialized: function(e) {
                 assert.deepEqual(e.component.getFilterExpression(), [["Field", ">=", 666], "and", ["Field", "<=", 777]]);
