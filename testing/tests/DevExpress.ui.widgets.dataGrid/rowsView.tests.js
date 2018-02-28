@@ -2263,7 +2263,7 @@ QUnit.test('Show grouped columns', function(assert) {
     //assert
     assert.equal(testElement.find('tbody > tr').length, 4, 'rows count: 3 + 1 freespace row');
 
-    assert.equal(testElement.find('tbody > tr').eq(0).attr('role'), 'rowgroup');
+    assert.equal(testElement.find('tbody > tr').eq(0).attr('role'), 'row');
     assert.equal(testElement.find('tbody > tr').eq(0).attr('aria-expanded'), 'true');
     assert.ok($(testElement.find('tbody > tr')[0]).hasClass("dx-group-row"));
     assert.equal($(testElement.find('tbody > tr')[0]).find('td').length, 2);
@@ -2271,7 +2271,7 @@ QUnit.test('Show grouped columns', function(assert) {
     assert.equal($(testElement.find('tbody > tr')[0]).find('td').last().text(), 'column 1: 1 (Continued on the next page)');
     assert.equal($(testElement.find('tbody > tr')[0]).find('td').last().attr('colspan'), 2);
 
-    assert.equal(testElement.find('tbody > tr').eq(1).attr('role'), 'rowgroup');
+    assert.equal(testElement.find('tbody > tr').eq(1).attr('role'), 'row');
     assert.equal(testElement.find('tbody > tr').eq(1).attr('aria-expanded'), 'false');
     assert.ok($(testElement.find('tbody > tr')[1]).hasClass("dx-group-row"));
     assert.equal($(testElement.find('tbody > tr')[1]).find('td').length, 3);
@@ -2305,7 +2305,7 @@ QUnit.test('Show grouped column when cellTemplate is defined', function(assert) 
     //assert
     assert.equal(testElement.find('tbody > tr').length, 3, 'rows count: 2 + 1 freespace row');
 
-    assert.equal(testElement.find('tbody > tr').eq(0).attr('role'), 'rowgroup');
+    assert.equal(testElement.find('tbody > tr').eq(0).attr('role'), 'row');
     assert.equal(testElement.find('tbody > tr').eq(0).attr('aria-expanded'), 'true');
     assert.ok($(testElement.find('tbody > tr')[0]).hasClass("dx-group-row"));
     assert.equal($(testElement.find('tbody > tr')[0]).find('td').last().text(), 'column 1: 1');
