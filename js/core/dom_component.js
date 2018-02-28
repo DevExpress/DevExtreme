@@ -152,7 +152,7 @@ var DOMComponent = Component.inherit({
     },
 
     _render: function() {
-        if(this.$element().hasClass(VISIBILITY_CHANGE_CLASS)) {
+        if(this._isVisibilityChangeSupported()) {
             this._attachVisibilityChangeHandlers();
         }
     },
