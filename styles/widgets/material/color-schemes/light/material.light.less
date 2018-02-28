@@ -1254,7 +1254,7 @@
 * @type color
 * @group datagrid
 */
-@datagrid-editor-bg: @datagrid-base-background-color;
+@datagrid-editor-bg: fade(@datagrid-base-background-color, 0%);
 
 @datagrid-drop-highlight-bg: @base-accent;
 @datagrid-drop-highlight-color: @base-inverted-text-color;
@@ -1286,6 +1286,13 @@
 @datagrid-overlay-content-shadow-color: fade(@base-shadow-color, 15%);
 
 @datagrid-column-separator-bg: fade(@base-accent, 50%);
+
+/**
+* @name 180. Filter row background color
+* @type color
+* @group datagrid
+*/
+@datagrid-filter-row-background-color: darken(@datagrid-base-background-color, 2%);
 
 //TreeList
 /**
@@ -1455,7 +1462,7 @@
 * @type color
 * @group treelist
 */
-@treelist-editor-bg: @treelist-base-background-color;
+@treelist-editor-bg: fade(@treelist-base-background-color, 0%);
 
 @treelist-drop-highlight-bg: @base-accent;
 @treelist-drop-highlight-color: @base-inverted-text-color;
@@ -1487,6 +1494,12 @@
 
 @treelist-column-separator-bg: fade(@base-accent, 50%);
 
+/**
+* @name 180. Filter row background color
+* @type color
+* @group datagrid
+*/
+@treelist-filter-row-background-color: darken(@treelist-base-background-color, 2%);
 
 // dxPivotGrid
 @PIVOTGRID_AREA_BACKGROUND: @base-bg;
