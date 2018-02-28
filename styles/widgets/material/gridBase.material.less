@@ -311,6 +311,11 @@
             padding-top: @MATERIAL_GRID_BASE_CELL_VERTICAL_PADDING;
             padding-bottom: @MATERIAL_GRID_BASE_CELL_VERTICAL_PADDING;
         }
+
+        > div {
+            position: relative;
+            top: 1px;
+        }
     }
 
     .dx-device-mobile .dx-@{widgetName}-column-chooser-list,
@@ -496,7 +501,7 @@
                         }
                     }
 
-                    &:hover:not(.dx-command-select):not(.dx-command-expand):not(.dx-editor-cell) {
+                    &:hover:not(.dx-command-select):not(.dx-command-expand):not(.dx-editor-cell):not(.dx-command-edit) {
                         background-color:  ~"@{@{widgetName}-hover-bg}";
                     }
                 }
@@ -555,6 +560,13 @@
         td .dx-editor-container .dx-filter-range-content {
             padding: @MATERIAL_GRID_BASE_CELL_VERTICAL_PADDING @MATERIAL_GRID_BASE_CELL_HORIZONTAL_PADDING @MATERIAL_GRID_BASE_CELL_VERTICAL_PADDING @MATERIAL_GRID_BASE_TEXTEDITOR_INPUT_PADDING;
         }
+
+        .dx-@{widgetName} .dx-@{widgetName}-table & { 
+            > td {
+                padding-top: 0;
+                padding-bottom: 0;
+            }
+        }
     }
 
     .dx-@{widgetName}-filter-range-overlay {
@@ -593,7 +605,6 @@
     }
 
     .dx-editor-with-menu {
-        top: 1px;
         .dx-menu-item-content {
             .dx-icon {
                 .dx-icon-sizing(24px);
