@@ -83,7 +83,7 @@ SeriesDataSource = function(options) {
     if(options.dataSource && seriesTemplate) {
         templatedSeries = vizUtils.processSeriesTemplate(seriesTemplate, options.dataSource);
     }
-    that._useAggregation = options.chart.useAggregation;
+
     that._series = that._calculateSeries(options, templatedSeries);
 
     negativesAsZeroes = themeManager.getOptions("negativesAsZeroes");
@@ -179,16 +179,26 @@ SeriesDataSource.prototype = {
                 series[i].updateData(parsedData[series[i].getArgumentField()]);
 
             }
+
+            that._createPoints(series);
         }
         return series;
     },
 
+    _createPoints: function(series) {
+        var viewport = new rangeModule.Range(),
+            axis = series[0].getArgumentAxis();
+
+        series.forEach(function(s) {
+            viewport.addRange(s.getArgumentRange());
+        });
+
+        axis.getTranslator().updateBusinessRange(viewport);
+
+        series.forEach(function(s) { s.createPoints(); });
+    },
+
     adjustSeriesDimensions: function() {
-        if(this._useAggregation) {
-            each(this._series, function(_, s) {
-                s.resamplePoints(s.getArgumentAxis().getTranslator().canvasLength);
-            });
-        }
         each(this._seriesFamilies, function(_, family) {
             family.adjustSeriesDimensions();
         });
