@@ -643,7 +643,7 @@ var FieldChooser = BaseFieldChooser.inherit({
     },
 
     _getSortableOptions: function() {
-        //TODO
+        // TODO
         return {
 
         };

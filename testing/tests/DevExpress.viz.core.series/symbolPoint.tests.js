@@ -318,9 +318,9 @@ QUnit.test("Process numeric minValue", function(assert) {
 QUnit.test("Reset correction", function(assert) {
     var point = createPoint(this.series, this.data, this.options);
     point.correctValue(12);
-    //act
+    // act
     point.resetCorrection();
-    //assert
+    // assert
     assert.equal(point.value, 10);
     assert.equal(point.minValue, "canvas_position_default");
 
@@ -1148,7 +1148,7 @@ QUnit.test("Draw point with selected state", function(assert) {
     assert.deepEqual(point.graphic.data.lastCall.args, [{ 'chart-data-point': point }]);
 });
 
-//TODO why?
+// TODO why?
 QUnit.test("Draw point with hover state", function(assert) {
     this.options.symbol = "circle";
     var point = createPoint(this.series, { argument: "4", value: 3 }, this.options);
@@ -1198,9 +1198,9 @@ QUnit.test("double drawing without animation", function(assert) {
     point.y = 50,
     point.defaultY = 0;
     point.visible = true;
-    //act
+    // act
     point.draw(this.renderer, this.groups, false);
-    //assert
+    // assert
 
     assert.ok(point);
     assert.ok(point.graphic);
@@ -1225,9 +1225,9 @@ QUnit.test("double drawing with animation", function(assert) {
     point.y = 50,
     point.defaultY = 0;
     point.visible = true;
-    //act
+    // act
     point.draw(this.renderer, this.groups, true);
-    //assert
+    // assert
 
     assert.ok(point);
     assert.ok(point.graphic);
@@ -1274,9 +1274,9 @@ QUnit.test("Animate point with complete", function(assert) {
 
     point.animate(stubComplete, { translate: { x: point.x, y: point.y } });
     complete = point.graphic.stub("animate").lastCall.args[2];
-    //act
+    // act
     complete();
-    //assert
+    // assert
     assert.ok(stubComplete.calledOnce);
 });
 
@@ -1322,9 +1322,9 @@ QUnit.test("Hide error bar", function(assert) {
 
     point.translate();
     point.draw(this.renderer, this.groups);
-    //act
+    // act
     point.setInvisibility();
-    //assert
+    // assert
     assert.ok(point.graphic);
     assert.strictEqual(this.renderer.path.callCount, 1);
     assert.deepEqual(this.renderer.path.lastCall.returnValue.attr.lastCall.args[0], {
@@ -2846,7 +2846,7 @@ QUnit.test("CustomizeLabel visibility is false, series labels are visible", func
 });
 
 QUnit.module("Correct Label position", environment);
-//Helper
+// Helper
 function createCorrectionLabel(x, y, visibility, bBox) {
     var point = createPoint(this.series, this.data, this.options),
         label = point._label;
@@ -2961,7 +2961,7 @@ QUnit.module("Check Label position", {
         environment.afterEach.apply(this, arguments);
     }
 });
-//Helper
+// Helper
 function createLabel(labelBBox) {
     var point = createPoint(this.series, this.data, this.options),
         label = point._label;
@@ -3335,7 +3335,7 @@ QUnit.module("API", {
 
 QUnit.test("coordsIn", function(assert) {
     var point = createPoint(this.series, { argument: 1, value: 1 }, this.options);
-    point.translate(); //point.x = 11, point.y = 22;
+    point.translate(); // point.x = 11, point.y = 22;
 
     point._storeTrackerR = function() {
         return 20;

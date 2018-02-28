@@ -1,0 +1,29 @@
+{
+  "folders": [
+    {
+      "path": ".",
+      "name": "DevExtreme"
+    },
+    {
+      "path": "build/style-compiler",
+      "name": "Style Compiler"
+    },
+    {
+      "path": "testing/runner",
+      "name": "Test Runner"
+    }
+  ],
+  "settings": {
+    "files.exclude": {
+      "bin": true,
+      "obj": true,
+      "node_modules": true
+    },
+    "search.exclude": {
+      "artifacts": true,
+      "ts/vendor": true,
+      "vendor": true
+    },
+    "typescript.tsdk": "./node_modules/typescript/lib"
+  }
+}

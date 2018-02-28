@@ -1,6 +1,6 @@
 "use strict";
 
-//there are rangebar, rangearea
+// there are rangebar, rangearea
 var extend = require("../../core/utils/extend").extend,
     _extend = extend,
     _isDefined = require("../../core/utils/type").isDefined,
@@ -82,14 +82,18 @@ exports.chart["rangearea"] = _extend({}, areaSeries, {
         }
     },
 
-    _prepareSegment: function(points, rotated) {
+    _prepareSegment: function(points, orderedPoints, rotated) {
         var processedPoints = this._processSinglePointsAreaSegment(points, rotated),
-            processedMinPointsCoords = _map(processedPoints, function(pt) { return pt.getCoords(true); });
+            processedMinPointsCoords = _map(processedPoints, function(pt) { return pt.getCoords(true); }),
+            orderedMinPoints = orderedPoints && orderedPoints.map(function(p) { return p.getCoords(true); });
 
         return {
             line: processedPoints,
+            orderedLine: orderedPoints,
             bottomLine: processedMinPointsCoords,
+            orderedBottomLine: orderedMinPoints,
             area: _map(processedPoints, function(pt) { return pt.getCoords(); }).concat(processedMinPointsCoords.slice().reverse()),
+            orderedArea: orderedPoints && orderedPoints.map(function(pt) { return pt.getCoords(); }).concat(orderedMinPoints.slice().reverse()),
             singlePointSegment: processedPoints !== points
         };
     },
@@ -126,13 +130,17 @@ exports.chart["rangearea"] = _extend({}, areaSeries, {
         });
     },
 
-    _updateElement: function(element, segment, animate, animateParams, complete) {
-        areaSeries._updateElement.call(this, element, segment, animate, animateParams, complete);
-        var bottomLineParams = { points: segment.bottomLine },
+    _updateElement: function(element, segment, animate, complete) {
+        var bottomLineParams = segment.orderedBottomLine ? { points: segment.orderedBottomLine } : { points: segment.bottomLine },
             bottomBorderElement = element.bottomLine;
 
+        areaSeries._updateElement.call(this, element, segment, animate, function() {
+            bottomBorderElement && bottomBorderElement.attr({ points: segment.bottomLine });
+            complete && complete();
+        });
+
         if(bottomBorderElement) {
-            animate ? bottomBorderElement.animate(bottomLineParams, animateParams) : bottomBorderElement.attr(bottomLineParams);
+            animate ? bottomBorderElement.animate(bottomLineParams) : bottomBorderElement.attr(bottomLineParams);
         }
     }
 }, baseRangeSeries);

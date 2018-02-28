@@ -34,7 +34,7 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
             fromTheme: true,
             type: "line"
         });
-        //act
+        // act
         var chart = this.createChart({
             series: [{}, {}]
         });
@@ -43,11 +43,11 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
     });
 
     QUnit.test("dxChart with single named series do not loose its name", function(assert) {
-        //arrange
+        // arrange
         var stubSeries = new MockSeries({});
         seriesMockData.series.push(stubSeries);
 
-        //act
+        // act
         var chart = this.createChart({
             dateSource: [{ arg: "First", val: 1 }, { arg: "2", val: 2 }, { arg: "3", val: 3 }, { arg: "4", val: 4 }, { arg: "Last", val: 5 }],
             series: {
@@ -56,7 +56,7 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
             }
         });
 
-        //assert
+        // assert
         assert.ok(chart.series, "dxChart has series");
         assert.equal(chart.series.length, 1, "There should be single series");
         assert.equal(chart.series[0], stubSeries, "Series is stub series object");
@@ -66,47 +66,47 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
 
 
     QUnit.test("dxChart with single series, series type is specified as number in option series", function(assert) {
-        //arrange
+        // arrange
         var stubSeries = new MockSeries({});
 
         seriesMockData.series.push(stubSeries);
         seriesModule.Series = function() { return { isUpdated: false }; };
-        //act
+        // act
         var chart = this.createChart({
             series: {
                 type: 100
             }
         });
 
-        //assert
+        // assert
         assert.ok(chart.series);
         assert.equal(chart.series.length, 0);
     });
 
     QUnit.test("dxChart with single series, series type is unknown in option series", function(assert) {
-        //arrange
+        // arrange
         var stubSeries = new MockSeries({});
         seriesMockData.series.push(stubSeries);
         seriesModule.Series = function() { return { isUpdated: false }; };
 
-        //act
+        // act
         var chart = this.createChart({
             series: {
                 type: "unknown",
             }
         });
-        //assert
+        // assert
         assert.ok(chart.series);
         assert.equal(chart.series.length, 0);
     });
 
     QUnit.test("dxChart with two Series request default type", function(assert) {
-        //arrange
+        // arrange
         var stubSeries1 = new MockSeries({}),
             stubSeries2 = new MockSeries({});
         seriesMockData.series.push(stubSeries1);
         seriesMockData.series.push(stubSeries2);
-        //act
+        // act
         var chart = this.createChart({
             valueAxis: {
                 categories: (categories.slice(0).push("additionalVal"))
@@ -121,7 +121,7 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
                 type: "line"
             }]
         });
-        //assert
+        // assert
         assert.ok(chart.series);
         assert.equal(chart.series.length, 2);
         assert.equal(chart.series[0], stubSeries1);
@@ -141,12 +141,12 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
     });
 
     QUnit.test("dxChart with two Series request default type visibilityChanged", function(assert) {
-        //arrange
+        // arrange
         var stubSeries1 = new MockSeries({}),
             stubSeries2 = new MockSeries({});
         seriesMockData.series.push(stubSeries1);
         seriesMockData.series.push(stubSeries2);
-        //act
+        // act
         var chart = this.createChart({
                 valueAxis: {
                     categories: (categories.slice(0).push("additionalVal"))
@@ -164,7 +164,7 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
             renderSpy = sinon.spy(chart, "_doRender");
         chart._renderer.stopAllAnimations.reset();
 
-        //assert
+        // assert
         assert.ok(chart.series);
 
         assert.ok(seriesMockData.args[0][1].visibilityChanged, "Options passed");
@@ -179,14 +179,14 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
     });
 
     QUnit.test("dxChart with single series request default type without category Axis", function(assert) {
-        //arrange
+        // arrange
         var stubSeries = new MockSeries({});
         seriesMockData.series.push(stubSeries);
-        //act
+        // act
         var chart = this.createChart({
             series: { type: "line" }
         });
-        //assert
+        // assert
         assert.ok(chart.series);
         assert.equal(chart.series.length, 1);
         assert.equal(chart.series[0], stubSeries);
@@ -198,7 +198,7 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
     });
 
     QUnit.test("Series index", function(assert) {
-        //arrange
+        // arrange
         var stubSeries1 = new MockSeries({}),
             stubSeries2 = new MockSeries({ isUpdated: false }),
             stubSeries3 = new MockSeries({});
@@ -206,7 +206,7 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
         seriesMockData.series.push(stubSeries1, stubSeries2, stubSeries3);
 
 
-        //act
+        // act
         var chart = this.createChart({
             valueAxis: {
                 categories: (categories.slice(0).push("additionalVal"))
@@ -225,7 +225,7 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
             { type: "line" }
             ]
         });
-        //assert
+        // assert
         assert.ok(chart.series);
 
         assert.equal(chart.series.length, 2);
@@ -236,10 +236,10 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
     });
 
     QUnit.test("dxChart with single series request - rotated", function(assert) {
-        //arrange
+        // arrange
         var stubSeries = new MockSeries({});
         seriesMockData.series.push(stubSeries);
-        //act
+        // act
         var chart = this.createChart({
             rotated: true,
             argumentAxis: {
@@ -252,7 +252,7 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
                 type: "line"
             }
         });
-        //assert
+        // assert
         assert.ok(chart.series);
         assert.equal(chart.series.length, 1);
         assert.equal(chart.series[0], stubSeries);
@@ -266,18 +266,18 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
     });
 
     QUnit.test("dxChart with single series request with data coming from Data Source", function(assert) {
-        //arrange
+        // arrange
         var stubSeries = new MockSeries({ argumentField: "arg" });
         seriesMockData.series.push(stubSeries);
         var data = [{ arg: 1, val: 1 }, { arg: 2, val: 2 }, { arg: 3, val: 3 }, { arg: 4, val: 4 }, { arg: 5, val: 5 }];
-        //act
+        // act
         var chart = this.createChart({
             dataSource: data,
             series: {
                 type: "bar"
             }
         });
-        //assert
+        // assert
         assert.ok(chart.series);
         assert.equal(chart.series.length, 1);
         assert.equal(chart.series[0], stubSeries);
@@ -287,10 +287,10 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
     });
 
     QUnit.test("Theme was applied to single series", function(assert) {
-        //arrange
+        // arrange
         var stubSeries = new MockSeries({});
         seriesMockData.series.push(stubSeries);
-        //act
+        // act
         var chart = this.createChart({
             argumentAxis: {
                 categories: categories
@@ -299,7 +299,7 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
                 type: "line"
             }
         });
-        //assert
+        // assert
         assert.ok(chart.series);
         assert.equal(chart.series.length, 1);
         assert.equal(chart.series[0], stubSeries);
@@ -308,9 +308,9 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
     });
 
     QUnit.test("Pass series count to themeManager", function(assert) {
-        //arrange
+        // arrange
         seriesMockData.series.push(new MockSeries({}), new MockSeries({}));
-        //act
+        // act
         this.createChart({
             series: [{
                 type: "line"
@@ -318,19 +318,19 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
                 type: "line"
             }]
         });
-        //assert
+        // assert
         assert.strictEqual(this.themeManager.getOptions.withArgs("series").getCall(0).args[2], 2);
         assert.strictEqual(this.themeManager.getOptions.withArgs("series").getCall(1).args[2], 2);
     });
 
 
     QUnit.test("dxChart with two Series which belongs to different panes (with default pane)", function(assert) {
-        //arrange
+        // arrange
         var stubSeries1 = new MockSeries({}),
             stubSeries2 = new MockSeries({});
         seriesMockData.series.push(stubSeries1);
         seriesMockData.series.push(stubSeries2);
-        //act
+        // act
         var chart = this.createChart({
             argumentAxis: {
                 categories: categories
@@ -347,7 +347,7 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
                 type: "line"
             }]
         });
-        //assert
+        // assert
         assert.ok(chart.series);
         assert.equal(chart.series.length, 2);
         assert.equal(chart.series[0], stubSeries1);
@@ -357,12 +357,12 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
     });
 
     QUnit.test("dxChart with two value axis with different names", function(assert) {
-        //arrange
+        // arrange
         var stubSeries1 = new MockSeries({}),
             stubSeries2 = new MockSeries({});
         seriesMockData.series.push(stubSeries1);
         seriesMockData.series.push(stubSeries2);
-        //act
+        // act
         var chart = this.createChart({
             argumentAxis: {
                 categories: categories
@@ -400,7 +400,7 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
         });
 
 
-        //assert
+        // assert
 
         assert.ok(chart.series);
         var verticalAxes = chart._valueAxes;
@@ -411,7 +411,7 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
 
     QUnit.test("dxChart with two panes and argument axis has default position", function(assert) {
 
-        //act
+        // act
         var chart = this.createChart({
             argumentAxis: {
                 title: "Title",
@@ -426,7 +426,7 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
             ]
         });
 
-        //assert
+        // assert
         assert.ok(chart._argumentAxes);
         var horizontalAxes = chart._argumentAxes;
         assert.equal(horizontalAxes.length, 2);
@@ -451,7 +451,7 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
     });
 
     QUnit.test("dxChart with two panes and argument axis has top position", function(assert) {
-        //act
+        // act
         var chart = this.createChart({
             argumentAxis: {
                 title: "Title",
@@ -467,7 +467,7 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
             ]
         });
 
-        //assert
+        // assert
         assert.ok(chart._argumentAxes);
         var horizontalAxes = chart._argumentAxes;
         assert.equal(horizontalAxes.length, 2);
@@ -493,7 +493,7 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
     });
 
     QUnit.test("dxChart with two panes and argument axis has invalid position", function(assert) {
-        //act
+        // act
         var chart = this.createChart({
             argumentAxis: {
                 title: "Title",
@@ -509,7 +509,7 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
             ]
         });
 
-        //assert
+        // assert
         assert.ok(chart._argumentAxes);
         var horizontalAxes = chart._argumentAxes;
         assert.equal(horizontalAxes.length, 2);
@@ -534,7 +534,7 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
     });
 
     QUnit.test("Rotated chart with two panes and argument axis has default position", function(assert) {
-        //act
+        // act
         var chart = this.createChart({
             rotated: true,
             argumentAxis: {
@@ -550,7 +550,7 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
             ]
         });
 
-        //assert
+        // assert
         assert.ok(chart._argumentAxes);
         var verticalAxes = chart._argumentAxes;
         assert.equal(verticalAxes.length, 2);
@@ -576,7 +576,7 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
     });
 
     QUnit.test("Rotated chart with two panes and argument axis has right position", function(assert) {
-        //act
+        // act
         var chart = this.createChart({
             rotated: true,
             argumentAxis: {
@@ -593,7 +593,7 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
             ]
         });
 
-        //assert
+        // assert
         assert.ok(chart._argumentAxes);
         var verticalAxes = chart._argumentAxes;
         assert.equal(verticalAxes.length, 2);
@@ -619,12 +619,12 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
     });
 
     QUnit.test("Rotated chart with two panes and argument axis has invalid position", function(assert) {
-        //arrange
+        // arrange
         var stubSeries1 = new MockSeries({}),
             stubSeries2 = new MockSeries({});
         seriesMockData.series.push(stubSeries1);
         seriesMockData.series.push(stubSeries2);
-        //act
+        // act
         var chart = this.createChart({
             rotated: true,
             argumentAxis: {
@@ -641,7 +641,7 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
             ]
         });
 
-        //assert
+        // assert
         assert.ok(chart._argumentAxes);
         var verticalAxes = chart._argumentAxes;
         assert.equal(verticalAxes.length, 2);
@@ -666,11 +666,11 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
     });
 
     QUnit.test("tracker repaired tooltip. after series rendering", function(assert) {
-        //arrange
+        // arrange
         var stubSeries = new MockSeries({});
         seriesMockData.series.push(stubSeries);
 
-        //act
+        // act
         this.createChart({
             dataSource: [{ arg: "First", val: 1 }, { arg: "2", val: 2 }],
             series: [{
@@ -725,7 +725,7 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
             dataSource: [{ series: "s1", x: 1, y: 1, tag: "a" }, { series: "s2", x: 2, y: 2, tag: "b" }, { series: "s3", x: 3, y: 3, tag: "c" }],
             seriesTemplate: { customizeSeries: function(sName) { return { type: "spline-" + sName }; } }
         });
-        //Assert
+        // Assert
         assert.ok(chart.series);
         assert.equal(chart.series.length, 3);
         assert.equal(chart.series[0].getOptions().name, "first");
@@ -770,7 +770,7 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
             seriesTemplate: { nameField: "series1", customizeSeries: function(sName) { return { type: "spline-" + sName }; } },
             series: [{}, {}]
         });
-        //Assert
+        // Assert
         assert.ok(chart.series);
         assert.equal(chart.series.length, 3);
         assert.equal(chart.series[0].options.name, "s1");
@@ -806,20 +806,20 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
     }));
 
     QUnit.test("dxChart - clear selection", function(assert) {
-        //arrange
+        // arrange
         var chart = this.createChart({
             series: {
                 type: "line"
             }
         });
-        //act
+        // act
         chart.clearSelection();
-        //assert
+        // assert
         assert.ok(commons.getTrackerStub().stub("clearSelection"), "Selection should be cleared through tracker");
     });
 
     QUnit.test("dxChart - get all series", function(assert) {
-        //arrange
+        // arrange
         var chart = this.createChart({
             series: [{
                 name: "First series",
@@ -829,9 +829,9 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
                 type: "line"
             }]
         });
-        //act
+        // act
         var allSeries = chart.getAllSeries();
-        //assert
+        // assert
         assert.ok(allSeries, "Result is defined");
         assert.strictEqual(allSeries.length, 2, "Both series should be returned");
         assert.equal(allSeries[0].name, "First series");
@@ -839,7 +839,7 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
     });
 
     QUnit.test("dxChart - get series by name", function(assert) {
-        //arrange
+        // arrange
         var chart = this.createChart({
             series: [
                 {
@@ -851,15 +851,15 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
                     type: "line"
                 }]
         });
-        //act
+        // act
         var series = chart.getSeriesByName("First series");
-        //assert
+        // assert
         assert.ok(series, "Result is defined");
         assert.equal(series.name, "First series");
     });
 
     QUnit.test("dxChart - get non-existing series by name", function(assert) {
-        //arrange
+        // arrange
         var chart = this.createChart({
             series: [
                 {
@@ -871,14 +871,14 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
                     type: "line"
                 }]
         });
-        //act
+        // act
         var series = chart.getSeriesByName("Six series");
-        //assert
+        // assert
         assert.ok(!series, "Result does not exists");
     });
 
     QUnit.test("dxChart - get series by pos", function(assert) {
-        //arrange
+        // arrange
         var chart = this.createChart({
             series: [
                 {
@@ -890,15 +890,15 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
                     type: "line"
                 }]
         });
-        //act
+        // act
         var series = chart.getSeriesByPos(1);
-        //assert
+        // assert
         assert.ok(series, "Result is defined");
         assert.equal(series.name, "Second series");
     });
 
     QUnit.test("dxChart - get non-existing series by pos", function(assert) {
-        //arrange
+        // arrange
         var chart = this.createChart({
             series: [
                 {
@@ -910,9 +910,9 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
                     type: "line"
                 }]
         });
-        //act
+        // act
         var series = chart.getSeriesByPos(10);
-        //assert
+        // assert
         assert.ok(!series, "Result does not exists");
     });
 
@@ -925,23 +925,23 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
     });
 
     QUnit.test("dxChart - render", function(assert) {
-        //arrange
+        // arrange
         var chart = commons.createChartInstance({}, this.$container),
             renderCalled = false,
             drawOptions = null;
 
-        //hack internal _render implementation
+        // hack internal _render implementation
         chart._doRender = function(options) {
             renderCalled = true;
             drawOptions = options;
         };
-        //act
+        // act
         chart.render({
             force: true,
             animate: true,
             unsupportedOption: 100500
         });
-        //assert
+        // assert
         assert.ok(renderCalled, "Rendering internal function should be called");
         assert.deepEqual(drawOptions, {
             force: true,
@@ -966,13 +966,13 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
                     drawnCounter++;
                 }
             });
-        //act
+        // act
         chart.render({ force: true });
         chart.render({ force: true });
         chart.render({ force: true });
         chart.render({ force: true });
 
-        //assert
+        // assert
         assert.equal(drawnCounter, 5);
     });
 })();
@@ -1026,19 +1026,19 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
     });
 
     QUnit.test("dxChart with single series, series type is specified as number in option series", function(assert) {
-        //arrange
+        // arrange
         var stubSeries = new MockSeries({});
 
         seriesMockData.series.push(stubSeries);
         seriesModule.Series = function() { return { isUpdated: false }; };
-        //act
+        // act
         var chart = this.createChart({
                 series: {
                     type: 100,
                 }
             }), idError;
 
-        //assert
+        // assert
         assert.ok(chart._incidentOccurred.calledOnce);
 
         idError = chart._incidentOccurred.firstCall.args[0];
@@ -1050,19 +1050,19 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
     });
 
     QUnit.test("dxChart with single series, series type is specified as datetime in option series", function(assert) {
-        //arrange
+        // arrange
         var stubSeries = new MockSeries({});
 
         seriesMockData.series.push(stubSeries);
         seriesModule.Series = function() { return { isUpdated: false }; };
-        //act
+        // act
         var chart = this.createChart({
                 series: {
                     type: new Date(2011, 1, 1)
                 }
             }), idError;
 
-        //assert
+        // assert
         assert.ok(chart._incidentOccurred.calledOnce);
 
         idError = chart._incidentOccurred.firstCall.args[0];
@@ -1074,19 +1074,19 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
     });
 
     QUnit.test("dxChart with single series, series type is unknown in option series", function(assert) {
-        //arrange
+        // arrange
         var stubSeries = new MockSeries({});
 
         seriesMockData.series.push(stubSeries);
         seriesModule.Series = function() { return { isUpdated: false }; };
 
-        //act
+        // act
         var chart = commons.createChartInstance({
                 series: {
                     type: "unknown",
                 }
             }, this.$container), idError;
-        //assert
+        // assert
         assert.ok(chart._incidentOccurred.calledOnce);
 
         idError = chart._incidentOccurred.firstCall.args[0];
@@ -1145,9 +1145,9 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
     });
 
     QUnit.test("Series. Series with invalid axis", function(assert) {
-        //arrange
+        // arrange
         seriesMockData.series.push(new MockSeries({}));
-        //act
+        // act
         var chart = commons.createChartInstance({
                 series: [{
                     axis: "axis",
@@ -1155,7 +1155,7 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
                 }]
             }, this.$container),
             idError;
-        //assert
+        // assert
         assert.ok(chart._incidentOccurred.calledOnce);
 
         idError = chart._incidentOccurred.firstCall.args[0];
@@ -1408,7 +1408,7 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
         assert.strictEqual(this.labels[1].draw.callCount, 0);
     });
 
-    //T545134
+    // T545134
     QUnit.test("Two non overlapping labels in width, labels should not be shift and hide", function(assert) {
         this.createFakeSeriesWithLabels([{ x: 5, y: 10, width: 10, height: 10 }, { x: 20, y: 15, width: 10, height: 10 }], { argument: "argument" });
 
@@ -1423,7 +1423,7 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
         assert.strictEqual(this.labels[1].draw.callCount, 0);
     });
 
-    //T545134
+    // T545134
     QUnit.test("Two non overlapping labels in width, labels should not be shift and hide, rotated", function(assert) {
         this.createFakeSeriesWithLabels([{ x: 5, y: 10, width: 10, height: 10 }, { x: 5, y: 25, width: 10, height: 10 }], { argument: "argument" });
 
@@ -1729,7 +1729,7 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
         assert.strictEqual(this.labels[2].draw.callCount, 0, "label not should be hidden");
     });
 
-    //T514690
+    // T514690
     QUnit.test("stacked bar. save series order", function(assert) {
         this.createFakeSeriesWithLabels([{ x: 5, y: 20, width: 10, height: 30, value: 12 },
             { x: 5, y: 40, width: 10, height: 30, value: 6 },
@@ -1745,7 +1745,7 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
         assert.ok(!this.labels[2].shift.called);
     });
 
-    //T514690
+    // T514690
     QUnit.test("full stacked bar. save series order", function(assert) {
         this.createFakeSeriesWithLabels([{ x: 5, y: 20, width: 10, height: 30, value: 12 },
             { x: 5, y: 40, width: 10, height: 30, value: 6 },
@@ -1761,7 +1761,7 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
         assert.ok(!this.labels[2].shift.called);
     });
 
-    //T514690
+    // T514690
     QUnit.test("stacked bar. series order. last and second label were overlapped", function(assert) {
         this.createFakeSeriesWithLabels([
             { x: 5, y: 96, width: 23, height: 24, value: 5 },
@@ -1781,7 +1781,7 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
         assert.ok(!this.labels[3].shift.called);
     });
 
-    //T522291
+    // T522291
     QUnit.test("stacked bar. series order. rotated chart", function(assert) {
         this.createFakeSeriesWithLabels([
             { x: 5, y: 96, width: 23, height: 24, value: 5 },

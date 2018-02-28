@@ -52,8 +52,8 @@ function sum(array) {
 }
 
 function isErrorBarTypeCorrect(type) {
-    //TODO why UNDEFINED is here
-    //return inArray(type, [FIXED, PERCENT, VARIANCE, STANDARD_DEVIATION, STANDARD_ERROR, UNDEFINED]) !== -1;
+    // TODO why UNDEFINED is here
+    // return inArray(type, [FIXED, PERCENT, VARIANCE, STANDARD_DEVIATION, STANDARD_ERROR, UNDEFINED]) !== -1;
     return inArray(type, [FIXED, PERCENT, VARIANCE, STANDARD_DEVIATION, STANDARD_ERROR]) !== -1;
 }
 
@@ -77,15 +77,6 @@ var baseScatterMethods = {
     _prepareSegment: _noop,
 
     _drawSegment: _noop,
-
-    _generateDefaultSegments: _noop,
-
-    _prepareSeriesToDrawing: function() {
-        var that = this;
-        that._deleteOldAnimationMethods();
-        that._disposePoints(that._oldPoints);
-        that._oldPoints = null;
-    },
 
     _appendInGroup: function() {
         this._group.append(this._extGroups.seriesGroup);
@@ -140,7 +131,7 @@ var baseScatterMethods = {
         var that = this,
             settings = that._createPointStyles(that._getMarkerGroupOptions()).normal;
         settings["class"] = "dxc-markers";
-        settings.opacity = 1; //T172577
+        settings.opacity = 1; // T172577
         that._applyMarkerClipRect(settings);
         that._markersGroup.attr(settings);
     },
@@ -302,16 +293,6 @@ var baseScatterMethods = {
         }
     },
 
-    _clearingAnimation: function(drawComplete) {
-        var that = this,
-            params = { opacity: 0.001 },
-            options = { duration: that._defaultDuration, partitionDuration: 0.5 };
-
-        that._labelsGroup && that._labelsGroup.animate(params, options, function() {
-            that._markersGroup && that._markersGroup.animate(params, options, drawComplete);
-        });
-    },
-
     _animateComplete: function() {
         var that = this,
             animationSettings = { duration: that._defaultDuration };
@@ -441,7 +422,7 @@ var baseScatterMethods = {
                     item[highValueField] = value + error;
                 };
                 break;
-            case UNDEFINED: //TODO: rework this
+            case UNDEFINED: // TODO: rework this
                 processDataItem = function(_, item) {
                     item[lowValueField] = item[ORIGINAL + lowValueField];
                     item[highValueField] = item[ORIGINAL + highValueField];

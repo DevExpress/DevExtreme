@@ -184,14 +184,6 @@ exports.DataController = dataControllerModule.controllers.data.inherit((function
             return this._dataSource.getNodeByKey(key);
         },
 
-        getNodeLeafKeys: function(keys, callBack) {
-            if(!this._dataSource) {
-                return;
-            }
-
-            return this._dataSource.getNodeLeafKeys(keys, callBack);
-        },
-
         getChildNodeKeys: function(parentKey) {
             if(!this._dataSource) {
                 return;

@@ -146,12 +146,12 @@ var DOMComponent = Component.inherit({
 
     _initMarkup: function() {
         this._renderElementAttributes();
+        this._renderDimensions();
+        this._toggleRTLDirection(this.option("rtlEnabled"));
     },
 
     _render: function() {
-        this._toggleRTLDirection(this.option("rtlEnabled"));
         this._renderVisibilityChange();
-        this._renderDimensions();
     },
 
     _renderElementAttributes: function() {
@@ -184,8 +184,16 @@ var DOMComponent = Component.inherit({
         var width = this._getOptionValue("width", element);
         var height = this._getOptionValue("height", element);
 
-        $element.outerWidth(width);
-        $element.outerHeight(height);
+        if(this._isCssUpdateRequired(element, height, width)) {
+            $element.css({
+                width: width,
+                height: height
+            });
+        }
+    },
+
+    _isCssUpdateRequired: function(element, height, width) {
+        return !!(width || height || element.style.width || element.style.height);
     },
 
     _attachDimensionChangeHandlers: function() {
@@ -367,7 +375,13 @@ var DOMComponent = Component.inherit({
         var i = element.attributes.length - 1;
 
         for(; i >= 0; i--) {
-            var attributeName = element.attributes[i].name;
+            var attribute = element.attributes[i];
+
+            if(!attribute) {
+                return;
+            }
+
+            var attributeName = attribute.name;
 
             if(attributeName.indexOf("aria-") === 0 ||
                 attributeName.indexOf("dx-") !== -1 ||

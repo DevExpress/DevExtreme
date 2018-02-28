@@ -18,6 +18,15 @@ QUnit.test("insertElement", function(assert) {
     assert.equal(this.container.childNodes.length, 1);
 });
 
+QUnit.test("listen with no window", function(assert) {
+    assert.expect(0);
+
+    var windowObject = {};
+    windowObject.window = windowObject;
+
+    domAdapter.listen(windowObject, "test-event", function() {});
+});
+
 QUnit.module("DOM Adapter injection", {
     afterEach: function() {
         domAdapter.resetInjection();

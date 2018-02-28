@@ -573,7 +573,7 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
 
     exports.MockGridDataSource = function(options) {
         return {
-            //TODO remove
+            // TODO remove
             options: function() {
                 return options;
             },

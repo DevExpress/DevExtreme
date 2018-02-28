@@ -262,9 +262,13 @@ var ActionSheet = CollectionWidget.inherit({
 
     _renderDimensions: noop,
 
-    _render: function() {
+    _initMarkup: function() {
+        this.callBase();
         this.$element().addClass(ACTION_SHEET_CLASS);
         this._createItemContainer();
+    },
+
+    _render: function() {
         this._renderPopup();
     },
 

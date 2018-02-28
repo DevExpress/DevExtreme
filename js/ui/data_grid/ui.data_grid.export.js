@@ -84,7 +84,7 @@ exports.DataProvider = Class.inherit({
         var wrapTextEnabled = this._options.wrapTextEnabled,
             styles = ["center", "left", "right"].map(function(alignment) {
                 return {
-                    //Header, Total styles
+                    // Header, Total styles
                     bold: true,
                     alignment: alignment,
                     wrapText: true
@@ -93,7 +93,7 @@ exports.DataProvider = Class.inherit({
 
         this.getColumns().forEach(function(column) {
             styles.push({
-                //column styles
+                // column styles
                 alignment: column.alignment || "left",
                 format: column.format,
                 precision: column.precision,
@@ -103,7 +103,7 @@ exports.DataProvider = Class.inherit({
         });
 
         styles.push({
-            //Group row style
+            // Group row style
             bold: true,
             wrapText: false,
             alignment: getDefaultAlignment(this._options.rtlEnabled)
@@ -125,7 +125,7 @@ exports.DataProvider = Class.inherit({
         } else if(this.isGroupRow(rowIndex - this.getHeaderRowCount())) {
             return DATA_STYLE_OFFSET + this.getColumns().length;
         } else {
-            return cellIndex + DATA_STYLE_OFFSET;//header style offset
+            return cellIndex + DATA_STYLE_OFFSET;// header style offset
         }
     },
 

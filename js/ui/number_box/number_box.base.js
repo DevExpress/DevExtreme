@@ -219,7 +219,7 @@ var NumberBoxBase = TextEditor.inherit({
         this.callBase(e);
 
         var ch = e.key || String.fromCharCode(e.which),
-            validCharRegExp = /[\d.,eE\-+]|Subtract/, //Workaround for IE (T592690)
+            validCharRegExp = /[\d.,eE\-+]|Subtract/, // Workaround for IE (T592690)
             isInputCharValid = validCharRegExp.test(ch);
 
         if(!isInputCharValid) {
@@ -270,6 +270,8 @@ var NumberBoxBase = TextEditor.inherit({
 
         this._renderInputAddons();
         this.setAria("valuenow", value);
+
+        this.option("text", this._input().val());
     },
 
     _renderValueEventName: function() {

@@ -2103,20 +2103,20 @@ QUnit.test("selectAll and unselectAll should log warning if selectAllMode is all
 
     sinon.spy(errors, "log");
 
-    //act
+    // act
     $selectAll.trigger("dxclick");
 
-    //assert
+    // assert
     assert.equal(errors.log.callCount, 1);
     assert.equal(errors.log.lastCall.args[0], "W1010", "Warning about selectAllMode allPages and grouped data");
     assert.equal($selectAll.dxCheckBox("option", "value"), true, "selectAll checkbox is in selected state");
     assert.equal($list.dxList("option", "selectedItems").length, 0, "items are not selected");
 
 
-    //act
+    // act
     $selectAll.trigger("dxclick");
 
-    //assert
+    // assert
     assert.equal(errors.log.callCount, 2);
     assert.equal(errors.log.lastCall.args[0], "W1010", "Warning about selectAllMode allPages and grouped data");
     assert.equal($selectAll.dxCheckBox("option", "value"), false, "selectAll checkbox is in selected state");

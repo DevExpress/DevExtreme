@@ -124,10 +124,10 @@ QUnit.test("custom user template engine for div template", function(assert) {
     var template = new Template($('<div>$text$</div>'));
     var container = $('<div>');
 
-    //act
+    // act
     template.render({ model: { text: 123 }, container: container });
 
-    //assert
+    // assert
     assert.equal(container.children().length, 1);
     assert.equal(container.children().text(), '123');
 });
@@ -138,10 +138,10 @@ QUnit.test("custom user template engine for script template", function(assert) {
     var template = new Template($("<script type='text/html'>Text: <b>$text$</b><\/script>"));
     var container = $('<div>');
 
-    //act
+    // act
     template.render({ model: { text: 123 }, container: container });
 
-    //assert
+    // assert
     assert.equal(container.children("b").length, 1);
     assert.equal(container.text().replace('\r\n', ''), 'Text: 123');
 });
@@ -152,10 +152,10 @@ QUnit.test("custom user template engine has access to item index", function(asse
     var template = new Template($("<div>$text$, ($@index$)</div>"));
     var container = $('<div>');
 
-    //act
+    // act
     template.render({ model: { text: 123 }, container: container, index: 1 });
 
-    //assert
+    // assert
     assert.equal(container.children().text(), '123, (1)');
 });
 
@@ -165,27 +165,27 @@ QUnit.test("removing div template from document on creation", function(assert) {
     var template = new Template($('<div>$text$</div>'));
     var container = $('<div>');
 
-    //act
+    // act
     template.render({ model: { text: 123 }, container: container });
 
-    //assert
+    // assert
     assert.equal(container.children().length, 1);
     assert.equal(container.children().text(), '123');
 });
 
 QUnit.test("template render result", function(assert) {
-    //act
+    // act
     setTemplateEngine(customUserTemplate);
 
     var template = new Template($('<div>$text$</div>'));
     var container = $('<div>');
 
-    //act
+    // act
     var result = template.render({ model: { text: 123 }, container: container });
 
     result = $(result);
 
-    //assert
+    // assert
     assert.equal(result.length, 1);
     assert.equal(result[0].tagName.toLowerCase(), 'div');
     assert.equal(result.text(), '123');

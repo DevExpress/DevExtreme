@@ -338,7 +338,7 @@ var dxPieChart = BaseChart.inherit({
         this._abstractSeries = null;
     },
 
-    //DEPRECATED_15_2
+    // DEPRECATED_15_2
     getSeries: function() {
         errors.log("W0002", "dxPieChart", "getSeries", "15.2", "Use the 'getAllSeries' method instead");
         return this.series[0];

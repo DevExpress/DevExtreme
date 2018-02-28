@@ -94,6 +94,7 @@ var GALLERY_CLASS = "dx-gallery",
     GALLERY_WRAPPER_CLASS = GALLERY_CLASS + "-wrapper",
     GALLERY_ITEM_CONTAINER_CLASS = GALLERY_CLASS + "-container",
     GALLERY_ITEM_CLASS = GALLERY_CLASS + "-item",
+    GALLERY_INVISIBLE_ITEM_CLASS = GALLERY_CLASS + "-item-invisible",
     GALLERY_INDICATOR_CLASS = "dx-gallery-indicator",
     GALLERY_LOOP_ITEM_CLASS = GALLERY_CLASS + "-item-loop",
     INDICATOR_ITEM_CLASS = GALLERY_CLASS + "-indicator-item",
@@ -1090,6 +1091,77 @@ QUnit.test("userInteraction", function(assert) {
     this.instance.option("indicatorEnabled", false);
     mouse.start().swipeStart().swipe(-0.5).swipeEnd(-1);
     assert.equal(calculateItemPosition(this.$element.find("." + GALLERY_ITEM_CLASS).eq(0), this.$element), -400);
+});
+
+QUnit.module("items visibility", {
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+        fx.off = true;
+
+        this.$element = $("#gallerySimple").dxGallery({ items: [0, 1, 2, 3, 4], width: 500 });
+        this.instance = this.$element.dxGallery("instance");
+    },
+
+    afterEach: function() {
+        fx.off = false;
+        this.clock.restore();
+    }
+});
+
+QUnit.test("invisible items should have correct class", function(assert) {
+    var instance = this.instance;
+
+    instance.option("selectedIndex", 2);
+
+    var $galleryItems = this.$element.find("." + GALLERY_ITEM_CLASS);
+
+    $.each($galleryItems, function(index, $item) {
+        if(index !== instance.option("selectedIndex")) {
+            assert.ok($($item).hasClass(GALLERY_INVISIBLE_ITEM_CLASS), "item has invisible class");
+        } else {
+            assert.notOk($($item).hasClass(GALLERY_INVISIBLE_ITEM_CLASS), "selected item has not invisible class");
+        }
+    });
+});
+
+QUnit.test("all items should be visible on swipeStart", function(assert) {
+    var $galleryItems = this.$element.find("." + GALLERY_ITEM_CLASS);
+
+    var mouse = pointerMock(this.$element);
+
+    mouse.start().swipeStart();
+
+    $.each($galleryItems, function(index, $item) {
+        assert.notOk($($item).hasClass(GALLERY_INVISIBLE_ITEM_CLASS), "swiped item has not invisible class");
+    });
+});
+
+QUnit.test("selected item shouldn't have invisible class", function(assert) {
+    this.instance.option("selectedIndex", 2);
+
+    var $galleryItems = this.$element.find("." + GALLERY_ITEM_CLASS);
+
+    this.instance.goToItem(1);
+    assert.notOk($galleryItems.eq(1).hasClass(GALLERY_INVISIBLE_ITEM_CLASS), "selected item has not invisible class");
+    assert.ok($galleryItems.eq(2).hasClass(GALLERY_INVISIBLE_ITEM_CLASS), "previously selected item has not invisible class");
+
+    this.instance.goToItem(3);
+    assert.notOk($galleryItems.eq(3).hasClass(GALLERY_INVISIBLE_ITEM_CLASS), "selected item has not invisible class");
+    assert.ok($galleryItems.eq(1).hasClass(GALLERY_INVISIBLE_ITEM_CLASS), "previously selected item has not invisible class");
+});
+
+QUnit.test("there are no invisible items if items count per page > 1", function(assert) {
+    this.instance.option({
+        width: 1000,
+        initialItemWidth: 100,
+        items: [0, 1, 2]
+    });
+
+    var $galleryItems = this.$element.find("." + GALLERY_ITEM_CLASS);
+
+    $.each($galleryItems, function(index, $item) {
+        assert.notOk($($item).hasClass(GALLERY_INVISIBLE_ITEM_CLASS), "item has not invisible class");
+    });
 });
 
 QUnit.module("responsiveness", {

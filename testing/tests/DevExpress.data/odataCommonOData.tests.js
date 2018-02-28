@@ -204,7 +204,7 @@ QUnit.test("Should parse guids", function(assert) {
 
 QUnit.module("Primitives");
 QUnit.test("OData 2 & 3", function(assert) {
-    //NOTE: http://www.odata.org/documentation/odata-version-2-0/json-format/#RepresentingPrimitiveProperties
+    // NOTE: http://www.odata.org/documentation/odata-version-2-0/json-format/#RepresentingPrimitiveProperties
 
     function interpret(value) {
         var result = interpretJsonFormat({ d: { results: value } }, "success");
@@ -285,7 +285,7 @@ QUnit.test("All formats", function(assert) {
 });
 
 QUnit.test("OData 2", function(assert) {
-    //arrange
+    // arrange
     var scalarResponse = { d: { results: "/Date(-777807300000)/" } };
     var singleResponse = { d: { date: "/Date(-777807300000)/" } };
     var collectionResponse = {
@@ -296,12 +296,12 @@ QUnit.test("OData 2", function(assert) {
         ]
     };
 
-    //act
+    // act
     var scalarResult = interpretJsonFormat(scalarResponse, "success"),
         singleResult = interpretJsonFormat(singleResponse, "success"),
         collectionResult = interpretJsonFormat(collectionResponse, "success");
 
-    //assert
+    // assert
     assert.equal(scalarResult.data.getTime(), new Date(1945, 4, 9, 14, 25, 0, 0).getTime());
 
     assert.equal(singleResult.data.date.getTime(), new Date(1945, 4, 9, 14, 25, 0, 0).getTime());
@@ -312,7 +312,7 @@ QUnit.test("OData 2", function(assert) {
 });
 
 QUnit.test("OData 3", function(assert) {
-    //arrange
+    // arrange
     var scalarResponse = { value: "1945-05-09T14:25:00" };
     var singleResponse = { value: { date: "1945-05-09T14:25:00" } };
     var collectionResponse = {
@@ -322,12 +322,12 @@ QUnit.test("OData 3", function(assert) {
         ]
     };
 
-    //act
+    // act
     var scalarResult = interpretJsonFormat(scalarResponse, "success"),
         singleResult = interpretJsonFormat(singleResponse, "success"),
         collectionResult = interpretJsonFormat(collectionResponse, "success");
 
-    //assert
+    // assert
     assert.equal(scalarResult.data.getTime(), new Date(1945, 4, 9, 14, 25, 0, 0).getTime());
 
     assert.equal(singleResult.data.date.getTime(), new Date(1945, 4, 9, 14, 25, 0, 0).getTime());
@@ -337,7 +337,7 @@ QUnit.test("OData 3", function(assert) {
 });
 
 QUnit.test("OData 4", function(assert) {
-    //arrange
+    // arrange
     var scalarResponse = { value: "1945-05-09T14:25:00Z" };
     var singleResponse = { value: { date: "1945-05-09T14:25:00Z" } };
     var collectionResponse = {
@@ -347,12 +347,12 @@ QUnit.test("OData 4", function(assert) {
         ]
     };
 
-    //act
+    // act
     var scalarResult = interpretJsonFormat(scalarResponse, "success"),
         singleResult = interpretJsonFormat(singleResponse, "success"),
         collectionResult = interpretJsonFormat(collectionResponse, "success");
 
-    //assert
+    // assert
     assert.equal(scalarResult.data.getTime(), new Date(1945, 4, 9, 14, 25, 0, 0).getTime());
 
     assert.equal(singleResult.data.date.getTime(), new Date(1945, 4, 9, 14, 25, 0, 0).getTime());

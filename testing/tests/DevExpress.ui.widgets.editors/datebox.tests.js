@@ -6,6 +6,7 @@ var $ = require("jquery"),
     browser = require("core/utils/browser"),
     support = require("core/utils/support"),
     dateUtils = require("core/utils/date"),
+    typeUtils = require("core/utils/type"),
     uiDateUtils = require("ui/date_box/ui.date_utils"),
     devices = require("core/devices"),
     DateBox = require("ui/date_box"),
@@ -44,6 +45,7 @@ var currentDate = new Date(2015, 11, 31),
     BOX_CLASS = "dx-box",
     CALENDAR_CLASS = "dx-calendar",
     TIMEVIEW_CLASS = "dx-timeview",
+    TIMEVIEW_CLOCK_CLASS = "dx-timeview-clock",
     TEXTEDITOR_INPUT_CLASS = "dx-texteditor-input",
 
     DATEBOX_CLASS = "dx-datebox",
@@ -393,6 +395,25 @@ QUnit.test("T378630 - the displayFormat should not be changed if the type option
     assert.equal(instance.option("displayFormat"), displayFormat, "the displayFormat option is not changed");
 });
 
+QUnit.test("set maxWidth for time view when fallback strategy is used", function(assert) {
+    if(!browser.msie) {
+        assert.ok(true);
+        return;
+    }
+
+    var dateBox = $("#dateBox").dxDateBox({
+        type: "datetime",
+        pickerType: "calendarWithTime",
+        value: new Date()
+    }).dxDateBox("instance");
+
+    dateBox.option("opened", true);
+
+    var maxWidth = $("." + TIMEVIEW_CLASS).css("maxWidth");
+    assert.ok(typeUtils.isDefined(maxWidth), "maxWidth is defined");
+    assert.equal(maxWidth, $("." + TIMEVIEW_CLOCK_CLASS).css("minWidth"), "minWidth of time view clock should be equal maxWidth");
+});
+
 QUnit.test("the 'displayFormat' option should accept format objects (T378753)", function(assert) {
     var date = new Date(2016, 4, 13, 22, 5);
     var format = {
@@ -475,7 +496,7 @@ QUnit.test("the value should be passed to the hidden input in the correct format
     });
 });
 
-//T552313
+// T552313
 QUnit.test("the value should be passed to the hidden input in the correct format if dateSerializationFormat option is defined", function(assert) {
     var dateValue = new Date(Date.UTC(2016, 6, 15, 14, 30)),
         $element = $("#dateBox").dxDateBox({
@@ -1497,7 +1518,7 @@ QUnit.test("calendar picker should be used on generic device by default and 'typ
         realDevice = devices.real();
 
     devices.real({ platform: "generic", deviceType: "desktop", phone: false });
-    devices.current({ platform: "generic" });
+    devices.current({ deviceType: "desktop" });
 
     try {
         var $dateBox = $("#dateBox").dxDateBox(),
@@ -1527,14 +1548,14 @@ QUnit.test("calendar picker should not be used on generic device by default and 
 });
 
 QUnit.test("calendar picker should not be used on mobile device by default", function(assert) {
-    var currentDevice = devices.current();
-    devices.current({ platform: "android" });
+    var realDevice = devices.real();
+    devices.real({ platform: "android" });
 
     try {
         var $dateBox = $("#dateBox").dxDateBox();
         assert.ok(!$dateBox.hasClass(DATEBOX_CLASS + "-calendar"));
     } finally {
-        devices.current(currentDevice);
+        devices.real(realDevice);
     }
 });
 
@@ -1828,7 +1849,7 @@ QUnit.test("DateBox must update its value when a date is selected in the calenda
 
     this.fixture.dateBox.open();
     getInstanceWidget(this.fixture.dateBox).option("value", date);
-    //this.fixture.dateBox.close();
+    // this.fixture.dateBox.close();
     assert.strictEqual(this.fixture.dateBox.option("value"), date);
 });
 
@@ -3253,7 +3274,7 @@ QUnit.testInActiveWindow("onValueChanged fires after clearing and enter key pres
 
     $(".dx-calendar .dx-calendar-cell").eq(12).trigger("dxclick");
 
-    //attempt to simulate real clearing
+    // attempt to simulate real clearing
     $input.val("");
     this.dateBox.option("text", "");
 
@@ -3946,7 +3967,7 @@ QUnit.test("ISO strings support dateSerializationFormat", function(assert) {
     }
 });
 
-//T506146
+// T506146
 QUnit.test("enter value with big year if dateSerializationFormat is defined", function(assert) {
     var defaultForceIsoDateParsing = config().forceIsoDateParsing;
     config().forceIsoDateParsing = true;
@@ -3997,10 +4018,10 @@ QUnit.test("onValueChanged should not be fired when on popup opening", function(
             }
         }).dxDateBox("instance");
 
-    //act
+    // act
     dateBox.option("opened", true);
 
-    //assert
+    // assert
     assert.ok(!isValueChangedCalled, "onValueChanged is not called");
 });
 
@@ -4017,10 +4038,10 @@ QUnit.test("value should be changed on cell click in calendar with defined dateS
     var dateBox = $dateBox.dxDateBox("instance");
     dateBox.open();
 
-    //act
+    // act
     $(".dx-calendar-cell").eq(0).trigger("dxclick");
 
-    //assert
+    // assert
     assert.deepEqual(dateBox.option("value"), new Date(2017, 10, 26), "value is changed");
 
     Calendar.defaultOptions({

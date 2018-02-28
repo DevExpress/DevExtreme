@@ -127,7 +127,7 @@ function compareAxes(a, b) {
     return a.priority - b.priority;
 }
 
-//checks if pane with provided name exists in this panes array
+// checks if pane with provided name exists in this panes array
 function doesPaneExist(panes, paneName) {
     var found = false;
     _each(panes, function(_, pane) {
@@ -139,7 +139,7 @@ function doesPaneExist(panes, paneName) {
     return found;
 }
 
-//'var' because JSHint throws W021 error
+// 'var' because JSHint throws W021 error
 var prepareSegmentRectPoints = function(left, top, width, height, borderOptions) {
     var maxSW = ~~((width < height ? width : height) / 2),
         sw = borderOptions.width || 0,
@@ -201,7 +201,7 @@ var prepareSegmentRectPoints = function(left, top, width, height, borderOptions)
     return { points: points, pathType: visiblyOpt === 15 ? "area" : "line" };
 };
 
-//utilities used in axes rendering
+// utilities used in axes rendering
 function accumulate(field, src1, src2, auxSpacing) {
     var val1 = src1[field] || 0,
         val2 = src2[field] || 0;
@@ -334,7 +334,7 @@ function checkUsedSpace(sizeShortage, side, axes, getMarginFunc) {
         performActionOnAxes(axes, "hideOuterElements");
     }
 }
-//utilities used in axes rendering
+// utilities used in axes rendering
 
 var dxChart = AdvancedChart.inherit({
     _chartType: "chart",
@@ -496,7 +496,7 @@ var dxChart = AdvancedChart.inherit({
         that.panes.forEach(function(pane) {
             var paneName = pane.name;
             if(!paneWithAxis[paneName]) {
-                that._getValueAxis(paneName); //creates an value axis if there is no one for pane
+                that._getValueAxis(paneName); // creates an value axis if there is no one for pane
             }
             if(needHideGrids && synchronizeMultiAxes) {
                 hideGridsOnNonFirstValueAxisForPane(valueAxes.filter(function(axis) {
@@ -592,6 +592,17 @@ var dxChart = AdvancedChart.inherit({
         return panesBorderOptions;
     },
 
+    _seriesPopulatedHandlerCore: function() {
+        var that = this,
+            animationMaxPointSupported = that._getAnimationOptions().maxPointCountSupported,
+            animationEnabled = that._renderer.animationEnabled();
+
+        this.callBase();
+        this.series.forEach(function(s) {
+            s.prepareToDrawing(s.getPoints().length <= animationMaxPointSupported && animationEnabled);
+        });
+    },
+
     _isLegendInside: function() {
         return this._legend && this._legend.getPosition() === "inside";
     },
@@ -655,6 +666,12 @@ var dxChart = AdvancedChart.inherit({
         vizUtils.updatePanesCanvases(this.panes, this._canvas, this._isRotated());
     },
 
+    _renderScaleBreaks: function() {
+        this._valueAxes.concat(this._argumentAxes).forEach(function(axis) {
+            axis.drawScaleBreaks();
+        });
+    },
+
     _renderAxes: function(drawOptions, panesBorderOptions) {
         var that = this,
             rotated = that._isRotated(),
@@ -676,9 +693,7 @@ var dxChart = AdvancedChart.inherit({
         if(!drawOptions.adjustAxes) {
             drawAxesWithTicks(verticalAxes, !rotated && synchronizeMultiAxes, panesCanvases, panesBorderOptions);
             drawAxesWithTicks(horizontalAxes, rotated && synchronizeMultiAxes, panesCanvases, panesBorderOptions);
-            that._valueAxes.concat(that._argumentAxes).forEach(function(axis) {
-                axis.drawScaleBreaks();
-            });
+            that._renderScaleBreaks();
             return;
         }
 
@@ -702,6 +717,8 @@ var dxChart = AdvancedChart.inherit({
 
         horizontalAxes.forEach(shiftAxis("top", "bottom"));
         verticalAxes.forEach(shiftAxis("left", "right"));
+
+        that._renderScaleBreaks();
 
         that.panes.forEach(function(pane) {
             _extend(pane.canvas, panesCanvases[pane.name]);
@@ -774,7 +791,7 @@ var dxChart = AdvancedChart.inherit({
 
         for(i = 0; i < panes.length; i++) {
             canvas = panes[i].canvas;
-            if(!commonCanvas) { //TODO
+            if(!commonCanvas) { // TODO
                 commonCanvas = _extend({}, canvas);
             } else {
                 commonCanvas.right = canvas.right;
@@ -1089,7 +1106,7 @@ var dxChart = AdvancedChart.inherit({
         return this._getOption("crosshair");
     },
 
-    //API
+    // API
     zoomArgument: function(min, max, gesturesUsed) {
         var that = this,
             bounds,
@@ -1109,7 +1126,7 @@ var dxChart = AdvancedChart.inherit({
 
         that._zoomMinArg = zoomArg && zoomArg.min;
         that._zoomMaxArg = zoomArg && zoomArg.max;
-        that._notApplyMargins = gesturesUsed; //TODO
+        that._notApplyMargins = gesturesUsed; // TODO
 
         that._doRender({
             force: true,
@@ -1124,12 +1141,12 @@ var dxChart = AdvancedChart.inherit({
 
     _resetZoom: function() {
         var that = this;
-        that._zoomMinArg = that._zoomMaxArg = that._notApplyMargins = undefined; //T190927
+        that._zoomMinArg = that._zoomMaxArg = that._notApplyMargins = undefined; // T190927
         that._argumentAxes[0].resetZoom();
-        that._valueAxes.forEach(function(axis) { axis.resetZoom(); }); //T602156
+        that._valueAxes.forEach(function(axis) { axis.resetZoom(); }); // T602156
     },
 
-    //T218011 for dashboards
+    // T218011 for dashboards
     getVisibleArgumentBounds: function() {
         var translator = this._argumentAxes[0].getTranslator(),
             range = translator.getBusinessRange(),

@@ -401,7 +401,7 @@ function drawElement(element, context, parentOptions) {
             break;
         case "rect":
             drawRect(context, options);
-            context.closePath(); //for valid clipping
+            context.closePath(); // for valid clipping
             break;
         case "circle":
             context.arc(options.cx, options.cy, options.r, 0, 2 * PI, 1);
@@ -441,7 +441,7 @@ function applyFilter(context, options) {
     }
 }
 
-//translate and clip are the special attributtes, they should not be inherited by child nodes
+// translate and clip are the special attributtes, they should not be inherited by child nodes
 function transformElement(context, options) {
     context.translate(options.translateX || 0, options.translateY || 0);
     delete options.translateX;
@@ -485,7 +485,7 @@ function createFilter(element) {
 
         switch(attr.result.value) {
             case "gaussianBlurResult":
-                if(attr.stdDeviation) { //T511738, IE10
+                if(attr.stdDeviation) { // T511738, IE10
                     filterOptions.blur = _number(attr.stdDeviation.value);
                 }
                 break;
@@ -545,7 +545,7 @@ function drawCanvasElements(elements, context, parentOptions) {
 function setLineDash(context, options) {
     var matches = options["stroke-dasharray"] && options["stroke-dasharray"].match(/(\d+)/g);
 
-    if(matches && matches.length && context.setLineDash) { //IE10 does not have setLineDash
+    if(matches && matches.length && context.setLineDash) { // IE10 does not have setLineDash
         matches = iteratorUtils.map(matches, function(item) {
             return _number(item);
         });
@@ -596,7 +596,7 @@ var parseAttributes = function(attributes) {
         if(isFinite(attr)) {
             attr = _number(attr);
         }
-        newAttributes[item.name.toLowerCase()] = attr; //lowerCase for Edge
+        newAttributes[item.name.toLowerCase()] = attr; // lowerCase for Edge
     });
 
     return newAttributes;

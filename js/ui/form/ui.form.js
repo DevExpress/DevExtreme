@@ -396,6 +396,12 @@ var Form = Widget.inherit({
              * @default undefined
              */
             /**
+             * @name dxFormGroupItem_name
+             * @publicName name
+             * @type string
+             * @default undefined
+             */
+            /**
              * @name dxFormGroupItem_colCount
              * @publicName colCount
              * @type number
@@ -466,6 +472,12 @@ var Form = Widget.inherit({
             * @section FormItems
             * @type object
             */
+            /**
+             * @name dxFormTabbedItem_name
+             * @publicName name
+             * @type string
+             * @default undefined
+             */
             /**
              * @name dxFormTabbedItem_visible
              * @publicName visible
@@ -665,7 +677,7 @@ var Form = Widget.inherit({
     },
 
     _getLabelWidthByText: function(text) {
-        //this code has slow performance
+        // this code has slow performance
         this._hiddenLabelText.innerHTML = text;
         return this._hiddenLabelText.offsetWidth;
     },
@@ -788,8 +800,12 @@ var Form = Widget.inherit({
         }
     },
 
-    _render: function() {
+    _initMarkup: function() {
         this._clearCachedInstances();
+        this.callBase();
+    },
+
+    _render: function() {
         this._prepareFormData();
 
         this.callBase();
@@ -1402,13 +1418,14 @@ var Form = Widget.inherit({
 
         do {
             if(isItemWithSubItems) {
-                var isGroupWithCaption = typeUtils.isDefined(item.caption || item.title),
-                    captionWithoutSpaces = that._getTextWithoutSpaces(item.caption || item.title),
+                var name = item.name || item.caption || item.title,
+                    isGroupWithName = typeUtils.isDefined(name),
+                    nameWithoutSpaces = that._getTextWithoutSpaces(name),
                     pathNode;
 
                 item[subItemsField] = that._generateItemsFromData(item[subItemsField]);
 
-                if(isGroupWithCaption) {
+                if(isGroupWithName) {
                     pathNode = path.pop();
                 }
 
@@ -1420,7 +1437,7 @@ var Form = Widget.inherit({
                     }
                 }
 
-                if(!isGroupWithCaption || isGroupWithCaption && captionWithoutSpaces === pathNode) {
+                if(!isGroupWithName || isGroupWithName && nameWithoutSpaces === pathNode) {
                     if(path.length) {
                         result = that._searchItemInEverySubItem(path, fieldName, item[subItemsField]);
                     }

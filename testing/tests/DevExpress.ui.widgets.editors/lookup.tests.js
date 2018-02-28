@@ -702,7 +702,7 @@ QUnit.test("Empty dataSource searchExpr (B253811)", function(assert) {
 });
 
 QUnit.test("userDataSource: byKey", function(assert) {
-    //arrange
+    // arrange
     var initialLoadCalled = false,
         searchLoadCalled = false,
         searchString = null,
@@ -749,10 +749,10 @@ QUnit.test("userDataSource: byKey", function(assert) {
 
     var search = this.search;
 
-    //act
+    // act
     search.option("value", "thr");
 
-    //assert
+    // assert
     assert.ok(initialLoadCalled, "initial load");
     assert.ok(searchLoadCalled, "load should be called with search params");
     assert.equal(searchString, "thr", "Correct search string should be passed");
@@ -761,7 +761,7 @@ QUnit.test("userDataSource: byKey", function(assert) {
 });
 
 QUnit.test("userDataSource: lookup with not defined value", function(assert) {
-    //arrange
+    // arrange
     var lookupKeys = [],
         userDataSource = {
             load: function(loadOptions) {
@@ -774,7 +774,7 @@ QUnit.test("userDataSource: lookup with not defined value", function(assert) {
             }
         };
 
-    //act
+    // act
     this.instance.option({
         dataSource: userDataSource,
         displayExpr: "name",
@@ -784,7 +784,7 @@ QUnit.test("userDataSource: lookup with not defined value", function(assert) {
 
     this.togglePopup();
 
-    //assert
+    // assert
     assert.equal(lookupKeys.length, 0, "Lookup callback should never be called");
 });
 
@@ -1053,7 +1053,7 @@ QUnit.test("regression: B236007 (check that selection item in one lookup do not 
     openPopupWithList(secondLookup);
     assert.equal($("." + LIST_ITEM_SELECTED_CLASS).length, 2);
 
-    //mouse = pointerMock($firstListItem);
+    // mouse = pointerMock($firstListItem);
     mouse.start().down().move(0, 10).up();
 
     openPopupWithList(firstLookup);
@@ -3166,7 +3166,7 @@ QUnit.test("aria-target for lookup's list should point to the list's focusTarget
 
     var list = $("." + LIST_CLASS).dxList("instance");
 
-    //TODO: change it when _getAriaTarget becomes an option
+    // TODO: change it when _getAriaTarget becomes an option
     assert.deepEqual(list._getAriaTarget(), list.$element(), "aria target for nested list is correct");
 });
 

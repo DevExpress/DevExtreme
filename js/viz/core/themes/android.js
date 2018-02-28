@@ -49,7 +49,7 @@ themeModule.registerTheme({
 }, "generic.light");
 
 registerThemeAlias("android", ANDROID5_LIGHT);
-//DEPRECATED in 15.1
+// DEPRECATED in 15.1
 registerThemeAlias("android.holo-dark", ANDROID5_LIGHT);
 registerThemeAlias("android.holo-light", ANDROID5_LIGHT);
 registerThemeAlias("android.dark", ANDROID5_LIGHT);

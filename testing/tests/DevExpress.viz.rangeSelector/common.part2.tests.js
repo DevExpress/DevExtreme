@@ -696,7 +696,7 @@ QUnit.test("range, discrete argument with dataSource", function(assert) {
     assert.deepEqual(range.categories, ["a1", "a2", "a3"]);
 });
 
-//T103203
+// T103203
 QUnit.test("pass dataType to translator", function(assert) {
     this.createWidget({
         scale: {
@@ -710,7 +710,7 @@ QUnit.test("pass dataType to translator", function(assert) {
     assert.strictEqual(this.getArgRange().dataType, "datetime");
 });
 
-//////// Tests on change all first level properties (KO support) ////////////////////
+// Tests on change all first level properties (KO support) ////////////////////
 QUnit.module("Options changing", $.extend({}, environmentWithDataSource, {
     beforeEach: function() {
         environmentWithDataSource.beforeEach.apply(this, arguments);
@@ -763,7 +763,7 @@ QUnit.test("range when background is changed", function(assert) {
 
     range.option("background", { image: { url: "test2.png" } });
 
-    //assert
+    // assert
     var options = this.rangeView.update.lastCall.args[0];
     assert.strictEqual(options.image.url, "test2.png");
 });
@@ -790,7 +790,7 @@ QUnit.test("range when several options are changed", function(assert) {
     assert.strictEqual(this.slidersController.update.lastCall.args[4].visible, false);
 });
 
-//T319043
+// T319043
 QUnit.test("T319043. range updating indent", function(assert) {
     var range = this.createWidget({
         indent: {
@@ -877,7 +877,7 @@ QUnit.test("rangeContainer canvas after min/max calculation", function(assert) {
     assert.deepEqual(this.slidersController.update.lastCall.args[0], [0, 24]);
 });
 
-//B217680
+// B217680
 QUnit.test("rangeContainer canvas with big scale max value", function(assert) {
     this.createWidget({
         scale: {
@@ -933,7 +933,7 @@ QUnit.test('Auto format for scale when valueType is datetime, type is discrete',
     assert.strictEqual(this.slidersController.update.lastCall.args[4].format, "monthandyear", 'Slider markers auto format');
 });
 
-//B219631
+// B219631
 QUnit.test("Auto format when scale marker is not visible", function(assert) {
     this.createWidget({
         scale: {
@@ -949,7 +949,7 @@ QUnit.test("Auto format when scale marker is not visible", function(assert) {
     assert.strictEqual(this.slidersController.update.lastCall.args[4].format, "shortdate", "Slider marker auto format monthAndYear(Y)");
 });
 
-//T311953
+// T311953
 QUnit.test("Slidermarker format have custom format", function(assert) {
     this.createWidget({
         scale: {
@@ -982,7 +982,7 @@ QUnit.test("Auto format when scale marker is not visible and minorTickInterval i
     assert.strictEqual(this.slidersController.update.lastCall.args[4].format, "monthandyear", "Slider marker auto format monthAndYear(Y)");
 });
 
-//B230196
+// B230196
 QUnit.test("Auto format when minorTickInterval is auto calculated", function(assert) {
     this.createWidget({
         scale: {
@@ -1094,7 +1094,7 @@ QUnit.test("T576618. axis division factors are undefined, no tick intervals - co
 });
 
 
-//B251771
+// B251771
 QUnit.test("scale.marker.label.customizeText is not a function", function(assert) {
     this.createWidget({
         scale: {
@@ -1120,7 +1120,7 @@ QUnit.test("pass containerBackgroundColor to slidersMarker options like border c
     assert.strictEqual(this.slidersController.update.lastCall.args[4].borderColor, "someColor");
 });
 
-//for deprecated padding option
+// for deprecated padding option
 QUnit.test("padding without paddingLeftRight & without paddingTopBottom", function(assert) {
     this.createWidget({
         sliderMarker: {
@@ -1132,7 +1132,7 @@ QUnit.test("padding without paddingLeftRight & without paddingTopBottom", functi
     assert.strictEqual(this.slidersController.update.lastCall.args[4].paddingTopBottom, 20);
 });
 
-//for deprecated padding option
+// for deprecated padding option
 QUnit.test("padding without paddingLeftRight", function(assert) {
     this.createWidget({
         sliderMarker: {
@@ -1145,7 +1145,7 @@ QUnit.test("padding without paddingLeftRight", function(assert) {
     assert.strictEqual(this.slidersController.update.lastCall.args[4].paddingTopBottom, 10);
 });
 
-//for deprecated padding option
+// for deprecated padding option
 QUnit.test("padding without paddingTopBottom", function(assert) {
     this.createWidget({
         sliderMarker: {
@@ -1158,7 +1158,7 @@ QUnit.test("padding without paddingTopBottom", function(assert) {
     assert.strictEqual(this.slidersController.update.lastCall.args[4].paddingTopBottom, undefined);
 });
 
-//for deprecated padding option
+// for deprecated padding option
 QUnit.test("padding with paddingLeftRight & with paddingTopBottom", function(assert) {
     this.createWidget({
         sliderMarker: {
@@ -1172,7 +1172,7 @@ QUnit.test("padding with paddingLeftRight & with paddingTopBottom", function(ass
     assert.strictEqual(this.slidersController.update.lastCall.args[4].paddingTopBottom, 10);
 });
 
-//T402810
+// T402810
 QUnit.test("tickInterval less than 6 months, width enough for years - marker is visible", function(assert) {
     this.createWidget({
         size: { width: 500 },
@@ -1188,7 +1188,7 @@ QUnit.test("tickInterval less than 6 months, width enough for years - marker is 
     assert.strictEqual(this.axis.updateOptions.lastCall.args[0].marker.visible, true);
 });
 
-//T402810
+// T402810
 QUnit.test("tickInterval is 6 months, width enough for years - marker is NOT visible", function(assert) {
     this.createWidget({
         size: { width: 500 },
@@ -1205,7 +1205,7 @@ QUnit.test("tickInterval is 6 months, width enough for years - marker is NOT vis
     assert.strictEqual(this.axis.updateOptions.lastCall.args[0].marker.visible, false);
 });
 
-//T402810
+// T402810
 QUnit.test("tickInterval less than 6 months, width is NOT enough for years - marker is NOT visible", function(assert) {
     this.createWidget({
         size: { width: 500 },
@@ -1222,7 +1222,7 @@ QUnit.test("tickInterval less than 6 months, width is NOT enough for years - mar
     assert.strictEqual(this.axis.updateOptions.lastCall.args[0].marker.visible, false);
 });
 
-//T402810
+// T402810
 QUnit.test("tickInterval less than 6 months, width enough for years, marker.visible = false - marker is NOT visible", function(assert) {
     this.createWidget({
         size: { width: 500 },

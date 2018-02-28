@@ -26,7 +26,7 @@ var camelize = inflector.camelize;
 require("common.css!");
 require("generic_light.css!");
 
-//calendar
+// calendar
 var CALENDAR_CLASS = "dx-calendar",
     CALENDAR_BODY_CLASS = "dx-calendar-body",
     CALENDAR_NAVIGATOR_CLASS = "dx-calendar-navigator",
@@ -41,7 +41,7 @@ var CALENDAR_CLASS = "dx-calendar",
     CALENDAR_OTHER_VIEW_CLASS = "dx-calendar-other-view",
     CALENDAR_VIEWS_WRAPPER_CLASS = "dx-calendar-views-wrapper",
 
-    //calendar view
+    // calendar view
     CALENDAR_SELECTED_DATE_CLASS = "dx-calendar-selected-date",
     CALENDAR_CONTOURED_DATE_CLASS = "dx-calendar-contoured-date",
 

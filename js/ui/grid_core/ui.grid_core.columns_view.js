@@ -83,6 +83,11 @@ var subscribeToRowClick = function(that, $table) {
     }));
 };
 
+var getWidthStyle = function(width) {
+    if(width === "auto") return "";
+    return typeof width === "number" ? width + "px" : width;
+};
+
 exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
     _createScrollableOptions: function() {
         var that = this,
@@ -96,7 +101,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             useKeyboard: false
         });
 
-        //TODO jsdmitry: This condition is for unit tests and testing scrollable
+        // TODO jsdmitry: This condition is for unit tests and testing scrollable
         if(useNativeScrolling === undefined) {
             useNativeScrolling = true;
         }
@@ -133,12 +138,21 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             $cell.addClass(this.addWidgetPrefix(GROUP_SPACE_CLASS));
         }
 
+        if(this.option("advancedRendering") && this.option("columnAutoWidth")) {
+            if(column.width || column.minWidth) {
+                cell.style.minWidth = getWidthStyle(column.minWidth || column.width);
+            }
+            if(column.width) {
+                cell.style.width = cell.style.maxWidth = getWidthStyle(column.width);
+            }
+        }
+
         column.colspan > 1 && $cell.attr("colSpan", column.colspan);
 
         return $cell;
     },
 
-    _createRow: function() {
+    _createRow: function(row) {
         return $("<tr>")
             .addClass(ROW_CLASS)
             .attr("role", "row");
@@ -158,14 +172,14 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         if(columns) {
             $table.append(that._createColGroup(columns));
             if(devices.real().ios) {
-                //T198380
+                // T198380
                 $table.append($("<thead>").append("<tr>"));
             }
         }
 
         $table.append("<tbody>");
 
-        //T138469
+        // T138469
         if(browser.mozilla) {
             eventsEngine.on($table, "mousedown", "td", function(e) {
                 if(e.ctrlKey) {
@@ -200,7 +214,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
                         $element.data(CELL_HINT_VISIBLE, false);
                     }
 
-                    difference = $element[0].scrollWidth - $element[0].clientWidth - msieCorrection; //T598499
+                    difference = $element[0].scrollWidth - $element[0].clientWidth - msieCorrection; // T598499
                     if(difference > 0 && !typeUtils.isDefined($element.attr("title"))) {
                         $element.attr("title", $element.text());
                         $element.data(CELL_HINT_VISIBLE, true);
@@ -443,7 +457,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
         $cell = that._createCell(cellOptions);
 
-        //TODO move to cellPrepared
+        // TODO move to cellPrepared
         if(!column.command) {
             that.setAria("label", that.localize("dxDataGrid-ariaColumn") + " " + column.caption + ", " + that.localize("dxDataGrid-ariaValue") + " " + cellOptions.text, $cell);
         }
@@ -604,6 +618,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
     _getWidths: function($cellElements) {
         var result = [],
+            advancedRendering = this.option("advancedRendering") && this.option("columnAutoWidth"),
             width,
             clientRect;
 
@@ -612,8 +627,8 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
                 width = item.offsetWidth;
                 if(item.getBoundingClientRect) {
                     clientRect = item.getBoundingClientRect();
-                    if(clientRect.width > width) {
-                        width = Math.ceil(clientRect.width);
+                    if(clientRect.width > width - 1) {
+                        width = advancedRendering ? clientRect.width : Math.ceil(clientRect.width);
                     }
                 }
 
@@ -654,7 +669,9 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         var $cols,
             i,
             width,
-            columnIndex;
+            minWidth,
+            columnIndex,
+            advancedRendering = this.option("advancedRendering") && this.option("columnAutoWidth");
 
         $tableElement = $tableElement || this._getTableElement();
 
@@ -664,6 +681,22 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             columns = columns || this.getColumns(null, $tableElement);
 
             for(i = 0; i < columns.length; i++) {
+                if(advancedRendering) {
+                    width = columns[i].width;
+
+                    if(width) {
+                        width = getWidthStyle(width);
+                        minWidth = getWidthStyle(columns[i].minWidth || width);
+                        var $rows = $tableElement.children().children(".dx-row");
+                        for(var rowIndex = 0; rowIndex < $rows.length; rowIndex++) {
+                            var cell = $rows[rowIndex].cells[i];
+                            if(cell) {
+                                cell.style.width = cell.style.maxWidth = width;
+                                cell.style.minWidth = minWidth;
+                            }
+                        }
+                    }
+                }
                 if(columns[i].colspan) {
                     columnIndex += columns[i].colspan;
                     continue;
@@ -671,6 +704,9 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
                 width = widths[columnIndex];
                 if(width === "adaptiveHidden") {
                     width = HIDDEN_COLUMNS_WIDTH;
+                }
+                if(typeof width === "number") {
+                    width = width.toFixed(3) + "px";
                 }
                 $cols.eq(columnIndex).css("width", width || "auto");
                 columnIndex++;

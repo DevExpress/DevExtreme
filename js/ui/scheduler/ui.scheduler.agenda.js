@@ -428,7 +428,7 @@ var SchedulerAgenda = SchedulerWorkSpace.inherit({
     },
 
     _getGroupRowHeight: function(groupRows) {
-        //TODO: hotfix
+        // TODO: hotfix
         if(!groupRows) {
             return;
         }

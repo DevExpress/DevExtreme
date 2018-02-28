@@ -110,9 +110,9 @@ $.each(DevExpress.ui, function(componentName, componentConstructor) {
                 var prevValue = options[option],
                     newValue = prevValue;
 
-                //NOTE: some widgets doesn't support dataSource === null
+                // NOTE: some widgets doesn't support dataSource === null
                 if(option === "dataSource") {
-                    //NOTE: dxResponsiveBox supports only plain object in items
+                    // NOTE: dxResponsiveBox supports only plain object in items
                     var item = componentName === "dxResponsiveBox" ? { text: 1 } : 1;
                     item = componentName === "dxScheduler" ? { text: 1, startDate: new Date(2015, 0, 1) } : item;
 

@@ -169,7 +169,7 @@ var EditingController = modules.ViewController.inherit((function() {
                 columnIndex = $targetCell[0] && $targetCell[0].cellIndex,
                 rowIndex = this.getView("rowsView").getRowIndex($targetCell.parent()),
                 visibleColumns = this._columnsController.getVisibleColumns(),
-                //TODO jsdmitry: Move this code to _rowClick method of rowsView
+                // TODO jsdmitry: Move this code to _rowClick method of rowsView
                 allowEditing = visibleColumns[columnIndex] && visibleColumns[columnIndex].allowEditing;
 
             if(this.isEditing() && (!isDataRow || (isDataRow && !allowEditing && !this.isEditCell(rowIndex, columnIndex)))) {
@@ -770,7 +770,7 @@ var EditingController = modules.ViewController.inherit((function() {
             if(!column || !column.showEditorAlways || (oldColumn && !oldColumn.showEditorAlways)) {
                 that._editCellInProgress = true;
 
-                //T316439
+                // T316439
                 that.getController("editorFactory").loseFocus();
 
                 that._dataController.updateItems({
@@ -779,8 +779,8 @@ var EditingController = modules.ViewController.inherit((function() {
                 });
             }
 
-            //TODO no focus border when call editCell via API
-            var $cell = rowsView && rowsView._getCellElement(that._getVisibleEditRowIndex(), that._editColumnIndex); //T319885
+            // TODO no focus border when call editCell via API
+            var $cell = rowsView && rowsView._getCellElement(that._getVisibleEditRowIndex(), that._editColumnIndex); // T319885
             if($cell && !$cell.find(":focus").length) {
                 that._focusEditingCell(function() {
                     that._editCellInProgress = false;
@@ -1146,6 +1146,10 @@ var EditingController = modules.ViewController.inherit((function() {
 
             that._afterSaveEditData();
             return result.resolve().promise();
+        },
+
+        isSaving: function() {
+            return this._saving;
         },
 
         _updateEditColumn: function() {
@@ -1817,7 +1821,7 @@ module.exports = {
                  * @type Enums.GridEditMode
                  * @default "row"
                  */
-                mode: "row", //"batch"
+                mode: "row", // "batch"
                 /**
                  * @name GridBaseOptions_editing_allowAdding
                  * @publicName allowAdding
@@ -1960,11 +1964,17 @@ module.exports = {
                         editingController.resetRowAndPageIndices(true);
                     });
                 },
+                repaintRows: function() {
+                    if(this.getController("editing").isSaving()) return;
+                    return this.callBase.apply(this, arguments);
+                },
                 changeRowExpand: function(key) {
                     var editingController = this.getController("editing");
-                    if(editingController.isEditing()) {
+
+                    if(editingController.isEditing() && editingController.isRowEditMode()) {
                         editingController.cancelEditData();
                     }
+
                     return this.callBase.apply(this, arguments);
                 },
                 _updateItemsCore: function(change) {

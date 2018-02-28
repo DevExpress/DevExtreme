@@ -143,7 +143,7 @@ QUnit.test("Theme manager destruction", function(assert) {
 
 QUnit.test("Theme manager callback", function(assert) {
     this.onGetAnimationOptions = function() { return "animation-option"; };
-    //this.onHandleThemeOptionsCore = sinon.spy();
+    // this.onHandleThemeOptionsCore = sinon.spy();
     this.createWidget({
         rtlEnabled: "rtl-enabled-option",
         encodeHtml: "encode-html-option"
@@ -159,9 +159,9 @@ QUnit.test("Theme manager callback", function(assert) {
         encodeHtml: "encode-html-option"
     }], "renderer animation options");
 
-    //assert.deepEqual(this.onHandleThemeOptionsCore.lastCall.args, [], "theme options handled");
-    //assert.ok(this.renderer.lock.firstCall.calledBefore(this.title.update.lastCall), "renderer is locked");
-    //assert.ok(this.renderer.unlock.lastCall.calledAfter(this.onHandleThemeOptionsCore.lastCall), "renderer is unlocked")
+    // assert.deepEqual(this.onHandleThemeOptionsCore.lastCall.args, [], "theme options handled");
+    // assert.ok(this.renderer.lock.firstCall.calledBefore(this.title.update.lastCall), "renderer is locked");
+    // assert.ok(this.renderer.unlock.lastCall.calledAfter(this.onHandleThemeOptionsCore.lastCall), "renderer is unlocked")
 });
 
 // T190525
@@ -300,7 +300,7 @@ QUnit.test("rtlEnabled", function(assert) {
 
 QUnit.test("encodeHtml", function(assert) {
     this.onGetAnimationOptions = function() { return "animation-option"; };
-    //this.onHandleThemeOptionsCore = sinon.spy();
+    // this.onHandleThemeOptionsCore = sinon.spy();
     this.createWidget({
         rtlEnabled: "rtl-enabled-option",
         pathModified: "path-modified-option"
@@ -313,10 +313,10 @@ QUnit.test("encodeHtml", function(assert) {
         rtl: "rtl-enabled-option",
         encodeHtml: "encode-html-option"
     }], "renderer animation options");
-    //assert.deepEqual(this.onHandleThemeOptionsCore.lastCall.args, [], "theme options handled");
+    // assert.deepEqual(this.onHandleThemeOptionsCore.lastCall.args, [], "theme options handled");
 });
 
-//QUnit.test("Option from the invalidating list", function (assert) {
+// QUnit.test("Option from the invalidating list", function (assert) {
 //    this.createWidget();
 //    var spy = sinon.spy(this.widget, "_invalidate");
 //    this.widget._invalidatingOptions = ["test-option"];
@@ -324,7 +324,7 @@ QUnit.test("encodeHtml", function(assert) {
 //    this.widget.option("test-option", "test-value");
 //
 //    assert.deepEqual(spy.lastCall.args, []);
-//});
+// });
 
 QUnit.test("Unknown option", function(assert) {
     this.createWidget();
@@ -606,6 +606,25 @@ QUnit.test('no options and container has no sizes', function(assert) {
     }
 });
 
+QUnit.test('no options and container has negative sizes - get default size (T607069)', function(assert) {
+    try {
+        sinon.stub(renderer.fn, 'width').returns(-2);
+        sinon.stub(renderer.fn, 'height').returns(-3);
+        this.onGetDefaultSize = function() {
+            return { width: 400, height: 300, left: 10, top: 20, right: 30, bottom: 40 };
+        };
+        this.createWidget();
+
+        assert.deepEqual(this.widget.DEBUG_getCanvas(), {
+            width: 400, height: 300,
+            left: 10, top: 20, right: 30, bottom: 40
+        }, 'canvas');
+    } finally {
+        renderer.fn.width.restore();
+        renderer.fn.height.restore();
+    }
+});
+
 QUnit.test('container is not visible', function(assert) {
     this.$container.hide();
     this.createWidget();
@@ -698,7 +717,7 @@ QUnit.test("Call render after container is resized", function(assert) {
 
     var size = this.widget.getSize();
 
-    //assert
+    // assert
     assert.equal(size.width, 400);
     assert.equal(size.height, 300);
 });
@@ -717,10 +736,10 @@ QUnit.test("size option changed", function(assert) {
         }
     });
 
-    //Act
+    // Act
     var size = this.widget.getSize();
 
-    //assert
+    // assert
     assert.equal(size.width, 300);
     assert.equal(size.height, 300);
 });
@@ -741,10 +760,10 @@ QUnit.test("size option changed with initial size. negative width", function(ass
         }
     });
 
-    //Act
+    // Act
     var size = this.widget.getSize();
 
-    //assert
+    // assert
     assert.equal(size.width, 0);
     assert.equal(size.height, 0);
 });
@@ -765,10 +784,10 @@ QUnit.test("size option changed with initial size. negative height", function(as
         }
     });
 
-    //Act
+    // Act
     var size = this.widget.getSize();
 
-    //assert
+    // assert
     assert.equal(size.width, 0);
     assert.equal(size.height, 0);
 });
@@ -783,10 +802,10 @@ QUnit.test("size option changed with container size. negative height", function(
             height: -100
         }
     });
-    //Act
+    // Act
     var size = this.widget.getSize();
 
-    //assert
+    // assert
     assert.equal(size.width, 0);
     assert.equal(size.height, 0);
 });
@@ -875,18 +894,18 @@ QUnit.module('Visibility changing', $.extend({}, environment, {
 }));
 
 QUnit.test('Hide', function(assert) {
-    //act
+    // act
     this.$container.trigger('dxhiding');
 
     assert.strictEqual(this.renderStub.callCount, 1);
 });
 
 QUnit.test('Show', function(assert) {
-    //arrange
+    // arrange
     this.$container.trigger('dxhiding').hide();
     this.renderStub.reset();
 
-    //act
+    // act
     this.$container.show().trigger('dxshown');
 
     assert.strictEqual(this.renderStub.callCount, 1);
@@ -925,11 +944,11 @@ QUnit.test('Call renderer.fixPlacement on window resize even if redrawOnResize f
 });
 
 QUnit.test('Call renderer.fixPlacement on container visibility change (show)', function(assert) {
-    //arrange
+    // arrange
     this.createWidget();
     this.$container.trigger('dxhiding').hide();
 
-    //act
+    // act
     this.$container.show().trigger('dxshown');
 
     assert.strictEqual(this.renderer.fixPlacement.callCount, 2);
@@ -1041,25 +1060,25 @@ QUnit.module('drawn', $.extend({}, environment, {
 }));
 
 QUnit.test('without set drawn handler', function(assert) {
-    //arrange
+    // arrange
     this.createWidget();
 
-    //act
+    // act
     this.triggerDrawn();
 
-    //assert
+    // assert
     assert.ok(true, 'no exceptions');
 });
 
 QUnit.test('with set drawn handler', function(assert) {
-    //arrange
+    // arrange
     var onDrawnCallback = sinon.spy();
     this.createWidget({ onDrawn: onDrawnCallback });
 
-    //act
+    // act
     this.triggerDrawn();
 
-    //assert
+    // assert
     assert.deepEqual(onDrawnCallback.lastCall.args, [{
         component: this.widget,
         element: this.widget.element()
@@ -1074,25 +1093,25 @@ QUnit.module('isReady', $.extend({}, environment, {
 }));
 
 QUnit.test('isReady on drawn', function(assert) {
-    //arrange
+    // arrange
     this.createWidget();
 
-    //act
+    // act
     this.triggerDrawn();
-    //assert
+    // assert
     assert.ok(this.renderer.onEndAnimation.calledOnce);
     assert.ok(!this.widget.isReady());
 });
 
 QUnit.test('isReady after call ready callback', function(assert) {
-    //arrange
+    // arrange
     this.createWidget();
     this.renderer.onEndAnimation = function(complete) {
         complete();
     };
-    //act
+    // act
     this.triggerDrawn();
-    //assert
+    // assert
 
     assert.ok(this.widget.isReady());
 });
@@ -1416,10 +1435,10 @@ QUnit.module('Misc API', $.extend({}, environment, {
 }));
 
 QUnit.test('get widget markup', function(assert) {
-    //arrange
+    // arrange
     this.renderer.svg = function() {
         return 'some markup';
     };
-    //act
+    // act
     assert.equal(this.widget.svg(), 'some markup', 'markup, returned from element');
 });

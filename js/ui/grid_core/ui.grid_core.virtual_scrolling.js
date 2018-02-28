@@ -7,6 +7,7 @@ var $ = require("../../core/renderer"),
     gridCoreUtils = require("./ui.grid_core.utils"),
     each = require("../../core/utils/iterator").each,
     browser = require("../../core/utils/browser"),
+    Deferred = require("../../core/utils/deferred").Deferred,
     translator = require("../../animation/translator"),
     LoadIndicator = require("../load_indicator");
 
@@ -180,8 +181,22 @@ var VirtualScrollingDataSourceAdapterExtender = (function() {
         },
         reload: function() {
             this._dataSource.pageIndex(this.pageIndex());
+            var virtualScrollController = this._virtualScrollController;
 
-            return this.callBase.apply(this, arguments);
+            if(virtualScrollController) {
+                var d = new Deferred();
+                this.callBase.apply(this, arguments).done(function(r) {
+                    var delayDeferred = virtualScrollController._delayDeferred;
+                    if(delayDeferred) {
+                        delayDeferred.done(d.resolve).fail(d.reject);
+                    } else {
+                        d.resolve(r);
+                    }
+                }).fail(d.reject);
+                return d;
+            } else {
+                return this.callBase.apply(this, arguments);
+            }
         },
         refresh: function(options, isReload, operationTypes) {
             var that = this,
@@ -332,7 +347,7 @@ var VirtualScrollingRowsViewExtender = (function() {
                 commonUtils.deferRender(function() {
                     translator.move($contentTable, { left: 0, top: top });
 
-                    //TODO jsdmitry: Separate this functionality on render and resize
+                    // TODO jsdmitry: Separate this functionality on render and resize
                     isRenderVirtualTableContentRequired = that._contentHeight !== contentHeight || contentHeight === 0 ||
                         !that._isTableLinesDisplaysCorrect(virtualTable) ||
                         !that._isColumnElementsEqual($contentTable.find("col"), virtualTable.find("col"));

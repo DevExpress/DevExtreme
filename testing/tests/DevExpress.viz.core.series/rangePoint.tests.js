@@ -16,7 +16,7 @@ var createPoint = function(series, data, options) {
     options = options || {};
     options.type = options.type || "rangearea";
     var point = new pointModule.Point(series, data, options);
-    point._getLabelCoordOfPosition = sinon.spy(point._getLabelCoordOfPosition);//check internal behavior
+    point._getLabelCoordOfPosition = sinon.spy(point._getLabelCoordOfPosition);// check internal behavior
     return point;
 };
 
@@ -2155,12 +2155,12 @@ QUnit.test("CoordsIn. RangeArea", function(assert) {
     this.opt.type = "rangearea";
 
     var point = createPoint(this.series, { argument: 1, value: 1, minValue: 10 }, this.opt);
-    point.translate(); //point.x = 11, point.y = 22; point.minY = 220
+    point.translate(); // point.x = 11, point.y = 22; point.minY = 220
 
     point._storeTrackerR = function() {
         return 20;
     };
-    //value marker
+    // value marker
     assert.ok(point.coordsIn(11, 22), "center");
     assert.ok(point.coordsIn(21, 22), "right inside");
     assert.ok(point.coordsIn(31, 22), "right side");
@@ -2177,7 +2177,7 @@ QUnit.test("CoordsIn. RangeArea", function(assert) {
     assert.ok(point.coordsIn(11, 10), "top inside");
     assert.ok(point.coordsIn(11, 3), "top side");
     assert.ok(!point.coordsIn(11, 1), "top side out");
-    //minValue marker
+    // minValue marker
     assert.ok(point.coordsIn(11, 222), "center");
     assert.ok(point.coordsIn(21, 222), "right inside");
     assert.ok(point.coordsIn(31, 222), "right side");
@@ -2201,12 +2201,12 @@ QUnit.test("CoordsIn. RangeArea. Rotated", function(assert) {
     this.opt.rotated = true;
 
     var point = createPoint(this.series, { argument: 1, value: 1, minValue: 10 }, this.opt);
-    point.translate(); //point.y = 11, point.x = 22; point.minX = 220
+    point.translate(); // point.y = 11, point.x = 22; point.minX = 220
 
     point._storeTrackerR = function() {
         return 20;
     };
-    //marker
+    // marker
     assert.ok(point.coordsIn(22, 11), "center");
     assert.ok(point.coordsIn(22, 21), "right inside");
     assert.ok(point.coordsIn(22, 31), "right side");
@@ -2223,7 +2223,7 @@ QUnit.test("CoordsIn. RangeArea. Rotated", function(assert) {
     assert.ok(point.coordsIn(10, 11), "top inside");
     assert.ok(point.coordsIn(3, 11), "top side");
     assert.ok(!point.coordsIn(1, 11), "top side out");
-    //min value marker
+    // min value marker
     assert.ok(point.coordsIn(220, 11), "center");
     assert.ok(point.coordsIn(220, 21), "right inside");
     assert.ok(point.coordsIn(220, 31), "right side");
@@ -2819,7 +2819,7 @@ QUnit.test("Negative. value", function(assert) {
 
 QUnit.module("Draw label", environment);
 
-//helper
+// helper
 function createLabels(x, y, minY) {
     var point = createPoint(this.series, this.data, this.options);
 
@@ -3039,7 +3039,7 @@ QUnit.module("Draw Label. Range area", {
     afterEach: environment.afterEach
 });
 
-//helpers
+// helpers
 var createCorrectionLabels = function(pos1, pos2, x, y, minY, minX) {
     var point = createPoint(this.series, this.data, this.options),
         topLabel = point._topLabel,
@@ -3505,7 +3505,7 @@ QUnit.module("Draw Label. Range bar", {
     afterEach: environment.afterEach
 });
 
-//helpers
+// helpers
 var createCorrectionBarLabels = function(bBox, x, y, width, height, pos1, pos2) {
     this.renderer.bBoxTemplate = bBox;
     var point = createPoint(this.series, this.data, this.options);

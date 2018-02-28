@@ -275,9 +275,7 @@ var BlockSeparatorView = SeparatorView.inherit({
         this.callBase();
 
         this.getController("data").loadingChanged.add(function(isLoading) {
-            var element = that.element();
-
-            if(!isLoading && element && element.css("display") !== "none") {
+            if(!isLoading) {
                 that.hide();
             }
         });
@@ -417,7 +415,7 @@ var DraggingHeaderView = modules.View.inherit({
         this.getController("data").loadingChanged.add(function(isLoading) {
             var element = that.element();
 
-            if(!isLoading && element && element.css("display") !== "none") {
+            if(!isLoading && element) {
                 element.hide();
             }
         });
@@ -999,7 +997,9 @@ var TablePositionViewController = modules.ViewController.inherit({
         that._pagerView = this.getView("pagerView");
 
         that._rowsView.resizeCompleted.add(function() {
-            that.update();
+            if(that.option("allowColumnResizing")) {
+                that.update();
+            }
         });
     },
 

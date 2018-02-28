@@ -299,14 +299,16 @@ var CollectionWidget = BaseCollectionWidget.inherit({
         return indices;
     },
 
-    _render: function() {
+    _initMarkup: function() {
         this._rendering = true;
-
         if(!this._dataSource || !this._dataSource.isLoading()) {
             this._syncSelectionOptions();
             this._normalizeSelectedItems();
         }
 
+        this.callBase();
+    },
+    _render: function() {
         this.callBase();
 
         var selectedItemIndices = this._getSelectedItemIndices();

@@ -46,8 +46,13 @@ var Scrollbar = Widget.inherit({
         this._isHovered = false;
     },
 
-    _render: function() {
+    _initMarkup: function() {
         this._renderThumb();
+
+        this.callBase();
+    },
+
+    _render: function() {
         this.callBase();
 
         this._renderDirection();

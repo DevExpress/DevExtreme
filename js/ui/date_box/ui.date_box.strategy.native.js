@@ -18,7 +18,7 @@ var NativeStrategy = DateBoxStrategy.inherit({
             return null;
         }
 
-        //NOTE: Required for correct date parsing when native picker is used (T418155)
+        // NOTE: Required for correct date parsing when native picker is used (T418155)
         if(this.dateBox.option("type") === "datetime") {
             return new Date(text.replace(/-/g, '/').replace('T', ' ').split(".")[0]);
         }

@@ -11,14 +11,20 @@ require("ui/filter_builder/filter_builder");
 require("ui/drop_down_box");
 require("ui/button");
 
-var FILTER_BUILDER_ITEM_FIELD_CLASS = "dx-filterbuilder-item-field",
-    FILTER_BUILDER_ITEM_OPERATION_CLASS = "dx-filterbuilder-item-operation",
-    FILTER_BUILDER_ITEM_VALUE_CLASS = "dx-filterbuilder-item-value",
-    FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS = "dx-filterbuilder-item-value-text",
-    FILTER_BUILDER_GROUP_CONTENT_CLASS = "dx-filterbuilder-group-content",
+var
+    FILTER_BUILDER_CLASS = "dx-filterbuilder",
+    FILTER_BUILDER_ITEM_FIELD_CLASS = FILTER_BUILDER_CLASS + "-item-field",
+    FILTER_BUILDER_ITEM_OPERATION_CLASS = FILTER_BUILDER_CLASS + "-item-operation",
+    FILTER_BUILDER_ITEM_VALUE_CLASS = FILTER_BUILDER_CLASS + "-item-value",
+    FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS = FILTER_BUILDER_CLASS + "-item-value-text",
+    FILTER_BUILDER_GROUP_CONTENT_CLASS = FILTER_BUILDER_CLASS + "-group-content",
+    FILTER_BUILDER_GROUP_OPERATION_CLASS = FILTER_BUILDER_CLASS + "-group-operation",
     FILTER_BUILDER_IMAGE_ADD_CLASS = "dx-icon-plus",
     FILTER_BUILDER_IMAGE_REMOVE_CLASS = "dx-icon-remove",
-    FILTER_BUILDER_GROUP_OPERATION_CLASS = "dx-filterbuilder-group-operation",
+    FILTER_BUILDER_RANGE_CLASS = FILTER_BUILDER_CLASS + "-range",
+    FILTER_BUILDER_RANGE_START_CLASS = FILTER_BUILDER_RANGE_CLASS + "-start",
+    FILTER_BUILDER_RANGE_END_CLASS = FILTER_BUILDER_RANGE_CLASS + "-end",
+    FILTER_BUILDER_RANGE_SEPARATOR_CLASS = FILTER_BUILDER_RANGE_CLASS + "-separator",
     ACTIVE_CLASS = "dx-state-active";
 
 var getSelectedMenuText = function() {
@@ -26,7 +32,11 @@ var getSelectedMenuText = function() {
 };
 
 var clickByOutside = function() {
-    $("body").trigger("dxpointerdown"); //use dxpointerdown because T600142
+    $("body").trigger("dxpointerdown"); // use dxpointerdown because T600142
+};
+
+var clickByValue = function(index) {
+    $("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).eq(index || 0).trigger("dxclick");
 };
 
 var selectMenuItem = function(menuItemIndex) {
@@ -162,7 +172,7 @@ QUnit.module("Rendering", function() {
                 dataField: "CompanyName"
             }, {
                 dataField: "Budget",
-                visible: false //this is unavailable property but it available in grid. See T579785.
+                visible: false // this is unavailable property but it available in grid. See T579785.
             }]
         });
 
@@ -201,8 +211,7 @@ QUnit.module("Rendering", function() {
     });
 
     QUnit.test("editorElement argument of onEditorPreparing option is correct", function(assert) {
-        var container = $("#container"),
-            companyNameValueField;
+        var container = $("#container");
 
         container.dxFilterBuilder({
             value: [
@@ -214,9 +223,8 @@ QUnit.module("Rendering", function() {
             fields: fields
         });
 
-        //act
-        companyNameValueField = $("." + FILTER_BUILDER_ITEM_VALUE_CLASS).eq(0);
-        companyNameValueField.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).trigger("dxclick");
+        // act
+        clickByValue();
     });
 
     QUnit.test("operations are changed after field change", function(assert) {
@@ -312,7 +320,174 @@ QUnit.module("Rendering", function() {
         assert.equal(getSelectedMenuText(), "Greater than");
     });
 
-    QUnit.test("hide value field for isblank & isNotBlank", function(assert) {
+    // T588221
+    QUnit.testInActiveWindow("click by dropdownbox specified editorTemplate", function(assert) {
+        var container = $("#container"),
+            INNER_ELEMENT_CLASS = "test-inner-element",
+            VALUE = "Value after click by button";
+
+        container.dxFilterBuilder({
+            value: ["Field", "=", "Test1"],
+            fields: [{
+                dataField: "Field",
+                editorTemplate: function(options, $container) {
+                    $("<div>")
+                        .appendTo($container)
+                        .dxDropDownBox({
+                            value: 3,
+                            valueExpr: "ID",
+                            contentTemplate: function(e) {
+                                var dropDownContent = $("<div>");
+                                $("<div>")
+                                    .addClass(INNER_ELEMENT_CLASS)
+                                    .appendTo(dropDownContent);
+                                $("<div>")
+                                    .appendTo(dropDownContent)
+                                    .dxButton({
+                                        onClick: function() {
+                                            options.setValue(VALUE);
+                                        }
+                                    });
+
+                                return dropDownContent;
+                            }
+                        });
+                }
+            }]
+        });
+
+        container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).trigger("dxclick");
+        assert.equal($("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).length, 0, "hide button");
+        assert.equal($(".dx-dropdowneditor-button").length, 1, "has one dropdowneditor button");
+
+        $(".dx-dropdowneditor-button").trigger("dxclick");
+        assert.equal($("." + INNER_ELEMENT_CLASS).length, 1, "dropdown opened");
+
+        $("." + INNER_ELEMENT_CLASS).trigger("dxclick");
+        assert.equal($("." + INNER_ELEMENT_CLASS).length, 1, "dropdown opened after click by its inner element");
+
+        $(".dx-button").trigger("dxclick");
+        clickByOutside();
+
+        assert.equal($("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).text(), VALUE);
+    });
+
+    QUnit.test("Add and remove condition", function(assert) {
+        var container = $("#container"),
+            instance = container.dxFilterBuilder({
+                allowHierarchicalFields: true,
+                value: ["State", "<>", "Test"],
+                fields: fields
+            }).dxFilterBuilder("instance");
+
+        $("." + FILTER_BUILDER_IMAGE_ADD_CLASS).trigger("dxclick");
+
+        assert.ok($(".dx-filterbuilder-add-condition").length > 0);
+
+        selectMenuItem(0);
+
+        assert.ok($(".dx-filterbuilder-add-condition").length === 0);
+        assert.deepEqual(instance.option("value"), [["State", "<>", "Test"], "and", ["CompanyName", "contains", ""]]);
+
+        $("." + FILTER_BUILDER_IMAGE_REMOVE_CLASS).eq(1).trigger("dxclick");
+        assert.deepEqual(instance.option("value"), ["State", "<>", "Test"]);
+    });
+
+    QUnit.test("Add and remove group", function(assert) {
+        var container = $("#container"),
+            instance = container.dxFilterBuilder({
+                allowHierarchicalFields: true,
+                value: ["State", "<>", "Test"],
+                fields: fields
+            }).dxFilterBuilder("instance");
+
+        clickByButtonAndSelectMenuItem($("." + FILTER_BUILDER_IMAGE_ADD_CLASS), 1);
+        assert.deepEqual(instance.option("value"), ["State", "<>", "Test"]);
+
+        $("." + FILTER_BUILDER_IMAGE_REMOVE_CLASS).eq(1).trigger("dxclick");
+        assert.deepEqual(instance.option("value"), ["State", "<>", "Test"]);
+    });
+
+    // T589531
+    QUnit.test("datebox returns null when a date value is specified as an empty string", function(assert) {
+        $("#container").dxFilterBuilder({
+            value: ["Date", "=", ""],
+            fields: fields
+        });
+
+        $("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).trigger("dxclick");
+        assert.equal($(".dx-datebox").dxDateBox("instance").option("value"), null);
+    });
+
+    // T589341
+    QUnit.test("the formatter is applied to a field with the date type", function(assert) {
+        if(devices.real().deviceType !== "desktop") {
+            assert.ok(true, "This test is not actual for mobile devices");
+            return;
+        }
+
+        $("#container").dxFilterBuilder({
+            value: ["Date", "=", ""],
+            fields: [{
+                dataField: "Date",
+                dataType: "date",
+                format: "dd.MM.yyyy"
+            }]
+        });
+
+        $("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).trigger("dxclick");
+        $(".dx-datebox input").val("12/12/2017");
+        $(".dx-datebox input").trigger("change");
+        clickByOutside();
+
+        assert.equal($("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).text(), "12.12.2017");
+    });
+
+    // T589341
+    QUnit.test('NumberBox with custom format', function(assert) {
+        var $container = $("#container");
+
+        $container.dxFilterBuilder({
+            value: ["Weight", "=", 3.14],
+            fields: [{
+                dataField: "Weight",
+                dataType: 'number',
+                editorOptions: {
+                    format: "#0.## kg"
+                }
+            }]
+        });
+
+        $("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).trigger("dxclick");
+
+        // assert
+        assert.equal($container.find(".dx-texteditor-input").val(), "3.14 kg", 'numberbox formatted value');
+    });
+
+    // T603217
+    QUnit.test("Menu popup hasn't target", function(assert) {
+        // arrange
+        var $container = $("#container");
+
+        $container.dxFilterBuilder({
+            value: ["Weight", "=", 3.14],
+            fields: [{
+                dataField: "Weight",
+                dataType: 'number'
+            }]
+        });
+
+        // act
+        $("." + FILTER_BUILDER_GROUP_OPERATION_CLASS).trigger("dxclick");
+
+        // assert
+        assert.notOk($container.find(".dx-filterbuilder-overlay").dxPopup("instance").option("target"), "popup target shoud not be set");
+    });
+});
+
+QUnit.module("Filter value", function() {
+
+    QUnit.test("hide filter value for isblank & isNotBlank", function(assert) {
         var container = $("#container");
 
         container.dxFilterBuilder({
@@ -345,6 +520,55 @@ QUnit.module("Rendering", function() {
         assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS).length, 1);
     });
 
+    QUnit.test("change filter value text when customOperation is selected", function(assert) {
+        var container = $("#container");
+
+        container.dxFilterBuilder({
+            value: [
+                ["field", "=", "K&S Music"]
+            ],
+            customOperations: [{
+                name: "customOperation"
+            }],
+            fields: [{
+                dataField: "field",
+                filterOperations: ["=", "customOperation"]
+            }]
+        });
+
+        assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS).text(), "K&S Music");
+
+        var $operationButton = container.find("." + FILTER_BUILDER_ITEM_OPERATION_CLASS);
+        clickByButtonAndSelectMenuItem($operationButton, 1);
+
+        assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS).text(), "<enter a value>");
+    });
+
+    QUnit.test("execute customOperation.customizeText for field with lookup", function(assert) {
+        var container = $("#container");
+
+        container.dxFilterBuilder({
+            value: [
+                ["field", "customOperation", "1"]
+            ],
+            customOperations: [{
+                name: "customOperation",
+                customizeText: function() {
+                    return "custom text";
+                }
+            }],
+            fields: [{
+                dataField: "field",
+                lookup: {
+                    dataSource: ["1", "2"]
+                },
+                filterOperations: ["customOperation"]
+            }]
+        });
+
+        assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS).text(), "custom text");
+    });
+
     QUnit.test("hide filter value for field with object dataType", function(assert) {
         var container = $("#container");
 
@@ -366,6 +590,24 @@ QUnit.module("Rendering", function() {
         assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS).length, 1);
     });
 
+    QUnit.test("hide filter value for customOperation", function(assert) {
+        var container = $("#container");
+
+        container.dxFilterBuilder({
+            value: [
+                ["State", "lastWeek"]
+            ],
+            customOperations: [{
+                name: "lastWeek",
+                dataTypes: ["string"],
+                hasValue: false
+            }],
+            fields: [{ dataField: "State" }]
+        });
+
+        assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS).length, 0);
+    });
+
     QUnit.testInActiveWindow("value button loses focus after value change and outside click", function(assert) {
         var container = $("#container");
 
@@ -382,6 +624,21 @@ QUnit.module("Rendering", function() {
 
         var valueButton = container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS);
         assert.notOk(valueButton.is(":focus"));
+    });
+
+    QUnit.testInActiveWindow("range start editor has focus", function(assert) {
+        var container = $("#container");
+
+        container.dxFilterBuilder({
+            value: ["field", "between", [1, 2]],
+            fields: [{ dataField: "field", dataType: "number" }],
+            customOperations: [{ name: "between" }]
+        });
+
+        container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).trigger("dxclick");
+
+        var $rangeStartEditor = container.find("." + FILTER_BUILDER_RANGE_START_CLASS + " .dx-texteditor-input");
+        assert.ok($rangeStartEditor.is(":focus"));
     });
 
     QUnit.testInActiveWindow("change filter value", function(assert) {
@@ -502,154 +759,10 @@ QUnit.module("Rendering", function() {
         assert.deepEqual(instance.option("value"), ["Field", "=", "Test2"]);
         assert.notOk(container.find("input").length, "hasn't input");
     });
-
-    //T588221
-    QUnit.testInActiveWindow("click by dropdownbox specified editorTemplate", function(assert) {
-        var container = $("#container"),
-            INNER_ELEMENT_CLASS = "test-inner-element",
-            VALUE = "Value after click by button";
-
-        container.dxFilterBuilder({
-            value: ["Field", "=", "Test1"],
-            fields: [{
-                dataField: "Field",
-                editorTemplate: function(options, $container) {
-                    $("<div>")
-                        .appendTo($container)
-                        .dxDropDownBox({
-                            value: 3,
-                            valueExpr: "ID",
-                            contentTemplate: function(e) {
-                                var dropDownContent = $("<div>");
-                                $("<div>")
-                                    .addClass(INNER_ELEMENT_CLASS)
-                                    .appendTo(dropDownContent);
-                                $("<div>")
-                                    .appendTo(dropDownContent)
-                                    .dxButton({
-                                        onClick: function() {
-                                            options.setValue(VALUE);
-                                        }
-                                    });
-
-                                return dropDownContent;
-                            }
-                        });
-                }
-            }]
-        });
-
-        container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).trigger("dxclick");
-        assert.equal($("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).length, 0, "hide button");
-        assert.equal($(".dx-dropdowneditor-button").length, 1, "has one dropdowneditor button");
-
-        $(".dx-dropdowneditor-button").trigger("dxclick");
-        assert.equal($("." + INNER_ELEMENT_CLASS).length, 1, "dropdown opened");
-
-        $("." + INNER_ELEMENT_CLASS).trigger("dxclick");
-        assert.equal($("." + INNER_ELEMENT_CLASS).length, 1, "dropdown opened after click by its inner element");
-
-        $(".dx-button").trigger("dxclick");
-        clickByOutside();
-
-        assert.equal($("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).text(), VALUE);
-    });
-
-    QUnit.test("Add and remove condition", function(assert) {
-        var container = $("#container"),
-            instance = container.dxFilterBuilder({
-                allowHierarchicalFields: true,
-                value: ["State", "<>", "Test"],
-                fields: fields
-            }).dxFilterBuilder("instance");
-
-        $("." + FILTER_BUILDER_IMAGE_ADD_CLASS).trigger("dxclick");
-
-        assert.ok($(".dx-filterbuilder-add-condition").length > 0);
-
-        selectMenuItem(0);
-
-        assert.ok($(".dx-filterbuilder-add-condition").length === 0);
-        assert.deepEqual(instance.option("value"), [["State", "<>", "Test"], "and", ["CompanyName", "contains", ""]]);
-
-        $("." + FILTER_BUILDER_IMAGE_REMOVE_CLASS).eq(1).trigger("dxclick");
-        assert.deepEqual(instance.option("value"), ["State", "<>", "Test"]);
-    });
-
-    QUnit.test("Add and remove group", function(assert) {
-        var container = $("#container"),
-            instance = container.dxFilterBuilder({
-                allowHierarchicalFields: true,
-                value: ["State", "<>", "Test"],
-                fields: fields
-            }).dxFilterBuilder("instance");
-
-        clickByButtonAndSelectMenuItem($("." + FILTER_BUILDER_IMAGE_ADD_CLASS), 1);
-        assert.deepEqual(instance.option("value"), ["State", "<>", "Test"]);
-
-        $("." + FILTER_BUILDER_IMAGE_REMOVE_CLASS).eq(1).trigger("dxclick");
-        assert.deepEqual(instance.option("value"), ["State", "<>", "Test"]);
-    });
-
-    //T589531
-    QUnit.test("datebox returns null when a date value is specified as an empty string", function(assert) {
-        $("#container").dxFilterBuilder({
-            value: ["Date", "=", ""],
-            fields: fields
-        });
-
-        $("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).trigger("dxclick");
-        assert.equal($(".dx-datebox").dxDateBox("instance").option("value"), null);
-    });
-
-    //T589341
-    QUnit.test("the formatter is applied to a field with the date type", function(assert) {
-        if(devices.real().deviceType !== "desktop") {
-            assert.ok(true, "This test is not actual for mobile devices");
-            return;
-        }
-
-        $("#container").dxFilterBuilder({
-            value: ["Date", "=", ""],
-            fields: [{
-                dataField: "Date",
-                dataType: "date",
-                format: "dd.MM.yyyy"
-            }]
-        });
-
-        $("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).trigger("dxclick");
-        $(".dx-datebox input").val("12/12/2017");
-        $(".dx-datebox input").trigger("change");
-        clickByOutside();
-
-        assert.equal($("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).text(), "12.12.2017");
-    });
-
-    //T589341
-    QUnit.test('NumberBox with custom format', function(assert) {
-        var $container = $("#container");
-
-        $container.dxFilterBuilder({
-            value: ["Weight", "=", 3.14],
-            fields: [{
-                dataField: "Weight",
-                dataType: 'number',
-                editorOptions: {
-                    format: "#0.## kg"
-                }
-            }]
-        });
-
-        $("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).trigger("dxclick");
-
-        //assert
-        assert.equal($container.find(".dx-texteditor-input").val(), "3.14 kg", 'numberbox formatted value');
-    });
 });
 
-QUnit.module("Create editor by field dataType", function() {
-    QUnit.test("number", function(assert) {
+QUnit.module("Create editor", function() {
+    QUnit.test("dataType - number", function(assert) {
         var container = $("#container");
 
         container.dxFilterBuilder({
@@ -658,11 +771,11 @@ QUnit.module("Create editor by field dataType", function() {
             fields: fields
         });
         var valueField = $("." + FILTER_BUILDER_ITEM_VALUE_CLASS).eq(0);
-        valueField.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).trigger("dxclick");
+        clickByValue();
         assert.ok(valueField.find(".dx-numberbox").dxNumberBox("instance"));
     });
 
-    QUnit.test("string", function(assert) {
+    QUnit.test("dataType - string", function(assert) {
         var container = $("#container");
 
         container.dxFilterBuilder({
@@ -676,7 +789,7 @@ QUnit.module("Create editor by field dataType", function() {
         assert.ok(valueField.find(".dx-textbox").dxTextBox("instance"));
     });
 
-    QUnit.test("date", function(assert) {
+    QUnit.test("dataType - date", function(assert) {
         var container = $("#container"),
             dateBoxInstance;
 
@@ -687,12 +800,12 @@ QUnit.module("Create editor by field dataType", function() {
         });
 
         var valueField = $("." + FILTER_BUILDER_ITEM_VALUE_CLASS).eq(0);
-        valueField.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).trigger("dxclick");
+        clickByValue();
         dateBoxInstance = valueField.find(".dx-datebox").dxDateBox("instance");
         assert.strictEqual(dateBoxInstance.option("type"), "date");
     });
 
-    QUnit.test("datetime", function(assert) {
+    QUnit.test("dataType - datetime", function(assert) {
         var container = $("#container"),
             dateBoxInstance;
 
@@ -703,12 +816,12 @@ QUnit.module("Create editor by field dataType", function() {
         });
 
         var valueField = $("." + FILTER_BUILDER_ITEM_VALUE_CLASS).eq(0);
-        valueField.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).trigger("dxclick");
+        clickByValue();
         dateBoxInstance = valueField.find(".dx-datebox").dxDateBox("instance");
         assert.strictEqual(dateBoxInstance.option("type"), "datetime");
     });
 
-    QUnit.test("boolean", function(assert) {
+    QUnit.test("dataType - boolean", function(assert) {
         var container = $("#container");
 
         container.dxFilterBuilder({
@@ -718,11 +831,11 @@ QUnit.module("Create editor by field dataType", function() {
         });
 
         var valueField = $("." + FILTER_BUILDER_ITEM_VALUE_CLASS).eq(0);
-        valueField.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).trigger("dxclick");
+        clickByValue();
         assert.ok(valueField.find(".dx-selectbox").dxSelectBox("instance"));
     });
 
-    QUnit.test("object", function(assert) {
+    QUnit.test("dataType - object", function(assert) {
         var container = $("#container");
 
         container.dxFilterBuilder({
@@ -745,11 +858,11 @@ QUnit.module("Create editor by field dataType", function() {
         });
 
         var valueField = $("." + FILTER_BUILDER_ITEM_VALUE_CLASS).eq(0);
-        valueField.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).trigger("dxclick");
+        clickByValue();
         assert.ok(valueField.find(".dx-selectbox").dxSelectBox("instance"));
     });
 
-    QUnit.test("editorTemplate", function(assert) {
+    QUnit.test("field.editorTemplate", function(assert) {
         var args,
             fields = [{
                 dataField: "Field",
@@ -768,13 +881,110 @@ QUnit.module("Create editor by field dataType", function() {
         });
 
         var valueField = $("." + FILTER_BUILDER_ITEM_VALUE_CLASS).eq(0);
-        valueField.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).trigger("dxclick");
+        clickByValue();
         assert.ok(valueField.find("input").hasClass("my-editor"));
 
         assert.strictEqual(args.value, "value", "filter value");
         assert.strictEqual(args.filterOperation, "=", "filter operation");
         assert.deepEqual(args.field, fields[0], "field");
         assert.ok(args.setValue, "has setValue");
+    });
+
+    QUnit.test("customOperation.editorTemplate", function(assert) {
+        var args,
+            fields = [{
+                dataField: "Field"
+            }];
+
+        $("#container").dxFilterBuilder({
+            value: [
+                ["Field", "lastDays", 2]
+            ],
+            fields: fields,
+            customOperations: [{
+                name: "lastDays",
+                dataTypes: ["string"],
+                editorTemplate: function(options, $container) {
+                    args = options;
+
+                    return $("<input/>").addClass("my-editor");
+                }
+            }]
+        });
+
+        var valueField = $("." + FILTER_BUILDER_ITEM_VALUE_CLASS).eq(0);
+        clickByValue();
+        assert.ok(valueField.find("input").hasClass("my-editor"));
+
+        assert.strictEqual(args.value, 2, "filter value");
+        assert.strictEqual(args.filterOperation, "lastDays", "filter operation");
+        assert.deepEqual(args.field, fields[0], "field");
+        assert.ok(args.setValue, "has setValue");
+    });
+
+    QUnit.test("customOperation.editorTemplate has more priority than field.editorTemplate", function(assert) {
+        var event,
+            fields = [{
+                dataField: "Field",
+                dataType: "number",
+                editorTemplate: function(options, $container) {
+                    event = "field.editorTemplate";
+                }
+            }],
+            instance = $("#container").dxFilterBuilder({
+                value: [
+                    ["Field", "lastDays", 2]
+                ],
+                fields: fields,
+                customOperations: [{
+                    name: "lastDays",
+                    dataTypes: ["number"],
+                    editorTemplate: function(options, $container) {
+                        event = "customOperation.editorTemplate";
+                    }
+                }]
+            }).dxFilterBuilder("instance");
+
+
+        clickByValue();
+        assert.equal(event, "customOperation.editorTemplate", "customOperation.editorTemplate is executed");
+
+        instance.option("value", ["Field", "=", 2]);
+        clickByValue();
+        assert.equal(event, "field.editorTemplate", "field.editorTemplate is executed");
+    });
+
+    QUnit.test("between.editorTemplate", function(assert) {
+        // arrange
+        var fields = [{
+            dataField: "Field",
+            dataType: "number"
+        }];
+
+        $("#container").dxFilterBuilder({
+            value: [
+                ["Field", "between", [1, 2]]
+            ],
+            fields: fields,
+            customOperations: [{
+                name: "between"
+            }]
+        });
+
+        // act
+        clickByValue();
+
+        var $rangeContainer = $("." + FILTER_BUILDER_RANGE_CLASS),
+            $editorStart = $rangeContainer.find("." + FILTER_BUILDER_RANGE_START_CLASS),
+            $editorEnd = $rangeContainer.find("." + FILTER_BUILDER_RANGE_END_CLASS),
+            $separator = $rangeContainer.find("." + FILTER_BUILDER_RANGE_SEPARATOR_CLASS);
+
+        // assert
+        assert.equal($editorStart.length, 1, "Start editor is created");
+        assert.equal($editorEnd.length, 1, "End editor is created");
+        assert.equal($separator.length, 1, "Separator is created");
+        assert.equal($editorStart.dxNumberBox("instance").option("value"), 1, "Start editor value = 1");
+        assert.equal($editorEnd.dxNumberBox("instance").option("value"), 2, "End editor value = 2");
     });
 });
 
@@ -879,7 +1089,7 @@ QUnit.module("on value changed", function() {
         clickByButtonAndSelectMenuItem($("." + FILTER_BUILDER_IMAGE_ADD_CLASS).eq(1), 0);
         assert.notEqual(instance.option("value"), value);
 
-        //remove group
+        // remove group
         value = instance.option("value");
         clickByButtonAndSelectMenuItem($("." + FILTER_BUILDER_IMAGE_REMOVE_CLASS).eq(1), 0);
         assert.notEqual(instance.option("value"), value);
@@ -899,7 +1109,7 @@ QUnit.module("on value changed", function() {
 
         assert.notEqual(instance.option("value"), value);
 
-        //remove condition
+        // remove condition
         value = instance.option("value");
         clickByButtonAndSelectMenuItem($("." + FILTER_BUILDER_IMAGE_REMOVE_CLASS).eq(1), 0);
 
@@ -917,7 +1127,7 @@ QUnit.module("on value changed", function() {
 
         assert.deepEqual(instance.option("value"), ["Field", "contains", ""]);
 
-        //remove condition
+        // remove condition
         clickByButtonAndSelectMenuItem($("." + FILTER_BUILDER_IMAGE_REMOVE_CLASS).eq(0), 0);
 
         assert.deepEqual(instance.option("value"), null);
@@ -936,7 +1146,7 @@ QUnit.module("on value changed", function() {
 
         assert.equal(instance.option("value"), value);
 
-        //remove condition
+        // remove condition
         value = instance.option("value");
         clickByButtonAndSelectMenuItem($("." + FILTER_BUILDER_IMAGE_REMOVE_CLASS).eq(1), 0);
 
@@ -1001,5 +1211,82 @@ QUnit.module("on value changed", function() {
         assert.equal(instance.option("value"), value);
         assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).length, 1);
     });
+
+    QUnit.test("change between value", function(assert) {
+        // arrange
+        var fields = [{
+                dataField: "Field",
+                dataType: "number"
+            }],
+            value = [
+                ["Field", "between", []]
+            ],
+            instance = $("#container").dxFilterBuilder({
+                value: value,
+                fields: fields,
+                customOperations: [{
+                    name: "between"
+                }]
+            }).dxFilterBuilder("instance");
+
+        // act
+        clickByValue();
+
+        var $editorStart = $("." + FILTER_BUILDER_RANGE_START_CLASS);
+        $editorStart.dxNumberBox("instance").option("value", 0);
+        clickByOutside();
+
+        // assert
+        assert.deepEqual(instance.option("value")[2], [0, null]);
+
+        // act
+        instance.option("value", value);
+        clickByValue();
+
+        var $editorEnd = $("." + FILTER_BUILDER_RANGE_END_CLASS);
+        $editorEnd.dxNumberBox("instance").option("value", 0);
+        clickByOutside();
+
+        // assert
+        assert.deepEqual(instance.option("value")[2], [null, 0]);
+    });
 });
 
+QUnit.module("Methods", function() {
+    QUnit.test("getFilterExpression", function(assert) {
+        // arrange
+        var instance = $("#container").dxFilterBuilder({
+            value: [
+                ["State", "<>", "K&S Music"],
+                "and",
+                ["OrderDate", "lastDay"]
+            ],
+            fields: [{
+                dataField: "State",
+                calculateFilterExpression: function(filterValue, selectedFieldOperation) {
+                    return [[this.dataField, selectedFieldOperation, filterValue], "and", [this.dataField, "=", "Some state"]];
+                }
+            }, {
+                dataField: "OrderDate"
+            }],
+            customOperations: [{
+                name: "lastDay",
+                dataTypes: ["string"],
+                calculateFilterExpression: function(filterValue, field) {
+                    return [field.dataField, ">", "1"];
+                }
+            }]
+        }).dxFilterBuilder("instance");
+
+        // act, assert
+        assert.deepEqual(instance.getFilterExpression(), [
+            [
+                ["State", "<>", "K&S Music"],
+                "and",
+                ["State", "=", "Some state"]
+            ],
+            "and",
+            ["OrderDate", ">", "1"]
+        ]);
+    });
+});

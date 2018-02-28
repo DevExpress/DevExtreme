@@ -42,7 +42,7 @@ function createTick(axis, renderer, tickOptions, gridOptions, skippedCategory, s
                     return;
                 }
 
-                //DEPRECATED IN 15_2
+                // DEPRECATED IN 15_2
                 if(this.withoutPath) {
                     return;
                 }
@@ -70,7 +70,7 @@ function createTick(axis, renderer, tickOptions, gridOptions, skippedCategory, s
                     return;
                 }
 
-                //DEPRECATED IN 15_2
+                // DEPRECATED IN 15_2
                 if(this.withoutLabel) {
                     return;
                 }

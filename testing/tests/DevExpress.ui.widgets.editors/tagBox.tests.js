@@ -564,7 +564,7 @@ QUnit.test("TagBox has right tag order if byKey return value in wrong order", fu
             paging: false
         })
     });
-    this.clock.tick(timeToWait * 3);
+    this.clock.tick(timeToWait * 4);
 
     var content = $tagBox.find("." + TAGBOX_TAG_CONTENT_CLASS);
     assert.equal(content.eq(0).text(), "1", "first tag has right content");
@@ -2533,7 +2533,7 @@ QUnit.test("size of input is 1 when searchEnabled and editEnabled is false", fun
         editEnabled: false
     });
     var $input = $tagBox.find("input");
-    //NOTE: width should be 0.1 because of T393423
+    // NOTE: width should be 0.1 because of T393423
     assert.roughEqual($input.width(), 0.1, 0.1, "input has correct width");
 });
 
@@ -2714,8 +2714,8 @@ QUnit.test("remove tag by backspace", function(assert) {
 
 QUnit.test("removing tag by backspace should not load data from DS", function(assert) {
     var data = ["one", "two", "three"],
-        loadedCount = 0
-    ;
+        loadedCount = 0;
+
     var $tagBox = $("#tagBox").dxTagBox({
         dataSource: {
             load: function() {
@@ -2727,6 +2727,7 @@ QUnit.test("removing tag by backspace should not load data from DS", function(as
             }
         },
         value: ["one", "two"],
+        deferRendering: true,
         searchEnabled: true,
         searchTimeout: 0
     });
@@ -3985,8 +3986,8 @@ QUnit.test("focusOut should be prevented when tagContainer clicked - T454876", f
     var $inputWrapper = this.$element.find(".dx-dropdowneditor-input-wrapper");
 
     $inputWrapper.on("mousedown", function(e) {
-        //note: you should not prevent pointerdown because it will prevent click on ios real devices
-        //you must use preventDefault in code because it is possible to use .on('focusout', handler) instead of onFocusOut option
+        // note: you should not prevent pointerdown because it will prevent click on ios real devices
+        // you must use preventDefault in code because it is possible to use .on('focusout', handler) instead of onFocusOut option
         assert.ok(e.isDefaultPrevented(), "mousedown was prevented and lead to focusout prevent");
     });
 
@@ -4277,7 +4278,7 @@ QUnit.test("first page should be displayed after search and tag select", functio
     assert.equal($.trim($(".dx-item").first().text()), "0", "first item loaded");
 });
 
-QUnit.test("'byKey' called once per 'value' item (T533200)", function(assert) {
+QUnit.test("'byKey' should not be called on initialization (T533200)", function(assert) {
     var byKeySpy = sinon.spy(function(key) {
         return key;
     });
@@ -4292,8 +4293,9 @@ QUnit.test("'byKey' called once per 'value' item (T533200)", function(assert) {
         }
     });
 
-    assert.equal(byKeySpy.callCount, 1);
+    assert.equal(byKeySpy.callCount, 0);
 });
+
 
 QUnit.module("performance");
 
@@ -4416,7 +4418,7 @@ QUnit.test("Select All should use cache", function(assert) {
         keyGetterCounter++;
         return this._id;
     };
-    for(var i = 1; i <= 10; i++) {
+    for(var i = 1; i <= 100; i++) {
         var item = { _id: i, text: "item " + i };
         Object.defineProperty(item, "id", {
             get: getter,
@@ -4443,14 +4445,80 @@ QUnit.test("Select All should use cache", function(assert) {
 
     var isValueEqualsSpy = sinon.spy(tagBox, "_isValueEquals");
 
-    //act
+    // act
     keyGetterCounter = 0;
     $(".dx-list-select-all-checkbox").trigger("dxclick");
 
-    //assert
-    assert.equal(keyGetterCounter, 144, "key getter call count");
+    // assert
+    assert.equal(keyGetterCounter, 1404, "key getter call count");
     assert.equal(isValueEqualsSpy.callCount, 0, "_isValueEquals is not called");
 });
+
+QUnit.test("load filter should be undefined when tagBox has a lot of initial values", function(assert) {
+    var load = sinon.stub();
+
+    $("#tagBox").dxTagBox({
+        dataSource: {
+            load: load
+        },
+        value: Array.apply(null, { length: 2000 }).map(Number.call, Number),
+        valueExpr: "id",
+        displayExpr: "text"
+    });
+
+    assert.strictEqual(load.getCall(0).args[0].filter, undefined);
+});
+
+QUnit.test("load filter should be array when tagBox has not a lot of initial values", function(assert) {
+    var load = sinon.stub();
+
+    $("#tagBox").dxTagBox({
+        dataSource: {
+            load: load
+        },
+        value: Array.apply(null, { length: 2 }).map(Number.call, Number),
+        valueExpr: "id",
+        displayExpr: "text"
+    });
+
+    assert.deepEqual(load.getCall(0).args[0].filter, [["id", "=", 0], "or", ["id", "=", 1]]);
+});
+
+QUnit.test("initial items value should be loaded when filter is not implemented in load method", function(assert) {
+    var load = sinon.stub().returns([{ id: 1, text: "item 1" }, { id: 2, text: "item 2" }, { id: 3, text: "item 3" }]),
+        $tagBox = $("#tagBox").dxTagBox({
+            dataSource: {
+                load: load
+            },
+            value: [2, 3],
+            valueExpr: "id",
+            displayExpr: "text"
+        });
+
+    assert.equal($tagBox.find("." + TAGBOX_TAG_CLASS).text(), "item 2item 3");
+});
+
+QUnit.test("useSubmitBehavior option", function(assert) {
+    var $tagBox = $("#tagBox").dxTagBox({
+            items: [1, 2],
+            useSubmitBehavior: false,
+            value: [1]
+        }),
+        instance = $tagBox.dxTagBox("instance");
+
+    assert.equal($tagBox.find("select").length, 0, "submit element is not rendered on init");
+
+    instance.option("value", [1, 2]);
+    assert.equal($tagBox.find("select").length, 0, "submit element is not rendered after value change");
+
+    instance.option("useSubmitBehavior", true);
+    assert.equal($tagBox.find("select").length, 1, "submit element is rendered after option changed");
+    assert.equal($tagBox.find("option").length, 2, "2 options was rendered");
+
+    instance.option("useSubmitBehavior", false);
+    assert.equal($tagBox.find("select").length, 0, "submit element was removed");
+});
+
 
 QUnit.test("Unnecessary a load calls do not happen of custom store when item is selected", function(assert) {
     var loadCallCounter = 0,
@@ -4570,12 +4638,16 @@ QUnit.test("tagBox should not render duplicated tags after searching", function(
         dataSource: new CustomStore({
             key: "id",
             load: function(loadOptions) {
-                var loadedItems = [];
-                if(!loadOptions.searchValue) return data;
+                var loadedItems = [],
+                    filteredData = loadOptions.filter ? dataQuery(data).filter(loadOptions.filter).toArray() : data;
+
+                if(!loadOptions.searchValue) {
+                    return filteredData;
+                }
 
                 var d = $.Deferred();
                 setTimeout(function(i) {
-                    data.forEach(function(i) {
+                    filteredData.forEach(function(i) {
                         if(i.Name.indexOf(loadOptions.searchValue) >= 0) {
                             loadedItems.push(i);
                         }

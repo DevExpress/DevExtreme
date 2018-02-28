@@ -407,7 +407,7 @@ QUnit.test("Send data with request (cached resources)", function(assert) {
             dataType: testData[i].dataType,
             contentType: testData[i].contentType
         });
-        //https://github.com/jquery/jquery/issues/2658
+        // https://github.com/jquery/jquery/issues/2658
         if(compareVersion($.fn.jquery, [3], 1) < 0) {
             if(testData[i].requestBody) {
                 testData[i].requestBody = testData[i].requestBody.replace("%20", "+");
@@ -517,7 +517,7 @@ QUnit.test("Synchronous request", function(assert) {
     ajax.sendRequest({
         url: "/json-url",
         async: false,
-        timeout: 1000 //is not valid for sync request
+        timeout: 1000 // is not valid for sync request
     });
 
     assert.equal(this.requests.length, 1);
@@ -562,7 +562,7 @@ QUnit.test("X-Requested-With headers (cors)", function(assert) {
         ajax.sendRequest({
             url: testData[i].url
         });
-        //jQuery checks cors support on start and doesn't create xhr object on $.ajax call
+        // jQuery checks cors support on start and doesn't create xhr object on $.ajax call
         assert.notOk(this.requests[i] && this.requests[i].requestHeaders["X-Requested-With"]);
     }
 });
@@ -606,6 +606,55 @@ QUnit.test("cache=false for dataType=json", function(assert) {
     });
 
     assert.ok(/_=\d+/.test(this.requests[0].url));
+});
+
+QUnit.test("xhr is available in done", function(assert) {
+    var xhrCount = 0;
+    var requests = this.requests;
+
+    function check(dataType, statusCode, responseText, options) {
+        options = options || { };
+        options.dataType = dataType;
+
+        ajax.sendRequest(options).done(function(data, statusText, xhr) {
+            if("getResponseHeader" in xhr) {
+                xhrCount++;
+            }
+        });
+
+        requests.pop().respond(statusCode, { }, responseText);
+    }
+
+    check("json", 200, "{}");
+    check("jsonp", 200, "cb({})", { jsonpCallback: "cb" });
+    check("script", 200, ";");
+    check("text", 200, "");
+    check(null, 204, null);
+
+    assert.equal(xhrCount, 5);
+});
+
+QUnit.test("special values in data", function(assert) {
+    ajax.sendRequest({
+        url: "any",
+        data: {
+            a: undefined,
+            b: null,
+            c: NaN
+        }
+    });
+
+    var url = this.requests[0].url;
+
+    // undefined values are excluded
+    assert.ok(url.indexOf("a=") < 0);
+
+    // null values included as empty strings
+    assert.ok(url.indexOf("b=") > -1);
+    assert.ok(url.indexOf("b=null") < 0);
+
+    // NaN values are kept
+    assert.ok(url.indexOf("c=NaN") > -1);
 });
 
 QUnit.module("sendRequest async tests");

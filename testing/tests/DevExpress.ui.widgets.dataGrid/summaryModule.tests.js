@@ -90,17 +90,17 @@ QUnit.module("Summary footer", {
 });
 
 QUnit.test("Render when summary is defined", function(assert) {
-    //arrange
+    // arrange
     var footerView = this.createFooterView(this.defaultFooterOptions),
         $summary,
         $cells;
 
-    //act
+    // act
     footerView.render($("#container"));
     $summary = $(".dx-datagrid-summary-item");
     $cells = $(".dx-row td");
 
-    //assert
+    // assert
     assert.equal($("col").length, 5, "col elements count");
     assert.equal($(".dx-datagrid-total-footer").length, 1, "footer element");
     assert.equal($(".dx-datagrid-scroll-container").length, 1, "scroll container");
@@ -115,7 +115,7 @@ QUnit.test("Render when summary is defined", function(assert) {
     });
 });
 
-//T298904
+// T298904
 QUnit.test("rowClick event when summary is defined", function(assert) {
     this.options = {
         onRowClick: function(e) {
@@ -123,7 +123,7 @@ QUnit.test("rowClick event when summary is defined", function(assert) {
         }
     };
 
-    //arrange
+    // arrange
     var footerView = this.createFooterView(this.defaultFooterOptions),
         $summary,
         rowClickArgs = [];
@@ -132,10 +132,10 @@ QUnit.test("rowClick event when summary is defined", function(assert) {
     footerView.render($("#container"));
     $summary = $(".dx-datagrid-summary-item");
 
-    //act
+    // act
     $summary.eq(1).trigger("dxclick");
 
-    //assert
+    // assert
     assert.equal(rowClickArgs.length, 1, "rowClick call count");
     assert.ok($(rowClickArgs[0].rowElement).hasClass("dx-row"), "rowElement is defined");
     assert.equal(rowClickArgs[0].rowType, "totalFooter", "rowType is defined");
@@ -144,23 +144,23 @@ QUnit.test("rowClick event when summary is defined", function(assert) {
 });
 
 QUnit.test("Summary is not rendered when summary is not defined in an options", function(assert) {
-    //arrange
+    // arrange
     var footerView = this.createFooterView();
 
-    //act
+    // act
     footerView.render($("#container"));
 
-    //assert
+    // assert
     assert.ok(!$(".dx-datagrid-total-footer").length, "footer element");
     assert.ok(!$(".dx-datagrid-summary-item").length, "summary elements");
 });
 
 QUnit.test("Text alignment by default", function(assert) {
-    //arrange
+    // arrange
     var footerView = this.createFooterView(this.defaultFooterOptions),
         $summaryItems;
 
-    //act
+    // act
     footerView.render($("#container"));
     $summaryItems = $(".dx-datagrid-summary-item");
 
@@ -173,7 +173,7 @@ QUnit.test("Text alignment by default", function(assert) {
 });
 
 QUnit.test("Customize text alignment", function(assert) {
-    //arrange
+    // arrange
     var footerView = this.createFooterView(getFooterOptions({
             0: [
             { summaryType: "count", value: 100, alignment: "center" },
@@ -187,7 +187,7 @@ QUnit.test("Customize text alignment", function(assert) {
         }, 5)),
         $summaryItems;
 
-    //act
+    // act
     footerView.render($("#container"));
     $summaryItems = $(".dx-datagrid-summary-item");
 
@@ -200,22 +200,22 @@ QUnit.test("Customize text alignment", function(assert) {
 });
 
 QUnit.test("Repeated rendering", function(assert) {
-    //arrange
+    // arrange
     var footerView = this.createFooterView(this.defaultFooterOptions),
         $container = $("#container");
 
-    //act
+    // act
     footerView.render($container);
     footerView.render($container);
 
-    //assert
+    // assert
     assert.equal($("col").length, 5, "col elements count");
     assert.equal($(".dx-datagrid-total-footer").length, 1, "footer element");
     assert.equal($(".dx-datagrid-summary-item").length, 5, "summary elements");
 });
 
 QUnit.test("View is rendered when changed event with changeType 'refresh' of dataController is occurred", function(assert) {
-    //arrange
+    // arrange
     var summaryCount = { summaryType: "count", value: 100 },
         footerView = this.createFooterView(getFooterOptions({
             0: [
@@ -227,23 +227,23 @@ QUnit.test("View is rendered when changed event with changeType 'refresh' of dat
         $summary,
         $container = $("#container");
 
-    //act
+    // act
     footerView.render($container);
     summaryCount.value = 21;
 
-    //T246726
+    // T246726
     this.rowsView.render = function() { };
     this.dataController.changed.fire({ changeType: "refresh" });
 
     $summary = $(".dx-datagrid-summary-item");
 
-    //assert
+    // assert
     assert.equal($summary.eq(0).text(), "Count: 21");
 });
 
-//T563460
+// T563460
 QUnit.test("View is rendered when changed event with changeType 'append' of dataController is occurred", function(assert) {
-    //arrange
+    // arrange
     var summaryCount = { summaryType: "count", value: 100 },
         footerView = this.createFooterView(getFooterOptions({
             0: [
@@ -253,18 +253,18 @@ QUnit.test("View is rendered when changed event with changeType 'append' of data
         $summary,
         $container = $("#container");
 
-    //act
+    // act
     footerView.render($container);
     summaryCount.value = 21;
     this.dataController.changed.fire({ changeType: "append" });
 
-    //assert
+    // assert
     $summary = $(".dx-datagrid-summary-item");
     assert.equal($summary.eq(0).text(), "Count: 21");
 });
 
 QUnit.test("View is rendered when changed event with changeType 'prepend' of dataController is occurred", function(assert) {
-    //arrange
+    // arrange
     var summaryCount = { summaryType: "count", value: 100 },
         footerView = this.createFooterView(getFooterOptions({
             0: [
@@ -274,19 +274,19 @@ QUnit.test("View is rendered when changed event with changeType 'prepend' of dat
         $summary,
         $container = $("#container");
 
-    //act
+    // act
     footerView.render($container);
     summaryCount.value = 21;
     this.dataController.changed.fire({ changeType: "prepend" });
 
-    //assert
+    // assert
     $summary = $(".dx-datagrid-summary-item");
     assert.equal($summary.eq(0).text(), "Count: 21");
 });
 
-//T246726
+// T246726
 QUnit.test("View is not rendered when changed event with changeType 'update' of dataController is occurred", function(assert) {
-    //arrange
+    // arrange
     var summaryCount = { summaryType: "count", value: 100 },
         footerView = this.createFooterView(getFooterOptions({
             0: [
@@ -299,7 +299,7 @@ QUnit.test("View is not rendered when changed event with changeType 'update' of 
         $summary,
         $container = $("#container");
 
-    //act
+    // act
     footerView.render($container);
     summaryCount.value = 21;
 
@@ -311,18 +311,18 @@ QUnit.test("View is not rendered when changed event with changeType 'update' of 
 
     $summary = $(".dx-datagrid-summary-item");
 
-    //assert
+    // assert
     assert.ok(!isRendered, "footer view is not rendered");
     assert.equal($summary.eq(0).text(), "Count: 100");
 });
 
 QUnit.test("View is rendered when width of column is changed", function(assert) {
-    //arrange
+    // arrange
     var footerView = this.createFooterView(this.defaultFooterOptions),
         $cols,
         $container = $("#container");
 
-    //act
+    // act
     this.rowsView.render($container);
     footerView.render($container);
 
@@ -332,17 +332,17 @@ QUnit.test("View is rendered when width of column is changed", function(assert) 
 
     $cols = $(".dx-datagrid-total-footer" + " col");
 
-    //assert
+    // assert
     assert.equal($cols.eq(0).css("width"), "100px");
 });
 
 QUnit.test("View is not rendered when columnChanged is occurred", function(assert) {
-    //arrange
+    // arrange
     var isRendered,
         footerView = this.createFooterView(this.defaultFooterOptions),
         $container = $("#container");
 
-    //act
+    // act
     this.rowsView.render($container);
     footerView.render($container);
 
@@ -352,12 +352,12 @@ QUnit.test("View is not rendered when columnChanged is occurred", function(asser
 
     this.columnsController.columnsChanged.fire({ columnIndex: 0, optionNames: { test: true, length: 1 }, changeTypes: { columns: true, length: 1 } });
 
-    //assert
+    // assert
     assert.ok(!isRendered);
 });
 
 QUnit.test("Value format for summary item", function(assert) {
-    //arrange
+    // arrange
     var footerView = this.createFooterView(getFooterOptions({
             0: [
                 { summaryType: "min", valueFormat: "currency", value: 100 },
@@ -367,17 +367,17 @@ QUnit.test("Value format for summary item", function(assert) {
         $container = $("#container"),
         $summary;
 
-    //act
+    // act
     footerView.render($container);
     $summary = $(".dx-datagrid-summary-item");
 
-    //assert
+    // assert
     assert.equal($summary.eq(0).text(), "Min: $100");
     assert.equal($summary.eq(1).text(), "Max: 120.0001");
 });
 
 QUnit.test("Display format for summary item", function(assert) {
-    //arrange
+    // arrange
     var footerView = this.createFooterView(getFooterOptions({
             0: [
                 { summaryType: "min", valueFormat: "currency", value: 100, displayFormat: "Min: {0}" },
@@ -387,17 +387,17 @@ QUnit.test("Display format for summary item", function(assert) {
         $container = $("#container"),
         $summary;
 
-    //act
+    // act
     footerView.render($container);
     $summary = $(".dx-datagrid-summary-item");
 
-    //assert
+    // assert
     assert.equal($summary.eq(0).text(), "Min: $100");
     assert.equal($summary.eq(1).text(), "120.0001 - Max");
 });
 
 QUnit.test("Customize text for summary items", function(assert) {
-    //arrange
+    // arrange
     var customizeText = function(cellInfo) {
             return "test " + cellInfo.valueText + " postfix";
         },
@@ -410,17 +410,17 @@ QUnit.test("Customize text for summary items", function(assert) {
         $container = $("#container"),
         $summary;
 
-    //act
+    // act
     footerView.render($container);
     $summary = $(".dx-datagrid-summary-item");
 
-    //assert
+    // assert
     assert.equal($summary.eq(0).text(), "test Min: $100 postfix");
     assert.equal($summary.eq(1).text(), "test 12,000% - Max postfix");
 });
 
 QUnit.test("Custom Css class for summary item", function(assert) {
-    //arrange
+    // arrange
     var footerView = this.createFooterView(getFooterOptions({
             0: [
             { summaryType: "min", cssClass: "min-bold" },
@@ -433,25 +433,25 @@ QUnit.test("Custom Css class for summary item", function(assert) {
         $container = $("#container"),
         $summary;
 
-    //act
+    // act
     footerView.render($container);
     $summary = $(".dx-datagrid-summary-item");
 
-    //assert
+    // assert
     assert.ok($summary.eq(0).hasClass("min-bold"), "min-bold class");
     assert.ok($summary.eq(1).hasClass("max-italic"), "max-italic class");
     assert.ok($summary.eq(2).hasClass("count-red"), "count-red class");
 });
 
 QUnit.test("Cell is rendered in not a command column", function(assert) {
-    //arrange
+    // arrange
     var summaryTexts = {
             min: "Min: {0}",
             count: "Count: {0}"
         },
         $cellElements = [$("<td/>"), $("<td/>")];
 
-    //act
+    // act
     summaryModule.renderSummaryCell($cellElements[0], {
         summaryItems: [{
             column: "name",
@@ -462,10 +462,10 @@ QUnit.test("Cell is rendered in not a command column", function(assert) {
         summaryTexts: summaryTexts
     });
 
-    //assert
+    // assert
     assert.equal($cellElements[0].text(), 119, "column is not command");
 
-    //act
+    // act
     summaryModule.renderSummaryCell($cellElements[1], {
         summaryItems: [{
             column: "age",
@@ -476,12 +476,12 @@ QUnit.test("Cell is rendered in not a command column", function(assert) {
         summaryTexts: summaryTexts
     });
 
-    //assert
+    // assert
     assert.equal($cellElements[1].html(), "", "command column");
 });
 
 QUnit.test("onCellPrepared for totalFooter", function(assert) {
-    //arrange
+    // arrange
     var footerView,
         resultOptions,
         countCallCellPrepared = 0;
@@ -498,10 +498,10 @@ QUnit.test("onCellPrepared for totalFooter", function(assert) {
 
     footerView = this.createFooterView(this.defaultFooterOptions);
 
-    //act
+    // act
     footerView.render($("#container"));
 
-    //assert
+    // assert
     assert.equal(countCallCellPrepared, 5, "countCallCellPrepared");
     assert.equal(resultOptions.columnIndex, 0, "columnIndex");
     assert.strictEqual(resultOptions.rowType, "totalFooter", "rowType");
@@ -512,7 +512,7 @@ QUnit.test("onCellPrepared for totalFooter", function(assert) {
 });
 
 QUnit.test("onRowPrepared for totalFooter", function(assert) {
-    //arrange
+    // arrange
     var footerView,
         resultOptions,
         countCallRowPrepared = 0;
@@ -526,19 +526,19 @@ QUnit.test("onRowPrepared for totalFooter", function(assert) {
 
     footerView = this.createFooterView(this.defaultFooterOptions);
 
-    //act
+    // act
     footerView.render($("#container"));
 
-    //assert
+    // assert
     assert.equal(countCallRowPrepared, 1, "countCallRowPrepared");
     assert.equal(resultOptions.columns.length, 5, "columns");
     assert.strictEqual(resultOptions.rowType, "totalFooter", "rowType");
     assert.equal(resultOptions.summaryCells.length, 5, "summaryCells");
 });
 
-//T373746
+// T373746
 QUnit.test("Change scroll position after resize", function(assert) {
-    //arrange
+    // arrange
     var footerView = this.createFooterView(this.defaultFooterOptions, null, [
             { caption: 'Column 1', width: 200 },
             { caption: 'Column 2', width: 200 },
@@ -551,11 +551,11 @@ QUnit.test("Change scroll position after resize", function(assert) {
     footerView.render($testElement);
     footerView.scrollTo({ left: 1000 });
 
-    //act
+    // act
     footerView.render($testElement);
     footerView.resize();
 
-    //assert
+    // assert
     assert.equal($testElement.find(".dx-datagrid-scroll-container").scrollLeft(), 700, "scroll left");
 });
 
@@ -594,7 +594,7 @@ QUnit.module("Group footer", {
 });
 
 QUnit.test("Show summary", function(assert) {
-    //arrange
+    // arrange
     var rowsView = this.createRowsView([{
             rowType: "groupFooter", values: [], summaryCells: [
                 [
@@ -608,11 +608,11 @@ QUnit.test("Show summary", function(assert) {
         }]),
         $summaryItems;
 
-    //act
+    // act
     rowsView.render($("#container"));
     $summaryItems = $(".dx-datagrid-summary-item");
 
-    //assert
+    // assert
     assert.ok($(".dx-datagrid-group-footer").length, "group footer class");
     assert.equal($summaryItems.length, 3, "summary items count");
     assert.ok($summaryItems.eq(0).closest(".dx-datagrid-rowsview").length, "rowsView is parent");
@@ -622,7 +622,7 @@ QUnit.test("Show summary", function(assert) {
 });
 
 QUnit.test("onCellPrepared for group footer", function(assert) {
-    //arrange
+    // arrange
     var rowsView,
         resultOptions,
         countCallCellPrepared = 0;
@@ -649,10 +649,10 @@ QUnit.test("onCellPrepared for group footer", function(assert) {
             ]]
     }]);
 
-    //act
+    // act
     rowsView.render($("#container"));
 
-    //assert
+    // assert
     assert.equal(countCallCellPrepared, 3, "countCallCellPrepared");
     assert.equal(resultOptions.rowIndex, 0, "rowIndex");
     assert.equal(resultOptions.columnIndex, 0, "columnIndex");
@@ -662,7 +662,7 @@ QUnit.test("onCellPrepared for group footer", function(assert) {
 });
 
 QUnit.test("onRowPrepared for group footer", function(assert) {
-    //arrange
+    // arrange
     var rowsView,
         resultOptions,
         countCallRowPrepared = 0;
@@ -686,10 +686,10 @@ QUnit.test("onRowPrepared for group footer", function(assert) {
             ]]
     }]);
 
-    //act
+    // act
     rowsView.render($("#container"));
 
-    //assert
+    // assert
     assert.equal(countCallRowPrepared, 1, "countCallRowPrepared");
     assert.equal(resultOptions.columns.length, 3, "columns");
     assert.strictEqual(resultOptions.rowType, "groupFooter", "rowType");
@@ -739,7 +739,7 @@ QUnit.module("Footer with real dataController and columnController", {
 });
 
 QUnit.test("Summary items with valueFormat and displayFormat", function(assert) {
-    //arrange, act
+    // arrange, act
     this.setupDataGridModules({
         summary: {
             totalItems: [
@@ -785,7 +785,7 @@ QUnit.test("Summary items with valueFormat and displayFormat", function(assert) 
     this.footerView.render($("#container"));
     var $summary = $(".dx-datagrid-summary-item");
 
-    //assert
+    // assert
     assert.equal($summary.eq(0).text(), "Names count: 7", "names count");
     assert.equal($summary.eq(1).text(), "Very old man: 21", "names count");
     assert.equal($summary.eq(2).text(), "Very young man: 15", "names count");
@@ -795,9 +795,9 @@ QUnit.test("Summary items with valueFormat and displayFormat", function(assert) 
     assert.equal($summary.eq(6).text(), "Max: Sunday, May 18, 2014", "date max custom valueFormat");
 });
 
-//T348335
+// T348335
 QUnit.test("Summary items when summary.texts are not defined", function(assert) {
-    //arrange, act
+    // arrange, act
     this.setupDataGridModules({
         summary: {
             texts: null,
@@ -816,13 +816,13 @@ QUnit.test("Summary items when summary.texts are not defined", function(assert) 
     this.footerView.render($("#container"));
     var $summary = $(".dx-datagrid-summary-item");
 
-    //assert
+    // assert
     assert.equal($summary.eq(0).text(), "7", "names count");
     assert.equal($summary.eq(1).text(), "21", "names count");
 });
 
 QUnit.test("Summary items with default and custom valueFormat in group rows", function(assert) {
-    //arrange, act
+    // arrange, act
 
     this.setupDataGridModules({
         customizeColumns: function(columns) {
@@ -846,12 +846,12 @@ QUnit.test("Summary items with default and custom valueFormat in group rows", fu
     this.rowsView.render($("#container"));
     var $summary = $(".dx-group-row td:last-child");
 
-    //assert
+    // assert
     assert.equal($summary.eq(0).text(), "Test cash: 12 (Max of Reg Date is 5/23/2010, Max of Reg Date is Sunday, May 23, 2010)", "Group summary date format in default and custom valueFormat");
 });
 
 QUnit.test("Summary items with default and custom valueFormat in group footer", function(assert) {
-    //arrange, act
+    // arrange, act
 
     this.setupDataGridModules({
         customizeColumns: function(columns) {
@@ -877,13 +877,13 @@ QUnit.test("Summary items with default and custom valueFormat in group footer", 
     this.rowsView.render($("#container"));
     var $summary = $(".dx-datagrid-summary-item");
 
-    //assert
+    // assert
     assert.equal($summary.eq(0).text(), "Max: 5/23/2010", "Group summary date format in shortDate");
     assert.equal($summary.eq(1).text(), "Max: Sunday, May 23, 2010", "Group summary date format in custom valueFormat");
 });
 
 QUnit.test("Show in column", function(assert) {
-    //arrange, act
+    // arrange, act
     this.setupDataGridModules({
         summary: {
             totalItems: [
@@ -904,7 +904,7 @@ QUnit.test("Show in column", function(assert) {
     var $summary = $(".dx-datagrid-summary-item"),
         $summaryCells = $(".dx-datagrid-total-footer" + " td");
 
-    //assert
+    // assert
     assert.equal($summaryCells.length, 4, "cells count");
     assert.equal($summaryCells.eq(0).children().length, 2, "1 cell children count");
     assert.equal($summaryCells.eq(1).children().length, 0, "2 cell children count");
@@ -914,7 +914,7 @@ QUnit.test("Show in column", function(assert) {
 });
 
 QUnit.test("getTotalSummaryValue api method", function(assert) {
-    //arrange
+    // arrange
     this.setupDataGridModules({
         summary: {
             totalItems: [
@@ -935,12 +935,12 @@ QUnit.test("getTotalSummaryValue api method", function(assert) {
         }
     });
 
-    //act, assert
+    // act, assert
     assert.equal(this.dataController.getTotalSummaryValue("test cash"), 1200700);
 });
 
 QUnit.test("getTotalSummaryValue api method for show in column", function(assert) {
-    //arrange
+    // arrange
     this.setupDataGridModules({
         summary: {
             totalItems: [
@@ -962,12 +962,12 @@ QUnit.test("getTotalSummaryValue api method for show in column", function(assert
         }
     });
 
-    //act, assert
+    // act, assert
     assert.equal(this.dataController.getTotalSummaryValue("test cash"), 1216857);
 });
 
 QUnit.test("Invalid value is not shown", function(assert) {
-    //arrange act
+    // arrange act
     this.setupDataGridModules();
 
     var summaryItems = [
@@ -985,7 +985,7 @@ QUnit.test("Invalid value is not shown", function(assert) {
             return column.index;
         });
 
-    //assert
+    // assert
     assert.deepEqual(summaryCells, [[], [], [{
         "column": "cash",
         "summaryType": "sum",
@@ -993,9 +993,9 @@ QUnit.test("Invalid value is not shown", function(assert) {
     }]]);
 });
 
-//T239191
+// T239191
 QUnit.test("Show group footer", function(assert) {
-    //arrange
+    // arrange
     var that = this,
         testElement = $("#container");
 
@@ -1013,10 +1013,10 @@ QUnit.test("Show group footer", function(assert) {
         }
     });
 
-    //act
+    // act
     that.rowsView.render(testElement);
 
-    //assert
+    // assert
     assert.equal(testElement.find(".dx-datagrid-group-footer").length, 6, "has group footer rows");
     assert.equal(testElement.find(".dx-datagrid-group-footer").first().find("td").length, 4, "count cell in group footer row");
     assert.strictEqual(testElement.find(".dx-datagrid-group-footer").first().find("td").eq(0).text(), "", "text first cell in group footer row");
@@ -1025,9 +1025,9 @@ QUnit.test("Show group footer", function(assert) {
     assert.ok(!testElement.find(".dx-datagrid-group-footer").first().find(".dx-datagrid-expand").length, "not has expand cell in group footer row");
 });
 
-//T341607
+// T341607
 QUnit.test("Show group footer when edit column exists", function(assert) {
-    //arrange
+    // arrange
     var that = this,
         testElement = $("#container");
 
@@ -1047,10 +1047,10 @@ QUnit.test("Show group footer when edit column exists", function(assert) {
         }
     });
 
-    //act
+    // act
     that.rowsView.render(testElement);
 
-    //assert
+    // assert
     assert.equal(testElement.find(".dx-datagrid-group-footer").length, 6, "has group footer rows");
     var $groupFooterEditCell = testElement.find(".dx-datagrid-group-footer").first().find("td").last();
     assert.ok($groupFooterEditCell.hasClass("dx-command-edit"), "is command edit cell");
@@ -1058,9 +1058,9 @@ QUnit.test("Show group footer when edit column exists", function(assert) {
 });
 
 
-//T324170
+// T324170
 QUnit.test("Show group footer when has calculateCustomSummary and groupItems with showInColumn and without column", function(assert) {
-    //arrange
+    // arrange
     var that = this,
         $testElement = $("#container");
 
@@ -1081,10 +1081,10 @@ QUnit.test("Show group footer when has calculateCustomSummary and groupItems wit
         }
     });
 
-    //act
+    // act
     that.rowsView.render($testElement);
 
-    //assert
+    // assert
     assert.equal($testElement.find(".dx-datagrid-group-footer").length, 6, "count group footer rows");
     assert.equal($testElement.find(".dx-datagrid-group-footer").eq(0).children().eq(1).text(), "Sum Group: 0", "count group footer rows");
 });
@@ -1136,9 +1136,9 @@ QUnit.module("Footer with virtual scroll", {
     }
 });
 
-//T317725
+// T317725
 QUnit.test("Show group footer with virtual scrolling", function(assert) {
-    //arrange
+    // arrange
     var that = this,
         $testElement = $("#container");
 
@@ -1155,11 +1155,11 @@ QUnit.test("Show group footer with virtual scrolling", function(assert) {
         }
     });
 
-    //act
+    // act
     that.rowsView.render($testElement);
     that.rowsView.height(100);
     that.rowsView.resize();
 
-    //assert
+    // assert
     assert.equal($testElement.find(".dx-datagrid-group-footer").length, 1, "count group footer rows");
 });

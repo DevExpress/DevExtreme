@@ -635,6 +635,14 @@ QUnit.test("height option in static mode when widget is multiple", function(asse
     assert.equal($element.find("." + ACCORDION_WRAPPER_CLASS).height(), widgetHeight, "item container height is correct");
 });
 
+QUnit.test("Value from plain data source is should be encoded", function(assert) {
+    var $accordion = $("#accordion").dxAccordion({
+            dataSource: ["<b>Test item</b>"]
+        }),
+        $titleTemplate = $accordion.find("." + ACCORDION_ITEM_TITLE_CLASS);
+
+    assert.equal($titleTemplate.text(), "<b>Test item</b>");
+});
 
 QUnit.module("widget options changed", moduleSetup);
 

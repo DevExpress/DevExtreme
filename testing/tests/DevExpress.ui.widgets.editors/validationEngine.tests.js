@@ -1046,11 +1046,11 @@ QUnit.test("Rule should not be revalidated if no value changed - invalid value",
             validationCallback: handler
         };
 
-    //act
+    // act
     ValidationEngine.validate(value, [rule]);
     var result2 = ValidationEngine.validate(value, [rule]);
 
-    //assert
+    // assert
     assert.strictEqual(rule.isValid, false, "Rule should be marked as invalid");
     assert.ok(handler.calledOnce, "Handler should be called only once as value did not change");
     assert.ok(result2.brokenRule, "Rule should be marked as broken");
@@ -1066,11 +1066,11 @@ QUnit.test("Rule should not be revalidated if no value changed - valid value", f
             validationCallback: handler
         };
 
-    //act
+    // act
     ValidationEngine.validate(value, [rule]);
     ValidationEngine.validate(value, [rule]);
 
-    //assert
+    // assert
     assert.strictEqual(rule.isValid, true, "Rule should be marked as valid");
     assert.ok(handler.calledOnce, "Handler should be called only once as value did not change");
 });
@@ -1083,11 +1083,11 @@ QUnit.test("Rule should  be revalidated after value change - valid value", funct
             validationCallback: handler
         };
 
-    //act
+    // act
     ValidationEngine.validate(value, [rule]);
     ValidationEngine.validate(value + "1", [rule]);
 
-    //assert
+    // assert
     assert.strictEqual(rule.isValid, true, "Rule should be marked as valid");
     assert.ok(handler.calledTwice, "Handler should be called twice as value changed");
 });
@@ -1104,10 +1104,10 @@ QUnit.test("If first rule fails, second one should not be evaluated", function(a
             validationCallback: handler
         };
 
-    //act
+    // act
     var result1 = ValidationEngine.validate(value, [rule1, rule2]);
 
-    //assert
+    // assert
     assert.strictEqual(result1.isValid, false, "Result should be marked as invalid");
     assert.ok(!handler.called, "Handler should never be called");
 });
@@ -1124,11 +1124,11 @@ QUnit.test("If first rule failed on last check, second one should not be evaluat
             validationCallback: handler
         };
 
-    //act
+    // act
     ValidationEngine.validate(emptyValue, [rule1, rule2]);
     var result2 = ValidationEngine.validate(emptyValue, [rule1, rule2]);
 
-    //assert
+    // assert
     assert.strictEqual(result2.isValid, false, "Result should be marked as invalid");
     assert.ok(!handler.called, "Handler should be called twice as value changed");
 });
@@ -1143,10 +1143,10 @@ QUnit.test("Compare rule should be reevaluated on each call", function(assert) {
         };
 
     ValidationEngine.validate(value, [rule]);
-    //act
+    // act
     var result2 = ValidationEngine.validate(value, [rule]);
 
-    //assert
+    // assert
     assert.strictEqual(result2.isValid, true, "Result should be marked as valid");
     assert.ok(handler.calledTwice, "Handler should be called twice");
 });
@@ -1162,10 +1162,10 @@ QUnit.test("Simple group - can register validator in group", function(assert) {
     var group = "newGroup",
         validator = sinon.createStubInstance(Validator);
 
-    //act
+    // act
     ValidationEngine.registerValidatorInGroup(group, validator);
 
-    //assert
+    // assert
     var groupConfig = ValidationEngine.getGroupConfig(group);
     assert.ok(groupConfig, "Group was registered in Validation Engine");
     assert.equal(groupConfig.validators.length, 1, "Single validator was registered in group Validation Engine");
@@ -1176,11 +1176,11 @@ QUnit.test("Simple group - validator should not be duplicated in group", functio
     var group = "newGroup",
         validator = sinon.createStubInstance(Validator);
 
-    //act
+    // act
     ValidationEngine.registerValidatorInGroup(group, validator);
     ValidationEngine.registerValidatorInGroup(group, validator);
 
-    //assert
+    // assert
     var groupConfig = ValidationEngine.getGroupConfig(group);
     assert.ok(groupConfig, "Group was registered in Validation Engine");
     assert.equal(groupConfig.validators.length, 1, "Single validator was registered in group Validation Engine");
@@ -1190,10 +1190,10 @@ QUnit.test("Simple group - validator should not be duplicated in group", functio
 QUnit.test("Simple group - can register validator in undefined group", function(assert) {
     var validator = sinon.createStubInstance(Validator);
 
-    //act
+    // act
     ValidationEngine.registerValidatorInGroup(undefined, validator);
 
-    //assert
+    // assert
     var groupConfig = ValidationEngine.getGroupConfig();
     assert.ok(groupConfig, "Group was registered in Validation Engine");
     assert.equal(groupConfig.validators.length, 1, "Single validator was registered in group Validation Engine");
@@ -1204,10 +1204,10 @@ QUnit.test("Simple group - remove validator registration", function(assert) {
     var validator = sinon.createStubInstance(Validator);
     ValidationEngine.registerValidatorInGroup(undefined, validator);
 
-    //act
+    // act
     ValidationEngine.removeRegisteredValidator(undefined, validator);
 
-    //assert
+    // assert
     var groupConfig = ValidationEngine.getGroupConfig();
     assert.ok(groupConfig, "Group still exist Validation Engine");
     assert.equal(groupConfig.validators.length, 0, "Validator was unregistered");
@@ -1221,10 +1221,10 @@ QUnit.test("Simple group - call validateGroup method", function(assert) {
     validator.validate.returns({ isValid: false, brokenRule: { type: "required", isValid: false } });
 
     ValidationEngine.registerValidatorInGroup(group, validator);
-    //act
+    // act
     var result = ValidationEngine.validateGroup(group);
 
-    //assert
+    // assert
     assert.ok(result, "Group Result is defined");
     assert.ok(validator.validate.calledOnce, "Validation Engine calls validator validate");
     assert.strictEqual(result.isValid, false, "IsValid");
@@ -1239,10 +1239,10 @@ QUnit.test("Simple group - call validateGroup method for undefined group", funct
     validator.validate.returns({ isValid: false, brokenRule: { type: "required", isValid: false } });
 
     ValidationEngine.registerValidatorInGroup(undefined, validator);
-    //act
+    // act
     var result = ValidationEngine.validateGroup();
 
-    //assert
+    // assert
     assert.ok(result, "Group Result is defined");
     assert.ok(validator.validate.calledOnce, "Validation Engine calls validator validate");
     assert.equal(result.brokenRules.length, 1, "Widget's validation results should be passed to caller");
@@ -1271,10 +1271,10 @@ QUnit.test("Event Validated should be triggered", function(assert) {
     ValidationEngine.registerValidatorInGroup(group, validator);
     ValidationEngine.getGroupConfig(group).on("validated", handler);
 
-    //act
+    // act
     ValidationEngine.validateGroup(group);
 
-    //assert
+    // assert
     assert.ok(handler.calledOnce, "Handler should be called");
     assert.ok(handler.calledOn(ValidationEngine.getGroupConfig(group)), "Group config should be passed as 'this'");
 
@@ -1284,7 +1284,7 @@ QUnit.test("Event Validated should be triggered", function(assert) {
 });
 
 QUnit.test("Undefined group is defined by default", function(assert) {
-    //act
+    // act
     var config = ValidationEngine.getGroupConfig();
 
     assert.ok(config, "Config should be retrieved for undefined group");
@@ -1298,10 +1298,10 @@ QUnit.test("Simple group - call validate method on group config object", functio
 
     ValidationEngine.registerValidatorInGroup(undefined, validator);
     var groupConfig = ValidationEngine.getGroupConfig();
-    //act
+    // act
     var result = groupConfig.validate();
 
-    //assert
+    // assert
     assert.ok(result, "Group Result is defined");
     assert.ok(validator.validate.calledOnce, "Validation Engine calls validator validate");
     assert.equal(result.brokenRules.length, 1, "Widget's validation results should be passed to caller");
@@ -1312,14 +1312,14 @@ QUnit.test("Remove registered group", function(assert) {
         validator = sinon.createStubInstance(Validator);
     ValidationEngine.registerValidatorInGroup(group, validator);
 
-    //act
+    // act
     ValidationEngine.removeGroup(group);
 
-    //assert
+    // assert
     var groupConfig = ValidationEngine.getGroupConfig(group);
     assert.ok(!groupConfig, "Group config should be removed from the list");
 });
 
 
 QUnit.module("ViewModel");
-//all unit tests for KO are in koValidationTests.js
+// all unit tests for KO are in koValidationTests.js

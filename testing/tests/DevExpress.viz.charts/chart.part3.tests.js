@@ -47,13 +47,13 @@ QUnit.module("dxChart Translators", $.extend({}, commons.environment, {
     }
 }));
 
-///////////////////////////////////////////////////////
-//////      Axes
-///////////////////////////////////////////////////////
+// ////////////////////////////////
+//      Axes
+// ////////////////////////////////
 QUnit.module("Axes", commons.environment);
 
 QUnit.test("Create Horizontal Category Axis, Vertical Continuous axis", function(assert) {
-    //Arrange
+    // Arrange
     var stubSeries = new MockSeries({
         range: { val: { min: 1, max: 3 } }
     });
@@ -61,7 +61,7 @@ QUnit.test("Create Horizontal Category Axis, Vertical Continuous axis", function
     var argumentAxis,
         valueAxis;
 
-    //act
+    // act
     var chart = this.createChart({
         argumentAxis: {
             categories: categories
@@ -100,16 +100,16 @@ QUnit.test("Create Horizontal Category Axis, Vertical Continuous axis", function
     assert.equal(chart._valueAxes[0].isArgumentAxis, false);
 });
 
-//B254993
+// B254993
 QUnit.test("Argument axis is empty array", function(assert) {
-    //Arrange
+    // Arrange
     var stubSeries = new MockSeries({
         range: { minY: 1, maxY: 3 }
     });
     seriesMockData.series.push(stubSeries);
     var argumentAxis;
 
-    //act
+    // act
     var chart = this.createChart({
         argumentAxis: [],
         series: [],
@@ -125,7 +125,7 @@ QUnit.test("Argument axis is empty array", function(assert) {
     assertCommonAxesProperties(assert, argumentAxis, {});
 });
 
-//B254993
+// B254993
 QUnit.test("Value axis is empty array", function(assert) {
     var stubSeries = new MockSeries({
         range: { minY: 1, maxY: 3 }
@@ -146,13 +146,13 @@ QUnit.test("Value axis is empty array", function(assert) {
 });
 
 QUnit.test("create axes with crosshair", function(assert) {
-    //Arrange
+    // Arrange
     var stubSeries = new MockSeries({
         range: { val: { min: 1, max: 3 } }
     });
     seriesMockData.series.push(stubSeries);
 
-    //act
+    // act
     var chart = this.createChart({
         crosshair: {
             enabled: true,
@@ -177,13 +177,13 @@ QUnit.test("create axes with crosshair", function(assert) {
 });
 
 QUnit.test("create axes with crosshair. horizontal line is invisible", function(assert) {
-    //Arrange
+    // Arrange
     var stubSeries = new MockSeries({
         range: { val: { min: 1, max: 3 } }
     });
     seriesMockData.series.push(stubSeries);
 
-    //act
+    // act
     var chart = this.createChart({
         crosshair: {
             enabled: true,
@@ -208,13 +208,13 @@ QUnit.test("create axes with crosshair. horizontal line is invisible", function(
 });
 
 QUnit.test("create axes with crosshair. horizontal line is invisible. rotated", function(assert) {
-    //Arrange
+    // Arrange
     var stubSeries = new MockSeries({
         range: { val: { min: 1, max: 3 } }
     });
     seriesMockData.series.push(stubSeries);
 
-    //act
+    // act
     var chart = this.createChart({
         rotated: true,
         crosshair: {
@@ -240,13 +240,13 @@ QUnit.test("create axes with crosshair. horizontal line is invisible. rotated", 
 });
 
 QUnit.test("create axes with crosshair. vertical line is invisible", function(assert) {
-    //Arrange
+    // Arrange
     var stubSeries = new MockSeries({
         range: { val: { min: 1, max: 3 } }
     });
     seriesMockData.series.push(stubSeries);
 
-    //act
+    // act
     var chart = this.createChart({
         crosshair: {
             enabled: true,
@@ -271,13 +271,13 @@ QUnit.test("create axes with crosshair. vertical line is invisible", function(as
 });
 
 QUnit.test("create axes with crosshair. vertical line is invisible. rotated", function(assert) {
-    //Arrange
+    // Arrange
     var stubSeries = new MockSeries({
         range: { val: { min: 1, max: 3 } }
     });
     seriesMockData.series.push(stubSeries);
 
-    //act
+    // act
     var chart = this.createChart({
         rotated: true,
         crosshair: {
@@ -303,13 +303,13 @@ QUnit.test("create axes with crosshair. vertical line is invisible. rotated", fu
 });
 
 QUnit.test("T543486. Named value axis in non-existent pane should have crosshairMargin", function(assert) {
-    //Arrange
+    // Arrange
     var stubSeries = new MockSeries({
         range: { val: { min: 1, max: 3 } }
     });
     seriesMockData.series.push(stubSeries);
 
-    //act
+    // act
     var chart = this.createChart({
         panes: [{}],
         valueAxis: [{
@@ -336,13 +336,13 @@ QUnit.test("T543486. Named value axis in non-existent pane should have crosshair
 });
 
 QUnit.test("T543486. Named value axis in non-existent pane should have crosshairMargin. Rotated", function(assert) {
-    //Arrange
+    // Arrange
     var stubSeries = new MockSeries({
         range: { val: { min: 1, max: 3 } }
     });
     seriesMockData.series.push(stubSeries);
 
-    //act
+    // act
     var chart = this.createChart({
         rotated: true,
         panes: [{}],
@@ -371,7 +371,7 @@ QUnit.test("T543486. Named value axis in non-existent pane should have crosshair
 
 
 QUnit.test("Create Horizontal Continuous Axis, Vertical Continuous axis", function(assert) {
-    //Arrange
+    // Arrange
     var stubSeries = new MockSeries({
         range: { val: { min: 1, max: 3 } }
     });
@@ -379,7 +379,7 @@ QUnit.test("Create Horizontal Continuous Axis, Vertical Continuous axis", functi
     var argumentAxis,
         valueAxis;
 
-    //act
+    // act
     var chart = this.createChart({
         argumentAxis: {
             min: 10,
@@ -422,7 +422,7 @@ QUnit.test("Create Horizontal Continuous Axis, Vertical Continuous axis", functi
 });
 
 QUnit.test("Create Horizontal Continuous Axis, Vertical Continuous axis (horizontal range goes from series)", function(assert) {
-    //Arrange
+    // Arrange
     var stubSeries = new MockSeries({
         range: { val: { min: 1, max: 3 }, arg: { min: 10, max: 20 } }
     });
@@ -430,7 +430,7 @@ QUnit.test("Create Horizontal Continuous Axis, Vertical Continuous axis (horizon
     var argumentAxis,
         valueAxis;
 
-    //act
+    // act
     var chart = this.createChart({
         argumentAxis: {
             minValueMargin: 0,
@@ -469,7 +469,7 @@ QUnit.test("Create Horizontal Continuous Axis, Vertical Continuous axis (horizon
 });
 
 QUnit.test("Create Vertical Category Axis, Horizontal Continuous axis (rotated)", function(assert) {
-    //Arrange
+    // Arrange
     var stubSeries = new MockSeries({
         range: { val: { min: 1, max: 3 } }
     });
@@ -477,7 +477,7 @@ QUnit.test("Create Vertical Category Axis, Horizontal Continuous axis (rotated)"
     var valueAxis,
         argumentAxis;
 
-    //act
+    // act
     var chart = this.createChart({
         rotated: true,
         argumentAxis: {
@@ -517,7 +517,7 @@ QUnit.test("Create Vertical Category Axis, Horizontal Continuous axis (rotated)"
 });
 
 QUnit.test("Create Vertical Continuous Axis, Horizontal Continuous axis (rotated)", function(assert) {
-    //Arrange
+    // Arrange
     var stubSeries = new MockSeries({
         range: { val: { min: 1, max: 3 } }
     });
@@ -525,7 +525,7 @@ QUnit.test("Create Vertical Continuous Axis, Horizontal Continuous axis (rotated
     var valueAxis,
         argumentAxis;
 
-    //act
+    // act
     var chart = this.createChart({
         rotated: true,
         argumentAxis: {
@@ -561,13 +561,13 @@ QUnit.test("Create Vertical Continuous Axis, Horizontal Continuous axis (rotated
 });
 
 QUnit.test("Creation axes, container color and group of the scale breaks should be passed to axes", function(assert) {
-    //Arrange
+    // Arrange
     var stubSeries = new MockSeries({
         range: { val: { min: 1, max: 3 } }
     });
     seriesMockData.series.push(stubSeries);
 
-    //act
+    // act
     var chart = this.createChart({
         series: {
             type: "line"
@@ -582,13 +582,13 @@ QUnit.test("Creation axes, container color and group of the scale breaks should 
 });
 
 QUnit.test("Panes - named Horizontal Category Axis, named Vertical Continuous axis", function(assert) {
-    //Arrange
+    // Arrange
     var stubSeries = new MockSeries({
         range: { val: { min: 1, max: 3 } }
     });
     seriesMockData.series.push(stubSeries);
 
-    //act
+    // act
     var chart = this.createChart({
         argumentAxis: {
             categories: categories,
@@ -610,13 +610,13 @@ QUnit.test("Panes - named Horizontal Category Axis, named Vertical Continuous ax
 });
 
 QUnit.test("Panes - single pane specified, replace default for Horizontal Category Axis, Vertical Continuous axis", function(assert) {
-    //Arrange
+    // Arrange
     var stubSeries = new MockSeries({
         range: { val: { min: 1, max: 3 } }
     });
     seriesMockData.series.push(stubSeries);
 
-    //act
+    // act
     var chart = this.createChart({
         argumentAxis: {
             categories: categories
@@ -633,9 +633,9 @@ QUnit.test("Panes - single pane specified, replace default for Horizontal Catego
     assertCommonAxesProperties(assert, chart._valueAxes[0], { pane: "topPane" });
 });
 
-//duplicate
+// duplicate
 QUnit.test("Panes - two panes, replace default for Horizontal Category Axis, Vertical Continuous axis, duplicate vertical axis", function(assert) {
-    //Arrange
+    // Arrange
     var stubSeries = new MockSeries({
         range: { val: { min: 1, max: 3 } }
     });
@@ -643,7 +643,7 @@ QUnit.test("Panes - two panes, replace default for Horizontal Category Axis, Ver
     var argumentAxis,
         valueAxis;
 
-    //act
+    // act
     var chart = this.createChart({
         argumentAxis: {
             categories: categories,
@@ -686,21 +686,21 @@ QUnit.test("Panes - two panes, replace default for Horizontal Category Axis, Ver
     assert.ok(valueAxis._constantLinesGroup);
     assert.strictEqual(valueAxis.getOptions().min, 1, "Min values goes from common options");
 });
-//only one
+// only one
 QUnit.test("Panes - two panes, replace default for Horizontal Category Axis, Vertical Continuous axis", function(assert) {
-    //Arrange
+    // Arrange
     var stubSeries = new MockSeries({
         range: { val: { min: 1, max: 3 } }
     });
     seriesMockData.series.push(stubSeries);
 
-    //act
+    // act
     var chart = this.createChart({
         argumentAxis: {
             categories: categories,
             pane: "bottomPane"
         },
-        //this axis is specific for top pane and should not be duplicated
+        // this axis is specific for top pane and should not be duplicated
         valueAxis: {
             pane: "topPane"
         },
@@ -722,7 +722,7 @@ QUnit.test("Panes - two panes, replace default for Horizontal Category Axis, Ver
 });
 
 QUnit.test("Panes - Percent format for pane with full stacked series", function(assert) {
-    //Arrange
+    // Arrange
     var stubSeries = new MockSeries({
         range: { val: { min: 1, max: 3 } }
     });
@@ -730,7 +730,7 @@ QUnit.test("Panes - Percent format for pane with full stacked series", function(
     seriesMockData.series.push(new MockSeries({}));
     var valueAxis;
 
-    //act
+    // act
     var chart = this.createChart({
         argumentAxis: {
             categories: categories,
@@ -769,7 +769,7 @@ QUnit.test("Panes - Percent format for pane with full stacked series", function(
 });
 
 QUnit.test("Panes - Percent format for pane with two axes", function(assert) {
-    //Arrange
+    // Arrange
     var stubSeries = new MockSeries({
         range: { val: { min: 1, max: 3 } }
     });
@@ -777,7 +777,7 @@ QUnit.test("Panes - Percent format for pane with two axes", function(assert) {
     seriesMockData.series.push(new MockSeries({}));
     var verticalAxis;
 
-    //act
+    // act
     var chart = this.createChart({
         argumentAxis: {
             categories: categories
@@ -814,7 +814,7 @@ QUnit.test("Panes - Percent format for pane with two axes", function(assert) {
     assert.ok(!verticalAxis.resetAutoLabelFormat.called, "no reset percent format");
 });
 
-//two different
+// two different
 QUnit.test("Panes - two panes, replace default for Horizontal Category Axis, Vertical Continuous axis, both vertical axis specified", function(assert) {
     var stubSeries = new MockSeries({
         range: { val: { min: 1, max: 3 } }
@@ -860,12 +860,12 @@ QUnit.test("Panes - two panes, replace default for Horizontal Category Axis, Ver
 });
 
 QUnit.test("Panes check duplicate argument axis for each pane", function(assert) {
-    //arrange
+    // arrange
     var stubSeries1 = new MockSeries({}),
         stubSeries2 = new MockSeries({});
     seriesMockData.series.push(stubSeries1);
     seriesMockData.series.push(stubSeries2);
-    //act
+    // act
     var chart = this.createChart({
         argumentAxis: {
             categories: categories,
@@ -886,7 +886,7 @@ QUnit.test("Panes check duplicate argument axis for each pane", function(assert)
             type: "line"
         }]
     });
-    //assert
+    // assert
     assert.ok(chart.series);
     assert.equal(chart._argumentAxes.length, 2);
     assert.equal(chart._argumentAxes[0].pane, "top");
@@ -967,8 +967,8 @@ function assertCommonAxesProperties(assert, axis, options) {
     assert.strictEqual(axis.getOptions().pane, options.pane || "default", "Default pane name");
 }
 
-////////////////////////////////////////
-////////////////////////////////////////
+// //////////////////////////////////////
+// //////////////////////////////////////
 
 QUnit.module("Legend creation", $.extend({}, commons.environment, {
     beforeEach: function() {
@@ -982,7 +982,7 @@ QUnit.module("Legend creation", $.extend({}, commons.environment, {
 }));
 
 QUnit.test("Create Horizontal Legend with single named series, position = outside", function(assert) {
-    //arrange
+    // arrange
     var stubSeries = new MockSeries({
         name: "First series",
         visible: true,
@@ -990,10 +990,10 @@ QUnit.test("Create Horizontal Legend with single named series, position = outsid
     });
     seriesMockData.series.push(stubSeries);
 
-    //act
+    // act
     var chart = this.createChart({ series: { type: "line" } });
 
-    //assert
+    // assert
     var legendCtorArgs = legendModule.Legend.lastCall.args[0],
         legend = commons.getLegendStub(),
         updateCall = legend.update.lastCall;
@@ -1028,7 +1028,7 @@ QUnit.test("Create Horizontal Legend with single named series, position = outsid
 });
 
 QUnit.test("Create chart with bottom title. Not header block", function(assert) {
-    //arrange
+    // arrange
     var stubSeries = new MockSeries({
         name: "First series",
         visible: true,
@@ -1036,7 +1036,7 @@ QUnit.test("Create chart with bottom title. Not header block", function(assert) 
     });
     seriesMockData.series.push(stubSeries);
 
-    //act
+    // act
     var chart = this.createChart({
         series: {
             type: "line"
@@ -1046,14 +1046,14 @@ QUnit.test("Create chart with bottom title. Not header block", function(assert) 
         }
     });
 
-    //assert
+    // assert
     var legend = commons.getLegendStub();
 
     assert.deepEqual(chart.layoutManager.layoutElements.lastCall.args[0], [commons.getTitleStub(), legend], "legend and title layouted");
 });
 
 QUnit.test("Hidden marker for simple series. First drawing", function(assert) {
-    //arrange
+    // arrange
     var stubSeries = new MockSeries({
         name: "First series",
         visible: false,
@@ -1062,10 +1062,10 @@ QUnit.test("Hidden marker for simple series. First drawing", function(assert) {
 
     seriesMockData.series.push(stubSeries);
 
-    //act
+    // act
     this.createChart({ series: { type: "line" } });
 
-    //assert
+    // assert
     var legend = commons.getLegendStub();
 
     assert.strictEqual(legend.update.lastCall.args[0][0].textOpacity, 0.3, "Text opacity is correct");
@@ -1082,10 +1082,10 @@ QUnit.test("Hidden marker for simple series. Opacity < 0.3", function(assert) {
 
     seriesMockData.series.push(stubSeries);
 
-    //act
+    // act
     this.createChart({ series: { type: "line" } });
 
-    //assert
+    // assert
     var legend = commons.getLegendStub();
 
     assert.strictEqual(legend.update.lastCall.args[0][0].textOpacity, 0.3, "Text opacity is correct");
@@ -1129,14 +1129,14 @@ QUnit.test("Draw title (text is not specified)", function(assert) {
 QUnit.module("Panes backgroundColor", commons.environment);
 
 QUnit.test("CommonPaneSetting. Background color", function(assert) {
-    //var chartOptions = {
+    // var chartOptions = {
     //    width: 800,
     //    height: 800,
     //    left: 60,
     //    right: 50,
     //    top: 20,
     //    bottom: 80
-    //};
+    // };
     var stubSeries = new MockSeries();
     seriesMockData.series.push(stubSeries);
     var chart = this.createChart({
@@ -1166,14 +1166,14 @@ QUnit.test("CommonPaneSetting. Background color", function(assert) {
 });
 
 QUnit.test("CommonPaneSetting. Background color. Two panes. second pane has background", function(assert) {
-    //var chartOptions = {
+    // var chartOptions = {
     //    width: 800,
     //    height: 800,
     //    left: 60,
     //    right: 50,
     //    top: 20,
     //    bottom: 80
-    //};
+    // };
     var stubSeries = new MockSeries();
     seriesMockData.series.push(stubSeries);
     var chart = this.createChart({
@@ -1211,14 +1211,14 @@ QUnit.test("CommonPaneSetting. Background color. Two panes. second pane has back
 });
 
 QUnit.test("CommonPaneSetting. Background color. Two panes. Both panes has background", function(assert) {
-    //var chartOptions = {
+    // var chartOptions = {
     //    width: 800,
     //    height: 800,
     //    left: 60,
     //    right: 50,
     //    top: 20,
     //    bottom: 80
-    //};
+    // };
     var stubSeries = new MockSeries();
     seriesMockData.series.push(stubSeries);
     var chart = this.createChart({
@@ -1245,14 +1245,14 @@ QUnit.test("CommonPaneSetting. Background color. Two panes. Both panes has backg
 });
 
 QUnit.test("CommonPaneSetting. Background color. Two panes. First pane has background is none", function(assert) {
-    //var chartOptions = {
+    // var chartOptions = {
     //    width: 800,
     //    height: 800,
     //    left: 60,
     //    right: 50,
     //    top: 20,
     //    bottom: 80
-    //};
+    // };
     var stubSeries = new MockSeries();
     seriesMockData.series.push(stubSeries);
     var chart = this.createChart({
@@ -1383,14 +1383,14 @@ QUnit.test("full rect. even border width (4)", function(assert) {
 QUnit.module("Panes border", commons.environment);
 
 QUnit.test("Panes border, default attributes", function(assert) {
-    //var chartOptions = {
+    // var chartOptions = {
     //    width: 800,
     //    height: 800,
     //    left: 80,
     //    right: 90,
     //    top: 10,
     //    bottom: 80
-    //};
+    // };
 
     var chart = this.createChart({
         size: { width: 800, height: 800 },
@@ -1407,14 +1407,14 @@ QUnit.test("Panes border, default attributes", function(assert) {
 });
 
 QUnit.test("Panes border, default attributes. Two render", function(assert) {
-    //var chartOptions = {
+    // var chartOptions = {
     //    width: 800,
     //    height: 800,
     //    left: 80,
     //    right: 90,
     //    top: 10,
     //    bottom: 80
-    //};
+    // };
 
     var chart = this.createChart({
         size: { width: 800, height: 800 },
@@ -1449,14 +1449,14 @@ QUnit.test("Panes border, default attributes. Two render", function(assert) {
 });
 
 QUnit.test("Create border, custom attributes", function(assert) {
-    //var chartOptions = {
+    // var chartOptions = {
     //    width: 800,
     //    height: 800,
     //    left: 80,
     //    right: 90,
     //    top: 10,
     //    bottom: 80
-    //};
+    // };
 
     var chart = this.createChart({
         size: { width: 800, height: 800 },
@@ -1477,14 +1477,14 @@ QUnit.test("Create border, custom attributes", function(assert) {
 });
 
 QUnit.test("Create border, bottom = false", function(assert) {
-    //var chartOptions = {
+    // var chartOptions = {
     //    width: 800,
     //    height: 800,
     //    left: 80,
     //    right: 90,
     //    top: 10,
     //    bottom: 80
-    //};
+    // };
 
     var chart = this.createChart({
         size: { width: 800, height: 800 },
@@ -1504,14 +1504,14 @@ QUnit.test("Create border, bottom = false", function(assert) {
 });
 
 QUnit.test("Create two borders, with different attributes", function(assert) {
-    //var chartOptions = {
+    // var chartOptions = {
     //    width: 800,
     //    height: 800,
     //    left: 80,
     //    right: 90,
     //    top: 10,
     //    bottom: 80
-    //};
+    // };
 
     var chart = this.createChart({
         size: { width: 800, height: 800 },
@@ -1550,14 +1550,14 @@ QUnit.test("Create two borders, with different attributes", function(assert) {
 });
 
 QUnit.test("Negative Panes border width and height", function(assert) {
-    //var chartOptions = {
+    // var chartOptions = {
     //    width: 800,
     //    height: 800,
     //    left: 600,
     //    right: 300,
     //    top: 500,
     //    bottom: 400
-    //};
+    // };
 
     var chart = this.createChart({
         size: { width: 800, height: 800 },
@@ -1569,8 +1569,8 @@ QUnit.test("Negative Panes border width and height", function(assert) {
 
     assert.ok(chart.panes);
     assert.equal(chart.panes.length, 1);
-    //assert.equal(chart._renderer.path.callCount, 1);
-    //checkSegmentRectCommon(assert, chart, 0, 600, 500, 0, 0, "none", "solid", undefined, undefined, undefined, { top: true, bottom: true, left: true, right: true });
+    // assert.equal(chart._renderer.path.callCount, 1);
+    // checkSegmentRectCommon(assert, chart, 0, 600, 500, 0, 0, "none", "solid", undefined, undefined, undefined, { top: true, bottom: true, left: true, right: true });
     assert.strictEqual(chart._renderer.stub("path").lastCall, null);
 });
 
@@ -1587,7 +1587,7 @@ QUnit.module("Prepare shared tooltip", $.extend({}, commons.environment, {
 
 QUnit.test("stack is null", function(assert) {
     assert.expect(2 + 2 * 3 * 5);
-    //arrange
+    // arrange
     var point1 = new MockPoint({ argument: "1", val: 1 }),
         point2 = new MockPoint({ argument: "2", val: 2 }),
         point3 = new MockPoint({ argument: "3", val: 3 }),
@@ -1597,7 +1597,7 @@ QUnit.test("stack is null", function(assert) {
         stubSeries1 = new MockSeries({ points: [point1, point2, point3], stack: null }),
         stubSeries2 = new MockSeries({ points: [point4, point5, point6], stack: null });
     seriesMockData.series.push(stubSeries1, stubSeries2);
-    //act
+    // act
     var chart = this.createChart({
         tooltip: { shared: true },
         series: [{
@@ -1609,7 +1609,7 @@ QUnit.test("stack is null", function(assert) {
         }]
     });
 
-    //assert
+    // assert
     var checkStackPoints = function(series, points) {
         $.each(series.getPoints(), function(i, point) {
             assert.equal(point.stackPoints.length, 2);
@@ -1629,7 +1629,7 @@ QUnit.test("stack is null", function(assert) {
 
 QUnit.test("different stack", function(assert) {
     assert.expect(2 + 2 * 3 * 4 + 3 * 2);
-    //arrange
+    // arrange
     var point1 = new MockPoint({ argument: "1", val: 1 }),
         point2 = new MockPoint({ argument: "2", val: 2 }),
         point3 = new MockPoint({ argument: "3", val: 3 }),
@@ -1643,13 +1643,13 @@ QUnit.test("different stack", function(assert) {
         stubSeries2 = new MockSeries({ points: [point4, point5, point6], stack: "a" }),
         stubSeries3 = new MockSeries({ points: [point7, point8, point9], stack: "b" });
     seriesMockData.series.push(stubSeries1, stubSeries2, stubSeries3);
-    //act
+    // act
     var chart = this.createChart({
         tooltip: { shared: true },
         series: [{ name: "name1", type: "line" }, { name: "name2", type: "line" }, { name: "name3", type: "line" }]
     });
 
-    //assert
+    // assert
     var checkStackPoints = function(series, points, stackName) {
         $.each(series.getPoints(), function(i, point) {
             assert.equal(point.stackPoints[0].argument, points[0 + i].argument);
@@ -1676,7 +1676,7 @@ QUnit.test("different stack", function(assert) {
 
 QUnit.test("different stack", function(assert) {
     assert.expect(2 + 2 * 3 * 4 + 3 * 2);
-    //arrange
+    // arrange
     var point1 = new MockPoint({ argument: "1", val: 1 }),
         point2 = new MockPoint({ argument: "2", val: 2 }),
         point3 = new MockPoint({ argument: "3", val: 3 }),
@@ -1690,13 +1690,13 @@ QUnit.test("different stack", function(assert) {
         stubSeries2 = new MockSeries({ points: [point4, point5, point6], stack: null }),
         stubSeries3 = new MockSeries({ points: [point7, point8, point9], stack: "b" });
     seriesMockData.series.push(stubSeries1, stubSeries2, stubSeries3);
-    //act
+    // act
     var chart = this.createChart({
         tooltip: { shared: true },
         series: [{ name: "name1", type: "line" }, { name: "name2", type: "line" }, { name: "name3", type: "line" }]
     });
 
-    //assert
+    // assert
     var checkStackPoints = function(series, points, stackName) {
         var num;
         $.each(series.getPoints(), function(i, point) {
@@ -1724,7 +1724,7 @@ QUnit.test("different stack", function(assert) {
 });
 
 QUnit.test("update shared tooltip with not shared", function(assert) {
-    //arrange
+    // arrange
     var point1 = new MockPoint({ argument: "1", val: 1 }),
         point2 = new MockPoint({ argument: "2", val: 2 }),
         point3 = new MockPoint({ argument: "3", val: 3 }),
@@ -1734,7 +1734,7 @@ QUnit.test("update shared tooltip with not shared", function(assert) {
         stubSeries1 = new MockSeries({ points: [point1, point2, point3], stack: null }),
         stubSeries2 = new MockSeries({ points: [point4, point5, point6], stack: null });
     seriesMockData.series.push(stubSeries1, stubSeries2);
-    //act
+    // act
     var chart = this.createChart({
         dataSource: [{}],
         tooltip: { shared: true },
@@ -1749,7 +1749,7 @@ QUnit.test("update shared tooltip with not shared", function(assert) {
     this.themeManager.getOptions.withArgs("tooltip").returns({ shared: false, enabled: true, font: {} });
     chart.option({ tooltip: { shared: false } });
 
-    //assert
+    // assert
     var checkStackPoints = function(series) {
         $.each(series.getPoints(), function(i, point) {
             assert.equal(point.stackPoints, null);
@@ -2088,7 +2088,7 @@ QUnit.test("Two series, two value axis, one pane (check default)", function(asse
             { name: "axis1" }
         ]
     });
-    //assert
+    // assert
     var chartSeries = chart.series;
     assert.equal(chartSeries.length, 2, "chart have two series");
     assert.equal(chartSeries[0].axis, "axis1", "first series was mapped to axis1 axis");

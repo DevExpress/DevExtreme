@@ -63,13 +63,13 @@ QUnit.skip("Animation performance test", function(assert) {
         $div2.css("transform", "translate(100px,0)");
 
 
-        //$div.css("left", 0);
-        //$div.css("opacity", 1);
-        //$div.css("transform", "translate3d(200px,0,0)");
+        // $div.css("left", 0);
+        // $div.css("opacity", 1);
+        // $div.css("transform", "translate3d(200px,0,0)");
 
-        //$div.css("left", 0);
-        //$div.css("opacity", 1);
-        //$div.css("transform", "translate3d(300px,0,0)");
+        // $div.css("left", 0);
+        // $div.css("opacity", 1);
+        // $div.css("transform", "translate3d(300px,0,0)");
 
         return deferred;
     };

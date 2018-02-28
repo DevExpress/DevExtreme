@@ -296,10 +296,13 @@ var DropDownMenu = Widget.inherit({
         this._defaultTemplates["content"] = new ChildDefaultTemplate("content", this);
     },
 
-    _render: function() {
+    _initMarkup: function() {
         this._renderButton();
         this.callBase();
+    },
 
+    _render: function() {
+        this.callBase();
         this.setAria({
             "role": "menubar",
             "haspopup": true,
@@ -402,7 +405,7 @@ var DropDownMenu = Widget.inherit({
 
         this._list = this._createComponent($content, this.option("menuWidget"), listConfig);
 
-        //todo: replace with option
+        // todo: replace with option
         this._list._getAriaTarget = (function() {
             return this.$element();
         }).bind(this);

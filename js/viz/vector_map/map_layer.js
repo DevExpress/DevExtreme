@@ -569,7 +569,7 @@ strategiesByElementType[TYPE_MARKER] = {
             }
             if(count > 0) {
                 values = [];
-                palette = context.params.themeManager.createPalette(context.settings.palette, { useHighlight: true, extensionMode: "repeat" });
+                palette = context.params.themeManager.createPalette(context.settings.palette, { useHighlight: true, extensionMode: "alternate" });
                 for(i = 0; i < count; ++i) {
                     values.push(palette.getNextColor());
                 }
@@ -583,7 +583,7 @@ strategiesByElementType[TYPE_MARKER] = {
     image: {
         _draw: function(ctx, figure, data) {
             figure.image = ctx.renderer.image(null, null, null, null, null, "center")
-                .attr({ "pointer-events": "visible" })//T567545
+                .attr({ "pointer-events": "visible" })// T567545
                 .data(ctx.dataKey, data)
                 .append(figure.root);
         },
@@ -1399,7 +1399,7 @@ function calculatePolygonCentroid(coordinates) {
         minY = _min(minY, v2[1]);
         maxY = _max(maxY, v2[1]);
     }
-    //from centroid coords we need subtract the center of bbox coords to get a good geometrical center (T312029)
+    // from centroid coords we need subtract the center of bbox coords to get a good geometrical center (T312029)
     return {
         area: _abs(area) / 2,
         center: [

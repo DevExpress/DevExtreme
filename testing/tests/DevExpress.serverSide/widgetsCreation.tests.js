@@ -69,27 +69,8 @@ var widgets = {
     TreeView: require("ui/tree_view"),
     ValidationGroup: require("ui/validation_group"),
     ValidationSummary: require("ui/validation_summary"),
-    Validator: require("ui/validator"),
     VectorMap: require("viz/vector_map")
 };
-
-QUnit.module("Scripts loading");
-
-Object.keys(widgets).forEach(function(widget) {
-    QUnit.test(widget, function(assert) {
-        assert.ok(widgets[widget], "it's possible to import " + widget);
-    });
-});
-
-
-var notDisposableWidgets = [
-    "ActionSheet",
-    "ContextMenu",
-    "Gallery",
-    "Lookup",
-    "ProgressBar",
-    "Toolbar"
-];
 
 QUnit.module("Widget creation", {
     beforeEach: function() {
@@ -98,32 +79,11 @@ QUnit.module("Widget creation", {
         fixture.appendChild(this.element);
     },
     afterEach: function() {
-        if(notDisposableWidgets.indexOf(this.instance.NAME.substr(2)) === -1) {
-            this.instance.dispose();
-        }
+        this.instance.dispose();
     }
 });
 
 Object.keys(widgets).forEach(function(widget) {
-    var excludedWidgets = [
-        "BarGauge",
-        "Bullet",
-        "Chart",
-        "CircularGauge",
-        "Funnel",
-        "LinearGauge",
-        "PieChart",
-        "PolarChart",
-        "RangeSelector",
-        "Sparkline",
-        "TileView",
-        "TreeMap",
-        "Validator",
-        "VectorMap"
-    ];
-
-    if(excludedWidgets.indexOf(widget) > -1) return;
-
     QUnit.test(widget, function(assert) {
         this.instance = new widgets[widget](this.element);
         assert.ok(true, "it's possible to create " + widget);

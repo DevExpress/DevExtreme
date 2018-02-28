@@ -170,6 +170,7 @@ var ListBase = CollectionWidget.inherit({
             * @publicName showScrollbar
             * @type Enums.ShowScrollbarMode
             * @default 'onScroll'
+            * @default 'onHover' @for desktop
             */
             showScrollbar: "onScroll",
 
@@ -180,6 +181,7 @@ var ListBase = CollectionWidget.inherit({
             * @publicName bounceEnabled
             * @type boolean
             * @default true
+            * @default false @for desktop
             */
             bounceEnabled: true,
 
@@ -188,6 +190,7 @@ var ListBase = CollectionWidget.inherit({
             * @publicName scrollByContent
             * @type boolean
             * @default true
+            * @default false @for non-touch_devices
             */
             scrollByContent: true,
 
@@ -196,6 +199,7 @@ var ListBase = CollectionWidget.inherit({
             * @publicName scrollByThumb
             * @type boolean
             * @default false
+            * @default true @for desktop
             */
             scrollByThumb: false,
 
@@ -617,7 +621,7 @@ var ListBase = CollectionWidget.inherit({
             useKeyboard: false
         });
 
-        this._$container = this._scrollView.content();
+        this._$container = $(this._scrollView.content());
 
         this._createScrollViewActions();
     },
@@ -641,7 +645,7 @@ var ListBase = CollectionWidget.inherit({
                     $container.text(data.key);
                 }
             } else {
-                $container.html(String(data));
+                $container.text(String(data));
             }
         }, ["key"], this.option("integrationOptions.watchMethod"));
     },
@@ -694,6 +698,11 @@ var ListBase = CollectionWidget.inherit({
         }
 
         this.callBase(newItems);
+    },
+
+    _refreshContent: function() {
+        this._prepareContent();
+        this._fireContentReadyAction();
     },
 
     _hideLoadingIfLoadIndicationOff: function() {
@@ -816,13 +825,25 @@ var ListBase = CollectionWidget.inherit({
         }
     },
 
-    _render: function() {
+    _initMarkup: function() {
         this._itemElementsCache = $();
 
         this.$element().addClass(LIST_CLASS);
         this.callBase();
-
+        this._prepareContent();
         this.option("useInkRipple") && this._renderInkRipple();
+    },
+
+    _prepareContent: function() {
+        var that = this;
+
+        commonUtils.deferRender(function() {
+            that._renderContentImpl();
+        });
+    },
+
+    _renderContent: function() {
+        this._fireContentReadyAction();
     },
 
     _renderInkRipple: function() {

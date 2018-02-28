@@ -25,6 +25,7 @@ var GALLERY_CLASS = "dx-gallery",
     GALLERY_ACTIVE_CLASS = GALLERY_CLASS + "-active",
 
     GALLERY_ITEM_CLASS = GALLERY_CLASS + "-item",
+    GALLERY_INVISIBLE_ITEM_CLASS = GALLERY_CLASS + "-item-invisible",
     GALLERY_LOOP_ITEM_CLASS = GALLERY_ITEM_CLASS + "-loop",
     GALLERY_ITEM_SELECTOR = "." + GALLERY_ITEM_CLASS,
     GALLERY_ITEM_SELECTED_CLASS = GALLERY_ITEM_CLASS + "-selected",
@@ -372,13 +373,17 @@ var Gallery = CollectionWidget.inherit({
         return this.option("rtlEnabled") ? -1 : 1;
     },
 
+    _initMarkup: function() {
+        this.callBase();
+        this._renderWrapper();
+        this._renderItemsContainer();
+    },
+
     _render: function() {
         this.$element().addClass(GALLERY_CLASS);
         this.$element().toggleClass(GALLERY_LOOP_CLASS, this.option("loop"));
 
         this._renderDragHandler();
-        this._renderWrapper();
-        this._renderItemsContainer();
 
         this.callBase();
         this._renderContainerPosition();
@@ -388,6 +393,7 @@ var Gallery = CollectionWidget.inherit({
         this._renderNavButtons();
         this._renderIndicator();
         this._renderSelectedItem();
+        this._renderItemsVisibility();
         this._renderUserInteraction();
 
         this._setupSlideShow();
@@ -417,6 +423,7 @@ var Gallery = CollectionWidget.inherit({
         this._renderItemPositions();
         this._renderIndicator();
         this._renderContainerPosition(this._calculateIndexOffset(selectedIndex));
+        this._renderItemsVisibility();
     },
 
     _renderDragHandler: function() {
@@ -462,7 +469,7 @@ var Gallery = CollectionWidget.inherit({
 
         if(!itemsCount) return;
 
-        this.$element().find("." + GALLERY_LOOP_ITEM_CLASS).remove();
+        this._getLoopedItems().remove();
 
         var duplicateCount = Math.min(this._itemsPerPage(), itemsCount);
 
@@ -473,6 +480,10 @@ var Gallery = CollectionWidget.inherit({
         for(i = 0; i < duplicateCount; i++) {
             this._renderItem(0, items[lastItemIndex - i]).addClass(GALLERY_LOOP_ITEM_CLASS);
         }
+    },
+
+    _getLoopedItems: function() {
+        return this.$element().find("." + GALLERY_LOOP_ITEM_CLASS);
     },
 
     _emptyMessageContainer: function() {
@@ -508,7 +519,6 @@ var Gallery = CollectionWidget.inherit({
             if(index > itemsCount + itemsPerPage - 1) {
                 realIndex = lastItemDuplicateIndex - realIndex - itemsPerPage;
             }
-
 
             var itemPosition = itemWidth * (realIndex + offsetRatio) + freeSpace * (realIndex + 1 - offsetRatio);
             $(this).css(rtlEnabled ? "right" : "left", itemPosition * 100 + "%");
@@ -662,6 +672,32 @@ var Gallery = CollectionWidget.inherit({
             .removeClass(GALLERY_ITEM_SELECTED_CLASS)
             .eq(selectedIndex)
             .addClass(GALLERY_ITEM_SELECTED_CLASS);
+    },
+
+    _renderItemsVisibility: function() {
+        if(this.option("initialItemWidth")) {
+            this._releaseInvisibleItems();
+            return;
+        }
+
+        this._itemElements().each((function(index, item) {
+            if(this.option("selectedIndex") === index) {
+                $(item).removeClass(GALLERY_INVISIBLE_ITEM_CLASS);
+            } else {
+                $(item).addClass(GALLERY_INVISIBLE_ITEM_CLASS);
+            }
+        }).bind(this));
+
+        this._getLoopedItems()
+            .addClass(GALLERY_INVISIBLE_ITEM_CLASS);
+    },
+
+    _releaseInvisibleItems: function() {
+        this._itemElements()
+            .removeClass(GALLERY_INVISIBLE_ITEM_CLASS);
+
+        this._getLoopedItems()
+            .removeClass(GALLERY_INVISIBLE_ITEM_CLASS);
     },
 
     _renderSelectedPageIndicator: function() {
@@ -895,6 +931,8 @@ var Gallery = CollectionWidget.inherit({
     },
 
     _swipeStartHandler: function(e) {
+        this._releaseInvisibleItems();
+
         this._clearCacheWidth();
         this._elementWidth();
 
@@ -957,6 +995,8 @@ var Gallery = CollectionWidget.inherit({
         }
 
         this.option("selectedIndex", paginatedIndex);
+
+        this._renderItemsVisibility();
     },
 
     _setFocusOnSelect: function() {
@@ -1021,6 +1061,7 @@ var Gallery = CollectionWidget.inherit({
         this._renderNavButtonsVisibility();
 
         this._renderSelectedItem();
+        this._renderItemsVisibility();
 
         this._relocateItems(addedSelection[0], removedSelection[0]);
 
@@ -1174,7 +1215,7 @@ var Gallery = CollectionWidget.inherit({
         }
 
         this.option("selectedIndex", itemIndex);
-
+        this._renderItemsVisibility();
         return this._deferredAnimate.promise();
     },
 

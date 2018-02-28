@@ -375,7 +375,7 @@ var Widget = DOMComponent.inherit({
             return this._defaultTemplates[templateSource.name];
         }
 
-        //TODO: templateSource.render is needed for angular2 integration. Try to remove it after supporting TypeScript modules.
+        // TODO: templateSource.render is needed for angular2 integration. Try to remove it after supporting TypeScript modules.
         if(typeUtils.isFunction(templateSource.render) && !typeUtils.isRenderer(templateSource)) {
             return templateSource;
         }
@@ -450,16 +450,21 @@ var Widget = DOMComponent.inherit({
         });
     },
 
-    _render: function() {
+    _initMarkup: function() {
         this.$element().addClass(WIDGET_CLASS);
-        this.callBase();
 
         this._toggleDisabledState(this.option("disabled"));
         this._toggleVisibility(this.option("visible"));
 
         this._renderHint();
-        this._renderContent();
 
+        this.callBase();
+    },
+
+    _render: function() {
+        this.callBase();
+
+        this._renderContent();
         this._renderFocusState();
         this._attachFeedbackEvents();
         this._attachHoverEvents();
@@ -847,7 +852,7 @@ var Widget = DOMComponent.inherit({
                 var visible = args.value;
                 this._toggleVisibility(visible);
                 if(this._isVisibilityChangeSupported()) {
-                    //TODO hiding works wrong
+                    // TODO hiding works wrong
                     this._checkVisibilityChanged(args.value ? "shown" : "hiding");
                 }
                 break;

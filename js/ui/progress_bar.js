@@ -120,13 +120,13 @@ var ProgressBar = TrackBar.inherit({
         ]);
     },
 
-    _init: function() {
+    _initMarkup: function() {
         this.callBase();
+        this._renderStatus();
     },
 
     _render: function() {
         this._createCompleteAction();
-        this._renderStatus();
         this.callBase();
     },
 

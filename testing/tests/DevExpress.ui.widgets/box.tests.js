@@ -544,6 +544,19 @@ QUnit.test("shrink may be set to 0", function(assert) {
     assert.equal($items.eq(1).height(), secondItemSize - (firstItemSize + secondItemSize - boxSize) / (firstItemShrink + secondItemShrink) * secondItemShrink);
 });
 
+QUnit.test("box must have a correct flex direction on items rendering (T604581)", function(assert) {
+    new Box($("#box"), {
+        direction: "col",
+        items: [{ baseSize: 100 }],
+        itemTemplate: function(item) {
+            if(this.option("_layoutStrategy") === "flex") {
+                assert.equal(this._$element.css("flexDirection"), "column");
+            } else {
+                assert.ok(true);
+            }
+        }
+    });
+});
 
 QUnit.module("template rendering");
 

@@ -307,7 +307,7 @@ QUnit.test("long param list B231902", function(assert) {
     });
 });
 
-//Q476683
+// Q476683
 QUnit.test("Period stripped out of parameter passed to a view", function(assert) {
     var router = new Router();
 
@@ -319,7 +319,7 @@ QUnit.test("Period stripped out of parameter passed to a view", function(assert)
     assert.equal(res.myString, "Hello my name is John...");
 });
 
-//Q484546
+// Q484546
 QUnit.test("format should compare values which don't exist in segments", function(assert) {
     var router = new Router(),
         uri;

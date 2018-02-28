@@ -605,7 +605,7 @@ var runTests = function() {
         assert.deepEqual(instance.option("selectedItemKeys"), [1, 2], "selectedItemKeys wasn't cleared");
     });
 
-    //T579731
+    // T579731
     QUnit.test("selectedItems should not be cleared if datasource instance has been changed to a dataSource config", function(assert) {
         var instance = new TestComponent($("<div>"), {
             selectionMode: "multiple",

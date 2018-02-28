@@ -28,6 +28,10 @@ var BaseRenderingStrategy = Class.inherit({
         return APPOINTMENT_MIN_SIZE;
     },
 
+    keepAppointmentSettings: function() {
+        return false;
+    },
+
     getDeltaTime: abstract,
 
     getAppointmentGeometry: function(coordinates) {
@@ -288,7 +292,7 @@ var BaseRenderingStrategy = Class.inherit({
     },
 
     _normalizeCondition: function(first, second) {
-        //NOTE: ie & ff pixels
+        // NOTE: ie & ff pixels
         var result = first - second;
         return Math.abs(result) > 1.001 ? result : 0;
     },

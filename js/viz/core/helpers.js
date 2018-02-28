@@ -1,6 +1,9 @@
 "use strict";
 
 var _extend = require("../../core/utils/extend").extend;
+var windowUtils = require("../../core/utils/window");
+var noop = require("../../core/utils/common").noop;
+var isServerSide = !windowUtils.hasWindow();
 
 function Flags() {
     this.reset();
@@ -109,37 +112,64 @@ function addPlugin(plugin) {
     }
 }
 
-exports.replaceInherit = function(widget) {
-    var _inherit = widget.inherit;
-    widget.inherit = function() {
-        var proto = this.prototype,
-            plugins = proto._plugins,
-            eventsMap = proto._eventsMap,
-            initialChanges = proto._initialChanges,
-            themeDependentChanges = proto._themeDependentChanges,
-            optionChangesMap = proto._optionChangesMap,
-            optionChangesOrder = proto._optionChangesOrder,
-            layoutChangesOrder = proto._layoutChangesOrder,
-            customChangesOrder = proto._customChangesOrder,
-            result = _inherit.apply(this, arguments);
+exports.replaceInherit = isServerSide
+    ? function(widget) {
+        var _inherit = widget.inherit;
+        widget.inherit = function() {
+            var result = _inherit.apply(this, arguments);
+            var proto = result.prototype;
+            [
+                "_plugins",
+                "_eventsMap",
+                "_initialChanges",
+                "_themeDependentChanges",
+                "_optionChangesMap",
+                "_optionChangesOrder",
+                "_layoutChangesOrder",
+                "_customChangesOrder",
+                "_totalChangesOrder"
+            ].forEach(function(key) {
+                proto[key] = {};
+            });
 
-        proto = result.prototype;
-        proto._plugins = combineLists(plugins, proto._plugins);
-        proto._eventsMap = combineMaps(eventsMap, proto._eventsMap);
-        proto._initialChanges = combineLists(initialChanges, proto._initialChanges);
-        proto._themeDependentChanges = combineLists(themeDependentChanges, proto._themeDependentChanges);
-        proto._optionChangesMap = combineMaps(optionChangesMap, proto._optionChangesMap);
-        proto._optionChangesOrder = combineLists(optionChangesOrder, proto._optionChangesOrder);
-        proto._layoutChangesOrder = combineLists(layoutChangesOrder, proto._layoutChangesOrder);
-        proto._customChangesOrder = combineLists(customChangesOrder, proto._customChangesOrder);
-        buildTotalChanges(proto);
-        result.addPlugin = addPlugin;
-        return result;
+            result.addPlugin = noop;
+
+            return result;
+        };
+        widget.addChange = noop;
+        widget.addPlugin = noop;
+    }
+    : function(widget) {
+        var _inherit = widget.inherit;
+        widget.inherit = function() {
+            var proto = this.prototype,
+                plugins = proto._plugins,
+                eventsMap = proto._eventsMap,
+                initialChanges = proto._initialChanges,
+                themeDependentChanges = proto._themeDependentChanges,
+                optionChangesMap = proto._optionChangesMap,
+                optionChangesOrder = proto._optionChangesOrder,
+                layoutChangesOrder = proto._layoutChangesOrder,
+                customChangesOrder = proto._customChangesOrder,
+                result = _inherit.apply(this, arguments);
+
+            proto = result.prototype;
+            proto._plugins = combineLists(plugins, proto._plugins);
+            proto._eventsMap = combineMaps(eventsMap, proto._eventsMap);
+            proto._initialChanges = combineLists(initialChanges, proto._initialChanges);
+            proto._themeDependentChanges = combineLists(themeDependentChanges, proto._themeDependentChanges);
+            proto._optionChangesMap = combineMaps(optionChangesMap, proto._optionChangesMap);
+            proto._optionChangesOrder = combineLists(optionChangesOrder, proto._optionChangesOrder);
+            proto._layoutChangesOrder = combineLists(layoutChangesOrder, proto._layoutChangesOrder);
+            proto._customChangesOrder = combineLists(customChangesOrder, proto._customChangesOrder);
+            buildTotalChanges(proto);
+            result.addPlugin = addPlugin;
+            return result;
+        };
+        widget.prototype._plugins = [];
+        widget.addChange = addChange;
+        widget.addPlugin = addPlugin;
     };
-    widget.prototype._plugins = [];
-    widget.addChange = addChange;
-    widget.addPlugin = addPlugin;
-};
 
 exports.changes = function() {
     return new Flags();

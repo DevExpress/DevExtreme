@@ -2,6 +2,7 @@
 
 var Deferred = require("./deferred").Deferred;
 var domAdapter = require("../../core/dom_adapter");
+var httpRequest = require("../../core/http_request");
 var windowUtils = require("../../core/utils/window");
 var window = windowUtils.getWindow();
 var extendFromObject = require("./extend").extendFromObject;
@@ -28,7 +29,17 @@ var paramsConvert = function(params) {
     var result = [];
 
     for(var name in params) {
-        result.push(encodeURIComponent(name) + "=" + encodeURIComponent(params[name]));
+        var value = params[name];
+
+        if(value === undefined) {
+            continue;
+        }
+
+        if(value === null) {
+            value = "";
+        }
+
+        result.push(encodeURIComponent(name) + "=" + encodeURIComponent(value));
     }
 
     return result.join("&");
@@ -125,23 +136,27 @@ var postProcess = function(deferred, xhr, dataType) {
 
         case "script":
             evalScript(data);
-            deferred.resolve(data, SUCCESS);
+            deferred.resolve(data, SUCCESS, xhr);
             break;
 
         case "json":
             try {
-                deferred.resolve(JSON.parse(data), SUCCESS);
+                deferred.resolve(JSON.parse(data), SUCCESS, xhr);
             } catch(e) {
                 deferred.reject(xhr, PARSER_ERROR, e);
             }
             break;
 
         default:
-            deferred.resolve(data, SUCCESS);
+            deferred.resolve(data, SUCCESS, xhr);
     }
 };
 
 var isCrossDomain = function(url) {
+    if(!windowUtils.hasWindow()) {
+        return true;
+    }
+
     var crossDomain = false,
         originAnchor = domAdapter.createElement("a"),
         urlAnchor = domAdapter.createElement("a");
@@ -231,7 +246,7 @@ var sendRequest = function(options) {
         return ajaxStrategy(options);
     }
 
-    var xhr = new window.XMLHttpRequest(),
+    var xhr = httpRequest.getXhr(),
         d = new Deferred(),
         result = d.promise(),
         async = isDefined(options.async) ? options.async : true,
@@ -254,7 +269,7 @@ var sendRequest = function(options) {
 
     if(callbackName) {
         window[callbackName] = function(data) {
-            d.resolve(data, SUCCESS);
+            d.resolve(data, SUCCESS, xhr);
         };
     }
 
@@ -264,7 +279,7 @@ var sendRequest = function(options) {
             },
             resolve = function() {
                 if(dataType === "jsonp") return;
-                d.resolve(null, SUCCESS);
+                d.resolve(null, SUCCESS, xhr);
             };
 
         evalCrossDomainScript(url).then(resolve, reject);
@@ -295,7 +310,7 @@ var sendRequest = function(options) {
                 if(hasContent(xhr.status)) {
                     postProcess(d, xhr, dataType);
                 } else {
-                    d.resolve(null, NO_CONTENT);
+                    d.resolve(null, NO_CONTENT, xhr);
                 }
             } else {
                 d.reject(xhr, xhr.customStatus || ERROR);

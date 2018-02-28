@@ -471,9 +471,14 @@ var Slider = TrackBar.inherit({
     _renderDimensions: function() {
         this.callBase();
         if(this._$bar) {
-            var barMarginWidth = this._$bar.outerWidth(true) - this._$bar.outerWidth();
-            this._$bar.width(this._getOptionValue("width", this._$bar.get(0)) - barMarginWidth);
+            var barMarginWidth = this._getBarMarginWidth();
+            this._$bar.css("width", this._getOptionValue("width", this._$bar.get(0)) - barMarginWidth);
         }
+    },
+
+    _getBarMarginWidth: function() {
+        var margins = parseInt(this._$bar.css("marginLeft")) + parseInt(this._$bar.css("marginRight"));
+        return Math.abs(margins);
     },
 
     _renderStartHandler: function() {
@@ -574,7 +579,7 @@ var Slider = TrackBar.inherit({
         }
 
         step = parseFloat(step.toFixed(5));
-        //TODO or exception?
+        // TODO or exception?
         if(step === 0) {
             step = 0.00001;
         }
@@ -680,10 +685,6 @@ var Slider = TrackBar.inherit({
             case "label":
                 this._renderLabels();
                 break;
-            case "rtlEnabled":
-                this._toggleRTLDirection();
-                this._renderValue();
-                break;
             case "useInkRipple":
                 this._invalidate();
                 break;
@@ -691,8 +692,8 @@ var Slider = TrackBar.inherit({
                 this.callBase(args);
         }
     },
-
     _refresh: function() {
+        this._toggleRTLDirection(this.option("rtlEnabled"));
         this._renderDimensions();
         this._renderValue();
         this._renderHandle();

@@ -69,10 +69,10 @@ QUnit.testStart(function() {
 
         summary._initGroupRegistration();
 
-        //act
+        // act
         ValidationEngine.validateGroup(group);
 
-        //assert
+        // assert
         assert.ok(summary._groupValidationHandler.calledOnce, "Handler should be called");
         var params = summary._groupValidationHandler.getCall(0).args[0];
         assert.ok(summary._groupValidationHandler.calledOnce, "Handler should be called");
@@ -151,7 +151,7 @@ QUnit.testStart(function() {
             validators: [validator]
         });
 
-        //assert
+        // assert
         var itemElements = this.fixture.$summaryContainer.find(".dx-validationsummary-item");
         assert.equal(itemElements.length, 1, "Single item element should be rendered");
         itemElements.trigger("click");
@@ -195,11 +195,10 @@ QUnit.testStart(function() {
 
         ValidationEngine.registerValidatorInGroup(group, validator);
 
-
-        //act
+        // act
         ValidationEngine.validateGroup(group);
 
-        //assert
+        // assert
         assert.ok(summary._groupValidationHandler.calledOnce, "Handler should be called");
         var params = summary._groupValidationHandler.getCall(0).args[0];
         assert.ok(summary._groupValidationHandler.calledOnce, "Handler should be called");
@@ -215,12 +214,12 @@ QUnit.testStart(function() {
                 validationGroup: undefined
             });
 
-        //fake
+        // fake
         summary._groupValidationHandler = sinon.spy();
-        //act
+        // act
         summary.option("validationGroup", group);
         ValidationEngine.getGroupConfig(group).validate();
-        //assert
+        // assert
         assert.ok(summary._groupValidationHandler.calledOnce, "Handler should be called");
 
     });
@@ -231,12 +230,12 @@ QUnit.testStart(function() {
                 validationGroup: undefined
             });
 
-        //fake
+        // fake
         summary._groupValidationHandler = sinon.spy();
-        //act
+        // act
         summary.option("validationGroup", group);
         ValidationEngine.getGroupConfig(undefined).validate();
-        //assert
+        // assert
         assert.ok(summary._groupValidationHandler.notCalled, "Handler should not be called");
 
     });
@@ -278,12 +277,12 @@ QUnit.testStart(function() {
         ValidationEngine.validateGroup("group1");
 
 
-        //act
-        //change validator's state
+        // act
+        // change validator's state
         validator1.option("adapter").getValue.returns("1");
         validator1.validate();
 
-        //assert
+        // assert
         var items = summary.option('items');
 
         assert.ok(items, "Items should exists");
@@ -318,12 +317,12 @@ QUnit.testStart(function() {
 
         ValidationEngine.validateGroup("group1");
 
-        //act
-        //change validator's state
+        // act
+        // change validator's state
         validator1.option("adapter").getValue.returns("100500");
         validator1.validate();
 
-        //assert
+        // assert
         var items = summary.option('items');
 
         assert.ok(items, "Items should exists");
@@ -345,12 +344,12 @@ QUnit.testStart(function() {
 
         ValidationEngine.validateGroup("group1");
 
-        //act
-        //change validator's state
+        // act
+        // change validator's state
         validator1.option("adapter").getValue.returns("");
         validator1.validate();
 
-        //assert
+        // assert
         var items = summary.option('items');
 
         assert.ok(items, "Items should exists");
@@ -411,12 +410,12 @@ QUnit.testStart(function() {
 
         ValidationEngine.validateGroup("group1");
 
-        //act
-        //change validator's state
+        // act
+        // change validator's state
         validator1.option("adapter").getValue.returns("");
         validator1.validate();
 
-        //assert
+        // assert
         var items = summary.option('items');
 
         assert.ok(items, "Items should exists");

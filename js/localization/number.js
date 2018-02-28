@@ -15,10 +15,10 @@ var MAX_LARGE_NUMBER_POWER = 4,
 var NUMERIC_FORMATS = ["currency", "fixedpoint", "exponential", "percent", "decimal"];
 
 var LargeNumberFormatPostfixes = {
-    1: 'K', //kilo
-    2: 'M', //mega
-    3: 'B', //billions
-    4: 'T' //tera
+    1: 'K', // kilo
+    2: 'M', // mega
+    3: 'B', // billions
+    4: 'T' // tera
 };
 
 var LargeNumberFormatPowers = {
@@ -234,7 +234,7 @@ var numberLocalization = dependencyInjector({
         });
     },
 
-    _getSign: function(text, format) {
+    getSign: function(text, format) {
         if(text.charAt(0) === "-") {
             return -1;
         }
@@ -312,7 +312,7 @@ var numberLocalization = dependencyInjector({
             return null;
         }
 
-        return parsed * this._getSign(text, format);
+        return parsed * this.getSign(text, format);
     }
 });
 

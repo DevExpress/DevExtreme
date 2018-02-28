@@ -25,21 +25,21 @@ Microsoft.Maps = {
                 waypoints.push(waypoint);
                 Microsoft.lastDirectionPoints = [waypoints[0].getLocation(), waypoints[waypoints.length - 1].getLocation()];
             };
-            this.calculateDirections = function() {};//()
-            this.clearDisplay = function() {};//()
+            this.calculateDirections = function() {};// ()
+            this.clearDisplay = function() {};// ()
             this.dispose = function() {
                 Microsoft.directionRemoved = true;
             };
-            this.getAllWaypoints = function() {};//()
-            this.getMap = function() {};//()
-            this.getNearbyMajorRoads = function() {};//(location:Location, callback:function, errorCallback:function, userData:object)
-            this.getRenderOptions = function() {};//()
-            this.getRequestOptions = function() {};//()
-            this.getRouteResult = function() {};//()
-            this.removeWaypoint = function() {};//(waypoint:Waypoint) or removeWaypoints(index:number)
-            this.resetDirections = function() {};//(options:ResetDirectionsOptions)
-            this.reverseGeocode = function() {};//(location:Location, callback:function, errorCallback:function, userData:object)
-            this.setMapView = function() {};//()
+            this.getAllWaypoints = function() {};// ()
+            this.getMap = function() {};// ()
+            this.getNearbyMajorRoads = function() {};// (location:Location, callback:function, errorCallback:function, userData:object)
+            this.getRenderOptions = function() {};// ()
+            this.getRequestOptions = function() {};// ()
+            this.getRouteResult = function() {};// ()
+            this.removeWaypoint = function() {};// (waypoint:Waypoint) or removeWaypoints(index:number)
+            this.resetDirections = function() {};// (options:ResetDirectionsOptions)
+            this.reverseGeocode = function() {};// (location:Location, callback:function, errorCallback:function, userData:object)
+            this.setMapView = function() {};// ()
             this.setRenderOptions = function(options) {
                 Microsoft.directionsOptions = Microsoft.directionsOptions || {};
                 Microsoft.directionsOptions.drivingPolylineOptions = options.drivingPolylineOptions;
@@ -55,20 +55,20 @@ Microsoft.Maps = {
             walking: 2
         },
         Waypoint: function(options) {
-            this.clear = function() {};//()
-            this.dispose = function() {};//()
-            this.getAddress = function() {};//()
-            this.getBusinessDetails = function() {};//()
-            this.getDisambiguationContainer = function() {};//()
-            this.getDisambiguationResult = function() {};//()
+            this.clear = function() {};// ()
+            this.dispose = function() {};// ()
+            this.getAddress = function() {};// ()
+            this.getBusinessDetails = function() {};// ()
+            this.getDisambiguationContainer = function() {};// ()
+            this.getDisambiguationResult = function() {};// ()
             this.getLocation = function() {
                 return options.location;
-            };//()
-            this.getPushpin = function() {};//()
-            this.getShortAddress = function() {};//()
-            this.isExactLocation = function() {};//()
-            this.isViapoint = function() {};//()
-            this.setOptions = function() {};//(options:WaypointOptions)
+            };// ()
+            this.getPushpin = function() {};// ()
+            this.getShortAddress = function() {};// ()
+            this.isExactLocation = function() {};// ()
+            this.isViapoint = function() {};// ()
+            this.setOptions = function() {};// (options:WaypointOptions)
         }
     },
     Events: {
@@ -100,8 +100,8 @@ Microsoft.Maps = {
                     return "viewchangeendHandler";
             }
         },
-        addThrottledHandler: function() {}, //(target:object, eventName:string, handler:function, throttleInterval:number)
-        hasHandler: function() {}, //(target:object, eventName:string)
+        addThrottledHandler: function() {}, // (target:object, eventName:string, handler:function, throttleInterval:number)
+        hasHandler: function() {}, // (target:object, eventName:string)
         invoke: function(_, handler) {
             switch(handler) {
                 case "viewchange":
@@ -141,9 +141,9 @@ Microsoft.Maps = {
         }
 
         this.entities = new Microsoft.Maps.EntityCollection();
-        this.blur = function() {};//()
-        this.dispose = function() {};//()
-        this.focus = function() {};//()
+        this.blur = function() {};// ()
+        this.dispose = function() {};// ()
+        this.focus = function() {};// ()
         this.getBounds = function() {
             if(Microsoft.boundsValue) {
                 return Microsoft.boundsValue;
@@ -158,36 +158,36 @@ Microsoft.Maps = {
                 return new Microsoft.Maps.Location(0, 0);
             }
         };
-        this.getCopyrights = function() {};//(callback:function)
-        this.getCredentials = function() {};//(callback:function)
-        this.getHeading = function() {};//()
-        this.getHeight = function() {};//()
-        this.getImageryId = function() {};//()
-        this.getMapTypeId = function() {};//()
-        this.getMetersPerPixel = function() {};//()
-        this.getMode = function() {};//()
-        this.getModeLayer = function() {};//()
-        this.getOptions = function() {};//()
-        this.getPageX = function() {};//()
-        this.getPageY = function() {};//()
-        this.getRootElement = function() {};//()
-        this.getTargetBounds = function() {};//()
-        this.getTargetCenter = function() {};//()
-        this.getTargetHeading = function() {};//()
-        this.getTargetMetersPerPixel = function() {};//()
-        this.getTargetZoom = function() {};//()
-        this.getUserLayer = function() {};//()
-        this.getViewportX = function() {};//()
-        this.getViewportY = function() {};//()
-        this.getWidth = function() {};//()
+        this.getCopyrights = function() {};// (callback:function)
+        this.getCredentials = function() {};// (callback:function)
+        this.getHeading = function() {};// ()
+        this.getHeight = function() {};// ()
+        this.getImageryId = function() {};// ()
+        this.getMapTypeId = function() {};// ()
+        this.getMetersPerPixel = function() {};// ()
+        this.getMode = function() {};// ()
+        this.getModeLayer = function() {};// ()
+        this.getOptions = function() {};// ()
+        this.getPageX = function() {};// ()
+        this.getPageY = function() {};// ()
+        this.getRootElement = function() {};// ()
+        this.getTargetBounds = function() {};// ()
+        this.getTargetCenter = function() {};// ()
+        this.getTargetHeading = function() {};// ()
+        this.getTargetMetersPerPixel = function() {};// ()
+        this.getTargetZoom = function() {};// ()
+        this.getUserLayer = function() {};// ()
+        this.getViewportX = function() {};// ()
+        this.getViewportY = function() {};// ()
+        this.getWidth = function() {};// ()
         this.getZoom = function() {
             return Microsoft.zoomValue;
         };
-        this.getZoomRange = function() {};//()
-        this.isDownloadingTiles = function() {};//()
-        this.isMercator = function() {};//()
-        this.isRotationEnabled = function() {};//()
-        this.setMapType = function() {};//(mapTypeId:string)
+        this.getZoomRange = function() {};// ()
+        this.isDownloadingTiles = function() {};// ()
+        this.isMercator = function() {};// ()
+        this.isRotationEnabled = function() {};// ()
+        this.setMapType = function() {};// (mapTypeId:string)
         this.setOptions = function(options) {
             Microsoft.assignedOptions = jQuery.extend(Microsoft.assignedOptions || {}, options);
         };
@@ -203,7 +203,7 @@ Microsoft.Maps = {
                 }
             }
         };
-        this.tryLocationToPixel = function() {};//(location:Location |Location[], reference?:PixelReference)
+        this.tryLocationToPixel = function() {};// (location:Location |Location[], reference?:PixelReference)
         this.tryPixelToLocation = function(point) {
             return new Microsoft.Maps.Location(point.x, point.y);
         };
@@ -234,21 +234,21 @@ Microsoft.Maps = {
         Microsoft.pushpinInstance = (Microsoft.pushpinInstance || 0) + 1;
         Microsoft.pushpinOptions = options;
 
-        this.getAnchor = function() {};//()
+        this.getAnchor = function() {};// ()
         this.getIcon = function() {
             return options.icon;
         };
-        this.getHeight = function() {};//()
-        this.getLocation = function() {};//()
-        this.getText = function() {};//()
-        this.getTextOffset = function() {};//()
-        this.getTypeName = function() {};//()
-        this.getVisible = function() {};//()
-        this.getWidth = function() {};//()
-        this.getZIndex = function() {};//()
-        this.setLocation = function() {};//(location:Location)
-        this.setOptions = function() {};//(options:PushpinOptions)
-        this.toString = function() {};//()
+        this.getHeight = function() {};// ()
+        this.getLocation = function() {};// ()
+        this.getText = function() {};// ()
+        this.getTextOffset = function() {};// ()
+        this.getTypeName = function() {};// ()
+        this.getVisible = function() {};// ()
+        this.getWidth = function() {};// ()
+        this.getZIndex = function() {};// ()
+        this.setLocation = function() {};// (location:Location)
+        this.setOptions = function() {};// (options:PushpinOptions)
+        this.toString = function() {};// ()
     },
     Color: {
         a: 0,
@@ -260,24 +260,24 @@ Microsoft.Maps = {
         }
     },
     Polyline: function(locations, options) {
-        this.getLocations = function() {};//()
-        this.getStrokeColor = function() {};//()
-        this.getStrokeDashArray = function() {};//()
-        this.getStrokeThickness = function() {};//()
-        this.getVisible = function() {};//()
-        this.setLocations = function() {};//(locations:Location[])
-        this.setOptions = function() {};//(options:PolylineOptions)
-        this.toString = function() {};//()
+        this.getLocations = function() {};// ()
+        this.getStrokeColor = function() {};// ()
+        this.getStrokeDashArray = function() {};// ()
+        this.getStrokeThickness = function() {};// ()
+        this.getVisible = function() {};// ()
+        this.setLocations = function() {};// (locations:Location[])
+        this.setOptions = function() {};// (options:PolylineOptions)
+        this.toString = function() {};// ()
     },
     EntityCollection: function(options) {
-        this.clear = function() {};//()
-        this.get = function() {};//(index:number)
-        this.getLength = function() {};//()
-        this.getVisible = function() {};//()
-        this.getZIndex = function() {};//()
-        this.indexOf = function() {};//(entity:Entity*)
-        this.insert = function() {};//(entity:Entity*, index:number)
-        this.pop = function() {};//()
+        this.clear = function() {};// ()
+        this.get = function() {};// (index:number)
+        this.getLength = function() {};// ()
+        this.getVisible = function() {};// ()
+        this.getZIndex = function() {};// ()
+        this.indexOf = function() {};// (entity:Entity*)
+        this.insert = function() {};// (entity:Entity*, index:number)
+        this.pop = function() {};// ()
         this.push = function(entity) {
             if(entity instanceof Microsoft.Maps.Pushpin) {
                 Microsoft.pushpinAddedToMap = true;
@@ -294,9 +294,9 @@ Microsoft.Maps = {
                 Microsoft.infoboxRemoved = true;
             }
         };
-        this.removeAt = function() {};//(index:number)
-        this.setOptions = function() {};//(options:EntityCollectionOptions)
-        this.toString = function() {};//()
+        this.removeAt = function() {};// (index:number)
+        this.setOptions = function() {};// (options:EntityCollectionOptions)
+        this.toString = function() {};// ()
     },
     Infobox: function(location, options) {
         Microsoft.infoboxLocation = location;

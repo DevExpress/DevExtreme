@@ -212,19 +212,19 @@ QUnit.test("Async loading when more 10000 items", function(assert) {
         values: [{ summaryType: "count" }]
     }).done(function(result) {
         doneCalled = true;
-        //assert
+        // assert
         assert.equal(result.columns.length, 0);
         assert.equal(result.rows.length, 20000);
         assert.equal(result.values.length, 20001);
     });
 
-    //assert
+    // assert
     assert.notOk(doneCalled, "load is not completed");
 
-    //act
+    // act
     clock.tick();
 
-    //assert
+    // assert
     assert.ok(doneCalled, "load is completed");
     assert.deepEqual(progresses, [50, 100], "progress values");
 
@@ -1623,14 +1623,14 @@ QUnit.test("reload data", function(assert) {
         assert.strictEqual(data.values[0][0][0], 4);
     });
 
-    //act
+    // act
     dataSource.splice(0, 2);
 
     localStore = localStore.load({
         values: [{ dataField: "OrderID" }],
         reload: true
     }).done(function(data) {
-        //assert
+        // assert
         assert.strictEqual(data.values[0][0][0], 2);
     });
 });
@@ -1649,14 +1649,14 @@ QUnit.test("filter data", function(assert) {
         values: [{ dataField: "OrderID" }]
     });
 
-    //act
+    // act
     localStore.filter("OrderID", ">", 10249);
     var filterExpr = localStore.filter();
 
     localStore.load({
         values: [{ dataField: "OrderID" }],
     }).done(function(data) {
-        //assert
+        // assert
         assert.strictEqual(data.values[0][0][0], 4, "data should be filtered on reload only if not CustomStore is used");
     });
 
@@ -1664,7 +1664,7 @@ QUnit.test("filter data", function(assert) {
         values: [{ dataField: "OrderID" }],
         reload: true
     }).done(function(data) {
-        //assert
+        // assert
         assert.strictEqual(data.values[0][0][0], 2);
     }).fail(function() {
         assert.ok(false);
