@@ -310,7 +310,7 @@ var Scheduler = Widget.inherit({
                 * @name dxSchedulerOptions_views_agendaDuration
                 * @publicName agendaDuration
                 * @type number
-                * default 7
+                * @default 7
                 */
 
                 /**
