@@ -367,25 +367,9 @@ QUnit.test("delete button click should delete list item", function(assert) {
 });
 
 
-var TOGGLE_DELETE_SWITCH_CLASS = "dx-list-toggle-delete-switch",
-    TOGGLE_DELETE_SWITCH_ICON_CLASS = "dx-icon-toggle-delete";
+var TOGGLE_DELETE_SWITCH_CLASS = "dx-list-toggle-delete-switch";
 
 QUnit.module("toggle delete decorator");
-
-QUnit.test("list item markup", function(assert) {
-    var $list = $($("#templated-list").dxList({
-        items: ["0"],
-        allowItemDeleting: true,
-        itemDeleteMode: "toggle"
-    }));
-
-    var $items = $list.find(toSelector(LIST_ITEM_CLASS)),
-        $item = $items.eq(0);
-
-    var $deleteToggle = $item.children(toSelector(LIST_ITEM_BEFORE_BAG_CLASS)).children(toSelector(TOGGLE_DELETE_SWITCH_CLASS));
-    assert.ok($deleteToggle.length, "toggle generated");
-    assert.ok($deleteToggle.find(toSelector(TOGGLE_DELETE_SWITCH_ICON_CLASS)).length, "toggle icon generated");
-});
 
 QUnit.test("toggling delete toggle button should switch delete ready class", function(assert) {
     var $list = $($("#templated-list").dxList({
@@ -404,27 +388,9 @@ QUnit.test("toggling delete toggle button should switch delete ready class", fun
 });
 
 
-var STATIC_DELETE_BUTTON_CONTAINER_CLASS = "dx-list-static-delete-button-container",
-    STATIC_DELETE_BUTTON_CLASS = "dx-list-static-delete-button";
+var STATIC_DELETE_BUTTON_CLASS = "dx-list-static-delete-button";
 
 QUnit.module("static delete decorator");
-
-QUnit.test("list item markup", function(assert) {
-    var $list = $($("#list").dxList({
-        items: ["0", "1", "2"],
-        allowItemDeleting: true,
-        itemDeleteMode: "static"
-    }));
-
-    var $items = $list.find(toSelector(LIST_ITEM_CLASS)),
-        $item = $items.eq(0);
-
-    var $button = $item.find(toSelector(STATIC_DELETE_BUTTON_CLASS));
-
-    assert.equal($button.length, 1, "delete button was rendered");
-    assert.ok($button.parent().hasClass(STATIC_DELETE_BUTTON_CONTAINER_CLASS), "delete button was rendered in correct container");
-    assert.equal($list.find(toSelector(STATIC_DELETE_BUTTON_CLASS)).length, 3, "delete button was rendered for all items");
-});
 
 QUnit.test("delete button click should delete list item", function(assert) {
     assert.expect(1);
@@ -1501,25 +1467,7 @@ QUnit.module("item select decorator");
 
 var SELECT_DECORATOR_ENABLED_CLASS = "dx-list-select-decorator-enabled",
 
-    SELECT_CHECKBOX_CONTAINER_CLASS = "dx-list-select-checkbox-container",
     SELECT_CHECKBOX_CLASS = "dx-list-select-checkbox";
-
-QUnit.test("list item markup", function(assert) {
-    var $list = $($("#templated-list").dxList({
-        items: ["0"],
-        showSelectionControls: true,
-        selectionMode: "multiple"
-    }));
-
-    var $items = $list.find(toSelector(LIST_ITEM_CLASS)),
-        $item = $items.eq(0);
-
-    var $checkboxContainer = $item.children(toSelector(LIST_ITEM_BEFORE_BAG_CLASS)),
-        $checkbox = $checkboxContainer.children(toSelector(SELECT_CHECKBOX_CLASS));
-
-    assert.ok($checkboxContainer.hasClass(SELECT_CHECKBOX_CONTAINER_CLASS), "container has proper class");
-    assert.ok($checkbox.hasClass("dx-checkbox"), "select generated");
-});
 
 QUnit.test("selection control has focusStateEnabled = false and hoverStateEnabled = false", function(assert) {
     var $list = $($("#templated-list").dxList({
@@ -2126,23 +2074,7 @@ QUnit.test("selectAll and unselectAll should log warning if selectAllMode is all
     errors.log.restore();
 });
 
-
 QUnit.module("item select decorator with all selection mode");
-
-QUnit.test("render selectAll item when showSelectedAll is true", function(assert) {
-    var $list = $($("#list").dxList({
-        items: [0],
-        showSelectionControls: true,
-        selectionMode: "all",
-        selectAllText: "Test"
-    }));
-
-    var $multipleContainer = $list.find(".dx-list-select-all");
-    assert.equal($multipleContainer.length, 1, "container for SelectAll rendered");
-    assert.equal($multipleContainer.text(), "Test", "select all rendered");
-    var $checkbox = $multipleContainer.find(".dx-checkbox");
-    assert.equal($checkbox.length, 1, "checkbox rendered");
-});
 
 QUnit.test("render selectAll item when showSelectedAll is true", function(assert) {
     var $list = $($("#list").dxList({
@@ -2440,24 +2372,7 @@ QUnit.test("onContentReady event should be called after update the state Select 
 
 QUnit.module("item select decorator with single selection mode");
 
-var SELECT_RADIO_BUTTON_CONTAINER_CLASS = "dx-list-select-radiobutton-container",
-    SELECT_RADIO_BUTTON_CLASS = "dx-list-select-radiobutton";
-
-QUnit.test("list item markup", function(assert) {
-    var $list = $($("#templated-list").dxList({
-        items: ["0"],
-        showSelectionControls: true,
-        selectionMode: "single"
-    }));
-
-    var $items = $list.find(toSelector(LIST_ITEM_CLASS)),
-        $item = $items.eq(0);
-
-    var $radioButtonContainer = $item.children(toSelector(SELECT_RADIO_BUTTON_CONTAINER_CLASS)),
-        $radioButton = $radioButtonContainer.children(toSelector(SELECT_RADIO_BUTTON_CLASS));
-
-    assert.ok($radioButton.hasClass("dx-radiobutton"), "radio button generated");
-});
+var SELECT_RADIO_BUTTON_CLASS = "dx-list-select-radiobutton";
 
 QUnit.test("item click changes radio button state only to true in single selection mode", function(assert) {
     var $list = $($("#templated-list").dxList({
@@ -2489,8 +2404,7 @@ QUnit.module("reordering decorator", {
     }
 });
 
-var REORDER_HANDLE_CONTAINER_CLASS = "dx-list-reorder-handle-container",
-    REORDER_HANDLE_CLASS = "dx-list-reorder-handle",
+var REORDER_HANDLE_CLASS = "dx-list-reorder-handle",
 
     REOREDERING_ITEM_CLASS = "dx-list-item-reordering",
     REOREDERING_ITEM_GHOST_CLASS = "dx-list-item-ghost-reordering";
@@ -2533,22 +2447,6 @@ var reorderingPointerMock = function($item, clock, usePixel) {
 var topTranslation = function($item) {
     return translator.locate($item).top;
 };
-
-QUnit.test("list item markup should be correct", function(assert) {
-    var $list = $($("#templated-list").dxList({
-        items: ["0"],
-        allowItemReordering: true
-    }));
-
-    var $items = $list.find(toSelector(LIST_ITEM_CLASS)),
-        $item = $items.eq(0);
-
-    var $handleContainer = $item.children(toSelector(REORDER_HANDLE_CONTAINER_CLASS)),
-        $handle = $handleContainer.children(toSelector(REORDER_HANDLE_CLASS));
-
-    assert.equal($handleContainer.length, 1, "container generated");
-    assert.equal($handle.length, 1, "handle generated");
-});
 
 QUnit.test("reordering class should be present on item during drag", function(assert) {
     var $list = $($("#templated-list").dxList({
