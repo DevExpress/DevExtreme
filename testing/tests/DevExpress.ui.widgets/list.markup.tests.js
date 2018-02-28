@@ -184,7 +184,8 @@ QUnit.test("next button showing", function(assert) {
             store: [1, 2, 3],
             pageSize: 2
         },
-        showNextButton: true
+        showNextButton: true,
+        pageLoadMode: "nextButton"
     }).dxList("instance");
     var nextButton = $(".dx-list-next-button ", this.element);
 
