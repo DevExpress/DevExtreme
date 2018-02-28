@@ -152,9 +152,7 @@ var DOMComponent = Component.inherit({
     },
 
     _render: function() {
-        if(this._isVisibilityChangeSupported()) {
-            this._attachVisibilityChangeHandlers();
-        }
+        this._attachVisibilityChangeHandlers();
     },
 
     _renderElementAttributes: function() {
@@ -210,6 +208,9 @@ var DOMComponent = Component.inherit({
     },
 
     _attachVisibilityChangeHandlers: function() {
+        if(!this._isVisibilityChangeSupported()) {
+            return;
+        }
         var that = this;
         var hidingEventName = "dxhiding." + this.NAME + VISIBILITY_CHANGE_EVENTNAMESPACE;
         var shownEventName = "dxshown." + this.NAME + VISIBILITY_CHANGE_EVENTNAMESPACE;
