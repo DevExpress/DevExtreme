@@ -78,7 +78,7 @@ var getCaretAfterFormat = function(text, formatted, caret, format) {
     if(isCaretOnFloat) {
         var relativeIndex = caret.start - pointPosition - 1,
             digitsBefore = getDigitCountBeforeIndex(relativeIndex, textParts[1]),
-            newPosition = newPointPosition + 1 + getDigitPositionByIndex(digitsBefore, formattedParts[1]) + 1;
+            newPosition = formattedParts[1] ? newPointPosition + 1 + getDigitPositionByIndex(digitsBefore, formattedParts[1]) + 1 : formatted.length;
 
         return getCaretInBoundaries(newPosition, text, format);
     } else {
