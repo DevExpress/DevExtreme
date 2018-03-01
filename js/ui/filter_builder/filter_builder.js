@@ -776,7 +776,7 @@ var FilterBuilder = Widget.inherit({
                     items: availableOperations,
                     displayExpr: "text",
                     onItemRendered: function(e) {
-                        e.itemData.isCustom && e.itemElement.addClass(FILTER_BUILDER_MENU_CUSTOM_OPERATION_CLASS);
+                        e.itemData.isCustom && $(e.itemElement).addClass(FILTER_BUILDER_MENU_CUSTOM_OPERATION_CLASS);
                     },
                     onContentReady: function(e) {
                         e.component.selectItem(currentOperation);
