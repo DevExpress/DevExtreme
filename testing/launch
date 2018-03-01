@@ -3,7 +3,6 @@
 "use strict";
 // jshint esversion:6
 
-require('../gulpfile');
 
 var path = require("path"),
     http = require("http"),
@@ -16,7 +15,7 @@ var PORT = require("./../ports.json").qunit;
 if(parseInt(process.versions.node.split('.')[0]) < 6)
     throw "Node version is too low";
 
-gulp.start('transpile-watch');
+watchForTests();
 
 childProcess.spawn(
     "dotnet",
@@ -24,6 +23,15 @@ childProcess.spawn(
     { stdio: "inherit" }
 );
 waitForRunner();
+
+
+function watchForTests() {
+    var process = require('process');
+    process.chdir(path.join(__dirname, "../"));
+
+    require('../gulpfile');
+    gulp.start('transpile-watch');
+}
 
 function waitForRunner() {
     var timestamp = Date.now();
