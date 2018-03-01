@@ -10,8 +10,6 @@ QUnit.testStart(function() {
     var markup =
         '<div id="qunit-fixture">\
             <div id="textbox"></div>\
-            <div id="widget"></div>\
-            <div id="widthRootStyle" style="width: 300px;"></div>\
         </div>';
 
     $("#qunit-fixture").html(markup);
@@ -74,7 +72,7 @@ QUnit.test("'maxLength' option", function(assert) {
 });
 
 QUnit.test("set width via constructor", function(assert) {
-    var $element = $("#widget").dxTextBox({ width: 400 }),
+    var $element = $("#textbox").dxTextBox({ width: 400 }),
         elementStyles = $element.get(0).style;
 
     assert.strictEqual(elementStyles.width, "400px", "'width' style of the element must be equal to custom width");
@@ -91,6 +89,6 @@ QUnit.test("textBox with the 'seach' mode should render the search icon", functi
 QUnit.module("aria accessibility");
 
 QUnit.test("aria role", function(assert) {
-    var $element = $("#widget").dxTextBox();
+    var $element = $("#textbox").dxTextBox();
     assert.equal($element.find(".dx-texteditor-input").attr("role"), "textbox", "aria role is correct");
 });

@@ -11,7 +11,6 @@ QUnit.testStart(function() {
     var markup =
         '<div id="qunit-fixture">\
             <div id="textbox"></div>\
-            <div id="widget"></div>\
             <div id="widthRootStyle" style="width: 300px;"></div>\
         </div>';
 
@@ -253,13 +252,13 @@ QUnit.test("options 'height' and 'width'", function(assert) {
 QUnit.module("widget sizing render");
 
 QUnit.test("default", function(assert) {
-    var $element = $("#widget").dxTextBox();
+    var $element = $("#textbox").dxTextBox();
 
     assert.ok($element.outerWidth() > 0, "outer width of the element must be more than zero");
 });
 
 QUnit.test("constructor", function(assert) {
-    var $element = $("#widget").dxTextBox({ width: 400 }),
+    var $element = $("#textbox").dxTextBox({ width: 400 }),
         instance = $element.dxTextBox("instance");
 
     assert.strictEqual(instance.option("width"), 400);
@@ -275,7 +274,7 @@ QUnit.test("root with custom width", function(assert) {
 });
 
 QUnit.test("change width", function(assert) {
-    var $element = $("#widget").dxTextBox(),
+    var $element = $("#textbox").dxTextBox(),
         instance = $element.dxTextBox("instance"),
         customWidth = 400;
 
