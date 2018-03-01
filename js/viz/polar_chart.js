@@ -119,9 +119,7 @@ var dxPolarChart = AdvancedChart.inherit({
 
     _getCrosshairOptions: _noop,
 
-    _isLegendInside: _noop,
-
-    _processSingleSeries: _noop
+    _isLegendInside: _noop
 });
 
 registerComponent("dxPolarChart", dxPolarChart);

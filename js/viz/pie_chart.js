@@ -128,6 +128,7 @@ var dxPieChart = BaseChart.inherit({
     },
 
     _processSingleSeries: function(singleSeries) {
+        this.callBase(singleSeries);
         singleSeries.arrangePoints();
     },
 

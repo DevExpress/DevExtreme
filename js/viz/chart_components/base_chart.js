@@ -1057,17 +1057,20 @@ var BaseChart = BaseWidget.inherit({
         this._dataSpecificInit(true);
     },
 
-    _createPoints: function() {
-        this.series.forEach(function(series) {
-            series.createPoints();
-        });
+    _processSingleSeries: function(singleSeries) {
+        singleSeries.createPoints();
+    },
+
+    _handleSeriesDataUpdated: function() {
+        this.series.forEach(function(s) {
+            this._processSingleSeries(s);
+        }, this);
     },
 
     _dataSpecificInit: function(needRedraw) {
         var that = this;
         that.series = that.series || that._populateSeries();
         that._repopulateSeries();
-        that._createPoints();
         that._seriesPopulatedHandlerCore();
         that._populateBusinessRange();
         that._tracker.updateSeries(that.series);
@@ -1100,8 +1103,9 @@ var BaseChart = BaseWidget.inherit({
 
         that.series.forEach(function(singleSeries) {
             singleSeries.updateData(parsedData[singleSeries.getArgumentField()]);
-            that._processSingleSeries(singleSeries);
         });
+
+        that._handleSeriesDataUpdated();
 
         that._organizeStackPoints();
     },

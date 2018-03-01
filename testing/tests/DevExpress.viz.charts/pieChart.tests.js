@@ -436,6 +436,7 @@ var environment = {
         var stubSeries = new MockSeries({});
         stubSeries.adjustLabels = sinon.stub();
         seriesMockData.series.push(stubSeries);
+        sinon.spy(stubSeries, "arrangePoints");
         // act
         var chart = createPieChart.call(this, {
             dataSource: this.dataSource,
@@ -452,7 +453,8 @@ var environment = {
         assert.equal(seriesMockData.args[0][0].seriesGroup, chart._seriesGroup, "seriesGroup passed");
         assert.equal(seriesMockData.args[0][0].labelsGroup, chart._labelsGroup, "labelsGroup passed");
         assert.ok(seriesMockData.args[0][1], "Options passed");
-        assert.ok(stubSeries.pointsWereArranged, "points should be arranged");
+        assert.ok(stubSeries.arrangePoints.called, "points should be arranged");
+        assert.ok(stubSeries.arrangePoints.firstCall.calledAfter(stubSeries.createPoints.firstCall));
         assert.ok(chart.series[0].adjustLabels.called);
     });
 
