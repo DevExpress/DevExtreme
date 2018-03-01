@@ -510,9 +510,23 @@ module.exports = {
                             this.setAria("role", "row", $row);
                             this.setAria("expanded", isDefined(isRowExpanded) && isRowExpanded.toString(), $row);
                         }
+                        this._setAriaRowIndex(row, $row);
                     }
 
                     return $row;
+                },
+
+                _setAriaRowIndex: function(row, $row) {
+                    var component = this.component,
+                        isPagerMode = component.option("scrolling.mode") === "standard",
+                        rowIndex = row.rowIndex + 1;
+
+                    if(isPagerMode) {
+                        rowIndex = component.pageIndex() * component.pageSize() + rowIndex;
+                    } else {
+                        rowIndex += this._dataController.getRowIndexOffset();
+                    }
+                    this.setAria("rowindex", rowIndex, $row);
                 },
 
                 _afterRowPrepared: function(e) {

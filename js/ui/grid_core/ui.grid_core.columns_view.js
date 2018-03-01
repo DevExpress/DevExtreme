@@ -140,30 +140,9 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
     _createRow: function(rowObject) {
         var $element = $("<tr>").addClass(ROW_CLASS);
         if(rowObject) {
-            var component = this.component;
-            if(component.pageIndex) {
-                this.setRowAccessibilityAttributes(rowObject, $element);
-            } else {
-                this.setAria("role", "row", $element);
-            }
+            this.setAria("role", "row", $element);
         }
         return $element;
-    },
-
-    setRowAccessibilityAttributes: function(rowObject, $element) {
-        var component = this.component,
-            isPagerMode = component.option("scrolling.mode") === "standard",
-            rowIndex = rowObject.rowIndex + 1;
-
-        if(isPagerMode) {
-            rowIndex = component.pageIndex() * component.pageSize() + rowIndex;
-        } else {
-            rowIndex += this._dataController.getRowIndexOffset();
-        }
-        this.component.setAria({
-            "role": "row",
-            "rowindex": rowIndex
-        }, $element);
     },
 
     _createTable: function(columns) {
