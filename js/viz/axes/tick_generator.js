@@ -598,7 +598,7 @@ function generator(options, getBusinessDelta, calculateTickInterval, calculateMi
 
         if(!isNaN(businessDelta)) {
             result = generateMajorTicks(result, data, businessDelta, screenDelta, tickInterval, forceTickInterval, customTicks, breaks || []);
-            if(!options.skipTickGeneration) {
+            if(!options.skipTickGeneration && businessDelta > 0) {
                 result = generateMinorTicks(result, data, businessDelta, screenDelta, minorTickInterval, minorTickCount, customTicks);
             }
         }
