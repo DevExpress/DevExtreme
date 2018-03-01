@@ -50,6 +50,12 @@ var TrackBar = Editor.inherit({
         this.callBase();
     },
 
+    _render: function() {
+        this.callBase();
+
+        this._initAnimation();
+    },
+
     _renderWrapper: function() {
         this._$wrapper = $("<div>")
             .addClass(TRACKBAR_WRAPPER_CLASS)
@@ -90,7 +96,6 @@ var TrackBar = Editor.inherit({
         }
 
         var ratio = (min === max) ? 0 : (val - min) / (max - min);
-        !this._needPreventAnimation && this._setRangeStyles({ width: ratio * 100 + "%" });
 
         this.setAria({
             "valuemin": this.option("min"),
@@ -99,6 +104,10 @@ var TrackBar = Editor.inherit({
         });
 
         this._currentRatio = ratio;
+    },
+
+    _initAnimation: function() {
+        !this._needPreventAnimation && this._setRangeStyles({ width: this._currentRatio * 100 + "%" });
     },
 
     _setRangeStyles: function(options) {
