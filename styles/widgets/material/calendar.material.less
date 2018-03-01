@@ -251,17 +251,23 @@
 
     &.dx-calendar-other-view,
     &.dx-calendar-empty-cell {
-        color: @calendar-cell-other-color;
+        span {
+            color: @calendar-cell-other-color;
+        }
 
         &.dx-state-hover,
         &.dx-state-active {
-            color: @calendar-cell-other-hover-color;
+            span {
+                color: @calendar-cell-other-hover-color;
+                background: transparent;
+            }
+
         }
     }
 
     &.dx-calendar-empty-cell {
         cursor: default;
-        background: @calendar-cell-empty-bg;
+        opacity: .5;
 
         &.dx-state-hover {
             .box-shadow(none);
