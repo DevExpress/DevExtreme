@@ -497,6 +497,7 @@
             _extGroups: {},
             _valueAxis: options.valueAxis,
             _argumentAxis: options.argumentAxis,
+            createPoints: sinon.spy(),
             pointsByArgument: (function() {
                 var pointsByArgument = {};
 
@@ -541,6 +542,7 @@
 
                 return range;
             },
+            getArgumentRange: sinon.stub().returns({ min: 0, max: 10 }),
             animate: function() {
                 this.wasAnimated = true;
             },
@@ -611,9 +613,6 @@
                 return this._options.tagFields || this._options.tagField;
             },
             _segmentPoints: commonUtils.noop,
-            resamplePoints: sinon.spy(function() {
-                this.resampled = true;
-            }),
             sort: commonUtils.noop,
             updateTemplateFieldNames: function() {
                 this.updatedFields = true;

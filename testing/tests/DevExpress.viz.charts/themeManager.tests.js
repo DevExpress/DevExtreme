@@ -779,6 +779,17 @@ function createThemeManager(options, themeGroupName) {
         assert.equal(theme.resolveLabelsOverlapping, true);
     });
 
+    QUnit.test("Pass useAggregation to series", function(assert) {
+        var themeManager = createThemeManager({
+            useAggregation: true
+        });
+        themeManager.setTheme({});
+        var theme = themeManager.getOptions("series", {});
+
+        assert.ok(theme);
+        assert.equal(theme.useAggregation, true);
+    });
+
     QUnit.test('Apply next series theme chart is bar. Point options are in series options field', function(assert) {
         // arrange
         var themeManager = createThemeManager({

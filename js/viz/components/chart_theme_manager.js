@@ -140,7 +140,9 @@ var ThemeManager = BaseThemeManager.inherit((function() {
                 userOptions.visible = seriesVisibility;
             }
 
-            settings = extend(true, {}, themeCommonSettings, themeCommonSettings[type], userCommonSettings, userCommonSettings[type], userOptions);
+            settings = extend(true, {
+                useAggregation: that.getOptions("useAggregation"),
+            }, themeCommonSettings, themeCommonSettings[type], userCommonSettings, userCommonSettings[type], userOptions);
             settings.type = type;
             settings.widgetType = widgetType;
             settings.containerBackgroundColor = containerBackgroundColor;

@@ -175,12 +175,14 @@ var checkTwoGroups = function(assert, series) {
         });
         // act
         series.updateData(this.data);
+        series.createPoints();
         series.draw(false);
         series.updateData([]);
+        series.createPoints();
         // assert
 
         assert.equal(series._points.length, 0);
-        assert.equal(series._originalPoints.length, 0);
+        assert.equal(series.getAllPoints().length, 0);
     });
 
     QUnit.test("Update points by index", function(assert) {
@@ -191,8 +193,10 @@ var checkTwoGroups = function(assert, series) {
         });
         // act
         series.updateData([{ arg: 1, val: 10 }, { arg: 2, val: 10 }, { arg: 3, val: 4 }]);
+        series.createPoints();
         series.draw(false);
         series.updateData([{ arg: 2, val: 10 }, { arg: 3, val: 10 }]);
+        series.createPoints();
         series.draw(false);
         // assert
 
@@ -214,6 +218,7 @@ var checkTwoGroups = function(assert, series) {
             paintNullPoints: false
         });
         series.updateData([{ arg: 1, val: 1 }, { arg: 2, val: undefined }]);
+        series.createPoints();
 
         // assert
         assert.equal(series.getPoints().length, 1);
@@ -225,6 +230,7 @@ var checkTwoGroups = function(assert, series) {
             paintNullPoints: false
         });
         series.updateData([{ arg: 1, val: 1 }, { arg: 2, val: null }]);
+        series.createPoints();
 
         // assert
         assert.equal(series.getPoints().length, 1);
@@ -236,6 +242,7 @@ var checkTwoGroups = function(assert, series) {
             paintNullPoints: true
         });
         series.updateData([{ arg: 1, val: 1 }, { arg: 2, val: null }]);
+        series.createPoints();
 
         // assert
         assert.equal(series.getPoints().length, 2);
@@ -247,6 +254,7 @@ var checkTwoGroups = function(assert, series) {
             paintNullPoints: true
         });
         series.updateData([{ arg: 1, val: 1 }, { arg: 2, val: undefined }]);
+        series.createPoints();
 
         // assert
         assert.equal(series.getPoints().length, 1);
@@ -261,6 +269,7 @@ var checkTwoGroups = function(assert, series) {
         });
 
         series.updateData(this.data);
+        series.createPoints();
         $.each(series._points, function(i, pt) {
             pt._label.isVisible.returns(false);
             pt.x = pt.argument;
@@ -291,6 +300,7 @@ var checkTwoGroups = function(assert, series) {
             series = createSeries($.extend({ type: seriesType }, options), { renderer: this.renderer, trackerGroup: {} });
 
         series.updateData(this.data.slice(0, 3));
+        series.createPoints();
 
         series.draw(true);
 
@@ -331,6 +341,7 @@ var checkTwoGroups = function(assert, series) {
 
         var series = createSeries(options, { trackerGroup: {} });
         series.updateData(this.data);
+        series.createPoints();
         series.canvas = { width: 400, height: 400, left: 0, right: 0, top: 0, bottom: 0 };
 
 
@@ -338,6 +349,7 @@ var checkTwoGroups = function(assert, series) {
         series.updateData([]);
         series.draw();
         series.updateData(this.data);
+        series.createPoints();
         // act
         series.draw();
 
@@ -355,6 +367,7 @@ var checkTwoGroups = function(assert, series) {
             complete,
             series = createSeries($.extend({ type: seriesType }, options), { renderer: this.renderer, trackerGroup: {} });
         series.updateData(this.data);
+        series.createPoints();
 
         series.draw(true);
         $.each(series.getPoints(), function(_, p) {
@@ -396,6 +409,7 @@ var checkTwoGroups = function(assert, series) {
             legendCallback = sinon.spy();
 
         series.updateData(this.data);
+        series.createPoints();
         series.draw(false, undefined, legendCallback);
 
         assert.equal(legendCallback.callCount, 0);
@@ -413,6 +427,7 @@ var checkTwoGroups = function(assert, series) {
             });
 
         series.updateData(this.data);
+        series.createPoints();
         this.createPoint.returnValues[1].isSelected.returns(true);
         this.createPoint.returnValues[2].isSelected.returns(true);
         series.draw(false, undefined, legendCallback);
@@ -430,6 +445,7 @@ var checkTwoGroups = function(assert, series) {
                 label: { visible: false }
             });
             this.series.updateData(this.data);
+            this.series.createPoints();
         },
         afterEach: environment.afterEach
     });
@@ -532,6 +548,7 @@ var checkTwoGroups = function(assert, series) {
         var series = createSeries(this.options);
 
         series.updateData(this.data);
+        series.createPoints();
 
         assert.deepEqual(this.createPoint.firstCall.args[2].styles, {
             hover: {
@@ -576,6 +593,7 @@ var checkTwoGroups = function(assert, series) {
         var series = createSeries(this.options);
 
         series.updateData(this.data);
+        series.createPoints();
         $.each(series._points, function(_, pt) {
             pt._label.isVisible.returns(false);
         });
@@ -591,6 +609,7 @@ var checkTwoGroups = function(assert, series) {
             styles;
 
         series.updateData(this.data);
+        series.createPoints();
         styles = series._getPointOptions().styles;
 
         assert.deepEqual(styles.hover, {
@@ -626,6 +645,7 @@ var checkTwoGroups = function(assert, series) {
             { arg: "arg2", val: "val4" },
             { arg: "arg2", val: "val5" },
             { arg: "arg3", val: "val6" }]);
+        series.createPoints();
 
         assert.equal(series.getOptions().mainSeriesColor.callCount, 6);
 
@@ -645,6 +665,7 @@ var checkTwoGroups = function(assert, series) {
             { arg: "arg4", val: undefined },
             { arg: "arg5", val: "val5" },
             { arg: "arg6", val: "val6" }]);
+        series.createPoints();
 
         assert.equal(series.getOptions().mainSeriesColor.callCount, 4);
 
@@ -663,8 +684,10 @@ var checkTwoGroups = function(assert, series) {
             { arg: "arg2", val: "val5" },
             { arg: "arg3", val: "val6" }];
         series.updateData(data);
+        series.createPoints();
         series.getOptions().mainSeriesColor.reset();
         series.updateData(data);
+        series.createPoints();
 
         assert.equal(series.getOptions().mainSeriesColor.callCount, 6);
 
@@ -684,6 +707,7 @@ var checkTwoGroups = function(assert, series) {
             styles;
 
         series.updateData(this.data);
+        series.createPoints();
         styles = series._getPointOptions().styles;
 
         assert.strictEqual(styles.hover["stroke-width"], 0);
@@ -710,6 +734,7 @@ var checkTwoGroups = function(assert, series) {
             }),
             styles;
         series.updateData(this.data);
+        series.createPoints();
         styles = series._getPointOptions({ argument: "arg" }).styles;
 
         assert.strictEqual(styles.hover.fill, "arg", "hover.fill");
@@ -746,6 +771,7 @@ var checkTwoGroups = function(assert, series) {
             }),
             styles;
         series.updateData(this.data);
+        series.createPoints();
 
         assert.ok(this.createPoint.calledOnce);
 
@@ -782,6 +808,7 @@ var checkTwoGroups = function(assert, series) {
             }),
             styles;
         series.updateData(this.data);
+        series.createPoints();
 
         assert.equal(this.createPoint.callCount, 2);
 
@@ -828,6 +855,7 @@ var checkTwoGroups = function(assert, series) {
             });
 
         series.updateData(data);
+        series.createPoints();
 
         // act
         series.arrangePoints();
@@ -859,6 +887,7 @@ var checkTwoGroups = function(assert, series) {
             });
 
         series.updateData(data);
+        series.createPoints();
 
         // act
         series.arrangePoints();
@@ -890,6 +919,7 @@ var checkTwoGroups = function(assert, series) {
             });
 
         series.updateData(data);
+        series.createPoints();
         series.arrangePoints();
         // act
         series.arrangePoints(series._points);
@@ -921,6 +951,7 @@ var checkTwoGroups = function(assert, series) {
             points;
 
         series.updateData(data);
+        series.createPoints();
         points = series.getPoints();
         series.arrangePoints();
 
@@ -954,6 +985,7 @@ var checkTwoGroups = function(assert, series) {
             series = createSeries({ type: seriesType, minSegmentSize: 2 });
         var minShownValue = 180 / 40 / 358;
         series.updateData(data);
+        series.createPoints();
         // act
         series.arrangePoints();
         // assert
@@ -983,6 +1015,7 @@ var checkTwoGroups = function(assert, series) {
                 { arg: 5, val: 40 }],
             series = createSeries({ type: seriesType });
         series.updateData(data);
+        series.createPoints();
 
         var points = series.getPoints();
 
@@ -1011,6 +1044,7 @@ var checkTwoGroups = function(assert, series) {
             series = createSeries({ type: seriesType, minSegmentSize: 2 });
         var minShownValue = 140 / 40 / 358;
         series.updateData(data);
+        series.createPoints();
         series._points[1].isVisible = function() {
             return false;
         };
@@ -1041,6 +1075,7 @@ var checkTwoGroups = function(assert, series) {
                 { arg: 5, val: 0 }],
             series = createSeries({ type: seriesType });
         series.updateData(data);
+        series.createPoints();
         series._points[0].isVisible = function() { return false; };
 
         // act
@@ -1069,6 +1104,7 @@ var checkTwoGroups = function(assert, series) {
                 { arg: 5, val: 0 }],
             series = createSeries({ type: seriesType });
         series.updateData(data);
+        series.createPoints();
 
         // act
         series.arrangePoints();
@@ -1097,6 +1133,7 @@ var checkTwoGroups = function(assert, series) {
                 { arg: 5, val: 0 }],
             series = createSeries({ type: seriesType, minSegmentSize: 1 });
         series.updateData(data);
+        series.createPoints();
         // act
         series.arrangePoints(series.getPoints());
         // assert
@@ -1125,6 +1162,7 @@ var checkTwoGroups = function(assert, series) {
                 { arg: 5, val: 0 }],
             series = createSeries({ type: seriesType, minSegmentSize: 1 });
         series.updateData(data);
+        series.createPoints();
         series.arrangePoints();
         // act
         series.arrangePoints(series.getPoints());
@@ -1155,6 +1193,7 @@ var checkTwoGroups = function(assert, series) {
 
             series = createSeries({ type: seriesType, minSegmentSize: 400 });
         series.updateData(data);
+        series.createPoints();
         // act
         series.arrangePoints();
         // assert
@@ -1185,6 +1224,7 @@ var checkTwoGroups = function(assert, series) {
 
         var minShownValue = 30 * 1400 / 500 / 330;
         series.updateData(data);
+        series.createPoints();
         // act
         series.arrangePoints();
         // assert
@@ -1209,6 +1249,7 @@ var checkTwoGroups = function(assert, series) {
                     { arg: 2, val: 4 }],
             series = createSeries({ type: seriesType, minSegmentSize: 360 });
         series.updateData(data);
+        series.createPoints();
         // act
         series.arrangePoints();
         // assert
@@ -1228,6 +1269,7 @@ var checkTwoGroups = function(assert, series) {
                     { arg: 3, val: 3 }],
             series = createSeries({ type: seriesType, minSegmentSize: 180 });
         series.updateData(data);
+        series.createPoints();
         // act
         series.arrangePoints();
         // assert
@@ -1251,6 +1293,7 @@ var checkTwoGroups = function(assert, series) {
                 { arg: 5, val: 40 }],
             series = createSeries({ type: seriesType, argumentField: "arg", valueField: "val", label: {} });
         series.updateData(data);
+        series.createPoints();
 
         // act
         series.arrangePoints();
@@ -1275,6 +1318,7 @@ var checkTwoGroups = function(assert, series) {
         var data = this.data,
             series = createSeries({ type: seriesType, minSegmentSize: 400 });
         series.updateData(data);
+        series.createPoints();
         // act
         series.arrangePoints();
         // assert
@@ -1296,6 +1340,7 @@ var checkTwoGroups = function(assert, series) {
             ],
             series = createSeries({ type: seriesType, minSegmentSize: 1 });
         series.updateData(data);
+        series.createPoints();
         // act
         series.arrangePoints();
         // assert
@@ -1314,6 +1359,7 @@ var checkTwoGroups = function(assert, series) {
                 { arg: 3, val: 1 }],
             series = createSeries({ type: seriesType });
         series.updateData(data);
+        series.createPoints();
         // act
         series.arrangePoints();
         // assert
@@ -1329,6 +1375,7 @@ var checkTwoGroups = function(assert, series) {
         var data = this.data,
             series = createSeries({ type: seriesType, segmentsDirection: "anticlockwise" });
         series.updateData(data);
+        series.createPoints();
         // act
         series.arrangePoints();
         // assert
@@ -1349,6 +1396,7 @@ var checkTwoGroups = function(assert, series) {
         var data = this.data,
             series = createSeries({ type: seriesType, startAngle: 90 });
         series.updateData(data);
+        series.createPoints();
         // act
         series.arrangePoints();
         // assert
@@ -1365,6 +1413,7 @@ var checkTwoGroups = function(assert, series) {
         var data = this.data,
             series = createSeries({ type: seriesType });
         series.updateData(data);
+        series.createPoints();
         // act
         series.arrangePoints();
         // assert
@@ -1381,6 +1430,7 @@ var checkTwoGroups = function(assert, series) {
         var data = this.data,
             series = createSeries({ type: seriesType, startAngle: -90 });
         series.updateData(data);
+        series.createPoints();
         // act
         series.arrangePoints();
         // assert
@@ -1397,6 +1447,7 @@ var checkTwoGroups = function(assert, series) {
         var data = this.data,
             series = createSeries({ type: seriesType, startAngle: 450 });
         series.updateData(data);
+        series.createPoints();
         // act
         series.arrangePoints();
         // assert
@@ -1413,6 +1464,7 @@ var checkTwoGroups = function(assert, series) {
         var data = this.data,
             series = createSeries({ type: seriesType, startAngle: "test" });
         series.updateData(data);
+        series.createPoints();
         // act
         series.arrangePoints();
         // assert
@@ -1437,6 +1489,7 @@ var checkTwoGroups = function(assert, series) {
             canvas = { top: 10, bottom: 15, left: 20, right: 25, width: 100, height: 200 };
 
         series.updateData(this.data);
+        series.createPoints();
 
         series.correctPosition(correctArgument, canvas);
 
@@ -1454,6 +1507,7 @@ var checkTwoGroups = function(assert, series) {
     QUnit.test("correct radius", function(assert) {
         var series = createSeries({});
         series.updateData(this.data);
+        series.createPoints();
         series.correctRadius(true);
 
         $.each(series._points, function(_, p) {
@@ -1464,6 +1518,7 @@ var checkTwoGroups = function(assert, series) {
     QUnit.test("correct label radius", function(assert) {
         var series = createSeries({});
         series.updateData(this.data);
+        series.createPoints();
         series.correctLabelRadius(true);
 
         $.each(series._points, function(_, p) {
@@ -1474,6 +1529,7 @@ var checkTwoGroups = function(assert, series) {
     QUnit.test("Visible Area", function(assert) {
         var series = createSeries({});
         series.updateData(this.data);
+        series.createPoints();
         series.setVisibleArea({ top: 10, bottom: 15, left: 20, right: 25, width: 100, height: 200 });
 
         assert.deepEqual(series._visibleArea, {
@@ -1511,6 +1567,7 @@ var checkTwoGroups = function(assert, series) {
         });
 
         series.updateData(this.data);
+        series.createPoints();
 
         series.draw(false);
 
@@ -1622,6 +1679,7 @@ var checkTwoGroups = function(assert, series) {
     QUnit.test("drawLabelsWOPoints", function(assert) {
         var series = createSeries();
         series.updateData(this.data);
+        series.createPoints();
 
         assert.ok(series.drawLabelsWOPoints());
 
@@ -1633,6 +1691,7 @@ var checkTwoGroups = function(assert, series) {
     QUnit.test("drawLabelsWOPoints, label position 'inside'", function(assert) {
         var series = createSeries({ label: { position: "inside" } });
         series.updateData(this.data);
+        series.createPoints();
 
         assert.ok(!series.drawLabelsWOPoints());
 
@@ -1644,6 +1703,7 @@ var checkTwoGroups = function(assert, series) {
     QUnit.test("drawLabelsWOPoints, label is not visible", function(assert) {
         var series = createSeries({ label: { visible: false } });
         series.updateData(this.data);
+        series.createPoints();
 
         assert.ok(series.drawLabelsWOPoints());
 
@@ -1654,6 +1714,7 @@ var checkTwoGroups = function(assert, series) {
     QUnit.test("get points by argument and argumentIndex", function(assert) {
         var series = createSeries({});
         series.updateData([{ arg: "arg1", val: 1 }, { arg: "arg1", val: 2 }, { arg: "arg2", val: 3 }, { arg: "arg1", val: 4 }]);
+        series.createPoints();
 
         var points0 = series.getPointsByKeys("arg1", 0);
         var points1 = series.getPointsByKeys("arg1", 1);
@@ -1675,6 +1736,7 @@ var checkTwoGroups = function(assert, series) {
     QUnit.test("get points by argument with invalid argumentIndex", function(assert) {
         var series = createSeries({});
         series.updateData([{ arg: "arg1", val: 1 }, { arg: "arg1", val: 2 }, { arg: "arg2", val: 3 }, { arg: "arg1", val: 4 }]);
+        series.createPoints();
 
         var points0 = series.getPointsByKeys("arg1", 15);
 
@@ -1684,6 +1746,7 @@ var checkTwoGroups = function(assert, series) {
     QUnit.test("notify series. hover argument", function(assert) {
         var series = createSeries({});
         series.updateData([{ arg: "arg1", val: 1 }, { arg: "arg1", val: 2 }, { arg: "arg2", val: 3 }, { arg: "arg1", val: 4 }]);
+        series.createPoints();
 
         series.notify({
             action: "pointHover",
@@ -1707,6 +1770,7 @@ var checkTwoGroups = function(assert, series) {
     QUnit.test("notify series. clear hover argument", function(assert) {
         var series = createSeries({});
         series.updateData([{ arg: "arg1", val: 1 }, { arg: "arg1", val: 2 }, { arg: "arg2", val: 3 }, { arg: "arg1", val: 4 }]);
+        series.createPoints();
 
         series.notify({
             action: "clearPointHover",
@@ -1730,6 +1794,7 @@ var checkTwoGroups = function(assert, series) {
     QUnit.test("notify series. selection argument", function(assert) {
         var series = createSeries({}, { commonSeriesModes: {} });
         series.updateData([{ arg: "arg1", val: 1 }, { arg: "arg1", val: 2 }, { arg: "arg2", val: 3 }, { arg: "arg1", val: 4 }]);
+        series.createPoints();
 
         series.notify({
             action: "pointSelect",
@@ -1753,6 +1818,7 @@ var checkTwoGroups = function(assert, series) {
     QUnit.test("notify series. clear selection argument", function(assert) {
         var series = createSeries({}, { commonSeriesModes: {} });
         series.updateData([{ arg: "arg1", val: 1 }, { arg: "arg1", val: 2 }, { arg: "arg2", val: 3 }, { arg: "arg1", val: 4 }]);
+        series.createPoints();
 
         series.notify({
             action: "pointSelect",
@@ -1804,7 +1870,8 @@ var checkTwoGroups = function(assert, series) {
         var series = createSeries();
 
         series.canvas = { width: 400, height: 400, left: 0, right: 0, top: 0, bottom: 0 },
-        series.updateData(this.data);
+            series.updateData(this.data);
+        series.createPoints();
         series.correctPosition({ centerX: 200, centerY: 300, radiusOuter: 25, radiusInner: 0 }, {});
 
         // act
@@ -1826,7 +1893,8 @@ var checkTwoGroups = function(assert, series) {
         var series = createSeries();
 
         series.canvas = { width: 400, height: 400, left: 0, right: 0, top: 0, bottom: 0 },
-        series.updateData(this.data);
+            series.updateData(this.data);
+        series.createPoints();
         $.each(series.getPoints(), function(_, point) {
             point._label.isVisible.returns(false);
         });
@@ -1848,7 +1916,8 @@ var checkTwoGroups = function(assert, series) {
         // arrange
         var series = createSeries();
         series.canvas = { width: 400, height: 400, left: 0, right: 0, top: 0, bottom: 0 },
-        series.updateData(this.data);
+            series.updateData(this.data);
+        series.createPoints();
         $.each(series.getPoints(), function(_, point) {
             point._label.getLayoutOptions.returns({ position: "inside" });
         });

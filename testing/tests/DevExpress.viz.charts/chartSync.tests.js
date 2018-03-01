@@ -525,7 +525,6 @@ var environment = {
         assert.ok(layoutManagerModule.LayoutManager.calledOnce);
         assert.strictEqual(layoutManagerModule.LayoutManager.firstCall.returnValue.setOptions.lastCall.args[0], chart._themeManager.getOptions("layouted"));
         assert.strictEqual(validateData.callCount, 1, "validation");
-        assert.ok(chart.series[0].resampled, "Series was not aggregated");
     });
 
     QUnit.test("Do not draw on hidden container", function(assert) {

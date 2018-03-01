@@ -855,43 +855,6 @@ QUnit.test("defaultPane specified, no panes with givenName - defaultPane is the 
     assert.strictEqual(chart.defaultPane, "pane 2");
 });
 
-QUnit.module("Resample points", commons.environment);
-
-QUnit.test("Canvas length for rotated chart", function(assert) {
-    seriesMockData.series.push(new MockSeries());
-    var chart = this.createChart({
-        series: [{ }],
-        rotated: true,
-        useAggregation: true,
-        margin: {
-            left: 20,
-            right: 10,
-            top: 5,
-            bottom: 30
-        }
-    });
-
-    assert.ok(chart.getAllSeries()[0].resamplePoints.called);
-    assert.equal(chart.getAllSeries()[0].resamplePoints.args[0][0], 115);
-});
-
-QUnit.test("Canvas lenght for not rotated chart", function(assert) {
-    seriesMockData.series.push(new MockSeries());
-    var chart = this.createChart({
-        series: [{ }],
-        useAggregation: true,
-        margin: {
-            left: 20,
-            right: 10,
-            top: 5,
-            bottom: 30
-        }
-    });
-
-    assert.ok(chart.getAllSeries()[0].resamplePoints.called);
-    assert.equal(chart.getAllSeries()[0].resamplePoints.args[0][0], 270);
-});
-
 QUnit.module("Merge marginOptions", commons.environment);
 
 QUnit.test("Pass merged marginOptions to axes", function(assert) {

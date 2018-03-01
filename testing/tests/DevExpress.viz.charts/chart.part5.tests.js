@@ -342,7 +342,6 @@ QUnit.test("chart with single value with aggregation. Adjust on zoom = true", fu
     // assert
     assert.strictEqual(series1.getValueAxis().zoom.callCount, 1);
     assert.deepEqual(series1.getValueAxis().zoom.lastCall.args, [10, 15], "zoom args");
-    assert.ok(series1.getViewport.calledAfter(series1.resamplePoints));
 });
 
 QUnit.test("chart with single value with aggregation. Adjust on zoom = false", function(assert) {
