@@ -283,7 +283,7 @@ QUnit.test("render", function(assert) {
 });
 
 QUnit.test("Actions sequence with series on render chart", function(assert) {
-    //arrange
+    // arrange
     var chart = this.createSimplePolarChart(),
         argumentAxis = chart._argumentAxes[0],
         series = chart.getAllSeries()[0];

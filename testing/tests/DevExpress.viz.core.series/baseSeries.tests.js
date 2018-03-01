@@ -1504,33 +1504,6 @@ QUnit.test("With Resample Points, Some point", function(assert) {
     assert.deepEqual(series.resampleArgs.slice(0, 4), [0, 3, 3, true]);
 });
 
-//T103451 - Check
-// QUnit.test("Resample points after change dataSource", function(assert) {
-//     var series = this.series;
-
-//     series.updateData([{ arg: 1, val: 22 }, { arg: 2, val: 33 }, { arg: 3, val: 11 }, { arg: 4, val: 44 }]);
-//     series.updateData([{ arg: 1, val: 22 }, { arg: 2, val: 33 }]);
-
-//     this.setupAggregation(1, 2);
-//     series.resamplePoints(10);
-
-//     assert.deepEqual(series.resampleArgs[0], 1);
-// });
-
-// QUnit.test("Resample points with empty dataSource", function(assert) {
-//     var series = this.series;
-
-//     series.updateOptions($.extend(series._options, {
-//         useAggregation: true
-//     }));
-
-//     series.updateData([]);
-//     series.createPoints();
-
-//     assert.ok(!series.resampleArgs);
-//     assert.deepEqual(series.getPoints(), []);
-// });
-
 QUnit.test("T172956. With Resample Points, with Error Bars", function(assert) {
     var series = createSeries({
         type: "scatter",

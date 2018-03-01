@@ -151,13 +151,13 @@ QUnit.test("actions sequence on render chart", function(assert) {
 
     var layoutElementsSpy = chart.layoutManager.layoutElements,
         updatePanesCanvasesSpy = vizUtils.updatePanesCanvases;
-    //assert
+    // assert
     assert.equal(updatePanesCanvasesSpy.callCount, 2);
     assert.ok(updatePanesCanvasesSpy.secondCall.calledAfter(layoutElementsSpy.firstCall), "second call updatePanes after draw title and legend");
 });
 
 QUnit.test("Actions sequence with series on render chart", function(assert) {
-    //arrange
+    // arrange
     var stubSeries = new MockSeries({
             range: {
                 arg: {
@@ -204,7 +204,7 @@ QUnit.test("Actions sequence with series on render chart", function(assert) {
 });
 
 QUnit.test("Recreate series points on zooming if aggregation is enabled", function(assert) {
-    //arrange
+    // arrange
     seriesMockData.series.push(new MockSeries());
 
     var chart = this.createChart({
@@ -224,7 +224,7 @@ QUnit.test("Recreate series points on zooming if aggregation is enabled", functi
 });
 
 QUnit.test("Do not recreate series points on zooming if aggregation is not enabled", function(assert) {
-    //arrange
+    // arrange
     seriesMockData.series.push(new MockSeries());
 
     var chart = this.createChart({
@@ -242,7 +242,7 @@ QUnit.test("Do not recreate series points on zooming if aggregation is not enabl
 });
 
 QUnit.test("Recreate points on resize if aggregation is enabled", function(assert) {
-    //arrange
+    // arrange
     seriesMockData.series.push(new MockSeries());
 
     var chart = this.createChart({
