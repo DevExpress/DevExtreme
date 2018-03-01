@@ -20,7 +20,7 @@ var getCaretBoundaries = function(text, format) {
     return { start: startBorder, end: endBorder };
 };
 
-var getDigitCountBeforeIndex = function(index, text) {
+var _getDigitCountBeforeIndex = function(index, text) {
     var decimalSeparator = number.getDecimalSeparator(),
         regExp = new RegExp("[^0-9" + escapeRegExp(decimalSeparator) + "]", "g"),
         textBeforePosition = text.slice(0, index);
@@ -28,11 +28,11 @@ var getDigitCountBeforeIndex = function(index, text) {
     return textBeforePosition.replace(regExp, '').length;
 };
 
-var reverseText = function(text) {
+var _reverseText = function(text) {
     return text.split("").reverse().join("");
 };
 
-var getDigitPositionByIndex = function(digitIndex, text) {
+var _getDigitPositionByIndex = function(digitIndex, text) {
     if(!digitIndex) {
         return -1;
     }
@@ -77,14 +77,14 @@ var getCaretAfterFormat = function(text, formatted, caret, format) {
 
     if(isCaretOnFloat) {
         var relativeIndex = caret.start - pointPosition - 1,
-            digitsBefore = getDigitCountBeforeIndex(relativeIndex, textParts[1]),
-            newPosition = formattedParts[1] ? newPointPosition + 1 + getDigitPositionByIndex(digitsBefore, formattedParts[1]) + 1 : formatted.length;
+            digitsBefore = _getDigitCountBeforeIndex(relativeIndex, textParts[1]),
+            newPosition = formattedParts[1] ? newPointPosition + 1 + _getDigitPositionByIndex(digitsBefore, formattedParts[1]) + 1 : formatted.length;
 
         return getCaretInBoundaries(newPosition, text, format);
     } else {
         var positionFromEnd = textParts[0].length - caret.start,
-            digitsFromEnd = getDigitCountBeforeIndex(positionFromEnd, reverseText(textParts[0])),
-            newPositionFromEnd = getDigitPositionByIndex(digitsFromEnd, reverseText(formattedParts[0])),
+            digitsFromEnd = _getDigitCountBeforeIndex(positionFromEnd, _reverseText(textParts[0])),
+            newPositionFromEnd = _getDigitPositionByIndex(digitsFromEnd, _reverseText(formattedParts[0])),
             newPositionFromBegin = formattedParts[0].length - (newPositionFromEnd + 1);
 
         return getCaretInBoundaries(newPositionFromBegin, formatted, format);

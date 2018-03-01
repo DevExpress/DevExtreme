@@ -233,6 +233,15 @@ var NumberBoxMask = NumberBoxBase.inherit({
         }
     },
 
+    _getFormatForSign: function(text) {
+        var format = this._getFormatPattern(),
+            signParts = format.split(";"),
+            sign = number.getSign(text, format);
+
+        signParts[1] = signParts[1] || "-" + signParts[0];
+        return sign < 0 ? signParts[1] : signParts[0];
+    },
+
     _getEditedText: function(text, selection, char) {
         var textBefore = text.slice(0, selection.start),
             textAfter = text.slice(selection.end),
@@ -246,7 +255,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
             format = this._getFormatPattern(),
             isTextSelected = selection.start !== selection.end,
             parsed = number.parse(editedText, format),
-            maxPrecision = this._getMaxPrecision(format, parsed),
+            maxPrecision = this._getMaxPrecision(format, editedText),
             isValueChanged = parsed !== this._parsedValue;
 
         var isDecimalPointRestricted = char === number.getDecimalSeparator() && maxPrecision === 0,
@@ -277,37 +286,15 @@ var NumberBoxMask = NumberBoxBase.inherit({
             return this.callBase(text);
         }
 
-        var formatParts = this._getFormatPattern().split(";")[0].split("."),
-            isRemoveKeyPressed = this._isDeleteKey(this._lastKey) || this._lastKey === "Backspace",
-            isFloatPartAllowed = formatParts.length === 2;
+        text = number.cleanText(text, this._getFormatForSign(text));
+        var point = escapeRegExp(number.getDecimalSeparator()),
+            comma = escapeRegExp(number.getThousandsSeparator()),
+            maxPrecision = this._getMaxPrecision(this._getFormatPattern(), text),
+            maxIncompletePrecision = (maxPrecision || 1) - 1;
 
-        if(!isFloatPartAllowed || isRemoveKeyPressed) {
-            return false;
-        }
+        var incompleteRegExp = new RegExp("^[0-9" + comma + "]*\\d" + point + "0{0," + maxIncompletePrecision + "}$");
 
-        var clearedText = this._removeStubInText(text),
-            decimalSeparator = number.getDecimalSeparator(),
-            decimalSeparatorIndex = clearedText.indexOf(decimalSeparator),
-            separatorIsFirst = decimalSeparatorIndex === 0,
-            lastChar = clearedText.charAt(clearedText.length - 1),
-            onlyOneSeparatorExists = decimalSeparatorIndex === clearedText.length - 1;
-
-        if(separatorIsFirst) {
-            return false;
-        }
-        if(lastChar === decimalSeparator && onlyOneSeparatorExists) {
-            return true;
-        }
-        if(lastChar !== "0") {
-            return false;
-        }
-
-        var caret = this._caret(),
-            floatLength = clearedText.length - decimalSeparatorIndex - 1,
-            maxPrecisionOverflow = floatLength >= this._getMaxPrecision(this._getFormatPattern(), clearedText),
-            textAfterCaret = this._getInputVal().slice(caret.start);
-
-        return !maxPrecisionOverflow && (!textAfterCaret || this._isStub(textAfterCaret, true));
+        return incompleteRegExp.test(text);
     },
 
     _isValueInRange: function(value) {
@@ -422,10 +409,9 @@ var NumberBoxMask = NumberBoxBase.inherit({
         return this._parsedValue;
     },
 
-    _getMaxPrecision: function(format, value) {
-        var signParts = format.split(";"),
-            currentFormat = signParts[value >= 0 ? 0 : 1] || signParts[0],
-            floatPart = currentFormat.split(".")[1] || "";
+    _getMaxPrecision: function(format, text) {
+        var currentFormat = this._getFormatForSign(text),
+            floatPart = (currentFormat.split(".")[1] || "").replace(/[^#0]/g, "");
 
         return floatPart.length;
     },
@@ -534,16 +520,6 @@ var NumberBoxMask = NumberBoxBase.inherit({
             return (1 / oldValue) === (1 / newValue);
         }
         return this.callBase.apply(this, arguments);
-    },
-
-    _removeStubInText: function(text) {
-        var decimalSeparator = number.getDecimalSeparator(),
-            regExpString = "[^0-9" + decimalSeparator + "]+",
-            regExp = new RegExp(regExpString, "g");
-
-        text = text || this._getInputVal();
-
-        return text.replace(regExp, "");
     },
 
     _clearCache: function() {
