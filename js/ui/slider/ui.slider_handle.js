@@ -44,9 +44,9 @@ var SliderHandle = Widget.inherit({
     },
 
     _render: function() {
-        this.callBase();
-
         this._renderTooltip();
+
+        this.callBase();
     },
 
     _renderTooltip: function() {

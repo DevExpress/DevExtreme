@@ -288,10 +288,13 @@ var Slider = TrackBar.inherit({
         this._renderLabels();
         this._renderStartHandler();
         this._renderAriaMinAndMax();
+    },
+
+    _render: function() {
+        this.callBase();
 
         this._repaintHandle();
     },
-
     _renderSubmitElement: function() {
         this._$submitElement = $("<input>")
             .attr("type", "hidden")
@@ -630,6 +633,7 @@ var Slider = TrackBar.inherit({
 
     _renderValue: function() {
         this.callBase();
+        this._initAnimation();
 
         var value = this.option("value");
 
@@ -663,9 +667,13 @@ var Slider = TrackBar.inherit({
                 break;
             case "min":
             case "max":
+                this._renderValue();
+                this._initAnimation();
+
+                this.callBase(args);
                 this._renderLabels();
                 this._renderAriaMinAndMax();
-                this.callBase(args);
+
                 this._fitTooltip();
                 break;
             case "step":

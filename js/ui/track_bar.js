@@ -126,11 +126,13 @@ var TrackBar = Editor.inherit({
         switch(args.name) {
             case "value":
                 this._renderValue();
+                this._initAnimation();
                 this.callBase(args);
                 break;
             case "max":
             case "min":
                 this._renderValue();
+                this._initAnimation();
                 break;
             default:
                 this.callBase(args);
