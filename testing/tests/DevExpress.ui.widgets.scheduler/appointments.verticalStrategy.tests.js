@@ -165,7 +165,7 @@ QUnit.test("Wide rival appointments should not have specific class", function(as
     assert.ok(!$appointment.eq(1).hasClass("dx-scheduler-appointment-empty"), "appointment has not the class");
 });
 
-//NOTE: integration test
+// NOTE: integration test
 QUnit.test("Narrow rival appointments should have specific class", function(assert) {
     var items = [{
         itemData: {

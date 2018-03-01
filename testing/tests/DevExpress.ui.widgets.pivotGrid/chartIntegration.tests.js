@@ -4,7 +4,7 @@ var $ = require("jquery"),
     PivotGridDataSource = require("ui/pivot_grid/data_source"),
     executeAsyncMock = require("../../helpers/executeAsyncMock.js");
 
-require("viz/core/themes/generic.light"); //remove
+require("viz/core/themes/generic.light"); // remove
 
 /* global orders */
 require("../../../testing/content/orders.js");
@@ -166,11 +166,11 @@ QUnit.test("Update bound chart when pivotGrid is changed", function(assert) {
 
     var chartDataSource = this.getChartOptions().dataSource;
 
-    //act
+    // act
     pivotGrid.getDataSource().field(0, { area: null });
     pivotGrid.getDataSource().load();
 
-    //assert
+    // assert
     var updatedChartOptions = this.getChartOptions();
     assert.ok(chartDataSource !== updatedChartOptions.dataSource, "chart dataSource is updated");
 });
@@ -201,10 +201,10 @@ QUnit.test("Binding same chart two times", function(assert) {
     pivotGrid.bindChart(chart);
 
     chart.on("done", chartReady);
-    //act
+    // act
     pivotGrid.getDataSource().field(0, { area: null });
     pivotGrid.getDataSource().load();
-    //assert
+    // assert
     assert.strictEqual(chartReady.callCount, 1);
 });
 
@@ -335,7 +335,7 @@ QUnit.test("Not redraw chart during virtual scrolling", function(assert) {
     pivotGrid.bindChart(chart);
     chart.on("done", chartReady);
     pivotGrid._dataController.scrollChanged.empty();
-   //act
+   // act
     pivotGrid._dataController.setViewportPosition(0, 2000);
 
     assert.strictEqual(chartReady.callCount, 0);
@@ -382,7 +382,7 @@ QUnit.module("Chart dataSource item generation with single dataField", {
 
 QUnit.test("Generate data", function(assert) {
     this.createBinding();
-    //assert
+    // assert
 
     var series = this.dxChart.getAllSeries();
 
@@ -410,7 +410,7 @@ QUnit.test("InvertedBinding", function(assert) {
     this.createBinding({
         inverted: true
     });
-    //assert
+    // assert
 
     var series = this.dxChart.getAllSeries();
 
@@ -486,7 +486,7 @@ QUnit.test("Generate data for zero level", function(assert) {
 
     this.createBinding();
 
-    //assert
+    // assert
     var series = this.dxChart.getAllSeries();
     assert.strictEqual(series.length, 1);
 
@@ -508,7 +508,7 @@ QUnit.test("Can Include all items", function(assert) {
         }
     });
 
-    //assert
+    // assert
 
     var series = this.dxChart.getAllSeries();
     assert.strictEqual(series.length, 3);
@@ -523,7 +523,7 @@ QUnit.test("Can Include all items", function(assert) {
 
 QUnit.test("Generate data", function(assert) {
     this.createBinding();
-    //assert
+    // assert
 
     var series = this.dxChart.getAllSeries();
 
@@ -822,7 +822,7 @@ QUnit.test("Generate data - dataFields on arguments. Inverted Binding", function
         putDataFieldsInto: "args",
         inverted: true
     });
-    //assert
+    // assert
     var series = this.dxChart.getAllSeries();
 
     assert.strictEqual(series.length, 2);
@@ -1265,11 +1265,11 @@ QUnit.test("Customize Chart options", function(assert) {
             nameField: "customField"
         }
     });
-    //act
+    // act
     this.createBinding({
         customizeChart: customizeChart
     });
-    //assert
+    // assert
     assert.ok(customizeChart.calledOnce);
 
     assert.deepEqual(customizeChart.lastCall.args[0], {

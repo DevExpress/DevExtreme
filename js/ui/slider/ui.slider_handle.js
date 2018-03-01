@@ -180,14 +180,17 @@ var SliderHandle = Widget.inherit({
         translator.move(this._$tooltipArrow, { left: mathUtils.fitIntoRange(arrowLeft, arrowMinLeft, arrowMaxRight) });
     },
 
+    _getFormattedValue: function(value) {
+        return numberLocalization.format(value, this.option("tooltipFormat"));
+    },
+
     _renderValue: function() {
         if(!this._tooltip) {
             return;
         }
 
-        var formattedValue = numberLocalization.format(this.option("value"), this.option("tooltipFormat"));
-
-        this._tooltip.$content().html(formattedValue);
+        var value = this.option("value");
+        this._tooltip.$content().html(this._getFormattedValue(value));
         this._fitTooltip();
     },
 
@@ -223,7 +226,9 @@ var SliderHandle = Widget.inherit({
             case "value":
                 this._renderValue();
 
-                this._ensureTooltipIsCentered(args.value, args.previousValue);
+                var value = this._getFormattedValue(args.value);
+                var previousValue = this._getFormattedValue(args.previousValue);
+                this._ensureTooltipIsCentered(value, previousValue);
 
                 this.setAria("valuenow", args.value);
                 break;

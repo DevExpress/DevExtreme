@@ -1,7 +1,7 @@
 "use strict";
 
 /* global console */
-/*eslint no-console: off */
+/* eslint no-console: off */
 
 var isFunction = require("./type").isFunction;
 

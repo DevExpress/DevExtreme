@@ -803,9 +803,9 @@ QUnit.test("Manual datasource - search in datasource", function(assert) {
 
     $list = this.instance._list._$element;
 
-    //act
+    // act
     keyboard.type("t");
-    //assert
+    // assert
     assert.equal(searchedString, "t", "Search string should be passed to user-defined load method");
 });
 

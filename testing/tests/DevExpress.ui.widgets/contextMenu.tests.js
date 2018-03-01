@@ -430,7 +430,7 @@ QUnit.test("Document should be default target", function(assert) {
     assert.equal(showingHandler.callCount, 1, "context menu is subscribed on the document");
 });
 
-//T459373
+// T459373
 QUnit.test("Show context menu when position and target is defined", function(assert) {
     var overlay,
         instance = new ContextMenu(this.$element, {
@@ -623,7 +623,7 @@ QUnit.test("context menu should not blink after second hover on root item", func
             $itemsContainer = instance.itemsContainer(),
             $rootItem = $itemsContainer.find("." + DX_MENU_ITEM_CLASS).eq(0);
 
-        //todo: remove private spy if better solution will found
+        // todo: remove private spy if better solution will found
         hideSubmenu = sinon.spy(instance, "_hideSubmenu");
 
         $($itemsContainer).trigger($.Event("dxhoverstart", { target: $rootItem.get(0) }));

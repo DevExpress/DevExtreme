@@ -10,7 +10,7 @@ var $ = require("jquery"),
     tooltipModule = require("viz/core/tooltip"),
     tooltipViewerModule = require("viz/vector_map/tooltip_viewer"),
     dataSourceModule = require("data/data_source/data_source"),
-    exportMenuModule = require("viz/core/export"), //TODO maybe if you test layer - you should create exact layer?
+    exportMenuModule = require("viz/core/export"), // TODO maybe if you test layer - you should create exact layer?
     rendererModule = require("viz/core/renderers/renderer");
 
 require("viz/vector_map/vector_map");
@@ -19,7 +19,7 @@ $("#qunit-fixture").append('<div id="container" style="width: 1200px; height: 60
 
 titleModule.Title = vizMocks.stubClass(titleModule.Title, { });
 tooltipModule.Tooltip = vizMocks.stubClass(tooltipModule.Tooltip);
-exportMenuModule.ExportMenu = vizMocks.stubClass(exportMenuModule.ExportMenu); //TODO maybe if you test layer - you should create exact layer?
+exportMenuModule.ExportMenu = vizMocks.stubClass(exportMenuModule.ExportMenu); // TODO maybe if you test layer - you should create exact layer?
 loadingIndicatorModule.LoadingIndicator = vizMocks.stubClass(loadingIndicatorModule.LoadingIndicator);
 controlBarModule.ControlBar = vizMocks.stubClass(controlBarModule.ControlBar);
 legendModule.LegendsControl = vizMocks.stubClass(legendModule.LegendsControl);

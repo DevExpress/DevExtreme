@@ -268,6 +268,11 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
             * @type String
             */
             /**
+             * @name dxMenuBaseItemTemplate_html
+             * @publicName html
+             * @type String
+             */
+            /**
             * @name dxMenuBaseItemTemplate_items
             * @publicName items
             * @type Array<dxMenuBaseItemTemplate>
@@ -385,7 +390,7 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
             $itemContainer = $('<span>').addClass(DX_MENU_ITEM_CAPTION_CLASS),
             itemContent = typeUtils.isPlainObject(itemData) ? itemText : String(itemData);
 
-        return itemText && $itemContainer.html(itemContent);
+        return itemText && $itemContainer.text(itemContent);
     },
 
     _getPopoutContainer: function(itemData) {
@@ -542,7 +547,7 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
         return typeUtils.isObject(delay) ? delay[action] : delay;
     },
 
-    //TODO: try to simplify
+    // TODO: try to simplify
     _getItemElementByEventArgs: function(eventArgs) {
         var $target = $(eventArgs.target);
 
@@ -550,7 +555,7 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
             return $target;
         }
 
-        //TODO: move it to inheritors, menuBase don't know about dx-submenu
+        // TODO: move it to inheritors, menuBase don't know about dx-submenu
         while(!$target.hasClass(this._itemClass())) {
             $target = $target.parent();
             if($target.hasClass("dx-submenu")) {

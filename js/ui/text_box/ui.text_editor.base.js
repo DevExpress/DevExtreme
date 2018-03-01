@@ -47,7 +47,7 @@ var CONTROL_KEYS = [
     "ArrowUp",
     "ArrowRight",
     "ArrowDown",
-    //IE9 fallback:
+    // IE9 fallback:
     "Esc",
     "Left",
     "Up",
@@ -414,8 +414,8 @@ var TextEditorBase = Editor.inherit({
 
         this.option("text", text);
 
-        //fallback to empty string is required to support WebKit native date picker in some basic scenarios
-        //can not be covered by QUnit
+        // fallback to empty string is required to support WebKit native date picker in some basic scenarios
+        // can not be covered by QUnit
         if(this._input().val() !== (isDefined(text) ? text : "")) {
             this._renderDisplayText(text);
         } else {

@@ -146,7 +146,7 @@ var environment = {
 
             axis = this.createAxis(this.renderSettings, options);
 
-            this.translator.getBusinessRange.returns(this.range);//TODO - move
+            this.translator.getBusinessRange.returns(this.range);// TODO - move
             axis.setBusinessRange(this.range);
 
             return axis;
@@ -395,7 +395,7 @@ QUnit.module("Semidiscrete axis", $.extend({}, environment, {
 QUnit.test("translates coordinates with tickInterval info", function(assert) {
     this.createDrawnAxis({ type: "semidiscrete", tickInterval: 5 });
 
-    assert.equal(this.translator.translate.callCount, 8); //4 for labels
+    assert.equal(this.translator.translate.callCount, 8); // 4 for labels
     assert.deepEqual(this.translator.translate.getCall(0).args, [1, 0, 5]);
     assert.deepEqual(this.translator.translate.getCall(2).args, [2, 0, 5]);
     assert.deepEqual(this.translator.translate.getCall(4).args, [3, 0, 5]);
@@ -836,7 +836,7 @@ QUnit.test("Labels are empty", function(assert) {
     assert.deepEqual(this.arrayRemovedElements, []);
 });
 
-//T497323
+// T497323
 QUnit.test("frequent ticks", function(assert) {
     var markersBBoxes = [
         { x: 0, y: 0, width: 1, height: 2 },
@@ -1030,7 +1030,7 @@ QUnit.test("alignment of labels after rotate, angle less than 0", function(asser
     assert.equal(texts.getCall(0).returnValue.attr.lastCall.args[0].translateY, 467);
 });
 
-QUnit.test("custom alignment for labels", function(assert) { //TODO: remove userAlingment and this test
+QUnit.test("custom alignment for labels", function(assert) { // TODO: remove userAlingment and this test
     this.translator.translate.withArgs(1).returns(0);
     this.translator.translate.withArgs(3).returns(15);
     this.translator.translate.withArgs(5).returns(20);
@@ -1260,7 +1260,7 @@ QUnit.test("Alignment of labels after their rotation and updating width of canva
     var axis = this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: { mode: "rotate" }, rotationAngle: 40 } });
 
     this.renderer.text.reset();
-    //updating
+    // updating
     this.translator.translate.withArgs(1).returns(10);
     this.translator.translate.withArgs(3).returns(40);
     this.translator.translate.withArgs(5).returns(70);
@@ -1274,7 +1274,7 @@ QUnit.test("Alignment of labels after their rotation and updating width of canva
     }
 });
 
-//DEPRECATED 17_1 start
+// DEPRECATED 17_1 start
 QUnit.test("User rotationAngle in overlappingBehavior options, rotationAngle = 45", function(assert) {
     var markersBBoxes = [
         { x: 0, y: 0, width: 10, height: 5 },
@@ -1316,7 +1316,7 @@ QUnit.test("User rotationAngle in overlappingBehavior options, rotationAngle = 0
         }
     }
 });
-//DEPRECATED 17_1 end
+// DEPRECATED 17_1 end
 
 QUnit.module("Label overlapping, 'stagger' mode", overlappingEnvironment);
 
@@ -1487,7 +1487,7 @@ QUnit.test("staggeringSpacing more than zero", function(assert) {
     assert.equal(texts.getCall(4).returnValue.attr.lastCall.args[0].translateY, 600, "4 text not moved");
 });
 
-//DEPRECATED 17_1 start
+// DEPRECATED 17_1 start
 QUnit.test("User staggeringSpacing in overlappingBehavior options, staggeringSpacing = 3", function(assert) {
     var markersBBoxes = [
         { x: 0, y: 0, width: 10, height: 5 },
@@ -1547,7 +1547,7 @@ QUnit.test("User staggeringSpacing in overlappingBehavior options, staggeringSpa
     assert.equal(texts.getCall(3).returnValue.attr.lastCall.args[0].translateY, 607, "3 text moved");
     assert.equal(texts.getCall(4).returnValue.attr.lastCall.args[0].translateY, 600, "4 text not moved");
 });
-//DEPRECATED 17_1 end
+// DEPRECATED 17_1 end
 
 QUnit.module("Label overlapping, 'auto' mode", overlappingEnvironment);
 
@@ -2737,7 +2737,7 @@ QUnit.test("All margins are zero", function(assert) {
     this.renderer.g.getCall(5).returnValue.attr.reset();
 
     axis.shift({ top: 0, bottom: 0, left: 0, right: 0 });
-    //T548860
+    // T548860
     assert.deepEqual(this.renderer.g.getCall(5).returnValue.attr.lastCall.args[0], {
         translateX: 0
     });
@@ -2900,18 +2900,6 @@ QUnit.test("Do not get scale break if viewport inside it", function(assert) {
     assert.deepEqual(breaks, []);
 });
 
-QUnit.test("Do not get scale break if multiple value axes", function(assert) {
-    this.updateOptions({
-        breaks: [{ startValue: 200, endValue: 500 }]
-    });
-    this.axis.setBusinessRange({ min: 0, max: 1000, addRange: function() { return this; } }, true);
-    this.axis.createTicks(this.canvas);
-
-    var breaks = this.tickGeneratorSpy.lastCall.args[7];
-
-    assert.deepEqual(breaks, []);
-});
-
 QUnit.test("Sorting of the breaks if user set not sorted breaks", function(assert) {
     this.updateOptions({
         breaks: [{ startValue: 200, endValue: 500 }, { startValue: 100, endValue: 150 }],
@@ -3037,6 +3025,47 @@ QUnit.test("Datetime axis, breaks values are string", function(assert) {
         to: new Date(2015, 4, 9),
         cumulativeWidth: 0
     }]);
+});
+
+QUnit.test("Remove groups on disposing", function(assert) {
+    this.renderSettings.scaleBreaksGroup = this.renderer.g();
+    var axis = this.createAxis(this.renderSettings, $.extend(true, this.options, {
+        breaks: [
+            { startValue: 50, endValue: 100 },
+            { startValue: 70, endValue: 150 }
+        ],
+        visible: true,
+        breakStyle: {
+            color: "black",
+            line: "waved",
+            width: 10
+        },
+        min: 0,
+        max: 140
+    }));
+
+    this.translator.getBusinessRange.returns({
+        breaks: [
+            { startValue: 50, endValue: 100 },
+            { startValue: 70, endValue: 150 }
+        ]
+    });
+
+    axis.createTicks(this.canvas);
+
+    axis.shift({ left: -10 });
+    this.renderer.g.reset();
+
+    axis.drawScaleBreaks();
+    // act
+    axis.dispose();
+
+    // assert
+    assert.ok(this.renderer.g.getCall(0).returnValue.dispose.called);
+    assert.ok(this.renderer.clipRect.getCall(0).returnValue.dispose.called);
+
+    assert.ok(this.renderer.g.getCall(1).returnValue.dispose.called);
+    assert.ok(this.renderer.clipRect.getCall(1).returnValue.dispose.called);
 });
 
 QUnit.module("Datetime scale breaks. Weekends and holidays", $.extend({}, environment2DTranslator, {
@@ -3437,11 +3466,11 @@ QUnit.test("Recalculate the breaks on zoom", function(assert) {
 
     this.axis.createTicks(this.canvas);
 
-    //act
+    // act
     this.axis.zoom(new Date(2017, 8, 8, 8, 0, 0), new Date(2017, 8, 11));
     this.axis.createTicks(this.canvas);
 
-    //assert
+    // assert
     var breaks = this.tickGeneratorSpy.lastCall.args[7];
     assert.deepEqual(breaks, [
         {
@@ -3916,30 +3945,6 @@ QUnit.test("Reset zoom", function(assert) {
     this.axis.createTicks(this.canvas);
 
     assert.deepEqual(this.tickGeneratorSpy.lastCall.args[7], [{ from: 10, to: 40, cumulativeWidth: 0 }, { from: 40, to: 80, cumulativeWidth: 0 }]);
-});
-
-QUnit.test("Do not generate scale breaks on zooming if multiple axis", function(assert) {
-    this.axis.setGroupSeries([
-        this.stubSeries([[3, 10, 40], []]),
-        this.stubSeries([[80, 120, 40], []])
-    ]);
-
-    this.updateOptions({
-        autoBreaksEnabled: true,
-        maxAutoBreakCount: 2
-    });
-    this.axis.setBusinessRange({ min: 2, max: 120, addRange: function() { return this; } }, true);
-    this.axis.createTicks(this.canvas);
-
-    this.axis.setGroupSeries([
-        this.stubSeries([[3, 10], []]),
-        this.stubSeries([[80, 120, 40], []])
-    ]);
-
-    this.axis.zoom(50, 100);
-    this.axis.createTicks(this.canvas);
-
-    assert.deepEqual(this.tickGeneratorSpy.lastCall.args[7], []);
 });
 
 QUnit.test("Generate the breaks take into account the edge points that out of the range", function(assert) {

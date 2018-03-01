@@ -12,7 +12,6 @@ var noop = require("../../core/utils/common").noop,
     extend = require("../../core/utils/extend").extend,
 
     _floor = Math.floor,
-    Class = require("../../core/class"),
     DOMComponent = require("../../core/dom_component"),
     helpers = require("./helpers"),
     _parseScalar = require("./utils").parseScalar,
@@ -105,15 +104,8 @@ function pickPositiveValue(values) {
 var getEmptyComponent = function() {
     var emptyComponentConfig = {};
 
-    for(var field in DOMComponent.prototype) {
-        var prop = DOMComponent.prototype[field];
-
-        if(typeUtils.isFunction(prop) && field.substr(0, 1) !== "_") {
-            emptyComponentConfig[field] = noop;
-        }
-    }
-
     emptyComponentConfig.ctor = function(element, options) {
+        this.callBase(element, options);
         var sizedElement = domAdapter.createElement("div");
 
         var width = options && typeUtils.isNumeric(options.width) ? options.width + "px" : "100%";
@@ -126,7 +118,20 @@ var getEmptyComponent = function() {
         domAdapter.insertElement(element, sizedElement);
     };
 
-    return Class.inherit(emptyComponentConfig);
+    var EmptyComponent = DOMComponent.inherit(emptyComponentConfig);
+    var originalInherit = EmptyComponent.inherit;
+
+    EmptyComponent.inherit = function(config) {
+        for(var field in config) {
+            if(typeUtils.isFunction(config[field]) && field.substr(0, 1) !== "_" || field === "_dispose") {
+                config[field] = noop;
+            }
+        }
+
+        return originalInherit.call(this, config);
+    };
+
+    return EmptyComponent;
 };
 
 var isServerSide = !windowUtils.hasWindow();
@@ -167,6 +172,7 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
         // Though this relation is not ensured in code we will immediately know when it is broken - `loading indicator` will break on construction
         linkTarget && linkTarget.enableLinks().virtualLink("core").virtualLink("peripheral");
         that._renderVisibilityChange();
+        that._attachVisibilityChangeHandlers();
         that._initEventTrigger();
         that._incidentOccurred = createIncidentOccurred(that.NAME, that._eventTrigger);
         that._layout = new _Layout();
@@ -360,7 +366,7 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
             canvas = that._calculateCanvas();
 
         that._renderer.fixPlacement();
-        if(areCanvasesDifferent(that._canvas, canvas) || that.__forceRender /*for charts*/) {
+        if(areCanvasesDifferent(that._canvas, canvas) || that.__forceRender /* for charts */) {
             that._canvas = canvas;
             that._renderer.resize(canvas.width, canvas.height);
             that._change(["LAYOUT"]);
@@ -464,7 +470,7 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
     _getActionForUpdating: function(args) {
         var that = this;
 
-        return that._deprecatedOptionsSuppressed ? function() { //T479911
+        return that._deprecatedOptionsSuppressed ? function() { // T479911
             that._suppressDeprecatedWarnings();
             _option.apply(that, args);
             that._resumeDeprecatedWarnings();

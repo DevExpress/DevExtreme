@@ -211,8 +211,8 @@ QUnit.test("component lifecycle, changing a couple of options", function(assert)
         "beginUpdate",
         "endUpdate",
 
-        //"beginUpdate", // optionByDevice options applying
-        //"endUpdate",
+        // "beginUpdate", // optionByDevice options applying
+        // "endUpdate",
         "endUpdate",
         "_init",
 
@@ -322,10 +322,10 @@ QUnit.test("option value equality comparison", function(assert) {
     checkTriggered("scalar", 1, true);
     checkTriggered("func", noop, true);
 
-    //plain objects are always treated as different
+    // plain objects are always treated as different
     checkTriggered("obj", plainObj, true);
 
-    //same arrays are different
+    // same arrays are different
     checkTriggered("array", array, true);
 
     checkTriggered("scalar", 1, false);
@@ -497,7 +497,7 @@ QUnit.test("component should _suppressDeprecatedWarnings while initializing _def
     assert.strictEqual(instance._logDeprecatedWarningCount, 1);
 });
 
-/*QUnit.test("changing an option alias should change the option value", function(assert) {
+/* QUnit.test("changing an option alias should change the option value", function(assert) {
     var instance = new TestComponent(),
         option = "value",
         alias = "checked";
@@ -516,7 +516,7 @@ QUnit.test("reading an option alias should return the option value", function(as
     instance.option(option, true);
     assert.strictEqual(instance.option(alias), true);
     assert.strictEqual(instance.option(alias), instance.option(option));
-});*/
+}); */
 
 QUnit.test("deprecated options api syntactic sugar for options having aliases", function(assert) {
     var originalLog = errors.log,
@@ -548,7 +548,7 @@ QUnit.test("deprecated options api syntactic sugar for options having aliases", 
     }
 });
 
-//T116550
+// T116550
 QUnit.test("deprecated options api syntactic sugar for second level options having aliases", function(assert) {
     var originalLog = errors.log,
         log = [];

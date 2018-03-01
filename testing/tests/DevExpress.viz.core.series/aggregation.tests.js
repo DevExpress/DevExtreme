@@ -88,7 +88,7 @@ QUnit.test("Fusion three  points", function(assert) {
         points = [this.createPoint(this.series, { value: 1 }), this.createPoint(this.series, { value: 2 }), this.createPoint(this.series, { value: 3 })];
     this.createPoint.reset();
 
-    //act
+    // act
     result = this.series._fusionPoints(points, tick);
 
     assert.ok(result);
@@ -102,7 +102,7 @@ QUnit.test("Fusion two  points", function(assert) {
         points = [this.createPoint(this.series, { value: 1 }), this.createPoint(this.series, { value: 2 })];
     this.createPoint.reset();
 
-    //act
+    // act
     result = this.series._fusionPoints(points, tick);
 
     assert.ok(result);
@@ -118,7 +118,7 @@ QUnit.test("Fusion many points", function(assert) {
             this.createPoint(this.series, { value: 2 }), this.createPoint(this.series, { value: 4 })];
     this.createPoint.reset();
 
-    //act
+    // act
     result = this.series._fusionPoints(points, tick);
 
     assert.ok(result);
@@ -134,7 +134,7 @@ QUnit.test("Fusion many points. With null ", function(assert) {
             this.createPoint(this.series, { value: null }), this.createPoint(this.series, { value: 4 })];
     this.createPoint.reset();
 
-    //act
+    // act
     result = this.series._fusionPoints(points, tick);
 
     assert.ok(result);
@@ -1028,10 +1028,10 @@ QUnit.test("T382881, Series is not sorted", function(assert) {
 
     this.series.updateData(points);
     this.setup(1, 10);
-    //Act
+    // Act
     this.series.resamplePoints(10);
 
-    //Assert
+    // Assert
     checkResult(assert, this.series.getPoints(), fusionPoints, 6);
 });
 
@@ -1071,7 +1071,7 @@ QUnit.test("10 points -> 5 points. All points", function(assert) {
 });
 
 QUnit.test("getPointsByArg usage", function(assert) {
-    //arrange
+    // arrange
     var initialPointsCountOnFirstArgument;
 
     this.series.updateData([{ arg: 1, val: 1 }, { arg: 2, val: 2 }]);
@@ -1079,10 +1079,10 @@ QUnit.test("getPointsByArg usage", function(assert) {
     initialPointsCountOnFirstArgument = this.series.getPointsByArg(1).length;
     this.setup(0, 1);
 
-    //act
+    // act
     this.series.resamplePoints(10);
 
-    //assert
+    // assert
     assert.strictEqual(this.series.getPointsByArg(1).length, initialPointsCountOnFirstArgument);
 });
 
@@ -1091,9 +1091,9 @@ QUnit.test("Dispose old aggregation points", function(assert) {
     this.setup(1, 2);
     this.series.resamplePoints(10);
     var points = this.series.getPoints().slice();
-    //Act
+    // Act
     this.series.resamplePoints(10);
-    //Assert
+    // Assert
     assert.equal(points.length, 2);
     assert.ok(points[0].dispose.called);
     assert.ok(points[1].dispose.called);
@@ -1516,7 +1516,7 @@ QUnit.test("Customize Point with result", function(assert) {
     }]);
 });
 
-//T172772
+// T172772
 QUnit.test("Aggregation one point", function(assert) {
     var options = {
         argument: {
@@ -1721,10 +1721,10 @@ QUnit.test("T382881, Series is not sorted", function(assert) {
 
     this.series.updateData(points);
     this.setup(undefined, 10, categories);
-    //Act
+    // Act
     this.series.resamplePoints(10);
 
-    //Assert
+    // Assert
     checkResult(assert, this.series.getPoints(), fusionPoints, 5);
 });
 

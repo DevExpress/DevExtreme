@@ -142,7 +142,7 @@ initRender.prototype.hasClass = function(className) {
     for(var i = 0; i < classNames.length; i++) {
         if(this[0].classList) {
             if(this[0].classList.contains(classNames[i])) return true;
-        } else { //IE9
+        } else { // IE9
             if(this[0].className.split(" ").indexOf(classNames[i]) >= 0) return true;
         }
     }
@@ -265,7 +265,7 @@ var appendElements = function(element, nextSibling) {
             container = this[0],
             wrapTR = container.tagName === "TABLE" && item.tagName === "TR";
 
-        if(wrapTR && container.tBodies.length) {
+        if(wrapTR && container.tBodies && container.tBodies.length) {
             container = container.tBodies[0];
         }
         domAdapter.insertElement(container, item.nodeType ? item : item[0], nextSibling);

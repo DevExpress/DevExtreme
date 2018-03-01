@@ -13,7 +13,7 @@ define(function(require) {
     require("common.css!");
     require("android5_light.css!");
 
-    require("/js/bundles/dx.mobile.js");
+    require("/artifacts/transpiled/bundles/dx.mobile.js");
 
     require("/testing/helpers/frameworkMocks.js");
     require("/testing/helpers/layoutHelper.js");

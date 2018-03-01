@@ -21,10 +21,10 @@ QUnit.test("orderEach", function(assert) {
     checkOrderEach(["", 1, "100", 12, -5, "test", 3, undefined, null], ["-5", "1", "3", "12", "100", "", "null", "test", "undefined"]);
 });
 
-//T396670
+// T396670
 QUnit.test("orderEach when there is custom method in prototype of the array", function(assert) {
     // jshint freeze:false
-    //arrange
+    // arrange
     var array = [1, 2, 3],
         keys = [];
 
@@ -32,12 +32,12 @@ QUnit.test("orderEach when there is custom method in prototype of the array", fu
         this[this.length] = item;
     };
 
-    //act
+    // act
     objectUtils.orderEach(array, function(key, value) {
         keys.push(key);
     });
 
-    //assert
+    // assert
     assert.deepEqual(keys, ["0", "1", "2"], "keys order");
     delete Array.prototype.add;
 });
@@ -54,10 +54,10 @@ QUnit.module('Object cloning', {
 });
 
 QUnit.test('Prototypical cloning', function(assert) {
-    //act
+    // act
     var clone = objectUtils.clone(this.source);
 
-    //assert
+    // assert
     assert.ok(clone);
     assert.ok(clone instanceof this.SomeClass);
     assert.notEqual(clone, this.source);
@@ -66,49 +66,49 @@ QUnit.test('Prototypical cloning', function(assert) {
 });
 
 QUnit.test("External source changes affect clone", function(assert) {
-    //arrange
+    // arrange
     var clone = objectUtils.clone(this.source);
 
-    //act
+    // act
     this.source.a = 'aa';
 
-    //assert
+    // assert
     assert.equal(this.source.a, 'aa');
     assert.equal(clone.a, 'aa');
 });
 
 QUnit.test("External clone changes don't affect source", function(assert) {
-    //arrange
+    // arrange
     var clone = objectUtils.clone(this.source);
 
-    //act
+    // act
     clone.a = 'aa';
 
-    //assert
+    // assert
     assert.equal(this.source.a, 'a');
     assert.equal(clone.a, 'aa');
 });
 
 QUnit.test("Internal source changes affect clone", function(assert) {
-    //arrange
+    // arrange
     var clone = objectUtils.clone(this.source);
 
-    //act
+    // act
     this.source.changeB(15);
 
-    //assert
+    // assert
     assert.equal(this.source.b, 15);
     assert.equal(clone.b, 15);
 });
 
 QUnit.test("Internal clone changes don't affect source", function(assert) {
-    //arrange
+    // arrange
     var clone = objectUtils.clone(this.source);
 
-    //act
+    // act
     clone.changeB([]);
 
-    //assert
+    // assert
     assert.equal(this.source.b, 'b');
     assert.deepEqual(clone.b, []);
 });

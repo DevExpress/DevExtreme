@@ -120,7 +120,7 @@ function calculateIndents(renderer, scale, sliderMarkerOptions, indentOptions, t
 
     indentOptions = indentOptions || {};
     parsedPlaceholderSize = parseSliderMarkersPlaceholderSize(sliderMarkerOptions.placeholderSize);
-    if(parsedPlaceholderSize && indentOptions.left === undefined && indentOptions.right === undefined) {   //for deprecated in 15.1 sliderMarker.placeholderSize
+    if(parsedPlaceholderSize && indentOptions.left === undefined && indentOptions.right === undefined) {   // for deprecated in 15.1 sliderMarker.placeholderSize
         placeholderWidthLeft = parsedPlaceholderSize.widthLeft;
         placeholderWidthRight = parsedPlaceholderSize.widthRight;
     } else {
@@ -128,7 +128,7 @@ function calculateIndents(renderer, scale, sliderMarkerOptions, indentOptions, t
         placeholderWidthRight = indentOptions.right;
     }
 
-    if(parsedPlaceholderSize && sliderMarkerOptions.placeholderHeight === undefined) {    //for deprecated in 15.1 sliderMarker.placeholderSize.height
+    if(parsedPlaceholderSize && sliderMarkerOptions.placeholderHeight === undefined) {    // for deprecated in 15.1 sliderMarker.placeholderSize.height
         placeholderHeight = parsedPlaceholderSize.height;
     } else {
         placeholderHeight = sliderMarkerOptions.placeholderHeight;
@@ -149,7 +149,7 @@ function calculateIndents(renderer, scale, sliderMarkerOptions, indentOptions, t
         rightScaleLabelWidth = calculateScaleLabelHalfWidth(renderer, endTickValue, scale, tickIntervalsInfo);
     }
     placeholderWidthLeft = placeholderWidthLeft !== undefined ? placeholderWidthLeft : leftScaleLabelWidth;
-    placeholderWidthRight = (placeholderWidthRight !== undefined ? placeholderWidthRight : rightScaleLabelWidth) || 1;  //T240698
+    placeholderWidthRight = (placeholderWidthRight !== undefined ? placeholderWidthRight : rightScaleLabelWidth) || 1;  // T240698
 
     return {
         left: placeholderWidthLeft,
@@ -532,10 +532,10 @@ function prepareScaleOptions(scaleOption, seriesDataSource, incidentOccurred, co
         scaleOption.type = "continuous";
     }
 
-    //DEPRECATED IN 15_2 start
+    // DEPRECATED IN 15_2 start
     scaleOption.tickInterval === undefined && (scaleOption.tickInterval = scaleOption.majorTickInterval);
     scaleOption.minorTick.visible && (scaleOption.minorTick.visible = scaleOption.showMinorTicks);
-    //DEPRECATED IN 15_2 end
+    // DEPRECATED IN 15_2 end
 
     scaleOption.parser = parser;
     if(scaleOption.type === SEMIDISCRETE) {
@@ -596,7 +596,7 @@ function getPrecisionForSlider(startValue, endValue, screenDelta) {
 
 var dxRangeSelector = require("../core/base_widget").inherit({
     _eventsMap: {
-        "onSelectedRangeChanged": { name: SELECTED_RANGE_CHANGED }, //deprecated in 16_2
+        "onSelectedRangeChanged": { name: SELECTED_RANGE_CHANGED }, // deprecated in 16_2
         "onValueChanged": { name: VALUE_CHANGED }
     },
 
@@ -697,10 +697,10 @@ var dxRangeSelector = require("../core/base_widget").inherit({
                     that._resumeDeprecatedWarnings();
                     that.option(VALUE, parseSelectedRange(range));
                 }
-                //event is deprecated and should not be triggered without the need
+                // event is deprecated and should not be triggered without the need
                 if(that._options.onSelectedRangeChanged || that.hasEvent("selectedRangeChanged")) {
                     // Event target has to be copied (T226597)
-                    that._eventTrigger(SELECTED_RANGE_CHANGED, { startValue: range.startValue, endValue: range.endValue }); //deprecated in 16_2
+                    that._eventTrigger(SELECTED_RANGE_CHANGED, { startValue: range.startValue, endValue: range.endValue }); // deprecated in 16_2
                 }
 
                 that._eventTrigger(VALUE_CHANGED, {

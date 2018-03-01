@@ -57,7 +57,7 @@ QUnit.test("by $.html", function(assert) {
     checkHasNoTestData($childElement, assert);
 });
 
-//T266920
+// T266920
 QUnit.test("by $.replaceWith", function(assert) {
     var $childElement = $("<div>").appendTo(this.$element);
 

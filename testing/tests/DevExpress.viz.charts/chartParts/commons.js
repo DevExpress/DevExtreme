@@ -53,7 +53,7 @@ var baseEnvironment = {
     }
 };
 
-//stubs
+// stubs
 rendererModule.Renderer = sinon.spy(function(parameters) {
     return new vizMocks.Renderer(parameters);
 });
@@ -83,7 +83,7 @@ trackerModule.PieTracker = sinon.spy(function(parameters) {
     return new PieTrackerSub(parameters);
 });
 
-//stubs getters
+// stubs getters
 function getTitleStub() {
     return titleModule.Title.lastCall.returnValue;
 }

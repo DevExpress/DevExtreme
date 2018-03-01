@@ -58,10 +58,10 @@ QUnit.module("Creation", {
 });
 
 QUnit.test("Groups creation", function(assert) {
-    //arrange
+    // arrange
     this.createExportMenu();
 
-    //assert
+    // assert
     assert.equal(this.renderer.g.callCount, 5, "Three groups");
     assert.deepEqual(this.renderer.g.getCall(0).returnValue.attr.getCall(0).args[0], { "class": "dx-export-menu" }, "Group css-class");
     assert.deepEqual(this.renderer.g.getCall(1).returnValue.attr.getCall(0).args[0], { "class": "dx-export-menu-button" }, "Button css-class");
@@ -76,10 +76,10 @@ QUnit.test("Groups creation", function(assert) {
 });
 
 QUnit.test("Button creation", function(assert) {
-    //arrange, act
+    // arrange, act
     this.createExportMenu();
 
-    //assert
+    // assert
     assert.deepEqual(this.renderer.rect.getCall(1).args, [0, 0, 35, 35], "Button rect");
     assert.deepEqual(this.renderer.rect.getCall(1).returnValue.attr.getCall(0).args[0], {
         rx: 4,
@@ -102,12 +102,12 @@ QUnit.test("Button creation", function(assert) {
 });
 
 QUnit.test("List creation", function(assert) {
-    //arrange, act
+    // arrange, act
     this.options.formats = ["JPEG", "PNG"];
     this.createExportMenu();
 
-    //assert
-    //rect
+    // assert
+    // rect
     assert.deepEqual(this.renderer.rect.getCall(0).args, [-85, 39, 120, 0], "List rect");
     assert.deepEqual(this.renderer.rect.getCall(0).returnValue.attr.getCall(0).args[0], {
         "stroke-width": 1,
@@ -128,7 +128,7 @@ QUnit.test("List creation", function(assert) {
     assert.deepEqual(this.renderer.shadowFilter.getCall(0).returnValue.attr.getCall(0).args[0], { opacity: 0.8 }, "Rect shadow set opacity");
     assert.deepEqual(this.renderer.shadowFilter.getCall(0).returnValue.attr.getCall(1).args[0], { color: "#ababab" }, "Rect shadow set Color");
 
-    //separator
+    // separator
 
     assert.equal(this.renderer.path.getCall(1).args[1], "line", "List separator type");
     assert.deepEqual(this.renderer.path.getCall(1).returnValue.attr.getCall(0).args[0], {
@@ -139,10 +139,10 @@ QUnit.test("List creation", function(assert) {
         cursor: "pointer"
     }, "List separator style");
 
-    //texts
+    // texts
     assert.equal(this.renderer.text.callCount, 3, "Texts count");
 
-    //printing text
+    // printing text
     assert.deepEqual(this.renderer.text.getCall(0).args, ["Print"], "Printing text params");
     assert.deepEqual(this.renderer.text.getCall(0).returnValue.css.getCall(0).args[0], {
         "font-size": 16,
@@ -160,7 +160,7 @@ QUnit.test("List creation", function(assert) {
         "export-element-type": "printing"
     }, "Printing rect events data");
 
-    //JPEG group
+    // JPEG group
     assert.deepEqual(this.renderer.text.getCall(1).args, ["JPEG file"], "JPEG text params");
     assert.deepEqual(this.renderer.text.getCall(1).returnValue.css.getCall(0).args[0], {
         "font-size": 16,
@@ -179,7 +179,7 @@ QUnit.test("List creation", function(assert) {
         y: 92
     }, "JPEG text attrs");
 
-    //PNG group
+    // PNG group
     assert.deepEqual(this.renderer.text.getCall(2).args, ["PNG file"], "PNG text params");
     assert.deepEqual(this.renderer.text.getCall(2).returnValue.css.getCall(0).args[0], {
         "font-size": 16,
@@ -200,11 +200,11 @@ QUnit.test("List creation", function(assert) {
 });
 
 QUnit.test("List creation, without printing", function(assert) {
-    //arrange, act
+    // arrange, act
     this.options.printingEnabled = false;
     this.createExportMenu();
 
-    //assert
+    // assert
     assert.deepEqual(this.renderer.rect.getCall(0).returnValue.attr.getCall(0).args[0], {
         "stroke-width": 1,
         cursor: "pointer",
@@ -237,11 +237,11 @@ QUnit.test("List creation, without printing", function(assert) {
 });
 
 QUnit.test("List creation, without formats", function(assert) {
-    //arrange, act
+    // arrange, act
     this.options.formats = [];
     this.createExportMenu();
 
-    //assert
+    // assert
     assert.deepEqual(this.renderer.rect.getCall(0).returnValue.attr.getCall(1).args[0].height, 32, "List rect");
     assert.deepEqual(this.renderer.rect.getCall(2).returnValue.css.getCall(0).args[0], {
         cursor: "pointer",
@@ -268,12 +268,12 @@ QUnit.test("List creation, without formats", function(assert) {
 });
 
 QUnit.test("Without printing and formats", function(assert) {
-    //arrange, act
+    // arrange, act
     this.options.formats = [];
     this.options.printingEnabled = false;
     this.createExportMenu();
 
-    //assert
+    // assert
     assert.equal(this.renderer.stub("rect").callCount, 1, "List rect");
     assert.strictEqual(this.renderer.stub("rect").getCall(0).returnValue.stub("append").callCount, 0, "List rect");
     assert.equal(this.renderer.stub("path").callCount, 0, "No paths");
@@ -281,11 +281,11 @@ QUnit.test("Without printing and formats", function(assert) {
 });
 
 QUnit.test("Enabled options is false", function(assert) {
-    //arrange, act
+    // arrange, act
     this.options.enabled = false;
     this.createExportMenu();
 
-    //assert
+    // assert
     assert.equal(this.renderer.stub("rect").callCount, 1, "List rect");
     assert.strictEqual(this.renderer.stub("rect").getCall(0).returnValue.stub("append").callCount, 0, "List rect");
     assert.equal(this.renderer.stub("path").callCount, 0, "No paths");
@@ -345,7 +345,7 @@ QUnit.module("API", {
 });
 
 QUnit.test("exportFromMarkup method", function(assert) {
-    //arrange
+    // arrange
     var options = {
             format: "jpeg",
             proxyUrl: "testUrl",
@@ -358,10 +358,10 @@ QUnit.test("exportFromMarkup method", function(assert) {
         },
         markup = "testMarkup";
 
-    //act
+    // act
     exportModule.exportFromMarkup(markup, options);
 
-    //assert
+    // assert
     assert.equal(clientExporter.export.callCount, 1, "Export was called");
     assert.deepEqual(clientExporter.export.getCall(0).args[0], "testMarkup", "Export data");
     assert.deepEqual(clientExporter.export.getCall(0).args[1], {
@@ -393,14 +393,14 @@ QUnit.test("combineWidgets method", function(assert) {
 });
 
 QUnit.test("Get layout options", function(assert) {
-    //arrange
+    // arrange
     var exportMenu = this.createExportMenu(),
         layout;
 
-    //act
+    // act
     layout = exportMenu.getLayoutOptions();
 
-    //assert
+    // assert
     assert.deepEqual(layout, {
         cutLayoutSide: "top",
         cutSide: "vertical",
@@ -419,60 +419,60 @@ QUnit.test("Get layout options", function(assert) {
 });
 
 QUnit.test("Draw", function(assert) {
-    //arrange
+    // arrange
     var exportMenu = this.createExportMenu();
 
-    //act
+    // act
     exportMenu.draw(100, 60, { width: 30, height: 30, left: 50 });
 
-    //assert
+    // assert
     assert.deepEqual(this.renderer.g.getCall(0).returnValue.move.getCall(0).args, [110, 12], "group moving");
 });
 
 QUnit.test("Shift", function(assert) {
-    //arrange
+    // arrange
     var exportMenu = this.createExportMenu();
 
     this.renderer.g.getCall(0).returnValue.attr.reset();
 
-    //act
+    // act
     exportMenu.shift(10, 20);
 
-    //assert
+    // assert
     assert.deepEqual(this.renderer.g.getCall(0).returnValue.attr.getCall(1).args[0], { translateY: 20 }, "y shifting");
 });
 
 QUnit.test("Hide", function(assert) {
-    //arrange
+    // arrange
     var exportMenu = this.createExportMenu();
 
-    //act
+    // act
     exportMenu.hide();
 
-    //assert
+    // assert
     assert.equal(this.renderer.g.getCall(0).returnValue.linkRemove.callCount, 1, "link is removed");
 });
 
 QUnit.test("Show", function(assert) {
-    //arrange
+    // arrange
     var exportMenu = this.createExportMenu();
 
-    //act
+    // act
     exportMenu.show();
 
-    //assert
+    // assert
     assert.equal(this.renderer.g.getCall(0).returnValue.linkAppend.callCount, 2, "link is appended");
 });
 
 QUnit.test("Set options", function(assert) {
-    //arrange
+    // arrange
     var exportMenu = this.createExportMenu();
 
     this.renderer.rect.reset();
     this.renderer.text.reset();
     this.renderer.path.reset();
 
-    //act
+    // act
     exportMenu.setOptions({
         enabled: true,
         formats: ["png", "abc"],
@@ -511,7 +511,7 @@ QUnit.test("Set options", function(assert) {
         borderColor: "#b6b6b6"
     });
 
-    //assert
+    // assert
     var listGroup = this.renderer.g.getCall(2).returnValue;
 
     assert.equal(listGroup.clear.callCount, 2, "clearing");
@@ -548,13 +548,13 @@ QUnit.test("Set options", function(assert) {
 });
 
 QUnit.test("Dispose", function(assert) {
-    //assert
+    // assert
     var exportMenu = this.createExportMenu();
 
-    //act
+    // act
     exportMenu.dispose();
 
-    //assert
+    // assert
     assert.equal(this.renderer.g.getCall(0).returnValue.dispose.callCount, 1, "Group dispose was called");
     assert.equal(this.renderer.shadowFilter.getCall(0).returnValue.dispose.callCount, 1, "Shadow filter dispose was called");
 });
@@ -611,10 +611,10 @@ QUnit.module("Events", {
 });
 
 QUnit.test("'On' subscribe", function(assert) {
-    //assert, act
+    // assert, act
     this.createExportMenu();
 
-    //assert
+    // assert
     assert.equal(this.renderer.root.on.callCount, 1, "one subscribe");
     assert.equal(this.renderer.root.on.getCall(0).args[0], "dxpointerup.export", "event name");
     assert.ok(this.renderer.root.on.getCall(0).args[1], "event handler");
@@ -630,13 +630,13 @@ QUnit.test("'On' subscribe", function(assert) {
 });
 
 QUnit.test("'Off' unsubscribe", function(assert) {
-    //assert
+    // assert
     var exportMenu = this.createExportMenu();
 
-    //act
+    // act
     exportMenu.dispose();
 
-    //assert
+    // assert
     assert.equal(this.renderer.root.off.callCount, 1, "one unsubscribe");
     assert.equal(this.renderer.root.off.getCall(0).args[0], ".export", "event name");
     assert.equal(this.renderer.g.getCall(1).returnValue.off.callCount, 1, "off for button");
@@ -644,189 +644,189 @@ QUnit.test("'Off' unsubscribe", function(assert) {
 });
 
 QUnit.test("Button hover", function(assert) {
-    //assert
+    // assert
     this.createExportMenu();
 
     this.renderer.rect.getCall(1).returnValue.attr.reset();
 
-    //act
+    // act
     this.renderer.g.getCall(1).returnValue.on.getCall(0).args[1]({ target: { "export-element-type": "button" } });
 
-    //assert
+    // assert
     assert.deepEqual(this.renderer.rect.getCall(1).returnValue.attr.getCall(0).args[0], { fill: "#e6e6e6", stroke: "#bebebe" }, "hovered button");
 });
 
 QUnit.test("Button mousedown", function(assert) {
-    //assert
+    // assert
     this.createExportMenu();
 
     this.renderer.rect.getCall(1).returnValue.attr.reset();
-    //act
+    // act
     this.renderer.g.getCall(1).returnValue.on.getCall(2).args[1]({ target: { "export-element-type": "button" } });
-    //assert
+    // assert
     assert.deepEqual(this.renderer.rect.getCall(1).returnValue.attr.getCall(0).args[0], { fill: "#d4d4d4", stroke: "#9d9d9d" }, "Button set active state");
 });
 
 QUnit.test("Button unhover", function(assert) {
-    //assert
+    // assert
     this.createExportMenu();
 
     this.renderer.rect.getCall(1).returnValue.attr.reset();
 
-    //act
+    // act
     this.renderer.g.getCall(1).returnValue.on.getCall(0).args[1]({ target: { "export-element-type": "button" } });
     this.renderer.g.getCall(1).returnValue.on.getCall(1).args[1]({ target: { "export-element-type": "button" } });
 
-    //assert
+    // assert
     assert.deepEqual(this.renderer.rect.getCall(1).returnValue.attr.getCall(1).args[0], { fill: "#123456", stroke: "#b6b6b6" }, "unhovered button");
 });
 
 QUnit.test("menuItem hover", function(assert) {
-    //assert
+    // assert
     this.createExportMenu();
     var menuItemRect = this.renderer.rect.getCall(2).returnValue;
 
     menuItemRect.attr.reset();
 
-    //act
+    // act
     menuItemRect.on.getCall(0).args[1]();
 
-    //assert
+    // assert
     assert.deepEqual(menuItemRect.attr.getCall(0).args[0], { fill: "#e6e6e6" }, "Menu item hovered");
 });
 
 QUnit.test("menuItem unhover", function(assert) {
-    //assert
+    // assert
     this.createExportMenu();
     var menuItemRect = this.renderer.rect.getCall(2).returnValue;
 
     menuItemRect.attr.reset();
 
-    //act
+    // act
     menuItemRect.on.getCall(0).args[1]();
     menuItemRect.on.getCall(1).args[1]();
 
-    //assert
+    // assert
     assert.deepEqual(menuItemRect.attr.getCall(0).args[0], { fill: "#e6e6e6" }, "Menu item unhovered");
     assert.deepEqual(menuItemRect.attr.getCall(1).args[0], { fill: null }, "Menu item unhovered");
 });
 
 QUnit.test("Button hover when button is selected", function(assert) {
-    //assert
+    // assert
     this.createExportMenu();
 
-    //act
+    // act
     this.renderer.root.on.getCall(0).args[1]({ target: { "export-element-type": "button" } });
     this.renderer.rect.getCall(1).returnValue.attr.reset();
     this.renderer.g.getCall(1).returnValue.on.getCall(0).args[1]({ target: { "export-element-type": "button" } });
 
-    //assert
+    // assert
     assert.equal(this.renderer.rect.getCall(1).returnValue.attr.callCount, 1, "non-hovered but selected button");
 });
 
 QUnit.test("Button unhover when button is selected", function(assert) {
-    //assert
+    // assert
     this.createExportMenu();
 
-    //act
+    // act
     this.renderer.root.on.getCall(0).args[1]({ target: { "export-element-type": "button" } });
     this.renderer.g.getCall(1).returnValue.on.getCall(0).args[1]({ target: { "export-element-type": "button" } });
     this.renderer.rect.getCall(1).returnValue.attr.reset();
     this.renderer.g.getCall(1).returnValue.on.getCall(1).args[1]({ target: { "export-element-type": "button" } });
 
-    //assert
+    // assert
     assert.equal(this.renderer.rect.getCall(1).returnValue.attr.callCount, 1, "non-hovered but selected button");
 });
 
 QUnit.test("List opening", function(assert) {
-    //assert
+    // assert
     this.createExportMenu();
 
     this.renderer.g.getCall(2).returnValue.attr.reset();
     this.renderer.rect.getCall(1).returnValue.attr.reset();
 
-    //act
+    // act
     this.renderer.root.on.getCall(0).args[1]({ target: { "export-element-type": "button" } });
 
-    //assert
+    // assert
     assert.equal(this.renderer.g.getCall(2).returnValue.append.callCount, 2, "showing call count");
     assert.deepEqual(this.renderer.g.getCall(2).returnValue.append.getCall(0).args[0], this.renderer.g.getCall(2).returnValue.append.getCall(1).args[0], "visible list");
     assert.deepEqual(this.renderer.rect.getCall(1).returnValue.attr.getCall(0).args[0], { fill: "#e6e6e6", stroke: "#9d9d9d" }, "selected button has focused state style");
 });
 
 QUnit.test("Correct texts positions on list opening", function(assert) {
-    //assert
+    // assert
     this.createExportMenu();
 
-    //act
+    // act
     this.renderer.root.on.getCall(0).args[1]({ target: { "export-element-type": "button" } });
 
-    //assert
+    // assert
     assert.deepEqual(this.renderer.text.getCall(0).returnValue.move.lastCall.args, [-71]);
 });
 
 QUnit.test("Correct texts positions on list opening. RTL", function(assert) {
-    //assert
+    // assert
     this.options.rtl = true;
     this.options.printingEnabled = false;
     this.createExportMenu();
 
-    //act
+    // act
     this.renderer.root.on.getCall(0).args[1]({ target: { "export-element-type": "button" } });
 
-    //assert
+    // assert
     assert.deepEqual(this.renderer.text.getCall(0).returnValue.move.lastCall.args, [-1]);
 });
 
 QUnit.test("List closing by menu button", function(assert) {
-    //assert
+    // assert
     this.createExportMenu();
 
     this.renderer.g.getCall(2).returnValue.attr.reset();
     this.renderer.rect.getCall(1).returnValue.attr.reset();
 
-    //act
+    // act
     this.renderer.root.on.getCall(0).args[1]({ target: { "export-element-type": "button" } });
     this.renderer.root.on.getCall(0).args[1]({ target: { "export-element-type": "button" } });
 
-    //assert
+    // assert
     assert.equal(this.renderer.g.getCall(2).returnValue.remove.callCount, 2, "showing call count");
     assert.deepEqual(this.renderer.rect.getCall(1).returnValue.attr.getCall(1).args[0], { fill: "#123456", stroke: "#b6b6b6" }, "unselected button has default state style");
 });
 
 QUnit.test("List closing by any place", function(assert) {
-    //assert
+    // assert
     this.createExportMenu();
 
     this.renderer.g.getCall(2).returnValue.attr.reset();
 
-    //act
+    // act
     this.renderer.root.on.getCall(0).args[1]({ target: { "export-element-type": "button" } });
     this.renderer.rect.getCall(1).returnValue.attr.reset();
     this.renderer.root.on.getCall(0).args[1]({ target: {} });
 
-    //assert
+    // assert
     assert.equal(this.renderer.g.getCall(2).returnValue.remove.callCount, 2, "showing call count");
     assert.deepEqual(this.renderer.rect.getCall(1).returnValue.attr.getCall(0).args[0], { fill: "#123456", stroke: "#b6b6b6" }, "unselected button");
 });
 
 QUnit.test("List isn't closing by click on list", function(assert) {
-    //assert
+    // assert
     this.createExportMenu();
 
     this.renderer.g.getCall(2).returnValue.attr.reset();
 
-    //act
+    // act
     this.renderer.root.on.getCall(0).args[1]({ target: { "export-element-type": "button" } });
     this.renderer.root.on.getCall(0).args[1]({ target: { "export-element-type": "list" } });
 
-    //assert
+    // assert
     assert.equal(this.renderer.g.getCall(2).returnValue.append.callCount, 2, "Appending call count");
     assert.equal(this.renderer.g.getCall(2).returnValue.remove.callCount, 1, "Removing call count");
 });
 
 QUnit.test("Exporting by click on format text", function(assert) {
-    //assert
+    // assert
     this.svgMethod = sinon.stub(),
     this.svgMethod.returns("svgMarkup");
 
@@ -836,7 +836,7 @@ QUnit.test("Exporting by click on format text", function(assert) {
     this.renderer.g.getCall(2).returnValue.attr.reset();
     this.renderer.g.getCall(0).returnValue.linkAppend.reset();
 
-    //act
+    // act
     this.renderer.root.on.getCall(0).args[1]({ target: { "export-element-type": "button" } });
     this.renderer.rect.getCall(1).returnValue.attr.reset();
     this.renderer.root.on.getCall(0).args[1]({
@@ -846,7 +846,7 @@ QUnit.test("Exporting by click on format text", function(assert) {
         }
     });
 
-    //assert
+    // assert
     assert.equal(this.renderer.g.getCall(0).returnValue.linkRemove.callCount, 1, "common group was removed");
     assert.equal(this.renderer.g.getCall(0).returnValue.linkAppend.callCount, 1, "common group was appended");
 
@@ -866,7 +866,7 @@ QUnit.test("Exporting by click on format text", function(assert) {
 });
 
 QUnit.test("Hide menu on export before getting markup", function(assert) {
-    //assert
+    // assert
     this.svgMethod = sinon.stub(),
     this.svgMethod.returns("svgMarkup");
 
@@ -876,7 +876,7 @@ QUnit.test("Hide menu on export before getting markup", function(assert) {
     this.renderer.g.getCall(2).returnValue.attr.reset();
     this.renderer.g.getCall(0).returnValue.linkAppend.reset();
 
-    //act
+    // act
     this.renderer.root.on.getCall(0).args[1]({ target: { "export-element-type": "button" } });
     this.renderer.rect.getCall(0).returnValue.attr.reset();
     this.renderer.root.on.getCall(0).args[1]({
@@ -886,13 +886,13 @@ QUnit.test("Hide menu on export before getting markup", function(assert) {
         }
     });
 
-    //assert
+    // assert
     assert.ok(this.svgMethod.lastCall.calledAfter(this.renderer.g.getCall(0).returnValue.linkRemove.lastCall));
     assert.ok(this.svgMethod.lastCall.calledBefore(this.renderer.g.getCall(0).returnValue.linkAppend.lastCall));
 });
 
 QUnit.test("Open list after exporting - previously clicked item is unhovered. T511729", function(assert) {
-    //assert
+    // assert
     this.svgMethod = sinon.stub(),
     this.svgMethod.returns("svgMarkup");
 
@@ -902,7 +902,7 @@ QUnit.test("Open list after exporting - previously clicked item is unhovered. T5
     var menuItemRect = this.renderer.rect.getCall(2).returnValue;
     menuItemRect.attr.reset();
 
-    //act
+    // act
     this.renderer.root.on.getCall(0).args[1]({ target: { "export-element-type": "button" } });
     menuItemRect.on.getCall(0).args[1]();
     this.renderer.root.on.getCall(0).args[1]({
@@ -913,13 +913,13 @@ QUnit.test("Open list after exporting - previously clicked item is unhovered. T5
     });
     this.renderer.root.on.getCall(0).args[1]({ target: { "export-element-type": "button" } });
 
-    //assert
+    // assert
     assert.deepEqual(menuItemRect.attr.callCount, 2);
     assert.deepEqual(menuItemRect.attr.lastCall.args[0], { fill: null }, "Menu item unhovered");
 });
 
 QUnit.test("Printing by menu", function(assert) {
-    //assert
+    // assert
     var exportMenu,
         svgNode = { style: {} },
         docStub = {
@@ -946,12 +946,12 @@ QUnit.test("Printing by menu", function(assert) {
     this.renderer.g.getCall(2).returnValue.attr.reset();
     this.renderer.g.getCall(0).returnValue.linkAppend.reset();
 
-    //act
+    // act
     this.renderer.root.on.getCall(0).args[1]({ target: { "export-element-type": "button" } });
     this.renderer.rect.getCall(1).returnValue.attr.reset();
     this.renderer.root.on.getCall(0).args[1]({ target: { "export-element-type": "printing" } });
 
-    //assert
+    // assert
     assert.equal(this.renderer.g.getCall(0).returnValue.linkRemove.callCount, 1, "common group was removed");
     assert.equal(this.renderer.g.getCall(0).returnValue.linkAppend.callCount, 1, "common group was appended");
 
@@ -972,7 +972,7 @@ QUnit.test("Printing by menu", function(assert) {
 
 // T397838
 QUnit.test("Localization", function(assert) {
-    //assert
+    // assert
     var exportMenu,
         localization = require("localization");
 
@@ -1047,75 +1047,75 @@ QUnit.module("Layout", {
 });
 
 QUnit.test("Menu is hidden if there is no enough space", function(assert) {
-    //arrange
+    // arrange
     var exportMenu = this.createExportMenu();
 
-    //act
+    // act
     exportMenu.draw(10, 20, { width: 30, height: 30 });
 
-    //assert
+    // assert
     assert.equal(this.renderer.g.getCall(0).returnValue.linkRemove.callCount, 1);
 });
 
 QUnit.test("freeSpace", function(assert) {
-    //arrange
+    // arrange
     var exportMenu = this.createExportMenu();
     exportMenu.draw(100, 200, { width: 30, height: 30 });
 
-    //act
+    // act
     exportMenu.freeSpace();
 
-    //assert
+    // assert
     assert.equal(this.renderer.g.getCall(0).returnValue.linkRemove.callCount, 1);
 });
 
 QUnit.test("Return empty layout options if was hidden due to small container", function(assert) {
-    //arrange
+    // arrange
     var exportMenu = this.createExportMenu();
     exportMenu.draw(10, 20, { width: 30, height: 30 });
 
-    //act
+    // act
     var layout = exportMenu.getLayoutOptions();
 
-    //assert
+    // assert
     assert.deepEqual(layout, { width: 0, height: 0, cutSide: "vertical", cutLayoutSide: "top" });
 });
 
 QUnit.test("Send warning message if was hidden due to small container", function(assert) {
-    //arrange
+    // arrange
     var exportMenu = this.createExportMenu();
 
-    //act
+    // act
     exportMenu.draw(10, 20, { width: 30, height: 30 });
 
-    //assert
+    // assert
     assert.ok(this.incidentOccurred.calledWith("W2107"));
 });
 
 QUnit.test("Menu is hidden first time and shown if container gets bigger", function(assert) {
-    //arrange
+    // arrange
     var exportMenu = this.createExportMenu();
     exportMenu.draw(10, 20, { width: 30, height: 30 });
 
-    //act
+    // act
     exportMenu.probeDraw(100, 60, { width: 30, height: 30 });
     exportMenu.draw(100, 60, { width: 30, height: 30 });
 
-    //assert
+    // assert
     assert.equal(this.renderer.g.getCall(0).returnValue._stored_settings.visibility, null);
 });
 
 QUnit.test("Return real layout options if container gets bigger", function(assert) {
-    //arrange
+    // arrange
     var exportMenu = this.createExportMenu();
     exportMenu.draw(10, 20, { width: 30, height: 30 });
     exportMenu.probeDraw(100, 60, { width: 30, height: 30 });
     exportMenu.draw(100, 60, { width: 30, height: 30 });
 
-    //act
+    // act
     var layout = exportMenu.getLayoutOptions();
 
-    //assert
+    // assert
     assert.deepEqual(layout, {
         cutLayoutSide: "top",
         cutSide: "vertical",

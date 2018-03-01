@@ -17,7 +17,8 @@ var $ = require("../core/renderer"),
     themes = require("./themes"),
     Overlay = require("./overlay"),
     EmptyTemplate = require("./widget/empty_template"),
-    domUtils = require("../core/utils/dom");
+    domUtils = require("../core/utils/dom"),
+    windowUtils = require("../core/utils/window");
 
 require("./toolbar/ui.toolbar.base");
 
@@ -248,12 +249,6 @@ var Popup = Overlay.inherit({
                     return device.phone && currentTheme === "win8";
                 },
                 options: {
-                    /**
-                    * @name dxPopupOptions_position
-                    * @publicName position
-                    * @type string|positionConfig
-                    * @inheritdoc
-                    */
                     position: {
                         my: "top center",
                         at: "top center",
@@ -698,7 +693,9 @@ var Popup = Overlay.inherit({
         } else {
             this.callBase.apply(this, arguments);
         }
-        this._renderFullscreenWidthClass();
+        if(windowUtils.hasWindow()) {
+            this._renderFullscreenWidthClass();
+        }
     },
 
     _renderFullscreenWidthClass: function() {

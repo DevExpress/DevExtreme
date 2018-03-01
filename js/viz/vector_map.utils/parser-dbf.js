@@ -62,7 +62,7 @@ var DBF_FIELD_PARSERS = {
         var str = getAsciiString(stream, length);
 
         try {
-            str = decodeURIComponent(escape(str)); //T522922
+            str = decodeURIComponent(escape(str)); // T522922
         } catch(e) { }
 
         return str.trim();

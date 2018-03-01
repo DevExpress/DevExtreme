@@ -331,10 +331,10 @@ QUnit.test("mouseenter bubble to document (throught catching native 'mouseover')
         var mouseMoveEvent = document.createEvent("MouseEvents");
 
         mouseMoveEvent.initMouseEvent(
-            name, //event type : click, mousedown, mouseup, mouseover, mousemove, mouseout.
-            bubble, //canBubble
-            false, //cancelable
-            window, //event's AbstractView : should be window
+            name, // event type : click, mousedown, mouseup, mouseover, mousemove, mouseout.
+            bubble, // canBubble
+            false, // cancelable
+            window, // event's AbstractView : should be window
             1, // detail : Event's mouse click count
             50, // screenX
             50, // screenY

@@ -251,9 +251,10 @@ QUnit.test("Group table cells should have correct height", function(assert) {
     var $groupTable = $element.find(".dx-scheduler-sidebar-scrollable .dx-scheduler-group-table"),
         $groupRows = $groupTable.find(".dx-scheduler-group-row"),
         $groupHeader = $groupRows.eq(1).find(".dx-scheduler-group-header").eq(0),
-        dateTableCellHeight = $element.find(".dx-scheduler-date-table-cell").eq(0).outerHeight();
+        dateTableCellHeight = $element.find(".dx-scheduler-date-table-cell").get(0).getBoundingClientRect().height,
+        groupHeaderHeight = $groupHeader.get(0).getBoundingClientRect().height;
 
-    assert.roughEqual(dateTableCellHeight, $groupHeader.height(), 1.1, "Cell height is OK");
+    assert.roughEqual(dateTableCellHeight, groupHeaderHeight, 1.1, "Cell height is OK");
 });
 
 QUnit.test("Group table should contain right rows and cells count", function(assert) {
@@ -368,6 +369,20 @@ QUnit.test("the 'getCellIndexByCoordinates' method should return right coordinat
     var cellIndex = this.instance.getCellIndexByCoordinates({ left: cellWidth * 15, top: 1 });
 
     assert.equal(cellIndex, 15, "Cell index is OK");
+});
+
+QUnit.test("the 'getCellIndexByCoordinates' method should return right coordinates for fractional value", function(assert) {
+    this.instance.option("groups", [
+        { name: "one", items: [{ id: 1, text: "a" }, { id: 2, text: "b" }] },
+        { name: "two", items: [{ id: 1, text: "1" }, { id: 2, text: "2" }] }
+    ]);
+
+    var cellWidth = this.instance.$element().find(".dx-scheduler-date-table-cell").eq(0).outerWidth(),
+        cellHeight = this.instance.$element().find(".dx-scheduler-date-table-cell").eq(0).outerHeight();
+
+    var cellIndex = this.instance.getCellIndexByCoordinates({ left: cellWidth * 15 + 0.656, top: cellHeight * 2 - 0.656 });
+
+    assert.equal(cellIndex, 111, "Cell index is OK");
 });
 
 QUnit.test("Timeline should not have time panel offset", function(assert) {

@@ -28,9 +28,16 @@ require("common.css!");
     QUnit.module("Widget markup");
 
     QUnit.test("markup init", function(assert) {
-        var element = $("#widget").dxWidget();
+        var element = $("#widget").dxWidget({});
 
         assert.ok(element.hasClass(WIDGET_CLASS));
+    });
+
+    QUnit.test("widget with a custom dimensions", function(assert) {
+        var element = $("#widget").dxWidget({ width: 150, height: 100 });
+
+        assert.strictEqual(element[0].style.width, "150px", "outer width of the element must be equal to custom width");
+        assert.strictEqual(element[0].style.height, "100px", "outer height of the element must be equal to custom width");
     });
 
     QUnit.test("root with custom width", function(assert) {

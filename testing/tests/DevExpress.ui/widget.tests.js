@@ -782,13 +782,13 @@ require("common.css!");
         assert.strictEqual(testContainer._getTemplateByOption("template2"), templateCollection["group"]);
     });
 
-    //T312012
+    // T312012
     QUnit.test("internal row template as name (string)", function(assert) {
         var testContainer = new TestContainer("#container", { rowTemplate: "rowItem" });
 
         var $row = testContainer._getTemplateByOption("rowTemplate").render();
         assert.strictEqual($row.length, 1, "one element is rendered");
-        assert.strictEqual($row[0].tagName, "TR", "tr is rendered"); //T484419
+        assert.strictEqual($row[0].tagName, "TR", "tr is rendered"); // T484419
         assert.strictEqual($row.html(), "<td>item template content</td>", "tr contains td with content");
     });
 

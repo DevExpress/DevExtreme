@@ -80,10 +80,10 @@ QUnit.test("Create tooltip", function(assert) {
         wrapper,
         div;
 
-    //act
+    // act
     tooltip = new Tooltip({ eventTrigger: et, cssClass: "tooltip-class", pathModified: "pathModified-option" });
 
-    //assert
+    // assert
     assert.equal(tooltip._eventTrigger, et, "eventTrigger");
     assert.deepEqual(tooltip._renderer.ctorArgs, [{ pathModified: "pathModified-option", container: tooltip._wrapper[0] }], "renderer with rendererOptions");
 
@@ -109,7 +109,7 @@ QUnit.test("Create tooltip", function(assert) {
     assert.deepEqual(tooltip._renderer.shadowFilter.firstCall.args, []);
     assert.equal(tooltip._shadow, tooltip._renderer.shadowFilter.firstCall.returnValue);
 
-    //for svg text ↓
+    // for svg text ↓
     assert.equal(tooltip._renderer.g.callCount, 1, "text group element created");
     assert.deepEqual(tooltip._renderer.g.firstCall.args, []);
     assert.equal(tooltip._textGroup, tooltip._renderer.g.firstCall.returnValue);
@@ -126,9 +126,9 @@ QUnit.test("Create tooltip", function(assert) {
 
     assert.equal(tooltip._text.append.callCount, 1, "text added to dom");
     assert.deepEqual(tooltip._text.append.firstCall.args, [tooltip._textGroup]);
-    //for svg text ↑
+    // for svg text ↑
 
-    //for html text ↓
+    // for html text ↓
     assert.ok(tooltip._textGroupHtml, "textGroupHtml");
     div = tooltip._textGroupHtml.get(0);
     assert.equal(div.nodeName, "DIV");
@@ -152,7 +152,7 @@ QUnit.test("Create tooltip", function(assert) {
     assert.equal(div.style["border-width"], "0px");
     assert.equal(div.style["border-style"], "solid");
     assert.equal(div.style["border-color"], "transparent");
-    //for html text ↑
+    // for html text ↑
 });
 
 QUnit.test("Set options. All options", function(assert) {
@@ -160,10 +160,10 @@ QUnit.test("Set options. All options", function(assert) {
         tooltip = new Tooltip({ eventTrigger: et }),
         result;
 
-    //act
+    // act
     result = tooltip.setOptions(this.options);
 
-    //assert
+    // assert
     assert.equal(tooltip, result);
     assert.deepEqual(tooltip._options, this.options, "whole options");
     assert.deepEqual(tooltip._shadowSettings, {
@@ -187,8 +187,8 @@ QUnit.test("Set options. All options", function(assert) {
     }, "cloud");
     assert.equal(this.patchFontOptions.callCount, 1, "font");
     assert.deepEqual(this.patchFontOptions.firstCall.args, [this.options.font]);
-    assert.equal(tooltip._textFontStyles, this.patchFontOptions.firstCall.returnValue); //reference
-    assert.equal(tooltip._textFontStyles.color, this.options.font.color); //additional value
+    assert.equal(tooltip._textFontStyles, this.patchFontOptions.firstCall.returnValue); // reference
+    assert.equal(tooltip._textFontStyles.color, this.options.font.color); // additional value
 
     assert.equal(tooltip._customizeTooltip, this.options.customizeTooltip, "customizeTooltip");
 });
@@ -198,10 +198,10 @@ QUnit.test("Set options. Cloud border options", function(assert) {
         tooltip = new Tooltip({ eventTrigger: et }),
         result;
     this.options.border.visible = false;
-    //act
+    // act
     result = tooltip.setOptions(this.options);
 
-    //assert
+    // assert
     assert.equal(tooltip, result);
     assert.deepEqual(tooltip._options, this.options, "whole options");
     assert.deepEqual(tooltip._cloudSettings, {
@@ -217,11 +217,11 @@ QUnit.test("Set options. ZIndex", function(assert) {
         tooltip = new Tooltip({ eventTrigger: et }),
         result;
     this.options.zIndex = 1000;
-    //act
+    // act
     sinon.spy(tooltip._wrapper, "css");
     result = tooltip.setOptions(this.options);
 
-    //assert
+    // assert
     assert.equal(tooltip, result);
     assert.deepEqual(tooltip._options, this.options, "whole options");
     assert.deepEqual(tooltip._wrapper.css.lastCall.args[0], { "zIndex": 1000 }, "zIndex");
@@ -232,10 +232,10 @@ QUnit.test("Set options. Container is incorrect", function(assert) {
         tooltip = new Tooltip({ eventTrigger: et }),
         result;
     this.options.container = ".some-wrong-class-name";
-    //act
+    // act
     result = tooltip.setOptions(this.options);
 
-    //assert
+    // assert
     assert.equal(tooltip, result);
     assert.equal(tooltip._getContainer(), $("body").get(0));
 });
@@ -245,10 +245,10 @@ QUnit.test("Set options. Container is correct", function(assert) {
         tooltip = new Tooltip({ eventTrigger: et }),
         result;
     this.options.container = ".some-correct-class-name";
-    //act
+    // act
     result = tooltip.setOptions(this.options);
 
-    //assert
+    // assert
     assert.equal(tooltip, result);
     assert.equal(tooltip._getContainer(), $(".some-correct-class-name").get(0));
 });
@@ -265,7 +265,7 @@ QUnit.test("Append tooltip to container on shown", function(assert) {
     tooltip.setOptions(this.options);
 
     tooltip.show({ valueText: "text" }, {});
-    //act
+    // act
     $(".tooltip-container").eq(0).remove();
     tooltip.show({ valueText: "text" }, {});
 
@@ -285,7 +285,7 @@ QUnit.test("Tooltip should be appended in the closest element to root", function
     tooltip.setOptions(this.options);
 
     tooltip.show({ valueText: "text" }, {});
-    //act
+    // act
     var $tooltipContainer = $(".test-tooltip").parent().eq(0);
     assert.ok($tooltipContainer.hasClass("tooltip-container"));
     assert.ok(!$tooltipContainer.hasClass("far"));
@@ -296,10 +296,10 @@ QUnit.test("Set options. customizeTooltip", function(assert) {
         tooltip = new Tooltip({ eventTrigger: et }),
         result;
     this.options.customizeTooltip = {};
-    //act
+    // act
     result = tooltip.setOptions(this.options);
 
-    //assert
+    // assert
     assert.equal(tooltip, result);
     assert.deepEqual(tooltip._options, this.options, "whole options");
     assert.strictEqual(tooltip._customizeTooltip, null, "customizeTooltip");
@@ -351,10 +351,10 @@ QUnit.test("Set options. Two times", function(assert) {
 
     tooltip.setOptions(this.options);
 
-    //act
+    // act
     result = tooltip.setOptions(options2);
 
-    //assert
+    // assert
     assert.equal(tooltip, result);
     assert.deepEqual(tooltip._options, options2, "whole options");
     assert.deepEqual(tooltip._shadowSettings, {
@@ -414,10 +414,10 @@ QUnit.test("Render, enabled", function(assert) {
     tooltip._wrapper.detach = sinon.spy();
     tooltip._textGroupHtml.css = sinon.spy();
 
-    //act
+    // act
     result = tooltip.render();
 
-    //assert
+    // assert
     assert.equal(tooltip, result);
     assert.equal(tooltip._wrapper.appendTo.callCount, 0, "wrapper is not added to dom");
     assert.equal(tooltip._wrapper.get(0).style.left, "-9999px", "wrapper is moved to invisible area");
@@ -429,18 +429,18 @@ QUnit.test("Render, enabled", function(assert) {
     assert.equal(tooltip._shadow.attr.callCount, 1, "shadow attrs");
     assert.deepEqual(tooltip._shadow.attr.firstCall.args, [tooltip._shadowSettings]);
 
-    //for svg text ↓
+    // for svg text ↓
     assert.equal(tooltip._textGroup.css.callCount, 1, "textGroup styles");
     assert.deepEqual(tooltip._textGroup.css.firstCall.args, [tooltip._textFontStyles]);
 
     assert.equal(tooltip._text.css.callCount, 1, "text styles");
     assert.deepEqual(tooltip._text.css.firstCall.args, [tooltip._textFontStyles]);
-    //for svg text ↑
+    // for svg text ↑
 
-    //for html text ↓
+    // for html text ↓
     assert.equal(tooltip._textGroupHtml.css.callCount, 1, "textGroupHtml styles");
     assert.deepEqual(tooltip._textGroupHtml.css.firstCall.args, [tooltip._textFontStyles]);
-    //for html text ↑
+    // for html text ↑
 });
 
 QUnit.test("Update", function(assert) {
@@ -454,10 +454,10 @@ QUnit.test("Update", function(assert) {
     tooltip.setOptions = sinon.spy(function() { return setOptions.apply(tooltip, arguments); });
     tooltip.render = sinon.spy(function() { return render.apply(tooltip, arguments); });
 
-    //act
+    // act
     result = tooltip.update(options);
 
-    //assert
+    // assert
     assert.equal(tooltip, result);
     assert.equal(tooltip.setOptions.callCount, 1);
     assert.equal(tooltip.setOptions.firstCall.args[0], options);
@@ -470,10 +470,10 @@ QUnit.test("Disposing", function(assert) {
         tooltip = new Tooltip({ eventTrigger: et, widgetRoot: $("#qunit-fixture") });
     tooltip._wrapper.remove && (tooltip._wrapper.remove = sinon.spy());
 
-    //act
+    // act
     tooltip.dispose();
 
-    //assert
+    // assert
     assert.equal(tooltip._renderer.dispose.callCount, 1);
     assert.equal(tooltip._wrapper.remove.callCount, 1);
     assert.equal(tooltip._options, null);
@@ -1003,7 +1003,7 @@ QUnit.test("Show. W/o params", function(assert) {
     this.tooltip._textHtml.html = sinon.spy();
     var eventData = { tag: "event-data" };
 
-    //act
+    // act
     var result = this.tooltip.show({ valueText: "some-text" }, { x: 100, y: 200, offset: 300 }, eventData);
     delete this.tooltip._state.contentSize;
 
@@ -1066,7 +1066,7 @@ QUnit.test("Show. W/o params. Html", function(assert) {
         textHtmlElement.getBoundingClientRect = sinon.spy(function() { return { right: 103.13, left: 20, bottom: 33.45, top: 10 }; });
     }
 
-    //act
+    // act
     var result = this.tooltip.show({ valueText: "some-text" }, { x: 100, y: 200, offset: 300 }, eventData);
     delete this.tooltip._state.contentSize;
 
@@ -1135,7 +1135,7 @@ QUnit.test("Show. W/o params. Html. T298249", function(assert) {
         textHtmlElement.getBoundingClientRect = sinon.spy(function() { return { right: 123.13, left: 20, bottom: 33.45, top: 20, width: 83.13, height: 23.45 }; });
     }
 
-    //act
+    // act
     this.tooltip.show({ valueText: "some-text" }, { x: 100, y: 200, offset: 300 }, eventData);
     delete this.tooltip._state.contentSize;
 
@@ -1160,7 +1160,7 @@ QUnit.test("Show. W/ params", function(assert) {
 
     this.tooltip.move = sinon.spy(function() { return this; });
 
-    //act
+    // act
     var result = this.tooltip.show({ valueText: "some-text" }, { x: 10, y: 20, offset: 30 });
     delete this.tooltip._state.contentSize;
 
@@ -1215,7 +1215,7 @@ QUnit.test("Show. Calculate content size", function(assert) {
     this.tooltip.update(this.options);
     this.tooltip.move = sinon.spy(function() { return this; });
 
-    //act
+    // act
     this.tooltip.show({ valueText: "some-text" }, { x: 100, y: 200, offset: 300 });
 
     assert.deepEqual(this.tooltip._state.tc, {});
@@ -1257,10 +1257,10 @@ QUnit.test("Show. Calculate content size. Html", function(assert) {
         this.tooltip._textHtml.get(0).getBoundingClientRect = function() { return { right: 103.13, left: 20, bottom: 33.45, top: 10 }; };
     }
 
-    //act
+    // act
     this.tooltip.show({ valueText: "some-text" }, { x: 100, y: 200, offset: 300 });
 
-    //assert
+    // assert
     assert.deepEqual(this.tooltip._state.tc, {});
 
     assert.deepEqual(this.tooltip._state.contentSize, {
@@ -1290,7 +1290,7 @@ QUnit.test("Show. Calculate content size. Margins to zero", function(assert) {
     this.tooltip.update(this.options);
     this.tooltip.move = sinon.spy(function() { return this; });
 
-    //act
+    // act
     this.tooltip.show({ valueText: "some-text" }, {});
 
     assert.equal(this.tooltip._state.contentSize.lm, 0);
@@ -1310,10 +1310,10 @@ QUnit.test("Hide.", function(assert) {
     this.tooltip._wrapper.appendTo = sinon.spy();
     this.tooltip._wrapper.detach = sinon.spy();
 
-    //act
+    // act
     this.tooltip.hide();
 
-    //assert
+    // assert
     assert.equal(this.tooltip._wrapper.appendTo.callCount, 0, "wrapper is not added to dom");
     assert.equal(this.tooltip._wrapper.get(0).style.left, "-9999px", "wrapper is moved to invisible area");
     assert.equal(this.tooltip._wrapper.detach.callCount, 1, "wrapper detached");
@@ -1401,23 +1401,23 @@ QUnit.test("LT corner of page", function(assert) {
 
     this.resetTooltipMocks();
 
-    //act
+    // act
     this.tooltip.show({ valueText: "some-text" }, { x: 30, y: 80, offset: 30 });
 
-    //assert
+    // assert
     wrapper = $('.test-title-class');
     assert.equal(this.tooltip._textGroup.move.callCount, 1, "textGroup move");
     assert.deepEqual(this.tooltip._textGroup.move.firstCall.args, [-bBox.x + bBox.lm, -bBox.y + bBox.tm + this.options.arrowLength]);
 
     assert.equal(this.tooltip._cloud.attr.callCount, 2, "cloud attr");
     assert.deepEqual(this.tooltip._cloud.attr.lastCall.args, [{
-        points: [0, 10, //lt
-            0, 10, //la
-            0, 0, //ca
-            10, 10, //ra
-            60, 10, //rt
-            60, 50, //rb
-            0, 50] //lb
+        points: [0, 10, // lt
+            0, 10, // la
+            0, 0, // ca
+            10, 10, // ra
+            60, 10, // rt
+            60, 50, // rb
+            0, 50] // lb
     }]);
 
     assert.equal(this.tooltip._cloud.move.callCount, 1, "cloud move");
@@ -1426,8 +1426,8 @@ QUnit.test("LT corner of page", function(assert) {
     assert.equal(this.tooltip._renderer.resize.callCount, 1, "renderer resize");
     assert.deepEqual(this.tooltip._renderer.resize.firstCall.args, [60 + 10 + 20, 40 + 9 + 21 + this.options.arrowLength]);
 
-    assert.equal(wrapper.css("left"), "20px"); //x - lm
-    assert.equal(wrapper.css("top"), "101px"); //y + offset - tm
+    assert.equal(wrapper.css("left"), "20px"); // x - lm
+    assert.equal(wrapper.css("top"), "101px"); // y + offset - tm
 });
 
 QUnit.test("CT side of page", function(assert) {
@@ -1449,23 +1449,23 @@ QUnit.test("CT side of page", function(assert) {
 
     this.resetTooltipMocks();
 
-    //act
+    // act
     this.tooltip.show({ valueText: "some-text" }, { x: 400, y: 80, offset: 30 });
 
-    //assert
+    // assert
     wrapper = $('.test-title-class');
     assert.equal(this.tooltip._textGroup.move.callCount, 1, "textGroup move");
     assert.deepEqual(this.tooltip._textGroup.move.firstCall.args, [-bBox.x + bBox.lm, -bBox.y + bBox.tm + this.options.arrowLength]);
 
     assert.equal(this.tooltip._cloud.attr.callCount, 2, "cloud attr");
     assert.deepEqual(this.tooltip._cloud.attr.lastCall.args, [{
-        points: [0, 10, //lt
-            20, 10, //la
-            30, 0, //ca
-            40, 10, //ra
-            60, 10, //rt
-            60, 50, //rb
-            0, 50] //lb
+        points: [0, 10, // lt
+            20, 10, // la
+            30, 0, // ca
+            40, 10, // ra
+            60, 10, // rt
+            60, 50, // rb
+            0, 50] // lb
     }]);
 
     assert.equal(this.tooltip._cloud.move.callCount, 1, "cloud move");
@@ -1474,8 +1474,8 @@ QUnit.test("CT side of page", function(assert) {
     assert.equal(this.tooltip._renderer.resize.callCount, 1, "renderer resize");
     assert.deepEqual(this.tooltip._renderer.resize.firstCall.args, [60 + 10 + 20, 40 + 9 + 21 + this.options.arrowLength]);
 
-    assert.equal(wrapper.css("left"), "360px"); //x - bBox.width / 2 - lm
-    assert.equal(wrapper.css("top"), "101px"); //y + offset - tm
+    assert.equal(wrapper.css("left"), "360px"); // x - bBox.width / 2 - lm
+    assert.equal(wrapper.css("top"), "101px"); // y + offset - tm
 });
 
 QUnit.test("CT side of page, Html", function(assert) {
@@ -1489,10 +1489,10 @@ QUnit.test("CT side of page, Html", function(assert) {
         this.tooltip._textHtml.get(0).getBoundingClientRect = sinon.spy(function() { return { right: 60, left: 0, bottom: 40, top: 0 }; });
     }
 
-    //act
+    // act
     this.tooltip.show({ valueText: "some-text" }, { x: 400, y: 80, offset: 30 });
 
-    //assert
+    // assert
     assert.equal(this.tooltip._textGroupHtml.css.callCount, 2, "textGroup move");
     assert.deepEqual(this.tooltip._textGroupHtml.css.lastCall.args, [{ left: 18 + 10, top: 15 + 9 + this.options.arrowLength }]);
 
@@ -1521,23 +1521,23 @@ QUnit.test("RT corner of page", function(assert) {
 
     this.resetTooltipMocks();
 
-    //act
+    // act
     this.tooltip.show({ valueText: "some-text" }, { x: 770, y: 80, offset: 30 });
 
-    //assert
+    // assert
     wrapper = $('.test-title-class');
     assert.equal(this.tooltip._textGroup.move.callCount, 1, "textGroup move");
     assert.deepEqual(this.tooltip._textGroup.move.firstCall.args, [-bBox.x + bBox.lm, -bBox.y + bBox.tm + this.options.arrowLength]);
 
     assert.equal(this.tooltip._cloud.attr.callCount, 2, "cloud attr");
     assert.deepEqual(this.tooltip._cloud.attr.lastCall.args, [{
-        points: [0, 10, //lt
-            50, 10, //la
-            60, 0, //ca
-            60, 10, //ra
-            60, 10, //rt
-            60, 50, //rb
-            0, 50] //lb
+        points: [0, 10, // lt
+            50, 10, // la
+            60, 0, // ca
+            60, 10, // ra
+            60, 10, // rt
+            60, 50, // rb
+            0, 50] // lb
     }]);
 
     assert.equal(this.tooltip._cloud.move.callCount, 1, "cloud move");
@@ -1546,8 +1546,8 @@ QUnit.test("RT corner of page", function(assert) {
     assert.equal(this.tooltip._renderer.resize.callCount, 1, "renderer resize");
     assert.deepEqual(this.tooltip._renderer.resize.firstCall.args, [60 + 10 + 20, 40 + 9 + 21 + this.options.arrowLength]);
 
-    assert.equal(wrapper.css("left"), "700px"); //x - bBox.width - lm
-    assert.equal(wrapper.css("top"), "101px"); //y + offset - tm
+    assert.equal(wrapper.css("left"), "700px"); // x - bBox.width - lm
+    assert.equal(wrapper.css("top"), "101px"); // y + offset - tm
 });
 
 QUnit.test("LC side of page", function(assert) {
@@ -1569,23 +1569,23 @@ QUnit.test("LC side of page", function(assert) {
 
     this.resetTooltipMocks();
 
-    //act
+    // act
     this.tooltip.show({ valueText: "some-text" }, { x: 30, y: 300, offset: 30 });
 
-    //assert
+    // assert
     wrapper = $('.test-title-class');
     assert.equal(this.tooltip._textGroup.move.callCount, 1, "textGroup move");
     assert.deepEqual(this.tooltip._textGroup.move.firstCall.args, [-bBox.x + bBox.lm, -bBox.y + bBox.tm]);
 
     assert.equal(this.tooltip._cloud.attr.callCount, 2, "cloud attr");
     assert.deepEqual(this.tooltip._cloud.attr.lastCall.args, [{
-        points: [0, 0, //lt
-            60, 0, //rt
-            60, 40, //rb
-            10, 40, //ra
-            0, 50, //ca
-            0, 40, //la
-            0, 40] //lb
+        points: [0, 0, // lt
+            60, 0, // rt
+            60, 40, // rb
+            10, 40, // ra
+            0, 50, // ca
+            0, 40, // la
+            0, 40] // lb
     }]);
 
     assert.equal(this.tooltip._cloud.move.callCount, 1, "cloud move");
@@ -1594,8 +1594,8 @@ QUnit.test("LC side of page", function(assert) {
     assert.equal(this.tooltip._renderer.resize.callCount, 1, "renderer resize");
     assert.deepEqual(this.tooltip._renderer.resize.firstCall.args, [60 + 10 + 20, 40 + 9 + 21 + this.options.arrowLength]);
 
-    assert.equal(wrapper.css("left"), "20px"); //x - lm
-    assert.equal(wrapper.css("top"), "211px"); //y - (bBox.height + arrowLength) - offset - tm
+    assert.equal(wrapper.css("left"), "20px"); // x - lm
+    assert.equal(wrapper.css("top"), "211px"); // y - (bBox.height + arrowLength) - offset - tm
 });
 
 QUnit.test("CC of page", function(assert) {
@@ -1615,23 +1615,23 @@ QUnit.test("CC of page", function(assert) {
 
     this.resetTooltipMocks();
 
-    //act
+    // act
     this.tooltip.show({ valueText: "some-text" }, { x: 400, y: 300, offset: 30 });
 
-    //assert
+    // assert
     wrapper = $('.test-title-class');
     assert.equal(this.tooltip._textGroup.move.callCount, 1, "textGroup move");
     assert.deepEqual(this.tooltip._textGroup.move.firstCall.args, [-bBox.x + bBox.lm, -bBox.y + bBox.tm]);
 
     assert.equal(this.tooltip._cloud.attr.callCount, 2, "cloud attr");
     assert.deepEqual(this.tooltip._cloud.attr.lastCall.args, [{
-        points: [0, 0, //lt
-            60, 0, //rt
-            60, 40, //rb
-            40, 40, //ra
-            30, 50, //ca
-            20, 40, //la
-            0, 40] //lb
+        points: [0, 0, // lt
+            60, 0, // rt
+            60, 40, // rb
+            40, 40, // ra
+            30, 50, // ca
+            20, 40, // la
+            0, 40] // lb
     }]);
 
     assert.equal(this.tooltip._cloud.move.callCount, 1, "cloud move");
@@ -1640,8 +1640,8 @@ QUnit.test("CC of page", function(assert) {
     assert.equal(this.tooltip._renderer.resize.callCount, 1, "renderer resize");
     assert.deepEqual(this.tooltip._renderer.resize.firstCall.args, [60 + 10 + 20, 40 + 9 + 21 + this.options.arrowLength]);
 
-    assert.equal(wrapper.css("left"), "360px"); //x - bBox.width / 2 - lm
-    assert.equal(wrapper.css("top"), "211px"); //y - (bBox.height + arrowLength) - offset - tm
+    assert.equal(wrapper.css("left"), "360px"); // x - bBox.width / 2 - lm
+    assert.equal(wrapper.css("top"), "211px"); // y - (bBox.height + arrowLength) - offset - tm
 });
 
 QUnit.test("CC side of page, Html", function(assert) {
@@ -1655,10 +1655,10 @@ QUnit.test("CC side of page, Html", function(assert) {
         this.tooltip._textHtml.get(0).getBoundingClientRect = sinon.spy(function() { return { right: 60, left: 0, bottom: 40, top: 0 }; });
     }
 
-    //act
+    // act
     this.tooltip.show({ valueText: "some-text" }, { x: 400, y: 300, offset: 30 });
 
-    //assert
+    // assert
     assert.equal(this.tooltip._textGroupHtml.css.callCount, 2, "textGroup move");
     assert.deepEqual(this.tooltip._textGroupHtml.css.lastCall.args, [{ left: 18 + 10, top: 15 + 9 }]);
 
@@ -1687,23 +1687,23 @@ QUnit.test("RC side of page", function(assert) {
 
     this.resetTooltipMocks();
 
-    //act
+    // act
     this.tooltip.show({ valueText: "some-text" }, { x: 770, y: 300, offset: 30 });
 
-    //assert
+    // assert
     wrapper = $('.test-title-class');
     assert.equal(this.tooltip._textGroup.move.callCount, 1, "textGroup move");
     assert.deepEqual(this.tooltip._textGroup.move.firstCall.args, [-bBox.x + bBox.lm, -bBox.y + bBox.tm]);
 
     assert.equal(this.tooltip._cloud.attr.callCount, 2, "cloud attr");
     assert.deepEqual(this.tooltip._cloud.attr.lastCall.args, [{
-        points: [0, 0, //lt
-            60, 0, //rt
-            60, 40, //rb
-            60, 40, //ra
-            60, 50, //ca
-            50, 40, //la
-            0, 40] //lb
+        points: [0, 0, // lt
+            60, 0, // rt
+            60, 40, // rb
+            60, 40, // ra
+            60, 50, // ca
+            50, 40, // la
+            0, 40] // lb
     }]);
 
     assert.equal(this.tooltip._cloud.move.callCount, 1, "cloud move");
@@ -1712,8 +1712,8 @@ QUnit.test("RC side of page", function(assert) {
     assert.equal(this.tooltip._renderer.resize.callCount, 1, "renderer resize");
     assert.deepEqual(this.tooltip._renderer.resize.firstCall.args, [60 + 10 + 20, 40 + 9 + 21 + this.options.arrowLength]);
 
-    assert.equal(wrapper.css("left"), "700px"); //x - bBox.width - lm
-    assert.equal(wrapper.css("top"), "211px"); //y - (bBox.height + arrowLength) - offset - tm
+    assert.equal(wrapper.css("left"), "700px"); // x - bBox.width - lm
+    assert.equal(wrapper.css("top"), "211px"); // y - (bBox.height + arrowLength) - offset - tm
 });
 
 QUnit.test("LB corner of page", function(assert) {
@@ -1735,23 +1735,23 @@ QUnit.test("LB corner of page", function(assert) {
 
     this.resetTooltipMocks();
 
-    //act
+    // act
     this.tooltip.show({ valueText: "some-text" }, { x: 30, y: 600, offset: 30 });
 
-    //assert
+    // assert
     wrapper = $('.test-title-class');
     assert.equal(this.tooltip._textGroup.move.callCount, 1, "textGroup move");
     assert.deepEqual(this.tooltip._textGroup.move.firstCall.args, [-bBox.x + bBox.lm, -bBox.y + bBox.tm]);
 
     assert.equal(this.tooltip._cloud.attr.callCount, 2, "cloud attr");
     assert.deepEqual(this.tooltip._cloud.attr.lastCall.args, [{
-        points: [0, 0, //lt
-            60, 0, //rt
-            60, 40, //rb
-            10, 40, //ra
-            0, 50, //ca
-            0, 40, //la
-            0, 40] //lb
+        points: [0, 0, // lt
+            60, 0, // rt
+            60, 40, // rb
+            10, 40, // ra
+            0, 50, // ca
+            0, 40, // la
+            0, 40] // lb
     }]);
 
     assert.equal(this.tooltip._cloud.move.callCount, 1, "cloud move");
@@ -1760,8 +1760,8 @@ QUnit.test("LB corner of page", function(assert) {
     assert.equal(this.tooltip._renderer.resize.callCount, 1, "renderer resize");
     assert.deepEqual(this.tooltip._renderer.resize.firstCall.args, [60 + 10 + 20, 40 + 9 + 21 + this.options.arrowLength]);
 
-    assert.equal(wrapper.css("left"), "20px"); //x - lm
-    assert.equal(wrapper.css("top"), "511px"); //y - (bBox.height + arrowLength) - offset - tm
+    assert.equal(wrapper.css("left"), "20px"); // x - lm
+    assert.equal(wrapper.css("top"), "511px"); // y - (bBox.height + arrowLength) - offset - tm
 });
 
 QUnit.test("CB side of page", function(assert) {
@@ -1781,23 +1781,23 @@ QUnit.test("CB side of page", function(assert) {
 
     this.resetTooltipMocks();
 
-    //act
+    // act
     this.tooltip.show({ valueText: "some-text" }, { x: 400, y: 600, offset: 30 });
 
-    //assert
+    // assert
     wrapper = $('.test-title-class');
     assert.equal(this.tooltip._textGroup.move.callCount, 1, "textGroup move");
     assert.deepEqual(this.tooltip._textGroup.move.firstCall.args, [-bBox.x + bBox.lm, -bBox.y + bBox.tm]);
 
     assert.equal(this.tooltip._cloud.attr.callCount, 2, "cloud attr");
     assert.deepEqual(this.tooltip._cloud.attr.lastCall.args, [{
-        points: [0, 0, //lt
-            60, 0, //rt
-            60, 40, //rb
-            40, 40, //ra
-            30, 50, //ca
-            20, 40, //la
-            0, 40] //lb
+        points: [0, 0, // lt
+            60, 0, // rt
+            60, 40, // rb
+            40, 40, // ra
+            30, 50, // ca
+            20, 40, // la
+            0, 40] // lb
     }]);
 
     assert.equal(this.tooltip._cloud.move.callCount, 1, "cloud move");
@@ -1806,8 +1806,8 @@ QUnit.test("CB side of page", function(assert) {
     assert.equal(this.tooltip._renderer.resize.callCount, 1, "renderer resize");
     assert.deepEqual(this.tooltip._renderer.resize.firstCall.args, [60 + 10 + 20, 40 + 9 + 21 + this.options.arrowLength]);
 
-    assert.equal(wrapper.css("left"), "360px"); //x - bBox.width / 2 - lm
-    assert.equal(wrapper.css("top"), "511px"); //y - (bBox.height + arrowLength) - offset - tm
+    assert.equal(wrapper.css("left"), "360px"); // x - bBox.width / 2 - lm
+    assert.equal(wrapper.css("top"), "511px"); // y - (bBox.height + arrowLength) - offset - tm
 });
 
 QUnit.test("RB corner of page", function(assert) {
@@ -1829,23 +1829,23 @@ QUnit.test("RB corner of page", function(assert) {
 
     this.resetTooltipMocks();
 
-    //act
+    // act
     this.tooltip.show({ valueText: "some-text" }, { x: 770, y: 600, offset: 30 });
 
-    //assert
+    // assert
     wrapper = $('.test-title-class');
     assert.equal(this.tooltip._textGroup.move.callCount, 1, "textGroup move");
     assert.deepEqual(this.tooltip._textGroup.move.firstCall.args, [-bBox.x + bBox.lm, -bBox.y + bBox.tm]);
 
     assert.equal(this.tooltip._cloud.attr.callCount, 2, "cloud attr");
     assert.deepEqual(this.tooltip._cloud.attr.lastCall.args, [{
-        points: [0, 0, //lt
-            60, 0, //rt
-            60, 40, //rb
-            60, 40, //ra
-            60, 50, //ca
-            50, 40, //la
-            0, 40] //lb
+        points: [0, 0, // lt
+            60, 0, // rt
+            60, 40, // rb
+            60, 40, // ra
+            60, 50, // ca
+            50, 40, // la
+            0, 40] // lb
     }]);
 
     assert.equal(this.tooltip._cloud.move.callCount, 1, "cloud move");
@@ -1854,8 +1854,8 @@ QUnit.test("RB corner of page", function(assert) {
     assert.equal(this.tooltip._renderer.resize.callCount, 1, "renderer resize");
     assert.deepEqual(this.tooltip._renderer.resize.firstCall.args, [60 + 10 + 20, 40 + 9 + 21 + this.options.arrowLength]);
 
-    assert.equal(wrapper.css("left"), "700px"); //x - bBox.width - lm
-    assert.equal(wrapper.css("top"), "511px"); //y - (bBox.height + arrowLength) - offset - tm
+    assert.equal(wrapper.css("left"), "700px"); // x - bBox.width - lm
+    assert.equal(wrapper.css("top"), "511px"); // y - (bBox.height + arrowLength) - offset - tm
 });
 
 QUnit.test("Orientation is not changed", function(assert) {
@@ -1868,18 +1868,18 @@ QUnit.test("Orientation is not changed", function(assert) {
     this.resetTooltipMocks();
     this.tooltip._textGroupHtml.css = sinon.spy();
 
-    //act
+    // act
     this.tooltip.move(500, 400, 10);
 
-    //assert
+    // assert
     wrapper = $('.test-title-class');
     assert.equal(this.tooltip._textGroupHtml.css.callCount, 0, "textGroupHtml move");
     assert.equal(this.tooltip._textGroup.move.callCount, 0, "textGroup move");
     assert.equal(this.tooltip._cloud.attr.callCount, 0, "cloud attr");
     assert.equal(this.tooltip._renderer.resize.callCount, 0, "renderer resize");
 
-    assert.equal(wrapper.css("left"), "460px"); //x - bBox.width / 2 - lm
-    assert.equal(wrapper.css("top"), "331px"); //y - (bBox.height + arrowLength) - offset - tm
+    assert.equal(wrapper.css("left"), "460px"); // x - bBox.width / 2 - lm
+    assert.equal(wrapper.css("top"), "331px"); // y - (bBox.height + arrowLength) - offset - tm
 });
 
 QUnit.test("Orientation is changed", function(assert) {
@@ -1901,10 +1901,10 @@ QUnit.test("Orientation is changed", function(assert) {
     this.resetTooltipMocks();
     this.tooltip._textGroupHtml.css = sinon.spy();
 
-    //act
+    // act
     this.tooltip.move(800, 300, 30);
 
-    //assert
+    // assert
     wrapper = $('.test-title-class');
     assert.equal(this.tooltip._textGroupHtml.css.callCount, 0, "textGroupHtml move");
 
@@ -1913,13 +1913,13 @@ QUnit.test("Orientation is changed", function(assert) {
 
     assert.equal(this.tooltip._cloud.attr.callCount, 1, "cloud attr");
     assert.deepEqual(this.tooltip._cloud.attr.lastCall.args, [{
-        points: [0, 0, //lt
-            60, 0, //rt
-            60, 40, //rb
-            60, 40, //ra
-            60, 50, //ca
-            50, 40, //la
-            0, 40] //lb
+        points: [0, 0, // lt
+            60, 0, // rt
+            60, 40, // rb
+            60, 40, // ra
+            60, 50, // ca
+            50, 40, // la
+            0, 40] // lb
     }]);
 
     assert.equal(this.tooltip._cloud.move.callCount, 1, "cloud move");
@@ -1928,8 +1928,8 @@ QUnit.test("Orientation is changed", function(assert) {
     assert.equal(this.tooltip._renderer.resize.callCount, 1, "renderer resize");
     assert.deepEqual(this.tooltip._renderer.resize.firstCall.args, [60 + 10 + 20, 40 + 9 + 21 + this.options.arrowLength]);
 
-    assert.equal(wrapper.css("left"), "730px"); //x - bBox.width - lm
-    assert.equal(wrapper.css("top"), "211px"); //y - (bBox.height + arrowLength) - offset - tm
+    assert.equal(wrapper.css("left"), "730px"); // x - bBox.width - lm
+    assert.equal(wrapper.css("top"), "211px"); // y - (bBox.height + arrowLength) - offset - tm
 });
 
 QUnit.test("Orientation is changed. Html", function(assert) {
@@ -1944,10 +1944,10 @@ QUnit.test("Orientation is changed. Html", function(assert) {
     this.resetTooltipMocks();
     this.tooltip._textGroupHtml.css = sinon.spy();
 
-    //act
+    // act
     this.tooltip.move(800, 300, 30);
 
-    //assert
+    // assert
     assert.equal(this.tooltip._textGroup.move.callCount, 0, "textGroup move");
 
     assert.equal(this.tooltip._textGroupHtml.css.callCount, 1, "textGroupHtml move");
@@ -1976,23 +1976,23 @@ QUnit.test("Show after move w/o orientation changing", function(assert) {
     this.tooltip._textGroup.getBBox = sinon.spy(function() { return { x: -22, y: -15, width: 44, height: 20 }; });
     this.resetTooltipMocks();
 
-    //act
+    // act
     this.tooltip.show({ valueText: "some-long-text" }, { x: 500, y: 400, offset: 30 });
 
-    //assert
+    // assert
     wrapper = $('.test-title-class');
     assert.equal(this.tooltip._textGroup.move.callCount, 1, "textGroup move");
     assert.deepEqual(this.tooltip._textGroup.move.firstCall.args, [-bBox.x + bBox.lm, -bBox.y + bBox.tm]);
 
     assert.equal(this.tooltip._cloud.attr.callCount, 2, "cloud attr");
     assert.deepEqual(this.tooltip._cloud.attr.lastCall.args, [{
-        points: [0, 0, //lt
-            80, 0, //rt
-            80, 50, //rb
-            50, 50, //ra
-            40, 60, //ca
-            30, 50, //la
-            0, 50] //lb
+        points: [0, 0, // lt
+            80, 0, // rt
+            80, 50, // rb
+            50, 50, // ra
+            40, 60, // ca
+            30, 50, // la
+            0, 50] // lb
     }]);
 
     assert.equal(this.tooltip._cloud.move.callCount, 1, "cloud move");
@@ -2001,8 +2001,8 @@ QUnit.test("Show after move w/o orientation changing", function(assert) {
     assert.equal(this.tooltip._renderer.resize.callCount, 1, "renderer resize");
     assert.deepEqual(this.tooltip._renderer.resize.firstCall.args, [80 + 10 + 20, 50 + 9 + 21 + this.options.arrowLength]);
 
-    assert.equal(wrapper.css("left"), "450px"); //x - bBox.width / 2 - lm
-    assert.equal(wrapper.css("top"), "301px"); //y - (bBox.height + arrowLength) - offset - tm
+    assert.equal(wrapper.css("left"), "450px"); // x - bBox.width / 2 - lm
+    assert.equal(wrapper.css("top"), "301px"); // y - (bBox.height + arrowLength) - offset - tm
 });
 
 // T277991, T447623
@@ -2025,16 +2025,16 @@ QUnit.test("Position when page's body has relative position and margins and page
     });
     $("body").height(4000).get(0).scrollTop = 200;
 
-    //act
+    // act
     this.tooltip.move(500, 400, 30);
 
-    //assert
+    // assert
     wrapper = $('.test-title-class');
     assert.strictEqual(wrapper.css("left"), "350px");
     assert.strictEqual(wrapper.css("top"), "191px");
 });
 
-//T486487
+// T486487
 QUnit.test("size of wrapper", function(assert) {
     this.tooltip.update(this.options);
     this.tooltip._textGroup.getBBox = sinon.spy(function() { return { x: -22, y: -15, width: 44, height: 20 }; });
@@ -2098,19 +2098,19 @@ QUnit.test("Out of bounds vertically. L side of page", function(assert) {
         this.tooltip._textGroup.getBBox = sinon.spy(function() { return { x: -12, y: -485, width: 24, height: 970 }; });
     }
 
-    //act
+    // act
     this.tooltip.show({ valueText: "some-text" }, { x: 40, y: 300, offset: 30 });
 
-    //assert
+    // assert
     assert.equal(this.tooltip._textGroup.move.callCount, 1, "textGroup move");
     assert.deepEqual(this.tooltip._textGroup.move.firstCall.args, [-bBox.x + bBox.lm, -bBox.y + bBox.tm]);
 
     assert.equal(this.tooltip._cloud.attr.callCount, 2, "cloud attr");
     assert.deepEqual(this.tooltip._cloud.attr.lastCall.args, [{
-        points: [0, 0, //lt
-            60, 0, //rt
-            60, 1000, //rb
-            0, 1000] //lb
+        points: [0, 0, // lt
+            60, 0, // rt
+            60, 1000, // rb
+            0, 1000] // lb
     }]);
 
     assert.equal(this.tooltip._cloud.move.callCount, 1, "cloud move");
@@ -2119,8 +2119,8 @@ QUnit.test("Out of bounds vertically. L side of page", function(assert) {
     assert.equal(this.tooltip._renderer.resize.callCount, 1, "renderer resize");
     assert.deepEqual(this.tooltip._renderer.resize.firstCall.args, [60 + 10 + 20, 2000]);
 
-    assert.equal(this.tooltip._wrapper.css("left"), "30px"); //x - lm
-    assert.equal(this.tooltip._wrapper.css("top"), "11px"); //canvas.top - tm
+    assert.equal(this.tooltip._wrapper.css("left"), "30px"); // x - lm
+    assert.equal(this.tooltip._wrapper.css("top"), "11px"); // canvas.top - tm
     assert.equal(this.tooltip._wrapper.css("width"), "90px");
 });
 
@@ -2145,19 +2145,19 @@ QUnit.test("Out of bounds vertically. C of page", function(assert) {
         this.tooltip._textGroup.getBBox = sinon.spy(function() { return { x: -12, y: -485, width: 24, height: 970 }; });
     }
 
-    //act
+    // act
     this.tooltip.show({ valueText: "some-text" }, { x: 400, y: 300, offset: 30 });
 
-    //assert
+    // assert
     assert.equal(this.tooltip._textGroup.move.callCount, 1, "textGroup move");
     assert.deepEqual(this.tooltip._textGroup.move.firstCall.args, [-bBox.x + bBox.lm, -bBox.y + bBox.tm]);
 
     assert.equal(this.tooltip._cloud.attr.callCount, 2, "cloud attr");
     assert.deepEqual(this.tooltip._cloud.attr.lastCall.args, [{
-        points: [0, 0, //lt
-            60, 0, //rt
-            60, 1000, //rb
-            0, 1000] //lb
+        points: [0, 0, // lt
+            60, 0, // rt
+            60, 1000, // rb
+            0, 1000] // lb
     }]);
 
     assert.equal(this.tooltip._cloud.move.callCount, 1, "cloud move");
@@ -2166,8 +2166,8 @@ QUnit.test("Out of bounds vertically. C of page", function(assert) {
     assert.equal(this.tooltip._renderer.resize.callCount, 1, "renderer resize");
     assert.deepEqual(this.tooltip._renderer.resize.firstCall.args, [60 + 10 + 20, 2000]);
 
-    assert.equal(this.tooltip._wrapper.css("left"), "360px"); //x - bBox.width / 2 - lm
-    assert.equal(this.tooltip._wrapper.css("top"), "11px"); //canvas.top - tm
+    assert.equal(this.tooltip._wrapper.css("left"), "360px"); // x - bBox.width / 2 - lm
+    assert.equal(this.tooltip._wrapper.css("top"), "11px"); // canvas.top - tm
     assert.equal(this.tooltip._wrapper.css("width"), "90px");
 });
 
@@ -2192,19 +2192,19 @@ QUnit.test("Out of bounds vertically. R side of page", function(assert) {
         this.tooltip._textGroup.getBBox = sinon.spy(function() { return { x: -12, y: -485, width: 24, height: 970 }; });
     }
 
-    //act
+    // act
     this.tooltip.show({ valueText: "some-text" }, { x: 770, y: 300, offset: 30 });
 
-    //assert
+    // assert
     assert.equal(this.tooltip._textGroup.move.callCount, 1, "textGroup move");
     assert.deepEqual(this.tooltip._textGroup.move.firstCall.args, [-bBox.x + bBox.lm, -bBox.y + bBox.tm]);
 
     assert.equal(this.tooltip._cloud.attr.callCount, 2, "cloud attr");
     assert.deepEqual(this.tooltip._cloud.attr.lastCall.args, [{
-        points: [0, 0, //lt
-            60, 0, //rt
-            60, 1000, //rb
-            0, 1000] //lb
+        points: [0, 0, // lt
+            60, 0, // rt
+            60, 1000, // rb
+            0, 1000] // lb
     }]);
 
     assert.equal(this.tooltip._cloud.move.callCount, 1, "cloud move");
@@ -2213,8 +2213,8 @@ QUnit.test("Out of bounds vertically. R side of page", function(assert) {
     assert.equal(this.tooltip._renderer.resize.callCount, 1, "renderer resize");
     assert.deepEqual(this.tooltip._renderer.resize.firstCall.args, [60 + 10 + 20, 2000]);
 
-    assert.equal(this.tooltip._wrapper.css("left"), "700px"); //x - bBox.width - lm
-    assert.equal(this.tooltip._wrapper.css("top"), "11px"); //canvas.top - tm
+    assert.equal(this.tooltip._wrapper.css("left"), "700px"); // x - bBox.width - lm
+    assert.equal(this.tooltip._wrapper.css("top"), "11px"); // canvas.top - tm
     assert.equal(this.tooltip._wrapper.css("width"), "90px");
 });
 
@@ -2239,19 +2239,19 @@ QUnit.test("Out of bounds horizontally. T side of page", function(assert) {
         this.tooltip._textGroup.getBBox = sinon.spy(function() { return { x: -482, y: -5, width: 964, height: 10 }; });
     }
 
-    //act
+    // act
     this.tooltip.show({ valueText: "some-text" }, { x: 400, y: 80, offset: 30 });
 
-    //assert
+    // assert
     assert.equal(this.tooltip._textGroup.move.callCount, 1, "textGroup move");
     assert.deepEqual(this.tooltip._textGroup.move.firstCall.args, [-bBox.x + bBox.lm, -bBox.y + bBox.tm]);
 
     assert.equal(this.tooltip._cloud.attr.callCount, 2, "cloud attr");
     assert.deepEqual(this.tooltip._cloud.attr.lastCall.args, [{
-        points: [0, 0, //lt
-            1000, 0, //rt
-            1000, 40, //rb
-            0, 40] //lb
+        points: [0, 0, // lt
+            1000, 0, // rt
+            1000, 40, // rb
+            0, 40] // lb
     }]);
 
     assert.equal(this.tooltip._cloud.move.callCount, 1, "cloud move");
@@ -2260,8 +2260,8 @@ QUnit.test("Out of bounds horizontally. T side of page", function(assert) {
     assert.equal(this.tooltip._renderer.resize.callCount, 1, "renderer resize");
     assert.deepEqual(this.tooltip._renderer.resize.firstCall.args, [3010, 40 + 9 + 21 + this.options.arrowLength]);
 
-    assert.equal(this.tooltip._wrapper.css("left"), "0px"); //canvas.left - lm
-    assert.equal(this.tooltip._wrapper.css("top"), "101px"); //y + offset - tm
+    assert.equal(this.tooltip._wrapper.css("left"), "0px"); // canvas.left - lm
+    assert.equal(this.tooltip._wrapper.css("top"), "101px"); // y + offset - tm
     assert.equal(this.tooltip._wrapper.css("width"), "3010px");
 });
 
@@ -2286,19 +2286,19 @@ QUnit.test("Out of bounds horizontally. C of page", function(assert) {
         this.tooltip._textGroup.getBBox = sinon.spy(function() { return { x: -482, y: -5, width: 964, height: 10 }; });
     }
 
-    //act
+    // act
     this.tooltip.show({ valueText: "some-text" }, { x: 400, y: 300, offset: 30 });
 
-    //assert
+    // assert
     assert.equal(this.tooltip._textGroup.move.callCount, 1, "textGroup move");
     assert.deepEqual(this.tooltip._textGroup.move.firstCall.args, [-bBox.x + bBox.lm, -bBox.y + bBox.tm]);
 
     assert.equal(this.tooltip._cloud.attr.callCount, 2, "cloud attr");
     assert.deepEqual(this.tooltip._cloud.attr.lastCall.args, [{
-        points: [0, 0, //lt
-            1000, 0, //rt
-            1000, 40, //rb
-            0, 40] //lb
+        points: [0, 0, // lt
+            1000, 0, // rt
+            1000, 40, // rb
+            0, 40] // lb
     }]);
 
     assert.equal(this.tooltip._cloud.move.callCount, 1, "cloud move");
@@ -2307,8 +2307,8 @@ QUnit.test("Out of bounds horizontally. C of page", function(assert) {
     assert.equal(this.tooltip._renderer.resize.callCount, 1, "renderer resize");
     assert.deepEqual(this.tooltip._renderer.resize.firstCall.args, [3010, 40 + 9 + 21 + this.options.arrowLength]);
 
-    assert.equal(this.tooltip._wrapper.css("left"), "0px"); //canvas.left - lm
-    assert.equal(this.tooltip._wrapper.css("top"), "211px"); //y - (bBox.height + arrowLength) - offset - tm
+    assert.equal(this.tooltip._wrapper.css("left"), "0px"); // canvas.left - lm
+    assert.equal(this.tooltip._wrapper.css("top"), "211px"); // y - (bBox.height + arrowLength) - offset - tm
     assert.equal(this.tooltip._wrapper.css("width"), "3010px");
 });
 
@@ -2365,29 +2365,29 @@ QUnit.test("Top side of page. verticalAlignment 'top'", function(assert) {
 
     this.resetTooltipMocks();
 
-    //act
+    // act
     this.tooltip.show({ valueText: "some-text" }, { x: 400, y: 0, offset: 30 });
 
-    //assert
+    // assert
     assert.equal(this.tooltip._textGroup.move.callCount, 1, "textGroup move");
     assert.deepEqual(this.tooltip._textGroup.move.firstCall.args, [-bBox.x + bBox.lm, -bBox.y + bBox.tm]);
 
     assert.equal(this.tooltip._cloud.attr.callCount, 2, "cloud attr");
     assert.deepEqual(this.tooltip._cloud.attr.lastCall.args, [{
-        points: [0, 0, //lt
-            60, 0, //rt
-            60, 40, //rb
-            40, 40, //ra
-            30, 50, //ca
-            20, 40, //la
-            0, 40] //lb
+        points: [0, 0, // lt
+            60, 0, // rt
+            60, 40, // rb
+            40, 40, // ra
+            30, 50, // ca
+            20, 40, // la
+            0, 40] // lb
     }]);
 
     assert.equal(this.tooltip._cloud.move.callCount, 1, "cloud move");
     assert.deepEqual(this.tooltip._cloud.move.lastCall.args, [bBox.lm, bBox.tm]);
 
-    assert.equal(this.tooltip._wrapper.css("left"), "360px"); //x - bBox.width / 2 - lm
-    assert.equal(this.tooltip._wrapper.css("top"), "-89px"); //y - (bBox.height + arrowLength) - offset - tm
+    assert.equal(this.tooltip._wrapper.css("left"), "360px"); // x - bBox.width / 2 - lm
+    assert.equal(this.tooltip._wrapper.css("top"), "-89px"); // y - (bBox.height + arrowLength) - offset - tm
 });
 
 QUnit.test("Bottom side of page. verticalAlignment 'bottom'", function(assert) {
@@ -2405,29 +2405,29 @@ QUnit.test("Bottom side of page. verticalAlignment 'bottom'", function(assert) {
 
     this.resetTooltipMocks();
 
-    //act
+    // act
     this.tooltip.show({ valueText: "some-text" }, { x: 400, y: 600, offset: 30 });
 
-    //assert
+    // assert
     assert.equal(this.tooltip._textGroup.move.callCount, 1, "textGroup move");
     assert.deepEqual(this.tooltip._textGroup.move.firstCall.args, [-bBox.x + bBox.lm, -bBox.y + bBox.tm + this.options.arrowLength]);
 
     assert.equal(this.tooltip._cloud.attr.callCount, 2, "cloud attr");
     assert.deepEqual(this.tooltip._cloud.attr.lastCall.args, [{
-        points: [0, 10, //lt
-            20, 10, //la
-            30, 0, //ca
-            40, 10, //ra
-            60, 10, //rt
-            60, 50, //rb
-            0, 50] //lb
+        points: [0, 10, // lt
+            20, 10, // la
+            30, 0, // ca
+            40, 10, // ra
+            60, 10, // rt
+            60, 50, // rb
+            0, 50] // lb
     }]);
 
     assert.equal(this.tooltip._cloud.move.callCount, 1, "cloud move");
     assert.deepEqual(this.tooltip._cloud.move.lastCall.args, [bBox.lm, bBox.tm]);
 
-    assert.equal(this.tooltip._wrapper.css("left"), "360px"); //x - bBox.width / 2 - lm
-    assert.equal(this.tooltip._wrapper.css("top"), "621px"); //y + offset - tm
+    assert.equal(this.tooltip._wrapper.css("left"), "360px"); // x - bBox.width / 2 - lm
+    assert.equal(this.tooltip._wrapper.css("top"), "621px"); // y + offset - tm
 });
 
 QUnit.test("Right side of page. horizontalAlignment 'right'", function(assert) {
@@ -2445,29 +2445,29 @@ QUnit.test("Right side of page. horizontalAlignment 'right'", function(assert) {
 
     this.resetTooltipMocks();
 
-    //act
+    // act
     this.tooltip.show({ valueText: "some-text" }, { x: 800, y: 300, offset: 30 });
 
-    //assert
+    // assert
     assert.equal(this.tooltip._textGroup.move.callCount, 1, "textGroup move");
     assert.deepEqual(this.tooltip._textGroup.move.firstCall.args, [-bBox.x + bBox.lm, -bBox.y + bBox.tm]);
 
     assert.equal(this.tooltip._cloud.attr.callCount, 2, "cloud attr");
     assert.deepEqual(this.tooltip._cloud.attr.lastCall.args, [{
-        points: [0, 0, //lt
-            60, 0, //rt
-            60, 40, //rb
-            10, 40, //ra
-            0, 50, //ca
-            0, 40, //la
-            0, 40] //lb
+        points: [0, 0, // lt
+            60, 0, // rt
+            60, 40, // rb
+            10, 40, // ra
+            0, 50, // ca
+            0, 40, // la
+            0, 40] // lb
     }]);
 
     assert.equal(this.tooltip._cloud.move.callCount, 1, "cloud move");
     assert.deepEqual(this.tooltip._cloud.move.lastCall.args, [bBox.lm, bBox.tm]);
 
-    assert.equal(this.tooltip._wrapper.css("left"), "790px"); //x - lm
-    assert.equal(this.tooltip._wrapper.css("top"), "211px"); //y - (bBox.height + arrowLength) - offset - tm
+    assert.equal(this.tooltip._wrapper.css("left"), "790px"); // x - lm
+    assert.equal(this.tooltip._wrapper.css("top"), "211px"); // y - (bBox.height + arrowLength) - offset - tm
 });
 
 QUnit.test("Left side of page. horizontalAlignment 'left'", function(assert) {
@@ -2485,29 +2485,29 @@ QUnit.test("Left side of page. horizontalAlignment 'left'", function(assert) {
 
     this.resetTooltipMocks();
 
-    //act
+    // act
     this.tooltip.show({ valueText: "some-text" }, { x: 0, y: 300, offset: 30 });
 
-    //assert
+    // assert
     assert.equal(this.tooltip._textGroup.move.callCount, 1, "textGroup move");
     assert.deepEqual(this.tooltip._textGroup.move.firstCall.args, [-bBox.x + bBox.lm, -bBox.y + bBox.tm]);
 
     assert.equal(this.tooltip._cloud.attr.callCount, 2, "cloud attr");
     assert.deepEqual(this.tooltip._cloud.attr.lastCall.args, [{
-        points: [0, 0, //lt
-            60, 0, //rt
-            60, 40, //rb
-            60, 40, //ra
-            60, 50, //ca
-            50, 40, //la
-            0, 40] //lb
+        points: [0, 0, // lt
+            60, 0, // rt
+            60, 40, // rb
+            60, 40, // ra
+            60, 50, // ca
+            50, 40, // la
+            0, 40] // lb
     }]);
 
     assert.equal(this.tooltip._cloud.move.callCount, 1, "cloud move");
     assert.deepEqual(this.tooltip._cloud.move.lastCall.args, [bBox.lm, bBox.tm]);
 
-    assert.equal(this.tooltip._wrapper.css("left"), "-70px"); //x - bBox.width - lm
-    assert.equal(this.tooltip._wrapper.css("top"), "211px"); //y - (bBox.height + arrowLength) - offset - tm
+    assert.equal(this.tooltip._wrapper.css("left"), "-70px"); // x - bBox.width - lm
+    assert.equal(this.tooltip._wrapper.css("top"), "211px"); // y - (bBox.height + arrowLength) - offset - tm
 });
 
 QUnit.test("Left side of page. horizontalAlignment 'center'", function(assert) {
@@ -2525,27 +2525,27 @@ QUnit.test("Left side of page. horizontalAlignment 'center'", function(assert) {
 
     this.resetTooltipMocks();
 
-    //act
+    // act
     this.tooltip.show({ valueText: "some-text" }, { x: 0, y: 300, offset: 30 });
 
-    //assert
+    // assert
     assert.equal(this.tooltip._textGroup.move.callCount, 1, "textGroup move");
     assert.deepEqual(this.tooltip._textGroup.move.firstCall.args, [-bBox.x + bBox.lm, -bBox.y + bBox.tm]);
 
     assert.equal(this.tooltip._cloud.attr.callCount, 2, "cloud attr");
     assert.deepEqual(this.tooltip._cloud.attr.lastCall.args, [{
-        points: [0, 0, //lt
-            60, 0, //rt
-            60, 40, //rb
-            40, 40, //ra
-            30, 50, //ca
-            20, 40, //la
-            0, 40] //lb
+        points: [0, 0, // lt
+            60, 0, // rt
+            60, 40, // rb
+            40, 40, // ra
+            30, 50, // ca
+            20, 40, // la
+            0, 40] // lb
     }]);
 
     assert.equal(this.tooltip._cloud.move.callCount, 1, "cloud move");
     assert.deepEqual(this.tooltip._cloud.move.lastCall.args, [bBox.lm, bBox.tm]);
 
-    assert.equal(this.tooltip._wrapper.css("left"), "-40px"); //x - bBox.width / 2 - lm
-    assert.equal(this.tooltip._wrapper.css("top"), "211px"); //y - (bBox.height + arrowLength) - offset - tm
+    assert.equal(this.tooltip._wrapper.css("left"), "-40px"); // x - bBox.width / 2 - lm
+    assert.equal(this.tooltip._wrapper.css("top"), "211px"); // y - (bBox.height + arrowLength) - offset - tm
 });

@@ -76,17 +76,17 @@ QUnit.test("Disabled selection", function(assert) {
         selection: { mode: 'none' }
     });
 
-    //act
+    // act
     this.selectionController.selectRows([{ name: 'Dan', age: 16 }]);
 
-    //assert
+    // assert
     assert.equal(this.dataController.items().length, 7);
     assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{ name: 'Dan', age: 16 }]);
 
-    //act
+    // act
     this.selectionController.changeItemSelection(0);
 
-    //assert
+    // assert
     assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{ name: 'Dan', age: 16 }]);
     assert.equal(this.selectionController.focusedItemIndex(), -1);
 });
@@ -131,17 +131,17 @@ QUnit.test("pass selection options to selection controller", function(assert) {
 });
 
 QUnit.test("set selectedRows. Array parameter with one object and parameter preserve is true", function(assert) {
-    //arrange
+    // arrange
     this.applyOptions({
         selection: { mode: 'single' }
     });
 
     this.selectionController.selectRows([{ name: 'Dan', age: 16 }, { name: 'Vadim', age: 17 }]);
 
-    //act
+    // act
     this.selectionController.selectRows([{ name: 'Vadim', age: 17 }, { name: 'Dmitry', age: 18 }], true);
 
-    //assert
+    // assert
     assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{ name: 'Dan', age: 16 }, { name: 'Vadim', age: 17 }, { name: 'Dmitry', age: 18 }]);
     assert.ok(!this.dataController.items()[0].isSelected);
     assert.ok(this.dataController.items()[1].isSelected);
@@ -166,7 +166,7 @@ QUnit.test("set selectedRows. Done callback", function(assert) {
 
     this.clock.tick();
 
-    //assert
+    // assert
     assert.ok(finalized);
 });
 
@@ -187,7 +187,7 @@ QUnit.test("set selectedRows for single selection. Several objects in array. sel
     assert.ok(!this.dataController.items()[2].focused);
 });
 
-//T453514
+// T453514
 QUnit.test("set selectedRows after modify keys returned by getSelectedRowKeys", function(assert) {
     var onSelectionCounter = 0;
     var selectionChangedArgs;
@@ -201,13 +201,13 @@ QUnit.test("set selectedRows after modify keys returned by getSelectedRowKeys", 
 
     this.selectionController.selectRows([{ name: 'Dan', age: 16 }, { name: 'Vadim', age: 17 }]);
 
-    //act
+    // act
     var keys = this.selectionController.getSelectedRowKeys();
     keys.shift();
     onSelectionCounter = 0;
     this.selectionController.selectRows(keys);
 
-    //assert
+    // assert
     assert.strictEqual(onSelectionCounter, 1, "onSelectedChanged is called");
     assert.deepEqual(selectionChangedArgs.currentSelectedRowKeys, []);
     assert.deepEqual(selectionChangedArgs.currentDeselectedRowKeys, [{ name: 'Dan', age: 16 }]);
@@ -216,13 +216,13 @@ QUnit.test("set selectedRows after modify keys returned by getSelectedRowKeys", 
     assert.deepEqual(this.selectionController.getSelectedRowsData(), [{ name: 'Vadim', age: 17 }]);
 });
 
-//T443719
+// T443719
 QUnit.test("getSelectedRowKeys and getSelectedRowsData should returns array copy", function(assert) {
     var keys = this.selectionController.getSelectedRowKeys();
 
     this.selectionController.selectRows([{ name: 'Dan', age: 16 }], true);
 
-    //assert
+    // assert
     assert.deepEqual(keys, [], "old keys are no modified");
     assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{ name: 'Dan', age: 16 }]);
     assert.notStrictEqual(this.selectionController.getSelectedRowKeys(), this.selectionController.getSelectedRowKeys(), "selected keys are not equals by reference");
@@ -243,17 +243,17 @@ QUnit.test("set selectedRows for single selection. Object parameter", function(a
 });
 
 QUnit.test("set selectedRows. Object parameter and parameter preserve is true", function(assert) {
-    //arrange
+    // arrange
     this.applyOptions({
         selection: { mode: 'single' }
     });
 
     this.selectionController.selectRows({ name: 'Dan', age: 16 });
 
-    //act
+    // act
     this.selectionController.selectRows({ name: 'Dmitry', age: 18 }, true);
 
-    //assert
+    // assert
     assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{ name: 'Dan', age: 16 }, { name: 'Dmitry', age: 18 }]);
     assert.ok(!this.dataController.items()[0].isSelected);
     assert.ok(this.dataController.items()[1].isSelected);
@@ -264,7 +264,7 @@ QUnit.test("set selectedRows. Object parameter and parameter preserve is true", 
     assert.ok(!this.dataController.items()[6].isSelected);
 });
 
-//B251864
+// B251864
 QUnit.test("set selectedRows for single selection. Object parameter with array field", function(assert) {
     var array = [
         { name: 'Alex', comments: [] },
@@ -315,9 +315,9 @@ QUnit.test("set selectedRows for single selection. Object parameter with object 
     assert.ok(!this.dataController.items()[3].isSelected);
 });
 
-//T122304
+// T122304
 QUnit.test("set selectedRows for single selection. Object with the level of embedding > 2", function(assert) {
-    //arrange
+    // arrange
     var array = [
         { name: 'Alex', address: { country: { name: "USA", city: { name: "New York" } } } },
         { name: 'Alex', address: { country: { name: "USA", city: { name: "Chicago" } } } }
@@ -330,18 +330,18 @@ QUnit.test("set selectedRows for single selection. Object with the level of embe
         selection: { mode: 'single' }
     });
 
-    //act
+    // act
     this.selectionController.selectRows({ name: 'Alex', address: { country: { name: "USA", city: { name: "Chicago" } } } });
 
-    //assert
+    // assert
     assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{ name: 'Alex', address: { country: { name: "USA", city: { name: "Chicago" } } } }]);
     assert.notOk(this.dataController.items()[0].isSelected);
     assert.ok(this.dataController.items()[1].isSelected);
 });
 
-//T122304
+// T122304
 QUnit.test("set selectedRows for single selection. Recursive object", function(assert) {
-    //arrange
+    // arrange
     var item1 = { name: 'Alex', address: { country: 'USA', city: 'New York' } },
         item2 = { name: 'Dan', address: { country: 'USA', city: 'Chicago' } },
         array;
@@ -358,18 +358,18 @@ QUnit.test("set selectedRows for single selection. Recursive object", function(a
         selection: { mode: 'single' }
     });
 
-    //act
+    // act
     this.selectionController.selectRows(item2);
 
-    //assert
+    // assert
     assert.deepEqual(this.selectionController.getSelectedRowKeys(), [item2]);
     assert.ok(!this.dataController.items()[0].isSelected);
     assert.ok(this.dataController.items()[1].isSelected);
 });
 
-//T119761
+// T119761
 QUnit.test("set selectedRows for single selection. Object with the property dataType is date", function(assert) {
-    //arrange
+    // arrange
     var array = [
         { name: 'Alex', date: new Date(2011, 2, 3) },
         { name: 'Alex', date: new Date(2012, 3, 4) }
@@ -382,18 +382,18 @@ QUnit.test("set selectedRows for single selection. Object with the property data
         selection: { mode: 'single' }
     });
 
-    //act
+    // act
     this.selectionController.selectRows({ name: 'Alex', date: new Date(2012, 3, 4) });
 
-    //assert
+    // assert
     assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{ name: 'Alex', date: new Date(2012, 3, 4) }], "selected row keys");
     assert.ok(!this.dataController.items()[0].isSelected, "item 1 not selected");
     assert.ok(this.dataController.items()[1].isSelected, "item 2 selected");
 });
 
-//T112473
+// T112473
 QUnit.test("set selectedRows for single selection. Empty objects", function(assert) {
-    //arrange
+    // arrange
     var array = [{ name: 'Alex', address: { country: 'USA', city: 'New York' } }, {}, {}];
 
     this.dataSource = createDataSource(array);
@@ -403,19 +403,19 @@ QUnit.test("set selectedRows for single selection. Empty objects", function(asse
         selection: { mode: 'single' }
     });
 
-    //act
+    // act
     this.selectionController.selectRows({ name: 'Alex', address: { country: 'USA', city: 'New York' } });
 
-    //assert
+    // assert
     assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{ name: 'Alex', address: { country: 'USA', city: 'New York' } }], "selected row keys");
     assert.ok(this.dataController.items()[0].isSelected, "item 1 selected");
     assert.ok(!this.dataController.items()[1].isSelected, "item 2 not selected");
     assert.ok(!this.dataController.items()[2].isSelected, "item 3 not selected");
 });
 
-//T112473
+// T112473
 QUnit.test("set selectedRows for single selection. Selecting empty object", function(assert) {
-    //arrange
+    // arrange
     var array = [{ name: 'Alex', address: { country: 'USA', city: 'New York' } }, {}, {}];
 
     this.dataSource = createDataSource(array);
@@ -425,19 +425,19 @@ QUnit.test("set selectedRows for single selection. Selecting empty object", func
         selection: { mode: 'single' }
     });
 
-    //act
+    // act
     this.selectionController.selectRows({});
 
-    //assert
+    // assert
     assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{}, {}], "selected row keys");
     assert.ok(!this.dataController.items()[0].isSelected, "item 1 not selected");
     assert.ok(this.dataController.items()[1].isSelected, "item 2 selected");
     assert.ok(this.dataController.items()[2].isSelected, "item 3 selected");
 });
 
-//T112473
+// T112473
 QUnit.test("set selectedRows for single selection. Selecting object with a different number of properties", function(assert) {
-    //arrange
+    // arrange
     var array = [{ name: 'Alex', address: { country: 'USA', city: 'New York' } },
                 { name: 'Dan', address: { country: 'USA', city: 'Chicago' } }];
 
@@ -448,10 +448,10 @@ QUnit.test("set selectedRows for single selection. Selecting object with a diffe
         selection: { mode: 'single' }
     });
 
-    //act
+    // act
     this.selectionController.selectRows({ name: 'Dan' });
 
-    //assert
+    // assert
     assert.deepEqual(this.selectionController.getSelectedRowKeys(), [], "selected row keys");
     assert.ok(!this.dataController.items()[0].isSelected, "item 1 not selected");
     assert.ok(!this.dataController.items()[1].isSelected, "item 2 not selected");
@@ -462,8 +462,8 @@ QUnit.test("set selectedRows for single selection. Several call", function(asser
         selection: { mode: 'single' }
     });
 
-    this.selectionController.selectRows({ name: 'Dan', age: 16 }); //1
-    this.selectionController.selectRows({ name: 'Dmitry', age: 18 });//3
+    this.selectionController.selectRows({ name: 'Dan', age: 16 }); // 1
+    this.selectionController.selectRows({ name: 'Dmitry', age: 18 });// 3
 
     assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{ name: 'Dmitry', age: 18 }]);
 
@@ -476,7 +476,7 @@ QUnit.test("set selectedRows for multiple selection. Several objects in array", 
         selection: { mode: 'multiple' }
     });
 
-    this.selectionController.selectRows([{ name: 'Dan', age: 16 }, { name: 'Dmitry', age: 18 }]); //1, 3
+    this.selectionController.selectRows([{ name: 'Dan', age: 16 }, { name: 'Dmitry', age: 18 }]); // 1, 3
 
     assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{ name: 'Dan', age: 16 }, { name: 'Dmitry', age: 18 }]);
 
@@ -486,7 +486,7 @@ QUnit.test("set selectedRows for multiple selection. Several objects in array", 
     assert.ok(this.dataController.items()[3].isSelected);
 });
 
-//T135244
+// T135244
 QUnit.test("set selectedRows. Not Loading data then no selected rows", function(assert) {
     var loadingCount = 0;
     this.dataController.store().on("loading", function() {
@@ -497,7 +497,7 @@ QUnit.test("set selectedRows. Not Loading data then no selected rows", function(
 
     this.clock.tick();
 
-    //assert
+    // assert
     assert.strictEqual(loadingCount, 0, 'no loadings');
     assert.strictEqual(this.selectionController.getSelectedRowKeys().length, 0, 'no selected row keys');
 });
@@ -507,7 +507,7 @@ QUnit.test("selectRowsByIndexes for multiple selection. Array of indexes", funct
         selection: { mode: 'multiple' }
     });
 
-    this.selectionController.selectRowsByIndexes([1, 3]); //1, 3
+    this.selectionController.selectRowsByIndexes([1, 3]); // 1, 3
 
     assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{ name: 'Dan', age: 16 }, { name: 'Dmitry', age: 18 }]);
 
@@ -522,7 +522,7 @@ QUnit.test("selectRowsByIndexes for multiple selection. Wrong index", function(a
         selection: { mode: 'multiple' }
     });
 
-    this.selectionController.selectRowsByIndexes([1, 3, 100]); //1, 3
+    this.selectionController.selectRowsByIndexes([1, 3, 100]); // 1, 3
 
     assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{ name: 'Dan', age: 16 }, { name: 'Dmitry', age: 18 }]);
 
@@ -537,7 +537,7 @@ QUnit.test("selectRowsByIndexes for multiple selection. Indexes via arguments", 
         selection: { mode: 'multiple' }
     });
 
-    this.selectionController.selectRowsByIndexes(1, 3); //1, 3
+    this.selectionController.selectRowsByIndexes(1, 3); // 1, 3
 
     assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{ name: 'Dan', age: 16 }, { name: 'Dmitry', age: 18 }]);
 
@@ -546,24 +546,24 @@ QUnit.test("selectRowsByIndexes for multiple selection. Indexes via arguments", 
     assert.ok(!this.dataController.items()[2].isSelected);
     assert.ok(this.dataController.items()[3].isSelected);
 });
-/*test("set selectedRows from user state", function () {
-    //arrange
+/* test("set selectedRows from user state", function () {
+    // arrange
     this.applyOptions({
         selection: { mode: 'multiple' }
     });
 
-    this.stateStoringController.state({ selectedItemKeys: [{ name: 'Dan', age: 16 }, { name: 'Dmitry', age: 18 }] }); //1, 3
+    this.stateStoringController.state({ selectedItemKeys: [{ name: 'Dan', age: 16 }, { name: 'Dmitry', age: 18 }] }); // 1, 3
 
-    //act
+    // act
     this.stateStoringController.restoreSelectedItemKeys();
 
-    //assert
+    // assert
     assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{ name: 'Dan', age: 16 }, { name: 'Dmitry', age: 18 }]);
     assert.ok(!this.dataController.items()[0].isSelected);
     assert.ok(this.dataController.items()[1].isSelected);
     assert.ok(!this.dataController.items()[2].isSelected);
     assert.ok(this.dataController.items()[3].isSelected);
-});*/
+}); */
 
 QUnit.test("Set isSelected items", function(assert) {
     this.applyOptions({
@@ -593,7 +593,7 @@ QUnit.test("get selectedRows for multiple selection. Several objects in array", 
         selection: { mode: 'multiple', storeSelectedItems: true }
     });
 
-    this.selectionController.selectRows([{ name: 'Dan', age: 16 }, { name: 'Dmitry', age: 18 }]); //1, 3
+    this.selectionController.selectRows([{ name: 'Dan', age: 16 }, { name: 'Dmitry', age: 18 }]); // 1, 3
 
 
     var selectedRows = this.selectionController.getSelectedRowsData();
@@ -612,7 +612,7 @@ QUnit.test("get selectedRows for multiple selection when dataSource has filter. 
 
     this.dataController.filter(['age', '>', 17]);
 
-    this.selectionController.selectRows([{ name: 'Dan', age: 16 }, { name: 'Dmitry', age: 18 }]); //1, 3
+    this.selectionController.selectRows([{ name: 'Dan', age: 16 }, { name: 'Dmitry', age: 18 }]); // 1, 3
 
     var selectedRows = this.selectionController.getSelectedRowsData();
     assert.deepEqual(selectedRows, [{ name: 'Dan', age: 16 }, { name: 'Dmitry', age: 18 }], 'selectRows ignore filter');
@@ -647,7 +647,7 @@ QUnit.test("get selectedRows for multiple selection. Array key", function(assert
 });
 
 QUnit.test("selectedRows with non-unique key", function(assert) {
-    //arrange
+    // arrange
     this.applyOptions({
         selection: { mode: 'single' },
         dataSource: { store: { type: 'array', data: this.array, key: 'age' } }
@@ -656,10 +656,10 @@ QUnit.test("selectedRows with non-unique key", function(assert) {
     this.dataController.optionChanged({ name: 'dataSource' });
 
 
-    //act
+    // act
     this.selectionController.selectRows([16, 18]);
 
-    //assert
+    // assert
     assert.deepEqual(this.selectionController.getSelectedRowKeys(), [16, 18, 18]);
     assert.deepEqual(this.selectionController.getSelectedRowsData(), [{ name: 'Dan', age: 16 }, { name: 'Dmitry', age: 18 }, { name: 'Sergey', age: 18 }]);
     assert.ok(!this.dataController.items()[0].isSelected);
@@ -671,7 +671,7 @@ QUnit.test("selectedRows with non-unique key", function(assert) {
     assert.ok(!this.dataController.items()[6].isSelected);
 });
 
-//T429370
+// T429370
 QUnit.test("selectedRowKeys should not be changed after assign", function(assert) {
     this.applyOptions({
         selection: {
@@ -695,7 +695,7 @@ QUnit.test("selectedRowKeys should not be changed after assign", function(assert
 
 
 QUnit.test("Deselect selectedRows. Store with key", function(assert) {
-    //arrange
+    // arrange
     this.applyOptions({
         selection: { mode: 'single' },
         dataSource: { store: { type: 'array', data: this.array, key: 'age' } }
@@ -706,10 +706,10 @@ QUnit.test("Deselect selectedRows. Store with key", function(assert) {
 
     this.selectionController.selectRows([16, 18]);
 
-    //act
+    // act
     this.selectionController.deselectRows([18]);
 
-    //assert
+    // assert
     assert.deepEqual(this.selectionController.getSelectedRowKeys(), [16]);
     assert.deepEqual(this.selectionController.getSelectedRowsData(), [{ name: 'Dan', age: 16 }]);
     assert.ok(!this.dataController.items()[0].isSelected);
@@ -722,7 +722,7 @@ QUnit.test("Deselect selectedRows. Store with key", function(assert) {
 });
 
 QUnit.test("Deselect all if key is defined", function(assert) {
-    //arrange
+    // arrange
     this.applyOptions({
         selection: { mode: 'single' },
         dataSource: { store: { type: 'array', data: this.array, key: 'age' } }
@@ -733,26 +733,26 @@ QUnit.test("Deselect all if key is defined", function(assert) {
 
     this.selectionController.selectRows([16, 18]);
 
-    //act
+    // act
     this.selectionController.deselectAll();
 
-    //assert
+    // assert
     assert.deepEqual(this.selectionController.getSelectedRowKeys(), []);
     assert.deepEqual(this.selectionController.getSelectedRowsData(), []);
 });
 
 QUnit.test("Deselect selectedRows. Object parameter", function(assert) {
-    //arrange
+    // arrange
     this.applyOptions({
         selection: { mode: 'single' }
     });
 
     this.selectionController.selectRows([{ name: 'Dan', age: 16 }, { name: 'Dmitry', age: 18 }]);
 
-    //act
+    // act
     this.selectionController.deselectRows({ name: 'Dmitry', age: 18 });
 
-    //assert
+    // assert
     assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{ name: 'Dan', age: 16 }]);
     assert.ok(!this.dataController.items()[0].isSelected);
     assert.ok(this.dataController.items()[1].isSelected);
@@ -764,7 +764,7 @@ QUnit.test("Deselect selectedRows. Object parameter", function(assert) {
 });
 
 QUnit.test("OnSelectionChange action when row deselected via API (T220378)", function(assert) {
-    //arrange
+    // arrange
     var onSelectionCounter = 0;
 
     this.applyOptions({
@@ -774,7 +774,7 @@ QUnit.test("OnSelectionChange action when row deselected via API (T220378)", fun
         }
     });
 
-    //act
+    // act
     this.selectionController.selectRows([{ name: 'Dan', age: 16 }, { name: 'Dmitry', age: 18 }]);
 
     assert.equal(onSelectionCounter, 1, 'First time onSelection fire when we select some rows');
@@ -785,7 +785,7 @@ QUnit.test("OnSelectionChange action when row deselected via API (T220378)", fun
 });
 
 QUnit.test("On selection changed argument contents actual parameters (T239237, selection case)", function(assert) {
-    //arrange
+    // arrange
     var onSelectionChangedArgs,
         onSelectionChangedCounter = 0,
         that = this;
@@ -812,7 +812,7 @@ QUnit.test("On selection changed argument contents actual parameters (T239237, s
         }
     });
 
-    //act
+    // act
     this.selectionController.selectRows([{ name: 'Dan', age: 16 }]);
 
     assert.deepEqual(
@@ -830,7 +830,7 @@ QUnit.test("On selection changed argument contents actual parameters (T239237, s
 });
 
 QUnit.test("On selection changed argument contents actual parameters (T239237, deselection case)", function(assert) {
-    //arrange
+    // arrange
     var onSelectionChangedArgs,
         onSelectionChangedCounter = 0,
         that = this;
@@ -858,7 +858,7 @@ QUnit.test("On selection changed argument contents actual parameters (T239237, d
         }
     });
 
-    //act
+    // act
     that.selectionController.selectRows([{ name: 'Dan', age: 16 }]);
 
     this.selectionController.deselectRows([{ name: 'Dan', age: 16 }]);
@@ -878,7 +878,7 @@ QUnit.test("On selection changed argument contents actual parameters (T239237, d
 });
 
 QUnit.test("onSelectionChanged should not be called when loading data and given the selectedRowKeys", function(assert) {
-    //arrange
+    // arrange
     var onSelectionChangedCounter = 0;
 
     this.applyOptions({
@@ -887,12 +887,12 @@ QUnit.test("onSelectionChanged should not be called when loading data and given 
         }
     });
 
-    //act
+    // act
     this.options.selectedRowKeys = [{ name: 'Dan', age: 16 }];
     this.dataController.init();
     this.clock.tick();
 
-    //act
+    // act
     assert.strictEqual(onSelectionChangedCounter, 0, "onSelectionChanged not called");
 });
 
@@ -901,12 +901,12 @@ QUnit.test("clearSelection", function(assert) {
         selection: { mode: 'multiple' }
     });
 
-    this.selectionController.selectRows([{ name: 'Dan', age: 16 }, { name: 'Dmitry', age: 18 }]); //1, 3
+    this.selectionController.selectRows([{ name: 'Dan', age: 16 }, { name: 'Dmitry', age: 18 }]); // 1, 3
 
-    //act
+    // act
     this.selectionController.clearSelection();
 
-    //assert
+    // assert
     assert.deepEqual(this.selectionController.getSelectedRowKeys(), []);
     assert.deepEqual(this.selectionController.option("selectedRowKeys"), []);
     assert.ok(!this.dataController.items()[0].isSelected);
@@ -927,7 +927,7 @@ QUnit.test("Rise selectionChanged event on set selectedRows. Several objects", f
         }
     });
 
-    this.selectionController.selectRows([{ name: 'Dan', age: 16 }, { name: 'Dmitry', age: 18 }]); //1, 3
+    this.selectionController.selectRows([{ name: 'Dan', age: 16 }, { name: 'Dmitry', age: 18 }]); // 1, 3
 
     assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{ name: 'Dan', age: 16 }, { name: 'Dmitry', age: 18 }]);
     assert.strictEqual(selectionChangedCount, 1);
@@ -937,7 +937,7 @@ QUnit.test("Rise selectionChanged event on set selectedRows. Several objects", f
     assert.deepEqual(selectionChangedArgs[0].currentDeselectedRowKeys, [], 'removed isSelected keys');
 });
 
-//B255057
+// B255057
 QUnit.test("Rise selectionChanged event on set selectedRows. Several objects. Store with key", function(assert) {
     var selectionChangedCount = 0,
         selectionChangedArgs;
@@ -953,8 +953,8 @@ QUnit.test("Rise selectionChanged event on set selectedRows. Several objects. St
 
     this.dataController.optionChanged({ name: 'dataSource' });
 
-    //act
-    this.selectionController.selectRows([16, 20]); //1, 5
+    // act
+    this.selectionController.selectRows([16, 20]); // 1, 5
 
     assert.deepEqual(this.selectionController.getSelectedRowKeys(), [16, 20]);
     assert.deepEqual(this.selectionController.getSelectedRowsData(), [{ "age": 16, "name": "Dan" }, { "age": 20, "name": "Kate" }]);
@@ -976,9 +976,9 @@ QUnit.test("Rise selectionChanged event on change selectedRows. Several objects"
         }
     });
 
-    this.selectionController.selectRows([{ name: 'Dan', age: 16 }, { name: 'Dmitry', age: 18 }]); //1, 3
+    this.selectionController.selectRows([{ name: 'Dan', age: 16 }, { name: 'Dmitry', age: 18 }]); // 1, 3
 
-    this.selectionController.selectRows([{ name: 'Dmitry', age: 18 }]); //3
+    this.selectionController.selectRows([{ name: 'Dmitry', age: 18 }]); // 3
 
     assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{ name: 'Dmitry', age: 18 }]);
     assert.strictEqual(selectionChangedCount, 2);
@@ -987,7 +987,7 @@ QUnit.test("Rise selectionChanged event on change selectedRows. Several objects"
     assert.deepEqual(selectionChangedArgs[0].currentDeselectedRowKeys, [{ name: 'Dan', age: 16 }], 'removed isSelected items');
 });
 
-//B255057
+// B255057
 QUnit.test("Rise selectionChanged event on change selectedRows. Several objects. Store with key", function(assert) {
     var selectionChangedCount = 0,
         selectionChangedArgs;
@@ -1003,9 +1003,9 @@ QUnit.test("Rise selectionChanged event on change selectedRows. Several objects.
 
     this.dataController.optionChanged({ name: 'dataSource' });
 
-    //act
-    this.selectionController.selectRows([16, 20]); //1, 5
-    this.selectionController.selectRows([20]); //5
+    // act
+    this.selectionController.selectRows([16, 20]); // 1, 5
+    this.selectionController.selectRows([20]); // 5
 
     assert.deepEqual(this.selectionController.getSelectedRowKeys(), [20]);
     assert.deepEqual(this.selectionController.getSelectedRowsData(), [{ "age": 20, "name": "Kate" }]);
@@ -1017,7 +1017,7 @@ QUnit.test("Rise selectionChanged event on change selectedRows. Several objects.
 });
 
 QUnit.test("proxy select and expand load parameters during selectAll operation", function(assert) {
-    //arrange
+    // arrange
     var loadOptions;
 
     this.applyOptions({
@@ -1032,11 +1032,11 @@ QUnit.test("proxy select and expand load parameters during selectAll operation",
         loadOptions = options;
     });
 
-    //act
+    // act
     this.selectionController.selectAll();
     this.clock.tick();
 
-    //assert
+    // assert
     assert.strictEqual(loadOptions.expand, 'testExpand', 'dataSource expand options sent correctly');
     assert.strictEqual(loadOptions.select, 'testSelect', 'dataSource select options sent correctly');
 });
@@ -1054,10 +1054,10 @@ QUnit.test("Not rise selectionChanged event on apply filter after SelectAll", fu
     this.selectionController.selectAll();
     assert.strictEqual(selectionChangedCount, 1);
 
-    //act
+    // act
     this.dataController.filter(['age', '>', 18]);
 
-    //assert
+    // assert
     assert.deepEqual(this.selectionController.getSelectedRowKeys().length, 7);
     assert.strictEqual(selectionChangedCount, 1, 'selection changed not raised');
 });
@@ -1072,13 +1072,13 @@ QUnit.test("Not rise selectionChanged event on apply filter after set selectedRo
         }
     });
 
-    this.selectionController.selectRows([{ name: 'Dan', age: 16 }, { name: 'Dmitry', age: 18 }]); //1, 3
+    this.selectionController.selectRows([{ name: 'Dan', age: 16 }, { name: 'Dmitry', age: 18 }]); // 1, 3
     assert.strictEqual(selectionChangedCount, 1);
 
-    //act
+    // act
     this.dataController.filter(['age', '=', 18]);
 
-    //assert
+    // assert
     assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{ name: 'Dan', age: 16 }, { name: 'Dmitry', age: 18 }]);
     assert.strictEqual(selectionChangedCount, 1, 'selection changed not raised');
 });
@@ -1093,14 +1093,14 @@ QUnit.test("Rise selectionChanged event on change dataSource", function(assert) 
         }
     });
 
-    this.selectionController.selectRows([{ name: 'Dan', age: 16 }, { name: 'Dmitry', age: 18 }]); //1, 3
+    this.selectionController.selectRows([{ name: 'Dan', age: 16 }, { name: 'Dmitry', age: 18 }]); // 1, 3
     assert.strictEqual(selectionChangedCount, 1);
 
-    //act
+    // act
     this.options.dataSource = [{ name: 'Dan', age: 16 }];
     this.dataController.optionChanged({ name: 'dataSource' });
 
-    //assert
+    // assert
     assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{ name: 'Dan', age: 16 }]);
     assert.strictEqual(selectionChangedCount, 2, 'selection changed raised');
 });
@@ -1115,17 +1115,17 @@ QUnit.test("Not rise selectionChanged event on apply filter when selectedRows co
         }
     });
 
-    this.selectionController.selectRows([{ name: 'Dan', age: 16 }, { name: 'Dmitry', age: 18 }]); //1, 3
+    this.selectionController.selectRows([{ name: 'Dan', age: 16 }, { name: 'Dmitry', age: 18 }]); // 1, 3
     assert.strictEqual(selectionChangedCount, 1);
 
-    //act
+    // act
     this.dataController.filter(['age', '>', 1]);
 
-    //assert
+    // assert
     assert.strictEqual(selectionChangedCount, 1);
 });
 
-/*test("Not rise event on second set selectedRows without changes", function () {
+/* test("Not rise event on second set selectedRows without changes", function () {
     var selectionChangedCount = 0;
 
     this.applyOptions({
@@ -1135,13 +1135,13 @@ QUnit.test("Not rise selectionChanged event on apply filter when selectedRows co
         }
     });
 
-    this.selectionController.selectRows([{ name: 'Dan', age: 16 }, { name: 'Dmitry', age: 18 }]); //1, 3
-    this.selectionController.selectRows([{ name: 'Dan', age: 16 }, { name: 'Dmitry', age: 18 }]); //1, 3
+    this.selectionController.selectRows([{ name: 'Dan', age: 16 }, { name: 'Dmitry', age: 18 }]); // 1, 3
+    this.selectionController.selectRows([{ name: 'Dan', age: 16 }, { name: 'Dmitry', age: 18 }]); // 1, 3
 
     assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{ name: 'Dan', age: 16 }, { name: 'Dmitry', age: 18 }]);
 
     assert.strictEqual(selectionChangedCount, 1);
-});*/
+}); */
 
 QUnit.test("changed on set selectedRows", function(assert) {
     var changedCount = 0,
@@ -1157,7 +1157,7 @@ QUnit.test("changed on set selectedRows", function(assert) {
 
     assert.strictEqual(changedCount, 0);
 
-    this.selectionController.selectRows([{ name: 'Dan', age: 16 }, { name: 'Dmitry', age: 18 }]); //1, 3
+    this.selectionController.selectRows([{ name: 'Dan', age: 16 }, { name: 'Dmitry', age: 18 }]); // 1, 3
 
     assert.strictEqual(changedCount, 1);
 
@@ -1191,7 +1191,7 @@ QUnit.test("select column row values", function(assert) {
     assert.ok(!this.dataController.items()[2].values[0]);
 });
 
-//T363549
+// T363549
 QUnit.test("select column row values than column position at the end", function(assert) {
     this.applyOptions({
         columns: ['name', 'age'],
@@ -1247,7 +1247,7 @@ QUnit.test("update selectedRows after update item in store and refresh where Pag
     assert.deepEqual(this.selectionController.getSelectedRowsData(), [{ name: 'Dan1', pay: 999 }]);
 });
 
-//T203742
+// T203742
 QUnit.test("redundant load after refresh when the grid restores its selection", function(assert) {
     var array = [
         { name: 'Alex', pay: 215 },
@@ -1287,7 +1287,7 @@ QUnit.test("redundant load after refresh when the grid restores its selection", 
     assert.equal(loadingCount, 0, "no loading on selectRows when all items in the page");
     var oldSelectedRowsData = this.selectionController.getSelectedRowsData();
 
-    //act
+    // act
     this.dataController.refresh();
 
     var selectedRowsData = this.selectionController.getSelectedRowsData();
@@ -1296,7 +1296,7 @@ QUnit.test("redundant load after refresh when the grid restores its selection", 
     assert.equal(loadingCount, 1, "one loading after refresh with selection");
 });
 
-//T460451
+// T460451
 QUnit.test("selection should not perform redundant load when loaded items contains all selected items", function(assert) {
     var that = this,
         isSelectAllStates = [];
@@ -1323,7 +1323,7 @@ QUnit.test("selection should not perform redundant load when loaded items contai
         selectedRowKeys: ["Dan1", "Dan3"]
     });
 
-    //act
+    // act
     this.dataController._refreshDataSource();
 
     var loadingCount = 0;
@@ -1337,13 +1337,13 @@ QUnit.test("selection should not perform redundant load when loaded items contai
 
     this.clock.tick();
 
-    //assert
+    // assert
     assert.equal(loadingCount, 1, "one loading after init dataSource");
     assert.deepEqual(this.getSelectedRowsData(), [array[1], array[3]], "selected rows data is correct");
     assert.deepEqual(isSelectAllStates, [undefined], "selectAll states");
 });
 
-//T450615
+// T450615
 QUnit.test("selection should be cleared when call clearSelection after call selectRows", function(assert) {
     var array = [
         { name: 'Alex', pay: 215 },
@@ -1364,19 +1364,19 @@ QUnit.test("selection should be cleared when call clearSelection after call sele
 
     this.clock.tick();
 
-    //act
+    // act
     this.selectRows(["Dan1", "Dan3"]);
     this.clearSelection();
 
     this.clock.tick();
 
-    //assert
+    // assert
     assert.deepEqual(this.getSelectedRowKeys(), []);
 });
 
-//B254503
+// B254503
 QUnit.test("no selection column when not has columns", function(assert) {
-    //arrange
+    // arrange
     this.applyOptions({
         selection: {
             mode: 'multiple',
@@ -1385,15 +1385,15 @@ QUnit.test("no selection column when not has columns", function(assert) {
         columns: []
     });
 
-    //act
+    // act
     var visibleColumns = this.columnsController.getVisibleColumns();
 
-    //assert
+    // assert
     assert.ok(!visibleColumns.length, 'not has columns');
 });
 
 QUnit.test("selectRows with big array", function(assert) {
-    //arrange
+    // arrange
     var that = this;
 
     that.applyOptions({
@@ -1411,24 +1411,24 @@ QUnit.test("selectRows with big array", function(assert) {
     that.dataController.setDataSource(that.dataSource);
     that.dataSource.load();
 
-    //act
+    // act
     var keys = that.array.filter(function(data) { return data.id <= 9000; }).map(function(data) { return data.id; });
     that.selectRows(keys);
     assert.equal(that.selectionController.getSelectedRowKeys().length, 9000, "selected row keys");
 });
 
-//T441847
+// T441847
 QUnit.test("selectRows with key as array of undefined", function(assert) {
-    //arrange
+    // arrange
     var that = this;
 
     that.dataSource = createDataSource(that.array, { key: ['name', 'age'] });
     that.dataController.setDataSource(that.dataSource);
     that.dataSource.load();
 
-    //act
+    // act
     that.selectRows([undefined]).done(function() {
-        //assert
+        // assert
         assert.deepEqual(that.selectionController.getSelectedRowKeys(), [], "selected row keys");
     });
 });
@@ -1476,12 +1476,12 @@ QUnit.test("selectAll", function(assert) {
 
     this.clock.tick();
 
-    //assert
+    // assert
     assert.equal(changeCallCount, 1);
     assert.deepEqual(selectionController.getSelectedRowsData(), []);
 });
 
-//T130427
+// T130427
 QUnit.test("loadingChanged when selectAll", function(assert) {
     var selectionController = this.selectionController,
         loadingStates = [];
@@ -1507,7 +1507,7 @@ QUnit.test("loadingChanged when selectAll", function(assert) {
 
     this.clock.tick();
 
-    //assert
+    // assert
     assert.strictEqual(selectionController.getSelectedRowKeys().length, 2);
     assert.deepEqual(loadingStates, [true, false]);
 });
@@ -1590,18 +1590,18 @@ QUnit.test("changeRowSelection. Checkboxes works as control key", function(asser
     assert.ok(!this.dataController.items()[2].isSelected);
 });
 
-/*test("changeRowSelection. Multiple. Several calls on different rows", function () {
+/* test("changeRowSelection. Multiple. Several calls on different rows", function () {
     this.applyOptions({
         selection: { mode: 'multiple' }
     });
 
     assert.deepEqual(this.selectionController.getSelectedRowKeys(), []);
 
-    //act
+    // act
     this.selectionController.changeItemSelection(2);
     this.selectionController.changeItemSelection(3);
 
-    //assert
+    // assert
     assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{ name: 'Vadim', age: 17 }, { name: 'Dmitry', age: 18 }]);
 });
 
@@ -1619,7 +1619,7 @@ QUnit.test("changeRowSelection. Multiple. Several calls on same row", function (
     assert.deepEqual(this.selectionController.getSelectedRowKeys(), []);
 
     assert.ok(!this.dataController.items()[2].isSelected);
-});*/
+}); */
 
 QUnit.test("changeRowSelection. Several calls on different rows with control key", function(assert) {
     this.applyOptions({
@@ -1880,9 +1880,9 @@ QUnit.test("changeRowSelection with shift key. Change shift selection from up to
     assert.ok(this.dataController.items()[4].isSelected);
 });
 
-//T547950
+// T547950
 QUnit.test("changeRowSelection with shift key after filtering", function(assert) {
-    //arrange
+    // arrange
     this.applyOptions({
         selection: {
             mode: "multiple",
@@ -1892,25 +1892,25 @@ QUnit.test("changeRowSelection with shift key after filtering", function(assert)
 
     this.dataController.filter(["age", "<", 18]);
 
-    //assert
+    // assert
     assert.strictEqual(this.dataController.items().length, 3, "item count");
 
     this.selectionController.changeItemSelection(1);
     this.dataController.clearFilter("dataSource");
 
-    //assert
+    // assert
     assert.strictEqual(this.dataController.items().length, 7, "item count");
 
-    //act
+    // act
     this.selectionController.changeItemSelection(5, { shift: true });
 
-    //assert
+    // assert
     assert.deepEqual(this.selectionController.getSelectedRowKeys(), [2, 6], "selectedRowKeys");
 });
 
-//T547950
+// T547950
 QUnit.test("focusedItemIndex should be reset to -1 after change page index", function(assert) {
-    //arrange
+    // arrange
     this.applyOptions({
         selection: {
             mode: "multiple",
@@ -1921,13 +1921,13 @@ QUnit.test("focusedItemIndex should be reset to -1 after change page index", fun
 
     this.selectionController.changeItemSelection(1);
 
-    //assert
+    // assert
     assert.strictEqual(this.selectionController.focusedItemIndex(), 1, "focusedItemIndex");
 
-    //act
+    // act
     this.pageIndex(1);
 
-    //assert
+    // assert
     assert.strictEqual(this.selectionController.focusedItemIndex(), -1, "focusedItemIndex");
 });
 
@@ -1987,15 +1987,15 @@ QUnit.test("selectRows when filter row defined", function(assert) {
         }
     });
 
-    //act
+    // act
     this.selectionController.selectRows([2, 4]);
 
-    //assert
+    // assert
     assert.deepEqual(this.selectionController.getSelectedRowsData(), [{ id: 2, name: 'Dan', age: 16 }, { id: 4, name: 'Dmitry', age: 18 }]);
 });
 
 
-//T150738
+// T150738
 QUnit.test("set selectedRows when CustomStore used without filter implementation", function(assert) {
     var array = this.array;
 
@@ -2027,14 +2027,14 @@ QUnit.test("QUnit.start selection enable selectionWithCheckboxes mode", function
     });
 
     assert.ok(!this.selectionController.isSelectionWithCheckboxes());
-    //act
+    // act
     this.selectionController.startSelectionWithCheckboxes();
     this.selectionController.changeItemSelection(1);
     this.selectionController.changeItemSelection(2);
     this.selectionController.changeItemSelection(3);
     this.selectionController.changeItemSelection(3);
 
-    //assert
+    // assert
     assert.ok(this.selectionController.isSelectionWithCheckboxes());
     assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{ name: 'Dan', age: 16 }, { name: 'Vadim', age: 17 }]);
 });
@@ -2046,10 +2046,10 @@ QUnit.test("start selection enable selectionWithCheckboxes mode when one selecte
 
     assert.ok(!this.selectionController.isSelectionWithCheckboxes());
 
-    //act
+    // act
     this.selectionController.startSelectionWithCheckboxes();
 
-    //assert
+    // assert
     assert.ok(this.selectionController.isSelectionWithCheckboxes());
 });
 
@@ -2059,12 +2059,12 @@ QUnit.test("stop selection after QUnit.start disable selectionWithCheckboxes mod
     });
 
     this.selectionController.startSelectionWithCheckboxes();
-    //act
+    // act
     this.selectionController.stopSelectionWithCheckboxes();
     this.selectionController.changeItemSelection(1);
     this.selectionController.changeItemSelection(2);
 
-    //assert
+    // assert
     assert.ok(!this.selectionController.isSelectionWithCheckboxes());
     assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{ name: 'Vadim', age: 17 }]);
 });
@@ -2074,12 +2074,12 @@ QUnit.test("QUnit.start selection do not work for single selectionMode", functio
         selection: { mode: 'single' }
     });
 
-    //act
+    // act
     this.selectionController.startSelectionWithCheckboxes();
     this.selectionController.changeItemSelection(1);
     this.selectionController.changeItemSelection(2);
 
-    //assert
+    // assert
     assert.ok(!this.selectionController.isSelectionWithCheckboxes());
     assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{ name: 'Vadim', age: 17 }]);
 });
@@ -2090,12 +2090,12 @@ QUnit.test("QUnit.start selection do not work for multipleWithCheckBoxes selecti
     });
 
     assert.ok(this.selectionController.isSelectionWithCheckboxes(), 'isSelectionWithCheckboxes');
-    //act
+    // act
     this.selectionController.startSelectionWithCheckboxes();
     this.selectionController.changeItemSelection(1);
     this.selectionController.changeItemSelection(2);
 
-    //assert
+    // assert
     assert.ok(this.selectionController.isSelectionWithCheckboxes(), 'isSelectionWithCheckboxes');
     assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{ name: 'Dan', age: 16 }, { name: 'Vadim', age: 17 }]);
 });
@@ -2106,12 +2106,12 @@ QUnit.test("stop selection do not work for multipleWithCheckBoxes selectionMode"
     });
 
     assert.ok(this.selectionController.isSelectionWithCheckboxes(), 'isSelectionWithCheckboxes');
-    //act
+    // act
     this.selectionController.stopSelectionWithCheckboxes();
     this.selectionController.changeItemSelection(1);
     this.selectionController.changeItemSelection(2);
 
-    //assert
+    // assert
     assert.ok(this.selectionController.isSelectionWithCheckboxes(), 'isSelectionWithCheckboxes');
     assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{ name: 'Dan', age: 16 }, { name: 'Vadim', age: 17 }]);
 });
@@ -2121,11 +2121,11 @@ QUnit.test("QUnit.start selection added select column to columns and rows", func
         selection: { mode: 'multiple' }
     });
 
-    //act
+    // act
     this.selectionController.startSelectionWithCheckboxes();
     this.selectionController.changeItemSelection(1);
 
-    //assert
+    // assert
     assert.ok(this.selectionController.isSelectionWithCheckboxes());
     assert.deepEqual(this.dataController.items()[0].values, [false, 'Alex', 15]);
     assert.deepEqual(this.dataController.items()[1].values, [true, 'Dan', 16]);
@@ -2137,10 +2137,10 @@ QUnit.test("stop selection after QUnit.start remove select column to columns and
     });
 
     this.selectionController.startSelectionWithCheckboxes();
-    //act
+    // act
     this.selectionController.stopSelectionWithCheckboxes();
 
-    //assert
+    // assert
     assert.ok(!this.selectionController.isSelectionWithCheckboxes());
     assert.deepEqual(this.dataController.items()[0].values, ['Alex', 15]);
     assert.deepEqual(this.dataController.items()[1].values, ['Dan', 16]);
@@ -2159,10 +2159,10 @@ QUnit.test("QUnit.start selection rise columnsChanged/changed events", function(
         changedCount++;
     });
 
-    //act
+    // act
     this.selectionController.startSelectionWithCheckboxes();
 
-    //assert
+    // assert
     assert.ok(this.selectionController.isSelectionWithCheckboxes());
     assert.equal(columnsChangedCount, 1);
     assert.equal(changedCount, 1);
@@ -2183,10 +2183,10 @@ QUnit.test("stop selection after QUnit.start rise columnsChanged/changed events"
         changedCount++;
     });
 
-    //act
+    // act
     this.selectionController.stopSelectionWithCheckboxes();
 
-    //assert
+    // assert
     assert.ok(!this.selectionController.isSelectionWithCheckboxes());
     assert.equal(columnsChangedCount, 1);
     assert.equal(changedCount, 1);
@@ -2206,10 +2206,10 @@ QUnit.test("stop selection without QUnit.start not rise columnsChanged/changed e
         changedCount++;
     });
 
-    //act
+    // act
     this.selectionController.stopSelectionWithCheckboxes();
 
-    //assert
+    // assert
     assert.ok(!this.selectionController.isSelectionWithCheckboxes());
     assert.strictEqual(columnsChangedCount, 0);
     assert.strictEqual(changedCount, 0);
@@ -2248,10 +2248,10 @@ QUnit.test("Select All work for single selection. API method work always and not
 
     this.selectionController.selectRows(2);
 
-    //act
+    // act
     this.selectionController.selectAll();
 
-    //assert
+    // assert
     assert.deepEqual(this.selectionController.getSelectedRowKeys().length, 7);
 
     assert.ok(this.dataController.items()[0].isSelected);
@@ -2268,10 +2268,10 @@ QUnit.test("Select All for multiple selection", function(assert) {
 
     this.selectionController.selectRows(2);
 
-    //act
+    // act
     this.selectionController.selectAll();
 
-    //assert
+    // assert
     assert.deepEqual(this.selectionController.getSelectedRowKeys(), [2, 1, 3, 4, 5, 6, 7]);
 
     assert.ok(this.dataController.items()[0].isSelected);
@@ -2291,10 +2291,10 @@ QUnit.test("Select All for multiple selection when selectAllMode is page", funct
 
     this.selectionController.selectRows(2);
 
-    //act
+    // act
     this.selectionController.selectAll();
 
-    //assert
+    // assert
     assert.deepEqual(this.selectionController.getSelectedRowKeys(), [2, 1, 3, 4]);
     assert.strictEqual(this.selectionController.isSelectAll(), true, "select all is true");
 });
@@ -2312,10 +2312,10 @@ QUnit.test("Select All for multiple selection when selectAllMode is page and dat
         }
     });
 
-    //act
+    // act
     this.selectionController.selectAll();
 
-    //assert
+    // assert
     assert.deepEqual(this.selectionController.getSelectedRowKeys(), [1, 2]);
     assert.strictEqual(this.selectionController.isSelectAll(), true, "select all is true");
 });
@@ -2329,11 +2329,11 @@ QUnit.test("Select All and deselect for multiple selection when selectAllMode is
         }
     });
 
-    //act
+    // act
     this.selectionController.selectAll();
     this.selectionController.deselectRows(2);
 
-    //assert
+    // assert
     assert.deepEqual(this.selectionController.getSelectedRowKeys(), [1, 3, 4]);
     assert.strictEqual(this.selectionController.isSelectAll(), undefined, "select all is undefined");
 });
@@ -2349,15 +2349,15 @@ QUnit.test("Deselect All for multiple selection when selectAllMode is page", fun
 
     this.selectionController.selectRows([1, 2, 3, 4, 5]);
 
-    //act
+    // act
     this.selectionController.deselectAll();
 
-    //assert
+    // assert
     assert.deepEqual(this.selectionController.getSelectedRowKeys(), [5]);
     assert.strictEqual(this.selectionController.isSelectAll(), false, "select all is false");
 });
 
-//T350806
+// T350806
 QUnit.test("remove all items and refresh after selectAll", function(assert) {
     var that = this;
 
@@ -2367,20 +2367,20 @@ QUnit.test("remove all items and refresh after selectAll", function(assert) {
         }
     });
 
-    //act
+    // act
     this.selectionController.selectAll();
 
-    //assert
+    // assert
     assert.deepEqual(this.selectionController.getSelectedRowKeys(), [1, 2, 3, 4, 5, 6, 7]);
 
-    //act
+    // act
     $.each(this.selectionController.getSelectedRowKeys(), function(index, key) {
         that.dataController.store().remove(key);
     });
 
     this.dataController.refresh();
 
-    //assert
+    // assert
     assert.equal(this.array.length, 0, "array length");
     assert.equal(this.dataController.items().length, 0, "items count");
     assert.equal(this.dataController.totalCount(), 0, "totalCount");
@@ -2396,11 +2396,11 @@ QUnit.test("Select All for multiple selection change page", function(assert) {
 
     this.selectionController.selectRows(2);
 
-    //act
+    // act
     this.selectionController.selectAll();
     this.dataController.pageIndex(1);
 
-    //assert
+    // assert
     assert.deepEqual(this.selectionController.getSelectedRowKeys(), [2, 1, 3, 4, 5, 6, 7]);
 
     assert.equal(this.dataController.items()[0].data.id, 5);
@@ -2424,10 +2424,10 @@ QUnit.test("Select All for multipleWithCheckBoxes selection", function(assert) {
 
     this.selectionController.selectRows(2);
 
-    //act
+    // act
     this.selectionController.selectAll();
 
-    //assert
+    // assert
     assert.deepEqual(this.selectionController.getSelectedRowKeys(), [2, 1, 3, 4, 5, 6, 7]);
 
     assert.ok(this.dataController.items()[0].isSelected);
@@ -2447,10 +2447,10 @@ QUnit.test("Reset Select All after set selectedRows", function(assert) {
 
     this.selectionController.selectAll();
 
-    //act
+    // act
     this.selectionController.selectRows([1, 3]);
 
-    //assert
+    // assert
     assert.deepEqual(this.selectionController.getSelectedRowKeys(), [1, 3]);
 
     assert.ok(this.dataController.items()[0].isSelected);
@@ -2469,10 +2469,10 @@ QUnit.test("Reset Select All after changeRowSelection without keyboard keys", fu
 
     this.selectionController.selectAll();
 
-    //act
+    // act
     this.selectionController.changeItemSelection(0);
 
-    //assert
+    // assert
     assert.deepEqual(this.selectionController.getSelectedRowKeys(), [1]);
 
     assert.ok(this.dataController.items()[0].isSelected);
@@ -2493,10 +2493,10 @@ QUnit.test("Reset Select All after changeRowSelection with shift key", function(
 
     assert.ok(this.selectionController.isSelectAll());
 
-    //act
+    // act
     this.selectionController.changeItemSelection(0, { shift: true });
 
-    //assert
+    // assert
     assert.deepEqual(this.selectionController.getSelectedRowKeys(), [1]);
 
     assert.ok(this.dataController.items()[0].isSelected);
@@ -2516,10 +2516,10 @@ QUnit.test("changeRowSelection with control after Select All", function(assert) 
 
     this.selectionController.selectAll();
 
-    //act
+    // act
     this.selectionController.changeItemSelection(1, { control: true });
 
-    //assert
+    // assert
     assert.deepEqual(this.selectionController.getSelectedRowKeys(), [1, 3, 4, 5, 6, 7]);
 
     assert.ok(!this.selectionController.isSelectAll());
@@ -2529,7 +2529,7 @@ QUnit.test("changeRowSelection with control after Select All", function(assert) 
     assert.ok(this.dataController.items()[3].isSelected);
 });
 
-//B255078
+// B255078
 QUnit.test("Unselect item and select again after Select All", function(assert) {
     this.applyOptions({
         selection: {
@@ -2540,11 +2540,11 @@ QUnit.test("Unselect item and select again after Select All", function(assert) {
 
     this.selectionController.selectAll();
 
-    //act
+    // act
     this.selectionController.changeItemSelection(1, { control: true });
     this.selectionController.changeItemSelection(1, { control: true });
 
-    //assert
+    // assert
     assert.deepEqual(this.selectionController.getSelectedRowKeys(), [1, 3, 4, 5, 6, 7, 2]);
 
     assert.ok(this.selectionController.isSelectAll());
@@ -2562,10 +2562,10 @@ QUnit.test("isSelectAll when use selectRows for select all items", function(asse
         }
     });
 
-    //act
+    // act
     this.selectionController.selectRows([1, 2, 3, 4, 5, 6, 7]);
 
-    //assert
+    // assert
     assert.deepEqual(this.selectionController.getSelectedRowKeys(), [1, 2, 3, 4, 5, 6, 7]);
     assert.ok(this.selectionController.isSelectAll());
 });
@@ -2585,10 +2585,10 @@ QUnit.test("changeRowSelection when multipleWithCheckBoxes after Select All", fu
 
     this.selectionController.selectAll();
 
-    //act
+    // act
     this.selectionController.changeItemSelection(1);
 
-    //assert
+    // assert
     assert.deepEqual(this.selectionController.getSelectedRowKeys(), [1, 3, 4, 5, 6, 7]);
 
     assert.ok(this.dataController.items()[0].isSelected);
@@ -2610,12 +2610,12 @@ QUnit.test("several changeRowSelection with control key after Select All", funct
 
     this.selectionController.selectAll();
 
-    //act
+    // act
     this.selectionController.changeItemSelection(1, { control: true });
     this.selectionController.changeItemSelection(2, { control: true });
     this.selectionController.changeItemSelection(1, { control: true });
 
-    //assert
+    // assert
     assert.deepEqual(this.selectionController.getSelectedRowKeys(), [1, 4, 5, 6, 7, 2]);
 
     assert.ok(this.dataController.items()[0].isSelected);
@@ -2637,9 +2637,9 @@ QUnit.test("get isSelected rows after Select All", function(assert) {
     this.selectionController.changeItemSelection(1, { control: true });
     this.selectionController.changeItemSelection(2, { control: true });
 
-    //act
+    // act
     var selectedRows = this.selectionController.getSelectedRowsData();
-    //assert
+    // assert
     assert.deepEqual(selectedRows, [
         { id: 1, value: 'value1' },
         { id: 4, value: 'value4' },
@@ -2664,9 +2664,9 @@ QUnit.test("get isSelected rows after Select All when dataSource has filter", fu
     this.selectionController.changeItemSelection(1, { control: true });
     this.selectionController.changeItemSelection(2, { control: true });
 
-    //act
+    // act
     var selectedRows = this.selectionController.getSelectedRowsData();
-    //assert
+    // assert
     assert.deepEqual(selectedRows, [
             { id: 1, value: 'value1' },
             { id: 4, value: 'value4' },
@@ -2674,7 +2674,7 @@ QUnit.test("get isSelected rows after Select All when dataSource has filter", fu
     ]);
 });
 
-//T215341
+// T215341
 QUnit.test("selected rows after Select All when filter row defined", function(assert) {
     this.applyOptions({
         columns: [{ dataField: 'id', selectedFilterOperation: '<', filterValue: 4 }, { dataField: 'value' }],
@@ -2687,11 +2687,11 @@ QUnit.test("selected rows after Select All when filter row defined", function(as
 
     this.dataController.reload();
 
-    //act
+    // act
     this.selectionController.selectRows([5]);
     this.selectionController.selectAll();
 
-    //assert
+    // assert
     var selectedRows = this.selectionController.getSelectedRowsData();
     assert.equal(selectedRows.length, 4, 'selected rows count');
     assert.ok(this.selectionController.isSelectAll(), 'isSelectAll');
@@ -2702,10 +2702,10 @@ QUnit.test("selected rows after Select All when filter row defined", function(as
             { id: 3, value: 'value3' }
     ]);
 
-    //act
+    // act
     this.columnOption("id", "filterValue", undefined);
 
-    //assert
+    // assert
     assert.deepEqual(this.selectionController.getSelectedRowsData().length, 4, 'selected rows count after clear filter');
     assert.strictEqual(this.selectionController.isSelectAll(), undefined, 'isSelectAll changed to indeterminate state after change filter');
 });
@@ -2715,12 +2715,12 @@ QUnit.test("deselectAll when no filtering", function(assert) {
         selection: { mode: 'multiple' }
     });
 
-    this.selectionController.selectRows([{ name: 'Dan', age: 16 }, { name: 'Dmitry', age: 18 }]); //1, 3
+    this.selectionController.selectRows([{ name: 'Dan', age: 16 }, { name: 'Dmitry', age: 18 }]); // 1, 3
 
-    //act
+    // act
     this.selectionController.deselectAll();
 
-    //assert
+    // assert
     assert.deepEqual(this.selectionController.getSelectedRowKeys(), [], 'no selected row keys');
     assert.strictEqual(this.selectionController.isSelectAll(), false, 'isSelectAll');
     assert.ok(!this.dataController.items()[0].isSelected);
@@ -2729,7 +2729,7 @@ QUnit.test("deselectAll when no filtering", function(assert) {
     assert.ok(!this.dataController.items()[3].isSelected);
 });
 
-//T215341, T319862
+// T215341, T319862
 QUnit.test("selected rows after Deselect All when filter row defined", function(assert) {
     this.applyOptions({
         columns: [{ dataField: 'id', selectedFilterOperation: '<', filterValue: 4 }, { dataField: 'value' }],
@@ -2740,11 +2740,11 @@ QUnit.test("selected rows after Deselect All when filter row defined", function(
         }
     });
 
-    //act
+    // act
     this.selectRows([1, 2, 3, 4]);
     this.deselectAll();
 
-    //assert
+    // assert
     var selectedRows = this.selectionController.getSelectedRowsData();
     assert.equal(selectedRows.length, 1, 'selected rows count');
     assert.deepEqual(selectedRows, [{ id: 4, value: 'value4' }]);
@@ -2766,9 +2766,9 @@ QUnit.test("get isSelected rows after Select All when dataSource has complex key
     this.selectionController.changeItemSelection(1, { control: true });
     this.selectionController.changeItemSelection(2, { control: true });
 
-    //act
+    // act
     var selectedRows = this.selectionController.getSelectedRowsData();
-    //assert
+    // assert
     assert.deepEqual(selectedRows, [
         { id: 1, value: 'value1' },
         { id: 4, value: 'value4' },
@@ -2794,9 +2794,9 @@ QUnit.test("get isSelected rows after Select All when dataSource has no key", fu
     this.selectionController.changeItemSelection(1, { control: true });
     this.selectionController.changeItemSelection(2, { control: true });
 
-    //act
+    // act
     var selectedRows = this.selectionController.getSelectedRowsData();
-    //assert
+    // assert
     assert.deepEqual(selectedRows, [
         { id: 1, value: 'value1' },
         { id: 4, value: 'value4' },
@@ -2940,18 +2940,18 @@ QUnit.test("selectAll when remoteOperations enabled", function(assert) {
     this.dataController.setDataSource(this.dataSource);
     this.dataSource.load();
 
-    //act
+    // act
     this.selectionController.selectAll();
 
-    //assert
+    // assert
     assert.strictEqual(this.dataController.items()[1].rowType, "data", "second row type");
     assert.deepEqual(this.selectionController.getSelectedRowsData(), this.array, "selected items");
     assert.strictEqual(this.selectionController.isSelectAll(), true, "isSelectAll");
 
-    //act
+    // act
     this.selectionController.deselectRows([this.array[0]]);
 
-    //assert
+    // assert
     assert.deepEqual(this.selectionController.getSelectedRowsData(), this.array.slice(1), "selected items");
     assert.strictEqual(this.selectionController.isSelectAll(), undefined, "isSelectAll");
 });
@@ -2965,18 +2965,18 @@ QUnit.test("selectAll when remoteOperations disabled", function(assert) {
     this.dataController.setDataSource(this.dataSource);
     this.dataSource.load();
 
-    //act
+    // act
     this.selectionController.selectAll();
 
-    //assert
+    // assert
     assert.strictEqual(this.dataController.items()[1].rowType, "group", "second row type");
     assert.deepEqual(this.selectionController.getSelectedRowsData(), this.array, "selected items");
     assert.strictEqual(this.selectionController.isSelectAll(), true, "isSelectAll");
 
-    //act
+    // act
     this.selectionController.deselectRows([this.array[0]]);
 
-    //assert
+    // assert
     assert.deepEqual(this.selectionController.getSelectedRowsData(), this.array.slice(1), "selected items");
     assert.strictEqual(this.selectionController.isSelectAll(), undefined, "isSelectAll");
 });
@@ -2985,15 +2985,15 @@ QUnit.test("selectAll when remoteOperations disabled", function(assert) {
 QUnit.module("Multiple selection with checkboxes on click", { beforeEach: setupSelectionModule, afterEach: teardownSelectionModule });
 
 QUnit.test("changeRowSelection for one row", function(assert) {
-    //arrange
+    // arrange
     this.applyOptions({
         selection: { mode: 'multiple', showCheckBoxesMode: 'onClick' }
     });
 
-    //act
+    // act
     this.selectionController.changeItemSelection(1);
 
-    //assert
+    // assert
     assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{ name: 'Dan', age: 16 }]);
     assert.ok(!this.selectionController.isSelectionWithCheckboxes(), 'isSelectionWithCheckboxes');
 });
@@ -3003,11 +3003,11 @@ QUnit.test("changeRowSelection for two rows", function(assert) {
         selection: { mode: 'multiple', showCheckBoxesMode: 'onClick' }
     });
 
-    //act
+    // act
     this.selectionController.changeItemSelection(1);
     this.selectionController.changeItemSelection(2);
 
-    //assert
+    // assert
     assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{ name: 'Vadim', age: 17 }]);
     assert.ok(!this.selectionController.isSelectionWithCheckboxes(), 'isSelectionWithCheckboxes');
 });
@@ -3017,11 +3017,11 @@ QUnit.test("changeRowSelection for select second item with control key", functio
         selection: { mode: 'multiple', showCheckBoxesMode: 'onClick' }
     });
 
-    //act
+    // act
     this.selectionController.changeItemSelection(1);
     this.selectionController.changeItemSelection(2, { control: true });
 
-    //assert
+    // assert
     assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{ name: 'Dan', age: 16 }, { name: 'Vadim', age: 17 }]);
     assert.ok(this.selectionController.isSelectionWithCheckboxes(), 'isSelectionWithCheckboxes');
 });
@@ -3031,12 +3031,12 @@ QUnit.test("changeRowSelection for select second item with control key and unsel
         selection: { mode: 'multiple', showCheckBoxesMode: 'onClick' }
     });
 
-    //act
+    // act
     this.selectionController.changeItemSelection(1);
     this.selectionController.changeItemSelection(2, { control: true });
     this.selectionController.changeItemSelection(2);
 
-    //assert
+    // assert
     assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{ name: 'Dan', age: 16 }]);
     assert.ok(this.selectionController.isSelectionWithCheckboxes(), 'isSelectionWithCheckboxes');
 });
@@ -3046,13 +3046,13 @@ QUnit.test("changeRowSelection for select second item with control key and unsel
         selection: { mode: 'multiple', showCheckBoxesMode: 'onClick' }
     });
 
-    //act
+    // act
     this.selectionController.changeItemSelection(1);
     this.selectionController.changeItemSelection(2, { control: true });
     this.selectionController.changeItemSelection(2);
     this.selectionController.changeItemSelection(1);
 
-    //assert
+    // assert
     assert.deepEqual(this.selectionController.getSelectedRowKeys(), []);
     assert.ok(!this.selectionController.isSelectionWithCheckboxes(), 'isSelectionWithCheckboxes');
 });
@@ -3062,11 +3062,11 @@ QUnit.test("changeRowSelection for select items with shift key", function(assert
         selection: { mode: 'multiple', showCheckBoxesMode: 'onClick' }
     });
 
-    //act
+    // act
     this.selectionController.changeItemSelection(1);
     this.selectionController.changeItemSelection(3, { shift: true });
 
-    //assert
+    // assert
     assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{ name: 'Dan', age: 16 }, { name: 'Dmitry', age: 18 }, { name: 'Vadim', age: 17 }]);
     assert.ok(this.selectionController.isSelectionWithCheckboxes(), 'isSelectionWithCheckboxes');
 });
@@ -3078,18 +3078,18 @@ QUnit.test("changeRowSelection for select items with shift key when isSelectionW
 
     this.selectionController.changeItemSelection(1);
     this.selectionController.changeItemSelection(2, { control: true });
-    //act
+    // act
     this.selectionController.changeItemSelection(4, { shift: true });
 
-    //assert
+    // assert
     assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{ name: 'Dan', age: 16 }, { name: 'Vadim', age: 17 }, { name: 'Sergey', age: 18 }, { name: 'Dmitry', age: 18 }]);
     assert.ok(this.selectionController.isSelectionWithCheckboxes(), 'isSelectionWithCheckboxes');
 });
 
-//T117203
+// T117203
 QUnit.test("selectRows with several values", function(assert) {
     var selectionChangedCallCount = 0;
-    //arrange
+    // arrange
     this.applyOptions({
         selection: { mode: 'multiple', showCheckBoxesMode: 'onClick' },
         onSelectionChanged: function(e) {
@@ -3097,10 +3097,10 @@ QUnit.test("selectRows with several values", function(assert) {
         }
     });
 
-    //act
+    // act
     this.selectionController.selectRows([{ name: 'Dan', age: 16 }, { name: 'Dmitry', age: 18 }]);
 
-    //assert
+    // assert
     assert.strictEqual(selectionChangedCallCount, 1, 'selectionChanged called one time');
     assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{ name: 'Dan', age: 16 }, { name: 'Dmitry', age: 18 }]);
     assert.ok(this.selectionController.isSelectionWithCheckboxes(), 'isSelectionWithCheckboxes');
@@ -3140,9 +3140,9 @@ QUnit.module("Selection with views", {
     }
 });
 
-//B254109
+// B254109
 QUnit.test("unselect row after selectAll work incorrectly", function(assert) {
-    //arrange
+    // arrange
     var that = this,
         testElement = $('#container').width(800);
 
@@ -3155,14 +3155,14 @@ QUnit.test("unselect row after selectAll work incorrectly", function(assert) {
 
     var $checkbox = $('.dx-header-row').find('.dx-checkbox');
 
-    //assert
+    // assert
     assert.ok($checkbox.length);
     assert.ok($checkbox.hasClass('dx-checkbox-checked'));
 
-    //act
+    // act
     that.selectionController.changeItemSelection(1);
 
-    //assert
+    // assert
     assert.equal(that.selectionController.getSelectedRowKeys().length, 6, 'length isSelected rows');
     assert.strictEqual(that.selectionController.isSelectAll(), undefined, 'isSelectAll undefined');
     assert.ok($checkbox.hasClass('dx-checkbox-indeterminate'), "indeterminate state of checkbox");
@@ -3183,17 +3183,17 @@ QUnit.test("changeRowSelection onClick Multiple mode", function(assert) {
     this.columnHeadersView.render(testElement);
     this.rowsView.render(testElement);
 
-    //act
+    // act
     this.selectionController.changeItemSelection(1);
 
-    //assert
+    // assert
     assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{ name: 'Dan', age: 16 }]);
     assert.ok(!this.selectionController.isSelectionWithCheckboxes(), 'isSelectionWithCheckboxes');
 });
 
-//T357814
+// T357814
 QUnit.test("changeRowSelection for edited data", function(assert) {
-    //arrange
+    // arrange
     var that = this,
         $trElement,
         $testElement = $('#container').width(800);
@@ -3206,22 +3206,22 @@ QUnit.test("changeRowSelection for edited data", function(assert) {
     that.setup();
     that.columnHeadersView.render($testElement);
     that.rowsView.render($testElement);
-    that.cellValue(0, 0, "Test");
+    that.cellValue(0, 1, "Test");
 
-    //act
+    // act
     that.selectionController.changeItemSelection(0);
 
-    //assert
+    // assert
     $trElement = $testElement.find(".dx-datagrid-rowsview").find("tbody > tr").first();
     assert.equal($trElement.children().eq(1).text(), "Test", "text of the first cell");
     assert.ok($trElement.hasClass("dx-selection"), "selected first row");
     assert.equal($testElement.find(".dx-datagrid-rowsview").find("tbody td").eq(1).text(), "Test", "text of the first cell");
     assert.deepEqual(that.selectionController.getSelectedRowKeys(), [{ name: 'Alex', age: 15 }], "selected row key of the first row");
 
-    //act
+    // act
     that.saveEditData();
 
-    //assert
+    // assert
     assert.deepEqual(that.selectionController.getSelectedRowKeys(), [{ name: 'Test', age: 15 }], "selected row key of the first row after save");
 });
 
@@ -3235,7 +3235,7 @@ QUnit.test("Indeterminate state of selectAll", function(assert) {
 
     $checkbox = $('.dx-header-row').find('.dx-checkbox');
 
-    //act
+    // act
     this.selectionController.changeItemSelection(1);
     assert.ok($checkbox.hasClass('dx-checkbox-indeterminate'), "indeterminate state of checkbox");
 });
@@ -3249,25 +3249,25 @@ QUnit.test("selectAll checkbox state after change filter", function(assert) {
     this.columnHeadersView.render(testElement);
     this.rowsView.render(testElement);
 
-    //act
+    // act
     this.dataController.filter(['age', '<', 17]);
     this.selectionController.selectAll();
 
-    //assert
+    // assert
     $checkbox = $('.dx-header-row').find('.dx-checkbox');
     assert.strictEqual($checkbox.dxCheckBox("option", "value"), true, "true state of checkbox");
 
-    //act
+    // act
     this.dataController.filter(['age', '>', 17]);
 
-    //assert
+    // assert
     $checkbox = $('.dx-header-row').find('.dx-checkbox');
     assert.strictEqual($checkbox.dxCheckBox("option", "value"), false, "false state of checkbox");
 
-    //act
+    // act
     this.dataController.clearFilter("dataSource");
 
-    //assert
+    // assert
     $checkbox = $('.dx-header-row').find('.dx-checkbox');
     assert.strictEqual($checkbox.dxCheckBox("option", "value"), undefined, "indeterminate state of checkbox");
 });
@@ -3281,23 +3281,23 @@ QUnit.test("Uncheck selectAll button call deselectAll", function(assert) {
     this.columnHeadersView.render(testElement);
     this.rowsView.render(testElement);
 
-    //act
+    // act
     this.selectionController.selectAll();
 
-    //assert
+    // assert
     $checkbox = $('.dx-header-row').find('.dx-checkbox');
     assert.strictEqual($checkbox.dxCheckBox("option", "value"), true, "true state of checkbox");
 
-    //act
+    // act
     this.dataController.filter(['age', '>=', 17]);
     $checkbox.trigger("dxclick");
 
-    //assert
+    // assert
     assert.strictEqual($checkbox.dxCheckBox("option", "value"), false, "false state of checkbox");
     assert.deepEqual(this.selectionController.getSelectedRowKeys(), [this.array[0], this.array[1]], "selected items after deselectAll");
 });
 
-//T102394
+// T102394
 QUnit.test("Indeterminate state of selectAll when selectedRowKeys defined", function(assert) {
     var $checkbox,
         testElement = $('#container');
@@ -3309,7 +3309,7 @@ QUnit.test("Indeterminate state of selectAll when selectedRowKeys defined", func
 
     $checkbox = $('.dx-header-row').find('.dx-checkbox');
 
-    //assert
+    // assert
     assert.ok($checkbox.hasClass('dx-checkbox-indeterminate'), "indeterminate state of checkbox");
 });
 
@@ -3324,7 +3324,7 @@ QUnit.test("Unchecked of selectAll when rows are not isSelected", function(asser
 
     $checkbox = $('.dx-header-row').find('.dx-checkbox');
 
-    //act
+    // act
     this.selectionController.changeItemSelection(1);
     this.selectionController.changeItemSelection(1);
 
@@ -3332,7 +3332,7 @@ QUnit.test("Unchecked of selectAll when rows are not isSelected", function(asser
     assert.ok(!$checkbox.hasClass('dx-checkbox-indeterminate'), "indeterminate state of checkbox");
 });
 
-//B255078
+// B255078
 QUnit.test("Checked of selectAll when all rows are isSelected", function(assert) {
     var $checkbox,
         testElement = $('#container');
@@ -3343,7 +3343,7 @@ QUnit.test("Checked of selectAll when all rows are isSelected", function(assert)
 
     $checkbox = $('.dx-header-row').find('.dx-checkbox');
 
-    //act
+    // act
     this.selectionController.selectAll();
     this.selectionController.changeItemSelection(1);
     this.selectionController.changeItemSelection(1);
@@ -3351,28 +3351,28 @@ QUnit.test("Checked of selectAll when all rows are isSelected", function(assert)
     assert.ok($checkbox.hasClass('dx-checkbox-checked'), "checked state of checkbox");
 });
 
-//T108078
+// T108078
 QUnit.test("updateSelection with invalid itemIndexes", function(assert) {
     var testElement = $('#container');
 
     this.setup();
     this.rowsView.render(testElement);
 
-    //act
+    // act
     this.dataController.updateItems({
         changeType: 'updateSelection',
         itemIndexes: [10]
     });
 
 
-    //assert
+    // assert
     assert.equal(testElement.find('.dx-checkbox').length, 7);
     assert.equal(testElement.find('.dx-checkbox-checked').length, 0);
 });
 
-//T152315
+// T152315
 QUnit.test("Selection state refreshing on dataController change", function(assert) {
-    //arrange
+    // arrange
     var that = this,
         testElement = $('#container').width(800),
         $headerCheckBox,
@@ -3384,20 +3384,20 @@ QUnit.test("Selection state refreshing on dataController change", function(asser
     that.columnHeadersView.render(testElement);
     that.rowsView.render(testElement);
 
-    //act
+    // act
     that.selectionController.startSelectionWithCheckboxes();
-    that.selectionController.selectRows([{ name: 'Dan', age: 16 }]); //1 rows
+    that.selectionController.selectRows([{ name: 'Dan', age: 16 }]); // 1 rows
 
-    //assert
+    // assert
     $headerCheckBox = $('.dx-header-row .dx-checkbox');
     isHeaderCheckBoxInIntermediateState = $headerCheckBox.length && $headerCheckBox.hasClass('dx-checkbox-indeterminate');
     assert.ok(isHeaderCheckBoxInIntermediateState, 'After one item select, checkbox in header panel has indeterminate state');
 
-    //act
+    // act
     that.editingController.deleteRow(1);
     isHeaderCheckBoxChecked = $headerCheckBox.length && ($headerCheckBox.hasClass('dx-checkbox-checked') || $headerCheckBox.hasClass('dx-checkbox-indeterminate'));
 
-    //assert
+    // assert
     assert.equal(that.rowsView.element().find(".dx-select-checkboxes-hidden").length, 1, 'checkboxes are hidden');
     assert.ok(!isHeaderCheckBoxChecked, 'CheckBox in header panel has no indeterminate or checked state');
 });
@@ -3416,7 +3416,7 @@ QUnit.test("Add checkboxes hidden class to table", function(assert) {
 });
 
 QUnit.test("Show checkboxes when selectedRowKeys are defined from options_T102396", function(assert) {
-    //arrange
+    // arrange
     $.extend(this.option, {
         selection: { mode: 'multiple', showCheckBoxesMode: "onClick" },
         selectedRowKeys: [16, 17],
@@ -3425,10 +3425,10 @@ QUnit.test("Show checkboxes when selectedRowKeys are defined from options_T10239
     this.setup();
     this.rowsView.render("#container");
 
-    //act
+    // act
     this.dataController.optionChanged({ name: 'dataSource' });
 
-    //assert
+    // assert
     assert.ok(this.selectionController.isSelectionWithCheckboxes());
     assert.ok(!$("#container").find("table").hasClass("dx-select-checkboxes-hidden"));
 });
@@ -3514,7 +3514,7 @@ QUnit.test("change selectAllMode to 'allPages' at runtime", function(assert) {
     });
 });
 
-//T550013
+// T550013
 QUnit.test("Click on selected selection checkbox with shift key", function(assert) {
     var testElement = $('#container');
 
@@ -3523,17 +3523,17 @@ QUnit.test("Click on selected selection checkbox with shift key", function(asser
     this.columnHeadersView.render(testElement);
     this.rowsView.render(testElement);
 
-    //act
+    // act
     var $checkbox = testElement.find(".dx-data-row .dx-select-checkbox").eq(0);
     $checkbox.trigger("dxclick");
     $checkbox.trigger($.Event("dxclick", { shiftKey: true }));
 
-    //assert
+    // assert
     assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{ age: 15, name: "Alex" }], "one item is selected");
     assert.strictEqual($checkbox.dxCheckBox("instance").option("value"), true, "checkbox is checked");
 });
 
-//T550013
+// T550013
 QUnit.test("Click on selected selection checkbox with shift key to select range", function(assert) {
     var testElement = $('#container');
 
@@ -3542,19 +3542,19 @@ QUnit.test("Click on selected selection checkbox with shift key to select range"
     this.columnHeadersView.render(testElement);
     this.rowsView.render(testElement);
 
-    //act
+    // act
     var $checkboxes = testElement.find(".dx-data-row .dx-select-checkbox");
     $checkboxes.eq(1).trigger("dxclick");
     $checkboxes.eq(0).trigger("dxclick");
     $checkboxes.eq(1).trigger($.Event("dxclick", { shiftKey: true }));
 
-    //assert
+    // assert
     assert.deepEqual(this.selectionController.getSelectedRowKeys().length, 2, "two items are selected");
     assert.strictEqual($checkboxes.eq(0).dxCheckBox("instance").option("value"), true, "checkbox 0 is checked");
     assert.strictEqual($checkboxes.eq(1).dxCheckBox("instance").option("value"), true, "checkbox 1 is checked");
 });
 
-//T550013
+// T550013
 QUnit.test("Click on unselected selection checkbox with shift key", function(assert) {
     var testElement = $('#container');
 
@@ -3563,13 +3563,13 @@ QUnit.test("Click on unselected selection checkbox with shift key", function(ass
     this.columnHeadersView.render(testElement);
     this.rowsView.render(testElement);
 
-    //act
+    // act
     var $checkbox = testElement.find(".dx-data-row .dx-select-checkbox").eq(0);
     $checkbox.trigger("dxclick");
     $checkbox.trigger("dxclick");
     $checkbox.trigger($.Event("dxclick", { shiftKey: true }));
 
-    //assert
+    // assert
     assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{ age: 15, name: "Alex" }], "one item is selected");
     assert.strictEqual($checkbox.dxCheckBox("instance").option("value"), true, "checkbox is checked");
 });
@@ -3599,7 +3599,7 @@ QUnit.module("Deferred selection", {
 });
 
 QUnit.test("init", function(assert) {
-    //act
+    // act
     this.setupDataGrid({
         dataSource: createDataSource(this.data, { key: "id" }),
         selection: {
@@ -3616,7 +3616,7 @@ QUnit.test("init", function(assert) {
 });
 
 QUnit.test("init with selectionFilter", function(assert) {
-    //act
+    // act
     this.setupDataGrid({
         dataSource: createDataSource(this.data, { key: "id" }),
         selectionFilter: [[["id", "=", 2], "or", ["id", "=", 3]]],
@@ -3632,9 +3632,9 @@ QUnit.test("init with selectionFilter", function(assert) {
     assert.ok(this.dataController.items()[2].isSelected);
 });
 
-//T461315
+// T461315
 QUnit.test("Checkboxes should not be visible when selected one row", function(assert) {
-    //arrange, act
+    // arrange, act
     this.setupDataGrid({
         dataSource: createDataSource(this.data, { key: "id" }),
         selectionFilter: ["id", "=", 2],
@@ -3646,15 +3646,15 @@ QUnit.test("Checkboxes should not be visible when selected one row", function(as
 
     this.clock.tick();
 
-    //assert
+    // assert
     var items = this.dataController.items();
     assert.ok(items[1].isSelected, "second item is selected");
     assert.ok(!this.selectionController.isSelectionWithCheckboxes(), "checkboxes isn't visible");
 });
 
-//T461315
+// T461315
 QUnit.test("Checkboxes should not be visible when selected one row (key as array)", function(assert) {
-    //arrange, act
+    // arrange, act
     this.setupDataGrid({
         dataSource: createDataSource(this.data, { key: ["id", "name"] }),
         selectionFilter: [["id", "=", 2], "and", ["name", "=", "Dan"]],
@@ -3666,15 +3666,15 @@ QUnit.test("Checkboxes should not be visible when selected one row (key as array
 
     this.clock.tick();
 
-    //assert
+    // assert
     var items = this.dataController.items();
     assert.ok(items[1].isSelected, "second item is selected");
     assert.ok(!this.selectionController.isSelectionWithCheckboxes(), "checkboxes isn't visible");
 });
 
-//T461315
+// T461315
 QUnit.test("Checkboxes should be visible when selected several rows", function(assert) {
-    //arrange, act
+    // arrange, act
     this.setupDataGrid({
         dataSource: createDataSource(this.data, { key: "id" }),
         selectionFilter: [["name", "=", "Dan"], "or", ["age", "=", 18]],
@@ -3686,7 +3686,7 @@ QUnit.test("Checkboxes should be visible when selected several rows", function(a
 
     this.clock.tick();
 
-    //assert
+    // assert
     var items = this.dataController.items();
     assert.ok(items[1].isSelected, "second item is selected");
     assert.ok(items[3].isSelected, "fourth item is selected");
@@ -3694,9 +3694,9 @@ QUnit.test("Checkboxes should be visible when selected several rows", function(a
     assert.ok(this.selectionController.isSelectionWithCheckboxes(), "checkboxes is visible");
 });
 
-//T461315
+// T461315
 QUnit.test("Checkboxes should be visible when selected several rows (key as array)", function(assert) {
-    //arrange, act
+    // arrange, act
     this.setupDataGrid({
         dataSource: createDataSource(this.data, { key: ["name", "age"] }),
         selectionFilter: [["name", "=", "Dan"], "and", ["age", ">=", 16]],
@@ -3708,7 +3708,7 @@ QUnit.test("Checkboxes should be visible when selected several rows (key as arra
 
     this.clock.tick();
 
-    //assert
+    // assert
     var items = this.dataController.items();
     assert.ok(items[1].isSelected, "second item is selected");
     assert.ok(items[6].isSelected, "seventh item is selected");
@@ -3733,11 +3733,11 @@ QUnit.test("selectRows", function(assert) {
 
     this.clock.tick();
 
-    //act
+    // act
     this.selectionController.selectRows([0]);
     this.selectionController.selectRows([2, 4]);
 
-    //assert
+    // assert
     this.selectionController.getSelectedRowKeys().done(function(keys) {
         assert.deepEqual(keys, [2, 4]);
     });
@@ -3772,10 +3772,10 @@ QUnit.test("change row selection", function(assert) {
             changedItemIndexes = e.itemIndexes;
         }
     });
-    //act
+    // act
     this.selectionController.selectRows([1]);
 
-    //assert
+    // assert
     assert.deepEqual(changedItemIndexes, [0]);
     assert.strictEqual(selectionChanged.callCount, 1);
     assert.deepEqual(selectionChanged.lastCall.args[0], { selectionFilter: ["id", "=", 1] });
@@ -3795,14 +3795,14 @@ QUnit.test("change selectionFilter", function(assert) {
 
     this.clock.tick();
 
-    //act
+    // act
     selectionChangedStub.reset();
 
     this.selectionController.optionChanged({
         name: "selectionFilter",
         value: ["id", ">", 5]
     });
-    //assert
+    // assert
     var selectedKeys = [];
 
     this.selectionController.getSelectedRowKeys().done(function(keys) {
@@ -3817,7 +3817,7 @@ QUnit.test("change selectionFilter", function(assert) {
 
 QUnit.test("getSelectedRowData should not load data when selectionFilter is empty", function(assert) {
     var dataSource = createDataSource(this.data, { key: "id" });
-    //act
+    // act
     this.setupDataGrid({
         dataSource: dataSource,
         selectionFilter: [],
@@ -3839,12 +3839,38 @@ QUnit.test("getSelectedRowData should not load data when selectionFilter is empt
 
     loadingCount = 0;
 
-    //act
+    // act
     this.getSelectedRowsData().done(function(items) {
         rowsData = items;
     });
 
-    //assert
+    // assert
     assert.deepEqual(rowsData, [], "empty rows");
     assert.strictEqual(loadingCount, 0, "no loading count");
+});
+
+QUnit.test("SelectAll items with remote filtering and deferred selection", function(assert) {
+    // arrange, act
+    this.data = [
+        { id: 1, name: 'Alex', code: "13358" },
+        { id: 5, name: 'Sergey', code: "6798" }
+    ];
+    this.setupDataGrid({
+        dataSource: createDataSource(this.data, { key: "id" }),
+        remoteOperations: { filtering: true },
+        columns: [{ dataField: "code", filterValue: 50, dataType: "number", selectedFilterOperation: ">" }],
+        selection: { mode: "selectAll", deferred: true }
+    });
+
+    this.clock.tick();
+
+    var items = this.dataController.items();
+    assert.equal(items.length, 2, "filtered items");
+
+    this.selectionController.selectAll();
+
+    // assert
+    items = this.dataController.items();
+    assert.ok(items[0].isSelected, "first item is selected");
+    assert.ok(items[1].isSelected, "second item is selected");
 });

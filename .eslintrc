@@ -37,6 +37,10 @@
         "space-in-parens": "error",
         "space-infix-ops": "error",
         "space-unary-ops": "error",
+        "spaced-comment": [ "error", "always", { 
+            "exceptions": [ "#DEBUG", "#ENDDEBUG" ],
+            "markers": [ "/" ] 
+        } ],
 
         "brace-style": [ "error", "1tbs", { "allowSingleLine": true } ],
         "curly": [ "error", "multi-line", "consistent" ],

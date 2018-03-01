@@ -55,7 +55,7 @@ var createPoint = function() {
     stub.hasCoords.returns(true);
     stub.isInVisibleArea.returns(true);
 
-    stub._options = {};//see T243839
+    stub._options = {};// see T243839
     return stub;
 };
 
@@ -170,9 +170,9 @@ QUnit.test("Update template field", function(assert) {
         label: { visible: false }
 
     }, { renderer: this.renderer });
-    //act
+    // act
     series.updateTemplateFieldNames();
-    //assert
+    // assert
     assert.equal(series._options.valueField, "valueFieldbubbleSeries");
     assert.equal(series._options.sizeField, "sizeFieldbubbleSeries");
     assert.equal(series._options.tagField, "tagFieldbubbleSeries");
@@ -186,9 +186,9 @@ QUnit.test("Update template field. Default values", function(assert) {
         label: { visible: false }
 
     }, { renderer: this.renderer });
-    //act
+    // act
     series.updateTemplateFieldNames();
-    //assert
+    // assert
     assert.equal(series._options.valueField, "valbubbleSeries");
     assert.equal(series._options.sizeField, "sizebubbleSeries");
     assert.equal(series._options.tagField, "tagbubbleSeries");
@@ -200,9 +200,9 @@ QUnit.test("Draw without data", function(assert) {
         point: { visible: false }
 
     });
-    //act
+    // act
     series.draw(false);
-    //assert
+    // assert
 
     checkGroups(assert, series);
 
@@ -219,9 +219,9 @@ QUnit.test("Draw simple data without animation", function(assert) {
         pt.x = pt.argument;
         pt.y = pt.value;
     });
-    //act
+    // act
     series.draw(false);
-    //assert
+    // assert
     checkGroups(assert, series);
 
     $.each(series._points, function(i, p) {
@@ -240,9 +240,9 @@ QUnit.test("Draw simple data with animation", function(assert) {
         pt.x = pt.argument;
         pt.y = pt.value;
     });
-    //act
+    // act
     series.draw(true);
-    //assert
+    // assert
     checkGroups(assert, series);
 
     assert.equal(series._labelsGroup._stored_settings.opacity, 0.001);
@@ -281,9 +281,9 @@ QUnit.module("Bubble. Points animation", {
 
 QUnit.test("Draw without animation", function(assert) {
     var series = this.series;
-    //act
+    // act
     series.draw(false);
-    //assert
+    // assert
     $.each(series._points, function(i, p) {
         assert.ok(p.draw.calledOnce);
         assert.equal(p.draw.firstCall.args[0], series._renderer, "renderer pass to point " + i);
@@ -294,9 +294,9 @@ QUnit.test("Draw without animation", function(assert) {
 
 QUnit.test("Draw with animation", function(assert) {
     var series = this.series;
-    //act
+    // act
     series.draw(true);
-    //assert
+    // assert
     $.each(series._points, function(i, p) {
         assert.ok(p.draw.calledOnce);
         assert.equal(p.draw.firstCall.args[0], series._renderer, "renderer pass to point " + i);
@@ -320,12 +320,12 @@ QUnit.test("Draw aggregated points with animation", function(assert) {
         this._points = aggregatedPoints;
         this._lastPointIndex = this._points.length;
     };
-    //act
+    // act
     series.resamplePoints();
-    //act
+    // act
     series.draw(true);
     series.drawTrackers();
-    //assert
+    // assert
     assert.ok(series._originalPoints.length);
     $.each(series._originalPoints, function(i, p) {
         assert.ok(!p.draw.callCount);
@@ -801,7 +801,7 @@ QUnit.test("Hide visible series", function(assert) {
     series.hide();
 
     var points = series.getPoints();
-    //see T243839
+    // see T243839
     $.each(points, function(_, point) {
         assert.ok(point._options.visible === false);
     });
@@ -819,7 +819,7 @@ QUnit.test("Show invisible series", function(assert) {
     series.show();
 
     var points = series.getPoints();
-    //see T243839
+    // see T243839
     $.each(points, function(_, point) {
         assert.ok(point._options.visible === true);
     });

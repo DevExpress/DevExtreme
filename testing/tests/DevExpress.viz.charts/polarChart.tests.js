@@ -488,7 +488,7 @@ QUnit.test("create correct seriesFamily", function(assert) {
 });
 
 QUnit.test("adjust series dimension in seriesFamily", function(assert) {
-    var chart = this.createSimplePolarChart();//,
+    var chart = this.createSimplePolarChart(); // ,
         // translators = {
         //     arg: chart.translator,
         //     val: chart.translator
@@ -497,10 +497,10 @@ QUnit.test("adjust series dimension in seriesFamily", function(assert) {
     assert.ok(chart.seriesFamilies);
     assert.equal(chart.seriesFamilies.length, 1);
     assert.ok(chart.seriesFamilies[0].updateSeriesValues.called);
-    //assert.deepEqual(chart.seriesFamilies[0].updateSeriesValues.args[0][0], translators);
+    // assert.deepEqual(chart.seriesFamilies[0].updateSeriesValues.args[0][0], translators);
 
     assert.ok(chart.seriesFamilies[0].adjustSeriesDimensions.called);
-    //assert.deepEqual(chart.seriesFamilies[0].adjustSeriesDimensions.args[0][0], translators);
+    // assert.deepEqual(chart.seriesFamilies[0].adjustSeriesDimensions.args[0][0], translators);
 });
 
 QUnit.test("require not need more space in canvas", function(assert) {

@@ -69,10 +69,10 @@ function calculateFilterExpression(filterValue, field) {
     return [[field.dataField, ">=", startValue], "and", [field.dataField, "<=", endValue]];
 }
 
-function getConfig() {
+function getConfig(caption) {
     return {
         name: "between",
-        caption: messageLocalization.format("dxDataGrid-filterRowOperationBetween"),
+        caption: caption,
         icon: "range",
         dataTypes: ["number", "date", "datetime"],
         calculateFilterExpression: calculateFilterExpression,

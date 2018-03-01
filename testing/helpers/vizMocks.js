@@ -54,7 +54,7 @@
         smartAttr: function(attrs) {
             return this.attr(attrs);
         },
-        applyEllipsis: function(maxWidth) { //for text
+        applyEllipsis: function(maxWidth) { // for text
             return maxWidth < 50;
         },
         stopAnimation: function() {
@@ -188,7 +188,7 @@
         this.ctor = ctor;
         this.stubIndex = 0;
 
-        this.returnValues = [];/// for consistency with sinon.js
+        this.returnValues = [];// for consistency with sinon.js
 
         this.getItem = function() {
             var stub,
@@ -227,7 +227,7 @@
         wrapCtor.resetIndex = this.resetIndex;
         wrapCtor.returnValues = this.returnValues;
         wrapCtor.toString = function() {
-            return "object pool";//http://en.wikipedia.org/wiki/Object_pool_pattern
+            return "object pool";// http://en.wikipedia.org/wiki/Object_pool_pattern
         };
         return wrapCtor;
     }

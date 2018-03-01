@@ -8,13 +8,13 @@ var Class = require("../../core/class"),
     _isString = typeUtils.isString,
     _parseScalar = require("./utils").parseScalar,
     themeModule = require("../themes"),
-    _findTheme = themeModule.findTheme,
+    _getTheme = themeModule.getTheme,
     _addCacheItem = themeModule.addCacheItem,
     _removeCacheItem = themeModule.removeCacheItem,
     _extend = extend,
     _each = each;
 
-//register themes
+// register themes
 require("./themes/generic.light");
 require("./themes/generic.dark");
 require("./themes/generic.contrast");
@@ -35,7 +35,7 @@ function getThemePart(theme, path) {
     return _theme;
 }
 
-exports.BaseThemeManager = Class.inherit({//TODO: test hack
+exports.BaseThemeManager = Class.inherit({// TODO: test hack
     ctor: function() {
         _addCacheItem(this);
     },
@@ -63,7 +63,7 @@ exports.BaseThemeManager = Class.inherit({//TODO: test hack
     refresh: function() {
         var that = this,
             current = that._current || {},
-            theme = _findTheme(current.name || current);
+            theme = _getTheme(current.name || current);
         that._themeName = theme.name;
         that._defaultPalette = theme.defaultPalette;
         that._font = _extend({}, theme.font, current.font);

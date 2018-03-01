@@ -200,7 +200,7 @@ QUnit.test("dxpointer events on iOS7 with alert", function(assert) {
         requestAnimationFrameCallback();
         requestAnimationFrameCallback = noop;
 
-        //iOS dispatch same events after hide alert
+        // iOS dispatch same events after hide alert
         this.element
             .trigger($.Event("touchstart", { touches: [1], targetTouches: [1], changedTouches: [{ identifier: touchId }] }));
         this.element
@@ -435,7 +435,7 @@ QUnit.test("native click should not focus on input after animation or scroll", f
             resetCount++;
         }, this);
 
-        //NOTE: after animation/scroll on real device input can be placed under pointer
+        // NOTE: after animation/scroll on real device input can be placed under pointer
         if(!isMouseDownPrevented) {
             $input.focus();
             $input.trigger("click");
@@ -485,7 +485,7 @@ QUnit.test("native click should focus on input after animation or scroll if defa
             resetCount++;
         }, this);
 
-        //NOTE: after animation/scroll on real device input can be placed under pointer
+        // NOTE: after animation/scroll on real device input can be placed under pointer
         if(!isMouseDownPrevented) {
             $input.focus();
             $input.trigger("click");
@@ -697,7 +697,7 @@ QUnit.test("dxclick should be based on native click", function(assert) {
     $element.trigger("click");
 });
 
-//T322738
+// T322738
 QUnit.test("dxclick should be based on native click for all devices when useNative parameter is true", function(assert) {
     var $element = $("#element"),
         dxClickCallCount = 0,

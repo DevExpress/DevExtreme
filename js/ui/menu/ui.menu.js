@@ -912,7 +912,7 @@ var Menu = MenuBase.inherit({
     },
 
     _itemMouseMoveHandler: function(e) {
-        //todo: replace mousemove with hover event
+        // todo: replace mousemove with hover event
         if(e.pointers && e.pointers.length) {
             return;
         }

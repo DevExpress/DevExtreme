@@ -25,7 +25,7 @@ var environment = {
         trackerModule._DEBUG_forceEventMode(this.eventMode);
         this.createTracker();
         this.$target = $('<div>').appendTo(this.root.element);
-        this.$target.get(0)['vectormap-data'] = 'test-data'; //emulate data attachment
+        this.$target.get(0)['vectormap-data'] = 'test-data'; // emulate data attachment
         this.$targetNoData = $('<div>').appendTo(this.root.element);
         $.each(this.stubbedCallbacks || [], $.proxy(function(_, name) {
             this[name] = sinon.stub();

@@ -610,7 +610,7 @@ QUnit.test("update old options", function(assert) {
 QUnit.module("Added series to Family");
 
 QUnit.test("Add array of correct series", function(assert) {
-    //arrange
+    // arrange
     var type = "bar",
         series1 = new MockSeries(),
         series2 = new MockSeries(),
@@ -622,9 +622,9 @@ QUnit.test("Add array of correct series", function(assert) {
     series1.type = "bar";
     series2.type = "bar";
     series3.type = "bar";
-    //act
+    // act
     family.add(series);
-    //assert
+    // assert
     assert.equal(family.series.length, 3);
     assert.equal(family.series[0], series1);
     assert.equal(family.series[1], series2);
@@ -632,7 +632,7 @@ QUnit.test("Add array of correct series", function(assert) {
 });
 
 QUnit.test("Add array of different series", function(assert) {
-    //arrange
+    // arrange
     var type = "bar",
         series1 = new MockSeries(),
         series2 = new MockSeries(),
@@ -644,9 +644,9 @@ QUnit.test("Add array of different series", function(assert) {
     series1.type = "bar";
     series2.type = "line";
     series3.type = "bar";
-    //act
+    // act
     family.add(series);
-    //assert
+    // assert
     assert.equal(family.series.length, 2);
     assert.equal(family.series[0], series1);
     assert.equal(family.series[1], series3);
@@ -925,7 +925,7 @@ QUnit.test("Set five series. rotated", function(assert) {
     checkSeries(assert, series1, expectedWidth, ZERO + expectedWidth / 2 + expectedSpacing + expectedWidth + expectedSpacing + expectedWidth / 2);
 });
 
-//Q560976
+// Q560976
 QUnit.test("Stackedbar with negative values", function(assert) {
     var negativePoints1 = pointsForStacking.negativePoints1(),
         mixedPoints = pointsForStacking.mixedPoints2(),
@@ -950,7 +950,7 @@ QUnit.test("Set two series", function(assert) {
 
     createSeriesFamily("bar", series, { equalBarWidth: true });
 
-    //first argument - both bars exists
+    // first argument - both bars exists
     assert.strictEqual(series1.getPointsByArg("First")[0].coordinatesCorrection.width, expectedWidthTwoBars, "Series 1, point 1 - both bars exist");
     assert.strictEqual(series2.getPointsByArg("First")[0].coordinatesCorrection.width, expectedWidthTwoBars, "Series 1, point 1 - both bars exist");
     assert.strictEqual(series1.getPointsByArg("First")[0].coordinatesCorrection.offset,
@@ -960,7 +960,7 @@ QUnit.test("Set two series", function(assert) {
         ZERO + expectedWidthTwoBars / 2 + expectedSpacing / 2,
         "Series 2, point 1 - both bars exist");
 
-    //first argument - both bars exists
+    // first argument - both bars exists
     assert.strictEqual(series2.getPointsByArg("Second")[0].coordinatesCorrection.width, expectedWidthTwoBars, "Series 2, point 2 - width - single bar exists");
     assert.strictEqual(series2.getPointsByArg("Second")[0].coordinatesCorrection.offset,
         ZERO + expectedWidthTwoBars / 2 + expectedSpacing / 2,
@@ -979,7 +979,7 @@ QUnit.test("Set two series", function(assert) {
 
     createSeriesFamily("bar", series, { equalBarWidth: false });
 
-    //first argument - both bars exists
+    // first argument - both bars exists
     assert.strictEqual(series1.getPointsByArg("First")[0].coordinatesCorrection.width, expectedWidthTwoBars, "Series 1, point 1 - both bars exist");
     assert.strictEqual(series2.getPointsByArg("First")[0].coordinatesCorrection.width, expectedWidthTwoBars, "Series 2, point 1 - both bars exist");
     assert.strictEqual(series1.getPointsByArg("First")[0].coordinatesCorrection.offset,
@@ -989,7 +989,7 @@ QUnit.test("Set two series", function(assert) {
         ZERO + expectedWidthTwoBars / 2 + expectedSpacing / 2,
         "Series 2, point 1 - both bars exist");
 
-    //first argument - both bars exists
+    // first argument - both bars exists
     assert.strictEqual(series2.getPointsByArg("Second")[0].coordinatesCorrection.width, expectedWidthOneBar, "Series 2, point 2 - single bar exists");
     assert.strictEqual(series2.getPointsByArg("Second")[0].coordinatesCorrection.offset,
         0,
@@ -1005,7 +1005,7 @@ QUnit.test("Set two series with points with the same arguments", function(assert
 
     createSeriesFamily("bar", series, { equalBarWidth: false });
 
-    //first series
+    // first series
     assert.strictEqual(series1.getPointsByArg("A")[0].coordinatesCorrection.width, expectedWidthTwoBars, "Series 1, argument A, first point");
     assert.strictEqual(series1.getPointsByArg("A")[0].coordinatesCorrection.offset, 0 - expectedWidthTwoBars / 2 - expectedSpacing / 2, "Series 1, argument A, first point");
 
@@ -1015,7 +1015,7 @@ QUnit.test("Set two series with points with the same arguments", function(assert
     assert.strictEqual(series1.getPointsByArg("B")[0].coordinatesCorrection.width, expectedWidthTwoBars, "Series 1, argument B, first point");
     assert.strictEqual(series1.getPointsByArg("B")[0].coordinatesCorrection.offset, 0 - expectedWidthTwoBars / 2 - expectedSpacing / 2, "Series 1, argument B, first point");
 
-    //second series
+    // second series
     assert.strictEqual(series2.getPointsByArg("B")[0].coordinatesCorrection.width, expectedWidthTwoBars, "Series 2, argument B, first point");
     assert.strictEqual(series2.getPointsByArg("B")[0].coordinatesCorrection.offset, ZERO + expectedWidthTwoBars / 2 + expectedSpacing / 2, "Series 2, argument B, first point");
 
@@ -1035,7 +1035,7 @@ QUnit.test("Set two series with points with the same arguments. With null points
 
     createSeriesFamily("bar", series, { equalBarWidth: false });
 
-    //first series
+    // first series
     assert.strictEqual(series1.getPointsByArg("A")[0].coordinatesCorrection.width, expectedWidthTwoBars, "Series 1, argument A, first point");
     assert.strictEqual(series1.getPointsByArg("A")[0].coordinatesCorrection.offset, 0 - expectedWidthTwoBars / 2 - expectedSpacing / 2, "Series 1, argument A, first point");
 
@@ -1045,7 +1045,7 @@ QUnit.test("Set two series with points with the same arguments. With null points
     assert.strictEqual(series1.getPointsByArg("B")[0].coordinatesCorrection.width, expectedWidthTwoBars, "Series 1, argument B, first point");
     assert.strictEqual(series1.getPointsByArg("B")[0].coordinatesCorrection.offset, 0 - expectedWidthTwoBars / 2 - expectedSpacing / 2, "Series 1, argument B, first point");
 
-    //second series
+    // second series
     assert.strictEqual(series2.getPointsByArg("B")[0].coordinatesCorrection.width, expectedWidthTwoBars, "Series 2, argument B, first point");
     assert.strictEqual(series2.getPointsByArg("B")[0].coordinatesCorrection.offset, ZERO + expectedWidthTwoBars / 2 + expectedSpacing / 2, "Series 2, argument B, first point");
 
@@ -1101,7 +1101,7 @@ QUnit.test("Set two series with zero values", function(assert) {
 
     createSeriesFamily("bar", series, { equalBarWidth: false });
 
-    //first argument - both bars exists
+    // first argument - both bars exists
     assert.strictEqual(series1.getPointsByArg("First")[0].coordinatesCorrection.width, expectedWidthTwoBars, "Series 1, point 1 - both bars exist");
     assert.strictEqual(series2.getPointsByArg("First")[0].coordinatesCorrection.width, expectedWidthTwoBars, "Series 2, point 1 - both bars exist");
     assert.strictEqual(series1.getPointsByArg("First")[0].coordinatesCorrection.offset,
@@ -1111,7 +1111,7 @@ QUnit.test("Set two series with zero values", function(assert) {
         ZERO + expectedWidthTwoBars / 2 + expectedSpacing / 2,
         "Series 2, point 1 - both bars exist");
 
-    //first argument - both bars exists
+    // first argument - both bars exists
     assert.strictEqual(series2.getPointsByArg("Second")[0].coordinatesCorrection.width, expectedWidthTwoBars, "Series 2, point 2 - single bar exists");
     assert.strictEqual(series2.getPointsByArg("Second")[0].coordinatesCorrection.offset, expectedWidthTwoBars / 2 + expectedSpacing / 2, "Series 2, point 2 - single bar exists");
 });
@@ -1367,7 +1367,7 @@ QUnit.test("Set four series", function(assert) {
 
     createSeriesFamily("rangebar", series, { equalBarWidth: true });
 
-    //looking from center to border...
+    // looking from center to border...
     checkSeries(assert, series1, expectedWidth, 0 - expectedSpacing / 2 - expectedWidth - expectedSpacing - expectedWidth / 2);
     checkSeries(assert, series2, expectedWidth, 0 - expectedSpacing / 2 - expectedWidth / 2);
     checkSeries(assert, series3, expectedWidth, ZERO + expectedSpacing / 2 + expectedWidth / 2);
@@ -3597,7 +3597,7 @@ QUnit.test("Set four series", function(assert) {
 
     createSeriesFamily("candlestick", series);
 
-    //looking from center to border...
+    // looking from center to border...
     checkSeries(assert, series1, expectedWidth, 0 - expectedSpacing / 2 - expectedWidth - expectedSpacing - expectedWidth / 2);
     checkSeries(assert, series2, expectedWidth, 0 - expectedSpacing / 2 - expectedWidth / 2);
     checkSeries(assert, series3, expectedWidth, ZERO + expectedSpacing / 2 + expectedWidth / 2);
@@ -3712,7 +3712,7 @@ QUnit.test("Set four series", function(assert) {
 
     createSeriesFamily("stock", series);
 
-    //looking from center to border...
+    // looking from center to border...
     checkSeries(assert, series1, expectedWidth, 0 - expectedSpacing / 2 - expectedWidth - expectedSpacing - expectedWidth / 2);
     checkSeries(assert, series2, expectedWidth, 0 - expectedSpacing / 2 - expectedWidth / 2);
     checkSeries(assert, series3, expectedWidth, ZERO + expectedSpacing / 2 + expectedWidth / 2);
@@ -3840,7 +3840,7 @@ QUnit.test("maxBubbleSize === minBubbleSize", function(assert) {
     assert.equal(series[0].getPoints()[2].coordinatesCorrection, 8, "size < maxSize");
 });
 
-//T129206
+// T129206
 QUnit.test("Set two series with invisible series. Bubble", function(assert) {
     var series1 = createSeries({ points: pointsForBubble.points1() }, undefined, { arg: { min: 0, max: 100 }, val: { min: 10, max: 200 } }),
         series2 = createSeries({ points: pointsForBubble.points2() }, undefined, { arg: { min: 0, max: 100 }, val: { min: 10, max: 200 } }),
