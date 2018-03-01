@@ -468,19 +468,6 @@ var Slider = TrackBar.inherit({
         }
     },
 
-    _renderDimensions: function() {
-        this.callBase();
-        if(this._$bar) {
-            var barMarginWidth = this._getBarMarginWidth();
-            this._$bar.css("width", this._getOptionValue("width", this._$bar.get(0)) - barMarginWidth);
-        }
-    },
-
-    _getBarMarginWidth: function() {
-        var margins = parseInt(this._$bar[0].style.marginLeft) + parseInt(this._$bar[0].style.marginRight);
-        return Math.abs(margins);
-    },
-
     _renderStartHandler: function() {
         var pointerDownEventName = eventUtils.addNamespace(pointerEvents.down, this.NAME);
         var clickEventName = eventUtils.addNamespace(clickEvent.name, this.NAME);
