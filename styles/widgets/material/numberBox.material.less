@@ -1,5 +1,5 @@
 .dx-size-default() {
-    @MATERIAL_NUMBERBOX_SPIN_CONTAINER_WIDTH: 34px;
+    @MATERIAL_NUMBERBOX_SPIN_CONTAINER_WIDTH: 24px;
     @MATERIAL_NUMBERBOX_SPIN_PADDING: 1px;
     @MATERIAL_NUMBERBOX_TOUCH_FRIENDLY_SPIN_CONTAINER_WIDTH: 74px;
     @MATERIAL_NUMBERBOX_CLEAR_BUTTON_AREA_WIDTH: 32px;
@@ -17,6 +17,10 @@
     width: @MATERIAL_NUMBERBOX_SPIN_CONTAINER_WIDTH;
     padding-bottom: @MATERIAL_TEXTEDITOR_BOTTOM_PADDING - 2;
     .border-radius(@numberbox-spin-container-border-radius);
+
+    .dx-state-disabled & {
+        opacity: 1;
+    }
 }
 
 .dx-numberbox-spin-up-icon {

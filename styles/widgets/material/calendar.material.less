@@ -72,10 +72,11 @@
         display: table-cell;
         border-color: @calendar-navigator-border-color;
 
+        .dx-button-flat-styling(@button-default-bg);
+
         .dx-button-text {
             text-transform: none;
         }
-
 
         .dx-icon {
             font-size: @MATERIAL_CALENDAR_NAVIGATOR_ICON_FONTSIZE;
@@ -212,12 +213,22 @@
     width: 39px;
     .border-radius(@calendar-cell-contoured-border-radius);
 
-    .dx-calendar-view-year &,
-    .dx-calendar-view-century & {
-        span {
-            line-height: 0px;
+    .dx-calendar-view-decade &,
+    .dx-calendar-view-year & {
+       span {
+            line-height: 400%;
+            width: 48px;
         }
     }
+
+
+    .dx-calendar-view-century & {
+        span {
+            line-height: 200%;
+            width: 48px;
+        }
+    }
+
 
     span {
         display: inline-block;

@@ -33,7 +33,8 @@
         }
     }
 
-    &.dx-checkbox-checked {
+    &.dx-checkbox-checked,
+    &.dx-checkbox-indeterminate {
         &.dx-state-focused,
         &.dx-state-active {
             .dx-checkbox-icon:after {
@@ -52,6 +53,7 @@
 }
 
 .dx-checkbox,
+.dx-checkbox-indeterminate,
 .dx-checkbox-checked {
     &.dx-state-readonly.dx-state-focused {
         .dx-checkbox-icon:after {
@@ -114,17 +116,14 @@
 }
 
 .dx-invalid {
-    .dx-checkbox-container {
-        .dx-checkbox-icon {
-            border: 1px solid @checkbox-invalid-faded-border-color;
-        }
+    .dx-checkbox-icon {
+        border: 2px solid @checkbox-invalid-focused-border-color;
     }
 
     &.dx-state-focused {
-        .dx-checkbox-container {
-            .dx-checkbox-icon {
-                border-color: @checkbox-invalid-focused-border-color;
-            }
+        .dx-checkbox-icon:after {
+            background-color: fade(@checkbox-invalid-focused-border-color, 10%);
+            .scale(1);
         }
     }
 }

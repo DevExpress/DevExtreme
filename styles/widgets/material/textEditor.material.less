@@ -2,8 +2,7 @@
 @MATERIAL_TEXTEDITOR_BOTTOM_PADDING: 8px;
 @MATERIAL_TEXTEDITOR_INPUT_PADDING: 6px @MATERIAL_BASE_INLINE_BORDEREDWIDGET_HORIZONTAL_PADDING @MATERIAL_TEXTEDITOR_BOTTOM_PADDING;
 
-@MATERIAL_TEXTEDITOR_ICON_CONTAINER_SIZE: @MATERIAL_BASE_INLINE_BORDEREDWIDGET_INNER_SIZE;
-@MATERIAL_TEXTEDITOR_ICON_SIZE: @MATERIAL_BASE_ICON_SIZE;
+@MATERIAL_TEXTEDITOR_ICON_CONTAINER_SIZE: @MATERIAL_BASE_ICON_SIZE;
 
 @MATERIAL_TEXTEDITOR_INVALID_BADGE_SIZE: @MATERIAL_INVALID_BADGE_SIZE + 2 * @MATERIAL_INVALID_BADGE_HORIZONTAL_PADDING;
 @MATERIAL_TEXTEDITOR_FONT_SIZE: 16px;
@@ -20,7 +19,7 @@
 .dx-texteditor-icon() {
     position: absolute;
     bottom: @MATERIAL_TEXTEDITOR_BOTTOM_PADDING + @MATERIAL_TEXTEDITOR_BORDER_WIDTH;
-    .dx-icon-sizing(@MATERIAL_TEXTEDITOR_ICON_SIZE);
+    .dx-icon-sizing(@MATERIAL_TEXTEDITOR_ICON_CONTAINER_SIZE);
 }
 
 .validation-icon-position(@padding: 0) {
@@ -55,6 +54,7 @@
             right: 0;
             bottom: 0;
             height: 0;
+            width: 100%;
             content: '';
             position: absolute;
         }
@@ -86,13 +86,12 @@
             }
         }
 
-        &.dx-state-disabled, &.dx-state-readonly {
+        &.dx-state-disabled,
+        &.dx-state-readonly,
+        &.dx-state-readonly.dx-state-hover {
             .dx-texteditor-container:after {
                 border-bottom: 1px dotted @texteditor-border-color;
-            }
-
-            .dx-texteditor-input {
-                color: fade(@texteditor-color, 38%);
+                border-top: 0;
             }
         }
     }
@@ -111,7 +110,7 @@
     }
 
     .dx-clear-button-area {
-        width: @MATERIAL_TEXTEDITOR_ICON_SIZE;
+        width: @MATERIAL_TEXTEDITOR_ICON_CONTAINER_SIZE;
         right: 0;
     }
 
