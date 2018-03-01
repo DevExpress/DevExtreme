@@ -59,13 +59,13 @@ var moduleOptions = {
 
 QUnit.module("render", moduleOptions);
 
-QUnit.test("default", function(assert) {
-    var $sliderElement = $("#slider").dxSlider({
-        useInkRipple: false
-    });
+// QUnit.test("default", function(assert) {
+//     var $sliderElement = $("#slider").dxSlider({
+//         useInkRipple: false
+//     });
 
-    assert.ok($sliderElement.hasClass(SLIDER_CLASS));
-});
+//     assert.ok($sliderElement.hasClass(SLIDER_CLASS));
+// });
 
 QUnit.test("onContentReady fired after the widget is fully ready", function(assert) {
     assert.expect(2);
@@ -1561,53 +1561,6 @@ QUnit.test("change width", function(assert) {
     instance.option("width", customWidth);
 
     assert.strictEqual($element.outerWidth(), customWidth, "outer width of the element must be equal to custom width");
-});
-
-
-QUnit.module("aria accessibility");
-
-QUnit.test("aria role", function(assert) {
-    var $element = $("#widget").dxSlider({
-            useInkRipple: false
-        }),
-        $handle = $element.find(".dx-slider-handle");
-
-    assert.equal($handle.attr("role"), "slider", "aria role is correct");
-});
-
-QUnit.test("aria properties", function(assert) {
-    var $element = $("#widget").dxSlider({
-            min: 20,
-            max: 50,
-            value: 35,
-            useInkRipple: false
-        }),
-        $handle = $element.find(".dx-slider-handle");
-
-    assert.equal($handle.attr("aria-valuemin"), 20, "aria min is correct");
-    assert.equal($handle.attr("aria-valuemax"), 50, "aria max is correct");
-    assert.equal($handle.attr("aria-valuenow"), 35, "aria now is correct");
-});
-
-QUnit.test("change aria properties on option changing", function(assert) {
-    var $element = $("#widget").dxSlider({
-            min: 20,
-            max: 50,
-            value: 35,
-            useInkRipple: false
-        }),
-        instance = $element.dxSlider("instance"),
-        $handle = $element.find(".dx-slider-handle");
-
-    instance.option({
-        min: 25,
-        max: 70,
-        value: 40
-    });
-
-    assert.equal($handle.attr("aria-valuemin"), 25, "aria min is correct");
-    assert.equal($handle.attr("aria-valuemax"), 70, "aria max is correct");
-    assert.equal($handle.attr("aria-valuenow"), 40, "aria now is correct");
 });
 
 

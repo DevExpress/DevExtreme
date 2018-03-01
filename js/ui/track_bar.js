@@ -40,7 +40,7 @@ var TrackBar = Editor.inherit({
         });
     },
 
-    _render: function() {
+    _initMarkup: function() {
         this.$element().addClass(TRACKBAR_CLASS);
         this._renderWrapper();
         this._renderContainer();

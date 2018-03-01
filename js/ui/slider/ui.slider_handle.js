@@ -33,7 +33,7 @@ var SliderHandle = Widget.inherit({
         });
     },
 
-    _render: function() {
+    _initMarkup: function() {
         this.callBase();
         this.$element().addClass(SLIDER_HANDLE_CLASS);
         this._renderTooltip();

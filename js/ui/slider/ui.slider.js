@@ -278,21 +278,18 @@ var Slider = TrackBar.inherit({
         ]);
     },
 
-    _render: function() {
+    _initMarkup: function() {
         this.$element().addClass(SLIDER_CLASS);
         this._renderSubmitElement();
+        this.option("useInkRipple") && this._renderInkRipple();
 
         this.callBase();
-    },
 
-    _renderContentImpl: function() {
         this._renderLabels();
         this._renderStartHandler();
         this._renderAriaMinAndMax();
 
         this._repaintHandle();
-        this.option("useInkRipple") && this._renderInkRipple();
-        this.callBase();
     },
 
     _renderSubmitElement: function() {
@@ -477,7 +474,7 @@ var Slider = TrackBar.inherit({
     },
 
     _getBarMarginWidth: function() {
-        var margins = parseInt(this._$bar.css("marginLeft")) + parseInt(this._$bar.css("marginRight"));
+        var margins = parseInt(this._$bar[0].style.marginLeft) + parseInt(this._$bar[0].style.marginRight);
         return Math.abs(margins);
     },
 
