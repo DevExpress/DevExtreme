@@ -668,8 +668,6 @@ var Slider = TrackBar.inherit({
             case "min":
             case "max":
                 this._renderValue();
-                this._setRangeStyles(this._rangeStylesConfig());
-
                 this.callBase(args);
                 this._renderLabels();
                 this._renderAriaMinAndMax();

@@ -18,6 +18,7 @@ require("common.css!");
 var SLIDER_CLASS = "dx-slider",
     SLIDER_HANDLE_CLASS = "dx-slider-handle",
     SLIDER_RANGE_CLASS = SLIDER_CLASS + "-range",
+    SLIDER_BAR_CLASS = "dx-slider-bar",
     SLIDER_RANGE_VISIBLE_CLASS = SLIDER_RANGE_CLASS + "-visible",
     SLIDER_LABEL_CLASS = SLIDER_CLASS + "-label";
 
@@ -37,6 +38,10 @@ QUnit.test("default", function(assert) {
     var $range = $sliderElement.find("." + SLIDER_RANGE_CLASS);
 
     assert.ok($range.length, "range is rendered");
+
+    var $bar = $sliderElement.find("." + SLIDER_BAR_CLASS);
+
+    assert.ok($bar.length, "bar is rendered");
 });
 
 QUnit.test("'showRange' option should toggle class to range element", function(assert) {
