@@ -59,6 +59,7 @@ var TextBox = TextEditor.inherit({
 
     _initMarkup: function() {
         this.$element().addClass(TEXTBOX_CLASS);
+
         this.callBase();
     },
 

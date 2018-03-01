@@ -22,24 +22,11 @@ var internals = TextBox.__internals;
 
 var TEXTBOX_CLASS = "dx-textbox",
     INPUT_CLASS = "dx-texteditor-input",
-    CONTAINER_CLASS = "dx-texteditor-container",
     PLACEHOLDER_CLASS = "dx-placeholder",
     SEARCHBOX_CLASS = internals.SEARCHBOX_CLASS,
     SEARCH_ICON_SELECTOR = internals.SEARCH_ICON_CLASS;
 
 QUnit.module();
-
-QUnit.test("markup init", function(assert) {
-    assert.expect(5);
-
-    var element = $("#textbox").dxTextBox();
-
-    assert.ok(element.hasClass(TEXTBOX_CLASS));
-    assert.equal(element.children().length, 1);
-    assert.equal(element.find("." + PLACEHOLDER_CLASS).length, 1);
-    assert.equal(element.find("." + INPUT_CLASS).length, 1);
-    assert.equal(element.find("." + CONTAINER_CLASS).length, 1);
-});
 
 QUnit.test("onContentReady fired after the widget is fully ready", function(assert) {
     assert.expect(1);
@@ -51,25 +38,6 @@ QUnit.test("onContentReady fired after the widget is fully ready", function(asse
     });
 });
 
-QUnit.test("init with options", function(assert) {
-    assert.expect(4);
-
-    var element = $("#textbox").dxTextBox({
-        value: "custom",
-        mode: "search",
-        placeholder: "enter value",
-        readOnly: true
-    });
-
-    var input = element.find("." + INPUT_CLASS);
-
-    assert.equal(input.val(), "custom");
-    assert.equal(input.attr("type"), "text");
-    assert.equal(input.prop("placeholder") || element.find("." + PLACEHOLDER_CLASS).attr("data-dx_placeholder"), "enter value");
-
-    assert.equal(input.prop("readOnly"), true);
-});
-
 QUnit.test("changing mode to 'search' should render search icon", function(assert) {
     var element = $("#textbox").dxTextBox(),
         textBox = element.dxTextBox("instance");
@@ -78,22 +46,6 @@ QUnit.test("changing mode to 'search' should render search icon", function(asser
 
     assert.ok(element.has(SEARCHBOX_CLASS));
     assert.equal(element.find("." + SEARCH_ICON_SELECTOR).length, 1);
-});
-
-QUnit.test("'maxLength' option", function(assert) {
-    var originalDevices = devices.real();
-    devices.real({
-        platform: "not android",
-        version: ["32"]
-    });
-
-    try {
-        var element = $("#textbox").dxTextBox({ maxLength: "5" }),
-            input = element.find("." + INPUT_CLASS);
-        assert.equal(input.attr("maxLength"), "5");
-    } finally {
-        devices.real(originalDevices);
-    }
 });
 
 QUnit.test("'maxLength' option on android 2.3 and 4.1", function(assert) {
@@ -331,7 +283,6 @@ QUnit.test("change width", function(assert) {
 
     assert.strictEqual($element.outerWidth(), customWidth, "outer width of the element must be equal to custom width");
 });
-
 
 QUnit.module("aria accessibility");
 
