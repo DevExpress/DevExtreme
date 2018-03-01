@@ -421,6 +421,42 @@ QUnit.test("Items should not be changed if one of them is hidden", function(asse
     assert.equal(tagBox.option("items").length, 5, "items was restored");
 });
 
+QUnit.test("added and removed items should be correct with hideSelecterdItems option and dataSource (T589590)", function(assert) {
+    var spy = sinon.spy(),
+        tagBox = $("#tagBox").dxTagBox({
+            dataSource: [1, 2, 3],
+            opened: true,
+            hideSelectedItems: true,
+            onSelectionChanged: spy
+        }).dxTagBox("instance"),
+        content = tagBox.content(),
+        $item = $(content).find("." + LIST_ITEM_CLASS).eq(0);
+
+    $item.trigger("dxclick");
+    assert.deepEqual(spy.args[1][0].addedItems, [1], "added items is correct");
+    assert.deepEqual(spy.args[1][0].removedItems, [], "removed items is empty");
+
+    $item = $(content).find("." + LIST_ITEM_CLASS).eq(1);
+    $item.trigger("dxclick");
+    assert.deepEqual(spy.args[2][0].addedItems, [3], "added items is correct");
+    assert.deepEqual(spy.args[2][0].removedItems, [], "removed items is empty");
+});
+
+QUnit.test("selected items should be correct after item click with hideSelecterdItems option (T606462)", function(assert) {
+    var tagBox = $("#tagBox").dxTagBox({
+            dataSource: [1, 2, 3],
+            value: [1],
+            opened: true,
+            hideSelectedItems: true
+        }).dxTagBox("instance"),
+        content = tagBox.content(),
+        $item = $(content).find("." + LIST_ITEM_CLASS).eq(0);
+
+    $item.trigger("dxclick");
+
+    assert.deepEqual(tagBox.option("selectedItems"), [1, 2], "selected items are correct");
+});
+
 QUnit.module("tags", moduleSetup);
 
 QUnit.test("add/delete tags", function(assert) {
