@@ -20,27 +20,7 @@ function toSelector(text) {
     return "." + text;
 }
 
-var TRACKBAR_CLASS = "dx-trackbar",
-    TRACKBAR_CONTAINER_CLASS = "dx-trackbar-container",
-    TRACKBAR_RANGE_CLASS = "dx-trackbar-range",
-    TRACKBAR_WRAPPER_CLASS = "dx-trackbar-wrapper";
-
-QUnit.module("default", {
-    beforeEach: function() {
-        this.$element = $("#trackbar");
-    }
-});
-
-QUnit.test("rendered markup", function(assert) {
-    assert.expect(4);
-
-    var $trackBar = this.$element.dxTrackBar();
-
-    assert.ok($trackBar.hasClass(TRACKBAR_CLASS), "dxTrackBar initialized");
-    assert.equal($trackBar.find(toSelector(TRACKBAR_CONTAINER_CLASS)).length, 1, "Container has been created");
-    assert.equal($trackBar.find(toSelector(TRACKBAR_RANGE_CLASS)).length, 1, "Range has been created");
-    assert.equal($trackBar.find(toSelector(TRACKBAR_WRAPPER_CLASS)).length, 1, "Wrapper div has been created");
-});
+var TRACKBAR_RANGE_CLASS = "dx-trackbar-range";
 
 QUnit.module("options", {
     beforeEach: function() {
