@@ -36,12 +36,17 @@ var SliderHandle = Widget.inherit({
     _initMarkup: function() {
         this.callBase();
         this.$element().addClass(SLIDER_HANDLE_CLASS);
-        this._renderTooltip();
 
         this.setAria({
             "role": "slider",
             "valuenow": this.option("value")
         });
+    },
+
+    _render: function() {
+        this.callBase();
+
+        this._renderTooltip();
     },
 
     _renderTooltip: function() {

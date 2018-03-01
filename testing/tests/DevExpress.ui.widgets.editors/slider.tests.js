@@ -29,7 +29,6 @@ var SLIDER_CLASS = "dx-slider",
     SLIDER_WRAPPER_CLASS = SLIDER_CLASS + "-wrapper",
     SLIDER_LABEL_POSITION_CLASS_PREFIX = SLIDER_CLASS + "-label-position-",
     SLIDER_RANGE_CLASS = SLIDER_CLASS + "-range",
-    SLIDER_RANGE_VISIBLE_CLASS = SLIDER_RANGE_CLASS + "-visible",
     SLIDER_BAR_CLASS = SLIDER_CLASS + "-bar",
     SLIDER_HANDLE_CLASS = SLIDER_CLASS + "-handle",
     SLIDER_LABEL_CLASS = SLIDER_CLASS + "-label",
@@ -59,13 +58,13 @@ var moduleOptions = {
 
 QUnit.module("render", moduleOptions);
 
-// QUnit.test("default", function(assert) {
-//     var $sliderElement = $("#slider").dxSlider({
-//         useInkRipple: false
-//     });
+QUnit.test("default size", function(assert) {
+    var $element = $("#widget").dxSlider({
+        useInkRipple: false
+    });
 
-//     assert.ok($sliderElement.hasClass(SLIDER_CLASS));
-// });
+    assert.ok($element.outerWidth() > 0, "outer width of the element must be more than zero");
+});
 
 QUnit.test("onContentReady fired after the widget is fully ready", function(assert) {
     assert.expect(2);
@@ -315,49 +314,7 @@ QUnit.test("value should be updated on click on mobile devices", function(assert
     assert.equal(instance.option("value"), 300, "value set after dxclick");
 });
 
-QUnit.test("'showRange' option should toggle class to range element", function(assert) {
-    var slider = $("#slider").dxSlider({
-        showRange: true,
-        useInkRipple: false
-    }).dxSlider("instance");
-
-    assert.ok($("." + SLIDER_RANGE_CLASS).hasClass(SLIDER_RANGE_VISIBLE_CLASS));
-
-    slider.option("showRange", false);
-    assert.ok(!$("." + SLIDER_RANGE_CLASS).hasClass(SLIDER_RANGE_VISIBLE_CLASS));
-});
-
-
 QUnit.module("hidden input");
-
-QUnit.test("a hidden input should be rendered", function(assert) {
-    var $slider = $("#slider").dxSlider(),
-        $input = $slider.find("input");
-
-    assert.equal($input.length, 1, "input is rendered");
-    assert.equal($input.attr("type"), "hidden", "the input type is 'hidden'");
-});
-
-QUnit.test("the hidden input should have correct value on widget init", function(assert) {
-    var expectedValue = 30,
-        $slider = $("#slider").dxSlider({
-            value: expectedValue
-        }),
-        $input = $slider.find("input");
-
-    assert.equal(parseInt($input.val()), expectedValue, "the hidden input value is correct");
-});
-
-QUnit.test("the hidden input should get correct value on widget value change", function(assert) {
-    var expectedValue = 77,
-        $slider = $("#slider").dxSlider(),
-        instance = $slider.dxSlider("instance"),
-        $input = $slider.find("input");
-
-    instance.option("value", 11);
-    instance.option("value", expectedValue);
-    assert.equal(parseInt($input.val()), expectedValue, "the hidden input value is correct");
-});
 
 QUnit.test("the hidden input should use the decimal separator specified in DevExpress.config", function(assert) {
     var originalConfig = config();
@@ -947,50 +904,6 @@ QUnit.test("labels should re-rendered if 'min' or/and 'max' options changed", fu
     assert.equal($sliderLabels.eq(1).html(), "2500");
 });
 
-QUnit.test("'label.format' as function", function(assert) {
-    var $slider = $("#slider").dxSlider({
-        label: {
-            visible: true,
-            format: function(value) {
-                return "[" + value + "]";
-            }
-        },
-        useInkRipple: false
-    });
-
-    var $sliderLabels = $slider.find("." + SLIDER_LABEL_CLASS);
-    assert.equal($sliderLabels.eq(0).html(), "[0]");
-    assert.equal($sliderLabels.eq(1).html(), "[100]");
-
-    $slider.dxSlider("option", "label.format", function(value) {
-        return "(" + value + ")";
-    });
-    assert.equal($sliderLabels.eq(0).html(), "(0)");
-    assert.equal($sliderLabels.eq(1).html(), "(100)");
-});
-
-QUnit.test("'label.position' option toggles label position", function(assert) {
-    var $slider = $("#slider").dxSlider({
-        label: {
-            visible: true,
-            position: "top"
-        },
-        useInkRipple: false
-    });
-
-    assert.ok($slider.hasClass("dx-slider-label-position-top"));
-    assert.ok(!$slider.hasClass("dx-slider-label-position-bottom"));
-
-    $slider.dxSlider("option", "label.position", "bottom");
-    assert.ok($slider.hasClass("dx-slider-label-position-bottom"));
-    assert.ok(!$slider.hasClass("dx-slider-label-position-top"));
-
-    $slider.dxSlider("option", "label.visible", false);
-    assert.ok(!$slider.hasClass("dx-slider-label-position-bottom"));
-    assert.ok(!$slider.hasClass("dx-slider-label-position-top"));
-});
-
-
 QUnit.module("events");
 
 QUnit.test("value change should cause value change action call", function(assert) {
@@ -1519,50 +1432,6 @@ QUnit.test("mousedown/touchstart on slider set new value", function(assert) {
     pointerMock($element).start().move(350 + $element.offset().left).down();
     assert.equal($range.width(), 150);
 });
-
-QUnit.module("widget sizing render");
-
-QUnit.test("default", function(assert) {
-    var $element = $("#widget").dxSlider({
-        useInkRipple: false
-    });
-
-    assert.ok($element.outerWidth() > 0, "outer width of the element must be more than zero");
-});
-
-QUnit.test("constructor", function(assert) {
-    var $element = $("#widget").dxSlider({
-            width: 400,
-            useInkRipple: false
-        }),
-        instance = $element.dxSlider("instance");
-
-    assert.strictEqual(instance.option("width"), 400);
-    assert.strictEqual($element.outerWidth(), 400, "outer width of the element must be equal to custom width");
-});
-
-QUnit.test("root with custom width", function(assert) {
-    var $element = $("#widthRootStyle").dxSlider({
-            useInkRipple: false
-        }),
-        instance = $element.dxSlider("instance");
-
-    assert.strictEqual(instance.option("width"), undefined);
-    assert.strictEqual($element.outerWidth(), 300, "outer width of the element must be equal to custom width");
-});
-
-QUnit.test("change width", function(assert) {
-    var $element = $("#widget").dxSlider({
-            useInkRipple: false
-        }),
-        instance = $element.dxSlider("instance"),
-        customWidth = 400;
-
-    instance.option("width", customWidth);
-
-    assert.strictEqual($element.outerWidth(), customWidth, "outer width of the element must be equal to custom width");
-});
-
 
 QUnit.module("visibility change");
 

@@ -16,9 +16,12 @@ QUnit.testStart(function() {
 require("common.css!");
 
 var SLIDER_CLASS = "dx-slider",
-    SLIDER_HANDLE_CLASS = "dx-slider-handle";
+    SLIDER_HANDLE_CLASS = "dx-slider-handle",
+    SLIDER_RANGE_CLASS = SLIDER_CLASS + "-range",
+    SLIDER_RANGE_VISIBLE_CLASS = SLIDER_RANGE_CLASS + "-visible",
+    SLIDER_LABEL_CLASS = SLIDER_CLASS + "-label";
 
-QUnit.module("Slider markup");
+QUnit.module("slider markup");
 
 QUnit.test("default", function(assert) {
     var $sliderElement = $("#slider").dxSlider({
@@ -30,33 +33,146 @@ QUnit.test("default", function(assert) {
     var $handle = $sliderElement.find("." + SLIDER_HANDLE_CLASS);
 
     assert.ok($handle.length, "handle is rendered");
+
+    var $range = $sliderElement.find("." + SLIDER_RANGE_CLASS);
+
+    assert.ok($range.length, "range is rendered");
+});
+
+QUnit.test("'showRange' option should toggle class to range element", function(assert) {
+    var slider = $("#slider").dxSlider({
+        showRange: true,
+        useInkRipple: false
+    }).dxSlider("instance");
+
+    assert.ok($("." + SLIDER_RANGE_CLASS).hasClass(SLIDER_RANGE_VISIBLE_CLASS));
+
+    slider.option("showRange", false);
+    assert.ok(!$("." + SLIDER_RANGE_CLASS).hasClass(SLIDER_RANGE_VISIBLE_CLASS));
+});
+
+QUnit.test("labels visibility", function(assert) {
+    var $slider = $("#slider").dxSlider({
+        min: 0,
+        max: 100,
+        label: {
+            visible: true
+        },
+        useInkRipple: false
+    });
+
+    var $sliderLabels = $slider.find("." + SLIDER_LABEL_CLASS);
+    assert.equal($sliderLabels.length, 2, "labels are rendered");
+});
+
+QUnit.test("labels visiility - format", function(assert) {
+    var $slider = $("#slider").dxSlider({
+        label: {
+            visible: true,
+            format: function(value) {
+                return "[" + value + "]";
+            }
+        },
+        useInkRipple: false
+    });
+
+    var $sliderLabels = $slider.find("." + SLIDER_LABEL_CLASS);
+    assert.equal($sliderLabels.eq(0).html(), "[0]");
+    assert.equal($sliderLabels.eq(1).html(), "[100]");
+
+    $slider.dxSlider("option", "label.format", function(value) {
+        return "(" + value + ")";
+    });
+    assert.equal($sliderLabels.eq(0).html(), "(0)");
+    assert.equal($sliderLabels.eq(1).html(), "(100)");
+});
+
+QUnit.test("labels visiility - position", function(assert) {
+    var $slider = $("#slider").dxSlider({
+        label: {
+            visible: true,
+            position: "top"
+        },
+        useInkRipple: false
+    });
+
+    assert.ok($slider.hasClass("dx-slider-label-position-top"));
+    assert.ok(!$slider.hasClass("dx-slider-label-position-bottom"));
+
+    $slider.dxSlider("option", "label.position", "bottom");
+    assert.ok($slider.hasClass("dx-slider-label-position-bottom"));
+    assert.ok(!$slider.hasClass("dx-slider-label-position-top"));
+
+    $slider.dxSlider("option", "label.visible", false);
+    assert.ok(!$slider.hasClass("dx-slider-label-position-bottom"));
+    assert.ok(!$slider.hasClass("dx-slider-label-position-top"));
+});
+
+QUnit.module("widget sizing render");
+
+QUnit.test("constructor", function(assert) {
+    var $element = $("#widget").dxSlider({
+            width: 400,
+            useInkRipple: false
+        }),
+        instance = $element.dxSlider("instance");
+
+    assert.strictEqual(instance.option("width"), 400);
+    assert.strictEqual($element[0].style.width, "400px", "outer width of the element must be equal to custom width");
 });
 
 QUnit.test("root with custom width", function(assert) {
-    var $sliderElement = $("#widthRootStyle").dxSlider({
+    var $element = $("#widthRootStyle").dxSlider({
             useInkRipple: false
         }),
-        instance = $sliderElement.dxSlider("instance");
+        instance = $element.dxSlider("instance");
 
     assert.strictEqual(instance.option("width"), undefined);
-    assert.strictEqual($sliderElement[0].style.width, "300px", "outer width of the element must be equal to custom width");
+    assert.strictEqual($element[0].style.width, "300px", "outer width of the element must be equal to custom width");
 });
 
-QUnit.test("slider with a custom dimensions", function(assert) {
-    var setUpWidth = 11,
-        setUpHeight = 22,
-        $sliderElement = $("#slider").dxSlider({
-            max: 100,
-            min: 0,
-            width: setUpWidth,
-            height: setUpHeight,
+QUnit.test("change width", function(assert) {
+    var $element = $("#widget").dxSlider({
             useInkRipple: false
         }),
-        initialWidth = $sliderElement[0].style.width,
-        initialHeight = $sliderElement[0].style.height;
+        instance = $element.dxSlider("instance"),
+        customWidth = 400;
 
-    assert.equal(initialWidth, setUpWidth + "px", "Element's width was set properly on init");
-    assert.equal(initialHeight, setUpHeight + "px", "Element's height was et properly on init");
+    instance.option("width", customWidth);
+
+    assert.strictEqual($element[0].style.width, customWidth + "px", "outer width of the element must be equal to custom width");
+});
+
+QUnit.module("hidden input");
+
+QUnit.test("a hidden input should be rendered", function(assert) {
+    var $slider = $("#slider").dxSlider(),
+        $input = $slider.find("input");
+
+    assert.equal($input.length, 1, "input is rendered");
+    assert.equal($input.attr("type"), "hidden", "the input type is 'hidden'");
+});
+
+QUnit.test("the hidden input should have correct value on widget init", function(assert) {
+    var expectedValue = 30,
+        $slider = $("#slider").dxSlider({
+            value: expectedValue
+        }),
+        $input = $slider.find("input");
+
+    assert.equal(parseInt($input.val()), expectedValue, "the hidden input value is correct");
+});
+
+
+QUnit.test("the hidden input should get correct value on widget value change", function(assert) {
+    var expectedValue = 77,
+        $slider = $("#slider").dxSlider(),
+        instance = $slider.dxSlider("instance"),
+        $input = $slider.find("input");
+
+    instance.option("value", 11);
+    instance.option("value", expectedValue);
+    assert.equal(parseInt($input.val()), expectedValue, "the hidden input value is correct");
 });
 
 QUnit.module("aria accessibility");
