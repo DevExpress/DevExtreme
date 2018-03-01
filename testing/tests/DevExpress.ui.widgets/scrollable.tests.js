@@ -1773,7 +1773,7 @@ QUnit.test("useSimulatedScrollbar option dependence from useNative option", func
     });
 
     $scrollable.dxScrollable("option", "useNative", true);
-    //NOTE: on android devices useSimulatedScrollbar is true always
+    // NOTE: on android devices useSimulatedScrollbar is true always
     assert.equal($scrollable.dxScrollable("option", "useSimulatedScrollbar"), devices.real().platform === "android", "useSimulatedScrollbar option was changed");
 });
 
@@ -3047,7 +3047,7 @@ QUnit.test("scroll by thumb", function(assert) {
     mouse.move(0, distance);
     location = getScrollOffset($scrollable);
 
-    assert.notOk(downEvent.isDefaultPrevented(), "default is not prevented"); //T516691
+    assert.notOk(downEvent.isDefaultPrevented(), "default is not prevented"); // T516691
     assert.equal(location.top, -distance / containerToContentRatio, "scroll follows pointer");
 
     mouse.move(0, distance);

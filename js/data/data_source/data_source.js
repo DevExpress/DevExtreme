@@ -1006,7 +1006,7 @@ var DataSource = Class.inherit({
             return;
         }
 
-        //todo: if operation is canceled there is no need to do data transformation
+        // todo: if operation is canceled there is no need to do data transformation
 
         data = that._applyPostProcessFunction(that._applyMapFunction(data));
 

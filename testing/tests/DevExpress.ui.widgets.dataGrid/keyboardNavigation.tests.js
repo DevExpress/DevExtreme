@@ -200,77 +200,77 @@ QUnit.module("Keyboard navigation", {
 });
 
 QUnit.testInActiveWindow("Focused views is not initialized when enableKeyboardNavigation is false", function(assert) {
-    //arrange
+    // arrange
     this.options.useKeyboard = false;
     var navigationController = new KeyboardNavigationController(this.component);
 
-    //act
+    // act
     navigationController.init();
 
-    //assert
+    // assert
     assert.ok(!navigationController._focusedViews);
 });
 
 QUnit.testInActiveWindow("Init focused views", function(assert) {
-    //arrange
+    // arrange
     var navigationController = new KeyboardNavigationController(this.component);
 
-    //act
+    // act
     navigationController.init();
 
-    //assert
+    // assert
     assert.equal(navigationController._focusedViews.length, 1, "focused views count");
     assert.equal(navigationController._focusedViews[0].name, "rowsView", "focused views contains rows view");
 });
 
 QUnit.testInActiveWindow("Init focused views when some view has hidden element", function(assert) {
-    //arrange
+    // arrange
     var navigationController = new KeyboardNavigationController(this.component);
 
     this.getView("columnHeadersView").isVisible = function() {
         return false;
     };
 
-    //act
+    // act
     navigationController.init();
 
-    //assert
+    // assert
     assert.equal(navigationController._focusedViews.length, 1, "focused views count");
     assert.equal(navigationController._focusedViews[0].name, "rowsView", "focused views contains rows view");
 });
 
 QUnit.testInActiveWindow("Element of view is subscribed to events", function(assert) {
-    //arrange
+    // arrange
     var navigationController = new KeyboardNavigationController(this.component),
         element;
 
-    //act
+    // act
     navigationController.init();
     element = navigationController._focusedViews[0].element();
 
     callViewsRenderCompleted(this.component._views);
 
-    //assert
+    // assert
     assert.equal(element.eventsInfo[eventUtils.addNamespace("dxpointerdown", "dxDataGridKeyboardNavigation")].subscribeToEventCounter, 1, "dxClick");
 });
 
 QUnit.testInActiveWindow("Element of view is unsubscribed from events", function(assert) {
-    //arrange
+    // arrange
     var navigationController = new KeyboardNavigationController(this.component),
         element;
 
-    //act
+    // act
     navigationController.init();
     element = navigationController._focusedViews[0].element();
 
     callViewsRenderCompleted(this.component._views);
 
-    //assert
+    // assert
     assert.equal(element.eventsInfo[eventUtils.addNamespace("dxpointerdown", "dxDataGridKeyboardNavigation")].unsubscribeFromEventCounter, 1, "dxClick");
 });
 
 QUnit.testInActiveWindow("Cell is focused when clicked on self", function(assert) {
-    //arrange
+    // arrange
     var navigationController,
         isFocused = false,
         $cell,
@@ -280,7 +280,7 @@ QUnit.testInActiveWindow("Cell is focused when clicked on self", function(assert
         return $rowsElement;
     };
 
-    //act
+    // act
     navigationController = new KeyboardNavigationController(this.component);
     navigationController.init();
 
@@ -294,7 +294,7 @@ QUnit.testInActiveWindow("Cell is focused when clicked on self", function(assert
 
     $($cell).trigger(CLICK_EVENT);
 
-    //assert
+    // assert
     assert.ok(isFocused, "cell is focused");
     assert.equal(navigationController._focusedViews.viewIndex, 0, "view index");
     assert.equal(navigationController._focusedView.name, "rowsView", "focused view");
@@ -303,7 +303,7 @@ QUnit.testInActiveWindow("Cell is focused when clicked on self", function(assert
 
 // T579521
 QUnit.testInActiveWindow("Master detail cell is not focused when clicked on self", function(assert) {
-    //arrange
+    // arrange
     var navigationController,
         isFocused = false,
         $masterDetailCell,
@@ -313,7 +313,7 @@ QUnit.testInActiveWindow("Master detail cell is not focused when clicked on self
         return $rowsElement;
     };
 
-    //act
+    // act
     navigationController = new KeyboardNavigationController(this.component);
     navigationController.init();
 
@@ -327,19 +327,19 @@ QUnit.testInActiveWindow("Master detail cell is not focused when clicked on self
 
     $($masterDetailCell).trigger(CLICK_EVENT);
 
-    //assert
+    // assert
     assert.notOk(isFocused, "master detail cell is not focused");
 });
 
-//T281701
+// T281701
 QUnit.testInActiveWindow("Cell is not focused when clicked it in another grid", function(assert) {
-    //arrange
+    // arrange
     var navigationController,
         isFocused = false,
         $cell,
         $rowsElement = $("<div />").addClass(".dx-datagrid").append($("<table><tr class='dx-row'><td/></tr></table>")).appendTo("#container");
 
-    //act
+    // act
     navigationController = new KeyboardNavigationController(this.component);
     navigationController.init();
 
@@ -353,14 +353,14 @@ QUnit.testInActiveWindow("Cell is not focused when clicked it in another grid", 
 
     $($cell).trigger(CLICK_EVENT);
 
-    //assert
+    // assert
     assert.ok(!isFocused, "cell is not focused");
     assert.equal(navigationController._focusedViews.viewIndex, undefined, "view index");
     assert.equal(navigationController._focusedView, null, "no focused view");
 });
 
 QUnit.testInActiveWindow("Cell is not focused when clicked on invalid self", function(assert) {
-    //arrange
+    // arrange
     var navigationController,
         isFocused = false,
         $cell,
@@ -371,7 +371,7 @@ QUnit.testInActiveWindow("Cell is not focused when clicked on invalid self", fun
         return $rowsElement;
     };
 
-    //act
+    // act
     navigationController = new KeyboardNavigationController(this.component);
     navigationController.init();
     navigationController._focusedView = rowsView;
@@ -392,7 +392,7 @@ QUnit.testInActiveWindow("Cell is not focused when clicked on invalid self", fun
 
     $($cell).trigger(CLICK_EVENT);
 
-    //assert
+    // assert
     assert.ok(!isFocused, "cell is not focused");
     assert.deepEqual(navigationController._focusedCellPosition, {}, "focusedCellPosition");
     assert.ok(!navigationController._isNeedFocus, "isKeyDown");
@@ -401,7 +401,7 @@ QUnit.testInActiveWindow("Cell is not focused when clicked on invalid self", fun
 /*
 TODO repair
 QUnit.testInActiveWindow("View is focused when render of view is completed", function (assert) {
-    //arrange
+    // arrange
     var navigationController,
         isFocused = false,
         $rowsElement = $("<div />").append($("<tr class='dx-row'><td/></tr>"));
@@ -410,7 +410,7 @@ QUnit.testInActiveWindow("View is focused when render of view is completed", fun
         return $rowsElement;
     };
 
-    //act
+    // act
     navigationController = new KeyboardNavigationController(this.component);
     navigationController.init();
 
@@ -434,13 +434,13 @@ QUnit.testInActiveWindow("View is focused when render of view is completed", fun
         view.renderCompleted.fire();
     });
 
-    //assert
+    // assert
     assert.ok(isFocused, "view is focused");
     assert.strictEqual(this.getController('editorFactory')._$focusedElement[0], $cell[0], "focused element");
 });
 */
 QUnit.testInActiveWindow("Input is focused when edit mode is enabled", function(assert) {
-    //arrange
+    // arrange
     var navigationController,
         view,
         $rowsElement = $("<div />").appendTo("#container").append($("<tr class='dx-row'>" +
@@ -454,7 +454,7 @@ QUnit.testInActiveWindow("Input is focused when edit mode is enabled", function(
         return $rowsElement;
     };
 
-    //act
+    // act
     this.component._controllers.editing._isEditing = true;
     navigationController = new KeyboardNavigationController(this.component);
     navigationController.init();
@@ -475,9 +475,9 @@ QUnit.testInActiveWindow("Input is focused when edit mode is enabled", function(
     assert.ok(navigationController._testInteractiveElement && navigationController._testInteractiveElement.is("input"));
 });
 
-//T403964
+// T403964
 QUnit.testInActiveWindow("Only visible input element is focused when edit mode is enabled", function(assert) {
-    //arrange
+    // arrange
     var navigationController,
         view,
         $rowsElement = $("<div />").appendTo("#container").append($("<tr class='dx-row'>" +
@@ -491,7 +491,7 @@ QUnit.testInActiveWindow("Only visible input element is focused when edit mode i
         return $rowsElement;
     };
 
-    //act
+    // act
     this.component._controllers.editing._isEditing = true;
     navigationController = new KeyboardNavigationController(this.component);
     navigationController.init();
@@ -514,7 +514,7 @@ QUnit.testInActiveWindow("Only visible input element is focused when edit mode i
 });
 
 QUnit.testInActiveWindow("Textarea is focused when edit mode is enabled", function(assert) {
-    //arrange
+    // arrange
     var navigationController,
         view,
         $rowsElement = $("<div />").appendTo("#container").append($("<tr class='dx-row'>" +
@@ -528,7 +528,7 @@ QUnit.testInActiveWindow("Textarea is focused when edit mode is enabled", functi
         return $rowsElement;
     };
 
-    //act
+    // act
     this.component._controllers.editing._isEditing = true;
     navigationController = new KeyboardNavigationController(this.component);
     navigationController.init();
@@ -550,7 +550,7 @@ QUnit.testInActiveWindow("Textarea is focused when edit mode is enabled", functi
 });
 
 QUnit.testInActiveWindow("View is not focused when row is inline edited", function(assert) {
-    //arrange
+    // arrange
     var navigationController,
         isFocused = false,
         $rowsElement = $("<div />");
@@ -562,7 +562,7 @@ QUnit.testInActiveWindow("View is not focused when row is inline edited", functi
         return $rowsElement;
     };
 
-    //act
+    // act
     navigationController = new KeyboardNavigationController(this.component);
     navigationController._hasInput = function() {
         return true;
@@ -576,12 +576,12 @@ QUnit.testInActiveWindow("View is not focused when row is inline edited", functi
     };
     $($rowsElement).trigger(CLICK_EVENT);
 
-    //assert
+    // assert
     assert.ok(!isFocused, "headers view is not focused");
 });
 
 QUnit.testInActiveWindow("KeyDownProcessor is disposed when controller is initialized", function(assert) {
-    //arrange
+    // arrange
     var navigationController,
         isDisposeCalled = false,
         $rowsElement = $("<div />").append($("<tr class='dx-row'><td/></tr>"));
@@ -590,7 +590,7 @@ QUnit.testInActiveWindow("KeyDownProcessor is disposed when controller is initia
         return $rowsElement;
     };
 
-    //act
+    // act
     navigationController = new KeyboardNavigationController(this.component);
     navigationController.init();
 
@@ -604,13 +604,13 @@ QUnit.testInActiveWindow("KeyDownProcessor is disposed when controller is initia
 
     $($rowsElement.find("td")[0]).trigger(CLICK_EVENT);
 
-    //assert
+    // assert
     assert.ok(isDisposeCalled, "keyDownProcessor is disposed");
 });
 
-//T311207
+// T311207
 QUnit.testInActiveWindow("Focus by click is not applied when editing is enabled", function(assert) {
-    //arrange
+    // arrange
     var navigationController,
         isViewFocused = false,
         $rowsViewElement = $("<div />").append($("<table><tbody><tr class='dx-row'><td><input class='dx-texteditor-input'></td><td><input class='dx-texteditor-input'></td></tr></tbody></table>")).appendTo("#container"),
@@ -620,7 +620,7 @@ QUnit.testInActiveWindow("Focus by click is not applied when editing is enabled"
         return $rowsViewElement;
     };
 
-    //act
+    // act
     navigationController = new KeyboardNavigationController(this.component);
     navigationController.init();
     navigationController._focusedView = rowsView;
@@ -633,13 +633,13 @@ QUnit.testInActiveWindow("Focus by click is not applied when editing is enabled"
     this.component._controllers.editing._isEditing = true;
     $($rowsViewElement.find("input").last()).trigger(CLICK_EVENT);
 
-    //assert
+    // assert
     assert.deepEqual(navigationController._focusedCellPosition, {}, "focused cell position");
     assert.ok(!isViewFocused, "view isn't focused");
 });
 
 QUnit.testInActiveWindow("Next cell is not focused when it is located in a command column", function(assert) {
-    //arrange
+    // arrange
     this.component._controllers.columns = new MockColumnsController([
         { title: 'Column 1', command: "select", visible: true },
         { title: 'Column 2', visible: true },
@@ -655,7 +655,7 @@ QUnit.testInActiveWindow("Next cell is not focused when it is located in a comma
         return $([{ cellIndex: 0 }]);
     };
 
-    //act
+    // act
     navigationController._keyDownHandler({
         key: "leftArrow",
         originalEvent: {
@@ -665,12 +665,12 @@ QUnit.testInActiveWindow("Next cell is not focused when it is located in a comma
         }
     });
 
-    //assert
+    // assert
     assert.deepEqual(navigationController._focusedCellPosition, { columnIndex: 1, rowIndex: 0 }, "focusedCellPosition");
 });
 
 QUnit.testInActiveWindow("Next cell is not focused when it is located in a grouped column", function(assert) {
-    //arrange
+    // arrange
     this.component._controllers.columns = new MockColumnsController([
         { title: 'Column 1', groupIndex: 0, visible: true },
         { title: 'Column 2', visible: true },
@@ -686,7 +686,7 @@ QUnit.testInActiveWindow("Next cell is not focused when it is located in a group
         return this.getView("rowsView").getCell({ columnIndex: 0, rowIndex: 0 });
     };
 
-    //act
+    // act
     navigationController._keyDownHandler({
         key: "leftArrow",
         originalEvent: {
@@ -696,12 +696,12 @@ QUnit.testInActiveWindow("Next cell is not focused when it is located in a group
         }
     });
 
-    //assert
+    // assert
     assert.deepEqual(navigationController._focusedCellPosition, { columnIndex: 1, rowIndex: 0 }, "focusedCellPosition");
 });
 
 QUnit.testInActiveWindow("Down key is not worked when cell has position according with a command column", function(assert) {
-    //arrange
+    // arrange
     this.component._controllers.columns = new MockColumnsController([
         { title: 'Column 1', command: "select", visible: true },
         { title: 'Column 2', visible: true }
@@ -720,7 +720,7 @@ QUnit.testInActiveWindow("Down key is not worked when cell has position accordin
         isFocused = true;
     };
 
-    //act
+    // act
     navigationController._keyDownHandler({
         key: "downArrow",
         originalEvent: {
@@ -730,12 +730,12 @@ QUnit.testInActiveWindow("Down key is not worked when cell has position accordin
         }
     });
 
-    //assert
+    // assert
     assert.ok(!isFocused, "cell is not focused");
 });
 
 QUnit.testInActiveWindow("Up key is not worked when cell has position according with a command column", function(assert) {
-    //arrange
+    // arrange
     this.component._controllers.columns = new MockColumnsController([
         { title: 'Column 1', command: "select", visible: true },
         { title: 'Column 2', visible: true }
@@ -754,7 +754,7 @@ QUnit.testInActiveWindow("Up key is not worked when cell has position according 
         isFocused = true;
     };
 
-    //act
+    // act
     navigationController._keyDownHandler({
         key: "upArrow",
         originalEvent: {
@@ -764,17 +764,17 @@ QUnit.testInActiveWindow("Up key is not worked when cell has position according 
         }
     });
 
-    //assert
+    // assert
     assert.ok(!isFocused, "cell is not focused");
 });
 
 QUnit.testInActiveWindow("Focus valid cell in a rows with data", function(assert) {
-    //arrange
+    // arrange
     var view = new RowsView(this.component),
         isFocused,
         navigationController;
 
-    //act
+    // act
     this.component._views.rowsView = view;
     navigationController = new KeyboardNavigationController(this.component);
     navigationController._focusedView = view;
@@ -790,28 +790,28 @@ QUnit.testInActiveWindow("Focus valid cell in a rows with data", function(assert
 
     this.clock.tick();
 
-    //assert
+    // assert
     assert.ok(isFocused, "cell is focused");
 });
 
 QUnit.testInActiveWindow("Update focused cell for not cell element_T106691", function(assert) {
-    //arrange
+    // arrange
     var navigationController = new KeyboardNavigationController(this.component);
 
-    //act
+    // act
     navigationController.init();
     navigationController._updateFocusedCellPosition($("<div/>").closest("td"));
 
-    //assert
+    // assert
     assert.deepEqual(navigationController._focusedCellPosition, {});
 });
 
 QUnit.testInActiveWindow("Reset focused cell info on click ", function(assert) {
-    //arrange
+    // arrange
     var navigationController = new KeyboardNavigationController(this.component),
         $cell = $("<td tabindex='0'>");
 
-    //act
+    // act
     navigationController.init();
     navigationController._focusedCellPosition = {
         columnIndex: 0,
@@ -822,18 +822,18 @@ QUnit.testInActiveWindow("Reset focused cell info on click ", function(assert) {
     };
     $(document).trigger("dxpointerdown");
 
-    //assert
+    // assert
     assert.deepEqual(navigationController._focusedCellPosition, {}, "focusedCellPosition");
     assert.ok(!navigationController._isNeedFocus, "isKeyDown");
 });
 
 QUnit.testInActiveWindow("focused cell info is not reset when element of rowvIew is clicked ", function(assert) {
-    //arrange
+    // arrange
     var navigationController = new KeyboardNavigationController(this.component),
         $rowsView = $("<div>").addClass("dx-datagrid-rowsview"),
         $cell = $("<td tabindex='0'>");
 
-    //act
+    // act
     $rowsView
         .append($cell)
         .appendTo($("#container"));
@@ -848,13 +848,13 @@ QUnit.testInActiveWindow("focused cell info is not reset when element of rowvIew
     };
     $($cell).trigger("dxpointerdown");
 
-    //assert
+    // assert
     assert.deepEqual(navigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 0 }, "focusedCellPosition");
     assert.equal($cell.attr("tabIndex"), "0", "tabIndex");
 });
 
 QUnit.testInActiveWindow("Cell is not focused when view is renderCompleted without keydown event", function(assert) {
-    //arrange
+    // arrange
     var navigationController,
         isFocused = false,
         $cell,
@@ -865,7 +865,7 @@ QUnit.testInActiveWindow("Cell is not focused when view is renderCompleted witho
         return $rowsElement;
     };
 
-    //act
+    // act
     navigationController = new KeyboardNavigationController(this.component);
     navigationController.init();
     navigationController._focusedView = rowsView;
@@ -886,7 +886,7 @@ QUnit.testInActiveWindow("Cell is not focused when view is renderCompleted witho
 });
 
 QUnit.test("Element is not focused when it is html tag is not cell", function(assert) {
-    //arrange
+    // arrange
     var navigationController,
         _$focusElement,
         rowsView = this.getView("rowsView"),
@@ -899,13 +899,13 @@ QUnit.test("Element is not focused when it is html tag is not cell", function(as
         _$focusElement = $focusElement;
     };
 
-    //act
+    // act
     navigationController = new KeyboardNavigationController(this.component);
     navigationController.init();
     navigationController._focusedView = rowsView;
     navigationController._focus($("<div>"));
 
-    //assert
+    // assert
     assert.ok(!_$focusElement, "element has not focused");
 });
 
@@ -1035,10 +1035,10 @@ QUnit.module("Keyboard keys", {
 });
 
 QUnit.testInActiveWindow("Save focusedCellPosition by click on self", function(assert) {
-    //arrange
+    // arrange
     setupModules(this);
 
-    //act
+    // act
     this.gridView.render($("#container"));
 
     var $row = $(this.rowsView.element().find(".dx-row")[3]),
@@ -1046,7 +1046,7 @@ QUnit.testInActiveWindow("Save focusedCellPosition by click on self", function(a
 
     $($cell).trigger(CLICK_EVENT);
 
-    //assert
+    // assert
     assert.ok(!$cell.hasClass("dx-focused"));
     assert.ok(this.keyboardNavigationController._focusedCellPosition, "focusedCellPosition");
     assert.equal(this.keyboardNavigationController._focusedCellPosition.columnIndex, 3, "cellIndex");
@@ -1054,27 +1054,27 @@ QUnit.testInActiveWindow("Save focusedCellPosition by click on self", function(a
 });
 
 QUnit.testInActiveWindow("Right arrow", function(assert) {
-    //arrange
+    // arrange
     setupModules(this);
 
-    //act
+    // act
     this.gridView.render($("#container"));
 
     this.focusFirstCell();
 
     var isPreventDefaultCalled = this.triggerKeyDown("rightArrow").preventDefault;
 
-    //assert
+    // assert
     assert.equal(this.keyboardNavigationController._focusedCellPosition.columnIndex, 1, "cellIndex");
     assert.equal(this.keyboardNavigationController._focusedCellPosition.rowIndex, 0, "rowIndex");
     assert.ok(isPreventDefaultCalled, "preventDefault is called");
 });
 
 QUnit.testInActiveWindow("Left arrow", function(assert) {
-    //arrange
+    // arrange
     setupModules(this);
 
-    //act
+    // act
     this.gridView.render($("#container"));
 
     this.focusFirstCell();
@@ -1084,36 +1084,36 @@ QUnit.testInActiveWindow("Left arrow", function(assert) {
     this.triggerKeyDown("rightArrow");
     var isPreventDefaultCalled = this.triggerKeyDown("leftArrow").preventDefault;
 
-    //assert
+    // assert
     assert.equal(this.keyboardNavigationController._focusedCellPosition.columnIndex, 2, "cellIndex");
     assert.equal(this.keyboardNavigationController._focusedCellPosition.rowIndex, 0, "rowIndex");
     assert.ok(isPreventDefaultCalled, "preventDefault is called");
 });
 
 QUnit.testInActiveWindow("Left arrow (RTL)", function(assert) {
-    //arrange
+    // arrange
     setupModules(this);
     this.options.rtlEnabled = true;
 
-    //act
+    // act
     this.gridView.render($("#container"));
 
     this.focusFirstCell();
 
     var isPreventDefaultCalled = this.triggerKeyDown("leftArrow").preventDefault;
 
-    //assert
+    // assert
     assert.equal(this.keyboardNavigationController._focusedCellPosition.columnIndex, 1, "cellIndex");
     assert.equal(this.keyboardNavigationController._focusedCellPosition.rowIndex, 0, "rowIndex");
     assert.ok(isPreventDefaultCalled, "preventDefault is called");
 });
 
 QUnit.testInActiveWindow("Right arrow (RTL)", function(assert) {
-    //arrange
+    // arrange
     setupModules(this);
     this.options.rtlEnabled = true;
 
-    //act
+    // act
     this.gridView.render($("#container"));
 
     this.focusFirstCell();
@@ -1123,17 +1123,17 @@ QUnit.testInActiveWindow("Right arrow (RTL)", function(assert) {
     this.triggerKeyDown("leftArrow");
     var isPreventDefaultCalled = this.triggerKeyDown("rightArrow").preventDefault;
 
-    //assert
+    // assert
     assert.equal(this.keyboardNavigationController._focusedCellPosition.columnIndex, 2, "cellIndex");
     assert.equal(this.keyboardNavigationController._focusedCellPosition.rowIndex, 0, "rowIndex");
     assert.ok(isPreventDefaultCalled, "preventDefault is called");
 });
 
 QUnit.testInActiveWindow("Down arrow", function(assert) {
-    //arrange
+    // arrange
     setupModules(this);
 
-    //act
+    // act
     this.gridView.render($("#container"));
 
     this.focusFirstCell();
@@ -1141,17 +1141,17 @@ QUnit.testInActiveWindow("Down arrow", function(assert) {
     var isPreventDefaultCalled = this.triggerKeyDown("downArrow").preventDefault;
     this.triggerKeyDown("downArrow");
 
-    //assert
+    // assert
     assert.equal(this.keyboardNavigationController._focusedCellPosition.columnIndex, 0, "cellIndex");
     assert.equal(this.keyboardNavigationController._focusedCellPosition.rowIndex, 3, "rowIndex");
     assert.ok(isPreventDefaultCalled, "preventDefault is called");
 });
 
 QUnit.testInActiveWindow("Up arrow", function(assert) {
-    //arrange
+    // arrange
     setupModules(this);
 
-    //act
+    // act
     this.gridView.render($("#container"));
 
     this.focusFirstCell();
@@ -1161,30 +1161,30 @@ QUnit.testInActiveWindow("Up arrow", function(assert) {
     this.triggerKeyDown("downArrow");
     var isPreventDefaultCalled = this.triggerKeyDown("upArrow").preventDefault;
 
-    //assert
+    // assert
     assert.equal(this.keyboardNavigationController._focusedCellPosition.columnIndex, 0, "cellIndex");
     assert.equal(this.keyboardNavigationController._focusedCellPosition.rowIndex, 3, "rowIndex");
     assert.ok(isPreventDefaultCalled, "preventDefault is called");
 });
 
 QUnit.testInActiveWindow("StopPropagation is called", function(assert) {
-    //arrange
+    // arrange
     setupModules(this);
 
-    //act
+    // act
     this.gridView.render($("#container"));
 
     this.focusFirstCell();
 
-    //assert
+    // assert
     assert.ok(this.triggerKeyDown("downArrow").stopPropagation);
 });
 
 QUnit.testInActiveWindow("Down arrow to group footer", function(assert) {
-    //arrange
+    // arrange
     setupModules(this);
 
-    //act
+    // act
     this.gridView.render($("#container"));
 
     this.focusCell(1, 5);
@@ -1192,7 +1192,7 @@ QUnit.testInActiveWindow("Down arrow to group footer", function(assert) {
     this.triggerKeyDown("downArrow");
     this.triggerKeyDown("downArrow");
 
-    //assert
+    // assert
     var rowIndex = this.keyboardNavigationController._focusedCellPosition.rowIndex;
     assert.equal(this.keyboardNavigationController._focusedCellPosition.columnIndex, 1, "cellIndex");
     assert.equal(rowIndex, 8, "rowIndex");
@@ -1200,16 +1200,16 @@ QUnit.testInActiveWindow("Down arrow to group footer", function(assert) {
 });
 
 QUnit.testInActiveWindow("Up arrow to group footer", function(assert) {
-    //arrange
+    // arrange
     setupModules(this);
 
-    //act
+    // act
     this.gridView.render($("#container"));
 
     this.focusCell(1, 8);
     this.triggerKeyDown("upArrow");
 
-    //assert
+    // assert
     var rowIndex = this.keyboardNavigationController._focusedCellPosition.rowIndex;
     assert.equal(this.keyboardNavigationController._focusedCellPosition.columnIndex, 1, "cellIndex");
     assert.equal(rowIndex, 6, "rowIndex");
@@ -1217,10 +1217,10 @@ QUnit.testInActiveWindow("Up arrow to group footer", function(assert) {
 });
 
 QUnit.testInActiveWindow("Ctrl+RightArrow do not expand master detail row if master detail is not enabled (T576946)", function(assert) {
-    //arrange
+    // arrange
     setupModules(this);
 
-    //act
+    // act
     this.gridView.render($("#container"));
 
     this.focusCell(1, 1);
@@ -1228,12 +1228,12 @@ QUnit.testInActiveWindow("Ctrl+RightArrow do not expand master detail row if mas
     this.dataController.expandRow = sinon.spy();
     this.triggerKeyDown("rightArrow", true);
 
-    //assert
+    // assert
     assert.strictEqual(this.dataController.expandRow.callCount, 0, "grid does not open master detail");
 });
 
-/*test("Down arrow for master detail", function () {
-    //act
+/* test("Down arrow for master detail", function () {
+    // act
     this.options.masterDetail = {
         enabled: true,
         template: function(container){
@@ -1249,13 +1249,13 @@ QUnit.testInActiveWindow("Ctrl+RightArrow do not expand master detail row if mas
     this.triggerKeyDown("downArrow");
     this.triggerKeyDown("downArrow");
 
-    //assert
+    // assert
     assert.equal(this.keyboardNavigationController._focusedCellPosition.columnIndex, 1, "cellIndex");
     assert.equal(this.keyboardNavigationController._focusedCellPosition.rowIndex, 5, "rowIndex");
 });
 
 QUnit.testInActiveWindow("Up arrow for master detail", function (assert) {
-    //act
+    // act
     this.gridView.render($("#container"));
 
     this.focusFirstCell();
@@ -1264,13 +1264,13 @@ QUnit.testInActiveWindow("Up arrow for master detail", function (assert) {
     this.triggerKeyDown("downArrow");
     this.triggerKeyDown("downArrow");
 
-    //assert
+    // assert
     assert.equal(this.keyboardNavigationController._focusedCellPosition.columnIndex, 0, "cellIndex");
     assert.equal(this.keyboardNavigationController._focusedCellPosition.rowIndex, 2, "rowIndex");
-});*/
+}); */
 
 QUnit.testInActiveWindow("Update focus when row is editing with form_T306378", function(assert) {
-    //arrange
+    // arrange
     this.$element = function() {
         return $("#container");
     };
@@ -1287,7 +1287,7 @@ QUnit.testInActiveWindow("Update focus when row is editing with form_T306378", f
 
     setupDataGridModules(this, ['data', 'columns', 'rows', "editorFactory", 'gridView', 'columnHeaders', "editing", "keyboardNavigation", "masterDetail"], { initViews: true });
 
-    //act
+    // act
     this.gridView.render($("#container"));
     this.focusCell(0, 0);
     this.editingController.editRow(0);
@@ -1295,18 +1295,18 @@ QUnit.testInActiveWindow("Update focus when row is editing with form_T306378", f
     this.editingController.editRow(0);
     this.clock.tick();
 
-    //assert
+    // assert
     assert.equal($(".dx-datagrid-edit-form input:focus").length, 1);
 });
 
 QUnit.testInActiveWindow("Right, left, top, down arrow keys when row or cell is editing", function(assert) {
-    //arrange
+    // arrange
     setupModules(this);
 
-    //assert
+    // assert
     var arrowKeysCounter = 0;
 
-    //act
+    // act
     this.editingController._editRowIndex = 1;
     this.gridView.render($("#container"));
 
@@ -1324,13 +1324,13 @@ QUnit.testInActiveWindow("Right, left, top, down arrow keys when row or cell is 
 });
 
 QUnit.testInActiveWindow("Right, left arrow keys when row is grouped", function(assert) {
-    //arrange
+    // arrange
     setupModules(this);
 
-    //assert
+    // assert
     var arrowKeysCounter = 0;
 
-    //act
+    // act
     this.gridView.render($("#container"));
 
     this.focusFirstCell();
@@ -1350,13 +1350,13 @@ QUnit.testInActiveWindow("Right, left arrow keys when row is grouped", function(
 });
 
 QUnit.testInActiveWindow("Down arrow keys for navigate to grouped row", function(assert) {
-    //arrange
+    // arrange
     setupModules(this);
 
-    //assert
+    // assert
     var isGroupedRowFocused;
 
-    //act
+    // act
     this.gridView.render($("#container"));
 
     this.keyboardNavigationController._focusedView = this.rowsView;
@@ -1376,10 +1376,10 @@ QUnit.testInActiveWindow("Down arrow keys for navigate to grouped row", function
 });
 
 QUnit.testInActiveWindow("Up arrow key for navigate to grouped row", function(assert) {
-    //arrange
+    // arrange
     setupModules(this);
 
-    //act
+    // act
     this.gridView.render($("#container"));
 
     this.keyboardNavigationController._focusedView = this.rowsView;
@@ -1391,12 +1391,12 @@ QUnit.testInActiveWindow("Up arrow key for navigate to grouped row", function(as
 
     this.triggerKeyDown("upArrow");
 
-    //assert
+    // assert
     assert.equal(this.rowsView.getRow(6).attr("tabindex"), 0);
 });
 
 QUnit.testInActiveWindow("Up arrow key for navigate to grouped row with masterDetail", function(assert) {
-    //arrange
+    // arrange
     this.columns = [
         { visible: true, command: "expand" },
         { visible: true, command: "expand" },
@@ -1419,7 +1419,7 @@ QUnit.testInActiveWindow("Up arrow key for navigate to grouped row with masterDe
 
     setupModules(this);
 
-    //act
+    // act
     this.gridView.render($("#container"));
 
     this.keyboardNavigationController._focusedView = this.rowsView;
@@ -1435,7 +1435,7 @@ QUnit.testInActiveWindow("Up arrow key for navigate to grouped row with masterDe
 });
 
 QUnit.testInActiveWindow("Down arrow key for navigate from last row to masterDetail row", function(assert) {
-    //assert
+    // assert
     this.columns = [
         { visible: true, command: "expand" },
         { caption: 'Column 1', visible: true, dataField: "Column1" },
@@ -1459,7 +1459,7 @@ QUnit.testInActiveWindow("Down arrow key for navigate from last row to masterDet
 
     setupModules(this);
 
-    //act
+    // act
     this.gridView.render($("#container"));
 
     this.keyboardNavigationController._focusedView = this.rowsView;
@@ -1471,13 +1471,13 @@ QUnit.testInActiveWindow("Down arrow key for navigate from last row to masterDet
 
     this.triggerKeyDown("downArrow");
 
-    //assert
+    // assert
     assert.equal(this.keyboardNavigationController._focusedCellPosition.columnIndex, 0, "cellIndex");
     assert.equal(this.keyboardNavigationController._focusedCellPosition.rowIndex, 2, "rowIndex");
 });
 
 QUnit.testInActiveWindow("Down arrow key do not work in masterDetail row", function(assert) {
-    //assert
+    // assert
     this.columns = [
         { visible: true, command: "expand" },
         { caption: 'Column 1', visible: true, dataField: "Column1" },
@@ -1500,22 +1500,22 @@ QUnit.testInActiveWindow("Down arrow key do not work in masterDetail row", funct
 
     setupModules(this);
 
-    //act
+    // act
     this.gridView.render($("#container"));
 
     $("#container input").focus().trigger(CLICK_EVENT);
 
     var isDefaultPrevented = this.triggerKeyDown("downArrow").preventDefault;
 
-    //assert
+    // assert
     assert.strictEqual(isDefaultPrevented, false, "default is not prevented");
     assert.equal(this.keyboardNavigationController._focusedCellPosition.columnIndex, 1, "cellIndex");
     assert.equal(this.keyboardNavigationController._focusedCellPosition.rowIndex, 1, "rowIndex");
 });
 
-//T376499
+// T376499
 QUnit.testInActiveWindow("Left arrow key do not work in masterDetail row", function(assert) {
-    //assert
+    // assert
     this.columns = [
         { visible: true, command: "expand" },
         { caption: 'Column 1', visible: true, dataField: "Column1" },
@@ -1538,21 +1538,21 @@ QUnit.testInActiveWindow("Left arrow key do not work in masterDetail row", funct
 
     setupModules(this);
 
-    //act
+    // act
     this.gridView.render($("#container"));
 
     $("#container input").focus().trigger(CLICK_EVENT);
 
     var isDefaultPrevented = this.triggerKeyDown("leftArrow").preventDefault;
 
-    //assert
+    // assert
     assert.strictEqual(isDefaultPrevented, false, "default is not prevented");
     assert.equal(this.keyboardNavigationController._focusedCellPosition.columnIndex, 1, "cellIndex");
     assert.equal(this.keyboardNavigationController._focusedCellPosition.rowIndex, 1, "rowIndex");
 });
 
 QUnit.testInActiveWindow("Down arrow key for navigate to masterDetail row and summary", function(assert) {
-    //assert
+    // assert
     this.columns = [
         { visible: true, command: "expand" },
         { caption: 'Column 1', visible: true, dataField: "Column1" },
@@ -1577,7 +1577,7 @@ QUnit.testInActiveWindow("Down arrow key for navigate to masterDetail row and su
 
     setupModules(this);
 
-    //act
+    // act
     this.gridView.render($("#container"));
 
     this.keyboardNavigationController._focusedView = this.rowsView;
@@ -1590,63 +1590,63 @@ QUnit.testInActiveWindow("Down arrow key for navigate to masterDetail row and su
     this.triggerKeyDown("downArrow");
     this.triggerKeyDown("rightArrow");
 
-    //assert
+    // assert
     assert.equal(this.keyboardNavigationController._focusedCellPosition.columnIndex, 1, "cellIndex");
     assert.equal(this.keyboardNavigationController._focusedCellPosition.rowIndex, 2, "rowIndex");
 });
 
 QUnit.testInActiveWindow("Focus grouped row", function(assert) {
-    //arrange
+    // arrange
     setupModules(this);
 
-    //act
+    // act
     this.gridView.render($("#container"));
     this.keyboardNavigationController._focusedView = this.rowsView;
 
     var $row = $(this.rowsView.element().find('tbody > tr')[6]);
     this.keyboardNavigationController._focus($($row.find("td")[1]));
 
-    //assert
+    // assert
     assert.ok($row.hasClass("dx-group-row"), "row is focused");
     assert.equal(this.keyboardNavigationController._focusedCellPosition.rowIndex, 6, "rowIndex of focusedCellPosition");
 });
 
 QUnit.testInActiveWindow("Page down when paging enabled", function(assert) {
-    //arrange
+    // arrange
     this.options = {
         paging: { enabled: true }
     };
     setupModules(this);
 
-    //act
+    // act
     this.gridView.render($("#container"));
 
     this.focusFirstCell();
 
     var isPreventDefaultCalled = this.triggerKeyDown("pageDown").preventDefault;
 
-    //assert
+    // assert
     assert.equal(this.dataController.pageIndex(), 1, "pageIndex");
     assert.ok(isPreventDefaultCalled, "preventDefault is called");
 });
 
 QUnit.testInActiveWindow("Page down should not prevent default behaviour when paging disabled and no vertial scroll", function(assert) {
-    //arrange
+    // arrange
     setupModules(this);
 
-    //act
+    // act
     this.gridView.render($("#container"));
 
     this.focusFirstCell();
 
     var isPreventDefaultCalled = this.triggerKeyDown("pageDown").preventDefault;
 
-    //assert
+    // assert
     assert.ok(!isPreventDefaultCalled, "preventDefault is not called");
 });
 
 QUnit.testInActiveWindow("Page down should scroll page down when paging disabled and vertial scroll exists", function(assert) {
-    //arrange
+    // arrange
     var that = this;
     var done = assert.async();
 
@@ -1655,7 +1655,7 @@ QUnit.testInActiveWindow("Page down should scroll page down when paging disabled
     };
     setupModules(this);
 
-    //act
+    // act
     this.gridView.render($("#container"));
     this.rowsView.height(200);
     this.rowsView.resize();
@@ -1674,19 +1674,19 @@ QUnit.testInActiveWindow("Page down should scroll page down when paging disabled
         });
     });
 
-    //assert
+    // assert
     assert.equal(this.rowsView.getScrollable().scrollTop(), 200);
     assert.ok(isPreventDefaultCalled, "preventDefault is called");
 });
 
 QUnit.testInActiveWindow("Page up when paging enabled", function(assert) {
-    //arrange
+    // arrange
     this.options = {
         paging: { enabled: true }
     };
     setupModules(this);
 
-    //act
+    // act
     this.gridView.render($("#container"));
 
     this.focusFirstCell();
@@ -1696,19 +1696,19 @@ QUnit.testInActiveWindow("Page up when paging enabled", function(assert) {
     this.triggerKeyDown("pageDown");
     var isPreventDefaultCalled = this.triggerKeyDown("pageUp").preventDefault;
 
-    //assert
+    // assert
     assert.equal(this.dataController.pageIndex(), 2, "pageIndex");
     assert.ok(isPreventDefaultCalled, "preventDefault is called");
 });
 
 QUnit.testInActiveWindow("Page up should scroll page up when paging disabled and vertial scroll exists", function(assert) {
-    //arrange
+    // arrange
     this.options = {
         height: 200
     };
     setupModules(this);
 
-    //act
+    // act
     this.gridView.render($("#container"));
     this.rowsView.height(200);
     this.rowsView.resize();
@@ -1717,16 +1717,16 @@ QUnit.testInActiveWindow("Page up should scroll page up when paging disabled and
 
     var isPreventDefaultCalled = this.triggerKeyDown("pageUp").preventDefault;
 
-    //assert
+    // assert
     assert.equal(this.rowsView.getScrollable().scrollTop(), 10);
     assert.ok(isPreventDefaultCalled, "preventDefault is called");
 });
 
 QUnit.testInActiveWindow("Page up and page down by infinite scrolling", function(assert) {
-    //arrange
+    // arrange
     setupModules(this);
 
-    //act
+    // act
     this.options.scrolling = { mode: "infinite" };
 
     this.gridView.render($("#container"));
@@ -1743,25 +1743,25 @@ QUnit.testInActiveWindow("Page up and page down by infinite scrolling", function
         }
     };
 
-    //act
+    // act
     this.triggerKeyDown("pageDown");
 
-    //assert
+    // assert
     assert.ok(!isPageIndexChanged);
 
-    //act
+    // act
     isPageIndexChanged = false;
     this.triggerKeyDown("pageUp");
 
-    //assert
+    // assert
     assert.ok(!isPageIndexChanged);
 });
 
 QUnit.testInActiveWindow("Page up and page down by virtual scrolling", function(assert) {
-    //arrange
+    // arrange
     setupModules(this);
 
-    //act
+    // act
     this.options.scrolling = { mode: "virtual" };
 
     this.gridView.render($("#container"));
@@ -1778,26 +1778,26 @@ QUnit.testInActiveWindow("Page up and page down by virtual scrolling", function(
         }
     };
 
-    //act
+    // act
     this.triggerKeyDown("pageDown");
 
-    //assert
+    // assert
     assert.ok(!isPageIndexChanged);
 
-    //act
+    // act
     isPageIndexChanged = false;
     this.triggerKeyDown("pageUp");
 
-    //assert
+    // assert
     assert.ok(!isPageIndexChanged);
 });
 
 if(!browser.msie || parseInt(browser.version) > 11) {
     QUnit.testInActiveWindow("Space", function(assert) {
-        //arrange
+        // arrange
         setupModules(this);
 
-        //act
+        // act
         this.options.selection = { mode: "single" };
         this.gridView.render($("#container"));
 
@@ -1807,18 +1807,18 @@ if(!browser.msie || parseInt(browser.version) > 11) {
         this.triggerKeyDown("downArrow");
         this.triggerKeyDown("space", false, false, $(":focus").get(0));
 
-        //assert
+        // assert
         assert.equal(this.selectionOptions.changeItemSelectionCallsCount, 1, "selection rows count");
         assert.deepEqual(this.selectionOptions.changeItemSelectionArgs, [3], "changeItemSelectionArgs");
     });
 }
 
-//T336376
+// T336376
 QUnit.testInActiveWindow("Space in input", function(assert) {
-    //arrange
+    // arrange
     setupModules(this);
 
-    //act
+    // act
     this.columns[0].cellTemplate = function($cell, options) {
         $("<input>").appendTo($cell);
     };
@@ -1839,7 +1839,7 @@ QUnit.testInActiveWindow("Space in input", function(assert) {
     var e = $.Event("keydown", { which: 32 /* space */ });
     $("#container input").trigger(e);
 
-    //assert
+    // assert
     assert.ok(!this.selectionOptions.changeItemSelectionCallsCount, "changeItemSelection is not called");
     assert.ok(isKeyDownCalled, "keyDown called");
     assert.ok(!isDefaultPrevented, "default is not prevented");
@@ -1848,10 +1848,10 @@ QUnit.testInActiveWindow("Space in input", function(assert) {
 
 
 QUnit.testInActiveWindow("Space is not worked when selection is disabled", function(assert) {
-    //arrange
+    // arrange
     setupModules(this);
 
-    //act
+    // act
     this.options.selection = {
         mode: "none"
     };
@@ -1863,15 +1863,15 @@ QUnit.testInActiveWindow("Space is not worked when selection is disabled", funct
     this.triggerKeyDown("downArrow");
     this.triggerKeyDown("space", false, false, $(":focus").get(0));
 
-    //assert
+    // assert
     assert.ok(!this.selectionOptions.changeItemSelectionCallsCount);
 });
 
 QUnit.testInActiveWindow("Selection by space key is not worked_B255143", function(assert) {
-    //arrange
+    // arrange
     setupModules(this);
 
-    //act
+    // act
     this.options.selection = {
         mode: "multiple"
     };
@@ -1885,15 +1885,15 @@ QUnit.testInActiveWindow("Selection by space key is not worked_B255143", functio
     this._controllers.editing._editRowIndex = 1;
     this.triggerKeyDown("space", false, false, $("#container").find("td").get(0));
 
-    //assert
+    // assert
     assert.ok(!this.selectionOptions.changeItemSelectionCallsCount);
 });
 
 QUnit.testInActiveWindow("Use space key with a shift key", function(assert) {
-    //arrange
+    // arrange
     setupModules(this);
 
-    //act
+    // act
     this.options.selection = { mode: "multiple" };
     this.gridView.render($("#container"));
 
@@ -1904,16 +1904,16 @@ QUnit.testInActiveWindow("Use space key with a shift key", function(assert) {
     this.triggerKeyDown("space", false, false, $(":focus").get(0));
     this.triggerKeyDown("space", false, true, $(":focus").get(0));
 
-    //assert
+    // assert
     assert.equal(this.selectionOptions.changeItemSelectionCallsCount, 2, "selection rows count");
     assert.deepEqual(this.selectionOptions.additionalKeys, { shift: true, control: false }, "shift key");
 });
 
 QUnit.testInActiveWindow("Use space key with a ctrl key", function(assert) {
-    //arrange
+    // arrange
     setupModules(this);
 
-    //act
+    // act
     this.options.selection = { mode: "multiple" };
     this.gridView.render($("#container"));
 
@@ -1923,16 +1923,16 @@ QUnit.testInActiveWindow("Use space key with a ctrl key", function(assert) {
     this.triggerKeyDown("downArrow");
     this.triggerKeyDown("space", true, false, $(":focus").get(0));
 
-    //assert
+    // assert
     assert.equal(this.selectionOptions.changeItemSelectionCallsCount, 1, "selection rows count");
     assert.deepEqual(this.selectionOptions.additionalKeys, { control: true, shift: false }, "ctrl key");
 });
 
 QUnit.testInActiveWindow("Enter before row is edited", function(assert) {
-    //arrange
+    // arrange
     setupModules(this);
 
-    //act
+    // act
     this.options.editing = { allowUpdating: true };
     this.gridView.render($("#container"));
 
@@ -1941,12 +1941,12 @@ QUnit.testInActiveWindow("Enter before row is edited", function(assert) {
     this.triggerKeyDown("downArrow");
     this.triggerKeyDown("enter");
 
-    //assert
+    // assert
     assert.equal(this.editingController._editRowIndex, 1, "row is editing");
 });
 
 QUnit.testInActiveWindow("Editor has focus when edit form", function(assert) {
-    //arrange
+    // arrange
     this.options = {
         errorRowEnabled: true,
         editing: {
@@ -1986,19 +1986,19 @@ QUnit.testInActiveWindow("Editor has focus when edit form", function(assert) {
 
     this.gridView.render(testElement);
 
-    //act
+    // act
     this.focusCell(0, 0);
     this.triggerKeyDown("enter");
 
     this.clock.tick();
 
-    //assert
+    // assert
     assert.ok(testElement.find(".test .dx-texteditor.dx-state-focused").length === 1);
 });
 
-//T317001
+// T317001
 QUnit.testInActiveWindow("Focus previous cell after shift+tab on first form editor", function(assert) {
-    //arrange
+    // arrange
     this.options = {
         errorRowEnabled: true,
         editing: {
@@ -2038,7 +2038,7 @@ QUnit.testInActiveWindow("Focus previous cell after shift+tab on first form edit
 
     this.gridView.render(testElement);
 
-    //act
+    // act
     this.focusCell(0, 1);
     this.triggerKeyDown("enter");
 
@@ -2048,7 +2048,7 @@ QUnit.testInActiveWindow("Focus previous cell after shift+tab on first form edit
     this.triggerKeyDown("tab", false, true, testElement.find(".test .dx-texteditor.dx-state-focused").get(0));
     this.clock.tick();
 
-    //assert
+    // assert
     assert.equal(this.keyboardNavigationController._focusedCellPosition.columnIndex, 0, "column index");
     assert.equal(this.keyboardNavigationController._focusedCellPosition.rowIndex, 1, "row index");
 
@@ -2058,9 +2058,9 @@ QUnit.testInActiveWindow("Focus previous cell after shift+tab on first form edit
     assert.equal(testElement.find("[tabIndex]").index(testElement.find(":focus")) - 1, testElement.find("[tabIndex]").index($prevCell), "previous focusable element");
 });
 
-//T317001
+// T317001
 QUnit.testInActiveWindow("Focus next cell after tab on last form button", function(assert) {
-    //arrange
+    // arrange
     this.options = {
         errorRowEnabled: true,
         editing: {
@@ -2095,7 +2095,7 @@ QUnit.testInActiveWindow("Focus next cell after tab on last form button", functi
 
     this.gridView.render(testElement);
 
-    //act
+    // act
     this.focusCell(0, 1);
     this.triggerKeyDown("enter");
     this.clock.tick();
@@ -2108,7 +2108,7 @@ QUnit.testInActiveWindow("Focus next cell after tab on last form button", functi
     this.triggerKeyDown("tab", false, false, testElement.find(":focus").get(0));
     this.clock.tick();
 
-    //assert
+    // assert
     var $nextCell = testElement.find(".dx-data-row").eq(1).children().eq(0);
 
     assert.equal($nextCell.attr("tabindex"), "0");
@@ -2120,9 +2120,9 @@ QUnit.testInActiveWindow("Focus next cell after tab on last form button", functi
     }
 });
 
-//T448310
+// T448310
 QUnit.testInActiveWindow("Navigation using tab inside edit form in the first row", function(assert) {
-    //arrange
+    // arrange
     this.options = {
         errorRowEnabled: true,
         editing: {
@@ -2156,7 +2156,7 @@ QUnit.testInActiveWindow("Navigation using tab inside edit form in the first row
 
     this.gridView.render(testElement);
 
-    //act
+    // act
     this.focusCell(0, 1);
     this.triggerKeyDown("enter");
 
@@ -2165,13 +2165,13 @@ QUnit.testInActiveWindow("Navigation using tab inside edit form in the first row
     this.triggerKeyDown("tab", false, false, testElement.find(".test .dx-texteditor.dx-state-focused").get(0));
     this.clock.tick();
 
-    //assert
+    // assert
     assert.equal(this.keyboardNavigationController._focusedCellPosition.columnIndex, 1, "column index");
     assert.equal(this.keyboardNavigationController._focusedCellPosition.rowIndex, 1, "row index");
 });
 
 QUnit.testInActiveWindow("Focused view must be initialized after insert a new row", function(assert) {
-    //arrange
+    // arrange
     this.options = {
         errorRowEnabled: true,
         editing: {
@@ -2197,17 +2197,17 @@ QUnit.testInActiveWindow("Focused view must be initialized after insert a new ro
 
     assert.notOk(this.keyboardNavigationController._focusedView, "focused view isn't initialized");
 
-    //act
+    // act
     this.addRow();
     this.clock.tick();
 
-    //assert
+    // assert
     assert.ok(this.keyboardNavigationController._focusedView, "focused view is initialized");
 });
 
-//T499640
+// T499640
 QUnit.testInActiveWindow("Navigation using tab inside edit form in the added row", function(assert) {
-    //arrange
+    // arrange
     this.options = {
         errorRowEnabled: true,
         editing: {
@@ -2241,16 +2241,16 @@ QUnit.testInActiveWindow("Navigation using tab inside edit form in the added row
     var $focusedEditor = testElement.find(".dx-texteditor.dx-state-focused");
     assert.equal($focusedEditor.length, 1, "focused editor exists");
 
-    //act
+    // act
     this.triggerKeyDown("tab", false, false, $focusedEditor.get(0));
 
-    //assert
+    // assert
     assert.ok(true, "exception should not be occured");
 });
 
-//T448310
+// T448310
 QUnit.testInActiveWindow("Navigation using shift+tab inside edit form in the first row", function(assert) {
-    //arrange
+    // arrange
     this.options = {
         errorRowEnabled: true,
         editing: {
@@ -2283,7 +2283,7 @@ QUnit.testInActiveWindow("Navigation using shift+tab inside edit form in the fir
 
     this.gridView.render(testElement);
 
-    //act
+    // act
     this.focusCell(0, 0);
     this.triggerKeyDown("enter");
 
@@ -2292,15 +2292,15 @@ QUnit.testInActiveWindow("Navigation using shift+tab inside edit form in the fir
     this.triggerKeyDown("tab", false, true, testElement.find(".test .dx-texteditor.dx-state-focused").get(0));
     this.clock.tick();
 
-    //assert
+    // assert
     assert.equal(this.keyboardNavigationController._focusedCellPosition.columnIndex, 0, "column index");
     assert.equal(this.keyboardNavigationController._focusedCellPosition.rowIndex, 0, "row index");
 });
 
 
-//T448310
+// T448310
 QUnit.testInActiveWindow("Navigate using shift + tab to first editor from row after this editor", function(assert) {
-    //arrange
+    // arrange
     this.options = {
         errorRowEnabled: true,
         editing: {
@@ -2334,7 +2334,7 @@ QUnit.testInActiveWindow("Navigate using shift + tab to first editor from row af
 
     this.gridView.render(testElement);
 
-    //act
+    // act
     this.focusCell(0, 0);
     this.triggerKeyDown("enter");
 
@@ -2347,13 +2347,13 @@ QUnit.testInActiveWindow("Navigate using shift + tab to first editor from row af
     this.triggerKeyDown("tab", false, true, testElement.find(".dx-row").get(1));
     this.clock.tick();
 
-    //assert
+    // assert
     assert.equal(this.keyboardNavigationController._focusedCellPosition.columnIndex, 0, "column index");
     assert.equal(this.keyboardNavigationController._focusedCellPosition.rowIndex, 0, "row index");
 });
 
 QUnit.testInActiveWindow("Close edit form after enter key", function(assert) {
-    //arrange
+    // arrange
     this.options = {
         errorRowEnabled: true,
         editing: {
@@ -2393,7 +2393,7 @@ QUnit.testInActiveWindow("Close edit form after enter key", function(assert) {
 
     this.gridView.render(testElement);
 
-    //act
+    // act
     this.focusCell(0, 0);
     this.triggerKeyDown("enter");
     this.clock.tick();
@@ -2405,16 +2405,16 @@ QUnit.testInActiveWindow("Close edit form after enter key", function(assert) {
     $($focusedEditor).trigger(e);
     this.clock.tick();
 
-    //assert
+    // assert
     assert.ok(testElement.find(".test .dx-texteditor.dx-state-focused").length === 0);
     if(!browser.msie) {
-        //T317003
+        // T317003
         assert.equal(testElement.find("td.dx-focused").length, 1, "focused cell exists");
     }
 });
 
 QUnit.testInActiveWindow("Close edit form after esc key", function(assert) {
-    //arrange
+    // arrange
     this.options = {
         errorRowEnabled: true,
         editing: {
@@ -2454,7 +2454,7 @@ QUnit.testInActiveWindow("Close edit form after esc key", function(assert) {
 
     this.gridView.render(testElement);
 
-    //act
+    // act
     this.focusCell(0, 0);
     this.triggerKeyDown("enter");
 
@@ -2468,17 +2468,17 @@ QUnit.testInActiveWindow("Close edit form after esc key", function(assert) {
     $($focusedEditor).trigger(e);
     this.clock.tick();
 
-    //assert
+    // assert
     assert.ok(testElement.find(".test .dx-texteditor.dx-state-focused").length === 0);
 
     if(!browser.msie) {
-        //T317003
+        // T317003
         assert.equal(testElement.find("td.dx-focused").length, 1, "focused cell exists");
     }
 });
 
 QUnit.test("Key down event - default key handler is canceled", function(assert) {
-    //arrange
+    // arrange
     var keyDownInfo,
         isLeftArrow;
 
@@ -2490,7 +2490,7 @@ QUnit.test("Key down event - default key handler is canceled", function(assert) 
     };
     setupModules(this);
 
-    //act
+    // act
     this.gridView.render($("#container"));
 
     this.keyboardNavigationController._leftRightKeysHandler = function() {
@@ -2505,7 +2505,7 @@ QUnit.test("Key down event - default key handler is canceled", function(assert) 
         }
     });
 
-    //assert
+    // assert
     assert.deepEqual(keyDownInfo, {
         handled: true,
         event: {
@@ -2518,7 +2518,7 @@ QUnit.test("Key down event - default key handler is canceled", function(assert) 
 });
 
 QUnit.test("Key down event", function(assert) {
-    //arrange
+    // arrange
     var keyDownInfo,
         isLeftArrow;
 
@@ -2529,7 +2529,7 @@ QUnit.test("Key down event", function(assert) {
     };
     setupModules(this);
 
-    //act
+    // act
     this.gridView.render($("#container"));
 
     this.keyboardNavigationController._leftRightKeysHandler = function() {
@@ -2543,7 +2543,7 @@ QUnit.test("Key down event", function(assert) {
         }
     });
 
-    //assert
+    // assert
     assert.deepEqual(keyDownInfo, {
         handled: false,
         event: {
@@ -2588,7 +2588,7 @@ QUnit.test("Get a valid index of cell on tab key_T259896", function(assert) {
 
     setupModules(this);
 
-    //act
+    // act
     this.gridView.render($("#container"));
     this.editingController.editCell(0, 1);
 
@@ -2599,7 +2599,7 @@ QUnit.test("Get a valid index of cell on tab key_T259896", function(assert) {
         }
     }, true);
 
-    //assert
+    // assert
     assert.equal(this.keyboardNavigationController._focusedCellPosition.columnIndex, 2, "column index");
     assert.equal(this.keyboardNavigationController._focusedCellPosition.rowIndex, 0, "row index");
 });
@@ -2637,7 +2637,7 @@ QUnit.test("Get a valid index of cell on enter key_T259896", function(assert) {
 
     setupModules(this);
 
-    //act
+    // act
     this.gridView.render($("#container"));
     this.editingController.editCell(0, 1);
 
@@ -2653,7 +2653,7 @@ QUnit.test("Get a valid index of cell on enter key_T259896", function(assert) {
         }
     }, true);
 
-    //assert
+    // assert
     assert.equal(this.keyboardNavigationController._focusedCellPosition.columnIndex, 1, "column index");
     assert.equal(this.keyboardNavigationController._focusedCellPosition.rowIndex, 0, "row index");
 });
@@ -2691,7 +2691,7 @@ QUnit.test("Get a valid index of cell on escape key_T259896", function(assert) {
 
     setupModules(this);
 
-    //act
+    // act
     this.gridView.render($("#container"));
     this.editingController.editCell(0, 1);
 
@@ -2707,14 +2707,14 @@ QUnit.test("Get a valid index of cell on escape key_T259896", function(assert) {
         }
     }, true);
 
-    //assert
+    // assert
     assert.equal(this.keyboardNavigationController._focusedCellPosition.columnIndex, 1, "column index");
     assert.equal(this.keyboardNavigationController._focusedCellPosition.rowIndex, 0, "row index");
 });
 
 if(device.deviceType === "desktop") {
     QUnit.testInActiveWindow("Enter after row is edited", function(assert) {
-        //arrange
+        // arrange
         setupModules(this);
 
         var $container = $("#container"),
@@ -2735,7 +2735,7 @@ if(device.deviceType === "desktop") {
             };
         };
 
-        //act
+        // act
         this.options.editing = { allowUpdating: true };
         this.gridView.render($container);
 
@@ -2752,13 +2752,13 @@ if(device.deviceType === "desktop") {
         $input.val('Test update cell');
         keyboardMock($container.find("input").eq(1)).keyDown("enter");
 
-        //act
+        // act
         var event = $.Event('change');
         $($input).trigger(event);
 
         this.clock.tick();
 
-        //assert
+        // assert
         assert.strictEqual(event.isDefaultPrevented(), false, "default is not prevented");
         assert.ok(isStoreUpdated);
         assert.equal(this.editingController._editRowIndex, -1, "row is editing");
@@ -2769,7 +2769,7 @@ if(device.deviceType === "desktop") {
         assert.ok(!this.keyboardNavigationController._isEditingCompleted, "editing is completed");
     });
 
-    //T364106
+    // T364106
     QUnit.testInActiveWindow("Reset focus after repaint on unregistered keydown handler", function(assert) {
         var F8_KEYCODE = 119;
         var that = this;
@@ -2783,7 +2783,7 @@ if(device.deviceType === "desktop") {
         };
 
 
-        //act
+        // act
         this.gridView.render($container);
 
         this.focusFirstCell();
@@ -2791,7 +2791,7 @@ if(device.deviceType === "desktop") {
         this.triggerKeyDown("downArrow");
         this.clock.tick();
 
-        //assert
+        // assert
         assert.equal($("td[tabIndex]").attr("tabIndex"), 0, "tabIndex of cell");
         assert.equal($("td.dx-focused").length, 1, "one cell is focused");
 
@@ -2804,13 +2804,13 @@ if(device.deviceType === "desktop") {
             }
         });
 
-        //act
+        // act
         var e = $.Event("keydown", { which: F8_KEYCODE });
         $($container.find(".dx-datagrid-rowsview")).trigger(e);
         this.clock.tick();
 
 
-        //assert
+        // assert
         assert.ok(isRepaintCalled, "repaint called");
         assert.equal($("td[tabIndex]").length, 1, "cells count with tabIndex");
         assert.equal($("td.dx-focused").length, 0, "no cells with focus");
@@ -2819,13 +2819,13 @@ if(device.deviceType === "desktop") {
 }
 
 QUnit.testInActiveWindow("Escape for cancel row editing", function(assert) {
-    //arrange
+    // arrange
     var $container = $("#container"),
         isPreventDefaultCalled;
 
     setupModules(this);
 
-    //act
+    // act
     this.options.editing = { allowUpdating: true };
     this.gridView.render($container);
 
@@ -2836,7 +2836,7 @@ QUnit.testInActiveWindow("Escape for cancel row editing", function(assert) {
     this.keyboardNavigationController._focusedCellPosition = null;
     isPreventDefaultCalled = this.triggerKeyDown("escape", false, false, $container.find("input")[0]).preventDefault;
 
-    //assert
+    // assert
     assert.ok(isPreventDefaultCalled, "PreventDefault");
     assert.ok(this.dataControllerOptions.itemsUpdated, "items are updated after cancel editing row");
     assert.ok(!this.keyboardNavigationController._isEditing, "editing is canceled");
@@ -2845,7 +2845,7 @@ QUnit.testInActiveWindow("Escape for cancel row editing", function(assert) {
 });
 
 QUnit.testInActiveWindow("Escape for cancel batch editing", function(assert) {
-    //arrange
+    // arrange
     var $container = $("#container"),
         isPreventDefaultCalled;
 
@@ -2868,17 +2868,17 @@ QUnit.testInActiveWindow("Escape for cancel batch editing", function(assert) {
     keyboardMock($container.find("input").eq(0));
     $($input).trigger('change');
 
-    //act
+    // act
     isPreventDefaultCalled = this.triggerKeyDown("escape", false, false, $container.find("input")[0]).preventDefault;
     this.clock.tick();
 
-    //assert
+    // assert
     assert.ok(!this.editingController.isEditing(), "editing is not active");
     assert.ok(this.editingController.hasEditData(), "grid has unsaved data");
 });
 
 QUnit.testInActiveWindow("Escape for cancel cell editing", function(assert) {
-    //arrange
+    // arrange
     var $container = $("#container"),
         isPreventDefaultCalled;
 
@@ -2901,22 +2901,22 @@ QUnit.testInActiveWindow("Escape for cancel cell editing", function(assert) {
     keyboardMock($container.find("input").eq(0));
     $($input).trigger('change');
 
-    //act
+    // act
     isPreventDefaultCalled = this.triggerKeyDown("escape", false, false, $container.find("input")[0]).preventDefault;
     this.clock.tick();
 
-    //assert
+    // assert
     assert.ok(!this.editingController.isEditing(), "editing is not active");
     assert.ok(!this.editingController.hasEditData(), "grid hasn't unsaved data");
 });
 
 QUnit.testInActiveWindow("Editing by enter key is not worked when editing is disabled", function(assert) {
-    //arrange
+    // arrange
     var $container = $("#container");
 
     setupModules(this);
 
-    //act
+    // act
     this.options.editing = { allowUpdating: false };
     this.gridView.render($container);
 
@@ -2924,73 +2924,73 @@ QUnit.testInActiveWindow("Editing by enter key is not worked when editing is dis
 
     this.triggerKeyDown("enter");
 
-    //assert
+    // assert
     assert.ok(!this.keyboardNavigationController._isEditing);
 });
 
 QUnit.testInActiveWindow("Edit cell after enter key", function(assert) {
-    //arrange
+    // arrange
     setupModules(this);
 
-    //act
+    // act
     this.options.editing = { allowUpdating: true, mode: "batch" };
     this.gridView.render($("#container"));
 
     this.focusFirstCell();
 
-    //act
+    // act
     this.triggerKeyDown("rightArrow");
     this.triggerKeyDown("rightArrow");
     this.triggerKeyDown("enter");
 
-    //assert
+    // assert
     assert.equal(this.editingController._editRowIndex, 0, "edit row index");
     assert.equal(this.editingController._editColumnIndex, 2, "edit column index");
 });
 
-//T202754
+// T202754
 QUnit.testInActiveWindow("Enter after edit cell by enter when default prevented", function(assert) {
-    //arrange
+    // arrange
     setupModules(this);
 
-    //act
+    // act
     this.options.editing = { allowUpdating: true, mode: "batch" };
     this.gridView.render($("#container"));
 
     this.focusFirstCell();
 
-    //act
+    // act
     this.triggerKeyDown("enter");
 
-    //assert
+    // assert
     assert.equal(this.editingController._editRowIndex, 0, "edit row index");
     assert.equal(this.editingController._editColumnIndex, 0, "edit column index");
 
-    //act
+    // act
     this.triggerKeyDown("enter", false, false, false, {
         preventDefault: true,
         stopPropagation: false
     });
     this.clock.tick();
 
-    //assert
+    // assert
     assert.equal(this.editingController._editRowIndex, 0, "edit row index");
     assert.equal(this.editingController._editColumnIndex, 0, "edit column index");
 
-    //act
+    // act
     this.triggerKeyDown("enter");
     this.clock.tick();
 
-    //assert
+    // assert
     assert.equal(this.editingController._editRowIndex, -1, "edit row index");
     assert.equal(this.editingController._editColumnIndex, -1, "edit column index");
 });
 
 QUnit.testInActiveWindow("Edit cell after enter key ('cell' edit mode)", function(assert) {
-    //arrange
+    // arrange
     setupModules(this);
 
-    //act
+    // act
     this.options.editing = { allowUpdating: true, mode: "cell" };
     this.gridView.render($("#container"));
 
@@ -3005,7 +3005,7 @@ QUnit.testInActiveWindow("Edit cell after enter key ('cell' edit mode)", functio
 });
 
 QUnit.testInActiveWindow("Edit next cell after tab key", function(assert) {
-    //arrange
+    // arrange
     setupModules(this);
 
     this.options.editing = { allowUpdating: true, mode: "batch" };
@@ -3018,18 +3018,18 @@ QUnit.testInActiveWindow("Edit next cell after tab key", function(assert) {
     this.triggerKeyDown("enter");
     var that = this;
 
-    //act
+    // act
     var isPreventDefaultCalled = that.triggerKeyDown("tab", false, false, $("#container").find('input')).preventDefault;
 
-    //assert
+    // assert
     assert.equal(that.editingController._editRowIndex, 1, "edit row index");
     assert.equal(that.editingController._editColumnIndex, 2, "edit column index");
     assert.ok(isPreventDefaultCalled, "preventDefault is called");
 });
 
-//T355598
+// T355598
 QUnit.testInActiveWindow("Focus first cell after tab key on rowsView", function(assert) {
-    //arrange
+    // arrange
     setupModules(this);
 
     this.options.editing = { allowUpdating: true, mode: "batch" };
@@ -3042,17 +3042,17 @@ QUnit.testInActiveWindow("Focus first cell after tab key on rowsView", function(
 
     var that = this;
 
-    //act
+    // act
     var isPreventDefaultCalled = that.triggerKeyDown("tab", false, false, $rowsView).preventDefault;
 
-    //assert
+    // assert
     assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { rowIndex: 0, columnIndex: 0 }, "first cell is focused");
     assert.ok(isPreventDefaultCalled, "preventDefault is called");
 });
 
-//T570999
+// T570999
 QUnit.testInActiveWindow("Move focus to first data cell after tab key on group row", function(assert) {
-    //arrange
+    // arrange
     this.columns = [
         { visible: true, command: "expand" },
         { caption: 'Column 1', visible: true, dataField: "Column1" },
@@ -3072,7 +3072,7 @@ QUnit.testInActiveWindow("Move focus to first data cell after tab key on group r
 
     setupModules(this);
 
-    //act
+    // act
     this.gridView.render($("#container"));
 
     var $groupRow = $("#container").find(".dx-group-row");
@@ -3093,7 +3093,7 @@ QUnit.testInActiveWindow("Move focus to first data cell after tab key on group r
 });
 
 QUnit.testInActiveWindow("Do not prevent default on 'shift+tab' if the current cell is the first", function(assert) {
-    //arrange
+    // arrange
     this.columns = [
         { caption: 'Column 1', visible: true, dataField: "Column1" },
         { caption: 'Column 2', visible: true, dataField: "Column2" }
@@ -3114,16 +3114,16 @@ QUnit.testInActiveWindow("Do not prevent default on 'shift+tab' if the current c
     this.focusFirstCell();
     this.keyboardNavigationController._focusedCellPosition = { rowIndex: 0, columnIndex: 0 };
 
-    //act
+    // act
     var isPreventDefaultCalled = this.triggerKeyDown("tab", false, true, this.getCellElement(0, 0)).preventDefault;
 
-    //assert
+    // assert
     assert.ok(!isPreventDefaultCalled, "preventDefault is not called");
 });
 
-//T311207
+// T311207
 QUnit.testInActiveWindow("Do not prevent default on 'shift+tab' for second editable column when first column is not editable in batch edit mode", function(assert) {
-    //arrange
+    // arrange
     this.columns = [
         { caption: 'Column 1', visible: true, dataField: "Column1", allowEditing: false },
         { caption: 'Column 2', visible: true, dataField: "Column2", allowEditing: true },
@@ -3145,15 +3145,15 @@ QUnit.testInActiveWindow("Do not prevent default on 'shift+tab' for second edita
     this.editCell(0, 1);
     this.keyboardNavigationController._focusedCellPosition = { rowIndex: 0, columnIndex: 1 };
 
-    //act
+    // act
     var isPreventDefaultCalled = this.triggerKeyDown("tab", false, true, this.getCellElement(0, 1)).preventDefault;
 
-    //assert
+    // assert
     assert.ok(!isPreventDefaultCalled, "preventDefault is called");
 });
 
 QUnit.testInActiveWindow("Do not prevent default on 'tab' if the current cell is the last", function(assert) {
-    //arrange
+    // arrange
     this.columns = [
         { caption: 'Column 1', visible: true, dataField: "Column1" },
         { caption: 'Column 2', visible: true, dataField: "Column2" }
@@ -3176,16 +3176,16 @@ QUnit.testInActiveWindow("Do not prevent default on 'tab' if the current cell is
     this.focusCell($lastCell);
     this.keyboardNavigationController._focusedCellPosition = { rowIndex: 1, columnIndex: 1 };
 
-    //act
+    // act
     var isPreventDefaultCalled = this.triggerKeyDown("tab", false, false, $lastCell).preventDefault;
 
-    //assert
+    // assert
     assert.ok(!isPreventDefaultCalled, "preventDefault is not called");
 });
 
-//T535101
+// T535101
 QUnit.testInActiveWindow("Do not prevent default on 'tab' if the current cell is the last in the added row if virtual scrolling is enabled", function(assert) {
-    //arrange
+    // arrange
     this.columns = [
         { caption: 'Column 1', visible: true, dataField: "Column1", allowEditing: true, setCellValue: $.noop },
         { caption: 'Column 2', visible: true, dataField: "Column2", allowEditing: true, setCellValue: $.noop }
@@ -3209,14 +3209,14 @@ QUnit.testInActiveWindow("Do not prevent default on 'tab' if the current cell is
     var $input = $("#container").find(".dx-texteditor-input");
     assert.equal($input.length, 1);
 
-    //act
+    // act
     var isPreventDefaultCalled = this.triggerKeyDown("tab", false, false, $input).preventDefault;
 
-    //assert
+    // assert
     assert.ok(!isPreventDefaultCalled, "preventDefault is not called");
 });
 
-//T381273
+// T381273
 QUnit.testInActiveWindow("closeEditCell and reset focus on 'tab' if the current cell is the last editable cell and contains editor", function(assert) {
 
     this.$element = function() {
@@ -3238,8 +3238,9 @@ QUnit.testInActiveWindow("closeEditCell and reset focus on 'tab' if the current 
 
     setupDataGridModules(this, ['data', 'columns', 'rows', "editorFactory", 'gridView', 'columnHeaders', "editing", "keyboardNavigation"], { initViews: true });
 
-    //act
+    // act
     this.gridView.render($("#container"));
+    this.gridView.update();
 
     this.editCell(1, 1);
     this.clock.tick();
@@ -3249,21 +3250,21 @@ QUnit.testInActiveWindow("closeEditCell and reset focus on 'tab' if the current 
 
     var $lastCell = this.rowsView.element().find(".dx-row").filter(":visible").last().find("td").eq(1);
 
-    //this.focusCell($lastCell);
+    // this.focusCell($lastCell);
     this.keyboardNavigationController._focusedCellPosition = { rowIndex: 1, columnIndex: 1 };
 
-    //act
+    // act
     var isPreventDefaultCalled = this.triggerKeyDown("tab", false, false, $lastCell).preventDefault;
     this.clock.tick();
 
-    //assert
+    // assert
     assert.ok(!isPreventDefaultCalled, "preventDefault is not called");
     assert.ok(!$("#container input").length, "all editors are closed");
     assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, {}, "focused cell position is reset");
     assert.ok($("#container .dx-datagrid-focus-overlay").hasClass("dx-hidden"), "focus overlay is not visible");
 });
 
-//T381273
+// T381273
 QUnit.testInActiveWindow("closeEditCell and reset focus on 'tab' if the current cell is the last and contains editor", function(assert) {
 
     this.$element = function() {
@@ -3284,8 +3285,9 @@ QUnit.testInActiveWindow("closeEditCell and reset focus on 'tab' if the current 
 
     setupDataGridModules(this, ['data', 'columns', 'rows', "editorFactory", 'gridView', 'columnHeaders', "editing", "keyboardNavigation"], { initViews: true });
 
-    //act
+    // act
     this.gridView.render($("#container"));
+    this.gridView.update();
 
     this.editCell(1, 1);
     this.clock.tick();
@@ -3299,7 +3301,7 @@ QUnit.testInActiveWindow("closeEditCell and reset focus on 'tab' if the current 
     var isPreventDefaultCalled = this.triggerKeyDown("tab", false, false, $lastCell).preventDefault;
     this.clock.tick();
 
-    //assert
+    // assert
     assert.ok(!isPreventDefaultCalled, "preventDefault is not called");
     assert.ok(!$("#container input").length, "all editors are closed");
     assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, {}, "focused cell position is reset");
@@ -3307,9 +3309,9 @@ QUnit.testInActiveWindow("closeEditCell and reset focus on 'tab' if the current 
 });
 
 
-//T280003
+// T280003
 QUnit.testInActiveWindow("Edit next cell after tab key press with column is not allow editing when editing mode batch", function(assert) {
-    //arrange
+    // arrange
     this.columns = [
         { caption: 'Column 1', visible: true, allowEditing: true, dataField: "Column1" },
         { caption: 'Column 2', visible: true, allowEditing: true, dataField: "Column2" },
@@ -3321,7 +3323,7 @@ QUnit.testInActiveWindow("Edit next cell after tab key press with column is not 
     this.options.editing = { allowUpdating: true, mode: "batch" };
     this.gridView.render($("#container"));
 
-    //act
+    // act
     this.focusFirstCell();
 
     this.triggerKeyDown("rightArrow");
@@ -3333,14 +3335,14 @@ QUnit.testInActiveWindow("Edit next cell after tab key press with column is not 
     this.triggerKeyDown("tab", false, false, $("#container").find('input'));
     this.clock.tick();
 
-    //assert
+    // assert
     assert.ok(this.editingController.isEditing(), "Cell is editing now");
     assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 3, rowIndex: 0 }, "Correct focus position");
 });
 
-//T280003
+// T280003
 QUnit.testInActiveWindow("Edit next cell after tab key press with column is not allow editing when editing mode row", function(assert) {
-    //arrange
+    // arrange
     this.columns = [
         { caption: 'Column 1', visible: true, allowEditing: true, dataField: "Column1" },
         { caption: 'Column 2', visible: true, allowEditing: false, dataField: "Column2" },
@@ -3355,18 +3357,18 @@ QUnit.testInActiveWindow("Edit next cell after tab key press with column is not 
     this.editRow(0);
     this.focusFirstCell();
 
-    //act
+    // act
     this.triggerKeyDown("tab", false, false, $("#container").find('input'));
     this.clock.tick();
 
-    //assert
+    // assert
     assert.ok(this.editingController.isEditing(), "Cell is editing now");
     assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 3, rowIndex: 0 }, "Correct focus position");
 });
 
-//T280003
+// T280003
 QUnit.testInActiveWindow("Focus next cell in not editable the row after tab key press with column is not allow editing when editing mode row", function(assert) {
-    //arrange
+    // arrange
     this.columns = [
         { caption: 'Column 1', visible: true, allowEditing: true, dataField: "Column1" },
         { caption: 'Column 2', visible: true, allowEditing: false, dataField: "Column2" },
@@ -3386,18 +3388,18 @@ QUnit.testInActiveWindow("Focus next cell in not editable the row after tab key 
 
     this.focusCell(0, 1);
 
-    //act
+    // act
     this.triggerKeyDown("tab", false, false, $("#container").find('.dx-datagrid-rowsview').find("table > tbody").find("td").eq(1).find("td").eq(1));
     this.clock.tick();
 
-    //assert
+    // assert
     assert.ok(this.editingController.isEditing(), "Cell is editing now");
     assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 1, rowIndex: 1 }, "Correct focus position");
 });
 
-//T342637
+// T342637
 QUnit.testInActiveWindow("Focus link elements on tab key", function(assert) {
-    //arrange
+    // arrange
     this.columns = [
         { caption: 'Column 1', visible: true, dataField: "Column1" },
         {
@@ -3429,34 +3431,34 @@ QUnit.testInActiveWindow("Focus link elements on tab key", function(assert) {
     this.gridView.render($("#container"));
 
 
-    //act
+    // act
     var $cell = $(this.rowsView.element()).find(".dx-row").filter(":visible").eq(0).find("td").eq(0);
     $cell.focus().trigger("dxpointerdown");
 
     var isPreventDefaultCalled = this.triggerKeyDown("tab", false, false, $cell).preventDefault;
 
-    //assert
+    // assert
     assert.ok(isPreventDefaultCalled, "preventDefault is called");
     assert.ok($(":focus").hasClass("link1"), "first link is focused");
 
-    //act
+    // act
     isPreventDefaultCalled = this.triggerKeyDown("tab", false, false, $(":focus")).preventDefault;
 
-    //assert
+    // assert
     assert.ok(!isPreventDefaultCalled, "preventDefault is not called");
 
-    //act
+    // act
     var $link2 = $(".link2").first().focus().trigger("dxclick");
     isPreventDefaultCalled = this.triggerKeyDown("tab", false, false, $link2).preventDefault;
 
-    //assert
+    // assert
     assert.ok(isPreventDefaultCalled, "preventDefault is called");
     assert.ok(this.rowsView.element().find(".dx-row").filter(":visible").eq(0).find("td").eq(2).is(":focus"), "last cell is focused");
 });
 
-//T342637
+// T342637
 QUnit.testInActiveWindow("Focus link elements on shift+tab key", function(assert) {
-    //arrange
+    // arrange
     this.columns = [
         { caption: 'Column 1', visible: true, dataField: "Column1" },
         {
@@ -3489,40 +3491,40 @@ QUnit.testInActiveWindow("Focus link elements on shift+tab key", function(assert
     this.gridView.render($("#container"));
 
 
-    //act
+    // act
     var $cell = $(this.rowsView.element()).find(".dx-row").filter(":visible").eq(0).find("td").eq(2);
     $cell.focus().trigger("dxpointerdown");
     var isPreventDefaultCalled = this.triggerKeyDown("tab", false, true, $cell).preventDefault;
     this.clock.tick();
 
-    //assert
+    // assert
     assert.ok(isPreventDefaultCalled, "preventDefault is called");
     assert.ok($(":focus").hasClass("link2"), "last link is focused");
     assert.ok($("#container .dx-datagrid-focus-overlay").hasClass("dx-hidden"), "focus overlay is not visible");
 
-    //act
+    // act
     isPreventDefaultCalled = this.triggerKeyDown("tab", false, true, $(":focus")).preventDefault;
     this.clock.tick();
 
-    //assert
+    // assert
     assert.ok(!isPreventDefaultCalled, "preventDefault is not called");
     assert.ok($("#container .dx-datagrid-focus-overlay").hasClass("dx-hidden"), "focus overlay is not visible");
 
-    //act
+    // act
     var $link1 = $(".link1").first().focus().trigger("dxpointerdown");
     isPreventDefaultCalled = this.triggerKeyDown("tab", false, true, $link1).preventDefault;
     this.clock.tick();
 
-    //assert
+    // assert
     assert.ok(isPreventDefaultCalled, "preventDefault is called");
     assert.ok(this.rowsView.element().find(".dx-row").filter(":visible").eq(0).find("td").eq(0).is(":focus"), "first cell is focused");
     assert.ok($("#container .dx-datagrid-focus-overlay").is(":visible"), "focus overlay is visible");
 });
 
 if(device.deviceType === "desktop") {
-    //T342637
+    // T342637
     QUnit.testInActiveWindow("Focus dxButton element on tab key", function(assert) {
-        //arrange
+        // arrange
         this.columns = [
             { caption: 'Column 1', visible: true, dataField: "Column1" },
             {
@@ -3547,13 +3549,13 @@ if(device.deviceType === "desktop") {
         this.gridView.render($("#container"));
 
 
-        //act
+        // act
         var $cell = $(this.rowsView.element()).find(".dx-row").filter(":visible").eq(0).find("td").eq(0);
         $cell.focus().trigger("dxpointerdown");
         var isPreventDefaultCalled = this.triggerKeyDown("tab", false, false, $cell).preventDefault;
         this.clock.tick();
 
-        //assert
+        // assert
         assert.ok(isPreventDefaultCalled, "preventDefault is called");
         assert.ok($(":focus").hasClass("dx-button"), "button is focused");
         assert.ok($("#container .dx-datagrid-focus-overlay").hasClass("dx-hidden"), "focus overlay is not visible");
@@ -3561,7 +3563,7 @@ if(device.deviceType === "desktop") {
 }
 
 QUnit.testInActiveWindow("Try edit next cell after enter key press when column is not allow editing", function(assert) {
-    //arrange
+    // arrange
     this.columns = [
         { caption: 'Column 1', visible: true, allowEditing: true, dataField: "Column1" },
         { caption: 'Column 2', visible: true, allowEditing: false, dataField: "Column2" },
@@ -3573,7 +3575,7 @@ QUnit.testInActiveWindow("Try edit next cell after enter key press when column i
     this.options.editing = { allowUpdating: true, mode: "batch" };
     this.gridView.render($("#container"));
 
-    //act
+    // act
     this.focusFirstCell();
 
     this.triggerKeyDown("rightArrow");
@@ -3582,13 +3584,13 @@ QUnit.testInActiveWindow("Try edit next cell after enter key press when column i
     this.triggerKeyDown("enter");
     this.clock.tick();
 
-    //assert
+    // assert
     assert.ok(!this.editingController.isEditing(), "Cell is not editing now");
     assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 1, rowIndex: 0 }, "Correct focus position");
 });
 
 QUnit.testInActiveWindow("Try edit next cell after enter key press with column is not allow editing when edit mode row", function(assert) {
-    //arrange
+    // arrange
     this.columns = [
         { caption: 'Column 1', visible: true, allowEditing: true, dataField: "Column1" },
         { caption: 'Column 2', visible: true, allowEditing: false, dataField: "Column2" },
@@ -3600,7 +3602,7 @@ QUnit.testInActiveWindow("Try edit next cell after enter key press with column i
     this.options.editing = { allowUpdating: true, mode: "row" };
     this.gridView.render($("#container"));
 
-    //act
+    // act
     this.focusFirstCell();
 
     this.triggerKeyDown("rightArrow");
@@ -3609,13 +3611,13 @@ QUnit.testInActiveWindow("Try edit next cell after enter key press with column i
     this.triggerKeyDown("enter");
     this.clock.tick();
 
-    //assert
+    // assert
     assert.ok(!this.editingController.isEditing(), "Cell is not editing now");
     assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 1, rowIndex: 0 }, "Correct focus position");
 });
 
 QUnit.testInActiveWindow("Edit next cell after tab key when edit disabled and row edited via API", function(assert) {
-    //arrange
+    // arrange
     var $editRow;
 
     setupModules(this);
@@ -3630,12 +3632,12 @@ QUnit.testInActiveWindow("Edit next cell after tab key when edit disabled and ro
 
     assert.equal(this.editingController._editRowIndex, 0, "edit row index");
 
-    //act
+    // act
     this.triggerKeyDown("tab", false, false, $("#container").find('input'));
 
     this.clock.tick();
 
-    //assert
+    // assert
     assert.equal(this.editingController._editRowIndex, 0, "edit row index");
     assert.ok($editRow.find('input').eq(1).parents('.dx-editor-cell').hasClass("dx-focused"));
 
@@ -3663,12 +3665,12 @@ if(device.deviceType === "desktop") {
         assert.equal(this.editingController._editRowIndex, 0, "edit row index");
         assert.ok($newRow.find('input').first().parents('.dx-editor-cell').hasClass("dx-focused"));
 
-        //act
+        // act
         this.triggerKeyDown("tab", false, false, $("#container").find('input'));
 
         this.clock.tick();
 
-        //assert
+        // assert
         assert.equal(this.editingController._editRowIndex, 0, "edit row index");
         assert.ok($newRow.find('input').eq(1).parents('.dx-editor-cell').hasClass("dx-focused"));
     });
@@ -3693,12 +3695,12 @@ if(device.deviceType === "desktop") {
         assert.equal(this.editingController._editRowIndex, 0, "edit row index");
         assert.ok($newRow.find('input').first().parents('.dx-editor-cell').hasClass("dx-focused"));
 
-        //act
+        // act
         this.triggerKeyDown("tab", false, false, $("#container").find('input'));
 
         this.clock.tick();
 
-        //assert
+        // assert
         assert.equal(this.editingController._editRowIndex, 0, "edit row index");
         assert.ok($newRow.find('input').eq(1).parents('.dx-editor-cell').hasClass("dx-focused"));
     });
@@ -3709,59 +3711,59 @@ QUnit.testInActiveWindow("Edit next cell after tab key when first cell focused a
     this.options.editing = { allowUpdating: true, mode: "batch" };
     this.gridView.render($("#container"));
 
-    //act
+    // act
     this.editingController.editCell(0, 0);
     this.clock.tick();
     var isPreventDefaultCalled = this.triggerKeyDown("tab", false, false, $("#container").find('input'));
 
-    //assert
+    // assert
     assert.equal(this.editingController._editRowIndex, 0, "edit row index");
     assert.equal(this.editingController._editColumnIndex, 1, "edit column index");
     assert.ok(isPreventDefaultCalled, "preventDefault is called");
 });
 
 QUnit.testInActiveWindow("Focus next cell after tab key when first cell focused at 'editCell' function call and editing is false", function(assert) {
-    //arrange
+    // arrange
     setupModules(this);
     this.options.editing = { allowUpdating: false, mode: "batch" };
     this.gridView.render($("#container"));
 
-    //act
+    // act
     this.editingController.editCell(0, 0);
     this.clock.tick();
 
     this.triggerKeyDown("tab", false, false, $("#container").find('input'));
     this.clock.tick();
 
-    //assert
+    // assert
     assert.equal(this.editingController._editRowIndex, -1, "we are do not editing anything");
     assert.equal(this.editingController._editColumnIndex, -1, "we are do not editing anything");
     assert.equal(this.keyboardNavigationController._getFocusedCell().text(), "test2", "at now we are focused at second cell");
 });
 
-//T497279
+// T497279
 QUnit.testInActiveWindow("Focus next editor after tab key for inserted row when editing mode is cell and allowUpdating is false", function(assert) {
-    //arrange
+    // arrange
     setupModules(this);
     this.options.editing = { allowUpdating: false, mode: "cell" };
     this.dataControllerOptions.items[0].inserted = true;
     this.gridView.render($("#container"));
 
-    //act
+    // act
     this.editingController.editCell(0, 0);
     this.clock.tick();
 
     this.triggerKeyDown("tab", false, false, $("#container").find('input'));
     this.clock.tick();
 
-    //assert
+    // assert
     assert.equal(this.editingController._editRowIndex, 0, "we are do not editing anything");
     assert.equal(this.editingController._editColumnIndex, 1, "we are do not editing anything");
     assert.equal(this.keyboardNavigationController._getFocusedCell().find("input").length, 1, "focused cell contains editor");
 });
 
 QUnit.testInActiveWindow("Move to next cell via tab key when edit command column is shown (when editing)", function(assert) {
-    //arrange
+    // arrange
     this.columns = [
         { caption: 'Column 1', visible: true, allowEditing: true, dataField: "Column1" },
         { caption: 'Column 2', visible: true, allowEditing: true, dataField: "Column2" },
@@ -3780,16 +3782,16 @@ QUnit.testInActiveWindow("Move to next cell via tab key when edit command column
     this.triggerKeyDown("rightArrow");
     this.triggerKeyDown("enter");
 
-    //act
+    // act
     this.triggerKeyDown("tab", false, false, $container.find('input'));
 
-    //assert
+    // assert
     assert.equal(this.keyboardNavigationController._focusedCellPosition.columnIndex, 0, "cellIndex");
     assert.equal(this.keyboardNavigationController._focusedCellPosition.rowIndex, 1, "rowIndex");
 });
 
 QUnit.testInActiveWindow("Move to next cell via tab key when edit command column is shown", function(assert) {
-    //arrange
+    // arrange
     this.columns = [
         { caption: 'Column 1', visible: true, allowEditing: true, dataField: "Column1" },
         { caption: 'Column 2', visible: true, allowEditing: true, dataField: "Column2" },
@@ -3807,16 +3809,16 @@ QUnit.testInActiveWindow("Move to next cell via tab key when edit command column
 
     this.triggerKeyDown("tab", false, false, $container);
 
-    //act
+    // act
     this.triggerKeyDown("tab", false, false, $container);
 
-    //assert
+    // assert
     assert.equal(this.keyboardNavigationController._focusedCellPosition.columnIndex, 0, "cellIndex");
     assert.equal(this.keyboardNavigationController._focusedCellPosition.rowIndex, 1, "rowIndex");
 });
 
 QUnit.testInActiveWindow("Move to previous cell via tab key when edit command column is shown", function(assert) {
-    //arrange
+    // arrange
     this.columns = [
         { caption: 'Column 1', visible: true, allowEditing: true, dataField: "Column1" },
         { caption: 'Column 2', visible: true, allowEditing: true, dataField: "Column2" },
@@ -3834,10 +3836,10 @@ QUnit.testInActiveWindow("Move to previous cell via tab key when edit command co
 
     this.triggerKeyDown("tab", false, false, $container);
 
-    //act
+    // act
     this.triggerKeyDown("tab", false, false, $container);
 
-    //assert
+    // assert
     assert.equal(this.keyboardNavigationController._focusedCellPosition.columnIndex, 0, "cellIndex");
     assert.equal(this.keyboardNavigationController._focusedCellPosition.rowIndex, 1, "rowIndex");
 
@@ -3847,7 +3849,7 @@ QUnit.testInActiveWindow("Move to previous cell via tab key when edit command co
 });
 
 QUnit.testInActiveWindow("Try move to previous cell via tab key when focus on first cell and multiple selection", function(assert) {
-    //arrange
+    // arrange
     this.columns = [
         { caption: 'Column 1', visible: true, allowEditing: true, dataField: "Column1" },
         { caption: 'Column 2', visible: true, allowEditing: true, dataField: "Column2" },
@@ -3870,7 +3872,7 @@ QUnit.testInActiveWindow("Try move to previous cell via tab key when focus on fi
 });
 
 QUnit.testInActiveWindow("Try move to next cell via tab key when focus on last cell", function(assert) {
-    //arrange
+    // arrange
     this.columns = [
         { caption: 'Column 1', visible: true, allowEditing: true, dataField: "Column1" },
         { caption: 'Column 2', visible: true, allowEditing: true, dataField: "Column2" },
@@ -3902,7 +3904,7 @@ QUnit.testInActiveWindow("Try move to next cell via tab key when focus on last c
 });
 
 QUnit.testInActiveWindow("Edit next cell after tab key ('cell' edit mode)", function(assert) {
-    //arrange
+    // arrange
     setupModules(this);
 
     this.options.editing = { allowUpdating: true, mode: "cell" };
@@ -3921,11 +3923,11 @@ QUnit.testInActiveWindow("Edit next cell after tab key ('cell' edit mode)", func
         isFocusedInput = true;
     };
 
-    //act
+    // act
     var isPreventDefaultCalled = this.triggerKeyDown("tab", false, false, $("#container").find('input')).preventDefault;
     this.clock.tick();
 
-    //assert
+    // assert
     assert.equal(this.editingController._editRowIndex, 1, "edit row index");
     assert.equal(this.editingController._editColumnIndex, 2, "edit column index");
     assert.ok(isPreventDefaultCalled, "preventDefault is called");
@@ -3933,7 +3935,7 @@ QUnit.testInActiveWindow("Edit next cell after tab key ('cell' edit mode)", func
 });
 
 QUnit.testInActiveWindow("Edit cell after tab key ('row' edit mode)", function(assert) {
-    //arrange
+    // arrange
     setupModules(this);
 
     this.options.editing = { allowUpdating: true, mode: "row" };
@@ -3951,30 +3953,30 @@ QUnit.testInActiveWindow("Edit cell after tab key ('row' edit mode)", function(a
         isFocusedInput = true;
     };
 
-    //act
+    // act
     this.triggerKeyDown("tab", false, false, this.keyboardNavigationController._getFocusedCell());
     this.clock.tick();
 
-    //assert
+    // assert
     assert.equal(this.editingController._editRowIndex, 1, "edit row index");
     assert.ok(isFocusedInput, "is focused input");
 
-    //act
+    // act
     isFocusedInput = false;
 
     this.triggerKeyDown("tab", false, false, this.keyboardNavigationController._getFocusedCell());
     this.clock.tick();
 
-    //assert
+    // assert
     assert.equal(this.editingController._editRowIndex, 1, "edit row index");
     assert.ok(isFocusedInput, "is focused input");
 });
 
 QUnit.testInActiveWindow("Enter on grouped row when allowCollapsing is true", function(assert) {
-    //arrange
+    // arrange
     setupModules(this);
 
-    //assert
+    // assert
     this.options.grouping = {
         allowCollapsing: true
     };
@@ -3990,21 +3992,21 @@ QUnit.testInActiveWindow("Enter on grouped row when allowCollapsing is true", fu
         return "testPath";
     };
 
-    //act
+    // act
     this.gridView.render($("#container"));
 
     this.triggerKeyDown("downArrow");
     this.triggerKeyDown("enter");
 
-    //assert
+    // assert
     assert.equal(this.dataControllerOptions.groupExpandPath, "testPath", "row is isExpanded");
 });
 
 QUnit.testInActiveWindow("Enter on grouped row for expand", function(assert) {
-    //arrange
+    // arrange
     setupModules(this);
 
-    //assert
+    // assert
     this.options.grouping = {
         allowCollapsing: true
     };
@@ -4020,7 +4022,7 @@ QUnit.testInActiveWindow("Enter on grouped row for expand", function(assert) {
         return "testPath";
     };
 
-    //act
+    // act
     var $container = $("#container"),
         $groupRow;
 
@@ -4033,16 +4035,16 @@ QUnit.testInActiveWindow("Enter on grouped row for expand", function(assert) {
 
     this.clock.tick();
 
-    //assert
+    // assert
     $groupRow = $container.find(".dx-group-row").first();
     assert.ok($groupRow.attr("tabindex"), "tab index");
 });
 
 QUnit.testInActiveWindow("Enter on grouped row when allowCollapsing is false", function(assert) {
-    //arrange
+    // arrange
     setupModules(this);
 
-    //assert
+    // assert
     this.options.grouping = {
         allowCollapsing: false
     };
@@ -4058,21 +4060,21 @@ QUnit.testInActiveWindow("Enter on grouped row when allowCollapsing is false", f
         return "testPath";
     };
 
-    //act
+    // act
     this.gridView.render($("#container"));
 
     this.triggerKeyDown("downArrow");
     this.triggerKeyDown("enter");
 
-    //assert
+    // assert
     assert.ok(!this.dataControllerOptions.groupExpandPath, "expand is not allowed");
 });
 
 QUnit.testInActiveWindow("Enter on grouped row when allowCollapsing is false and masterDetail is enabled", function(assert) {
-    //arrange
+    // arrange
     setupModules(this);
 
-    //assert
+    // assert
     this.options.masterDetail = {
         enabled: true
     };
@@ -4092,18 +4094,18 @@ QUnit.testInActiveWindow("Enter on grouped row when allowCollapsing is false and
         return "testPath";
     };
 
-    //act
+    // act
     this.gridView.render($("#container"));
 
     this.triggerKeyDown("downArrow");
     this.triggerKeyDown("enter");
 
-    //assert
+    // assert
     assert.ok(!this.dataControllerOptions.groupExpandPath, "expand is not allowed");
 });
 
 QUnit.testInActiveWindow("Enter on grouped row with isContinuation is true, is not worked", function(assert) {
-    //arrange
+    // arrange
     setupModules(this);
 
     this.options = { grouping: { allowCollapsing: true }, editing: {} };
@@ -4118,18 +4120,18 @@ QUnit.testInActiveWindow("Enter on grouped row with isContinuation is true, is n
         return "testPath";
     };
 
-    //act
+    // act
     this.gridView.render($("#container"));
 
     this.triggerKeyDown("downArrow");
     this.triggerKeyDown("enter");
 
-    //assert
+    // assert
     assert.ok(!this.dataControllerOptions.groupExpandPath, "expand is not allowed");
 });
 
 QUnit.testInActiveWindow("Enter on expand cell of row with masterDetail", function(assert) {
-    //arrange
+    // arrange
     this.options = { columns: [
         { caption: 'Column 1', visible: true, dataField: "Column1" },
         { caption: 'Column 2', visible: true, dataField: "Column2" },
@@ -4169,19 +4171,19 @@ QUnit.testInActiveWindow("Enter on expand cell of row with masterDetail", functi
         return "testPath";
     };
 
-    //act
+    // act
     this.gridView.render($("#container"));
 
     this.triggerKeyDown("leftArrow");
     this.triggerKeyDown("enter");
 
-    //assert
+    // assert
     assert.equal(this.dataControllerOptions.groupExpandPath, "testPath");
 });
 
-//T400692
+// T400692
 QUnit.testInActiveWindow("Group row after render should have tabIndex", function(assert) {
-    //arrange
+    // arrange
     this.options = {
         columns: [
             { caption: 'Column 1', visible: true, dataField: "Column1" },
@@ -4207,19 +4209,19 @@ QUnit.testInActiveWindow("Group row after render should have tabIndex", function
         }
     });
 
-    //act
+    // act
     this.gridView.render($("#container"));
 
-    //assert
+    // assert
     assert.equal($("#container [tabIndex]").length, 1, "only one element has tabIndex");
     assert.equal($("#container .dx-group-row").first().attr("tabIndex"), "0", "first group row has tabIndex");
 });
 
 QUnit.testInActiveWindow("Ctrl + F", function(assert) {
-    //arrange
+    // arrange
     setupModules(this);
 
-    //act
+    // act
     this.options.searchPanel = {
         visible: true
     };
@@ -4230,16 +4232,16 @@ QUnit.testInActiveWindow("Ctrl + F", function(assert) {
 
     var isPreventDefaultCalled = this.triggerKeyDown("F", true).preventDefault;
 
-    //assert
+    // assert
     assert.ok(this.keyboardNavigationController._testHeaderPanelFocused, "search panel is focused");
     assert.ok(isPreventDefaultCalled, "preventDefault is called");
 });
 
 QUnit.testInActiveWindow("Select all rows by Ctrl + A do not work when allowSelectAll is false", function(assert) {
-    //arrange
+    // arrange
     setupModules(this);
 
-    //arrange, act
+    // arrange, act
     this.options.selection = { mode: "multiple" };
     this.gridView.render($("#container"));
 
@@ -4247,12 +4249,12 @@ QUnit.testInActiveWindow("Select all rows by Ctrl + A do not work when allowSele
 
     this.triggerKeyDown("A", true);
 
-    //assert
+    // assert
     assert.ok(!this.selectionOptions.isSelectAllCalled, "selectAll is not called");
 });
 
 QUnit.testInActiveWindow("Select all rows by Ctrl + A when allowSelectAll is true", function(assert) {
-    //arrange, act
+    // arrange, act
     setupModules(this);
 
     this.options.selection = { mode: "multiple", allowSelectAll: true };
@@ -4262,14 +4264,14 @@ QUnit.testInActiveWindow("Select all rows by Ctrl + A when allowSelectAll is tru
 
     var isPreventDefaultCalled = this.triggerKeyDown("A", true).preventDefault;
 
-    //assert
+    // assert
     assert.ok(this.selectionOptions.isSelectAllCalled, "selection rows count");
     assert.ok(isPreventDefaultCalled, "preventDefault is called");
 });
 
-//T518574
+// T518574
 QUnit.testInActiveWindow("Select all should not work on AltGr + A when allowSelectAll is true", function(assert) {
-    //arrange, act
+    // arrange, act
     setupModules(this);
 
     this.options.selection = { mode: "multiple", allowSelectAll: true };
@@ -4279,13 +4281,13 @@ QUnit.testInActiveWindow("Select all should not work on AltGr + A when allowSele
 
     var isPreventDefaultCalled = this.triggerKeyDown("A", { ctrl: true, alt: true }).preventDefault;
 
-    //assert
+    // assert
     assert.notOk(this.selectionOptions.isSelectAllCalled, "selectAll is not called");
     assert.notOk(isPreventDefaultCalled, "preventDefault is not called");
 });
 
 QUnit.testInActiveWindow("Ctrl + A when cell is editing does not prevent default handler", function(assert) {
-    //arrange, act
+    // arrange, act
     setupModules(this);
 
     this.options.editing = { mode: "batch" };
@@ -4298,13 +4300,13 @@ QUnit.testInActiveWindow("Ctrl + A when cell is editing does not prevent default
 
     var isPreventDefaultCalled = this.triggerKeyDown("A", true).preventDefault;
 
-    //assert
+    // assert
     assert.ok(!this.selectionOptions.isSelectAllCalled, "The select all is not called");
     assert.ok(!isPreventDefaultCalled, "preventDefault is not called");
 });
 
 QUnit.testInActiveWindow("key A_T103450 ", function(assert) {
-    //arrange, act
+    // arrange, act
     setupModules(this);
     this.options.editing = { mode: "batch", allowUpdating: true };
     this.options.selection = { mode: "multiple" };
@@ -4315,29 +4317,29 @@ QUnit.testInActiveWindow("key A_T103450 ", function(assert) {
     this.triggerKeyDown("enter");
     this.triggerKeyDown("A", false, false, $("#container").find('.dx-editor-cell input').first());
 
-    //assert
+    // assert
     assert.equal(this.keyboardNavigationController._focusedCellPosition.columnIndex, 0, "columnIndex of focusedCellPosition");
 });
 
 QUnit.testInActiveWindow("Move up when a focused cell is located on invalid position", function(assert) {
-    //arrange
+    // arrange
     setupModules(this);
     this.gridView.render($("#container"));
     this.keyboardNavigationController._focusedView = this.rowsView;
     this.keyboardNavigationController._isNeedFocus = true;
 
-    //act
+    // act
     this.keyboardNavigationController._focusedCellPosition = { columnIndex: 0, rowIndex: 7 };
     this.editorFactoryController._$focusedElement = $("<div/>");
     callViewsRenderCompleted(this._views);
     this.clock.tick();
 
-    //arrange
+    // arrange
     assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 6 });
 });
 
 QUnit.testInActiveWindow('Tab index is not applied when focus is located inside edit form and master detail is enabled', function(assert) {
-    //arrange
+    // arrange
     this.options = {
         editing: {
             mode: 'form',
@@ -4360,7 +4362,7 @@ QUnit.testInActiveWindow('Tab index is not applied when focus is located inside 
     this.gridView.render($testElement);
     this.editingController.addRow();
 
-    //act
+    // act
     var $input = $testElement.find(".dx-texteditor-input").first();
 
     $($input).trigger("dxpointerdown.dxDataGridKeyboardNavigation");
@@ -4369,31 +4371,31 @@ QUnit.testInActiveWindow('Tab index is not applied when focus is located inside 
     this.triggerKeyDown("tab", false, false, $testElement.find(":focus").get(0));
     this.clock.tick();
 
-    //assert
+    // assert
     assert.ok(!$(".dx-datagrid-edit-form-item[tabindex=\"0\"]").length, "tabIndex is not applied");
 });
 
 QUnit.testInActiveWindow("Add custom tabIndex to focused element after key press", function(assert) {
-    //arrange
+    // arrange
     this.options = {
         tabIndex: 3
     };
 
     setupModules(this);
 
-    //act
+    // act
     this.gridView.render($("#container"));
 
     this.focusFirstCell();
 
     this.triggerKeyDown("rightArrow");
 
-    //assert
+    // assert
     assert.equal(this.rowsView.element().find("td").eq(1).attr("tabIndex"), 3, "tabIndex of focused cell");
 });
 
 QUnit.testInActiveWindow("Add custom tabIndex to rowsView on pageDown", function(assert) {
-    //arrange
+    // arrange
     var that = this;
     var done = assert.async();
 
@@ -4403,7 +4405,7 @@ QUnit.testInActiveWindow("Add custom tabIndex to rowsView on pageDown", function
     };
     setupModules(this);
 
-    //act
+    // act
     this.gridView.render($("#container"));
     this.rowsView.height(200);
     this.rowsView.resize();
@@ -4414,7 +4416,7 @@ QUnit.testInActiveWindow("Add custom tabIndex to rowsView on pageDown", function
 
     this.triggerKeyDown("pageDown");
 
-    //assert
+    // assert
     this.rowsView.getScrollable().on("scroll", function() {
         setTimeout(function() {
             assert.equal(that.rowsView.element().attr("tabIndex"), "4", "tabIndex of rowsView");
@@ -4424,7 +4426,7 @@ QUnit.testInActiveWindow("Add custom tabIndex to rowsView on pageDown", function
 });
 
 QUnit.testInActiveWindow("Add custom tabIndex to cell inside edit form when tab key is pressed", function(assert) {
-    //arrange
+    // arrange
     this.options = {
         errorRowEnabled: true,
         editing: {
@@ -4465,7 +4467,7 @@ QUnit.testInActiveWindow("Add custom tabIndex to cell inside edit form when tab 
 
     this.gridView.render(testElement);
 
-    //act
+    // act
     this.focusCell(0, 1);
     this.triggerKeyDown("enter");
 
@@ -4475,28 +4477,28 @@ QUnit.testInActiveWindow("Add custom tabIndex to cell inside edit form when tab 
     this.triggerKeyDown("tab", false, false, testElement.find(".test .dx-texteditor.dx-state-focused").get(0));
     this.clock.tick();
 
-    //assert
+    // assert
     var $nextCell = testElement.find(".dx-data-row").eq(0).children().eq(0);
     assert.equal($nextCell.attr("tabIndex"), "3");
 });
 
 QUnit.testInActiveWindow("Add custom tabIndex to first valid cell", function(assert) {
-    //arrange
+    // arrange
     this.options = {
         tabIndex: 3
     };
 
     setupModules(this);
 
-    //act
+    // act
     this.gridView.render($("#container"));
 
-    //assert
+    // assert
     assert.equal(this.rowsView.element().find("td").first().attr("tabIndex"), "3", "tabIndex of first cell");
 });
 
 QUnit.testInActiveWindow("Add custom tabIndex to group row", function(assert) {
-    //arrange
+    // arrange
     this.columns = [
         { visible: true, command: "expand" },
         { caption: 'Column 1', visible: true, dataField: "Column1" },
@@ -4518,16 +4520,16 @@ QUnit.testInActiveWindow("Add custom tabIndex to group row", function(assert) {
 
     setupModules(this);
 
-    //act
+    // act
     this.gridView.render($("#container"));
 
-    //assert
+    // assert
     assert.equal(this.rowsView.element().find(".dx-group-row").first().attr("tabIndex"), "3", "tabIndex of group row");
 });
 
-//T547660
+// T547660
 QUnit.testInActiveWindow("Edit next cell after tab key when there is masterDetail", function(assert) {
-    //arrange
+    // arrange
     var $testElement = $("#container");
 
     this.columns = [
@@ -4551,19 +4553,19 @@ QUnit.testInActiveWindow("Edit next cell after tab key when there is masterDetai
 
     this.gridView.render($testElement);
 
-    //assert
+    // assert
     assert.ok($testElement.find(".dx-datagrid-rowsview").find("tbody > tr > td").first().hasClass("dx-datagrid-expand"), "has an expand cell");
 
     this.focusCell(1, 0);
     this.triggerKeyDown("enter");
 
-    //assert
+    // assert
     assert.ok($testElement.find(".dx-datagrid-rowsview").find("tbody > tr").first().children().eq(1).hasClass("dx-editor-cell"), "second cell of the first row is edited");
 
-    //act
+    // act
     this.triggerKeyDown("tab", false, false, $("#container").find('input'));
 
-    //assert
+    // assert
     assert.ok($testElement.find(".dx-datagrid-rowsview").find("tbody > tr").eq(1).children().eq(1).hasClass("dx-editor-cell"), "second cell of the second row is edited");
 });
 
@@ -4622,9 +4624,9 @@ QUnit.module("Rows view", {
     }
 });
 
-//T222258
+// T222258
 QUnit.testInActiveWindow("Focused cell from free space row when view is rendered", function(assert) {
-    //arrange
+    // arrange
     var $container = $("#container"),
         origUpdateFocus;
 
@@ -4637,23 +4639,23 @@ QUnit.testInActiveWindow("Focused cell from free space row when view is rendered
     this.keyboardNavigationController._updateFocus = function() {
         origUpdateFocus.apply(this, arguments);
 
-        //assert
+        // assert
         assert.ok(true);
     };
 
-    //act
+    // act
     $($container.find(".dx-freespace-row").find("td").first()).trigger("dxpointerdown");
     this.rowsView.renderCompleted.fire();
 });
 
 QUnit.testInActiveWindow("Cell is not focused when view is rendered if key is not pressed", function(assert) {
-    //arrange, act
+    // arrange, act
     var isCellFocused = false,
         $container = $("#container");
 
     setupModules(this);
 
-    //act
+    // act
     this.gridView.render($container);
     this.keyboardNavigationController._focusedView = this.rowsView;
     this.keyboardNavigationController._isNeedScroll = true;
@@ -4670,39 +4672,39 @@ QUnit.testInActiveWindow("Cell is not focused when view is rendered if key is no
 
     this.clock.tick();
 
-    //assert
+    // assert
     assert.ok(!isCellFocused);
     assert.ok(!this.keyboardNavigationController._isNeedFocus);
 });
 
 QUnit.testInActiveWindow('Render rows view with keyboard navigation', function(assert) {
-    //arrange
+    // arrange
     var rowsView = this.createRowsView(this.items),
         testElement = $('#container');
 
-    //act
+    // act
     rowsView.render(testElement);
 
-    //assert
+    // assert
     assert.strictEqual(rowsView.element().attr("tabindex"), undefined, "no tabindex on rowsView element");
     assert.strictEqual(rowsView.element().find("td[tabIndex]").length, 1, "cells with tabIndex attr count");
 });
 
-//T391194, T380140
+// T391194, T380140
 QUnit.testInActiveWindow('Tab from focused element before rowsview must focus first cell', function(assert) {
-    //arrange
+    // arrange
     var rowsView = this.createRowsView(this.items),
         testElement = $('#container');
 
     rowsView.render(testElement);
     this.clock.tick();
 
-    //act
+    // act
     var $focusable = testElement.find("[tabIndex]").first();
     $focusable.focus();
     this.clock.tick();
 
-    //assert
+    // assert
     assert.ok($focusable.is("td"), "focusable is cell");
     assert.strictEqual($focusable.text(), "test1", "focused cell text");
     assert.strictEqual($focusable.index(), 0, "focused cell columnIndex");
@@ -4712,12 +4714,12 @@ QUnit.testInActiveWindow('Tab from focused element before rowsview must focus fi
 });
 
 QUnit.testInActiveWindow("Reset focused cell when click on expand column of master detail", function(assert) {
-    //arrange
+    // arrange
     var rowsView = this.createRowsView(this.items, null, [{ command: "expand" }, {}, {}, {}]),
         keyboardNavigationController = this.dataGrid.keyboardNavigationController,
         testElement = $('#container');
 
-    //act
+    // act
     this.options.useKeyboard = true;
     this.options.masterDetail = { enabled: true, template: commonUtils.noop };
     keyboardNavigationController.init();
@@ -4729,7 +4731,7 @@ QUnit.testInActiveWindow("Reset focused cell when click on expand column of mast
     $($expandCell.focus()).trigger("dxpointerdown");
     this.clock.tick();
 
-    //assert
+    // assert
     assert.ok(!keyboardNavigationController._isNeedFocus, "is key down");
     assert.deepEqual(keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 0 }, "focusedCellPosition is empty");
     assert.equal($(rowsView.getCellElement(0, 0)).attr("tabIndex"), 0, "expand cell not have tab index");
@@ -4740,7 +4742,7 @@ QUnit.testInActiveWindow("Reset focused cell when click on expand column of mast
 });
 
 QUnit.testInActiveWindow("Skip invalid cell for moving to right", function(assert) {
-    //arrange
+    // arrange
     var rowsView = this.createRowsView(this.items, null, [{}, {}, {}, {}]),
         navigationController = this.dataGrid.keyboardNavigationController,
         $cell;
@@ -4753,13 +4755,13 @@ QUnit.testInActiveWindow("Skip invalid cell for moving to right", function(asser
     navigationController._focusedCellPosition = { rowIndex: 0, columnIndex: 1 };
     rowsView.render($('#container'));
 
-    //assert, act
+    // assert, act
     $cell = navigationController._getNextCell.call(navigationController, "nextInRow");
     assert.equal($cell[0].cellIndex, 3);
 });
 
 QUnit.testInActiveWindow("Skip invalid cell for moving to left", function(assert) {
-    //arrange
+    // arrange
     var rowsView = this.createRowsView(this.items, null, [{}, {}, {}, {}]),
         navigationController = this.dataGrid.keyboardNavigationController,
         $cell;
@@ -4772,13 +4774,13 @@ QUnit.testInActiveWindow("Skip invalid cell for moving to left", function(assert
     navigationController._focusedCellPosition = { rowIndex: 0, columnIndex: 3 };
     rowsView.render($('#container'));
 
-    //assert, act
+    // assert, act
     $cell = navigationController._getNextCell.call(navigationController, "previousInRow");
     assert.equal($cell[0].cellIndex, 0);
 });
 
 QUnit.test("Focused state is not applied when element is not cell", function(assert) {
-    //arrange
+    // arrange
     var rowsView = this.createRowsView(this.items, null, [{}, {}, {}, {}]),
         $element = $("<div>");
 
@@ -4796,21 +4798,21 @@ QUnit.test("Focused state is not applied when element is not cell", function(ass
         return $element;
     };
 
-    //act
+    // act
     rowsView.renderFocusState();
 
-    //assert
+    // assert
     assert.ok(!$element.attr("tabIndex"));
 });
 
 QUnit.test("Apply custom tabIndex to rows view on click", function(assert) {
-    //arrange
+    // arrange
     var rowsView = this.createRowsView(this.items),
         testElement = $('#container');
 
     this.options.tabIndex = 5;
 
-    //act
+    // act
     rowsView.render(testElement);
 
     var $cell = $(rowsView.element().find("td").first());
@@ -4861,7 +4863,7 @@ QUnit.module("Keyboard navigation with real dataController and columnsController
     }
 }, function() {
     QUnit.testInActiveWindow("First input is focused when row is edited from a cell template", function(assert) {
-        //arrange
+        // arrange
         var that = this;
         that.$element = function() {
             return $("#container");
@@ -4888,7 +4890,7 @@ QUnit.module("Keyboard navigation with real dataController and columnsController
 
         this.setupModule();
 
-        //act
+        // act
         that.gridView.render($("#container"));
         $("#editButton")
             .trigger("dxpointerdown.dxDataGridKeyboardNavigation")
@@ -4896,7 +4898,7 @@ QUnit.module("Keyboard navigation with real dataController and columnsController
 
         this.clock.tick();
 
-        //assert
+        // assert
         assert.equal($("input:focus").val(), "Alex", "value of first editor");
     });
 });

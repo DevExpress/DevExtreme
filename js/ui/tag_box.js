@@ -19,6 +19,7 @@ var $ = require("../core/renderer"),
     clickEvent = require("../events/click"),
     caret = require("./text_box/utils.caret"),
     browser = require("../core/utils/browser"),
+    FilterCreator = require("../core/utils/selection_filter").SelectionFilterCreator,
     deferredUtils = require("../core/utils/deferred"),
     when = deferredUtils.when,
     Deferred = deferredUtils.Deferred,
@@ -278,6 +279,8 @@ var TagBox = SelectBox.inherit({
 
             showDropDownButton: false,
 
+            maxFilterLength: 1500,
+
             /**
             * @name dxTagBoxOptions_tagTemplate
             * @publicName tagTemplate
@@ -362,7 +365,16 @@ var TagBox = SelectBox.inherit({
             * @type boolean
             * @default true
             */
-            multiline: true
+            multiline: true,
+
+            /**
+             * @name dxTagBoxOptions_useSubmitBehavior
+             * @publicName useSubmitBehavior
+             * @type boolean
+             * @default true
+             * @hidden
+             */
+            useSubmitBehavior: true,
 
             /**
             * @name dxTagBoxOptions_applyValueMode
@@ -523,7 +535,21 @@ var TagBox = SelectBox.inherit({
         }, [], this.option("integrationOptions.watchMethod"));
     },
 
+    _toggleSubmitElement: function(enabled) {
+        if(enabled) {
+            this._renderSubmitElement();
+            this._setSubmitValue();
+        } else {
+            this._$submitElement && this._$submitElement.remove();
+            delete this._$submitElement;
+        }
+    },
+
     _renderSubmitElement: function() {
+        if(!this.option("useSubmitBehavior")) {
+            return;
+        }
+
         this._$submitElement = $("<select>")
             .attr("multiple", "multiple")
             .css("display", "none")
@@ -531,6 +557,10 @@ var TagBox = SelectBox.inherit({
     },
 
     _setSubmitValue: function() {
+        if(!this.option("useSubmitBehavior")) {
+            return;
+        }
+
         var value = this._getValue(),
             useDisplayText = this.option("valueExpr") === "this",
             $options = [];
@@ -547,9 +577,8 @@ var TagBox = SelectBox.inherit({
         this._$submitElement.append($options);
     },
 
-    _render: function() {
+    _initMarkup: function() {
         this._tagElementsCache = $();
-
         var isSingleLineMode = !this.option("multiline");
 
         this.$element()
@@ -558,9 +587,12 @@ var TagBox = SelectBox.inherit({
             .toggleClass(TAGBOX_SINGLE_LINE_CLASS, isSingleLineMode);
 
         // TODO: texteditor render methods order research
-        this._toggleRTLDirection(this.option("rtlEnabled"));
         this._initTagTemplate();
 
+        this.callBase();
+    },
+
+    _render: function() {
         this.callBase();
 
         this._renderTagRemoveAction();
@@ -780,29 +812,64 @@ var TagBox = SelectBox.inherit({
         return $tag;
     },
 
+    _getFilteredItems: function(values) {
+        var creator = new FilterCreator(values);
+
+        var selectedItems = (this._list && this._list.option("selectedItems")) || this.option("selectedItems"),
+            clientFilterFunction = creator.getLocalFilter(this._valueGetter),
+            filteredItems = selectedItems.filter(clientFilterFunction),
+            selectedItemsAlreadyLoaded = filteredItems.length === values.length,
+            d = new Deferred();
+
+        if(selectedItemsAlreadyLoaded) {
+            return d.resolve(filteredItems).promise();
+        } else {
+            var dataSourceFilter = this._dataSource.filter(),
+                filterExpr = creator.getCombinedFilter(this.option("valueExpr"), dataSourceFilter),
+                filterLength = encodeURI(JSON.stringify(filterExpr)).length,
+                resultFilter = filterLength > this.option("maxFilterLength") ? undefined : filterExpr;
+
+            this._dataSource.store().load({ filter: resultFilter }).done(function(items) {
+                d.resolve(items.filter(clientFilterFunction));
+            });
+
+            return d.promise();
+        }
+
+    },
+
+    _createTagData: function(values, filteredItems) {
+        var items = [];
+
+        iteratorUtils.each(values, function(valueIndex, value) {
+            var item = filteredItems[valueIndex];
+
+            if(isDefined(item)) {
+                this._selectedItems.push(item);
+                items.splice(valueIndex, 0, item);
+            } else {
+                var selectedItem = this.option("selectedItem"),
+                    customItem = this._valueGetter(selectedItem) === value ? selectedItem : value;
+
+                items.splice(valueIndex, 0, customItem);
+            }
+        }.bind(this));
+
+        return items;
+    },
+
     _loadTagData: function() {
         var values = this._getValue(),
-            tagData = new Deferred(),
-            cache = {},
-            items = [];
+            tagData = new Deferred();
 
         this._selectedItems = [];
-        var itemLoadDeferreds = iteratorUtils.map(values, (function(value) {
-            return this._loadItem(value, cache).always((function(item) {
-                var valueIndex = values.indexOf(value);
 
-                if(isDefined(item)) {
-                    this._selectedItems.push(item);
-                    items.splice(valueIndex, 0, item);
-                } else {
-                    items.splice(valueIndex, 0, value);
-                }
-            }).bind(this));
-        }).bind(this));
-
-        when.apply($, itemLoadDeferreds)
-            .done(function() { tagData.resolve(items); })
-            .fail(function() { tagData.reject(items); });
+        this._getFilteredItems(values)
+            .done(function(filteredItems) {
+                var items = this._createTagData(values, filteredItems);
+                tagData.resolve(items);
+            }.bind(this))
+            .fail(tagData.reject.bind(this));
 
         return tagData.promise();
     },
@@ -1255,6 +1322,9 @@ var TagBox = SelectBox.inherit({
                     this._resetListDataSourceFilter();
                 }
                 break;
+            case "useSubmitBehavior":
+                this._toggleSubmitElement(args.value);
+                break;
             case "displayExpr":
                 this.callBase(args);
                 this._invalidate();
@@ -1291,6 +1361,8 @@ var TagBox = SelectBox.inherit({
             case "multiline":
                 this.$element().toggleClass(TAGBOX_SINGLE_LINE_CLASS, !args.value);
                 this._renderSingleLineScroll();
+                break;
+            case "maxFilterLength":
                 break;
             default:
                 this.callBase(args);

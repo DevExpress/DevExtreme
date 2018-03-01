@@ -12,7 +12,7 @@ SystemJS.config({
 define(function(require) {
     require("common.css!");
 
-    require("/js/bundles/dx.mobile.js");
+    require("/artifacts/transpiled/bundles/dx.mobile.js");
 
     require("/testing/helpers/frameworkMocks.js");
     require("/testing/helpers/htmlFrameworkMocks.js");

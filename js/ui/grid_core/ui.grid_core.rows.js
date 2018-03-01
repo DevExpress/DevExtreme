@@ -29,6 +29,7 @@ var ROWS_VIEW_CLASS = "rowsview",
     COLUMN_LINES_CLASS = "dx-column-lines",
     ROW_ALTERNATION_CLASS = "dx-row-alt",
     LAST_ROW_BORDER = "dx-last-row-border",
+    EMPTY_CLASS = "dx-empty",
 
     LOADPANEL_HIDE_TIMEOUT = 200;
 
@@ -574,7 +575,7 @@ module.exports = {
                             }
                         }
 
-                        if(that.option("columnAutoWidth") || that._hasHeight || allColumnsHasWidth || that._columnsController._isColumnFixing()) {
+                        if(that.option("advancedRendering") || that.option("columnAutoWidth") || that._hasHeight || allColumnsHasWidth || that._columnsController._isColumnFixing()) {
                             that._renderScrollableCore($element);
                         }
                     }
@@ -670,7 +671,7 @@ module.exports = {
                     }
                 },
 
-                _renderFreeSpaceRow: function(tableElement) {
+                _renderFreeSpaceRow: function(tableElement, options) {
                     var that = this,
                         i,
                         freeSpaceRowElement = that._createRow(),
@@ -681,7 +682,7 @@ module.exports = {
                         .toggleClass(COLUMN_LINES_CLASS, that.option("showColumnLines"));
 
                     for(i = 0; i < columns.length; i++) {
-                        freeSpaceRowElement.append(that._createCell({ column: columns[i], rowType: "freeSpace" }));
+                        freeSpaceRowElement.append(that._createCell({ column: columns[i], rowType: "freeSpace", columnIndex: i, columns: columns }));
                     }
 
                     that._appendRow(tableElement, freeSpaceRowElement, appendFreeSpaceRowTemplate);
@@ -988,7 +989,12 @@ module.exports = {
                         column;
 
                     if(rowOptions) {
-                        column = this._columnsController.columnOption(columnIdentifier);
+                        if(typeUtils.isString(columnIdentifier)) {
+                            column = this._columnsController.columnOption(columnIdentifier);
+                        } else {
+                            column = this._columnsController.getVisibleColumns()[columnIdentifier];
+                        }
+
                         if(column) {
                             cellOptions = this._getCellOptions({
                                 value: column.calculateCellValue(rowOptions.data),
@@ -1034,11 +1040,11 @@ module.exports = {
                                 scrollingMode = that.option("scrolling.mode");
 
                                 if(freeSpaceRowCount > 0 && that._dataController.pageCount() > 1 && scrollingMode !== "virtual" && scrollingMode !== "infinite") {
-                                    freeSpaceRowElements.height(freeSpaceRowCount * that._rowHeight);
+                                    freeSpaceRowElements.css("height", freeSpaceRowCount * that._rowHeight);
                                     isFreeSpaceRowVisible = true;
                                 }
                                 if(!isFreeSpaceRowVisible && $table) {
-                                    freeSpaceRowElements.height(0);
+                                    freeSpaceRowElements.css("height", 0);
                                 } else {
                                     freeSpaceRowElements.toggle(isFreeSpaceRowVisible);
                                 }
@@ -1055,7 +1061,7 @@ module.exports = {
 
                                     if(showFreeSpaceRow) {
                                         commonUtils.deferRender(function() {
-                                            freeSpaceRowElements.height(resultHeight);
+                                            freeSpaceRowElements.css("height", resultHeight);
                                             isFreeSpaceRowVisible = true;
                                             freeSpaceRowElements.show();
                                         });
@@ -1066,7 +1072,7 @@ module.exports = {
                                 });
                             }
                         } else {
-                            freeSpaceRowElements.height(0);
+                            freeSpaceRowElements.css("height", 0);
                             freeSpaceRowElements.show();
                             that._updateLastRowBorder(true);
                         }
@@ -1150,7 +1156,7 @@ module.exports = {
                     return scrollbarWidth > 0 ? scrollbarWidth : 0;
                 },
 
-                //TODO remove this call, move _fireColumnResizedCallbacks functionality to columnsController
+                // TODO remove this call, move _fireColumnResizedCallbacks functionality to columnsController
                 _fireColumnResizedCallbacks: function() {
                     var that = this,
                         lastColumnWidths = that._lastColumnWidths || [],

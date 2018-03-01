@@ -200,7 +200,7 @@ var subscribes = {
     appointmentTakesSeveralDays: function(appointment) {
         return this._appointmentModel.appointmentTakesSeveralDays(appointment);
     },
-        //NOTE: T312051, remove after fix scrollable bug T324196
+        // NOTE: T312051, remove after fix scrollable bug T324196
     appointmentFocused: function() {
         this._workSpace.restoreScrollTop();
     },
@@ -605,7 +605,7 @@ var subscribes = {
         date = new Date(dateInUTC + appointmentTimezoneOffset * 3600000);
 
         if(typeof commonTimezoneOffset === "number") {
-            date = new Date(date.getTime() + (commonTimezoneOffset - appointmentTimezoneOffset) * 3600000);
+            date = new Date(date.setHours(date.getHours() + (commonTimezoneOffset - appointmentTimezoneOffset)));
         }
 
         return date;
@@ -629,7 +629,7 @@ var subscribes = {
         date = new Date(dateInUTC - appointmentTimezoneOffset * 3600000);
 
         if(typeof commonTimezoneOffset === "number") {
-            date = new Date(date.getTime() - (commonTimezoneOffset - appointmentTimezoneOffset) * 3600000);
+            date = new Date(date.setHours(date.getHours() - (commonTimezoneOffset - appointmentTimezoneOffset)));
         }
 
         return date;
@@ -663,7 +663,7 @@ var subscribes = {
 
         this._convertDatesByTimezoneBack(false, result);
 
-            //TODO: _getSingleAppointmentData already uses a related cell data for appointment that contains info about resources
+            // TODO: _getSingleAppointmentData already uses a related cell data for appointment that contains info about resources
         this.setTargetedAppointmentResources(result, appointmentElement, appointmentIndex);
 
         return result;
@@ -674,7 +674,13 @@ var subscribes = {
             endDate = options.endDate,
             allDay = options.allDay,
             appointmentDuration = endDate.getTime() - startDate.getTime(),
-            dayDuration = toMs("day"),
+            daylightDiff = startDate.getTimezoneOffset() - endDate.getTimezoneOffset();
+
+        if(daylightDiff !== 0) {
+            appointmentDuration += daylightDiff * toMs("minute");
+        }
+
+        var dayDuration = toMs("day"),
             visibleDayDuration = this._getDayDuration() * toMs("hour"),
             result = 0;
 

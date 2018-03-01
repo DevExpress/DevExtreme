@@ -14,7 +14,7 @@ QUnit.test("Renderer", function(assert) {
     assert.deepEqual(this.renderer.root.css.lastCall.args, [{ "-ms-touch-action": "pan-y", "touch-action": "pan-y" }], "root settings");
 });
 
-//B219560
+// B219560
 QUnit.test("startValue equals endValue", function(assert) {
     this.createWidget({
         scale: {
@@ -28,7 +28,7 @@ QUnit.test("startValue equals endValue", function(assert) {
     assert.strictEqual(options.endValue, undefined, "end value");
 });
 
-//T282809
+// T282809
 QUnit.test("one category", function(assert) {
     this.createWidget({
         scale: {
@@ -94,7 +94,7 @@ QUnit.test("format when majorTickInterval is not defined", function(assert) {
     assert.strictEqual(this.axis.updateOptions.lastCall.args[0].label.format, "day", "date time format");
 });
 
-//T152860
+// T152860
 QUnit.test("no format value with empty data", function(assert) {
     this.createWidget({
         scale: {
@@ -178,7 +178,7 @@ QUnit.test("initialize with logarithmic axis", function(assert) {
     assert.equal(range.base, 10, "base");
 });
 
-//T153827
+// T153827
 QUnit.test("correct sliders place holder size by values", function(assert) {
     this.createWidget({
         scale: {
@@ -191,7 +191,7 @@ QUnit.test("correct sliders place holder size by values", function(assert) {
     assert.deepEqual(this.rangeView.update.lastCall.args[2], { left: 0, top: 0, width: 299, height: 24, right: 0, bottom: 0 });
 });
 
-//T153827
+// T153827
 QUnit.test("correct sliders place holder size by values (with set placeholderSize)", function(assert) {
     this.createWidget({
         sliderMarker: {
@@ -328,6 +328,30 @@ QUnit.test("dataSource is loaded", function(assert) {
     this.renderer.onEndAnimation.lastCall.args[0]();
     assert.strictEqual(rangeSelector.isReady(), true, "ready state after end animation");
 });
+
+QUnit.test("Update axis canvas before create series dataSorce", function(assert) {
+    var spy = sinon.spy(seriesDataSourceModule, "SeriesDataSource");
+    this.seriesDataSource.stub("getBoundRange").returns({
+        arg: new commons.StubRange(),
+        val: new commons.StubRange()
+    });
+    this.createWidget({
+        dataSource: [{}],
+        chart: {
+        }
+    });
+
+    var argumentAxis = spy.lastCall.args[0].argumentAxis;
+
+    assert.deepEqual(argumentAxis.getTranslator().updateCanvas.firstCall.args[0], {
+        height: 150,
+        left: 0,
+        top: 0,
+        width: 300
+    });
+    assert.ok(argumentAxis.getTranslator().updateCanvas.firstCall.calledBefore(spy.firstCall));
+});
+
 
 QUnit.module("logarithmic type", commons.environment);
 

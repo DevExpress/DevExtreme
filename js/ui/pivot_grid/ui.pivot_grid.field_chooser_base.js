@@ -95,7 +95,7 @@ var FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).in
     _refreshDataSource: function() {
         var dataSource = this.option("dataSource");
 
-        if(dataSource && dataSource.fields && dataSource.load/*instanceof DX.ui.dxPivotGrid.DataSource*/) {
+        if(dataSource && dataSource.fields && dataSource.load/* instanceof DX.ui.dxPivotGrid.DataSource */) {
             this._dataSource = dataSource;
         }
     },
@@ -273,7 +273,7 @@ var FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).in
                         type: mainGroupField.groupName ? 'tree' : 'list',
                         dataSource: {
                             useDefaultSearch: true,
-                            //paginate: false,
+                            // paginate: false,
                             load: function(options) {
                                 var userData = options.userData;
                                 if(userData.store) {

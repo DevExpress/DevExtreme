@@ -103,7 +103,7 @@ QUnit.test("onItemSelectionChanged should have correct arguments", function(asse
 
     assert.equal(itemSelectionChanged.callCount, 1, "selection was changed once");
 
-    //note: other parameters are redundant but they were saved in the code to prevent a BC
+    // note: other parameters are redundant but they were saved in the code to prevent a BC
     assert.equal(itemSelectionChanged.getCall(0).args[0].component.NAME, instance.NAME, "component is correct");
     assert.ok($(itemSelectionChanged.getCall(0).args[0].element).hasClass("dx-treeview"), "element is correct");
     assert.equal(itemSelectionChanged.getCall(0).args[0].node.key, 2, "node is correct");
@@ -292,4 +292,47 @@ QUnit.test("selectNodesRecursive should work correct on option changing", functi
 
     assert.ok($nodes.eq(0).hasClass("dx-state-selected"), "root node should be selected");
     assert.ok($nodes.eq(1).hasClass("dx-state-selected"), "nested node should be selected");
+});
+
+QUnit.test("onItemSelectionChanged event should be fired on unselect previosly selected item", function(assert) {
+    var items = [{ text: "item 1" }, { text: "item 2" }],
+        itemSelectionChangedStub = sinon.stub(),
+        $treeView = initTree({
+            items: items,
+            selectByClick: true,
+            selectionMode: "single",
+            onItemSelectionChanged: itemSelectionChangedStub
+        }),
+        $items = $treeView.find(".dx-treeview-item");
+
+    $items.eq(0).trigger("dxclick");
+    $items.eq(1).trigger("dxclick");
+
+    assert.equal(itemSelectionChangedStub.callCount, 3, "'onItemSelectionChanged' event fires three times");
+
+    var callArgs = itemSelectionChangedStub.getCall(1).args[0];
+    assert.deepEqual(callArgs.itemData, { selected: false, text: "item 1" }, "'onItemSelectionChanged' event fires on unselect of item1");
+});
+
+QUnit.test("item selection correctly reset when dataSource is filtered", function(assert) {
+    var CHECK_BOX_SELECTOR = ".dx-checkbox",
+        items = [{ text: "item 1" }, { text: "item 2" }],
+        $treeView = initTree({
+            dataSource: items,
+            selectionMode: "single",
+            showCheckBoxesMode: "normal",
+            searchExpr: "text",
+            searchEnabled: true,
+        }),
+        treeViewInstance = $treeView.dxTreeView("instance");
+
+    treeViewInstance.option("searchValue", "2");
+    $treeView.find(CHECK_BOX_SELECTOR).trigger("dxclick");
+    treeViewInstance.option("searchValue", "1");
+    $treeView.find(CHECK_BOX_SELECTOR).trigger("dxclick");
+    treeViewInstance.option("searchValue", "");
+
+    var checkedCheckBoxCount = $treeView.find(".dx-checkbox-checked").length;
+    assert.equal(checkedCheckBoxCount, 1, "There is only one checked checkBox");
+    assert.ok($treeView.find(CHECK_BOX_SELECTOR).eq(0).hasClass("dx-checkbox-checked"), "Correct checkbox checked");
 });

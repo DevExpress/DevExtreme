@@ -58,7 +58,7 @@ var createPoint = function() {
     stub.hasCoords.returns(true);
     stub.isInVisibleArea.returns(true);
 
-    stub._options = {};//see T243839
+    stub._options = {};// see T243839
     return stub;
 };
 
@@ -195,9 +195,9 @@ QUnit.test("Draw without data", function(assert) {
         type: seriesType,
         point: { visible: false }
     });
-    //act
+    // act
     series.draw(false);
-    //assert
+    // assert
 
     checkGroups(assert, series);
 });
@@ -208,13 +208,14 @@ QUnit.test("Draw simple data without animation", function(assert) {
         point: { visible: false }
     });
     series.updateData(this.data);
+    series.createPoints();
     $.each(series._points, function(i, pt) {
         pt.x = pt.argument;
         pt.y = pt.value;
     });
-    //act
+    // act
     series.draw(false);
-    //assert
+    // assert
     checkGroups(assert, series);
 
     assert.deepEqual(series._markersGroup._stored_settings.scaleX, 1);
@@ -235,14 +236,15 @@ QUnit.test("Draw simple data with animation. first draw", function(assert) {
         }),
         complete;
     series.updateData(this.data);
+    series.createPoints();
     $.each(series._points, function(i, pt) {
         pt.x = pt.argument;
         pt.y = pt.value;
     });
-    //act
+    // act
 
     series.draw(true);
-    //assert
+    // assert
     checkGroups(assert, series);
 
     assert.equal(series._labelsGroup._stored_settings.opacity, 0.001);
@@ -279,13 +281,14 @@ QUnit.test("Draw simple data with animation. draw after draw without data", func
         complete;
     series.draw(true);
     series.updateData(this.data);
+    series.createPoints();
     $.each(series._points, function(i, pt) {
         pt.x = pt.argument;
         pt.y = pt.value;
     });
-    //act
+    // act
     series.draw(true);
-    //assert
+    // assert
     checkGroups(assert, series);
 
     assert.equal(series._labelsGroup._stored_settings.opacity, 0.001);
@@ -322,14 +325,15 @@ QUnit.test("Draw simple data with animation. first draw. Rotated", function(asse
         }),
         complete;
     series.updateData(this.data);
+    series.createPoints();
     $.each(series._points, function(i, pt) {
         pt.x = pt.argument;
         pt.y = pt.value;
     });
-    //act
+    // act
 
     series.draw(true);
-    //assert
+    // assert
     checkGroups(assert, series);
 
     assert.equal(series._labelsGroup._stored_settings.opacity, 0.001);
@@ -365,15 +369,16 @@ QUnit.test("Draw simple data with animation. second draw", function(assert) {
         }),
         complete;
     series.updateData(this.data);
+    series.createPoints();
     $.each(series._points, function(i, pt) {
         pt.x = pt.argument;
         pt.y = pt.value;
     });
-    //act
+    // act
 
     series.draw(true);
     series.draw(true);
-    //assert
+    // assert
     checkGroups(assert, series);
 
     assert.equal(series._labelsGroup._stored_settings.opacity, 0.001);
@@ -414,15 +419,16 @@ QUnit.module("Bar. Points animation", {
             valueAxis: axis.valAxis
         });
         this.series.updateData(this.data);
+        this.series.createPoints();
     },
     afterEach: environment.afterEach
 });
 
 QUnit.test("Draw without animation", function(assert) {
     var series = this.series;
-    //act
+    // act
     series.draw(false);
-    //assert
+    // assert
     $.each(series._points, function(i, p) {
         assert.ok(p.draw.calledOnce);
         assert.equal(p.draw.firstCall.args[0], series._renderer, "renderer pass to point " + i);
@@ -433,10 +439,10 @@ QUnit.test("Draw without animation", function(assert) {
 
 QUnit.test("Draw with animation", function(assert) {
     var series = this.series;
-    //act
+    // act
     series.draw(true);
     series.draw(true);
-    //assert
+    // assert
     $.each(series._points, function(i, p) {
         assert.ok(p.draw.calledTwice);
         assert.equal(p.draw.firstCall.args[0], series._renderer, "renderer pass to point " + i);
@@ -460,15 +466,16 @@ QUnit.test("Draw aggregated points with animation", function(assert) {
         aggregatedPoints = [this.createPoint(), this.createPoint()];
 
     series.updateData(this.data);
+    series.createPoints();
     series.resamplePoints = function() {
         this._points = aggregatedPoints;
         this._lastPointIndex = aggregatedPoints.length - 1;
     };
-    //act
+    // act
     series.resamplePoints();
     series.draw(true);
     series.draw(true);
-    //assert
+    // assert
     assert.ok(series._points.length);
     $.each(series._originalPoints, function(i, p) {
         assert.ok(!p.draw.calledOnce);
@@ -531,6 +538,7 @@ QUnit.module("Bar. Point styles", {
 QUnit.test("Style in point", function(assert) {
     var series = createSeries(this.options);
     series.updateData(this.data);
+    series.createPoints();
 
     assert.deepEqual(this.createPoint.firstCall.args[2].styles, {
         hover: {
@@ -561,6 +569,7 @@ QUnit.test("Style in point group", function(assert) {
         valueAxis: new MockAxis({ renderer: this.renderer })
     });
     series.updateData(this.data);
+    series.createPoints();
     series.draw(false);
 
     assert.deepEqual(series._markersGroup._stored_settings, {
@@ -582,6 +591,7 @@ QUnit.test("Style in point group", function(assert) {
 QUnit.test("All options defined", function(assert) {
     var series = createSeries(this.options);
     series.updateData(this.data);
+    series.createPoints();
 
     assert.deepEqual((series._getPointOptions().styles), {
         hover: {
@@ -613,6 +623,7 @@ QUnit.test("without borders", function(assert) {
         styles;
 
     series.updateData(this.data);
+    series.createPoints();
 
     styles = series._getPointOptions().styles;
 
@@ -642,6 +653,7 @@ QUnit.test("Define only color", function(assert) {
         styles;
 
     series.updateData(this.data);
+    series.createPoints();
     styles = series._getPointOptions().styles;
 
     assert.strictEqual(styles.hover.fill, "n-color", "hover fill color");
@@ -674,6 +686,7 @@ QUnit.test("Define only series color", function(assert) {
         }),
         styles;
     series.updateData(this.data);
+    series.createPoints();
 
     styles = series._getPointOptions().styles;
 
@@ -703,6 +716,7 @@ QUnit.test("_get Point size visible point", function(assert) {
     });
 
     series.updateData(this.data);
+    series.createPoints();
 
     assert.equal(series._getPointSize(), 3);
 });
@@ -723,6 +737,7 @@ QUnit.test("_get Point size invisible point", function(assert) {
     });
 
     series.updateData(this.data);
+    series.createPoints();
 
     assert.equal(series._getPointSize(), 3);
 });
@@ -743,6 +758,8 @@ QUnit.test("customizePoint object", function(assert) {
             name: "seriesName"
         });
     series.updateData(this.data);
+
+    series.createPoints();
 
     assert.ok(series);
     assert.equal(spy.callCount, 2);
@@ -792,6 +809,7 @@ QUnit.test("customize point color. all", function(assert) {
         }
     });
     series.updateData(this.data);
+    series.createPoints();
 
     assert.deepEqual(series.getAllPoints()[0].updateOptions.lastCall.args[0].styles, {
         usePointCustomOptions: true,
@@ -850,6 +868,8 @@ QUnit.test("customize with hatching", function(assert) {
     }, { renderer: this.renderer });
 
     series.updateData(this.data);
+
+    series.createPoints();
 
     assert.deepEqual(series.getAllPoints()[0].updateOptions.lastCall.args[0].styles, {
         usePointCustomOptions: true,
@@ -966,10 +986,11 @@ QUnit.test("Hide visible series", function(assert) {
         point: { visible: true }
     });
     series.updateData([{ arg: 1, val: 10 }, { arg: 2, val: 20 }, { arg: 3, val: 30 }, { arg: 4, val: 40 }]);
+    series.createPoints();
     series.hide();
 
     var points = series.getPoints();
-    //see T243839
+    // see T243839
     $.each(points, function(_, point) {
         assert.ok(point._options.visible === false);
     });
@@ -983,11 +1004,11 @@ QUnit.test("Show invisible series", function(assert) {
         point: { visible: false }
     });
     series.updateData([{ arg: 1, val: 10 }, { arg: 2, val: 20 }, { arg: 3, val: 30 }, { arg: 4, val: 40 }]);
-
+    series.createPoints();
     series.show();
 
     var points = series.getPoints();
-    //see T243839
+    // see T243839
     $.each(points, function(_, point) {
         assert.ok(point._options.visible === true);
     });
@@ -1016,6 +1037,7 @@ QUnit.module("Polar bar series", {
             }
         });
         series.updateData(this.data);
+        series.createPoints();
         return series;
     },
     createDrawnSeries: function(animationEnabled) {
@@ -1083,6 +1105,7 @@ QUnit.module("PolarBar. Point styles", {
 QUnit.test("Style in point", function(assert) {
     var series = createSeries(this.options);
     series.updateData(this.data);
+    series.createPoints();
 
     assert.deepEqual(this.createPoint.firstCall.args[2].styles, {
         hover: {
@@ -1116,6 +1139,7 @@ QUnit.test("Style in point group", function(assert) {
         }
     });
     series.updateData(this.data);
+    series.createPoints();
     series.draw(false);
 
     assert.deepEqual(series._markersGroup._stored_settings, {
@@ -1137,6 +1161,7 @@ QUnit.test("All options defined", function(assert) {
 
     var series = createSeries(this.options);
     series.updateData(this.data);
+    series.createPoints();
 
     assert.deepEqual((series._getPointOptions().styles), {
         hover: {

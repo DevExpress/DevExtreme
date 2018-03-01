@@ -63,8 +63,8 @@ function getTickGenerator(options, incidentOccurred, skipTickGeneration) {
         firstDayOfWeek: options.workWeek && options.workWeek[0],
         skipTickGeneration: skipTickGeneration,
 
-        showCalculatedTicks: options.tick.showCalculatedTicks, //DEPRECATED IN 15_2
-        showMinorCalculatedTicks: options.minorTick.showCalculatedTicks //DEPRECATED IN 15_2
+        showCalculatedTicks: options.tick.showCalculatedTicks, // DEPRECATED IN 15_2
+        showMinorCalculatedTicks: options.minorTick.showCalculatedTicks // DEPRECATED IN 15_2
     });
 }
 
@@ -161,7 +161,7 @@ function removeInvalidTick(ticks, i) {
 }
 
 function getAddFunction(range, correctZeroLevel) {
-    //T170398
+    // T170398
     if(range.dataType === "datetime") {
         return function(rangeValue, marginValue) {
             return new Date(rangeValue.getTime() + marginValue);
@@ -685,7 +685,6 @@ Axis.prototype = {
         };
 
         that._axisStripLabelGroup = renderer.g().attr({ "class": classSelector + "axis-labels" });
-        that._axisBreaksGroup = renderer.g().attr({ "class": classSelector + "breaks" });
     },
 
     _clearAxisGroups: function() {
@@ -697,7 +696,6 @@ Axis.prototype = {
         that._axisConstantLineGroups.inside.remove();
         that._axisConstantLineGroups.outside1.remove();
         that._axisConstantLineGroups.outside2.remove();
-        that._axisBreaksGroup.remove();
 
         that._axisGridGroup.remove();
 
@@ -711,7 +709,6 @@ Axis.prototype = {
         that._axisConstantLineGroups.outside1.clear();
         that._axisConstantLineGroups.outside2.clear();
         that._axisStripLabelGroup && that._axisStripLabelGroup.clear();
-        that._axisBreaksGroup.clear();
     },
 
     _getLabelFormatObject: function(value, labelOptions, range, point, tickInterval, ticks) {
@@ -730,12 +727,12 @@ Axis.prototype = {
                 point: point
             }) || "",
 
-            //B252346
+            // B252346
             min: range.minVisible,
             max: range.maxVisible
         };
 
-        //for crosshair's customizeText
+        // for crosshair's customizeText
         if(point) {
             formatObject.point = point;
         }
@@ -856,11 +853,13 @@ Axis.prototype = {
         return true;
     },
 
-    //public
+    _disposeBreaksGroup: _noop,
+
+    // public
     dispose: function() {
         var that = this;
 
-        [that._axisElementsGroup, that._axisStripGroup, that._axisGroup, that._axisBreaksGroup].forEach(function(g) { g.dispose(); });
+        [that._axisElementsGroup, that._axisStripGroup, that._axisGroup].forEach(function(g) { g.dispose(); });
 
         that._strips = that._title = null;
 
@@ -869,11 +868,10 @@ Axis.prototype = {
         that._axisGroup = that._axisTitleGroup = null;
         that._axesContainerGroup = that._stripsGroup = that._constantLinesGroup = null;
 
-        that._scaleBreaksGroup = null;
-
         that._renderer = that._options = that._textOptions = that._textFontStyles = null;
         that._translator = null;
         that._majorTicks = that._minorTicks = null;
+        that._disposeBreaksGroup();
     },
 
     getOptions: function() {
@@ -997,7 +995,7 @@ Axis.prototype = {
         }
     },
 
-    setBusinessRange: function(range, isMultipleAxes) {
+    setBusinessRange: function(range) {
         var that = this,
             validateBusinessRange = function(range, min, max) {
                 function validate(valueSelector, baseValueSelector, optionValue) {
@@ -1013,8 +1011,7 @@ Axis.prototype = {
 
         that._seriesData = new rangeModule.Range(validateBusinessRange(range, options.min, options.max));
 
-        that._breaks = !isMultipleAxes ? that._getScaleBreaks(options, that._seriesData, that._series, that.isArgumentAxis) : [];
-        that._disableBreaks = isMultipleAxes;
+        that._breaks = that._getScaleBreaks(options, that._seriesData, that._series, that.isArgumentAxis);
 
         that._translator.updateBusinessRange(that._seriesData);
     },
@@ -1320,11 +1317,13 @@ Axis.prototype = {
                     marginValue = _max(marginValue, maxMinDistance * (marginSizeMultiplier > 1 ? marginSizeMultiplier / 10 : marginSizeMultiplier));
                 }
 
-                minVisible = addMargin(minVisible, -marginValue, minValueMargin);
-                maxVisible = addMargin(maxVisible, marginValue, maxValueMargin);
-                maxMinDistance = maxVisible - minVisible;
-                minVisible = correctMarginExtremum(minVisible, margins, maxMinDistance, _math.floor);
-                maxVisible = correctMarginExtremum(maxVisible, margins, maxMinDistance, _math.ceil);
+                if(maxMinDistance !== 0) {
+                    minVisible = addMargin(minVisible, -marginValue, minValueMargin);
+                    maxVisible = addMargin(maxVisible, marginValue, maxValueMargin);
+                    maxMinDistance = maxVisible - minVisible;
+                    minVisible = correctMarginExtremum(minVisible, margins, maxMinDistance, _math.floor);
+                    maxVisible = correctMarginExtremum(maxVisible, margins, maxMinDistance, _math.ceil);
+                }
             }
 
             range.addRange({
@@ -1340,7 +1339,7 @@ Axis.prototype = {
         return range;
     },
 
-    //DEPRECATED IN 15_2
+    // DEPRECATED IN 15_2
     correctTicksOnDeprecated: function() {
         var behavior = this._options.label.overlappingBehavior,
             majorTicks = this._majorTicks,
@@ -1382,7 +1381,6 @@ Axis.prototype = {
         that._labelAxesGroup && that._axisStripLabelGroup.append(that._labelAxesGroup);
         that._gridContainerGroup && that._axisGridGroup.append(that._gridContainerGroup);
         that._stripsGroup && that._axisStripGroup.append(that._stripsGroup);
-        that._scaleBreaksGroup && that._axisBreaksGroup.append(that._scaleBreaksGroup);
 
         if(that._constantLinesGroup) {
             that._axisConstantLineGroups.inside.append(that._constantLinesGroup);
@@ -1459,7 +1457,6 @@ Axis.prototype = {
 
         updateGridsPosition(that._majorTicks);
         updateGridsPosition(that._minorTicks);
-        that.drawScaleBreaks();
     },
 
     applyClipRects: function(elementsClipID, canvasClipID) {
@@ -1514,10 +1511,10 @@ Axis.prototype = {
 
         that._zoomArgs = { min: min, max: max };
 
-        that._breaks = !that._disableBreaks ? that._getScaleBreaks(options, {
+        that._breaks = that._getScaleBreaks(options, {
             minVisible: min,
             maxVisible: max
-        }, that._series, that.isArgumentAxis) : [];
+        }, that._series, that.isArgumentAxis);
 
         if(translator.zoomArgsIsEqualCanvas(that._zoomArgs)) {
             that.resetZoom();
@@ -1660,8 +1657,8 @@ Axis.prototype = {
             labelOpt = that._options.label,
             displayMode = that._validateDisplayMode(labelOpt.displayMode),
             overlappingMode = that._validateOverlappingMode(labelOpt.overlappingBehavior.mode, displayMode),
-            rotationAngle = labelOpt.overlappingBehavior.rotationAngle, //DEPRECATED 17_1
-            staggeringSpacing = labelOpt.overlappingBehavior.staggeringSpacing, //DEPRECATED 17_1
+            rotationAngle = labelOpt.overlappingBehavior.rotationAngle, // DEPRECATED 17_1
+            staggeringSpacing = labelOpt.overlappingBehavior.staggeringSpacing, // DEPRECATED 17_1
             ignoreOverlapping = overlappingMode === "none" || overlappingMode === "ignore",
             behavior = {
                 rotationAngle: isDefined(rotationAngle) ? rotationAngle : labelOpt.rotationAngle,

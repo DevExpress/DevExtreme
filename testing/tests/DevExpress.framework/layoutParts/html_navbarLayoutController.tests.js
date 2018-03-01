@@ -122,7 +122,7 @@
             $layout,
             $layoutFooter;
 
-        //themes.current("android5");
+        // themes.current("android5");
 
         createLayoutController({
             initOptions: {

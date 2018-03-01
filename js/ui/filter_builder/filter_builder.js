@@ -33,6 +33,7 @@ var FILTER_BUILDER_CLASS = "dx-filterbuilder",
     FILTER_BUILDER_FIELDS_CLASS = FILTER_BUILDER_CLASS + "-fields",
     FILTER_BUILDER_ADD_CONDITION_CLASS = FILTER_BUILDER_CLASS + "-add-condition",
     ACTIVE_CLASS = "dx-state-active",
+    FILTER_BUILDER_MENU_CUSTOM_OPERATION_CLASS = FILTER_BUILDER_CLASS + "-menu-custom-operation",
 
     TAB_KEY = 9,
     ENTER_KEY = 13,
@@ -232,16 +233,14 @@ var FilterBuilder = Widget.inherit({
             /**
              * @name dxFilterBuilderField_defaultFilterOperation
              * @publicName defaultFilterOperation
-             * @type string
-             * @acceptValues "=" | "<>" | "<" | "<=" | ">" | ">=" | "notcontains" | "contains" | "startswith" | "endswith" | "isblank" | "isnotblank"
+             * @type Enums.FilterBuilderFieldFilterOperations | string
              * @hidden
              */
 
             /**
              * @name dxFilterBuilderField_filterOperations
              * @publicName filterOperations
-             * @type Array<string>
-             * @acceptValues "=" | "<>" | "<" | "<=" | ">" | ">=" | "notcontains" | "contains" | "startswith" | "endswith" | "isblank" | "isnotblank"
+             * @type Array<Enums.FilterBuilderFieldFilterOperations, string>
              * @default undefined
              */
 
@@ -332,49 +331,54 @@ var FilterBuilder = Widget.inherit({
             /**
              * @name dxFilterBuilderOptions_customOperations
              * @publicName customOperations
-             * @type Array<dxFilterBuilderCustomOperations>
+             * @type Array<dxFilterBuilderCustomOperation>
              * @default []
              */
             customOperations: [],
 
+            /**
+             * @name dxFilterBuilderCustomOperation
+             * @publicName dxFilterBuilderCustomOperation
+             * @type object
+             */
 
             /**
-             * @name dxFilterBuilderCustomOperations_name
+             * @name dxFilterBuilderCustomOperation_name
              * @publicName name
              * @type string
              * @default undefined
              */
 
             /**
-             * @name dxFilterBuilderCustomOperations_caption
+             * @name dxFilterBuilderCustomOperation_caption
              * @publicName caption
              * @type string
              * @default undefined
              */
 
             /**
-             * @name dxFilterBuilderCustomOperations_icon
+             * @name dxFilterBuilderCustomOperation_icon
              * @publicName icon
              * @type string
              * @default undefined
              */
 
             /**
-             * @name dxFilterBuilderCustomOperations_dataTypes
+             * @name dxFilterBuilderCustomOperation_dataTypes
              * @publicName dataTypes
-             * @type Array<string>
+             * @type Array<Enums.FilterBuilderFieldDataType>
              * @default undefined
              */
 
             /**
-             * @name dxFilterBuilderCustomOperations_hasValue
+             * @name dxFilterBuilderCustomOperation_hasValue
              * @publicName hasValue
              * @type boolean
              * @default true
              */
 
             /**
-             * @name dxFilterBuilderCustomOperations_calculateFilterExpression
+             * @name dxFilterBuilderCustomOperation_calculateFilterExpression
              * @publicName calculateFilterExpression
              * @type function(filterValue, field)
              * @type_function_param1 filterValue:any
@@ -383,7 +387,7 @@ var FilterBuilder = Widget.inherit({
              */
 
             /**
-             * @name dxFilterBuilderCustomOperations_editorTemplate
+             * @name dxFilterBuilderCustomOperation_editorTemplate
              * @publicName editorTemplate
              * @type template|function
              * @type_function_param1 conditionInfo:object
@@ -395,7 +399,7 @@ var FilterBuilder = Widget.inherit({
              */
 
             /**
-             * @name dxFilterBuilderCustomOperations_customizeText
+             * @name dxFilterBuilderCustomOperation_customizeText
              * @publicName customizeText
              * @type function(fieldInfo)
              * @type_function_param1 fieldInfo:object
@@ -411,6 +415,13 @@ var FilterBuilder = Widget.inherit({
              * @type object
              */
             filterOperationDescriptions: {
+                /**
+                 * @name dxFilterBuilderOptions_filterOperationDescriptions_between
+                 * @publicName between
+                 * @type string
+                 * @default "Between"
+                 */
+                between: messageLocalization.format("dxDataGrid-filterRowOperationBetween"),
                 /**
                  * @name dxFilterBuilderOptions_filterOperationDescriptions_equal
                  * @publicName equal
@@ -507,6 +518,9 @@ var FilterBuilder = Widget.inherit({
                 this._initActions();
                 break;
             case "customOperations":
+                this._initCustomOperations();
+                this._invalidate();
+                break;
             case "fields":
             case "defaultGroupOperation":
             case "allowHierarchicalFields":
@@ -516,6 +530,7 @@ var FilterBuilder = Widget.inherit({
                 break;
             case "value":
                 if(!this._disableInvalidateForValue) {
+                    this._initModel();
                     this._invalidate();
                 }
                 this.executeAction("onValueChanged", {
@@ -551,7 +566,8 @@ var FilterBuilder = Widget.inherit({
     },
 
     _init: function() {
-        this._model = null;
+        this._initCustomOperations();
+        this._initModel();
         this._initEditorFactory();
         this._initActions();
         this.callBase();
@@ -559,6 +575,14 @@ var FilterBuilder = Widget.inherit({
 
     _initEditorFactory: function() {
         this._editorFactory = new EditorFactory();
+    },
+
+    _initCustomOperations: function() {
+        this._customOperations = utils.getMergedOperations(this.option("customOperations"), this.option("operationDescriptions.between"));
+    },
+
+    _initModel: function() {
+        this._model = utils.convertToInnerStructure(this.option("value"), this._customOperations);
     },
 
     _initActions: function() {
@@ -583,8 +607,6 @@ var FilterBuilder = Widget.inherit({
     },
 
     _renderContentImpl: function() {
-        this._customOperations = utils.getMergedOperations(this.option("customOperations"));
-        this._model = utils.convertToInnerStructure(this.option("value"), this._customOperations);
         this._createGroupElementByCriteria(this._model)
             .appendTo(this.$element());
     },
@@ -703,13 +725,12 @@ var FilterBuilder = Widget.inherit({
             onHiding: function(e) {
                 $button.removeClass(ACTIVE_CLASS);
             },
-            position: { my: position + " top", at: position + " bottom", offset: "0 1" },
+            position: { my: position + " top", at: position + " bottom", offset: "0 1", of: $button },
             animation: null,
             onHidden: function() {
                 removeMenu();
             },
             cssClass: FILTER_BUILDER_OVERLAY_CLASS + " " + options.menu.cssClass,
-            target: $button,
             rtlEnabled: rtlEnabled
         });
 
@@ -721,7 +742,7 @@ var FilterBuilder = Widget.inherit({
                     if((e.type === "keydown" && e.keyCode === TAB_KEY)
                             || (e.type === "keyup" && (e.keyCode === ESCAPE_KEY || e.keyCode === ENTER_KEY))) {
                         info.component.hide();
-                        eventsEngine.trigger(options.menu.target, "focus");
+                        eventsEngine.trigger(options.menu.position.of, "focus");
                     }
                 });
 
@@ -754,6 +775,9 @@ var FilterBuilder = Widget.inherit({
                 menu: {
                     items: availableOperations,
                     displayExpr: "text",
+                    onItemRendered: function(e) {
+                        e.itemData.isCustom && $(e.itemElement).addClass(FILTER_BUILDER_MENU_CUSTOM_OPERATION_CLASS);
+                    },
                     onContentReady: function(e) {
                         e.component.selectItem(currentOperation);
                     },
@@ -1044,7 +1068,6 @@ var FilterBuilder = Widget.inherit({
             $popup = $("<div>")
                 .addClass(options.menu.cssClass).appendTo($container);
         this._createComponent($popup, Popup, {
-            target: options.menu.target,
             onHiding: options.menu.onHiding,
             onHidden: options.menu.onHidden,
             rtlEnabled: options.menu.rtlEnabled,

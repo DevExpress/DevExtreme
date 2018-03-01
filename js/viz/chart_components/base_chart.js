@@ -51,7 +51,7 @@ var commonUtils = require("../../core/utils/common"),
         "barGroupPadding",
         "barGroupWidth",
         "negativesAsZeroes",
-        "negativesAsZeros" //misspelling case
+        "negativesAsZeros" // misspelling case
     ],
 
     FORCE_RENDER_REFRESH_ACTION_OPTIONS = [
@@ -402,25 +402,25 @@ var BaseChart = BaseWidget.inherit({
 
     _reinit: function() {
         var that = this;
-            //_skipRender = !that._initialized;
+            // _skipRender = !that._initialized;
 
         _setCanvasValues(that._canvas);
         that._reinitAxes();
         // NOTE: T273635
         // Changing the `_initialized` flag prevents `_render` which is synchronously called from the `_updateDataSource` when data source is local and series rendering is synchronous
         // This is possible because `_render` checks the `_initialized` flag
-        //if (!_skipRender) {
+        // if (!_skipRender) {
         that._skipRender = true;        // T273635, T351032
-        //}
+        // }
         that._updateDataSource();
         if(!that.series) {
             that._dataSpecificInit(false);
         }
-        //if (!_skipRender) {
+        // if (!_skipRender) {
         that._skipRender = false;       // T273635, T351032
-        //}
+        // }
         that._correctAxes();
-        /*_skipRender || */that._forceRender();
+        /* _skipRender || */that._forceRender();
     },
 
     _correctAxes: noop,
@@ -533,19 +533,19 @@ var BaseChart = BaseWidget.inherit({
     },
 
     _applySize: function() {
-        //if (this._initialized) {
+        // if (this._initialized) {
         //    this._resize();
-        //}
+        // }
         this._processRefreshData(RESIZE_REFRESH_ACTION);
     },
 
-    //_resize: function () {
-    //    if (this._updateLockCount) {//T244164
+    // _resize: function () {
+    //    if (this._updateLockCount) {// T244164
     //        this._processRefreshData(RESIZE_REFRESH_ACTION);
     //    } else {
     //        this._render(this.__renderOptions || { animate: false, isResize: true });
     //    }
-    //},
+    // },
 
     _resize: function() {
         this._doRender(this.__renderOptions || { animate: false, isResize: true });
@@ -595,11 +595,11 @@ var BaseChart = BaseWidget.inherit({
             drawOptions,
             recreateCanvas;
 
-        if(/*!that._initialized || */that._skipRender) return; // NOTE: Because _render can be called from _init!
+        if(/* !that._initialized || */that._skipRender) return; // NOTE: Because _render can be called from _init!
 
         if(that._canvas.width === 0 && that._canvas.height === 0) return;
 
-        that._resetIsReady(); //T207606
+        that._resetIsReady(); // T207606
         drawOptions = that._prepareDrawOptions(_options);
         recreateCanvas = drawOptions.recreateCanvas;
 
@@ -815,7 +815,7 @@ var BaseChart = BaseWidget.inherit({
         that._axesGroup.linkRemove().clear();               // TODO: Must be removed in the same place where appended (advanced chart)
         that._constantLinesGroup.linkRemove().clear();      // TODO: Must be removed in the same place where appended (advanced chart)
         that._labelAxesGroup.linkRemove().clear();          // TODO: Must be removed in the same place where appended (advanced chart)
-        //that._seriesGroup.linkRemove().clear();
+        // that._seriesGroup.linkRemove().clear();
         that._labelsGroup.linkRemove().clear();
         that._crosshairCursorGroup.linkRemove().clear();
         that._scaleBreaksGroup.linkRemove().clear();
@@ -870,7 +870,7 @@ var BaseChart = BaseWidget.inherit({
             newRefreshActionPosition = inArray(newRefreshAction, ACTIONS_BY_PRIORITY);
         if(!this._currentRefreshData || (currentRefreshActionPosition >= 0 && newRefreshActionPosition < currentRefreshActionPosition)) {
             this._currentRefreshData = newRefreshAction;
-            //this._invalidate();
+            // this._invalidate();
         }
     },
 
@@ -1057,10 +1057,17 @@ var BaseChart = BaseWidget.inherit({
         this._dataSpecificInit(true);
     },
 
+    _createPoints: function() {
+        this.series.forEach(function(series) {
+            series.createPoints();
+        });
+    },
+
     _dataSpecificInit: function(needRedraw) {
         var that = this;
         that.series = that.series || that._populateSeries();
         that._repopulateSeries();
+        that._createPoints();
         that._seriesPopulatedHandlerCore();
         that._populateBusinessRange();
         that._tracker.updateSeries(that.series);
@@ -1246,7 +1253,7 @@ var BaseChart = BaseWidget.inherit({
         return that.series;
     },
 
-    //API
+    // API
     getAllSeries: function getAllSeries() {
         return this.series.slice();
     },

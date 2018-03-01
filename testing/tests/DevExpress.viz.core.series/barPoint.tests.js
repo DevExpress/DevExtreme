@@ -1310,7 +1310,7 @@ QUnit.test("Get Graphic Settings", function(assert) {
         renderer = new vizMocks.Renderer();
     point.graphic = renderer.rect(250, 100, 430, 133);
 
-    //act
+    // act
     var settings = point.getGraphicSettings();
 
     assert.equal(settings.x, 250);
@@ -1755,7 +1755,7 @@ QUnit.test("Outside, rotated, label under the point, label height > point height
     assert.equal(point._label.draw.callCount, 0);
 });
 
-//T605894
+// T605894
 QUnit.test("Label's border is equal of point's border", function(assert) {
     this.label.getBoundingRect.returns({ width: 30, height: 15 });
     this.options.resolveLabelsOverlapping = true;
@@ -1776,7 +1776,7 @@ QUnit.test("Label's border is equal of point's border", function(assert) {
     assert.strictEqual(point._label.draw.lastCall.args[0], false);
 });
 
-//T605894
+// T605894
 QUnit.test("Label's border is equal of point's border. Rotated chart", function(assert) {
     this.label.getBoundingRect.returns({ width: 30, height: 15 });
     this.options.resolveLabelsOverlapping = true;
@@ -2275,7 +2275,7 @@ QUnit.test("get radius", function(assert) {
     assert.equal(point.getPointRadius(), 0);
 });
 
-//Helpers
+// Helpers
 
 function createLabel(pointBBox) {
     var point = createPoint(this.series, this.data, this.options),

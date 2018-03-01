@@ -827,7 +827,8 @@ module.exports = {
                             var parsedValue = parseFloat(value);
                             return isNaN(parsedValue) ? value : parsedValue;
                         };
-                        options.serializeValue = function(value) {
+                        options.serializeValue = function(value, target) {
+                            if(target === "filter") return value;
                             return isDefined(value) && this.serializationFormat === "string" ? value.toString() : value;
                         };
                     }
@@ -1072,6 +1073,11 @@ module.exports = {
                     }
 
                     assignColumns(that, resultColumns);
+                    if(that._dataSourceApplied && that._dataSource) {
+                        that._dataSource.group(that.getGroupDataSourceParameters());
+                        that._dataSource.sort(that.getSortDataSourceParameters());
+                        that._dataSource.load();
+                    }
                 }
             };
 
@@ -1207,7 +1213,7 @@ module.exports = {
                     }
 
                     if(!notFireEvent) {
-                        //T346972
+                        // T346972
                         if(inArray(optionName, USER_STATE_FIELD_NAMES) < 0 && optionName !== "visibleWidth") {
                             columns = that.option("columns");
                             column = columns && columns[columnIndex];
@@ -1234,7 +1240,7 @@ module.exports = {
                     command: "expand",
                     width: "auto",
                     cssClass: COMMAND_EXPAND_CLASS,
-                    allowEditing: false, //T165142
+                    allowEditing: false, // T165142
                     allowGrouping: false,
                     allowSorting: false,
                     allowResizing: false,
@@ -2320,7 +2326,7 @@ module.exports = {
 
                         if(remoteFiltering) {
                             if(config().forceIsoDateParsing && column && column.serializeValue && filter.length > 1) {
-                                filter[filter.length - 1] = column.serializeValue(filter[filter.length - 1]);
+                                filter[filter.length - 1] = column.serializeValue(filter[filter.length - 1], "filter");
                             }
                         } else {
                             if(column && column.selector) {

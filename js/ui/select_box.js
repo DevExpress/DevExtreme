@@ -263,10 +263,16 @@ var SelectBox = DropDownList.inherit({
         this._initCustomItemCreatingAction();
     },
 
-    _render: function() {
+    _initMarkup: function() {
         this._renderSubmitElement();
-        this.callBase();
         this.$element().addClass(SELECTBOX_CLASS);
+
+        this.callBase();
+    },
+
+    _render: function() {
+        this.callBase();
+
         this.option("useInkRipple") && this._renderInkRipple();
         this._renderTooltip();
         this._$container.addClass(SELECTBOX_CONTAINER_CLASS);
@@ -704,13 +710,19 @@ var SelectBox = DropDownList.inherit({
         this._customItemCreatingAction = this._createActionByOption("onCustomItemCreating");
     },
 
-    _customItemAddedHandler: function() {
-        var searchValue = this._searchValue(),
-            params = {
-                text: searchValue
+    _createCustomItem: function(text) {
+        var params = {
+                text: text
             },
             actionResult = this._customItemCreatingAction(params),
             item = commonUtils.ensureDefined(actionResult, params.customItem);
+
+        return item;
+    },
+
+    _customItemAddedHandler: function() {
+        var searchValue = this._searchValue(),
+            item = this._createCustomItem(searchValue);
 
         if(item === undefined) {
             this._renderValue();

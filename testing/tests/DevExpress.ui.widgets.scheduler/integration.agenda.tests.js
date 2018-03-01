@@ -734,16 +734,16 @@ QUnit.test("Agenda should contain a right appointment sorting", function(assert)
 
     var $appointments = this.instance.$element().find(".dx-scheduler-appointment");
 
-    assert.equal(dataUtils.data($appointments.get(0), "dxItemData").text, "d"); //24
-    assert.equal(dataUtils.data($appointments.get(1), "dxItemData").text, "a"); //24
-    assert.equal(dataUtils.data($appointments.get(2), "dxItemData").text, "c"); //24
-    assert.equal(dataUtils.data($appointments.get(3), "dxItemData").text, "d"); //25
-    assert.equal(dataUtils.data($appointments.get(4), "dxItemData").text, "b"); //25
-    assert.equal(dataUtils.data($appointments.get(5), "dxItemData").text, "d"); //26
-    assert.equal(dataUtils.data($appointments.get(6), "dxItemData").text, "e"); //26
-    assert.equal(dataUtils.data($appointments.get(7), "dxItemData").text, "e"); //27
-    assert.equal(dataUtils.data($appointments.get(8), "dxItemData").text, "d"); //27
-    assert.equal(dataUtils.data($appointments.get(9), "dxItemData").text, "d"); //28
+    assert.equal(dataUtils.data($appointments.get(0), "dxItemData").text, "d"); // 24
+    assert.equal(dataUtils.data($appointments.get(1), "dxItemData").text, "a"); // 24
+    assert.equal(dataUtils.data($appointments.get(2), "dxItemData").text, "c"); // 24
+    assert.equal(dataUtils.data($appointments.get(3), "dxItemData").text, "d"); // 25
+    assert.equal(dataUtils.data($appointments.get(4), "dxItemData").text, "b"); // 25
+    assert.equal(dataUtils.data($appointments.get(5), "dxItemData").text, "d"); // 26
+    assert.equal(dataUtils.data($appointments.get(6), "dxItemData").text, "e"); // 26
+    assert.equal(dataUtils.data($appointments.get(7), "dxItemData").text, "e"); // 27
+    assert.equal(dataUtils.data($appointments.get(8), "dxItemData").text, "d"); // 27
+    assert.equal(dataUtils.data($appointments.get(9), "dxItemData").text, "d"); // 28
 });
 
 QUnit.test("Agenda should contain a right appointment sorting after adding of the new appointment", function(assert) {
@@ -800,9 +800,9 @@ QUnit.test("Agenda should contain a right recurrence appointment sorting", funct
 
     var $appointments = this.instance.$element().find(".dx-scheduler-appointment");
 
-    assert.equal(dataUtils.data($appointments.get(0), "dxItemData").text, "d"); //24
-    assert.equal(dataUtils.data($appointments.get(1), "dxItemData").text, "f"); //24
-    assert.equal(dataUtils.data($appointments.get(2), "dxItemData").text, "e"); //24
+    assert.equal(dataUtils.data($appointments.get(0), "dxItemData").text, "d"); // 24
+    assert.equal(dataUtils.data($appointments.get(1), "dxItemData").text, "f"); // 24
+    assert.equal(dataUtils.data($appointments.get(2), "dxItemData").text, "e"); // 24
 });
 
 QUnit.test("Long & recurrence appts should be sorted correctly", function(assert) {
@@ -1171,7 +1171,7 @@ QUnit.test("All-day appointment should not be duplicated with custom timezone (T
 });
 
 QUnit.test("Recurring appointment and timepanel should be rendered correctly if DST makes sense(T444318)", function(assert) {
-    //can be reproduced in PST timezone
+    // can be reproduced in PST timezone
     this.createInstance({
         views: ["agenda"],
         currentView: "agenda",
@@ -1287,12 +1287,12 @@ QUnit.test("Long appointment parts data should be correct", function(assert) {
     assert.equal(dataUtils.data($appointments.get(2), "dxItemData").text, "a");
     assert.equal(dataUtils.data($appointments.get(3), "dxItemData").text, "a");
 
-    assert.deepEqual(dataUtils.data($appointments.get(0), "dxItemData").Start, new Date(2016, 1, 24, 1)); //first part of long appointment has original startDate
+    assert.deepEqual(dataUtils.data($appointments.get(0), "dxItemData").Start, new Date(2016, 1, 24, 1)); // first part of long appointment has original startDate
     assert.deepEqual(dataUtils.data($appointments.get(1), "dxItemData").settings.Start, new Date(2016, 1, 25, 8));
     assert.deepEqual(dataUtils.data($appointments.get(2), "dxItemData").settings.Start, new Date(2016, 1, 26, 8));
     assert.deepEqual(dataUtils.data($appointments.get(3), "dxItemData").settings.Start, new Date(2016, 1, 27, 8));
 
-    assert.deepEqual(dataUtils.data($appointments.get(0), "dxItemData").endDate, new Date(2016, 1, 27, 11, 30)); //first part of long appointment has original endDate
+    assert.deepEqual(dataUtils.data($appointments.get(0), "dxItemData").endDate, new Date(2016, 1, 27, 11, 30)); // first part of long appointment has original endDate
     assert.deepEqual(dataUtils.data($appointments.get(1), "dxItemData").settings.endDate, new Date(2016, 1, 25, 20));
     assert.deepEqual(dataUtils.data($appointments.get(2), "dxItemData").settings.endDate, new Date(2016, 1, 26, 20));
     assert.deepEqual(dataUtils.data($appointments.get(3), "dxItemData").settings.endDate, new Date(2016, 1, 27, 11, 30));

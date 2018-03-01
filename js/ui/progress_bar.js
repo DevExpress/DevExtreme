@@ -121,8 +121,8 @@ var ProgressBar = TrackBar.inherit({
     },
 
     _initMarkup: function() {
-        this.callBase();
         this._renderStatus();
+        this.callBase();
     },
 
     _render: function() {

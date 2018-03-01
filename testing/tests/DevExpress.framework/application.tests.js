@@ -617,7 +617,7 @@ QUnit.test("Restore highlighted navigation command if navigation is canceled (Q5
     var commandOptionChangedLog = [],
         app = new frameworkMocks.MockApplication({
             router: new Router(),
-            disableViewCache: true, //T105609
+            disableViewCache: true, // T105609
             navigation: [
                 {
                     id: "home",
@@ -1256,11 +1256,11 @@ QUnit.test("resolveViewCacheKey (T292466)", function(assert) {
 
     app.navigate("view1/1", { root: true });
     app.navigate("view2/1");
-    viewInfos["view2"].commands[0].execute();//back
+    viewInfos["view2"].commands[0].execute();// back
 
     app.navigate("view1/2", { root: true });
     app.navigate("view2/2");
-    viewInfos["view2"].commands[0].execute();//back
+    viewInfos["view2"].commands[0].execute();// back
 
     assert.equal(viewShownLog.length, 6);
     assert.equal(viewShownLog[5].params.view, "view1");

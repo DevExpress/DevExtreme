@@ -67,15 +67,15 @@ QUnit.module('Renderer common API', {
 });
 
 QUnit.test('Creation', function(assert) {
-    //arrange
-    //act
+    // arrange
+    // act
     var renderer = this.createRenderer({
         cssClass: "my-super-class",
         pathModified: "yes",
         container: this.container
     });
 
-    //assert
+    // assert
     assert.ok(renderer.root, "root element is created");
     assert.equal(renderer.root.ctorArgs[0], renderer, "root element Renderer param");
     assert.equal(renderer.root.ctorArgs[1], "svg", "root element TagName param");
@@ -84,7 +84,7 @@ QUnit.test('Creation', function(assert) {
         xmlns: "http://www.w3.org/2000/svg",
         "xmlns:xlink": "http://www.w3.org/1999/xlink",
         version: "1.1",
-        //backward compatibility
+        // backward compatibility
         fill: "none",
         stroke: "none",
         "stroke-width": 0
@@ -99,7 +99,7 @@ QUnit.test('Creation', function(assert) {
         "-webkit-user-select": "none",
         display: "block",
         overflow: "hidden",
-        "line-height": "normal" //T179515
+        "line-height": "normal" // T179515
     }, "root's css params");
 
     assert.deepEqual(renderers.SvgElement.getCall(1).returnValue.ctorArgs, [renderer, "defs", undefined], "defs element is created");
@@ -111,7 +111,7 @@ QUnit.test('Creation', function(assert) {
 });
 
 QUnit.test('setOptions', function(assert) {
-    //arrange
+    // arrange
     var renderer = this.createRenderer({
         rtl: "yes",
         encodeHtml: "yes",
@@ -121,14 +121,14 @@ QUnit.test('setOptions', function(assert) {
     renderer.root.stub("attr").reset();
     renderer.root.stub("css").reset();
 
-    //act
+    // act
     renderer.setOptions({
         rtl: false,
         encodeHtml: false,
         animation: { enabled: true, duration: 500, easing: "cubic" }
     });
 
-    //assert
+    // assert
     assert.strictEqual(renderer.pathModified, false, "pathModified");
     assert.strictEqual(renderer.rtl, false, "rtl");
     assert.strictEqual(renderer.encodeHtml, false, "encodeHtml");
@@ -143,42 +143,42 @@ QUnit.test('setOptions', function(assert) {
 });
 
 QUnit.test('Update animation options', function(assert) {
-    //arrange
+    // arrange
     var renderer = this.createRenderer(),
         result;
     renderer.setOptions({ animation: { enabled: false, duration: 2000, easing: "linear" } });
 
-    //act
+    // act
     result = renderer.updateAnimationOptions({ duration: 3000, someOtherOption: 1 });
 
-    //assert
+    // assert
     assert.equal(result, renderer);
     assert.deepEqual(renderer._animation, { enabled: false, duration: 3000, easing: "linear", someOtherOption: 1 }, "animation options");
 });
 
 QUnit.test('Animation enabled', function(assert) {
-    //arrange
+    // arrange
     var renderer1 = this.createRenderer(),
         renderer2 = this.createRenderer();
     renderer2.setOptions({ animation: { enabled: false } });
 
-    //act/assert
+    // act/assert
     assert.equal(renderer1.animationEnabled(), true);
     assert.equal(renderer2.animationEnabled(), false);
 });
 
 QUnit.test('stopAllAnimations', function(assert) {
-    //arrange
+    // arrange
     var renderer1 = this.createRenderer(),
         renderer2 = this.createRenderer(),
         result1,
         result2;
 
-    //act
+    // act
     result1 = renderer1.stopAllAnimations();
     result2 = renderer2.stopAllAnimations(true);
 
-    //assert
+    // assert
     assert.equal(result1, renderer1);
     assert.equal(renderer1._animationController.stub("stop").callCount, 1, "Stop without lock. animationController's stop method called");
     assert.equal(renderer1._animationController.stub("lock").callCount, 0, "Stop without lock. animationController's lock method not called");
@@ -188,17 +188,17 @@ QUnit.test('stopAllAnimations', function(assert) {
 });
 
 QUnit.test('animateElement', function(assert) {
-    //arrange
+    // arrange
     var element = { a: 'a' },
         params = { b: 'b' },
         options = { c: 'c' },
         renderer = this.createRenderer(),
         result;
 
-    //act
+    // act
     result = renderer.animateElement(element, params, options);
 
-    //assert
+    // assert
     assert.equal(result, renderer);
     assert.equal(renderer._animationController.stub("animateElement").callCount, 1, "animationController's animateElement method called");
     assert.equal(renderer._animationController.stub("animateElement").firstCall.args[0], element, "animationController animateElement's element param");
@@ -207,63 +207,63 @@ QUnit.test('animateElement', function(assert) {
 });
 
 QUnit.test('Resize with wrong size', function(assert) {
-    //arrange
+    // arrange
     var renderer = this.createRenderer(),
         result;
 
     renderer.root.stub("attr").reset();
 
-    //act
+    // act
     result = renderer.resize(0, -10);
 
-    //assert
+    // assert
     assert.equal(result, renderer);
     assert.strictEqual(renderer.root.stub("attr").callCount, 0, "root is not resized");
 });
 
 QUnit.test('Resize with good size', function(assert) {
-    //arrange
+    // arrange
     var renderer = this.createRenderer(),
         result;
 
     renderer.root.stub("attr").reset();
 
-    //act
+    // act
     result = renderer.resize(1000, 100);
 
-    //assert
+    // assert
     assert.equal(result, renderer);
     assert.strictEqual(renderer.root.stub("attr").callCount, 1, "root is resized");
     assert.deepEqual(renderer.root.stub("attr").firstCall.args[0], { width: 1000, height: 100 }, "size is passed");
 });
 
-//Q558365
+// Q558365
 QUnit.test('Svg method', function(assert) {
-    //arrange
+    // arrange
     var renderer = this.createRenderer(),
         svgString;
 
     renderer.root.stub("markup").returns("root's markup");
 
-    //act
+    // act
     svgString = renderer.svg();
 
-    //assert
+    // assert
     assert.strictEqual(renderer.root.stub("markup").callCount, 1, "got root's markup");
     assert.strictEqual(svgString, "root's markup", "return root's markup");
 });
 
 QUnit.test("getRootOffset", function(assert) {
-    //arrange
+    // arrange
     var renderer = this.createRenderer(),
         offset;
 
     renderer.root.stub("getOffset").returns({ top: 5, left: 10 });
 
-    //act
+    // act
     offset = renderer.getRootOffset();
 
-    //assert
+    // assert
     assert.strictEqual(renderer.root.stub("getOffset").callCount, 1, "got root's offset");
     assert.deepEqual(offset, { top: 5, left: 10 }, "return root's offset");
 });
@@ -291,17 +291,17 @@ QUnit.test('Disposing', function(assert) {
 });
 
 QUnit.test('onEndAnimation', function(assert) {
-    //arrange
+    // arrange
     var renderer = this.createRenderer(),
         endAnimation = 'endAnimation',
         animationControllerEndAnimationStub;
 
-    //act
+    // act
     renderer.onEndAnimation(endAnimation);
 
     animationControllerEndAnimationStub = renderer._animationController.stub('onEndAnimation');
 
-    //assert
+    // assert
     assert.equal(animationControllerEndAnimationStub.callCount, 1);
     assert.deepEqual(animationControllerEndAnimationStub.firstCall.args, [endAnimation]);
 });
@@ -413,13 +413,13 @@ QUnit.module('Fix sharping', {
 });
 
 QUnit.test('Compensate root coordinates on creation', function(assert) {
-    //arrange
-    //act
+    // arrange
+    // act
     var renderer = new Renderer({
         container: this.container
     });
 
-    //assert
+    // assert
     if(browser.mozilla) {
         assert.deepEqual(renderer.root.move.firstCall.args, [-0.76, -0.15]);
     } else if(browser.msie) {
@@ -433,7 +433,7 @@ QUnit.test('Compensate root coordinates on creation', function(assert) {
 });
 
 QUnit.test('Compensate root coordinates on Unlock', function(assert) {
-    //arrange
+    // arrange
     var renderer = new Renderer({
         container: this.container
     });
@@ -441,10 +441,10 @@ QUnit.test('Compensate root coordinates on Unlock', function(assert) {
     $("#qunit-fixture").append(this.container);
     this.boundingRect = { left: 123.34, top: 2.5 };
 
-    //act
+    // act
     renderer.unlock();
 
-    //assert
+    // assert
     if(browser.mozilla) {
         assert.deepEqual(renderer.root.move.callCount, 2);
         assert.deepEqual(renderer.root.move.lastCall.args, [-0.34, -0.5]);
@@ -460,16 +460,16 @@ QUnit.test('Compensate root coordinates on Unlock', function(assert) {
 });
 
 QUnit.test('Compensate root coordinates on fixPlacement call', function(assert) {
-    //arrange
+    // arrange
     var renderer = new Renderer({
         container: this.container
     });
     this.boundingRect = { left: 123.34, top: 2.5 };
 
-    //act
+    // act
     renderer.fixPlacement();
 
-    //assert
+    // assert
     if(browser.mozilla) {
         assert.deepEqual(renderer.root.move.callCount, 2);
         assert.deepEqual(renderer.root.move.lastCall.args, [-0.34, -0.5]);
@@ -481,6 +481,50 @@ QUnit.test('Compensate root coordinates on fixPlacement call', function(assert) 
     } else {
         assert.deepEqual(renderer.root.stub("move").callCount, 0);
         assert.deepEqual(renderer.root.css.callCount, 1);
+    }
+});
+
+QUnit.test('Remove compensation before getting markup, compensate again after', function(assert) {
+    // arrange
+    var renderer = new Renderer({
+        container: this.container
+    });
+    this.boundingRect = { left: 123.34, top: 2.5 };
+    renderer.root.stub("attr").reset();
+    renderer.root.stub("css").reset();
+    renderer.root.stub("markup").reset();
+    renderer.root.stub("move").reset();
+
+    // act
+    renderer.svg();
+
+    // assert
+    if(browser.mozilla) {
+        assert.deepEqual(renderer.root.attr.callCount, 1);
+        assert.deepEqual(renderer.root.attr.getCall(0).args, [{ transform: null }]);
+
+        assert.strictEqual(renderer.root.markup.callCount, 1);
+        assert.ok(renderer.root.markup.getCall(0).calledAfter(renderer.root.attr.getCall(0)));
+
+        assert.deepEqual(renderer.root.move.callCount, 1);
+        assert.deepEqual(renderer.root.move.getCall(0).args, [-0.34, -0.5]);
+        assert.ok(renderer.root.move.getCall(0).calledAfter(renderer.root.markup.getCall(0)));
+
+    } else if(browser.msie) {
+        assert.deepEqual(renderer.root.css.callCount, 2);
+        assert.deepEqual(renderer.root.css.getCall(0).args, [{ transform: "" }]);
+
+        assert.strictEqual(renderer.root.markup.callCount, 1);
+        assert.ok(renderer.root.markup.getCall(0).calledAfter(renderer.root.css.getCall(0)));
+
+        assert.deepEqual(renderer.root.css.getCall(1).args, [{
+            transform: "translate(-0.34px,-0.5px)"
+        }]);
+        assert.ok(renderer.root.css.getCall(1).calledAfter(renderer.root.markup.getCall(0)));
+    } else {
+        assert.deepEqual(renderer.root.stub("move").callCount, 0);
+        assert.deepEqual(renderer.root.stub("css").callCount, 0);
+        assert.strictEqual(renderer.root.markup.callCount, 1);
     }
 });
 
@@ -496,10 +540,10 @@ QUnit.module('Renderer drawing API', {
 });
 
 QUnit.test("rect without params", function(assert) {
-    //act
+    // act
     var rect = this.renderer.rect();
 
-    //assert
+    // assert
     assert.ok(rect, "rect element is created");
     assert.ok(rect instanceof renderers.RectSvgElement);
     assert.deepEqual(rect.ctorArgs, [this.renderer]);
@@ -510,10 +554,10 @@ QUnit.test("rect without params", function(assert) {
 });
 
 QUnit.test("rect with params", function(assert) {
-    //act
+    // act
     var rect = this.renderer.rect(10, 20, 30, 40);
 
-    //assert
+    // assert
     assert.ok(rect, "rect element is created");
     assert.ok(rect instanceof renderers.RectSvgElement);
     assert.deepEqual(rect.ctorArgs, [this.renderer]);
@@ -531,10 +575,10 @@ QUnit.test("simple rect", function(assert) {
 });
 
 QUnit.test("circle without params", function(assert) {
-    //act
+    // act
     var circle = this.renderer.circle();
 
-    //assert
+    // assert
     assert.ok(circle, "circle element is created");
     assert.ok(circle instanceof renderers.SvgElement);
     assert.deepEqual(circle.ctorArgs, [this.renderer, "circle", undefined]);
@@ -545,10 +589,10 @@ QUnit.test("circle without params", function(assert) {
 });
 
 QUnit.test("circle with params", function(assert) {
-    //act
+    // act
     var circle = this.renderer.circle(10, 20, 30);
 
-    //assert
+    // assert
     assert.ok(circle, "circle element is created");
     assert.ok(circle instanceof renderers.SvgElement);
     assert.deepEqual(circle.ctorArgs, [this.renderer, "circle", undefined]);
@@ -559,10 +603,10 @@ QUnit.test("circle with params", function(assert) {
 });
 
 QUnit.test("g", function(assert) {
-    //act
+    // act
     var group = this.renderer.g();
 
-    //assert
+    // assert
     assert.ok(group, "group element is created");
     assert.ok(group instanceof renderers.SvgElement);
     assert.deepEqual(group.ctorArgs, [this.renderer, "g", undefined]);
@@ -572,10 +616,10 @@ QUnit.test("g", function(assert) {
 });
 
 QUnit.test('image without params', function(assert) {
-    //act
+    // act
     var image = this.renderer.image();
 
-    //assert
+    // assert
     assert.ok(image, "image element is created");
     assert.ok(image instanceof renderers.SvgElement);
     assert.deepEqual(image.ctorArgs, [this.renderer, "image", undefined]);
@@ -591,10 +635,10 @@ QUnit.test('image without params', function(assert) {
 });
 
 QUnit.test('image with params', function(assert) {
-    //act
+    // act
     var image = this.renderer.image(10, 20, 30, 40, '/test.jpg', 'Center');
 
-    //assert
+    // assert
     assert.ok(image, "image element is created");
     assert.ok(image instanceof renderers.SvgElement);
     assert.deepEqual(image.ctorArgs, [this.renderer, "image", undefined]);
@@ -610,10 +654,10 @@ QUnit.test('image with params', function(assert) {
 });
 
 QUnit.test('pattern, with right hatching, default width, step and opacity', function(assert) {
-    //act
+    // act
     var pattern = this.renderer.pattern('red', { direction: 'RighT' });
 
-    //assert
+    // assert
     assert.ok(pattern, "pattern element is created");
     assert.ok(pattern instanceof renderers.SvgElement);
     assert.strictEqual(pattern.id, "DevExpressId", "id is composed");
@@ -645,10 +689,10 @@ QUnit.test('pattern, with right hatching, default width, step and opacity', func
 });
 
 QUnit.test('pattern, with right hatching', function(assert) {
-    //act
+    // act
     var pattern = this.renderer.pattern('red', { direction: 'RighT', width: 2, step: 3, opacity: 0.6 });
 
-    //assert
+    // assert
     assert.ok(pattern, "pattern element is created");
     assert.ok(pattern instanceof renderers.SvgElement);
     assert.strictEqual(pattern.id, "DevExpressId", "id is composed");
@@ -680,22 +724,22 @@ QUnit.test('pattern, with right hatching', function(assert) {
 });
 
 QUnit.test('pattern, with left hatching', function(assert) {
-    //act
+    // act
     var pattern = this.renderer.pattern('red', { direction: 'LefT', width: 2, step: 3, opacity: 0.6 });
 
-    //assert
+    // assert
     assert.strictEqual(pattern.path.stub("attr").callCount, 1, "pattern.path's attr called once");
     assert.strictEqual(pattern.path.stub("attr").firstCall.args[0].d, "M 0 0 L 3 3 M -1.5 1.5 L 1.5 4.5 M 1.5 -1.5 L 4.5 1.5", "pattern.path d param for left hatching");
 });
 
 QUnit.test('clipRect with params', function(assert) {
-    //act
+    // act
     var clipRect = this.renderer.clipRect(10, 20, 30, 40);
 
-    //assert
+    // assert
     assert.ok(clipRect, "clipRect element is created");
     assert.ok(clipRect instanceof renderers.RectSvgElement);
-    //clipPath
+    // clipPath
     assert.ok(clipRect.clipPath, "clipPath element is created");
     assert.ok(clipRect.clipPath instanceof renderers.SvgElement);
     assert.deepEqual(clipRect.clipPath.ctorArgs, [this.renderer, "clipPath", undefined]);
@@ -704,7 +748,7 @@ QUnit.test('clipRect with params', function(assert) {
     assert.strictEqual(clipRect.clipPath.stub("css").callCount, 0, "clipPath's css is not called");
     assert.strictEqual(clipRect.clipPath.stub("append").callCount, 1, "clipPath is appended");
     assert.equal(clipRect.clipPath.stub("append").firstCall.args[0], renderers.SvgElement.getCall(1).returnValue, "clipPath is appended to defs");
-    //clipRect
+    // clipRect
     assert.strictEqual(clipRect.id, "DevExpressId", "id is composed");
     assert.deepEqual(clipRect.ctorArgs, [this.renderer]);
     assert.strictEqual(clipRect.stub("attr").callCount, 1, "clipRect's attr called once");
@@ -715,24 +759,24 @@ QUnit.test('clipRect with params', function(assert) {
 });
 
 QUnit.test('clipRect disposing', function(assert) {
-    //arrange
+    // arrange
     var clipRect = this.renderer.clipRect(10, 20, 30, 40);
     clipRect.clipPath.stub("dispose").reset();
 
-    //act
+    // act
     clipRect.dispose();
 
-    //assert
+    // assert
     assert.ok(clipRect.clipPath.stub("dispose").called);
 });
 
 QUnit.test('shadowFilter with params', function(assert) {
-    //arrange
-    //act
+    // arrange
+    // act
     var shadow = this.renderer.shadowFilter(10, 20, 30, 40, 50, 60, 70, 'red', 0.6);
 
-    //assert
-    //main filter
+    // assert
+    // main filter
     assert.ok(shadow, "shadow element is created");
     assert.ok(shadow instanceof renderers.SvgElement);
     assert.strictEqual(shadow.id, "DevExpressId");
@@ -743,7 +787,7 @@ QUnit.test('shadowFilter with params', function(assert) {
     assert.strictEqual(shadow.stub("append").callCount, 1, "shadow is appended");
     assert.equal(shadow.stub("append").firstCall.args[0], renderers.SvgElement.getCall(1).returnValue, "shadow is appended to defs");
 
-    //feGaussianBlur
+    // feGaussianBlur
     assert.ok(shadow.gaussianBlur, "shadow.gaussianBlur element is created");
     assert.ok(shadow.gaussianBlur instanceof renderers.SvgElement);
     assert.deepEqual(shadow.gaussianBlur.ctorArgs, [this.renderer, "feGaussianBlur", undefined]);
@@ -753,7 +797,7 @@ QUnit.test('shadowFilter with params', function(assert) {
     assert.strictEqual(shadow.gaussianBlur.stub("append").callCount, 1, "shadow.gaussianBlur is appended");
     assert.equal(shadow.gaussianBlur.stub("append").firstCall.args[0], shadow, "shadow.gaussianBlur is appended to defs");
 
-    //feOffset
+    // feOffset
     assert.ok(shadow.offset, "shadow.offset element is created");
     assert.ok(shadow.offset instanceof renderers.SvgElement);
     assert.deepEqual(shadow.offset.ctorArgs, [this.renderer, "feOffset", undefined]);
@@ -763,7 +807,7 @@ QUnit.test('shadowFilter with params', function(assert) {
     assert.strictEqual(shadow.offset.stub("append").callCount, 1, "shadow.offset is appended");
     assert.equal(shadow.offset.stub("append").firstCall.args[0], shadow, "shadow.offset is appended to defs");
 
-    //feFlood
+    // feFlood
     assert.ok(shadow.flood, "shadow.flood element is created");
     assert.ok(shadow.flood instanceof renderers.SvgElement);
     assert.deepEqual(shadow.flood.ctorArgs, [this.renderer, "feFlood", undefined]);
@@ -773,7 +817,7 @@ QUnit.test('shadowFilter with params', function(assert) {
     assert.strictEqual(shadow.flood.stub("append").callCount, 1, "shadow.flood is appended");
     assert.equal(shadow.flood.stub("append").firstCall.args[0], shadow, "shadow.flood is appended to defs");
 
-    //feComposite
+    // feComposite
     assert.ok(shadow.composite, "shadow.composite element is created");
     assert.ok(shadow.composite instanceof renderers.SvgElement);
     assert.deepEqual(shadow.composite.ctorArgs, [this.renderer, "feComposite", undefined]);
@@ -783,7 +827,7 @@ QUnit.test('shadowFilter with params', function(assert) {
     assert.strictEqual(shadow.composite.stub("append").callCount, 1, "shadow.composite is appended");
     assert.equal(shadow.composite.stub("append").firstCall.args[0], shadow, "shadow.composite is appended to defs");
 
-    //feComposite final
+    // feComposite final
     assert.ok(shadow.finalComposite, "shadow.finalComposite element is created");
     assert.ok(shadow.finalComposite instanceof renderers.SvgElement);
     assert.deepEqual(shadow.finalComposite.ctorArgs, [this.renderer, "feComposite", undefined]);
@@ -795,7 +839,7 @@ QUnit.test('shadowFilter with params', function(assert) {
 });
 
 QUnit.test('shadowFilter change filter attr function (full list of params)', function(assert) {
-    //arrange
+    // arrange
     var shadow = this.renderer.shadowFilter(10, 20, 30, 40, 50, 60, 70, 'red', 0.6),
         result;
     shadow.gaussianBlur.stub("attr").reset();
@@ -803,11 +847,11 @@ QUnit.test('shadowFilter change filter attr function (full list of params)', fun
     shadow.flood.stub("attr").reset();
     shadow.element.setAttribute = sinon.spy();
 
-    //act
+    // act
     result = shadow.attr({ x: 100, y: 200, width: 300, height: 400, offsetX: 500, offsetY: 600, blur: 700, color: 'green', opacity: 0.9 });
 
-    //assert
-    //main filter
+    // assert
+    // main filter
     assert.equal(result, shadow);
     assert.equal(shadow.element.setAttribute.callCount, 4);
     assert.deepEqual(shadow.element.setAttribute.withArgs("x").lastCall.args, ["x", 100]);
@@ -815,21 +859,21 @@ QUnit.test('shadowFilter change filter attr function (full list of params)', fun
     assert.deepEqual(shadow.element.setAttribute.withArgs("width").lastCall.args, ["width", 300]);
     assert.deepEqual(shadow.element.setAttribute.withArgs("height").lastCall.args, ["height", 400]);
 
-    //feGaussianBlur
+    // feGaussianBlur
     assert.strictEqual(shadow.gaussianBlur.stub("attr").callCount, 1, "shadow.gaussianBlur's attr called once");
     assert.deepEqual(shadow.gaussianBlur.stub("attr").firstCall.args[0], { "stdDeviation": 700 }, "shadow.gaussianBlur's attr params");
 
-    //feOffset
+    // feOffset
     assert.strictEqual(shadow.offset.stub("attr").callCount, 1, "shadow.offset's attr called once");
     assert.deepEqual(shadow.offset.stub("attr").firstCall.args[0], { "dx": 500, "dy": 600 }, "shadow.offset's attr params");
 
-    //feFlood
+    // feFlood
     assert.strictEqual(shadow.flood.stub("attr").callCount, 1, "shadow.flood's attr called once");
     assert.deepEqual(shadow.flood.stub("attr").firstCall.args[0], { "flood-color": "green", "flood-opacity": 0.9 }, "shadow.flood's attr params");
 });
 
 QUnit.test('shadowFilter change filter attr function (short list of params)', function(assert) {
-    //arrange
+    // arrange
     var shadow = this.renderer.shadowFilter(10, 20, 30, 40, 50, 60, 70, 'red', 0.6),
         result;
     shadow.gaussianBlur.stub("attr").reset();
@@ -837,24 +881,24 @@ QUnit.test('shadowFilter change filter attr function (short list of params)', fu
     shadow.flood.stub("attr").reset();
     shadow.element.setAttribute = sinon.spy();
 
-    //act
+    // act
     result = shadow.attr({ width: 300, height: 400, offsetY: 600, opacity: 0.9 });
 
-    //assert
-    //main filter
+    // assert
+    // main filter
     assert.equal(result, shadow);
     assert.equal(shadow.element.setAttribute.callCount, 2);
     assert.deepEqual(shadow.element.setAttribute.withArgs("width").lastCall.args, ["width", 300]);
     assert.deepEqual(shadow.element.setAttribute.withArgs("height").lastCall.args, ["height", 400]);
 
-    //feGaussianBlur
+    // feGaussianBlur
     assert.strictEqual(shadow.gaussianBlur.stub("attr").callCount, 0, "shadow.gaussianBlur's attr is not called");
 
-    //feOffset
+    // feOffset
     assert.strictEqual(shadow.offset.stub("attr").callCount, 1, "shadow.offset's attr called once");
     assert.deepEqual(shadow.offset.stub("attr").firstCall.args[0], { "dy": 600 }, "shadow.offset's attr params");
 
-    //feFlood
+    // feFlood
     assert.strictEqual(shadow.flood.stub("attr").callCount, 1, "shadow.flood's attr called once");
     assert.deepEqual(shadow.flood.stub("attr").firstCall.args[0], { "flood-opacity": 0.9 }, "shadow.flood's attr params");
 });
@@ -922,12 +966,12 @@ QUnit.test("getGrayScaleFilter. call twice - only one filter created", function(
 });
 
 QUnit.test("path without params", function(assert) {
-    //arrange
+    // arrange
 
-    //act
+    // act
     var path = this.renderer.path();
 
-    //assert
+    // assert
     assert.ok(path, "path element is created");
     assert.ok(path instanceof renderers.PathSvgElement);
     assert.deepEqual(path.ctorArgs, [this.renderer, undefined]);
@@ -938,13 +982,13 @@ QUnit.test("path without params", function(assert) {
 });
 
 QUnit.test("path with params", function(assert) {
-    //arrange
+    // arrange
     var points = [10, 20];
 
-    //act
+    // act
     var path = this.renderer.path(points, "bezier");
 
-    //assert
+    // assert
     assert.ok(path, "path element is created");
     assert.ok(path instanceof renderers.PathSvgElement);
     assert.deepEqual(path.ctorArgs, [this.renderer, "bezier"]);
@@ -955,12 +999,12 @@ QUnit.test("path with params", function(assert) {
 });
 
 QUnit.test("arc without params", function(assert) {
-    //arrange
+    // arrange
 
-    //act
+    // act
     var arc = this.renderer.arc();
 
-    //assert
+    // assert
     assert.ok(arc, "arc element is created");
     assert.ok(arc instanceof renderers.ArcSvgElement);
     assert.deepEqual(arc.ctorArgs, [this.renderer]);
@@ -978,12 +1022,12 @@ QUnit.test("arc without params", function(assert) {
 });
 
 QUnit.test("arc with params", function(assert) {
-    //arrange
+    // arrange
 
-    //act
+    // act
     var arc = this.renderer.arc(1000, 2000, 50, 100, 90, 180);
 
-    //assert
+    // assert
     assert.ok(arc, "arc element is created");
     assert.ok(arc instanceof renderers.ArcSvgElement);
     assert.deepEqual(arc.ctorArgs, [this.renderer]);
@@ -1001,12 +1045,12 @@ QUnit.test("arc with params", function(assert) {
 });
 
 QUnit.test("text without params", function(assert) {
-    //arrange
+    // arrange
 
-    //act
+    // act
     var text = this.renderer.text();
 
-    //assert
+    // assert
     assert.ok(text, "text element is created");
     assert.ok(text instanceof renderers.TextSvgElement);
     assert.deepEqual(text.ctorArgs, [this.renderer]);
@@ -1017,12 +1061,12 @@ QUnit.test("text without params", function(assert) {
 });
 
 QUnit.test("text with params", function(assert) {
-    //arrange
+    // arrange
 
-    //act
+    // act
     var text = this.renderer.text('simple text', 10, 20);
 
-    //assert
+    // assert
     assert.ok(text, "text element is created");
     assert.ok(text instanceof renderers.TextSvgElement);
     assert.deepEqual(text.ctorArgs, [this.renderer]);
@@ -1033,12 +1077,12 @@ QUnit.test("text with params", function(assert) {
 });
 
 QUnit.test("text with params. text argument is 0", function(assert) {
-    //arrange
+    // arrange
 
-    //act
+    // act
     var text = this.renderer.text(0, 10, 20);
 
-    //assert
+    // assert
     assert.ok(text, "text element is created");
     assert.ok(text instanceof renderers.TextSvgElement);
     assert.deepEqual(text.ctorArgs, [this.renderer]);
@@ -1049,12 +1093,12 @@ QUnit.test("text with params. text argument is 0", function(assert) {
 });
 
 QUnit.test("text with params. text argument is null", function(assert) {
-    //arrange
+    // arrange
 
-    //act
+    // act
     var text = this.renderer.text(null, 10, 20);
 
-    //assert
+    // assert
     assert.ok(text, "text element is created");
     assert.ok(text instanceof renderers.TextSvgElement);
     assert.deepEqual(text.ctorArgs, [this.renderer]);
@@ -1132,7 +1176,7 @@ if("pushState" in history) {
     });
 
     QUnit.test("FixPath API. Do not fix IRIs on disposed elements", function(assert) {
-        //arrange
+        // arrange
         var renderer = this.createRenderer(true),
             element = renderer.rect(0, 0, 0, 0).attr({
                 "fill": "DevExpress_12"
@@ -1146,10 +1190,10 @@ if("pushState" in history) {
 
         renderer.dispose();
 
-        //act
+        // act
         this.refreshPaths();
 
-        //assert
+        // assert
         assert.strictEqual(element.element.getAttribute("fill"), "url(" + oldUrl + "#DevExpress_12)");
     });
 }

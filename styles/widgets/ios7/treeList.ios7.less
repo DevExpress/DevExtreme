@@ -12,16 +12,11 @@
 @TREELIST_ICON_CONTAINER_PADDING_RIGHT: @GRID_BASE_CHECKBOX_ICON_SIZE + @GRID_BASE_CELL_PADDING;
 
 .dx-treelist-rowsview {
-    .dx-treelist-table:not(.dx-treelist-table-fixed) {
-        .dx-treelist-empty-space {
-            width: @TREELIST_EMPTY_SPACE_WIDTH;
-        }
-    }
-
     .dx-treelist-empty-space {
         .dx-icon-spinright;
         position: relative;
         display: inline-block;
+        width: @TREELIST_EMPTY_SPACE_WIDTH;
         margin-right: @TREELIST_EMPTY_SPACE_MARGIN_RIGHT;
 
         &:before {

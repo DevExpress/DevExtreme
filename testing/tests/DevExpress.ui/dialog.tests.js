@@ -54,14 +54,14 @@ QUnit.test("dialog show/hide", function(assert) {
 
     assert.ok(this.thereIsNoDialog(), "Dialog is not shown.");
 
-    //by 'hide' calling
+    // by 'hide' calling
     instance = dialog.custom(options);
     instance.show().done(afterHide);
     assert.ok(this.thereIsDialog(), "Dialog is shown.");
     instance.hide(result);
     assert.ok(this.thereIsNoDialog(), "Dialog is not shown after 'hide' was called.");
 
-    //by clicking button
+    // by clicking button
     instance = dialog.custom(options);
     instance.show();
     assert.ok(this.thereIsDialog(), "Dialog is shown.");

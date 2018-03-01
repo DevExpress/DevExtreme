@@ -88,7 +88,7 @@ QUnit.test("Fusion three  points", function(assert) {
         points = [this.createPoint(this.series, { value: 1 }), this.createPoint(this.series, { value: 2 }), this.createPoint(this.series, { value: 3 })];
     this.createPoint.reset();
 
-    //act
+    // act
     result = this.series._fusionPoints(points, tick);
 
     assert.ok(result);
@@ -102,7 +102,7 @@ QUnit.test("Fusion two  points", function(assert) {
         points = [this.createPoint(this.series, { value: 1 }), this.createPoint(this.series, { value: 2 })];
     this.createPoint.reset();
 
-    //act
+    // act
     result = this.series._fusionPoints(points, tick);
 
     assert.ok(result);
@@ -118,7 +118,7 @@ QUnit.test("Fusion many points", function(assert) {
             this.createPoint(this.series, { value: 2 }), this.createPoint(this.series, { value: 4 })];
     this.createPoint.reset();
 
-    //act
+    // act
     result = this.series._fusionPoints(points, tick);
 
     assert.ok(result);
@@ -134,7 +134,7 @@ QUnit.test("Fusion many points. With null ", function(assert) {
             this.createPoint(this.series, { value: null }), this.createPoint(this.series, { value: 4 })];
     this.createPoint.reset();
 
-    //act
+    // act
     result = this.series._fusionPoints(points, tick);
 
     assert.ok(result);
@@ -950,19 +950,20 @@ QUnit.module("Sampler points", {
         var that = this,
             viewport;
 
-        this.setup = function(min, max) {
-            that.translator = that.getTranslator(min, max);
+        this.setup = function(min, max, canvasLength) {
+            that.translator = that.getTranslator(min, max, canvasLength);
             viewport = {
                 min: min,
                 max: max
             };
         };
 
-        this.getTranslator = function(min, max) {
+        this.getTranslator = function(min, max, canvasLength) {
             var translator = new MockTranslator({
                 minVisible: min,
                 maxVisible: max
             });
+            translator.canvasLength = canvasLength;
             return translator;
         };
 
@@ -975,7 +976,9 @@ QUnit.module("Sampler points", {
             }
         };
 
-        this.series = createSeries({}, {
+        this.series = createSeries({
+            useAggregation: true
+        }, {
             argumentAxis: this.argumentAxis
         });
         this.createFusionPoints = function(options, datetime) {
@@ -1027,11 +1030,11 @@ QUnit.test("T382881, Series is not sorted", function(assert) {
         ];
 
     this.series.updateData(points);
-    this.setup(1, 10);
-    //Act
-    this.series.resamplePoints(10);
+    this.setup(1, 10, 10);
+    // Act
+    this.series.createPoints();
 
-    //Assert
+    // Assert
     checkResult(assert, this.series.getPoints(), fusionPoints, 6);
 });
 
@@ -1063,40 +1066,11 @@ QUnit.test("10 points -> 5 points. All points", function(assert) {
     this.series.updateData(this.createFusionPoints(options));
     var spy = sinon.spy(this.series, "_endUpdateData");
 
-    this.setup(0, 9);
-    this.series.resamplePoints(10);
+    this.setup(0, 9, 10);
+    this.series.createPoints();
 
     checkResult(assert, this.series.getPoints(), fusionPoints, 5);
     assert.ok(spy.calledOnce);
-});
-
-QUnit.test("getPointsByArg usage", function(assert) {
-    //arrange
-    var initialPointsCountOnFirstArgument;
-
-    this.series.updateData([{ arg: 1, val: 1 }, { arg: 2, val: 2 }]);
-
-    initialPointsCountOnFirstArgument = this.series.getPointsByArg(1).length;
-    this.setup(0, 1);
-
-    //act
-    this.series.resamplePoints(10);
-
-    //assert
-    assert.strictEqual(this.series.getPointsByArg(1).length, initialPointsCountOnFirstArgument);
-});
-
-QUnit.test("Dispose old aggregation points", function(assert) {
-    this.series.updateData([{ arg: 1, val: 1 }, { arg: 2, val: 2 }]);
-    this.setup(1, 2);
-    this.series.resamplePoints(10);
-    var points = this.series.getPoints().slice();
-    //Act
-    this.series.resamplePoints(10);
-    //Assert
-    assert.equal(points.length, 2);
-    assert.ok(points[0].dispose.called);
-    assert.ok(points[1].dispose.called);
 });
 
 QUnit.test("10 points -> 10 points. All points", function(assert) {
@@ -1114,8 +1088,8 @@ QUnit.test("10 points -> 10 points. All points", function(assert) {
         points = this.createFusionPoints(options);
 
     this.series.updateData(points);
-    this.setup(0, 9);
-    this.series.resamplePoints(20);
+    this.setup(0, 9, 20);
+    this.series.createPoints();
 
     checkResult(assert, this.series.getPoints(), points, 10);
 });
@@ -1149,8 +1123,8 @@ QUnit.test("9 points -> 5 points. All points", function(assert) {
     fusionPoints[4] = { arg: points[8].arg, val: points[8].val };
 
     this.series.updateData(points);
-    this.setup(0, 8);
-    this.series.resamplePoints(10);
+    this.setup(0, 8, 10);
+    this.series.createPoints();
 
     checkResult(assert, this.series.getPoints(), fusionPoints, 5);
 });
@@ -1180,9 +1154,9 @@ QUnit.test("20 points -> 4 points. CustomTick", function(assert) {
         },
         fusionPoints = this.createFusionPoints(optionsFusionPoints);
 
-    this.setup(0, 19);
+    this.setup(0, 19, 20);
     this.series.updateData(this.createFusionPoints(options)),
-    this.series.resamplePoints(20);
+    this.series.createPoints();
 
     checkResult(assert, this.series.getPoints(), fusionPoints, 10);
 });
@@ -1216,8 +1190,8 @@ QUnit.test("7 points -> 3 points. CustomTick", function(assert) {
     fusionPoints[3] = { arg: points[6].arg, val: points[6].val };
 
     this.series.updateData(this.createFusionPoints(options));
-    this.setup(0, 6);
-    this.series.resamplePoints(10);
+    this.setup(0, 6, 10);
+    this.series.createPoints();
 
     checkResult(assert, this.series.getPoints(), fusionPoints, 4);
 });
@@ -1243,9 +1217,9 @@ QUnit.test("9 points -> 9 points. Skip point in centre. CustomTick", function(as
     });
 
     this.series.updateData(points);
-    this.setup(0, 9);
+    this.setup(0, 9, 20);
 
-    this.series.resamplePoints(20);
+    this.series.createPoints();
 
     checkResult(assert, this.series.getPoints(), fusionPoints, 9);
 });
@@ -1271,8 +1245,8 @@ QUnit.test("10 points -> 3 points. CustomTick", function(assert) {
     points.splice(6, 2);
 
     this.series.updateData(points);
-    this.setup(0, 14);
-    this.series.resamplePoints(9);
+    this.setup(0, 14, 9);
+    this.series.createPoints();
 
     checkResult(assert, this.series.getPoints(), fusionPoints, 3);
 });
@@ -1298,8 +1272,8 @@ QUnit.test("10 points -> 10 points. All points. Datetime", function(assert) {
     });
 
     this.series.updateData(points);
-    this.setup(0, 24 * 60 * 60 * 1000 * 9);
-    this.series.resamplePoints(20);
+    this.setup(0, 24 * 60 * 60 * 1000 * 9, 20);
+    this.series.createPoints();
 
     checkResult(assert, this.series.getPoints(), fusionPoints, 10);
 });
@@ -1320,6 +1294,7 @@ QUnit.test("Customize Point without result", function(assert) {
         customizeLabelSpy = sinon.stub(),
         series = createSeries({
             type: "scatter",
+            useAggregation: true,
             point: {
                 size: 0,
                 border: {
@@ -1347,8 +1322,8 @@ QUnit.test("Customize Point without result", function(assert) {
     series.updateData(this.createFusionPoints(options));
     this.createPoint.reset();
 
-    this.setup(0, 9);
-    series.resamplePoints(10);
+    this.setup(0, 9, 10);
+    series.createPoints();
 
     assert.equal(this.createPoint.callCount, 5, "points");
     assert.deepEqual(this.createPoint.getCall(0).args[2].styles, {
@@ -1413,6 +1388,7 @@ QUnit.test("Customize Point with result", function(assert) {
         customizeLabelSpy = sinon.stub(),
         series = createSeries({
             type: "scatter",
+            useAggregation: true,
             point: {
                 size: 0,
                 border: {
@@ -1442,9 +1418,9 @@ QUnit.test("Customize Point with result", function(assert) {
 
     customizePointSpy.returns({ color: "customColor" });
     customizeLabelSpy.returns({ font: { size: "customSize" } });
-    this.setup(0, 9);
+    this.setup(0, 9, 10);
 
-    series.resamplePoints(10);
+    series.createPoints();
 
     assert.equal(this.createPoint.callCount, 5);
 
@@ -1516,7 +1492,7 @@ QUnit.test("Customize Point with result", function(assert) {
     }]);
 });
 
-//T172772
+// T172772
 QUnit.test("Aggregation one point", function(assert) {
     var options = {
         argument: {
@@ -1531,8 +1507,8 @@ QUnit.test("Aggregation one point", function(assert) {
     };
 
     this.series.updateData(this.createFusionPoints(options));
-    this.setup(0, 9);
-    this.series.resamplePoints(20);
+    this.setup(0, 9, 20);
+    this.series.createPoints();
 
     assert.deepEqual(this.series.getPoints(), this.series.getAllPoints());
 });
@@ -1561,8 +1537,8 @@ QUnit.test("After zooming", function(assert) {
         { arg: 87, val: 187 }];
 
     this.series.updateData(this.createFusionPoints(options));
-    this.setup(45, 75);
-    this.series.resamplePoints(10);
+    this.setup(45, 75, 10);
+    this.series.createPoints(10);
 
     checkResult(assert, this.series.getPoints(), fusionPoints, 10);
 });
@@ -1591,8 +1567,8 @@ QUnit.test("After zooming, series is not sorting", function(assert) {
         { arg: 6, val: 300 }];
 
     this.series.updateData(points);
-    this.setup(3, 6);
-    this.series.resamplePoints(6);
+    this.setup(3, 6, 6);
+    this.series.createPoints();
 
     checkResult(assert, this.series.getPoints(), fusionPoints, 9);
 });
@@ -1625,8 +1601,8 @@ QUnit.test("T370495, Series starts from the middle of the x-axis, 10 -> 3 points
     fusionPoints[2].val = 1050;
 
     this.series.updateData(this.createFusionPoints(options));
-    this.setup(0, 9);
-    this.series.resamplePoints(10);
+    this.setup(0, 9, 10);
+    this.series.createPoints();
 
     checkResult(assert, this.series.getPoints(), fusionPoints, 3);
 });
@@ -1640,8 +1616,8 @@ QUnit.module("Sampler points, discrete", {
         var that = this,
             viewport;
 
-        this.setup = function(min, max, categories) {
-            that.translator = that.getTranslator(min, max, categories);
+        this.setup = function(min, max, categories, canvasLength) {
+            that.translator = that.getTranslator(min, max, categories, canvasLength);
             viewport = {
                 min: min,
                 max: max
@@ -1657,16 +1633,19 @@ QUnit.module("Sampler points, discrete", {
             }
         };
 
-        this.getTranslator = function(min, max, categories) {
+        this.getTranslator = function(min, max, categories, canvasLength) {
             var translator = new MockTranslator({
                 minVisible: min,
                 maxVisible: max,
                 categories: categories
             });
+            translator.canvasLength = canvasLength;
             return translator;
         };
 
-        this.series = createSeries({}, {
+        this.series = createSeries({
+            useAggregation: true
+        }, {
             argumentAxis: this.argumentAxis
         });
 
@@ -1720,11 +1699,11 @@ QUnit.test("T382881, Series is not sorted", function(assert) {
         categories = $.map(points, function(item) { return item.arg; });
 
     this.series.updateData(points);
-    this.setup(undefined, 10, categories);
-    //Act
-    this.series.resamplePoints(10);
+    this.setup(undefined, 10, categories, 10);
+    // Act
+    this.series.createPoints();
 
-    //Assert
+    // Assert
     checkResult(assert, this.series.getPoints(), fusionPoints, 5);
 });
 
@@ -1748,38 +1727,12 @@ QUnit.test("10 points -> 5 points. All points", function(assert) {
         }),
         categories = $.map(points, function(item) { return item.arg; });
     this.series.updateData(points);
-    this.setup(0, 9, categories);
-    this.series.resamplePoints(10);
+    this.setup(0, 9, categories, 10);
+
+    this.series.createPoints();
 
     checkResult(assert, this.series.getPoints(), fusionPoints, 5);
-});
-
-QUnit.test("10 points -> 5 points. Check Invisibility", function(assert) {
-    var options = {
-            argument: {
-                startValue: 0,
-                endValue: 10,
-                interval: 1
-            },
-            values: [{
-                startValue: 100,
-                interval: 100
-            }]
-        },
-        points = this.createFusionPoints(options),
-        categories = $.map(points, function(item) { return item.arg; });
-    this.series.updateData(points);
-    this.setup(0, 9, categories);
-
-    this.series.resamplePoints(10);
-
-    $.each(this.series.getAllPoints(), function(index, point) {
-        if((index % 2)) {
-            assert.ok(point.setInvisibility.calledOnce);
-        } else {
-            assert.ok(!point.setInvisibility.called);
-        }
-    });
+    assert.deepEqual(this.series.getRangeData().arg.categories.length, 10, "range data should hava all categories");
 });
 
 QUnit.test("10 points -> 5 points. All points. ValueAxisType = discrete", function(assert) {
@@ -1804,8 +1757,8 @@ QUnit.test("10 points -> 5 points. All points. ValueAxisType = discrete", functi
         valueAxisType: "discrete"
     });
     this.series.updateData(points);
-    this.setup(0, 9);
-    this.series.resamplePoints(10);
+    this.setup(0, 9, undefined, 10);
+    this.series.createPoints();
 
     checkResult(assert, this.series.getPoints(), fusionPoints, 5);
 });
@@ -1832,8 +1785,8 @@ QUnit.test("10 points -> 5 points. ValueAxisType = discrete, interval 2", functi
         valueAxisType: "discrete"
     });
     this.series.updateData(points);
-    this.setup(0, 19);
-    this.series.resamplePoints(10);
+    this.setup(0, 19, undefined, 10);
+    this.series.createPoints();
 
     checkResult(assert, this.series.getPoints(), fusionPoints, 5);
 });
@@ -1853,12 +1806,11 @@ QUnit.test("10 points -> 10 points.", function(assert) {
         points = this.createFusionPoints(options, true),
         categories = $.map(points, function(item) { return item.arg; });
 
-    this.setup(0, 9, categories);
+    this.setup(0, 9, categories, 20);
 
-    this.translator.canvasLength = 20;
     this.series.updateData(points);
 
-    this.series.resamplePoints(20);
+    this.series.createPoints();
 
     checkResult(assert, this.series.getPoints(), points, 10);
 });
@@ -1882,9 +1834,9 @@ QUnit.test("10 points -> 10 points. ValueAxisType = discrete", function(assert) 
     });
     this.series.updateData(points);
 
-    this.setup(0, 9);
+    this.setup(0, 9, undefined, 20);
 
-    this.series.resamplePoints(20);
+    this.series.createPoints();
     checkResult(assert, this.series.getPoints(), points, 10);
 });
 
@@ -1904,9 +1856,9 @@ QUnit.test("After zooming", function(assert) {
         categories = $.map(points, function(item) { return item.arg; });
 
     this.series.updateData(points);
-    this.setup(3, 6, categories);
+    this.setup(3, 6, categories, 20);
 
-    this.series.resamplePoints(20);
+    this.series.createPoints();
 
     checkResult(assert, this.series.getPoints(), points, 10);
 });
@@ -1931,7 +1883,7 @@ QUnit.test("After zooming, value axis is discrete", function(assert) {
     });
     this.series.updateData(points);
 
-    this.setup(3, 6, categories);
-    this.series.resamplePoints(20);
+    this.setup(3, 6, categories, 20);
+    this.series.createPoints();
     checkResult(assert, this.series.getPoints(), points, 10);
 });

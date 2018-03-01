@@ -8,16 +8,11 @@
 @TREELIST_ICON_CONTAINER_PADDING_RIGHT: @GENERIC_GRID_BASE_CHECKBOX_ICON_SIZE + @GENERIC_GRID_BASE_CELL_PADDING;
 
 .dx-treelist-rowsview {
-    .dx-treelist-table:not(.dx-treelist-table-fixed) {
-        .dx-treelist-empty-space {
-            width: @TREELIST_EMPTY_SPACE_WIDTH;
-        }
-    }
-
     .dx-treelist-empty-space {
         position: relative;
         display: inline-block;
         color: @treelist-spin-icon-color;
+        width: @TREELIST_EMPTY_SPACE_WIDTH;
         .dx-icon-spinright;
 
         &:before {
@@ -48,7 +43,7 @@
             margin-top: -@TREELIST_ICON_MARGIN_TOP;
         }
     }
-    
+
     .dx-selection {
         .dx-treelist-empty-space  {
             color: @treelist-selection-spin-icon-color;

@@ -6,7 +6,7 @@ window.DevExpress = window.DevExpress || {};
 window.DevExpress.config = { useJQuery: useJQuery };
 
 define(function(require) {
-    require("/js/bundles/dx.mobile.js");
+    require("/artifacts/transpiled/bundles/dx.mobile.js");
 
     QUnit.module("config.useJQuery");
 

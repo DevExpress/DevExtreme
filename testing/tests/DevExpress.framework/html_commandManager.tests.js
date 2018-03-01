@@ -69,7 +69,7 @@ QUnit.test("Execute command with object args", function(assert) {
 QUnit.test("Navigation command", function(assert) {
     executeAsyncMock.setup();
     try {
-        //Registering uri binding that needs this.app.navigationManager
+        // Registering uri binding that needs this.app.navigationManager
         var router = new Router();
         router.register(":view/:id", { view: "index", id: undefined });
         var app = new htmlFrameworkMocks.MockHtmlApplication({ router: router });
@@ -85,7 +85,7 @@ QUnit.test("Navigation command", function(assert) {
 });
 
 QUnit.test("Navigation command with template", function(assert) {
-    //Registering uri binding that needs this.app.navigationManager
+    // Registering uri binding that needs this.app.navigationManager
     var router = new Router();
     router.register(":view/:id", { view: "index", id: undefined });
     var app = new htmlFrameworkMocks.MockHtmlApplication({ router: router });
@@ -226,7 +226,7 @@ QUnit.test("Missing command id", function(assert) {
     var commands = manager.findCommands($("#missedIdcommand")),
         containers = manager.findCommandContainers($("#missedIdcommand"));
 
-    //var renderResult = $("#complex-test .render-result");
+    // var renderResult = $("#complex-test .render-result");
     assert.throws(function() {
         manager.renderCommandsToContainers(commands, containers);
     }, function(e) {

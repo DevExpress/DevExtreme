@@ -800,7 +800,8 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         };
     },
 
-    _render: function() {
+    _initMarkup: function() {
+        this._renderScrollableContainer();
         this.callBase();
         this.setAria("role", "tree");
     },
@@ -808,7 +809,6 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
     _renderContentImpl: function() {
         var $nodeContainer = this._renderNodeContainer();
 
-        this._renderScrollableContainer();
         this._scrollableContainer.$content().append($nodeContainer);
 
         if(!this.option("items") || !this.option("items").length) {
@@ -892,7 +892,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         return this.option("showCheckBoxesMode") === "selectAll";
     },
 
-    //todo: remove in 16.1 with deprecated showCheckBoxes and selectAllEnabled
+    // todo: remove in 16.1 with deprecated showCheckBoxes and selectAllEnabled
     _initCheckBoxesMode: function() {
         if(this._showCheckboxes()) {
             return;
@@ -1345,7 +1345,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             node = this._getNodeByElement($item),
             value = e.value;
 
-        if(node.internalFields.selected === value) {
+        if(node && node.internalFields.selected === value) {
             return;
         }
 
@@ -1361,28 +1361,32 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _updateItemSelection: function(value, itemElement, dxEvent) {
-        var node = this._getNode(itemElement);
+        var that = this,
+            node = that._getNode(itemElement);
 
         if(!node || node.internalFields.selected === value) {
             return;
         }
 
-        if(this._isSingleSelection()) {
-            this._toggleSelectAll({ value: false });
+        if(that._isSingleSelection() && value) {
+            var selectedNodesKeys = that.getSelectedNodesKeys();
+            each(selectedNodesKeys, function(index, nodeKey) {
+                that.unselectItem(nodeKey);
+            });
         }
 
-        this._dataAdapter.toggleSelection(node.internalFields.key, value);
-        this._updateItemsUI();
+        that._dataAdapter.toggleSelection(node.internalFields.key, value);
+        that._updateItemsUI();
 
-        var initiator = dxEvent || this._findItemElementByItem(node.internalFields.item),
-            handler = dxEvent ? this._itemDXEventHandler : this._itemEventHandler;
+        var initiator = dxEvent || that._findItemElementByItem(node.internalFields.item),
+            handler = dxEvent ? that._itemDXEventHandler : that._itemEventHandler;
 
-        handler.call(this, initiator, "onItemSelectionChanged", {
-            node: this._dataAdapter.getPublicNode(node),
+        handler.call(that, initiator, "onItemSelectionChanged", {
+            node: that._dataAdapter.getPublicNode(node),
             itemData: node.internalFields.item
         });
 
-        this._fireSelectionChanged();
+        that._fireSelectionChanged();
     },
 
     _getCheckBoxInstance: function($node) {

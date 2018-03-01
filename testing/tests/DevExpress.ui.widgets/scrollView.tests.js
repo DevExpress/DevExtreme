@@ -991,7 +991,7 @@ QUnit.module("api", moduleConfig);
 
 QUnit.test("content", function(assert) {
     var $scrollView = $("#scrollView").dxScrollView({});
-    assert.ok($scrollView.dxScrollView("instance").content().hasClass(SCROLLVIEW_CONTENT_CLASS), "returns scrollView content");
+    assert.ok($($scrollView.dxScrollView("instance").content()).hasClass(SCROLLVIEW_CONTENT_CLASS), "returns scrollView content");
 });
 
 QUnit.test("release", function(assert) {
@@ -1399,7 +1399,7 @@ QUnit.test("reach bottom action fired when scrolled to bottom", function(assert)
     });
     var scrollView = $scrollView.dxScrollView("instance");
     var bottomPocketHeight = $scrollView.find("." + SCROLLVIEW_REACHBOTTOM_CLASS).height();
-    scrollView.scrollTo(scrollView.content().height() + bottomPocketHeight);
+    scrollView.scrollTo($(scrollView.content()).height() + bottomPocketHeight);
 });
 
 QUnit.test("loadPanel hiding after release", function(assert) {
@@ -1852,7 +1852,7 @@ QUnit.test("pulled down action should be fired when content less than container 
         }
     });
 
-    $scrollView.dxScrollView("content").height(10);
+    $($scrollView.dxScrollView("content")).height(10);
     $scrollView.dxScrollView("update");
 
     var $container = $scrollView.find("." + SCROLLABLE_CONTAINER_CLASS);
@@ -1877,7 +1877,7 @@ QUnit.test("pulled down action should be fired after pointer is up if the 'swipe
             }
         });
 
-    $scrollView.dxScrollView("content").height(10);
+    $($scrollView.dxScrollView("content")).height(10);
     $scrollView.dxScrollView("update");
 
     var $container = $scrollView.find("." + SCROLLABLE_CONTAINER_CLASS);
@@ -1905,7 +1905,7 @@ QUnit.test("pulled down action should not be fired at the end of scrollview", fu
             height: 100
         });
 
-    $scrollView.dxScrollView("content").height(1000);
+    $($scrollView.dxScrollView("content")).height(1000);
     $scrollView.dxScrollView("update");
 
     var $container = $scrollView.find("." + SCROLLABLE_CONTAINER_CLASS);

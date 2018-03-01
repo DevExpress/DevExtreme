@@ -153,30 +153,30 @@ QUnit.module("dxPivotGrid", {
 });
 
 QUnit.test("getFrozenArea", function(assert) {
-    //act, assert
+    // act, assert
     assert.strictEqual(this.dataProvider.getFrozenArea().x, 2, "Frozen area width is correct");
     assert.strictEqual(this.dataProvider.getFrozenArea().y, 3, "Frozen area height is correct");
 });
 
 QUnit.test("Data provider base stub testing", function(assert) {
-    //act, assert
+    // act, assert
     assert.strictEqual(this.dataProvider.getGroupLevel(3), 0, "getGroupLevel returns 0");
 });
 
 QUnit.test("getRowsCount", function(assert) {
-    //act, assert
+    // act, assert
     assert.strictEqual(this.dataProvider.getRowsCount(), 10, "Rows count is correct");
 });
 
 QUnit.test("getCellType", function(assert) {
-    //act, assert
+    // act, assert
     assert.strictEqual(this.dataProvider.getCellType(5, 5), "number", "Cells dataType is correct");
     assert.strictEqual(this.dataProvider.getCellType(1, 2), "string", "RowPart dataType is correct");
     assert.strictEqual(this.dataProvider.getCellType(5, 0), "string", "ColsPart dataType is correct");
 });
 
 QUnit.test("getCellValue", function(assert) {
-    //act, assert
+    // act, assert
     assert.strictEqual(this.dataProvider.getCellValue(5, 5), 0.1, "CellsInfo cellValue is correct");
     assert.strictEqual(this.dataProvider.getCellValue(1, 2), "Q1", "Header part cellText is correct");
 
@@ -185,16 +185,16 @@ QUnit.test("getCellValue", function(assert) {
 });
 
 QUnit.test("exportToExcel", function(assert) {
-    //arrange
+    // arrange
     var pivotGrid = this.pivotGrid;
 
     sinon.stub(pivotGrid, "getDataProvider");
     sinon.stub(clientExporter, "export");
 
-    //act
+    // act
     pivotGrid.exportToExcel();
 
-    //assert
+    // assert
     assert.equal(clientExporter.export.callCount, 1, "exporting is called");
     assert.deepEqual(clientExporter.export.getCall(0).args[0], pivotGrid.getDataProvider.getCall(0).returnValue, "First arg is data");
 
@@ -213,7 +213,7 @@ QUnit.test("exportToExcel", function(assert) {
 });
 
 QUnit.test("getAllItems", function(assert) {
-    //act, assert
+    // act, assert
     assert.strictEqual(this.items.length, 10, "All rows are collected");
     assert.strictEqual(this.items[1].length, 16, "All columns are collected");
     assert.deepEqual(this.items[3][3], {
@@ -280,7 +280,7 @@ QUnit.test("Loading indicator showing", function(assert) {
 });
 
 QUnit.test("Export with empty cellsInfo", function(assert) {
-    //arrange
+    // arrange
     var items,
         columnsInfo,
         rowsInfo,
@@ -298,9 +298,9 @@ QUnit.test("Export with empty cellsInfo", function(assert) {
 
     items = this.pivotGrid._getAllItems(columnsInfo, rowsInfo, cellsInfo);
 
-    //act
+    // act
     dataProvider.ready();
-    //assert
+    // assert
     assert.strictEqual(this.dataProvider.getColumns().length, 16, "Columns length is correct");
     assert.strictEqual(this.dataProvider.getRowsCount(), 10, "Rows count is length is correct");
     assert.strictEqual(this.dataProvider.getCellMerging(0, 0).colspan, 1, "colspan count is correct");
@@ -314,19 +314,19 @@ QUnit.test("Export with empty cellsInfo", function(assert) {
 });
 
 QUnit.test("Context menu with export", function(assert) {
-    //act
+    // act
     var $dataArea = this.pivotGrid.$element().find('.dx-pivotgrid-area-data');
 
     $($dataArea.find('tr').eq(1).find('td').eq(3)).trigger('dxcontextmenu');
 
     this.clock.tick();
 
-    //assert
+    // assert
     assert.equal($(".dx-menu-item-text").eq(1).text(), "Export to Excel file");
 });
 
 QUnit.test("Hide export from the context menu when the export.enabled option is disabled", function(assert) {
-    //act
+    // act
     this.pivotGrid.option("export.enabled", false);
 
     var $dataArea = this.pivotGrid.$element().find('.dx-pivotgrid-area-data');
@@ -335,29 +335,29 @@ QUnit.test("Hide export from the context menu when the export.enabled option is 
 
     this.clock.tick();
 
-    //assert
+    // assert
     assert.equal($(".dx-menu-item-text").eq(1).text(), "");
 });
 
 // T311313:
 QUnit.test("Row column alignment", function(assert) {
-    //act
+    // act
     var columnsInfo = $.extend(true, [], this.pivotGrid._dataController.getColumnsInfo(true)),
         rowsInfo = $.extend(true, [], this.pivotGrid._dataController.getRowsInfo(true)),
         cellsInfo = this.pivotGrid._dataController.getCellsInfo(true),
         dataProvider = this.pivotGrid.getDataProvider();
 
     var items = this.pivotGrid._getAllItems(columnsInfo, rowsInfo, cellsInfo);
-    //act
+    // act
     dataProvider.ready();
-    //assert
+    // assert
     assert.equal(items[0][0].alignment, "left", "Not RTL export data");
 
     this.pivotGrid._options.rtlEnabled = true;
     items = this.pivotGrid._getAllItems(columnsInfo, rowsInfo, cellsInfo);
-    //act
+    // act
     dataProvider.ready();
-    //assert
+    // assert
     this.pivotGrid._options.rtlEnabled = false;
     assert.equal(items[0][0].alignment, "right", "RTL export data");
 });
@@ -478,7 +478,7 @@ QUnit.test("getCellMerging", function(assert) {
 
     dataProvider.ready();
 
-    //act, assert
+    // act, assert
     assert.strictEqual(dataProvider.getCellMerging(0, 0).colspan, 1, "colspan count is correct");
     assert.strictEqual(dataProvider.getCellMerging(0, 0).rowspan, 2, "rowspan count is correct");
 

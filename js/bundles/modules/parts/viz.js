@@ -59,8 +59,10 @@ core.registerPalette = require("../../../viz/palette").registerPalette;
 
 viz.BaseWidget = require("../../../viz/core/base_widget");
 
-viz.findTheme = require("../../../viz/themes").findTheme;
-//We need to keep this method as we suggested it to users
+viz.getTheme = require("../../../viz/themes").getTheme;
+// Keep it for backward compatibility after renaming findTheme to getTheme
+viz.findTheme = require("../../../viz/themes").getTheme;
+// We need to keep this method as we suggested it to users
 viz.refreshAll = require("../../../viz/themes").refreshTheme;
 
 viz.refreshPaths = require("../../../viz/utils").refreshPaths;

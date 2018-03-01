@@ -137,16 +137,16 @@ QUnit.test("check for 'new'", function(assert) {
     });
 
     // Conflict with TypeScript inheritance
-    //check(function() {
+    // check(function() {
     //    A.call({});
-    //});
+    // });
 
-    //check(function() {
+    // check(function() {
     //    var container = {
     //        A: A
     //    };
     //    container.A();
-    //});
+    // });
 });
 
 

@@ -37,3 +37,15 @@ QUnit.test("Sized element when sizes are not defined", function(assert) {
     assert.equal(this.element.childNodes[0].style.width, "100%");
     assert.equal(this.element.childNodes[0].style.height, "200px");
 });
+
+QUnit.test("element method should return correct value", function(assert) {
+    var TestVizBaseVizWidget = BaseVizWidget.inherit({
+        _getDefaultSize: function() {
+            return { width: 200, height: 200 };
+        }
+    });
+
+    this.instance = new TestVizBaseVizWidget(this.element);
+
+    assert.equal(this.instance.element(), this.element);
+});

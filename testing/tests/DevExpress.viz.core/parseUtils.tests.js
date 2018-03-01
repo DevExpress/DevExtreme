@@ -49,20 +49,20 @@ QUnit.test('string parser', function(assert) {
 });
 
 QUnit.test('string parser - invalid argument = "undefined"', function(assert) {
-    //Arrange
+    // Arrange
     var parser = parseUtils.getParser('string');
-    //Act
+    // Act
     var result = parser();
-    //Assert
+    // Assert
     assert.strictEqual(result, undefined);
 });
 
 QUnit.test('string parser - argument = "null"', function(assert) {
-    //Arrange
+    // Arrange
     var parser = parseUtils.getParser('string');
-    //Act
+    // Act
     var result = parser(null);
-    //Assert
+    // Assert
     assert.strictEqual(result, null);
 });
 
@@ -85,29 +85,29 @@ QUnit.test('numeric parser', function(assert) {
 });
 
 QUnit.test('numeric parser - invalid argument', function(assert) {
-    //Arrange
+    // Arrange
     var parser = parseUtils.getParser('numeric');
-    //Act
+    // Act
     var result = parser('f4956');
-    //Assert
+    // Assert
     assert.strictEqual(result, undefined);
 });
 
 QUnit.test('numeric parser - invalid argument="undefined"', function(assert) {
-    //Arrange
+    // Arrange
     var parser = parseUtils.getParser('numeric');
-    //Act
+    // Act
     var result = parser();
-    //Assert
+    // Assert
     assert.strictEqual(result, undefined);
 });
 
 QUnit.test('numeric parser - argument="null"', function(assert) {
-    //Arrange
+    // Arrange
     var parser = parseUtils.getParser('numeric');
-    //Act
+    // Act
     var result = parser(null);
-    //Assert
+    // Assert
     assert.strictEqual(result, null);
 });
 

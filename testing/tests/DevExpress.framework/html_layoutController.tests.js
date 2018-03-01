@@ -31,7 +31,7 @@ var createLayoutController = function(options) {
 
     layoutHelper.createLayoutController(options, function(ctorOptions) {
         ctorOptions.name = ctorOptions.name || "default";
-        ctorOptions.transitionDuration = 1;//Don't set to 0 (async behavior should be tested)
+        ctorOptions.transitionDuration = 1;// Don't set to 0 (async behavior should be tested)
         return new DefaultLayoutController(ctorOptions);
     }).done(function(layoutController) {
         result = layoutController;
@@ -415,7 +415,7 @@ QUnit.test("View release", function(assert) {
             assert.equal(viewReleasedLog.length, 1);
             assert.equal(viewReleasedLog[0].model.title, "View1", "Old view is released");
 
-            //Q465089
+            // Q465089
             layoutController.deactivate();
             assert.equal(viewReleasedLog.length, 2);
             assert.equal(viewReleasedLog[1].model.title, "View2", "All views are released on deactivate");
@@ -1196,7 +1196,7 @@ QUnit.test("back command disposing correctly", function(assert) {
 });
 
 // TODO: reanimate or remove
-//test("orientationChanged with more than one view", function() {
+// test("orientationChanged with more than one view", function() {
 //    DefaultLayoutController = DX.framework.html.DefaultLayoutController.inherit({
 //        _getTargetFrame: function(viewInfo) {
 //            return viewInfo.viewName;
@@ -1232,7 +1232,7 @@ QUnit.test("back command disposing correctly", function(assert) {
 //    assert.equal($("#viewPort .dx-layout .dx-active-view .portrait").length, 0);
 
 //    DefaultLayoutController = DX.framework.html.DefaultLayoutController;
-//});
+// });
 
 QUnit.test("Bindings are applied properly (T242369)", function(assert) {
     assert.expect(2);

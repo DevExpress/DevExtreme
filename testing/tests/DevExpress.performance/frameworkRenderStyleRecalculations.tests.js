@@ -22,7 +22,7 @@ var createLayoutController = function(options) {
 
     layoutHelper.createLayoutController(options, function(ctorOptions) {
         ctorOptions.name = ctorOptions.name || "default";
-        ctorOptions.transitionDuration = 1;//Don't set to 0 (async behavior should be tested)
+        ctorOptions.transitionDuration = 1;// Don't set to 0 (async behavior should be tested)
         return new DefaultLayoutController(ctorOptions);
     }).done(function(layoutController) {
         result = layoutController;

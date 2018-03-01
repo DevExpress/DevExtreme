@@ -15,7 +15,7 @@
     @GRID_TEXTEDITOR_INPUT_PADDING: 32px;
     @GRID_TOTAL_FOOTER_PADDINGS: 7px;
     @GRID_COMMAND_SELECT_COLUMN_WIDTH: 70px;
-    @GRID_COMMAND_EDIT_COLUMN_WIDTH: 85px;
+    @GRID_COMMAND_EDIT_COLUMN_WIDTH: 100px;
     @GRID_COMMAND_EXPAND_COLUMN_WIDTH: 30px;
     @GRID_MASTERDETAIL_PADDING: 30px;
     @GRID_COMMAND_ADAPTIVE_COLUMN_WIDTH: 21px;
@@ -30,7 +30,7 @@
         margin-right: 5px !important;
     }
 
-    //for Foundation Responsive Framework
+    // for Foundation Responsive Framework
     .dx-@{widgetName}-table {
         background-color: transparent;
     }
@@ -225,7 +225,7 @@
     .dx-@{widgetName}-nowrap {
         white-space: nowrap;
 
-        &.dx-@{widgetName}-headers .dx-header-row > td > .dx-@{widgetName}-text-content {
+        .dx-header-row > td > .dx-@{widgetName}-text-content {
             white-space: nowrap;
         }
     }
@@ -235,7 +235,7 @@
         vertical-align: middle;
         cursor: pointer;
         z-index: 10000;
-        //T105728
+        // T105728
         .box-sizing(content-box);
     }
 
@@ -329,6 +329,34 @@
             }
         }
 
+        .dx-@{widgetName}-best-fit {
+            .dx-column-indicators {
+                float: none !important;
+
+                & > span {
+                    width: @GRID_COLUMN_HEADER_INDICATOR_WIDTH;
+                }
+            }
+
+            .dx-column-indicators .dx-sort {
+                &.dx-sort-none {
+                    display: inline-block;
+                }
+            }
+
+            .dx-header-row .dx-@{widgetName}-text-content {
+                max-width: none;
+            }
+
+            .dx-text-content-alignment-left {
+                margin-right: @GRID_TEXT_CONTENT_MARGIN;
+            }
+
+            .dx-text-content-alignment-right {
+                margin-left: @GRID_TEXT_CONTENT_MARGIN;
+            }
+        }
+
         &:not(.dx-@{widgetName}-table-fixed) {
             .dx-column-indicators {
                 float: none !important;
@@ -384,6 +412,7 @@
                 }
 
             .dx-editor-cell {
+                max-width: 0;
                 padding: 0;
                 vertical-align: middle;
 
@@ -402,6 +431,7 @@
                 padding: 0;
                 width: @GRID_COMMAND_SELECT_COLUMN_WIDTH;
                 min-width: @GRID_COMMAND_SELECT_COLUMN_WIDTH;
+                max-width: @GRID_COMMAND_SELECT_COLUMN_WIDTH;
             }
 
             .dx-command-edit {
@@ -413,6 +443,7 @@
                 padding: 0;
                 width: @GRID_COMMAND_EXPAND_COLUMN_WIDTH;
                 min-width: @GRID_COMMAND_EXPAND_COLUMN_WIDTH;
+                max-width: @GRID_COMMAND_EXPAND_COLUMN_WIDTH;
             }
         }
 
@@ -422,10 +453,6 @@
             -o-text-overflow: ellipsis;
             text-overflow: ellipsis;
             cursor: pointer;
-        }
-
-        td {
-            .box-sizing(content-box);
         }
 
         .dx-row > .dx-last-data-cell {
@@ -499,25 +526,23 @@
         position: relative;
         outline: 0;
         .user-select(none);
-
-        .dx-header-row {
-            .dx-editor-cell .dx-select-checkbox {
-                display: inline-block;
-            }
-
-            & > td {
-                white-space: nowrap;
-                overflow: hidden;
-
-                & > .dx-@{widgetName}-text-content {
-                    white-space: normal;
-                    vertical-align: top;
-                }
-            }
-        }
     }
 
     .dx-header-row {
+        .dx-editor-cell .dx-select-checkbox {
+            display: inline-block;
+        }
+
+        & > td {
+            white-space: nowrap;
+            overflow: hidden;
+
+            & > .dx-@{widgetName}-text-content {
+                white-space: normal;
+                vertical-align: top;
+            }
+        }
+
         .dx-text-content-alignment-left, .dx-text-content-alignment-right {
             display: inline-block;
             max-width: 100%;
@@ -777,6 +802,7 @@
         }
 
         .dx-row > .dx-master-detail-cell {
+            max-width: 0;
             padding: @GRID_MASTERDETAIL_PADDING;
             padding-left: 0;
             &:first-child {
@@ -883,7 +909,7 @@
         -ms-touch-action: none;
         touch-action: none;
         -ms-content-zooming: none;
-        -ms-overflow-style: none; //for Edge browser
+        -ms-overflow-style: none; // for Edge browser
     }
 
     .dx-device-mobile .dx-@{widgetName}-column-chooser-list.dx-treeview,

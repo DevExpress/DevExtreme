@@ -222,7 +222,7 @@ var HierarchicalCollectionWidget = CollectionWidget.inherit({
         return accessors;
     },
 
-    _render: function() {
+    _initMarkup: function() {
         this.callBase();
         this._addWidgetClass();
     },

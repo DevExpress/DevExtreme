@@ -525,13 +525,12 @@ var environment = {
         assert.ok(layoutManagerModule.LayoutManager.calledOnce);
         assert.strictEqual(layoutManagerModule.LayoutManager.firstCall.returnValue.setOptions.lastCall.args[0], chart._themeManager.getOptions("layouted"));
         assert.strictEqual(validateData.callCount, 1, "validation");
-        assert.ok(chart.series[0].resampled, "Series was not aggregated");
     });
 
     QUnit.test("Do not draw on hidden container", function(assert) {
-        //arrange
+        // arrange
         this.$container.hide();
-        //act
+        // act
         var chart = this.createChart({
             tooltip: { enabled: true },
             dataSource: [{ arg: 1, val: 1 }],
@@ -544,13 +543,13 @@ var environment = {
                 enabled: true
             }
         });
-        //assert
+        // assert
         testEverythingWasDrawn(assert, chart, { firstDraw: true, withNewData: true });
         assert.strictEqual(validateData.callCount, 1, "validation");
     });
 
     QUnit.test("Do not re-draw on hidden container", function(assert) {
-        //arrange
+        // arrange
         this.$container.width(350);
         this.$container.hide();
         var chart = this.createChart({
@@ -562,15 +561,15 @@ var environment = {
             }
         });
         resetMocksInChart(chart);
-        //act
+        // act
         chart.render();
-        //assert
-        testNothingWasDrawn(assert, chart/*, { containerWasKilled: true }*/);
+        // assert
+        testNothingWasDrawn(assert, chart /* , { containerWasKilled: true } */);
         assert.strictEqual(validateData.callCount, 0, "validation");
     });
 
     QUnit.test("Redraw if hidden container is already shown", function(assert) {
-        //arrange
+        // arrange
         this.$container.hide();
         var chart = this.createChart({
             tooltip: { enabled: true },
@@ -588,9 +587,9 @@ var environment = {
         $.each(chart._argumentAxes, function(_, axis) { axis.dispose = function() { chart.horizontalAxesDisposed = true; }; });
         $.each(chart._valueAxes, function(_, axis) { axis.dispose = function() { chart.verticalAxesDisposed = true; }; });
         this.$container.show();
-        //act
+        // act
         chart.render();
-        //assert
+        // assert
         testNothingWasDrawn(assert, chart);
         assert.ok(!chart.seriesDisposed, "Series should not be disposed");
         assert.ok(!chart.seriesFamiliesDisposed, "SeriesFamilies should not be disposed");
@@ -602,7 +601,7 @@ var environment = {
     });
 
     QUnit.test("Re-draw if size container with chart set 0;0 then restore old size ", function(assert) {
-        //arrange
+        // arrange
         var oldWidth = this.$container.width(),
             oldHeight = this.$container.height();
         var chart = this.createChart({
@@ -622,7 +621,7 @@ var environment = {
         resetMocksInChart(chart);
         this.$container.css({ width: 0, height: 0 });
         chart.render();
-        //act
+        // act
         resetMocksInChart(chart);
 
         $.each(chart.series, function(_, series) { series.dispose = function() { chart.seriesDisposed = true; }; });
@@ -632,7 +631,7 @@ var environment = {
 
         this.$container.css({ width: oldWidth, height: oldHeight });
         chart.render();
-        //assert
+        // assert
         testEverythingWasDrawn(assert, chart, { firstDraw: false, noTrackerUpdateCheck: true });
         assert.ok(!chart.seriesDisposed, "Series should not be disposed");
         assert.ok(!chart.seriesFamiliesDisposed, "SeriesFamilies should not be disposed");
@@ -643,7 +642,7 @@ var environment = {
     });
 
     QUnit.test("Force full redraw", function(assert) {
-        //arrange
+        // arrange
         var chart = this.createChart({
             tooltip: { enabled: true },
             legend: { position: "outside" },
@@ -663,11 +662,11 @@ var environment = {
         $.each(chart.seriesFamilies, function(_, family) { family.dispose = function() { chart.seriesFamiliesDisposed = true; }; });
         $.each(chart._argumentAxes, function(_, axis) { axis.dispose = function() { chart.horizontalAxesDisposed = true; }; });
         $.each(chart._valueAxes, function(_, axis) { axis.dispose = function() { chart.verticalAxesDisposed = true; }; });
-        //act
+        // act
         chart.render({
             force: true
         });
-        //assert
+        // assert
         testEverythingWasDrawn(assert, chart);
         assert.ok(!chart.seriesDisposed, "Series should not be disposed");
         assert.ok(!chart.seriesFamiliesDisposed, "SeriesFamilies should not be disposed");
@@ -679,7 +678,7 @@ var environment = {
     });
 
     QUnit.test("Redraw after width change", function(assert) {
-        //arrange
+        // arrange
         var chart = this.createChart({
             tooltip: { enabled: true },
             legend: { position: "outside" },
@@ -701,9 +700,9 @@ var environment = {
         $.each(chart._valueAxes, function(_, axis) { axis.dispose = function() { chart.verticalAxesDisposed = true; }; });
 
         this.$container.width(250);
-        //act
+        // act
         chart.render();
-        //assert
+        // assert
         testEverythingWasDrawn(assert, chart, { noTrackerUpdateCheck: true });
         assert.ok(!chart.seriesDisposed, "Series should not be disposed");
         assert.ok(!chart.seriesFamiliesDisposed, "SeriesFamilies should not be disposed");
@@ -715,7 +714,7 @@ var environment = {
     });
 
     QUnit.test("Redraw after height change", function(assert) {
-        //arrange
+        // arrange
         var chart = this.createChart({
             tooltip: { enabled: true },
             legend: { position: "outside" },
@@ -736,9 +735,9 @@ var environment = {
         $.each(chart._argumentAxes, function(_, axis) { axis.dispose = function() { chart.horizontalAxesDisposed = true; }; });
         $.each(chart._valueAxes, function(_, axis) { axis.dispose = function() { chart.verticalAxesDisposed = true; }; });
         this.$container.height(200);
-        //act
+        // act
         chart.render();
-        //assert
+        // assert
         testEverythingWasDrawn(assert, chart, { noTrackerUpdateCheck: true });
         assert.ok(!chart.seriesDisposed, "Series should not be disposed");
         assert.ok(!chart.seriesFamiliesDisposed, "SeriesFamilies should not be disposed");
@@ -750,7 +749,7 @@ var environment = {
     });
 
     QUnit.test("Do not redraw if no dimension changes", function(assert) {
-        //arrange
+        // arrange
         this.$container.width(300);
         this.$container.height(150);
         var chart = this.createChart({
@@ -767,12 +766,12 @@ var environment = {
         $.each(chart.seriesFamilies, function(_, family) { family.dispose = function() { chart.seriesFamiliesDisposed = true; }; });
         $.each(chart._argumentAxes, function(_, axis) { axis.dispose = function() { chart.horizontalAxesDisposed = true; }; });
         $.each(chart._valueAxes, function(_, axis) { axis.dispose = function() { chart.verticalAxesDisposed = true; }; });
-        //set exactly the same
+        // set exactly the same
         this.$container.width(300);
         this.$container.height(150);
-        //act
+        // act
         chart.render();
-        //assert
+        // assert
         testNothingWasDrawn(assert, chart);
         assert.ok(!chart.seriesDisposed, "Series should not be disposed");
         assert.ok(!chart.seriesFamiliesDisposed, "SeriesFamilies should not be disposed");
@@ -784,7 +783,7 @@ var environment = {
     });
 
     QUnit.test("Redraw after series changed", function(assert) {
-        //arrange
+        // arrange
         var chart = this.createChart({
             tooltip: { enabled: true },
             legend: { position: "outside" },
@@ -812,9 +811,9 @@ var environment = {
         $.each(chart._argumentAxes, function(_, axis) { axis.dispose = function() { chart.horizontalAxesDisposed = true; }; });
         $.each(chart._valueAxes, function(_, axis) { axis.dispose = function() { chart.verticalAxesDisposed = true; }; });
 
-        //act
+        // act
         chart.option("series", { valueField: "val2" });
-        //assert
+        // assert
         testEverythingWasDrawn(assert, chart, { firstDraw: false, withNewData: true });
 
         assert.ok(chart.seriesDisposed, "Series should be disposed");
@@ -826,7 +825,7 @@ var environment = {
     });
 
     QUnit.test("draw chart when scrollBar is visible", function(assert) {
-        //arrange
+        // arrange
         sinon.stub(scrollBarModule, "ScrollBar", function() {
             var stub = sinon.createStubInstance(ScrollBar);
             stub.init.returns(stub);
@@ -853,14 +852,14 @@ var environment = {
                 visible: true
             }
         });
-        //assert
+        // assert
         testEverythingWasDrawn(assert, chart, { firstDraw: true });
         assert.ok(chart._scrollBarGroup.linkAppend.called);
         scrollBarModule.ScrollBar.restore();
     });
 
     QUnit.test("draw chart when scrollBar is not visible", function(assert) {
-        //arrange
+        // arrange
         var chart = this.createChart({
             tooltip: { enabled: true },
             legend: { position: "outside" },
@@ -878,13 +877,13 @@ var environment = {
                 visible: false
             }
         });
-        //assert
+        // assert
         testEverythingWasDrawn(assert, chart, { firstDraw: true });
         assert.ok(!chart._scrollBarGroup.stub("linkAppend").called);
     });
 
     QUnit.test("Redraw after dataPrepareSettings changed", function(assert) {
-        //arrange
+        // arrange
         var chart = this.createChart({
             tooltip: { enabled: true },
             legend: { position: "outside" },
@@ -902,15 +901,15 @@ var environment = {
         resetMocksInChart(chart);
         seriesMockData.series.push(new MockSeries());
         this.themeManager.getOptions.withArgs("dataPrepareSettings").returns({ checkTypeForAllData: true, convertToAxisDataType: false, sortingMethod: "asc" });
-        //act
+        // act
         chart.option("dataPrepareSettings", { checkTypeForAllData: true, convertToAxisDataType: false, sortingMethod: "asc" });
-        //assert
+        // assert
         testEverythingWasDrawn(assert, chart, { firstDraw: false, withNewData: true });
         assert.strictEqual(validateData.callCount, 1, "validation");
     });
 
     QUnit.test("Tracker disposed on reinit", function(assert) {
-        //arrange
+        // arrange
         var chart = this.createChart({
                 tooltip: { enabled: true },
                 legend: { position: "outside" },
@@ -933,9 +932,9 @@ var environment = {
         $.each(chart._argumentAxes, function(_, axis) { axis.dispose = function() { chart.horizontalAxesDisposed = true; }; });
         $.each(chart._valueAxes, function(_, axis) { axis.dispose = function() { chart.verticalAxesDisposed = true; }; });
 
-        //act
+        // act
         chart.option("defaultPane", "pane1");
-        //assert
+        // assert
         assert.ok(paneClipRect.stub("dispose").called, "Pane clip rect should be removed");
         assert.ok(getTrackerStub().stub("update").calledTwice, "Tracker should be initialized");
         assert.ok(chart.seriesDisposed, "Series should be disposed");
@@ -946,7 +945,7 @@ var environment = {
     });
 
     QUnit.test("EqualBarWidth updating", function(assert) {
-        //arrange
+        // arrange
         var chart = this.createChart({
                 equalBarWidth: false,
                 dataSource: [{ arg: 1, val: 1 }],
@@ -963,13 +962,13 @@ var environment = {
             });
         });
 
-        //act
+        // act
         this.themeManager.getOptions.withArgs("equalBarWidth").returns(true);
 
         chart.option({
             equalBarWidth: true,
         });
-        //assert
+        // assert
         assert.equal(chart.seriesFamiliesUpdatingOptions.equalBarWidth, true, "series family should be updated");
 
         assert.ok(series === chart.getAllSeries()[0], "Series should not be recreated");
@@ -978,7 +977,7 @@ var environment = {
     });
 
     QUnit.test("T552944. Update series family and option that recreates series - series families are processed first", function(assert) {
-        //arrange
+        // arrange
         var chart = this.createChart({
                 equalBarWidth: false,
                 dataSource: [{ arg: 1, val: 1 }],
@@ -988,19 +987,19 @@ var environment = {
 
         seriesMockData.series.push(new MockSeries({ points: getPoints(DEFAULT_ANIMATION_LIMIT - 1) }));
 
-        //act
+        // act
         this.themeManager.getOptions.withArgs("equalBarWidth").returns(true);
 
         chart.option({
             palette: ["green"],
             equalBarWidth: true
         });
-        //assert
+        // assert
         assert.ok(chart.getAllSeries() !== series, "series recreated");
     });
 
     QUnit.test("MinBubbleSize updating", function(assert) {
-        //arrange
+        // arrange
         var chart = this.createChart({
                 minBubbleSize: 2,
                 dataSource: [{ arg: 1, val: 1 }],
@@ -1016,13 +1015,13 @@ var environment = {
             });
         });
 
-        //act
+        // act
         this.themeManager.getOptions.withArgs("minBubbleSize").returns(5);
 
         chart.option({
             minBubbleSize: 5
         });
-        //assert
+        // assert
         assert.equal(chart.seriesFamiliesUpdatingOptions.minBubbleSize, 5, "series family should be updated");
 
         assert.ok(series === chart.getAllSeries()[0], "Series should not be recreated");
@@ -1031,7 +1030,7 @@ var environment = {
     });
 
     QUnit.test("MaxBubbleSize updating", function(assert) {
-        //arrange
+        // arrange
         var chart = this.createChart({
                 maxBubbleSize: 4,
                 dataSource: [{ arg: 1, val: 1 }],
@@ -1047,13 +1046,13 @@ var environment = {
             });
         });
 
-        //act
+        // act
         this.themeManager.getOptions.withArgs("maxBubbleSize").returns(10);
 
         chart.option({
             maxBubbleSize: 10
         });
-        //assert
+        // assert
         assert.equal(chart.seriesFamiliesUpdatingOptions.maxBubbleSize, 10, "series family should be updated");
 
         assert.ok(series === chart.getAllSeries()[0], "Series should not be recreated");
@@ -1062,7 +1061,7 @@ var environment = {
     });
 
     QUnit.test("BarWidth updating", function(assert) {
-        //arrange
+        // arrange
         var chart = this.createChart({
                 barWidth: 7,
                 dataSource: [{ arg: 1, val: 1 }],
@@ -1078,13 +1077,13 @@ var environment = {
             });
         });
 
-        //act
+        // act
         this.themeManager.getOptions.withArgs("barWidth").returns(11);
 
         chart.option({
             barWidth: 11
         });
-        //assert
+        // assert
         assert.equal(chart.seriesFamiliesUpdatingOptions.barWidth, 11, "series family should be updated");
 
         assert.ok(series === chart.getAllSeries()[0], "Series should not be recreated");
@@ -1093,7 +1092,7 @@ var environment = {
     });
 
     QUnit.test("barGroupPadding updating", function(assert) {
-        //arrange
+        // arrange
         var chart = this.createChart({
             barGroupPadding: 2,
             dataSource: [{ arg: 1, val: 1 }],
@@ -1106,17 +1105,17 @@ var environment = {
             });
         });
 
-        //act
+        // act
         this.themeManager.getOptions.withArgs("barGroupPadding").returns(5);
         chart.option({
             barGroupPadding: 5
         });
-        //assert
+        // assert
         assert.equal(chart.seriesFamiliesUpdatingOptions.barGroupPadding, 5, "barGroupPadding should be updated");
     });
 
     QUnit.test("barGroupWidth updating", function(assert) {
-        //arrange
+        // arrange
         var chart = this.createChart({
             barGroupWidth: 7,
             dataSource: [{ arg: 1, val: 1 }],
@@ -1129,18 +1128,18 @@ var environment = {
             });
         });
 
-        //act
+        // act
         this.themeManager.getOptions.withArgs("barGroupWidth").returns(10);
 
         chart.option({
             barGroupWidth: 10
         });
-        //assert
+        // assert
         assert.equal(chart.seriesFamiliesUpdatingOptions.barGroupWidth, 10, "barGroupWidth should be updated");
     });
 
     QUnit.test("NegativesAsZeroes updating", function(assert) {
-        //arrange
+        // arrange
         var chart = this.createChart({
                 negativesAsZeroes: false,
                 dataSource: [{ arg: 1, val: 1 }],
@@ -1156,13 +1155,13 @@ var environment = {
             });
         });
 
-        //act
+        // act
         this.themeManager.getOptions.withArgs("negativesAsZeroes").returns(true);
 
         chart.option({
             negativesAsZeroes: true
         });
-        //assert
+        // assert
         assert.equal(chart.seriesFamiliesUpdatingOptions.negativesAsZeroes, true, "series family should be updated");
 
         assert.ok(series === chart.getAllSeries()[0], "Series should not be recreated");
@@ -1253,7 +1252,7 @@ var environment = {
     });
 
     QUnit.test("dxChart with single series request default type", function(assert) {
-        //arrange
+        // arrange
         var chart = this.createChart({
                 legend: {
                     position: "outside"
@@ -1282,10 +1281,10 @@ var environment = {
         $.each(chart._argumentAxes, function(_, axis) { axis.dispose = function() { chart.horizontalAxesDisposed = true; }; });
         $.each(chart._valueAxes, function(_, axis) { axis.dispose = function() { chart.verticalAxesDisposed = true; }; });
 
-        //act
+        // act
         chart.option("dataSource", updatedData.slice(0));
 
-        //assert
+        // assert
         assert.equal(chart.series.length, 1, "There is one series");
         assert.ok(chart.series[0].dataReinitialized, "Series data was reinitialized");
         assert.deepEqual(chart.series[0].reinitializedData, updatedData, "Data is correct");
@@ -1320,7 +1319,7 @@ var environment = {
     });
 
     QUnit.test("dxChart with single series request default type", function(assert) {
-        //arrange
+        // arrange
         var loadingDeferred = $.Deferred(),
             store = new CustomStore({
                 load: function() {
@@ -1349,10 +1348,10 @@ var environment = {
         chart.series[0].setOptions({ range: { val: { min: 1, max: 5 } } });
         resetMocksInChart(chart);
 
-        //act
+        // act
         loadingDeferred.resolve(updatedData);
 
-        //assert
+        // assert
         assert.equal(chart.series.length, 1, "There is one series");
         assert.ok(chart.series[0].dataReinitialized, "Series data was reinitialized");
         assert.deepEqual(chart.series[0].reinitializedData, updatedData, "Data is correct");
@@ -1388,7 +1387,7 @@ var environment = {
     });
 
     QUnit.test("Smoke", function(assert) {
-        //arrange
+        // arrange
         var chart = this.createChart({
             series: { type: "line" }
         });
@@ -1401,10 +1400,10 @@ var environment = {
         $.each(chart._argumentAxes, function(_, axis) { axis.dispose = function() { chart.horizontalAxesDisposed = true; }; });
         $.each(chart._valueAxes, function(_, axis) { axis.dispose = function() { chart.verticalAxesDisposed = true; }; });
 
-        //act
+        // act
         chart.zoomArgument(2, 4);
 
-        //assert
+        // assert
         assert.ok(chart.series);
         assert.equal(chart.series.length, 1);
 
@@ -1430,7 +1429,7 @@ var environment = {
     });
 
     QUnit.test("Re-Calculate business range for continuous without valueMargin", function(assert) {
-        //arrange
+        // arrange
         seriesMockData.series.push(new MockSeries({
             range: {
                 val: {
@@ -1457,10 +1456,10 @@ var environment = {
         chart.series[0].setOptions({ range: { val: { min: 0, max: 10 } } });
         resetMocksInChart(chart);
 
-        //act
+        // act
         chart.zoomArgument(2, 4);
 
-        //assert
+        // assert
 
         assert.ok(chart.businessRanges);
         assert.equal(chart.businessRanges.length, 1);
@@ -1490,10 +1489,10 @@ var environment = {
         chart.series[0].setOptions({ range: { val: { min: 0, max: 10 } } });
         resetMocksInChart(chart);
 
-        //act
+        // act
         chart.zoomArgument(2, 4);
 
-        //assert
+        // assert
         assert.ok(chart.businessRanges);
         assert.equal(chart.businessRanges.length, 1);
         var range = chart.businessRanges[0];
@@ -1507,12 +1506,12 @@ var environment = {
     var DEFAULT_ANIMATION_LIMIT = 300;
 
     QUnit.test("Disabled animation", function(assert) {
-        //arrange
+        // arrange
         var stubSeries = new MockSeries({
             points: getPoints(DEFAULT_ANIMATION_LIMIT - 1)
         });
         seriesMockData.series.push(stubSeries);
-        //act
+        // act
 
         var chart = this.createChart({
             animation: {
@@ -1521,34 +1520,34 @@ var environment = {
             dataSource: [{ arg: 1, val: 1 }],
             series: { type: "line" }
         });
-        //assert
+        // assert
         assert.ok(!chart.series[0].wasAnimated, "Animations should be off");
     });
 
     QUnit.test("Series animation with default - less than Limit", function(assert) {
-        //arrange
+        // arrange
         var stubSeries = new MockSeries({
             points: getPoints(DEFAULT_ANIMATION_LIMIT - 1)
         });
         seriesMockData.series.push(stubSeries);
-        //act
+        // act
         var chart = this.createChart({
             dataSource: [{ arg: 1, val: 1 }],
             series: { type: "line" }
         });
-        //assert
+        // assert
         assert.equal(chart.series[0].prepareToDrawing.lastCall.args[0], true);
         assert.ok(chart.series[0].wasAnimated, "Series should be animated");
     });
 
     QUnit.test("Series animation. Renderer unsupported animation", function(assert) {
-        //arrange
+        // arrange
         var stubSeries = new MockSeries({
             points: getPoints(DEFAULT_ANIMATION_LIMIT - 1)
         });
 
         seriesMockData.series.push(stubSeries);
-        //act
+        // act
         var chart = this.createChart({
             dataSource: [{ arg: 1, val: 1 }],
             series: { type: "line" }
@@ -1560,35 +1559,35 @@ var environment = {
         };
 
         chart.option({ dataSource: [] });
-        //assert
+        // assert
         assert.equal(chart.series[0].prepareToDrawing.lastCall.args[0], false);
         assert.ok(!chart.series[0].wasAnimated, "Series should be not animated");
     });
 
     QUnit.test("Series animation with default - more than Limit", function(assert) {
-        //arrange
+        // arrange
         var stubSeries = new MockSeries({
             points: getPoints(DEFAULT_ANIMATION_LIMIT + 500)
         });
         seriesMockData.series.push(stubSeries);
-        //act
+        // act
         var chart = this.createChart({
             dataSource: [{ arg: 1, val: 1 }],
             series: { type: "line" }
         });
-        //assert
+        // assert
         assert.equal(chart.series[0].prepareToDrawing.lastCall.args[0], false);
         assert.ok(!chart.series[0].wasAnimated, "Series should not be animated as point animation limit is exceeded");
     });
 
     QUnit.test("Series animation - less than overridden limit", function(assert) {
-        //arrange
+        // arrange
         var newLimit = DEFAULT_ANIMATION_LIMIT + 1000;
         var stubSeries = new MockSeries({
             points: getPoints(DEFAULT_ANIMATION_LIMIT + 500)
         });
         seriesMockData.series.push(stubSeries);
-        //act
+        // act
         var chart = this.createChart({
             animation: {
                 maxPointCountSupported: newLimit
@@ -1596,12 +1595,12 @@ var environment = {
             dataSource: [{ arg: 1, val: 1 }],
             series: { type: "line" }
         });
-        //assert
+        // assert
         assert.ok(chart.series[0].wasAnimated, "Series should be animated as point animation limit is exceeded");
     });
 
     QUnit.test("One series is animated while second one is not", function(assert) {
-        //arrange
+        // arrange
         var stubSeries1 = new MockSeries({
                 points: getPoints(DEFAULT_ANIMATION_LIMIT - 500)
             }),
@@ -1610,13 +1609,13 @@ var environment = {
             });
         seriesMockData.series.push(stubSeries1);
         seriesMockData.series.push(stubSeries2);
-        //act
+        // act
         var chart = this.createChart({
             dataSource: [{ arg: 1, val: 1, val2: 2 }],
             series: [{ type: "line" },
                 { valueField: "val2", type: "line" }]
         });
-        //assert
+        // assert
         assert.ok(chart.series[0].wasAnimated, "Series should be animated as point animation limit is not exceeded");
         assert.ok(!chart.series[1].wasAnimated, "Series should not be animated as point animation limit is exceeded");
     });
@@ -1624,7 +1623,7 @@ var environment = {
     QUnit.module("Life cycle", environment);
 
     QUnit.test("Dispose", function(assert) {
-        //arrange
+        // arrange
         seriesMockData.series.push(new MockSeries({ points: getPoints(10) }));
         seriesMockData.series.push(new MockSeries({ points: getPoints(10) }));
         seriesMockData.series.push(new MockSeries({ points: getPoints(10) }));
@@ -1701,9 +1700,9 @@ var environment = {
         mockObjectDispose("_backgroundRect");
         mockObjectDispose("_scaleBreaksGroup");
 
-        //act
+        // act
         this.$container.remove();
-        //assert
+        // assert
         assert.strictEqual(chart.panes, null, "Panes are null");
         assert.ok(getLegendStub().stub("dispose").called, "legend");
         assert.strictEqual(chart._legend, null, "Legend is null");
@@ -1729,7 +1728,7 @@ var environment = {
         assert.ok(chart._themeManagerDisposed, "themeManager");
         assert.strictEqual(chart._themeManager, null, "theme manager is null");
         assert.ok(chart._rendererDisposed, "renderer");
-        //assert.strictEqual(chart._renderer, null);
+        // assert.strictEqual(chart._renderer, null);
         assert.ok(getTrackerStub().stub("dispose").called, "tracker");
         assert.strictEqual(chart._tracker, null, "tracker is null");
         assert.strictEqual(chart._title, null, "title is null");
@@ -1875,8 +1874,7 @@ function resetMocksInChart(chart) {
 
     vizUtils.updatePanesCanvases.reset();
 }
-////////////////////////////////////////
-////////////////////////////////////////
+
 function createChartInstance(options, container) {
     /* global currentAssert */
 

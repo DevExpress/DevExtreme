@@ -135,7 +135,7 @@ QUnit.module("Keyboard navigation", {
         assert.ok(this.getValueButtonElement().is(":focus"));
     });
 
-    //T591055
+    // T591055
     QUnit.testInActiveWindow("menu has focus after open by enter key press", function(assert) {
         keyboardMock(this.getOperationButtonElement()).keyUp(ENTER_KEY);
 

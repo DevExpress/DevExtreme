@@ -64,9 +64,9 @@ var HistoryBasedNavigationDevice = Class.inherit({
 
     _isWindowsPhone8: function() {
         // NOTE: Windows Phone 8 can't work in browser. It works only if packed as native app. Taking into account permanent cordova bugs in each new version:
-        //https://issues.apache.org/jira/browse/CB-4873
-        //https://issues.apache.org/jira/browse/CB-6763
-        //https://issues.apache.org/jira/browse/CB-7356
+        // https://issues.apache.org/jira/browse/CB-4873
+        // https://issues.apache.org/jira/browse/CB-6763
+        // https://issues.apache.org/jira/browse/CB-7356
         // we have to disable some navigation stuff to make everything work
         var realDevice = devices.real();
         return realDevice.platform === "win" && realDevice.phone;

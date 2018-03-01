@@ -583,8 +583,12 @@ var Calendar = Editor.inherit({
         return this.$element();
     },
 
-    _render: function() {
+    _initMarkup: function() {
         this._renderSubmitElement();
+        this.callBase();
+    },
+
+    _render: function() {
         this.callBase();
 
         var $element = this.$element();

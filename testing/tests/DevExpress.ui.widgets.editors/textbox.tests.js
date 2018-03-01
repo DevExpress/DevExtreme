@@ -11,7 +11,6 @@ QUnit.testStart(function() {
     var markup =
         '<div id="qunit-fixture">\
             <div id="textbox"></div>\
-            <div id="widget"></div>\
             <div id="widthRootStyle" style="width: 300px;"></div>\
         </div>';
 
@@ -22,24 +21,11 @@ var internals = TextBox.__internals;
 
 var TEXTBOX_CLASS = "dx-textbox",
     INPUT_CLASS = "dx-texteditor-input",
-    CONTAINER_CLASS = "dx-texteditor-container",
     PLACEHOLDER_CLASS = "dx-placeholder",
-    SEARCHBOX_CLASS = internals.SEARCHBOX_CLASS,
-    SEARCH_ICON_SELECTOR = internals.SEARCH_ICON_CLASS;
+    SEARCHBOX_CLASS = "dx-searchbox",
+    SEARCH_ICON_CLASS = "dx-icon-search";
 
 QUnit.module();
-
-QUnit.test("markup init", function(assert) {
-    assert.expect(5);
-
-    var element = $("#textbox").dxTextBox();
-
-    assert.ok(element.hasClass(TEXTBOX_CLASS));
-    assert.equal(element.children().length, 1);
-    assert.equal(element.find("." + PLACEHOLDER_CLASS).length, 1);
-    assert.equal(element.find("." + INPUT_CLASS).length, 1);
-    assert.equal(element.find("." + CONTAINER_CLASS).length, 1);
-});
 
 QUnit.test("onContentReady fired after the widget is fully ready", function(assert) {
     assert.expect(1);
@@ -51,25 +37,6 @@ QUnit.test("onContentReady fired after the widget is fully ready", function(asse
     });
 });
 
-QUnit.test("init with options", function(assert) {
-    assert.expect(4);
-
-    var element = $("#textbox").dxTextBox({
-        value: "custom",
-        mode: "search",
-        placeholder: "enter value",
-        readOnly: true
-    });
-
-    var input = element.find("." + INPUT_CLASS);
-
-    assert.equal(input.val(), "custom");
-    assert.equal(input.attr("type"), "text");
-    assert.equal(input.prop("placeholder") || element.find("." + PLACEHOLDER_CLASS).attr("data-dx_placeholder"), "enter value");
-
-    assert.equal(input.prop("readOnly"), true);
-});
-
 QUnit.test("changing mode to 'search' should render search icon", function(assert) {
     var element = $("#textbox").dxTextBox(),
         textBox = element.dxTextBox("instance");
@@ -77,23 +44,7 @@ QUnit.test("changing mode to 'search' should render search icon", function(asser
     textBox.option("mode", "search");
 
     assert.ok(element.has(SEARCHBOX_CLASS));
-    assert.equal(element.find("." + SEARCH_ICON_SELECTOR).length, 1);
-});
-
-QUnit.test("'maxLength' option", function(assert) {
-    var originalDevices = devices.real();
-    devices.real({
-        platform: "not android",
-        version: ["32"]
-    });
-
-    try {
-        var element = $("#textbox").dxTextBox({ maxLength: "5" }),
-            input = element.find("." + INPUT_CLASS);
-        assert.equal(input.attr("maxLength"), "5");
-    } finally {
-        devices.real(originalDevices);
-    }
+    assert.equal(element.find("." + SEARCH_ICON_CLASS).length, 1);
 });
 
 QUnit.test("'maxLength' option on android 2.3 and 4.1", function(assert) {
@@ -301,13 +252,13 @@ QUnit.test("options 'height' and 'width'", function(assert) {
 QUnit.module("widget sizing render");
 
 QUnit.test("default", function(assert) {
-    var $element = $("#widget").dxTextBox();
+    var $element = $("#textbox").dxTextBox();
 
     assert.ok($element.outerWidth() > 0, "outer width of the element must be more than zero");
 });
 
 QUnit.test("constructor", function(assert) {
-    var $element = $("#widget").dxTextBox({ width: 400 }),
+    var $element = $("#textbox").dxTextBox({ width: 400 }),
         instance = $element.dxTextBox("instance");
 
     assert.strictEqual(instance.option("width"), 400);
@@ -323,19 +274,11 @@ QUnit.test("root with custom width", function(assert) {
 });
 
 QUnit.test("change width", function(assert) {
-    var $element = $("#widget").dxTextBox(),
+    var $element = $("#textbox").dxTextBox(),
         instance = $element.dxTextBox("instance"),
         customWidth = 400;
 
     instance.option("width", customWidth);
 
     assert.strictEqual($element.outerWidth(), customWidth, "outer width of the element must be equal to custom width");
-});
-
-
-QUnit.module("aria accessibility");
-
-QUnit.test("aria role", function(assert) {
-    var $element = $("#widget").dxTextBox();
-    assert.equal($element.find(".dx-texteditor-input").attr("role"), "textbox", "aria role is correct");
 });

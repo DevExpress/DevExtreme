@@ -106,7 +106,7 @@ var convertDateUnitToMilliseconds = function(dateUnit, count) {
     return toMilliseconds(dateUnit) * count;
 };
 
-//refactor for performance
+// refactor for performance
 var getDateUnitInterval = function(tickInterval) {
     var maxInterval = -1,
         i;
