@@ -292,9 +292,9 @@ QUnit.test("Vertical scrollbar spacing should not be added when widget does not 
     clock.restore();
 });
 
-//T608687
+// T608687
 QUnit.test("Horizontal scrollbar should not be shown if container height is not integer", function(assert) {
-    //act
+    // act
     var dataGrid = createDataGrid({
         width: 300.8,
         dataSource: [{}],
@@ -306,7 +306,7 @@ QUnit.test("Horizontal scrollbar should not be shown if container height is not 
         columns: ["column1", "column2", "column3"]
     });
 
-    //assert
+    // assert
     assert.strictEqual(dataGrid.getScrollbarWidth(true), 0);
 });
 
