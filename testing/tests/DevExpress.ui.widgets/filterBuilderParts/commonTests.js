@@ -25,7 +25,8 @@ var
     FILTER_BUILDER_RANGE_START_CLASS = FILTER_BUILDER_RANGE_CLASS + "-start",
     FILTER_BUILDER_RANGE_END_CLASS = FILTER_BUILDER_RANGE_CLASS + "-end",
     FILTER_BUILDER_RANGE_SEPARATOR_CLASS = FILTER_BUILDER_RANGE_CLASS + "-separator",
-    ACTIVE_CLASS = "dx-state-active";
+    ACTIVE_CLASS = "dx-state-active",
+    FILTER_BUILDER_MENU_CUSTOM_OPERATION_CLASS = FILTER_BUILDER_CLASS + "-menu-custom-operation";
 
 var getSelectedMenuText = function() {
     return $(".dx-treeview-node.dx-state-selected").text();
@@ -181,6 +182,27 @@ QUnit.module("Rendering", function() {
 
         var $menuItem = $(".dx-treeview-item").eq(1);
         assert.equal($menuItem.text(), "Budget");
+    });
+
+    QUnit.test("operation menu has between item with custom operation class", function(assert) {
+        var container = $("#container");
+
+        container.dxFilterBuilder({
+            value: [
+                ["CompanyName", "=", 1]
+            ],
+            fields: [{
+                dataField: "CompanyName",
+                dataType: "number"
+            }]
+        });
+
+        var $fieldButton = container.find("." + FILTER_BUILDER_ITEM_OPERATION_CLASS);
+        $fieldButton.trigger("dxclick");
+
+        var $customItems = $(".dx-treeview").find("." + FILTER_BUILDER_MENU_CUSTOM_OPERATION_CLASS);
+        assert.equal($customItems.length, 1, "one custom");
+        assert.equal($customItems.text(), "Between", "between is custom");
     });
 
     QUnit.test("value and operations depend on selected field", function(assert) {

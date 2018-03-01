@@ -187,7 +187,8 @@ function getAvailableOperations(field, filterOperationDescriptions, customOperat
             return {
                 icon: customOperation.icon || EMPTY_MENU_ICON,
                 text: customOperation.caption || inflector.captionize(customOperation.name),
-                value: customOperation.name
+                value: customOperation.name,
+                isCustom: true
             };
         } else {
             return {
