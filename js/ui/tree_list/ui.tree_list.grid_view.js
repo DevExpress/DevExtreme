@@ -16,5 +16,18 @@ treeListCore.registerModule("gridView", {
     controllers: gridViewModule.controllers,
     views: {
         gridView: GridView
+    },
+    extenders: {
+        controllers: {
+            resizing: {
+                _toggleBestFitMode: function(isBestFit) {
+                    this.callBase(isBestFit);
+                    if(this.option("advancedRendering") && this.option("columnAutoWidth")) {
+                        var $rowsTable = this._rowsView._getTableElement();
+                        $rowsTable.find(".dx-treelist-cell-expandable").toggleClass(this.addWidgetPrefix("best-fit"), isBestFit);
+                    }
+                }
+            }
+        }
     }
 });
