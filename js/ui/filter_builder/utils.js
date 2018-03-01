@@ -618,7 +618,7 @@ function setFocusToBody() {
     }
 }
 
-function getMergedOperations(customOperations) {
+function getMergedOperations(customOperations, betweenCaption) {
     var result = extend(true, [], customOperations),
         betweenIndex = -1;
     result.some(function(customOperation, index) {
@@ -628,7 +628,9 @@ function getMergedOperations(customOperations) {
         }
     });
     if(betweenIndex !== -1) {
-        result[betweenIndex] = extend(between.getConfig(), result[betweenIndex]);
+        result[betweenIndex] = extend(between.getConfig(betweenCaption), result[betweenIndex]);
+    } else {
+        result.unshift(between.getConfig(betweenCaption));
     }
     return result;
 }

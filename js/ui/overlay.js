@@ -1271,10 +1271,7 @@ var Overlay = Widget.inherit({
             minWidth: this._getOptionValue("minWidth", content),
             maxWidth: this._getOptionValue("maxWidth", content),
             minHeight: this._getOptionValue("minHeight", content),
-            maxHeight: this._getOptionValue("maxHeight", content)
-        });
-
-        this._$content.css({
+            maxHeight: this._getOptionValue("maxHeight", content),
             width: this._getOptionValue("width", content),
             height: this._getOptionValue("height", content)
         });
