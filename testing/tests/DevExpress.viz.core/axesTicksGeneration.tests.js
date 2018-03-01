@@ -2280,6 +2280,23 @@ QUnit.test("Do not generate minor ticks more than minorTickCount before first ti
     assert.equal(minorTicks.length, 2);
 });
 
+QUnit.test("Do not generate minor ticks nor calculate minorTickInterval when data range is zero (min == max)", function(assert) {
+    this.createAxis();
+    this.updateOptions({
+        valueType: "datetime",
+        type: "continuous",
+        minorTick: { visible: true }
+    });
+
+    this.axis.setBusinessRange({ minVisible: new Date(2012, 10, 1, 12), maxVisible: new Date(2012, 10, 1, 12), addRange: function() { } });
+
+    // act
+    this.axis.createTicks(canvas(1000));
+
+    assert.deepEqual(this.axis._minorTicks.map(value), []);
+    assert.deepEqual(this.axis._minorTickInterval, undefined);
+});
+
 QUnit.module("Polar axes", environment);
 
 QUnit.test("Circular. startAngle < endAngle", function(assert) {
