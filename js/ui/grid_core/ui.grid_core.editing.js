@@ -657,7 +657,6 @@ var EditingController = modules.ViewController.inherit((function() {
                 row = that.component.getVisibleRows()[rowIndex],
                 templateOptions = {
                     row: row,
-                    data: row.data,
                     rowType: row.rowType,
                     key: row.key
                 };
@@ -1414,6 +1413,7 @@ var EditingController = modules.ViewController.inherit((function() {
                 column = item.column,
                 rowData = detailCellOptions.row && detailCellOptions.row.data,
                 cellOptions = extend({}, detailCellOptions, {
+                    data: rowData,
                     cellElement: null,
                     isOnForm: true,
                     item: item,
