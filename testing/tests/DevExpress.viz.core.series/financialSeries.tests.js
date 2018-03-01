@@ -1723,17 +1723,11 @@ var checkGroups = function(assert, series) {
                 reduction: { color: "green", level: "open" }
             });
         series.updateData(data);
-<<<<<<< HEAD
+        series.createPoints();
         // Act
         series.updateData(data);
+        series.createPoints();
         // Assert
-=======
-        series.createPoints();
-        //Act
-        series.updateData(data);
-        series.createPoints();
-        //Assert
->>>>>>> Refactor points creation
         assert.equal(series.level, "open");
 
         assert.equal(series._points.length, 5);
