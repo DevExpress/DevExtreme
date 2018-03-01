@@ -11727,3 +11727,34 @@ QUnit.test("Repaint of popup is should be called when form layout is changed", f
     assert.equal(spy1.callCount, 1, "repaint is thrown");
     assert.equal(spy2.callCount, 0, "render is called after repaint");
 });
+
+//T610885
+QUnit.test("The data passed to the editCellTemplate callback should be updated after editing cell (in the scenario with cascaded editors)", function(assert) {
+    //arrange
+    var template = sinon.spy();
+
+    this.options.columns = [{
+        dataField: "name",
+        editCellTemplate: template
+    }, {
+        dataField: "age",
+        setCellValue: function(rowData, value) {
+            rowData.age = value;
+        }
+    }];
+    this.setupModules(this);
+    this.renderRowsView();
+
+    this.editRow(0);
+    this.clock.tick();
+
+    //assert
+    assert.deepEqual(template.getCall(0).args[1].data, { name: 'Alex', age: 15, lastName: "John", phone: "555555", room: 1 }, "row data");
+
+    //act
+    this.cellValue(0, 1, 666);
+
+    //assert
+    assert.deepEqual(template.getCall(1).args[1].data, { name: 'Alex', age: 666, lastName: "John", phone: "555555", room: 1 }, "row data");
+    assert.strictEqual(template.callCount, 2, "editCellTemplate call count");
+});
