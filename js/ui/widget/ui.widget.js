@@ -469,11 +469,7 @@ var Widget = DOMComponent.inherit({
         this.callBase();
 
         this._renderContent();
-        if(this._isFocusable()) {
-            this._attachKeyboardEvents();
-            this._attachFocusEvents();
-            this._renderAccessKey();
-        }
+        this._renderFocusState();
         this._attachFeedbackEvents();
         this._attachHoverEvents();
     },

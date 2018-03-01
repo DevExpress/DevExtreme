@@ -278,7 +278,7 @@ var Slider = TrackBar.inherit({
         ]);
     },
 
-    _render: function() {
+    _initMarkup: function() {
         this.$element().addClass(SLIDER_CLASS);
         this._renderSubmitElement();
 

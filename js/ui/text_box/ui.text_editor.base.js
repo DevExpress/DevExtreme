@@ -4,6 +4,7 @@ var $ = require("../../core/renderer"),
     domAdapter = require("../../core/dom_adapter"),
     eventsEngine = require("../../events/core/events_engine"),
     domUtils = require("../../core/utils/dom"),
+    hasWindow = require("../../core/utils/window").hasWindow,
     focused = require("../widget/selectors").focused,
     isDefined = require("../../core/utils/type").isDefined,
     extend = require("../../core/utils/extend").extend,
@@ -349,7 +350,10 @@ var TextEditorBase = Editor.inherit({
 
         this._renderInput();
         this._renderInputType();
-        this._renderInputValue();
+
+        if(!hasWindow()) {
+            this._renderInputValue();
+        }
 
         this._renderPlaceholderMarkup();
         this._renderProps();
@@ -360,7 +364,7 @@ var TextEditorBase = Editor.inherit({
     _render: function() {
         this._renderValue();
 
-        this._attachPlaceholderEvents();
+        this._renderPlaceholder();
         this._refreshValueChangeEvent();
         this._renderEvents();
 
@@ -516,12 +520,13 @@ var TextEditorBase = Editor.inherit({
     },
 
     _attachPlaceholderEvents: function() {
-        var startEvent = eventUtils.addNamespace(pointerEvents.up, this.NAME);
+        var that = this,
+            startEvent = eventUtils.addNamespace(pointerEvents.up, that.NAME);
 
-        eventsEngine.on(this._$placeholder, startEvent, function() {
-            eventsEngine.trigger(this._input(), "focus");
+        eventsEngine.on(that._$placeholder, startEvent, function() {
+            eventsEngine.trigger(that._input(), "focus");
         });
-        this._toggleEmptinessEventHandler();
+        that._toggleEmptinessEventHandler();
     },
 
     _placeholder: function() {
