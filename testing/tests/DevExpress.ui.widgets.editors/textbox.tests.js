@@ -283,10 +283,3 @@ QUnit.test("change width", function(assert) {
 
     assert.strictEqual($element.outerWidth(), customWidth, "outer width of the element must be equal to custom width");
 });
-
-QUnit.module("aria accessibility");
-
-QUnit.test("aria role", function(assert) {
-    var $element = $("#widget").dxTextBox();
-    assert.equal($element.find(".dx-texteditor-input").attr("role"), "textbox", "aria role is correct");
-});

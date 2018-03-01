@@ -77,3 +77,10 @@ QUnit.test("set width via constructor", function(assert) {
 
     assert.strictEqual(elementStyles.width, "400px", "'width' style of the element must be equal to custom width");
 });
+
+QUnit.module("aria accessibility");
+
+QUnit.test("aria role", function(assert) {
+    var $element = $("#widget").dxTextBox();
+    assert.equal($element.find(".dx-texteditor-input").attr("role"), "textbox", "aria role is correct");
+});
