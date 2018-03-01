@@ -1,3 +1,3 @@
 "use strict";
 
-require("../DevExpress.ui.widgets.editors/textBox.markup.tests.js");
+require("../DevExpress.ui.widgets.editors/textbox.markup.tests.js");
