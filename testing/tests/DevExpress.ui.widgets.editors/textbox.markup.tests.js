@@ -20,7 +20,9 @@ QUnit.testStart(function() {
 var TEXTBOX_CLASS = "dx-textbox",
     INPUT_CLASS = "dx-texteditor-input",
     CONTAINER_CLASS = "dx-texteditor-container",
-    PLACEHOLDER_CLASS = "dx-placeholder";
+    PLACEHOLDER_CLASS = "dx-placeholder",
+    SEARCHBOX_CLASS = "dx-searchbox",
+    SEARCH_ICON_CLASS = "dx-icon-search";
 
 QUnit.module("markup");
 
@@ -77,6 +79,14 @@ QUnit.test("set width via constructor", function(assert) {
 
     assert.strictEqual(elementStyles.width, "400px", "'width' style of the element must be equal to custom width");
 });
+
+QUnit.test("textBox with the 'seach' mode should render the search icon", function(assert) {
+    var element = $("#textbox").dxTextBox({ mode: "search" });
+
+    assert.ok(element.has(SEARCHBOX_CLASS));
+    assert.equal(element.find("." + SEARCH_ICON_CLASS).length, 1);
+});
+
 
 QUnit.module("aria accessibility");
 

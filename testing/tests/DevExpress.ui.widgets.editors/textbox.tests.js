@@ -23,8 +23,8 @@ var internals = TextBox.__internals;
 var TEXTBOX_CLASS = "dx-textbox",
     INPUT_CLASS = "dx-texteditor-input",
     PLACEHOLDER_CLASS = "dx-placeholder",
-    SEARCHBOX_CLASS = internals.SEARCHBOX_CLASS,
-    SEARCH_ICON_SELECTOR = internals.SEARCH_ICON_CLASS;
+    SEARCHBOX_CLASS = "dx-searchbox",
+    SEARCH_ICON_CLASS = "dx-icon-search";
 
 QUnit.module();
 
@@ -45,7 +45,7 @@ QUnit.test("changing mode to 'search' should render search icon", function(asser
     textBox.option("mode", "search");
 
     assert.ok(element.has(SEARCHBOX_CLASS));
-    assert.equal(element.find("." + SEARCH_ICON_SELECTOR).length, 1);
+    assert.equal(element.find("." + SEARCH_ICON_CLASS).length, 1);
 });
 
 QUnit.test("'maxLength' option on android 2.3 and 4.1", function(assert) {
