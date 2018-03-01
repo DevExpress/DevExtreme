@@ -640,6 +640,17 @@ QUnit.test("value without float part should never be incomplete", function(asser
     assert.equal(this.input.val(), "$ 10", "value has been reformatted");
 });
 
+QUnit.test("zero should not be incomplete", function(assert) {
+    this.instance.option({
+        format: "#0.00",
+        value: 12.34
+    });
+
+    this.keyboard.caret({ start: 0, end: 5 }).type("0");
+
+    assert.equal(this.input.val(), "0.00", "zero has been formatted");
+});
+
 QUnit.test("value without integer part is not supported", function(assert) {
     this.instance.option({
         format: "$ #.#",
