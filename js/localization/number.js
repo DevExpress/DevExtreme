@@ -250,14 +250,6 @@ var numberLocalization = dependencyInjector({
         return cleanedText === negativeEtalon ? -1 : 1;
     },
 
-    cleanText: function(text, format) {
-        var thousandsSeparator = this.getThousandsSeparator(),
-            stubs = format.replace(/[#0.,]/g, ""),
-            regExp = new RegExp("[\-" + escapeRegExp(thousandsSeparator + stubs) + "]", "g");
-
-        return text.replace(regExp, "");
-    },
-
     format: function(value, format) {
         if(typeof value !== "number") {
             return value;
@@ -304,7 +296,9 @@ var numberLocalization = dependencyInjector({
         }
 
         var decimalSeparator = this.getDecimalSeparator(),
-            cleanedText = this.cleanText(text, format)
+            regExp = new RegExp("[^0-9" + escapeRegExp(decimalSeparator) + "]", "g"),
+            cleanedText = text
+                .replace(regExp, "")
                 .replace(decimalSeparator, ".")
                 .replace(/\.$/g, ""),
             parsed = +cleanedText;

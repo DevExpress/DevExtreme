@@ -292,9 +292,9 @@ QUnit.test("input with non-required digit", function(assert) {
     assert.equal(this.input.val(), "1", "extra digits should not be shown");
 
     this.keyboard.type("..");
-    assert.equal(this.input.val(), "1.", "extra point should be prevented");
+    assert.equal(this.input.val(), "1", "extra point should reformat the value");
 
-    this.keyboard.type("0");
+    this.keyboard.type(".0");
     assert.equal(this.input.val(), "1.0", "zero should not be rounded");
 
     this.keyboard.type("56");
@@ -606,7 +606,7 @@ QUnit.test("incomplete values should be limited by max precision", function(asse
     assert.equal(this.input.val(), "$ 0.00 kg", "value is incomplete");
 
     this.keyboard.type("0");
-    assert.equal(this.input.val(), "$ 0.00 kg", "extra zero was prevented");
+    assert.equal(this.input.val(), "$ 0 kg", "value was reformatted");
 });
 
 QUnit.test("value can be incomplete after removing via backspace", function(assert) {
@@ -657,7 +657,7 @@ QUnit.test("value with more than one point should not be incomplete", function(a
     });
 
     this.keyboard.type("1.0.");
-    assert.equal(this.input.val(), "$ 1.0", "point was prevented");
+    assert.equal(this.input.val(), "$ 1", "value was reformatted");
 });
 
 QUnit.test("entering any stub in incomplete value should reformat the value", function(assert) {

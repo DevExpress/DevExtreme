@@ -242,6 +242,15 @@ var NumberBoxMask = NumberBoxBase.inherit({
         return sign < 0 ? signParts[1] : signParts[0];
     },
 
+    _removeStubs: function(text, excludeComma) {
+        var format = this._getFormatForSign(text),
+            thousandsSeparator = number.getThousandsSeparator(),
+            stubs = format.replace(/[#0.,]/g, ""),
+            regExp = new RegExp("[\-" + escapeRegExp((excludeComma ? "" : thousandsSeparator) + stubs) + "]", "g");
+
+        return text.replace(regExp, "");
+    },
+
     _getEditedText: function(text, selection, char) {
         var textBefore = text.slice(0, selection.start),
             textAfter = text.slice(selection.end),
@@ -259,7 +268,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
             isValueChanged = parsed !== this._parsedValue;
 
         var isDecimalPointRestricted = char === number.getDecimalSeparator() && maxPrecision === 0,
-            isUselessCharRestricted = !isTextSelected && !isValueChanged && char !== MINUS && !this._isValueIncomplete(editedText);
+            isUselessCharRestricted = !isTextSelected && !isValueChanged && char !== MINUS && !this._isValueIncomplete(editedText) && this._isStub(char);
 
         if(isDecimalPointRestricted || isUselessCharRestricted) {
             return undefined;
@@ -286,7 +295,8 @@ var NumberBoxMask = NumberBoxBase.inherit({
             return this.callBase(text);
         }
 
-        text = number.cleanText(text, this._getFormatForSign(text));
+        text = this._removeStubs(text, true);
+
         var point = escapeRegExp(number.getDecimalSeparator()),
             comma = escapeRegExp(number.getThousandsSeparator()),
             maxPrecision = this._getMaxPrecision(this._getFormatPattern(), text),
