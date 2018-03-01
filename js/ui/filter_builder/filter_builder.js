@@ -33,7 +33,7 @@ var FILTER_BUILDER_CLASS = "dx-filterbuilder",
     FILTER_BUILDER_FIELDS_CLASS = FILTER_BUILDER_CLASS + "-fields",
     FILTER_BUILDER_ADD_CONDITION_CLASS = FILTER_BUILDER_CLASS + "-add-condition",
     ACTIVE_CLASS = "dx-state-active",
-    FILTER_BUILDER_MENU_CUSTOM_OPERATION_CLASS = "dx-filter-builder-menu-custom-operation",
+    FILTER_BUILDER_MENU_CUSTOM_OPERATION_CLASS = FILTER_BUILDER_CLASS + "-menu-custom-operation",
 
     TAB_KEY = 9,
     ENTER_KEY = 13,

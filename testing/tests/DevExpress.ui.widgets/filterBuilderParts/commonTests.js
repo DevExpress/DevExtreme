@@ -26,7 +26,7 @@ var
     FILTER_BUILDER_RANGE_END_CLASS = FILTER_BUILDER_RANGE_CLASS + "-end",
     FILTER_BUILDER_RANGE_SEPARATOR_CLASS = FILTER_BUILDER_RANGE_CLASS + "-separator",
     ACTIVE_CLASS = "dx-state-active",
-    FILTER_BUILDER_MENU_CUSTOM_OPERATION_CLASS = "dx-filter-builder-menu-custom-operation";
+    FILTER_BUILDER_MENU_CUSTOM_OPERATION_CLASS = FILTER_BUILDER_CLASS + "-menu-custom-operation";
 
 var getSelectedMenuText = function() {
     return $(".dx-treeview-node.dx-state-selected").text();
