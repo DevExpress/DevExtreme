@@ -633,7 +633,7 @@ var Slider = TrackBar.inherit({
 
     _renderValue: function() {
         this.callBase();
-        this._initAnimation();
+        this._setRangeStyles(this._rangeStylesConfig());
 
         var value = this.option("value");
 
@@ -668,7 +668,7 @@ var Slider = TrackBar.inherit({
             case "min":
             case "max":
                 this._renderValue();
-                this._initAnimation();
+                this._setRangeStyles(this._rangeStylesConfig());
 
                 this.callBase(args);
                 this._renderLabels();

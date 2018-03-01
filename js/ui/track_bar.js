@@ -53,7 +53,7 @@ var TrackBar = Editor.inherit({
     _render: function() {
         this.callBase();
 
-        this._initAnimation();
+        this._setRangeStyles(this._rangeStylesConfig());
     },
 
     _renderWrapper: function() {
@@ -106,33 +106,35 @@ var TrackBar = Editor.inherit({
         this._currentRatio = ratio;
     },
 
-    _initAnimation: function() {
-        !this._needPreventAnimation && this._setRangeStyles({ width: this._currentRatio * 100 + "%" });
+    _rangeStylesConfig: function() {
+        return { width: this._currentRatio * 100 + "%" };
     },
 
     _setRangeStyles: function(options) {
         fx.stop(this._$range);
 
-        if(!this._needPreventAnimation) {
-            fx.animate(this._$range, {
-                type: "custom",
-                duration: 100,
-                to: options
-            });
+        if(this._needPreventAnimation) {
+            return;
         }
+
+        fx.animate(this._$range, {
+            type: "custom",
+            duration: 100,
+            to: options
+        });
     },
 
     _optionChanged: function(args) {
         switch(args.name) {
             case "value":
                 this._renderValue();
-                this._initAnimation();
+                this._setRangeStyles(this._rangeStylesConfig());
                 this.callBase(args);
                 break;
             case "max":
             case "min":
                 this._renderValue();
-                this._initAnimation();
+                this._setRangeStyles(this._rangeStylesConfig());
                 break;
             default:
                 this.callBase(args);
