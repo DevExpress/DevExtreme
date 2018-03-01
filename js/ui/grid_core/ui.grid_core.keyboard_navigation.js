@@ -115,9 +115,13 @@ var KeyboardNavigationController = core.ViewController.inherit({
             this._focusView(data.view, data.viewIndex);
             this._updateFocusedCellPosition($target);
             if(!this._editingController.isEditing() && !this._isMasterDetailCell($target)) {
-                data.view.element().find("." + CELL_FOCUS_DISABLED_CLASS + "[tabIndex]").removeClass(CELL_FOCUS_DISABLED_CLASS);
-                $(e.event.target).addClass(CELL_FOCUS_DISABLED_CLASS);
-                this._applyTabIndexToElement($(e.event.target));
+                var $targetParent = $target.parent();
+                if(isGroupRow($targetParent)) {
+                    $target = $targetParent;
+                }
+                data.view.element().find("." + CELL_FOCUS_DISABLED_CLASS + "[tabIndex]").removeClass(CELL_FOCUS_DISABLED_CLASS).removeAttr("tabIndex");
+                $target.addClass(CELL_FOCUS_DISABLED_CLASS);
+                this._applyTabIndexToElement($target);
                 eventsEngine.trigger($target, "focus", { hideBorders: true });
             }
         } else if($target.is("td")) {
