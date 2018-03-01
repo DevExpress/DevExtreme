@@ -4,6 +4,7 @@ var $ = require("../../core/renderer"),
     domAdapter = require("../../core/dom_adapter"),
     eventsEngine = require("../../events/core/events_engine"),
     domUtils = require("../../core/utils/dom"),
+    hasWindow = require("../../core/utils/window").hasWindow,
     focused = require("../widget/selectors").focused,
     isDefined = require("../../core/utils/type").isDefined,
     extend = require("../../core/utils/extend").extend,
@@ -345,20 +346,28 @@ var TextEditorBase = Editor.inherit({
     },
 
     _initMarkup: function() {
+        this.$element().addClass(TEXTEDITOR_CLASS);
+
         this._renderInput();
+        this._renderInputType();
+
+        if(!hasWindow()) {
+            this._renderInputValue();
+        }
+
+        this._renderPlaceholderMarkup();
+        this._renderProps();
+
         this.callBase();
     },
 
     _render: function() {
-        this.$element().addClass(TEXTEDITOR_CLASS);
-
-        this._renderInputType();
         this._renderValue();
-        this._renderProps();
-        this._renderPlaceholder();
 
+        this._renderPlaceholder();
         this._refreshValueChangeEvent();
         this._renderEvents();
+
         this._renderEnterKeyAction();
         this._renderEmptinessEvent();
         this.callBase();
@@ -491,26 +500,33 @@ var TextEditorBase = Editor.inherit({
     },
 
     _renderPlaceholder: function() {
+        this._renderPlaceholderMarkup();
+        this._attachPlaceholderEvents();
+    },
+
+    _renderPlaceholderMarkup: function() {
         if(this._$placeholder) {
             this._$placeholder.remove();
             this._$placeholder = null;
         }
 
-        var that = this,
-            $input = that._input(),
-            placeholderText = that.option("placeholder"),
+        var $input = this._input(),
+            placeholderText = this.option("placeholder"),
             $placeholder = this._$placeholder = $('<div>')
-                .attr("data-dx_placeholder", placeholderText),
-            startEvent = eventUtils.addNamespace(pointerEvents.up, this.NAME);
-
-        eventsEngine.on($placeholder, startEvent, function() {
-            eventsEngine.trigger($input, "focus");
-        });
+                .attr("data-dx_placeholder", placeholderText);
 
         $placeholder.insertAfter($input);
-
         $placeholder.addClass(TEXTEDITOR_PLACEHOLDER_CLASS);
-        this._toggleEmptinessEventHandler();
+    },
+
+    _attachPlaceholderEvents: function() {
+        var that = this,
+            startEvent = eventUtils.addNamespace(pointerEvents.up, that.NAME);
+
+        eventsEngine.on(that._$placeholder, startEvent, function() {
+            eventsEngine.trigger(that._input(), "focus");
+        });
+        that._toggleEmptinessEventHandler();
     },
 
     _placeholder: function() {

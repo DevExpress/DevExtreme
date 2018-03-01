@@ -170,12 +170,16 @@ var RadioGroup = Editor.inherit({
         this._defaultTemplates["item"] = new ChildDefaultTemplate("item", this);
     },
 
-    _render: function() {
+    _initMarkup: function() {
         this.$element().addClass(RADIO_GROUP_CLASS);
         this._renderSubmitElement();
-        this._renderRadios();
         this.setAria("role", "radiogroup");
 
+        this.callBase();
+    },
+
+    _render: function() {
+        this._renderRadios();
         this._renderLayout();
 
         this.option("useInkRipple") && this._renderInkRipple();

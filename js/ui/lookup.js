@@ -675,17 +675,16 @@ var Lookup = DropDownList.inherit({
         this._defaultTemplates["title"] = new ChildDefaultTemplate("title", this);
     },
 
-    _inputWrapper: function() {
-        return this.$element().find("." + LOOKUP_FIELD_WRAPPER_CLASS);
-    },
-
-    _render: function() {
-        this._renderSubmitElement();
-        this.callBase();
-
+    _initMarkup: function() {
         this.$element()
             .addClass(LOOKUP_CLASS)
             .toggleClass(LOOKUP_POPOVER_MODE, this.option("usePopover"));
+        this._renderSubmitElement();
+        this.callBase();
+    },
+
+    _inputWrapper: function() {
+        return this.$element().find("." + LOOKUP_FIELD_WRAPPER_CLASS);
     },
 
     _renderSubmitElement: function() {
