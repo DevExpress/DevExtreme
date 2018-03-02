@@ -380,8 +380,6 @@ var dxChart = AdvancedChart.inherit({
 
     _getExtraOptions: noop,
 
-    _processSingleSeries: noop,
-
     _cleanPanesClipRects: function(clipArrayName) {
         var that = this,
             clipArray = that._panesClipRects[clipArrayName];
@@ -594,7 +592,7 @@ var dxChart = AdvancedChart.inherit({
         return panesBorderOptions;
     },
 
-    _createPoints: function() {
+    _handleSeriesDataUpdated: function() {
         var that = this,
             viewport = new rangeModule.Range();
 
