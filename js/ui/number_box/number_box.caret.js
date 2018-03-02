@@ -80,7 +80,7 @@ var getCaretAfterFormat = function(text, formatted, caret, format) {
             digitsBefore = _getDigitCountBeforeIndex(relativeIndex, textParts[1]),
             newPosition = formattedParts[1] ? newPointPosition + 1 + _getDigitPositionByIndex(digitsBefore, formattedParts[1]) + 1 : formatted.length;
 
-        return getCaretInBoundaries(newPosition, text, format);
+        return getCaretInBoundaries(newPosition, formatted, format);
     } else {
         var positionFromEnd = textParts[0].length - caret.start,
             digitsFromEnd = _getDigitCountBeforeIndex(positionFromEnd, _reverseText(textParts[0])),

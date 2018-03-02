@@ -232,6 +232,9 @@ QUnit.test("extra decimal points should be ignored", function(assert) {
 
     this.keyboard.type("2..05");
     assert.equal(this.input.val(), "2.05", "text is correct");
+
+    this.keyboard.caret(3).type(".");
+    assert.equal(this.input.val(), "2.05", "extra point should be prevented");
 });
 
 QUnit.test("value should be rounded to the low digit on input an extra float digits", function(assert) {
