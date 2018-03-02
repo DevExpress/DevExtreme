@@ -232,6 +232,9 @@ QUnit.test("extra decimal points should be ignored", function(assert) {
 
     this.keyboard.type("2..05");
     assert.equal(this.input.val(), "2.05", "text is correct");
+
+    this.keyboard.caret(3).type(".");
+    assert.equal(this.input.val(), "2.05", "extra point should be prevented");
 });
 
 QUnit.test("value should be rounded to the low digit on input an extra float digits", function(assert) {
@@ -292,9 +295,9 @@ QUnit.test("input with non-required digit", function(assert) {
     assert.equal(this.input.val(), "1", "extra digits should not be shown");
 
     this.keyboard.type("..");
-    assert.equal(this.input.val(), "1.", "extra point should be prevented");
+    assert.equal(this.input.val(), "1", "extra point should reformat the value");
 
-    this.keyboard.type("0");
+    this.keyboard.type(".0");
     assert.equal(this.input.val(), "1.0", "zero should not be rounded");
 
     this.keyboard.type("56");
@@ -512,17 +515,6 @@ QUnit.test("decimal point input should be prevented when it is restricted by the
     assert.equal(this.keyboard.caret().start, 1, "caret should not be moved");
 });
 
-QUnit.test("incomplete input should not be prevented when there are stubs and zeros after the caret", function(assert) {
-    this.instance.option({
-        format: "#0.## kg",
-        value: 123
-    });
-
-    this.keyboard.caret(3).type(".05");
-
-    assert.equal(this.input.val(), "123.05 kg", "value is correct");
-});
-
 QUnit.test("leading zeros should be replaced on input", function(assert) {
     this.instance.option("format", "$ #0 d");
     this.instance.option("value", 0);
@@ -552,17 +544,6 @@ QUnit.test("it should be possible to input decimal point when valueChangeEvent i
     assert.equal(this.input.val(), "1.5", "value is correct");
 });
 
-QUnit.test("enter should remove incomplete value chars from input", function(assert) {
-    this.keyboard.type("123.").press("enter");
-    assert.equal(this.input.val(), "123", "input was reformatted");
-});
-
-QUnit.testInActiveWindow("focusout should remove incomplete value chars from input", function(assert) {
-    this.instance.option("value", 123);
-    this.keyboard.caret(3).type(".").change().blur();
-    assert.equal(this.input.val(), "123", "input was reformatted");
-});
-
 QUnit.test("valueChanged event fires on value apply", function(assert) {
     if(!browser.msie) {
         // You can remove this test once issue noted below will resolved
@@ -577,6 +558,151 @@ QUnit.test("valueChanged event fires on value apply", function(assert) {
     this.keyboard.caret(0).type("123").press("enter");
 
     assert.ok(valueChangedSpy.calledOnce, "valueChanged event called once");
+});
+
+QUnit.module("format: incomplete value", moduleConfig);
+
+QUnit.test("incomplete values should not be reformatted on input", function(assert) {
+    this.instance.option({
+        format: "#0.####",
+        value: null
+    });
+
+    this.keyboard.type("0.0005");
+    assert.equal(this.input.val(), "0.0005", "value was typed");
+});
+
+QUnit.test("incomplete values with stubs should not be reformatted on input", function(assert) {
+    this.instance.option({
+        format: "$ #0.#### kg",
+        value: null
+    });
+
+    this.keyboard.type("0.0005");
+    assert.equal(this.input.val(), "$ 0.0005 kg", "value was typed");
+});
+
+QUnit.test("incomplete values should not be reformatted on paste", function(assert) {
+    this.instance.option({
+        format: "$ #0.#### kg",
+        value: null
+    });
+
+    this.input.val("0.00");
+    this.keyboard.input();
+    assert.equal(this.input.val(), "0.00", "walue has not been reformatted");
+
+    this.keyboard.type("0");
+    assert.equal(this.input.val(), "0.000", "walue has not been reformatted yet");
+
+    this.keyboard.type("5");
+    assert.equal(this.input.val(), "$ 0.0005 kg", "walue has been reformatted");
+});
+
+QUnit.test("incomplete values should be limited by max precision", function(assert) {
+    this.instance.option({
+        format: "$ #0.### kg",
+        value: null
+    });
+
+    this.keyboard.type("0.000");
+    assert.equal(this.input.val(), "$ 0.000 kg", "value is incomplete");
+
+    this.keyboard.press("enter");
+    assert.equal(this.input.val(), "$ 0 kg", "value was reformatted on enter");
+});
+
+QUnit.test("value can be incomplete after removing via backspace", function(assert) {
+    this.instance.option({
+        format: "$ #0.### kg",
+        value: 1.2
+    });
+
+    this.keyboard.caret(5).press("backspace");
+    assert.equal(this.input.val(), "$ 1. kg", "value has not been reformatted");
+});
+
+QUnit.test("value can be incomplete after removing via delete", function(assert) {
+    this.instance.option({
+        format: "$ #0.### kg",
+        value: 1.2
+    });
+
+    this.keyboard.caret(4).press("del");
+    assert.equal(this.input.val(), "$ 1. kg", "value has not been reformatted");
+});
+
+QUnit.test("value without float part should never be incomplete", function(assert) {
+    this.instance.option({
+        format: "$ #0.####",
+        value: null
+    });
+
+    this.input.val("10");
+    this.keyboard.input();
+    assert.equal(this.input.val(), "$ 10", "value has been reformatted");
+});
+
+QUnit.test("zero should not be incomplete", function(assert) {
+    this.instance.option({
+        format: "#0.00",
+        value: 12.34
+    });
+
+    this.keyboard.caret({ start: 0, end: 5 }).type("0");
+
+    assert.equal(this.input.val(), "0.00", "zero has been formatted");
+});
+
+QUnit.test("value without integer part is not supported", function(assert) {
+    this.instance.option({
+        format: "$ #.#",
+        value: null
+    });
+
+    this.keyboard.type(".5");
+    assert.equal(this.input.val(), "$ 5", "point should be prevented");
+});
+
+QUnit.test("value with more than one point should not be incomplete", function(assert) {
+    this.instance.option({
+        format: "$ #0.###",
+        value: null
+    });
+
+    this.keyboard.type("1.0.");
+    assert.equal(this.input.val(), "$ 1", "value was reformatted");
+});
+
+QUnit.test("entering any stub in incomplete value should reformat the value", function(assert) {
+    this.instance.option({
+        format: "$ #0.###",
+        value: null
+    });
+
+    this.keyboard.type("$ 1.0r");
+    assert.equal(this.input.val(), "$ 1.0", "stub was prevented");
+});
+
+QUnit.test("incomplete value should be limited by min precision", function(assert) {
+    this.instance.option({
+        format: "#0.0##",
+        value: 1
+    });
+
+    this.keyboard.caret(3).press("backspace");
+    assert.equal(this.input.val(), "1.0", "zero has not been removed");
+});
+
+QUnit.test("incomplete values should be reformatted on enter", function(assert) {
+    this.keyboard.type("123.").press("enter");
+    assert.equal(this.input.val(), "123", "input was reformatted");
+});
+
+QUnit.testInActiveWindow("incomplete values should be reformatted on focusout", function(assert) {
+    this.instance.option("value", 123);
+    this.keyboard.caret(3).type(".").blur();
+    assert.equal(this.input.val(), "123", "input was reformatted");
 });
 
 
@@ -681,7 +807,10 @@ QUnit.test("last non required zero should not be typed", function(assert) {
     this.instance.option("format", "#.##");
     this.keyboard.type("1.50");
 
-    assert.equal(this.input.val(), "1.5", "zero type was prevented");
+    assert.equal(this.input.val(), "1.50", "zero type was not prevented");
+
+    this.input.blur();
+    assert.equal(this.input.val(), "1.5", "value was reformatted on focusout");
 });
 
 QUnit.test("removing with group separators using delete key", function(assert) {
@@ -763,10 +892,15 @@ QUnit.test("removing required decimal digit should replace it to 0 and move care
         format: "#0.00",
         value: 1.23
     });
+
     this.keyboard.caret(4).press("backspace");
 
     assert.equal(this.input.val(), "1.20", "value is correct");
     assert.deepEqual(this.keyboard.caret(), { start: 3, end: 3 }, "caret position is correct");
+
+    this.keyboard.press("backspace");
+    assert.equal(this.input.val(), "1.00", "value is correct");
+    assert.deepEqual(this.keyboard.caret(), { start: 2, end: 2 }, "caret position is correct");
 });
 
 QUnit.test("removing integer digit using backspace if group separator is hiding", function(assert) {
@@ -874,6 +1008,7 @@ QUnit.test("removing decimal separator should be possible if float part is not r
     });
 
     this.keyboard.caret(4)
+        .press("backspace")
         .press("backspace");
 
     assert.equal(this.input.val(), "12 kg", "decimal separator has been removed");
