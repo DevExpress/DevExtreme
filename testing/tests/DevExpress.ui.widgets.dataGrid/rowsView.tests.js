@@ -248,13 +248,13 @@ QUnit.test('Check WAI-ARIA attributes for data rows/cells after render rows', fu
         $freeSpaceCells,
         i;
 
-    //act
+    // act
     rowsView.render(testElement);
     $rows = rowsView._getRowElements();
     $freeSpaceCells = getCells(testElement).filter(function(i, cell) { return $(cell).parent().hasClass("dx-freespace-row"); });
     $cells = getCells(testElement).filter(function(i, cell) { return !$(cell).parent().hasClass("dx-freespace-row"); });
 
-    //assert
+    // assert
     assert.expect(15 - $freeSpaceCells.length);
 
     for(i = 0; i < $cells.length; i++) {
