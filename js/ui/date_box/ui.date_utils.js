@@ -188,6 +188,11 @@ var dateUtils = {
         }
 
         return longestDate;
+    },
+
+    normalizeTime: function(date) {
+        date.setSeconds(0);
+        date.setMilliseconds(0);
     }
 };
 

@@ -2589,6 +2589,7 @@ QUnit.test("T231015 - widget should set default date or time if only one widget'
     dateBox._popup._wrapper().find(".dx-popup-done").trigger("dxclick");
 
     date.setFullYear(2015, 3, 21);
+    uiDateUtils.normalizeTime(date);
     assert.equal(Math.floor(dateBox.option("value").getTime() / 1000 / 10), Math.floor(date.getTime() / 1000 / 10), "value is correct if only calendar value is changed");
 
     dateBox.option("value", null);
@@ -2598,7 +2599,8 @@ QUnit.test("T231015 - widget should set default date or time if only one widget'
     dateBox._strategy._timeView.option("value", new Date(2015, 3, 21, 15, 15, 34));
     dateBox._popup._wrapper().find(".dx-popup-done").trigger("dxclick");
 
-    date.setHours(15, 15, 34);
+    date.setHours(15, 15);
+    uiDateUtils.normalizeTime(date);
     assert.equal(Math.floor(dateBox.option("value").getTime() / 1000 / 10), Math.floor(date.getTime() / 1000 / 10), "value is correct if only timeView value is changed");
 });
 
@@ -2612,9 +2614,12 @@ QUnit.test("T253298 - widget should set default date and time if value is null a
 
     dateBox.open();
     var date = new Date();
+    uiDateUtils.normalizeTime(date);
     dateBox._popup._wrapper().find(".dx-popup-done").trigger("dxclick");
 
-    assert.equal(Math.round(dateBox.option("value").getTime() / 1000 / 10), Math.round(date.getTime() / 1000 / 10), "value is correct");
+    var value = dateBox.option("value");
+    assert.equal(value.getMilliseconds(), 0, "milliseconds is should be zero");
+    assert.equal(Math.round(value.getTime() / 1000 / 10), Math.round(date.getTime() / 1000 / 10), "value is correct");
 });
 
 QUnit.test("DateBox should have time part when pickerType is rollers", function(assert) {
@@ -2650,6 +2655,35 @@ QUnit.test("DateBox with time should be rendered correctly in IE, templatesRende
     } finally {
         clock.restore();
     }
+});
+
+QUnit.test("Reset seconds and milliseconds when DateBox has no value for datetime view", function(assert) {
+    var dateBox = $("#dateBox").dxDateBox({
+        type: "datetime",
+        min: new Date("2015/1/25"),
+        max: new Date("2015/2/10")
+    }).dxDateBox("instance");
+
+    dateBox.open();
+
+    $(".dx-calendar-cell").first().trigger("dxclick");
+    $(".dx-popup-done.dx-button").first().trigger("dxclick");
+
+    assert.equal(dateBox.option("value").getSeconds(), 0, "seconds has zero value");
+    assert.equal(dateBox.option("value").getMilliseconds(), 0, "milliseconds has zero value");
+});
+
+QUnit.test("Reset seconds and milliseconds when DateBox has no value for time view", function(assert) {
+    var dateBox = $("#dateBox").dxDateBox({
+        type: "time"
+    }).dxDateBox("instance");
+
+    dateBox.open();
+
+    $(".dx-list-item").first().trigger("dxclick");
+
+    assert.equal(dateBox.option("value").getSeconds(), 0, "seconds has zero value");
+    assert.equal(dateBox.option("value").getMilliseconds(), 0, "milliseconds has zero value");
 });
 
 QUnit.module("datebox w/ time list", {

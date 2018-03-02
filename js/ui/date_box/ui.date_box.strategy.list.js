@@ -7,7 +7,8 @@ var $ = require("../../core/renderer"),
     commonUtils = require("../../core/utils/common"),
     extend = require("../../core/utils/extend").extend,
     dateUtils = require("./ui.date_utils"),
-    dateLocalization = require("../../localization/date");
+    dateLocalization = require("../../localization/date"),
+    uiDateUtils = require("./ui.date_utils");
 
 var BOUNDARY_VALUES = {
     "min": new Date(0, 0, 0, 0, 0),
@@ -240,7 +241,13 @@ var ListStrategy = DateBoxStrategy.inherit({
         this.dateBox.option("opened", false);
 
         var date = this.dateBox.option("value");
-        date = date ? new Date(date) : new Date();
+
+        if(date) {
+            date = new Date(date);
+        } else {
+            date = new Date();
+            uiDateUtils.normalizeTime(date);
+        }
 
         date.setHours(e.itemData.getHours());
         date.setMinutes(e.itemData.getMinutes());
