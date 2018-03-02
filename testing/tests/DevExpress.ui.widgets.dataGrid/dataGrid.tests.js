@@ -2577,6 +2577,33 @@ QUnit.test("aria-rowindex aria-colindex if virtual scrolling", function(assert) 
     clock.restore();
 });
 
+// T595044
+QUnit.test("aria-colcount aria-rowcount if virtual scrolling", function(assert) {
+    // arrange, act
+    var clock = sinon.useFakeTimers(),
+        array = [],
+        dataGrid;
+
+    for(var i = 0; i < 100; i++) {
+        array.push({ ID: i, C0: "C0_" + i, C1: "C1_" + i });
+    }
+
+    dataGrid = $("#dataGrid").dxDataGrid({
+        height: 200,
+        dataSource: array,
+        paging: { pageSize: 2 },
+        scrolling: { mode: "virtual" }
+    });
+
+    clock.tick();
+
+    // assert
+    assert.equal(dataGrid.find(".dx-gridbase-container").attr("aria-rowcount"), 101, "aria-rowcount is correct");
+    assert.equal(dataGrid.find(".dx-gridbase-container").attr("aria-colcount"), 3, "aria-colcount is correct");
+
+    clock.restore();
+});
+
 QUnit.test("Freespace row have the correct height when using master-detail with virtual scrolling and container has fixed height", function(assert) {
     // arrange
     var array = [];

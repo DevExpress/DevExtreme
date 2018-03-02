@@ -80,6 +80,7 @@ var ResizingController = modules.ViewController.inherit({
 
                 if(changeType && changeType !== "updateSelection" && !isDelayed) {
                     when(resizeDeferred).done(function() {
+                        that._setAriaRowColCount();
                         that.component._fireContentReadyAction();
                     });
                 }
@@ -89,6 +90,15 @@ var ResizingController = modules.ViewController.inherit({
                 that._dataController.changed.add(that._refreshSizesHandler);
             });
         }
+    },
+
+    _setAriaRowColCount: function() {
+        var component = this.component,
+            ariaRowCount = this._columnHeadersView.getRowCount() + component.totalCount();
+        component.setAria({
+            "rowCount": ariaRowCount,
+            "colCount": component.columnCount()
+        }, component.$element().find(GRIDBASE_CONTAINER_CLASS));
     },
 
     _getBestFitWidths: function() {
@@ -630,7 +640,7 @@ var GridView = modules.View.inherit({
         $groupElement.addClass(GRIDBASE_CONTAINER_CLASS);
         $groupElement.toggleClass(that.addWidgetPrefix(BORDERS_CLASS), !!that.option("showBorders"));
 
-        that.component.setAria({ "role": "presentation" }, $rootElement);
+        that.setAria("role", "presentation", $rootElement);
 
         that.component.setAria({
             "role": this._getTableRoleName(),
