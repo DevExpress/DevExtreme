@@ -129,7 +129,6 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         cell.style.textAlign = alignment;
 
         var $cell = $(cell);
-        this.setAria("role", "gridcell", $cell);
 
         if(!typeUtils.isDefined(column.groupIndex) && column.cssClass) {
             $cell.addClass(column.cssClass);
@@ -152,22 +151,19 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         return $cell;
     },
 
-    _createRow: function(row) {
-        return $("<tr>")
-            .addClass(ROW_CLASS)
-            .attr("role", "row");
-    },
-
-    _getTableRoleName: function() {
-        return "grid";
+    _createRow: function(rowObject) {
+        var $element = $("<tr>").addClass(ROW_CLASS);
+        if(rowObject) {
+            this.setAria("role", "row", $element);
+        }
+        return $element;
     },
 
     _createTable: function(columns) {
         var that = this,
             $table = $("<table>")
                 .addClass(that.addWidgetPrefix(TABLE_CLASS))
-                .addClass(that.addWidgetPrefix(TABLE_FIXED_CLASS))
-                .attr("role", that._getTableRoleName());
+                .addClass(that.addWidgetPrefix(TABLE_FIXED_CLASS));
 
         if(columns) {
             $table.append(that._createColGroup(columns));
@@ -175,6 +171,9 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
                 // T198380
                 $table.append($("<thead>").append("<tr>"));
             }
+            that.setAria("role", "presentation", $table);
+        } else {
+            that.setAria("hidden", true, $table);
         }
 
         $table.append("<tbody>");
@@ -424,6 +423,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         options.row.cells = [];
 
         $row = that._createRow(options.row);
+
         that._renderCells($row, options);
         that._appendRow($table, $row);
         that._rowPrepared($row, extend({ columns: options.columns }, options.row));
@@ -450,16 +450,18 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
     _renderCell: function($row, options) {
         var that = this,
             cellOptions = that._getCellOptions(options),
-            column = options.column,
             $cell;
 
         options.row.cells.push(cellOptions);
 
         $cell = that._createCell(cellOptions);
 
-        // TODO move to cellPrepared
-        if(!column.command) {
-            that.setAria("label", that.localize("dxDataGrid-ariaColumn") + " " + column.caption + ", " + that.localize("dxDataGrid-ariaValue") + " " + cellOptions.text, $cell);
+        if(cellOptions.rowType !== "freeSpace") {
+            that.component.setAria({
+                "role": "gridcell",
+                "colindex": options.columnIndex + 1,
+                "selected": false
+            }, $cell);
         }
 
         that._renderCellContent($cell, cellOptions);
@@ -605,6 +607,8 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             .addClass(that.addWidgetPrefix(SCROLL_CONTAINER_CLASS))
             .append($table)
             .appendTo(that.element());
+
+        that.setAria("role", "presentation", $scrollContainer);
 
         return $scrollContainer;
     },

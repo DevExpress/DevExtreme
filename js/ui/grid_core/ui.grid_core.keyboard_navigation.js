@@ -23,6 +23,7 @@ var ROWS_VIEW_CLASS = "rowsview",
     MASTER_DETAIL_CELL_CLASS = "dx-master-detail-cell",
     DROPDOWN_EDITOR_OVERLAY_CLASS = "dx-dropdowneditor-overlay",
     COMMAND_EXPAND_CLASS = "dx-command-expand",
+    CELL_FOCUS_DISABLED_CLASS = "dx-cell-focus-disabled",
 
     INTERACTIVE_ELEMENTS_SELECTOR = "input:not([type='hidden']), textarea, a, [tabindex]",
 
@@ -114,9 +115,14 @@ var KeyboardNavigationController = core.ViewController.inherit({
             this._focusView(data.view, data.viewIndex);
             this._updateFocusedCellPosition($target);
             if(!this._editingController.isEditing() && !this._isMasterDetailCell($target)) {
-                this._applyTabIndexToElement(data.view.element());
-                data.view.element().find(".dx-row[tabIndex], .dx-row > td[tabIndex]").removeAttr("tabIndex");
-                eventsEngine.trigger($target, "focus");
+                var $targetParent = $target.parent();
+                if(isGroupRow($targetParent)) {
+                    $target = $targetParent;
+                }
+                data.view.element().find("." + CELL_FOCUS_DISABLED_CLASS + "[tabIndex]").removeClass(CELL_FOCUS_DISABLED_CLASS).removeAttr("tabIndex");
+                $target.addClass(CELL_FOCUS_DISABLED_CLASS);
+                this._applyTabIndexToElement($target);
+                eventsEngine.trigger($target, "focus", { hideBorders: true });
             }
         } else if($target.is("td")) {
             this._resetFocusedCell();

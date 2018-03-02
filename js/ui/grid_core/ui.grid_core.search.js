@@ -197,8 +197,6 @@ module.exports = {
                                             .addClass(that.addWidgetPrefix(SEARCH_PANEL_CLASS))
                                             .appendTo(container);
 
-                                    that.setAria("label", messageLocalization.format("dxDataGrid-ariaSearchInGrid"), $search);
-
                                     that.getController("editorFactory").createEditor($search, {
                                         width: searchPanelOptions.width,
                                         placeholder: searchPanelOptions.placeholder,
@@ -207,6 +205,11 @@ module.exports = {
                                         updateValueTimeout: FILTERING_TIMEOUT,
                                         setValue: function(value) {
                                             dataController.searchByText(value);
+                                        },
+                                        editorOptions: {
+                                            inputAttr: {
+                                                "aria-label": messageLocalization.format("dxDataGrid-ariaSearchInGrid")
+                                            }
                                         }
                                     });
 

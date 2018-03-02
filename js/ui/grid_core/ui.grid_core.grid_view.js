@@ -625,10 +625,13 @@ var GridView = modules.View.inherit({
 
         $groupElement.addClass(GRIDBASE_CONTAINER_CLASS);
         $groupElement.toggleClass(that.addWidgetPrefix(BORDERS_CLASS), !!that.option("showBorders"));
+
+        that.component.setAria({ "role": "presentation" }, $rootElement);
+
         that.component.setAria({
-            "role": "application",
+            "role": "grid",
             "label": messageLocalization.format(that._getWidgetAriaLabel())
-        }, $rootElement);
+        }, $groupElement);
 
         that._rootElement = $rootElement || that._rootElement;
 

@@ -165,7 +165,6 @@ QUnit.test('Draw headers', function(assert) {
         assert.equal(getText(cells[i]), 'Column ' + headerNumber, headerNumber + ' header text');
         assert.ok(cells.eq(i).hasClass('dx-cell-focus-disabled'), 'focus disabled on cell');
         assert.equal(cells.eq(i).attr('role'), 'columnheader', 'Header cell has correct role');
-        assert.equal(cells.eq(i).attr('aria-label'), this.columns[i].caption + ' Column', 'Header cell has correct label');
     }
 });
 
