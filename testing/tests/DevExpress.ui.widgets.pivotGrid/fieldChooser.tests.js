@@ -238,7 +238,7 @@ QUnit.test("Render Fields Tree", function(assert) {
     ]);
 });
 
-QUnit.test("Create treeView with draggable items", function(assert) {
+QUnit.test("Create areas with draggable items", function(assert) {
     var fields = [
         { dataField: "field1", caption: "Field 1", area: "row" }
     ];
