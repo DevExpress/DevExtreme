@@ -484,7 +484,7 @@ var TestPointerElement = TestElement.inherit({
         assert.strictEqual(gauge._subvalueIndicatorsSet._options.y, 307, "sub pointers set y");
     });
 
-    //T569322
+    // T569322
     QUnit.test("Indents of labels", function(assert) {
         new dxLinearGauge(this.container, {
             scale: {

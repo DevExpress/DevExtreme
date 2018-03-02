@@ -68,9 +68,9 @@ function adjustBarSeriesDimensionsCore(series, stackCount, options, seriesStackI
             correctPointCoordinates(points, parameters.width, getOffset(stackIndex, parameters));
         }
     } else {
-        //TODO: optimize everything
-        //collect every stack which we have
-        //every single series with no stack
+        // TODO: optimize everything
+        // collect every stack which we have
+        // every single series with no stack
         _each(series, function(i, singleSeries) {
             stackName = singleSeries.getStackName && singleSeries.getStackName();
             stackName = stackName || i.toString();

@@ -210,19 +210,19 @@ var google = window.google = {
                 google.directionsRendererOptions.mapSpecified = options.map instanceof google.maps.Map;
             }
 
-            this.getDirections = function() {};//()
-            this.getMap = function() {};//()
-            this.getPanel = function() {};//()
-            this.getRouteIndex = function() {};//()
-            this.setDirections = function() {};//(directions:DirectionsResult)
+            this.getDirections = function() {};// ()
+            this.getMap = function() {};// ()
+            this.getPanel = function() {};// ()
+            this.getRouteIndex = function() {};// ()
+            this.setDirections = function() {};// (directions:DirectionsResult)
             this.setMap = function(map) {
                 if(map === null) {
                     google.routeRemoved = true;
                 }
             };
-            this.setOptions = function() {};//(options:DirectionsRendererOptions)
-            this.setPanel = function() {};//(panel:Node)
-            this.setRouteIndex = function() {};//(routeIndex:number)
+            this.setOptions = function() {};// (options:DirectionsRendererOptions)
+            this.setPanel = function() {};// (panel:Node)
+            this.setRouteIndex = function() {};// (routeIndex:number)
         },
         DirectionsResult: function() {
             this.routes = [];

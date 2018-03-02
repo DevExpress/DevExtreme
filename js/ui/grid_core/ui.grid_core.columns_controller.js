@@ -1171,7 +1171,7 @@ module.exports = {
                     }
 
                     if(!notFireEvent) {
-                        //T346972
+                        // T346972
                         if(inArray(optionName, USER_STATE_FIELD_NAMES) < 0 && optionName !== "visibleWidth") {
                             columns = that.option("columns");
                             column = columns && columns[columnIndex];
@@ -1198,7 +1198,7 @@ module.exports = {
                     command: "expand",
                     width: "auto",
                     cssClass: COMMAND_EXPAND_CLASS,
-                    allowEditing: false, //T165142
+                    allowEditing: false, // T165142
                     allowGrouping: false,
                     allowSorting: false,
                     allowResizing: false,

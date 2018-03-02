@@ -275,7 +275,7 @@ QUnit.test("Subscriptions on update if wheel zoom enabled", function(assert) {
 QUnit.test("dxpointermove without series over", function(assert) {
     this.series.stub("getNeighborPoint").returns(this.point);
 
-    //act
+    // act
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50 }));
     this.clock.tick(this.tracker.__trackerDelay);
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 102, pageY: 40 }));
@@ -283,7 +283,7 @@ QUnit.test("dxpointermove without series over", function(assert) {
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 2, pageY: 5 }));
     this.clock.tick(this.tracker.__trackerDelay);
 
-    //assert
+    // assert
     assert.ok(!this.series.stub("hover").called, "showHoverState was not called");
     assert.ok(!this.series.stub("hoverPoint").called, "hover point was not called");
     assert.ok(!this.series.stub("clearPointHover").called);
@@ -291,7 +291,7 @@ QUnit.test("dxpointermove without series over", function(assert) {
 });
 
 QUnit.test("dxpointermove without series over when shared tooltip", function(assert) {
-    //Arrange
+    // Arrange
     var series2 = createSeries(),
         point2 = createPoint(series2);
 
@@ -304,11 +304,11 @@ QUnit.test("dxpointermove without series over when shared tooltip", function(ass
     this.options.tooltip.stub("isShared").returns(true);
     this.updateTracker([this.series, series2]);
 
-    //Act
+    // Act
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50, pointerType: "mouse" }));
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 102, pageY: 40, pointerType: "mouse" }));
 
-    //Assert
+    // Assert
     assert.ok(!series2.stub("hover").called);
     assert.ok(!point2.stub("hover").called);
     assert.ok(!this.series.stub("hover").called);
@@ -323,7 +323,7 @@ QUnit.test("dxpointermove without series over when shared tooltip", function(ass
 });
 
 QUnit.test("dxpointermove without series over when shared tooltip. another series", function(assert) {
-    //Arrange
+    // Arrange
     var series2 = createSeries(),
         point2 = createPoint(series2);
 
@@ -335,11 +335,11 @@ QUnit.test("dxpointermove without series over when shared tooltip. another serie
     this.options.tooltip.stub("isShared").returns(true);
     this.updateTracker([this.series, series2]);
 
-    //Act
+    // Act
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50, pointerType: "mouse" }));
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 102, pageY: 40, pointerType: "mouse" }));
 
-    //Assert
+    // Assert
     assert.ok(!this.series.stub("hover").called);
     assert.ok(!this.point.stub("hover").called);
     assert.ok(!series2.stub("hover").called);
@@ -353,7 +353,7 @@ QUnit.test("dxpointermove without series over when shared tooltip. another serie
 });
 
 QUnit.test("dxpointermove without series over when shared tooltip, series has two points", function(assert) {
-    //Arrange
+    // Arrange
     var series2 = createSeries(),
         point2 = createPoint(series2),
         point1 = createPoint(series2);
@@ -369,10 +369,10 @@ QUnit.test("dxpointermove without series over when shared tooltip, series has tw
     this.updateTracker([this.series, series2]);
 
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 30, pointerType: "mouse" }));
-    //Act
+    // Act
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 80, pointerType: "mouse" }));
 
-    //Assert
+    // Assert
     assert.ok(!this.series.stub("hover").called);
     assert.ok(!this.point.stub("hover").called);
     assert.ok(!series2.stub("hover").called);
@@ -384,14 +384,14 @@ QUnit.test("dxpointermove without series over when shared tooltip, series has tw
 });
 
 QUnit.test("dxpointermove on series", function(assert) {
-    //arrange
+    // arrange
     this.series.getNeighborPoint.withArgs(97, 45).returns(this.point);
 
-    //Act
+    // Act
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50, target: this.seriesGroup.element }));
     this.clock.tick(this.tracker.__trackerDelay);
 
-    //Assert
+    // Assert
     assert.ok(this.series.hover.calledOnce);
 
     assert.equal(this.options.tooltip.stub("show").callCount, 1, "tooltip show");
@@ -402,10 +402,10 @@ QUnit.test("dxpointermove on series", function(assert) {
 });
 
 QUnit.test("move tooltip on one series", function(assert) {
-    //arrange
+    // arrange
     this.series.getNeighborPoint.withArgs(97, 45).returns(this.point);
 
-    //Act
+    // Act
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50, target: this.seriesGroup.element }));
     this.clock.tick(this.tracker.__trackerDelay);
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50, target: this.seriesGroup.element }));
@@ -413,25 +413,25 @@ QUnit.test("move tooltip on one series", function(assert) {
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50, target: this.seriesGroup.element }));
     this.clock.tick(this.tracker.__trackerDelay);
 
-    //Assert
+    // Assert
     assert.equal(this.options.tooltip.stub("show").callCount, 1, "tooltip showing");
     assert.equal(this.options.tooltip.stub("hide").callCount, 0, "tooltip hiding");
 });
 
 QUnit.test("move on series between two point", function(assert) {
-    //arrange
+    // arrange
     var point1 = createPoint(this.series);
 
     this.series.getNeighborPoint.withArgs(97, 45).returns(this.point);
     this.series.getNeighborPoint.withArgs(92, 45).returns(this.point);
     this.point.stub("getCrosshairData").withArgs(92, 45).returns({ x: 92, y: 45, xValue: 10, yValue: 20 });
 
-    //Act
+    // Act
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50, target: this.seriesGroup.element, pointerType: "mouse" }));
     this.clock.tick(this.tracker.__trackerDelay);
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 95, pageY: 50, target: this.seriesGroup.element, pointerType: "mouse" }));
 
-    //Assert
+    // Assert
     assert.ok(this.series.hover.calledOnce);
     assert.deepEqual(this.series.stub("updateHover").getCall(0).args, [97, 45], "updateHover args, first time");
     assert.deepEqual(this.series.stub("updateHover").getCall(1).args, [92, 45], "updateHover args, second time");
@@ -446,15 +446,15 @@ QUnit.test("move on series between two point", function(assert) {
 });
 
 QUnit.test("dxpointermove on series, mouse out of the chart", function(assert) {
-    //arrange
+    // arrange
     this.series.getNeighborPoint.withArgs(97, 45).returns(this.point);
 
-    //Act
+    // Act
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50, target: this.seriesGroup.element }));
     this.clock.tick(this.tracker.__trackerDelay);
     $(document).trigger(getEvent("dxpointermove", { pageX: 500, pageY: 500 }));
 
-    //Assert
+    // Assert
     assert.strictEqual(this.series.clearHover.callCount, 1);
     assert.ok(this.series.clearHover.calledAfter(this.series.hover));
 
@@ -466,25 +466,25 @@ QUnit.test("dxpointermove on series, mouse out of the chart", function(assert) {
 });
 
 QUnit.test("dxpointermove over point", function(assert) {
-    //act
+    // act
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50, target: this.pointElement.element }));
 
-    //assert
+    // assert
     assert.ok(!this.series.hover.called, "series was not hoveres");
     assert.ok(this.point.hover.calledOnce, "point hovered");
     assert.equal(this.options.tooltip.stub("show").callCount, 1, "tooltip show");
 });
 
 QUnit.test("dxpointermove over point. move crosshair on point", function(assert) {
-    //arrange
+    // arrange
     this.series.getNeighborPoint.withArgs(97, 45).returns(this.point);
 
-    //act
+    // act
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50, target: this.pointElement.element }));
     this.point.stub("getCrosshairData").returns({ x: 80, y: 30, xValue: 10, yValue: 20 });
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 80, pageY: 50, target: this.pointElement.element }));
 
-    //assert
+    // assert
     assert.equal(this.options.crosshair.show.callCount, 2);
     strictEqualForAllFields(assert, this.options.crosshair.show.getCall(0).args[0], { point: this.point, x: 97, y: 45 });
     strictEqualForAllFields(assert, this.options.crosshair.show.getCall(1).args[0], { point: this.point, x: 77, y: 45 });
@@ -492,112 +492,112 @@ QUnit.test("dxpointermove over point. move crosshair on point", function(assert)
 });
 
 QUnit.test("move crosshair, point is invisible", function(assert) {
-    //arrange
+    // arrange
     this.point.stub("isVisible").returns(false);
     this.series.getNeighborPoint.withArgs(97, 45).returns(this.point);
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 2, pageY: 1, target: this.pointElement.element }));
 
-    //assert
+    // assert
     assert.equal(this.options.crosshair.show.callCount, 0);
 });
 
 QUnit.test("dxpointermove over point but out of a canvas (point on the border)", function(assert) {
-    //arrange
+    // arrange
     this.series.getNeighborPoint.withArgs(97, 45).returns(this.point);
 
-    //act
+    // act
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 2, pageY: 1, target: this.pointElement.element }));
 
-    //assert
+    // assert
     assert.ok(this.point.hover.calledOnce, "point hovered");
     assert.equal(this.options.tooltip.stub("show").callCount, 1, "tooltip showing");
 });
 
 QUnit.test("mouseover on series - mouseout from series", function(assert) {
-    //arrange
+    // arrange
     this.series.getNeighborPoint.withArgs(99, 40).returns(this.point);
 
-    //act
+    // act
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50, target: this.seriesGroup.element, pointerType: "mouse" }));
     this.clock.tick(this.tracker.__trackerDelay);
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 102, pageY: 45, pointerType: "mouse" }));
     this.clock.tick(this.tracker.__trackerDelay);
 
-    //assert
+    // assert
     assert.strictEqual(this.series.clearHover.callCount, 1);
     assert.ok(this.series.clearHover.calledAfter(this.series.hover));
     assert.ok(this.point.hover.calledOnce, "point hovered");
 });
 
 QUnit.test("mouse out from series before hover", function(assert) {
-    //act
+    // act
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50, target: this.seriesGroup.element }));
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 102, pageY: 45 }));
     this.clock.tick(this.tracker.__trackerDelay);
 
-    //assert
+    // assert
     assert.strictEqual(this.series.stub("hover").callCount, 0, "setHoverState");
 });
 
 QUnit.test("mouse move over series after hover series", function(assert) {
-    //act
+    // act
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50, target: this.seriesGroup.element, pointerType: "mouse" }));
     this.clock.tick(this.tracker.__trackerDelay);
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50, target: this.seriesGroup.element, pointerType: "mouse" }));
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 99, pageY: 50, target: this.seriesGroup.element, pointerType: "mouse" }));
     this.clock.tick(this.tracker.__trackerDelay);
 
-    //assert
+    // assert
     assert.strictEqual(this.series.hover.callCount, 1);
     assert.strictEqual(this.series.stub("clearHover").callCount, 0);
     assert.deepEqual(this.series.updateHover.lastCall.args, [96, 45]);
 });
 
 QUnit.test("mouse move over series cross point after hover series", function(assert) {
-    //act
+    // act
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50, target: this.seriesGroup.element, pointerType: "mouse" }));
     this.clock.tick(this.tracker.__trackerDelay);
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50, target: this.pointElement.element, pointerType: "mouse" }));
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 99, pageY: 50, target: this.seriesGroup.element, pointerType: "mouse" }));
 
-    //assert
+    // assert
     assert.strictEqual(this.series.hover.callCount, 1);
     assert.strictEqual(this.series.stub("clearHover").callCount, 0);
     assert.strictEqual(this.series.stub("hoverPoint").callCount, 0, "point not hovered");
 });
 
 QUnit.test("mouse move over series then mouse move on point", function(assert) {
-    //act
+    // act
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50, target: this.seriesGroup.element }));
     this.clock.tick(this.tracker.__trackerDelay);
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50, target: this.pointElement.element }));
     this.clock.tick(this.tracker.__trackerDelay);
 
-    //assert
+    // assert
     assert.strictEqual(this.series.clearHover.callCount, 1);
     assert.ok(this.series.clearHover.calledAfter(this.series.hover));
     assert.ok(this.point.hover.calledOnce, "point hovered");
 });
 
 QUnit.test("mouse move over series and point", function(assert) {
-    //arrange
+    // arrange
     this.series.getPointByCoord.withArgs(97, 45).returns(this.point);
 
-    //act
+    // act
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50, target: this.seriesGroup.element }));
 
-    //assert
+    // assert
     assert.strictEqual(this.series.stub("hover").callCount, 0, "series not hovered");
     assert.ok(this.point.hover.calledOnce, "point hovered");
 });
 
 QUnit.test("mouseout from canvas after dxpointermove on point", function(assert) {
-    //act
+    // act
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50, target: this.pointElement.element, pointerType: "mouse" }));
     this.clock.tick(this.tracker.__trackerDelay);
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 2, pageY: 5, pointerType: "mouse" }));
 
-    //assert
+    // assert
     assert.strictEqual(this.point.clearHover.callCount, 1, "point unhovered");
     assert.ok(this.point.clearHover.calledAfter(this.point.hover));
     assert.ok(this.options.tooltip.stub("hide").called, "tooltip hide");
@@ -632,29 +632,29 @@ QUnit.test("mouseout from series to point another series", function(assert) {
 });
 
 QUnit.test("Mouseout from canvas after dxpointermove on series. Tooltip disabled", function(assert) {
-    //arrange
+    // arrange
     this.options.tooltip.isEnabled.returns(false);
     this.tracker.update(this.options);
     this.options.tooltip.stub("hide").reset();
 
-    //act
+    // act
     $(this.seriesGroup.element).trigger(getEvent("showpointtooltip"), this.point);
 
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50, target: this.seriesGroup.element }));
     this.clock.tick(this.tracker.__trackerDelay);
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 2, pageY: 5 }));
 
-    //assert
+    // assert
     assert.ok(this.options.tooltip.show.calledOnce);
     assert.ok(!this.options.tooltip.stub("hide").called);
 });
 
 QUnit.test("mouseout from canvas after dxpointermove on series some times. Check canvas calculation", function(assert) {
-    //arrange
+    // arrange
     var that = this;
     this.series.getNeighborPoint.returns(this.point);
 
-    //assert
+    // assert
     $(this.renderer.root.element).on("dxpointermove", function(e) {
         var testSettings = (e.test || {});
         that.clock.tick(that.tracker.__trackerDelay);
@@ -677,7 +677,7 @@ QUnit.test("mouseout from canvas after dxpointermove on series some times. Check
         that.series.stub("clearHover").reset();
     });
 
-    //act
+    // act
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", {
         pageX: 100, pageY: 50, target: this.seriesGroup.element, test: {
             action: "hover",
@@ -757,12 +757,12 @@ QUnit.test("mouseout from canvas after dxpointermove on series some times. Check
             name: "bottom out"
         }, pointerType: "mouse"
     }));
-    //teardown
+    // teardown
     $(this.renderer.root.element).off();
 });
 
 QUnit.test("dxpointermove when there are two series", function(assert) {
-    //arrange
+    // arrange
     var series2 = createSeries(),
         pointSeries2 = createPoint(series2),
         series2Element = this.renderer.g();
@@ -776,7 +776,7 @@ QUnit.test("dxpointermove when there are two series", function(assert) {
 
     this.tracker.update(this.options);
 
-    //act
+    // act
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50, target: this.seriesGroup.element }));
     this.clock.tick(this.tracker.__trackerDelay);
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 80, pageY: 40, target: series2Element.element }));
@@ -784,7 +784,7 @@ QUnit.test("dxpointermove when there are two series", function(assert) {
     delete series2Element.element["chart-data-series"];
     $(series2Element.element).remove();
 
-    //assert
+    // assert
     assert.strictEqual(this.series.hover.callCount, 1);
     assert.ok(this.series.clearHover.calledAfter(this.series.hover));
     assert.strictEqual(series2.hover.callCount, 1);
@@ -792,7 +792,7 @@ QUnit.test("dxpointermove when there are two series", function(assert) {
 });
 
 QUnit.test("dxpointermove from point one series to point other series", function(assert) {
-    //arrange
+    // arrange
     var series2 = createSeries(),
         pointSeries2 = createPoint(series2),
         point2Element = this.renderer.g();
@@ -805,7 +805,7 @@ QUnit.test("dxpointermove from point one series to point other series", function
 
     this.tracker.update(this.options);
 
-    //act
+    // act
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50, target: this.pointElement.element }));
     this.clock.tick(this.tracker.__trackerDelay);
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 80, pageY: 40, target: point2Element.element }));
@@ -813,14 +813,14 @@ QUnit.test("dxpointermove from point one series to point other series", function
     delete point2Element.element["chart-data-point"];
     $(point2Element.element).remove();
 
-    //assert
+    // assert
     assert.strictEqual(this.series.stub("clearHover").callCount, 0);
     assert.strictEqual(pointSeries2.hover.callCount, 1);
     assert.ok(this.options.tooltip.stub("show").calledTwice);
 });
 
 QUnit.test("dxpointermove from point one series to other series", function(assert) {
-    //arrange
+    // arrange
     var series2 = createSeries(),
         series2Element = this.renderer.g();
 
@@ -831,22 +831,22 @@ QUnit.test("dxpointermove from point one series to other series", function(asser
 
     this.tracker.update(this.options);
 
-    //act
+    // act
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50, target: this.pointElement.element }));
     this.clock.tick(this.tracker.__trackerDelay);
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 80, pageY: 40, target: series2Element.element }));
     this.clock.tick(this.tracker.__trackerDelay);
 
-    //assert
+    // assert
     assert.strictEqual(this.point.stub("clearHover").callCount, 1);
     assert.strictEqual(series2.hover.callCount, 1);
 });
 
 QUnit.test("touch without series over", function(assert) {
-    //arrange
+    // arrange
     this.series.stub("getNeighborPoint").returns(this.point);
 
-    //act
+    // act
     $(this.renderer.root.element).trigger(getEvent("dxpointerdown", { pageX: 100, pageY: 50 }));
     this.clock.tick(this.tracker.__trackerDelay);
     $(this.renderer.root.element).trigger(getEvent("dxpointerdown", { pageX: 102, pageY: 40 }));
@@ -854,19 +854,19 @@ QUnit.test("touch without series over", function(assert) {
     $(this.renderer.root.element).trigger(getEvent("dxpointerdown", { pageX: 2, pageY: 5 }));
     this.clock.tick(this.tracker.__trackerDelay);
 
-    //assert
+    // assert
     assert.ok(!this.series.stub("hover").called, "series not hovered");
     assert.ok(!this.series.stub("hoverPoint").called, "point not hovered");
     assert.ok(!this.options.crosshair.show.called, "crosshair showing");
 });
 
 QUnit.test("touch over point", function(assert) {
-    //arrange
-    //act
+    // arrange
+    // act
     $(this.renderer.root.element).trigger(getEvent("dxpointerdown", { pageX: 100, pageY: 50, target: this.pointElement.element }));
     this.clock.tick(this.tracker.__trackerDelay);
 
-    //assert
+    // assert
     assert.ok(!this.series.hover.called, "series was not hoveres");
     assert.ok(this.point.hover.calledOnce, "point hovered");
     assert.equal(this.options.tooltip.stub("show").callCount, 1, "tooltip show");
@@ -885,7 +885,7 @@ QUnit.test("dxpointermove on series, click", function(assert) {
     var clickEvent = getEvent("dxclick", { pageX: 100, pageY: 50, target: this.seriesGroup.element });
     this.series.getPointByCoord.withArgs(97, 45).returns(this.point);
 
-    //Act
+    // Act
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50, target: this.seriesGroup.element }));
     $(this.renderer.root.element).trigger(clickEvent);
 
@@ -903,7 +903,7 @@ QUnit.test("dxpointermove on series, click, pointClick with cancel seriesClick",
     var clickEvent = getEvent("dxclick", { pageX: 100, pageY: 50, target: this.seriesGroup.element });
     this.series.getPointByCoord.withArgs(97, 45).returns(this.point);
 
-    //Act
+    // Act
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50, target: this.seriesGroup.element }));
     $(this.renderer.root.element).trigger(clickEvent);
 
@@ -920,7 +920,7 @@ QUnit.test("dxpointermove on series, click far from point ", function(assert) {
     var clickEvent = getEvent("dxclick", { pageX: 100, pageY: 50, target: this.seriesGroup.element });
     this.series.getPointByCoord.withArgs(97, 45).returns(null);
 
-    //Act
+    // Act
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50, target: this.seriesGroup.element }));
     $(this.renderer.root.element).trigger(clickEvent);
 
@@ -935,7 +935,7 @@ QUnit.test("stop propagation event after dispose series on pointClick", function
 
     this.options.eventTrigger = function(eventName, event, complete) {
         if(eventName === "pointClick") {
-            series.getOptions.returns(null); //emulate disposing
+            series.getOptions.returns(null); // emulate disposing
             complete();
         } else if(eventName === "seriesClick") {
             assert.ok(false, "unexpected seriesClick");
@@ -945,7 +945,7 @@ QUnit.test("stop propagation event after dispose series on pointClick", function
     this.tracker = this.createTracker(this.options, this.canvases, this.tooltip);
     this.series.getPointByCoord.withArgs(97, 45).returns(this.point);
 
-    //Act
+    // Act
     $(this.renderer.root.element).trigger(clickEvent);
 
     assert.ok(this.tracker);
@@ -966,7 +966,7 @@ QUnit.test("no stop propagation event after dispose tracker on pointClick, if se
     };
 
     this.tracker = this.createTracker(this.options, this.canvases, this.tooltip);
-    //Act
+    // Act
     $(this.renderer.root.element).trigger(clickEvent);
 
     assert.ok(seriesClicked);
@@ -976,7 +976,7 @@ QUnit.test("dxpointermove on series, mouseout from series but in point tracker r
     var clickEvent = getEvent("dxclick", { pageX: 90, pageY: 50, pointerType: "mouse" });
     this.series.getPointByCoord.withArgs(87, 45).returns(this.point);
 
-    //Act
+    // Act
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50, target: this.seriesGroup.element, pointerType: "mouse" }));
     this.clock.tick(this.tracker.__trackerDelay);
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 90, pageY: 50, pointerType: "mouse" }));
@@ -1002,7 +1002,7 @@ QUnit.test("On touch devices on click get series from clicked target, not sticke
 
     this.tracker.update(this.options);
 
-    //Act
+    // Act
     $(this.renderer.root.element).trigger(getEvent("dxpointerdown", { pageX: 100, pageY: 50, target: series2Element.element, pointerType: "touch" }));
     this.clock.tick(this.tracker.__trackerDelay);
     $(this.renderer.root.element).trigger(clickEvent);
@@ -1015,7 +1015,7 @@ QUnit.test("dxpointermove on series, mouseout from series click", function(asser
     var clickEvent = getEvent("dxclick", { pageX: 90, pageY: 50 });
     this.series.getPointByCoord.withArgs(87, 45).returns(null);
 
-    //Act
+    // Act
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50, target: this.seriesGroup.element }));
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 90, pageY: 50 }));
     $(this.renderer.root.element).trigger(clickEvent);
@@ -1068,22 +1068,22 @@ QUnit.test("hold on series", function(assert) {
 });
 
 QUnit.test("mouseover on legend item", function(assert) {
-    //arrange
+    // arrange
     this.legend.coordsIn.withArgs(97, 45).returns(true);
     this.legend.getItemByCoord.withArgs(97, 45).returns({
         id: 0
     });
 
-    //act
+    // act
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50 }));
 
-    //assert
+    // assert
     assert.ok(this.series.stub("hover").calledOnce);
     assert.deepEqual(this.series.hover.lastCall.args, ["includepoints"]);
 });
 
 QUnit.test("mouseover on legend item. ExcludePoints mode", function(assert) {
-    //arrange
+    // arrange
     this.legend.getOptions.returns({ hoverMode: "excludepoints" });
 
     this.legend.coordsIn.withArgs(97, 45).returns(true);
@@ -1091,16 +1091,16 @@ QUnit.test("mouseover on legend item. ExcludePoints mode", function(assert) {
         id: 0
     });
 
-    //act
+    // act
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50 }));
 
-    //assert
+    // assert
     assert.ok(this.series.stub("hover").calledOnce);
     assert.deepEqual(this.series.hover.lastCall.args, ["excludepoints"]);
 });
 
 QUnit.test("mouseover on legend item. none mode", function(assert) {
-    //arrange
+    // arrange
     this.legend.getOptions.returns({ hoverMode: "none" });
 
     this.legend.coordsIn.withArgs(97, 45).returns(true);
@@ -1108,16 +1108,16 @@ QUnit.test("mouseover on legend item. none mode", function(assert) {
         id: 0
     });
 
-    //act
+    // act
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50 }));
 
-    //assert
+    // assert
     assert.ok(this.series.stub("hover").calledOnce);
     assert.deepEqual(this.series.hover.lastCall.args, ["none"]);
 });
 
 QUnit.test("mouseover on legend item. not valid mode", function(assert) {
-    //arrange
+    // arrange
     this.legend.getOptions.returns({ hoverMode: "allargumentpoints" });
 
     this.legend.coordsIn.withArgs(97, 45).returns(true);
@@ -1125,27 +1125,27 @@ QUnit.test("mouseover on legend item. not valid mode", function(assert) {
         id: 0
     });
 
-    //act
+    // act
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50 }));
 
-    //assert
+    // assert
     assert.ok(this.series.stub("hover").calledOnce);
     assert.deepEqual(this.series.hover.lastCall.args, ["includepoints"]);
 });
 
 QUnit.test("mouseout from legend in canvas", function(assert) {
-    //arrange
+    // arrange
     this.series.getNeighborPoint.withArgs(87, 45).returns(this.point);
     this.legend.coordsIn.withArgs(97, 45).returns(true);
     this.legend.getItemByCoord.withArgs(97, 45).returns({
         id: 0
     });
 
-    //act
+    // act
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50 }));
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 90, pageY: 50 }));
 
-    //assert
+    // assert
     assert.equal(this.series.hover.callCount, 1);
     assert.strictEqual(this.series.clearHover.callCount, 1);
 });
@@ -1292,7 +1292,7 @@ QUnit.test("stop propagation event after dispose series on legendClick", functio
 
     this.options.eventTrigger = function(eventName, event, complete) {
         if(eventName === "legendClick") {
-            series.getOptions.returns(null); //emulate series disposing
+            series.getOptions.returns(null); // emulate series disposing
             complete();
         } else if(eventName === "seriesClick") {
             assert.ok(false, "unexpected seriesClick");
@@ -1301,7 +1301,7 @@ QUnit.test("stop propagation event after dispose series on legendClick", functio
 
     this.tracker = this.createTracker(this.options, this.canvases, this.tooltip);
 
-    //Act
+    // Act
     $(this.renderer.root.element).trigger(clickEvent);
 
     assert.ok(this.tracker);
@@ -1328,7 +1328,7 @@ QUnit.test("no stop propagation event after dispose tracker on legendClick, if s
 
     this.tracker = this.createTracker(this.options, this.canvases, this.tooltip);
 
-    //Act
+    // Act
     $(this.renderer.root.element).trigger(clickEvent);
 
     assert.ok(seriesClicked);
@@ -1519,7 +1519,7 @@ QUnit.test("pointermove from axis element to out of canvas", function(assert) {
 });
 
 QUnit.test("pointermove from hovered point to axis element", function(assert) {
-    //arrange
+    // arrange
     var point1 = createPoint(this.series, "argument1"),
         axisElement1 = this.renderer.g(),
         axisElement2 = this.renderer.g(),
@@ -1534,14 +1534,14 @@ QUnit.test("pointermove from hovered point to axis element", function(assert) {
 
     pointElement.element["chart-data-point"] = point1;
 
-    //act
+    // act
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 90, pageY: 40, target: pointElement.element }));
     this.clock.tick(this.tracker.__trackerDelay);
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50, target: axisElement1.element }));
 
     delete pointElement.element["chart-data-point"];
 
-    //assert
+    // assert
     assert.strictEqual(point1.clearHover.callCount, 1);
     assert.strictEqual(this.series.stub("notify").callCount, 1);
     assert.strictEqual(this.series.notify.lastCall.args[0].action, "pointHover");
@@ -1551,7 +1551,7 @@ QUnit.test("pointermove from hovered point to axis element", function(assert) {
 });
 
 QUnit.test("pointermove from axis element to point", function(assert) {
-    //arrange
+    // arrange
     var point1 = createPoint(this.series, "argument1"),
         axisElement1 = this.renderer.g(),
         axisElement2 = this.renderer.g(),
@@ -1566,14 +1566,14 @@ QUnit.test("pointermove from axis element to point", function(assert) {
 
     pointElement.element["chart-data-point"] = point1;
 
-    //act
+    // act
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50, target: axisElement1.element }));
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 40, target: pointElement.element }));
     this.clock.tick(this.tracker.__trackerDelay);
 
     delete pointElement.element["chart-data-point"];
 
-    //assert
+    // assert
     assert.strictEqual(this.series.stub("notify").callCount, 2);
     assert.strictEqual(this.series.notify.lastCall.args[0].action, "clearPointHover");
     assert.equal(this.series.stub("hover").callCount, 0, "setHoverState");
@@ -1581,17 +1581,17 @@ QUnit.test("pointermove from axis element to point", function(assert) {
 });
 
 QUnit.test("without series", function(assert) {
-    //arrange
+    // arrange
     this.updateTracker(undefined);
 
-    //act
+    // act
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50 }));
     this.clock.tick(this.tracker.__trackerDelay);
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 80, pageY: 50 }));
     this.clock.tick(this.tracker.__trackerDelay);
     $(this.renderer.root.element).trigger(getEvent("dxclick", { pageX: 80, pageY: 50 }));
     this.clock.tick(this.tracker.__trackerDelay);
-    //Assert
+    // Assert
     assert.ok(this.tracker);
 });
 
@@ -1666,7 +1666,7 @@ QUnit.module("Update tracker", {
 });
 
 QUnit.test("update with old series", function(assert) {
-    //arrange
+    // arrange
     var point = createPoint(this.series),
         series2 = createSeries(),
         series = [this.series, series2];
@@ -1678,17 +1678,17 @@ QUnit.test("update with old series", function(assert) {
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50, target: this.seriesGroup.element }));
     this.clock.tick(this.tracker.__trackerDelay);
 
-    //act
+    // act
     this.tracker.updateSeries(series);
 
-    //assert
+    // assert
     assert.strictEqual(this.series.clearHover.callCount, 1);
     assert.strictEqual(this.series.clearSelection.callCount, 1);
     assert.strictEqual(point.clearSelection.callCount, 1);
 });
 
 QUnit.test("update with old series when point is hovered", function(assert) {
-    //arrange
+    // arrange
     var point = createPoint(this.series),
         series = [this.series];
 
@@ -1699,17 +1699,17 @@ QUnit.test("update with old series when point is hovered", function(assert) {
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50, target: this.seriesGroup.element }));
     this.clock.tick(this.tracker.__trackerDelay);
 
-    //act
+    // act
     this.tracker.updateSeries(series);
 
-    //assert
+    // assert
     assert.strictEqual(this.series.clearSelection.callCount, 1);
     assert.strictEqual(point.clearHover.callCount, 1);
     assert.strictEqual(point.clearSelection.callCount, 1);
 });
 
 QUnit.test("update with old series when point is hovered. point was disposed", function(assert) {
-    //arrange
+    // arrange
     var point = createPoint(this.series),
         series = [this.series];
 
@@ -1720,16 +1720,16 @@ QUnit.test("update with old series when point is hovered. point was disposed", f
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50, target: this.seriesGroup.element }));
     this.clock.tick(this.tracker.__trackerDelay);
     point.getOptions.returns(null);
-    //act
+    // act
     this.tracker.updateSeries(series);
 
-    //assert
+    // assert
     assert.strictEqual(this.series.clearSelection.callCount, 1);
     assert.strictEqual(point.stub("clearHover").callCount, 0);
 });
 
 QUnit.test("Work after update with old series", function(assert) {
-    //arrange
+    // arrange
     var point = createPoint(this.series),
         series = [this.series];
 
@@ -1745,11 +1745,11 @@ QUnit.test("Work after update with old series", function(assert) {
     this.series.getNeighborPoint.withArgs(97, 45).returns(null);
 
     this.series.hover.reset();
-    //act
+    // act
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50, target: this.seriesGroup.element }));
     this.clock.tick(this.tracker.__trackerDelay);
 
-    //assert
+    // assert
     assert.strictEqual(this.series.hover.callCount, 1, "setHoverState");
 
     assert.equal(this.options.tooltip.stub("show").callCount, 1, "tooltip showing");
@@ -1759,19 +1759,19 @@ QUnit.test("Work after update with old series", function(assert) {
 
 QUnit.test("Emulate rendering chart in hidden container. Call UpdateSeries twice, but update only once during last updateTracker session", function(assert) {
     assert.expect(0);
-    //arrange
+    // arrange
     var series = [this.series];
 
     var tracker = new trackers.ChartTracker(this.options);
     tracker.updateSeries(series);
 
-    //act
+    // act
     tracker.updateSeries(series);
     tracker.update(this.options);
 });
 
 QUnit.test("update with new series", function(assert) {
-    //arrange
+    // arrange
     var point = createPoint(this.series),
         newSeries = createSeries();
 
@@ -1783,15 +1783,15 @@ QUnit.test("update with new series", function(assert) {
     this.options.tooltip.stub("hide").reset();
     this.options.tooltip.stub("show").reset();
 
-    //act
+    // act
     this.tracker.updateSeries([newSeries]);
 
-    //assert
+    // assert
     assert.ok(this.options.tooltip.stub("hide").calledOnce, "tooltip hiding");
 });
 
 QUnit.test("Work after update with new series", function(assert) {
-    //arrange
+    // arrange
     var point = createPoint(this.series),
         newSeries = createSeries();
 
@@ -1807,16 +1807,16 @@ QUnit.test("Work after update with new series", function(assert) {
 
     this.tracker.updateSeries([newSeries]);
 
-    //Act
+    // Act
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50, target: this.seriesGroup.element }));
     this.clock.tick(this.tracker.__trackerDelay);
 
-    //Assert
+    // Assert
     assert.equal(newSeries.hover.callCount, 1, "setHoverState");
 });
 
 QUnit.test("T206518, update after hover series", function(assert) {
-    //arrange
+    // arrange
     var point = createPoint(this.series),
         newSeries = createSeries();
 
@@ -1826,28 +1826,28 @@ QUnit.test("T206518, update after hover series", function(assert) {
 
     newSeries.isNew = true;
 
-    //act
+    // act
     this.tracker.updateSeries([newSeries]);
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50 }));
 
-    //assert
+    // assert
     assert.equal(this.series.getNeighborPoint.callCount, 1, "getNeighborPoint");
 });
 
 QUnit.test("T206518, update before hover series", function(assert) {
-    //arrange
+    // arrange
     var point = createPoint(this.series),
         newSeries = createSeries();
 
     this.series.getNeighborPoint.returns(point);
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50, target: this.seriesGroup.element }));
 
-    //act
+    // act
     this.tracker.updateSeries([newSeries]);
     this.clock.tick(this.tracker.__trackerDelay);
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50 }));
 
-    //assert
+    // assert
     assert.equal(this.series.getNeighborPoint.callCount, 1, "getNeighborPoint");
 });
 
@@ -1887,27 +1887,27 @@ QUnit.test("Prepared just once", function(assert) {
         clickEvent = getEvent("dxclick", { pageX: 100, pageY: 50, target: this.seriesGroup.element });
     this.series.getPointByCoord.withArgs(97, 45).returns(point);
 
-    //Act
+    // Act
     this.tracker.update(this.options);
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50, target: this.seriesGroup.element }));
     $(this.renderer.root.element).trigger(clickEvent);
-    //Assert
+    // Assert
     assert.equal(this.options.eventTrigger.withArgs("pointClick").callCount, 1);
 
 });
 
 QUnit.test("repairTooltip", function(assert) {
-    //arrange
+    // arrange
     var point = createPoint(this.series);
 
     $(this.options.seriesGroup.element).trigger(getEvent("showpointtooltip"), point);
     this.options.tooltip.show.reset();
     point.getTooltipParams.reset();
 
-    //act
+    // act
     this.tracker.repairTooltip();
 
-    //assert
+    // assert
     assert.ok(this.options.tooltip.show.calledOnce);
     assert.ok(point.getTooltipParams.calledOnce);
 });
@@ -1917,9 +1917,9 @@ QUnit.test('Can be disposed', function(assert) {
     this.renderer.root.off.reset();
     this.seriesGroup.off.reset();
 
-    //Act
+    // Act
     this.tracker.dispose();
-    //Assert
+    // Assert
     $(document).trigger(getEvent("dxpointermove"));
     $(document).trigger(getEvent("dxpointerdown", { pageX: 100, pageY: 50 }));
     $(document).trigger(getEvent("dxpointerup", { pageX: 100, pageY: 50 }));
@@ -2130,12 +2130,12 @@ QUnit.test("dispose tracker doesn't affect other trackers", function(assert) {
         },
         otherTracker = this.createTracker(options);
 
-    //act
+    // act
     otherTracker.dispose();
     $(this.renderer.root.element).trigger(getEvent("dxpointerdown", { pageX: 30, pointers: [{ pageX: 30, pageY: 40 }] }));
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 50, pointers: [{ pageX: 50, pageY: 40 }] }));
     $(document).trigger(getEvent("dxpointerup", {}));
-    //assert
+    // assert
     assert.deepEqual(this.options.chart.zoomArgument.lastCall.args, ["minArg", "maxArg", true]);
 });
 
@@ -2697,22 +2697,22 @@ QUnit.module("Root events. Pie chart", {
 });
 
 QUnit.test("mousemove without point over", function(assert) {
-    //arrange
+    // arrange
     this.series.stub("getNeighborPoint").returns(this.point);
 
-    //act
+    // act
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50 }));
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 102, pageY: 40 }));
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 2, pageY: 5 }));
 
-    //assert
+    // assert
     assert.strictEqual(this.series.stub("hover").callCount, 0);
     assert.strictEqual(this.series.stub("hoverPoint").callCount, 0);
     assert.ok(!this.options.tooltip.stub("show").called);
     assert.ok(!this.series.stub("clearPointHover").called);
 });
 
-//T582760
+// T582760
 QUnit.test("hover point after hover legend", function(assert) {
     this.legend.coordsIn.withArgs(87, 35).returns(true);
     this.legend.getItemByCoord.withArgs(87, 35).returns({ id: 0, argument: "argument1", argumentIndex: 11 });
@@ -2726,10 +2726,10 @@ QUnit.test("hover point after hover legend", function(assert) {
 });
 
 QUnit.test("mouseover on point", function(assert) {
-    //Act
+    // Act
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50, target: this.seriesGroup.element }));
 
-    //Assert
+    // Assert
     assert.strictEqual(this.series.stub("hover").callCount, 0);
     assert.ok(this.point.hover.calledOnce);
     assert.ok(!this.point.stub("clearHover").called);
@@ -2738,11 +2738,11 @@ QUnit.test("mouseover on point", function(assert) {
 });
 
 QUnit.test("mousemove on point ", function(assert) {
-    //Act
+    // Act
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50, target: this.seriesGroup.element }));
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50, target: this.seriesGroup.element }));
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50, target: this.seriesGroup.element }));
-    //Assert
+    // Assert
     assert.strictEqual(this.series.stub("hover").callCount, 0);
     assert.strictEqual(this.point.hover.callCount, 1);
     assert.ok(!this.series.stub("clearPointHover").called);
@@ -2752,10 +2752,10 @@ QUnit.test("mousemove on point ", function(assert) {
 
 QUnit.test("mouseout from point", function(assert) {
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50, target: this.seriesGroup.element }));
-    //Act
+    // Act
 
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 120, pageY: 40 }));
-    //Assert
+    // Assert
     assert.ok(!this.series.stub("hover").called);
     assert.strictEqual(this.point.stub("hover").callCount, 1);
     assert.strictEqual(this.point.stub("clearHover").callCount, 1);
@@ -2776,12 +2776,12 @@ QUnit.test("mousemove from hovered point to other point", function(assert) {
     this.legendCallback.withArgs(this.point).returns("pointLegendCallback");
 
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50, target: this.seriesGroup.element }));
-    //Act
+    // Act
 
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 120, pageY: 40, target: element.element }));
 
     delete element.element["chart-data-point"];
-    //Assert
+    // Assert
     assert.equal(this.point.hover.callCount, 1, "hover point");
     assert.equal(point1.hover.callCount, 1, "hover point");
     assert.ok(point1.hover.lastCall.calledAfter(this.point.hover.lastCall));
@@ -2945,7 +2945,7 @@ QUnit.test("without series", function(assert) {
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50 }));
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 80, pageY: 50 }));
     $(this.renderer.root.element).trigger(getEvent("dxclick", { pageX: 80, pageY: 50 }));
-    //Assert
+    // Assert
     assert.ok(this.tracker);
 });
 
@@ -2968,7 +2968,7 @@ QUnit.test("legend item click. One series", function(assert) {
 
     var legendClick = this.options.eventTrigger.withArgs("legendClick");
 
-    //assert
+    // assert
     assert.ok(legendClick.calledOnce, "legendClick");
     assert.strictEqual(legendClick.lastCall.args[1].target, "argument1", "argument");
     assert.deepEqual(legendClick.lastCall.args[1].points, [this.point], "points");
@@ -2976,7 +2976,7 @@ QUnit.test("legend item click. One series", function(assert) {
 });
 
 QUnit.test("legend item click, several series", function(assert) {
-    //arrange
+    // arrange
     var argument = "arg",
         extraSeries = createSeries(),
         legendClick,
@@ -2993,11 +2993,11 @@ QUnit.test("legend item click, several series", function(assert) {
 
     var event = getEvent("dxclick", { pageX: 100, pageY: 50 });
 
-    //act
+    // act
     $(this.renderer.root.element).trigger(event);
     legendClick = this.options.eventTrigger.withArgs("legendClick");
 
-    //assert
+    // assert
     assert.ok(legendClick.calledOnce, "legendClick");
     assert.strictEqual(legendClick.lastCall.args[1].target, argument, "argument");
     assert.deepEqual(legendClick.lastCall.args[1].points, points, "points");
@@ -3065,11 +3065,11 @@ QUnit.test('tooltip hidden on point unhover, pointHover', function(assert) {
     var that = this;
     that.that.tracker.showHoldTooltip = false;
 
-    //act
+    // act
     $(that.that.options.seriesTrackerGroup.element).trigger(getEvent("mouseover"));
     $(that.that.options.seriesTrackerGroup.element).trigger(getEvent("mousemove", { pageX: 15, pageY: 20 }));
 
-    //act
+    // act
     assert.ok(that.that.tracker);
 });
 
@@ -3113,7 +3113,7 @@ QUnit.test('show Tooltip event when there is tooltip on another point. TooltipHi
     this.tooltip.stub("hide").reset();
     this.tooltip.stub("show").reset();
 
-    //act
+    // act
     this.environment.options.seriesGroup.trigger(getEvent("showpointtooltip"), this.environment.point1);
 
     assert.ok(this.tooltip.stub("hide").calledOnce);
@@ -3179,7 +3179,7 @@ QUnit.test("repairTooltip. Point got invisible, tooltipHidden not fired", functi
     this.tooltip.stub("hide").reset();
     this.tooltip.stub("show").reset();
 
-    //act
+    // act
     this.tracker.repairTooltip();
 
     assert.equal(this.tooltip.hide.callCount, 1);
@@ -3195,7 +3195,7 @@ QUnit.test("repairTooltip. Point got visible after invisible, tooltipShown not f
     this.tooltip.stub("hide").reset();
     this.tooltip.stub("show").reset();
 
-    //act
+    // act
     this.tracker.repairTooltip();
 
     assert.equal(this.tooltip.show.callCount, 1);
@@ -3210,7 +3210,7 @@ QUnit.test("show tooltip on point. Point with tooltip is invisible", function(as
     this.tooltip.stub("hide").reset();
     this.tooltip.stub("show").reset();
 
-    //act
+    // act
     $(this.environment.options.seriesGroup.element).trigger(getEvent("showpointtooltip"), this.environment.point2);
 
     assert.equal(this.tooltip.hide.callCount, 1);
@@ -3221,8 +3221,7 @@ QUnit.test("show tooltip on point. Point with tooltip is invisible", function(as
 
 });
 
-/////////////////////////////////
-///Utility functions
+// Utility functions
 function createCompleteTracker(options) {
     var that = {},
         renderer = new vizMocks.Renderer(),

@@ -461,7 +461,7 @@ QUnit.module("Utils", function() {
         assert.equal(field.dataField, "State");
     });
 
-    //T603218
+    // T603218
     QUnit.test("getNormalizedFields", function(assert) {
         var normalizedFields = utils.getNormalizedFields([{
             dataField: "Weight",
@@ -1008,7 +1008,7 @@ QUnit.module("Lookup Value", function() {
         });
     });
 
-    //T597637
+    // T597637
     QUnit.test("lookup with ODataStore shouldn't send getValueText query when value is empty", function(assert) {
         var fakeStore = {
             load: function() {

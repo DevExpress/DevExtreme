@@ -401,7 +401,7 @@ var DropDownMenu = Widget.inherit({
 
         this._list = this._createComponent($content, this.option("menuWidget"), listConfig);
 
-        //todo: replace with option
+        // todo: replace with option
         this._list._getAriaTarget = (function() {
             return this.$element();
         }).bind(this);

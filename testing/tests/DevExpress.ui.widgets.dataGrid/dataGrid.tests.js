@@ -129,7 +129,7 @@ QUnit.test("columns option is not changed after initialization when columnAutoWi
         dataSource: [{ field1: 1, field2: 2 }]
     });
 
-    //assert
+    // assert
     assert.ok(dataGrid, "dataGrid is created");
     assert.deepEqual(dataGrid.option("columns"), ["field1", { dataField: "field2" }], "columns option is not changed");
 });
@@ -180,9 +180,9 @@ QUnit.test("Correct start scroll position when RTL", function(assert) {
     clock.restore();
 });
 
-//T388508
+// T388508
 QUnit.test("Correct start scroll position when RTL and detached container of the datagrid", function(assert) {
-    //arrange, act
+    // arrange, act
     var clock = sinon.useFakeTimers(),
         $dataGrid = $("<div/>").dxDataGrid({
             width: 100,
@@ -200,17 +200,17 @@ QUnit.test("Correct start scroll position when RTL and detached container of the
     $dataGrid.dxDataGrid("instance").updateDimensions();
     scrollLeft = $(".dx-scrollable").dxScrollable("instance").scrollLeft();
 
-    //assert
+    // assert
     assert.equal(scrollLeft, 100);
     clock.restore();
 });
 
-//T475354
+// T475354
 QUnit.test("Correct start scroll position when RTL and columnAutoWidth option is enabled", function(assert) {
-    //arrange
+    // arrange
     var clock = sinon.useFakeTimers();
 
-    //act
+    // act
     createDataGrid({
         width: 100,
         rtlEnabled: true,
@@ -222,15 +222,15 @@ QUnit.test("Correct start scroll position when RTL and columnAutoWidth option is
     });
     clock.tick();
 
-    //assert
+    // assert
     assert.equal($(".dx-scrollable").dxScrollable("instance").scrollLeft(), 100);
 
     clock.restore();
 });
 
-//T388508
+// T388508
 QUnit.test("Scroll position after grouping when RTL", function(assert) {
-    //arrange
+    // arrange
     var clock = sinon.useFakeTimers(),
         done = assert.async(),
         dataGrid = createDataGrid({
@@ -244,18 +244,18 @@ QUnit.test("Scroll position after grouping when RTL", function(assert) {
     clock.tick();
     scrollable = $(".dx-scrollable").dxScrollable("instance");
 
-    //assert
+    // assert
     assert.equal(scrollable.scrollLeft(), 300, "scroll position");
     clock.restore();
 
     scrollable.scrollTo({ x: 100 });
 
     setTimeout(function() {
-        //act
+        // act
         dataGrid.columnOption("field1", "groupIndex", 0);
 
         setTimeout(function() {
-            //assert
+            // assert
             assert.ok($(dataGrid.$element()).find(".dx-datagrid-rowsview").find("tbody > tr").first().hasClass("dx-group-row"));
             assert.equal(scrollable.scrollLeft(), 100, "scroll position after grouping");
             done();
@@ -270,7 +270,7 @@ QUnit.test("Scroller state", function(assert) {
     assert.ok(!dataGrid.getTopVisibleRowData());
 });
 
-//T532629
+// T532629
 QUnit.test("Vertical scrollbar spacing should not be added when widget does not have height", function(assert) {
     var clock = sinon.useFakeTimers();
 
@@ -283,18 +283,18 @@ QUnit.test("Vertical scrollbar spacing should not be added when widget does not 
         columns: ["column"]
     });
 
-    //act
+    // act
     clock.tick();
 
-    //assert
+    // assert
     assert.equal($(dataGrid.$element()).find(".dx-datagrid-headers").css("padding-right"), "0px");
 
     clock.restore();
 });
 
-//T608687
+// T608687
 QUnit.test("Horizontal scrollbar should not be shown if container height is not integer", function(assert) {
-    //act
+    // act
     var dataGrid = createDataGrid({
         width: 300.8,
         dataSource: [{}],
@@ -306,22 +306,22 @@ QUnit.test("Horizontal scrollbar should not be shown if container height is not 
         columns: ["column1", "column2", "column3"]
     });
 
-    //assert
+    // assert
     assert.strictEqual(dataGrid.getScrollbarWidth(true), 0);
 });
 
 QUnit.test("noDataText option", function(assert) {
-    //act
+    // act
     var noDataText = "Custom no data",
         dataGrid = $("#dataGrid").dxDataGrid({
             noDataText: noDataText
         }).dxDataGrid("instance");
-    //assert
+    // assert
     assert.strictEqual(dataGrid.getView("rowsView").option("noDataText"), noDataText, "valid noDataText in rowsView options");
 });
 
 QUnit.test("selectedRowKeys option", function(assert) {
-    //act
+    // act
     var dataGrid = $("#dataGrid").dxDataGrid({
         loadingTimeout: undefined,
         dataSource: {
@@ -334,7 +334,7 @@ QUnit.test("selectedRowKeys option", function(assert) {
         },
         selectedRowKeys: [2, 3, 4]
     }).dxDataGrid("instance");
-    //assert
+    // assert
     assert.deepEqual(dataGrid.getSelectedRowKeys(), [2, 3], "isSelected keys");
     assert.deepEqual(dataGrid.getSelectedRowsData(), [{ id: 2, value: "value 2" }, { id: 3, value: "value 3" }], "isSelected items");
     assert.equal($("#dataGrid").find(".dx-row.dx-selection").length, 2, "isSelected rows");
@@ -389,9 +389,9 @@ QUnit.test("Change row expand state on row click", function(assert) {
 
 });
 
-//T553981
+// T553981
 QUnit.test("Row expand state should not be changed on row click when scrolling mode is 'infinite'", function(assert) {
-    //arrange
+    // arrange
     var dataGrid = $("#dataGrid").dxDataGrid({
         columns: ["field1", "field2"],
         loadingTimeout: undefined,
@@ -407,22 +407,22 @@ QUnit.test("Row expand state should not be changed on row click when scrolling m
         }
     }).dxDataGrid("instance");
 
-    //assert
+    // assert
     assert.ok(dataGrid.isRowExpanded(["1"]), "first group row is expanded");
 
-    //act
+    // act
     $(dataGrid.$element())
         .find(".dx-datagrid-rowsview .dx-group-row")
         .first()
         .trigger("dxclick");
 
-    //assert
+    // assert
     assert.ok(dataGrid.isRowExpanded(["1"]), "first group row is expanded");
 });
 
-//T601360
+// T601360
 QUnit.test("Update cell after infinit scrolling and editing must processing after all pages has been loaded", function(assert) {
-    //arrange
+    // arrange
     var items = [{ value: "0" }, { value: "1" }, { value: "2" }, { value: "3" }],
         clock = sinon.useFakeTimers(),
         dataGrid = $("#dataGrid").dxDataGrid({
@@ -450,13 +450,13 @@ QUnit.test("Update cell after infinit scrolling and editing must processing afte
 
     var firstCellTextInDone;
 
-    //act
+    // act
     dataGrid.refresh().done(function() {
         firstCellTextInDone = $(dataGrid.getCellElement(0, 0)).text();
     });
     clock.tick(20);
 
-    //assert
+    // assert
     assert.equal(firstCellTextInDone, "test");
 
     clock.restore();
@@ -585,7 +585,7 @@ QUnit.test("Check grouping context menu operability", function(assert) {
         .eq(1)
         .trigger("dxcontextmenu");
 
-    $(".dx-datagrid .dx-menu-item")  //click on "group by this"
+    $(".dx-datagrid .dx-menu-item")  // click on "group by this"
         .eq(3)
         .trigger("dxclick");
 
@@ -599,7 +599,7 @@ QUnit.test("Check grouping context menu operability", function(assert) {
         .eq(1)
         .trigger("dxcontextmenu");
 
-    $(".dx-datagrid .dx-menu-item")  //click on "clear grouping"
+    $(".dx-datagrid .dx-menu-item")  // click on "clear grouping"
         .eq(4)
         .trigger("dxclick");
 
@@ -610,9 +610,9 @@ QUnit.test("Check grouping context menu operability", function(assert) {
     clock.restore();
 });
 
-//T315857
+// T315857
 QUnit.test("Editing should work with classes as data objects", function(assert) {
-    //arrange
+    // arrange
     function DataItem(id, text) {
         this.id = id;
         this.text = text;
@@ -708,7 +708,7 @@ QUnit.test("Check grouping context menu operability (ungroup one column)", funct
         .eq(3)
         .trigger("dxcontextmenu");
 
-    $(".dx-datagrid .dx-menu-item")  //click on "Ungroup this"
+    $(".dx-datagrid .dx-menu-item")  // click on "Ungroup this"
         .eq(1)
         .trigger("dxclick");
 
@@ -744,7 +744,7 @@ QUnit.test("Ungroup one column via group row context menu", function(assert) {
         .first()
         .trigger("dxcontextmenu");
 
-    $(".dx-datagrid .dx-menu-item")  //click on "Ungroup this"
+    $(".dx-datagrid .dx-menu-item")  // click on "Ungroup this"
         .eq(0)
         .trigger("dxclick");
 
@@ -775,7 +775,7 @@ QUnit.test("Ungroup all columns via group row context menu", function(assert) {
         .eq(1)
         .trigger("dxcontextmenu");
 
-    $(".dx-datagrid .dx-menu-item")  //click on "clear groupings"
+    $(".dx-datagrid .dx-menu-item")  // click on "clear groupings"
         .eq(1)
         .trigger("dxclick");
 
@@ -858,10 +858,10 @@ QUnit.test("dataGrid first data rendering", function(assert) {
     assert.equal(templatesRenderedCount, 2, "templates rendered once");
 });
 
-//T292587
+// T292587
 QUnit.test("headerCellTemplate when no dataSource", function(assert) {
     var templatesRenderedCount = 0;
-    //act
+    // act
     var $element = $("#dataGrid").dxDataGrid({
         columns: [{ dataField: "field1", headerCellTemplate: function(container) {
             assert.equal(typeUtils.isRenderer(container), !!config().useJQuery, "headerCellElement is correct");
@@ -869,14 +869,14 @@ QUnit.test("headerCellTemplate when no dataSource", function(assert) {
         } }]
     });
 
-    //assert
+    // assert
     assert.equal(templatesRenderedCount, 1, "headerCellTemplate rendered once");
     assert.equal($element.find(".field1-header").length, 1, "headerCellTemplate attached to grid");
 });
 
-//T410328
+// T410328
 QUnit.test("Edit cell by click when grid is created in dxForm", function(assert) {
-    //arrange
+    // arrange
     var dataGrid,
         clock = sinon.useFakeTimers();
 
@@ -895,17 +895,17 @@ QUnit.test("Edit cell by click when grid is created in dxForm", function(assert)
         }]
     });
 
-    //act
+    // act
     $(dataGrid.$element().find(".dx-data-row > td").eq(0)).trigger("dxclick");
     clock.tick();
     clock.restore();
 
-    //assert
+    // assert
     assert.equal($(dataGrid.$element()).find(TEXTEDITOR_INPUT_SELECTOR).length, 1, "one editor is shown");
 });
 
 QUnit.test("Resize columns", function(assert) {
-    //arrange
+    // arrange
     var dataGrid = $("#dataGrid").dxDataGrid({
             width: 470,
             selection: { mode: "multiple", showCheckBoxesMode: "always" },
@@ -921,7 +921,7 @@ QUnit.test("Resize columns", function(assert) {
         rowsCols,
         resizeController;
 
-    //act
+    // act
     resizeController = instance.getController("columnsResizer");
     resizeController._isResizing = true;
     resizeController._targetPoint = { columnIndex: 1 };
@@ -935,7 +935,7 @@ QUnit.test("Resize columns", function(assert) {
         }
     });
 
-    //assert
+    // assert
     headersCols = $(".dx-datagrid-headers" + " col");
     rowsCols = $(".dx-datagrid-rowsview col");
     assert.equal($(headersCols[1]).css("width"), "150px", "width of two column - headers view");
@@ -944,9 +944,9 @@ QUnit.test("Resize columns", function(assert) {
     assert.equal($(rowsCols[2]).css("width"), "50px", "width of three column - rows view");
 });
 
-//T571282
+// T571282
 QUnit.test("Resizing columns should work correctly when scrolling mode is 'virtual' and wordWrapEnabled is true", function(assert) {
-    //arrange
+    // arrange
     var generateData = function(count) {
         var result = [],
             i;
@@ -980,16 +980,16 @@ QUnit.test("Resizing columns should work correctly when scrolling mode is 'virtu
         instance = dataGrid.dxDataGrid("instance"),
         rowsView = instance.getView("rowsView");
 
-    //assert
+    // assert
     rowHeight = rowsView._rowHeight;
     assert.ok(rowHeight > 50, "rowHeight > 50");
     assert.strictEqual(instance.getVisibleRows().length, 4, "row count");
 
-    //arrange
+    // arrange
     instance.pageIndex(10);
 
     setTimeout(function() {
-        //act
+        // act
         resizeController = instance.getController("columnsResizer");
         resizeController._isResizing = true;
         resizeController._targetPoint = { columnIndex: 1 };
@@ -1008,7 +1008,7 @@ QUnit.test("Resizing columns should work correctly when scrolling mode is 'virtu
             }
         });
 
-        //assert
+        // assert
         assert.strictEqual(instance.pageIndex(), 10, "current page index");
 
         setTimeout(function() {
@@ -1021,9 +1021,9 @@ QUnit.test("Resizing columns should work correctly when scrolling mode is 'virtu
     }, 200);
 });
 
-//T596274
+// T596274
 QUnit.testInActiveWindow("Resize a column with the 'between' filter should not throw an exception", function(assert) {
-    //arrange
+    // arrange
     var resizeController,
         $filterRangeContent,
         clock = sinon.useFakeTimers();
@@ -1050,10 +1050,10 @@ QUnit.testInActiveWindow("Resize a column with the 'between' filter should not t
         $filterRangeContent.focus();
         clock.tick();
 
-        //assert
+        // assert
         assert.strictEqual($(".dx-overlay-wrapper.dx-datagrid-filter-range-overlay").length, 1, "has overlay wrapper");
 
-        //act
+        // act
         resizeController = instance.getController("columnsResizer");
         resizeController._startResizing({
             event: {
@@ -1078,11 +1078,11 @@ QUnit.testInActiveWindow("Resize a column with the 'between' filter should not t
             }
         });
 
-        //assert
+        // assert
         assert.strictEqual(instance.columnOption(0, "width"), 150);
         assert.strictEqual(instance.columnOption(1, "width"), 50);
     } catch(e) {
-        //assert
+        // assert
         assert.ok(false, "exception");
     } finally {
         fx.off = false;
@@ -1090,9 +1090,9 @@ QUnit.testInActiveWindow("Resize a column with the 'between' filter should not t
     }
 });
 
-//T527538
+// T527538
 QUnit.test("Grid's height should be updated during column resizing if column headers height is changed", function(assert) {
-    //arrange
+    // arrange
     var $dataGrid = $("#dataGrid").dxDataGrid({
             height: 300,
             wordWrapEnabled: true,
@@ -1105,7 +1105,7 @@ QUnit.test("Grid's height should be updated during column resizing if column hea
 
     var columnHeadersViewHeight = instance.getView("columnHeadersView").getHeight();
 
-    //act
+    // act
     var resizeController = instance.getController("columnsResizer");
     resizeController._isResizing = true;
     resizeController._targetPoint = { columnIndex: 0 };
@@ -1119,7 +1119,7 @@ QUnit.test("Grid's height should be updated during column resizing if column hea
         }
     });
 
-    //assert
+    // assert
     assert.ok(instance.getView("columnHeadersView").getHeight() > columnHeadersViewHeight, "column headers height is changed");
     assert.equal($dataGrid.children().height(), 300, "widget's height is not changed");
     assert.equal(instance.columnOption(0, "width"), 30, "column 0 width");
@@ -1127,7 +1127,7 @@ QUnit.test("Grid's height should be updated during column resizing if column hea
 });
 
 QUnit.test("Add row to empty dataGrid - freeSpaceRow element is hidden", function(assert) {
-    //arrange
+    // arrange
     var clock = sinon.useFakeTimers(),
         $grid = $("#dataGrid").dxDataGrid({
             loadingTimeout: undefined,
@@ -1142,11 +1142,11 @@ QUnit.test("Add row to empty dataGrid - freeSpaceRow element is hidden", functio
         }),
         gridInstance = $grid.dxDataGrid("instance");
 
-    //act
+    // act
     gridInstance.insertRow();
     clock.tick();
 
-    //assert
+    // assert
     var $freeSpaceRow = $grid.find(".dx-freespace-row"),
         $noDataElement = $grid.find(".dx-datagrid-nodata");
 
@@ -1157,7 +1157,7 @@ QUnit.test("Add row to empty dataGrid - freeSpaceRow element is hidden", functio
 });
 
 QUnit.test("Lose focus on start of resize columns", function(assert) {
-    //arrange
+    // arrange
     var dataGrid = $("#dataGrid").dxDataGrid({
             width: 470,
             selection: { mode: "multiple", showCheckBoxesMode: "always" },
@@ -1173,7 +1173,7 @@ QUnit.test("Lose focus on start of resize columns", function(assert) {
         resizeController = instance.getController("columnsResizer"),
         isLoseFocusCalled = false;
 
-    //act
+    // act
     editorFactoryController.loseFocus = function() { isLoseFocusCalled = true; };
     resizeController._isReadyResizing = true;
     resizeController._targetPoint = { columnIndex: 1 };
@@ -1191,12 +1191,12 @@ QUnit.test("Lose focus on start of resize columns", function(assert) {
         }
     });
 
-    //assert
+    // assert
     assert.ok(isLoseFocusCalled, "loseFocus is called");
 });
 
 QUnit.test("Resize is not called after editCell", function(assert) {
-    //arrange
+    // arrange
     var clock = sinon.useFakeTimers(),
         dataGrid = $("#dataGrid").dxDataGrid({
             dataSource: {
@@ -1220,10 +1220,10 @@ QUnit.test("Resize is not called after editCell", function(assert) {
     assert.equal(resizingController.resize.callCount, 1, "resize call count before editCell");
     assert.equal(rowsView.synchronizeRows.callCount, 1, "synchronizeRows call count before editCell");
 
-    //act
+    // act
     dataGrid.editCell(0, 0);
 
-    //assert
+    // assert
     assert.ok(dataGrid.getController("editing").isEditing());
     assert.equal(resizingController.resize.callCount, 1, "resize call count after editCell");
     assert.equal(rowsView.synchronizeRows.callCount, 2, "synchronizeRows call count after editCell");
@@ -1232,7 +1232,7 @@ QUnit.test("Resize is not called after editCell", function(assert) {
 });
 
 QUnit.test("Resize columns and move column to another position in virtual scrolling mode (T222418)", function(assert) {
-    //arrange
+    // arrange
     var clock = sinon.useFakeTimers(),
         dataGrid = $("#dataGrid").dxDataGrid({
             width: 470,
@@ -1250,7 +1250,7 @@ QUnit.test("Resize columns and move column to another position in virtual scroll
         resizeController,
         columnController;
 
-    //act
+    // act
     resizeController = instance.getController("columnsResizer");
     resizeController._isResizing = true;
     resizeController._targetPoint = { columnIndex: 0 };
@@ -1270,7 +1270,7 @@ QUnit.test("Resize columns and move column to another position in virtual scroll
     columnController.moveColumn(0, 3);
     clock.tick();
 
-    //assert
+    // assert
     colGroups = $(".dx-datagrid colgroup");
 
     for(var i = 0; i < colGroups.length; i++) {
@@ -1284,10 +1284,10 @@ QUnit.test("Resize columns and move column to another position in virtual scroll
     clock.restore();
 });
 
-//T356865
+// T356865
 QUnit.test("Resize grid after column resizing", function(assert) {
     $("#container").width(200);
-    //arrange
+    // arrange
     var dataGrid = $("#dataGrid").dxDataGrid({
             loadingTimeout: undefined,
             allowColumnResizing: true,
@@ -1299,7 +1299,7 @@ QUnit.test("Resize grid after column resizing", function(assert) {
         headersCols,
         resizeController;
 
-    //act
+    // act
     resizeController = instance.getController("columnsResizer");
     resizeController._isResizing = true;
     resizeController._targetPoint = { columnIndex: 0 };
@@ -1317,7 +1317,7 @@ QUnit.test("Resize grid after column resizing", function(assert) {
     $("#container").width(400);
     instance.updateDimensions();
 
-    //assert
+    // assert
     assert.strictEqual(instance.$element().width(), 400);
     assert.strictEqual(instance.columnOption(0, "width"), "60.000%");
     assert.strictEqual(instance.columnOption(1, "width"), "40.000%");
@@ -1335,19 +1335,19 @@ QUnit.test("Resize grid after column resizing", function(assert) {
 
 });
 
-//T590907
+// T590907
 QUnit.test("Change column width via option method", function(assert) {
-    //arrange
+    // arrange
     var dataGrid = $("#dataGrid").dxDataGrid({
         loadingTimeout: undefined,
         dataSource: [{}],
         columns: [{ dataField: "column1", width: 100 }, { dataField: "column2", width: 100 }]
     }).dxDataGrid("instance");
 
-    //act
+    // act
     dataGrid.option("columns[0].width", 1);
 
-    //assert
+    // assert
     assert.strictEqual(dataGrid.$element().width(), 101);
     assert.strictEqual(dataGrid.columnOption(0, "visibleWidth"), 1);
     assert.strictEqual(dataGrid.columnOption(1, "visibleWidth"), "auto");
@@ -1363,7 +1363,7 @@ function isColumnHidden($container, index) {
 }
 
 QUnit.test("Columns hiding - columnHidingEnabled is true", function(assert) {
-    //arrange
+    // arrange
     $("#container").width(200);
 
     var clock = sinon.useFakeTimers(),
@@ -1380,7 +1380,7 @@ QUnit.test("Columns hiding - columnHidingEnabled is true", function(assert) {
     clock.tick();
     $visibleColumns = $(instance.$element().find(".dx-header-row td"));
 
-    //act
+    // act
     assert.equal($visibleColumns.length, 3, "only 1 column is visible");
     assert.ok(!isColumnHidden(dataGrid, 0), "first column is shown");
     assert.ok(isColumnHidden(dataGrid, 1), "second column is hidden");
@@ -1394,7 +1394,7 @@ QUnit.test("Columns hiding - columnHidingEnabled is true", function(assert) {
 
     $visibleColumns = $(instance.$element().find(".dx-header-row td"));
 
-    //assert
+    // assert
     assert.equal($visibleColumns.length, 3, "2 columns are visible");
     assert.ok(!isColumnHidden(dataGrid, 0), "first column is shown");
     assert.ok(!isColumnHidden(dataGrid, 1), "second column is shown");
@@ -1407,7 +1407,7 @@ QUnit.test("Columns hiding - columnHidingEnabled is true", function(assert) {
 });
 
 QUnit.test("Columns hiding - hidingPriority", function(assert) {
-    //arrange
+    // arrange
     $("#container").width(200);
 
     var clock = sinon.useFakeTimers(),
@@ -1423,7 +1423,7 @@ QUnit.test("Columns hiding - hidingPriority", function(assert) {
     clock.tick();
     $visibleColumns = $(instance.$element().find(".dx-header-row td"));
 
-    //act
+    // act
     assert.ok(isColumnHidden(dataGrid, 0), "first column is hidden");
     assert.ok(!isColumnHidden(dataGrid, 1), "second column is shown");
     assert.ok(!isColumnHidden(dataGrid, 2), "adaptive column is shown");
@@ -1436,7 +1436,7 @@ QUnit.test("Columns hiding - hidingPriority", function(assert) {
     clock.tick();
     $visibleColumns = $(instance.$element().find(".dx-header-row td"));
 
-    //assert
+    // assert
     assert.ok(!isColumnHidden(dataGrid, 0), "first column is shown");
     assert.ok(!isColumnHidden(dataGrid, 1), "second column is shown");
     assert.ok(isColumnHidden(dataGrid, 2), "adaptive column is hidden");
@@ -1449,7 +1449,7 @@ QUnit.test("Columns hiding - hidingPriority", function(assert) {
 });
 
 QUnit.test("Columns hiding - grouping with hidingPriority", function(assert) {
-    //arrange
+    // arrange
     $("#container").width(600);
 
     var clock = sinon.useFakeTimers(),
@@ -1466,7 +1466,7 @@ QUnit.test("Columns hiding - grouping with hidingPriority", function(assert) {
 
     $visibleColumns = $(instance.$element().find(".dx-header-row td:not(.dx-datagrid-group-space)"));
 
-    //act
+    // act
     assert.equal($visibleColumns.length, 3, "2 column are visible");
     assert.equal($visibleColumns.eq(0).text(), "Last Name", "first is 'lastName' column");
     assert.equal($visibleColumns.eq(1).text(), "Age", "second is 'lastName' column");
@@ -1477,7 +1477,7 @@ QUnit.test("Columns hiding - grouping with hidingPriority", function(assert) {
     clock.tick();
     $visibleColumns = $(instance.$element().find(".dx-header-row td:not(.dx-datagrid-group-space)"));
 
-    //assert
+    // assert
     assert.ok(!isColumnHidden(dataGrid, 0), "first column is shown");
     assert.ok(isColumnHidden(dataGrid, 1), "second column is hidden");
     assert.ok(!isColumnHidden(dataGrid, 2), "adaptive column is shown");
@@ -1489,7 +1489,7 @@ QUnit.test("Columns hiding - grouping with hidingPriority", function(assert) {
 });
 
 QUnit.test("Columns hiding - column without priority must stay (hidingPriority)", function(assert) {
-    //arrange
+    // arrange
     $("#container").width(80);
     var clock = sinon.useFakeTimers(),
         dataGrid = $("#dataGrid").dxDataGrid({
@@ -1505,7 +1505,7 @@ QUnit.test("Columns hiding - column without priority must stay (hidingPriority)"
 
     $visibleColumns = $(instance.$element().find(".dx-header-row td"));
 
-    //act
+    // act
     assert.ok(isColumnHidden(dataGrid, 0), "first column is hidden");
     assert.ok(isColumnHidden(dataGrid, 1), "second column is hidden");
     assert.ok(!isColumnHidden(dataGrid, 2), "third column is shown");
@@ -1525,7 +1525,7 @@ QUnit.test("Columns hiding - column without priority must stay (hidingPriority)"
 
     $visibleColumns = $(instance.$element().find(".dx-header-row td"));
 
-    //assert
+    // assert
     assert.ok(!isColumnHidden(dataGrid, 0), "first column is shown");
     assert.ok(!isColumnHidden(dataGrid, 1), "second column is shown");
     assert.ok(!isColumnHidden(dataGrid, 2), "third column is shown");
@@ -1538,9 +1538,9 @@ QUnit.test("Columns hiding - column without priority must stay (hidingPriority)"
     assert.equal(adaptiveColumnsController.getHidingColumnsQueue().length, 2, "There is 2 columns in hiding queue");
     clock.restore();
 });
-//TODO jsdmitry: wait fix T381435
-/*QUnit.test("Columns hiding - do not hide fixed columns", function(assert) {
-    //arrange
+// TODO jsdmitry: wait fix T381435
+/* QUnit.test("Columns hiding - do not hide fixed columns", function(assert) {
+    // arrange
     $("#container").width(150);
 
     var clock = sinon.useFakeTimers(),
@@ -1558,7 +1558,7 @@ QUnit.test("Columns hiding - column without priority must stay (hidingPriority)"
     clock.tick();
     $cells = $(instance.$element().find(".dx-header-row").first().find("td"));
 
-    //act
+    // act
     assert.equal($cells.length, 3, "columns count");
     assert.equal($cells.eq(0).text(), "First Name", "First is 'firstName' column");
     assert.equal($cells.eq(1).text(), "Age", "Second is 'firstName' column");
@@ -1572,7 +1572,7 @@ QUnit.test("Columns hiding - column without priority must stay (hidingPriority)"
     $cells = $(instance.$element().find(".dx-header-row").first().find("td")),
     $unfixedColumns = $(instance.$element().find(".dx-header-row").last().find("td"));
 
-    //assert
+    // assert
     assert.equal($cells.length, 3, "3 columns are visible");
     assert.equal($cells.eq(0).text(), "First Name", "First is 'firstName' column");
     assert.equal($unfixedColumns.eq(1).text(), "Last Name", "Second is 'lastName' column");
@@ -1580,10 +1580,10 @@ QUnit.test("Columns hiding - column without priority must stay (hidingPriority)"
     assert.equal(adaptiveColumnsController.getHiddenColumns().length, 0, "There is no hidden columns");
     assert.equal(adaptiveColumnsController.getHidingColumnsQueue().length, 1, "There is 1 column in hiding queue");
     clock.restore();
-});*/
+}); */
 
 QUnit.test("Form item of adaptive detail row is rendered with the underscore template", function(assert) {
-    //arrange
+    // arrange
     $("#container").width(200);
 
     var data = [{ firstName: "Blablablablablablablablablabla", lastName: "Psy" }],
@@ -1595,10 +1595,10 @@ QUnit.test("Form item of adaptive detail row is rendered with the underscore tem
         }),
         instance = $dataGrid.dxDataGrid("instance");
 
-    //act
+    // act
     instance.expandAdaptiveDetailRow(data[0]);
 
-    //assert
+    // assert
     assert.equal($dataGrid.find(".dx-adaptive-detail-row .dx-form").length, 1, "adaptive detail form is opened");
     assert.equal($dataGrid.find(".dx-form #template1").text(), "Template1", "the underscore template is rendered correctly");
 
@@ -1606,7 +1606,7 @@ QUnit.test("Form item of adaptive detail row is rendered with the underscore tem
 });
 
 QUnit.test("Get correct column and column index in the onCellHoverChanged event when event is occurred for form's item", function(assert) {
-    //arrange
+    // arrange
     $("#container").width(200);
 
     var clock = sinon.useFakeTimers(),
@@ -1627,13 +1627,13 @@ QUnit.test("Get correct column and column index in the onCellHoverChanged event 
         }),
         instance = dataGrid.dxDataGrid("instance");
 
-    //act
+    // act
     instance.expandAdaptiveDetailRow(dataSource[0]);
     clock.tick();
     dataGrid.find(".dx-field-item-content").first().trigger("mouseover");
     dataGrid.find(".dx-field-item-content").first().trigger("mouseout");
 
-    //assert
+    // assert
     assert.equal(eventArgs.length, 2, "count of eventArgs");
     assert.equal(eventArgs[0].column.dataField, "lastName", "dataField of column (mouseover)");
     assert.equal(eventArgs[0].columnIndex, 1, "index of column (mouseover)");
@@ -1644,7 +1644,7 @@ QUnit.test("Get correct column and column index in the onCellHoverChanged event 
 });
 
 QUnit.test("Get correct column and column index in the onCellClick event when event is occurred for form's item", function(assert) {
-    //arrange
+    // arrange
     $("#container").width(200);
 
     var clock = sinon.useFakeTimers(),
@@ -1664,21 +1664,21 @@ QUnit.test("Get correct column and column index in the onCellClick event when ev
         }),
         instance = dataGrid.dxDataGrid("instance");
 
-    //act
+    // act
     instance.expandAdaptiveDetailRow(dataSource[0]);
     clock.tick();
     dataGrid.find(".dx-field-item-content").trigger("dxclick");
 
-    //assert
+    // assert
     assert.equal(column.dataField, "lastName", "dataField of column");
     assert.equal(columnIndex, 1, "index of column");
 
     clock.restore();
 });
 
-//T592757
+// T592757
 QUnit.test("onCellClick event should have correct row parameters when event is occurred in detail grid", function(assert) {
-    //arrange
+    // arrange
     var cellClickArgs = [],
         $dataGrid = $("#dataGrid").dxDataGrid({
             loadingTimeout: undefined,
@@ -1703,16 +1703,16 @@ QUnit.test("onCellClick event should have correct row parameters when event is o
 
     $dataGrid.dxDataGrid("instance").expandRow(1);
 
-    //act
+    // act
     $dataGrid.find(".detail-grid .dx-data-row").eq(1).children().eq(0).trigger("dxclick");
 
-    //assert
+    // assert
     assert.equal(cellClickArgs.length, 1, "cellClick fired once");
     assert.equal(cellClickArgs[0].key, 1, "clicked row key");
 });
 
 QUnit.test("Edit row with the underscore template when the editForm mode is enabled", function(assert) {
-    //arrange
+    // arrange
     var clock = sinon.useFakeTimers(),
         data = [{ firstName: "Super", lastName: "Man" }, { firstName: "Super", lastName: "Zi" }],
         $dataGrid = $("#dataGrid").dxDataGrid({
@@ -1727,11 +1727,11 @@ QUnit.test("Edit row with the underscore template when the editForm mode is enab
         }),
         instance = $dataGrid.dxDataGrid("instance");
 
-    //act
+    // act
     instance.editRow(0);
     clock.tick();
 
-    //assert
+    // assert
     assert.equal($dataGrid.find(".dx-form #template1").text(), "Template1", "the underscore template is rendered correctly");
 
     clock.restore();
@@ -1739,7 +1739,7 @@ QUnit.test("Edit row with the underscore template when the editForm mode is enab
 
 QUnit.test("Resize grid after column resizing when adaptColumnWidthByRatio false", function(assert) {
     $("#container").width(200);
-    //arrange
+    // arrange
     var dataGrid = $("#dataGrid").dxDataGrid({
             loadingTimeout: undefined,
             adaptColumnWidthByRatio: false,
@@ -1752,7 +1752,7 @@ QUnit.test("Resize grid after column resizing when adaptColumnWidthByRatio false
         headersCols,
         resizeController;
 
-    //act
+    // act
     resizeController = instance.getController("columnsResizer");
     resizeController._isResizing = true;
     resizeController._targetPoint = { columnIndex: 0 };
@@ -1770,7 +1770,7 @@ QUnit.test("Resize grid after column resizing when adaptColumnWidthByRatio false
     $("#container").width(400);
     instance.updateDimensions();
 
-    //assert
+    // assert
     assert.strictEqual(instance.$element().width(), 200);
     assert.strictEqual(instance.columnOption(0, "width"), 120);
     assert.strictEqual(instance.columnOption(1, "width"), 80);
@@ -1790,7 +1790,7 @@ QUnit.test("Resize grid after column resizing when adaptColumnWidthByRatio false
 
 QUnit.test("Resize grid after column resizing to left when columnResizingMode is widget", function(assert) {
     $("#container").width(300);
-    //arrange
+    // arrange
     var dataGrid = $("#dataGrid").dxDataGrid({
             loadingTimeout: undefined,
             columnResizingMode: "widget",
@@ -1803,7 +1803,7 @@ QUnit.test("Resize grid after column resizing to left when columnResizingMode is
         headersCols,
         resizeController;
 
-    //act
+    // act
     resizeController = instance.getController("columnsResizer");
     resizeController._isResizing = true;
     resizeController._targetPoint = { columnIndex: 0 };
@@ -1818,13 +1818,13 @@ QUnit.test("Resize grid after column resizing to left when columnResizingMode is
             preventDefault: commonUtils.noop
         }
     });
-    resizeController._endResizing({ //T571282
+    resizeController._endResizing({ // T571282
         event: {
             data: resizeController
         }
     });
 
-    //assert
+    // assert
     assert.strictEqual(instance.$element().children().width(), 280);
     assert.strictEqual(instance.columnOption(0, "width"), 80);
     assert.strictEqual(instance.columnOption(1, "width"), 100);
@@ -1845,7 +1845,7 @@ QUnit.test("Resize grid after column resizing to left when columnResizingMode is
 
 QUnit.test("Resize grid after column resizing to left when columnResizingMode is widget and minWidth is assigned", function(assert) {
     $("#container").width(300);
-    //arrange
+    // arrange
     var dataGrid = $("#dataGrid").dxDataGrid({
             loadingTimeout: undefined,
             columnResizingMode: "widget",
@@ -1858,7 +1858,7 @@ QUnit.test("Resize grid after column resizing to left when columnResizingMode is
         headersCols,
         resizeController;
 
-    //act
+    // act
     resizeController = instance.getController("columnsResizer");
     resizeController._isResizing = true;
     resizeController._targetPoint = { columnIndex: 0 };
@@ -1881,13 +1881,13 @@ QUnit.test("Resize grid after column resizing to left when columnResizingMode is
             preventDefault: commonUtils.noop
         }
     });
-    resizeController._endResizing({ //T571282
+    resizeController._endResizing({ // T571282
         event: {
             data: resizeController
         }
     });
 
-    //assert
+    // assert
     assert.strictEqual(instance.$element().children().width(), 250);
     assert.strictEqual(instance.columnOption(0, "width"), 50);
     assert.strictEqual(instance.columnOption(1, "width"), 100);
@@ -1908,7 +1908,7 @@ QUnit.test("Resize grid after column resizing to left when columnResizingMode is
 
 QUnit.test("Resize grid after column resizing to left when columnResizingMode is nextColumn and minWidth is assigned", function(assert) {
     $("#container").width(200);
-    //arrange
+    // arrange
     var dataGrid = $("#dataGrid").dxDataGrid({
             loadingTimeout: undefined,
             columnResizingMode: "nextColumn",
@@ -1921,7 +1921,7 @@ QUnit.test("Resize grid after column resizing to left when columnResizingMode is
         headersCols,
         resizeController;
 
-    //act
+    // act
     resizeController = instance.getController("columnsResizer");
     resizeController._isResizing = true;
     resizeController._targetPoint = { columnIndex: 0 };
@@ -1947,7 +1947,7 @@ QUnit.test("Resize grid after column resizing to left when columnResizingMode is
 
     instance.updateDimensions();
 
-    //assert
+    // assert
     assert.strictEqual(instance.$element().children().width(), 200);
     assert.strictEqual(instance.columnOption(0, "width"), "75.000%");
     assert.strictEqual(instance.columnOption(1, "width"), "25.000%");
@@ -1966,7 +1966,7 @@ QUnit.test("Resize grid after column resizing to left when columnResizingMode is
 
 QUnit.test("Resize grid after column resizing to left when columnResizingMode is widget and grid's width is 100%", function(assert) {
     $("#container").width(300);
-    //arrange
+    // arrange
     var dataGrid = $("#dataGrid").dxDataGrid({
             width: "100%",
             loadingTimeout: undefined,
@@ -1980,7 +1980,7 @@ QUnit.test("Resize grid after column resizing to left when columnResizingMode is
         headersCols,
         resizeController;
 
-    //act
+    // act
     resizeController = instance.getController("columnsResizer");
     resizeController._isResizing = true;
     resizeController._targetPoint = { columnIndex: 0 };
@@ -1995,13 +1995,13 @@ QUnit.test("Resize grid after column resizing to left when columnResizingMode is
             preventDefault: commonUtils.noop
         }
     });
-    resizeController._endResizing({ //T571282
+    resizeController._endResizing({ // T571282
         event: {
             data: resizeController
         }
     });
 
-    //assert
+    // assert
     assert.strictEqual(instance.$element().children().width(), 300);
     assert.strictEqual(instance.columnOption(0, "width"), 80);
     assert.strictEqual(instance.columnOption(1, "width"), 100);
@@ -2022,7 +2022,7 @@ QUnit.test("Resize grid after column resizing to left when columnResizingMode is
 
 QUnit.test("Resize grid after column resizing to right when columnResizingMode is widget", function(assert) {
     $("#container").width(300);
-    //arrange
+    // arrange
     var dataGrid = $("#dataGrid").dxDataGrid({
             loadingTimeout: undefined,
             columnResizingMode: "widget",
@@ -2035,7 +2035,7 @@ QUnit.test("Resize grid after column resizing to right when columnResizingMode i
         headersCols,
         resizeController;
 
-    //act
+    // act
     resizeController = instance.getController("columnsResizer");
     resizeController._isResizing = true;
     resizeController._targetPoint = { columnIndex: 0 };
@@ -2051,7 +2051,7 @@ QUnit.test("Resize grid after column resizing to right when columnResizingMode i
         }
     });
 
-    //assert
+    // assert
     assert.strictEqual(instance.$element().children().width(), 300);
     assert.strictEqual(instance.columnOption(0, "width"), 220);
     assert.strictEqual(instance.columnOption(1, "width"), 100);
@@ -2072,7 +2072,7 @@ QUnit.test("Resize grid after column resizing to right when columnResizingMode i
 
 QUnit.test("Initialize grid with any columns when columnMinWidth option is assigned", function(assert) {
     $("#container").width(200);
-    //arrange
+    // arrange
     var dataGrid = $("#dataGrid").dxDataGrid({
             loadingTimeout: undefined,
             columnMinWidth: 100,
@@ -2083,7 +2083,7 @@ QUnit.test("Initialize grid with any columns when columnMinWidth option is assig
         $colGroups,
         $cols;
 
-    //act
+    // act
     assert.strictEqual(instance.$element().children().width(), 200);
     assert.ok(instance.getScrollable(), "scrollable is created");
 
@@ -2102,7 +2102,7 @@ QUnit.test("Initialize grid with any columns when columnMinWidth option is assig
 
 QUnit.test("width should not be applied if minWidth greater than width", function(assert) {
     $("#container").width(200);
-    //arrange
+    // arrange
     var dataGrid = $("#dataGrid").dxDataGrid({
             loadingTimeout: undefined,
             columnMinWidth: 100,
@@ -2113,7 +2113,7 @@ QUnit.test("width should not be applied if minWidth greater than width", functio
         $colGroups,
         $cols;
 
-    //act
+    // act
     assert.strictEqual(instance.$element().children().width(), 200);
     assert.ok(instance.getScrollable(), "scrollable is created");
 
@@ -2130,10 +2130,10 @@ QUnit.test("width should not be applied if minWidth greater than width", functio
     }
 });
 
-//T516187
+// T516187
 QUnit.test("width should be auto if minWidth is assigned to another column", function(assert) {
     $("#container").width(200);
-    //arrange
+    // arrange
     var $dataGrid = $("#dataGrid").dxDataGrid({
             loadingTimeout: undefined,
             dataSource: [{}],
@@ -2141,7 +2141,7 @@ QUnit.test("width should be auto if minWidth is assigned to another column", fun
         }),
         $cols;
 
-    //act
+    // act
     $cols = $dataGrid.find("colgroup").eq(0).find("col");
 
     assert.strictEqual($cols.length, 3);
@@ -2151,7 +2151,7 @@ QUnit.test("width should be auto if minWidth is assigned to another column", fun
 });
 
 QUnit.test("Apply minWidth when columns have 'auto' width but the last column hasn't width", function(assert) {
-    //arrange
+    // arrange
     $("#container").width(200);
 
     $("#dataGrid").dxDataGrid({
@@ -2187,7 +2187,7 @@ QUnit.test("Apply minWidth when columns have 'auto' width but the last column ha
 });
 
 QUnit.test("Horizontal scrollbar is not displayed when columns width has float value", function(assert) {
-    //arrange, act
+    // arrange, act
     var $dataGrid = $("#dataGrid").dxDataGrid({
             width: 1000,
             selection: { mode: "multiple", showCheckBoxesMode: "always" },
@@ -2201,13 +2201,13 @@ QUnit.test("Horizontal scrollbar is not displayed when columns width has float v
         }),
         dataGrid = $dataGrid.dxDataGrid("instance");
 
-    //assert
+    // assert
     assert.ok(dataGrid.getView("rowsView").getScrollbarWidth(true) === 0);
 });
 
-//T386755
+// T386755
 QUnit.test("column headers visibility when hide removing row in batch editing mode", function(assert) {
-    //arrange, act
+    // arrange, act
     var $dataGrid = $("#dataGrid").dxDataGrid({
             width: 1000,
             dataSource: [{ col1: "1", col2: "2" }],
@@ -2227,13 +2227,13 @@ QUnit.test("column headers visibility when hide removing row in batch editing mo
 
     dataGrid.deleteRow(0);
 
-    //assert
+    // assert
     assert.strictEqual(dataGrid.getView("rowsView").getScrollbarWidth(), 0, "vertical scrollbar width");
     assert.strictEqual($dataGrid.find(".dx-datagrid-headers").css("padding-right"), "0px", "no headers right padding");
 });
 
 QUnit.test("Disable rows hover", function(assert) {
-    //arrange
+    // arrange
     var $dataGrid = $("#dataGrid").dxDataGrid({
             dataSource: [],
             columns: [
@@ -2246,10 +2246,10 @@ QUnit.test("Disable rows hover", function(assert) {
         }),
         $firstRow = $dataGrid.find(".dx-row").first();
 
-    //act
+    // act
     $($dataGrid).trigger({ target: $firstRow.get(0), type: "dxpointerenter", pointerType: "mouse" });
 
-    //assert
+    // assert
     assert.ok(!$firstRow.hasClass(DX_STATE_HOVER_CLASS), "row hasn't hover class");
 });
 
@@ -2259,7 +2259,7 @@ QUnit.test("Enable rows hover", function(assert) {
         return;
     }
 
-    //arrange
+    // arrange
     var $dataGrid = $("#dataGrid").dxDataGrid({
             dataSource: [],
             columns: [
@@ -2272,10 +2272,10 @@ QUnit.test("Enable rows hover", function(assert) {
         }),
         $firstRow = $dataGrid.find(".dx-row").first();
 
-    //act
+    // act
     $($dataGrid).trigger({ target: $firstRow.get(0), type: "dxpointerenter", pointerType: "mouse" });
 
-    //assert
+    // assert
     assert.ok($firstRow.hasClass(DX_STATE_HOVER_CLASS), "row has hover class");
 });
 
@@ -2285,7 +2285,7 @@ QUnit.test("Enable rows hover via option method", function(assert) {
         return;
     }
 
-    //arrange
+    // arrange
     var $dataGrid = $("#dataGrid").dxDataGrid({
             dataSource: [],
             columns: [
@@ -2298,17 +2298,17 @@ QUnit.test("Enable rows hover via option method", function(assert) {
         instance = $dataGrid.dxDataGrid("instance"),
         $firstRow = $dataGrid.find(".dx-row").first();
 
-    //act
+    // act
     instance.option("hoverStateEnabled", true);
     $($dataGrid).trigger({ target: $firstRow.get(0), type: "dxpointerenter", pointerType: "mouse" });
 
-    //assert
+    // assert
     assert.ok($firstRow.hasClass(DX_STATE_HOVER_CLASS), "row has hover class");
 });
 
-//T113644
+// T113644
 QUnit.test("resize on change window size", function(assert) {
-    //arrange, act
+    // arrange, act
     var $dataGrid = $("#dataGrid").dxDataGrid({
         width: 1000,
         loadingTimeout: undefined,
@@ -2322,16 +2322,16 @@ QUnit.test("resize on change window size", function(assert) {
     });
 
 
-    //act
+    // act
     $dataGrid.width(400);
     resizeCallbacks.fire();
 
-    //assert
+    // assert
     assert.equal($dataGrid.find(".dx-datagrid-table").width(), 400);
 });
 
 QUnit.test("resize on change width", function(assert) {
-    //arrange, act
+    // arrange, act
     var $dataGrid = $("#dataGrid").dxDataGrid({
             loadingTimeout: undefined,
             dataSource: [],
@@ -2344,16 +2344,16 @@ QUnit.test("resize on change width", function(assert) {
         }),
         dataGrid = $dataGrid.dxDataGrid("instance");
 
-    //act
+    // act
     dataGrid.option("width", 400);
 
 
-    //assert
+    // assert
     assert.equal($dataGrid.find(".dx-datagrid-table").width(), 400);
 });
 
 QUnit.test("resize on change height from fixed to auto", function(assert) {
-    //arrange, act
+    // arrange, act
     var $dataGrid = $("#dataGrid").dxDataGrid({
             height: 400,
             loadingTimeout: undefined,
@@ -2367,16 +2367,17 @@ QUnit.test("resize on change height from fixed to auto", function(assert) {
         }),
         dataGrid = $dataGrid.dxDataGrid("instance");
 
-    //act
+    // act
     dataGrid.option("height", "auto");
 
 
-    //assert
+
+    // assert
     assert.equal($dataGrid.find(".dx-datagrid-rowsview").get(0).style.height, "auto");
 });
 
 QUnit.test("resize on change height from auto to fixed", function(assert) {
-    //arrange, act
+    // arrange, act
     var $dataGrid = $("#dataGrid").dxDataGrid({
             loadingTimeout: undefined,
             dataSource: [{}],
@@ -2389,16 +2390,16 @@ QUnit.test("resize on change height from auto to fixed", function(assert) {
         }),
         dataGrid = $dataGrid.dxDataGrid("instance");
 
-    //act
+    // act
     dataGrid.option("height", 400);
 
 
-    //assert
+    // assert
     assert.equal(Math.round($dataGrid.find(".dx-datagrid").height()), 400);
 });
 
 QUnit.test("resize column event when columnAutoWidth enabled", function(assert) {
-    //arrange, act
+    // arrange, act
     var resizedWidths = [],
         $dataGrid = $("#dataGrid").dxDataGrid({
             width: 1000,
@@ -2419,14 +2420,14 @@ QUnit.test("resize column event when columnAutoWidth enabled", function(assert) 
         dataGrid = $dataGrid.dxDataGrid("instance");
 
 
-    //assert
+    // assert
     assert.equal(resizedWidths.length, 1);
     assert.ok(Math.abs(resizedWidths[0] - 250) <= 1, "width applied");
 
-    //act
+    // act
     dataGrid.resize();
 
-    //assert
+    // assert
     assert.equal(resizedWidths.length, 3);
     assert.strictEqual(resizedWidths[1], undefined, "column width reset for bestFit calculation");
     assert.ok(Math.abs(resizedWidths[2] - 250) <= 1, "width applied");
@@ -2434,19 +2435,19 @@ QUnit.test("resize column event when columnAutoWidth enabled", function(assert) 
 
 QUnit.test("height 100% when this style apply as auto", function(assert) {
     $("#qunit-fixture").addClass("qunit-fixture-auto-height");
-    //arrange, act
+    // arrange, act
     var $dataGrid = $("#dataGrid").dxDataGrid({
         height: "100%"
     });
 
-    //assert
+    // assert
     assert.ok($dataGrid.find(".dx-datagrid-rowsview").height(), "rowsView has height");
     $("#qunit-fixture").removeClass("qunit-fixture-auto-height");
 });
 
-//T222134
+// T222134
 QUnit.test("height 100% when parent container with fixed height when virtual scrolling enabled", function(assert) {
-    //arrange, act
+    // arrange, act
 
     var array = [];
     for(var i = 0; i < 50; i++) {
@@ -2464,14 +2465,14 @@ QUnit.test("height 100% when parent container with fixed height when virtual scr
 
     this.clock.tick();
 
-    //assert
+    // assert
     assert.ok($dataGrid.find(".dx-datagrid-rowsview").height() > 300, "rowsView has height");
 
     this.clock.restore();
 });
 
 QUnit.test("Freespace row have the correct height when using master-detail with virtual scrolling and container has fixed height", function(assert) {
-    //arrange
+    // arrange
     var array = [];
 
     for(var i = 0; i < 4; i++) {
@@ -2503,7 +2504,7 @@ QUnit.test("Freespace row have the correct height when using master-detail with 
     var key1 = gridInstance.getKeyByRowIndex(0),
         key2 = gridInstance.getKeyByRowIndex(1);
 
-    //act
+    // act
     gridInstance.expandRow(key1);
     gridInstance.expandRow(key2);
     gridInstance.collapseRow(key1);
@@ -2518,14 +2519,14 @@ QUnit.test("Freespace row have the correct height when using master-detail with 
 
     var expectedFreeSpaceRowHeight = $contentTable.height() - dataRowsHeight;
 
-    //assert
+    // assert
     assert.roughEqual($dataGrid.find(".dx-freespace-row").eq(2).height(), expectedFreeSpaceRowHeight, 1, "Height of the freeSpace row");
 
     this.clock.restore();
 });
 
 QUnit.test("height from extern styles", function(assert) {
-    //arrange, act
+    // arrange, act
     var $dataGrid = $("#dataGrid").addClass("fixed-height").dxDataGrid({
         loadingTimeout: undefined,
         dataSource: [],
@@ -2537,13 +2538,13 @@ QUnit.test("height from extern styles", function(assert) {
         ]
     });
 
-    //assert
+    // assert
     assert.equal(Math.round($dataGrid.find(".dx-datagrid").height()), 400);
 });
 
-//T189228
+// T189228
 QUnit.test("height from extern styles when rendering to detached container", function(assert) {
-    //arrange
+    // arrange
     var $dataGrid = $("<div />").addClass("fixed-height").dxDataGrid({
         loadingTimeout: undefined,
         dataSource: [],
@@ -2555,23 +2556,23 @@ QUnit.test("height from extern styles when rendering to detached container", fun
         ]
     });
 
-    //act
+    // act
     $dataGrid.appendTo("#dataGrid");
 
-    //assert
+    // assert
     assert.equal($dataGrid.children(".dx-datagrid").length, 1, "dataGrid container has gridview");
 
-    //act
+    // act
     $($dataGrid).trigger("dxshown");
 
-    //assert
+    // assert
     assert.equal(Math.round($dataGrid.find(".dx-datagrid").height()), 400);
 });
 
-//T347043
+// T347043
 QUnit.test("height from extern styles when rendering to invisible container", function(assert) {
-    //arrange
-    //act
+    // arrange
+    // act
     $("#dataGrid").css({
         height: 400,
         position: "relative"
@@ -2591,18 +2592,18 @@ QUnit.test("height from extern styles when rendering to invisible container", fu
         ]
     });
 
-    //act
+    // act
     $("#dataGrid").show();
     $($dataGrid).trigger("dxshown");
 
-    //assert
+    // assert
     assert.equal($dataGrid.find(".dx-datagrid").height(), 400);
 });
 
-//T380698
+// T380698
 QUnit.test("height from style after updateDimensions when rendering to container with zero content height", function(assert) {
-    //arrange
-    //act
+    // arrange
+    // act
     var dataGrid = $("#dataGrid").css({
         border: "1px solid black",
         height: 2
@@ -2616,17 +2617,17 @@ QUnit.test("height from style after updateDimensions when rendering to container
         ]
     }).dxDataGrid("instance");
 
-    //act
+    // act
     $("#dataGrid").css("height", 300);
     dataGrid.updateDimensions();
 
-    //assert
+    // assert
     assert.equal($("#dataGrid").find(".dx-datagrid").height(), 298);
 });
 
-//T362517
+// T362517
 QUnit.test("max-height from styles", function(assert) {
-    //arrange, act
+    // arrange, act
     var $dataGrid = $("#dataGrid").css("max-height", 400).dxDataGrid({
             loadingTimeout: undefined,
             dataSource: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
@@ -2639,21 +2640,21 @@ QUnit.test("max-height from styles", function(assert) {
         }),
         dataGrid = $dataGrid.dxDataGrid("instance");
 
-    //assert
+    // assert
     assert.equal(Math.round($dataGrid.find(".dx-datagrid").height()), 400, "height is equal max-height");
 
 
-    //act
+    // act
     dataGrid.searchByText("test");
 
-    //assert
+    // assert
     assert.equal(dataGrid.totalCount(), 0, "no items");
     assert.ok($dataGrid.find(".dx-datagrid").height() < 400, "height is less then max-height");
 });
 
-//T412035
+// T412035
 QUnit.test("scrollTop position must be kept after updateDimensions when scrolling is native", function(assert) {
-    //arrange, act
+    // arrange, act
     var $dataGrid = $("#dataGrid").dxDataGrid({
             height: 200,
             loadingTimeout: undefined,
@@ -2672,7 +2673,7 @@ QUnit.test("scrollTop position must be kept after updateDimensions when scrollin
     var scrollable = $dataGrid.find(".dx-scrollable").dxScrollable("instance");
 
 
-    //act
+    // act
     scrollable.scrollTo({ x: 0, y: 50 });
     dataGrid.updateDimensions();
 
@@ -2680,8 +2681,8 @@ QUnit.test("scrollTop position must be kept after updateDimensions when scrollin
 });
 
 QUnit.test("height from style after updateDimensions when rendering to container without height", function(assert) {
-    //arrange
-    //act
+    // arrange
+    // act
     var dataGrid = $("#dataGrid").dxDataGrid({
         dataSource: [],
         columns: [
@@ -2692,16 +2693,16 @@ QUnit.test("height from style after updateDimensions when rendering to container
         ]
     }).dxDataGrid("instance");
 
-    //act
+    // act
     $("#dataGrid").css("height", 300);
     dataGrid.updateDimensions();
 
-    //assert
+    // assert
     assert.equal($("#dataGrid").find(".dx-datagrid").height(), 300);
 });
 
-//T391169
-//T429504
+// T391169
+// T429504
 QUnit.test("min-height from styles when showBorders true", function(assert) {
     var clock = sinon.useFakeTimers();
 
@@ -2722,17 +2723,17 @@ QUnit.test("min-height from styles when showBorders true", function(assert) {
 
     var firstRenderHeight = $dataGrid.height();
 
-    //act
+    // act
     dataGrid.updateDimensions();
 
-    //assert
+    // assert
     assert.roughEqual($dataGrid.height(), firstRenderHeight, 1.01, "height is not changed");
     assert.roughEqual($dataGrid.height(), 200, 1.01, "height is equal min-height");
 
     clock.restore();
 });
 
-//T450683
+// T450683
 QUnit.test("rowsview height should not be reseted during updateDimension when min-height/max-height are not specified", function(assert) {
     var $dataGrid = $("#dataGrid").dxDataGrid({
             height: 200,
@@ -2752,10 +2753,10 @@ QUnit.test("rowsview height should not be reseted during updateDimension when mi
 
     sinon.spy(rowsView, "height");
 
-    //act
+    // act
     dataGrid.updateDimensions();
 
-    //assert
+    // assert
     var heightCalls = rowsView.height.getCalls().filter(function(call) { return call.args.length > 0; });
     assert.equal(heightCalls.length, 1, "rowsview height is assigned once");
 
@@ -2763,9 +2764,9 @@ QUnit.test("rowsview height should not be reseted during updateDimension when mi
     assert.equal(typeof firstAssignedHeight, "number", "assigned rowsview height is number");
 });
 
-//T108204
+// T108204
 QUnit.test("resize on change visibility", function(assert) {
-    //arrange, act
+    // arrange, act
     var $dataGrid = $("#dataGrid").hide().dxDataGrid({
         width: 1000,
         loadingTimeout: undefined,
@@ -2779,16 +2780,16 @@ QUnit.test("resize on change visibility", function(assert) {
     });
 
 
-    //act
+    // act
     $dataGrid.show();
     $($dataGrid).trigger("dxshown");
 
-    //assert
+    // assert
     assert.equal($dataGrid.find(".dx-datagrid-nodata").length, 1, "nodata text is shown");
 });
 
 QUnit.test("Height of Data grid is not changed when allowResizing is false and allowReordering is true", function(assert) {
-    //arrange, act
+    // arrange, act
     var testElement = $("#dataGrid").height(600),
         $dataGrid = testElement.dxDataGrid({
             width: 1000,
@@ -2802,12 +2803,12 @@ QUnit.test("Height of Data grid is not changed when allowResizing is false and a
             ]
         });
 
-    //assert
+    // assert
     assert.equal(Math.round($dataGrid.find(".dx-datagrid-rowsview").parent().height()), 600, "height of datagrid");
 });
 
 QUnit.test("Resize columns for virtual scrolling", function(assert) {
-    //arrange
+    // arrange
     var testElement = $("#dataGrid"),
         generateDataSource = function(recordsCount) {
             var result = [],
@@ -2839,7 +2840,7 @@ QUnit.test("Resize columns for virtual scrolling", function(assert) {
         $tables,
         columnsResizer = dataGrid.getController("columnsResizer");
 
-    //act
+    // act
     columnsResizer._isResizing = true;
     columnsResizer._targetPoint = { columnIndex: 0 };
     columnsResizer._setupResizingInfo(-9750);
@@ -2854,13 +2855,13 @@ QUnit.test("Resize columns for virtual scrolling", function(assert) {
 
     $tables = $(".dx-datagrid-rowsview .dx-datagrid-table");
 
-    //assert
+    // assert
     assert.equal($tables.eq(0).find("col").eq(0).width(), 400, "width of first column for first table");
     assert.equal($tables.eq(1).find("col").eq(0).width(), 400, "width of first column for second table");
 });
 
 QUnit.testInActiveWindow("Focus search textbox after change search text", function(assert) {
-    //arrange
+    // arrange
     var clock = sinon.useFakeTimers(),
         dataGrid = createDataGrid({
             loadingTimeout: undefined,
@@ -2871,7 +2872,7 @@ QUnit.testInActiveWindow("Focus search textbox after change search text", functi
             columns: [{ dataField: "field1", groupIndex: 0 }, { dataField: "field2", groupIndex: 1 }, "field3"]
         });
 
-    //act
+    // act
     $(dataGrid.$element())
         .find(".dx-datagrid-search-panel input")
         .focus()
@@ -2880,16 +2881,16 @@ QUnit.testInActiveWindow("Focus search textbox after change search text", functi
 
     clock.tick();
 
-    //assert
+    // assert
     var $search = $($(dataGrid.$element()).find(".dx-datagrid-search-panel"));
 
     assert.ok($search.hasClass("dx-state-focused"));
     clock.restore();
 });
 
-//T117114
+// T117114
 QUnit.test("columns width when all columns have width and scrolling mode is virtual", function(assert) {
-    //arrange, act
+    // arrange, act
     var $dataGrid = $("#dataGrid").dxDataGrid({
         width: 1000,
         height: 200,
@@ -2908,16 +2909,16 @@ QUnit.test("columns width when all columns have width and scrolling mode is virt
     });
 
     var $dataGridTables = $dataGrid.find(".dx-datagrid-table");
-    //assert
+    // assert
     assert.equal($dataGridTables.length, 3);
     assert.equal($dataGridTables.eq(0).find(".dx-row").first().find("td").last().outerWidth(), 700);
     assert.equal($dataGridTables.eq(1).find(".dx-row").first().find("td").last().outerWidth(), 700);
     assert.equal($dataGridTables.eq(2).find(".dx-row").first().find("td").last().outerWidth(), 700);
 });
 
-//T422575, T411642
+// T422575, T411642
 QUnit.test("column widths should be synchronized when scrolling mode is virtual and lookup column and edit column are exist", function(assert) {
-    //arrange, act
+    // arrange, act
     var clock = sinon.useFakeTimers(),
         contentReadyCallCount = 0,
         $dataGrid = $("#dataGrid").dxDataGrid({
@@ -2960,7 +2961,7 @@ QUnit.test("column widths should be synchronized when scrolling mode is virtual 
     clock.tick();
 
     var $dataGridTables = $dataGrid.find(".dx-datagrid-table");
-    //assert
+    // assert
     assert.equal(contentReadyCallCount, 1);
     assert.equal($dataGridTables.length, 3);
     assert.equal($dataGridTables.eq(0).find(".dx-row").first().find("td").eq(0).outerWidth(), $dataGridTables.eq(1).find(".dx-row").first().find("td").eq(0).outerWidth());
@@ -2972,9 +2973,9 @@ QUnit.test("column widths should be synchronized when scrolling mode is virtual 
     clock.restore();
 });
 
-//T352218
+// T352218
 QUnit.test("columns width when all columns have width and scrolling mode is virtual and columns fixing and grouping", function(assert) {
-    //arrange, act
+    // arrange, act
     var $dataGrid = $("#dataGrid").dxDataGrid({
         loadingTimeout: undefined,
         remoteOperations: true,
@@ -3003,14 +3004,14 @@ QUnit.test("columns width when all columns have width and scrolling mode is virt
 
     var $dataGridTables = $dataGrid.find(".dx-datagrid-content").not(".dx-datagrid-content-fixed").find(".dx-datagrid-table");
 
-    //assert
+    // assert
     assert.equal($dataGridTables.length, 3);
     assert.equal($dataGridTables.eq(0).find(".dx-row").first().find("td").last().outerWidth(), 100);
 });
 
-//T144297
+// T144297
 QUnit.test("columns width when all columns have width and dataGrid width auto", function(assert) {
-    //arrange, act
+    // arrange, act
     $("#container").width(300);
 
     var $dataGrid = $("#dataGrid").dxDataGrid({
@@ -3028,24 +3029,24 @@ QUnit.test("columns width when all columns have width and dataGrid width auto", 
         ]
     });
 
-    //assert
+    // assert
     assert.equal($dataGrid.width(), 200);
     assert.equal($dataGrid.find(".dx-row").first().find("td").last().outerWidth(), 50);
 
-    //act
+    // act
     $("#container").width(100);
 
-    //assert
+    // assert
     assert.equal($dataGrid.width(), 100);
 });
 
-//T533852
+// T533852
 QUnit.test("last column should have correct width if all columns have width and native vertcal scrollbar is shown", function(assert) {
     if(devices.real().deviceType !== "desktop") {
         assert.ok(true, "This test is not actual for mobile devices");
         return;
     }
-    //arrange
+    // arrange
     var clock = sinon.useFakeTimers();
     var $dataGrid = $("#dataGrid").dxDataGrid({
         height: 100,
@@ -3061,18 +3062,18 @@ QUnit.test("last column should have correct width if all columns have width and 
         ]
     });
 
-    //act
+    // act
     clock.tick(0);
 
-    //assert
+    // assert
     assert.ok($dataGrid.width() > 200, "grid's width is more then column widths sum");
     assert.equal($dataGrid.find(".dx-row").first().find("td").last().outerWidth(), 50, "last column have correct width");
     clock.restore();
 });
 
-//T387828
+// T387828
 QUnit.test("columns width when all columns have width and dataGrid with fixed width", function(assert) {
-    //arrange
+    // arrange
     var $dataGrid = $("#dataGrid").dxDataGrid({
             width: 300,
             loadingTimeout: undefined,
@@ -3080,7 +3081,7 @@ QUnit.test("columns width when all columns have width and dataGrid with fixed wi
         }),
         dataGridInstance = $dataGrid.dxDataGrid("instance");
 
-    //act
+    // act
     dataGridInstance.option("columns", [
         { dataField: "field1", width: 50 },
         { dataField: "field2", width: 50 },
@@ -3088,14 +3089,14 @@ QUnit.test("columns width when all columns have width and dataGrid with fixed wi
         { dataField: "field4", width: 50 }
     ]);
 
-    //assert
+    // assert
     assert.equal($dataGrid.width(), 300);
     assert.equal($dataGrid.find(".dx-row").first().find("td").last().outerWidth(), 150);
 });
 
-//T332448
+// T332448
 QUnit.test("columns width when all columns have width and dataGrid width auto and showBorders enabled", function(assert) {
-    //arrange, act
+    // arrange, act
     $("#container").width(300);
 
     var $dataGrid = $("#dataGrid").dxDataGrid({
@@ -3114,14 +3115,14 @@ QUnit.test("columns width when all columns have width and dataGrid width auto an
         ]
     });
 
-    //assert
+    // assert
     assert.equal($dataGrid.width(), 202);
     assert.equal($dataGrid.find(".dx-row").first().find("td").last().outerWidth(), 50);
 });
 
-//T154611
+// T154611
 QUnit.test("max-width style property must be work for grid", function(assert) {
-    //arrange, act
+    // arrange, act
     $("#dataGrid").css("max-width", 200);
     $("#container").width(300);
 
@@ -3134,21 +3135,21 @@ QUnit.test("max-width style property must be work for grid", function(assert) {
         ]
     });
 
-    //assert
+    // assert
     assert.equal($dataGrid.width(), 200);
     assert.equal($dataGrid.find(".dx-row").first().find("td").last().outerWidth(), 50);
 
-    //act
+    // act
     $("#container").width(100);
 
-    //assert
+    // assert
     assert.equal($dataGrid.width(), 100);
     assert.equal($dataGrid.find(".dx-row").first().find("td").last().outerWidth(), 25);
 });
 
-//T242473
+// T242473
 QUnit.test("width of grid when master detail enabled and columns are not defined", function(assert) {
-    //arrange, act
+    // arrange, act
     $("#container").width(300);
 
     var $dataGrid = $("#dataGrid").dxDataGrid({
@@ -3158,13 +3159,13 @@ QUnit.test("width of grid when master detail enabled and columns are not defined
         dataSource: [{ field1: 1, field2: 2 }]
     });
 
-    //assert
+    // assert
     assert.equal($dataGrid.width(), 300);
 });
 
-//T144297
+// T144297
 QUnit.test("columns width when all columns have width, one column width in percent format and dataGrid width is auto", function(assert) {
-    //arrange, act
+    // arrange, act
     $("#container").width(400);
 
     var $dataGrid = $("#dataGrid").dxDataGrid({
@@ -3182,21 +3183,21 @@ QUnit.test("columns width when all columns have width, one column width in perce
         ]
     });
 
-    //assert
+    // assert
     assert.equal($dataGrid.width(), 400);
     assert.equal($dataGrid.find(".dx-row").first().find("td").last().outerWidth(), 200);
 
-    //act
+    // act
     $("#container").width(200);
 
-    //assert
+    // assert
     assert.equal($dataGrid.width(), 200);
     assert.equal($dataGrid.find(".dx-row").first().find("td").last().outerWidth(), 50);
 });
 
-//T344125
+// T344125
 QUnit.test("column width does not changed after changing grid's width when columnAutoWidth enabled", function(assert) {
-    //arrange, act
+    // arrange, act
     var $dataGrid = $("#dataGrid").dxDataGrid({
             width: 100,
             loadingTimeout: undefined,
@@ -3212,18 +3213,18 @@ QUnit.test("column width does not changed after changing grid's width when colum
 
     var widths = $dataGrid.find(".dx-data-row > td").map(function() { return Math.floor($(this).width()); }).get().join(",");
 
-    //act
+    // act
     dataGrid.option("width", 200);
     dataGrid.updateDimensions();
 
-    //assert
+    // assert
     var newWidths = $dataGrid.find(".dx-data-row > td").map(function() { return Math.floor($(this).width()); }).get().join(",");
 
     assert.equal(widths, newWidths, "widths are not changed");
 });
 
 QUnit.test("Correct calculate height of the grid when wordWrapEnabled is true (T443257)", function(assert) {
-    //arrange, act
+    // arrange, act
     var $dataGridElement = $("#dataGrid").dxDataGrid({
         height: 300,
         loadingTimeout: undefined,
@@ -3236,12 +3237,12 @@ QUnit.test("Correct calculate height of the grid when wordWrapEnabled is true (T
         ]
     });
 
-    //assert
+    // assert
     assert.equal(Math.round($dataGridElement.children(".dx-datagrid").outerHeight()), 300, "correct height of the grid");
 });
 
 QUnit.test("expand column width when summary with alignByColumn exists", function(assert) {
-    //arrange, act
+    // arrange, act
     var $dataGrid = $("#dataGrid").dxDataGrid({
         dataSource: [{ field1: 1, field2: 2, field3: 3, field4: 4 }],
         loadingTimeout: undefined,
@@ -3261,12 +3262,12 @@ QUnit.test("expand column width when summary with alignByColumn exists", functio
         }
     });
 
-    //assert
+    // assert
     assert.roughEqual($dataGrid.find(".dx-row").first().find("td").first().outerWidth(), 30, 1, "expand column width");
 });
 
 QUnit.test("Check sum of views height in grid", function(assert) {
-    //arrange
+    // arrange
     function generateDataSource(count) {
         var result = [],
             i;
@@ -3282,9 +3283,9 @@ QUnit.test("Check sum of views height in grid", function(assert) {
             width: 470,
             height: 400,
             dataSource: generateDataSource(20),
-            columnAutoWidth: true, //T406965
+            columnAutoWidth: true, // T406965
             filterRow: {
-                visible: true //T406965
+                visible: true // T406965
             },
             pager: {
                 visible: true
@@ -3304,15 +3305,15 @@ QUnit.test("Check sum of views height in grid", function(assert) {
         resultHeight,
         $dataGrid = $container.find(".dx-datagrid");
 
-    //act
+    // act
     resultHeight = $container.outerHeight() - $dataGrid.outerHeight();
 
-    //assert
+    // assert
     assert.ok(resultHeight >= 0 && resultHeight <= 2, "result height");
 });
 
 QUnit.test("Horizontal scroll position of headers view is changed_T251448", function(assert) {
-    //arrange
+    // arrange
     var clock = sinon.useFakeTimers(),
         $dataGrid = $("#dataGrid").dxDataGrid({
             width: 400,
@@ -3345,7 +3346,7 @@ QUnit.test("Horizontal scroll position of headers view is changed_T251448", func
         $footerView,
         $headersView;
 
-    //act
+    // act
     clock.tick();
 
     $headersView = $dataGrid.find(".dx-datagrid-headers" + " .dx-datagrid-scroll-container").first();
@@ -3355,13 +3356,13 @@ QUnit.test("Horizontal scroll position of headers view is changed_T251448", func
 
     clock.restore();
 
-    //assert
+    // assert
     assert.equal(dataGrid._views.rowsView.getScrollable().scrollLeft(), 400, "scroll left of rows view");
     assert.equal($footerView.scrollLeft(), 400, "scroll left of footer view");
 });
 
 QUnit.test("Horizontal scroll position of footer view is changed_T251448", function(assert) {
-    //arrange
+    // arrange
     var clock = sinon.useFakeTimers(),
         $dataGrid = $("#dataGrid").dxDataGrid({
             width: 400,
@@ -3394,7 +3395,7 @@ QUnit.test("Horizontal scroll position of footer view is changed_T251448", funct
         $footerView,
         $headersView;
 
-    //act
+    // act
     clock.tick();
 
     $footerView = $dataGrid.find(".dx-datagrid-total-footer .dx-datagrid-scroll-container").first();
@@ -3404,7 +3405,7 @@ QUnit.test("Horizontal scroll position of footer view is changed_T251448", funct
 
     clock.restore();
 
-    //assert
+    // assert
     assert.equal(dataGrid._views.rowsView.getScrollable().scrollLeft(), 300, "scroll left of rows view");
     assert.equal($headersView.scrollLeft(), 300, "scroll left of headers view");
 });
@@ -3498,9 +3499,9 @@ QUnit.test("Keep horizontal scroller position after refresh with native scrollin
     scrollableInstance.scrollTo({ x: 150 });
     function scrollHandler() {
         scrollableInstance.off("scroll", scrollHandler);
-        //act
+        // act
         dataGrid.refresh().done(function() {
-            //assert
+            // assert
             assert.equal(scrollableInstance.scrollLeft(), 150, "Grid save its horizontal scroll position after refresh");
             done();
         });
@@ -3509,7 +3510,7 @@ QUnit.test("Keep horizontal scroller position after refresh with native scrollin
     scrollableInstance.on("scroll", scrollHandler);
 });
 
-//T473860, T468902
+// T473860, T468902
 QUnit.test("Keep horizontal scroller position after refresh when all columns have widths", function(assert) {
     var done = assert.async(),
         dataGrid,
@@ -3546,9 +3547,9 @@ QUnit.test("Keep horizontal scroller position after refresh when all columns hav
     scrollableInstance.on("scroll", scrollHandler);
 });
 
-//T345699
+// T345699
 QUnit.test("Keep horizontal scroller position after grouping column with native scrolling", function(assert) {
-    //arrange
+    // arrange
     var done = assert.async(),
         dataGrid,
         scrollableInstance;
@@ -3575,10 +3576,10 @@ QUnit.test("Keep horizontal scroller position after grouping column with native 
 
     scrollableInstance.on("scroll", function() {
         setTimeout(function() {
-            //act
+            // act
             dataGrid.columnOption("city", "groupIndex", 0);
             setTimeout(function() {
-                //assert
+                // assert
                 assert.equal(scrollableInstance.scrollLeft(), 400, "Grid save its horizontal scroll position after refresh");
                 done();
             });
@@ -3588,7 +3589,7 @@ QUnit.test("Keep horizontal scroller position after grouping column with native 
     scrollableInstance.scrollTo({ x: 400 });
 });
 
-//T362355
+// T362355
 QUnit.test("Keep vertical browser scroll position after refresh with freespace row", function(assert) {
     $("#qunit-fixture").css("overflow-y", "auto").height(50);
 
@@ -3607,17 +3608,17 @@ QUnit.test("Keep vertical browser scroll position after refresh with freespace r
 
     $("#qunit-fixture").scrollTop(500);
 
-    //assert
+    // assert
     assert.equal($("#qunit-fixture").scrollTop(), 500, "scroll top");
 
-    //act
+    // act
     dataGrid.refresh();
 
-    //assert
+    // assert
     assert.equal($("#qunit-fixture").scrollTop(), 500, "scroll top");
 });
 
-//T135244
+// T135244
 QUnit.test("Load count on start", function(assert) {
     var loadCallCount = 0;
 
@@ -3635,7 +3636,7 @@ QUnit.test("Load count on start", function(assert) {
     assert.equal(loadCallCount, 1, "one load count on start");
 });
 
-//T162735, T406593
+// T162735, T406593
 QUnit.test("Load count on start when stateStoring enabled with search/filterRow values", function(assert) {
     var clock = sinon.useFakeTimers(),
         loadCallCount = 0,
@@ -3674,10 +3675,10 @@ QUnit.test("Load count on start when stateStoring enabled with search/filterRow 
     clock.restore();
 });
 
-//T489478
+// T489478
 QUnit.test("Console errors should not be occurs when stateStoring enabled with selectedRowKeys value", function(assert) {
     sinon.spy(errors, "log");
-    //act
+    // act
     var clock = sinon.useFakeTimers(),
         dataGrid = createDataGrid({
             loadingTimeout: undefined,
@@ -3701,7 +3702,7 @@ QUnit.test("Console errors should not be occurs when stateStoring enabled with s
 
     clock.tick();
 
-    //assert
+    // assert
     assert.ok(dataGrid);
     assert.equal(errors.log.getCalls().length, 0, "no error maeesages in console");
 
@@ -3709,7 +3710,7 @@ QUnit.test("Console errors should not be occurs when stateStoring enabled with s
     clock.restore();
 });
 
-//T268912
+// T268912
 QUnit.test("load from remote rest store when remoteOperations false", function(assert) {
     var done = assert.async(),
         errorMessage;
@@ -3736,7 +3737,7 @@ QUnit.test("load from remote rest store when remoteOperations false", function(a
     });
 });
 
-//T240338
+// T240338
 QUnit.test("Loading columns state when all columns have width and one column is hidden", function(assert) {
     var clock = sinon.useFakeTimers(),
         dataGrid = createDataGrid({
@@ -3758,13 +3759,13 @@ QUnit.test("Loading columns state when all columns have width and one column is 
 
         });
 
-    //assert
+    // assert
     assert.equal(dataGrid.getController("columns").getVisibleColumns().length, 0, "visible column count");
 
-    //act
+    // act
     clock.tick();
 
-    //assert
+    // assert
     var visibleColumns = dataGrid.getController("columns").getVisibleColumns();
     assert.equal(visibleColumns.length, 3, "visible column count");
     assert.equal(visibleColumns[0].command, "select", "select column");
@@ -3774,7 +3775,7 @@ QUnit.test("Loading columns state when all columns have width and one column is 
     clock.restore();
 });
 
-//T235091
+// T235091
 QUnit.test("pageSize state is not applied when scrolling mode is virtual", function(assert) {
     var clock = sinon.useFakeTimers(),
         dataGrid = createDataGrid({
@@ -3794,15 +3795,15 @@ QUnit.test("pageSize state is not applied when scrolling mode is virtual", funct
 
         });
 
-    //act
+    // act
     clock.tick();
 
-    //assert
+    // assert
     assert.equal(dataGrid.pageSize(), 20, "pageSize from stateStoring is not applied");
     clock.restore();
 });
 
-//T235091
+// T235091
 QUnit.test("pageSize state is applied when scrolling mode is not virtual", function(assert) {
     var clock = sinon.useFakeTimers(),
         dataGrid = createDataGrid({
@@ -3820,43 +3821,43 @@ QUnit.test("pageSize state is applied when scrolling mode is not virtual", funct
             }
         });
 
-    //act
+    // act
     clock.tick();
 
-    //assert
+    // assert
     assert.equal(dataGrid.pageSize(), 10, "pageSize from stateStoring is applied");
 });
 
-//T152307
+// T152307
 QUnit.test("no action cursor for column header when sorting and dragging not allowed", function(assert) {
-    //act
+    // act
     var dataGrid = createDataGrid({
         loadingTimeout: undefined,
         columns: [{ dataField: "field1", allowSorting: false }, { dataField: "field2" }],
         dataSource: []
     });
 
-    //assert
+    // assert
     assert.equal($(dataGrid.$element()).find(".dx-datagrid-drag-action").length, 0, "no drag actions");
     assert.equal($(dataGrid.$element()).find(".dx-datagrid-action").length, 1, "one action");
     assert.ok($(dataGrid.$element()).find(".dx-header-row > td").eq(1).hasClass("dx-datagrid-action"));
 
-    //act
+    // act
     dataGrid.showColumnChooser();
 
-    //assert
+    // assert
     assert.equal($(dataGrid.$element()).find(".dx-datagrid-drag-action").length, 2, "two drag actions for hiding columns");
 });
 
 QUnit.test("Correct runtime changing of a columnChooser mode (string)", function(assert) {
-    //arrange
+    // arrange
     var dataGrid = createDataGrid({
         loadingTimeout: undefined,
         columns: [{ dataField: "field1", allowSorting: false }, { dataField: "field2" }],
         dataSource: []
     });
 
-    //act
+    // act
     dataGrid.showColumnChooser();
 
     var $overlayWrapper = dataGrid.getView("columnChooserView")._popupContainer._wrapper();
@@ -3868,20 +3869,20 @@ QUnit.test("Correct runtime changing of a columnChooser mode (string)", function
 
     $overlayWrapper = dataGrid.getView("columnChooserView")._popupContainer._wrapper();
 
-    //assert
+    // assert
     assert.ok(!$overlayWrapper.hasClass("dx-datagrid-column-chooser-mode-drag"), "hasn't dragAndDrop mode class");
     assert.ok($overlayWrapper.hasClass("dx-datagrid-column-chooser-mode-select"), "has select mode class");
 });
 
 QUnit.test("Correct runtime changing of a columnChooser mode (object)", function(assert) {
-    //arrange
+    // arrange
     var dataGrid = createDataGrid({
         loadingTimeout: undefined,
         columns: [{ dataField: "field1", allowSorting: false }, { dataField: "field2" }],
         dataSource: []
     });
 
-    //act
+    // act
     dataGrid.showColumnChooser();
 
     var $overlayWrapper = dataGrid.getView("columnChooserView")._popupContainer._wrapper();
@@ -3893,13 +3894,13 @@ QUnit.test("Correct runtime changing of a columnChooser mode (object)", function
 
     $overlayWrapper = dataGrid.getView("columnChooserView")._popupContainer._wrapper();
 
-    //assert
+    // assert
     assert.ok(!$overlayWrapper.hasClass("dx-datagrid-column-chooser-mode-drag"), "hasn't dragAndDrop mode class");
     assert.ok($overlayWrapper.hasClass("dx-datagrid-column-chooser-mode-select"), "has select mode class");
 });
 
 QUnit.test("ColumnChooser's treeView get correct default config (without checkboxes)", function(assert) {
-    //arrange
+    // arrange
     var dataGrid = createDataGrid({
         loadingTimeout: undefined,
         columnChooser: { mode: "select" },
@@ -3907,7 +3908,7 @@ QUnit.test("ColumnChooser's treeView get correct default config (without checkbo
         dataSource: []
     });
 
-    //act
+    // act
     dataGrid.showColumnChooser();
 
     var $overlayWrapper = dataGrid.getView("columnChooserView")._popupContainer._wrapper();
@@ -3918,11 +3919,11 @@ QUnit.test("ColumnChooser's treeView get correct default config (without checkbo
 
     $overlayWrapper = dataGrid.getView("columnChooserView")._popupContainer._wrapper();
 
-    //assert
+    // assert
     assert.ok(!$overlayWrapper.find(".dx-checkbox").length, "There aren't checkboxes in columnChooser");
 });
 
-//T364210
+// T364210
 QUnit.test("Load count on start when EdmLiteral in calculatedFilterExpression is used and scrolling mode is virtual", function(assert) {
     var loadCallCount = 0,
         contentReadyCallCount = 0,
@@ -4009,13 +4010,13 @@ QUnit.test("row alternation should be correct if virtual scrolling is enabled an
         return $(dataGrid.getRowElement(index)).hasClass("dx-row-alt");
     });
 
-    //assert
+    // assert
     assert.deepEqual(dataIndexes, [undefined, 0, 1, 2, 3, 4], "dataIndex values in rows");
     assert.deepEqual(alternatedRowIndexes, [2, 4], "row indexes with dx-row-alt class");
 });
 
 QUnit.test("isReady when loading", function(assert) {
-    //act
+    // act
     var d = $.Deferred(),
         dataGrid = createDataGrid({
             loadingTimeout: undefined,
@@ -4026,17 +4027,17 @@ QUnit.test("isReady when loading", function(assert) {
             }
         });
 
-    //assert
+    // assert
     assert.ok(!dataGrid.isReady(), "dataGrid is not ready");
 
-    //act
+    // act
     d.resolve([], { totalCount: 0 });
     assert.ok(dataGrid.isReady(), "dataGrid is ready");
 });
 
 QUnit.test("command column widths calculated from styles", function(assert) {
-    //arrange
-    //act
+    // arrange
+    // act
     var $dataGrid = $("#dataGridWithStyle").dxDataGrid({
         loadingTimeout: undefined,
         dataSource: {
@@ -4047,7 +4048,7 @@ QUnit.test("command column widths calculated from styles", function(assert) {
         columns: ["field1", "field2", { dataField: "field3", groupIndex: 0 }]
     });
 
-    //assert
+    // assert
     var cols = $dataGrid.find("colgroup").first().children();
 
     assert.ok(Math.abs(70 - cols.eq(0).width()) <= 1, "select column width");
@@ -4055,9 +4056,9 @@ QUnit.test("command column widths calculated from styles", function(assert) {
     assert.ok(Math.abs(100 - cols.eq(cols.length - 1).width()) <= 1, "edit column width");
 });
 
-//T317140
+// T317140
 QUnit.test("Error on loading", function(assert) {
-    //act
+    // act
     var clock = sinon.useFakeTimers(),
         dataGrid = createDataGrid({
             columns: ["field1", "field2"],
@@ -4070,7 +4071,7 @@ QUnit.test("Error on loading", function(assert) {
 
     clock.tick();
 
-    //assert
+    // assert
     assert.ok(dataGrid.isReady(), "dataGrid is ready");
     assert.ok(!dataGrid.getController("data").isLoaded(), "data is not loaded");
     var $errorRow = $($(dataGrid.$element()).find(".dx-error-row"));
@@ -4081,7 +4082,8 @@ QUnit.test("Error on loading", function(assert) {
 });
 
 QUnit.test("Raise error if key field is missed", function(assert) {
-    //act
+
+    // act
     var clock = sinon.useFakeTimers();
     sinon.spy(errors, "log");
 
@@ -4093,7 +4095,7 @@ QUnit.test("Raise error if key field is missed", function(assert) {
 
     clock.tick();
 
-    //assert
+    // assert
     assert.equal(errors.log.lastCall.args[0], "W1012", "Warning about keyExpr is raised");
     assert.equal(errors.log.callCount, 1, "Warning about keyExpr is raised one time");
 
@@ -4102,7 +4104,8 @@ QUnit.test("Raise error if key field is missed", function(assert) {
 });
 
 QUnit.test("Not raise error if key field is null", function(assert) {
-    //act
+
+    // act
     var clock = sinon.useFakeTimers();
     sinon.spy(errors, "log");
 
@@ -4114,7 +4117,7 @@ QUnit.test("Not raise error if key field is null", function(assert) {
 
     clock.tick();
 
-    //assert
+    // assert
     assert.equal(errors.log.callCount, 0, "Warning about keyExpr not raised");
 
     errors.log.restore();
@@ -4122,7 +4125,7 @@ QUnit.test("Not raise error if key field is null", function(assert) {
 });
 
 
-//T481276
+// T481276
 QUnit.test("updateDimensions during grouping when fixed to right column exists", function(assert) {
     var loadResult = $.Deferred().resolve([{}]),
         dataGrid = createDataGrid({
@@ -4140,18 +4143,18 @@ QUnit.test("updateDimensions during grouping when fixed to right column exists",
     loadResult = $.Deferred();
     dataGrid.columnOption("field1", "groupIndex", 0);
 
-    //act
+    // act
     dataGrid.updateDimensions();
     loadResult.resolve([{}]);
 
-    //assert
+    // assert
     assert.ok(dataGrid.isReady(), "dataGrid is ready");
     assert.ok($(dataGrid.$element()).find(".dx-group-row").length, 1, "one grouped row is rendered");
 });
 
-//T334530
+// T334530
 QUnit.test("columnHeaders visibility after change some options", function(assert) {
-    //act
+    // act
     var clock = sinon.useFakeTimers(),
         dataGrid = createDataGrid({
             columns: ["field1", "field2"],
@@ -4160,7 +4163,7 @@ QUnit.test("columnHeaders visibility after change some options", function(assert
 
     clock.tick();
 
-    //act
+    // act
     dataGrid.option({
         dataSource: [],
         columns: ["field1", "field2"],
@@ -4170,7 +4173,7 @@ QUnit.test("columnHeaders visibility after change some options", function(assert
     });
 
 
-    //assert
+    // assert
     assert.ok(!dataGrid.isReady(), "dataGrid is not ready");
     assert.ok(!dataGrid.getController("data").isLoaded(), "data is not loaded");
     assert.equal($(dataGrid.$element()).find(".dx-header-row").length, 1, "header row is rendered");
@@ -4178,7 +4181,7 @@ QUnit.test("columnHeaders visibility after change some options", function(assert
     clock.restore();
 });
 
-//T317098
+// T317098
 QUnit.test("Load panel visibility during first loading", function(assert) {
     var loadResult = $.Deferred(),
         clock = sinon.useFakeTimers(),
@@ -4196,11 +4199,11 @@ QUnit.test("Load panel visibility during first loading", function(assert) {
     var $loadPanel = $($(dataGrid.$element()).find(".dx-loadpanel"));
     assert.ok($loadPanel.is(":visible"), "load panel is visible");
 
-    //act
+    // act
     loadResult.resolve([]);
     clock.tick(500);
 
-    //assert
+    // assert
     assert.ok(!$loadPanel.is(":visible"), "load panel is not visible");
 
     clock.restore();
@@ -4214,14 +4217,14 @@ QUnit.test("Load panel is not rendered for ArrayStore", function(assert) {
 
     clock.tick(500);
 
-    //assert
+    // assert
     var $loadPanel = $($(dataGrid.$element()).find(".dx-loadpanel"));
     assert.ok(!$loadPanel.length, "load panel is visible");
 });
 
-//T389866
+// T389866
 QUnit.test("Collapse the group row of the grid, nested in the master detail", function(assert) {
-    //arrange
+    // arrange
     var $masterDetail,
         dataSource = [{ field1: "1", field2: "2" }],
         clock = sinon.useFakeTimers(),
@@ -4249,16 +4252,16 @@ QUnit.test("Collapse the group row of the grid, nested in the master detail", fu
     $($dataGrid.find(".dx-datagrid-rowsview .dx-command-expand").first()).trigger("dxclick");
     clock.tick();
 
-    //assert
+    // assert
     $masterDetail = $dataGrid.find(".dx-master-detail-row");
     assert.equal($masterDetail.length, 1, "has master detail row");
     assert.ok($masterDetail.find(".dx-datagrid").length, "has dataGrid in master detail row");
 
-    //act
+    // act
     $($masterDetail.find(".dx-datagrid-rowsview .dx-command-expand").first()).trigger("dxclick");
     clock.tick();
 
-    //assert
+    // assert
     assert.equal($dataGrid.find(".dx-datagrid-rowsview .dx-command-expand").first().find(".dx-datagrid-group-opened").length, 1, "master detail row opened");
     assert.ok($dataGrid.find(".dx-datagrid-rowsview .dx-row").eq(1).hasClass("dx-master-detail-row"), "has master detail row");
     assert.ok($dataGrid.find(".dx-datagrid-rowsview .dx-row").eq(1).is(":visible"), "master detail row is visible");
@@ -4266,9 +4269,9 @@ QUnit.test("Collapse the group row of the grid, nested in the master detail", fu
     clock.restore();
 });
 
-//T439040
+// T439040
 QUnit.test("Toolbar templates should be called when toolbar is attached to dom", function(assert) {
-    //arrange, act
+    // arrange, act
     var clock = sinon.useFakeTimers(),
         toolbarPreparingCallCount = 0,
         toolbarTemplateCallCount = 0;
@@ -4288,16 +4291,16 @@ QUnit.test("Toolbar templates should be called when toolbar is attached to dom",
 
     clock.tick();
 
-    //assert
+    // assert
     assert.equal(toolbarPreparingCallCount, 1, "onToolbarPreparing is called once");
     assert.equal(toolbarTemplateCallCount, 1, "toolbar template is called once");
 
     clock.restore();
 });
 
-//T471984
+// T471984
 QUnit.test("Custom toolbar item should be aligned", function(assert) {
-    //arrange, act
+    // arrange, act
     var dataGrid = createDataGrid({
         editing: {
             allowAdding: true
@@ -4315,14 +4318,14 @@ QUnit.test("Custom toolbar item should be aligned", function(assert) {
 
     var toolbarItemOffset = $(dataGrid.$element()).find(".dx-toolbar .dx-button").offset().top;
 
-    //assert
+    // assert
     assert.equal(toolbarItemOffset, $(dataGrid.$element()).find(".dx-datagrid-search-panel").offset().top, "toolbar sarch panel is aligned");
     assert.equal(toolbarItemOffset, $(dataGrid.$element()).find(".dx-toolbar .dx-datebox").offset().top, "toolbar custom item is aligned");
 });
 
-//T558301
+// T558301
 QUnit.testInActiveWindow("Height virtual table should be updated to show validation message when there is a single row and virtual scrolling is enabled", function(assert) {
-    //arrange
+    // arrange
     var $tableElements,
         clock = sinon.useFakeTimers(),
         dataGrid = createDataGrid({
@@ -4341,16 +4344,16 @@ QUnit.testInActiveWindow("Height virtual table should be updated to show validat
             }]
         });
 
-    //assert
+    // assert
     $tableElements = dataGrid.$element().find(".dx-datagrid-rowsview").find("table");
     assert.roughEqual($tableElements.eq(0).outerHeight(), 35, 3, "height main table");
     assert.roughEqual($tableElements.eq(1).outerHeight(), 35, 3, "height virtual table");
 
-    //act
+    // act
     dataGrid.editCell(0, 0);
     clock.tick();
 
-    //assert
+    // assert
     $tableElements = dataGrid.$element().find(".dx-datagrid-rowsview").find("table");
     assert.roughEqual($tableElements.eq(0).outerHeight(), 68, 3, "height main table");
     assert.roughEqual($tableElements.eq(1).outerHeight(), 68, 3, "height virtual table");
@@ -4358,7 +4361,7 @@ QUnit.testInActiveWindow("Height virtual table should be updated to show validat
     dataGrid.closeEditCell();
     clock.tick();
 
-    //assert
+    // assert
     $tableElements = dataGrid.$element().find(".dx-datagrid-rowsview").find("table");
     assert.roughEqual($tableElements.eq(0).outerHeight(), 35, 3, "height main table");
     assert.roughEqual($tableElements.eq(1).outerHeight(), 35, 3, "height virtual table");
@@ -4366,7 +4369,7 @@ QUnit.testInActiveWindow("Height virtual table should be updated to show validat
 });
 
 QUnit.test("Error row is not hidden when rowKey is undefined by editMode is cell", function(assert) {
-    //arrange
+    // arrange
     var clock = sinon.useFakeTimers();
     var dataGrid = createDataGrid({
         loadingTimeout: undefined,
@@ -4394,7 +4397,7 @@ QUnit.test("Error row is not hidden when rowKey is undefined by editMode is cell
 
     clock.tick();
 
-    //act
+    // act
     dataGrid.editCell(0, 0);
     clock.tick();
 
@@ -4407,7 +4410,7 @@ QUnit.test("Error row is not hidden when rowKey is undefined by editMode is cell
     dataGrid.editCell(0, 1);
     clock.tick();
 
-    //assert
+    // assert
     assert.equal($(".dx-error-message").length, 1, "Error message is shown");
 
     clock.restore();
@@ -4415,7 +4418,7 @@ QUnit.test("Error row is not hidden when rowKey is undefined by editMode is cell
 
 if(browser.msie && parseInt(browser.version) <= 11) {
     QUnit.test("Update the scrollable for IE browsers when the adaptive column is hidden", function(assert) {
-        //arrange
+        // arrange
         var clock = sinon.useFakeTimers();
 
         var dataGrid = createDataGrid({
@@ -4431,13 +4434,13 @@ if(browser.msie && parseInt(browser.version) <= 11) {
 
         clock.tick();
 
-        //act
+        // act
         var scrollable = dataGrid.$element().find(".dx-scrollable").data("dxScrollable");
         sinon.spy(scrollable, "update");
         dataGrid.updateDimensions();
         clock.tick();
 
-        //assert
+        // assert
         var $lastDataCell = dataGrid.$element().find(".dx-last-data-cell");
         assert.equal($lastDataCell.text(), "2014/01/12", "text of last data cell");
         assert.equal(scrollable.update.callCount, 2);
@@ -4447,7 +4450,7 @@ if(browser.msie && parseInt(browser.version) <= 11) {
 }
 
 QUnit.test("search text when scrolling mode virtual and one column is not defined", function(assert) {
-    //arrange, act
+    // arrange, act
 
     var dataSource = [
         { "CompanyName": "K&S Music" },
@@ -4475,7 +4478,7 @@ QUnit.test("search text when scrolling mode virtual and one column is not define
     assert.equal(dataGrid.getVisibleRows().length, 1, "items were filtered");
 });
 
-//T583229
+// T583229
 QUnit.test("The same page should not load when scrolling in virtual mode", function(assert) {
     var dataGrid,
         pageIndexesForLoad = [],
@@ -4519,7 +4522,7 @@ QUnit.test("The same page should not load when scrolling in virtual mode", funct
 
         clock.tick(200);
 
-        //assert
+        // assert
         assert.deepEqual(pageIndexesForLoad, [0, 1]);
         assert.strictEqual(dataGrid.getVisibleRows().length, 40);
 
@@ -4528,7 +4531,7 @@ QUnit.test("The same page should not load when scrolling in virtual mode", funct
         dataGrid.getScrollable().scrollTo({ y: 1400 });
         clock.tick(200);
 
-        //assert
+        // assert
         assert.deepEqual(pageIndexesForLoad, [0, 1, 2, 3]);
         assert.strictEqual(dataGrid.getVisibleRows().length, 80);
     } finally {
@@ -4545,27 +4548,27 @@ QUnit.module("Assign options", {
     }
 });
 
-//B232542
+// B232542
 QUnit.test("dataSource change", function(assert) {
-    //arrange, act
+    // arrange, act
     var dataGrid = createDataGrid({
         loadingTimeout: undefined,
         dataSource: [{ id: 1111 }]
     });
 
-    //act
+    // act
     dataGrid.option("dataSource", [{ id: 1, value: "value 1" }]);
 
-    //assert
+    // assert
     var columns = dataGrid.getController("columns").getColumns();
     assert.equal(columns.length, 2);
     assert.equal(columns[0].dataField, "id");
     assert.equal(columns[0].dataType, "number");
 });
 
-//T216940
+// T216940
 QUnit.test("dataSource change to equal instance", function(assert) {
-    //arrange, act
+    // arrange, act
     var loadCount,
         dataSourceInstance;
 
@@ -4579,18 +4582,18 @@ QUnit.test("dataSource change to equal instance", function(assert) {
     dataSourceInstance = dataGrid.getController("data")._dataSource;
     loadCount = 0;
 
-    //act
+    // act
     dataSource.push({ id: 2 });
     dataGrid.option("dataSource", dataSource);
 
-    //assert
+    // assert
     assert.strictEqual(dataSourceInstance, dataGrid.getController("data")._dataSource, "dataSource is not recreated");
     assert.strictEqual(dataGrid.getController("data").items().length, 2, "data is updated");
 });
 
-//T260011
+// T260011
 QUnit.test('dataSource change to null', function(assert) {
-    //arrange
+    // arrange
     var dataGrid = createDataGrid({
         loadingTimeout: undefined,
         dataSource: [{ id: 1111 }]
@@ -4602,10 +4605,10 @@ QUnit.test('dataSource change to null', function(assert) {
         contentReadyCount++;
     });
 
-    //act
+    // act
     dataGrid.option('dataSource', null);
 
-    //assert
+    // assert
     assert.ok(dataGrid.getController("data").isEmpty(), "no data");
     assert.ok(!dataGrid.getController("data").dataSource(), "no dataSource");
     assert.equal(dataGrid.getController("data").items().length, 0, "items count");
@@ -4613,18 +4616,18 @@ QUnit.test('dataSource change to null', function(assert) {
     assert.equal($(dataGrid.$element()).find(".dx-data-row").length, 0, "data row count");
 });
 
-//T405875
+// T405875
 QUnit.test("dataSource changing reset columns order when dataSource structure is changed", function(assert) {
-    //arrange, act
+    // arrange, act
     var dataGrid = createDataGrid({
         loadingTimeout: undefined,
         dataSource: [{ field1: 1, field3: 3 }]
     });
 
-    //act
+    // act
     dataGrid.option("dataSource", [{ field1: 1, field2: 2, field3: 3 }]);
 
-    //assert
+    // assert
     var columns = dataGrid.getController("columns").getVisibleColumns();
     assert.equal(columns.length, 3);
     assert.equal(columns[0].dataField, "field1");
@@ -4633,7 +4636,7 @@ QUnit.test("dataSource changing reset columns order when dataSource structure is
 });
 
 QUnit.test("dataSource changing not reset columns order when dataSource structure is not changed", function(assert) {
-    //arrange, act
+    // arrange, act
     var dataGrid = createDataGrid({
         loadingTimeout: undefined,
         dataSource: [{ field1: 1, field2: 2 }]
@@ -4641,10 +4644,10 @@ QUnit.test("dataSource changing not reset columns order when dataSource structur
 
     dataGrid.columnOption("field2", "visibleIndex", 0);
 
-    //act
+    // act
     dataGrid.option("dataSource", [{ field1: 3, field2: 4 }]);
 
-    //assert
+    // assert
     var columns = dataGrid.getController("columns").getVisibleColumns();
     assert.equal(columns.length, 2);
     assert.equal(columns[0].dataField, "field2");
@@ -4652,9 +4655,9 @@ QUnit.test("dataSource changing not reset columns order when dataSource structur
     assert.deepEqual(dataGrid.getController("data").items()[0].data, { field1: 3, field2: 4 });
 });
 
-//T531189
+// T531189
 QUnit.test("noData should be hidden after assign dataSource and height", function(assert) {
-    //arrange, act
+    // arrange, act
     var clock = sinon.useFakeTimers();
     var dataGrid = createDataGrid({
         columns: ["id"]
@@ -4662,13 +4665,13 @@ QUnit.test("noData should be hidden after assign dataSource and height", functio
 
     clock.tick(0);
 
-    //act
+    // act
     dataGrid.option("dataSource", [{ id: 1 }]);
     dataGrid.option("height", 300);
 
     clock.tick(0);
 
-    //assert
+    // assert
     var $noData = $($(dataGrid.$element()).find(".dx-datagrid-nodata"));
     assert.equal($noData.length, 1, "nodata is rendered once");
     assert.notOk($noData.is(":visible"), "nodata is hidden");
@@ -4676,35 +4679,35 @@ QUnit.test("noData should be hidden after assign dataSource and height", functio
     clock.restore();
 });
 
-//T231356
+// T231356
 QUnit.test("rtlEnabled change", function(assert) {
-    //arrange, act
+    // arrange, act
     var dataGrid = createDataGrid({
     });
 
-    //act
+    // act
     dataGrid.option("rtlEnabled", true);
 
-    //assert
+    // assert
     assert.ok($(dataGrid.$element()).hasClass("dx-rtl"), "dx-rtl class added");
 });
 
-//T288385
+// T288385
 QUnit.test("disabled change", function(assert) {
-    //arrange, act
+    // arrange, act
     var dataGrid = createDataGrid({
     });
 
-    //act
+    // act
     dataGrid.option("disabled", true);
 
-    //assert
+    // assert
     assert.ok($(dataGrid.$element()).hasClass("dx-state-disabled"), "dx-state-disabled class added");
 });
 
-//T360631
+// T360631
 QUnit.test("disabled change when selection enabled", function(assert) {
-    //arrange, act
+    // arrange, act
     var dataGrid = createDataGrid({
         dataSource: [{ field1: 1 }],
         loadingTimeout: undefined,
@@ -4717,15 +4720,15 @@ QUnit.test("disabled change when selection enabled", function(assert) {
 
     assert.strictEqual($(dataGrid.$element()).find(".dx-state-disabled").length, 3, "dx-state-disabled class exists");
 
-    //act
+    // act
     dataGrid.option("disabled", false);
 
-    //assert
+    // assert
     assert.strictEqual($(dataGrid.$element()).find(".dx-state-disabled").length, 0, "dx-state-disabled class does not exist");
 });
 
 QUnit.test("dataSource change with selection", function(assert) {
-    //arrange, act
+    // arrange, act
     var dataGrid = createDataGrid({
         dataSource: [{ field1: 1, field2: 2 }],
         selection: { mode: "none" }
@@ -4733,19 +4736,19 @@ QUnit.test("dataSource change with selection", function(assert) {
 
     this.clock.tick(0);
 
-    //act
+    // act
     dataGrid.option({
         dataSource: [{ field1: 1, field2: 2, field3: 3 }],
         selection: { mode: "none" }
     });
     this.clock.tick(0);
 
-    //assert
+    // assert
     assert.equal(dataGrid.columnCount(), 3, "columnCount after change dataSource");
 });
 
 QUnit.test("Selection changed handler do not try to get dxCheckBox instance when selection mode is single (T237209)", function(assert) {
-    //arrange, act
+    // arrange, act
     var dataGrid = createDataGrid({
         dataSource: [{ field1: 1, field2: 2 }],
         selection: { mode: "multiple" }
@@ -4753,16 +4756,16 @@ QUnit.test("Selection changed handler do not try to get dxCheckBox instance when
 
     this.clock.tick(0);
 
-    //act
+    // act
     dataGrid.option("selection.mode", "single");
 
-    //assert
+    // assert
     assert.ok(true);
 });
 
-//T325867
+// T325867
 QUnit.test("selection.showCheckBoxesMode change", function(assert) {
-    //arrange, act
+    // arrange, act
     var dataGrid = createDataGrid({
         dataSource: [{ field1: 1, field2: 2 }],
         selection: { mode: "multiple" }
@@ -4773,18 +4776,18 @@ QUnit.test("selection.showCheckBoxesMode change", function(assert) {
     assert.equal($(dataGrid.$element()).find(".dx-select-checkboxes-hidden").length, 1, "select checkboxes are hidden");
 
 
-    //act
+    // act
     dataGrid.option("selection.showCheckBoxesMode", "none");
     dataGrid.option("selection.showCheckBoxesMode", "always");
 
-    //assert
+    // assert
     assert.equal($(dataGrid.$element()).find(".dx-select-checkboxes-hidden").length, 0, "select checkboxes are not hidden");
     assert.equal($(dataGrid.$element()).find(".dx-select-checkbox").length, 2, "two select checkboxes");
 });
 
-//T420180
+// T420180
 QUnit.test("selection.mode change from single to multiple", function(assert) {
-    //arrange, act
+    // arrange, act
     var dataGrid = createDataGrid({
         loadingTimeout: undefined,
         dataSource: [{ id: 1 }, { id: 2 }, { id: 3 }],
@@ -4795,17 +4798,17 @@ QUnit.test("selection.mode change from single to multiple", function(assert) {
     assert.equal($(dataGrid.$element()).find(".dx-row.dx-selection").length, 1, "one row is selected");
 
 
-    //act
+    // act
     dataGrid.option("selection.mode", "multiple");
 
-    //assert
+    // assert
     assert.equal($(dataGrid.$element()).find(".dx-row.dx-selection").length, 1, "one row is selected");
     assert.deepEqual(dataGrid.getSelectedRowKeys(), [{ id: 1 }], "one selected row key via method");
     assert.deepEqual(dataGrid.option("selectedRowKeys"), [{ id: 1 }], "one selected row key via option");
 });
 
 QUnit.test("selection.mode change from multiple to single and none", function(assert) {
-    //arrange, act
+    // arrange, act
     var dataGrid = createDataGrid({
         loadingTimeout: undefined,
         dataSource: [{ id: 1 }, { id: 2 }, { id: 3 }],
@@ -4815,18 +4818,18 @@ QUnit.test("selection.mode change from multiple to single and none", function(as
 
     assert.equal($(dataGrid.$element()).find(".dx-row.dx-selection").length, 2, "one row is selected");
 
-    //act
+    // act
     dataGrid.option("selection.mode", "single");
 
-    //assert
+    // assert
     assert.equal($(dataGrid.$element()).find(".dx-row.dx-selection").length, 1, "one row is selected");
     assert.deepEqual(dataGrid.getSelectedRowKeys(), [{ id: 1 }], "one selected row key via method");
     assert.deepEqual(dataGrid.option("selectedRowKeys"), [{ id: 1 }], "one selected row key via option");
 
-    //act
+    // act
     dataGrid.option("selection.mode", "none");
 
-    //assert
+    // assert
     assert.equal($(dataGrid.$element()).find(".dx-row.dx-selection").length, 0, "no selected rows");
     assert.deepEqual(dataGrid.getSelectedRowKeys(), [], "no selected row key via method");
     assert.deepEqual(dataGrid.option("selectedRowKeys"), [], "no selected row key via option");
@@ -4834,7 +4837,7 @@ QUnit.test("selection.mode change from multiple to single and none", function(as
 });
 
 QUnit.test("selection change without changing mode do not change selectedRowKeys", function(assert) {
-    //arrange, act
+    // arrange, act
     var dataGrid = createDataGrid({
         loadingTimeout: undefined,
         dataSource: [{ id: 1 }, { id: 2 }, { id: 3 }],
@@ -4844,17 +4847,17 @@ QUnit.test("selection change without changing mode do not change selectedRowKeys
 
     assert.equal($(dataGrid.$element()).find(".dx-row.dx-selection").length, 2, "one row is selected");
 
-    //act
+    // act
     dataGrid.option("selection", { mode: "none" });
 
-    //assert
+    // assert
     assert.equal($(dataGrid.$element()).find(".dx-row.dx-selection").length, 2, "one row is selected");
     assert.deepEqual(dataGrid.getSelectedRowKeys(), [{ id: 1 }, { id: 3 }], "one selected row key via method");
     assert.deepEqual(dataGrid.option("selectedRowKeys"), [{ id: 1 }, { id: 3 }], "one selected row key via option");
 });
 
 QUnit.test("dataSource pageSize change", function(assert) {
-    //arrange, act
+    // arrange, act
     var dataGrid = createDataGrid({
         dataSource: {
             store: [{ id: 1111 }]
@@ -4862,19 +4865,19 @@ QUnit.test("dataSource pageSize change", function(assert) {
     });
     assert.equal(dataGrid.getController("data")._dataSource.pageSize(), 20);
 
-    //act
+    // act
     dataGrid.option("dataSource", {
         store: [{ id: 1, value: "value 1" }],
         pageSize: 50
     });
 
-    //assert
+    // assert
     assert.equal(dataGrid.getController("data")._dataSource.pageSize(), 50);
 });
 
 
 QUnit.test("columns change", function(assert) {
-    //arrange, act
+    // arrange, act
     var loadingCount = 0,
         dataGrid = createDataGrid({
             loadingTimeout: undefined,
@@ -4889,10 +4892,10 @@ QUnit.test("columns change", function(assert) {
             }
         });
 
-    //act
+    // act
     dataGrid.option("columns", ["a"]);
 
-    //assert
+    // assert
     var columns = dataGrid.getController("columns").getColumns();
     assert.equal(columns.length, 1);
     assert.equal(columns[0].dataField, "a");
@@ -4902,22 +4905,22 @@ QUnit.test("columns change", function(assert) {
     assert.equal(tableElement.find("col").length, 1);
     assert.equal(tableElement.find("tbody > tr").length, 2);
     assert.equal(tableElement.find("td").length, 2);
-    //T196532
+    // T196532
     assert.equal(loadingCount, 1, "one load only");
 });
 
-//T365730
+// T365730
 QUnit.test("columns change to empty array", function(assert) {
-    //arrange, act
+    // arrange, act
     var dataGrid = createDataGrid({
         loadingTimeout: undefined,
         dataSource: [{ a: 1111, b: 222 }]
     });
 
-    //act
+    // act
     dataGrid.option("columns", []);
 
-    //assert
+    // assert
     assert.equal(dataGrid.getController("columns").getColumns().length, 0);
     assert.equal(dataGrid.getController("columns").getVisibleColumns().length, 0);
 
@@ -4928,9 +4931,9 @@ QUnit.test("columns change to empty array", function(assert) {
     assert.equal(tableElement.find("td").length, 0, "cell count");
 });
 
-//T388879
+// T388879
 QUnit.test("change columns at the time refresh the grid", function(assert) {
-    //arrange
+    // arrange
     var visibleColumns,
         $headerElements,
         dataGrid = createDataGrid({
@@ -4941,16 +4944,16 @@ QUnit.test("change columns at the time refresh the grid", function(assert) {
 
     this.clock.tick(100);
 
-    //assert
+    // assert
     assert.equal(dataGrid.getController("columns").getColumns().length, 2, "count column");
     assert.equal($(dataGrid.$element()).find(".dx-datagrid-rowsview table").find("tbody > tr.dx-data-row").length, 2, "row count");
 
-    //act
+    // act
     dataGrid.refresh();
     dataGrid.option("columns", ["column3"]);
     this.clock.tick(100);
 
-    //assert
+    // assert
     visibleColumns = dataGrid.getController("columns").getVisibleColumns();
     $headerElements = $($(dataGrid.$element()).find(".dx-header-row").children());
     assert.equal(dataGrid.getController("columns").getColumns().length, 1, "count column");
@@ -4960,11 +4963,11 @@ QUnit.test("change columns at the time refresh the grid", function(assert) {
     assert.strictEqual($headerElements.first().text(), "Column 3", "text of the first header");
 });
 
-//TODO this test without clock
-//T197089
+// TODO this test without clock
+// T197089
 QUnit.test("group command column width after grouping column with showWhenGrouped", function(assert) {
-    //arrange
-    //act
+    // arrange
+    // act
     var $dataGrid = $("#dataGridWithStyle").dxDataGrid({
         dataSource: [{ field1: "1" }],
         columnAutoWidth: true,
@@ -4973,20 +4976,20 @@ QUnit.test("group command column width after grouping column with showWhenGroupe
 
     this.clock.tick();
 
-    //act
+    // act
     $dataGrid.dxDataGrid("instance").columnOption("field1", "groupIndex", 0);
 
     this.clock.tick();
 
-    //assert
+    // assert
     var cols = $dataGrid.find("colgroup").first().children();
 
     assert.ok(Math.abs(30 - cols.eq(0).width()) <= 1, "grouped column width");
 });
 
-//T196532
+// T196532
 QUnit.test("columns change when changed dataSource parameters", function(assert) {
-    //arrange, act
+    // arrange, act
     var loadingCount = 0,
         loadingOptions,
         dataGrid = createDataGrid({
@@ -5004,16 +5007,16 @@ QUnit.test("columns change when changed dataSource parameters", function(assert)
             }
         });
 
-    //act
+    // act
     dataGrid.option("columns", ["a", { dataField: "b", sortOrder: "asc" }]);
 
-    //assert
+    // assert
     assert.equal(loadingCount, 2, "second load for apply sorting");
     assert.equal(dataGrid.getController("data").items()[0].data.b, 1);
 });
 
 QUnit.test("Toolbar update it's items only when corresponding options are change", function(assert) {
-    //arrange, act
+    // arrange, act
     var dataGrid = createDataGrid({
             loadingTimeout: undefined,
             remoteOperations: { filtering: true, sorting: true, paging: true },
@@ -5028,10 +5031,10 @@ QUnit.test("Toolbar update it's items only when corresponding options are change
 
     sinon.spy(headerPanel, "_getToolbarOptions");
 
-    //act
+    // act
     dataGrid.option("columns", ["a", { dataField: "b", sortOrder: "asc" }]);
 
-    //assert
+    // assert
     assert.equal(headerPanel._getToolbarOptions.callCount, 0, "Toolbar items aren't update on change sort order");
 
     dataGrid.option("editing", { mode: "batch" });
@@ -5054,7 +5057,7 @@ QUnit.test("Toolbar update it's items only when corresponding options are change
 });
 
 QUnit.test("search editor have not been recreated when search text is changed", function(assert) {
-    //arrange, act
+    // arrange, act
     var dataGrid = createDataGrid({
             loadingTimeout: undefined,
             remoteOperations: { filtering: true, sorting: true, paging: true },
@@ -5069,14 +5072,14 @@ QUnit.test("search editor have not been recreated when search text is changed", 
             }
         }),
         searchEditor = $(dataGrid.$element()).find(".dx-datagrid-search-panel").dxTextBox("instance");
-    //act
+    // act
     dataGrid.option("searchPanel.text", "123");
-    //assert
+    // assert
     assert.strictEqual(searchEditor.option("value"), "123");
 });
 
 QUnit.test("search editor have not been recreated on typing", function(assert) {
-    //arrange, act
+    // arrange, act
     var dataGrid = createDataGrid({
             loadingTimeout: undefined,
             remoteOperations: { filtering: true, sorting: true, paging: true },
@@ -5091,14 +5094,14 @@ QUnit.test("search editor have not been recreated on typing", function(assert) {
             }
         }),
         searchEditor = $(dataGrid.$element()).find(".dx-datagrid-search-panel").dxTextBox("instance");
-    //act
+    // act
     searchEditor.option("value", "123");
-    //assert
+    // assert
     assert.strictEqual(searchEditor, $(dataGrid.$element()).find(".dx-datagrid-search-panel").dxTextBox("instance"));
 });
 
 QUnit.test("customizeColumns change", function(assert) {
-    //arrange, act
+    // arrange, act
     var dataGrid = createDataGrid({
         loadingTimeout: undefined,
         dataSource: [{ a: 1111, b: 222 }],
@@ -5107,12 +5110,12 @@ QUnit.test("customizeColumns change", function(assert) {
         }
     });
 
-    //act
+    // act
     dataGrid.option("customizeColumns", function(columns) {
         columns.unshift({ dataField: "b", visibleIndex: 0 });
     });
 
-    //assert
+    // assert
     var columns = dataGrid.getController("columns").getColumns();
     assert.equal(columns.length, 2);
     assert.equal(columns[0].dataField, "b");
@@ -5130,7 +5133,7 @@ QUnit.test("customizeColumns change", function(assert) {
 });
 
 QUnit.test("selectionMode change", function(assert) {
-    //arrange, act
+    // arrange, act
     var dataGrid = createDataGrid({
         loadingTimeout: undefined,
         dataSource: [{ a: 1111, b: 222 }],
@@ -5140,26 +5143,26 @@ QUnit.test("selectionMode change", function(assert) {
 
     assert.deepEqual(dataGrid.getSelectedRowKeys(), [{ a: 1111, b: 222 }]);
 
-    //act
+    // act
     dataGrid.option("selection.mode", "none");
-    //assert
+    // assert
     assert.deepEqual(dataGrid.getSelectedRowKeys(), []);
 
-    //act
+    // act
     dataGrid.selectRows({ a: 1111, b: 222 });
-    //assert
+    // assert
     assert.deepEqual(dataGrid.getSelectedRowKeys(), [{ a: 1111, b: 222 }]);
 });
 
 QUnit.test("selectRows after change scrolling", function(assert) {
-    //arrange, act
+    // arrange, act
     var dataGrid = createDataGrid({
         dataSource: [{ a: 1111, b: 222 }]
     });
 
     this.clock.tick();
 
-    //act
+    // act
     dataGrid.option({
         dataSource: [{ a: 1111, b: 222 }],
         scrolling: {
@@ -5171,27 +5174,27 @@ QUnit.test("selectRows after change scrolling", function(assert) {
 
     this.clock.tick();
 
-    //assert
+    // assert
     assert.deepEqual(dataGrid.getSelectedRowKeys(), [{ a: 1111, b: 222 }], "selected row keys");
     assert.equal($(dataGrid.$element()).find(".dx-selection").length, 1, "one row is selected");
 });
 
 QUnit.test("several options change", function(assert) {
-    //arrange, act
+    // arrange, act
     var dataGrid = createDataGrid({
         commonColumnSettings: { allowSorting: false },
         loadingTimeout: undefined,
         dataSource: [{ id: 1111 }]
     });
 
-    //act
+    // act
     dataGrid.option({
         commonColumnSettings: { allowSorting: true },
         dataSource: [{ id: 1, value: "value 1" }],
         loadingTimeout: undefined
     });
 
-    //assert
+    // assert
     var columns = dataGrid.getController("columns").getColumns();
     assert.equal(columns.length, 2);
     assert.equal(columns[0].dataField, "id");
@@ -5201,7 +5204,7 @@ QUnit.test("several options change", function(assert) {
 });
 
 QUnit.test("paging change", function(assert) {
-    //arrange, act
+    // arrange, act
     var dataGrid = createDataGrid({
         loadingTimeout: undefined,
         dataSource: {
@@ -5216,18 +5219,18 @@ QUnit.test("paging change", function(assert) {
     assert.deepEqual(dataGrid.getController("data").items().length, 3, "items count");
     assert.ok(dataGrid.getView("pagerView").isVisible(), "pager visibility");
 
-    //act
+    // act
     dataGrid.option("paging.enabled", false);
 
-    //assert
+    // assert
     assert.deepEqual(dataGrid.getController("data").pageCount(), 1, "pages count when paging disabled");
     assert.deepEqual(dataGrid.getController("data").items().length, 5, "items count when paging disabled");
     assert.ok(!dataGrid.getView("pagerView").isVisible(), "pager visibility when paging disabled");
 });
 
-//T121445
+// T121445
 QUnit.test("pager.allowedPageSizes change", function(assert) {
-    //arrange, act
+    // arrange, act
     var dataGrid = createDataGrid({
         loadingTimeout: undefined,
         dataSource: {
@@ -5241,15 +5244,15 @@ QUnit.test("pager.allowedPageSizes change", function(assert) {
 
     assert.equal($("#dataGrid").find(".dx-page-size").length, 3);
 
-    //act
+    // act
     dataGrid.option("pager.allowedPageSizes", [2, 3, 5, 10]);
 
     assert.equal($("#dataGrid").find(".dx-page-size").length, 4);
 });
 
-//T121445
+// T121445
 QUnit.test("pager.visible change", function(assert) {
-    //arrange, act
+    // arrange, act
     var dataGrid = createDataGrid({
         height: 100,
         loadingTimeout: undefined,
@@ -5262,16 +5265,16 @@ QUnit.test("pager.visible change", function(assert) {
     var rowsViewHeight = $("#dataGrid").find(".dx-datagrid-rowsview").height();
     assert.ok($("#dataGrid").find(".dx-pager").is(":visible"), "pager shown");
 
-    //act
+    // act
     dataGrid.option("pager.visible", false);
 
     assert.ok(!$("#dataGrid").find(".dx-pager").is(":visible"), "pager hidden");
     assert.ok($("#dataGrid").find(".dx-datagrid-rowsview").height() > rowsViewHeight, "rowsView height updated");
 });
 
-//T121445
+// T121445
 QUnit.test("pager light-mode should be correct after change pageSize", function(assert) {
-    //arrange, act
+    // arrange, act
     var data = [];
     for(var i = 0; i < 11; ++i) {
         data.push({ value: i });
@@ -5292,37 +5295,37 @@ QUnit.test("pager light-mode should be correct after change pageSize", function(
         }
     });
 
-    //assert
+    // assert
     assert.notOk($("#dataGrid .dx-pager").hasClass("dx-light-mode"));
 
-    //act
+    // act
     dataGrid.option("paging.pageSize", 2);
     dataGrid.option("paging.pageSize", 6);
 
-    //assert
+    // assert
     assert.notOk($("#dataGrid .dx-pager").hasClass("dx-light-mode"), "is not light-mode");
 });
 
 QUnit.test("scrolling change", function(assert) {
-    //arrange, act
+    // arrange, act
     var dataGrid = createDataGrid({
         dataSource: [{ a: 1111, b: 222 }]
     });
 
     this.clock.tick();
-    //act
+    // act
     dataGrid.option("scrolling", {
         mode: "infinite"
     });
     this.clock.tick();
-    //assert
+    // assert
     assert.ok(dataGrid.getController("data").viewportSize() > 0);
     assert.ok(!dataGrid.getController("data").dataSource().requireTotalCount());
 });
 
-//T273187
+// T273187
 QUnit.test("infinite scrolling after change height", function(assert) {
-    //arrange, act
+    // arrange, act
 
     var dataSource = [];
     for(var i = 0; i < 50; i++) {
@@ -5345,20 +5348,20 @@ QUnit.test("infinite scrolling after change height", function(assert) {
     var viewportSize = dataGrid.getController("data").viewportSize();
     var itemCount = dataGrid.getController("data").items().length;
 
-    //act
+    // act
     $("#dataGrid").height(1000);
     dataGrid.repaint();
     this.clock.tick();
 
-    //assert
+    // assert
     assert.ok(dataGrid.getController("data").viewportSize() > 0, "viewport size more 0");
     assert.ok(dataGrid.getController("data").viewportSize() > viewportSize, "viewport size is changed");
     assert.ok(dataGrid.getController("data").items().length > itemCount, "item count is changed");
 });
 
-//T256314
+// T256314
 QUnit.test("dataSource change when scrolling mode virtual", function(assert) {
-    //arrange, act
+    // arrange, act
     var dataGrid = createDataGrid({
         scrolling: { mode: "virtual" },
         dataSource: [{ test: 1 }, { test: 2 }]
@@ -5366,17 +5369,17 @@ QUnit.test("dataSource change when scrolling mode virtual", function(assert) {
 
     this.clock.tick();
 
-    //act
+    // act
     dataGrid.option("dataSource", [{ test: 3 }, { test: 4 }]);
     this.clock.tick();
 
-    //assert
+    // assert
     assert.ok(dataGrid.getController("data").viewportSize() > 0, "viewportSize is assigned");
 });
 
-//T176960
+// T176960
 QUnit.test("scrolling mode change from infinite to virtual", function(assert) {
-    //arrange, act
+    // arrange, act
     var dataGrid = createDataGrid({
         height: 50,
         paging: { pageSize: 2 },
@@ -5387,20 +5390,20 @@ QUnit.test("scrolling mode change from infinite to virtual", function(assert) {
 
     this.clock.tick();
     assert.equal($(dataGrid.$element()).find(".dx-datagrid-bottom-load-panel").length, 1);
-    //act
+    // act
     dataGrid.option("scrolling.mode", "virtual");
 
-    //assert
+    // assert
     assert.ok($(dataGrid.$element()).find(".dx-datagrid-rowsview").height() > 0);
-    //act
+    // act
     this.clock.tick();
-    //assert
+    // assert
     assert.ok($(dataGrid.$element()).find(".dx-datagrid-rowsview").height() > 0);
     assert.equal($(dataGrid.$element()).find(".dx-datagrid-bottom-load-panel").length, 0);
 });
 
 QUnit.test("filterRow.visible change after clearFilter", function(assert) {
-    //arrange, act
+    // arrange, act
     var clock = sinon.useFakeTimers(),
         dataGrid = createDataGrid({
             dataSource: [{ a: 1111, b: 222 }]
@@ -5408,13 +5411,13 @@ QUnit.test("filterRow.visible change after clearFilter", function(assert) {
 
     clock.tick();
 
-    //act
+    // act
     dataGrid.clearFilter();
     dataGrid.option("filterRow.visible", true);
 
     clock.tick();
 
-    //assert
+    // assert
     assert.equal($(dataGrid.$element()).find(".dx-datagrid-filter-row").length, 1, "filter row is rendered");
 
     assert.strictEqual(dataGrid.getView("columnHeadersView")._requireReady, false, "columnHeadersView requireReady is false");
@@ -5423,9 +5426,9 @@ QUnit.test("filterRow.visible change after clearFilter", function(assert) {
     clock.restore();
 });
 
-//T210836
+// T210836
 QUnit.test("scrolling change after creating before data is rendered", function(assert) {
-    //arrange, act
+    // arrange, act
     var dataGrid = createDataGrid({
         dataSource: [{ value: 1 }, { value: 2 }, { value: 3 }, { value: 4 }, { value: 5 }],
         paging: {
@@ -5433,20 +5436,20 @@ QUnit.test("scrolling change after creating before data is rendered", function(a
         }
     });
 
-    //act
+    // act
     dataGrid.option({ scrolling: { mode: "virtual" } });
     this.clock.tick();
 
-    //assert
+    // assert
     assert.deepEqual(dataGrid.getController("data").pageCount(), 2, "pages count");
     assert.deepEqual(dataGrid.getController("data").items().length, 5, "items count");
     assert.ok(!dataGrid.getView("pagerView").isVisible(), "pager visibility");
 });
 
 
-//T120699
+// T120699
 QUnit.test("showRowLines/showColumnLines change", function(assert) {
-    //arrange, act
+    // arrange, act
     var dataGrid = createDataGrid({
             loadingTimeout: undefined,
             dataSource: [{ a: 1111, b: 222 }]
@@ -5459,33 +5462,33 @@ QUnit.test("showRowLines/showColumnLines change", function(assert) {
         resizeCalledCount++;
     };
 
-    //act
+    // act
     dataGrid.beginUpdate();
     dataGrid.option("showColumnLines", !dataGrid.option("showColumnLines"));
     dataGrid.endUpdate();
 
-    //assert
+    // assert
     assert.equal(resizeCalledCount, 1, "resize called");
 
-    //act
+    // act
     dataGrid.beginUpdate();
     dataGrid.option("showRowLines", !dataGrid.option("showRowLines"));
     dataGrid.endUpdate();
 
-    //assert
+    // assert
     assert.equal(resizeCalledCount, 2, "resize called");
 });
 
 
 QUnit.test("dataSource instance of DataSource", function(assert) {
-    //arrange, act
+    // arrange, act
     var errorMessage;
 
     logger.error = function(message) {
         errorMessage = message;
     };
 
-    //act
+    // act
     var dataGrid = createDataGrid({
         loadingTimeout: undefined,
         dataSource: new DataSource({
@@ -5494,7 +5497,7 @@ QUnit.test("dataSource instance of DataSource", function(assert) {
         })
     });
 
-    //assert
+    // assert
     var dataSource = dataGrid.getController("data").dataSource();
     assert.ok(!errorMessage, "No error messages");
     assert.ok(dataSource, "dataSource assigned");
@@ -5502,32 +5505,32 @@ QUnit.test("dataSource instance of DataSource", function(assert) {
     assert.strictEqual(dataGrid.totalCount(), 1, "totalCount");
 });
 
-//T221734
+// T221734
 QUnit.test("using dataSource instance after disposing DataGrid", function(assert) {
-    //arrange, act
+    // arrange, act
     var dataSource = new DataSource({
         store: [{ id: 1111 }]
     });
 
-    //act
+    // act
     var dataGrid = createDataGrid({
         loadingTimeout: undefined,
         dataSource: dataSource
     });
 
-    //assert
+    // assert
     assert.ok(dataSource.isLoaded(), "dataSource is loaded");
 
-    //act
+    // act
     $("#dataGrid").remove();
     dataSource.load();
 
-    //assert
+    // assert
     assert.ok(!dataGrid.getController("data").dataSource(), "no dataSource");
     assert.ok(!dataSource._disposed, "dataSource is not disposed");
 });
 
-//T243908
+// T243908
 QUnit.test("onContentReady after hide column", function(assert) {
     var clock = sinon.useFakeTimers();
 
@@ -5541,27 +5544,27 @@ QUnit.test("onContentReady after hide column", function(assert) {
             }
         });
 
-    //assert
+    // assert
     assert.equal(contentReadyCallCount, 0, "onContentReady call count");
 
     clock.tick();
 
-    //assert
+    // assert
     assert.equal(contentReadyCallCount, 1, "onContentReady call count");
 
-    //arrange
+    // arrange
     contentReadyCallCount = 0;
     dataGrid.getController("columns").columnsChanged.add(function() {
         countCallColumnsChanged++;
         assert.ok(!contentReadyCallCount, "columnsChanged called before onContentReady");
     });
 
-    //act
+    // act
     dataGrid.columnOption(0, "visible", false);
 
     clock.tick();
 
-    //assert
+    // assert
     assert.equal(contentReadyCallCount, 1, "onContentReady call count");
     assert.equal(countCallColumnsChanged, 3, "columnsChanged call count");
 
@@ -5586,14 +5589,14 @@ QUnit.test("onContentReady when loadingTimeout", function(assert) {
         resizeCallCount++;
     };
 
-    //assert
+    // assert
     assert.equal($("#dataGrid").find(".dx-data-row").length, 0);
     assert.equal(contentReadyCallCount, 0);
 
-    //act
+    // act
     clock.tick();
 
-    //assert
+    // assert
     assert.equal($("#dataGrid").find(".dx-data-row").length, 1);
     assert.equal($("#dataGrid").find(".dx-data-row").text(), "1111");
     assert.equal(contentReadyCallCount, 1, "onContentReady call count");
@@ -5605,7 +5608,7 @@ QUnit.test("onContentReady when loadingTimeout", function(assert) {
 QUnit.test("onContentReady when no loadingTimeout", function(assert) {
     var contentReadyCallCount = 0;
 
-    //act
+    // act
     createDataGrid({
         loadingTimeout: undefined,
         dataSource: [{ id: 1111 }],
@@ -5614,7 +5617,7 @@ QUnit.test("onContentReady when no loadingTimeout", function(assert) {
         }
     });
 
-    //assert
+    // assert
     assert.equal($("#dataGrid").find(".dx-data-row").text(), "1111");
     assert.equal(contentReadyCallCount, 1);
 });
@@ -5622,7 +5625,7 @@ QUnit.test("onContentReady when no loadingTimeout", function(assert) {
 QUnit.test("onContentReady after change page", function(assert) {
     var contentReadyCallCount = 0;
 
-    //act
+    // act
     var dataGrid = createDataGrid({
         loadingTimeout: undefined,
         dataSource: {
@@ -5634,14 +5637,14 @@ QUnit.test("onContentReady after change page", function(assert) {
         }
     });
 
-    //assert
+    // assert
     assert.equal($("#dataGrid").find(".dx-data-row").length, 3);
     assert.equal(contentReadyCallCount, 1);
 
-    //act
+    // act
     dataGrid.pageIndex(1);
 
-    //assert
+    // assert
     assert.equal($("#dataGrid").find(".dx-data-row").length, 1);
     assert.equal(contentReadyCallCount, 2);
 });
@@ -5650,7 +5653,7 @@ QUnit.test("onContentReady after change page", function(assert) {
 QUnit.test("pageIndex return deferred when change page", function(assert) {
     var doneCalled = false;
 
-    //act
+    // act
     var dataGrid = createDataGrid({
         dataSource: {
             pageSize: 2,
@@ -5660,14 +5663,14 @@ QUnit.test("pageIndex return deferred when change page", function(assert) {
 
     this.clock.tick();
 
-    //act
+    // act
     dataGrid.pageIndex(1).done(function() {
         doneCalled = true;
     });
 
     this.clock.tick();
 
-    //assert
+    // assert
     assert.equal(doneCalled, true);
     var visibleRows = dataGrid.getVisibleRows();
     assert.equal(visibleRows.length, 2);
@@ -5677,7 +5680,7 @@ QUnit.test("pageIndex return deferred when change page", function(assert) {
 QUnit.test("pageIndex return deferred when set same pageIndex", function(assert) {
     var doneCalled = false;
 
-    //act
+    // act
     var dataGrid = createDataGrid({
         dataSource: {
             pageSize: 2,
@@ -5687,12 +5690,12 @@ QUnit.test("pageIndex return deferred when set same pageIndex", function(assert)
 
     this.clock.tick();
 
-    //act
+    // act
     dataGrid.pageIndex(0).done(function() {
         doneCalled = true;
     });
 
-    //assert
+    // assert
     assert.equal(doneCalled, true);
     var visibleRows = dataGrid.getVisibleRows();
     assert.equal(visibleRows.length, 2);
@@ -5702,7 +5705,7 @@ QUnit.test("pageIndex return deferred when set same pageIndex", function(assert)
 QUnit.test("onContentReady after render", function(assert) {
     var contentReadyCallCount = 0;
 
-    //act
+    // act
     var dataGrid = createDataGrid({
         loadingTimeout: undefined,
         dataSource: {
@@ -5714,21 +5717,21 @@ QUnit.test("onContentReady after render", function(assert) {
         }
     });
 
-    //assert
+    // assert
     assert.equal($("#dataGrid").find(".dx-data-row").length, 3);
     assert.equal(contentReadyCallCount, 1);
 
-    //act
+    // act
     dataGrid._render();
 
-    //assert
+    // assert
     assert.equal($("#dataGrid").find(".dx-data-row").length, 3);
     assert.equal(contentReadyCallCount, 2);
 });
 
-//T148740
+// T148740
 QUnit.test("Updating after changing the option", function(assert) {
-    //arrange
+    // arrange
     var dataGrid = $("#dataGrid").dxDataGrid({
         columns: ["field1", "field2"],
         dataSource: {
@@ -5738,27 +5741,27 @@ QUnit.test("Updating after changing the option", function(assert) {
 
     this.clock.tick();
 
-    //assert
+    // assert
     assert.equal(dataGrid._views.columnHeadersView.element().find("td").length, 2, "count columns");
 
-    //act
+    // act
     dataGrid.option("groupPanel.visible", true);
     this.clock.tick();
 
-    //assert
+    // assert
     assert.equal(dataGrid._views.headerPanel.element().find(".dx-datagrid-group-panel").length, 1, "has group panel");
     assert.ok(dataGrid._views.headerPanel.element().find(".dx-datagrid-group-panel").is(":visible"), "visible group panel");
 
-    //act
+    // act
     dataGrid.columnOption(0, { visible: false });
     this.clock.tick();
 
-    //assert
+    // assert
     assert.equal(dataGrid._views.columnHeadersView.element().find("td").length, 1, "count columns");
 });
 
 QUnit.test("Correct update group panel items runtime", function(assert) {
-    //arrange
+    // arrange
     var dataGrid = $("#dataGrid").dxDataGrid({
         columns: ["field1", "field2"],
         groupPanel: { visible: true },
@@ -5769,18 +5772,18 @@ QUnit.test("Correct update group panel items runtime", function(assert) {
 
     this.clock.tick();
 
-    //act
+    // act
     dataGrid.columnOption(0, { groupIndex: 0 });
     this.clock.tick();
 
-    //assert
+    // assert
     var $groupPanelItems = $("#dataGrid").find(".dx-group-panel-item");
 
     assert.equal($groupPanelItems.length, 1, "count of group panel items");
 });
 
 QUnit.test("Check group panel items are draggable when toolbar items updated runtime", function(assert) {
-    //arrange
+    // arrange
     var renderCompletedCallCount = 0;
     var dataGrid = $("#dataGrid").dxDataGrid({
         onInitialized: function(e) {
@@ -5797,20 +5800,20 @@ QUnit.test("Check group panel items are draggable when toolbar items updated run
 
     this.clock.tick();
 
-    //act
+    // act
     var toolbar = dataGrid.$element().find(".dx-toolbar").dxToolbar("instance");
     toolbar.option("items", toolbar.option("items"));
     this.clock.tick();
 
-    //assert
+    // assert
     var $groupPanelItems = $("#dataGrid").find(".dx-toolbar .dx-datagrid-drag-action");
     assert.equal($groupPanelItems.length, 1, "count of group panel items");
     assert.equal(renderCompletedCallCount, 3, "renderCompleted call count");
 });
 
-//T113684
+// T113684
 QUnit.test("Height rows view = height content", function(assert) {
-    //arrange, act
+    // arrange, act
     var rowsViewElement,
         $dataGrid = $("#dataGrid").dxDataGrid({
             height: 200,
@@ -5823,7 +5826,7 @@ QUnit.test("Height rows view = height content", function(assert) {
 
     this.clock.tick();
 
-    //assert
+    // assert
     rowsViewElement = $dataGrid.find(".dx-datagrid-rowsview");
     assert.equal(rowsViewElement.find(".dx-datagrid-content").length, 1, "has content");
     var heightDiff = Math.round(rowsViewElement.height()) - rowsViewElement.find("tbody")[0].offsetHeight;
@@ -5831,7 +5834,7 @@ QUnit.test("Height rows view = height content", function(assert) {
 });
 
 QUnit.test("Height rows view auto when no height option", function(assert) {
-    //arrange, act
+    // arrange, act
     var rowsViewElement,
         $dataGrid = $("#dataGrid").dxDataGrid({
             columns: ["field1", "field2"],
@@ -5843,13 +5846,13 @@ QUnit.test("Height rows view auto when no height option", function(assert) {
 
     this.clock.tick();
 
-    //assert
+    // assert
     rowsViewElement = $dataGrid.find(".dx-datagrid-rowsview");
     assert.equal(rowsViewElement[0].style.height, "auto", "rowsview height is auto");
 });
 
 QUnit.test("Assign column options", function(assert) {
-    //arrange, act
+    // arrange, act
     var $dataGrid = $("#dataGrid").dxDataGrid({
         dataSource: [{ field1: "1", field2: "2" }]
     });
@@ -5858,13 +5861,13 @@ QUnit.test("Assign column options", function(assert) {
 
     $dataGrid.dxDataGrid("instance").columnOption("field1", "visible", false);
 
-    //assert
+    // assert
     var headerCells = $dataGrid.find(".dx-header-row").find("td");
     assert.strictEqual(headerCells.length, 1, "header cells count after hide first column");
 });
 
 QUnit.test("Assign column options with beginUpdate/endUpdate", function(assert) {
-    //arrange, act
+    // arrange, act
     var $dataGrid = $("#dataGrid").dxDataGrid({
         dataSource: [{ field1: "1", field2: "2", field3: "3" }]
     });
@@ -5880,13 +5883,13 @@ QUnit.test("Assign column options with beginUpdate/endUpdate", function(assert) 
     });
 
 
-    //act
+    // act
     dataGrid.beginUpdate();
     dataGrid.columnOption("field1", "visible", false);
     dataGrid.columnOption("field2", "visible", false);
     dataGrid.endUpdate();
 
-    //assert
+    // assert
     assert.deepEqual(columnsChangedArgs, [{
         changeTypes: { columns: true, length: 1 },
         optionNames: { visible: true, length: 1 }
@@ -5896,9 +5899,9 @@ QUnit.test("Assign column options with beginUpdate/endUpdate", function(assert) 
     assert.strictEqual(headerCells.length, 1, "header cells count after hide two columns");
 });
 
-//T427432
+// T427432
 QUnit.test("Assign grid option and refresh in beginUpdate/endUpdate", function(assert) {
-    //arrange, act
+    // arrange, act
     var $dataGrid = $("#dataGrid").dxDataGrid({
         selection: {
             mode: "multiple"
@@ -5913,7 +5916,7 @@ QUnit.test("Assign grid option and refresh in beginUpdate/endUpdate", function(a
     assert.strictEqual($dataGrid.find(".dx-header-row").children().length, 3, "header cells count");
     assert.strictEqual($dataGrid.find(".dx-data-row").children().length, 3, "data cells count");
 
-    //act
+    // act
     dataGrid.beginUpdate();
     dataGrid.option("selection.mode", "single");
     dataGrid.refresh();
@@ -5921,14 +5924,14 @@ QUnit.test("Assign grid option and refresh in beginUpdate/endUpdate", function(a
 
     this.clock.tick();
 
-    //assert
+    // assert
     assert.strictEqual($dataGrid.find(".dx-header-row").children().length, 2, "header cells count");
     assert.strictEqual($dataGrid.find(".dx-data-row").children().length, 2, "data cells count");
 });
 
-//T181974, T152353
+// T181974, T152353
 QUnit.test("Reset last non-command column width when width 100% in style", function(assert) {
-    //arrange
+    // arrange
     var $dataGrid = $("#dataGrid").css("width", "100%").dxDataGrid({
         dataSource: [{ field1: "1", field2: "2", field3: "3", field4: "4", field5: "5" }],
         groupPanel: {
@@ -5952,11 +5955,11 @@ QUnit.test("Reset last non-command column width when width 100% in style", funct
         allowColumnResizing: true
     });
 
-    //act
+    // act
     this.clock.tick();
     var $cols = $dataGrid.find("colgroup").first().find("col");
 
-    //assert
+    // assert
     assert.equal($cols.length, 3);
     assert.equal($cols.get(0).style.width, "50px", "first column width is not reset");
     assert.equal($cols.get(1).style.width, "auto", "second column width is reset - this is last non-command column");
@@ -5964,9 +5967,9 @@ QUnit.test("Reset last non-command column width when width 100% in style", funct
     assert.equal($dataGrid.width(), $dataGrid.parent().width());
 });
 
-//T276049
+// T276049
 QUnit.test("columnFixing.enabled change to false", function(assert) {
-    //arrange
+    // arrange
     var $dataGrid = $("#dataGrid").dxDataGrid({
         dataSource: [{ field1: "1", field2: "2", field3: "3", field4: "4", field5: "5" }],
         columns: ["field1", "field2"],
@@ -5983,19 +5986,19 @@ QUnit.test("columnFixing.enabled change to false", function(assert) {
     assert.equal($dataGrid.find(".dx-datagrid-rowsview table").length, 2, "two rowsview tables");
     assert.equal($dataGrid.dxDataGrid("instance").getView("rowsView").getTableElements().length, 2, "two rowsview tables");
 
-    //act
+    // act
     $dataGrid.dxDataGrid("instance").option("columnFixing.enabled", false);
 
     this.clock.tick();
 
-    //assert
+    // assert
     assert.equal($dataGrid.find(".dx-datagrid-rowsview table").length, 1, "one main rowsview table");
     assert.equal($dataGrid.dxDataGrid("instance").getView("rowsView").getTableElements().length, 1, "one main rowsview table");
 });
 
-//T445971
+// T445971
 QUnit.test("Hide group panel and search panel when calculateDisplayValue is defined", function(assert) {
-    //arrange
+    // arrange
     var visibleColumns,
         dataGrid = createDataGrid({
             loadingTimeout: undefined,
@@ -6007,7 +6010,7 @@ QUnit.test("Hide group panel and search panel when calculateDisplayValue is defi
             groupPanel: { visible: true }
         });
 
-    //act
+    // act
     dataGrid.option({
         groupPanel: {
             visible: false
@@ -6017,7 +6020,7 @@ QUnit.test("Hide group panel and search panel when calculateDisplayValue is defi
         }
     });
 
-    //assert
+    // assert
     visibleColumns = dataGrid.getVisibleColumns();
     assert.strictEqual(visibleColumns.length, 3, "count column");
     assert.strictEqual(visibleColumns[0].dataField, "field1", "dataField of the first column");
@@ -6026,12 +6029,12 @@ QUnit.test("Hide group panel and search panel when calculateDisplayValue is defi
     assert.strictEqual(visibleColumns[1].groupIndex, 1, "groupIndex of the second column");
 });
 
-//T582855
+// T582855
 QUnit.test("change editing.allowAdding with onCellPrepared and dataSource options should update add row button", function(assert) {
-    //arrange
+    // arrange
     var dataGrid = createDataGrid({});
 
-    //act
+    // act
     dataGrid.option({
         editing: {
             allowAdding: true
@@ -6042,7 +6045,7 @@ QUnit.test("change editing.allowAdding with onCellPrepared and dataSource option
 
     this.clock.tick();
 
-    //assert
+    // assert
     var $addRowButton = dataGrid.$element().find(".dx-datagrid-addrow-button");
     assert.strictEqual($addRowButton.length, 1, "add row button is rendered");
 });
@@ -6057,66 +6060,66 @@ QUnit.module("API methods", {
 });
 
 QUnit.test("begin custom loading", function(assert) {
-    //arrange, act
+    // arrange, act
     var dataGrid = createDataGrid({
         loadingTimeout: undefined,
         dataSource: [{ id: 1111 }]
     });
 
-    //act
+    // act
     dataGrid.beginCustomLoading("Test");
 
-    //assert
+    // assert
     assert.equal(dataGrid.getView("rowsView")._loadPanel.option("message"), "Test");
 
-    //act
+    // act
     dataGrid.endCustomLoading();
 
     this.clock.tick(200);
 
-    //assert
+    // assert
     assert.equal(dataGrid.getView("rowsView")._loadPanel.option("message"), "Loading...");
 });
 
 QUnit.test("begin custom loading without message", function(assert) {
-    //arrange, act
+    // arrange, act
     var dataGrid = createDataGrid({
         loadingTimeout: undefined,
         dataSource: [{ id: 1111 }]
     });
 
-    //act
+    // act
     dataGrid.beginCustomLoading();
 
-    //assert
+    // assert
     assert.equal(dataGrid.getView("rowsView")._loadPanel.option("message"), "Loading...");
 
-    //act
+    // act
     dataGrid.endCustomLoading();
 
     this.clock.tick(200);
 
-    //assert
+    // assert
     assert.equal(dataGrid.getView("rowsView")._loadPanel.option("message"), "Loading...");
 });
 
 QUnit.test("insert row", function(assert) {
-    //arrange, act
+    // arrange, act
     var dataGrid = createDataGrid({
         loadingTimeout: undefined,
         dataSource: [{ id: 1111 }]
     });
 
-    //act
+    // act
     dataGrid.addRow();
 
-    //assert
+    // assert
     assert.equal($("#dataGrid").find(TEXTEDITOR_INPUT_SELECTOR).length, 1);
     assert.equal($("#dataGrid").find(".dx-datagrid-rowsview").find("tbody > tr").length, 3, "inserting row + data row + freespace row");
 });
 
 QUnit.test("Disable editing buttons after insert a row", function(assert) {
-    //arrange, act
+    // arrange, act
     var dataGrid = createDataGrid({
             loadingTimeout: undefined,
             dataSource: [{ id: 1111 }],
@@ -6133,19 +6136,19 @@ QUnit.test("Disable editing buttons after insert a row", function(assert) {
     assert.ok($editButtons.eq(1).hasClass("dx-state-disabled"), "Save button is disabled");
     assert.ok($editButtons.eq(2).hasClass("dx-state-disabled"), "Revert button is disabled");
 
-    //act
+    // act
     dataGrid.addRow();
 
     $editButtons = $("#dataGrid .dx-edit-button");
 
-    //assert
+    // assert
     assert.ok(!$editButtons.eq(0).hasClass("dx-state-disabled"), "Insert button isn't disabled");
     assert.ok(!$editButtons.eq(1).hasClass("dx-state-disabled"), "Save button isn't disabled");
     assert.ok(!$editButtons.eq(2).hasClass("dx-state-disabled"), "Revert button isn't disabled");
 });
 
 QUnit.test("insert row when master detail autoExpandAll is active", function(assert) {
-    //arrange, act
+    // arrange, act
     var dataGrid = createDataGrid({
             loadingTimeout: undefined,
             dataSource: [{ id: 1111 }],
@@ -6159,11 +6162,11 @@ QUnit.test("insert row when master detail autoExpandAll is active", function(ass
         }),
         rows;
 
-    //act
+    // act
     dataGrid.addRow();
     rows = $("#dataGrid").find(".dx-datagrid-rowsview").find("tbody > tr");
 
-    //assert
+    // assert
     assert.ok(rows.eq(0).hasClass("dx-row-inserted"), "First row is inserted row");
     assert.ok(rows.eq(1).hasClass("dx-row"), "Second row has dx-row class");
     assert.ok(!rows.eq(1).hasClass("dx-master-detail-row"), "Second row is not master-detail-row");
@@ -6171,7 +6174,7 @@ QUnit.test("insert row when master detail autoExpandAll is active", function(ass
 });
 
 QUnit.test("LoadPanel show when grid rendering in detail row", function(assert) {
-    //arrange, act
+    // arrange, act
     var clock = sinon.useFakeTimers();
 
     createDataGrid({
@@ -6192,39 +6195,39 @@ QUnit.test("LoadPanel show when grid rendering in detail row", function(assert) 
         }
     });
 
-    //act
+    // act
     clock.tick(200);
     $(".dx-command-expand").eq(1).trigger("dxclick");
     clock.tick(200);
 
-    //assert
+    // assert
     assert.equal($(".dx-loadpanel").length, 2, "We have two loadpanels");
     assert.equal($(".dx-loadpanel.dx-state-invisible").length, 1, "One of them is invisible");
 
-    //act
+    // act
     clock.tick(200);
 
-    //assert
+    // assert
     assert.equal($(".dx-loadpanel").length, 2, "We have two loadpanels");
     assert.equal($(".dx-loadpanel.dx-state-invisible").length, 2, "two load panels are invisible");
 });
 
 QUnit.test("add column", function(assert) {
-    //arrange, act
+    // arrange, act
     var dataGrid = createDataGrid({
         loadingTimeout: undefined,
         dataSource: [{ id: 1111 }]
     });
 
-    //act
+    // act
     dataGrid.addColumn("testColumn");
 
-    //assert
+    // assert
     assert.equal($("#dataGrid").find("td").eq(1).find(".dx-datagrid-text-content").first().text(), "Test Column");
 });
 
 QUnit.test("Group row has correct text-align in RTL", function(assert) {
-    //arrange, act
+    // arrange, act
 
     var dataGrid = createDataGrid({
             rtlEnabled: true,
@@ -6237,13 +6240,13 @@ QUnit.test("Group row has correct text-align in RTL", function(assert) {
         groupedRows = $(dataGrid.$element()).find(".dx-group-row"),
         cells = groupedRows.children();
 
-    //assert
+    // assert
     assert.ok(groupedRows.length, "We have grouped row");
     assert.equal(cells.eq(1).css("text-align"), "right", "Grouped cell has correct text-align");
 });
 
 QUnit.test("CellTemplate and master-detail template cells has correct text-align in RTL", function(assert) {
-    //arrange, act
+    // arrange, act
 
     var dataGrid = createDataGrid({
             rtlEnabled: true,
@@ -6278,13 +6281,13 @@ QUnit.test("CellTemplate and master-detail template cells has correct text-align
             return $(dataGrid.$element()).find(".dx-button").eq(buttonNumber).closest("td").css("text-align");
         };
 
-    //assert
+    // assert
     assert.equal(getCellTextAlignByButtonNumber(0), "right", "Cell template has correct text-align");
     assert.equal(getCellTextAlignByButtonNumber(1), "right", "Detail cell has correct text-align");
 });
 
 QUnit.testInActiveWindow("Keyboard navigation works well with multilevel grouping", function(assert) {
-    //arrange
+    // arrange
     var dataGrid = createDataGrid({
             loadingTimeout: undefined,
             dataSource: {
@@ -6298,16 +6301,16 @@ QUnit.testInActiveWindow("Keyboard navigation works well with multilevel groupin
             originalEvent: $.Event("keyup")
         };
 
-    //act
+    // act
     dataGrid.focus($(".dx-data-row").find("td").last());
     navigationController._upDownKeysHandler(keyUpEvent);
     navigationController._upDownKeysHandler(keyUpEvent);
 
-    //assert
+    // assert
     assert.equal(navigationController._focusedCellPosition.rowIndex, 0);
 });
 
-//T460276
+// T460276
 QUnit.testInActiveWindow("Tab key should open editor in next cell when virtual scrolling enabled and editing mode is cell", function(assert) {
     if(devices.real().deviceType !== "desktop") {
         assert.ok(true, "keyboard navigation is disabled for not desktop devices");
@@ -6320,7 +6323,7 @@ QUnit.testInActiveWindow("Tab key should open editor in next cell when virtual s
         array.push({ name: "name" + i, index: i });
     }
 
-    //arrange
+    // arrange
     var dataGrid = createDataGrid({
             dataSource: array,
             height: 200,
@@ -6334,7 +6337,7 @@ QUnit.testInActiveWindow("Tab key should open editor in next cell when virtual s
         }),
         navigationController = dataGrid.getController("keyboardNavigation");
 
-    //act
+    // act
     this.clock.tick();
     dataGrid.getScrollable().scrollTo({ left: 0, top: 1500 });
 
@@ -6348,7 +6351,7 @@ QUnit.testInActiveWindow("Tab key should open editor in next cell when virtual s
     navigationController._keyDownHandler({ key: "tab", originalEvent: $.Event("keydown", { target: $(dataGrid.$element()).find("input").get(0) }) });
     this.clock.tick();
 
-    //assert
+    // assert
     assert.equal(Math.floor(rowData.index / 20), 2, "scroll position is on third page");
     assert.equal(dataGrid.getTopVisibleRowData().index, rowData.index, "scroll position is not changed");
     assert.equal($(dataGrid.$element()).find("input").val(), (rowData.index + 1).toString(), "editor in second column with correct row index is opened");
@@ -6361,7 +6364,7 @@ QUnit.testInActiveWindow("Tab key on editor should focus next cell if editing mo
         return;
     }
 
-    //arrange
+    // arrange
     var dataGrid = createDataGrid({
             dataSource: [{ name: "name 1", value: 1 }, { name: "name 2", value: 2 }],
             editing: {
@@ -6380,17 +6383,17 @@ QUnit.testInActiveWindow("Tab key on editor should focus next cell if editing mo
     this.clock.tick();
 
 
-    //act
+    // act
     navigationController._keyDownHandler({ key: "tab", originalEvent: $.Event("keydown", { target: $(":focus").get(0) }) });
     $(dataGrid.getCellElement(0, 1)).find(".dx-numberbox").dxNumberBox("instance").option("value", 10);
     this.clock.tick();
 
-    //assert
+    // assert
     assert.equal($(dataGrid.getCellElement(0, 1)).find(".dx-texteditor-input").eq(0).val(), "10", "editor value is changed");
     assert.ok($(dataGrid.getCellElement(1, 0)).hasClass("dx-focused"), "first cell in second row is focused");
 });
 
-//T460276
+// T460276
 QUnit.testInActiveWindow("Tab key should open editor in next cell when virtual scrolling enabled and editing mode is cell at the end of table", function(assert) {
     if(devices.real().deviceType !== "desktop") {
         assert.ok(true, "keyboard navigation is disabled for not desktop devices");
@@ -6402,7 +6405,7 @@ QUnit.testInActiveWindow("Tab key should open editor in next cell when virtual s
         array.push({ name: "name" + i, index: i });
     }
 
-    //arrange
+    // arrange
     var dataGrid = createDataGrid({
             dataSource: array,
             height: 200,
@@ -6416,7 +6419,7 @@ QUnit.testInActiveWindow("Tab key should open editor in next cell when virtual s
         }),
         navigationController = dataGrid.getController("keyboardNavigation");
 
-    //act
+    // act
     this.clock.tick();
     dataGrid.getScrollable().scrollTo({ x: 0, y: 10000 });
 
@@ -6430,20 +6433,20 @@ QUnit.testInActiveWindow("Tab key should open editor in next cell when virtual s
     navigationController._keyDownHandler({ key: "tab", originalEvent: $.Event("keydown", { target: $(dataGrid.$element()).find("input").get(0) }) });
     this.clock.tick();
 
-    //assert
+    // assert
     assert.equal(dataGrid.getTopVisibleRowData().index, rowData.index, "scroll position is not changed");
     assert.equal($(dataGrid.$element()).find("input").val(), "198", "editor in second column with correct row index is opened");
     assert.ok($(dataGrid.$element()).find("input").closest("td").hasClass("dx-focused"), "cell with editor is focused");
 });
 
-//T553067
+// T553067
 QUnit.testInActiveWindow("Enter key on editor should prevent default behaviour", function(assert) {
     if(devices.real().deviceType !== "desktop") {
         assert.ok(true, "keyboard navigation is disabled for not desktop devices");
         return;
     }
 
-    //arrange
+    // arrange
     var dataGrid = createDataGrid({
             dataSource: [{ name: "name 1", value: 1 }, { name: "name 2", value: 2 }],
             editing: {
@@ -6458,23 +6461,23 @@ QUnit.testInActiveWindow("Enter key on editor should prevent default behaviour",
     dataGrid.editCell(0, 0);
     this.clock.tick();
     $(":focus").on("focusout", function(e) {
-        //emulate browser behaviour
+        // emulate browser behaviour
         $(e.target).trigger("change");
     });
     $(":focus").val("test");
 
-    //act
+    // act
     var event = $.Event("keydown", { target: $(":focus").get(0) });
     navigationController._keyDownHandler({ key: "enter", originalEvent: event });
     this.clock.tick();
 
-    //assert
+    // assert
     assert.ok(event.isDefaultPrevented(), "keydown event is prevented");
     assert.equal(dataGrid.cellValue(0, 0), "test", "cell value is changed");
 });
 
 QUnit.test("expandAll", function(assert) {
-    //arrange, act
+    // arrange, act
     var expandAllGroupIndex,
         dataGrid = createDataGrid({
             loadingTimeout: undefined,
@@ -6485,15 +6488,15 @@ QUnit.test("expandAll", function(assert) {
         expandAllGroupIndex = groupIndex;
     };
 
-    //act
+    // act
     dataGrid.expandAll(1);
 
-    //assert
+    // assert
     assert.equal(expandAllGroupIndex, 1);
 });
 
 QUnit.test("collapseAll", function(assert) {
-    //arrange, act
+    // arrange, act
     var collapseAllGroupIndex,
         dataGrid = createDataGrid({
             loadingTimeout: undefined,
@@ -6504,16 +6507,16 @@ QUnit.test("collapseAll", function(assert) {
         collapseAllGroupIndex = groupIndex;
     };
 
-    //act
+    // act
     dataGrid.collapseAll(1);
 
-    //assert
+    // assert
     assert.equal(collapseAllGroupIndex, 1);
 });
 
-//T152353
+// T152353
 QUnit.test("Stretch column datagrid width when grouping columns", function(assert) {
-    //arrange
+    // arrange
     var $dataGrid = $("#dataGridWithStyle").dxDataGrid({
             dataSource: [{ field1: "1", field2: "2", field3: "3", field4: "4", field5: "5" }],
             groupPanel: {
@@ -6542,7 +6545,7 @@ QUnit.test("Stretch column datagrid width when grouping columns", function(asser
         gridWidthAfterUngrouping;
 
     this.clock.tick();
-    //act
+    // act
     gridInitialWidth = $dataGrid.outerWidth();
 
     columnController.moveColumn(2, 0, "headers", "group");
@@ -6555,31 +6558,31 @@ QUnit.test("Stretch column datagrid width when grouping columns", function(asser
 
     gridWidthAfterUngrouping = $dataGrid.outerWidth();
 
-    //assert
-    //TODO: if we set style or rule to grid's container, this asserts will be "equal" instead of "ok"
+    // assert
+    // TODO: if we set style or rule to grid's container, this asserts will be "equal" instead of "ok"
     assert.equal(gridWidthAfterGrouping, gridInitialWidth, "After grouping columns grid width equals initial grid width");
     assert.equal(gridWidthAfterUngrouping, gridWidthAfterGrouping, "After move one group column to grid, grid size equals than previous grouping");
     assert.equal(gridWidthAfterUngrouping, gridInitialWidth);
 });
 
-//B239291
+// B239291
 QUnit.test("component refresh", function(assert) {
-    //arrange, act
+    // arrange, act
     var dataGrid = createDataGrid({
         loadingTimeout: undefined,
         dataSource: [{ testField: "TestValue" }]
     });
 
-    //act
+    // act
     dataGrid._refresh();
 
-    //assert
+    // assert
     assert.equal($("#dataGrid").find("td").eq(0).find(".dx-datagrid-text-content").first().text(), "Test Field");
     assert.equal($("#dataGrid").find("tbody > tr").eq(1).find("td").eq(0).text(), "TestValue");
 });
 
 QUnit.test("refresh", function(assert) {
-    //arrange, act
+    // arrange, act
     var dataGrid = createDataGrid({
             loadingTimeout: undefined,
             dataSource: []
@@ -6595,9 +6598,9 @@ QUnit.test("refresh", function(assert) {
     assert.ok(reloadResolved);
 });
 
-//T257132
+// T257132
 QUnit.test("refresh $.Callbacks memory leaks", function(assert) {
-    //arrange, act
+    // arrange, act
     var dataGrid = createDataGrid({
             loadingTimeout: undefined,
             dataSource: []
@@ -6622,15 +6625,15 @@ QUnit.test("refresh $.Callbacks memory leaks", function(assert) {
         });
     });
 
-    //act
+    // act
     dataGrid.refresh();
 
-    //assert
+    // assert
     assert.equal(addCallCount, removeCallCount, "added call count equals removed call count");
 });
 
 QUnit.test("loading count after refresh when scrolling mode virtual", function(assert) {
-    //arrange, act
+    // arrange, act
 
     var array = [];
     for(var i = 0; i < 50; i++) {
@@ -6663,18 +6666,18 @@ QUnit.test("loading count after refresh when scrolling mode virtual", function(a
     loadingCount = 0;
     contentReadyCount = 0;
 
-    //act
+    // act
     dataGrid.refresh();
     this.clock.tick();
 
-    //assert
+    // assert
     assert.equal(loadingCount, 2, "virtual scrolling load 2 pages");
     assert.equal(contentReadyCount, 1, "contentReady is called once");
 });
 
-//T551304
+// T551304
 QUnit.test("row should rendered after editing if scrolling mode is virtual", function(assert) {
-    //arrange, act
+    // arrange, act
 
     var array = [];
     for(var i = 0; i < 4; i++) {
@@ -6693,19 +6696,19 @@ QUnit.test("row should rendered after editing if scrolling mode is virtual", fun
 
     this.clock.tick();
 
-    //act
+    // act
     dataGrid.cellValue(2, 1, 666);
     dataGrid.saveEditData();
     this.clock.tick();
 
-    //assert
+    // assert
     assert.equal(dataGrid.getVisibleRows().length, 4, "visible row count");
     assert.equal(dataGrid.cellValue(2, 1), 666, "value is changed");
     assert.equal(dataGrid.hasEditData(), false, "no unsaved data");
 });
 
 QUnit.test("Duplicate rows should not be rendered if virtual scrolling enabled and column has values on second page only", function(assert) {
-    //arrange, act
+    // arrange, act
 
     var array = [];
     for(var i = 1; i <= 20; i++) {
@@ -6723,16 +6726,16 @@ QUnit.test("Duplicate rows should not be rendered if virtual scrolling enabled a
         }
     });
 
-    //act
+    // act
     this.clock.tick();
 
-    //assert
+    // assert
     var $dataRows = $(dataGrid.$element()).find(".dx-data-row");
     assert.equal($dataRows.length, 20, "rendered data row count");
     assert.equal($dataRows.filter(":contains(Test)").length, 1, "only one row contains text 'Test'");
 });
 
-//T307737
+// T307737
 QUnit.test("scroll position after refresh with native scrolling", function(assert) {
     var $dataGrid = $("#dataGrid").dxDataGrid({
             width: 100,
@@ -6751,10 +6754,10 @@ QUnit.test("scroll position after refresh with native scrolling", function(asser
     $scrollableContainer.scrollLeft(100);
     $($scrollableContainer).trigger("scroll");
 
-    //act
+    // act
     dataGrid.updateDimensions();
 
-    //assert
+    // assert
     assert.equal($scrollableContainer.scrollLeft(), 100);
 });
 
@@ -6772,17 +6775,17 @@ QUnit.test("round scroll position for columnHeadersView", function(assert) {
 
     var scrollable = $dataGrid.find(".dx-scrollable").dxScrollable("instance");
 
-    //act
+    // act
     scrollable.scrollTo(100.7);
 
-    //assert
+    // assert
     assert.equal(Math.round(scrollable.scrollLeft()), 101);
 
     var $headersScrollable = $dataGrid.find(".dx-datagrid-headers" + " .dx-datagrid-scroll-container").first();
     assert.equal($headersScrollable.scrollLeft(), 101);
 });
 
-//T372552
+// T372552
 QUnit.test("scroll must be updated after change column visibility", function(assert) {
     var $dataGrid = $("#dataGrid").dxDataGrid({
             width: 100,
@@ -6812,12 +6815,12 @@ QUnit.test("scroll must be updated after change column visibility", function(ass
 
     var scrollable = $dataGrid.find(".dx-scrollable").dxScrollable("instance");
 
-    //act
+    // act
     scrollable.scrollTo(200);
     dataGrid.columnOption("field3", "visible", true);
     this.clock.tick();
 
-    //assert
+    // assert
     assert.equal(scrollable.scrollLeft(), 200);
 
     var $headersScrollable = $dataGrid.find(".dx-datagrid-headers" + " .dx-datagrid-scroll-container").first();
@@ -6825,22 +6828,22 @@ QUnit.test("scroll must be updated after change column visibility", function(ass
 });
 
 QUnit.test("getSelectedRowsData when storeSelectedItems enabled", function(assert) {
-    //arrange, act
+    // arrange, act
     var dataGrid = createDataGrid({
         loadingTimeout: undefined,
         dataSource: [{ testField: "TestValue" }],
         storeSelectedItems: true
     });
 
-    //act
+    // act
     var rows = dataGrid.getSelectedRowsData();
 
-    //assert
+    // assert
     assert.deepEqual(rows, [], "empty rows");
 });
 
 QUnit.test("pageCount", function(assert) {
-    //act
+    // act
     var dataGrid = createDataGrid({
         loadingTimeout: undefined,
         dataSource: {
@@ -6849,29 +6852,29 @@ QUnit.test("pageCount", function(assert) {
         }
     });
 
-    //act
+    // act
     var pageCount = dataGrid.pageCount();
 
-    //assert
+    // assert
     assert.equal(pageCount, 2, "Page Count");
 });
 
 QUnit.test("columnCount", function(assert) {
-    //act
+    // act
     var dataGrid = createDataGrid({
         loadingTimeout: undefined,
         dataSource: [{ field1: 1, field2: 2, field3: 3 }]
     });
 
-    //act
+    // act
     var columnCount = dataGrid.columnCount();
 
-    //assert
+    // assert
     assert.equal(columnCount, 3, "Column Count");
 });
 
 QUnit.test("getCellElement", function(assert) {
-    //arrange, act
+    // arrange, act
     var dataGrid = createDataGrid({
         loadingTimeout: undefined,
         columns: ["field1", "field2", "field3", { dataField: "fixedField", fixed: true, fixedPosition: "right" }],
@@ -6884,7 +6887,7 @@ QUnit.test("getCellElement", function(assert) {
         }
     });
 
-    //act, assert
+    // act, assert
     assert.equal($(dataGrid.getCellElement(2, "field2")).text(), "5", "column by field name");
     assert.equal($(dataGrid.getCellElement(2, "fixedField")).text(), "6", "column by field name for fixed column");
     assert.equal($(dataGrid.getCellElement(2, 2)).text(), "5", "column by visible index");
@@ -6895,7 +6898,7 @@ QUnit.test("getCellElement", function(assert) {
 });
 
 QUnit.test("getRowElement", function(assert) {
-    //arrange
+    // arrange
     var $rowElement,
         dataGrid = createDataGrid({
             loadingTimeout: undefined,
@@ -6908,7 +6911,7 @@ QUnit.test("getRowElement", function(assert) {
             }
         });
 
-    //act, assert
+    // act, assert
     $rowElement = $(dataGrid.getRowElement(1));
     assert.equal(typeUtils.isRenderer(dataGrid.getRowElement(1)), !!config().useJQuery, "rowElement is correct");
     assert.equal($rowElement.length, 1, "count row");
@@ -6916,7 +6919,7 @@ QUnit.test("getRowElement", function(assert) {
 });
 
 QUnit.test("getRowElement when there is fixed column", function(assert) {
-    //arrange
+    // arrange
     var $rowElement,
         dataGrid = createDataGrid({
             loadingTimeout: undefined,
@@ -6930,7 +6933,7 @@ QUnit.test("getRowElement when there is fixed column", function(assert) {
             }
         });
 
-    //act, assert
+    // act, assert
     $rowElement = $(dataGrid.getRowElement(1));
     assert.equal($rowElement.length, 2, "count row");
     assert.deepEqual($rowElement[0], $("#dataGrid").find(".dx-datagrid-rowsview .dx-datagrid-content").not(".dx-datagrid-content-fixed").find("tbody > tr")[1], "correct row element of the main table");
@@ -6938,7 +6941,7 @@ QUnit.test("getRowElement when there is fixed column", function(assert) {
 });
 
 QUnit.test("Scroll positioned correct with fixed columns", function(assert) {
-    //arrange, act
+    // arrange, act
     var dataGrid = createDataGrid({
         loadingTimeout: undefined,
         columnFixing: {
@@ -6954,17 +6957,17 @@ QUnit.test("Scroll positioned correct with fixed columns", function(assert) {
         width: 400
     });
 
-    //act
+    // act
 
     dataGrid.focus($(dataGrid.getCellElement(0, 2)));
     this.clock.tick();
 
-    //assert
+    // assert
     assert.equal(dataGrid.getView("rowsView").getScrollable().scrollLeft(), 400, "Correct offset");
 });
 
 QUnit.test("There is no console errors when call getCellElement at command column's cell", function(assert) {
-    //arrange
+    // arrange
     var dataGrid = createDataGrid({
         loadingTimeout: undefined,
         columns: [{ dataField: "field1" }],
@@ -6999,14 +7002,14 @@ QUnit.test("There is no console errors when call getCellElement at command colum
         errorMessage = message;
     };
 
-    //act
+    // act
     dataGrid.focus($(dataGrid.getCellElement(0, 0)));
     this.clock.tick();
     assert.ok(!errorMessage, "There is no errors");
 });
 
 QUnit.test("Focused cell position has correct value when focus grouping row cell", function(assert) {
-    //arrange
+    // arrange
     var dataGrid = createDataGrid({
             loadingTimeout: undefined,
             columns: ["field1", { dataField: "field2", groupIndex: 0 }, { dataField: "field3", groupIndex: 1 }, { dataField: "fixedField", fixed: true, fixedPosition: "right" }],
@@ -7031,7 +7034,7 @@ QUnit.test("Focused cell position has correct value when focus grouping row cell
             }, true);
         };
 
-    //act
+    // act
     $(dataGrid.getCellElement(2, 2)).trigger("dxpointerdown");
 
     assert.deepEqual(keyboardNavigationController._focusedCellPosition, {
@@ -7068,9 +7071,9 @@ QUnit.test("Focused cell position has correct value when focus grouping row cell
     }, "Tabbing to cell OK, column index saved");
 });
 
-//T317210
+// T317210
 QUnit.test("Focused cell position has correct value when focus grouping row with alignByColumn summary cells", function(assert) {
-    //arrange
+    // arrange
     var dataGrid = createDataGrid({
             loadingTimeout: undefined,
             columns: ["field1", { dataField: "field2", groupIndex: 0 }, { dataField: "field3" }, { dataField: "field4" }, { dataField: "fixedField", fixed: true, fixedPosition: "right" }],
@@ -7100,10 +7103,10 @@ QUnit.test("Focused cell position has correct value when focus grouping row with
             }, true);
         };
 
-    //act
+    // act
     $(dataGrid.getCellElement(1, 1)).trigger("dxpointerdown");
 
-    //assert
+    // assert
     assert.deepEqual(keyboardNavigationController._focusedCellPosition, {
         columnIndex: 1,
         rowIndex: 1
@@ -7111,10 +7114,10 @@ QUnit.test("Focused cell position has correct value when focus grouping row with
 
     assert.equal($(dataGrid.getCellElement(1, 1)).text(), "1", "row 1 column 1 text");
 
-    //act
+    // act
     triggerTabPress($(dataGrid.getCellElement(1, 1)), true);
 
-    //assert
+    // assert
     assert.deepEqual(keyboardNavigationController._focusedCellPosition, {
         columnIndex: 1,
         rowIndex: 0
@@ -7124,9 +7127,9 @@ QUnit.test("Focused cell position has correct value when focus grouping row with
     assert.equal($(dataGrid.getCellElement(0, 1)).next().text(), "Sum: 3", "row 0 column 2 exists");
 });
 
-//T404427
+// T404427
 QUnit.testInActiveWindow("focus method for cell with editor must focus this editor", function(assert) {
-    //arrange
+    // arrange
     var dataGrid = createDataGrid({
         loadingTimeout: undefined,
         dataSource: {
@@ -7140,14 +7143,14 @@ QUnit.testInActiveWindow("focus method for cell with editor must focus this edit
         }
     });
 
-    //act
+    // act
     dataGrid.editRow(0);
     this.clock.tick();
 
     dataGrid.focus($(dataGrid.getCellElement(0, 1)));
     this.clock.tick();
 
-    //assert
+    // assert
     var $inputs = $($(dataGrid.$element()).find(TEXTEDITOR_INPUT_SELECTOR));
 
     assert.equal($inputs.length, 2, "dataGrid has two inputs");
@@ -7155,7 +7158,7 @@ QUnit.testInActiveWindow("focus method for cell with editor must focus this edit
 });
 
 QUnit.test("Click on detail cell with cellIndex more than number of parent grid columns", function(assert) {
-    //arrange
+    // arrange
     var dataGrid = createDataGrid({
         loadingTimeout: undefined,
         columns: [{ dataField: "field1" }],
@@ -7186,18 +7189,18 @@ QUnit.test("Click on detail cell with cellIndex more than number of parent grid 
         }
     });
 
-    //act
+    // act
     $(dataGrid.getCellElement(0, 0)).trigger("dxclick");
     this.clock.tick();
 
-    $($(dataGrid.$element()).find("td").eq(14)).trigger("dxpointerdown"); //check that error is not raised
+    $($(dataGrid.$element()).find("td").eq(14)).trigger("dxpointerdown"); // check that error is not raised
 
     assert.ok(dataGrid.getController("keyboardNavigation")._isCellValid($(dataGrid.$element()).find("td").eq(14)), "detail-grid cell with cellIndex greater than number of parent columns causes no errors");
 });
 
-//T454990
+// T454990
 QUnit.test("Row heights should be synchronized after expand master detail row with nested DataGrid", function(assert) {
-    //arrange
+    // arrange
     var dataGrid = createDataGrid({
         columns: [{ dataField: "field1", fixed: true }, { dataField: "field2" }],
         dataSource: [
@@ -7216,11 +7219,11 @@ QUnit.test("Row heights should be synchronized after expand master detail row wi
 
     this.clock.tick();
 
-    //act
+    // act
     dataGrid.expandRow({ id: 1 });
     this.clock.tick();
 
-    //assert
+    // assert
     var $rows = $(dataGrid.getRowElement(1));
 
     assert.equal($rows.length, 2, "two rows: main row + fixed row");
@@ -7229,9 +7232,9 @@ QUnit.test("Row heights should be synchronized after expand master detail row wi
     assert.equal($rows.eq(0).height(), $rows.eq(1).height(), "row heights are synchronized");
 });
 
-//T607490
+// T607490
 QUnit.test("Scrollable should be updated after expand master detail row with nested DataGrid", function(assert) {
-    //arrange
+    // arrange
     var dataGrid = createDataGrid({
         height: 200,
         keyExpr: "id",
@@ -7247,18 +7250,18 @@ QUnit.test("Scrollable should be updated after expand master detail row with nes
 
     this.clock.tick();
 
-    //act
+    // act
     dataGrid.expandRow(1);
     this.clock.tick();
     dataGrid.getScrollable().scrollTo({ x: 0, y: 1000 });
 
-    //assert
+    // assert
     assert.ok(dataGrid.getScrollable().scrollTop() > 100, "vertical scroll is exists");
 });
 
 
 QUnit.test("Column hiding should works with masterDetail and column fixing", function(assert) {
-    //arrange
+    // arrange
     var dataGrid = createDataGrid({
         dataSource: [{ id: 1 }],
         columnHidingEnabled: true,
@@ -7283,7 +7286,7 @@ QUnit.test("Column hiding should works with masterDetail and column fixing", fun
 
     this.clock.tick();
 
-    //act
+    // act
     dataGrid.expandRow({ id: 1 });
     this.clock.tick();
 
@@ -7296,7 +7299,7 @@ QUnit.test("Column hiding should works with masterDetail and column fixing", fun
     dataGrid.collapseAdaptiveDetailRow({ id: 1 });
     this.clock.tick();
 
-    //assert
+    // assert
     var $masterDetailRows = $($(dataGrid.$element()).find(".dx-master-detail-row"));
     assert.equal($masterDetailRows.length, 2, "master-detail row count");
     assert.notOk($masterDetailRows.is(":visible"), "master-detail rows are not visible");
@@ -7308,7 +7311,7 @@ QUnit.testInActiveWindow("Scroll positioned correct with fixed columns and editi
         return;
     }
 
-    //arrange, act
+    // arrange, act
     var dataGrid = createDataGrid({
             loadingTimeout: undefined,
             columnFixing: {
@@ -7339,7 +7342,7 @@ QUnit.testInActiveWindow("Scroll positioned correct with fixed columns and editi
             }, true);
         };
 
-    //act
+    // act
     dataGrid.editCell(0, 0);
     this.clock.tick();
 
@@ -7349,12 +7352,12 @@ QUnit.testInActiveWindow("Scroll positioned correct with fixed columns and editi
     triggerTabPress(dataGrid.getCellElement(0, 1));
     this.clock.tick();
 
-    //assert
+    // assert
     assert.equal(dataGrid.getView("rowsView").getScrollable().scrollLeft(), 400, "Correct offset");
 });
 
 QUnit.testInActiveWindow("'Form' edit mode correctly change focus after edit a field with defined 'setCellValue' handler", function(assert) {
-    //arrange
+    // arrange
     var clock = sinon.useFakeTimers(),
         data = [{ firstName: "Alex", lastName: "Black" }, { firstName: "John", lastName: "Dow" }],
         dataGrid = createDataGrid({
@@ -7385,7 +7388,7 @@ QUnit.testInActiveWindow("'Form' edit mode correctly change focus after edit a f
             });
         };
 
-    //act
+    // act
     dataGrid.editRow(0);
     clock.tick();
 
@@ -7399,7 +7402,7 @@ QUnit.testInActiveWindow("'Form' edit mode correctly change focus after edit a f
     $(dataGrid.$element()).find(".dx-form .dx-texteditor-input").eq(1).focus();
     clock.tick();
 
-    //assert
+    // assert
     var $secondEditor = $(dataGrid.$element()).find(".dx-form .dx-texteditor").eq(1);
 
     assert.deepEqual(
@@ -7413,9 +7416,9 @@ QUnit.testInActiveWindow("'Form' edit mode correctly change focus after edit a f
     clock.restore();
 });
 
-//T532658
+// T532658
 QUnit.test("Cancel editing should works correctly if editing mode is form and masterDetail row is shown", function(assert) {
-    //arrange
+    // arrange
     var items = [{ firstName: "Alex", lastName: "Black" }, { firstName: "John", lastName: "Dow" }];
 
     var dataGrid = createDataGrid({
@@ -7434,10 +7437,10 @@ QUnit.test("Cancel editing should works correctly if editing mode is form and ma
     assert.ok($(dataGrid.getRowElement(0)).hasClass("dx-datagrid-edit-form"), "row 0 is edit form row");
     assert.ok(dataGrid.getVisibleRows()[0].isEditing, "row 0 isEditing");
 
-    //act
+    // act
     dataGrid.cancelEditData();
 
-    //assert
+    // assert
     assert.ok($(dataGrid.getRowElement(0)).hasClass("dx-data-row"), "row 0 is data row");
     assert.notOk(dataGrid.getVisibleRows()[0].isEditing, "row 0 isEditing");
 
@@ -7449,7 +7452,7 @@ QUnit.test("Cancel editing should works correctly if editing mode is form and ma
 });
 
 QUnit.test("KeyboardNavigation 'isValidCell' works well with handling of fixed 'edit' command column", function(assert) {
-    //arrange, act
+    // arrange, act
     var dataGrid = createDataGrid({
             loadingTimeout: undefined,
             width: 300,
@@ -7472,9 +7475,9 @@ QUnit.test("KeyboardNavigation 'isValidCell' works well with handling of fixed '
     assert.ok(!navigationController._isCellValid($editCommandCell), "editCommand cell must be not valid");
 });
 
-//T172125
+// T172125
 QUnit.test("resize when all columns have width", function(assert) {
-    //arrange, act
+    // arrange, act
     var dataGrid = createDataGrid({
         columns: [
                 { dataField: "field1", width: 50 },
@@ -7485,19 +7488,19 @@ QUnit.test("resize when all columns have width", function(assert) {
         dataSource: [{ field1: 1, field2: 2, field3: 3 }]
     });
 
-    //assert
+    // assert
     assert.equal($(dataGrid.$element()).width(), 150, "total width");
 
-    //act
+    // act
     dataGrid.resize();
 
-    //assert
+    // assert
     assert.equal($(dataGrid.$element()).width(), 150, "total width after resize");
 });
 
-//T335767
+// T335767
 QUnit.test("skip columns synchronization on window resize when grid size is not changed", function(assert) {
-    //arrange, act
+    // arrange, act
     var dataGrid = createDataGrid({
         columns: [
                 { dataField: "field1", width: 50 },
@@ -7510,24 +7513,24 @@ QUnit.test("skip columns synchronization on window resize when grid size is not 
 
     sinon.spy(dataGrid.getController("resizing"), "_synchronizeColumns");
 
-    //act
+    // act
     dataGrid._dimensionChanged();
 
-    //assert
+    // assert
     assert.equal(dataGrid.getController("resizing")._synchronizeColumns.callCount, 0, "synchronizeColumns is not called");
 
 
-    //act
+    // act
     $(dataGrid.$element()).height(500);
     dataGrid._dimensionChanged();
 
-    //assert
+    // assert
     assert.equal(dataGrid.getController("resizing")._synchronizeColumns.callCount, 1, "synchronizeColumns is called");
 });
 
-//T372519
+// T372519
 QUnit.test("rowsView height is not changed on window resize when grid container is not visible", function(assert) {
-    //arrange, act
+    // arrange, act
 
     var dataGrid = createDataGrid({
         height: 500,
@@ -7544,19 +7547,19 @@ QUnit.test("rowsView height is not changed on window resize when grid container 
 
     sinon.spy(dataGrid.getController("resizing"), "_synchronizeColumns");
 
-    //act
+    // act
     $("#qunit-fixture").hide();
     dataGrid._dimensionChanged();
     $("#qunit-fixture").show();
 
-    //assert
+    // assert
     assert.equal(dataGrid.getController("resizing")._synchronizeColumns.callCount, 0, "synchronizeColumns is not called");
     assert.equal($("#dataGrid .dx-datagrid-rowsview").height(), rowsViewHeight, "rowsView height is not changed");
 });
 
-//T196595
+// T196595
 QUnit.test("change pageIndex when all columns have width", function(assert) {
-    //arrange, act
+    // arrange, act
     var dataGrid = createDataGrid({
         paging: {
             pageSize: 3
@@ -7571,19 +7574,19 @@ QUnit.test("change pageIndex when all columns have width", function(assert) {
         dataSource: [{ field1: "test", field2: 2, field3: 3 }, { field1: "test test test test test test test test test test test", field2: 3, field3: 4 }]
     });
 
-    //assert
+    // assert
     assert.ok($(dataGrid.$element()).width() < $("#qunit-fixture").width(), "total width");
 
-    //act
+    // act
     dataGrid.pageIndex(1);
 
-    //assert
+    // assert
     assert.ok($(dataGrid.$element()).width() < $("#qunit-fixture").width(), "total width after change pageIndex");
 });
 
-//T179519
+// T179519
 QUnit.test("update focus border on resize", function(assert) {
-    //arrange, act
+    // arrange, act
     var dataGrid = createDataGrid({
         width: 150,
         filterRow: { visible: true },
@@ -7609,12 +7612,12 @@ QUnit.test("update focus border on resize", function(assert) {
 
     var oldFocusWidth = $focusOverlay.width();
 
-    //act
+    // act
     $(dataGrid.$element()).width(100);
     dataGrid.resize();
     this.clock.tick();
 
-    //assert
+    // assert
     var newFocusWidth = $focusOverlay.width();
 
     assert.ok(oldFocusWidth > 0, "old focus width");
@@ -7643,20 +7646,20 @@ QUnit.test("Clear state when initial options defined", function(assert) {
 
     });
 
-    //act
+    // act
     this.clock.tick();
 
-    //assert
+    // assert
     var visibleColumns = dataGrid.getController("columns").getVisibleColumns();
     assert.equal(visibleColumns.length, 2, "visible column count");
     assert.equal(visibleColumns[0].sortOrder, undefined, "field1 sortOrder");
     assert.equal(dataGrid.pageSize(), 40, "page size");
 
-    //act
+    // act
     dataGrid.state(null);
     this.clock.tick();
 
-    //assert
+    // assert
     visibleColumns = dataGrid.getController("columns").getVisibleColumns();
     assert.equal(visibleColumns.length, 3, "visible column count");
     assert.equal(visibleColumns[0].sortOrder, "desc", "field1 sortOrder");
@@ -7664,7 +7667,7 @@ QUnit.test("Clear state when initial options defined", function(assert) {
     assert.equal(dataGrid.pageSize(), 10, "page size");
 });
 
-//T528181
+// T528181
 QUnit.test("Change state when lookup column exists and remote data is used", function(assert) {
     var createRemoteDataSource = function(data) {
         return {
@@ -7693,14 +7696,14 @@ QUnit.test("Change state when lookup column exists and remote data is used", fun
         dataSource: createRemoteDataSource([ { id: 1 } ])
     });
 
-    //act
+    // act
     this.clock.tick(0);
 
-    //act
+    // act
     dataGrid.state({});
     this.clock.tick(0);
 
-    //assert
+    // assert
     var $firstCell = $($(dataGrid.$element()).find(".dx-data-row").eq(0).children().eq(0));
     assert.equal($firstCell.text(), "Test 1", "Lookup text is correct");
 });
@@ -7727,21 +7730,21 @@ QUnit.test("Clear state when initial options is defined in dataSource", function
 
     });
 
-    //act
+    // act
     this.clock.tick();
 
-    //assert
+    // assert
     var visibleColumns = dataGrid.getController("columns").getVisibleColumns();
     assert.equal(visibleColumns.length, 2, "visible column count");
     assert.equal(visibleColumns[0].sortOrder, undefined, "field1 sortOrder");
     assert.equal(visibleColumns[0].sortIndex, undefined, "field1 sortIndex");
     assert.equal(dataGrid.pageSize(), 40, "page size");
 
-    //act
+    // act
     dataGrid.state(null);
     this.clock.tick();
 
-    //assert
+    // assert
     visibleColumns = dataGrid.getController("columns").getVisibleColumns();
     assert.equal(visibleColumns.length, 3, "visible column count");
     assert.equal(visibleColumns[0].sortOrder, "desc", "field1 sortOrder");
@@ -7758,22 +7761,22 @@ QUnit.test("Reset pageIndex on clear state", function(assert) {
         }
     });
 
-    //act
+    // act
     this.clock.tick();
     dataGrid.pageIndex(1);
 
-    //assert
+    // assert
     assert.equal(dataGrid.pageIndex(), 1, "pageIndex");
 
-    //act
+    // act
     dataGrid.state(null);
     this.clock.tick();
 
-    //assert
+    // assert
     assert.equal(dataGrid.pageIndex(), 0, "pageIndex");
 });
 
-//T414555
+// T414555
 QUnit.test("Apply state when search text and grouping are changed", function(assert) {
     var loadingCount = 0,
         dataGrid = createDataGrid({
@@ -7817,19 +7820,19 @@ QUnit.test("Apply state when search text and grouping are changed", function(ass
         "allowedPageSizes": []
     };
 
-    //act
+    // act
     dataGrid.state(strState);
     this.clock.tick();
 
-    //assert
+    // assert
     assert.ok(!dataGrid.columnOption("groupIndex:0"), "no grouped columns");
     assert.equal(dataGrid.option("searchPanel.text"), "A", "search panel text is applied");
     assert.equal(loadingCount, 1, "loading count");
 });
 
-//T296786
+// T296786
 QUnit.test("beginCustomLoading in onInitialized", function(assert) {
-    //arrange, act
+    // arrange, act
     var initialized,
         dataGrid = createDataGrid({
             onInitialized: function(e) {
@@ -7843,14 +7846,14 @@ QUnit.test("beginCustomLoading in onInitialized", function(assert) {
     this.clock.tick();
 
 
-    //assert
+    // assert
     assert.ok(initialized, "onInitialized called");
     assert.ok(!dataGrid.getController("data").isLoading(), "is not loading");
 });
 
-//T461925
+// T461925
 QUnit.test("columnOption in onInitialized", function(assert) {
-    //arrange, act
+    // arrange, act
     var initialized,
         dataGrid = createDataGrid({
             loadingTimeout: undefined,
@@ -7864,7 +7867,7 @@ QUnit.test("columnOption in onInitialized", function(assert) {
             }
         });
 
-    //assert
+    // assert
     assert.ok(initialized, "onInitialized called");
     var $commandColumnCells = $($(dataGrid.$element()).find(".dx-command-edit"));
     assert.equal($commandColumnCells.length, 3, "three command cells");
@@ -7873,9 +7876,9 @@ QUnit.test("columnOption in onInitialized", function(assert) {
     assert.equal($commandColumnCells.eq(2).index(), 0, "command cell 3 in first td");
 });
 
-//T494138
+// T494138
 QUnit.test("Change expand column width in onInitialized", function(assert) {
-    //arrange, act
+    // arrange, act
     var dataGrid = createDataGrid({
         loadingTimeout: undefined,
         onInitialized: function(e) {
@@ -7887,31 +7890,31 @@ QUnit.test("Change expand column width in onInitialized", function(assert) {
         dataSource: [{ id: 1111 }]
     });
 
-    //assert
+    // assert
     var $commandColumnCells = $($(dataGrid.$element()).find(".dx-command-expand"));
     assert.equal($commandColumnCells.eq(0).width(), 15, "expand command column width");
 });
 
-//T508818
+// T508818
 QUnit.test("Change sortOrder via columnOption when data is not loaded", function(assert) {
-    //arrange
+    // arrange
     var dataGrid = createDataGrid({
         dataSource: [{ a: 1 }, { a: 2 }],
         columns: ["a"]
     });
 
-    //act
+    // act
     dataGrid.columnOption(0, "sortOrder", "desc");
     this.clock.tick();
 
-    //assert
+    // assert
     assert.equal(dataGrid.cellValue(0, 0), 2, "first row value");
     assert.equal(dataGrid.cellValue(1, 0), 1, "second row value");
 });
 
-//T394873
+// T394873
 QUnit.test("Column widths must be kept after cell edit", function(assert) {
-    //arrange
+    // arrange
     var $grid = $("#dataGrid").dxDataGrid({
             loadingTimeout: undefined,
             dataSource: [{ name: "James Bond", code: "007" }],
@@ -7925,10 +7928,10 @@ QUnit.test("Column widths must be kept after cell edit", function(assert) {
 
     var visibleWidths = [gridInstance.columnOption(0, "visibleWidth"), gridInstance.columnOption(1, "visibleWidth")];
 
-    //act
+    // act
     gridInstance.editCell(0, 0);
 
-    //assert
+    // assert
     var newVisibleWidths = [gridInstance.columnOption(0, "visibleWidth"), gridInstance.columnOption(1, "visibleWidth")];
     assert.equal($grid.find("input").length, 1, "one editor is rendered");
 
@@ -7936,7 +7939,7 @@ QUnit.test("Column widths must be kept after cell edit", function(assert) {
 });
 
 QUnit.test("Repaint row", function(assert) {
-    //arrange
+    // arrange
     var $rowElements,
         $updatedRowElements,
         dataSource = new DataSource({
@@ -7957,15 +7960,15 @@ QUnit.test("Repaint row", function(assert) {
 
     dataSource.store().update(1, { field1: "test3" });
 
-    //assert
+    // assert
     $rowElements = $($(dataGrid.$element()).find(".dx-data-row"));
     assert.equal($rowElements.length, 2, "count row");
     assert.strictEqual($(dataGrid.getCellElement(0, 0)).text(), "test1", "first row - value of the first cell");
 
-    //act
+    // act
     dataGrid.repaintRows(0);
 
-    //assert
+    // assert
     $updatedRowElements = $($(dataGrid.$element()).find(".dx-data-row"));
     assert.equal($updatedRowElements.length, 2, "count row");
     assert.ok(!$updatedRowElements.eq(0).is($rowElements.eq(0)), "first row is updated");
@@ -7974,7 +7977,7 @@ QUnit.test("Repaint row", function(assert) {
 });
 
 QUnit.test("Repaint rows", function(assert) {
-    //arrange
+    // arrange
     var $rowElements,
         $updatedRowElements,
         dataSource = new DataSource({
@@ -7998,16 +8001,16 @@ QUnit.test("Repaint rows", function(assert) {
     dataSource.store().update(1, { field1: "test5" });
     dataSource.store().update(3, { field1: "test6" });
 
-    //assert
+    // assert
     $rowElements = $($(dataGrid.$element()).find(".dx-data-row"));
     assert.equal($rowElements.length, 4, "count row");
     assert.strictEqual($(dataGrid.getCellElement(0, 0)).text(), "test1", "first row - value of the first cell");
     assert.strictEqual($(dataGrid.getCellElement(2, 0)).text(), "test3", "third row - value of the first cell");
 
-    //act
+    // act
     dataGrid.repaintRows([0, 2]);
 
-    //assert
+    // assert
     $updatedRowElements = $($(dataGrid.$element()).find(".dx-data-row"));
     assert.equal($updatedRowElements.length, 4, "count row");
     assert.ok(!$updatedRowElements.eq(0).is($rowElements.eq(0)), "first row is updated");
@@ -8018,24 +8021,24 @@ QUnit.test("Repaint rows", function(assert) {
     assert.strictEqual($(dataGrid.getCellElement(2, 0)).text(), "test6", "third row - value of the first cell");
 });
 
-//T443177
+// T443177
 QUnit.test("Show searchPanel via option method", function(assert) {
-    //arrange
+    // arrange
     var dataGrid = createDataGrid({}),
         $headerPanelElement;
 
-    //act
+    // act
     dataGrid.option("searchPanel.visible", true);
 
-    //assert
+    // assert
     $headerPanelElement = $($(dataGrid.$element()).find(".dx-datagrid-header-panel"));
     assert.ok($headerPanelElement.length, "has headerPanel");
     assert.ok($headerPanelElement.find(".dx-datagrid-search-panel").length, "has searchPanel");
 });
 
-//T548906
+// T548906
 QUnit.test("Change page index when virtual scrolling is enabled", function(assert) {
-    //arrange
+    // arrange
     var generateDataSource = function(count) {
             var result = [],
                 i;
@@ -8056,16 +8059,16 @@ QUnit.test("Change page index when virtual scrolling is enabled", function(asser
             }
         });
 
-    //act
+    // act
     dataGrid.pageIndex(3);
 
-    //assert
+    // assert
     assert.equal(dataGrid.pageIndex(), 3, "page index");
 });
 
-//T558189
+// T558189
 QUnit.test("Band columns should be displayed correctly after state is reset", function(assert) {
-    //arrange
+    // arrange
     var columns,
         dataGrid = createDataGrid({
             dataSource: [{ field1: 1, field2: 2, field3: 3, field4: 4 }],
@@ -8078,11 +8081,11 @@ QUnit.test("Band columns should be displayed correctly after state is reset", fu
 
     this.clock.tick();
 
-    //act
+    // act
     dataGrid.state(null);
     this.clock.tick();
 
-    //assert
+    // assert
     columns = dataGrid.getVisibleColumns(0).map(function(column) { return column.caption; });
     assert.deepEqual(columns, ["Field 1", "Field 2", "Band Column"], "columns of the first level");
 
@@ -8090,9 +8093,9 @@ QUnit.test("Band columns should be displayed correctly after state is reset", fu
     assert.deepEqual(columns, ["Field 3", "Field 4"], "columns of the second level");
 });
 
-//T592655
+// T592655
 QUnit.test("Sorting should not throw an exception when headers are hidden", function(assert) {
-    //arrange
+    // arrange
     var dataGrid = createDataGrid({
         showColumnHeaders: false,
         dataSource: [{ field1: 1, field2: 2, field3: 3 }, { field1: 4, field2: 5, field3: 6 }]
@@ -8101,14 +8104,14 @@ QUnit.test("Sorting should not throw an exception when headers are hidden", func
     this.clock.tick();
 
     try {
-        //act
+        // act
         dataGrid.columnOption("field2", "sortOrder", "desc");
         this.clock.tick();
 
-        //assert
+        // assert
         assert.ok(true, "no exceptions");
     } catch(e) {
-        //assert
+        // assert
         assert.ok(false, "exception");
     }
 });
@@ -8116,37 +8119,37 @@ QUnit.test("Sorting should not throw an exception when headers are hidden", func
 QUnit.module("templates");
 
 QUnit.test("template no found - create text node", function(assert) {
-    //arrange, act
+    // arrange, act
     var dataGrid = createDataGrid({});
 
     var container = $("<div />").appendTo("#qunit-fixture");
 
-    //act
+    // act
     dataGrid._getTemplate("unknown").render({ container: container, model: {} });
 
-    //assert
+    // assert
     assert.equal(container.text(), "unknown");
 
     container.remove();
 });
 
 QUnit.test("test template in dataGrid container", function(assert) {
-    //arrange, act
+    // arrange, act
     var dataGrid = createDataGrid({});
 
     var container = $("<div />").appendTo("#qunit-fixture");
 
-    //act
+    // act
     dataGrid._getTemplate("test").render({ container: container, model: {} });
 
-    //assert
+    // assert
     assert.equal(container.text(), "Template Content");
 
     container.remove();
 });
 
 QUnit.test("test template in script outside container", function(assert) {
-    //arrange
+    // arrange
     setTemplateEngine({
         compile: function(element) {
             element = $(element);
@@ -8161,17 +8164,17 @@ QUnit.test("test template in script outside container", function(assert) {
 
     var container = $("<div />");
 
-    //act
+    // act
     dataGrid._getTemplate($("#scriptTestTemplate1")).render({ container: container });
 
-    //assert
+    // assert
     assert.equal(container.html().toLowerCase(), "<span id=\"template1\">Template1</span>".toLowerCase());
     setTemplateEngine("default");
 });
 
-//T474695
+// T474695
 QUnit.test("jsrender row template should works", function(assert) {
-    //arrange, act
+    // arrange, act
     setTemplateEngine("jsrender");
 
     var dataGrid = createDataGrid({
@@ -8180,7 +8183,7 @@ QUnit.test("jsrender row template should works", function(assert) {
         rowTemplate: $("#jsrenderRow")
     });
 
-    //assert
+    // assert
     var $rows = $($(dataGrid.$element()).find(".jsrender-row"));
 
     assert.equal($rows.length, 2);
@@ -8190,9 +8193,9 @@ QUnit.test("jsrender row template should works", function(assert) {
     setTemplateEngine("default");
 });
 
-//TODO: deprecated, remove it in 15.1
+// TODO: deprecated, remove it in 15.1
 QUnit.test("test template in script outside container (get by selector)", function(assert) {
-    //arrange
+    // arrange
     setTemplateEngine({
         compile: function(element) {
             element = $(element);
@@ -8207,32 +8210,32 @@ QUnit.test("test template in script outside container (get by selector)", functi
 
     var container = $("<div />");
 
-    //act
+    // act
     dataGrid._getTemplate("#scriptTestTemplate2").render({ container: container });
 
-    //assert
+    // assert
     assert.equal(container.html().toLowerCase(), "<span>Template2</span>".toLowerCase());
     setTemplateEngine("default");
 });
 
 QUnit.test("getTemplate in gridView", function(assert) {
-    //arrange, act
+    // arrange, act
     var dataGrid = createDataGrid({});
 
     var container = $("<div />").appendTo("#qunit-fixture");
 
-    //act
+    // act
     dataGrid.getView("gridView").getTemplate("test").render({ container: container, model: {} });
 
-    //assert
+    // assert
     assert.equal(container.text(), "Template Content");
 
     container.remove();
 });
 
-//T344195
+// T344195
 QUnit.test("Setting cellTemplate via DOM node with id attribute", function(assert) {
-    //arrange, act
+    // arrange, act
     var $cells,
         clock = sinon.useFakeTimers(),
         dataGrid = createDataGrid({
@@ -8242,7 +8245,7 @@ QUnit.test("Setting cellTemplate via DOM node with id attribute", function(asser
 
     clock.tick();
 
-    //assert
+    // assert
     $cells = $($(dataGrid.$element()).find(".dx-datagrid-rowsview").find("table > tbody").find("td"));
     assert.strictEqual($cells.eq(0).html().toLowerCase(), "<span id=\"template1\">template1</span>", "template of the first column");
     assert.strictEqual($cells.eq(1).html().toLowerCase(), "<span>template2</span>", "template of the second column");
@@ -8250,9 +8253,9 @@ QUnit.test("Setting cellTemplate via DOM node with id attribute", function(asser
     clock.restore();
 });
 
-//T344195
+// T344195
 QUnit.test("Setting cellTemplate via DOM node without id attribute", function(assert) {
-    //arrange, act
+    // arrange, act
     var $cells,
         $template1 = $("#scriptTestTemplate1").removeAttr("id"),
         $template2 = $("#scriptTestTemplate2").removeAttr("id"),
@@ -8264,7 +8267,7 @@ QUnit.test("Setting cellTemplate via DOM node without id attribute", function(as
 
     clock.tick();
 
-    //assert
+    // assert
     $cells = $($(dataGrid.$element()).find(".dx-datagrid-rowsview").find("table > tbody").find("td"));
     assert.strictEqual($cells.eq(0).html().toLowerCase(), "<span id=\"template1\">template1</span>", "template of the first column");
     assert.strictEqual($cells.eq(1).html().toLowerCase(), "<span>template2</span>", "template of the second column");
@@ -8274,9 +8277,9 @@ QUnit.test("Setting cellTemplate via DOM node without id attribute", function(as
     $template2.attr("id", "scriptTestTemplate2");
 });
 
-//T344195
+// T344195
 QUnit.test("Setting cellTemplate via dxTemplate", function(assert) {
-    //arrange, act
+    // arrange, act
     var $cells,
         clock = sinon.useFakeTimers(),
         dataGrid = createDataGrid({
@@ -8286,7 +8289,7 @@ QUnit.test("Setting cellTemplate via dxTemplate", function(assert) {
 
     clock.tick();
 
-    //assert
+    // assert
     $cells = $($(dataGrid.$element()).find(".dx-datagrid-rowsview").find("table > tbody").find("td"));
     assert.strictEqual($cells.eq(0).text(), "Template Content", "template of the first column");
     assert.strictEqual($cells.eq(1).text(), "Template Content2", "template of the second column");
@@ -8294,9 +8297,9 @@ QUnit.test("Setting cellTemplate via dxTemplate", function(assert) {
     clock.restore();
 });
 
-//T312012
+// T312012
 QUnit.test("Setting rowTemplate via dxTemplate", function(assert) {
-    //arrange, act
+    // arrange, act
     var $rowElements,
         dataGrid = createDataGrid({
             loadingTimeout: undefined,
@@ -8305,7 +8308,7 @@ QUnit.test("Setting rowTemplate via dxTemplate", function(assert) {
             columns: [{ dataField: "column1" }, { dataField: "column2" }]
         });
 
-    //assert
+    // assert
     $rowElements = $($(dataGrid.$element()).find(".dx-datagrid-rowsview").find("table > tbody").find("tr.test"));
     assert.strictEqual($rowElements.length, 1, "row element count");
     assert.strictEqual($rowElements.eq(0).text(), "Row Content", "row element content");
@@ -8314,7 +8317,7 @@ QUnit.test("Setting rowTemplate via dxTemplate", function(assert) {
 });
 
 QUnit.test("rowElement argument of rowTemplate option is correct", function(assert) {
-    //arrange, act
+    // arrange, act
     createDataGrid({
         rowTemplate: function(rowElement) {
             assert.equal(typeUtils.isRenderer(rowElement), !!config().useJQuery, "rowElement is correct");
@@ -8324,9 +8327,9 @@ QUnit.test("rowElement argument of rowTemplate option is correct", function(asse
     });
 });
 
-//T484419
+// T484419
 QUnit.test("rowTemplate via dxTemplate should works with masterDetail template", function(assert) {
-    //arrange, act
+    // arrange, act
     var $rowElements,
         dataGrid = createDataGrid({
             loadingTimeout: undefined,
@@ -8344,10 +8347,10 @@ QUnit.test("rowTemplate via dxTemplate should works with masterDetail template",
         });
 
 
-    //act
+    // act
     $($(dataGrid.$element()).find(".dx-datagrid-expand").eq(0)).trigger("dxclick");
 
-    //assert
+    // assert
     $rowElements = $($(dataGrid.$element()).find(".dx-datagrid-rowsview").find("table > tbody").find(".dx-row"));
     assert.strictEqual($rowElements.length, 5, "row element count");
     assert.strictEqual($rowElements.eq(0).text(), "Row Content More info", "row 0 content");
@@ -8356,9 +8359,9 @@ QUnit.test("rowTemplate via dxTemplate should works with masterDetail template",
     assert.strictEqual($rowElements.eq(3).text(), "Row Content More info", "row 3 content");
 });
 
-//T120698
+// T120698
 QUnit.test("totalCount", function(assert) {
-    //arrange, act
+    // arrange, act
     var dataGrid = createDataGrid({
         loadingTimeout: undefined,
         dataSource: {
@@ -8367,16 +8370,16 @@ QUnit.test("totalCount", function(assert) {
         }
     });
 
-    //act
+    // act
     var totalCount = dataGrid.totalCount();
 
-    //assert
+    // assert
     assert.equal(totalCount, 5, "totalCount");
 });
 
-//T587150
+// T587150
 QUnit.testInActiveWindow("DataGrid with inside grid in masterDetail - the invalid message of the datebox should not be removed when focusing cell", function(assert) {
-    //arrange
+    // arrange
     var $dateBoxInput,
         dataGrid = createDataGrid({
             loadingTimeout: undefined,
@@ -8413,14 +8416,14 @@ QUnit.testInActiveWindow("DataGrid with inside grid in masterDetail - the invali
         $dateBoxInput.trigger("change");
         clock.tick();
 
-        //assert
+        // assert
         assert.strictEqual($(".inside-grid").find(".dx-datagrid-filter-row > td").find(".dx-overlay.dx-invalid-message").length, 1, "has invalid message");
 
-        //act
+        // act
         $dateBoxInput.focus();
         clock.tick();
 
-        //assert
+        // assert
         assert.strictEqual($(".inside-grid").find(".dx-datagrid-filter-row > td").find(".dx-overlay.dx-invalid-message").length, 1, "has invalid message");
     } finally {
         clock.restore();
@@ -8430,10 +8433,10 @@ QUnit.testInActiveWindow("DataGrid with inside grid in masterDetail - the invali
 QUnit.module("API methods");
 
 QUnit.test("get methods for grid without options", function(assert) {
-    //arrange
+    // arrange
     var dataGrid = createDataGrid({});
 
-    //act, assert
+    // act, assert
     assert.deepEqual(dataGrid.getSelectedRowKeys(), []);
     assert.deepEqual(dataGrid.getSelectedRowsData(), []);
     assert.strictEqual(dataGrid.isScrollbarVisible(), false);
@@ -8524,7 +8527,7 @@ QUnit.test("Check table params with set width", function(assert) {
     assert.strictEqual($($("#dataGrid").find(".dx-datagrid-headers").find("td")[1]).outerWidth(), 230, "valid cell width");
 });
 
-//T113233
+// T113233
 QUnit.test("Check cell width paddings", function(assert) {
     $("#dataGrid").dxDataGrid({
         loadingTimeout: undefined,
@@ -8546,7 +8549,7 @@ QUnit.test("Check cell width paddings", function(assert) {
     assert.ok(emptyCellWidth >= 7 && emptyCellWidth < 20, "empty cell width with paddings");
 });
 
-//T198380
+// T198380
 QUnit.test("columnAutoWidth when table with one row in safari", function(assert) {
     var dataGrid = $("#dataGrid").dxDataGrid({
         loadingTimeout: undefined,
@@ -8563,33 +8566,33 @@ QUnit.test("columnAutoWidth when table with one row in safari", function(assert)
 });
 
 QUnit.test("SelectAll when allowSelectAll is default", function(assert) {
-    //arrange, act
+    // arrange, act
     var dataGrid = createDataGrid({
         selection: { mode: "multiple" },
         loadingTimeout: undefined,
         dataSource: [{ id: 1111 }, { id: 2222 }]
     });
 
-    //act
+    // act
     dataGrid.selectAll();
 
-    //assert
+    // assert
     var selectedRows = dataGrid.getSelectedRowKeys();
     assert.equal(selectedRows.length, 2);
 });
 
 QUnit.test("SelectAll when allowSelectAll is false", function(assert) {
-    //arrange, act
+    // arrange, act
     var dataGrid = createDataGrid({
         selection: { mode: "multiple", allowSelectAll: false },
         loadingTimeout: undefined,
         dataSource: [{ id: 1111 }, { id: 2222 }]
     });
 
-    //act
+    // act
     dataGrid.selectAll();
 
-    //assert
+    // assert
     var selectedRows = dataGrid.getSelectedRowKeys();
     assert.equal(selectedRows.length, 2);
 });
@@ -8603,22 +8606,22 @@ QUnit.module("Modules", {
 QUnit.test("register module", function(assert) {
     var modulesCount = gridCore.modules.length;
 
-    //act
+    // act
     gridCore.registerModule("test", {});
 
-    //assert
+    // assert
     assert.equal(gridCore.modules.length - modulesCount, 1);
     assert.equal(gridCore.modules[modulesCount].name, "test");
 });
 
-//T413259
+// T413259
 QUnit.test("register module in dxDataGrid Class", function(assert) {
     var modulesCount = gridCore.modules.length;
 
-    //act
+    // act
     DataGrid.registerModule("test", { id: "test" });
 
-    //assert
+    // assert
     assert.equal(gridCore.modules.length - modulesCount, 1);
     assert.equal(gridCore.modules[modulesCount].name, "test");
     assert.equal(gridCore.modules[modulesCount].id, "test");
@@ -8629,10 +8632,10 @@ QUnit.test("register module with existing name", function(assert) {
 
     gridCore.registerModule("test", { id: 1 });
 
-    //act
+    // act
     gridCore.registerModule("test", { id: 2 });
 
-    //assert
+    // assert
     assert.equal(gridCore.modules.length - modulesCount, 1);
     assert.equal(gridCore.modules[modulesCount].name, "test");
     assert.equal(gridCore.modules[modulesCount].id, 1);
@@ -8653,7 +8656,7 @@ QUnit.test("register defaultOptions", function(assert) {
     assert.ok(dataGrid.option("test.enabled"), "registered default option");
 });
 
-//T109256
+// T109256
 QUnit.test("register defaultOptions with localizable value", function(assert) {
     gridCore.registerModule("test", {
         defaultOptions: function() {
@@ -8795,7 +8798,7 @@ QUnit.test("extend view", function(assert) {
 });
 
 QUnit.test("Render view after invalidate", function(assert) {
-    //arrange
+    // arrange
     var testView = new gridCore.View({
             isReady: function() {
                 return true;
@@ -8809,7 +8812,7 @@ QUnit.test("Render view after invalidate", function(assert) {
         renderCounter++;
     };
 
-    //act
+    // act
     testView.beginUpdate();
 
     assert.equal(renderCounter, 0, "view is not rendered on beginUpdate");
@@ -8822,7 +8825,7 @@ QUnit.test("Render view after invalidate", function(assert) {
     testView.endUpdate();
     testView.endUpdate();
 
-    //assert
+    // assert
     assert.equal(renderCounter, 1, "view is rendered on endUpdate");
 });
 
@@ -8920,7 +8923,7 @@ QUnit.test("callbacks registration", function(assert) {
 });
 
 QUnit.test("Begin and end update", function(assert) {
-    //arrange
+    // arrange
     var moduleItem = new gridCore.Controller(),
         endUpdateCounter = 0;
 
@@ -8928,7 +8931,7 @@ QUnit.test("Begin and end update", function(assert) {
         endUpdateCounter++;
     };
 
-    //act
+    // act
     moduleItem.beginUpdate();
     moduleItem.beginUpdate();
     moduleItem.beginUpdate();
@@ -8939,7 +8942,7 @@ QUnit.test("Begin and end update", function(assert) {
     moduleItem.endUpdate();
     moduleItem.endUpdate();
 
-    //assert
+    // assert
     assert.equal(endUpdateCounter, 1);
 });
 
@@ -8969,28 +8972,28 @@ QUnit.module("View's focus", {
 });
 
 QUnit.test("try to focus unknown element", function(assert) {
-    //arrange
+    // arrange
     var $focusedCell;
 
     this.focusGridCell($(".lalala"));
 
     $focusedCell = $(this.dataGrid.$element()).find(".dx-focused");
 
-    //assert
+    // assert
     assert.ok(!$focusedCell.length, "We do not have focused cell in markup");
     assert.ok(!typeUtils.isDefined(this.keyboardNavigationController._focusedView), "There is no focused view");
 });
 
 QUnit.test("Focus row element", function(assert) {
-    //arrange
+    // arrange
     var $focusedCell;
 
-    //act
+    // act
     this.focusGridCell($(this.dataGrid.$element()).find(".dx-datagrid-rowsview td").eq(4));
 
     $focusedCell = $(this.dataGrid.$element()).find(".dx-focused");
 
-    //assert
+    // assert
     assert.ok($focusedCell.length, "We have focused cell in markup");
     assert.equal(this.keyboardNavigationController._focusedView.name, "rowsView", "Check that correct view is focused");
     assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, {
@@ -9000,15 +9003,15 @@ QUnit.test("Focus row element", function(assert) {
 });
 
 QUnit.test("Focus row element should support native DOM", function(assert) {
-    //arrange
+    // arrange
     var $focusedCell;
 
-    //act
+    // act
     this.focusGridCell($(this.dataGrid.$element()).find(".dx-datagrid-rowsview td").get(4));
 
     $focusedCell = $(this.dataGrid.$element()).find(".dx-focused");
 
-    //assert
+    // assert
     assert.ok($focusedCell.length, "We have focused cell in markup");
     assert.equal(this.keyboardNavigationController._focusedView.name, "rowsView", "Check that correct view is focused");
     assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, {
@@ -9017,9 +9020,9 @@ QUnit.test("Focus row element should support native DOM", function(assert) {
     }, "Check that correct cell is focused");
 });
 
-//T592731
+// T592731
 QUnit.test("Pressing arrow keys inside editor of the internal grid does not call preventDefault", function(assert) {
-    //arrange
+    // arrange
     var keyboard,
         $dateBoxInput,
         preventDefaultCalled,
@@ -9060,13 +9063,13 @@ QUnit.test("Pressing arrow keys inside editor of the internal grid does not call
     this.clock.tick();
     keyboard = keyboardMock($dateBoxInput);
 
-    //act
+    // act
     keyboard.keyDown("left", eventOptions);
     keyboard.keyDown("right", eventOptions);
     keyboard.keyDown("up", eventOptions);
     keyboard.keyDown("down", eventOptions);
 
-    //assert
+    // assert
     assert.notOk(preventDefaultCalled, "preventDefault is not called");
 });
 

@@ -200,7 +200,7 @@ var subscribes = {
     appointmentTakesSeveralDays: function(appointment) {
         return this._appointmentModel.appointmentTakesSeveralDays(appointment);
     },
-        //NOTE: T312051, remove after fix scrollable bug T324196
+        // NOTE: T312051, remove after fix scrollable bug T324196
     appointmentFocused: function() {
         this._workSpace.restoreScrollTop();
     },
@@ -663,7 +663,7 @@ var subscribes = {
 
         this._convertDatesByTimezoneBack(false, result);
 
-            //TODO: _getSingleAppointmentData already uses a related cell data for appointment that contains info about resources
+            // TODO: _getSingleAppointmentData already uses a related cell data for appointment that contains info about resources
         this.setTargetedAppointmentResources(result, appointmentElement, appointmentIndex);
 
         return result;

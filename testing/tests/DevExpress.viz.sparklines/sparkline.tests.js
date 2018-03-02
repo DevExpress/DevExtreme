@@ -174,7 +174,7 @@ QUnit.begin(function() {
         assert.deepEqual(this.renderer.resize.firstCall.args, [250, 30], 'Pass canvas width and height to renderer');
     });
 
-    //T607927 start
+    // T607927 start
     QUnit.test("Create canvas with big point size - canvas should have margins for point size", function(assert) {
         this.createSparkline({
             dataSource: [1],
@@ -262,7 +262,7 @@ QUnit.begin(function() {
         assert.deepEqual(argTranslator.update.lastCall.args[1], { width: 250, height: 30, top: 13, bottom: 13, left: 13, right: 13 }, 'Canvas object is correct');
         assert.deepEqual(valTranslator.update.lastCall.args[1], { width: 250, height: 30, top: 13, bottom: 13, left: 13, right: 13 }, 'Canvas object is correct');
     });
-    //T607927 end
+    // T607927 end
 
     QUnit.test("Create canvas with big point size and update theme - canvas shouldn't decrease", function(assert) {
         var sparkline = this.createSparkline({
@@ -281,7 +281,7 @@ QUnit.begin(function() {
         assert.deepEqual(valTranslator.update.lastCall.args[1], { width: 250, height: 30, top: 13, bottom: 13, left: 13, right: 13 }, 'Canvas object is correct');
     });
 
-    //T124801
+    // T124801
     QUnit.test('Create canvas when container size is not defined', function(assert) {
         var container = $('<div style="width: 100px">').appendTo(this.$container);
 
@@ -2164,7 +2164,7 @@ QUnit.begin(function() {
         assert.ok(true, 'dxSparkline was not broken');
     });
 
-    //T422022
+    // T422022
     QUnit.test("sparkline contains export methods", function(assert) {
         var sparkline = this.createSparkline({});
 

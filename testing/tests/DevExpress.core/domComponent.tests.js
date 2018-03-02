@@ -229,8 +229,8 @@ QUnit.test("component lifecycle, changing a couple of options", function(assert)
         "beginUpdate",
         "endUpdate",
 
-        //"beginUpdate", // optionByDevice options applying
-        //"endUpdate",
+        // "beginUpdate", // optionByDevice options applying
+        // "endUpdate",
 
         "beginUpdate", // user options applying
         "endUpdate",
@@ -902,7 +902,7 @@ QUnit.test("Dispose: attributes deleted", function(assert) {
     var element = $("#component").TestComponent(),
         instance = element.TestComponent("instance"),
         attributes = [
-            //setAria
+            // setAria
             "role",
             "aria-multiselectable",
             "aria-hidden",

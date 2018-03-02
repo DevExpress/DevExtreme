@@ -74,16 +74,16 @@ QUnit.test("executeAsync with timeout", function(assert) {
         called = true;
     }, 20);
 
-    //act
+    // act
     this.clock.tick(19);
 
-    //assert
+    // assert
     assert.ok(!called, "action is not called");
 
-    //act
+    // act
     this.clock.tick(1);
 
-    //assert
+    // assert
     assert.ok(called, "action is called");
 });
 
@@ -229,7 +229,7 @@ QUnit.module('defer render/update', {
 QUnit.test("deferRender execute immediately without deferUpdate", function(assert) {
     var logs = [];
 
-    //act
+    // act
     commonUtils.deferRender(function() {
         logs.push("before inner render");
 
@@ -240,7 +240,7 @@ QUnit.test("deferRender execute immediately without deferUpdate", function(asser
         logs.push("after inner render");
     });
 
-    //assert
+    // assert
     assert.equal(logs.length, 3, "3 log texts");
     assert.equal(logs[0], "before inner render", "before inner render");
     assert.equal(logs[1], "inner render", "inner render");
@@ -250,7 +250,7 @@ QUnit.test("deferRender execute immediately without deferUpdate", function(asser
 QUnit.test("deferUpdate execute immediately without deferRender", function(assert) {
     var logs = [];
 
-    //act
+    // act
     commonUtils.deferRender(function() {
         logs.push("before inner update");
 
@@ -261,7 +261,7 @@ QUnit.test("deferUpdate execute immediately without deferRender", function(asser
         logs.push("after inner update");
     });
 
-    //assert
+    // assert
     assert.equal(logs.length, 3, "3 log texts");
     assert.equal(logs[0], "before inner update", "before inner update");
     assert.equal(logs[1], "inner update", "inner update");
@@ -271,7 +271,7 @@ QUnit.test("deferUpdate execute immediately without deferRender", function(asser
 QUnit.test("deferRender execute delayed in deferUpdate", function(assert) {
     var logs = [];
 
-    //act
+    // act
     commonUtils.deferUpdate(function() {
         logs.push("before inner render");
 
@@ -286,7 +286,7 @@ QUnit.test("deferRender execute delayed in deferUpdate", function(assert) {
         logs.push("update deferred done");
     });
 
-    //assert
+    // assert
     assert.equal(logs.length, 5, "5 log texts");
     assert.equal(logs[0], "before inner render", "before inner render");
     assert.equal(logs[1], "after inner render", "after inner render");
@@ -298,7 +298,7 @@ QUnit.test("deferRender execute delayed in deferUpdate", function(assert) {
 QUnit.test("deferUpdate execute delayed in deferRender", function(assert) {
     var logs = [];
 
-    //act
+    // act
     commonUtils.deferRender(function() {
         logs.push("before inner update");
 
@@ -313,7 +313,7 @@ QUnit.test("deferUpdate execute delayed in deferRender", function(assert) {
         logs.push("render deferred done");
     });
 
-    //assert
+    // assert
     assert.equal(logs.length, 5, "5 log texts");
     assert.equal(logs[0], "before inner update", "before inner update");
     assert.equal(logs[1], "after inner update", "after inner update");
@@ -325,7 +325,7 @@ QUnit.test("deferUpdate execute delayed in deferRender", function(assert) {
 QUnit.test("several deferUpdate in one deferRender", function(assert) {
     var logs = [];
 
-    //act
+    // act
     commonUtils.deferRender(function() {
         logs.push("render");
 
@@ -346,7 +346,7 @@ QUnit.test("several deferUpdate in one deferRender", function(assert) {
         logs.push("render completed");
     });
 
-    //assert
+    // assert
     assert.equal(logs.length, 6, "6 log texts");
     assert.equal(logs[0], "render");
     assert.equal(logs[1], "update 1");
@@ -359,7 +359,7 @@ QUnit.test("several deferUpdate in one deferRender", function(assert) {
 QUnit.test("Return deferred in deferRender and using deferUpdater", function(assert) {
     var logs = [];
 
-    //act
+    // act
     commonUtils.deferRender(function() {
         var d = $.Deferred();
 
@@ -375,13 +375,13 @@ QUnit.test("Return deferred in deferRender and using deferUpdater", function(ass
         logs.push("render completed");
     });
 
-    //assert
+    // assert
     assert.equal(logs.length, 1, "1 log texts");
 
-    //act
+    // act
     this.clock.tick(1000);
 
-    //assert
+    // assert
     assert.equal(logs.length, 3, "4 log texts");
     assert.equal(logs[0], "render");
     assert.equal(logs[1], "update");
@@ -391,7 +391,7 @@ QUnit.test("Return deferred in deferRender and using deferUpdater", function(ass
 QUnit.test("Return deferred in deferUpdate and using deferRenderer", function(assert) {
     var logs = [];
 
-    //act
+    // act
     commonUtils.deferUpdate(function() {
         var d = $.Deferred();
 
@@ -407,13 +407,13 @@ QUnit.test("Return deferred in deferUpdate and using deferRenderer", function(as
         logs.push("update completed");
     });
 
-    //assert
+    // assert
     assert.equal(logs.length, 1, "1 log texts");
 
-    //act
+    // act
     this.clock.tick(1000);
 
-    //assert
+    // assert
     assert.equal(logs.length, 3, "4 log texts");
     assert.equal(logs[0], "update");
     assert.equal(logs[1], "render");

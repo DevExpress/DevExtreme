@@ -256,7 +256,7 @@ var SlideOut = CollectionWidget.inherit({
     },
 
     _render: function() {
-        //TODO: remove this, needed for memory leak tests
+        // TODO: remove this, needed for memory leak tests
         this._slideOutView._renderShield();
         this._renderList();
         this._renderContentTemplate();

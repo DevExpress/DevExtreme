@@ -40,7 +40,7 @@ function stopPropagationAndPreventDefault(e) {
     }
 }
 
-//Q375042
+// Q375042
 function isTouchEventArgs(e) {
     return e && e.type && e.type.indexOf("touch") === 0;
 }

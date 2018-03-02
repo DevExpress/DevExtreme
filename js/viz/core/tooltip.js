@@ -50,11 +50,11 @@ function Tooltip(params) {
     that._cloud = renderer.path([], "area").sharp().append(root);
     that._shadow = renderer.shadowFilter();
 
-    //svg text
+    // svg text
     that._textGroup = renderer.g().attr({ align: "center" }).append(root);
     that._text = renderer.text(undefined, 0, 0).append(that._textGroup);
 
-    //html text
+    // html text
     that._textGroupHtml = $("<div>").css({ position: "absolute", width: 0, padding: 0, margin: 0, border: "0px solid transparent" }).appendTo(that._wrapper);
     that._textHtml = $("<div>").css({ position: "relative", display: "inline-block", padding: 0, margin: 0, border: "0px solid transparent" }).appendTo(that._textGroupHtml);
 }
@@ -119,7 +119,7 @@ Tooltip.prototype = {
         that._cloud.attr(that._cloudSettings);
         that._shadow.attr(that._shadowSettings);
 
-        //text area
+        // text area
         that._textGroupHtml.css(that._textFontStyles);
         that._textGroup.css(that._textFontStyles);
         that._text.css(that._textFontStyles);
@@ -180,16 +180,16 @@ Tooltip.prototype = {
 
         that._wrapper.appendTo(that._getContainer());
 
-        //apply attributes
+        // apply attributes
         that._cloud.attr({ fill: state.color, stroke: state.borderColor });
 
-        //draw texts
+        // draw texts
         if(state.html) {
             that._text.attr({ text: "" });
             textGroupHtml.css({ color: state.textColor, width: that._getCanvas().width });
             textHtml.html(state.html);
 
-            if(getComputedStyle) { //IE9 compatibility (T298249)
+            if(getComputedStyle) { // IE9 compatibility (T298249)
                 bBox = getComputedStyle(textHtml.get(0));
                 bBox = { x: 0, y: 0, width: mathCeil(parseFloat(bBox.width)), height: mathCeil(parseFloat(bBox.height)) };
             } else {
@@ -211,19 +211,19 @@ Tooltip.prototype = {
             width: bBox.width + 2 * paddingLeftRight,
             height: bBox.height + 2 * paddingTopBottom,
 
-            lm: (blur - xOff) > 0 ? blur - xOff : 0, //left margin
-            rm: (blur + xOff) > 0 ? blur + xOff : 0, //right margin
-            tm: (blur - yOff) > 0 ? blur - yOff : 0, //top margin
-            bm: (blur + yOff) > 0 ? blur + yOff : 0 //bottom margin
+            lm: (blur - xOff) > 0 ? blur - xOff : 0, // left margin
+            rm: (blur + xOff) > 0 ? blur + xOff : 0, // right margin
+            tm: (blur - yOff) > 0 ? blur - yOff : 0, // top margin
+            bm: (blur + yOff) > 0 ? blur + yOff : 0 // bottom margin
         };
 
         contentSize.fullWidth = contentSize.width + contentSize.lm + contentSize.rm;
         contentSize.fullHeight = contentSize.height + contentSize.tm + contentSize.bm + options.arrowLength;
 
-        //move to position
+        // move to position
         that.move(params.x, params.y, params.offset);
 
-        //trigger event
+        // trigger event
         // The *onTooltipHidden* is triggered outside the *hide* method because of the cases when *show* is called to determine if tooltip will be visible or not (when target is changed) -
         // *hide* can neither be called before that *show* - because if tooltip is determined to hide it requires some timeout before actually hiding
         // nor after that *show* - because it is either too early to hide (because of timeout) or wrong (because tooltip has already been shown for new target)
@@ -238,7 +238,7 @@ Tooltip.prototype = {
     hide: function() {
         var that = this;
         hideElement(that._wrapper);
-        //trigger event
+        // trigger event
         that._eventData && that._eventTrigger("tooltipHidden", that._eventData);
         that._eventData = null;
     },
@@ -254,7 +254,7 @@ Tooltip.prototype = {
         if(that._calculatePosition(x, y, offset, canvas)) {
             that._cloud.attr({ points: coords.cloudPoints }).move(contentSize.lm, contentSize.tm);
 
-            //translate inner content
+            // translate inner content
             if(state.html) {
                 that._textGroupHtml.css({ left: -contentSize.x + contentSize.lm, top: -contentSize.y + contentSize.tm + coords.correction });
             } else {
@@ -264,12 +264,12 @@ Tooltip.prototype = {
                 coords.vp === "out" ? canvas.fullHeight : contentSize.fullHeight);
         }
 
-        //move wrapper
+        // move wrapper
         offset = that._wrapper.css({ left: 0, top: 0 }).offset();   // T277991
         that._wrapper.css({
             left: coords.x - offset.left,
             top: coords.y - offset.top,
-            width: coords.hp === "out" ? canvas.fullWidth + contentSize.lm : contentSize.fullWidth//T486487
+            width: coords.hp === "out" ? canvas.fullWidth + contentSize.lm : contentSize.fullWidth// T486487
         });
     },
 
@@ -328,7 +328,7 @@ Tooltip.prototype = {
 
         y1 = y3 = contentHeight;
 
-        switch(options.verticalAlignment) { //deprecated since 15.1
+        switch(options.verticalAlignment) { // deprecated since 15.1
             case "top":
                 vp = "bottom";
                 hasDeprecatedPosition = true;
@@ -348,7 +348,7 @@ Tooltip.prototype = {
         }
         hasDeprecatedPosition = false;
 
-        switch(options.horizontalAlignment) { //deprecated since 15.1
+        switch(options.horizontalAlignment) { // deprecated since 15.1
             case "left":
                 hp = "right";
                 hasDeprecatedPosition = true;
@@ -412,10 +412,10 @@ Tooltip.prototype = {
         coords.vp = vp;
 
         cloudPoints = [
-            0, 0 + correction, //lt
-            contentWidth, 0 + correction, //rt
-            contentWidth, contentHeight + correction, //rb
-            0, contentHeight + correction //lb
+            0, 0 + correction, // lt
+            contentWidth, 0 + correction, // rt
+            contentWidth, contentHeight + correction, // rb
+            0, contentHeight + correction // lb
         ];
 
         if(hp !== "out" && vp !== "out") {
@@ -442,13 +442,13 @@ Tooltip.prototype = {
             width: html.clientWidth || 0,
             height: html.clientHeight || 0,
 
-            /*scrollWidth*/
+            /* scrollWidth */
             fullWidth: mathMax(
                 body.scrollWidth, html.scrollWidth,
                 body.offsetWidth, html.offsetWidth,
                 body.clientWidth, html.clientWidth
             ) - left,
-            /*scrollHeight*/
+            /* scrollHeight */
             fullHeight: mathMax(
                 body.scrollHeight, html.scrollHeight,
                 body.offsetHeight, html.offsetHeight,

@@ -25,7 +25,7 @@ var clearSelection = function() {
     if(selection.empty) {
         selection.empty();
     } else if(selection.removeAllRanges) {
-        //T522811
+        // T522811
         try {
             selection.removeAllRanges();
         } catch(e) {}

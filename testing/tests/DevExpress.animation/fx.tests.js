@@ -521,7 +521,7 @@ if(support.transition) {
                 assert.ok($element.is(".my-animation"));
                 assert.ok($element.is(".my-animation-active"));
                 assert.equal($element.position().left, 1000);
-                setTimeout(function() { //browser recalculate styles only during the next paint
+                setTimeout(function() { // browser recalculate styles only during the next paint
                     assert.ok(!$element.is(".my-animation"));
                     assert.ok(!$element.is(".my-animation-active"));
                     assert.equal($element.position().left, 0);

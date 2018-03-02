@@ -37,7 +37,7 @@ var Class = require("../core/class"),
     DAYS_COUNT_BEFORE_29_FEB_1900 = 60,
 
     BOLD_STYLES_COUNT = 4,
-    MAX_DIGIT_WIDTH_IN_PIXELS = 7, //Calibri font with 11pt size
+    MAX_DIGIT_WIDTH_IN_PIXELS = 7, // Calibri font with 11pt size
     CUSTOM_FORMAT_START_INDEX = 165;
 
 exports.ExcelCreator = Class.inherit({

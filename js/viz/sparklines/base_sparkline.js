@@ -196,7 +196,7 @@ var BaseSparkline = BaseWidget.inherit({
         };
         that._tooltipTracker.on(mouseEvents, data).on(touchEvents, data).on(mouseWheelEvents, data);
 
-        //for ie11
+        // for ie11
         that._tooltipTracker.on(menuEvents);
     },
 
@@ -221,7 +221,7 @@ var BaseSparkline = BaseWidget.inherit({
     }
 });
 
-//for ie11
+// for ie11
 var menuEvents = {
     "contextmenu.sparkline-tooltip": function(event) {
         if(eventUtils.isTouchEvent(event) || eventUtils.isPointerEvent(event)) {
@@ -388,7 +388,7 @@ BaseSparkline.prototype._hideTooltip = function(delay) {
 };
 
 // PLUGINS_SECTION
-//T422022
+// T422022
 var exportPlugin = extend(true, {}, require("../core/export").plugin, {
     init: _noop,
     dispose: _noop,

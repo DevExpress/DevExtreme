@@ -333,7 +333,7 @@ module.exports = {
                 _renderCore: function() {
                     this.callBase.apply(this, arguments);
 
-                    //T103538
+                    // T103538
                     if(this.option("rowTemplate")) {
                         if(this.option("templatesRenderAsynchronously")) {
                             clearTimeout(this._highlightTimer);

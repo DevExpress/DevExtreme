@@ -166,8 +166,8 @@ QUnit.test("focusout should be prevented when list clicked", function(assert) {
     var $list = $(this.instance.content()).find(".dx-list");
 
     $list.on("mousedown", function(e) {
-        //note: you should not prevent pointerdown because it will prevent click on ios real devices
-        //you must use preventDefault in code because it is possible to use .on('focusout', handler) instead of onFocusOut option
+        // note: you should not prevent pointerdown because it will prevent click on ios real devices
+        // you must use preventDefault in code because it is possible to use .on('focusout', handler) instead of onFocusOut option
         assert.ok(e.isDefaultPrevented(), "mousedown was prevented and lead to focusout prevent");
     });
 
@@ -544,8 +544,8 @@ QUnit.test("searchTimeout should be refreshed after next symbol entered", functi
 });
 
 QUnit.test("valueExpr should not be passed to the list if it is 'this'", function(assert) {
-    //note: selection can not work with this and function as keyExpr.
-    //Allowing of this breaks the case when store key is specified and deferred datasource is used
+    // note: selection can not work with this and function as keyExpr.
+    // Allowing of this breaks the case when store key is specified and deferred datasource is used
     $("#dropDownList").dxDropDownList({
         dataSource: [{ id: 1, text: "Item 1" }],
         displayExpr: 'text',
@@ -559,8 +559,8 @@ QUnit.test("valueExpr should not be passed to the list if it is 'this'", functio
 });
 
 QUnit.test("valueExpr should not be passed to the list if it is the function", function(assert) {
-    //note: selection can not work with this and function as keyExpr.
-    //Allowing of this breaks the case when store key is specified and deferred datasource is used
+    // note: selection can not work with this and function as keyExpr.
+    // Allowing of this breaks the case when store key is specified and deferred datasource is used
     $("#dropDownList").dxDropDownList({
         dataSource: [{ id: 1, text: "Item 1" }],
         displayExpr: 'text',
@@ -811,9 +811,9 @@ QUnit.test("reset()", function(assert) {
         selectedItem: 2
     }).dxDropDownList("instance");
 
-    //act
+    // act
     dropDownList.reset();
-    //assert
+    // assert
     assert.strictEqual(dropDownList.option("value"), null, "Value should be reset");
     assert.strictEqual(dropDownList.option("selectedItem"), null, "Value should be reset");
 });
@@ -1086,7 +1086,7 @@ QUnit.test("list's aria-target should point to the widget's input (T247414)", fu
     var dropDownList = $("#dropDownList").dxDropDownList({ opened: true }).dxDropDownList("instance"),
         list = $(".dx-list").dxList("instance");
 
-    //todo: make getAriaTarget an option
+    // todo: make getAriaTarget an option
     assert.deepEqual(list._getAriaTarget(), dropDownList._getAriaTarget());
 });
 

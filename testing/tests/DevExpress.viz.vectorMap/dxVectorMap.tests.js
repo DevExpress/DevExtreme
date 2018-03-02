@@ -166,9 +166,9 @@ QUnit.test('LayoutControl', function(assert) {
 
     assert.deepEqual(spy.lastCall.args, [], "created");
     assert.ok(this.layoutControl.suspend.getCall(0).calledBefore(this.controlBar.setOptions.lastCall), "suspend 1");
-    //assert.ok(this.layoutControl.suspend.getCall(1).calledBefore(this.controlBar.setOptions.lastCall), "suspend 2");
+    // assert.ok(this.layoutControl.suspend.getCall(1).calledBefore(this.controlBar.setOptions.lastCall), "suspend 2");
     assert.ok(this.layoutControl.resume.getCall(0).calledAfter(this.layerCollection.setOptions.getCall(0)), "resume 1");
-    //assert.ok(this.layoutControl.resume.getCall(1).calledAfter(this.controlBar.setInteraction.lastCall), "resume 2");
+    // assert.ok(this.layoutControl.resume.getCall(1).calledAfter(this.controlBar.setInteraction.lastCall), "resume 2");
 });
 
 QUnit.test("Tracker", function(assert) {

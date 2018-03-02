@@ -257,7 +257,7 @@ module.exports = {
                                             }
                                         } else {
                                             var scrollable = component.getScrollable();
-                                            //T607490
+                                            // T607490
                                             scrollable && scrollable.update();
                                         }
                                     });

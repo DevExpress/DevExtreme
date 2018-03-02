@@ -2,8 +2,8 @@
 
 var $ = require("jquery"),
     summaryDisplayModes = require("ui/pivot_grid/ui.pivot_grid.summary_display_modes"),
-    applyDisplaySummaryMode = summaryDisplayModes.applyDisplaySummaryMode, //arguments: description, data
-    applyRunningTotal = summaryDisplayModes.applyRunningTotal, //arguments: description, data
+    applyDisplaySummaryMode = summaryDisplayModes.applyDisplaySummaryMode, // arguments: description, data
+    applyRunningTotal = summaryDisplayModes.applyRunningTotal, // arguments: description, data
     pivotGridUtils = require("ui/pivot_grid/ui.pivot_grid.utils"),
     summaryDictionary = summaryDisplayModes.summaryDictionary,
     data = {
@@ -389,11 +389,11 @@ QUnit.test("Cache original value", function(assert) {
     this.data.values[0][0] = ["GT1", "GT2"];
     this.descriptions.values.push({ area: "data", caption: "summaryField2", summaryDisplayMode: "summaryDisplayType" });
 
-    //act
+    // act
     new this.Cell([this.grandTotalColumn], [this.grandTotalRow], this.data, this.descriptions, 0);
     this.data.values[0][0][0] = "new GT1";
     this.data.values[0][0][1] = "new GT2";
-    //assert
+    // assert
     assert.strictEqual(new this.Cell([this.grandTotalColumn], [this.grandTotalRow], this.data, this.descriptions, 0).value(), "GT1");
     assert.strictEqual(new this.Cell([this.grandTotalColumn], [this.grandTotalRow], this.data, this.descriptions, 0).value(true), "new GT1");
 
@@ -431,9 +431,9 @@ QUnit.test("Calculate cell value using expression", function(assert) {
 
     this.descriptions.values[0].calculateSummaryValue = summaryExpr;
     this.data.values[1][0] = null;
-    //act
+    // act
     applyDisplaySummaryMode(this.descriptions, this.data);
-    //assert
+    // assert
     assert.strictEqual(summaryExpr.callCount, 54);
 
     var values = this.data.values;
@@ -458,9 +458,9 @@ QUnit.test("Calculate cell value using expression and summaryDisplayType", funct
     this.descriptions.values[0].calculateSummaryValue = summaryExpr;
     this.descriptions.values[0].summaryDisplayMode = "absoluteVariation";
     this.data.values[1][0] = null;
-    //act
+    // act
     applyDisplaySummaryMode(this.descriptions, this.data);
-    //assert
+    // assert
     assert.strictEqual(summaryExpr.callCount, 54);
 
     var values = this.data.values;
@@ -480,9 +480,9 @@ QUnit.test("Calculate cell value using expression and summaryDisplayType", funct
 
 QUnit.test("Calculate cell values with invalid expression", function(assert) {
     this.descriptions.values[0].calculateSummaryValue = "not a function";
-    //act
+    // act
     applyDisplaySummaryMode(this.descriptions, this.data);
-    //assert
+    // assert
     var values = this.data.values;
 
     assert.deepEqual(values, data.values);
@@ -494,9 +494,9 @@ QUnit.test("Calculate display summary Type with preset", function(assert) {
     summaryExpr.returns("calculatedValue");
     this.descriptions.values[0].summaryDisplayMode = "percentOfColumnTotal";
     this.data.values[1][0] = null;
-    //act
+    // act
     applyDisplaySummaryMode(this.descriptions, this.data);
-    //assert
+    // assert
     assert.strictEqual(summaryExpr.callCount, 54);
 
     var values = this.data.values;
@@ -511,15 +511,15 @@ QUnit.test("Calculate display summary Type with preset", function(assert) {
             }
         });
     });
-    //teardown
+    // teardown
     summaryExpr.restore();
 });
 
 QUnit.test("Calculate display summary Type with non exist summary type", function(assert) {
     this.descriptions.values[0].summaryDisplayMode = "non exist";
-    //act
+    // act
     applyDisplaySummaryMode(this.descriptions, this.data);
-    //assert
+    // assert
     var values = this.data.values;
 
     assert.deepEqual(values, data.values);
@@ -534,9 +534,9 @@ QUnit.test("Add percent format for percent display type", function(assert) {
         { summaryDisplayMode: "percentOfColumnTotal" },
         { summaryDisplayMode: "percentOfRow", format: "numeric" }
     ];
-    //act
+    // act
     applyDisplaySummaryMode(this.descriptions, this.data);
-    //assert
+    // assert
     assert.strictEqual(this.descriptions.values[0].format, "percent");
     assert.strictEqual(this.descriptions.values[1].format, "numeric");
     assert.ok(setFieldProperty.calledOnce);
@@ -557,9 +557,9 @@ QUnit.test("Second calculation leads to same results", function(assert) {
     applyDisplaySummaryMode(this.descriptions, this.data);
     var value = this.data.values[0][6][0];
 
-    //act
+    // act
     applyDisplaySummaryMode(this.descriptions, this.data);
-    //assert
+    // assert
     assert.deepEqual(value, "T61");
     assert.deepEqual(this.data.values[0][6][0], value);
 });
@@ -574,9 +574,9 @@ QUnit.test("Calculate cell value with empty data", function(assert) {
     this.data.values = [];
     this.data.columns = [];
     this.data.rows = [];
-    //act
+    // act
     applyDisplaySummaryMode(this.descriptions, this.data);
-    //assert
+    // assert
     assert.strictEqual(summaryExpr.callCount, 1);
 
     assert.deepEqual(this.data.values, [
@@ -591,9 +591,9 @@ QUnit.test("Calculate cell value with empty data", function(assert) {
 QUnit.test("applyDisplaySummaryMode without RunningTotal flag", function(assert) {
     this.descriptions.columns[0].runningTotal = true;
 
-    //act
+    // act
     applyDisplaySummaryMode(this.descriptions, this.data);
-    //assert
+    // assert
     var values = this.data.values;
 
     assert.deepEqual(values[0], [["GT"], ["T1"], ["T2"], ["T3"], ["T4"], ["T5"], ["T6"], ["T7"], ["T8"]]);
@@ -605,9 +605,9 @@ QUnit.test("RunningTotal", function(assert) {
     this.data.values[1][0] = null;
 
     this.data.values[1][8] = [null];
-    //act
+    // act
     applyRunningTotal(this.descriptions, this.data);
-    //assert
+    // assert
     var values = this.data.values;
 
     assert.deepEqual(values[0], [["GT"], ["T1"], ["T2"], ["T2T3"], ["T2T3T4"], ["T1T5"], ["T1T5T6"], ["T7"], ["T7T8"]]);
@@ -620,9 +620,9 @@ QUnit.test("Second RunningTotal calculation leads to same results", function(ass
     applyRunningTotal(this.descriptions, this.data);
     var value = this.data.values[0][6][0];
 
-    //act
+    // act
     applyRunningTotal(this.descriptions, this.data);
-    //assert
+    // assert
     assert.deepEqual(value, "T1T5T6");
     assert.deepEqual(this.data.values[0][6][0], value);
 });
@@ -635,9 +635,9 @@ QUnit.test("RunningTotal with 2 fields", function(assert) {
         [['1T', '1T1'], [1, 1], [11, 11], [12, 12], [13, 13], [2, 2], [3, 3], [31, 31], [32, 32]]
     ];
 
-    //act
+    // act
     applyRunningTotal(this.descriptions, this.data);
-    //assert
+    // assert
     var values = this.data.values;
 
     assert.deepEqual(values[0], [["GT", "GT1"], ["T1", "T11"], ["T2", "T22"], ["T2T3", "T33"], ["T2T3T4", "T44"], ["T1T5", "T55"], ["T1T5T6", "T66"], ["T7", "T77"], ["T7T8", "T88"]]);
@@ -650,9 +650,9 @@ QUnit.test("RunningTotal by column", function(assert) {
     this.data.values[1][0] = null;
 
     this.data.values[1][8] = [null];
-    //act
+    // act
     applyRunningTotal(this.descriptions, this.data);
-    //assert
+    // assert
     var values = this.data.values;
 
     assert.deepEqual(values[0], [["GT"], ["T1"], ["T2"], ["T2T3"], ["T2T3T4"], ["T1T5"], ["T1T5T6"], ["T7"], ["T7T8"]]);
@@ -664,9 +664,9 @@ QUnit.test("RunningTotal by row", function(assert) {
     this.data.values[1][0] = null;
 
     this.data.values[1][8] = [null];
-    //act
+    // act
     applyRunningTotal(this.descriptions, this.data);
-    //assert
+    // assert
     var values = this.data.values,
         firstColumn = $.map(values, function(row) { return row[0]; });
 
@@ -681,9 +681,9 @@ QUnit.test("RunningTotal with grossGrouping", function(assert) {
     this.data.values[1][0] = null;
 
     this.data.values[1][8] = [null];
-    //act
+    // act
     applyRunningTotal(this.descriptions, this.data);
-    //assert
+    // assert
     var values = this.data.values;
 
     assert.deepEqual(values[0], [["GT"], ["T1"], ["T2"], ["T2T3"], ["T2T3T4"], ["T1T5"], ["T1T5T6"], ["T1T5T7"], ["T1T5T7T8"]]);
@@ -700,10 +700,10 @@ QUnit.test("RunningTotal with expression", function(assert) {
     this.data.values[1][0] = null;
 
     this.data.values[1][8] = [null];
-    //act
+    // act
     applyDisplaySummaryMode(this.descriptions, this.data);
     applyRunningTotal(this.descriptions, this.data);
-    //assert
+    // assert
     var values = this.data.values;
     assert.deepEqual(values[0], [[1], [1], [1], [2], [3], [2], [3], [1], [2]]);
 });
@@ -721,10 +721,10 @@ QUnit.test("RunningTotal with expression. Second calculation leads to same resul
     applyRunningTotal(this.descriptions, this.data);
     var value = this.data.values[0][6][0];
 
-    //act
+    // act
     applyDisplaySummaryMode(this.descriptions, this.data);
     applyRunningTotal(this.descriptions, this.data);
-    //assert
+    // assert
     assert.deepEqual(value, "T11T51T61");
     assert.deepEqual(this.data.values[0][6][0], value);
 });
@@ -739,10 +739,10 @@ QUnit.test("RunningTotal with expression and crossGrouping", function(assert) {
     this.data.values[1][0] = null;
 
     this.data.values[1][8] = [null];
-    //act
+    // act
     applyDisplaySummaryMode(this.descriptions, this.data);
     applyRunningTotal(this.descriptions, this.data);
-    //assert
+    // assert
     var values = this.data.values;
 
     assert.deepEqual(values[0], [[1], [1], [1], [2], [3], [2], [3], [3], [4]]);
@@ -757,15 +757,15 @@ QUnit.test("RunningTotal with summaryDisplayType", function(assert) {
     this.data.values[1][0] = null;
 
     this.data.values[1][8] = [null];
-    //act
+    // act
     applyDisplaySummaryMode(this.descriptions, this.data);
     applyRunningTotal(this.descriptions, this.data);
-    //assert
+    // assert
     var values = this.data.values;
 
     assert.deepEqual(values[0], [[1], [1], [1], [2], [3], [2], [3], [1], [2]]);
 
-    //teardown
+    // teardown
     summaryExpr.restore();
 });
 
@@ -820,7 +820,7 @@ QUnit.test("Absolute variation. Crossgrouping", function(assert) {
     cell.value.returns(2);
     var resultWithEqualValues = calculateSummaryCallback(cell);
 
-    //assert
+    // assert
     assert.strictEqual(resultWithPrevCell, 8);
     assert.strictEqual(resultWithoutPrevCell, null);
     assert.strictEqual(resultWithNullValues, null);
@@ -861,7 +861,7 @@ QUnit.test("Absolute variation", function(assert) {
     cell.value.returns(2);
     var resultWithEqualValues = calculateSummaryCallback(cell);
 
-    //assert
+    // assert
     assert.strictEqual(resultWithPrevCell, 8);
     assert.strictEqual(resultWithoutPrevCell, null);
     assert.strictEqual(resultWithNullValues, null);
@@ -905,7 +905,7 @@ QUnit.test("Percent variation. CrossGrouping", function(assert) {
     prevCell.value.returns(0);
     var resultWithZeroPrevValue = calculateSummaryCallback(cell);
 
-    //assert
+    // assert
     assert.strictEqual(resultWithPrevCell, 4);
     assert.strictEqual(resultWithoutPrevCell, null);
     assert.strictEqual(resultWithNullValues, null);
@@ -945,7 +945,7 @@ QUnit.test("Percent variation.", function(assert) {
     cell.value.returns(2);
     var resultWithEqualValues = calculateSummaryCallback(cell);
 
-    //assert
+    // assert
     assert.strictEqual(resultWithPrevCell, 4);
     assert.strictEqual(resultWithoutPrevCell, null);
     assert.strictEqual(resultWithNullValues, null);
@@ -971,7 +971,7 @@ QUnit.test("Percent of row grand total", function(assert) {
     cell.value.returns(2);
     var resultWithEqualValues = calculateSummaryCallback(cell);
 
-    //assert
+    // assert
     assert.strictEqual(resultWithTotalCell, 0.5);
     assert.strictEqual(resultWithCellNullValue, null);
     assert.strictEqual(resultWithEqualValues, 1);
@@ -994,7 +994,7 @@ QUnit.test("Percent of column grand total", function(assert) {
     cell.value.returns(2);
     var resultWithEqualValues = calculateSummaryCallback(cell);
 
-    //assert
+    // assert
     assert.strictEqual(resultWithTotalCell, 0.5);
     assert.strictEqual(resultWithCellNullValue, null);
     assert.strictEqual(resultWithEqualValues, 1);
@@ -1017,7 +1017,7 @@ QUnit.test("Percent of grandTotal", function(assert) {
     cell.value.returns(2);
     var resultWithEqualValues = calculateSummaryCallback(cell);
 
-    //assert
+    // assert
     assert.strictEqual(resultWithTotalCell, 0.5);
     assert.strictEqual(resultWithCellNullValue, null);
     assert.strictEqual(resultWithEqualValues, 1);
@@ -1041,9 +1041,9 @@ QUnit.test("Percent of row", function(assert) {
     var resultWithEqualValues = calculateSummaryCallback(cell);
 
     cell.parent.withArgs("column").returns(null);
-    var resultWhenNoParent = calculateSummaryCallback(cell);//current cell is grandTotal by row
+    var resultWhenNoParent = calculateSummaryCallback(cell);// current cell is grandTotal by row
 
-    //assert
+    // assert
     assert.strictEqual(resultWithParentCell, 0.5);
     assert.strictEqual(resultWithCellNullValue, null);
     assert.strictEqual(resultWithEqualValues, 1);
@@ -1061,7 +1061,7 @@ QUnit.test("Percent of Total row should be null when it's value is 0", function(
     parentCell.value.returns(0);
 
     var result = calculateSummaryCallback(cell);
-    //assert
+    // assert
     assert.strictEqual(result, null);
 });
 
@@ -1077,7 +1077,7 @@ QUnit.test("Percent of Total row should be null when it's value is undefined", f
     parentCell.value.returns(undefined);
 
     var result = calculateSummaryCallback(cell);
-    //assert
+    // assert
     assert.strictEqual(result, null);
 });
 
@@ -1092,7 +1092,7 @@ QUnit.test("Percent of GrandTotal should be null when it's value is 0", function
     parentCell.value.returns(0);
 
     var result = calculateSummaryCallback(cell);
-    //assert
+    // assert
     assert.strictEqual(result, null);
 });
 
@@ -1108,7 +1108,7 @@ QUnit.test("Percent of GrandTotal should be null when it's value is null", funct
     parentCell.value.returns(null);
 
     var result = calculateSummaryCallback(cell);
-    //assert
+    // assert
     assert.strictEqual(result, null);
 });
 
@@ -1130,9 +1130,9 @@ QUnit.test("Percent of column", function(assert) {
     var resultWithEqualValues = calculateSummaryCallback(cell);
 
     cell.parent.withArgs("row").returns(null);
-    var resultWhenNoParent = calculateSummaryCallback(cell);//current cell is grandTotal by column
+    var resultWhenNoParent = calculateSummaryCallback(cell);// current cell is grandTotal by column
 
-    //assert
+    // assert
     assert.strictEqual(resultWithParentCell, 0.5);
     assert.strictEqual(resultWithCellNullValue, null);
     assert.strictEqual(resultWithEqualValues, 1);
@@ -1164,9 +1164,9 @@ QUnit.test("not empty data", function(assert) {
         return 0;
     };
     this.data.values[1][0] = null;
-    //act
+    // act
     applyDisplaySummaryMode(this.descriptions, this.data);
-    //assert
+    // assert
 
     pivotGridUtils.foreachTree(this.data.rows, function(items) {
         assert.strictEqual(items[0].isEmpty, false);
@@ -1182,9 +1182,9 @@ QUnit.test("not empty data", function(assert) {
 
 QUnit.test("not empty data when no summary calculations", function(assert) {
     this.data.values[1][0] = null;
-    //act
+    // act
     applyDisplaySummaryMode(this.descriptions, this.data);
-    //assert
+    // assert
 
     pivotGridUtils.foreachTree(this.data.rows, function(items) {
         assert.strictEqual(items[0].isEmpty, false);
@@ -1202,9 +1202,9 @@ QUnit.test("Empty data", function(assert) {
     this.descriptions.values[0].calculateSummaryValue = function() {
         return null;
     };
-    //act
+    // act
     applyDisplaySummaryMode(this.descriptions, this.data);
-    //assert
+    // assert
 
     pivotGridUtils.foreachTree(this.data.rows, function(items) {
         assert.strictEqual(items[0].isEmpty, true);
@@ -1226,9 +1226,9 @@ QUnit.test("Empty GrandTotal row", function(assert) {
             return 0;
         }
     };
-    //act
+    // act
     applyDisplaySummaryMode(this.descriptions, this.data);
-    //assert
+    // assert
 
     pivotGridUtils.foreachTree(this.data.rows, function(items) {
         assert.strictEqual(items[0].isEmpty, false);
@@ -1250,9 +1250,9 @@ QUnit.test("empty column", function(assert) {
             return 0;
         }
     };
-    //act
+    // act
     applyDisplaySummaryMode(this.descriptions, this.data);
-    //assert
+    // assert
 
     pivotGridUtils.foreachTree(this.data.rows, function(items) {
         assert.strictEqual(items[0].isEmpty, false);
@@ -1279,9 +1279,9 @@ QUnit.test("empty row", function(assert) {
             return 0;
         }
     };
-    //act
+    // act
     applyDisplaySummaryMode(this.descriptions, this.data);
-    //assert
+    // assert
 
     pivotGridUtils.foreachTree(this.data.rows, function(items) {
         var path = pivotGridUtils.createPath(items);
@@ -1304,9 +1304,9 @@ QUnit.test("empty row", function(assert) {
 
 QUnit.test("summary display mode is wrong", function(assert) {
     this.descriptions.values[0].summaryDisplayMode = "incorrect";
-    //act
+    // act
     applyDisplaySummaryMode(this.descriptions, this.data);
-    //assert
+    // assert
 
     pivotGridUtils.foreachTree(this.data.rows, function(items) {
         var path = pivotGridUtils.createPath(items);
@@ -1336,7 +1336,7 @@ QUnit.test("createMockSummaryCell with custom calculateSummaryValue", function(a
         },
         summaryCell = summaryDisplayModes.createMockSummaryCell(descriptions, fields, {});
 
-    //assert
+    // assert
     assert.equal(summaryCell.child("row"), null);
     assert.equal(summaryCell.child("column", 1), null);
 
@@ -1403,9 +1403,9 @@ QUnit.test("not empty data", function(assert) {
         return 0;
     };
 
-    //act
+    // act
     applyDisplaySummaryMode(this.descriptions, this.data);
-    //assert
+    // assert
 
     pivotGridUtils.foreachTree(this.data.rows, function(items) {
         assert.strictEqual(items[0].isEmpty, false);
@@ -1426,9 +1426,9 @@ QUnit.test("Empty cell for first field cells", function(assert) {
     this.descriptions.values[1].calculateSummaryValue = function(e) {
         return e.value();
     };
-    //act
+    // act
     applyDisplaySummaryMode(this.descriptions, this.data);
-    //assert
+    // assert
 
     pivotGridUtils.foreachTree(this.data.rows, function(items) {
         var path = pivotGridUtils.createPath(items);
@@ -1449,9 +1449,9 @@ QUnit.test("Empty cell for first field cells if second field without calculate s
         return null;
     };
     this.descriptions.values[1].calculateSummaryValue = null;
-    //act
+    // act
     applyDisplaySummaryMode(this.descriptions, this.data);
-    //assert
+    // assert
 
     pivotGridUtils.foreachTree(this.data.rows, function(items) {
         var path = pivotGridUtils.createPath(items);
@@ -1472,9 +1472,9 @@ QUnit.test("summary display mode is wrong in first data field", function(assert)
     this.descriptions.values[1].calculateSummaryValue = function(e) {
         return e.value();
     };
-    //act
+    // act
     applyDisplaySummaryMode(this.descriptions, this.data);
-    //assert
+    // assert
 
     pivotGridUtils.foreachTree(this.data.rows, function(items) {
         var path = pivotGridUtils.createPath(items);

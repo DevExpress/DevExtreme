@@ -73,7 +73,7 @@ var $ = require("jquery"),
     QUnit.test('Creation. Two Controllers', function(assert) {
         var animationController = this.createAnimationController();
         animationController.addAnimation(new this.Animation());
-        //act
+        // act
         var animationController1 = new this.AnimationController();
 
         assert.ok(animationController1);
@@ -98,10 +98,10 @@ var $ = require("jquery"),
             animationStartedCount++;
             doAssert();
         };
-        //Act
+        // Act
         animationController.addAnimation(animation);
 
-        //Assert
+        // Assert
         function doAssert() {
             assert.equal(animationController._animationCount, 1);
             assert.deepEqual(animationController._animations, { '0': animation });
@@ -144,12 +144,12 @@ var $ = require("jquery"),
             animationStartedCount++;
             doAssert();
         };
-        //Act
+        // Act
         for(var i = 0; i < animations.length; i++) {
             animationController.addAnimation(animations[i]);
         }
 
-        //Assert
+        // Assert
         function doAssert() {
             assert.equal(animationController._animationCount, 4);
             assert.deepEqual(animationController._animations, { '0': animations[0], '1': animations[1], '2': animations[2], '3': animations[3] });
@@ -169,9 +169,9 @@ var $ = require("jquery"),
 
         animationController.addAnimation(new this.Animation());
         this.mockCancelAnimationFrame(cancelRequestAnimationFrameSpy);
-        //act
+        // act
         animationController.stop();
-        //assert
+        // assert
         assert.deepEqual(animationController._animations, {});
         assert.equal(animationController._animationCount, 0);
         assert.ok(!animation1.stopped);
@@ -188,9 +188,9 @@ var $ = require("jquery"),
 
         animationController.addAnimation(animation1);
         animationController.addAnimation(animation2);
-        //act
+        // act
         animationController.lock();
-        //assert
+        // assert
         assert.deepEqual(animationController._animations, {});
         assert.equal(animationController._animationCount, 0);
         assert.deepEqual(animation1.stopArguments, [true]);
@@ -209,10 +209,10 @@ var $ = require("jquery"),
 
         animationController.addAnimation(animation1);
         animationController.addAnimation(animation2);
-        //act
+        // act
         animationController.lock();
 
-        //assert
+        // assert
         assert.equal(animation1.stopArguments.length, 1, "stop does called");
         assert.ok(!animation2.stopArguments, "stop doesn't called");
         assert.ok(!animationController.stop.called);
@@ -233,10 +233,10 @@ var $ = require("jquery"),
 
         animationController.addAnimation(animation1);
         animationController.addAnimation(animation2);
-        //act
+        // act
         animationController.lock();
 
-        //assert
+        // assert
         assert.equal(animation1.stopArguments.length, 1, "stop does called");
         assert.equal(animation2.stopArguments.length, 1, "stop does called");
         assert.equal(animationController.stop.callCount, 1);
@@ -374,9 +374,9 @@ var $ = require("jquery"),
         var oldAnimation = new this.Animation();
         element.animation = oldAnimation;
 
-        //Act
+        // Act
         animationController.animateElement(element, params, options);
-        //Assert
+        // Assert
         assert.ok(oldAnimation.stopped, 'old animation must be stopped');
         assert.deepEqual(oldAnimation.stopArguments, [], 'old animation must be stopped with break parameter');
         var newAnimation = element.animation;
@@ -525,10 +525,10 @@ var $ = require("jquery"),
             firstTick = animation.tick,
             secondTick;
 
-        //Act
+        // Act
         var result = animation.tick(new Date().getTime());
         secondTick = animation.tick;
-        //Assert
+        // Assert
         assert.ok(new Date() - animation._startTime < 1000);
         assert.strictEqual(result, true);
         assert.ok(firstTick !== secondTick);
@@ -538,7 +538,7 @@ var $ = require("jquery"),
     QUnit.test('Calculate animation progress', function(assert) {
         var animation = new this.Animation(this.element, this.params, $.extend(this.options, { duration: 10000 }));
         animation._startTime = new Date(2013, 0, 1, 0, 0, 0, 0);
-        //Act,Assert
+        // Act,Assert
         assert.roughEqual(animation._calcProgress(new Date(2013, 0, 1, 0, 0, 0, 250).getTime()), 0.025, 0.01);
         assert.roughEqual(animation._calcProgress(new Date(2013, 0, 1, 0, 0, 1, 0).getTime()), 0.1, 0.01);
         assert.roughEqual(animation._calcProgress(new Date(2013, 0, 1, 0, 0, 3, 0).getTime()), 0.3, 0.01);
@@ -550,7 +550,7 @@ var $ = require("jquery"),
     QUnit.test('Calculate animation progress when animation duration is 0', function(assert) {
         var animation = new this.Animation(this.element, this.params, $.extend(this.options, { duration: 0 }));
         animation._startTime = new Date(2013, 0, 1, 0, 0, 0, 0);
-        //Act,Assert
+        // Act,Assert
         assert.strictEqual(animation._calcProgress(new Date(2013, 0, 1, 0, 0, 0, 250).getTime()), 1);
         assert.strictEqual(animation._calcProgress(new Date(2013, 0, 1, 0, 0, 1, 0).getTime()), 1);
         assert.strictEqual(animation._calcProgress(new Date(2013, 0, 1, 0, 0, 3, 0).getTime()), 1);
@@ -569,11 +569,11 @@ var $ = require("jquery"),
 
     QUnit.test('Step', function(assert) {
         var animation = this.createAnimation(this.element, this.params, this.options);
-        //Act
+        // Act
         animation.tick();
         animation.tick();
         animation.tick();
-        //Assert
+        // Assert
         var animateAction1 = this.animateAttributeParameters._Arguments[0];
         assertAnimationAction(assert, animateAction1, this.element, this.params['_'], 0.4, {}, '_', 1);
 
@@ -583,11 +583,11 @@ var $ = require("jquery"),
 
     QUnit.test('Step. same params', function(assert) {
         var animation = this.createAnimation(this.element, $.extend(true, this.params, { x: { from: 10, to: 12 } }), this.options);
-        //Act
+        // Act
         animation.tick();
         animation.tick();
         animation.tick();
-        //Assert
+        // Assert
         var animateAction1 = this.animateAttributeParameters._Arguments[0];
         assertAnimationAction(assert, animateAction1, this.element, this.params['_'], 0.4, {}, '_', 1);
 
@@ -604,11 +604,11 @@ var $ = require("jquery"),
     QUnit.test('Stop. Break Animations', function(assert) {
         this.options.complete = sinon.stub();
         var animation = this.createAnimation(this.element, $.extend(true, this.params, { x: { from: 10, to: 12 } }), this.options);
-        //Act
+        // Act
         animation.tick();
         animation.tick();
         animation.stop();
-        //Assert
+        // Assert
         var animateAction1 = this.animateAttributeParameters._Arguments[0];
         assertAnimationAction(assert, animateAction1, this.element, this.params['_'], 0.4, {}, '_', 1);
 
@@ -623,11 +623,11 @@ var $ = require("jquery"),
     QUnit.test('Stop. Break Animations with disable user complete', function(assert) {
         this.options.complete = sinon.stub();
         var animation = this.createAnimation(this.element, $.extend(true, this.params, { x: { from: 10, to: 12 } }), this.options);
-        //Act
+        // Act
         animation.tick();
         animation.tick();
         animation.stop(true);
-        //Assert
+        // Assert
         var animateAction1 = this.animateAttributeParameters._Arguments[0];
         assertAnimationAction(assert, animateAction1, this.element, this.params['_'], 0.4, {}, '_', 1);
 
@@ -645,10 +645,10 @@ var $ = require("jquery"),
             synchronizeTimeValue;
         animation._calcProgress = function(now) { synchronizeTimeValue = now; return 1; };
         animation.tick();
-        //Act
+        // Act
         var now = new Date().getTime();
         animation.tick(now);
-        //Assert
+        // Assert
         assert.deepEqual(synchronizeTimeValue, now);
     });
 
@@ -656,9 +656,9 @@ var $ = require("jquery"),
         var animation = this.createAnimation(this.element, this.params, this.options);
         animation._calcProgress = function() { return 1; };
         animation.tick();
-        //Act
+        // Act
         var result = animation.tick();
-        //Assert
+        // Assert
         assert.ok(!result);
         assert.equal(animation.tick, animationModule.noop);
         var completeAction = this.animateAttributeParameters.completeArguments[0];
@@ -675,10 +675,10 @@ var $ = require("jquery"),
                     }
                 }));
         animation.tick();
-        //Act
+        // Act
         animation.tick();
         animation.tick();
-        //Assert
+        // Assert
         assert.equal(steps.length, 2);
 
         assert.roughEqual(steps[0][0], 0.784, 0.01);
@@ -697,11 +697,11 @@ var $ = require("jquery"),
                     }
                 }));
         animation.tick();
-        //Act
+        // Act
         animation.tick();
         animation.tick();
         animation.tick();
-        //Assert
+        // Assert
         assert.equal(completeCallCount, 1);
     });
 
@@ -709,7 +709,7 @@ var $ = require("jquery"),
         assert.expect(2);
         var that = this,
             animation = this.createAnimation(this.element, this.params, $.extend(this.options, {
-                //Assert
+                // Assert
                 complete: function() {
                     var completeAction = that.animateAttributeParameters.completeArguments[0];
                     assert.equal(completeAction[0], that.element);
@@ -717,7 +717,7 @@ var $ = require("jquery"),
                 }
             }));
         animation.tick();
-        //Act
+        // Act
         animation.tick();
         animation.tick();
         animation.tick();
@@ -731,7 +731,7 @@ var $ = require("jquery"),
         assert.equal(animation.duration, 1000 / 2);
     });
 
-    //B239023
+    // B239023
     QUnit.test('Stop animation on complete animation', function(assert) {
         assert.expect(1);
         var completeCallCount = 0,
@@ -748,11 +748,11 @@ var $ = require("jquery"),
                 }
             }));
         animation.tick();
-        //Act
+        // Act
         animation.tick();
         animation.tick();
         animation.tick();
-        //Assert
+        // Assert
         assert.equal(completeCallCount, 1);
     });
 
@@ -778,14 +778,14 @@ var $ = require("jquery"),
         animation.tick(new Date().getTime());
         this.clock.tick(10);
 
-        //Act
+        // Act
         animation.tick(new Date().getTime());
         this.clock.tick(10);
         animation.tick(new Date().getTime());
 
         this.clock.tick(0);
         animation.tick(new Date().getTime());
-        //Assert
+        // Assert
         assert.strictEqual(step.callCount, 1);
         assert.strictEqual(step.getCall(0).args[0], 0);
     });
@@ -802,14 +802,14 @@ var $ = require("jquery"),
         animation.tick(new Date().getTime());
         this.clock.tick(20);
         animation.tick(new Date().getTime());
-        //Act
+        // Act
         this.clock.tick(40);
         animation.tick(new Date().getTime());
         this.clock.tick(40);
         animation.tick(new Date().getTime());
         this.clock.tick(20);
         animation.tick(new Date().getTime());
-        //Assert
+        // Assert
         assert.strictEqual(step.callCount, 3);
         assert.strictEqual(step.getCall(0).args[0], 0.4);
         assert.strictEqual(step.getCall(1).args[0], 0.8);
@@ -846,7 +846,7 @@ QUnit.test('animateSvgStep object', function(assert) {
 
 QUnit.test('Base step', function(assert) {
     var step = this.animationStep;
-    //elem, params, progress, easing, currentParams, attributeName
+    // elem, params, progress, easing, currentParams, attributeName
     step.base(this.element, { from: 10, to: 20 }, 0.5, this.easing(assert), this.currentParams, 'x');
 
     assert.deepEqual(this.currentParams, { x: 15 });
@@ -856,7 +856,7 @@ QUnit.test('Base step', function(assert) {
 
 QUnit.test('Transformations step. translateX, translateY', function(assert) {
     var step = this.animationStep;
-    //elem, params, progress, easing, currentParams, attributeName
+    // elem, params, progress, easing, currentParams, attributeName
     step.transform(this.element, {
         from: {
             translateX: 10,
@@ -876,8 +876,8 @@ QUnit.test('Transformations step. translateX, translateY', function(assert) {
 QUnit.test('Transformations step. Rotate with xy', function(assert) {
     var step = this.animationStep;
 
-    //Act
-    //elem, params, progress, easing, currentParams, attributeName
+    // Act
+    // elem, params, progress, easing, currentParams, attributeName
     step.transform(this.element, {
         from: {
             rotate: 10,
@@ -899,8 +899,8 @@ QUnit.test('Transformations step. Rotate with xy', function(assert) {
 QUnit.test('Transformations step. Rotate without xy', function(assert) {
     var step = this.animationStep;
 
-    //Act
-    //elem, params, progress, easing, currentParams, attributeName
+    // Act
+    // elem, params, progress, easing, currentParams, attributeName
     step.transform(this.element, {
         from: { rotate: 10 },
         to: { rotate: 360 }
@@ -913,7 +913,7 @@ QUnit.test('Transformations step. Rotate without xy', function(assert) {
 
 QUnit.test('Transformations step. Scale', function(assert) {
     var step = this.animationStep;
-    //elem, params, progress, easing, currentParams, attributeName
+    // elem, params, progress, easing, currentParams, attributeName
     step.transform(this.element, {
         from: {
             scaleX: 0,
@@ -932,7 +932,7 @@ QUnit.test('Transformations step. Scale', function(assert) {
 
 QUnit.test('Transformations step. All transformations', function(assert) {
     var step = this.animationStep;
-    //elem, params, progress, easing, currentParams, attributeName
+    // elem, params, progress, easing, currentParams, attributeName
     step.transform(this.element, {
         from: {
             scaleX: 0,
@@ -961,7 +961,7 @@ QUnit.test('Transformations step. All transformations', function(assert) {
 
 QUnit.test('Arc step', function(assert) {
     var step = this.animationStep;
-    //elem, params, progress, easing, currentParams, attributeName
+    // elem, params, progress, easing, currentParams, attributeName
     step.arc(this.element, {
         from: {
             x: 1000,
@@ -980,7 +980,7 @@ QUnit.test('Arc step', function(assert) {
         }
     }, 0.5, this.easing(assert), this.currentParams, 'arc');
 
-    //assert
+    // assert
     assert.deepEqual(this.currentParams, {});
 
     assert.strictEqual(this.element.stub('attr').callCount, 1);
@@ -996,7 +996,7 @@ QUnit.test('Arc step', function(assert) {
 
 QUnit.test('Segments step', function(assert) {
     var step = this.animationStep;
-    //elem, params, progress, easing, currentParams, attributeName
+    // elem, params, progress, easing, currentParams, attributeName
     step.segments(this.element, {
         from: [["M", 10, 20], ["L", 10, 40], ["L", 50, 1], ["Z"]],
         to: [["M", 0, 10], ["L", 10, 30], ["L", 40, 2], ["Z"]]
@@ -1009,7 +1009,7 @@ QUnit.test('Segments step', function(assert) {
 
 QUnit.test('Segments step with end param', function(assert) {
     var step = this.animationStep;
-    //elem, params, progress, easing, currentParams, attributeName
+    // elem, params, progress, easing, currentParams, attributeName
     step.segments(this.element, {
         from: [["M", 10, 20], ["L", 10, 40], ["L", 50, 1], ["Z"]],
         to: [["M", 0, 10], ["L", 10, 30], ["L", 40, 2], ["Z"]],
@@ -1023,7 +1023,7 @@ QUnit.test('Segments step with end param', function(assert) {
 
 QUnit.test('Segments last step with end param', function(assert) {
     var step = this.animationStep;
-    //elem, params, progress, easing, currentParams, attributeName
+    // elem, params, progress, easing, currentParams, attributeName
     step.segments(this.element, {
         from: [["M", 10, 20], ["L", 10, 40], ["L", 50, 1], ["Z"]],
         to: [["M", 0, 10], ["L", 10, 30], ["L", 40, 2], ["Z"]],

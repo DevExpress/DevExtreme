@@ -51,7 +51,7 @@ function adjust(value, interval) {
         value = value - Math.floor(value) + integerPart;
     }
 
-    precision = ((isEdge && (getExponent(value) > 6)) || precision > 7) ? 15 : 7; //fix toPrecision() bug in Edge (T570217)
+    precision = ((isEdge && (getExponent(value) > 6)) || precision > 7) ? 15 : 7; // fix toPrecision() bug in Edge (T570217)
 
     if(!isExponentValue) {
         separatedAdjustedValue = parseFloat(value.toPrecision(precision)).toString().split(".");

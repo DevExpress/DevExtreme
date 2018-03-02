@@ -64,7 +64,7 @@ QUnit.test("Render fields", function(assert) {
 
     assert.strictEqual(rows.length, 1);
     assert.strictEqual(rows[0].cells.length, 2);
-    assert.ok(this.$container.find(".dx-area-field").eq(0).children().eq(0).hasClass("dx-area-field-content"));//showColumnLines set to false
+    assert.ok(this.$container.find(".dx-area-field").eq(0).children().eq(0).hasClass("dx-area-field-content"));// showColumnLines set to false
 });
 
 QUnit.test("Render fields for row area", function(assert) {
@@ -75,7 +75,7 @@ QUnit.test("Render fields for row area", function(assert) {
     area.render(this.$container, [{ dataField: "Field Area 1", allowFiltering: true, allowSorting: true, area: "row" }]);
 
 
-    assert.ok(this.$container.find(".dx-area-field").eq(0).children().eq(0).hasClass("dx-column-indicators")); //showColumnLines set to true for row area fields
+    assert.ok(this.$container.find(".dx-area-field").eq(0).children().eq(0).hasClass("dx-column-indicators")); // showColumnLines set to true for row area fields
 });
 
 QUnit.test("Render if area is hidden", function(assert) {
@@ -98,7 +98,7 @@ QUnit.test("Render after show the area", function(assert) {
     this.component.option.withArgs("showMyAreaHeader").returns(false);
     this.area.render(this.$container, []);
 
-    //act
+    // act
     this.component.option.withArgs("showMyAreaHeader").returns(true);
     this.area.render(this.$container, []);
 

@@ -53,11 +53,11 @@
     exports.MockViewEngine = Class.inherit({
         ctor: function(options) {
             options = options || {};
-            //this.__renderBlankViewLog = [];
-            //this.__renderCompleteViewLog = [];
-            //this.__renderBlankResult = {};
-            //this.__renderCompleteResult = {};
-            //this.commandManager = new exports.MockCommandManager();
+            // this.__renderBlankViewLog = [];
+            // this.__renderCompleteViewLog = [];
+            // this.__renderBlankResult = {};
+            // this.__renderCompleteResult = {};
+            // this.commandManager = new exports.MockCommandManager();
             this.__findViewComponentOptions = options.__findViewComponentOptions || [];
         },
         getViewTemplateInfo: function(viewName) {
@@ -67,14 +67,14 @@
 
             return component;
         }
-        //renderBlankView: function(viewInfo, $renderTarget) {
+        // renderBlankView: function(viewInfo, $renderTarget) {
         //    this.__renderBlankViewLog.push({
         //        viewInfo: viewInfo,
         //        $renderTarget: $renderTarget
         //    });
         //    viewInfo.renderResult = this.__renderBlankResult;
-        //},
-        //renderCompleteView: function(viewInfo, $renderTarget) {
+        // },
+        // renderCompleteView: function(viewInfo, $renderTarget) {
         //    this.__renderCompleteViewLog.push({
         //        viewInfo: viewInfo,
         //        $renderTarget: $renderTarget
@@ -82,7 +82,7 @@
         //    var result = this.__renderCompleteResult || viewInfo.renderResult;
         //    result.rendered = true;
         //    viewInfo.renderResult = result;
-        //}
+        // }
     });
 
     exports.MockLayoutController = Class.inherit({
@@ -146,14 +146,14 @@
         }
     });
 
-    //exports.MockKnockoutJSTemplateEngine = DX.framework.html.KnockoutJSTemplateEngine.inherit({
+    // exports.MockKnockoutJSTemplateEngine = DX.framework.html.KnockoutJSTemplateEngine.inherit({
     //    ctor: function (options) {
     //        options = options || {};
     //        this.callBase($.extend(false, {
     //            navigationManager: new frameworkMocks.MockStackBasedNavigationManager()
     //        }, options));
     //    }
-    //});
+    // });
 
     return exports;
 

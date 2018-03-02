@@ -43,7 +43,7 @@ function buildData(partition, values, field) {
     return list;
 }
 
-//'var' because JSHint throws W021 error
+// 'var' because JSHint throws W021 error
 var Legend = function(parameters) {
     var that = this;
     that._params = parameters;

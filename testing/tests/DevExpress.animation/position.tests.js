@@ -952,7 +952,7 @@ var testCollision = function(name, fixtureName, params, expectedHorzDist, expect
 
     QUnit.test("position should return window.innerHeight for mobile safari if window.outerHeight < window.innerHeight", function(assert) {
         if(browser.msie && parseInt(browser.version.split(".")[0]) <= 11) {
-            //skip for ie because we can not write window.innerHeight in IE
+            // skip for ie because we can not write window.innerHeight in IE
             assert.expect(0);
             return;
         }
@@ -976,10 +976,10 @@ var testCollision = function(name, fixtureName, params, expectedHorzDist, expect
         }
     });
 
-    //T509285
+    // T509285
     QUnit.test("position should return window.innerWidth for mobile safari if window.outerWidth < window.innerWidth", function(assert) {
         if(browser.msie && parseInt(browser.version.split(".")[0]) <= 11) {
-            //skip for ie because we can not write window.innerWidth in IE
+            // skip for ie because we can not write window.innerWidth in IE
             assert.expect(0);
             return;
         }

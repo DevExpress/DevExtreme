@@ -1023,7 +1023,7 @@ QUnit.test("minValueMargin - apply margins to the min", function(assert) {
     });
 });
 
-//T603177
+// T603177
 QUnit.test("Margins for one point (dateTime)", function(assert) {
     var date = new Date('2018/05/02');
 
@@ -1655,7 +1655,7 @@ QUnit.test("Margins and endOnTick = true - extend range with margins to boundary
             valueMarginsEnabled: true,
             minValueMargin: 0.1,
             maxValueMargin: 0.2,
-            endOnTick: true //emulation, see returned ticks below
+            endOnTick: true // emulation, see returned ticks below
         },
         range: {
             min: 100,
@@ -2041,8 +2041,8 @@ QUnit.test("updateSize, synchronized axis - do not recalculate margins/interval"
         size: 100
     });
 
-    //act
-    //emulate synchronizer
+    // act
+    // emulate synchronizer
     this.translator.updateBusinessRange({
         min: 50,
         max: 250,
@@ -2076,7 +2076,7 @@ QUnit.test("Margins and skipViewportExtending = true - do not extend range with 
             minValueMargin: 0.1,
             maxValueMargin: 0.2,
             skipViewportExtending: true,
-            endOnTick: true //emulation, see returned ticks below
+            endOnTick: true // emulation, see returned ticks below
         },
         range: {
             min: 100,
@@ -2310,7 +2310,7 @@ QUnit.test("Argument axis, endOnTick = true - do not extend range to boundary ti
             valueMarginsEnabled: true,
             minValueMargin: 0.1,
             maxValueMargin: 0.2,
-            endOnTick: true //emulation, see returned ticks below
+            endOnTick: true // emulation, see returned ticks below
         },
         range: {
             min: 100,
@@ -2334,7 +2334,7 @@ QUnit.test("Value axis, endOnTick = true - extend range to boundary ticks", func
             valueMarginsEnabled: true,
             minValueMargin: 0.1,
             maxValueMargin: 0.2,
-            endOnTick: true //emulation, see returned ticks below
+            endOnTick: true // emulation, see returned ticks below
         },
         range: {
             min: 100,

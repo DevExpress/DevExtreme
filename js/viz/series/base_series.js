@@ -751,8 +751,8 @@ Series.prototype = {
         that._options.visibilityChanged();
     },
 
-    //TODO. Problem related to 'point' option for bar-like series. Revisit this code once options parsing is changed
-    //see T243839, T231939
+    // TODO. Problem related to 'point' option for bar-like series. Revisit this code once options parsing is changed
+    // see T243839, T231939
     _updatePointsVisibility: _noop,
 
     hideLabels: function() {

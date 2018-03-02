@@ -242,7 +242,7 @@ var RangeSlider = Slider.inherit({
             min = this.option("min");
 
         var newRatio = this._startOffset + offsetDirection * e.event.offset / this._swipePixelRatio();
-        newRatio = newRatio.toPrecision(12); //NOTE: android 2.3 has problems with mathematics
+        newRatio = newRatio.toPrecision(12); // NOTE: android 2.3 has problems with mathematics
 
         var newValue = newRatio * (max - min) + min;
 

@@ -65,7 +65,7 @@ QUnit.module("dxPivotGridFieldChooser", {
 });
 
 QUnit.test("Empty options", function(assert) {
-    //act
+    // act
     this.setup();
 
     assert.ok(this.fieldChooser);
@@ -96,10 +96,10 @@ QUnit.test("Empty options", function(assert) {
 QUnit.test("Empty DataSource", function(assert) {
     var dataSourceOptions = {};
 
-    //act
+    // act
     this.setup(dataSourceOptions);
 
-    //assert
+    // assert
     assert.ok(this.fieldChooser);
     assert.ok(this.dataSource);
     assert.equal(this.$container.find(".dx-area").length, 5, "area count");
@@ -125,10 +125,10 @@ QUnit.test("Render Area Fields", function(assert) {
         ]
     };
 
-    //act
+    // act
     this.setup(dataSourceOptions);
 
-    //assert
+    // assert
     assert.ok(this.fieldChooser);
     assert.ok(this.dataSource);
     assert.equal(this.$container.find(".dx-area").length, 5, "area count");
@@ -175,10 +175,10 @@ QUnit.test("Hidden field in the data area", function(assert) {
         ]
     };
 
-    //act
+    // act
     this.setup(dataSourceOptions);
 
-    //assert
+    // assert
     var $groupFieldElements = this.$container.find(".dx-area-fields[group=data] .dx-area-field");
     assert.equal($groupFieldElements.length, 1, 'field elements count');
     assert.equal($groupFieldElements.eq(0).text(), 'Field 2', 'Field 1 text');
@@ -187,14 +187,14 @@ QUnit.test("Hidden field in the data area", function(assert) {
 QUnit.test("Render to hidden container", function(assert) {
     $("#container").hide();
 
-    //act
+    // act
     this.setup();
 
     $("#container").show();
 
     domUtils.triggerShownEvent($("#container"));
 
-    //assert
+    // assert
     var columns = $("#container").find(".dx-col");
     assert.strictEqual(columns.length, 2);
     assert.ok(columns.eq(0).height() > 0);
@@ -210,16 +210,16 @@ QUnit.test("Render Fields Tree", function(assert) {
             { dataField: "field5", caption: "Field 5", isDefault: true },
             { dataField: "field6", caption: "Field 6", isDefault: false, area: "data" },
             { dataField: "field7", caption: "Field 7", visible: false },
-            { dataField: "field8", caption: "Field 8", groupIndex: 0, groupName: "test" } //T232385
+            { dataField: "field8", caption: "Field 8", groupIndex: 0, groupName: "test" } // T232385
     ];
     var dataSourceOptions = {
         fields: fields
     };
 
-    //act
+    // act
     this.setup(dataSourceOptions);
 
-    //assert
+    // assert
     assert.ok(this.fieldChooser);
     assert.ok(this.dataSource);
     assert.equal(this.$container.find(".dx-treeview").length, 1, "tree view count");
@@ -270,10 +270,10 @@ QUnit.test("Render Fields Tree with dimension and displayFolder", function(asser
             fields: fields
         };
 
-    //act
+    // act
     this.setup(dataSourceOptions);
 
-    //assert
+    // assert
     assert.ok(this.fieldChooser);
     assert.ok(this.dataSource);
     assert.equal(this.$container.find(".dx-treeview").length, 1, "tree view count");
@@ -338,12 +338,12 @@ QUnit.test("Select Items in all fields area", function(assert) {
 
     var treeView = this.$container.find(".dx-treeview").dxTreeView("instance"),
         treeViewItems = treeView.option("dataSource");
-    //acts
-    treeView.selectItem(treeViewItems[4]);  //act1 - select field5
-    treeView.selectItem(treeViewItems[2]);  //act2 - select Dimension2
-    treeView.selectItem(treeViewItems[0]);  //act3 - select field8
-    treeView.selectItem(treeViewItems[1]);  //act4 - select Dimension1
-    //assert
+    // acts
+    treeView.selectItem(treeViewItems[4]);  // act1 - select field5
+    treeView.selectItem(treeViewItems[2]);  // act2 - select Dimension2
+    treeView.selectItem(treeViewItems[0]);  // act3 - select field8
+    treeView.selectItem(treeViewItems[1]);  // act4 - select Dimension1
+    // assert
 
     assert.strictEqual(this.dataSource.load.callCount, 4);
     assert.strictEqual(this.dataSource.field.callCount, 4);
@@ -392,10 +392,10 @@ QUnit.test("Unselect Items in all fields area", function(assert) {
 
     var treeView = this.$container.find(".dx-treeview").dxTreeView("instance"),
         treeViewItems = treeView.option("dataSource");
-    //acts
-    treeView.unselectItem(treeViewItems[4]);  //act1 - unselect field5
-    treeView.selectItem(treeViewItems[2]);    //act2 - unselect Dimension2
-    //assert
+    // acts
+    treeView.unselectItem(treeViewItems[4]);  // act1 - unselect field5
+    treeView.selectItem(treeViewItems[2]);    // act2 - unselect Dimension2
+    // assert
 
     assert.strictEqual(this.dataSource.load.callCount, 2);
     assert.strictEqual(this.dataSource.field.callCount, 4);
@@ -443,15 +443,15 @@ QUnit.test("Change sort order", function(assert) {
 
     this.setup(dataSourceOptions);
 
-    //act
+    // act
     var $sortIndicatorsInColumnArea = this.$container.find(".dx-area-fields[group=column] .dx-sort");
     $sortIndicatorsInColumnArea.parent().trigger("dxclick");
 
-    //act
+    // act
     var $sortIndicatorsInRowArea = this.$container.find(".dx-area-fields[group=row] .dx-sort");
     $sortIndicatorsInRowArea.parent().trigger("dxclick");
 
-    //assert
+    // assert
     assert.equal($sortIndicatorsInColumnArea.length, 1, 'sort indicators count');
     assert.equal($sortIndicatorsInRowArea.length, 1, 'sort indicators count');
 
@@ -486,30 +486,30 @@ QUnit.test("Header filter menu for not group field", function(assert) {
     var $filterIndicatorsInColumnArea = this.$container.find(".dx-area-fields[group=column] .dx-header-filter");
     assert.equal($filterIndicatorsInColumnArea.length, 2, 'filter indicators count');
 
-    //act
+    // act
     $filterIndicatorsInColumnArea.eq(0).trigger("dxclick");
     this.clock.tick(500);
 
-    //assert
+    // assert
     var $filterMenuList = $(".dx-header-filter-menu .dx-list");
     assert.equal($filterMenuList.length, 1);
 
     assert.equal($filterMenuList.find(".dx-list-item").length, 4, 'list item count');
     assert.equal($filterMenuList.find(".dx-list-item-selected").length, 0, 'list selected item count');
 
-    //act
+    // act
     $filterIndicatorsInColumnArea.eq(1).trigger("dxclick");
     this.clock.tick(500);
 
-    //assert
+    // assert
     $filterMenuList = $(".dx-header-filter-menu .dx-list");
     assert.equal($filterMenuList.length, 1);
 
     assert.equal($filterMenuList.find(".dx-list-item").length, 5, 'list item count');
     assert.equal($filterMenuList.find(".dx-list-item-selected").length, 1, 'list selected item count');
 
-    //T278093
-    //act - resize filtermenu
+    // T278093
+    // act - resize filtermenu
     pointerMock($(".dx-header-filter-menu .dx-resizable-handle-right"))
         .start()
         .down()
@@ -537,11 +537,11 @@ QUnit.test("Date in the filterValue", function(assert) {
 
     var $filterIndicatorsInColumnArea = this.$container.find(".dx-area-fields[group=column] .dx-header-filter");
 
-    //act
+    // act
     $filterIndicatorsInColumnArea.eq(1).trigger("dxclick");
     this.clock.tick(500);
 
-    //assert
+    // assert
     var $filterMenuList = $(".dx-header-filter-menu .dx-list");
     assert.equal($filterMenuList.find(".dx-list-item").length, 5, 'list item count');
     assert.equal($filterMenuList.find(".dx-list-item-selected").length, 1, 'list selected item count');
@@ -573,22 +573,22 @@ QUnit.test("Header filter menu when data with key", function(assert) {
     var $filterIndicatorsInColumnArea = this.$container.find(".dx-area-fields[group=column] .dx-header-filter");
     assert.equal($filterIndicatorsInColumnArea.length, 2, 'filter indicators count');
 
-    //act
+    // act
     $filterIndicatorsInColumnArea.eq(0).trigger("dxclick");
     this.clock.tick(500);
 
-    //assert
+    // assert
     var $filterMenuList = $(".dx-header-filter-menu .dx-list");
     assert.equal($filterMenuList.length, 1);
 
     assert.equal($filterMenuList.find(".dx-list-item").length, 4, 'list item count');
     assert.equal($filterMenuList.find(".dx-list-item-selected").length, 0, 'list selected item count');
 
-    //act
+    // act
     $filterIndicatorsInColumnArea.eq(1).trigger("dxclick");
     this.clock.tick(500);
 
-    //assert
+    // assert
     $filterMenuList = $(".dx-header-filter-menu .dx-list");
     assert.equal($filterMenuList.length, 1);
 
@@ -616,11 +616,11 @@ QUnit.test("Header filter menu for not group field when filterType exclude", fun
     var $filterIndicatorsInColumnArea = this.$container.find(".dx-area-fields[group=column] .dx-header-filter");
     assert.equal($filterIndicatorsInColumnArea.length, 2, 'filter indicators count');
 
-    //act
+    // act
     $filterIndicatorsInColumnArea.eq(1).trigger("dxclick");
     this.clock.tick(500);
 
-    //assert
+    // assert
     var $filterMenuList = $(".dx-header-filter-menu .dx-list");
     assert.equal($filterMenuList.length, 1);
 
@@ -645,18 +645,18 @@ QUnit.test("Change filter values for not group field", function(assert) {
     var $filterIndicatorsInColumnArea = this.$container.find(".dx-area-fields[group=column] .dx-header-filter");
     assert.equal($filterIndicatorsInColumnArea.length, 2, 'filter indicators count');
 
-    //act
+    // act
     $filterIndicatorsInColumnArea.eq(1).trigger("dxclick");
     this.clock.tick(500);
 
-    //assert
+    // assert
     var $filterMenuList = $(".dx-header-filter-menu .dx-list");
     assert.equal($filterMenuList.length, 1);
 
     assert.equal($filterMenuList.find(".dx-list-item").length, 5, 'list item count');
     assert.equal($filterMenuList.find(".dx-list-item-selected").length, 1, 'list selected item count');
 
-    //act
+    // act
     $filterMenuList.find(".dx-list-item").eq(0).trigger("dxclick");
     $filterMenuList.find(".dx-list-item").eq(4).trigger("dxclick");
 
@@ -666,13 +666,13 @@ QUnit.test("Change filter values for not group field", function(assert) {
     $buttons.eq(0).trigger("dxclick");
     this.clock.tick(500);
 
-    //assert
+    // assert
     assert.deepEqual(this.dataSource.field.getCall(0).args, [1, {
         filterType: undefined,
         filterValues: [8, 6, "&[10]"]
     }]);
 
-    //T241360
+    // T241360
     var scrollableUpdateCallCount = 0;
     var $scrollableElements = this.$container.find(".dx-area .dx-scrollable");
     $.each($scrollableElements, function() {
@@ -681,10 +681,10 @@ QUnit.test("Change filter values for not group field", function(assert) {
         });
     });
 
-    //act
+    // act
     this.fieldChooser.updateDimensions();
 
-    //assert
+    // assert
     assert.equal(this.$container.find(".dx-header-filter").length, 2, "header filter count");
     assert.equal(this.$container.find(".dx-header-filter-empty").length, 1, "empty header filter count");
     assert.equal(this.$container.find(".dx-header-filter-empty").length, 1, "empty header filter count");
@@ -721,18 +721,18 @@ QUnit.test("T247590. Save tree view scroll position on dataSource changed", func
     var dataSource = this.dataSource,
         scrollable = $(".dx-treeview-border-visible").find(".dx-scrollable").dxScrollable("instance");
 
-    //act
+    // act
     scrollable.scrollTo({ y: 30 });
 
     dataSource.on.withArgs("changed").lastCall.args[1]();
-    //assert
+    // assert
     var newTreeScrollable = $(".dx-treeview-border-visible").find(".dx-scrollable").dxScrollable("instance");
 
     assert.strictEqual(newTreeScrollable.scrollTop(), 30);
 });
 
 if(devices.current().deviceType === "desktop") {
-    //T244547
+    // T244547
     QUnit.test("Dragging after change filter values", function(assert) {
         var dataSourceOptions = {
             columnFields: [
@@ -753,11 +753,11 @@ if(devices.current().deviceType === "desktop") {
         var $filterIndicatorsInColumnArea = this.$container.find(".dx-area-fields[group=column] .dx-header-filter");
         assert.equal($filterIndicatorsInColumnArea.length, 2, 'filter indicators count');
 
-        //act
+        // act
         $filterIndicatorsInColumnArea.eq(1).trigger("dxclick");
         this.clock.tick(500);
 
-        //assert
+        // assert
         var $filterMenuList = $(".dx-header-filter-menu .dx-list");
         assert.equal($filterMenuList.length, 1);
 
@@ -765,7 +765,7 @@ if(devices.current().deviceType === "desktop") {
         assert.equal($filterMenuList.find(".dx-list-item-selected").length, 1, 'list selected item count');
 
 
-        //act
+        // act
         $filterMenuList.find(".dx-list-item").eq(0).trigger("dxclick");
 
         var $buttons = $(".dx-header-filter-menu .dx-button");
@@ -774,7 +774,7 @@ if(devices.current().deviceType === "desktop") {
         $buttons.eq(0).trigger("dxclick");
         this.clock.tick(500);
 
-        //act
+        // act
         var $item = this.$container.find(".dx-area-box").eq(0);
         var offset = $item.offset();
 
@@ -783,7 +783,7 @@ if(devices.current().deviceType === "desktop") {
             .down()
             .move(offset.left + 10, offset.top);
 
-        //assert
+        // assert
         assert.ok($item.hasClass("dx-drag-source"), "dragging is started");
         assert.strictEqual($(".dx-drag").length, 1);
 
@@ -818,11 +818,11 @@ QUnit.test("Change filter values second time", function(assert) {
     var $filterIndicatorsInColumnArea = this.$container.find(".dx-area-fields[group=column] .dx-header-filter");
     assert.equal($filterIndicatorsInColumnArea.length, 2, 'filter indicators count');
 
-    //act
+    // act
     $filterIndicatorsInColumnArea.eq(1).trigger("dxclick");
     this.clock.tick(500);
 
-    //act
+    // act
     var $listItems = $(".dx-header-filter-menu .dx-list .dx-list-item");
     assert.equal($listItems.length, 5);
     $listItems.eq(0).trigger("dxclick");
@@ -837,7 +837,7 @@ QUnit.test("Change filter values second time", function(assert) {
     $filterIndicatorsInColumnArea.eq(1).trigger("dxclick");
     this.clock.tick(500);
 
-    //assert
+    // assert
     var $filterMenuList = $(".dx-header-filter-menu .dx-list");
     assert.equal($filterMenuList.length, 1);
 
@@ -865,18 +865,18 @@ QUnit.test("Change filter type for not group field", function(assert) {
     var $filterIndicatorsInColumnArea = this.$container.find(".dx-area-fields[group=column] .dx-header-filter");
     assert.equal($filterIndicatorsInColumnArea.length, 2, 'filter indicators count');
 
-    //act
+    // act
     $filterIndicatorsInColumnArea.eq(1).trigger("dxclick");
     this.clock.tick(500);
 
-    //assert
+    // assert
     var $filterMenuList = $(".dx-header-filter-menu .dx-list");
     assert.equal($filterMenuList.length, 1);
 
     assert.equal($filterMenuList.find(".dx-list-select-all").length, 1, 'list all item count');
 
 
-    //act
+    // act
     $filterMenuList.find(".dx-list-select-all").trigger("dxclick");
     $filterMenuList = $(".dx-header-filter-menu .dx-list");
     $filterMenuList.find(".dx-list-item").eq(0).trigger("dxclick");
@@ -886,7 +886,7 @@ QUnit.test("Change filter type for not group field", function(assert) {
 
     $buttons.trigger("dxclick");
 
-    //assert
+    // assert
     assert.deepEqual(this.dataSource.field.getCall(0).args, [1, {
         filterType: 'exclude',
         filterValues: [6]
@@ -911,11 +911,11 @@ QUnit.test("Change filter values for group field", function(assert) {
     var $filterIndicatorsInColumnArea = this.$container.find(".dx-area-fields[group=column] .dx-header-filter");
     assert.equal($filterIndicatorsInColumnArea.length, 1, 'filter indicators count');
 
-    //act
+    // act
     $filterIndicatorsInColumnArea.eq(0).trigger("dxclick");
     this.clock.tick(500);
 
-    //assert
+    // assert
     var $filterMenuList = $(".dx-header-filter-menu .dx-treeview");
     assert.equal($filterMenuList.length, 1, 'treeView');
 
@@ -930,7 +930,7 @@ QUnit.test("Change filter values for group field", function(assert) {
     assert.ok(!treeNodes[1].selected);
     assert.strictEqual(treeNodes[1].items.length, 2);
 
-    //act
+    // act
     $filterMenuList.find(".dx-treeview-node .dx-checkbox").eq(0).trigger("dxclick");
 
     var $buttons = $(".dx-header-filter-menu .dx-button");
@@ -938,7 +938,7 @@ QUnit.test("Change filter values for group field", function(assert) {
 
     $buttons.trigger("dxclick");
 
-    //assert
+    // assert
     assert.strictEqual(this.dataSource.field.callCount, 1);
     assert.deepEqual(this.dataSource.field.getCall(0).args, [0, {
         filterType: undefined,
@@ -963,11 +963,11 @@ QUnit.test("Change filter values for group field. filterType is 'exclude'.", fun
     var $filterIndicatorsInColumnArea = this.$container.find(".dx-area-fields[group=column] .dx-header-filter");
     assert.equal($filterIndicatorsInColumnArea.length, 1, 'filter indicators count');
 
-    //act
+    // act
     $filterIndicatorsInColumnArea.eq(0).trigger("dxclick");
     this.clock.tick(500);
 
-    //assert
+    // assert
     var $filterMenuList = $(".dx-header-filter-menu .dx-treeview");
     assert.equal($filterMenuList.length, 1, 'treeView');
 
@@ -982,7 +982,7 @@ QUnit.test("Change filter values for group field. filterType is 'exclude'.", fun
     assert.strictEqual(!treeNodes[1].selected, true);
     assert.strictEqual(treeNodes[1].items.length, 2);
 
-    //act
+    // act
     $filterMenuList.find(".dx-treeview-node .dx-checkbox").eq(0).trigger("dxclick");
 
     var $buttons = $(".dx-header-filter-menu .dx-button");
@@ -991,7 +991,7 @@ QUnit.test("Change filter values for group field. filterType is 'exclude'.", fun
     $buttons.trigger("dxclick");
     this.clock.tick(500);
 
-    //assert
+    // assert
     assert.strictEqual(this.dataSource.field.callCount, 1);
     assert.deepEqual(this.dataSource.field.getCall(0).args, [0, {
         filterType: "exclude",
@@ -1021,11 +1021,11 @@ QUnit.test("Change filter values for group field when key in data", function(ass
     var $filterIndicatorsInColumnArea = this.$container.find(".dx-area-fields[group=column] .dx-header-filter");
     assert.equal($filterIndicatorsInColumnArea.length, 1, 'filter indicators count');
 
-    //act
+    // act
     $filterIndicatorsInColumnArea.eq(0).trigger("dxclick");
     this.clock.tick(500);
 
-    //assert
+    // assert
     var $filterMenuList = $(".dx-header-filter-menu .dx-treeview");
     assert.equal($filterMenuList.length, 1, 'treeView');
 
@@ -1040,7 +1040,7 @@ QUnit.test("Change filter values for group field when key in data", function(ass
     assert.ok(!treeNodes[1].selected);
     assert.strictEqual(treeNodes[1].items.length, 2);
 
-    //act
+    // act
     $filterMenuList.find(".dx-treeview-node .dx-checkbox").eq(0).trigger("dxclick");
 
     var $buttons = $(".dx-header-filter-menu .dx-button");
@@ -1048,7 +1048,7 @@ QUnit.test("Change filter values for group field when key in data", function(ass
 
     $buttons.trigger("dxclick");
 
-    //assert
+    // assert
     assert.strictEqual(this.dataSource.field.callCount, 1);
     assert.deepEqual(this.dataSource.field.getCall(0).args, [0, {
         filterType: undefined,
@@ -1074,11 +1074,11 @@ QUnit.test("Change filter type for group field", function(assert) {
     var $filterIndicatorsInColumnArea = this.$container.find(".dx-area-fields[group=column] .dx-header-filter");
     assert.equal($filterIndicatorsInColumnArea.length, 1, 'filter indicators count');
 
-    //act
+    // act
     $filterIndicatorsInColumnArea.eq(0).trigger("dxclick");
     this.clock.tick(500);
 
-    //assert
+    // assert
     var $filterMenuList = $(".dx-header-filter-menu .dx-treeview");
     assert.equal($filterMenuList.length, 1, 'treeView');
 
@@ -1086,7 +1086,7 @@ QUnit.test("Change filter type for group field", function(assert) {
     assert.equal($filterMenuList.find(".dx-treeview-select-all-item").length, 1, 'list all item count');
 
 
-    //act
+    // act
     $filterMenuList.find(".dx-treeview-select-all-item").trigger("dxclick");
     $filterMenuList = $(".dx-header-filter-menu .dx-treeview");
     $filterMenuList.find(".dx-treeview-node .dx-checkbox").eq(0).trigger("dxclick");
@@ -1096,7 +1096,7 @@ QUnit.test("Change filter type for group field", function(assert) {
 
     $buttons.trigger("dxclick");
 
-    //assert
+    // assert
     assert.strictEqual(this.dataSource.field.callCount, 1);
     assert.deepEqual(this.dataSource.field.getCall(0).args, [0, {
         filterType: undefined,
@@ -1126,7 +1126,7 @@ QUnit.test("Dragging Fields", function(assert) {
     }
 
     function assertDragging(field, area, cancelExpected) {
-        //act
+        // act
         var $targetGroup = $(".dx-area-fields[group='" + area + "']"),
             areaBorderColor = getBorderColor($targetGroup);
 
@@ -1143,7 +1143,7 @@ QUnit.test("Dragging Fields", function(assert) {
             .move(10, 0)
             .move(targetOffset.left - offset.left + 25, targetOffset.top - offset.top + 30);
 
-        //assert
+        // assert
 
         assert.strictEqual($targetGroup.hasClass("dx-drag-target"), !cancelExpected, "target group has target class " + dataUtils.data(field.get(0), "field").dataField + " " + area);
 
@@ -1202,10 +1202,10 @@ QUnit.test("rtlEnabled assign for all children widgets", function(assert) {
         ]
     };
 
-    //act
+    // act
     this.setup(dataSourceOptions, { rtlEnabled: true });
 
-    //assert
+    // assert
     var $widgets = $(".dx-widget");
 
     $.each($widgets, function() {
@@ -1245,15 +1245,15 @@ QUnit.test("Restore selecting state for second page when all items on first page
     var $filterMenuList = $(".dx-header-filter-menu .dx-list");
     $filterMenuList.find(".dx-list-select-all-checkbox").dxCheckBox("instance").option("value", true);
 
-    //act
+    // act
     $filterMenuList.dxScrollView("option", "onReachBottom")();
 
-    //assert
+    // assert
     assert.equal($filterMenuList.find(".dx-list-item-selected").length, 60, "selected items count");
 });
 
 QUnit.test("Pass allowDragging to sortable", function(assert) {
-    //act
+    // act
     this.setup({}, {
         allowFieldDragging: false
     });
@@ -1264,7 +1264,7 @@ QUnit.test("Pass allowDragging to sortable", function(assert) {
 });
 
 QUnit.test("Change allowDragging at runtime", function(assert) {
-    //act
+    // act
     this.setup({}, {
         allowFieldDragging: false
     });
@@ -1276,10 +1276,10 @@ QUnit.test("Change allowDragging at runtime", function(assert) {
 });
 
 QUnit.test("Layout 0", function(assert) {
-    //act
+    // act
     this.setup({}, { layout: 0 });
 
-    //assert
+    // assert
     var $cols = this.$container.find(".dx-col");
     var $areas = this.$container.find(".dx-area");
 
@@ -1300,10 +1300,10 @@ QUnit.test("Layout 0", function(assert) {
 });
 
 QUnit.test("Layout 1", function(assert) {
-    //act
+    // act
     this.setup({}, { layout: 1 });
 
-    //assert
+    // assert
     var $cols = this.$container.find(".dx-col");
     var $areas = this.$container.find(".dx-area");
 
@@ -1324,10 +1324,10 @@ QUnit.test("Layout 1", function(assert) {
 });
 
 QUnit.test("Layout 2", function(assert) {
-    //act
+    // act
     this.setup({}, { layout: 2 });
 
-    //assert
+    // assert
     var $cols = this.$container.find(".dx-col");
     var $areas = this.$container.find(".dx-area");
 
@@ -1369,7 +1369,7 @@ QUnit.test("change group position", function(assert) {
 
     var sortable = this.fieldChooser.$element().dxSortable("instance"),
         onChangedHandler = sortable.option("onChanged");
-    //act
+    // act
     onChangedHandler(changedArgs);
 
     assert.strictEqual(this.dataSource.field.lastCall.args[0], 1);
@@ -1392,43 +1392,43 @@ QUnit.test("getDataSource method", function(assert) {
         fields: fields
     };
 
-    //act
+    // act
     this.setup(dataSourceOptions);
 
-    //assert
+    // assert
     assert.strictEqual(this.fieldChooser.getDataSource(), this.dataSource, "method works correct");
 });
 
 QUnit.test("FieldChooser fire the 'contentReady' event after render without dataSource", function(assert) {
-    //arrange
+    // arrange
     var contentReadyHandler = sinon.stub();
 
-    //act
+    // act
     this.setup(null, { onContentReady: contentReadyHandler });
 
-    //assert
+    // assert
     assert.equal(contentReadyHandler.callCount, 1, "'contentReady' has been triggered");
 });
 
 QUnit.test("FieldChooser does not fire the contentReady event while dataSource is loading", function(assert) {
-    //arrange
+    // arrange
     var dataSource = createMockDataSource({}),
         contentReadyHandler = sinon.stub();
 
     dataSource.isLoading.returns(true);
 
-    //act
+    // act
     this.createFieldChooser({
         dataSource: dataSource,
         onContentReady: contentReadyHandler
     });
 
-    //assert
+    // assert
     assert.equal(contentReadyHandler.callCount, 0, "'contentReady' hasn't been triggered");
 });
 
 QUnit.test("The 'contentReady' event fires after all data is loaded", function(assert) {
-    //arrange
+    // arrange
     var dataSource = createMockDataSource({}),
         contentReadyHandler = sinon.stub();
 
@@ -1443,10 +1443,10 @@ QUnit.test("The 'contentReady' event fires after all data is loaded", function(a
 
     dataSource.isLoading.returns(false);
 
-    //act
+    // act
     dataSourceChangedHandler();
 
-    //assert
+    // assert
     assert.equal(contentReadyHandler.callCount, 1, "'contentReady' has been triggered");
 });
 
@@ -1510,10 +1510,10 @@ QUnit.module("dxPivotGridFieldChooser context menu", {
 QUnit.test("render dxContextMenu", function(assert) {
     var dataSourceOptions = {};
 
-    //act
+    // act
     this.setup(dataSourceOptions);
 
-    //assert
+    // assert
     assert.equal(this.fieldChooser.$element().find(".dx-has-context-menu").length, 1, "ContextMenu was created");
 
 });
@@ -1523,7 +1523,7 @@ QUnit.test("create event args from field", function(assert) {
         onContextMenuPreparingHandler = sinon.stub(),
         e = $.Event("dxcontextmenu");
 
-    //act
+    // act
     this.setup({
         fields: this.fields,
         columnFields: [this.fields[1]],
@@ -1533,7 +1533,7 @@ QUnit.test("create event args from field", function(assert) {
 
     this.$container.find("[group='column']").find(".dx-area-field").eq(0).trigger(e);
 
-    //assert
+    // assert
     assert.strictEqual(onContextMenuPreparingHandler.callCount, 1);
 
     eventArgs = onContextMenuPreparingHandler.lastCall.args[0];
@@ -1549,7 +1549,7 @@ QUnit.test("create event args from area", function(assert) {
         onContextMenuPreparingHandler = sinon.stub(),
         e = $.Event("dxcontextmenu");
 
-    //act
+    // act
     this.setup({
         fields: this.fields,
         columnFields: [this.fields[1]],
@@ -1559,7 +1559,7 @@ QUnit.test("create event args from area", function(assert) {
 
     this.$container.find("[group='column']").eq(0).trigger(e);
 
-    //assert
+    // assert
     assert.strictEqual(onContextMenuPreparingHandler.callCount, 1);
 
     eventArgs = onContextMenuPreparingHandler.lastCall.args[0];
@@ -1575,7 +1575,7 @@ QUnit.test("create event args from empty area", function(assert) {
         onContextMenuPreparingHandler = sinon.stub(),
         e = $.Event("dxcontextmenu");
 
-    //act
+    // act
     this.setup({
         fields: this.fields,
         columnFields: [this.fields[1]],
@@ -1584,7 +1584,7 @@ QUnit.test("create event args from empty area", function(assert) {
     });
 
     this.$container.find("[group='row']").eq(0).trigger(e);
-    //assert
+    // assert
     assert.strictEqual(onContextMenuPreparingHandler.callCount, 1);
 
     eventArgs = onContextMenuPreparingHandler.lastCall.args[0];
@@ -1600,7 +1600,7 @@ QUnit.test("create event args from empty space", function(assert) {
         onContextMenuPreparingHandler = sinon.stub(),
         e = $.Event("dxcontextmenu");
 
-    //act
+    // act
     this.setup({
         fields: this.fields,
         columnFields: [this.fields[1]],
@@ -1609,7 +1609,7 @@ QUnit.test("create event args from empty space", function(assert) {
     });
 
     this.$container.eq(0).trigger(e);
-    //assert
+    // assert
     assert.strictEqual(onContextMenuPreparingHandler.callCount, 1);
 
     eventArgs = onContextMenuPreparingHandler.lastCall.args[0];
@@ -1626,7 +1626,7 @@ QUnit.test("create custom context menu items", function(assert) {
             text: "1",
             onItemClick: itemClick
         };
-    //act
+    // act
     this.setup({
         fields: this.fields,
         columnFields: [this.fields[1]],
@@ -1637,7 +1637,7 @@ QUnit.test("create custom context menu items", function(assert) {
     });
 
     this.$container.find("[group='column']").eq(0).trigger("dxcontextmenu");
-    //assert
+    // assert
 
     var contextMenu = this.$container.find(".dx-pivotgridfieldchooser-context-menu").dxContextMenu("instance"),
         items = contextMenu.option("items");
@@ -1652,7 +1652,7 @@ QUnit.test("create custom context menu items", function(assert) {
 QUnit.test("onContextMenuPreparing handler can be changed at runtime", function(assert) {
     var onContextMenuPreparingHandler = sinon.stub(),
         fieldChooser;
-    //act
+    // act
     this.setup({
         fields: this.fields,
         columnFields: [this.fields[1]],
@@ -1667,7 +1667,7 @@ QUnit.test("onContextMenuPreparing handler can be changed at runtime", function(
     });
 
     this.$container.find("[group='column']").eq(0).trigger("dxcontextmenu");
-    //assert
+    // assert
     assert.strictEqual(onContextMenuPreparingHandler.callCount, 1);
 });
 
@@ -1795,7 +1795,7 @@ QUnit.test("Change sortOrder for group field", function(assert) {
 
     var fieldElements = that.$container.find(".dx-area-field[item-group]");
 
-    //act
+    // act
     fieldElements.eq(1).trigger("dxclick");
 
     assert.strictEqual(this.dataSource.field.lastCall.args[0], 3);
@@ -1822,7 +1822,7 @@ QUnit.test("change group position", function(assert) {
             targetIndex: 0,
             sourceIndex: 1
         };
-    //act
+    // act
 
     onChangedHandler(changedArgs);
 
@@ -1857,11 +1857,11 @@ QUnit.test("Show search box in headerFilter", function(assert) {
 
     fieldElements = that.$container.find(".dx-area-field");
 
-    //act
+    // act
     fieldElements.first().find(".dx-header-filter").trigger("dxclick");
     this.clock.tick(500);
 
-    //assert
+    // assert
     list = $(".dx-list").dxList("instance");
     assert.ok(list.option("searchEnabled"), "list with search bar");
     assert.equal(list.option("searchExpr"), "text", "expr is correct");
@@ -1897,11 +1897,11 @@ QUnit.test("HeaderFilter should be without search bar when column allowSearch is
 
     fieldElements = that.$container.find(".dx-area-field");
 
-    //act
+    // act
     fieldElements.first().find(".dx-header-filter").trigger("dxclick");
     this.clock.tick(500);
 
-    //assert
+    // assert
     list = $(".dx-list").dxList("instance");
     assert.notOk(list.option("searchEnabled"), "list without search bar");
 });
@@ -1935,11 +1935,11 @@ QUnit.test("Search in headerFilter", function(assert) {
     fieldElements.first().find(".dx-header-filter").trigger("dxclick");
     this.clock.tick(500);
 
-    //act
+    // act
     list = $(".dx-list").dxList("instance");
     list.option("searchValue", "t2");
 
-    //assert
+    // assert
     $listItems = list.$element().find(".dx-list-item");
     assert.strictEqual($listItems.length, 1, "list item's count");
     assert.strictEqual($listItems.text(), "test2", "correct item's text");

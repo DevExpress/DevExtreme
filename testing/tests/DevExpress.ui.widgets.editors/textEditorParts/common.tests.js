@@ -769,9 +769,9 @@ QUnit.test("onValueChanged fired only when value is changed", function(assert) {
 
 QUnit.test("reset()", function(assert) {
     var textBox = this.instance;
-    //act
+    // act
     textBox.reset();
-    //assert
+    // assert
     assert.strictEqual(textBox.option("value"), "", "Value should be reset");
 });
 

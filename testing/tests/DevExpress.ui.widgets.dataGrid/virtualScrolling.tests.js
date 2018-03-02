@@ -109,8 +109,8 @@ QUnit.test("Load", function(assert) {
 
 
     assert.strictEqual(mockDataSource.load.callCount, 2);
-    assert.equal(this.externalDataChangedHandler.callCount, 2);  //TODO 1
-    //assert.ok(this.externalDataChangedHandler.calledAfter(mockDataSource.load.lastCall));
+    assert.equal(this.externalDataChangedHandler.callCount, 2);  // TODO 1
+    // assert.ok(this.externalDataChangedHandler.calledAfter(mockDataSource.load.lastCall));
 
     assert.strictEqual(this.scrollController.beginPageIndex(), 0);
     assert.strictEqual(this.scrollController.endPageIndex(), 1);
@@ -129,8 +129,8 @@ QUnit.test("Load with removeInvisiblePages is true", function(assert) {
 
 
     assert.strictEqual(mockDataSource.load.callCount, 2);
-    assert.equal(this.externalDataChangedHandler.callCount, 1);  //TODO 1
-    //assert.ok(this.externalDataChangedHandler.calledAfter(mockDataSource.load.lastCall));
+    assert.equal(this.externalDataChangedHandler.callCount, 1);  // TODO 1
+    // assert.ok(this.externalDataChangedHandler.calledAfter(mockDataSource.load.lastCall));
 
     assert.strictEqual(this.scrollController.beginPageIndex(), 0);
     assert.strictEqual(this.scrollController.endPageIndex(), 1);
@@ -138,16 +138,16 @@ QUnit.test("Load with removeInvisiblePages is true", function(assert) {
     assert.deepEqual(this.externalDataChangedHandler.lastCall.args, [undefined]);
 });
 
-//TODO Check it
-//QUnit.test("Load when dataSource pageIndex > 0", function (assert) {
+// TODO Check it
+// QUnit.test("Load when dataSource pageIndex > 0", function (assert) {
 //    this.scrollController.viewportSize(12);
 //    mockDataSource.pageIndex(5);
 //    this.scrollController.load();
 
 
 //    assert.strictEqual(mockDataSource.load.callCount, 2);
-//    assert.equal(this.externalDataChangedHandler.callCount, 2);  //TODO 1
-//    //assert.ok(this.externalDataChangedHandler.calledAfter(mockDataSource.load.lastCall));
+//    assert.equal(this.externalDataChangedHandler.callCount, 2);  // TODO 1
+//    // assert.ok(this.externalDataChangedHandler.calledAfter(mockDataSource.load.lastCall));
 
 //    assert.strictEqual(this.scrollController.beginPageIndex(), 5);
 //    assert.strictEqual(this.scrollController.endPageIndex(), 6);
@@ -156,7 +156,7 @@ QUnit.test("Load with removeInvisiblePages is true", function(assert) {
 //        changeType: "append",
 //        items: []
 //    }]);
-//});
+// });
 
 QUnit.test("setContentSize. No items", function(assert) {
     this.scrollController.viewportSize(12);
@@ -541,7 +541,7 @@ QUnit.module("Subscribe to external scrollable events", {
 
 QUnit.test("Window scroll event", function(assert) {
     if(devices.real().ios || ('callPhantom' in window)) {
-        //TODO reanimate for ios
+        // TODO reanimate for ios
         assert.ok(true);
         return;
     }
@@ -581,7 +581,7 @@ QUnit.test("Native scroll event", function(assert) {
     this.scrollController.subscribeToWindowScrollEvents($element);
 
     $(this.$fixtureElement).on("scroll", assertFunction);
-    //act
+    // act
     this.$fixtureElement.scrollTop(24000);
 
     function assertFunction() {
@@ -648,7 +648,7 @@ QUnit.test("dxScrollable scroll event", function(assert) {
 
 QUnit.test("ScrollTo when window scroll subscription", function(assert) {
     if(devices.real().ios || ('callPhantom' in window)) {
-        //TODO reanimate for ios
+        // TODO reanimate for ios
         assert.ok(true);
         return;
     }
@@ -754,11 +754,11 @@ QUnit.test("Scroll To after disposing", function(assert) {
     this.scrollController.subscribeToWindowScrollEvents($element);
 
     $(this.$fixtureElement).on("scroll", assertFunction);
-    //act
+    // act
     scrollController.dispose();
 
     scrollController.scrollTo(24000);
-    //assert
+    // assert
     assert.strictEqual(scrollController.getViewportPosition(), 0);
 
     function assertFunction() {
@@ -777,15 +777,15 @@ QUnit.test("Remove subscription on disposing", function(assert) {
 
     var originalEventSubscriptions = memoryLeaksHelper.getAllEventSubscriptions();
     this.scrollController.subscribeToWindowScrollEvents($element);
-    //act
+    // act
     scrollController.dispose();
-    //assert
+    // assert
     assert.deepEqual(memoryLeaksHelper.getAllEventSubscriptions(), originalEventSubscriptions);
 });
 
-//T470971
+// T470971
 QUnit.test("Content height limit for different browsers", function(assert) {
-    //act, assert
+    // act, assert
     assert.equal(virtualScrollingCore.getContentHeightLimit({ msie: true }), 4000000, "content height limit for ie");
     assert.equal(virtualScrollingCore.getContentHeightLimit({ mozilla: true }), 8000000, "content height limit for firefox");
     assert.equal(virtualScrollingCore.getContentHeightLimit({}), 15000000, "content height limit for other browsers");

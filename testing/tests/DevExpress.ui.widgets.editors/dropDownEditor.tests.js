@@ -259,10 +259,10 @@ QUnit.test("Validation: onHidden validation message handler should restore toolt
         validationError: { message: "Something bad happened" }
     });
 
-    //act
+    // act
     dropDownEditor.open();
     dropDownEditor.close();
-    //assert
+    // assert
     assert.ok(dropDownEditor._$validationMessage);
     var pos = dropDownEditor._$validationMessage.dxOverlay("option", "position");
     assert.equal(pos.my, "left top", "Message should be below dropdown");
@@ -301,9 +301,9 @@ QUnit.test("default value", function(assert) {
 QUnit.test("reset()", function(assert) {
     var dropDownEditor = this.dropDownEditor;
     dropDownEditor.option("value", "123");
-    //act
+    // act
     dropDownEditor.reset();
-    //assert
+    // assert
     assert.strictEqual(dropDownEditor.option("value"), null, "Value should be reset");
 });
 
@@ -314,10 +314,10 @@ QUnit.test("reset method should clear the input value", function(assert) {
     dropDownEditor.option("value", null);
     $input.val("456");
 
-    //act
+    // act
     dropDownEditor.reset();
 
-    //assert
+    // assert
     assert.strictEqual(dropDownEditor.option("value"), null, "Value should be null");
     assert.equal($input.val(), "", "Input value is correct");
 

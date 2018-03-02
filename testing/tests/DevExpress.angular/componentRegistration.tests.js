@@ -2108,7 +2108,7 @@ QUnit.test("binding to circular data (T144697)", function(assert) {
 QUnit.test("watcher type changed (T145604)", function(assert) {
     var data = [],
         controller = function($scope) {
-            $scope.collection = undefined;//Important!!!
+            $scope.collection = undefined;// Important!!!
         },
         $markup = initMarkup($(
             "<div dx-test-collection-container=\"{ bindingOptions: { items: 'collection' } }\"></div>"
@@ -2122,12 +2122,12 @@ QUnit.test("watcher type changed (T145604)", function(assert) {
         });
     }
 
-    //render items can take some time
+    // render items can take some time
     scope.$apply(function() {
         scope.collection = data;
     });
 
-    //change item's property shouldn't recompare the whole collection
+    // change item's property shouldn't recompare the whole collection
     var $watchOld = scope["$watch"],
         watchLog = [];
 
@@ -2704,7 +2704,7 @@ QUnit.test("component created by option with category 'rendering' does not calls
     assert.ok(!valueChanged);
 });
 
-//related with Q566857
+// related with Q566857
 QUnit.test("change option in component action handler (phase $apply) ", function(assert) {
     var $markup = $("<div dx-action-test=\"{ onHandler: vm.handler,  bindingOptions: { value: 'vm.value' }}\"></div>")
             .appendTo(this.$controller),

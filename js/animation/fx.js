@@ -170,7 +170,7 @@ var TransitionAnimationStrategy = {
         };
 
         eventsEngine.one($element, transitionEndEventName, function() {
-            //NOTE: prevent native transitionEnd event from previous animation in queue (Chrome)
+            // NOTE: prevent native transitionEnd event from previous animation in queue (Chrome)
             if(Date.now() - startTime >= config.duration) {
                 transitionEndFired.reject();
             }
@@ -181,10 +181,10 @@ var TransitionAnimationStrategy = {
             deferred.reject();
         });
 
-        waitForJSCompleteTimer = setTimeout(function() { //Fix for a visual bug (T244514): do not setup the timer until all js code has finished working
+        waitForJSCompleteTimer = setTimeout(function() { // Fix for a visual bug (T244514): do not setup the timer until all js code has finished working
             simulatedEndEventTimer = setTimeout(function() {
                 simulatedTransitionEndFired.reject();
-            }, config.duration + config.delay + fx._simulatedTransitionEndDelay/*T255863*/);
+            }, config.duration + config.delay + fx._simulatedTransitionEndDelay /* T255863 */);
 
             when(transitionEndFired, simulatedTransitionEndFired).fail((function() {
                 deferred.resolve();
@@ -204,8 +204,8 @@ var TransitionAnimationStrategy = {
 
         if(typeof config.to === "string") {
             $element[0].className += " " + config.to;
-            //Do not uncomment: performance critical
-            //$element.addClass(config.to);
+            // Do not uncomment: performance critical
+            // $element.addClass(config.to);
         } else if(config.to) {
             setProps($element, config.to);
         }
@@ -859,7 +859,7 @@ var stop = function(element, jumpToEnd) {
     var $element = $(element),
         queueData = getAnimQueueData($element);
 
-    //TODO: think about complete all animation in queue
+    // TODO: think about complete all animation in queue
     iteratorUtils.each(queueData, function(_, animation) {
         animation.config.delay = 0;
         animation.config.duration = 0;

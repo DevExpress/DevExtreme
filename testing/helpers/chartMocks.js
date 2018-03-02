@@ -211,7 +211,7 @@
         label: {
             alignment: "center",
             indentFromAxis: 10,
-            //TODO: make sure we really need it
+            // TODO: make sure we really need it
             precision: 0,
             format: "",
             customizeText: undefined
@@ -247,7 +247,7 @@
         label: {
             alignment: "right",
             indentFromAxis: 10,
-            //TODO: make sure we really need it
+            // TODO: make sure we really need it
             precision: 0,
             format: "",
             customizeText: undefined
@@ -322,8 +322,8 @@
         axis.updateOptions(mergedOptions);
 
         axis.setTranslator(translator, orthogonalTranslator);
-        //we emulate this call to allow testing partial draw methods (such as drawTicks)
-        //in production it"s called from axis.draw() method
+        // we emulate this call to allow testing partial draw methods (such as drawTicks)
+        // in production it"s called from axis.draw() method
         axis._initAxisPositions(axis);
         return axis;
     }
@@ -394,7 +394,7 @@
             return new MockSeriesFamily(options);
         };
     };
-    //////  Translator
+    //  Translator
 
 
     exports.MockTranslator = function(data) {
@@ -470,7 +470,7 @@
         };
     };
 
-    /// Mock series
+    // Mock series
     exports.MockSeries = function MockSeries(options) {
         options = options || {};
         return {
@@ -718,7 +718,7 @@
                 // store value for comparison in tests
                 if(this.hasValue()) {
                     this.correctedValue = val;
-                    //emulate real point behavior
+                    // emulate real point behavior
                     if(this.hasValue()) {
                         this.value = (base || this.initialValue) + val;
                         this.minValue = val;
@@ -747,7 +747,7 @@
 
             },
             correctPosition: function(correction) {
-                //correct angles?...
+                // correct angles?...
                 var that = this;
                 that.radiusInner = correction.radiusInner;
                 that.radiusOuter = correction.radiusOuter;

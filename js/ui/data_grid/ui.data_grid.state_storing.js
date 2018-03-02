@@ -8,7 +8,7 @@ var gridCore = require("./ui.data_grid.core"),
     equalByValue = commonUtils.equalByValue;
 
 
-//TODO move processLoadState to target modules (data, columns, pagerView)
+// TODO move processLoadState to target modules (data, columns, pagerView)
 var processLoadState = function(that) {
     var columnsController = that.getController("columns"),
         selectionController = that.getController("selection"),

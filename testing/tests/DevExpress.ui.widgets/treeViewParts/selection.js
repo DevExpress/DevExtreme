@@ -103,7 +103,7 @@ QUnit.test("onItemSelectionChanged should have correct arguments", function(asse
 
     assert.equal(itemSelectionChanged.callCount, 1, "selection was changed once");
 
-    //note: other parameters are redundant but they were saved in the code to prevent a BC
+    // note: other parameters are redundant but they were saved in the code to prevent a BC
     assert.equal(itemSelectionChanged.getCall(0).args[0].component.NAME, instance.NAME, "component is correct");
     assert.ok($(itemSelectionChanged.getCall(0).args[0].element).hasClass("dx-treeview"), "element is correct");
     assert.equal(itemSelectionChanged.getCall(0).args[0].node.key, 2, "node is correct");

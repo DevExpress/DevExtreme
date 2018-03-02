@@ -61,9 +61,9 @@
 
             this.$pivot.dxPivot("instance").on("optionChanged", function(args) {
                 if(args.name === "items") {
-                    //Layouts design is not supposed to be able to remove a rendered view from a layout and insert it again.
-                    //Since the dxPivot widget doesn't support changing its items dynamically,
-                    //the items are recreated and view render cache should be cleared
+                    // Layouts design is not supposed to be able to remove a rendered view from a layout and insert it again.
+                    // Since the dxPivot widget doesn't support changing its items dynamically,
+                    // the items are recreated and view render cache should be cleared
                     that._clearPivotViewsRenderCache();
                 }
             });

@@ -420,7 +420,7 @@ QUnit.test("check safety custom setting of scale after updating dataSource", fun
     assert.deepEqual(options.endValue, new Date(20000));
 });
 
-//B237548
+// B237548
 QUnit.test("rangeSelector with scale.valueType and dataSourceField and without chart", function(assert) {
     this.createWidget({
         dataSource: [
@@ -796,7 +796,7 @@ QUnit.test("Custom bound ticks only contain first customTick", function(assert) 
 });
 
 QUnit.test("Calculate tickInterval based on screen delta (screenDelta is small, a bit more than spacing factor). T450747", function(assert) {
-    this.$container.width(60); //1 ticks, 50px per tick
+    this.$container.width(60); // 1 ticks, 50px per tick
     this.createWidget({
         scale: {
             type: "semidiscrete",
@@ -812,7 +812,7 @@ QUnit.test("Calculate tickInterval based on screen delta (screenDelta is small, 
 });
 
 QUnit.test("Calculate tickInterval based on screen delta (screenDelta is small, less than spacing factor). T450747", function(assert) {
-    this.$container.width(40); //1 ticks, 50px per tick
+    this.$container.width(40); // 1 ticks, 50px per tick
     this.createWidget({
         scale: {
             type: "semidiscrete",
@@ -828,8 +828,8 @@ QUnit.test("Calculate tickInterval based on screen delta (screenDelta is small, 
 });
 
 QUnit.test("Calculate tickInterval based on screen delta (2*minRange. numeric)", function(assert) {
-    this.$container.width(400); //10 ticks, 50px per tick
-    //10,15,20,25,30,35,40,45,50,55
+    this.$container.width(400); // 10 ticks, 50px per tick
+    // 10,15,20,25,30,35,40,45,50,55
     this.createWidget({
         scale: {
             type: "semidiscrete",
@@ -846,8 +846,8 @@ QUnit.test("Calculate tickInterval based on screen delta (2*minRange. numeric)",
 });
 
 QUnit.test("Calculate tickInterval based on screen delta (3*minRange. numeric)", function(assert) {
-    this.$container.width(200); //10 ticks, 50px per tick
-    //10,15,20,25,30,35,40,45,50,55
+    this.$container.width(200); // 10 ticks, 50px per tick
+    // 10,15,20,25,30,35,40,45,50,55
     this.createWidget({
         scale: {
             type: "semidiscrete",
@@ -864,7 +864,7 @@ QUnit.test("Calculate tickInterval based on screen delta (3*minRange. numeric)",
 });
 
 QUnit.test("Calculate tickInterval based on screen delta (datetime. minRange is day)", function(assert) {
-    this.$container.width(1400); //30 days, 50px per tick
+    this.$container.width(1400); // 30 days, 50px per tick
     this.createWidget({
         scale: {
             type: "semidiscrete",
@@ -882,7 +882,7 @@ QUnit.test("Calculate tickInterval based on screen delta (datetime. minRange is 
 });
 
 QUnit.test("Calculate tickInterval based on screen delta (datetime. minRange is month)", function(assert) {
-    this.$container.width(700); //15 months, 50px per tick
+    this.$container.width(700); // 15 months, 50px per tick
     this.createWidget({
         scale: {
             type: "semidiscrete",
@@ -900,7 +900,7 @@ QUnit.test("Calculate tickInterval based on screen delta (datetime. minRange is 
 });
 
 QUnit.test("Calculate tickInterval based on screen delta (datetime. minRange is year. limit)", function(assert) {
-    this.$container.width(400); //15 years, 50px per tick
+    this.$container.width(400); // 15 years, 50px per tick
     this.createWidget({
         scale: {
             type: "semidiscrete",
@@ -922,7 +922,7 @@ QUnit.test("Calculate tickInterval based on screen delta (datetime. minRange is 
 });
 
 QUnit.test("Calculate tickInterval based on screen delta (datetime. minRange is day, all days fit). Dashboard specific", function(assert) {
-    this.$container.width(1500); //30 days, 40px per tick
+    this.$container.width(1500); // 30 days, 40px per tick
     this.createWidget({
         scale: {
             axisDivisionFactor: { day: 40, month: 20 },
@@ -941,7 +941,7 @@ QUnit.test("Calculate tickInterval based on screen delta (datetime. minRange is 
 });
 
 QUnit.test("Calculate tickInterval based on screen delta (datetime. minRange is day, ticks not fit). Dashboard specific", function(assert) {
-    this.$container.width(1000); //30 days, 40px per tick
+    this.$container.width(1000); // 30 days, 40px per tick
     this.createWidget({
         scale: {
             axisDivisionFactor: { day: 40, month: 20 },
@@ -973,7 +973,7 @@ QUnit.test("If not set - scale label format depends on tickInterval", function(a
 });
 
 QUnit.test("If set - scale label format applies if NO scale overlapping occurred", function(assert) {
-    this.$container.width(1500); //30 days, 40px per tick
+    this.$container.width(1500); // 30 days, 40px per tick
     this.createWidget({
         scale: {
             axisDivisionFactor: { day: 40, month: 20 },
@@ -992,7 +992,7 @@ QUnit.test("If set - scale label format applies if NO scale overlapping occurred
 });
 
 QUnit.test("If set - scale label format depends on tickInterval if scale overlapping occurred", function(assert) {
-    this.$container.width(1000); //30 days, 40px per tick
+    this.$container.width(1000); // 30 days, 40px per tick
     this.createWidget({
         scale: {
             axisDivisionFactor: { day: 40, month: 20 },
@@ -1169,7 +1169,7 @@ QUnit.test("rangeContainer canvas if sliderMarker placeholderSize is defined", f
             placeholderSize: {
                 width: {
                     left: 15
-                    //right - auto
+                    // right - auto
                 },
                 height: 10
             }
@@ -1179,7 +1179,7 @@ QUnit.test("rangeContainer canvas if sliderMarker placeholderSize is defined", f
     assert.deepEqual(this.rangeView.update.lastCall.args[2], { left: 15, top: 10, width: 299, height: 24, right: 0, bottom: 0 });
 });
 
-//T252890
+// T252890
 QUnit.test("sliderMarker's placeholderSize width only", function(assert) {
     this.createWidget({
         sliderMarker: {
@@ -1447,7 +1447,7 @@ QUnit.test("Init selection format before calculate canvas for dateTime type", fu
     assert.ok(formatsAreEqual(options.format, expectedFormat), "format selection for number type");
 });
 
-//B217786
+// B217786
 QUnit.test("range small width", function(assert) {
     this.createWidget({
         size: {
@@ -1483,7 +1483,7 @@ QUnit.test("initialization theme options by customized theme", function(assert) 
         }
     });
 
-    //assert
+    // assert
     assert.deepEqual(rangeSelector.option("theme").chart, {
         defaultSeriesOptions: {
             type: "line"
@@ -1605,7 +1605,7 @@ QUnit.module("Scale labels rea height calculation", commons.environment);
 
 QUnit.test("Only labels visible", function(assert) {
     this.createWidget({
-        background: { image: { url: "url" } }, //to prevent compact mode
+        background: { image: { url: "url" } }, // to prevent compact mode
         scale: {
             label: {
                 topIndent: 11,
@@ -1619,7 +1619,7 @@ QUnit.test("Only labels visible", function(assert) {
 
 QUnit.test("Only markers visible", function(assert) {
     this.createWidget({
-        background: { image: { url: "url" } }, //to prevent compact mode
+        background: { image: { url: "url" } }, // to prevent compact mode
         scale: {
             valueType: "dateTime",
             marker: {
@@ -1635,7 +1635,7 @@ QUnit.test("Only markers visible", function(assert) {
 
 QUnit.test("Labels and markers visible", function(assert) {
     this.createWidget({
-        background: { image: { url: "url" } }, //to prevent compact mode
+        background: { image: { url: "url" } }, // to prevent compact mode
         scale: {
             valueType: "dateTime",
             marker: {
@@ -1656,7 +1656,7 @@ QUnit.test("Labels and markers visible", function(assert) {
 
 QUnit.test("Labels and markers visible, but placeholderHeight is specified - take placeholderHeight", function(assert) {
     this.createWidget({
-        background: { image: { url: "url" } }, //to prevent compact mode
+        background: { image: { url: "url" } }, // to prevent compact mode
         scale: {
             placeholderHeight: 13,
             valueType: "dateTime",
@@ -1700,7 +1700,7 @@ QUnit.test("Compact mode. all is visible - take constant height", function(asser
 QUnit.test("Draw first tick to measure height. Numeric", function(assert) {
     var spy = sinon.spy();
     this.createWidget({
-        background: { image: { url: "url" } }, //to prevent compact mode
+        background: { image: { url: "url" } }, // to prevent compact mode
         scale: {
             startValue: 9.5,
             endValue: 12,
@@ -1716,7 +1716,7 @@ QUnit.test("Draw first tick to measure height. Numeric", function(assert) {
 QUnit.test("Draw first tick to measure height. DateTime", function(assert) {
     var spy = sinon.spy();
     this.createWidget({
-        background: { image: { url: "url" } }, //to prevent compact mode
+        background: { image: { url: "url" } }, // to prevent compact mode
         scale: {
             valueType: "dateTime",
             startValue: new Date(2016, 5, 5),
@@ -1733,7 +1733,7 @@ QUnit.test("Draw first tick to measure height. DateTime", function(assert) {
 QUnit.test("Draw first tick to measure height. Semidiscrete", function(assert) {
     var spy = sinon.spy();
     this.createWidget({
-        background: { image: { url: "url" } }, //to prevent compact mode
+        background: { image: { url: "url" } }, // to prevent compact mode
         scale: {
             type: "semidiscrete",
             minRange: 5,

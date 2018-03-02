@@ -435,7 +435,7 @@ var Application = Class.inherit({
 
         iteratorUtils.each(this.navigation, function(index, command) {
             if(forceUpdate && command === selectedCommand && command.option("highlighted")) {
-                command.fireEvent("optionChanged", [{ name: "highlighted", value: true, previousValue: true }]); //Q587642
+                command.fireEvent("optionChanged", [{ name: "highlighted", value: true, previousValue: true }]); // Q587642
             }
             command.option("highlighted", command === selectedCommand);
         });
