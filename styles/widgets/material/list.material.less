@@ -250,10 +250,6 @@
 
     .dx-list-border-visible {
         border: @MATERIAL_LIST_BORDER;
-
-        .dx-list-select-all {
-            border-bottom: @MATERIAL_LIST_BORDER;
-        }
     }
 
     .dx-list-item-before-bag {
@@ -292,6 +288,18 @@
 
     .dx-list-select-all {
         padding: @MATERIAL_LIST_ITEM_VERTICAL_PADDING - 1px 0;
+        font-size: @MATERIAL_LIST_MAIN_FONT_SIZE;
+
+        position: relative;
+        &:after {
+            content: "";
+            position: absolute;
+            bottom: 1px;
+            left: @MATERIAL_LIST_ITEM_HORIZONTAL_PADDING;
+            right: @MATERIAL_LIST_ITEM_HORIZONTAL_PADDING;
+            height: 1px;
+            background-color: @list-border-color;
+        }
     }
 
     .dx-list-select-all-checkbox {
@@ -301,7 +309,7 @@
 
     .dx-list-select-all-label {
         line-height: 1;
-        padding: 0 @MATERIAL_LIST_ITEM_HORIZONTAL_PADDING;
+        padding: 0 @MATERIAL_LIST_ITEM_HORIZONTAL_PADDING + 19;
         margin-top: @MATERIAL_LIST_SELECT_ALL_LABEL_MARGIN_TOP;
     }
 
