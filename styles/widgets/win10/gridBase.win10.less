@@ -362,16 +362,16 @@
         font-size: 12pt;
     }
 
+    .dx-@{widgetName}-header-row {
+        font-size: 12pt;
+    }
+
     .dx-@{widgetName}-headers {
         color: ~"@{@{widgetName}-headers-color}";
         .touch-action(pinch-zoom);
 
         .dx-@{widgetName}-table {
             .dx-row {
-                &:first-child {
-                    font-size: 12pt;
-                }
-
                 & > td {
                     border-bottom: ~"@{@{widgetName}-headers-border}";
                 }
