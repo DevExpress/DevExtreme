@@ -31,5 +31,5 @@ QUnit.test("context menu should have correct css class", function(assert) {
 QUnit.test("aria role", function(assert) {
     new ContextMenu(this.$element, {});
 
-    assert.equal(this.$element.attr("role"), undefined, "aria role is not present");
+    assert.equal(this.$element.attr("role"), "menu", "aria role is correct");
 });
