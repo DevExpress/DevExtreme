@@ -20,7 +20,8 @@ require("./data_source");
 
 var FIELDCHOOSER_CLASS = "dx-pivotgridfieldchooser",
     FIELDCHOOSER_CONTAINER_CLASS = "dx-pivotgridfieldchooser-container",
-    FIELDS_CONTAINER_CLASS = "dx-pivotgrid-fields-container";
+    FIELDS_CONTAINER_CLASS = "dx-pivotgrid-fields-container",
+    AREA_DRAG_CLASS = "dx-pivotgrid-drag-action";
 
 function getDimensionFields(item, fields) {
     var result = [];
@@ -621,7 +622,7 @@ var FieldChooser = BaseFieldChooser.inherit({
             .text(caption)
             .appendTo($areaContainer);
 
-        $fieldsContainer = $(DIV).addClass("dx-area-fields").height(0).appendTo($areaContainer);
+        $fieldsContainer = $(DIV).addClass("dx-area-fields").addClass(AREA_DRAG_CLASS).height(0).appendTo($areaContainer);
 
         if(area !== "all") {
             $fieldsContent = $(DIV).addClass("dx-area-field-container").appendTo($fieldsContainer);

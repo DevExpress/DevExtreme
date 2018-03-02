@@ -11,6 +11,8 @@ var $ = require("../../core/renderer"),
 
 require("./ui.pivot_grid.field_chooser_base");
 
+var AREA_DRAG_CLASS = "dx-pivotgrid-drag-action";
+
 function renderGroupConnector(field, nextField, prevField, $container) {
     if(prevField && prevField.groupName && prevField.groupName === field.groupName) {
         $(DIV).addClass("dx-group-connector").addClass("dx-group-connector-prev").appendTo($container);
@@ -33,7 +35,7 @@ exports.FieldsArea = areaItem.AreaItem.inherit({
     },
 
     _createGroupElement: function() {
-        return $(DIV).addClass("dx-pivotgrid-fields-area").addClass("dx-area-fields").attr("group", this._area);
+        return $(DIV).addClass("dx-pivotgrid-fields-area").addClass("dx-area-fields").addClass(AREA_DRAG_CLASS).attr("group", this._area);
     },
 
     isVisible: function() {
