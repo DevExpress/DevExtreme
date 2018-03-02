@@ -4,7 +4,6 @@ var $ = require("jquery"),
     config = require("core/config");
 
 require("ui/range_slider");
-require("ui/number_box/number_box");
 
 QUnit.testStart(function() {
     var markup =
