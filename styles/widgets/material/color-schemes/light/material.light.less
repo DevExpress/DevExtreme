@@ -675,8 +675,8 @@
 @list-menu-button-default-color: @button-default-color;
 @list-menu-button-default-bg: @button-default-bg;
 
-@list-menu-button-delete-color: @button-danger-color;
-@list-menu-button-delete-bg: @button-danger-bg;
+@list-menu-button-delete-bg: @base-danger;
+@list-button-delete-shadow-color: fade(@base-shadow-color, 24%);
 
 @list-item-ghost-bg: @base-bg;
 @list-chevron-focus-color: @base-inverted-text-color;
@@ -931,8 +931,8 @@
 * @type color
 * @group overlays.common
 */
-@loadindicator-bg: lighten(@base-text-color, 17.5%);
-@loadindicator-segment-shadow-color: fade(@base-shadow-color, 20%);
+@load-indicator-segment-bg-color: darken(@base-bg, 54%);
+
 
 // LoadPanel
 @loadpanel-border-color: @overlay-border-color;
@@ -1969,8 +1969,6 @@
 
 // Images
 @list-item-icon-toggle-delete-bg: url(images/widgets/generic/color-schemes/light/list/delete.png);
-@scrollview-pull-down-bg: url(images/widgets/generic/color-schemes/light/pulldown.png) 0 0 no-repeat;
-@loadindicator-image-bg: url(images/widgets/generic/color-schemes/light/loader64.gif);
 @toast-info-icon-image-bg: url(images/widgets/generic/color-schemes/light/toast/info.png);
 @toast-warning-icon-image-bg: url(images/widgets/generic/color-schemes/light/toast/warning.png);
 @toast-error-icon-image-bg: url(images/widgets/generic/color-schemes/light/toast/error.png);
@@ -1980,6 +1978,7 @@
 @sctollbar-button-vertical-decrement-bg: url(images/widgets/generic/color-schemes/light/scrollable/scrollbar-vertical-arrow-up.png) no-repeat;
 @sctollbar-button-vertical-increment-bg: url(images/widgets/generic/color-schemes/light/scrollable/scrollbar-vertical-arrow-down.png) no-repeat;
 @colorbox-preview-empty-bg: url(images/widgets/generic/color-schemes/light/colorbox/nocolor.png);
+@loadindicator-background-image: url(images/widgets/material/color-schemes/light/loader64.png);
 
 
 // SPA

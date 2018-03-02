@@ -33,6 +33,7 @@ var LIST_CLASS = "dx-list",
     LIST_GROUP_BODY_CLASS = "dx-list-group-body",
     LIST_COLLAPSIBLE_GROUPS_CLASS = "dx-list-collapsible-groups",
     LIST_GROUP_COLLAPSED_CLASS = "dx-list-group-collapsed",
+    LIST_GROUP_HEADER_INDICATOR_CLASS = "dx-list-group-header-indicator",
     LIST_HAS_NEXT_CLASS = "dx-has-next",
     LIST_NEXT_BUTTON_CLASS = "dx-list-next-button",
     SELECT_ALL_SELECTOR = ".dx-list-select-all",
@@ -492,7 +493,7 @@ var ListBase = CollectionWidget.inherit({
             },
             {
                 device: function() {
-                    return /android5/.test(themes.current());
+                    return /(android5|material)/.test(themes.current());
                 },
                 options: {
                     useInkRipple: true
@@ -899,6 +900,10 @@ var ListBase = CollectionWidget.inherit({
 
         this._createItemByTemplate(groupTemplate, renderArgs);
 
+        if(/material/.test(themes.current())) {
+            this._createGroupHeaderIndicator($groupHeaderElement);
+        }
+
         this._renderingGroupIndex = index;
 
         var $groupBody = $("<div>")
@@ -913,6 +918,22 @@ var ListBase = CollectionWidget.inherit({
             groupElement: getPublicElement($groupElement),
             groupIndex: index,
             groupData: group
+        });
+    },
+
+    _createGroupHeaderIndicator: function(headerElement) {
+        var that = this;
+
+        $("<div>")
+            .addClass(LIST_GROUP_HEADER_INDICATOR_CLASS)
+            .prependTo(headerElement);
+
+        headerElement.on("dxpointerdown", function(e) {
+            that._toggleActiveState(headerElement, true, e);
+        });
+
+        headerElement.on("dxpointerup dxhoverend", function() {
+            that._toggleActiveState(headerElement, false);
         });
     },
 
