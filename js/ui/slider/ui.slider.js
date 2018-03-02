@@ -629,7 +629,7 @@ var Slider = TrackBar.inherit({
     },
 
     _setRangeStyles: function(options) {
-        this._$range.css(options);
+        options && this._$range.css(options);
     },
 
     _callHandlerMethod: function(name, args) {
