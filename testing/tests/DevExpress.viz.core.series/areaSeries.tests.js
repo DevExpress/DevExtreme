@@ -61,6 +61,8 @@ var createSeries = function(options, renderSettings) {
 function setSeriesState(act, renderSettings) {
     var series = createSeries(this.options, renderSettings);
     series.updateData(this.data);
+
+    series.createPoints();
     series.draw();
 
     series[act]();
@@ -235,6 +237,7 @@ function setDiscreteType(series) {
 
         });
         series.updateData(this.data);
+        series.createPoints();
         $.each(series._points, function(i, pt) {
             pt.x = pt.argument;
             pt.y = pt.value;
@@ -263,6 +266,7 @@ function setDiscreteType(series) {
 
         });
         series.updateData(this.data);
+        series.createPoints();
         $.each(series._points, function(i, pt) {
             pt.x = pt.argument;
             pt.y = pt.value;
@@ -271,6 +275,7 @@ function setDiscreteType(series) {
         series.draw(false);
         // act
         series.updateData([{ arg: 1, val: 2 }, { arg: 2, val: 1 }]);
+        series.createPoints();
         $.each(series._points, function(i, pt) {
             pt.x = pt.argument;
             pt.y = pt.value;
@@ -319,6 +324,7 @@ function setDiscreteType(series) {
 
         });
         series.updateData(this.data);
+        series.createPoints();
         $.each(series._points, function(i, pt) {
             pt.x = pt.argument;
             pt.y = pt.value;
@@ -363,6 +369,7 @@ function setDiscreteType(series) {
 
         });
         series.updateData(this.data);
+        series.createPoints();
         $.each(series._points, function(i, pt) {
             pt.x = pt.argument;
             pt.y = pt.value;
@@ -392,6 +399,7 @@ function setDiscreteType(series) {
         });
 
         series.updateData([{ arg: 1, val: 10 }, { arg: 2, val: 20 }, { arg: 3, val: null }, { arg: 3.5, val: 40 }]);
+        series.createPoints();
         $.each(series._points, function(i, pt) {
             pt.x = pt.argument;
             pt.y = pt.value;
@@ -453,6 +461,7 @@ function setDiscreteType(series) {
         });
 
         series.updateData(this.data);
+        series.createPoints();
         $.each(series._points, function(i, pt) {
             pt.x = pt.argument;
             pt.y = pt.value;
@@ -462,6 +471,7 @@ function setDiscreteType(series) {
 
         // act
         series.updateData([{ arg: 1, val: 10 }, { arg: 2, val: 20 }, { arg: 3, val: null }, { arg: 3.5, val: 40 }]);
+        series.createPoints();
         $.each(series._points, function(i, pt) {
             pt.x = pt.argument;
             pt.y = pt.value;
@@ -514,6 +524,8 @@ function setDiscreteType(series) {
         });
 
         series.updateData([{ arg: 1, val: 10 }, { arg: 2, val: 20 }, { arg: 3, val: null }, { arg: 4, val: 40 }]);
+        series.createPoints();
+
         $.each(series._points, function(i, pt) {
             pt.x = pt.argument;
             pt.y = pt.value;
@@ -529,6 +541,7 @@ function setDiscreteType(series) {
 
         // act
         series.updateData(this.data);
+        series.createPoints();
         $.each(series._points, function(i, pt) {
             pt.x = pt.argument;
             pt.y = pt.value;
@@ -561,6 +574,7 @@ function setDiscreteType(series) {
             point: { visible: false }
         });
         series.updateData([{ arg: 1, val: 10 }]);
+        series.createPoints();
         $.each(series._points, function(i, pt) {
             pt.x = pt.value;
             pt.y = pt.argument;
@@ -599,9 +613,11 @@ function setDiscreteType(series) {
 
     QUnit.test("Draw old and new points in the right order", function(assert) {
         this.series.updateData([{ arg: 1, val: 10 }, { arg: 2, val: 20 }]);
+        this.series.createPoints();
         this.series.draw();
 
         this.series.updateData([{ arg: -1, val: 20 }, { arg: 1, val: 20 }]);
+        this.series.createPoints();
         this.series.prepareToDrawing(true);
 
         var borderPoints = this.renderer.stub("path").firstCall.returnValue.animate.lastCall.args[0].points;
@@ -613,6 +629,7 @@ function setDiscreteType(series) {
 
     QUnit.test("Apply only new points after animation", function(assert) {
         this.series.updateData([{ arg: 1, val: 10 }, { arg: 2, val: 20 }]);
+        this.series.createPoints();
 
         this.series.draw();
 
@@ -623,6 +640,7 @@ function setDiscreteType(series) {
         });
 
         this.series.updateData([{ arg: -1, val: 20 }, { arg: 1, val: 20 }]);
+        this.series.createPoints();
         this.series.prepareToDrawing(true);
         var path = this.renderer.stub("path").lastCall.returnValue;
         path.attr.reset();
@@ -652,6 +670,7 @@ function setDiscreteType(series) {
             valueAxis: new MockAxis({ renderer: this.renderer })
         });
         series.updateData(this.data);
+        series.createPoints();
         $.each(series._points, function(i, pt) {
             pt.x = pt.argument;
             pt.y = pt.value;
@@ -681,6 +700,7 @@ function setDiscreteType(series) {
             valueAxis: new MockAxis({ renderer: this.renderer })
         });
         series.updateData([{ arg: 1, val: 3 }]);
+        series.createPoints();
         $.each(series._points, function(i, pt) {
             pt.x = pt.argument;
             pt.y = pt.value;
@@ -717,6 +737,8 @@ function setDiscreteType(series) {
     QUnit.test("Draw without animation", function(assert) {
         var series = this.series;
         this.series.updateData(this.data);
+        this.series.createPoints();
+        series.createPoints();
         // act
         series.draw(false);
         // assert
@@ -726,6 +748,7 @@ function setDiscreteType(series) {
     QUnit.test("Draw with animation", function(assert) {
         var series = this.series;
         this.series.updateData(this.data);
+        this.series.createPoints();
         // act
         series.draw(true);
         // assert
@@ -736,6 +759,7 @@ function setDiscreteType(series) {
     QUnit.test("Draw with animation complete animation", function(assert) {
         var series = this.series;
         this.series.updateData(this.data);
+        this.series.createPoints();
         // act
         series.draw(true);
         // assert
@@ -751,6 +775,7 @@ function setDiscreteType(series) {
     QUnit.test("Draw two segments with animation complete animation", function(assert) {
         var series = this.series;
         this.series.updateData([{ arg: 1, val: 10 }, { arg: 2, val: 20 }, { arg: 3, val: null }, { arg: 4, val: 44 }]);
+        this.series.createPoints();
         // act
         series.draw(true);
         // assert
@@ -817,6 +842,7 @@ function setDiscreteType(series) {
         var series = this.createSeries({ type: seriesType, border: { visible: false }, selectionStyle: { border: { visible: false } }, hoverStyle: { border: { visible: false } } });
 
         series.updateData(this.data);
+        series.createPoints();
 
         series.draw();
         checkThreeGroups(assert, series);
@@ -827,9 +853,11 @@ function setDiscreteType(series) {
     QUnit.test("Series without borders. Remove element", function(assert) {
         var series = this.createSeries({ type: seriesType, border: { visible: false }, selectionStyle: { border: { visible: false } }, hoverStyle: { border: { visible: false } } });
         series.updateData(this.data);
+        series.createPoints();
         series.draw();
         // act
         series.updateData([]);
+        series.createPoints();
         series.draw();
 
         checkThreeGroups(assert, series);
@@ -842,6 +870,7 @@ function setDiscreteType(series) {
         var series = this.createSeries({ type: seriesType, border: { visible: true }, selectionStyle: { border: { visible: false } }, hoverStyle: { border: { visible: false } } });
 
         series.updateData(this.data);
+        series.createPoints();
 
         series.draw();
         checkGroups(assert, series);
@@ -854,6 +883,7 @@ function setDiscreteType(series) {
         var series = this.createSeries({ type: seriesType, border: { visible: false }, selectionStyle: { border: { visible: true } }, hoverStyle: { border: { visible: false } } });
 
         series.updateData(this.data);
+        series.createPoints();
 
         series.draw();
         checkGroups(assert, series);
@@ -866,6 +896,7 @@ function setDiscreteType(series) {
         var series = this.createSeries({ type: seriesType, border: { visible: false }, selectionStyle: { border: { visible: false } }, hoverStyle: { border: { visible: true } } });
 
         series.updateData(this.data);
+        series.createPoints();
 
         series.draw();
         checkGroups(assert, series);
@@ -877,6 +908,7 @@ function setDiscreteType(series) {
     QUnit.test("First draw - Normal State", function(assert) {
         var series = this.createSeries(this.options);
         series.updateData(this.data);
+        series.createPoints();
 
         series.draw();
 
@@ -939,6 +971,7 @@ function setDiscreteType(series) {
     QUnit.test("Apply normal state after hover", function(assert) {
         var series = this.createSeries(this.options);
         series.updateData(this.data);
+        series.createPoints();
 
         series.draw();
 
@@ -1003,6 +1036,7 @@ function setDiscreteType(series) {
     QUnit.test("Select series before drawing", function(assert) {
         var series = this.createSeries(this.options);
         series.updateData(this.data);
+        series.createPoints();
 
         series.select();
 
@@ -1038,6 +1072,7 @@ function setDiscreteType(series) {
             }
         }));
         series.updateData(this.data);
+        series.createPoints();
         series.draw(undefined, undefined, noop);
 
         series.select();
@@ -1157,6 +1192,7 @@ function setDiscreteType(series) {
 
         });
         series.updateData(this.data);
+        series.createPoints();
         $.each(series._points, function(i, pt) {
             pt.x = pt.argument;
             pt.y = pt.value;
@@ -1184,6 +1220,7 @@ function setDiscreteType(series) {
 
         });
         series.updateData(this.data);
+        series.createPoints();
         $.each(series._points, function(i, pt) {
             pt.x = pt.argument;
             pt.y = pt.value;
@@ -1192,6 +1229,7 @@ function setDiscreteType(series) {
         series.draw(false);
         // act
         series.updateData([{ arg: 1, val: 2 }, { arg: 2, val: 1 }]);
+        series.createPoints();
         $.each(series._points, function(i, pt) {
             pt.x = pt.argument;
             pt.y = pt.value;
@@ -1228,6 +1266,7 @@ function setDiscreteType(series) {
 
         });
         series.updateData(this.data);
+        series.createPoints();
         $.each(series._points, function(i, pt) {
             pt.x = pt.argument;
             pt.y = pt.value;
@@ -1265,6 +1304,7 @@ function setDiscreteType(series) {
         });
 
         series.updateData([{ arg: 1, val: 10 }, { arg: 2, val: 20 }, { arg: 3, val: null }, { arg: 4, val: 40 }]);
+        series.createPoints();
         $.each(series._points, function(i, pt) {
             pt.x = pt.argument;
             pt.y = pt.value;
@@ -1326,6 +1366,7 @@ function setDiscreteType(series) {
         });
 
         series.updateData(this.data);
+        series.createPoints();
         $.each(series._points, function(i, pt) {
             pt.x = pt.argument;
             pt.y = pt.value;
@@ -1335,6 +1376,7 @@ function setDiscreteType(series) {
 
         // act
         series.updateData([{ arg: 1, val: 10 }, { arg: 2, val: 20 }, { arg: 3, val: null }, { arg: 4, val: 40 }]);
+        series.createPoints();
         $.each(series._points, function(i, pt) {
             pt.x = pt.argument;
             pt.y = pt.value;
@@ -1387,6 +1429,7 @@ function setDiscreteType(series) {
         });
 
         series.updateData([{ arg: 1, val: 10 }, { arg: 2, val: 20 }, { arg: 3, val: null }, { arg: 4, val: 40 }]);
+        series.createPoints();
         $.each(series._points, function(i, pt) {
             pt.x = pt.argument;
             pt.y = pt.value;
@@ -1402,6 +1445,7 @@ function setDiscreteType(series) {
 
         // act
         series.updateData(this.data);
+        series.createPoints();
         $.each(series._points, function(i, pt) {
             pt.x = pt.argument;
             pt.y = pt.value;
@@ -1434,6 +1478,7 @@ function setDiscreteType(series) {
 
         });
         series.updateData([{ arg: 1, val: 10 }]);
+        series.createPoints();
         $.each(series._points, function(i, pt) {
             pt.x = pt.value;
             pt.y = pt.argument;
@@ -1505,6 +1550,7 @@ function setDiscreteType(series) {
         var series = this.createSeries({ type: seriesType, border: { visible: false }, selectionStyle: { border: { visible: false } }, hoverStyle: { border: { visible: false } } });
 
         series.updateData(this.data);
+        series.createPoints();
 
         series.draw();
         checkThreeGroups(assert, series);
@@ -1515,9 +1561,11 @@ function setDiscreteType(series) {
     QUnit.test("Series without borders. Remove element", function(assert) {
         var series = this.createSeries({ type: seriesType, border: { visible: false }, selectionStyle: { border: { visible: false } }, hoverStyle: { border: { visible: false } } });
         series.updateData(this.data);
+        series.createPoints();
         series.draw();
         // act
         series.updateData([]);
+        series.createPoints();
         series.draw();
 
         checkThreeGroups(assert, series);
@@ -1530,6 +1578,7 @@ function setDiscreteType(series) {
         var series = this.createSeries({ type: seriesType, border: { visible: true }, selectionStyle: { border: { visible: false } }, hoverStyle: { border: { visible: false } } });
 
         series.updateData(this.data);
+        series.createPoints();
 
         series.draw();
         checkGroups(assert, series);
@@ -1542,6 +1591,7 @@ function setDiscreteType(series) {
         var series = this.createSeries({ type: seriesType, border: { visible: false }, selectionStyle: { border: { visible: true } }, hoverStyle: { border: { visible: false } } });
 
         series.updateData(this.data);
+        series.createPoints();
 
         series.draw();
         checkGroups(assert, series);
@@ -1554,6 +1604,7 @@ function setDiscreteType(series) {
         var series = this.createSeries({ type: seriesType, border: { visible: false }, selectionStyle: { border: { visible: false } }, hoverStyle: { border: { visible: true } } });
 
         series.updateData(this.data);
+        series.createPoints();
 
         series.draw();
         checkGroups(assert, series);
@@ -1581,9 +1632,11 @@ function setDiscreteType(series) {
 
     QUnit.test("Draw old and new points in the right order", function(assert) {
         this.series.updateData([{ arg: 1, val: 10 }, { arg: 2, val: 20 }]);
+        this.series.createPoints();
         this.series.draw();
 
         this.series.updateData([{ arg: -1, val: 20 }, { arg: 1, val: 20 }]);
+        this.series.createPoints();
         this.series.prepareToDrawing(true);
 
         var segmentPoints = this.renderer.stub("path").lastCall.returnValue.animate.lastCall.args[0].points;
@@ -1644,6 +1697,7 @@ function setDiscreteType(series) {
 
         });
         series.updateData(this.data);
+        series.createPoints();
         $.each(series._points, function(i, pt) {
             pt.x = pt.argument;
             pt.y = pt.value;
@@ -1673,6 +1727,7 @@ function setDiscreteType(series) {
 
         });
         series.updateData(this.data);
+        series.createPoints();
         $.each(series._points, function(i, pt) {
             pt.x = pt.argument;
             pt.y = pt.value;
@@ -1682,6 +1737,7 @@ function setDiscreteType(series) {
         series.draw(false);
         // act
         series.updateData([{ arg: 1, val: 2 }, { arg: 2, val: 1 }]);
+        series.createPoints();
         $.each(series._points, function(i, pt) {
             pt.x = pt.argument;
             pt.y = pt.value;
@@ -1719,6 +1775,7 @@ function setDiscreteType(series) {
 
         });
         series.updateData(this.data);
+        series.createPoints();
         $.each(series._points, function(i, pt) {
             pt.x = pt.argument;
             pt.y = pt.value;
@@ -1758,6 +1815,7 @@ function setDiscreteType(series) {
         });
         this.data.splice(2, 1, { arg: 2, val: null });
         series.updateData(this.data);
+        series.createPoints();
         $.each(series._points, function(i, pt) {
             pt.x = pt.argument;
             pt.y = pt.value;
@@ -1822,6 +1880,7 @@ function setDiscreteType(series) {
         });
 
         series.updateData(this.data);
+        series.createPoints();
         $.each(series._points, function(i, pt) {
             pt.x = pt.argument;
             pt.y = pt.value;
@@ -1832,6 +1891,7 @@ function setDiscreteType(series) {
         this.data.splice(2, 1, { arg: 2, val: null });
         // act
         series.updateData(this.data);
+        series.createPoints();
         $.each(series._points, function(i, pt) {
             pt.x = pt.argument;
             pt.y = pt.value;
@@ -1885,6 +1945,7 @@ function setDiscreteType(series) {
             data = this.data.slice();
         this.data.splice(2, 1, { arg: 2, val: null });
         series.updateData(this.data);
+        series.createPoints();
         $.each(series._points, function(i, pt) {
             pt.x = pt.argument;
             pt.y = pt.value;
@@ -1901,6 +1962,7 @@ function setDiscreteType(series) {
 
         // act
         series.updateData(data);
+        series.createPoints();
         $.each(series._points, function(i, pt) {
             pt.x = pt.argument;
             pt.y = pt.value;
@@ -1936,6 +1998,7 @@ function setDiscreteType(series) {
         });
 
         series.updateData(data);
+        series.createPoints();
         $.each(series._points, function(i, pt) {
             pt.x = pt.value;
             pt.y = pt.argument;
@@ -1959,6 +2022,7 @@ function setDiscreteType(series) {
         });
 
         series.updateData(this.data);
+        series.createPoints();
         $.each(series._points, function(i, pt) {
             pt.x = pt.value;
             pt.y = pt.argument;
@@ -1987,6 +2051,7 @@ function setDiscreteType(series) {
 
         });
         series.updateData([{ arg: 1, val: 10 }]);
+        series.createPoints();
         $.each(series._points, function(i, pt) {
             pt.x = pt.argument;
             pt.y = pt.value;
@@ -2013,6 +2078,7 @@ function setDiscreteType(series) {
 
         });
         series.updateData([{ arg: 1, val: 10 }]);
+        series.createPoints();
         $.each(series._points, function(i, pt) {
             pt.x = pt.value;
             pt.y = pt.argument;
@@ -2056,6 +2122,7 @@ function setDiscreteType(series) {
             width: 2
         });
         series.updateData(this.data);
+        series.createPoints();
         $.each(series._points, function(i, pt) {
             pt.x = pt.argument;
             pt.y = pt.value;
@@ -2082,6 +2149,7 @@ function setDiscreteType(series) {
             width: 21
         });
         series.updateData([{ arg: 1, val: 3 }]);
+        series.createPoints();
         $.each(series._points, function(i, pt) {
             pt.x = pt.argument;
             pt.y = pt.value;
@@ -2153,6 +2221,7 @@ function setDiscreteType(series) {
         var series = this.createSeries({ type: seriesType, border: { visible: false }, selectionStyle: { border: { visible: false } }, hoverStyle: { border: { visible: false } } });
 
         series.updateData(this.data);
+        series.createPoints();
 
         series.draw();
         checkThreeGroups(assert, series);
@@ -2163,9 +2232,11 @@ function setDiscreteType(series) {
     QUnit.test("Series without borders. Remove element", function(assert) {
         var series = this.createSeries({ type: seriesType, border: { visible: false }, selectionStyle: { border: { visible: false } }, hoverStyle: { border: { visible: false } } });
         series.updateData(this.data);
+        series.createPoints();
         series.draw();
         // act
         series.updateData([{}]);
+        series.createPoints();
         series.draw();
 
         checkThreeGroups(assert, series);
@@ -2178,6 +2249,7 @@ function setDiscreteType(series) {
         var series = this.createSeries({ type: seriesType, border: { visible: true }, selectionStyle: { border: { visible: false } }, hoverStyle: { border: { visible: false } } });
 
         series.updateData(this.data);
+        series.createPoints();
 
         series.draw();
         checkGroups(assert, series);
@@ -2190,6 +2262,7 @@ function setDiscreteType(series) {
         var series = this.createSeries({ type: seriesType, border: { visible: false }, selectionStyle: { border: { visible: true } }, hoverStyle: { border: { visible: false } } });
 
         series.updateData(this.data);
+        series.createPoints();
 
         series.draw();
         checkGroups(assert, series);
@@ -2202,6 +2275,7 @@ function setDiscreteType(series) {
         var series = this.createSeries({ type: seriesType, border: { visible: false }, selectionStyle: { border: { visible: false } }, hoverStyle: { border: { visible: true } } });
 
         series.updateData(this.data);
+        series.createPoints();
 
         series.draw();
         checkGroups(assert, series);
@@ -2229,6 +2303,7 @@ function setDiscreteType(series) {
     QUnit.test("Draw without animation", function(assert) {
         var series = this.series;
         this.series.updateData(this.data);
+        series.createPoints();
         // act
         series.draw(false);
         // assert
@@ -2238,6 +2313,7 @@ function setDiscreteType(series) {
     QUnit.test("Draw with animation", function(assert) {
         var series = this.series;
         this.series.updateData(this.data);
+        series.createPoints();
         // act
         series.draw(true);
         // assert
@@ -2248,6 +2324,7 @@ function setDiscreteType(series) {
     QUnit.test("Draw with animation complete animation", function(assert) {
         var series = this.series;
         this.series.updateData(this.data);
+        series.createPoints();
         // act
         series.draw(true);
         // assert
@@ -2263,6 +2340,7 @@ function setDiscreteType(series) {
     QUnit.test("Draw two segments with animation complete animation", function(assert) {
         var series = this.series;
         this.series.updateData([{ arg: 1, val: 10 }, { arg: 2, val: 20 }, { arg: 3, val: null }, { arg: 4, val: 44 }]);
+        this.series.createPoints();
         // act
         series.draw(true);
         // assert
@@ -2296,9 +2374,11 @@ function setDiscreteType(series) {
 
     QUnit.test("Draw old and new points in the right order", function(assert) {
         this.series.updateData([{ arg: 1, val: 10 }, { arg: 2, val: 20 }]);
+        this.series.createPoints();
         this.series.draw();
 
         this.series.updateData([{ arg: -1, val: 20 }, { arg: 1, val: 20 }]);
+        this.series.createPoints();
         this.series.prepareToDrawing(true);
 
         var segmentPoints = this.renderer.stub("path").lastCall.returnValue.animate.lastCall.args[0].points;
@@ -2360,7 +2440,9 @@ function setDiscreteType(series) {
             });
 
         series.updateData(this.data);
+        series.createPoints();
         series1.updateData(this.data1);
+        series1.createPoints();
         series1._prevSeries = series;
         $.each(series._points, function(i, pt) {
             pt.x = pt.argument;
@@ -2413,7 +2495,9 @@ function setDiscreteType(series) {
         this.data[2].val = null;
 
         series.updateData(this.data);
+        series.createPoints();
         series1.updateData(this.data1);
+        series1.createPoints();
         series1._prevSeries = series;
         $.each(series._points, function(i, pt) {
             pt.x = pt.argument;
@@ -2470,7 +2554,9 @@ function setDiscreteType(series) {
         this.data1[2].val = null;
 
         series.updateData(this.data);
+        series.createPoints();
         series1.updateData(this.data1);
+        series1.createPoints();
         series1._prevSeries = series;
         $.each(series._points, function(i, pt) {
             pt.x = pt.argument;
@@ -2527,7 +2613,9 @@ function setDiscreteType(series) {
         this.data[2].val = null;
 
         series.updateData(this.data);
+        series.createPoints();
         series1.updateData(this.data1);
+        series1.createPoints();
         series1._prevSeries = series;
         $.each(series._points, function(i, pt) {
             pt.x = pt.argument;
@@ -2600,9 +2688,12 @@ function setDiscreteType(series) {
         this.data1[2].val = null;
 
         series.updateData(this.data);
+        series.createPoints();
         series1.updateData(this.data1);
+        series1.createPoints();
         var data = [{ arg: 0, val: 70 }, { arg: 3, val: 90 }, { arg: 6, val: 40 }, { arg: 9, val: 140 }, { arg: 12, val: 220 }];
         series2.updateData(data);
+        series2.createPoints();
         series1._prevSeries = series;
         series2._prevSeries = series1;
         $.each(series._points, function(i, pt) {
@@ -2680,6 +2771,7 @@ function setDiscreteType(series) {
             });
 
         series.updateData(this.data);
+        series.createPoints();
         $.each(series.getAllPoints(), function(i, pt) {
             pt.x = pt.argument;
             pt.y = pt.value;
@@ -2706,6 +2798,7 @@ function setDiscreteType(series) {
             });
 
         series.updateData(this.data);
+        series.createPoints();
         $.each(series.getAllPoints(), function(i, pt) {
             pt.x = pt.argument;
             pt.y = pt.value;
@@ -2751,6 +2844,7 @@ function setDiscreteType(series) {
         });
 
         series.updateData(this.data);
+        series.createPoints();
         $.each(series.getAllPoints(), function(i, pt) {
             pt.x = pt.argument;
             pt.y = pt.value;
@@ -2780,7 +2874,9 @@ function setDiscreteType(series) {
             });
 
         series.updateData(this.data);
+        series.createPoints();
         series1.updateData(this.data1);
+        series1.createPoints();
         series1._prevSeries = series;
         $.each(series.getAllPoints(), function(i, pt) {
             pt.x = pt.argument;
@@ -2824,7 +2920,10 @@ function setDiscreteType(series) {
             });
 
         series.updateData(this.data);
+        series.createPoints();
         series1.updateData(this.data1);
+        series1.createPoints();
+        series1.createPoints();
         series1._prevSeries = series;
         $.each(series.getAllPoints(), function(i, pt) {
             pt.x = pt.argument;
@@ -2894,6 +2993,7 @@ function setDiscreteType(series) {
             });
 
         series.updateData(this.data);
+        series.createPoints();
         $.each(series.getAllPoints(), function(i, pt) {
             pt.x = pt.argument;
             pt.y = pt.value;
@@ -2920,6 +3020,7 @@ function setDiscreteType(series) {
             });
 
         series.updateData(this.data);
+        series.createPoints();
         $.each(series.getAllPoints(), function(i, pt) {
             pt.x = pt.argument;
             pt.y = pt.value;
@@ -2956,9 +3057,11 @@ function setDiscreteType(series) {
 
     QUnit.test("Draw old and new points in the right order", function(assert) {
         this.series.updateData([{ arg: 1, val: 10 }, { arg: 2, val: 20 }]);
+        this.series.createPoints();
         this.series.draw();
 
         this.series.updateData([{ arg: -1, val: 20 }, { arg: 1, val: 20 }]);
+        this.series.createPoints();
         this.series.prepareToDrawing(true);
 
         var borderPoints = this.renderer.stub("path").firstCall.returnValue.animate.lastCall.args[0].points;
@@ -3007,6 +3110,7 @@ function setDiscreteType(series) {
 
         setPolarType(series);
         series.updateData([{ arg: 0, val: 0 }, { arg: 2, val: 2 }]);
+        series.createPoints();
         series.draw();
 
         assert.equal(this.renderer.stub("path").callCount, 2);
@@ -3031,6 +3135,7 @@ function setDiscreteType(series) {
         });
         setPolarType(series);
         series.updateData([{ arg: 0, val: 0 }, { arg: 2, val: 2 }]);
+        series.createPoints();
         series.draw();
 
         assert.equal(this.renderer.stub("path").callCount, 2);
@@ -3054,6 +3159,7 @@ function setDiscreteType(series) {
         });
         setPolarType(series);
         series.updateData([{ arg: 0, val: 10 }, { arg: 2, val: 0 }, { arg: 4, val: null }, { arg: 359, val: 5 }]);
+        series.createPoints();
 
         series.getAllPoints()[2].hasValue.returns(false);// set new segment
 
@@ -3089,6 +3195,7 @@ function setDiscreteType(series) {
         setDiscreteType(series);
 
         series.updateData([{ arg: 0, val: 0 }, { arg: 2, val: 358 }]);
+        series.createPoints();
         series.draw();
 
         assert.equal(this.renderer.stub("path").getCall(1).args[0].length, 6);
@@ -3110,6 +3217,7 @@ function setDiscreteType(series) {
         });
         setPolarType(series);
         series.updateData([{ arg: 0, val: 0 }]);
+        series.createPoints();
         series.draw();
 
         assert.equal(this.renderer.stub("path").callCount, 2);

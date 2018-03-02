@@ -162,6 +162,7 @@ var dxSparkline = BaseSparkline.inherit({
         })[singleSeries.getArgumentField()];
 
         singleSeries.updateData(that._simpleDataSource);
+        singleSeries.createPoints();
 
         that._groupsDataCategories = groupsData.categories;
     },

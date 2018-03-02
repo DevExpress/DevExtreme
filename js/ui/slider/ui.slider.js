@@ -278,23 +278,23 @@ var Slider = TrackBar.inherit({
         ]);
     },
 
-    _render: function() {
+    _initMarkup: function() {
         this.$element().addClass(SLIDER_CLASS);
         this._renderSubmitElement();
+        this.option("useInkRipple") && this._renderInkRipple();
 
         this.callBase();
-    },
 
-    _renderContentImpl: function() {
         this._renderLabels();
         this._renderStartHandler();
         this._renderAriaMinAndMax();
-
-        this._repaintHandle();
-        this.option("useInkRipple") && this._renderInkRipple();
-        this.callBase();
     },
 
+    _render: function() {
+        this.callBase();
+
+        this._repaintHandle();
+    },
     _renderSubmitElement: function() {
         this._$submitElement = $("<input>")
             .attr("type", "hidden")
@@ -468,19 +468,6 @@ var Slider = TrackBar.inherit({
         }
     },
 
-    _renderDimensions: function() {
-        this.callBase();
-        if(this._$bar) {
-            var barMarginWidth = this._getBarMarginWidth();
-            this._$bar.css("width", this._getOptionValue("width", this._$bar.get(0)) - barMarginWidth);
-        }
-    },
-
-    _getBarMarginWidth: function() {
-        var margins = parseFloat(this._$bar.css("marginLeft")) + parseFloat(this._$bar.css("marginRight"));
-        return Math.abs(margins);
-    },
-
     _renderStartHandler: function() {
         var pointerDownEventName = eventUtils.addNamespace(pointerEvents.down, this.NAME);
         var clickEventName = eventUtils.addNamespace(clickEvent.name, this.NAME);
@@ -633,6 +620,7 @@ var Slider = TrackBar.inherit({
 
     _renderValue: function() {
         this.callBase();
+        this._setRangeStyles(this._rangeStylesConfig());
 
         var value = this.option("value");
 
@@ -666,9 +654,11 @@ var Slider = TrackBar.inherit({
                 break;
             case "min":
             case "max":
+                this._renderValue();
+                this.callBase(args);
                 this._renderLabels();
                 this._renderAriaMinAndMax();
-                this.callBase(args);
+
                 this._fitTooltip();
                 break;
             case "step":

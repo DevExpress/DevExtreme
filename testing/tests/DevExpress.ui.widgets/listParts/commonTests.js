@@ -2133,22 +2133,6 @@ QUnit.test("default", function(assert) {
     assert.ok($element.outerWidth() > 0, "outer width of the element must be more than zero");
 });
 
-QUnit.test("constructor", function(assert) {
-    var $element = $("#list").dxList({ items: [1, 2, 3, 4], width: 400 }),
-        instance = $element.dxList("instance");
-
-    assert.strictEqual(instance.option("width"), 400);
-    assert.strictEqual($element.outerWidth(), 400, "outer width of the element must be equal to custom width");
-});
-
-QUnit.test("root with custom width", function(assert) {
-    var $element = $("#list").width(300).dxList({ items: [1, 2, 3, 4] }),
-        instance = $element.dxList("instance");
-
-    assert.strictEqual(instance.option("width"), undefined);
-    assert.strictEqual($element.outerWidth(), 300, "outer width of the element must be equal to custom width");
-});
-
 QUnit.test("change width", function(assert) {
     var $element = $("#list").dxList({ items: [1, 2, 3, 4] }),
         instance = $element.dxList("instance"),

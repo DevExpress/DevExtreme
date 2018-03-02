@@ -1057,10 +1057,17 @@ var BaseChart = BaseWidget.inherit({
         this._dataSpecificInit(true);
     },
 
+    _createPoints: function() {
+        this.series.forEach(function(series) {
+            series.createPoints();
+        });
+    },
+
     _dataSpecificInit: function(needRedraw) {
         var that = this;
         that.series = that.series || that._populateSeries();
         that._repopulateSeries();
+        that._createPoints();
         that._seriesPopulatedHandlerCore();
         that._populateBusinessRange();
         that._tracker.updateSeries(that.series);

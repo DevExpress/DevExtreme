@@ -4,6 +4,7 @@ var $ = require("../../core/renderer"),
     domAdapter = require("../../core/dom_adapter"),
     eventsEngine = require("../../events/core/events_engine"),
     domUtils = require("../../core/utils/dom"),
+    hasWindow = require("../../core/utils/window").hasWindow,
     focused = require("../widget/selectors").focused,
     isDefined = require("../../core/utils/type").isDefined,
     extend = require("../../core/utils/extend").extend,
@@ -25,7 +26,9 @@ var TEXTEDITOR_CLASS = "dx-texteditor",
     TEXTEDITOR_ICON_CLASS = "dx-icon",
     TEXTEDITOR_CLEAR_ICON_CLASS = "dx-icon-clear",
     TEXTEDITOR_CLEAR_BUTTON_CLASS = "dx-clear-button-area",
-    TEXTEDITOR_EMPTY_INPUT_CLASS = "dx-texteditor-empty";
+    TEXTEDITOR_EMPTY_INPUT_CLASS = "dx-texteditor-empty",
+
+    STATE_INVISIBLE_CLASS = "dx-state-invisible";
 
 var EVENTS_LIST = [
     "KeyDown", "KeyPress", "KeyUp",
@@ -345,20 +348,28 @@ var TextEditorBase = Editor.inherit({
     },
 
     _initMarkup: function() {
+        this.$element().addClass(TEXTEDITOR_CLASS);
+
         this._renderInput();
+        this._renderInputType();
+        this._renderPlaceholderMarkup();
+
+        if(!hasWindow()) {
+            this._renderInputValue();
+        }
+
+        this._renderProps();
+
         this.callBase();
     },
 
     _render: function() {
-        this.$element().addClass(TEXTEDITOR_CLASS);
-
-        this._renderInputType();
         this._renderValue();
-        this._renderProps();
-        this._renderPlaceholder();
 
+        this._renderPlaceholder();
         this._refreshValueChangeEvent();
         this._renderEvents();
+
         this._renderEnterKeyAction();
         this._renderEmptinessEvent();
         this.callBase();
@@ -445,7 +456,7 @@ var TextEditorBase = Editor.inherit({
             return;
         }
 
-        this._$placeholder.toggleClass("dx-state-invisible", !isEmpty);
+        this._$placeholder.toggleClass(STATE_INVISIBLE_CLASS, !isEmpty);
     },
 
     _renderProps: function() {
@@ -491,26 +502,33 @@ var TextEditorBase = Editor.inherit({
     },
 
     _renderPlaceholder: function() {
+        this._renderPlaceholderMarkup();
+        this._attachPlaceholderEvents();
+    },
+
+    _renderPlaceholderMarkup: function() {
         if(this._$placeholder) {
             this._$placeholder.remove();
             this._$placeholder = null;
         }
 
-        var that = this,
-            $input = that._input(),
-            placeholderText = that.option("placeholder"),
+        var $input = this._input(),
+            placeholderText = this.option("placeholder"),
             $placeholder = this._$placeholder = $('<div>')
-                .attr("data-dx_placeholder", placeholderText),
-            startEvent = eventUtils.addNamespace(pointerEvents.up, this.NAME);
-
-        eventsEngine.on($placeholder, startEvent, function() {
-            eventsEngine.trigger($input, "focus");
-        });
+                .attr("data-dx_placeholder", placeholderText);
 
         $placeholder.insertAfter($input);
-
         $placeholder.addClass(TEXTEDITOR_PLACEHOLDER_CLASS);
-        this._toggleEmptinessEventHandler();
+    },
+
+    _attachPlaceholderEvents: function() {
+        var that = this,
+            startEvent = eventUtils.addNamespace(pointerEvents.up, that.NAME);
+
+        eventsEngine.on(that._$placeholder, startEvent, function() {
+            eventsEngine.trigger(that._input(), "focus");
+        });
+        that._toggleEmptinessEventHandler();
     },
 
     _placeholder: function() {
@@ -534,7 +552,7 @@ var TextEditorBase = Editor.inherit({
         }
 
         if(this._$clearButton) {
-            this._$clearButton.toggleClass("dx-state-invisible", !clearButtonVisibility);
+            this._$clearButton.toggleClass(STATE_INVISIBLE_CLASS, !clearButtonVisibility);
         }
     },
 

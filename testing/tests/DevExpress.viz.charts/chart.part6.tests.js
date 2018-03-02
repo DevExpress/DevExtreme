@@ -1248,17 +1248,20 @@ QUnit.test("adjustOnZoom option", function(assert) {
     });
 
     var chart = this.createChart({
-        useAggregation: true,
         adjustOnZoom: false,
         series: [{
             type: "line"
         }]
     });
 
+    chart.zoomArgument(1, 2);
+
     var series = chart.getAllSeries()[0],
         valAxis = chart._valueAxes[0],
         argAxis = chart._argumentAxes[0];
     this.themeManager.getOptions.withArgs("adjustOnZoom").returns(true);
+
+    valAxis.zoom.reset();
 
     // act
     chart.option({
@@ -1268,7 +1271,6 @@ QUnit.test("adjustOnZoom option", function(assert) {
     // assert
     assert.strictEqual(stubSeries1.getValueAxis().zoom.callCount, 1);
     assert.deepEqual(stubSeries1.getValueAxis().zoom.lastCall.args, [10, 15], "zoom args");
-    assert.ok(stubSeries1.getViewport.calledAfter(stubSeries1.resamplePoints));
 
     assert.ok(series === chart.getAllSeries()[0], "Series should not be recreated");
     assert.ok(valAxis === chart._valueAxes[0], "Val axis should not be recreated");
@@ -1366,8 +1368,6 @@ QUnit.test("useAggregation option", function(assert) {
     });
 
     // assert
-    assert.equal(stubSeries2.resamplePoints.callCount, 1);
-
     assert.ok(series !== chart.getAllSeries()[0], "Series should be recreated");
     assert.ok(valAxis !== chart._valueAxes[0], "Val axis should be recreated");
     assert.ok(argAxis !== chart._argumentAxes[0], "Arg axis should be recreated");

@@ -329,6 +329,30 @@ QUnit.test("dataSource is loaded", function(assert) {
     assert.strictEqual(rangeSelector.isReady(), true, "ready state after end animation");
 });
 
+QUnit.test("Update axis canvas before create series dataSorce", function(assert) {
+    var spy = sinon.spy(seriesDataSourceModule, "SeriesDataSource");
+    this.seriesDataSource.stub("getBoundRange").returns({
+        arg: new commons.StubRange(),
+        val: new commons.StubRange()
+    });
+    this.createWidget({
+        dataSource: [{}],
+        chart: {
+        }
+    });
+
+    var argumentAxis = spy.lastCall.args[0].argumentAxis;
+
+    assert.deepEqual(argumentAxis.getTranslator().updateCanvas.firstCall.args[0], {
+        height: 150,
+        left: 0,
+        top: 0,
+        width: 300
+    });
+    assert.ok(argumentAxis.getTranslator().updateCanvas.firstCall.calledBefore(spy.firstCall));
+});
+
+
 QUnit.module("logarithmic type", commons.environment);
 
 QUnit.test("scale. logarithmic type", function(assert) {

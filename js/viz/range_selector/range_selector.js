@@ -835,7 +835,11 @@ var dxRangeSelector = require("../core/base_widget").inherit({
         var that = this,
             renderer = that._renderer,
             rect = that._clientRect,
-            currentAnimationEnabled;
+            currentAnimationEnabled,
+            canvas = {
+                left: rect[0], top: rect[1], width: rect[2] - rect[0], height: rect[3] - rect[1]
+            };
+
         if(that.__isResizing) {
             currentAnimationEnabled = renderer.animationEnabled();
             renderer.updateAnimationOptions({
@@ -846,6 +850,9 @@ var dxRangeSelector = require("../core/base_widget").inherit({
         that._clipRect.attr({
             x: rect[0], y: rect[1], width: rect[2] - rect[0], height: rect[3] - rect[1]
         });
+
+        that._axis.getTranslator().updateCanvas(canvas);
+
         that._updateContent({
             left: rect[0], top: rect[1], width: rect[2] - rect[0], height: rect[3] - rect[1]
         });

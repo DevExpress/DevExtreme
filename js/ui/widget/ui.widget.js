@@ -458,6 +458,10 @@ var Widget = DOMComponent.inherit({
 
         this._renderHint();
 
+        if(this._isFocusable()) {
+            this._renderFocusTarget();
+        }
+
         this.callBase();
     },
 
@@ -512,7 +516,7 @@ var Widget = DOMComponent.inherit({
     _renderFocusState: function() {
         this._attachKeyboardEvents();
 
-        if(!this.option("focusStateEnabled") || this.option("disabled")) {
+        if(!this._isFocusable()) {
             return;
         }
 
@@ -535,6 +539,10 @@ var Widget = DOMComponent.inherit({
                 this.focus();
             }
         }).bind(this));
+    },
+
+    _isFocusable: function() {
+        return this.option("focusStateEnabled") && !this.option("disabled");
     },
 
     _eventBindingTarget: function() {

@@ -71,6 +71,7 @@ var SchedulerAgenda = SchedulerWorkSpace.inherit({
     },
 
     _renderFocusState: noop,
+    _renderFocusTarget: noop,
     _cleanFocusState: noop,
 
     supportAllDayRow: function() {

@@ -800,7 +800,8 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         };
     },
 
-    _render: function() {
+    _initMarkup: function() {
+        this._renderScrollableContainer();
         this.callBase();
         this.setAria("role", "tree");
     },
@@ -808,7 +809,6 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
     _renderContentImpl: function() {
         var $nodeContainer = this._renderNodeContainer();
 
-        this._renderScrollableContainer();
         this._scrollableContainer.$content().append($nodeContainer);
 
         if(!this.option("items") || !this.option("items").length) {

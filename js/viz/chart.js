@@ -550,10 +550,8 @@ var dxChart = AdvancedChart.inherit({
     _prepareToRender: function(drawOptions) {
         var that = this,
             panesBorderOptions = that._createPanesBorderOptions(),
-            useAggregation = that._options.useAggregation,
-            canvas = that._canvas,
             series = that._getVisibleSeries(),
-            canvasLength = that._isRotated() ? canvas.height - canvas.top - canvas.bottom : canvas.width - canvas.left - canvas.right;
+            useAggregation = that._options.useAggregation;
 
         that._createPanesBackground();
         that._appendAxesGroups();
@@ -563,12 +561,16 @@ var dxChart = AdvancedChart.inherit({
         that._updatePanesCanvases(drawOptions);
 
         if(useAggregation) {
+            this._argumentAxes.forEach(function(axis) {
+                axis.updateCanvas(that._canvas);
+            });
+
             series.forEach(function(series) {
-                series.resamplePoints(canvasLength);
+                series.createPoints();
             });
         }
 
-        if((useAggregation || _isDefined(that._zoomMinArg) || _isDefined(that._zoomMaxArg)) && that._themeManager.getOptions("adjustOnZoom")) {
+        if(useAggregation || (_isDefined(that._zoomMinArg) || _isDefined(that._zoomMaxArg)) && that._themeManager.getOptions("adjustOnZoom")) {
             that._valueAxes.forEach(function(axis) {
                 var viewport = series.filter(function(s) {
                     return s.getValueAxis() === axis;
@@ -590,6 +592,22 @@ var dxChart = AdvancedChart.inherit({
         }
 
         return panesBorderOptions;
+    },
+
+    _createPoints: function() {
+        var that = this,
+            viewport = new rangeModule.Range();
+
+        that.series.forEach(function(s) {
+            viewport.addRange(s.getArgumentRange());
+        });
+
+        that._argumentAxes.forEach(function(axis) {
+            axis.updateCanvas(that._canvas);
+            axis.setBusinessRange(viewport);
+        });
+
+        that.callBase();
     },
 
     _seriesPopulatedHandlerCore: function() {
@@ -967,29 +985,6 @@ var dxChart = AdvancedChart.inherit({
                 return panes[i].canvas;
             }
         }
-    },
-
-    _getBusinessRange: function(paneName, axisName) {
-        var ranges = this.businessRanges || [],
-            rangesNumber = ranges.length,
-            foundRange,
-            i;
-
-        for(i = 0; i < rangesNumber; i++) {
-            if(ranges[i].val.pane === paneName && ranges[i].val.axis === axisName) {
-                foundRange = ranges[i];
-                break;
-            }
-        }
-        if(!foundRange) {
-            for(i = 0; i < rangesNumber; i++) {
-                if(ranges[i].val.pane === paneName) {
-                    foundRange = ranges[i];
-                    break;
-                }
-            }
-        }
-        return foundRange;
     },
 
     _transformArgument: function(translate, scale) {
