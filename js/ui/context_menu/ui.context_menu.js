@@ -421,7 +421,6 @@ var ContextMenu = MenuBase.inherit((function() {
             this.$element()
                 .addClass(DX_HAS_CONTEXT_MENU_CLASS);
 
-            this.setAria("role", "menu");
             this.callBase();
         },
 
