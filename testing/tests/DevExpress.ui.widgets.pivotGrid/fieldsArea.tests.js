@@ -53,6 +53,7 @@ QUnit.test("Render without data", function(assert) {
     var groupElement = this.area.groupElement();
 
     assert.ok(groupElement.hasClass("dx-area-fields"));
+    assert.ok(groupElement.hasClass("dx-pivotgrid-drag-action"), "items in area are draggable");
     assert.strictEqual(groupElement.attr("group"), "myArea");
 });
 
