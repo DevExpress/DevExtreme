@@ -618,6 +618,10 @@ var GridView = modules.View.inherit({
         });
     },
 
+    _getTableRoleName: function() {
+        return "grid";
+    },
+
     render: function($rootElement) {
         var that = this,
             isFirstRender = !that._groupElement,
@@ -629,7 +633,7 @@ var GridView = modules.View.inherit({
         that.component.setAria({ "role": "presentation" }, $rootElement);
 
         that.component.setAria({
-            "role": "grid",
+            "role": this._getTableRoleName(),
             "label": messageLocalization.format(that._getWidgetAriaLabel())
         }, $groupElement);
 
