@@ -26,7 +26,9 @@ var TEXTEDITOR_CLASS = "dx-texteditor",
     TEXTEDITOR_ICON_CLASS = "dx-icon",
     TEXTEDITOR_CLEAR_ICON_CLASS = "dx-icon-clear",
     TEXTEDITOR_CLEAR_BUTTON_CLASS = "dx-clear-button-area",
-    TEXTEDITOR_EMPTY_INPUT_CLASS = "dx-texteditor-empty";
+    TEXTEDITOR_EMPTY_INPUT_CLASS = "dx-texteditor-empty",
+
+    STATE_INVISIBLE_CLASS = "dx-state-invisible";
 
 var EVENTS_LIST = [
     "KeyDown", "KeyPress", "KeyUp",
@@ -350,12 +352,12 @@ var TextEditorBase = Editor.inherit({
 
         this._renderInput();
         this._renderInputType();
+        this._renderPlaceholderMarkup();
 
         if(!hasWindow()) {
             this._renderInputValue();
         }
 
-        this._renderPlaceholderMarkup();
         this._renderProps();
 
         this.callBase();
@@ -454,7 +456,7 @@ var TextEditorBase = Editor.inherit({
             return;
         }
 
-        this._$placeholder.toggleClass("dx-state-invisible", !isEmpty);
+        this._$placeholder.toggleClass(STATE_INVISIBLE_CLASS, !isEmpty);
     },
 
     _renderProps: function() {
@@ -550,7 +552,7 @@ var TextEditorBase = Editor.inherit({
         }
 
         if(this._$clearButton) {
-            this._$clearButton.toggleClass("dx-state-invisible", !clearButtonVisibility);
+            this._$clearButton.toggleClass(STATE_INVISIBLE_CLASS, !clearButtonVisibility);
         }
     },
 

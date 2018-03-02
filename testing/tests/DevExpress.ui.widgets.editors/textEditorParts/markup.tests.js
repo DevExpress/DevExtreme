@@ -7,7 +7,8 @@ require("ui/text_box/ui.text_editor");
 var TEXTEDITOR_CLASS = "dx-texteditor",
     INPUT_CLASS = "dx-texteditor-input",
     CONTAINER_CLASS = "dx-texteditor-container",
-    PLACEHOLDER_CLASS = "dx-placeholder";
+    PLACEHOLDER_CLASS = "dx-placeholder",
+    STATE_INVISIBLE_CLASS = "dx-state-invisible";
 
 QUnit.module("Basic markup");
 
@@ -21,6 +22,16 @@ QUnit.test("basic init", function(assert) {
     assert.equal(element.find("." + CONTAINER_CLASS).length, 1);
 });
 
+QUnit.test("init with placeholder", function(assert) {
+    var element = $("#textbox").dxTextEditor({
+        placeholder: "enter value"
+    });
+
+    var placeholder = element.find("." + PLACEHOLDER_CLASS);
+
+    assert.notOk(placeholder.hasClass(STATE_INVISIBLE_CLASS), "placeholder is visible when editor hasn't a value");
+});
+
 QUnit.test("init with options", function(assert) {
     var element = $("#texteditor").dxTextEditor({
         value: "custom",
@@ -29,10 +40,12 @@ QUnit.test("init with options", function(assert) {
         tabIndex: 3
     });
 
-    var input = element.find("." + INPUT_CLASS);
+    var input = element.find("." + INPUT_CLASS),
+        placeholder = element.find("." + PLACEHOLDER_CLASS);
 
     assert.equal(input.val(), "custom");
     assert.equal(input.prop("placeholder") || element.find("." + PLACEHOLDER_CLASS).attr("data-dx_placeholder"), "enter value");
+    assert.ok(placeholder.hasClass(STATE_INVISIBLE_CLASS), "placeholder is invisible when editor has a value");
     assert.equal(input.prop("readOnly"), true);
     assert.equal(input.prop("tabindex"), 3);
 });
