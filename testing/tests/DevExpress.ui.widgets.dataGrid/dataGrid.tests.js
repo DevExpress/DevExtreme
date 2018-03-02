@@ -180,6 +180,22 @@ QUnit.test("Correct start scroll position when RTL", function(assert) {
     clock.restore();
 });
 
+QUnit.test("Base accessibility structure", function(assert) {
+    createDataGrid({
+        columns: [{ dataField: "field1", width: 100 }, { dataField: "field2", width: 100 }],
+        dataSource: {
+            store: [{ field1: "1", field2: "2" }]
+        }
+    });
+
+    assert.equal($(".dx-widget").attr("role"), "presentation");
+    assert.equal($(".dx-datagrid").attr("role"), "grid");
+    assert.equal($(".dx-datagrid-headers").attr("role"), "presentation");
+    assert.equal($(".dx-datagrid-scroll-container").attr("role"), "presentation");
+    assert.equal($(".dx-datagrid-table").eq(0).attr("role"), "presentation");
+    assert.equal($(".dx-datagrid-table").eq(1).attr("role"), "presentation");
+});
+
 // T388508
 QUnit.test("Correct start scroll position when RTL and detached container of the datagrid", function(assert) {
     // arrange, act

@@ -143,30 +143,6 @@ QUnit.test('Create col elements by columns collection', function(assert) {
     assert.equal(cols[4].style.width, '91px', '5 column width');
 });
 
-QUnit.test('Check WAI-ARIA cell labels', function(assert) {
-    // arrange
-
-    var columns = [
-            { caption: 'testColumn1' },
-            { caption: 'testColumn2' },
-            { caption: 'testColumn3' }
-        ],
-        getAriaLabel = function($element) { return $element.attr("aria-label"); },
-        getExpectedWithoutValue = function(colNumber) { return "Column testColumn" + colNumber + ", Value "; };
-
-    var rowsView = this.createRowsView(this.items, null, columns),
-        $testElement = $('#container');
-
-    rowsView.render($testElement);
-
-    // assert
-    var $gridCells = rowsView._getRowElements().find("td");
-
-    assert.equal(getAriaLabel($gridCells.eq(0)), getExpectedWithoutValue(1) + "test1");
-    assert.equal(getAriaLabel($gridCells.eq(1)), getExpectedWithoutValue(2) + "1");
-    assert.equal(getAriaLabel($gridCells.eq(2)), getExpectedWithoutValue(3) + "1/01/2001");
-});
-
 QUnit.test('Add colgroup to table', function(assert) {
     // arrange
     var rowsView = this.createRowsView(this.items),
@@ -263,7 +239,33 @@ QUnit.test('Render scrollable', function(assert) {
     assert.strictEqual(scrollable.option("updateManually"), true, 'scrollable updateManually');
 });
 
-QUnit.test('Check WAI-ARIA attributes after render rows', function(assert) {
+QUnit.test('Check WAI-ARIA attributes for data rows/cells after render rows', function(assert) {
+    // arrange
+    var rowsView = this.createRowsView(this.items),
+        testElement = $('#container'),
+        $rows,
+        $cells,
+        $freeSpaceCells,
+        i;
+
+    // act
+    rowsView.render(testElement);
+    $rows = rowsView._getRowElements();
+    $freeSpaceCells = getCells(testElement).filter(function(i, cell) { return $(cell).parent().hasClass("dx-freespace-row"); });
+    $cells = getCells(testElement).filter(function(i, cell) { return !$(cell).parent().hasClass("dx-freespace-row"); });
+
+    // assert
+    assert.expect(15 - $freeSpaceCells.length);
+
+    for(i = 0; i < $cells.length; i++) {
+        if(i < $rows.length) {
+            assert.equal($rows.eq(i).attr('role'), 'row', 'Row has correct role');
+        }
+        assert.equal($cells.eq(i).attr('role'), 'gridcell', 'Cell has correct role');
+    }
+});
+
+QUnit.test('Check WAI-ARIA attributes for freeSpace rows/cells after render rows', function(assert) {
     // arrange
     var rowsView = this.createRowsView(this.items),
         testElement = $('#container'),
@@ -271,19 +273,21 @@ QUnit.test('Check WAI-ARIA attributes after render rows', function(assert) {
         $cells,
         i;
 
-    assert.expect(15);
-
     // act
     rowsView.render(testElement);
-    $rows = rowsView._getRowElements();
-    $cells = getCells(testElement);
+
+    $rows = rowsView._getRowElements().filter(function(i, row) { return $(row).hasClass("dx-freespace-row"); });
+    $cells = getCells(testElement).filter(function(i, cell) { return $(cell).parent().hasClass("dx-freespace-row"); });
 
     // assert
     for(i = 0; i < $cells.length; i++) {
         if(i < $rows.length) {
-            assert.equal($rows.eq(i).attr('role'), 'row', 'Row has correct role');
+            assert.equal($rows.eq(i).attr('aria-hidden'), true, 'Free space row has aria-hidden attribute');
         }
-        assert.equal($cells.eq(i).attr('role'), 'gridcell', 'Cell has correct role');
+        var $cell = $cells.eq(i);
+        assert.equal($cell.attr('role'), undefined, 'Free space cell has no "role"');
+        assert.equal($cell.attr('aria-colindex'), undefined, 'Free space cell has no "aria-colindex"');
+        assert.equal($cell.attr('aria-selected'), undefined, 'Free space cell has no "aria-selected"');
     }
 });
 
@@ -2259,7 +2263,7 @@ QUnit.test('Show grouped columns', function(assert) {
     // assert
     assert.equal(testElement.find('tbody > tr').length, 4, 'rows count: 3 + 1 freespace row');
 
-    assert.equal(testElement.find('tbody > tr').eq(0).attr('role'), 'rowgroup');
+    assert.equal(testElement.find('tbody > tr').eq(0).attr('role'), 'row');
     assert.equal(testElement.find('tbody > tr').eq(0).attr('aria-expanded'), 'true');
     assert.ok($(testElement.find('tbody > tr')[0]).hasClass("dx-group-row"));
     assert.equal($(testElement.find('tbody > tr')[0]).find('td').length, 2);
@@ -2267,7 +2271,7 @@ QUnit.test('Show grouped columns', function(assert) {
     assert.equal($(testElement.find('tbody > tr')[0]).find('td').last().text(), 'column 1: 1 (Continued on the next page)');
     assert.equal($(testElement.find('tbody > tr')[0]).find('td').last().attr('colspan'), 2);
 
-    assert.equal(testElement.find('tbody > tr').eq(1).attr('role'), 'rowgroup');
+    assert.equal(testElement.find('tbody > tr').eq(1).attr('role'), 'row');
     assert.equal(testElement.find('tbody > tr').eq(1).attr('aria-expanded'), 'false');
     assert.ok($(testElement.find('tbody > tr')[1]).hasClass("dx-group-row"));
     assert.equal($(testElement.find('tbody > tr')[1]).find('td').length, 3);
@@ -2301,7 +2305,7 @@ QUnit.test('Show grouped column when cellTemplate is defined', function(assert) 
     // assert
     assert.equal(testElement.find('tbody > tr').length, 3, 'rows count: 2 + 1 freespace row');
 
-    assert.equal(testElement.find('tbody > tr').eq(0).attr('role'), 'rowgroup');
+    assert.equal(testElement.find('tbody > tr').eq(0).attr('role'), 'row');
     assert.equal(testElement.find('tbody > tr').eq(0).attr('aria-expanded'), 'true');
     assert.ok($(testElement.find('tbody > tr')[0]).hasClass("dx-group-row"));
     assert.equal($(testElement.find('tbody > tr')[0]).find('td').last().text(), 'column 1: 1');

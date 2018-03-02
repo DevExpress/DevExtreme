@@ -156,9 +156,10 @@ QUnit.module("Keyboard navigation", {
                 columnHeadersView: new View("columnHeadersView")
             },
             setAria: function(name, value, $target) {
-                $target = $target || that.$element();
-                if(!$target) return;
-                domUtils.toggleAttr($target, "aria-" + name, value);
+                $target = $target || that.$element && that.$element();
+                if($target) {
+                    domUtils.toggleAttr($target, "aria-" + name, value); // TODO check this attribute!!!
+                }
             },
             option: function(name) {
                 return that.options[name];
@@ -1711,9 +1712,8 @@ QUnit.testInActiveWindow("Page up should scroll page up when paging disabled and
     this.gridView.render($("#container"));
     this.rowsView.height(200);
     this.rowsView.resize();
-    this.rowsView.getScrollable().scrollTo({ left: 0, top: 210 });
-
     this.focusFirstCell();
+    this.rowsView.getScrollable().scrollTo({ left: 0, top: 210 });
 
     var isPreventDefaultCalled = this.triggerKeyDown("pageUp").preventDefault;
 
@@ -4734,8 +4734,9 @@ QUnit.testInActiveWindow("Reset focused cell when click on expand column of mast
     // assert
     assert.ok(!keyboardNavigationController._isNeedFocus, "is key down");
     assert.deepEqual(keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 0 }, "focusedCellPosition is empty");
-    assert.strictEqual($(rowsView.getCellElement(0, 0)).attr("tabIndex"), undefined, "expand cell not have tab index");
-    assert.strictEqual(rowsView.element().attr("tabIndex"), "0", "rowsView has tabIndex");
+    assert.equal($(rowsView.getCellElement(0, 0)).attr("tabIndex"), 0, "expand cell not have tab index");
+    assert.ok($(rowsView.getCellElement(0, 0)).hasClass("dx-cell-focus-disabled"), "expand cell has disable focus class");
+    assert.strictEqual(rowsView.element().attr("tabIndex"), undefined, "rowsView has tabIndex");
     assert.ok(!$(rowsView.getCellElement(0, 0)).hasClass("dx-focused"), "expand cell is not focused");
     assert.ok(!this.dataGrid.editorFactoryController.focus(), "no focus overlay");
 });
@@ -4813,8 +4814,11 @@ QUnit.test("Apply custom tabIndex to rows view on click", function(assert) {
 
     // act
     rowsView.render(testElement);
-    $(rowsView.element().find("td").first()).trigger(CLICK_EVENT);
-    assert.equal(rowsView.element().attr("tabIndex"), 5, "tabIndex of rowsView");
+
+    var $cell = $(rowsView.element().find("td").first());
+    $cell.trigger(CLICK_EVENT);
+    assert.equal(rowsView.element().attr("tabIndex"), undefined, "tabIndex of rowsView");
+    assert.equal($cell.attr("tabIndex"), 5, "tabIndex of clicked cell");
 });
 
 QUnit.module("Keyboard navigation with real dataController and columnsController", {
