@@ -6,9 +6,10 @@
     @MATERIAL_GRID_BASE_HEADER_CELL_FONT_SIZE: 12px;
 
     @MATERIAL_GRID_BASE_CHECKBOX_SIZE: 18px;
-    @MATERIAL_GRID_BASE_CELL_HORIZONTAL_PADDING: 28px;
+    @MATERIAL_GRID_BASE_CELL_HORIZONTAL_PADDING: 14px;
     @MATERIAL_GRID_BASE_CELL_FIRST_COLUMN_PADDING: 24px;
     @MATERIAL_GRID_BASE_CELL_LAST_COLUMN_PADDING: 24px;
+    @MATERIAL_GRID_BASE_ICON_SIZE: 16px;
 
     @MATERIAL_GRID_BASE_TEXTEDITOR_INPUT_PADDING: 32px;
     @MATERIAL_GRID_BASE_HEADER_PANEL_MARGIN: 14px 0;
@@ -70,63 +71,86 @@
             .dx-menu-items-container {
                 .dx-icon-context-menu-sort-asc {
                     .dx-icon-sortuptext;
-                    .dx-icon-sizing(16px);
+                    .dx-icon-sizing(@MATERIAL_GRID_BASE_ICON_SIZE);
                 }
 
                 .dx-icon-context-menu-sort-desc {
                     .dx-icon-sortdowntext;
-                    .dx-icon-sizing(16px);
+                    .dx-icon-sizing(@MATERIAL_GRID_BASE_ICON_SIZE);
                 }
             }
         }
 
+        .dx-sort-up, .dx-sort-down, .dx-header-filter {
+            .dx-icon-sizing(@MATERIAL_GRID_BASE_ICON_SIZE);
+        }
+
         .dx-icon-filter-operation-equals {
             .dx-icon-equal;
+            .dx-icon-sizing(@MATERIAL_GRID_BASE_ICON_SIZE);
         }
 
         .dx-icon-filter-operation-default {
             .dx-icon-find;
-            .dx-icon-sizing(12px);
+            .dx-icon-sizing(@MATERIAL_GRID_BASE_ICON_SIZE);
         }
 
         .dx-icon-filter-operation-not-equals {
             .dx-icon-notequal;
+            .dx-icon-sizing(@MATERIAL_GRID_BASE_ICON_SIZE);
         }
 
         .dx-icon-filter-operation-less {
             .dx-icon-less;
+            .dx-icon-sizing(@MATERIAL_GRID_BASE_ICON_SIZE);
         }
 
         .dx-icon-filter-operation-less-equal {
             .dx-icon-lessorequal;
+            .dx-icon-sizing(@MATERIAL_GRID_BASE_ICON_SIZE);
         }
 
         .dx-icon-filter-operation-greater {
             .dx-icon-greater;
+            .dx-icon-sizing(@MATERIAL_GRID_BASE_ICON_SIZE);
         }
 
         .dx-icon-filter-operation-greater-equal {
             .dx-icon-greaterorequal;
+            .dx-icon-sizing(@MATERIAL_GRID_BASE_ICON_SIZE);
         }
 
         .dx-icon-filter-operation-contains {
             .dx-icon-contains;
+            .dx-icon-sizing(@MATERIAL_GRID_BASE_ICON_SIZE);
         }
 
         .dx-icon-filter-operation-not-contains {
             .dx-icon-doesnotcontain;
+            .dx-icon-sizing(@MATERIAL_GRID_BASE_ICON_SIZE);
         }
 
         .dx-icon-filter-operation-starts-with {
             .dx-icon-startswith;
+            .dx-icon-sizing(@MATERIAL_GRID_BASE_ICON_SIZE);
         }
 
         .dx-icon-filter-operation-ends-with {
             .dx-icon-endswith;
+            .dx-icon-sizing(@MATERIAL_GRID_BASE_ICON_SIZE);
         }
 
         .dx-icon-filter-operation-between {
             .dx-icon-range;
+            .dx-icon-sizing(@MATERIAL_GRID_BASE_ICON_SIZE);
+        }
+
+        .dx-column-indicators {
+            height: @MATERIAL_GRID_BASE_ICON_SIZE;
+            vertical-align: middle;
+            > div {
+                .dx-icon-sizing(@MATERIAL_GRID_BASE_ICON_SIZE);
+            }
         }
     }
 
@@ -142,7 +166,7 @@
                     padding: @MATERIAL_GRID_BASE_MENU_ITEM_PADDING;
 
                     .dx-icon {
-                        .dx-icon-sizing(@MATERIAL_BASE_ICON_SIZE);
+                        .dx-icon-sizing(@MATERIAL_GRID_BASE_ICON_SIZE);
                         margin: 0px 3px;
                     }
                 }
@@ -489,9 +513,6 @@
                     .dx-sort-indicator, .dx-sort {
                         color: ~"@{@{widgetName}-base-color}";
                     }
-                    .dx-column-indicators {
-                        height: @MATERIAL_GRID_BASE_HEADER_LINE_HEIGHT;
-                    }
 
                     &:hover {
                         .dx-@{widgetName}-text-content {
@@ -597,7 +618,7 @@
     &.dx-filter-menu {
         .dx-menu-item-content {
             .dx-icon {
-                .dx-icon-sizing(24px);
+                .dx-icon-sizing(@MATERIAL_GRID_BASE_ICON_SIZE);
                 &.dx-icon-filter-operation-default {
                     margin-top: 2px;
                 }
@@ -608,7 +629,7 @@
     .dx-editor-with-menu {
         .dx-menu-item-content {
             .dx-icon {
-                .dx-icon-sizing(24px);
+                .dx-icon-sizing(@MATERIAL_GRID_BASE_ICON_SIZE);
                 &.dx-icon-filter-operation-default {
                     margin-top: 2px;
                 }
@@ -635,10 +656,6 @@
 
         .dx-apply-button {
             .dx-button-flat-styling(@button-success-color);
-        }
-
-        .dx-column-indicators {
-            height: @MATERIAL_GRID_BASE_HEADER_LINE_HEIGHT;
         }
     }
 
