@@ -684,6 +684,16 @@ QUnit.test("entering any stub in incomplete value should reformat the value", fu
     assert.equal(this.input.val(), "$ 1.0", "stub was prevented");
 });
 
+QUnit.test("incomplete value should be limited by min precision", function(assert) {
+    this.instance.option({
+        format: "#0.0##",
+        value: 1
+    });
+
+    this.keyboard.caret(3).press("backspace");
+    assert.equal(this.input.val(), "1.0", "zero has not been removed");
+});
+
 QUnit.test("incomplete values should be reformatted on enter", function(assert) {
     this.keyboard.type("123.").press("enter");
     assert.equal(this.input.val(), "123", "input was reformatted");

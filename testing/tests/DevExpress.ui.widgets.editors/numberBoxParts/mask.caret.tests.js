@@ -61,8 +61,5 @@ QUnit.test("getCaretAfterFormat with float part", function(assert) {
     assert.deepEqual(maskCaret.getCaretAfterFormat("1.23", "1.230", 4, "#0.000"), { start: 4, end: 4 }, "remove 4 with backspace");
     assert.deepEqual(maskCaret.getCaretAfterFormat("1.24", "1.240", 3, "#0.000"), { start: 3, end: 3 }, "remove 3 with backspace");
     assert.deepEqual(maskCaret.getCaretAfterFormat("1.34", "1.30", 2, "#0.000"), { start: 2, end: 2 }, "remove 2 with backspace");
-    assert.deepEqual(maskCaret.getCaretAfterFormat("1.0000 kg", "1 kg", 6, "#0.### kg"), {
-        start: 1,
-        end: 1
-    }, "remove 2 with backspace");
+    assert.deepEqual(maskCaret.getCaretAfterFormat("1.0000 kg", "1 kg", 6, "#0.### kg"), { start: 1, end: 1 }, "remove 2 with backspace");
 });
