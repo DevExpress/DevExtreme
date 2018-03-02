@@ -238,6 +238,19 @@ QUnit.test("Render Fields Tree", function(assert) {
     ]);
 });
 
+QUnit.test("Create treeView with draggable items", function(assert) {
+    var fields = [
+        { dataField: "field1", caption: "Field 1", area: "row" }
+    ];
+
+    // act
+    this.setup({ fields: fields });
+    var areas = this.$container.find(".dx-area-fields");
+
+    // assert
+    assert.ok(areas.eq(0).hasClass("dx-pivotgrid-drag-action"), "items in area are draggable");
+});
+
 QUnit.test("Render Fields Tree with dimension and displayFolder", function(assert) {
     var fields = [
             { dataField: "field1", caption: "Field 1", dimension: "Dimension 1", area: "row", isMeasure: false },
