@@ -243,34 +243,33 @@
     }
 
     &.dx-state-hover {
+        color: @calendar-cell-hover-color;
+
         span {
             background-color: @calendar-hover-bg;
-            color: @calendar-cell-hover-color;
         }
     }
 
     &.dx-calendar-other-view,
     &.dx-calendar-empty-cell {
-        span {
-            color: @calendar-cell-other-color;
-        }
+        color: @calendar-cell-other-color;
+
 
         &.dx-state-hover,
         &.dx-state-active {
-            span {
-                color: @calendar-cell-other-hover-color;
-                background: transparent;
-            }
-
+            color: @calendar-cell-other-hover-color;
         }
     }
 
     &.dx-calendar-empty-cell {
         cursor: default;
-        opacity: .5;
+        color: fade(@calendar-color, 40%);
 
         &.dx-state-hover {
-            .box-shadow(none);
+            color: fade(@calendar-color, 40%);
+            span {
+                background-color: transparent;
+            }
         }
     }
 
