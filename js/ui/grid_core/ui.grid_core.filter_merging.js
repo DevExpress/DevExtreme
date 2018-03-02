@@ -7,7 +7,12 @@ var modules = require("./ui.grid_core.modules"),
 var FilterMergingController = modules.Controller.inherit((function() {
     return {
         init: function() {
-        }
+        },
+
+        syncFilterRow: function(filter) {
+            var syncFilter = utils.syncFilters(this.option("filterValue"), filter);
+            this.option("filterValue", syncFilter);
+        },
     };
 })());
 
@@ -32,6 +37,9 @@ var DataControllerFilterMergingExtender = {
                 this._applyFilter();
                 args.handled = true;
                 break;
+            case "filterSyncEnabled":
+                args.handled = true;
+                break;
             default:
                 this.callBase(args);
         }
@@ -47,7 +55,15 @@ module.exports = {
              * @type Filter expression
              * @default null
              */
-            filterValue: null
+            filterValue: null,
+
+            /**
+             * @name GridBaseOptions_filterSyncEnabled
+             * @publicName filterSyncEnabled
+             * @type boolean
+             * @default false
+             */
+            filterSyncEnabled: false
         };
     },
     controllers: {

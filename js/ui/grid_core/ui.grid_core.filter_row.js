@@ -143,12 +143,19 @@ var ColumnHeadersViewFilterRowExtender = (function() {
         var value = options.value === "" ? null : options.value,
             $editorContainer = options.container,
             column = that._columnsController.columnOption(options.column.index),
-            filterValue = getFilterValue(that, column.index, $editorContainer);
+            filterValue = getFilterValue(that, column.index, $editorContainer),
+            isOnClick = isOnClickApplyFilterMode(that),
+            normalizedValue = normalizeFilterValue(that, value, column, $editorContainer);
 
         if(!isDefined(filterValue) && !isDefined(value)) return;
 
         that._applyFilterViewController.setHighLight($editorContainer, filterValue !== value);
-        that._columnsController.columnOption(column.index, isOnClickApplyFilterMode(that) ? "bufferedFilterValue" : "filterValue", normalizeFilterValue(that, value, column, $editorContainer), options.notFireEvent);
+        that._columnsController.columnOption(column.index, isOnClick ? "bufferedFilterValue" : "filterValue", normalizedValue, options.notFireEvent);
+
+        if(!isOnClick && that.option("filterSyncEnabled")) {
+            var operation = column.selectedFilterOperation || column.defaultFilterOperation;
+            that.getController("filterMerging").syncFilterRow([column.dataField, operation, normalizedValue]);
+        }
     };
 
     return {

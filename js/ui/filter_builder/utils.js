@@ -633,6 +633,44 @@ function getMergedOperations(customOperations) {
     return result;
 }
 
+function syncFilters(filter, addedFilter) {
+    if(filter === null || filter.length === 0) return addedFilter;
+
+    if(isCondition(filter)) {
+        if(filter[0] === addedFilter[0]) {
+            return addedFilter;
+        } else {
+            return [filter, AND_GROUP_OPERATION, addedFilter];
+        }
+    }
+
+    var result = [],
+        fieldApplied = false;
+    filter.forEach(function(item) {
+        if(isCondition(item)) {
+            if(item[0] === addedFilter[0]) {
+                if(!fieldApplied) {
+                    result.push(addedFilter);
+                    fieldApplied = true;
+                } else {
+                    result.splice(result.length - 1, 1);
+                }
+            } else {
+                result.push(item);
+            }
+        } else {
+            result.push(item);
+        }
+    });
+
+    if(!fieldApplied) {
+        result.push(AND_GROUP_OPERATION);
+        result.push(addedFilter);
+    }
+
+    return result;
+}
+
 exports.isValidCondition = isValidCondition;
 exports.isEmptyGroup = isEmptyGroup;
 exports.getOperationFromAvailable = getOperationFromAvailable;
@@ -664,3 +702,4 @@ exports.setFocusToBody = setFocusToBody;
 exports.getFilterExpression = getFilterExpression;
 exports.getCustomOperation = getCustomOperation;
 exports.getMergedOperations = getMergedOperations;
+exports.syncFilters = syncFilters;

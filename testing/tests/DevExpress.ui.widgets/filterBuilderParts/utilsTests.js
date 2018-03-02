@@ -1533,3 +1533,77 @@ QUnit.module("Between operation", function() {
         assert.equal(text, "0 - 1", "text with startValue & endValue");
     });
 });
+
+QUnit.module("Filter merging", function() {
+    QUnit.test("null with field condition", function(assert) {
+        // arrange
+        var filter = null,
+            addedFilter = ["field", "=", 2];
+
+        // act
+        var result = utils.syncFilters(filter, addedFilter);
+
+        // assert
+        assert.deepEqual(result, addedFilter, "result = addedFilter");
+    });
+
+    QUnit.test("empty with field condition", function(assert) {
+        // arrange
+        var filter = [],
+            addedFilter = ["field", "=", 2];
+
+        // act
+        var result = utils.syncFilters(filter, addedFilter);
+
+        // assert
+        assert.deepEqual(result, addedFilter, "result = addedFilter");
+    });
+
+    QUnit.test("condition with same field condition", function(assert) {
+        // arrange
+        var filter = ["field", "=", 1],
+            addedFilter = ["field", "=", 2];
+
+        // act
+        var result = utils.syncFilters(filter, addedFilter);
+
+        // assert
+        assert.deepEqual(result, addedFilter, "result = addedFilter");
+    });
+
+    QUnit.test("condition with another field condition", function(assert) {
+        // arrange
+        var filter = ["field", "=", 1],
+            addedFilter = ["field2", "=", 2];
+
+        // act
+        var result = utils.syncFilters(filter, addedFilter);
+
+        // assert
+        assert.deepEqual(result, [["field", "=", 1], "and", ["field2", "=", 2]], "result = addedFilter");
+    });
+
+    QUnit.test("group with same field condition", function(assert) {
+        // arrange
+        var filter = [["field", "=", 1], "and", ["field2", "=", 3], "and", ["field", "=", 4]],
+            addedFilter = ["field", "=", 2];
+
+        // act
+        var result = utils.syncFilters(filter, addedFilter);
+
+        // assert
+        assert.deepEqual(result, [["field", "=", 2], "and", ["field2", "=", 3]], "result = addedFilter");
+    });
+
+    QUnit.test("group with another field condition", function(assert) {
+        // arrange
+        var filter = [["field", "=", 1], "and", ["field2", "=", 3]],
+            addedFilter = ["field3", "=", 2];
+
+        // act
+        var result = utils.syncFilters(filter, addedFilter);
+
+        // assert
+        assert.deepEqual(result, [["field", "=", 1], "and", ["field2", "=", 3], "and", ["field3", "=", 2]], "result = addedFilter");
+    });
+});
