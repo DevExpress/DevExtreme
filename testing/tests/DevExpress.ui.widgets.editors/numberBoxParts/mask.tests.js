@@ -602,11 +602,11 @@ QUnit.test("incomplete values should be limited by max precision", function(asse
         value: null
     });
 
-    this.keyboard.type("0.00");
-    assert.equal(this.input.val(), "$ 0.00 kg", "value is incomplete");
+    this.keyboard.type("0.000");
+    assert.equal(this.input.val(), "$ 0.000 kg", "value is incomplete");
 
-    this.keyboard.type("0");
-    assert.equal(this.input.val(), "$ 0 kg", "value was reformatted");
+    this.keyboard.press("enter");
+    assert.equal(this.input.val(), "$ 0 kg", "value was reformatted on enter");
 });
 
 QUnit.test("value can be incomplete after removing via backspace", function(assert) {
@@ -794,7 +794,10 @@ QUnit.test("last non required zero should not be typed", function(assert) {
     this.instance.option("format", "#.##");
     this.keyboard.type("1.50");
 
-    assert.equal(this.input.val(), "1.5", "zero type was prevented");
+    assert.equal(this.input.val(), "1.50", "zero type was not prevented");
+
+    this.input.blur();
+    assert.equal(this.input.val(), "1.5", "value was reformatted on focusout");
 });
 
 QUnit.test("removing with group separators using delete key", function(assert) {
@@ -876,10 +879,15 @@ QUnit.test("removing required decimal digit should replace it to 0 and move care
         format: "#0.00",
         value: 1.23
     });
+
     this.keyboard.caret(4).press("backspace");
 
     assert.equal(this.input.val(), "1.20", "value is correct");
     assert.deepEqual(this.keyboard.caret(), { start: 3, end: 3 }, "caret position is correct");
+
+    this.keyboard.press("backspace");
+    assert.equal(this.input.val(), "1.00", "value is correct");
+    assert.deepEqual(this.keyboard.caret(), { start: 2, end: 2 }, "caret position is correct");
 });
 
 QUnit.test("removing integer digit using backspace if group separator is hiding", function(assert) {

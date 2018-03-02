@@ -264,7 +264,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
             format = this._getFormatPattern(),
             isTextSelected = selection.start !== selection.end,
             parsed = number.parse(editedText, format),
-            maxPrecision = this._getMaxPrecision(format, editedText),
+            maxPrecision = this._getPrecisionLimits(format, editedText).max,
             isValueChanged = parsed !== this._parsedValue;
 
         var isDecimalPointRestricted = char === number.getDecimalSeparator() && maxPrecision === 0,
@@ -295,16 +295,22 @@ var NumberBoxMask = NumberBoxBase.inherit({
             return this.callBase(text);
         }
 
-        text = this._removeStubs(text, true);
+        var caret = this._caret(),
+            point = number.getDecimalSeparator(),
+            pointIndex = text.indexOf(point),
+            isCaretOnFloat = pointIndex > 0 && pointIndex < caret.start,
+            textParts = this._removeStubs(text, true).split(point);
 
-        var point = escapeRegExp(number.getDecimalSeparator()),
-            comma = escapeRegExp(number.getThousandsSeparator()),
-            maxPrecision = this._getMaxPrecision(this._getFormatPattern(), text),
-            maxIncompletePrecision = (maxPrecision || 1) - 1;
+        if(!isCaretOnFloat || textParts.length !== 2) {
+            return false;
+        }
 
-        var incompleteRegExp = new RegExp("^[0-9" + comma + "]*\\d" + point + "0{0," + maxIncompletePrecision + "}$");
+        var floatLength = textParts[1].length,
+            precision = this._getPrecisionLimits(this._getFormatPattern(), text),
+            isPrecisionInRange = inRange(floatLength, precision.min, precision.max),
+            endsWithZero = textParts[1].charAt(floatLength - 1) === "0";
 
-        return incompleteRegExp.test(text);
+        return !floatLength || isPrecisionInRange && endsWithZero;
     },
 
     _isValueInRange: function(value) {
@@ -419,11 +425,13 @@ var NumberBoxMask = NumberBoxBase.inherit({
         return this._parsedValue;
     },
 
-    _getMaxPrecision: function(format, text) {
+    _getPrecisionLimits: function(format, text) {
         var currentFormat = this._getFormatForSign(text),
-            floatPart = (currentFormat.split(".")[1] || "").replace(/[^#0]/g, "");
+            floatPart = (currentFormat.split(".")[1] || "").replace(/[^#0]/g, ""),
+            minPrecision = floatPart.replace(/^(0*)#*/, '$1').length,
+            maxPrecision = floatPart.length;
 
-        return floatPart.length;
+        return { min: minPrecision, max: maxPrecision };
     },
 
     _revertSign: function(e) {
