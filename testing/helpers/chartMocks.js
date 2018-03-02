@@ -560,6 +560,10 @@
                 this.pointsWereArranged = true;
                 this.arrangePointsArgs = $.makeArray(arguments);
             },
+            getPointsCount: function() {
+                return (this.reinitializedData || []).length;
+            },
+            setMaxPointsCount: sinon.stub(),
             canRenderCompleteHandle: function() {
                 return true;
             },

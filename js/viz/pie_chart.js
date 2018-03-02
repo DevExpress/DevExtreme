@@ -132,6 +132,17 @@ var dxPieChart = BaseChart.inherit({
         singleSeries.arrangePoints();
     },
 
+    _handleSeriesDataUpdated: function() {
+        var maxPointCount = 0;
+        this.series.forEach(function(s) {
+            maxPointCount = Math.max(s.getPointsCount(), maxPointCount);
+        });
+        this.series.forEach(function(s) {
+            s.setMaxPointsCount(maxPointCount);
+        });
+        this.callBase();
+    },
+
     _getLegendTargets: function() {
         var that = this,
             itemsByArgument = {},

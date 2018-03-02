@@ -79,17 +79,6 @@ exports.pie = _extend({}, barSeries, {
 
     areErrorBarsVisible: _noop,
 
-    _getPointsCount: function() {
-        return this._pointsCount;
-    },
-
-    _beginUpdateData: function(data) {
-        var that = this,
-            options = that._options;
-
-        that._pointsCount = data.filter(function(d) { return that._checkData(that._getPointData(d, options)); }).length;
-    },
-
     drawLabelsWOPoints: function() {
         var that = this;
 
@@ -105,8 +94,16 @@ exports.pie = _extend({}, barSeries, {
         return true;
     },
 
-    _getCreatingPointOptions: function(data) {
-        return this._getPointOptions(data);
+    getPointsCount: function() {
+        return this._data.length;
+    },
+
+    setMaxPointsCount: function(count) {
+        this._pointsCount = count;
+    },
+
+    _getCreatingPointOptions: function(data, dataIndex) {
+        return this._getPointOptions(data, dataIndex);
     },
 
     _updateOptions: function(options) {
@@ -126,21 +123,21 @@ exports.pie = _extend({}, barSeries, {
         that._markersGroup.attr({ "class": "dxc-markers" });
     },
 
-    _getMainColor: function(data) {
-        return this._options.mainSeriesColor(data.argument, data.index, this._getPointsCount());
+    _getMainColor: function(data, dataIndex) {
+        return this._options.mainSeriesColor(data.argument, dataIndex, this._pointsCount);
     },
 
-    _getPointOptions: function(data) {
-        return this._parsePointOptions(this._preparePointOptions(), this._options.label, data);
+    _getPointOptions: function(data, dataIndex) {
+        return this._parsePointOptions(this._preparePointOptions(), this._options.label, data, dataIndex);
     },
 
     _getRangeData: function() {
         return this._rangeData;
     },
 
-    _createPointStyles: function(pointOptions, data) {
+    _createPointStyles: function(pointOptions, data, dataIndex) {
         var that = this,
-            mainColor = pointOptions.color || that._getMainColor(data);
+            mainColor = pointOptions.color || that._getMainColor(data, dataIndex);
 
         return {
             normal: that._parsePointStyle(pointOptions, mainColor, mainColor),

@@ -883,6 +883,44 @@ var environment = {
         });
     });
 
+    QUnit.module("Multi level pie chart with different count of points", {
+        beforeEach: function() {
+            environment.beforeEach.apply(this, arguments);
+            this.mockSeries1 = new MockSeries({ argumentField: "arg" });
+            this.mockSeries2 = new MockSeries({ argumentField: "arg" });
+            var translatorClass = new vizMocks.stubClass(translator1DModule.Translator1D);
+
+            sinon.stub(translator1DModule, "Translator1D", function() {
+                var translator = new translatorClass();
+                translator.stub("setDomain").returnsThis();
+                translator.stub("setCodomain").returnsThis();
+                return translator;
+            });
+            this.mockSeries1.getPointsCount = sinon.stub().returns(2);
+            this.mockSeries2.getPointsCount = sinon.stub().returns(3);
+            seriesMockData.series.push(this.mockSeries1);
+            seriesMockData.series.push(this.mockSeries2);
+
+        },
+        afterEach: function() {
+            environment.afterEach.apply(this, arguments);
+            translator1DModule.Translator1D.restore();
+        }
+    });
+
+    QUnit.test("Set max point count in each series", function(assert) {
+        var chart = this.createPieChart({
+            dataSource: this.dataSource,
+            series: [{}, {}]
+        });
+
+        assert.ok(chart.series[0].getPointsCount.called);
+        assert.equal(chart.series[0].setMaxPointsCount.lastCall.args, 3);
+
+        assert.ok(chart.series[1].getPointsCount.called);
+        assert.equal(chart.series[1].setMaxPointsCount.lastCall.args, 3);
+    });
+
     QUnit.module("Render Complete callback", {
         beforeEach: function() {
             environment.beforeEach.apply(this, arguments);

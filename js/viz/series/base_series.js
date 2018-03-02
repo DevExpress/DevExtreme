@@ -229,11 +229,11 @@ Series.prototype = {
         return rangeCalculator.getPointsInViewPort(this);
     },
 
-    _createPoint: function(data, index, oldPoint) {
+    _createPoint: function(data, index, oldPoint, dataIndex) {
         data.index = index;
         var that = this,
             pointsByArgument = that.pointsByArgument,
-            options = that._getCreatingPointOptions(data),
+            options = that._getCreatingPointOptions(data, dataIndex),
             arg = data.argument.valueOf(),
             point = oldPoint,
             pointByArgument;
@@ -255,7 +255,7 @@ Series.prototype = {
         }
 
         if(point.hasValue()) {
-            that.customizePoint(point, data);
+            that.customizePoint(point, data, dataIndex);
         }
         return point;
     },
@@ -366,9 +366,10 @@ Series.prototype = {
 
         that._beginUpdateData(data);
 
-        that._data = data.reduce(function(data, dataItem) {
+        that._data = data.reduce(function(data, dataItem, index) {
             var pointDataItem = that._getPointData(dataItem, options);
             if(that._checkData(pointDataItem)) {
+                pointDataItem.index = index;
                 data.push(pointDataItem);
             }
             return data;
@@ -397,7 +398,7 @@ Series.prototype = {
 
         points = that._getData().map(function(dataItem, index) {
             var oldPoint = that._getOldPoint(dataItem, oldPointsByArgument, index),
-                p = that._createPoint(dataItem, index, oldPoint);
+                p = that._createPoint(dataItem, index, oldPoint, dataItem.index);
 
             if(!oldPoint) {
                 allPoints.push(p);
@@ -736,7 +737,7 @@ Series.prototype = {
         return this.areLabelsVisible() && this._options.label && this._options.label.visible;
     },
 
-    customizePoint: function(point, pointData) {
+    customizePoint: function(point, pointData, dataItem) {
         var that = this,
             options = that._options,
             customizePoint = options.customizePoint,
@@ -764,7 +765,7 @@ Series.prototype = {
         }
 
         if(useLabelCustomOptions || usePointCustomOptions) {
-            pointOptions = that._parsePointOptions(that._preparePointOptions(customOptions), customLabelOptions || options.label, pointData);
+            pointOptions = that._parsePointOptions(that._preparePointOptions(customOptions), customLabelOptions || options.label, pointData, dataItem);
             pointOptions.styles.useLabelCustomOptions = useLabelCustomOptions;
             pointOptions.styles.usePointCustomOptions = usePointCustomOptions;
 
@@ -802,10 +803,10 @@ Series.prototype = {
         });
     },
 
-    _parsePointOptions: function(pointOptions, labelOptions, data) {
+    _parsePointOptions: function(pointOptions, labelOptions, data, dataIndex) {
         var that = this,
             options = that._options,
-            styles = that._createPointStyles(pointOptions, data),
+            styles = that._createPointStyles(pointOptions, data, dataIndex),
             parsedOptions = _extend({}, pointOptions, {
                 type: options.type,
                 rotated: options.rotated,
