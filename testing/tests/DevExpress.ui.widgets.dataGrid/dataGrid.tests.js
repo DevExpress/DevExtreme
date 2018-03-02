@@ -2534,13 +2534,10 @@ QUnit.test("aria-rowindex aria-colindex if virtual scrolling", function(assert) 
     var clock = sinon.useFakeTimers(),
         array = [],
         dataGrid,
-        i,
-        rowIndexOffset,
-        rowIndex,
-        rows,
+        row,
         rowsView;
 
-    for(i = 0; i < 100; i++) {
+    for(var i = 0; i < 100; i++) {
         array.push({ author: "J. D. Salinger", title: "The Catcher in the Rye", year: 1951 });
     }
 
@@ -2554,25 +2551,17 @@ QUnit.test("aria-rowindex aria-colindex if virtual scrolling", function(assert) 
     clock.tick();
 
     rowsView = dataGrid._views.rowsView;
-    rows = rowsView.element().find(".dx-row").filter(function(index, element) { return !$(element).hasClass("dx-freespace-row"); });
+    row = rowsView.element().find(".dx-data-row").eq(0);
 
     // assert
-    rowIndexOffset = dataGrid._controllers.data.getRowIndexOffset();
-    for(i = 0; i < rows.length; ++i) {
-        rowIndex = rowIndexOffset + i + 1;
-        assert.equal($(rows[i]).attr("aria-rowindex"), rowIndex, "aria-index = " + rowIndex);
-    }
+    assert.equal(row.attr("aria-rowindex"), 1, "aria-index is correct");
 
     rowsView.scrollTo({ y: 3000 });
 
     clock.tick();
 
-    rows = rowsView.element().find(".dx-row").filter(function(index, element) { return !$(element).hasClass("dx-freespace-row"); });
-    rowIndexOffset = dataGrid._controllers.data.getRowIndexOffset();
-    for(i = 0; i < rows.length; ++i) {
-        rowIndex = rowIndexOffset + i + 1;
-        assert.equal($(rows[i]).attr("aria-rowindex"), rowIndex, "aria-index = " + rowIndex);
-    }
+    row = rowsView.element().find(".dx-data-row").eq(0);
+    assert.equal(row.attr("aria-rowindex"), 89, "aria-index is correct after scrolling");
 
     clock.restore();
 });
