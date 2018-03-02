@@ -359,7 +359,7 @@ var ResizingController = modules.ViewController.inherit({
                     continue;
                 }
                 resultSizes[i] += diffElement;
-                if(onePixelElementsCount) {
+                if(onePixelElementsCount > 0) {
                     resultSizes[i]++;
                     onePixelElementsCount--;
                 }
