@@ -111,10 +111,6 @@ exports.RowsView = rowsViewModule.views.rowsView.inherit((function() {
             return $rowElement;
         },
 
-        _getTableRoleName: function() {
-            return "treegrid";
-        },
-
         isExpandIcon: function($targetElement) {
             return !!$targetElement.closest("." + TREELIST_EXPANDED_CLASS + ", ." + TREELIST_COLLAPSED_CLASS).length;
         }
