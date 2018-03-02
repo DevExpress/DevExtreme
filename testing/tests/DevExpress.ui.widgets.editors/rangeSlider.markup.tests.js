@@ -81,7 +81,6 @@ QUnit.test("second input gets correct value after widget the 'end' option change
     assert.equal($input.val(), expectedEnd, "the second input value is correct");
 });
 
-
 QUnit.test("the hidden inputs should use the decimal separator specified in DevExpress.config", function(assert) {
     var originalConfig = config();
     try {
