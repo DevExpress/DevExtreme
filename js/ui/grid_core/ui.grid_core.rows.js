@@ -561,7 +561,7 @@ module.exports = {
                             }
                         }
 
-                        if(that.option("advancedRendering") || that.option("columnAutoWidth") || that._hasHeight || allColumnsHasWidth || that._columnsController._isColumnFixing()) {
+                        if(that.option("columnAutoWidth") || that._hasHeight || allColumnsHasWidth || that._columnsController._isColumnFixing()) {
                             that._renderScrollableCore($element);
                         }
                     }
