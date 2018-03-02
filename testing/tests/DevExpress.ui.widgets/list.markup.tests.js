@@ -198,6 +198,24 @@ QUnit.test("next button showing", function(assert) {
 });
 
 
+QUnit.module("widget sizing render");
+
+QUnit.test("constructor", function(assert) {
+    var $element = $("#list").dxList({ items: [1, 2, 3, 4], width: 400 }),
+        instance = $element.dxList("instance");
+
+    assert.strictEqual(instance.option("width"), 400);
+    assert.strictEqual($element[0].style.width, 400 + "px", "outer width of the element must be equal to custom width");
+});
+
+QUnit.test("root with custom width", function(assert) {
+    var $element = $("#list").width(300).dxList({ items: [1, 2, 3, 4] }),
+        instance = $element.dxList("instance");
+
+    assert.strictEqual(instance.option("width"), undefined);
+    assert.strictEqual($element[0].style.width, 300 + "px", "outer width of the element must be equal to custom width");
+});
+
 QUnit.module("nested rendering");
 
 QUnit.test("plain list with nested list should contain correct items", function(assert) {
