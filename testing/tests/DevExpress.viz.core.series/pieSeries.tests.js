@@ -634,6 +634,37 @@ var checkTwoGroups = function(assert, series) {
         checkMainSeriesColor(assert, series, 5, "arg3", 5);
     });
 
+    // T607678
+    QUnit.test("mainSeriesColor, several series, data is missing from some data", function(assert) {
+        var data = [{ arg: "arg1", val1: 1, val2: 2 }, { arg: "arg2", val1: 3 }, { arg: "arg3", val1: 5, val2: 6 }],
+            series1 = createSeries({ valueField: "val1" }),
+            series2 = createSeries({ valueField: "val2" });
+        series1.updateData(data);
+        series2.updateData(data);
+
+        checkMainSeriesColor(assert, series1, 0, "arg1", 0);
+        checkMainSeriesColor(assert, series1, 1, "arg2", 1);
+        checkMainSeriesColor(assert, series1, 2, "arg3", 2);
+
+        checkMainSeriesColor(assert, series2, 0, "arg1", 0);
+        checkMainSeriesColor(assert, series2, 1, "arg3", 2);
+    });
+
+    QUnit.test("mainSeriesColor, several series, data is missing from some data, customizePoint is set", function(assert) {
+        var data = [{ arg: "arg1", val1: 1, val2: 2 }, { arg: "arg2", val1: 3 }, { arg: "arg3", val1: 5, val2: 6 }],
+            series1 = createSeries({ valueField: "val1", customizePoint: function() { return { border: { visible: true } }; } }),
+            series2 = createSeries({ valueField: "val2", customizePoint: function() { return { border: { visible: true } }; } });
+        series1.updateData(data);
+        series2.updateData(data);
+
+        checkMainSeriesColor(assert, series1, 1, "arg1", 0);
+        checkMainSeriesColor(assert, series1, 3, "arg2", 1);
+        checkMainSeriesColor(assert, series1, 5, "arg3", 2);
+
+        checkMainSeriesColor(assert, series2, 1, "arg1", 0);
+        checkMainSeriesColor(assert, series2, 3, "arg3", 2);
+    });
+
     QUnit.test("without borders", function(assert) {
         this.options.border.visible = false;
         this.options.hoverStyle.border.visible = false;

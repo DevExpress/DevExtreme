@@ -229,7 +229,7 @@ Series.prototype = {
         return rangeCalculator.getPointsInViewPort(this);
     },
 
-    _createPoint: function(data, pointsArray, index) {
+    _createPoint: function(data, pointsArray, index, dataIndex) {
         data.index = index;
         var that = this,
             point = pointsArray[index],
@@ -239,7 +239,7 @@ Series.prototype = {
             pointByArgument;
 
         if(that._checkData(data)) {
-            options = that._getCreatingPointOptions(data);
+            options = that._getCreatingPointOptions(data, dataIndex);
             if(point) {
                 point.update(data, options);
             } else {
@@ -251,7 +251,7 @@ Series.prototype = {
             }
 
             if(point.hasValue()) {
-                that.customizePoint(point, data);
+                that.customizePoint(point, data, dataIndex);
             }
 
             arg = point.argument.valueOf();
@@ -389,7 +389,7 @@ Series.prototype = {
         that._beginUpdateData(data);
 
         while(i < len) {
-            if(that._createPoint(that._getPointData(data[i], options), points, lastPointIndex)) {
+            if(that._createPoint(that._getPointData(data[i], options), points, lastPointIndex, i)) {
                 lastPointIndex++;
             }
             i++;
@@ -695,7 +695,7 @@ Series.prototype = {
         return this.areLabelsVisible() && this._options.label && this._options.label.visible;
     },
 
-    customizePoint: function(point, pointData) {
+    customizePoint: function(point, pointData, dataIndex) {
         var that = this,
             options = that._options,
             customizePoint = options.customizePoint,
@@ -723,7 +723,7 @@ Series.prototype = {
         }
 
         if(useLabelCustomOptions || usePointCustomOptions) {
-            pointOptions = that._parsePointOptions(that._preparePointOptions(customOptions), customLabelOptions || options.label, pointData);
+            pointOptions = that._parsePointOptions(that._preparePointOptions(customOptions), customLabelOptions || options.label, pointData, dataIndex);
             pointOptions.styles.useLabelCustomOptions = useLabelCustomOptions;
             pointOptions.styles.usePointCustomOptions = usePointCustomOptions;
 
@@ -761,10 +761,10 @@ Series.prototype = {
         });
     },
 
-    _parsePointOptions: function(pointOptions, labelOptions, data) {
+    _parsePointOptions: function(pointOptions, labelOptions, data, dataIndex) {
         var that = this,
             options = that._options,
-            styles = that._createPointStyles(pointOptions, data),
+            styles = that._createPointStyles(pointOptions, data, dataIndex),
             parsedOptions = _extend({}, pointOptions, {
                 type: options.type,
                 rotated: options.rotated,
