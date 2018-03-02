@@ -24,7 +24,7 @@ var PROGRESSBAR_CLASS = "dx-progressbar",
     PROGRESSBAR_INDETERMINATE_SEGMENT_CONTAINER = "dx-progressbar-animating-container",
     PROGRESSBAR_INDETERMINATE_SEGMENT = "dx-progressbar-animating-segment";
 
-QUnit.module("default", {
+QUnit.module("ProgressBar markup", {
     beforeEach: function() {
         this.$element = $("#progressbar");
     }
