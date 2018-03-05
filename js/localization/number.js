@@ -242,9 +242,9 @@ var numberLocalization = dependencyInjector({
             return 1;
         }
 
-        var negativeEtalon = this.format(-1, format),
-            separators = this._getSeparators(),
+        var separators = this._getSeparators(),
             regExp = new RegExp("[0-9" + escapeRegExp(separators.decimalSeparator + separators.thousandsSeparator) + "]+", "g"),
+            negativeEtalon = this.format(-1, format).replace(regExp, "1"),
             cleanedText = text.replace(regExp, "1");
 
         return cleanedText === negativeEtalon ? -1 : 1;
