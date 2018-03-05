@@ -381,11 +381,17 @@ Series.prototype = {
     _getData: function() {
         var data = this._data || [];
 
-        if(this.getOptions().useAggregation) {
+        if(this.useAggregation()) {
             data = this._aggregateData(data);
         }
 
         return data;
+    },
+
+    useAggregation: function() {
+        var aggregation = this.getOptions().aggregation;
+
+        return aggregation && aggregation.enabled;
     },
 
     createPoints: function() {

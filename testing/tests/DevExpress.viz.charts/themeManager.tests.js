@@ -55,6 +55,7 @@ function createThemeManager(options, themeGroupName) {
         assert.equal(theme.border.color, undefined);
         assert.equal(theme.line.width, 2);
         assert.equal(theme.line.dashStyle, 'solid');
+        assert.equal(theme.aggregation.enabled, false);
         assert.deepEqual(theme.point, {
             visible: true,
             symbol: 'circle',
@@ -779,7 +780,7 @@ function createThemeManager(options, themeGroupName) {
         assert.equal(theme.resolveLabelsOverlapping, true);
     });
 
-    QUnit.test("Pass useAggregation to series", function(assert) {
+    QUnit.test("Merge useAggregation with series.aggregation.enabled", function(assert) {
         var themeManager = createThemeManager({
             useAggregation: true
         });
@@ -787,7 +788,7 @@ function createThemeManager(options, themeGroupName) {
         var theme = themeManager.getOptions("series", {});
 
         assert.ok(theme);
-        assert.equal(theme.useAggregation, true);
+        assert.equal(theme.aggregation.enabled, true);
     });
 
     QUnit.test('Apply next series theme chart is bar. Point options are in series options field', function(assert) {

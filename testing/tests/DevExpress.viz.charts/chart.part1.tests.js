@@ -206,10 +206,10 @@ QUnit.test("Actions sequence with series on render chart", function(assert) {
 QUnit.test("Recreate series points on zooming if aggregation is enabled", function(assert) {
     // arrange
     seriesMockData.series.push(new MockSeries());
+    seriesMockData.series[0].useAggregation.returns(true);
 
     var chart = this.createChart({
             dataSource: [{}],
-            useAggregation: true,
             series: [{ type: "line" }]
         }),
         series = chart.getAllSeries()[0],
@@ -226,10 +226,10 @@ QUnit.test("Recreate series points on zooming if aggregation is enabled", functi
 QUnit.test("Do not recreate series points on zooming if aggregation is not enabled", function(assert) {
     // arrange
     seriesMockData.series.push(new MockSeries());
+    seriesMockData.series[0].useAggregation.returns(false);
 
     var chart = this.createChart({
             dataSource: [{}],
-            useAggregation: false,
             series: [{ type: "line" }]
         }),
         series = chart.getAllSeries()[0];
@@ -244,10 +244,10 @@ QUnit.test("Do not recreate series points on zooming if aggregation is not enabl
 QUnit.test("Recreate points on resize if aggregation is enabled", function(assert) {
     // arrange
     seriesMockData.series.push(new MockSeries());
+    seriesMockData.series[0].useAggregation.returns(true);
 
     var chart = this.createChart({
             dataSource: [{}],
-            useAggregation: true,
             series: [{ type: "line" }],
             size: {
                 width: 300

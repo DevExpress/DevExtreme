@@ -503,7 +503,7 @@ var dxChart = {
     * @name dxchartoptions_useAggregation
     * @publicName useAggregation
     * @type boolean
-    * @default false
+    * @deprecated dxChartSeriesTypes_CommonSeries_aggregation_enabled
     */
     useAggregation: false,
     /**

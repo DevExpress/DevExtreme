@@ -324,6 +324,7 @@ QUnit.test("Zoom argument axis, two series, one of them is not visible", functio
 QUnit.test("chart with single value with aggregation. Adjust on zoom = true", function(assert) {
     var series1 = new MockSeries({});
 
+    series1.useAggregation.returns(true);
     series1.getViewport.returns({
         min: 10,
         max: 15
@@ -332,7 +333,6 @@ QUnit.test("chart with single value with aggregation. Adjust on zoom = true", fu
     seriesMockData.series.push(series1);
 
     this.createChart({
-        useAggregation: true,
         adjustOnZoom: true,
         series: [{
             type: "line"
@@ -347,10 +347,10 @@ QUnit.test("chart with single value with aggregation. Adjust on zoom = true", fu
 QUnit.test("chart with single value with aggregation. Adjust on zoom = false", function(assert) {
     var series1 = new MockSeries({});
 
+    series1.useAggregation.returns(true);
     seriesMockData.series.push(series1);
 
     this.createChart({
-        useAggregation: true,
         adjustOnZoom: false,
         series: [{
             type: "line"
@@ -369,11 +369,10 @@ QUnit.test("Aggregation with min and max on argument axis, without zooming", fun
     });
 
     series1.getViewport.returns({ min: 50, max: 60 });
-
+    series1.useAggregation.returns(true);
     seriesMockData.series.push(series1);
 
     this.createChart({
-        useAggregation: true,
         adjustOnZoom: true,
         series: [{
             type: "line"
@@ -389,6 +388,8 @@ QUnit.test("Aggregation. One of the series without points", function(assert) {
     var series1 = new MockSeries({}),
         series2 = new MockSeries({});
 
+    series1.useAggregation.returns(true);
+
     series1.getViewport.returns({
         min: 0,
         max: 15
@@ -402,7 +403,6 @@ QUnit.test("Aggregation. One of the series without points", function(assert) {
     seriesMockData.series.push(series1, series2);
 
     this.createChart({
-        useAggregation: true,
         adjustOnZoom: true,
         series: [{
             type: "line"

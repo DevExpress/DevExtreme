@@ -632,6 +632,9 @@ var dxRangeSelector = require("../core/base_widget").inherit({
             },
             "chart.equalBarWidth": {
                 since: "18.1", message: "Use the 'chart.commonSeriesSettings.ignoreEmptyPoints' or 'chart.series.ignoreEmptyPoints' option instead"
+            },
+            "chart.useAggregation": {
+                since: "18.1", message: "Use the 'chart.commonSeriesSettings.aggregation.enabled' or 'chart.series.aggregation.enabled' option instead"
             }
         });
     },
