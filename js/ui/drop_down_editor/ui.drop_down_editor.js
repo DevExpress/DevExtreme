@@ -317,9 +317,15 @@ var DropDownEditor = TextBox.inherit({
         });
     },
 
-    _render: function() {
+    _initMarkup: function() {
         this.callBase();
+        this.$element()
+            .addClass(DROP_DOWN_EDITOR_CLASS);
 
+        this.setAria("role", "combobox");
+    },
+
+    _render: function() {
         this._renderOpenHandler();
 
         this.$element()

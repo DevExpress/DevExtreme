@@ -361,11 +361,11 @@ var TextEditorBase = Editor.inherit({
         this._renderProps();
 
         this.callBase();
+
+        this._renderValue();
     },
 
     _render: function() {
-        this._renderValue();
-
         this._renderPlaceholder();
         this._refreshValueChangeEvent();
         this._renderEvents();
