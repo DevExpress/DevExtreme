@@ -453,10 +453,9 @@ QUnit.test("group header collapsed indicator element for the Material theme", fu
         collapsibleGroups: true
     });
 
-    var $group = $element.find("." + LIST_GROUP_CLASS),
-        $groupHeader = $group.find("." + LIST_GROUP_HEADER_CLASS);
+    var $groupHeader = $element.find(toSelector(LIST_GROUP_CLASS) + " " + toSelector(LIST_GROUP_HEADER_CLASS));
 
-    assert.equal($groupHeader.find("." + LIST_GROUP_HEADER_INDICATOR_CLASS).length, 1, "group header has the collapsed indicator element for the Material theme");
+    assert.equal($groupHeader.find(toSelector(LIST_GROUP_HEADER_INDICATOR_CLASS)).length, 1, "group header has the collapsed indicator element for the Material theme");
 
     themes.current = origCurrent;
 });
@@ -471,10 +470,9 @@ QUnit.test("no group header collapsed indicator element for the Generic theme", 
         collapsibleGroups: true
     });
 
-    var $group = $element.find("." + LIST_GROUP_CLASS),
-        $groupHeader = $group.find("." + LIST_GROUP_HEADER_CLASS);
+    var $groupHeader = $element.find(toSelector(LIST_GROUP_CLASS) + " " + toSelector(LIST_GROUP_HEADER_CLASS));
 
-    assert.equal($groupHeader.find("." + LIST_GROUP_HEADER_INDICATOR_CLASS).length, 0, "group header should not have collapsed indicator element for the Generic theme");
+    assert.equal($groupHeader.find(toSelector(LIST_GROUP_HEADER_INDICATOR_CLASS)).length, 0, "group header should not have collapsed indicator element for the Generic theme");
 
     themes.current = origCurrent;
 });
