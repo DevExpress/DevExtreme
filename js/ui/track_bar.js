@@ -47,6 +47,8 @@ var TrackBar = Editor.inherit({
         this._renderRange();
 
         this._renderValue();
+
+        this._setRangeStyles();
         this.callBase();
     },
 
@@ -112,6 +114,11 @@ var TrackBar = Editor.inherit({
 
     _setRangeStyles: function(options) {
         fx.stop(this._$range);
+
+        if(!options) {
+            this._$range.css({ width: 0 });
+            return;
+        }
 
         if(this._needPreventAnimation) {
             return;
