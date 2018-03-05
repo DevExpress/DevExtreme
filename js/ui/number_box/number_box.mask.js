@@ -471,13 +471,18 @@ var NumberBoxMask = NumberBoxBase.inherit({
 
     _formatValue: function() {
         var text = this._getInputVal(),
-            caret = this._caret();
+            caret = this._caret(),
+            textWithoutMinus = this._removeMinusFromText(text, caret),
+            wasMinusRemoved = textWithoutMinus !== text;
 
         this._isInputTriggered = true;
-        text = this._removeMinusFromText(text, caret);
+        text = textWithoutMinus;
 
-        if(this._isValueIncomplete(text)) {
+        if(this._isValueIncomplete(textWithoutMinus)) {
             this._formattedValue = text;
+            if(wasMinusRemoved) {
+                this._setTextByParsedValue();
+            }
             return;
         }
 
