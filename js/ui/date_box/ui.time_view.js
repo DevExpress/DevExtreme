@@ -6,7 +6,8 @@ var $ = require("../../core/renderer"),
     Box = require("../box"),
     extend = require("../../core/utils/extend").extend,
     registerComponent = require("../../core/component_registrator"),
-    dateLocalization = require("../../localization/date");
+    dateLocalization = require("../../localization/date"),
+    uiDateUtils = require("./ui.date_utils");
 
 var TIMEVIEW_CLASS = "dx-timeview",
     TIMEVIEW_CLOCK_CLASS = "dx-timeview-clock",
@@ -154,6 +155,7 @@ var TimeView = Editor.inherit({
 
                 var time = new Date(this._getValue());
                 time.setHours(newHours);
+                uiDateUtils.normalizeTime(time);
                 this.option("value", time);
             }).bind(this)
         }, this._getNumberBoxConfig()));
@@ -172,6 +174,7 @@ var TimeView = Editor.inherit({
 
                 var time = new Date(this._getValue());
                 time.setMinutes(newMinutes);
+                uiDateUtils.normalizeTime(time);
                 this.option("value", time);
             }).bind(this)
         }, this._getNumberBoxConfig()));
