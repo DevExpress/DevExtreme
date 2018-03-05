@@ -564,12 +564,12 @@ var dxChart = AdvancedChart.inherit({
             this._argumentAxes.forEach(function(axis) {
                 axis.updateCanvas(that._canvas);
             });
-
             series.forEach(function(series) {
                 if(series.useAggregation()) {
                     series.createPoints();
                 }
             });
+            this._processSeriesFamilies();
         }
 
         if(useAggregation || (_isDefined(that._zoomMinArg) || _isDefined(that._zoomMaxArg)) && that._themeManager.getOptions("adjustOnZoom")) {

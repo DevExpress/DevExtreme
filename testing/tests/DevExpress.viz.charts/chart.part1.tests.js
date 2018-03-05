@@ -216,11 +216,14 @@ QUnit.test("Recreate series points on zooming if aggregation is enabled", functi
         argumentAxis = chart._argumentAxes[0];
 
     series.createPoints.reset();
+    chart.seriesFamilies[0].adjustSeriesValues.reset();
 
     chart.zoomArgument(0, 1);
 
     assert.ok(series.createPoints.called);
     assert.ok(series.createPoints.lastCall.calledAfter(argumentAxis.zoom.lastCall));
+    assert.ok(chart.seriesFamilies[0].adjustSeriesValues.calledOnce);
+    assert.ok(chart.seriesFamilies[0].adjustSeriesValues.firstCall.calledAfter(series.createPoints.lastCall));
 });
 
 QUnit.test("Do not recreate series points on zooming if aggregation is not enabled", function(assert) {
