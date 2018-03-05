@@ -703,6 +703,10 @@
 
         .dx-@{widgetName}-content {
             overflow-anchor: none; /* Chrome 56+ */
+
+            &:not(.dx-@{widgetName}-content-fixed) {
+                min-height: 100%; /* IE, Edge */
+            }
         }
 
 
