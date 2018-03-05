@@ -155,10 +155,6 @@ var Editor = Widget.inherit({
         this._setSubmitElementName(this.option("name"));
 
         this.callBase();
-    },
-
-    _render: function() {
-        this.callBase();
         this._renderValidationState();
     },
 
