@@ -560,6 +560,7 @@ QUnit.test("valueChanged event fires on value apply", function(assert) {
     assert.ok(valueChangedSpy.calledOnce, "valueChanged event called once");
 });
 
+
 QUnit.module("format: incomplete value", moduleConfig);
 
 QUnit.test("incomplete values should not be reformatted on input", function(assert) {
@@ -589,7 +590,7 @@ QUnit.test("incomplete values should not be reformatted on paste", function(asse
     });
 
     this.input.val("0.00");
-    this.keyboard.input();
+    this.keyboard.caret(4).input();
     assert.equal(this.input.val(), "0.00", "walue has not been reformatted");
 
     this.keyboard.type("0");
@@ -703,6 +704,21 @@ QUnit.testInActiveWindow("incomplete values should be reformatted on focusout", 
     this.instance.option("value", 123);
     this.keyboard.caret(3).type(".").blur();
     assert.equal(this.input.val(), "123", "input was reformatted");
+});
+
+QUnit.test("minus sign typed to the end of the incomplete value should revert sign", function(assert) {
+    this.instance.option({
+        format: "#0.##",
+        value: 0
+    });
+
+    this.keyboard
+        .caret(1)
+        .type(".0")
+        .keyDown(MINUS_KEY)
+        .type("-");
+
+    assert.equal(this.input.val(), "-0", "value has been reformatted after incorrect sign");
 });
 
 
@@ -876,7 +892,6 @@ QUnit.test("removing required last char should replace it to 0 if there are stub
     assert.equal(this.input.val(), "$0.00", "value is correct");
     assert.equal(this.keyboard.caret().start, 2, "caret is good");
 });
-
 
 QUnit.test("removing required last char should replace it to 0 if percent format", function(assert) {
     this.instance.option("format", "#0%");
