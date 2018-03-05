@@ -268,6 +268,18 @@ QUnit.test("list item role", function(assert) {
     });
 });
 
+QUnit.module("searching");
+
+QUnit.test("searchEnabled", function(assert) {
+    var $element = $("#list").dxList({
+        dataSource: [1, 2, 3],
+        searchEnabled: true
+    });
+
+    assert.ok($element.hasClass("dx-list-with-search"), "list with search");
+    assert.ok($element.children().first().hasClass("dx-list-search"), "has search editor");
+});
+
 var STATIC_DELETE_BUTTON_CONTAINER_CLASS = "dx-list-static-delete-button-container",
     STATIC_DELETE_BUTTON_CLASS = "dx-list-static-delete-button",
 

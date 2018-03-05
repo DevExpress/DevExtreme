@@ -66,7 +66,7 @@ module.exports = {
         });
     },
 
-    _render: function() {
+    _initMarkup: function() {
         this._renderSearch();
         this.callBase();
     },

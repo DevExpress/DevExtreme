@@ -838,7 +838,7 @@ QUnit.test("list should be able to change grouped option after dataSource option
     assert.notOk(instance.option("grouped"), "grouped option was changed without exceptions");
 });
 
-QUnit.test("searchEnabled", function(assert) {
+QUnit.test("searchEnabled option changing", function(assert) {
     var $element = $("#list").dxList({
             dataSource: [1, 2, 3],
             searchEnabled: true
