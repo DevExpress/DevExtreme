@@ -153,9 +153,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
     _createRow: function(rowObject) {
         var $element = $("<tr>").addClass(ROW_CLASS);
-        if(rowObject) {
-            this.setAria("role", "row", $element);
-        }
+        this.setAria("role", "row", $element);
         return $element;
     },
 

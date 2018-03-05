@@ -19,7 +19,6 @@ var $ = require("jquery"),
     keyboardMock = require("../../helpers/keyboardMock.js"),
     browser = require("core/utils/browser"),
     device = devices.real(),
-    domUtils = require("core/utils/dom"),
     commonUtils = require("core/utils/common"),
     typeUtils = require("core/utils/type"),
     eventUtils = require("events/utils"),
@@ -154,12 +153,6 @@ QUnit.module("Keyboard navigation", {
             _views: {
                 rowsView: new View("rowsView"),
                 columnHeadersView: new View("columnHeadersView")
-            },
-            setAria: function(name, value, $target) {
-                $target = $target || that.$element && that.$element();
-                if($target) {
-                    domUtils.toggleAttr($target, "aria-" + name, value); // TODO check this attribute!!!
-                }
             },
             option: function(name) {
                 return that.options[name];
