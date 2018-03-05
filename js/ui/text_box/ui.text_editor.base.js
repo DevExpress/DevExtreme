@@ -4,7 +4,6 @@ var $ = require("../../core/renderer"),
     domAdapter = require("../../core/dom_adapter"),
     eventsEngine = require("../../events/core/events_engine"),
     domUtils = require("../../core/utils/dom"),
-    hasWindow = require("../../core/utils/window").hasWindow,
     focused = require("../widget/selectors").focused,
     isDefined = require("../../core/utils/type").isDefined,
     extend = require("../../core/utils/extend").extend,
@@ -353,10 +352,7 @@ var TextEditorBase = Editor.inherit({
         this._renderInput();
         this._renderInputType();
         this._renderPlaceholderMarkup();
-
-        if(!hasWindow()) {
-            this._renderInputValue();
-        }
+        this._renderValue();
 
         this._renderProps();
 
@@ -364,8 +360,6 @@ var TextEditorBase = Editor.inherit({
     },
 
     _render: function() {
-        this._renderValue();
-
         this._renderPlaceholder();
         this._refreshValueChangeEvent();
         this._renderEvents();
