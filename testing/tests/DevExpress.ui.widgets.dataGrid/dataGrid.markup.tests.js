@@ -1,8 +1,12 @@
 "use strict";
 
-var $ = require("jquery");
+var $ = require("jquery"),
+    windowUtils = require("core/utils/window");
 
 require("ui/data_grid");
+
+require("common.css!");
+
 
 QUnit.testStart(function() {
     var markup =
@@ -59,4 +63,99 @@ QUnit.test("markup with dataSource", function(assert) {
     assert.equal($rowsView.find(".dx-data-row td").length, 2, "rows view has 2 data cells");
     assert.equal($rowsView.find("td").length, 4, "rows view has 4 cells");
     assert.equal($rowsView.find("td").eq(1).text(), "Alex", "second data cell value");
+});
+
+QUnit.test("markup with column width", function(assert) {
+    var $element = $("#dataGrid").dxDataGrid({
+        dataSource: [{ id: 1, name: "Alex" }],
+        columns: ["id", { dataField: "name", width: 200 }]
+    });
+
+    this.clock.tick(30);
+
+    var $container = $element.children(),
+        $headersView = $container.children(".dx-datagrid-headers"),
+        $rowsView = $container.children(".dx-datagrid-rowsview");
+
+    assert.ok($element.hasClass("dx-widget"), "dx-widget");
+    assert.ok($container.hasClass("dx-datagrid"), "dx-datagrid");
+
+    assert.equal($headersView.length, 1, "headers view");
+    assert.equal($headersView.find("col").get(0).style.width, "", "headers first col width");
+    assert.equal($headersView.find("col").get(1).style.width, "200px", "headers second col width");
+
+    assert.equal($rowsView.length, 1, "rows view");
+    assert.equal($rowsView.find("col").get(0).style.width, "", "rows first col width");
+    assert.equal($rowsView.find("col").get(1).style.width, "200px", "rows second col width");
+});
+
+QUnit.test("markup with fixed column", function(assert) {
+    var $element = $("#dataGrid").dxDataGrid({
+        dataSource: [{ id: 1, name: "Alex" }],
+        columns: ["id", { dataField: "name", fixed: true }]
+    });
+
+    this.clock.tick(30);
+
+    assert.equal($element.find(".dx-datagrid-content-fixed").length, 2, "There are two fixed tables");
+});
+
+QUnit.test("markup with columns resizing/reordering", function(assert) {
+    var $element = $("#dataGrid").dxDataGrid({
+        allowColumnResizing: true,
+        allowColumnReordering: true,
+        dataSource: [{ id: 1, name: "Alex" }]
+    });
+
+    this.clock.tick(30);
+
+    var $separator = $element.find(".dx-datagrid-columns-separator"),
+        $tracker = $element.find(".dx-datagrid-tracker"),
+        $dragHeader = $element.find(".dx-datagrid-drag-header");
+
+    assert.equal($separator.length, 1, "separator is rendered");
+    assert.equal($tracker.length, 1, "tracker is rendered");
+    assert.equal($dragHeader.length, 1, "drag header is rendered");
+});
+
+QUnit.test("markup with virtual scrolling", function(assert) {
+    var $element = $("#dataGrid").dxDataGrid({
+        height: 300,
+        scrolling: { mode: "virtual" },
+        dataSource: [{ id: 1, name: "Alex" }]
+    });
+
+    this.clock.tick(30);
+
+    assert.equal($element.find(".dx-datagrid-rowsview .dx-datagrid-table").length, 2, "two row tables are rendered");
+});
+
+QUnit.test("markup with editing", function(assert) {
+    var $element = $("#dataGrid").dxDataGrid({
+        editing: {
+            allowUpdating: true,
+            allowDeleting: true,
+            allowAdding: true
+        },
+        dataSource: [{ id: 1, name: "Alex" }]
+    });
+
+    this.clock.tick(30);
+
+    var $editCell = $element.find(".dx-data-row .dx-command-edit");
+    assert.equal($editCell.length, 1, "one command edit column in data rows");
+    assert.equal($editCell.get(0).style.textAlign, "center", "text-align style for edit column");
+    assert.equal($element.find("colgroup col").last().get(0).style.width, windowUtils.hasWindow() ? "100px" : "auto", "width style for edit command column");
+});
+
+QUnit.test("markup with grouping", function(assert) {
+    var $element = $("#dataGrid").dxDataGrid({
+        dataSource: [{ id: 1, name: "Alex" }],
+        columns: ["id", { dataField: "name", groupIndex: 0 }]
+    });
+
+    this.clock.tick(30);
+
+    assert.equal($element.find(".dx-command-expand").length, 4, "four command expand cells: header + group + data + freeSpace");
+    assert.equal($element.find(".dx-group-row").length, 1, "one group row is rendered");
 });

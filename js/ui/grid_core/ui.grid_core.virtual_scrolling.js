@@ -262,7 +262,7 @@ var VirtualScrollingRowsViewExtender = (function() {
 
             that.callBase.apply(that, arguments);
 
-            that._updateContentPosition();
+            that._updateContentPosition(true);
 
             that._renderTime = new Date() - startRenderDate;
         },
