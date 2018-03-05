@@ -2350,7 +2350,7 @@ module.exports = {
                  * @return number
                  */
                 columnCount: function() {
-                    return this._columns.length;
+                    return this._columns && this._columns.length;
                 },
                 /**
                  * @name GridBaseMethods_columnOption

@@ -93,14 +93,11 @@ var ResizingController = modules.ViewController.inherit({
     },
 
     _setAriaRowColCount: function() {
-        if(this._columnsController && this._columnsController._columns) {
-            var component = this.component,
-                ariaRowCount = this._columnsController.getRowCount() + component.totalCount();
-            component.setAria({
-                "rowCount": ariaRowCount,
-                "colCount": component.columnCount()
-            }, component.$element().find(".dx-gridbase-container"));
-        }
+        var component = this.component;
+        component.setAria({
+            "rowCount": this._dataController.totalItemsCount(),
+            "colCount": component.columnCount()
+        }, component.$element().children("." + GRIDBASE_CONTAINER_CLASS));
     },
 
     _getBestFitWidths: function() {

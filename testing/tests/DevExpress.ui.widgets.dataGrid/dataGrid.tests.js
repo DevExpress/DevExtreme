@@ -2579,7 +2579,10 @@ QUnit.test("aria-colcount aria-rowcount if virtual scrolling", function(assert) 
 
     dataGrid = $("#dataGrid").dxDataGrid({
         height: 200,
-        dataSource: array,
+        dataSource: {
+            store: array,
+            group: "ID"
+        },
         paging: { pageSize: 2 },
         scrolling: { mode: "virtual" }
     });
@@ -2587,7 +2590,7 @@ QUnit.test("aria-colcount aria-rowcount if virtual scrolling", function(assert) 
     clock.tick();
 
     // assert
-    assert.equal(dataGrid.find(".dx-gridbase-container").attr("aria-rowcount"), 101, "aria-rowcount is correct");
+    assert.equal(dataGrid.find(".dx-gridbase-container").attr("aria-rowcount"), 200, "aria-rowcount is correct");
     assert.equal(dataGrid.find(".dx-gridbase-container").attr("aria-colcount"), 3, "aria-colcount is correct");
 
     clock.restore();
