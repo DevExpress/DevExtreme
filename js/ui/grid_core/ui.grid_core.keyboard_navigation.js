@@ -122,7 +122,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
                 data.view.element().find("." + CELL_FOCUS_DISABLED_CLASS + "[tabIndex]").removeClass(CELL_FOCUS_DISABLED_CLASS).removeAttr("tabIndex");
                 $target.addClass(CELL_FOCUS_DISABLED_CLASS);
                 this._applyTabIndexToElement($target);
-                eventsEngine.trigger($target, "focus", { hideBorders: true });
+                eventsEngine.trigger($target, "focus");
             }
         } else if($target.is("td")) {
             this._resetFocusedCell();
