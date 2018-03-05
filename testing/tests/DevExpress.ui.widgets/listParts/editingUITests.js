@@ -16,6 +16,7 @@ var $ = require("jquery"),
     decoratorRegistry = require("ui/list/ui.list.edit.decorator_registry"),
     SwitchableEditDecorator = require("ui/list/ui.list.edit.decorator.switchable"),
     SwitchableButtonEditDecorator = require("ui/list/ui.list.edit.decorator.switchable.button"),
+    themes = require("ui/themes"),
     DataSource = require("data/data_source/data_source").DataSource,
     ArrayStore = require("data/array_store");
 
@@ -364,6 +365,50 @@ QUnit.test("delete button click should delete list item", function(assert) {
 
     var $deleteButton = $item.find(toSelector(SWITCHABLE_DELETE_BUTTON_CLASS));
     $deleteButton.trigger("dxclick");
+});
+
+QUnit.test("button should have icon and no text for the Material theme", function(assert) {
+    var origCurrent = themes.current;
+    themes.current = function() { return "material"; };
+
+    var $list = $($("#templated-list").dxList({
+        items: ["0"],
+        allowItemDeleting: true,
+        itemDeleteMode: "test"
+    }));
+
+    var $item = $list.find(toSelector(LIST_ITEM_CLASS)).eq(0);
+
+    $item.trigger("dxpreparetodelete");
+
+    var deleteButton = $item.find(toSelector("dx-button")).dxButton("instance");
+
+    assert.equal(deleteButton.option("icon"), "trash", "button has trash icon for the Material theme");
+    assert.equal(deleteButton.option("text").length, 0, "button hasn't text for the Material theme");
+
+    themes.current = origCurrent;
+});
+
+QUnit.test("button should have text and no icon for the Generic theme", function(assert) {
+    var origCurrent = themes.current;
+    themes.current = function() { return "generic"; };
+
+    var $list = $($("#templated-list").dxList({
+        items: ["0"],
+        allowItemDeleting: true,
+        itemDeleteMode: "test"
+    }));
+
+    var $item = $list.find(toSelector(LIST_ITEM_CLASS)).eq(0);
+
+    $item.trigger("dxpreparetodelete");
+
+    var deleteButton = $item.find(toSelector("dx-button")).dxButton("instance");
+
+    assert.equal(deleteButton.option("icon"), "", "button has no icon for the Generic theme");
+    assert.ok(deleteButton.option("text").length > 0, "button has a text for the Generic theme");
+
+    themes.current = origCurrent;
 });
 
 
@@ -748,6 +793,50 @@ QUnit.test("click on button should not remove item if widget disabled", function
     pointerMock($item).start().swipeStart().swipe(-0.5).swipeEnd(-1);
     list.option("disabled", true);
     $deleteButton.trigger("dxclick");
+});
+
+QUnit.test("button should have no text for the Material theme", function(assert) {
+    var origCurrent = themes.current;
+    themes.current = function() { return "material"; };
+
+    var $list = $($("#templated-list").dxList({
+        items: ["0"],
+        allowItemDeleting: true,
+        itemDeleteMode: "slideItem"
+    }));
+
+    var $items = $list.find(toSelector(LIST_ITEM_CLASS)),
+        $item = $items.eq(0);
+
+    pointerMock($item).start().swipeStart().swipe(-0.5).swipeEnd(-1, -0.5);
+
+    var $deleteButton = $item.find(toSelector(SLIDE_MENU_BUTTON_CLASS));
+
+    assert.equal($deleteButton.text(), "", "button has no text for Material theme");
+
+    themes.current = origCurrent;
+});
+
+QUnit.test("button should have no text for the Generic theme", function(assert) {
+    var origCurrent = themes.current;
+    themes.current = function() { return "generic"; };
+
+    var $list = $($("#templated-list").dxList({
+        items: ["0"],
+        allowItemDeleting: true,
+        itemDeleteMode: "slideItem"
+    }));
+
+    var $items = $list.find(toSelector(LIST_ITEM_CLASS)),
+        $item = $items.eq(0);
+
+    pointerMock($item).start().swipeStart().swipe(-0.5).swipeEnd(-1, -0.5);
+
+    var $deleteButton = $item.find(toSelector(SLIDE_MENU_BUTTON_CLASS));
+
+    assert.ok($deleteButton.text().length > 0, "button has a text for Generic theme");
+
+    themes.current = origCurrent;
 });
 
 QUnit.test("swipe should prepare item for delete in RTL mode", function(assert) {

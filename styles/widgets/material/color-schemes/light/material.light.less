@@ -642,7 +642,7 @@
 * @group list
 * @paletteColorOpacity .25
 */
-@list-item-selected-bg: darken(@base-bg, 20%);
+@list-item-selected-bg: darken(@base-bg, 12%);
 /**
 * @name 30. Focused selected item state background color
 * @type color
@@ -656,10 +656,10 @@
 * @group base.common
 * @paletteColorOpacity 1
 */
-@list-focused-bg: @base-focus-color;
+@list-focused-bg: darken(@base-bg, 12%);;
 @list-item-color: @base-text-color;
 @list-item-hover-color: @list-item-color;
-@list-item-selected-color: @list-item-color;
+@list-item-selected-color: fade(@base-text-color, 100%);
 
 /**
 * @name 40. Active state item background color
@@ -931,7 +931,7 @@
 * @type color
 * @group overlays.common
 */
-@load-indicator-segment-bg-color: darken(@base-bg, 54%);
+@load-indicator-segment-bg-color: @base-accent;
 
 
 // LoadPanel

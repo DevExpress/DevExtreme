@@ -928,11 +928,11 @@ var ListBase = CollectionWidget.inherit({
             .addClass(LIST_GROUP_HEADER_INDICATOR_CLASS)
             .prependTo(headerElement);
 
-        headerElement.on("dxpointerdown", function(e) {
+        eventsEngine.on(headerElement, "dxpointerdown", function(e) {
             that._toggleActiveState(headerElement, true, e);
         });
 
-        headerElement.on("dxpointerup dxhoverend", function() {
+        eventsEngine.on(headerElement, "dxpointerup dxhoverend", function(e) {
             that._toggleActiveState(headerElement, false);
         });
     },

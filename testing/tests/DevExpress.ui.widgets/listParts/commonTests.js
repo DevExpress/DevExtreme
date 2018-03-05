@@ -18,6 +18,7 @@ var $ = require("jquery"),
     swipeEvents = require("events/swipe"),
     ScrollView = require("ui/scroll_view"),
     errors = require("ui/widget/ui.errors"),
+    themes = require("ui/themes"),
     devices = require("core/devices");
 
 var LIST_CLASS = "dx-list",
@@ -438,6 +439,44 @@ QUnit.test("group body should be not collapsed by click on header in disabled st
 
     $groupHeader.trigger("dxclick");
     assert.ok(!$group.hasClass(LIST_GROUP_COLLAPSED_CLASS), "collapsed class is not present");
+});
+
+var LIST_GROUP_HEADER_INDICATOR_CLASS = "dx-list-group-header-indicator";
+
+QUnit.test("group header collapsed indicator element for the Material theme", function(assert) {
+    var origCurrent = themes.current;
+    themes.current = function() { return "material"; };
+
+    var $element = this.element.dxList({
+        items: [{ key: "a", items: ["0"] }],
+        grouped: true,
+        collapsibleGroups: true
+    });
+
+    var $group = $element.find("." + LIST_GROUP_CLASS),
+        $groupHeader = $group.find("." + LIST_GROUP_HEADER_CLASS);
+
+    assert.equal($groupHeader.find("." + LIST_GROUP_HEADER_INDICATOR_CLASS).length, 1, "group header has the collapsed indicator element for the Material theme");
+
+    themes.current = origCurrent;
+});
+
+QUnit.test("no group header collapsed indicator element for the Generic theme", function(assert) {
+    var origCurrent = themes.current;
+    themes.current = function() { return "generic"; };
+
+    var $element = this.element.dxList({
+        items: [{ key: "a", items: ["0"] }],
+        grouped: true,
+        collapsibleGroups: true
+    });
+
+    var $group = $element.find("." + LIST_GROUP_CLASS),
+        $groupHeader = $group.find("." + LIST_GROUP_HEADER_CLASS);
+
+    assert.equal($groupHeader.find("." + LIST_GROUP_HEADER_INDICATOR_CLASS).length, 0, "group header should not have collapsed indicator element for the Generic theme");
+
+    themes.current = origCurrent;
 });
 
 QUnit.test("group collapsing is animated", function(assert) {

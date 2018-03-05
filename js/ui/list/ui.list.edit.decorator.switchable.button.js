@@ -6,6 +6,7 @@ var $ = require("../../core/renderer"),
     messageLocalization = require("../../localization/message"),
     registerDecorator = require("./ui.list.edit.decorator_registry").register,
     themes = require("../themes"),
+    extend = require("../../core/utils/extend").extend,
     SwitchableEditDecorator = require("./ui.list.edit.decorator.switchable");
 
 var SWITCHABLE_DELETE_BUTTON_CONTAINER_CLASS = "dx-list-switchable-delete-button-container",
@@ -24,18 +25,19 @@ var SwitchableButtonEditDecorator = SwitchableEditDecorator.inherit({
             $buttonWrapper = $("<div>").addClass(SWITCHABLE_DELETE_BUTTON_WRAPPER_CLASS),
             $buttonInnerWrapper = $("<div>").addClass(SWITCHABLE_DELETE_BUTTON_INNER_WRAPPER_CLASS),
             $button = $("<div>").addClass(SWITCHABLE_DELETE_BUTTON_CLASS),
-            isMaterial = /material/.test(themes.current());
+            isMaterial = /material/.test(themes.current()),
+            buttonOptions = isMaterial
+                ? { icon: "trash" }
+                : { text: messageLocalization.format("dxListEditDecorator-delete") };
 
-        this._list._createComponent($button, Button, {
-            text: isMaterial ? "" : messageLocalization.format("dxListEditDecorator-delete"),
-            icon: isMaterial ? "trash" : "",
+        this._list._createComponent($button, Button, extend(buttonOptions, {
             type: "danger",
             onClick: (function(e) {
                 this._deleteItem();
                 e.event.stopPropagation();
             }).bind(this),
             integrationOptions: {}
-        });
+        }));
 
         $buttonContainer.append($buttonWrapper);
         $buttonWrapper.append($buttonInnerWrapper);

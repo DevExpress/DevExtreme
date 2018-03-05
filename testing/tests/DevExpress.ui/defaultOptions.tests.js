@@ -949,6 +949,21 @@ testComponentDefaults(LoadIndicator,
 testComponentDefaults(LoadIndicator,
     {},
     {
+        _animatingSegmentCount: 2,
+        _animatingSegmentInner: true
+    },
+    function() {
+        this.originalCurrentTheme = themes.current();
+        themes.current("material");
+    },
+    function() {
+        themes.current(this.originalCurrentTheme);
+    }
+);
+
+testComponentDefaults(LoadIndicator,
+    {},
+    {
         _animatingSegmentCount: 7,
         _animatingSegmentInner: false
     },
@@ -1056,6 +1071,20 @@ testComponentDefaults(List,
     function() {
         this.originalCurrentTheme = themes.current();
         themes.current("android5");
+    },
+    function() {
+        themes.current(this.originalCurrentTheme);
+    }
+);
+
+testComponentDefaults(List,
+    { platform: devices.current().platform },
+    {
+        useInkRipple: true
+    },
+    function() {
+        this.originalCurrentTheme = themes.current();
+        themes.current("material.light");
     },
     function() {
         themes.current(this.originalCurrentTheme);
