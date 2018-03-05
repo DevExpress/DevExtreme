@@ -1049,6 +1049,48 @@ QUnit.test("removing decimal separator if decimal separator is not default", fun
     }
 });
 
+QUnit.test("removing a stub in the end or begin of the text should lead to remove minus sign", function(assert) {
+    this.instance.option({
+        format: "$ #0.00;<<$ #0.00>>",
+        value: -5
+    });
+
+    this.keyboard.caret(4).press("backspace");
+    assert.equal(this.input.val(), "$ 5.00", "value has been inverted");
+
+    this.keyboard.caret(2).press("backspace");
+    assert.equal(this.input.val(), "$ 5.00", "value has not been inverted after second removing");
+
+    this.instance.option("value", -6);
+    this.keyboard.caret(9).press("del");
+    assert.equal(this.input.val(), "$ 6.00", "value has been inverted");
+
+    this.keyboard.caret(6).press("del");
+    assert.equal(this.input.val(), "$ 6.00", "value has not been inverted after second removing");
+});
+
+QUnit.test("minus zero should be reverted after removing minus via backspace", function(assert) {
+    this.instance.option({
+        format: "#0.00 kg",
+        value: -0
+    });
+
+    this.keyboard.caret(1).press("backspace");
+    assert.equal(this.input.val(), "0.00 kg", "value has been reverted");
+
+    this.keyboard.caret(4).press("del");
+    assert.equal(this.input.val(), "0.00 kg", "value has not been reverted again");
+});
+
+QUnit.test("removing a stub should be prevented when it leads to revert sign", function(assert) {
+    this.instance.option({
+        format: "#0.00 kg",
+        value: -0
+    });
+
+    this.keyboard.caret(5).press("del");
+    assert.equal(this.input.val(), "0.00 kg", "value has been reverted");
+});
 
 QUnit.module("format: caret boundaries", moduleConfig);
 
