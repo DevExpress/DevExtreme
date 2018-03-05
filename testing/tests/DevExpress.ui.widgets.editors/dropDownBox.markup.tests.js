@@ -21,12 +21,16 @@ var DROP_DOWN_BOX_CLASS = "dx-dropdownbox";
 
 var moduleConfig = {
     beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
         this.$element = $("#dropDownBox");
         this.simpleItems = [
             { id: 1, name: "Item 1" },
             { id: 2, name: "Item 2" },
             { id: 3, name: "Item 3" }
         ];
+    },
+    afterEach: function() {
+        this.clock.restore();
     }
 };
 
