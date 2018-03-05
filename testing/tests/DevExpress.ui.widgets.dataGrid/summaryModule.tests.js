@@ -10,7 +10,6 @@ QUnit.testStart(function() {
 });
 
 
-
 require("common.css!");
 
 require("ui/data_grid/ui.data_grid");

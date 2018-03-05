@@ -77,7 +77,6 @@ QUnit.test("Required - correct value", function(assert) {
 });
 
 
-
 QUnit.test("Required - empty string", function(assert) {
     testInvalidRequiredRules("", assert);
 });
@@ -372,7 +371,6 @@ QUnit.test("Range - default English message with name", function(assert) {
 
     assert.equal(result.brokenRule.message, "Length is out of range");
 });
-
 
 
 QUnit.test("Range - empty value should be valid", function(assert) {
@@ -1036,7 +1034,6 @@ QUnit.test("Comparison target should be set; otherways we should throw exception
 });
 
 
-
 QUnit.module("State of validated rules");
 
 QUnit.test("Rule should not be revalidated if no value changed - invalid value", function(assert) {
@@ -1094,7 +1091,6 @@ QUnit.test("Rule should  be revalidated after value change - valid value", funct
     assert.strictEqual(rule.isValid, true, "Rule should be marked as valid");
     assert.ok(handler.calledTwice, "Handler should be called twice as value changed");
 });
-
 
 
 QUnit.test("If first rule fails, second one should not be evaluated", function(assert) {
@@ -1216,7 +1212,6 @@ QUnit.test("Simple group - remove validator registration", function(assert) {
     assert.ok(groupConfig, "Group still exist Validation Engine");
     assert.equal(groupConfig.validators.length, 0, "Validator was unregistered");
 });
-
 
 
 QUnit.test("Simple group - call validateGroup method", function(assert) {

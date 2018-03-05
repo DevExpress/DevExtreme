@@ -226,7 +226,6 @@ QUnit.test("Garbage dynamic markup is not put in cache (T303333)", function(asse
 });
 
 
-
 QUnit.module("ViewEngine");
 
 QUnit.test("Detach templates and remove unnecessary markup (performance)", function(assert) {

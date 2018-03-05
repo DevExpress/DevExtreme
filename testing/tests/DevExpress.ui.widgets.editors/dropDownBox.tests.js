@@ -508,7 +508,6 @@ QUnit.test("widget hidden input should get the 'name' attribute with a correct v
 });
 
 
-
 QUnit.module("keyboard navigation", moduleConfig);
 
 QUnit.testInActiveWindow("first focusable element inside of content should get focused after tab pressing", function(assert) {

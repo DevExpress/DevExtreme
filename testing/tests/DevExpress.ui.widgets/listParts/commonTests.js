@@ -557,7 +557,6 @@ QUnit.test("more button shouldn't disappear after group collapsed with custom st
 });
 
 
-
 QUnit.module("next button", moduleSetup);
 
 var isElementHidden = function($element) {
