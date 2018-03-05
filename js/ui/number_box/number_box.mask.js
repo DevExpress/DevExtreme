@@ -181,6 +181,10 @@ var NumberBoxMask = NumberBoxBase.inherit({
 
         if(this._isStub(char)) {
             this._moveCaret(this._isDeleteKey(e.key) ? 1 : -1);
+            if(this._parsedValue < 0 || 1 / this._parsedValue === -Infinity) {
+                this._revertSign(e);
+                this._setTextByParsedValue();
+            }
             e.preventDefault();
             return;
         }
