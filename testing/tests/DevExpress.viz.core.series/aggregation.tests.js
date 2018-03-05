@@ -27,6 +27,9 @@ var createSeries = function(options, renderSettings) {
 
     options = $.extend(true, {
         widgetType: "chart",
+        aggregation: {
+            enabled: undefined
+        },
         containerBackgroundColor: "containerColor",
         type: "scatter",
         argumentField: "arg",
@@ -925,7 +928,7 @@ QUnit.module("Sampler points", {
         };
 
         this.series = createSeries({
-            useAggregation: true
+            aggregation: { enabled: true }
         }, {
             argumentAxis: this.argumentAxis
         });
@@ -1242,7 +1245,7 @@ QUnit.test("Customize Point without result", function(assert) {
         customizeLabelSpy = sinon.stub(),
         series = createSeries({
             type: "scatter",
-            useAggregation: true,
+            aggregation: { enabled: true },
             point: {
                 size: 0,
                 border: {
@@ -1336,7 +1339,7 @@ QUnit.test("Customize Point with result", function(assert) {
         customizeLabelSpy = sinon.stub(),
         series = createSeries({
             type: "scatter",
-            useAggregation: true,
+            aggregation: { enabled: true },
             point: {
                 size: 0,
                 border: {
@@ -1592,7 +1595,7 @@ QUnit.module("Sampler points, discrete", {
         };
 
         this.series = createSeries({
-            useAggregation: true
+            aggregation: { enabled: true },
         }, {
             argumentAxis: this.argumentAxis
         });

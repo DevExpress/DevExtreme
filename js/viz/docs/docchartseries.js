@@ -1068,6 +1068,20 @@ var commonSeries = {
         * @default undefined
         */
         opacity: undefined
+    },
+    /**
+	* @name dxChartSeriesTypes_CommonSeries_aggregation
+	* @publicName aggregation
+	* @type object
+	*/
+    aggregation: {
+        /**
+		* @name dxChartSeriesTypes_CommonSeries_aggregation_enabled
+		* @publicName enabled
+		* @type boolean
+		* @default false
+		*/
+        enabled: false
     }
 };
 

@@ -149,7 +149,7 @@ module.exports = {
 
     getRangeData: function(series) {
         var points = series.getPoints(),
-            useAggregation = series.getOptions().useAggregation,
+            useAggregation = series.useAggregation(),
             argumentCalculator = !useAggregation ? getRangeCalculator(series.argumentAxisType, points.length > 1 && series.getArgumentAxis()) : noop,
             valueRangeCalculator = getRangeCalculator(series.valueAxisType),
             viewportReducer = getViewportReducer(series),
