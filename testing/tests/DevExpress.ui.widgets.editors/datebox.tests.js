@@ -2660,6 +2660,7 @@ QUnit.test("DateBox with time should be rendered correctly in IE, templatesRende
 QUnit.test("Reset seconds and milliseconds when DateBox has no value for datetime view", function(assert) {
     var dateBox = $("#dateBox").dxDateBox({
         type: "datetime",
+        pickerType: "calendar",
         min: new Date("2015/1/25"),
         max: new Date("2015/2/10")
     }).dxDateBox("instance");
@@ -2675,7 +2676,8 @@ QUnit.test("Reset seconds and milliseconds when DateBox has no value for datetim
 
 QUnit.test("Reset seconds and milliseconds when DateBox has no value for time view", function(assert) {
     var dateBox = $("#dateBox").dxDateBox({
-        type: "time"
+        type: "time",
+        pickerType: "list",
     }).dxDateBox("instance");
 
     dateBox.open();
