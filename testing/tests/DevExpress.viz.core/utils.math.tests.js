@@ -95,7 +95,6 @@ QUnit.test('getCosAndSin', function(assert) {
 });
 
 
-
 QUnit.test("getDistance", function(assert) {
     assert.equal(vizUtils.getDistance(0, 0, 3, 4), 5, "egypt triangle");
     assert.equal(vizUtils.getDistance(3, 4, 0, 0), 5, "egypt triangle");
