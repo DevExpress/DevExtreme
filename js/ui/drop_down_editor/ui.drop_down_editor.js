@@ -327,13 +327,9 @@ var DropDownEditor = TextBox.inherit({
 
     _render: function() {
         this.callBase();
+
         this._renderOpenHandler();
-
-        this.$element()
-            .addClass(DROP_DOWN_EDITOR_CLASS);
         this._renderOpenedState();
-
-        this.setAria("role", "combobox");
     },
 
     _renderContentImpl: function() {
