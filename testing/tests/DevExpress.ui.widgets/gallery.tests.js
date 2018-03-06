@@ -1164,6 +1164,20 @@ QUnit.test("there are no invisible items if items count per page > 1", function(
     });
 });
 
+QUnit.test("there are no invisible items if wrapAround=true", function(assert) {
+    this.instance.option({
+        width: 1000,
+        wrapAround: true,
+        items: [0, 1, 2]
+    });
+
+    var $galleryItems = this.$element.find("." + GALLERY_ITEM_CLASS);
+
+    $.each($galleryItems, function(index, $item) {
+        assert.notOk($($item).hasClass(GALLERY_INVISIBLE_ITEM_CLASS), "item has not invisible class");
+    });
+});
+
 QUnit.module("responsiveness", {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
