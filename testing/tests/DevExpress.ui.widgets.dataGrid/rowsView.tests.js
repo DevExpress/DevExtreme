@@ -5927,6 +5927,7 @@ QUnit.test('Update rowsView on changed', function(assert) {
         changeType: 'refresh',
         items: options.items
     });
+    rowsView.resize();
 
     var content = testElement.find('.dx-scrollable-content').children();
 
@@ -6137,6 +6138,7 @@ QUnit.test("Set column widths for virtual table", function(assert) {
         mode: 'virtual'
     };
     rowsView.render($testElement);
+    rowsView.resize();
 
     // act
     rowsView.setColumnWidths([10, 20, 30]);

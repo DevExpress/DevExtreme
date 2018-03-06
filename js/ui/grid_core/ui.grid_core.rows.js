@@ -1094,7 +1094,9 @@ module.exports = {
                     });
 
                     dataController.dataSourceChanged.add(function() {
-                        that._handleScroll({ scrollOffset: { top: that._scrollTop, left: that._scrollLeft } });
+                        if(that._scrollLeft >= 0) {
+                            that._handleScroll({ scrollOffset: { top: that._scrollTop, left: that._scrollLeft } });
+                        }
                     });
                 },
 
