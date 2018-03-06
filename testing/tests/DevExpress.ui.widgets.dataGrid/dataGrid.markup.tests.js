@@ -174,3 +174,16 @@ QUnit.test("markup with column hiding", function(assert) {
         assert.equal($element.find("colgroup col").last().get(0).style.width, "auto", "width style for adaptive command column");
     }
 });
+
+QUnit.test("markup with pager", function(assert) {
+    var $element = $("#dataGrid").dxDataGrid({
+        paging: { pageSize: 2 },
+        dataSource: [{ id: 1, name: "Alex1" }, { id: 2, name: "Alex2" }, { id: 3, name: "Alex3" }]
+    });
+
+    this.clock.tick(30);
+    var $pagerView = $element.find(".dx-datagrid-pager");
+    assert.equal($pagerView.length, 1, "pager view is rendered");
+    assert.equal($pagerView.hasClass("dx-pager"), windowUtils.hasWindow(), "pager");
+    assert.equal(!!$pagerView.children().length, windowUtils.hasWindow(), "pager content");
+});
