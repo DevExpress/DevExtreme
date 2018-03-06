@@ -128,6 +128,7 @@ QUnit.test("markup with virtual scrolling", function(assert) {
     this.clock.tick(30);
 
     assert.equal($element.find(".dx-datagrid-rowsview .dx-datagrid-table").length, 2, "two row tables are rendered");
+    assert.equal($element.find(".dx-datagrid-rowsview .dx-datagrid-table").eq(0).hasClass("dx-datagrid-table-content"), windowUtils.hasWindow(), "table-content class");
 });
 
 QUnit.test("markup with editing", function(assert) {
