@@ -97,6 +97,7 @@ var google = window.google = {
                 google.options.zoomControl = options.zoomControl;
                 google.options.mapTypeControl = options.mapTypeControl;
                 google.options.streetViewControl = options.streetViewControl;
+                google.options.center = options.center;
             }
 
             this.fitBounds = function(bounds) {
