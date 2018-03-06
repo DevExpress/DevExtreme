@@ -675,7 +675,7 @@ var Gallery = CollectionWidget.inherit({
     },
 
     _renderItemsVisibility: function() {
-        if(this.option("initialItemWidth")) {
+        if(this.option("initialItemWidth") || this.option("wrapAround")) {
             this._releaseInvisibleItems();
             return;
         }
