@@ -9,7 +9,8 @@
     @MATERIAL_GRID_BASE_CELL_HORIZONTAL_PADDING: 14px;
     @MATERIAL_GRID_BASE_CELL_FIRST_COLUMN_PADDING: 24px;
     @MATERIAL_GRID_BASE_CELL_LAST_COLUMN_PADDING: 24px;
-    @MATERIAL_GRID_BASE_ICON_SIZE: 16px;
+    @MATERIAL_GRID_BASE_HEADER_ICON_SIZE: 15px;
+    @MATERIAL_GRID_BASE_FILTER_ICON_SIZE: 22px;
 
     @MATERIAL_GRID_BASE_TEXTEDITOR_INPUT_PADDING: 32px;
     @MATERIAL_GRID_BASE_HEADER_PANEL_MARGIN: 14px 0;
@@ -36,7 +37,6 @@
     @MATERIAL_GRID_BASE_GROUPPANEL_ITEM_MARGIN: 5px;
     @MATERIAL_GRID_BASE_COMMAND_SELECT_COLUMN_WIDTH: 55px;
     @MATERIAL_GRID_BASE_COMMAND_EDIT_COLUMN_WIDTH: 70px;
-    @MATERIAL_GRID_BASE_COMMAND_EXPAND_COLUMN_WIDTH: 15px;
     @MATERIAL_GRID_BASE_ADAPTIVE_TEXT_PADDING: 6px;
     @MATERIAL_GRID_BASE_TREEVIEW_SEARCH_MARGIN: 5px;
 }
@@ -71,18 +71,18 @@
             .dx-menu-items-container {
                 .dx-icon-context-menu-sort-asc {
                     .dx-icon-sortuptext;
-                    .dx-icon-sizing(@MATERIAL_GRID_BASE_ICON_SIZE);
+                    .dx-icon-sizing(@MATERIAL_GRID_BASE_HEADER_ICON_SIZE);
                 }
 
                 .dx-icon-context-menu-sort-desc {
                     .dx-icon-sortdowntext;
-                    .dx-icon-sizing(@MATERIAL_GRID_BASE_ICON_SIZE);
+                    .dx-icon-sizing(@MATERIAL_GRID_BASE_HEADER_ICON_SIZE);
                 }
             }
         }
 
         .dx-sort-up, .dx-sort-down, .dx-header-filter {
-            .dx-icon-sizing(@MATERIAL_GRID_BASE_ICON_SIZE);
+            .dx-icon-sizing(@MATERIAL_GRID_BASE_HEADER_ICON_SIZE);
         }
 
         .dx-icon-filter-operation-equals {
@@ -134,10 +134,10 @@
         }
 
         .dx-column-indicators {
-            height: @MATERIAL_GRID_BASE_ICON_SIZE;
+            height: @MATERIAL_GRID_BASE_HEADER_ICON_SIZE;
             vertical-align: middle;
             > div {
-                .dx-icon-sizing(@MATERIAL_GRID_BASE_ICON_SIZE);
+                .dx-icon-sizing(@MATERIAL_GRID_BASE_HEADER_ICON_SIZE);
             }
         }
     }
@@ -154,7 +154,7 @@
                     padding: @MATERIAL_GRID_BASE_MENU_ITEM_PADDING;
 
                     .dx-icon {
-                        .dx-icon-sizing(@MATERIAL_GRID_BASE_ICON_SIZE);
+                        .dx-icon-sizing(@MATERIAL_GRID_BASE_FILTER_ICON_SIZE);
                         margin: 0px 3px;
                     }
                 }
@@ -198,18 +198,20 @@
                 padding: @MATERIAL_GRID_BASE_CELL_PADDING;
                 font-size: @MATERIAL_GRID_BASE_CELL_FONT_SIZE;
                 line-height: @MATERIAL_GRID_BASE_HEADER_LINE_HEIGHT;
-
-                &:first-of-type {
-                    padding-left: @MATERIAL_GRID_BASE_CELL_FIRST_COLUMN_PADDING;
-                }
-
-                &:last-of-type {
-                    padding-right: @MATERIAL_GRID_BASE_CELL_LAST_COLUMN_PADDING;
-                }
             }
+        }
 
-            > .dx-command-select + td, > .dx-command-expand + td, > .dx-datagrid-group-space + td {
-                padding-left: @MATERIAL_GRID_BASE_CELL_FIRST_COLUMN_PADDING;
+        .dx-@{widgetName}-content .dx-@{widgetName}-table {
+            .dx-row {
+                > td {
+                    &:first-of-type {
+                        padding-left: @MATERIAL_GRID_BASE_CELL_FIRST_COLUMN_PADDING;
+                    }
+
+                    &:last-of-type {
+                        padding-right: @MATERIAL_GRID_BASE_CELL_LAST_COLUMN_PADDING;
+                    }
+                }
             }
         }
     }
@@ -296,10 +298,12 @@
 
             .dx-texteditor-input {
                 background: ~"@{@{widgetName}-editor-bg}";
+                font-size: @MATERIAL_GRID_BASE_CELL_FONT_SIZE;
+                padding: 0 0 1px 0;
             }
 
-            .dx-texteditor-container:after {
-                border-bottom: ~"@{@{widgetName}-border}";
+            .dx-texteditor-container:after, .dx-texteditor-container:before {
+                content: none;
             }
 
             &.dx-numberbox-spin .dx-texteditor-input {
@@ -322,11 +326,6 @@
         &.dx-editor-inline-block .dx-highlight-outline::before {
             padding-top: @MATERIAL_GRID_BASE_CELL_VERTICAL_PADDING;
             padding-bottom: @MATERIAL_GRID_BASE_CELL_VERTICAL_PADDING;
-        }
-
-        > div {
-            position: relative;
-            top: 1px;
         }
     }
 
@@ -408,8 +407,14 @@
         }
     }
 
-    .dx-@{widgetName}-focus-overlay {
-        border-bottom: 2px solid ~"@{@{widgetName}-focused-border-color}";
+    .dx-@{widgetName}-focus-overlay:after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        height: 2px;
+        background-color: ~"@{@{widgetName}-focused-border-color}";
+        left: @MATERIAL_GRID_BASE_CELL_HORIZONTAL_PADDING;
+        right: @MATERIAL_GRID_BASE_CELL_HORIZONTAL_PADDING - 1;
     }
 
     .dx-@{widgetName}-content {
@@ -420,6 +425,7 @@
                     width: @MATERIAL_GRID_BASE_COMMAND_SELECT_COLUMN_WIDTH;
                     min-width: @MATERIAL_GRID_BASE_COMMAND_SELECT_COLUMN_WIDTH;
                     padding-left: @MATERIAL_GRID_BASE_CELL_FIRST_COLUMN_PADDING;
+                    padding-right: @MATERIAL_GRID_BASE_CELL_FIRST_COLUMN_PADDING - @MATERIAL_GRID_BASE_CELL_HORIZONTAL_PADDING;
                     line-height: 1;
                 }
 
@@ -431,27 +437,19 @@
                 .dx-command-expand, .dx-@{widgetName}-group-space {
                     width: @MATERIAL_GRID_BASE_COMMAND_EXPAND_COLUMN_WIDTH;
                     min-width: @MATERIAL_GRID_BASE_COMMAND_EXPAND_COLUMN_WIDTH;
-                    padding-left: @MATERIAL_GRID_BASE_CHECKBOX_SIZE;
-                    padding-right: 0;
+                    padding: 0 4px 0 8px;
                     line-height: 0;
                 }
 
                 .dx-editor-cell:not(.dx-command-select) {
                     padding-right: @MATERIAL_GRID_BASE_CELL_HORIZONTAL_PADDING;
                     padding-left: @MATERIAL_GRID_BASE_CELL_HORIZONTAL_PADDING;
-                    &:first-of-type {
-                        padding-left: @MATERIAL_GRID_BASE_CELL_FIRST_COLUMN_PADDING;
-                    }
-
-                    &:last-of-type {
-                        padding-right: @MATERIAL_GRID_BASE_CELL_LAST_COLUMN_PADDING;
-                    }
                 }
             }
     
             .dx-data-row.dx-state-hover {
                 &:not(.dx-selection):not(.dx-row-inserted):not(.dx-row-removed):not(.dx-edit-row) {
-                    & > td:not(.dx-focused) {
+                    & > td {
                         background-color: ~"@{@{widgetName}-hover-bg}";
                         color: ~"@{@{widgetName}-row-hovered-color}";
     
@@ -502,6 +500,10 @@
                         color: ~"@{@{widgetName}-base-color}";
                     }
 
+                    .dx-@{widgetName}-text-content {
+                        vertical-align: middle;
+                    }
+
                     &:hover {
                         .dx-@{widgetName}-text-content {
                             color: ~"@{@{widgetName}-base-color}";
@@ -511,7 +513,7 @@
                         }
                     }
 
-                    &:hover:not(.dx-command-select):not(.dx-command-expand):not(.dx-editor-cell):not(.dx-command-edit) {
+                    &:hover:not(.dx-command-select):not(.dx-command-expand):not(.dx-editor-cell):not(.dx-command-edit):not(.dx-@{widgetName}-group-space) {
                         background-color:  ~"@{@{widgetName}-hover-bg}";
                     }
                 }
@@ -606,7 +608,7 @@
     &.dx-filter-menu {
         .dx-menu-item-content {
             .dx-icon {
-                .dx-icon-sizing(@MATERIAL_GRID_BASE_ICON_SIZE);
+                .dx-icon-sizing(@MATERIAL_GRID_BASE_FILTER_ICON_SIZE);
                 &.dx-icon-filter-operation-default {
                     margin-top: 2px;
                 }
@@ -617,7 +619,7 @@
     .dx-editor-with-menu {
         .dx-menu-item-content {
             .dx-icon {
-                .dx-icon-sizing(@MATERIAL_GRID_BASE_ICON_SIZE);
+                .dx-icon-sizing(@MATERIAL_GRID_BASE_FILTER_ICON_SIZE);
                 &.dx-icon-filter-operation-default {
                     margin-top: 2px;
                 }
@@ -799,11 +801,6 @@
                     border-left-color: ~"@{@{widgetName}-row-selected-border-color}";
                     border-right-color: ~"@{@{widgetName}-row-selected-border-color}";
                 }
-            }
-
-            & > td.dx-focused {
-                background-color: ~"@{@{widgetName}-base-background-color}";
-                color: ~"@{@{widgetName}-base-color}";
             }
 
             &:not(.dx-row-lines) > td {
