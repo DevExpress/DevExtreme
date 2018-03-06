@@ -133,6 +133,20 @@ QUnit.test("map ready action", function(assert) {
     });
 });
 
+QUnit.test("map initilize with default center", function(assert) {
+    var done = assert.async();
+
+    $("#map").dxMap({
+        provider: "google",
+        onReady: function(e) {
+            var map = e.component._provider._map;
+            assert.deepEqual(map.get("options").center, { lat: 0, lng: 0 }, "center option of google map");
+
+            done();
+        }
+    });
+});
+
 QUnit.test("dimensions: width", function(assert) {
     var done = assert.async();
     var d = $.Deferred();

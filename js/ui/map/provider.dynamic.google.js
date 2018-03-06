@@ -174,6 +174,7 @@ var GoogleProvider = DynamicProvider.inherit({
 
             this._map = new google.maps.Map(this._$container[0], {
                 zoom: this._option("zoom"),
+                center: this._option("center"),
                 panControl: controls,
                 zoomControl: controls,
                 mapTypeControl: controls,
