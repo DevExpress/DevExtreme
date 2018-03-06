@@ -1034,7 +1034,9 @@ module.exports = {
                                         contentHeight = contentElement.outerHeight(),
                                         showFreeSpaceRow = (elementHeightWithoutScrollbar - contentHeight) > 0,
                                         rowsHeight = that._getRowsHeight(contentElement.children().first()),
-                                        resultHeight = elementHeightWithoutScrollbar - rowsHeight;
+                                        $tableElement = $table || that.getTableElements(),
+                                        borderTopWidth = Math.ceil(parseFloat($tableElement.css("borderTopWidth"))),
+                                        resultHeight = elementHeightWithoutScrollbar - rowsHeight - borderTopWidth;
 
                                     if(showFreeSpaceRow) {
                                         commonUtils.deferRender(function() {
