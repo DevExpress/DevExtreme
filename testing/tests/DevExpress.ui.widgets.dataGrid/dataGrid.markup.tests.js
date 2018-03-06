@@ -159,3 +159,17 @@ QUnit.test("markup with grouping", function(assert) {
     assert.equal($element.find(".dx-command-expand").length, 4, "four command expand cells: header + group + data + freeSpace");
     assert.equal($element.find(".dx-group-row").length, 1, "one group row is rendered");
 });
+
+QUnit.test("markup with column hiding", function(assert) {
+    var $element = $("#dataGrid").dxDataGrid({
+        columnHidingEnabled: true,
+        dataSource: [{ id: 1, name: "Alex" }]
+    });
+
+    this.clock.tick(30);
+
+    assert.equal($element.find(".dx-command-adaptive").length, 3, "three command expand cells: header + data + freeSpace");
+    if(!windowUtils.hasWindow()) {
+        assert.equal($element.find("colgroup col").last().get(0).style.width, "auto", "width style for adaptive command column");
+    }
+});
