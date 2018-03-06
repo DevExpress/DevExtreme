@@ -173,7 +173,7 @@ var Autocomplete = DropDownList.inherit({
     * @hidden
     */
 
-    _render: function() {
+    _initMarkup: function() {
         this.callBase();
         this.$element().addClass(AUTOCOMPLETE_CLASS);
         this.setAria("autocomplete", "inline");
