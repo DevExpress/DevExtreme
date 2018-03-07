@@ -18,6 +18,7 @@ var $ = require("../../core/renderer"),
     devices = require("../../core/devices"),
     config = require("../../core/config"),
     fx = require("../../animation/fx"),
+    windowUtils = require("../../core/utils/window"),
     messageLocalization = require("../../localization/message"),
     FunctionTemplate = require("../widget/function_template");
 
@@ -585,10 +586,7 @@ var Calendar = Editor.inherit({
 
     _initMarkup: function() {
         this._renderSubmitElement();
-        this.callBase();
-    },
 
-    _render: function() {
         this.callBase();
 
         var $element = this.$element();
@@ -598,7 +596,10 @@ var Calendar = Editor.inherit({
         $element.append(this.$body);
 
         this._renderViews();
+
         this._renderNavigator();
+        $element.append(this._navigator.$element());
+
         this._renderSwipeable();
         this._renderFooter();
 
@@ -606,7 +607,6 @@ var Calendar = Editor.inherit({
             "role": "listbox",
             "label": messageLocalization.format("dxCalendar-ariaWidgetName")
         });
-
         this._updateAriaSelected();
         this._updateAriaId();
 
@@ -614,9 +614,12 @@ var Calendar = Editor.inherit({
             this._moveCurrentDate(1);
         }
 
-        this._setViewContoured(this.option("currentDate"));
+    },
 
-        $element.append(this._navigator.$element());
+    _render: function() {
+        this.callBase();
+
+        this._setViewContoured(this.option("currentDate"));
     },
 
     _renderBody: function() {
@@ -635,11 +638,13 @@ var Calendar = Editor.inherit({
         this._view = this._renderSpecificView(currentDate);
         this._view.option("_keyboardProcessor", this._viewKeyboardProcessor);
 
-        var beforeDate = this._getDateByOffset(-1, currentDate);
-        this._beforeView = this._isViewAvailable(beforeDate) ? this._renderSpecificView(beforeDate) : null;
+        if(windowUtils.hasWindow()) {
+            var beforeDate = this._getDateByOffset(-1, currentDate);
+            this._beforeView = this._isViewAvailable(beforeDate) ? this._renderSpecificView(beforeDate) : null;
 
-        var afterDate = this._getDateByOffset(1, currentDate);
-        this._afterView = this._isViewAvailable(afterDate) ? this._renderSpecificView(afterDate) : null;
+            var afterDate = this._getDateByOffset(1, currentDate);
+            this._afterView = this._isViewAvailable(afterDate) ? this._renderSpecificView(afterDate) : null;
+        }
 
         this._translateViews();
     },

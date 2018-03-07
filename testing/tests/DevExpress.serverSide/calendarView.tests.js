@@ -1,0 +1,3 @@
+"use strict";
+
+require("../DevExpress.ui.widgets.editors/calendarView.markup.tests.js");

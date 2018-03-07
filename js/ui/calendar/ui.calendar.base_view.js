@@ -58,7 +58,7 @@ var BaseView = Widget.inherit({
         }
     },
 
-    _render: function() {
+    _initMarkup: function() {
         this.callBase();
 
         this._renderImpl();
