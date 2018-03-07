@@ -573,23 +573,15 @@
 
     .dx-@{widgetName}-filter-range-overlay {
         .dx-overlay-content {
-            border: ~"@{@{widgetName}-border}";
             overflow: inherit;
-            .box-shadow(2px 2px 3px ~"@{@{widgetName}-overlay-content-shadow-color}");
-
-            .dx-editor-container.dx-highlight-outline::after {
-                border-color: ~"@{@{widgetName}-cell-modified-border-color}";
-                left: 0px;
-            }
+            background-color: ~"@{@{widgetName}-filter-row-background-color}";
+            .box-shadow(@MATERIAL_GRID_BASE_DRAG_HEADER_FIRST_SHADOW, @MATERIAL_GRID_BASE_DRAG_HEADER_SECOND_SHADOW);
 
             .dx-texteditor {
+                padding: 10px 10px;
+                
                 .dx-texteditor-input {
-                    background-color: ~"@{@{widgetName}-base-background-color}";
-                    padding: @MATERIAL_GRID_BASE_CELL_PADDING;
-                }
-
-                &.dx-state-focused:after {
-                    border: 2px solid ~"@{@{widgetName}-focused-border-color}";
+                    font-size: @MATERIAL_GRID_BASE_CELL_FONT_SIZE;
                 }
             }
         }
@@ -739,6 +731,7 @@
         }
 
         .dx-row-removed > td {
+            // TODO
             background-color: ~"@{@{widgetName}-row-removed-bg}";
             border-top: 1px solid ~"@{@{widgetName}-cell-modified-border-color}";
             border-bottom: 1px solid ~"@{@{widgetName}-cell-modified-border-color}";
@@ -821,7 +814,6 @@
     }
 
     .dx-@{widgetName}-pager {
-        // padding: @MATERIAL_GRID_BASE_HEADER_HEIGHT // TODO button height????
         &.dx-widget {
             font-size: @MATERIAL_GRID_BASE_FOOTER_FONT_SIZE;
             color: ~"@{@{widgetName}-columnchooser-item-color}";
