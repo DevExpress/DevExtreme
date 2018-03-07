@@ -131,6 +131,7 @@ module.exports = {
              * @publicName visible
              * @type boolean
              * @default true
+             * @fires GridBase_onOptionChanged
              */
             /**
              * @name GridBaseColumn_hidingPriority
@@ -179,6 +180,7 @@ module.exports = {
              * @publicName visibleIndex
              * @type number
              * @default undefined
+             * @fires GridBase_onOptionChanged
              */
             /**
              * @name GridBaseColumn_showInColumnChooser
@@ -299,12 +301,14 @@ module.exports = {
              * @type Enums.SortOrder
              * @default undefined
              * @acceptValues undefined
+             * @fires GridBase_onOptionChanged
              */
             /**
              * @name GridBaseColumn_sortIndex
              * @publicName sortIndex
              * @type number
              * @default undefined
+             * @fires GridBase_onOptionChanged
              */
             /**
              * @name GridBaseColumn_showEditorAlways
@@ -355,18 +359,21 @@ module.exports = {
              * @publicName selectedFilterOperation
              * @type Enums.FilterOperations
              * @default undefined
+             * @fires GridBase_onOptionChanged
              */
             /**
              * @name GridBaseColumn_filterValue
              * @publicName filterValue
              * @type any
              * @default undefined
+             * @fires GridBase_onOptionChanged
              */
             /**
              * @name GridBaseColumn_filterValues
              * @publicName filterValues
              * @type Array<any>
              * @default undefined
+             * @fires GridBase_onOptionChanged
             */
             /**
              * @name GridBaseColumn_filterType
@@ -407,6 +414,7 @@ module.exports = {
              * @publicName groupIndex
              * @type number
              * @default undefined
+             * @fires dxDataGrid_onOptionChanged
              */
             /**
              * @name dxDataGridColumn_grouped

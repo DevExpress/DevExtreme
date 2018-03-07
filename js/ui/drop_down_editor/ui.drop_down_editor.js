@@ -152,6 +152,8 @@ var DropDownEditor = TextBox.inherit({
             * @publicName opened
             * @type boolean
             * @default false
+            * @fires dxDropDownEditorOptions_onOpened
+            * @fires dxDropDownEditorOptions_onClosed
             */
             opened: false,
 

@@ -67,6 +67,7 @@ var CollectionWidget = BaseCollectionWidget.inherit({
             * @name CollectionWidgetOptions_selectedItems
             * @publicName selectedItems
             * @type Array<any>
+            * @fires CollectionWidgetOptions_onSelectionChanged
             */
             selectedItems: [],
 
@@ -74,6 +75,7 @@ var CollectionWidget = BaseCollectionWidget.inherit({
              * @name CollectionWidgetOptions_selectedItemKeys
              * @publicName selectedItemKeys
              * @type Array<any>
+             * @fires CollectionWidgetOptions_onSelectionChanged
              */
             selectedItemKeys: [],
 
@@ -92,6 +94,7 @@ var CollectionWidget = BaseCollectionWidget.inherit({
             * @publicName selectedIndex
             * @type number
             * @default -1
+            * @fires CollectionWidgetOptions_onSelectionChanged
             */
             selectedIndex: NOT_EXISTING_INDEX,
 
@@ -100,6 +103,7 @@ var CollectionWidget = BaseCollectionWidget.inherit({
             * @publicName selectedItem
             * @type object
             * @default null
+            * @fires CollectionWidgetOptions_onSelectionChanged
             * @ref
             */
             selectedItem: null,

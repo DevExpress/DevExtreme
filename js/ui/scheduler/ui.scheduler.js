@@ -318,6 +318,7 @@ var Scheduler = Widget.inherit({
                 * @publicName currentView
                 * @type Enums.SchedulerViewType
                 * @default "day"
+                * @fires dxSchedulerOptions_onOptionChanged
                 */
             currentView: "day", // TODO: should we calculate currentView if views array contains only one item, for example 'month'?
                 /**
@@ -325,6 +326,7 @@ var Scheduler = Widget.inherit({
                 * @publicName currentDate
                 * @type Date|number|string
                 * @default new Date()
+                * @fires dxSchedulerOptions_onOptionChanged
                 */
             currentDate: dateUtils.trimTime(new Date()),
                 /**
