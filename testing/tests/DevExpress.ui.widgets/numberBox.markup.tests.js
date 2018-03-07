@@ -47,8 +47,7 @@ QUnit.test("input type should depend on mode option", function(assert) {
         { mode: "tel", prop: "tel" },
         { mode: "number", prop: "number" },
         { mode: "text", prop: "text" },
-        { mode: "tel", prop: "tel" },
-        { mode: undefined, prop: "text" }
+        { mode: "tel", prop: "tel" }
     ];
 
     types.forEach(function(type) {
