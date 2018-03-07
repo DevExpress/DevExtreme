@@ -158,25 +158,6 @@ QUnit.test("field multiple attr should be set correctly, multiple = false", func
     assert.equal($fileInput.prop("multiple"), false, "file input has correct name property");
 });
 
-
-QUnit.module("disabled option");
-
-QUnit.test("file input should be hidden when widget is disabled", function(assert) {
-    var $fileUploader = $("#fileuploader").dxFileUploader({
-            disabled: false,
-            useNativeInputClick: false,
-            useDragOver: true,
-            uploadMode: "useButtons"
-        }),
-        $fileInput = $fileUploader.find("." + FILEUPLOADER_INPUT_CLASS);
-
-    assert.equal($fileInput.css("display"), "inline-block", "input is visible");
-
-    $fileUploader.dxFileUploader("option", "disabled", true);
-    assert.equal($fileInput.css("display"), "none", "input is hidden");
-});
-
-
 QUnit.module("option accept");
 
 QUnit.test("field accept should be rendered correctly", function(assert) {

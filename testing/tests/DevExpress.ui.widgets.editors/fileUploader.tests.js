@@ -1893,3 +1893,20 @@ QUnit.test("the 'values' option should work correctly", function(assert) {
     fileUploader.option("values", []);
     assert.deepEqual(fileUploader.option("value"), [], "the 'values' option works correctly with writing");
 });
+
+QUnit.module("disabled option");
+
+QUnit.test("file input should be hidden when widget is disabled", function(assert) {
+    var $fileUploader = $("#fileuploader").dxFileUploader({
+            disabled: false,
+            useNativeInputClick: false,
+            useDragOver: true,
+            uploadMode: "useButtons"
+        }),
+        $fileInput = $fileUploader.find("." + FILEUPLOADER_INPUT_CLASS);
+
+    assert.equal($fileInput.css("display"), "inline-block", "input is visible");
+
+    $fileUploader.dxFileUploader("option", "disabled", true);
+    assert.equal($fileInput.css("display"), "none", "input is hidden");
+});
