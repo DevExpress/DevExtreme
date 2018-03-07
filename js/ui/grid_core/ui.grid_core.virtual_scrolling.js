@@ -1,7 +1,8 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
-    window = require("../../core/utils/window").getWindow(),
+    windowUtils = require("../../core/utils/window"),
+    window = windowUtils.getWindow(),
     commonUtils = require("../../core/utils/common"),
     virtualScrollingCore = require("./ui.grid_core.virtual_scrolling_core"),
     gridCoreUtils = require("./ui.grid_core.utils"),
@@ -272,6 +273,9 @@ var VirtualScrollingRowsViewExtender = (function() {
                 virtualItemsCount = that._dataController.virtualItemsCount();
 
             if(virtualItemsCount) {
+                if(windowUtils.hasWindow()) {
+                    tableElement.addClass(that.addWidgetPrefix(TABLE_CONTENT_CLASS));
+                }
                 if(!contentElement.children().length) {
                     contentElement.append(tableElement);
                 } else {
@@ -309,13 +313,13 @@ var VirtualScrollingRowsViewExtender = (function() {
 
             that._updateBottomLoading();
         },
-        _updateContentPosition: function(isRender) {
+        _updateContentPosition: function() {
             var that = this;
             commonUtils.deferUpdate(function() {
-                that._updateContentPositionCore(isRender);
+                that._updateContentPositionCore();
             });
         },
-        _updateContentPositionCore: function(isRender) {
+        _updateContentPositionCore: function() {
             var that = this,
                 contentElement,
                 contentHeight,
@@ -331,10 +335,6 @@ var VirtualScrollingRowsViewExtender = (function() {
                 $tables = contentElement.children();
                 $contentTable = $tables.eq(0);
                 virtualTable = $tables.eq(1);
-
-                if(!isRender) {
-                    $contentTable.addClass(that.addWidgetPrefix(TABLE_CONTENT_CLASS));
-                }
 
                 that._contentTableHeight = $contentTable[0].offsetHeight;
 
