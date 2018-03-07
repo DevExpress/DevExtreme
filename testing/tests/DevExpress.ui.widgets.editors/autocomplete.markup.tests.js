@@ -9,8 +9,6 @@ QUnit.testStart(function() {
         '<div id="qunit-fixture" class="dx-viewport">\
             <div id="widget"></div>\
             <div id="widthRootStyle" style="width: 300px;"></div>\
-            <div id="autocomplete"></div>\
-            <div id="autocomplete2"></div>\
         </div>';
 
     $("#qunit-fixture").html(markup);
@@ -22,7 +20,7 @@ var WIDGET_CLASS = "dx-autocomplete",
 
 QUnit.module("dxAutocomplete", {
     beforeEach: function() {
-        this.element = $("#autocomplete").dxAutocomplete({
+        this.element = $("#widget").dxAutocomplete({
             value: "text",
             dataSource: ["item 1", "item 2", "item 3"]
         });
@@ -38,7 +36,7 @@ QUnit.test("markup init", function(assert) {
 });
 
 QUnit.test("init with options", function(assert) {
-    var element = $("#autocomplete2").dxAutocomplete({
+    var element = $("#widget").dxAutocomplete({
             value: "anotherText",
             placeholder: "type something"
         }),
@@ -68,7 +66,7 @@ QUnit.test("maxLength", function(assert) {
 });
 
 QUnit.test("input should be empty when value is empty", function(assert) {
-    var $autocomplete = $("#autocomplete2").dxAutocomplete({
+    var $autocomplete = $("#widget").dxAutocomplete({
         placeholder: "test",
         value: ""
     });
