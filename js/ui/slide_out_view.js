@@ -82,7 +82,8 @@ var SlideOutView = Widget.inherit({
             /**
             * @name dxSlideOutViewOptions_menuTemplate
             * @publicName menuTemplate
-            * @type template
+            * @type_function_param1 menuElement:dxElement
+            * @type template|function
             * @default null
             */
             menuTemplate: "menu",
@@ -90,7 +91,8 @@ var SlideOutView = Widget.inherit({
             /**
             * @name dxSlideOutViewOptions_contentTemplate
             * @publicName contentTemplate
-            * @type template
+            * @type_function_param1 contentElement:dxElement
+            * @type template|function
             * @default "content"
             */
             contentTemplate: "content",
