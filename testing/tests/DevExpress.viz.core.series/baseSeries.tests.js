@@ -1458,7 +1458,9 @@ QUnit.module("Drawing with resample data", {
         });
 
         this.series = createSeries({
-            useAggregation: true
+            aggregation: {
+                enabled: true
+            }
         }, {
             seriesGroup: this.seriesGroup,
             labelsGroup: this.renderer.g(),
@@ -1511,7 +1513,7 @@ QUnit.test("T172956. With Resample Points, with Error Bars", function(assert) {
             type: "fixed",
             value: 2
         },
-        useAggregation: true
+        aggregation: { enabled: true }
     }, {
         argumentAxis: this.argumentAxis
     });
@@ -1553,7 +1555,7 @@ QUnit.test("T172956. With Resample Points, with Error Bars when fusion points = 
                 type: "fixed",
                 value: 2
             },
-            useAggregation: true
+            aggregation: { enabled: true }
         }, {
             argumentAxis: this.argumentAxis
         }),
@@ -1576,7 +1578,7 @@ QUnit.test("T172956. With Resample Points, with Error Bars when fusion points = 
 QUnit.test("Draw aggragated points", function(assert) {
     var series = createSeries({
         type: "scatter",
-        useAggregation: true
+        aggregation: { enabled: true }
     }, {
         argumentAxis: this.argumentAxis,
         valueAxis: new MockAxis({

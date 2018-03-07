@@ -135,6 +135,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             $cell.addClass(column.cssClass);
         }
         if(column.command === "expand") {
+            $cell.addClass(column.cssClass);
             $cell.addClass(this.addWidgetPrefix(GROUP_SPACE_CLASS));
         }
 
@@ -296,7 +297,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             width = HIDDEN_COLUMNS_WIDTH;
         }
 
-        return $("<col>").width(width);
+        return $("<col>").css("width", width);
     },
 
     renderDelayedTemplates: function() {

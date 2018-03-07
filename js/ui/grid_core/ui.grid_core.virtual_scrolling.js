@@ -262,7 +262,7 @@ var VirtualScrollingRowsViewExtender = (function() {
 
             that.callBase.apply(that, arguments);
 
-            that._updateContentPosition();
+            that._updateContentPosition(true);
 
             that._renderTime = new Date() - startRenderDate;
         },
@@ -272,8 +272,6 @@ var VirtualScrollingRowsViewExtender = (function() {
                 virtualItemsCount = that._dataController.virtualItemsCount();
 
             if(virtualItemsCount) {
-                tableElement.addClass(that.addWidgetPrefix(TABLE_CONTENT_CLASS));
-
                 if(!contentElement.children().length) {
                     contentElement.append(tableElement);
                 } else {
@@ -311,7 +309,13 @@ var VirtualScrollingRowsViewExtender = (function() {
 
             that._updateBottomLoading();
         },
-        _updateContentPosition: commonUtils.deferUpdater(function() {
+        _updateContentPosition: function(isRender) {
+            var that = this;
+            commonUtils.deferUpdate(function() {
+                that._updateContentPositionCore(isRender);
+            });
+        },
+        _updateContentPositionCore: function(isRender) {
             var that = this,
                 contentElement,
                 contentHeight,
@@ -327,6 +331,10 @@ var VirtualScrollingRowsViewExtender = (function() {
                 $tables = contentElement.children();
                 $contentTable = $tables.eq(0);
                 virtualTable = $tables.eq(1);
+
+                if(!isRender) {
+                    $contentTable.addClass(that.addWidgetPrefix(TABLE_CONTENT_CLASS));
+                }
 
                 that._contentTableHeight = $contentTable[0].offsetHeight;
 
@@ -362,7 +370,7 @@ var VirtualScrollingRowsViewExtender = (function() {
                     }
                 });
             }
-        }),
+        },
 
         _isTableLinesDisplaysCorrect: function(table) {
             var hasColumnLines = table.find("." + COLUMN_LINES_CLASS).length > 0;

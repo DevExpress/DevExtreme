@@ -708,14 +708,11 @@ var RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
         this.callBase(e);
     },
 
-    _updateContentPosition: function() {
-        var isUpdated = this.callBase();
-
-        if(isUpdated) {
+    _updateContentPosition: function(isRender) {
+        this.callBase.apply(this, arguments);
+        if(!isRender) {
             this._updateFixedTablePosition(-this._scrollTop);
         }
-
-        return isUpdated;
     },
     _afterRowPrepared: function(e) {
         if(this._isFixedTableRendering) return;

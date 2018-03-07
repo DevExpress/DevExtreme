@@ -413,11 +413,11 @@ QUnit.test("day time should be changed when clock moves back through the boundar
 
     hourNumberBox.option("value", 11);
     assert.equal(formatField.option("value"), TIMEVIEW_FORMAT12_AM, "am is selected");
-    assert.equal(instance.option("value").toString(), new Date(2011, 0, 1, 11, 0, 10, 0), "time is correct");
+    assert.equal(instance.option("value").toString(), new Date(2011, 0, 1, 11, 0, 0, 0), "time is correct");
 
     hourNumberBox.option("value", 12);
     assert.equal(formatField.option("value"), TIMEVIEW_FORMAT12_PM, "pm is selected");
-    assert.equal(instance.option("value").toString(), new Date(2011, 0, 1, 12, 0, 10, 0), "time is correct");
+    assert.equal(instance.option("value").toString(), new Date(2011, 0, 1, 12, 0, 0, 0), "time is correct");
 });
 
 QUnit.test("timeView should not change value specified via api", function(assert) {

@@ -352,7 +352,9 @@ var dxChart = AdvancedChart.inherit({
 
             "commonAxisSettings.label.overlappingBehavior.rotationAngle": { since: "17.1", message: "Use the 'commonAxisSettings.label.rotationAngle' option instead" },
             "commonAxisSettings.label.overlappingBehavior.staggeringSpacing": { since: "17.1", message: "Use the 'commonAxisSettings.label.staggeringSpacing' option instead" },
-            "commonAxisSettings.label.overlappingBehavior.mode": { since: "17.1", message: "Use the 'overlappingBehavior' option directly" }
+            "commonAxisSettings.label.overlappingBehavior.mode": { since: "17.1", message: "Use the 'overlappingBehavior' option directly" },
+
+            "useAggregation": { since: "18.1", message: "Use the 'commonSeriesSettings.aggregation.enabled' or 'series.aggregation.enabled' option instead" }
         });
     },
 
@@ -549,7 +551,7 @@ var dxChart = AdvancedChart.inherit({
         var that = this,
             panesBorderOptions = that._createPanesBorderOptions(),
             series = that._getVisibleSeries(),
-            useAggregation = that._options.useAggregation;
+            useAggregation = series.some(function(s) { return s.useAggregation(); });
 
         that._createPanesBackground();
         that._appendAxesGroups();
@@ -562,10 +564,12 @@ var dxChart = AdvancedChart.inherit({
             this._argumentAxes.forEach(function(axis) {
                 axis.updateCanvas(that._canvas);
             });
-
             series.forEach(function(series) {
-                series.createPoints();
+                if(series.useAggregation()) {
+                    series.createPoints();
+                }
             });
+            this._processSeriesFamilies();
         }
 
         if(useAggregation || (_isDefined(that._zoomMinArg) || _isDefined(that._zoomMaxArg)) && that._themeManager.getOptions("adjustOnZoom")) {

@@ -84,7 +84,8 @@ var NumberBoxMask = NumberBoxBase.inherit({
 
     _isValueDirty: function() {
         // https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/15181565/
-        return browser.msie && this._isInputTriggered;
+        // https://bugreport.apple.com/web/?problemID=38133794 but this bug tracker is private
+        return (browser.msie || browser.safari) && this._isInputTriggered;
     },
 
     _arrowHandler: function(step, e) {
@@ -180,6 +181,10 @@ var NumberBoxMask = NumberBoxBase.inherit({
 
         if(this._isStub(char)) {
             this._moveCaret(this._isDeleteKey(e.key) ? 1 : -1);
+            if(this._parsedValue < 0 || 1 / this._parsedValue === -Infinity) {
+                this._revertSign(e);
+                this._setTextByParsedValue();
+            }
             e.preventDefault();
             return;
         }

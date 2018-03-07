@@ -356,6 +356,7 @@ var TextEditorBase = Editor.inherit({
         this._renderProps();
 
         this.callBase();
+
         this._renderValue();
     },
 

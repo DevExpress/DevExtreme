@@ -140,9 +140,9 @@ var ThemeManager = BaseThemeManager.inherit((function() {
                 userOptions.visible = seriesVisibility;
             }
 
-            settings = extend(true, {
-                useAggregation: that.getOptions("useAggregation"),
-            }, themeCommonSettings, themeCommonSettings[type], userCommonSettings, userCommonSettings[type], userOptions);
+            settings = extend(true, { aggregation: {} }, themeCommonSettings, themeCommonSettings[type], userCommonSettings, userCommonSettings[type], userOptions);
+
+            settings.aggregation.enabled = normalizeAggregationEnabled(settings.aggregation, that.getOptions("useAggregation"));
             settings.type = type;
             settings.widgetType = widgetType;
             settings.containerBackgroundColor = containerBackgroundColor;
@@ -173,6 +173,10 @@ var ThemeManager = BaseThemeManager.inherit((function() {
             userOptions = typeUtils.isPlainObject(userOptions) ? userOptions : _isDefined(userOptions) ? { enabled: !!userOptions } : {};
             return mergeOptions.call(this, name, userOptions);
         }
+    };
+
+    var normalizeAggregationEnabled = function(aggregation, useAggregation) {
+        return !!(!_isDefined(aggregation.enabled) ? useAggregation : aggregation.enabled);
     };
 
     return {

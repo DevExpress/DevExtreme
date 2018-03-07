@@ -178,6 +178,27 @@ QUnit.test("initialize with logarithmic axis", function(assert) {
     assert.equal(range.base, 10, "base");
 });
 
+
+QUnit.test("Pass series dataType to range", function(assert) {
+    this.seriesDataSource.stub("getBoundRange").returns({
+        arg: new commons.StubRange(),
+        val: new commons.StubRange()
+    });
+    this.seriesDataSource.stub("getCalculatedValueType").returns("datetime");
+
+    this.createWidget({
+        dataSource: [{}],
+        chart: {
+            series: [{}]
+        },
+        scale: {
+        }
+    });
+
+    var range = this.axis.setBusinessRange.lastCall.args[0];
+    assert.equal(range.addRange.firstCall.args[0].dataType, "datetime");
+});
+
 // T153827
 QUnit.test("correct sliders place holder size by values", function(assert) {
     this.createWidget({
@@ -335,6 +356,7 @@ QUnit.test("Update axis canvas before create series dataSorce", function(assert)
         arg: new commons.StubRange(),
         val: new commons.StubRange()
     });
+
     this.createWidget({
         dataSource: [{}],
         chart: {
@@ -343,15 +365,14 @@ QUnit.test("Update axis canvas before create series dataSorce", function(assert)
 
     var argumentAxis = spy.lastCall.args[0].argumentAxis;
 
-    assert.deepEqual(argumentAxis.getTranslator().updateCanvas.firstCall.args[0], {
+    assert.deepEqual(argumentAxis.getTranslator().update.firstCall.args, [{ stubData: true }, {
         height: 150,
         left: 0,
         top: 0,
         width: 300
-    });
-    assert.ok(argumentAxis.getTranslator().updateCanvas.firstCall.calledBefore(spy.firstCall));
+    }, { isHorizontal: true }]);
+    assert.ok(argumentAxis.getTranslator().update.firstCall.calledBefore(spy.firstCall));
 });
-
 
 QUnit.module("logarithmic type", commons.environment);
 

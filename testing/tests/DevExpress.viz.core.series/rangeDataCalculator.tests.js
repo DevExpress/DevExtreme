@@ -1,5 +1,6 @@
 "use strict";
 
+/* global MockTranslator */
 var $ = require("jquery"),
     vizMocks = require("../../helpers/vizMocks.js"),
     Series = require("viz/series/base_series").Series;
@@ -24,7 +25,10 @@ var createSeries = function(options, renderSettings, widgetType) {
     renderSettings.renderer = renderSettings.renderer || new vizMocks.Renderer();
     renderSettings.argumentAxis = renderSettings.argumentAxis || {
         getViewport: function() {},
-        calculateInterval: function(a, b) { return Math.abs(a - b); }
+        calculateInterval: function(a, b) { return Math.abs(a - b); },
+        getTranslator: function() {
+            return new MockTranslator({});
+        }
     };
     options = $.extend(true, {
         visible: true,
@@ -2817,4 +2821,20 @@ QUnit.test("Get argument range when discrete data", function(assert) {
 
     assert.ok(rangeData, "Range data should be created");
     assert.deepEqual(rangeData.categories, [0, 1, 2], "range data should have all categories");
+});
+
+QUnit.test("Calculate interval in range data when aggregation is enabled", function(assert) {
+    var data = [{ arg: 2, val: 11 }, { arg: 5, val: 22 }, { arg: 13, val: 3 }, { arg: 20, val: 15 }],
+        rangeData,
+        series = createSeries({ type: "scatter", argumentAxisType: "continuous", aggregation: { enabled: true } });
+
+    series.updateData(data);
+    series.createPoints();
+
+    rangeData = series.getRangeData();
+
+    assert.ok(rangeData, "Range data should be created");
+    assert.strictEqual(rangeData.arg.min, 2, "Min arg should be correct");
+    assert.strictEqual(rangeData.arg.max, 20, "Max arg should be correct");
+    assert.strictEqual(rangeData.arg.interval, 3, "Min interval arg should be correct");
 });

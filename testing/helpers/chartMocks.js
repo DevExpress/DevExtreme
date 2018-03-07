@@ -661,7 +661,8 @@
             correctRadius: sinon.spy(),
             updateDataType: sinon.spy(),
             getViewport: sinon.stub().returns({}),
-            getMarginOptions: sinon.stub().returns(options.marginOptions || {})
+            getMarginOptions: sinon.stub().returns(options.marginOptions || {}),
+            useAggregation: sinon.stub().returns(false)
         };
     };
 

@@ -2038,15 +2038,17 @@ QUnit.test('Height free space row for virtual scroller', function(assert) {
     var dataController = new MockDataController({ items: this.items, virtualItemsCount: { begin: 0, end: 0 } }),
         rowsView = this.createRowsView(this.items, dataController),
         $testElement = $('#container'),
-        freeSpaceRowHeight;
+        freeSpaceRowHeight,
+        borderTopWidth;
 
     // act
     rowsView.render($testElement);
     rowsView.height(400);
     rowsView.resize();
+    borderTopWidth = Math.ceil(parseFloat(rowsView.getTableElements().css("borderTopWidth")));
 
     // assert
-    freeSpaceRowHeight = 400 - 3 * rowsView._rowHeight;
+    freeSpaceRowHeight = 400 - 3 * rowsView._rowHeight - borderTopWidth;
     assert.equal(rowsView._getFreeSpaceRowElements().css('display'), 'table-row', 'display style is none');
     assert.equal(rowsView._getFreeSpaceRowElements()[0].offsetHeight, Math.round(freeSpaceRowHeight), 'height free space row');
 });
@@ -5927,6 +5929,7 @@ QUnit.test('Update rowsView on changed', function(assert) {
         changeType: 'refresh',
         items: options.items
     });
+    rowsView.resize();
 
     var content = testElement.find('.dx-scrollable-content').children();
 
@@ -6137,6 +6140,7 @@ QUnit.test("Set column widths for virtual table", function(assert) {
         mode: 'virtual'
     };
     rowsView.render($testElement);
+    rowsView.resize();
 
     // act
     rowsView.setColumnWidths([10, 20, 30]);
