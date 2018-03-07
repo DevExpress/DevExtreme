@@ -2,30 +2,14 @@
   "name": "devextreme",
   "version": "18.1.0",
   "description": "HTML5 JavaScript Component Suite for Responsive Web Development",
-  "keywords": [
-    "html5",
-    "controls",
-    "widgets",
-    "components",
-    "jquery",
-    "knockout",
-    "angular",
-    "web",
-    "ui",
-    "datagrid",
-    "pivotgrid",
-    "scheduler",
-    "treelist",
-    "chart"
-  ],
+  "keywords": [ "html5", "controls", "widgets", "components", "jquery", "knockout", "angular", "web", "ui", "datagrid", "pivotgrid", "scheduler", "treelist", "chart" ],
   "homepage": "https://js.devexpress.com/",
   "bugs": "https://www.devexpress.com/support/",
   "author": "Developer Express Inc.",
   "repository": "https://github.com/DevExpress/DevExtreme",
   "license": "SEE LICENSE IN README.md",
   "dependencies": {
-    "jszip": "^2.0.0 || ^3.0.0",
-    "npm": "^5.7.1"
+    "jszip": "^2.0.0 || ^3.0.0"
   },
   "devDependencies": {
     "@types/jquery": "^2.0.34",
