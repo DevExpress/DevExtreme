@@ -413,62 +413,54 @@
         bottom: 0;
         height: 2px;
         background-color: ~"@{@{widgetName}-focused-border-color}";
-        left: @MATERIAL_GRID_BASE_CELL_HORIZONTAL_PADDING;
-        right: @MATERIAL_GRID_BASE_CELL_HORIZONTAL_PADDING - 1;
+        left: @MATERIAL_GRID_BASE_CELL_HORIZONTAL_PADDING + 1;
+        right: @MATERIAL_GRID_BASE_CELL_HORIZONTAL_PADDING + 1;
     }
 
-    .dx-@{widgetName}-content {
-        .dx-@{widgetName}-table {
-            .dx-row {
-                .dx-command-select {
-                    overflow: visible;
-                    width: @MATERIAL_GRID_BASE_COMMAND_SELECT_COLUMN_WIDTH;
-                    min-width: @MATERIAL_GRID_BASE_COMMAND_SELECT_COLUMN_WIDTH;
-                    padding-left: @MATERIAL_GRID_BASE_CELL_FIRST_COLUMN_PADDING;
-                    padding-right: @MATERIAL_GRID_BASE_CELL_FIRST_COLUMN_PADDING - @MATERIAL_GRID_BASE_CELL_HORIZONTAL_PADDING;
-                    line-height: 1;
-                }
+    .dx-@{widgetName}-content .dx-@{widgetName}-table .dx-row {
+        .dx-command-select {
+            overflow: visible;
+            width: @MATERIAL_GRID_BASE_COMMAND_SELECT_COLUMN_WIDTH;
+            min-width: @MATERIAL_GRID_BASE_COMMAND_SELECT_COLUMN_WIDTH;
+            padding-left: @MATERIAL_GRID_BASE_CELL_FIRST_COLUMN_PADDING;
+            padding-right: @MATERIAL_GRID_BASE_CELL_FIRST_COLUMN_PADDING - @MATERIAL_GRID_BASE_CELL_HORIZONTAL_PADDING;
+            line-height: 1;
+        }
 
-                .dx-command-edit {
-                    width: @MATERIAL_GRID_BASE_COMMAND_EDIT_COLUMN_WIDTH;
-                    min-width: @MATERIAL_GRID_BASE_COMMAND_EDIT_COLUMN_WIDTH;
-                }
+        .dx-command-edit {
+            width: @MATERIAL_GRID_BASE_COMMAND_EDIT_COLUMN_WIDTH;
+            min-width: @MATERIAL_GRID_BASE_COMMAND_EDIT_COLUMN_WIDTH;
+        }
 
-                .dx-command-expand, .dx-@{widgetName}-group-space {
-                    width: @MATERIAL_GRID_BASE_COMMAND_EXPAND_COLUMN_WIDTH;
-                    min-width: @MATERIAL_GRID_BASE_COMMAND_EXPAND_COLUMN_WIDTH;
-                    padding: 0 4px 0 8px;
-                    line-height: 0;
-                }
+        .dx-command-expand, .dx-@{widgetName}-group-space {
+            width: @MATERIAL_GRID_BASE_COMMAND_EXPAND_COLUMN_WIDTH;
+            min-width: @MATERIAL_GRID_BASE_COMMAND_EXPAND_COLUMN_WIDTH;
+            padding: 0 4px 0 8px;
+            line-height: 0;
+        }
 
-                .dx-editor-cell:not(.dx-command-select) {
-                    padding-right: @MATERIAL_GRID_BASE_CELL_HORIZONTAL_PADDING;
-                    padding-left: @MATERIAL_GRID_BASE_CELL_HORIZONTAL_PADDING;
+        .dx-editor-cell:not(.dx-command-select) {
+            padding-right: @MATERIAL_GRID_BASE_CELL_HORIZONTAL_PADDING;
+            padding-left: @MATERIAL_GRID_BASE_CELL_HORIZONTAL_PADDING;
+        }
+    }
+
+    .dx-data-row.dx-state-hover {
+        &:not(.dx-selection):not(.dx-row-inserted):not(.dx-row-removed):not(.dx-edit-row) {
+            background-color: ~"@{@{widgetName}-hover-bg}";
+            > td {
+                color: ~"@{@{widgetName}-row-hovered-color}";
+            }
+
+            & > .dx-@{widgetName}-readonly .dx-texteditor {
+                .dx-texteditor-input {
+                    background-color: ~"@{@{widgetName}-hover-bg}";
+                    color: ~"@{@{widgetName}-row-hovered-color}";
                 }
             }
-    
-            .dx-data-row.dx-state-hover {
-                &:not(.dx-selection):not(.dx-row-inserted):not(.dx-row-removed):not(.dx-edit-row) {
-                    & > td {
-                        background-color: ~"@{@{widgetName}-hover-bg}";
-                        color: ~"@{@{widgetName}-row-hovered-color}";
-    
-                        &.dx-@{widgetName}-group-space {
-                            border-right-color: ~"@{@{widgetName}-hover-bg}";
-                        }
-                    }
-    
-                    & > .dx-@{widgetName}-readonly .dx-texteditor {
-                        .dx-texteditor-input {
-                            background-color: ~"@{@{widgetName}-hover-bg}";
-                            color: ~"@{@{widgetName}-row-hovered-color}";
-                        }
-                    }
-    
-                    & > td.dx-pointer-events-none {
-                        background-color: transparent;
-                    }
-                }
+
+            & > td.dx-pointer-events-none {
+                background-color: transparent;
             }
         }
     }
@@ -629,6 +621,8 @@
 
     .dx-highlight-outline {
         padding: @MATERIAL_GRID_BASE_CELL_PADDING;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     .dx-@{widgetName}-header-panel {
@@ -742,11 +736,7 @@
             }
 
             .dx-cell-modified {
-                .dx-highlight-outline {
-                    &::after {
-                        border-color: ~"@{@{widgetName}-cell-modified-border-color}";
-                    }
-                }
+                background-color: ~"@{@{widgetName}-cell-modified-border-color}";
             }
         }
 
@@ -946,5 +936,9 @@
             padding: 12px 8px 0 8px;
             border-bottom: 1px solid @MATERIAL_GRID_BASE_BORDER_COLOR;
         }
+    }
+
+    .dx-placeholder:before {
+        font-size: @MATERIAL_GRID_BASE_CELL_FONT_SIZE;
     }
 }
