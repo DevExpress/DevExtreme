@@ -818,6 +818,22 @@ QUnit.test("with dataSourceField", function(assert) {
     assert.equal(seriesDataSource._series[1].getOptions().argumentField, "x");
 });
 
+// T612521
+QUnit.test("No chart, dataSourceField, arguments as string, valueType = datetime - pass datetime as value and argument types. T612521", function(assert) {
+    // arrange,act
+    var seriesDataSource = new SeriesDataSource({
+        dataSource: [{ x: "2018-02-01T00:00:00" }, { x: "2018-03-01T00:00:00" }],
+        dataSourceField: "x",
+        valueType: "datetime",
+        chart: {},
+        incidentOccurred: noop,
+        renderer: new vizMocks.Renderer()
+    });
+    // assert
+    assert.equal(seriesDataSource._series[0].valueType, "datetime");
+    assert.equal(seriesDataSource._series[0].argumentType, "datetime");
+});
+
 // B254994
 QUnit.test("argumentField in commonSeriesSettings", function(assert) {
     // arrange,act
