@@ -474,11 +474,12 @@ var Pager = Widget.inherit({
             pagesSizesLength = pageSizes && pageSizes.length,
             $element = that.$element();
 
+        that._$pagesSizeChooser && that._$pagesSizeChooser.remove();
+
         if(!showPageSizes || !pagesSizesLength) {
             return;
         }
 
-        that._$pagesSizeChooser && that._$pagesSizeChooser.remove();
         that._$pagesSizeChooser = $('<div>').addClass(PAGER_PAGE_SIZES_CLASS).appendTo($element);
 
         if(that.option("lightModeEnabled")) {
@@ -537,12 +538,21 @@ var Pager = Widget.inherit({
 
     _renderContentImpl: function() {
         this.$element()
-            .addClass(PAGER_CLASS)
             .toggleClass(LIGHT_MODE_CLASS, this.option("lightModeEnabled"));
 
         this._toggleVisibility(this.option("visible"));
         this._updatePageSizes(true);
         this._updatePages(true);
+    },
+
+    _initMarkup: function() {
+        var $element = this.$element();
+
+        $element.addClass(PAGER_CLASS);
+
+        var $pageSize = $('<div>').addClass(PAGER_PAGE_CLASS);
+
+        this._$pagesChooser = $('<div>').addClass(PAGER_PAGES_CLASS).append($pageSize).appendTo($element);
     },
 
     _render: function() {
