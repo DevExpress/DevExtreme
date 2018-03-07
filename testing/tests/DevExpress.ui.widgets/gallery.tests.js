@@ -1153,10 +1153,10 @@ QUnit.test("selected item shouldn't have invisible class", function(assert) {
 QUnit.test("there are no invisible items if items count per page > 1", function(assert) {
     this.instance.option({
         width: 1000,
-        initialItemWidth: 100,
+        initialItemWidth: undefined,
         items: [0, 1, 2]
     });
-
+    this.instance.option("initialItemWidth", 100);
     var $galleryItems = this.$element.find("." + GALLERY_ITEM_CLASS);
 
     $.each($galleryItems, function(index, $item) {
@@ -1167,10 +1167,11 @@ QUnit.test("there are no invisible items if items count per page > 1", function(
 QUnit.test("there are no invisible items if wrapAround=true", function(assert) {
     this.instance.option({
         width: 1000,
-        wrapAround: true,
+        wrapAround: false,
         items: [0, 1, 2]
     });
 
+    this.instance.option("wrapAround", true);
     var $galleryItems = this.$element.find("." + GALLERY_ITEM_CLASS);
 
     $.each($galleryItems, function(index, $item) {
