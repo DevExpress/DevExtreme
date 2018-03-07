@@ -1795,6 +1795,47 @@ QUnit.test("appending items on 'more' button", function(assert) {
     assert.equal(element.dxList("instance")._startIndexForAppendedItems, null, "does not expecting appending items if all items rendered");
 });
 
+QUnit.test("more button should have default type for the Material theme", function(assert) {
+    var origCurrent = themes.current;
+    themes.current = function() { return "material"; };
+
+    var element = this.element.dxList({
+        dataSource: {
+            store: new ArrayStore([1, 2, 3, 4]),
+            pageSize: 2
+        },
+        pageLoadMode: "nextButton",
+        scrollingEnabled: true
+    });
+
+    var button = element.find(".dx-list-next-button .dx-button").dxButton("instance");
+
+    assert.equal(button.option("type"), "default", "more button should have default type for the Material theme");
+
+    themes.current = origCurrent;
+});
+
+QUnit.test("more button should have undefined type for the Generic theme", function(assert) {
+    var origCurrent = themes.current;
+    themes.current = function() { return "generic"; };
+
+    var element = this.element.dxList({
+        dataSource: {
+            store: new ArrayStore([1, 2, 3, 4]),
+            pageSize: 2
+        },
+        pageLoadMode: "nextButton",
+        scrollingEnabled: true
+    });
+
+    var button = element.find(".dx-list-next-button .dx-button").dxButton("instance");
+
+    assert.equal(button.option("type"), undefined, "more button should have undefined type for the Generic theme");
+
+    themes.current = origCurrent;
+});
+
+
 QUnit.test("should not expect appending items if items were appended just now", function(assert) {
     var element = this.element.dxList({
         pageLoadMode: "scrollBottom",

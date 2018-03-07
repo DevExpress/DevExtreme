@@ -13,6 +13,7 @@
     @MATERIAL_LIST_DELETEBUTTON_PADDING: 3px;
 
     @MATERIAL_LIST_SEARCHBOX_VERTICAL_PADDING: 8px;
+    @MATERIAL_LIST_NEXT_BUTTON_HORIZONTAL_PADDING: 58px;
 
     @MATERIAL_LIST_MAIN_FONT_SIZE: 16px;
 }
@@ -281,13 +282,25 @@
         font-size: @MATERIAL_LIST_MAIN_FONT_SIZE;
     }
 
-    .dx-list-item-content,
-    .dx-list .dx-empty-message {
+    .dx-list-item-content {
         padding: @MATERIAL_LIST_ITEM_VERTICAL_PADDING @item_horizontal_padding @MATERIAL_LIST_ITEM_VERTICAL_PADDING - 1px;
     }
 
+    .dx-list .dx-empty-message {
+        padding: @MATERIAL_LIST_ITEM_VERTICAL_PADDING/2 + 1px @item_horizontal_padding @MATERIAL_LIST_ITEM_VERTICAL_PADDING/2;
+        color: fade(@list-normal-color, 54%);
+        font-size: 12px;
+    }
+
     .dx-list-next-button .dx-button {
+        margin-top: 20px;
+        padding: 0;
         .dx-button-withtext-sizing();
+
+        .dx-button-content {
+            padding-left: @MATERIAL_LIST_NEXT_BUTTON_HORIZONTAL_PADDING;
+            padding-right: @MATERIAL_LIST_NEXT_BUTTON_HORIZONTAL_PADDING;
+        }
     }
 
     .dx-list-item-chevron-container {
@@ -392,8 +405,6 @@
         bottom: 1px;
     }
 
-
-
     .dx-list-slide-menu-button-delete {
         .dx-icon-trash;
         color: @base-inverted-text-color;
@@ -423,9 +434,13 @@
         height: @MATERIAL_BASE_ICON_SIZE + @MATERIAL_BUTTON_ICON_HORIZONTAL_PADDING * 2 - 2px;
         margin-top: -2px;
 
-        &.dx-button{
+        &.dx-button {
             box-shadow: none;
             background-color: transparent;
+
+            .dx-button-content {
+                z-index: 1;
+            }
         }
     }
 

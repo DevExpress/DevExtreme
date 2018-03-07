@@ -991,6 +991,7 @@ var ListBase = CollectionWidget.inherit({
         this._createComponent($button, Button, {
             text: this.option("nextButtonText"),
             onClick: this._nextButtonHandler.bind(this),
+            type: /material/.test(themes.current()) ? "default" : undefined,
             integrationOptions: {}
         });
 
