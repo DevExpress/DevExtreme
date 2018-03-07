@@ -21,23 +21,10 @@ QUnit.testStart(function() {
 
 var TEXTAREA_CLASS = "dx-textarea",
     INPUT_CLASS = "dx-texteditor-input",
-    CONTAINER_CLASS = "dx-texteditor-container",
     PLACEHOLDER_CLASS = "dx-placeholder";
 
 
 QUnit.module("rendering");
-
-QUnit.test("markup init", function(assert) {
-    assert.expect(5);
-
-    var $element = $("#textarea").dxTextArea();
-
-    assert.ok($element.hasClass(TEXTAREA_CLASS));
-    assert.equal($element.children().length, 1);
-    assert.equal($element.find("." + PLACEHOLDER_CLASS).length, 1);
-    assert.equal($element.find("." + INPUT_CLASS).length, 1);
-    assert.equal($element.find("." + CONTAINER_CLASS).length, 1);
-});
 
 QUnit.test("onContentReady fired after the widget is fully ready", function(assert) {
     assert.expect(1);
@@ -47,23 +34,6 @@ QUnit.test("onContentReady fired after the widget is fully ready", function(asse
             assert.ok($(e.element).hasClass(TEXTAREA_CLASS));
         }
     });
-});
-
-QUnit.test("init with options", function(assert) {
-    assert.expect(3);
-
-    var $element = $("#textarea").dxTextArea({
-        value: "custom",
-        placeholder: "enter value",
-        required: true,
-        readOnly: true
-    });
-
-    var $input = $element.find("." + INPUT_CLASS);
-
-    assert.equal($input.val(), "custom");
-    assert.equal($input.prop("placeholder") || $element.find("." + PLACEHOLDER_CLASS).attr("data-dx_placeholder"), "enter value");
-    assert.equal($input.prop("readOnly"), true);
 });
 
 QUnit.test("scrolling with dxpointer events", function(assert) {
@@ -224,14 +194,6 @@ QUnit.test("default", function(assert) {
     assert.ok($element.outerWidth() > 0, "outer width of the element must be more than zero");
 });
 
-QUnit.test("constructor", function(assert) {
-    var $element = $("#widget").dxTextArea({ width: 400 }),
-        instance = $element.dxTextArea("instance");
-
-    assert.strictEqual(instance.option("width"), 400);
-    assert.strictEqual($element.outerWidth(), 400, "outer width of the element must be equal to custom width");
-});
-
 QUnit.test("root with custom width", function(assert) {
     var $element = $("#widthRootStyle").dxTextArea(),
         instance = $element.dxTextArea("instance");
@@ -248,32 +210,6 @@ QUnit.test("change width", function(assert) {
     instance.option("width", customWidth);
 
     assert.strictEqual($element.outerWidth(), customWidth, "outer width of the element must be equal to custom width");
-});
-
-QUnit.test("the 'minHeight' option works correctly", function(assert) {
-    var $element = $("#widget").dxTextArea({
-        minHeight: 30,
-        height: 0
-    });
-
-    assert.equal($element.outerHeight(), 30, "widget height is correct");
-});
-
-QUnit.test("the 'maxHeight' option works correctly", function(assert) {
-    var $element = $("#widget").dxTextArea({
-        maxHeight: 30,
-        height: 100
-    });
-
-    assert.equal($element.outerHeight(), 30, "widget height is correct");
-});
-
-
-QUnit.module("aria accessibility");
-
-QUnit.test("aria multiline attribute", function(assert) {
-    var $element = $("#textarea").dxTextArea();
-    assert.equal($element.find(".dx-texteditor-input").attr("aria-multiline"), "true", "aria multiline is correct");
 });
 
 
