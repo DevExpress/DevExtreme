@@ -827,7 +827,8 @@ QUnit.test("No chart, dataSourceField, arguments as string, valueType = datetime
         valueType: "datetime",
         chart: {},
         incidentOccurred: noop,
-        renderer: new vizMocks.Renderer()
+        renderer: new vizMocks.Renderer(),
+        argumentAxis: this.argumentAxis
     });
     // assert
     assert.equal(seriesDataSource._series[0].valueType, "datetime");
