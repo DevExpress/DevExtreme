@@ -6,7 +6,8 @@ var $ = require("jquery"),
     fx = require("animation/fx"),
     config = require("core/config"),
     isRenderer = require("core/utils/type").isRenderer,
-    dateSerialization = require("core/utils/date_serialization");
+    dateSerialization = require("core/utils/date_serialization"),
+    hasWindow = require("core/utils/window").hasWindow;
 
 require("common.css!");
 require("generic_light.css!");
@@ -48,7 +49,11 @@ QUnit.test("navigator is rendered", function(assert) {
 });
 
 QUnit.test("views are rendered", function(assert) {
-    assert.equal(this.$element.find(toSelector(CALENDAR_VIEWS_WRAPPER_CLASS) + " .dx-widget").length, 3, "all views are rendered");
+    if(hasWindow()) {
+        assert.equal(this.$element.find(toSelector(CALENDAR_VIEWS_WRAPPER_CLASS) + " .dx-widget").length, 3, "all views are rendered");
+    } else {
+        assert.equal(this.$element.find(toSelector(CALENDAR_VIEWS_WRAPPER_CLASS) + " .dx-widget").length, 1, "only one view is rendered");
+    }
 });
 
 QUnit.test("Calendar must render with dx-rtl class", function(assert) {
