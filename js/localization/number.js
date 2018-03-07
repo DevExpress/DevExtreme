@@ -133,15 +133,16 @@ var numberLocalization = dependencyInjector({
 
     _addZeroes: function(value, precision) {
         var multiplier = Math.pow(10, precision);
+        var sign = value < 0 ? "-" : "";
 
-        value = ((value * multiplier) >>> 0) / multiplier;
+        value = ((Math.abs(value) * multiplier) >>> 0) / multiplier;
 
         var result = value.toString();
         while(result.length < precision) {
             result = "0" + result;
         }
 
-        return result;
+        return sign + result;
     },
 
     _addGroupSeparators: function(value) {
