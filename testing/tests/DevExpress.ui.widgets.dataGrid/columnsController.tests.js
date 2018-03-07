@@ -1250,6 +1250,20 @@ QUnit.test("minWidth should be assigned to all columns from columnMinWidth optio
     assert.strictEqual(visibleColumns[2].minWidth, 30);
 });
 
+QUnit.test("width should be assigned to all columns from columnWidth option", function(assert) {
+    this.applyOptions({
+        columnWidth: 20,
+        columns: ['TestField1', 'TestField2', { dataField: 'TestField3', width: 30 }]
+    });
+
+    assert.ok(this.columnsController.isInitialized());
+    var visibleColumns = this.columnsController.getVisibleColumns();
+
+    assert.strictEqual(visibleColumns[0].width, 20);
+    assert.strictEqual(visibleColumns[1].width, 20);
+    assert.strictEqual(visibleColumns[2].width, 30);
+});
+
 QUnit.test("format of the column with dataType is 'datetime'", function(assert) {
     // arrange
     var column;

@@ -178,12 +178,19 @@ QUnit.test("markup with column hiding", function(assert) {
 QUnit.test("markup with pager", function(assert) {
     var $element = $("#dataGrid").dxDataGrid({
         paging: { pageSize: 2 },
+        pager: {
+            showPageSizeSelector: true,
+            showNavigationButtons: true,
+            showInfo: true
+        },
         dataSource: [{ id: 1, name: "Alex1" }, { id: 2, name: "Alex2" }, { id: 3, name: "Alex3" }]
     });
 
     this.clock.tick(30);
     var $pagerView = $element.find(".dx-datagrid-pager");
     assert.equal($pagerView.length, 1, "pager view is rendered");
-    assert.equal($pagerView.hasClass("dx-pager"), windowUtils.hasWindow(), "pager");
-    assert.equal(!!$pagerView.children().length, windowUtils.hasWindow(), "pager content");
+    assert.ok($pagerView.hasClass("dx-pager"), "pager is rendered");
+    assert.equal($pagerView.children().length, windowUtils.hasWindow() ? 2 : 1, "pager content is rendered");
+    assert.equal($pagerView.find(".dx-pages .dx-page").length, windowUtils.hasWindow() ? 2 : 1, "page size count");
+    assert.equal($pagerView.find(".dx-pages .dx-page").eq(0).text(), windowUtils.hasWindow() ? "1" : "", "page size text");
 });

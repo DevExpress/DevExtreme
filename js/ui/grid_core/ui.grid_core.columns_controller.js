@@ -88,6 +88,13 @@ module.exports = {
              * @default undefined
              */
             columnMinWidth: undefined,
+            /**
+             * @name GridBaseOptions_columnWidth
+             * @publicName columnWidth
+             * @type number
+             * @default undefined
+             */
+            columnWidth: undefined,
             adaptColumnWidthByRatio: true,
             /**
              * @name GridBaseOptions_columns
@@ -1428,6 +1435,7 @@ module.exports = {
                         case "dateSerializationFormat":
                         case "columnResizingMode":
                         case "columnMinWidth":
+                        case "columnWidth":
                             args.handled = true;
                             this.reinit();
                             break;
@@ -1521,6 +1529,7 @@ module.exports = {
                         allowResizing: this.option("allowColumnResizing"),
                         allowReordering: this.option("allowColumnReordering"),
                         minWidth: this.option("columnMinWidth"),
+                        width: this.option("columnWidth"),
                         autoExpandGroup: groupingOptions.autoExpandAll,
                         allowCollapsing: groupingOptions.allowCollapsing,
                         allowGrouping: groupPanelOptions.allowColumnDragging && groupPanelOptions.visible || groupingOptions.contextMenuEnabled
