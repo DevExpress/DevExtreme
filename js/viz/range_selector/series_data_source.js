@@ -158,7 +158,7 @@ SeriesDataSource.prototype = {
                     series: series,
                     valueOptions: {
                         type: valueAxis.type,
-                        valueType: valueAxis.valueType
+                        valueType: dataSourceField ? options.valueType : valueAxis.valueType
                     }
                 }],
                 argumentOptions: {
