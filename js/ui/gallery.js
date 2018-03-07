@@ -389,7 +389,7 @@ var Gallery = CollectionWidget.inherit({
         this._renderNavButtons();
         this._renderIndicator();
         this._renderSelectedItem();
-        this._renderItemsVisibility();
+        this._renderItemVisibility();
         this._renderUserInteraction();
 
         this._setupSlideShow();
@@ -419,7 +419,7 @@ var Gallery = CollectionWidget.inherit({
         this._renderItemPositions();
         this._renderIndicator();
         this._renderContainerPosition(this._calculateIndexOffset(selectedIndex));
-        this._renderItemsVisibility();
+        this._renderItemVisibility();
     },
 
     _renderDragHandler: function() {
@@ -670,7 +670,7 @@ var Gallery = CollectionWidget.inherit({
             .addClass(GALLERY_ITEM_SELECTED_CLASS);
     },
 
-    _renderItemsVisibility: function() {
+    _renderItemVisibility: function() {
         if(this.option("initialItemWidth") || this.option("wrapAround")) {
             this._releaseInvisibleItems();
             return;
@@ -992,7 +992,7 @@ var Gallery = CollectionWidget.inherit({
 
         this.option("selectedIndex", paginatedIndex);
 
-        this._renderItemsVisibility();
+        this._renderItemVisibility();
     },
 
     _setFocusOnSelect: function() {
@@ -1057,7 +1057,7 @@ var Gallery = CollectionWidget.inherit({
         this._renderNavButtonsVisibility();
 
         this._renderSelectedItem();
-        this._renderItemsVisibility();
+        this._renderItemVisibility();
 
         this._relocateItems(addedSelection[0], removedSelection[0]);
 
@@ -1177,6 +1177,7 @@ var Gallery = CollectionWidget.inherit({
             case "stretchImages":
                 this._renderItemSizes();
                 this._renderItemPositions();
+                this._renderItemVisibility();
                 break;
             case "swipeEnabled":
             case "indicatorEnabled":
@@ -1211,7 +1212,7 @@ var Gallery = CollectionWidget.inherit({
         }
 
         this.option("selectedIndex", itemIndex);
-        this._renderItemsVisibility();
+        this._renderItemVisibility();
         return this._deferredAnimate.promise();
     },
 
