@@ -2042,15 +2042,17 @@ QUnit.test('Height free space row for virtual scroller', function(assert) {
     var dataController = new MockDataController({ items: this.items, virtualItemsCount: { begin: 0, end: 0 } }),
         rowsView = this.createRowsView(this.items, dataController),
         $testElement = $('#container'),
-        freeSpaceRowHeight;
+        freeSpaceRowHeight,
+        borderTopWidth;
 
     // act
     rowsView.render($testElement);
     rowsView.height(400);
     rowsView.resize();
+    borderTopWidth = Math.ceil(parseFloat(rowsView.getTableElements().css("borderTopWidth")));
 
     // assert
-    freeSpaceRowHeight = 400 - 3 * rowsView._rowHeight;
+    freeSpaceRowHeight = 400 - 3 * rowsView._rowHeight - borderTopWidth;
     assert.equal(rowsView._getFreeSpaceRowElements().css('display'), 'table-row', 'display style is none');
     assert.equal(rowsView._getFreeSpaceRowElements()[0].offsetHeight, Math.round(freeSpaceRowHeight), 'height free space row');
 });
@@ -5931,6 +5933,7 @@ QUnit.test('Update rowsView on changed', function(assert) {
         changeType: 'refresh',
         items: options.items
     });
+    rowsView.resize();
 
     var content = testElement.find('.dx-scrollable-content').children();
 
@@ -6141,6 +6144,7 @@ QUnit.test("Set column widths for virtual table", function(assert) {
         mode: 'virtual'
     };
     rowsView.render($testElement);
+    rowsView.resize();
 
     // act
     rowsView.setColumnWidths([10, 20, 30]);
@@ -6521,6 +6525,23 @@ QUnit.test("Get width of horizontal scrollbar when both scrollbars are shown", f
     } else {
         assert.strictEqual(rowsView.getScrollbarWidth(), 0, 'scrollbar width is 0 for mobile devices');
     }
+});
+
+// T606944
+QUnit.test("The vertical scrollbar should not be shown when there is a horizontal scrollbar", function(assert) {
+    // arrange
+    var rows = [{ field1: "test1", field2: "test2", field3: "test3", field4: "test4" }],
+        columns = [{ dataField: "field1", width: 300 }, { dataField: "field2", width: 300 }, { dataField: "field3", width: 300 }, { dataField: "field4", width: 300 } ],
+        rowsView = this.createRowsView(rows, null, columns, null, { scrolling: { useNative: true } }),
+        $testElement = $('#container').width(600);
+
+    // act
+    rowsView.render($testElement);
+    rowsView.height(700);
+    rowsView.resize();
+
+    // assert
+    assert.strictEqual(rowsView.getScrollbarWidth(), 0, "There is no vertical scrollbar");
 });
 
 QUnit.module('No data text', {

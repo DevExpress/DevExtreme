@@ -18,17 +18,13 @@ require("common.css!");
 
 var internals = FileUploader.__internals;
 
-var FILEUPLOADER_CLASS = "dx-fileuploader",
-    FILEUPLOADER_EMPTY_CLASS = "dx-fileuploader-empty",
+var FILEUPLOADER_EMPTY_CLASS = "dx-fileuploader-empty",
 
-    FILEUPLOADER_WRAPPER_CLASS = "dx-fileuploader-wrapper",
-    FILEUPLOADER_CONTAINER_CLASS = "dx-fileuploader-container",
     FILEUPLOADER_CONTENT_CLASS = "dx-fileuploader-content",
     FILEUPLOADER_INPUT_WRAPPER_CLASS = "dx-fileuploader-input-wrapper",
     FILEUPLOADER_BUTTON_CLASS = "dx-fileuploader-button",
     FILEUPLOADER_INPUT_CONTAINER_CLASS = "dx-fileuploader-input-container",
     FILEUPLOADER_INPUT_CLASS = "dx-fileuploader-input",
-    FILEUPLOADER_INPUT_LABEL_CLASS = "dx-fileuploader-input-label",
     FILEUPLOADER_FILES_CONTAINER_CLASS = "dx-fileuploader-files-container",
     FILEUPLOADER_FILE_CONTAINER_CLASS = "dx-fileuploader-file-container",
 
@@ -117,75 +113,6 @@ var moduleConfig = {
 
 
 QUnit.module("rendering");
-
-QUnit.test("widget should be rendered", function(assert) {
-    var $fileUploader = $("#fileuploader").dxFileUploader();
-
-    assert.ok($fileUploader.hasClass(FILEUPLOADER_CLASS), "widget rendered");
-});
-
-QUnit.test("wrapper should be rendered", function(assert) {
-    var $fileUploader = $("#fileuploader").dxFileUploader(),
-        $wrapper = $fileUploader.children("." + FILEUPLOADER_WRAPPER_CLASS);
-
-    assert.equal($wrapper.length, 1, "wrapper wrapper was rendered");
-});
-
-QUnit.test("container should be rendered in wrapper", function(assert) {
-    var $fileUploader = $("#fileuploader").dxFileUploader(),
-        $wrapper = $fileUploader.find("." + FILEUPLOADER_WRAPPER_CLASS),
-        $container = $wrapper.children("." + FILEUPLOADER_CONTAINER_CLASS);
-
-    assert.equal($container.length, 1, "container was rendered");
-});
-
-QUnit.test("content should be rendered in container", function(assert) {
-    var $fileUploader = $("#fileuploader").dxFileUploader(),
-        $container = $fileUploader.find("." + FILEUPLOADER_CONTAINER_CLASS),
-        $content = $container.children("." + FILEUPLOADER_CONTENT_CLASS);
-
-    assert.equal($content.length, 1, "field was rendered");
-});
-
-QUnit.test("input wrapper should be rendered in content", function(assert) {
-    var $fileUploader = $("#fileuploader").dxFileUploader(),
-        $content = $fileUploader.find("." + FILEUPLOADER_CONTENT_CLASS),
-        $inputWrapper = $content.children("." + FILEUPLOADER_INPUT_WRAPPER_CLASS);
-
-    assert.equal($inputWrapper.length, 1, "input wrapper was rendered");
-});
-
-QUnit.test("files container should be rendered in content", function(assert) {
-    var $fileUploader = $("#fileuploader").dxFileUploader(),
-        $content = $fileUploader.find("." + FILEUPLOADER_CONTENT_CLASS),
-        $filesContainer = $content.children("." + FILEUPLOADER_FILES_CONTAINER_CLASS);
-
-    assert.equal($filesContainer.length, 1, "files container was rendered");
-});
-
-QUnit.test("input container should be rendered in input wrapper", function(assert) {
-    var $fileUploader = $("#fileuploader").dxFileUploader(),
-        $inputWrapper = $fileUploader.find("." + FILEUPLOADER_INPUT_WRAPPER_CLASS),
-        $inputContainer = $inputWrapper.children("." + FILEUPLOADER_INPUT_CONTAINER_CLASS);
-
-    assert.equal($inputContainer.length, 1, "input was rendered");
-});
-
-QUnit.test("button should be rendered in input container", function(assert) {
-    var $fileUploader = $("#fileuploader").dxFileUploader(),
-        $inputWrapper = $fileUploader.find("." + FILEUPLOADER_INPUT_WRAPPER_CLASS),
-        $button = $inputWrapper.children("." + FILEUPLOADER_BUTTON_CLASS);
-
-    assert.equal($button.length, 1, "input was rendered");
-});
-
-QUnit.test("input label should be rendered in input container", function(assert) {
-    var $fileUploader = $("#fileuploader").dxFileUploader(),
-        $inputContainer = $fileUploader.find("." + FILEUPLOADER_INPUT_CONTAINER_CLASS),
-        $inputLabel = $inputContainer.children("." + FILEUPLOADER_INPUT_LABEL_CLASS);
-
-    assert.equal($inputLabel.length, 1, "field was rendered");
-});
 
 QUnit.test("the 'Upload' button should be hidden if no files are chosen", function(assert) {
     var $fileUploader = $("#fileuploader").dxFileUploader({
@@ -678,10 +605,10 @@ QUnit.test("value should present in the file name", function(assert) {
 QUnit.test("empty class should be present when value is empty", function(assert) {
     var $fileUploader = $("#fileuploader").dxFileUploader();
 
-    assert.ok($fileUploader.hasClass(FILEUPLOADER_EMPTY_CLASS), "empty class not added");
+    assert.ok($fileUploader.hasClass(FILEUPLOADER_EMPTY_CLASS), "empty class added");
 
     simulateFileChoose($fileUploader, fakeFile);
-    assert.ok(!$fileUploader.hasClass(FILEUPLOADER_EMPTY_CLASS), "empty class added");
+    assert.ok(!$fileUploader.hasClass(FILEUPLOADER_EMPTY_CLASS), "empty class not added");
 });
 
 QUnit.test("value should contain only file name (ie9 fix)", function(assert) {
@@ -698,43 +625,6 @@ QUnit.test("value should contain only file name (ie9 fix)", function(assert) {
     simulateFileChoose($fileUploader, "fakefile.txt");
     assert.deepEqual($fileUploader.dxFileUploader("option", "value"), [{ name: "fakefile.txt" }], "value contain file name");
 });
-
-
-QUnit.module("buttons text", moduleConfig);
-
-QUnit.test("select button text is changed by option", function(assert) {
-    var selectButtonText = "Click me!",
-        $fileUploader = $("#fileuploader").dxFileUploader({
-            selectButtonText: selectButtonText
-        }),
-        instance = $fileUploader.dxFileUploader("instance");
-
-    var $button = $fileUploader.find("." + FILEUPLOADER_BUTTON_CLASS);
-
-    assert.equal($button.text(), selectButtonText, "button text is correct");
-
-    selectButtonText = "Click me again!";
-    instance.option("selectButtonText", selectButtonText);
-    assert.equal($button.text(), selectButtonText, "button text is correct");
-});
-
-QUnit.test("upload button text is changed by option", function(assert) {
-    var uploadButtonText = "Click me!",
-        $fileUploader = $("#fileuploader").dxFileUploader({
-            uploadMode: "useButtons",
-            uploadButtonText: uploadButtonText
-        }),
-        instance = $fileUploader.dxFileUploader("instance");
-
-    var $button = $fileUploader.find("." + FILEUPLOADER_UPLOAD_BUTTON_CLASS);
-
-    assert.equal($button.text(), uploadButtonText, "button text is correct");
-
-    uploadButtonText = "Click me again!";
-    instance.option("uploadButtonText", uploadButtonText);
-    assert.equal($button.text(), uploadButtonText, "button text is correct");
-});
-
 
 QUnit.module("multiple option", moduleConfig);
 
@@ -762,55 +652,6 @@ QUnit.test("value should contain several file names", function(assert) {
     simulateFileChoose($fileUploader, [fakeFile, fakeFile1]);
     assert.deepEqual($fileUploader.dxFileUploader("option", "value"), [fakeFile, fakeFile1], "value contain both files");
 });
-
-
-QUnit.module("disabled option");
-
-QUnit.test("file input should be hidden when widget is disabled", function(assert) {
-    var $fileUploader = $("#fileuploader").dxFileUploader({
-            disabled: false,
-            useNativeInputClick: false,
-            useDragOver: true,
-            uploadMode: "useButtons"
-        }),
-        $fileInput = $fileUploader.find("." + FILEUPLOADER_INPUT_CLASS);
-
-    assert.ok($fileInput.is(":visible"), "input is visible");
-
-    $fileUploader.dxFileUploader("option", "disabled", true);
-    assert.ok($fileInput.is(":hidden"), "input is hidden");
-});
-
-
-QUnit.module("option accept", moduleConfig);
-
-QUnit.test("field accept should be rendered correctly", function(assert) {
-    var $fileUploader = $("#fileuploader").dxFileUploader({
-            accept: "image/*"
-        }),
-        fileUploader = $fileUploader.dxFileUploader("instance"),
-
-        $fileInput = $fileUploader.find("." + FILEUPLOADER_INPUT_CLASS);
-
-    assert.equal($fileInput.prop("accept"), "image/*", "value was set to empty string");
-
-    fileUploader.option("accept", "video/*");
-    assert.equal($fileInput.prop("accept"), "video/*", "value was set to empty string");
-});
-
-
-QUnit.module("the 'name' option");
-
-QUnit.test("widget input should get the 'name' attribute with a correct value", function(assert) {
-    var expectedName = "some_name",
-        $element = $("#fileuploader").dxFileUploader({
-            name: expectedName
-        }),
-        $input = $element.find("." + FILEUPLOADER_INPUT_CLASS);
-
-    assert.equal($input.attr("name"), expectedName, "the input 'name' attribute has correct value");
-});
-
 
 QUnit.module("option change", moduleConfig);
 
@@ -2051,4 +1892,21 @@ QUnit.test("the 'values' option should work correctly", function(assert) {
 
     fileUploader.option("values", []);
     assert.deepEqual(fileUploader.option("value"), [], "the 'values' option works correctly with writing");
+});
+
+QUnit.module("disabled option");
+
+QUnit.test("file input should be hidden when widget is disabled", function(assert) {
+    var $fileUploader = $("#fileuploader").dxFileUploader({
+            disabled: false,
+            useNativeInputClick: false,
+            useDragOver: true,
+            uploadMode: "useButtons"
+        }),
+        $fileInput = $fileUploader.find("." + FILEUPLOADER_INPUT_CLASS);
+
+    assert.equal($fileInput.css("display"), "inline-block", "input is visible");
+
+    $fileUploader.dxFileUploader("option", "disabled", true);
+    assert.equal($fileInput.css("display"), "none", "input is hidden");
 });

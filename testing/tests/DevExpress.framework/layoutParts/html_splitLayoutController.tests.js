@@ -980,7 +980,6 @@
     });
 
 
-
     QUnit.module("Throw error tests");
 
     QUnit.test("AndroidSplitLayoutController throws error if Empty layout controller is missing", function(assert) {

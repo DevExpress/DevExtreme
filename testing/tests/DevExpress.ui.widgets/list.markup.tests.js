@@ -11,7 +11,7 @@ require("common.css!");
 QUnit.testStart(function() {
     var markup =
         '<div id="list"></div>\
-        \
+        <div id="widthRootStyle" style="width: 300px;"></div>\
         <div id="templated-list">\
             <div data-options="dxTemplate: { name: \'item\' }">Item Template</div>\
         </div>';
@@ -209,7 +209,7 @@ QUnit.test("constructor", function(assert) {
 });
 
 QUnit.test("root with custom width", function(assert) {
-    var $element = $("#list").width(300).dxList({ items: [1, 2, 3, 4] }),
+    var $element = $("#widthRootStyle").dxList({ items: [1, 2, 3, 4] }),
         instance = $element.dxList("instance");
 
     assert.strictEqual(instance.option("width"), undefined);
@@ -266,6 +266,18 @@ QUnit.test("list item role", function(assert) {
     $element.find(".dx-list-item").each(function(i, item) {
         assert.equal($(item).attr("role"), "option", "role for item " + i + " is correct");
     });
+});
+
+QUnit.module("searching");
+
+QUnit.test("searchEnabled", function(assert) {
+    var $element = $("#list").dxList({
+        dataSource: [1, 2, 3],
+        searchEnabled: true
+    });
+
+    assert.ok($element.hasClass("dx-list-with-search"), "list with search");
+    assert.ok($element.children().first().hasClass("dx-list-search"), "has search editor");
 });
 
 var STATIC_DELETE_BUTTON_CONTAINER_CLASS = "dx-list-static-delete-button-container",

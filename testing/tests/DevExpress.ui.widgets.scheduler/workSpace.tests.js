@@ -1896,7 +1896,6 @@ QUnit.testStart(function() {
     });
 
 
-
     QUnit.test("Month workspace navigation by arrows, RTL mode", function(assert) {
         var $element = $("#scheduler-work-space").dxSchedulerWorkSpaceMonth({
                 focusStateEnabled: true,

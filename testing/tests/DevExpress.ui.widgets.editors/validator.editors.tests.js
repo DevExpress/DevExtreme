@@ -103,8 +103,6 @@ QUnit.test("Validation request should get value from editor", function(assert) {
 
     var result = validator.validate();
 
-
-
     assert.strictEqual(result.isValid, true, "result should be valid");
 
     assert.strictEqual(editor.option("isValid"), true, "Editor options should be set");

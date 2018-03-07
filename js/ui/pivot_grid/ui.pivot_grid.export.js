@@ -155,8 +155,6 @@ exports.DataProvider = Class.inherit({
                 that._styles.push(dataItemStyle);
             }
 
-
-
             each(columns, function(columnIndex, column) {
                 column.width = DEFAUL_COLUMN_WIDTH;
             });

@@ -557,7 +557,6 @@ QUnit.test("more button shouldn't disappear after group collapsed with custom st
 });
 
 
-
 QUnit.module("next button", moduleSetup);
 
 var isElementHidden = function($element) {
@@ -839,7 +838,7 @@ QUnit.test("list should be able to change grouped option after dataSource option
     assert.notOk(instance.option("grouped"), "grouped option was changed without exceptions");
 });
 
-QUnit.test("searchEnabled", function(assert) {
+QUnit.test("searchEnabled option changing", function(assert) {
     var $element = $("#list").dxList({
             dataSource: [1, 2, 3],
             searchEnabled: true

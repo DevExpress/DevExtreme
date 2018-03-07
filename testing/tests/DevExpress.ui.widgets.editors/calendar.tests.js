@@ -6,7 +6,6 @@ var $ = require("jquery"),
     dateUtils = require("core/utils/date"),
     dateSerialization = require("core/utils/date_serialization"),
     noop = require("core/utils/common").noop,
-    isDefined = require("core/utils/type").isDefined,
     KeyboardProcessor = require("ui/widget/ui.keyboard_processor"),
     swipeEvents = require("events/swipe"),
     fx = require("animation/fx"),
@@ -15,7 +14,6 @@ var $ = require("jquery"),
     pointerMock = require("../../helpers/pointerMock.js"),
     keyboardMock = require("../../helpers/keyboardMock.js"),
     config = require("core/config"),
-    isRenderer = require("core/utils/type").isRenderer,
     browser = require("core/utils/browser"),
     dateSerialization = require("core/utils/date_serialization"),
     dataUtils = require("core/element_data"),
@@ -27,15 +25,12 @@ require("common.css!");
 require("generic_light.css!");
 
 // calendar
-var CALENDAR_CLASS = "dx-calendar",
-    CALENDAR_BODY_CLASS = "dx-calendar-body",
-    CALENDAR_NAVIGATOR_CLASS = "dx-calendar-navigator",
+var CALENDAR_BODY_CLASS = "dx-calendar-body",
     CALENDAR_CELL_CLASS = "dx-calendar-cell",
     CALENDAR_DISABLED_NAVIGATOR_LINK_CLASS = "dx-calendar-disabled-navigator-link",
     CALENDAR_NAVIGATOR_NEXT_MONTH_CLASS = "dx-calendar-navigator-next-month",
     CALENDAR_NAVIGATOR_PREVIOUS_VIEW_CLASS = "dx-calendar-navigator-previous-view",
     CALENDAR_NAVIGATOR_NEXT_VIEW_CLASS = "dx-calendar-navigator-next-view",
-    CALENDAR_FOOTER_CLASS = "dx-calendar-footer",
     CALENDAR_TODAY_BUTTON_CLASS = "dx-calendar-today-button",
     CALENDAR_CAPTION_BUTTON_CLASS = "dx-calendar-caption-button",
     CALENDAR_OTHER_VIEW_CLASS = "dx-calendar-other-view",
@@ -84,42 +79,6 @@ var iterateViews = function(callback) {
     $.each(views, callback);
 };
 
-
-QUnit.module("Rendering", {
-    beforeEach: function() {
-        fx.off = true;
-
-        this.$element = $("<div>").appendTo("body");
-        this.calendar = this.$element.dxCalendar({
-            value: new Date(2013, 9, 15),
-            firstDayOfWeek: 1,
-            focusStateEnabled: true
-        }).dxCalendar("instance");
-    },
-    afterEach: function() {
-        fx.off = false;
-        this.$element.remove();
-    }
-});
-
-QUnit.test("'dx-calendar' class should be added", function(assert) {
-    assert.ok(this.$element.hasClass(CALENDAR_CLASS));
-});
-
-QUnit.test("navigator is rendered", function(assert) {
-    assert.equal(this.$element.find(toSelector(CALENDAR_NAVIGATOR_CLASS)).length, 1, "navigator is rendered");
-});
-
-QUnit.test("views are rendered", function(assert) {
-    assert.equal(this.$element.find(toSelector(CALENDAR_VIEWS_WRAPPER_CLASS) + " .dx-widget").length, 3, "all views are rendered");
-});
-
-QUnit.test("Calendar must render with dx-rtl class", function(assert) {
-    this.calendar.option("rtlEnabled", true);
-    assert.ok(this.$element.hasClass("dx-rtl"), "class dx-rtl must be");
-});
-
-
 QUnit.module("Hidden input", {
     beforeEach: function() {
         fx.off = true;
@@ -139,46 +98,12 @@ QUnit.module("Hidden input", {
     }
 });
 
-QUnit.test("Calendar must create a hidden input", function(assert) {
-    var $input = this.$element.find("input");
-
-    assert.equal($input.length, 1, "input is rendered");
-    assert.equal($input.attr("type"), "hidden", "input type is 'hidden'");
-});
-
-QUnit.test("Calendar should pass value to the hidden input on init", function(assert) {
-    var $input = this.$element.find("input");
-
-    var expectedValue = this.stringValue(this.calendar.option("value"));
-    assert.equal($input.val(), expectedValue, "input value is correct after init");
-});
-
 QUnit.test("Calendar should pass value to the hidden input on widget value change", function(assert) {
     var $input = this.$element.find("input");
 
     var date = new Date(2016, 6, 9);
     this.calendar.option("value", date);
     assert.equal($input.val(), this.stringValue(date), "input value is correct after widget value change");
-});
-
-
-QUnit.module("The 'name' option", {
-    beforeEach: function() {
-        this.$element = $("<div>").appendTo("body");
-    },
-    afterEach: function() {
-        this.$element.remove();
-    }
-});
-
-QUnit.test("widget input should get the 'name' attribute with a correct value", function(assert) {
-    var expectedName = "some_name",
-        $element = this.$element.dxCalendar({
-            name: expectedName
-        }),
-        $input = $element.find("input");
-
-    assert.equal($input.attr("name"), expectedName, "the input 'name' attribute has correct value");
 });
 
 
@@ -194,15 +119,6 @@ QUnit.module("Navigator", {
         this.$element.remove();
         fx.off = false;
     }
-});
-
-QUnit.test("Caption button is render", function(assert) {
-    assert.ok(this.$element.find(".dx-calendar-caption-button").length === 1);
-});
-
-QUnit.test("Calendar must display previous and next month links, and previous and next year links", function(assert) {
-    assert.ok(this.$element.find(toSelector(CALENDAR_NAVIGATOR_PREVIOUS_VIEW_CLASS)).length === 1);
-    assert.ok(this.$element.find(toSelector(CALENDAR_NAVIGATOR_NEXT_VIEW_CLASS)).length === 1);
 });
 
 QUnit.test("Navigator links must prevent default click browser action", function(assert) {
@@ -1292,15 +1208,6 @@ QUnit.module("Calendar footer", {
     }
 });
 
-QUnit.test("calendar must have _footer if showTodayButton with class CALENDAR_FOOTER_CLASS true and vice versa", function(assert) {
-    var $element = this.$element;
-
-    assert.equal($element.find(toSelector(CALENDAR_FOOTER_CLASS)).length, 1, "footer exist");
-
-    this.calendar.option("showTodayButton", false);
-    assert.equal($element.find(toSelector(CALENDAR_FOOTER_CLASS)).length, 0, "footer deleted");
-});
-
 QUnit.test("today view are current after today button click", function(assert) {
     var calendar = this.calendar;
 
@@ -1596,60 +1503,6 @@ QUnit.test("contoured date displaying should depend on 'hasFocus' option", funct
     assert.deepEqual(getCurrentViewInstance(this.calendar).option("contouredDate"), new Date(2015, 10, 18), "view contoured is set");
 });
 
-
-QUnit.module("CellTemplate option", {
-    beforeEach: function() {
-        fx.off = true;
-
-        this.$element = $("<div>").appendTo("body");
-        this.calendar = this.$element.dxCalendar().dxCalendar("instance");
-    },
-    reinit: function(options) {
-        this.$element.remove();
-        this.$element = $("<div>").appendTo("body");
-        this.calendar = this.$element.dxCalendar(options).dxCalendar("instance");
-    },
-    afterEach: function() {
-        this.$element.remove();
-        fx.off = false;
-    }
-});
-
-QUnit.test("custom markup should be applied", function(assert) {
-    var $cellTemplate = $("<span class='custom-cell-class'>");
-
-    try {
-        this.reinit({
-            value: new Date(2013, 11, 15),
-            currentDate: new Date(2013, 11, 15),
-            cellTemplate: $cellTemplate
-        });
-
-        assert.ok(this.$element.find(".custom-cell-class").length > 0, "custom templated cells are rendered");
-
-    } finally {
-        $cellTemplate.remove();
-    }
-});
-
-QUnit.test("correct data should be passed to cellTemplate", function(assert) {
-    var data;
-
-    this.reinit({
-        cellTemplate: function(itemData, itemIndex, itemElement) {
-            assert.equal(isRenderer(itemElement), !!config().useJQuery, "itemElement is correct");
-            if(!data) {
-                data = itemData;
-            }
-        }
-    });
-
-    assert.equal(isDefined(data.text), true, "text field is present in itemData");
-    assert.equal(isDefined(data.date), true, "date field is present in itemData");
-    assert.equal(isDefined(data.view), true, "view field is present in itemData");
-});
-
-
 QUnit.module("ZoomLevel option", {
     beforeEach: function() {
         fx.off = true;
@@ -1659,22 +1512,6 @@ QUnit.module("ZoomLevel option", {
         this.$element.remove();
         fx.off = false;
     }
-});
-
-QUnit.test("calendar must have view class name", function(assert) {
-    var $element = this.$element,
-        calendar = $element.dxCalendar().dxCalendar("instance"),
-        className = 'dx-calendar-view-';
-
-    $.each(['month', 'year', 'decade', 'century'], function(_, type) {
-        calendar.option("zoomLevel", type);
-
-        assert.ok($element.hasClass(className + type));
-
-        $.each(['month', 'year', 'decade', 'century'], function(_, affix) {
-            if(type !== affix) assert.ok(!$element.hasClass(className + affix));
-        });
-    });
 });
 
 QUnit.test("'zoomLevel' should have correct value on init if 'maxZoomLevel' is specified", function(assert) {

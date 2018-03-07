@@ -1050,15 +1050,17 @@ QUnit.test("SeriesDataSource updates axes' translator with argument range", func
             ],
             chart: {
                 commonSeriesSettings: {
-                    type: "area"
+                    type: "area",
+                    aggregation: {
+                        enabled: true
+                    }
                 },
                 series: [{
                     type: "line",
                 }, {
                     valueField: "val1",
                     argumentField: "arg1"
-                }],
-                useAggregation: true
+                }]
             },
             renderer: new vizMocks.Renderer(),
             argumentAxis: this.argumentAxis

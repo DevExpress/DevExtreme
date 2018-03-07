@@ -218,7 +218,6 @@ var Validator = DOMComponent.inherit({
     },
 
 
-
     /**
     * @name dxValidatorMethods_validate
     * @publicName validate()

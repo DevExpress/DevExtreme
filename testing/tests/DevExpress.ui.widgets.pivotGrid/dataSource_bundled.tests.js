@@ -5107,7 +5107,6 @@ QUnit.test("load fields without area if it is used in calculateSummaryValue", fu
 });
 
 
-
 QUnit.test("apply Display Summary Mode when expressions were used", function(assert) {
     var def = $.Deferred();
 

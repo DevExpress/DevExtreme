@@ -560,6 +560,10 @@
                 this.pointsWereArranged = true;
                 this.arrangePointsArgs = $.makeArray(arguments);
             },
+            getPointsCount: function() {
+                return (this.reinitializedData || []).length;
+            },
+            setMaxPointsCount: sinon.stub(),
             canRenderCompleteHandle: function() {
                 return true;
             },
@@ -657,7 +661,8 @@
             correctRadius: sinon.spy(),
             updateDataType: sinon.spy(),
             getViewport: sinon.stub().returns({}),
-            getMarginOptions: sinon.stub().returns(options.marginOptions || {})
+            getMarginOptions: sinon.stub().returns(options.marginOptions || {}),
+            useAggregation: sinon.stub().returns(false)
         };
     };
 

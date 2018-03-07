@@ -266,15 +266,10 @@ var SelectBox = DropDownList.inherit({
     _initMarkup: function() {
         this._renderSubmitElement();
         this.$element().addClass(SELECTBOX_CLASS);
-
-        this.callBase();
-    },
-
-    _render: function() {
-        this.callBase();
-
-        this.option("useInkRipple") && this._renderInkRipple();
         this._renderTooltip();
+        this.option("useInkRipple") && this._renderInkRipple();
+
+        this.callBase();
         this._$container.addClass(SELECTBOX_CONTAINER_CLASS);
     },
 

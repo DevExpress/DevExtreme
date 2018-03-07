@@ -575,7 +575,7 @@ module.exports = {
                             }
                         }
 
-                        if(that.option("advancedRendering") || that.option("columnAutoWidth") || that._hasHeight || allColumnsHasWidth || that._columnsController._isColumnFixing()) {
+                        if(that.option("columnAutoWidth") || that._hasHeight || allColumnsHasWidth || that._columnsController._isColumnFixing()) {
                             that._renderScrollableCore($element);
                         }
                     }
@@ -1057,7 +1057,9 @@ module.exports = {
                                         contentHeight = contentElement.outerHeight(),
                                         showFreeSpaceRow = (elementHeightWithoutScrollbar - contentHeight) > 0,
                                         rowsHeight = that._getRowsHeight(contentElement.children().first()),
-                                        resultHeight = elementHeightWithoutScrollbar - rowsHeight;
+                                        $tableElement = $table || that.getTableElements(),
+                                        borderTopWidth = Math.ceil(parseFloat($tableElement.css("borderTopWidth"))),
+                                        resultHeight = elementHeightWithoutScrollbar - rowsHeight - borderTopWidth;
 
                                     if(showFreeSpaceRow) {
                                         commonUtils.deferRender(function() {
@@ -1114,7 +1116,9 @@ module.exports = {
                     });
 
                     dataController.dataSourceChanged.add(function() {
-                        that._handleScroll({ scrollOffset: { top: that._scrollTop, left: that._scrollLeft } });
+                        if(that._scrollLeft >= 0) {
+                            that._handleScroll({ scrollOffset: { top: that._scrollTop, left: that._scrollLeft } });
+                        }
                     });
                 },
 

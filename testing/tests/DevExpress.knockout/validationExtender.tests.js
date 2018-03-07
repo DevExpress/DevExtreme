@@ -110,7 +110,6 @@ QUnit.test("validated handler should be called", function(assert) {
 });
 
 
-
 QUnit.test("changing observable value should cause validation", function(assert) {
     var vm = {
             login: ko.observable("").extend({

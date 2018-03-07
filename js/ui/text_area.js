@@ -113,13 +113,13 @@ var TextArea = TextBox.inherit({
         });
     },
 
-    _render: function() {
+    _initMarkup: function() {
         this.$element().addClass(TEXTAREA_CLASS);
         this.callBase();
+        this.setAria("multiline", "true");
     },
 
     _renderContentImpl: function() {
-        this.setAria("multiline", "true");
         this._updateInputHeight();
         this.callBase();
     },

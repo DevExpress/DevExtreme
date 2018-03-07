@@ -254,10 +254,20 @@ var ColorView = Editor.inherit({
         }
     },
 
-    _render: function() {
+    _initMarkup: function() {
         this.callBase();
         this.$element().addClass(COLOR_VIEW_CLASS);
         this._renderColorPickerContainer();
+    },
+
+    _render: function() {
+        this.callBase();
+
+        this._renderPalette();
+        this._renderHueScale();
+        this._renderControlsContainer();
+        this._renderControls();
+        this._renderAlphaChannelElements();
     },
 
     _makeTransparentBackground: function($el, color) {
@@ -286,11 +296,6 @@ var ColorView = Editor.inherit({
             .appendTo($parent);
 
         this._renderHtmlRows();
-        this._renderPalette();
-        this._renderHueScale();
-        this._renderControlsContainer();
-        this._renderControls();
-        this._renderAlphaChannelElements();
     },
 
     _renderHtmlRows: function(updatedOption) {

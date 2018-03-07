@@ -2545,6 +2545,7 @@ QUnit.test("aria-rowindex aria-colindex if virtual scrolling", function(assert) 
         height: 200,
         dataSource: array,
         paging: { pageSize: 2 },
+
         scrolling: {
             mode: "virtual",
             useNative: false

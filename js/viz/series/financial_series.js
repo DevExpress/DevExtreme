@@ -208,7 +208,7 @@ exports.stock = _extend({}, scatterSeries, {
             return {};
         }
         _each(fusionPoints, function(_, point) {
-            if(!point.hasValue()) {
+            if(point.lowValue === null || point.highValue === null) {
                 return;
             }
             highValue = Math.max(highValue, point.highValue);

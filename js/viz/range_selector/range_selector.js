@@ -398,7 +398,8 @@ function calculateTranslatorRange(seriesDataSource, scaleOptions) {
     translatorRange.addRange({
         categories: !seriesDataSource ? categories : undefined,
         base: scaleOptions.logarithmBase,
-        axisType: scaleOptions.type
+        axisType: scaleOptions.type,
+        dataType: scaleOptions.valueType
     });
     seriesDataSource && translatorRange.sortCategories(categories);
 
@@ -632,6 +633,9 @@ var dxRangeSelector = require("../core/base_widget").inherit({
             },
             "chart.equalBarWidth": {
                 since: "18.1", message: "Use the 'chart.commonSeriesSettings.ignoreEmptyPoints' or 'chart.series.ignoreEmptyPoints' option instead"
+            },
+            "chart.useAggregation": {
+                since: "18.1", message: "Use the 'chart.commonSeriesSettings.aggregation.enabled' or 'chart.series.aggregation.enabled' option instead"
             }
         });
     },
@@ -851,7 +855,7 @@ var dxRangeSelector = require("../core/base_widget").inherit({
             x: rect[0], y: rect[1], width: rect[2] - rect[0], height: rect[3] - rect[1]
         });
 
-        that._axis.getTranslator().updateCanvas(canvas);
+        that._axis.getTranslator().update({ stubData: true }, canvas, { isHorizontal: true });
 
         that._updateContent({
             left: rect[0], top: rect[1], width: rect[2] - rect[0], height: rect[3] - rect[1]
