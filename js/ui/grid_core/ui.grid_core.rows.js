@@ -508,12 +508,26 @@ module.exports = {
                         if(isGroup) {
                             $row.addClass(GROUP_ROW_CLASS);
                             isRowExpanded = row.isExpanded;
-                            this.setAria("role", "rowgroup", $row);
+                            this.setAria("role", "row", $row);
                             this.setAria("expanded", isDefined(isRowExpanded) && isRowExpanded.toString(), $row);
                         }
+                        this._setAriaRowIndex(row, $row);
                     }
 
                     return $row;
+                },
+
+                _setAriaRowIndex: function(row, $row) {
+                    var component = this.component,
+                        isPagerMode = component.option("scrolling.mode") === "standard",
+                        rowIndex = row.rowIndex + 1;
+
+                    if(isPagerMode) {
+                        rowIndex = component.pageIndex() * component.pageSize() + rowIndex;
+                    } else {
+                        rowIndex += this._dataController.getRowIndexOffset();
+                    }
+                    this.setAria("rowindex", rowIndex, $row);
                 },
 
                 _afterRowPrepared: function(e) {
@@ -591,7 +605,11 @@ module.exports = {
                 _renderLoadPanel: gridCoreUtils.renderLoadPanel,
 
                 _renderContent: function(contentElement, tableElement) {
-                    contentElement.replaceWith($("<div>").addClass(this.addWidgetPrefix(CONTENT_CLASS)).append(tableElement));
+                    contentElement.replaceWith($("<div>")
+                        .addClass(this.addWidgetPrefix(CONTENT_CLASS))
+                        .append(tableElement));
+
+                    this.setAria("role", "presentation", contentElement);
 
                     return this._findContentElement();
                 },
@@ -891,6 +909,8 @@ module.exports = {
 
                     $element.addClass(that.addWidgetPrefix(ROWS_VIEW_CLASS)).toggleClass(that.addWidgetPrefix(NOWRAP_CLASS), !that.option("wordWrapEnabled"));
                     $element.toggleClass(EMPTY_CLASS, that._dataController.items().length === 0);
+
+                    that.setAria("role", "presentation", $element);
 
                     $table = that._renderTable({ change: change });
                     that._updateContent($table, change);

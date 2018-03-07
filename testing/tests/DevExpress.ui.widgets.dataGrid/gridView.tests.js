@@ -201,6 +201,22 @@ function createGridView(options, userOptions) {
         assert.strictEqual(countCallUpdate, 1, 'valid count call update method');
     });
 
+    QUnit.test('Check search panel aria attribute', function(assert) {
+        // arrange
+        var testElement = $('#container'),
+            gridView = this.createGridView(this.defaultOptions);
+
+        gridView.render(testElement, $.extend(this.options, {
+            searchPanel: {
+                visible: true
+            }
+        }));
+
+        // assert
+        assert.equal(testElement.find(".dx-datagrid-search-panel :not(.dx-texteditor-input)").attr("aria-label"), undefined, "aria-label attribute not presents for non 'input' elements");
+        assert.notEqual(testElement.find(".dx-texteditor-input").attr("aria-label"), undefined, "aria-label attribute presents for 'input' element");
+    });
+
     QUnit.test('Grid view resize', function(assert) {
         // arrange
         this.defaultOptions.columnsController.getVisibleColumns = function() {

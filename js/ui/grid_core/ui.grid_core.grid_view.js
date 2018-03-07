@@ -80,6 +80,7 @@ var ResizingController = modules.ViewController.inherit({
 
                 if(changeType && changeType !== "updateSelection" && !isDelayed) {
                     when(resizeDeferred).done(function() {
+                        that._setAriaRowColCount();
                         that.component._fireContentReadyAction();
                     });
                 }
@@ -89,6 +90,14 @@ var ResizingController = modules.ViewController.inherit({
                 that._dataController.changed.add(that._refreshSizesHandler);
             });
         }
+    },
+
+    _setAriaRowColCount: function() {
+        var component = this.component;
+        component.setAria({
+            "rowCount": this._dataController.totalItemsCount(),
+            "colCount": component.columnCount()
+        }, component.$element().children("." + GRIDBASE_CONTAINER_CLASS));
     },
 
     _getBestFitWidths: function() {
@@ -618,6 +627,10 @@ var GridView = modules.View.inherit({
         });
     },
 
+    _getTableRoleName: function() {
+        return "grid";
+    },
+
     render: function($rootElement) {
         var that = this,
             isFirstRender = !that._groupElement,
@@ -625,10 +638,13 @@ var GridView = modules.View.inherit({
 
         $groupElement.addClass(GRIDBASE_CONTAINER_CLASS);
         $groupElement.toggleClass(that.addWidgetPrefix(BORDERS_CLASS), !!that.option("showBorders"));
+
+        that.setAria("role", "presentation", $rootElement);
+
         that.component.setAria({
-            "role": "application",
+            "role": this._getTableRoleName(),
             "label": messageLocalization.format(that._getWidgetAriaLabel())
-        }, $rootElement);
+        }, $groupElement);
 
         that._rootElement = $rootElement || that._rootElement;
 

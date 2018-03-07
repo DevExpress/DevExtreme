@@ -7,6 +7,9 @@ var GridView = gridViewModule.views.gridView.inherit((function() {
     return {
         _getWidgetAriaLabel: function() {
             return "dxTreeList-ariaTreeList";
+        },
+        _getTableRoleName: function() {
+            return "treegrid";
         }
     };
 })());

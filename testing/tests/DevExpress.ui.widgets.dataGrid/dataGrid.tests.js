@@ -180,6 +180,22 @@ QUnit.test("Correct start scroll position when RTL", function(assert) {
     clock.restore();
 });
 
+QUnit.test("Base accessibility structure", function(assert) {
+    createDataGrid({
+        columns: [{ dataField: "field1", width: 100 }, { dataField: "field2", width: 100 }],
+        dataSource: {
+            store: [{ field1: "1", field2: "2" }]
+        }
+    });
+
+    assert.equal($(".dx-widget").attr("role"), "presentation");
+    assert.equal($(".dx-datagrid").attr("role"), "grid");
+    assert.equal($(".dx-datagrid-headers").attr("role"), "presentation");
+    assert.equal($(".dx-datagrid-scroll-container").attr("role"), "presentation");
+    assert.equal($(".dx-datagrid-table").eq(0).attr("role"), "presentation");
+    assert.equal($(".dx-datagrid-table").eq(1).attr("role"), "presentation");
+});
+
 // T388508
 QUnit.test("Correct start scroll position when RTL and detached container of the datagrid", function(assert) {
     // arrange, act
@@ -2466,6 +2482,118 @@ QUnit.test("height 100% when parent container with fixed height when virtual scr
     assert.ok($dataGrid.find(".dx-datagrid-rowsview").height() > 300, "rowsView has height");
 
     this.clock.restore();
+});
+
+// T595044
+QUnit.test("aria-rowindex aria-colindex if default pager mode", function(assert) {
+    // arrange, act
+    var clock = sinon.useFakeTimers(),
+        array = [],
+        rowsView,
+        rows,
+        i,
+        rowIndex;
+
+    for(i = 0; i < 10; i++) {
+        array.push({ author: "J. D. Salinger", title: "The Catcher in the Rye", year: 1951 });
+    }
+
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        height: 200,
+        dataSource: array,
+        paging: { pageSize: 2 }
+    }).dxDataGrid("instance");
+
+    clock.tick();
+
+    rowsView = dataGrid._views.rowsView;
+    rows = rowsView.element().find(".dx-row").filter(function(index, element) { return !$(element).hasClass("dx-freespace-row"); });
+
+    // assert
+    for(i = 0; i < rows.length; ++i) {
+        rowIndex = i + 1;
+        assert.equal($(rows[i]).attr("aria-rowindex"), rowIndex, "aria-index = " + rowIndex);
+    }
+
+    dataGrid.pageIndex(4);
+
+    clock.tick();
+
+    rows = rowsView.element().find(".dx-row").filter(function(index, element) { return !$(element).hasClass("dx-freespace-row"); });
+    for(i = 0; i < rows.length; ++i) {
+        rowIndex = 8 + i + 1;
+        assert.equal($(rows[i]).attr("aria-rowindex"), rowIndex, "aria-index = " + rowIndex);
+    }
+
+    clock.restore();
+});
+
+// T595044
+QUnit.test("aria-rowindex aria-colindex if virtual scrolling", function(assert) {
+    // arrange, act
+    var clock = sinon.useFakeTimers(),
+        array = [],
+        dataGrid,
+        row,
+        rowsView;
+
+    for(var i = 0; i < 100; i++) {
+        array.push({ author: "J. D. Salinger", title: "The Catcher in the Rye", year: 1951 });
+    }
+
+    dataGrid = $("#dataGrid").dxDataGrid({
+        height: 200,
+        dataSource: array,
+        paging: { pageSize: 2 },
+        scrolling: { mode: "virtual" }
+    }).dxDataGrid("instance");
+
+    clock.tick();
+
+    rowsView = dataGrid._views.rowsView;
+    row = rowsView.element().find(".dx-data-row").eq(0);
+
+    // assert
+    assert.equal(row.attr("aria-rowindex"), 1, "aria-index is correct");
+
+    rowsView.scrollTo({ y: 3000 });
+
+    clock.tick();
+
+    row = rowsView.element().find(".dx-data-row").eq(0);
+    assert.equal(row.attr("aria-rowindex"), 89, "aria-index is correct after scrolling");
+
+    clock.restore();
+});
+
+// T595044
+QUnit.test("aria-colcount aria-rowcount if virtual scrolling", function(assert) {
+    // arrange, act
+    var clock = sinon.useFakeTimers(),
+        array = [],
+        dataGrid;
+
+    for(var i = 0; i < 100; i++) {
+        array.push({ ID: i, C0: "C0_" + i, C1: "C1_" + i });
+    }
+
+    dataGrid = $("#dataGrid").dxDataGrid({
+        height: 200,
+        dataSource: {
+            store: array,
+            group: "ID"
+        },
+        paging: { pageSize: 2 },
+        scrolling: { mode: "virtual" }
+    });
+
+    clock.tick();
+
+    // assert
+    assert.equal(dataGrid.find(".dx-gridbase-container").attr("aria-rowcount"), 200, "aria-rowcount is correct");
+    assert.equal(dataGrid.find(".dx-gridbase-container").attr("aria-colcount"), 3, "aria-colcount is correct");
+
+    clock.restore();
 });
 
 QUnit.test("Freespace row have the correct height when using master-detail with virtual scrolling and container has fixed height", function(assert) {
