@@ -758,6 +758,7 @@ QUnit.test('Percent numeric formats', function(assert) {
 QUnit.test('Decimal numeric formats', function(assert) {
     assert.equal(numberLocalization.format(437, { type: "decimAl" }), '437');
     assert.equal(numberLocalization.format(437, { type: "deCimal", precision: 5 }), '00437');
+    assert.equal(numberLocalization.format(-437, { type: "decimal", precision: 0 }), '-437');
 });
 
 QUnit.test('format as function', function(assert) {
