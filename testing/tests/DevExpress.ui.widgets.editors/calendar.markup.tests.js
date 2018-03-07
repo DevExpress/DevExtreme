@@ -3,7 +3,6 @@
 var $ = require("jquery"),
     dateSerialization = require("core/utils/date_serialization"),
     isDefined = require("core/utils/type").isDefined,
-    fx = require("animation/fx"),
     config = require("core/config"),
     isRenderer = require("core/utils/type").isRenderer,
     dateSerialization = require("core/utils/date_serialization"),
@@ -13,7 +12,6 @@ require("common.css!");
 require("generic_light.css!");
 require("ui/calendar");
 
-// calendar
 var CALENDAR_CLASS = "dx-calendar",
     CALENDAR_NAVIGATOR_CLASS = "dx-calendar-navigator",
     CALENDAR_NAVIGATOR_PREVIOUS_VIEW_CLASS = "dx-calendar-navigator-previous-view",
@@ -172,8 +170,6 @@ QUnit.test("calendar mustn't have _footer if showTodayButton  = false", function
 
 QUnit.module("CellTemplate option", {
     beforeEach: function() {
-        fx.off = true;
-
         this.$element = $("<div>").appendTo("body");
         this.calendar = this.$element.dxCalendar().dxCalendar("instance");
     },
@@ -184,7 +180,6 @@ QUnit.module("CellTemplate option", {
     },
     afterEach: function() {
         this.$element.remove();
-        fx.off = false;
     }
 });
 
@@ -241,12 +236,10 @@ QUnit.test("calendar must have view class name", function(assert) {
 
 QUnit.module("Aria accessibility", {
     beforeEach: function() {
-        fx.off = true;
         this.$element = $("<div>").appendTo("body");
     },
     afterEach: function() {
         this.$element.remove();
-        fx.off = false;
     }
 });
 
