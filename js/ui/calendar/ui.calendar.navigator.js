@@ -34,7 +34,7 @@ var Navigator = Widget.inherit({
         this._captionClickAction = this._createActionByOption("onCaptionClick");
     },
 
-    _render: function() {
+    _initMarkup: function() {
         this.callBase();
 
         this.$element().addClass(CALENDAR_NAVIGATOR_CLASS);

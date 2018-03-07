@@ -585,10 +585,7 @@ var Calendar = Editor.inherit({
 
     _initMarkup: function() {
         this._renderSubmitElement();
-        this.callBase();
-    },
 
-    _render: function() {
         this.callBase();
 
         var $element = this.$element();
@@ -598,7 +595,10 @@ var Calendar = Editor.inherit({
         $element.append(this.$body);
 
         this._renderViews();
+
         this._renderNavigator();
+        $element.append(this._navigator.$element());
+
         this._renderSwipeable();
         this._renderFooter();
 
@@ -606,7 +606,6 @@ var Calendar = Editor.inherit({
             "role": "listbox",
             "label": messageLocalization.format("dxCalendar-ariaWidgetName")
         });
-
         this._updateAriaSelected();
         this._updateAriaId();
 
@@ -614,9 +613,12 @@ var Calendar = Editor.inherit({
             this._moveCurrentDate(1);
         }
 
-        this._setViewContoured(this.option("currentDate"));
+    },
 
-        $element.append(this._navigator.$element());
+    _render: function() {
+        this.callBase();
+
+        this._setViewContoured(this.option("currentDate"));
     },
 
     _renderBody: function() {
