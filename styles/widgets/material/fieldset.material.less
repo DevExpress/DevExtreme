@@ -2,7 +2,7 @@
     @MATERIAL_FIELDSET_VERTICAL_MARGIN: 30px;
     @MATERIAL_FIELDSET_HORIZONTAL_MARGIN: 20px;
     @MATERIAL_FIELDSET_HEADER_VERTICAL_MARGIN: 20px;
-    @MATERIAL_FIELD_VERTICAL_MARGIN: 10px;
+    @MATERIAL_FIELD_VERTICAL_MARGIN: 20px;
     @MATERIAL_FIELD_LABELVALUE_SPACING: 15px;
 }
 
@@ -33,7 +33,12 @@
 
     .dx-field-label {
         color: @fieldset-field-label-color;
+        font-size: @MATERIAL_FORM_LABEL_FONT_SIZE;
         cursor: default;
+
+        i {
+            font-style: normal;
+        }
     }
 
     .dx-field-value {

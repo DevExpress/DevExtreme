@@ -51,7 +51,8 @@ var $ = require("jquery"),
     Toast = require("ui/toast"),
     TreeView = require("ui/tree_view"),
     FileUploader = require("ui/file_uploader"),
-    Toolbar = require("ui/toolbar");
+    Toolbar = require("ui/toolbar"),
+    Form = require("ui/form");
 
 
 QUnit.testStart(function() {
@@ -1279,5 +1280,20 @@ testComponentDefaults(FileUploader,
     function() {
         browser.msie = this._origMSIE;
         browser.version = this._origMSIEVersion;
+    }
+);
+
+testComponentDefaults(Form,
+    {},
+    {
+        labelLocation: "top",
+        showColonAfterLabel: false
+    },
+    function() {
+        this.originalCurrentTheme = themes.current();
+        themes.current("material.light");
+    },
+    function() {
+        themes.current(this.originalCurrentTheme);
     }
 );

@@ -749,8 +749,6 @@
 */
 @dropdowneditor-icon-active-color: @base-icon-color;
 
-@dropdowneditor-icon-border-radius: @base-border-radius-small;
-
 // Lookup
 
 @lookup-icon-color: @base-icon-color;
@@ -1952,7 +1950,7 @@
 * @type color
 * @group form
 */
-@form-field-item-color: @base-label-color;
+@form-field-item-color: lighten(@base-label-color, 46%);
 
 /**
 * @name 20. Group border color
@@ -1960,8 +1958,8 @@
 * @group form
 */
 @form-group-border-color: @base-border-color;
-@form-field-required-color: saturate(lighten(@form-field-item-color, 39.3%), 80%);
-@form-field-mark-color: lighten(@form-field-item-color, 48.5%);
+@form-field-required-color: @form-field-item-color;
+@form-field-mark-color: @form-field-item-color;
 
 // Images
 @list-item-icon-toggle-delete-bg: url(images/widgets/material/color-schemes/light/list/delete.png);
@@ -2023,7 +2021,7 @@
 
 // Fieldset
 
-@fieldset-field-label-color: @base-label-color;
+@fieldset-field-label-color: lighten(@base-label-color, 46%);
 @fieldset-field-value-invalid-color: @base-invalid-color;
 
 // FilterBuilder
