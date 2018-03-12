@@ -157,6 +157,7 @@ var HeaderFilterController = modules.ViewController.inherit((function() {
                 group = gridCoreUtils.getHeaderFilterGroupParameters(column, dataSource && dataSource.remoteOperations().grouping),
                 headerFilterDataSource = column.headerFilter && column.headerFilter.dataSource,
                 headerFilterOptions = that.option("headerFilter"),
+                isLookup = false,
                 options = {
                     component: that.component
                 };
@@ -166,6 +167,7 @@ var HeaderFilterController = modules.ViewController.inherit((function() {
             if(typeUtils.isDefined(headerFilterDataSource) && !typeUtils.isFunction(headerFilterDataSource)) {
                 options.dataSource = normalizeDataSourceOptions(headerFilterDataSource);
             } else if(column.lookup) {
+                isLookup = true;
                 dataSource = column.lookup.dataSource;
                 if(typeUtils.isFunction(dataSource) && !isWrapped(dataSource)) {
                     dataSource = dataSource({});
@@ -210,7 +212,7 @@ var HeaderFilterController = modules.ViewController.inherit((function() {
             options.dataSource.postProcess = function(data) {
                 var items = data;
 
-                if(column.lookup) {
+                if(isLookup) {
                     if(this.pageIndex() === 0 && !this.searchValue()) {
                         items = items.slice(0);
                         items.unshift(null);
