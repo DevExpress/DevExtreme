@@ -223,6 +223,48 @@ QUnit.test("Header filter with dataSource as function - postProcess should not b
     assert.deepEqual(items, [{ text: "blank", value: null }, { field: 1, text: "test1", value: 1 }]);
 });
 
+// T612786
+QUnit.test("Header filter with custom dataSource if column with lookup", function(assert) {
+    // arrange
+    var items,
+        dataSource;
+
+    this.setupDataGrid({
+        dataSource: [],
+        headerFilter: {
+            texts: {
+                emptyValue: "blank"
+            }
+        },
+        columns: [{ dataField: "Test",
+            lookup: {
+                dataSource: [{ field: 1 }],
+                valueExpr: "field",
+                displayExpr: "field"
+            },
+            headerFilter: {
+                dataSource: [{
+                    text: "test1",
+                    value: 1
+                }, {
+                    text: "test2",
+                    value: 2
+                }]
+            }
+        }]
+    });
+
+    // act
+    dataSource = new DataSource(this.headerFilterController.getDataSource(this.getVisibleColumns()[0]));
+    dataSource.load().done(function(data) {
+        items = data;
+    });
+    this.clock.tick();
+
+    // assert
+    assert.deepEqual(items, [{ text: "test1", value: 1 }, { text: "test2", value: 2 }]);
+});
+
 
 QUnit.module("Header Filter", {
     beforeEach: function() {
