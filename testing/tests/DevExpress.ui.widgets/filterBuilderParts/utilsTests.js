@@ -1583,6 +1583,18 @@ QUnit.module("Filter merging", function() {
         assert.deepEqual(result, [["field", "=", 1], "and", ["field2", "=", 2]], "result = addedFilter");
     });
 
+    QUnit.test("condition with null value", function(assert) {
+        // arrange
+        var filter = ["field", "=", 1],
+            addedFilter = ["field", "=", null];
+
+        // act
+        var result = utils.syncFilters(filter, addedFilter);
+
+        // assert
+        assert.equal(result, null, "result = null");
+    });
+
     QUnit.test("group with same field condition", function(assert) {
         // arrange
         var filter = [["field", "=", 1], "and", ["field2", "=", 3], "and", ["field", "=", 4]],

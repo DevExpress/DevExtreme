@@ -636,7 +636,11 @@ function getMergedOperations(customOperations) {
 function syncFilters(filter, addedFilter) {
     if(filter === null || filter.length === 0) return addedFilter;
 
+    var canPush = addedFilter[2] !== null;
+
     if(isCondition(filter)) {
+        if(!canPush) return null;
+
         if(filter[0] === addedFilter[0]) {
             return addedFilter;
         } else {
@@ -644,14 +648,13 @@ function syncFilters(filter, addedFilter) {
         }
     }
 
-    var result = [],
-        fieldApplied = false;
+    var result = [];
     filter.forEach(function(item) {
         if(isCondition(item)) {
             if(item[0] === addedFilter[0]) {
-                if(!fieldApplied) {
+                if(canPush) {
                     result.push(addedFilter);
-                    fieldApplied = true;
+                    canPush = false;
                 } else {
                     result.splice(result.length - 1, 1);
                 }
@@ -663,7 +666,7 @@ function syncFilters(filter, addedFilter) {
         }
     });
 
-    if(!fieldApplied) {
+    if(canPush) {
         result.push(AND_GROUP_OPERATION);
         result.push(addedFilter);
     }
