@@ -126,6 +126,17 @@ var combineGetters = function(getters) {
     };
 };
 
+var ensurePropValueDefined = function(obj, propName, value, options) {
+    if(typeUtils.isDefined(value)) {
+        return value;
+    }
+
+    var newValue = {};
+    assignPropValue(obj, propName, value, options);
+
+    return newValue;
+};
+
 var compileSetter = function(expr) {
     expr = bracketsToDots(expr || "this").split(".");
     var lastLevelIndex = expr.length - 1;
@@ -138,13 +149,9 @@ var compileSetter = function(expr) {
             var propertyValue = readPropValue(currentValue, propertyName, options),
                 isPropertyFunc = !options.functionsAsIs && typeUtils.isFunction(propertyValue) && !isWrapped(propertyValue);
 
-            if(levelIndex !== lastLevelIndex && !typeUtils.isDefined(propertyValue)) {
-                propertyValue = { };
-                assignPropValue(currentValue, propertyName, propertyValue, options);
-            }
-
             if(levelIndex === lastLevelIndex) {
-                if(options.merge && typeUtils.isPlainObject(value) && typeUtils.isPlainObject(propertyValue)) {
+                if(options.merge && typeUtils.isPlainObject(value) && (!typeUtils.isDefined(propertyValue) || typeUtils.isPlainObject(propertyValue))) {
+                    propertyValue = ensurePropValueDefined(currentValue, propertyName, propertyValue, options);
                     objectUtils.deepExtendArraySafe(propertyValue, value, false, true);
                 } else if(isPropertyFunc) {
                     currentValue[propertyName](value);
@@ -152,6 +159,7 @@ var compileSetter = function(expr) {
                     assignPropValue(currentValue, propertyName, value, options);
                 }
             } else {
+                propertyValue = ensurePropValueDefined(currentValue, propertyName, propertyValue, options);
                 if(isPropertyFunc) {
                     propertyValue = propertyValue.call(currentValue);
                 }
