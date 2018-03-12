@@ -578,9 +578,11 @@ module.exports = (function() {
             return result;
         },
         createObjectWithChanges: function(target, changes) {
-            var emptyTarget = target ? Object.create(target) : { };
-            target = objectUtils.deepExtendArraySafe(emptyTarget, target, false, true);
-            return objectUtils.deepExtendArraySafe(target, changes, false, true);
+            var cloneTarget = objectUtils.deepExtendArraySafe({ }, target, false, true);
+            cloneTarget = objectUtils.deepExtendArraySafe(cloneTarget, changes, false, true);
+            var cloneProto = Object.getPrototypeOf(target);
+            Object.setPrototypeOf(cloneTarget, cloneProto);
+            return cloneTarget;
         },
 
         isDateType: isDateType
