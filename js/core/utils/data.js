@@ -138,7 +138,7 @@ var compileSetter = function(expr) {
             var propertyValue = readPropValue(currentValue, propertyName, options),
                 isPropertyFunc = !options.functionsAsIs && typeUtils.isFunction(propertyValue) && !isWrapped(propertyValue);
 
-            if(!typeUtils.isDefined(propertyValue)) {
+            if(levelIndex !== lastLevelIndex && !typeUtils.isDefined(propertyValue)) {
                 propertyValue = { };
                 assignPropValue(currentValue, propertyName, propertyValue, options);
             }
