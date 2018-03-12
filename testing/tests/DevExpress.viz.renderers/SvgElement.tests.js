@@ -4994,8 +4994,46 @@ function checkDashStyle(assert, elem, result, style, value) {
         assert.strictEqual(result, text, "method result");
         this.checkTspans(assert, text, [
             { x: 10, y: 20, text: "simple text" },
-            { x: 10, dy: 18, text: "with multiple" },
-            { x: 10, dy: 18, text: "lines" }
+            { x: 10, dy: "18px", text: "with multiple" },
+            { x: 10, dy: "18px", text: "lines" }
+        ], { x: 10, y: 20 });
+        assert.deepEqual(attrs, { text: "simple text\r\nwith multiple\nlines", x: 10, y: 20 }, "function param is not changed");
+    });
+
+    QUnit.test("Multiline text, line height from font size(em)", function(assert) {
+        // arrange
+        var text = this.createText().css({ "font-size": "0.9em" }),
+            attrs = { text: "simple text\r\nwith multiple\nlines", x: 10, y: 20 },
+            result;
+
+        // act
+        result = text.attr(attrs);
+
+        // assert
+        assert.strictEqual(result, text, "method result");
+        this.checkTspans(assert, text, [
+            { x: 10, y: 20, text: "simple text" },
+            { x: 10, dy: "0.9em", text: "with multiple" },
+            { x: 10, dy: "0.9em", text: "lines" }
+        ], { x: 10, y: 20 });
+        assert.deepEqual(attrs, { text: "simple text\r\nwith multiple\nlines", x: 10, y: 20 }, "function param is not changed");
+    });
+
+    QUnit.test("Multiline text, line height from font size(absolute size)", function(assert) {
+        // arrange
+        var text = this.createText().css({ "font-size": "large" }),
+            attrs = { text: "simple text\r\nwith multiple\nlines", x: 10, y: 20 },
+            result;
+
+        // act
+        result = text.attr(attrs);
+
+        // assert
+        assert.strictEqual(result, text, "method result");
+        this.checkTspans(assert, text, [
+            { x: 10, y: 20, text: "simple text" },
+            { x: 10, dy: 12, text: "with multiple" },
+            { x: 10, dy: 12, text: "lines" }
         ], { x: 10, y: 20 });
         assert.deepEqual(attrs, { text: "simple text\r\nwith multiple\nlines", x: 10, y: 20 }, "function param is not changed");
     });
@@ -5089,8 +5127,8 @@ function checkDashStyle(assert, elem, result, style, value) {
 
         this.checkTspans(assert, text, [
             { x: 1, y: 2, text: "line1" },
-            { x: 1, dy: 16, text: "line2" },
-            { x: 1, dy: 18, text: "line3" }
+            { x: 1, dy: "16px", text: "line2" },
+            { x: 1, dy: "18px", text: "line3" }
         ], { x: 1, y: 2 });
     });
 
@@ -5183,8 +5221,8 @@ function checkDashStyle(assert, elem, result, style, value) {
         assert.strictEqual(result, text, "method result");
         this.checkTspans(assert, text, [
             { x: 10, y: 20, text: "simple text" },
-            { x: 10, dy: 18, text: "with multiple" },
-            { x: 10, dy: 18, text: "lines" }
+            { x: 10, dy: "18px", text: "with multiple" },
+            { x: 10, dy: "18px", text: "lines" }
         ], { x: 10, y: 20 });
     });
 
@@ -5211,10 +5249,10 @@ function checkDashStyle(assert, elem, result, style, value) {
 
         this.checkTspans(assert, text, [
             { x: 1, y: 2, text: "Line 1" },
-            { x: 1, dy: 20, text: "Line 2-1" },
+            { x: 1, dy: "20px", text: "Line 2-1" },
             { text: "Line 2-2" },
             { text: "Line 2-3" },
-            { x: 1, dy: 20, text: "Line 3" }
+            { x: 1, dy: "20px", text: "Line 3" }
         ], { x: 1, y: 2 });
     });
 
@@ -5224,9 +5262,9 @@ function checkDashStyle(assert, elem, result, style, value) {
 
         this.checkTspans(assert, text, [
             { x: 1, y: 2, text: "Line 1" },
-            { x: 1, dy: 20, text: "Line 2-1" },
+            { x: 1, dy: "20px", text: "Line 2-1" },
             { text: "Line 2-2" },
-            { x: 1, dy: 20, text: "Line 3" }
+            { x: 1, dy: "20px", text: "Line 3" }
         ], { x: 1, y: 2 });
     });
 
@@ -5236,10 +5274,10 @@ function checkDashStyle(assert, elem, result, style, value) {
 
         this.checkTspans(assert, text, [
             { x: 1, y: 2, text: "Line 1" },
-            { x: 1, dy: 18, text: "Line 2-1" },
+            { x: 1, dy: "18px", text: "Line 2-1" },
             { text: "Line 2-2" },
             { text: "Line 2-3" },
-            { x: 1, dy: 10, text: "Line 3" }
+            { x: 1, dy: "10px", text: "Line 3" }
         ], { x: 1, y: 2 });
     });
 
@@ -5249,9 +5287,9 @@ function checkDashStyle(assert, elem, result, style, value) {
 
         this.checkTspans(assert, text, [
             { x: 1, y: 2, text: "Line 1" },
-            { x: 1, dy: 18, text: "Line 2-1" },
+            { x: 1, dy: "18px", text: "Line 2-1" },
             { text: "Line 2-2" },
-            { x: 1, dy: 10, text: "Line 3" }
+            { x: 1, dy: "10px", text: "Line 3" }
         ], { x: 1, y: 2 });
     });
 
@@ -5261,7 +5299,7 @@ function checkDashStyle(assert, elem, result, style, value) {
 
         this.checkTspans(assert, text, [
             { x: 1, y: 2, text: "Line 1" },
-            { x: 1, dy: 18, text: "Line 2-1" },
+            { x: 1, dy: "18px", text: "Line 2-1" },
             { text: "Line 2-2" },
             { text: "Line 2-3" },
             { x: 1, dy: 12, text: "Line 3" }
@@ -5274,7 +5312,7 @@ function checkDashStyle(assert, elem, result, style, value) {
 
         this.checkTspans(assert, text, [
             { x: 1, y: 2, text: "Line 1" },
-            { x: 1, dy: 18, text: "Line 2-1" },
+            { x: 1, dy: "18px", text: "Line 2-1" },
             { text: "Line 2-2" },
             { x: 1, dy: 12, text: "Line 3" }
         ], { x: 1, y: 2 });
@@ -5320,7 +5358,7 @@ function checkDashStyle(assert, elem, result, style, value) {
 
         this.checkTspans(assert, text, [
             { x: 10, y: 20, text: "Line 1" },
-            { x: 10, dy: 16, text: "Line 2-1" },
+            { x: 10, dy: "16px", text: "Line 2-1" },
             { text: "Line 2-2", style: { "font-size": "16px;" } },
             { x: 10, dy: 12, text: "Line 3" }
         ], { x: 10, y: 20 }, { stroke: "black", "stroke-width": 3, "stroke-opacity": 0.4 });
@@ -5356,7 +5394,7 @@ function checkDashStyle(assert, elem, result, style, value) {
 
         this.checkTspans(assert, text, [
             { x: 0, y: 0, text: "Line 1" },
-            { x: 0, dy: 16, text: "Line 2-1" },
+            { x: 0, dy: "16px", text: "Line 2-1" },
             { text: "Line 2-2", style: { "font-size": "16px;" } },
             { x: 0, dy: 12, text: "Line 3" }
         ], { x: 0, y: 0 });
