@@ -64,6 +64,11 @@ function isOnClickApplyFilterMode(that) {
     return that.option("filterRow.applyFilter") === "onClick";
 }
 
+function syncFilterRow(that, column, value) {
+    var operation = column.selectedFilterOperation || column.defaultFilterOperation;
+    that.getController("filterMerging").syncFilterRow([column.dataField, operation, value]);
+}
+
 
 var ColumnHeadersViewFilterRowExtender = (function() {
     var getEditorInstance = function($editorContainer) {
@@ -153,8 +158,7 @@ var ColumnHeadersViewFilterRowExtender = (function() {
         that._columnsController.columnOption(column.index, isOnClick ? "bufferedFilterValue" : "filterValue", normalizedValue, options.notFireEvent);
 
         if(!isOnClick && that.option("filterSyncEnabled")) {
-            var operation = column.selectedFilterOperation || column.defaultFilterOperation;
-            that.getController("filterMerging").syncFilterRow([column.dataField, operation, normalizedValue]);
+            syncFilterRow(that, column, normalizedValue);
         }
     };
 
@@ -647,13 +651,18 @@ exports.ApplyFilterViewController = modules.ViewController.inherit({
 
         columnsController.beginUpdate();
         for(var i = 0; i < columns.length; i++) {
-            if(columns[i].bufferedFilterValue !== undefined) {
-                columnsController.columnOption(i, "filterValue", columns[i].bufferedFilterValue);
-                columns[i].bufferedFilterValue = undefined;
+            var column = columns[i];
+            if(column.bufferedFilterValue !== undefined) {
+                columnsController.columnOption(i, "filterValue", column.bufferedFilterValue);
+                column.bufferedFilterValue = undefined;
             }
-            if(columns[i].bufferedSelectedFilterOperation !== undefined) {
-                columnsController.columnOption(i, "selectedFilterOperation", columns[i].bufferedSelectedFilterOperation);
-                columns[i].bufferedSelectedFilterOperation = undefined;
+            if(column.bufferedSelectedFilterOperation !== undefined) {
+                columnsController.columnOption(i, "selectedFilterOperation", column.bufferedSelectedFilterOperation);
+                column.bufferedSelectedFilterOperation = undefined;
+            }
+
+            if(this.option("filterSyncEnabled")) {
+                syncFilterRow(this, column, column.filterValue);
             }
         }
         columnsController.endUpdate();
