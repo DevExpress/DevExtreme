@@ -64,12 +64,6 @@ function isOnClickApplyFilterMode(that) {
     return that.option("filterRow.applyFilter") === "onClick";
 }
 
-function syncFilterRow(that, column, value) {
-    var operation = column.selectedFilterOperation || column.defaultFilterOperation;
-    that.getController("filterMerging").syncFilterRow([column.dataField, operation, value]);
-}
-
-
 var ColumnHeadersViewFilterRowExtender = (function() {
     var getEditorInstance = function($editorContainer) {
         var $editor = $editorContainer && $editorContainer.children(),
@@ -158,7 +152,7 @@ var ColumnHeadersViewFilterRowExtender = (function() {
         that._columnsController.columnOption(column.index, isOnClick ? "bufferedFilterValue" : "filterValue", normalizedValue, options.notFireEvent);
 
         if(!isOnClick && that.option("filterSyncEnabled")) {
-            syncFilterRow(that, column, normalizedValue);
+            that.getController("filterMerging").syncFilterRow(column, normalizedValue);
         }
     };
 
@@ -662,7 +656,7 @@ exports.ApplyFilterViewController = modules.ViewController.inherit({
             }
 
             if(this.option("filterSyncEnabled")) {
-                syncFilterRow(this, column, column.filterValue);
+                this.getController("filterMerging").syncFilterRow(column, column.filterValue);
             }
         }
         columnsController.endUpdate();
