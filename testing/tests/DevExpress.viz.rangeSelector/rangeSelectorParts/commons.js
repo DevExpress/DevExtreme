@@ -98,7 +98,8 @@ exports.environment = {
             label: {},
             marker: {
                 label: {}
-            }
+            },
+            endOnTick: false
         });
 
         return that.$container.dxRangeSelector(options).dxRangeSelector("instance");
