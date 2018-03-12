@@ -29,20 +29,7 @@ QUnit.module("Sync with Filter Row", {
                 filterRow: {
                     applyFilter: "auto",
                     visible: true,
-                    showOperationChooser: true,
-                    operationDescriptions: {
-                        "equal": "Equals",
-                        "notEqual": "Not equals",
-                        "lessThan": "Less",
-                        "lessThanOrEqual": "Less or equals",
-                        "greaterThan": "Greater",
-                        "greaterThanOrEqual": "Greater or equals",
-                        "startsWith": "Starts with",
-                        "contains": "Contains",
-                        "notContains": "Not contains",
-                        "endsWith": "Ends with"
-                    },
-                    resetOperationText: "Reset"
+                    showOperationChooser: true
                 }
             }, options);
 
