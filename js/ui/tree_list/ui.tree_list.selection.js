@@ -393,9 +393,9 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
                         result = [],
                         dataController = that._dataController;
 
-                    keys.forEach(function(key, index, arr) {
+                    keys.forEach(function(key, index, keys) {
                         var node = dataController.getNodeByKey(key),
-                            parentKeys = that._getSelectedParentKeys(key, arr);
+                            parentKeys = that._getSelectedParentKeys(key, keys);
 
                         if(!parentKeys.length && node.hasChildren) {
                             result.push(key);
