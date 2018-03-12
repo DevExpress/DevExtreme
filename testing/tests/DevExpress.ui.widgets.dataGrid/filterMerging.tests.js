@@ -119,7 +119,6 @@ QUnit.module("Sync with Filter Row", {
     });
 });
 
-
 QUnit.module("getCombinedFilter", {
     beforeEach: function() {
         this.setupDataGrid = function(options) {
@@ -176,8 +175,38 @@ QUnit.module("getCombinedFilter", {
         assert.equal(handler.lastCall.args[1], "between", "selectedFilterOperation");
         assert.equal(handler.lastCall.args[2], "filterBuilder", "target");
     });
+});
 
-    QUnit.test("after initializing", function(assert) {
+
+QUnit.module("Sync on initialization", {
+    beforeEach: function() {
+        this.setupDataGrid = function(options) {
+            this.options = options;
+            setupDataGridModules(this, ["columns", "data", "filterMerging"], {
+                initViews: false
+            });
+        };
+    },
+    afterEach: function() {
+    }
+}, function() {
+    QUnit.test("filter sync enabled", function(assert) {
+        //act
+        this.setupDataGrid({
+            dataSource: [],
+            filterValue: null,
+            filterSyncEnabled: true,
+            columns: [{
+                dataField: "Test",
+                filterValue: "1"
+            }]
+        });
+
+        //assert
+        assert.deepEqual(this.option("filterValue"), ["Test", "contains", "1"], "filterValue");
+    });
+
+    QUnit.test("filter sync disabled", function(assert) {
         //act
         this.setupDataGrid({
             dataSource: [],
@@ -189,6 +218,7 @@ QUnit.module("getCombinedFilter", {
         });
 
         //assert
-        assert.deepEqual(this.option("filterValue"), ["Test", "contains", "1"], "filterValue");
+        assert.equal(this.option("filterValue"), null, "filterValue");
     });
 });
+

@@ -6,7 +6,7 @@ var modules = require("./ui.grid_core.modules"),
 
 var FilterMergingController = modules.Controller.inherit((function() {
     return {
-        init: function() {
+        _initSync: function() {
             var columns = this.getController("columns").getColumns(),
                 filterValue = this.option("filterValue");
             for(var i = 0; i < columns.length; i++) {
@@ -17,6 +17,12 @@ var FilterMergingController = modules.Controller.inherit((function() {
 
             if(filterValue && filterValue.length > 0) {
                 this.option("filterValue", filterValue);
+            }
+        },
+
+        init: function() {
+            if(this.option("filterSyncEnabled")) {
+                this._initSync();
             }
         },
 
