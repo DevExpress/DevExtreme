@@ -276,7 +276,7 @@
 
 /**
  * @typedef {string} Enums.FilterBuilderFieldFilterOperations
- * @enum {'='|'<>'|'<'|'<='|'>'|'>='|'contains'|'endswith'|'isblank'|'isnotblank'|'notcontains'|'startswith'}
+ * @enum {'='|'<>'|'<'|'<='|'>'|'>='|'between'|'contains'|'endswith'|'isblank'|'isnotblank'|'notcontains'|'startswith'}
  */
 
 /**
