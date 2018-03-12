@@ -762,7 +762,6 @@ QUnit.test("getSelectedRowKeys with default parameter", function(assert) {
 
     // act, assert
     assert.deepEqual(this.getSelectedRowKeys(), [2, 4], "actual selection"); // deprecated in 18.1
-    assert.deepEqual(this.getSelectedRowKeys("excludeRecursive"), [2, 4], "actual selection");
 });
 
 QUnit.test("getSelectedRowKeys with 'leavesOnly' parameter", function(assert) {
@@ -810,6 +809,28 @@ QUnit.test("getSelectedRowKeys with 'includeRecursive' parameter", function(asse
 
     // act, assert
     assert.deepEqual(this.getSelectedRowKeys("includeRecursive"), [1, 2, 3, 4, 5], "all selected items");
+});
+
+QUnit.test("getSelectedRowKeys with 'excludeRecursive' parameter", function(assert) {
+    // arrange
+    var $testElement = $('#treeList');
+
+    this.options.dataSource = [
+             { id: 1, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
+             { id: 2, parentId: 1, field1: 'test2', field2: 2, field3: new Date(2002, 1, 2) },
+             { id: 3, parentId: 1, field1: 'test3', field2: 3, field3: new Date(2002, 1, 3) },
+             { id: 4, parentId: 1, field1: 'test4', field2: 4, field3: new Date(2002, 1, 4) },
+             { id: 5, parentId: 4, field1: 'test5', field2: 5, field3: new Date(2002, 1, 5) },
+             { id: 6, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
+             { id: 7, parentId: 6, field1: 'test2', field2: 2, field3: new Date(2002, 1, 2) },
+    ];
+    this.options.expandedRowKeys = [1, 4];
+    this.options.selectedRowKeys = [2, 5, 7];
+    this.setupTreeList();
+    this.rowsView.render($testElement);
+
+     // act, assert
+    assert.deepEqual(this.getSelectedRowKeys("excludeRecursive"), [4, 6], "all selected items");
 });
 
 QUnit.test("Selection state of rows should be updated on loadDescendants", function(assert) {
