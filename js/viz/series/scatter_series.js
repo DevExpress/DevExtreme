@@ -27,7 +27,6 @@ var extend = require("../../core/utils/extend").extend,
 
     HIGH_ERROR = "highError",
     LOW_ERROR = "lowError",
-    ORIGINAL = "original",
 
     VARIANCE = "variance",
     STANDARD_DEVIATION = "stddeviation",
@@ -350,11 +349,41 @@ var baseScatterMethods = {
         return { low: lowValue, high: highValue };
     },
 
+    _aggregateErrorBars: function(data) {
+        var errorBarsOptions = this._options.valueErrorBar,
+            lowValueField = errorBarsOptions.lowValueField || LOW_ERROR,
+            highValueField = errorBarsOptions.highValueField || HIGH_ERROR,
+            result = {};
+
+        if(this.areErrorBarsVisible() && errorBarsOptions.type === undefined) {
+            result[lowValueField] = Infinity;
+            result[highValueField] = -Infinity;
+            result = data.reduce(function(result, item) {
+                if(_isDefined(item[lowValueField])) {
+                    result[lowValueField] = Math.min(result[lowValueField], item[lowValueField]);
+                }
+                if(_isDefined(item[highValueField])) {
+                    result[highValueField] = Math.max(result[highValueField], item[highValueField]);
+                }
+                return result;
+            }, result);
+
+            if(!isFinite(result[lowValueField])) {
+                result[lowValueField] = undefined;
+            }
+            if(!isFinite(result[highValueField])) {
+                result[highValueField] = undefined;
+            }
+        }
+
+        return result;
+    },
+
     _defaultAggregator: "avg",
 
     _aggregators: {
         avg: function(aggregationInfo, series) {
-            var result = {},
+            var result = series._aggregateErrorBars(aggregationInfo.data),
                 valueField = series.getValueFields()[0],
                 aggregate = aggregationInfo.data.reduce(function(result, item) {
                     result[0] += item[valueField];
@@ -483,9 +512,9 @@ var baseScatterMethods = {
             meanValue,
             processDataItem,
             addSubError = function(_i, item) {
-                value = item[valueField];
-                item[lowValueField] = value - floatErrorValue;
-                item[highValueField] = value + floatErrorValue;
+                value = item.value;
+                item.lowError = value - floatErrorValue;
+                item.highError = value + floatErrorValue;
             };
 
         switch(errorBarType) {
@@ -494,16 +523,16 @@ var baseScatterMethods = {
                 break;
             case PERCENT:
                 processDataItem = function(_, item) {
-                    value = item[valueField];
+                    value = item.value;
                     var error = value * floatErrorValue / 100;
-                    item[lowValueField] = value - error;
-                    item[highValueField] = value + error;
+                    item.lowError = value - error;
+                    item.highError = value + error;
                 };
                 break;
             case UNDEFINED: // TODO: rework this
                 processDataItem = function(_, item) {
-                    item[lowValueField] = item[ORIGINAL + lowValueField];
-                    item[highValueField] = item[ORIGINAL + highValueField];
+                    item.lowError = item.data[lowValueField];
+                    item.highError = item.data[highValueField];
                 };
                 break;
             default:
@@ -519,8 +548,8 @@ var baseScatterMethods = {
                         meanValue = sum(valueArray) / valueArrayLength;
                         floatErrorValue = _sqrt(variance(valueArray, meanValue)) * floatErrorValue;
                         processDataItem = function(_, item) {
-                            item[lowValueField] = meanValue - floatErrorValue;
-                            item[highValueField] = meanValue + floatErrorValue;
+                            item.lowError = meanValue - floatErrorValue;
+                            item.highError = meanValue + floatErrorValue;
                         };
                         break;
                     case STANDARD_ERROR:
@@ -533,9 +562,6 @@ var baseScatterMethods = {
         processDataItem && _each(data, processDataItem);
     },
 
-    _beginUpdateData: function(data) {
-        this._calculateErrorBars(data);
-    },
 
     _patchMarginOptions: function(options) {
         var pointOptions = this._getCreatingPointOptions(),

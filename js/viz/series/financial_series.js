@@ -238,8 +238,6 @@ exports.stock = _extend({}, scatterSeries, {
         return this._options.argumentField || "date";
     },
 
-    _beginUpdateData: _noop,
-
     _patchMarginOptions: function(options) {
         var pointOptions = this._getCreatingPointOptions(),
             styles = pointOptions.styles,
@@ -255,7 +253,6 @@ exports.stock = _extend({}, scatterSeries, {
 });
 
 exports.candlestick = _extend({}, exports.stock, {
-    _beginUpdateData: barSeries._beginUpdateData,
 
     _parsePointStyle: function(style, defaultColor, innerColor) {
         var color = style.color || innerColor,

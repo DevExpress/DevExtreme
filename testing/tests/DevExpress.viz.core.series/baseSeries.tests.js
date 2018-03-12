@@ -92,7 +92,9 @@ var environment = {
             },
             _prepareSeriesToDrawing: function() { },
             _endUpdateData: function() { },
-            _beginUpdateData: function() { },
+            _calculateErrorBars: function() {
+
+            },
             _setGroupsSettings: function() {
                 this.groupsSetSettings = true;
             },

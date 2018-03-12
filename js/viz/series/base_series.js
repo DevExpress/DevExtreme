@@ -364,8 +364,6 @@ Series.prototype = {
             that._canRenderCompleteHandle = true;
         }
 
-        that._beginUpdateData(data);
-
         that._data = data.reduce(function(data, dataItem, index) {
             var pointDataItem = that._getPointData(dataItem, options);
             if(that._checkData(pointDataItem)) {
@@ -398,11 +396,14 @@ Series.prototype = {
         var that = this,
             allPoints = that._allPoints = (that._points || []).slice(),
             oldPointsByArgument = that.pointsByArgument || {},
+            data = that._getData(),
             points;
 
         that.pointsByArgument = {};
 
-        points = that._getData().map(function(dataItem, index) {
+        this._calculateErrorBars(data);
+
+        points = data.map(function(dataItem, index) {
             var oldPoint = that._getOldPoint(dataItem, oldPointsByArgument, index),
                 p = that._createPoint(dataItem, index, oldPoint, dataItem.index);
 

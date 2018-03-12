@@ -14,7 +14,6 @@ var extend = require("../../core/utils/extend").extend,
 exports.chart = {};
 
 var baseRangeSeries = {
-    _beginUpdateData: _noop,
 
     areErrorBarsVisible: _noop,
     _createErrorBarGroup: _noop,
