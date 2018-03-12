@@ -662,7 +662,7 @@ function syncFilters(filter, addedFilter) {
                 result.push(item);
             }
         } else {
-            result.push(item);
+            (result.length || isGroup(item)) && result.push(item);
         }
     });
 
@@ -671,7 +671,7 @@ function syncFilters(filter, addedFilter) {
         result.push(addedFilter);
     }
 
-    return result;
+    return result.length === 1 ? result[0] : result;
 }
 
 exports.isValidCondition = isValidCondition;

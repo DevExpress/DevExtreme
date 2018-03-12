@@ -1595,6 +1595,30 @@ QUnit.module("Filter merging", function() {
         assert.equal(result, null, "result = null");
     });
 
+    QUnit.test("condition in the begining of group replace with null value", function(assert) {
+        // arrange
+        var filter = [["field", "=", 1], "and", ["field2", "=", 2]],
+            addedFilter = ["field", "=", null];
+
+        // act
+        var result = utils.syncFilters(filter, addedFilter);
+
+        // assert
+        assert.deepEqual(result, ["field2", "=", 2], "result = field2");
+    });
+
+    QUnit.test("condition in the ending of group replace with null value", function(assert) {
+        // arrange
+        var filter = [["field2", "=", 2], "and", ["field", "=", 1]],
+            addedFilter = ["field", "=", null];
+
+        // act
+        var result = utils.syncFilters(filter, addedFilter);
+
+        // assert
+        assert.deepEqual(result, ["field2", "=", 2], "result = field2");
+    });
+
     QUnit.test("group with same field condition", function(assert) {
         // arrange
         var filter = [["field", "=", 1], "and", ["field2", "=", 3], "and", ["field", "=", 4]],
