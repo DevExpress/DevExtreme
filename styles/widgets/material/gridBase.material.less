@@ -193,24 +193,47 @@
             }
         }
 
-        .dx-row {
-            > td {
-                padding: @MATERIAL_GRID_BASE_CELL_PADDING;
-                font-size: @MATERIAL_GRID_BASE_CELL_FONT_SIZE;
-                line-height: @MATERIAL_GRID_BASE_HEADER_LINE_HEIGHT;
-            }
+        .dx-row > td {
+            padding-top: @MATERIAL_GRID_BASE_CELL_VERTICAL_PADDING;
+            padding-bottom: @MATERIAL_GRID_BASE_CELL_VERTICAL_PADDING;
+            font-size: @MATERIAL_GRID_BASE_CELL_FONT_SIZE;
         }
 
-        .dx-@{widgetName}-content .dx-@{widgetName}-table {
-            .dx-row {
-                > td {
-                    &:first-of-type {
-                        padding-left: @MATERIAL_GRID_BASE_CELL_FIRST_COLUMN_PADDING;
-                    }
+        .dx-@{widgetName}-content .dx-@{widgetName}-table .dx-row {
+            > td, > td.dx-cell-modified:not(.dx-field-item-content), > td.dx-@{widgetName}-invalid:not(.dx-field-item-content) {
+                padding-right: @MATERIAL_GRID_BASE_CELL_HORIZONTAL_PADDING;
+                padding-left: @MATERIAL_GRID_BASE_CELL_HORIZONTAL_PADDING;
+                line-height: @MATERIAL_GRID_BASE_HEADER_LINE_HEIGHT;
+            }
 
-                    &:last-of-type {
-                        padding-right: @MATERIAL_GRID_BASE_CELL_LAST_COLUMN_PADDING;
-                    }
+            > td {
+                &:first-of-type {
+                    padding-left: @MATERIAL_GRID_BASE_CELL_FIRST_COLUMN_PADDING;
+                }
+
+                &:last-of-type {
+                    padding-right: @MATERIAL_GRID_BASE_CELL_LAST_COLUMN_PADDING;
+                }
+
+                &.dx-command-select {
+                    overflow: visible;
+                    width: @MATERIAL_GRID_BASE_COMMAND_SELECT_COLUMN_WIDTH;
+                    min-width: @MATERIAL_GRID_BASE_COMMAND_SELECT_COLUMN_WIDTH;
+                    padding-left: @MATERIAL_GRID_BASE_CELL_FIRST_COLUMN_PADDING;
+                    padding-right: @MATERIAL_GRID_BASE_CELL_FIRST_COLUMN_PADDING - @MATERIAL_GRID_BASE_CELL_HORIZONTAL_PADDING;
+                    line-height: 1;
+                }
+
+                &.dx-command-edit {
+                    width: @MATERIAL_GRID_BASE_COMMAND_EDIT_COLUMN_WIDTH;
+                    min-width: @MATERIAL_GRID_BASE_COMMAND_EDIT_COLUMN_WIDTH;
+                }
+
+                &.dx-command-expand, .dx-@{widgetName}-group-space {
+                    width: @MATERIAL_GRID_BASE_COMMAND_EXPAND_COLUMN_WIDTH;
+                    min-width: @MATERIAL_GRID_BASE_COMMAND_EXPAND_COLUMN_WIDTH;
+                    padding: 0 4px 0 8px;
+                    line-height: 0;
                 }
             }
         }
@@ -222,7 +245,7 @@
 
     .dx-@{widgetName}-headers, .dx-@{widgetName}-rowsview {
         .dx-texteditor-input {
-            min-height: @MATERIAL_GRID_BASE_CELL_HEIGHT;
+            min-height: @MATERIAL_GRID_BASE_HEADER_LINE_HEIGHT;
         }
 
         .dx-lookup {
@@ -299,7 +322,7 @@
             .dx-texteditor-input {
                 background: ~"@{@{widgetName}-editor-bg}";
                 font-size: @MATERIAL_GRID_BASE_CELL_FONT_SIZE;
-                padding: 0 0 1px 0;
+                height: @MATERIAL_GRID_BASE_CELL_HEIGHT;
             }
 
             .dx-texteditor-container:after, .dx-texteditor-container:before {
@@ -317,6 +340,12 @@
 
         .dx-dropdowneditor {
             background-color: ~"@{@{widgetName}-editor-bg}";
+            .dx-dropdowneditor-icon {
+                &:before {
+                    top: 50%;
+                    bottom: auto;
+                }
+            }
         }
 
         &.dx-focused .dx-dropdowneditor-icon {
@@ -415,34 +444,6 @@
         background-color: ~"@{@{widgetName}-focused-border-color}";
         left: @MATERIAL_GRID_BASE_CELL_HORIZONTAL_PADDING + 1;
         right: @MATERIAL_GRID_BASE_CELL_HORIZONTAL_PADDING + 1;
-    }
-
-    .dx-@{widgetName}-content .dx-@{widgetName}-table .dx-row {
-        .dx-command-select {
-            overflow: visible;
-            width: @MATERIAL_GRID_BASE_COMMAND_SELECT_COLUMN_WIDTH;
-            min-width: @MATERIAL_GRID_BASE_COMMAND_SELECT_COLUMN_WIDTH;
-            padding-left: @MATERIAL_GRID_BASE_CELL_FIRST_COLUMN_PADDING;
-            padding-right: @MATERIAL_GRID_BASE_CELL_FIRST_COLUMN_PADDING - @MATERIAL_GRID_BASE_CELL_HORIZONTAL_PADDING;
-            line-height: 1;
-        }
-
-        .dx-command-edit {
-            width: @MATERIAL_GRID_BASE_COMMAND_EDIT_COLUMN_WIDTH;
-            min-width: @MATERIAL_GRID_BASE_COMMAND_EDIT_COLUMN_WIDTH;
-        }
-
-        .dx-command-expand, .dx-@{widgetName}-group-space {
-            width: @MATERIAL_GRID_BASE_COMMAND_EXPAND_COLUMN_WIDTH;
-            min-width: @MATERIAL_GRID_BASE_COMMAND_EXPAND_COLUMN_WIDTH;
-            padding: 0 4px 0 8px;
-            line-height: 0;
-        }
-
-        .dx-editor-cell:not(.dx-command-select) {
-            padding-right: @MATERIAL_GRID_BASE_CELL_HORIZONTAL_PADDING;
-            padding-left: @MATERIAL_GRID_BASE_CELL_HORIZONTAL_PADDING;
-        }
     }
 
     .dx-data-row.dx-state-hover {
@@ -560,7 +561,7 @@
         }
 
         td .dx-editor-container .dx-filter-range-content {
-            padding: @MATERIAL_GRID_BASE_CELL_VERTICAL_PADDING @MATERIAL_GRID_BASE_CELL_HORIZONTAL_PADDING @MATERIAL_GRID_BASE_CELL_VERTICAL_PADDING @MATERIAL_GRID_BASE_TEXTEDITOR_INPUT_PADDING;
+            padding: @MATERIAL_GRID_BASE_CELL_VERTICAL_PADDING 0 @MATERIAL_GRID_BASE_CELL_VERTICAL_PADDING @MATERIAL_GRID_BASE_TEXTEDITOR_INPUT_PADDING;
         }
 
         .dx-@{widgetName} .dx-@{widgetName}-table & { 
@@ -579,7 +580,6 @@
 
             .dx-texteditor {
                 padding: 10px 10px;
-                
                 .dx-texteditor-input {
                     font-size: @MATERIAL_GRID_BASE_CELL_FONT_SIZE;
                 }
@@ -599,6 +599,7 @@
     }
 
     .dx-editor-with-menu {
+        height: @MATERIAL_GRID_BASE_CELL_HEIGHT;
         .dx-menu-item-content {
             .dx-icon {
                 .dx-icon-sizing(@MATERIAL_GRID_BASE_FILTER_ICON_SIZE);
@@ -610,7 +611,7 @@
     }
 
     .dx-highlight-outline {
-        padding: @MATERIAL_GRID_BASE_CELL_PADDING;
+        padding: @MATERIAL_GRID_BASE_CELL_VERTICAL_PADDING 0 @MATERIAL_GRID_BASE_CELL_VERTICAL_PADDING 0;
         overflow: hidden;
         text-overflow: ellipsis;
     }
@@ -672,6 +673,7 @@
     }
 
     .dx-@{widgetName}-adaptive-more {
+        vertical-align: middle;
         .dx-icon-sizing(@MATERIAL_BASE_MORE_ADAPTIVE_ICON_SIZE);
     }
 
@@ -711,17 +713,23 @@
         .dx-data-row {
             .dx-validator.dx-@{widgetName}-invalid {
                 .dx-highlight-outline::after {
-                    border: 1px solid ~"@{@{widgetName}-row-invalid-faded-border-color}";
+                    left: 0;
+                    border-top: none;
+                    border-right: none;
+                    border-left: none;
+                    border-bottom: 2px solid ~"@{@{widgetName}-row-invalid-faded-border-color}";
                 }
 
                 &.dx-focused > .dx-highlight-outline::after {
-                    border: 1px solid ~"@{@{widgetName}-row-invalid-border-color}";
+                    border-bottom: 2px solid ~"@{@{widgetName}-row-invalid-border-color}";
                 }
             }
 
             .dx-invalid-message {
                 .dx-overlay-content {
                     padding: 9px 17px 9px;
+                    background-color: @VALIDATION_MESSAGE_BACKGROUND_COLOR;
+                    color: @VALIDATION_MESSAGE_COLOR;
                 }
             }
 
@@ -891,10 +899,6 @@
                         margin: 0px 3px;
                     }
                 }
-            }
-
-            .dx-@{widgetName}-filter-row td .dx-editor-container .dx-filter-range-content {
-                padding: @MATERIAL_GRID_BASE_CELL_VERTICAL_PADDING @MATERIAL_GRID_BASE_TEXTEDITOR_INPUT_PADDING @MATERIAL_GRID_BASE_CELL_VERTICAL_PADDING @MATERIAL_GRID_BASE_CELL_HORIZONTAL_PADDING;
             }
         }
 
