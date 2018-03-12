@@ -5869,6 +5869,37 @@ QUnit.test("The cellValue method should work correctly with visible index", func
     assert.deepEqual(visibleColumns, ["lastName", "name", "age"], "visible columns");
 });
 
+// T612318
+QUnit.test("EditorPreparing and EditorPrepared events should have correct parameters for the select column", function(assert) {
+    // arrange
+    var $testElement = $("#container"),
+        editorPreparingHandler = sinon.spy(),
+        editorPreparedHandler = sinon.spy(),
+        expectedProperties = ["parentType", "value", "setValue", "width", "cancel", "editorElement", "editorName", "editorOptions", "row"];
+
+    this.options.onEditorPreparing = editorPreparingHandler;
+    this.options.onEditorPrepared = editorPreparedHandler;
+    this.options.selection = {
+        mode: "multiple",
+        showCheckBoxesMode: "always"
+    };
+    this.selectionController.init();
+    this.editorFactoryController.init();
+
+    // act
+    this.rowsView.render($testElement);
+    this.clock.tick();
+
+    // assert
+    assert.strictEqual(editorPreparingHandler.getCall(0).args[0].command, "select", "The editorPreparing event argument - select column");
+    assert.strictEqual(editorPreparedHandler.getCall(0).args[0].command, "select", "The editorPrepared event argument - select column");
+    expectedProperties.forEach(function(item) {
+        assert.ok(editorPreparingHandler.getCall(0).args[0].hasOwnProperty(item), "The editorPreparing event argument - The '" + item + "' property existed");
+        assert.ok(editorPreparedHandler.getCall(0).args[0].hasOwnProperty(item), "The editorPrepared event argument - The '" + item + "' property existed");
+    });
+});
+
+
 if(device.ios || device.android) {
     // T322738
     QUnit.testInActiveWindow("Native click is used when allowUpdating is true", function(assert) {

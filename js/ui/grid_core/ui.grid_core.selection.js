@@ -766,38 +766,39 @@ module.exports = {
 
                     if(column.command === "select") {
                         return function(container, options) {
-                            that.renderSelectCheckBoxContainer(column, container, options);
+                            that.renderSelectCheckBoxContainer(container, options);
                         };
                     } else {
                         return that.callBase(column);
                     }
                 },
 
-                renderSelectCheckBoxContainer: function(column, $container, options) {
+                renderSelectCheckBoxContainer: function($container, options) {
                     if(options.rowType === "data" && !options.row.inserted) {
                         $container.addClass(EDITOR_CELL_CLASS);
                         this._attachCheckBoxClickEvent($container);
 
                         this.setAria("label", messageLocalization.format("dxDataGrid-ariaSelectRow"), $container);
-                        this._renderSelectCheckBox($container, options.value, column);
+                        this._renderSelectCheckBox($container, options);
                     }
                 },
 
-                _renderSelectCheckBox: function(container, value, column) {
+                _renderSelectCheckBox: function(container, options) {
                     var groupElement = $("<div>")
                             .addClass(SELECT_CHECKBOX_CLASS)
                             .appendTo(container);
 
-                    this.getController("editorFactory").createEditor(groupElement, extend({}, column, {
+                    this.getController("editorFactory").createEditor(groupElement, extend({}, options.column, {
                         parentType: "dataRow",
                         dataType: "boolean",
-                        value: value,
+                        value: options.value,
                         tabIndex: -1,
                         setValue: function(value, e) {
                             if(e && e.event && e.event.type === "keydown") {
                                 eventsEngine.trigger(container, clickEvent.name, e);
                             }
-                        }
+                        },
+                        row: options.row
                     }));
 
                     return groupElement;
