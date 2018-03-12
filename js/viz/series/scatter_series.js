@@ -262,7 +262,8 @@ var baseScatterMethods = {
         var pointData = {
             value: data[options.valueField || "val"],
             argument: data[options.argumentField || "arg"],
-            tag: data[options.tagField || "tag"]
+            tag: data[options.tagField || "tag"],
+            data: data
         };
 
         this._fillErrorBars(data, pointData, options);
@@ -349,13 +350,90 @@ var baseScatterMethods = {
         return { low: lowValue, high: highValue };
     },
 
-    _fusionPoints: function(fusionPoints, tick, index) {
+    _defaultAggregator: "avg",
+
+    _aggregators: {
+        avg: function(aggregationInfo, series) {
+            var result = {},
+                valueField = series.getValueFields()[0],
+                aggregate = aggregationInfo.data.reduce(function(result, item) {
+                    result[0] += item[valueField];
+                    result[1]++;
+                    return result;
+                }, [0, 0]);
+
+            result[valueField] = aggregate[0] / aggregate[1];
+            result[series.getArgumentField()] = aggregationInfo.intervalStart;
+
+            return result;
+        },
+
+        sum: function(aggregationInfo, series) {
+            var result = {},
+                valueField = series.getValueFields()[0];
+
+            result[valueField] = aggregationInfo.data.reduce(function(result, item) {
+                result += item[valueField];
+                return result;
+            }, 0);
+
+            result[series.getArgumentField()] = aggregationInfo.intervalStart;
+
+            return result;
+        },
+
+        count: function(aggregationInfo, series) {
+            var result = {},
+                valueField = series.getValueFields()[0];
+
+            result[valueField] = aggregationInfo.data.reduce(function(result, item) {
+                return ++result;
+            }, 0);
+
+            result[series.getArgumentField()] = aggregationInfo.intervalStart;
+
+            return result;
+        },
+
+        min: function(aggregationInfo, series) {
+            var result = {},
+                valueField = series.getValueFields()[0],
+                data = aggregationInfo.data;
+
+            result[valueField] = data.reduce(function(result, item) {
+                result = _min(item[valueField], result);
+                return result;
+            }, data[0][valueField]);
+
+
+            result[series.getArgumentField()] = aggregationInfo.intervalStart;
+
+            return result;
+        },
+
+        max: function(aggregationInfo, series) {
+            var result = {},
+                valueField = series.getValueFields()[0],
+                data = aggregationInfo.data;
+
+            result[valueField] = data.reduce(function(result, item) {
+                result = _max(item[valueField], result);
+                return result;
+            }, data[0][valueField]);
+
+
+            result[series.getArgumentField()] = aggregationInfo.intervalStart;
+
+            return result;
+        }
+    },
+
+    _fusionPoints: function(fusionPoints, tick) {
         var errorBarValues = this._calcErrorBarValues(fusionPoints);
         return {
             value: this._calcMedianValue(fusionPoints, "value"),
             argument: tick,
             tag: null,
-            index: index,
             seriesName: this.name,
             lowError: errorBarValues.low,
             highError: errorBarValues.high

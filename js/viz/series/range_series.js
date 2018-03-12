@@ -41,19 +41,42 @@ var baseRangeSeries = {
             tag: data[options.tagField || "tag"],
             minValue: data[options.rangeValue1Field || "val1"],
             value: data[options.rangeValue2Field || "val2"],
-            argument: data[options.argumentField || "arg"]
+            argument: data[options.argumentField || "arg"],
+            data: data
         };
     },
 
-    _fusionPoints: function(fusionPoints, tick) {
-        var calcMedianValue = scatterSeries._calcMedianValue,
-            value = calcMedianValue.call(this, fusionPoints, "value"),
-            minValue = calcMedianValue.call(this, fusionPoints, "minValue");
+    _defaultAggregator: "range",
 
-        if(value === null || minValue === null) {
-            value = minValue = null;
+    _aggregators: {
+        range: function(aggregationInfo, series) {
+            var result = {},
+                data = aggregationInfo.data,
+                valueFields = series.getValueFields(),
+                val1Field = valueFields[0],
+                val2Field = valueFields[1];
+
+            result[val1Field] = -Infinity;
+            result[val2Field] = Infinity;
+
+            result = data.reduce(function(result, item) {
+                var minValue = Math.min(item[val1Field], item[val2Field]);
+                var maxValue = Math.max(item[val1Field], item[val2Field]);
+
+                if(item[val1Field] === null || item[val2Field] === null) {
+                    return result;
+                }
+
+                result[val1Field] = Math.min(result[val1Field], minValue);
+                result[val2Field] = Math.max(result[val2Field], maxValue);
+
+                return result;
+            });
+
+            result[series.getArgumentField()] = aggregationInfo.intervalStart;
+
+            return result;
         }
-        return { minValue: minValue, value: value, argument: tick, tag: null };
     },
 
     getValueFields: function() {
