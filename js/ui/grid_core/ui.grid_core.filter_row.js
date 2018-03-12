@@ -143,15 +143,15 @@ var ColumnHeadersViewFilterRowExtender = (function() {
             $editorContainer = options.container,
             column = that._columnsController.columnOption(options.column.index),
             filterValue = getFilterValue(that, column.index, $editorContainer),
-            isOnClick = isOnClickApplyFilterMode(that),
+            isOnClickMode = isOnClickApplyFilterMode(that),
             normalizedValue = normalizeFilterValue(that, value, column, $editorContainer);
 
         if(!isDefined(filterValue) && !isDefined(value)) return;
 
         that._applyFilterViewController.setHighLight($editorContainer, filterValue !== value);
-        that._columnsController.columnOption(column.index, isOnClick ? "bufferedFilterValue" : "filterValue", normalizedValue, options.notFireEvent);
+        that._columnsController.columnOption(column.index, isOnClickMode ? "bufferedFilterValue" : "filterValue", normalizedValue, options.notFireEvent);
 
-        if(!isOnClick && that.option("filterSyncEnabled")) {
+        if(!isOnClickMode && that.option("filterSyncEnabled")) {
             that.getController("filterMerging").syncFilterRow(column, normalizedValue);
         }
     };
@@ -523,6 +523,11 @@ var ColumnHeadersViewFilterRowExtender = (function() {
                         that._focusEditor($editorContainer);
                     } else {
                         that._showFilterRange($editorContainer.closest("." + EDITOR_CELL_CLASS), column);
+                    }
+
+                    if(!isOnClickMode && that.option("filterSyncEnabled")) {
+                        var columnOption = that._columnsController.columnOption(column.index);
+                        that.getController("filterMerging").syncFilterRow(columnOption, columnOption.filterValue || null);
                     }
                 },
                 onSubmenuShown: function() {

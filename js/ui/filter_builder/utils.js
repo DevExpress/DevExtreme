@@ -634,9 +634,8 @@ function getMergedOperations(customOperations) {
 }
 
 function syncFilters(filter, addedFilter) {
-    if(filter === null || filter.length === 0) return addedFilter;
-
     var canPush = addedFilter[2] !== null;
+    if(filter === null || filter.length === 0) return canPush ? addedFilter : null;
 
     if(isCondition(filter)) {
         if(!canPush) return null;
