@@ -1,4 +1,5 @@
 @MATERIAL_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE: @MATERIAL_BASE_ICON_SIZE;
+@MATERIAL_DROPDOWNEDITOR_BUTTON_ICON_BOTTOM_PADDING: @MATERIAL_TEXTEDITOR_BOTTOM_PADDING + @MATERIAL_TEXTEDITOR_BORDER_WIDTH;
 
 @MATERIAL_DROPDOWNEDITOR_CLEAR_ICON_CONTAINER_SIZE:
     @MATERIAL_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE -
@@ -24,10 +25,10 @@
     height: 100%;
 
     .dx-icon-font-centered-sizing(@MATERIAL_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE);
-    .border-radius(@dropdowneditor-icon-border-radius);
 
     &:before {
-        margin-top: -(@MATERIAL_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE - 8);
+        top: auto;
+        bottom: @MATERIAL_DROPDOWNEDITOR_BUTTON_ICON_BOTTOM_PADDING;
     }
 }
 
@@ -41,7 +42,7 @@
         }
     }
 
-    .dx-state-readonly &{
+    .dx-state-readonly & {
         .dx-dropdowneditor-icon {
             opacity: 1;
         }
@@ -49,7 +50,6 @@
 }
 
 .dx-dropdowneditor-icon {
-    border: @MATERIAL_BASE_BORDER_WIDTH solid transparent;
     color: @dropdowneditor-icon-color;
     .dx-icon-spindown;
     .dx-dropdowneditor-button-icon();

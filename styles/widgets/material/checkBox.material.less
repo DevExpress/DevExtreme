@@ -80,9 +80,13 @@
         border-radius: 50%;
         display: block;
         position: absolute;
-        z-index: -1;
+        z-index: 1;
         .scale(0.5);
         .transition(@MATERIAL_CHECKBOX_RIPPLE_TRANSITION);
+    }
+
+    &:before {
+        z-index: 2;
     }
 
     .dx-checkbox-checked & {
