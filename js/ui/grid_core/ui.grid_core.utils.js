@@ -577,10 +577,10 @@ module.exports = (function() {
             }
             return result;
         },
+
         createObjectWithChanges: function(target, changes) {
-            var emptyTarget = target ? Object.create(target) : { };
-            target = objectUtils.deepExtendArraySafe(emptyTarget, target, false, true);
-            return objectUtils.deepExtendArraySafe(target, changes, false, true);
+            var result = target ? Object.create(target) : { };
+            return objectUtils.deepExtendArraySafe(result, changes, false, true);
         },
 
         isDateType: isDateType
