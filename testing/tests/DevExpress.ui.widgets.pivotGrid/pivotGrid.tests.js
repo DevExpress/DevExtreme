@@ -445,48 +445,6 @@ QUnit.test("expand column item", function(assert) {
     });
 });
 
-QUnit.test("rows sorting saved after row expanding", function(assert) {
-    // arrange
-    var sales = [
-        { "field1": null, "field2": "Value2" },
-        { "field1": "[1]", "field2": "Value2" },
-        { "field1": "[2]", "field2": "Value2" },
-        { "field1": "[3]", "field2": "Value2" },
-        { "field1": "[4]", "field2": "Value2" },
-        { "field1": "[5]", "field2": "Value2" },
-        { "field1": "Value", "field2": "Value2" },
-        { "field1": "[11]", "field2": "Value2" },
-        { "field1": "[11]", "field2": "Value2" },
-        { "field1": "[21]", "field2": "Value2" },
-        { "field1": "[22]", "field2": "Value2" },
-        { "field1": "[23]", "field2": "Value2" }
-    ];
-    var pivotGrid = createPivotGrid({
-        dataSource: {
-            fields: [{ dataField: "field1", area: "row" }, { dataField: "field2", area: "row" }],
-            store: sales
-        }
-    }, assert);
-
-    this.clock.tick();
-
-    assert.ok(pivotGrid);
-
-    // act
-    var $firstRow = $("#pivotGrid").find('tbody.dx-pivotgrid-vertical-headers').children().eq(0),
-        firstRowText = $firstRow.text();
-
-    $($firstRow.find(".dx-pivotgrid-collapsed")).trigger('dxclick');
-    this.clock.tick();
-
-    var $expandedRow = $("#pivotGrid").find('tbody.dx-pivotgrid-vertical-headers').children().eq(0).find(".dx-pivotgrid-expanded"),
-        expandedRowText = $expandedRow.text();
-
-    // assert
-    assert.ok($expandedRow.length, "first row is expanded");
-    assert.equal(firstRowText, expandedRowText, "the same text");
-});
-
 QUnit.test("onCellClick prevents expansion", function(assert) {
     var expandValueChangingArgs;
     var pivotGrid = createPivotGrid({
