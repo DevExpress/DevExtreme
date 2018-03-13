@@ -107,7 +107,10 @@ var getHandlersController = function(element, eventName) {
     return {
         addHandler: function(handler, selector, data) {
             var callHandler = function(e, extraParameters) {
-                var handlerArgs = [e];
+                var handlerArgs = [e],
+                    target = e.currentTarget,
+                    relatedTarget = e.relatedTarget,
+                    result;
 
                 if(extraParameters !== undefined) {
                     handlerArgs.push(extraParameters);
@@ -115,7 +118,9 @@ var getHandlersController = function(element, eventName) {
 
                 special.callMethod(eventName, "handle", element, [ e, data ]);
 
-                var result = handler.apply(e.currentTarget, handlerArgs);
+                if(!relatedTarget || (relatedTarget !== target && !(target && e.currentTarget.contains(relatedTarget)))) {
+                    result = handler.apply(target, handlerArgs);
+                }
 
                 if(result === false) {
                     e.preventDefault();
