@@ -247,9 +247,9 @@ QUnit.test("Event bubbling", function(assert) {
 
 QUnit.test("Should not fire event when relatedTarget is children of a target", function(assert) {
     var div = document.createElement("div"),
-        div2 = document.createElement("div"),
+        childNode = document.createElement("div"),
         fired = 0;
-    div.appendChild(div2);
+    div.appendChild(childNode);
 
     document.body.appendChild(div);
 
@@ -257,7 +257,7 @@ QUnit.test("Should not fire event when relatedTarget is children of a target", f
         fired++;
     });
 
-    var event = new eventsEngine.Event("someEvent", { target: div, relatedTarget: div.children[0] });
+    var event = new eventsEngine.Event("someEvent", { target: div, relatedTarget: childNode });
 
     eventsEngine.trigger(div, event);
 
