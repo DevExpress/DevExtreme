@@ -3400,7 +3400,7 @@ QUnit.test("leaving inner scroller and releasing in outer scroller should hide i
     // start scrolling inner
     pointerMock($scrollableContainer).start().down().move(0, 10);
     // leaving inner
-    $scrollableContainer.trigger($.Event("mouseleave", { relatedTarget: $wrapScrollableContainer }));
+    $scrollableContainer.trigger($.Event("mouseleave", { relatedTarget: $wrapScrollableContainer.get(0) }));
     // up on outer
     pointerMock($wrapScrollableContainer).up();
 
