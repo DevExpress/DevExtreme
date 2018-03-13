@@ -41,6 +41,7 @@ var $ = require("jquery"),
     nativePointerMock = require("../../helpers/nativePointerMock.js"),
     dataGridMocks = require("../../helpers/dataGridMocks.js"),
     numberLocalization = require("localization/number"),
+    virtualScrollingCore = require("ui/grid_core/ui.grid_core.virtual_scrolling_core"),
     setupDataGridModules = dataGridMocks.setupDataGridModules,
     MockDataController = dataGridMocks.MockDataController,
     MockColumnsController = dataGridMocks.MockColumnsController,
@@ -1982,6 +1983,9 @@ QUnit.test('Freespace row must be empty for virtual scroller and non-first page'
     // act
     rowsView.render($testElement);
     rowsView.height(400);
+    dataController.getVirtualContentSize = function() {
+        return 1000;
+    };
     rowsView.resize();
 
     // assert
@@ -2015,6 +2019,12 @@ QUnit.test('RowsView should not be scrolled on render if page index is specified
 
     rowsView.render($testElement);
     rowsView.height(30);
+    dataController.getVirtualContentSize = function() {
+        return 300;
+    };
+    dataController.getContentOffset = function() {
+        return 200;
+    };
     rowsView.resize();
 
     var $scrollable = $testElement.find(".dx-scrollable"),
@@ -4298,9 +4308,15 @@ QUnit.test('Scroll position is not reset on change dataSource when virtual scrol
 
     this.rowsView.render(testElement);
     this.rowsView.height(50);
+    this.dataController.getVirtualContentSize = function() {
+        return 1000;
+    };
     this.rowsView.resize();
-
     var that = this;
+    this.dataController.changed.add(function() {
+        that.rowsView.resize();
+    });
+
     var scrollOffsetChangedCallCount = 0;
 
     this.rowsView.scrollChanged.add(function(e) {
@@ -5173,7 +5189,20 @@ QUnit.test("Scrollbar should be correct updated when specified a remote data", f
 
 QUnit.module('Virtual scrolling', {
     beforeEach: function() {
-        this.createRowsView = createRowsView;
+        this.createRowsView = function() {
+            var rowsView = createRowsView.apply(this, arguments);
+            var x = new virtualScrollingCore.VirtualScrollController(this, { pageIndex: function() {} });
+            rowsView._dataController.getVirtualContentSize = x.getVirtualContentSize;
+            rowsView._dataController.getContentOffset = x.getContentOffset;
+            rowsView._dataController.viewportItemSize = x.viewportItemSize;
+            rowsView._dataController.setContentSize = x.setContentSize;
+            rowsView._dataController.setViewportPosition = x.setViewportPosition;
+            rowsView._dataController._setViewportPositionCore = x._setViewportPositionCore;
+            rowsView._dataController.option = rowsView.option.bind(rowsView);
+            rowsView._dataController._dataSource = { changingDuration: function() { return 50; } };
+
+            return rowsView;
+        };
     },
     afterEach: function() {
         this.dataGrid && this.dataGrid.dispose();
@@ -5247,7 +5276,8 @@ QUnit.test('Render rows with virtual items count is more 1 000 000', function(as
     rowsView.resize();
 
     var rowHeight = rowsView._rowHeight;
-    var heightRatio = rowsView._heightRatio;
+
+    var heightRatio = dataController._sizeRatio;
 
     var content = testElement.find('.dx-scrollable-content').children();
 
@@ -5367,6 +5397,7 @@ QUnit.test('setViewportItemIndex for virtual scrolling when rowsView height defi
     this.options.scrolling = {
         useNative: false,
         timeout: 10,
+        renderingThreshold: 0,
         mode: 'virtual'
     };
     rowsView.render(testElement);
@@ -5430,7 +5461,7 @@ QUnit.test('setViewportItemIndex to far for virtual scrolling when rowsView heig
     rowsView.resize();
 
     var rowHeight = rowsView._rowHeight;
-    var heightRatio = rowsView._heightRatio;
+    var heightRatio = rowsView._dataController._sizeRatio;
 
     dataController.setViewportItemIndex = function(itemIndex) {
         assert.ok(heightRatio > 0 && heightRatio < 1, "heightRatio is defined and in (0, 1)");
@@ -5476,7 +5507,7 @@ QUnit.test('setViewportItemIndex to near for virtual scrolling when rowsView hei
     rowsView.resize();
 
     var rowHeight = rowsView._rowHeight;
-    var heightRatio = rowsView._heightRatio;
+    var heightRatio = rowsView._dataController._sizeRatio;
 
     dataController.setViewportItemIndex = function(itemIndex) {
         assert.ok(heightRatio > 0 && heightRatio < 1, "heightRatio is defined and in (0, 1)");
@@ -5487,50 +5518,6 @@ QUnit.test('setViewportItemIndex to near for virtual scrolling when rowsView hei
     // act
     rowsView.scrollTo({ y: rowHeight * heightRatio * 7000000 + rowHeight * 3 });
 });
-
-/* QUnit.test('setViewportItemIndex for virtual scrolling when rowsView height auto and extern dxScrollable used', function (assert) {
-    $("#qunit-fixture").children().css('height', 30);
-    var dxScrollable = $("#qunit-fixture").children().dxScrollable().dxScrollable("instance");
-    $("#qunit-fixture").attr("id", "qunit-fixture-static");
-    // arrange
-    var viewportSize = 0,
-        options = {
-            items: [
-                { values: [1] },
-                { values: [2] },
-                { values: [3] }
-            ],
-            virtualItemsCount: {
-                begin: 10,
-                end: 97
-            }
-        },
-        dataController = new MockDataController(options),
-        rowsView = this.createRowsView(options.items, dataController),
-        testElement = $('#container');
-
-    // act
-    this.options.scrolling = {
-        mode: 'virtual'
-    };
-
-    rowsView.render(testElement);
-    rowsView.height('auto');
-    rowsView.resize();
-
-    var rowHeight = rowsView._rowHeight;
-    var content = testElement.find('.dx-scrollable-content').children();
-
-    dataController.setViewportItemIndex = function (itemIndex) {
-        if ($("#qunit-fixture-static").length) {
-            $("#qunit-fixture-static").attr("id", "qunit-fixture");
-            assert.equal(Math.round(itemIndex), 50);
-            done();
-        }
-    }
-    dxScrollable.update();
-    dxScrollable.scrollTo({ left: 0, top: testElement.offset().top + 50 * rowHeight });
-}); */
 
 QUnit.test('setViewportItemIndex for virtual scrolling when rowsView height auto and browser scroll used', function(assert) {
     if(devices.real().ios || ('callPhantom' in window)) {
@@ -6264,6 +6251,42 @@ QUnit.test("Vertical scroll position should be correct after render rows when sc
     });
 });
 
+QUnit.test('getTopVisibleRowData when virtual scrolling enabled', function(assert) {
+    // arrange
+    var done = assert.async();
+    var rows = [
+            { values: [1], data: { field: 1 } },
+            { values: [2], data: { field: 2 } },
+            { values: [3], data: { field: 3 } }
+        ],
+        dataController = new MockDataController({
+            items: rows,
+            virtualItemsCount: {
+                begin: 5,
+                end: 2
+            }
+        }),
+        rowsView = this.createRowsView(rows, dataController),
+        testElement = $('#container');
+
+    this.options.scrolling = {
+        mode: 'virtual'
+    };
+
+    rowsView.render(testElement);
+    rowsView.height(20);
+    rowsView.resize();
+
+    rowsView.scrollChanged.add(function() {
+        // act, assert
+        assert.deepEqual(rowsView.getTopVisibleRowData(), { field: 2 });
+        done();
+    });
+
+    rowsView.element().dxScrollable('instance').scrollTo(rowsView._rowHeight * 5 + 25);
+});
+
+
 QUnit.module('Scrollbar', {
     beforeEach: function() {
         this.createRowsView = createRowsView;
@@ -6389,76 +6412,6 @@ QUnit.test('getTopVisibleRowData with scrolling', function(assert) {
     });
 
     rowsView.element().dxScrollable('instance').scrollTo(20);
-});
-
-QUnit.test('getTopVisibleRowData when virtual scrolling enabled', function(assert) {
-    // arrange
-    var done = assert.async();
-    var rows = [
-            { values: [1], data: { field: 1 } },
-            { values: [2], data: { field: 2 } },
-            { values: [3], data: { field: 3 } }
-        ],
-        dataController = new MockDataController({
-            items: rows,
-            virtualItemsCount: {
-                begin: 5,
-                end: 2
-            }
-        }),
-        rowsView = this.createRowsView(rows, dataController),
-        testElement = $('#container');
-
-    this.options.scrolling = {
-        mode: 'virtual'
-    };
-
-    rowsView.render(testElement);
-    rowsView.height(20);
-    rowsView.resize();
-
-    rowsView.scrollChanged.add(function() {
-    // act, assert
-        assert.deepEqual(rowsView.getTopVisibleRowData(), { field: 2 });
-        done();
-    });
-
-    rowsView.element().dxScrollable('instance').scrollTo(rowsView._rowHeight * 5 + 25);
-});
-
-QUnit.test('getTopVisibleRowData when not inertion virtual scrolling enabled', function(assert) {
-    // arrange
-    var done = assert.async();
-    var rows = [
-            { values: [1], data: { field: 1 } },
-            { values: [2], data: { field: 2 } },
-            { values: [3], data: { field: 3 } }
-        ],
-        dataController = new MockDataController({
-            items: rows,
-            virtualItemsCount: {
-                begin: 5,
-                end: 2
-            }
-        }),
-        rowsView = this.createRowsView(rows, dataController),
-        testElement = $('#container');
-
-    this.options.scrolling = {
-        mode: 'virtual'
-    };
-
-    rowsView.render(testElement);
-    rowsView.height(20);
-    rowsView.resize();
-
-    rowsView.scrollChanged.add(function() {
-    // act, assert
-        assert.deepEqual(rowsView.getTopVisibleRowData(), { field: 2 });
-        done();
-    });
-
-    rowsView.element().dxScrollable('instance').scrollTo(rowsView._rowHeight * 5 + 25);
 });
 
 QUnit.test('getTopVisibleRowData when virtual scrolling enabled after append next page', function(assert) {

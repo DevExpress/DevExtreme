@@ -667,6 +667,45 @@ QUnit.test("Editing should work with classes as data objects", function(assert) 
     assert.deepEqual(rows[1].values, [1, "test"]);
 });
 
+// T613804
+QUnit.test("Editing should work with classes as data objects contains readonly properties", function(assert) {
+    // arrange
+    function DataItem(id, text) {
+        this.id = id;
+        this.text = text;
+    }
+    Object.defineProperty(DataItem.prototype, "ID", {
+        configurable: true,
+        enumerable: true,
+        get: function() { return this.id; }
+    });
+    Object.defineProperty(DataItem.prototype, "Text", {
+        configurable: true,
+        enumerable: false,
+        get: function() { return this.text; },
+        set: function(value) { this.text = value; }
+    });
+    var dataItem0 = new DataItem(0, "text0"),
+        dataGrid = $("#dataGrid").dxDataGrid({
+            loadingTimeout: undefined,
+            columns: ["ID", "Text"],
+            dataSource: {
+                store: [ dataItem0 ]
+            },
+            editing: { allowUpdating: true, mode: "batch" }
+        }).dxDataGrid("instance");
+
+    // act
+    dataGrid.cellValue(0, 1, "test");
+
+    // assert
+    var rows = dataGrid.getVisibleRows();
+    assert.equal(rows.length, 1);
+    assert.equal(rows[0].data.ID, 0);
+    assert.equal(rows[0].data.Text, "test");
+    assert.deepEqual(rows[0].values, [0, "test"]);
+});
+
 QUnit.test("Group panel should set correct 'max-width' after clear grouping", function(assert) {
     var clock = sinon.useFakeTimers(),
         dataGrid = $("#dataGrid").dxDataGrid({

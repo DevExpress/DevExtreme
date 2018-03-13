@@ -92,6 +92,53 @@ QUnit.test("Pass axes to seriesDataSource", function(assert) {
     assert.strictEqual(axisModule.Axis.secondCall.args[0].axisType, "xyAxes");
 });
 
+QUnit.test("range min/max from dataSource. ticks inside data source range - take range by data source", function(assert) {
+    this.createWidget({
+        dataSource: [
+            { t: 10, y1: 0 },
+            { t: 190, y1: 8 }
+        ],
+        dataSourceField: "t",
+        scale: {
+            tickInterval: 20
+        }
+    });
+
+    var options = this.axis.updateOptions.lastCall.args[0],
+        range = this.getArgRange();
+    assert.strictEqual(options.startValue, 10, "startValue");
+    assert.strictEqual(options.endValue, 190, "endValue");
+    assert.strictEqual(range.min, 10);
+    assert.strictEqual(range.max, 190);
+    assert.strictEqual(range.minVisible, 10);
+    assert.strictEqual(range.maxVisible, 190);
+    assert.strictEqual(this.seriesDataSource.isShowChart(), false, "isShowChart");
+});
+
+QUnit.test("range min/max from dataSource. ticks out of data source range - take range by ticks", function(assert) {
+    this.createWidget({
+        dataSource: [
+            { t: 10, y1: 0 },
+            { t: 190, y1: 8 }
+        ],
+        dataSourceField: "t",
+        scale: {
+            tickInterval: 20,
+            endOnTick: true
+        }
+    });
+
+    var options = this.axis.updateOptions.lastCall.args[0],
+        range = this.getArgRange();
+    assert.strictEqual(options.startValue, 0, "startValue");
+    assert.strictEqual(options.endValue, 200, "endValue");
+    assert.strictEqual(range.min, 0);
+    assert.strictEqual(range.max, 200);
+    assert.strictEqual(range.minVisible, 0);
+    assert.strictEqual(range.maxVisible, 200);
+    assert.strictEqual(this.seriesDataSource.isShowChart(), false, "isShowChart");
+});
+
 QUnit.test("range min/max from series", function(assert) {
     this.createWidget({
         dataSource: [
@@ -125,31 +172,6 @@ QUnit.test("range min/max from series", function(assert) {
     assert.strictEqual(valRange.minVisible, undefined);
     assert.strictEqual(valRange.maxVisible, undefined);
     assert.strictEqual(this.seriesDataSource.isShowChart(), true, "isShowChart");
-});
-
-QUnit.test("range min/max from dataSource", function(assert) {
-    this.createWidget({
-        dataSource: [
-            { t: 10, y1: 0 },
-            { t: 15, y1: 6 },
-            { t: 20, y1: 8 },
-            { t: 30, y1: 10 },
-            { t: 50, y1: 16 },
-            { t: 150, y1: 12 },
-            { t: 180, y1: 8 }
-        ],
-        dataSourceField: "t"
-    });
-
-    var options = this.axis.updateOptions.lastCall.args[0],
-        range = this.getArgRange();
-    assert.strictEqual(options.startValue, 10, "startValue");
-    assert.strictEqual(options.endValue, 180, "endValue");
-    assert.strictEqual(range.min, 10);
-    assert.strictEqual(range.max, 180);
-    assert.strictEqual(range.minVisible, 10);
-    assert.strictEqual(range.maxVisible, 180);
-    assert.strictEqual(this.seriesDataSource.isShowChart(), false, "isShowChart");
 });
 
 QUnit.test("range max from series", function(assert) {

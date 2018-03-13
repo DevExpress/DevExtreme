@@ -316,10 +316,8 @@ function updateTickIntervals(scaleOptions, screenDelta, incidentOccurred, range)
         );
 
         length = ticksInfo.ticks.length;
-        if(length > 1) {
-            bounds.minVisible = ticksInfo.ticks[0].value < min ? ticksInfo.ticks[0].value : min;
-            bounds.maxVisible = ticksInfo.ticks[length - 1].value > max ? ticksInfo.ticks[length - 1].value : max;
-        }
+        bounds.minVisible = ticksInfo.ticks[0] < min ? ticksInfo.ticks[0] : min;
+        bounds.maxVisible = ticksInfo.ticks[length - 1] > max ? ticksInfo.ticks[length - 1] : max;
 
         result = {
             tickInterval: ticksInfo.tickInterval,

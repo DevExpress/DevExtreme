@@ -193,6 +193,7 @@ var PivotGrid = Widget.inherit({
             scrolling: {
                 timeout: 300,
                 renderingThreshold: 150,
+                minTimeout: 10,
                 /**
                  * @name dxPivotGridOptions_scrolling_mode
                  * @publicName mode

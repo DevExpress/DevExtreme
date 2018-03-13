@@ -295,7 +295,7 @@ exports.VirtualScrollController = Class.inherit((function() {
                 scrollingTimeout = Math.min(that.option("scrolling.timeout") || 0, that._dataSource.changingDuration());
 
             if(isNear && scrollingTimeout < that.option("scrolling.renderingThreshold")) {
-                scrollingTimeout = 10;
+                scrollingTimeout = that.option("scrolling.minTimeout") || 0;
             }
 
             clearTimeout(that._scrollTimeoutID);
