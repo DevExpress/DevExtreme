@@ -5,7 +5,6 @@ var $ = require("jquery"),
     fx = require("animation/fx"),
     viewPort = require("core/utils/view_port").value,
     isRenderer = require("core/utils/type").isRenderer,
-    eventsEngine = require("events/core/events_engine"),
     config = require("core/config"),
     Submenu = require("ui/menu/ui.submenu"),
     resizeCallbacks = require("core/utils/resize_callbacks"),
@@ -1262,8 +1261,8 @@ QUnit.test("Menu should not hide after mouseleave to children of a target", func
         }),
         $rootMenuItem = $(menu.element).find("." + DX_MENU_ITEM_CLASS);
 
-    eventsEngine.trigger(menu.element, $.Event("click", { target: $rootMenuItem.eq(0).get(0) }));
-    eventsEngine.trigger(menu.element, $.Event("mouseleave", { target: $rootMenuItem.eq(0).get(0), relatedTarget: $rootMenuItem.eq(0).children()[2] }));
+    $(menu.element).trigger($.Event("click", { target: $rootMenuItem.eq(0).get(0) }));
+    $(menu.element).trigger($.Event("mouseleave", { target: $rootMenuItem.eq(0).get(0), relatedTarget: $rootMenuItem.eq(0).children()[2] }));
     this.clock.tick(0);
 
     var submenu = getSubMenuInstance($rootMenuItem);
