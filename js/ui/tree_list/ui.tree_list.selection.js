@@ -73,7 +73,11 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
 
                     $container.addClass(CELL_FOCUS_DISABLED_CLASS);
 
-                    var $checkbox = rowsView._renderSelectCheckBox($container, model);
+                    var $checkbox = rowsView._renderSelectCheckBox($container, {
+                        value: model.row.isSelected,
+                        row: model.row,
+                        column: model.column
+                    });
 
                     rowsView._attachCheckBoxClickEvent($checkbox);
                 },
