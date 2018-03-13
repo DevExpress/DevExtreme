@@ -540,19 +540,24 @@ var FileUploader = Editor.inherit({
         return this._$fileInput;
     },
 
-    _render: function() {
+    _initMarkup: function() {
+        this.callBase();
+
         this.$element().addClass(FILEUPLOADER_CLASS);
 
         this._renderWrapper();
         this._renderInputWrapper();
-        this._renderDragEvents();
         this._renderSelectButton();
         this._renderInputContainer();
+        this._renderUploadButton();
+    },
+
+    _render: function() {
+        this._renderDragEvents();
 
         this._renderFiles();
-        this._renderUploadButton();
 
-        this.callBase.apply(this, arguments);
+        this.callBase();
     },
 
     _createFiles: function() {

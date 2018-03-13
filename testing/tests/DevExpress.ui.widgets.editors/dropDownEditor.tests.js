@@ -23,13 +23,10 @@ QUnit.testStart(function() {
     $("#qunit-fixture").html(markup);
 });
 
-var DROP_DOWN_EDITOR_CLASS = "dx-dropdowneditor",
-    DROP_DOWN_EDITOR_BUTTON_ICON = "dx-dropdowneditor-icon",
-    DROP_DOWN_EDITOR_INPUT_WRAPPER_CLASS = "dx-dropdowneditor-input-wrapper",
+var DROP_DOWN_EDITOR_BUTTON_ICON = "dx-dropdowneditor-icon",
     DROP_DOWN_EDITOR_BUTTON_CLASS = "dx-dropdowneditor-button",
     DROP_DOWN_EDITOR_OVERLAY = "dx-dropdowneditor-overlay",
-    DROP_DOWN_EDITOR_ACTIVE = "dx-dropdowneditor-active",
-    DROP_DOWN_EDITOR_BUTTON_VISIBLE = "dx-dropdowneditor-button-visible";
+    DROP_DOWN_EDITOR_ACTIVE = "dx-dropdowneditor-active";
 
 var TAB_KEY_CODE = 9,
     ESC_KEY_CODE = 27;
@@ -74,19 +71,6 @@ QUnit.test("dxDropDownEditor can be instantiated", function(assert) {
     assert.ok(this.dropDownEditor instanceof DropDownEditor);
 });
 
-QUnit.test("root element must be decorated with DROP_DOWN_EDITOR_CLASS", function(assert) {
-    assert.ok(this.rootElement.hasClass(DROP_DOWN_EDITOR_CLASS));
-});
-
-QUnit.test("dxDropDownEditor must have a button", function(assert) {
-    assert.ok(this.dropDownEditor._$dropDownButton);
-});
-
-QUnit.test("button must be decorated with DROP_DOWN_EDITOR_BUTTON_CLASS", function(assert) {
-    assert.strictEqual(this.rootElement.find("." + DROP_DOWN_EDITOR_BUTTON_CLASS)[0], this.dropDownEditor._$dropDownButton[0]);
-    assert.ok(this.dropDownEditor._$dropDownButton.hasClass(DROP_DOWN_EDITOR_BUTTON_CLASS));
-});
-
 QUnit.test("the element must be decorated with the DROP_DOWN_EDITOR_ACTIVE class while the drop down is displayed", function(assert) {
     var activeClass = DROP_DOWN_EDITOR_ACTIVE;
     assert.ok(!this.rootElement.hasClass(activeClass));
@@ -94,17 +78,6 @@ QUnit.test("the element must be decorated with the DROP_DOWN_EDITOR_ACTIVE class
     assert.ok(this.rootElement.hasClass(activeClass));
     this.dropDownEditor.close();
     assert.ok(!this.rootElement.hasClass(activeClass));
-});
-
-QUnit.test("input wrapper must be upper than button", function(assert) {
-    var $inputWrapper = this.rootElement.children();
-
-    assert.strictEqual(this.rootElement.find("." + DROP_DOWN_EDITOR_INPUT_WRAPPER_CLASS)[0], $inputWrapper[0]);
-    assert.strictEqual(this.rootElement.find("." + DROP_DOWN_EDITOR_BUTTON_CLASS)[0], $inputWrapper.find("." + DROP_DOWN_EDITOR_BUTTON_CLASS)[0]);
-});
-
-QUnit.test("input must be wrapped for proper event handling", function(assert) {
-    assert.ok(this.dropDownEditor._input().parents().find(".dx-dropdowneditor-input-wrapper").hasClass(DROP_DOWN_EDITOR_INPUT_WRAPPER_CLASS));
 });
 
 QUnit.test("content returned by _renderPopupContent must be rendered inside the dropdown", function(assert) {
@@ -204,28 +177,6 @@ QUnit.test("in design mode, it should not be possible to show the drop down by c
     }
 });
 
-QUnit.test("DROP_DOWN_EDITOR_BUTTON_VISIBLE class should depend on drop down button visibility", function(assert) {
-    assert.ok(this.rootElement.hasClass(DROP_DOWN_EDITOR_BUTTON_VISIBLE), "class present by default");
-
-    this.dropDownEditor.option("showDropDownButton", false);
-    assert.notOk(this.rootElement.hasClass(DROP_DOWN_EDITOR_BUTTON_VISIBLE), "class removes when the button hides");
-
-    this.dropDownEditor.option("showDropDownButton", true);
-    assert.ok(this.rootElement.hasClass(DROP_DOWN_EDITOR_BUTTON_VISIBLE), "class appears when the button shows");
-});
-
-QUnit.test("correct buttons order after rendering", function(assert) {
-    var $dropDownEditor = this.rootElement.dxDropDownEditor({
-            showClearButton: true
-        }),
-        $buttonsContainer = $dropDownEditor.find(".dx-texteditor-buttons-container"),
-        $buttons = $buttonsContainer.children();
-
-    assert.equal($buttons.length, 2, "clear button and drop button were rendered");
-    assert.ok($buttons.eq(0).hasClass(DROP_DOWN_EDITOR_BUTTON_CLASS), "drop button is the first one");
-    assert.ok($buttons.eq(1).hasClass("dx-clear-button-area"), "drop button is the first one");
-});
-
 QUnit.test("correct buttons order after option change", function(assert) {
     this.dropDownEditor.option("showClearButton", true);
 
@@ -259,10 +210,10 @@ QUnit.test("Validation: onHidden validation message handler should restore toolt
         validationError: { message: "Something bad happened" }
     });
 
-    //act
+    // act
     dropDownEditor.open();
     dropDownEditor.close();
-    //assert
+    // assert
     assert.ok(dropDownEditor._$validationMessage);
     var pos = dropDownEditor._$validationMessage.dxOverlay("option", "position");
     assert.equal(pos.my, "left top", "Message should be below dropdown");
@@ -301,9 +252,9 @@ QUnit.test("default value", function(assert) {
 QUnit.test("reset()", function(assert) {
     var dropDownEditor = this.dropDownEditor;
     dropDownEditor.option("value", "123");
-    //act
+    // act
     dropDownEditor.reset();
-    //assert
+    // assert
     assert.strictEqual(dropDownEditor.option("value"), null, "Value should be reset");
 });
 
@@ -314,10 +265,10 @@ QUnit.test("reset method should clear the input value", function(assert) {
     dropDownEditor.option("value", null);
     $input.val("456");
 
-    //act
+    // act
     dropDownEditor.reset();
 
-    //assert
+    // assert
     assert.strictEqual(dropDownEditor.option("value"), null, "Value should be null");
     assert.equal($input.val(), "", "Input value is correct");
 
@@ -784,18 +735,6 @@ QUnit.test("popup is rendered only when open editor when deferRendering is true"
 
 
 QUnit.module("Templates");
-
-QUnit.test("fieldTemplate as render", function(assert) {
-    var $dropDownEditor = $("#dropDownEditorLazy").dxDropDownEditor({
-        fieldTemplate: function(value) {
-            var $textBox = $("<div>").dxTextBox();
-            return $("<div>").text(value + this.option("value")).append($textBox);
-        },
-        value: "test"
-    });
-
-    assert.equal($.trim($dropDownEditor.text()), "testtest", "field rendered");
-});
 
 QUnit.test("contentTemplate as render", function(assert) {
     $("#dropDownEditorLazy").dxDropDownEditor({

@@ -59,9 +59,9 @@ QUnit.test("change dataSource only - reinitialized series data", function(assert
     var oldChartSeries = chart.series;
     this.validateData.reset();
     chart.seriesFamilies[0].adjustSeriesValues.reset();
-    //Act
+    // Act
     chart.option("dataSource", dataSource2);
-    //Assert
+    // Assert
 
     assert.equal(chart.series, oldChartSeries);
     assert.equal(chart.series.length, 1);
@@ -87,7 +87,7 @@ QUnit.test("change dataSource only. render call", function(assert) {
     this.validateData.reset();
     chart.seriesFamilies[0].adjustSeriesValues.reset();
 
-    //act
+    // act
     chart.option("dataSource", dataSource2);
 
     assert.ok(chart._renderCalled);
@@ -96,7 +96,7 @@ QUnit.test("change dataSource only. render call", function(assert) {
     assert.strictEqual(this.validateData.callCount, 1, "validation");
 });
 
-//T535468
+// T535468
 QUnit.test("change dataSource after zoomArgument with gesture and useAggregation", function(assert) {
     var stubSeries = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
     var stubSeries1 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
@@ -110,7 +110,7 @@ QUnit.test("change dataSource after zoomArgument with gesture and useAggregation
         },
         chart = this.createChart(chartOptions);
 
-    //act
+    // act
     chart.zoomArgument(2, 3, true);
     chart.option(chartOptions);
 
@@ -118,7 +118,7 @@ QUnit.test("change dataSource after zoomArgument with gesture and useAggregation
 });
 
 QUnit.test("change series options only - populateSeries", function(assert) {
-    //arrange
+    // arrange
     var stubSeries1 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
     var stubSeries2 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
     var stubSeries3 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
@@ -136,12 +136,12 @@ QUnit.test("change series options only - populateSeries", function(assert) {
     this.validateData.reset();
     chart.seriesFamilies[0].adjustSeriesValues.reset();
 
-    //Act
+    // Act
     chart.option({
         series: [{ name: "first", type: "spline" }]
     });
 
-    //Assert
+    // Assert
     assert.ok(oldSeries !== chart.series, "new series");
     assert.ok(chart.seriesDisposed, "Series should be disposed");
     assert.ok(chart.seriesFamiliesDisposed, "SeriesFamilies should be disposed");
@@ -155,7 +155,7 @@ QUnit.test("change series options only - populateSeries", function(assert) {
 });
 
 QUnit.test("change series options only", function(assert) {
-    //arrange
+    // arrange
     var stubSeries1 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
     var stubSeries2 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
     var stubSeries3 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
@@ -174,11 +174,11 @@ QUnit.test("change series options only", function(assert) {
     this.validateData.reset();
     chart.seriesFamilies[0].adjustSeriesValues.reset();
 
-    //Act
+    // Act
     chart.option({
         series: [{ name: "first", type: "spline" }]
     });
-    //Assert
+    // Assert
     assert.ok(chart.seriesDisposed, "Series should be disposed");
     assert.ok(chart.seriesFamiliesDisposed, "SeriesFamilies should be disposed");
     assert.ok(chart.seriesFamilies[0].adjustSeriesValues.calledOnce, "SeriesFamilies should adjust series values");
@@ -192,7 +192,7 @@ QUnit.test("change series options only", function(assert) {
 });
 
 QUnit.test("change rotated option only", function(assert) {
-    //arrange
+    // arrange
     var stubSeries1 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
     var stubSeries2 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
     var stubSeries3 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
@@ -214,12 +214,12 @@ QUnit.test("change rotated option only", function(assert) {
 
     this.themeManager.getOptions.withArgs("rotated").returns(true);
 
-    //Act
+    // Act
     chart.option({
         rotated: true
     });
 
-    //Assert
+    // Assert
     assert.ok(chart.seriesDisposed, "Series should be disposed");
     assert.ok(chart.seriesFamiliesDisposed, "SeriesFamilies should be disposed");
     assert.ok(chart.seriesFamilies[0].adjustSeriesValues.calledOnce, "SeriesFamilies should adjust series values");
@@ -234,7 +234,7 @@ QUnit.test("change rotated option only", function(assert) {
 });
 
 QUnit.test("change customizePoint option only", function(assert) {
-    //arrange
+    // arrange
     var stubSeries1 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } }),
         stubSeries2 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } }),
         stubSeries3 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } }),
@@ -252,11 +252,11 @@ QUnit.test("change customizePoint option only", function(assert) {
     $.each(chart._valueAxes, function(_, axis) { axis.dispose = function() { chart.verticalAxesDisposed = true; }; });
 
     this.themeManager.getOptions.withArgs("customizePoint").returns(customizePoint);
-    //act
+    // act
     chart.option({
         customizePoint: customizePoint
     });
-    //Assert
+    // Assert
     assert.ok(chart.seriesDisposed, "Series should be disposed");
     assert.ok(chart.seriesFamiliesDisposed, "SeriesFamilies should be disposed");
     assert.ok(chart.seriesFamilies[0].adjustSeriesValues.calledOnce, "SeriesFamilies should adjust series values");
@@ -270,7 +270,7 @@ QUnit.test("change customizePoint option only", function(assert) {
 });
 
 QUnit.test("change customizeLabel option only", function(assert) {
-    //arrange
+    // arrange
     var stubSeries1 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } }),
         stubSeries2 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } }),
         stubSeries3 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } }),
@@ -288,11 +288,11 @@ QUnit.test("change customizeLabel option only", function(assert) {
     $.each(chart._valueAxes, function(_, axis) { axis.dispose = function() { chart.verticalAxesDisposed = true; }; });
 
     this.themeManager.getOptions.withArgs("customizeLabel").returns(customizeLabel);
-    //act
+    // act
     chart.option({
         customizeLabel: customizeLabel
     });
-    //Assert
+    // Assert
     assert.ok(chart.seriesDisposed, "Series should be disposed");
     assert.ok(chart.seriesFamiliesDisposed, "SeriesFamilies should be disposed");
     assert.ok(chart.seriesFamilies[0].adjustSeriesValues.calledOnce, "SeriesFamilies should adjust series values");
@@ -329,11 +329,11 @@ QUnit.test("change series options only. render called", function(assert) {
     this.validateData.reset();
     chart.seriesFamilies[0].adjustSeriesValues.reset();
 
-    //Act
+    // Act
     chart.option({
         series: [{ name: "first", type: "spline" }]
     });
-    //Assert
+    // Assert
     assert.ok(chart._renderCalled);
     assert.ok(chart.seriesDisposed, "Series should be disposed");
     assert.ok(chart.seriesFamiliesDisposed, "SeriesFamilies should be disposed");
@@ -365,11 +365,11 @@ QUnit.test("change containerBackgroundColor option only", function(assert) {
     $.each(chart.seriesFamilies, function(_, family) { family.dispose = function() { chart.seriesFamiliesDisposed = true; }; });
 
     this.validateData.reset();
-    //Act
+    // Act
     chart.option({
         containerBackgroundColor: "red"
     });
-    //assert
+    // assert
     assert.ok(!chart._dataSourceChangedHandlerCalled);
     assert.ok(chart._refreshCalled);
     assert.ok(!chart._initCalled);
@@ -400,7 +400,7 @@ QUnit.test("change title option only. change title settings", function(assert) {
     chart._init = function() {
         this._InitCalled = true;
     };
-    //Act
+    // Act
     this.validateData.reset();
     chart.option({
         title: {
@@ -410,7 +410,7 @@ QUnit.test("change title option only. change title settings", function(assert) {
             horizontalAlignment: "top"
         }
     });
-    //assert
+    // assert
     assert.ok(!chart._dataSourceChangedHandlerCalled);
     assert.ok(chart._refreshCalled, "chart must be refreshed");
     assert.ok(!chart._initCalled);
@@ -421,7 +421,7 @@ QUnit.test("change title option only. change title settings", function(assert) {
 });
 
 QUnit.test("change panes option only", function(assert) {
-    //arrange
+    // arrange
     var stubSeries1 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
     var stubSeries2 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
     seriesMockData.series.push(stubSeries1, stubSeries2);
@@ -440,11 +440,11 @@ QUnit.test("change panes option only", function(assert) {
     this.validateData.reset();
     chart.seriesFamilies[0].adjustSeriesValues.reset();
     this.themeManager.getOptions.withArgs("panes").returns([{ name: "pane1" }]);
-    //Act
+    // Act
     chart.option({
         panes: [{ name: "pane1" }]
     });
-    //assert
+    // assert
     assert.equal(chart.panes.length, 1, "panes length");
     assert.equal(chart.panes[0].name, "pane1", "pane name");
     assert.equal(chart.defaultPane, "pane1", "default pane");
@@ -460,7 +460,7 @@ QUnit.test("change panes option only", function(assert) {
 });
 
 QUnit.test("change default Pane", function(assert) {
-    //arrange
+    // arrange
     var stubSeries1 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
     var stubSeries2 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
     seriesMockData.series.push(stubSeries1, stubSeries2);
@@ -477,11 +477,11 @@ QUnit.test("change default Pane", function(assert) {
     this.validateData.reset();
     chart.seriesFamilies[0].adjustSeriesValues.reset();
     this.themeManager.getOptions.withArgs("defaultPane").returns("top");
-    //Act
+    // Act
     chart.option({
         defaultPane: "top"
     });
-    //assert
+    // assert
     assert.equal(chart.panes.length, 2, "panes length");
     assert.equal(chart.panes[0].name, "top", "first pane name");
     assert.equal(chart.panes[1].name, "bottom", "second pane name");
@@ -498,7 +498,7 @@ QUnit.test("change default Pane", function(assert) {
 });
 
 QUnit.test("change valueAxis option", function(assert) {
-    //arrange
+    // arrange
     var stubSeries1 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
     var stubSeries2 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
     var stubSeries3 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
@@ -520,7 +520,7 @@ QUnit.test("change valueAxis option", function(assert) {
 
     this.validateData.reset();
     chart.seriesFamilies[0].adjustSeriesValues.reset();
-    //Act
+    // Act
     chart.option({
         valueAxis: {
             name: "axis1",
@@ -529,7 +529,7 @@ QUnit.test("change valueAxis option", function(assert) {
             }
         }
     });
-    //Assert
+    // Assert
     assert.equal(chart.series.length, 1, "series length");
     assert.equal(chart.series[0].getValueAxis().name, "axis1", "series axis");
     assert.ok(chart.seriesDisposed, "Series should be disposed");
@@ -551,12 +551,12 @@ QUnit.test("change panes option only. no additional panes created", function(ass
     $.each(chart._argumentAxes, function(_, axis) { axis.dispose = function() { chart.horizontalAxesDisposed = true; }; });
     $.each(chart._valueAxes, function(_, axis) { axis.dispose = function() { chart.verticalAxesDisposed = true; }; });
     this.themeManager.getOptions.withArgs("panes").returns([{ name: "pane1" }]);
-    //Act
+    // Act
     this.validateData.reset();
     chart.option({
         panes: [{ name: "pane1" }]
     });
-    //assert
+    // assert
     assert.strictEqual(chart._valueAxes[0].pane, "pane1");
     assert.ok(chart.horizontalAxesDisposed, "Horizontal axes should be disposed");
     assert.ok(chart.verticalAxesDisposed, "Vertical axes should be disposed");
@@ -584,10 +584,10 @@ QUnit.test("change some options check calls", function(assert) {
     chart._doRender = function(opt) {
         renderOpts.push(opt);
     };
-    //Act
+    // Act
     this.validateData.reset();
     chart.option($.extend({}, newOptions));
-    //assert
+    // assert
     assert.equal(renderOpts.length, 2);
     assert.deepEqual(renderOpts[1], { force: true });
     assert.strictEqual(this.validateData.callCount, 1, "validation");
@@ -610,7 +610,7 @@ QUnit.test("change some options", function(assert) {
         this._renderCalled = true;
     };
     this.themeManager.getOptions.withArgs("panes").returns([{ name: "top" }, { name: "bottom" }]);
-    //Act
+    // Act
     this.validateData.reset();
     chart.option({
         valueAxis: [{ name: "axis1" }],
@@ -618,7 +618,7 @@ QUnit.test("change some options", function(assert) {
         series: [{ type: "line", pane: "top" }, { type: "bar", pane: "bottom" }]
 
     });
-    //assert
+    // assert
     assert.ok(chart._renderCalled);
     assert.ok(!("_seriesInitializing" in chart));
     assert.equal(chart._valueAxes.length, 2);
@@ -648,9 +648,9 @@ QUnit.test("change useAggregation options", function(assert) {
         this._renderCalled = true;
     };
 
-    //Act
+    // Act
     chart.option({ useAggregation: true });
-    //assert
+    // assert
     assert.ok(chart._renderCalled);
 });
 
@@ -660,21 +660,21 @@ QUnit.test("change container options", function(assert) {
         this._dataSourceChangedHandlerCalled = true;
     };
     this.themeManager.getOptions.withArgs("size").returns({});
-    //Act
+    // Act
     this.validateData.reset();
     this.$container.width(400);
     this.$container.height(300);
-    //this.themeManager.getOptions.withArgs("size").returns({});
-    //chart.option({
+    // this.themeManager.getOptions.withArgs("size").returns({});
+    // chart.option({
     //    valueAxis: [{ name: "axis1" }, { name: "axis2" }],
     //    panes: [{ name: "top" }, { name: "bottom" }]
-    //});
+    // });
     chart.render();
-    //assert
+    // assert
     assert.equal(chart.getSize().width, 400);
     assert.equal(chart.getSize().height, 300);
 
-    //assert.strictEqual(this.validateData.callCount, 1, "validation");
+    // assert.strictEqual(this.validateData.callCount, 1, "validation");
 });
 
 QUnit.test("change container options. Size was set", function(assert) {
@@ -687,7 +687,7 @@ QUnit.test("change container options. Size was set", function(assert) {
     chart._dataSourceChangedHandler = function() {
         this._dataSourceChangedHandlerCalled = true;
     };
-    //Act
+    // Act
     this.validateData.reset();
     this.$container.width(200);
     this.$container.height(200);
@@ -695,7 +695,7 @@ QUnit.test("change container options. Size was set", function(assert) {
         valueAxis: [{ name: "axis1" }, { name: "axis2" }],
         panes: [{ name: "top" }, { name: "bottom" }]
     });
-    //assert
+    // assert
     assert.equal(chart.getSize().width, 300);
     assert.equal(chart.getSize().height, 300);
 
@@ -712,7 +712,7 @@ QUnit.test("size option changed", function(assert) {
             height: 500
         }
     });
-    //Act
+    // Act
     this.validateData.reset();
     this.themeManager.getOptions.withArgs("size").returns({
         width: 300,
@@ -727,7 +727,7 @@ QUnit.test("size option changed", function(assert) {
         panes: [{ name: "top" }, { name: "bottom" }]
     });
 
-    //assert
+    // assert
     assert.equal(chart.getSize().width, 300);
     assert.equal(chart.getSize().height, 300);
 
@@ -737,7 +737,7 @@ QUnit.test("size option changed", function(assert) {
 });
 
 QUnit.test("palette option changed", function(assert) {
-    //arrange
+    // arrange
     var stubSeries1 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
     var stubSeries2 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
     seriesMockData.series.push(stubSeries1, stubSeries2);
@@ -754,11 +754,11 @@ QUnit.test("palette option changed", function(assert) {
     this.validateData.reset();
     chart.seriesFamilies[0].adjustSeriesValues.reset();
 
-    //Act
+    // Act
     chart.option({
         palette: "Soft Pastel"
     });
-    //assert
+    // assert
     assert.ok(chart._themeManager.updatePalette.calledOnce, "palette");
     assert.ok(chart.seriesDisposed, "Series should be disposed");
     assert.ok(chart.seriesFamiliesDisposed, "SeriesFamilies should be disposed");
@@ -770,7 +770,7 @@ QUnit.test("palette option changed", function(assert) {
 });
 
 QUnit.test("paletteExtensionMode option changed", function(assert) {
-    //arrange
+    // arrange
     var stubSeries1 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
     var stubSeries2 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
     seriesMockData.series.push(stubSeries1, stubSeries2);
@@ -788,11 +788,11 @@ QUnit.test("paletteExtensionMode option changed", function(assert) {
     this.validateData.reset();
     chart.seriesFamilies[0].adjustSeriesValues.reset();
 
-    //Act
+    // Act
     chart.option({
         paletteExtensionMode: "alternate"
     });
-    //assert
+    // assert
     assert.ok(chart._themeManager.updatePalette.calledOnce, "palette");
     assert.ok(chart.seriesDisposed, "Series should be disposed");
     assert.ok(chart.seriesFamiliesDisposed, "SeriesFamilies should be disposed");
@@ -804,7 +804,7 @@ QUnit.test("paletteExtensionMode option changed", function(assert) {
 });
 
 QUnit.test("palette option changed. palette as array", function(assert) {
-    //arrange
+    // arrange
     var stubSeries1 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
     var stubSeries2 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
     seriesMockData.series.push(stubSeries1, stubSeries2);
@@ -820,11 +820,11 @@ QUnit.test("palette option changed. palette as array", function(assert) {
 
     this.validateData.reset();
     chart.seriesFamilies[0].adjustSeriesValues.reset();
-    //Act
+    // Act
     chart.option({
         palette: ["black", "blue"]
     });
-    //assert
+    // assert
     assert.deepEqual(chart._options.palette, ["black", "blue"], "palette");
     assert.ok(chart._themeManager.updatePalette.calledOnce, "palette updated");
     assert.ok(chart.seriesDisposed, "Series should be disposed");
@@ -857,7 +857,7 @@ QUnit.test("animation option changed", function(assert) {
     this.validateData.reset();
     chart.seriesFamilies[0].adjustSeriesValues.reset();
     this.themeManager.getOptions.withArgs("animation").returns({ newOptions: true });
-    //Act
+    // Act
     chart.option({
         animation: newAnimOpt
     });
@@ -865,7 +865,7 @@ QUnit.test("animation option changed", function(assert) {
     chart._render = function() {
         chartReRendered = true;
     };
-    //assert
+    // assert
     assert.deepEqual(chart._renderer.updateAnimationOptions.lastCall.args[0], {
         newOptions: true
     });
@@ -899,11 +899,11 @@ QUnit.test("CommonSettings changed. commonSeriesSettings", function(assert) {
         return [];
     };
 
-    //act
+    // act
     chart.option({
         commonSeriesSettings: newOptions
     });
-    //assert
+    // assert
     assert.ok(populateSeriesCalled);
     assert.strictEqual(this.validateData.callCount, 1, "validation");
 });
@@ -919,7 +919,7 @@ QUnit.test("CommonSettings changed. commonAxisSettings", function(assert) {
     });
     $.each(chart._argumentAxes, function(_, axis) { axis.dispose = function() { chart.horizontalAxesDisposed = true; }; });
     $.each(chart._valueAxes, function(_, axis) { axis.dispose = function() { chart.verticalAxesDisposed = true; }; });
-    //Act
+    // Act
     this.validateData.reset();
     var newOptions = {
         grid: {
@@ -930,7 +930,7 @@ QUnit.test("CommonSettings changed. commonAxisSettings", function(assert) {
     chart.option({
         commonAxisSettings: newOptions
     });
-    //assert
+    // assert
 
     assert.ok(chart._valueAxes[0]);
     assert.ok(chart._valueAxes[0]);
@@ -940,7 +940,7 @@ QUnit.test("CommonSettings changed. commonAxisSettings", function(assert) {
 });
 
 QUnit.test("SeriesTemplate.", function(assert) {
-    //arrange
+    // arrange
     var stubSeries1 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } }),
         stubSeries2 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } }),
         stubSeries3 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } }),
@@ -960,11 +960,11 @@ QUnit.test("SeriesTemplate.", function(assert) {
     this.validateData.reset();
     chart.seriesFamilies[0].adjustSeriesValues.reset();
     this.themeManager.getOptions.withArgs("seriesTemplate").returns({ nameField: "series", customizeSeries: function(sName) { return { type: "spline-" + sName }; } });
-    //Act
+    // Act
     chart.option({
         seriesTemplate: { nameField: "series", customizeSeries: function(sName) { return { type: "spline-" + sName }; } }
     });
-    //Assert
+    // Assert
     assert.equal(chart.series.length, 3, "series length");
     assert.equal(chart.series[0].options.name, "s1", "first series name");
     assert.equal(chart.series[0].type, "spline-s1", "first series type");
@@ -979,18 +979,18 @@ QUnit.test("SeriesTemplate.", function(assert) {
     assert.ok(chart.seriesFamilies[0].adjustSeriesValues.calledOnce, "SeriesFamilies should adjust series values");
     assert.ok(!stubSeries4.getTemplateFields.called, "get template fields");
 });
-//seriesTemplate with incorrect nameField
+// seriesTemplate with incorrect nameField
 QUnit.test("SeriesTemplate. B239844", function(assert) {
-    //arrange
+    // arrange
     var stubSeries = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
 
     seriesMockData.series.push(stubSeries);
-    //act
+    // act
     var chart = this.createChart({
         dataSource: [{ series: "s1", x: 1, y: 1 }],
         seriesTemplate: { nameField: "incorrectNameField" }
     });
-    //Assert
+    // Assert
     assert.equal(chart.seriesFamilies.length, 0, "seriesFamilies length");
     assert.ok(chart.series);
     assert.equal(chart.series.length, 0, "chart series length");
@@ -1013,12 +1013,12 @@ QUnit.test("SeriesTemplate. render called", function(assert) {
         this._renderCalled = true;
     };
     this.themeManager.getOptions.withArgs("seriesTemplate").returns({ nameField: "series", customizeSeries: function(sName) { return { type: "spline-" + sName }; } });
-    //Act
+    // Act
     this.validateData.reset();
     chart.option({
         seriesTemplate: { nameField: "series", customizeSeries: function(sName) { return { type: "spline-" + sName }; } }
     });
-    //Assert
+    // Assert
     assert.ok(chart._renderCalled);
     assert.ok(!("_seriesInitializing" in chart));
     assert.strictEqual(this.validateData.callCount, 1, "validation");
@@ -1035,12 +1035,12 @@ QUnit.test("Ignore Series update if SeriesTemplate presents.", function(assert) 
         seriesTemplate: { nameField: "series", customizeSeries: function(sName) { return { type: "line" }; } }
     });
     seriesMockData.series.push(new MockSeries(), new MockSeries(), new MockSeries());
-    //Act
+    // Act
     this.validateData.reset();
     chart.option({
         series: [{ name: "first", type: "spline" }]
     });
-    //Assert
+    // Assert
     assert.ok(chart.series);
     assert.equal(chart.series.length, 3);
     assert.equal(chart.series[0].options.name, "s1");
@@ -1066,9 +1066,9 @@ QUnit.test("change tooltip option", function(assert) {
         tooltip: { some: "options" }
     });
     this.themeManager.getOptions.withArgs("tooltip").returns({ some_new: "options" });
-    //Act
+    // Act
     chart.option("tooltip", options);
-    //Assert
+    // Assert
     assert.deepEqual(this.tooltip.update.lastCall.args[0], options);
 });
 
@@ -1117,11 +1117,11 @@ QUnit.test("zoomingMode option", function(assert) {
     var series = chart.getAllSeries()[0],
         valAxis = chart._valueAxes[0],
         argAxis = chart._argumentAxes[0];
-    //Act
+    // Act
     chart.option({
         zoomingMode: "none"
     });
-    //Assert
+    // Assert
     assert.strictEqual(commons.getTrackerStub().stub("update").lastCall.args[0].zoomingMode, "none", "new zoomingMode");
 
     assert.ok(series === chart.getAllSeries()[0], "Series should not be recreated");
@@ -1145,11 +1145,11 @@ QUnit.test("scrollingMode option", function(assert) {
     var series = chart.getAllSeries()[0],
         valAxis = chart._valueAxes[0],
         argAxis = chart._argumentAxes[0];
-    //Act
+    // Act
     chart.option({
         scrollingMode: "none"
     });
-    //Assert
+    // Assert
     assert.strictEqual(commons.getTrackerStub().stub("update").lastCall.args[0].scrollingMode, "none", "new scrollingMode");
 
     assert.ok(series === chart.getAllSeries()[0], "Series should not be recreated");
@@ -1158,7 +1158,7 @@ QUnit.test("scrollingMode option", function(assert) {
 });
 
 QUnit.test("title option", function(assert) {
-    //arrange
+    // arrange
     var stubSeries1 = new MockSeries({});
     seriesMockData.series.push(stubSeries1);
     var chart = this.createChart({
@@ -1178,11 +1178,11 @@ QUnit.test("title option", function(assert) {
         valAxis = chart._valueAxes[0],
         argAxis = chart._argumentAxes[0];
 
-    //Act
+    // Act
     chart.option({
         title: "changed title"
     });
-    //assert
+    // assert
     assert.equal(chart._reinitCalled, undefined, "reinit");
     assert.equal(chart._forceRenderCalled, true, "force render");
 
@@ -1248,27 +1248,29 @@ QUnit.test("adjustOnZoom option", function(assert) {
     });
 
     var chart = this.createChart({
-        useAggregation: true,
         adjustOnZoom: false,
         series: [{
             type: "line"
         }]
     });
 
+    chart.zoomArgument(1, 2);
+
     var series = chart.getAllSeries()[0],
         valAxis = chart._valueAxes[0],
         argAxis = chart._argumentAxes[0];
     this.themeManager.getOptions.withArgs("adjustOnZoom").returns(true);
 
-    //act
+    valAxis.zoom.reset();
+
+    // act
     chart.option({
         adjustOnZoom: true
     });
 
-    //assert
+    // assert
     assert.strictEqual(stubSeries1.getValueAxis().zoom.callCount, 1);
     assert.deepEqual(stubSeries1.getValueAxis().zoom.lastCall.args, [10, 15], "zoom args");
-    assert.ok(stubSeries1.getViewport.calledAfter(stubSeries1.resamplePoints));
 
     assert.ok(series === chart.getAllSeries()[0], "Series should not be recreated");
     assert.ok(valAxis === chart._valueAxes[0], "Val axis should not be recreated");
@@ -1294,12 +1296,12 @@ QUnit.test("pointSelectionMode option", function(assert) {
         argAxis = chart._argumentAxes[0];
     this.themeManager.getOptions.withArgs("pointSelectionMode").returns("new-point-selection-mode");
 
-    //act
+    // act
     chart.option({
         pointSelectionMode: "new-point-selection-mode"
     });
 
-    //assert
+    // assert
     assert.equal(commons.getTrackerStub().stub("update").lastCall.args[0].pointSelectionMode, "new-point-selection-mode");
     assert.equal(chart.getAllSeries()[0].renderSettings.commonSeriesModes.pointSelectionMode, "new-point-selection-mode");
 
@@ -1325,12 +1327,12 @@ QUnit.test("seriesSelectionMode option", function(assert) {
         argAxis = chart._argumentAxes[0];
     this.themeManager.getOptions.withArgs("seriesSelectionMode").returns("new-series-selection-mode");
 
-    //act
+    // act
     chart.option({
         seriesSelectionMode: "new-series-selection-mode"
     });
 
-    //assert
+    // assert
     assert.equal(commons.getTrackerStub().stub("update").lastCall.args[0].seriesSelectionMode, "new-series-selection-mode");
     assert.equal(chart.getAllSeries()[0].renderSettings.commonSeriesModes.seriesSelectionMode, "new-series-selection-mode");
 
@@ -1360,14 +1362,12 @@ QUnit.test("useAggregation option", function(assert) {
         valAxis = chart._valueAxes[0],
         argAxis = chart._argumentAxes[0];
 
-    //act
+    // act
     chart.option({
         useAggregation: true
     });
 
-    //assert
-    assert.equal(stubSeries2.resamplePoints.callCount, 1);
-
+    // assert
     assert.ok(series !== chart.getAllSeries()[0], "Series should be recreated");
     assert.ok(valAxis !== chart._valueAxes[0], "Val axis should be recreated");
     assert.ok(argAxis !== chart._argumentAxes[0], "Arg axis should be recreated");
@@ -1398,12 +1398,12 @@ QUnit.test("synchronizeMultiAxes option", function(assert) {
         valAxis = chart._valueAxes[0],
         argAxis = chart._argumentAxes[0];
 
-    //act
+    // act
     chart.option({
         synchronizeMultiAxes: true
     });
 
-    //assert
+    // assert
     assert.equal(multiAxesSynchronizer.synchronize.callCount, 1);
 
     assert.ok(series !== chart.getAllSeries()[0], "Series should not be recreated");
@@ -1429,11 +1429,11 @@ QUnit.test("Common axis settings strips are not changed", function(assert) {
             }
         }),
         newOptions = { name: "axis" };
-    //Act
+    // Act
     chart.option({
         commonAxisSettings: newOptions
     });
-    //assert
+    // assert
     assert.deepEqual(chart.option("commonAxisSettings"), $.extend(true, chart.initialOption("commonAxisSettings"), {
         name: "axis",
         strips: [{ startValue: 250, endValue: 350, color: "red" }]
@@ -1451,11 +1451,11 @@ QUnit.test("Common axis settings more strips", function(assert) {
                 { startValue: 30, endValue: 40, color: "red" },
                 { startValue: 50, endValue: 60, color: "red" }]
         };
-    //Act
+    // Act
     chart.option({
         commonAxisSettings: newOptions
     });
-    //assert
+    // assert
     assert.deepEqual(chart.option("commonAxisSettings"), $.extend(true, chart.initialOption("commonAxisSettings"), newOptions));
 });
 
@@ -1470,11 +1470,11 @@ QUnit.test("Common axis settings less strips", function(assert) {
         newOptions = {
             strips: [{ startValue: 250, endValue: 350, color: "red" }]
         };
-    //Act
+    // Act
     chart.option({
         commonAxisSettings: newOptions
     });
-    //assert
+    // assert
     assert.deepEqual(chart.option("commonAxisSettings"), $.extend(true, chart.initialOption("commonAxisSettings"), newOptions));
 });
 
@@ -1485,11 +1485,11 @@ QUnit.test("Argument axis strips are not changed", function(assert) {
             }
         }),
         newOptions = { name: "axis" };
-    //Act
+    // Act
     chart.option({
         argumentAxis: newOptions
     });
-    //assert
+    // assert
     assert.deepEqual(chart.option("argumentAxis"), {
         name: "axis",
         strips: [{ startValue: 250, endValue: 350, color: "red" }]
@@ -1507,11 +1507,11 @@ QUnit.test("Argument axis more strips", function(assert) {
                 { startValue: 30, endValue: 40, color: "red" },
                 { startValue: 50, endValue: 60, color: "red" }]
         };
-    //Act
+    // Act
     chart.option({
         argumentAxis: newOptions
     });
-    //assert
+    // assert
     assert.deepEqual(chart.option("argumentAxis").strips, newOptions.strips);
 });
 
@@ -1526,11 +1526,11 @@ QUnit.test("Argument axis less strips", function(assert) {
         newOptions = {
             strips: [{ startValue: 250, endValue: 350, color: "red" }]
         };
-    //Act
+    // Act
     chart.option({
         argumentAxis: newOptions
     });
-    //assert
+    // assert
     assert.deepEqual(chart.option("argumentAxis").strips, newOptions.strips);
 });
 
@@ -1541,11 +1541,11 @@ QUnit.test("Value axis strips are not changed", function(assert) {
             }
         }),
         newOptions = { name: "axis" };
-    //Act
+    // Act
     chart.option({
         valueAxis: newOptions
     });
-    //assert
+    // assert
     assert.deepEqual(chart.option("valueAxis"), {
         name: "axis",
         strips: [{ startValue: 250, endValue: 350, color: "red" }]
@@ -1563,11 +1563,11 @@ QUnit.test("Value axis more strips", function(assert) {
                 { startValue: 30, endValue: 40, color: "red" },
                 { startValue: 50, endValue: 60, color: "red" }]
         };
-    //Act
+    // Act
     chart.option({
         valueAxis: newOptions
     });
-    //assert
+    // assert
     assert.deepEqual(chart.option("valueAxis").strips, newOptions.strips);
 });
 
@@ -1582,11 +1582,11 @@ QUnit.test("Value axis less strips", function(assert) {
         newOptions = {
             strips: [{ startValue: 250, endValue: 350, color: "red" }]
         };
-    //Act
+    // Act
     chart.option({
         valueAxis: newOptions
     });
-    //assert
+    // assert
     assert.deepEqual(chart.option("valueAxis").strips, newOptions.strips);
 });
 
@@ -1607,11 +1607,11 @@ QUnit.test("Multiple Value axis more strips", function(assert) {
                     { startValue: 90, endValue: 100, color: "red" },
                     { startValue: 110, endValue: 120, color: "red" }]
         }];
-    //Act
+    // Act
     chart.option({
         valueAxis: newOptions
     });
-    //assert
+    // assert
     assert.deepEqual(chart.option("valueAxis"), newOptions);
 });
 
@@ -1632,11 +1632,11 @@ QUnit.test("Multiple Value axis less strips", function(assert) {
         }, {
             strips: [{ startValue: 300, endValue: 500, color: "red" }]
         }];
-    //Act
+    // Act
     chart.option({
         valueAxis: newOptions
     });
-    //assert
+    // assert
     assert.deepEqual(chart.option("valueAxis"), newOptions);
 });
 
@@ -1655,11 +1655,11 @@ QUnit.test("Single Value axis to multiple with strips", function(assert) {
                     { startValue: 90, endValue: 100, color: "red" },
                     { startValue: 110, endValue: 120, color: "red" }]
         }];
-    //Act
+    // Act
     chart.option({
         valueAxis: newOptions
     });
-    //assert
+    // assert
     assert.deepEqual(chart.option("valueAxis"), newOptions);
 });
 
@@ -1678,11 +1678,11 @@ QUnit.test("Multiple Value axis to single with strips", function(assert) {
         newOptions = {
             strips: [{ startValue: 100, endValue: 200, color: "green" }]
         };
-    //Act
+    // Act
     chart.option({
         valueAxis: newOptions
     });
-    //assert
+    // assert
     assert.deepEqual(chart.option("valueAxis"), newOptions);
 });
 
@@ -1704,11 +1704,11 @@ QUnit.test("Common axis settings Categories are not changed", function(assert) {
             }
         }),
         newOptions = { name: "axis" };
-    //Act
+    // Act
     chart.option({
         commonAxisSettings: newOptions
     });
-    //assert
+    // assert
     assert.deepEqual(chart.option("commonAxisSettings"), $.extend(true, chart.initialOption("commonAxisSettings"), {
         name: "axis",
         categories: ["A", "B", "C"]
@@ -1724,11 +1724,11 @@ QUnit.test("Common axis settings more Categories", function(assert) {
         newOptions = {
             categories: ["AA", "BB", "CC"]
         };
-    //Act
+    // Act
     chart.option({
         commonAxisSettings: newOptions
     });
-    //assert
+    // assert
     assert.deepEqual(chart.option("commonAxisSettings"), $.extend(true, chart.initialOption("commonAxisSettings"), newOptions));
 });
 
@@ -1741,11 +1741,11 @@ QUnit.test("Common axis settings less Categories", function(assert) {
         newOptions = {
             categories: ["A", "B"]
         };
-    //Act
+    // Act
     chart.option({
         commonAxisSettings: newOptions
     });
-    //assert
+    // assert
     assert.deepEqual(chart.option("commonAxisSettings"), $.extend(true, chart.initialOption("commonAxisSettings"), newOptions));
 });
 
@@ -1756,11 +1756,11 @@ QUnit.test("Argument axis Categories are not changed", function(assert) {
             }
         }),
         newOptions = { name: "axis" };
-    //Act
+    // Act
     chart.option({
         argumentAxis: newOptions
     });
-    //assert
+    // assert
     assert.deepEqual(chart.option("argumentAxis"), {
         name: "axis",
         categories: ["A", "B"]
@@ -1776,11 +1776,11 @@ QUnit.test("Argument axis more Categories", function(assert) {
         newOptions = {
             categories: ["AA", "BB", "CC"]
         };
-    //Act
+    // Act
     chart.option({
         argumentAxis: newOptions
     });
-    //assert
+    // assert
     assert.deepEqual(chart.option("argumentAxis").categories, newOptions.categories);
 });
 
@@ -1793,11 +1793,11 @@ QUnit.test("Argument axis less Categories", function(assert) {
         newOptions = {
             categories: ["A", "B"]
         };
-    //Act
+    // Act
     chart.option({
         argumentAxis: newOptions
     });
-    //assert
+    // assert
     assert.deepEqual(chart.option("argumentAxis").categories, newOptions.categories);
 });
 
@@ -1808,11 +1808,11 @@ QUnit.test("Value axis Categories are not changed", function(assert) {
             }
         }),
         newOptions = { name: "axis" };
-    //Act
+    // Act
     chart.option({
         valueAxis: newOptions
     });
-    //assert
+    // assert
     assert.deepEqual(chart.option("valueAxis"), {
         name: "axis",
         categories: ["AA", "BB", "CC"]
@@ -1828,11 +1828,11 @@ QUnit.test("Value axis more Categories", function(assert) {
         newOptions = {
             categories: ["AA", "BB", "CC"]
         };
-    //Act
+    // Act
     chart.option({
         valueAxis: newOptions
     });
-    //assert
+    // assert
     assert.deepEqual(chart.option("valueAxis").categories, newOptions.categories);
 });
 
@@ -1845,11 +1845,11 @@ QUnit.test("Value axis less Categories", function(assert) {
         newOptions = {
             categories: ["A", "B"]
         };
-    //Act
+    // Act
     chart.option({
         valueAxis: newOptions
     });
-    //assert
+    // assert
     assert.deepEqual(chart.option("valueAxis").categories, newOptions.categories);
 });
 
@@ -1866,11 +1866,11 @@ QUnit.test("Multiple Value axis more Categories", function(assert) {
         }, {
             categories: ["QQ", "WW", "EE"]
         }];
-    //Act
+    // Act
     chart.option({
         valueAxis: newOptions
     });
-    //assert
+    // assert
     assert.deepEqual(chart.option("valueAxis"), newOptions);
 });
 
@@ -1887,11 +1887,11 @@ QUnit.test("Multiple Value axis less Categories", function(assert) {
         }, {
             categories: ["Q", "W"]
         }];
-    //Act
+    // Act
     chart.option({
         valueAxis: newOptions
     });
-    //assert
+    // assert
     assert.deepEqual(chart.option("valueAxis"), newOptions);
 });
 
@@ -1906,11 +1906,11 @@ QUnit.test("Single Value axis to multiple with Categories", function(assert) {
         }, {
             categories: ["QQ", "WW", "EE"]
         }];
-    //Act
+    // Act
     chart.option({
         valueAxis: newOptions
     });
-    //assert
+    // assert
     assert.deepEqual(chart.option("valueAxis"), newOptions);
 });
 
@@ -1925,10 +1925,10 @@ QUnit.test("Multiple Value axis to single with Categories", function(assert) {
         newOptions = {
             categories: ["A", "B"]
         };
-    //Act
+    // Act
     chart.option({
         valueAxis: newOptions
     });
-    //assert
+    // assert
     assert.deepEqual(chart.option("valueAxis"), newOptions);
 });

@@ -68,96 +68,96 @@ QUnit.module('DateTime functions', {
 });
 
 QUnit.test('getIntervalByString year', function(assert) {
-    //act, assert
+    // act, assert
     assert.deepEqual(this.getDateIntervalByString('year'), { years: 1 });
 });
 
 QUnit.test('getIntervalByString month', function(assert) {
-    //act, assert
+    // act, assert
     assert.deepEqual(this.getDateIntervalByString('month'), { months: 1 });
 });
 
 QUnit.test('getIntervalByString quarter', function(assert) {
-    //act, assert
+    // act, assert
     assert.deepEqual(this.getDateIntervalByString('quarter'), { months: 3 });
 });
 
 QUnit.test('getIntervalByString week', function(assert) {
-    //act, assert
+    // act, assert
     assert.deepEqual(this.getDateIntervalByString('week'), { weeks: 1 });
 });
 
 QUnit.test('getIntervalByString day', function(assert) {
-    //act, assert
+    // act, assert
     assert.deepEqual(this.getDateIntervalByString('day'), { days: 1 });
 });
 
 QUnit.test('getIntervalByString hour', function(assert) {
-    //act, assert
+    // act, assert
     assert.deepEqual(this.getDateIntervalByString('hour'), { hours: 1 });
 });
 
 QUnit.test('getIntervalByString minute', function(assert) {
-    //act, assert
+    // act, assert
     assert.deepEqual(this.getDateIntervalByString('minute'), { minutes: 1 });
 });
 
 QUnit.test('getIntervalByString second', function(assert) {
-    //act, assert
+    // act, assert
     assert.deepEqual(this.getDateIntervalByString('second'), { seconds: 1 });
 });
 
 QUnit.test('add negative Interval number', function(assert) {
-    //arrange, act
+    // arrange, act
     var newNumber = dateUtils.addInterval(11, 5, true);
 
-    //assert
+    // assert
     assert.deepEqual(newNumber, 6);
 });
 
 QUnit.test('add negative day', function(assert) {
-    //arrange, act
+    // arrange, act
     var newDate = dateUtils.addInterval(new Date(2012, 2, 2), 'day', true);
 
-    //assert
+    // assert
     assert.deepEqual(newDate, new Date(2012, 2, 1));
 });
 
 QUnit.test('add negative day overflow', function(assert) {
-    //arrange, act
+    // arrange, act
     var newDate = dateUtils.addInterval(new Date(2012, 1, 1), 'day', true);
 
-    //assert
+    // assert
     assert.deepEqual(newDate, new Date(2012, 0, 31));
 });
 
 QUnit.test('addInterval number', function(assert) {
-    //arrange, act
+    // arrange, act
     var newNumber = dateUtils.addInterval(5, 6);
 
-    //assert
+    // assert
     assert.deepEqual(newNumber, 11);
 });
 
 QUnit.test('addInterval day', function(assert) {
-    //arrange, act
+    // arrange, act
     var newDate = dateUtils.addInterval(new Date(2012, 2, 2), 'day');
 
-    //assert
+    // assert
     assert.deepEqual(newDate, new Date(2012, 2, 3));
 });
 
 QUnit.test('addInterval day overflow', function(assert) {
-    //arrange, act
+    // arrange, act
     var newDate = dateUtils.addInterval(new Date(2012, 0, 31), 'day');
 
-    //assert
+    // assert
     assert.deepEqual(newDate, new Date(2012, 1, 1));
 });
 
 
 QUnit.test('addInterval date object', function(assert) {
-    //arrange, act
+    // arrange, act
     var newDate = dateUtils.addInterval(new Date(2012, 1, 1, 1, 1, 1, 1), {
         years: 1,
         months: 2,
@@ -168,24 +168,24 @@ QUnit.test('addInterval date object', function(assert) {
         milliseconds: 7
     });
 
-    //assert
+    // assert
     assert.deepEqual(newDate, new Date(2013, 3, 4, 5, 6, 7, 8));
 });
 
 QUnit.test('addInterval date object (with timezone)', function(assert) {
-    //arrange, act
+    // arrange, act
     var newDate = dateUtils.addInterval(new Date("2017-10-29T01:55:00+01:00"), {
         minutes: 5,
         seconds: 6,
         milliseconds: 7
     });
 
-    //assert
+    // assert
     assert.deepEqual(newDate.getTime(), 1509238806007);
 });
 
 QUnit.test('addInterval date object overflow', function(assert) {
-    //arrange, act
+    // arrange, act
     var newDate = dateUtils.addInterval(new Date(2012, 12, 1, 1, 1, 1, 1), {
         years: 1,
         months: 2,
@@ -196,11 +196,11 @@ QUnit.test('addInterval date object overflow', function(assert) {
         milliseconds: 7
     });
 
-    //assert
+    // assert
     assert.deepEqual(newDate, new Date(2014, 2, 4, 5, 6, 7, 8));
 });
 QUnit.test('addInterval date object overflow', function(assert) {
-    //arrange, act
+    // arrange, act
     var newDate = dateUtils.addInterval(new Date(2012, 12, 1, 1, 1, 1, 1), {
         years: 1,
         months: 2,
@@ -211,61 +211,61 @@ QUnit.test('addInterval date object overflow', function(assert) {
         milliseconds: 7
     });
 
-    //assert
+    // assert
     assert.deepEqual(newDate, new Date(2014, 2, 4, 5, 6, 7, 8));
 });
 
 QUnit.test('addInterval day overflow', function(assert) {
-    //arrange, act
+    // arrange, act
     var newDate = dateUtils.addInterval(new Date(2012, 0, 31), 'Day');
 
-    //assert
+    // assert
     assert.deepEqual(newDate, new Date(2012, 1, 1));
 });
 QUnit.test('getDateUnitInterval with millisecond tickInterval', function(assert) {
-    //arrange
+    // arrange
     var getDateUnitInterval = dateUtils.getDateUnitInterval,
         tickInterval = {
             milliseconds: 33
         };
-    //assert
+    // assert
     assert.equal(getDateUnitInterval(tickInterval), 'millisecond');
 });
 QUnit.test('getDateUnitInterval with minute tickInterval', function(assert) {
-    //arrange
+    // arrange
     var getDateUnitInterval = dateUtils.getDateUnitInterval,
         tickInterval = {
             milliseconds: 122,
             seconds: 33,
             minutes: 17
         };
-    //assert
+    // assert
     assert.equal(getDateUnitInterval(tickInterval), 'minute');
 });
 QUnit.test('getDateUnitInterval with zero minutes and some seconds tickInterval', function(assert) {
-    //arrange
+    // arrange
     var getDateUnitInterval = dateUtils.getDateUnitInterval,
         tickInterval = {
             milliseconds: 122,
             seconds: 33,
             minutes: 0
         };
-    //assert
+    // assert
     assert.equal(getDateUnitInterval(tickInterval), 'second');
 });
 QUnit.test('getDateUnitInterval with dateDifferences style tickInterval', function(assert) {
-    //arrange
+    // arrange
     var getDateUnitInterval = dateUtils.getDateUnitInterval,
         tickInterval = {
             millisecond: true,
             second: true,
             minute: false
         };
-    //assert
+    // assert
     assert.equal(getDateUnitInterval(tickInterval), 'second');
 });
 QUnit.test('getDateUnitInterval with hour tickInterval', function(assert) {
-    //arrange
+    // arrange
     var getDateUnitInterval = dateUtils.getDateUnitInterval,
         tickInterval = {
             milliseconds: 998,
@@ -273,22 +273,22 @@ QUnit.test('getDateUnitInterval with hour tickInterval', function(assert) {
             seconds: 33,
             minutes: 17
         };
-    //assert
+    // assert
     assert.equal(getDateUnitInterval(tickInterval), 'hour');
 });
 QUnit.test('getDateUnitInterval with day tickInterval', function(assert) {
-    //arrange
+    // arrange
     var getDateUnitInterval = dateUtils.getDateUnitInterval,
         tickInterval = {
             hours: 12,
             seconds: 33,
             days: 17
         };
-    //assert
+    // assert
     assert.equal(getDateUnitInterval(tickInterval), 'day');
 });
 QUnit.test('getDateUnitInterval with week tickInterval', function(assert) {
-    //arrange
+    // arrange
     var getDateUnitInterval = dateUtils.getDateUnitInterval,
         tickInterval = {
             weeks: 3,
@@ -296,11 +296,11 @@ QUnit.test('getDateUnitInterval with week tickInterval', function(assert) {
             seconds: 33,
             days: 17
         };
-    //assert
+    // assert
     assert.equal(getDateUnitInterval(tickInterval), 'week');
 });
 QUnit.test('getDateUnitInterval with month tickInterval', function(assert) {
-    //arrange
+    // arrange
     var getDateUnitInterval = dateUtils.getDateUnitInterval,
         tickInterval = {
             weeks: 3,
@@ -308,11 +308,11 @@ QUnit.test('getDateUnitInterval with month tickInterval', function(assert) {
             months: 3,
             days: 17
         };
-    //assert
+    // assert
     assert.equal(getDateUnitInterval(tickInterval), 'month');
 });
 QUnit.test('getDateUnitInterval with year tickInterval', function(assert) {
-    //arrange
+    // arrange
     var getDateUnitInterval = dateUtils.getDateUnitInterval,
         tickInterval = {
             weeks: 3,
@@ -320,7 +320,7 @@ QUnit.test('getDateUnitInterval with year tickInterval', function(assert) {
             months: 3,
             years: 17
         };
-    //assert
+    // assert
     assert.equal(getDateUnitInterval(tickInterval), 'year');
 });
 
@@ -429,9 +429,9 @@ QUnit.test('year', function(assert) {
 });
 
 QUnit.test('convertMillisecondsToDateUnits', function(assert) {
-    //arrange
+    // arrange
     var convertMillisecondsToDateUnits = dateUtils.convertMillisecondsToDateUnits;
-    //assert
+    // assert
     assert.deepEqual(convertMillisecondsToDateUnits(new Date(2010, 1, 3) - new Date(2010, 1, 1)), { days: 2 }, 'days interval');
     assert.deepEqual(convertMillisecondsToDateUnits(new Date(2010, 9, 14) - new Date(2010, 4, 14)), { days: 3, months: 5 }, 'months and days');
     assert.deepEqual(convertMillisecondsToDateUnits(new Date(2010, 9, 14) - new Date(2010, 8, 14)), { months: 1 }, 'months');
@@ -441,11 +441,11 @@ QUnit.test('convertMillisecondsToDateUnits', function(assert) {
 });
 
 QUnit.test('correctDateWithUnitBeginning without gap correction', function(assert) {
-    //arrange
+    // arrange
     var date = new Date(2013, 5, 20, 5, 26, 35, 222),
         correct = dateUtils.correctDateWithUnitBeginning;
 
-    //assert
+    // assert
     var millisecondsDate = correct(new Date(date.getTime()), "millisecond");
     assert.deepEqual(millisecondsDate, new Date(2013, 5, 20, 5, 26, 35, 222), 'milliseconds');
 
@@ -475,11 +475,11 @@ QUnit.test('correctDateWithUnitBeginning without gap correction', function(asser
 });
 
 QUnit.test('correctDateWithUnitBeginning with gap correction', function(assert) {
-    //arrange
+    // arrange
     var date = new Date(2013, 5, 20, 5, 26, 35, 222),
         correct = dateUtils.correctDateWithUnitBeginning;
 
-    //assert
+    // assert
     var millisecondsDate = correct(new Date(date.getTime()), "millisecond", true);
     assert.deepEqual(millisecondsDate, new Date(2013, 5, 20, 5, 26, 35, 222), 'milliseconds');
 

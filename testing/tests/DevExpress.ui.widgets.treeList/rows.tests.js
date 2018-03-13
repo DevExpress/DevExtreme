@@ -51,7 +51,7 @@ var teardownModule = function() {
 QUnit.module("Rows view", { beforeEach: setupModule, afterEach: teardownModule });
 
 QUnit.test("Render rows when all items collapsed", function(assert) {
-    //arrange
+    // arrange
     var $iconElement,
         $cellElements,
         $rowElements,
@@ -61,10 +61,10 @@ QUnit.test("Render rows when all items collapsed", function(assert) {
     this.items[0].isExpanded = false;
     this.setupTreeList();
 
-    //act
+    // act
     this.rowsView.render($testElement);
 
-    //assert
+    // assert
     $rowElements = $testElement.find("tbody > .dx-data-row");
     $cellElements = $rowElements.find("td");
     assert.equal($rowElements.length, 1, "count data row");
@@ -77,7 +77,7 @@ QUnit.test("Render rows when all items collapsed", function(assert) {
 });
 
 QUnit.test("Render rows when all items expanded", function(assert) {
-    //arrange
+    // arrange
     var $iconElement,
         $cellElements,
         $rowElements,
@@ -85,10 +85,10 @@ QUnit.test("Render rows when all items expanded", function(assert) {
 
     this.setupTreeList();
 
-    //act
+    // act
     this.rowsView.render($testElement);
 
-    //assert
+    // assert
     $rowElements = $testElement.find("tbody > .dx-data-row");
     $cellElements = $rowElements.find("td");
     assert.equal($rowElements.length, 3, "count data row");
@@ -136,23 +136,23 @@ QUnit.module("Expand/Collapse rows", {
 });
 
 QUnit.test("Expand row", function(assert) {
-    //arrange
+    // arrange
     var $rowElements,
         $testElement = $('#treeList');
 
     this.setupTreeList();
     this.rowsView.render($testElement);
 
-    //assert
+    // assert
     $rowElements = $testElement.find("tbody > .dx-data-row");
     assert.equal($rowElements.length, 1, "count data row");
     assert.equal($rowElements.first().find("td").first().find(".dx-treelist-expanded").length, 0, "hasn't expand icon");
     assert.equal($rowElements.first().find("td").first().find(".dx-treelist-collapsed").length, 1, "has collapse icon");
 
-    //act
+    // act
     $rowElements.find(".dx-treelist-collapsed").trigger("dxclick");
 
-    //assert
+    // assert
     $rowElements = $testElement.find("tbody > .dx-data-row");
     assert.equal($rowElements.length, 2, "count data row");
     assert.equal($rowElements.first().find("td").first().find(".dx-treelist-expanded").length, 1, "hasn't expand icon");
@@ -160,32 +160,32 @@ QUnit.test("Expand row", function(assert) {
 });
 
 QUnit.test("Collapse row", function(assert) {
-    //arrange
+    // arrange
     var $rowElements,
         $testElement = $('#treeList');
 
     this.setupTreeList();
     this.rowsView.render($testElement);
 
-    //assert
+    // assert
     $rowElements = $testElement.find("tbody > .dx-data-row");
     assert.equal($rowElements.length, 1, "count data row");
     assert.equal($rowElements.first().find("td").first().find(".dx-treelist-expanded").length, 0, "hasn't expand icon");
     assert.equal($rowElements.first().find("td").first().find(".dx-treelist-collapsed").length, 1, "has collapse icon");
 
-    //arrange
+    // arrange
     $rowElements.find(".dx-treelist-collapsed").trigger("dxclick");
 
-    //assert
+    // assert
     $rowElements = $testElement.find("tbody > .dx-data-row");
     assert.equal($rowElements.length, 2, "count data row");
     assert.equal($rowElements.first().find("td").first().find(".dx-treelist-expanded").length, 1, "hasn't expand icon");
     assert.equal($rowElements.first().find("td").first().find(".dx-treelist-collapsed").length, 0, "has collapse icon");
 
-    //act
+    // act
     $rowElements.first().find(".dx-treelist-expanded").trigger("dxclick");
 
-    //assert
+    // assert
     $rowElements = $testElement.find("tbody > .dx-data-row");
     assert.equal($rowElements.length, 1, "count data row");
     assert.equal($rowElements.first().find("td").first().find(".dx-treelist-expanded").length, 0, "hasn't expand icon");
@@ -193,7 +193,7 @@ QUnit.test("Collapse row", function(assert) {
 });
 
 QUnit.test("Expand row on row click when edit mode is 'batch'", function(assert) {
-    //arrange
+    // arrange
     var $testElement = $('#treeList');
 
     this.options.editing = {
@@ -204,16 +204,16 @@ QUnit.test("Expand row on row click when edit mode is 'batch'", function(assert)
     this.setupTreeList();
     this.rowsView.render($testElement);
 
-    //act
+    // act
     $testElement.find("tbody td").first().find(".dx-treelist-collapsed").first().trigger("dxclick");
 
-    //assert
+    // assert
     assert.ok(!$testElement.find("tbody td").first().hasClass("dx-editor-cell"), "cell isn't edit");
     assert.equal($testElement.find("tbody > .dx-data-row").length, 2, "count data row");
 });
 
 QUnit.test("Collapse row on row click when edit mode is 'batch'", function(assert) {
-    //arrange
+    // arrange
     var $testElement = $('#treeList');
 
     this.options.editing = {
@@ -225,12 +225,12 @@ QUnit.test("Collapse row on row click when edit mode is 'batch'", function(asser
     this.setupTreeList();
     this.rowsView.render($testElement);
 
-    //assert
+    // assert
     assert.equal($testElement.find("tbody > .dx-data-row").length, 2, "count data row");
 
-    //act
+    // act
     $testElement.find("tbody td").first().find(".dx-treelist-expanded").first().trigger("dxclick");
 
-    //assert
+    // assert
     assert.equal($testElement.find("tbody > .dx-data-row").length, 1, "count data row");
 });

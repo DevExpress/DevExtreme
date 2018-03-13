@@ -44,27 +44,27 @@ QUnit.test("Date time format converting", function(assert) {
     }
 });
 
-//T495544
+// T495544
 QUnit.test("Date format converting when format is custom", function(assert) {
-    //act
+    // act
     var excelFormat = excelCreator.formatConverter.convertFormat('dd/MMM/yyyy', null, "date");
 
-    //assert
+    // assert
     assert.strictEqual(excelFormat, "[$-9]dd\\/MMM\\/yyyy", "excel format for custom date format");
 });
 
-//T476869
+// T476869
 QUnit.test("Number format converting when format is not string", function(assert) {
     var format = function(x) { return x + " $"; };
 
-    //act
+    // act
     var excelFormat = excelCreator.formatConverter.convertFormat(format, null, "number");
 
-    //assert
+    // assert
     assert.strictEqual(excelFormat, undefined, "no excel format for format as function");
 });
 
-//T454328
+// T454328
 QUnit.test("Date time format as function converting", function(assert) {
     // arrange
     var month_names = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -115,7 +115,7 @@ QUnit.test("Date time format as function converting", function(assert) {
         "[$-9]d,ddd": function(value) { return value.getDate().toString() + "," + day_names_short[value.getDay()]; },
         "[$-9]yyyy\\/MM\\/dd": function(value) { return expected["[$-9]yyyy"](value) + "/" + expected["[$-9]MM"](value) + "/" + expected["[$-9]dd"](value); },
         "[$-9]dddd, MMMM d, yyyy": function(value) { return expected["[$-9]dddd"][0](value) + ", " + expected["[$-9]MMMM"](value) + " " + expected["[$-9]d"](value) + ", " + expected["[$-9]yyyy"](value); },
-        "[$-9]dd-MMM-yyyy": function(value) { return expected["[$-9]dd"](value) + "-" + expected["[$-9]MMM"](value) + "-" + expected["[$-9]yyyy"](value); }, //T489981
+        "[$-9]dd-MMM-yyyy": function(value) { return expected["[$-9]dd"](value) + "-" + expected["[$-9]MMM"](value) + "-" + expected["[$-9]yyyy"](value); }, // T489981
         "[$-2010009]d\\/M\\/yyyy": function(value) { return formatArabicNumber(expected["[$-9]d"](value)) + "/" + formatArabicNumber(expected["[$-9]M"](value)) + "/" + formatArabicNumber(expected["[$-9]yyyy"](value)); }
     };
 
@@ -129,7 +129,7 @@ QUnit.test("Date time format as function converting", function(assert) {
     }
 });
 
-//T573609
+// T573609
 QUnit.test("Date time format if formatter is defined with moment Do pattern", function(assert) {
     // arrange
     var month_names_short = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -157,13 +157,13 @@ QUnit.test("Date time format if formatter is defined with moment Do pattern", fu
     assert.strictEqual(convertDate(format), "[$-9]MMM d, yyyy", "format with formatter");
 });
 
-//T457272
+// T457272
 QUnit.test("shortDate format for user language", function(assert) {
     var oldLocale = coreLocalization.locale();
 
     coreLocalization.locale("cs");
 
-    //act
+    // act
     var excelFormat = excelCreator.formatConverter.convertFormat(function(value) {
         return value.getDate().toString() + ". " + value.getMonth().toString() + ". " + value.getFullYear().toString();
     }, null, "date");
@@ -193,7 +193,7 @@ QUnit.test("Get excel date value", function(assert) {
     assert.ok(getExcelDateValue("08/23/1983 14:57:31").indexOf("30551.62327546296") === 0);
     assert.strictEqual(getExcelDateValue("03/29/1989 15:33:47"), "32596.64846064815");
     assert.strictEqual(getExcelDateValue("08/15/2015 2:00:00"), "42231.083333333336");
-    //T267460 UTC -06:00 USA
+    // T267460 UTC -06:00 USA
     assert.strictEqual(getExcelDateValue("08/15/2015"), "42231");
     assert.strictEqual(getExcelDateValue("08/15/2015 0:30:00"), "42231.020833333336");
     assert.strictEqual(this.excelCreator._getExcelDateValue(""), undefined);
@@ -333,7 +333,7 @@ QUnit.test("colsArray generating", function(assert) {
 QUnit.test("Cell index generate", function(assert) {
     // assert, act
     assert.strictEqual(this.excelCreator._getCellIndex(1, 3), "D1", "Simple letter index correct (\"D1\")");
-    assert.strictEqual(this.excelCreator._getCellIndex(1, 26), "AA1", "Two-digit letter index correct (\"AA1\")"); //T271869
+    assert.strictEqual(this.excelCreator._getCellIndex(1, 26), "AA1", "Two-digit letter index correct (\"AA1\")"); // T271869
     assert.strictEqual(this.excelCreator._getCellIndex(121, 2132), "CDA121", "Multi letter index correct (\"DEA121\")");
     assert.strictEqual(this.excelCreator._getCellIndex(99999999, 99999999), "HJUNYV99999999", "Long multi letter index correct (\"IKVOZV99999999\")");
 });
@@ -700,7 +700,6 @@ QUnit.test("Workwheet XML content is valid", function(assert) {
 });
 
 
-
 QUnit.test("Generating worksheet with groups and three rows of the header", function(assert) {
     // arrange
     var done = assert.async();
@@ -726,8 +725,6 @@ QUnit.test("Generating worksheet with groups and three rows of the header", func
         }
     });
 });
-
-
 
 
 QUnit.test("Style XML content is valid", function(assert) {
@@ -797,7 +794,7 @@ QUnit.test("EncodeHtml for sharedStrings", function(assert) {
     assert.equal(this.excelCreator._stringArray[0], "&lt;div cssClass=&quot;myCss&quot; data=&#39;dfsdf&#39;&gt;&lt;p&gt;La &amp; la &amp; ba&lt;/p&gt;&lt;/div&gt;");
 });
 
-//T573609
+// T573609
 QUnit.test("Date format with formatter", function(assert) {
     var format = {
         type: "date",
@@ -970,7 +967,7 @@ QUnit.test("Trillions format", function(assert) {
     assert.equal(this.excelCreator._styleFormat[3], "#,##0.000,,,,&quot;T&quot;", "precision = 3");
 });
 
-//T267460
+// T267460
 QUnit.test("CalculateWidth convert 0 and undefined to min value", function(assert) {
     // act, assert
     assert.equal(this.excelCreator._calculateWidth(0), 13.57, "Return min value width zerow");

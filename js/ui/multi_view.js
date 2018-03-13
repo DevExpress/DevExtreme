@@ -384,7 +384,7 @@ var MultiView = CollectionWidget.inherit({
         var targetOffset = e.targetOffset * this._getRTLSignCorrection();
         if(targetOffset) {
             this.option("selectedIndex", this._normalizeIndex(this.option("selectedIndex") - targetOffset));
-            //TODO: change focusedElement on focusedItem
+            // TODO: change focusedElement on focusedItem
             var $selectedElement = this.itemElements().filter(".dx-item-selected");
             this.option("focusStateEnabled") && this.option("focusedElement", getPublicElement($selectedElement));
         } else {

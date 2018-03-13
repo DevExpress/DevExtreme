@@ -188,10 +188,10 @@ var NumberBoxBase = TextEditor.inherit({
         ]);
     },
 
-    _render: function() {
+    _initMarkup: function() {
         this._renderSubmitElement();
-        this._setSubmitValue(this.option("value"));
         this.$element().addClass(WIDGET_CLASS);
+
         this.callBase();
     },
 
@@ -205,6 +205,7 @@ var NumberBoxBase = TextEditor.inherit({
         this._$submitElement = $("<input>")
             .attr("type", "hidden")
             .appendTo(this.$element());
+        this._setSubmitValue(this.option("value"));
     },
 
     _setSubmitValue: function(value) {
@@ -219,7 +220,7 @@ var NumberBoxBase = TextEditor.inherit({
         this.callBase(e);
 
         var ch = e.key || String.fromCharCode(e.which),
-            validCharRegExp = /[\d.,eE\-+]|Subtract/, //Workaround for IE (T592690)
+            validCharRegExp = /[\d.,eE\-+]|Subtract/, // Workaround for IE (T592690)
             isInputCharValid = validCharRegExp.test(ch);
 
         if(!isInputCharValid) {

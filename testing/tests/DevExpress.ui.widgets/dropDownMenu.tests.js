@@ -643,7 +643,6 @@ QUnit.test("B233109: dropDownMenu menu interference", function(assert) {
 });
 
 
-
 QUnit.test("B250811 - Cancel item in overflow menu on Android does not work", function(assert) {
     assert.expect(1);
 

@@ -111,7 +111,6 @@
             }, MOUSE_EVENTS, KEY_EVENTS, TOUCH_EVENTS);
 
 
-
         var simulateKeyEvent = function(target, type, bubbles, cancelable, view, ctrlKey, altKey, shiftKey, metaKey, keyCode, charCode) {
             if(!target) {
                 throw Error("Invalid target");

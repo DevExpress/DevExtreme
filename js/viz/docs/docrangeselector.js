@@ -934,7 +934,7 @@ var dxRangeSelector = {
         * @name dxrangeselectoroptions_chart_useAggregation
         * @publicName useAggregation
         * @type boolean
-        * @default false
+        * @deprecated dxChartSeriesTypes_CommonSeries_aggregation_enabled
         */
         useAggregation: false,
         /**

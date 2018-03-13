@@ -117,12 +117,12 @@ QUnit.test("dataSource by options disposing", function(assert) {
     var dataSource = dataController.getDataSource();
     dataController.scrollChanged.add(onScrollChanged);
 
-    //act
+    // act
     dataController.dispose();
 
     dataController.scrollChanged.fire();
 
-    //assert
+    // assert
     assert.ok(dataSource, "dataSource created");
     assert.ok(dataSource.isDisposed(), "dataSource disposed");
     assert.ok(!onScrollChanged.called, "onScrollChanged");
@@ -134,10 +134,10 @@ QUnit.test("dataSource by instance disposing", function(assert) {
         dataSource: dataSource
     });
 
-    //act
+    // act
     dataController.dispose();
 
-    //assert
+    // assert
     assert.ok(dataSource, "dataSource created");
     assert.strictEqual(dataController.getDataSource(), dataSource, "DataController dataSource equal dataSource instance");
     assert.ok(!dataSource.isDisposed(), "dataSource is not disposed");
@@ -705,7 +705,7 @@ QUnit.test("columnsInfo and rowsInfo without dimension fields when showGrandTota
     ]], "Columns Info");
 });
 
-//B234872
+// B234872
 QUnit.test("columnsInfo with empty array children when cells descriptions count === 1", function(assert) {
     var dataController = new DataController({
         dataSource: {
@@ -1002,7 +1002,7 @@ QUnit.test("columnsInfo when cells descriptions count > 1 when sorting by summar
     ]);
 });
 
-//B234872
+// B234872
 QUnit.test("columnsInfo with empty array children when cells descriptions count > 1", function(assert) {
     var dataController = new DataController({
         dataSource: {
@@ -1098,7 +1098,7 @@ QUnit.test("columns formatting", function(assert) {
         ]
     ]);
 
-    assert.strictEqual(customizeTextThisObjects.length, 2);  //TODO
+    assert.strictEqual(customizeTextThisObjects.length, 2);  // TODO
 
     var compareColumn = $.extend({ index: 0 }, column);
     assert.deepEqual(customizeTextThisObjects[0], compareColumn);
@@ -1679,7 +1679,7 @@ QUnit.test("collapse column item for incorrect path", function(assert) {
         }
     });
 
-    //act, assert
+    // act, assert
     assert.ok(!dataController.collapseHeaderItem('column', ['A', 'P3']));
 });
 
@@ -1697,7 +1697,7 @@ QUnit.test("collapse collapsed item", function(assert) {
         }
     });
 
-    //act, assert
+    // act, assert
     assert.ok(!dataController.collapseHeaderItem('column', ['C']));
 });
 
@@ -1716,10 +1716,10 @@ QUnit.test("collapse row item", function(assert) {
         texts: texts
     });
 
-    //act
+    // act
     assert.ok(dataController.collapseHeaderItem('row', ['A']));
 
-    //assert
+    // assert
     assert.deepEqual(dataController.getRowsInfo(), [
         [{ text: 'A', expanded: false, path: ['A'], type: 'D', isLast: true }],
         [{ text: 'C1', expanded: false, path: ['C1'], type: 'D', isLast: true }],
@@ -1744,7 +1744,7 @@ QUnit.test("expand collapsed column item", function(assert) {
     });
     assert.ok(dataController.collapseHeaderItem('column', ['A']));
 
-    //act, assert
+    // act, assert
     assert.ok(dataController.expandHeaderItem('column', ['A']));
 
     assert.deepEqual(dataController.getColumnsInfo(), [
@@ -1775,10 +1775,10 @@ QUnit.test("expand not collapsed column item", function(assert) {
         }
     });
 
-    //act, assert
+    // act, assert
     assert.ok(!dataController.expandHeaderItem('column', ['C']));
 
-    //when expandHeaderItem return false, need request for partial dataController for children
+    // when expandHeaderItem return false, need request for partial dataController for children
 });
 
 QUnit.test("apply partial dataController with columns path", function(assert) {
@@ -1828,7 +1828,7 @@ QUnit.test("apply partial dataController with columns path", function(assert) {
     ]);
 });
 
-//B234872
+// B234872
 QUnit.test("apply partial dataController with empty data", function(assert) {
     var dataController = new DataController({
         dataSource: {
@@ -1850,14 +1850,14 @@ QUnit.test("apply partial dataController with empty data", function(assert) {
         }
     });
 
-    //act
+    // act
     dataController.applyPartialDataSource('column', ['C'], {
         columns: [],
         rows: [{ value: 'Vasya', index: 0 }, { value: 'Piter', index: 1 }],
         values: []
     });
 
-    //assert
+    // assert
     assert.deepEqual(prepareLoadedData(dataController.getData().columns), [
         { value: 'A', index: 2, children: [{ value: 'P1', index: 0 }, { value: 'P2', index: 1 }] },
         { value: 'C', index: 3, children: [] }
@@ -1876,7 +1876,7 @@ QUnit.test("apply partial dataController with empty data", function(assert) {
     ]);
 });
 
-//B234219
+// B234219
 QUnit.test("collapse column after apply partial dataController with column path", function(assert) {
     var dataController = new DataController({
         dataSource: {
@@ -2075,7 +2075,7 @@ QUnit.test("apply partial dataController with rows path", function(assert) {
     ]);
 });
 
-//B234219
+// B234219
 QUnit.test("collapse row after apply partial dataController with rows path", function(assert) {
     var dataController = new DataController({
         dataSource: {
@@ -2127,7 +2127,7 @@ QUnit.test("collapse row after apply partial dataController with rows path", fun
     ]);
 });
 
-//B232736
+// B232736
 QUnit.test("lost cells after several collapse/expand/applyPartialDataSource", function(assert) {
     var dataController = new DataController({
         dataSource: {
@@ -2238,7 +2238,7 @@ QUnit.test("apply partial dataController with rows path when no column descripti
     ]);
 });
 
-//Q561802
+// Q561802
 QUnit.test("Header item text for an item with displayText equal to empty string", function(assert) {
     var dataController = new DataController({
         dataSource: {
@@ -3386,7 +3386,7 @@ QUnit.test("Hide totals on data row header field level", function(assert) {
 
 });
 
-//T504918
+// T504918
 QUnit.test("Format cell with error value", function(assert) {
     var dataController = new DataController({
         dataSource: {
@@ -4171,7 +4171,7 @@ QUnit.test("Calculate virtual content params", function(assert) {
     columnsScrollController.getViewportPosition.returns(400);
     rowsScrollController.getViewportPosition.returns(500);
 
-    //act
+    // act
     var result = dataController.calculateVirtualContentParams({
         contentWidth: 600,
         contentHeight: 800,
@@ -4181,7 +4181,7 @@ QUnit.test("Calculate virtual content params", function(assert) {
         viewportHeight: 200
     });
 
-    //assert
+    // assert
     assert.strictEqual(columnsScrollController.viewportItemSize.callCount, 3);
     assert.strictEqual(rowsScrollController.viewportItemSize.secondCall.args[0], 40);
     assert.strictEqual(columnsScrollController.viewportItemSize.callCount, 3);
@@ -4221,11 +4221,11 @@ QUnit.test("setViewPortPosition", function(assert) {
         rowsScrollController = this.VirtualScrollController.firstCall.returnValue,
         columnsScrollController = this.VirtualScrollController.secondCall.returnValue;
 
-    //act
+    // act
     dataController.setViewportPosition(20, 100);
     dataController.setViewportPosition(null, undefined);
     dataController.setViewportPosition(undefined, 0);
-    //assert
+    // assert
     assert.strictEqual(columnsScrollController.setViewportPosition.callCount, 3);
     assert.strictEqual(rowsScrollController.setViewportPosition.callCount, 3);
 
@@ -4244,9 +4244,9 @@ QUnit.test("subscribeToWindowScrollEvents", function(assert) {
         columnsScrollController = this.VirtualScrollController.secondCall.returnValue,
         testElement = $("<div>");
 
-    //act
+    // act
     dataController.subscribeToWindowScrollEvents(testElement);
-    //assert
+    // assert
     assert.strictEqual(columnsScrollController.subscribeToWindowScrollEvents.callCount, 0);
     assert.strictEqual(rowsScrollController.subscribeToWindowScrollEvents.callCount, 1);
 
@@ -4258,9 +4258,9 @@ QUnit.test("updateWindowScrollPosition", function(assert) {
         rowsScrollController = this.VirtualScrollController.firstCall.returnValue,
         columnsScrollController = this.VirtualScrollController.secondCall.returnValue;
 
-    //act
+    // act
     dataController.updateWindowScrollPosition(145);
-    //assert
+    // assert
     assert.strictEqual(columnsScrollController.scrollTo.callCount, 0);
     assert.strictEqual(rowsScrollController.scrollTo.callCount, 1);
 
@@ -4378,9 +4378,9 @@ QUnit.test("dataAdapter for columnsScrollController. Load when rowPageIndex grea
     dataController.changed.add(changed);
     scrollController.pageIndex.returns(10);
 
-    //act
+    // act
     dataAdapter.load();
-    //assert
+    // assert
     assert.ok(scrollController.handleDataChanged.calledOnce);
     scrollController.handleDataChanged.lastCall.args[0]();
     assert.ok(changed.calledOnce);
@@ -4464,9 +4464,9 @@ QUnit.test("dataAdapter for rowsScrollController. Load when rowPageIndex greater
     dataController.changed.add(changed);
     scrollController.pageIndex.returns(10);
 
-    //act
+    // act
     dataAdapter.load();
-    //assert
+    // assert
     assert.ok(this.VirtualScrollController.firstCall.returnValue.handleDataChanged.calledOnce);
     this.VirtualScrollController.firstCall.returnValue.handleDataChanged.lastCall.args[0]();
     assert.ok(changed.calledOnce);
@@ -5417,7 +5417,7 @@ QUnit.test("Can get changingTime. after load columnsScrollController", function(
     var loadResult = columnsDataAdapter.load(),
         handleDataChangedArg = columnsScrollController.handleDataChanged.lastCall.args[0];
 
-    //act
+    // act
     handleDataChangedArg();
 
     assert.ok(columnsScrollController);
@@ -5425,7 +5425,7 @@ QUnit.test("Can get changingTime. after load columnsScrollController", function(
     assert.strictEqual(columnsDataAdapter.changingDuration(), 377);
     assert.strictEqual(rowsDataAdapter.changingDuration(), 377);
 
-    //teardown
+    // teardown
     clock.restore();
 });
 
@@ -5455,7 +5455,7 @@ QUnit.test("Can get changingTime. after load rowsScrollController", function(ass
     var loadResult = rowsDataAdapter.load(),
         handleDataChangedArg = rowsScrollController.handleDataChanged.lastCall.args[0];
 
-    //act
+    // act
     handleDataChangedArg();
 
     assert.ok(rowsScrollController);
@@ -5464,7 +5464,7 @@ QUnit.test("Can get changingTime. after load rowsScrollController", function(ass
     assert.strictEqual(columnsDataAdapter.changingDuration(), 377);
     assert.strictEqual(rowsDataAdapter.changingDuration(), 377);
 
-    //teardown
+    // teardown
     clock.restore();
 });
 
@@ -5484,9 +5484,9 @@ QUnit.test("T327502. DataController changed once on update", function(assert) {
         changedCallback = sinon.stub();
 
     dataController.changed.add(changedCallback);
-    //act
+    // act
     dataController.getDataSource().load();
-    //assert
+    // assert
     assert.ok(changedCallback.calledOnce);
 });
 

@@ -182,7 +182,7 @@
                 toolbar = $toolbar.dxToolbar("instance");
 
             var initNavButton = function() {
-                toolbar.option("items[0].visible", true);//nav button item
+                toolbar.option("items[0].visible", true);// nav button item
                 $toolbar.find(".nav-button").dxButton("instance").option("onClick", $.proxy(that._toggleNavigation, that, $markup));
             };
 

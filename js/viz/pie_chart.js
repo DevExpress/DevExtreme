@@ -128,7 +128,19 @@ var dxPieChart = BaseChart.inherit({
     },
 
     _processSingleSeries: function(singleSeries) {
+        this.callBase(singleSeries);
         singleSeries.arrangePoints();
+    },
+
+    _handleSeriesDataUpdated: function() {
+        var maxPointCount = 0;
+        this.series.forEach(function(s) {
+            maxPointCount = Math.max(s.getPointsCount(), maxPointCount);
+        });
+        this.series.forEach(function(s) {
+            s.setMaxPointsCount(maxPointCount);
+        });
+        this.callBase();
     },
 
     _getLegendTargets: function() {
@@ -338,7 +350,7 @@ var dxPieChart = BaseChart.inherit({
         this._abstractSeries = null;
     },
 
-    //DEPRECATED_15_2
+    // DEPRECATED_15_2
     getSeries: function() {
         errors.log("W0002", "dxPieChart", "getSeries", "15.2", "Use the 'getAllSeries' method instead");
         return this.series[0];

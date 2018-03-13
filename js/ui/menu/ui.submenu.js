@@ -93,7 +93,7 @@ var Submenu = ContextMenu.inherit({
         });
     },
 
-    //TODO: try to simplify it
+    // TODO: try to simplify it
     _showDelimiter: function(arg) {
         if(!this.$contentDelimiter) {
             return;

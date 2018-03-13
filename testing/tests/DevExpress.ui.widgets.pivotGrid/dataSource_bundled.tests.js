@@ -257,7 +257,7 @@ QUnit.test("Create LocalStore with onChanged event", function(assert) {
     assert.equal(onChangedCallCount, 1, "changed call count");
 });
 
-//T306927
+// T306927
 QUnit.test("Create simple store by data", function(assert) {
     executeAsyncMock.teardown();
 
@@ -276,7 +276,7 @@ QUnit.test("Create simple store by data", function(assert) {
     assert.deepEqual(dataSource.getData().rows.length, 0);
     assert.deepEqual(dataSource.getData().values.length, 0);
     assert.deepEqual(dataSource.getData().columns.length, 2);
-    //T317225
+    // T317225
     assert.deepEqual(dataSource.getData().columns[0].value, "B");
     assert.deepEqual(dataSource.getData().columns[1].value, "A");
 
@@ -286,7 +286,7 @@ QUnit.test("Create simple store by data", function(assert) {
 });
 
 QUnit.test("onChanged event reset data to default loaded data", function(assert) {
-    //act
+    // act
     var onChangedCallCount = 0,
         dataSource = createDataSource({
             fields: [
@@ -303,14 +303,14 @@ QUnit.test("onChanged event reset data to default loaded data", function(assert)
             }
         });
 
-    //assert
+    // assert
     assert.equal(dataSource.getData().values[0][0][0], 6, "test value after changed handler");
     assert.equal(onChangedCallCount, 1, "changed call count");
 
-    //act
+    // act
     dataSource.load();
 
-    //assert
+    // assert
     assert.equal(dataSource.getData().values[0][0][0], 6, "test value after changed handler");
     assert.equal(onChangedCallCount, 2, "changed call count");
 });
@@ -377,7 +377,7 @@ QUnit.test("getAreaFields", function(assert) {
         store: this.testStore
     });
 
-    //assert
+    // assert
     assert.deepEqual(dataSource.getAreaFields("column"), [fields[4], fields[1]], 'column area fields');
     assert.deepEqual(dataSource.getAreaFields("column", true), [fields[5]], 'column area group fields');
     assert.deepEqual(dataSource.getAreaFields("row"), [fields[3], fields[0]], 'row area fields');
@@ -387,7 +387,7 @@ QUnit.test("getAreaFields", function(assert) {
     assert.deepEqual(dataSource.getAreaFields("filter"), [], 'filter area fields');
 });
 
-//T317225
+// T317225
 QUnit.test("getAreaFields for many data fields", function(assert) {
     var fields = [
             { area: "data", caption: "1" },
@@ -410,7 +410,7 @@ QUnit.test("getAreaFields for many data fields", function(assert) {
     });
 
 
-    //assert
+    // assert
     var dataFields = dataSource.getAreaFields("data");
     assert.equal(dataFields.length, 12, "data fields count");
 
@@ -422,7 +422,7 @@ QUnit.test("getAreaFields for many data fields", function(assert) {
 
 QUnit.test("Load Field Values", function(assert) {
     this.testStore.load.returns($.Deferred().reject());
-    //act
+    // act
     var customizeFunction = function(arg) {
             return "customized" + arg.value;
         },
@@ -452,7 +452,7 @@ QUnit.test("Load Field Values", function(assert) {
         fieldValues = data;
     });
 
-    //assert
+    // assert
     assert.deepEqual(prepareLoadArgs(this.testStore.load.lastCall.args), [{
         values: [dataSource.field(2)],
         columns: [
@@ -482,7 +482,7 @@ QUnit.test("Load Field Values", function(assert) {
 QUnit.test("Reload data", function(assert) {
     var testStore = this.testStore;
     this.testStore.load.returns($.Deferred().reject());
-    //act
+    // act
     var dataSource = createDataSource({
             fields: [
                 { dataField: "[Product].[Category]", area: "column", areaIndex: 0 },
@@ -539,7 +539,7 @@ QUnit.test("Reload data", function(assert) {
 });
 
 QUnit.test("Filter", function(assert) {
-    //act
+    // act
     var dataSource = createDataSource({
         fields: [
             { dataField: "[Product].[Category]", area: "column", areaIndex: 0 },
@@ -551,7 +551,7 @@ QUnit.test("Filter", function(assert) {
     });
 
     this.testStore.filter.returns("storeFilterResult");
-    //act
+    // act
 
     var result = dataSource.filter("a", ">", 10);
 
@@ -562,7 +562,7 @@ QUnit.test("Filter", function(assert) {
 
 QUnit.test("Load Field Values for group", function(assert) {
     this.testStore.load.returns($.Deferred().reject());
-    //act
+    // act
     var customize1 = function(arg) {
             return "customized1_" + arg.value;
         },
@@ -596,7 +596,7 @@ QUnit.test("Load Field Values for group", function(assert) {
         fieldValues = data;
     });
 
-    //assert
+    // assert
     assert.deepEqual(prepareLoadArgs(this.testStore.load.lastCall.args), [{
         values: [dataSource.field(4)],
         columns: [
@@ -644,7 +644,7 @@ QUnit.test("Fields visibility", function(assert) {
     var def = $.Deferred();
 
     this.testStore.load.returns(def);
-    //act
+    // act
     var dataSource = createDataSource({
         fields: [
             { dataField: "[Product].[Category]", area: "column", areaIndex: 0 },
@@ -674,7 +674,7 @@ QUnit.test("Fields visibility", function(assert) {
 
     });
 
-    //assert
+    // assert
     assert.deepEqual(prepareFields(this.testStore.load.lastCall.args[0].columns), [{
         area: "column",
         areaIndex: 0,
@@ -718,7 +718,7 @@ QUnit.test("Load store", function(assert) {
     var def = $.Deferred();
 
     this.testStore.load.returns(def);
-    //act
+    // act
     var dataSource = createDataSource({
             fields: [
             { dataField: "[Product].[Category]", allMember: "[All Products]", area: "column", areaIndex: 0 },
@@ -746,7 +746,7 @@ QUnit.test("Load store", function(assert) {
     def.resolve(loadResult);
 
 
-    //assert
+    // assert
     assert.deepEqual(dataSource.getData(), loadResult);
     assert.ok(this.testStore.load.calledOnce, "load count");
     assert.deepEqual(prepareLoadArgs(this.testStore.load.lastCall.args), [{
@@ -789,7 +789,7 @@ QUnit.test("Handle error on loading", function(assert) {
         errorHandler = sinon.stub();
 
     this.testStore.load.returns(def);
-    //act
+    // act
     createDataSource({
         fields: [],
         store: this.testStore,
@@ -799,7 +799,7 @@ QUnit.test("Handle error on loading", function(assert) {
     });
 
     def.reject({ message: "my error" });
-    //assert
+    // assert
 
     assert.ok(errorHandler.calledOnce);
     assert.strictEqual(errorHandler.lastCall.args[0].message, "my error");
@@ -809,7 +809,7 @@ QUnit.test("retrieve Fields", function(assert) {
     var retrieveFieldsDef = $.Deferred();
 
     this.testStore.getFields.returns(retrieveFieldsDef);
-    //act
+    // act
     var userFields = [
             { dataField: "[Product].[Category]", area: "column", areaIndex: 0 },
             { dataField: "[Product].[Subcategory]", area: "column", areaIndex: 1 },
@@ -840,7 +840,7 @@ QUnit.test("retrieve Fields", function(assert) {
             { dataField: "Measure", summaryType: "avg" }
     ]);
 
-    //assert
+    // assert
     assert.ok(this.testStore.load.calledOnce, "load count");
     assert.strictEqual(dataSource.fields().length, 10);
 
@@ -878,14 +878,14 @@ QUnit.test("retrieve Fields. Pass dataType to getFields method", function(assert
             { dataField: "Measure", dataType: "number" }
     ];
 
-    //act
+    // act
     createDataSource({
         fields: userFields,
         store: this.testStore,
         retrieveFields: true
     });
 
-    //assert
+    // assert
     assert.ok(this.testStore.getFields.calledOnce);
     assert.deepEqual(this.testStore.getFields.lastCall.args, [userFields]);
 });
@@ -894,7 +894,7 @@ QUnit.test("retrieve Fields by default", function(assert) {
     var retrieveFieldsDef = $.Deferred();
 
     this.testStore.getFields.returns(retrieveFieldsDef);
-    //act
+    // act
     var dataSource = createDataSource({
         fields: [
             { dataField: "[Product].[Category]", area: "column", areaIndex: 0 },
@@ -922,7 +922,7 @@ QUnit.test("retrieve Fields by default", function(assert) {
             { dataField: "Measure", summaryType: "avg", caption: "" }
     ]);
 
-    //assert
+    // assert
     assert.ok(this.testStore.load.calledOnce, "load count");
     assert.deepEqual(prepareFields(dataSource.fields()), [
             { dataField: "[Product].[Category]", area: "column", areaIndex: 0, allMember: "[All Products]", caption: "" },
@@ -946,7 +946,7 @@ QUnit.test("Retrieve fields. Create custom Group", function(assert) {
         { dataField: "Field2" },
         { dataField: "Field3" }
     ]));
-    //act
+    // act
     var dataSource = createDataSource({
         fields: [
             { groupName: "Group1" },
@@ -956,7 +956,7 @@ QUnit.test("Retrieve fields. Create custom Group", function(assert) {
         store: this.testStore,
         retrieveFields: true
     });
-    //assert
+    // assert
 
     assert.strictEqual(dataSource.fields().length, 4);
     assert.deepEqual(prepareFields(dataSource.fields()), [
@@ -977,7 +977,7 @@ QUnit.test("Retrieve fields. Create custom Group with dataField", function(asser
         { dataField: "Field1" },
         { dataField: "Field2" }
     ]));
-    //act
+    // act
     var dataSource = createDataSource({
         fields: [
             { dataField: "Field1", groupName: "Group1", dataType: "date" },
@@ -988,7 +988,7 @@ QUnit.test("Retrieve fields. Create custom Group with dataField", function(asser
         store: this.testStore,
         retrieveFields: true
     });
-    //assert
+    // assert
 
     assert.strictEqual(dataSource.fields().length, 5);
     assert.deepEqual(prepareFields(dataSource.fields()), [
@@ -1011,7 +1011,7 @@ QUnit.test("Retrieve fields. Create custom Group. Use one field in some groups",
         { dataField: "Field2" },
         { dataField: "Field3" }
     ]));
-    //act
+    // act
     var dataSource = createDataSource({
         fields: [
             { groupName: "Group1" },
@@ -1025,7 +1025,7 @@ QUnit.test("Retrieve fields. Create custom Group. Use one field in some groups",
         store: this.testStore,
         retrieveFields: true
     });
-    //assert
+    // assert
 
     assert.strictEqual(dataSource.fields().length, 6);
     assert.deepEqual(prepareFields(dataSource.fields()), [
@@ -1055,7 +1055,7 @@ QUnit.test("Retrieve fields. Create custom Group. Get field from other store gro
         { dataField: "Field2", groupName: "StoreGroup", groupIndex: 1 },
         { dataField: "Field3", groupName: "StoreGroup", groupIndex: 2 }
     ]));
-    //act
+    // act
     var dataSource = createDataSource({
         fields: [
             { groupName: "UserGroup" },
@@ -1065,7 +1065,7 @@ QUnit.test("Retrieve fields. Create custom Group. Get field from other store gro
         store: this.testStore,
         retrieveFields: true
     });
-    //assert
+    // assert
 
     assert.strictEqual(dataSource.fields().length, 5);
     assert.deepEqual(prepareFields(dataSource.fields()), [
@@ -1094,7 +1094,7 @@ QUnit.test("Retrieve fields. Customize store group", function(assert) {
         { dataField: "Field2", groupName: "StoreGroup", groupIndex: 1 },
         { dataField: "Field3", groupName: "StoreGroup", groupIndex: 2 }
     ]));
-    //act
+    // act
     var dataSource = createDataSource({
         fields: [
             { dataField: "StoreGroup", groupName: "StoreGroup", userProperty: "value" },
@@ -1105,7 +1105,7 @@ QUnit.test("Retrieve fields. Customize store group", function(assert) {
         store: this.testStore,
         retrieveFields: true
     });
-    //assert
+    // assert
 
     assert.strictEqual(dataSource.fields().length, 4);
     assert.deepEqual(prepareFields(dataSource.fields()), [
@@ -1126,7 +1126,7 @@ QUnit.test("Retrieve fields. Add field without group when group exists", functio
         { dataField: "OrderDate", groupName: "OrderDate" },
         { dataField: "OrderDate", groupName: "OrderDate", groupInterval: "year", groupIndex: 0 }
     ]));
-    //act
+    // act
     var dataSource = createDataSource({
         fields: [
             { dataField: "OrderDate", dataType: "date" },
@@ -1136,7 +1136,7 @@ QUnit.test("Retrieve fields. Add field without group when group exists", functio
         store: this.testStore,
         retrieveFields: true
     });
-    //assert
+    // assert
     assert.strictEqual(dataSource.fields().length, 4);
     var fields = prepareFields(dataSource.fields());
 
@@ -1162,7 +1162,7 @@ QUnit.test("Retrieve fields. Hide store default group", function(assert) {
         { dataField: "ShipDate", groupName: "ShipDate" },
         { dataField: "ShipDate", groupName: "ShipDate", groupInterval: "month", groupIndex: 0 }
     ]));
-    //act
+    // act
     var dataSource = createDataSource({
         fields: [
             { dataField: "OrderDate", visible: false },
@@ -1173,7 +1173,7 @@ QUnit.test("Retrieve fields. Hide store default group", function(assert) {
         store: this.testStore,
         retrieveFields: true
     });
-    //assert
+    // assert
 
     assert.strictEqual(dataSource.fields().length, 5);
     var fields = prepareFields(dataSource.fields());
@@ -1211,7 +1211,7 @@ QUnit.test("Retrieve fields is false - merge fields but no add fields from store
 
         { dataField: "date", groupInterval: "month", caption: "date.month" }
     ]));
-    //act
+    // act
     var dataSource = createDataSource({
         fields: [
             { dataField: "[Product].[Category]", area: "column", areaIndex: 0 },
@@ -1226,7 +1226,7 @@ QUnit.test("Retrieve fields is false - merge fields but no add fields from store
         retrieveFields: false
     });
 
-    //assert
+    // assert
     assert.ok(this.testStore.load.calledOnce, "load count");
     assert.deepEqual(prepareFields(dataSource.fields()), [
         { dataField: "[Product].[Category]", area: "column", areaIndex: 0, allMember: "[All Products]", caption: "" },
@@ -1244,7 +1244,7 @@ QUnit.test("T447446. Date field without group interval. Retrieve fields is disab
         { dataField: "OrderDate", dataType: "date", groupName: "OrderDate" },
         { dataField: "OrderDate", dataType: "date", groupName: "OrderDate", groupInterval: "year", groupIndex: 0 },
     ]));
-    //act
+    // act
     var dataSource = createDataSource({
         fields: [
             { dataField: "OrderDate", dataType: "date" }
@@ -1253,7 +1253,7 @@ QUnit.test("T447446. Date field without group interval. Retrieve fields is disab
         retrieveFields: false
     });
 
-    //assert
+    // assert
     var fields = prepareFields(dataSource.fields());
     assert.strictEqual(fields.length, 1, "fields count");
     assert.deepEqual(fields[0], {
@@ -1270,7 +1270,7 @@ QUnit.test("retrieve Fields. Fail on load store fields", function(assert) {
 
     this.testStore.load.returns(def);
     this.testStore.getFields.returns(retrieveFieldsDef);
-    //act
+    // act
     var dataSource = createDataSource({
             fields: [
             { dataField: "[Product].[Category]", area: "column", areaIndex: 0 },
@@ -1300,7 +1300,7 @@ QUnit.test("retrieve Fields. Fail on load store fields", function(assert) {
     def.resolve(loadResult);
     retrieveFieldsDef.reject();
 
-    //assert
+    // assert
     assert.deepEqual(dataSource.getData(), loadResult);
     assert.ok(this.testStore.load.calledOnce, "load count");
     assert.deepEqual(prepareLoadArgs(this.testStore.load.lastCall.args), [{
@@ -1378,7 +1378,7 @@ QUnit.test("Retrieve Fields. Create data field with summaryType", function(asser
     ]);
 
     this.testStore.getFields.returns(retrieveFieldsDef);
-    //act
+    // act
     var dataSource = createDataSource({
         fields: [
             { dataField: "Date", area: "data", summaryType: "min" },
@@ -1387,7 +1387,7 @@ QUnit.test("Retrieve Fields. Create data field with summaryType", function(asser
         store: this.testStore
     });
 
-    //assert
+    // assert
     assert.ok(this.testStore.load.calledOnce, "load count");
 
     assert.deepEqual(prepareFields(this.testStore.load.lastCall.args[0].columns), [
@@ -1536,7 +1536,7 @@ QUnit.test("Retrieve Fields. Create data field with summaryType", function(asser
 QUnit.test("Fields order", function(assert) {
     var def = $.Deferred();
     this.testStore.load.returns(def);
-    //act
+    // act
     var dataSource = createDataSource({
             fields: [
             { dataField: "ColumnField2", area: "column", areaIndex: 2 },
@@ -1567,7 +1567,7 @@ QUnit.test("Fields order", function(assert) {
         };
 
     def.resolve(loadResult);
-    //assert
+    // assert
     assert.deepEqual(dataSource.getData(), loadResult);
     assert.ok(this.testStore.load.calledOnce, "load count");
     assert.deepEqual(prepareLoadArgs(this.testStore.load.lastCall.args), [{
@@ -1686,9 +1686,9 @@ QUnit.test("Expand columns && rows", function(assert) {
         grandTotalColumnIndex: 0,
         grandTotalRowIndex: 0
     }));
-    //act
+    // act
     dataSource.expandHeaderItem("row", ["2006"]);
-    //assert
+    // assert
     assert.equal(this.testStore.load.callCount, 2);
 
     assert.deepEqual(prepareLoadArgs(this.testStore.load.lastCall.args), [{
@@ -1789,9 +1789,9 @@ QUnit.test("Expand rows && columns", function(assert) {
         grandTotalColumnIndex: 0,
         grandTotalRowIndex: 0
     }));
-    //act
+    // act
     dataSource.expandHeaderItem("column", ["2006"]);
-    //assert
+    // assert
     assert.equal(this.testStore.load.callCount, 2);
 
     assert.deepEqual(prepareLoadArgs(this.testStore.load.lastCall.args), [{
@@ -1874,9 +1874,9 @@ QUnit.test("Deep expand rows && columns", function(assert) {
 
     this.testStore.load.returns($.Deferred().resolve({ value: "new Item", index: 14 }));
 
-    //act
+    // act
     dataSource.expandHeaderItem("column", ["Cat1"]);
-    //assert
+    // assert
     assert.equal(this.testStore.load.callCount, 2);
 
     assert.deepEqual(prepareLoadArgs(this.testStore.load.lastCall.args), [{
@@ -1908,11 +1908,11 @@ QUnit.test("Change field by index", function(assert) {
         store: this.testStore
     });
 
-    //act
+    // act
     dataSource.field(0, { area: "row", areaIndex: 1 });
     dataSource.load();
 
-    //assert
+    // assert
     prepareFields(dataSource.fields());
     assert.ok(this.testStore.load.calledTwice, "load count");
     assert.deepEqual(prepareLoadArgs(this.testStore.load.lastCall.args), [{
@@ -1959,10 +1959,10 @@ QUnit.test("Change field by dataField", function(assert) {
         store: this.testStore
     });
 
-    //act
+    // act
     dataSource.field("[Product].[Category]", { area: "row", areaIndex: 1 });
 
-    //assert
+    // assert
     assert.deepEqual(prepareFields(dataSource.fields())[0], {
         caption: "",
         dataField: "[Product].[Category]",
@@ -1982,10 +1982,10 @@ QUnit.test("Change field by caption", function(assert) {
         store: this.testStore
     });
 
-    //act
+    // act
     dataSource.field("Count", { area: "data", areaIndex: 2 });
 
-    //assert
+    // assert
     assert.deepEqual(prepareFields(dataSource.fields())[2], {
         caption: "Count",
         dataField: "[Measures].[Customer Count]",
@@ -2023,11 +2023,11 @@ QUnit.test("Change field non exist field", function(assert) {
 
     def.resolve(loadResult);
 
-    //act
+    // act
     dataSource.field(10, { area: "row", areaIndex: 1 });
     dataSource.load();
 
-    //assert
+    // assert
     assert.deepEqual(dataSource.getData(), loadResult);
     assert.ok(this.testStore.load.calledTwice, "load twice");
     assert.deepEqual(prepareLoadArgs(this.testStore.load.lastCall.args), [{
@@ -2145,11 +2145,11 @@ QUnit.test("Change field after expand", function(assert) {
     }));
 
     dataSource.expandHeaderItem("column", ["2006"]);
-    //act
+    // act
     dataSource.field(0, { area: "row", areaIndex: 1 });
     dataSource.load();
 
-    //assert
+    // assert
     assert.equal(this.testStore.load.callCount, 3);
     prepareFields(dataSource.fields());
     assert.deepEqual(prepareLoadArgs(this.testStore.load.lastCall.args), [{
@@ -2213,11 +2213,11 @@ QUnit.test("Reset calculated field's properties on changed", function(assert) {
     setFieldProperty(field, "allowFiltering", true);
     setFieldProperty(field, "allowExpandAll", true);
     setFieldProperty(field, "allowSortingBySummary", true);
-    //act
+    // act
 
     dataSource.field(0, { prop: "myProp" });
 
-    //assert
+    // assert
     prepareFields(dataSource.fields());
 
     assert.deepEqual(field, {
@@ -2254,11 +2254,11 @@ QUnit.test("Reset calculated field's properties on fields changed", function(ass
     setFieldProperty(field, "allowFiltering", true);
     setFieldProperty(field, "allowExpandAll", true);
     setFieldProperty(field, "allowSortingBySummary", true);
-    //act
+    // act
 
     dataSource.fields(dataSource.fields());
 
-    //assert
+    // assert
     prepareFields(dataSource.fields());
 
     assert.deepEqual(field, {
@@ -2323,14 +2323,14 @@ QUnit.test("Remove fields when expanded items exist", function(assert) {
         store: this.testStore
     });
     this.testStore.load.returns($.Deferred().reject());
-    //act
+    // act
     var changedFields = [
         dataSource.field(0, { area: undefined, areaIndex: 1 }),
         dataSource.field(1, { area: undefined, areaIndex: 1 })
     ];
     dataSource.load();
 
-    //assert
+    // assert
     prepareFields(dataSource.fields());
     assert.deepEqual(this.testStore.load.lastCall.args[0].rowExpandedPaths, [["2003"]], "Expanded rows paths");
     assert.deepEqual(this.testStore.load.lastCall.args[0].columnExpandedPaths, [], "Expanded columns paths");
@@ -2402,13 +2402,13 @@ QUnit.test("Remove field when expanded items exist", function(assert) {
         store: this.testStore
     });
     this.testStore.load.returns($.Deferred().reject());
-    //act
+    // act
     var changedFields = [
         dataSource.field(1, { area: undefined, areaIndex: 1 })
     ];
     dataSource.load();
 
-    //assert
+    // assert
     prepareFields(dataSource.fields());
     assert.deepEqual(this.testStore.load.lastCall.args[0].rowExpandedPaths, [["2003"]], "Expanded rows paths");
     assert.deepEqual(this.testStore.load.lastCall.args[0].columnExpandedPaths, [["Cat1"]], "Expanded columns paths");
@@ -2420,7 +2420,7 @@ QUnit.test("Remove field when expanded items exist", function(assert) {
     }], "changed Fields");
 });
 
-//T496854
+// T496854
 QUnit.test("Reorder field when expanded items exist", function(assert) {
     this.testStore.load.returns($.Deferred().resolve({
         columns: [],
@@ -2451,11 +2451,11 @@ QUnit.test("Reorder field when expanded items exist", function(assert) {
     });
     this.testStore.load.returns($.Deferred().reject());
 
-    //act
+    // act
     dataSource.field(2, { area: "row", areaIndex: 1 });
     dataSource.load();
 
-    //assert
+    // assert
     assert.deepEqual(this.testStore.load.lastCall.args[0].rowExpandedPaths, [[1]], "Expanded rows paths");
 });
 
@@ -2494,7 +2494,7 @@ QUnit.test("Change field when fields not loaded", function(assert) {
 
     def.resolve(loadResult);
 
-    //act
+    // act
     dataSource.field(0, { area: "row" });
     dataSource.load();
 
@@ -2509,7 +2509,7 @@ QUnit.test("Change field when fields not loaded", function(assert) {
             { dataField: "date", groupInterval: "month", caption: "date.month" }
     ]);
 
-    //assert
+    // assert
     prepareFields(dataSource.fields());
     assert.deepEqual(dataSource.getData(), loadResult);
     assert.strictEqual(this.testStore.load.callCount, 2, "load callCount");
@@ -2579,11 +2579,11 @@ QUnit.test("Change areaIndex to begin", function(assert) {
         ],
         store: this.testStore
     });
-    //act
+    // act
     dataSource.field(1, { areaIndex: 0 });
     dataSource.load();
 
-    //assert
+    // assert
     prepareFields(dataSource.fields());
     assert.ok(this.testStore.load.calledTwice, "load twice");
     assert.deepEqual(prepareLoadArgs(this.testStore.load.lastCall.args), [{
@@ -2637,12 +2637,12 @@ QUnit.test("Change areaIndex to begin when group", function(assert) {
         ],
         store: this.testStore
     });
-    //act
+    // act
 
     dataSource.field("[Product].[Subcategory]", { areaIndex: 0 });
     dataSource.load();
 
-    //assert
+    // assert
     prepareFields(dataSource.fields());
 
     assert.ok(this.testStore.load.calledTwice, "load twice");
@@ -2702,12 +2702,12 @@ QUnit.test("Change areaIndex to end", function(assert) {
 
     def.resolve(loadResult);
 
-    //act
+    // act
 
     dataSource.field(0, { areaIndex: 2 });
     dataSource.load();
 
-    //assert
+    // assert
     prepareFields(dataSource.fields());
     assert.deepEqual(dataSource.getData(), loadResult);
     assert.ok(this.testStore.load.calledTwice, "load twice");
@@ -2752,7 +2752,7 @@ QUnit.test("Load with group field", function(assert) {
 
     def.resolve(loadResult);
 
-    //assert
+    // assert
     assert.deepEqual(dataSource.getData(), loadResult);
     assert.ok(this.testStore.load.calledOnce, "load once");
     assert.deepEqual(prepareLoadArgs(this.testStore.load.lastCall.args), [{
@@ -2770,7 +2770,7 @@ QUnit.test("Load with group field", function(assert) {
     }], "load args");
 });
 
-//T531359
+// T531359
 QUnit.test("Sort group fields", function(assert) {
     this.testStore.load.returns($.Deferred());
 
@@ -2898,7 +2898,7 @@ QUnit.test("Sort group fields", function(assert) {
         store: this.testStore
     });
 
-    //assert
+    // assert
     assert.ok(this.testStore.load.calledOnce, "load once");
     assert.deepEqual(this.testStore.load.lastCall.args[0].columns, [
         fields[1],
@@ -2920,7 +2920,7 @@ QUnit.test("Sort group fields", function(assert) {
 });
 
 QUnit.test("Load with group field. Pass sorting params", function(assert) {
-    //act
+    // act
     createDataSource({
         fields: [
             { dataField: "[Color]", area: "row", areaIndex: 2 },
@@ -2932,7 +2932,7 @@ QUnit.test("Load with group field. Pass sorting params", function(assert) {
         store: this.testStore
     });
 
-    //assert
+    // assert
     assert.ok(this.testStore.load.calledOnce, "load once");
     assert.deepEqual(prepareLoadArgs(this.testStore.load.lastCall.args), [{
         rowExpandedPaths: [],
@@ -2950,7 +2950,7 @@ QUnit.test("Load with group field. Pass sorting params", function(assert) {
 });
 
 QUnit.test("Load with group field. Pass expanded and showTotals params", function(assert) {
-    //act
+    // act
     createDataSource({
         fields: [
             { dataField: "[Product]", groupName: "[Product]", expanded: true, area: "row", showTotals: false, showGrandTotals: true },
@@ -2961,7 +2961,7 @@ QUnit.test("Load with group field. Pass expanded and showTotals params", functio
         store: this.testStore
     });
 
-    //assert
+    // assert
     assert.ok(this.testStore.load.calledOnce, "load once");
     assert.deepEqual(prepareLoadArgs(this.testStore.load.lastCall.args), [{
         rowExpandedPaths: [],
@@ -2991,7 +2991,7 @@ QUnit.test("Load with group field. change group field", function(assert) {
 
     dataSource.field("[Product]", { sortOrder: "desc", sortBySummaryPath: ["NewPath"] });
 
-    //assert
+    // assert
     assert.deepEqual(prepareLoadArgs(this.testStore.load.lastCall.args), [{
         rowExpandedPaths: [],
         columnExpandedPaths: [],
@@ -3035,7 +3035,7 @@ QUnit.test("Load several groups on single axis", function(assert) {
 
     def.resolve(loadResult);
 
-    //assert
+    // assert
     assert.deepEqual(dataSource.getData(), loadResult);
     assert.ok(this.testStore.load.calledOnce, "load once");
     assert.deepEqual(prepareLoadArgs(this.testStore.load.lastCall.args), [{
@@ -3068,10 +3068,10 @@ QUnit.test("Change group item", function(assert) {
         ],
         store: this.testStore
     });
-    //act
+    // act
     dataSource.field("[Month]", { sortBy: "value" });
     dataSource.load();
-    //assert
+    // assert
 
     prepareFields(dataSource.fields());
 
@@ -3116,7 +3116,7 @@ QUnit.test("Load with group fields with filterValues", function(assert) {
 
     def.resolve(loadResult);
 
-    //assert
+    // assert
     assert.deepEqual(dataSource.getData(), loadResult);
     assert.ok(this.testStore.load.calledOnce, "load once");
     assert.deepEqual(prepareLoadArgs(this.testStore.load.lastCall.args), [{
@@ -3169,7 +3169,7 @@ QUnit.test("Load with group fields with filterValues and filter area", function(
 
     def.resolve(loadResult);
 
-    //assert
+    // assert
     assert.deepEqual(dataSource.getData(), loadResult);
     assert.ok(this.testStore.load.calledOnce, "load once");
 
@@ -3215,9 +3215,9 @@ QUnit.test("Collapse level", function(assert) {
 
     dataSource.on("changed", assertFunction);
 
-    //act
+    // act
     dataSource.collapseAll(0);
-    //assert
+    // assert
     assert.equal(this.testStore.load.callCount, 1);
 
     function assertFunction() {
@@ -3273,9 +3273,9 @@ QUnit.test("Collapse level by field id", function(assert) {
 
     dataSource.on("changed", assertFunction);
 
-    //act
+    // act
     dataSource.collapseAll("ShipCountry");
-    //assert
+    // assert
     assert.equal(this.testStore.load.callCount, 1);
 
     function assertFunction() {
@@ -3340,9 +3340,9 @@ QUnit.test("Collapse level when group", function(assert) {
 
     dataSource.on("changed", assertFunction);
 
-    //act
+    // act
     dataSource.collapseAll(2);
-    //assert
+    // assert
     assert.equal(this.testStore.load.callCount, 1);
 
     function assertFunction() {
@@ -3382,9 +3382,9 @@ QUnit.test("Collapse level when fieldIndex incorrect", function(assert) {
 
     dataSource.on("changed", dataSourceChanged);
 
-    //act
+    // act
     dataSource.collapseAll(21);
-    //assert
+    // assert
     assert.equal(this.testStore.load.callCount, 1);
     assert.ok(!dataSourceChanged.called);
 });
@@ -3408,10 +3408,10 @@ QUnit.test("Collapse level when there are not expanded items", function(assert) 
 
     dataSource.on("changed", dataSourceChanged);
 
-    //act
+    // act
 
     dataSource.collapseAll(0);
-    //assert
+    // assert
     assert.equal(this.testStore.load.callCount, 1);
     assert.ok(!dataSourceChanged.called);
 });
@@ -3430,9 +3430,9 @@ QUnit.test("Expand level", function(assert) {
             store: this.testStore
         });
 
-    //act
+    // act
     dataSource.expandAll(0);
-    //assert
+    // assert
     assert.equal(this.testStore.load.callCount, 2);
 
     assert.deepEqual(prepareLoadArgs(this.testStore.load.lastCall.args)[0].columns, [{
@@ -3465,9 +3465,9 @@ QUnit.test("Expand level by fieldId", function(assert) {
             store: this.testStore
         });
 
-    //act
+    // act
     dataSource.expandAll("ShipCountry");
-    //assert
+    // assert
     assert.equal(this.testStore.load.callCount, 2);
 
     assert.deepEqual(prepareLoadArgs(this.testStore.load.lastCall.args)[0].columns, [{
@@ -3503,15 +3503,15 @@ QUnit.test("expand level when fieldIndex incorrect", function(assert) {
 
     dataSource.on("changed", dataSourceChanged);
 
-    //act
+    // act
     dataSource.collapseAll(21);
-    //assert
+    // assert
     assert.equal(this.testStore.load.callCount, 1);
     assert.ok(!dataSourceChanged.called);
 });
 
 QUnit.test("Fields Caption generation", function(assert) {
-    //act
+    // act
     inflector.titleize.restore();
     var dataSource = createDataSource({
             fields: [
@@ -3532,7 +3532,7 @@ QUnit.test("Fields Caption generation", function(assert) {
             store: this.testStore
         }),
         fields = dataSource.fields();
-    //assert
+    // assert
 
     assert.strictEqual(fields[0].caption, "userCaption");
     assert.strictEqual(fields[1].caption, "");
@@ -3550,7 +3550,7 @@ QUnit.test("Fields Caption generation", function(assert) {
 });
 
 QUnit.test("Fields Caption generation. Change field option", function(assert) {
-    //act
+    // act
     inflector.titleize.restore();
     var dataSource = createDataSource({
             fields: [
@@ -3572,7 +3572,7 @@ QUnit.test("Fields Caption generation. Change field option", function(assert) {
         }),
         fields;
 
-    //acts
+    // acts
     dataSource.field(1, { summaryType: "max" });
     dataSource.field(2, { summaryType: "max" });
     dataSource.field(5, { area: "row", summaryType: "max" });
@@ -3584,7 +3584,7 @@ QUnit.test("Fields Caption generation. Change field option", function(assert) {
 
     dataSource.field(10, { caption: "new custom caption", summaryType: "sum" });
 
-    //assert
+    // assert
     fields = dataSource.fields();
     assert.strictEqual(fields[0].caption, "userCaption");
     assert.strictEqual(fields[1].caption, "");
@@ -3614,7 +3614,7 @@ QUnit.test("T411764. Change generated caption on fields prepared", function(asse
         },
         store: this.testStore
     });
-    //act
+    // act
     dataSource.field(0, { area: "column" });
 
 
@@ -3635,13 +3635,13 @@ QUnit.test("Change fields at runtime", function(assert) {
         }),
         fieldsPrepared = sinon.stub();
     dataSource.on("fieldsPrepared", fieldsPrepared);
-    //Act
+    // Act
     dataSource.fields([
         { dataField: "Field1" },
         { dataField: "Field2", caption: "newCaption" },
         { dataField: "Field3" }
     ]);
-    //Assert
+    // Assert
     assert.deepEqual(prepareFields(dataSource.fields()), [
         { dataField: "Field1", dataType: "number", caption: "" },
         { dataField: "Field2", caption: "newCaption" },
@@ -3660,14 +3660,14 @@ QUnit.test("Set fields at runtime", function(assert) {
     var dataSource = createDataSource({
         store: this.testStore
     });
-    //Act
+    // Act
     dataSource.fields([
         { dataField: "Field1", caption: "Field1CustomCaption" },
         { groupName: "Group", caption: "Group" },
         { dataField: "Field3", caption: "First Group Item", groupName: "Group", groupIndex: 0 },
         { dataField: "Field2", caption: "Second Group Item", groupName: "Group", groupIndex: 1 }
     ]);
-    //Assert
+    // Assert
     assert.deepEqual(prepareFields(dataSource.fields()), [
         { dataField: "Field1", dataType: "number", caption: "Field1CustomCaption" },
         {
@@ -3696,7 +3696,7 @@ QUnit.test("Change fields at runtime when store fields not yet loaded", function
         fieldsPrepared = sinon.stub();
 
     dataSource.on("fieldsPrepared", fieldsPrepared);
-    //Act
+    // Act
     dataSource.fields([
         { dataField: "Field1" },
         { dataField: "Field2", caption: "newCaption" },
@@ -3707,7 +3707,7 @@ QUnit.test("Change fields at runtime when store fields not yet loaded", function
         { dataField: "Field1", dataType: "number" },
         { dataField: "Field2" }
     ]);
-    //Assert
+    // Assert
     assert.deepEqual(prepareFields(dataSource.fields()), [
         { dataField: "Field1", dataType: "number", caption: "" },
         { dataField: "Field2", caption: "newCaption" },
@@ -3730,9 +3730,9 @@ QUnit.test("isLoading() in dataSource changed event", function(assert) {
 
     dataSource.on("changed", assertFunction);
 
-    //act
+    // act
     d.resolve(this.storeData);
-    //assert
+    // assert
     function assertFunction() {
         assert.ok(!this.isLoading());
     }
@@ -3751,11 +3751,11 @@ QUnit.test("isLoading() in dataSource changed event when expand header item", fu
     this.testStore.load.returns(d);
     dataSource.on("changed", assertFunction);
 
-    //act
+    // act
     dataSource.expandHeaderItem("column", ["Canada"]);
     this.storeData.columns = this.storeData.columns[1].children;
     d.resolve(this.storeData);
-    //assert
+    // assert
     function assertFunction() {
         assert.ok(!this.isLoading());
     }
@@ -3773,10 +3773,10 @@ QUnit.test("data on load done when async loading", function(assert) {
 
     this.testStore.load.returns(d);
     dataSource.on("changed", assertFunction);
-    //act
+    // act
     dataSource.load().done(assertFunction);
     d.resolve(this.storeData);
-    //assert
+    // assert
     function assertFunction() {
         assert.ok(!dataSource.isLoading());
         var data = dataSource.getData();
@@ -3797,10 +3797,10 @@ QUnit.test("data on load done when sync loading", function(assert) {
     });
 
     this.testStore.load.returns($.Deferred().resolve(this.storeData));
-    //act
+    // act
     dataSource.load().done(assertFunction);
 
-    //assert
+    // assert
     function assertFunction(data) {
         assert.ok(!dataSource.isLoading());
         assert.strictEqual(data.columns[0].value, "Brazil");
@@ -3826,7 +3826,7 @@ QUnit.test("headers formatting", function(assert) {
             store: this.testStore
         });
 
-    //assert
+    // assert
     var rows = dataSource.getData().rows;
 
     assert.strictEqual(rows.length, 3);
@@ -3863,11 +3863,11 @@ QUnit.test("header formatting when expanding", function(assert) {
 
     this.testStore.load.returns(d);
 
-    //act
+    // act
     dataSource.expandHeaderItem("column", ["Canada"]);
     this.storeData.columns = [{ value: "Vancouver" }];
     d.resolve(this.storeData);
-    //assert
+    // assert
     var rows = dataSource.getData().rows;
 
     assert.strictEqual(rows.length, 3);
@@ -4145,7 +4145,7 @@ QUnit.test("Data order with sortingMethod", function(assert) {
         }]);
 
     assert.ok(sortingMethod.called);
-    assert.strictEqual(sortingMethod.lastCall.thisValue, dataSource.field("ShipCountry"), "field is context");//T490852
+    assert.strictEqual(sortingMethod.lastCall.thisValue, dataSource.field("ShipCountry"), "field is context");// T490852
 });
 
 QUnit.test("Data order with sortBy: none", function(assert) {
@@ -4459,10 +4459,10 @@ QUnit.test("Sort by summary with path", function(assert) {
         grandTotalColumnIndex: 0,
         values: [
         //   GT    1    2    3
-            [[0], [0], [0], [0]],      //GT
-            [[0], [0], [0], [0]],      //A
-            [[0], [null], [0], [0]],   //B
-            [[0], [-1], [0], [0]]      //C
+            [[0], [0], [0], [0]],      // GT
+            [[0], [0], [0], [0]],      // A
+            [[0], [null], [0], [0]],   // B
+            [[0], [-1], [0], [0]]      // C
         ]
     }));
 
@@ -4952,9 +4952,9 @@ QUnit.test("Sort by summary with path expand item", function(assert) {
         ],
         store: window.orders
     });
-    //act
+    // act
     dataSource.expandHeaderItem("column", [1996]);
-    //assert
+    // assert
     var data = dataSource.getData();
 
     assert.strictEqual(data.rows.length, 7);
@@ -4983,9 +4983,9 @@ QUnit.test("Sort by summary with path collapse item", function(assert) {
         ],
         store: window.orders
     });
-    //Act
+    // Act
     dataSource.collapseHeaderItem('column', [1996]);
-    //assert
+    // assert
     var data = dataSource.getData();
 
     assert.strictEqual(data.rows.length, 7);
@@ -5068,7 +5068,7 @@ QUnit.test("apply Display Summary Mode when expressions were not used", function
 });
 
 QUnit.test("load fields without area if it is used in calculateSummaryValue", function(assert) {
-    //act
+    // act
     var dataSource = createDataSource({
         fields: [
             { dataField: "Field1", caption: "Field1", visible: false },
@@ -5097,7 +5097,7 @@ QUnit.test("load fields without area if it is used in calculateSummaryValue", fu
         store: this.testStore
     });
 
-    //assert
+    // assert
     var dataFields = prepareFields(this.testStore.load.lastCall.args[0].values);
     assert.equal(dataFields.length, 2);
     assert.equal(dataFields[0].dataField, "[Measures].[Customer Count]");
@@ -5105,7 +5105,6 @@ QUnit.test("load fields without area if it is used in calculateSummaryValue", fu
 
     assert.strictEqual(dataSource.getAreaFields("data", true).length, 1);
 });
-
 
 
 QUnit.test("apply Display Summary Mode when expressions were used", function(assert) {
@@ -5467,7 +5466,7 @@ QUnit.test("Get current State. DataSource is not loaded", function(assert) {
             store: this.testStore
         });
 
-    //act
+    // act
     var state = dataSource.state();
 
     assert.ok(state);
@@ -5544,7 +5543,7 @@ QUnit.test("Get current State", function(assert) {
         grandTotalRowIndex: 0
     });
 
-    //act
+    // act
     var state = dataSource.state();
 
     assert.ok(state);
@@ -5717,7 +5716,7 @@ QUnit.test("Set State", function(assert) {
 
     this.testStore.load.reset();
 
-    //act
+    // act
     dataSource.state({
         rowExpandedPaths: [["2005"], ["2005", "January"], ["2007"]],
         columnExpandedPaths: [["Cat2"]],
@@ -5816,7 +5815,7 @@ QUnit.test("Set State", function(assert) {
         }]
     });
 
-    //Assert
+    // Assert
     assert.ok(this.testStore.load.calledOnce);
     assert.deepEqual(this.testStore.load.lastCall.args[0].rowExpandedPaths, [["2005"], ["2005", "January"], ["2007"]]);
     assert.deepEqual(this.testStore.load.lastCall.args[0].columnExpandedPaths, [["Cat2"]]);
@@ -5938,7 +5937,7 @@ QUnit.test("T399271: dxPivotGrid - It is impossible to apply the state of a grid
         store: this.testStore
     });
 
-    //act
+    // act
     dataSource.state({
         fields: [
             { dataField: "Field1", summaryType: "avg", summaryDisplayMode: "percentOfRowGrandTotal" },
@@ -5947,7 +5946,7 @@ QUnit.test("T399271: dxPivotGrid - It is impossible to apply the state of a grid
         ]
     });
 
-    //Assert
+    // Assert
     assert.deepEqual(prepareFields(dataSource.fields()), [
         {
             area: undefined,
@@ -6018,11 +6017,11 @@ QUnit.test("Set State. After new field have added. T389504", function(assert) {
     var state = dataSource.state();
     dataSource.fields([{ dataField: "Field6" }].concat(fields));
 
-        //act
+        // act
     this.testStore.load.reset();
     dataSource.state(state);
 
-        //Assert
+        // Assert
     assert.ok(this.testStore.load.calledOnce);
 
     $.each(dataSource.fields(), function(index, field) {
@@ -6230,7 +6229,7 @@ QUnit.test("Set State state fields count less fields count", function(assert) {
 
     this.testStore.load.reset();
 
-    //act
+    // act
     dataSource.state({
         rowExpandedPaths: [["2005"], ["2005", "January"], ["2007"]],
         columnExpandedPaths: [["Cat2"]],
@@ -6249,7 +6248,7 @@ QUnit.test("Set State state fields count less fields count", function(assert) {
         }]
     });
 
-    //Assert
+    // Assert
     assert.ok(this.testStore.load.calledOnce);
     assert.deepEqual(this.testStore.load.lastCall.args[0].rowExpandedPaths, [["2005"], ["2005", "January"], ["2007"]]);
     assert.deepEqual(this.testStore.load.lastCall.args[0].columnExpandedPaths, [["Cat2"]]);
@@ -6306,13 +6305,13 @@ QUnit.test("Set State without fields", function(assert) {
 
     this.testStore.load.reset();
 
-    //act
+    // act
     dataSource.state({
         rowExpandedPaths: [["2005"], ["2005", "January"], ["2007"]],
         columnExpandedPaths: [["Cat2"]]
     });
 
-    //Assert
+    // Assert
     assert.ok(this.testStore.load.calledOnce);
     assert.deepEqual(this.testStore.load.lastCall.args[0].rowExpandedPaths, [["2005"], ["2005", "January"], ["2007"]]);
     assert.deepEqual(this.testStore.load.lastCall.args[0].columnExpandedPaths, [["Cat2"]]);
@@ -6327,7 +6326,7 @@ QUnit.test("set state when store fields not loaded", function(assert) {
         dataSource;
 
     this.testStore.getFields.returns(retrieveFieldsDef);
-    //act
+    // act
 
     dataSource = new DataSource({
         fields: [],
@@ -6375,7 +6374,7 @@ QUnit.test("Set default state", function(assert) {
     dataSource.field("Field2", { area: undefined });
 
     this.testStore.load.reset();
-    //act
+    // act
     dataSource.state(null);
 
     assert.deepEqual(prepareFields(dataSource.fields()), [{
@@ -6417,7 +6416,7 @@ QUnit.test("T388396. update auto generated caption if state is reset", function(
 
     dataSource.field("Field1", { summaryType: "count" });
 
-    //act
+    // act
     dataSource.state(null);
 
     assert.deepEqual(prepareFields(dataSource.fields()), [{
@@ -6450,7 +6449,7 @@ QUnit.test("reset expanded paths", function(assert) {
 
     this.testStore.load.reset();
 
-    //act
+    // act
     dataSource.state(null);
 
     prepareFields(dataSource.fields());

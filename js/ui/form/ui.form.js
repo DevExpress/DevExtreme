@@ -326,6 +326,10 @@ var Form = Widget.inherit({
              * @publicName template
              * @type template|function
              * @type_function_param1 data:object
+             * @type_function_param1_field1 component:dxForm
+             * @type_function_param1_field2 dataField:string
+             * @type_function_param1_field3 editorOptions:object
+             * @type_function_param1_field4 editorType:string
              * @type_function_param2 itemElement:dxElement
              * @type_function_return string|Node|jQuery
              */
@@ -677,7 +681,7 @@ var Form = Widget.inherit({
     },
 
     _getLabelWidthByText: function(text) {
-        //this code has slow performance
+        // this code has slow performance
         this._hiddenLabelText.innerHTML = text;
         return this._hiddenLabelText.offsetWidth;
     },
@@ -800,8 +804,12 @@ var Form = Widget.inherit({
         }
     },
 
-    _render: function() {
+    _initMarkup: function() {
         this._clearCachedInstances();
+        this.callBase();
+    },
+
+    _render: function() {
         this._prepareFormData();
 
         this.callBase();

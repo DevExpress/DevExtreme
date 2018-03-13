@@ -7,6 +7,7 @@ var eventsEngine = require("../../events/core/events_engine"),
     inRange = require("../../core/utils/math").inRange,
     escapeRegExp = require("../../core/utils/common").escapeRegExp,
     number = require("../../localization/number"),
+    maskCaret = require("./number_box.caret"),
     getLDMLFormat = require("../../localization/ldml/number").getFormat,
     NumberBoxBase = require("./number_box.base"),
     eventUtils = require("../../events/utils"),
@@ -56,8 +57,8 @@ var NumberBoxMask = NumberBoxBase.inherit({
             minus: that._revertSign.bind(that),
             del: that._removeHandler.bind(that),
             backspace: that._removeHandler.bind(that),
-            leftArrow: that._arrowHandler.bind(that, MOVE_FORWARD),
-            rightArrow: that._arrowHandler.bind(that, MOVE_BACKWARD),
+            leftArrow: that._arrowHandler.bind(that, MOVE_BACKWARD),
+            rightArrow: that._arrowHandler.bind(that, MOVE_FORWARD),
             home: that._moveCaretToBoundary.bind(that, MOVE_FORWARD),
             enter: that._updateFormattedValue.bind(that),
             end: that._moveCaretToBoundary.bind(that, MOVE_BACKWARD)
@@ -82,8 +83,9 @@ var NumberBoxMask = NumberBoxBase.inherit({
     },
 
     _isValueDirty: function() {
-        //https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/15181565/
-        return browser.msie && this._isInputTriggered;
+        // https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/15181565/
+        // https://bugreport.apple.com/web/?problemID=38133794 but this bug tracker is private
+        return (browser.msie || browser.safari) && this._isInputTriggered;
     },
 
     _arrowHandler: function(step, e) {
@@ -91,34 +93,15 @@ var NumberBoxMask = NumberBoxBase.inherit({
             return;
         }
 
-        var text = this._input().val(),
-            caret = this._caret(),
-            start = step > 0 ? 0 : caret.start,
-            end = step > 0 ? caret.start : text.length,
-            chars = text.slice(start, end);
+        var text = this._getInputVal(),
+            format = this._getFormatPattern(),
+            nextCaret = maskCaret.getCaretWithOffset(this._caret(), step);
 
-        if(this._isStub(chars, true)) {
+        if(!maskCaret.isCaretInBoundaries(nextCaret, text, format)) {
+            nextCaret = step === MOVE_FORWARD ? nextCaret.end : nextCaret.start;
             e.preventDefault();
+            this._caret(maskCaret.getCaretInBoundaries(nextCaret, text, format));
         }
-
-        if(caret.end - caret.start === text.length) {
-            this._moveCaretToBoundary(step, e);
-        }
-    },
-
-    _getClosestNonStubIndex: function(direction, start) {
-        var text = this._input().val(),
-            index = start || (direction > 0 ? 0 : text.length);
-
-        if(direction === MOVE_BACKWARD) {
-            index--;
-        }
-
-        while(this._isStub(text.charAt(index))) {
-            index += direction;
-        }
-
-        return direction < 0 ? ++index : index;
     },
 
     _moveCaretToBoundary: function(direction, e) {
@@ -126,42 +109,12 @@ var NumberBoxMask = NumberBoxBase.inherit({
             return;
         }
 
-        var index = this._getClosestNonStubIndex(direction);
+        var boundaries = maskCaret.getCaretBoundaries(this._getInputVal(), this._getFormatPattern()),
+            newCaret = maskCaret.getCaretWithOffset(direction === MOVE_FORWARD ? boundaries.start : boundaries.end, 0);
 
-        this._caret({
-            start: index,
-            end: index
-        });
+        this._caret(newCaret);
 
         e && e.preventDefault();
-    },
-
-    _getDefaultCaretPosition: function() {
-        var formatted = number.format(1, this._getFormatPattern());
-        return formatted.indexOf("1");
-    },
-
-    _moveToClosestNonStub: function(position) {
-        position = isNumeric(position) ? { start: position, end: position } : position;
-
-        var caret = position || this._caret();
-
-        if(caret.start !== caret.end) {
-            return;
-        }
-
-        var text = this._input().val(),
-            startPosition = fitIntoRange(caret.start, 0, text.length),
-            index = this._getClosestNonStubIndex(MOVE_FORWARD, startPosition);
-
-        if(index >= text.length) {
-            index = this._getClosestNonStubIndex(MOVE_BACKWARD, startPosition) || this._getDefaultCaretPosition();
-        }
-
-        this._caret({
-            start: index,
-            end: index
-        });
     },
 
     _shouldMoveCaret: function(text, caret) {
@@ -179,15 +132,14 @@ var NumberBoxMask = NumberBoxBase.inherit({
     },
 
     _keyboardHandler: function(e) {
+        this._lastKey = number.convertDigits(e.originalEvent.key, true);
+
         if(!this._shouldHandleKey(e.originalEvent)) {
-            this._lastKey = null;
             return this.callBase(e);
         }
 
         var text = this._getInputVal(),
             caret = this._caret();
-
-        this._lastKey = number.convertDigits(e.originalEvent.key, true);
 
         var enteredChar = this._lastKey === MINUS ? "" : this._lastKey,
             newValue = this._tryParse(text, caret, enteredChar);
@@ -228,6 +180,11 @@ var NumberBoxMask = NumberBoxBase.inherit({
         var char = text.slice(start, end);
 
         if(this._isStub(char)) {
+            this._moveCaret(this._isDeleteKey(e.key) ? 1 : -1);
+            if(this._parsedValue < 0 || 1 / this._parsedValue === -Infinity) {
+                this._revertSign(e);
+                this._setTextByParsedValue();
+            }
             e.preventDefault();
             return;
         }
@@ -281,6 +238,24 @@ var NumberBoxMask = NumberBoxBase.inherit({
         }
     },
 
+    _getFormatForSign: function(text) {
+        var format = this._getFormatPattern(),
+            signParts = format.split(";"),
+            sign = number.getSign(text, format);
+
+        signParts[1] = signParts[1] || "-" + signParts[0];
+        return sign < 0 ? signParts[1] : signParts[0];
+    },
+
+    _removeStubs: function(text, excludeComma) {
+        var format = this._getFormatForSign(text),
+            thousandsSeparator = number.getThousandsSeparator(),
+            stubs = format.replace(/[#0.,]/g, ""),
+            regExp = new RegExp("[\-" + escapeRegExp((excludeComma ? "" : thousandsSeparator) + stubs) + "]", "g");
+
+        return text.replace(regExp, "");
+    },
+
     _getEditedText: function(text, selection, char) {
         var textBefore = text.slice(0, selection.start),
             textAfter = text.slice(selection.end),
@@ -294,11 +269,11 @@ var NumberBoxMask = NumberBoxBase.inherit({
             format = this._getFormatPattern(),
             isTextSelected = selection.start !== selection.end,
             parsed = number.parse(editedText, format),
-            maxPrecision = this._getMaxPrecision(format, parsed),
+            maxPrecision = this._getPrecisionLimits(format, editedText).max,
             isValueChanged = parsed !== this._parsedValue;
 
         var isDecimalPointRestricted = char === number.getDecimalSeparator() && maxPrecision === 0,
-            isUselessCharRestricted = !isTextSelected && !isValueChanged && char !== MINUS && !this._isValueIncomplete(editedText);
+            isUselessCharRestricted = !isTextSelected && !isValueChanged && char !== MINUS && !this._isValueIncomplete(editedText) && this._isStub(char);
 
         if(isDecimalPointRestricted || isUselessCharRestricted) {
             return undefined;
@@ -325,36 +300,22 @@ var NumberBoxMask = NumberBoxBase.inherit({
             return this.callBase(text);
         }
 
-        var formatParts = this._getFormatPattern().split(";")[0].split("."),
-            isFloatPartAllowed = formatParts.length === 2;
-
-        if(!isFloatPartAllowed) {
-            return false;
-        }
-
-        var clearedText = this._removeStubInText(text),
-            decimalSeparator = number.getDecimalSeparator(),
-            decimalSeparatorIndex = clearedText.indexOf(decimalSeparator),
-            separatorIsFirst = decimalSeparatorIndex === 0,
-            lastChar = clearedText.charAt(clearedText.length - 1),
-            onlyOneSeparatorExists = decimalSeparatorIndex === clearedText.length - 1;
-
-        if(separatorIsFirst) {
-            return false;
-        }
-        if(lastChar === decimalSeparator && onlyOneSeparatorExists) {
-            return true;
-        }
-        if(lastChar !== "0") {
-            return false;
-        }
-
         var caret = this._caret(),
-            floatLength = clearedText.length - decimalSeparatorIndex - 1,
-            maxPrecisionOverflow = floatLength > this._getMaxPrecision(this._getFormatPattern(), clearedText),
-            textAfterCaret = this._getInputVal().slice(caret.start);
+            point = number.getDecimalSeparator(),
+            pointIndex = text.indexOf(point),
+            isCaretOnFloat = pointIndex > 0 && pointIndex < caret.start,
+            textParts = this._removeStubs(text, true).split(point);
 
-        return !maxPrecisionOverflow && (!textAfterCaret || this._isStub(textAfterCaret, true));
+        if(!isCaretOnFloat || textParts.length !== 2) {
+            return false;
+        }
+
+        var floatLength = textParts[1].length,
+            precision = this._getPrecisionLimits(this._getFormatPattern(), text),
+            isPrecisionInRange = inRange(floatLength, precision.min, precision.max),
+            endsWithZero = textParts[1].charAt(floatLength - 1) === "0";
+
+        return isPrecisionInRange && (endsWithZero || !floatLength);
     },
 
     _isValueInRange: function(value) {
@@ -364,22 +325,12 @@ var NumberBoxMask = NumberBoxBase.inherit({
         return inRange(value, min, max);
     },
 
-    _setInputText: function(text, position) {
-        var oldLength = (this._formattedValue || "").length,
-            newLength = text.length,
-            wasRemoved = newLength < oldLength;
-
+    _setInputText: function(text) {
+        var newCaret = maskCaret.getCaretAfterFormat(this._getInputVal(), text, this._caret(), this._getFormatPattern());
         this._input().val(number.convertDigits(text));
         this._formattedValue = text;
 
-        if(wasRemoved) {
-            this._moveToClosestNonStub({ start: position, end: position });
-        } else {
-            this._caret({
-                start: position,
-                end: position
-            });
-        }
+        this._caret(newCaret);
     },
 
     _useMaskBehavior: function() {
@@ -405,19 +356,18 @@ var NumberBoxMask = NumberBoxBase.inherit({
             return;
         }
 
-        var caret = this._caret();
+        var newCaret = maskCaret.getCaretWithOffset(this._caret(), offset),
+            adjustedCaret = maskCaret.getCaretInBoundaries(newCaret, this._getInputVal(), this._getFormatPattern());
 
-        this._caret({
-            start: caret.start + offset,
-            end: caret.end + offset
-        });
+        this._caret(adjustedCaret);
     },
 
     _shouldHandleKey: function(e) {
         var isSpecialChar = e.ctrlKey || e.shiftKey || e.altKey || !this._isChar(e.key),
+            isMinusKey = e.key === MINUS,
             useMaskBehavior = this._useMaskBehavior();
 
-        return useMaskBehavior && !isSpecialChar;
+        return useMaskBehavior && !isSpecialChar && !isMinusKey;
     },
 
     _renderInput: function() {
@@ -442,7 +392,9 @@ var NumberBoxMask = NumberBoxBase.inherit({
         var $input = this._input();
 
         eventsEngine.on($input, eventUtils.addNamespace(INPUT_EVENT, NUMBER_FORMATTER_NAMESPACE), this._formatValue.bind(this));
-        eventsEngine.on($input, eventUtils.addNamespace("dxclick", NUMBER_FORMATTER_NAMESPACE), this._moveToClosestNonStub.bind(this, null));
+        eventsEngine.on($input, eventUtils.addNamespace("dxclick", NUMBER_FORMATTER_NAMESPACE), function() {
+            this._caret(maskCaret.getCaretInBoundaries(this._caret(), this._getInputVal(), this._getFormatPattern()));
+        }.bind(this));
     },
 
     _forceRefreshInputValue: function() {
@@ -478,12 +430,13 @@ var NumberBoxMask = NumberBoxBase.inherit({
         return this._parsedValue;
     },
 
-    _getMaxPrecision: function(format, value) {
-        var signParts = format.split(";"),
-            currentFormat = signParts[value >= 0 ? 0 : 1] || signParts[0],
-            floatPart = currentFormat.split(".")[1] || "";
+    _getPrecisionLimits: function(format, text) {
+        var currentFormat = this._getFormatForSign(text),
+            floatPart = (currentFormat.split(".")[1] || "").replace(/[^#0]/g, ""),
+            minPrecision = floatPart.replace(/^(0*)#*/, '$1').length,
+            maxPrecision = floatPart.length;
 
-        return floatPart.length;
+        return { min: minPrecision, max: maxPrecision };
     },
 
     _revertSign: function(e) {
@@ -491,48 +444,20 @@ var NumberBoxMask = NumberBoxBase.inherit({
             return;
         }
 
+        var caret = this._caret();
+        if(caret.start !== caret.end) {
+            this._caret(maskCaret.getCaretInBoundaries(0, this._getInputVal(), this._getFormatPattern()));
+        }
+
         var newValue = -1 * ensureDefined(this._parsedValue, null);
 
         if(this._isValueInRange(newValue)) {
             this._parsedValue = newValue;
 
-            if(e.key === NUMPUD_MINUS_KEY_IE) { //Workaround for IE (T592690)
+            if(e.key === NUMPUD_MINUS_KEY_IE) { // Workaround for IE (T592690)
                 eventsEngine.trigger(this._input(), INPUT_EVENT);
             }
         }
-    },
-
-    _isCaretOnFloat: function() {
-        var text = this._getInputVal(),
-            caret = this._caret(),
-            decimalSeparator = number.getDecimalSeparator(),
-            decimalSeparatorIndex = text.indexOf(decimalSeparator);
-
-        return decimalSeparatorIndex >= 0 && caret.start > decimalSeparatorIndex;
-    },
-
-    _getCaretDelta: function(formatted) {
-        var text = this._getInputVal(),
-            caret = this._caret(),
-            caretDelta = 0,
-            isFirstInput = this._formattedValue === "",
-            allStubsAfterCaret = this._isStub(text.slice(caret.start), true),
-            isOneCharInput = Math.abs(formatted.length - text.length) === 1;
-
-        if((isOneCharInput && this._isCaretOnFloat() && !allStubsAfterCaret) || isFirstInput) {
-            caretDelta = 0;
-        } else if(formatted.length && this._lastKey === text) {
-            caretDelta = formatted.indexOf(text) - caret.start + 1;
-        } else {
-            caretDelta = formatted.length - text.length;
-        }
-
-        if(typeUtils.isDefined(this._parsedValue) && this._formattedValue === "" && this._parsedValue !== null) {
-            var indexOfLastKey = formatted.indexOf(this._parsedValue.toString());
-            caretDelta = indexOfLastKey !== -1 ? indexOfLastKey : 0;
-        }
-
-        return caretDelta;
     },
 
     _removeMinusFromText: function(text, caret) {
@@ -543,23 +468,26 @@ var NumberBoxMask = NumberBoxBase.inherit({
 
     _setTextByParsedValue: function() {
         var format = this._getFormatPattern(),
-            caret = this._caret(),
             parsed = this._parseValue(),
-            formatted = number.format(parsed, format) || "",
-            newCaret = caret.start + this._getCaretDelta(formatted);
+            formatted = number.format(parsed, format) || "";
 
-        this._setInputText(formatted, newCaret);
+        this._setInputText(formatted);
     },
 
     _formatValue: function() {
         var text = this._getInputVal(),
-            caret = this._caret();
+            caret = this._caret(),
+            textWithoutMinus = this._removeMinusFromText(text, caret),
+            wasMinusRemoved = textWithoutMinus !== text;
 
         this._isInputTriggered = true;
-        text = this._removeMinusFromText(text, caret);
+        text = textWithoutMinus;
 
-        if(this._isValueIncomplete(text)) {
+        if(this._isValueIncomplete(textWithoutMinus)) {
             this._formattedValue = text;
+            if(wasMinusRemoved) {
+                this._setTextByParsedValue();
+            }
             return;
         }
 
@@ -620,16 +548,6 @@ var NumberBoxMask = NumberBoxBase.inherit({
             return (1 / oldValue) === (1 / newValue);
         }
         return this.callBase.apply(this, arguments);
-    },
-
-    _removeStubInText: function(text) {
-        var decimalSeparator = number.getDecimalSeparator(),
-            regExpString = "[^0-9" + decimalSeparator + "]+",
-            regExp = new RegExp(regExpString, "g");
-
-        text = text || this._getInputVal();
-
-        return text.replace(regExp, "");
     },
 
     _clearCache: function() {

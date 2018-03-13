@@ -263,12 +263,13 @@ var SelectBox = DropDownList.inherit({
         this._initCustomItemCreatingAction();
     },
 
-    _render: function() {
+    _initMarkup: function() {
         this._renderSubmitElement();
-        this.callBase();
         this.$element().addClass(SELECTBOX_CLASS);
-        this.option("useInkRipple") && this._renderInkRipple();
         this._renderTooltip();
+        this.option("useInkRipple") && this._renderInkRipple();
+
+        this.callBase();
         this._$container.addClass(SELECTBOX_CONTAINER_CLASS);
     },
 

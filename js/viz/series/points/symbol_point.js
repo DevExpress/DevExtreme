@@ -31,7 +31,7 @@ function getSquareMarkerCoords(radius) {
 }
 
 function getPolygonMarkerCoords(radius) {
-    var r = _ceil(radius); //T100386
+    var r = _ceil(radius); // T100386
     return [
         -r, 0,
         0, -r,
@@ -42,7 +42,7 @@ function getPolygonMarkerCoords(radius) {
 }
 
 function getCrossMarkerCoords(radius) {
-    var r = _ceil(radius), //T100386
+    var r = _ceil(radius), // T100386
         floorHalfRadius = _floor(r / 2),
         ceilHalfRadius = _ceil(r / 2);
 

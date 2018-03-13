@@ -26,6 +26,7 @@ var $ = require("../../../core/renderer"),
     _rotateBBox = vizUtils.rotateBBox,
     PI_DIV_180 = mathPI / 180,
     _parseInt = parseInt,
+    _parseFloat = parseFloat,
     SHARPING_CORRECTION = 0.5,
     ARC_COORD_PREC = 5;
 
@@ -52,8 +53,9 @@ var KEY_TEXT = "text",
     KEY_FONT_STYLE = "font-style",
     KEY_FONT_WEIGHT = "font-weight",
     KEY_TEXT_DECORATION = "text-decoration",
-    NONE = "none";
+    NONE = "none",
 
+    DEFAULT_FONT_SIZE = 12;
 
 var objectCreate = (function() {
     if(!Object.create) {
@@ -491,7 +493,7 @@ function baseAttr(that, attrs) {
             hasTransformations = true;
             continue;
         } else if(/^(x|y|d)$/i.test(key)) {
-            //TODO test it
+            // TODO test it
             hasTransformations = true;
         }
         if(value === null) {
@@ -694,7 +696,7 @@ function orderHtmlTree(list, line, node, parentStyle, parentClassName) {
         }
         realStyle = node.style;
         realStyle.color && (style.fill = realStyle.color);
-        realStyle.fontSize && (style[KEY_FONT_SIZE] = _parseInt(realStyle.fontSize, 10));
+        realStyle.fontSize && (style[KEY_FONT_SIZE] = realStyle.fontSize);
         realStyle.fontStyle && (style[KEY_FONT_STYLE] = realStyle.fontStyle);
         realStyle.fontWeight && (style[KEY_FONT_WEIGHT] = realStyle.fontWeight);
         realStyle.textDecoration && (style[KEY_TEXT_DECORATION] = realStyle.textDecoration);
@@ -713,8 +715,8 @@ function adjustLineHeights(items) {
         item = items[i];
         if(item.line === currentItem.line) {
             // T177039
-            currentItem.height = mathMax(currentItem.height, item.height);
-            currentItem.inherits = currentItem.inherits || item.height === 0;
+            currentItem.height = maxLengthFontSize(currentItem.height, item.height);
+            currentItem.inherits = currentItem.inherits || _parseFloat(item.height) === 0;
             item.height = NaN;
         } else {
             currentItem = item;
@@ -919,18 +921,27 @@ function locateTextNodes(wrapper) {
     if(!wrapper._texts) return;
     var items = wrapper._texts,
         x = wrapper._settings.x,
-        lineHeight = _parseInt(wrapper._styles[KEY_FONT_SIZE], 10) || 12,
+        lineHeight = !isNaN(_parseFloat(wrapper._styles[KEY_FONT_SIZE])) ? wrapper._styles[KEY_FONT_SIZE] : DEFAULT_FONT_SIZE,
         i, ii,
         item = items[0];
     setTextNodeAttribute(item, "x", x);
     setTextNodeAttribute(item, "y", wrapper._settings.y);
     for(i = 1, ii = items.length; i < ii; ++i) {
         item = items[i];
-        if(item.height >= 0) {
+        if(_parseFloat(item.height) >= 0) {
             setTextNodeAttribute(item, "x", x);
-            setTextNodeAttribute(item, "dy", item.inherits ? mathMax(item.height, lineHeight) : (item.height || lineHeight));   // T177039
+            setTextNodeAttribute(item, "dy", item.inherits ? maxLengthFontSize(item.height, lineHeight) : (item.height || lineHeight));   // T177039
         }
     }
+}
+
+function maxLengthFontSize(fontSize1, fontSize2) {
+    var parsedHeight1 = _parseFloat(fontSize1),
+        parsedHeight2 = _parseFloat(fontSize2),
+        height1 = parsedHeight1 || DEFAULT_FONT_SIZE,
+        height2 = parsedHeight2 || DEFAULT_FONT_SIZE;
+
+    return height1 > height2 ? (!isNaN(parsedHeight1) ? fontSize1 : height1) : (!isNaN(parsedHeight2) ? fontSize2 : height2);
 }
 
 function strokeTextNodes(wrapper) {
@@ -976,7 +987,7 @@ function baseAnimate(that, params, options, complete) {
             value = params[key];
             if(/^(translate(X|Y)|rotate[XY]?|scale(X|Y))$/i.test(key)) {
                 animationParams.transform = animationParams.transform || { from: {}, to: {} };
-                animationParams.transform.from[key] = key in settings ? Number(settings[key].toFixed(3)) : defaults[key]; //T338486
+                animationParams.transform.from[key] = key in settings ? Number(settings[key].toFixed(3)) : defaults[key]; // T338486
                 animationParams.transform.to[key] = value;
             } else if(key === "arc" || key === "segments") {
                 animationParams[key] = value;
@@ -1065,7 +1076,7 @@ function buildLink(target, parameters) {
     return obj;
 }
 
-//SvgElement
+// SvgElement
 function SvgElement(renderer, tagName, type) {
     var that = this;
     that.renderer = renderer;
@@ -1331,7 +1342,7 @@ SvgElement.prototype = {
         return bBox || { x: 0, y: 0, width: elem.offsetWidth || 0, height: elem.offsetHeight || 0 };
     },
 
-    //TODO do we need to round results and consider rotation coordinates?
+    // TODO do we need to round results and consider rotation coordinates?
     getBBox: function() {
         var transformation = this._settings,
             bBox = this._getElementBBox();
@@ -1401,9 +1412,9 @@ SvgElement.prototype = {
         return this;
     }
 };
-//SvgElement
+// SvgElement
 
-//PathSvgElement
+// PathSvgElement
 function PathSvgElement(renderer, type) {
     SvgElement.call(this, renderer, "path", type);
 }
@@ -1416,9 +1427,9 @@ extend(PathSvgElement.prototype, {
     attr: pathAttr,
     animate: pathAnimate
 });
-//PathSvgElement
+// PathSvgElement
 
-//ArcSvgElement
+// ArcSvgElement
 function ArcSvgElement(renderer) {
     SvgElement.call(this, renderer, "path", "arc");
 }
@@ -1431,9 +1442,9 @@ extend(ArcSvgElement.prototype, {
     attr: arcAttr,
     animate: arcAnimate
 });
-//ArcSvgElement
+// ArcSvgElement
 
-//RectSvgElement
+// RectSvgElement
 function RectSvgElement(renderer) {
     SvgElement.call(this, renderer, "rect");
 }
@@ -1445,9 +1456,9 @@ extend(RectSvgElement.prototype, {
     constructor: RectSvgElement,
     attr: rectAttr
 });
-//RectSvgElement
+// RectSvgElement
 
-//TextSvgElement
+// TextSvgElement
 function TextSvgElement(renderer) {
     SvgElement.call(this, renderer, "text");
 }
@@ -1462,7 +1473,7 @@ extend(TextSvgElement.prototype, {
     applyEllipsis: applyEllipsis,
     restoreText: restoreText
 });
-//TextSvgElement
+// TextSvgElement
 
 function updateIndexes(items, k) {
     var i,
@@ -1695,14 +1706,14 @@ Renderer.prototype = {
         return image;
     },
 
-    //to combine different d attributes use helper methods
+    // to combine different d attributes use helper methods
     path: function(points, type) {
         var elem = new exports.PathSvgElement(this, type);
         return elem.attr({ points: points || [] });
     },
 
-    //TODO check B232257
-    //TODO animate end angle special case
+    // TODO check B232257
+    // TODO animate end angle special case
     arc: function(x, y, innerRadius, outerRadius, startAngle, endAngle) {
         var elem = new exports.ArcSvgElement(this);
         return elem.attr({ x: x || 0, y: y || 0, innerRadius: innerRadius || 0, outerRadius: outerRadius || 0, startAngle: startAngle || 0, endAngle: endAngle || 0 });
@@ -1713,7 +1724,7 @@ Renderer.prototype = {
         return elem.attr({ text: text, x: x || 0, y: y || 0 });
     },
 
-    //appended automatically
+    // appended automatically
     pattern: function(color, hatching, _id) {
         hatching = hatching || {};
 
@@ -1756,7 +1767,7 @@ Renderer.prototype = {
         });
     },
 
-    //appended automatically
+    // appended automatically
     clipRect: function(x, y, width, height) {
         var that = this,
             id = getNextDefsSvgId(),
@@ -1777,7 +1788,7 @@ Renderer.prototype = {
         return rect;
     },
 
-    //appended automatically
+    // appended automatically
     shadowFilter: function(x, y, width, height, offsetX, offsetY, blur, color, opacity) {
         var that = this,
             id = getNextDefsSvgId(),
@@ -1911,7 +1922,7 @@ function getHatchingHash(color, hatching) {
     return "@" + color + "::" + hatching.step + ":" + hatching.width + ":" + hatching.opacity + ":" + hatching.direction;
 }
 
-//paths modifier
+// paths modifier
 var fixFuncIriCallbacks = (function() {
     var callbacks = [];
 

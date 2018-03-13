@@ -107,7 +107,7 @@ var $ = require("jquery"),
             this.sendRequest.restore();
             errors.log.restore();
             errors.Error.restore();
-            //testEnvironment.afterEach.call(this);
+            // testEnvironment.afterEach.call(this);
         },
         dataSource: testEnvironment.dataSource,
 
@@ -3448,7 +3448,7 @@ QUnit.test("send ajax request on load", function(assert) {
 QUnit.test("send ajax request with before send callback", function(assert) {
     var dataSource = this.dataSource,
         beforeSend = function(settings) {
-            //assert beforeSend argument
+            // assert beforeSend argument
             assert.strictEqual(settings.url, dataSource.url, "url");
             assert.strictEqual(settings.method, "POST", "method");
             assert.ok(settings.data, "data");
@@ -3457,7 +3457,7 @@ QUnit.test("send ajax request with before send callback", function(assert) {
             assert.deepEqual(settings.headers, { "Content-Type": "text/xml" }, "headers");
             assert.strictEqual(settings.beforeSend, undefined);
 
-            //act
+            // act
             settings.headers["my-header"] = "my-header-value";
         };
     dataSource.beforeSend = beforeSend;
@@ -3466,7 +3466,7 @@ QUnit.test("send ajax request with before send callback", function(assert) {
         ajaxArg;
 
     store.load(this.loadOptions);
-    //assert
+    // assert
     assert.ok(ajax.sendRequest.calledOnce);
     ajaxArg = ajax.sendRequest.lastCall.args[0];
 

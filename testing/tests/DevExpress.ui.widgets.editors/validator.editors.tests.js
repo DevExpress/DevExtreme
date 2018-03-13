@@ -103,8 +103,6 @@ QUnit.test("Validation request should get value from editor", function(assert) {
 
     var result = validator.validate();
 
-
-
     assert.strictEqual(result.isValid, true, "result should be valid");
 
     assert.strictEqual(editor.option("isValid"), true, "Editor options should be set");
@@ -144,9 +142,9 @@ QUnit.test("Editor's validators request should not be mixed with another editors
         editor2.$element()
     );
 
-    //act
+    // act
     editor1.option("value", emptyValue);
-    //assert
+    // assert
     assert.strictEqual(editor1.option("isValid"), false, "Editor1 changed and should be marked as valid");
     assert.strictEqual(editor2.option("isValid"), true, "Editor2 have not changed yet and should not be validated");
 });
@@ -172,9 +170,9 @@ QUnit.test("Editor-specific validation should be kept", function(assert) {
         });
 
 
-    //act
+    // act
     validator.validate();
-    //assert
+    // assert
     assert.strictEqual(editor.option("isValid"), false, "Editor should be kept invalid");
     assert.strictEqual(validator.option("isValid"), false, "Validator should become invalid");
     assert.ok(handler.calledOnce);
@@ -197,9 +195,9 @@ QUnit.test("Disabled editor should bypass validation", function(assert) {
         }]
     });
 
-    //act
+    // act
     var result = validator.option("adapter").bypass();
-    //assert
+    // assert
 
     assert.strictEqual(result, true, "Disabled editor should bypass validation");
 });

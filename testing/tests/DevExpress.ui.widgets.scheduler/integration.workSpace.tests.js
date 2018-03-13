@@ -609,7 +609,6 @@ QUnit.test("Cell data should be applied when resources are loaded", function(ass
     });
 
 
-
 });
 
 QUnit.test("Cell data should be updated after view changing", function(assert) {
@@ -636,7 +635,6 @@ QUnit.test("Cell data should be updated after view changing", function(assert) {
         startDate: new Date(2016, 8, 4),
         endDate: new Date(2016, 8, 4, 0, 30)
     }, "Cell data is OK!");
-
 
 
 });
@@ -1126,7 +1124,6 @@ QUnit.test("dateCellTemplate should have correct options in agenda view", functi
     assert.deepEqual(templateOptions.groups, { "ownerId": 1 }, "groups option is ok");
 
 });
-
 
 
 QUnit.test("Agenda has right arguments in resourceCellTemplate arguments", function(assert) {

@@ -77,7 +77,6 @@ viewPort($("#qunit-fixture").addClass("dx-viewport"));
 devices.current("iPhone");
 
 
-
 QUnit.testStart(function() {
     var markup = '\
         <div id="scrollable" style="height: 50px; width: 50px;">\
@@ -1773,7 +1772,7 @@ QUnit.test("useSimulatedScrollbar option dependence from useNative option", func
     });
 
     $scrollable.dxScrollable("option", "useNative", true);
-    //NOTE: on android devices useSimulatedScrollbar is true always
+    // NOTE: on android devices useSimulatedScrollbar is true always
     assert.equal($scrollable.dxScrollable("option", "useSimulatedScrollbar"), devices.real().platform === "android", "useSimulatedScrollbar option was changed");
 });
 
@@ -2145,6 +2144,24 @@ QUnit.test("disabled: scroll was not moved when disabled is true", function(asse
     location = getScrollOffset($scrollable);
     assert.equal(location.top, 0, "scroll was not moved when disabled is true");
     mouse.up();
+});
+
+QUnit.test("simulated strategy should subscribe to the poiner events after disabled option changed", function(assert) {
+    var $scrollable = $("#scrollable"),
+        scrollableInstance = $("#scrollable").dxScrollable({
+            useNative: false,
+            showScrollbar: "onHover",
+            disabled: true
+        }).dxScrollable("instance");
+
+    scrollableInstance.option("disabled", false);
+
+    var scrollbar = Scrollbar.getInstance($scrollable.find("." + SCROLLABLE_SCROLLBAR_CLASS));
+    var $container = $scrollable.find("." + SCROLLABLE_CONTAINER_CLASS);
+
+    $container.trigger("mouseenter");
+
+    assert.equal(scrollbar.option("visible"), true, "thumb is visible after mouse enter");
 });
 
 QUnit.test("disabled option add class to root element", function(assert) {
@@ -3047,7 +3064,7 @@ QUnit.test("scroll by thumb", function(assert) {
     mouse.move(0, distance);
     location = getScrollOffset($scrollable);
 
-    assert.notOk(downEvent.isDefaultPrevented(), "default is not prevented"); //T516691
+    assert.notOk(downEvent.isDefaultPrevented(), "default is not prevented"); // T516691
     assert.equal(location.top, -distance / containerToContentRatio, "scroll follows pointer");
 
     mouse.move(0, distance);

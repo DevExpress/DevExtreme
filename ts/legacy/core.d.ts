@@ -603,7 +603,7 @@ declare module DevExpress {
             createQuery(): Query;
         }
 
-        //T184606
+        // T184606
         interface Promise {
             then(doneFn?: any, failFn?: any, progressFn?: any): Promise;
         }

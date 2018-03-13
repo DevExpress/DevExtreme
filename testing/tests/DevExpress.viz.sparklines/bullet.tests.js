@@ -82,7 +82,7 @@ QUnit.test('Create canvas when size option is defined', function(assert) {
         valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
     assert.deepEqual(argTranslator.update.lastCall.args[1], { width: 250, height: 30, top: 2, bottom: 2, left: 1, right: 1 }, 'Canvas object is correct');
     assert.deepEqual(valTranslator.update.lastCall.args[1], { width: 250, height: 30, top: 2, bottom: 2, left: 1, right: 1 }, 'Canvas object is correct');
-    assert.equal(this.renderer.resize.callCount, 1, 'Resize call count'); //renderer for sparkline and tooltip
+    assert.equal(this.renderer.resize.callCount, 1, 'Resize call count'); // renderer for sparkline and tooltip
     assert.deepEqual(this.renderer.resize.firstCall.args, [250, 30], 'Pass canvas width and height to renderer');
 });
 
@@ -300,11 +300,11 @@ QUnit.test('Prepare options when all options are custom', function(assert) {
                 paddingLeftRight: 14,
                 paddingTopBottom: 10,
                 arrowLength: 10,
-                enabled: false, //false
+                enabled: false, // false
                 text: 'test',
-                verticalAlignment: 'bottom', //'bottom'
+                verticalAlignment: 'bottom', // 'bottom'
                 horizontalAlignment: 'right',
-                format: 'fixedPoint', //'currency', 'fixedPoint', 'decimal', 'exponential', 'largeNumber', 'thousands', 'millions', 'billions', 'trillions'
+                format: 'fixedPoint', // 'currency', 'fixedPoint', 'decimal', 'exponential', 'largeNumber', 'thousands', 'millions', 'billions', 'trillions'
                 precision: 2,
                 color: '#FF00FF',
                 opacity: 1,
@@ -404,8 +404,8 @@ QUnit.test('Create helpers', function(assert) {
 
     assert.ok(argTranslator.update.lastCall.args[0], 'Arg Range should be create');
     assert.ok(valTranslator.update.lastCall.args[0], 'Val Range should be create');
-    assert.ok(translator2DModule.Translator2D.firstCall.args[0], 'X Translator should be created'); //bullet._translatorX
-    assert.ok(translator2DModule.Translator2D.secondCall.args[0], 'Y Translator should be created'); //bullet._translatorY
+    assert.ok(translator2DModule.Translator2D.firstCall.args[0], 'X Translator should be created'); // bullet._translatorX
+    assert.ok(translator2DModule.Translator2D.secondCall.args[0], 'Y Translator should be created'); // bullet._translatorY
     assert.ok(this.renderer, 'Renderer should be created');
     assert.strictEqual(rendererModule.Renderer.firstCall.args[0]['cssClass'], 'dxb dxb-bullet', 'root class');
 });
@@ -1207,7 +1207,7 @@ QUnit.test('Change size if size = 0,10 - B239871', function(assert) {
     assert.ok(redrawFunctionCalled, 'Redraw function was not called');
 });
 
-//QUnit.test('Rendering in container with container size 0, 0', function (assert) {
+// QUnit.test('Rendering in container with container size 0, 0', function (assert) {
 //    var container = $('#containerForResize'),
 //        sparkCont = $('<div style="width: 10px; height: 0px">').appendTo(container),
 //        options = {
@@ -1228,9 +1228,9 @@ QUnit.test('Change size if size = 0,10 - B239871', function(assert) {
 //    sparkCont.dxBullet('instance').render();
 //
 //    assert.equal(renderCalled, 2, 'Render called 2 time');
-//});
+// });
 //
-//QUnit.test('Rendering in container with size 0, 0', function (assert) {
+// QUnit.test('Rendering in container with size 0, 0', function (assert) {
 //    var container = $('#containerForResize'),
 //        sparkCont = $('<div style="width: 10px; height: 10px">').appendTo(container),
 //        options = {
@@ -1253,9 +1253,9 @@ QUnit.test('Change size if size = 0,10 - B239871', function(assert) {
 //    sparkCont.dxBullet('instance').option('size', { width: 200, height: 30 });
 //
 //    assert.equal(renderCalled, 1, 'Render called 1 time');
-//});
+// });
 //
-//QUnit.test('Rendering in container with big margin', function (assert) {
+// QUnit.test('Rendering in container with big margin', function (assert) {
 //    var container = $('#containerForResize'),
 //        sparkCont = $('<div style="width: 2px; height: 2px">').appendTo(container),
 //        options = {
@@ -1272,7 +1272,7 @@ QUnit.test('Change size if size = 0,10 - B239871', function(assert) {
 //    sparkCont.dxBullet('instance').render();
 //
 //    assert.equal(renderCalled, 1, 'Render called 2 time');
-//});
+// });
 
 QUnit.module('drawn', {
     beforeEach: function() {
@@ -1288,7 +1288,7 @@ QUnit.module('drawn', {
 });
 
 QUnit.test('call drawn in BaseWidget', function(assert) {
-    //arrange
+    // arrange
     this.createBullet({});
 
     assert.strictEqual(BaseWidget.prototype._drawn.calledOnce, true);

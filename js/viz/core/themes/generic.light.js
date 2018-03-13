@@ -279,6 +279,9 @@ registerTheme({
         commonSeriesSettings: {
             type: "line",
             stack: "default",
+            aggregation: {
+                enabled: undefined
+            },
             "point": {
                 visible: true,
                 symbol: "circle",
@@ -698,7 +701,6 @@ registerTheme({
             color: "gray",
             width: 10
         },
-        useAggregation: false,
         adjustOnZoom: true,
         rotated: false,
         zoomingMode: NONE,
@@ -1008,7 +1010,7 @@ registerTheme({
             color: BLACK,
             opacity: 0.1,
             showCustomBoundaryTicks: true,
-            showMinorTicks: true, //DEPRECATED IN 15_2
+            showMinorTicks: true, // DEPRECATED IN 15_2
             label: {
                 overlappingBehavior: "hide",
                 alignment: "center",
@@ -1085,7 +1087,6 @@ registerTheme({
         },
         redrawOnResize: true,
         chart: {
-            useAggregation: false,
             equalBarWidth: true,
             barGroupPadding: 0.3,
             minBubbleSize: 12,
@@ -1098,6 +1099,9 @@ registerTheme({
             },
             commonSeriesSettings: {
                 type: "area",
+                aggregation: {
+                    enabled: undefined
+                },
                 point: {
                     visible: false
                 },

@@ -58,7 +58,7 @@ var BaseView = Widget.inherit({
         }
     },
 
-    _render: function() {
+    _initMarkup: function() {
         this.callBase();
 
         this._renderImpl();
@@ -89,7 +89,7 @@ var BaseView = Widget.inherit({
             };
 
         function renderCell(cellIndex) {
-            //T425127
+            // T425127
             if(prevCellDate) {
                 dateUtils.fixTimezoneGap(prevCellDate, cellDate);
             }

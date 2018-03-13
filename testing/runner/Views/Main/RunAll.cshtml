@@ -168,7 +168,7 @@
 
         var nextUrl = function(i) {
             if(!urls.length) {
-                //$.ajax(ROOT_URL + "run/something/FrameHasFinishedRunningASuite.js?frame=" + i);
+                // $.ajax(ROOT_URL + "run/something/FrameHasFinishedRunningASuite.js?frame=" + i);
                 if(!resultSaving && !busyCount) {
                     resultSaving = true;
                     rootSuite.time = roundTime((new Date() - rootStartTime) / 1000);

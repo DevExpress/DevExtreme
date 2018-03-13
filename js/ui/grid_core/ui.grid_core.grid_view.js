@@ -3,6 +3,7 @@
 var $ = require("../../core/renderer"),
     modules = require("./ui.grid_core.modules"),
     commonUtils = require("../../core/utils/common"),
+    windowUtils = require("../../core/utils/window"),
     each = require("../../core/utils/iterator").each,
     typeUtils = require("../../core/utils/type"),
     messageLocalization = require("../../localization/message"),
@@ -79,15 +80,24 @@ var ResizingController = modules.ViewController.inherit({
 
                 if(changeType && changeType !== "updateSelection" && !isDelayed) {
                     when(resizeDeferred).done(function() {
+                        that._setAriaRowColCount();
                         that.component._fireContentReadyAction();
                     });
                 }
             };
-            //TODO remove resubscribing
+            // TODO remove resubscribing
             that._dataController.changed.add(function() {
                 that._dataController.changed.add(that._refreshSizesHandler);
             });
         }
+    },
+
+    _setAriaRowColCount: function() {
+        var component = this.component;
+        component.setAria({
+            "rowCount": this._dataController.totalItemsCount(),
+            "colCount": component.columnCount()
+        }, component.$element().children("." + GRIDBASE_CONTAINER_CLASS));
     },
 
     _getBestFitWidths: function() {
@@ -155,7 +165,7 @@ var ResizingController = modules.ViewController.inherit({
         } else {
             $element.find("." + this.addWidgetPrefix(TABLE_CLASS)).toggleClass(this.addWidgetPrefix(TABLE_FIXED_CLASS), !isBestFit);
 
-            //B253906
+            // B253906
             $element.find(EDITORS_INPUT_SELECTOR).toggleClass(HIDDEN_CLASS, isBestFit);
             $element.find(".dx-group-cell").toggleClass(HIDDEN_CLASS, isBestFit);
             $element.find(".dx-header-row ." + this.addWidgetPrefix(TEXT_CONTENT_CLASS)).css("maxWidth", "");
@@ -358,7 +368,7 @@ var ResizingController = modules.ViewController.inherit({
                     continue;
                 }
                 resultSizes[i] += diffElement;
-                if(onePixelElementsCount) {
+                if(onePixelElementsCount > 0) {
                     resultSizes[i]++;
                     onePixelElementsCount--;
                 }
@@ -423,7 +433,7 @@ var ResizingController = modules.ViewController.inherit({
 
         that._initPostRenderHandlers();
 
-        //T335767
+        // T335767
         if(!that._checkSize(checkSize)) {
             return;
         }
@@ -476,15 +486,13 @@ var ResizingController = modules.ViewController.inherit({
             $testDiv.remove();
         }
 
-        rowsView.element().toggleClass("dx-empty", !that._hasHeight && dataController.items().length === 0);
-
         if(isMaxHeightApplied) {
             rowsViewHeight = rowsView.height();
         }
 
         commonUtils.deferRender(function() {
             rowsView.height(rowsViewHeight, hasHeight);
-            //IE11
+            // IE11
             if(maxHeightHappened && !isMaxHeightApplied) {
                 $(groupElement).css("height", maxHeight);
             }
@@ -619,6 +627,10 @@ var GridView = modules.View.inherit({
         });
     },
 
+    _getTableRoleName: function() {
+        return "grid";
+    },
+
     render: function($rootElement) {
         var that = this,
             isFirstRender = !that._groupElement,
@@ -626,22 +638,23 @@ var GridView = modules.View.inherit({
 
         $groupElement.addClass(GRIDBASE_CONTAINER_CLASS);
         $groupElement.toggleClass(that.addWidgetPrefix(BORDERS_CLASS), !!that.option("showBorders"));
+
+        that.setAria("role", "presentation", $rootElement);
+
         that.component.setAria({
-            "role": "application",
+            "role": this._getTableRoleName(),
             "label": messageLocalization.format(that._getWidgetAriaLabel())
-        }, $rootElement);
+        }, $groupElement);
 
         that._rootElement = $rootElement || that._rootElement;
 
         if(isFirstRender) {
             that._groupElement = $groupElement;
-            that.getController("resizing").updateSize($rootElement);
+            windowUtils.hasWindow() && that.getController("resizing").updateSize($rootElement);
             $groupElement.appendTo($rootElement);
         }
 
         that._renderViews($groupElement);
-
-        that.update();
     },
 
     update: function() {

@@ -776,13 +776,13 @@ QUnit.test("Mock should group values correctly", function(assert) {
 QUnit.module("Data filtering", moduleConfig);
 
 QUnit.test("Columns with filter values", function(assert) {
-    //arrange, act
+    // arrange, act
     this.load({
         columns: [{ dataField: "ShipCountry", filterValues: ["Argentina", "Germany"] }],
         rows: [{ dataField: "ShipVia" }],
         values: [{ summaryType: "count" }]
     }).done(function(data) {
-        //assert
+        // assert
         assert.ok(data, "has data");
         assert.equal(data.columns.length, 2, "count column");
         assert.equal(data.columns[0].value, "Argentina", "value of the first column");
@@ -791,13 +791,13 @@ QUnit.test("Columns with filter values", function(assert) {
 });
 
 QUnit.test("Rows with filter values", function(assert) {
-    //arrange, act
+    // arrange, act
     this.load({
         columns: [{ dataField: "ShipCountry" }],
         rows: [{ dataField: "ShipVia", filterValues: [1, 3] }],
         values: [{ summaryType: "count" }]
     }).done(function(data) {
-        //assert
+        // assert
         assert.ok(data);
         assert.equal(data.rows.length, 2, "count column");
         assert.equal(data.rows[0].value, 1, "value of the first row");
@@ -806,7 +806,7 @@ QUnit.test("Rows with filter values", function(assert) {
 });
 
 QUnit.test("Columns and rows with filter values", function(assert) {
-    //arrange, act
+    // arrange, act
     this.load({
         rows: [
             { dataField: "ShipCountry", filterValues: ["USA", "Canada"] }
@@ -816,7 +816,7 @@ QUnit.test("Columns and rows with filter values", function(assert) {
         ],
         values: [{ summaryType: "count" }]
     }).done(function(data) {
-        //assert
+        // assert
         assert.equal(data.rows.length, 2);
         assert.equal(data.rows[0].value, "Canada");
         assert.equal(data.rows[1].value, "USA");
@@ -827,7 +827,7 @@ QUnit.test("Columns and rows with filter values", function(assert) {
 });
 
 QUnit.test("Columns and rows with filter values. Exclude Type", function(assert) {
-    //arrange, act
+    // arrange, act
     this.load({
         rows: [
             { dataField: "ShipCountry", filterValues: ["USA", "Canada"], filterType: "exclude" }
@@ -837,14 +837,14 @@ QUnit.test("Columns and rows with filter values. Exclude Type", function(assert)
         ],
         values: [{ summaryType: "count" }]
     }).done(function(data) {
-        //assert
+        // assert
         assert.equal(data.rows.length, 19, "count row");
         assert.equal(data.columns.length, 1, "count column");
     });
 });
 
 QUnit.test("Rows with filter values when expanded is false", function(assert) {
-    //arrange, act
+    // arrange, act
     this.load({
         rows: [
             { dataField: "ShipCountry" },
@@ -854,7 +854,7 @@ QUnit.test("Rows with filter values when expanded is false", function(assert) {
         ],
         values: [{ summaryType: "count" }]
     }).done(function(data) {
-        //assert
+        // assert
         assert.equal(data.rows.length, 2, "count column");
         assert.equal(data.rows[0].value, "Germany", "value of the first row");
         assert.equal(data.rows[1].value, "Mexico", "value of the second row");
@@ -863,7 +863,7 @@ QUnit.test("Rows with filter values when expanded is false", function(assert) {
 });
 
 QUnit.test("Columns with filter values when expanded is false", function(assert) {
-    //arrange, act
+    // arrange, act
     this.load({
         columns: [
             { dataField: "ShipCountry" },
@@ -873,7 +873,7 @@ QUnit.test("Columns with filter values when expanded is false", function(assert)
         ],
         values: [{ summaryType: "count" }]
     }).done(function(data) {
-        //assert
+        // assert
         assert.equal(data.columns.length, 2, "count column");
         assert.equal(data.columns[0].value, "Germany", "value of the first column");
         assert.equal(data.columns[1].value, "Mexico", "value of the second column");
@@ -882,7 +882,7 @@ QUnit.test("Columns with filter values when expanded is false", function(assert)
 });
 
 QUnit.test("Columns and rows with filter values. Exclude and include types", function(assert) {
-    //arrange, act
+    // arrange, act
     this.load({
         rows: [
             { dataField: "ShipCountry", filterValues: ["USA", "Canada"], filterType: "exclude", expanded: true },
@@ -893,7 +893,7 @@ QUnit.test("Columns and rows with filter values. Exclude and include types", fun
         ],
         values: [{ summaryType: "count" }]
     }).done(function(data) {
-        //assert
+        // assert
         assert.equal(data.rows.length, 18, "count row");
         assert.equal(data.rows[0].value, "Argentina", "value of first row");
         assert.equal(data.rows[17].value, "Venezuela", "value of last row");
@@ -905,7 +905,7 @@ QUnit.test("Columns and rows with filter values. Exclude and include types", fun
 });
 
 QUnit.test("There are filter values in all dimensions", function(assert) {
-    //arrange, act
+    // arrange, act
     this.load({
         rows: [
             { dataField: "ShipCountry", filterValues: ["USA", "Canada"], filterType: "include", expanded: true },
@@ -918,7 +918,7 @@ QUnit.test("There are filter values in all dimensions", function(assert) {
         filters: [{ dataField: "ShipCity", filterValues: ["Boise", "Seattle", "Vancouver"] }],
         values: [{ summaryType: "count" }]
     }).done(function(data) {
-        //assert
+        // assert
         assert.equal(data.rows.length, 2, "count row");
         assert.equal(data.rows[0].value, "Canada", "value of first row");
         assert.equal(data.rows[1].value, "USA", "value of last row");
@@ -931,7 +931,7 @@ QUnit.test("There are filter values in all dimensions", function(assert) {
 });
 
 QUnit.test("Filter group field. Include Type", function(assert) {
-    //arrange, act
+    // arrange, act
     this.load({
         rows: [
             { dataField: "ShipVia", expanded: true },
@@ -951,7 +951,7 @@ QUnit.test("Filter group field. Include Type", function(assert) {
             }
         ]
     }).done(function(data) {
-        //assert
+        // assert
         assert.deepEqual(data.rows.length, 2, "count row");
         assert.deepEqual(data.rows[0].children.length, 21, "count child of the first row");
         assert.deepEqual(data.rows[1].children.length, 1, "count child of the second row");

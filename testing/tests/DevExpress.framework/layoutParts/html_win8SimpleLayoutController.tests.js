@@ -128,7 +128,7 @@
             layoutController.showView(viewInfo).then(function() {
                 testToolbarVisibility(true);
 
-                //show another view (without toolbar)
+                // show another view (without toolbar)
                 layoutController.showView({
                     viewName: "for-T142621-without-appbar",
                     model: {
@@ -138,7 +138,7 @@
                 }).then(function() {
                     testToolbarVisibility(false);
 
-                    //back to first view (with toolbar)
+                    // back to first view (with toolbar)
                     layoutController.showView(viewInfo, "backward").then(function() {
                         testToolbarVisibility(true);
 

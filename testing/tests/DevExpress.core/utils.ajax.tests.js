@@ -407,7 +407,7 @@ QUnit.test("Send data with request (cached resources)", function(assert) {
             dataType: testData[i].dataType,
             contentType: testData[i].contentType
         });
-        //https://github.com/jquery/jquery/issues/2658
+        // https://github.com/jquery/jquery/issues/2658
         if(compareVersion($.fn.jquery, [3], 1) < 0) {
             if(testData[i].requestBody) {
                 testData[i].requestBody = testData[i].requestBody.replace("%20", "+");
@@ -517,7 +517,7 @@ QUnit.test("Synchronous request", function(assert) {
     ajax.sendRequest({
         url: "/json-url",
         async: false,
-        timeout: 1000 //is not valid for sync request
+        timeout: 1000 // is not valid for sync request
     });
 
     assert.equal(this.requests.length, 1);
@@ -562,7 +562,7 @@ QUnit.test("X-Requested-With headers (cors)", function(assert) {
         ajax.sendRequest({
             url: testData[i].url
         });
-        //jQuery checks cors support on start and doesn't create xhr object on $.ajax call
+        // jQuery checks cors support on start and doesn't create xhr object on $.ajax call
         assert.notOk(this.requests[i] && this.requests[i].requestHeaders["X-Requested-With"]);
     }
 });

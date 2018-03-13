@@ -64,9 +64,9 @@ QUnit.module("General", {
 
 QUnit.test("dxValidationGroup can be created", function(assert) {
     var $container = $("#dxValidationGroup-empty");
-    //act
+    // act
     var group = this.fixture.createGroup($container);
-    //assert
+    // assert
     assert.ok(group, "Group should be instantiated");
     assert.ok($container.hasClass("dx-validationgroup"), "Specific class should be added");
 });
@@ -75,9 +75,9 @@ QUnit.test("dxValidationGroup should not remove container content", function(ass
     var $container = $("#dxValidationGroup-empty");
     $("<img/>").appendTo($container);
 
-    //act
+    // act
     this.fixture.createGroup($container);
-    //assert
+    // assert
     assert.equal($container.find("img").length, 1, "Image inside of container should remain untouched");
 });
 
@@ -87,9 +87,9 @@ QUnit.test("dxValidator can be validated as part of dxValidationGroup", function
         validator = this.fixture.createValidatorInGroup();
 
     validator.validate = sinon.spy(validator.validate);
-    //act
+    // act
     ValidationEngine.validateGroup(group);
-    //assert
+    // assert
     assert.ok(validator.validate.calledOnce, "Validator should be validated as part of group");
 });
 
@@ -104,9 +104,9 @@ QUnit.test("dxValidator should be registered as part of dxValidationGroup - when
         defaultGroupConfig = ValidationEngine.getGroupConfig(undefined);
 
     validator.validate = sinon.spy(validator.validate);
-    //act
+    // act
     ValidationEngine.validateGroup(group);
-    //assert
+    // assert
     assert.strictEqual(defaultGroupConfig.validators.length, 0, "Validator should be deregistered in default group");
     assert.ok(validator.validate.calledOnce, "Validator should be validated as part of group");
 });
@@ -114,9 +114,9 @@ QUnit.test("dxValidator should be registered as part of dxValidationGroup - when
 QUnit.test("dxValidationGroup can be disposed, container should be cleared (T199232)", function(assert) {
     var $container = $("#dxValidationGroup-empty");
     this.fixture.createGroup($container);
-    //act
+    // act
     this.fixture.disposeGroup();
-    //assert
+    // assert
     assert.strictEqual(false, $container.hasClass("dx-validationgroup"), "Specific class should be added");
 });
 
@@ -127,9 +127,9 @@ QUnit.test("dxValidator can be reset as part of dxValidationGroup", function(ass
         validator = this.fixture.createValidatorInGroup();
 
     validator.reset = sinon.spy(validator.reset);
-    //act
+    // act
     group.reset();
-    //assert
+    // assert
     assert.ok(validator.reset.calledOnce, "Validator should be reset as part of group");
 });
 
@@ -142,13 +142,13 @@ QUnit.test("validator should find group after dxshown event is triggered", funct
     var validator = $validator.dxValidator("instance");
     validator.validate = sinon.spy(validator.validate);
 
-    //act
+    // act
     $validator.appendTo($container);
     domUtils.triggerShownEvent($container);
     ValidationEngine.validateGroup(group);
 
 
-    //assert
+    // assert
     assert.ok(validator.validate.calledOnce, "Validator should be validated as part of group");
 });
 
@@ -169,9 +169,9 @@ QUnit.test("group.validate", function(assert) {
     this.fixture.createValidatorInGroup();
 
     ValidationEngine.validateGroup = sinon.spy(ValidationEngine.validateGroup);
-    //act
+    // act
     var result = group.validate();
-    //assert
+    // assert
     assert.ok(result, "Result should be returned");
     assert.ok(ValidationEngine.validateGroup.calledOnce, "validatorGroup should be called");
     assert.equal(ValidationEngine.validateGroup.getCall(0).args[0], group, "correct group key should be passed");

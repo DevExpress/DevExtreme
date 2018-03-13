@@ -418,7 +418,7 @@ QUnit.testStart(function() {
             minDate = new Date("Thu Mar 10 2016 00:00:00 GMT-0500"),
             maxDate = new Date("Mon Mar 15 2016 00:00:00 GMT-0400");
 
-        //TODO: use public method instead
+        // TODO: use public method instead
         this.instance._getIntervalBetween(minDate, maxDate, true);
 
         assert.ok(stub.calledOnce, "getTimezonesDifference was called");
@@ -1767,7 +1767,7 @@ QUnit.testStart(function() {
                 expectedCoordinate = $currentCell.position();
 
             if(rowIndex) {
-                //! fix coordinate calculation in webkit
+                // ! fix coordinate calculation in webkit
                 expectedCoordinate.top = rowIndex * ws.getCellHeight();
             }
 
@@ -1894,7 +1894,6 @@ QUnit.testStart(function() {
         assert.ok(!cells.eq(1).hasClass("dx-state-focused"), "previous cell is not focused");
         assert.ok(cells.eq(0).hasClass("dx-state-focused"), "new cell is focused");
     });
-
 
 
     QUnit.test("Month workspace navigation by arrows, RTL mode", function(assert) {

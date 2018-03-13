@@ -152,14 +152,10 @@ var Editor = Widget.inherit({
 
     _initMarkup: function() {
         this._toggleReadOnlyState();
+        this._setSubmitElementName(this.option("name"));
 
-        this.callBase();
-    },
-
-    _render: function() {
         this.callBase();
         this._renderValidationState();
-        this._setSubmitElementName(this.option("name"));
     },
 
     _raiseValueChangeAction: function(value, previousValue) {

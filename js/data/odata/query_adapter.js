@@ -354,7 +354,7 @@ var createODataQueryAdapter = function(queryOptions) {
         }
 
         if(queryOptions.requireTotalCount || _countQuery) {
-            //todo: tests!!!
+            // todo: tests!!!
             if(_oDataVersion !== 4) {
                 result["$inlinecount"] = "allpages";
             } else {

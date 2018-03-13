@@ -301,7 +301,7 @@ QUnit.test("palette", function(assert) {
         extensionMode: "blend"
     }, "useHighlight");
 
-    //teardown
+    // teardown
     paletteModule.Palette.restore();
 });
 

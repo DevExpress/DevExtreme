@@ -2,6 +2,7 @@
 
 var Deferred = require("./deferred").Deferred;
 var domAdapter = require("../../core/dom_adapter");
+var httpRequest = require("../../core/http_request");
 var windowUtils = require("../../core/utils/window");
 var window = windowUtils.getWindow();
 var extendFromObject = require("./extend").extendFromObject;
@@ -152,6 +153,10 @@ var postProcess = function(deferred, xhr, dataType) {
 };
 
 var isCrossDomain = function(url) {
+    if(!windowUtils.hasWindow()) {
+        return true;
+    }
+
     var crossDomain = false,
         originAnchor = domAdapter.createElement("a"),
         urlAnchor = domAdapter.createElement("a");
@@ -241,7 +246,7 @@ var sendRequest = function(options) {
         return ajaxStrategy(options);
     }
 
-    var xhr = new window.XMLHttpRequest(),
+    var xhr = httpRequest.getXhr(),
         d = new Deferred(),
         result = d.promise(),
         async = isDefined(options.async) ? options.async : true,

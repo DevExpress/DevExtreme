@@ -211,7 +211,7 @@
         label: {
             alignment: "center",
             indentFromAxis: 10,
-            //TODO: make sure we really need it
+            // TODO: make sure we really need it
             precision: 0,
             format: "",
             customizeText: undefined
@@ -247,7 +247,7 @@
         label: {
             alignment: "right",
             indentFromAxis: 10,
-            //TODO: make sure we really need it
+            // TODO: make sure we really need it
             precision: 0,
             format: "",
             customizeText: undefined
@@ -322,8 +322,8 @@
         axis.updateOptions(mergedOptions);
 
         axis.setTranslator(translator, orthogonalTranslator);
-        //we emulate this call to allow testing partial draw methods (such as drawTicks)
-        //in production it"s called from axis.draw() method
+        // we emulate this call to allow testing partial draw methods (such as drawTicks)
+        // in production it"s called from axis.draw() method
         axis._initAxisPositions(axis);
         return axis;
     }
@@ -394,7 +394,7 @@
             return new MockSeriesFamily(options);
         };
     };
-    //////  Translator
+    //  Translator
 
 
     exports.MockTranslator = function(data) {
@@ -470,7 +470,7 @@
         };
     };
 
-    /// Mock series
+    // Mock series
     exports.MockSeries = function MockSeries(options) {
         options = options || {};
         return {
@@ -497,6 +497,7 @@
             _extGroups: {},
             _valueAxis: options.valueAxis,
             _argumentAxis: options.argumentAxis,
+            createPoints: sinon.spy(),
             pointsByArgument: (function() {
                 var pointsByArgument = {};
 
@@ -541,6 +542,7 @@
 
                 return range;
             },
+            getArgumentRange: sinon.stub().returns({ min: 0, max: 10 }),
             animate: function() {
                 this.wasAnimated = true;
             },
@@ -558,6 +560,10 @@
                 this.pointsWereArranged = true;
                 this.arrangePointsArgs = $.makeArray(arguments);
             },
+            getPointsCount: function() {
+                return (this.reinitializedData || []).length;
+            },
+            setMaxPointsCount: sinon.stub(),
             canRenderCompleteHandle: function() {
                 return true;
             },
@@ -611,9 +617,6 @@
                 return this._options.tagFields || this._options.tagField;
             },
             _segmentPoints: commonUtils.noop,
-            resamplePoints: sinon.spy(function() {
-                this.resampled = true;
-            }),
             sort: commonUtils.noop,
             updateTemplateFieldNames: function() {
                 this.updatedFields = true;
@@ -658,7 +661,8 @@
             correctRadius: sinon.spy(),
             updateDataType: sinon.spy(),
             getViewport: sinon.stub().returns({}),
-            getMarginOptions: sinon.stub().returns(options.marginOptions || {})
+            getMarginOptions: sinon.stub().returns(options.marginOptions || {}),
+            useAggregation: sinon.stub().returns(false)
         };
     };
 
@@ -719,7 +723,7 @@
                 // store value for comparison in tests
                 if(this.hasValue()) {
                     this.correctedValue = val;
-                    //emulate real point behavior
+                    // emulate real point behavior
                     if(this.hasValue()) {
                         this.value = (base || this.initialValue) + val;
                         this.minValue = val;
@@ -748,7 +752,7 @@
 
             },
             correctPosition: function(correction) {
-                //correct angles?...
+                // correct angles?...
                 var that = this;
                 that.radiusInner = correction.radiusInner;
                 that.radiusOuter = correction.radiusOuter;

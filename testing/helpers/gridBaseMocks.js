@@ -134,9 +134,19 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                 return options.viewportSize;
             },
 
+            viewportItemSize: function() {},
+
+            setContentSize: function() {},
+
             setViewportItemIndex: function(index) {
                 options.viewportItemIndex = index;
             },
+
+            setViewportPosition: function() {},
+
+            getVirtualContentSize: function() { return 0; },
+
+            getContentOffset: function() { return 0; },
 
             itemsCount: function() {
                 return options.itemsCount;
@@ -573,7 +583,7 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
 
     exports.MockGridDataSource = function(options) {
         return {
-            //TODO remove
+            // TODO remove
             options: function() {
                 return options;
             },

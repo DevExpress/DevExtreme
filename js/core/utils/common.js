@@ -11,7 +11,7 @@ var ensureDefined = function(value, defaultValue) {
     return typeUtils.isDefined(value) ? value : defaultValue;
 };
 
-var executeAsync = function(action, context/*, internal */) {
+var executeAsync = function(action, context/* , internal */) {
     var deferred = new Deferred(),
         normalizedContext = context || this,
         timerId,
@@ -286,7 +286,7 @@ var getKeyHash = function(key) {
 };
 
 var escapeRegExp = function(string) {
-    return string.replace(/[[\]{}()*+?.\\^$|\s]/g, "\\$&");
+    return string.replace(/[[\]{}\-()*+?.\\^$|\s]/g, "\\$&");
 };
 
 var applyServerDecimalSeparator = function(value) {

@@ -146,12 +146,13 @@ var DOMComponent = Component.inherit({
 
     _initMarkup: function() {
         this._renderElementAttributes();
-    },
-
-    _render: function() {
         this._toggleRTLDirection(this.option("rtlEnabled"));
         this._renderVisibilityChange();
         this._renderDimensions();
+    },
+
+    _render: function() {
+        this._attachVisibilityChangeHandlers();
     },
 
     _renderElementAttributes: function() {
@@ -175,7 +176,6 @@ var DOMComponent = Component.inherit({
         }
 
         this.$element().addClass(VISIBILITY_CHANGE_CLASS);
-        this._attachVisibilityChangeHandlers();
     },
 
     _renderDimensions: function() {
@@ -184,8 +184,16 @@ var DOMComponent = Component.inherit({
         var width = this._getOptionValue("width", element);
         var height = this._getOptionValue("height", element);
 
-        $element.outerWidth(width);
-        $element.outerHeight(height);
+        if(this._isCssUpdateRequired(element, height, width)) {
+            $element.css({
+                width: width,
+                height: height
+            });
+        }
+    },
+
+    _isCssUpdateRequired: function(element, height, width) {
+        return !!(width || height || element.style.width || element.style.height);
     },
 
     _attachDimensionChangeHandlers: function() {
@@ -200,6 +208,9 @@ var DOMComponent = Component.inherit({
     },
 
     _attachVisibilityChangeHandlers: function() {
+        if(!this._isVisibilityChangeSupported()) {
+            return;
+        }
         var that = this;
         var hidingEventName = "dxhiding." + this.NAME + VISIBILITY_CHANGE_EVENTNAMESPACE;
         var shownEventName = "dxshown." + this.NAME + VISIBILITY_CHANGE_EVENTNAMESPACE;
@@ -452,7 +463,7 @@ DOMComponent.getInstance = function(element) {
 * @section uiWidgets
 * @publicName defaultOptions(rule)
 * @param1 rule:Object
-* @param1_field1 device:Object|Array<Object>|function
+* @param1_field1 device:Device|Array<Device>|function
 * @param1_field2 options:Object
 */
 DOMComponent.defaultOptions = function(rule) {

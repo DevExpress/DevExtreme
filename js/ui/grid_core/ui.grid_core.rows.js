@@ -29,6 +29,7 @@ var ROWS_VIEW_CLASS = "rowsview",
     COLUMN_LINES_CLASS = "dx-column-lines",
     ROW_ALTERNATION_CLASS = "dx-row-alt",
     LAST_ROW_BORDER = "dx-last-row-border",
+    EMPTY_CLASS = "dx-empty",
 
     LOADPANEL_HIDE_TIMEOUT = 200;
 
@@ -507,12 +508,26 @@ module.exports = {
                         if(isGroup) {
                             $row.addClass(GROUP_ROW_CLASS);
                             isRowExpanded = row.isExpanded;
-                            this.setAria("role", "rowgroup", $row);
+                            this.setAria("role", "row", $row);
                             this.setAria("expanded", isDefined(isRowExpanded) && isRowExpanded.toString(), $row);
                         }
+                        this._setAriaRowIndex(row, $row);
                     }
 
                     return $row;
+                },
+
+                _setAriaRowIndex: function(row, $row) {
+                    var component = this.component,
+                        isPagerMode = component.option("scrolling.mode") === "standard",
+                        rowIndex = row.rowIndex + 1;
+
+                    if(isPagerMode) {
+                        rowIndex = component.pageIndex() * component.pageSize() + rowIndex;
+                    } else {
+                        rowIndex += this._dataController.getRowIndexOffset();
+                    }
+                    this.setAria("rowindex", rowIndex, $row);
                 },
 
                 _afterRowPrepared: function(e) {
@@ -560,7 +575,7 @@ module.exports = {
                             }
                         }
 
-                        if(that.option("advancedRendering") || that.option("columnAutoWidth") || that._hasHeight || allColumnsHasWidth || that._columnsController._isColumnFixing()) {
+                        if(that.option("columnAutoWidth") || that._hasHeight || allColumnsHasWidth || that._columnsController._isColumnFixing()) {
                             that._renderScrollableCore($element);
                         }
                     }
@@ -590,7 +605,11 @@ module.exports = {
                 _renderLoadPanel: gridCoreUtils.renderLoadPanel,
 
                 _renderContent: function(contentElement, tableElement) {
-                    contentElement.replaceWith($("<div>").addClass(this.addWidgetPrefix(CONTENT_CLASS)).append(tableElement));
+                    contentElement.replaceWith($("<div>")
+                        .addClass(this.addWidgetPrefix(CONTENT_CLASS))
+                        .append(tableElement));
+
+                    this.setAria("role", "presentation", contentElement);
 
                     return this._findContentElement();
                 },
@@ -889,6 +908,9 @@ module.exports = {
                         $element = that.element();
 
                     $element.addClass(that.addWidgetPrefix(ROWS_VIEW_CLASS)).toggleClass(that.addWidgetPrefix(NOWRAP_CLASS), !that.option("wordWrapEnabled"));
+                    $element.toggleClass(EMPTY_CLASS, that._dataController.items().length === 0);
+
+                    that.setAria("role", "presentation", $element);
 
                     $table = that._renderTable({ change: change });
                     that._updateContent($table, change);
@@ -1018,11 +1040,11 @@ module.exports = {
                                 scrollingMode = that.option("scrolling.mode");
 
                                 if(freeSpaceRowCount > 0 && that._dataController.pageCount() > 1 && scrollingMode !== "virtual" && scrollingMode !== "infinite") {
-                                    freeSpaceRowElements.height(freeSpaceRowCount * that._rowHeight);
+                                    freeSpaceRowElements.css("height", freeSpaceRowCount * that._rowHeight);
                                     isFreeSpaceRowVisible = true;
                                 }
                                 if(!isFreeSpaceRowVisible && $table) {
-                                    freeSpaceRowElements.height(0);
+                                    freeSpaceRowElements.css("height", 0);
                                 } else {
                                     freeSpaceRowElements.toggle(isFreeSpaceRowVisible);
                                 }
@@ -1035,11 +1057,13 @@ module.exports = {
                                         contentHeight = contentElement.outerHeight(),
                                         showFreeSpaceRow = (elementHeightWithoutScrollbar - contentHeight) > 0,
                                         rowsHeight = that._getRowsHeight(contentElement.children().first()),
-                                        resultHeight = elementHeightWithoutScrollbar - rowsHeight;
+                                        $tableElement = $table || that.getTableElements(),
+                                        borderTopWidth = Math.ceil(parseFloat($tableElement.css("borderTopWidth"))),
+                                        resultHeight = elementHeightWithoutScrollbar - rowsHeight - borderTopWidth;
 
                                     if(showFreeSpaceRow) {
                                         commonUtils.deferRender(function() {
-                                            freeSpaceRowElements.height(resultHeight);
+                                            freeSpaceRowElements.css("height", resultHeight);
                                             isFreeSpaceRowVisible = true;
                                             freeSpaceRowElements.show();
                                         });
@@ -1050,7 +1074,7 @@ module.exports = {
                                 });
                             }
                         } else {
-                            freeSpaceRowElements.height(0);
+                            freeSpaceRowElements.css("height", 0);
                             freeSpaceRowElements.show();
                             that._updateLastRowBorder(true);
                         }
@@ -1092,7 +1116,9 @@ module.exports = {
                     });
 
                     dataController.dataSourceChanged.add(function() {
-                        that._handleScroll({ scrollOffset: { top: that._scrollTop, left: that._scrollLeft } });
+                        if(that._scrollLeft >= 0) {
+                            that._handleScroll({ scrollOffset: { top: that._scrollTop, left: that._scrollLeft } });
+                        }
                     });
                 },
 
@@ -1134,7 +1160,7 @@ module.exports = {
                     return scrollbarWidth > 0 ? scrollbarWidth : 0;
                 },
 
-                //TODO remove this call, move _fireColumnResizedCallbacks functionality to columnsController
+                // TODO remove this call, move _fireColumnResizedCallbacks functionality to columnsController
                 _fireColumnResizedCallbacks: function() {
                     var that = this,
                         lastColumnWidths = that._lastColumnWidths || [],

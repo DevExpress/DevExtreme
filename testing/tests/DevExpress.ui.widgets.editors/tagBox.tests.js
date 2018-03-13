@@ -421,6 +421,42 @@ QUnit.test("Items should not be changed if one of them is hidden", function(asse
     assert.equal(tagBox.option("items").length, 5, "items was restored");
 });
 
+QUnit.test("added and removed items should be correct with hideSelecterdItems option and dataSource (T589590)", function(assert) {
+    var spy = sinon.spy(),
+        tagBox = $("#tagBox").dxTagBox({
+            dataSource: [1, 2, 3],
+            opened: true,
+            hideSelectedItems: true,
+            onSelectionChanged: spy
+        }).dxTagBox("instance"),
+        content = tagBox.content(),
+        $item = $(content).find("." + LIST_ITEM_CLASS).eq(0);
+
+    $item.trigger("dxclick");
+    assert.deepEqual(spy.args[1][0].addedItems, [1], "added items is correct");
+    assert.deepEqual(spy.args[1][0].removedItems, [], "removed items is empty");
+
+    $item = $(content).find("." + LIST_ITEM_CLASS).eq(1);
+    $item.trigger("dxclick");
+    assert.deepEqual(spy.args[2][0].addedItems, [3], "added items is correct");
+    assert.deepEqual(spy.args[2][0].removedItems, [], "removed items is empty");
+});
+
+QUnit.test("selected items should be correct after item click with hideSelecterdItems option (T606462)", function(assert) {
+    var tagBox = $("#tagBox").dxTagBox({
+            dataSource: [1, 2, 3],
+            value: [1],
+            opened: true,
+            hideSelectedItems: true
+        }).dxTagBox("instance"),
+        content = tagBox.content(),
+        $item = $(content).find("." + LIST_ITEM_CLASS).eq(0);
+
+    $item.trigger("dxclick");
+
+    assert.deepEqual(tagBox.option("selectedItems"), [1, 2], "selected items are correct");
+});
+
 QUnit.module("tags", moduleSetup);
 
 QUnit.test("add/delete tags", function(assert) {
@@ -2533,7 +2569,7 @@ QUnit.test("size of input is 1 when searchEnabled and editEnabled is false", fun
         editEnabled: false
     });
     var $input = $tagBox.find("input");
-    //NOTE: width should be 0.1 because of T393423
+    // NOTE: width should be 0.1 because of T393423
     assert.roughEqual($input.width(), 0.1, 0.1, "input has correct width");
 });
 
@@ -3986,8 +4022,8 @@ QUnit.test("focusOut should be prevented when tagContainer clicked - T454876", f
     var $inputWrapper = this.$element.find(".dx-dropdowneditor-input-wrapper");
 
     $inputWrapper.on("mousedown", function(e) {
-        //note: you should not prevent pointerdown because it will prevent click on ios real devices
-        //you must use preventDefault in code because it is possible to use .on('focusout', handler) instead of onFocusOut option
+        // note: you should not prevent pointerdown because it will prevent click on ios real devices
+        // you must use preventDefault in code because it is possible to use .on('focusout', handler) instead of onFocusOut option
         assert.ok(e.isDefaultPrevented(), "mousedown was prevented and lead to focusout prevent");
     });
 
@@ -4445,11 +4481,11 @@ QUnit.test("Select All should use cache", function(assert) {
 
     var isValueEqualsSpy = sinon.spy(tagBox, "_isValueEquals");
 
-    //act
+    // act
     keyGetterCounter = 0;
     $(".dx-list-select-all-checkbox").trigger("dxclick");
 
-    //assert
+    // assert
     assert.equal(keyGetterCounter, 1404, "key getter call count");
     assert.equal(isValueEqualsSpy.callCount, 0, "_isValueEquals is not called");
 });

@@ -496,7 +496,7 @@ QUnit.test("the value should be passed to the hidden input in the correct format
     });
 });
 
-//T552313
+// T552313
 QUnit.test("the value should be passed to the hidden input in the correct format if dateSerializationFormat option is defined", function(assert) {
     var dateValue = new Date(Date.UTC(2016, 6, 15, 14, 30)),
         $element = $("#dateBox").dxDateBox({
@@ -1849,7 +1849,7 @@ QUnit.test("DateBox must update its value when a date is selected in the calenda
 
     this.fixture.dateBox.open();
     getInstanceWidget(this.fixture.dateBox).option("value", date);
-    //this.fixture.dateBox.close();
+    // this.fixture.dateBox.close();
     assert.strictEqual(this.fixture.dateBox.option("value"), date);
 });
 
@@ -2672,16 +2672,18 @@ QUnit.test("T231015 - widget should set default date or time if only one widget'
     $(dateBox._popup._wrapper()).find(".dx-popup-done").trigger("dxclick");
 
     date.setFullYear(2015, 3, 21);
+    uiDateUtils.normalizeTime(date);
     assert.equal(Math.floor(dateBox.option("value").getTime() / 1000 / 10), Math.floor(date.getTime() / 1000 / 10), "value is correct if only calendar value is changed");
 
     dateBox.option("value", null);
     dateBox._strategy._widget.option("value", null);
     dateBox.open();
     date = new Date();
-    dateBox._strategy._timeView.option("value", new Date(2015, 3, 21, 15, 15, 34));
+    dateBox._strategy._timeView.option("value", new Date(2015, 3, 21, 15, 15));
     $(dateBox._popup._wrapper()).find(".dx-popup-done").trigger("dxclick");
 
-    date.setHours(15, 15, 34);
+    date.setHours(15, 15);
+    uiDateUtils.normalizeTime(date);
     assert.equal(Math.floor(dateBox.option("value").getTime() / 1000 / 10), Math.floor(date.getTime() / 1000 / 10), "value is correct if only timeView value is changed");
 });
 
@@ -2695,9 +2697,12 @@ QUnit.test("T253298 - widget should set default date and time if value is null a
 
     dateBox.open();
     var date = new Date();
+    uiDateUtils.normalizeTime(date);
     $(dateBox._popup._wrapper()).find(".dx-popup-done").trigger("dxclick");
 
-    assert.equal(Math.round(dateBox.option("value").getTime() / 1000 / 10), Math.round(date.getTime() / 1000 / 10), "value is correct");
+    var value = dateBox.option("value");
+    assert.equal(value.getMilliseconds(), 0, "milliseconds is should be zero");
+    assert.equal(Math.round(value.getTime() / 1000 / 10), Math.round(date.getTime() / 1000 / 10), "value is correct");
 });
 
 QUnit.test("DateBox should have time part when pickerType is rollers", function(assert) {
@@ -2733,6 +2738,37 @@ QUnit.test("DateBox with time should be rendered correctly in IE, templatesRende
     } finally {
         clock.restore();
     }
+});
+
+QUnit.test("Reset seconds and milliseconds when DateBox has no value for datetime view", function(assert) {
+    var dateBox = $("#dateBox").dxDateBox({
+        type: "datetime",
+        pickerType: "calendar",
+        min: new Date("2015/1/25"),
+        max: new Date("2015/2/10")
+    }).dxDateBox("instance");
+
+    dateBox.open();
+
+    $(".dx-calendar-cell").first().trigger("dxclick");
+    $(".dx-popup-done.dx-button").first().trigger("dxclick");
+
+    assert.equal(dateBox.option("value").getSeconds(), 0, "seconds has zero value");
+    assert.equal(dateBox.option("value").getMilliseconds(), 0, "milliseconds has zero value");
+});
+
+QUnit.test("Reset seconds and milliseconds when DateBox has no value for time view", function(assert) {
+    var dateBox = $("#dateBox").dxDateBox({
+        pickerType: "list",
+        type: "time"
+    }).dxDateBox("instance");
+
+    dateBox.open();
+
+    $(".dx-list-item").first().trigger("dxclick");
+
+    assert.equal(dateBox.option("value").getSeconds(), 0, "seconds has zero value");
+    assert.equal(dateBox.option("value").getMilliseconds(), 0, "milliseconds has zero value");
 });
 
 QUnit.module("datebox w/ time list", {
@@ -3274,7 +3310,7 @@ QUnit.testInActiveWindow("onValueChanged fires after clearing and enter key pres
 
     $(".dx-calendar .dx-calendar-cell").eq(12).trigger("dxclick");
 
-    //attempt to simulate real clearing
+    // attempt to simulate real clearing
     $input.val("");
     this.dateBox.option("text", "");
 
@@ -3967,7 +4003,7 @@ QUnit.test("ISO strings support dateSerializationFormat", function(assert) {
     }
 });
 
-//T506146
+// T506146
 QUnit.test("enter value with big year if dateSerializationFormat is defined", function(assert) {
     var defaultForceIsoDateParsing = config().forceIsoDateParsing;
     config().forceIsoDateParsing = true;
@@ -4018,10 +4054,10 @@ QUnit.test("onValueChanged should not be fired when on popup opening", function(
             }
         }).dxDateBox("instance");
 
-    //act
+    // act
     dateBox.option("opened", true);
 
-    //assert
+    // assert
     assert.ok(!isValueChangedCalled, "onValueChanged is not called");
 });
 
@@ -4038,10 +4074,10 @@ QUnit.test("value should be changed on cell click in calendar with defined dateS
     var dateBox = $dateBox.dxDateBox("instance");
     dateBox.open();
 
-    //act
+    // act
     $(".dx-calendar-cell").eq(0).trigger("dxclick");
 
-    //assert
+    // assert
     assert.deepEqual(dateBox.option("value"), new Date(2017, 10, 26), "value is changed");
 
     Calendar.defaultOptions({

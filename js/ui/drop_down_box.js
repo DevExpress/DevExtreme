@@ -82,6 +82,8 @@ var DropDownBox = DropDownEditor.inherit({
              * @type template|function
              * @default null
              * @type_function_param1 templateData:object
+             * @type_function_param1_field1 component:dxDropDownBox
+             * @type_function_param1_field2 value:any
              * @type_function_param2 contentElement:dxElement
              * @type_function_return string|Node|jQuery
              */
@@ -166,10 +168,11 @@ var DropDownBox = DropDownEditor.inherit({
         this._initDataExpressions();
     },
 
-    _render: function() {
+    _initMarkup: function() {
         this._renderSubmitElement();
-        this.callBase();
         this.$element().addClass(DROP_DOWN_BOX_CLASS);
+
+        this.callBase();
     },
 
     _renderSubmitElement: function() {

@@ -43,9 +43,7 @@ QUnit.testStart(function() {
     $("#qunit-fixture").html(markup);
 });
 
-var WIDGET_CLASS = "dx-autocomplete",
-    TEXTEDITOR_CLASS = "dx-texteditor",
-    TEXTEDITOR_INPUT_CLASS = "dx-texteditor-input",
+var TEXTEDITOR_INPUT_CLASS = "dx-texteditor-input",
     LIST_CLASS = "dx-list",
     LIST_ITEM_CLASS = "dx-list-item",
     FOCUSED_STATE_SELECTOR = ".dx-state-focused",
@@ -82,31 +80,22 @@ QUnit.module("dxAutocomplete", {
     }
 });
 
-QUnit.test("markup init", function(assert) {
-    var element = this.element;
 
-    assert.ok(element.hasClass(WIDGET_CLASS), "Element has " + WIDGET_CLASS + " class");
-    assert.ok(element.hasClass(TEXTEDITOR_CLASS), "Element has " + TEXTEDITOR_CLASS + " class");
+QUnit.test("popup init", function(assert) {
     assert.ok(this.popup._wrapper().hasClass("dx-autocomplete-popup-wrapper"), "popup wrapper class set");
 
     this.instance.option("value", "i");
     assert.equal($(".dx-viewport " + "." + LIST_CLASS).length, 1, "Element has " + LIST_CLASS + " class");
 });
 
-QUnit.test("init with options", function(assert) {
+QUnit.test("dataSource init", function(assert) {
     var element = $("#autocomplete2").dxAutocomplete({
             value: "anotherText",
-            dataSource: ["qwerty", "item 2", "item 3"],
-            placeholder: "type something"
+            dataSource: ["qwerty", "item 2", "item 3"]
         }),
         instance = element.dxAutocomplete("instance");
 
     assert.equal(instance._dataSource.items()[0], "qwerty", "autocomplete-s dataSource initialization");
-    assert.equal(instance.option("value"), "anotherText", "autocomplete-s textbox value initialization");
-    assert.equal(instance.option("placeholder"), instance.option("placeholder"), "autocomplete-s successful placeholder initialization");
-
-    instance.option("placeholder", "abcde");
-    assert.equal(instance.option("placeholder"), "abcde", "when we change autocomplete-s placeholder, we change textbox-s placeholder");
 });
 
 QUnit.test("Resize by option", function(assert) {
@@ -157,14 +146,6 @@ QUnit.test("check textbox sizes", function(assert) {
     instance.option("height", 120);
 
     assert.equal(element.height(), instance.option("height"), "textbox height is right");
-});
-
-QUnit.test("change autocomplete's textbox value", function(assert) {
-    this.instance.option("value", "new value");
-    assert.equal(this.instance.option("value"), "new value");
-
-    this.instance.option("value", "newest value");
-    assert.equal(this.instance.option("value"), "newest value");
 });
 
 QUnit.test("dataSource support", function(assert) {
@@ -261,14 +242,6 @@ QUnit.test("item click sets value", function(assert) {
     assert.equal(this.instance.option("value"), "item 1", "click on list item, and it-s value replace textbox value");
     assert.equal($list.is(":hidden"), true, "when click on list-s item, list is hidden");
     assert.ok(!this.$input.is(":focus"), "after select value we drop focus from input");
-});
-
-QUnit.test("maxLength", function(assert) {
-    this.instance.option("maxLength", 5);
-    assert.equal(this.instance.option("maxLength"), 5);
-
-    this.instance.option("maxLength", 3);
-    assert.equal(this.instance.option("maxLength"), 3);
 });
 
 QUnit.testInActiveWindow("open/close actions", function(assert) {
@@ -803,9 +776,9 @@ QUnit.test("Manual datasource - search in datasource", function(assert) {
 
     $list = this.instance._list._$element;
 
-    //act
+    // act
     keyboard.type("t");
-    //assert
+    // assert
     assert.equal(searchedString, "t", "Search string should be passed to user-defined load method");
 });
 
@@ -816,16 +789,6 @@ QUnit.test("Changing the 'value' option must invoke the 'onValueChanged' action"
         }
     }).dxAutocomplete("instance");
     autocomplete.option("value", true);
-});
-
-QUnit.test("input should be empty when value is empty", function(assert) {
-    var $autocomplete = $("#autocomplete2").dxAutocomplete({
-        placeholder: "test",
-        value: ""
-    });
-
-    var $input = $autocomplete.find("input");
-    assert.equal($input.val(), "", "input is empty");
 });
 
 QUnit.test("dxAutoComplete should not be opened when change the value from code (T141485)", function(assert) {
@@ -1295,16 +1258,6 @@ QUnit.test("B238021", function(assert) {
     assert.ok($list.is(":hidden"), "close menu after input losts focus");
 });
 
-QUnit.test("B251138 disabled", function(assert) {
-    this.instance.option("disabled", true);
-    assert.ok(this.instance.$element().hasClass("dx-state-disabled"), "disabled state should be added to autocomplete itself");
-    assert.ok(this.instance.option("disabled"), "Disabled state should be propagated to texteditor");
-
-    this.instance.option("disabled", false);
-    assert.ok(!this.instance.$element().hasClass("dx-state-disabled"), "disabled state should be removed from autocomplete itself");
-    assert.ok(!this.instance.option("disabled"), "Disabled state should be propagated to texteditor");
-});
-
 QUnit.test("onValueChanged callback", function(assert) {
     var called = 0;
 
@@ -1360,7 +1313,6 @@ QUnit.test("B251208 - dxAutocomplete: cannot select text by keyboard", function(
     assert.equal(this.$input.prop("selectionStart"), 0);
     assert.equal(this.$input.prop("selectionEnd"), 2);
 });
-
 
 
 QUnit.module("widget sizing render", {
@@ -1429,13 +1381,6 @@ QUnit.testInActiveWindow("filter is not reset", function(assert) {
 
 
 QUnit.module("aria accessibility");
-
-QUnit.test("aria-autocomplete property", function(assert) {
-    var $element = $("#widget").dxAutocomplete(),
-        $input = $element.find("input:first");
-
-    assert.equal($input.attr("aria-autocomplete"), "inline");
-});
 
 QUnit.test("aria role should not change to listbox after it's second rendering (T290859)", function(assert) {
     assert.expect(1);

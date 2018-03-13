@@ -229,44 +229,43 @@ Series.prototype = {
         return rangeCalculator.getPointsInViewPort(this);
     },
 
-    _createPoint: function(data, index, oldPoint) {
+    _createPoint: function(data, index, oldPoint, dataIndex) {
         data.index = index;
         var that = this,
             pointsByArgument = that.pointsByArgument,
-            options,
-            arg,
-            point,
+            options = that._getCreatingPointOptions(data, dataIndex),
+            arg = data.argument.valueOf(),
+            point = oldPoint,
             pointByArgument;
 
-        if(that._checkData(data)) {
-            options = that._getCreatingPointOptions(data);
-            arg = data.argument.valueOf();
-            point = oldPoint;
-            if(point) {
-                point.update(data, options);
-            } else {
-                point = new pointModule.Point(that, data, options);
-                if(that.isSelected() && includePointsMode(that.lastSelectionMode)) {
-                    point.setView(SELECTION);
-                }
+        if(point) {
+            point.update(data, options);
+        } else {
+            point = new pointModule.Point(that, data, options);
+            if(that.isSelected() && includePointsMode(that.lastSelectionMode)) {
+                point.setView(SELECTION);
             }
+        }
 
-            pointByArgument = pointsByArgument[arg];
-            if(pointByArgument) {
-                pointByArgument.push(point);
-            } else {
-                pointsByArgument[arg] = [point];
-            }
+        pointByArgument = pointsByArgument[arg];
+        if(pointByArgument) {
+            pointByArgument.push(point);
+        } else {
+            pointsByArgument[arg] = [point];
+        }
 
-            if(point.hasValue()) {
-                that.customizePoint(point, data);
-            }
+        if(point.hasValue()) {
+            that.customizePoint(point, data, dataIndex);
         }
         return point;
     },
 
     getRangeData: function() {
         return this._visible ? this._getRangeData() : getEmptyBusinessRange();
+    },
+
+    getArgumentRange: function() {
+        return this._visible ? rangeCalculator.getArgumentRange(this) : getEmptyBusinessRange();
     },
 
     getViewport: function() {
@@ -344,10 +343,6 @@ Series.prototype = {
         return this._options;
     },
 
-    _resetRangeData: function() {
-        this._rangeData = getEmptyBusinessRange();
-    },
-
     _getOldPoint: function(data, oldPointsByArgument, index) {
         var arg = data.argument && data.argument.valueOf(),
             point = (oldPointsByArgument[arg] || [])[0];
@@ -361,42 +356,61 @@ Series.prototype = {
 
     updateData: function(data) {
         var that = this,
-            points = that._originalPoints || [],
-            options = that._options,
-            allPoints = that._allPoints = (that._originalPoints || []).slice(),
-            oldPointsByArgument = that.pointsByArgument || {};
+            options = that._options;
 
         data = data || [];
-        that.pointsByArgument = {};
-
-        that._resetRangeData();
 
         if(data.length) {
             that._canRenderCompleteHandle = true;
         }
 
-        if(that._aggregatedPoints) {
-            that._allPoints = [];
-            that._disposePoints(that._originalPoints);
-            oldPointsByArgument = {};
-        }
-
         that._beginUpdateData(data);
 
-        points = data.reduce(function(points, dataItem) {
-            var data = that._getPointData(dataItem, options),
-                index = points.length,
-                oldPoint = that._getOldPoint(data, oldPointsByArgument, index),
-                p = that._createPoint(data, index, oldPoint);
-
-            if(p) {
-                points.push(p);
-                if(!oldPoint) {
-                    allPoints.push(p);
-                }
+        that._data = data.reduce(function(data, dataItem, index) {
+            var pointDataItem = that._getPointData(dataItem, options);
+            if(that._checkData(pointDataItem)) {
+                pointDataItem.index = index;
+                data.push(pointDataItem);
             }
-            return points;
+            return data;
         }, []);
+
+        that._endUpdateData();
+    },
+
+    _getData: function() {
+        var data = this._data || [];
+
+        if(this.useAggregation()) {
+            data = this._aggregateData(data);
+        }
+
+        return data;
+    },
+
+    useAggregation: function() {
+        var aggregation = this.getOptions().aggregation;
+
+        return aggregation && aggregation.enabled;
+    },
+
+    createPoints: function() {
+        var that = this,
+            allPoints = that._allPoints = (that._points || []).slice(),
+            oldPointsByArgument = that.pointsByArgument || {},
+            points;
+
+        that.pointsByArgument = {};
+
+        points = that._getData().map(function(dataItem, index) {
+            var oldPoint = that._getOldPoint(dataItem, oldPointsByArgument, index),
+                p = that._createPoint(dataItem, index, oldPoint, dataItem.index);
+
+            if(!oldPoint) {
+                allPoints.push(p);
+            }
+            return p;
+        });
 
         that._oldPoints = Object.keys(oldPointsByArgument).reduce(function(points, key) {
             var argPoints = oldPointsByArgument[key];
@@ -406,11 +420,8 @@ Series.prototype = {
             return points;
         }, []);
 
-        that._disposePoints(that._aggregatedPoints);
-        that._aggregatedPoints = null;
-        that._points = that._originalPoints = points;
+        that._points = points;
         that._pointsToDraw = null;
-        that._endUpdateData();
     },
 
     prepareToDrawing: function(animationEnabled) {
@@ -418,7 +429,7 @@ Series.prototype = {
             points = that._points || [],
             allPoints = that._allPoints || [];
 
-        if(animationEnabled && !that._firstDrawing && !this._aggregatedPoints) {
+        if(animationEnabled && !that._firstDrawing) {
             that._pointsToDraw = allPoints;
             that._drawElements(true, false);
         } else {
@@ -435,11 +446,25 @@ Series.prototype = {
         }, this);
     },
 
-    resamplePoints: function(canvasLength) {
+    _removeOldSegments: function() {
+        var that = this,
+            startIndex = that._segments.length;
+
+        _each(that._graphics.splice(startIndex, that._graphics.length) || [], function(_, elem) {
+            that._removeElement(elem);
+        });
+        if(that._trackers) {
+            _each(that._trackers.splice(startIndex, that._trackers.length) || [], function(_, elem) {
+                elem.remove();
+            });
+        }
+    },
+
+    _aggregateData: function(data) {
         var that = this,
             categories,
             sizePoint = that._getPointSize(),
-            pointsLength = that.getAllPoints().length,
+            pointsLength = data.length,
             discreteMin,
             discreteMax,
             count,
@@ -454,7 +479,7 @@ Series.prototype = {
             tickInterval;
 
         if(pointsLength && pointsLength > 1) {
-            count = canvasLength / sizePoint;
+            count = argTranslator.canvasLength / sizePoint;
             count = count <= 1 ? 1 : count;
 
             if(isDiscrete) {
@@ -473,23 +498,10 @@ Series.prototype = {
                 tickInterval = (minMaxDefined ? (max - min) : (businessRange.maxVisible - businessRange.minVisible)) / count;
             }
 
-            that._points = that._resample(tickInterval, min - tickInterval, max + tickInterval, minMaxDefined);
-            that.prepareToDrawing(false);
+            return that._resample(tickInterval, min - tickInterval, max + tickInterval, minMaxDefined, data);
         }
-    },
 
-    _removeOldSegments: function() {
-        var that = this,
-            startIndex = that._segments.length;
-
-        _each(that._graphics.splice(startIndex, that._graphics.length) || [], function(_, elem) {
-            that._removeElement(elem);
-        });
-        if(that._trackers) {
-            _each(that._trackers.splice(startIndex, that._trackers.length) || [], function(_, elem) {
-                elem.remove();
-            });
-        }
+        return [];
     },
 
     _drawElements: function(animationEnabled, firstDrawing) {
@@ -731,7 +743,7 @@ Series.prototype = {
         return this.areLabelsVisible() && this._options.label && this._options.label.visible;
     },
 
-    customizePoint: function(point, pointData) {
+    customizePoint: function(point, pointData, dataItem) {
         var that = this,
             options = that._options,
             customizePoint = options.customizePoint,
@@ -759,7 +771,7 @@ Series.prototype = {
         }
 
         if(useLabelCustomOptions || usePointCustomOptions) {
-            pointOptions = that._parsePointOptions(that._preparePointOptions(customOptions), customLabelOptions || options.label, pointData);
+            pointOptions = that._parsePointOptions(that._preparePointOptions(customOptions), customLabelOptions || options.label, pointData, dataItem);
             pointOptions.styles.useLabelCustomOptions = useLabelCustomOptions;
             pointOptions.styles.usePointCustomOptions = usePointCustomOptions;
 
@@ -787,8 +799,8 @@ Series.prototype = {
         that._options.visibilityChanged();
     },
 
-    //TODO. Problem related to 'point' option for bar-like series. Revisit this code once options parsing is changed
-    //see T243839, T231939
+    // TODO. Problem related to 'point' option for bar-like series. Revisit this code once options parsing is changed
+    // see T243839, T231939
     _updatePointsVisibility: _noop,
 
     hideLabels: function() {
@@ -797,10 +809,10 @@ Series.prototype = {
         });
     },
 
-    _parsePointOptions: function(pointOptions, labelOptions, data) {
+    _parsePointOptions: function(pointOptions, labelOptions, data, dataIndex) {
         var that = this,
             options = that._options,
-            styles = that._createPointStyles(pointOptions, data),
+            styles = that._createPointStyles(pointOptions, data, dataIndex),
             parsedOptions = _extend({}, pointOptions, {
                 type: options.type,
                 rotated: options.rotated,
@@ -827,14 +839,14 @@ Series.prototype = {
         return _extend(false, {}, this._getOptionsForPoint(), { hoverStyle: {}, selectionStyle: {} });
     },
 
-    _resample: function(ticksInterval, min, max, isDefinedMinMax) {
+    _resample: function(ticksInterval, min, max, isDefinedMinMax, data) {
         var that = this,
             fusionPoints = [],
             nowIndexTicks = 0,
             pointData,
             minTick,
-            state = 0,
-            originalPoints = that.getAllPoints();
+            aggregatedData,
+            state = 0;
 
         function addFirstFusionPoint(point) {
             fusionPoints.push(point);
@@ -852,21 +864,15 @@ Series.prototype = {
         }
 
         if(that.argumentAxisType === DISCRETE || that.valueAxisType === DISCRETE) {
-            return _map(originalPoints, function(point, index) {
+            return _map(data, function(point, index) {
                 if(index % ticksInterval === 0) {
                     return point;
                 }
-                point.setInvisibility();
                 return null;
             });
         }
 
-        that.pointsByArgument = {};
-
-        that._disposePoints(that._aggregatedPoints);
-
-        that._aggregatedPoints = originalPoints.reduce(function(aggregatedPoints, point) {
-            point.setInvisibility();
+        aggregatedData = data.reduce(function(aggregatedPoints, point) {
             if(!fusionPoints.length) {
                 addFirstFusionPoint(point);
             } else if(!state && Math.abs(minTick - point.argument) < ticksInterval) {
@@ -875,7 +881,7 @@ Series.prototype = {
                 pointData = that._fusionPoints(fusionPoints, minTick, nowIndexTicks);
                 nowIndexTicks++;
 
-                aggregatedPoints.push(that._createPoint(pointData, aggregatedPoints.length));
+                aggregatedPoints.push(pointData);
 
                 fusionPoints = [];
                 addFirstFusionPoint(point);
@@ -887,11 +893,11 @@ Series.prototype = {
 
         if(fusionPoints.length) {
             pointData = that._fusionPoints(fusionPoints, minTick, nowIndexTicks);
-            that._aggregatedPoints.push(that._createPoint(pointData, that._aggregatedPoints.length));
+            aggregatedData.push(pointData);
         }
 
         that._endUpdateData();
-        return that._aggregatedPoints;
+        return aggregatedData;
     },
 
     canRenderCompleteHandle: function() {
@@ -913,7 +919,7 @@ Series.prototype = {
     },
 
     getAllPoints: function() {
-        return (this._originalPoints || []).slice();
+        return (this._points || []).slice();
     },
 
     getPointByPos: function(pos) {
@@ -1117,10 +1123,9 @@ Series.prototype = {
 
     _deletePoints: function() {
         var that = this;
-        that._disposePoints(that._originalPoints);
-        that._disposePoints(that._aggregatedPoints);
         that._disposePoints(that._oldPoints);
-        that._points = that._oldPoints = that._aggregatedPoints = that._originalPoints = that._drawnPoints = null;
+        that._disposePoints(that._points);
+        that._points = that._oldPoints = that._drawnPoints = null;
     },
 
     _deleteTrackers: function() {
@@ -1158,7 +1163,6 @@ Series.prototype = {
             that._pointOptions =
 
             that._drawnPoints =
-            that._aggregatedPoints =
             that.pointsByArgument =
             that._segments =
             that._prevSeries = null;

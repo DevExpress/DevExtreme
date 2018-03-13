@@ -1856,7 +1856,7 @@ var SchedulerWorkSpace = Widget.inherit({
         return this._$allDayContainer;
     },
 
-    //NOTE: refactor leftIndex calculation
+    // NOTE: refactor leftIndex calculation
     getCellIndexByCoordinates: function(coordinates, allDay) {
         var cellCount = this._getTotalCellCount(this._getGroupCount()),
             timePanelWidth = this.getTimePanelWidth(),
@@ -1995,7 +1995,7 @@ var SchedulerWorkSpace = Widget.inherit({
         return result;
     },
 
-    //NOTE: T312051, remove after fix scrollable bug T324196
+    // NOTE: T312051, remove after fix scrollable bug T324196
     restoreScrollTop: function() {
         this.$element().scrollTop(0);
     },

@@ -1,5 +1,6 @@
 "use strict";
 
+/* global MockTranslator */
 var $ = require("jquery"),
     vizMocks = require("../../helpers/vizMocks.js"),
     Series = require("viz/series/base_series").Series;
@@ -24,7 +25,10 @@ var createSeries = function(options, renderSettings, widgetType) {
     renderSettings.renderer = renderSettings.renderer || new vizMocks.Renderer();
     renderSettings.argumentAxis = renderSettings.argumentAxis || {
         getViewport: function() {},
-        calculateInterval: function(a, b) { return Math.abs(a - b); }
+        calculateInterval: function(a, b) { return Math.abs(a - b); },
+        getTranslator: function() {
+            return new MockTranslator({});
+        }
     };
     options = $.extend(true, {
         visible: true,
@@ -47,6 +51,7 @@ QUnit.test("Range for empty dataSource", function(assert) {
     var series = createSeries({ type: "line" });
 
     series.updateData([]);
+    series.createPoints();
 
     var rangeData = series.getRangeData();
 
@@ -67,6 +72,7 @@ QUnit.test("Range for empty dataSource", function(assert) {
 QUnit.test("Range for dataSource with one point", function(assert) {
     var series = createSeries({ type: "line" });
     series.updateData([{ arg: 0, val: 0 }]);
+    series.createPoints();
 
     assert.ok(series, "Series should be created");
 
@@ -90,6 +96,7 @@ QUnit.test("Numeric", function(assert) {
         series = createSeries({ type: "line", argumentAxisType: "continuous" });
 
     series.updateData(data);
+    series.createPoints();
 
     rangeData = series.getRangeData();
 
@@ -111,6 +118,7 @@ QUnit.test("Numeric. Date with same arguments", function(assert) {
         series = createSeries({ type: "line", argumentAxisType: "continuous" });
 
     series.updateData(data);
+    series.createPoints();
     rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
@@ -132,6 +140,7 @@ QUnit.test("Data with valueErrorBar (lowError < highError)", function(assert) {
         series = createSeries({ type: "line", argumentAxisType: "continuous", valueErrorBar: { displayMode: "auto", highValueField: "highError", lowValueField: "lowError" } });
 
     series.updateData(data);
+    series.createPoints();
     rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
@@ -148,6 +157,7 @@ QUnit.test("Data with valueErrorBar (lowError > highError)", function(assert) {
         series = createSeries({ type: "line", argumentAxisType: "continuous", valueErrorBar: { displayMode: "auto", highValueField: "highError", lowValueField: "lowError" } });
 
     series.updateData(data);
+    series.createPoints();
     rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
@@ -164,6 +174,7 @@ QUnit.test("Data with valueErrorBar. low mode", function(assert) {
         series = createSeries({ type: "line", argumentAxisType: "continuous", valueErrorBar: { displayMode: "low", highValueField: "highError", lowValueField: "lowError" } });
 
     series.updateData(data);
+    series.createPoints();
     rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
@@ -180,6 +191,7 @@ QUnit.test("Data with valueErrorBar. high mode", function(assert) {
         series = createSeries({ type: "line", argumentAxisType: "continuous", valueErrorBar: { displayMode: "high", highValueField: "highError", lowValueField: "lowError" } });
 
     series.updateData(data);
+    series.createPoints();
     rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
@@ -196,6 +208,7 @@ QUnit.test("Data with valueErrorBar. none mode", function(assert) {
         series = createSeries({ type: "line", argumentAxisType: "continuous", valueErrorBar: { displayMode: "none", highValueField: "highError", lowValueField: "lowError" } });
 
     series.updateData(data);
+    series.createPoints();
     rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
@@ -212,6 +225,7 @@ QUnit.test("Data with valueErrorBar. invalid mode", function(assert) {
         series = createSeries({ type: "line", argumentAxisType: "continuous", valueErrorBar: { displayMode: "invalidMode", highValueField: "highError", lowValueField: "lowError" } });
 
     series.updateData(data);
+    series.createPoints();
     rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
@@ -235,6 +249,7 @@ QUnit.test("Datetime.", function(assert) {
         series = createSeries({ type: "line", argumentAxisType: "continuous" });
 
     series.updateData(data);
+    series.createPoints();
     rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
@@ -256,6 +271,7 @@ QUnit.test("Numeric. Categories", function(assert) {
         series = createSeries(options);
 
     series.updateData(data);
+    series.createPoints();
     rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
@@ -285,6 +301,7 @@ QUnit.test("Datetime. Categories", function(assert) {
         series = createSeries(options);
 
     series.updateData(data);
+    series.createPoints();
     rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
@@ -305,6 +322,7 @@ QUnit.test("String.", function(assert) {
         series = createSeries({ type: "line", argumentAxisType: "discrete", valueAxisType: "discrete" });
 
     series.updateData(data);
+    series.createPoints();
     rangeData = series.getRangeData();
 
     assert.ok(rangeData);
@@ -327,6 +345,7 @@ QUnit.test("Numeric.", function(assert) {
         series = createSeries({ type: "line" });
 
     series.updateData(data);
+    series.createPoints();
     rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
@@ -354,6 +373,7 @@ QUnit.test("Datetime.", function(assert) {
         series = createSeries({ type: "line" });
 
     series.updateData(data);
+    series.createPoints();
     rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
@@ -375,6 +395,7 @@ QUnit.test("Numeric. Categories", function(assert) {
         series = createSeries(options);
 
     series.updateData(data);
+    series.createPoints();
     rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be correct");
@@ -403,6 +424,7 @@ QUnit.test("Datetime. Categories", function(assert) {
         series = createSeries(options);
 
     series.updateData(data);
+    series.createPoints();
     rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
@@ -423,6 +445,7 @@ QUnit.test("String.", function(assert) {
         series = createSeries({ type: "line", argumentAxisType: "discrete", valueAxisType: "discrete" });
 
     series.updateData(data);
+    series.createPoints();
     rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be correct");
@@ -445,6 +468,7 @@ QUnit.test("Line", function(assert) {
         series = createSeries({ type: "line", argumentAxisType: "continuous" });
 
     series.updateData(data);
+    series.createPoints();
     rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
@@ -463,6 +487,7 @@ QUnit.test("Scatter", function(assert) {
         series = createSeries({ type: "scatter", argumentAxisType: "continuous" });
 
     series.updateData(data);
+    series.createPoints();
     rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
@@ -481,6 +506,7 @@ QUnit.test("Spline", function(assert) {
         series = createSeries({ type: "spline", argumentAxisType: "continuous" });
 
     series.updateData(data);
+    series.createPoints();
     rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
@@ -499,6 +525,7 @@ QUnit.test("Stepline", function(assert) {
         series = createSeries({ type: "stepline", argumentAxisType: "continuous" });
 
     series.updateData(data);
+    series.createPoints();
     rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
@@ -519,6 +546,7 @@ QUnit.test("Numeric", function(assert) {
         series = createSeries({ type: "rangebar", argumentAxisType: "continuous", mainSeriesColor: function() { } });
 
     series.updateData(data);
+    series.createPoints();
     rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
@@ -547,6 +575,7 @@ QUnit.test("Datetime.", function(assert) {
         series = createSeries({ type: "rangebar", argumentAxisType: "continuous" });
 
     series.updateData(data);
+    series.createPoints();
     rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
@@ -568,6 +597,7 @@ QUnit.test("Numeric. Categories", function(assert) {
         series = createSeries(options);
 
     series.updateData(data);
+    series.createPoints();
     rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
@@ -597,6 +627,7 @@ QUnit.test("Datetime. Categories", function(assert) {
         series = createSeries(options);
 
     series.updateData(data);
+    series.createPoints();
     rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
@@ -617,6 +648,7 @@ QUnit.test("String.", function(assert) {
         series = createSeries({ type: "rangebar", argumentAxisType: "discrete", valueAxisType: "discrete" });
 
     series.updateData(data);
+    series.createPoints();
     rangeData = series.getRangeData();
 
     assert.ok(rangeData);
@@ -639,6 +671,7 @@ QUnit.test("Numeric", function(assert) {
         series = createSeries({ type: "rangebar", argumentAxisType: "continuous" });
 
     series.updateData(data);
+    series.createPoints();
     rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
@@ -665,6 +698,7 @@ QUnit.test("Datetime.", function(assert) {
         series = createSeries({ type: "rangebar", argumentAxisType: "continuous" });
 
     series.updateData(data);
+    series.createPoints();
     rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
@@ -686,6 +720,7 @@ QUnit.test("Numeric. Categories", function(assert) {
         series = createSeries(options);
 
     series.updateData(data);
+    series.createPoints();
     rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
@@ -713,6 +748,7 @@ QUnit.test("Datetime. Categories", function(assert) {
         series = createSeries(options);
 
     series.updateData(data);
+    series.createPoints();
     rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
@@ -733,6 +769,7 @@ QUnit.test("String.", function(assert) {
         series = createSeries({ type: "rangebar", argumentAxisType: "discrete", valueAxisType: "discrete" });
 
     series.updateData(data);
+    series.createPoints();
     rangeData = series.getRangeData();
 
     assert.ok(rangeData);
@@ -755,6 +792,7 @@ QUnit.test("Rangebar", function(assert) {
         series = createSeries({ type: "rangebar", argumentAxisType: "continuous" });
 
     series.updateData(data);
+    series.createPoints();
     rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
@@ -773,6 +811,7 @@ QUnit.test("Rangearea", function(assert) {
         series = createSeries({ type: "rangebar", argumentAxisType: "continuous" });
 
     series.updateData(data);
+    series.createPoints();
     rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
@@ -804,6 +843,7 @@ QUnit.test("Get range data for one point", function(assert) {
         series = createSeries($.extend(true, {}, this.defaultOptions, { argumentAxisType: "argumentAxisType", argumentType: "argumentType", valueAxisType: "valueAxisType", valueType: "valueType" }));
 
     series.updateData(data);
+    series.createPoints();
     rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
@@ -829,6 +869,7 @@ QUnit.test("Numeric", function(assert) {
         series = createSeries($.extend(true, {}, this.defaultOptions, { argumentAxisType: "continuous" }));
 
     series.updateData(data);
+    series.createPoints();
     rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
@@ -857,6 +898,7 @@ QUnit.test("Datetime.", function(assert) {
         series = createSeries($.extend(true, {}, this.defaultOptions, { argumentAxisType: "continuous" }));
 
     series.updateData(data);
+    series.createPoints();
     rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
@@ -878,6 +920,7 @@ QUnit.test("Numeric. Categories", function(assert) {
         series = createSeries(options);
 
     series.updateData(data);
+    series.createPoints();
     rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
@@ -907,6 +950,7 @@ QUnit.test("Datetime. Categories", function(assert) {
         series = createSeries(options);
 
     series.updateData(data);
+    series.createPoints();
     rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
@@ -927,6 +971,7 @@ QUnit.test("String.", function(assert) {
         series = createSeries($.extend(true, {}, this.defaultOptions, { argumentAxisType: "discrete", valueAxisType: "discrete" }));
 
     series.updateData(data);
+    series.createPoints();
     rangeData = series.getRangeData();
 
     assert.ok(rangeData);
@@ -958,6 +1003,7 @@ QUnit.test("Line", function(assert) {
         series = createSeries($.extend(true, {}, this.defaultOptions, { type: "line", argumentAxisType: "continuous" }));
 
     series.updateData(data);
+    series.createPoints();
     rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
@@ -978,6 +1024,7 @@ QUnit.test("Scatter", function(assert) {
         series = createSeries($.extend(true, {}, this.defaultOptions, { type: "scatter", argumentAxisType: "continuous" }));
 
     series.updateData(data);
+    series.createPoints();
     rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
@@ -998,6 +1045,7 @@ QUnit.test("Spline", function(assert) {
         series = createSeries($.extend(true, {}, this.defaultOptions, { type: "spline", argumentAxisType: "continuous" }));
 
     series.updateData(data);
+    series.createPoints();
     rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
@@ -1018,6 +1066,7 @@ QUnit.test("Stepline", function(assert) {
         series = createSeries($.extend(true, {}, this.defaultOptions, { type: "stepline", argumentAxisType: "continuous" }));
 
     series.updateData(data);
+    series.createPoints();
     rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
@@ -1038,6 +1087,7 @@ QUnit.test("Stackedline", function(assert) {
         series = createSeries($.extend(true, {}, this.defaultOptions, { type: "stackedline", argumentAxisType: "continuous" }));
 
     series.updateData(data);
+    series.createPoints();
 
     rangeData = series.getRangeData();
 
@@ -1059,6 +1109,7 @@ QUnit.test("Stackedspline", function(assert) {
         series = createSeries($.extend(true, {}, this.defaultOptions, { type: "stackedspline", argumentAxisType: "continuous" }));
 
     series.updateData(data);
+    series.createPoints();
     rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
@@ -1080,9 +1131,11 @@ QUnit.test("Stackedline, update data", function(assert) {
         series = createSeries($.extend(true, {}, this.defaultOptions, { type: "stackedline", argumentAxisType: "continuous" }));
 
     series.updateData(data1);
+    series.createPoints();
     series.getRangeData();
 
     series.updateData(data2);
+    series.createPoints();
     rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
@@ -1103,6 +1156,7 @@ QUnit.test("Bubble", function(assert) {
         series = createSeries($.extend(true, {}, this.defaultOptions, { type: "bubble", argumentAxisType: "continuous" }));
 
     series.updateData(data);
+    series.createPoints();
     rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
@@ -1136,6 +1190,7 @@ QUnit.test("Positive points", function(assert) {
         rangeData;
 
     series.updateData(data);
+    series.createPoints();
     rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
@@ -1151,6 +1206,7 @@ QUnit.test("Negative points", function(assert) {
         rangeData;
 
     series.updateData(data);
+    series.createPoints();
     rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
@@ -1166,6 +1222,7 @@ QUnit.test("Positive and negative points", function(assert) {
         rangeData;
 
     series.updateData(data);
+    series.createPoints();
     rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
@@ -1181,6 +1238,7 @@ QUnit.test("Numeric", function(assert) {
         rangeData;
 
     series.updateData(data);
+    series.createPoints();
     rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
@@ -1204,6 +1262,7 @@ QUnit.test("Datetime", function(assert) {
         series = createSeries($.extend(true, {}, this.defaultOptions, { valueType: "datetime", argumentAxisType: "continuous" }));
 
     series.updateData(data);
+    series.createPoints();
     rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
@@ -1225,6 +1284,7 @@ QUnit.test("showZero === undefined", function(assert) {
         series = createSeries(options);
 
     series.updateData(data);
+    series.createPoints();
     rangeData = series.getRangeData();
 
     assert.strictEqual(rangeData.val.min, 0, "minY");
@@ -1237,6 +1297,7 @@ QUnit.test("showZero === false", function(assert) {
         series = createSeries(options);
 
     series.updateData(data);
+    series.createPoints();
     series.updateDataType({ showZero: false });
     rangeData = series.getRangeData();
 
@@ -1249,6 +1310,7 @@ QUnit.test("Positive points. Polar bar point", function(assert) {
         rangeData;
 
     series.updateData(data);
+    series.createPoints();
     rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
@@ -1277,6 +1339,7 @@ QUnit.test("Bar", function(assert) {
         rangeData;
 
     series.updateData(data);
+    series.createPoints();
     rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
@@ -1292,6 +1355,7 @@ QUnit.test("Stackedbar", function(assert) {
         rangeData;
 
     series.updateData(data);
+    series.createPoints();
     rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
@@ -1308,9 +1372,11 @@ QUnit.test("Stackedbar, update data", function(assert) {
         rangeData;
 
     series.updateData(data1);
+    series.createPoints();
     series.getRangeData();
 
     series.updateData(data2);
+    series.createPoints();
     rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
@@ -1326,6 +1392,7 @@ QUnit.test("Fullstackedbar", function(assert) {
         rangeData;
 
     series.updateData(data);
+    series.createPoints();
     rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
@@ -1341,6 +1408,7 @@ QUnit.test("Area", function(assert) {
         rangeData;
 
     series.updateData(data);
+    series.createPoints();
     rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
@@ -1356,6 +1424,7 @@ QUnit.test("Stackedarea", function(assert) {
         rangeData;
 
     series.updateData(data);
+    series.createPoints();
     rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
@@ -1371,6 +1440,7 @@ QUnit.test("Stackedsplinearea", function(assert) {
         rangeData;
 
     series.updateData(data);
+    series.createPoints();
     rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
@@ -1387,9 +1457,11 @@ QUnit.test("Stackedarea, update data", function(assert) {
         rangeData;
 
     series.updateData(data1);
+    series.createPoints();
     series.getRangeData();
 
     series.updateData(data2);
+    series.createPoints();
     rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
@@ -1405,6 +1477,7 @@ QUnit.test("Stackedarea, rearrange series family", function(assert) {
         rangeData;
 
     series.updateData(data1);
+    series.createPoints();
     series.getRangeData();
 
     $.each(series.getPoints(), function(_, p) {
@@ -1425,6 +1498,7 @@ QUnit.test("Steparea", function(assert) {
         rangeData;
 
     series.updateData(data);
+    series.createPoints();
     rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
@@ -1440,6 +1514,7 @@ QUnit.test("Splinearea", function(assert) {
         rangeData;
 
     series.updateData(data);
+    series.createPoints();
     rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
@@ -1467,11 +1542,12 @@ QUnit.module("Get range data. Fullstacked series", {
             rangeData;
 
         series.updateData(data);
+        series.createPoints();
 
-        //act
+        // act
         rangeData = series.getRangeData();
 
-        //assert
+        // assert
         assert.ok(rangeData, "Range data should be created");
         assert.strictEqual(rangeData.arg.min, undefined, "Min x should be undefined");
         assert.strictEqual(rangeData.arg.max, undefined, "Max x should be undefined");
@@ -1484,12 +1560,14 @@ QUnit.module("Get range data. Fullstacked series", {
             rangeData;
 
         series.updateData(data1);
+        series.createPoints();
         series.getRangeData();
         series.updateData(data2);
-        //act
+        series.createPoints();
+        // act
         rangeData = series.getRangeData();
 
-        //assert
+        // assert
         assert.ok(rangeData, "Range data should be created");
         assert.strictEqual(rangeData.arg.min, minArg, "Min x should be undefined");
         assert.strictEqual(rangeData.arg.max, maxArg, "Max x should be undefined");
@@ -1682,6 +1760,7 @@ QUnit.test("Numeric", function(assert) {
         series = createSeries($.extend(true, {}, this.defaultOptions, { argumentAxisType: "continuous" }));
 
     series.updateData(data);
+    series.createPoints();
     rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
@@ -1710,6 +1789,7 @@ QUnit.test("Datetime.", function(assert) {
         series = createSeries($.extend(true, {}, this.defaultOptions, { argumentAxisType: "continuous" }));
 
     series.updateData(data);
+    series.createPoints();
     rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
@@ -1731,6 +1811,7 @@ QUnit.test("Numeric. Categories", function(assert) {
         series = createSeries(options);
 
     series.updateData(data);
+    series.createPoints();
     rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
@@ -1760,6 +1841,7 @@ QUnit.test("Datetime. Categories", function(assert) {
         series = createSeries(options);
 
     series.updateData(data);
+    series.createPoints();
     rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
@@ -1781,6 +1863,7 @@ QUnit.test("String.", function(assert) {
 
 
     series.updateData(data);
+    series.createPoints();
     rangeData = series.getRangeData();
 
     assert.ok(rangeData);
@@ -1813,6 +1896,7 @@ QUnit.test("Rangebar", function(assert) {
         series = createSeries($.extend(true, {}, this.defaultOptions, { type: "rangebar" }));
 
     series.updateData(data);
+    series.createPoints();
     rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
@@ -1833,6 +1917,7 @@ QUnit.test("Rangearea", function(assert) {
         series = createSeries($.extend(true, {}, this.defaultOptions, { type: "rangearea" }));
 
     series.updateData(data);
+    series.createPoints();
     rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
@@ -1873,6 +1958,7 @@ QUnit.test("Numeric", function(assert) {
         series = createSeries($.extend(true, {}, this.defaultOptions, { argumentAxisType: "continuous" }));
 
     series.updateData(data);
+    series.createPoints();
     rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
@@ -1901,6 +1987,7 @@ QUnit.test("Datetime.", function(assert) {
         series = createSeries($.extend(true, {}, this.defaultOptions, { argumentAxisType: "continuous" }));
 
     series.updateData(data);
+    series.createPoints();
     rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
@@ -1922,6 +2009,7 @@ QUnit.test("Numeric. Categories", function(assert) {
         series = createSeries(options);
 
     series.updateData(data);
+    series.createPoints();
     rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
@@ -1951,6 +2039,7 @@ QUnit.test("Datetime. Categories", function(assert) {
         series = createSeries(options);
 
     series.updateData(data);
+    series.createPoints();
     rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
@@ -1972,6 +2061,7 @@ QUnit.test("String.", function(assert) {
 
 
     series.updateData(data);
+    series.createPoints();
     rangeData = series.getRangeData();
 
     assert.ok(rangeData);
@@ -2012,6 +2102,7 @@ QUnit.test("Stock", function(assert) {
         series = createSeries($.extend(true, {}, this.defaultOptions, { type: "stock" }));
 
     series.updateData(data);
+    series.createPoints();
     rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
@@ -2032,6 +2123,7 @@ QUnit.test("Candlestick", function(assert) {
         series = createSeries($.extend(true, {}, this.defaultOptions, { type: "candlestick" }));
 
     series.updateData(data);
+    series.createPoints();
     rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
@@ -2067,6 +2159,7 @@ QUnit.test("Positive points", function(assert) {
         series = createSeries(this.defaultOptions);
 
     series.updateData(data);
+    series.createPoints();
     series.arrangePoints();
     rangeData = series.getRangeData();
 
@@ -2080,6 +2173,7 @@ QUnit.test("Positive and negative points", function(assert) {
         series = createSeries(this.defaultOptions);
 
     series.updateData(data);
+    series.createPoints();
     series.arrangePoints();
     rangeData = series.getRangeData();
 
@@ -2092,6 +2186,7 @@ QUnit.test("Negative points", function(assert) {
         series = createSeries(this.defaultOptions);
 
     series.updateData(data);
+    series.createPoints();
     series.arrangePoints();
     rangeData = series.getRangeData();
 
@@ -2117,6 +2212,7 @@ QUnit.test("Pie", function(assert) {
         series = createSeries($.extend(true, {}, this.defaultOptions, { type: "pie" }), null, "pie");
 
     series.updateData(data);
+    series.createPoints();
     series.arrangePoints();
     rangeData = series.getRangeData();
 
@@ -2129,6 +2225,7 @@ QUnit.test("Doughnut", function(assert) {
         series = createSeries($.extend(true, {}, this.defaultOptions, { type: "doughnut" }), null, "pie");
 
     series.updateData(data);
+    series.createPoints();
     series.arrangePoints();
     rangeData = series.getRangeData();
 
@@ -2166,6 +2263,7 @@ QUnit.test("Set incorrect min zoom (null)", function(assert) {
         series = createSeries(this.defaultOptions, { argumentAxis: this.argumentAxis });
 
     series.updateData(data);
+    series.createPoints();
 
     this.zoom(null, 4);
 
@@ -2182,6 +2280,7 @@ QUnit.test("Set incorrect max zoom (undefined)", function(assert) {
         series = createSeries(this.defaultOptions, { argumentAxis: this.argumentAxis });
 
     series.updateData(data);
+    series.createPoints();
 
     this.zoom(3, undefined);
 
@@ -2198,6 +2297,7 @@ QUnit.test("Set incorrect max zoom (null)", function(assert) {
         series = createSeries(this.defaultOptions, { argumentAxis: this.argumentAxis });
 
     series.updateData(data);
+    series.createPoints();
 
     this.zoom(3, null);
 
@@ -2214,6 +2314,7 @@ QUnit.test("Set incorrect min zoom (undefined)", function(assert) {
         series = createSeries(this.defaultOptions, { argumentAxis: this.argumentAxis });
 
     series.updateData(data);
+    series.createPoints();
 
     this.zoom(undefined, 5);
 
@@ -2232,6 +2333,7 @@ QUnit.test("GetViewport without zooming", function(assert) {
         series = createSeries(this.defaultOptions, { argumentAxis: this.argumentAxis });
 
     series.updateData(data);
+    series.createPoints();
 
     rangeData = series.getViewport();
 
@@ -2271,6 +2373,7 @@ QUnit.test("Numeric.", function(assert) {
         series = createSeries(this.defaultOptions, { argumentAxis: this.argumentAxis });
 
     series.updateData(data);
+    series.createPoints();
 
     this.zoom(3, 4.5);
 
@@ -2287,6 +2390,7 @@ QUnit.test("Numeric. zooming args between points.", function(assert) {
         series = createSeries(this.defaultOptions, { argumentAxis: this.argumentAxis });
 
     series.updateData(data);
+    series.createPoints();
 
     this.zoom(3, 4);
 
@@ -2298,13 +2402,14 @@ QUnit.test("Numeric. zooming args between points.", function(assert) {
 });
 
 
-//T583086
+// T583086
 QUnit.test("Zooming points with null values", function(assert) {
     var data = getOriginalData([{ arg: 1, val: null }, { arg: 1, val: 16 }, { arg: 2, val: 90 }, { arg: 3, val: 100 }, { arg: 4, val: 100 }]),
         rangeData,
         series = createSeries(this.defaultOptions, { argumentAxis: this.argumentAxis });
 
     series.updateData(data);
+    series.createPoints();
     this.zoom(0.5, 4.5);
 
     rangeData = series.getViewport();
@@ -2322,6 +2427,7 @@ QUnit.test("Numeric. Area", function(assert) {
         series = createSeries(this.defaultOptions, { argumentAxis: this.argumentAxis });
 
     series.updateData(data);
+    series.createPoints();
 
     this.zoom(3, 4.5);
 
@@ -2330,7 +2436,7 @@ QUnit.test("Numeric. Area", function(assert) {
     assert.ok(rangeData, "Returned object");
     assert.equal(rangeData.min, 0, "min y");
     assert.equal(rangeData.max, 45, "max y");
-    //assert.strictEqual(rangeData.arg.interval, 1);
+    // assert.strictEqual(rangeData.arg.interval, 1);
 });
 
 
@@ -2340,6 +2446,7 @@ QUnit.test("Range data has viewport", function(assert) {
         series = createSeries(this.defaultOptions, { argumentAxis: this.argumentAxis });
 
     series.updateData(data);
+    series.createPoints();
 
     this.zoom(3, 4.5);
 
@@ -2376,6 +2483,7 @@ QUnit.test("T179635. With error bars", function(assert) {
         series = createSeries(this.defaultOptions, { argumentAxis: this.argumentAxis });
 
     series.updateData(data);
+    series.createPoints();
 
     this.zoom(2, 5);
 
@@ -2400,6 +2508,7 @@ QUnit.test("Datetime argument. String value.", function(assert) {
         series = createSeries($.extend(true, {}, this.defaultOptions, { valueAxisType: "discrete" }), { argumentAxis: this.argumentAxis });
 
     series.updateData(data);
+    series.createPoints();
 
     this.zoom(argDate3, testDate);
 
@@ -2409,7 +2518,7 @@ QUnit.test("Datetime argument. String value.", function(assert) {
 
     assert.strictEqual(rangeData.min, undefined, "min Visible Y");
     assert.strictEqual(rangeData.max, undefined, "max Visible Y");
-    //assert.deepEqual(rangeData.categories, ["30", "40", "50"?], "CategoriesY");
+    // assert.deepEqual(rangeData.categories, ["30", "40", "50"?], "CategoriesY");
 });
 
 QUnit.test("Discrete argument axis.", function(assert) {
@@ -2418,6 +2527,7 @@ QUnit.test("Discrete argument axis.", function(assert) {
         series = createSeries($.extend(true, {}, this.defaultOptions, { argumentAxisType: "discrete" }), { argumentAxis: this.argumentAxis });
 
     series.updateData(data);
+    series.createPoints();
 
     this.zoom("3", "4");
 
@@ -2427,7 +2537,7 @@ QUnit.test("Discrete argument axis.", function(assert) {
     assert.equal(rangeData.min, undefined, "min y");
     assert.equal(rangeData.max, undefined, "max y");
     assert.strictEqual(rangeData.interval, undefined);
-    //should include values inside of range AND neighbour points
+    // should include values inside of range AND neighbour points
     assert.strictEqual(rangeData.minVisible, undefined, "no min Visible Y");
     assert.strictEqual(rangeData.maxVisible, undefined, "no max Visible Y");
     assert.deepEqual(rangeData.categories, undefined, "No categories");
@@ -2464,6 +2574,7 @@ QUnit.test("Positive points", function(assert) {
         series = createSeries(this.defaultOptions, { argumentAxis: this.argumentAxis });
 
     series.updateData(data);
+    series.createPoints();
 
     this.zoom(2, 4.5);
 
@@ -2479,6 +2590,7 @@ QUnit.test("Bar. In the range shouldn't be the points that out of the zoom area"
         series = createSeries($.extend({}, this.defaultOptions, { type: "bar" }), { argumentAxis: this.argumentAxis });
 
     series.updateData(data);
+    series.createPoints();
 
     this.zoom(2, 4.5);
 
@@ -2494,6 +2606,7 @@ QUnit.test("Negative points", function(assert) {
         series = createSeries(this.defaultOptions, { argumentAxis: this.argumentAxis });
 
     series.updateData(data);
+    series.createPoints();
 
     this.zoom(3, 4.5);
 
@@ -2509,6 +2622,7 @@ QUnit.test("ShowZero === false", function(assert) {
         series = createSeries($.extend(true, {}, this.defaultOptions, { showZero: false }), { argumentAxis: this.argumentAxis });
 
     series.updateData(data);
+    series.createPoints();
 
     this.zoom(3, 4.5);
     rangeData = series.getViewport();
@@ -2524,6 +2638,7 @@ QUnit.test("Discrete data", function(assert) {
         series = createSeries(this.defaultOptions, { argumentAxis: this.argumentAxis });
 
     series.updateData(data);
+    series.createPoints();
 
     this.zoom("2", "4");
 
@@ -2569,6 +2684,7 @@ QUnit.test("Simple series with zoom. Do not include value of edge points if they
         series = createSeries({ type: "line", argumentAxisType: "continuous" }, { argumentAxis: this.argumentAxis, valueAxis: this.valueAxis });
 
     series.updateData(data);
+    series.createPoints();
 
     this.zoomArgument(2, 5.5);
     this.zoomValue(35, 70);
@@ -2589,6 +2705,7 @@ QUnit.test("Include value of edge points that out of argument viewport but they 
         series = createSeries({ type: "line", argumentAxisType: "continuous" }, { argumentAxis: this.argumentAxis, valueAxis: this.valueAxis });
 
     series.updateData(data);
+    series.createPoints();
 
     this.zoomArgument(2.5, 5.5);
     this.zoomValue(25, 70);
@@ -2609,6 +2726,7 @@ QUnit.test("Line series without zoom", function(assert) {
         series = createSeries({ type: "line", argumentAxisType: "continuous" }, { argumentAxis: this.argumentAxis, valueAxis: this.valueAxis });
 
     series.updateData(data);
+    series.createPoints();
 
     assert.deepEqual(series.getPointsInViewPort(), [[10, 20, 30, 40, 50, 60, 70], []]);
 });
@@ -2626,6 +2744,7 @@ QUnit.test("Range series. Area. With edge points", function(assert) {
         series = createSeries({ type: "rangearea", argumentAxisType: "continuous" }, { argumentAxis: this.argumentAxis, valueAxis: this.valueAxis });
 
     series.updateData(data);
+    series.createPoints();
 
     this.zoomArgument(2, 5.5);
     this.zoomValue(25, 55);
@@ -2647,8 +2766,75 @@ QUnit.test("Bar series with zooming. Without edge points", function(assert) {
 
     series.updateData(data);
 
+    series.createPoints();
+
     this.zoomArgument(2, 5.5);
     this.zoomValue(25, 55);
 
     assert.deepEqual(series.getPointsInViewPort(), [[35, 30, 45, 40, 55, 50], []]);
+});
+
+QUnit.module("Argument Range");
+
+QUnit.test("Get argument range when empty data", function(assert) {
+    var series = createSeries({ type: "line" });
+
+    series.updateData([]);
+
+    var rangeData = series.getArgumentRange();
+
+    assert.ok(rangeData, "Range data should be created");
+    assert.strictEqual(rangeData.min, undefined, "Min arg should be undefined");
+    assert.strictEqual(rangeData.max, undefined, "Max arg should be undefined");
+    assert.deepEqual(rangeData.categories, undefined, "Categories arg should be correct");
+});
+
+QUnit.test("Range for dataSource with one point", function(assert) {
+    var series = createSeries({ type: "line" });
+    series.updateData([{ arg: 0, val: 0 }]);
+
+    var rangeData = series.getArgumentRange();
+
+    assert.ok(rangeData, "Range data should be created");
+    assert.strictEqual(rangeData.min, 0, "Min arg should be undefined");
+    assert.strictEqual(rangeData.max, 0, "Max arg should be undefined");
+    assert.deepEqual(rangeData.categories, undefined, "Categories arg should be correct");
+});
+
+QUnit.test("Get Range data when several points", function(assert) {
+    var series = createSeries({ type: "line" });
+    series.updateData([{ arg: 0, val: 0 }, { arg: 1, val: 0 }, { arg: 2, val: 0 }]);
+
+    var rangeData = series.getArgumentRange();
+
+    assert.ok(rangeData, "Range data should be created");
+    assert.strictEqual(rangeData.min, 0, "Min arg should be undefined");
+    assert.strictEqual(rangeData.max, 2, "Max arg should be undefined");
+    assert.deepEqual(rangeData.categories, undefined, "Categories arg should be correct");
+});
+
+QUnit.test("Get argument range when discrete data", function(assert) {
+    var series = createSeries({ type: "line", argumentAxisType: "discrete" });
+    series.updateData([{ arg: 0, val: 0 }, { arg: 1, val: 0 }, { arg: 2, val: 0 }]);
+
+    var rangeData = series.getArgumentRange();
+
+    assert.ok(rangeData, "Range data should be created");
+    assert.deepEqual(rangeData.categories, [0, 1, 2], "range data should have all categories");
+});
+
+QUnit.test("Calculate interval in range data when aggregation is enabled", function(assert) {
+    var data = [{ arg: 2, val: 11 }, { arg: 5, val: 22 }, { arg: 13, val: 3 }, { arg: 20, val: 15 }],
+        rangeData,
+        series = createSeries({ type: "scatter", argumentAxisType: "continuous", aggregation: { enabled: true } });
+
+    series.updateData(data);
+    series.createPoints();
+
+    rangeData = series.getRangeData();
+
+    assert.ok(rangeData, "Range data should be created");
+    assert.strictEqual(rangeData.arg.min, 2, "Min arg should be correct");
+    assert.strictEqual(rangeData.arg.max, 20, "Max arg should be correct");
+    assert.strictEqual(rangeData.arg.interval, 3, "Min interval arg should be correct");
 });

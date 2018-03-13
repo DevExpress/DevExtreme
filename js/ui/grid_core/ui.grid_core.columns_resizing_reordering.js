@@ -228,9 +228,7 @@ var ColumnsSeparatorView = SeparatorView.inherit({
         if($element && (this._isShown || force)) {
             if(this._isTransparent) {
                 $element.addClass(columnsSeparatorTransparent);
-                if($element.css("display") === "none") {
-                    $element.show();
-                }
+                $element.show();
             } else {
                 if($element.hasClass(columnsSeparatorTransparent)) {
                     $element.removeClass(columnsSeparatorTransparent);
@@ -275,9 +273,7 @@ var BlockSeparatorView = SeparatorView.inherit({
         this.callBase();
 
         this.getController("data").loadingChanged.add(function(isLoading) {
-            var element = that.element();
-
-            if(!isLoading && element && element.css("display") !== "none") {
+            if(!isLoading) {
                 that.hide();
             }
         });
@@ -417,7 +413,7 @@ var DraggingHeaderView = modules.View.inherit({
         this.getController("data").loadingChanged.add(function(isLoading) {
             var element = that.element();
 
-            if(!isLoading && element && element.css("display") !== "none") {
+            if(!isLoading && element) {
                 element.hide();
             }
         });

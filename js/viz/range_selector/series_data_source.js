@@ -83,11 +83,11 @@ SeriesDataSource = function(options) {
     if(options.dataSource && seriesTemplate) {
         templatedSeries = vizUtils.processSeriesTemplate(seriesTemplate, options.dataSource);
     }
-    that._useAggregation = options.chart.useAggregation;
+
     that._series = that._calculateSeries(options, templatedSeries);
 
     negativesAsZeroes = themeManager.getOptions("negativesAsZeroes");
-    negativesAsZeros = themeManager.getOptions("negativesAsZeros"); //misspelling case
+    negativesAsZeros = themeManager.getOptions("negativesAsZeros"); // misspelling case
 
     that._seriesFamilies = processSeriesFamilies(that._series,
         themeManager.getOptions('equalBarWidth'),
@@ -142,9 +142,9 @@ SeriesDataSource.prototype = {
             data = particularSeriesOptions.data || options.dataSource;
 
             seriesTheme = chartThemeManager.getOptions("series", particularSeriesOptions, allSeriesOptions.length);
-            seriesTheme.argumentField = seriesTheme.argumentField || options.dataSourceField;//B253068
+            seriesTheme.argumentField = seriesTheme.argumentField || options.dataSourceField;// B253068
             if(data && data.length > 0) {
-                //TODO
+                // TODO
                 newSeries = new seriesModule.Series({
                     renderer: options.renderer,
                     argumentAxis: options.argumentAxis,
@@ -164,7 +164,7 @@ SeriesDataSource.prototype = {
                     series: series,
                     valueOptions: {
                         type: valueAxis.type,
-                        valueType: valueAxis.valueType
+                        valueType: dataSourceField ? options.valueType : valueAxis.valueType
                     }
                 }],
                 argumentOptions: {
@@ -179,16 +179,26 @@ SeriesDataSource.prototype = {
                 series[i].updateData(parsedData[series[i].getArgumentField()]);
 
             }
+
+            that._createPoints(series);
         }
         return series;
     },
 
+    _createPoints: function(series) {
+        var viewport = new rangeModule.Range(),
+            axis = series[0].getArgumentAxis();
+
+        series.forEach(function(s) {
+            viewport.addRange(s.getArgumentRange());
+        });
+
+        axis.getTranslator().updateBusinessRange(viewport);
+
+        series.forEach(function(s) { s.createPoints(); });
+    },
+
     adjustSeriesDimensions: function() {
-        if(this._useAggregation) {
-            each(this._series, function(_, s) {
-                s.resamplePoints(s.getArgumentAxis().getTranslator().canvasLength);
-            });
-        }
         each(this._seriesFamilies, function(_, family) {
             family.adjustSeriesDimensions();
         });
@@ -223,7 +233,7 @@ SeriesDataSource.prototype = {
             maxIndent = valueAxis.inverted ? that._indent.bottom : that._indent.top;
             rangeYSize = valRange.max - valRange.min;
             rangeVisibleSizeY = (typeUtils.isNumeric(valRange.maxVisible) ? valRange.maxVisible : valRange.max) - (typeUtils.isNumeric(valRange.minVisible) ? valRange.minVisible : valRange.min);
-            //B253717
+            // B253717
             if(typeUtils.isDate(valRange.min)) {
                 valRange.min = new Date(valRange.min.valueOf() - rangeYSize * minIndent);
             } else {

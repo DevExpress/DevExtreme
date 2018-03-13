@@ -1,12 +1,12 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
-    window = require("../../core/utils/window").getWindow(),
+    windowUtils = require("../../core/utils/window"),
+    window = windowUtils.getWindow(),
     commonUtils = require("../../core/utils/common"),
     virtualScrollingCore = require("./ui.grid_core.virtual_scrolling_core"),
     gridCoreUtils = require("./ui.grid_core.utils"),
     each = require("../../core/utils/iterator").each,
-    browser = require("../../core/utils/browser"),
     Deferred = require("../../core/utils/deferred").Deferred,
     translator = require("../../animation/translator"),
     LoadIndicator = require("../load_indicator");
@@ -53,7 +53,7 @@ var VirtualScrollingDataSourceAdapterExtender = (function() {
         }
     };
 
-    return {
+    var result = {
         init: function(dataSource) {
             var that = this;
 
@@ -100,6 +100,9 @@ var VirtualScrollingDataSourceAdapterExtender = (function() {
                 },
                 onChanged: function(e) {
                     that.changed.fire(e);
+                },
+                changingDuration: function(e) {
+                    return that._renderTime || 0;
                 }
             });
 
@@ -134,35 +137,11 @@ var VirtualScrollingDataSourceAdapterExtender = (function() {
             }
             return this._virtualScrollController.itemsCount();
         },
-        virtualItemsCount: function() {
-            return this._virtualScrollController.virtualItemsCount();
-        },
-        getViewportItemIndex: function() {
-            return this._virtualScrollController.getViewportItemIndex();
-        },
-        setViewportItemIndex: function(itemIndex) {
-            return this._virtualScrollController.setViewportItemIndex(itemIndex);
-        },
-        viewportSize: function(size) {
-            return this._virtualScrollController.viewportSize(size);
-        },
-        pageIndex: function(pageIndex) {
-            return this._virtualScrollController.pageIndex(pageIndex);
-        },
-        beginPageIndex: function() {
-            return this._virtualScrollController.beginPageIndex();
-        },
-        endPageIndex: function() {
-            return this._virtualScrollController.endPageIndex();
-        },
         load: function(loadOptions) {
             if(loadOptions) {
                 return this.callBase(loadOptions);
             }
             return this._virtualScrollController.load();
-        },
-        loadIfNeed: function() {
-            return this._virtualScrollController.loadIfNeed();
         },
         isLoading: function() {
             return this._isLoading;
@@ -226,6 +205,25 @@ var VirtualScrollingDataSourceAdapterExtender = (function() {
             return that.callBase.apply(that, arguments);
         }
     };
+
+    [
+        "virtualItemsCount",
+        "getContentOffset",
+        "getVirtualContentSize",
+        "setContentSize", "setViewportPosition",
+        "getViewportItemIndex", "setViewportItemIndex",
+        "viewportSize", "viewportItemSize",
+        "pageIndex", "beginPageIndex", "endPageIndex",
+        "loadIfNeed"
+    ].forEach(function(name) {
+        result[name] = function() {
+            var virtualScrollController = this._virtualScrollController;
+            return virtualScrollController[name].apply(virtualScrollController, arguments);
+        };
+    });
+
+    return result;
+
 })();
 
 var VirtualScrollingRowsViewExtender = (function() {
@@ -262,9 +260,12 @@ var VirtualScrollingRowsViewExtender = (function() {
 
             that.callBase.apply(that, arguments);
 
-            that._updateContentPosition();
+            that._updateContentPosition(true);
 
-            that._renderTime = new Date() - startRenderDate;
+            var dataSource = that._dataController._dataSource;
+            if(dataSource) {
+                dataSource._renderTime = new Date() - startRenderDate;
+            }
         },
 
         _renderContent: function(contentElement, tableElement) {
@@ -272,8 +273,9 @@ var VirtualScrollingRowsViewExtender = (function() {
                 virtualItemsCount = that._dataController.virtualItemsCount();
 
             if(virtualItemsCount) {
-                tableElement.addClass(that.addWidgetPrefix(TABLE_CONTENT_CLASS));
-
+                if(windowUtils.hasWindow()) {
+                    tableElement.addClass(that.addWidgetPrefix(TABLE_CONTENT_CLASS));
+                }
                 if(!contentElement.children().length) {
                     contentElement.append(tableElement);
                 } else {
@@ -311,7 +313,13 @@ var VirtualScrollingRowsViewExtender = (function() {
 
             that._updateBottomLoading();
         },
-        _updateContentPosition: commonUtils.deferUpdater(function() {
+        _updateContentPosition: function() {
+            var that = this;
+            commonUtils.deferUpdate(function() {
+                that._updateContentPositionCore();
+            });
+        },
+        _updateContentPositionCore: function() {
             var that = this,
                 contentElement,
                 contentHeight,
@@ -330,24 +338,16 @@ var VirtualScrollingRowsViewExtender = (function() {
 
                 that._contentTableHeight = $contentTable[0].offsetHeight;
 
-                contentHeight = (virtualItemsCount.begin + virtualItemsCount.end + that._dataController.itemsCount()) * that._rowHeight;
+                that._dataController.viewportItemSize(rowHeight);
+                that._dataController.setContentSize(that._contentTableHeight);
 
-                var contentHeightLimit = virtualScrollingCore.getContentHeightLimit(browser);
-
-                if(contentHeight > contentHeightLimit) {
-                    that._heightRatio = contentHeightLimit / contentHeight;
-                } else {
-                    that._heightRatio = 1;
-                }
-
-                contentHeight = (virtualItemsCount.begin + virtualItemsCount.end) * rowHeight * that._heightRatio + that._contentTableHeight;
-
-                var top = Math.floor(virtualItemsCount.begin * rowHeight * that._heightRatio);
+                contentHeight = that._dataController.getVirtualContentSize();
+                var top = that._dataController.getContentOffset();
 
                 commonUtils.deferRender(function() {
                     translator.move($contentTable, { left: 0, top: top });
 
-                    //TODO jsdmitry: Separate this functionality on render and resize
+                    // TODO jsdmitry: Separate this functionality on render and resize
                     isRenderVirtualTableContentRequired = that._contentHeight !== contentHeight || contentHeight === 0 ||
                         !that._isTableLinesDisplaysCorrect(virtualTable) ||
                         !that._isColumnElementsEqual($contentTable.find("col"), virtualTable.find("col"));
@@ -362,7 +362,7 @@ var VirtualScrollingRowsViewExtender = (function() {
                     }
                 });
             }
-        }),
+        },
 
         _isTableLinesDisplaysCorrect: function(table) {
             var hasColumnLines = table.find("." + COLUMN_LINES_CLASS).length > 0;
@@ -455,38 +455,9 @@ var VirtualScrollingRowsViewExtender = (function() {
             var that = this;
 
             if(that._hasHeight && that._rowHeight) {
-                that._setViewportScrollTop(e.scrollOffset.top);
+                that._dataController.setViewportPosition(e.scrollOffset.top);
             }
             that.callBase.apply(that, arguments);
-        },
-
-        _setViewportScrollTop: function(scrollTop) {
-            var that = this,
-                scrollingTimeout = Math.min(that.option("scrolling.timeout") || 0, that._renderTime || 0);
-
-            clearTimeout(that._scrollTimeoutID);
-            if(scrollingTimeout > 0) {
-                that._scrollTimeoutID = setTimeout(function() {
-                    that._setViewportScrollTopCore(scrollTop);
-                }, scrollingTimeout);
-            } else {
-                that._setViewportScrollTopCore(scrollTop);
-            }
-        },
-
-        _setViewportScrollTopCore: function(scrollTop) {
-            var that = this,
-                virtualItemsCount = that._dataController.virtualItemsCount(),
-                heightRatio = that._heightRatio || 1,
-                rowHeight = that._rowHeight,
-                beginHeight = virtualItemsCount ? Math.floor(virtualItemsCount.begin * rowHeight * heightRatio) : 0;
-
-
-            if(virtualItemsCount && scrollTop >= beginHeight && scrollTop <= beginHeight + that._contentTableHeight) {
-                that._dataController.setViewportItemIndex(virtualItemsCount.begin + (scrollTop - beginHeight) / rowHeight);
-            } else {
-                that._dataController.setViewportItemIndex(scrollTop / (rowHeight * heightRatio));
-            }
         },
 
         _needUpdateRowHeight: function(itemsCount) {
@@ -541,7 +512,7 @@ var VirtualScrollingRowsViewExtender = (function() {
             if(that.component.$element() && !that._windowScroll && $element.closest(window.document).length) {
                 that._windowScroll = virtualScrollingCore.subscribeToExternalScrollers($element, function(scrollPos) {
                     if(!that._hasHeight && that._rowHeight) {
-                        that._setViewportScrollTop(scrollPos);
+                        that._dataController.setViewportPosition(scrollPos);
                     }
 
                 }, that.component.$element());
@@ -581,6 +552,8 @@ module.exports = {
         return {
             scrolling: {
                 timeout: 300,
+                minTimeout: 0,
+                renderingThreshold: 150,
                 /**
                  * @name dxDataGridOptions_scrolling_mode
                  * @publicName mode
@@ -618,6 +591,11 @@ module.exports = {
                 gridCoreUtils.proxyMethod(members, "virtualItemsCount");
                 gridCoreUtils.proxyMethod(members, "viewportSize");
                 gridCoreUtils.proxyMethod(members, "setViewportItemIndex");
+                gridCoreUtils.proxyMethod(members, "viewportItemSize");
+                gridCoreUtils.proxyMethod(members, "getContentOffset");
+                gridCoreUtils.proxyMethod(members, "getVirtualContentSize");
+                gridCoreUtils.proxyMethod(members, "setContentSize");
+                gridCoreUtils.proxyMethod(members, "setViewportPosition");
 
                 return members;
             })()

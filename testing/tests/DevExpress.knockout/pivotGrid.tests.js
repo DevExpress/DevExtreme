@@ -43,10 +43,10 @@ QUnit.test("T244054. DataSource option changing", function(assert) {
     this.applyBindings({ dataSource: dataSource });
     this.clock.tick();
 
-    //Act
+    // Act
     dataSource({ store: [{ key: 10, title: 'Item1' }, { key: 20, title: 'Item2' }], fields: [{ dataField: 'title', area: 'column' }, { dataField: 'key', area: 'row' }, { summaryType: 'count', area: 'data' }] });
     this.clock.tick();
-    //Assert
+    // Assert
     assert.ok($("#pivotGridContainer").dxPivotGrid("instance"));
     var $rowAreaCells = $("#pivotGridContainer .dx-pivotgrid-vertical-headers td");
     assert.strictEqual($rowAreaCells.eq(0).text(), "10");

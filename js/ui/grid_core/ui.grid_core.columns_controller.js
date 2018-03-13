@@ -88,6 +88,13 @@ module.exports = {
              * @default undefined
              */
             columnMinWidth: undefined,
+            /**
+             * @name GridBaseOptions_columnWidth
+             * @publicName columnWidth
+             * @type number
+             * @default undefined
+             */
+            columnWidth: undefined,
             adaptColumnWidthByRatio: true,
             /**
              * @name GridBaseOptions_columns
@@ -1213,7 +1220,7 @@ module.exports = {
                     }
 
                     if(!notFireEvent) {
-                        //T346972
+                        // T346972
                         if(inArray(optionName, USER_STATE_FIELD_NAMES) < 0 && optionName !== "visibleWidth") {
                             columns = that.option("columns");
                             column = columns && columns[columnIndex];
@@ -1240,7 +1247,7 @@ module.exports = {
                     command: "expand",
                     width: "auto",
                     cssClass: COMMAND_EXPAND_CLASS,
-                    allowEditing: false, //T165142
+                    allowEditing: false, // T165142
                     allowGrouping: false,
                     allowSorting: false,
                     allowResizing: false,
@@ -1428,6 +1435,7 @@ module.exports = {
                         case "dateSerializationFormat":
                         case "columnResizingMode":
                         case "columnMinWidth":
+                        case "columnWidth":
                             args.handled = true;
                             this.reinit();
                             break;
@@ -1521,6 +1529,7 @@ module.exports = {
                         allowResizing: this.option("allowColumnResizing"),
                         allowReordering: this.option("allowColumnReordering"),
                         minWidth: this.option("columnMinWidth"),
+                        width: this.option("columnWidth"),
                         autoExpandGroup: groupingOptions.autoExpandAll,
                         allowCollapsing: groupingOptions.allowCollapsing,
                         allowGrouping: groupPanelOptions.allowColumnDragging && groupPanelOptions.visible || groupingOptions.contextMenuEnabled
@@ -2350,7 +2359,7 @@ module.exports = {
                  * @return number
                  */
                 columnCount: function() {
-                    return this._columns.length;
+                    return this._columns ? this._columns.length : 0;
                 },
                 /**
                  * @name GridBaseMethods_columnOption

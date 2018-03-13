@@ -718,6 +718,10 @@ QUnit.test("parse: test starts with not digit symbols", function(assert) {
     assert.equal(numberLocalization.parse("1.2 руб."), 1.2);
 });
 
+QUnit.test("parse: test different negative format", function(assert) {
+    assert.equal(numberLocalization.parse("<<1.0>>", "#0.00;<<#0.00>>"), -1);
+});
+
 QUnit.test('Fixed point numeric formats', function(assert) {
     assert.equal(numberLocalization.format(23.04059872, { type: "fIxedPoint", precision: 4 }), '23.0406');
     assert.equal(numberLocalization.format(23.04059872, "fIxedPoint"), "23");
@@ -754,6 +758,7 @@ QUnit.test('Percent numeric formats', function(assert) {
 QUnit.test('Decimal numeric formats', function(assert) {
     assert.equal(numberLocalization.format(437, { type: "decimAl" }), '437');
     assert.equal(numberLocalization.format(437, { type: "deCimal", precision: 5 }), '00437');
+    assert.equal(numberLocalization.format(-437, { type: "decimal", precision: 0 }), '-437');
 });
 
 QUnit.test('format as function', function(assert) {
@@ -870,7 +875,7 @@ QUnit.test("date", function(assert) {
 
 QUnit.test("'no parser' errors", function(assert) {
     var numberFormatter = function(value) {
-            return 1;
+            return "1";
         },
         dateFormatter = function(value) {
             return new Date(0, 0, 1);

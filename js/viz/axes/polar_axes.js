@@ -100,7 +100,7 @@ circularAxes = polarAxes.circular = {
         min: true
     },
 
-    _getSpiderCategoryOption: function() { //TODO rename spider
+    _getSpiderCategoryOption: function() { // TODO rename spider
         return this._options.firstPointOnStartAngle;
     },
 

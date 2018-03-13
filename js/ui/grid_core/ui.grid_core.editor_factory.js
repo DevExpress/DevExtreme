@@ -30,7 +30,7 @@ var EDITOR_INLINE_BLOCK = "dx-editor-inline-block",
 
 var EditorFactory = modules.ViewController.inherit({
     _getFocusedElement: function($dataGridElement) {
-        //T181706
+        // T181706
         return $dataGridElement.find(FOCUSED_ELEMENT_SELECTOR);
     },
 
@@ -45,7 +45,7 @@ var EditorFactory = modules.ViewController.inherit({
             hideBorders;
 
         if($dataGridElement) {
-            //this selector is specific to IE
+            // this selector is specific to IE
             $focus = this._getFocusedElement($dataGridElement);
 
             if($focus.length) {
@@ -104,7 +104,7 @@ var EditorFactory = modules.ViewController.inherit({
         if($element === undefined) {
             return that._$focusedElement;
         } else if($element) {
-            //TODO: this code should be before timeout else focus is not will move to adaptive form by shift + tab key
+            // TODO: this code should be before timeout else focus is not will move to adaptive form by shift + tab key
             that._$focusedElement && that._$focusedElement.removeClass(FOCUSED_ELEMENT_CLASS);
             that._$focusedElement = $element;
 
@@ -179,14 +179,14 @@ var EditorFactory = modules.ViewController.inherit({
             isIE10OrLower = browser.msie && parseInt(browser.version) < 11;
 
         if($container) {
-            //T179518
+            // T179518
             eventsEngine.on($container, addNamespace("keydown", MODULE_NAMESPACE), function(e) {
                 if(e.which === TAB_KEY) {
                     that._updateFocusHandler(e);
                 }
             });
 
-            //T112103, T110581, T174768, T551322
+            // T112103, T110581, T174768, T551322
             isIE10OrLower && eventsEngine.on($container, [pointerEvents.down, pointerEvents.move, pointerEvents.up, clickEvent.name, contextMenuEvent.name].join(" "), "." + POINTER_EVENTS_TARGET_CLASS, that._focusOverlayEventProxy.bind(that));
         }
     },

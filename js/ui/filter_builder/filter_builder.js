@@ -33,6 +33,7 @@ var FILTER_BUILDER_CLASS = "dx-filterbuilder",
     FILTER_BUILDER_FIELDS_CLASS = FILTER_BUILDER_CLASS + "-fields",
     FILTER_BUILDER_ADD_CONDITION_CLASS = FILTER_BUILDER_CLASS + "-add-condition",
     ACTIVE_CLASS = "dx-state-active",
+    FILTER_BUILDER_MENU_CUSTOM_OPERATION_CLASS = FILTER_BUILDER_CLASS + "-menu-custom-operation",
     SOURCE = "filterBuilder",
 
     TAB_KEY = 9,
@@ -416,6 +417,13 @@ var FilterBuilder = Widget.inherit({
              */
             filterOperationDescriptions: {
                 /**
+                 * @name dxFilterBuilderOptions_filterOperationDescriptions_between
+                 * @publicName between
+                 * @type string
+                 * @default "Between"
+                 */
+                between: messageLocalization.format("dxDataGrid-filterRowOperationBetween"),
+                /**
                  * @name dxFilterBuilderOptions_filterOperationDescriptions_equal
                  * @publicName equal
                  * @type string
@@ -571,7 +579,7 @@ var FilterBuilder = Widget.inherit({
     },
 
     _initCustomOperations: function() {
-        this._customOperations = utils.getMergedOperations(this.option("customOperations"));
+        this._customOperations = utils.getMergedOperations(this.option("customOperations"), this.option("operationDescriptions.between"));
     },
 
     _initModel: function() {
@@ -768,6 +776,9 @@ var FilterBuilder = Widget.inherit({
                 menu: {
                     items: availableOperations,
                     displayExpr: "text",
+                    onItemRendered: function(e) {
+                        e.itemData.isCustom && $(e.itemElement).addClass(FILTER_BUILDER_MENU_CUSTOM_OPERATION_CLASS);
+                    },
                     onContentReady: function(e) {
                         e.component.selectItem(currentOperation);
                     },

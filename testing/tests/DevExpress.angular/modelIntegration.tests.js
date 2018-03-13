@@ -171,7 +171,7 @@ QUnit.test("changing value from editor should set ngmodel dirty", function(asser
     assert.equal($markup.controller("ngModel").$dirty, true, "model is dirty");
 });
 
-$.each(["dxTagBox"/*, "dxFileUploader"*/], function(_, widgetName) {
+$.each(["dxTagBox"/* , "dxFileUploader" */], function(_, widgetName) {
     QUnit.test("ngmodel should be bound with values option for " + widgetName, function(assert) {
         var $markup = $("<div></div>")
             .attr(inflector.dasherize(widgetName), "{}")
@@ -196,7 +196,7 @@ $.each(["dxTagBox"/*, "dxFileUploader"*/], function(_, widgetName) {
     });
 });
 
-$.each(["dxTagBox"/*, "dxFileUploader"*/], function(_, widgetName) {
+$.each(["dxTagBox"/* , "dxFileUploader" */], function(_, widgetName) {
     QUnit.test("ngmodel should be bound with values option for " + widgetName, function(assert) {
         var $markup = $("<div></div>")
             .attr(inflector.dasherize(widgetName), "{bindingOptions: {values: 'value'}}")

@@ -577,9 +577,8 @@ var TagBox = SelectBox.inherit({
         this._$submitElement.append($options);
     },
 
-    _render: function() {
+    _initMarkup: function() {
         this._tagElementsCache = $();
-
         var isSingleLineMode = !this.option("multiline");
 
         this.$element()
@@ -588,9 +587,12 @@ var TagBox = SelectBox.inherit({
             .toggleClass(TAGBOX_SINGLE_LINE_CLASS, isSingleLineMode);
 
         // TODO: texteditor render methods order research
-        this._toggleRTLDirection(this.option("rtlEnabled"));
         this._initTagTemplate();
 
+        this.callBase();
+    },
+
+    _render: function() {
         this.callBase();
 
         this._renderTagRemoveAction();

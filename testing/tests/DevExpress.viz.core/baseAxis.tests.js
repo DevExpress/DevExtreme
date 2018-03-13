@@ -280,7 +280,7 @@ QUnit.test("Update translator on setTypes pass old business range and canvas", f
 
     var translator = translator2DModule.Translator2D.lastCall.returnValue;
     this.axis.updateCanvas(this.canvas);
-    //act
+    // act
     this.axis.setTypes("someAxisType", "someType", "valueType");
 
     assert.strictEqual(translator.update.lastCall.args[0], translator.getBusinessRange());
@@ -713,11 +713,28 @@ QUnit.test("hold min/max for single point series", function(assert) {
             visible: true
         }
     });
-
     this.axis.setBusinessRange({ min: 4, max: 4, minVisible: 3.1, maxVisible: 4.9 });
     this.generatedTicks = [3.2, 3.4, 3.6, 3.8, 4.0, 4.2, 4.4, 4.6, 4.8];
     this.axis.createTicks(this.canvas);
     businessRange = this.axis.getTranslator().getBusinessRange();
+
+    assert.equal(businessRange.min, 4, "min");
+    assert.equal(businessRange.max, 4, "max");
+});
+
+QUnit.test("hold min/max for single bar series", function(assert) {
+    var businessRange;
+    this.updateOptions({
+        tick: {
+            visible: true
+        }
+    });
+    this.axis.setMarginOptions({ checkInterval: true });
+    this.axis.setBusinessRange({ min: 4, max: 4, minVisible: 3.1, maxVisible: 4.9 });
+    this.generatedTicks = [3.2, 3.4, 3.6, 3.8, 4.0, 4.2, 4.4, 4.6, 4.8];
+    this.axis.createTicks(this.canvas);
+    businessRange = this.axis.getTranslator().getBusinessRange();
+
     assert.equal(businessRange.min, 4, "min");
     assert.equal(businessRange.max, 4, "max");
 });
@@ -1034,7 +1051,7 @@ QUnit.test("minValueMargin - apply margins to the min", function(assert) {
     });
 });
 
-//T603177
+// T603177
 QUnit.test("Margins for one point (dateTime)", function(assert) {
     var date = new Date('2018/05/02');
 
@@ -1666,7 +1683,7 @@ QUnit.test("Margins and endOnTick = true - extend range with margins to boundary
             valueMarginsEnabled: true,
             minValueMargin: 0.1,
             maxValueMargin: 0.2,
-            endOnTick: true //emulation, see returned ticks below
+            endOnTick: true // emulation, see returned ticks below
         },
         range: {
             min: 100,
@@ -2052,8 +2069,8 @@ QUnit.test("updateSize, synchronized axis - do not recalculate margins/interval"
         size: 100
     });
 
-    //act
-    //emulate synchronizer
+    // act
+    // emulate synchronizer
     this.translator.updateBusinessRange({
         min: 50,
         max: 250,
@@ -2087,7 +2104,7 @@ QUnit.test("Margins and skipViewportExtending = true - do not extend range with 
             minValueMargin: 0.1,
             maxValueMargin: 0.2,
             skipViewportExtending: true,
-            endOnTick: true //emulation, see returned ticks below
+            endOnTick: true // emulation, see returned ticks below
         },
         range: {
             min: 100,
@@ -2321,7 +2338,7 @@ QUnit.test("Argument axis, endOnTick = true - do not extend range to boundary ti
             valueMarginsEnabled: true,
             minValueMargin: 0.1,
             maxValueMargin: 0.2,
-            endOnTick: true //emulation, see returned ticks below
+            endOnTick: true // emulation, see returned ticks below
         },
         range: {
             min: 100,
@@ -2345,7 +2362,7 @@ QUnit.test("Value axis, endOnTick = true - extend range to boundary ticks", func
             valueMarginsEnabled: true,
             minValueMargin: 0.1,
             maxValueMargin: 0.2,
-            endOnTick: true //emulation, see returned ticks below
+            endOnTick: true // emulation, see returned ticks below
         },
         range: {
             min: 100,

@@ -219,7 +219,7 @@ var FallbackLayoutStrategy = Class.inherit({
             boxSize = this._$element[FALLBACK_MAIN_SIZE_MAP[direction]](),
             freeSpace = boxSize - totalItemSize;
 
-        //NOTE: clear margins
+        // NOTE: clear margins
         this._setItemsMargins($items, direction, 0);
 
         switch(align) {
@@ -605,17 +605,17 @@ var Box = CollectionWidget.inherit({
 
     _render: function() {
         this._renderActions();
+        this._layout.renderBox();
         this.callBase();
         this.$element().addClass(BOX_CLASS);
-        this._renderBox();
+        this._renderAlign();
     },
 
     _renderActions: function() {
         this._onItemStateChanged = this._createActionByOption("onItemStateChanged");
     },
 
-    _renderBox: function() {
-        this._layout.renderBox();
+    _renderAlign: function() {
         this._layout.renderAlign();
         this._layout.renderCrossAlign();
     },

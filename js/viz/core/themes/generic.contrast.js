@@ -12,7 +12,7 @@ var themeModule = require("../../themes"),
 registerTheme({
     name: "generic.contrast",
     defaultPalette: "Bright",
-    //CONTRAST_ACTIVE
+    // CONTRAST_ACTIVE
     font: {
         color: WHITE
     },

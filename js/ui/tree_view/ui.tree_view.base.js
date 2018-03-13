@@ -800,7 +800,8 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         };
     },
 
-    _render: function() {
+    _initMarkup: function() {
+        this._renderScrollableContainer();
         this.callBase();
         this.setAria("role", "tree");
     },
@@ -808,7 +809,6 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
     _renderContentImpl: function() {
         var $nodeContainer = this._renderNodeContainer();
 
-        this._renderScrollableContainer();
         this._scrollableContainer.$content().append($nodeContainer);
 
         if(!this.option("items") || !this.option("items").length) {
@@ -892,7 +892,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         return this.option("showCheckBoxesMode") === "selectAll";
     },
 
-    //todo: remove in 16.1 with deprecated showCheckBoxes and selectAllEnabled
+    // todo: remove in 16.1 with deprecated showCheckBoxes and selectAllEnabled
     _initCheckBoxesMode: function() {
         if(this._showCheckboxes()) {
             return;

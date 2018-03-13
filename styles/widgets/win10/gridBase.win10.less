@@ -1,3 +1,7 @@
+.dx-header-row {
+    font-size: 12pt;
+}
+
 .grid-base(@widgetName) {
     @GRID_BASE_CELL_PADDING: 7px;
     @GRID_BASE_DRAG_HEADER_FIRST_SHADOW: 0px 0px 1px ~"@{@{widgetName}-drag-header-first-shadow-color}";
@@ -368,10 +372,6 @@
 
         .dx-@{widgetName}-table {
             .dx-row {
-                &:first-child {
-                    font-size: 12pt;
-                }
-
                 & > td {
                     border-bottom: ~"@{@{widgetName}-headers-border}";
                 }

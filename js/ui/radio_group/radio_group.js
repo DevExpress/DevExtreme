@@ -170,17 +170,21 @@ var RadioGroup = Editor.inherit({
         this._defaultTemplates["item"] = new ChildDefaultTemplate("item", this);
     },
 
-    _render: function() {
+    _initMarkup: function() {
         this.$element().addClass(RADIO_GROUP_CLASS);
         this._renderSubmitElement();
-        this._renderRadios();
         this.setAria("role", "radiogroup");
 
+        this.callBase();
+    },
+
+    _render: function() {
+        this._renderRadios();
         this._renderLayout();
-        this._updateItemsSize();
 
         this.option("useInkRipple") && this._renderInkRipple();
         this.callBase();
+        this._updateItemsSize();
     },
 
     _renderInkRipple: function() {
@@ -281,11 +285,6 @@ var RadioGroup = Editor.inherit({
 
     itemElements: function() {
         return this._radios.itemElements();
-    },
-
-    _renderDimensions: function() {
-        this.callBase();
-        this._updateItemsSize();
     },
 
     _renderLayout: function() {

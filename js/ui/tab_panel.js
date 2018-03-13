@@ -292,6 +292,10 @@ var TabPanel = MultiView.inherit({
     },
 
     _refreshActiveDescendant: function() {
+        if(!this._tabs) {
+            return;
+        }
+
         var tabs = this._tabs,
             tabItems = tabs.itemElements(),
             $activeTab = $(tabItems[tabs.option("selectedIndex")]),

@@ -3,7 +3,6 @@
 "use strict";
 
 var gulp = require('gulp');
-var babel = require('gulp-babel');
 var footer = require('gulp-footer');
 var eol = require('gulp-eol');
 var replace = require('gulp-replace');
@@ -21,12 +20,12 @@ var headerPipes = require('./header-pipes.js');
 var compressionPipes = require('./compression-pipes.js');
 var version = require('../../package.json').version;
 
-var SRC_GLOBS = [
-    'js/**/*.js',
-    '!js/bundles/*.js',
-    '!js/bundles/modules/parts/*.js',
-    '!js/viz/vector_map.utils/*.js',
-    '!js/viz/docs/*.js'
+var TRANSPILED_GLOBS = [
+    context.TRANSPILED_PATH + '/**/*.js',
+    '!' + context.TRANSPILED_PATH + '/bundles/*.js',
+    '!' + context.TRANSPILED_PATH + '/bundles/modules/parts/*.js',
+    '!' + context.TRANSPILED_PATH + '/viz/vector_map.utils/*.js',
+    '!' + context.TRANSPILED_PATH + '/viz/docs/*.js'
 ];
 
 var JSON_GLOBS = [
@@ -36,6 +35,7 @@ var JSON_GLOBS = [
 
 var DIST_GLOBS = [
     'artifacts/**/*.*',
+    '!' + context.TRANSPILED_PATH,
     '!artifacts/npm/**/*.*',
     '!artifacts/js/dx.aspnet.mvc.js',
     '!artifacts/js/angular**/*.*',
@@ -71,12 +71,11 @@ var addDefaultExport = lazyPipe().pipe(function() {
     });
 });
 
-gulp.task('npm-sources', ['bundler-config', 'npm-dts-generator'], function() {
+gulp.task('npm-sources', ['npm-dts-generator'], function() {
     return merge(
 
-        gulp.src(SRC_GLOBS)
+        gulp.src(TRANSPILED_GLOBS)
             .pipe(compressionPipes.removeDebug())
-            .pipe(babel())
             .pipe(addDefaultExport())
             .pipe(headerPipes.starLicense())
             .pipe(compressionPipes.beautify())

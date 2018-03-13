@@ -67,7 +67,7 @@
 
     .dx-area-description-cell {
         position: relative;
-        .background-clip(padding-box);  //T379462
+        .background-clip(padding-box);  // T379462
         .dx-pivotgrid-fields-area {
             position: absolute;
             bottom: 0;
@@ -149,7 +149,6 @@
             }
         }
     }
-
 }
 
 .dx-pivotgridfieldchooser {
@@ -171,4 +170,8 @@
 
 .dx-pivotgrid-action {
     cursor: pointer;
+}
+
+.dx-pivotgrid-drag-action {
+    .touch-action(pinch-zoom);
 }

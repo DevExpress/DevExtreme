@@ -54,7 +54,7 @@ var environment = {
 
         this.translator = new StubTranslator();
         this.translator.stub("getBusinessRange").returns({ addRange: sinon.stub() });
-        this.translator.stub("getCanvasVisibleArea").returns({ min: 0, max: 200 }); //for horizontal only
+        this.translator.stub("getCanvasVisibleArea").returns({ min: 0, max: 200 }); // for horizontal only
     },
     createAxis: function(options) {
         this.axis = new Axis({
@@ -88,7 +88,7 @@ var environment = {
         this.axis.validate();
     },
     testFormat: function(assert, options, ticks, tickInterval, texts, constantLineValue) {
-        //arrange
+        // arrange
         this.createAxis(options);
 
         this.generatedTicks = ticks;
@@ -101,14 +101,14 @@ var environment = {
 
         this.renderer.stub("text").reset();
 
-        //act
+        // act
         this.axis.draw(this.canvas);
 
         if(constantLineValue) {
             this.axis._drawConstantLineLabels(constantLineValue, {}, 0, this.renderer.g());
         }
 
-        //assert
+        // assert
         var renderer = this.renderer,
             actualTexts = getArray(texts.length).map(function(_, i) {
                 return renderer.text.getCall(i).args[0];
@@ -236,7 +236,7 @@ QUnit.test("No formats for logarithmic ticks with logarithmBase !== 10", functio
 });
 
 QUnit.test("Label's hint - use auto formatter", function(assert) {
-    //arrange
+    // arrange
     var spy = sinon.spy();
     this.createAxis({
         label: {
@@ -248,10 +248,10 @@ QUnit.test("Label's hint - use auto formatter", function(assert) {
     this.generatedTicks = [1500];
     this.generatedTickInterval = 100;
 
-    //act
+    // act
     this.axis.draw(this.canvas);
 
-    //assert
+    // assert
     assert.strictEqual(spy.getCall(0).args[0].valueText, "1.5K");
 });
 
@@ -368,7 +368,7 @@ QUnit.test("Datetime - single format by ticks", function(assert) {
         new Date(2009, 11, 1),
         new Date(2010, 0, 1),
         new Date(2010, 1, 1)
-    ], 1, //tickGenerator returns that tickInterval for discrete data
+    ], 1, // tickGenerator returns that tickInterval for discrete data
     ["December 2009", "January 2010", "February 2010"]);
 });
 
@@ -383,7 +383,7 @@ QUnit.test("Numeric - no format", function(assert) {
         10010,
         11001,
         20000
-    ], 1, //tickGenerator returns that tickInterval for discrete data
+    ], 1, // tickGenerator returns that tickInterval for discrete data
     ["10010", "11001", "20000"]);
 });
 
@@ -1274,7 +1274,7 @@ QUnit.test("T297683. Pass options and point - check customizeText arguments", fu
 QUnit.module("Date markers", environment);
 
 QUnit.test("No custom format - use auto formatting", function(assert) {
-    //arrange
+    // arrange
     var date0 = new Date(2011, 5, 29, 0, 0, 0),
         date1 = new Date(2011, 5, 30, 0, 0, 0),
         date2 = new Date(2011, 6, 1, 0, 0, 0),
@@ -1295,7 +1295,7 @@ QUnit.test("No custom format - use auto formatting", function(assert) {
     this.generatedTicks = [date0, date1, date2, date3, date4];
     this.generatedTickInterval = "hour";
 
-    //act
+    // act
     this.axis.draw(this.canvas);
 
     var text = this.renderer.text;
@@ -1306,7 +1306,7 @@ QUnit.test("No custom format - use auto formatting", function(assert) {
 });
 
 QUnit.test("Custom format - use custom format", function(assert) {
-    //arrange
+    // arrange
     var date0 = new Date(2011, 5, 29, 0, 0, 0),
         date1 = new Date(2011, 5, 30, 0, 0, 0),
         date2 = new Date(2011, 6, 1, 0, 0, 0),
@@ -1329,7 +1329,7 @@ QUnit.test("Custom format - use custom format", function(assert) {
     this.generatedTicks = [date0, date1, date2, date3, date4];
     this.generatedTickInterval = "hour";
 
-    //act
+    // act
     this.axis.draw(this.canvas);
 
     var text = this.renderer.text;
@@ -1341,7 +1341,7 @@ QUnit.test("Custom format - use custom format", function(assert) {
 });
 
 QUnit.test("Tick labels do not show date transition", function(assert) {
-    //arrange
+    // arrange
     var date0 = new Date(2011, 5, 30, 0, 0, 0),
         date1 = new Date(2011, 5, 30, 12, 0, 0),
         date2 = new Date(2011, 6, 1, 0, 0, 0),
@@ -1364,7 +1364,7 @@ QUnit.test("Tick labels do not show date transition", function(assert) {
     this.generatedTicks = [date0, date1, date2, date3];
     this.generatedTickInterval = "hour";
 
-    //act
+    // act
     this.axis.draw(this.canvas);
 
     var text = this.renderer.text;
@@ -1375,7 +1375,7 @@ QUnit.test("Tick labels do not show date transition", function(assert) {
 });
 
 QUnit.test("Custom format for tick labels - use custom format", function(assert) {
-    //arrange
+    // arrange
     var date0 = new Date(2011, 5, 30, 0, 0, 0),
         date1 = new Date(2011, 5, 30, 12, 0, 0),
         date2 = new Date(2011, 6, 1, 0, 0, 0),
@@ -1399,7 +1399,7 @@ QUnit.test("Custom format for tick labels - use custom format", function(assert)
     this.generatedTicks = [date0, date1, date2, date3];
     this.generatedTickInterval = "hour";
 
-    //act
+    // act
     this.axis.draw(this.canvas);
 
     var text = this.renderer.text;

@@ -1,6 +1,6 @@
 "use strict";
 
-//there are stock, candlestick
+// there are stock, candlestick
 var scatterSeries = require("./scatter_series").chart,
     barSeries = require("./bar_series").chart.bar,
     extend = require("../../core/utils/extend").extend,
@@ -208,7 +208,7 @@ exports.stock = _extend({}, scatterSeries, {
             return {};
         }
         _each(fusionPoints, function(_, point) {
-            if(!point.hasValue()) {
+            if(point.lowValue === null || point.highValue === null) {
                 return;
             }
             highValue = Math.max(highValue, point.highValue);

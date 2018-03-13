@@ -127,7 +127,7 @@ module.exports = Class.inherit((function() {
                 if(headerItem.children) {
                     lastIndex = Math.max(lastIndex, getHeaderItemsLastIndex(headerItem.children));
                 } else if(headerItem.collapsedChildren) {
-                    //B232736
+                    // B232736
                     lastIndex = Math.max(lastIndex, getHeaderItemsLastIndex(headerItem.collapsedChildren));
                 }
             }
@@ -164,7 +164,7 @@ module.exports = Class.inherit((function() {
 
         var applyingItemIndexesToCurrent = [];
 
-        //reset cache
+        // reset cache
         when(foreachTreeAsync(headerItems, function(items) {
             delete items[0].collapsedChildren;
         })).done(function() {
@@ -234,7 +234,7 @@ module.exports = Class.inherit((function() {
         if(typeUtils.isPlainObject(dataSourceOptions) && dataSourceOptions.load) {
             store = createLocalOrRemoteStore(dataSourceOptions, notifyProgress);
         } else {
-            //TODO remove
+            // TODO remove
             if(dataSourceOptions && !dataSourceOptions.store) {
                 dataSourceOptions = { store: dataSourceOptions };
             }
@@ -287,7 +287,7 @@ module.exports = Class.inherit((function() {
                     field[name] = srcField[name];
                 } else {
                     if((name === "summaryType" || name === "summaryDisplayMode") && srcField[name] === undefined) {
-                        //T399271
+                        // T399271
                         return;
                     }
 
@@ -980,7 +980,7 @@ module.exports = Class.inherit((function() {
             that._descriptions = options.descriptions ? extend(that._createDescriptions(), options.descriptions) : undefined;
 
             if(!store) {
-                //TODO create dashboard store
+                // TODO create dashboard store
                 extend(true, that._data, options.store || options);
             }
         },

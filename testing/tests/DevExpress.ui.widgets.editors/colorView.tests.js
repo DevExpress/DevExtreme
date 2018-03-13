@@ -96,30 +96,6 @@ QUnit.module("ColorView", {
     }
 });
 
-QUnit.test("Apply css class", function(assert) {
-    var $colorPicker = showColorView.call(this);
-    assert.ok($colorPicker.hasClass("dx-colorview"));
-});
-
-QUnit.test("Default value should be 'null'", function(assert) {
-    var colorView = showColorView.call(this).dxColorView("instance");
-    assert.strictEqual(colorView.option("value"), null);
-});
-
-QUnit.test("Render color picker container", function(assert) {
-    showColorView.call(this);
-
-    var $colorPickerContainer = this.element.find(".dx-colorview-container"),
-        $alphaChannelScale = this.element.find(".dx-colorview-alpha-channel-scale"),
-        $alphaChannelInput = this.element.find(".dx-colorview-alpha-channel-input"),
-        $alphaChannelLabel = this.element.find(".dx-colorview-alpha-label");
-
-    assert.equal($colorPickerContainer.length, 1);
-    assert.equal($alphaChannelScale.length, 0);
-    assert.equal($alphaChannelInput.length, 0);
-    assert.equal($alphaChannelLabel.length, 0);
-});
-
 QUnit.test("Render html rows", function(assert) {
     showColorView.call(this);
     var $colorPickerContainer = this.element.find(".dx-colorview-container"),
@@ -163,18 +139,6 @@ QUnit.test("Color chooser position", function(assert) {
 
     assert.equal(markerPosition.left, 205);
     assert.equal(markerPosition.top, 70);
-});
-
-QUnit.test("Color chooser position can be negative", function(assert) {
-    showColorView.call(this);
-
-    var $colorChooserMarker = $(".dx-colorview-palette-handle");
-
-    move($colorChooserMarker, {
-        left: 220,
-        top: -16
-    });
-    assert.equal(parseInt($colorChooserMarker.position().top, 10), -14);
 });
 
 QUnit.test("Render hue scale and hue scale handle", function(assert) {
@@ -295,6 +259,37 @@ QUnit.test("Render colors preview", function(assert) {
     assert.equal($colorPreviewContainerInner.length, 1);
     assert.equal($colorPreviewContainerInner.find(".dx-colorview-color-preview-color-current").length, 1);
     assert.equal($colorPreviewContainerInner.find(".dx-colorview-color-preview-color-new").length, 1);
+});
+
+QUnit.test("In 'instantly' mode 'OK' and 'Cancel' buttons should not be rendered", function(assert) {
+    showColorView.call(this, {
+        applyValueMode: "instantly"
+    });
+
+    var $applyButton = this.element.find(".dx-colorview-buttons-container .dx-colorview-apply-button"),
+        $cancelButton = this.element.find(".dx-colorview-buttons-container .dx-colorview-cancel-button"),
+        $htmlRows = this.element.find(".dx-colorview-container-row");
+
+    assert.equal($applyButton.length, 0);
+    assert.equal($cancelButton.length, 0);
+    assert.equal($htmlRows.length, 1);
+});
+
+QUnit.test("T110896", function(assert) {
+    showColorView.call(this, { editAlphaChannel: true, rtlEnabled: true, value: "rgba(255, 0, 0, 1)" });
+    assert.equal(Math.round(this.element.find(".dx-colorview-alpha-channel-handle").position().left), 275);
+});
+
+QUnit.test("Color chooser position can be negative", function(assert) {
+    showColorView.call(this);
+
+    var $colorChooserMarker = $(".dx-colorview-palette-handle");
+
+    move($colorChooserMarker, {
+        left: 220,
+        top: -16
+    });
+    assert.equal(parseInt($colorChooserMarker.position().top, 10), -14);
 });
 
 QUnit.test("Update color values", function(assert) {
@@ -583,20 +578,6 @@ QUnit.test("In 'instantly' mode value should be updated if some input was update
     assert.equal(colorPicker.option("value"), "#0000ff");
 });
 
-QUnit.test("In 'instantly' mode 'OK' and 'Cancel' buttons should not be rendered", function(assert) {
-    showColorView.call(this, {
-        applyValueMode: "instantly"
-    });
-
-    var $applyButton = this.element.find(".dx-colorview-buttons-container .dx-colorview-apply-button"),
-        $cancelButton = this.element.find(".dx-colorview-buttons-container .dx-colorview-cancel-button"),
-        $htmlRows = this.element.find(".dx-colorview-container-row");
-
-    assert.equal($applyButton.length, 0);
-    assert.equal($cancelButton.length, 0);
-    assert.equal($htmlRows.length, 1);
-});
-
 QUnit.test("Update 'applyValueMode' option if editAlphaChannel is true", function(assert) {
     var instance = showColorView.call(this, { editAlphaChannel: true }).dxColorView("instance");
 
@@ -663,11 +644,6 @@ QUnit.test("T104929", function(assert) {
     assert.equal(this.element.find(".dx-colorview-alpha-channel-scale").length, 0);
     assert.equal(this.element.find(".dx-colorview-alpha-channel-label .dx-texteditor").length, 0);
     assert.equal(this.element.find(".dx-colorview-container-row").length, 1);
-});
-
-QUnit.test("T110896", function(assert) {
-    showColorView.call(this, { editAlphaChannel: true, rtlEnabled: true, value: "rgba(255, 0, 0, 1)" });
-    assert.equal(Math.round(this.element.find(".dx-colorview-alpha-channel-handle").position().left), 275);
 });
 
 QUnit.test("T110896: move handle", function(assert) {
@@ -1065,6 +1041,7 @@ QUnit.test("setting alphaChannelHandler to left position by keybord navigation c
 
     assert.equal(this.instance.option("value"), "rgba(255, 0, 0, 0.99)", "alpha was changed correctly when 'ctrl+right' was pressed");
 });
+
 
 QUnit.module("aria accessibility");
 
