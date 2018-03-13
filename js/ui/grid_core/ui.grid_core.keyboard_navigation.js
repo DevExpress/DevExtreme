@@ -30,8 +30,9 @@ var ROWS_VIEW_CLASS = "rowsview",
     VIEWS = ["rowsView"],
 
     EDIT_MODE_ROW = "row",
-    EDIT_MODE_FORM = "form";
-
+    EDIT_MODE_FORM = "form",
+    EDIT_MODE_BATCH = "batch",
+    EDIT_MODE_CELL = "cell";
 
 function isGroupRow($row) {
     return $row && $row.hasClass(GROUP_ROW_CLASS);
@@ -49,6 +50,11 @@ var KeyboardNavigationController = core.ViewController.inherit({
     _isRowEditMode: function() {
         var editMode = this._editingController.getEditMode();
         return editMode === EDIT_MODE_ROW || editMode === EDIT_MODE_FORM;
+    },
+
+    _isCellEditMode: function() {
+        var editMode = this._editingController.getEditMode();
+        return editMode === EDIT_MODE_CELL || editMode === EDIT_MODE_BATCH;
     },
 
     _focusView: function(view, viewIndex) {
@@ -116,7 +122,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
             $target = this._isInsideEditForm($target) ? $(event.target) : $target;
             this._focusView(data.view, data.viewIndex);
             this._updateFocusedCellPosition($target);
-            if(!this._editingController.isEditing() && !this._isMasterDetailCell($target)) {
+            if(!this._editingController.isEditing() && !this._isCellEditMode() && !this._isMasterDetailCell($target)) {
                 this._focus($target, true);
             }
         } else if($target.is("td")) {
@@ -292,12 +298,11 @@ var KeyboardNavigationController = core.ViewController.inherit({
             this._applyTabIndexToElement($focusElement);
             eventsEngine.trigger($focusElement, "focus");
         }
-
         if(disableFocus) {
             $focusViewElement && $focusViewElement.find("." + CELL_FOCUS_DISABLED_CLASS + "[tabIndex]").removeClass(CELL_FOCUS_DISABLED_CLASS).removeAttr("tabIndex");
             $focusElement.addClass(CELL_FOCUS_DISABLED_CLASS);
         } else {
-            $focusViewElement && $focusViewElement.find("." + CELL_FOCUS_DISABLED_CLASS).removeClass(CELL_FOCUS_DISABLED_CLASS);
+            $focusViewElement && $focusViewElement.find("." + CELL_FOCUS_DISABLED_CLASS + ":not(." + MASTER_DETAIL_CELL_CLASS + ")").removeClass(CELL_FOCUS_DISABLED_CLASS);
             this.getController("editorFactory").focus($focusElement);
         }
     },
