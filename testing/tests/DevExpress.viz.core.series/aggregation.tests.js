@@ -1057,36 +1057,52 @@ QUnit.test("Default aggregation method is sum, for bar series", function(assert)
 });
 
 QUnit.test("Can set a custom function", function(assert) {
-    var points = this.aggregateData(function() {
-        return {
-            arg: 1,
-            val: 2
-        };
-    }, this.data);
+    var points = this.aggregateData("custom", this.data, "scatter", {
+        aggregation: {
+            calculate: function() {
+                return {
+                    arg: 1,
+                    val: 2
+                };
+            }
+        }
+    });
     assert.equal(points.length, 1);
     assert.equal(points[0].argument, 1);
     assert.equal(points[0].value, 2);
 });
 
 QUnit.test("Can skip a point", function(assert) {
-    var points = this.aggregateData(function() {
-        return {
-            arg: undefined,
-            val: 2
-        };
-    }, this.data);
+    var points = this.aggregateData("custom", this.data, "scatter", {
+        aggregation: {
+            calculate: function() {
+                return {
+                    arg: undefined,
+                    val: 2
+                };
+            }
+        }
+    });
     assert.equal(points.length, 0);
 });
 
 QUnit.test("Can return nothing from custom callback", function(assert) {
-    var points = this.aggregateData(function() {
-    }, this.data);
+    var points = this.aggregateData("custom", this.data, "scatter", {
+        aggregation: {
+            calculate: function() {
+            }
+        }
+    });
     assert.equal(points.length, 0);
 });
 
 QUnit.test("series pass aggregation info into custom callback", function(assert) {
     var customMethod = sinon.spy();
-    this.aggregateData(customMethod, this.data);
+    this.aggregateData("custom", this.data, "scatter", {
+        aggregation: {
+            calculate: customMethod
+        }
+    });
 
     assert.deepEqual(customMethod.lastCall.args[0].data, this.data);
     assert.equal(customMethod.lastCall.args[0].intervalStart, 0);

@@ -841,8 +841,10 @@ Series.prototype = {
     },
 
     _getAggregationMethod: function() {
-        var method = this.getOptions().aggregation.method,
-            aggregator = typeof method !== "function" ? this._aggregators[method] : method;
+        var options = this.getOptions().aggregation,
+            method = options.method,
+            aggregator = method !== "custom" ? this._aggregators[method] : options.calculate;
+
         if(!aggregator) {
             return this._aggregators[this._defaultAggregator];
         }
