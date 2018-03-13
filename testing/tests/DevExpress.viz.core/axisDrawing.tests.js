@@ -1306,6 +1306,43 @@ QUnit.test("showCustomBoundaryTicks true, customBoundTicks - render first two cu
     assert.deepEqual(path.getCall(1).returnValue.attr.getCall(1).args[0], { points: [70, 70 - 5, 70, 70 + 5] });
 });
 
+QUnit.test("showCustomBoundaryTicks true, customBoundTicks, double drawing, second with no data - no boundary ticks should render. T615270", function(assert) {
+    // arrange
+    this.createAxis();
+    this.updateOptions({
+        isHorizontal: true,
+        position: "bottom",
+        showCustomBoundaryTicks: true,
+        customBoundTicks: [1, 3, 5],
+        tick: {
+            visible: true,
+            color: "#123456",
+            opacity: 0.3,
+            width: 5,
+            length: 10
+        }
+    });
+
+    this.axis.setBusinessRange({ minVisible: 1, maxVisible: 3, addRange: function() { } });
+    this.translator.stub("translate").withArgs(1).returns(30);
+    this.translator.stub("translate").withArgs(3).returns(70);
+
+    this.axis.draw(this.canvas);
+
+    this.updateOptions({
+        customBoundTicks: [undefined]
+    });
+    this.axis.setBusinessRange({ minVisible: undefined, maxVisible: undefined, addRange: function() { } });
+    this.translator.stub("translate").reset();
+    this.renderer.path.reset();
+
+    // act
+    this.axis.draw(this.canvas);
+
+    // assert
+    assert.equal(this.renderer.path.callCount, 0);
+});
+
 QUnit.test("showCustomBoundaryTicks true, range inside ticks (endOnTick = true) - do not render boundary ticks", function(assert) {
     // arrange
     this.createAxis();
