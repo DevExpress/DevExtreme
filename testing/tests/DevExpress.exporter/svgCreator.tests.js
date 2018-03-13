@@ -2,12 +2,8 @@
 
 var $ = require("jquery"),
     isFunction = require("core/utils/type").isFunction,
-    svgCreator = require("client_exporter").svg.creator,
-    browser = require("core/utils/browser");
+    svgCreator = require("client_exporter").svg.creator;
 
-if(browser.msie && parseInt(browser.version) < 10) {
-    return;
-}
 function setupCanvasStub() {
     // Blob
     isFunction(Blob) && sinon.stub(window, "Blob", function(arrayBuffer, options) {
