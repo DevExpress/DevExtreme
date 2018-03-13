@@ -64,7 +64,7 @@ module.exports = (function() {
             values = getDateValues(filterValue),
             selector = getFilterSelector(column, target);
 
-        if(target === "headerFilter") {
+        if(target === "headerFilter" || target === "filterBuilder") {
             dateInterval = module.exports.getGroupInterval(column)[values.length - 1];
         } else if(column.dataType === "datetime") {
             dateInterval = "minute";
