@@ -23,9 +23,21 @@ var $ = require("jquery"),
     ArrayStore = require("data/array_store"),
     CustomStore = require("data/custom_store"),
     Query = require("data/query"),
-    dataUtils = require("core/element_data");
+    dataUtils = require("core/element_data"),
+    devices = require("core/devices");
 
 require("ui/scheduler/ui.scheduler");
+
+var APPOINTMENT_DEFAULT_OFFSET = 25,
+    APPOINTMENT_MOBILE_OFFSET = 50;
+
+function getOffset() {
+    if(devices.current().deviceType !== "desktop") {
+        return APPOINTMENT_MOBILE_OFFSET;
+    } else {
+        return APPOINTMENT_DEFAULT_OFFSET;
+    }
+}
 
 QUnit.module("Integration: allDay appointments", {
     beforeEach: function() {
@@ -1294,7 +1306,8 @@ QUnit.test("All-day & common appointments should have a right sorting", function
     var $element = $(this.instance.$element()),
         $appointments = $element.find(".dx-scheduler-appointment-compact"),
         $simpleAppointment = $element.find(".dx-scheduler-appointment").last(),
-        cellWidth = $element.find(".dx-scheduler-date-table-cell").outerWidth();
+        cellWidth = $element.find(".dx-scheduler-date-table-cell").outerWidth(),
+        offset = getOffset();
 
     assert.equal(dataUtils.data($appointments.get(0), "dxItemData").text, "Short 1", "Data is right");
     assert.equal(dataUtils.data($appointments.get(1), "dxItemData").text, "Short 2", "Data is right");
@@ -1302,7 +1315,7 @@ QUnit.test("All-day & common appointments should have a right sorting", function
     assert.equal(dataUtils.data($appointments.get(3), "dxItemData").text, "Short 4", "Data is right");
 
     assert.roughEqual(translator.locate($simpleAppointment).left, 100, 1.001, "Appointment position is OK");
-    assert.roughEqual($simpleAppointment.outerWidth(), cellWidth - 25, 1.001, "Appointment size is OK");
+    assert.roughEqual($simpleAppointment.outerWidth(), cellWidth - offset, 1.001, "Appointment size is OK");
 });
 
 QUnit.test("All-day appointments should have a right sorting", function(assert) {
