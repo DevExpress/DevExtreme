@@ -1156,7 +1156,6 @@ Axis.prototype = {
         if(!canvas) {
             return;
         }
-        that._majorTicks = that._minorTicks = null;
 
         that.updateCanvas(canvas);
 
@@ -1171,6 +1170,8 @@ Axis.prototype = {
             if(boundaryTicks.length > 1) {
                 that._boundaryTicks = that._boundaryTicks.concat([boundaryTicks[1]].map(createBoundaryTick(that, renderer, false)));
             }
+        } else {
+            that._boundaryTicks = [];
         }
 
         var minors = (ticks.minorTicks || []).filter(function(minor) {
@@ -1363,13 +1364,13 @@ Axis.prototype = {
 
         initTickCoords(that._majorTicks);
         initTickCoords(that._minorTicks);
-        initTickCoords(that._boundaryTicks || []);
+        initTickCoords(that._boundaryTicks);
 
         that._drawAxis();
         that._drawTitle();
         drawTickMarks(that._majorTicks);
         drawTickMarks(that._minorTicks);
-        drawTickMarks(that._boundaryTicks || []);
+        drawTickMarks(that._boundaryTicks);
         drawGrids(that._majorTicks, drawGridLine);
         drawGrids(that._minorTicks, drawGridLine);
         callAction(that._majorTicks, "drawLabel", that._getViewportRange());
@@ -1423,17 +1424,17 @@ Axis.prototype = {
 
         initTickCoords(that._majorTicks);
         initTickCoords(that._minorTicks);
-        initTickCoords(that._boundaryTicks || []);
+        initTickCoords(that._boundaryTicks);
 
         cleanUpInvalidTicks(that._majorTicks);
         cleanUpInvalidTicks(that._minorTicks);
-        cleanUpInvalidTicks(that._boundaryTicks || []);
+        cleanUpInvalidTicks(that._boundaryTicks);
 
         that._updateAxisElementPosition();
 
         updateTicksPosition(that._majorTicks);
         updateTicksPosition(that._minorTicks);
-        updateTicksPosition(that._boundaryTicks || []);
+        updateTicksPosition(that._boundaryTicks);
 
         callAction(that._majorTicks, "updateLabelPosition");
 
@@ -1604,7 +1605,7 @@ Axis.prototype = {
         if(this._options.type === constants.discrete) {
             return convertTicksToValues(majors);
         } else {
-            return convertTicksToValues(majors.concat(this._minorTicks, this._boundaryTicks || []))
+            return convertTicksToValues(majors.concat(this._minorTicks, this._boundaryTicks))
                 .sort(function(a, b) {
                     return valueOf(a) - valueOf(b);
                 });
