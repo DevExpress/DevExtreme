@@ -53,12 +53,10 @@ var currentDate = new Date(2015, 11, 31),
 
     DATEBOX_LIST_POPUP_SELECTOR = ".dx-datebox-wrapper-list .dx-popup-content",
     LIST_ITEM_SELECTOR = ".dx-list-item",
-    DATEBOX_LIST_CLASS = "dx-datebox-list",
     DATEBOX_ADAPTIVITY_MODE_CLASS = "dx-datebox-adaptivity-mode",
     LIST_ITEM_SELECTED_CLASS = "dx-list-item-selected",
 
     STATE_FOCUSED_CLASS = "dx-state-focused",
-    DX_AUTO_WIDTH_CLASS = "dx-auto-width",
 
     widgetName = "dxDateBox",
 
@@ -106,18 +104,6 @@ var getExpectedResult = function(date, mode, stringDate) {
 
 QUnit.module("datebox tests", moduleConfig);
 
-QUnit.test("attach dxDateBox", function(assert) {
-    assert.ok(this.instance instanceof DateBox);
-});
-
-QUnit.test("render value", function(assert) {
-    var date = new Date(2012, 10, 26, 16, 40, 23),
-        mode = this.instance.option("mode");
-
-    this.instance.option("value", date);
-    assert.equal(this.$input().val(), getExpectedResult(date, mode, "2012-11-26"));
-});
-
 QUnit.test("value is null after reset", function(assert) {
     var date = new Date(2012, 10, 26, 16, 40, 23);
 
@@ -125,27 +111,6 @@ QUnit.test("value is null after reset", function(assert) {
     this.instance.reset();
 
     assert.equal(this.instance.option("value"), null, "value is null after reset");
-});
-
-QUnit.test("render type", function(assert) {
-    var date = new Date(2012, 10, 26, 16, 40, 0);
-
-    this.instance.option({
-        value: date,
-        type: "datetime"
-    });
-
-    assert.equal(!support.inputType("datetime"), this.instance.option("mode") === "datetime-local", "if 'datetime' mode is not supported, it is change to 'datetime-local'");
-
-    assert.equal(uiDateUtils.fromStandardDateFormat(this.$input().val()).getTime(), date.getTime());
-
-    this.instance.option("type", "time");
-
-    var inputValue = $(this.$input()).val(),
-        normalizedInputValue = support.inputType(this.instance.option("mode")) ? uiDateUtils.fromStandardDateFormat(inputValue) : dateLocalization.parse(inputValue, uiDateUtils.FORMATS_MAP.time);
-
-    assert.equal(normalizedInputValue.getHours(), date.getHours());
-    assert.equal(normalizedInputValue.getMinutes(), date.getMinutes());
 });
 
 QUnit.test("render valueChangeEvent", function(assert) {
@@ -163,13 +128,6 @@ QUnit.test("render valueChangeEvent", function(assert) {
     assert.equal(value.getFullYear(), 2012);
     assert.equal(value.getMonth(), 10);
     assert.equal(value.getDate(), 26);
-});
-
-QUnit.test("render disabled state", function(assert) {
-    assert.ok(!this.$input().attr("disabled"));
-
-    this.instance.option("disabled", true);
-    assert.ok(this.$input().attr("disabled"));
 });
 
 QUnit.test("simulated date picker should not be opened if pickerType is 'native'", function(assert) {
@@ -223,7 +181,7 @@ QUnit.test("T204179 - dxDateBox should not render dropDownButton only for generi
     assert.equal($dropDownButton.length, expectedButtonsNumber, "correct readOnly value");
 });
 
-QUnit.test("Datebox should set min and max attributes to the native input (T258860)", function(assert) {
+QUnit.test("Datebox should set min and max attributes to the native input (T258860) after option changed", function(assert) {
     var $dateBox = $("#dateBox").dxDateBox({
             type: "date",
             pickerType: "native",
@@ -232,9 +190,6 @@ QUnit.test("Datebox should set min and max attributes to the native input (T2588
         }),
         dateBox = $dateBox.dxDateBox("instance"),
         $input = $dateBox.find("." + TEXTEDITOR_INPUT_CLASS);
-
-    assert.equal($input.attr("min"), "2015-06-02", "minimum date initialized correctly");
-    assert.equal($input.attr("max"), "2015-08-02", "maximum date initialized correctly");
 
     dateBox.option({
         min: new Date(2015, 5, 3),
@@ -258,18 +213,6 @@ QUnit.test("T195971 - popup is not showing after click on the 'clear' button", f
     assert.ok(!dateBox.option("opened"), "popup is closed");
     $($clearButton).trigger("dxclick");
     assert.ok(!dateBox.option("opened"), "popup is still closed after click on clear button");
-});
-
-QUnit.test("T209347 - clear button should not be rendered if pickerType is 'native'", function(assert) {
-    var $dateBox = $("#dateBox").dxDateBox({
-            type: "date",
-            pickerType: "native",
-            showClearButton: true,
-            value: new Date()
-        }),
-        $clearButton = $dateBox.find(".dx-clear-button-area");
-
-    assert.equal($clearButton.length, 0, "no clear buttons are rendered");
 });
 
 QUnit.test("invalid value should be cleared after clear button click", function(assert) {
@@ -331,16 +274,6 @@ QUnit.test("T252737 - the 'acceptCustomValue' option correct behavior", function
 
     assert.equal($dateBox.dxDateBox("option", "value"), null, "value is not set");
     assert.equal($input.val(), "", "text is not rendered");
-});
-
-QUnit.test("T266206 - validation should be correct when max value is chosen", function(assert) {
-    var dateBox = $("#dateBox").dxDateBox({
-        min: new Date(2015, 6, 10),
-        max: new Date(2015, 6, 14),
-        value: new Date(2015, 6, 14, 15, 30)
-    }).dxDateBox("instance");
-
-    assert.ok(dateBox.option("isValid"), "datebox is valid");
 });
 
 QUnit.test("T278148 - picker type should be 'rollers' if the real device is phone in generic theme", function(assert) {
@@ -461,26 +394,6 @@ QUnit.test("T437211: Custom dxDateBox value formatter is not called if the same 
 
 QUnit.module("hidden input");
 
-QUnit.test("a hidden input should be rendered", function(assert) {
-    var $element = $("#dateBox").dxDateBox(),
-        $hiddenInput = $element.find("input[type='hidden']");
-
-    assert.equal($hiddenInput.length, 1, "hidden input is rendered");
-});
-
-QUnit.test("the value should be passed to the hidden input on init", function(assert) {
-    var dateValue = new Date(2016, 6, 15),
-        type = "date",
-        stringValue = uiDateUtils.toStandardDateFormat(dateValue, type),
-        $element = $("#dateBox").dxDateBox({
-            value: dateValue,
-            type: type
-        }),
-        $hiddenInput = $element.find("input[type='hidden']");
-
-    assert.equal($hiddenInput.val(), stringValue, "input value is correct after init");
-});
-
 QUnit.test("the value should be passed to the hidden input in the correct format", function(assert) {
     var dateValue = new Date(2016, 6, 15, 14, 30),
         types = ["datetime", "date", "time"],
@@ -496,18 +409,6 @@ QUnit.test("the value should be passed to the hidden input in the correct format
     });
 });
 
-// T552313
-QUnit.test("the value should be passed to the hidden input in the correct format if dateSerializationFormat option is defined", function(assert) {
-    var dateValue = new Date(Date.UTC(2016, 6, 15, 14, 30)),
-        $element = $("#dateBox").dxDateBox({
-            type: "datetime",
-            dateSerializationFormat: "yyyy-MM-ddTHH:mm:ssZ",
-            value: dateValue
-        });
-
-    assert.equal($element.find("input[type='hidden']").val(), "2016-07-15T14:30:00Z", "input value is correct for the 'yyyy-MM-ddTHH:mm:ssZ' format");
-});
-
 QUnit.test("the value should be passed to the hidden input on widget value change", function(assert) {
     var type = "date",
         $element = $("#dateBox").dxDateBox({
@@ -521,20 +422,6 @@ QUnit.test("the value should be passed to the hidden input on widget value chang
     instance.option("value", expectedDateValue);
     assert.equal($hiddenInput.val(), expectedStringValue, "input value is correct after widget value change");
 });
-
-
-QUnit.module("the 'name' option");
-
-QUnit.test("widget hidden input should get the 'name' attribute with a correct value", function(assert) {
-    var expectedName = "some_name",
-        $element = $("#dateBox").dxDateBox({
-            name: expectedName
-        }),
-        $input = $element.find("input[type='hidden']");
-
-    assert.equal($input.attr("name"), expectedName, "the input 'name' attribute has correct value");
-});
-
 
 QUnit.module("focus policy");
 
@@ -829,6 +716,24 @@ QUnit.test("closeOnValueChange option still affects on buttons rendering", funct
 
 
 QUnit.module("merging dates", moduleConfig);
+
+QUnit.test("dates should be merged correctly", function(assert) {
+    var $element = $("#dateBox").dxDateBox({
+            value: new Date(2014, 10, 1, 11, 22),
+            type: "date",
+            pickerType: "native"
+        }),
+        instance = $element.dxDateBox("instance"),
+        $input = $element.find("." + TEXTEDITOR_INPUT_CLASS);
+
+    $input.val("2014-10-31");
+    $input.triggerHandler("change");
+    assert.equal(instance.option("value").valueOf(), new Date(2014, 9, 31, 11, 22).valueOf(), "date merged correctly");
+
+    $input.val("2014-11-01");
+    $input.triggerHandler("change");
+    assert.equal(instance.option("value").valueOf(), new Date(2014, 10, 1, 11, 22).valueOf(), "date merged correctly");
+});
 
 QUnit.test("incorrect work of mergeDates function (B237850)", function(assert) {
     this.instance.option("type", "date");
@@ -1289,18 +1194,6 @@ QUnit.test("default", function(assert) {
     assert.ok($element.outerWidth() > 0, "outer width of the element must be more than zero");
 });
 
-QUnit.test("component should have special css class when the user set the width option", function(assert) {
-    var $element = $("#dateBox").dxDateBox({
-            width: 100
-        }),
-        component = $element.dxDateBox("instance");
-
-    assert.notOk($element.hasClass(DX_AUTO_WIDTH_CLASS), "component has not class");
-
-    component.option("width", undefined);
-    assert.ok($element.hasClass(DX_AUTO_WIDTH_CLASS), "component has class");
-});
-
 QUnit.test("component should have correct width when it was rendered in a scaled container (T584097)", function(assert) {
     var $parent = $("#parent-div");
     $parent.css("width", 200);
@@ -1318,25 +1211,6 @@ QUnit.test("component should have correct width when it was rendered in a scaled
     assert.equal(component.$element().outerWidth(), initialWidth, "component has correct width");
 });
 
-QUnit.test("constructor", function(assert) {
-    var $element = $("#dateBox").dxDateBox({
-            pickerType: "rollers",
-            width: 400
-        }),
-        instance = $element.dxDateBox("instance");
-
-    assert.strictEqual(instance.option("width"), 400);
-    assert.strictEqual($element.outerWidth(), 400, "outer width of the element must be equal to custom width");
-});
-
-QUnit.test("root with custom width", function(assert) {
-    var $element = $("#widthRootStyle").dxDateBox(),
-        instance = $element.dxDateBox("instance");
-
-    assert.strictEqual(instance.option("width"), undefined);
-    assert.strictEqual($element.outerWidth(), 300, "outer width of the element must be equal to custom width");
-});
-
 QUnit.test("change width", function(assert) {
     var $element = $("#dateBox").dxDateBox({
             pickerType: "rollers"
@@ -1349,24 +1223,6 @@ QUnit.test("change width", function(assert) {
     assert.strictEqual($element.outerWidth(), customWidth, "outer width of the element must be equal to custom width");
 });
 
-QUnit.test("dates should be merged correctly", function(assert) {
-    var $element = $("#dateBox").dxDateBox({
-            value: new Date(2014, 10, 1, 11, 22),
-            type: "date",
-            pickerType: "native"
-        }),
-        instance = $element.dxDateBox("instance"),
-        $input = $element.find("." + TEXTEDITOR_INPUT_CLASS);
-
-    $input.val("2014-10-31");
-    $input.triggerHandler("change");
-    assert.equal(instance.option("value").valueOf(), new Date(2014, 9, 31, 11, 22).valueOf(), "date merged correctly");
-
-    $input.val("2014-11-01");
-    $input.triggerHandler("change");
-    assert.equal(instance.option("value").valueOf(), new Date(2014, 10, 1, 11, 22).valueOf(), "date merged correctly");
-});
-
 
 QUnit.module("datebox and calendar integration");
 
@@ -1374,22 +1230,6 @@ QUnit.test("default", function(assert) {
     var $element = $("#dateBox").dxDateBox({ pickerType: "calendar" });
 
     assert.ok($element.outerWidth() > 0, "outer width of the element must be more than zero");
-});
-
-QUnit.test("constructor", function(assert) {
-    var $element = $("#dateBox").dxDateBox({ pickerType: "calendar", width: 1234 }),
-        instance = $element.dxDateBox("instance");
-
-    assert.strictEqual(instance.option("width"), 1234);
-    assert.strictEqual($element.outerWidth(), 1234, "outer width of the element must be equal to custom width");
-});
-
-QUnit.test("root with custom width", function(assert) {
-    var $element = $("#widthRootStyle").dxDateBox({ pickerType: "calendar" }),
-        instance = $element.dxDateBox("instance");
-
-    assert.strictEqual(instance.option("width"), undefined);
-    assert.strictEqual($element.outerWidth(), 300, "outer width of the element must be equal to custom width");
 });
 
 QUnit.test("change width", function(assert) {
@@ -2560,19 +2400,6 @@ QUnit.test("date box popup should have maximum 100% width", function(assert) {
     }
 });
 
-QUnit.test("format should be correct", function(assert) {
-    var date = new Date($.now());
-
-    var $element = $("#dateBox").dxDateBox({
-            type: "datetime",
-            pickerType: "calendar",
-            value: date
-        }),
-        formattedValue = dateLocalization.format(date, uiDateUtils.FORMATS_MAP['datetime']);
-
-    assert.equal($element.find("." + TEXTEDITOR_INPUT_CLASS).val(), formattedValue, "correct format");
-});
-
 QUnit.test("datebox value is bound to time view value", function(assert) {
     var $element = $("#dateBox").dxDateBox({
             type: "datetime",
@@ -2790,10 +2617,6 @@ QUnit.module("datebox w/ time list", {
 });
 
 QUnit.test("rendered markup", function(assert) {
-    var $dateBox = this.$dateBox;
-
-    assert.ok($dateBox.hasClass(DATEBOX_LIST_CLASS), "TimeBox initialized");
-
     this.dateBox.option("opened", true);
     assert.ok($(DATEBOX_LIST_POPUP_SELECTOR).length, "Popup has dx-timebox-popup-wrapper class");
 });
@@ -2876,18 +2699,6 @@ QUnit.test("min/max overflow test", function(assert) {
 
     assert.equal($listItems.first().text(), "4:00 AM", "min value is right");
     assert.equal($listItems.last().text(), "3:30 AM", "max value is right");
-});
-
-QUnit.test("default field template test", function(assert) {
-    this.dateBox.option({
-        min: new Date(2008, 7, 8, 4, 0),
-        value: new Date(2008, 7, 8, 5, 0),
-        max: new Date(2008, 7, 8, 6, 0)
-    });
-
-    var $input = this.$dateBox.find(".dx-texteditor-input");
-
-    assert.equal($input.val(), "5:00 AM", "field template is right");
 });
 
 QUnit.test("interval option", function(assert) {
@@ -3129,27 +2940,6 @@ QUnit.test("validator correctly check value with 'time' format", function(assert
     assert.equal(value.getMinutes(), 30, "Correct minutes");
     assert.equal(dateBox.option("isValid"), true, "Editor should be marked as valid");
 });
-
-
-QUnit.module("native datebox", {
-    beforeEach: function() {
-        this.$dateBox = $("#dateBox");
-
-        this.dateBox = this.$dateBox
-            .dxDateBox({
-                pickerType: "native"
-            })
-            .dxDateBox("instance");
-    },
-    afterEach: function() {
-    }
-});
-
-QUnit.test("it should work and not fall", function(assert) {
-    assert.ok(this.dateBox, "Instance of native datepicker should work for each platform");
-    assert.equal(this.dateBox._strategy.NAME, "Native", "correct strategy is chosen");
-});
-
 
 QUnit.module("keyboard navigation", {
     beforeEach: function() {
@@ -3426,53 +3216,6 @@ QUnit.test("aria-activedescendant on combobox should point to the active list it
 
 QUnit.module("pickerType");
 
-QUnit.test("correct behavior for the 'calendar' value", function(assert) {
-    var $element = $("#dateBox").dxDateBox({
-            value: new Date(),
-            pickerType: "calendar",
-            type: "date"
-        }),
-        instance = $element.dxDateBox("instance");
-
-    assert.equal(instance._strategy.NAME, "Calendar", "strategy is correct for the 'date' type");
-
-    instance.option("type", "datetime");
-    assert.equal(instance._strategy.NAME, "CalendarWithTime", "strategy is correct for the 'datetime' type");
-});
-
-QUnit.test("correct behavior for the 'list' value", function(assert) {
-    var $element = $("#dateBox").dxDateBox({
-            value: new Date(),
-            pickerType: "list",
-            type: "time"
-        }),
-        instance = $element.dxDateBox("instance");
-
-    assert.equal(instance._strategy.NAME, "List", "strategy is correct");
-});
-
-QUnit.test("correct behavior for the 'rollers' value", function(assert) {
-    var $element = $("#dateBox").dxDateBox({
-            value: new Date(),
-            pickerType: "rollers",
-            type: "date"
-        }),
-        instance = $element.dxDateBox("instance");
-
-    assert.equal(instance._strategy.NAME, "DateView", "strategy is correct");
-});
-
-QUnit.test("correct behavior for the 'native' value", function(assert) {
-    var $element = $("#dateBox").dxDateBox({
-            value: new Date(),
-            pickerType: "native",
-            type: "date"
-        }),
-        instance = $element.dxDateBox("instance");
-
-    assert.equal(instance._strategy.NAME, "Native", "strategy is correct");
-});
-
 QUnit.test("T319039 - classes on DateBox should be correct after the 'pickerType' option changed", function(assert) {
     var pickerTypes = ["rollers", "calendar", "native", "list"],
         $dateBox = $("#dateBox").dxDateBox(),
@@ -3550,6 +3293,17 @@ QUnit.test("useCalendar = true and type = time should use time list (T248089)", 
 
 
 QUnit.module("datebox validation");
+
+QUnit.test("validation should be correct when max value is chosen (T266206)", function(assert) {
+    var $dateBox = $("#dateBox").dxDateBox({
+            min: new Date(2015, 6, 10),
+            max: new Date(2015, 6, 14),
+            value: new Date(2015, 6, 14, 15, 30)
+        }),
+        dateBox = $dateBox.dxDateBox("instance");
+
+    assert.ok(dateBox.option("isValid"), "datebox is valid");
+});
 
 QUnit.test("widget is still valid after drop down is opened", function(assert) {
     var startDate = new Date(2015, 1, 1, 8, 12);
