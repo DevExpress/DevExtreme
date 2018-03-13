@@ -18,11 +18,8 @@ require("common.css!");
 require("generic_light.css!");
 
 var TEXTEDITOR_INPUT_CLASS = "dx-texteditor-input",
-
     DATEBOX_CLASS = "dx-datebox",
-
     DATEBOX_LIST_CLASS = "dx-datebox-list",
-
     DX_AUTO_WIDTH_CLASS = "dx-auto-width";
 
 var moduleConfig = {
