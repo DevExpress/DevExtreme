@@ -564,7 +564,7 @@ var baseScatterMethods = {
                 };
                 break;
             default:
-                valueArray = _map(data, function(item) { return _isDefined(item[valueField]) ? item[valueField] : null; });
+                valueArray = _map(data, function(item) { return _isDefined(item.data[valueField]) ? item.data[valueField] : null; });
                 valueArrayLength = valueArray.length;
                 floatErrorValue = floatErrorValue || 1;
                 switch(errorBarType) {
