@@ -1,4 +1,5 @@
 {
+    "esversion": 6,
     "eqeqeq": true,
     "eqnull": true,
     "expr": true,
@@ -16,7 +17,7 @@
     "-W069": true,
     "-W079": true,
 
-    "predef": [ 
+    "predef": [
         "require",
         "module",
         "exports"
