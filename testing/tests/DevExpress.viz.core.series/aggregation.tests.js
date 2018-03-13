@@ -1193,13 +1193,13 @@ QUnit.test("Use avg method for value and size in Bubble series", function(assert
     assert.equal(points[0].value, 3.6);
 });
 
-QUnit.test("Calculate error bars", function(assert) {
+QUnit.test("Avg. Calculate error bars", function(assert) {
     var data = [
-            { arg: 0, val: 100, low: null, high: 30 },
-            { arg: 2, val: 300, low: 10, high: 30 },
-            { arg: 4, val: 500, low: 5, high: undefined },
-            { arg: 6, val: 700, low: 10, high: 70 },
-            { arg: 8, val: 900, low: 10, high: 30 }
+            { arg: 0, val: 100, low: null, high: 120 },
+            { arg: 2, val: 300, low: 280, high: 340 },
+            { arg: 4, val: 500, low: 450, high: undefined },
+            { arg: 6, val: 700, low: 600, high: 710 },
+            { arg: 8, val: 900, low: 850, high: 960 }
         ],
         points = this.aggregateData("avg", data, "scatter", {
             valueErrorBar: {
@@ -1211,8 +1211,8 @@ QUnit.test("Calculate error bars", function(assert) {
     assert.equal(points.length, 1);
     assert.equal(points[0].argument, 0);
     assert.equal(points[0].value, 500);
-    assert.equal(points[0].lowError, 5);
-    assert.equal(points[0].highError, 70);
+    assert.equal(points[0].lowError, 445);
+    assert.equal(points[0].highError, 532.5);
 });
 
 QUnit.test("Calculate error bars. Each value is null or undefined", function(assert) {
@@ -1231,6 +1231,116 @@ QUnit.test("Calculate error bars. Each value is null or undefined", function(ass
         });
 
     assert.equal(points.length, 1);
-    assert.equal(points[0].lowError, undefined);
-    assert.equal(points[0].highError, undefined);
+    assert.strictEqual(points[0].lowError, undefined);
+    assert.strictEqual(points[0].highError, undefined);
+});
+
+QUnit.test("Avg. With fixed error bars", function(assert) {
+    var data = [
+            { arg: 0, val: 100, low: null, high: 120 },
+            { arg: 2, val: 300, low: 280, high: 340 },
+            { arg: 4, val: 500, low: 450, high: undefined },
+            { arg: 6, val: 700, low: 600, high: 710 },
+            { arg: 8, val: 900, low: 850, high: 960 }
+        ],
+        points = this.aggregateData("avg", data, "scatter", {
+            valueErrorBar: {
+                type: "fixed",
+                value: 1
+            }
+        });
+
+    assert.equal(points.length, 1);
+    assert.equal(points[0].argument, 0);
+    assert.equal(points[0].value, 500);
+    assert.equal(points[0].lowError, 499);
+    assert.equal(points[0].highError, 501);
+});
+
+QUnit.test("Sum. Calculate error bars", function(assert) {
+    var data = [
+            { arg: 0, val: 100, low: 80, high: 120 },
+            { arg: 2, val: 300, low: 280, high: 340 },
+            { arg: 4, val: 500, low: 450, high: 520 },
+            { arg: 6, val: 700, low: 600, high: 710 },
+            { arg: 8, val: 900, low: 850, high: 960 }
+        ],
+        points = this.aggregateData("sum", data, "scatter", {
+            valueErrorBar: {
+                lowValueField: "low",
+                highValueField: "high",
+            }
+        });
+
+    assert.equal(points.length, 1);
+    assert.equal(points[0].argument, 0);
+    assert.equal(points[0].value, 2500);
+    assert.equal(points[0].lowError, 2260);
+    assert.equal(points[0].highError, 2650);
+});
+
+QUnit.test("Min. Calculate error bars", function(assert) {
+    var data = [
+            { arg: 0, val: 100, low: null, high: 120 },
+            { arg: 2, val: 300, low: 280, high: 340 },
+            { arg: 4, val: 500, low: 450, high: undefined },
+            { arg: 6, val: 700, low: 600, high: 710 },
+            { arg: 8, val: 900, low: 850, high: 960 }
+        ],
+        points = this.aggregateData("min", data, "scatter", {
+            valueErrorBar: {
+                lowValueField: "low",
+                highValueField: "high",
+            }
+        });
+
+    assert.equal(points.length, 1);
+    assert.equal(points[0].argument, 0);
+    assert.equal(points[0].value, 100);
+    assert.strictEqual(points[0].lowError, null);
+    assert.equal(points[0].highError, 120);
+});
+
+QUnit.test("Max. Calculate error bars", function(assert) {
+    var data = [
+            { arg: 0, val: 100, low: null, high: 120 },
+            { arg: 2, val: 300, low: 280, high: 340 },
+            { arg: 4, val: 500, low: 450, high: undefined },
+            { arg: 6, val: 700, low: 600, high: 710 },
+            { arg: 8, val: 900, low: 850, high: 960 }
+        ],
+        points = this.aggregateData("max", data, "scatter", {
+            valueErrorBar: {
+                lowValueField: "low",
+                highValueField: "high",
+            }
+        });
+
+    assert.equal(points.length, 1);
+    assert.equal(points[0].argument, 0);
+    assert.equal(points[0].value, 900);
+    assert.strictEqual(points[0].lowError, 850);
+    assert.equal(points[0].highError, 960);
+});
+
+QUnit.test("Count. Do not calculate error bars", function(assert) {
+    var data = [
+            { arg: 0, val: 100, low: null, high: 120 },
+            { arg: 2, val: 300, low: 280, high: 340 },
+            { arg: 4, val: 500, low: 450, high: undefined },
+            { arg: 6, val: 700, low: 600, high: 710 },
+            { arg: 8, val: 900, low: 850, high: 960 }
+        ],
+        points = this.aggregateData("count", data, "scatter", {
+            valueErrorBar: {
+                lowValueField: "low",
+                highValueField: "high",
+            }
+        });
+
+    assert.equal(points.length, 1);
+    assert.equal(points[0].argument, 0);
+    assert.equal(points[0].value, 5);
+    assert.strictEqual(points[0].lowError, undefined);
+    assert.strictEqual(points[0].highError, undefined);
 });

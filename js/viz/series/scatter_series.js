@@ -1,14 +1,12 @@
 "use strict";
 
-var extend = require("../../core/utils/extend").extend,
+var _extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
-    each = require("../../core/utils/iterator").each,
+    _each = require("../../core/utils/iterator").each,
     rangeCalculator = require("./helpers/range_data_calculator"),
     typeUtils = require("../../core/utils/type"),
     vizUtils = require("../core/utils"),
 
-    _each = each,
-    _extend = extend,
     _noop = require("../../core/utils/common").noop,
     _isDefined = typeUtils.isDefined,
     _isString = typeUtils.isString,
@@ -61,6 +59,58 @@ function variance(array, expectedValue) {
         return (value - expectedValue) * (value - expectedValue);
     })) / array.length;
 }
+
+var errorBarAggregators = {
+    avg: function(result, data, series) {
+        var errorBarsOptions = series.getOptions().valueErrorBar,
+            valueField = series.getValueFields()[0],
+            lowValueField = errorBarsOptions.lowValueField || LOW_ERROR,
+            highValueField = errorBarsOptions.highValueField || HIGH_ERROR;
+
+        if(series.areErrorBarsVisible() && errorBarsOptions.type === undefined) {
+            var fusionData = data.reduce(function(result, item) {
+                if(_isDefined(item[lowValueField])) {
+                    result[0] += item[valueField] - item[lowValueField];
+                    result[1]++;
+                }
+                if(_isDefined(item[highValueField])) {
+                    result[2] += item[highValueField] - item[valueField];
+                    result[3]++;
+                }
+
+                return result;
+            }, [0, 0, 0, 0]);
+
+            if(fusionData[1]) {
+                result[lowValueField] = result[valueField] - fusionData[0] / fusionData[1];
+            }
+            if(fusionData[2]) {
+                result[highValueField] = result[valueField] + fusionData[2] / fusionData[3];
+            }
+        }
+
+        return result;
+    },
+
+    sum: function(result, data, series) {
+        var errorBarsOptions = series.getOptions().valueErrorBar,
+            lowValueField = errorBarsOptions.lowValueField || LOW_ERROR,
+            highValueField = errorBarsOptions.highValueField || HIGH_ERROR;
+
+        if(series.areErrorBarsVisible() && errorBarsOptions.type === undefined) {
+            result[lowValueField] = 0;
+            result[highValueField] = 0;
+            result = data.reduce(function(result, item) {
+                result[lowValueField] += item[lowValueField];
+                result[highValueField] += item[highValueField];
+
+                return result;
+            }, result);
+        }
+
+        return result;
+    }
+};
 
 var baseScatterMethods = {
     _defaultDuration: DEFAULT_DURATION,
@@ -349,41 +399,11 @@ var baseScatterMethods = {
         return { low: lowValue, high: highValue };
     },
 
-    _aggregateErrorBars: function(data) {
-        var errorBarsOptions = this._options.valueErrorBar,
-            lowValueField = errorBarsOptions.lowValueField || LOW_ERROR,
-            highValueField = errorBarsOptions.highValueField || HIGH_ERROR,
-            result = {};
-
-        if(this.areErrorBarsVisible() && errorBarsOptions.type === undefined) {
-            result[lowValueField] = Infinity;
-            result[highValueField] = -Infinity;
-            result = data.reduce(function(result, item) {
-                if(_isDefined(item[lowValueField])) {
-                    result[lowValueField] = Math.min(result[lowValueField], item[lowValueField]);
-                }
-                if(_isDefined(item[highValueField])) {
-                    result[highValueField] = Math.max(result[highValueField], item[highValueField]);
-                }
-                return result;
-            }, result);
-
-            if(!isFinite(result[lowValueField])) {
-                result[lowValueField] = undefined;
-            }
-            if(!isFinite(result[highValueField])) {
-                result[highValueField] = undefined;
-            }
-        }
-
-        return result;
-    },
-
     _defaultAggregator: "avg",
 
     _aggregators: {
         avg: function(aggregationInfo, series) {
-            var result = series._aggregateErrorBars(aggregationInfo.data),
+            var result = {},
                 valueField = series.getValueFields()[0],
                 aggregate = aggregationInfo.data.reduce(function(result, item) {
                     result[0] += item[valueField];
@@ -393,6 +413,8 @@ var baseScatterMethods = {
 
             result[valueField] = aggregate[0] / aggregate[1];
             result[series.getArgumentField()] = aggregationInfo.intervalStart;
+
+            result = errorBarAggregators.avg(result, aggregationInfo.data, series);
 
             return result;
         },
@@ -407,6 +429,8 @@ var baseScatterMethods = {
             }, 0);
 
             result[series.getArgumentField()] = aggregationInfo.intervalStart;
+
+            result = errorBarAggregators.sum(result, aggregationInfo.data, series);
 
             return result;
         },
@@ -427,33 +451,37 @@ var baseScatterMethods = {
         min: function(aggregationInfo, series) {
             var result = {},
                 valueField = series.getValueFields()[0],
-                data = aggregationInfo.data;
+                data = aggregationInfo.data,
+                itemWithMinPoint = data[0];
 
-            result[valueField] = data.reduce(function(result, item) {
-                result = _min(item[valueField], result);
+            itemWithMinPoint = data.reduce(function(result, item) {
+                if(item[valueField] < result[valueField]) {
+                    return item;
+                }
                 return result;
-            }, data[0][valueField]);
-
+            }, itemWithMinPoint);
 
             result[series.getArgumentField()] = aggregationInfo.intervalStart;
 
-            return result;
+            return _extend({}, itemWithMinPoint, result);
         },
 
         max: function(aggregationInfo, series) {
             var result = {},
                 valueField = series.getValueFields()[0],
-                data = aggregationInfo.data;
+                data = aggregationInfo.data,
+                itemWithMinPoint = data[0];
 
-            result[valueField] = data.reduce(function(result, item) {
-                result = _max(item[valueField], result);
+            itemWithMinPoint = data.reduce(function(result, item) {
+                if(item[valueField] > result[valueField]) {
+                    return item;
+                }
                 return result;
-            }, data[0][valueField]);
-
+            }, itemWithMinPoint);
 
             result[series.getArgumentField()] = aggregationInfo.intervalStart;
 
-            return result;
+            return _extend({}, itemWithMinPoint, result);
         }
     },
 
