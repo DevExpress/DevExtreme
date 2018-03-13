@@ -10,6 +10,7 @@ var $ = require("../core/renderer"),
     isDefined = require("../core/utils/type").isDefined,
     arrayUtils = require("../core/utils/array"),
     typeUtils = require("../core/utils/type"),
+    windowUtils = require("../core/utils/window"),
     iteratorUtils = require("../core/utils/iterator"),
     extend = require("../core/utils/extend").extend,
     messageLocalization = require("../localization/message"),
@@ -201,7 +202,7 @@ var TagBox = SelectBox.inherit({
     },
 
     _scrollContainer: function(direction) {
-        if(this.option("multiline")) {
+        if(this.option("multiline") || !windowUtils.hasWindow()) {
             return;
         }
 
