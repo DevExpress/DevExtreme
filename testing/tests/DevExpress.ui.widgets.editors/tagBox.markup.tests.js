@@ -392,10 +392,11 @@ QUnit.test("single line class presence should depend the 'multiline' option", fu
 
 QUnit.test("the 'values' option should work correctly", function(assert) {
     var $tagBox = $("#tagBox").dxTagBox({
-        items: [1, 2, 3],
-        values: [2],
-        showSelectionControls: true
-    });
+            items: [1, 2, 3],
+            values: [2],
+            showSelectionControls: true
+        }),
+        $tag = $tagBox.find("." + TAGBOX_TAG_CLASS);
 
-    assert.equal($tagBox.text(), "2", "the 'values' option works correctly");
+    assert.equal($tag.text(), "2", "the 'values' option works correctly");
 });
