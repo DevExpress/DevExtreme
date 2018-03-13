@@ -110,6 +110,7 @@ var getHandlersController = function(element, eventName) {
                 var handlerArgs = [e],
                     target = e.currentTarget,
                     relatedTarget = e.relatedTarget,
+                    secondaryTargetIsOutside = !relatedTarget || (relatedTarget !== target && !(target && e.currentTarget.contains(relatedTarget))),
                     result;
 
                 if(extraParameters !== undefined) {
@@ -118,7 +119,7 @@ var getHandlersController = function(element, eventName) {
 
                 special.callMethod(eventName, "handle", element, [ e, data ]);
 
-                if(!relatedTarget || (relatedTarget !== target && !(target && e.currentTarget.contains(relatedTarget)))) {
+                if(secondaryTargetIsOutside) {
                     result = handler.apply(target, handlerArgs);
                 }
 

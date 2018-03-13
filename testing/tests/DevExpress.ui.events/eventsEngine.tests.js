@@ -287,6 +287,25 @@ QUnit.test("Event bubbling", function(assert) {
     assert.equal(fired.focus, 0);
 });
 
+QUnit.test("Should not fire event when relatedTarget is children of a target", function(assert) {
+    var div = document.createElement("div"),
+        div2 = document.createElement("div"),
+        fired = 0;
+    div.appendChild(div2);
+
+    document.body.appendChild(div);
+
+    eventsEngine.on(div, "someEvent", function() {
+        fired++;
+    });
+
+    var event = new eventsEngine.Event("someEvent", { target: div, relatedTarget: div.children[0] });
+
+    eventsEngine.trigger(div, event);
+
+    assert.equal(fired, 0);
+});
+
 QUnit.test("'on' signatures", function(assert) {
     var fired = 0;
     var hasData = 0;
