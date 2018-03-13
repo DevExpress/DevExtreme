@@ -475,14 +475,14 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
 
                         if(this.isRecursiveSelection() && mode) {
                             selectedRowKeys = this._getAllSelectedRowKeys(selectedRowKeys);
+
+                            if(mode === "excludeRecursive") {
+                                selectedRowKeys = that._getParentSelectedRowKeys(selectedRowKeys);
+                            }
                         }
 
                         if(that._isModeLeavesOnly(mode)) {
                             selectedRowKeys = that._getLeafSelectedRowKeys(selectedRowKeys);
-                        }
-
-                        if(this.isRecursiveSelection() && mode === "excludeRecursive") {
-                            selectedRowKeys = that._getParentSelectedRowKeys(selectedRowKeys);
                         }
                     }
 
