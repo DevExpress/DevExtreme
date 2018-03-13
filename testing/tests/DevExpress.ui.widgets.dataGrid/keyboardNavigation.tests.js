@@ -4868,6 +4868,58 @@ QUnit.module("Keyboard navigation with real dataController and columnsController
         assert.equal($("input:focus").val(), "Alex", "value of first editor");
     });
 
+    QUnit.testInActiveWindow("Focus must be after cell click if edit mode == 'cell'", function(assert) {
+        // arrange
+        this.$element = function() {
+            return $("#container");
+        };
+
+        this.options = {
+            useKeyboard: true,
+            editing: { mode: 'cell' }
+        };
+
+        this.setupModule();
+
+        // act
+        this.gridView.render($("#container"));
+        var keyboardNavigationController = this.gridView.component.keyboardNavigationController;
+        var $cell = $(this.rowsView.element().find(".dx-row").eq(1).find("td").eq(1));
+        $cell.trigger(CLICK_EVENT);
+
+        this.clock.tick();
+
+        // assert
+        assert.ok(!keyboardNavigationController._isHiddenFocus, "not hidden focus");
+        assert.notOk($cell.hasClass("dx-cell-focus-disabled"), "cell has no .dx-cell-focus-disabled");
+        assert.notOk($cell.hasClass("dx-focused"), "cell has .dx-focused");
+    });
+
+    QUnit.testInActiveWindow("Focus must be after cell click if edit mode == 'batch'", function(assert) {
+        // arrange
+        this.$element = function() {
+            return $("#container");
+        };
+
+        this.options = {
+            useKeyboard: true,
+            editing: { mode: 'batch' }
+        };
+
+        this.setupModule();
+
+        // act
+        this.gridView.render($("#container"));
+        var keyboardNavigationController = this.gridView.component.keyboardNavigationController;
+        var $cell = $(this.rowsView.element().find(".dx-row").eq(1).find("td").eq(1));
+        $cell.trigger(CLICK_EVENT);
+
+        // assert
+        assert.ok(!keyboardNavigationController._isHiddenFocus, "not hidden focus");
+        assert.notOk($cell.hasClass("dx-cell-focus-disabled"), "cell has no .dx-cell-focus-disabled");
+        assert.notOk($cell.hasClass("dx-focused"), "cell has .dx-focused");
+    });
+
     QUnit.testInActiveWindow("Reset focused cell when click on expand column of master detail", function(assert) {
         // arrange
         this.$element = function() {
