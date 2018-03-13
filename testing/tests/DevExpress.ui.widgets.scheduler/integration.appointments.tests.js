@@ -39,7 +39,8 @@ require("ui/switch");
 var DATE_TABLE_CELL_CLASS = "dx-scheduler-date-table-cell",
     APPOINTMENT_CLASS = "dx-scheduler-appointment";
 
-var APPOINTMENT_DEFAULT_OFFSET = 25;
+var APPOINTMENT_DEFAULT_OFFSET = 25,
+    APPOINTMENT_MOBILE_OFFSET = 50;
 
 function getDeltaTz(schedulerTz, date) {
     var defaultTz = date.getTimezoneOffset() * 60000;
@@ -5159,3 +5160,27 @@ QUnit.test("Scheduler should add only one appointment at multiple 'done' button 
     assert.equal($appointments.length, 1, "right appointment quantity");
 });
 
+QUnit.test("Appointment should have right width on mobile devices & desktop in week view", function(assert) {
+    this.createInstance({
+        dataSource: [{
+            text: "a",
+            startDate: new Date(2018, 2, 13, 1),
+            endDate: new Date(2018, 2, 13, 3)
+        }],
+        currentDate: new Date(2018, 2, 13),
+        views: ["week"],
+        currentView: "week"
+    });
+
+    var expectedOffset,
+        $appointments = this.instance.$element().find("." + APPOINTMENT_CLASS),
+        cellWidth = this.instance.$element().find("." + DATE_TABLE_CELL_CLASS).eq(0).outerWidth();
+
+    if(devices.current().deviceType !== "desktop") {
+        expectedOffset = APPOINTMENT_MOBILE_OFFSET;
+    } else {
+        expectedOffset = APPOINTMENT_DEFAULT_OFFSET;
+    }
+
+    assert.roughEqual($appointments.eq(0).outerWidth(), cellWidth - expectedOffset, 1.001, "Width is OK");
+});
