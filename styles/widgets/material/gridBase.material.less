@@ -512,6 +512,20 @@
                 }
             }
         }
+
+        &.dx-header-multi-row {
+            .dx-row {
+                &.dx-header-row {
+                    .dx-command-select {
+                        padding-bottom: (@MATERIAL_GRID_BASE_HEADER_HEIGHT - @MATERIAL_GRID_BASE_CHECKBOX_SIZE) / 2;
+                    }
+                    > td {
+                        vertical-align: bottom;
+                        border-right: 1px solid @MATERIAL_GRID_BASE_BORDER_COLOR;
+                    }
+                }
+            }
+        }
     }
 
     .dx-@{widgetName}-filter-row {
@@ -712,15 +726,13 @@
 
         .dx-data-row {
             .dx-validator.dx-@{widgetName}-invalid {
-                .dx-highlight-outline::after {
+                background-color: ~"@{@{widgetName}-row-invalid-faded-border-color}";
+
+                &.dx-focused > .dx-highlight-outline::after {
                     left: 0;
                     border-top: none;
                     border-right: none;
                     border-left: none;
-                    border-bottom: 2px solid ~"@{@{widgetName}-row-invalid-faded-border-color}";
-                }
-
-                &.dx-focused > .dx-highlight-outline::after {
                     border-bottom: 2px solid ~"@{@{widgetName}-row-invalid-border-color}";
                 }
             }
@@ -933,5 +945,11 @@
 
     .dx-placeholder:before {
         font-size: @MATERIAL_GRID_BASE_CELL_FONT_SIZE;
+    }
+
+    .dx-datagrid-form-buttons-container {
+        .dx-button {
+            .dx-button-flat-styling(@button-default-bg);
+        }
     }
 }
