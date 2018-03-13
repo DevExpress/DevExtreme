@@ -2,6 +2,7 @@
 
 var $ = require("../../core/renderer"),
     noop = require("../../core/utils/common").noop,
+    deferRender = require("../../core/utils/common").deferRender,
     devices = require("../../core/devices"),
     extend = require("../../core/utils/extend").extend,
     registerComponent = require("../../core/component_registrator"),
@@ -52,6 +53,28 @@ var RadioCollection = CollectionWidget.inherit({
 
     _keyboardEventBindingTarget: function() {
         return this._focusTarget();
+    },
+
+    _refreshContent: function() {
+        this._prepareContent();
+        this._fireContentReadyAction();
+    },
+
+    _renderContent: function() {
+        this._fireContentReadyAction();
+    },
+
+    _initMarkup: function() {
+        this.callBase();
+        this._prepareContent();
+    },
+
+    _prepareContent: function() {
+        var that = this;
+
+        deferRender(function() {
+            that._renderContentImpl();
+        });
     }
 });
 
@@ -175,14 +198,14 @@ var RadioGroup = Editor.inherit({
         this._renderSubmitElement();
         this.setAria("role", "radiogroup");
 
+        this._renderRadios();
+        this.option("useInkRipple") && this._renderInkRipple();
+
         this.callBase();
     },
 
     _render: function() {
-        this._renderRadios();
         this._renderLayout();
-
-        this.option("useInkRipple") && this._renderInkRipple();
         this.callBase();
         this._updateItemsSize();
     },

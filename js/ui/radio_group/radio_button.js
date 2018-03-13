@@ -70,7 +70,7 @@ var RadioButton = Editor.inherit({
         this.$element().addClass(RADIO_BUTTON_CLASS);
     },
 
-    _render: function() {
+    _initMarkup: function() {
         this.callBase();
 
         this._renderIcon();
