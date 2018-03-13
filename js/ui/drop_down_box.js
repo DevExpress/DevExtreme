@@ -163,12 +163,8 @@ var DropDownBox = DropDownEditor.inherit({
         });
     },
 
-    _init: function() {
-        this.callBase();
-        this._initDataExpressions();
-    },
-
     _initMarkup: function() {
+        this._initDataExpressions();
         this._renderSubmitElement();
         this.$element().addClass(DROP_DOWN_BOX_CLASS);
 
