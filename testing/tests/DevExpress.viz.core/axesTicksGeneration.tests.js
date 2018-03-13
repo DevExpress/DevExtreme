@@ -610,7 +610,7 @@ QUnit.test("tickInterval > businessDelta, no data as multiplier of tickInterval 
     assert.deepEqual(this.axis._tickInterval, 100);
 });
 
-QUnit.test(" 2*tickInterval > businessDelta > tickInterval, no data as multiplier of tickInterval (endOnTick == undefined)", function(assert) {
+QUnit.test("2*tickInterval > businessDelta > tickInterval, no data as multiplier of tickInterval (endOnTick == undefined)", function(assert) {
     this.createAxis();
     this.updateOptions({
         argumentType: "numeric",
@@ -867,25 +867,6 @@ QUnit.test("calculated ticks out of mix/max issue", function(assert) {
     this.axis.createTicks(canvas(1000));
 
     assert.deepEqual(this.axis._majorTicks.map(value).map(function(tick) { return tick.toFixed(1); }), ["-0.9", "-0.8", "-0.7"]);
-});
-
-QUnit.test("Logarithmic ticks adjusting", function(assert) {
-    this.createAxis();
-    this.updateOptions({
-        argumentType: "numeric",
-        type: "logarithmic",
-        logarithmBase: 10,
-        tickInterval: 1,
-        endOnTicks: true
-    });
-
-    this.axis.setBusinessRange({ minVisible: 1e-9, maxVisible: 1e-7 });
-
-    // act
-    this.axis.createTicks(canvas(1000));
-
-    // assert
-    assert.deepEqual(this.axis._majorTicks.map(value), [1e-9, 1e-8, 1e-7]);
 });
 
 QUnit.test("Add extra tick (continuous, numeric) for the bar point is equal to the minimum tick value", function(assert) {
@@ -1552,6 +1533,25 @@ QUnit.test("tickInterval > businessDelta, no data as multiplier of tickInterval 
 
     assert.deepEqual(this.axis._majorTicks.map(value), [1000, 10000]);
     assert.deepEqual(this.axis._tickInterval, 1);
+});
+
+QUnit.test("Logarithmic ticks adjusting", function(assert) {
+    this.createAxis();
+    this.updateOptions({
+        argumentType: "numeric",
+        type: "logarithmic",
+        logarithmBase: 10,
+        tickInterval: 1,
+        endOnTicks: true
+    });
+
+    this.axis.setBusinessRange({ minVisible: 1e-9, maxVisible: 1e-7 });
+
+    // act
+    this.axis.createTicks(canvas(1000));
+
+    // assert
+    assert.deepEqual(this.axis._majorTicks.map(value), [1e-9, 1e-8, 1e-7]);
 });
 
 QUnit.module("Logarithmic. Minor ticks", environment);
