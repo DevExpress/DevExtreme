@@ -350,7 +350,6 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
              * @publicName onSelectionChanged
              * @extends Action
              * @action
-             * @inheritdoc
              */
 
             /**
