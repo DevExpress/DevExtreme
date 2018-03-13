@@ -121,10 +121,12 @@ exports.formatValue = function(value, options) {
 
 exports.getCompareFunction = function(valueSelector) {
     return function(a, b) {
-        var result = 0;
-        if(valueSelector(a) > valueSelector(b)) {
+        var result = 0,
+            valueA = valueSelector(a) ? valueSelector(a) : "",
+            valueB = valueSelector(b) ? valueSelector(b) : "";
+        if(valueA > valueB) {
             result = 1;
-        } else if(valueSelector(a) < valueSelector(b)) {
+        } else if(valueA < valueB) {
             result = -1;
         }
         return result;
