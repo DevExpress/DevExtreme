@@ -141,7 +141,7 @@ QUnit.test("render type - time", function(assert) {
 
     this.createInstance({
         value: date,
-        type: "datetime"
+        type: "time"
     });
 
     var inputValue = this.instance._input().val(),
