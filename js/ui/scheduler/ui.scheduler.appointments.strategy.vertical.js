@@ -3,9 +3,11 @@
 var BaseAppointmentsStrategy = require("./ui.scheduler.appointments.strategy.base"),
     extend = require("../../core/utils/extend").extend,
     isNumeric = require("../../core/utils/type").isNumeric,
+    devices = require("../../core/devices"),
     dateUtils = require("../../core/utils/date");
 
 var WEEK_APPOINTMENT_DEFAULT_OFFSET = 25,
+    WEEK_APPOINTMENT_MOBILE_OFFSET = 50,
     ALLDAY_APPOINTMENT_MIN_OFFSET = 5,
     ALLDAY_APPOINTMENT_MAX_OFFSET = 20,
     APPOINTMENT_COUNT_PER_CELL = 2;
@@ -169,7 +171,9 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
     },
 
     _getAppointmentMaxWidth: function() {
-        return (this._defaultWidth - WEEK_APPOINTMENT_DEFAULT_OFFSET) || this.getAppointmentMinSize();
+        var offset = devices.current().deviceType === "desktop" ? WEEK_APPOINTMENT_DEFAULT_OFFSET : WEEK_APPOINTMENT_MOBILE_OFFSET;
+
+        return (this._defaultWidth - offset) || this.getAppointmentMinSize();
     },
 
     calculateAppointmentWidth: function(appointment, position, isRecurring) {
