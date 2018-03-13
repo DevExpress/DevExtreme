@@ -3436,7 +3436,7 @@ QUnit.test("scrollbar is visible for parent scrollable after mouse leave for chi
     assert.equal(parentScrollbar.option("visible"), false, "parent scrollbar is hidden");
     assert.equal(childrenScrollbar.option("visible"), true, "children scrollbar is visible");
 
-    $childScrollable.triggerHandler($.Event("mouseleave", { relatedTarget: $parentContainer }));
+    $childScrollable.triggerHandler($.Event("mouseleave", { relatedTarget: $parentContainer.get(0) }));
 
     assert.equal(parentScrollbar.option("visible"), true, "parent scrollbar is visible");
     assert.equal(childrenScrollbar.option("visible"), false, "children scrollbar is hidden");
