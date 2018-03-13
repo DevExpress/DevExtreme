@@ -33,7 +33,7 @@ QUnit.module("Sync with Filter Row", {
                 }
             }, options);
 
-            setupDataGridModules(this, ["data", "columnHeaders", "filterRow", "editorFactory", "filterMerging", "headerPanel"], {
+            setupDataGridModules(this, ["data", "columnHeaders", "filterRow", "headerFilter", "editorFactory", "filterMerging", "headerPanel"], {
                 initViews: true,
                 controllers: {
                     columns: new MockColumnsController(this.options.columns),
@@ -260,7 +260,7 @@ QUnit.module("getCombinedFilter", {
     beforeEach: function() {
         this.setupDataGrid = function(options) {
             this.options = options;
-            setupDataGridModules(this, ["columns", "data", "filterMerging"], {
+            setupDataGridModules(this, ["columns", "data", "headerFilter", "filterRow", "filterMerging"], {
                 initViews: false
             });
         };
@@ -314,6 +314,47 @@ QUnit.module("getCombinedFilter", {
 
         // assert
         assert.deepEqual(this.getCombinedFilter(true), ["!", [["Test", "=", 1], "or", ["Test", "=", 2]]], "combined filter");
+    });
+
+    QUnit.test("ignore Header Filter & Filter Row when filterSyncEnabled = true", function(assert) {
+        // act
+        this.setupDataGrid({
+            filterSyncEnabled: true,
+            dataSource: [],
+            columns: [{ dataField: "Test", filterValue: 3, defaultFilterOperation: "=", filterValues: [4, 8] }],
+            filterValue: [["Test", "=", 2], "and", ["Test", "anyof", [5, 6]]]
+        });
+
+        // assert
+        assert.deepEqual(this.getCombinedFilter(true), [
+            ["Test", "=", 4], "or", ["Test", "=", 8]
+        ], "combined filter");
+    });
+
+    QUnit.test("filterValue & Header Filter & Filter Row (filterSyncEnabled = false)", function(assert) {
+        // act
+        this.setupDataGrid({
+            filterSyncEnabled: false,
+            dataSource: [],
+            columns: [{ dataField: "Test", filterValue: 3, defaultFilterOperation: "=", filterValues: [4, 8] }],
+            filterValue: [["Test", "=", 2], "and", ["Test", "anyof", [5, 6]]]
+        });
+
+        // assert
+        assert.deepEqual(this.getCombinedFilter(true),
+            [
+                [
+                    ["Test", "=", 3],
+                    "and",
+                    [["Test", "=", 4], "or", ["Test", "=", 8]]
+                ],
+                "and",
+                [
+                    ["Test", "=", 2],
+                    "and",
+                    [["Test", "=", 5 ], "or", ["Test", "=", 6]]
+                ]
+            ], "combined filter");
     });
 
     QUnit.test("calculateFilterExpression", function(assert) {

@@ -611,10 +611,9 @@ var ColumnHeadersViewFilterRowExtender = (function() {
 })();
 
 var DataControllerFilterRowExtender = {
-    _calculateAdditionalFilter: function() {
-        var that = this,
-            filters = [that.callBase()],
-            columns = that._columnsController.getVisibleColumns();
+    _calculateFilterRowAdditionalFilter: function() {
+        var filters = [this.callBase()],
+            columns = this._columnsController.getVisibleColumns();
 
         iteratorUtils.each(columns, function() {
             var filter;
@@ -626,6 +625,14 @@ var DataControllerFilterRowExtender = {
         });
 
         return gridCoreUtils.combineFilters(filters);
+    },
+
+    _calculateAdditionalFilter: function() {
+        if(this.option("filterSyncEnabled")) {
+            return gridCoreUtils.combineFilters([this.callBase()]);
+        } else {
+            return this._calculateFilterRowAdditionalFilter();
+        }
     }
 };
 
