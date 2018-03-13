@@ -35,6 +35,29 @@ var FilterMergingController = modules.Controller.inherit((function() {
         syncFilterRow: function(column, value) {
             this.option("filterValue", this._getSyncFilterRow(this.option("filterValue"), column, value));
         },
+
+        _getOperation: function(filterValues, isExclude) {
+            var hasOneValue = filterValues.length === 1;
+            if(isExclude) {
+                return hasOneValue ? "<>" : "noneof";
+            } else {
+                return hasOneValue ? "=" : "anyof";
+            }
+        },
+
+        syncHeaderFilter: function(columnIndex) {
+            var column = this.getController("columns").getColumns()[columnIndex],
+                filterValues = column.filterValues,
+                condition = [column.dataField];
+            if(filterValues) {
+                condition.push(this._getOperation(filterValues, column.filterType === "exclude"));
+                condition.push(filterValues.length === 1 ? filterValues[0] : filterValues);
+            } else {
+                condition.push("=");
+                condition.push(null);
+            }
+            this.option("filterValue", utils.syncFilters(this.option("filterValue"), condition));
+        },
     };
 })());
 

@@ -325,6 +325,10 @@ var ColumnHeadersViewHeaderFilterExtender = extend({}, headerFilterCore.headerFi
         var optionNames = e.optionNames;
 
         if(gridCoreUtils.checkChanges(optionNames, ["filterValues", "filterType"])) {
+            if(this.option("filterSyncEnabled")) {
+                this.getController("filterMerging").syncHeaderFilter(e.columnIndex);
+            }
+
             if(this.option("headerFilter.visible")) {
                 this._updateIndicators("headerFilter");
             }
