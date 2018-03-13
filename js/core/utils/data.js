@@ -132,7 +132,7 @@ var ensurePropValueDefined = function(obj, propName, value, options) {
     }
 
     var newValue = {};
-    assignPropValue(obj, propName, value, options);
+    assignPropValue(obj, propName, newValue, options);
 
     return newValue;
 };
