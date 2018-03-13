@@ -66,15 +66,14 @@ QUnit.test("tagbox should have base class", function(assert) {
     assert.equal($tagContent.find("." + TAGBOX_TAG_REMOVE_BUTTON_CLASS).length, 2, "each tag has remove button");
 });
 
-QUnit.test("onValueChanged should not be fired on first render", function(assert) {
-    var valueChangeActionSpy = sinon.spy();
-    $("#tagBox").dxTagBox({
-        items: [1, 2, 3],
-        value: [1],
-        onValueChanged: valueChangeActionSpy
-    });
+QUnit.test("tagbox should render custom values in tags", function(assert) {
+    var $element = $("#tagBox")
+        .dxTagBox({
+            value: [1, 2]
+        });
 
-    assert.equal(valueChangeActionSpy.called, false, "onValueChanged was not fired");
+    var tags = $element.find("." + TAGBOX_TAG_CONTENT_CLASS);
+    assert.equal(tags.length, 2, "tags are rendered");
 });
 
 QUnit.test("tagElement arguments of tagTemplate for custom tags is correct", function(assert) {
@@ -123,6 +122,7 @@ QUnit.test("placeholder should be rendered", function(assert) {
 
     assert.equal($placeholder.length, 1, "placeholder has been rendered");
 });
+
 
 QUnit.module("select element", moduleSetup);
 
@@ -212,6 +212,7 @@ QUnit.test("select element should get the 'name' attribute with a correct value"
     assert.equal($select.attr("name"), expectedName, "the select element 'name' attribute has correct value");
 });
 
+
 QUnit.module("multitag", moduleSetup);
 
 QUnit.test("tagBox should display one tag after limit overflow", function(assert) {
@@ -287,7 +288,7 @@ QUnit.test("multi tag should be rendered after max number of tags if showMultiTa
     assert.deepEqual(this.getTexts($tag), ["1", "2 more"], "tags have correct text");
 });
 
-QUnit.test("tags should be rerendered after showMultiTagOnly option changed", function(assert) {
+QUnit.test("only multi tag should be shown when showMultiTagOnly option is true", function(assert) {
     var $tagBox = $("#tagBox").dxTagBox({
             items: [1, 2, 3, 4],
             value: [1, 2, 4],
@@ -349,7 +350,7 @@ QUnit.test("tags should not be rendered if the value is null", function(assert) 
     assert.equal($element.find("." + TAGBOX_TAG_CLASS).length, 0, "no tags are rendered");
 });
 
-QUnit.test("tag template should be applied correctly after item selection", function(assert) {
+QUnit.test("tag template option should work", function(assert) {
     var $element = $("#tagBox").dxTagBox({
             items: [{ id: 1, text: "one" }, { id: 2, text: "two" }],
             displayExpr: "text",
@@ -385,7 +386,7 @@ QUnit.test("widget gets special class in the single line mode", function(assert)
     assert.ok($tagBox.hasClass(TAGBOX_SINGLE_LINE_CLASS), "the single line class is added");
 });
 
-QUnit.test("single line class presence should depend the 'multiline' option", function(assert) {
+QUnit.test("tagbox should not have a single line class if multiline is true", function(assert) {
     var $tagBox = $("#tagBox").dxTagBox({ multiline: true });
     assert.notOk($tagBox.hasClass(TAGBOX_SINGLE_LINE_CLASS), "there is no single line class on widget");
 });
