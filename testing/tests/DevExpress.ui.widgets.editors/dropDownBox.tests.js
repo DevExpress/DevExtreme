@@ -237,6 +237,21 @@ QUnit.test("dropDownBox should update display text after displayExpr changed", f
     assert.equal($input.val(), "text 1", "input text has been updated");
 });
 
+QUnit.test("dropDownBox should update display text when displayExpr was changed on initialization", function(assert) {
+    this.$element.dxDropDownBox({
+        items: [{ id: 1, name: "item 1", text: "text 1" }],
+        onInitialized: function(e) {
+            e.component.option("displayExpr", "name");
+        },
+        valueExpr: "id",
+        value: 1
+    });
+
+    var $input = this.$element.find(".dx-texteditor-input");
+
+    assert.equal($input.val(), "item 1", "input text is correct");
+});
+
 QUnit.test("text option should follow the displayValue option", function(assert) {
     var instance = new DropDownBox(this.$element, {});
     instance.option("displayValue", "test");
