@@ -473,16 +473,19 @@ var DateBox = DropDownEditor.inherit({
     _initMarkup: function() {
         this.$element().addClass(DATEBOX_CLASS);
         this._renderSubmitElement();
+
         this.callBase();
+
+        this._refreshFormatClass();
+        this._refreshPickerTypeClass();
+
+        this._strategy.renderInputMinMax(this._input());
     },
 
     _render: function() {
-        this._refreshFormatClass();
-        this._refreshPickerTypeClass();
         this.callBase();
 
         this._updateSize();
-        this._strategy.renderInputMinMax(this._input());
     },
 
     _renderDimensions: function() {
