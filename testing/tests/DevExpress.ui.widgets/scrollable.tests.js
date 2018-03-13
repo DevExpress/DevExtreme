@@ -2114,6 +2114,24 @@ QUnit.test("disabled: scroll was not moved when disabled is true", function(asse
     mouse.up();
 });
 
+QUnit.test("simulated strategy should subscribe to the poiner events after disabled option changed", function(assert) {
+    var $scrollable = $("#scrollable"),
+        scrollableInstance = $("#scrollable").dxScrollable({
+            useNative: false,
+            showScrollbar: "onHover",
+            disabled: true
+        }).dxScrollable("instance");
+
+    scrollableInstance.option("disabled", false);
+
+    var scrollbar = Scrollbar.getInstance($scrollable.find("." + SCROLLABLE_SCROLLBAR_CLASS));
+    var $container = $scrollable.find("." + SCROLLABLE_CONTAINER_CLASS);
+
+    $container.trigger("mouseenter");
+
+    assert.equal(scrollbar.option("visible"), true, "thumb is visible after mouse enter");
+});
+
 QUnit.test("disabled option add class to root element", function(assert) {
     var $scrollable = $("#scrollable").dxScrollable({
         useNative: false

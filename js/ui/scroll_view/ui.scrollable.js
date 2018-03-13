@@ -406,6 +406,7 @@ var Scrollable = DOMComponent.inherit({
                 break;
             case "disabled":
                 this._renderDisabledState();
+                this._strategy.disabledChanged();
                 break;
             case "updateManually":
                 break;
