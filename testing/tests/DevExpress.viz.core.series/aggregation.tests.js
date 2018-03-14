@@ -810,6 +810,7 @@ QUnit.module("Aggregation methods", {
 
             return {
                 argument: data.argument,
+                aggregationInfo: data.aggregationInfo,
                 openValue: data.openValue,
                 closeValue: data.closeValue,
                 highValue: data.highValue,
@@ -899,6 +900,21 @@ QUnit.module("Aggregation methods", {
     afterEach: function() {
         this.createPoint.restore();
     }
+});
+
+QUnit.test("Aggregation is disabled", function(assert) {
+    var points = this.aggregateData("unknown", this.data, "line", { aggregation: { enabled: false } });
+    assert.equal(points.length, 5);
+    assert.equal(points[0].aggregationInfo, undefined);
+});
+
+QUnit.test("Pass aggregationInfo into point", function(assert) {
+    var points = this.aggregateData("avg", this.data);
+    assert.equal(points.length, 1);
+    assert.deepEqual(points[0].aggregationInfo.data, this.data);
+    assert.equal(points[0].aggregationInfo.aggregationInterval, 10);
+    assert.equal(points[0].aggregationInfo.intervalStart, 0);
+    assert.equal(points[0].aggregationInfo.intervalEnd, 10);
 });
 
 QUnit.test("Avg", function(assert) {

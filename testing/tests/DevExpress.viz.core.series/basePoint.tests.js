@@ -78,6 +78,7 @@ QUnit.test("Tag", function(assert) {
 });
 
 QUnit.test("Create simple point", function(assert) {
+    var aggregationInfo = this.simpleData.aggregationInfo = {};
     var point = createPoint(this.series, this.simpleData, this.options);
 
     assert.ok(point, "Point should be created");
@@ -92,6 +93,8 @@ QUnit.test("Create simple point", function(assert) {
 
     assert.strictEqual(point.lowError, undefined, "lowError should be undefined");
     assert.strictEqual(point.highError, undefined, "highError should be undefined");
+
+    assert.strictEqual(point.aggregationInfo, aggregationInfo, "aggregationInfo should be object");
 });
 
 QUnit.test("CretePoint with errorBar", function(assert) {
