@@ -635,6 +635,7 @@ var CollectionWidget = Widget.inherit({
     },
 
     _refreshContent: function() {
+        this._prepareContent();
         this._renderContent();
     },
 
