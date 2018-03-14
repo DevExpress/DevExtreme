@@ -5,44 +5,69 @@ var modules = require("./ui.grid_core.modules"),
     gridCoreUtils = require("./ui.grid_core.utils");
 
 var FilterMergingController = modules.Controller.inherit((function() {
+    var setHeaderFilterValue = function(columnsController, column, headerFilterValue) {
+        if(headerFilterValue) {
+            if(headerFilterValue[0] === "!") {
+                columnsController.columnOption(column.dataField, {
+                    filterType: "exclude",
+                    filterValues: headerFilterValue[1]
+                });
+            } else {
+                columnsController.columnOption(column.dataField, {
+                    filterType: "include",
+                    filterValues: headerFilterValue
+                });
+            }
+        }
+    };
+
+    var setFilterRowCondition = function(columnsController, column, filterRowCondition) {
+        if(filterRowCondition) {
+            columnsController.columnOption(column.dataField, {
+                filterValue: filterRowCondition[2],
+                selectedFilterOperation: filterRowCondition[1]
+            });
+        }
+    };
+
     return {
-        _initSync: function() {
+        syncFilterValue: function() {
             var that = this,
-                columns = that.getController("columns").getColumns(),
+                columnsController = that.getController("columns"),
+                columns = columnsController.getColumns(),
                 filterValue = that.option("filterValue");
 
             columns.forEach(function(column) {
                 var filterRowCondition = utils.getFilterRowCondition(filterValue, column.dataField);
-                if(filterRowCondition) {
-                    column.filterValue = filterRowCondition[2];
-                    column.selectedFilterOperation = filterRowCondition[1];
-                }
+                setFilterRowCondition(columnsController, column, filterRowCondition);
+
                 var headerFilterValue = utils.getHeaderFilterValue(filterValue, column.dataField);
-                if(headerFilterValue) {
-                    if(headerFilterValue[0] === "!") {
-                        column.filterType = "exclude";
-                        headerFilterValue = headerFilterValue[1];
-                    } else {
-                        column.filterType = "include";
-                    }
-                    column.filterValues = headerFilterValue;
-                }
+                setHeaderFilterValue(columnsController, column, headerFilterValue);
+
                 if(column.filterValues && !headerFilterValue) {
                     filterValue = that._getSyncHeaderFilter(filterValue, column);
+                    setFilterRowCondition(columnsController, column, utils.getFilterRowCondition(filterValue, column.dataField));
                 } else if(column.filterValue && !filterRowCondition) {
                     filterValue = that._getSyncFilterRow(filterValue, column, column.filterValue);
+                    setHeaderFilterValue(columnsController, column, utils.getHeaderFilterValue(filterValue, column.dataField));
                 }
             });
 
             if(filterValue && filterValue.length > 0) {
-                that.option("filterValue", filterValue);
+                that._setFilterValue(filterValue);
             }
         },
 
         init: function() {
             if(this.option("filterSyncEnabled")) {
-                this._initSync();
+                this.syncFilterValue();
             }
+        },
+
+        _setFilterValue: function(filterValue) {
+            this.skipSyncFilterValue = true;
+            this.option("filterValue", filterValue);
+            this.skipSyncFilterValue = false;
         },
 
         _getSyncFilterRow: function(filterValue, column, value) {
@@ -78,7 +103,8 @@ var FilterMergingController = modules.Controller.inherit((function() {
         },
 
         syncHeaderFilter: function(column) {
-            this.option("filterValue", this._getSyncHeaderFilter(this.option("filterValue"), column));
+            this._setFilterValue(this._getSyncHeaderFilter(this.option("filterValue"), column));
+            setFilterRowCondition(this.getController("columns"), column, utils.getFilterRowCondition(this.option("filterValue"), column.dataField));
         },
     };
 })());
@@ -130,6 +156,10 @@ var DataControllerFilterMergingExtender = {
         switch(args.name) {
             case "filterValue":
                 this._applyFilter();
+                var filterMergingController = this.getController("filterMerging");
+                if(!filterMergingController.skipSyncFilterValue) {
+                    filterMergingController.syncFilterValue();
+                }
                 args.handled = true;
                 break;
             case "filterSyncEnabled":

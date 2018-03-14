@@ -259,7 +259,7 @@ QUnit.module("Sync with FilterValue", {
     beforeEach: function() {
         this.setupDataGrid = function(options) {
             this.options = $.extend({
-                columns: [{ dataField: "field", allowHeaderFiltering: true }, { dataField: "excludedField", allowHeaderFiltering: true, filterType: "exclude" }],
+                columns: [{ dataField: "field" }],
                 filterSyncEnabled: true,
                 filterValue: null
             }, options);
@@ -273,16 +273,28 @@ QUnit.module("Sync with FilterValue", {
     QUnit.test("equals", function(assert) {
         // arrange, act
         this.setupDataGrid({
-            filterValue: ["excludedField", "=", 2]
+            filterValue: ["field", "=", 2],
+            columns: [{ dataField: "field", filterType: "exclude" }]
         });
 
         // assert
-        assert.deepEqual(this.columnsController.columnOption("excludedField", "filterValues"), [2]);
-        assert.deepEqual(this.columnsController.columnOption("excludedField", "filterType"), "include");
-        assert.deepEqual(this.columnsController.columnOption("excludedField", "filterValue"), 2);
+        assert.deepEqual(this.columnsController.columnOption("field", "filterValues"), [2]);
+        assert.deepEqual(this.columnsController.columnOption("field", "filterType"), "include");
+        assert.deepEqual(this.columnsController.columnOption("field", "filterValue"), 2);
     });
 
-    QUnit.test("any of", function(assert) {
+    QUnit.test("any of with one value", function(assert) {
+        // arrange, act
+        this.setupDataGrid({
+            filterValue: ["field", "anyof", [1]]
+        });
+
+        // assert
+        assert.deepEqual(this.columnsController.columnOption("field", "filterValues"), [1]);
+        assert.deepEqual(this.columnsController.columnOption("field", "filterValue"), 1);
+    });
+
+    QUnit.test("any of with two values", function(assert) {
         // arrange, act
         this.setupDataGrid({
             filterValue: ["field", "anyof", [2, 1]]
@@ -305,7 +317,19 @@ QUnit.module("Sync with FilterValue", {
         assert.deepEqual(this.columnsController.columnOption("field", "filterValue"), 2);
     });
 
-    QUnit.test("noneof", function(assert) {
+    QUnit.test("noneof one value", function(assert) {
+        // arrange, act
+        this.setupDataGrid({
+            filterValue: ["field", "noneof", [1]]
+        });
+
+        // assert
+        assert.deepEqual(this.columnsController.columnOption("field", "filterValues"), [1]);
+        assert.deepEqual(this.columnsController.columnOption("field", "filterType"), "exclude");
+        assert.deepEqual(this.columnsController.columnOption("field", "filterValue"), 1);
+    });
+
+    QUnit.test("noneof two values", function(assert) {
         // arrange, act
         this.setupDataGrid({
             filterValue: ["field", "noneof", [2, 1]]
@@ -315,6 +339,64 @@ QUnit.module("Sync with FilterValue", {
         assert.deepEqual(this.columnsController.columnOption("field", "filterValues"), [2, 1]);
         assert.deepEqual(this.columnsController.columnOption("field", "filterType"), "exclude");
         assert.deepEqual(this.columnsController.columnOption("field", "filterValue"), undefined);
+    });
+
+    QUnit.test("skip filter value", function(assert) {
+        // arrange, act
+        this.setupDataGrid({
+            filterValue: ["field", "<>", 2],
+            columns: [{ dataField: "field", filterValue: 1 }],
+        });
+
+        // assert
+        assert.deepEqual(this.option("filterValue"), ["field", "<>", 2]);
+        assert.deepEqual(this.columnsController.columnOption("field", "filterValues"), [2]);
+        assert.deepEqual(this.columnsController.columnOption("field", "filterType"), "exclude");
+        assert.deepEqual(this.columnsController.columnOption("field", "filterValue"), 2);
+        assert.deepEqual(this.columnsController.columnOption("field", "selectedFilterOperation"), "<>");
+    });
+
+    QUnit.test("skip header filter", function(assert) {
+        // arrange, act
+        this.setupDataGrid({
+            filterValue: ["field", "noneof", [2]],
+            columns: [{ dataField: "field", filterValues: [1, 3] }],
+        });
+
+        // assert
+        assert.deepEqual(this.option("filterValue"), ["field", "noneof", [2]]);
+        assert.deepEqual(this.columnsController.columnOption("field", "filterValues"), [2]);
+        assert.deepEqual(this.columnsController.columnOption("field", "filterType"), "exclude");
+        assert.deepEqual(this.columnsController.columnOption("field", "filterValue"), 2);
+        assert.deepEqual(this.columnsController.columnOption("field", "selectedFilterOperation"), "<>");
+    });
+
+    QUnit.test("sync header filter with filterrow", function(assert) {
+        // arrange, act
+        this.setupDataGrid({
+            columns: [{ dataField: "field", filterValue: 1, selectedFilterOperation: "=" }],
+        });
+
+        // assert
+        assert.deepEqual(this.option("filterValue"), ["field", "=", 1]);
+        assert.deepEqual(this.columnsController.columnOption("field", "filterValues"), [1]);
+        assert.deepEqual(this.columnsController.columnOption("field", "filterType"), "include");
+        assert.deepEqual(this.columnsController.columnOption("field", "filterValue"), 1);
+        assert.deepEqual(this.columnsController.columnOption("field", "selectedFilterOperation"), "=");
+    });
+
+    QUnit.test("sync filterrow with headerfilter", function(assert) {
+        // arrange, act
+        this.setupDataGrid({
+            columns: [{ dataField: "field", filterValues: [1], filterType: "exclude" }],
+        });
+
+        // assert
+        assert.deepEqual(this.option("filterValue"), ["field", "<>", 1]);
+        assert.deepEqual(this.columnsController.columnOption("field", "filterValues"), [1]);
+        assert.deepEqual(this.columnsController.columnOption("field", "filterType"), "exclude");
+        assert.deepEqual(this.columnsController.columnOption("field", "filterValue"), 1);
+        assert.deepEqual(this.columnsController.columnOption("field", "selectedFilterOperation"), "<>");
     });
 });
 
