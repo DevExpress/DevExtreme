@@ -830,21 +830,21 @@ var ListBase = CollectionWidget.inherit({
 
         this.$element().addClass(LIST_CLASS);
         this.callBase();
-        this._prepareContent();
+        // this._prepareContent();
         this.option("useInkRipple") && this._renderInkRipple();
     },
 
-    _prepareContent: function() {
-        var that = this;
+    // _prepareContent: function() {
+    //     var that = this;
 
-        commonUtils.deferRender(function() {
-            that._renderContentImpl();
-        });
-    },
+    //     commonUtils.deferRender(function() {
+    //         that._renderContentImpl();
+    //     });
+    // },
 
-    _renderContent: function() {
-        this._fireContentReadyAction();
-    },
+    // _renderContent: function() {
+    //     this._fireContentReadyAction();
+    // },
 
     _renderInkRipple: function() {
         this._inkRipple = inkRipple.render();
