@@ -3400,7 +3400,7 @@ QUnit.test("leaving inner scroller and releasing in outer scroller should hide i
     // start scrolling inner
     pointerMock($scrollableContainer).start().down().move(0, 10);
     // leaving inner
-    $scrollableContainer.trigger($.Event("mouseleave", { relatedTarget: $wrapScrollableContainer }));
+    $scrollableContainer.trigger($.Event("mouseleave", { relatedTarget: $wrapScrollableContainer.get(0) }));
     // up on outer
     pointerMock($wrapScrollableContainer).up();
 
@@ -3436,7 +3436,7 @@ QUnit.test("scrollbar is visible for parent scrollable after mouse leave for chi
     assert.equal(parentScrollbar.option("visible"), false, "parent scrollbar is hidden");
     assert.equal(childrenScrollbar.option("visible"), true, "children scrollbar is visible");
 
-    $childScrollable.triggerHandler($.Event("mouseleave", { relatedTarget: $parentContainer }));
+    $childScrollable.triggerHandler($.Event("mouseleave", { relatedTarget: $parentContainer.get(0) }));
 
     assert.equal(parentScrollbar.option("visible"), true, "parent scrollbar is visible");
     assert.equal(childrenScrollbar.option("visible"), false, "children scrollbar is hidden");
