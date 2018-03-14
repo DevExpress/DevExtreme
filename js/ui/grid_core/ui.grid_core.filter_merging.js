@@ -21,35 +21,53 @@ var FilterMergingController = modules.Controller.inherit((function() {
         }
     };
 
-    var setFilterRowCondition = function(columnsController, column, filterRowCondition) {
-        if(filterRowCondition) {
-            columnsController.columnOption(column.dataField, {
-                filterValue: filterRowCondition[2],
-                selectedFilterOperation: filterRowCondition[1]
-            });
-        }
+    var clearHeaderFilterValues = function(columnsController, column) {
+        columnsController.columnOption(column.dataField, {
+            filterType: "include",
+            filterValues: undefined
+        });
+    };
+
+    var setFilterRowCondition = function(columnsController, column, filterValue, selectedFilterOperation) {
+        columnsController.columnOption(column.dataField, {
+            filterValue: filterValue,
+            selectedFilterOperation: selectedFilterOperation
+        });
+    };
+
+    var clearFilterRowCondition = function(columnsController, column) {
+        columnsController.columnOption(column.dataField, {
+            filterValue: undefined,
+            selectedFilterOperation: undefined
+        });
     };
 
     return {
-        syncFilterValue: function() {
+        syncFilterValue: function(isInit) {
             var that = this,
                 columnsController = that.getController("columns"),
                 columns = columnsController.getColumns(),
                 filterValue = that.option("filterValue");
 
             columns.forEach(function(column) {
-                var filterRowCondition = utils.getFilterRowCondition(filterValue, column.dataField);
-                setFilterRowCondition(columnsController, column, filterRowCondition);
-
                 var headerFilterValue = utils.getHeaderFilterValue(filterValue, column.dataField);
-                setHeaderFilterValue(columnsController, column, headerFilterValue);
+                if(headerFilterValue) {
+                    setHeaderFilterValue(columnsController, column, headerFilterValue);
+                } else if(column.filterValues && !isInit) {
+                    clearHeaderFilterValues(columnsController, column);
+                }
+
+                var filterRowCondition = utils.getFilterRowCondition(filterValue, column.dataField);
+                if(!headerFilterValue && filterRowCondition) {
+                    setFilterRowCondition(columnsController, column, filterRowCondition[2], filterRowCondition[1]);
+                } else if(column.filterValue && column.filterValues) {
+                    clearFilterRowCondition(columnsController, column);
+                }
 
                 if(column.filterValues && !headerFilterValue) {
                     filterValue = that._getSyncHeaderFilter(filterValue, column);
-                    setFilterRowCondition(columnsController, column, utils.getFilterRowCondition(filterValue, column.dataField));
                 } else if(column.filterValue && !filterRowCondition) {
                     filterValue = that._getSyncFilterRow(filterValue, column, column.filterValue);
-                    setHeaderFilterValue(columnsController, column, utils.getHeaderFilterValue(filterValue, column.dataField));
                 }
             });
 
@@ -60,7 +78,7 @@ var FilterMergingController = modules.Controller.inherit((function() {
 
         init: function() {
             if(this.option("filterSyncEnabled")) {
-                this.syncFilterValue();
+                this.syncFilterValue(true);
             }
         },
 
@@ -80,8 +98,8 @@ var FilterMergingController = modules.Controller.inherit((function() {
             var filterValues = column.filterValues,
                 filter = [column.dataField];
             if(filterValues) {
-                filter.push(this._getOperation(filterValues, column.filterType === "exclude"));
-                filter.push(filterValues.length === 1 ? filterValues[0] : filterValues);
+                filter.push("anyof");
+                filter.push(filterValues);
             } else {
                 filter.push("=");
                 filter.push(null);
@@ -93,32 +111,24 @@ var FilterMergingController = modules.Controller.inherit((function() {
             this.option("filterValue", this._getSyncFilterRow(this.option("filterValue"), column, value));
         },
 
-        _getOperation: function(filterValues, isExclude) {
-            var hasOneValue = filterValues.length === 1;
-            if(isExclude) {
-                return hasOneValue ? "<>" : "noneof";
-            } else {
-                return hasOneValue ? "=" : "anyof";
-            }
-        },
-
         syncHeaderFilter: function(column) {
             this._setFilterValue(this._getSyncHeaderFilter(this.option("filterValue"), column));
-            setFilterRowCondition(this.getController("columns"), column, utils.getFilterRowCondition(this.option("filterValue"), column.dataField));
+            clearFilterRowCondition(this.getController("columns"), column);
         },
     };
 })());
 
-function anyOf(dataField, filterValue) {
+function anyOf(field, filterValue) {
     var result = [],
+        isExclude = field.filterType === "exclude",
         lastIndex = filterValue.length - 1;
     filterValue.forEach(function(value, index) {
         if(utils.isCondition(value) || utils.isGroup(value)) {
-            result.push(value);
+            result.push(utils.getFilterExpression(value, [field], [], "headerFilter"));
         } else {
-            result.push([dataField, "=", value]);
+            result.push(utils.getFilterExpression([field.dataField, "=", value], [field], [], "headerFilter"));
         }
-        index !== lastIndex && result.push("or");
+        index !== lastIndex && result.push(isExclude ? "and" : "or");
     });
     return result;
 }
@@ -133,14 +143,7 @@ var DataControllerFilterMergingExtender = {
                 name: "anyof",
                 calculateFilterExpression: function(filterValue, field) {
                     if(filterValue && filterValue.length > 0) {
-                        return anyOf(field.dataField, filterValue);
-                    }
-                }
-            }, {
-                name: "noneof",
-                calculateFilterExpression: function(filterValue, field) {
-                    if(filterValue && filterValue.length > 0) {
-                        return ["!", anyOf(field.dataField, filterValue)];
+                        return anyOf(field, filterValue);
                     }
                 }
             }], "filterBuilder");

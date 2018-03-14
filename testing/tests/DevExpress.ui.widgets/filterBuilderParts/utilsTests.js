@@ -1702,7 +1702,7 @@ QUnit.module("Filter merging - Get Filter Row condition", function() {
         // act
         var result = utils.getFilterRowCondition(filter, "field");
         // assert
-        assert.deepEqual(result, ["field", "=", 1]);
+        assert.deepEqual(result, null);
     });
 
     QUnit.test("from filter with anyof in group", function(assert) {
@@ -1711,34 +1711,7 @@ QUnit.module("Filter merging - Get Filter Row condition", function() {
         // act
         var result = utils.getFilterRowCondition(filter, "field");
         // assert
-        assert.deepEqual(result, ["field", "=", 1]);
-    });
-
-    QUnit.test("from filter with two values in noneof", function(assert) {
-        // arrange
-        var filter = ["field", "noneof", [1, 2]];
-        // act
-        var result = utils.getFilterRowCondition(filter, "field");
-        // assert
         assert.deepEqual(result, null);
-    });
-
-    QUnit.test("from filter with one value in noneof", function(assert) {
-        // arrange
-        var filter = ["field", "noneof", [1]];
-        // act
-        var result = utils.getFilterRowCondition(filter, "field");
-        // assert
-        assert.deepEqual(result, ["field", "<>", 1]);
-    });
-
-    QUnit.test("from filter with noneof in group", function(assert) {
-        // arrange
-        var filter = [["field2", "=", 3], "and", ["field", "noneof", [1]]];
-        // act
-        var result = utils.getFilterRowCondition(filter, "field");
-        // assert
-        assert.deepEqual(result, ["field", "<>", 1]);
     });
 });
 
@@ -1762,7 +1735,7 @@ QUnit.module("Filter merging - Get Header Filter value", function() {
         var result = utils.getHeaderFilterValue(filter, "field");
 
         // assert
-        assert.deepEqual(result, [1]);
+        assert.deepEqual(result, null);
     });
 
     QUnit.test("from filter == field condition with <>", function(assert) {
@@ -1773,7 +1746,7 @@ QUnit.module("Filter merging - Get Header Filter value", function() {
         var result = utils.getHeaderFilterValue(filter, "field");
 
         // assert
-        assert.deepEqual(result, ["!", [1]]);
+        assert.deepEqual(result, null);
     });
 
     QUnit.test("from filter == field condition with anyof", function(assert) {
@@ -1787,20 +1760,9 @@ QUnit.module("Filter merging - Get Header Filter value", function() {
         assert.deepEqual(result, [1]);
     });
 
-    QUnit.test("from filter == field condition with noneof", function(assert) {
-        // arrange
-        var filter = ["field", "noneof", [1]];
-
-        // act
-        var result = utils.getHeaderFilterValue(filter, "field");
-
-        // assert
-        assert.deepEqual(result, ["!", [1]]);
-    });
-
     QUnit.test("from filter != field condition", function(assert) {
         // arrange
-        var filter = ["field2", "=", 1];
+        var filter = ["field2", "anyof", [1]];
 
         // act
         var result = utils.getHeaderFilterValue(filter, "field");
@@ -1811,7 +1773,7 @@ QUnit.module("Filter merging - Get Header Filter value", function() {
 
     QUnit.test("from filter with one field condition", function(assert) {
         // arrange
-        var filter = [["field", "=", 1], "and", ["field2", "=", 3]];
+        var filter = [["field", "anyof", [1]], "and", ["field2", "=", 3]];
 
         // act
         var result = utils.getHeaderFilterValue(filter, "field");
@@ -1822,7 +1784,7 @@ QUnit.module("Filter merging - Get Header Filter value", function() {
 
     QUnit.test("from filter with two field condition and 'and' group value", function(assert) {
         // arrange
-        var filter = [["field", "=", 1], "and", ["field", "=", 3]];
+        var filter = [["field", "anyof", [1]], "and", ["field", "anyof", [2]]];
 
         // act
         var result = utils.getHeaderFilterValue(filter, "field");
@@ -1833,7 +1795,7 @@ QUnit.module("Filter merging - Get Header Filter value", function() {
 
     QUnit.test("from filter with two field condition and 'or' group value", function(assert) {
         // arrange
-        var filter = [["field", "=", 1], "or", ["field", "=", 3]];
+        var filter = [["field", "anyof", [1]], "and", ["field", "anyof", [2]]];
 
         // act
         var result = utils.getHeaderFilterValue(filter, "field");

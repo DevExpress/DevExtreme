@@ -16,7 +16,6 @@ var DEFAULT_DATA_TYPE = "string",
     EMPTY_MENU_ICON = "icon-none",
     AND_GROUP_OPERATION = "and",
     ANY_OF_OPERATION = "anyof",
-    NONE_OF_OPERATION = "noneof",
     EQUAL_OPERATION = "=",
     NOT_EQUAL_OPERATION = "<>",
     DATATYPE_OPERATIONS = {
@@ -682,19 +681,17 @@ function syncFilters(filter, addedFilter) {
 
 function convertFilterRowCondition(condition) {
     if(condition[1] === ANY_OF_OPERATION) {
-        return condition[2] && condition[2].length === 1 ? [condition[0], EQUAL_OPERATION, condition[2][0]] : null;
-    } else if(condition[1] === NONE_OF_OPERATION) {
-        return condition[2] && condition[2].length === 1 ? [condition[0], NOT_EQUAL_OPERATION, condition[2][0]] : null;
+        return null;
     }
     return condition;
 }
 
-function getFilterRowCondition(filter, dataField) {
+function getCondition(filter, dataField, handler) {
     if(filter === null || filter.length === 0) return null;
 
     if(isCondition(filter)) {
         if(filter[0] === dataField) {
-            return convertFilterRowCondition(filter);
+            return handler(filter);
         } else {
             return null;
         }
@@ -708,7 +705,7 @@ function getFilterRowCondition(filter, dataField) {
                 if(hasDataFieldValue) {
                     result = null;
                 } else {
-                    result = convertFilterRowCondition(item);
+                    result = handler(item);
                     hasDataFieldValue = true;
                 }
             }
@@ -718,48 +715,19 @@ function getFilterRowCondition(filter, dataField) {
     return result;
 }
 
+function getFilterRowCondition(filter, dataField) {
+    return getCondition(filter, dataField, convertFilterRowCondition);
+}
+
 function convertHeaderFilterCondition(condition) {
     switch(condition[1]) {
         case ANY_OF_OPERATION: return condition[2];
-        case NONE_OF_OPERATION: return ["!", condition[2]];
-        case EQUAL_OPERATION: return [condition[2]];
-        case NOT_EQUAL_OPERATION: return ["!", [condition[2]]];
         default: return null;
     }
 }
 
 function getHeaderFilterValue(filter, dataField) {
-    if(filter === null || filter.length === 0) return null;
-
-    if(isCondition(filter)) {
-        if(filter[0] === dataField) {
-            return convertHeaderFilterCondition(filter);
-        } else {
-            return null;
-        }
-    }
-
-    var conditions = [],
-        groupValue = getGroupValue(filter);
-    filter.forEach(function(item) {
-        if(isCondition(item)) {
-            if(item[0] === dataField) {
-                if(conditions) {
-                    if(groupValue === AND_GROUP_OPERATION && conditions.length >= 1) {
-                        conditions = null;
-                    } else {
-                        conditions.push(item);
-                    }
-                }
-            }
-        }
-    });
-
-    if(conditions && conditions.length === 1) {
-        return convertHeaderFilterCondition(conditions[0]);
-    }
-
-    return null;
+    return getCondition(filter, dataField, convertHeaderFilterCondition);
 }
 
 exports.isValidCondition = isValidCondition;
