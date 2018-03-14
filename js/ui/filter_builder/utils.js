@@ -15,6 +15,10 @@ var dataErrors = require("../../data/errors").errors,
 var DEFAULT_DATA_TYPE = "string",
     EMPTY_MENU_ICON = "icon-none",
     AND_GROUP_OPERATION = "and",
+    ANY_OF_OPERATION = "anyof",
+    NONE_OF_OPERATION = "noneof",
+    EQUAL_OPERATION = "=",
+    NOT_EQUAL_OPERATION = "<>",
     DATATYPE_OPERATIONS = {
         "number": ["=", "<>", "<", ">", "<=", ">=", "isblank", "isnotblank"],
         "string": ["contains", "notcontains", "startswith", "endswith", "=", "<>", "isblank", "isnotblank"],
@@ -315,7 +319,7 @@ function convertToInnerCondition(condition, customOperations) {
 
     if(condition.length < 3) {
         condition[2] = condition[1];
-        condition[1] = "=";
+        condition[1] = EQUAL_OPERATION;
     }
     return condition;
 }
@@ -576,10 +580,10 @@ function updateConditionByOperation(condition, operation, customOperations) {
     }
 
     if(operation === "isblank") {
-        condition[1] = "=";
+        condition[1] = EQUAL_OPERATION;
         condition[2] = null;
     } else if(operation === "isnotblank") {
-        condition[1] = "<>";
+        condition[1] = NOT_EQUAL_OPERATION;
         condition[2] = null;
     } else {
         customOperation = getCustomOperation(customOperations, condition[1]);
@@ -594,7 +598,7 @@ function updateConditionByOperation(condition, operation, customOperations) {
 function getOperationValue(condition) {
     var caption;
     if(condition[2] === null) {
-        if(condition[1] === "=") {
+        if(condition[1] === EQUAL_OPERATION) {
             caption = "isblank";
         } else {
             caption = "isnotblank";
@@ -676,6 +680,88 @@ function syncFilters(filter, addedFilter) {
     return result.length === 1 ? result[0] : result;
 }
 
+function convertFilterRowCondition(condition) {
+    if(condition[1] === ANY_OF_OPERATION) {
+        return condition[2] && condition[2].length === 1 ? [condition[0], EQUAL_OPERATION, condition[2][0]] : null;
+    } else if(condition[1] === NONE_OF_OPERATION) {
+        return condition[2] && condition[2].length === 1 ? [condition[0], NOT_EQUAL_OPERATION, condition[2][0]] : null;
+    }
+    return condition;
+}
+
+function getFilterRowCondition(filter, dataField) {
+    if(filter === null || filter.length === 0) return null;
+
+    if(isCondition(filter)) {
+        if(filter[0] === dataField) {
+            return convertFilterRowCondition(filter);
+        } else {
+            return null;
+        }
+    }
+
+    var result = null,
+        hasDataFieldValue = false;
+    filter.forEach(function(item) {
+        if(isCondition(item)) {
+            if(item[0] === dataField) {
+                if(hasDataFieldValue) {
+                    result = null;
+                } else {
+                    result = convertFilterRowCondition(item);
+                    hasDataFieldValue = true;
+                }
+            }
+        }
+    });
+
+    return result;
+}
+
+function convertHeaderFilterCondition(condition) {
+    switch(condition[1]) {
+        case ANY_OF_OPERATION: return condition[2];
+        case NONE_OF_OPERATION: return ["!", condition[2]];
+        case EQUAL_OPERATION: return [condition[2]];
+        case EQUAL_OPERATION: return ["!", [condition[2]]];
+        default: return null;
+    }
+}
+
+function getHeaderFilterValue(filter, dataField) {
+    if(filter === null || filter.length === 0) return null;
+
+    if(isCondition(filter)) {
+        if(filter[0] === dataField) {
+            return convertHeaderFilterCondition(filter);
+        } else {
+            return null;
+        }
+    }
+
+    var conditions = [],
+        groupValue = getGroupValue(filter);
+    filter.forEach(function(item) {
+        if(isCondition(item)) {
+            if(item[0] === dataField) {
+                if(conditions) {
+                    if(groupValue === AND_GROUP_OPERATION && conditions.length >= 1) {
+                        conditions = null;
+                    } else {
+                        conditions.push(item);
+                    }
+                }
+            }
+        }
+    });
+
+    if(conditions && conditions.length === 1) {
+        return convertHeaderFilterCondition(conditions[0]);
+    }
+
+    return null;
+}
+
 exports.isValidCondition = isValidCondition;
 exports.isEmptyGroup = isEmptyGroup;
 exports.getOperationFromAvailable = getOperationFromAvailable;
@@ -708,3 +794,5 @@ exports.getFilterExpression = getFilterExpression;
 exports.getCustomOperation = getCustomOperation;
 exports.getMergedOperations = getMergedOperations;
 exports.syncFilters = syncFilters;
+exports.getFilterRowCondition = getFilterRowCondition;
+exports.getHeaderFilterValue = getHeaderFilterValue;
