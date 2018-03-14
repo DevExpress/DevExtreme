@@ -72,6 +72,8 @@ var widgets = {
     VectorMap: require("viz/vector_map")
 };
 
+var DataSource = require("data/data_source");
+
 QUnit.module("Widget creation", {
     beforeEach: function() {
         var fixture = document.getElementById("qunit-fixture");
@@ -83,9 +85,93 @@ QUnit.module("Widget creation", {
     }
 });
 
+var optionChangeExcluded = [
+    "Accordion",
+    "ActionSheet",
+    "Box",
+    "Calendar",
+    "Chart",
+    "ContextMenu",
+    "DataGrid",
+    "DateBox",
+    "FileUploader",
+    "Form",
+    "Gallery",
+    "List",
+    "LoadPanel",
+    "Map",
+    "Menu",
+    "MultiView",
+    "NavBar",
+    "Panorama",
+    "PieChart",
+    "Pivot",
+    "PivotGrid",
+    "PivotGridFieldChooser",
+    "PolarChart",
+    "Popover",
+    "Popup",
+    "ProgressBar",
+    "RangeSlider",
+    "Resizable",
+    "ResponsiveBox",
+    "Scheduler",
+    "ScrollView",
+    "SlideOut",
+    "SlideOutView",
+    "Slider",
+    "Switch",
+    "TabPanel",
+    "Tabs",
+    "TextArea",
+    "TileView",
+    "Toast",
+    "Toolbar",
+    "Tooltip",
+    "TreeList"
+];
+
 Object.keys(widgets).forEach(function(widget) {
-    QUnit.test(widget, function(assert) {
+    QUnit.test(widget + " created", function(assert) {
         this.instance = new widgets[widget](this.element);
         assert.ok(true, "it's possible to create " + widget);
+    });
+
+    QUnit[optionChangeExcluded.indexOf(widget) < 0 ? "test" : "skip"](widget + " optionChanged", function(assert) {
+        this.instance = new widgets[widget](this.element);
+        var options = this.instance.option();
+
+        for(var optionName in options) {
+            var prevValue = options[optionName],
+                newValue = prevValue;
+
+             // NOTE: some widgets doesn't support dataSource === null
+            if(optionName === "dataSource") {
+                // NOTE: dxResponsiveBox supports only plain object in items
+                var item = widget === "dxResponsiveBox" ? { text: 1 } : 1;
+                item = widget === "dxScheduler" ? { text: 1, startDate: new Date(2015, 0, 1) } : item;
+
+                newValue = new DataSource([item]);
+                options[optionName] = newValue;
+            }
+
+            // The most critical scenarios for the server-side rendering
+            if(optionName === "visible") {
+                prevValue = false;
+                newValue = true;
+                options[optionName] = newValue;
+            }
+
+            if(optionName === "width" || optionName === "height") {
+                newValue = 555;
+                options[optionName] = newValue;
+            }
+
+            this.instance.beginUpdate();
+            this.instance._notifyOptionChanged(optionName, newValue, prevValue);
+            this.instance.endUpdate();
+
+            assert.ok(true, "it's possible to change option " + optionName);
+        }
     });
 });
