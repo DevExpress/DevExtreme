@@ -13,10 +13,8 @@ var _extend = require("../../core/utils/extend").extend,
     _map = vizUtils.map,
     _normalizeEnum = vizUtils.normalizeEnum,
     math = Math,
-    _floor = math.floor,
     _abs = math.abs,
     _sqrt = math.sqrt,
-    _min = math.min,
     _max = math.max,
 
     DEFAULT_SYMBOL_POINT_SIZE = 2,
@@ -60,57 +58,54 @@ function variance(array, expectedValue) {
     })) / array.length;
 }
 
-var errorBarAggregators = {
-    avg: function(result, data, series) {
-        var errorBarsOptions = series.getOptions().valueErrorBar,
-            valueField = series.getValueFields()[0],
-            lowValueField = errorBarsOptions.lowValueField || LOW_ERROR,
-            highValueField = errorBarsOptions.highValueField || HIGH_ERROR;
+function calculateAvgErrorBars(result, data, series) {
+    var errorBarsOptions = series.getOptions().valueErrorBar,
+        valueField = series.getValueFields()[0],
+        lowValueField = errorBarsOptions.lowValueField || LOW_ERROR,
+        highValueField = errorBarsOptions.highValueField || HIGH_ERROR;
 
-        if(series.areErrorBarsVisible() && errorBarsOptions.type === undefined) {
-            var fusionData = data.reduce(function(result, item) {
-                if(_isDefined(item[lowValueField])) {
-                    result[0] += item[valueField] - item[lowValueField];
-                    result[1]++;
-                }
-                if(_isDefined(item[highValueField])) {
-                    result[2] += item[highValueField] - item[valueField];
-                    result[3]++;
-                }
-
-                return result;
-            }, [0, 0, 0, 0]);
-
-            if(fusionData[1]) {
-                result[lowValueField] = result[valueField] - fusionData[0] / fusionData[1];
+    if(series.areErrorBarsVisible() && errorBarsOptions.type === undefined) {
+        var fusionData = data.reduce(function(result, item) {
+            if(_isDefined(item[lowValueField])) {
+                result[0] += item[valueField] - item[lowValueField];
+                result[1]++;
             }
-            if(fusionData[2]) {
-                result[highValueField] = result[valueField] + fusionData[2] / fusionData[3];
+            if(_isDefined(item[highValueField])) {
+                result[2] += item[highValueField] - item[valueField];
+                result[3]++;
             }
+
+            return result;
+        }, [0, 0, 0, 0]);
+
+        if(fusionData[1]) {
+            result[lowValueField] = result[valueField] - fusionData[0] / fusionData[1];
         }
-
-        return result;
-    },
-
-    sum: function(result, data, series) {
-        var errorBarsOptions = series.getOptions().valueErrorBar,
-            lowValueField = errorBarsOptions.lowValueField || LOW_ERROR,
-            highValueField = errorBarsOptions.highValueField || HIGH_ERROR;
-
-        if(series.areErrorBarsVisible() && errorBarsOptions.type === undefined) {
-            result[lowValueField] = 0;
-            result[highValueField] = 0;
-            result = data.reduce(function(result, item) {
-                result[lowValueField] += item[lowValueField];
-                result[highValueField] += item[highValueField];
-
-                return result;
-            }, result);
+        if(fusionData[2]) {
+            result[highValueField] = result[valueField] + fusionData[2] / fusionData[3];
         }
-
-        return result;
     }
-};
+
+    return result;
+}
+function calculateSumErrorBars(result, data, series) {
+    var errorBarsOptions = series.getOptions().valueErrorBar,
+        lowValueField = errorBarsOptions.lowValueField || LOW_ERROR,
+        highValueField = errorBarsOptions.highValueField || HIGH_ERROR;
+
+    if(series.areErrorBarsVisible() && errorBarsOptions.type === undefined) {
+        result[lowValueField] = 0;
+        result[highValueField] = 0;
+        result = data.reduce(function(result, item) {
+            result[lowValueField] += item[lowValueField];
+            result[highValueField] += item[highValueField];
+
+            return result;
+        }, result);
+    }
+
+    return result;
+}
 
 var baseScatterMethods = {
     _defaultDuration: DEFAULT_DURATION,
@@ -364,41 +359,6 @@ var baseScatterMethods = {
         return this._options.point.visible ? this._options.point.size : DEFAULT_SYMBOL_POINT_SIZE;
     },
 
-    _calcMedianValue: function(fusionPoints, valueField) {
-        var result,
-            allValue = _map(fusionPoints, function(point) { return _isDefined(point[valueField]) ? point[valueField] : null; });
-
-        allValue.sort(function(a, b) { return a - b; });
-
-        result = allValue[_floor(allValue.length / 2)];
-
-        return _isDefined(result) ? result : null;
-    },
-
-    _calcErrorBarValues: function(fusionPoints) {
-        if(!fusionPoints.length) {
-            return {};
-        }
-
-        var lowValue = fusionPoints[0].lowError,
-            highValue = fusionPoints[0].highError,
-            i = 1,
-            length = fusionPoints.length,
-            lowError,
-            highError;
-
-        for(i; i < length; i++) {
-            lowError = fusionPoints[i].lowError;
-            highError = fusionPoints[i].highError;
-            if(_isDefined(lowError) && _isDefined(highError)) {
-                lowValue = _min(lowError, lowValue);
-                highValue = _max(highError, highValue);
-            }
-        }
-
-        return { low: lowValue, high: highValue };
-    },
-
     _defaultAggregator: "avg",
 
     _aggregators: {
@@ -414,7 +374,7 @@ var baseScatterMethods = {
             result[valueField] = aggregate[0] / aggregate[1];
             result[series.getArgumentField()] = aggregationInfo.intervalStart;
 
-            result = errorBarAggregators.avg(result, aggregationInfo.data, series);
+            result = calculateAvgErrorBars(result, aggregationInfo.data, series);
 
             return result;
         },
@@ -430,7 +390,7 @@ var baseScatterMethods = {
 
             result[series.getArgumentField()] = aggregationInfo.intervalStart;
 
-            result = errorBarAggregators.sum(result, aggregationInfo.data, series);
+            result = calculateSumErrorBars(result, aggregationInfo.data, series);
 
             return result;
         },
@@ -483,18 +443,6 @@ var baseScatterMethods = {
 
             return _extend({}, itemWithMinPoint, result);
         }
-    },
-
-    _fusionPoints: function(fusionPoints, tick) {
-        var errorBarValues = this._calcErrorBarValues(fusionPoints);
-        return {
-            value: this._calcMedianValue(fusionPoints, "value"),
-            argument: tick,
-            tag: null,
-            seriesName: this.name,
-            lowError: errorBarValues.low,
-            highError: errorBarValues.high
-        };
     },
 
     _endUpdateData: function() {
@@ -590,13 +538,12 @@ var baseScatterMethods = {
         processDataItem && _each(data, processDataItem);
     },
 
-
     _patchMarginOptions: function(options) {
         var pointOptions = this._getCreatingPointOptions(),
             styles = pointOptions.styles,
             maxSize = [styles.normal, styles.hover, styles.selection]
                 .reduce(function(max, style) {
-                    return Math.max(max, style.r * 2 + style["stroke-width"]);
+                    return _max(max, style.r * 2 + style["stroke-width"]);
                 }, 0);
 
         options.size = pointOptions.visible ? maxSize : 0;

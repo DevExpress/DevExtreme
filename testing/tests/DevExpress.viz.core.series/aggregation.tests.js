@@ -5,7 +5,7 @@ var $ = require("jquery"),
     Series = require("viz/series/base_series").Series,
     pointModule = require("viz/series/points/base_point");
 
-/* global insertMockFactory, MockTranslator */
+/* global MockTranslator */
 require("../../helpers/chartMocks.js");
 
 
@@ -62,111 +62,6 @@ var createSeries = function(options, renderSettings) {
 
     return new Series(renderSettings, options);
 };
-
-QUnit.module("One Value. Fusion function.", {
-    beforeEach: function() {
-        insertMockFactory();
-        this.renderer = new vizMocks.Renderer();
-        this.translator = new MockTranslator({
-            translateX: { "First": 10, "Second": 20, "Third": 30, "Fourth": 40, "canvas_position_default": "defaultX" },
-            translateY: { 1: 100, 2: 200, 3: 300, 4: 400, "canvas_position_default": "defaultY" },
-            getCanvasVisibleArea: { minX: 0, maxX: 700, minY: 0, maxY: 500 },
-
-        });
-        this.createPoint = sinon.stub(pointModule, "Point", function(series, data, options) {
-            return { argument: data.argument, value: data.value, series: series };
-        });
-        this.series = createSeries({});
-    },
-
-    afterEach: function() {
-        this.createPoint.restore();
-    }
-});
-
-QUnit.test("Fusion three  points", function(assert) {
-    var result,
-        tick = 1,
-        points = [{ value: 1 }, { value: 2 }, { value: 3 }];
-    this.createPoint.reset();
-
-    // act
-    result = this.series._fusionPoints(points, tick);
-
-    assert.ok(result);
-    assert.equal(result.argument, tick);
-    assert.equal(result.value, 2);
-});
-
-QUnit.test("Fusion two  points", function(assert) {
-    var result,
-        tick = 1,
-        points = [{ value: 1 }, { value: 2 }];
-    this.createPoint.reset();
-
-    // act
-    result = this.series._fusionPoints(points, tick);
-
-    assert.ok(result);
-
-    assert.equal(result.argument, tick);
-    assert.equal(result.value, 2);
-});
-
-QUnit.test("Fusion many points", function(assert) {
-    var result,
-        tick = 4,
-        points = [{ value: 2 }, { value: 2 }, { value: 100 }, { value: 2 },
-            { value: 2 }, { value: 4 }];
-
-    // act
-    result = this.series._fusionPoints(points, tick);
-
-    assert.ok(result);
-
-    assert.equal(result.argument, tick);
-    assert.equal(result.value, 2);
-});
-
-QUnit.test("Fusion many points. With null ", function(assert) {
-    var result,
-        tick = 3,
-        points = [{ value: 2 }, { value: null }, { value: null }, { value: 2 }, { value: null }, { value: 4 }];
-
-    // act
-    result = this.series._fusionPoints(points, tick);
-
-    assert.ok(result);
-
-    assert.equal(result.argument, tick);
-    assert.equal(result.value, 2);
-});
-
-QUnit.test("Fusion many points. Only null ", function(assert) {
-    var result,
-        tick = 2,
-        points = [{ value: null }, { value: null }, { value: null }, { value: null }];
-
-    result = this.series._fusionPoints(points, tick);
-
-    assert.ok(result);
-
-    assert.equal(result.argument, tick);
-    assert.strictEqual(result.value, null);
-});
-
-QUnit.test("Fusion many points. Result zero", function(assert) {
-    var result,
-        tick = 2,
-        points = [{ value: -1 }, { value: 1 }, { value: null }, { value: 0 }];
-
-    result = this.series._fusionPoints(points, tick);
-
-    assert.ok(result);
-
-    assert.equal(result.argument, tick);
-    assert.strictEqual(result.value, 0);
-});
 
 QUnit.module("Sampler points", {
     beforeEach: function() {
@@ -909,8 +804,7 @@ QUnit.test("After zooming, value axis is discrete", function(assert) {
     checkResult(assert, this.series.getPoints(), points, 10);
 });
 
-
-QUnit.module("Aggregation methods. Simple series", {
+QUnit.module("Aggregation methods", {
     beforeEach: function() {
         this.createPoint = sinon.stub(pointModule, "Point", function(series, data, options) {
 
@@ -1067,6 +961,7 @@ QUnit.test("Can set a custom function", function(assert) {
             }
         }
     });
+
     assert.equal(points.length, 1);
     assert.equal(points[0].argument, 1);
     assert.equal(points[0].value, 2);
@@ -1180,7 +1075,7 @@ QUnit.test("Range. range series", function(assert) {
 });
 
 QUnit.test("Range. range series. skip null points", function(assert) {
-    var points = this.aggregateData("any", [
+    var points = this.aggregateData("sun", [
         { arg: 0, val1: 2, val2: 5 },
         { arg: 2, val1: null, val2: null },
         { arg: 4, val1: 5, val2: 5 },
@@ -1195,7 +1090,7 @@ QUnit.test("Range. range series. skip null points", function(assert) {
 });
 
 QUnit.test("Use avg method for value and size in Bubble series", function(assert) {
-    var points = this.aggregateData("any", [
+    var points = this.aggregateData("sum", [
         { arg: 0, val: 2, size: 5 },
         { arg: 2, val: 3, size: 6 },
         { arg: 4, val: 5, size: 5 },

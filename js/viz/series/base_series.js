@@ -401,7 +401,7 @@ Series.prototype = {
 
         that.pointsByArgument = {};
 
-        this._calculateErrorBars(data);
+        that._calculateErrorBars(data);
 
         points = data.map(function(dataItem, index) {
             var oldPoint = that._getOldPoint(dataItem, oldPointsByArgument, index),
