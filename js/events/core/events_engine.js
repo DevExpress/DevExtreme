@@ -108,10 +108,15 @@ var getHandlersController = function(element, eventName) {
         addHandler: function(handler, selector, data) {
             var callHandler = function(e, extraParameters) {
                 var handlerArgs = [e],
+                    eventsWithRelatedTarget = ["mouseenter", "mouseleave", "pointerenter", "pointerleave"],
                     target = e.currentTarget,
                     relatedTarget = e.relatedTarget,
-                    secondaryTargetIsOutside = !relatedTarget || !target || relatedTarget !== target && !target.contains(relatedTarget),
+                    secondaryTargetIsOutside = true,
                     result;
+
+                if(eventsWithRelatedTarget.indexOf(eventName) > -1) {
+                    secondaryTargetIsOutside = !relatedTarget || !target || relatedTarget !== target && !target.contains(relatedTarget);
+                }
 
                 if(extraParameters !== undefined) {
                     handlerArgs.push(extraParameters);
