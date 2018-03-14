@@ -672,7 +672,6 @@ var Scheduler = Widget.inherit({
                 * @type_function_param1_field6 appointmentElement:dxElement
                 * @type_function_param1_field7 jQueryEvent:jQuery.Event:deprecated(event)
                 * @type_function_param1_field8 event:event
-                * @type_function_param1_field9 cancel:Boolean
                 * @action
                 */
             onAppointmentContextMenu: null,
@@ -702,7 +701,6 @@ var Scheduler = Widget.inherit({
                 * @type_function_param1_field5 cellElement:dxElement
                 * @type_function_param1_field6 jQueryEvent:jQuery.Event:deprecated(event)
                 * @type_function_param1_field7 event:event
-                * @type_function_param1_field8 cancel:Boolean
                 * @action
                 */
             onCellContextMenu: null,
