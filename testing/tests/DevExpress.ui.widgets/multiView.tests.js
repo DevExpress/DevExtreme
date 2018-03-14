@@ -172,7 +172,23 @@ QUnit.test("item content should be rendered correctly when template was changed 
     multiView.option("selectedIndex", 1);
 
     var $items = $multiView.find(toSelector(MULTIVIEW_ITEM_CLASS));
+
     assert.equal($items.eq(1).text(), "Test2", "element has correct content");
+});
+
+QUnit.test("item should stay hidden after changing template (T613732)", function(assert) {
+    var $multiView = $("#customMultiViewWithTemplate").dxMultiView({
+            items: [{ template: $("#template1") }, { template: $("#template1") }],
+            selectedIndex: 0
+        }),
+        multiView = $multiView.dxMultiView("instance");
+
+    multiView.option("items[1].template", $("#template2"));
+
+    var $items = $multiView.find(toSelector(MULTIVIEW_ITEM_CLASS));
+
+    assert.notOk($items.eq(0).hasClass(MULTIVIEW_ITEM_HIDDEN_CLASS), "first item is visible");
+    assert.ok($items.eq(1).hasClass(MULTIVIEW_ITEM_HIDDEN_CLASS), "second item is still hidden");
 });
 
 QUnit.module("nested multiview");
