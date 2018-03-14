@@ -4478,9 +4478,9 @@ QUnit.test("Sort by summary with path", function(assert) {
     var data = dataSource.getData();
 
     assert.strictEqual(data.rows.length, 3);
-    assert.strictEqual(data.rows[0].value, "C");
-    assert.strictEqual(data.rows[1].value, "A");
-    assert.strictEqual(data.rows[2].value, "B");
+    assert.strictEqual(data.rows[0].value, "A");
+    assert.strictEqual(data.rows[1].value, "B");
+    assert.strictEqual(data.rows[2].value, "C");
 });
 
 QUnit.test("Sorting with null values", function(assert) {
@@ -4518,7 +4518,7 @@ QUnit.test("Sorting with null values", function(assert) {
 
     def.resolve(storeData);
 
-    assert.deepEqual(prepareLoadedData(dataSource.getData().rows)[11].value, null, "sorted correctly");
+    assert.deepEqual(prepareLoadedData(dataSource.getData().rows)[0].value, null, "sorted correctly");
 });
 
 
