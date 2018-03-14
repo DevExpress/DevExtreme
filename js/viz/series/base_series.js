@@ -842,7 +842,7 @@ Series.prototype = {
 
     _getAggregationMethod: function() {
         var options = this.getOptions().aggregation,
-            method = options.method,
+            method = _normalizeEnum(options.method),
             aggregator = method !== "custom" ? this._aggregators[method] : options.calculate;
 
         if(!aggregator) {

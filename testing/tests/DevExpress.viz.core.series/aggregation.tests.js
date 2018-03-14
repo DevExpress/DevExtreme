@@ -930,7 +930,7 @@ QUnit.test("Min", function(assert) {
 });
 
 QUnit.test("Max", function(assert) {
-    var points = this.aggregateData("max", this.data);
+    var points = this.aggregateData("Max", this.data);
     assert.equal(points.length, 1);
     assert.equal(points[0].argument, 0);
     assert.equal(points[0].value, 900);
