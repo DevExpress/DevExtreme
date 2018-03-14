@@ -141,14 +141,14 @@ var checkTwoGroups = function(assert, series) {
         beforeEach: function() {
             environment.beforeEach.call(this);
             this.data = [
-                { arg: "A", val: 2, lowErrorValue: 0, highErrorValue: 1, "originallowErrorValue": 0, "originalhighErrorValue": 2 },
-                { arg: "B", val: 4, lowErrorValue: 0, highErrorValue: 1, "originallowErrorValue": 0, "originalhighErrorValue": 3 },
-                { arg: "C", val: 4, lowErrorValue: 0, highErrorValue: 1, "originallowErrorValue": 0, "originalhighErrorValue": 4 },
-                { arg: "D", val: 4, lowErrorValue: 0, highErrorValue: 1, "originallowErrorValue": 0, "originalhighErrorValue": 1 },
-                { arg: "E", val: 5, lowErrorValue: 0, highErrorValue: 1, "originallowErrorValue": 0, "originalhighErrorValue": 1 },
-                { arg: "F", val: 5, lowErrorValue: 0, highErrorValue: 1, "originallowErrorValue": 0, "originalhighErrorValue": 1 },
-                { arg: "G", val: 7, lowErrorValue: 0, highErrorValue: 1, "originallowErrorValue": 0, "originalhighErrorValue": 1 },
-                { arg: "I", val: 9, lowErrorValue: 0, highErrorValue: 1, "originallowErrorValue": 0, "originalhighErrorValue": 1 }
+                { arg: "A", val: 2, lowErrorValue: 0, highErrorValue: 1 },
+                { arg: "B", val: 4, lowErrorValue: 0, highErrorValue: 1 },
+                { arg: "C", val: 4, lowErrorValue: 0, highErrorValue: 1 },
+                { arg: "D", val: 4, lowErrorValue: 0, highErrorValue: 1 },
+                { arg: "E", val: 5, lowErrorValue: 0, highErrorValue: 1 },
+                { arg: "F", val: 5, lowErrorValue: 0, highErrorValue: 1 },
+                { arg: "G", val: 7, lowErrorValue: 0, highErrorValue: 1 },
+                { arg: "I", val: 9, lowErrorValue: 0, highErrorValue: 1 }
             ];
             this.options = {
                 type: "scatter",
@@ -266,13 +266,13 @@ var checkTwoGroups = function(assert, series) {
 
         assert.strictEqual(this.createPoint.callCount, 3);
 
-        assert.strictEqual(this.createPoint.getCall(0).args[1].highError, 2, "point0 highError");
+        assert.strictEqual(this.createPoint.getCall(0).args[1].highError, 1, "point0 highError");
         assert.strictEqual(this.createPoint.getCall(0).args[1].lowError, 0, "point0 lowError");
 
-        assert.strictEqual(this.createPoint.getCall(1).args[1].highError, 3, "point1 highError");
+        assert.strictEqual(this.createPoint.getCall(1).args[1].highError, 1, "point1 highError");
         assert.strictEqual(this.createPoint.getCall(1).args[1].lowError, 0, "point1 lowError");
 
-        assert.strictEqual(this.createPoint.getCall(2).args[1].highError, 4, "point2 highError");
+        assert.strictEqual(this.createPoint.getCall(2).args[1].highError, 1, "point2 highError");
         assert.strictEqual(this.createPoint.getCall(2).args[1].lowError, 0, "point2 lowError");
     });
 
@@ -1417,11 +1417,30 @@ var checkTwoGroups = function(assert, series) {
         assert.ok(series);
         assert.equal(spy.callCount, 2);
 
-        assert.deepEqual(spy.firstCall.args, [{ argument: "arg1", value: "val1", seriesName: "seriesName", tag: "tag1", index: 0, series: series }]);
-        assert.deepEqual(spy.firstCall.thisValue, { argument: "arg1", value: "val1", seriesName: "seriesName", tag: "tag1", index: 0, series: series });
+        var expectedArg = {
+            argument: "arg1",
+            value: "val1",
+            seriesName: "seriesName",
+            tag: "tag1",
+            index: 0,
+            series: series,
+            data: this.data[0]
+        };
 
-        assert.deepEqual(spy.secondCall.args, [{ argument: "arg2", value: "val2", seriesName: "seriesName", tag: "tag2", index: 1, series: series }]);
-        assert.deepEqual(spy.secondCall.thisValue, { argument: "arg2", value: "val2", seriesName: "seriesName", tag: "tag2", index: 1, series: series });
+        assert.deepEqual(spy.firstCall.args, [expectedArg]);
+        assert.deepEqual(spy.firstCall.thisValue, expectedArg);
+
+        expectedArg = {
+            argument: "arg2",
+            value: "val2",
+            seriesName: "seriesName",
+            tag: "tag2",
+            index: 1,
+            series: series,
+            data: this.data[1]
+        };
+        assert.deepEqual(spy.secondCall.args, [expectedArg]);
+        assert.deepEqual(spy.secondCall.thisValue, expectedArg);
     });
 
     QUnit.test("Without result", function(assert) {
@@ -2001,11 +2020,31 @@ var checkTwoGroups = function(assert, series) {
         assert.ok(series);
         assert.equal(spy.callCount, 2);
 
-        assert.deepEqual(spy.firstCall.args, [{ argument: "arg1", value: "val1", seriesName: "seriesName", tag: "tag1", index: 0, series: series }]);
-        assert.deepEqual(spy.firstCall.thisValue, { argument: "arg1", value: "val1", seriesName: "seriesName", tag: "tag1", index: 0, series: series });
+        var expectedArg = {
+            argument: "arg1",
+            value: "val1",
+            seriesName: "seriesName",
+            tag: "tag1",
+            index: 0,
+            series: series,
+            data: this.data[0]
+        };
 
-        assert.deepEqual(spy.secondCall.args, [{ argument: "arg2", value: "val2", seriesName: "seriesName", tag: "tag2", index: 1, series: series }]);
-        assert.deepEqual(spy.secondCall.thisValue, { argument: "arg2", value: "val2", seriesName: "seriesName", tag: "tag2", index: 1, series: series });
+        assert.deepEqual(spy.firstCall.args, [expectedArg]);
+        assert.deepEqual(spy.firstCall.thisValue, expectedArg);
+
+        expectedArg = {
+            argument: "arg2",
+            value: "val2",
+            seriesName: "seriesName",
+            tag: "tag2",
+            index: 1,
+            series: series,
+            data: this.data[1]
+        };
+
+        assert.deepEqual(spy.secondCall.args, [expectedArg]);
+        assert.deepEqual(spy.secondCall.thisValue, expectedArg);
     });
 
     QUnit.test("customize label without result", function(assert) {

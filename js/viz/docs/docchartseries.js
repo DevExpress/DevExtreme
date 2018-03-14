@@ -1070,7 +1070,7 @@ var commonSeries = {
         opacity: undefined
     },
     /**
-	* @name dxChartSeriesTypes_CommonSeries_aggregation
+    * @name dxChartSeriesTypes_CommonSeries_aggregation
 	* @publicName aggregation
 	* @type object
 	*/
@@ -1078,10 +1078,31 @@ var commonSeries = {
         /**
 		* @name dxChartSeriesTypes_CommonSeries_aggregation_enabled
 		* @publicName enabled
-		* @type boolean
-		* @default false
+        * @type boolean
+        * @default false
 		*/
-        enabled: false
+        enabled: false,
+        /**
+		* @name dxChartSeriesTypes_CommonSeries_aggregation_method
+		* @publicName method
+        * @type string
+        * @acceptValues 'avg'|'count'|'max'|'min'|'ohlc'|'range'|'sum'|'custom'
+        */
+        method: undefined,
+        /**
+		* @name dxChartSeriesTypes_CommonSeries_aggregation_calculate
+		* @publicName calculate
+        * @type function(aggregationInfo, series)
+        * @type_function_param1 aggregationInfo:object
+        * @type_function_param1_field1 data:Array<any>
+        * @type_function_param1_field2 aggregationInterval:any
+        * @type_function_param1_field3 intervalStart:any
+        * @type_function_param1_field4 intervalEnd:any
+        * @type_function_param2 series:baseSeriesObject
+        * @type_function_return object
+        * @default undefined
+        */
+        calculate: function(aggregationInfo, series) { }
     }
 };
 
@@ -1141,7 +1162,24 @@ var areaSeries = {
 	* @acceptValues 'includePoints' | 'excludePoints' | 'none'
     * @default 'includePoints'
 	*/
-    selectionMode: 'includePoints'
+    selectionMode: 'includePoints',
+    /**
+	* @name dxChartSeriesTypes_areaseries_aggregation
+    * @publicName aggregation
+    * @inheritdoc
+	* @type object
+	*/
+    aggregation: {
+        /**
+		* @name dxChartSeriesTypes_areaseries_aggregation_method
+		* @publicName method
+        * @type string
+        * @acceptValues 'avg'|'count'|'max'|'min'|'sum'|'custom'
+        * @default 'avg'
+        * @inheritdoc
+        */
+        method: "avg"
+    }
 };
 
 /**
@@ -1184,7 +1222,24 @@ var barSeries = {
 	* @acceptValues 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none'
     * @default 'onlyPoint'
 	*/
-    selectionMode: 'onlyPoint'
+    selectionMode: 'onlyPoint',
+    /**
+	* @name dxChartSeriesTypes_barseries_aggregation
+    * @publicName aggregation
+    * @inheritdoc
+	* @type object
+	*/
+    aggregation: {
+        /**
+		* @name dxChartSeriesTypes_barseries_aggregation_method
+		* @publicName method
+        * @type string
+        * @acceptValues 'avg'|'count'|'max'|'min'|'sum'|'custom'
+        * @default 'sum'
+        * @inheritdoc
+        */
+        method: "sum"
+    }
 };
 
 /**
@@ -1282,6 +1337,23 @@ var candlestickSeries = {
             */
             direction: 'none'
         }
+    },
+    /**
+	* @name dxChartSeriesTypes_candlestickseries_aggregation
+    * @publicName aggregation
+    * @inheritdoc
+	* @type object
+	*/
+    aggregation: {
+        /**
+		* @name dxChartSeriesTypes_candlestickseries_aggregation_method
+		* @publicName method
+        * @type string
+        * @acceptValues 'ohlc'|'custom'
+        * @default 'ohlc'
+        * @inheritdoc
+        */
+        method: "ohlc"
     }
 };
 
@@ -1340,7 +1412,24 @@ var fullstackedareaSeries = {
 	* @acceptValues 'includePoints' | 'excludePoints' | 'none'
     * @default 'includePoints'
 	*/
-    selectionMode: 'includePoints'
+    selectionMode: 'includePoints',
+    /**
+	* @name dxChartSeriesTypes_fullstackedareaseries_aggregation
+    * @publicName aggregation
+    * @inheritdoc
+	* @type object
+	*/
+    aggregation: {
+        /**
+		* @name dxChartSeriesTypes_fullstackedareaseries_aggregation_method
+		* @publicName method
+        * @type string
+        * @acceptValues 'avg'|'count'|'max'|'min'|'sum'|'custom'
+        * @default 'avg'
+        * @inheritdoc
+        */
+        method: "avg"
+    }
 };
 
 /**
@@ -1399,7 +1488,24 @@ var fullstackedsplineareaSeries = {
 	* @acceptValues 'includePoints' | 'excludePoints' | 'none'
     * @default 'includePoints'
 	*/
-    selectionMode: 'includePoints'
+    selectionMode: 'includePoints',
+    /**
+	* @name dxChartSeriesTypes_fullstackedsplineareaseries_aggregation
+    * @publicName aggregation
+    * @inheritdoc
+	* @type object
+	*/
+    aggregation: {
+        /**
+		* @name dxChartSeriesTypes_fullstackedsplineareaseries_aggregation_method
+		* @publicName method
+        * @type string
+        * @acceptValues 'avg'|'count'|'max'|'min'|'sum'|'custom'
+        * @default 'avg'
+        * @inheritdoc
+        */
+        method: "avg"
+    }
 };
 
 /**
@@ -1451,6 +1557,23 @@ var fullstackedbarSeries = {
     * @default 'onlyPoint'
 	*/
     selectionMode: 'onlyPoint',
+    /**
+	* @name dxChartSeriesTypes_fullstackedsplineareaseries_aggregation
+    * @publicName aggregation
+    * @inheritdoc
+	* @type object
+	*/
+    aggregation: {
+        /**
+		* @name dxChartSeriesTypes_fullstackedbarseries_aggregation_method
+		* @publicName method
+        * @type string
+        * @acceptValues 'avg'|'count'|'max'|'min'|'sum'|'custom'
+        * @default 'sum'
+        * @inheritdoc
+        */
+        method: "sum"
+    }
 };
 
 /**
@@ -1493,7 +1616,24 @@ var fullstackedlineSeries = {
 	* @acceptValues 'includePoints' | 'excludePoints' | 'none'
     * @default 'includePoints'
 	*/
-    selectionMode: 'includePoints'
+    selectionMode: 'includePoints',
+    /**
+   * @name dxChartSeriesTypes_fullstackedlineseries_aggregation
+   * @publicName aggregation
+   * @inheritdoc
+   * @type object
+   */
+    aggregation: {
+        /**
+		* @name dxChartSeriesTypes_fullstackedlineseries_aggregation_method
+		* @publicName method
+        * @type string
+        * @acceptValues 'avg'|'count'|'max'|'min'|'sum'|'custom'
+        * @default 'avg'
+        * @inheritdoc
+        */
+        method: "avg"
+    }
 };
 
 /**
@@ -1536,7 +1676,24 @@ var fullstackedsplineSeries = {
 	* @acceptValues 'includePoints' | 'excludePoints' | 'none'
     * @default 'includePoints'
 	*/
-    selectionMode: 'includePoints'
+    selectionMode: 'includePoints',
+    /**
+   * @name dxChartSeriesTypes_fullstackedsplineseries_aggregation
+   * @publicName aggregation
+   * @inheritdoc
+   * @type object
+   */
+    aggregation: {
+        /**
+		* @name dxChartSeriesTypes_fullstackedsplineseries_aggregation_method
+		* @publicName method
+        * @type string
+        * @acceptValues 'avg'|'count'|'max'|'min'|'sum'|'custom'
+        * @default 'avg'
+        * @inheritdoc
+        */
+        method: "avg"
+    }
 };
 
 
@@ -1580,7 +1737,24 @@ var lineSeries = {
 	* @acceptValues 'includePoints' | 'excludePoints' | 'none'
     * @default 'includePoints'
 	*/
-    selectionMode: 'includePoints'
+    selectionMode: 'includePoints',
+    /**
+  * @name dxChartSeriesTypes_lineseries_aggregation
+  * @publicName aggregation
+  * @inheritdoc
+  * @type object
+  */
+    aggregation: {
+        /**
+		* @name dxChartSeriesTypes_lineseries_aggregation_method
+		* @publicName method
+        * @type string
+        * @acceptValues 'avg'|'count'|'max'|'min'|'sum'|'custom'
+        * @default 'avg'
+        * @inheritdoc
+        */
+        method: "avg"
+    }
 };
 
 /**
@@ -1639,7 +1813,24 @@ var rangeareaSeries = {
 	* @acceptValues 'includePoints' | 'excludePoints' | 'none'
     * @default 'includePoints'
 	*/
-    selectionMode: 'includePoints'
+    selectionMode: 'includePoints',
+    /**
+   * @name dxChartSeriesTypes_rangeareaseries_aggregation
+   * @publicName aggregation
+   * @inheritdoc
+   * @type object
+   */
+    aggregation: {
+        /**
+		* @name dxChartSeriesTypes_rangeareaseries_aggregation_method
+		* @publicName method
+        * @type string
+        * @acceptValues 'range'|'custom'
+        * @default 'range'
+        * @inheritdoc
+        */
+        method: "range"
+    }
 };
 
 /**
@@ -1682,7 +1873,24 @@ var rangebarSeries = {
 	* @acceptValues 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none'
     * @default 'onlyPoint'
 	*/
-    selectionMode: 'onlyPoint'
+    selectionMode: 'onlyPoint',
+    /**
+   * @name dxChartSeriesTypes_rangebarseries_aggregation
+   * @publicName aggregation
+   * @inheritdoc
+   * @type object
+   */
+    aggregation: {
+        /**
+		* @name dxChartSeriesTypes_rangebarseries_aggregation_method
+		* @publicName method
+        * @type string
+        * @acceptValues 'range'|'custom'
+        * @default 'range'
+        * @inheritdoc
+        */
+        method: "range"
+    }
 };
 
 /**
@@ -1709,6 +1917,23 @@ var scatterSeries = {
         * @notUsedInTheme
         */
         customizeText: undefined
+    },
+    /**
+  * @name dxChartSeriesTypes_scatterseries_aggregation
+  * @publicName aggregation
+  * @inheritdoc
+  * @type object
+  */
+    aggregation: {
+        /**
+		* @name dxChartSeriesTypes_scatterseries_aggregation_method
+		* @publicName method
+        * @type string
+        * @acceptValues 'avg'|'count'|'max'|'min'|'sum'|'custom'
+        * @default 'avg'
+        * @inheritdoc
+        */
+        method: "avg"
     }
 };
 
@@ -1768,7 +1993,24 @@ var splineareaSeries = {
 	* @acceptValues 'includePoints' | 'excludePoints' | 'none'
     * @default 'includePoints'
 	*/
-    selectionMode: 'includePoints'
+    selectionMode: 'includePoints',
+    /**
+  * @name dxChartSeriesTypes_splineareaseries_aggregation
+  * @publicName aggregation
+  * @inheritdoc
+  * @type object
+  */
+    aggregation: {
+        /**
+		* @name dxChartSeriesTypes_splineareaseries_aggregation_method
+		* @publicName method
+        * @type string
+        * @acceptValues 'avg'|'count'|'max'|'min'|'sum'|'custom'
+        * @default 'avg'
+        * @inheritdoc
+        */
+        method: "avg"
+    }
 };
 
 /**
@@ -1811,7 +2053,24 @@ var splineSeries = {
 	* @acceptValues 'includePoints' | 'excludePoints' | 'none'
     * @default 'includePoints'
 	*/
-    selectionMode: 'includePoints'
+    selectionMode: 'includePoints',
+    /**
+   * @name dxChartSeriesTypes_splineseries_aggregation
+   * @publicName aggregation
+   * @inheritdoc
+   * @type object
+   */
+    aggregation: {
+        /**
+		* @name dxChartSeriesTypes_splineseries_aggregation_method
+		* @publicName method
+        * @type string
+        * @acceptValues 'avg'|'count'|'max'|'min'|'sum'|'custom'
+        * @default 'avg'
+        * @inheritdoc
+        */
+        method: "avg"
+    }
 };
 
 /**
@@ -1870,7 +2129,24 @@ var stackedareaSeries = {
 	* @acceptValues 'includePoints' | 'excludePoints' | 'none'
     * @default 'includePoints'
 	*/
-    selectionMode: 'includePoints'
+    selectionMode: 'includePoints',
+    /**
+   * @name dxChartSeriesTypes_splineseries_aggregation
+   * @publicName aggregation
+   * @inheritdoc
+   * @type object
+   */
+    aggregation: {
+        /**
+		* @name dxChartSeriesTypes_splineseries_aggregation_method
+		* @publicName method
+        * @type string
+        * @acceptValues 'avg'|'count'|'max'|'min'|'sum'|'custom'
+        * @default 'avg'
+        * @inheritdoc
+        */
+        method: "avg"
+    }
 };
 
 /**
@@ -1929,7 +2205,24 @@ var stackedsplineareaSeries = {
 	* @acceptValues 'includePoints' | 'excludePoints' | 'none'
     * @default 'includePoints'
 	*/
-    selectionMode: 'includePoints'
+    selectionMode: 'includePoints',
+    /**
+   * @name dxChartSeriesTypes_stackedsplineareaseries_aggregation
+   * @publicName aggregation
+   * @inheritdoc
+   * @type object
+   */
+    aggregation: {
+        /**
+		* @name dxChartSeriesTypes_stackedsplineareaseries_aggregation_method
+		* @publicName method
+        * @type string
+        * @acceptValues 'avg'|'count'|'max'|'min'|'sum'|'custom'
+        * @default 'avg'
+        * @inheritdoc
+        */
+        method: "avg"
+    }
 };
 
 /**
@@ -1980,7 +2273,24 @@ var stackedbarSeries = {
 	* @acceptValues 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none'
     * @default 'onlyPoint'
 	*/
-    selectionMode: 'onlyPoint'
+    selectionMode: 'onlyPoint',
+    /**
+  * @name dxChartSeriesTypes_stackedbarseries_aggregation
+  * @publicName aggregation
+  * @inheritdoc
+  * @type object
+  */
+    aggregation: {
+        /**
+		* @name dxChartSeriesTypes_stackedbarseries_aggregation_method
+		* @publicName method
+        * @type string
+        * @acceptValues 'sum'|'count'|'max'|'min'|'sum'|'custom'
+        * @default 'avg'
+        * @inheritdoc
+        */
+        method: "sum"
+    }
 };
 
 /**
@@ -2023,7 +2333,24 @@ var stackedlineSeries = {
 	* @acceptValues 'includePoints' | 'excludePoints' | 'none'
     * @default 'includePoints'
 	*/
-    selectionMode: 'includePoints'
+    selectionMode: 'includePoints',
+    /**
+   * @name dxChartSeriesTypes_stackedlineseries_aggregation
+   * @publicName aggregation
+   * @inheritdoc
+   * @type object
+   */
+    aggregation: {
+        /**
+		* @name dxChartSeriesTypes_stackedlineseries_aggregation_method
+		* @publicName method
+        * @type string
+        * @acceptValues 'avg'|'count'|'max'|'min'|'sum'|'custom'
+        * @default 'avg'
+        * @inheritdoc
+        */
+        method: "avg"
+    }
 };
 
 /**
@@ -2066,7 +2393,24 @@ var stackedsplineSeries = {
 	* @acceptValues 'includePoints' | 'excludePoints' | 'none'
     * @default 'includePoints'
 	*/
-    selectionMode: 'includePoints'
+    selectionMode: 'includePoints',
+    /**
+   * @name dxChartSeriesTypes_stackedsplineseries_aggregation
+   * @publicName aggregation
+   * @inheritdoc
+   * @type object
+   */
+    aggregation: {
+        /**
+		* @name dxChartSeriesTypes_stackedsplineseries_aggregation_method
+		* @publicName method
+        * @type string
+        * @acceptValues 'avg'|'count'|'max'|'min'|'sum'|'custom'
+        * @default 'avg'
+        * @inheritdoc
+        */
+        method: "avg"
+    }
 };
 
 /**
@@ -2189,7 +2533,24 @@ var stepareaSeries = {
 	* @acceptValues 'includePoints' | 'excludePoints' | 'none'
     * @default 'includePoints'
 	*/
-    selectionMode: 'includePoints'
+    selectionMode: 'includePoints',
+    /**
+   * @name dxChartSeriesTypes_stepareaseries_aggregation
+   * @publicName aggregation
+   * @inheritdoc
+   * @type object
+   */
+    aggregation: {
+        /**
+		* @name dxChartSeriesTypes_stepareaseries_aggregation_method
+		* @publicName method
+        * @type string
+        * @acceptValues 'avg'|'count'|'max'|'min'|'sum'|'custom'
+        * @default 'avg'
+        * @inheritdoc
+        */
+        method: "avg"
+    }
 };
 
 /**
@@ -2232,7 +2593,24 @@ var steplineSeries = {
 	* @acceptValues 'includePoints' | 'excludePoints' | 'none'
     * @default 'includePoints'
 	*/
-    selectionMode: 'includePoints'
+    selectionMode: 'includePoints',
+    /**
+   * @name dxChartSeriesTypes_steplineseries_aggregation
+   * @publicName aggregation
+   * @inheritdoc
+   * @type object
+   */
+    aggregation: {
+        /**
+		* @name dxChartSeriesTypes_steplineseries_aggregation_method
+		* @publicName method
+        * @type string
+        * @acceptValues 'avg'|'count'|'max'|'min'|'sum'|'custom'
+        * @default 'avg'
+        * @inheritdoc
+        */
+        method: "avg"
+    }
 };
 
 /**
@@ -2282,7 +2660,24 @@ var stockSeries = {
 	* @acceptValues 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none'
     * @default 'onlyPoint'
 	*/
-    selectionMode: 'onlyPoint'
+    selectionMode: 'onlyPoint',
+    /**
+   * @name dxChartSeriesTypes_stockseries_aggregation
+   * @publicName aggregation
+   * @inheritdoc
+   * @type object
+   */
+    aggregation: {
+        /**
+		* @name dxChartSeriesTypes_stockseries_aggregation_method
+		* @publicName method
+        * @type string
+        * @acceptValues 'ohlc'|'custom'
+        * @default 'ohlc'
+        * @inheritdoc
+        */
+        method: "ohlc"
+    }
 };
 /**
 * @name dxChartSeriesTypes_bubbleseries
@@ -2324,5 +2719,22 @@ var bubbleSeries = {
 	* @acceptValues 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none'
     * @default 'onlyPoint'
 	*/
-    selectionMode: 'onlyPoint'
+    selectionMode: 'onlyPoint',
+    /**
+   * @name dxChartSeriesTypes_bubbleseries_aggregation
+   * @publicName aggregation
+   * @inheritdoc
+   * @type object
+   */
+    aggregation: {
+        /**
+		* @name dxChartSeriesTypes_bubbleseries_aggregation_method
+		* @publicName method
+        * @type string
+        * @acceptValues 'avg'|'custom'
+        * @default 'avg'
+        * @inheritdoc
+        */
+        method: "avg"
+    }
 };

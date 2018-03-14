@@ -92,7 +92,9 @@ var environment = {
             },
             _prepareSeriesToDrawing: function() { },
             _endUpdateData: function() { },
-            _beginUpdateData: function() { },
+            _calculateErrorBars: function() {
+
+            },
             _setGroupsSettings: function() {
                 this.groupsSetSettings = true;
             },
@@ -1504,75 +1506,6 @@ QUnit.test("With Resample Points, Some point", function(assert) {
     series.createPoints();
 
     assert.deepEqual(series.resampleArgs.slice(0, 4), [0, 3, 3, true]);
-});
-
-QUnit.test("T172956. With Resample Points, with Error Bars", function(assert) {
-    var series = createSeries({
-        type: "scatter",
-        valueErrorBar: {
-            type: "fixed",
-            value: 2
-        },
-        aggregation: { enabled: true }
-    }, {
-        argumentAxis: this.argumentAxis
-    });
-
-    var data = [];
-    for(var i = 0; i < 100; i++) {
-        data.push({ arg: i, val: i * 2 });
-    }
-
-    series.updateData(data);
-    this.setupAggregation(0, 99, 10);
-
-    series.createPoints();
-
-    var points = series.getPoints();
-
-    assert.equal(points.length, 5);
-
-    assert.equal(points[0].lowError, -2);
-    assert.equal(points[0].highError, 40);
-
-    assert.equal(points[1].lowError, 38);
-    assert.equal(points[1].highError, 80);
-
-    assert.equal(points[2].lowError, 78);
-    assert.equal(points[2].highError, 120);
-
-    assert.equal(points[3].lowError, 118);
-    assert.equal(points[3].highError, 160);
-
-    assert.equal(points[4].lowError, 158);
-    assert.equal(points[4].highError, 200);
-});
-
-QUnit.test("T172956. With Resample Points, with Error Bars when fusion points = []", function(assert) {
-    var series = createSeries({
-            type: "bar",
-            valueErrorBar: {
-                type: "fixed",
-                value: 2
-            },
-            aggregation: { enabled: true }
-        }, {
-            argumentAxis: this.argumentAxis
-        }),
-        data = [];
-
-    for(var i = 0; i < 5; i++) {
-        data.push({ arg: i, val: i * 2 });
-    }
-
-    series.updateData(data);
-    this.setupAggregation(0, 4, 10);
-
-    series.createPoints();
-
-    var points = series.getPoints();
-
-    assert.equal(points.length, 3);
 });
 
 QUnit.test("Draw aggragated points", function(assert) {

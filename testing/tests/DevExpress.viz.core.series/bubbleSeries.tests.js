@@ -455,11 +455,19 @@ QUnit.test("customizePoint object", function(assert) {
     assert.ok(series);
     assert.equal(spy.callCount, 2);
 
-    assert.deepEqual(spy.firstCall.args, [{ argument: "arg1", value: "val1", size: "size1", seriesName: "seriesName", tag: "tag1", index: 0, series: series }]);
-    assert.deepEqual(spy.firstCall.thisValue, { argument: "arg1", value: "val1", size: "size1", seriesName: "seriesName", tag: "tag1", index: 0, series: series });
+    var expectedArg = {
+        argument: "arg1",
+        value: "val1",
+        size: "size1",
+        seriesName: "seriesName",
+        tag: "tag1",
+        index: 0,
+        series: series,
+        data: this.data[0]
+    };
 
-    assert.deepEqual(spy.secondCall.args, [{ argument: "arg2", value: "val2", seriesName: "seriesName", size: "size2", tag: "tag2", index: 1, series: series }]);
-    assert.deepEqual(spy.secondCall.thisValue, { argument: "arg2", value: "val2", seriesName: "seriesName", size: "size2", tag: "tag2", index: 1, series: series });
+    assert.deepEqual(spy.firstCall.args, [expectedArg]);
+    assert.deepEqual(spy.firstCall.thisValue, expectedArg);
 });
 
 QUnit.test("customize point color. all", function(assert) {
