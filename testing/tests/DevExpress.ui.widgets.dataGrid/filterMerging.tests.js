@@ -259,7 +259,7 @@ QUnit.module("Sync with FilterValue", {
     beforeEach: function() {
         this.setupDataGrid = function(options) {
             this.options = $.extend({
-                columns: [{ dataField: "field", allowHeaderFiltering: true }],
+                columns: [{ dataField: "field", allowHeaderFiltering: true }, { dataField: "excludedField", allowHeaderFiltering: true, filterType: "exclude" }],
                 filterSyncEnabled: true,
                 filterValue: null
             }, options);
@@ -273,12 +273,13 @@ QUnit.module("Sync with FilterValue", {
     QUnit.test("equals", function(assert) {
         // arrange, act
         this.setupDataGrid({
-            filterValue: ["field", "=", 2]
+            filterValue: ["excludedField", "=", 2]
         });
 
         // assert
-        assert.deepEqual(this.columnsController.columnOption("field", "filterValues"), [2]);
-        assert.deepEqual(this.columnsController.columnOption("field", "filterValue"), 2);
+        assert.deepEqual(this.columnsController.columnOption("excludedField", "filterValues"), [2]);
+        assert.deepEqual(this.columnsController.columnOption("excludedField", "filterType"), "include");
+        assert.deepEqual(this.columnsController.columnOption("excludedField", "filterValue"), 2);
     });
 
     QUnit.test("any of", function(assert) {

@@ -723,7 +723,7 @@ function convertHeaderFilterCondition(condition) {
         case ANY_OF_OPERATION: return condition[2];
         case NONE_OF_OPERATION: return ["!", condition[2]];
         case EQUAL_OPERATION: return [condition[2]];
-        case EQUAL_OPERATION: return ["!", [condition[2]]];
+        case NOT_EQUAL_OPERATION: return ["!", [condition[2]]];
         default: return null;
     }
 }

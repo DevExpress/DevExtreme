@@ -12,9 +12,24 @@ var FilterMergingController = modules.Controller.inherit((function() {
                 filterValue = that.option("filterValue");
 
             columns.forEach(function(column) {
-                if(column.filterValues) {
+                var filterRowCondition = utils.getFilterRowCondition(filterValue, column.dataField);
+                if(filterRowCondition) {
+                    column.filterValue = filterRowCondition[2];
+                    column.selectedFilterOperation = filterRowCondition[1];
+                }
+                var headerFilterValue = utils.getHeaderFilterValue(filterValue, column.dataField);
+                if(headerFilterValue) {
+                    if(headerFilterValue[0] === "!") {
+                        column.filterType = "exclude";
+                        headerFilterValue = headerFilterValue[1];
+                    } else {
+                        column.filterType = "include";
+                    }
+                    column.filterValues = headerFilterValue;
+                }
+                if(column.filterValues && !headerFilterValue) {
                     filterValue = that._getSyncHeaderFilter(filterValue, column);
-                } else if(column.filterValue) {
+                } else if(column.filterValue && !filterRowCondition) {
                     filterValue = that._getSyncFilterRow(filterValue, column, column.filterValue);
                 }
             });

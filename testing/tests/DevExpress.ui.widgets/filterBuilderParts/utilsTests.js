@@ -1765,7 +1765,18 @@ QUnit.module("Filter merging - Get Header Filter value", function() {
         assert.deepEqual(result, [1]);
     });
 
-    QUnit.test("from filter == field condition with any of", function(assert) {
+    QUnit.test("from filter == field condition with <>", function(assert) {
+        // arrange
+        var filter = ["field", "<>", 1];
+
+        // act
+        var result = utils.getHeaderFilterValue(filter, "field");
+
+        // assert
+        assert.deepEqual(result, ["!", [1]]);
+    });
+
+    QUnit.test("from filter == field condition with anyof", function(assert) {
         // arrange
         var filter = ["field", "anyof", [1]];
 
@@ -1774,6 +1785,17 @@ QUnit.module("Filter merging - Get Header Filter value", function() {
 
         // assert
         assert.deepEqual(result, [1]);
+    });
+
+    QUnit.test("from filter == field condition with noneof", function(assert) {
+        // arrange
+        var filter = ["field", "noneof", [1]];
+
+        // act
+        var result = utils.getHeaderFilterValue(filter, "field");
+
+        // assert
+        assert.deepEqual(result, ["!", [1]]);
     });
 
     QUnit.test("from filter != field condition", function(assert) {
