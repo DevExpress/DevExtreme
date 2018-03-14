@@ -4,6 +4,7 @@ var $ = require("../core/renderer"),
     getPublicElement = require("../core/utils/dom").getPublicElement,
     noop = require("../core/utils/common").noop,
     isDefined = require("../core/utils/type").isDefined,
+    windowUtils = require("../core/utils/window"),
     registerComponent = require("../core/component_registrator"),
     extend = require("../core/utils/extend").extend,
     map = require("../core/utils/iterator").map,
@@ -308,7 +309,7 @@ var SlideOut = CollectionWidget.inherit({
     },
 
     _renderContentTemplate: function() {
-        if(isDefined(this._singleContent)) {
+        if(isDefined(this._singleContent || !windowUtils.hasWindow())) {
             return;
         }
 

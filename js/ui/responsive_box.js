@@ -252,6 +252,10 @@ var ResponsiveBox = CollectionWidget.inherit({
     },
 
     _renderItems: function() {
+        if(!windowUtils.hasWindow()) {
+            return;
+        }
+
         this._setScreenSize();
 
         this._screenItems = this._itemsByScreen();
