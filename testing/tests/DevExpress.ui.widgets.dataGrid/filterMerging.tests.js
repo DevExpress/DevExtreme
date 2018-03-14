@@ -559,6 +559,7 @@ QUnit.module("Real dataGrid", function() {
         var dataGrid = $("#container").dxDataGrid({
             dataSource: [{}],
             filterSyncEnabled: true,
+            loadingTimeout: undefined,
             columns: [{ dataField: "field", filterValues: [1], filterType: "exclude", filterValue: 2, selectedFilterOperation: "=" }]
         }).dxDataGrid("instance");
 
