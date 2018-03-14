@@ -2737,6 +2737,23 @@ QUnit.testStart(function() {
         assert.notOk(stub.called, "showAddAppointmentPopup doesn't shown");
     });
 
+    QUnit.test("onCellContextMenu should be fired after trigger context menu event", function(assert) {
+        assert.expect(4);
+
+        var $element = $("#scheduler-work-space").dxSchedulerWorkSpaceMonth({
+            focusStateEnabled: true,
+            onCellContextMenu: function(e) {
+                assert.ok(true, "event is handled");
+                assert.equal(isRenderer(e.cellElement), !!config().useJQuery, "cell is correct");
+                assert.deepEqual($(e.cellElement)[0], $cell[0], "cell is correct");
+                assert.deepEqual(e.cellData, { startDate: new Date(2018, 1, 26), endDate: new Date(2018, 1, 27) }, "cell is correct");
+            }
+        });
+
+        var $cell = $element.find("." + CELL_CLASS).eq(1);
+        $($cell).trigger("dxcontextmenu");
+    });
+
 })("Workspace Mouse Interaction");
 
 
