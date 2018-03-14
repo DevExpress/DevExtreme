@@ -1592,12 +1592,12 @@ var Form = Widget.inherit({
 
     /**
      * @name dxFormMethods_getEditor
-     * @publicName getEditor(field)
-     * @param1 field:string
+     * @publicName getEditor(dataField)
+     * @param1 dataField:string
      * @return any
      */
-    getEditor: function(field) {
-        return this._editorInstancesByField[field];
+    getEditor: function(dataField) {
+        return this._editorInstancesByField[dataField];
     },
 
     /**
@@ -1635,15 +1635,15 @@ var Form = Widget.inherit({
      */
     /**
      * @name dxFormMethods_itemOption
-     * @publicName itemOption(field)
-     * @param1 field:string
+     * @publicName itemOption(id)
+     * @param1 id:string
      * @return any
      */
-    itemOption: function(field, option, value) {
+    itemOption: function(id, option, value) {
         var that = this,
             argsCount = arguments.length,
             items = that._generateItemsFromData(that.option("items")),
-            item = that._getItemByField(field, items);
+            item = that._getItemByField(id, items);
 
         switch(argsCount) {
             case 1:
