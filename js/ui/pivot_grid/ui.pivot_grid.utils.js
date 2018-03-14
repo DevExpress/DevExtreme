@@ -5,6 +5,7 @@ var typeUtils = require("../../core/utils/type"),
     dataCoreUtils = require("../../core/utils/data"),
     iteratorUtils = require("../../core/utils/iterator"),
     extend = require("../../core/utils/extend").extend,
+    isDefined = require("../../core/utils/type").isDefined,
     dateLocalization = require("../../localization/date"),
     formatHelper = require("../../format_helper"),
     DataSourceModule = require("../../data/data_source/data_source"),
@@ -121,12 +122,28 @@ exports.formatValue = function(value, options) {
 
 exports.getCompareFunction = function(valueSelector) {
     return function(a, b) {
-        var result = 0;
-        if(valueSelector(a) > valueSelector(b)) {
-            result = 1;
-        } else if(valueSelector(a) < valueSelector(b)) {
+        var result = 0,
+            valueA = valueSelector(a),
+            valueB = valueSelector(b),
+            aIsDefined = isDefined(valueA),
+            bIsDefined = isDefined(valueB);
+
+        if(aIsDefined && bIsDefined) {
+            if(valueA > valueB) {
+                result = 1;
+            } else if(valueA < valueB) {
+                result = -1;
+            }
+        }
+
+        if(aIsDefined && !bIsDefined) {
             result = -1;
         }
+
+        if(!aIsDefined && bIsDefined) {
+            result = 1;
+        }
+
         return result;
     };
 };
