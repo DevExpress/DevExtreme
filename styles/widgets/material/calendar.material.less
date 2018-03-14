@@ -1,13 +1,13 @@
 .dx-size-default() {
     @MATERIAL_CALENDAR_CELL_FONT_SIZE: 12px;
     @MATERIAL_CALENDAR_BODY_WIDTH: 320px;
-    @MATERIAL_CALENDAR_BODY_HEIGHT: 215px;
-    @MATERIAL_CALENDAR_BODY_TOP: 52px;
+    @MATERIAL_CALENDAR_BODY_HEIGHT: 267px;
+    @MATERIAL_CALENDAR_BODY_TOP: 49px;
     @MATERIAL_CALENDAR_FOOTER_HEIGHT: 45px;
     @MATERIAL_CALENDAR_NAVIGATOR_VERTICAL_PADDING: 9px;
     @MATERIAL_CALENDAR_NAVIGATOR_HEIGHT: 36px;
 
-    @MATERIAL_CALENDAR_HEADER_BOTTOM_PADDING: 6px;
+    @MATERIAL_CALENDAR_HEADER_BOTTOM_PADDING: 10px;
     @MATERIAL_CALENDAR_CELL_HORIZONTAL_PADDING: 8px;
     @MATERIAL_NAV_BUTTON_WIDTH: 32px;
     @MATERIAL_CALENDAR_CAPTION_BUTTON_PADDING: 2px 15px 4px;
@@ -16,7 +16,6 @@
 .dx-size-compact() {
     @MATERIAL_CALENDAR_CELL_FONT_SIZE: 13px;
     @MATERIAL_CALENDAR_BODY_WIDTH: 232px;
-    @MATERIAL_CALENDAR_BODY_HEIGHT: 175px;
     @MATERIAL_CALENDAR_BODY_TOP: 42px;
     @MATERIAL_CALENDAR_FOOTER_HEIGHT: 35px;
     @MATERIAL_CALENDAR_NAVIGATOR_VERTICAL_PADDING: 4px;
@@ -179,17 +178,12 @@
     top: @MATERIAL_CALENDAR_BODY_TOP;
 
     thead {
-        font-size: 10px;
-        font-weight: bold;
+        font-size: 11px;
         line-height: 1.2;
 
         tr {
             height: 25px;
             padding-bottom: 10px;
-
-            th {
-                color: @calendar-header-color;
-            }
         }
     }
 
@@ -198,8 +192,8 @@
 
         th {
             color: @calendar-header-color;
+            font-weight: 500;
             text-align: center;
-            font-size: @MATERIAL_XS_FONT_SIZE;
             padding: 1px 0 @MATERIAL_CALENDAR_HEADER_BOTTOM_PADDING 0;
         }
     }
@@ -207,7 +201,7 @@
 
 .dx-calendar-cell {
     text-align: center;
-    //padding: 12px @MATERIAL_CALENDAR_CELL_HORIZONTAL_PADDING;
+    padding: 4px 0;
     color: @calendar-color;
     font-size: @MATERIAL_CALENDAR_CELL_FONT_SIZE;
     width: 39px;
@@ -242,7 +236,8 @@
         color: @calendar-cell-selected-bg;
     }
 
-    &.dx-state-hover {
+    &.dx-state-hover,
+    &.dx-calendar-contoured-date {
         color: @calendar-cell-hover-color;
 
         span {
@@ -263,10 +258,10 @@
 
     &.dx-calendar-empty-cell {
         cursor: default;
-        color: fade(@calendar-color, 40%);
+        color: fade(@calendar-color, 25%);
 
         &.dx-state-hover {
-            color: fade(@calendar-color, 40%);
+            color: fade(@calendar-color, 25%);
             span {
                 background-color: transparent;
             }
