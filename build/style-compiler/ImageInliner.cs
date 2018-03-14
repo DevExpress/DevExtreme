@@ -52,7 +52,7 @@ namespace StyleCompiler
 
         static bool IsFontPath(string path)
         {
-            return Regex.Match(path, "(\\.(eot|woff|ttf)(\\?#\\w*)?['\"]?)$").Success;
+            return Regex.Match(path, "(\\.(eot|woff|woff2|ttf)(\\?#\\w*)?['\"]?)$").Success;
         }
 
         static string GenerateDataUrl(string path)
