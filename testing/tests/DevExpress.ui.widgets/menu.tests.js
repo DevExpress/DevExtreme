@@ -1251,6 +1251,24 @@ QUnit.test("Menu should hide after mouseleave when hideOnMouseLeave = true", fun
     assert.notOk(submenu.option("visible"), "submenu hidden");
 });
 
+QUnit.test("Menu should not hide after mouseleave to children of a target", function(assert) {
+    if(!isDeviceDesktop(assert)) return;
+
+    var menu = createMenu({
+            items: [{ text: "Item 1", items: [{ text: "item 11" }] }, { text: "Item 2" }],
+            showFirstSubmenuMode: { name: "onHover", delay: 0 },
+            hideSubmenuOnMouseLeave: true
+        }),
+        $rootMenuItem = $(menu.element).find("." + DX_MENU_ITEM_CLASS);
+
+    $(menu.element).trigger($.Event("click", { target: $rootMenuItem.eq(0).get(0) }));
+    $(menu.element).trigger($.Event("mouseleave", { target: $rootMenuItem.eq(0).get(0), relatedTarget: $rootMenuItem.eq(0).children()[2] }));
+    this.clock.tick(0);
+
+    var submenu = getSubMenuInstance($rootMenuItem);
+    assert.ok(submenu.option("visible"), "submenu shown");
+});
+
 QUnit.test("Menu should show after it's submenu has been selected", function(assert) {
     var menu = createMenu({
             items: [{ text: "Item 1", items: [{ text: "item 11" }] }, { text: "Item 2" }],
