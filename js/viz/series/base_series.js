@@ -477,7 +477,9 @@ Series.prototype = {
             isDiscrete = that.argumentAxisType === DISCRETE || that.valueAxisType === DISCRETE,
             businessRange = argTranslator.getBusinessRange(),
             minMaxDefined = _isDefined(min) && _isDefined(max),
-            tickInterval;
+            aggregationInfo,
+            tickInterval,
+            aggregationInterval = argumentAxis.getOptions().aggregationInterval;
 
         if(pointsLength && pointsLength > 1) {
             count = argTranslator.canvasLength / sizePoint;
@@ -499,7 +501,10 @@ Series.prototype = {
                 tickInterval = (minMaxDefined ? (max - min) : (businessRange.maxVisible - businessRange.minVisible)) / count;
             }
 
-            return that._resample(tickInterval, min - tickInterval, max + tickInterval, minMaxDefined, data);
+            // tickInterval = calculateAggregationInterval();
+            aggregationInfo = _isDefined(aggregationInterval) ? { tickInterval: aggregationInterval } : argumentAxis._getTicks(businessRange, _noop, true);
+
+            return that._resample(aggregationInfo, min - tickInterval, max + tickInterval, minMaxDefined, data);
         }
 
         return [];
@@ -871,9 +876,10 @@ Series.prototype = {
         return null;
     },
 
-    _resample: function(aggregationInterval, min, max, isDefinedMinMax, data) {
+    _resample: function(aggregationInfo, min, max, isDefinedMinMax, data) {
         var that = this,
             dataInInterval = [],
+            aggregationInterval = aggregationInfo.tickInterval,
             pointData,
             minTick,
             aggregatedData,
