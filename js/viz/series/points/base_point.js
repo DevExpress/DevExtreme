@@ -133,6 +133,8 @@ Point.prototype = {
         that.lowError = dataItem.lowError;
         that.highError = dataItem.highError;
 
+        that.aggregationInfo = dataItem.aggregationInfo;
+
         that._updateData(dataItem);
 
 

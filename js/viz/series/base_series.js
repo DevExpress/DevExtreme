@@ -856,15 +856,17 @@ Series.prototype = {
         var options = this.getOptions(),
             aggregationMethod = this._getAggregationMethod(),
             underlyingData = data.map(function(item) { return item.data; }),
-            aggregatedData = aggregationMethod({
+            aggregationInfo = {
                 data: underlyingData,
-                intervalStart: interval,
                 aggregationInterval: aggregationInterval,
-                intervalEnd: interval + aggregationInterval
-            }, this),
+                intervalStart: interval,
+                intervalEnd: typeUtils.isDate(interval) ? new Date(interval.getTime() + aggregationInterval) : interval + aggregationInterval
+            },
+            aggregatedData = aggregationMethod(aggregationInfo, this),
             pointData = aggregatedData && this._getPointData(aggregatedData, options);
 
         if(pointData && this._checkData(pointData)) {
+            pointData.aggregationInfo = aggregationInfo;
             return pointData;
         }
 
