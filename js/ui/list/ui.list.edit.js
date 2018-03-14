@@ -24,30 +24,44 @@ var ListEdit = ListBase.inherit({
         };
 
         var moveFocusedItemUp = function(e) {
+            var focusedItemIndex = that._editStrategy.getNormalizedIndex(that.option("focusedElement"));
+
             if(e.shiftKey && that.option("allowItemReordering")) {
                 e.preventDefault();
 
-                var focusedItemIndex = that._editStrategy.getNormalizedIndex(that.option("focusedElement")),
-                    $prevItem = that._editStrategy.getItemElement(focusedItemIndex - 1);
+                var $prevItem = that._editStrategy.getItemElement(focusedItemIndex - 1);
 
                 that.reorderItem(that.option("focusedElement"), $prevItem);
                 that.scrollToItem(that.option("focusedElement"));
             } else {
-                parent.upArrow(e);
+                if(this.option("selectionMode") === "all" && this.option("showSelectionControls") && focusedItemIndex === 0) {
+                    var selectAllCheckBox = this.$element().find(".dx-list-select-all-checkbox").dxCheckBox("instance");
+
+                    selectAllCheckBox.focus();
+                } else {
+                    parent.upArrow(e);
+                }
             }
         };
 
         var moveFocusedItemDown = function(e) {
+            var focusedItemIndex = that._editStrategy.getNormalizedIndex(that.option("focusedElement"));
+
             if(e.shiftKey && that.option("allowItemReordering")) {
                 e.preventDefault();
 
-                var focusedItemIndex = that._editStrategy.getNormalizedIndex(that.option("focusedElement")),
-                    $nextItem = that._editStrategy.getItemElement(focusedItemIndex + 1);
+                var $nextItem = that._editStrategy.getItemElement(focusedItemIndex + 1);
 
                 that.reorderItem(that.option("focusedElement"), $nextItem);
                 that.scrollToItem(that.option("focusedElement"));
             } else {
-                parent.downArrow(e);
+                if(this.option("selectionMode") === "all" && this.option("showSelectionControls") && focusedItemIndex === this._itemElements().length - 1) {
+                    var selectAllCheckBox = this.$element().find(".dx-list-select-all-checkbox").dxCheckBox("instance");
+
+                    selectAllCheckBox.focus();
+                } else {
+                    parent.downArrow(e);
+                }
             }
         };
 
