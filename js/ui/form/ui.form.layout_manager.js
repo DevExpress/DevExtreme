@@ -24,7 +24,8 @@ var $ = require("../../core/renderer"),
     inflector = require("../../core/utils/inflector"),
     Widget = require("../widget/ui.widget"),
     Validator = require("../validator"),
-    ResponsiveBox = require("../responsive_box");
+    ResponsiveBox = require("../responsive_box"),
+    themes = require("../themes");
 
 require("../text_box");
 require("../number_box");
@@ -59,6 +60,8 @@ var FORM_EDITOR_BY_DEFAULT = "dxTextBox",
     LAYOUT_MANAGER_ONE_COLUMN = "dx-layout-manager-one-col",
 
     FLEX_LAYOUT_CLASS = "dx-flex-layout",
+
+    INVALID_CLASS = "dx-invalid",
 
     LAYOUT_STRATEGY_FLEX = "flex",
     LAYOUT_STRATEGY_FALLBACK = "fallback",
@@ -744,6 +747,20 @@ var LayoutManager = Widget.inherit({
         return validationRules;
     },
 
+    _addWrapperInvalidClass: function(editorInstance) {
+        var wrapperClass = "." + FIELD_ITEM_CONTENT_WRAPPER_CLASS;
+        if(/material/.test(themes.current())) {
+            var toggleInvalidClass = function(e) {
+                $(e.element).parents(wrapperClass)
+                    .toggleClass(INVALID_CLASS, e.event.type === "focusin" && !e.component.option("isValid"));
+            };
+
+            editorInstance
+                .on("focusIn", toggleInvalidClass)
+                .on("focusOut", toggleInvalidClass);
+        }
+    },
+
     _createEditor: function($container, renderOptions, editorOptions) {
         var that = this,
             template = renderOptions.template,
@@ -775,6 +792,8 @@ var LayoutManager = Widget.inherit({
                 editorInstance.setAria("describedby", renderOptions.helpID);
                 editorInstance.setAria("required", renderOptions.isRequired);
                 that._registerEditorInstance(editorInstance, renderOptions);
+
+                that._addWrapperInvalidClass(editorInstance);
 
                 if(renderOptions.dataField) {
                     that._bindDataField(editorInstance, renderOptions, $container);
