@@ -249,9 +249,12 @@ var Tabs = CollectionWidget.inherit({
         return TABS_ITEM_DATA_KEY;
     },
 
-    _render: function() {
+    _initMarkup: function() {
         this.callBase();
         this._renderWrapper();
+    },
+    _render: function() {
+        this.callBase();
 
         this._renderScrolling();
 
