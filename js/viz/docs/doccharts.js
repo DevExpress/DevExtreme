@@ -2530,19 +2530,19 @@ var dxPieChart = {
    */
     segmentsDirection: 'clockwise',
     /**
-	* @name dxpiechartoptions_startangle
-	* @publicName startAngle
-	* @type number
-	* @default 0
-	*/
+    * @name dxpiechartoptions_startangle
+    * @publicName startAngle
+    * @type number
+    * @default 0
+    */
     startAngle: 0,
     /**
-	* @name dxpiechartoptions_innerradius
-	* @publicName innerRadius
-	* @type number
-	* @default 0.5
-	* @propertyOf dxChartSeriesTypes_DoughnutSeries
-	*/
+    * @name dxpiechartoptions_innerradius
+    * @publicName innerRadius
+    * @type number
+    * @default 0.5
+    * @propertyOf dxChartSeriesTypes_DoughnutSeries
+    */
     innerRadius: 0.5,
     /**
     * @name dxpiechartoptions_onlegendclick
