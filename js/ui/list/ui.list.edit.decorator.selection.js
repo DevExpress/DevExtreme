@@ -118,21 +118,23 @@ registerDecorator(
             this._selectAllCheckBox.registerKeyHandler("upArrow", (function() {
                 var $lastItem = this._list._itemElements().last();
 
-                this._list.option("focusedElement", $lastItem);
-                this._list.focus();
-                this._list.scrollToItem(this._list.option("focusedElement"));
+                this._focusList($lastItem);
             }).bind(this));
 
             this._selectAllCheckBox.registerKeyHandler("downArrow", (function() {
                 var $firstItem = this._list._itemElements().first();
 
-                this._list.option("focusedElement", $firstItem);
-                this._list.focus();
-                this._list.scrollToItem(this._list.option("focusedElement"));
+                this._focusList($firstItem);
             }).bind(this));
 
             this._updateSelectAllState();
             this._attachSelectAllHandler();
+        },
+
+        _focusList: function($item) {
+            this._list.option("focusedElement", $item);
+            this._list.focus();
+            this._list.scrollToItem(this._list.option("focusedElement"));
         },
 
         _attachSelectAllHandler: function() {
