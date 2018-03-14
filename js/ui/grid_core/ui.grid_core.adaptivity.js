@@ -712,7 +712,7 @@ module.exports = {
                 _cellPrepared: function($cell, options) {
                     this.callBase.apply(this, arguments);
 
-                    if(options.column.visibleWidth === HIDDEN_COLUMNS_WIDTH) {
+                    if(options.row.rowType !== ADAPTIVE_ROW_TYPE && options.column.visibleWidth === HIDDEN_COLUMNS_WIDTH) {
                         $cell.addClass(this.addWidgetPrefix(HIDDEN_COLUMN_CLASS));
                     }
                 },
