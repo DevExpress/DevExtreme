@@ -1617,12 +1617,12 @@ var fullstackedlineSeries = {
     * @default 'includePoints'
 	*/
     selectionMode: 'includePoints',
-     /**
-	* @name dxChartSeriesTypes_fullstackedlineseries_aggregation
-    * @publicName aggregation
-    * @inheritdoc
-	* @type object
-	*/
+    /**
+   * @name dxChartSeriesTypes_fullstackedlineseries_aggregation
+   * @publicName aggregation
+   * @inheritdoc
+   * @type object
+   */
     aggregation: {
         /**
 		* @name dxChartSeriesTypes_fullstackedlineseries_aggregation_method
@@ -1677,12 +1677,12 @@ var fullstackedsplineSeries = {
     * @default 'includePoints'
 	*/
     selectionMode: 'includePoints',
-     /**
-	* @name dxChartSeriesTypes_fullstackedsplineseries_aggregation
-    * @publicName aggregation
-    * @inheritdoc
-	* @type object
-	*/
+    /**
+   * @name dxChartSeriesTypes_fullstackedsplineseries_aggregation
+   * @publicName aggregation
+   * @inheritdoc
+   * @type object
+   */
     aggregation: {
         /**
 		* @name dxChartSeriesTypes_fullstackedsplineseries_aggregation_method
@@ -1738,12 +1738,12 @@ var lineSeries = {
     * @default 'includePoints'
 	*/
     selectionMode: 'includePoints',
-      /**
-	* @name dxChartSeriesTypes_lineseries_aggregation
-    * @publicName aggregation
-    * @inheritdoc
-	* @type object
-	*/
+    /**
+  * @name dxChartSeriesTypes_lineseries_aggregation
+  * @publicName aggregation
+  * @inheritdoc
+  * @type object
+  */
     aggregation: {
         /**
 		* @name dxChartSeriesTypes_lineseries_aggregation_method
@@ -1814,12 +1814,12 @@ var rangeareaSeries = {
     * @default 'includePoints'
 	*/
     selectionMode: 'includePoints',
-     /**
-	* @name dxChartSeriesTypes_rangeareaseries_aggregation
-    * @publicName aggregation
-    * @inheritdoc
-	* @type object
-	*/
+    /**
+   * @name dxChartSeriesTypes_rangeareaseries_aggregation
+   * @publicName aggregation
+   * @inheritdoc
+   * @type object
+   */
     aggregation: {
         /**
 		* @name dxChartSeriesTypes_rangeareaseries_aggregation_method
@@ -1874,12 +1874,12 @@ var rangebarSeries = {
     * @default 'onlyPoint'
 	*/
     selectionMode: 'onlyPoint',
-     /**
-	* @name dxChartSeriesTypes_rangebarseries_aggregation
-    * @publicName aggregation
-    * @inheritdoc
-	* @type object
-	*/
+    /**
+   * @name dxChartSeriesTypes_rangebarseries_aggregation
+   * @publicName aggregation
+   * @inheritdoc
+   * @type object
+   */
     aggregation: {
         /**
 		* @name dxChartSeriesTypes_rangebarseries_aggregation_method
@@ -1918,12 +1918,12 @@ var scatterSeries = {
         */
         customizeText: undefined
     },
-      /**
-	* @name dxChartSeriesTypes_scatterseries_aggregation
-    * @publicName aggregation
-    * @inheritdoc
-	* @type object
-	*/
+    /**
+  * @name dxChartSeriesTypes_scatterseries_aggregation
+  * @publicName aggregation
+  * @inheritdoc
+  * @type object
+  */
     aggregation: {
         /**
 		* @name dxChartSeriesTypes_scatterseries_aggregation_method
@@ -1994,12 +1994,12 @@ var splineareaSeries = {
     * @default 'includePoints'
 	*/
     selectionMode: 'includePoints',
-      /**
-	* @name dxChartSeriesTypes_splineareaseries_aggregation
-    * @publicName aggregation
-    * @inheritdoc
-	* @type object
-	*/
+    /**
+  * @name dxChartSeriesTypes_splineareaseries_aggregation
+  * @publicName aggregation
+  * @inheritdoc
+  * @type object
+  */
     aggregation: {
         /**
 		* @name dxChartSeriesTypes_splineareaseries_aggregation_method
@@ -2054,12 +2054,12 @@ var splineSeries = {
     * @default 'includePoints'
 	*/
     selectionMode: 'includePoints',
-     /**
-	* @name dxChartSeriesTypes_splineseries_aggregation
-    * @publicName aggregation
-    * @inheritdoc
-	* @type object
-	*/
+    /**
+   * @name dxChartSeriesTypes_splineseries_aggregation
+   * @publicName aggregation
+   * @inheritdoc
+   * @type object
+   */
     aggregation: {
         /**
 		* @name dxChartSeriesTypes_splineseries_aggregation_method
@@ -2130,12 +2130,12 @@ var stackedareaSeries = {
     * @default 'includePoints'
 	*/
     selectionMode: 'includePoints',
-     /**
-	* @name dxChartSeriesTypes_splineseries_aggregation
-    * @publicName aggregation
-    * @inheritdoc
-	* @type object
-	*/
+    /**
+   * @name dxChartSeriesTypes_splineseries_aggregation
+   * @publicName aggregation
+   * @inheritdoc
+   * @type object
+   */
     aggregation: {
         /**
 		* @name dxChartSeriesTypes_splineseries_aggregation_method
@@ -2206,12 +2206,12 @@ var stackedsplineareaSeries = {
     * @default 'includePoints'
 	*/
     selectionMode: 'includePoints',
-     /**
-	* @name dxChartSeriesTypes_stackedsplineareaseries_aggregation
-    * @publicName aggregation
-    * @inheritdoc
-	* @type object
-	*/
+    /**
+   * @name dxChartSeriesTypes_stackedsplineareaseries_aggregation
+   * @publicName aggregation
+   * @inheritdoc
+   * @type object
+   */
     aggregation: {
         /**
 		* @name dxChartSeriesTypes_stackedsplineareaseries_aggregation_method
@@ -2274,12 +2274,12 @@ var stackedbarSeries = {
     * @default 'onlyPoint'
 	*/
     selectionMode: 'onlyPoint',
-      /**
-	* @name dxChartSeriesTypes_stackedbarseries_aggregation
-    * @publicName aggregation
-    * @inheritdoc
-	* @type object
-	*/
+    /**
+  * @name dxChartSeriesTypes_stackedbarseries_aggregation
+  * @publicName aggregation
+  * @inheritdoc
+  * @type object
+  */
     aggregation: {
         /**
 		* @name dxChartSeriesTypes_stackedbarseries_aggregation_method
@@ -2334,12 +2334,12 @@ var stackedlineSeries = {
     * @default 'includePoints'
 	*/
     selectionMode: 'includePoints',
-     /**
-	* @name dxChartSeriesTypes_stackedlineseries_aggregation
-    * @publicName aggregation
-    * @inheritdoc
-	* @type object
-	*/
+    /**
+   * @name dxChartSeriesTypes_stackedlineseries_aggregation
+   * @publicName aggregation
+   * @inheritdoc
+   * @type object
+   */
     aggregation: {
         /**
 		* @name dxChartSeriesTypes_stackedlineseries_aggregation_method
@@ -2394,12 +2394,12 @@ var stackedsplineSeries = {
     * @default 'includePoints'
 	*/
     selectionMode: 'includePoints',
-     /**
-	* @name dxChartSeriesTypes_stackedsplineseries_aggregation
-    * @publicName aggregation
-    * @inheritdoc
-	* @type object
-	*/
+    /**
+   * @name dxChartSeriesTypes_stackedsplineseries_aggregation
+   * @publicName aggregation
+   * @inheritdoc
+   * @type object
+   */
     aggregation: {
         /**
 		* @name dxChartSeriesTypes_stackedsplineseries_aggregation_method
@@ -2534,12 +2534,12 @@ var stepareaSeries = {
     * @default 'includePoints'
 	*/
     selectionMode: 'includePoints',
-     /**
-	* @name dxChartSeriesTypes_stepareaseries_aggregation
-    * @publicName aggregation
-    * @inheritdoc
-	* @type object
-	*/
+    /**
+   * @name dxChartSeriesTypes_stepareaseries_aggregation
+   * @publicName aggregation
+   * @inheritdoc
+   * @type object
+   */
     aggregation: {
         /**
 		* @name dxChartSeriesTypes_stepareaseries_aggregation_method
@@ -2594,12 +2594,12 @@ var steplineSeries = {
     * @default 'includePoints'
 	*/
     selectionMode: 'includePoints',
-     /**
-	* @name dxChartSeriesTypes_steplineseries_aggregation
-    * @publicName aggregation
-    * @inheritdoc
-	* @type object
-	*/
+    /**
+   * @name dxChartSeriesTypes_steplineseries_aggregation
+   * @publicName aggregation
+   * @inheritdoc
+   * @type object
+   */
     aggregation: {
         /**
 		* @name dxChartSeriesTypes_steplineseries_aggregation_method
@@ -2661,12 +2661,12 @@ var stockSeries = {
     * @default 'onlyPoint'
 	*/
     selectionMode: 'onlyPoint',
-     /**
-	* @name dxChartSeriesTypes_stockseries_aggregation
-    * @publicName aggregation
-    * @inheritdoc
-	* @type object
-	*/
+    /**
+   * @name dxChartSeriesTypes_stockseries_aggregation
+   * @publicName aggregation
+   * @inheritdoc
+   * @type object
+   */
     aggregation: {
         /**
 		* @name dxChartSeriesTypes_stockseries_aggregation_method
@@ -2720,12 +2720,12 @@ var bubbleSeries = {
     * @default 'onlyPoint'
 	*/
     selectionMode: 'onlyPoint',
-     /**
-	* @name dxChartSeriesTypes_bubbleseries_aggregation
-    * @publicName aggregation
-    * @inheritdoc
-	* @type object
-	*/
+    /**
+   * @name dxChartSeriesTypes_bubbleseries_aggregation
+   * @publicName aggregation
+   * @inheritdoc
+   * @type object
+   */
     aggregation: {
         /**
 		* @name dxChartSeriesTypes_bubbleseries_aggregation_method
