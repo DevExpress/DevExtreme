@@ -52,7 +52,7 @@ QUnit.test("change dataSource only - reinitialized series data", function(assert
         dataSource2 = [{ x: "First", y: 1 }, { x: "Second", y: 2 }, { x: "Third", y: 3 }],
         chart = this.createChart({
             series: [
-            { name: "First series", type: "line" }
+                { name: "First series", type: "line" }
             ],
             dataSource: dataSource1
         });
@@ -77,7 +77,7 @@ QUnit.test("change dataSource only. render call", function(assert) {
         dataSource2 = [{ x: 1, y: 1 }, { x: 2, y: 2 }, { x: 3, y: 3 }],
         chart = this.createChart({
             series: [
-            { name: "First series", type: "line" }
+                { name: "First series", type: "line" }
             ],
             dataSource: dataSource1
         });
@@ -351,18 +351,10 @@ QUnit.test("change containerBackgroundColor option only", function(assert) {
         containerBackgroundColor: "green",
         series: { name: "series1", type: "line" }
     });
-    chart._doRefresh = function() {
-        this._refreshCalled = true;
-    };
-
-    chart._dataSourceChangedHandler = function() {
-        this._dataSourceChangedHandlerCalled = true;
-    };
-    chart._init = function() {
-        this._InitCalled = true;
-    };
-    $.each(chart.series, function(_, series) { series.dispose = function() { chart.seriesDisposed = true; }; });
-    $.each(chart.seriesFamilies, function(_, family) { family.dispose = function() { chart.seriesFamiliesDisposed = true; }; });
+    var series = chart.getAllSeries()[0],
+        seriesFamily = chart.seriesFamilies[0],
+        valAxis = chart._valueAxes[0],
+        argAxis = chart._argumentAxes[0];
 
     this.validateData.reset();
     // Act
@@ -370,14 +362,42 @@ QUnit.test("change containerBackgroundColor option only", function(assert) {
         containerBackgroundColor: "red"
     });
     // assert
-    assert.ok(!chart._dataSourceChangedHandlerCalled);
-    assert.ok(chart._refreshCalled);
-    assert.ok(!chart._initCalled);
-    assert.ok(chart.seriesDisposed, "Series should not be disposed");
-    assert.ok(chart.seriesFamiliesDisposed, "SeriesFamilies should not be disposed");
-
-
     assert.equal(chart._options.containerBackgroundColor, "red", "Container background color should be correct");
+    assert.ok(series.disposed);
+    assert.ok(seriesFamily.dispose.called);
+    assert.ok(valAxis.disposed);
+    assert.ok(argAxis.disposed);
+
+    assert.ok(stubSeries2 === chart.getAllSeries()[0], "Series should be recreated");
+    assert.ok(valAxis !== chart._valueAxes[0], "Val axis should not be recreated");
+    assert.ok(argAxis !== chart._argumentAxes[0], "Arg axis should not be recreated");
+});
+
+QUnit.test("change resolveLabelsOverlapping option only", function(assert) {
+    var stubSeries1 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
+    var stubSeries2 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
+    seriesMockData.series.push(stubSeries1, stubSeries2);
+    var chart = this.createChart({
+        resolveLabelsOverlapping: true,
+        series: { name: "series1", type: "line" }
+    });
+
+    var series = chart.getAllSeries()[0],
+        seriesFamily = chart.seriesFamilies[0],
+        valAxis = chart._valueAxes[0],
+        argAxis = chart._argumentAxes[0];
+
+    this.validateData.reset();
+    // Act
+    chart.option({
+        resolveLabelsOverlapping: false
+    });
+    // assert
+    assert.ok(series.disposed);
+    assert.ok(seriesFamily.dispose.called);
+    assert.ok(stubSeries2 === chart.getAllSeries()[0], "Series should be recreated");
+    assert.ok(valAxis === chart._valueAxes[0], "Val axis should not be recreated");
+    assert.ok(argAxis === chart._argumentAxes[0], "Arg axis should not be recreated");
 });
 
 QUnit.test("change title option only. change title settings", function(assert) {
@@ -390,15 +410,8 @@ QUnit.test("change title option only. change title settings", function(assert) {
             horizontalAlignment: "bottom"
         }
     });
-    chart._doRefresh = function() {
-        this._refreshCalled = true;
-    };
-
     chart._dataSourceChangedHandler = function() {
         this._dataSourceChangedHandlerCalled = true;
-    };
-    chart._init = function() {
-        this._InitCalled = true;
     };
     // Act
     this.validateData.reset();
@@ -412,8 +425,6 @@ QUnit.test("change title option only. change title settings", function(assert) {
     });
     // assert
     assert.ok(!chart._dataSourceChangedHandlerCalled);
-    assert.ok(chart._refreshCalled, "chart must be refreshed");
-    assert.ok(!chart._initCalled);
     assert.equal(chart._options.title.text, "changed title");
     assert.equal(chart._options.title.verticalAlignment, "center");
     assert.equal(chart._options.title.horizontalAlignment, "top");
@@ -1161,34 +1172,27 @@ QUnit.test("title option", function(assert) {
     // arrange
     var stubSeries1 = new MockSeries({});
     seriesMockData.series.push(stubSeries1);
-    var chart = this.createChart({
-        title: {
-            text: "original"
-        },
-        series: { type: "line" }
-    });
-    chart._reinit = function() {
-        this._reinitCalled = true;
-    };
-
-    chart._forceRender = function() {
-        this._forceRenderCalled = true;
-    };
+    var onDrawn = sinon.spy(),
+        chart = this.createChart({
+            title: {
+                text: "original"
+            },
+            series: { type: "line" },
+            onDrawn: onDrawn
+        });
     var series = chart.getAllSeries()[0],
         valAxis = chart._valueAxes[0],
         argAxis = chart._argumentAxes[0];
-
+    onDrawn.reset();
     // Act
     chart.option({
         title: "changed title"
     });
     // assert
-    assert.equal(chart._reinitCalled, undefined, "reinit");
-    assert.equal(chart._forceRenderCalled, true, "force render");
-
     assert.ok(series === chart.getAllSeries()[0], "Series should not be recreated");
     assert.ok(valAxis === chart._valueAxes[0], "Val axis should not be recreated");
     assert.ok(argAxis === chart._argumentAxes[0], "Arg axis should not be recreated");
+    assert.ok(onDrawn.called);
 });
 
 QUnit.test("adaptiveLayout option", function(assert) {
@@ -1448,8 +1452,8 @@ QUnit.test("Common axis settings more strips", function(assert) {
         }),
         newOptions = {
             strips: [{ startValue: 10, endValue: 20, color: "red" },
-                { startValue: 30, endValue: 40, color: "red" },
-                { startValue: 50, endValue: 60, color: "red" }]
+            { startValue: 30, endValue: 40, color: "red" },
+            { startValue: 50, endValue: 60, color: "red" }]
         };
     // Act
     chart.option({
@@ -1463,8 +1467,8 @@ QUnit.test("Common axis settings less strips", function(assert) {
     var chart = this.createChart({
             commonAxisSettings: {
                 strips: [{ startValue: 10, endValue: 20, color: "red" },
-                { startValue: 30, endValue: 40, color: "red" },
-                { startValue: 50, endValue: 60, color: "red" }]
+            { startValue: 30, endValue: 40, color: "red" },
+            { startValue: 50, endValue: 60, color: "red" }]
             }
         }),
         newOptions = {
@@ -1504,8 +1508,8 @@ QUnit.test("Argument axis more strips", function(assert) {
         }),
         newOptions = {
             strips: [{ startValue: 10, endValue: 20, color: "red" },
-                { startValue: 30, endValue: 40, color: "red" },
-                { startValue: 50, endValue: 60, color: "red" }]
+            { startValue: 30, endValue: 40, color: "red" },
+            { startValue: 50, endValue: 60, color: "red" }]
         };
     // Act
     chart.option({
@@ -1519,8 +1523,8 @@ QUnit.test("Argument axis less strips", function(assert) {
     var chart = this.createChart({
             argumentAxis: {
                 strips: [{ startValue: 10, endValue: 20, color: "red" },
-                { startValue: 30, endValue: 40, color: "red" },
-                { startValue: 50, endValue: 60, color: "red" }]
+            { startValue: 30, endValue: 40, color: "red" },
+            { startValue: 50, endValue: 60, color: "red" }]
             }
         }),
         newOptions = {
@@ -1560,8 +1564,8 @@ QUnit.test("Value axis more strips", function(assert) {
         }),
         newOptions = {
             strips: [{ startValue: 10, endValue: 20, color: "red" },
-                { startValue: 30, endValue: 40, color: "red" },
-                { startValue: 50, endValue: 60, color: "red" }]
+            { startValue: 30, endValue: 40, color: "red" },
+            { startValue: 50, endValue: 60, color: "red" }]
         };
     // Act
     chart.option({
@@ -1575,8 +1579,8 @@ QUnit.test("Value axis less strips", function(assert) {
     var chart = this.createChart({
             valueAxis: {
                 strips: [{ startValue: 10, endValue: 20, color: "red" },
-                { startValue: 30, endValue: 40, color: "red" },
-                { startValue: 50, endValue: 60, color: "red" }]
+            { startValue: 30, endValue: 40, color: "red" },
+            { startValue: 50, endValue: 60, color: "red" }]
             }
         }),
         newOptions = {
@@ -1600,12 +1604,12 @@ QUnit.test("Multiple Value axis more strips", function(assert) {
         }),
         newOptions = [{
             strips: [{ startValue: 10, endValue: 20, color: "green" },
-                    { startValue: 30, endValue: 40, color: "green" },
-                    { startValue: 50, endValue: 60, color: "green" }]
+            { startValue: 30, endValue: 40, color: "green" },
+            { startValue: 50, endValue: 60, color: "green" }]
         }, {
             strips: [{ startValue: 70, endValue: 80, color: "red" },
-                    { startValue: 90, endValue: 100, color: "red" },
-                    { startValue: 110, endValue: 120, color: "red" }]
+            { startValue: 90, endValue: 100, color: "red" },
+            { startValue: 110, endValue: 120, color: "red" }]
         }];
     // Act
     chart.option({
@@ -1619,12 +1623,12 @@ QUnit.test("Multiple Value axis less strips", function(assert) {
     var chart = this.createChart({
             valueAxis: [{
                 strips: [{ startValue: 10, endValue: 20, color: "green" },
-                    { startValue: 30, endValue: 40, color: "green" },
-                    { startValue: 50, endValue: 60, color: "green" }]
+            { startValue: 30, endValue: 40, color: "green" },
+            { startValue: 50, endValue: 60, color: "green" }]
             }, {
                 strips: [{ startValue: 70, endValue: 80, color: "red" },
-                    { startValue: 90, endValue: 100, color: "red" },
-                    { startValue: 110, endValue: 120, color: "red" }]
+            { startValue: 90, endValue: 100, color: "red" },
+            { startValue: 110, endValue: 120, color: "red" }]
             }]
         }),
         newOptions = [{
@@ -1648,12 +1652,12 @@ QUnit.test("Single Value axis to multiple with strips", function(assert) {
         }),
         newOptions = [{
             strips: [{ startValue: 10, endValue: 20, color: "green" },
-                    { startValue: 30, endValue: 40, color: "green" },
-                    { startValue: 50, endValue: 60, color: "green" }]
+            { startValue: 30, endValue: 40, color: "green" },
+            { startValue: 50, endValue: 60, color: "green" }]
         }, {
             strips: [{ startValue: 70, endValue: 80, color: "red" },
-                    { startValue: 90, endValue: 100, color: "red" },
-                    { startValue: 110, endValue: 120, color: "red" }]
+            { startValue: 90, endValue: 100, color: "red" },
+            { startValue: 110, endValue: 120, color: "red" }]
         }];
     // Act
     chart.option({
@@ -1667,12 +1671,12 @@ QUnit.test("Multiple Value axis to single with strips", function(assert) {
     var chart = this.createChart({
             valueAxis: [{
                 strips: [{ startValue: 10, endValue: 20, color: "green" },
-                    { startValue: 30, endValue: 40, color: "green" },
-                    { startValue: 50, endValue: 60, color: "green" }]
+            { startValue: 30, endValue: 40, color: "green" },
+            { startValue: 50, endValue: 60, color: "green" }]
             }, {
                 strips: [{ startValue: 70, endValue: 80, color: "red" },
-                    { startValue: 90, endValue: 100, color: "red" },
-                    { startValue: 110, endValue: 120, color: "red" }]
+            { startValue: 90, endValue: 100, color: "red" },
+            { startValue: 110, endValue: 120, color: "red" }]
             }]
         }),
         newOptions = {
