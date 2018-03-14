@@ -95,6 +95,13 @@ registerDecorator(
             }
         },
 
+        handlePassFocusFromList: function(itemIndex) {
+            if(this._list.option("selectionMode") === "all" && (itemIndex === 0 || itemIndex === this._list._itemElements().length - 1)) {
+                this._selectAllCheckBox.focus();
+                return true;
+            }
+        },
+
         _renderSelectAll: function() {
             var $selectAll = this._$selectAll = $("<div>").addClass(SELECT_DECORATOR_SELECT_ALL_CLASS);
 

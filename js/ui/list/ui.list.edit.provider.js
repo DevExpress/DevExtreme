@@ -228,6 +228,10 @@ var EditProvider = Class.inherit({
         return this._eventHandler("handleClick", $itemElement, e);
     },
 
+    handlePassFocusFromList: function(itemIndex) {
+        return this._eventHandler("handlePassFocusFromList", itemIndex);
+    },
+
     contextMenuHandlerExists: function() {
         return this._handlerExists("handleContextMenu");
     },

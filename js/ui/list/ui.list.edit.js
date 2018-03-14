@@ -34,13 +34,10 @@ var ListEdit = ListBase.inherit({
                 that.reorderItem(that.option("focusedElement"), $prevItem);
                 that.scrollToItem(that.option("focusedElement"));
             } else {
-                if(this.option("selectionMode") === "all" && this.option("showSelectionControls") && focusedItemIndex === 0) {
-                    var selectAllCheckBox = this.$element().find(".dx-list-select-all-checkbox").dxCheckBox("instance");
-
-                    selectAllCheckBox.focus();
-                } else {
-                    parent.upArrow(e);
+                if(this._editProvider.handlePassFocusFromList(focusedItemIndex)) {
+                    return;
                 }
+                parent.upArrow(e);
             }
         };
 
@@ -55,13 +52,10 @@ var ListEdit = ListBase.inherit({
                 that.reorderItem(that.option("focusedElement"), $nextItem);
                 that.scrollToItem(that.option("focusedElement"));
             } else {
-                if(this.option("selectionMode") === "all" && this.option("showSelectionControls") && focusedItemIndex === this._itemElements().length - 1) {
-                    var selectAllCheckBox = this.$element().find(".dx-list-select-all-checkbox").dxCheckBox("instance");
-
-                    selectAllCheckBox.focus();
-                } else {
-                    parent.downArrow(e);
+                if(this._editProvider.handlePassFocusFromList(focusedItemIndex)) {
+                    return;
                 }
+                parent.downArrow(e);
             }
         };
 
