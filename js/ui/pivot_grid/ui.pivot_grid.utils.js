@@ -137,11 +137,11 @@ exports.getCompareFunction = function(valueSelector) {
         }
 
         if(aIsDefined && !bIsDefined) {
-            result = -1;
+            result = 1;
         }
 
         if(!aIsDefined && bIsDefined) {
-            result = 1;
+            result = -1;
         }
 
         return result;
