@@ -250,9 +250,8 @@ var Tabs = CollectionWidget.inherit({
     },
 
     _initMarkup: function() {
-        this._renderWrapper();
         this.callBase();
-
+        this._renderWrapper();
         this.setAria("role", "tab", this.itemElements());
 
         this.option("useInkRipple") && this._renderInkRipple();

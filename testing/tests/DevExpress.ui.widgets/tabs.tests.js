@@ -6,6 +6,7 @@ var $ = require("jquery"),
     config = require("core/config"),
     pointerMock = require("../../helpers/pointerMock.js");
 
+require("ui/tabs");
 require("common.css!");
 
 QUnit.testStart(function() {
