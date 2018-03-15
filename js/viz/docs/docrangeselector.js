@@ -730,6 +730,7 @@ var dxRangeSelector = {
     *@name dxrangeselectoroptions_value
     * @publicName value
     * @type Array<number,string,Date>
+    * @fires dxrangeselectoroptions_onvaluechanged
     * @notUsedInTheme
     */
     value: [undefined, undefined],
