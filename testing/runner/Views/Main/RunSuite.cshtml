@@ -1,13 +1,12 @@
 @model RunSuiteViewModel
 @{
-    var isNoJQueryTest = Model.ScriptVirtualPath.Contains("nojquery");
     var isServerSideTest = Model.ScriptVirtualPath.Contains("DevExpress.serverSide");
+    var isNoJQueryTest = Model.ScriptVirtualPath.Contains("nojquery") || isServerSideTest;
     var isSelfSufficientTest  = Model.ScriptVirtualPath.Contains("_bundled")
         || Model.ScriptVirtualPath.Contains("Bundles")
         || Model.ScriptVirtualPath.Contains("DevExpress.angular")
         || Model.ScriptVirtualPath.Contains("DevExpress.framework")
-        || Model.ScriptVirtualPath.Contains("DevExpress.jquery")
-        || isServerSideTest;
+        || Model.ScriptVirtualPath.Contains("DevExpress.jquery");
 
     string GetJQueryUrl() {
         if(isNoJQueryTest)
@@ -31,7 +30,6 @@
             }
         }
         if(isServerSideTest) {
-            yield return Url.Content("~/artifacts/transpiled/integration/jquery/component_registrator.js");
             yield return Url.Content("~/testing/helpers/ssrEmulator.js");
         }
     }
