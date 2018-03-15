@@ -226,7 +226,6 @@ var FileUploader = Editor.inherit({
             * @publicName uploadMode
             * @type Enums.FileUploadMode
             * @default "instantly"
-            * @default 'useForm' @for Internet_Explorer_9|Internet_Explorer_10
             */
             uploadMode: "instantly",
 
