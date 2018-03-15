@@ -110,7 +110,7 @@ QUnit.module("Widget sizing render", () => {
 
 QUnit.module("Aria accessibility", () => {
     QUnit.test("aria role", (assert) => {
-        const $element = $("#scrollableTabs").dxTabs({
+        const $element = $("#tabs").dxTabs({
                 items: [{ text: "item 1" }, { text: "item 2" }, { text: "item 3" }]
             }),
             $item = $element.find(".dx-tab:first");
