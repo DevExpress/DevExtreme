@@ -88,7 +88,7 @@ var EditDecorator = Class.inherit({
 
     handleClick: noop,
 
-    handlePassFocusFromList: noop,
+    moveFocusFromList: noop,
 
     handleContextMenu: noop,
 

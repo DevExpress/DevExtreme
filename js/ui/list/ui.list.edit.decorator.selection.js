@@ -95,8 +95,8 @@ registerDecorator(
             }
         },
 
-        handlePassFocusFromList: function(itemIndex) {
-            if(this._list.option("selectionMode") === "all" && (itemIndex === 0 || itemIndex === this._list._itemElements().length - 1)) {
+        moveFocusFromList: function(itemIndex) {
+            if(this._$selectAll && (itemIndex === 0 || itemIndex === this._list._getLastItemIndex())) {
                 this._selectAllCheckBox.focus();
                 return true;
             }
@@ -116,25 +116,19 @@ registerDecorator(
             this._list.itemsContainer().prepend($selectAll);
 
             this._selectAllCheckBox.registerKeyHandler("upArrow", (function() {
-                var $lastItem = this._list._itemElements().last();
+                var index = this._list._getLastItemIndex();
 
-                this._focusList($lastItem);
+                this._list._focusListItem(index);
             }).bind(this));
 
             this._selectAllCheckBox.registerKeyHandler("downArrow", (function() {
-                var $firstItem = this._list._itemElements().first();
+                var index = 0;
 
-                this._focusList($firstItem);
+                this._list._focusListItem(index);
             }).bind(this));
 
             this._updateSelectAllState();
             this._attachSelectAllHandler();
-        },
-
-        _focusList: function($item) {
-            this._list.option("focusedElement", $item);
-            this._list.focus();
-            this._list.scrollToItem(this._list.option("focusedElement"));
         },
 
         _attachSelectAllHandler: function() {

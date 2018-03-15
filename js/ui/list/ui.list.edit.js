@@ -34,7 +34,7 @@ var ListEdit = ListBase.inherit({
                 that.reorderItem(that.option("focusedElement"), $prevItem);
                 that.scrollToItem(that.option("focusedElement"));
             } else {
-                if(this._editProvider.handlePassFocusFromList(focusedItemIndex)) {
+                if(this._editProvider.moveFocusFromList(focusedItemIndex)) {
                     return;
                 }
                 parent.upArrow(e);
@@ -52,7 +52,7 @@ var ListEdit = ListBase.inherit({
                 that.reorderItem(that.option("focusedElement"), $nextItem);
                 that.scrollToItem(that.option("focusedElement"));
             } else {
-                if(this._editProvider.handlePassFocusFromList(focusedItemIndex)) {
+                if(this._editProvider.moveFocusFromList(focusedItemIndex)) {
                     return;
                 }
                 parent.downArrow(e);
@@ -69,6 +69,10 @@ var ListEdit = ListBase.inherit({
     _updateSelection: function() {
         this._editProvider.afterItemsRendered();
         this.callBase();
+    },
+
+    _getLastItemIndex: function() {
+        return this._itemElements().length - 1;
     },
 
     _refreshItemElements: function() {
@@ -386,6 +390,14 @@ var ListEdit = ListBase.inherit({
     _clean: function() {
         this._disposeEditProvider();
         this.callBase();
+    },
+
+    _focusListItem: function(index) {
+        var $item = this._editStrategy.getItemElement(index);
+
+        this.option("focusedElement", $item);
+        this.focus();
+        this.scrollToItem(this.option("focusedElement"));
     },
 
     _optionChanged: function(args) {
