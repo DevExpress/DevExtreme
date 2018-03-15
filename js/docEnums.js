@@ -745,6 +745,21 @@
  */
 
  /**
- * @typedef {string} Enums.ChartSeriesAggregationMethod
+ * @typedef {string} Enums.ChartCommonSeriesAggregationMethod
  * @enum {'avg'|'count'|'max'|'min'|'ohlc'|'range'|'sum'|'custom'}
+ */
+
+ /**
+ * @typedef {string} Enums.ChartFinancialSeriesAggregationMethod
+ * @enum {'ohlc'|'custom'}
+ */
+
+ /**
+ * @typedef {string} Enums.ChartRangeSeriesAggregationMethod
+ * @enum {'range'|'custom'}
+ */
+
+ /**
+ * @typedef {string} Enums.ChartBubbleSeriesAggregationMethod
+ * @enum {'avg'|'custom'}
  */
