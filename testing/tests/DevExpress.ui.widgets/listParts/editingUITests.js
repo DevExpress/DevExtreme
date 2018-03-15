@@ -839,6 +839,54 @@ QUnit.test("button should have no text for the Generic theme", function(assert) 
     themes.current = origCurrent;
 });
 
+var INKRIPPLE_WAVE_SHOWING_CLASS = "dx-inkripple-showing",
+    INKRIPPLE_MATERIAL_SHOW_TIMEOUT = 100;
+
+QUnit.test("button should have no inkRipple after fast swipe for Material theme", function(assert) {
+    var origCurrent = themes.current,
+        clock = sinon.useFakeTimers();
+
+    themes.current = function() { return "material"; };
+
+    var $list = $($("#templated-list").dxList({
+        items: ["0"],
+        allowItemDeleting: true,
+        itemDeleteMode: "slideItem"
+    }));
+
+    var $item = $list.find(toSelector(LIST_ITEM_CLASS)).eq(0);
+    var pointer = pointerMock($item);
+
+    var args,
+        inkRippleShowingWave,
+        testArgs = [{
+            afterTouchTimeout: INKRIPPLE_MATERIAL_SHOW_TIMEOUT,
+            afterSwipeTimeout: INKRIPPLE_MATERIAL_SHOW_TIMEOUT,
+            result: 0,
+            message: "button has no inkRipple after short touch before swipe for Material theme",
+        }, {
+            afterTouchTimeout: INKRIPPLE_MATERIAL_SHOW_TIMEOUT * 1.2,
+            afterSwipeTimeout: INKRIPPLE_MATERIAL_SHOW_TIMEOUT * 0.8,
+            result: 1,
+            message: "button has inkRipple after long touch before swipe for Material theme",
+        }];
+
+    for(var i = 0; i < testArgs.length; i++) {
+        args = testArgs[i];
+
+        pointer.start("touch").down();
+        clock.tick(args.afterTouchTimeout);
+        pointer.start().swipeStart().swipe(-0.5).swipeEnd(-1);
+        clock.tick(args.afterSwipeTimeout);
+        inkRippleShowingWave = $item.find(toSelector(INKRIPPLE_WAVE_SHOWING_CLASS));
+        assert.equal(inkRippleShowingWave.length, args.result, args.message);
+        pointer.start("touch").up();
+        clock.tick(400);
+    }
+
+    themes.current = origCurrent;
+});
+
 QUnit.test("swipe should prepare item for delete in RTL mode", function(assert) {
     var $list = $($("#templated-list").dxList({
         items: ["0"],
