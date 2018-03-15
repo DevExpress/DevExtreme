@@ -635,6 +635,7 @@ var CollectionWidget = Widget.inherit({
     },
 
     _refreshContent: function() {
+        this._prepareContent();
         this._renderContent();
     },
 
@@ -713,7 +714,21 @@ var CollectionWidget = Widget.inherit({
         this.onFocusedItemChanged = this._createActionByOption("onFocusedItemChanged");
 
         this.$element().addClass(COLLECTION_CLASS);
+        this._prepareContent();
     },
+
+    _prepareContent: function() {
+        var that = this;
+
+        commonUtils.deferRender(function() {
+            that._renderContentImpl();
+        });
+    },
+
+    _renderContent: function() {
+        this._fireContentReadyAction();
+    },
+
     _render: function() {
         this.callBase();
 
