@@ -96,7 +96,6 @@ var optionChangeExcluded = [
     "Gallery",
     "List",
     "LoadPanel",
-    "Menu",
     "MultiView",
     "NavBar",
     "Panorama",

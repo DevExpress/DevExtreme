@@ -239,12 +239,6 @@ QUnit.test("Render items with custom model", function(assert) {
     assert.equal($item111.text(), "item 111");
 });
 
-QUnit.test("Check default css class", function(assert) {
-    var menu = createMenu({});
-
-    assert.ok($(menu.element).hasClass(DX_MENU_CLASS));
-});
-
 QUnit.test("Do not render menu with empty items", function(assert) {
     var menu = createMenu({ items: [] }),
         submenus = $(menu.element).find("." + DX_SUBMENU_CLASS),
@@ -422,15 +416,6 @@ QUnit.test("Menu should not crash when items changed (T310030)", function(assert
 
     $($submenuItem).trigger("dxclick");
     assert.ok(true, "menu does not crash");
-});
-
-QUnit.test("Create root childfree item selected", function(assert) {
-    var menu = createMenu({
-            items: [{ text: "root", selected: true }],
-            selectionMode: "single"
-        }),
-        item1 = $(menu.element).find("." + DX_MENU_ITEM_CLASS).eq(0);
-    assert.ok(item1.hasClass(DX_MENU_ITEM_SELECTED_CLASS));
 });
 
 QUnit.test("Try to set selected state of several items via item.selected option 2", function(assert) {
@@ -1851,15 +1836,6 @@ QUnit.test("Create items with template", function(assert) {
     assert.equal($($item).text(), "test", "template rendered");
     assert.equal($(submenu._overlay.content()).find("." + DX_MENU_ITEM_CLASS).eq(0).text(), "test", "template rendered");
     assert.equal($(submenu._overlay.content()).find("." + DX_MENU_ITEM_CLASS).eq(1).text(), "test", "template rendered");
-});
-
-
-QUnit.module("aria accessibility");
-
-QUnit.test("Aria role", function(assert) {
-    var $element = $("#menu").dxMenu();
-
-    assert.equal($element.attr("role"), "menubar");
 });
 
 
