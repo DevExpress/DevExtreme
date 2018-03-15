@@ -750,11 +750,6 @@
  */
 
  /**
- * @typedef {string} Enums.ChartSimpleSeriesAggregationMethod
- * @enum {'avg'|'count'|'max'|'min'|'sum'|'custom'}
- */
-
- /**
  * @typedef {string} Enums.ChartFinancialSeriesAggregationMethod
  * @enum {'ohlc'|'custom'}
  */
