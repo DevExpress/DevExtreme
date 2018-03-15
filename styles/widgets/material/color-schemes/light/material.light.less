@@ -650,13 +650,7 @@
 * @paletteColorOpacity .7
 */
 @list-item-focused-selected-bg: fade(@base-focus-color, 70%);
-/**
-* @name 40. Focused item state background color
-* @type color
-* @group base.common
-* @paletteColorOpacity 1
-*/
-@list-focused-bg: darken(@base-bg, 12%);;
+
 @list-item-color: @base-text-color;
 @list-item-hover-color: @list-item-color;
 @list-item-selected-color: fade(@base-text-color, 100%);
@@ -679,7 +673,6 @@
 @list-button-delete-shadow-color: fade(@base-shadow-color, 24%);
 
 @list-item-ghost-bg: @base-bg;
-@list-chevron-focus-color: @base-inverted-text-color;
 @list-item-ghost-color: lighten(@base-text-color, 38.5%);
 @list-item-ghost-border-color: @base-accent;
 @list-item-ghost-shadow-color: @base-shadow-color;

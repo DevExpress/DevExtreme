@@ -106,11 +106,6 @@
 }
 
 .item-states() {
-    &.dx-state-hover {
-        background-color: @list-item-hover-bg;
-        color: @list-item-hover-color;
-    }
-
     &.dx-list-item-selected {
         background-color: @list-item-selected-bg;
         color: @list-item-selected-color;
@@ -118,14 +113,6 @@
         &.dx-state-hover:not(.dx-state-focused) {
             background-color: @list-item-hover-bg;
             color: @list-item-selected-color;
-        }
-    }
-
-    &.dx-state-focused {
-        background-color: @list-focused-bg;
-
-        .dx-list-item-chevron {
-            border-color: @list-chevron-focus-color;
         }
     }
 
@@ -241,6 +228,11 @@
     }
 
     .dx-list-item {
+        &.dx-state-hover, &.dx-state-active {
+            background-color: @list-item-hover-bg;
+            color: @list-item-hover-color;
+        }
+
         &:first-of-type {
             border-top: none;
             margin-top: @MATERIAL_LIST_VERTICAL_PADDING;

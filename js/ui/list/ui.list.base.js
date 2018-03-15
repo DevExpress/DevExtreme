@@ -832,6 +832,7 @@ var ListBase = CollectionWidget.inherit({
 
     _toggleActiveState: function($element, value, e) {
         this.callBase.apply(this, arguments);
+        var that = this;
 
         if(!this._inkRipple) {
             return;
@@ -843,10 +844,27 @@ var ListBase = CollectionWidget.inherit({
         };
 
         if(value) {
-            this._inkRipple.showWave(config);
+            if(/material/.test(themes.current())) {
+                this._inkRippleTimeout = setTimeout(function() {
+                    that._inkRipple.showWave(config);
+                }, LIST_FEEDBACK_SHOW_TIMEOUT / 2);
+            } else {
+                that._inkRipple.showWave(config);
+            }
         } else {
             this._inkRipple.hideWave(config);
         }
+    },
+
+    _renderItem: function() {
+        var item = this.callBase.apply(this, arguments),
+            that = this;
+
+        eventsEngine.on(item, swipeEvents.start, function() {
+            clearTimeout(that._inkRippleTimeout);
+        });
+
+        return item;
     },
 
     _postprocessRenderItem: function(args) {
