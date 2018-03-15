@@ -1170,7 +1170,6 @@ var areaSeries = {
         * @publicName method
         * @type Enums.ChartSingleValueSeriesAggregationMethod
         * @default 'avg'
-        * @inheritdoc
         */
         method: "avg"
     }
@@ -1229,7 +1228,6 @@ var barSeries = {
         * @publicName method
         * @type Enums.ChartSingleValueSeriesAggregationMethod
         * @default 'sum'
-        * @inheritdoc
         */
         method: "sum"
     }
@@ -1343,7 +1341,6 @@ var candlestickSeries = {
         * @publicName method
         * @type Enums.ChartFinancialSeriesAggregationMethod
         * @default 'ohlc'
-        * @inheritdoc
         */
         method: "ohlc"
     }
@@ -1417,7 +1414,6 @@ var fullstackedareaSeries = {
         * @publicName method
         * @type Enums.ChartSingleValueSeriesAggregationMethod
         * @default 'avg'
-        * @inheritdoc
         */
         method: "avg"
     }
@@ -1492,7 +1488,6 @@ var fullstackedsplineareaSeries = {
         * @publicName method
         * @type Enums.ChartSingleValueSeriesAggregationMethod
         * @default 'avg'
-        * @inheritdoc
         */
         method: "avg"
     }
@@ -1559,7 +1554,6 @@ var fullstackedbarSeries = {
         * @publicName method
         * @type Enums.ChartSingleValueSeriesAggregationMethod
         * @default 'sum'
-        * @inheritdoc
         */
         method: "sum"
     }
@@ -1618,7 +1612,6 @@ var fullstackedlineSeries = {
         * @publicName method
         * @type Enums.ChartSingleValueSeriesAggregationMethod
         * @default 'avg'
-        * @inheritdoc
         */
         method: "avg"
     }
@@ -1677,7 +1670,6 @@ var fullstackedsplineSeries = {
         * @publicName method
         * @type Enums.ChartSingleValueSeriesAggregationMethod
         * @default 'avg'
-        * @inheritdoc
         */
         method: "avg"
     }
@@ -1737,7 +1729,6 @@ var lineSeries = {
         * @publicName method
         * @type Enums.ChartSingleValueSeriesAggregationMethod
         * @default 'avg'
-        * @inheritdoc
         */
         method: "avg"
     }
@@ -1812,7 +1803,6 @@ var rangeareaSeries = {
         * @publicName method
         * @type Enums.ChartRangeSeriesAggregationMethod
         * @default 'range'
-        * @inheritdoc
         */
         method: "range"
     }
@@ -1871,7 +1861,6 @@ var rangebarSeries = {
         * @publicName method
         * @type Enums.ChartRangeSeriesAggregationMethod
         * @default 'range'
-        * @inheritdoc
         */
         method: "range"
     }
@@ -1914,7 +1903,6 @@ var scatterSeries = {
         * @publicName method
         * @type Enums.ChartSingleValueSeriesAggregationMethod
         * @default 'avg'
-        * @inheritdoc
         */
         method: "avg"
     }
@@ -1989,7 +1977,6 @@ var splineareaSeries = {
         * @publicName method
         * @type Enums.ChartSingleValueSeriesAggregationMethod
         * @default 'avg'
-        * @inheritdoc
         */
         method: "avg"
     }
@@ -2048,7 +2035,6 @@ var splineSeries = {
         * @publicName method
         * @type Enums.ChartSingleValueSeriesAggregationMethod
         * @default 'avg'
-        * @inheritdoc
         */
         method: "avg"
     }
@@ -2123,7 +2109,6 @@ var stackedareaSeries = {
         * @publicName method
         * @type Enums.ChartSingleValueSeriesAggregationMethod
         * @default 'avg'
-        * @inheritdoc
         */
         method: "avg"
     }
@@ -2198,7 +2183,6 @@ var stackedsplineareaSeries = {
         * @publicName method
         * @type Enums.ChartSingleValueSeriesAggregationMethod
         * @default 'avg'
-        * @inheritdoc
         */
         method: "avg"
     }
@@ -2265,7 +2249,6 @@ var stackedbarSeries = {
         * @publicName method
         * @type Enums.ChartSingleValueSeriesAggregationMethod
         * @default 'sum'
-        * @inheritdoc
         */
         method: "sum"
     }
@@ -2324,7 +2307,6 @@ var stackedlineSeries = {
         * @publicName method
         * @type Enums.ChartSingleValueSeriesAggregationMethod
         * @default 'avg'
-        * @inheritdoc
         */
         method: "avg"
     }
@@ -2383,7 +2365,6 @@ var stackedsplineSeries = {
         * @publicName method
         * @type Enums.ChartSingleValueSeriesAggregationMethod
         * @default 'avg'
-        * @inheritdoc
         */
         method: "avg"
     }
@@ -2522,7 +2503,6 @@ var stepareaSeries = {
         * @publicName method
         * @type Enums.ChartSingleValueSeriesAggregationMethod
         * @default 'avg'
-        * @inheritdoc
         */
         method: "avg"
     }
@@ -2581,7 +2561,6 @@ var steplineSeries = {
         * @publicName method
         * @type Enums.ChartSingleValueSeriesAggregationMethod
         * @default 'avg'
-        * @inheritdoc
         */
         method: "avg"
     }
@@ -2647,7 +2626,6 @@ var stockSeries = {
         * @publicName method
         * @type Enums.ChartFinancialSeriesAggregationMethod
         * @default 'ohlc'
-        * @inheritdoc
         */
         method: "ohlc"
     }
@@ -2705,7 +2683,6 @@ var bubbleSeries = {
         * @publicName method
         * @type Enums.ChartBubbleSeriesAggregationMethod
         * @default 'avg'
-        * @inheritdoc
         */
         method: "avg"
     }
