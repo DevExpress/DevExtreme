@@ -295,11 +295,11 @@ QUnit.test("Should not fire event when relatedTarget is children of a target", f
 
     document.body.appendChild(div);
 
-    eventsEngine.on(div, "someEvent", function() {
+    eventsEngine.on(div, "mouseleave", function() {
         fired++;
     });
 
-    var event = new eventsEngine.Event("someEvent", { target: div, relatedTarget: childNode });
+    var event = new eventsEngine.Event("mouseleave", { target: div, relatedTarget: childNode });
 
     eventsEngine.trigger(div, event);
 
