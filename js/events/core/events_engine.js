@@ -102,14 +102,13 @@ var getHandlersController = function(element, eventName) {
         addHandler: function(handler, selector, data) {
             var callHandler = function(e, extraParameters) {
                 var handlerArgs = [e],
-                    eventsWithRelatedTarget = ["mouseenter", "mouseleave"],
                     target = e.currentTarget,
                     relatedTarget = e.relatedTarget,
-                    secondaryTargetIsOutside,
+                    secondaryTargetIsInside,
                     result;
 
-                if(eventsWithRelatedTarget.indexOf(eventName) > -1) {
-                    secondaryTargetIsOutside = relatedTarget && target && (relatedTarget === target || target.contains(relatedTarget));
+                if(eventName in NATIVE_EVENTS_TO_SUBSCRIBE) {
+                    secondaryTargetIsInside = relatedTarget && target && (relatedTarget === target || target.contains(relatedTarget));
                 }
 
                 if(extraParameters !== undefined) {
@@ -118,7 +117,7 @@ var getHandlersController = function(element, eventName) {
 
                 special.callMethod(eventName, "handle", element, [ e, data ]);
 
-                if(!secondaryTargetIsOutside) {
+                if(!secondaryTargetIsInside) {
                     result = handler.apply(target, handlerArgs);
                 }
 
