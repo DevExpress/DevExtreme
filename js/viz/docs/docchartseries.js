@@ -1093,7 +1093,7 @@ var commonSeries = {
         * @name dxChartSeriesTypes_CommonSeries_aggregation_calculate
         * @publicName calculate
         * @type function(aggregationInfo, series)
-        * @type_function_param1 aggregationInfo:chartPointObjectFields_aggregationInfo
+        * @type_function_param1 aggregationInfo:chartPointAggregationInfoObject
         * @type_function_param2 series:baseSeriesObject
         * @type_function_return object
         * @default undefined
