@@ -1168,8 +1168,7 @@ var areaSeries = {
         /**
         * @name dxChartSeriesTypes_areaseries_aggregation_method
         * @publicName method
-        * @type string
-        * @acceptValues 'avg'|'count'|'max'|'min'|'sum'|'custom'
+        * @type ChartSimpleSeriesAggregationMethod
         * @default 'avg'
         * @inheritdoc
         */
@@ -1228,8 +1227,7 @@ var barSeries = {
         /**
         * @name dxChartSeriesTypes_barseries_aggregation_method
         * @publicName method
-        * @type string
-        * @acceptValues 'avg'|'count'|'max'|'min'|'sum'|'custom'
+        * @type ChartSimpleSeriesAggregationMethod
         * @default 'sum'
         * @inheritdoc
         */
@@ -1343,8 +1341,7 @@ var candlestickSeries = {
         /**
         * @name dxChartSeriesTypes_candlestickseries_aggregation_method
         * @publicName method
-        * @type string
-        * @acceptValues 'ohlc'|'custom'
+        * @type ChartFinancialSeriesAggregationMethod
         * @default 'ohlc'
         * @inheritdoc
         */
@@ -1418,8 +1415,7 @@ var fullstackedareaSeries = {
         /**
         * @name dxChartSeriesTypes_fullstackedareaseries_aggregation_method
         * @publicName method
-        * @type string
-        * @acceptValues 'avg'|'count'|'max'|'min'|'sum'|'custom'
+        * @type ChartSimpleSeriesAggregationMethod
         * @default 'avg'
         * @inheritdoc
         */
@@ -1494,8 +1490,7 @@ var fullstackedsplineareaSeries = {
         /**
         * @name dxChartSeriesTypes_fullstackedsplineareaseries_aggregation_method
         * @publicName method
-        * @type string
-        * @acceptValues 'avg'|'count'|'max'|'min'|'sum'|'custom'
+        * @type ChartSimpleSeriesAggregationMethod
         * @default 'avg'
         * @inheritdoc
         */
@@ -1562,8 +1557,7 @@ var fullstackedbarSeries = {
         /**
         * @name dxChartSeriesTypes_fullstackedbarseries_aggregation_method
         * @publicName method
-        * @type string
-        * @acceptValues 'avg'|'count'|'max'|'min'|'sum'|'custom'
+        * @type ChartSimpleSeriesAggregationMethod
         * @default 'sum'
         * @inheritdoc
         */
@@ -1622,8 +1616,7 @@ var fullstackedlineSeries = {
         /**
         * @name dxChartSeriesTypes_fullstackedlineseries_aggregation_method
         * @publicName method
-        * @type string
-        * @acceptValues 'avg'|'count'|'max'|'min'|'sum'|'custom'
+        * @type ChartSimpleSeriesAggregationMethod
         * @default 'avg'
         * @inheritdoc
         */
@@ -1682,8 +1675,7 @@ var fullstackedsplineSeries = {
         /**
         * @name dxChartSeriesTypes_fullstackedsplineseries_aggregation_method
         * @publicName method
-        * @type string
-        * @acceptValues 'avg'|'count'|'max'|'min'|'sum'|'custom'
+        * @type ChartSimpleSeriesAggregationMethod
         * @default 'avg'
         * @inheritdoc
         */
@@ -1743,8 +1735,7 @@ var lineSeries = {
         /**
         * @name dxChartSeriesTypes_lineseries_aggregation_method
         * @publicName method
-        * @type string
-        * @acceptValues 'avg'|'count'|'max'|'min'|'sum'|'custom'
+        * @type ChartSimpleSeriesAggregationMethod
         * @default 'avg'
         * @inheritdoc
         */
@@ -1819,8 +1810,7 @@ var rangeareaSeries = {
         /**
         * @name dxChartSeriesTypes_rangeareaseries_aggregation_method
         * @publicName method
-        * @type string
-        * @acceptValues 'range'|'custom'
+        * @type ChartRangeSeriesAggregationMethod
         * @default 'range'
         * @inheritdoc
         */
@@ -1879,8 +1869,7 @@ var rangebarSeries = {
         /**
         * @name dxChartSeriesTypes_rangebarseries_aggregation_method
         * @publicName method
-        * @type string
-        * @acceptValues 'range'|'custom'
+        * @type ChartRangeSeriesAggregationMethod
         * @default 'range'
         * @inheritdoc
         */
@@ -1923,8 +1912,7 @@ var scatterSeries = {
         /**
         * @name dxChartSeriesTypes_scatterseries_aggregation_method
         * @publicName method
-        * @type string
-        * @acceptValues 'avg'|'count'|'max'|'min'|'sum'|'custom'
+        * @type ChartSimpleSeriesAggregationMethod
         * @default 'avg'
         * @inheritdoc
         */
@@ -1999,8 +1987,7 @@ var splineareaSeries = {
         /**
         * @name dxChartSeriesTypes_splineareaseries_aggregation_method
         * @publicName method
-        * @type string
-        * @acceptValues 'avg'|'count'|'max'|'min'|'sum'|'custom'
+        * @type ChartSimpleSeriesAggregationMethod
         * @default 'avg'
         * @inheritdoc
         */
@@ -2059,8 +2046,7 @@ var splineSeries = {
         /**
         * @name dxChartSeriesTypes_splineseries_aggregation_method
         * @publicName method
-        * @type string
-        * @acceptValues 'avg'|'count'|'max'|'min'|'sum'|'custom'
+        * @type ChartSimpleSeriesAggregationMethod
         * @default 'avg'
         * @inheritdoc
         */
@@ -2135,8 +2121,7 @@ var stackedareaSeries = {
         /**
         * @name dxChartSeriesTypes_splineseries_aggregation_method
         * @publicName method
-        * @type string
-        * @acceptValues 'avg'|'count'|'max'|'min'|'sum'|'custom'
+        * @type ChartSimpleSeriesAggregationMethod
         * @default 'avg'
         * @inheritdoc
         */
@@ -2211,8 +2196,7 @@ var stackedsplineareaSeries = {
         /**
         * @name dxChartSeriesTypes_stackedsplineareaseries_aggregation_method
         * @publicName method
-        * @type string
-        * @acceptValues 'avg'|'count'|'max'|'min'|'sum'|'custom'
+        * @type ChartSimpleSeriesAggregationMethod
         * @default 'avg'
         * @inheritdoc
         */
@@ -2279,9 +2263,8 @@ var stackedbarSeries = {
         /**
         * @name dxChartSeriesTypes_stackedbarseries_aggregation_method
         * @publicName method
-        * @type string
-        * @acceptValues 'sum'|'count'|'max'|'min'|'sum'|'custom'
-        * @default 'avg'
+        * @type ChartSimpleSeriesAggregationMethod
+        * @default 'sum'
         * @inheritdoc
         */
         method: "sum"
@@ -2339,8 +2322,7 @@ var stackedlineSeries = {
         /**
         * @name dxChartSeriesTypes_stackedlineseries_aggregation_method
         * @publicName method
-        * @type string
-        * @acceptValues 'avg'|'count'|'max'|'min'|'sum'|'custom'
+        * @type ChartSimpleSeriesAggregationMethod
         * @default 'avg'
         * @inheritdoc
         */
@@ -2399,8 +2381,7 @@ var stackedsplineSeries = {
         /**
         * @name dxChartSeriesTypes_stackedsplineseries_aggregation_method
         * @publicName method
-        * @type string
-        * @acceptValues 'avg'|'count'|'max'|'min'|'sum'|'custom'
+        * @type ChartSimpleSeriesAggregationMethod
         * @default 'avg'
         * @inheritdoc
         */
@@ -2539,8 +2520,7 @@ var stepareaSeries = {
         /**
         * @name dxChartSeriesTypes_stepareaseries_aggregation_method
         * @publicName method
-        * @type string
-        * @acceptValues 'avg'|'count'|'max'|'min'|'sum'|'custom'
+        * @type ChartSimpleSeriesAggregationMethod
         * @default 'avg'
         * @inheritdoc
         */
@@ -2599,8 +2579,7 @@ var steplineSeries = {
         /**
         * @name dxChartSeriesTypes_steplineseries_aggregation_method
         * @publicName method
-        * @type string
-        * @acceptValues 'avg'|'count'|'max'|'min'|'sum'|'custom'
+        * @type ChartSimpleSeriesAggregationMethod
         * @default 'avg'
         * @inheritdoc
         */
@@ -2666,8 +2645,7 @@ var stockSeries = {
         /**
         * @name dxChartSeriesTypes_stockseries_aggregation_method
         * @publicName method
-        * @type string
-        * @acceptValues 'ohlc'|'custom'
+        * @type ChartFinancialSeriesAggregationMethod
         * @default 'ohlc'
         * @inheritdoc
         */
@@ -2725,8 +2703,7 @@ var bubbleSeries = {
         /**
         * @name dxChartSeriesTypes_bubbleseries_aggregation_method
         * @publicName method
-        * @type string
-        * @acceptValues 'avg'|'custom'
+        * @type ChartBubbleSeriesAggregationMethod
         * @default 'avg'
         * @inheritdoc
         */
