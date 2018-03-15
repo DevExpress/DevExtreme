@@ -2,7 +2,8 @@
 
 /* global initTree */
 
-var $ = require("jquery");
+var $ = require("jquery"),
+    keyboardMock = require("../../../helpers/keyboardMock.js");
 
 QUnit.module("selection common");
 
@@ -335,4 +336,24 @@ QUnit.test("item selection correctly reset when dataSource is filtered", functio
     var checkedCheckBoxCount = $treeView.find(".dx-checkbox-checked").length;
     assert.equal(checkedCheckBoxCount, 1, "There is only one checked checkBox");
     assert.ok($treeView.find(CHECK_BOX_SELECTOR).eq(0).hasClass("dx-checkbox-checked"), "Correct checkbox checked");
+});
+
+QUnit.test("items should be selectable after the search", function(assert) {
+    var clickHandler = sinon.spy(),
+        $treeView = initTree({
+            dataSource: [{ text: "Stores" }],
+            searchEnabled: true,
+            searchTimeout: 0,
+            selectionMode: "single",
+            onItemClick: clickHandler
+        }),
+        $input = $treeView.find(".dx-texteditor-input"),
+        kb = keyboardMock($input);
+
+    kb.type("s");
+
+    var $item = $treeView.find(".dx-treeview-item").eq(0);
+    $($item).trigger("dxclick");
+
+    assert.equal(clickHandler.callCount, 1, "click works");
 });
