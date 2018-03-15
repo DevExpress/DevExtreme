@@ -309,7 +309,7 @@ var SlideOut = CollectionWidget.inherit({
     },
 
     _renderContentTemplate: function() {
-        if(isDefined(this._singleContent || !windowUtils.hasWindow())) {
+        if(isDefined(this._singleContent) || !windowUtils.hasWindow()) {
             return;
         }
 
