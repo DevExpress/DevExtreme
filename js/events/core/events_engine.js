@@ -111,11 +111,11 @@ var getHandlersController = function(element, eventName) {
                     eventsWithRelatedTarget = ["mouseenter", "mouseleave", "pointerenter", "pointerleave"],
                     target = e.currentTarget,
                     relatedTarget = e.relatedTarget,
-                    secondaryTargetIsOutside = true,
+                    secondaryTargetIsOutside,
                     result;
 
                 if(eventsWithRelatedTarget.indexOf(eventName) > -1) {
-                    secondaryTargetIsOutside = !relatedTarget || !target || relatedTarget !== target && !target.contains(relatedTarget);
+                    secondaryTargetIsOutside = relatedTarget && target && (relatedTarget === target || target.contains(relatedTarget));
                 }
 
                 if(extraParameters !== undefined) {
@@ -124,7 +124,7 @@ var getHandlersController = function(element, eventName) {
 
                 special.callMethod(eventName, "handle", element, [ e, data ]);
 
-                if(secondaryTargetIsOutside) {
+                if(!secondaryTargetIsOutside) {
                     result = handler.apply(target, handlerArgs);
                 }
 
