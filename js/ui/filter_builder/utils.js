@@ -15,7 +15,6 @@ var dataErrors = require("../../data/errors").errors,
 var DEFAULT_DATA_TYPE = "string",
     EMPTY_MENU_ICON = "icon-none",
     AND_GROUP_OPERATION = "and",
-    ANY_OF_OPERATION = "anyof",
     EQUAL_OPERATION = "=",
     NOT_EQUAL_OPERATION = "<>",
     DATATYPE_OPERATIONS = {
@@ -639,14 +638,18 @@ function getMergedOperations(customOperations, betweenCaption) {
     return result;
 }
 
-function syncFilters(filter, addedFilter) {
+function isMatchedCondition(filter, addedFilterDataField, operations) {
+    return filter[0] === addedFilterDataField && operations.indexOf(filter[1]) !== -1;
+}
+
+function syncFilters(filter, addedFilter, operations) {
     var canPush = addedFilter[2] !== null;
     if(filter === null || filter.length === 0) return canPush ? addedFilter : null;
 
     if(isCondition(filter)) {
         if(!canPush) return null;
 
-        if(filter[0] === addedFilter[0]) {
+        if(isMatchedCondition(filter, addedFilter[0], operations)) {
             return addedFilter;
         } else {
             return [filter, AND_GROUP_OPERATION, addedFilter];
@@ -656,7 +659,7 @@ function syncFilters(filter, addedFilter) {
     var result = [];
     filter.forEach(function(item) {
         if(isCondition(item)) {
-            if(item[0] === addedFilter[0]) {
+            if(isMatchedCondition(item, addedFilter[0], operations)) {
                 if(canPush) {
                     result.push(addedFilter);
                     canPush = false;
@@ -679,19 +682,12 @@ function syncFilters(filter, addedFilter) {
     return result.length === 1 ? result[0] : result;
 }
 
-function convertFilterRowCondition(condition) {
-    if(condition[1] === ANY_OF_OPERATION) {
-        return null;
-    }
-    return condition;
-}
-
-function getCondition(filter, dataField, handler) {
+function getMatchedCondition(filter, dataField, operations) {
     if(filter === null || filter.length === 0) return null;
 
     if(isCondition(filter)) {
-        if(filter[0] === dataField) {
-            return handler(filter);
+        if(isMatchedCondition(filter, dataField, operations)) {
+            return filter;
         } else {
             return null;
         }
@@ -701,11 +697,11 @@ function getCondition(filter, dataField, handler) {
         hasDataFieldValue = false;
     filter.forEach(function(item) {
         if(isCondition(item)) {
-            if(item[0] === dataField) {
+            if(isMatchedCondition(item, dataField, operations)) {
                 if(hasDataFieldValue) {
                     result = null;
                 } else {
-                    result = handler(item);
+                    result = item;
                     hasDataFieldValue = true;
                 }
             }
@@ -713,21 +709,6 @@ function getCondition(filter, dataField, handler) {
     });
 
     return result;
-}
-
-function getFilterRowCondition(filter, dataField) {
-    return getCondition(filter, dataField, convertFilterRowCondition);
-}
-
-function convertHeaderFilterCondition(condition) {
-    switch(condition[1]) {
-        case ANY_OF_OPERATION: return condition[2];
-        default: return null;
-    }
-}
-
-function getHeaderFilterValue(filter, dataField) {
-    return getCondition(filter, dataField, convertHeaderFilterCondition);
 }
 
 exports.isValidCondition = isValidCondition;
@@ -762,5 +743,4 @@ exports.getFilterExpression = getFilterExpression;
 exports.getCustomOperation = getCustomOperation;
 exports.getMergedOperations = getMergedOperations;
 exports.syncFilters = syncFilters;
-exports.getFilterRowCondition = getFilterRowCondition;
-exports.getHeaderFilterValue = getHeaderFilterValue;
+exports.getMatchedCondition = getMatchedCondition;

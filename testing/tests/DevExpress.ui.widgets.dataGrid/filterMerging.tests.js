@@ -352,18 +352,18 @@ QUnit.module("Sync with FilterValue", {
         assert.deepEqual(this.columnsController.columnOption("field", "selectedFilterOperation"), undefined);
     });
 
-    QUnit.test("headerfilter has priority over filterRow", function(assert) {
+    QUnit.test("headerfilter & filterRow", function(assert) {
         // arrange, act
         this.setupDataGrid({
-            columns: [{ dataField: "field", filterValues: [1], filterType: "exclude", filterValue: 2, selectedFilterOperation: "=" }],
+            columns: [{ dataField: "field", filterValues: ["2", "3"], filterType: "include", filterValue: "1", selectedFilterOperation: "=" }],
         });
 
         // assert
-        assert.deepEqual(this.option("filterValue"), ["field", "anyof", [1]]);
-        assert.deepEqual(this.columnsController.columnOption("field", "filterValues"), [1]);
-        assert.deepEqual(this.columnsController.columnOption("field", "filterType"), "exclude");
-        assert.deepEqual(this.columnsController.columnOption("field", "filterValue"), undefined);
-        assert.deepEqual(this.columnsController.columnOption("field", "selectedFilterOperation"), undefined);
+        assert.deepEqual(this.option("filterValue"), [["field", "anyof", ["2", "3"]], "and", ["field", "=", "1"]]);
+        assert.deepEqual(this.columnsController.columnOption("field", "filterValues"), ["2", "3"]);
+        assert.deepEqual(this.columnsController.columnOption("field", "filterType"), "include");
+        assert.deepEqual(this.columnsController.columnOption("field", "filterValue"), "1");
+        assert.deepEqual(this.columnsController.columnOption("field", "selectedFilterOperation"), "=");
     });
 });
 
@@ -417,18 +417,19 @@ QUnit.module("getCombinedFilter", {
     });
 
     QUnit.test("ignore Header Filter & Filter Row when filterSyncEnabled = true", function(assert) {
+        // arrange
+        var filterValue = [["Test", "=", 2], "and", ["Test", "anyof", [5, 6]]];
+
         // act
         this.setupDataGrid({
             filterSyncEnabled: true,
             dataSource: [],
             columns: [{ dataField: "Test", filterValue: 3, defaultFilterOperation: "=", filterValues: [4, 8] }],
-            filterValue: [["Test", "=", 2], "and", ["Test", "anyof", [5, 6]]]
+            filterValue: filterValue
         });
 
         // assert
-        assert.deepEqual(this.getCombinedFilter(true), [
-            ["Test", "=", 4], "or", ["Test", "=", 8]
-        ], "combined filter");
+        assert.deepEqual(this.getCombinedFilter(true), [["Test", "=", 2], "and", [["Test", "=", 5], "or", ["Test", "=", 6]]], "combined filter");
     });
 
     QUnit.test("filterValue & Header Filter & Filter Row (filterSyncEnabled = false)", function(assert) {
@@ -504,7 +505,6 @@ QUnit.module("getCombinedFilter", {
                 ]
             ]]
         });
-
 
         // assert
         assert.deepEqual(this.getCombinedFilter(true), [
@@ -583,22 +583,6 @@ QUnit.module("Sync on initialization", {
             columns: [{
                 dataField: "Test",
                 filterValues: ["2", "3"]
-            }]
-        });
-
-        // assert
-        assert.deepEqual(this.option("filterValue"), ["Test", "anyof", ["2", "3"]], "filterValue");
-    });
-
-    QUnit.test("filterValues has priority over filterValue", function(assert) {
-        // act
-        this.setupDataGrid({
-            filterValue: null,
-            filterSyncEnabled: true,
-            columns: [{
-                dataField: "Test",
-                filterValues: ["2", "3"],
-                filterValue: "1"
             }]
         });
 
