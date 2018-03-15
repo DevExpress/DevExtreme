@@ -1085,7 +1085,7 @@ var commonSeries = {
         /**
         * @name dxChartSeriesTypes_CommonSeries_aggregation_method
         * @publicName method
-        * @type ChartSeriesAggregationMethod
+        * @type Enums.ChartSeriesAggregationMethod
         */
         method: undefined,
         /**
