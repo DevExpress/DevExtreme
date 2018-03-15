@@ -440,7 +440,7 @@
         bottom: 0;
         height: 2px;
         background-color: ~"@{@{widgetName}-focused-border-color}";
-        left: @MATERIAL_GRID_BASE_CELL_HORIZONTAL_PADDING + 1;
+        left: @MATERIAL_GRID_BASE_CELL_HORIZONTAL_PADDING;
         right: @MATERIAL_GRID_BASE_CELL_HORIZONTAL_PADDING + 1;
     }
 
@@ -852,19 +852,21 @@
 
     .dx-@{widgetName}-revert-tooltip {
         .dx-overlay-content {
-            background-color: ~"@{@{widgetName}-base-background-color}";
+            background-color: transparent;
             min-width: inherit;
         }
 
         .dx-revert-button {
-            margin: 0px 1px;
-            margin-left: 1px;
-            .dx-button-styling( @button-danger-bg, @button-danger-color, @button-danger-hover-bg, @button-danger-focused-bg, @button-danger-active-bg, @button-danger-icon-color );
-            > .dx-button-content {
-                padding: @MATERIAL_GRID_BASE_CELL_VERTICAL_PADDING;
+            .dx-button-sizing(2px, 18px, 0);
+            .dx-button-styling(@button-danger-bg, @button-danger-color, @button-danger-bg, @button-danger-bg, @button-danger-bg, @button-danger-color);
+            margin: 0 0 0 1px;
+            height: @MATERIAL_GRID_BASE_CELL_HEIGHT;
+            box-shadow: none;
+            min-width: inherit;
+
+            &.dx-state-hover {
+                box-shadow: none;
             }
-
-
         }
     }
 
