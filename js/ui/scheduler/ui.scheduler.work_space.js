@@ -21,6 +21,7 @@ var $ = require("../../core/renderer"),
     pointerEvents = require("../../events/pointer"),
     errors = require("../widget/ui.errors"),
     clickEvent = require("../../events/click"),
+    contextMenuEvent = require("../../events/contextmenu"),
     dragEvents = require("../../events/drag"),
     Scrollable = require("../scroll_view/ui.scrollable"),
     tableCreator = require("./ui.scheduler.table_creator"),
@@ -413,6 +414,9 @@ var SchedulerWorkSpace = Widget.inherit({
                 break;
             case "onCellClick":
                 this._createCellClickAction();
+                break;
+            case "onCellContextMenu":
+                this._attachContextMenuEvent();
                 break;
             case "intervalCount":
                 this._cleanWorkSpace();
@@ -857,6 +861,11 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _attachEvents: function() {
+        this._attachClickEvent();
+        this._attachContextMenuEvent();
+    },
+
+    _attachClickEvent: function() {
         var that = this;
         var pointerDownAction = this._createAction(function(e) {
             that._pointerDownHandler(e.event);
@@ -932,6 +941,24 @@ var SchedulerWorkSpace = Widget.inherit({
         extend(args, lastCellData.groups);
 
         this.notifyObserver("showAddAppointmentPopup", args);
+    },
+
+    _attachContextMenuEvent: function() {
+        this._createContextMenuAction();
+
+        var cellSelector = "." + DATE_TABLE_CELL_CLASS + ",." + ALL_DAY_TABLE_CELL_CLASS,
+            $element = this.$element(),
+            eventName = eventUtils.addNamespace(contextMenuEvent.name, this.NAME);
+
+        eventsEngine.off($element, eventName, cellSelector);
+        eventsEngine.on($element, eventName, cellSelector, (function(e) {
+            var $cell = $(e.target);
+            this._contextMenuAction({ event: e, cellElement: getPublicElement($cell), cellData: this.getCellData($cell) });
+        }).bind(this));
+    },
+
+    _createContextMenuAction: function() {
+        this._contextMenuAction = this._createActionByOption("onCellContextMenu");
     },
 
     _getGroupHeaderContainer: function() {

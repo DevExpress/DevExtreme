@@ -296,6 +296,12 @@ var MultiView = CollectionWidget.inherit({
         }
     },
 
+    _refreshItem: function($item, item) {
+        this.callBase($item, item);
+
+        this._updateItemsVisibility(this.option("selectedIndex"));
+    },
+
     _setAriaSelected: noop,
 
     _updateSelection: function(addedSelection, removedSelection) {

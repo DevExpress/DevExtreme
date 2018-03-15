@@ -11,11 +11,11 @@
 */
 var CommonPolarChartSeries = {
     /**
-	* @name dxPolarChartSeriesTypes_CommonPolarChartSeries_color
-	* @publicName color
-	* @type string
-	* @default undefined
-	*/
+    * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_color
+    * @publicName color
+    * @type string
+    * @default undefined
+    */
     color: undefined,
     /**
      * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_closed
@@ -26,11 +26,11 @@ var CommonPolarChartSeries = {
      */
     closed: true,
     /**
-	* @name dxPolarChartSeriesTypes_CommonPolarChartSeries_visible
-	* @publicName visible
-	* @type boolean
-	* @default true
-	*/
+    * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_visible
+    * @publicName visible
+    * @type boolean
+    * @default true
+    */
     visible: true,
     /**
     * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_opacity
@@ -41,151 +41,151 @@ var CommonPolarChartSeries = {
     */
     opacity: 0.5,
     /**
-	* @name dxPolarChartSeriesTypes_CommonPolarChartSeries_width
-	* @publicName width
-	* @type number
-	* @default 2
-	* @propertyOf dxPolarChartSeriesTypes_linepolarseries
-	*/
+    * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_width
+    * @publicName width
+    * @type number
+    * @default 2
+    * @propertyOf dxPolarChartSeriesTypes_linepolarseries
+    */
     width: 2,
     /**
-	* @name dxPolarChartSeriesTypes_CommonPolarChartSeries_dashstyle
-	* @publicName dashStyle
-	* @type Enums.DashStyle
-	* @default 'solid'
-		* @propertyOf dxPolarChartSeriesTypes_linepolarseries
-	*/
+    * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_dashstyle
+    * @publicName dashStyle
+    * @type Enums.DashStyle
+    * @default 'solid'
+        * @propertyOf dxPolarChartSeriesTypes_linepolarseries
+    */
     dashStyle: 'solid',
     /**
-	* @name dxPolarChartSeriesTypes_CommonPolarChartSeries_stack
-	* @publicName stack
-	* @type string
-	* @default 'default'
-	* @propertyOf dxPolarChartSeriesTypes_stackedbarpolarseries
-	*/
+    * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_stack
+    * @publicName stack
+    * @type string
+    * @default 'default'
+    * @propertyOf dxPolarChartSeriesTypes_stackedbarpolarseries
+    */
     stack: 'default',
     /**
-	* @name dxPolarChartSeriesTypes_CommonPolarChartSeries_axis
-	* @publicName axis
-	* @type string
-	* @default undefined
+    * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_axis
+    * @publicName axis
+    * @type string
+    * @default undefined
     * @hidden
-	*/
+    */
     axis: undefined,
     /**
-	* @name dxPolarChartSeriesTypes_CommonPolarChartSeries_valuefield
-	* @publicName valueField
-	* @type string
-	* @default 'val'
+    * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_valuefield
+    * @publicName valueField
+    * @type string
+    * @default 'val'
     * @notUsedInTheme
-	*/
+    */
     valueField: 'val',
     /**
-	* @name dxPolarChartSeriesTypes_CommonPolarChartSeries_argumentfield
-	* @publicName argumentField
-	* @type string
-	* @default 'arg'
+    * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_argumentfield
+    * @publicName argumentField
+    * @type string
+    * @default 'arg'
     * @notUsedInTheme
-	*/
+    */
     argumentField: 'arg',
     /**
-	* @name dxPolarChartSeriesTypes_CommonPolarChartSeries_tagfield
-	* @publicName tagField
-	* @type string
-	* @default 'tag'
+    * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_tagfield
+    * @publicName tagField
+    * @type string
+    * @default 'tag'
     * @notUsedInTheme
-	*/
+    */
     tagField: 'tag',
     /**
-	* @name dxPolarChartSeriesTypes_CommonPolarChartSeries_border
-	* @publicName border
-	* @type object
-	* @propertyOf dxPolarChartSeriesTypes_areapolarseries,dxPolarChartSeriesTypes_barpolarseries,dxPolarChartSeriesTypes_stackedbarpolarseries
-	*/
+    * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_border
+    * @publicName border
+    * @type object
+    * @propertyOf dxPolarChartSeriesTypes_areapolarseries,dxPolarChartSeriesTypes_barpolarseries,dxPolarChartSeriesTypes_stackedbarpolarseries
+    */
     border: {
         /**
-		* @name dxPolarChartSeriesTypes_CommonPolarChartSeries_border_visible
-		* @publicName visible
-		* @type boolean
-		* @default false
-		* @propertyOf dxPolarChartSeriesTypes_areapolarseries,dxPolarChartSeriesTypes_barpolarseries,dxPolarChartSeriesTypes_stackedbarpolarseries
-		*/
+        * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_border_visible
+        * @publicName visible
+        * @type boolean
+        * @default false
+        * @propertyOf dxPolarChartSeriesTypes_areapolarseries,dxPolarChartSeriesTypes_barpolarseries,dxPolarChartSeriesTypes_stackedbarpolarseries
+        */
         visible: false,
         /**
-		* @name dxPolarChartSeriesTypes_CommonPolarChartSeries_border_width
-		* @publicName width
-		* @type number
-		* @default 2
-		* @propertyOf dxPolarChartSeriesTypes_areapolarseries,dxPolarChartSeriesTypes_barpolarseries,dxPolarChartSeriesTypes_stackedbarpolarseries
-		*/
+        * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_border_width
+        * @publicName width
+        * @type number
+        * @default 2
+        * @propertyOf dxPolarChartSeriesTypes_areapolarseries,dxPolarChartSeriesTypes_barpolarseries,dxPolarChartSeriesTypes_stackedbarpolarseries
+        */
         width: 2,
         /**
-		* @name dxPolarChartSeriesTypes_CommonPolarChartSeries_border_color
-		* @publicName color
-		* @type string
-		* @default undefined
-		* @propertyOf dxPolarChartSeriesTypes_areapolarseries,dxPolarChartSeriesTypes_barpolarseries,dxPolarChartSeriesTypes_stackedbarpolarseries
-		*/
+        * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_border_color
+        * @publicName color
+        * @type string
+        * @default undefined
+        * @propertyOf dxPolarChartSeriesTypes_areapolarseries,dxPolarChartSeriesTypes_barpolarseries,dxPolarChartSeriesTypes_stackedbarpolarseries
+        */
         color: undefined,
         /**
-	    * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_border_dashstyle
-	    * @publicName dashStyle
-	    * @type Enums.DashStyle
-	    * @default undefined
-		    * @propertyOf dxPolarChartSeriesTypes_areapolarseries,dxPolarChartSeriesTypes_barpolarseries,dxPolarChartSeriesTypes_stackedbarpolarseries
-	    */
+        * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_border_dashstyle
+        * @publicName dashStyle
+        * @type Enums.DashStyle
+        * @default undefined
+            * @propertyOf dxPolarChartSeriesTypes_areapolarseries,dxPolarChartSeriesTypes_barpolarseries,dxPolarChartSeriesTypes_stackedbarpolarseries
+        */
         dashStyle: undefined
     },
     /**
-	* @name dxPolarChartSeriesTypes_CommonPolarChartSeries_hovermode
-	* @publicName hoverMode
-	* @type Enums.ChartSeriesHoverMode
-	* @propertyOf dxPolarChartSeriesTypes_areapolarseries,dxPolarChartSeriesTypes_barpolarseries,dxPolarChartSeriesTypes_stackedbarpolarseries,dxPolarChartSeriesTypes_linepolarseries
-		*/
+    * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_hovermode
+    * @publicName hoverMode
+    * @type Enums.ChartSeriesHoverMode
+    * @propertyOf dxPolarChartSeriesTypes_areapolarseries,dxPolarChartSeriesTypes_barpolarseries,dxPolarChartSeriesTypes_stackedbarpolarseries,dxPolarChartSeriesTypes_linepolarseries
+        */
     hoverMode: 'nearestPoint',
     /**
-	* @name dxPolarChartSeriesTypes_CommonPolarChartSeries_selectionmode
-	* @publicName selectionMode
-	* @type Enums.ChartSeriesSelectionMode
-	* @propertyOf dxPolarChartSeriesTypes_areapolarseries,dxPolarChartSeriesTypes_barpolarseries,dxPolarChartSeriesTypes_stackedbarpolarseries,dxPolarChartSeriesTypes_linepolarseries
-		*/
+    * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_selectionmode
+    * @publicName selectionMode
+    * @type Enums.ChartSeriesSelectionMode
+    * @propertyOf dxPolarChartSeriesTypes_areapolarseries,dxPolarChartSeriesTypes_barpolarseries,dxPolarChartSeriesTypes_stackedbarpolarseries,dxPolarChartSeriesTypes_linepolarseries
+        */
     selectionMode: 'includePoints',
     /**
-	* @name dxPolarChartSeriesTypes_CommonPolarChartSeries_hoverstyle
-	* @publicName hoverStyle
-	* @propertyOf dxPolarChartSeriesTypes_areapolarseries,dxPolarChartSeriesTypes_barpolarseries,dxPolarChartSeriesTypes_stackedbarpolarseries,dxPolarChartSeriesTypes_linepolarseries
-	* @type object
-	*/
+    * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_hoverstyle
+    * @publicName hoverStyle
+    * @propertyOf dxPolarChartSeriesTypes_areapolarseries,dxPolarChartSeriesTypes_barpolarseries,dxPolarChartSeriesTypes_stackedbarpolarseries,dxPolarChartSeriesTypes_linepolarseries
+    * @type object
+    */
     hoverStyle: {
         /**
-		* @name dxPolarChartSeriesTypes_CommonPolarChartSeries_hoverstyle_color
-		* @publicName color
-		* @type string
-		* @default undefined
-		*/
+        * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_hoverstyle_color
+        * @publicName color
+        * @type string
+        * @default undefined
+        */
         color: undefined,
         /**
-		* @name dxPolarChartSeriesTypes_CommonPolarChartSeries_hoverstyle_width
-		* @publicName width
-		* @type number
-		* @default 3
-		* @propertyOf dxPolarChartSeriesTypes_linepolarseries
-		*/
+        * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_hoverstyle_width
+        * @publicName width
+        * @type number
+        * @default 3
+        * @propertyOf dxPolarChartSeriesTypes_linepolarseries
+        */
         width: 3,
         /**
-		* @name dxPolarChartSeriesTypes_CommonPolarChartSeries_hoverstyle_dashstyle
-		* @publicName dashStyle
-		* @type Enums.DashStyle
-		* @default 'solid'
-				* @propertyOf dxPolarChartSeriesTypes_linepolarseries
-		*/
+        * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_hoverstyle_dashstyle
+        * @publicName dashStyle
+        * @type Enums.DashStyle
+        * @default 'solid'
+                * @propertyOf dxPolarChartSeriesTypes_linepolarseries
+        */
         dashStyle: 'solid',
         /**
-		* @name dxPolarChartSeriesTypes_CommonPolarChartSeries_hoverstyle_hatching
-		* @publicName hatching
-		* @type object
-		* @propertyOf dxPolarChartSeriesTypes_areapolarseries,dxPolarChartSeriesTypes_barpolarseries,dxPolarChartSeriesTypes_stackedbarpolarseries
-		*/
+        * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_hoverstyle_hatching
+        * @publicName hatching
+        * @type object
+        * @propertyOf dxPolarChartSeriesTypes_areapolarseries,dxPolarChartSeriesTypes_barpolarseries,dxPolarChartSeriesTypes_stackedbarpolarseries
+        */
         hatching: {
             /**
             * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_hoverstyle_hatching_direction
@@ -195,18 +195,18 @@ var CommonPolarChartSeries = {
             */
             direction: 'right',
             /**
-			* @name dxPolarChartSeriesTypes_CommonPolarChartSeries_hoverstyle_hatching_width
-			* @publicName width
-			* @type number
-			* @default 2
-			*/
+            * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_hoverstyle_hatching_width
+            * @publicName width
+            * @type number
+            * @default 2
+            */
             width: 2,
             /**
-			* @name dxPolarChartSeriesTypes_CommonPolarChartSeries_hoverstyle_hatching_step
-			* @publicName step
-			* @type number
-			* @default 6
-			*/
+            * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_hoverstyle_hatching_step
+            * @publicName step
+            * @type number
+            * @default 6
+            */
             step: 6,
             /**
             * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_hoverstyle_hatching_opacity
@@ -217,78 +217,78 @@ var CommonPolarChartSeries = {
             opacity: 0.75
         },
         /**
-		* @name dxPolarChartSeriesTypes_CommonPolarChartSeries_hoverstyle_border
-		* @publicName border
-		* @type object
-		* @propertyOf dxPolarChartSeriesTypes_areapolarseries,dxPolarChartSeriesTypes_barpolarseries,dxPolarChartSeriesTypes_stackedbarpolarseries
-		*/
+        * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_hoverstyle_border
+        * @publicName border
+        * @type object
+        * @propertyOf dxPolarChartSeriesTypes_areapolarseries,dxPolarChartSeriesTypes_barpolarseries,dxPolarChartSeriesTypes_stackedbarpolarseries
+        */
         border: {
             /**
-			* @name dxPolarChartSeriesTypes_CommonPolarChartSeries_hoverstyle_border_visible
-			* @publicName visible
-			* @type boolean
-			* @default false
-			*/
+            * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_hoverstyle_border_visible
+            * @publicName visible
+            * @type boolean
+            * @default false
+            */
             visible: false,
             /**
-			* @name dxPolarChartSeriesTypes_CommonPolarChartSeries_hoverstyle_border_width
-			* @publicName width
-			* @type number
-			* @default 3
-			*/
+            * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_hoverstyle_border_width
+            * @publicName width
+            * @type number
+            * @default 3
+            */
             width: 3,
             /**
-			* @name dxPolarChartSeriesTypes_CommonPolarChartSeries_hoverstyle_border_color
-			* @publicName color
-			* @type string
-			* @default undefined
-			*/
+            * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_hoverstyle_border_color
+            * @publicName color
+            * @type string
+            * @default undefined
+            */
             color: undefined,
             /**
-		    * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_hoverstyle_border_dashstyle
-		    * @publicName dashStyle
-		    * @type Enums.DashStyle
-		    * @default 'solid'
-				    */
+            * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_hoverstyle_border_dashstyle
+            * @publicName dashStyle
+            * @type Enums.DashStyle
+            * @default 'solid'
+                    */
             dashStyle: 'solid'
         }
     },
     /**
-	* @name dxPolarChartSeriesTypes_CommonPolarChartSeries_selectionstyle
-	* @publicName selectionStyle
-	* @propertyOf dxPolarChartSeriesTypes_areapolarseries,dxPolarChartSeriesTypes_barpolarseries,dxPolarChartSeriesTypes_stackedbarpolarseries,dxPolarChartSeriesTypes_linepolarseries
-	* @type object
-	*/
+    * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_selectionstyle
+    * @publicName selectionStyle
+    * @propertyOf dxPolarChartSeriesTypes_areapolarseries,dxPolarChartSeriesTypes_barpolarseries,dxPolarChartSeriesTypes_stackedbarpolarseries,dxPolarChartSeriesTypes_linepolarseries
+    * @type object
+    */
     selectionStyle: {
         /**
-		* @name dxPolarChartSeriesTypes_CommonPolarChartSeries_selectionstyle_color
-		* @publicName color
-		* @type string
-		* @default undefined
-		*/
+        * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_selectionstyle_color
+        * @publicName color
+        * @type string
+        * @default undefined
+        */
         color: undefined,
         /**
-		* @name dxPolarChartSeriesTypes_CommonPolarChartSeries_selectionstyle_width
-		* @publicName width
-		* @type number
-		* @default 3
-		* @propertyOf dxPolarChartSeriesTypes_linepolarseries
-		*/
+        * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_selectionstyle_width
+        * @publicName width
+        * @type number
+        * @default 3
+        * @propertyOf dxPolarChartSeriesTypes_linepolarseries
+        */
         width: 3,
         /**
-		* @name dxPolarChartSeriesTypes_CommonPolarChartSeries_selectionstyle_dashstyle
-		* @publicName dashStyle
-		* @type Enums.DashStyle
-		* @default 'solid'
-				* @propertyOf dxPolarChartSeriesTypes_linepolarseries
-		*/
+        * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_selectionstyle_dashstyle
+        * @publicName dashStyle
+        * @type Enums.DashStyle
+        * @default 'solid'
+                * @propertyOf dxPolarChartSeriesTypes_linepolarseries
+        */
         dashStyle: 'solid',
         /**
-		* @name dxPolarChartSeriesTypes_CommonPolarChartSeries_selectionstyle_hatching
-		* @publicName hatching
-		* @type object
-		* @propertyOf dxPolarChartSeriesTypes_areapolarseries,dxPolarChartSeriesTypes_barpolarseries,dxPolarChartSeriesTypes_stackedbarpolarseries
-		*/
+        * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_selectionstyle_hatching
+        * @publicName hatching
+        * @type object
+        * @propertyOf dxPolarChartSeriesTypes_areapolarseries,dxPolarChartSeriesTypes_barpolarseries,dxPolarChartSeriesTypes_stackedbarpolarseries
+        */
         hatching: {
             /**
             * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_selectionstyle_hatching_direction
@@ -298,18 +298,18 @@ var CommonPolarChartSeries = {
             */
             direction: 'right',
             /**
-			* @name dxPolarChartSeriesTypes_CommonPolarChartSeries_selectionstyle_hatching_width
-			* @publicName width
-			* @type number
-			* @default 2
-			*/
+            * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_selectionstyle_hatching_width
+            * @publicName width
+            * @type number
+            * @default 2
+            */
             width: 2,
             /**
-			* @name dxPolarChartSeriesTypes_CommonPolarChartSeries_selectionstyle_hatching_step
-			* @publicName step
-			* @type number
-			* @default 6
-			*/
+            * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_selectionstyle_hatching_step
+            * @publicName step
+            * @type number
+            * @default 6
+            */
             step: 6,
             /**
             * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_selectionstyle_hatching_opacity
@@ -320,95 +320,95 @@ var CommonPolarChartSeries = {
             opacity: 0.5
         },
         /**
-		* @name dxPolarChartSeriesTypes_CommonPolarChartSeries_selectionstyle_border
-		* @publicName border
-		* @type object
-		* @propertyOf dxPolarChartSeriesTypes_areapolarseries,dxPolarChartSeriesTypes_barpolarseries,dxPolarChartSeriesTypes_stackedbarpolarseries
-		*/
+        * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_selectionstyle_border
+        * @publicName border
+        * @type object
+        * @propertyOf dxPolarChartSeriesTypes_areapolarseries,dxPolarChartSeriesTypes_barpolarseries,dxPolarChartSeriesTypes_stackedbarpolarseries
+        */
         border: {
             /**
-			* @name dxPolarChartSeriesTypes_CommonPolarChartSeries_selectionstyle_border_visible
-			* @publicName visible
-			* @type boolean
-			* @default false
-			*/
+            * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_selectionstyle_border_visible
+            * @publicName visible
+            * @type boolean
+            * @default false
+            */
             visible: false,
             /**
-			* @name dxPolarChartSeriesTypes_CommonPolarChartSeries_selectionstyle_border_width
-			* @publicName width
-			* @type number
-			* @default 3
-			*/
+            * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_selectionstyle_border_width
+            * @publicName width
+            * @type number
+            * @default 3
+            */
             width: 3,
             /**
-			* @name dxPolarChartSeriesTypes_CommonPolarChartSeries_selectionstyle_border_color
-			* @publicName color
-			* @type string
-			* @default undefined
-			*/
+            * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_selectionstyle_border_color
+            * @publicName color
+            * @type string
+            * @default undefined
+            */
             color: undefined,
             /**
-		    * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_selectionstyle_border_dashstyle
-		    * @publicName dashStyle
-		    * @type Enums.DashStyle
-		    * @default 'solid'
-				    */
+            * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_selectionstyle_border_dashstyle
+            * @publicName dashStyle
+            * @type Enums.DashStyle
+            * @default 'solid'
+                    */
             dashStyle: 'solid'
         }
     },
     /**
-	* @name dxPolarChartSeriesTypes_CommonPolarChartSeries_point
-	* @publicName point
-	* @type object
-	* @propertyOf dxPolarChartSeriesTypes_linepolarseries,dxPolarChartSeriesTypes_areapolarseries,dxPolarChartSeriesTypes_scatterpolarseries
-	*/
+    * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_point
+    * @publicName point
+    * @type object
+    * @propertyOf dxPolarChartSeriesTypes_linepolarseries,dxPolarChartSeriesTypes_areapolarseries,dxPolarChartSeriesTypes_scatterpolarseries
+    */
     point: {
         /**
-		* @name dxPolarChartSeriesTypes_CommonPolarChartSeries_point_hovermode
-		* @publicName hoverMode
-		* @type Enums.ChartPointInteractionMode
-		        * @default 'onlyPoint'
-		* @propertyOf dxPolarChartSeriesTypes_linepolarseries,dxPolarChartSeriesTypes_areapolarseries,dxPolarChartSeriesTypes_scatterpolarseries
-		*/
+        * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_point_hovermode
+        * @publicName hoverMode
+        * @type Enums.ChartPointInteractionMode
+                * @default 'onlyPoint'
+        * @propertyOf dxPolarChartSeriesTypes_linepolarseries,dxPolarChartSeriesTypes_areapolarseries,dxPolarChartSeriesTypes_scatterpolarseries
+        */
         hoverMode: 'onlyPoint',
         /**
-		* @name dxPolarChartSeriesTypes_CommonPolarChartSeries_point_selectionmode
-		* @publicName selectionMode
-		* @type Enums.ChartPointInteractionMode
-		        * @default 'onlyPoint'
-		* @propertyOf dxPolarChartSeriesTypes_linepolarseries,dxPolarChartSeriesTypes_areapolarseries,dxPolarChartSeriesTypes_scatterpolarseries
-		*/
+        * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_point_selectionmode
+        * @publicName selectionMode
+        * @type Enums.ChartPointInteractionMode
+                * @default 'onlyPoint'
+        * @propertyOf dxPolarChartSeriesTypes_linepolarseries,dxPolarChartSeriesTypes_areapolarseries,dxPolarChartSeriesTypes_scatterpolarseries
+        */
         selectionMode: 'onlyPoint',
         /**
-		* @name dxPolarChartSeriesTypes_CommonPolarChartSeries_point_color
-		* @publicName color
-		* @type string
-		* @default undefined
-		* @propertyOf dxPolarChartSeriesTypes_linepolarseries,dxPolarChartSeriesTypes_areapolarseries,dxPolarChartSeriesTypes_scatterpolarseries
-		*/
+        * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_point_color
+        * @publicName color
+        * @type string
+        * @default undefined
+        * @propertyOf dxPolarChartSeriesTypes_linepolarseries,dxPolarChartSeriesTypes_areapolarseries,dxPolarChartSeriesTypes_scatterpolarseries
+        */
         color: undefined,
         /**
-		* @name dxPolarChartSeriesTypes_CommonPolarChartSeries_point_visible
-		* @publicName visible
-		* @type boolean
-		* @default true
-		* @propertyOf dxPolarChartSeriesTypes_linepolarseries,dxPolarChartSeriesTypes_areapolarseries,dxPolarChartSeriesTypes_scatterpolarseries
-		*/
+        * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_point_visible
+        * @publicName visible
+        * @type boolean
+        * @default true
+        * @propertyOf dxPolarChartSeriesTypes_linepolarseries,dxPolarChartSeriesTypes_areapolarseries,dxPolarChartSeriesTypes_scatterpolarseries
+        */
         visible: true,
         /**
-		* @name dxPolarChartSeriesTypes_CommonPolarChartSeries_point_symbol
-		* @publicName symbol
-		* @type Enums.VizPointSymbol
-		* @default 'circle'
-				* @propertyOf dxPolarChartSeriesTypes_linepolarseries,dxPolarChartSeriesTypes_areapolarseries,dxPolarChartSeriesTypes_scatterpolarseries
-		*/
+        * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_point_symbol
+        * @publicName symbol
+        * @type Enums.VizPointSymbol
+        * @default 'circle'
+                * @propertyOf dxPolarChartSeriesTypes_linepolarseries,dxPolarChartSeriesTypes_areapolarseries,dxPolarChartSeriesTypes_scatterpolarseries
+        */
         symbol: 'circle',
         /**
-		* @name dxPolarChartSeriesTypes_CommonPolarChartSeries_point_image
-		* @publicName image
-		* @type string|object
-		* @default undefined
-		* @propertyOf dxPolarChartSeriesTypes_linepolarseries,dxPolarChartSeriesTypes_areapolarseries,dxPolarChartSeriesTypes_scatterpolarseries
+        * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_point_image
+        * @publicName image
+        * @type string|object
+        * @default undefined
+        * @propertyOf dxPolarChartSeriesTypes_linepolarseries,dxPolarChartSeriesTypes_areapolarseries,dxPolarChartSeriesTypes_scatterpolarseries
         */
         image: {
             /**
@@ -437,186 +437,186 @@ var CommonPolarChartSeries = {
             height: 30,
         },
         /**
-		* @name dxPolarChartSeriesTypes_CommonPolarChartSeries_point_border
-		* @publicName border
-		* @type object
-		* @propertyOf dxPolarChartSeriesTypes_linepolarseries,dxPolarChartSeriesTypes_areapolarseries,dxPolarChartSeriesTypes_scatterpolarseries
-		*/
+        * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_point_border
+        * @publicName border
+        * @type object
+        * @propertyOf dxPolarChartSeriesTypes_linepolarseries,dxPolarChartSeriesTypes_areapolarseries,dxPolarChartSeriesTypes_scatterpolarseries
+        */
         border: {
             /**
-			* @name dxPolarChartSeriesTypes_CommonPolarChartSeries_point_border_visible
-			* @publicName visible
-			* @type boolean
-			* @default false
-			* @propertyOf dxPolarChartSeriesTypes_linepolarseries,dxPolarChartSeriesTypes_areapolarseries,dxPolarChartSeriesTypes_scatterpolarseries
-			*/
+            * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_point_border_visible
+            * @publicName visible
+            * @type boolean
+            * @default false
+            * @propertyOf dxPolarChartSeriesTypes_linepolarseries,dxPolarChartSeriesTypes_areapolarseries,dxPolarChartSeriesTypes_scatterpolarseries
+            */
             visible: false,
             /**
-			* @name dxPolarChartSeriesTypes_CommonPolarChartSeries_point_border_width
-			* @publicName width
-			* @type number
-			* @default 1
-			* @propertyOf dxPolarChartSeriesTypes_linepolarseries,dxPolarChartSeriesTypes_areapolarseries,dxPolarChartSeriesTypes_scatterpolarseries
-			*/
+            * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_point_border_width
+            * @publicName width
+            * @type number
+            * @default 1
+            * @propertyOf dxPolarChartSeriesTypes_linepolarseries,dxPolarChartSeriesTypes_areapolarseries,dxPolarChartSeriesTypes_scatterpolarseries
+            */
             width: 1,
             /**
-			* @name dxPolarChartSeriesTypes_CommonPolarChartSeries_point_border_color
-			* @publicName color
-			* @type string
-			* @default undefined
-			* @propertyOf dxPolarChartSeriesTypes_linepolarseries,dxPolarChartSeriesTypes_areapolarseries,dxPolarChartSeriesTypes_scatterpolarseries
-			*/
+            * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_point_border_color
+            * @publicName color
+            * @type string
+            * @default undefined
+            * @propertyOf dxPolarChartSeriesTypes_linepolarseries,dxPolarChartSeriesTypes_areapolarseries,dxPolarChartSeriesTypes_scatterpolarseries
+            */
             color: undefined
         },
         /**
-		* @name dxPolarChartSeriesTypes_CommonPolarChartSeries_point_size
-		* @publicName size
-		* @type number
-		* @default 12
-		* @propertyOf dxPolarChartSeriesTypes_linepolarseries,dxPolarChartSeriesTypes_areapolarseries,dxPolarChartSeriesTypes_scatterpolarseries
-		*/
+        * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_point_size
+        * @publicName size
+        * @type number
+        * @default 12
+        * @propertyOf dxPolarChartSeriesTypes_linepolarseries,dxPolarChartSeriesTypes_areapolarseries,dxPolarChartSeriesTypes_scatterpolarseries
+        */
         size: 12,
         /**
-		* @name dxPolarChartSeriesTypes_CommonPolarChartSeries_point_hoverstyle
-		* @publicName hoverStyle
-		* @type object
-		* @propertyOf dxPolarChartSeriesTypes_linepolarseries,dxPolarChartSeriesTypes_areapolarseries,dxPolarChartSeriesTypes_scatterpolarseries
-		*/
+        * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_point_hoverstyle
+        * @publicName hoverStyle
+        * @type object
+        * @propertyOf dxPolarChartSeriesTypes_linepolarseries,dxPolarChartSeriesTypes_areapolarseries,dxPolarChartSeriesTypes_scatterpolarseries
+        */
         hoverStyle: {
             /**
-			* @name dxPolarChartSeriesTypes_CommonPolarChartSeries_point_hoverstyle_color
-			* @publicName color
-			* @type string
-			* @default undefined
-			* @propertyOf dxPolarChartSeriesTypes_linepolarseries,dxPolarChartSeriesTypes_areapolarseries,dxPolarChartSeriesTypes_scatterpolarseries
-			*/
+            * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_point_hoverstyle_color
+            * @publicName color
+            * @type string
+            * @default undefined
+            * @propertyOf dxPolarChartSeriesTypes_linepolarseries,dxPolarChartSeriesTypes_areapolarseries,dxPolarChartSeriesTypes_scatterpolarseries
+            */
             color: undefined,
             /**
-			* @name dxPolarChartSeriesTypes_CommonPolarChartSeries_point_hoverstyle_border
-			* @publicName border
-			* @type object
-			* @propertyOf dxPolarChartSeriesTypes_linepolarseries,dxPolarChartSeriesTypes_areapolarseries,dxPolarChartSeriesTypes_scatterpolarseries
-			*/
+            * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_point_hoverstyle_border
+            * @publicName border
+            * @type object
+            * @propertyOf dxPolarChartSeriesTypes_linepolarseries,dxPolarChartSeriesTypes_areapolarseries,dxPolarChartSeriesTypes_scatterpolarseries
+            */
             border: {
                 /**
-				* @name dxPolarChartSeriesTypes_CommonPolarChartSeries_point_hoverstyle_border_visible
-				* @publicName visible
-				* @type boolean
-				* @default true
-	            * @propertyOf dxPolarChartSeriesTypes_linepolarseries,dxPolarChartSeriesTypes_areapolarseries,dxPolarChartSeriesTypes_scatterpolarseries
-				*/
+                * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_point_hoverstyle_border_visible
+                * @publicName visible
+                * @type boolean
+                * @default true
+                * @propertyOf dxPolarChartSeriesTypes_linepolarseries,dxPolarChartSeriesTypes_areapolarseries,dxPolarChartSeriesTypes_scatterpolarseries
+                */
                 visible: true,
                 /**
-				* @name dxPolarChartSeriesTypes_CommonPolarChartSeries_point_hoverstyle_border_width
-				* @publicName width
-				* @type number
-				* @default 4
-	            * @propertyOf dxPolarChartSeriesTypes_linepolarseries,dxPolarChartSeriesTypes_areapolarseries,dxPolarChartSeriesTypes_scatterpolarseries
-				*/
+                * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_point_hoverstyle_border_width
+                * @publicName width
+                * @type number
+                * @default 4
+                * @propertyOf dxPolarChartSeriesTypes_linepolarseries,dxPolarChartSeriesTypes_areapolarseries,dxPolarChartSeriesTypes_scatterpolarseries
+                */
                 width: 4,
                 /**
-				* @name dxPolarChartSeriesTypes_CommonPolarChartSeries_point_hoverstyle_border_color
-				* @publicName color
-				* @type string
-				* @default undefined
-	            * @propertyOf dxPolarChartSeriesTypes_linepolarseries,dxPolarChartSeriesTypes_areapolarseries,dxPolarChartSeriesTypes_scatterpolarseries
-				*/
+                * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_point_hoverstyle_border_color
+                * @publicName color
+                * @type string
+                * @default undefined
+                * @propertyOf dxPolarChartSeriesTypes_linepolarseries,dxPolarChartSeriesTypes_areapolarseries,dxPolarChartSeriesTypes_scatterpolarseries
+                */
                 color: undefined
             },
             /**
-			* @name dxPolarChartSeriesTypes_CommonPolarChartSeries_point_hoverstyle_size
-			* @publicName size
-			* @type number
-			* @default 12
-			* @propertyOf dxPolarChartSeriesTypes_linepolarseries,dxPolarChartSeriesTypes_areapolarseries,dxPolarChartSeriesTypes_scatterpolarseries
-			*/
+            * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_point_hoverstyle_size
+            * @publicName size
+            * @type number
+            * @default 12
+            * @propertyOf dxPolarChartSeriesTypes_linepolarseries,dxPolarChartSeriesTypes_areapolarseries,dxPolarChartSeriesTypes_scatterpolarseries
+            */
             size: 12
         },
         /**
-		* @name dxPolarChartSeriesTypes_CommonPolarChartSeries_point_selectionstyle
-		* @publicName selectionStyle
-		* @type object
-		* @propertyOf dxPolarChartSeriesTypes_linepolarseries,dxPolarChartSeriesTypes_areapolarseries,dxPolarChartSeriesTypes_scatterpolarseries
-		*/
+        * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_point_selectionstyle
+        * @publicName selectionStyle
+        * @type object
+        * @propertyOf dxPolarChartSeriesTypes_linepolarseries,dxPolarChartSeriesTypes_areapolarseries,dxPolarChartSeriesTypes_scatterpolarseries
+        */
         selectionStyle: {
             /**
-			* @name dxPolarChartSeriesTypes_CommonPolarChartSeries_point_selectionstyle_color
-			* @publicName color
-			* @type string
-			* @default undefined
-			* @propertyOf dxPolarChartSeriesTypes_linepolarseries,dxPolarChartSeriesTypes_areapolarseries,dxPolarChartSeriesTypes_scatterpolarseries
-			*/
+            * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_point_selectionstyle_color
+            * @publicName color
+            * @type string
+            * @default undefined
+            * @propertyOf dxPolarChartSeriesTypes_linepolarseries,dxPolarChartSeriesTypes_areapolarseries,dxPolarChartSeriesTypes_scatterpolarseries
+            */
             color: undefined,
             /**
-			* @name dxPolarChartSeriesTypes_CommonPolarChartSeries_point_selectionstyle_border
-			* @publicName border
-			* @type object
-			* @propertyOf dxPolarChartSeriesTypes_linepolarseries,dxPolarChartSeriesTypes_areapolarseries,dxPolarChartSeriesTypes_scatterpolarseries
-			*/
+            * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_point_selectionstyle_border
+            * @publicName border
+            * @type object
+            * @propertyOf dxPolarChartSeriesTypes_linepolarseries,dxPolarChartSeriesTypes_areapolarseries,dxPolarChartSeriesTypes_scatterpolarseries
+            */
             border: {
                 /**
-				* @name dxPolarChartSeriesTypes_CommonPolarChartSeries_point_selectionstyle_border_visible
-				* @publicName visible
-				* @type boolean
-				* @default true
-				* @propertyOf dxPolarChartSeriesTypes_linepolarseries,dxPolarChartSeriesTypes_areapolarseries,dxPolarChartSeriesTypes_scatterpolarseries
-				*/
+                * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_point_selectionstyle_border_visible
+                * @publicName visible
+                * @type boolean
+                * @default true
+                * @propertyOf dxPolarChartSeriesTypes_linepolarseries,dxPolarChartSeriesTypes_areapolarseries,dxPolarChartSeriesTypes_scatterpolarseries
+                */
                 visible: true,
                 /**
-				* @name dxPolarChartSeriesTypes_CommonPolarChartSeries_point_selectionstyle_border_width
-				* @publicName width
-				* @type number
-				* @default 4
-				* @propertyOf dxPolarChartSeriesTypes_linepolarseries,dxPolarChartSeriesTypes_areapolarseries,dxPolarChartSeriesTypes_scatterpolarseries
-				*/
+                * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_point_selectionstyle_border_width
+                * @publicName width
+                * @type number
+                * @default 4
+                * @propertyOf dxPolarChartSeriesTypes_linepolarseries,dxPolarChartSeriesTypes_areapolarseries,dxPolarChartSeriesTypes_scatterpolarseries
+                */
                 width: 4,
                 /**
-				* @name dxPolarChartSeriesTypes_CommonPolarChartSeries_point_selectionstyle_border_color
-				* @publicName color
-				* @type string
-				* @default undefined
-				* @propertyOf dxPolarChartSeriesTypes_linepolarseries,dxPolarChartSeriesTypes_areapolarseries,dxPolarChartSeriesTypes_scatterpolarseries
-				*/
+                * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_point_selectionstyle_border_color
+                * @publicName color
+                * @type string
+                * @default undefined
+                * @propertyOf dxPolarChartSeriesTypes_linepolarseries,dxPolarChartSeriesTypes_areapolarseries,dxPolarChartSeriesTypes_scatterpolarseries
+                */
                 color: undefined
             },
             /**
-			* @name dxPolarChartSeriesTypes_CommonPolarChartSeries_point_selectionstyle_size
-			* @publicName size
-			* @type number
-			* @default 12
-			* @propertyOf dxPolarChartSeriesTypes_linepolarseries,dxPolarChartSeriesTypes_areapolarseries,dxPolarChartSeriesTypes_scatterpolarseries
-			*/
+            * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_point_selectionstyle_size
+            * @publicName size
+            * @type number
+            * @default 12
+            * @propertyOf dxPolarChartSeriesTypes_linepolarseries,dxPolarChartSeriesTypes_areapolarseries,dxPolarChartSeriesTypes_scatterpolarseries
+            */
             size: 12
         }
     },
     /**
-	* @name dxPolarChartSeriesTypes_CommonPolarChartSeries_showinlegend
-	* @publicName showInLegend
-	* @type boolean
-	* @default true
-	*/
+    * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_showinlegend
+    * @publicName showInLegend
+    * @type boolean
+    * @default true
+    */
     showInLegend: true,
     /**
-	* @name dxPolarChartSeriesTypes_CommonPolarChartSeries_maxlabelcount
-	* @publicName maxLabelCount
-	* @type number
-	* @default undefined
-	*/
+    * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_maxlabelcount
+    * @publicName maxLabelCount
+    * @type number
+    * @default undefined
+    */
     maxLabelCount: undefined,
     /**
-	* @name dxPolarChartSeriesTypes_CommonPolarChartSeries_minbarsize
-	* @publicName minBarSize
-	* @type number
-	* @default undefined
-	* @propertyOf dxPolarChartSeriesTypes_stackedbarpolarseries,dxPolarChartSeriesTypes_barpolarseries
-		*/
+    * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_minbarsize
+    * @publicName minBarSize
+    * @type number
+    * @default undefined
+    * @propertyOf dxPolarChartSeriesTypes_stackedbarpolarseries,dxPolarChartSeriesTypes_barpolarseries
+        */
     minBarSize: undefined,
     /**
-	* @name dxPolarChartSeriesTypes_CommonPolarChartSeries_ignoreemptypoints
-	* @publicName ignoreEmptyPoints
-	* @type boolean
-	* @default false
-		*/
+    * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_ignoreemptypoints
+    * @publicName ignoreEmptyPoints
+    * @type boolean
+    * @default false
+        */
     ignoreEmptyPoints: false,
     /**
     * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_barpadding
@@ -635,47 +635,47 @@ var CommonPolarChartSeries = {
     */
     barWidth: undefined,
     /**
-	* @name dxPolarChartSeriesTypes_CommonPolarChartSeries_label
-	* @publicName label
-	* @type object
-	*/
+    * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_label
+    * @publicName label
+    * @type object
+    */
     label: {
         /**
-		* @name dxPolarChartSeriesTypes_CommonPolarChartSeries_label_customizetext
-		* @publicName customizeText
-		* @type function(pointInfo)
+        * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_label_customizetext
+        * @publicName customizeText
+        * @type function(pointInfo)
         * @type_function_param1 pointInfo:object
         * @type_function_return string
         * @notUsedInTheme
-		*/
+        */
         customizeText: undefined,
         /**
-		* @name dxPolarChartSeriesTypes_CommonPolarChartSeries_label_visible
-		* @publicName visible
-		* @type boolean
-		* @default false
-		*/
+        * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_label_visible
+        * @publicName visible
+        * @type boolean
+        * @default false
+        */
         visible: false,
         /**
-		* @name dxPolarChartSeriesTypes_CommonPolarChartSeries_label_showforzerovalues
-		* @publicName showForZeroValues
-		* @type boolean
-		* @default true
-		* @propertyOf dxPolarChartSeriesTypes_barpolarseries,dxPolarChartSeriesTypes_stackedbarpolarseries
-		*/
+        * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_label_showforzerovalues
+        * @publicName showForZeroValues
+        * @type boolean
+        * @default true
+        * @propertyOf dxPolarChartSeriesTypes_barpolarseries,dxPolarChartSeriesTypes_stackedbarpolarseries
+        */
         showForZeroValues: true,
         /**
-		* @name dxPolarChartSeriesTypes_CommonPolarChartSeries_label_rotationangle
-		* @publicName rotationAngle
-		* @type number
-		* @default 0
-		*/
+        * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_label_rotationangle
+        * @publicName rotationAngle
+        * @type number
+        * @default 0
+        */
         rotationAngle: 0,
         /**
-		* @name dxPolarChartSeriesTypes_CommonPolarChartSeries_label_format
-		* @publicName format
-		* @extends CommonVizFormat
-		*/
+        * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_label_format
+        * @publicName format
+        * @extends CommonVizFormat
+        */
         format: '',
         /**
         * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_label_precision
@@ -910,29 +910,29 @@ var areaPolarSeries = {
     */
     point: {
         /**
-		* @name dxPolarChartSeriesTypes_areapolarseries_point_visible
-		* @publicName visible
+        * @name dxPolarChartSeriesTypes_areapolarseries_point_visible
+        * @publicName visible
         * @type boolean
-		* @default false
-		* @inheritdoc
-		*/
+        * @default false
+        * @inheritdoc
+        */
         visible: false
     },
     /**
-	* @name dxPolarChartSeriesTypes_areapolarseries_hovermode
-	* @publicName hoverMode
-	* @type string
-	* @acceptValues 'nearestPoint' | 'includePoints' | 'excludePoints' | 'none'
+    * @name dxPolarChartSeriesTypes_areapolarseries_hovermode
+    * @publicName hoverMode
+    * @type string
+    * @acceptValues 'nearestPoint' | 'includePoints' | 'excludePoints' | 'none'
     * @default 'nearestPoint'
-	*/
+    */
     hoverMode: 'nearestPoint',
     /**
-	* @name dxPolarChartSeriesTypes_areapolarseries_selectionmode
-	* @publicName selectionMode
-	* @type string
-	* @acceptValues 'includePoints' | 'excludePoints' | 'none'
+    * @name dxPolarChartSeriesTypes_areapolarseries_selectionmode
+    * @publicName selectionMode
+    * @type string
+    * @acceptValues 'includePoints' | 'excludePoints' | 'none'
     * @default 'includePoints'
-	*/
+    */
     selectionMode: 'includePoints'
 };
 
@@ -945,20 +945,20 @@ var areaPolarSeries = {
 */
 var barPolarSeries = {
     /**
-	* @name dxPolarChartSeriesTypes_barpolarseries_hovermode
-	* @publicName hoverMode
-	* @type string
-	* @acceptValues 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none'
+    * @name dxPolarChartSeriesTypes_barpolarseries_hovermode
+    * @publicName hoverMode
+    * @type string
+    * @acceptValues 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none'
     * @default 'onlyPoint'
-	*/
+    */
     hoverMode: 'onlyPoint',
     /**
-	* @name dxPolarChartSeriesTypes_barpolarseries_selectionmode
-	* @publicName selectionMode
-	* @type string
-	* @acceptValues 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none'
+    * @name dxPolarChartSeriesTypes_barpolarseries_selectionmode
+    * @publicName selectionMode
+    * @type string
+    * @acceptValues 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none'
     * @default 'onlyPoint'
-	*/
+    */
     selectionMode: 'onlyPoint'
 };
 /**
@@ -970,20 +970,20 @@ var barPolarSeries = {
 */
 var linePolarSeries = {
     /**
-	* @name dxPolarChartSeriesTypes_linepolarseries_hovermode
-	* @publicName hoverMode
-	* @type string
-	* @acceptValues 'nearestPoint' | 'includePoints' | 'excludePoints' | 'none'
+    * @name dxPolarChartSeriesTypes_linepolarseries_hovermode
+    * @publicName hoverMode
+    * @type string
+    * @acceptValues 'nearestPoint' | 'includePoints' | 'excludePoints' | 'none'
     * @default 'excludePoints'
-	*/
+    */
     hoverMode: 'nearestPoint',
     /**
-	* @name dxPolarChartSeriesTypes_linepolarseries_selectionmode
-	* @publicName selectionMode
-	* @type string
-	* @acceptValues 'includePoints' | 'excludePoints' | 'none'
+    * @name dxPolarChartSeriesTypes_linepolarseries_selectionmode
+    * @publicName selectionMode
+    * @type string
+    * @acceptValues 'includePoints' | 'excludePoints' | 'none'
     * @default 'includePoints'
-	*/
+    */
     selectionMode: 'includePoints'
 };
 
@@ -1025,11 +1025,11 @@ var stackedbarPolarSeries = {
     */
     hoverMode: 'onlyPoint',
     /**
-	* @name dxPolarChartSeriesTypes_stackedbarpolarseries_selectionmode
-	* @publicName selectionMode
-	* @type string
-	* @acceptValues 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none'
+    * @name dxPolarChartSeriesTypes_stackedbarpolarseries_selectionmode
+    * @publicName selectionMode
+    * @type string
+    * @acceptValues 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none'
     * @default 'onlyPoint'
-	*/
+    */
     selectionMode: 'onlyPoint'
 };
