@@ -1102,6 +1102,7 @@ Axis.prototype = {
         var majors = ticks.majorTicks || [];
         this._majorTicks = majors.map(createMajorTick(this, this._renderer, this._getSkippedCategory(majors)));
         this._minorTicks = (ticks.minorTicks || []).map(createMinorTick(this, this._renderer));
+        this._isSynchronized = true;
     },
 
     _getTicks: function(viewPort, incidentOccurred, skipTickGeneration) {
@@ -1157,6 +1158,7 @@ Axis.prototype = {
             return;
         }
 
+        that._isSynchronized = false;
         that.updateCanvas(canvas);
 
         that._estimatedTickInterval = that._getTicks(new rangeModule.Range(this._seriesData), _noop, true).tickInterval;
@@ -1203,7 +1205,7 @@ Axis.prototype = {
             length = ticks.length,
             translator = that._translator;
 
-        if(translator.getBusinessRange().isSynchronized) {
+        if(that._isSynchronized) {
             return;
         }
         if(that._options.type !== constants.discrete) {

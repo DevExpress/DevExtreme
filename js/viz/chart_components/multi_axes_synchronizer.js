@@ -318,7 +318,6 @@ var applyMinMaxValues = function(axesInfo) {
             range.max = range.maxVisible;
         }
 
-        range.isSynchronized = true;
         axis.getTranslator().updateBusinessRange(range);
         axis.setTicks({ majorTicks: info.tickValues, minorTicks: info.minorValues });
     });
