@@ -24,29 +24,37 @@ var ListEdit = ListBase.inherit({
         };
 
         var moveFocusedItemUp = function(e) {
+            var focusedItemIndex = that._editStrategy.getNormalizedIndex(that.option("focusedElement"));
+
             if(e.shiftKey && that.option("allowItemReordering")) {
                 e.preventDefault();
 
-                var focusedItemIndex = that._editStrategy.getNormalizedIndex(that.option("focusedElement")),
-                    $prevItem = that._editStrategy.getItemElement(focusedItemIndex - 1);
+                var $prevItem = that._editStrategy.getItemElement(focusedItemIndex - 1);
 
                 that.reorderItem(that.option("focusedElement"), $prevItem);
                 that.scrollToItem(that.option("focusedElement"));
             } else {
+                if(this._editProvider.moveFocusFromList(focusedItemIndex)) {
+                    return;
+                }
                 parent.upArrow(e);
             }
         };
 
         var moveFocusedItemDown = function(e) {
+            var focusedItemIndex = that._editStrategy.getNormalizedIndex(that.option("focusedElement"));
+
             if(e.shiftKey && that.option("allowItemReordering")) {
                 e.preventDefault();
 
-                var focusedItemIndex = that._editStrategy.getNormalizedIndex(that.option("focusedElement")),
-                    $nextItem = that._editStrategy.getItemElement(focusedItemIndex + 1);
+                var $nextItem = that._editStrategy.getItemElement(focusedItemIndex + 1);
 
                 that.reorderItem(that.option("focusedElement"), $nextItem);
                 that.scrollToItem(that.option("focusedElement"));
             } else {
+                if(this._editProvider.moveFocusFromList(focusedItemIndex)) {
+                    return;
+                }
                 parent.downArrow(e);
             }
         };
@@ -61,6 +69,10 @@ var ListEdit = ListBase.inherit({
     _updateSelection: function() {
         this._editProvider.afterItemsRendered();
         this.callBase();
+    },
+
+    _getLastItemIndex: function() {
+        return this._itemElements().length - 1;
     },
 
     _refreshItemElements: function() {
@@ -378,6 +390,14 @@ var ListEdit = ListBase.inherit({
     _clean: function() {
         this._disposeEditProvider();
         this.callBase();
+    },
+
+    focusListItem: function(index) {
+        var $item = this._editStrategy.getItemElement(index);
+
+        this.option("focusedElement", $item);
+        this.focus();
+        this.scrollToItem(this.option("focusedElement"));
     },
 
     _optionChanged: function(args) {
