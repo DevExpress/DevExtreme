@@ -489,6 +489,62 @@ QUnit.module("getCombinedFilter", {
         // assert
         assert.deepEqual(this.getCombinedFilter(true), [["Test", "<>", "1"], "and", ["Test", "<>", "2"]], "combined filter");
     });
+
+    QUnit.test("group in value - include", function(assert) {
+        // act
+        this.setupDataGrid({
+            dataSource: [],
+            columns: [{ dataField: "Test", filterType: "include" }],
+            filterValue: ["Test", "anyof", [
+                ["Test", "<", 3000],
+                [
+                    ["Test", ">=", 3000],
+                    "and",
+                    ["Test", "<", 5000]
+                ]
+            ]]
+        });
+
+
+        // assert
+        assert.deepEqual(this.getCombinedFilter(true), [
+            ["Test", "<", 3000],
+            "or",
+            [
+                ["Test", ">=", 3000],
+                "and",
+                ["Test", "<", 5000]
+            ]
+        ], "combined filter");
+    });
+
+    QUnit.test("group in value - exclude", function(assert) {
+        // act
+        this.setupDataGrid({
+            dataSource: [],
+            columns: [{ dataField: "Test", filterType: "exclude" }],
+            filterValue: ["Test", "anyof", [
+                ["Test", "<", 3000],
+                [
+                    ["Test", ">=", 3000],
+                    "and",
+                    ["Test", "<", 5000]
+                ]
+            ]]
+        });
+
+
+        // assert
+        assert.deepEqual(this.getCombinedFilter(true), [
+            ["!", ["Test", "<", 3000]],
+            "and",
+            ["!", [
+                ["Test", ">=", 3000],
+                "and",
+                ["Test", "<", 5000]
+            ]]
+        ], "combined filter");
+    });
 });
 
 

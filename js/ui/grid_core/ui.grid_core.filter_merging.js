@@ -124,12 +124,16 @@ function anyOf(field, filterValue) {
         lastIndex = filterValue.length - 1;
     filterValue.forEach(function(value, index) {
         if(utils.isCondition(value) || utils.isGroup(value)) {
-            result.push(utils.getFilterExpression(value, [field], [], "headerFilter"));
+            var filterExpression = utils.getFilterExpression(value, [field], [], "headerFilter");
+            result.push(isExclude ? ["!", filterExpression] : filterExpression);
         } else {
             result.push(utils.getFilterExpression([field.dataField, isExclude ? "<>" : "=", value], [field], [], "headerFilter"));
         }
         index !== lastIndex && result.push(isExclude ? "and" : "or");
     });
+    if(result.length === 1) {
+        result = result[0];
+    }
     return result;
 }
 
