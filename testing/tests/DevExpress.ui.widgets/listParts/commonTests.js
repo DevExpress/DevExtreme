@@ -2385,6 +2385,45 @@ QUnit.test("list scroll to focused item after press up/down arrows", function(as
     assert.equal(instance.scrollTop(), 0, "item scrolled to visible area at top when up arrow were pressed");
 });
 
+QUnit.test("focusing on selectAll checkbox after down / up pressing", function(assert) {
+    assert.expect(6);
+
+    var $element = $("#list").dxList({
+            showSelectionControls: true,
+            selectionMode: "all",
+            focusStateEnabled: true,
+            items: [0, 1, 2, 3, 4]
+        }),
+        keyboard = keyboardMock($element),
+        $selectAllCheckBox = $element.find(".dx-list-select-all-checkbox"),
+        $firstItem = $element.find(toSelector(LIST_ITEM_CLASS)).eq(0),
+        $lastItem = $element.find(toSelector(LIST_ITEM_CLASS)).eq(4);
+
+    $firstItem.trigger("dxpointerdown");
+    this.clock.tick();
+
+    keyboard.keyDown("up");
+    this.clock.tick();
+    assert.ok($selectAllCheckBox.hasClass("dx-state-focused"), "selectAll checkbox is focused");
+
+    keyboard = keyboardMock($selectAllCheckBox);
+    keyboard.keyDown("up");
+    this.clock.tick();
+    assert.ok(!$selectAllCheckBox.hasClass("dx-state-focused"), "selectAll checkbox isn't focused");
+    assert.ok($lastItem.hasClass("dx-state-focused"), "last item is focused");
+
+    keyboard = keyboardMock($element);
+    keyboard.keyDown("down");
+    this.clock.tick();
+    assert.ok($selectAllCheckBox.hasClass("dx-state-focused"), "selectAll checkbox is focused");
+
+    keyboard = keyboardMock($selectAllCheckBox);
+    keyboard.keyDown("down");
+    this.clock.tick();
+    assert.ok(!$selectAllCheckBox.hasClass("dx-state-focused"), "selectAll checkbox isn't focused");
+    assert.ok($firstItem.hasClass("dx-state-focused"), "first item is focused");
+});
+
 QUnit.test("list does not scroll to item after click on it", function(assert) {
     assert.expect(2);
 

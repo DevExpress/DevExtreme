@@ -92,6 +92,7 @@ var LIST_ITEM_BEFORE_BAG_CLASS = "dx-list-item-before-bag",
     DECORATOR_BEFORE_BAG_CREATE_METHOD = "beforeBag",
     DECORATOR_AFTER_BAG_CREATE_METHOD = "afterBag",
     DECORATOR_MODIFY_ELEMENT_METHOD = "modifyElement",
+    DECORATOR_MOVE_FOCUS_METHOD = "moveFocusFromList",
     DECORATOR_AFTER_RENDER_METHOD = "afterRender",
     DECORATOR_GET_EXCLUDED_SELECTORS_METHOD = "getExcludedSelectors";
 
@@ -226,6 +227,10 @@ var EditProvider = Class.inherit({
 
     handleClick: function($itemElement, e) {
         return this._eventHandler("handleClick", $itemElement, e);
+    },
+
+    moveFocusFromList: function(itemIndex) {
+        return this._applyDecorators(DECORATOR_MOVE_FOCUS_METHOD, itemIndex);
     },
 
     contextMenuHandlerExists: function() {
