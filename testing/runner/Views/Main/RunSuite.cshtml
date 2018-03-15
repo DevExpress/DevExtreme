@@ -1,7 +1,7 @@
 @model RunSuiteViewModel
 @{
+    var isNoJQueryTest = Model.ScriptVirtualPath.Contains("nojquery");
     var isServerSideTest = Model.ScriptVirtualPath.Contains("DevExpress.serverSide");
-    var isNoJQueryTest = Model.ScriptVirtualPath.Contains("nojquery") || isServerSideTest;
     var isSelfSufficientTest  = Model.ScriptVirtualPath.Contains("_bundled")
         || Model.ScriptVirtualPath.Contains("Bundles")
         || Model.ScriptVirtualPath.Contains("DevExpress.angular")
@@ -21,12 +21,12 @@
 
     IEnumerable<string> GetJQueryIntegrationImports() {
         if(!isSelfSufficientTest) {
-            if(!Model.NoJQuery && !isNoJQueryTest) {
-                yield return Url.Content("~/artifacts/transpiled/integration/jquery.js");
-            } else {
+            if(Model.NoJQuery || isNoJQueryTest || isServerSideTest) {
                 yield return Url.Content("~/testing/helpers/jQueryEventsPatch.js");
                 yield return Url.Content("~/testing/helpers/dataPatch.js");
                 yield return Url.Content("~/artifacts/transpiled/integration/jquery/component_registrator.js");
+            } else {
+                yield return Url.Content("~/artifacts/transpiled/integration/jquery.js");
             }
         }
         if(isServerSideTest) {
