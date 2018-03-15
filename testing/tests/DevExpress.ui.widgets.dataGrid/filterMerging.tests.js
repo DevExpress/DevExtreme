@@ -5,9 +5,7 @@ require("ui/data_grid/ui.data_grid");
 var $ = require("jquery"),
     dataGridMocks = require("../../helpers/dataGridMocks.js"),
     fx = require("animation/fx"),
-    setupDataGridModules = dataGridMocks.setupDataGridModules,
-    MockDataController = dataGridMocks.MockDataController,
-    MockColumnsController = dataGridMocks.MockColumnsController;
+    setupDataGridModules = dataGridMocks.setupDataGridModules;
 
 QUnit.testStart(function() {
     var markup =
@@ -18,180 +16,6 @@ QUnit.testStart(function() {
     </div>';
 
     $("#qunit-fixture").html(markup);
-});
-
-QUnit.module("Sync with Filter Row", {
-    beforeEach: function() {
-        this.setupDataGrid = function(options) {
-            this.options = $.extend(true, {
-                filterSyncEnabled: true,
-                filterValue: null,
-                filterRow: {
-                    applyFilter: "auto",
-                    visible: true,
-                    showOperationChooser: true
-                }
-            }, options);
-
-            setupDataGridModules(this, ["data", "columnHeaders", "filterRow", "headerFilter", "editorFactory", "filterMerging", "headerPanel"], {
-                initViews: true,
-                controllers: {
-                    columns: new MockColumnsController(this.options.columns),
-                    data: new MockDataController({})
-                }
-            });
-        };
-
-        this.clock = sinon.useFakeTimers();
-        fx.off = true;
-    },
-    afterEach: function() {
-        this.clock.restore();
-        fx.off = false;
-    }
-}, function() {
-    QUnit.test("update filterValue after change filter text with defaultFilterOperation", function(assert) {
-        // arrange
-        var testElement = $("#container");
-
-        this.setupDataGrid({
-            columns: [{ dataField: "field", dataType: "number", defaultFilterOperation: "=", allowFiltering: true, index: 0 }]
-        });
-
-        // act
-        this.columnHeadersView.render(testElement);
-
-        var filterRowInput = $(this.columnHeadersView.element()).find(".dx-texteditor");
-        assert.equal(filterRowInput.length, 1);
-
-        filterRowInput.find(".dx-texteditor-input").val(90);
-        filterRowInput.find(".dx-texteditor-input").trigger("keyup");
-
-        // act
-        this.clock.tick(700);
-
-        // assert
-        assert.deepEqual(this.option("filterValue"), ["field", "=", 90]);
-    });
-
-    QUnit.test("update filterValue after change filter text with selectedFilterOperation", function(assert) {
-        // arrange
-        var testElement = $("#container");
-
-        this.setupDataGrid({
-            columns: [{ dataField: "field", dataType: "number", defaultFilterOperation: "=", selectedFilterOperation: "<>", allowFiltering: true, index: 0 }]
-        });
-
-        // act
-        this.columnHeadersView.render(testElement);
-
-        var filterRowInput = $(this.columnHeadersView.element()).find(".dx-texteditor");
-        assert.equal(filterRowInput.length, 1);
-
-        filterRowInput.find(".dx-texteditor-input").val(90);
-        filterRowInput.find(".dx-texteditor-input").trigger("keyup");
-
-        // act
-        this.clock.tick(700);
-
-        // assert
-        assert.deepEqual(this.option("filterValue"), ["field", "<>", 90]);
-    });
-
-    QUnit.test("update filterValue after change filter operation", function(assert) {
-        // arrange
-        var testElement = $("#container");
-
-        this.setupDataGrid({
-            columns: [{
-                dataField: "field",
-                dataType: "number",
-                filterValue: 90,
-                defaultFilterOperation: "=",
-                selectedFilterOperation: "<>",
-                filterOperations: ["=", "<", ">", "<>"],
-                allowFiltering: true,
-                index: 0
-            }]
-        });
-
-        // act
-        this.columnHeadersView.render(testElement);
-
-        $(".dx-menu-item").trigger("dxclick");
-
-        var $filterMenuItem = $(".dx-menu-item").eq(2);
-        $filterMenuItem.trigger("dxclick");
-
-        // act
-        this.clock.tick(700);
-
-        // assert
-        assert.deepEqual(this.option("filterValue"), ["field", "<", 90]);
-    });
-
-    QUnit.test("filterValue == null after change filter operation without value", function(assert) {
-        // arrange
-        var testElement = $("#container");
-
-        this.setupDataGrid({
-            columns: [{
-                dataField: "field",
-                dataType: "number",
-                defaultFilterOperation: "=",
-                selectedFilterOperation: "<>",
-                filterOperations: ["=", "<", ">", "<>"],
-                allowFiltering: true,
-                index: 0
-            }]
-        });
-
-        // act
-        this.columnHeadersView.render(testElement);
-
-        $(".dx-menu-item").trigger("dxclick");
-
-        var $filterMenuItem = $(".dx-menu-item").eq(2);
-        $filterMenuItem.trigger("dxclick");
-
-        // act
-        this.clock.tick(700);
-
-        // assert
-        assert.deepEqual(this.option("filterValue"), null);
-    });
-
-    QUnit.test("onClick mode", function(assert) {
-        // arrange
-        var testElement = $("#container");
-
-        this.setupDataGrid({
-            columns: [{ dataField: "field", dataType: "number", defaultFilterOperation: "=", selectedFilterOperation: "<>", allowFiltering: true, index: 0 }],
-            filterRow: {
-                applyFilter: "onClick"
-            }
-        });
-
-        // act
-        this.headerPanel.render(testElement);
-        this.columnHeadersView.render(testElement);
-
-        var filterRowInput = $(this.columnHeadersView.element()).find(".dx-texteditor");
-
-        filterRowInput.find(".dx-texteditor-input").val(90);
-        filterRowInput.find(".dx-texteditor-input").trigger("keyup");
-
-        // act
-        this.clock.tick(700);
-
-        // assert
-        assert.deepEqual(this.option("filterValue"), null);
-
-        var $button = $(this.headerPanel.element()).find(".dx-apply-button");
-        $button.trigger("dxclick");
-
-        assert.deepEqual(this.option("filterValue"), ["field", "<>", 90]);
-    });
 });
 
 QUnit.module("Sync with Header Filter", {
@@ -605,16 +429,35 @@ QUnit.module("Sync on initialization", {
     });
 });
 
-QUnit.module("Real dataGrid", function() {
+QUnit.module("Real dataGrid", {
+    beforeEach: function() {
+        this.initDataGrid = function(options) {
+            this.dataGrid = $("#container").dxDataGrid($.extend({
+                dataSource: [{}],
+                filterSyncEnabled: true,
+                loadingTimeout: undefined,
+                filterRow: {
+                    visible: true
+                },
+                columns: [{ dataField: "field", filterValues: [1], filterType: "exclude", filterValue: 2, selectedFilterOperation: "=" }]
+            }, options)).dxDataGrid("instance");
+            return this.dataGrid;
+        };
+
+        this.clock = sinon.useFakeTimers();
+        fx.off = true;
+    },
+    afterEach: function() {
+        this.dataGrid.dispose();
+        this.clock.restore();
+        fx.off = false;
+    }
+}, function() {
     QUnit.test("clear all filters", function(assert) {
         // arrange
-        var dataGrid = $("#container").dxDataGrid({
-            dataSource: [{}],
-            filterSyncEnabled: true,
-            loadingTimeout: undefined,
-            columns: [{ dataField: "field", filterValues: [1], filterType: "exclude", filterValue: 2, selectedFilterOperation: "=" }]
-        }).dxDataGrid("instance");
+        var dataGrid = this.initDataGrid();
 
+        // act
         dataGrid.option("filterValue", null);
 
         // assert
@@ -622,7 +465,148 @@ QUnit.module("Real dataGrid", function() {
         assert.deepEqual(dataGrid.columnOption("field", "filterType"), "include");
         assert.deepEqual(dataGrid.columnOption("field", "filterValue"), undefined);
         assert.deepEqual(dataGrid.columnOption("field", "selectedFilterOperation"), undefined);
-        dataGrid.dispose();
+    });
+
+    QUnit.test("update filterValue after change filter text with defaultFilterOperation", function(assert) {
+        var dataGrid = this.initDataGrid({
+            columns: [{ dataField: "field", dataType: "number", defaultFilterOperation: "=", allowFiltering: true, index: 0 }]
+        });
+        var filterRowInput = $(".dx-texteditor");
+        assert.equal(filterRowInput.length, 1);
+
+        filterRowInput.find(".dx-texteditor-input").val(90);
+        filterRowInput.find(".dx-texteditor-input").trigger("keyup");
+
+        this.clock.tick(700);
+
+        assert.deepEqual(dataGrid.option("filterValue"), ["field", "=", 90]);
+    });
+
+    QUnit.test("update filterValue after change filter text with selectedFilterOperation", function(assert) {
+        // arrange
+        var dataGrid = this.initDataGrid({
+            columns: [{ dataField: "field", dataType: "number", defaultFilterOperation: "=", selectedFilterOperation: "<>", allowFiltering: true, index: 0 }]
+        });
+
+        var filterRowInput = $(".dx-texteditor");
+        assert.equal(filterRowInput.length, 1);
+
+        filterRowInput.find(".dx-texteditor-input").val(90);
+        filterRowInput.find(".dx-texteditor-input").trigger("keyup");
+
+        // act
+        this.clock.tick(700);
+
+        // assert
+        assert.deepEqual(dataGrid.option("filterValue"), ["field", "<>", 90]);
+    });
+
+    QUnit.test("update filterValue after change filter operation", function(assert) {
+        // arrange
+        var dataGrid = this.initDataGrid({
+            columns: [{
+                dataField: "field",
+                dataType: "number",
+                filterValue: 90,
+                defaultFilterOperation: "=",
+                selectedFilterOperation: "<>",
+                filterOperations: ["=", "<", ">", "<>"],
+                allowFiltering: true,
+                index: 0
+            }]
+        });
+
+        // act
+        $(".dx-menu-item").trigger("dxclick");
+        var $filterMenuItem = $(".dx-menu-item").eq(2);
+        $filterMenuItem.trigger("dxclick");
+
+        // act
+        this.clock.tick(700);
+
+        // assert
+        assert.deepEqual(dataGrid.option("filterValue"), ["field", "<", 90]);
+    });
+
+    QUnit.test("filterValue == null after change filter operation without value", function(assert) {
+        // arrange
+        var dataGrid = this.initDataGrid({
+            columns: [{
+                dataField: "field",
+                dataType: "number",
+                defaultFilterOperation: "=",
+                selectedFilterOperation: "<>",
+                filterOperations: ["=", "<", ">", "<>"],
+                allowFiltering: true,
+                index: 0
+            }]
+        });
+
+        // act
+        $(".dx-menu-item").trigger("dxclick");
+        var $filterMenuItem = $(".dx-menu-item").eq(2);
+        $filterMenuItem.trigger("dxclick");
+
+        // act
+        this.clock.tick(700);
+
+        // assert
+        assert.deepEqual(dataGrid.option("filterValue"), null);
+    });
+
+    QUnit.test("onClick mode", function(assert) {
+        // arrange
+        var dataGrid = this.initDataGrid({
+            columns: [{ dataField: "field", dataType: "number", defaultFilterOperation: "=", selectedFilterOperation: "<>", allowFiltering: true, index: 0 }],
+            filterRow: {
+                visible: true,
+                applyFilter: "onClick"
+            }
+        });
+
+        // act
+        var filterRowInput = $(".dx-texteditor");
+        filterRowInput.find(".dx-texteditor-input").val(90);
+        filterRowInput.find(".dx-texteditor-input").trigger("keyup");
+        this.clock.tick(700);
+        // assert
+        assert.deepEqual(dataGrid.option("filterValue"), null);
+
+        // act
+        var $button = $(".dx-apply-button");
+        $button.trigger("dxclick");
+        // assert
+        assert.deepEqual(dataGrid.option("filterValue"), ["field", "<>", 90]);
+    });
+
+    QUnit.test("change field filterValues", function(assert) {
+        // arrange
+        var dataGrid = this.initDataGrid();
+
+        // act
+        dataGrid.columnOption("field", { filterValues: [2, 3] });
+
+        // assert
+        assert.deepEqual(dataGrid.option("filterValue"), [["field", "anyof", [2, 3]], "and", ["field", "=", 2]]);
+        assert.deepEqual(dataGrid.columnOption("field", "filterValues"), [2, 3]);
+        assert.deepEqual(dataGrid.columnOption("field", "filterType"), "exclude");
+        assert.deepEqual(dataGrid.columnOption("field", "filterValue"), 2);
+        assert.deepEqual(dataGrid.columnOption("field", "selectedFilterOperation"), "=");
+    });
+
+    QUnit.test("change field filterValue", function(assert) {
+        // arrange
+        var dataGrid = this.initDataGrid();
+
+        // act
+        dataGrid.columnOption("field", { filterValue: 100 });
+
+        // assert
+        assert.deepEqual(dataGrid.option("filterValue"), [["field", "anyof", [1]], "and", ["field", "=", 100]]);
+        assert.deepEqual(dataGrid.columnOption("field", "filterValues"), [1]);
+        assert.deepEqual(dataGrid.columnOption("field", "filterType"), "exclude");
+        assert.deepEqual(dataGrid.columnOption("field", "filterValue"), 100);
+        assert.deepEqual(dataGrid.columnOption("field", "selectedFilterOperation"), "=");
     });
 });
 

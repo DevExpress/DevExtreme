@@ -150,10 +150,6 @@ var ColumnHeadersViewFilterRowExtender = (function() {
 
         that._applyFilterViewController.setHighLight($editorContainer, filterValue !== value);
         that._columnsController.columnOption(column.index, isOnClickMode ? "bufferedFilterValue" : "filterValue", normalizedValue, options.notFireEvent);
-
-        if(!isOnClickMode && that.option("filterSyncEnabled")) {
-            that.getController("filterMerging").syncFilterRow(column, normalizedValue);
-        }
     };
 
     return {
@@ -524,11 +520,6 @@ var ColumnHeadersViewFilterRowExtender = (function() {
                     } else {
                         that._showFilterRange($editorContainer.closest("." + EDITOR_CELL_CLASS), column);
                     }
-
-                    if(!isOnClickMode && that.option("filterSyncEnabled")) {
-                        var columnOption = that._columnsController.columnOption(column.index);
-                        that.getController("filterMerging").syncFilterRow(columnOption, columnOption.filterValue || null);
-                    }
                 },
                 onSubmenuShown: function() {
                     isCellWasFocused = that._isEditorFocused($editorContainer);
@@ -665,10 +656,6 @@ exports.ApplyFilterViewController = modules.ViewController.inherit({
             if(column.bufferedSelectedFilterOperation !== undefined) {
                 columnsController.columnOption(i, "selectedFilterOperation", column.bufferedSelectedFilterOperation);
                 column.bufferedSelectedFilterOperation = undefined;
-            }
-
-            if(this.option("filterSyncEnabled")) {
-                this.getController("filterMerging").syncFilterRow(column, column.filterValue);
             }
         }
         columnsController.endUpdate();

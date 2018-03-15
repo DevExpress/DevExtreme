@@ -95,7 +95,7 @@ var FilterMergingController = modules.Controller.inherit((function() {
 
         _getSyncFilterRow: function(filterValue, column, value) {
             var operation = column.selectedFilterOperation || column.defaultFilterOperation || utils.getDefaultOperation(column),
-                filter = [column.dataField, operation, value];
+                filter = [column.dataField, operation, value || null];
             return utils.syncFilters(filterValue, filter, FILTER_ROW_OPERATIONS);
         },
 
@@ -113,12 +113,11 @@ var FilterMergingController = modules.Controller.inherit((function() {
         },
 
         syncFilterRow: function(column, value) {
-            this.option("filterValue", this._getSyncFilterRow(this.option("filterValue"), column, value));
+            this._setFilterValue(this._getSyncFilterRow(this.option("filterValue"), column, value));
         },
 
         syncHeaderFilter: function(column) {
             this._setFilterValue(this._getSyncHeaderFilter(this.option("filterValue"), column));
-            clearFilterRowCondition(this.getController("columns"), column);
         },
     };
 })());
@@ -183,6 +182,25 @@ var DataControllerFilterMergingExtender = {
     }
 };
 
+var ColumnHeadersViewFilterMergingExtender = {
+    _columnOptionChanged: function(e) {
+        var optionNames = e.optionNames;
+
+        if(this.option("filterSyncEnabled")) {
+            var column = this.getController("columns").getColumns()[e.columnIndex];
+            if(gridCoreUtils.checkChanges(optionNames, ["filterValues", "filterType"])) {
+                this.getController("filterMerging").syncHeaderFilter(column);
+                return;
+            } else if(gridCoreUtils.checkChanges(optionNames, ["filterValue", "selectedFilterOperation"])) {
+                this.getController("filterMerging").syncFilterRow(column, column.filterValue);
+                return;
+            }
+        }
+
+        this.callBase(e);
+    }
+};
+
 module.exports = {
     defaultOptions: function() {
         return {
@@ -209,6 +227,9 @@ module.exports = {
     extenders: {
         controllers: {
             data: DataControllerFilterMergingExtender
+        },
+        views: {
+            columnHeadersView: ColumnHeadersViewFilterMergingExtender,
         }
     }
 };
