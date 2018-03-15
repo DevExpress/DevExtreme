@@ -370,12 +370,6 @@ namespace StyleCompiler
             public string[] RequireModules = new string[0];
         }
 
-
-        public static string GetIconsPath(string sourcePath)
-        {
-            return Path.Combine(sourcePath, "../icons");
-        }
-
         public static bool IsDefaultSizeScheme(string value)
         {
             return String.IsNullOrEmpty(value) || value == SIZE_SCHEME_DEFAULT;

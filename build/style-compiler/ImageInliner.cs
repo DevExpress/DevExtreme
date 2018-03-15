@@ -28,7 +28,7 @@ namespace StyleCompiler
                         }
                         else
                         {
-                            return "url(icons/" + Path.GetFileName(imagePath) + ")";
+                            return "url(" + imagePath + ")";
                         }
                     }
                     else
