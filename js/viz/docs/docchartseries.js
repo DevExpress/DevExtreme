@@ -85,7 +85,7 @@ var commonSeries = {
     * @publicName dashStyle
     * @type Enums.DashStyle
     * @default 'solid'
-        * @propertyOf dxChartSeriesTypes_LineSeries,dxChartSeriesTypes_StackedLineSeries,dxChartSeriesTypes_FullStackedLineSeries,dxChartSeriesTypes_StackedSplineSeries,dxChartSeriesTypes_FullStackedSplineSeries,dxChartSeriesTypes_SplineSeries,dxChartSeriesTypes_StepLineSeries
+    * @propertyOf dxChartSeriesTypes_LineSeries,dxChartSeriesTypes_StackedLineSeries,dxChartSeriesTypes_FullStackedLineSeries,dxChartSeriesTypes_StackedSplineSeries,dxChartSeriesTypes_FullStackedSplineSeries,dxChartSeriesTypes_SplineSeries,dxChartSeriesTypes_StepLineSeries
     */
     dashStyle: 'solid',
     /**
@@ -1085,8 +1085,7 @@ var commonSeries = {
         /**
         * @name dxChartSeriesTypes_CommonSeries_aggregation_method
         * @publicName method
-        * @type string
-        * @acceptValues 'avg'|'count'|'max'|'min'|'ohlc'|'range'|'sum'|'custom'
+        * @type ChartSeriesAggregationMethod
         */
         method: undefined,
         /**

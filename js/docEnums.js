@@ -743,3 +743,8 @@
  * @typedef {string} Enums.PositionResolveCollision
  * @enum {'fit'|'flip'|'flipfit'|'none'}
  */
+
+ /**
+ * @typedef {string} Enums.ChartSeriesAggregationMethod
+ * @enum {'avg'|'count'|'max'|'min'|'ohlc'|'range'|'sum'|'custom'}
+ */
