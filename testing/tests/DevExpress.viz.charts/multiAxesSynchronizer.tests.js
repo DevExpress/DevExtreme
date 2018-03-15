@@ -298,7 +298,6 @@ QUnit.test('Synchronization for 2 synchronized axis', function(assert) {
             {
                 range: {
                     axisType: 'continuous',
-                    isSynchronized: true,
                     min: 0,
                     minVisible: 0,
                     max: 10,
@@ -310,7 +309,6 @@ QUnit.test('Synchronization for 2 synchronized axis', function(assert) {
             {
                 range: {
                     axisType: 'continuous',
-                    isSynchronized: true,
                     min: 10,
                     minVisible: 10,
                     max: 60,
@@ -334,7 +332,6 @@ QUnit.test('Synchronization for 2 axis if tickValues count = 1', function(assert
             {
                 range: {
                     axisType: 'continuous',
-                    isSynchronized: true,
                     min: 0,
                     minVisible: 0,
                     max: 12,
@@ -345,7 +342,6 @@ QUnit.test('Synchronization for 2 axis if tickValues count = 1', function(assert
             {
                 range: {
                     axisType: 'continuous',
-                    isSynchronized: true,
                     min: 12,
                     minVisible: 12,
                     max: 60,
@@ -369,7 +365,6 @@ QUnit.test('Synchronization for 2 axis if tickValues count = 1(min==max). tickVa
             {
                 range: {
                     axisType: 'continuous',
-                    isSynchronized: true,
                     min: 1000,
                     minVisible: 1000,
                     max: 1012,
@@ -380,7 +375,6 @@ QUnit.test('Synchronization for 2 axis if tickValues count = 1(min==max). tickVa
             {
                 range: {
                     axisType: 'continuous',
-                    isSynchronized: true,
                     min: 0,
                     minVisible: 0,
                     max: 40,
@@ -404,7 +398,6 @@ QUnit.test('Synchronization for 2 axis if tickValues count = 1(min==max)', funct
             {
                 range: {
                     axisType: 'continuous',
-                    isSynchronized: true,
                     min: 0,
                     minVisible: 0,
                     max: 12,
@@ -415,7 +408,6 @@ QUnit.test('Synchronization for 2 axis if tickValues count = 1(min==max)', funct
             {
                 range: {
                     axisType: 'continuous',
-                    isSynchronized: true,
                     min: 0,
                     minVisible: 0,
                     max: 40,
@@ -439,7 +431,6 @@ QUnit.test('Synchronization for 2 axis if tickValues count = 1(min==max) (in bot
             {
                 range: {
                     axisType: 'continuous',
-                    isSynchronized: true,
                     min: 20,
                     minVisible: 20,
                     max: 20,
@@ -450,7 +441,6 @@ QUnit.test('Synchronization for 2 axis if tickValues count = 1(min==max) (in bot
             {
                 range: {
                     axisType: 'continuous',
-                    isSynchronized: true,
                     min: 20,
                     minVisible: 20,
                     max: 20,
@@ -473,7 +463,6 @@ QUnit.test('Synchronization for 2 axis if tickValues count = 1 (min==max) (negat
             {
                 range: {
                     axisType: 'continuous',
-                    isSynchronized: true,
                     min: -10,
                     minVisible: -10,
                     max: 2,
@@ -484,7 +473,6 @@ QUnit.test('Synchronization for 2 axis if tickValues count = 1 (min==max) (negat
             {
                 range: {
                     axisType: 'continuous',
-                    isSynchronized: true,
                     min: -40,
                     minVisible: -40,
                     max: 0,
@@ -507,7 +495,6 @@ QUnit.test('Synchronization for 2 axis if tickValues count = 1 (min==max) (logar
             {
                 range: {
                     axisType: 'logarithmic',
-                    isSynchronized: true,
                     min: 0,
                     minVisible: 0,
                     max: 620,
@@ -518,7 +505,6 @@ QUnit.test('Synchronization for 2 axis if tickValues count = 1 (min==max) (logar
             {
                 range: {
                     axisType: 'logarithmic',
-                    isSynchronized: true,
                     min: 0,
                     minVisible: 0,
                     max: 20.6666667,
@@ -544,8 +530,7 @@ QUnit.test('Synchronization for 2 axis if tickValues count = 1, value = 0', func
                     min: -1000,
                     minVisible: -1000,
                     max: 4800,
-                    maxVisible: 4800,
-                    isSynchronized: true
+                    maxVisible: 4800
                 },
                 tickValues: [0]
             }, {
@@ -554,8 +539,7 @@ QUnit.test('Synchronization for 2 axis if tickValues count = 1, value = 0', func
                     min: 0,
                     minVisible: 0,
                     max: 5800,
-                    maxVisible: 5800,
-                    isSynchronized: true
+                    maxVisible: 5800
                 },
                 tickValues: [0, 1000, 2000]
             }
@@ -577,8 +561,7 @@ QUnit.test('Synchronization for 2 axis if tickValues count = 1, value = 0,synchr
                     min: -1,
                     minVisible: -1,
                     max: 5.8,
-                    maxVisible: 5.8,
-                    isSynchronized: true
+                    maxVisible: 5.8
                 },
                 tickValues: [-1, 0, 1, 2, 3, 4, 5]
             }, {
@@ -587,8 +570,7 @@ QUnit.test('Synchronization for 2 axis if tickValues count = 1, value = 0,synchr
                     min: -1000,
                     minVisible: -1000,
                     max: 5800,
-                    maxVisible: 5800,
-                    isSynchronized: true
+                    maxVisible: 5800
                 },
                 tickValues: [-1000, 0, 1000, 2000, 3000, 4000, 5000]
             }
@@ -607,7 +589,6 @@ QUnit.test('Synchronization for 2 axis if tickValues count = 1, synchronizedValu
             {
                 range: {
                     axisType: 'continuous',
-                    isSynchronized: true,
                     min: 0,
                     minVisible: 0,
                     max: 95,
@@ -618,7 +599,6 @@ QUnit.test('Synchronization for 2 axis if tickValues count = 1, synchronizedValu
             {
                 range: {
                     axisType: 'continuous',
-                    isSynchronized: true,
                     min: 0,
                     minVisible: 0,
                     max: 19000,
@@ -644,8 +624,7 @@ QUnit.test('Synchronization for 2 axis if tickValues count = 1, value = 0, centr
                     min: -10,
                     minVisible: -10,
                     max: 10,
-                    maxVisible: 10,
-                    isSynchronized: true
+                    maxVisible: 10
                 },
                 tickValues: [0]
             }, {
@@ -654,8 +633,7 @@ QUnit.test('Synchronization for 2 axis if tickValues count = 1, value = 0, centr
                     min: -10,
                     minVisible: -10,
                     max: 10,
-                    maxVisible: 10,
-                    isSynchronized: true
+                    maxVisible: 10
                 },
                 tickValues: [-10, 0, 10]
             }
@@ -674,7 +652,6 @@ QUnit.test('Synchronization for 2 axis last tick > max', function(assert) {
             {
                 range: {
                     axisType: 'continuous',
-                    isSynchronized: true,
                     min: 2,
                     minVisible: 2,
                     max: 8,
@@ -685,7 +662,6 @@ QUnit.test('Synchronization for 2 axis last tick > max', function(assert) {
             {
                 range: {
                     axisType: 'continuous',
-                    isSynchronized: true,
                     min: 20,
                     minVisible: 20,
                     max: 50,
@@ -708,7 +684,6 @@ QUnit.test('Synchronization for 2 axis without paddings and with different tickV
             {
                 range: {
                     axisType: 'continuous',
-                    isSynchronized: true,
                     min: 2,
                     minVisible: 2,
                     max: 10,
@@ -719,7 +694,6 @@ QUnit.test('Synchronization for 2 axis without paddings and with different tickV
             {
                 range: {
                     axisType: 'continuous',
-                    isSynchronized: true,
                     min: 20,
                     minVisible: 20,
                     max: 60,
@@ -743,7 +717,6 @@ QUnit.test('Synchronization for 2 axis without paddings and with different tickV
             {
                 range: {
                     axisType: 'continuous',
-                    isSynchronized: true,
                     min: 0,
                     minVisible: 0,
                     max: 12,
@@ -755,7 +728,6 @@ QUnit.test('Synchronization for 2 axis without paddings and with different tickV
             {
                 range: {
                     axisType: 'continuous',
-                    isSynchronized: true,
                     min: 10,
                     minVisible: 10,
                     max: 70,
@@ -779,7 +751,6 @@ QUnit.test('Synchronization for 2 axis without paddings and with different tickV
             {
                 range: {
                     axisType: 'continuous',
-                    isSynchronized: true,
                     min: 10,
                     minVisible: 10,
                     max: 80,
@@ -790,7 +761,6 @@ QUnit.test('Synchronization for 2 axis without paddings and with different tickV
             {
                 range: {
                     axisType: 'continuous',
-                    isSynchronized: true,
                     min: -2,
                     minVisible: -2,
                     max: 12,
@@ -815,7 +785,6 @@ QUnit.test('Synchronization for 2 axis without paddings and with different tickV
             {
                 range: {
                     axisType: 'continuous',
-                    isSynchronized: true,
                     min: 10,
                     minVisible: 10,
                     max: 70,
@@ -826,7 +795,6 @@ QUnit.test('Synchronization for 2 axis without paddings and with different tickV
             {
                 range: {
                     axisType: 'continuous',
-                    isSynchronized: true,
                     min: 0,
                     minVisible: 0,
                     max: 12,
@@ -850,7 +818,6 @@ QUnit.test('Synchronization for 2 axis with paddings', function(assert) {
             {
                 range: {
                     axisType: 'continuous',
-                    isSynchronized: true,
                     min: -2,
                     minVisible: -2,
                     max: 10,
@@ -861,7 +828,6 @@ QUnit.test('Synchronization for 2 axis with paddings', function(assert) {
             {
                 range: {
                     axisType: 'continuous',
-                    isSynchronized: true,
                     min: 0,
                     minVisible: 0,
                     max: 60,
@@ -885,7 +851,6 @@ QUnit.test('Synchronization for 2 axis with different tickValues count. Rounding
             {
                 range: {
                     axisType: 'continuous',
-                    isSynchronized: true,
                     min: 2,
                     minVisible: 2,
                     max: 3.2,
@@ -896,7 +861,6 @@ QUnit.test('Synchronization for 2 axis with different tickValues count. Rounding
             {
                 range: {
                     axisType: 'continuous',
-                    isSynchronized: true,
                     min: 20,
                     minVisible: 20,
                     max: 60,
@@ -920,7 +884,6 @@ QUnit.test('Synchronization for 2 axis with different tickValues with 2 miltipli
             {
                 range: {
                     axisType: 'continuous',
-                    isSynchronized: true,
                     min: 2,
                     minVisible: 2,
                     max: 6,
@@ -931,7 +894,6 @@ QUnit.test('Synchronization for 2 axis with different tickValues with 2 miltipli
             {
                 range: {
                     axisType: 'continuous',
-                    isSynchronized: true,
                     min: 20,
                     minVisible: 20,
                     max: 60,
@@ -955,7 +917,6 @@ QUnit.test('Synchronization for 2 axis with different tickValues with 3 miltipli
             {
                 range: {
                     axisType: 'continuous',
-                    isSynchronized: true,
                     min: 2,
                     minVisible: 2,
                     max: 6,
@@ -966,7 +927,6 @@ QUnit.test('Synchronization for 2 axis with different tickValues with 3 miltipli
             {
                 range: {
                     axisType: 'continuous',
-                    isSynchronized: true,
                     min: 20,
                     minVisible: 20,
                     max: 80,
@@ -989,7 +949,6 @@ QUnit.test('Synchronization for 2 axis and with different tickValues. Adding tic
             {
                 range: {
                     axisType: 'continuous',
-                    isSynchronized: true,
                     min: 2,
                     minVisible: 2,
                     max: 12,
@@ -1000,7 +959,6 @@ QUnit.test('Synchronization for 2 axis and with different tickValues. Adding tic
             {
                 range: {
                     axisType: 'continuous',
-                    isSynchronized: true,
                     min: 20,
                     minVisible: 20,
                     max: 70,
@@ -1023,7 +981,6 @@ QUnit.test('Synchronization for 2 axis and with different tickValues. Not adding
             {
                 range: {
                     axisType: 'continuous',
-                    isSynchronized: true,
                     min: 0,
                     minVisible: 0,
                     max: 10,
@@ -1034,7 +991,6 @@ QUnit.test('Synchronization for 2 axis and with different tickValues. Not adding
             {
                 range: {
                     axisType: 'continuous',
-                    isSynchronized: true,
                     min: 20,
                     minVisible: 20,
                     max: 70,
@@ -1057,7 +1013,6 @@ QUnit.test('Synchronization for 2 axis with paddings and with different tickValu
             {
                 range: {
                     axisType: 'continuous',
-                    isSynchronized: true,
                     min: -2,
                     minVisible: -2,
                     max: 12,
@@ -1068,7 +1023,6 @@ QUnit.test('Synchronization for 2 axis with paddings and with different tickValu
             {
                 range: {
                     axisType: 'continuous',
-                    isSynchronized: true,
                     min: 0,
                     minVisible: 0,
                     max: 70,
@@ -1093,7 +1047,6 @@ QUnit.test('Synchronization for 3 axis with paddings and with different tickValu
             {
                 range: {
                     axisType: 'continuous',
-                    isSynchronized: true,
                     min: -4,
                     minVisible: -4,
                     max: 20,
@@ -1104,7 +1057,6 @@ QUnit.test('Synchronization for 3 axis with paddings and with different tickValu
             {
                 range: {
                     axisType: 'continuous',
-                    isSynchronized: true,
                     min: -20,
                     minVisible: -20,
                     max: 100,
@@ -1115,7 +1067,6 @@ QUnit.test('Synchronization for 3 axis with paddings and with different tickValu
             {
                 range: {
                     axisType: 'continuous',
-                    isSynchronized: true,
                     min: 1000,
                     minVisible: 1000,
                     max: 1600,
@@ -1139,7 +1090,6 @@ QUnit.test('Synchronization for 3 axis with different tickValues count. B254389'
             {
                 range: {
                     axisType: 'continuous',
-                    isSynchronized: true,
                     min: 0,
                     minVisible: 0,
                     max: 0.01006,
@@ -1150,7 +1100,6 @@ QUnit.test('Synchronization for 3 axis with different tickValues count. B254389'
             {
                 range: {
                     axisType: 'continuous',
-                    isSynchronized: true,
                     min: 0,
                     minVisible: 0,
                     max: 10.06,
@@ -1161,7 +1110,6 @@ QUnit.test('Synchronization for 3 axis with different tickValues count. B254389'
             {
                 range: {
                     axisType: 'continuous',
-                    isSynchronized: true,
                     min: 0,
                     minVisible: 0,
                     max: 1006,
@@ -1197,7 +1145,6 @@ QUnit.test('Synchronization for 3 axis when first with stubData', function(asser
             {
                 range: {
                     axisType: 'continuous',
-                    isSynchronized: true,
                     min: 2,
                     minVisible: 2,
                     max: 8,
@@ -1208,7 +1155,6 @@ QUnit.test('Synchronization for 3 axis when first with stubData', function(asser
             {
                 range: {
                     axisType: 'continuous',
-                    isSynchronized: true,
                     min: 20,
                     minVisible: 20,
                     max: 50,
@@ -1233,7 +1179,6 @@ QUnit.test('Synchronization for 4 axis in 2 panes', function(assert) {
             {
                 range: {
                     axisType: 'continuous',
-                    isSynchronized: true,
                     min: -2,
                     minVisible: -2,
                     max: 10,
@@ -1244,7 +1189,6 @@ QUnit.test('Synchronization for 4 axis in 2 panes', function(assert) {
             {
                 range: {
                     axisType: 'continuous',
-                    isSynchronized: true,
                     min: 0,
                     minVisible: 0,
                     max: 60,
@@ -1255,7 +1199,6 @@ QUnit.test('Synchronization for 4 axis in 2 panes', function(assert) {
             {
                 range: {
                     axisType: 'continuous',
-                    isSynchronized: true,
                     min: 1000,
                     minVisible: 1000,
                     max: 1600,
@@ -1266,7 +1209,6 @@ QUnit.test('Synchronization for 4 axis in 2 panes', function(assert) {
             {
                 range: {
                     axisType: 'continuous',
-                    isSynchronized: true,
                     min: -2,
                     minVisible: -2,
                     max: 10,
@@ -1289,7 +1231,6 @@ QUnit.test('Synchronization for 2 axis with synchronizedValue', function(assert)
             {
                 range: {
                     axisType: 'continuous',
-                    isSynchronized: true,
                     min: -8,
                     minVisible: -8,
                     max: 10,
@@ -1300,7 +1241,6 @@ QUnit.test('Synchronization for 2 axis with synchronizedValue', function(assert)
             {
                 range: {
                     axisType: 'continuous',
-                    isSynchronized: true,
                     min: -160,
                     minVisible: -160,
                     max: 200,
@@ -1323,7 +1263,6 @@ QUnit.test('Synchronization for 2 axis with synchronizedValue and main inverted 
             {
                 range: {
                     axisType: 'continuous',
-                    isSynchronized: true,
                     min: 0,
                     minVisible: 0,
                     max: 10,
@@ -1335,7 +1274,6 @@ QUnit.test('Synchronization for 2 axis with synchronizedValue and main inverted 
             {
                 range: {
                     axisType: 'continuous',
-                    isSynchronized: true,
                     min: -200,
                     minVisible: -200,
                     max: 0,
@@ -1358,7 +1296,6 @@ QUnit.test('Synchronization for 2 axis with synchronizedValue and second inverte
             {
                 range: {
                     axisType: 'continuous',
-                    isSynchronized: true,
                     min: 0,
                     minVisible: 0,
                     max: 10,
@@ -1369,7 +1306,6 @@ QUnit.test('Synchronization for 2 axis with synchronizedValue and second inverte
             {
                 range: {
                     axisType: 'continuous',
-                    isSynchronized: true,
                     min: -200,
                     minVisible: -200,
                     max: 0,
@@ -1393,7 +1329,6 @@ QUnit.test('Synchronization for 2 axis with synchronizedValue for one axis only'
             {
                 range: {
                     axisType: 'continuous',
-                    isSynchronized: true,
                     min: 0,
                     minVisible: 0,
                     max: 10,
@@ -1404,7 +1339,6 @@ QUnit.test('Synchronization for 2 axis with synchronizedValue for one axis only'
             {
                 range: {
                     axisType: 'continuous',
-                    isSynchronized: true,
                     min: -190,
                     minVisible: -190,
                     max: 10,
@@ -1427,7 +1361,6 @@ QUnit.test('Synchronization for 2 axis. One axis with zooming', function(assert)
             {
                 range: {
                     axisType: 'continuous',
-                    isSynchronized: true,
                     min: 0,
                     minVisible: 5,
                     max: 100,
@@ -1438,7 +1371,6 @@ QUnit.test('Synchronization for 2 axis. One axis with zooming', function(assert)
             {
                 range: {
                     axisType: 'continuous',
-                    isSynchronized: true,
                     min: 0,
                     minVisible: 0,
                     max: 10,
@@ -1465,7 +1397,6 @@ QUnit.test('Synchronization for 2 axis. Axes after argument zooming', function(a
             {
                 range: {
                     axisType: 'continuous',
-                    isSynchronized: true,
                     min: 0,
                     minVisible: 5,
                     max: 100,
@@ -1476,7 +1407,6 @@ QUnit.test('Synchronization for 2 axis. Axes after argument zooming', function(a
             {
                 range: {
                     axisType: 'continuous',
-                    isSynchronized: true,
                     min: 0,
                     minVisible: 0,
                     max: 10,
@@ -1577,7 +1507,6 @@ QUnit.test('Synchronization for 2 axis with zoom by value', function(assert) {
             {
                 range: {
                     axisType: 'continuous',
-                    isSynchronized: true,
                     min: -70,
                     minVisible: -70,
                     max: 105.5,
@@ -1588,7 +1517,6 @@ QUnit.test('Synchronization for 2 axis with zoom by value', function(assert) {
             {
                 range: {
                     axisType: 'continuous',
-                    isSynchronized: true,
                     min: 0,
                     minVisible: 10,
                     max: 185.5,
@@ -1611,7 +1539,6 @@ QUnit.test('Synchronization for 3 axis with different small ticks. T570230. #1 a
             {
                 range: {
                     axisType: 'continuous',
-                    isSynchronized: true,
                     min: -0.000002,
                     minVisible: -0.000002,
                     max: 0.0000025,
@@ -1622,7 +1549,6 @@ QUnit.test('Synchronization for 3 axis with different small ticks. T570230. #1 a
             {
                 range: {
                     axisType: 'continuous',
-                    isSynchronized: true,
                     min: -0.8,
                     minVisible: -0.8,
                     max: 1,
@@ -1646,7 +1572,6 @@ QUnit.test('Synchronization for 3 axis with different small ticks. T570230. #2 a
             {
                 range: {
                     axisType: 'continuous',
-                    isSynchronized: true,
                     min: 0,
                     minVisible: 0,
                     max: 10,
@@ -1657,7 +1582,6 @@ QUnit.test('Synchronization for 3 axis with different small ticks. T570230. #2 a
             {
                 range: {
                     axisType: 'continuous',
-                    isSynchronized: true,
                     min: 0,
                     minVisible: 0,
                     max: 0.01,
@@ -1668,7 +1592,6 @@ QUnit.test('Synchronization for 3 axis with different small ticks. T570230. #2 a
             {
                 range: {
                     axisType: 'continuous',
-                    isSynchronized: true,
                     min: 0,
                     minVisible: 0,
                     max: 0.2,
@@ -1698,7 +1621,6 @@ QUnit.test('Synchronization two logarithmic Axis. Small values', function(assert
             {
                 range: {
                     axisType: 'logarithmic',
-                    isSynchronized: true,
                     base: 10,
                     min: 0,
                     minVisible: 0,
@@ -1710,7 +1632,6 @@ QUnit.test('Synchronization two logarithmic Axis. Small values', function(assert
             {
                 range: {
                     axisType: 'logarithmic',
-                    isSynchronized: true,
                     base: 10,
                     min: 1,
                     minVisible: 1,
@@ -1739,7 +1660,6 @@ QUnit.test('Synchronization two logarithmic Axis. Equal tick count', function(as
             {
                 range: {
                     axisType: 'logarithmic',
-                    isSynchronized: true,
                     base: 10,
                     min: 0.00001,
                     minVisible: 0.00001,
@@ -1751,7 +1671,6 @@ QUnit.test('Synchronization two logarithmic Axis. Equal tick count', function(as
             {
                 range: {
                     axisType: 'logarithmic',
-                    isSynchronized: true,
                     base: 10,
                     min: 1,
                     minVisible: 1,
@@ -1780,7 +1699,6 @@ QUnit.test('Synchronization logarithmic Axis with non logarithmic axis', functio
             {
                 range: {
                     axisType: 'logarithmic',
-                    isSynchronized: true,
                     base: 10,
                     min: 0.001,
                     minVisible: 0.001,
@@ -1792,7 +1710,6 @@ QUnit.test('Synchronization logarithmic Axis with non logarithmic axis', functio
             {
                 range: {
                     axisType: 'continuous',
-                    isSynchronized: true,
                     min: 0,
                     minVisible: 0,
                     max: 100,
@@ -1820,7 +1737,6 @@ QUnit.test('Synchronization logarithmic Axis with non logarithmic axis. B250542'
             {
                 range: {
                     axisType: 'logarithmic',
-                    isSynchronized: true,
                     base: 10,
                     min: Number(Math.pow(10, -2.8).toFixed(7)),
                     minVisible: Number(Math.pow(10, -2.8).toFixed(7)),
@@ -1832,7 +1748,6 @@ QUnit.test('Synchronization logarithmic Axis with non logarithmic axis. B250542'
             {
                 range: {
                     axisType: 'continuous',
-                    isSynchronized: true,
                     min: 2,
                     minVisible: 2,
                     max: 98,
@@ -1860,7 +1775,6 @@ QUnit.test('Synchronization logarithmic Axis with non logarithmic axis. Ticks ad
             {
                 range: {
                     axisType: 'logarithmic',
-                    isSynchronized: true,
                     base: 10,
                     min: 1000,
                     minVisible: 1000,
@@ -1872,7 +1786,6 @@ QUnit.test('Synchronization logarithmic Axis with non logarithmic axis. Ticks ad
             {
                 range: {
                     axisType: 'continuous',
-                    isSynchronized: true,
                     min: 0,
                     minVisible: 0,
                     max: 400,
@@ -1900,7 +1813,6 @@ QUnit.test('Synchronization two continuous axis. B250542', function(assert) {
             {
                 range: {
                     axisType: 'continuous',
-                    isSynchronized: true,
                     min: -3.8,
                     minVisible: -3.8,
                     max: 5.8,
@@ -1911,7 +1823,6 @@ QUnit.test('Synchronization two continuous axis. B250542', function(assert) {
             {
                 range: {
                     axisType: 'continuous',
-                    isSynchronized: true,
                     min: 2,
                     minVisible: 2,
                     max: 98,
@@ -1937,7 +1848,6 @@ QUnit.test("Add minor ticks", function(assert) {
             {
                 range: {
                     axisType: 'continuous',
-                    isSynchronized: true,
                     min: 0,
                     minVisible: 0,
                     max: 3,
@@ -1949,7 +1859,6 @@ QUnit.test("Add minor ticks", function(assert) {
             {
                 range: {
                     axisType: 'continuous',
-                    isSynchronized: true,
                     min: 0,
                     minVisible: 0,
                     max: 3,
@@ -1984,7 +1893,6 @@ QUnit.test('Do not syncronize axis with scalebreaks', function(assert) {
             {
                 range: {
                     axisType: 'continuous',
-                    isSynchronized: true,
                     min: 2,
                     minVisible: 2,
                     max: 8,
@@ -1995,7 +1903,6 @@ QUnit.test('Do not syncronize axis with scalebreaks', function(assert) {
             {
                 range: {
                     axisType: 'continuous',
-                    isSynchronized: true,
                     min: 20,
                     minVisible: 20,
                     max: 50,
@@ -2022,7 +1929,6 @@ QUnit.test('Syncronize axis if scale breaks array is empty', function(assert) {
                     minVisible: 0,
                     max: 10,
                     maxVisible: 10,
-                    isSynchronized: true,
                     breaks: []
                 },
                 tickValues: [0, 2, 4, 6, 8, 10]
@@ -2030,7 +1936,6 @@ QUnit.test('Syncronize axis if scale breaks array is empty', function(assert) {
             {
                 range: {
                     axisType: 'continuous',
-                    isSynchronized: true,
                     min: 0,
                     minVisible: 0,
                     max: 10,
