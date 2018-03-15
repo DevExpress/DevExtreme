@@ -118,13 +118,13 @@ registerDecorator(
             this._selectAllCheckBox.registerKeyHandler("upArrow", (function() {
                 var index = this._list._getLastItemIndex();
 
-                this._list._focusListItem(index);
+                this._list.focusListItem(index);
             }).bind(this));
 
             this._selectAllCheckBox.registerKeyHandler("downArrow", (function() {
                 var index = 0;
 
-                this._list._focusListItem(index);
+                this._list.focusListItem(index);
             }).bind(this));
 
             this._updateSelectAllState();

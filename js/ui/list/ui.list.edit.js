@@ -392,7 +392,7 @@ var ListEdit = ListBase.inherit({
         this.callBase();
     },
 
-    _focusListItem: function(index) {
+    focusListItem: function(index) {
         var $item = this._editStrategy.getItemElement(index);
 
         this.option("focusedElement", $item);
