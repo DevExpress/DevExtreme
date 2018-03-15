@@ -46,31 +46,7 @@ var toSelector = function(cssClass) {
     return "." + cssClass;
 };
 
-
 QUnit.module("general");
-
-QUnit.test("init", function(assert) {
-    var tabsElement = $("#tabs").dxTabs({
-        items: [
-            { text: "0", icon: "custom" },
-            { text: "1", iconSrc: "http://1.png" },
-            { text: "2" }
-        ]
-    });
-
-    var tabsInstance = tabsElement.dxTabs("instance"),
-        tabElements = tabsInstance._itemElements();
-
-    assert.equal(tabsInstance.option("selectedIndex"), -1);
-
-    assert.equal($.trim(tabsElement.text()), "012");
-
-    assert.equal(tabElements.find(".dx-icon-custom").length, 1);
-
-    var icon = tabElements.find("img");
-    assert.equal(icon.length, 1);
-    assert.equal(icon.attr("src"), "http://1.png");
-});
 
 QUnit.test("mouseup switch selected tab", function(assert) {
     var tabsElement = $("#tabs").dxTabs({
@@ -276,23 +252,6 @@ QUnit.test("regression: B251795", function(assert) {
     assert.equal(itemClickFired, 0);
     assert.equal(itemSelectFired, 0);
 });
-
-
-QUnit.module("badges");
-
-QUnit.test("item badge render", function(assert) {
-    var $element = $("#widget").dxTabs({
-        items: [
-            { text: "user", badge: 1 },
-            { text: "analytics" }
-        ],
-        width: 400
-    });
-
-    assert.ok($element.find(".dx-tab:eq(0) .dx-badge").length, "badge on the first item exists");
-    assert.ok(!$element.find(".dx-tab:eq(1) .dx-badge").length, "badge on the second item is not exist");
-});
-
 
 QUnit.module("widget sizing render");
 

@@ -6,24 +6,9 @@ import Tabs from "ui/tabs";
 
 QUnit.testStart(() => {
     const markup =
-        '<style>\
-            #scrollableTabs .dx-tab {\
-                display: table-cell;\
-                padding: 35px;\
-            }\
-            \
-            .bigtab.dx-tabs-expanded .dx-tab {\
-                width: 1000px;\
-            }\
-        </style>\
-        \
-        <div id="tabs">\
-        \
-        </div>\
+        '<div id="tabs"></div>\
         <div id="widget"></div>\
-        <div id="widthRootStyle" style="width: 300px;"></div>\
-        \
-        <div id="scrollableTabs"></div>';
+        <div id="widthRootStyle" style="width: 300px;"></div>';
 
     $("#qunit-fixture").html(markup);
 });
@@ -48,6 +33,29 @@ QUnit.module("Tabs markup", () => {
         });
 
         assert.ok($tabsElement.find(toSelector(TABS_WRAPPER_CLASS)).length, "tabs has wrapper");
+    });
+
+    QUnit.test("items rendering", (assert) => {
+        const tabsElement = $("#tabs").dxTabs({
+            items: [
+                { text: "0", icon: "custom" },
+                { text: "1", iconSrc: "http://1.png" },
+                { text: "2" }
+            ]
+        });
+
+        const tabsInstance = tabsElement.dxTabs("instance"),
+            tabElements = tabsInstance._itemElements();
+
+        assert.equal(tabsInstance.option("selectedIndex"), -1);
+
+        assert.equal($.trim(tabsElement.text()), "012");
+
+        assert.equal(tabElements.find(".dx-icon-custom").length, 1);
+
+        var icon = tabElements.find("img");
+        assert.equal(icon.length, 1);
+        assert.equal(icon.attr("src"), "http://1.png");
     });
 });
 
