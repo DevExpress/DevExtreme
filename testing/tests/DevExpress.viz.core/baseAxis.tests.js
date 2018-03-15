@@ -2043,13 +2043,10 @@ QUnit.test("updateSize, synchronized axis - do not recalculate margins/interval"
 
     // act
     // emulate synchronizer
-    this.translator.updateBusinessRange({
-        min: 50,
-        max: 250,
-        interval: 50,
-        isSynchronized: true
-    });
-    axis.draw(this.canvas);
+    axis.createTicks(this.canvas);
+    axis.setTicks({});
+    axis.draw();
+
     this.translator.stub("updateBusinessRange").reset();
 
     axis.updateSize({
@@ -2061,12 +2058,50 @@ QUnit.test("updateSize, synchronized axis - do not recalculate margins/interval"
         height: 400
     });
 
-    assert.deepEqual(this.translator.getBusinessRange(), {
-        min: 50,
-        max: 250,
-        interval: 50,
-        isSynchronized: true
+    // assert
+    assert.equal(this.translator.stub("updateBusinessRange").callCount, 0);
+});
+
+QUnit.test("createTicks after synchronization (zoom chart) - recalculate margins/interval. T616166", function(assert) {
+    var axis = this.createAxis(true, {
+        valueMarginsEnabled: true
     });
+
+    this.generatedTicks = [100, 200];
+    axis.setBusinessRange({
+        min: 90,
+        max: 210,
+        interval: 30
+    });
+    axis.setMarginOptions({
+        checkInterval: true,
+        size: 100
+    });
+
+    // act
+    // emulate synchronizer
+    axis.createTicks(this.canvas);
+    axis.setTicks({});
+    axis.draw();
+
+    this.translator.stub("updateBusinessRange").reset();
+
+    axis.createTicks({
+        top: 200,
+        bottom: 200,
+        left: 200,
+        right: 200,
+        width: 900,
+        height: 400
+    });
+
+    // assert
+    var range = this.translator.stub("updateBusinessRange").lastCall.args[0];
+    assert.equal(range.min, 75);
+    assert.equal(range.minVisible, 75);
+    assert.equal(range.max, 225);
+    assert.equal(range.maxVisible, 225);
+    assert.equal(range.interval, 30);
 });
 
 QUnit.test("Margins and skipViewportExtending = true - do not extend range with margins to boundary ticks", function(assert) {
