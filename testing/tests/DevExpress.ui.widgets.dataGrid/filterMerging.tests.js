@@ -477,6 +477,18 @@ QUnit.module("getCombinedFilter", {
         assert.equal(handler.lastCall.args[1], "between", "selectedFilterOperation");
         assert.equal(handler.lastCall.args[2], "filterBuilder", "target");
     });
+
+    QUnit.test("header filter exclude", function(assert) {
+        // act
+        this.setupDataGrid({
+            dataSource: [],
+            columns: [{ dataField: "Test", filterType: "exclude" }],
+            filterValue: ["Test", "anyof", ["1", "2"]]
+        });
+
+        // assert
+        assert.deepEqual(this.getCombinedFilter(true), [["Test", "<>", "1"], "and", ["Test", "<>", "2"]], "combined filter");
+    });
 });
 
 

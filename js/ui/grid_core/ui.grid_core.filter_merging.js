@@ -126,7 +126,7 @@ function anyOf(field, filterValue) {
         if(utils.isCondition(value) || utils.isGroup(value)) {
             result.push(utils.getFilterExpression(value, [field], [], "headerFilter"));
         } else {
-            result.push(utils.getFilterExpression([field.dataField, "=", value], [field], [], "headerFilter"));
+            result.push(utils.getFilterExpression([field.dataField, isExclude ? "<>" : "=", value], [field], [], "headerFilter"));
         }
         index !== lastIndex && result.push(isExclude ? "and" : "or");
     });
