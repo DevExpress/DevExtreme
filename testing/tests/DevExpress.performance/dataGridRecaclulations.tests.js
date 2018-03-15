@@ -54,7 +54,7 @@ QUnit.performanceTest("render with columnFixing", function(assert) {
         }
     });
 
-    assert.measureStyleRecalculation(measureFunction, 17);
+    assert.measureStyleRecalculation(measureFunction, 14);
 });
 
 QUnit.performanceTest("render with virtual scrolling", function(assert) {
@@ -99,7 +99,7 @@ QUnit.performanceTest("updateDimensions with columnFixing", function(assert) {
 
     var measureFunction = createDataGridMeasureFunction("updateDimensions");
 
-    assert.measureStyleRecalculation(measureFunction, 9);
+    assert.measureStyleRecalculation(measureFunction, 2);
 });
 
 QUnit.performanceTest("updateDimensions with virtual scrolling", function(assert) {
@@ -146,7 +146,7 @@ QUnit.performanceTest("refresh with columnFixing", function(assert) {
 
     var measureFunction = createDataGridMeasureFunction("refresh");
 
-    assert.measureStyleRecalculation(measureFunction, 11);
+    assert.measureStyleRecalculation(measureFunction, 3);
 });
 
 QUnit.performanceTest("refresh with virtual scrolling", function(assert) {
