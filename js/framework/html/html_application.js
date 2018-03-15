@@ -580,7 +580,9 @@ var HtmlApplication = Application.inherit({
                 if(controllerToDeactivate.isOverlay) {
                     skipAnimation = true;
                 } else {
-                    that.transitionExecutor.leave(controllerToDeactivate.element(), LAYOUT_CHANGE_ANIMATION_NAME, { direction: direction });
+                    if(!skipAnimation) {
+                        that.transitionExecutor.leave(controllerToDeactivate.element(), LAYOUT_CHANGE_ANIMATION_NAME, { direction: direction });
+                    }
                 }
 
                 transitionDeferred.promise().done(getControllerDeactivator(controllerToDeactivate, d));
