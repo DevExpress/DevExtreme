@@ -8,7 +8,6 @@ var seriesNS = {},
     pointModule = require("./points/base_point"),
     _isDefined = typeUtils.isDefined,
     vizUtils = require("../core/utils"),
-    _map = vizUtils.map,
     _each = each,
     _extend = extend,
     _isEmptyObject = typeUtils.isEmptyObject,
@@ -476,9 +475,7 @@ Series.prototype = {
             argTranslator = argumentAxis.getTranslator(),
             isDiscrete = that.argumentAxisType === DISCRETE || that.valueAxisType === DISCRETE,
             businessRange = argTranslator.getBusinessRange(),
-            minMaxDefined = _isDefined(min) && _isDefined(max),
             aggregationInfo,
-            tickInterval,
             aggregationInterval = argumentAxis.getOptions().aggregationInterval;
 
         if(pointsLength && pointsLength > 1) {
@@ -496,15 +493,13 @@ Series.prototype = {
                     }
                     pointsLength = categories.length;
                 }
-                tickInterval = Math.ceil(pointsLength / count);
-            } else {
-                tickInterval = (minMaxDefined ? (max - min) : (businessRange.maxVisible - businessRange.minVisible)) / count;
+                aggregationInterval = Math.ceil(pointsLength / count);
             }
 
             // tickInterval = calculateAggregationInterval();
-            aggregationInfo = _isDefined(aggregationInterval) ? { tickInterval: aggregationInterval } : argumentAxis._getTicks(businessRange, _noop, true);
+            aggregationInfo = _isDefined(aggregationInterval) ? { tickInterval: aggregationInterval } : argumentAxis._getTicks(businessRange, _noop);
 
-            return that._resample(aggregationInfo, min - tickInterval, max + tickInterval, minMaxDefined, data);
+            return that._resample(aggregationInfo, data);
         }
 
         return [];
@@ -857,17 +852,16 @@ Series.prototype = {
         return aggregator;
     },
 
-    _fusionData: function(data, interval, aggregationInterval) {
-        var options = this.getOptions(),
-            aggregationMethod = this._getAggregationMethod(),
-            underlyingData = data.map(function(item) { return item.data; }),
+    _fusionData(data, { intervalStart, intervalEnd, aggregationInterval }) {
+        var aggregationMethod = this._getAggregationMethod(),
+            underlyingData = data.map(item => item.data),
             aggregatedData = aggregationMethod({
                 data: underlyingData,
-                intervalStart: interval,
-                aggregationInterval: aggregationInterval,
-                intervalEnd: interval + aggregationInterval
+                intervalStart,
+                aggregationInterval,
+                intervalEnd
             }, this),
-            pointData = aggregatedData && this._getPointData(aggregatedData, options);
+            pointData = aggregatedData && this._getPointData(aggregatedData, this.getOptions());
 
         if(pointData && this._checkData(pointData)) {
             return pointData;
@@ -876,63 +870,34 @@ Series.prototype = {
         return null;
     },
 
-    _resample: function(aggregationInfo, min, max, isDefinedMinMax, data) {
+    _resample: function({ tickInterval, ticks }, data) {
         var that = this,
-            dataInInterval = [],
-            aggregationInterval = aggregationInfo.tickInterval,
-            pointData,
-            minTick,
-            aggregatedData,
-            state = 0;
-
-        function addFirstDataItem(point) {
-            dataInInterval.push(point);
-            minTick = point.argument;
-
-            if(isDefinedMinMax) {
-                if(point.argument < min) {
-                    state = 1;
-                } else if(point.argument > max) {
-                    state = 2;
-                } else {
-                    state = 0;
-                }
-            }
-        }
+            aggregatedData = [],
+            dataIndex = 0;
 
         if(that.argumentAxisType === DISCRETE || that.valueAxisType === DISCRETE) {
-            return _map(data, function(point, index) {
-                if(index % aggregationInterval === 0) {
-                    return point;
+            return data.reduce((result, dataItem, index) => {
+                if(index % tickInterval === 0) {
+                    result.push(dataItem);
                 }
-                return null;
-            });
+                return result;
+            }, []);
         }
 
-        aggregatedData = data.reduce(function(aggregatedPoints, point) {
-            if(!dataInInterval.length) {
-                addFirstDataItem(point);
-            } else if(!state && Math.abs(minTick - point.argument) < aggregationInterval) {
-                dataInInterval.push(point);
-            } else if(!(state === 1 && point.argument < min) && !(state === 2 && point.argument > max)) {
-                pointData = that._fusionData(dataInInterval, minTick, aggregationInterval);
-
-                if(pointData) {
-                    aggregatedPoints.push(pointData);
-                }
-
-                dataInInterval = [];
-                addFirstDataItem(point);
+        for(let i = 1; i < ticks.length; i++) {
+            const intervalEnd = ticks[i];
+            const dataInInterval = [];
+            while(data[dataIndex] && data[dataIndex].argument < intervalEnd) {
+                dataInInterval.push(data[dataIndex]);
+                dataIndex++;
             }
-
-            return aggregatedPoints;
-
-        }, []);
-
-        if(dataInInterval.length) {
-            pointData = that._fusionData(dataInInterval, minTick, aggregationInterval);
-            if(pointData) {
-                aggregatedData.push(pointData);
+            const aggregatedDataItem = this._fusionData(dataInInterval, {
+                intervalStart: ticks[i - 1],
+                intervalEnd,
+                aggregationInterval: tickInterval
+            });
+            if(aggregatedDataItem) {
+                aggregatedData.push(aggregatedDataItem);
             }
         }
 
