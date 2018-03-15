@@ -116,8 +116,11 @@ function getGroupMenuItem(group, availableGroups) {
 }
 
 function getCriteriaOperation(criteria) {
-    var value = "";
+    if(isCondition(criteria)) {
+        return AND_GROUP_OPERATION;
+    }
 
+    var value = "";
     for(var i = 0; i < criteria.length; i++) {
         var item = criteria[i];
         if(!Array.isArray(item)) {
@@ -127,7 +130,6 @@ function getCriteriaOperation(criteria) {
             value = item;
         }
     }
-
     return value;
 }
 
@@ -656,6 +658,11 @@ function syncFilters(filter, addedFilter, operations) {
         }
     }
 
+    var groupValue = getGroupValue(filter);
+    if(groupValue !== AND_GROUP_OPERATION) {
+        return [addedFilter, "and", filter];
+    }
+
     var result = [];
     filter.forEach(function(item) {
         if(isCondition(item)) {
@@ -691,6 +698,11 @@ function getMatchedCondition(filter, dataField, operations) {
         } else {
             return null;
         }
+    }
+
+    var groupValue = getGroupValue(filter);
+    if(groupValue !== AND_GROUP_OPERATION) {
+        return null;
     }
 
     var result = null,
