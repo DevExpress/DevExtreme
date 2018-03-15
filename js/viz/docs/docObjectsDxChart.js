@@ -20,6 +20,38 @@ var chartSeriesObject = {
 }
 
 /**
+* @name chartPointAggregationInfoObject
+* @publicName aggregationInfo
+* @type object
+*/
+var chartPointAggregationInfoObject = {
+    /**
+    * @name chartPointAggregationInfoObject_data
+    * @publicName data
+    * @type Array<any>
+    */
+    data: null,
+    /**
+    * @name chartPointAggregationInfoObject_aggregationInterval
+    * @publicName aggregationInterval
+    * @type any
+    */
+    aggregationInterval: null,
+    /**
+    * @name chartPointAggregationInfoObject_intervalStart
+    * @publicName intervalStart
+    * @type any
+    */
+    intervalStart: null,
+    /**
+    * @name chartPointAggregationInfoObject_intervalEnd
+    * @publicName intervalEnd
+    * @type any
+    */
+    intervalEnd: null
+}
+
+/**
 * @name chartPointObject
 * @publicName Point
 * @type object
@@ -29,34 +61,9 @@ var chartPointObject = {
     /**
     * @name chartPointObjectFields_aggregationInfo
     * @publicName aggregationInfo
-    * @type object
+    * @type chartPointAggregationInfoObject
     */
-    aggregationInfo: {
-        /**
-        * @name chartPointObjectFields_aggregationInfo_data
-        * @publicName data
-        * @type Array<any>
-        */
-        data: null,
-        /**
-        * @name chartPointObjectFields_aggregationInfo_aggregationInterval
-        * @publicName aggregationInterval
-        * @type any
-        */
-        aggregationInterval: null,
-        /**
-        * @name chartPointObjectFields_aggregationInfo_intervalStart
-        * @publicName intervalStart
-        * @type any
-        */
-        intervalStart: null,
-        /**
-        * @name chartPointObjectFields_aggregationInfo_intervalEnd
-        * @publicName intervalEnd
-        * @type any
-        */
-        intervalEnd: null
-    },
+    aggregationInfo: null,
     /**
     * @name chartPointObjectFields_originalMinValue
     * @publicName originalMinValue
