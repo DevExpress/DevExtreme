@@ -2,7 +2,6 @@
 
 var $ = require("../../core/renderer"),
     noop = require("../../core/utils/common").noop,
-    deferRender = require("../../core/utils/common").deferRender,
     devices = require("../../core/devices"),
     extend = require("../../core/utils/extend").extend,
     registerComponent = require("../../core/component_registrator"),
@@ -57,24 +56,7 @@ var RadioCollection = CollectionWidget.inherit({
 
     _refreshContent: function() {
         this._prepareContent();
-        this._fireContentReadyAction();
-    },
-
-    _renderContent: function() {
-        this._fireContentReadyAction();
-    },
-
-    _initMarkup: function() {
-        this.callBase();
-        this._prepareContent();
-    },
-
-    _prepareContent: function() {
-        var that = this;
-
-        deferRender(function() {
-            that._renderContentImpl();
-        });
+        this._renderContent();
     }
 });
 

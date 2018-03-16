@@ -440,7 +440,8 @@ var Component = Class.inherit({
 
             if(Config().wrapActionsBeforeExecute) {
                 var beforeActionExecute = that.option("beforeActionExecute") || noop;
-                action = beforeActionExecute(that, action, config) || action;
+                var wrappedAction = beforeActionExecute(that, action, config) || action;
+                return wrappedAction.apply(that, arguments);
             }
 
             return action.apply(that, arguments);

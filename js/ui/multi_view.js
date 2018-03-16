@@ -230,7 +230,7 @@ var MultiView = CollectionWidget.inherit({
         this._initSwipeable();
     },
 
-    _render: function() {
+    _initMarkup: function() {
         this._deferredItems = [];
 
         this.callBase();

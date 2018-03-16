@@ -241,7 +241,7 @@ var DOMComponent = Component.inherit({
     },
 
     _isVisibilityChangeSupported: function() {
-        return this._visibilityChanged !== abstract;
+        return this._visibilityChanged !== abstract && windowUtils.hasWindow();
     },
 
     _clean: commonUtils.noop,

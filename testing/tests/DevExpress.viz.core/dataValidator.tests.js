@@ -4,10 +4,9 @@ var $ = require("jquery"),
     vizMocks = require("../../helpers/vizMocks.js"),
     commonUtils = require("core/utils/common"),
     seriesModule = require("viz/series/base_series"),
-    dataValidatorModule = require("viz/components/data_validator");
-
-/* global MockAxis */
-require("../../helpers/chartMocks.js");
+    dataValidatorModule = require("viz/components/data_validator"),
+    chartMocks = require("../../helpers/chartMocks.js"),
+    MockAxis = chartMocks.MockAxis;
 
 function checkTypes(assert, data, groupsData, argumentAxisType, argumentType, valueAxisType, valueType, callCount, options) {
     testValidateData(data, groupsData, null, options);

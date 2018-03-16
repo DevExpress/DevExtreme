@@ -129,6 +129,7 @@ module.exports = {
                  * @publicName pageSize
                  * @type number
                  * @default 20
+                 * @fires dxDataGridOptions_onOptionChanged
                  */
                 pageSize: undefined,
                 /**
@@ -136,6 +137,7 @@ module.exports = {
                  * @publicName pageIndex
                  * @type number
                  * @default 0
+                 * @fires dxDataGridOptions_onOptionChanged
                  */
                 pageIndex: undefined
             }

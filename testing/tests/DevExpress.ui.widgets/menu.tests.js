@@ -239,12 +239,6 @@ QUnit.test("Render items with custom model", function(assert) {
     assert.equal($item111.text(), "item 111");
 });
 
-QUnit.test("Check default css class", function(assert) {
-    var menu = createMenu({});
-
-    assert.ok($(menu.element).hasClass(DX_MENU_CLASS));
-});
-
 QUnit.test("Do not render menu with empty items", function(assert) {
     var menu = createMenu({ items: [] }),
         submenus = $(menu.element).find("." + DX_SUBMENU_CLASS),
@@ -422,15 +416,6 @@ QUnit.test("Menu should not crash when items changed (T310030)", function(assert
 
     $($submenuItem).trigger("dxclick");
     assert.ok(true, "menu does not crash");
-});
-
-QUnit.test("Create root childfree item selected", function(assert) {
-    var menu = createMenu({
-            items: [{ text: "root", selected: true }],
-            selectionMode: "single"
-        }),
-        item1 = $(menu.element).find("." + DX_MENU_ITEM_CLASS).eq(0);
-    assert.ok(item1.hasClass(DX_MENU_ITEM_SELECTED_CLASS));
 });
 
 QUnit.test("Try to set selected state of several items via item.selected option 2", function(assert) {
@@ -1251,6 +1236,24 @@ QUnit.test("Menu should hide after mouseleave when hideOnMouseLeave = true", fun
     assert.notOk(submenu.option("visible"), "submenu hidden");
 });
 
+QUnit.test("Menu should not hide after mouseleave to children of a target", function(assert) {
+    if(!isDeviceDesktop(assert)) return;
+
+    var menu = createMenu({
+            items: [{ text: "Item 1", items: [{ text: "item 11" }] }, { text: "Item 2" }],
+            showFirstSubmenuMode: { name: "onHover", delay: 0 },
+            hideSubmenuOnMouseLeave: true
+        }),
+        $rootMenuItem = $(menu.element).find("." + DX_MENU_ITEM_CLASS);
+
+    $(menu.element).trigger($.Event("click", { target: $rootMenuItem.eq(0).get(0) }));
+    $(menu.element).trigger($.Event("mouseleave", { target: $rootMenuItem.eq(0).get(0), relatedTarget: $rootMenuItem.eq(0).children()[2] }));
+    this.clock.tick(0);
+
+    var submenu = getSubMenuInstance($rootMenuItem);
+    assert.ok(submenu.option("visible"), "submenu shown");
+});
+
 QUnit.test("Menu should show after it's submenu has been selected", function(assert) {
     var menu = createMenu({
             items: [{ text: "Item 1", items: [{ text: "item 11" }] }, { text: "Item 2" }],
@@ -1833,15 +1836,6 @@ QUnit.test("Create items with template", function(assert) {
     assert.equal($($item).text(), "test", "template rendered");
     assert.equal($(submenu._overlay.content()).find("." + DX_MENU_ITEM_CLASS).eq(0).text(), "test", "template rendered");
     assert.equal($(submenu._overlay.content()).find("." + DX_MENU_ITEM_CLASS).eq(1).text(), "test", "template rendered");
-});
-
-
-QUnit.module("aria accessibility");
-
-QUnit.test("Aria role", function(assert) {
-    var $element = $("#menu").dxMenu();
-
-    assert.equal($element.attr("role"), "menubar");
 });
 
 

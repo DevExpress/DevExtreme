@@ -1,7 +1,4 @@
 "use strict";
-
-/* global insertMockFactory, resetMockFactory */
-
 var $ = require("jquery"),
     vizMocks = require("../../../helpers/vizMocks.js"),
     labelModule = require("viz/series/points/label"),
@@ -26,7 +23,10 @@ var $ = require("jquery"),
     ChartTrackerSub = vizMocks.stubClass(trackerModule.ChartTracker),
     PieTrackerSub = vizMocks.stubClass(trackerModule.PieTracker),
     chartModule = require("viz/chart"),
-    dataValidatorModule = require("viz/components/data_validator");
+    dataValidatorModule = require("viz/components/data_validator"),
+    chartMocks = require("../../../helpers/chartMocks.js"),
+    insertMockFactory = chartMocks.insertMockFactory,
+    resetMockFactory = chartMocks.resetMockFactory;
 
 exports.LabelCtor = LabelCtor;
 exports.rendererModule = rendererModule;

@@ -85,7 +85,7 @@ var commonSeries = {
     * @publicName dashStyle
     * @type Enums.DashStyle
     * @default 'solid'
-        * @propertyOf dxChartSeriesTypes_LineSeries,dxChartSeriesTypes_StackedLineSeries,dxChartSeriesTypes_FullStackedLineSeries,dxChartSeriesTypes_StackedSplineSeries,dxChartSeriesTypes_FullStackedSplineSeries,dxChartSeriesTypes_SplineSeries,dxChartSeriesTypes_StepLineSeries
+    * @propertyOf dxChartSeriesTypes_LineSeries,dxChartSeriesTypes_StackedLineSeries,dxChartSeriesTypes_FullStackedLineSeries,dxChartSeriesTypes_StackedSplineSeries,dxChartSeriesTypes_FullStackedSplineSeries,dxChartSeriesTypes_SplineSeries,dxChartSeriesTypes_StepLineSeries
     */
     dashStyle: 'solid',
     /**
@@ -1085,19 +1085,14 @@ var commonSeries = {
         /**
         * @name dxChartSeriesTypes_CommonSeries_aggregation_method
         * @publicName method
-        * @type string
-        * @acceptValues 'avg'|'count'|'max'|'min'|'ohlc'|'range'|'sum'|'custom'
+        * @type Enums.ChartSeriesAggregationMethod
         */
         method: undefined,
         /**
         * @name dxChartSeriesTypes_CommonSeries_aggregation_calculate
         * @publicName calculate
         * @type function(aggregationInfo, series)
-        * @type_function_param1 aggregationInfo:object
-        * @type_function_param1_field1 data:Array<any>
-        * @type_function_param1_field2 aggregationInterval:any
-        * @type_function_param1_field3 intervalStart:any
-        * @type_function_param1_field4 intervalEnd:any
+        * @type_function_param1 aggregationInfo:chartPointAggregationInfoObject
         * @type_function_param2 series:baseSeriesObject
         * @type_function_return object
         * @default undefined
@@ -1173,10 +1168,8 @@ var areaSeries = {
         /**
         * @name dxChartSeriesTypes_areaseries_aggregation_method
         * @publicName method
-        * @type string
-        * @acceptValues 'avg'|'count'|'max'|'min'|'sum'|'custom'
+        * @type Enums.ChartSingleValueSeriesAggregationMethod
         * @default 'avg'
-        * @inheritdoc
         */
         method: "avg"
     }
@@ -1233,10 +1226,8 @@ var barSeries = {
         /**
         * @name dxChartSeriesTypes_barseries_aggregation_method
         * @publicName method
-        * @type string
-        * @acceptValues 'avg'|'count'|'max'|'min'|'sum'|'custom'
+        * @type Enums.ChartSingleValueSeriesAggregationMethod
         * @default 'sum'
-        * @inheritdoc
         */
         method: "sum"
     }
@@ -1348,10 +1339,8 @@ var candlestickSeries = {
         /**
         * @name dxChartSeriesTypes_candlestickseries_aggregation_method
         * @publicName method
-        * @type string
-        * @acceptValues 'ohlc'|'custom'
+        * @type Enums.ChartFinancialSeriesAggregationMethod
         * @default 'ohlc'
-        * @inheritdoc
         */
         method: "ohlc"
     }
@@ -1423,10 +1412,8 @@ var fullstackedareaSeries = {
         /**
         * @name dxChartSeriesTypes_fullstackedareaseries_aggregation_method
         * @publicName method
-        * @type string
-        * @acceptValues 'avg'|'count'|'max'|'min'|'sum'|'custom'
+        * @type Enums.ChartSingleValueSeriesAggregationMethod
         * @default 'avg'
-        * @inheritdoc
         */
         method: "avg"
     }
@@ -1499,10 +1486,8 @@ var fullstackedsplineareaSeries = {
         /**
         * @name dxChartSeriesTypes_fullstackedsplineareaseries_aggregation_method
         * @publicName method
-        * @type string
-        * @acceptValues 'avg'|'count'|'max'|'min'|'sum'|'custom'
+        * @type Enums.ChartSingleValueSeriesAggregationMethod
         * @default 'avg'
-        * @inheritdoc
         */
         method: "avg"
     }
@@ -1567,10 +1552,8 @@ var fullstackedbarSeries = {
         /**
         * @name dxChartSeriesTypes_fullstackedbarseries_aggregation_method
         * @publicName method
-        * @type string
-        * @acceptValues 'avg'|'count'|'max'|'min'|'sum'|'custom'
+        * @type Enums.ChartSingleValueSeriesAggregationMethod
         * @default 'sum'
-        * @inheritdoc
         */
         method: "sum"
     }
@@ -1627,10 +1610,8 @@ var fullstackedlineSeries = {
         /**
         * @name dxChartSeriesTypes_fullstackedlineseries_aggregation_method
         * @publicName method
-        * @type string
-        * @acceptValues 'avg'|'count'|'max'|'min'|'sum'|'custom'
+        * @type Enums.ChartSingleValueSeriesAggregationMethod
         * @default 'avg'
-        * @inheritdoc
         */
         method: "avg"
     }
@@ -1687,10 +1668,8 @@ var fullstackedsplineSeries = {
         /**
         * @name dxChartSeriesTypes_fullstackedsplineseries_aggregation_method
         * @publicName method
-        * @type string
-        * @acceptValues 'avg'|'count'|'max'|'min'|'sum'|'custom'
+        * @type Enums.ChartSingleValueSeriesAggregationMethod
         * @default 'avg'
-        * @inheritdoc
         */
         method: "avg"
     }
@@ -1748,10 +1727,8 @@ var lineSeries = {
         /**
         * @name dxChartSeriesTypes_lineseries_aggregation_method
         * @publicName method
-        * @type string
-        * @acceptValues 'avg'|'count'|'max'|'min'|'sum'|'custom'
+        * @type Enums.ChartSingleValueSeriesAggregationMethod
         * @default 'avg'
-        * @inheritdoc
         */
         method: "avg"
     }
@@ -1824,10 +1801,8 @@ var rangeareaSeries = {
         /**
         * @name dxChartSeriesTypes_rangeareaseries_aggregation_method
         * @publicName method
-        * @type string
-        * @acceptValues 'range'|'custom'
+        * @type Enums.ChartRangeSeriesAggregationMethod
         * @default 'range'
-        * @inheritdoc
         */
         method: "range"
     }
@@ -1884,10 +1859,8 @@ var rangebarSeries = {
         /**
         * @name dxChartSeriesTypes_rangebarseries_aggregation_method
         * @publicName method
-        * @type string
-        * @acceptValues 'range'|'custom'
+        * @type Enums.ChartRangeSeriesAggregationMethod
         * @default 'range'
-        * @inheritdoc
         */
         method: "range"
     }
@@ -1928,10 +1901,8 @@ var scatterSeries = {
         /**
         * @name dxChartSeriesTypes_scatterseries_aggregation_method
         * @publicName method
-        * @type string
-        * @acceptValues 'avg'|'count'|'max'|'min'|'sum'|'custom'
+        * @type Enums.ChartSingleValueSeriesAggregationMethod
         * @default 'avg'
-        * @inheritdoc
         */
         method: "avg"
     }
@@ -2004,10 +1975,8 @@ var splineareaSeries = {
         /**
         * @name dxChartSeriesTypes_splineareaseries_aggregation_method
         * @publicName method
-        * @type string
-        * @acceptValues 'avg'|'count'|'max'|'min'|'sum'|'custom'
+        * @type Enums.ChartSingleValueSeriesAggregationMethod
         * @default 'avg'
-        * @inheritdoc
         */
         method: "avg"
     }
@@ -2064,10 +2033,8 @@ var splineSeries = {
         /**
         * @name dxChartSeriesTypes_splineseries_aggregation_method
         * @publicName method
-        * @type string
-        * @acceptValues 'avg'|'count'|'max'|'min'|'sum'|'custom'
+        * @type Enums.ChartSingleValueSeriesAggregationMethod
         * @default 'avg'
-        * @inheritdoc
         */
         method: "avg"
     }
@@ -2140,10 +2107,8 @@ var stackedareaSeries = {
         /**
         * @name dxChartSeriesTypes_splineseries_aggregation_method
         * @publicName method
-        * @type string
-        * @acceptValues 'avg'|'count'|'max'|'min'|'sum'|'custom'
+        * @type Enums.ChartSingleValueSeriesAggregationMethod
         * @default 'avg'
-        * @inheritdoc
         */
         method: "avg"
     }
@@ -2216,10 +2181,8 @@ var stackedsplineareaSeries = {
         /**
         * @name dxChartSeriesTypes_stackedsplineareaseries_aggregation_method
         * @publicName method
-        * @type string
-        * @acceptValues 'avg'|'count'|'max'|'min'|'sum'|'custom'
+        * @type Enums.ChartSingleValueSeriesAggregationMethod
         * @default 'avg'
-        * @inheritdoc
         */
         method: "avg"
     }
@@ -2284,10 +2247,8 @@ var stackedbarSeries = {
         /**
         * @name dxChartSeriesTypes_stackedbarseries_aggregation_method
         * @publicName method
-        * @type string
-        * @acceptValues 'sum'|'count'|'max'|'min'|'sum'|'custom'
-        * @default 'avg'
-        * @inheritdoc
+        * @type Enums.ChartSingleValueSeriesAggregationMethod
+        * @default 'sum'
         */
         method: "sum"
     }
@@ -2344,10 +2305,8 @@ var stackedlineSeries = {
         /**
         * @name dxChartSeriesTypes_stackedlineseries_aggregation_method
         * @publicName method
-        * @type string
-        * @acceptValues 'avg'|'count'|'max'|'min'|'sum'|'custom'
+        * @type Enums.ChartSingleValueSeriesAggregationMethod
         * @default 'avg'
-        * @inheritdoc
         */
         method: "avg"
     }
@@ -2404,10 +2363,8 @@ var stackedsplineSeries = {
         /**
         * @name dxChartSeriesTypes_stackedsplineseries_aggregation_method
         * @publicName method
-        * @type string
-        * @acceptValues 'avg'|'count'|'max'|'min'|'sum'|'custom'
+        * @type Enums.ChartSingleValueSeriesAggregationMethod
         * @default 'avg'
-        * @inheritdoc
         */
         method: "avg"
     }
@@ -2544,10 +2501,8 @@ var stepareaSeries = {
         /**
         * @name dxChartSeriesTypes_stepareaseries_aggregation_method
         * @publicName method
-        * @type string
-        * @acceptValues 'avg'|'count'|'max'|'min'|'sum'|'custom'
+        * @type Enums.ChartSingleValueSeriesAggregationMethod
         * @default 'avg'
-        * @inheritdoc
         */
         method: "avg"
     }
@@ -2604,10 +2559,8 @@ var steplineSeries = {
         /**
         * @name dxChartSeriesTypes_steplineseries_aggregation_method
         * @publicName method
-        * @type string
-        * @acceptValues 'avg'|'count'|'max'|'min'|'sum'|'custom'
+        * @type Enums.ChartSingleValueSeriesAggregationMethod
         * @default 'avg'
-        * @inheritdoc
         */
         method: "avg"
     }
@@ -2671,10 +2624,8 @@ var stockSeries = {
         /**
         * @name dxChartSeriesTypes_stockseries_aggregation_method
         * @publicName method
-        * @type string
-        * @acceptValues 'ohlc'|'custom'
+        * @type Enums.ChartFinancialSeriesAggregationMethod
         * @default 'ohlc'
-        * @inheritdoc
         */
         method: "ohlc"
     }
@@ -2730,10 +2681,8 @@ var bubbleSeries = {
         /**
         * @name dxChartSeriesTypes_bubbleseries_aggregation_method
         * @publicName method
-        * @type string
-        * @acceptValues 'avg'|'custom'
+        * @type Enums.ChartBubbleSeriesAggregationMethod
         * @default 'avg'
-        * @inheritdoc
         */
         method: "avg"
     }

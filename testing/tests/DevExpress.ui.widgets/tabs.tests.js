@@ -3,10 +3,10 @@
 var $ = require("jquery"),
     domUtils = require("core/utils/dom"),
     holdEvent = require("events/hold"),
-    Tabs = require("ui/tabs"),
     config = require("core/config"),
     pointerMock = require("../../helpers/pointerMock.js");
 
+require("ui/tabs");
 require("common.css!");
 
 QUnit.testStart(function() {
@@ -47,31 +47,7 @@ var toSelector = function(cssClass) {
     return "." + cssClass;
 };
 
-
 QUnit.module("general");
-
-QUnit.test("init", function(assert) {
-    var tabsElement = $("#tabs").dxTabs({
-        items: [
-            { text: "0", icon: "custom" },
-            { text: "1", iconSrc: "http://1.png" },
-            { text: "2" }
-        ]
-    });
-
-    var tabsInstance = tabsElement.dxTabs("instance"),
-        tabElements = tabsInstance._itemElements();
-
-    assert.equal(tabsInstance.option("selectedIndex"), -1);
-
-    assert.equal($.trim(tabsElement.text()), "012");
-
-    assert.equal(tabElements.find(".dx-icon-custom").length, 1);
-
-    var icon = tabElements.find("img");
-    assert.equal(icon.length, 1);
-    assert.equal(icon.attr("src"), "http://1.png");
-});
 
 QUnit.test("mouseup switch selected tab", function(assert) {
     var tabsElement = $("#tabs").dxTabs({
@@ -278,56 +254,7 @@ QUnit.test("regression: B251795", function(assert) {
     assert.equal(itemSelectFired, 0);
 });
 
-
-QUnit.module("badges");
-
-QUnit.test("item badge render", function(assert) {
-    var $element = $("#widget").dxTabs({
-        items: [
-            { text: "user", badge: 1 },
-            { text: "analytics" }
-        ],
-        width: 400
-    });
-
-    assert.ok($element.find(".dx-tab:eq(0) .dx-badge").length, "badge on the first item exists");
-    assert.ok(!$element.find(".dx-tab:eq(1) .dx-badge").length, "badge on the second item is not exist");
-});
-
-
 QUnit.module("widget sizing render");
-
-QUnit.test("constructor", function(assert) {
-    var $element = $("#widget").dxTabs({
-            items: [
-            { text: "user" },
-            { text: "analytics" },
-            { text: "customers" },
-            { text: "search" },
-            { text: "favorites" }
-            ], width: 400
-        }),
-        instance = $element.dxTabs("instance");
-
-    assert.strictEqual(instance.option("width"), 400);
-    assert.strictEqual($element.outerWidth(), 400, "outer width of the element must be equal to custom width");
-});
-
-QUnit.test("root with custom width", function(assert) {
-    var $element = $("#widthRootStyle").dxTabs({
-            items: [
-            { text: "user" },
-            { text: "analytics" },
-            { text: "customers" },
-            { text: "search" },
-            { text: "favorites" }
-            ]
-        }),
-        instance = $element.dxTabs("instance");
-
-    assert.strictEqual(instance.option("width"), undefined);
-    assert.strictEqual($element.outerWidth(), 300, "outer width of the element must be equal to custom width");
-});
 
 QUnit.test("change width", function(assert) {
     var $element = $("#widget").dxTabs({ items: [1, 2, 3] }),
@@ -645,14 +572,6 @@ QUnit.test("button should update disabled state after dxresize", function(assert
     assert.ok(!$button.dxButton("instance").option("disabled"));
 });
 
-QUnit.test("dxTabs should contains 'dx-tabs-wrapper' class", function(assert) {
-    var $element = $("#scrollableTabs").dxTabs({
-        items: [{ text: "item 1" }, { text: "item 2" }, { text: "item 3" }]
-    });
-
-    assert.ok($element.children("." + TABS_WRAPPER_CLASS).length, "dxTabs contains 'dx-tabs-wrapper' class");
-});
-
 QUnit.test("tabs should be scrolled to the right position on init in RTL mode", function(assert) {
     var $element = $("#scrollableTabs").dxTabs({
         items: [{ text: "item 1" }, { text: "item 2" }, { text: "item 3" }],
@@ -722,116 +641,3 @@ QUnit.test("tabs should scroll to the selected item on init", function(assert) {
 });
 
 
-QUnit.module("aria accessibility");
-
-QUnit.test("aria role", function(assert) {
-    var $element = $("#scrollableTabs").dxTabs({
-            items: [{ text: "item 1" }, { text: "item 2" }, { text: "item 3" }]
-        }),
-        $item = $element.find(".dx-tab:first");
-
-    assert.equal($element.attr("role"), "tablist", "role of the tab list is correct");
-    assert.equal($item.attr("role"), "tab", "role of the tab list is correct");
-});
-
-
-QUnit.module("default template", {
-    prepareItemTest: function(data) {
-        var tabs = new Tabs($("<div>"), {
-            items: [data]
-        });
-
-        return tabs.itemElements().eq(0).find(".dx-item-content").contents();
-    }
-});
-
-var TABS_ITEM_TEXT_CLASS = "dx-tab-text";
-
-QUnit.test("template should be rendered correctly with text", function(assert) {
-    var $content = this.prepareItemTest("custom");
-
-    assert.equal($content.text(), "custom");
-});
-
-QUnit.test("template should be rendered correctly with boolean", function(assert) {
-    var $content = this.prepareItemTest(true);
-
-    assert.equal($.trim($content.text()), "true");
-});
-
-QUnit.test("template should be rendered correctly with number", function(assert) {
-    var $content = this.prepareItemTest(1);
-
-    assert.equal($.trim($content.text()), "1");
-});
-
-QUnit.test("template should be rendered correctly with text", function(assert) {
-    var $content = this.prepareItemTest({ text: "custom" });
-
-    assert.equal($.trim($content.text()), "custom");
-});
-
-QUnit.test("template should be rendered correctly with html", function(assert) {
-    var $content = this.prepareItemTest({ html: "<span>test</span>" });
-
-    var $span = $content.is("span") ? $content : $content.children();
-    assert.ok($span.length);
-    assert.equal($span.text(), "test");
-});
-
-QUnit.test("template should be rendered correctly with htmlstring", function(assert) {
-    var $content = this.prepareItemTest("<span>test</span>");
-
-    assert.equal($content.text(), "<span>test</span>");
-});
-
-QUnit.test("template should be rendered correctly with html & text", function(assert) {
-    var $content = this.prepareItemTest({ text: "text", html: "<span>test</span>" });
-
-    var $span = $content.is("span") ? $content : $content.children();
-
-    assert.ok($span.length);
-    assert.equal($content.text(), "test");
-});
-
-QUnit.test("template should be rendered correctly with tab text wrapper for data with text field", function(assert) {
-    var $content = this.prepareItemTest({ text: "test" });
-
-    assert.equal($content.filter("." + TABS_ITEM_TEXT_CLASS).text(), "test");
-});
-
-QUnit.test("template should be rendered correctly with tab text wrapper for string data", function(assert) {
-    var $content = this.prepareItemTest("test");
-
-    assert.equal($content.filter("." + TABS_ITEM_TEXT_CLASS).text(), "test");
-});
-
-QUnit.test("template should be rendered correctly with tab text wrapper for string data", function(assert) {
-    var $content = this.prepareItemTest("test");
-
-    assert.equal($content.filter("." + TABS_ITEM_TEXT_CLASS).text(), "test");
-});
-
-QUnit.test("template should be rendered correctly with icon", function(assert) {
-    var $content = this.prepareItemTest({ icon: "test" });
-
-    assert.equal($content.filter(".dx-icon-test").length, 1);
-});
-
-QUnit.test("template should be rendered correctly with icon path", function(assert) {
-    var $content = this.prepareItemTest({ icon: "test.jpg" });
-
-    assert.equal($content.filter(".dx-icon").attr("src"), "test.jpg");
-});
-
-QUnit.test("template should be rendered correctly with external icon", function(assert) {
-    var $content = this.prepareItemTest({ icon: "fa fa-icon" });
-
-    assert.equal($content.filter(".fa.fa-icon").length, 1);
-});
-
-QUnit.test("template should be rendered correctly with imageSrc", function(assert) {
-    var $content = this.prepareItemTest({ iconSrc: "test.jpg" });
-
-    assert.equal($content.filter(".dx-icon").attr("src"), "test.jpg");
-});

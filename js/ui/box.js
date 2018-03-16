@@ -603,12 +603,17 @@ var Box = CollectionWidget.inherit({
         return this._queue.shift();
     },
 
-    _render: function() {
-        this._renderActions();
+    _initMarkup: function() {
+        this.$element().addClass(BOX_CLASS);
         this._layout.renderBox();
         this.callBase();
-        this.$element().addClass(BOX_CLASS);
         this._renderAlign();
+    },
+
+    _render: function() {
+        this._renderActions();
+
+        this.callBase();
     },
 
     _renderActions: function() {

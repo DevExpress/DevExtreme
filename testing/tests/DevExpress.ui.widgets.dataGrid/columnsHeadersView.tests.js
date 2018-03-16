@@ -617,7 +617,7 @@ QUnit.test('Add colgroup to table', function(assert) {
     this.columnHeadersView.render(testElement);
 
     // arrange
-    assert.equal(testElement.find('table').find('colgroup')[0].innerHTML.toLowerCase(), '<col>', '1 col element');
+    assert.equal(testElement.find('table').find('colgroup').children("col").length, 1, '1 col element');
 });
 
 QUnit.test('Create col elements by columns collection', function(assert) {

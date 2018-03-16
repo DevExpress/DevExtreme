@@ -18,7 +18,8 @@ var $ = require("jquery"),
 
     executeAsyncMock = require("../../helpers/executeAsyncMock.js"),
     frameworkMocks = require("../../helpers/frameworkMocks.js"),
-    htmlFrameworkMocks = require("../../helpers/htmlFrameworkMocks.js");
+    htmlFrameworkMocks = require("../../helpers/htmlFrameworkMocks.js"),
+    ajaxMock = require("../../helpers/ajaxMock.js");
 
 require("spa.css!");
 require("common.css!");
@@ -621,6 +622,61 @@ QUnit.test("T184222: Under some circumstances views stop being shown after a vie
     assert.equal(sequenceLog[2], "popup_deactivate");
     assert.equal(sequenceLog[3], "navbar_deactivate");
 
+    clock.restore();
+});
+
+QUnit.test("T615310: layoutController mustn't start animation when navigation occur from overlay layout", function(assert) {
+    var clock = sinon.useFakeTimers();
+    ajaxMock.setup({
+        url: "../../helpers/TestViewTemplates.html",
+        responseText: "<div data-options=\"dxView: { name: 'navbar' }\"></div>" +
+            "<div data-options=\"dxView: { name: 'popup' }\"></div>" +
+            "<div data-options=\"dxView: { name: 'simple' }\"></div>"
+    });
+    $("head").append('<link rel="dx-template" type="text/html" href="../../helpers/TestViewTemplates.html"/>');
+
+    var navbarLayoutController = new TestLayoutController({ name: "navbar" }),
+        popupLayoutController = new TestLayoutController({ name: "popup", isOverlay: true }),
+        simpleLayoutController = new TestLayoutController({ name: "simple" });
+
+    var app = new HtmlApplication({
+        layoutSet: [
+            { controller: navbarLayoutController, customResolveRequired: true },
+            { controller: popupLayoutController, customResolveRequired: true },
+            { controller: simpleLayoutController, customResolveRequired: true }
+        ],
+        router: new Router()
+    });
+
+    app.router.register(":view");
+
+    app.on("resolveLayoutController", function(args) {
+        if(args.viewInfo.viewName === "navbar") {
+            args.layoutController = navbarLayoutController;
+        } else if(args.viewInfo.viewName === "popup") {
+            args.layoutController = popupLayoutController;
+        } else if(args.viewInfo.viewName === "simple") {
+            args.layoutController = simpleLayoutController;
+        }
+    });
+
+    var animated = false;
+    var originalLeave = app.transitionExecutor.leave;
+    app.transitionExecutor.leave = function() {
+        animated = true;
+    };
+
+    app.navigate("navbar", { root: true });
+    clock.tick();
+    app.navigate("popup");
+    clock.tick();
+    app.navigate("simple");
+
+    assert.notOk(animated);
+
+    app.transitionExecutor.leave = originalLeave;
+    $("head").children("[rel='dx-template']").remove();
+    ajaxMock.clear();
     clock.restore();
 });
 

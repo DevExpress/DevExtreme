@@ -249,15 +249,18 @@ var Tabs = CollectionWidget.inherit({
         return TABS_ITEM_DATA_KEY;
     },
 
-    _render: function() {
+    _initMarkup: function() {
         this.callBase();
         this._renderWrapper();
-
-        this._renderScrolling();
-
         this.setAria("role", "tab", this.itemElements());
 
         this.option("useInkRipple") && this._renderInkRipple();
+    },
+
+    _render: function() {
+        this.callBase();
+
+        this._renderScrolling();
     },
 
     _renderScrolling: function() {

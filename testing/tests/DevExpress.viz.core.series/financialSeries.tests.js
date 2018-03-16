@@ -3,10 +3,10 @@
 var $ = require("jquery"),
     vizMocks = require("../../helpers/vizMocks.js"),
     Series = require("viz/series/base_series").Series,
-    pointModule = require("viz/series/points/base_point");
-
-/* global insertMockFactory, MockAxis */
-require("../../helpers/chartMocks.js");
+    pointModule = require("viz/series/points/base_point"),
+    chartMocks = require("../../helpers/chartMocks.js"),
+    insertMockFactory = chartMocks.insertMockFactory,
+    MockAxis = chartMocks.MockAxis;
 
 require("viz/chart");
 

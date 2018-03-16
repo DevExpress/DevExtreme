@@ -855,15 +855,17 @@ Series.prototype = {
     _fusionData(data, { intervalStart, intervalEnd, aggregationInterval }) {
         var aggregationMethod = this._getAggregationMethod(),
             underlyingData = data.map(item => item.data),
-            aggregatedData = aggregationMethod({
+            aggregationInfo = {
                 data: underlyingData,
                 intervalStart,
                 aggregationInterval,
                 intervalEnd
-            }, this),
-            pointData = aggregatedData && this._getPointData(aggregatedData, this.getOptions());
+            },
+            aggregatedData = aggregationMethod(aggregationInfo, this),
+            pointData = underlyingData && this._getPointData(aggregatedData, this.getOptions());
 
         if(pointData && this._checkData(pointData)) {
+            pointData.aggregationInfo = aggregationInfo;
             return pointData;
         }
 

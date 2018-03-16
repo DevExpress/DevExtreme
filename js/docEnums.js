@@ -743,3 +743,28 @@
  * @typedef {string} Enums.PositionResolveCollision
  * @enum {'fit'|'flip'|'flipfit'|'none'}
  */
+
+ /**
+ * @typedef {string} Enums.ChartSeriesAggregationMethod
+ * @enum {'avg'|'count'|'max'|'min'|'ohlc'|'range'|'sum'|'custom'}
+ */
+
+/**
+ * @typedef {string} Enums.ChartSingleValueSeriesAggregationMethod
+ * @enum {'avg'|'count'|'max'|'min'|'sum'|'custom'}
+ */
+
+ /**
+ * @typedef {string} Enums.ChartFinancialSeriesAggregationMethod
+ * @enum {'ohlc'|'custom'}
+ */
+
+ /**
+ * @typedef {string} Enums.ChartRangeSeriesAggregationMethod
+ * @enum {'range'|'custom'}
+ */
+
+ /**
+ * @typedef {string} Enums.ChartBubbleSeriesAggregationMethod
+ * @enum {'avg'|'custom'}
+ */
