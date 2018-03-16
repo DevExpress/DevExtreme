@@ -179,6 +179,11 @@
             border-bottom: ~"@{@{widgetName}-border}";
         }
 
+        .dx-column-lines > td {
+            border-left: ~"@{@{widgetName}-border}";
+            border-right: ~"@{@{widgetName}-border}";
+        }
+
         .dx-error-row {
             .dx-closebutton {
                 float: right;
@@ -334,6 +339,10 @@
             &.dx-numberbox-spin-touch-friendly .dx-texteditor-input {
                 padding-right: @MATERIAL_NUMBERBOX_TOUCH_FRIENDLY_SPIN_CONTAINER_WIDTH;
             }
+        }
+
+        .dx-placeholder:before {
+            font-size: @MATERIAL_GRID_BASE_CELL_FONT_SIZE;
         }
 
         .dx-dropdowneditor {
@@ -942,11 +951,7 @@
         }
     }
 
-    .dx-placeholder:before {
-        font-size: @MATERIAL_GRID_BASE_CELL_FONT_SIZE;
-    }
-
-    .dx-datagrid-form-buttons-container {
+    .dx-@{widgetName}-form-buttons-container {
         .dx-button {
             .dx-button-flat-styling(@button-default-bg);
         }
