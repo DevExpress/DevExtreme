@@ -2086,7 +2086,7 @@ QUnit.test("Resize grid after column resizing to right when columnResizingMode i
     }
 });
 
-QUnit.test("Resize column to show scroll if fixed column is exists", function(assert) {
+QUnit.test("Column widths should be correct after resize column to show scroll if fixed column is exists", function(assert) {
     // arrange
     var $dataGrid = $("#dataGrid").dxDataGrid({
             width: 400,
@@ -2119,7 +2119,7 @@ QUnit.test("Resize column to show scroll if fixed column is exists", function(as
     assert.strictEqual($colGroups.eq(1).children().get(2).style.width, "100px");
 });
 
-QUnit.test("Resize column to show scroll if fixed column is exists", function(assert) {
+QUnit.test("Last cell should have correct width after resize column to hide scroll if fixed column is exists and columnAutoWidth is enabled", function(assert) {
     // arrange
     var $dataGrid = $("#dataGrid").dxDataGrid({
             width: 400,
