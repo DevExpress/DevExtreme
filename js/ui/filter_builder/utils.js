@@ -723,6 +723,27 @@ function getMatchedCondition(filter, dataField, operations) {
     return result;
 }
 
+function filterHasField(filter, dataField) {
+    if(filter === null || filter.length === 0) return false;
+
+    if(isCondition(filter)) {
+        return filter[0] === dataField;
+    }
+
+    for(var i = 0; i < filter.length; i++) {
+        var item = filter[i];
+        if(isCondition(item) || isGroup(item)) {
+            if(filterHasField(item, dataField)) {
+                return true;
+            }
+        }
+    }
+
+    return filter.some(function(item) {
+        return (isCondition(item) || isGroup(item)) && filterHasField(item, dataField);
+    });
+}
+
 exports.isValidCondition = isValidCondition;
 exports.isEmptyGroup = isEmptyGroup;
 exports.getOperationFromAvailable = getOperationFromAvailable;
@@ -756,3 +777,4 @@ exports.getCustomOperation = getCustomOperation;
 exports.getMergedOperations = getMergedOperations;
 exports.syncFilters = syncFilters;
 exports.getMatchedCondition = getMatchedCondition;
+exports.filterHasField = filterHasField;

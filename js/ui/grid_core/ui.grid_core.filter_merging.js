@@ -203,6 +203,26 @@ var DataControllerFilterMergingExtender = {
     }
 };
 
+var ColumnHeadersViewFilterMergingExtender = {
+    _isHeaderFilterEmpty: function(column) {
+        if(this.option("filterSyncEnabled")) {
+            return !utils.filterHasField(this.option("filterValue"), column.dataField);
+        }
+
+        return this.callBase(column);
+    },
+
+    _needUpdateFilterIndicators: function() {
+        return !this.option("filterSyncEnabled");
+    },
+
+    optionChanged: function(args) {
+        if(args.name === "filterValue") {
+            this._updateHeaderFilterIndicators();
+        }
+    },
+};
+
 module.exports = {
     defaultOptions: function() {
         return {
@@ -229,6 +249,9 @@ module.exports = {
     extenders: {
         controllers: {
             data: DataControllerFilterMergingExtender
+        },
+        views: {
+            columnHeadersView: ColumnHeadersViewFilterMergingExtender,
         }
     }
 };

@@ -323,7 +323,7 @@ exports.headerFilterMixin = {
             rootElement.find("." + HEADER_FILTER_CLASS).remove();
 
             if(allowHeaderFiltering(column)) {
-                $headerFilterIndicator = this.callBase(options).toggleClass("dx-header-filter-empty", !column.filterValues || !column.filterValues.length);
+                $headerFilterIndicator = this.callBase(options).toggleClass("dx-header-filter-empty", this._isHeaderFilterEmpty(column));
             }
 
             return $headerFilterIndicator;
@@ -331,6 +331,11 @@ exports.headerFilterMixin = {
 
         return this.callBase(options);
     },
+
+    _isHeaderFilterEmpty: function(column) {
+        return !column.filterValues || !column.filterValues.length;
+    },
+
     _getIndicatorClassName: function(name) {
         if(name === "headerFilter") {
             return HEADER_FILTER_CLASS;

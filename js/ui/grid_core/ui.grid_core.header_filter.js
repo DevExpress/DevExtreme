@@ -321,12 +321,22 @@ var ColumnHeadersViewHeaderFilterExtender = extend({}, headerFilterCore.headerFi
         $indicator && this._subscribeToIndicatorEvent($indicator, column, indicatorName);
     },
 
+    _updateHeaderFilterIndicators: function() {
+        if(this.option("headerFilter.visible")) {
+            this._updateIndicators("headerFilter");
+        }
+    },
+
+    _needUpdateFilterIndicators: function() {
+        return true;
+    },
+
     _columnOptionChanged: function(e) {
         var optionNames = e.optionNames;
 
         if(gridCoreUtils.checkChanges(optionNames, ["filterValues", "filterType"])) {
-            if(this.option("headerFilter.visible")) {
-                this._updateIndicators("headerFilter");
+            if(this._needUpdateFilterIndicators()) {
+                this._updateHeaderFilterIndicators();
             }
             return;
         }

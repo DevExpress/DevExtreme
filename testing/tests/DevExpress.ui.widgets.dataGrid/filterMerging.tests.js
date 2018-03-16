@@ -7,6 +7,9 @@ var $ = require("jquery"),
     fx = require("animation/fx"),
     setupDataGridModules = dataGridMocks.setupDataGridModules;
 
+var HEADER_FILTER_CLASS = "dx-header-filter",
+    HEADER_FILTER_EMPTY_CLASS = HEADER_FILTER_CLASS + "-empty";
+
 QUnit.testStart(function() {
     var markup =
     '<div>\
@@ -567,6 +570,38 @@ QUnit.module("Real dataGrid", {
         assert.deepEqual(dataGrid.columnOption("field", "selectedFilterOperation"), "=");
     });
 
+    QUnit.test("header-filter-empty class isn't set in filtered column indicator when filterSyncEnabled = true", function(assert) {
+        // arrange
+        var dataGrid = this.initDataGrid({
+            filterSyncEnabled: true,
+            filterValue: null,
+            columns: [{ dataField: "field" }],
+            headerFilter: {
+                visible: true
+            }
+        });
+        // act
+        dataGrid.option("filterValue", ["field", "=", 2]);
+        // assert
+        assert.equal($("." + HEADER_FILTER_CLASS).length, 1);
+        assert.equal($("." + HEADER_FILTER_EMPTY_CLASS).length, 0);
+    });
+
+    QUnit.test("header-filter-empty class is set in filtered column indicator when filterSyncEnabled = false", function(assert) {
+        // arrange
+        var dataGrid = this.initDataGrid({
+            filterSyncEnabled: false,
+            filterValue: null,
+            columns: [{ dataField: "field" }],
+            headerFilter: {
+                visible: true
+            }
+        });
+        // act
+        dataGrid.option("filterValue", ["field", "=", 2]);
+        // assert
+        assert.equal($("." + HEADER_FILTER_EMPTY_CLASS).length, 1);
+    });
 
     QUnit.test("check equals (one value)", function(assert) {
         // arrange

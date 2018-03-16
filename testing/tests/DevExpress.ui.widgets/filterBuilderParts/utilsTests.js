@@ -1513,7 +1513,44 @@ QUnit.module("Between operation", function() {
     });
 });
 
-QUnit.module("Filter merging", function() {
+QUnit.module("filterHasField", function() {
+    QUnit.test("filter = null", function(assert) {
+        var hasField = utils.filterHasField(null, "field");
+        assert.notOk(hasField);
+    });
+
+    QUnit.test("filter = condition with field", function(assert) {
+        var hasField = utils.filterHasField(["field", "=", 1], "field");
+        assert.ok(hasField);
+    });
+
+    QUnit.test("filter = condition without field", function(assert) {
+        var hasField = utils.filterHasField(["field2", "=", 1], "field");
+        assert.notOk(hasField);
+    });
+
+    QUnit.test("filter = group with field", function(assert) {
+        var hasField = utils.filterHasField([["field2", "=", 2], "and", ["field", "=", 1]], "field");
+        assert.ok(hasField);
+    });
+
+    QUnit.test("filter = group without field", function(assert) {
+        var hasField = utils.filterHasField([["field2", "=", 2], "and", ["field2", "=", 1]], "field");
+        assert.notOk(hasField);
+    });
+
+    QUnit.test("filter = group with inner group with field", function(assert) {
+        var hasField = utils.filterHasField([["field2", "=", 1], "and", [["field2", "=", 2], "and", ["field", "=", 1]]], "field");
+        assert.ok(hasField);
+    });
+
+    QUnit.test("filter = group with inner group without field", function(assert) {
+        var hasField = utils.filterHasField([["field2", "=", 1], "and", [["field2", "=", 2], "and", ["field2", "=", 1]]], "field");
+        assert.notOk(hasField);
+    });
+});
+
+QUnit.module("Filter sync", function() {
     QUnit.test("null with field condition", function(assert) {
         // arrange
         var filter = null,
