@@ -7,7 +7,7 @@ var modules = require("./ui.grid_core.modules"),
 var FILTER_ROW_OPERATIONS = ["=", "<>", "<", "<=", ">", ">=", "notcontains", "contains", "startswith", "endswith", "between"],
     HEADER_FILTER_OPERATIONS = ["anyof"];
 
-var FilterMergingController = modules.Controller.inherit((function() {
+var FilterSyncController = modules.Controller.inherit((function() {
     var setHeaderFilterValue = function(columnsController, column, headerFilterValue) {
         if(headerFilterValue) {
             if(headerFilterValue[0] === "!") {
@@ -141,7 +141,7 @@ function anyOf(field, filterValue) {
     return result;
 }
 
-var DataControllerFilterMergingExtender = {
+var DataControllerFilterSyncExtender = {
     _calculateAdditionalFilter: function() {
         var that = this,
             filters = [that.callBase()],
@@ -175,9 +175,9 @@ var DataControllerFilterMergingExtender = {
         switch(args.name) {
             case "filterValue":
                 this._applyFilter();
-                var filterMergingController = this.getController("filterMerging");
-                if(!filterMergingController.skipSyncFilterValue && this.option("filterSyncEnabled")) {
-                    filterMergingController.syncFilterValue();
+                var filterSyncController = this.getController("filterSync");
+                if(!filterSyncController.skipSyncFilterValue && this.option("filterSyncEnabled")) {
+                    filterSyncController.syncFilterValue();
                 }
                 args.handled = true;
                 break;
@@ -190,10 +190,10 @@ var DataControllerFilterMergingExtender = {
                         column;
                     if(["filterValues", "filterType"].indexOf(columnInfo.changedField) !== -1) {
                         column = this.getController("columns").getColumns()[columnInfo.index];
-                        this.getController("filterMerging").syncHeaderFilter(column);
+                        this.getController("filterSync").syncHeaderFilter(column);
                     } else if(["filterValue", "selectedFilterOperation"].indexOf(columnInfo.changedField) !== -1) {
                         column = this.getController("columns").getColumns()[columnInfo.index];
-                        this.getController("filterMerging").syncFilterRow(column, column.filterValue);
+                        this.getController("filterSync").syncFilterRow(column, column.filterValue);
                     }
                 }
                 break;
@@ -203,7 +203,7 @@ var DataControllerFilterMergingExtender = {
     }
 };
 
-var ColumnHeadersViewFilterMergingExtender = {
+var ColumnHeadersViewFilterSyncExtender = {
     _isHeaderFilterEmpty: function(column) {
         if(this.option("filterSyncEnabled")) {
             return !utils.filterHasField(this.option("filterValue"), column.dataField);
@@ -219,6 +219,8 @@ var ColumnHeadersViewFilterMergingExtender = {
     optionChanged: function(args) {
         if(args.name === "filterValue") {
             this._updateHeaderFilterIndicators();
+        } else {
+            this.callBase(args);
         }
     },
 };
@@ -244,14 +246,14 @@ module.exports = {
         };
     },
     controllers: {
-        filterMerging: FilterMergingController
+        filterSync: FilterSyncController
     },
     extenders: {
         controllers: {
-            data: DataControllerFilterMergingExtender
+            data: DataControllerFilterSyncExtender
         },
         views: {
-            columnHeadersView: ColumnHeadersViewFilterMergingExtender,
+            columnHeadersView: ColumnHeadersViewFilterSyncExtender,
         }
     }
 };

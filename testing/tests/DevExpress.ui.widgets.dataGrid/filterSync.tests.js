@@ -29,7 +29,7 @@ QUnit.module("Sync with FilterValue", {
                 filterSyncEnabled: true,
                 filterValue: null
             }, options);
-            setupDataGridModules(this, ["columns", "data", "columnHeaders", "filterRow", "headerFilter", "filterMerging"], {
+            setupDataGridModules(this, ["columns", "data", "columnHeaders", "filterRow", "headerFilter", "filterSync"], {
                 initViews: true
             });
         };
@@ -159,7 +159,7 @@ QUnit.module("getCombinedFilter", {
     beforeEach: function() {
         this.setupDataGrid = function(options) {
             this.options = options;
-            setupDataGridModules(this, ["columns", "data", "headerFilter", "filterRow", "filterMerging"], {
+            setupDataGridModules(this, ["columns", "data", "headerFilter", "filterRow", "filterSync"], {
                 initViews: false
             });
         };
@@ -338,7 +338,7 @@ QUnit.module("Sync on initialization", {
     beforeEach: function() {
         this.setupDataGrid = function(options) {
             this.options = options;
-            setupDataGridModules(this, ["columns", "data", "filterMerging"], {
+            setupDataGridModules(this, ["columns", "data", "filterSync"], {
                 initViews: false
             });
         };
