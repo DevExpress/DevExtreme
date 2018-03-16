@@ -190,10 +190,8 @@ var ColumnHeadersViewFilterMergingExtender = {
             var column = this.getController("columns").getColumns()[e.columnIndex];
             if(gridCoreUtils.checkChanges(optionNames, ["filterValues", "filterType"])) {
                 this.getController("filterMerging").syncHeaderFilter(column);
-                return;
             } else if(gridCoreUtils.checkChanges(optionNames, ["filterValue", "selectedFilterOperation"])) {
                 this.getController("filterMerging").syncFilterRow(column, column.filterValue);
-                return;
             }
         }
 
