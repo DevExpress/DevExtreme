@@ -504,6 +504,20 @@ QUnit.test("Aria accessibility", function(assert) {
     assert.equal($dataRows.eq(2).attr("aria-level"), "0", "third data row - value of 'aria-level' attribute");
 });
 
+QUnit.test("filterSyncEnabled is working in TreeList", function(assert) {
+    // act
+    var treeList = createTreeList({
+        filterSyncEnabled: true,
+        columns: [{ dataField: "field", allowHeaderFiltering: true, filterValues: [2] }]
+    });
+
+    // act
+    treeList.columnOption("field", { filterValues: [2] });
+
+    // assert
+    assert.deepEqual(treeList.option("filterValue"), ["field", "anyof", [2]]);
+});
+
 QUnit.module("Option Changed", {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
