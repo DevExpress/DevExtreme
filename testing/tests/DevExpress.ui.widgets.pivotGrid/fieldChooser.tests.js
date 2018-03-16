@@ -1944,3 +1944,30 @@ QUnit.test("Search in headerFilter", function(assert) {
     assert.strictEqual($listItems.length, 1, "list item's count");
     assert.strictEqual($listItems.text(), "test2", "correct item's text");
 });
+
+QUnit.test("headerFilter items should be encoded", function(assert) {
+    var that = this,
+        $listItems,
+        fieldElements,
+        fields = [
+            { caption: "Field 1", area: 'column', index: 0, areaIndex: 0, allowFiltering: true }
+        ],
+        dataSourceOptions = {
+            columnFields: fields,
+            fieldValues: [
+                [{ value: 1, text: "<test1>" }]
+            ]
+        };
+
+    this.setup(dataSourceOptions);
+    that.$container.append(that.fieldChooser.renderField(fields[0]));
+
+    // act
+    fieldElements = that.$container.find(".dx-area-field");
+    fieldElements.first().find(".dx-header-filter").trigger("dxclick");
+    this.clock.tick(500);
+
+    // assert
+    $listItems = $(".dx-list").find(".dx-list-item");
+    assert.strictEqual($listItems.text(), "<test1>", "correct item's text");
+});
