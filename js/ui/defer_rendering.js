@@ -136,6 +136,18 @@ var DeferRendering = Widget.inherit({
         }).bind(this));
     },
 
+
+    _initMarkup: function() {
+        this.callBase();
+
+        if(!this._initContent) {
+            this._initContent = this._renderContent;
+            this._renderContent = function() {};
+        }
+
+        this._initContent();
+    },
+
     _renderContentImpl: function() {
         this.$element().removeClass(WIDGET_CLASS);
         this.$element().append(this._$initialContent);
@@ -178,7 +190,7 @@ var DeferRendering = Widget.inherit({
     _animate: function() {
         var that = this,
             $element = this.$element(),
-            animation = this.option("animation"),
+            animation = windowUtils.hasWindow() && this.option("animation"),
             staggerItemSelector = this.option("staggerItemSelector"),
             animatePromise;
 
