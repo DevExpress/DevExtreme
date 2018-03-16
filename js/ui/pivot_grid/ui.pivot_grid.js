@@ -1128,7 +1128,8 @@ var PivotGrid = Widget.inherit({
                 allowSearch: fieldChooserOptions.allowSearch,
                 width: undefined,
                 height: undefined,
-                headerFilter: that.option("headerFilter")
+                headerFilter: that.option("headerFilter"),
+                encodeHtml: that.option("encodeHtml")
             },
             popupOptions = {
                 shading: false,
@@ -1620,6 +1621,7 @@ var PivotGrid = Widget.inherit({
 
         that._createComponent(that.$element(), PivotGridFieldChooserBase, {
             dataSource: that.getDataSource(),
+            encodeHtml: that.option("encodeHtml"),
             allowFieldDragging: that.option("fieldPanel.allowFieldDragging"),
             headerFilter: that.option("headerFilter")
         });
