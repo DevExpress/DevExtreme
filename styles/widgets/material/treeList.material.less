@@ -1,8 +1,7 @@
 .grid-base(treelist);
 
-@TREELIST_EMPTY_SPACE_WIDTH: 14px;
-@TREELIST_SELECT_ALL_CHECKBOX_MARGIN_TOP: floor((round(@MATERIAL_BASE_LINE_HEIGHT*@MATERIAL_BASE_FONT_SIZE) - @MATERIAL_GRID_BASE_CHECKBOX_SIZE)/2);
-@TREELIST_CHECKBOX_PADDING_LEFT: @TREELIST_EMPTY_SPACE_WIDTH + @MATERIAL_GRID_BASE_CELL_HORIZONTAL_PADDING;
+@TREELIST_EMPTY_SPACE_WIDTH: 24px;
+@TREELIST_CHECKBOX_PADDING_LEFT: @TREELIST_EMPTY_SPACE_WIDTH + @MATERIAL_GRID_BASE_CELL_FIRST_COLUMN_PADDING;
 @TREELIST_CHECKBOX_MARGIN_LEFT: @TREELIST_CHECKBOX_PADDING_LEFT + @MATERIAL_GRID_BASE_CHECKBOX_SIZE;
 @TREELIST_EDITOR_CELL_PADDING_LEFT: @TREELIST_CHECKBOX_MARGIN_LEFT + @MATERIAL_GRID_BASE_CELL_HORIZONTAL_PADDING;
 @TREELIST_ICON_CONTAINER_PADDING_RIGHT: @MATERIAL_GRID_BASE_CHECKBOX_SIZE + @MATERIAL_GRID_BASE_CELL_HORIZONTAL_PADDING;
@@ -18,7 +17,8 @@
         position: relative;
         display: inline-block;
         color: @treelist-spin-icon-color;
-        .dx-icon-spinright;
+        .dx-icon-spinup;
+        width: @TREELIST_EMPTY_SPACE_WIDTH;
 
         &:before {
             visibility: hidden;
@@ -48,6 +48,10 @@
             margin-top: -@TREELIST_ICON_MARGIN_TOP;
         }
     }
+	
+	.dx-sort-up, .dx-sort-down, .dx-header-filter {
+		vertical-align: middle;
+	}
     
     .dx-selection {
         .dx-treelist-empty-space  {
@@ -82,10 +86,17 @@
     }
 }
 
-.dx-treelist-icon-container.dx-editor-inline-block {
-    position: relative;
-    padding-right: @TREELIST_ICON_CONTAINER_PADDING_RIGHT;
+.dx-treelist-icon-container {
+    max-height: @MATERIAL_BASE_ICON_SIZE;
 
+    &.dx-editor-inline-block {
+        position: relative;
+        padding-right: @TREELIST_ICON_CONTAINER_PADDING_RIGHT;
+    }
+}
+
+.dx-treelist-icon-container.dx-editor-inline-block, 
+.dx-treelist-select-all {
     .dx-checkbox {
         top: 50%;
         margin-top: -@MATERIAL_GRID_BASE_CHECKBOX_SIZE/2;
@@ -97,13 +108,12 @@
 
     .dx-checkbox {
         left: 0px;
-        margin-top: @TREELIST_SELECT_ALL_CHECKBOX_MARGIN_TOP;
         background-color: @treelist-base-background-color;
-        padding-left: @TREELIST_CHECKBOX_PADDING_LEFT;
+        margin-left: @TREELIST_CHECKBOX_PADDING_LEFT;
     }
 }
 
-.dx-treelist-headers .dx-header-row > .dx-treelist-select-all {
+.dx-treelist .dx-treelist-headers .dx-treelist-content .dx-treelist-table .dx-header-row > .dx-treelist-select-all {
     padding-left: @TREELIST_EDITOR_CELL_PADDING_LEFT;
 }
 

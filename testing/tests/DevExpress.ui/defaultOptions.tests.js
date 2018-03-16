@@ -49,6 +49,7 @@ var $ = require("jquery"),
     TabPanel = require("ui/tab_panel"),
     TagBox = require("ui/tag_box"),
     Toast = require("ui/toast"),
+    TreeList = require("ui/tree_list"),
     TreeView = require("ui/tree_view"),
     FileUploader = require("ui/file_uploader"),
     Toolbar = require("ui/toolbar"),
@@ -1082,6 +1083,21 @@ testComponentDefaults(List,
     { platform: devices.current().platform },
     {
         useInkRipple: true
+    },
+    function() {
+        this.originalCurrentTheme = themes.current();
+        themes.current("material.light");
+    },
+    function() {
+        themes.current(this.originalCurrentTheme);
+    }
+);
+
+testComponentDefaults(TreeList,
+    { platform: devices.current().platform },
+    {
+        showRowLines: true,
+        showColumnLines: false
     },
     function() {
         this.originalCurrentTheme = themes.current();
