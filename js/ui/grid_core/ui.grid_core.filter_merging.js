@@ -163,6 +163,14 @@ var DataControllerFilterMergingExtender = {
         return gridCoreUtils.combineFilters(filters);
     },
 
+    _parseColumnInfo: function(fullName) {
+        var matched = fullName.match(/columns\[([0-9]*)\]\.(.*)/);
+        return {
+            index: matched[1],
+            changedField: matched[2]
+        };
+    },
+
     optionChanged: function(args) {
         switch(args.name) {
             case "filterValue":
@@ -176,26 +184,22 @@ var DataControllerFilterMergingExtender = {
             case "filterSyncEnabled":
                 args.handled = true;
                 break;
+            case "columns":
+                if(this.option("filterSyncEnabled")) {
+                    var columnInfo = this._parseColumnInfo(args.fullName),
+                        column;
+                    if(["filterValues", "filterType"].indexOf(columnInfo.changedField) !== -1) {
+                        column = this.getController("columns").getColumns()[columnInfo.index];
+                        this.getController("filterMerging").syncHeaderFilter(column);
+                    } else if(["filterValue", "selectedFilterOperation"].indexOf(columnInfo.changedField) !== -1) {
+                        column = this.getController("columns").getColumns()[columnInfo.index];
+                        this.getController("filterMerging").syncFilterRow(column, column.filterValue);
+                    }
+                }
+                break;
             default:
                 this.callBase(args);
         }
-    }
-};
-
-var ColumnHeadersViewFilterMergingExtender = {
-    _columnOptionChanged: function(e) {
-        var optionNames = e.optionNames;
-
-        if(this.option("filterSyncEnabled")) {
-            var column = this.getController("columns").getColumns()[e.columnIndex];
-            if(gridCoreUtils.checkChanges(optionNames, ["filterValues", "filterType"])) {
-                this.getController("filterMerging").syncHeaderFilter(column);
-            } else if(gridCoreUtils.checkChanges(optionNames, ["filterValue", "selectedFilterOperation"])) {
-                this.getController("filterMerging").syncFilterRow(column, column.filterValue);
-            }
-        }
-
-        this.callBase(e);
     }
 };
 
@@ -225,9 +229,6 @@ module.exports = {
     extenders: {
         controllers: {
             data: DataControllerFilterMergingExtender
-        },
-        views: {
-            columnHeadersView: ColumnHeadersViewFilterMergingExtender,
         }
     }
 };

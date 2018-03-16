@@ -18,45 +18,6 @@ QUnit.testStart(function() {
     $("#qunit-fixture").html(markup);
 });
 
-QUnit.module("Sync with Header Filter", {
-    beforeEach: function() {
-        this.options = {
-            columns: [{ dataField: "field", allowHeaderFiltering: true }, { dataField: "excludedField", allowHeaderFiltering: true, filterType: "exclude" }],
-            filterSyncEnabled: true,
-            filterValue: null
-        };
-
-        this.setupDataGrid = function() {
-            setupDataGridModules(this, ["columns", "data", "columnHeaders", "headerFilter", "filterMerging"], {
-                initViews: true
-            });
-        };
-
-    }
-}, function() {
-    QUnit.test("check equals (one value)", function(assert) {
-        // arrange
-        this.setupDataGrid();
-
-        // act
-        this.columnsController.columnOption("field", { filterValues: [2] });
-
-        // assert
-        assert.deepEqual(this.option("filterValue"), ["field", "anyof", [2]]);
-    });
-
-    QUnit.test("check any of (two value)", function(assert) {
-        // arrange
-        this.setupDataGrid();
-
-        // act
-        this.columnsController.columnOption("field", { filterValues: [2, 1] });
-
-        // assert
-        assert.deepEqual(this.option("filterValue"), ["field", "anyof", [2, 1]]);
-    });
-});
-
 QUnit.module("Sync with FilterValue", {
     beforeEach: function() {
         this.setupDataGrid = function(options) {
@@ -531,7 +492,10 @@ QUnit.module("Real dataGrid", {
     QUnit.test("onClick mode", function(assert) {
         // arrange
         var dataGrid = this.initDataGrid({
-            columns: [{ dataField: "field", dataType: "number", defaultFilterOperation: "=", selectedFilterOperation: "<>", allowFiltering: true, index: 0 }],
+            columns: [
+                { dataField: "field", dataType: "number", selectedFilterOperation: "<>", allowFiltering: true },
+                { dataField: "field2", dataType: "number", selectedFilterOperation: "=", allowFiltering: true }
+            ],
             filterRow: {
                 visible: true,
                 applyFilter: "onClick"
@@ -539,8 +503,12 @@ QUnit.module("Real dataGrid", {
         });
 
         // act
-        var filterRowInput = $(".dx-texteditor");
+        var filterRowInput = $(".dx-texteditor").eq(0);
         filterRowInput.find(".dx-texteditor-input").val(90);
+        filterRowInput.find(".dx-texteditor-input").trigger("keyup");
+
+        filterRowInput = $(".dx-texteditor").eq(1);
+        filterRowInput.find(".dx-texteditor-input").val(150);
         filterRowInput.find(".dx-texteditor-input").trigger("keyup");
         this.clock.tick(700);
         // assert
@@ -550,7 +518,7 @@ QUnit.module("Real dataGrid", {
         var $button = $(".dx-apply-button");
         $button.trigger("dxclick");
         // assert
-        assert.deepEqual(dataGrid.option("filterValue"), ["field", "<>", 90]);
+        assert.deepEqual(dataGrid.option("filterValue"), [["field", "<>", 90], "and", ["field2", "=", 150]]);
     });
 
     QUnit.test("change field filterValues", function(assert) {
@@ -597,6 +565,33 @@ QUnit.module("Real dataGrid", {
         assert.deepEqual(dataGrid.columnOption("field", "filterValues"), [1, 3]);
         assert.deepEqual(dataGrid.columnOption("field", "filterValue"), 1);
         assert.deepEqual(dataGrid.columnOption("field", "selectedFilterOperation"), "=");
+    });
+
+
+    QUnit.test("check equals (one value)", function(assert) {
+        // arrange
+        var dataGrid = this.initDataGrid({
+            columns: [{ dataField: "field", allowHeaderFiltering: true }, { dataField: "excludedField", allowHeaderFiltering: true, filterType: "exclude" }]
+        });
+
+        // act
+        dataGrid.columnOption("field", { filterValues: [2] });
+
+        // assert
+        assert.deepEqual(dataGrid.option("filterValue"), ["field", "anyof", [2]]);
+    });
+
+    QUnit.test("check any of (two value)", function(assert) {
+        // arrange
+        var dataGrid = this.initDataGrid({
+            columns: [{ dataField: "field", allowHeaderFiltering: true }, { dataField: "excludedField", allowHeaderFiltering: true, filterType: "exclude" }]
+        });
+
+        // act
+        dataGrid.columnOption("field", { filterValues: [2, 1] });
+
+        // assert
+        assert.deepEqual(dataGrid.option("filterValue"), ["field", "anyof", [2, 1]]);
     });
 });
 
