@@ -5322,7 +5322,7 @@ if(browser.msie) {
         rowsView.resize();
 
         var rowHeight = rowsView._rowHeight;
-        var heightRatio = rowsView._heightRatio;
+        var heightRatio = dataController._sizeRatio;
 
         var content = testElement.find('.dx-scrollable-content').children();
 
