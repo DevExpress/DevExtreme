@@ -1706,7 +1706,7 @@
 * @type color
 * @group navigations.menu
 */
-@menu-color: @base-text-color;
+@menu-color: lighten(@base-text-color, 46%);
 
 /**
 * @name 55. Hovered item text color
@@ -1721,7 +1721,7 @@
 * @group navigations.menu
 * @paletteColorOpacity 1
 */
-@menu-item-selected-bg: darken(@base-bg, 10%);
+@menu-item-selected-bg: lighten(@base-text-color, 88%);
 /**
 * @name 20. Border color
 * @type color
@@ -1733,7 +1733,7 @@
 @menu-item-selected-color: @base-text-color;
 @menu-item-focused-selected-bg: fade(@base-focus-color, 70%);
 
-@menu-container-shadow-color: fade(@base-shadow-color, 15%);
+@menu-container-shadow-color: fade(@base-shadow-color, 20%);
 
 //Calendar
 /**
