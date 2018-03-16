@@ -4,10 +4,10 @@ var $ = require("jquery"),
     vizMocks = require("../../helpers/vizMocks.js"),
     translator2DModule = require("viz/translators/translator2d"),
     rangeModule = require("viz/translators/range"),
-    multiAxesSynchronizer = require("viz/chart_components/multi_axes_synchronizer");
-
-/* global MockAxis, insertMockFactory */
-require("../../helpers/chartMocks.js");
+    multiAxesSynchronizer = require("viz/chart_components/multi_axes_synchronizer"),
+    chartMocks = require("../../helpers/chartMocks.js"),
+    MockAxis = chartMocks.MockAxis,
+    insertMockFactory = chartMocks.insertMockFactory;
 
 require("viz/chart");
 
