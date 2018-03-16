@@ -779,7 +779,7 @@ QUnit.test("Field panel inherits encodeHtml option", function(assert) {
     this.clock.tick(500);
 
     // assert
-    assert.equal($(".dx-header-filter-menu").find(".dx-list-item").text(), "test <test>", "did not encoded");
+    assert.equal($(".dx-header-filter-menu").find(".dx-list-item").text(), "test <test>", "encoded");
 });
 
 QUnit.test("Field chooser inherits encodeHtml option", function(assert) {
@@ -806,7 +806,7 @@ QUnit.test("Field chooser inherits encodeHtml option", function(assert) {
     this.clock.tick(500);
 
     // assert
-    assert.equal($(".dx-header-filter-menu").find(".dx-list-item").text(), "test <test>", "did not encoded");
+    assert.equal($(".dx-header-filter-menu").find(".dx-list-item").text(), "test <test>", "encoded");
 });
 
 QUnit.test("fieldChooser layout change at runtime should not hide popup", function(assert) {
