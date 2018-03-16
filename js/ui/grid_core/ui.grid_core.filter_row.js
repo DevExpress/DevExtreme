@@ -618,11 +618,15 @@ var DataControllerFilterRowExtender = {
         return gridCoreUtils.combineFilters(filters);
     },
 
+    _needCalculateColumnsFilters: function() {
+        return true;
+    },
+
     _calculateAdditionalFilter: function() {
-        if(this.option("filterSyncEnabled")) {
-            return gridCoreUtils.combineFilters([this.callBase()]);
-        } else {
+        if(this._needCalculateColumnsFilters()) {
             return this._calculateFilterRowAdditionalFilter();
+        } else {
+            return gridCoreUtils.combineFilters([this.callBase()]);
         }
     }
 };

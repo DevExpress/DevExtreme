@@ -142,6 +142,10 @@ function anyOf(field, filterValue) {
 }
 
 var DataControllerFilterSyncExtender = {
+    _needCalculateColumnsFilters: function() {
+        return !this.option("filterSyncEnabled");
+    },
+
     _calculateAdditionalFilter: function() {
         var that = this,
             filters = [that.callBase()],
