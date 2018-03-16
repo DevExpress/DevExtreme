@@ -11,10 +11,8 @@ var $ = require("jquery"),
     })),
     axisModule = require("viz/axes/base_axis"),
     Crosshair = require("viz/chart_components/crosshair").Crosshair,
-    trackers = require("viz/chart_components/tracker");
-
-/* global MockAxis */
-require("../../helpers/chartMocks.js");
+    trackers = require("viz/chart_components/tracker"),
+    MockAxis = require("../../helpers/chartMocks.js").MockAxis;
 
 function getEvent(type, params) {
     $.Event(type, params);

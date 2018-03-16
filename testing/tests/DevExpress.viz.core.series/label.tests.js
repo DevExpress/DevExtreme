@@ -3,11 +3,9 @@
 var $ = require("jquery"),
     vizMocks = require("../../helpers/vizMocks.js"),
     labelModule = require("viz/series/points/label"),
-    pointModule = require("viz/series/points/base_point");
-
-/* global MockTranslator */
-require("../../helpers/chartMocks.js");
-
+    pointModule = require("viz/series/points/base_point"),
+    chartMocks = require("../../helpers/chartMocks.js"),
+    MockTranslator = chartMocks.MockTranslator;
 
 var environment = {
     beforeEach: function() {

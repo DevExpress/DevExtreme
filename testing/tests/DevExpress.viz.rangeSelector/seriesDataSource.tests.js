@@ -5,10 +5,11 @@ var $ = require("jquery"),
     vizMocks = require("../../helpers/vizMocks.js"),
     seriesDataSourceModule = require("viz/range_selector/series_data_source"),
     SeriesDataSource = seriesDataSourceModule.SeriesDataSource,
-    ThemeManager = require("viz/components/chart_theme_manager").ThemeManager;
-
-/* global setupSeriesFamily, MockAxis, MockTranslator*/
-require("../../helpers/chartMocks.js");
+    ThemeManager = require("viz/components/chart_theme_manager").ThemeManager,
+    chartMocks = require("../../helpers/chartMocks.js"),
+    setupSeriesFamily = chartMocks.setupSeriesFamily,
+    MockTranslator = chartMocks.MockTranslator,
+    MockAxis = chartMocks.MockAxis;
 
 var environment = {
     beforeEach: function() {

@@ -1,11 +1,10 @@
 "use strict";
 
-/* global MockTranslator */
 var $ = require("jquery"),
     vizMocks = require("../../helpers/vizMocks.js"),
-    Series = require("viz/series/base_series").Series;
-
-require("../../helpers/chartMocks.js");
+    Series = require("viz/series/base_series").Series,
+    chartMocks = require("../../helpers/chartMocks.js"),
+    MockTranslator = chartMocks.MockTranslator;
 
 require("viz/chart");
 

@@ -2,10 +2,11 @@
 
 var $ = require("jquery"),
     commons = require("./chartParts/commons.js"),
-    vizUtils = require("viz/core/utils");
-
-/* global MockSeries, seriesMockData, categories, commonMethodsForTests */
-require("../../helpers/chartMocks.js");
+    vizUtils = require("viz/core/utils"),
+    chartMocks = require("../../helpers/chartMocks.js"),
+    MockSeries = chartMocks.MockSeries,
+    commonMethodsForTests = chartMocks.commonMethodsForTests,
+    categories = chartMocks.categories;
 
 $('<div id="chartContainer">').appendTo("#qunit-fixture");
 
@@ -46,7 +47,7 @@ QUnit.module("Panes border. Rotated", commons.environment);
 
 QUnit.test("Panes border, default attributes", function(assert) {
     var stubSeries = new MockSeries();
-    seriesMockData.series.push(stubSeries);
+    chartMocks.seriesMockData.series.push(stubSeries);
     var chart = this.createChart({
         rotated: true,
         size: { width: 800, height: 800 },
@@ -65,7 +66,7 @@ QUnit.test("Panes border, default attributes", function(assert) {
 
 QUnit.test("Create border, custom attributes", function(assert) {
     var stubSeries = new MockSeries();
-    seriesMockData.series.push(stubSeries);
+    chartMocks.seriesMockData.series.push(stubSeries);
     var chart = this.createChart({
         rotated: true,
         size: { width: 800, height: 800 },
@@ -160,7 +161,7 @@ QUnit.test("Check pass correct borderOptions to axes", function(assert) {
             right: true,
             dashStyle: "solid"
         };
-    seriesMockData.series.push(stubSeries);
+    chartMocks.seriesMockData.series.push(stubSeries);
 
     var chart = this.createChart({
         size: { width: 800, height: 800 },
@@ -287,7 +288,7 @@ QUnit.test("Create clipRects. With financial series", function(assert) {
         panes[0].canvas = rect;
     });
     var stubSeries = new MockSeries();
-    seriesMockData.series.push(stubSeries);
+    chartMocks.seriesMockData.series.push(stubSeries);
     var chart = this.createChart({
         size: { width: 800, height: 800 },
         margin: { left: 80, right: 90, top: 10, bottom: 80 },
@@ -355,7 +356,7 @@ QUnit.test("Create clipRects. With series with errorBars", function(assert) {
             visible: true
         }
     });
-    seriesMockData.series.push(stubSeries);
+    chartMocks.seriesMockData.series.push(stubSeries);
     var chart = this.createChart({
         size: { width: 800, height: 800 },
         margin: { left: 80, right: 90, top: 10, bottom: 80 },
@@ -420,7 +421,7 @@ QUnit.test("Create clipRects. With financial series. Rotated", function(assert) 
         panes[0].canvas = rect;
     });
     var stubSeries = new MockSeries();
-    seriesMockData.series.push(stubSeries);
+    chartMocks.seriesMockData.series.push(stubSeries);
     var chart = this.createChart({
         rotated: true,
         size: { width: 800, height: 800 },
@@ -484,7 +485,7 @@ QUnit.test("Create clipRects. With financial series. Two panes", function(assert
     });
     var stubSeries1 = new MockSeries(),
         stubSeries2 = new MockSeries();
-    seriesMockData.series.push(stubSeries1, stubSeries2);
+    chartMocks.seriesMockData.series.push(stubSeries1, stubSeries2);
     var chart = this.createChart({
         size: { width: 800, height: 800 },
         margin: { left: 80, right: 90, top: 10, bottom: 80 },
@@ -567,7 +568,7 @@ QUnit.test("Create clipRects. With financial series. For second panes", function
     });
     var stubSeries1 = new MockSeries(),
         stubSeries2 = new MockSeries();
-    seriesMockData.series.push(stubSeries1, stubSeries2);
+    chartMocks.seriesMockData.series.push(stubSeries1, stubSeries2);
     var chart = this.createChart({
         size: { width: 800, height: 800 },
         margin: { left: 80, right: 90, top: 10, bottom: 80 },
@@ -627,7 +628,7 @@ QUnit.test("Create clipRects. With financial series. For second panes", function
 QUnit.test("T505068. Wide clip rect array length is not growing after update dataSource", function(assert) {
     var stubSeries1 = new MockSeries(),
         stubSeries2 = new MockSeries();
-    seriesMockData.series.push(stubSeries1, stubSeries2);
+    chartMocks.seriesMockData.series.push(stubSeries1, stubSeries2);
 
     var chart = this.createChart({
         series: [{ type: "line" }]
@@ -659,7 +660,7 @@ QUnit.test("Create clipRects. With financial series. Two panes. Rotated", functi
     });
     var stubSeries1 = new MockSeries(),
         stubSeries2 = new MockSeries();
-    seriesMockData.series.push(stubSeries1, stubSeries2);
+    chartMocks.seriesMockData.series.push(stubSeries1, stubSeries2);
     var chart = this.createChart({
         rotated: true,
         size: { width: 800, height: 800 },
@@ -744,7 +745,7 @@ QUnit.test("Create clipRects. With financial series. For second panes. Rotated",
     });
     var stubSeries1 = new MockSeries(),
         stubSeries2 = new MockSeries();
-    seriesMockData.series.push(stubSeries1, stubSeries2);
+    chartMocks.seriesMockData.series.push(stubSeries1, stubSeries2);
     var chart = this.createChart({
         rotated: true,
         size: { width: 800, height: 800 },
@@ -855,7 +856,7 @@ QUnit.test("Update clipRects. With financial series", function(assert) {
     });
 
     var stubSeries = new MockSeries();
-    seriesMockData.series.push(stubSeries);
+    chartMocks.seriesMockData.series.push(stubSeries);
     var chart = this.createChart({
         size: { width: 800, height: 800 },
         margin: { left: 80, right: 90, top: 10, bottom: 80 },
@@ -973,7 +974,7 @@ QUnit.test("Update clipRects. With financial series. When start series does not 
     });
 
     var stubSeries = new MockSeries();
-    seriesMockData.series.push(stubSeries);
+    chartMocks.seriesMockData.series.push(stubSeries);
     var chart = this.createChart({
         size: { width: 800, height: 800 },
         margin: { left: 80, right: 90, top: 10, bottom: 80 },
@@ -1012,7 +1013,7 @@ QUnit.test("Update clipRects. With financial series. When start series does not 
 
 QUnit.test("Create clipRects with visible pane borders", function(assert) {
     var stubSeries = new MockSeries();
-    seriesMockData.series.push(stubSeries);
+    chartMocks.seriesMockData.series.push(stubSeries);
     var chart = this.createChart({
         size: { width: 800, height: 800 },
         margin: { left: 80, right: 90, top: 10, bottom: 80 },
@@ -1063,7 +1064,7 @@ QUnit.test("Create clipRects with visible pane borders. With financial series", 
         panes[0].canvas = rect;
     });
     var stubSeries = new MockSeries();
-    seriesMockData.series.push(stubSeries);
+    chartMocks.seriesMockData.series.push(stubSeries);
     var chart = this.createChart({
         size: { width: 800, height: 800 },
         margin: { left: 80, right: 90, top: 10, bottom: 80 },
@@ -1104,7 +1105,7 @@ QUnit.test("Create clipRects with visible pane borders. With financial series", 
 
 QUnit.test("Get clipRect ID for series without pane border", function(assert) {
     var stubSeries = new MockSeries();
-    seriesMockData.series.push(stubSeries);
+    chartMocks.seriesMockData.series.push(stubSeries);
     var chart = this.createChart({
         size: { width: 800, height: 800 },
         margin: { left: 80, right: 90, top: 10, bottom: 80 },
@@ -1120,7 +1121,7 @@ QUnit.test("Get clipRect ID for series without pane border", function(assert) {
 
 QUnit.test("Get clipRect ID for series with pane border", function(assert) {
     var stubSeries = new MockSeries();
-    seriesMockData.series.push(stubSeries);
+    chartMocks.seriesMockData.series.push(stubSeries);
     var chart = this.createChart({
         commonPaneSettings: {
             border: {
@@ -1141,8 +1142,8 @@ QUnit.test("Get clipRect ID for series with pane border", function(assert) {
 
 QUnit.test("Get clipRect ID for series with pane border. (one series is financial)", function(assert) {
     var stubSeries = new MockSeries();
-    seriesMockData.series.push(stubSeries);
-    seriesMockData.series.push(new MockSeries());
+    chartMocks.seriesMockData.series.push(stubSeries);
+    chartMocks.seriesMockData.series.push(new MockSeries());
     var chart = this.createChart({
         commonPaneSettings: {
             border: {
@@ -1312,8 +1313,8 @@ QUnit.test("dxChart with two Series on one pane and different value axis", funct
     // arrange
     var stubSeries1 = new MockSeries({}),
         stubSeries2 = new MockSeries({});
-    seriesMockData.series.push(stubSeries1);
-    seriesMockData.series.push(stubSeries2);
+    chartMocks.seriesMockData.series.push(stubSeries1);
+    chartMocks.seriesMockData.series.push(stubSeries2);
     // act
     var chart = this.createChart({
         argumentAxis: {
@@ -1362,8 +1363,8 @@ QUnit.test("dxChart with two Series on one pane and different value axis check R
     // arrange
     var stubSeries1 = new MockSeries({}),
         stubSeries2 = new MockSeries({});
-    seriesMockData.series.push(stubSeries1);
-    seriesMockData.series.push(stubSeries2);
+    chartMocks.seriesMockData.series.push(stubSeries1);
+    chartMocks.seriesMockData.series.push(stubSeries2);
     // act
     var chart = this.createChart({
 
@@ -1416,7 +1417,7 @@ QUnit.test("dxChart with two Series on one pane and different value axis check R
 
 QUnit.test("Two ranges for two series with two value axis on single pane", function(assert) {
     // arrange
-    seriesMockData.series.push(new MockSeries({
+    chartMocks.seriesMockData.series.push(new MockSeries({
         range: {
             val: {
                 min: 0,
@@ -1424,7 +1425,7 @@ QUnit.test("Two ranges for two series with two value axis on single pane", funct
             }
         }
     }));
-    seriesMockData.series.push(new MockSeries({
+    chartMocks.seriesMockData.series.push(new MockSeries({
         range: {
             val: {
                 min: 101,
@@ -1509,7 +1510,7 @@ QUnit.test("Two ranges for two series with two value axis on single pane", funct
 
 QUnit.test("Two series, two value axis, one pane (check default)", function(assert) {
     // arrange
-    seriesMockData.series.push(new MockSeries({
+    chartMocks.seriesMockData.series.push(new MockSeries({
         range: {
             val: {
                 min: 0,
@@ -1517,7 +1518,7 @@ QUnit.test("Two series, two value axis, one pane (check default)", function(asse
             }
         }
     }));
-    seriesMockData.series.push(new MockSeries({
+    chartMocks.seriesMockData.series.push(new MockSeries({
         range: {
             val: {
                 min: 101,
@@ -1590,7 +1591,7 @@ QUnit.test("Two series, two value axis, one pane (check default)", function(asse
 
 QUnit.test("dxChart with two panes and one value axis with pointer to bottom pane. Two series on different panes and single axis", function(assert) {
     // arrange
-    seriesMockData.series.push(new MockSeries({
+    chartMocks.seriesMockData.series.push(new MockSeries({
         range: {
             val: {
                 min: 0,
@@ -1598,7 +1599,7 @@ QUnit.test("dxChart with two panes and one value axis with pointer to bottom pan
             }
         }
     }));
-    seriesMockData.series.push(new MockSeries({
+    chartMocks.seriesMockData.series.push(new MockSeries({
         range: {
             val: {
                 min: 101,
@@ -1663,7 +1664,7 @@ QUnit.test("dxChart with two panes and one value axis with pointer to bottom pan
 
 QUnit.test("Group Series by panes and axes. One pane, one value axis, one series", function(assert) {
     // arrange
-    seriesMockData.series.push(new MockSeries({
+    chartMocks.seriesMockData.series.push(new MockSeries({
         range: {
             val: {
                 min: 0,
@@ -1687,7 +1688,7 @@ QUnit.test("Group Series by panes and axes. One pane, one value axis, one series
 
 QUnit.test("Group Series by panes and axes. One pane, one value axis, four series", function(assert) {
     // arrange
-    seriesMockData.series.push(new MockSeries({}), new MockSeries({}), new MockSeries({}), new MockSeries({}));
+    chartMocks.seriesMockData.series.push(new MockSeries({}), new MockSeries({}), new MockSeries({}), new MockSeries({}));
     // act
     var chart = commons.createChartInstance({
         series: [{ type: "line" }, { type: "line" }, { type: "line" }, { type: "line" }],
@@ -1708,7 +1709,7 @@ QUnit.test("Group Series by panes and axes. One pane, one value axis, four serie
 
 QUnit.test("Group Series by panes and axes. One pane, two value axis, three series", function(assert) {
     // arrange
-    seriesMockData.series.push(new MockSeries({ type: "line" }), new MockSeries({ type: "line" }), new MockSeries({ type: "line" }));
+    chartMocks.seriesMockData.series.push(new MockSeries({ type: "line" }), new MockSeries({ type: "line" }), new MockSeries({ type: "line" }));
     // act
     var chart = this.createChart({
         series: [{ axis: "axis2", type: "line" }, { type: "line" }, { type: "line" }],
@@ -1734,7 +1735,7 @@ QUnit.test("Group Series by panes and axes. One pane, two value axis, three seri
 
 QUnit.test("Group Series by panes and axes. two pane, one value axis, three series", function(assert) {
     // arrange
-    seriesMockData.series.push(new MockSeries({}), new MockSeries({}), new MockSeries({}));
+    chartMocks.seriesMockData.series.push(new MockSeries({}), new MockSeries({}), new MockSeries({}));
     // act
     var chart = this.createChart({
         series: [{ pane: "pane1", type: "line" }, { type: "line" }, { type: "line" }],
@@ -1751,7 +1752,7 @@ QUnit.test("Group Series by panes and axes. two pane, one value axis, three seri
 
 QUnit.test("Group Series by panes and axes. two pane, three value axis, three series", function(assert) {
     // arrange
-    seriesMockData.series.push(new MockSeries({}), new MockSeries({}), new MockSeries({}));
+    chartMocks.seriesMockData.series.push(new MockSeries({}), new MockSeries({}), new MockSeries({}));
     // act
     var chart = this.createChart({
         series: [{ pane: "pane1", axis: "axis1", type: "line" }, { axis: "axis2", pane: "pane1", type: "line" }, { pane: "pane2", name: "axis2", type: "line" }],
@@ -1770,7 +1771,7 @@ QUnit.test("Group Series by panes and axes. two pane, three value axis, three se
 
 QUnit.test("Axes. Axis has no panes. no series has axis (axis2)", function(assert) {
     // arrange
-    seriesMockData.series.push(new MockSeries({
+    chartMocks.seriesMockData.series.push(new MockSeries({
         range: {
             val: {
                 min: 0,
@@ -1778,7 +1779,7 @@ QUnit.test("Axes. Axis has no panes. no series has axis (axis2)", function(asser
             }
         }
     }));
-    seriesMockData.series.push(new MockSeries({
+    chartMocks.seriesMockData.series.push(new MockSeries({
         range: {
             val: {
                 min: 101,
@@ -1833,8 +1834,8 @@ QUnit.test("Axes. Axis has no panes. no series has axis (axis2)", function(asser
 
 QUnit.test("Axes. There are series with axis and has no pane. axis has no pane", function(assert) {
     // arrange
-    seriesMockData.series.push(new MockSeries({}));
-    seriesMockData.series.push(new MockSeries({}));
+    chartMocks.seriesMockData.series.push(new MockSeries({}));
+    chartMocks.seriesMockData.series.push(new MockSeries({}));
     // act
     var chart = this.createChart({
         series: [{
@@ -1871,8 +1872,8 @@ QUnit.test("Axes. There are series with axis and has no pane. axis has no pane",
 
 QUnit.test("Axes. There are series with axis and pane. axis has no pane", function(assert) {
     // arrange
-    seriesMockData.series.push(new MockSeries({}));
-    seriesMockData.series.push(new MockSeries({}));
+    chartMocks.seriesMockData.series.push(new MockSeries({}));
+    chartMocks.seriesMockData.series.push(new MockSeries({}));
     // act
     var chart = this.createChart({
         series: [{
@@ -2122,7 +2123,7 @@ QUnit.test("Axes. axis has invalid panes", function(assert) {
 
 QUnit.test("Series. Series with invalid Pane", function(assert) {
     // arrange
-    seriesMockData.series.push(new MockSeries({
+    chartMocks.seriesMockData.series.push(new MockSeries({
         range: {
             val: {
                 min: 0,
@@ -2130,7 +2131,7 @@ QUnit.test("Series. Series with invalid Pane", function(assert) {
             }
         }
     }));
-    seriesMockData.series.push(new MockSeries({
+    chartMocks.seriesMockData.series.push(new MockSeries({
         range: {
             val: {
                 min: 101,
@@ -2161,7 +2162,7 @@ QUnit.test("Series. Series with invalid Pane", function(assert) {
 
 QUnit.test("Series. Series with invalid axis", function(assert) {
     // arrange
-    seriesMockData.series.push(new MockSeries({
+    chartMocks.seriesMockData.series.push(new MockSeries({
         range: {
             val: {
                 min: 0,
@@ -2194,7 +2195,7 @@ QUnit.test("Series. Series with invalid axis", function(assert) {
 
 QUnit.test("B251248. Break animations chart on update", function(assert) {
     var stubSeries1 = new MockSeries();
-    seriesMockData.series.push(stubSeries1);
+    chartMocks.seriesMockData.series.push(stubSeries1);
 
     var chart = this.createChart({
         series: [{ type: "line" }]

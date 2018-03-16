@@ -22,10 +22,13 @@ var $ = require("jquery"),
     ScrollBar = scrollBarModule.ScrollBar,
     trackerModule = require("viz/chart_components/tracker"),
     ChartTrackerSub = vizMocks.stubClass(trackerModule.ChartTracker),
-    dxChart = require("viz/chart");
-
-/* global MockSeries, MockPoint, seriesMockData, setupSeriesFamily, insertMockFactory, resetMockFactory */
-require("../../helpers/chartMocks.js");
+    dxChart = require("viz/chart"),
+    chartMocks = require("../../helpers/chartMocks.js"),
+    MockSeries = chartMocks.MockSeries,
+    MockPoint = chartMocks.MockSeries,
+    insertMockFactory = chartMocks.insertMockFactory,
+    resetMockFactory = chartMocks.resetMockFactory,
+    setupSeriesFamily = chartMocks.setupSeriesFamily;
 
 $('<div id="chartContainer">').appendTo("#qunit-fixture");
 setupSeriesFamily();
@@ -239,7 +242,7 @@ var environment = {
             panes[0].canvas = rect;
         });
 
-        seriesMockData.series.push(stubSeries);
+        chartMocks.seriesMockData.series.push(stubSeries);
         this.createChart({
             series: {
                 type: "line"
@@ -269,7 +272,7 @@ var environment = {
     QUnit.module("Layout elements and header block", {
         beforeEach: function() {
             environment.beforeEach.apply(this, arguments);
-            seriesMockData.series.push(new MockSeries());
+            chartMocks.seriesMockData.series.push(new MockSeries());
         },
         afterEach: environment.afterEach
     });
@@ -446,7 +449,7 @@ var environment = {
         beforeEach: function() {
             environment.beforeEach.call(this);
             var stubSeries = new MockSeries();
-            seriesMockData.series.push(stubSeries);
+            chartMocks.seriesMockData.series.push(stubSeries);
 
         },
         afterEach: function() {
@@ -488,7 +491,7 @@ var environment = {
     QUnit.module("Redraw", {
         beforeEach: function() {
             environment.beforeEach.apply(this, arguments);
-            seriesMockData.series.push(new MockSeries());
+            chartMocks.seriesMockData.series.push(new MockSeries());
         },
         afterEach: environment.afterEach
     });
@@ -803,7 +806,7 @@ var environment = {
         var stubSeries = new MockSeries({
             points: getPoints(DEFAULT_ANIMATION_LIMIT - 1)
         });
-        seriesMockData.series.push(stubSeries);
+        chartMocks.seriesMockData.series.push(stubSeries);
 
 
         $.each(chart.series, function(_, series) { series.dispose = function() { chart.seriesDisposed = true; }; });
@@ -899,7 +902,7 @@ var environment = {
             }
         });
         resetMocksInChart(chart);
-        seriesMockData.series.push(new MockSeries());
+        chartMocks.seriesMockData.series.push(new MockSeries());
         this.themeManager.getOptions.withArgs("dataPrepareSettings").returns({ checkTypeForAllData: true, convertToAxisDataType: false, sortingMethod: "asc" });
         // act
         chart.option("dataPrepareSettings", { checkTypeForAllData: true, convertToAxisDataType: false, sortingMethod: "asc" });
@@ -924,7 +927,7 @@ var environment = {
         var stubSeries = new MockSeries({
             points: getPoints(DEFAULT_ANIMATION_LIMIT - 1)
         });
-        seriesMockData.series.push(stubSeries);
+        chartMocks.seriesMockData.series.push(stubSeries);
         paneClipRect = chart._panesClipRects.base[0];
         resetMocksInChart(chart);
         $.each(chart.series, function(_, series) { series.dispose = function() { chart.seriesDisposed = true; }; });
@@ -955,7 +958,7 @@ var environment = {
             valAxis = chart._valueAxes[0],
             argAxis = chart._argumentAxes[0];
 
-        seriesMockData.series.push(new MockSeries({ points: getPoints(DEFAULT_ANIMATION_LIMIT - 1) }));
+        chartMocks.seriesMockData.series.push(new MockSeries({ points: getPoints(DEFAULT_ANIMATION_LIMIT - 1) }));
         $.each(chart.seriesFamilies, function(_, family) {
             sinon.stub(family, "updateOptions", function(options) {
                 chart.seriesFamiliesUpdatingOptions = options;
@@ -985,7 +988,7 @@ var environment = {
             }),
             series = chart.getAllSeries();
 
-        seriesMockData.series.push(new MockSeries({ points: getPoints(DEFAULT_ANIMATION_LIMIT - 1) }));
+        chartMocks.seriesMockData.series.push(new MockSeries({ points: getPoints(DEFAULT_ANIMATION_LIMIT - 1) }));
 
         // act
         this.themeManager.getOptions.withArgs("equalBarWidth").returns(true);
@@ -1008,7 +1011,7 @@ var environment = {
             series = chart.getAllSeries()[0],
             valAxis = chart._valueAxes[0],
             argAxis = chart._argumentAxes[0];
-        seriesMockData.series.push(new MockSeries({ points: getPoints(DEFAULT_ANIMATION_LIMIT - 1) }));
+        chartMocks.seriesMockData.series.push(new MockSeries({ points: getPoints(DEFAULT_ANIMATION_LIMIT - 1) }));
         $.each(chart.seriesFamilies, function(_, family) {
             sinon.stub(family, "updateOptions", function(options) {
                 chart.seriesFamiliesUpdatingOptions = options;
@@ -1039,7 +1042,7 @@ var environment = {
             series = chart.getAllSeries()[0],
             valAxis = chart._valueAxes[0],
             argAxis = chart._argumentAxes[0];
-        seriesMockData.series.push(new MockSeries({ points: getPoints(DEFAULT_ANIMATION_LIMIT - 1) }));
+        chartMocks.seriesMockData.series.push(new MockSeries({ points: getPoints(DEFAULT_ANIMATION_LIMIT - 1) }));
         $.each(chart.seriesFamilies, function(_, family) {
             sinon.stub(family, "updateOptions", function(options) {
                 chart.seriesFamiliesUpdatingOptions = options;
@@ -1070,7 +1073,7 @@ var environment = {
             series = chart.getAllSeries()[0],
             valAxis = chart._valueAxes[0],
             argAxis = chart._argumentAxes[0];
-        seriesMockData.series.push(new MockSeries({ points: getPoints(DEFAULT_ANIMATION_LIMIT - 1) }));
+        chartMocks.seriesMockData.series.push(new MockSeries({ points: getPoints(DEFAULT_ANIMATION_LIMIT - 1) }));
         $.each(chart.seriesFamilies, function(_, family) {
             sinon.stub(family, "updateOptions", function(options) {
                 chart.seriesFamiliesUpdatingOptions = options;
@@ -1098,7 +1101,7 @@ var environment = {
             dataSource: [{ arg: 1, val: 1 }],
             series: { type: "line" }
         });
-        seriesMockData.series.push(new MockSeries({ points: getPoints(DEFAULT_ANIMATION_LIMIT - 1) }));
+        chartMocks.seriesMockData.series.push(new MockSeries({ points: getPoints(DEFAULT_ANIMATION_LIMIT - 1) }));
         $.each(chart.seriesFamilies, function(_, family) {
             sinon.stub(family, "updateOptions", function(options) {
                 chart.seriesFamiliesUpdatingOptions = options;
@@ -1121,7 +1124,7 @@ var environment = {
             dataSource: [{ arg: 1, val: 1 }],
             series: { type: "line" }
         });
-        seriesMockData.series.push(new MockSeries({ points: getPoints(DEFAULT_ANIMATION_LIMIT - 1) }));
+        chartMocks.seriesMockData.series.push(new MockSeries({ points: getPoints(DEFAULT_ANIMATION_LIMIT - 1) }));
         $.each(chart.seriesFamilies, function(_, family) {
             sinon.stub(family, "updateOptions", function(options) {
                 chart.seriesFamiliesUpdatingOptions = options;
@@ -1148,7 +1151,7 @@ var environment = {
             series = chart.getAllSeries()[0],
             valAxis = chart._valueAxes[0],
             argAxis = chart._argumentAxes[0];
-        seriesMockData.series.push(new MockSeries({ points: getPoints(DEFAULT_ANIMATION_LIMIT - 1) }));
+        chartMocks.seriesMockData.series.push(new MockSeries({ points: getPoints(DEFAULT_ANIMATION_LIMIT - 1) }));
         $.each(chart.seriesFamilies, function(_, family) {
             sinon.stub(family, "updateOptions", function(options) {
                 chart.seriesFamiliesUpdatingOptions = options;
@@ -1243,7 +1246,7 @@ var environment = {
             environment.beforeEach.call(this);
             executeAsyncMock.setup();
             var stubSeries = new MockSeries({ argumentField: "arg", valueField: "val", type: "line" });
-            seriesMockData.series.push(stubSeries);
+            chartMocks.seriesMockData.series.push(stubSeries);
         },
         afterEach: function() {
             executeAsyncMock.teardown();
@@ -1381,7 +1384,7 @@ var environment = {
     QUnit.module("Zooming", {
         beforeEach: function() {
             environment.beforeEach.apply(this, arguments);
-            seriesMockData.series.push(new MockSeries());
+            chartMocks.seriesMockData.series.push(new MockSeries());
         },
         afterEach: environment.afterEach
     });
@@ -1430,7 +1433,7 @@ var environment = {
 
     QUnit.test("Re-Calculate business range for continuous without valueMargin", function(assert) {
         // arrange
-        seriesMockData.series.push(new MockSeries({
+        chartMocks.seriesMockData.series.push(new MockSeries({
             range: {
                 val: {
                     min: -20,
@@ -1471,7 +1474,7 @@ var environment = {
     });
 
     QUnit.test("Re-Calculate business range for continuous with default valueMargin", function(assert) {
-        seriesMockData.series.push(new MockSeries({
+        chartMocks.seriesMockData.series.push(new MockSeries({
             range: {
                 val: {
                     min: -20,
@@ -1510,7 +1513,7 @@ var environment = {
         var stubSeries = new MockSeries({
             points: getPoints(DEFAULT_ANIMATION_LIMIT - 1)
         });
-        seriesMockData.series.push(stubSeries);
+        chartMocks.seriesMockData.series.push(stubSeries);
         // act
 
         var chart = this.createChart({
@@ -1529,7 +1532,7 @@ var environment = {
         var stubSeries = new MockSeries({
             points: getPoints(DEFAULT_ANIMATION_LIMIT - 1)
         });
-        seriesMockData.series.push(stubSeries);
+        chartMocks.seriesMockData.series.push(stubSeries);
         // act
         var chart = this.createChart({
             dataSource: [{ arg: 1, val: 1 }],
@@ -1546,7 +1549,7 @@ var environment = {
             points: getPoints(DEFAULT_ANIMATION_LIMIT - 1)
         });
 
-        seriesMockData.series.push(stubSeries);
+        chartMocks.seriesMockData.series.push(stubSeries);
         // act
         var chart = this.createChart({
             dataSource: [{ arg: 1, val: 1 }],
@@ -1569,7 +1572,7 @@ var environment = {
         var stubSeries = new MockSeries({
             points: getPoints(DEFAULT_ANIMATION_LIMIT + 500)
         });
-        seriesMockData.series.push(stubSeries);
+        chartMocks.seriesMockData.series.push(stubSeries);
         // act
         var chart = this.createChart({
             dataSource: [{ arg: 1, val: 1 }],
@@ -1586,7 +1589,7 @@ var environment = {
         var stubSeries = new MockSeries({
             points: getPoints(DEFAULT_ANIMATION_LIMIT + 500)
         });
-        seriesMockData.series.push(stubSeries);
+        chartMocks.seriesMockData.series.push(stubSeries);
         // act
         var chart = this.createChart({
             animation: {
@@ -1607,8 +1610,8 @@ var environment = {
             stubSeries2 = new MockSeries({
                 points: getPoints(DEFAULT_ANIMATION_LIMIT + 500)
             });
-        seriesMockData.series.push(stubSeries1);
-        seriesMockData.series.push(stubSeries2);
+        chartMocks.seriesMockData.series.push(stubSeries1);
+        chartMocks.seriesMockData.series.push(stubSeries2);
         // act
         var chart = this.createChart({
             dataSource: [{ arg: 1, val: 1, val2: 2 }],
@@ -1624,9 +1627,9 @@ var environment = {
 
     QUnit.test("Dispose", function(assert) {
         // arrange
-        seriesMockData.series.push(new MockSeries({ points: getPoints(10) }));
-        seriesMockData.series.push(new MockSeries({ points: getPoints(10) }));
-        seriesMockData.series.push(new MockSeries({ points: getPoints(10) }));
+        chartMocks.seriesMockData.series.push(new MockSeries({ points: getPoints(10) }));
+        chartMocks.seriesMockData.series.push(new MockSeries({ points: getPoints(10) }));
+        chartMocks.seriesMockData.series.push(new MockSeries({ points: getPoints(10) }));
 
         var chart = this.createChart({
                 crosshair: {
@@ -1767,8 +1770,8 @@ var environment = {
     });
 
     QUnit.test("Call Dispose several times", function() {
-        seriesMockData.series.push(new MockSeries({ points: getPoints(10) }));
-        seriesMockData.series.push(new MockSeries({ points: getPoints(10) }));
+        chartMocks.seriesMockData.series.push(new MockSeries({ points: getPoints(10) }));
+        chartMocks.seriesMockData.series.push(new MockSeries({ points: getPoints(10) }));
 
         this.createChart({
             tooltip: { enabled: true },

@@ -3,10 +3,9 @@
 var $ = require("jquery"),
     executeAsyncMock = require("../../helpers/executeAsyncMock.js"),
     commons = require("./chartParts/commons.js"),
-    multiAxesSynchronizer = require("viz/chart_components/multi_axes_synchronizer");
-
-/* global MockSeries, seriesMockData */
-require("../../helpers/chartMocks.js");
+    multiAxesSynchronizer = require("viz/chart_components/multi_axes_synchronizer"),
+    chartMocks = require("../../helpers/chartMocks.js"),
+    MockSeries = chartMocks.MockSeries;
 
 $('<div id="chartContainer">').appendTo("#qunit-fixture");
 
@@ -47,7 +46,7 @@ QUnit.test("refresh chart without _refreshData", function(assert) {
 
 QUnit.test("change dataSource only - reinitialized series data", function(assert) {
     var stubSeries1 = new MockSeries({ argumentField: "arg", range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
-    seriesMockData.series.push(stubSeries1);
+    chartMocks.seriesMockData.series.push(stubSeries1);
     var dataSource1 = [{ x: 1, y: 1 }, { x: 2, y: 2 }, { x: 3, y: 3 }],
         dataSource2 = [{ x: "First", y: 1 }, { x: "Second", y: 2 }, { x: "Third", y: 3 }],
         chart = this.createChart({
@@ -72,7 +71,7 @@ QUnit.test("change dataSource only - reinitialized series data", function(assert
 
 QUnit.test("change dataSource only. render call", function(assert) {
     var stubSeries1 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
-    seriesMockData.series.push(stubSeries1);
+    chartMocks.seriesMockData.series.push(stubSeries1);
     var dataSource1 = [{ x: 1, y: 1 }, { x: 2, y: 2 }, { x: 3, y: 3 }],
         dataSource2 = [{ x: 1, y: 1 }, { x: 2, y: 2 }, { x: 3, y: 3 }],
         chart = this.createChart({
@@ -100,7 +99,7 @@ QUnit.test("change dataSource only. render call", function(assert) {
 QUnit.test("change dataSource after zoomArgument with gesture and useAggregation", function(assert) {
     var stubSeries = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
     var stubSeries1 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
-    seriesMockData.series.push(stubSeries, stubSeries1);
+    chartMocks.seriesMockData.series.push(stubSeries, stubSeries1);
     var dataSource = [{ x: 1, y: 1 }, { x: 2, y: 2 }, { x: 3, y: 3 }],
         chartOptions = {
             useAggregation: true,
@@ -123,7 +122,7 @@ QUnit.test("change series options only - populateSeries", function(assert) {
     var stubSeries2 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
     var stubSeries3 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
 
-    seriesMockData.series.push(stubSeries1, stubSeries2, stubSeries3);
+    chartMocks.seriesMockData.series.push(stubSeries1, stubSeries2, stubSeries3);
     var chart = this.createChart({
         series: [
             { name: "First series", type: "line" }
@@ -160,7 +159,7 @@ QUnit.test("change series options only", function(assert) {
     var stubSeries2 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
     var stubSeries3 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
 
-    seriesMockData.series.push(stubSeries1, stubSeries2, stubSeries3);
+    chartMocks.seriesMockData.series.push(stubSeries1, stubSeries2, stubSeries3);
     var chart = this.createChart({
         series: [
             { name: "First series", type: "line" }
@@ -197,7 +196,7 @@ QUnit.test("change rotated option only", function(assert) {
     var stubSeries2 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
     var stubSeries3 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
 
-    seriesMockData.series.push(stubSeries1, stubSeries2, stubSeries3);
+    chartMocks.seriesMockData.series.push(stubSeries1, stubSeries2, stubSeries3);
     var chart = this.createChart({
         series: [
             { name: "First series", type: "line" }
@@ -240,7 +239,7 @@ QUnit.test("change customizePoint option only", function(assert) {
         stubSeries3 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } }),
         customizePoint = function() { };
 
-    seriesMockData.series.push(stubSeries1, stubSeries2, stubSeries3);
+    chartMocks.seriesMockData.series.push(stubSeries1, stubSeries2, stubSeries3);
     var chart = this.createChart({
         series: [
             { name: "First series", type: "line" }
@@ -276,7 +275,7 @@ QUnit.test("change customizeLabel option only", function(assert) {
         stubSeries3 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } }),
         customizeLabel = function() { };
 
-    seriesMockData.series.push(stubSeries1, stubSeries2, stubSeries3);
+    chartMocks.seriesMockData.series.push(stubSeries1, stubSeries2, stubSeries3);
     var chart = this.createChart({
         series: [
             { name: "First series", type: "line" }
@@ -310,7 +309,7 @@ QUnit.test("change series options only. render called", function(assert) {
     var stubSeries2 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
     var stubSeries3 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
 
-    seriesMockData.series.push(stubSeries1, stubSeries2, stubSeries3);
+    chartMocks.seriesMockData.series.push(stubSeries1, stubSeries2, stubSeries3);
     var chart = this.createChart({
         series: [
             { name: "First series", type: "line" }
@@ -346,7 +345,7 @@ QUnit.test("change series options only. render called", function(assert) {
 QUnit.test("change containerBackgroundColor option only", function(assert) {
     var stubSeries1 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
     var stubSeries2 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
-    seriesMockData.series.push(stubSeries1, stubSeries2);
+    chartMocks.seriesMockData.series.push(stubSeries1, stubSeries2);
     var chart = this.createChart({
         containerBackgroundColor: "green",
         series: { name: "series1", type: "line" }
@@ -376,7 +375,7 @@ QUnit.test("change containerBackgroundColor option only", function(assert) {
 QUnit.test("change resolveLabelsOverlapping option only", function(assert) {
     var stubSeries1 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
     var stubSeries2 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
-    seriesMockData.series.push(stubSeries1, stubSeries2);
+    chartMocks.seriesMockData.series.push(stubSeries1, stubSeries2);
     var chart = this.createChart({
         resolveLabelsOverlapping: true,
         series: { name: "series1", type: "line" }
@@ -435,7 +434,7 @@ QUnit.test("change panes option only", function(assert) {
     // arrange
     var stubSeries1 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
     var stubSeries2 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
-    seriesMockData.series.push(stubSeries1, stubSeries2);
+    chartMocks.seriesMockData.series.push(stubSeries1, stubSeries2);
     var chart = this.createChart({
         title: {
             text: "original",
@@ -474,7 +473,7 @@ QUnit.test("change default Pane", function(assert) {
     // arrange
     var stubSeries1 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
     var stubSeries2 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
-    seriesMockData.series.push(stubSeries1, stubSeries2);
+    chartMocks.seriesMockData.series.push(stubSeries1, stubSeries2);
     var chart = this.createChart({
         panes: [{ name: "top" }, { name: "bottom" }],
         defaultPane: "bottom",
@@ -514,7 +513,7 @@ QUnit.test("change valueAxis option", function(assert) {
     var stubSeries2 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
     var stubSeries3 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
 
-    seriesMockData.series.push(stubSeries1, stubSeries2, stubSeries3);
+    chartMocks.seriesMockData.series.push(stubSeries1, stubSeries2, stubSeries3);
 
     var chart = this.createChart({
         series: [
@@ -609,9 +608,9 @@ QUnit.test("change some options", function(assert) {
         stubSeries2 = new MockSeries({ range: { arg: { min: 1, max: 5 } } }),
         stubSeries3 = new MockSeries({ range: { arg: { min: 1, max: 5 } } });
 
-    seriesMockData.series.push(stubSeries1);
-    seriesMockData.series.push(stubSeries2);
-    seriesMockData.series.push(stubSeries3);
+    chartMocks.seriesMockData.series.push(stubSeries1);
+    chartMocks.seriesMockData.series.push(stubSeries2);
+    chartMocks.seriesMockData.series.push(stubSeries3);
     var chart = this.createChart({
         series: [{
             type: "spline"
@@ -646,9 +645,9 @@ QUnit.test("change useAggregation options", function(assert) {
         stubSeries2 = new MockSeries({ range: { arg: { min: 1, max: 5 } } }),
         stubSeries3 = new MockSeries({ range: { arg: { min: 1, max: 5 } } });
 
-    seriesMockData.series.push(stubSeries1);
-    seriesMockData.series.push(stubSeries2);
-    seriesMockData.series.push(stubSeries3);
+    chartMocks.seriesMockData.series.push(stubSeries1);
+    chartMocks.seriesMockData.series.push(stubSeries2);
+    chartMocks.seriesMockData.series.push(stubSeries3);
     var chart = this.createChart({
         series: [{
             type: "spline"
@@ -751,7 +750,7 @@ QUnit.test("palette option changed", function(assert) {
     // arrange
     var stubSeries1 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
     var stubSeries2 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
-    seriesMockData.series.push(stubSeries1, stubSeries2);
+    chartMocks.seriesMockData.series.push(stubSeries1, stubSeries2);
     var chart = this.createChart({
         palette: "default",
         series: { name: "series1", type: "line" }
@@ -784,7 +783,7 @@ QUnit.test("paletteExtensionMode option changed", function(assert) {
     // arrange
     var stubSeries1 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
     var stubSeries2 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
-    seriesMockData.series.push(stubSeries1, stubSeries2);
+    chartMocks.seriesMockData.series.push(stubSeries1, stubSeries2);
     var chart = this.createChart({
         palette: "default",
         paletteExtensionMode: "blend",
@@ -818,7 +817,7 @@ QUnit.test("palette option changed. palette as array", function(assert) {
     // arrange
     var stubSeries1 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
     var stubSeries2 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
-    seriesMockData.series.push(stubSeries1, stubSeries2);
+    chartMocks.seriesMockData.series.push(stubSeries1, stubSeries2);
     var chart = this.createChart({
         palette: ["red", "green"],
         series: { name: "series1", type: "line" }
@@ -850,7 +849,7 @@ QUnit.test("palette option changed. palette as array", function(assert) {
 QUnit.test("animation option changed", function(assert) {
     var stubSeries1 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
     var stubSeries2 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
-    seriesMockData.series.push(stubSeries1, stubSeries2);
+    chartMocks.seriesMockData.series.push(stubSeries1, stubSeries2);
     var chart = this.createChart({
             series: { name: "series1", type: "line" },
             animation: {
@@ -959,12 +958,12 @@ QUnit.test("SeriesTemplate.", function(assert) {
 
     sinon.spy(stubSeries4, "getTemplateFields");
 
-    seriesMockData.series.push(stubSeries1, stubSeries2, stubSeries3, stubSeries4);
+    chartMocks.seriesMockData.series.push(stubSeries1, stubSeries2, stubSeries3, stubSeries4);
     var chart = this.createChart({
         dataSource: [{ series: "s1", x: 1, y: 1 }, { series: "s2", x: 2, y: 2 }, { series: "s3", x: 3, y: 3 }, { series: "s4", x: 3, y: 3 }],
         seriesTemplate: { nameField: "series", type: "line", customizeSeries: function(sName) { return { type: "line-" + sName }; } }
     });
-    seriesMockData.currentSeries = 0;
+    chartMocks.seriesMockData.currentSeries = 0;
     $.each(chart.series, function(_, series) { series.dispose = function() { chart.seriesDisposed = true; }; });
     $.each(chart.seriesFamilies, function(_, family) { family.dispose = function() { chart.seriesFamiliesDisposed = true; }; });
 
@@ -995,7 +994,7 @@ QUnit.test("SeriesTemplate. B239844", function(assert) {
     // arrange
     var stubSeries = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
 
-    seriesMockData.series.push(stubSeries);
+    chartMocks.seriesMockData.series.push(stubSeries);
     // act
     var chart = this.createChart({
         dataSource: [{ series: "s1", x: 1, y: 1 }],
@@ -1012,13 +1011,13 @@ QUnit.test("SeriesTemplate. render called", function(assert) {
     var stubSeries2 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } }, type: "line" });
     var stubSeries3 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } }, type: "line" });
 
-    seriesMockData.series.push(stubSeries1, stubSeries2, stubSeries3);
+    chartMocks.seriesMockData.series.push(stubSeries1, stubSeries2, stubSeries3);
     var chart = this.createChart({
         dataSource: [{ series: "s1", x: 1, y: 1 }, { series: "s2", x: 2, y: 2 }, { series: "s3", x: 3, y: 3 }],
         seriesTemplate: { nameField: "series", customizeSeries: function(sName) { return { type: "line-" + sName }; } }
     });
 
-    seriesMockData.series.push(new MockSeries(), new MockSeries(), new MockSeries());
+    chartMocks.seriesMockData.series.push(new MockSeries(), new MockSeries(), new MockSeries());
 
     chart._doRender = function() {
         this._renderCalled = true;
@@ -1040,12 +1039,12 @@ QUnit.test("Ignore Series update if SeriesTemplate presents.", function(assert) 
     var stubSeries2 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } }, type: "line" });
     var stubSeries3 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } }, type: "line" });
 
-    seriesMockData.series.push(stubSeries1, stubSeries2, stubSeries3);
+    chartMocks.seriesMockData.series.push(stubSeries1, stubSeries2, stubSeries3);
     var chart = this.createChart({
         dataSource: [{ series: "s1", x: 1, y: 1 }, { series: "s2", x: 2, y: 2 }, { series: "s3", x: 3, y: 3 }],
         seriesTemplate: { nameField: "series", customizeSeries: function(sName) { return { type: "line" }; } }
     });
-    seriesMockData.series.push(new MockSeries(), new MockSeries(), new MockSeries());
+    chartMocks.seriesMockData.series.push(new MockSeries(), new MockSeries(), new MockSeries());
     // Act
     this.validateData.reset();
     chart.option({
@@ -1069,7 +1068,7 @@ QUnit.test("change tooltip option", function(assert) {
             some_new: "options"
         };
 
-    seriesMockData.series.push(stubSeries1);
+    chartMocks.seriesMockData.series.push(stubSeries1);
     var chart = this.createChart({
         series: [
             { name: "First series", type: "line" }
@@ -1085,8 +1084,8 @@ QUnit.test("change tooltip option", function(assert) {
 
 // T273635
 QUnit.test("'done' event is triggered after all '_render' calls when async series rendering is disabled", function(assert) {
-    seriesMockData.series.push(new MockSeries());
-    seriesMockData.series.push(new MockSeries());
+    chartMocks.seriesMockData.series.push(new MockSeries());
+    chartMocks.seriesMockData.series.push(new MockSeries());
     var onDone = sinon.spy(),
         chart = this.createChart({
             series: { type: "line" },
@@ -1094,7 +1093,7 @@ QUnit.test("'done' event is triggered after all '_render' calls when async serie
         });
     onDone.reset();
     commons.getTrackerStub().stub("update").reset();
-    seriesMockData.series[1].canRenderCompleteHandle = function() {
+    chartMocks.seriesMockData.series[1].canRenderCompleteHandle = function() {
         this.canRenderCompleteHandle = function() {
             return false;
         };
@@ -1114,7 +1113,7 @@ QUnit.module("Change options - force render, series and axes are not recreated",
 
 QUnit.test("zoomingMode option", function(assert) {
     var stubSeries1 = new MockSeries({});
-    seriesMockData.series.push(stubSeries1);
+    chartMocks.seriesMockData.series.push(stubSeries1);
 
     var chart = this.createChart({
         series: [
@@ -1142,7 +1141,7 @@ QUnit.test("zoomingMode option", function(assert) {
 
 QUnit.test("scrollingMode option", function(assert) {
     var stubSeries1 = new MockSeries({});
-    seriesMockData.series.push(stubSeries1);
+    chartMocks.seriesMockData.series.push(stubSeries1);
 
     var chart = this.createChart({
         series: [
@@ -1171,7 +1170,7 @@ QUnit.test("scrollingMode option", function(assert) {
 QUnit.test("title option", function(assert) {
     // arrange
     var stubSeries1 = new MockSeries({});
-    seriesMockData.series.push(stubSeries1);
+    chartMocks.seriesMockData.series.push(stubSeries1);
     var onDrawn = sinon.spy(),
         chart = this.createChart({
             title: {
@@ -1197,7 +1196,7 @@ QUnit.test("title option", function(assert) {
 
 QUnit.test("adaptiveLayout option", function(assert) {
     var stubSeries1 = new MockSeries({});
-    seriesMockData.series.push(stubSeries1);
+    chartMocks.seriesMockData.series.push(stubSeries1);
     var chart = this.createChart({
         adaptiveLayout: {
             width: 20,
@@ -1222,7 +1221,7 @@ QUnit.test("adaptiveLayout option", function(assert) {
 
 QUnit.test("crosshair option", function(assert) {
     var stubSeries1 = new MockSeries({});
-    seriesMockData.series.push(stubSeries1);
+    chartMocks.seriesMockData.series.push(stubSeries1);
     var chart = this.createChart({
         crosshair: { enabled: false },
         series: { type: "line" }
@@ -1244,7 +1243,7 @@ QUnit.test("crosshair option", function(assert) {
 
 QUnit.test("adjustOnZoom option", function(assert) {
     var stubSeries1 = new MockSeries({});
-    seriesMockData.series.push(stubSeries1);
+    chartMocks.seriesMockData.series.push(stubSeries1);
 
     stubSeries1.getViewport.returns({
         min: 10,
@@ -1286,7 +1285,7 @@ QUnit.module("Change options - recreate series but not axes", commons.environmen
 QUnit.test("pointSelectionMode option", function(assert) {
     var stubSeries1 = new MockSeries({}),
         stubSeries2 = new MockSeries({});
-    seriesMockData.series.push(stubSeries1, stubSeries2);
+    chartMocks.seriesMockData.series.push(stubSeries1, stubSeries2);
 
     var chart = this.createChart({
         pointSelectionMode: "point-selection-mode",
@@ -1317,7 +1316,7 @@ QUnit.test("pointSelectionMode option", function(assert) {
 QUnit.test("seriesSelectionMode option", function(assert) {
     var stubSeries1 = new MockSeries({}),
         stubSeries2 = new MockSeries({});
-    seriesMockData.series.push(stubSeries1, stubSeries2);
+    chartMocks.seriesMockData.series.push(stubSeries1, stubSeries2);
 
     var chart = this.createChart({
         seriesSelectionMode: "series-selection-mode",
@@ -1348,7 +1347,7 @@ QUnit.test("seriesSelectionMode option", function(assert) {
 QUnit.test("useAggregation option", function(assert) {
     var stubSeries1 = new MockSeries({}),
         stubSeries2 = new MockSeries({});
-    seriesMockData.series.push(stubSeries1, stubSeries2);
+    chartMocks.seriesMockData.series.push(stubSeries1, stubSeries2);
 
     stubSeries2.getViewport.returns({
         min: 10,
@@ -1380,7 +1379,7 @@ QUnit.test("useAggregation option", function(assert) {
 QUnit.test("synchronizeMultiAxes option", function(assert) {
     var stubSeries1 = new MockSeries({}),
         stubSeries2 = new MockSeries({});
-    seriesMockData.series.push(stubSeries1, stubSeries2);
+    chartMocks.seriesMockData.series.push(stubSeries1, stubSeries2);
 
     multiAxesSynchronizer.synchronize = sinon.spy();
 

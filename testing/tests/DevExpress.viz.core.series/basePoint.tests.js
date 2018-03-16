@@ -5,10 +5,9 @@ var $ = require("jquery"),
     Series = require("viz/series/base_series").Series,
     pointModule = require("viz/series/points/base_point"),
     labelModule = require("viz/series/points/label"),
-    originalLabel = labelModule.Label;
-
-/* global MockTranslator */
-require("../../helpers/chartMocks.js");
+    originalLabel = labelModule.Label,
+    chartMocks = require("../../helpers/chartMocks.js"),
+    MockTranslator = chartMocks.MockTranslator;
 
 var createPoint = function(series, data, options) {
     options = options || {};

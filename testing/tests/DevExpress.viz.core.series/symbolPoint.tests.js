@@ -6,10 +6,9 @@ var $ = require("jquery"),
     tooltipModule = require("viz/core/tooltip"),
     labelModule = require("viz/series/points/label"),
     pointModule = require("viz/series/points/base_point"),
-    originalLabel = labelModule.Label;
-
-/* global MockTranslator */
-require("../../helpers/chartMocks.js");
+    chartMocks = require("../../helpers/chartMocks.js"),
+    originalLabel = labelModule.Label,
+    MockTranslator = chartMocks.MockTranslator;
 
 var createPoint = function(series, data, options) {
     options = options || {};
