@@ -168,7 +168,7 @@ var DataControllerFilterMergingExtender = {
             case "filterValue":
                 this._applyFilter();
                 var filterMergingController = this.getController("filterMerging");
-                if(!filterMergingController.skipSyncFilterValue) {
+                if(!filterMergingController.skipSyncFilterValue && this.option("filterSyncEnabled")) {
                     filterMergingController.syncFilterValue();
                 }
                 args.handled = true;

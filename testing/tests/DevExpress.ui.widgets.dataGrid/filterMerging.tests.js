@@ -608,5 +608,21 @@ QUnit.module("Real dataGrid", {
         assert.deepEqual(dataGrid.columnOption("field", "filterValue"), 100);
         assert.deepEqual(dataGrid.columnOption("field", "selectedFilterOperation"), "=");
     });
+
+    QUnit.test("do not sync if filterSyncEnabled = false", function(assert) {
+        // arrange
+        var dataGrid = this.initDataGrid({
+            filterSyncEnabled: false,
+            filterValue: null,
+            columns: [{ dataField: "field", filterValues: [1, 3], filterValue: 1, selectedFilterOperation: "=" }],
+        });
+        // act
+        dataGrid.option("filterValue", [["field", "anyof", [2]], "and", ["field", "=", 55]]);
+        // assert
+        assert.deepEqual(dataGrid.option("filterValue"), [["field", "anyof", [2]], "and", ["field", "=", 55]]);
+        assert.deepEqual(dataGrid.columnOption("field", "filterValues"), [1, 3]);
+        assert.deepEqual(dataGrid.columnOption("field", "filterValue"), 1);
+        assert.deepEqual(dataGrid.columnOption("field", "selectedFilterOperation"), "=");
+    });
 });
 
