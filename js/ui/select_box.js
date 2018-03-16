@@ -636,6 +636,11 @@ var SelectBox = DropDownList.inherit({
         var previousValue = this._getCurrentValue();
 
         this._saveValueChangeEvent(e.event);
+
+        if(this._wasSearch()) {
+            this._clearFilter();
+        }
+
         this._completeSelection(this._valueGetter(e.itemData));
 
         if(this._shouldCloseOnItemClick()) {
@@ -648,10 +653,6 @@ var SelectBox = DropDownList.inherit({
     },
 
     _completeSelection: function(value) {
-        if(this._wasSearch()) {
-            this._clearFilter();
-        }
-
         this._setValue(value);
     },
 
