@@ -271,7 +271,7 @@ var FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).in
                 if(isHeaderFilter) {
                     that._headerFilterView.showHeaderFilterMenu($(e.currentTarget), extend(mainGroupField, {
                         type: mainGroupField.groupName ? 'tree' : 'list',
-                        encodeHtml: true,
+                        encodeHtml: that.option("encodeHtml"),
                         dataSource: {
                             useDefaultSearch: true,
                             // paginate: false,
