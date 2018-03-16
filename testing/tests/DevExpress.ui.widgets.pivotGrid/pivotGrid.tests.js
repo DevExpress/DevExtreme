@@ -759,6 +759,56 @@ QUnit.test("Field chooser should be updated on change headerFilter at runtime", 
     assert.notOk($(".dx-header-filter-menu").find(".dx-list-search").length, "headerFilter hasn't searchBox");
 });
 
+QUnit.test("Field panel inherits encodeHtml option", function(assert) {
+    createPivotGrid({
+        dataSource: {
+            fields: [{ dataField: "field1", area: "column" }],
+            store: [{ field1: "test <test>" }]
+        },
+        allowFiltering: true,
+        encodeHtml: true,
+        fieldPanel: {
+            visible: true
+        }
+    }, assert);
+
+    this.clock.tick();
+
+    // act
+    $("#pivotGrid").find(".dx-header-filter").first().trigger("dxclick");
+    this.clock.tick(500);
+
+    // assert
+    assert.equal($(".dx-header-filter-menu").find(".dx-list-item").text(), "test <test>", "encoded");
+});
+
+QUnit.test("Field chooser inherits encodeHtml option", function(assert) {
+    var pivotGrid = createPivotGrid({
+            dataSource: {
+                fields: [{ dataField: "field1", area: "column" }],
+                store: [{ field1: "test <test>" }]
+            },
+            allowFiltering: true,
+            encodeHtml: true,
+            fieldChooser: {
+                enabled: true
+            }
+        }, assert),
+        fieldChooserPopup = pivotGrid.getFieldChooserPopup();
+
+    this.clock.tick();
+
+    // act
+    fieldChooserPopup.show();
+    this.clock.tick(500);
+
+    $(fieldChooserPopup.content()).find(".dx-header-filter").first().trigger("dxclick");
+    this.clock.tick(500);
+
+    // assert
+    assert.equal($(".dx-header-filter-menu").find(".dx-list-item").text(), "test <test>", "encoded");
+});
+
 QUnit.test("fieldChooser layout change at runtime should not hide popup", function(assert) {
     var pivotGrid = createPivotGrid({
             dataSource: {
