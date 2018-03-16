@@ -158,6 +158,33 @@ QUnit.test("Untouched validator should not be validated after validationRules ch
     assert.equal(spy.callCount, 0, "validation performed");
 });
 
+QUnit.test("Options changing after validator creation", function(assert) {
+    var validator = this.fixture.createValidator({
+        validationRules: [{
+            type: "required",
+            message: "Please set validator's value"
+        }]
+    });
+
+    var options = validator.option();
+
+    for(var optionName in options) {
+        var prevValue = validator.option(optionName),
+            newValue = prevValue;
+
+        if(optionName === "width" || optionName === "height") {
+            newValue = 555;
+            options[optionName] = newValue;
+        }
+
+        validator.beginUpdate();
+        validator._notifyOptionChanged(optionName, newValue, prevValue);
+        validator.endUpdate();
+
+        assert.ok(true, "it's possible to change option " + optionName);
+    }
+});
+
 
 QUnit.module("Validator specific tests", {
     beforeEach: function() {
