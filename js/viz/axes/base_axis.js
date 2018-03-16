@@ -1142,6 +1142,36 @@ Axis.prototype = {
         return ticks;
     },
 
+    getTicks: function(tickInterval, divisionFactor) {
+        var options = this._options,
+            customTicks = options.customTicks,
+            customMinorTicks = options.customMinorTicks,
+            viewPort = this.getTranslator().getBusinessRange();
+
+        return getTickGenerator(extend({}, {
+            endOnTick: true,
+            axisDivisionFactor: divisionFactor
+        }, options), _noop, false)(
+            {
+                min: viewPort.minVisible,
+                max: viewPort.maxVisible,
+                categories: viewPort.categories,
+                isSpacedMargin: viewPort.isSpacedMargin,
+                checkMinDataVisibility: viewPort.checkMinDataVisibility,
+                checkMaxDataVisibility: viewPort.checkMaxDataVisibility
+            },
+            this._getScreenDelta(),
+            tickInterval,
+            tickInterval !== null,
+            {
+                majors: customTicks,
+                minors: customMinorTicks
+            },
+            options.minorTickInterval,
+            options.minorTickCount
+        );
+    },
+
     createTicks: function(canvas) {
         var that = this,
             renderer = that._renderer,

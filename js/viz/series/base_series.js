@@ -479,7 +479,8 @@ Series.prototype = {
             minMaxDefined = _isDefined(min) && _isDefined(max),
             aggregationInfo,
             tickInterval,
-            aggregationInterval = argumentAxis.getOptions().aggregationInterval;
+            argumentAxisOptions = argumentAxis.getOptions(),
+            aggregationInterval = argumentAxisOptions.aggregationInterval;// move to axis
 
         if(pointsLength && pointsLength > 1) {
             count = argTranslator.canvasLength / sizePoint;
@@ -501,8 +502,8 @@ Series.prototype = {
                 tickInterval = (minMaxDefined ? (max - min) : (businessRange.maxVisible - businessRange.minVisible)) / count;
             }
 
-            // tickInterval = calculateAggregationInterval();
-            aggregationInfo = _isDefined(aggregationInterval) ? { tickInterval: aggregationInterval } : argumentAxis._getTicks(businessRange, _noop, true);
+            aggregationInterval = _isDefined(aggregationInterval) ? aggregationInterval : null;
+            aggregationInfo = aggregationInterval ? { tickInterval: aggregationInterval } : argumentAxis.getTicks(aggregationInterval, argumentAxisOptions.aggregationGroupWidth);
 
             return that._resample(aggregationInfo, min - tickInterval, max + tickInterval, minMaxDefined, data);
         }

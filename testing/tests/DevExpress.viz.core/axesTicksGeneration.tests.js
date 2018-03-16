@@ -918,6 +918,80 @@ QUnit.test("Add extra tick (logarithmic, numeric) for the bar point is equal to 
     assert.deepEqual(this.axis._tickInterval, 1);
 });
 
+QUnit.test("getTicks method", function(assert) {
+    var ticks;
+
+    this.createAxis();
+    this.updateOptions({
+        argumentType: "numeric",
+        type: "continuous"
+    });
+
+    this.axis.setBusinessRange({ minVisible: 1, maxVisible: 10, addRange: function() { } });
+    this.axis.createTicks(canvas(1000));
+    // act
+
+    ticks = this.axis.getTicks();
+
+    assert.strictEqual(this.axis._tickInterval, ticks.tickInterval);
+    assert.deepEqual(this.axis._majorTicks.map(value), ticks.ticks);
+});
+
+QUnit.test("getTicks with tickInterval", function(assert) {
+    var ticks;
+
+    this.createAxis();
+    this.updateOptions({
+        argumentType: "numeric",
+        type: "continuous"
+    });
+
+    this.axis.setBusinessRange({ minVisible: 1, maxVisible: 10, addRange: function() { } });
+    this.axis.createTicks(canvas(1000));
+    // act
+
+    ticks = this.axis.getTicks(2);
+
+    assert.strictEqual(ticks.tickInterval, 2);
+    assert.deepEqual(ticks.ticks, [0, 2, 4, 6, 8, 10]);
+});
+
+QUnit.test("getTicks. Ticks was generated with endOnTick", function(assert) {
+    var ticks;
+
+    this.createAxis();
+    this.updateOptions({
+        argumentType: "numeric",
+        type: "continuous"
+    });
+
+    this.axis.setBusinessRange({ minVisible: 4, maxVisible: 12, addRange: function() { } });
+    this.axis.createTicks(canvas(170));
+    // act
+
+    ticks = this.axis.getTicks(5);
+
+    assert.deepEqual(ticks.ticks, [0, 5, 10, 15]);
+});
+
+QUnit.test("getTicks. With divisionFactor", function(assert) {
+    var ticks;
+
+    this.createAxis();
+    this.updateOptions({
+        argumentType: "numeric",
+        type: "continuous"
+    });
+
+    this.axis.setBusinessRange({ minVisible: 1, maxVisible: 10, addRange: function() { } });
+    this.axis.createTicks(canvas(170));
+    // act
+
+    ticks = this.axis.getTicks(undefined, 20);
+
+    assert.deepEqual(ticks.ticks, [0, 2, 4, 6, 8, 10]);
+});
+
 QUnit.module("Numeric. Minor ticks", environment);
 
 QUnit.test("minorTick and minorGrid are not visible - do not calculate minor ticks", function(assert) {
