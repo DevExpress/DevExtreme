@@ -191,7 +191,6 @@ QUnit.module("Sync with FilterValue", {
     });
 });
 
-
 QUnit.module("getCombinedFilter", {
     beforeEach: function() {
         this.setupDataGrid = function(options) {
@@ -371,7 +370,6 @@ QUnit.module("getCombinedFilter", {
     });
 });
 
-
 QUnit.module("Sync on initialization", {
     beforeEach: function() {
         this.setupDataGrid = function(options) {
@@ -488,14 +486,7 @@ QUnit.module("Real dataGrid", {
             columns: [{ dataField: "field", dataType: "number", defaultFilterOperation: "=", selectedFilterOperation: "<>", allowFiltering: true, index: 0 }]
         });
 
-        var filterRowInput = $(".dx-texteditor");
-        assert.equal(filterRowInput.length, 1);
-
-        filterRowInput.find(".dx-texteditor-input").val(90);
-        filterRowInput.find(".dx-texteditor-input").trigger("keyup");
-
-        // act
-        this.clock.tick(700);
+        dataGrid.columnOption("field", { filterValue: 90 });
 
         // assert
         assert.deepEqual(dataGrid.option("filterValue"), ["field", "<>", 90]);
@@ -508,21 +499,12 @@ QUnit.module("Real dataGrid", {
                 dataField: "field",
                 dataType: "number",
                 filterValue: 90,
-                defaultFilterOperation: "=",
                 selectedFilterOperation: "<>",
-                filterOperations: ["=", "<", ">", "<>"],
-                allowFiltering: true,
-                index: 0
+                filterOperations: ["=", "<", ">", "<>"]
             }]
         });
 
-        // act
-        $(".dx-menu-item").trigger("dxclick");
-        var $filterMenuItem = $(".dx-menu-item").eq(2);
-        $filterMenuItem.trigger("dxclick");
-
-        // act
-        this.clock.tick(700);
+        dataGrid.columnOption("field", { selectedFilterOperation: "<" });
 
         // assert
         assert.deepEqual(dataGrid.option("filterValue"), ["field", "<", 90]);
@@ -536,19 +518,11 @@ QUnit.module("Real dataGrid", {
                 dataType: "number",
                 defaultFilterOperation: "=",
                 selectedFilterOperation: "<>",
-                filterOperations: ["=", "<", ">", "<>"],
-                allowFiltering: true,
-                index: 0
+                filterOperations: ["=", "<", ">", "<>"]
             }]
         });
 
-        // act
-        $(".dx-menu-item").trigger("dxclick");
-        var $filterMenuItem = $(".dx-menu-item").eq(2);
-        $filterMenuItem.trigger("dxclick");
-
-        // act
-        this.clock.tick(700);
+        dataGrid.columnOption("field", { selectedFilterOperation: "<" });
 
         // assert
         assert.deepEqual(dataGrid.option("filterValue"), null);
