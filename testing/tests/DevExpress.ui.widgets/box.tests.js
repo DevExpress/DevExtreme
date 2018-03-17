@@ -3,6 +3,8 @@
 var $ = require("jquery"),
     domUtils = require("core/utils/dom");
 
+require("ui/box");
+
 require("common.css!");
 require("ui/scroll_view/ui.scrollable");
 
