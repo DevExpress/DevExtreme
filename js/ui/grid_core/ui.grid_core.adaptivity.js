@@ -945,7 +945,7 @@ module.exports = {
                 _toggleBestFitMode: function(isBestFit) {
                     isBestFit && this._adaptiveColumnsController._removeCssClassesFromColumns();
                     this.callBase(isBestFit);
-                    if(this.option("advancedRendering") && this.option("columnAutoWidth") && this._adaptiveColumnsController.getHidingColumnsQueue().length) {
+                    if(this.option("advancedRendering") && this._adaptiveColumnsController.getHidingColumnsQueue().length) {
                         var $rowsTable = this._rowsView._getTableElement();
                         $rowsTable.css("width", isBestFit ? "auto" : "");
 

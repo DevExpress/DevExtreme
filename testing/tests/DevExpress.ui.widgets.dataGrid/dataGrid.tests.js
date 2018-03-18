@@ -2125,6 +2125,66 @@ QUnit.test("Resize grid after column resizing to right when columnResizingMode i
     }
 });
 
+QUnit.test("Column widths should be correct after resize column to show scroll if fixed column is exists", function(assert) {
+    // arrange
+    var $dataGrid = $("#dataGrid").dxDataGrid({
+            width: 400,
+            loadingTimeout: undefined,
+            dataSource: [{}],
+            columns: [
+                { dataField: "field1", width: 100 },
+                { dataField: "field2", width: 100 },
+                { dataField: "field3", width: 100, fixed: true, fixedPosition: "right" }
+            ]
+        }),
+        instance = $dataGrid.dxDataGrid("instance"),
+        $colGroups;
+
+    // act
+    instance.columnOption(0, "width", 400);
+    instance.columnOption(0, "visibleWidth", 400);
+    instance.updateDimensions();
+
+    // assert
+    $colGroups = $dataGrid.find(".dx-datagrid-rowsview colgroup");
+    assert.strictEqual($colGroups.length, 2);
+
+    assert.strictEqual($colGroups.eq(0).children().get(0).style.width, "400px");
+    assert.strictEqual($colGroups.eq(0).children().get(1).style.width, "100px");
+    assert.strictEqual($colGroups.eq(0).children().get(2).style.width, "100px");
+
+    assert.strictEqual($colGroups.eq(1).children().get(0).style.width, "auto");
+    assert.strictEqual($colGroups.eq(1).children().get(1).style.width, "auto");
+    assert.strictEqual($colGroups.eq(1).children().get(2).style.width, "100px");
+});
+
+QUnit.test("Last cell should have correct width after resize column to hide scroll if fixed column is exists and columnAutoWidth is enabled", function(assert) {
+    // arrange
+    var $dataGrid = $("#dataGrid").dxDataGrid({
+            width: 400,
+            loadingTimeout: undefined,
+            columnAutoWidth: true,
+            dataSource: [{}],
+            columns: [
+                { dataField: "field1", width: 250 },
+                { dataField: "field2", width: 100 },
+                { dataField: "field3", width: 100, fixed: true, fixedPosition: "right" }
+            ]
+        }),
+        instance = $dataGrid.dxDataGrid("instance");
+
+    // act
+    instance.columnOption(0, "width", 100);
+    instance.columnOption(0, "visibleWidth", 100);
+    instance.updateDimensions();
+
+    // assert
+    var $rows = $(instance.getRowElement(0));
+
+    assert.strictEqual($rows.eq(0).children().last().get(0).offsetWidth, 100);
+    assert.strictEqual($rows.eq(1).children().last().get(0).offsetWidth, 100);
+});
+
 QUnit.test("Initialize grid with any columns when columnMinWidth option is assigned", function(assert) {
     $("#container").width(200);
     // arrange
