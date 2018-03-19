@@ -6,7 +6,7 @@ var $ = require("jquery"),
 
 require("common.css!");
 require("generic_light.css!");
-require("ui/data_grid/pager");
+require("ui/pager");
 
 var PAGER_LIGHT_MODE_WIDTH = 200;
 
