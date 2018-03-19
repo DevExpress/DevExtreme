@@ -95,8 +95,8 @@ registerDecorator(
             }
         },
 
-        handleKeyboardEvents: function(itemIndex, moveFocus) {
-            if(this._$selectAll && this._needMoveFocus(itemIndex, moveFocus)) {
+        handleKeyboardEvents: function(itemIndex, focusOnList) {
+            if(this._$selectAll && this._needMoveFocus(itemIndex, focusOnList)) {
                 this._list.option("focusedElement", undefined);
                 this._selectAllCheckBox.$element().addClass("dx-state-focused");
                 return true;
@@ -107,8 +107,8 @@ registerDecorator(
             }
         },
 
-        _needMoveFocus: function(itemIndex, moveFocus) {
-            return moveFocus && (itemIndex === 0 || itemIndex === this._list._getLastItemIndex());
+        _needMoveFocus: function(itemIndex, focusOnList) {
+            return !focusOnList && (itemIndex === 0 || itemIndex === this._list._getLastItemIndex());
         },
 
         handleEnterPressing: function() {
