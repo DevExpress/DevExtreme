@@ -416,19 +416,18 @@ var DataControllerFilterRowExtender = {
             }
 
             if(allowHeaderFiltering(column) && column.calculateFilterExpression && Array.isArray(column.filterValues) && column.filterValues.length) {
-                var filterValues = [],
-                    isExclude = column.filterType === "exclude";
+                var filterValues = [];
 
                 each(column.filterValues, function(_, filterValue) {
 
                     if(Array.isArray(filterValue)) {
-                        filter = isExclude ? invertFilterExpression(filterValue) : filterValue;
+                        filter = filterValue;
                     } else {
                         if(column.deserializeValue && !gridCoreUtils.isDateType(column.dataType) && column.dataType !== "number") {
                             filterValue = column.deserializeValue(filterValue);
                         }
 
-                        filter = column.createFilterExpression(filterValue, isExclude ? "<>" : "=", "headerFilter");
+                        filter = column.createFilterExpression(filterValue, "=", "headerFilter");
                     }
                     if(filter) {
                         filter.columnIndex = column.index;
@@ -436,9 +435,9 @@ var DataControllerFilterRowExtender = {
                     filterValues.push(filter);
                 });
 
-                filterValues = gridCoreUtils.combineFilters(filterValues, isExclude ? "and" : "or");
+                filterValues = gridCoreUtils.combineFilters(filterValues, "or");
 
-                filters.push(filterValues);
+                filters.push(column.filterType === "exclude" ? ["!", filterValues] : filterValues);
             }
         });
 

@@ -122,8 +122,7 @@ module.exports = (function() {
             groupInterval = module.exports.getGroupInterval(column);
 
         if(target === "headerFilter" && groupInterval && typeUtils.isDefined(filterValue)) {
-            var isExclude = column.filterType === "exclude",
-                values = ("" + filterValue).split("/"),
+            var values = ("" + filterValue).split("/"),
                 value = Number(values[values.length - 1]),
                 interval,
                 startFilterValue,
@@ -133,7 +132,7 @@ module.exports = (function() {
             startFilterValue = [selector, ">=", value];
             endFilterValue = [selector, "<", value + interval];
             var condition = [startFilterValue, "and", endFilterValue];
-            return isExclude ? ["!", condition] : condition;
+            return condition;
         }
 
         return [selector, selectedFilterOperation || "=", filterValue];

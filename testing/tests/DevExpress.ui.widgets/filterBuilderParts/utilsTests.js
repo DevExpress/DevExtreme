@@ -6,7 +6,7 @@ var utils = require("ui/filter_builder/utils"),
     between = require("ui/filter_builder/between");
 
 var FILTER_ROW_OPERATIONS = ["=", "<>", "<", "<=", ">", ">=", "notcontains", "contains", "startswith", "endswith", "between"],
-    HEADER_FILTER_OPERATIONS = ["anyof"];
+    HEADER_FILTER_OPERATIONS = ["anyof", "noneof"];
 
 var condition1 = ["CompanyName", "=", "Super Mart of the West"],
     condition2 = ["CompanyName", "=", "and"],
@@ -1677,10 +1677,22 @@ QUnit.module("Filter sync", function() {
             addedFilter = ["field", "anyof", [2]];
 
         // act
-        var result = utils.syncFilters(filter, addedFilter, ["anyof"]);
+        var result = utils.syncFilters(filter, addedFilter, HEADER_FILTER_OPERATIONS);
 
         // assert
         assert.deepEqual(result, [["field", "=", 1], "and", ["field", "anyof", [2]]]);
+    });
+
+    QUnit.test("add anyof to condition with noneof", function(assert) {
+        // arrange
+        var filter = ["field", "noneof", [1]],
+            addedFilter = ["field", "anyof", [2]];
+
+        // act
+        var result = utils.syncFilters(filter, addedFilter, HEADER_FILTER_OPERATIONS);
+
+        // assert
+        assert.deepEqual(result, ["field", "anyof", [2]]);
     });
 
     QUnit.test("add anyof to group without anyof", function(assert) {
@@ -1689,7 +1701,7 @@ QUnit.module("Filter sync", function() {
             addedFilter = ["field", "anyof", [2]];
 
         // act
-        var result = utils.syncFilters(filter, addedFilter, ["anyof"]);
+        var result = utils.syncFilters(filter, addedFilter, HEADER_FILTER_OPERATIONS);
 
         // assert
         assert.deepEqual(result, [["field", "=", 1], "and", ["field2", "=", 3], "and", ["field", "anyof", [2]]]);
@@ -1772,24 +1784,6 @@ QUnit.module("getMatchedCondition", function() {
         // act
         var result = utils.getMatchedCondition(filter, "field", FILTER_ROW_OPERATIONS);
 
-        // assert
-        assert.deepEqual(result, null);
-    });
-
-    QUnit.test("from filter with two values in anyof", function(assert) {
-        // arrange
-        var filter = ["field", "anyof", [1, 2]];
-        // act
-        var result = utils.getMatchedCondition(filter, "field", FILTER_ROW_OPERATIONS);
-        // assert
-        assert.deepEqual(result, null);
-    });
-
-    QUnit.test("from filter with one value in anyof", function(assert) {
-        // arrange
-        var filter = ["field", "anyof", [1]];
-        // act
-        var result = utils.getMatchedCondition(filter, "field", FILTER_ROW_OPERATIONS);
         // assert
         assert.deepEqual(result, null);
     });

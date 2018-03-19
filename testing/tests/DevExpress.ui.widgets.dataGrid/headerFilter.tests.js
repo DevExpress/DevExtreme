@@ -83,7 +83,7 @@ QUnit.test("filterValues with several values with filterType 'exclude'", functio
     });
 
     // assert
-    assert.deepEqual(that.getCombinedFilter(), [["Test", "<>", 1], "and", ["Test", "<>", 2]], "combined filter");
+    assert.deepEqual(that.getCombinedFilter(), ["!", [["Test", "=", 1], "or", ["Test", "=", 2]]], "combined filter");
 });
 
 QUnit.test("filterValues with one filter expression", function(assert) {
@@ -2009,11 +2009,14 @@ QUnit.test("combined filter when filterValues defined", function(assert) {
         ],
         "and",
         [
-            ["column2", "<>", 1],
-            "and",
-            ["column2", "<>", 2],
-            "and",
-            ["column2", "<>", 3]
+            "!",
+            [
+                ["column2", "=", 1],
+                "or",
+                ["column2", "=", 2],
+                "or",
+                ["column2", "=", 3]
+            ]
         ]
     ]);
 });
