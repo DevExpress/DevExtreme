@@ -87,7 +87,6 @@ QUnit.module("Widget creation", {
 
 var optionChangeExcluded = [
     "ActionSheet",
-    "Box",
     "Calendar",
     "ContextMenu",
     "DataGrid",
