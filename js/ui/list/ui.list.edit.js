@@ -64,7 +64,7 @@ var ListEdit = ListBase.inherit({
         };
 
         var enter = function(e) {
-            if(this._editProvider.handleEnterPressing()) {
+            if(!this._editProvider.handleEnterPressing()) {
                 parent.enter.apply(this, arguments);
             }
         };
