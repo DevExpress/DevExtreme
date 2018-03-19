@@ -40,7 +40,7 @@ var EditorFactoryMixin = (function() {
     var getTextEditorConfig = function(options) {
         var isValueChanged = false,
             data = {},
-            isEnterBug = checkEnterBug(),
+            isEnterBug = !options.updateValueImmediately && checkEnterBug(),
             sharedData = options.sharedData || data;
 
         return getResultConfig({
@@ -100,7 +100,8 @@ var EditorFactoryMixin = (function() {
             displayFormat: options.format,
             type: options.dataType,
             formatWidthCalculator: null,
-            width: "auto"
+            dateSerializationFormat: null,
+            width: options.parentType === "filterBuilder" ? undefined : "auto"
         }, options);
     };
 

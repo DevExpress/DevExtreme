@@ -5,6 +5,7 @@ var $ = require("../../core/renderer"),
     commonUtils = require("../../core/utils/common"),
     noop = require("../../core/utils/common").noop,
     selectionModule = require("../grid_core/ui.grid_core.selection"),
+    errors = require("../widget/ui.errors"),
     extend = require("../../core/utils/extend").extend;
 
 var TREELIST_SELECT_ALL_CLASS = "dx-treelist-select-all",
@@ -77,7 +78,11 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
 
                     $container.addClass(CELL_FOCUS_DISABLED_CLASS);
 
-                    var $checkbox = rowsView._renderSelectCheckBox($container, model.row.isSelected);
+                    var $checkbox = rowsView._renderSelectCheckBox($container, {
+                        value: model.row.isSelected,
+                        row: model.row,
+                        column: model.column
+                    });
 
                     rowsView._attachCheckBoxClickEvent($checkbox);
                 },
@@ -368,7 +373,7 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
                 },
 
                 _isModeLeavesOnly: function(mode) {
-                    return mode === "leaves" || mode === true;
+                    return mode === "leavesOnly" || mode === true;
                 },
 
                 _getAllSelectedRowKeys: function(parentKeys) {
@@ -382,6 +387,36 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
                         result.splice.apply(result, [insertIndex, 0].concat(parentKeys));
                         result.push(key);
                         result = result.concat(childKeys);
+                    });
+
+                    return result;
+                },
+
+                _getParentSelectedRowKeys: function(keys) {
+                    var that = this,
+                        result = [],
+                        dataController = that._dataController;
+
+                    keys.forEach(function(key, index, keys) {
+                        var node = dataController.getNodeByKey(key),
+                            parentKeys = that._getSelectedParentKeys(key, keys);
+
+                        if(!parentKeys.length && node.hasChildren) {
+                            result.push(key);
+                        }
+                    });
+
+                    return result;
+                },
+
+                _getLeafSelectedRowKeys: function(keys) {
+                    var that = this,
+                        result = [],
+                        dataController = that._dataController;
+
+                    keys.forEach(function(key) {
+                        var node = dataController.getNodeByKey(key);
+                        !node.hasChildren && result.push(key);
                     });
 
                     return result;
@@ -418,24 +453,40 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
 
                 /**
                 * @name dxTreeListMethods_getSelectedRowKeys
+                * @publicName getSelectedRowKeys(leavesOnly)
+                * @param1 leavesOnly:boolean
+                * @return Array<any>
+                * @deprecated
+                */
+
+                /**
+                * @name dxTreeListMethods_getSelectedRowKeys
                 * @publicName getSelectedRowKeys(mode)
-                * @param1 mode:string|boolean
+                * @param1 mode:string
                 * @return Array<any>
                 */
                 getSelectedRowKeys: function(mode) {
                     var that = this,
                         dataController = that._dataController,
-                        selectedRowKeys = that.callBase.apply(that, arguments) || [];
+                        selectedRowKeys = [];
 
-                    if(this.isRecursiveSelection() && dataController) {
-                        if(that._isModeLeavesOnly(mode)) {
-                            selectedRowKeys = dataController.getNodeLeafKeys(selectedRowKeys, function(childNode, nodes) {
-                                return !childNode.hasChildren && that.isRowSelected(childNode.key);
-                            });
+                    if(dataController) {
+                        if(mode === true) {
+                            errors.log("W0002", "dxTreeList", "getSelectedRowKeys(leavesOnly)", "18.1", "Use the 'getSelectedRowKeys(mode)' method with a string parameter instead");
                         }
 
-                        if(mode === "all") {
+                        selectedRowKeys = that.callBase.apply(that, arguments);
+
+                        if(this.isRecursiveSelection() && mode) {
                             selectedRowKeys = this._getAllSelectedRowKeys(selectedRowKeys);
+
+                            if(mode === "excludeRecursive") {
+                                selectedRowKeys = that._getParentSelectedRowKeys(selectedRowKeys);
+                            }
+                        }
+
+                        if(that._isModeLeavesOnly(mode)) {
+                            selectedRowKeys = that._getLeafSelectedRowKeys(selectedRowKeys);
                         }
                     }
 

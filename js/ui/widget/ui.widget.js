@@ -10,8 +10,7 @@ var $ = require("../../core/renderer"),
     commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
     domUtils = require("../../core/utils/dom"),
-    windowUtils = require("../../core/utils/window"),
-    beforeActivateExists = windowUtils.beforeActivateExists,
+    domAdapter = require("../../core/dom_adapter"),
     devices = require("../../core/devices"),
     DOMComponent = require("../../core/dom_component"),
     Template = require("./jquery.template"),
@@ -376,7 +375,7 @@ var Widget = DOMComponent.inherit({
             return this._defaultTemplates[templateSource.name];
         }
 
-        //TODO: templateSource.render is needed for angular2 integration. Try to remove it after supporting TypeScript modules.
+        // TODO: templateSource.render is needed for angular2 integration. Try to remove it after supporting TypeScript modules.
         if(typeUtils.isFunction(templateSource.render) && !typeUtils.isRenderer(templateSource)) {
             return templateSource;
         }
@@ -451,16 +450,25 @@ var Widget = DOMComponent.inherit({
         });
     },
 
-    _render: function() {
+    _initMarkup: function() {
         this.$element().addClass(WIDGET_CLASS);
-        this.callBase();
 
         this._toggleDisabledState(this.option("disabled"));
         this._toggleVisibility(this.option("visible"));
 
         this._renderHint();
-        this._renderContent();
 
+        if(this._isFocusable()) {
+            this._renderFocusTarget();
+        }
+
+        this.callBase();
+    },
+
+    _render: function() {
+        this.callBase();
+
+        this._renderContent();
         this._renderFocusState();
         this._attachFeedbackEvents();
         this._attachHoverEvents();
@@ -508,7 +516,7 @@ var Widget = DOMComponent.inherit({
     _renderFocusState: function() {
         this._attachKeyboardEvents();
 
-        if(!this.option("focusStateEnabled") || this.option("disabled")) {
+        if(!this._isFocusable()) {
             return;
         }
 
@@ -531,6 +539,10 @@ var Widget = DOMComponent.inherit({
                 this.focus();
             }
         }).bind(this));
+    },
+
+    _isFocusable: function() {
+        return this.option("focusStateEnabled") && !this.option("disabled");
     },
 
     _eventBindingTarget: function() {
@@ -568,7 +580,7 @@ var Widget = DOMComponent.inherit({
 
         focusEvents = focusEvents + " " + eventUtils.addNamespace("focusout", namespace);
 
-        if(beforeActivateExists()) {
+        if(domAdapter.hasDocumentProperty("onbeforeactivate")) {
             focusEvents = focusEvents + " " + eventUtils.addNamespace("beforeactivate", namespace);
         }
 
@@ -584,7 +596,7 @@ var Widget = DOMComponent.inherit({
         eventsEngine.on($focusTarget, focusInEvent, this._focusInHandler.bind(this));
         eventsEngine.on($focusTarget, focusOutEvent, this._focusOutHandler.bind(this));
 
-        if(beforeActivateExists()) {
+        if(domAdapter.hasDocumentProperty("onbeforeactivate")) {
             var beforeActivateEvent = eventUtils.addNamespace("beforeactivate", namespace);
 
             eventsEngine.on(this._focusTarget(), beforeActivateEvent, function(e) {
@@ -848,7 +860,7 @@ var Widget = DOMComponent.inherit({
                 var visible = args.value;
                 this._toggleVisibility(visible);
                 if(this._isVisibilityChangeSupported()) {
-                    //TODO hiding works wrong
+                    // TODO hiding works wrong
                     this._checkVisibilityChanged(args.value ? "shown" : "hiding");
                 }
                 break;

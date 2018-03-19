@@ -4,10 +4,9 @@ var vizMocks = require("../../helpers/vizMocks.js"),
     tooltipModule = require("viz/core/tooltip"),
     labelModule = require("viz/series/points/label"),
     pointModule = require("viz/series/points/base_point"),
-    originalLabel = labelModule.Label;
-
-/* global MockTranslator */
-require("../../helpers/chartMocks.js");
+    originalLabel = labelModule.Label,
+    chartMocks = require("../../helpers/chartMocks.js"),
+    MockTranslator = chartMocks.MockTranslator;
 
 var createPoint = function(series, data, options) {
     options = options || {};
@@ -185,13 +184,13 @@ QUnit.test("animate without graphic", function(assert) {
 });
 
 QUnit.test("pass diameter to correctCoordinates", function(assert) {
-    //arrange
+    // arrange
     var point = createPoint(this.series, { argument: 1, value: 2, size: 3 }, this.options),
         diameter = 10;
 
-    //act
+    // act
     point.correctCoordinates(diameter);
-    //assert
+    // assert
     assert.strictEqual(point.bubbleSize, diameter / 2);
 });
 

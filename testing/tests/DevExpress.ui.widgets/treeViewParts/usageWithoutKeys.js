@@ -120,7 +120,6 @@ QUnit.test("unselectItem() method", function(assert) {
 });
 
 
-
 QUnit.test("expandItem() method", function(assert) {
     var data = [{ text: "Item 1", items: [{ text: "Nested item" }] }, { text: "Item 2" }],
         treeView = initTree({

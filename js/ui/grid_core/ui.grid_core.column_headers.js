@@ -5,8 +5,7 @@ var $ = require("../../core/renderer"),
     columnsView = require("./ui.grid_core.columns_view"),
     isDefined = require("../../core/utils/type").isDefined,
     each = require("../../core/utils/iterator").each,
-    extend = require("../../core/utils/extend").extend,
-    messageLocalization = require("../../localization/message");
+    extend = require("../../core/utils/extend").extend;
 
 var CELL_CONTENT_CLASS = "text-content",
     HEADERS_CLASS = "headers",
@@ -143,7 +142,7 @@ module.exports = {
 
                         if(!isDefined(options.column.command)) {
                             this.setAria("role", "columnheader", $cell);
-                            this.setAria("label", options.column.caption + " " + messageLocalization.format("dxDataGrid-ariaColumn"), $cell);
+                            this.setAria("colindex", options.column.index + 1, $cell);
                         }
                     }
 
@@ -173,6 +172,7 @@ module.exports = {
                         .toggleClass(that.addWidgetPrefix(NOWRAP_CLASS), !that.option("wordWrapEnabled"))
                         .empty();
 
+                    that.setAria("role", "presentation", $container);
 
                     that._updateContent(that._renderTable());
 

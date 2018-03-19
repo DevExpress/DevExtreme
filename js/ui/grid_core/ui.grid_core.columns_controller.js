@@ -28,10 +28,12 @@ var $ = require("../../core/renderer"),
     when = deferredUtils.when,
     Deferred = deferredUtils.Deferred,
     DataSourceModule = require("../../data/data_source/data_source"),
-    normalizeDataSourceOptions = DataSourceModule.normalizeDataSourceOptions;
+    normalizeDataSourceOptions = DataSourceModule.normalizeDataSourceOptions,
+    filterUtils = require("../shared/filtering");
 
 var USER_STATE_FIELD_NAMES_15_1 = ["filterValues", "filterType", "fixed", "fixedPosition"],
     USER_STATE_FIELD_NAMES = ["visibleIndex", "dataField", "name", "dataType", "width", "visible", "sortOrder", "lastSortOrder", "sortIndex", "groupIndex", "filterValue", "selectedFilterOperation", "added"].concat(USER_STATE_FIELD_NAMES_15_1),
+    IGNORE_COLUMN_OPTION_NAMES = { visibleWidth: true, bestFitWidth: true, bufferedFilterValue: true },
     COMMAND_EXPAND_CLASS = "dx-command-expand";
 
 module.exports = {
@@ -86,6 +88,13 @@ module.exports = {
              * @default undefined
              */
             columnMinWidth: undefined,
+            /**
+             * @name GridBaseOptions_columnWidth
+             * @publicName columnWidth
+             * @type number
+             * @default undefined
+             */
+            columnWidth: undefined,
             adaptColumnWidthByRatio: true,
             /**
              * @name GridBaseOptions_columns
@@ -129,6 +138,7 @@ module.exports = {
              * @publicName visible
              * @type boolean
              * @default true
+             * @fires GridBase_onOptionChanged
              */
             /**
              * @name GridBaseColumn_hidingPriority
@@ -177,6 +187,7 @@ module.exports = {
              * @publicName visibleIndex
              * @type number
              * @default undefined
+             * @fires GridBase_onOptionChanged
              */
             /**
              * @name GridBaseColumn_showInColumnChooser
@@ -297,12 +308,14 @@ module.exports = {
              * @type Enums.SortOrder
              * @default undefined
              * @acceptValues undefined
+             * @fires GridBase_onOptionChanged
              */
             /**
              * @name GridBaseColumn_sortIndex
              * @publicName sortIndex
              * @type number
              * @default undefined
+             * @fires GridBase_onOptionChanged
              */
             /**
              * @name GridBaseColumn_showEditorAlways
@@ -353,18 +366,21 @@ module.exports = {
              * @publicName selectedFilterOperation
              * @type Enums.FilterOperations
              * @default undefined
+             * @fires GridBase_onOptionChanged
              */
             /**
              * @name GridBaseColumn_filterValue
              * @publicName filterValue
              * @type any
              * @default undefined
+             * @fires GridBase_onOptionChanged
              */
             /**
              * @name GridBaseColumn_filterValues
              * @publicName filterValues
              * @type Array<any>
              * @default undefined
+             * @fires GridBase_onOptionChanged
             */
             /**
              * @name GridBaseColumn_filterType
@@ -405,6 +421,7 @@ module.exports = {
              * @publicName groupIndex
              * @type number
              * @default undefined
+             * @fires dxDataGrid_onOptionChanged
              */
             /**
              * @name dxDataGridColumn_grouped
@@ -729,6 +746,24 @@ module.exports = {
                 return result;
             };
 
+            var getColumnFullPath = function(that, column) {
+                var result = [],
+                    bandColumnsCache = that.getBandColumnsCache(),
+                    callbackFilter = function(item) {
+                        return item.ownerBand === column.ownerBand;
+                    },
+                    columns = that._columns.filter(callbackFilter);
+
+                while(columns.length) {
+                    result.unshift("columns[" + columns.indexOf(column) + "]");
+
+                    column = bandColumnsCache.columnParentByIndex[column.index];
+                    columns = column ? that._columns.filter(callbackFilter) : [];
+                }
+
+                return result.join(".");
+            };
+
             var calculateColspan = function(that, columnID) {
                 var colspan = 0,
                     columns = that.getChildrenByBandColumn(columnID, true);
@@ -807,7 +842,8 @@ module.exports = {
                             var parsedValue = parseFloat(value);
                             return isNaN(parsedValue) ? value : parsedValue;
                         };
-                        options.serializeValue = function(value) {
+                        options.serializeValue = function(value, target) {
+                            if(target === "filter") return value;
                             return isDefined(value) && this.serializationFormat === "string" ? value.toString() : value;
                         };
                     }
@@ -958,7 +994,8 @@ module.exports = {
                         groupIndex = Math.max(groupIndex, groupColumns[i].groupIndex + 1);
                     }
                 }
-                column.groupIndex = groupIndex;
+
+                return groupIndex;
             };
 
             var checkUserStateColumn = function(column, userStateColumn) {
@@ -1051,6 +1088,11 @@ module.exports = {
                     }
 
                     assignColumns(that, resultColumns);
+                    if(that._dataSourceApplied && that._dataSource) {
+                        that._dataSource.group(that.getGroupDataSourceParameters());
+                        that._dataSource.sort(that.getSortDataSourceParameters());
+                        that._dataSource.load();
+                    }
                 }
             };
 
@@ -1136,6 +1178,21 @@ module.exports = {
                 }
             };
 
+            var fireOptionChanged = function(that, options) {
+                var fullOptionName,
+                    column = options.column,
+                    value = options.value,
+                    optionName = options.optionName,
+                    prevValue = options.prevValue;
+
+                if(!IGNORE_COLUMN_OPTION_NAMES[optionName]) {
+                    fullOptionName = getColumnFullPath(that, column);
+                    that._skipProcessingColumnsChange = true;
+                    that.component._notifyOptionChanged(fullOptionName + "." + optionName, value, prevValue);
+                    that._skipProcessingColumnsChange = false;
+                }
+            };
+
             var columnOptionCore = function(that, column, optionName, value, notFireEvent) {
                 var optionGetter = dataCoreUtils.compileGetter(optionName),
                     columnIndex = column.index,
@@ -1159,13 +1216,19 @@ module.exports = {
                     }
                     optionSetter = dataCoreUtils.compileSetter(optionName);
                     optionSetter(column, value, { functionsAsIs: true });
+                    fireOptionChanged(that, {
+                        column: column,
+                        optionName: optionName,
+                        value: value,
+                        prevValue: prevValue
+                    });
 
                     if(!isDefined(prevValue) && !isDefined(value) && optionName.indexOf("buffer") !== 0) {
                         notFireEvent = true;
                     }
 
                     if(!notFireEvent) {
-                        //T346972
+                        // T346972
                         if(inArray(optionName, USER_STATE_FIELD_NAMES) < 0 && optionName !== "visibleWidth") {
                             columns = that.option("columns");
                             column = columns && columns[columnIndex];
@@ -1192,7 +1255,7 @@ module.exports = {
                     command: "expand",
                     width: "auto",
                     cssClass: COMMAND_EXPAND_CLASS,
-                    allowEditing: false, //T165142
+                    allowEditing: false, // T165142
                     allowGrouping: false,
                     allowSorting: false,
                     allowResizing: false,
@@ -1356,12 +1419,14 @@ module.exports = {
                             break;
                         case "columns":
                             args.handled = true;
-                            if(args.name === args.fullName) {
-                                this._columnsUserState = null;
-                                this._ignoreColumnOptionNames = null;
-                                this.init();
-                            } else {
-                                this._columnOptionChanged(args);
+                            if(!this._skipProcessingColumnsChange) {
+                                if(args.name === args.fullName) {
+                                    this._columnsUserState = null;
+                                    this._ignoreColumnOptionNames = null;
+                                    this.init();
+                                } else {
+                                    this._columnOptionChanged(args);
+                                }
                             }
                             break;
                         case "commonColumnSettings":
@@ -1378,6 +1443,7 @@ module.exports = {
                         case "dateSerializationFormat":
                         case "columnResizingMode":
                         case "columnMinWidth":
+                        case "columnWidth":
                             args.handled = true;
                             this.reinit();
                             break;
@@ -1471,6 +1537,7 @@ module.exports = {
                         allowResizing: this.option("allowColumnResizing"),
                         allowReordering: this.option("allowColumnReordering"),
                         minWidth: this.option("columnMinWidth"),
+                        width: this.option("columnWidth"),
                         autoExpandGroup: groupingOptions.autoExpandAll,
                         allowCollapsing: groupingOptions.allowCollapsing,
                         allowGrouping: groupPanelOptions.allowColumnDragging && groupPanelOptions.visible || groupingOptions.contextMenuEnabled
@@ -1854,10 +1921,11 @@ module.exports = {
                 },
                 moveColumn: function(fromVisibleIndex, toVisibleIndex, sourceLocation, targetLocation) {
                     var that = this,
+                        options = {},
+                        prevGroupIndex,
                         fromIndex = getColumnIndexByVisibleIndex(that, fromVisibleIndex, sourceLocation),
                         toIndex = getColumnIndexByVisibleIndex(that, toVisibleIndex, targetLocation),
                         targetGroupIndex,
-                        isGroupMoving = sourceLocation === GROUP_LOCATION || targetLocation === GROUP_LOCATION,
                         column;
 
                     if(fromIndex >= 0) {
@@ -1869,48 +1937,44 @@ module.exports = {
                             if(targetGroupIndex > column.groupIndex) {
                                 targetGroupIndex--;
                             }
-                            delete column.groupIndex;
-                            updateColumnGroupIndexes(that);
+                            if(targetLocation !== GROUP_LOCATION) {
+                                options.groupIndex = undefined;
+                            } else {
+                                prevGroupIndex = column.groupIndex;
+                                delete column.groupIndex;
+                                updateColumnGroupIndexes(that);
+                            }
                         }
 
                         if(targetLocation === GROUP_LOCATION) {
-                            moveColumnToGroup(that, column, targetGroupIndex);
-                            updateColumnGroupIndexes(that);
+                            options.groupIndex = moveColumnToGroup(that, column, targetGroupIndex);
+                            column.groupIndex = prevGroupIndex;
                         } else if(toVisibleIndex >= 0) {
                             var targetColumn = that._columns[toIndex];
 
                             if(!targetColumn || column.ownerBand !== targetColumn.ownerBand) {
-                                column.visibleIndex = undefined;
+                                options.visibleIndex = undefined;
                             } else {
-
                                 if(column.fixed ^ targetColumn.fixed) {
-                                    column.visibleIndex = undefined;
+                                    options.visibleIndex = undefined;
                                 } else {
-                                    column.visibleIndex = targetColumn.visibleIndex;
+                                    options.visibleIndex = targetColumn.visibleIndex;
                                 }
                             }
-                            updateColumnVisibleIndexes(that, column);
                         }
 
-                        var isVisible = targetLocation !== COLUMN_CHOOSER_LOCATION,
-                            changeType = isGroupMoving ? "grouping" : "columns";
+                        var isVisible = targetLocation !== COLUMN_CHOOSER_LOCATION;
 
                         if(column.visible !== isVisible) {
-                            column.visible = isVisible;
-                            updateColumnChanges(that, changeType, "visible", column.index);
-                        } else {
-                            updateColumnChanges(that, changeType);
+                            options.visible = isVisible;
                         }
 
-                        if(sourceLocation === GROUP_LOCATION ^ targetLocation === GROUP_LOCATION) {
-                            updateSortOrderWhenGrouping(column, column.groupIndex, -1);
-                        }
-
-                        fireColumnsChanged(that);
+                        that.columnOption(column.index, options);
                     }
                 },
                 changeSortOrder: function(columnIndex, sortOrder) {
                     var that = this,
+                        options = {},
                         sortingOptions = that.option("sorting"),
                         sortingMode = sortingOptions && sortingOptions.mode,
                         needResetSorting = sortingMode === "single" || !sortOrder,
@@ -1922,17 +1986,16 @@ module.exports = {
                                     return false;
                                 }
 
-                                delete column.sortOrder;
-                                delete column.sortIndex;
+                                options.sortOrder = undefined;
+                                options.sortIndex = undefined;
                             } else if(isDefined(column.groupIndex) || isDefined(column.sortIndex)) {
-                                column.sortOrder = column.sortOrder === "desc" ? "asc" : "desc";
+                                options.sortOrder = column.sortOrder === "desc" ? "asc" : "desc";
                             } else {
-                                column.sortOrder = "asc";
+                                options.sortOrder = "asc";
                             }
 
                             return true;
-                        },
-                        isSortingChanged = false;
+                        };
 
                     if(allowSorting && column && column.allowSorting) {
                         if(needResetSorting && !isDefined(column.groupIndex)) {
@@ -1940,30 +2003,24 @@ module.exports = {
                                 if(index !== columnIndex && this.sortOrder && !isDefined(this.groupIndex)) {
                                     delete this.sortOrder;
                                     delete this.sortIndex;
-                                    isSortingChanged = true;
                                 }
                             });
                         }
                         if(isSortOrderValid(sortOrder)) {
                             if(column.sortOrder !== sortOrder) {
-                                column.sortOrder = sortOrder;
-                                isSortingChanged = true;
+                                options.sortOrder = sortOrder;
                             }
                         } else if(sortOrder === "none") {
                             if(column.sortOrder) {
-                                delete column.sortIndex;
-                                delete column.sortOrder;
-                                isSortingChanged = true;
+                                options.sortIndex = undefined;
+                                options.sortOrder = undefined;
                             }
                         } else {
-                            isSortingChanged = nextSortOrder(column);
+                            nextSortOrder(column);
                         }
                     }
-                    if(isSortingChanged) {
-                        updateColumnSortIndexes(that);
-                        updateColumnChanges(that, "sorting");
-                        fireColumnsChanged(that);
-                    }
+
+                    that.columnOption(column.index, options);
                 },
                 getSortDataSourceParameters: function(useLocalSelector) {
                     var that = this,
@@ -2286,7 +2343,7 @@ module.exports = {
 
                         if(remoteFiltering) {
                             if(config().forceIsoDateParsing && column && column.serializeValue && filter.length > 1) {
-                                filter[filter.length - 1] = column.serializeValue(filter[filter.length - 1]);
+                                filter[filter.length - 1] = column.serializeValue(filter[filter.length - 1], "filter");
                             }
                         } else {
                             if(column && column.selector) {
@@ -2310,7 +2367,7 @@ module.exports = {
                  * @return number
                  */
                 columnCount: function() {
-                    return this._columns.length;
+                    return this._columns ? this._columns.length : 0;
                 },
                 /**
                  * @name GridBaseMethods_columnOption
@@ -2586,7 +2643,7 @@ module.exports = {
                         calculatedColumnOptions.allowFiltering = !!columnOptions.calculateFilterExpression;
                     }
                     calculatedColumnOptions.calculateFilterExpression = function() {
-                        return gridCoreUtils.defaultCalculateFilterExpression.apply(this, arguments);
+                        return filterUtils.defaultCalculateFilterExpression.apply(this, arguments);
                     };
 
                     calculatedColumnOptions.createFilterExpression = function() {

@@ -1,7 +1,6 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
-    window = require("../../core/utils/window").getWindow(),
     domAdapter = require("../../core/dom_adapter"),
     eventsEngine = require("../../events/core/events_engine"),
     Guid = require("../../core/guid"),
@@ -186,6 +185,8 @@ var ContextMenu = MenuBase.inherit((function() {
                 * @publicName visible
                 * @type boolean
                 * @default false
+                * @fires dxContextMenuOptions_onShowing
+                * @fires dxContextMenuOptions_onHiding
                 */
                 visible: false,
 
@@ -418,13 +419,17 @@ var ContextMenu = MenuBase.inherit((function() {
             this.callBase();
         },
 
-        _render: function() {
+        _initMarkup: function() {
             this.$element()
                 .addClass(DX_HAS_CONTEXT_MENU_CLASS);
 
             this.callBase();
+        },
 
-            this.setAria("role", "menu");
+        _render: function() {
+            this.callBase();
+            this._renderVisibility(this.option("visible"));
+            this._addWidgetClass();
         },
 
         _renderContentImpl: function() {
@@ -479,7 +484,7 @@ var ContextMenu = MenuBase.inherit((function() {
             if(this._showContextMenuEventHandler) {
                 eventsEngine.off(domAdapter.getDocument(), eventName, target, this._showContextMenuEventHandler);
             } else {
-                eventsEngine.off(target, eventName);
+                eventsEngine.off($(target), eventName);
             }
         },
 
@@ -795,7 +800,7 @@ var ContextMenu = MenuBase.inherit((function() {
             return position;
         },
 
-        //TODO: try to simplify it
+        // TODO: try to simplify it
         _updateSubmenuVisibilityOnClick: function(actionArgs) {
             if(!actionArgs.args.length) return;
 
@@ -817,7 +822,7 @@ var ContextMenu = MenuBase.inherit((function() {
                 return;
             }
 
-            //T238943. Give the workaround with e.cancel and remove this hack
+            // T238943. Give the workaround with e.cancel and remove this hack
             var notCloseMenuOnItemClick = itemData && itemData.closeMenuOnClick === false;
             if(!itemData || itemData.disabled || notCloseMenuOnItemClick) {
                 return;
@@ -903,7 +908,7 @@ var ContextMenu = MenuBase.inherit((function() {
 
             switch(args.name) {
                 case "visible":
-                    this._toggleVisibility(args.value);
+                    this._renderVisibility(args.value);
                     break;
                 case "showEvent":
                 case "position":
@@ -923,9 +928,11 @@ var ContextMenu = MenuBase.inherit((function() {
             }
         },
 
-        _toggleVisibility: function(showing) {
-            showing ? this._show() : this._hide();
+        _renderVisibility: function(showing) {
+            return showing ? this._show() : this._hide();
         },
+
+        _toggleVisibility: noop,
 
         _show: function(event) {
             var args = { jQEvent: event },
@@ -963,7 +970,7 @@ var ContextMenu = MenuBase.inherit((function() {
         },
 
         _getTarget: function() {
-            return this.option("target") || this.option("position").of || $(window.document);
+            return this.option("target") || this.option("position").of || $(domAdapter.getDocument());
         },
 
         _getContextMenuPosition: function() {
@@ -1024,7 +1031,7 @@ var ContextMenu = MenuBase.inherit((function() {
 
             showing = showing === undefined ? !visible : showing;
 
-            return this._toggleVisibility(showing);
+            return this._renderVisibility(showing);
         },
 
         /**

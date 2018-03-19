@@ -152,6 +152,8 @@ var DropDownEditor = TextBox.inherit({
             * @publicName opened
             * @type boolean
             * @default false
+            * @fires dxDropDownEditorOptions_onOpened
+            * @fires dxDropDownEditorOptions_onClosed
             */
             opened: false,
 
@@ -317,16 +319,19 @@ var DropDownEditor = TextBox.inherit({
         });
     },
 
+    _initMarkup: function() {
+        this.callBase();
+        this.$element()
+            .addClass(DROP_DOWN_EDITOR_CLASS);
+
+        this.setAria("role", "combobox");
+    },
+
     _render: function() {
         this.callBase();
 
         this._renderOpenHandler();
-
-        this.$element()
-            .addClass(DROP_DOWN_EDITOR_CLASS);
         this._renderOpenedState();
-
-        this.setAria("role", "combobox");
     },
 
     _renderContentImpl: function() {

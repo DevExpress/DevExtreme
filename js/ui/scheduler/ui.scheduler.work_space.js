@@ -21,6 +21,7 @@ var $ = require("../../core/renderer"),
     pointerEvents = require("../../events/pointer"),
     errors = require("../widget/ui.errors"),
     clickEvent = require("../../events/click"),
+    contextMenuEvent = require("../../events/contextmenu"),
     dragEvents = require("../../events/drag"),
     Scrollable = require("../scroll_view/ui.scrollable"),
     tableCreator = require("./ui.scheduler.table_creator"),
@@ -414,6 +415,9 @@ var SchedulerWorkSpace = Widget.inherit({
             case "onCellClick":
                 this._createCellClickAction();
                 break;
+            case "onCellContextMenu":
+                this._attachContextMenuEvent();
+                break;
             case "intervalCount":
                 this._cleanWorkSpace();
                 this._toggleWorkSpaceCountClass();
@@ -573,26 +577,35 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _createCrossScrollingConfig: function() {
-        var config = {};
+        var config = {},
+            headerScrollableOnScroll,
+            sidebarScrollableOnScroll;
 
         config.direction = "both";
-        config.onScroll = (function(e) {
-            if(!this._dateTableScrollWasHandled) {
-                this._headerScrollWasHandled = true;
-                this._sideBarScrollWasHandled = true;
-
-                this._sidebarScrollable.scrollTo({
-                    top: e.scrollOffset.top
-                });
-                this._headerScrollable.scrollTo({
-                    left: e.scrollOffset.left
-                });
-            } else {
-                this._dateTableScrollWasHandled = false;
+        config.onStart = (function(e) {
+            if(this._headerScrollable) {
+                headerScrollableOnScroll = this._headerScrollable.option("onScroll");
+                this._headerScrollable.option("onScroll", undefined);
             }
+
+            if(this._sidebarScrollable) {
+                sidebarScrollableOnScroll = this._sidebarScrollable.option("onScroll");
+                this._sidebarScrollable.option("onScroll", undefined);
+            }
+        }).bind(this);
+        config.onScroll = (function(e) {
+            this._sidebarScrollable && this._sidebarScrollable.scrollTo({
+                top: e.scrollOffset.top
+            });
+            this._headerScrollable && this._headerScrollable.scrollTo({
+                left: e.scrollOffset.left
+            });
+
         }).bind(this);
         config.onEnd = (function() {
             this.notifyObserver("updateResizableArea", {});
+            this._headerScrollable && this._headerScrollable.option("onScroll", headerScrollableOnScroll);
+            this._sidebarScrollable && this._sidebarScrollable.option("onScroll", sidebarScrollableOnScroll);
         }).bind(this);
 
         return config;
@@ -623,7 +636,8 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _createHeaderScrollable: function() {
-        var $headerScrollable = $("<div>")
+        var dateTableScrollableOnScroll,
+            $headerScrollable = $("<div>")
             .addClass(SCHEDULER_HEADER_SCROLLABLE_CLASS)
             .appendTo(this.$element());
 
@@ -635,21 +649,24 @@ var SchedulerWorkSpace = Widget.inherit({
             updateManually: true,
             bounceEnabled: false,
             pushBackValue: 0,
+            onStart: (function(e) {
+                dateTableScrollableOnScroll = this._dateTableScrollable.option("onScroll");
+                this._dateTableScrollable.option("onScroll", undefined);
+            }).bind(this),
             onScroll: (function(e) {
-                if(!this._headerScrollWasHandled) {
-                    this._dateTableScrollWasHandled = true;
-                    this._dateTableScrollable.scrollTo({
-                        left: e.scrollOffset.left
-                    });
-                } else {
-                    this._headerScrollWasHandled = false;
-                }
+                this._dateTableScrollable.scrollTo({
+                    left: e.scrollOffset.left
+                });
+            }).bind(this),
+            onEnd: (function(e) {
+                this._dateTableScrollable.option("onScroll", dateTableScrollableOnScroll);
             }).bind(this)
         });
     },
 
     _createSidebarScrollable: function() {
-        var $timePanelScrollable = $("<div>")
+        var dateTableScrollableOnScroll,
+            $timePanelScrollable = $("<div>")
             .addClass(SCHEDULER_SIDEBAR_SCROLLABLE_CLASS)
             .appendTo(this.$element());
 
@@ -661,15 +678,17 @@ var SchedulerWorkSpace = Widget.inherit({
             updateManually: true,
             bounceEnabled: false,
             pushBackValue: 0,
+            onStart: (function(e) {
+                dateTableScrollableOnScroll = this._dateTableScrollable.option("onScroll");
+                this._dateTableScrollable.option("onScroll", undefined);
+            }).bind(this),
             onScroll: (function(e) {
-                if(!this._sideBarScrollWasHandled) {
-                    this._dateTableScrollWasHandled = true;
-                    this._dateTableScrollable.scrollTo({
-                        top: e.scrollOffset.top
-                    });
-                } else {
-                    this._sideBarScrollWasHandled = false;
-                }
+                this._dateTableScrollable.scrollTo({
+                    top: e.scrollOffset.top
+                });
+            }).bind(this),
+            onEnd: (function(e) {
+                this._dateTableScrollable.option("onScroll", dateTableScrollableOnScroll);
             }).bind(this)
         });
     },
@@ -842,6 +861,11 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _attachEvents: function() {
+        this._attachClickEvent();
+        this._attachContextMenuEvent();
+    },
+
+    _attachClickEvent: function() {
         var that = this;
         var pointerDownAction = this._createAction(function(e) {
             that._pointerDownHandler(e.event);
@@ -917,6 +941,24 @@ var SchedulerWorkSpace = Widget.inherit({
         extend(args, lastCellData.groups);
 
         this.notifyObserver("showAddAppointmentPopup", args);
+    },
+
+    _attachContextMenuEvent: function() {
+        this._createContextMenuAction();
+
+        var cellSelector = "." + DATE_TABLE_CELL_CLASS + ",." + ALL_DAY_TABLE_CELL_CLASS,
+            $element = this.$element(),
+            eventName = eventUtils.addNamespace(contextMenuEvent.name, this.NAME);
+
+        eventsEngine.off($element, eventName, cellSelector);
+        eventsEngine.on($element, eventName, cellSelector, (function(e) {
+            var $cell = $(e.target);
+            this._contextMenuAction({ event: e, cellElement: getPublicElement($cell), cellData: this.getCellData($cell) });
+        }).bind(this));
+    },
+
+    _createContextMenuAction: function() {
+        this._contextMenuAction = this._createActionByOption("onCellContextMenu");
     },
 
     _getGroupHeaderContainer: function() {
@@ -1841,14 +1883,15 @@ var SchedulerWorkSpace = Widget.inherit({
         return this._$allDayContainer;
     },
 
-    //NOTE: refactor leftIndex calculation
+    // NOTE: refactor leftIndex calculation
     getCellIndexByCoordinates: function(coordinates, allDay) {
         var cellCount = this._getTotalCellCount(this._getGroupCount()),
             timePanelWidth = this.getTimePanelWidth(),
             cellWidth = Math.floor(this._getWorkSpaceWidth() / cellCount),
+            cellHeight = allDay ? this.getAllDayHeight() : this.getCellHeight(),
             leftOffset = this._isRTL() || this.option("crossScrollingEnabled") ? 0 : timePanelWidth,
-            topIndex = Math.floor(coordinates.top / (allDay ? this.getAllDayHeight() : this.getCellHeight())),
-            leftIndex = Math.floor((coordinates.left + 5 - leftOffset) / cellWidth);
+            topIndex = allDay ? Math.floor(coordinates.top / cellHeight) : Math.round(coordinates.top / cellHeight),
+            leftIndex = Math.round((coordinates.left + 5 - leftOffset) / cellWidth);
 
         if(this._isRTL()) {
             leftIndex = cellCount - leftIndex - 1;
@@ -1979,7 +2022,7 @@ var SchedulerWorkSpace = Widget.inherit({
         return result;
     },
 
-    //NOTE: T312051, remove after fix scrollable bug T324196
+    // NOTE: T312051, remove after fix scrollable bug T324196
     restoreScrollTop: function() {
         this.$element().scrollTop(0);
     },

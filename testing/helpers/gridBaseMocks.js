@@ -134,9 +134,19 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                 return options.viewportSize;
             },
 
+            viewportItemSize: function() {},
+
+            setContentSize: function() {},
+
             setViewportItemIndex: function(index) {
                 options.viewportItemIndex = index;
             },
+
+            setViewportPosition: function() {},
+
+            getVirtualContentSize: function() { return 0; },
+
+            getContentOffset: function() { return 0; },
 
             itemsCount: function() {
                 return options.itemsCount;
@@ -186,10 +196,18 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                 return result;
             },
 
+            getUserState: function() {
+                return {
+                    pageIndex: this.pageIndex(),
+                    pageSize: this.pageSize()
+                };
+            },
+
             getCombinedFilter: commonUtils.noop,
             getRowIndexByKey: function() {
                 return -1;
             },
+            skipProcessingPagingChange: commonUtils.noop,
             changed: $.Callbacks(),
             loadingChanged: $.Callbacks(),
             pageChanged: $.Callbacks(),
@@ -565,7 +583,7 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
 
     exports.MockGridDataSource = function(options) {
         return {
-            //TODO remove
+            // TODO remove
             options: function() {
                 return options;
             },
@@ -701,7 +719,8 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                     }
                 },
                 off: commonUtils.noop,
-                on: commonUtils.noop
+                on: commonUtils.noop,
+                length: 0
             };
         };
         return {
@@ -920,6 +939,8 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
             }
             return instance;
         };
+
+        that._notifyOptionChanged = function() {};
 
         that._createActionByOption = function(optionName, config) {
             this.__actionConfigs = this.__actionConfigs || {};

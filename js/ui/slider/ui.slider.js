@@ -278,23 +278,23 @@ var Slider = TrackBar.inherit({
         ]);
     },
 
-    _render: function() {
+    _initMarkup: function() {
         this.$element().addClass(SLIDER_CLASS);
         this._renderSubmitElement();
+        this.option("useInkRipple") && this._renderInkRipple();
 
         this.callBase();
-    },
 
-    _renderContentImpl: function() {
         this._renderLabels();
         this._renderStartHandler();
         this._renderAriaMinAndMax();
-
-        this._repaintHandle();
-        this.option("useInkRipple") && this._renderInkRipple();
-        this.callBase();
     },
 
+    _render: function() {
+        this.callBase();
+
+        this._repaintHandle();
+    },
     _renderSubmitElement: function() {
         this._$submitElement = $("<input>")
             .attr("type", "hidden")
@@ -468,14 +468,6 @@ var Slider = TrackBar.inherit({
         }
     },
 
-    _renderDimensions: function() {
-        this.callBase();
-        if(this._$bar) {
-            var barMarginWidth = this._$bar.outerWidth(true) - this._$bar.outerWidth();
-            this._$bar.width(this._getOptionValue("width", this._$bar.get(0)) - barMarginWidth);
-        }
-    },
-
     _renderStartHandler: function() {
         var pointerDownEventName = eventUtils.addNamespace(pointerEvents.down, this.NAME);
         var clickEventName = eventUtils.addNamespace(clickEvent.name, this.NAME);
@@ -574,7 +566,7 @@ var Slider = TrackBar.inherit({
         }
 
         step = parseFloat(step.toFixed(5));
-        //TODO or exception?
+        // TODO or exception?
         if(step === 0) {
             step = 0.00001;
         }
@@ -628,6 +620,7 @@ var Slider = TrackBar.inherit({
 
     _renderValue: function() {
         this.callBase();
+        this._setRangeStyles(this._rangeStylesConfig());
 
         var value = this.option("value");
 
@@ -636,7 +629,7 @@ var Slider = TrackBar.inherit({
     },
 
     _setRangeStyles: function(options) {
-        this._$range.css(options);
+        options && this._$range.css(options);
     },
 
     _callHandlerMethod: function(name, args) {
@@ -661,9 +654,11 @@ var Slider = TrackBar.inherit({
                 break;
             case "min":
             case "max":
+                this._renderValue();
+                this.callBase(args);
                 this._renderLabels();
                 this._renderAriaMinAndMax();
-                this.callBase(args);
+
                 this._fitTooltip();
                 break;
             case "step":
@@ -680,10 +675,6 @@ var Slider = TrackBar.inherit({
             case "label":
                 this._renderLabels();
                 break;
-            case "rtlEnabled":
-                this._toggleRTLDirection();
-                this._renderValue();
-                break;
             case "useInkRipple":
                 this._invalidate();
                 break;
@@ -691,8 +682,8 @@ var Slider = TrackBar.inherit({
                 this.callBase(args);
         }
     },
-
     _refresh: function() {
+        this._toggleRTLDirection(this.option("rtlEnabled"));
         this._renderDimensions();
         this._renderValue();
         this._renderHandle();

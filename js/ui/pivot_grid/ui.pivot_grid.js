@@ -129,11 +129,14 @@ function getScrollBarInfo(useNativeScrolling) {
 }
 
 function getCommonBorderWidth(elements, direction) {
-    var outerSize = direction === "width" ? "outerWidth" : "outerHeight",
+    var borderStyleNames = direction === "width" ? ["borderLeftWidth", "borderRightWidth"] : ["borderTopWidth", "borderBottomWidth"],
         width = 0;
 
     each(elements, function(_, elem) {
-        width += elem[outerSize]() - elem[direction]();
+        var computedStyle = window.getComputedStyle(elem.get(0));
+        borderStyleNames.forEach(function(borderStyleName) {
+            width += (parseFloat(computedStyle[borderStyleName]) || 0);
+        });
     });
 
     return width;
@@ -151,23 +154,30 @@ function clickedOnFieldsArea($targetElement) {
 */
 
 /**
- * @name dxPivotGridOptions_hoverStateEnabled
- * @publicName hoverStateEnabled
- * @hidden
+* @name dxPivotGridOptions_hoverStateEnabled
+* @publicName hoverStateEnabled
+* @hidden
 * @inheritdoc
 */
 
 /**
- * @name dxPivotGridOptions_focusStateEnabled
- * @publicName focusStateEnabled
- * @hidden
+* @name dxPivotGridOptions_focusStateEnabled
+* @publicName focusStateEnabled
+* @hidden
 * @inheritdoc
 */
 
 /**
- * @name dxPivotGridOptions_accessKey
- * @publicName accessKey
- * @hidden
+* @name dxPivotGridOptions_accessKey
+* @publicName accessKey
+* @hidden
+* @inheritdoc
+*/
+
+/**
+* @name dxPivotGridMethods_registerKeyHandler
+* @publicName registerKeyHandler(key, handler)
+* @hidden
 * @inheritdoc
 */
 
@@ -183,6 +193,7 @@ var PivotGrid = Widget.inherit({
             scrolling: {
                 timeout: 300,
                 renderingThreshold: 150,
+                minTimeout: 10,
                 /**
                  * @name dxPivotGridOptions_scrolling_mode
                  * @publicName mode
@@ -955,7 +966,7 @@ var PivotGrid = Widget.inherit({
     },
 
     _optionValuesEqual: function(name, oldValue, newValue) {
-        //T266402
+        // T266402
         if(name === "dataSource" && (newValue instanceof PivotGridDataSource) && (oldValue instanceof PivotGridDataSource)) {
             return newValue === oldValue;
         }
@@ -1119,7 +1130,8 @@ var PivotGrid = Widget.inherit({
                 allowSearch: fieldChooserOptions.allowSearch,
                 width: undefined,
                 height: undefined,
-                headerFilter: that.option("headerFilter")
+                headerFilter: that.option("headerFilter"),
+                encodeHtml: that.option("encodeHtml")
             },
             popupOptions = {
                 shading: false,
@@ -1611,6 +1623,7 @@ var PivotGrid = Widget.inherit({
 
         that._createComponent(that.$element(), PivotGridFieldChooserBase, {
             dataSource: that.getDataSource(),
+            encodeHtml: that.option("encodeHtml"),
             allowFieldDragging: that.option("fieldPanel.allowFieldDragging"),
             headerFilter: that.option("headerFilter")
         });
@@ -1851,7 +1864,7 @@ var PivotGrid = Widget.inherit({
 
                 rowsArea.groupHeight(that._hasHeight ? groupHeight : "auto");
                 rowsArea.processScrollBarSpacing(hasColumnsScroll ? scrollBarWidth : 0);
-                //B232690
+                // B232690
                 rowsArea.setColumnsWidth(rowsAreaColumnWidths);
                 rowsArea.setRowsHeight(resultHeights);
 
@@ -1865,7 +1878,7 @@ var PivotGrid = Widget.inherit({
                 dataAreaCell.toggleClass(BOTTOM_BORDER_CLASS, !hasRowsScroll);
                 rowAreaCell.toggleClass(BOTTOM_BORDER_CLASS, !hasRowsScroll);
 
-                //T317921
+                // T317921
                 if(!that._hasHeight && (elementWidth !== that.$element().width())) {
                     var diff = elementWidth - that.$element().width();
                     if(!hasColumnsScroll) {

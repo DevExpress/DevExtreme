@@ -702,7 +702,7 @@ QUnit.test("Empty dataSource searchExpr (B253811)", function(assert) {
 });
 
 QUnit.test("userDataSource: byKey", function(assert) {
-    //arrange
+    // arrange
     var initialLoadCalled = false,
         searchLoadCalled = false,
         searchString = null,
@@ -749,10 +749,10 @@ QUnit.test("userDataSource: byKey", function(assert) {
 
     var search = this.search;
 
-    //act
+    // act
     search.option("value", "thr");
 
-    //assert
+    // assert
     assert.ok(initialLoadCalled, "initial load");
     assert.ok(searchLoadCalled, "load should be called with search params");
     assert.equal(searchString, "thr", "Correct search string should be passed");
@@ -761,7 +761,7 @@ QUnit.test("userDataSource: byKey", function(assert) {
 });
 
 QUnit.test("userDataSource: lookup with not defined value", function(assert) {
-    //arrange
+    // arrange
     var lookupKeys = [],
         userDataSource = {
             load: function(loadOptions) {
@@ -774,7 +774,7 @@ QUnit.test("userDataSource: lookup with not defined value", function(assert) {
             }
         };
 
-    //act
+    // act
     this.instance.option({
         dataSource: userDataSource,
         displayExpr: "name",
@@ -784,7 +784,7 @@ QUnit.test("userDataSource: lookup with not defined value", function(assert) {
 
     this.togglePopup();
 
-    //assert
+    // assert
     assert.equal(lookupKeys.length, 0, "Lookup callback should never be called");
 });
 
@@ -1001,19 +1001,6 @@ QUnit.test("lookup with Done does not closed after item click", function(assert)
     assert.equal(lookup.option("value"), 2, "value changed after Done click");
 });
 
-QUnit.test("regression: value is out of range (B231783)", function(assert) {
-    this.instance.option({
-        dataSource: [1, 2, 3],
-        value: "wrongValue"
-    });
-
-    assert.equal(this.$field.text(), "Select...");
-});
-
-QUnit.test("regression: B232016 - Lookup element has no 'dx-widget' CSS class", function(assert) {
-    assert.ok(this.element.hasClass("dx-widget"));
-});
-
 QUnit.test("regression: can not select value after loading more items (B233390)", function(assert) {
     var lookup = this.element.dxLookup({
         items: ["1", "2", "3"]
@@ -1053,7 +1040,7 @@ QUnit.test("regression: B236007 (check that selection item in one lookup do not 
     openPopupWithList(secondLookup);
     assert.equal($("." + LIST_ITEM_SELECTED_CLASS).length, 2);
 
-    //mouse = pointerMock($firstListItem);
+    // mouse = pointerMock($firstListItem);
     mouse.start().down().move(0, 10).up();
 
     openPopupWithList(firstLookup);
@@ -1351,43 +1338,6 @@ QUnit.test("dxLookup should accept undefined value (T141821)", function(assert) 
     $(this.$list.find(".dx-list-item").eq(0)).trigger("dxclick");
 });
 
-QUnit.test("data source should be paginated by default", function(assert) {
-    assert.expect(1);
-
-    var $element = $("#widget").dxLookup({
-            dataSource: [1, 2]
-        }),
-        instance = $element.dxLookup("instance");
-
-    assert.equal(instance._dataSource.paginate(), true, "pagination enabled by default");
-});
-
-QUnit.test("T373464 - the 'fieldTemplate' should be used for rendering if the item is get asynchronously", function(assert) {
-    var fieldTemplateText = "Field template",
-        items = ["1", "2"],
-        $element = $("#lookup").dxLookup({
-            fieldTemplate: function() {
-                return fieldTemplateText;
-            },
-            dataSource: {
-                byKey: function(key) {
-                    var d = $.Deferred();
-                    setTimeout(function() {
-                        d.resolve(key);
-                    }, 0);
-                    return d.promise();
-                },
-                load: function() {
-                    return items;
-                }
-            },
-            value: items[0]
-        });
-
-    this.clock.tick(0);
-    assert.equal($element.find("." + LOOKUP_FIELD_CLASS).text(), fieldTemplateText, "field template is used");
-});
-
 QUnit.test("The search field should be insert before list", function(assert) {
     var $lookup = $("#lookup").dxLookup({
         dataSource: [1, 2, 3],
@@ -1410,23 +1360,6 @@ QUnit.test("The search field should be insert before list", function(assert) {
 
 QUnit.module("hidden input");
 
-QUnit.test("a hidden input should be rendered", function(assert) {
-    var $element = $("#lookup").dxLookup(),
-        $input = $element.find("input[type='hidden']");
-
-    assert.equal($input.length, 1, "a hidden input is rendered");
-});
-
-QUnit.test("the hidden input should have correct value on widget init", function(assert) {
-    var $element = $("#lookup").dxLookup({
-            items: [1, 2, 3],
-            value: 2
-        }),
-        $input = $element.find("input[type='hidden']");
-
-    assert.equal($input.val(), "2", "input value is correct");
-});
-
 QUnit.test("the hidden input should get correct value on widget value change", function(assert) {
     var $element = $("#lookup").dxLookup({
             items: [1, 2, 3],
@@ -1439,44 +1372,8 @@ QUnit.test("the hidden input should get correct value on widget value change", f
     assert.equal($input.val(), "1", "input value is correct");
 });
 
-QUnit.test("the hidden input should get display text as value if widget value is an object", function(assert) {
-    var items = [{ id: 1, text: "one" }],
-        $element = $("#lookup").dxLookup({
-            items: items,
-            value: items[0],
-            valueExpr: "this",
-            displayExpr: "text"
-        }),
-        $input = $element.find("input[type='hidden']");
-
-    assert.equal($input.val(), items[0].text, "input value is correct");
-});
-
-QUnit.test("the hidden input should get value in respect of the 'valueExpr' option", function(assert) {
-    var items = [{ id: 1, text: "one" }],
-        $element = $("#lookup").dxLookup({
-            items: items,
-            value: items[0].id,
-            valueExpr: "id",
-            displayExpr: "text"
-        }),
-        $input = $element.find("input[type='hidden']");
-
-    assert.equal($input.val(), items[0].id, "input value is correct");
-});
-
 
 QUnit.module("the 'name' option");
-
-QUnit.test("hidden input should get the 'name' attribute with a correct value", function(assert) {
-    var expectedName = "lookup",
-        $element = $("#lookup").dxLookup({
-            name: expectedName
-        }),
-        $input = $element.find("input[type='hidden']");
-
-    assert.equal($input.attr("name"), expectedName, "input has correct 'name' attribute");
-});
 
 QUnit.test("hidden input should get correct 'name' attribute after the 'name' option is changed", function(assert) {
     var expectedName = "lookup",
@@ -1502,22 +1399,6 @@ QUnit.module("options", {
         fx.off = false;
         this.clock.restore();
     }
-});
-
-QUnit.test("displayExpr, valueExpr as functions (regression B230600)", function(assert) {
-    var instance = $("#lookup").dxLookup({
-            dataSource: [1, 2],
-            valueExpr: function(item) {
-                return item * 2;
-            },
-            displayExpr: function(item) {
-                return "number " + item;
-            },
-            value: 2
-        }).dxLookup("instance"),
-        $field = instance._$field;
-
-    assert.equal($field.text(), "number 1");
 });
 
 QUnit.test("popupWidth", function(assert) {
@@ -1791,18 +1672,6 @@ QUnit.test("value", function(assert) {
     assert.equal($selectedItem.text(), "1", "select right item after render list");
 });
 
-QUnit.test("value should be assigned by reference", function(assert) {
-    var items = [{ name: "name" }],
-        instance = $("#lookup").dxLookup({
-            dataSource: items,
-            value: items[0],
-            displayExpr: "name"
-        }).dxLookup("instance"),
-        $field = $(instance._$field);
-
-    assert.equal($field.text(), "name", "item was found in items by reference");
-});
-
 QUnit.test("value in field should be selected", function(assert) {
     var date = new Date(),
         items = [date],
@@ -2044,12 +1913,6 @@ QUnit.test("'showCancelButton' option should affect on Cancel button rendering",
     assert.equal($popupWrapper.find(".dx-popup-cancel.dx-button").length, 0, "Apply button is not rendered");
 });
 
-QUnit.test("fieldTemplate should be rendered", function(assert) {
-    $("#lookupFieldTemplate").dxLookup({ fieldTemplate: "field" });
-
-    assert.equal($.trim($("#lookupFieldTemplate").text()), "test", "test was be rendered");
-});
-
 QUnit.test("Placeholder should be rendered if fieldTemplate defined with 'input'", function(assert) {
     var placeholderText = "Placeholder here...";
 
@@ -2064,22 +1927,6 @@ QUnit.test("Placeholder should be rendered if fieldTemplate defined with 'input'
 
     assert.ok($element.find(".dx-placeholder").length, "placeholder was rendered");
     assert.equal($element.find(".dx-placeholder").eq(0).attr("DATA-DX_PLACEHOLDER"), placeholderText, "placeholder text was rendered");
-});
-
-QUnit.test("selected item should be passed as first argument if fieldTemplate is a function", function(assert) {
-    var items = [{ id: 1, text: "one", data: 11 }, { id: 2, text: "two", data: 22 }];
-
-    $("#lookup").dxLookup({
-        items: items,
-        valueExpr: "id",
-        displayExpr: "text",
-        value: items[1].id,
-        fieldTemplate: function(item) {
-            assert.deepEqual(item, items[1], "selected item is passed to fieldTemplate function");
-
-            return $("<div>").dxTextBox();
-        }
-    });
 });
 
 QUnit.test("search wrapper should not be rendered if the 'searchEnabled' option is false", function(assert) {
@@ -2533,22 +2380,6 @@ QUnit.test("default", function(assert) {
     assert.ok($element.outerWidth() > 0, "outer width of the element must be more than zero");
 });
 
-QUnit.test("constructor", function(assert) {
-    var $element = $("#widget").dxLookup({ width: 400 }),
-        instance = $element.dxLookup("instance");
-
-    assert.strictEqual(instance.option("width"), 400);
-    assert.strictEqual($element.outerWidth(), 400, "outer width of the element must be equal to custom width");
-});
-
-QUnit.test("root with custom width", function(assert) {
-    var $element = $("#widthRootStyle").dxLookup(),
-        instance = $element.dxLookup("instance");
-
-    assert.strictEqual(instance.option("width"), undefined);
-    assert.strictEqual($element.outerWidth(), 300, "outer width of the element must be equal to custom width");
-});
-
 QUnit.test("change width", function(assert) {
     var $element = $("#widget").dxLookup(),
         instance = $element.dxLookup("instance"),
@@ -2947,16 +2778,6 @@ QUnit.test("'Home', 'End' keys does not changed default behaviour in searchField
 
 QUnit.module("dataSource integration");
 
-QUnit.test("'paginate' for dataSource depends on 'showNextButton' option (T172999)", function(assert) {
-    var lookup = $("#lookup").dxLookup({
-        dataSource: [],
-        pagingEnabled: false,
-        showNextButton: true
-    }).dxLookup("instance");
-
-    assert.ok(lookup._dataSource._paginate, "dataSource pagination is enabled");
-});
-
 QUnit.test("search should be execute after paste", function(assert) {
     var originalFX = fx.off;
     fx.off = true;
@@ -3152,13 +2973,6 @@ QUnit.test("popup should also get 'invalid' class", function(assert) {
 
 QUnit.module("aria accessibility");
 
-QUnit.test("aria role", function(assert) {
-    var $element = $("#widget").dxLookup(),
-        $field = $element.find("." + LOOKUP_FIELD_CLASS + ":first");
-
-    assert.equal($field.attr("role"), "combobox", "aria role is on the field");
-});
-
 QUnit.test("aria-target for lookup's list should point to the list's focusTarget", function(assert) {
     $("#widget").dxLookup({
         opened: true
@@ -3166,7 +2980,7 @@ QUnit.test("aria-target for lookup's list should point to the list's focusTarget
 
     var list = $("." + LIST_CLASS).dxList("instance");
 
-    //TODO: change it when _getAriaTarget becomes an option
+    // TODO: change it when _getAriaTarget becomes an option
     assert.deepEqual(list._getAriaTarget(), list.$element(), "aria target for nested list is correct");
 });
 

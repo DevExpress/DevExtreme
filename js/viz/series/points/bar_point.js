@@ -34,15 +34,12 @@ module.exports = _extend({}, symbolPoint, {
     },
 
     _getGraphicBBox: function() {
-        var that = this,
-            bBox = {};
-
-        bBox.x = that.x;
-        bBox.y = that.y;
-        bBox.width = that.width;
-        bBox.height = that.height;
-
-        return bBox;
+        return {
+            x: this.x,
+            y: this.y,
+            width: this.width,
+            height: this.height
+        };
     },
 
     _getLabelConnector: function(location) {
@@ -104,8 +101,8 @@ module.exports = _extend({}, symbolPoint, {
             labelBBox = label.getBoundingRect();
 
         if(this._options.resolveLabelsOverlapping) {
-            if(((coord.y < graphicBBox.y && coord.y + labelBBox.height > graphicBBox.y + graphicBBox.height) ||
-                (coord.x < graphicBBox.x && coord.x + labelBBox.width > graphicBBox.x + graphicBBox.width)) &&
+            if(((coord.y <= graphicBBox.y && coord.y + labelBBox.height >= graphicBBox.y + graphicBBox.height) ||
+                (coord.x <= graphicBBox.x && coord.x + labelBBox.width >= graphicBBox.x + graphicBBox.width)) &&
                 !(coord.y > graphicBBox.y + graphicBBox.height || coord.y + labelBBox.height < graphicBBox.y ||
                 coord.x > graphicBBox.x + graphicBBox.width || coord.x + labelBBox.width < graphicBBox.x)) {
                 label.draw(false);
@@ -255,7 +252,7 @@ module.exports = _extend({}, symbolPoint, {
         }
     },
 
-    //TODO check & rework
+    // TODO check & rework
     _translate: function() {
         var that = this,
             rotated = that._options.rotated,

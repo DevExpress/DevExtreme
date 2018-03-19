@@ -64,7 +64,6 @@ QUnit.test("templateRendered callbacks should be fired after template appended t
 });
 
 
-
 QUnit.module("showing");
 
 var VISIBILITY_CHANGE_HANDLER_CLASS = "dx-visibility-change-handler",

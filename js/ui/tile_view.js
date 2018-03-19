@@ -264,7 +264,7 @@ var TileView = CollectionWidget.inherit({
             showScrollbar: this.option("showScrollbar")
         });
 
-        this._$container = this._scrollView.content();
+        this._$container = $(this._scrollView.content());
         this._$container.addClass(TILEVIEW_CONTAINER_CLASS);
 
         this._scrollView.option("onUpdated", this._renderGeometry.bind(this));
@@ -278,10 +278,6 @@ var TileView = CollectionWidget.inherit({
         this._renderGeometry();
         this._updateScrollView();
         this._fireContentReadyAction();
-    },
-
-    _renderContent: function() {
-        this._renderContentImpl();
     },
 
     _updateScrollView: function() {

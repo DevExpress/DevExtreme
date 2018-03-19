@@ -6,7 +6,8 @@ var $ = require("../../core/renderer"),
     TimeView = require("./ui.time_view"),
     dateLocalization = require("../../localization/date"),
     extend = require("../../core/utils/extend").extend,
-    Box = require("../box");
+    Box = require("../box"),
+    uiDateUtils = require("./ui.date_utils");
 
 var SHRINK_VIEW_SCREEN_WIDTH = 573,
     DATEBOX_ADAPTIVITY_MODE_CLASS = "dx-datebox-adaptivity-mode";
@@ -73,6 +74,7 @@ var CalendarWithTimeStrategy = CalendarStrategy.inherit({
 
         if(!date && !preventDefaultValue) {
             date = new Date();
+            uiDateUtils.normalizeTime(date);
         }
 
         this.callBase();
@@ -135,10 +137,10 @@ var CalendarWithTimeStrategy = CalendarStrategy.inherit({
         var calendarPopupConfig = this.callBase(popupConfig),
             result = extend(calendarPopupConfig, {
                 onShowing: (function() {
-                    if(this._box.option("layoutStrategy") === "fallback") {
+                    if(this._box.option("_layoutStrategy") === "fallback") {
                         var clockMinWidth = this._getPopup().$content().find(".dx-timeview-clock").css("minWidth");
 
-                        this._timeView.$element().css("minWidth", clockMinWidth);
+                        this._timeView.$element().css("maxWidth", clockMinWidth);
                     }
                 }).bind(this),
             });
@@ -176,7 +178,7 @@ var CalendarWithTimeStrategy = CalendarStrategy.inherit({
             time = this._timeView.option("value");
 
         date = date ? new Date(date) : new Date();
-        date.setHours(time.getHours(), time.getMinutes(), time.getSeconds());
+        date.setHours(time.getHours(), time.getMinutes(), time.getSeconds(), time.getMilliseconds());
 
         return date;
     },

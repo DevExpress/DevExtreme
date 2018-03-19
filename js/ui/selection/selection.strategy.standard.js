@@ -5,121 +5,11 @@ var commonUtils = require("../../core/utils/common"),
     getKeyHash = commonUtils.getKeyHash,
     dataQuery = require("../../data/query"),
     deferredUtils = require("../../core/utils/deferred"),
+    SelectionFilterCreator = require("../../core/utils/selection_filter").SelectionFilterCreator,
     when = deferredUtils.when,
     Deferred = deferredUtils.Deferred,
     errors = require("../widget/ui.errors"),
     SelectionStrategy = require("./selection.strategy");
-
-function SelectionFilterCreator(keyExpr, selectedItemKeys, isSelectAll, equalKeys, keyOf, equalByReference) {
-
-    this.getLocalFilter = function() {
-        return functionFilter;
-    };
-
-    this.getExpr = function() {
-        if(!keyExpr) return;
-
-        var filterExpr;
-        for(var i = 0, length = selectedItemKeys.length; i < length; i++) {
-            filterExpr = filterExpr || [];
-
-            var itemKeyValue = selectedItemKeys[i],
-                filterExprPart;
-
-            if(i > 0) {
-                filterExpr.push(isSelectAll ? "and" : "or");
-            }
-
-            if(typeUtils.isString(keyExpr)) {
-                filterExprPart = getFilterForPlainKey(itemKeyValue);
-            } else {
-                filterExprPart = getFilterForCompositeKey(itemKeyValue);
-            }
-
-            filterExpr.push(filterExprPart);
-        }
-        if(filterExpr && filterExpr.length === 1) {
-            filterExpr = filterExpr[0];
-        }
-
-        this._filter = filterExpr;
-        return filterExpr;
-    };
-
-    this.getCombinedFilter = function(dataSourceFilter) {
-        var filterExpr = this.getExpr(),
-            combinedFilter = filterExpr;
-
-        if(isSelectAll && dataSourceFilter) {
-            if(filterExpr) {
-                combinedFilter = [];
-                combinedFilter.push(filterExpr);
-                combinedFilter.push(dataSourceFilter);
-            } else {
-                combinedFilter = dataSourceFilter;
-            }
-        }
-
-        return combinedFilter;
-    };
-
-    var selectedItemKeyHashesMap;
-
-    var getSelectedItemKeyHashesMap = function(selectedItemKeys) {
-        if(!selectedItemKeyHashesMap) {
-            selectedItemKeyHashesMap = {};
-            for(var i = 0; i < selectedItemKeys.length; i++) {
-                selectedItemKeyHashesMap[getKeyHash(selectedItemKeys[i])] = true;
-            }
-        }
-        return selectedItemKeyHashesMap;
-    };
-
-    var functionFilter = function(item) {
-        var key = keyOf(item),
-            keyHash,
-            i;
-
-        if(!equalByReference) {
-            keyHash = getKeyHash(key);
-            if(!typeUtils.isObject(keyHash)) {
-                var selectedKeyHashesMap = getSelectedItemKeyHashesMap(selectedItemKeys);
-                if(selectedKeyHashesMap[keyHash]) {
-                    return !isSelectAll;
-                }
-                return !!isSelectAll;
-            }
-        }
-
-        for(i = 0; i < selectedItemKeys.length; i++) {
-            if(equalKeys(selectedItemKeys[i], key)) {
-                return !isSelectAll;
-            }
-        }
-        return !!isSelectAll;
-    };
-
-    var getFilterForPlainKey = function(keyValue, key) {
-        return [key || keyExpr, isSelectAll ? "<>" : "=", keyValue];
-    };
-
-    var getFilterForCompositeKey = function(itemKeyValue) {
-        var filterExpr = [];
-
-        for(var i = 0, length = keyExpr.length; i < length; i++) {
-            if(i > 0) {
-                filterExpr.push(isSelectAll ? "or" : "and");
-            }
-            var currentKeyExpr = keyExpr[i],
-                currentKeyValue = itemKeyValue && itemKeyValue[currentKeyExpr],
-                filterExprPart = getFilterForPlainKey(currentKeyValue, currentKeyExpr);
-
-            filterExpr.push(filterExprPart);
-        }
-
-        return filterExpr;
-    };
-}
 
 module.exports = SelectionStrategy.inherit({
     ctor: function(options) {
@@ -204,8 +94,8 @@ module.exports = SelectionStrategy.inherit({
             return deferred;
         }
 
-        var selectionFilterCreator = new SelectionFilterCreator(key(), keys, isSelectAll, this.equalKeys.bind(this), this.options.keyOf, this.options.equalByReference),
-            combinedFilter = selectionFilterCreator.getCombinedFilter(filter);
+        var selectionFilterCreator = new SelectionFilterCreator(keys, isSelectAll),
+            combinedFilter = selectionFilterCreator.getCombinedFilter(key(), filter);
 
         var deselectedItems = [];
         if(isDeselect) {
@@ -214,7 +104,7 @@ module.exports = SelectionStrategy.inherit({
 
         var filteredItems = deselectedItems.length ? deselectedItems : this.options.plainItems().filter(this.options.isSelectableItem).map(this.options.getItemData);
 
-        var localFilter = selectionFilterCreator.getLocalFilter();
+        var localFilter = selectionFilterCreator.getLocalFilter(this.options.keyOf, this.equalKeys.bind(this), this.options.equalByReference);
 
         filteredItems = filteredItems.filter(localFilter);
 

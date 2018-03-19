@@ -185,67 +185,67 @@ require("style-compiler-test-server/known-css-files");
     QUnit.module('dx-theme links', createModuleObject());
 
     QUnit.test("should not add additional link if no dx-theme found", function(assert) {
-        //arrange
-        //act
+        // arrange
+        // act
         themes.init({ _autoInit: true, context: this.frameDoc() });
-        //assert
+        // assert
         var realStylesheets = this.getFrameStyleLinks();
         assert.equal(realStylesheets.length, 0, "No stylesheets should be added");
     });
 
     QUnit.test("should throw if non-existing platform requested", function(assert) {
-        //arrange
+        // arrange
         this.writeToFrame("<link rel='dx-theme' href='style1.css' data-theme='myPlatform.theme1' />");
-        //act
+        // act
         assert.throws(function() {
             themes.init({ theme: "missingPlatform", context: this.frameDoc() });
         });
     });
 
     QUnit.test("theme by platform only", function(assert) {
-        //arrange
+        // arrange
         this.writeToFrame("<link rel='dx-theme' href='myCss' data-theme='myPlatform.theme1' />");
-        //act
+        // act
         themes.init({ theme: "myPlatform", context: this.frameDoc() });
-        //assert
+        // assert
         var realStylesheets = this.getFrameStyleLinks();
         assert.equal(realStylesheets.length, 1, "Single dx-theme should be converted to regular stylesheet");
         assert.equal(realStylesheets.attr("href"), "myCss");
     });
 
     QUnit.test("theme by platform and color scheme", function(assert) {
-        //arrange
+        // arrange
         this.writeToFrame("<link rel='dx-theme' href='style1.css' data-theme='myPlatform.theme1' />");
         this.writeToFrame("<link rel='dx-theme' href='style2.css' data-theme='myPlatform.theme2' />");
-        //act
+        // act
         themes.init({ theme: "myPlatform.theme2", context: this.frameDoc() });
-        //assert
+        // assert
         var realStylesheets = this.getFrameStyleLinks();
         assert.equal(realStylesheets.length, 1, "Single dx-theme should be converted to regular stylesheet");
         assert.equal(realStylesheets.attr("href"), "style2.css");
     });
 
     QUnit.test("change theme by string", function(assert) {
-        //arrange
+        // arrange
         this.writeToFrame("<link rel='dx-theme' href='style1.css' data-theme='myPlatform.theme1' />");
         this.writeToFrame("<link rel='dx-theme' href='style2.css' data-theme='myPlatform.theme2' />");
         themes.init({ theme: "myPlatform.theme2", context: this.frameDoc() });
-        //act
+        // act
         themes.current("myPlatform.theme1");
-        //assert
+        // assert
         var realStylesheets = this.getFrameStyleLinks();
         assert.equal(realStylesheets.length, 1, "Single dx-theme should be converted to regular stylesheet");
         assert.equal(realStylesheets.attr("href"), "style1.css");
     });
 
     QUnit.test("change theme by configuration object", function(assert) {
-        //arrange
+        // arrange
         this.writeToFrame("<link rel='dx-theme' href='style1.css' data-theme='myPlatform.theme1' />");
         this.writeToFrame("<link rel='dx-theme' href='style2.css' data-theme='myPlatform.theme2' />");
         themes.init({ theme: "myPlatform.theme1", context: this.frameDoc() });
-        //act
+        // act
         themes.current({ theme: "myPlatform.theme2" });
-        //assert
+        // assert
         var realStylesheets = this.getFrameStyleLinks();
         assert.equal(realStylesheets.length, 1, "Single dx-theme should be converted to regular stylesheet");
         assert.equal(realStylesheets.attr("href"), "style2.css");
@@ -270,51 +270,51 @@ require("style-compiler-test-server/known-css-files");
     });
 
     QUnit.test("default theme is first if not specified", function(assert) {
-        //arrange
+        // arrange
         this.writeToFrame("<link rel='dx-theme' href='style1.css' data-theme='myPlatform.theme1' />");
         this.writeToFrame("<link rel='dx-theme' href='style2.css' data-theme='myPlatform.theme2' />");
-        //act
+        // act
         themes.init({ theme: "myPlatform", context: this.frameDoc() });
-        //assert
+        // assert
         assert.equal(this.getFrameStyleLinks().attr("href"), "style1.css");
     });
 
     QUnit.test("default theme defined by active attribute if not specified", function(assert) {
-        //arrange
+        // arrange
         this.writeToFrame("<link rel='dx-theme' href='style1.css' data-theme='myPlatform.theme1' data-active='nonsense' />");
         this.writeToFrame("<link rel='dx-theme' href='style2.css' data-theme='myPlatform.theme2' data-active='true' />");
-        //act
+        // act
         themes.init({ theme: "myPlatform", context: this.frameDoc() });
-        //assert
+        // assert
         assert.equal(this.getFrameStyleLinks().attr("href"), "style2.css");
     });
 
     QUnit.test("dx-theme should change compact theme to normal if compact has data-active='true' (T449216)", function(assert) {
-        //arrange
+        // arrange
         this.writeToFrame("<link rel='dx-theme' href='style1.css' data-theme='myPlatform.theme1' />");
         this.writeToFrame("<link rel='dx-theme' href='style1.compact.css' data-theme='myPlatform.theme1.compact' data-active='true' />");
-        //act
+        // act
         themes.init({ theme: "myPlatform.theme1", context: this.frameDoc() });
-        //assert
+        // assert
         assert.equal(themes.current(), "myPlatform.theme1");
     });
 
     QUnit.test("dx-theme should select active theme if theme name is incomplete (T449216)", function(assert) {
-        //arrange
+        // arrange
         this.writeToFrame("<link rel='dx-theme' href='style1.css' data-theme='myPlatform.theme1' />");
         this.writeToFrame("<link rel='dx-theme' href='style1.compact.css' data-theme='myPlatform.theme1.compact' data-active='true' />");
         themes.init({ theme: "myPlatform.theme1", context: this.frameDoc() });
-        //act
+        // act
         themes.current({ theme: "myPlatform" });
-        //assert
+        // assert
         assert.equal(themes.current(), "myPlatform.theme1.compact");
     });
 
     QUnit.test("read current theme name", function(assert) {
-        //arrange
+        // arrange
         this.writeToFrame("<link rel='dx-theme' href='style1.css' data-theme='theme1' />");
         this.writeToFrame("<link rel='dx-theme' href='style2.css' data-theme='theme2.dark' />");
-        //act
+        // act
         themes.init({ theme: "theme1", context: this.frameDoc() });
         assert.equal(themes.current(), "theme1");
         themes.current("theme2");
@@ -362,10 +362,10 @@ require("style-compiler-test-server/known-css-files");
                 $("link", that.frameDoc()).remove();
 
                 setTimeout(function() {
-                    ///TODO: debugging block
+                    /// TODO: debugging block
                     var s = that.frameDoc().styleSheets;
                     assert.equal(s.length, 0, "style rules should be cleared");
-                    ///TODO: end
+                    /// TODO: end
 
                     that.writeToFrame("<style>.dx-theme-marker{ font-family: 'dx.sampleTheme.sampleColorScheme1';}</style>");
 
@@ -376,7 +376,7 @@ require("style-compiler-test-server/known-css-files");
                     setTimeout(function() {
                         assert.ok(assertPredicate(), "theme name was read from css");
 
-                        ///TODO: debugging block
+                        /// TODO: debugging block
                         if(!assertPredicate()) {
 
                             var s = that.frameDoc().styleSheets;
@@ -398,7 +398,7 @@ require("style-compiler-test-server/known-css-files");
                                 }, 15000);
                             }, 15000);
                         }
-                        ///TODO: end
+                        /// TODO: end
 
 
                         that.writeToFrame("<style>.dx-theme-marker{ font-family: 'dx.sampleTheme.sampleColorScheme2';}</style>");

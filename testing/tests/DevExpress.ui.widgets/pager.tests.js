@@ -6,7 +6,7 @@ var $ = require("jquery"),
 
 require("common.css!");
 require("generic_light.css!");
-require("ui/data_grid/pager");
+require("ui/pager");
 
 var PAGER_LIGHT_MODE_WIDTH = 200;
 
@@ -159,7 +159,7 @@ QUnit.test('Get pages when pages count more maxPagesCount and more page exists',
     assert.ok(this.checkPages(instance._pages, [1, 2, 3, 4, 5, 13, ">"], "1"), "pages");
 });
 
-//B232538
+// B232538
 QUnit.test('Get pages when pages count more maxPagesCount after pages count is changed', function(assert) {
     var $pager = $("#container").dxPager({ maxPagesCount: 10, pageCount: 1 }),
         instance = $pager.dxPager("instance");
@@ -190,7 +190,7 @@ QUnit.test('SelectPageByValue', function(assert) {
         instance = $pager.dxPager("instance"),
         pages = instance._pages;
 
-    //assert
+    // assert
     assert.ok(this.checkPages(pages, [1, 2, 3, 4, 5, 13], "1"), "page value = 1");
     instance._selectPageByValue(2);
     assert.ok(this.checkPages(pages, [1, 2, 3, 4, 5, 13], "2"), "page value = 2");
@@ -407,25 +407,25 @@ QUnit.test('Page size selection by click', function(assert) {
     pageSizesElements.eq(0).trigger("dxclick");
     selectionPageSizesElements = $(cssSelectionClassName);
 
-    //assert
+    // assert
     assert.equal(selectionPageSizesElements.length, 1, 'page size elements count');
     assert.equal(getText(selectionPageSizesElements[0]), '5', 'page size = 5');
 
-    //act
+    // act
     pageSizesElements = $(".dx-page-size");
     pageSizesElements.eq(2).trigger("dxclick");
     selectionPageSizesElements = $(cssSelectionClassName);
 
-    //assert
+    // assert
     assert.equal(selectionPageSizesElements.length, 1, 'page size elements count');
     assert.equal(getText(selectionPageSizesElements[0]), '20', 'page size = 20');
 
-    //act
+    // act
     pageSizesElements = $(".dx-page-size");
     pageSizesElements.eq(1).trigger("dxclick");
     selectionPageSizesElements = $(cssSelectionClassName);
 
-    //assert
+    // assert
     assert.equal(selectionPageSizesElements.length, 1, 'page size elements count');
     assert.equal(getText(selectionPageSizesElements[0]), '10', 'page size = 10');
 });
@@ -518,7 +518,7 @@ QUnit.test('Refresh pages after page size is changed_B233925', function(assert) 
     assert.equal(instance._pages[5].value(), 13, '6 page value');
 });
 
-//B239491
+// B239491
 QUnit.test('Pager has negative pages when pages count is changed', function(assert) {
     var $pager = $("#container").dxPager({
             maxPagesCount: 8,
@@ -560,7 +560,7 @@ QUnit.test('Selected page is not reset_B237051', function(assert) {
     assert.equal(instance._pages[5].value(), 15, '6 page value');
 });
 
-//B239176
+// B239176
 QUnit.test('Click separator page_B239176', function(assert) {
     var $pager = $("#container").dxPager({ maxPagesCount: 7, pageCount: 8 }),
         instance = $pager.dxPager("instance");
@@ -570,7 +570,7 @@ QUnit.test('Click separator page_B239176', function(assert) {
     assert.ok(!typeUtils.isDefined(instance._testPageIndex));
 });
 
-//B239176
+// B239176
 QUnit.test('Click  page parent container_B239176', function(assert) {
     var $pager = $("#container").dxPager({ maxPagesCount: 7, pageCount: 8 }),
         instance = $pager.dxPager("instance");
@@ -580,7 +580,7 @@ QUnit.test('Click  page parent container_B239176', function(assert) {
     assert.ok(!typeUtils.isDefined(instance._testPageIndex));
 });
 
-//B239176
+// B239176
 QUnit.test('Click page size parent container_B239176', function(assert) {
     var $pager = $("#container").dxPager({ maxPagesCount: 8, pageCount: 10, pageSizes: [5, 10, 20] }),
         instance = $pager.dxPager("instance");

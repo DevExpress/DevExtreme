@@ -418,7 +418,7 @@ QUnit.testStart(function() {
             minDate = new Date("Thu Mar 10 2016 00:00:00 GMT-0500"),
             maxDate = new Date("Mon Mar 15 2016 00:00:00 GMT-0400");
 
-        //TODO: use public method instead
+        // TODO: use public method instead
         this.instance._getIntervalBetween(minDate, maxDate, true);
 
         assert.ok(stub.calledOnce, "getTimezonesDifference was called");
@@ -1767,7 +1767,7 @@ QUnit.testStart(function() {
                 expectedCoordinate = $currentCell.position();
 
             if(rowIndex) {
-                //! fix coordinate calculation in webkit
+                // ! fix coordinate calculation in webkit
                 expectedCoordinate.top = rowIndex * ws.getCellHeight();
             }
 
@@ -1894,7 +1894,6 @@ QUnit.testStart(function() {
         assert.ok(!cells.eq(1).hasClass("dx-state-focused"), "previous cell is not focused");
         assert.ok(cells.eq(0).hasClass("dx-state-focused"), "new cell is focused");
     });
-
 
 
     QUnit.test("Month workspace navigation by arrows, RTL mode", function(assert) {
@@ -2736,6 +2735,23 @@ QUnit.testStart(function() {
         pointerMock($cell).start().click().click();
 
         assert.notOk(stub.called, "showAddAppointmentPopup doesn't shown");
+    });
+
+    QUnit.test("onCellContextMenu should be fired after trigger context menu event", function(assert) {
+        assert.expect(4);
+
+        var $element = $("#scheduler-work-space").dxSchedulerWorkSpaceMonth({
+            focusStateEnabled: true,
+            onCellContextMenu: function(e) {
+                assert.ok(true, "event is handled");
+                assert.equal(isRenderer(e.cellElement), !!config().useJQuery, "cell is correct");
+                assert.deepEqual($(e.cellElement)[0], $cell[0], "cell is correct");
+                assert.deepEqual(e.cellData, { startDate: new Date(2018, 1, 26), endDate: new Date(2018, 1, 27) }, "cell is correct");
+            }
+        });
+
+        var $cell = $element.find("." + CELL_CLASS).eq(1);
+        $($cell).trigger("dxcontextmenu");
     });
 
 })("Workspace Mouse Interaction");

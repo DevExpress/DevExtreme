@@ -35,13 +35,6 @@ exports.DataController = dataControllerModule.controllers.data.inherit((function
             };
         },
 
-        _setPagingOptions: function(dataSource) {
-            var isVirtualScrolling = this.option("scrolling.mode") === "virtual";
-
-            dataSource.paginate(isVirtualScrolling);
-            dataSource.requireTotalCount(true);
-        },
-
         _loadOnOptionChange: function() {
             this._dataSource.load();
         },
@@ -184,14 +177,6 @@ exports.DataController = dataControllerModule.controllers.data.inherit((function
             return this._dataSource.getNodeByKey(key);
         },
 
-        getNodeLeafKeys: function(keys, callBack) {
-            if(!this._dataSource) {
-                return;
-            }
-
-            return this._dataSource.getNodeLeafKeys(keys, callBack);
-        },
-
         getChildNodeKeys: function(parentKey) {
             if(!this._dataSource) {
                 return;
@@ -290,6 +275,7 @@ treeListCore.registerModule("data", {
             * @publicName expandedRowKeys
             * @type Array<any>
             * @default []
+            * @fires dxTreeListOptions_onOptionChanged
             */
             expandedRowKeys: [],
             filterMode: "extended",
@@ -318,7 +304,16 @@ treeListCore.registerModule("data", {
             * @action
             */
             onNodesInitialized: null,
-            maxFilterLengthInRequest: 1500
+            maxFilterLengthInRequest: 1500,
+            paging: {
+                /**
+                 * @name dxTreeListOptions_paging_enabled
+                 * @publicName enabled
+                 * @type boolean
+                 * @default false
+                 */
+                enabled: false
+            }
         });
     },
     controllers: {

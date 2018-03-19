@@ -6,10 +6,10 @@ var $ = require("jquery"),
     pointModule = require("viz/series/points/base_point"),
     originalPoint = pointModule.Point,
     Series = require("viz/series/base_series").Series,
-    seriesType;
-
-/* global insertMockFactory, MockAxis */
-require("../../helpers/chartMocks.js");
+    seriesType,
+    chartMocks = require("../../helpers/chartMocks.js"),
+    insertMockFactory = chartMocks.insertMockFactory,
+    MockAxis = chartMocks.MockAxis;
 
 require("viz/chart");
 
@@ -81,13 +81,20 @@ var environmentWithSinonStubPoint = {
     beforeEach: function() {
         environment.beforeEach.call(this);
         var mockPointIndex = 0;
-        this.createPoint = sinon.stub(pointModule, "Point", function() {
+        this.createPoint = sinon.stub(pointModule, "Point", function(params, data) {
             var stub = mockPoints[mockPointIndex++];
             stub.argument = 1;
             stub.hasValue.returns(true);
             stub.isInVisibleArea.returns(true);
+            stub.hasCoords.returns(true);
             stub.draw.reset();
             stub.animate.reset();
+            stub.getCoords
+                .returns({ x: data.argument, y: data.value })
+                .withArgs(true).returns({ x: data.argument, y: data.minValue });
+            stub.x = data.argument;
+            stub.y = data.value;
+            stub.index = data.index;
             return stub;
         });
     },
@@ -108,6 +115,7 @@ var environmentWithSinonStubPoint = {
             data = [{ arg: 1, val1: 3, val2: 4 }],
             points;
         series.updateData(data);
+        series.createPoints();
         points = series.getPoints();
 
         assert.ok(points, "Points should be created");
@@ -147,9 +155,9 @@ var environmentWithSinonStubPoint = {
             label: { visible: false }
 
         }, { renderer: this.renderer });
-        //act
+        // act
         series.updateTemplateFieldNames();
-        //assert
+        // assert
         assert.equal(series._options.rangeValue1Field, "rangeValue1FieldrangeSeries");
         assert.equal(series._options.rangeValue2Field, "rangeValue2FieldrangeSeries");
         assert.equal(series._options.tagField, "tagFieldrangeSeries");
@@ -163,9 +171,9 @@ var environmentWithSinonStubPoint = {
             label: { visible: false }
 
         }, { renderer: this.renderer });
-        //act
+        // act
         series.updateTemplateFieldNames();
-        //assert
+        // assert
         assert.equal(series._options.rangeValue1Field, "val1rangeSeries");
         assert.equal(series._options.rangeValue2Field, "val2rangeSeries");
         assert.equal(series._options.tagField, "tagrangeSeries");
@@ -332,6 +340,7 @@ var environmentWithSinonStubPoint = {
             series = createSeries(this.options);
 
         series.updateData(data);
+        series.createPoints();
 
         assert.equal(series._points.length, 0);
     });
@@ -341,6 +350,7 @@ var environmentWithSinonStubPoint = {
             series = createSeries(this.options);
 
         series.updateData(data);
+        series.createPoints();
 
         assert.equal(series._points.length, 0);
     });
@@ -350,6 +360,7 @@ var environmentWithSinonStubPoint = {
             series = createSeries(this.options);
 
         series.updateData(data);
+        series.createPoints();
 
         assert.equal(series._points.length, 0);
     });
@@ -359,6 +370,7 @@ var environmentWithSinonStubPoint = {
             series = createSeries(this.options);
 
         series.updateData(data);
+        series.createPoints();
 
         assert.equal(series._points.length, 1);
     });
@@ -368,6 +380,7 @@ var environmentWithSinonStubPoint = {
             series = createSeries(this.options);
 
         series.updateData(data);
+        series.createPoints();
 
         assert.equal(series._points.length, 0);
     });
@@ -377,6 +390,7 @@ var environmentWithSinonStubPoint = {
             series = createSeries(this.options);
 
         series.updateData(data);
+        series.createPoints();
 
         assert.equal(series._points.length, 1);
     });
@@ -400,9 +414,9 @@ var environmentWithSinonStubPoint = {
             type: seriesType,
             point: { visible: false }
         });
-        //act
+        // act
         series.draw(false);
-        //assert
+        // assert
         assert.equal(this.renderer.stub("path").callCount, 0);
     });
 
@@ -415,6 +429,7 @@ var environmentWithSinonStubPoint = {
             }
         });
         series.updateData(this.data);
+        series.createPoints();
         $.each(series._points, function(i, pt) {
             pt.x = pt.argument;
             pt.y = pt.value;
@@ -422,9 +437,9 @@ var environmentWithSinonStubPoint = {
             pt.visibleTopMarker = true;
             pt.visibleBottomMarker = true;
         });
-        //act
+        // act
         series.draw(false);
-        //assert
+        // assert
         assert.equal(this.renderer.stub("path").callCount, 3);
         assert.equal(this.renderer.stub("path").getCall(0).args[1], "line");
         assert.equal(this.renderer.stub("path").getCall(1).args[1], "area");
@@ -441,6 +456,7 @@ var environmentWithSinonStubPoint = {
             point: { visible: false }
         });
         series.updateData(this.data);
+        series.createPoints();
         $.each(series._points, function(i, pt) {
             pt.x = pt.argument;
             pt.y = pt.value;
@@ -449,8 +465,9 @@ var environmentWithSinonStubPoint = {
             pt.visibleBottomMarker = true;
         });
         series.draw(false);
-        //act
+        // act
         series.updateData([{ arg: 1, val1: 2, val2: 4 }, { arg: 2, val1: 1, val2: 2 }]);
+        series.createPoints();
         $.each(series._points, function(i, pt) {
             pt.x = pt.argument;
             pt.y = pt.value;
@@ -460,7 +477,7 @@ var environmentWithSinonStubPoint = {
         });
 
         series.draw(false);
-        //assert
+        // assert
         assert.equal(this.renderer.stub("path").callCount, 3);
 
         var element = this.renderer.stub("path").getCall(0).returnValue,
@@ -510,6 +527,7 @@ var environmentWithSinonStubPoint = {
                 }
             });
         series.updateData(this.data);
+        series.createPoints();
         $.each(series.getPoints(), function(i, pt) {
             pt.x = pt.argument;
             pt.y = pt.value;
@@ -518,9 +536,9 @@ var environmentWithSinonStubPoint = {
             pt.visibleBottomMarker = true;
             sinon.spy(pt, "draw");
         });
-        //act
+        // act
         series.draw(true);
-        //assert
+        // assert
         assert.equal(this.renderer.stub("path").callCount, 3);
 
         var element = this.renderer.stub("path").getCall(0).returnValue,
@@ -563,6 +581,7 @@ var environmentWithSinonStubPoint = {
         });
 
         series.updateData([{ arg: 1, val1: 2, val2: 4 }, { arg: 2, val1: 1, val2: 2 }, { arg: 3, val1: null, val2: 2 }, { arg: 4, val1: 1, val2: 2 }, { arg: 5, val1: 1, val2: 2 }]);
+        series.createPoints();
         $.each(series._points, function(i, pt) {
             pt.x = pt.argument;
             pt.y = pt.value;
@@ -579,8 +598,9 @@ var environmentWithSinonStubPoint = {
             element5 = this.renderer.stub("path").getCall(4).returnValue,
             element6 = this.renderer.stub("path").getCall(5).returnValue;
 
-        //act
+        // act
         series.updateData(this.data);
+        series.createPoints();
         $.each(series._points, function(i, pt) {
             pt.x = pt.argument;
             pt.y = pt.value;
@@ -589,7 +609,7 @@ var environmentWithSinonStubPoint = {
             pt.visibleBottomMarker = true;
         });
         series.draw(true);
-        //assert
+        // assert
         assert.equal(this.renderer.stub("path").callCount, 6);
         assert.equal(this.renderer.stub("path").getCall(0).args[1], "line");
         assert.equal(this.renderer.stub("path").getCall(1).args[1], "area");
@@ -661,6 +681,7 @@ var environmentWithSinonStubPoint = {
     QUnit.test("First draw - Normal State", function(assert) {
         var series = this.createSeries(this.options);
         series.updateData(this.data);
+        series.createPoints();
 
         series.draw();
 
@@ -688,6 +709,7 @@ var environmentWithSinonStubPoint = {
     QUnit.test("Apply hover state", function(assert) {
         var series = this.createSeries(this.options);
         series.updateData(this.data);
+        series.createPoints();
 
         series.draw();
 
@@ -714,6 +736,7 @@ var environmentWithSinonStubPoint = {
     QUnit.test("Apply normal state after hover", function(assert) {
         var series = this.createSeries(this.options);
         series.updateData(this.data);
+        series.createPoints();
 
         series.draw();
 
@@ -741,6 +764,7 @@ var environmentWithSinonStubPoint = {
     QUnit.test("Apply selection state", function(assert) {
         var series = this.createSeries(this.options);
         series.updateData(this.data);
+        series.createPoints();
 
         series.draw();
 
@@ -767,6 +791,7 @@ var environmentWithSinonStubPoint = {
     QUnit.test("Select series before drawing", function(assert) {
         var series = this.createSeries(this.options);
         series.updateData(this.data);
+        series.createPoints();
 
         series.select();
 
@@ -790,3 +815,89 @@ var environmentWithSinonStubPoint = {
         });
     });
 })();
+
+QUnit.module("Range Area. Update Animation", {
+    beforeEach: function() {
+        environmentWithSinonStubPoint.beforeEach.call(this);
+        this.series = createSeries({
+            type: "rangearea",
+            border: {
+                visible: true
+            },
+            point: { visible: false }
+        }, {
+            renderer: this.renderer,
+            argumentAxis: new MockAxis({ renderer: this.renderer }),
+            valueAxis: new MockAxis({ renderer: this.renderer })
+        });
+    },
+    afterEach: function() {
+        environmentWithSinonStubPoint.afterEach.call(this);
+    }
+});
+
+function checkElementPoints(assert, elementPoints, expectedPoints, defaultCoord, comment) {
+    assert.ok(elementPoints, comment);
+    assert.equal(elementPoints.length, expectedPoints.length, comment + "- point length");
+    $.each(elementPoints, function(i, p) {
+        if(defaultCoord) {
+            assert.ok(p.defaultCoords, comment + " point" + i + " default value");
+        } else {
+            assert.equal(p.y.toFixed(2), expectedPoints[i][1], comment + " point.y " + i);
+        }
+        assert.equal(p.x.toFixed(2), expectedPoints[i][0], comment + " point.x " + i);
+    });
+}
+
+QUnit.test("Draw old and new points in the right order", function(assert) {
+    this.series.updateData([{ arg: 1, val1: 10, val2: 20 }, { arg: 2, val1: 20, val2: 40 }]);
+    this.series.createPoints();
+    this.series.draw();
+
+    this.series.updateData([{ arg: -1, val1: 20, val2: 50 }, { arg: 1, val1: 20, val2: 20 }]);
+    this.series.createPoints();
+    this.series.prepareToDrawing(true);
+
+    var borderPoints = this.renderer.stub("path").firstCall.returnValue.animate.lastCall.args[0].points;
+    checkElementPoints(assert, borderPoints, [[-1, 50], [1, 20], [2, 40]], false, "border points");
+
+    var minBorderPoints = this.renderer.stub("path").thirdCall.returnValue.animate.lastCall.args[0].points;
+    checkElementPoints(assert, minBorderPoints, [[-1, 20], [1, 10], [2, 20]], false, "border min points");
+
+    var segmentPoints = this.renderer.stub("path").secondCall.returnValue.animate.lastCall.args[0].points;
+    checkElementPoints(assert, segmentPoints, [[-1, 50], [1, 20], [2, 40], [2, 20], [1, 10], [-1, 20]], false, "drawn points");
+});
+
+QUnit.test("Apply only new points after animation", function(assert) {
+    this.series.updateData([{ arg: 1, val1: 10, val2: 30 }, { arg: 2, val1: 20, val2: 30 }]);
+    this.series.createPoints();
+
+    this.series.draw();
+
+    this.series.getAllPoints().forEach(function(p) {
+        p.update = function(data) {
+            p.index = data.index;
+        };
+    });
+
+    this.series.updateData([{ arg: -1, val1: 20, val2: 30 }, { arg: 1, val1: 20, val2: 30 }]);
+    this.series.createPoints();
+    this.series.prepareToDrawing(true);
+    var path = this.renderer.stub("path").secondCall.returnValue;
+    path.attr.reset();
+    this.renderer.stub("path").firstCall.returnValue.attr.reset();
+    this.renderer.stub("path").thirdCall.returnValue.attr.reset();
+    this.series.draw(true);
+
+    var complete = path.animate.lastCall.args[2];
+    complete();
+
+    var borderPoints = this.renderer.stub("path").firstCall.returnValue.attr.lastCall.args[0].points;
+    checkElementPoints(assert, borderPoints, [[-1, 30], [1, 30]], false, "drawn border points");
+
+    var segmentPoints = this.renderer.stub("path").secondCall.returnValue.attr.lastCall.args[0].points;
+    checkElementPoints(assert, segmentPoints, [[-1, 30], [1, 30], [1, 10], [-1, 20]], false, "drawn area points");
+
+    var minBorderPoints = this.renderer.stub("path").thirdCall.returnValue.attr.lastCall.args[0].points;
+    checkElementPoints(assert, minBorderPoints, [[-1, 20], [1, 10]], false, "drawn border points");
+});

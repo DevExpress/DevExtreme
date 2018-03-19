@@ -65,42 +65,6 @@ var moduleSetup = {
 
 QUnit.module("rendering", moduleSetup);
 
-QUnit.test("rendering", function(assert) {
-    var items = [1, 2, 3];
-
-    var $element = $("#tagBox")
-            .dxTagBox({
-                items: items
-            }),
-        instance = $element.dxTagBox("instance"),
-        $tagContainer = $element.find("." + TAGBOX_TAG_CONTAINER_CLASS);
-
-    assert.equal($tagContainer.length, 1, "tag container is added");
-
-    instance.option("value", [1, 2]);
-    var tags = $element.find("." + TAGBOX_TAG_CONTENT_CLASS);
-    assert.equal(tags.length, 2, "tags are rendered");
-});
-
-QUnit.test("custom tags rendering", function(assert) {
-    var $element = $("#tagBox")
-            .dxTagBox({
-                value: [1, 2]
-            });
-
-    var tags = $element.find("." + TAGBOX_TAG_CONTENT_CLASS);
-    assert.equal(tags.length, 2, "tags are rendered");
-});
-
-QUnit.test("tagElement arguments of tagTemplate for custom tags is correct", function(assert) {
-    $("#tagBox").dxTagBox({
-        value: [1, 2],
-        tagTemplate: function(tagData, tagElement) {
-            assert.equal(isRenderer(tagElement), !!config().useJQuery, "tagElement is correct");
-        }
-    });
-});
-
 QUnit.test("popup wrapper gets the 'dx-tagbox-popup-wrapper' class", function(assert) {
     $("#tagBox").dxTagBox({
         opened: true
@@ -115,7 +79,6 @@ QUnit.test("empty class should be added if no one tags selected", function(asser
             items: [1, 2, 3]
         }),
         tagBox = $tagBox.dxTagBox("instance");
-    assert.ok($tagBox.hasClass(EMPTY_INPUT_CLASS), "empty class present");
 
     tagBox.option("value", [1, 2]);
     assert.ok(!$tagBox.hasClass(EMPTY_INPUT_CLASS), "empty class not present");
@@ -138,111 +101,14 @@ QUnit.test("skip gesture event class attach only when popup is opened", function
     assert.equal($tagBox.hasClass(SKIP_GESTURE_EVENT_CLASS), false, "skip gesture event class was removed after popup was closed");
 });
 
-QUnit.test("tags container should use native click (T400944)", function(assert) {
-    var NATIVE_CLICK_CLASS = "dx-native-click";
-    var $tagContainer = $("#tagBox").dxTagBox()
-        .find("." + TAGBOX_TAG_CONTAINER_CLASS);
-
-    assert.ok($tagContainer.hasClass(NATIVE_CLICK_CLASS));
-});
-
-QUnit.test("tagBox should not render an empty tag when item is not found in the dataSource", function(assert) {
-    var $tagBox = $("#tagBox").dxTagBox({
-            items: [{ id: 1, text: "item 1" }],
-            valueExpr: "id",
-            displayExpr: "text",
-            value: [1, 4]
-        }),
-        $tags = $tagBox.find("." + TAGBOX_TAG_CLASS);
-
-    assert.equal($tags.length, 1, "only one tag should be rendered");
-    assert.equal($tags.text(), "item 1", "first tag should be rendered");
-});
-
 
 QUnit.module("select element");
-
-QUnit.test("a select element should be rendered", function(assert) {
-    var $select = $("#tagBox").dxTagBox()
-        .find("select");
-
-    assert.equal($select.length, 1, "select element is rendered");
-});
-
-QUnit.test("the select element should has the 'multiple' attribute", function(assert) {
-    var select = $("#tagBox").dxTagBox()
-        .find("select")
-        .get(0);
-
-    assert.ok(select.hasAttribute("multiple"), "the select element has the 'multiple' attribute");
-});
 
 QUnit.test("the select element should be invisible", function(assert) {
     var $select = $("#tagBox").dxTagBox()
         .find("select");
 
     assert.notOk($select.is(":visible"), "select in not visible");
-});
-
-QUnit.test("an option element should be rendered for each selected item", function(assert) {
-    var items = ["eins", "zwei", "drei"],
-        $options = $("#tagBox")
-            .dxTagBox({
-                items: items,
-                value: [items[0], items[2]]
-            })
-            .find("option");
-
-    assert.equal($options.length, 2, "option elements count is correct");
-});
-
-QUnit.test("option elements should have correct 'value' attributes", function(assert) {
-    var items = ["eins", "zwei", "drei"],
-        value = [items[0], items[2]],
-        $options = $("#tagBox")
-            .dxTagBox({
-                items: items,
-                value: value
-            })
-            .find("option");
-
-    $options.each(function(index) {
-        assert.equal(this.value, value[index], "the 'value' attribute is correct for the option " + index);
-    });
-});
-
-QUnit.test("option elements should have the 'selected' attributes", function(assert) {
-    var items = ["eins", "zwei", "drei"],
-        value = [items[0], items[2]],
-        $options = $("#tagBox")
-            .dxTagBox({
-                items: items,
-                value: value
-            })
-            .find("option");
-
-    $options.each(function(index) {
-        assert.ok(this.hasAttribute("selected"), "the 'selected' attribute is set for the option " + index);
-    });
-});
-
-QUnit.test("option elements should have displayed text of selected items as value if the 'valueExpr' option is 'this'", function(assert) {
-    var items = [{ id: 1, text: "eins" }, { id: 2, text: "zwei" }, { id: 3, text: "drei" }],
-        value = [items[0], items[2]],
-        $options = $("#tagBox")
-            .dxTagBox({
-                items: items,
-                value: value,
-                valueExpr: "this",
-                displayExpr: "text"
-            })
-            .find("option");
-
-    assert.equal($options.length, value.length, "all options are rendered");
-
-    $options.each(function(index) {
-        assert.equal(this.value, value[index].text, "the 'value' attribute is set for the option " + index);
-    });
 });
 
 QUnit.test("option elements should be updated on value change", function(assert) {
@@ -285,19 +151,6 @@ QUnit.test("unselect item with value '0'", function(assert) {
         .trigger("dxclick");
 
     assert.deepEqual(tagBoxInstance.option("value"), [1]);
-});
-
-
-QUnit.module("the 'name' option");
-
-QUnit.test("widget select element should get the 'name' attribute with a correct value", function(assert) {
-    var expectedName = "some_name",
-        $element = $("#tagBox").dxTagBox({
-            name: expectedName
-        }),
-        $select = $element.find("select");
-
-    assert.equal($select.attr("name"), expectedName, "the select element 'name' attribute has correct value");
 });
 
 
@@ -421,6 +274,42 @@ QUnit.test("Items should not be changed if one of them is hidden", function(asse
     assert.equal(tagBox.option("items").length, 5, "items was restored");
 });
 
+QUnit.test("added and removed items should be correct with hideSelecterdItems option and dataSource (T589590)", function(assert) {
+    var spy = sinon.spy(),
+        tagBox = $("#tagBox").dxTagBox({
+            dataSource: [1, 2, 3],
+            opened: true,
+            hideSelectedItems: true,
+            onSelectionChanged: spy
+        }).dxTagBox("instance"),
+        content = tagBox.content(),
+        $item = $(content).find("." + LIST_ITEM_CLASS).eq(0);
+
+    $item.trigger("dxclick");
+    assert.deepEqual(spy.args[1][0].addedItems, [1], "added items is correct");
+    assert.deepEqual(spy.args[1][0].removedItems, [], "removed items is empty");
+
+    $item = $(content).find("." + LIST_ITEM_CLASS).eq(1);
+    $item.trigger("dxclick");
+    assert.deepEqual(spy.args[2][0].addedItems, [3], "added items is correct");
+    assert.deepEqual(spy.args[2][0].removedItems, [], "removed items is empty");
+});
+
+QUnit.test("selected items should be correct after item click with hideSelecterdItems option (T606462)", function(assert) {
+    var tagBox = $("#tagBox").dxTagBox({
+            dataSource: [1, 2, 3],
+            value: [1],
+            opened: true,
+            hideSelectedItems: true
+        }).dxTagBox("instance"),
+        content = tagBox.content(),
+        $item = $(content).find("." + LIST_ITEM_CLASS).eq(0);
+
+    $item.trigger("dxclick");
+
+    assert.deepEqual(tagBox.option("selectedItems"), [1, 2], "selected items are correct");
+});
+
 QUnit.module("tags", moduleSetup);
 
 QUnit.test("add/delete tags", function(assert) {
@@ -489,7 +378,7 @@ QUnit.test("tagBox field is not cleared on blur", function(assert) {
     assert.equal($tags.is(":visible"), true, "tag is rendered");
 });
 
-QUnit.test("tag should have correct value when item value is zero", function(assert) {
+QUnit.test("list item with zero value should be selectable", function(assert) {
     var $tagBox = $("#tagBox").dxTagBox({
         items: [0, 1, 2, 3],
         opened: true
@@ -564,7 +453,7 @@ QUnit.test("TagBox has right tag order if byKey return value in wrong order", fu
             paging: false
         })
     });
-    this.clock.tick(timeToWait * 3);
+    this.clock.tick(timeToWait * 4);
 
     var content = $tagBox.find("." + TAGBOX_TAG_CONTENT_CLASS);
     assert.equal(content.eq(0).text(), "1", "first tag has right content");
@@ -605,19 +494,6 @@ QUnit.module("multi tag support", {
     afterEach: function() {
         this.clock.restore();
     }
-});
-
-QUnit.test("tagBox should display one tag after limit overflow", function(assert) {
-    var $tagBox = $("#tagBox").dxTagBox({
-            items: [1, 2, 3, 4],
-            value: [1, 2, 4],
-            maxDisplayedTags: 2
-        }),
-        $tag = $tagBox.find("." + TAGBOX_TAG_CLASS);
-
-    assert.equal($tag.length, 1, "only one tag should be displayed");
-    assert.ok($tag.hasClass(TAGBOX_MULTI_TAG_CLASS), "the tag has correct css class");
-    assert.equal($tag.text(), "3 selected", "tag has correct text");
 });
 
 QUnit.test("tagBox should display one tag after new tags was added", function(assert) {
@@ -691,38 +567,6 @@ QUnit.test("tags should be recalculated after maxDisplayedTags option changed", 
     assert.equal($tagBox.find("." + TAGBOX_TAG_CLASS).length, 4, "4 tags when option was disabled");
 });
 
-QUnit.test("multitag should be rendered always when maxDisplayedTags is 0", function(assert) {
-    var $tagBox = $("#tagBox").dxTagBox({
-            items: [1, 2, 3, 4],
-            maxDisplayedTags: 0,
-            value: [1]
-        }),
-        $tag = $tagBox.find("." + TAGBOX_TAG_CLASS);
-
-    assert.equal($tag.length, 1, "one tag is selected");
-    assert.ok($tag.hasClass(TAGBOX_MULTI_TAG_CLASS), "one selected tag is multitag");
-});
-
-QUnit.test("onMultitagPreparing option", function(assert) {
-    assert.expect(5);
-
-    var $tagBox = $("#tagBox").dxTagBox({
-            items: [1, 2, 3, 4],
-            value: [1, 2, 4],
-            maxDisplayedTags: 2,
-            onMultiTagPreparing: function(e) {
-                assert.equal(e.component.NAME, "dxTagBox", "component is correct");
-                assert.equal(isRenderer(e.multiTagElement), !!config().useJQuery, "tagElement is correct");
-                assert.ok($(e.multiTagElement).hasClass(TAGBOX_MULTI_TAG_CLASS), "element is correct");
-                assert.deepEqual(e.selectedItems, [1, 2, 4], "selectedItems are correct");
-                e.text = "custom text";
-            }
-        }),
-        $tag = $tagBox.find("." + TAGBOX_TAG_CLASS);
-
-    assert.deepEqual($tag.text(), "custom text", "custom text is displayed");
-});
-
 QUnit.test("onMultitagPreparing option change", function(assert) {
     assert.expect(4);
 
@@ -744,34 +588,6 @@ QUnit.test("onMultitagPreparing option change", function(assert) {
 
     var $tag = $tagBox.find("." + TAGBOX_TAG_CLASS);
     assert.deepEqual($tag.text(), "custom text", "custom text is displayed");
-});
-
-QUnit.test("multi tag should not be rendered if e.cancel is true", function(assert) {
-    var $tagBox = $("#tagBox").dxTagBox({
-            items: [1, 2, 3, 4],
-            value: [1, 2, 4],
-            maxDisplayedTags: 2,
-            onMultiTagPreparing: function(e) {
-                e.cancel = true;
-            }
-        }),
-        $tag = $tagBox.find("." + TAGBOX_TAG_CLASS);
-
-    assert.equal($tag.length, 3, "3 tags was rendered");
-    assert.deepEqual(this.getTexts($tag), ["1", "2", "4"], "tags have correct text");
-});
-
-QUnit.test("multi tag should be rendered after max number of tags if showMultiTagOnly is false", function(assert) {
-    var $tagBox = $("#tagBox").dxTagBox({
-            items: [1, 2, 3, 4],
-            value: [1, 2, 4],
-            maxDisplayedTags: 2,
-            showMultiTagOnly: false
-        }),
-        $tag = $tagBox.find("." + TAGBOX_TAG_CLASS);
-
-    assert.equal($tag.length, 2, "2 tags rendered");
-    assert.deepEqual(this.getTexts($tag), ["1", "2 more"], "tags have correct text");
 });
 
 QUnit.test("tags should be rerendered after showMultiTagOnly option changed", function(assert) {
@@ -862,15 +678,6 @@ QUnit.test("value should be passed by value (not by reference)", function(assert
     assert.deepEqual(value, ["item1"], "outer value is not changed");
 });
 
-QUnit.test("the 'value' option should accept null (T379677)", function(assert) {
-    var $element = $("#tagBox").dxTagBox({
-        items: [1, 2, 3],
-        value: null
-    });
-
-    assert.equal($element.find("." + TAGBOX_TAG_CLASS).length, 0, "no tags are rendered");
-});
-
 QUnit.test("reset()", function(assert) {
     var tagBox = $("#tagBox").dxTagBox({
         items: [1, 2, 3],
@@ -879,27 +686,6 @@ QUnit.test("reset()", function(assert) {
 
     tagBox.reset();
     assert.deepEqual(tagBox.option("value"), [], "Value should be reset");
-});
-
-
-QUnit.module("the 'displayExpr' option", moduleSetup);
-
-QUnit.test("displayExpr", function(assert) {
-    var items = [{ name: "one", value: 1 },
-                    { name: "two", value: 2 }];
-
-    var $element = $("#tagBox")
-            .dxTagBox({
-                items: items,
-                displayExpr: "name",
-                valueExpr: "value"
-            }),
-        instance = $element.dxTagBox("instance");
-
-    instance.option("value", [1]);
-    var $tag = $element.find("." + TAGBOX_TAG_CONTENT_CLASS);
-    assert.equal($tag.length, 1, "tag is rendered");
-    assert.equal($tag.text(), "one", "tag render displayExpr");
 });
 
 QUnit.test("displayExpr change at runtime", function(assert) {
@@ -1193,6 +979,75 @@ QUnit.test("tags should have a right display texts for acceptCustomValue and pre
     assert.equal($tags.length, 2, "tag is added");
     assert.equal($tags.eq(0).text(), "one");
     assert.equal($tags.eq(1).text(), "two");
+});
+
+QUnit.test("custom item should be selected in list but tag should not be rendered in useButtons mode", function(assert) {
+    var store = new ArrayStore([{ id: 1, name: "Alex" }]),
+        $tagBox = $("#tagBox").dxTagBox({
+            dataSource: store,
+            onCustomItemCreating: function(e) {
+                e.customItem = store.insert({ id: 2, name: e.text }).done(function() {
+                    instance.getDataSource().reload();
+                });
+            },
+            value: [],
+            acceptCustomValue: true,
+            applyValueMode: "useButtons",
+            valueExpr: "id",
+            displayExpr: "name",
+            opened: true
+        }),
+        instance = $tagBox.dxTagBox("instance"),
+        $input = $tagBox.find(".dx-texteditor-input"),
+        keyboard = keyboardMock($input);
+
+    keyboard
+        .type("123")
+        .press('enter');
+
+    this.clock.tick();
+
+    var $tags = $tagBox.find(".dx-tag"),
+        $listItems = $(instance.content()).find(".dx-list-item.dx-list-item-selected");
+
+    assert.equal($tags.length, 0, "tags should not be rendered before button click");
+    assert.equal($listItems.length, 1, "list item should be selected after enter press");
+});
+
+QUnit.test("custom item should be selected in list but tag should not be rendered in useButtons mode with checkboxes", function(assert) {
+    var store = new ArrayStore([{ id: 1, name: "Alex" }]),
+        $tagBox = $("#tagBox").dxTagBox({
+            dataSource: store,
+            onCustomItemCreating: function(e) {
+                e.customItem = store.insert({ id: 2, name: e.text }).done(function() {
+                    instance.getDataSource().reload();
+                });
+            },
+            value: [],
+            acceptCustomValue: true,
+            showSelectionControls: true,
+            applyValueMode: "useButtons",
+            valueExpr: "id",
+            displayExpr: "name",
+            opened: true
+        }),
+        instance = $tagBox.dxTagBox("instance"),
+        $input = $tagBox.find(".dx-texteditor-input"),
+        keyboard = keyboardMock($input);
+
+    keyboard
+        .type("123")
+        .press('enter');
+
+    this.clock.tick();
+
+    var $tags = $tagBox.find(".dx-tag"),
+        $listItems = $(instance.content()).find(".dx-list-item.dx-list-item-selected"),
+        checkbox = $listItems.eq(0).find(".dx-list-select-checkbox").dxCheckBox("instance");
+
+    assert.equal($tags.length, 0, "tags should not be rendered before button click");
+    assert.equal($listItems.length, 1, "list item should be selected after enter press");
+    assert.equal(checkbox.option("value"), true, "checkbox is checked");
 });
 
 
@@ -2533,7 +2388,7 @@ QUnit.test("size of input is 1 when searchEnabled and editEnabled is false", fun
         editEnabled: false
     });
     var $input = $tagBox.find("input");
-    //NOTE: width should be 0.1 because of T393423
+    // NOTE: width should be 0.1 because of T393423
     assert.roughEqual($input.width(), 0.1, 0.1, "input has correct width");
 });
 
@@ -2714,8 +2569,8 @@ QUnit.test("remove tag by backspace", function(assert) {
 
 QUnit.test("removing tag by backspace should not load data from DS", function(assert) {
     var data = ["one", "two", "three"],
-        loadedCount = 0
-    ;
+        loadedCount = 0;
+
     var $tagBox = $("#tagBox").dxTagBox({
         dataSource: {
             load: function() {
@@ -2727,6 +2582,7 @@ QUnit.test("removing tag by backspace should not load data from DS", function(as
             }
         },
         value: ["one", "two"],
+        deferRendering: true,
         searchEnabled: true,
         searchTimeout: 0
     });
@@ -3354,7 +3210,7 @@ QUnit.testInActiveWindow("field should not be updated on focus changing", functi
     assert.equal(fieldTemplateSpy.callCount, 0, "fieldTemplate render was not called");
 });
 
-QUnit.test("tagbox should have a template classes", function(assert) {
+QUnit.test("tagbox should get template classes after fieldTemplate option change", function(assert) {
     var fieldTemplate = function() {
         return $("<div>").dxTextBox();
     };
@@ -3363,9 +3219,6 @@ QUnit.test("tagbox should have a template classes", function(assert) {
         items: [1, 2, 3],
         focusStateEnabled: true
     });
-
-    assert.ok($tagBox.hasClass(TAGBOX_DEFAULT_FIELD_TEMPLATE_CLASS), "default template class was applied");
-    assert.ok(!$tagBox.hasClass(TAGBOX_CUSTOM_FIELD_TEMPLATE_CLASS), "custom template class wasn't applied");
 
     $tagBox.dxTagBox("instance").option("fieldTemplate", fieldTemplate);
 
@@ -3634,6 +3487,65 @@ QUnit.test("the search should be cleared after pressing the 'OK' button", functi
     assert.notOk(this.instance._dataSource.searchValue(), "The search value is cleared");
 });
 
+QUnit.test("value should keep initial tag order", function(assert) {
+    var items = this.instance.option("items"),
+        $listItems = this.$listItems;
+
+    $($listItems.eq(1)).trigger("dxclick");
+    $(this.$popupWrapper.find(".dx-popup-done")).trigger("dxclick");
+
+    this.instance.option("opened", true);
+
+    $($listItems.eq(0)).trigger("dxclick");
+    $(this.$popupWrapper.find(".dx-popup-done")).trigger("dxclick");
+
+    assert.deepEqual(this.instance.option("value"), [items[1], items[0]], "tags order is correct");
+});
+
+QUnit.test("value should keep initial tag order with object items", function(assert) {
+    this.reinit({
+        items: [{ id: 1, name: "Alex" }, { id: 2, name: "John" }, { id: 3, name: "Max" }],
+        valueExpr: "id",
+        displayExpr: "name",
+        opened: true
+    });
+
+    var items = this.instance.option("items"),
+        $listItems = this.$listItems;
+
+    $($listItems.eq(1)).trigger("dxclick");
+    $(this.$popupWrapper.find(".dx-popup-done")).trigger("dxclick");
+
+    this.instance.option("opened", true);
+
+    $($listItems.eq(0)).trigger("dxclick");
+    $(this.$popupWrapper.find(".dx-popup-done")).trigger("dxclick");
+
+    assert.deepEqual(this.instance.option("value"), [items[1].id, items[0].id], "tags order is correct");
+});
+
+QUnit.test("value should keep initial tag order with object items and 'this' valueExpr", function(assert) {
+    this.reinit({
+        items: [{ id: 1, name: "Alex" }, { id: 2, name: "John" }, { id: 3, name: "Max" }],
+        valueExpr: "this",
+        displayExpr: "name",
+        opened: true
+    });
+
+    var items = this.instance.option("items"),
+        $listItems = this.$listItems;
+
+    $($listItems.eq(1)).trigger("dxclick");
+    $(this.$popupWrapper.find(".dx-popup-done")).trigger("dxclick");
+
+    this.instance.option("opened", true);
+
+    $($listItems.eq(0)).trigger("dxclick");
+    $(this.$popupWrapper.find(".dx-popup-done")).trigger("dxclick");
+
+    assert.deepEqual(this.instance.option("value"), [items[1], items[0]], "tags order is correct");
+});
+
 
 QUnit.module("the 'onSelectAllValueChanged' option", {
     _init: function(options) {
@@ -3733,10 +3645,6 @@ QUnit.module("single line mode", {
         this.$element.remove();
         fx.off = false;
     }
-});
-
-QUnit.test("widget gets special class in the single line mode", function(assert) {
-    assert.ok(this.$element.hasClass(TAGBOX_SINGLE_LINE_CLASS), "the single line class is added");
 });
 
 QUnit.test("single line class presence should depend the 'multiline' option", function(assert) {
@@ -3925,8 +3833,8 @@ QUnit.test("focusOut should be prevented when tagContainer clicked - T454876", f
     var $inputWrapper = this.$element.find(".dx-dropdowneditor-input-wrapper");
 
     $inputWrapper.on("mousedown", function(e) {
-        //note: you should not prevent pointerdown because it will prevent click on ios real devices
-        //you must use preventDefault in code because it is possible to use .on('focusout', handler) instead of onFocusOut option
+        // note: you should not prevent pointerdown because it will prevent click on ios real devices
+        // you must use preventDefault in code because it is possible to use .on('focusout', handler) instead of onFocusOut option
         assert.ok(e.isDefaultPrevented(), "mousedown was prevented and lead to focusout prevent");
     });
 
@@ -4217,7 +4125,7 @@ QUnit.test("first page should be displayed after search and tag select", functio
     assert.equal($.trim($(".dx-item").first().text()), "0", "first item loaded");
 });
 
-QUnit.test("'byKey' called once per 'value' item (T533200)", function(assert) {
+QUnit.test("'byKey' should not be called on initialization (T533200)", function(assert) {
     var byKeySpy = sinon.spy(function(key) {
         return key;
     });
@@ -4232,8 +4140,9 @@ QUnit.test("'byKey' called once per 'value' item (T533200)", function(assert) {
         }
     });
 
-    assert.equal(byKeySpy.callCount, 1);
+    assert.equal(byKeySpy.callCount, 0);
 });
+
 
 QUnit.module("performance");
 
@@ -4356,7 +4265,7 @@ QUnit.test("Select All should use cache", function(assert) {
         keyGetterCounter++;
         return this._id;
     };
-    for(var i = 1; i <= 10; i++) {
+    for(var i = 1; i <= 100; i++) {
         var item = { _id: i, text: "item " + i };
         Object.defineProperty(item, "id", {
             get: getter,
@@ -4383,14 +4292,80 @@ QUnit.test("Select All should use cache", function(assert) {
 
     var isValueEqualsSpy = sinon.spy(tagBox, "_isValueEquals");
 
-    //act
+    // act
     keyGetterCounter = 0;
     $(".dx-list-select-all-checkbox").trigger("dxclick");
 
-    //assert
-    assert.equal(keyGetterCounter, 144, "key getter call count");
+    // assert
+    assert.equal(keyGetterCounter, 1404, "key getter call count");
     assert.equal(isValueEqualsSpy.callCount, 0, "_isValueEquals is not called");
 });
+
+QUnit.test("load filter should be undefined when tagBox has a lot of initial values", function(assert) {
+    var load = sinon.stub();
+
+    $("#tagBox").dxTagBox({
+        dataSource: {
+            load: load
+        },
+        value: Array.apply(null, { length: 2000 }).map(Number.call, Number),
+        valueExpr: "id",
+        displayExpr: "text"
+    });
+
+    assert.strictEqual(load.getCall(0).args[0].filter, undefined);
+});
+
+QUnit.test("load filter should be array when tagBox has not a lot of initial values", function(assert) {
+    var load = sinon.stub();
+
+    $("#tagBox").dxTagBox({
+        dataSource: {
+            load: load
+        },
+        value: Array.apply(null, { length: 2 }).map(Number.call, Number),
+        valueExpr: "id",
+        displayExpr: "text"
+    });
+
+    assert.deepEqual(load.getCall(0).args[0].filter, [["id", "=", 0], "or", ["id", "=", 1]]);
+});
+
+QUnit.test("initial items value should be loaded when filter is not implemented in load method", function(assert) {
+    var load = sinon.stub().returns([{ id: 1, text: "item 1" }, { id: 2, text: "item 2" }, { id: 3, text: "item 3" }]),
+        $tagBox = $("#tagBox").dxTagBox({
+            dataSource: {
+                load: load
+            },
+            value: [2, 3],
+            valueExpr: "id",
+            displayExpr: "text"
+        });
+
+    assert.equal($tagBox.find("." + TAGBOX_TAG_CLASS).text(), "item 2item 3");
+});
+
+QUnit.test("useSubmitBehavior option", function(assert) {
+    var $tagBox = $("#tagBox").dxTagBox({
+            items: [1, 2],
+            useSubmitBehavior: false,
+            value: [1]
+        }),
+        instance = $tagBox.dxTagBox("instance");
+
+    assert.equal($tagBox.find("select").length, 0, "submit element is not rendered on init");
+
+    instance.option("value", [1, 2]);
+    assert.equal($tagBox.find("select").length, 0, "submit element is not rendered after value change");
+
+    instance.option("useSubmitBehavior", true);
+    assert.equal($tagBox.find("select").length, 1, "submit element is rendered after option changed");
+    assert.equal($tagBox.find("option").length, 2, "2 options was rendered");
+
+    instance.option("useSubmitBehavior", false);
+    assert.equal($tagBox.find("select").length, 0, "submit element was removed");
+});
+
 
 QUnit.test("Unnecessary a load calls do not happen of custom store when item is selected", function(assert) {
     var loadCallCounter = 0,
@@ -4422,18 +4397,16 @@ QUnit.test("Unnecessary a load calls do not happen of custom store when item is 
 
 QUnit.module("deprecated options");
 
-QUnit.test("the 'values' option should work correctly", function(assert) {
+QUnit.test("the 'values' option changing should work correctly", function(assert) {
     var items = [1, 2, 3],
         tagBox = $("#tagBox").dxTagBox({
             items: items,
-            value: items,
+            values: items,
             showSelectionControls: true
         }).dxTagBox("instance");
 
-    assert.deepEqual(tagBox.option("value"), items, "the 'value' option works correctly with reading");
-
-    tagBox.option("value", [items[0]]);
-    assert.deepEqual(tagBox.option("value"), [items[0]], "the 'value' option works correctly with writing");
+    tagBox.option("values", [items[0]]);
+    assert.deepEqual(tagBox.option("value"), [items[0]], "the 'values' option works correctly");
 });
 
 
@@ -4510,12 +4483,16 @@ QUnit.test("tagBox should not render duplicated tags after searching", function(
         dataSource: new CustomStore({
             key: "id",
             load: function(loadOptions) {
-                var loadedItems = [];
-                if(!loadOptions.searchValue) return data;
+                var loadedItems = [],
+                    filteredData = loadOptions.filter ? dataQuery(data).filter(loadOptions.filter).toArray() : data;
+
+                if(!loadOptions.searchValue) {
+                    return filteredData;
+                }
 
                 var d = $.Deferred();
                 setTimeout(function(i) {
-                    data.forEach(function(i) {
+                    filteredData.forEach(function(i) {
                         if(i.Name.indexOf(loadOptions.searchValue) >= 0) {
                             loadedItems.push(i);
                         }

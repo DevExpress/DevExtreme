@@ -195,7 +195,7 @@ module.exports = errorUtils(errors.ERROR_MESSAGES, {
      * @name Errors and Warnings_E1041
      * @publicName E1041
      */
-    E1041: "The JSZip script is referenced after DevExtreme scripts",
+    E1041: "The JSZip script is referenced after the DevExtreme scripts or not referenced at all",
 
     /**
     * @name Errors and Warnings_E1042
@@ -301,5 +301,7 @@ module.exports = errorUtils(errors.ERROR_MESSAGES, {
      * @name Errors and Warnings_W1011
      * @publicName W1011
      */
-    W1011: "The \"keyExpr\" option is not applied when dataSource is not an array"
+    W1011: "The \"keyExpr\" option is not applied when dataSource is not an array",
+
+    W1012: "The '{0}' key field is not found in data objects"
 });

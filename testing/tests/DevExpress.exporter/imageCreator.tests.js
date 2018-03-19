@@ -8,15 +8,11 @@ var $ = require("jquery"),
     testingMarkupEnd = "</svg>",
     browser = require("core/utils/browser");
 
-if(browser.msie && parseInt(browser.version) < 10) {
-    return;
-}
-
 function setupCanvasStub(drawnElements, paths) {
     var prototype = window.CanvasRenderingContext2D.prototype,
         canvasPrototype = window.HTMLCanvasElement.prototype;
 
-    //image
+    // image
     sinon.stub(prototype, "drawImage", function(img, x, y, width, height) {
         drawnElements.push({
             type: "image",
@@ -24,10 +20,10 @@ function setupCanvasStub(drawnElements, paths) {
         });
     });
 
-    //image
+    // image
     sinon.spy(canvasPrototype, "toDataURL");
 
-    //stroke, fill
+    // stroke, fill
     sinon.stub(prototype, "stroke", function() {
         drawnElements.push({
             type: "stroke",
@@ -75,7 +71,7 @@ function setupCanvasStub(drawnElements, paths) {
         });
     });
 
-    //paths, rect, circle
+    // paths, rect, circle
     sinon.stub(prototype, "beginPath", function() {
         paths.push([]);
     });
@@ -170,7 +166,7 @@ function setupCanvasStub(drawnElements, paths) {
 
         return matches && matches[0];
     }
-    //texts
+    // texts
     sinon.stub(prototype, "fillText", function() {
         var tempFont = this.font.replace(/px\s/g, "px__"),
             fontParts = tempFont.split("__");
@@ -211,7 +207,7 @@ function setupCanvasStub(drawnElements, paths) {
         });
     });
 
-    //clips & patterns
+    // clips & patterns
     sinon.stub(prototype, "clip");
     sinon.stub(prototype, "save");
     sinon.stub(prototype, "restore");
@@ -221,11 +217,11 @@ function setupCanvasStub(drawnElements, paths) {
         });
     });
 
-    //translation
+    // translation
     sinon.stub(prototype, "translate");
     sinon.stub(prototype, "rotate");
 
-    //line dash
+    // line dash
     prototype.setLineDash && sinon.stub(prototype, "setLineDash");
 }
 
@@ -233,16 +229,16 @@ function teardownCanvasStub() {
     var prototype = window.CanvasRenderingContext2D.prototype,
         canvasPrototype = window.HTMLCanvasElement.prototype;
 
-    //image
+    // image
     prototype.drawImage.restore();
     canvasPrototype.toDataURL.restore();
 
-    //stroke, fill
+    // stroke, fill
     prototype.stroke.restore();
     prototype.fill.restore();
     prototype.fillRect.restore();
 
-    //paths, rect, arcTo, circle
+    // paths, rect, arcTo, circle
     prototype.beginPath.restore();
     prototype.moveTo.restore();
     prototype.lineTo.restore();
@@ -252,21 +248,21 @@ function teardownCanvasStub() {
     prototype.rect.restore();
     prototype.arcTo.restore();
 
-    //texts
+    // texts
     prototype.fillText.restore();
     prototype.strokeText.restore();
 
-    //clips & patterns
+    // clips & patterns
     prototype.clip.restore();
     prototype.save.restore();
     prototype.restore.restore();
     prototype.createPattern.restore();
 
-    //translation
+    // translation
     prototype.translate.restore();
     prototype.rotate.restore();
 
-    //line dash
+    // line dash
     prototype.setLineDash && prototype.setLineDash.restore();
 }
 
@@ -546,7 +542,7 @@ QUnit.test("Arc path", function(assert) {
                 y: 28
             }, "First component of path");
             assert.equal(that.paths[0][1].action, "A", "action");
-            //assert.equal(that.paths[0][1].c, true, "c");
+            // assert.equal(that.paths[0][1].c, true, "c");
             assert.equal(that.paths[0][1].r, 15, "radius");
             assert.roughEqual(that.paths[0][1].sa, 0.3012034806537296, 0.1, "start angle");
             assert.roughEqual(that.paths[0][1].ea, -0.6065021374442598, 0.1, "end angle");
@@ -1063,7 +1059,7 @@ QUnit.test("Multiline text", function(assert) {
     });
 });
 
-//T434703
+// T434703
 QUnit.test("Text with big amount of spaces", function(assert) {
     var that = this,
         done = assert.async(),
@@ -1595,7 +1591,7 @@ QUnit.test("getData returns Blob when it supported by Browser", function(assert)
         return;
     }
 
-    //arrange. act
+    // arrange. act
     var deferred,
         done = assert.async(),
         _getBlob = imageCreator._getBlob,
@@ -1615,7 +1611,7 @@ QUnit.test("getData returns Blob when it supported by Browser", function(assert)
     assert.expect(1);
     $.when(deferred).done(function(data) {
         try {
-            //assert
+            // assert
             assert.equal(data, "blobData", "_getBlob was called");
         } finally {
             imageCreator._getBlob = _getBlob;
@@ -1631,7 +1627,7 @@ QUnit.test("getData returns Base64 when Blob not supported by Browser", function
         return;
     }
 
-    //arrange. act
+    // arrange. act
     var deferred,
         done = assert.async(),
         _getBlob = imageCreator._getBlob,
@@ -1651,7 +1647,7 @@ QUnit.test("getData returns Base64 when Blob not supported by Browser", function
     assert.expect(1);
     $.when(deferred).done(function(data) {
         try {
-            //assert
+            // assert
             assert.equal(data, "base64Data", "_getBase64 was called");
         } finally {
             imageCreator._getBlob = _getBlob;
@@ -1667,7 +1663,7 @@ QUnit.test("getData returns Base64 when Blob not supported by Browser", function
         return;
     }
 
-    //arrange. act
+    // arrange. act
     var deferred,
         done = assert.async(),
         _getBlob = imageCreator._getBlob,
@@ -1687,7 +1683,7 @@ QUnit.test("getData returns Base64 when Blob not supported by Browser", function
     assert.expect(1);
     $.when(deferred).done(function(data) {
         try {
-            //assert
+            // assert
             assert.equal(data, "base64Data", "_getBase64 was called");
         } finally {
             imageCreator._getBlob = _getBlob;

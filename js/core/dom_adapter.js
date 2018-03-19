@@ -3,6 +3,7 @@
 /* global document, Node */
 
 var injector = require("./utils/dependency_injector");
+var noop = require("./utils/common").noop;
 
 var nativeDOMAdapterStrategy = {
     querySelectorAll: function(element, selector) {
@@ -26,18 +27,22 @@ var nativeDOMAdapterStrategy = {
     },
 
     createElement: function(tagName, context) {
-        context = context || this.getDocument();
+        context = context || this._document;
         return context.createElement(tagName);
     },
 
     createElementNS: function(ns, tagName, context) {
-        context = context || this.getDocument();
+        context = context || this._document;
         return context.createElementNS(ns, tagName);
     },
 
     createTextNode: function(text, context) {
-        context = context || this.getDocument();
+        context = context || this._document;
         return context.createTextNode(text);
+    },
+
+    isNode: function(element) {
+        return typeof element === "object" && "nodeType" in element;
     },
 
     isElementNode: function(element) {
@@ -88,14 +93,14 @@ var nativeDOMAdapterStrategy = {
     },
 
     setClass: function(element, className, isAdd) {
-        if(element.nodeType === 1) {
+        if(element.nodeType === 1 && className) {
             if(element.classList) {
                 if(isAdd) {
                     element.classList.add(className);
                 } else {
                     element.classList.remove(className);
                 }
-            } else { //IE9
+            } else { // IE9
                 var classNames = element.className.split(" ");
                 var classIndex = classNames.indexOf(className);
                 if(isAdd && classIndex < 0) {
@@ -113,59 +118,57 @@ var nativeDOMAdapterStrategy = {
         element.style[name] = value || '';
     },
 
+    _document: typeof document === "undefined" ? undefined : document,
+
     getDocument: function() {
-        return typeof document !== "undefined" && document;
+        return this._document;
     },
 
     getActiveElement: function() {
-        var document = this.getDocument();
-        return document.activeElement;
+        return this._document.activeElement;
     },
 
     getBody: function() {
-        var document = this.getDocument();
-        return document.body;
+        return this._document.body;
     },
 
     createDocumentFragment: function() {
-        var document = this.getDocument();
-        return document.createDocumentFragment();
+        return this._document.createDocumentFragment();
     },
 
     getDocumentElement: function() {
-        var document = this.getDocument();
-        return document.documentElement;
+        return this._document.documentElement;
     },
 
     getLocation: function() {
-        var document = this.getDocument();
-        return document.location;
+        return this._document.location;
     },
 
     getSelection: function() {
-        var document = this.getDocument();
-        return document.selection;
+        return this._document.selection;
     },
 
     getReadyState: function() {
-        var document = this.getDocument();
-        return document.readyState;
+        return this._document.readyState;
     },
 
     getHead: function() {
-        var document = this.getDocument();
-        return document.head;
+        return this._document.head;
     },
 
-    getProperty: function(element, name) {
-        return element[name];
+    hasDocumentProperty: function(property) {
+        return property in this._document;
     },
 
-    listen: function(element, event, callback, useCapture) {
-        element && element.addEventListener(event, callback, useCapture);
+    listen: function(element, event, callback, options) {
+        if(!element || !("addEventListener" in element)) {
+            return noop;
+        }
+
+        element.addEventListener(event, callback, options);
 
         return function() {
-            element && element.removeEventListener(event, callback);
+            element.removeEventListener(event, callback);
         };
     }
 };

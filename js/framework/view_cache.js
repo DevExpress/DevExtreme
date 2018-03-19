@@ -129,7 +129,7 @@ var ConditionalViewCacheDecorator = Class.inherit({
     }
 }).include(EventsMixin);
 
-var DEFAULT_VIEW_CACHE_CAPACITY = 5/*T317332*/;
+var DEFAULT_VIEW_CACHE_CAPACITY = 5/* T317332 */;
 var CapacityViewCacheDecorator = Class.inherit({
     ctor: function(options) {
         this._keys = [];

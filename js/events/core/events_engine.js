@@ -10,6 +10,8 @@ var typeUtils = require("../../core/utils/type");
 var Callbacks = require("../../core/utils/callbacks");
 var isWindow = typeUtils.isWindow;
 var isFunction = typeUtils.isFunction;
+var isString = typeUtils.isString;
+var errors = require("../../core/errors");
 var WeakMap = require("../../core/polyfills/weak_map");
 var hookTouchProps = require("../../events/core/hook_touch_props");
 
@@ -57,15 +59,17 @@ var applyForEach = function(args, method) {
         return;
     }
 
-    if(element.nodeType || isWindow(element)) {
+    if(domAdapter.isNode(element) || isWindow(element)) {
         method.apply(eventsEngine, args);
-    } else if(element.each) {
+    } else if(!isString(element) && "length" in element) {
         var itemArgs = Array.prototype.slice.call(args, 0);
 
-        element.each(function() {
-            itemArgs[0] = this;
+        Array.prototype.forEach.call(element, function(itemElement) {
+            itemArgs[0] = itemElement;
             applyForEach(itemArgs, method);
         });
+    } else {
+        throw errors.Error("E0025");
     }
 };
 
@@ -103,7 +107,15 @@ var getHandlersController = function(element, eventName) {
     return {
         addHandler: function(handler, selector, data) {
             var callHandler = function(e, extraParameters) {
-                var handlerArgs = [e];
+                var handlerArgs = [e],
+                    target = e.currentTarget,
+                    relatedTarget = e.relatedTarget,
+                    secondaryTargetIsInside,
+                    result;
+
+                if(eventName in NATIVE_EVENTS_TO_SUBSCRIBE) {
+                    secondaryTargetIsInside = relatedTarget && target && (relatedTarget === target || target.contains(relatedTarget));
+                }
 
                 if(extraParameters !== undefined) {
                     handlerArgs.push(extraParameters);
@@ -111,7 +123,9 @@ var getHandlersController = function(element, eventName) {
 
                 special.callMethod(eventName, "handle", element, [ e, data ]);
 
-                var result = handler.apply(e.currentTarget, handlerArgs);
+                if(!secondaryTargetIsInside) {
+                    result = handler.apply(target, handlerArgs);
+                }
 
                 if(result === false) {
                     e.preventDefault();
@@ -157,13 +171,14 @@ var getHandlersController = function(element, eventName) {
 
             var firstHandlerForTheType = eventData.handleObjects.length === 1;
             var shouldAddNativeListener = firstHandlerForTheType && eventNameIsDefined;
+            var nativeHandler = getNativeHandler(eventName);
 
             if(shouldAddNativeListener) {
-                shouldAddNativeListener = !special.callMethod(eventName, "setup", element, [ data, namespaces, handler ]);
+                shouldAddNativeListener = !special.callMethod(eventName, "setup", element, [ data, namespaces, nativeHandler ]);
             }
 
             if(shouldAddNativeListener) {
-                eventData.nativeHandler = getNativeHandler(eventName);
+                eventData.nativeHandler = nativeHandler;
                 eventData.removeListener = domAdapter.listen(element, NATIVE_EVENTS_TO_SUBSCRIBE[eventName] || eventName, eventData.nativeHandler);
             }
 
@@ -484,7 +499,7 @@ initEvent(normalizeEventArguments(function(src, config) {
 
     extend(that, src);
 
-    if(src instanceof eventsEngine.Event || (window && src instanceof window.Event)) {
+    if(src instanceof eventsEngine.Event || (windowUtils.hasWindow() && src instanceof window.Event)) {
         that.originalEvent = src;
         that.currentTarget = undefined;
     }

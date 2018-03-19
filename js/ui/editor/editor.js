@@ -4,6 +4,7 @@ var $ = require("../../core/renderer"),
     dataUtils = require("../../core/element_data"),
     Callbacks = require("../../core/utils/callbacks"),
     commonUtils = require("../../core/utils/common"),
+    windowUtils = require("../../core/utils/window"),
     getDefaultAlignment = require("../../core/utils/position").getDefaultAlignment,
     extend = require("../../core/utils/extend").extend,
     Widget = require("../widget/ui.widget"),
@@ -49,6 +50,7 @@ var Editor = Widget.inherit({
             * @publicName value
             * @type any
             * @default null
+            * @fires EditorOptions_onValueChanged
             */
             value: null,
 
@@ -150,11 +152,12 @@ var Editor = Widget.inherit({
         this._valueChangeActionSuppressed = false;
     },
 
-    _render: function() {
-        this.callBase();
-        this._renderValidationState();
+    _initMarkup: function() {
         this._toggleReadOnlyState();
         this._setSubmitElementName(this.option("name"));
+
+        this.callBase();
+        this._renderValidationState();
     },
 
     _raiseValueChangeAction: function(value, previousValue) {
@@ -184,6 +187,10 @@ var Editor = Widget.inherit({
 
         $element.toggleClass(INVALID_CLASS, !isValid);
         this.setAria("invalid", !isValid || undefined);
+
+        if(!windowUtils.hasWindow()) {
+            return;
+        }
 
         if(this._$validationMessage) {
             this._$validationMessage.remove();

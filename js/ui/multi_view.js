@@ -230,7 +230,7 @@ var MultiView = CollectionWidget.inherit({
         this._initSwipeable();
     },
 
-    _render: function() {
+    _initMarkup: function() {
         this._deferredItems = [];
 
         this.callBase();
@@ -294,6 +294,12 @@ var MultiView = CollectionWidget.inherit({
         if(isDefined(index) && !hasItemContent) {
             this._deferredItems[index].resolve();
         }
+    },
+
+    _refreshItem: function($item, item) {
+        this.callBase($item, item);
+
+        this._updateItemsVisibility(this.option("selectedIndex"));
     },
 
     _setAriaSelected: noop,
@@ -384,7 +390,7 @@ var MultiView = CollectionWidget.inherit({
         var targetOffset = e.targetOffset * this._getRTLSignCorrection();
         if(targetOffset) {
             this.option("selectedIndex", this._normalizeIndex(this.option("selectedIndex") - targetOffset));
-            //TODO: change focusedElement on focusedItem
+            // TODO: change focusedElement on focusedItem
             var $selectedElement = this.itemElements().filter(".dx-item-selected");
             this.option("focusStateEnabled") && this.option("focusedElement", getPublicElement($selectedElement));
         } else {

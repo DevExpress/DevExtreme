@@ -13,7 +13,7 @@
         return module.apply(this, arguments);
     };
 
-    //compares two float/double numbers with some acceptable epsilon
+    // compares two float/double numbers with some acceptable epsilon
     QUnit.assert.roughEqual = function(actual, expected, epsilon, message) {
         var delta = Math.abs(expected - actual);
         this.pushResult({
@@ -58,8 +58,8 @@
         } else {
             var iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
             if(iOS) {
-                //do not test
-                //do not skip
+                // do not test
+                // do not skip
                 return;
             }
 

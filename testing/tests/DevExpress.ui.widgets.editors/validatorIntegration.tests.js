@@ -39,7 +39,6 @@ var Fixture = Class.inherit({
 });
 
 
-
 (function() {
     QUnit.module("Regression", {
         beforeEach: function() {
@@ -67,8 +66,8 @@ var Fixture = Class.inherit({
 
         this.fixture.keyboard.type("somethingwrong");
         this.fixture.$input.trigger("change");
-        //action
-        //validate Validator which is associated with Editor that is not ready for official validation
+        // action
+        // validate Validator which is associated with Editor that is not ready for official validation
         this.fixture.validator.validate();
 
         assert.strictEqual(this.fixture.editor.option("isValid"), false, "Editor should be invalid because incorrect date was typed");
@@ -85,8 +84,8 @@ var Fixture = Class.inherit({
         this.fixture.validator.validate();
 
         this.fixture.$input.val("");
-        //action
-        //this should cause validation, and now - as empty string is "acceptable" date/time string for NULL date - it should result in "Required" validation
+        // action
+        // this should cause validation, and now - as empty string is "acceptable" date/time string for NULL date - it should result in "Required" validation
         this.fixture.$input.trigger("change");
 
         assert.strictEqual(this.fixture.editor.option("isValid"), false, "Editor should be invalid because incorrect date was typed");
@@ -101,7 +100,7 @@ var Fixture = Class.inherit({
 
         this.fixture.keyboard.type("1");
         this.fixture.$input.trigger("change");
-        //action
+        // action
         this.fixture.$input.trigger("focusout");
 
         assert.strictEqual(this.fixture.editor.option("isValid"), false, "Editor should be invalid because value is less then min");

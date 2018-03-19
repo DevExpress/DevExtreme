@@ -293,6 +293,21 @@ QUnit.test("regression test. Change value used option", function(assert) {
     assert.equal($input.val(), 200);
 });
 
+QUnit.test("'text' option should be correct", function(assert) {
+    assert.expect(2);
+
+    var element = $("#numberbox").dxNumberBox({
+        value: 100
+    });
+
+    var instance = element.dxNumberBox("instance");
+    assert.equal(instance.option("text"), "100", "Text is OK");
+
+    instance.option("value", 200);
+
+    assert.equal(instance.option("text"), "200", "Text is OK");
+});
+
 QUnit.test("placeholder is visible when value is invalid", function(assert) {
     var $element = $("#numberbox").dxNumberBox({
             placeholder: "Placeholder",
@@ -588,6 +603,16 @@ QUnit.test("T351846 - the value should be reset to null if input is cleared", fu
         .change();
 
     assert.equal($numberBox.dxNumberBox("option", "value"), null, "value is correct");
+});
+
+QUnit.test("the value should be reset to null if reset method called", function(assert) {
+    var numberBox = $("#numberbox").dxNumberBox({
+        value: 0
+    }).dxNumberBox("instance");
+
+    numberBox.reset();
+
+    assert.equal(numberBox.option("value"), null, "value is correct");
 });
 
 QUnit.test("The value option should not be changed if it is invalid", function(assert) {

@@ -69,6 +69,7 @@ var Form = Widget.inherit({
              * @publicName formData
              * @type object
              * @default {}
+             * @fires dxFormOptions_onFieldDataChanged
              */
             formData: {},
             /**
@@ -327,6 +328,10 @@ var Form = Widget.inherit({
              * @publicName template
              * @type template|function
              * @type_function_param1 data:object
+             * @type_function_param1_field1 component:dxForm
+             * @type_function_param1_field2 dataField:string
+             * @type_function_param1_field3 editorOptions:object
+             * @type_function_param1_field4 editorType:string
              * @type_function_param2 itemElement:dxElement
              * @type_function_return string|Node|jQuery
              */
@@ -393,6 +398,12 @@ var Form = Widget.inherit({
             /**
              * @name dxFormGroupItem_caption
              * @publicName caption
+             * @type string
+             * @default undefined
+             */
+            /**
+             * @name dxFormGroupItem_name
+             * @publicName name
              * @type string
              * @default undefined
              */
@@ -467,6 +478,12 @@ var Form = Widget.inherit({
             * @section FormItems
             * @type object
             */
+            /**
+             * @name dxFormTabbedItem_name
+             * @publicName name
+             * @type string
+             * @default undefined
+             */
             /**
              * @name dxFormTabbedItem_visible
              * @publicName visible
@@ -692,7 +709,7 @@ var Form = Widget.inherit({
     },
 
     _getLabelWidthByText: function(text) {
-        //this code has slow performance
+        // this code has slow performance
         this._hiddenLabelText.innerHTML = text;
         return this._hiddenLabelText.offsetWidth;
     },
@@ -809,8 +826,19 @@ var Form = Widget.inherit({
         this._removeHiddenElement();
     },
 
-    _render: function() {
+    _prepareFormData: function() {
+        if(!typeUtils.isDefined(this.option("formData"))) {
+            this.option("formData", {});
+        }
+    },
+
+    _initMarkup: function() {
         this._clearCachedInstances();
+        this.callBase();
+    },
+
+    _render: function() {
+        this._prepareFormData();
 
         this.callBase();
         this.$element().addClass(FORM_CLASS);
@@ -1422,13 +1450,14 @@ var Form = Widget.inherit({
 
         do {
             if(isItemWithSubItems) {
-                var isGroupWithCaption = typeUtils.isDefined(item.caption || item.title),
-                    captionWithoutSpaces = that._getTextWithoutSpaces(item.caption || item.title),
+                var name = item.name || item.caption || item.title,
+                    isGroupWithName = typeUtils.isDefined(name),
+                    nameWithoutSpaces = that._getTextWithoutSpaces(name),
                     pathNode;
 
                 item[subItemsField] = that._generateItemsFromData(item[subItemsField]);
 
-                if(isGroupWithCaption) {
+                if(isGroupWithName) {
                     pathNode = path.pop();
                 }
 
@@ -1440,7 +1469,7 @@ var Form = Widget.inherit({
                     }
                 }
 
-                if(!isGroupWithCaption || isGroupWithCaption && captionWithoutSpaces === pathNode) {
+                if(!isGroupWithName || isGroupWithName && nameWithoutSpaces === pathNode) {
                     if(path.length) {
                         result = that._searchItemInEverySubItem(path, fieldName, item[subItemsField]);
                     }
@@ -1591,12 +1620,12 @@ var Form = Widget.inherit({
 
     /**
      * @name dxFormMethods_getEditor
-     * @publicName getEditor(field)
-     * @param1 field:string
+     * @publicName getEditor(dataField)
+     * @param1 dataField:string
      * @return any
      */
-    getEditor: function(field) {
-        return this._editorInstancesByField[field];
+    getEditor: function(dataField) {
+        return this._editorInstancesByField[dataField];
     },
 
     /**
@@ -1621,28 +1650,28 @@ var Form = Widget.inherit({
 
     /**
      * @name dxFormMethods_itemOption
-     * @publicName itemOption(field, option, value)
-     * @param1 field:string
+     * @publicName itemOption(id, option, value)
+     * @param1 id:string
      * @param2 option:string
      * @param3 value:any
      */
     /**
      * @name dxFormMethods_itemOption
-     * @publicName itemOption(field, options)
-     * @param1 field:string
+     * @publicName itemOption(id, options)
+     * @param1 id:string
      * @param2 options:object
      */
     /**
      * @name dxFormMethods_itemOption
-     * @publicName itemOption(field)
-     * @param1 field:string
+     * @publicName itemOption(id)
+     * @param1 id:string
      * @return any
      */
-    itemOption: function(field, option, value) {
+    itemOption: function(id, option, value) {
         var that = this,
             argsCount = arguments.length,
             items = that._generateItemsFromData(that.option("items")),
-            item = that._getItemByField(field, items);
+            item = that._getItemByField(id, items);
 
         switch(argsCount) {
             case 1:
@@ -1664,7 +1693,7 @@ var Form = Widget.inherit({
     /**
      * @name dxFormMethods_validate
      * @publicName validate()
-     * @return object
+     * @return dxValidationGroupResult
      */
     validate: function() {
         try {

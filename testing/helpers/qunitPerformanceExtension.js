@@ -19,7 +19,7 @@
         loadJSON("http://localhost:9223/json", function(data) {
             $.each(data, function(_, item) {
                 var title = $("<div>").html(item.title).text();
-                //TODO: Try to find another way (item.title.indexOf(document.title) !== -1))
+                // TODO: Try to find another way (item.title.indexOf(document.title) !== -1))
                 if(item.webSocketDebuggerUrl && (title.indexOf(document.title) !== -1 || title.indexOf(window.location.href) !== -1)) {
                     that.connect(item.webSocketDebuggerUrl);
                 }

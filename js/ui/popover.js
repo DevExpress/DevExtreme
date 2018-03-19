@@ -104,7 +104,7 @@ var POPOVER_CLASS = "dx-popover",
         if(that["_" + name + "EventHandler"]) {
             eventsEngine.off(domAdapter.getDocument(), eventName, target, that["_" + name + "EventHandler"]);
         } else {
-            eventsEngine.off(target, eventName);
+            eventsEngine.off($(target), eventName);
         }
     };
 

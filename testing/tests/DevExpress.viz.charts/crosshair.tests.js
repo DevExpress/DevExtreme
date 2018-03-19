@@ -193,12 +193,12 @@ QUnit.test("update", function(assert) {
 
 QUnit.test("render", function(assert) {
     var crosshair = this.createCrosshair({}, {}),
-        attributes = { stroke: 'yellow', "stroke-width": 1, opacity: 1, dashStyle: 'solid', "stroke-linecap": "butt" /*"square"*/ },
+        attributes = { stroke: 'yellow', "stroke-width": 1, opacity: 1, dashStyle: 'solid', "stroke-linecap": "butt" /* "square" */ },
         circleOptions = { stroke: attributes.stroke, "stroke-width": attributes["stroke-width"], dashStyle: attributes.dashStyle, opacity: attributes.opacity };
 
-    //act
+    // act
     crosshair.render();
-    //assert
+    // assert
     assert.ok(crosshair);
     assert.equal(crosshair._horizontal.lines.length, 2);
     assert.equal(crosshair._vertical.lines.length, 2);
@@ -225,9 +225,9 @@ QUnit.test("render", function(assert) {
 QUnit.test("render label", function(assert) {
     var options = { horizontalLine: { label: { visible: true, font: { size: 14, color: "red" }, backgroundColor: "blue" } } };
     var crosshair = this.createCrosshair(options, {});
-    //act
+    // act
     crosshair.render();
-    //assert
+    // assert
     checkText(assert, this.renderer.text, "0", 0, 0, { align: "right" }, { 'font-size': 14, fill: "red" });
     checkRect(assert, this.renderer.rect, 0, 0, 0, 0, { fill: "blue" });
 
@@ -240,9 +240,9 @@ QUnit.test("render label, position of axis is right", function(assert) {
     var options = { horizontalLine: { label: { visible: true, font: { size: 14, color: "red" }, backgroundColor: "blue" } } };
     var crosshair = this.createCrosshair(options, { position: "right" });
 
-    //act
+    // act
     crosshair.render();
-    //assert
+    // assert
     assert.ok(crosshair);
     checkText(assert, this.renderer.text, "0", 0, 0, { align: "left" }, { 'font-size': 14, fill: "red" });
     checkRect(assert, this.renderer.rect, 0, 0, 0, 0, { fill: "blue" });
@@ -252,9 +252,9 @@ QUnit.test("render with label, stubData", function(assert) {
     var options = { horizontalLine: { label: { visible: true, font: { size: 14, color: "red" }, backgroundColor: "blue" } } };
     var crosshair = this.createCrosshair(options, { stubData: true });
 
-    //act
+    // act
     crosshair.render();
-    //assert
+    // assert
     assert.ok(crosshair);
     assert.ok(!this.renderer.stub("text").called);
     assert.ok(!this.renderer.stub("rect").called);
@@ -268,10 +268,10 @@ QUnit.test("show", function(assert) {
 
     dataForShow.x = "someX";
     dataForShow.y = "someY";
-    //act
+    // act
     crosshair.render();
     crosshair.show(dataForShow);
-    //assert
+    // assert
     assert.equal(dataForShow.point.getCrosshairData.callCount, 1);
     assert.equal(dataForShow.point.getPointRadius.callCount, 1);
     assert.deepEqual(dataForShow.point.getCrosshairData.firstCall.args, ["someX", "someY"]);
@@ -298,10 +298,10 @@ QUnit.test("T255239. Show when vertical and horizontal lines are invisible", fun
         horizontalLine: { visible: false },
         verticalLine: { visible: false }
     }, {});
-    //act
+    // act
     crosshair.render();
     crosshair.show(getDataForShowCrosshair({ x: 100, y: 30, xValue: "x100", yValue: "y30", axis: "defaultAxisName" }, 6));
-    //assert
+    // assert
     assert.equal(crosshair._crosshairGroup.attr.callCount, 2);
     assert.deepEqual(crosshair._crosshairGroup.attr.getCall(1).args[0], { visibility: "visible" });
 
@@ -315,10 +315,10 @@ QUnit.test("T255239. Show when vertical and horizontal lines are invisible", fun
 QUnit.test("show, coordinates out of the pane", function(assert) {
     this.panes[0].coords = { left: 150, right: 720, top: 10, bottom: 790 };
     var crosshair = this.createCrosshair({}, {});
-    //act
+    // act
     crosshair.render();
     crosshair.show(getDataForShowCrosshair({ x: 100, y: 30, xValue: "x100", yValue: "y30", axis: "defaultAxisName" }, 6));
-    //assert
+    // assert
     assert.equal(crosshair._crosshairGroup.attr.callCount, 2);
     assert.deepEqual(crosshair._crosshairGroup.attr.getCall(1).args[0], { visibility: "visible" });
 
@@ -340,10 +340,10 @@ QUnit.test("show, coordinates out of the pane", function(assert) {
 QUnit.test("show label", function(assert) {
     this.renderer.bBoxTemplate.width = 5;
     var crosshair = this.createCrosshair({ horizontalLine: { label: { visible: true } } }, {});
-    //act
+    // act
     crosshair.render();
     crosshair.show(getDataForShowCrosshair({ x: 100.9, y: 30.4, xValue: "x100", yValue: "y30", axis: "defaultAxisName" }));
-    //assert
+    // assert
     assert.equal(crosshair._horizontal.labels[0].text.attr.callCount, 3);
     assert.deepEqual(crosshair._horizontal.labels[0].text.attr.getCall(1).args[0], { text: "y30_formatted", x: 30, y: 10 });
     assert.deepEqual(crosshair._horizontal.labels[0].text.attr.getCall(2).args[0], { x: 30, y: 0 });
@@ -355,7 +355,7 @@ QUnit.test("show label", function(assert) {
 
 QUnit.test("show not in canvas, left", function(assert) {
     var crosshair = this.createCrosshair({}, {});
-    //act
+    // act
     crosshair.render();
     crosshair.show(getDataForShowCrosshair({ x: 10, y: 30, xValue: "x10", yValue: "y30", axis: "defaultAxisName" }));
 
@@ -365,7 +365,7 @@ QUnit.test("show not in canvas, left", function(assert) {
 
 QUnit.test("show not in canvas, right", function(assert) {
     var crosshair = this.createCrosshair({}, {});
-    //act
+    // act
     crosshair.render();
     crosshair.show(getDataForShowCrosshair({ x: 730, y: 30, xValue: "x730", yValue: "y30", axis: "defaultAxisName" }));
 
@@ -375,7 +375,7 @@ QUnit.test("show not in canvas, right", function(assert) {
 
 QUnit.test("show not in canvas, top", function(assert) {
     var crosshair = this.createCrosshair({}, {});
-    //act
+    // act
     crosshair.render();
     crosshair.show(getDataForShowCrosshair({ x: 100, y: 3, xValue: "x100", yValue: "y3", axis: "defaultAxisName" }));
 
@@ -385,7 +385,7 @@ QUnit.test("show not in canvas, top", function(assert) {
 
 QUnit.test("show not in canvas, bottom", function(assert) {
     var crosshair = this.createCrosshair({}, {});
-    //act
+    // act
     crosshair.render();
     crosshair.show(getDataForShowCrosshair({ x: 200, y: 750, xValue: "x200", yValue: "y750", axis: "defaultAxisName" }));
 
@@ -395,7 +395,7 @@ QUnit.test("show not in canvas, bottom", function(assert) {
 
 QUnit.test("show in canvas, left", function(assert) {
     var crosshair = this.createCrosshair({}, {});
-    //act
+    // act
     crosshair.render();
     crosshair.show(getDataForShowCrosshair({ x: 80, y: 30, xValue: "x80", yValue: "y30", axis: "defaultAxisName" }));
 
@@ -405,7 +405,7 @@ QUnit.test("show in canvas, left", function(assert) {
 
 QUnit.test("show in canvas, right", function(assert) {
     var crosshair = this.createCrosshair({}, {});
-    //act
+    // act
     crosshair.render();
     crosshair.show(getDataForShowCrosshair({ x: 710, y: 30, xValue: "x710", yValue: "y30", axis: "defaultAxisName" }));
 
@@ -415,7 +415,7 @@ QUnit.test("show in canvas, right", function(assert) {
 
 QUnit.test("show in canvas, top", function(assert) {
     var crosshair = this.createCrosshair({}, {});
-    //act
+    // act
     crosshair.render();
     crosshair.show(getDataForShowCrosshair({ x: 100, y: 10, xValue: "x100", yValue: "y10", axis: "defaultAxisName" }));
 
@@ -425,7 +425,7 @@ QUnit.test("show in canvas, top", function(assert) {
 
 QUnit.test("show in canvas, bottom", function(assert) {
     var crosshair = this.createCrosshair({}, {});
-    //act
+    // act
     crosshair.render();
     crosshair.show(getDataForShowCrosshair({ x: 200, y: 720, xValue: "x200", yValue: "y720", axis: "defaultAxisName" }));
 
@@ -492,10 +492,10 @@ QUnit.test('label formatting', function(assert) {
         dataForCrosshair = getDataForShowCrosshair({ x: 120, y: 120, xValue: "200", yValue: "720", axis: "defaultAxisName" });
 
     crosshair.render();
-    //act
+    // act
     crosshair.show(dataForCrosshair);
 
-    //assert
+    // assert
     assert.equal(this.axes[0][0].getFormattedValue.callCount, 1, 'format call count. arg axis');
     assert.equal(this.axes[1][0].getFormattedValue.callCount, 1, 'format call count. val axis');
     assert.deepEqual(this.axes[0][0].getFormattedValue.getCall(0).args, ['200', {
@@ -518,9 +518,9 @@ QUnit.test("render label", function(assert) {
     var options = { verticalLine: { label: { visible: true, font: { size: 14, color: "red" }, backgroundColor: "blue" } } };
     var crosshair = this.createCrosshair(options, { position: "top" });
 
-    //act
+    // act
     crosshair.render();
-    //assert
+    // assert
     checkText(assert, this.renderer.text, "0", 0, 0, { align: "center" }, { 'font-size': 14, fill: "red" });
     checkRect(assert, this.renderer.rect, 0, 0, 0, 0, { fill: "blue" });
     assert.ok(this.renderer.text.lastCall.returnValue.attr.called);
@@ -532,19 +532,19 @@ QUnit.test("render with label, position is bottom", function(assert) {
     var options = { verticalLine: { label: { visible: true, font: { size: 14, color: "red" }, backgroundColor: "blue" } } };
     var crosshair = this.createCrosshair(options, { position: "bottom" });
 
-    //act
+    // act
     crosshair.render();
-    //assert
+    // assert
     checkText(assert, this.renderer.text, "0", 0, 0, { align: "center" }, { 'font-size': 14, fill: "red" });
     checkRect(assert, this.renderer.rect, 0, 0, 0, 0, { fill: "blue" });
 });
 
 QUnit.test("show label", function(assert) {
     var crosshair = this.createCrosshair({ verticalLine: { label: { visible: true } } }, {});
-    //act
+    // act
     crosshair.render();
     crosshair.show(getDataForShowCrosshair({ x: 110.9, y: 50.4, xValue: "x110", yValue: "y50", axis: "defaultAxisName" }));
-    //assert
+    // assert
     assert.equal(crosshair._vertical.labels[0].text.attr.callCount, 3);
     assert.deepEqual(crosshair._vertical.labels[0].text.attr.getCall(1).args[0], { text: "x110_formatted", x: 80, y: 30 });
     assert.deepEqual(crosshair._vertical.labels[0].text.attr.getCall(2).args[0], { x: 80, y: 30 });
@@ -557,10 +557,10 @@ QUnit.test("show label", function(assert) {
 QUnit.test("show label, null text", function(assert) {
     var crosshair = this.createCrosshair({ verticalLine: { label: { visible: true } } }, {});
     this.axes[0][0].getFormattedValue = function() { return null; };
-    //act
+    // act
     crosshair.render();
     crosshair.show(getDataForShowCrosshair({ x: 110, y: 50, xValue: "x110", yValue: "y50", axis: "defaultAxisName" }));
-    //assert
+    // assert
     assert.equal(crosshair._vertical.labels[0].text.attr.callCount, 2);
     assert.deepEqual(crosshair._vertical.labels[0].text.attr.lastCall.args[0], { text: "" });
     assert.equal(crosshair._vertical.labels[0].background.attr.callCount, 2);
@@ -624,21 +624,21 @@ QUnit.module("show - hide", environment);
 
 QUnit.test("show", function(assert) {
     var crosshair = this.createCrosshair({}, {});
-    //act
+    // act
     crosshair.render();
     crosshair.show(getDataForShowCrosshair({ x: 110, y: 50, xValue: "x110", yValue: "y50", axis: "defaultAxisName" }));
-    //assert
+    // assert
     assert.equal(crosshair._crosshairGroup.attr.callCount, 2);
     assert.deepEqual(crosshair._crosshairGroup.attr.getCall(1).args[0], { visibility: "visible" });
 });
 
 QUnit.test("hide", function(assert) {
     var crosshair = this.createCrosshair({}, {});
-    //act
+    // act
     crosshair.render();
     crosshair.show(getDataForShowCrosshair({ x: 110, y: 50, xValue: "x110", yValue: "y50", axis: "defaultAxisName" }));
     crosshair.hide();
-    //assert
+    // assert
     assert.equal(crosshair._crosshairGroup.attr.callCount, 3);
     assert.deepEqual(crosshair._crosshairGroup.attr.getCall(2).args[0], { visibility: "hidden" });
 });
@@ -647,9 +647,9 @@ QUnit.module("Disposing", environment);
 
 QUnit.test("Dispose", function(assert) {
     var crosshair = this.createCrosshair({}, {});
-    //act
+    // act
     crosshair.dispose();
-    //assert
+    // assert
     assert.ok(crosshair);
     assert.deepEqual(crosshair._renderer, null);
     assert.deepEqual(crosshair._crosshairGroup, null);

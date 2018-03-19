@@ -105,7 +105,7 @@ QUnit.test("Render second level in virtualMode after click on icon", function(as
     assert.equal(items.length, 6);
     assert.equal(treeView.option("items").length, 6);
 
-    //T378648
+    // T378648
     var $itemsContainer = $icon.siblings("." + internals.NODE_CONTAINER_CLASS);
     $icon.trigger("dxclick");
     assert.ok(!$itemsContainer.is(":visible"), "collapsed");
@@ -871,11 +871,11 @@ QUnit.test("DataSource change should not influence on items", function(assert) {
     assert.equal(treeView._dataSource.items().length, 3);
     assert.equal(treeView.option("items").length, 6);
 
-    //newData = treeView.option("dataSource");
-    //treeView.option("dataSource", newData);
-    //this.clock.tick(400);
-    //assert.equal(treeView._dataSource.items().length, 3);
-    //assert.equal(treeView.option("items").length, 3); //will be fixed in T384846
+    // newData = treeView.option("dataSource");
+    // treeView.option("dataSource", newData);
+    // this.clock.tick(400);
+    // assert.equal(treeView._dataSource.items().length, 3);
+    // assert.equal(treeView.option("items").length, 3); // will be fixed in T384846
 });
 
 QUnit.test("Reload dataSource", function(assert) {
@@ -1009,7 +1009,7 @@ QUnit.test("Items should update when dataSource changed", function(assert) {
     assert.equal(treeView.option("items")[0].text, "Item 2");
 });
 
-//T480748
+// T480748
 QUnit.test("Datasource filter should not be cleared if virtual mode is disabled", function(assert) {
     var data = $.extend(true, [], data2),
         ds = new DataSource(makeSlowDataSource(data));

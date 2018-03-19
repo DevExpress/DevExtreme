@@ -3,10 +3,10 @@
 var $ = require("jquery"),
     vizMocks = require("../../helpers/vizMocks.js"),
     Series = require("viz/series/base_series").Series,
-    pointModule = require("viz/series/points/base_point");
-
-/* global insertMockFactory, MockAxis */
-require("../../helpers/chartMocks.js");
+    pointModule = require("viz/series/points/base_point"),
+    chartMocks = require("../../helpers/chartMocks.js"),
+    insertMockFactory = chartMocks.insertMockFactory,
+    MockAxis = chartMocks.MockAxis;
 
 require("viz/chart");
 
@@ -17,7 +17,7 @@ var createPoint = function() {
     stub.hasCoords.returns(true);
     stub.isInVisibleArea.returns(true);
 
-    stub._options = {};//see T243839
+    stub._options = {};// see T243839
     return stub;
 };
 var mockPoints = [createPoint(), createPoint(), createPoint(), createPoint(), createPoint()];
@@ -119,6 +119,7 @@ var checkGroups = function(assert, series) {
             data = [{ arg: 1, h: 3, l: -10, o: 1, c: -4 }],
             points;
         series.updateData(data);
+        series.createPoints();
         points = series.getPoints();
 
         assert.ok(points, "Points should be created");
@@ -140,6 +141,7 @@ var checkGroups = function(assert, series) {
             points;
 
         series.updateData(data);
+        series.createPoints();
         points = series.getPoints();
 
         assert.ok(points, "Points should be created");
@@ -161,6 +163,7 @@ var checkGroups = function(assert, series) {
             points;
 
         series.updateData(data);
+        series.createPoints();
         points = series.getPoints();
 
         assert.ok(points, "Points should be created");
@@ -218,9 +221,9 @@ var checkGroups = function(assert, series) {
             label: { visible: false }
 
         }, { renderer: this.renderer });
-        //act
+        // act
         series.updateTemplateFieldNames();
-        //assert
+        // assert
         assert.equal(series._options.openValueField, "openfinancialSeries");
         assert.equal(series._options.closeValueField, "closefinancialSeries");
         assert.equal(series._options.lowValueField, "lowfinancialSeries");
@@ -236,9 +239,9 @@ var checkGroups = function(assert, series) {
             label: { visible: false }
 
         }, { renderer: this.renderer });
-        //act
+        // act
         series.updateTemplateFieldNames();
-        //assert
+        // assert
         assert.equal(series._options.openValueField, "openfinancialSeries");
         assert.equal(series._options.closeValueField, "closefinancialSeries");
         assert.equal(series._options.lowValueField, "lowfinancialSeries");
@@ -251,9 +254,9 @@ var checkGroups = function(assert, series) {
             type: seriesType,
             point: { visible: false }
         });
-        //act
+        // act
         series.draw(false);
-        //assert
+        // assert
 
         checkGroups(assert, series);
 
@@ -265,13 +268,15 @@ var checkGroups = function(assert, series) {
             point: { visible: false }
         });
         series.updateData(this.data);
+
+        series.createPoints();
         $.each(series._points, function(i, pt) {
             pt.x = pt.argument;
             pt.y = pt.value;
         });
-        //act
+        // act
         series.draw(false);
-        //assert
+        // assert
         checkGroups(assert, series);
         assert.ok(series._points.length, "points");
         $.each(series._points, function(i, p) {
@@ -285,13 +290,14 @@ var checkGroups = function(assert, series) {
             point: { visible: false }
         });
         series.updateData(this.data);
+        series.createPoints();
         $.each(series._points, function(i, pt) {
             pt.x = pt.argument;
             pt.y = pt.value;
         });
-        //act
+        // act
         series.draw(true);
-        //assert
+        // assert
         checkGroups(assert, series);
 
         assert.ok(series._points.length, "points");
@@ -306,9 +312,9 @@ var checkGroups = function(assert, series) {
             type: seriesType,
             point: { visible: false }
         });
-        //act
+        // act
         series.draw(false);
-        //assert
+        // assert
 
         assert.ok(series._labelsGroup);
         assert.deepEqual(series._labelsGroup._stored_settings, {
@@ -327,9 +333,9 @@ var checkGroups = function(assert, series) {
             type: seriesType,
             point: { visible: false }
         });
-        //act
+        // act
         series.draw(true);
-        //assert
+        // assert
 
         assert.ok(series._labelsGroup);
         assert.deepEqual(series._labelsGroup._stored_settings, {
@@ -357,15 +363,16 @@ var checkGroups = function(assert, series) {
                 valueAxis: new MockAxis({ renderer: this.renderer })
             });
             this.series.updateData(this.data);
+            this.series.createPoints();
         },
         afterEach: environment.afterEach
     });
 
     QUnit.test("Draw without animation", function(assert) {
         var series = this.series;
-        //act
+        // act
         series.draw(false);
-        //assert
+        // assert
         assert.ok(series._points.length);
         $.each(series._points, function(i, p) {
             assert.ok(p.draw.calledOnce);
@@ -377,9 +384,9 @@ var checkGroups = function(assert, series) {
 
     QUnit.test("Draw with animation", function(assert) {
         var series = this.series;
-        //act
+        // act
         series.draw(true);
-        //assert
+        // assert
         assert.ok(series._points.length);
         $.each(series._points, function(i, p) {
             assert.ok(p.draw.calledOnce);
@@ -420,6 +427,7 @@ var checkGroups = function(assert, series) {
         });
 
         series.updateData(this.data);
+        series.createPoints();
 
         assert.equal(series.level, "close", "calc level");
         assert.equal(this.createPoint.callCount, 5);
@@ -442,6 +450,7 @@ var checkGroups = function(assert, series) {
             reduction: { color: "green", level: "open" }
         });
         series.updateData(this.data);
+        series.createPoints();
 
         assert.equal(series.level, "open");
         assert.equal(this.createPoint.callCount, 5);
@@ -469,9 +478,11 @@ var checkGroups = function(assert, series) {
                 reduction: { color: "green", level: "open" }
             });
         series.updateData(data);
-        //Act
+        series.createPoints();
+        // Act
         series.updateData(data);
-        //Assert
+        series.createPoints();
+        // Assert
         assert.equal(series.level, "open");
 
         assert.equal(series._points.length, 5);
@@ -501,6 +512,7 @@ var checkGroups = function(assert, series) {
             reduction: { color: "green", level: "high" }
         });
         series.updateData(this.data);
+        series.createPoints();
 
         assert.equal(series.level, "high");
 
@@ -524,6 +536,7 @@ var checkGroups = function(assert, series) {
             reduction: { color: "green", level: "low" }
         });
         series.updateData(this.data);
+        series.createPoints();
         assert.equal(series.level, "low");
 
 
@@ -567,6 +580,7 @@ var checkGroups = function(assert, series) {
             innerColor: "innerColor"
         });
         series.updateData(this.data);
+        series.createPoints();
 
         assert.deepEqual(this.createPoint.getCall(0).args[2].styles, {
             hover: {
@@ -652,6 +666,7 @@ var checkGroups = function(assert, series) {
             valueAxis: new MockAxis({ renderer: this.renderer })
         });
         series.updateData(this.data);
+        series.createPoints();
         series.draw(false);
 
         assert.deepEqual(series._markersGroup.defaultMarkersGroup._stored_settings, {
@@ -701,6 +716,7 @@ var checkGroups = function(assert, series) {
             innerColor: "innerColor"
         });
         series.updateData(this.data);
+        series.createPoints();
 
         assert.deepEqual(series._getPointOptions().styles, {
             hover: {
@@ -791,6 +807,7 @@ var checkGroups = function(assert, series) {
             innerColor: "innerColor"
         });
         series.updateData(this.data);
+        series.createPoints();
 
         assert.deepEqual(series._getPointOptions().styles, {
             hover: {
@@ -885,6 +902,7 @@ var checkGroups = function(assert, series) {
             innerColor: "innerColor"
         });
         series.updateData(this.data);
+        series.createPoints();
 
         assert.deepEqual(series._getPointOptions().styles, {
             hover: {
@@ -978,6 +996,7 @@ var checkGroups = function(assert, series) {
             innerColor: "innerColor"
         });
         series.updateData(this.data);
+        series.createPoints();
 
         assert.deepEqual(series._getPointOptions().styles, {
             hover: {
@@ -1067,6 +1086,7 @@ var checkGroups = function(assert, series) {
         });
 
         series.updateData(this.data);
+        series.createPoints();
 
         assert.equal(series._getPointSize(), 10);
     });
@@ -1087,6 +1107,7 @@ var checkGroups = function(assert, series) {
         });
 
         series.updateData(this.data);
+        series.createPoints();
 
         assert.equal(series._getPointSize(), 10);
     });
@@ -1128,6 +1149,7 @@ var checkGroups = function(assert, series) {
             }
         });
         series.updateData(this.data);
+        series.createPoints();
 
         assert.deepEqual(series.getAllPoints()[0].updateOptions.lastCall.args[0].styles, {
             usePointCustomOptions: true,
@@ -1363,6 +1385,7 @@ var checkGroups = function(assert, series) {
             series = createSeries(this.options);
 
         series.updateData(data);
+        series.createPoints();
 
         assert.equal(series._points.length, 0);
     });
@@ -1372,6 +1395,7 @@ var checkGroups = function(assert, series) {
             series = createSeries(this.options);
 
         series.updateData(data);
+        series.createPoints();
 
         assert.equal(series._points.length, 0);
     });
@@ -1381,6 +1405,7 @@ var checkGroups = function(assert, series) {
             series = createSeries(this.options);
 
         series.updateData(data);
+        series.createPoints();
 
         assert.equal(series._points.length, 0);
     });
@@ -1390,6 +1415,7 @@ var checkGroups = function(assert, series) {
             series = createSeries(this.options);
 
         series.updateData(data);
+        series.createPoints();
 
         assert.equal(series._points.length, 1);
     });
@@ -1399,6 +1425,7 @@ var checkGroups = function(assert, series) {
             series = createSeries(this.options);
 
         series.updateData(data);
+        series.createPoints();
 
         assert.equal(series._points.length, 0);
     });
@@ -1408,6 +1435,7 @@ var checkGroups = function(assert, series) {
             series = createSeries(this.options);
 
         series.updateData(data);
+        series.createPoints();
 
         assert.equal(series._points.length, 1);
     });
@@ -1417,6 +1445,7 @@ var checkGroups = function(assert, series) {
             series = createSeries(this.options);
 
         series.updateData(data);
+        series.createPoints();
 
         assert.equal(series._points.length, 0);
     });
@@ -1426,6 +1455,7 @@ var checkGroups = function(assert, series) {
             series = createSeries(this.options);
 
         series.updateData(data);
+        series.createPoints();
 
         assert.equal(series._points.length, 1);
     });
@@ -1435,6 +1465,7 @@ var checkGroups = function(assert, series) {
             series = createSeries(this.options);
 
         series.updateData(data);
+        series.createPoints();
 
         assert.equal(series._points.length, 0);
     });
@@ -1444,36 +1475,9 @@ var checkGroups = function(assert, series) {
             series = createSeries(this.options);
 
         series.updateData(data);
+        series.createPoints();
 
         assert.equal(series._points.length, 1);
-    });
-
-    QUnit.module("Update animations", {
-        beforeEach: function() {
-            environment.beforeEach.call(this);
-            this.options = {
-                type: "stock"
-            };
-        },
-        afterEach: environment.afterEach
-    });
-
-    QUnit.test("Check draw complete", function(assert) {
-        var data = [{ date: 1, open: 1, close: 1, low: 1, high: null }],
-            series = createSeries(this.options, {
-                argumentAxis: new MockAxis({ renderer: this.renderer }),
-                valueAxis: new MockAxis({ renderer: this.renderer })
-            }),
-            newOptions = $.extend(true, {}, series.getOptions(), { type: "line" });
-
-        series.updateData(data);
-        series.draw(false);
-
-        series.updateOptions(newOptions);
-        var drawSpy = sinon.spy(series, "_draw");
-        series.draw(true);
-
-        assert.ok(drawSpy.calledOnce);
     });
 
     QUnit.module("Series visibility", environment);
@@ -1487,10 +1491,12 @@ var checkGroups = function(assert, series) {
             point: { visible: true }
         });
         series.updateData([{ arg: 1, open: 1, close: 1, low: 1, high: 1 }, { arg: 2, open: 1, close: 1, low: 1, high: 1 }, { arg: 3, open: 1, close: 1, low: 1, high: 1 }, { arg: 4, open: 1, close: 1, low: 1, high: 1 }]);
+        series.createPoints();
+
         series.hide();
 
         var points = series.getPoints();
-        //see T243839
+        // see T243839
         $.each(points, function(_, point) {
             assert.ok(point._options.visible === false);
         });
@@ -1505,11 +1511,12 @@ var checkGroups = function(assert, series) {
             point: { visible: false }
         });
         series.updateData([{ arg: 1, open: 1, close: 1, low: 1, high: 1 }, { arg: 2, open: 1, close: 1, low: 1, high: 1 }, { arg: 3, open: 1, close: 1, low: 1, high: 1 }, { arg: 4, open: 1, close: 1, low: 1, high: 1 }]);
+        series.createPoints();
 
         series.show();
 
         var points = series.getPoints();
-        //see T243839
+        // see T243839
         $.each(points, function(_, point) {
             assert.ok(point._options.visible === true);
         });
@@ -1537,9 +1544,9 @@ var checkGroups = function(assert, series) {
             type: seriesType,
             point: { visible: false }
         });
-        //act
+        // act
         series.draw(false);
-        //assert
+        // assert
 
         checkGroups(assert, series);
     });
@@ -1550,13 +1557,14 @@ var checkGroups = function(assert, series) {
             point: { visible: false }
         });
         series.updateData(this.data);
+        series.createPoints();
         $.each(series._points, function(i, pt) {
             pt.x = pt.argument;
             pt.y = pt.value;
         });
-        //act
+        // act
         series.draw(false);
-        //assert
+        // assert
         checkGroups(assert, series);
         assert.ok(series._points.length, "points");
         $.each(series._points, function(i, p) {
@@ -1571,13 +1579,14 @@ var checkGroups = function(assert, series) {
 
         });
         series.updateData(this.data);
+        series.createPoints();
         $.each(series._points, function(i, pt) {
             pt.x = pt.argument;
             pt.y = pt.value;
         });
-        //act
+        // act
         series.draw(true);
-        //assert
+        // assert
         checkGroups(assert, series);
 
         assert.ok(series._points.length, "points");
@@ -1602,15 +1611,16 @@ var checkGroups = function(assert, series) {
                 valueAxis: new MockAxis({ renderer: this.renderer })
             });
             this.series.updateData(this.data);
+            this.series.createPoints();
         },
         afterEach: environment.afterEach
     });
 
     QUnit.test("Draw without animation", function(assert) {
         var series = this.series;
-        //act
+        // act
         series.draw(false);
-        //assert
+        // assert
         assert.ok(series._points.length);
         $.each(series._points, function(i, p) {
             assert.ok(p.draw.calledOnce);
@@ -1622,9 +1632,9 @@ var checkGroups = function(assert, series) {
 
     QUnit.test("Draw with animation", function(assert) {
         var series = this.series;
-        //act
+        // act
         series.draw(true);
-        //assert
+        // assert
         assert.ok(series._points.length);
         $.each(series._points, function(i, p) {
             assert.ok(p.draw.calledOnce);
@@ -1662,6 +1672,7 @@ var checkGroups = function(assert, series) {
         });
 
         series.updateData(this.data);
+        series.createPoints();
 
         assert.equal(series.level, "close", "calc level");
         assert.equal(this.createPoint.callCount, 5);
@@ -1684,6 +1695,7 @@ var checkGroups = function(assert, series) {
             reduction: { color: "green", level: "open" }
         });
         series.updateData(this.data);
+        series.createPoints();
 
         assert.equal(series.level, "open");
         assert.equal(this.createPoint.callCount, 5);
@@ -1711,9 +1723,11 @@ var checkGroups = function(assert, series) {
                 reduction: { color: "green", level: "open" }
             });
         series.updateData(data);
-        //Act
+        series.createPoints();
+        // Act
         series.updateData(data);
-        //Assert
+        series.createPoints();
+        // Assert
         assert.equal(series.level, "open");
 
         assert.equal(series._points.length, 5);
@@ -1743,6 +1757,7 @@ var checkGroups = function(assert, series) {
             reduction: { color: "green", level: "high" }
         });
         series.updateData(this.data);
+        series.createPoints();
 
         assert.equal(series.level, "high");
 
@@ -1766,6 +1781,7 @@ var checkGroups = function(assert, series) {
             reduction: { color: "green", level: "low" }
         });
         series.updateData(this.data);
+        series.createPoints();
         assert.equal(series.level, "low");
 
 
@@ -1810,6 +1826,7 @@ var checkGroups = function(assert, series) {
             innerColor: "innerColor"
         });
         series.updateData(this.data);
+        series.createPoints();
 
         assert.deepEqual(this.createPoint.getCall(0).args[2].styles, {
             hover: {
@@ -1904,6 +1921,7 @@ var checkGroups = function(assert, series) {
             valueAxis: new MockAxis({ renderer: this.renderer })
         });
         series.updateData(this.data);
+        series.createPoints();
         series.draw(false);
 
         assert.deepEqual(series._markersGroup.defaultMarkersGroup._stored_settings, {
@@ -1956,6 +1974,7 @@ var checkGroups = function(assert, series) {
             }),
             styles;
         series.updateData(this.data);
+        series.createPoints();
 
         styles = series._getPointOptions().styles;
 
@@ -2012,6 +2031,7 @@ var checkGroups = function(assert, series) {
             styles;
 
         series.updateData(this.data);
+        series.createPoints();
         styles = series._getPointOptions().styles;
 
         assert.strictEqual(styles.hover.fill, "seriesColor", "hover.fill color");
@@ -2071,6 +2091,7 @@ var checkGroups = function(assert, series) {
             }, { renderer: this.renderer }),
             styles;
         series.updateData(this.data);
+        series.createPoints();
 
         styles = series._getPointOptions().styles;
         assert.strictEqual(styles.hover.fill, "h-color", "hover.fill color");
@@ -2143,6 +2164,7 @@ var checkGroups = function(assert, series) {
             }
         });
         series.updateData(this.data);
+        series.createPoints();
 
         assert.deepEqual(series.getAllPoints()[0].updateOptions.lastCall.args[0].styles, {
             usePointCustomOptions: true,

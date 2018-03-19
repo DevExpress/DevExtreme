@@ -565,6 +565,7 @@ module.exports = {
             * @publicName selectionFilter
             * @type Filter expression
             * @default []
+            * @fires dxDataGridOptions_onOptionChanged
             */
             selectionFilter: [],
             /**
@@ -583,6 +584,7 @@ module.exports = {
              * @name GridBaseOptions_selectedRowKeys
              * @publicName selectedRowKeys
              * @type Array<any>
+             * @fires GridBaseOptions_onSelectionChanged
              */
             selectedRowKeys: []
         };
@@ -766,38 +768,39 @@ module.exports = {
 
                     if(column.command === "select") {
                         return function(container, options) {
-                            that.renderSelectCheckBoxContainer(column, container, options);
+                            that.renderSelectCheckBoxContainer(container, options);
                         };
                     } else {
                         return that.callBase(column);
                     }
                 },
 
-                renderSelectCheckBoxContainer: function(column, $container, options) {
+                renderSelectCheckBoxContainer: function($container, options) {
                     if(options.rowType === "data" && !options.row.inserted) {
                         $container.addClass(EDITOR_CELL_CLASS);
                         this._attachCheckBoxClickEvent($container);
 
                         this.setAria("label", messageLocalization.format("dxDataGrid-ariaSelectRow"), $container);
-                        this._renderSelectCheckBox($container, options.value, column);
+                        this._renderSelectCheckBox($container, options);
                     }
                 },
 
-                _renderSelectCheckBox: function(container, value, column) {
+                _renderSelectCheckBox: function(container, options) {
                     var groupElement = $("<div>")
                             .addClass(SELECT_CHECKBOX_CLASS)
                             .appendTo(container);
 
-                    this.getController("editorFactory").createEditor(groupElement, extend({}, column, {
+                    this.getController("editorFactory").createEditor(groupElement, extend({}, options.column, {
                         parentType: "dataRow",
                         dataType: "boolean",
-                        value: value,
+                        value: options.value,
                         tabIndex: -1,
                         setValue: function(value, e) {
                             if(e && e.event && e.event.type === "keydown") {
                                 eventsEngine.trigger(container, clickEvent.name, e);
                             }
-                        }
+                        },
+                        row: options.row
                     }));
 
                     return groupElement;
@@ -834,7 +837,7 @@ module.exports = {
                                     var $row,
                                         isSelected;
 
-                                    //T108078
+                                    // T108078
                                     if(change.items[index]) {
                                         $row = that._getRowElements($(tableElement)).eq(index);
                                         isSelected = change.items[index].isSelected;
@@ -861,7 +864,7 @@ module.exports = {
 
                     if(selectionMode !== "none") {
                         if(that.option(SHOW_CHECKBOXES_MODE) === "onLongTap" || !support.touch) {
-                            //TODO Not working timeout by hold when it is larger than other timeouts by hold
+                            // TODO Not working timeout by hold when it is larger than other timeouts by hold
                             eventsEngine.on($table, eventUtils.addNamespace(holdEvent.name, "dxDataGridRowsView"), "." + DATA_ROW_CLASS, that.createAction(function(e) {
                                 processLongTap(that.component, e.event);
 

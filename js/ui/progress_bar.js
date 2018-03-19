@@ -120,26 +120,25 @@ var ProgressBar = TrackBar.inherit({
         ]);
     },
 
-    _init: function() {
+    _initMarkup: function() {
+        this._renderStatus();
+
         this.callBase();
+
+        this.$element().addClass(PROGRESSBAR_CLASS);
+        this._$wrapper.addClass(PROGRESSBAR_WRAPPER_CLASS);
+        this._$bar.addClass(PROGRESSBAR_CONTAINER_CLASS);
+
+        this.setAria("role", "progressbar");
+
+        $("<div>").addClass(PROGRESSBAR_RANGE_CONTAINER_CLASS).appendTo(this._$wrapper).append(this._$bar);
+        this._$range.addClass(PROGRESSBAR_RANGE_CLASS);
+
+        this._toggleStatus(this.option("showStatus"));
     },
 
     _render: function() {
         this._createCompleteAction();
-        this._renderStatus();
-        this.callBase();
-    },
-
-    _renderContentImpl: function() {
-        this.$element().addClass(PROGRESSBAR_CLASS);
-        this.setAria("role", "progressbar");
-        this._$wrapper.addClass(PROGRESSBAR_WRAPPER_CLASS);
-        this._$bar.addClass(PROGRESSBAR_CONTAINER_CLASS);
-
-        $("<div>").addClass(PROGRESSBAR_RANGE_CONTAINER_CLASS).appendTo(this._$wrapper).append(this._$bar);
-        this._$range.addClass(PROGRESSBAR_RANGE_CLASS);
-        this._toggleStatus(this.option("showStatus"));
-
         this.callBase();
     },
 

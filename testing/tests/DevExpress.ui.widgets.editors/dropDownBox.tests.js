@@ -4,7 +4,6 @@ var $ = require("jquery"),
     renderer = require("core/renderer"),
     keyboardMock = require("../../helpers/keyboardMock.js"),
     fx = require("animation/fx"),
-    CustomStore = require("data/custom_store"),
     DropDownBox = require("ui/drop_down_box"),
     isRenderer = require("core/utils/type").isRenderer,
     config = require("core/config");
@@ -20,8 +19,7 @@ QUnit.testStart(function() {
     $("#qunit-fixture").html(markup);
 });
 
-var DROP_DOWN_BOX_CLASS = "dx-dropdownbox",
-    DX_TEXTEDITOR_INPUT_CLASS = "dx-texteditor-input",
+var DX_TEXTEDITOR_INPUT_CLASS = "dx-texteditor-input",
     TAB_KEY_CODE = 9,
     DX_STATE_FOCUSED_CLASS = "dx-state-focused";
 
@@ -43,12 +41,6 @@ var moduleConfig = {
 };
 
 QUnit.module("common", moduleConfig);
-
-QUnit.test("element should have correct class", function(assert) {
-    this.$element.dxDropDownBox({});
-
-    assert.ok(this.$element.hasClass(DROP_DOWN_BOX_CLASS), "element has correct class");
-});
 
 QUnit.test("the widget should work without the dataSource", function(assert) {
     this.$element.dxDropDownBox({ value: 1 });
@@ -73,18 +65,6 @@ QUnit.test("the widget should work when dataSource is set to null", function(ass
     instance.option("dataSource", null);
 
     assert.ok(true, "widget works correctly");
-});
-
-QUnit.test("expressions", function(assert) {
-    this.$element.dxDropDownBox({
-        items: this.simpleItems,
-        valueExpr: "id",
-        displayExpr: "name",
-        value: 1
-    });
-
-    var $input = this.$element.find(".dx-texteditor-input");
-    assert.equal($input.val(), "Item 1", "expressions work");
 });
 
 QUnit.test("array value should be supported", function(assert) {
@@ -177,20 +157,6 @@ QUnit.test("content template should work", function(assert) {
     assert.equal($(instance.content()).text(), "Test content", "content template has been rendered");
 });
 
-QUnit.test("field template should work", function(assert) {
-    new DropDownBox(this.$element, {
-        items: this.simpleItems,
-        opened: true,
-        fieldTemplate: function(value, fieldElement) {
-            assert.equal(isRenderer(fieldElement), !!config().useJQuery, "fieldElement is correct");
-            return $("<div>").dxTextBox({ value: 1 });
-        },
-        valueExpr: "id",
-        displayExpr: "name",
-        value: 1
-    });
-});
-
 QUnit.test("popup and editor width should be equal", function(assert) {
     var instance = new DropDownBox(this.$element, {
         items: this.simpleItems,
@@ -269,6 +235,21 @@ QUnit.test("dropDownBox should update display text after displayExpr changed", f
 
     instance.option("displayExpr", "text");
     assert.equal($input.val(), "text 1", "input text has been updated");
+});
+
+QUnit.test("dropDownBox should update display text when displayExpr was changed on initialization", function(assert) {
+    this.$element.dxDropDownBox({
+        items: [{ id: 1, name: "item 1", text: "text 1" }],
+        onInitialized: function(e) {
+            e.component.option("displayExpr", "name");
+        },
+        valueExpr: "id",
+        value: 1
+    });
+
+    var $input = this.$element.find(".dx-texteditor-input");
+
+    assert.equal($input.val(), "item 1", "input text is correct");
 });
 
 QUnit.test("text option should follow the displayValue option", function(assert) {
@@ -389,125 +370,6 @@ QUnit.test("maxHeight should be 90% of maximum of top or bottom offsets includin
         offset.restore();
     }
 });
-
-
-QUnit.module("hidden input", moduleConfig);
-
-QUnit.test("a hidden input should be rendered", function(assert) {
-    this.$element.dxDropDownBox();
-
-    var $input = this.$element.find("input[type='hidden']");
-
-    assert.equal($input.length, 1, "a hidden input is rendered");
-});
-
-QUnit.test("the hidden input should have correct value on widget init", function(assert) {
-    this.$element.dxDropDownBox({
-        items: [1, 2, 3],
-        value: 2
-    });
-
-    var $input = this.$element.find("input[type='hidden']");
-
-    assert.equal($input.val(), "2", "input value is correct");
-});
-
-QUnit.test("the hidden input should get correct value on widget value change", function(assert) {
-    this.$element.dxDropDownBox({
-        items: [1, 2, 3],
-        value: 2
-    });
-
-    var instance = this.$element.dxDropDownBox("instance"),
-        $input = this.$element.find("input[type='hidden']");
-
-    instance.option("value", 1);
-    assert.equal($input.val(), "1", "input value is correct");
-});
-
-QUnit.test("the hidden input should get display text as value if widget value is an object", function(assert) {
-    var items = [{ id: 1, text: "one" }];
-
-    this.$element.dxDropDownBox({
-        items: items,
-        value: items[0],
-        valueExpr: "this",
-        displayExpr: "text"
-    });
-
-    var $input = this.$element.find("input[type='hidden']");
-
-    assert.equal($input.val(), items[0].text, "input value is correct");
-});
-
-QUnit.test("the hidden input should get value in respect of the 'valueExpr' option", function(assert) {
-    var items = [{ id: 1, text: "one" }];
-
-    this.$element.dxDropDownBox({
-        items: items,
-        value: items[0].id,
-        valueExpr: "id",
-        displayExpr: "text"
-    });
-
-    var $input = this.$element.find("input[type='hidden']");
-
-    assert.equal($input.val(), items[0].id, "input value is correct");
-});
-
-
-QUnit.test("the hidden input should get correct values if async data source is used", function(assert) {
-    var data = [0, 1, 2, 3, 4],
-        initialValue = 2,
-        newValue = 4,
-        timeout = 100,
-        store = new CustomStore({
-            load: function() {
-                var d = $.Deferred();
-                setTimeout(function() {
-                    d.resolve(data);
-                }, timeout);
-                return d.promise();
-            },
-            byKey: function(key) {
-                var d = $.Deferred();
-                setTimeout(function() {
-                    d.resolve(key);
-                }, timeout);
-                return d.promise();
-            }
-        }),
-        $element = this.$element.dxDropDownBox({
-            dataSource: store,
-            value: initialValue,
-            valueExpr: "id",
-            displayExpr: "name"
-        }),
-        instance = $element.dxDropDownBox("instance");
-
-    this.clock.tick(timeout);
-
-    assert.equal($element.find("input[type='hidden']").val(), initialValue, "first rendered option value is correct");
-
-    instance.option("value", newValue);
-    this.clock.tick(timeout);
-    assert.equal($element.find("input[type='hidden']").val(), newValue, "first rendered option value is correct");
-});
-
-
-QUnit.module("the 'name' option", moduleConfig);
-
-QUnit.test("widget hidden input should get the 'name' attribute with a correct value", function(assert) {
-    var expectedName = "some_name",
-        $element = this.$element.dxDropDownBox({
-            name: expectedName
-        }),
-        $input = $element.find("input[type='hidden']");
-
-    assert.equal($input.attr("name"), expectedName, "the input 'name' attribute has correct value");
-});
-
-
 
 QUnit.module("keyboard navigation", moduleConfig);
 

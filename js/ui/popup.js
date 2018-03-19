@@ -17,7 +17,8 @@ var $ = require("../core/renderer"),
     themes = require("./themes"),
     Overlay = require("./overlay"),
     EmptyTemplate = require("./widget/empty_template"),
-    domUtils = require("../core/utils/dom");
+    domUtils = require("../core/utils/dom"),
+    windowUtils = require("../core/utils/window");
 
 require("./toolbar/ui.toolbar.base");
 
@@ -173,6 +174,20 @@ var Popup = Overlay.inherit({
             */
 
             /**
+             * @name dxPopupOptions_width
+             * @publicName width
+             * @fires dxPopupOptions_onResize
+             * @inheritdoc
+             */
+
+            /**
+             * @name dxPopupOptions_height
+             * @publicName height
+             * @fires dxPopupOptions_onResize
+             * @inheritdoc
+             */
+
+            /**
             * @name dxPopupOptions_toolbarItems
             * @publicName toolbarItems
             * @type Array<Object>
@@ -248,12 +263,6 @@ var Popup = Overlay.inherit({
                     return device.phone && currentTheme === "win8";
                 },
                 options: {
-                    /**
-                    * @name dxPopupOptions_position
-                    * @publicName position
-                    * @type string|positionConfig
-                    * @inheritdoc
-                    */
                     position: {
                         my: "top center",
                         at: "top center",
@@ -698,7 +707,9 @@ var Popup = Overlay.inherit({
         } else {
             this.callBase.apply(this, arguments);
         }
-        this._renderFullscreenWidthClass();
+        if(windowUtils.hasWindow()) {
+            this._renderFullscreenWidthClass();
+        }
     },
 
     _renderFullscreenWidthClass: function() {
@@ -749,9 +760,13 @@ var Popup = Overlay.inherit({
                 this._createTitleRenderAction(args.value);
                 break;
             case "toolbarItems":
+                var isPartialUpdate = args.fullName.search(".options") !== -1;
                 this._renderTitle();
                 this._renderBottom();
-                this._renderGeometry();
+
+                if(!isPartialUpdate) {
+                    this._renderGeometry();
+                }
                 break;
             case "dragEnabled":
                 this._renderDrag();

@@ -424,7 +424,7 @@ module.exports = gridCore.Controller.inherit((function() {
                         if(options.requireTotalCount && loadResult.extra.totalCount === undefined) {
                             loadResult.extra.totalCount = store.totalCount(loadResult.storeLoadOptions);
                         }
-                        //TODO map function??
+                        // TODO map function??
                         when(loadResult.data, loadResult.extra.totalCount).done(function(data, totalCount) {
                             loadResult.extra.totalCount = totalCount;
                             d.resolve(data, loadResult.extra);

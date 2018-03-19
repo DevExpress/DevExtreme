@@ -158,7 +158,7 @@ QUnit.test("External widgets templates work with cache (T298344)", function(asse
 
     $("head").append('<li' + 'nk rel="dx-template" type="text/html" href="../../helpers/TestViewTemplates.html"/>');
 
-    //init cache
+    // init cache
     engine = new ViewEngineTester({
         $root: $("#child-component-creation").clone(),
         templateCacheStorage: storage,
@@ -170,7 +170,7 @@ QUnit.test("External widgets templates work with cache (T298344)", function(asse
 
         assert.equal(engine.$root.find("#ext-tmpl").length, 1);
 
-        //get from cache
+        // get from cache
         engine = new ViewEngineTester({
             $root: $("#child-component-creation").clone(),
             templateCacheStorage: storage,
@@ -194,7 +194,7 @@ QUnit.test("Garbage dynamic markup is not put in cache (T303333)", function(asse
 
     $("head").append('<li' + 'nk rel="dx-template" type="text/html" href="../../helpers/TestViewTemplates.html"/>');
 
-    //init cache
+    // init cache
     $root = $("#child-component-creation").clone();
     $root.append("<div class='garbage-markup'></div>");
     engine = new ViewEngineTester({
@@ -208,7 +208,7 @@ QUnit.test("Garbage dynamic markup is not put in cache (T303333)", function(asse
 
         assert.equal($root.find(".garbage-markup").length, 1);
 
-        //get from cache
+        // get from cache
         $root = $("#child-component-creation").clone();
         engine = new ViewEngineTester({
             $root: $root,
@@ -224,7 +224,6 @@ QUnit.test("Garbage dynamic markup is not put in cache (T303333)", function(asse
     });
 
 });
-
 
 
 QUnit.module("ViewEngine");
@@ -386,14 +385,14 @@ QUnit.test("Templates are alive if obtained from cache", function(assert) {
             }
         });
 
-    //init cache
+    // init cache
     new ViewEngineCacheTester({
         $root: $("#child-component-creation"),
         templateCacheStorage: storage,
         templatesVersion: "1"
     });
 
-    //get from cache
+    // get from cache
     engine = new ViewEngineCacheTester({
         $root: $("#child-component-creation"),
         templateCacheStorage: storage,
@@ -569,7 +568,7 @@ QUnit.test("Render view complex", function(assert) {
     var model = { data: "data" };
     var viewInfo = { viewName: "index", model: model };
 
-    //engine.afterViewSetup(viewInfo);
+    // engine.afterViewSetup(viewInfo);
 
 
     var $markup = engine._testRenderView(viewInfo);

@@ -2,9 +2,12 @@
 
 var $ = require("../../core/renderer"),
     devices = require("../../core/devices"),
+    windowUtils = require("../../core/utils/window"),
     messageLocalization = require("../../localization/message"),
     registerComponent = require("../../core/component_registrator"),
+    getPublicElement = require("../../core/utils/dom").getPublicElement,
     extend = require("../../core/utils/extend").extend,
+    noop = require("../../core/utils/common").noop,
     PullDownStrategy = require("./ui.scroll_view.native.pull_down"),
     SwipeDownStrategy = require("./ui.scroll_view.native.swipe_down"),
     SlideDownStrategy = require("./ui.scroll_view.native.slide_down"),
@@ -33,7 +36,19 @@ var refreshStrategies = {
     simulated: SimulatedStrategy
 };
 
-var ScrollView = Scrollable.inherit({
+var isServerSide = !windowUtils.hasWindow();
+
+var scrollViewServerConfig = {
+    release: noop,
+    refresh: noop,
+    _optionChanged: function(args) {
+        if(args.name !== "onUpdated") {
+            return this.callBase.apply(this, arguments);
+        }
+    }
+};
+
+var ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
@@ -116,7 +131,7 @@ var ScrollView = Scrollable.inherit({
         this._loadingIndicatorEnabled = true;
     },
 
-    _initMarkup: function() {
+    _initScrollableMarkup: function() {
         this.callBase();
         this.$element().addClass(SCROLLVIEW_CLASS);
 
@@ -281,11 +296,11 @@ var ScrollView = Scrollable.inherit({
     },
 
     isEmpty: function() {
-        return !this.content().children().length;
+        return !$(this.content()).children().length;
     },
 
     content: function() {
-        return this._$content.children().eq(1);
+        return getPublicElement(this._$content.children().eq(1));
     },
 
     /**
@@ -318,7 +333,7 @@ var ScrollView = Scrollable.inherit({
     * @hidden
     */
     isFull: function() {
-        return this.content().height() > this._$container.height();
+        return $(this.content()).height() > this._$container.height();
     },
 
     /**

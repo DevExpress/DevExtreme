@@ -997,7 +997,7 @@ module.exports = {
         },
 
         areCoordsOutsideAxis: function(coords) {
-            //getCanvasVisibleArea takes into account inverted case
+            // getCanvasVisibleArea takes into account inverted case
             var canvas = this._translator.getCanvasVisibleArea(),
                 coord = this._isHorizontal ? coords.x : coords.y;
 
@@ -1039,7 +1039,7 @@ module.exports = {
             return filterBreaks(sortingBreaks(breaks), viewport, axisOptions.breakStyle);
         },
 
-        _drawBreak: function(translatedEnd, positionFrom, positionTo, width, options) {
+        _drawBreak: function(translatedEnd, positionFrom, positionTo, width, options, group) {
             var that = this,
                 breakStart = translatedEnd - (!that._translator.isInverted() ? width + 1 : 0),
                 attr = {
@@ -1052,11 +1052,49 @@ module.exports = {
                     "stroke-width": width
                 },
                 getPoints = that._isHorizontal ? rotateLine : function(p) { return p; },
-                drawer = getLineDrawer(that._renderer, spaceAttr, attr, that._axisBreaksGroup, getPoints, positionFrom, breakStart, positionTo, options.isWaved);
+                drawer = getLineDrawer(that._renderer, spaceAttr, attr, group, getPoints, positionFrom, breakStart, positionTo, options.isWaved);
 
             drawer(width / 2, spaceAttr);
             drawer(0, attr);
             drawer(width, attr);
+        },
+
+        _createBreakClipRect: function(from, to) {
+            var that = this,
+                canvas = that._canvas,
+                clipWidth = to - from,
+                clipRect;
+
+            if(that._isHorizontal) {
+                clipRect = that._renderer.clipRect(canvas.left, from, canvas.width, clipWidth);
+            } else {
+                clipRect = that._renderer.clipRect(from, canvas.top, clipWidth, canvas.height);
+            }
+
+            that._breaksElements = that._breaksElements || [];
+            that._breaksElements.push(clipRect);
+
+            return clipRect.id;
+        },
+
+        _createBreaksGroup: function(clipFrom, clipTo) {
+            var that = this,
+                group = that._renderer.g().attr({
+                    "class": that._axisCssPrefix + "breaks",
+                    "clip-path": that._createBreakClipRect(clipFrom, clipTo)
+                }).append(that._scaleBreaksGroup);
+
+            that._breaksElements = that._breaksElements || [];
+            that._breaksElements.push(group);
+            return group;
+        },
+
+        _disposeBreaksGroup: function() {
+            (this._breaksElements || []).forEach(function(clipRect) {
+                clipRect.dispose();
+            });
+
+            this._breaksElements = null;
         },
 
         drawScaleBreaks: function(customCanvas) {
@@ -1067,44 +1105,50 @@ module.exports = {
                 positionFrom,
                 positionTo,
                 breaks = that._translator.getBusinessRange().breaks || [],
-                canvas = that._canvas,
-                clipRect,
+                additionGroup,
+                additionBreakFrom,
+                additionBreakTo,
+                mainGroup,
                 breakOptions;
+
+            that._disposeBreaksGroup();
 
             if(!(breaks && breaks.length)) {
                 return;
             }
 
-            that._axisBreaksGroup.clear();
             breakOptions = {
                 color: that._options.containerColor,
                 borderColor: breakStyle.color,
                 isHorizontal: that._isHorizontal,
                 isWaved: breakStyle.line.toLowerCase() !== "straight"
             };
+
             if(customCanvas) {
                 positionFrom = customCanvas.start;
                 positionTo = customCanvas.end;
             } else {
-                positionFrom = that._orthogonalPositions.start - (options.visible && (position === "left" || position === "top") ? SCALE_BREAK_OFFSET : 0);
+                positionFrom = that._orthogonalPositions.start - (options.visible && !that._axisShift && (position === "left" || position === "top") ? SCALE_BREAK_OFFSET : 0);
                 positionTo = that._orthogonalPositions.end + (options.visible && (position === "right" || position === "bottom") ? SCALE_BREAK_OFFSET : 0);
             }
 
-            that._brakesClipRect && that._brakesClipRect.dispose();
+            mainGroup = that._createBreaksGroup(positionFrom, positionTo);
+
+            if(that._axisShift && options.visible) {
+                additionBreakFrom = that._axisPosition - that._axisShift - SCALE_BREAK_OFFSET;
+                additionBreakTo = additionBreakFrom + SCALE_BREAK_OFFSET * 2;
+                additionGroup = that._createBreaksGroup(additionBreakFrom, additionBreakTo);
+            }
 
             breaks.forEach(function(br) {
                 if(!br.gapSize) {
-                    that._drawBreak(that._getTranslatedCoord(br.to), positionFrom, positionTo, breakStyle.width, breakOptions);
+                    var breakCoord = that._getTranslatedCoord(br.to);
+                    that._drawBreak(breakCoord, positionFrom, positionTo, breakStyle.width, breakOptions, mainGroup);
+                    if(that._axisShift && options.visible) {
+                        that._drawBreak(breakCoord, additionBreakFrom, additionBreakTo, breakStyle.width, breakOptions, additionGroup);
+                    }
                 }
             });
-
-            if(that._isHorizontal) {
-                clipRect = that._renderer.clipRect(canvas.left, positionFrom, canvas.width, positionTo - positionFrom);
-            } else {
-                clipRect = that._renderer.clipRect(positionFrom, canvas.top, positionTo - positionFrom, canvas.height);
-            }
-            that._axisBreaksGroup.attr({ "clip-path": clipRect.id });
-            that._brakesClipRect = clipRect;
         },
 
         _getSpiderCategoryOption: noop,

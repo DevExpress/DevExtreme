@@ -4,6 +4,7 @@ var $ = require("../core/renderer"),
     getPublicElement = require("../core/utils/dom").getPublicElement,
     noop = require("../core/utils/common").noop,
     isDefined = require("../core/utils/type").isDefined,
+    windowUtils = require("../core/utils/window"),
     registerComponent = require("../core/component_registrator"),
     extend = require("../core/utils/extend").extend,
     map = require("../core/utils/iterator").map,
@@ -255,11 +256,18 @@ var SlideOut = CollectionWidget.inherit({
         }
     },
 
-    _render: function() {
-        //TODO: remove this, needed for memory leak tests
-        this._slideOutView._renderShield();
+    _initMarkup: function() {
         this._renderList();
+
         this._renderContentTemplate();
+
+        this.callBase();
+    },
+
+    _render: function() {
+        // TODO: remove this, needed for memory leak tests
+        this._slideOutView._renderShield();
+
         this.callBase();
     },
 
@@ -301,7 +309,7 @@ var SlideOut = CollectionWidget.inherit({
     },
 
     _renderContentTemplate: function() {
-        if(isDefined(this._singleContent)) {
+        if(isDefined(this._singleContent) || !windowUtils.hasWindow()) {
             return;
         }
 
@@ -339,6 +347,7 @@ var SlideOut = CollectionWidget.inherit({
     },
 
     _renderSelection: function() {
+        this._prepareContent();
         this._renderContent();
     },
 

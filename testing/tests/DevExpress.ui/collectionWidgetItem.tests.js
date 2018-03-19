@@ -68,10 +68,10 @@ QUnit.test("changing complex item field should correctly rerender one item", fun
 
     assert.equal($itemElements.eq(0).data("dxItemData").options.value, 1);
 
-    //act
+    // act
     widget.option("items[0].options.value", 2);
 
-    //assert
+    // assert
     var $newItemElements = widget.itemElements();
     assert.equal($newItemElements.eq(0).data("dxItemData").options.value, 2, "item 0 data is changed");
     assert.notEqual($newItemElements.get(0), $itemElements.get(0), "item 0 element is changed");

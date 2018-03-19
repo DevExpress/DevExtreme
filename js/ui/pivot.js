@@ -298,8 +298,11 @@ var Pivot = CollectionWidget.inherit({
         });
     },
 
-    _render: function() {
+    _initMarkup: function() {
         this._renderContentTemplate();
+        this.callBase();
+    },
+    _render: function() {
         this.callBase();
 
         var selectedIndex = this.option("selectedIndex");
@@ -342,6 +345,7 @@ var Pivot = CollectionWidget.inherit({
             $showingItem.removeClass(PIVOT_ITEM_HIDDEN_CLASS);
             domUtils.triggerShownEvent($showingItem);
         } else {
+            this._prepareContent();
             this._renderContent();
         }
 

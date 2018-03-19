@@ -2,7 +2,8 @@
 
 /* global fields */
 
-var utils = require("ui/filter_builder/utils");
+var utils = require("ui/filter_builder/utils"),
+    between = require("ui/filter_builder/between");
 
 var condition1 = ["CompanyName", "=", "Super Mart of the West"],
     condition2 = ["CompanyName", "=", "and"],
@@ -54,7 +55,7 @@ QUnit.module("Errors", function() {
     QUnit.test("E1048", function(assert) {
         assert.throws(
             function() {
-                utils.getOperationFromAvailable(">", utils.getAvailableOperations(fields[0]));
+                utils.getOperationFromAvailable(">", utils.getAvailableOperations(fields[0], {}, []));
             },
             function(e) {
                 return /E1048/.test(e.message);
@@ -133,6 +134,7 @@ QUnit.module("Utils", function() {
         assert.ok(utils.isGroup([["and"], "and", ["and"], "and"]));
         assert.ok(utils.isGroup(["and"]));
         assert.ok(utils.isGroup([]));
+        assert.notOk(utils.isGroup(["value", "range", [1, 2]]));
     });
 
     QUnit.test("isEmptyGroup", function(assert) {
@@ -155,6 +157,7 @@ QUnit.module("Utils", function() {
         assert.notOk(utils.isCondition([[], "and", []]));
         assert.notOk(utils.isCondition(["and"]));
         assert.notOk(utils.isCondition("and"));
+        assert.ok(utils.isCondition(["Column1", "=", [1, 2]]));
     });
 
     QUnit.test("get group value", function(assert) {
@@ -291,104 +294,29 @@ QUnit.module("Utils", function() {
         }]);
     });
 
-    QUnit.test("getAvailableOperations (default)", function(assert) {
-        var operations = utils.getAvailableOperations({}, filterOperationsDescriptions);
-
-        assert.strictEqual(operations[0].text, "Contains");
-        assert.strictEqual(operations[0].value, "contains");
-        assert.strictEqual(operations[0].icon, "contains");
-
-        assert.strictEqual(operations[1].text, "Does not contain");
-        assert.strictEqual(operations[1].value, "notcontains");
-        assert.strictEqual(operations[1].icon, "doesnotcontain");
-
-        assert.strictEqual(operations[2].text, "Starts with");
-        assert.strictEqual(operations[2].value, "startswith");
-        assert.strictEqual(operations[2].icon, "startswith");
-
-        assert.strictEqual(operations[3].text, "Ends with");
-        assert.strictEqual(operations[3].value, "endswith");
-        assert.strictEqual(operations[3].icon, "endswith");
-
-        assert.strictEqual(operations[4].text, "Equals");
-        assert.strictEqual(operations[4].value, "=");
-        assert.strictEqual(operations[4].icon, "equal");
-
-        assert.strictEqual(operations[5].text, "Does not equal");
-        assert.strictEqual(operations[5].value, "<>");
-        assert.strictEqual(operations[5].icon, "notequal");
-    });
-
-    QUnit.test("getAvailableOperations when field with filterOperations", function(assert) {
-        var operations = utils.getAvailableOperations(fields[1], filterOperationsDescriptions);
-
-        assert.strictEqual(operations[0].text, "Equals");
-        assert.strictEqual(operations[0].value, "=");
-        assert.strictEqual(operations[0].icon, "equal");
-
-        assert.strictEqual(operations[1].text, "Does not equal");
-        assert.strictEqual(operations[1].value, "<>");
-        assert.strictEqual(operations[1].icon, "notequal");
-
-        assert.strictEqual(operations[2].text, "Less than");
-        assert.strictEqual(operations[2].value, "<");
-        assert.strictEqual(operations[2].icon, "less");
-
-        assert.strictEqual(operations[3].text, "Greater than");
-        assert.strictEqual(operations[3].value, ">");
-        assert.strictEqual(operations[3].icon, "greater");
-
-        assert.strictEqual(operations[4].text, "Less than or equal to");
-        assert.strictEqual(operations[4].value, "<=");
-        assert.strictEqual(operations[4].icon, "lessorequal");
-
-        assert.strictEqual(operations[5].text, "Greater than or equal to");
-        assert.strictEqual(operations[5].value, ">=");
-        assert.strictEqual(operations[5].icon, "greaterorequal");
-    });
-
-    QUnit.test("getAvailableOperations for field with lookup", function(assert) {
-        var operations = utils.getAvailableOperations({
-            dataField: "Product",
-            lookup: {
-                dataSource: [
-                    "DataGrid",
-                    "PivotGrid",
-                    "TreeList"
-                ]
-            }
-        }, filterOperationsDescriptions);
-
-        assert.deepEqual(operations, [{
-            "icon": "equal",
-            "text": "Equals",
-            "value": "="
-        }, {
-            "icon": "notequal",
-            "text": "Does not equal",
-            "value": "<>"
-        }, {
-            "icon": "isblank",
-            "text": "Is blank",
-            "value": "isblank"
-        }, {
-            "icon": "isnotblank",
-            "text": "Is not blank",
-            "value": "isnotblank"
-        }]);
-    });
-
     QUnit.test("create condition", function(assert) {
-        var condition = utils.createCondition(fields[0]);
+        var condition = utils.createCondition(fields[0], []);
 
         assert.equal(condition[0], "CompanyName");
         assert.equal(condition[1], "contains");
         assert.equal(condition[2], "");
 
-        condition = utils.createCondition(fields[6]);
+        condition = utils.createCondition(fields[6], []);
         assert.equal(condition[0], "ObjectField");
         assert.equal(condition[1], "=");
         assert.equal(condition[2], null);
+    });
+
+    QUnit.test("create condition with custom operation", function(assert) {
+        var condition = utils.createCondition({
+            dataField: "OrderDate",
+            filterOperations: ["lastWeek"]
+        }, [{
+            name: "lastWeek",
+            hasValue: false
+        }]);
+
+        assert.deepEqual(condition, ["OrderDate", "lastWeek"]);
     });
 
     QUnit.test("getCaptionWithParents", function(assert) {
@@ -413,10 +341,52 @@ QUnit.module("Utils", function() {
     });
 
     QUnit.test("updateConditionByOperation", function(assert) {
-        assert.deepEqual(utils.updateConditionByOperation(["value", "=", "123"], "isblank"), ["value", "=", null]);
-        assert.deepEqual(utils.updateConditionByOperation(["value", "=", "123"], "isnotblank"), ["value", "<>", null]);
-        assert.deepEqual(utils.updateConditionByOperation(["value", "=", "123"], "<="), ["value", "<=", "123"]);
-        assert.deepEqual(utils.updateConditionByOperation(["value", "=", null], "<="), ["value", "<=", ""]);
+        assert.deepEqual(utils.updateConditionByOperation(["value", "=", "123"], "isblank", []), ["value", "=", null]);
+        assert.deepEqual(utils.updateConditionByOperation(["value", "=", "123"], "isnotblank", []), ["value", "<>", null]);
+        assert.deepEqual(utils.updateConditionByOperation(["value", "=", "123"], "<=", []), ["value", "<=", "123"]);
+        assert.deepEqual(utils.updateConditionByOperation(["value", "=", null], "<=", []), ["value", "<=", ""]);
+    });
+
+    QUnit.test("change operation from default to custom without value", function(assert) {
+        // arrange, act
+        var updatedCondition = utils.updateConditionByOperation(["value", "=", "123"], "lastDays", [{
+            name: "lastDays",
+            hasValue: false
+        }]);
+
+        // assert
+        assert.deepEqual(updatedCondition, ["value", "lastDays"]);
+    });
+
+    QUnit.test("change operation from default to custom with value", function(assert) {
+        // arrange, act
+        var updatedCondition = utils.updateConditionByOperation(["value", "=", "123"], "range", [{
+            name: "range"
+        }]);
+
+        // assert
+        assert.deepEqual(updatedCondition, ["value", "range", ""]);
+    });
+
+    QUnit.test("change operation from custom without value to default", function(assert) {
+        // arrange, act
+        var updatedCondition = utils.updateConditionByOperation(["value", "lastDays"], "=", [{
+            name: "lastDays",
+            hasValue: false
+        }]);
+
+        // assert
+        assert.deepEqual(updatedCondition, ["value", "=", ""]);
+    });
+
+    QUnit.test("change operation from custom with value to default", function(assert) {
+        // arrange, act
+        var updatedCondition = utils.updateConditionByOperation(["value", "range", [1, 2]], "=", [{
+            name: "range"
+        }]);
+
+        // assert
+        assert.deepEqual(updatedCondition, ["value", "=", ""]);
     });
 
     QUnit.test("getOperationValue", function(assert) {
@@ -459,6 +429,21 @@ QUnit.module("Utils", function() {
 
         field = utils.getField("State", [{ dataField: "State.Name" }, { dataField: "Company" }]);
         assert.equal(field.dataField, "State");
+    });
+
+    // T603218
+    QUnit.test("getNormalizedFields", function(assert) {
+        var normalizedFields = utils.getNormalizedFields([{
+            dataField: "Weight",
+            dataType: 'number',
+            width: 100
+        }, {
+        }]);
+
+        assert.deepEqual(normalizedFields, [{
+            dataField: "Weight",
+            dataType: 'number'
+        }]);
     });
 });
 
@@ -629,21 +614,21 @@ QUnit.module("Remove item", function() {
 
 QUnit.module("Convert to inner structure", function() {
     QUnit.test("from null", function(assert) {
-        assert.deepEqual(utils.convertToInnerStructure(null), ["and"]);
+        assert.deepEqual(utils.convertToInnerStructure(null, []), ["and"]);
     });
 
     QUnit.test("from empty array", function(assert) {
-        assert.deepEqual(utils.convertToInnerStructure([]), ["and"]);
+        assert.deepEqual(utils.convertToInnerStructure([], []), ["and"]);
     });
 
     QUnit.test("from condition", function(assert) {
-        var model = utils.convertToInnerStructure(condition1);
+        var model = utils.convertToInnerStructure(condition1, []);
         assert.deepEqual(model, [condition1, "and"]);
         assert.notEqual(model[0], condition1);
     });
 
     QUnit.test("from short group with two conditions", function(assert) {
-        var model = utils.convertToInnerStructure([condition1, condition2]);
+        var model = utils.convertToInnerStructure([condition1, condition2], []);
         assert.deepEqual(model, [condition1, "and", condition2, "and"]);
         assert.notEqual(model[0], condition1);
         assert.notEqual(model[2], condition2);
@@ -651,19 +636,19 @@ QUnit.module("Convert to inner structure", function() {
 
     QUnit.test("from short condition", function(assert) {
         var shortCondition = ["CompanyName", "DevExpress"],
-            model = utils.convertToInnerStructure(shortCondition);
+            model = utils.convertToInnerStructure(shortCondition, []);
         assert.deepEqual(model, [["CompanyName", "=", "DevExpress"], "and"]);
     });
 
     QUnit.test("from negative group with one condition", function(assert) {
-        var model = utils.convertToInnerStructure(["!", condition1]);
+        var model = utils.convertToInnerStructure(["!", condition1], []);
         assert.deepEqual(model, ["!", [condition1, "and"]]);
         assert.notEqual(model[1][0], condition1);
     });
 
     QUnit.test("from group with several conditions", function(assert) {
         var filter = [condition1, "or", condition2],
-            model = utils.convertToInnerStructure(filter);
+            model = utils.convertToInnerStructure(filter, []);
         assert.notEqual(model, filter);
         assert.deepEqual(model, [condition1, "or", condition2, "or"]);
         assert.notEqual(model[0], filter[0]);
@@ -672,7 +657,7 @@ QUnit.module("Convert to inner structure", function() {
 
     QUnit.test("from short group with several short conditions", function(assert) {
         var filter = [["CompanyName", "DevExpress"], ["CompanyName", "DevExpress"], ["!", ["CompanyName", "DevExpress"]]],
-            model = utils.convertToInnerStructure(filter);
+            model = utils.convertToInnerStructure(filter, []);
 
         assert.deepEqual(model, [
             ["CompanyName", "=", "DevExpress"],
@@ -688,7 +673,7 @@ QUnit.module("Convert to inner structure", function() {
 
     QUnit.test("check lowercase group", function(assert) {
         var filter = [condition1, "Or", condition2, "Or", [condition1, "And", ["!", [condition1, "Or", condition2]]]],
-            model = utils.convertToInnerStructure(filter);
+            model = utils.convertToInnerStructure(filter, []);
         assert.deepEqual(model, [
             condition1,
             "or",
@@ -706,6 +691,15 @@ QUnit.module("Convert to inner structure", function() {
                 "and"
             ],
             "or"
+        ]);
+    });
+
+    QUnit.test("with custom operation", function(assert) {
+        var filter = ["State", "lastWeek"],
+            model = utils.convertToInnerStructure(filter, [{ name: "lastWeek" }]);
+        assert.deepEqual(model, [
+            ["State", "lastWeek"],
+            "and"
         ]);
     });
 });
@@ -747,7 +741,8 @@ QUnit.module("Filter normalization", function() {
         group = utils.getNormalizedFilter(group, fields);
 
         assert.equal(group[0], condition1);
-        assert.equal(group[1], condition2);
+        assert.equal(group[1], "and");
+        assert.equal(group[2], condition2);
 
         group = [condition1, "or", [condition2, "or"], "or"];
         group = utils.getNormalizedFilter(group, fields);
@@ -757,7 +752,7 @@ QUnit.module("Filter normalization", function() {
         group = [condition1, "and", condition2, "and", ["and"], "and"];
         group = utils.getNormalizedFilter(group, fields);
 
-        assert.deepEqual(group, [condition1, condition2]);
+        assert.deepEqual(group, [condition1, "and", condition2]);
 
         group = [condition1, "and", ["and"], "and"];
         group = utils.getNormalizedFilter(group, fields);
@@ -787,7 +782,7 @@ QUnit.module("Filter normalization", function() {
 
         group = utils.getNormalizedFilter(group, fields);
 
-        assert.deepEqual(group, [condition1, condition2]);
+        assert.deepEqual(group, [condition1, "and", condition2]);
         assert.equal(group[0], condition1);
     });
 
@@ -801,7 +796,7 @@ QUnit.module("Filter normalization", function() {
         group = ["!", [condition1, "and", condition2, "and"]];
         group = utils.getNormalizedFilter(group, fields);
 
-        assert.deepEqual(group, ["!", [condition1, condition2]]);
+        assert.deepEqual(group, ["!", [condition1, "and", condition2]]);
         assert.equal(group[1][0], condition1);
     });
 
@@ -816,7 +811,7 @@ QUnit.module("Filter normalization", function() {
 
         group = utils.getNormalizedFilter(group, fields);
 
-        assert.deepEqual(group, [condition2, ["!", condition3]]);
+        assert.deepEqual(group, [condition2, "and", ["!", condition3]]);
     });
 
     QUnit.test("get normalized filter from group with one not valid condition", function(assert) {
@@ -847,8 +842,402 @@ QUnit.module("Filter normalization", function() {
 
         group = utils.getNormalizedFilter(group, fields);
 
-        assert.deepEqual(group, [[condition1, condition2], [condition3, condition2]]);
-        assert.equal(group[1][0], condition3);
+        assert.deepEqual(group, [[condition1, "and", condition2], "and", [condition3, "and", condition2]]);
+        assert.equal(group[2][0], condition3);
+    });
+});
+
+
+QUnit.module("getAvailableOperations", {
+    beforeEach: function() {
+        this.customOperations = [{
+            name: "lastDays",
+            caption: "last days",
+            icon: "add",
+            dataTypes: ["date"]
+        }];
+    }
+}, function() {
+
+    QUnit.test("default", function(assert) {
+        var operations = utils.getAvailableOperations({}, filterOperationsDescriptions, []);
+
+        assert.strictEqual(operations[0].text, "Contains");
+        assert.strictEqual(operations[0].value, "contains");
+        assert.strictEqual(operations[0].icon, "contains");
+
+        assert.strictEqual(operations[1].text, "Does not contain");
+        assert.strictEqual(operations[1].value, "notcontains");
+        assert.strictEqual(operations[1].icon, "doesnotcontain");
+
+        assert.strictEqual(operations[2].text, "Starts with");
+        assert.strictEqual(operations[2].value, "startswith");
+        assert.strictEqual(operations[2].icon, "startswith");
+
+        assert.strictEqual(operations[3].text, "Ends with");
+        assert.strictEqual(operations[3].value, "endswith");
+        assert.strictEqual(operations[3].icon, "endswith");
+
+        assert.strictEqual(operations[4].text, "Equals");
+        assert.strictEqual(operations[4].value, "=");
+        assert.strictEqual(operations[4].icon, "equal");
+
+        assert.strictEqual(operations[5].text, "Does not equal");
+        assert.strictEqual(operations[5].value, "<>");
+        assert.strictEqual(operations[5].icon, "notequal");
+    });
+
+    QUnit.test("when field with filterOperations", function(assert) {
+        var operations = utils.getAvailableOperations(fields[1], filterOperationsDescriptions, []);
+
+        assert.strictEqual(operations[0].text, "Equals");
+        assert.strictEqual(operations[0].value, "=");
+        assert.strictEqual(operations[0].icon, "equal");
+
+        assert.strictEqual(operations[1].text, "Does not equal");
+        assert.strictEqual(operations[1].value, "<>");
+        assert.strictEqual(operations[1].icon, "notequal");
+
+        assert.strictEqual(operations[2].text, "Less than");
+        assert.strictEqual(operations[2].value, "<");
+        assert.strictEqual(operations[2].icon, "less");
+
+        assert.strictEqual(operations[3].text, "Greater than");
+        assert.strictEqual(operations[3].value, ">");
+        assert.strictEqual(operations[3].icon, "greater");
+
+        assert.strictEqual(operations[4].text, "Less than or equal to");
+        assert.strictEqual(operations[4].value, "<=");
+        assert.strictEqual(operations[4].icon, "lessorequal");
+
+        assert.strictEqual(operations[5].text, "Greater than or equal to");
+        assert.strictEqual(operations[5].value, ">=");
+        assert.strictEqual(operations[5].icon, "greaterorequal");
+    });
+
+    QUnit.test("for field with lookup", function(assert) {
+        var operations = utils.getAvailableOperations({
+            dataField: "Product",
+            lookup: {
+                dataSource: [
+                    "DataGrid",
+                    "PivotGrid",
+                    "TreeList"
+                ]
+            }
+        }, filterOperationsDescriptions, []);
+
+        assert.deepEqual(operations, [{
+            "icon": "equal",
+            "text": "Equals",
+            "value": "="
+        }, {
+            "icon": "notequal",
+            "text": "Does not equal",
+            "value": "<>"
+        }, {
+            "icon": "isblank",
+            "text": "Is blank",
+            "value": "isblank"
+        }, {
+            "icon": "isnotblank",
+            "text": "Is not blank",
+            "value": "isnotblank"
+        }]);
+    });
+
+    QUnit.test("ignore custom operation if dataType is not set", function(assert) {
+        // arrange, act
+        var operations = utils.getAvailableOperations({
+            dataField: "test"
+        }, {
+            equals: "="
+        }, [{
+            name: "lastDays",
+            caption: "last days",
+            icon: "add"
+        }]);
+
+        // assert
+        assert.strictEqual(operations.length, 8, "custom operation is ignored");
+    });
+
+
+    QUnit.test("for custom operation with filterOperations", function(assert) {
+        // arrange, act
+        var operations = utils.getAvailableOperations({
+            dataField: "test",
+            filterOperations: ["equals", "lastDays"]
+        }, {
+            equals: "="
+        }, [{
+            name: "lastDays",
+            caption: "last days"
+        }]);
+
+        // assert
+        assert.strictEqual(operations.length, 2, "two operations");
+
+        assert.strictEqual(operations[0].value, "equals");
+        assert.strictEqual(operations[1].value, "lastDays");
+        assert.strictEqual(operations[1].icon, "icon-none");
+    });
+
+    QUnit.test("custom operation by dataType", function(assert) {
+        // arrange, act
+        var operations = utils.getAvailableOperations({
+            dataField: "test",
+            dataType: "date"
+        }, {
+            equals: "="
+        }, this.customOperations);
+
+        // assert
+        assert.strictEqual(operations.length, 9, "9 operations");
+
+        assert.strictEqual(operations[8].value, "lastDays");
+    });
+
+    QUnit.test("ignore custom operation by filterOperations", function(assert) {
+        // arrange, act
+        var operations = utils.getAvailableOperations({
+            dataField: "test",
+            dataType: "date",
+            filterOperations: ["equals"]
+        }, {
+            equals: "="
+        }, this.customOperations);
+
+        // assert
+        assert.strictEqual(operations.length, 1, "1 operation");
+    });
+
+    QUnit.test("ignore custom operation by dataType", function(assert) {
+        // arrange, act
+        var operations = utils.getAvailableOperations({
+            dataField: "test",
+            dataType: "number"
+        }, {
+            equals: "="
+        }, this.customOperations);
+
+        // assert
+        assert.strictEqual(operations.length, 8, "8 operations");
+    });
+
+    QUnit.test("custom operation in field with another dataType", function(assert) {
+        // arrange, act
+        var operations = utils.getAvailableOperations({
+            dataField: "test",
+            dataType: "number",
+            filterOperations: ["lastDays"]
+        }, {
+            equals: "="
+        }, this.customOperations);
+
+        // assert
+        assert.strictEqual(operations.length, 1, "1 operation");
+        assert.strictEqual(operations[0].value, "lastDays");
+    });
+
+    QUnit.test("get custom operation caption by key", function(assert) {
+        // arrange, act
+        var operations = utils.getAvailableOperations({
+            dataField: "test",
+            filterOperations: ["lastDays"]
+        }, { }, [{
+            name: "lastDays"
+        }]);
+
+        // assert
+        assert.strictEqual(operations[0].text, "Last Days");
+    });
+});
+
+QUnit.module("Custom filter expressions", {
+    beforeEach: function() {
+        this.fields = [{
+            dataField: "field1",
+            calculateFilterExpression: function(filterValue, selectedFilterOperation) {
+                return [
+                    [this.dataField, "<>", filterValue],
+                    "or",
+                    [this.dataField, "=", "10"]
+                ];
+            }
+        },
+        {
+            dataField: "field2"
+        }];
+    }
+}, function() {
+
+    QUnit.test("calculateFilterExpression for value = empty array", function(assert) {
+        // arrange
+        var value = [];
+
+        // act, assert
+        assert.deepEqual(utils.getFilterExpression(value, this.fields, []), null);
+    });
+
+    QUnit.test("calculateFilterExpression for value = null", function(assert) {
+        // arrange
+        var value = null;
+
+        // act, assert
+        assert.deepEqual(utils.getFilterExpression(value, this.fields, []), null);
+    });
+
+    QUnit.test("calculateFilterExpression for fieldValue = array", function(assert) {
+        // arrange
+        var value = ["field1", "range", [2, 3]],
+            customOperations = [{
+                name: "range",
+                calculateFilterExpression: function(filterValue, field) {
+                    return [[field.dataField, ">", filterValue[0]], "and", [field.dataField, "<", filterValue[1]]];
+                }
+            }];
+
+        // act, assert
+        assert.deepEqual(utils.getFilterExpression(value, this.fields, customOperations), [
+            ["field1", ">", 2],
+            "and",
+            ["field1", "<", 3]
+        ]);
+    });
+
+    QUnit.test("calculateFilterExpression for condition", function(assert) {
+        // arrange
+        var value = ["field1", "1"];
+
+        // act, assert
+        assert.deepEqual(utils.getFilterExpression(value, this.fields, []), [["field1", "<>", "1"], "or", ["field1", "=", "10"]]);
+    });
+
+    QUnit.test("calculateFilterExpression for group", function(assert) {
+        // arrange
+        var value = [
+            ["field1", "1"],
+            "and",
+            [
+                ["field1", "=", "20"],
+                "or",
+                ["field2", "30"]
+            ]
+        ];
+
+        // act, assert
+        assert.deepEqual(utils.getFilterExpression(value, this.fields, []), [
+            [
+                ["field1", "<>", "1"], "or", ["field1", "=", "10"]
+            ],
+            "and",
+            [
+                [
+                    ["field1", "<>", "20"], "or", ["field1", "=", "10"]
+                ],
+                "or",
+                ["field2", "=", "30"]
+            ]
+        ]);
+    });
+
+    QUnit.test("calculateFilterExpression for short form of group", function(assert) {
+        // arrange
+        var value = [
+            ["field1", "1"],
+            [
+                ["field1", "=", "20"],
+                ["field2", "30"]
+            ]
+        ];
+
+        // act, assert
+        assert.deepEqual(utils.getFilterExpression(value, this.fields, []), [
+            [
+                ["field1", "<>", "1"], "or", ["field1", "=", "10"]
+            ],
+            "and",
+            [
+                [
+                    ["field1", "<>", "20"], "or", ["field1", "=", "10"]
+                ],
+                "and",
+                ["field2", "=", "30"]
+            ]
+        ]);
+    });
+
+    QUnit.test("calculateFilterExpression for group with between", function(assert) {
+        // arrange
+        var value = [
+            ["field2", "20"],
+            "or",
+            ["field2", "30"],
+            "or",
+            ["field1", "between", [null, null]]
+        ];
+
+        // act, assert
+        assert.deepEqual(utils.getFilterExpression(value, this.fields, [between.getConfig()]), [
+            ["field2", "=", "20"],
+            "or",
+            ["field2", "=", "30"]
+        ]);
+
+        value = [
+            ["field2", "20"],
+            ["field2", "30"],
+            ["field1", "between", [null, null]]
+        ];
+        assert.deepEqual(utils.getFilterExpression(value, this.fields, [between.getConfig()]), [
+            ["field2", "=", "20"],
+            "and",
+            ["field2", "=", "30"]
+        ]);
+    });
+
+    QUnit.test("customOperation.calculateFilterExpression", function(assert) {
+        // arrange
+        var value = ["field1", "lastDays", "2"],
+            customOperations = [{
+                name: "lastDays",
+                calculateFilterExpression: function(filterValue, field) {
+                    return [field.dataField, ">", filterValue];
+                }
+            }];
+
+        // act, assert
+        assert.deepEqual(utils.getFilterExpression(value, this.fields, customOperations), ["field1", ">", "2"]);
+    });
+
+
+    QUnit.test("customOperation.calculateFilterExpression with condition does not return a value", function(assert) {
+        // arrange
+        var value = ["field1", "lastDays", "2"],
+            customOperations = [{
+                name: "lastDays",
+                calculateFilterExpression: function(filterValue, field) {
+
+                }
+            }];
+
+        // act, assert
+        assert.deepEqual(utils.getFilterExpression(value, this.fields, customOperations), null);
+    });
+
+    QUnit.test("customOperation.calculateFilterExpression with group does not return a value", function(assert) {
+        // arrange
+        var value = [["field1", "lastDays", "2"], "or", ["field1", "lastDays", "1"]],
+            customOperations = [{
+                name: "lastDays",
+                calculateFilterExpression: function(filterValue, field) {
+
+                }
+            }];
+
+        // act, assert
+        assert.deepEqual(utils.getFilterExpression(value, this.fields, customOperations), null);
     });
 });
 
@@ -884,7 +1273,7 @@ QUnit.module("Formatting", function() {
         assert.equal(utils.getCurrentValueText(field, value), "False Text");
     });
 
-    QUnit.test("customizeText", function(assert) {
+    QUnit.test("field.customizeText", function(assert) {
         var field = {
                 customizeText: function(conditionInfo) {
                     return conditionInfo.valueText + "Test";
@@ -892,6 +1281,21 @@ QUnit.module("Formatting", function() {
             },
             value = "MyValue";
         assert.equal(utils.getCurrentValueText(field, value), "MyValueTest");
+    });
+
+    QUnit.test("customOperation.customizeText", function(assert) {
+        var field = {
+                customizeText: function(conditionInfo) {
+                    return conditionInfo.valueText + "Test";
+                }
+            },
+            value = "MyValue",
+            customOperation = {
+                customizeText: function(conditionInfo) {
+                    return conditionInfo.valueText + "CustomOperation";
+                }
+            };
+        assert.equal(utils.getCurrentValueText(field, value, customOperation), "MyValueCustomOperation");
     });
 
     QUnit.test("default format for date", function(assert) {
@@ -992,7 +1396,7 @@ QUnit.module("Lookup Value", function() {
         });
     });
 
-    //T597637
+    // T597637
     QUnit.test("lookup with ODataStore shouldn't send getValueText query when value is empty", function(assert) {
         var fakeStore = {
             load: function() {
@@ -1011,5 +1415,96 @@ QUnit.module("Lookup Value", function() {
         utils.getCurrentLookupValueText(field, value, function(r) {
             assert.equal(r, "");
         });
+    });
+});
+
+QUnit.module("Between operation", function() {
+    QUnit.test("between is enabled", function(assert) {
+        // arrange
+        var customOperations = [{ name: "operation1" }];
+
+        // act
+        var mergedOperations = utils.getMergedOperations(customOperations, "My Between");
+
+        // assert
+        assert.equal(mergedOperations.length, 2, "length == 2");
+        assert.equal(mergedOperations[0].caption, "My Between");
+        assert.deepEqual(mergedOperations[0].dataTypes, ["number", "date", "datetime"]);
+        assert.equal(mergedOperations[1].name, "operation1");
+    });
+
+    QUnit.test("between.calculateFilterExpression", function(assert) {
+        // arrange
+        var customOperations = [];
+
+        // act
+        var mergedOperations = utils.getMergedOperations(customOperations, function() { }),
+            filterExpression = mergedOperations[0].calculateFilterExpression([1, 2], { dataField: "field" });
+        // assert
+        assert.deepEqual(filterExpression, [["field", ">=", 1], "and", ["field", "<=", 2]]);
+
+        // act
+        filterExpression = mergedOperations[0].calculateFilterExpression([1], { dataField: "field" });
+        // assert
+        assert.deepEqual(filterExpression, null);
+
+        // act
+        filterExpression = mergedOperations[0].calculateFilterExpression([], { dataField: "field" });
+        // assert
+        assert.deepEqual(filterExpression, null);
+
+        // act
+        filterExpression = mergedOperations[0].calculateFilterExpression("", { dataField: "field" });
+        // assert
+        assert.deepEqual(filterExpression, null);
+
+        // act
+        filterExpression = mergedOperations[0].calculateFilterExpression(null, { dataField: "field" });
+        // assert
+        assert.deepEqual(filterExpression, null);
+
+        // act
+        filterExpression = mergedOperations[0].calculateFilterExpression([null, null], { dataField: "field" });
+        // assert
+        assert.deepEqual(filterExpression, null);
+    });
+
+    QUnit.test("between.customizeText", function(assert) {
+        // arrange
+        var customOperations = [],
+            field = { dataType: "number" };
+
+        // act
+        var betweenOperation = utils.getMergedOperations(customOperations)[0],
+            text = betweenOperation.customizeText({
+                field: field,
+                value: ""
+            });
+        // assert
+        assert.equal(text, "<enter a value>", "empty text is correct");
+
+        // act
+        text = betweenOperation.customizeText({
+            field: field,
+            value: [0]
+        });
+        // assert
+        assert.equal(text, "0 - ?", "text without endValue");
+
+        // act
+        text = betweenOperation.customizeText({
+            field: field,
+            value: [null, 0]
+        });
+        // assert
+        assert.equal(text, "? - 0", "text without startValue");
+
+        // act
+        text = betweenOperation.customizeText({
+            field: field,
+            value: [0, 1]
+        });
+        // assert
+        assert.equal(text, "0 - 1", "text with startValue & endValue");
     });
 });

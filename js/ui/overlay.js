@@ -61,7 +61,11 @@ var OVERLAY_CLASS = "dx-overlay",
         "bottom": { my: "bottom center", at: "bottom center" },
         "right": { my: "right center", at: "right center" },
         "left": { my: "left center", at: "left center" },
-        "center": { my: 'center', at: 'center' }
+        "center": { my: 'center', at: 'center' },
+        "right bottom": { my: 'right bottom', at: 'right bottom' },
+        "right top": { my: 'right top', at: 'right top' },
+        "left bottom": { my: 'left bottom', at: 'left bottom' },
+        "left top": { my: 'left top', at: 'left top' }
     };
 
 var realDevice = devices.real(),
@@ -158,6 +162,8 @@ var Overlay = Widget.inherit({
             * @publicName visible
             * @type Boolean
             * @default false
+            * @fires dxOverlayOptions_onShowing
+            * @fires dxOverlayOptions_onHiding
             */
             visible: false,
 
@@ -188,7 +194,7 @@ var Overlay = Widget.inherit({
             /**
             * @name dxOverlayOptions_position
             * @publicName position
-            * @type string|positionConfig
+            * @type Enums.PositionAlignment|positionConfig|function
             * @default { my: 'center', at: 'center', of: window }
             */
             position: {
@@ -413,6 +419,14 @@ var Overlay = Widget.inherit({
                     }
                 }
             }
+        }, {
+            device: function() {
+                return !windowUtils.hasWindow();
+            },
+            options: {
+                width: null,
+                height: null
+            }
         }]);
     },
 
@@ -614,7 +628,8 @@ var Overlay = Widget.inherit({
     },
 
     _normalizePosition: function() {
-        this._position = this.option("position");
+        var position = this.option("position");
+        this._position = typeof position === "function" ? position() : position;
     },
 
     _getAnimationConfig: function() {
@@ -1258,12 +1273,10 @@ var Overlay = Widget.inherit({
             minWidth: this._getOptionValue("minWidth", content),
             maxWidth: this._getOptionValue("maxWidth", content),
             minHeight: this._getOptionValue("minHeight", content),
-            maxHeight: this._getOptionValue("maxHeight", content)
+            maxHeight: this._getOptionValue("maxHeight", content),
+            width: this._getOptionValue("width", content),
+            height: this._getOptionValue("height", content)
         });
-
-        this._$content
-            .outerWidth(this._getOptionValue("width", content))
-            .outerHeight(this._getOptionValue("height", content));
     },
 
     _renderPosition: function() {

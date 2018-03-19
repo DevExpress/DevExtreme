@@ -148,12 +148,11 @@ var LoadIndicator = Widget.inherit({
         this.$element().addClass(LOADINDICATOR_CLASS);
     },
 
-    _render: function() {
+    _initMarkup: function() {
+        this.callBase();
         this._renderWrapper();
         this._renderIndicatorContent();
         this._renderMarkup();
-
-        this.callBase();
     },
 
     _renderWrapper: function() {
@@ -167,7 +166,7 @@ var LoadIndicator = Widget.inherit({
     },
 
     _renderMarkup: function() {
-        if(support.animation() && !this.option("viaImage") && !this.option("indicatorSrc")) { //B236922
+        if(support.animation() && !this.option("viaImage") && !this.option("indicatorSrc")) { // B236922
             this._renderMarkupForAnimation();
         } else {
             this._renderMarkupForImage();
@@ -225,7 +224,7 @@ var LoadIndicator = Widget.inherit({
             this._$wrapper.css({
                 height: minDimension,
                 width: minDimension,
-                "font-size": minDimension
+                fontSize: minDimension
             });
         }
     },

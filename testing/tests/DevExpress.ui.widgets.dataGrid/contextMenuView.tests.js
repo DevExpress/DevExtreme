@@ -25,7 +25,6 @@ var dataGridMocks = require("../../helpers/dataGridMocks.js"),
     setupDataGridModules = dataGridMocks.setupDataGridModules;
 
 
-
 QUnit.module('Context menu', {
     beforeEach: function() {
         this.element = function() {
@@ -78,20 +77,20 @@ QUnit.module('Context menu', {
 });
 
 QUnit.test("Render context menu", function(assert) {
-    //arrange
+    // arrange
     var testElement = $("#container");
 
-    //act
+    // act
     this.contextMenuView.render(testElement);
 
-    //assert
+    // assert
     assert.ok(this.contextMenuView.element().dxContextMenu("instance")._initialized, "dxContextMenu initialized");
     assert.ok(this.contextMenuView.element().dxContextMenu("instance").$element().parent().hasClass("dx-datagrid"), "parent context menu");
     assert.ok(testElement.hasClass("dx-datagrid"), "has class dx-datagrid");
 });
 
 QUnit.test("Show context menu with defined menu items", function(assert) {
-    //arrange
+    // arrange
     var that = this,
         contextMenuInstance,
         contextMenu = that.contextMenuView,
@@ -103,12 +102,12 @@ QUnit.test("Show context menu with defined menu items", function(assert) {
                     { text: "none" }
     ];
 
-    //act
+    // act
     contextMenu.render(testElement);
     $("#columnHeaders").children().trigger("contextmenu");
     contextMenuInstance = contextMenu.element().dxContextMenu("instance");
 
-    //assert
+    // assert
     assert.ok(contextMenuInstance._overlay.$content().find(".dx-submenu").first().is(":visible"), "visible context menu");
     assert.strictEqual(contextMenuInstance._overlay.$content().find("li").first().text(), "asc", "text item");
     assert.strictEqual(contextMenuInstance._overlay.$content().find("li").eq(1).text(), "desc", "text item");
@@ -116,23 +115,23 @@ QUnit.test("Show context menu with defined menu items", function(assert) {
 });
 
 QUnit.test("Not show context menu with undefined menu items", function(assert) {
-    //arrange
+    // arrange
     var that = this,
         contextMenuInstance,
         contextMenu = that.contextMenuView,
         testElement = $("#container");
 
-    //act
+    // act
     contextMenu.render(testElement);
     $("#columnHeaders").children().trigger("contextmenu");
     contextMenuInstance = contextMenu.element().dxContextMenu("instance");
 
-    //assert
+    // assert
     assert.ok(!contextMenuInstance._overlay, "not visible context menu");
 });
 
 QUnit.test("Show context menu when several views", function(assert) {
-    //arrange
+    // arrange
     var that = this,
         contextMenuInstance,
         contextMenu = that.contextMenuView,
@@ -154,42 +153,42 @@ QUnit.test("Show context menu when several views", function(assert) {
         { text: "none2", onItemClick: onItemClick }
     ];
 
-    //act
+    // act
     contextMenu.render(testElement);
     $("#columnHeaders").children().trigger("contextmenu");
 
     contextMenuInstance = contextMenu.element().dxContextMenu("instance");
 
-    //assert
+    // assert
     assert.ok(contextMenuInstance._overlay.$content().find(".dx-submenu").first().is(":visible"), "visible context menu");
     assert.strictEqual(contextMenuInstance._overlay.$content().find("li").first().text(), "asc1", "text item");
     assert.strictEqual(contextMenuInstance._overlay.$content().find("li").eq(1).text(), "desc1", "text item");
     assert.strictEqual(contextMenuInstance._overlay.$content().find("li").last().text(), "none1", "text item");
 
-    //act
+    // act
     $(contextMenuInstance._overlay.$content().find(".dx-menu-item").first()).trigger("dxclick");
 
-    //assert
+    // assert
     assert.strictEqual(text, 'asc1', "first item text of first view");
 
-    //act
+    // act
     $("#rows").children().trigger("contextmenu");
 
-    //assert
+    // assert
     assert.ok(contextMenuInstance._overlay.$content().find(".dx-submenu").first().is(":visible"), "visible context menu");
     assert.strictEqual(contextMenuInstance._overlay.$content().find("li").first().text(), "asc2", "text item");
     assert.strictEqual(contextMenuInstance._overlay.$content().find("li").eq(1).text(), "desc2", "text item");
     assert.strictEqual(contextMenuInstance._overlay.$content().find("li").last().text(), "none2", "text item");
 
-    //act
+    // act
     $(contextMenuInstance._overlay.$content().find(".dx-menu-item").first()).trigger("dxclick");
 
-    //assert
+    // assert
     assert.strictEqual(text, 'asc2', "first item text of first view");
 });
 
 QUnit.test("Datagrid save 'rtlEnabled' class after contextMenu's invalidate", function(assert) {
-    //arrange
+    // arrange
     var rtlClass = "dx-rtl",
         testElement = $("#secondContainer"),
         contextMenu = this.contextMenuView,
@@ -197,18 +196,18 @@ QUnit.test("Datagrid save 'rtlEnabled' class after contextMenu's invalidate", fu
 
     testElement.dxDataGrid({ rtlEnabled: true });
 
-    //act
+    // act
     contextMenu.render(testElement);
     testElement.trigger("contextmenu");
     instance = contextMenu.element().dxContextMenu("instance");
 
-    //assert
+    // assert
     assert.ok(testElement.hasClass(rtlClass), "first render - rtl is on");
 
-    //act
+    // act
     instance.option("items", [{ text: "asc" }, { text: "desc" }]);
 
-    //assert
+    // assert
     assert.ok(testElement.hasClass(rtlClass), "after invalidate on items change - rtl option save value");
 });
 
@@ -244,7 +243,7 @@ QUnit.module('Context menu with rowsView', {
 });
 
 QUnit.test("Context menu with option onContextMenuPreparing", function(assert) {
-    //arrange
+    // arrange
     var that = this,
         contextMenuInstance,
         contextMenuOptions,
@@ -267,18 +266,18 @@ QUnit.test("Context menu with option onContextMenuPreparing", function(assert) {
     that.rowsView.render($testElement);
     that.contextMenuView.render($testElement);
 
-    //act
+    // act
     $("#columnHeaders").children().trigger("contextmenu");
 
     contextMenuInstance = that.contextMenuView.element().dxContextMenu("instance");
 
-    //assert
+    // assert
     assert.ok(!contextMenuInstance._overlay, "not visible context menu");
 
-    //act
+    // act
     $($testElement.find("td").eq(3)).trigger("contextmenu");
 
-    //assert
+    // assert
     assert.ok(contextMenuInstance._overlay.$content().find(".dx-submenu").first().is(":visible"), "visible context menu");
     assert.strictEqual(contextMenuInstance._overlay.$content().find("li").first().text(), "Test1", "text item");
     assert.strictEqual(contextMenuInstance._overlay.$content().find("li").eq(1).text(), "Test2", "text item");
@@ -289,9 +288,9 @@ QUnit.test("Context menu with option onContextMenuPreparing", function(assert) {
     assert.strictEqual(contextMenuOptions.column.dataField, "Column2", "dataField");
 });
 
-//T403458
+// T403458
 QUnit.test("Context menu with option onContextMenuPreparing when no data and scrollbar", function(assert) {
-    //arrange
+    // arrange
     var that = this,
         $rowsViewElement,
         contextMenuInstance,
@@ -316,21 +315,21 @@ QUnit.test("Context menu with option onContextMenuPreparing when no data and scr
     that.rowsView.render($testElement);
     that.contextMenuView.render($testElement);
 
-    //act
+    // act
     $("#columnHeaders").children().trigger("contextmenu");
 
     contextMenuInstance = that.contextMenuView.element().dxContextMenu("instance");
 
-    //assert
+    // assert
     $rowsViewElement = $testElement.find(".dx-datagrid-rowsview").first();
     assert.ok($rowsViewElement.length, "has rows view");
     assert.ok(!$rowsViewElement.hasClass("dx-scrollable"), "no scrollbar");
     assert.ok(!contextMenuInstance._overlay, "not visible context menu");
 
-    //act
+    // act
     $($testElement.find(".dx-datagrid-rowsview").first()).trigger("contextmenu");
 
-    //assert
+    // assert
     assert.ok(contextMenuInstance._overlay.$content().find(".dx-submenu").first().is(":visible"), "visible context menu");
     assert.strictEqual(contextMenuInstance._overlay.$content().find("li").first().text(), "Test1", "text item");
     assert.strictEqual(contextMenuInstance._overlay.$content().find("li").eq(1).text(), "Test2", "text item");
@@ -338,7 +337,7 @@ QUnit.test("Context menu with option onContextMenuPreparing when no data and scr
 });
 
 QUnit.test("Context menu should not be shown without items", function(assert) {
-    //arrange
+    // arrange
     var that = this,
         contextMenuInstance,
         contextMenuItems = [{ text: "test" }],
@@ -358,20 +357,20 @@ QUnit.test("Context menu should not be shown without items", function(assert) {
 
     contextMenuInstance = that.contextMenuView.element().dxContextMenu("instance");
 
-    //act
+    // act
     $($testElement.find("td").eq(3)).trigger("contextmenu");
     contextMenuInstance.hide();
 
     contextMenuItems = null;
     $($testElement.find("td").eq(3)).trigger("contextmenu");
 
-    //assert
+    // assert
     assert.notOk(contextMenuInstance.option("visible"), "visible context menu");
 });
 
-//T316422
+// T316422
 QUnit.test("Context menu with option onContextMenuPreparing for group row", function(assert) {
-    //arrange
+    // arrange
     var that = this,
         contextMenuInstance,
         contextMenuPreparingArg,
@@ -393,18 +392,18 @@ QUnit.test("Context menu with option onContextMenuPreparing for group row", func
     that.rowsView.render($testElement);
     that.contextMenuView.render($testElement);
 
-    //act
+    // act
     $("#columnHeaders").children().trigger("contextmenu");
 
     contextMenuInstance = that.contextMenuView.element().dxContextMenu("instance");
 
-    //assert
+    // assert
     assert.ok(!contextMenuInstance._overlay, "not visible context menu");
 
-    //act
+    // act
     $($testElement.find("td").eq(1)).trigger("contextmenu");
 
-    //assert
+    // assert
     assert.ok(contextMenuInstance._overlay.$content().find(".dx-submenu").first().is(":visible"), "visible context menu");
     assert.strictEqual(contextMenuPreparingArg.rowIndex, 0, "rowIndex");
     assert.strictEqual(contextMenuPreparingArg.row.rowType, "group", "rowType");

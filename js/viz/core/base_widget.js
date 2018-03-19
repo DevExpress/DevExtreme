@@ -1,6 +1,9 @@
 "use strict";
 
 var noop = require("../../core/utils/common").noop,
+    windowUtils = require("../../core/utils/window"),
+    domAdapter = require("../../core/dom_adapter"),
+    typeUtils = require("../../core/utils/type"),
     each = require("../../core/utils/iterator").each,
     version = require("../../core/version"),
     _windowResizeCallbacks = require("../../core/utils/resize_callbacks"),
@@ -19,6 +22,8 @@ var noop = require("../../core/utils/common").noop,
     _Layout = require("./layout"),
 
     OPTION_RTL_ENABLED = "rtlEnabled",
+
+    SIZED_ELEMENT_CLASS = "dx-sized-element",
 
     _option = DOMComponent.prototype.option;
 
@@ -71,8 +76,10 @@ var createIncidentOccurred = function(widgetName, eventTrigger) {
     }
 };
 
-function pickPositiveValue(value, defaultValue) {
-    return Number(value > 0 ? value : (defaultValue || 0));
+function pickPositiveValue(values) {
+    return values.reduce(function(result, value) {
+        return (value > 0 && !result) ? value : result;
+    }, 0);
 }
 
 // TODO - Changes handling
@@ -93,7 +100,43 @@ function pickPositiveValue(value, defaultValue) {
 //         }
 //     }]
 
-module.exports = DOMComponent.inherit({
+
+var getEmptyComponent = function() {
+    var emptyComponentConfig = {};
+
+    emptyComponentConfig.ctor = function(element, options) {
+        this.callBase(element, options);
+        var sizedElement = domAdapter.createElement("div");
+
+        var width = options && typeUtils.isNumeric(options.width) ? options.width + "px" : "100%";
+        var height = options && typeUtils.isNumeric(options.height) ? options.height + "px" : this._getDefaultSize().height + "px";
+
+        domAdapter.setStyle(sizedElement, "width", width);
+        domAdapter.setStyle(sizedElement, "height", height);
+
+        domAdapter.setClass(sizedElement, SIZED_ELEMENT_CLASS);
+        domAdapter.insertElement(element, sizedElement);
+    };
+
+    var EmptyComponent = DOMComponent.inherit(emptyComponentConfig);
+    var originalInherit = EmptyComponent.inherit;
+
+    EmptyComponent.inherit = function(config) {
+        for(var field in config) {
+            if(typeUtils.isFunction(config[field]) && field.substr(0, 1) !== "_" || field === "_dispose" || field === "_optionChanged") {
+                config[field] = noop;
+            }
+        }
+
+        return originalInherit.call(this, config);
+    };
+
+    return EmptyComponent;
+};
+
+var isServerSide = !windowUtils.hasWindow();
+
+module.exports = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
     _eventsMap: {
         "onIncidentOccurred": { name: "incidentOccurred" },
         "onDrawn": { name: "drawn" }
@@ -110,6 +153,9 @@ module.exports = DOMComponent.inherit({
     _init: function() {
         var that = this,
             linkTarget;
+
+        that._$element.children("." + SIZED_ELEMENT_CLASS).remove();
+
         that.callBase.apply(that, arguments);
         that._changesLocker = 0;
         that._changes = helpers.changes();
@@ -126,6 +172,7 @@ module.exports = DOMComponent.inherit({
         // Though this relation is not ensured in code we will immediately know when it is broken - `loading indicator` will break on construction
         linkTarget && linkTarget.enableLinks().virtualLink("core").virtualLink("peripheral");
         that._renderVisibilityChange();
+        that._attachVisibilityChangeHandlers();
         that._initEventTrigger();
         that._incidentOccurred = createIncidentOccurred(that.NAME, that._eventTrigger);
         that._layout = new _Layout();
@@ -296,13 +343,15 @@ module.exports = DOMComponent.inherit({
             size = that.option("size") || {},
             margin = that.option("margin") || {},
             defaultCanvas = that._getDefaultSize() || {},
+            elementWidth = windowUtils.hasWindow() ? that._$element.width() : 0,
+            elementHeight = windowUtils.hasWindow() ? that._$element.height() : 0,
             canvas = {
-                width: size.width <= 0 ? 0 : _floor(pickPositiveValue(size.width, that._$element.width() || defaultCanvas.width)),
-                height: size.height <= 0 ? 0 : _floor(pickPositiveValue(size.height, that._$element.height() || defaultCanvas.height)),
-                left: pickPositiveValue(margin.left, defaultCanvas.left || 0),
-                top: pickPositiveValue(margin.top, defaultCanvas.top || 0),
-                right: pickPositiveValue(margin.right, defaultCanvas.right || 0),
-                bottom: pickPositiveValue(margin.bottom, defaultCanvas.bottom || 0)
+                width: size.width <= 0 ? 0 : _floor(pickPositiveValue([size.width, elementWidth, defaultCanvas.width])),
+                height: size.height <= 0 ? 0 : _floor(pickPositiveValue([size.height, elementHeight, defaultCanvas.height])),
+                left: pickPositiveValue([margin.left, defaultCanvas.left]),
+                top: pickPositiveValue([margin.top, defaultCanvas.top]),
+                right: pickPositiveValue([margin.right, defaultCanvas.right]),
+                bottom: pickPositiveValue([margin.bottom, defaultCanvas.bottom])
             };
         // This for backward compatibility - widget was not rendered when canvas is empty.
         // Now it will be rendered but because of "width" and "height" of the root both set to 0 it will not be visible.
@@ -317,7 +366,7 @@ module.exports = DOMComponent.inherit({
             canvas = that._calculateCanvas();
 
         that._renderer.fixPlacement();
-        if(areCanvasesDifferent(that._canvas, canvas) || that.__forceRender /*for charts*/) {
+        if(areCanvasesDifferent(that._canvas, canvas) || that.__forceRender /* for charts */) {
             that._canvas = canvas;
             that._renderer.resize(canvas.width, canvas.height);
             that._change(["LAYOUT"]);
@@ -421,7 +470,7 @@ module.exports = DOMComponent.inherit({
     _getActionForUpdating: function(args) {
         var that = this;
 
-        return that._deprecatedOptionsSuppressed ? function() { //T479911
+        return that._deprecatedOptionsSuppressed ? function() { // T479911
             that._suppressDeprecatedWarnings();
             _option.apply(that, args);
             that._resumeDeprecatedWarnings();

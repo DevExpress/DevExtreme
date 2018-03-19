@@ -346,7 +346,7 @@ QUnit.test("hideFirstOrLast option in label option", function(assert) {
     assert.deepEqual(axisModule.Axis.getCall(0).returnValue.updateOptions.getCall(0).args[0].label.hideFirstOrLast, "hideFirstOrLast");
 });
 
-//Deprecated in 17.1 start
+// Deprecated in 17.1 start
 QUnit.test("hideFirstOrLast in overlappingBehavior option", function(assert) {
     this.createTestGauge({
         scale: {
@@ -405,7 +405,7 @@ QUnit.test("useTickAutoArrangement in majorTicks", function(assert) {
 
     assert.deepEqual(axisModule.Axis.getCall(0).returnValue.updateOptions.getCall(0).args[0].label.overlappingBehavior.mode, "none");
 });
-//Deprecated in 17.1 end
+// Deprecated in 17.1 end
 
 QUnit.test("Use range colors for scale", function(assert) {
     var gauge = this.createTestGauge({
@@ -430,7 +430,7 @@ QUnit.test("Use range colors for scale", function(assert) {
     assert.deepEqual(gauge._rangeContainer.getColorForValue.getCall(0).args[0], "test", "args");
 });
 
-QUnit.test("Chack deprecated option showCalculatedTicks with majorTick and minorTick objects. True and without customTicks", function(assert) { //DEPRECATED IN 15_2
+QUnit.test("Chack deprecated option showCalculatedTicks with majorTick and minorTick objects. True and without customTicks", function(assert) { // DEPRECATED IN 15_2
     this.createTestGauge({
         scale: {
             majorTick: {
@@ -447,7 +447,7 @@ QUnit.test("Chack deprecated option showCalculatedTicks with majorTick and minor
     assert.strictEqual(axisModule.Axis.getCall(0).returnValue.updateOptions.getCall(0).args[0].minorTick.showCalculatedTicks, false, "showCalculatedTicks");
 });
 
-QUnit.test("Chack deprecated option showCalculatedTicks with majorTick object. Undefined and with customTicks", function(assert) { //DEPRECATED IN 15_2
+QUnit.test("Chack deprecated option showCalculatedTicks with majorTick object. Undefined and with customTicks", function(assert) { // DEPRECATED IN 15_2
     this.createTestGauge({
         scale: {
             majorTick: {
@@ -462,7 +462,7 @@ QUnit.test("Chack deprecated option showCalculatedTicks with majorTick object. U
     assert.strictEqual(axisModule.Axis.getCall(0).returnValue.updateOptions.getCall(0).args[0].minorTick.showCalculatedTicks, true, "showCalculatedTicks");
 });
 
-QUnit.test("Chack deprecated option showCalculatedTicks with majorTick object. False and with customTicks", function(assert) { //DEPRECATED IN 15_2
+QUnit.test("Chack deprecated option showCalculatedTicks with majorTick object. False and with customTicks", function(assert) { // DEPRECATED IN 15_2
     this.createTestGauge({
         scale: {
             majorTick: {

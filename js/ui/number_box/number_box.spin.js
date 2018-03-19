@@ -31,21 +31,26 @@ var SpinButton = Widget.inherit({
         });
     },
 
-    _render: function() {
+    _initMarkup: function() {
         this.callBase();
 
-        var $element = this.$element(),
-            direction = SPIN_CLASS + "-" + this.option("direction");
-        var eventName = eventUtils.addNamespace(pointerEvents.down, this.NAME);
+        var direction = SPIN_CLASS + "-" + this.option("direction");
 
-        $element
+        this.$element()
             .addClass(SPIN_BUTTON_CLASS)
             .addClass(direction);
 
+        this._spinIcon = $("<div>").addClass(direction + "-icon").appendTo(this.$element());
+    },
+
+    _render: function() {
+        this.callBase();
+
+        var eventName = eventUtils.addNamespace(pointerEvents.down, this.NAME),
+            $element = this.$element();
+
         eventsEngine.off($element, eventName);
         eventsEngine.on($element, eventName, this._spinDownHandler.bind(this));
-
-        this._spinIcon = $("<div>").addClass(direction + "-icon").appendTo(this.$element());
 
         this._spinChangeHandler = this._createActionByOption("onChange");
     },

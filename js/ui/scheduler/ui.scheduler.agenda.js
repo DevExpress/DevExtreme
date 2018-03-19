@@ -71,7 +71,12 @@ var SchedulerAgenda = SchedulerWorkSpace.inherit({
     },
 
     _renderFocusState: noop,
+    _renderFocusTarget: noop,
     _cleanFocusState: noop,
+
+    supportAllDayRow: function() {
+        return false;
+    },
 
     _getElementClass: function() {
         return AGENDA_CLASS;
@@ -424,7 +429,7 @@ var SchedulerAgenda = SchedulerWorkSpace.inherit({
     },
 
     _getGroupRowHeight: function(groupRows) {
-        //TODO: hotfix
+        // TODO: hotfix
         if(!groupRows) {
             return;
         }

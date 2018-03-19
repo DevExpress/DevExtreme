@@ -5,10 +5,10 @@ var headerBlockModule = require("viz/chart_components/header_block");
 QUnit.module("Creation");
 
 QUnit.test("Create the header block", function(assert) {
-    //arrange, act
+    // arrange, act
     var headerBlock = new headerBlockModule.HeaderBlock();
 
-    //assert
+    // assert
     assert.ok(headerBlock);
 });
 
@@ -55,16 +55,16 @@ QUnit.module("API methods", {
 });
 
 QUnit.test("Get layout options", function(assert) {
-    //arrange
+    // arrange
     var headerBlock = new headerBlockModule.HeaderBlock(),
         layout;
 
     headerBlock.update(this.laidOutElements);
 
-    //act
+    // act
     layout = headerBlock.getLayoutOptions();
 
-    //assert
+    // assert
     assert.deepEqual(layout, {
         width: 100,
         height: 80,
@@ -80,7 +80,7 @@ QUnit.test("Get layout options", function(assert) {
 });
 
 QUnit.test("Get layout options after update", function(assert) {
-    //arrange
+    // arrange
     var headerBlock = new headerBlockModule.HeaderBlock(),
         layout,
         stub = sinon.stub();
@@ -96,13 +96,13 @@ QUnit.test("Get layout options after update", function(assert) {
     stub.draw = sinon.spy();
     stub.shift = sinon.spy();
 
-    //act
+    // act
     headerBlock.update([stub]);
     headerBlock.getLayoutOptions();
     headerBlock.update(this.laidOutElements);
     layout = headerBlock.getLayoutOptions();
 
-    //assert
+    // assert
     assert.deepEqual(layout, {
         width: 100,
         height: 80,
@@ -118,22 +118,22 @@ QUnit.test("Get layout options after update", function(assert) {
 });
 
 QUnit.test("Update", function(assert) {
-    //arrange
+    // arrange
     var headerBlock = new headerBlockModule.HeaderBlock(),
         layout;
 
     headerBlock.update(this.laidOutElements);
 
-    //act
+    // act
     headerBlock.update([]);
     layout = headerBlock.getLayoutOptions();
 
-    //assert
+    // assert
     assert.strictEqual(layout, null, "layout options");
 });
 
 QUnit.test("Get layout options. Zero elements", function(assert) {
-    //arrange
+    // arrange
     var elements = [{
             getLayoutOptions: function() {
                 return null;
@@ -144,15 +144,15 @@ QUnit.test("Get layout options. Zero elements", function(assert) {
 
     headerBlock.update(elements);
 
-    //act
+    // act
     layout = headerBlock.getLayoutOptions();
 
-    //assert
+    // assert
     assert.strictEqual(layout, null, "layout options");
 });
 
 QUnit.test("Get layout options. One element", function(assert) {
-    //arrange
+    // arrange
     var elements = [{
             getLayoutOptions: function() {
                 return {
@@ -168,10 +168,10 @@ QUnit.test("Get layout options. One element", function(assert) {
 
     headerBlock.update(elements);
 
-    //act
+    // act
     layout = headerBlock.getLayoutOptions();
 
-    //assert
+    // assert
     assert.deepEqual(layout, {
         width: 100,
         height: 80,
@@ -182,16 +182,16 @@ QUnit.test("Get layout options. One element", function(assert) {
 });
 
 QUnit.test("Probe draw", function(assert) {
-    //arrange
+    // arrange
     var headerBlock = new headerBlockModule.HeaderBlock(),
         layout;
 
     headerBlock.update(this.laidOutElements);
 
-    //act
+    // act
     layout = headerBlock.probeDraw(100, 20);
 
-    //assert
+    // assert
     assert.equal(this.laidOutElements[0].probeDraw.callCount, 1, "first element with probe draw");
     assert.deepEqual(this.laidOutElements[0].probeDraw.getCall(0).args, [100, 20, undefined], "first element with probe draw");
 
@@ -202,16 +202,16 @@ QUnit.test("Probe draw", function(assert) {
 });
 
 QUnit.test("Draw", function(assert) {
-    //arrange
+    // arrange
     var headerBlock = new headerBlockModule.HeaderBlock(),
         layout;
 
     headerBlock.update(this.laidOutElements, { width: 30 });
 
-    //act
+    // act
     layout = headerBlock.draw(100, 20);
 
-    //assert
+    // assert
     assert.equal(this.laidOutElements[0].draw.callCount, 1, "first element with draw");
     assert.deepEqual(this.laidOutElements[0].draw.getCall(0).args, [100, 20, { width: 30 }], "first element with draw");
 
@@ -222,50 +222,50 @@ QUnit.test("Draw", function(assert) {
 });
 
 QUnit.test("Hide all element if at least one of them is hidden", function(assert) {
-    //arrange
+    // arrange
     this.laidOutElements[1].getLayoutOptions.returns({ width: 0 });
     var headerBlock = new headerBlockModule.HeaderBlock(),
         layout;
 
     headerBlock.update(this.laidOutElements, { width: 30 });
 
-    //act
+    // act
     layout = headerBlock.draw(100, 20);
 
-    //assert
+    // assert
     assert.equal(this.laidOutElements[0].freeSpace.callCount, 1, "first element is hidden");
     assert.equal(this.laidOutElements[1].freeSpace.callCount, 1, "second element is hidden");
     assert.equal(this.laidOutElements[2].freeSpace.callCount, 1, "third element is hidden");
 });
 
 QUnit.test("Hide all element if common elements width greater then allowed with", function(assert) {
-    //arrange
+    // arrange
     this.laidOutElements[1].getLayoutOptions.returns({ width: 30 });
     var headerBlock = new headerBlockModule.HeaderBlock(),
         layout;
 
     headerBlock.update(this.laidOutElements, { width: 30 });
 
-    //act
+    // act
     layout = headerBlock.draw(70, 20);
 
-    //assert
+    // assert
     assert.equal(this.laidOutElements[0].freeSpace.callCount, 1, "first element is hidden");
     assert.equal(this.laidOutElements[1].freeSpace.callCount, 1, "second element is hidden");
     assert.equal(this.laidOutElements[2].freeSpace.callCount, 1, "third element is hidden");
 });
 
 QUnit.test("Shift", function(assert) {
-    //arrange
+    // arrange
     var headerBlock = new headerBlockModule.HeaderBlock(),
         layout;
 
     headerBlock.update(this.laidOutElements, { width: 400 });
 
-    //act
+    // act
     layout = headerBlock.shift(10, 20);
 
-    //assert
+    // assert
     assert.deepEqual(this.laidOutElements[0].shift.getCall(0).args, [10, 20], "first element with shift");
     assert.equal(this.laidOutElements[1].shift.callCount, 0, "second element with shift");
     assert.deepEqual(this.laidOutElements[2].shift.getCall(0).args, [10, 20], "third element with shift");

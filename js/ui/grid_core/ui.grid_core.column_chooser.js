@@ -447,7 +447,7 @@ module.exports = {
                  * @default "Drag a column here to hide it"
                  */
                 emptyPanelText: messageLocalization.format("dxDataGrid-columnChooserEmptyText"),
-                //TODO private option
+                // TODO private option
                 container: undefined
             }
         };

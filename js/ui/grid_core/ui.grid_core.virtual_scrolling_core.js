@@ -295,7 +295,7 @@ exports.VirtualScrollController = Class.inherit((function() {
                 scrollingTimeout = Math.min(that.option("scrolling.timeout") || 0, that._dataSource.changingDuration());
 
             if(isNear && scrollingTimeout < that.option("scrolling.renderingThreshold")) {
-                scrollingTimeout = 10;
+                scrollingTimeout = that.option("scrolling.minTimeout") || 0;
             }
 
             clearTimeout(that._scrollTimeoutID);
@@ -509,9 +509,9 @@ exports.VirtualScrollController = Class.inherit((function() {
                 }
 
                 processChanged(that, callBase, that._cache.length > 1 ? changeType : undefined, lastCacheLength === 0);
-                that.load().done(function() {
+                that._delayDeferred = that.load().done(function() {
                     if(processDelayChanged(that, callBase)) {
-                        that.load(); //needed for infinite scrolling when height is not defined
+                        that.load(); // needed for infinite scrolling when height is not defined
                     }
                 });
             } else {

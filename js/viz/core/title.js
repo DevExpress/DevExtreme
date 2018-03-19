@@ -96,7 +96,7 @@ extend(Title.prototype, require("./layout_element").LayoutElement.prototype, {
             y;
 
         titleElement.attr({ text: testText, y: 0 }).css(_patchFontOptions(options.font));
-        titleBox = titleElement.getBBox(); //for multiline text
+        titleBox = titleElement.getBBox(); // for multiline text
         that._titleTextY = titleBox.height + titleBox.y;
 
         titleElement.attr({ text: options.text });

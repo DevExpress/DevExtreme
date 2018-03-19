@@ -4,6 +4,48 @@ var eventsEngine = require("events/core/events_engine");
 var keyboardMock = require("../../helpers/keyboardMock.js");
 var registerEvent = require("events/core/event_registrator");
 
+QUnit.module("base");
+
+QUnit.test("on/one/trigger/off", function(assert) {
+    var element = document.createElement("div");
+    var handlerSpy = sinon.spy();
+
+    eventsEngine.on(element, "myEvent", handlerSpy);
+    eventsEngine.trigger(element, "myEvent");
+
+    assert.ok(handlerSpy.calledOnce);
+
+    eventsEngine.off(element, "myEvent");
+    eventsEngine.trigger(element, "myEvent");
+
+    assert.ok(handlerSpy.calledOnce);
+
+    handlerSpy = sinon.spy();
+
+    eventsEngine.one(element, "myOneTimeEvent", handlerSpy);
+    eventsEngine.trigger(element, "myOneTimeEvent");
+    eventsEngine.trigger(element, "myOneTimeEvent");
+
+    assert.ok(handlerSpy.calledOnce);
+});
+
+QUnit.test("using the array of DOM elements", function(assert) {
+    var element1 = document.createElement("div");
+    var element2 = document.createElement("div");
+    var element3 = document.createElement("div");
+    var handlerSpy = sinon.spy();
+
+    eventsEngine.on([ element1, element2, element3 ], "myEvent", handlerSpy);
+    eventsEngine.trigger([ element1, element2 ], "myEvent");
+
+    assert.equal(handlerSpy.callCount, 2);
+
+    eventsEngine.off([ element2, element3 ], "myEvent");
+    eventsEngine.trigger([ element1, element2 ], "myEvent");
+
+    assert.equal(handlerSpy.callCount, 3);
+});
+
 QUnit.module("namespaces");
 
 QUnit.test("Event is not removed if 'off' has extra namespace", function(assert) {
@@ -245,6 +287,25 @@ QUnit.test("Event bubbling", function(assert) {
     assert.equal(fired.focus, 0);
 });
 
+QUnit.test("Should not fire event when relatedTarget is children of a target", function(assert) {
+    var div = document.createElement("div"),
+        childNode = document.createElement("div"),
+        fired = 0;
+    div.appendChild(childNode);
+
+    document.body.appendChild(div);
+
+    eventsEngine.on(div, "mouseleave", function() {
+        fired++;
+    });
+
+    var event = new eventsEngine.Event("mouseleave", { target: div, relatedTarget: childNode });
+
+    eventsEngine.trigger(div, event);
+
+    assert.equal(fired, 0);
+});
+
 QUnit.test("'on' signatures", function(assert) {
     var fired = 0;
     var hasData = 0;
@@ -289,10 +350,10 @@ QUnit.test("mouseenter bubble to document (throught catching native 'mouseover')
         var mouseMoveEvent = document.createEvent("MouseEvents");
 
         mouseMoveEvent.initMouseEvent(
-            name, //event type : click, mousedown, mouseup, mouseover, mousemove, mouseout.
-            bubble, //canBubble
-            false, //cancelable
-            window, //event's AbstractView : should be window
+            name, // event type : click, mousedown, mouseup, mouseover, mousemove, mouseout.
+            bubble, // canBubble
+            false, // cancelable
+            window, // event's AbstractView : should be window
             1, // detail : Event's mouse click count
             50, // screenX
             50, // screenY

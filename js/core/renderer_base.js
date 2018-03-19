@@ -35,7 +35,7 @@ var initRender = function(selector, context) {
 
         [].push.apply(this, domAdapter.querySelectorAll(context, selector));
         return this;
-    } else if(selector.nodeType) {
+    } else if(domAdapter.isNode(selector)) {
         this[0] = selector;
         this.length = 1;
         return this;
@@ -142,7 +142,7 @@ initRender.prototype.hasClass = function(className) {
     for(var i = 0; i < classNames.length; i++) {
         if(this[0].classList) {
             if(this[0].classList.contains(classNames[i])) return true;
-        } else { //IE9
+        } else { // IE9
             if(this[0].className.split(" ").indexOf(classNames[i]) >= 0) return true;
         }
     }
@@ -265,7 +265,7 @@ var appendElements = function(element, nextSibling) {
             container = this[0],
             wrapTR = container.tagName === "TABLE" && item.tagName === "TR";
 
-        if(wrapTR && container.tBodies.length) {
+        if(wrapTR && container.tBodies && container.tBodies.length) {
             container = container.tBodies[0];
         }
         domAdapter.insertElement(container, item.nodeType ? item : item[0], nextSibling);
@@ -525,7 +525,7 @@ initRender.prototype.find = function(selector) {
         }
     } else {
         for(i = 0; i < this.length; i++) {
-            selector = selector.nodeType ? selector : selector[0];
+            selector = domAdapter.isNode(selector) ? selector : selector[0];
             if(this[i] !== selector && this[i].contains(selector)) {
                 nodes.push(selector);
             }
@@ -556,7 +556,7 @@ initRender.prototype.filter = function(selector) {
         var item = this[i];
         if(domAdapter.isElementNode(item) && typeUtils.type(selector) === "string") {
             domAdapter.elementMatches(item, selector) && result.push(item);
-        } else if(selector.nodeType || typeUtils.isWindow(selector)) {
+        } else if(domAdapter.isNode(selector) || typeUtils.isWindow(selector)) {
             selector === item && result.push(item);
         } else if(typeUtils.isFunction(selector)) {
             selector.call(item, i, item) && result.push(item);

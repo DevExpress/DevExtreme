@@ -24,6 +24,7 @@ var staticMethods = {
     /**
     * @name vizmethods_currentTheme
     * @publicName currentTheme()
+    * @return string
     * @static
     * @module viz/themes
     * @export currentTheme
@@ -47,6 +48,16 @@ var staticMethods = {
     * @export refreshTheme
     */
     refreshTheme: function() { },
+    /**
+    * @name vizmethods_getTheme 
+    * @publicName getTheme(theme)
+    * @param1 theme:string
+    * @return object
+    * @static
+    * @module viz/themes
+    * @export getTheme
+    */
+    getTheme: function() { },
     /**
     * @name vizmethods_exportFromMarkup
     * @publicName exportFromMarkup(markup, options)

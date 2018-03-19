@@ -212,26 +212,25 @@ var Accordion = CollectionWidget.inherit({
 
                 $container.append(iconUtils.getImageContainer(data.icon || data.iconSrc));
             } else {
-                $container.html(String(data));
+                $container.text(String(data));
             }
         }, ["title", "icon", "iconSrc"], this.option("integrationOptions.watchMethod"));
     },
 
-    _render: function() {
+    _initMarkup: function() {
         this._deferredItems = [];
 
         this.callBase();
-        this._fireContentReadyAction();
+    },
+
+    _render: function() {
+        this.callBase();
 
         this.setAria({
             "role": "tablist",
             "multiselectable": this.option("multiple")
         });
         this._attachItemTitleClickAction();
-    },
-
-    _renderContent: function() {
-        this._renderContentImpl();
     },
 
     _itemDataKey: function() {

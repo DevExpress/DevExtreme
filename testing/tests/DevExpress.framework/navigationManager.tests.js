@@ -611,7 +611,7 @@ QUnit.test("Unexpected navigation item (regression)", function(assert) {
         manager.navigate("view1", { root: true });
         manager.saveState(store);
 
-        //simulate F5 press
+        // simulate F5 press
         manager = new frameworkMocks.MockStackBasedNavigationManager({ navigationDevice: device });
         manager.init().done(function() {
             manager.restoreState(store);
@@ -693,7 +693,7 @@ QUnit.test("canBack", function(assert) {
     assert.ok(!manager.canBack());
     assert.ok(manager.canBack("view1"));
 
-    assert.ok(!manager.canBack("view5")); //T392438
+    assert.ok(!manager.canBack("view5")); // T392438
 });
 
 QUnit.test("canBack (Q520857)", function(assert) {
@@ -717,15 +717,15 @@ QUnit.test("canBack (Q520857)", function(assert) {
     assert.ok(manager.canBack());
 });
 
-//test("B250921: canBack and overlay (hideTopOverlayCallback)", function(assert) {
+// test("B250921: canBack and overlay (hideTopOverlayCallback)", function(assert) {
 QUnit.test("Q579100: canBack doesn't depend on overlay visibility", function(assert) {
     var manager = new frameworkMocks.MockStackBasedNavigationManager();
     manager.navigate("view1");
     var overlayHide = false;
     hideTopOverlayCallback.add(function() { overlayHide = true; });
     assert.ok(!overlayHide);
-    //ok(manager.canBack());
-    assert.ok(!manager.canBack());//behavior is changed to opposite. See the Q579100 notes
+    // ok(manager.canBack());
+    assert.ok(!manager.canBack());// behavior is changed to opposite. See the Q579100 notes
     assert.ok(!overlayHide);
     hideTopOverlayCallback.fire();
     assert.ok(overlayHide);
@@ -768,8 +768,8 @@ QUnit.test("fire back button then navigate back", function(assert) {
     assert.equal(manager.currentItem().uri, "view1", "go back");
 });
 
-//B250877 fix rolled back, since it has been fixed on the overlay widget level
-//test("B250877:fire backButton to hide overlay before navigate", function(assert) {
+// B250877 fix rolled back, since it has been fixed on the overlay widget level
+// test("B250877:fire backButton to hide overlay before navigate", function(assert) {
 QUnit.test("B251641: Navigating via app.navigate() shouldn't raise hideTopOverlayCallback", function(assert) {
     var manager = new frameworkMocks.MockStackBasedNavigationManager();
     var overlayHide = false;
@@ -812,7 +812,7 @@ QUnit.test("Navigating via hardware button should raise backButtonCallback", fun
         browser.history.back();
         assert.ok(backButtonCallbackRaised, "backButtonCallback raised");
         assert.equal(manager.currentItem().uri, "view2", "navigation canceled");
-        assert.equal(browser.location.hash, "#view2", "browser has is not changed"); //B250090
+        assert.equal(browser.location.hash, "#view2", "browser has is not changed"); // B250090
 
         backButtonCallbackRaised = false;
 
@@ -959,7 +959,7 @@ QUnit.test("Save empty state", function(assert) {
 
         manager = new frameworkMocks.MockStackBasedNavigationManager({ navigationDevice: device });
         manager.init().done(function() {
-            manager.saveState(store);//save empty state over the saved state with view1
+            manager.saveState(store);// save empty state over the saved state with view1
             manager.restoreState(store);
 
             assert.equal(manager.currentStack.items.length, 0);
@@ -1131,7 +1131,7 @@ QUnit.test("cancel navigation", function(assert) {
     assert.equal(manager._navigationDevice.getUri(), "view1");
 
     cancelArgs = undefined;
-    mockWindow.location.hash = "view2";//navigation via browser address bar
+    mockWindow.location.hash = "view2";// navigation via browser address bar
     mockWindow.doEvents();
 
     assert.equal(navigatingCount, 4);
@@ -1370,7 +1370,7 @@ QUnit.test("navigating handler can change uri", function(assert) {
     assert.equal(navigatedArgs.uri, "view2");
     assert.equal(manager._navigationDevice.getUri(), "view2");
 
-    mockWindow.location.hash = "view3";//navigation via browser address bar
+    mockWindow.location.hash = "view3";// navigation via browser address bar
     mockWindow.doEvents();
 
     assert.equal(navigatedArgs.uri, "view2");
@@ -1398,7 +1398,7 @@ QUnit.test("change uri on navigating and manual hash change (T303618)", function
 
     navigatedArgs = undefined;
 
-    mockWindow.location.hash = "view2";//navigation via browser address bar
+    mockWindow.location.hash = "view2";// navigation via browser address bar
     mockWindow.doEvents();
 
     assert.equal(navigatedArgs, undefined, "T303618");

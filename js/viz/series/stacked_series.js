@@ -1,6 +1,6 @@
 "use strict";
 
-//there stackedline, fullstackedline, stackedbar, fullstackedbar, stackedarea, fullstackedarea
+// there stackedline, fullstackedline, stackedbar, fullstackedbar, stackedarea, fullstackedarea
 var _noop = require("../../core/utils/common").noop,
     _extend = require("../../core/utils/extend").extend,
     each = require("../../core/utils/iterator").each,
@@ -79,8 +79,8 @@ function preparePointsForStackedAreaSegment(points) {
 }
 
 exports.chart["stackedarea"] = _extend({}, chartAreaSeries, baseStackedSeries, {
-    _prepareSegment: function(points, rotated) {
-        return chartAreaSeries._prepareSegment.call(this, preparePointsForStackedAreaSegment(points, this._prevSeries), rotated);
+    _prepareSegment: function(points, orderedPoints, rotated) {
+        return chartAreaSeries._prepareSegment.call(this, preparePointsForStackedAreaSegment(points, this._prevSeries), orderedPoints, rotated);
     },
     _appendInGroup: function() {
         this._group.append(this._extGroups.seriesGroup).toBackground();
@@ -97,12 +97,16 @@ function getPointsByArgFromPrevSeries(prevSeries, argument) {
 }
 
 exports.chart["stackedsplinearea"] = _extend({}, areaSeries["splinearea"], baseStackedSeries, {
-    _prepareSegment: function(points, rotated) {
+    prepareToDrawing: function(animationEnabled) {
+        this._pointsToDraw = this._points || [];
+    },
+
+    _prepareSegment: function(points, orderedPoints, rotated) {
         var that = this,
             areaSegment;
         points = preparePointsForStackedAreaSegment(points, that._prevSeries);
         if(!this._prevSeries || points.length === 1) {
-            areaSegment = areaSeries["splinearea"]._prepareSegment.call(this, points, rotated);
+            areaSegment = areaSeries["splinearea"]._prepareSegment.call(this, points, undefined, rotated);
         } else {
             var forwardPoints = lineSeries["spline"]._calculateBezierPoints(points, rotated),
                 backwardPoints = vizUtils.map(points, function(p) {

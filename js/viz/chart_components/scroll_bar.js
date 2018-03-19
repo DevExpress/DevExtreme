@@ -175,7 +175,7 @@ ScrollBar.prototype = {
         return margins;
     },
 
-    //Axis like functions
+    // Axis like functions
     draw: function() {},
 
     shift: function() {},
@@ -183,7 +183,7 @@ ScrollBar.prototype = {
     hideTitle: function() {},
 
     hideOuterElements: function() {},
-    //Axis like functions
+    // Axis like functions
 
     setPosition: function(min, max) {
         var that = this,

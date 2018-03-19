@@ -105,13 +105,13 @@ var Switch = Editor.inherit({
 
             useOldRendering: false
 
-                /**
-                * @name dxSwitchOptions_name
-                * @publicName name
-                * @type string
-                * @hidden false
-                * @inheritdoc
-                */
+            /**
+            * @name dxSwitchOptions_name
+            * @publicName name
+            * @type string
+            * @hidden false
+            * @inheritdoc
+            */
         });
     },
 
@@ -155,9 +155,7 @@ var Switch = Editor.inherit({
     _feedbackHideTimeout: 0,
     _animating: false,
 
-    _render: function() {
-        this._renderSwitchInner();
-        this._renderLabels();
+    _initMarkup: function() {
         this._renderContainers();
         this.option("useInkRipple") && this._renderInkRipple();
 
@@ -165,15 +163,24 @@ var Switch = Editor.inherit({
             .addClass(SWITCH_CLASS)
             .append(this._$switchWrapper);
 
+        this._renderSubmitElement();
+
+        this._renderClick();
+
         this.setAria("role", "button");
 
-        this._renderSubmitElement();
         this._renderSwipeable();
+
+        this.callBase();
+    },
+
+    _render: function() {
+        this._renderSwitchInner();
+        this._renderLabels();
 
         this._renderHandleWidth();
         this._getHandleOffset = this.option("useOldRendering") ? this._getPixelOffset : this._getCalcOffset;
         this._renderValue();
-        this._renderClick();
 
         this.callBase();
     },
@@ -197,7 +204,10 @@ var Switch = Editor.inherit({
     },
 
     _renderSwitchInner: function() {
-        this._$switchInner = $("<div>").addClass(SWITCH_INNER_CLASS);
+        this._$switchInner = $("<div>")
+            .addClass(SWITCH_INNER_CLASS)
+            .appendTo(this._$switchContainer);
+
         this._$handle = $("<div>")
             .addClass(SWITCH_HANDLE_CLASS)
             .appendTo(this._$switchInner);
@@ -217,8 +227,7 @@ var Switch = Editor.inherit({
 
     _renderContainers: function() {
         this._$switchContainer = $("<div>")
-            .addClass(SWITCH_CONTAINER_CLASS)
-            .append(this._$switchInner);
+            .addClass(SWITCH_CONTAINER_CLASS);
 
         this._$switchWrapper = $("<div>")
             .addClass(SWITCH_WRAPPER_CLASS)

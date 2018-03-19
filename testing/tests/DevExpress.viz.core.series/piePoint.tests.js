@@ -6,11 +6,9 @@ var noop = require("core/utils/common").noop,
     statesConsts = require("viz/components/consts").states,
     labelModule = require("viz/series/points/label"),
     tooltipModule = require("viz/core/tooltip"),
-    originalLabel = labelModule.Label;
-
-/* global MockAngularTranslator */
-require("../../helpers/chartMocks.js");
-
+    originalLabel = labelModule.Label,
+    chartMocks = require("../../helpers/chartMocks.js"),
+    MockAngularTranslator = chartMocks.MockAngularTranslator;
 
 var defaultCorrection = {
     radiusInner: 0,
@@ -1004,14 +1002,14 @@ QUnit.test("columns if label in center", function(assert) {
 });
 
 QUnit.test("columns with maxLabelLength", function(assert) {
-    //arrange
+    // arrange
     var point = createPointWithStubLabel.call(this, { 0: 350, 10: 330, 20: 310 });
     point.setMaxLabelLength(30);
 
-    //act
+    // act
     var coord = point._correctLabelCoord({ x: 400, y: 10 });
 
-    //arrange
+    // arrange
     assert.deepEqual(coord, { x: 450, y: 10 }, "coords");
 });
 

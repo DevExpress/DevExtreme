@@ -535,7 +535,7 @@ var dxRangeSelector = {
         * @publicName padding
         * @type number
         * @default 6
-        * @deprecated dxrangeselectoroptions_slidermarker_paddingleftright
+        * @deprecated
         */
         padding: 6,
         /**
@@ -571,7 +571,7 @@ var dxRangeSelector = {
         * @publicName placeholderSize
         * @type number|object
         * @default undefined
-        * @deprecated dxrangeselectoroptions_slidermarker_placeholderHeight
+        * @deprecated
         */
         placeholderSize: {
             /**
@@ -730,6 +730,7 @@ var dxRangeSelector = {
     *@name dxrangeselectoroptions_value
     * @publicName value
     * @type Array<number,string,Date>
+    * @fires dxrangeselectoroptions_onvaluechanged
     * @notUsedInTheme
     */
     value: [undefined, undefined],
@@ -934,7 +935,7 @@ var dxRangeSelector = {
         * @name dxrangeselectoroptions_chart_useAggregation
         * @publicName useAggregation
         * @type boolean
-        * @default false
+        * @deprecated dxChartSeriesTypes_CommonSeries_aggregation_enabled
         */
         useAggregation: false,
         /**

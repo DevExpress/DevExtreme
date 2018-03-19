@@ -1,15 +1,12 @@
 "use strict";
 
-//there are stock, candlestick
+// there are stock, candlestick
 var scatterSeries = require("./scatter_series").chart,
     barSeries = require("./bar_series").chart.bar,
-    extend = require("../../core/utils/extend").extend,
-    each = require("../../core/utils/iterator").each,
+    _extend = require("../../core/utils/extend").extend,
 
     _isDefined = require("../../core/utils/type").isDefined,
     _normalizeEnum = require("../core/utils").normalizeEnum,
-    _extend = extend,
-    _each = each,
     _noop = require("../../core/utils/common").noop,
 
     DEFAULT_FINANCIAL_POINT_SIZE = 10;
@@ -53,10 +50,6 @@ exports.stock = _extend({}, scatterSeries, {
 
     _setGroupsSettings: function() {
         scatterSeries._setGroupsSettings.call(this, false);
-    },
-
-    _clearingAnimation: function(drawComplete) {
-        drawComplete();
     },
 
     _getCreatingPointOptions: function() {
@@ -116,7 +109,8 @@ exports.stock = _extend({}, scatterSeries, {
             openValue: data[openValueField],
             reductionValue: reductionValue,
             tag: data[options.tagField || "tag"],
-            isReduction: that._checkReduction(reductionValue)
+            isReduction: that._checkReduction(reductionValue),
+            data: data
         };
     },
 
@@ -201,51 +195,34 @@ exports.stock = _extend({}, scatterSeries, {
         return result;
     },
 
-    _fusionPoints: function(fusionPoints, tick) {
-        var fusedPointData = {},
-            reductionLevel,
-            highValue = -Infinity,
-            lowValue = +Infinity,
-            openValue,
-            closeValue;
-        if(!fusionPoints.length) {
-            return {};
+    _defaultAggregator: "ohlc",
+
+    _aggregators: {
+        "ohlc": function(aggregationInfo, series) {
+            var result = {},
+                data = aggregationInfo.data,
+                valueFields = series.getValueFields(),
+                highValueField = valueFields[1],
+                lowValueField = valueFields[2];
+
+            result[highValueField] = -Infinity;
+            result[lowValueField] = Infinity;
+
+            result = data.reduce(function(result, item) {
+                if(item[highValueField] !== null) {
+                    result[highValueField] = Math.max(result[highValueField], item[highValueField]);
+                }
+                if(item[lowValueField] !== null) {
+                    result[lowValueField] = Math.min(result[lowValueField], item[lowValueField]);
+                }
+                return result;
+            });
+            result[valueFields[0]] = data[0][valueFields[0]];
+            result[valueFields[3]] = data[data.length - 1][valueFields[3]];
+            result[series.getArgumentField()] = aggregationInfo.intervalStart;
+
+            return result;
         }
-        _each(fusionPoints, function(_, point) {
-            if(!point.hasValue()) {
-                return;
-            }
-            highValue = Math.max(highValue, point.highValue);
-            lowValue = Math.min(lowValue, point.lowValue);
-            openValue = openValue !== undefined ? openValue : point.openValue;
-            closeValue = point.closeValue !== undefined ? point.closeValue : closeValue;
-        });
-        fusedPointData.argument = tick;
-        fusedPointData.openValue = openValue;
-        fusedPointData.closeValue = closeValue;
-        fusedPointData.highValue = highValue;
-        fusedPointData.lowValue = lowValue;
-        fusedPointData.tag = null;
-
-        switch(_normalizeEnum(this.level)) {
-            case "open":
-                reductionLevel = openValue;
-                break;
-            case "high":
-                reductionLevel = highValue;
-                break;
-            case "low":
-                reductionLevel = lowValue;
-                break;
-            default:
-                reductionLevel = closeValue;
-                break;
-        }
-        fusedPointData.reductionValue = reductionLevel;
-
-        fusedPointData.isReduction = this._checkReduction(reductionLevel);
-
-        return fusedPointData;
     },
 
     _getPointSize: function() {
@@ -260,8 +237,6 @@ exports.stock = _extend({}, scatterSeries, {
     getArgumentField: function() {
         return this._options.argumentField || "date";
     },
-
-    _beginUpdateData: _noop,
 
     _patchMarginOptions: function(options) {
         var pointOptions = this._getCreatingPointOptions(),
@@ -278,7 +253,6 @@ exports.stock = _extend({}, scatterSeries, {
 });
 
 exports.candlestick = _extend({}, exports.stock, {
-    _beginUpdateData: barSeries._beginUpdateData,
 
     _parsePointStyle: function(style, defaultColor, innerColor) {
         var color = style.color || innerColor,

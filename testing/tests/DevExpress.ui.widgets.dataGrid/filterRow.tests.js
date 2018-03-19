@@ -80,7 +80,7 @@ QUnit.module('Filter Row', {
 });
 
 QUnit.test('Draw filterRow with operation choosers', function(assert) {
-    //arrange
+    // arrange
     var $testElement = $('#container'),
         $filterMenu,
         $filterMenuItems,
@@ -89,7 +89,7 @@ QUnit.test('Draw filterRow with operation choosers', function(assert) {
 
     $.extend(this.columns, [{ caption: 'Column 1', allowFiltering: true, filterOperations: ['=', '<>'] }, { caption: 'Column 2', allowFiltering: true }, { caption: 'Column 3' }]);
 
-    //act
+    // act
     this.columnHeadersView.render($testElement);
 
     $filterMenu = $(this.columnHeadersView.element().find('.dx-menu').first());
@@ -99,25 +99,25 @@ QUnit.test('Draw filterRow with operation choosers', function(assert) {
     $cell = $filterMenu.parent();
     $filterMenuItems = $("#qunit-fixture").find('.dx-overlay-content').first().find('li');
 
-    //assert
+    // assert
     assert.ok($cell.children().first().is($filterMenu), 'first children is menu');
     assert.equal($filterMenu.length, 1, '1 filter operation button for first column');
     assert.equal($filterMenuItems.length, 3, '2 filter operation items for first column');
 });
 
 QUnit.test('FilterRow with cssClass', function(assert) {
-    //arrange
+    // arrange
     var testElement = $('#container'),
         filterCell;
 
     $.extend(this.columns, [{ caption: 'Column 1', cssClass: 'customCssClass' }, { caption: 'Column 2', cssClass: 'customCssClass', groupIndex: 0 }, { caption: 'Column 3' }]);
 
-    //act
+    // act
     this.columnHeadersView.render(testElement);
 
     filterCell = this.columnHeadersView.element().find(".dx-datagrid-filter-row").first().find('td');
 
-    //assert
+    // assert
     assert.equal(filterCell.length, 3, 'count filter cell');
     assert.ok(filterCell.first().hasClass('customCssClass'), 'has class customCssClass');
     assert.ok(!filterCell.eq(1).hasClass('customCssClass'), 'not has class customCssClass');
@@ -125,53 +125,53 @@ QUnit.test('FilterRow with cssClass', function(assert) {
 });
 
 QUnit.test('FilterRow with option showColumnLines true', function(assert) {
-    //arrange
+    // arrange
     var testElement = $('#container'),
         filterRow;
 
     this.options.showColumnLines = true;
 
-    //act
+    // act
     this.columnHeadersView.render(testElement);
     filterRow = testElement.find(".dx-datagrid-filter-row");
 
-    //assert
+    // assert
     assert.ok(filterRow.hasClass('dx-column-lines'), 'has class dx-column-lines');
 });
 
 QUnit.test('FilterRow with option showColumnLines false', function(assert) {
-    //arrange
+    // arrange
     var testElement = $('#container'),
         filterRow;
 
     this.options.showColumnLines = false;
 
-    //act
+    // act
     this.columnHeadersView.render(testElement);
     filterRow = testElement.find(".dx-datagrid-filter-row");
 
-    //assert
+    // assert
     assert.ok(!filterRow.hasClass('dx-column-lines'), 'not has class dx-column-lines');
 });
 
 QUnit.test('Not draw operation choosers for filterRow when showOperationChooser disabled', function(assert) {
-    //arrange
+    // arrange
     var testElement = $('#container');
 
     $.extend(this.columns, [{ caption: 'Column 1', allowFiltering: true, filterOperations: ['=', '<>'] }, { caption: 'Column 2', allowFiltering: true }, { caption: 'Column 3' }]);
 
     this.options.filterRow.showOperationChooser = false;
 
-    //act
+    // act
     this.columnHeadersView.render(testElement);
 
-    //assert
+    // assert
     var selectedFilterOperationElements = this.columnHeadersView.element().find('.dx-icon-filter-operation-isSelected');
     assert.equal(selectedFilterOperationElements.length, 0, '1 filter operation button for first column');
 });
 
 QUnit.test('Draw descriptions for operation chooser of filterRow', function(assert) {
-    //arrange
+    // arrange
     var testElement = $('#container'),
         filterMenu,
         filterMenuItems,
@@ -184,7 +184,7 @@ QUnit.test('Draw descriptions for operation chooser of filterRow', function(asse
         'notEqual': 'test not equals'
     };
 
-    //act
+    // act
     this.columnHeadersView.render(testElement);
 
     filterMenu = $(this.columnHeadersView.element()).find('.dx-menu').first();
@@ -192,7 +192,7 @@ QUnit.test('Draw descriptions for operation chooser of filterRow', function(asse
     $(rootMenuItem).trigger("dxclick");
     filterMenuItems = $("#qunit-fixture").find('.dx-overlay-content').first().find('li');
 
-    //assert
+    // assert
     assert.equal(filterMenu.length, 1, '1 filter operation button for first column');
     assert.equal(filterMenuItems.length, 3, '2 filter operation items for first column filter button');
     assert.equal(filterMenuItems.eq(0).find('.dx-menu-item').first().children('.dx-menu-item-content').find(":contains('test equals')").length, 1, 'equals description exists');
@@ -200,18 +200,18 @@ QUnit.test('Draw descriptions for operation chooser of filterRow', function(asse
 });
 
 QUnit.test('Draw operation chooser when filterOperations null', function(assert) {
-    //arrange
+    // arrange
     var testElement = $('#container'),
         filterMenu;
 
     $.extend(this.columns, [{ caption: 'Column 1', allowFiltering: true }]);
 
-    //act
+    // act
     this.columnHeadersView.render(testElement);
 
     filterMenu = $(this.columnHeadersView.element()).find('.dx-menu');
 
-    //assert
+    // assert
     assert.ok(!filterMenu.length, 'disabled option menu');
 });
 
@@ -230,23 +230,23 @@ QUnit.test('Check that dxMenu have correct rtlEnabled option value', function(as
 });
 
 QUnit.test('Default operation chooser', function(assert) {
-    //arrange
+    // arrange
     var testElement = $('#container'),
         filterMenu;
 
     $.extend(this.columns, [{ caption: 'Column 1', allowFiltering: true, filterOperations: ['=', '<>'] }]);
 
-    //act
+    // act
     this.columnHeadersView.render(testElement);
 
     filterMenu = $(this.columnHeadersView.element()).find('.dx-menu');
 
-    //assert
+    // assert
     assert.ok(filterMenu.find('.dx-icon').first().hasClass('dx-icon-filter-operation-default'), 'default menu image');
 });
 
 QUnit.test('Change operation via operation chooser', function(assert) {
-    //arrange
+    // arrange
     var testElement = $('#container'),
         filterMenu,
         filterMenuItems,
@@ -254,7 +254,7 @@ QUnit.test('Change operation via operation chooser', function(assert) {
 
     $.extend(this.columns, [{ caption: 'Column 1', allowFiltering: true, filterOperations: ['=', '<>'], index: 0 }, { caption: 'Column 2', allowFiltering: true, index: 1 }, { caption: 'Column 3', index: 2 }]);
 
-    //act
+    // act
     this.columnHeadersView.render(testElement);
 
     filterMenu = $(this.columnHeadersView.element()).find('.dx-menu');
@@ -264,7 +264,7 @@ QUnit.test('Change operation via operation chooser', function(assert) {
 
     $(filterMenuItems.find('.dx-menu-item')[1]).trigger('dxclick');
 
-    //assert
+    // assert
     assert.deepEqual(this.columnsController.updateOptions[0], {
         columnIndex: 0,
         optionName: { 'selectedFilterOperation': "<>" },
@@ -272,9 +272,9 @@ QUnit.test('Change operation via operation chooser', function(assert) {
     });
 });
 
-//T557200
+// T557200
 QUnit.test('Repaint view on change operation via operation chooser', function(assert) {
-    //arrange
+    // arrange
     var that = this,
         testElement = $('#container'),
         filterMenu,
@@ -301,15 +301,15 @@ QUnit.test('Repaint view on change operation via operation chooser', function(as
         }
     };
 
-    //act
+    // act
     filterMenuItems.find('.dx-menu-item').eq(1).trigger('dxclick');
 
-    //assert
+    // assert
     assert.ok(isViewRepainted, "view is repainted without exceptions");
 });
 
 QUnit.test('Reset operation via operation chooser', function(assert) {
-    //arrange
+    // arrange
     var testElement = $('#container'),
         filterMenu,
         rootMenuItem,
@@ -317,7 +317,7 @@ QUnit.test('Reset operation via operation chooser', function(assert) {
 
     $.extend(this.columns, [{ caption: 'Column 1', allowFiltering: true, filterOperations: ['=', '<>'], selectedFilterOperation: '<>', index: 0 }, { caption: 'Column 2', allowFiltering: true, initialIndex: 1 }, { caption: 'Column 3', index: 2 }]);
 
-    //act
+    // act
     this.columnHeadersView.render(testElement);
 
     filterMenu = $(this.columnHeadersView.element()).find('.dx-menu');
@@ -327,10 +327,10 @@ QUnit.test('Reset operation via operation chooser', function(assert) {
 
     var resetItem = filterMenuItems.find('.dx-menu-item').last();
 
-    //act
+    // act
     resetItem.trigger('dxclick');
 
-    //assert
+    // assert
     assert.equal(resetItem.children('.dx-menu-item-content').find(":contains('Reset')").length, 1, 'reset description exists');
     assert.deepEqual(this.columnsController.updateOptions[0], {
         columnIndex: 0,
@@ -342,9 +342,9 @@ QUnit.test('Reset operation via operation chooser', function(assert) {
     });
 });
 
-//T537880
+// T537880
 QUnit.test('Reset operation via operation chooser several times', function(assert) {
-    //arrange
+    // arrange
     var testElement = $('#container'),
         filterMenu,
         rootMenuItem,
@@ -352,7 +352,7 @@ QUnit.test('Reset operation via operation chooser several times', function(asser
 
     $.extend(this.columns, [{ caption: 'Column 1', allowFiltering: true, filterOperations: ['=', '<>'], selectedFilterOperation: '<>', index: 0 }, { caption: 'Column 2', allowFiltering: true, initialIndex: 1 }, { caption: 'Column 3', index: 2 }]);
 
-    //act
+    // act
     this.columnHeadersView.render(testElement);
 
     filterMenu = this.columnHeadersView.element().find('.dx-menu');
@@ -362,11 +362,11 @@ QUnit.test('Reset operation via operation chooser several times', function(asser
 
     var $resetItem = filterMenuItems.find('.dx-menu-item').last();
 
-    //act
+    // act
     $resetItem.trigger('dxclick');
     $resetItem.trigger('dxclick');
 
-    //assert
+    // assert
     assert.deepEqual(this.columnsController.updateOptions.length, 2, "columnOption is called twice");
     assert.deepEqual(this.columnsController.updateOptions[1], {
         columnIndex: 0,
@@ -378,9 +378,9 @@ QUnit.test('Reset operation via operation chooser several times', function(asser
     });
 });
 
-//T516687
+// T516687
 QUnit.test('Reset operation via operation chooser when applyMode is onClick', function(assert) {
-    //arrange
+    // arrange
     var testElement = $('#container'),
         filterMenu,
         rootMenuItem,
@@ -389,7 +389,7 @@ QUnit.test('Reset operation via operation chooser when applyMode is onClick', fu
     $.extend(this.columns, [{ caption: 'Column 1', allowFiltering: true, filterOperations: ['=', '<>'], selectedFilterOperation: '<>', index: 0 }, { caption: 'Column 2', allowFiltering: true, initialIndex: 1 }, { caption: 'Column 3', index: 2 }]);
     this.options.filterRow.applyFilter = "onClick";
 
-    //act
+    // act
     this.columnHeadersView.render(testElement);
 
     filterMenu = $(this.columnHeadersView.element()).find('.dx-menu');
@@ -399,10 +399,10 @@ QUnit.test('Reset operation via operation chooser when applyMode is onClick', fu
 
     var resetItem = filterMenuItems.find('.dx-menu-item').last();
 
-    //act
+    // act
     resetItem.trigger('dxclick');
 
-    //assert
+    // assert
     assert.equal(resetItem.children('.dx-menu-item-content').find(":contains('Reset')").length, 1, 'reset description exists');
     assert.deepEqual(this.columnsController.updateOptions[0], {
         columnIndex: 0,
@@ -416,19 +416,19 @@ QUnit.test('Reset operation via operation chooser when applyMode is onClick', fu
 
 
 QUnit.test('Change operation on columnsChanged event with filterValue optionName parameter', function(assert) {
-    //arrange
+    // arrange
     var testElement = $('#container'),
         filterMenu,
         that = this;
 
     $.extend(this.columns, [{ caption: 'Column 1', allowFiltering: true, filterOperations: ['=', '<>'], index: 0 }, { caption: 'Column 2', allowFiltering: true, index: 1 }, { caption: 'Column 3', index: 2 }]);
 
-    //act
+    // act
     this.columnHeadersView.render(testElement);
 
     filterMenu = $(this.columnHeadersView.element()).find('.dx-menu');
 
-    //act
+    // act
     this.columnsController.columnOption = function(index) {
         return that.columns[this.getVisibleIndex(index)];
     };
@@ -439,24 +439,24 @@ QUnit.test('Change operation on columnsChanged event with filterValue optionName
         changeTypes: { columns: true, length: 1 }
     });
 
-    //assert
-    assert.ok(filterMenu.find('.dx-icon').eq(0).hasClass('dx-icon-filter-operation-not-equals')); //<>
+    // assert
+    assert.ok(filterMenu.find('.dx-icon').eq(0).hasClass('dx-icon-filter-operation-not-equals')); // <>
 });
 
 QUnit.test('Change operation on columnsChanged event with filterValue optionName parameter when columnIndex is not equal visible index', function(assert) {
-    //arrange
+    // arrange
     var testElement = $('#container'),
         filterMenu,
         that = this;
 
     $.extend(this.columns, [{ caption: 'Column 1', allowFiltering: true, filterOperations: ['=', '<>'], index: 1 }, { caption: 'Column 2', allowFiltering: true, index: 0 }, { caption: 'Column 3', index: 2 }]);
 
-    //act
+    // act
     this.columnHeadersView.render(testElement);
 
     filterMenu = $(this.columnHeadersView.element()).find('.dx-menu');
 
-    //act
+    // act
     this.columnsController.columnOption = function(index) {
         return that.columns[this.getVisibleIndex(index)];
     };
@@ -467,19 +467,19 @@ QUnit.test('Change operation on columnsChanged event with filterValue optionName
         changeTypes: { columns: true, length: 1 }
     });
 
-    //assert
-    assert.ok(filterMenu.find('.dx-icon').eq(0).hasClass('dx-icon-filter-operation-not-equals')); //<>
+    // assert
+    assert.ok(filterMenu.find('.dx-icon').eq(0).hasClass('dx-icon-filter-operation-not-equals')); // <>
 });
 
 QUnit.test('Reset operation on columnsChanged event with filterValue optionName parameter', function(assert) {
-    //arrange
+    // arrange
     var testElement = $('#container'),
         filterMenu,
         that = this;
 
     $.extend(this.columns, [{ caption: 'Column 1', allowFiltering: true, filterOperations: ['=', '<>'], selectedFilterOperation: '<>', index: 0 }, { caption: 'Column 2', allowFiltering: true, index: 1 }, { caption: 'Column 3', index: 2 }]);
 
-    //act
+    // act
     this.columnHeadersView.render(testElement);
 
     filterMenu = $(this.columnHeadersView.element()).find('.dx-menu');
@@ -488,7 +488,7 @@ QUnit.test('Reset operation on columnsChanged event with filterValue optionName 
         return that.columns[this.getVisibleIndex(index)];
     };
 
-    //act
+    // act
     this.columns[0].selectedFilterOperation = undefined;
     this.columnsController.columnsChanged.fire({
         columnIndex: 0,
@@ -496,18 +496,18 @@ QUnit.test('Reset operation on columnsChanged event with filterValue optionName 
         changeTypes: { columns: true, length: 1 }
     });
 
-    //assert
-    assert.ok(filterMenu.find('.dx-icon').eq(0).hasClass('dx-icon-filter-operation-default')); //<>
+    // assert
+    assert.ok(filterMenu.find('.dx-icon').eq(0).hasClass('dx-icon-filter-operation-default')); // <>
 });
 
 QUnit.test('update filter text with timeout', function(assert) {
-    //arrange
+    // arrange
     var testElement = $('#container');
 
     $.extend(this.columns, [{ caption: 'Column 1', allowFiltering: true, filterOperations: false, index: 0, dataType: 'number' }]);
     this.options.filterRow.applyFilter = "auto";
 
-    //act
+    // act
     this.columnHeadersView.render(testElement);
 
     var filterRowInput = $(this.columnHeadersView.element()).find('.dx-texteditor');
@@ -516,16 +516,16 @@ QUnit.test('update filter text with timeout', function(assert) {
     filterRowInput.find('.dx-texteditor-input').val(90);
     filterRowInput.find('.dx-texteditor-input').trigger('keyup');
 
-    //act
+    // act
     this.clock.tick(600);
 
-    //assert
+    // assert
     assert.strictEqual(this.columnsController.updateOptions.length, 0);
 
-    //act
+    // act
     this.clock.tick(100);
 
-    //assert
+    // assert
     assert.strictEqual(this.columnsController.updateOptions.length, 1);
     assert.deepEqual(this.columnsController.updateOptions[0], {
         columnIndex: 0,
@@ -535,12 +535,12 @@ QUnit.test('update filter text with timeout', function(assert) {
 });
 
 QUnit.test('update filter text to empty string', function(assert) {
-    //arrange
+    // arrange
     var testElement = $('#container');
 
     $.extend(this.columns, [{ caption: 'Column 1', allowFiltering: true, filterOperations: false, index: 0, dataType: 'number' }]);
 
-    //act
+    // act
     this.columnHeadersView.render(testElement);
 
     var filterRowInput = $(this.columnHeadersView.element()).find('.dx-texteditor');
@@ -549,22 +549,22 @@ QUnit.test('update filter text to empty string', function(assert) {
     filterRowInput.find('.dx-texteditor-input').val('');
     filterRowInput.find('.dx-texteditor-input').trigger('keyup');
 
-    //act
+    // act
     this.clock.tick(600);
 
-    //assert
+    // assert
     assert.strictEqual(this.columnsController.updateOptions.length, 0);
 
-    //act
+    // act
     this.clock.tick(100);
 
-    //assert
+    // assert
     assert.strictEqual(this.columnsController.updateOptions.length, 0);
 });
 
-//T117317
+// T117317
 QUnit.test("update filter text for number column with format", function(assert) {
-    //arrange
+    // arrange
     var testElement = $("#container");
 
     $.extend(this.columns, [{
@@ -577,14 +577,14 @@ QUnit.test("update filter text for number column with format", function(assert) 
 
     this.columnHeadersView.render(testElement);
 
-    //act
+    // act
     var filterRowInput = $(this.columnHeadersView.element()).find(".dx-texteditor");
     filterRowInput.find(".dx-texteditor-input").val(90);
     filterRowInput.find(".dx-texteditor-input").trigger("keyup");
 
     this.clock.tick(700);
 
-    //assert
+    // assert
     assert.deepEqual(this.columnsController.updateOptions[0], {
         columnIndex: 0,
         optionName: "filterValue",
@@ -593,7 +593,7 @@ QUnit.test("update filter text for number column with format", function(assert) 
 });
 
 QUnit.test("update filter text for date column with format", function(assert) {
-    //arrange
+    // arrange
     var testElement = $("#container");
 
     $.extend(this.columns, [{
@@ -609,7 +609,7 @@ QUnit.test("update filter text for date column with format", function(assert) {
 
     this.columnHeadersView.render(testElement);
 
-    //act
+    // act
 
     var filterRowInput = $(this.columnHeadersView.element()).find(".dx-texteditor-input");
 
@@ -619,7 +619,7 @@ QUnit.test("update filter text for date column with format", function(assert) {
 
     this.clock.tick(700);
 
-    //assert
+    // assert
     assert.deepEqual(this.columnsController.updateOptions[0], {
         columnIndex: 0,
         optionName: "filterValue",
@@ -627,9 +627,9 @@ QUnit.test("update filter text for date column with format", function(assert) {
     });
 });
 
-//T469845
+// T469845
 QUnit.test("filter datebox should be valid after clearing filter value option", function(assert) {
-    //arrange
+    // arrange
     var testElement = $("#container");
 
     $.extend(this.columns, [{
@@ -646,7 +646,7 @@ QUnit.test("filter datebox should be valid after clearing filter value option", 
 
     this.columnHeadersView.render(testElement);
 
-    //act
+    // act
     this.columns[0].filterValue = undefined;
     this.columnsController.columnsChanged.fire({
         columnIndex: 0,
@@ -654,15 +654,15 @@ QUnit.test("filter datebox should be valid after clearing filter value option", 
         changeTypes: { columns: true, length: 1 }
     });
 
-    //assert
+    // assert
     var filterRowDateBox = this.columnHeadersView.element().find(".dx-datebox").eq(0).dxDateBox("instance");
     assert.ok(filterRowDateBox.option("isValid"), "dateBox should be valid");
     assert.strictEqual(filterRowDateBox.option("value"), null, "value was cleared");
 });
 
-//T104792
+// T104792
 QUnit.test("update filter value for boolean column to true", function(assert) {
-    //arrange
+    // arrange
     var testElement = $("#container");
 
     $.extend(this.columns, [{
@@ -671,12 +671,12 @@ QUnit.test("update filter value for boolean column to true", function(assert) {
     }]);
     this.columnHeadersView.render(testElement);
 
-    //act
+    // act
     var $selectBox = testElement.find(".dx-selectbox");
     assert.equal($selectBox.length, 1);
     $selectBox.dxSelectBox('instance').option('value', true);
 
-    //assert
+    // assert
     assert.deepEqual(this.columnsController.updateOptions[0], {
         columnIndex: 0,
         optionName: "filterValue",
@@ -684,9 +684,9 @@ QUnit.test("update filter value for boolean column to true", function(assert) {
     });
 });
 
-//T104792
+// T104792
 QUnit.test("update filter value for boolean column to false", function(assert) {
-    //arrange
+    // arrange
     var testElement = $("#container");
 
     $.extend(this.columns, [{
@@ -695,12 +695,12 @@ QUnit.test("update filter value for boolean column to false", function(assert) {
     }]);
     this.columnHeadersView.render(testElement);
 
-    //act
+    // act
     var $selectBox = testElement.find(".dx-selectbox");
     assert.equal($selectBox.length, 1);
     $selectBox.dxSelectBox('instance').option('value', false);
 
-    //assert
+    // assert
     assert.deepEqual(this.columnsController.updateOptions[0], {
         columnIndex: 0,
         optionName: "filterValue",
@@ -709,7 +709,7 @@ QUnit.test("update filter value for boolean column to false", function(assert) {
 });
 
 QUnit.test("update filter value for array column with dxTagBox", function(assert) {
-    //arrange
+    // arrange
     var testElement = $("#container");
 
     require("ui/tag_box");
@@ -736,18 +736,18 @@ QUnit.test("update filter value for array column with dxTagBox", function(assert
 
     this.columnHeadersView.render(testElement);
 
-    //act
+    // act
     testElement.find(".dx-tagbox").first().dxTagBox("instance").option("value", [1, 2, 3]);
 
 
-    //assert
+    // assert
     assert.deepEqual(this.columnsController.updateOptions[0], {
         columnIndex: 0,
         optionName: "filterValue",
         optionValue: [1, 2, 3]
     });
 
-    //act
+    // act
     this.columnsController.columnsChanged.fire({
         columnIndex: 0,
         optionName: "filterValue",
@@ -759,9 +759,9 @@ QUnit.test("update filter value for array column with dxTagBox", function(assert
     assert.deepEqual(testElement.find(".dx-tagbox").dxTagBox("instance").option("value"), [1, 2, 3]);
 });
 
-//B254521
+// B254521
 QUnit.test('Draw filterRow when all columns grouped', function(assert) {
-    //arrange
+    // arrange
     var testElement = $('#container'),
         filterRow;
 
@@ -771,12 +771,12 @@ QUnit.test('Draw filterRow when all columns grouped', function(assert) {
                             { command: 'empty' }
     ]);
 
-    //act
+    // act
     this.columnHeadersView.render(testElement);
 
     filterRow = testElement.find('.dx-datagrid-filter-row');
 
-    //assert
+    // assert
     assert.ok(filterRow.length, 'has filter row');
     assert.ok(!filterRow.find('.dx-editor-cell').length);
     assert.equal(filterRow.find('td').length, 4, 'count td');
@@ -784,28 +784,28 @@ QUnit.test('Draw filterRow when all columns grouped', function(assert) {
     assert.ok(filterRow.outerHeight() >= 30, 'height filter row');
 });
 
-//T100624
+// T100624
 QUnit.test('Filter Cell when the width of the columns in percent', function(assert) {
-    //arrange
+    // arrange
     var that = this,
         testElement = $("#container"),
         textEditor;
 
     $.extend(that.columns, [{ caption: 'Column 1', allowFiltering: true, width: "40%" }, { caption: 'Column 2', allowFiltering: true, width: "60%" }]);
 
-    //act
+    // act
     that.columnHeadersView.render(testElement);
 
-    //assert
+    // assert
     textEditor = testElement.find(".dx-texteditor");
     assert.equal(textEditor.length, 2, "text editor");
     assert.ok(!textEditor.first()[0].style.width, "not width text editor");
     assert.ok(!textEditor.last()[0].style.width, "not width text editor");
 });
 
-//T104915
+// T104915
 QUnit.test('Filter cell with lookup column', function(assert) {
-    //arrange
+    // arrange
     var that = this,
         testElement = $("#container"),
         cells;
@@ -818,20 +818,20 @@ QUnit.test('Filter cell with lookup column', function(assert) {
         }
     }, { caption: 'Column 2', allowFiltering: true, filterOperations: ['=', '<>'] }]);
 
-    //act
+    // act
     that.columnHeadersView.render(testElement);
 
     cells = testElement.find(".dx-datagrid-filter-row").first().find("td");
 
-    //assert
+    // assert
     assert.equal(cells.length, 2, "count filter cell");
     assert.ok(!cells.first().find(".dx-editor-with-menu").length, "first cell with lookup not have menu");
     assert.ok(cells.last().find(".dx-editor-with-menu").length, "last cell has menu");
 });
 
-//T104915
+// T104915
 QUnit.test('Filter cell with empty filterOperations in column', function(assert) {
-    //arrange
+    // arrange
     var that = this,
         testElement = $("#container"),
         cells;
@@ -840,20 +840,20 @@ QUnit.test('Filter cell with empty filterOperations in column', function(assert)
         caption: 'Column 1', allowFiltering: true, filterOperations: []
     }, { caption: 'Column 2', allowFiltering: true, filterOperations: ['=', '<>'] }]);
 
-    //act
+    // act
     that.columnHeadersView.render(testElement);
 
     cells = testElement.find(".dx-datagrid-filter-row").first().find("td");
 
-    //assert
+    // assert
     assert.equal(cells.length, 2, "count filter cell");
     assert.ok(!cells.first().find(".dx-editor-with-menu").length, "first cell not have menu");
     assert.ok(cells.last().find(".dx-editor-with-menu").length, "last cell has menu");
 });
 
-//T148717
+// T148717
 QUnit.test('Second render filterRow with operation choosers', function(assert) {
-    //arrange
+    // arrange
     var testElement = $('#container').width(300);
 
     $.extend(this.columns, [
@@ -863,15 +863,15 @@ QUnit.test('Second render filterRow with operation choosers', function(assert) {
     ]);
 
     this.columnHeadersView.render(testElement);
-    //act
+    // act
     this.columnHeadersView.render(testElement);
 
-    //assert
+    // assert
     assert.deepEqual(this.columnHeadersView.getColumnWidths(), [100, 100, 100]);
 });
 
 QUnit.test("Show apply filter button", function(assert) {
-    //arrange
+    // arrange
     var testElement = $('#container'),
         $button;
 
@@ -879,10 +879,10 @@ QUnit.test("Show apply filter button", function(assert) {
     this.options.filterRow.applyFilterButtonText = "Apply Filter";
     $.extend(this.columns, [{ caption: 'Column 1', allowFiltering: true, filterOperations: ['=', '<>'] }]);
 
-    //act
+    // act
     this.headerPanel.render(testElement);
 
-    //assert
+    // assert
     $button = testElement.find(".dx-apply-button");
     assert.equal($button.length, 1, "apply button class");
 
@@ -890,7 +890,7 @@ QUnit.test("Show apply filter button", function(assert) {
 });
 
 QUnit.test("Apply filter button is hidden when filter row options is undefined", function(assert) {
-    //arrange
+    // arrange
     var testElement = $('#container'),
         $button;
 
@@ -898,16 +898,16 @@ QUnit.test("Apply filter button is hidden when filter row options is undefined",
     this.options.groupPanel = { visible: true };
     $.extend(this.columns, [{ caption: 'Column 1', allowFiltering: true, filterOperations: ['=', '<>'] }]);
 
-    //act
+    // act
     this.headerPanel.render(testElement);
 
-    //assert
+    // assert
     $button = testElement.find(".dx-apply-button");
     assert.equal($button.length, 0, "apply button class");
 });
 
 QUnit.test("Apply filter button is hidden when visible of filter row option is false", function(assert) {
-    //arrange
+    // arrange
     var testElement = $('#container'),
         $button;
 
@@ -915,16 +915,16 @@ QUnit.test("Apply filter button is hidden when visible of filter row option is f
     this.options.groupPanel = { visible: true };
     $.extend(this.columns, [{ caption: 'Column 1', allowFiltering: true, filterOperations: ['=', '<>'] }]);
 
-    //act
+    // act
     this.headerPanel.render(testElement);
 
-    //assert
+    // assert
     $button = testElement.find(".dx-apply-button");
     assert.equal($button.length, 0, "apply button class");
 });
 
 QUnit.test("Apply filter button is hidden when applyFilter mode is 'auto'", function(assert) {
-    //arrange
+    // arrange
     var testElement = $('#container'),
         $button;
 
@@ -932,16 +932,16 @@ QUnit.test("Apply filter button is hidden when applyFilter mode is 'auto'", func
     this.options.groupPanel = { visible: true };
     $.extend(this.columns, [{ caption: 'Column 1', allowFiltering: true, filterOperations: ['=', '<>'] }]);
 
-    //act
+    // act
     this.headerPanel.render(testElement);
 
-    //assert
+    // assert
     $button = testElement.find(".dx-apply-button");
     assert.equal($button.length, 0, "apply button class");
 });
 
 QUnit.test("Apply filter button is changed enabled state", function(assert) {
-    //arrange
+    // arrange
     var testElement = $('#container'),
         $button,
         filterRowInput;
@@ -949,7 +949,7 @@ QUnit.test("Apply filter button is changed enabled state", function(assert) {
     this.options.filterRow.applyFilter = "onClick";
     $.extend(this.columns, [{ caption: 'Column 1', index: 0, allowFiltering: true, filterOperations: ['=', '<>'] }]);
 
-    //act
+    // act
     this.applyFilterController.init();
     this.headerPanel.render(testElement);
     this.columnHeadersView.render(testElement);
@@ -964,7 +964,7 @@ QUnit.test("Apply filter button is changed enabled state", function(assert) {
 });
 
 QUnit.test("Set highlight when filter operation is changed", function(assert) {
-    //arrange
+    // arrange
     var testElement = $('#container'),
         filterMenu,
         isHighLight,
@@ -974,7 +974,7 @@ QUnit.test("Set highlight when filter operation is changed", function(assert) {
     this.options.filterRow.applyFilter = "onClick";
     $.extend(this.columns, [{ caption: 'Column 1', allowFiltering: true, filterOperations: ['=', '<>'], initialIndex: 0 }, { caption: 'Column 2', allowFiltering: true, initialIndex: 1 }, { caption: 'Column 3', initialIndex: 2 }]);
 
-    //act
+    // act
     this.applyFilterController.setHighLight = function() {
         isHighLight = true;
     };
@@ -994,7 +994,7 @@ QUnit.test("Set highlight when filter operation is changed", function(assert) {
 
 
 QUnit.test("Apply filter button is changed enabled state when filter operation is changed", function(assert) {
-    //arrange
+    // arrange
     var testElement = $('#container'),
         filterMenu,
         $button,
@@ -1003,7 +1003,7 @@ QUnit.test("Apply filter button is changed enabled state when filter operation i
     this.options.filterRow.applyFilter = "onClick";
     $.extend(this.columns, [{ caption: 'Column 1', allowFiltering: true, filterOperations: ['=', '<>'], initialIndex: 0 }, { caption: 'Column 2', allowFiltering: true, initialIndex: 1 }, { caption: 'Column 3', initialIndex: 2 }]);
 
-    //act
+    // act
     this.applyFilterController.init();
     this.columnHeadersView.render(testElement);
 
@@ -1017,7 +1017,7 @@ QUnit.test("Apply filter button is changed enabled state when filter operation i
 });
 
 QUnit.test("Column option is changed when filter operation is changed", function(assert) {
-    //arrange
+    // arrange
     var testElement = $('#container'),
         filterMenu,
         rootMenuItem,
@@ -1026,7 +1026,7 @@ QUnit.test("Column option is changed when filter operation is changed", function
     this.options.filterRow.applyFilter = "onClick";
     $.extend(this.columns, [{ caption: 'Column 1', allowFiltering: true, filterOperations: ['=', '<>'], index: 0 }, { caption: 'Column 2', allowFiltering: true, index: 1 }, { caption: 'Column 3', index: 2 }]);
 
-    //act
+    // act
     this.applyFilterController.init();
     this.columnHeadersView.render(testElement);
 
@@ -1045,23 +1045,23 @@ QUnit.test("Column option is changed when filter operation is changed", function
 });
 
 QUnit.test("Header panel is not visible when apply filter button should not to be visible", function(assert) {
-    //arrange
+    // arrange
     var testElement = $('#container'),
         $headerPanel;
 
     this.options.filterRow.applyFilter = "auto";
     $.extend(this.columns, [{ caption: 'Column 1', allowFiltering: true, filterOperations: ['=', '<>'] }]);
 
-    //act
+    // act
     this.headerPanel.render(testElement);
 
-    //assert
+    // assert
     $headerPanel = testElement.find(".dx-datagrid-header-panel");
     assert.equal($headerPanel.length, 0, "apply button class");
 });
 
 QUnit.test("Set highlight to editor container when filter is changed", function(assert) {
-    //arrange
+    // arrange
     var testElement = $('#container'),
         $editorContainer,
         $filterCellContainer,
@@ -1070,7 +1070,7 @@ QUnit.test("Set highlight to editor container when filter is changed", function(
     this.options.filterRow.applyFilter = "onClick";
     $.extend(this.columns, [{ caption: 'Column 1', allowFiltering: true, filterOperations: ['=', '<>'], index: 0 }]);
 
-    //act
+    // act
     this.applyFilterController.init();
     this.columnHeadersView.render(testElement);
 
@@ -1091,7 +1091,7 @@ QUnit.test("Set highlight to editor container when filter is changed", function(
 });
 
 QUnit.test("Remove highlights from editor container when filter is applied", function(assert) {
-    //arrange
+    // arrange
     var testElement = $('#container'),
         $editorContainer,
         $filterCellContainer,
@@ -1101,7 +1101,7 @@ QUnit.test("Remove highlights from editor container when filter is applied", fun
     this.options.filterRow.applyFilter = "onClick";
     $.extend(this.columns, [{ caption: 'Column 1', index: 0, allowFiltering: true, filterOperations: ['=', '<>'] }]);
 
-    //act
+    // act
     this.applyFilterController.init();
     this.columnHeadersView.render(testElement);
     this.headerPanel.render(testElement);
@@ -1120,7 +1120,7 @@ QUnit.test("Remove highlights from editor container when filter is applied", fun
     $filterCellContainer = $(this.columnHeadersView.element().find(".dx-filter-modified"));
     assert.equal($filterCellContainer.length, 0, "highlights");
     assert.ok($button.hasClass("dx-state-disabled"), "button is enabled");
-    //assert.ok(this.dataController._isFilterApplied, "is filter applied");
+    // assert.ok(this.dataController._isFilterApplied, "is filter applied");
 
     assert.deepEqual(this.columnsController.updateOptions, [{
         "columnIndex": 0,
@@ -1134,7 +1134,7 @@ QUnit.test("Remove highlights from editor container when filter is applied", fun
 });
 
 QUnit.test("Set zero timeout for editor", function(assert) {
-    //arrange
+    // arrange
     var testElement = $('#container'),
         timeout;
 
@@ -1145,29 +1145,29 @@ QUnit.test("Set zero timeout for editor", function(assert) {
     this.editorFactoryController.init();
     $.extend(this.columns, [{ caption: 'Column 1', allowFiltering: true, filterOperations: ['=', '<>'] }]);
 
-    //act
+    // act
     this.columnHeadersView.render(testElement);
 
-    //assert
+    // assert
     assert.equal(timeout, 0);
 });
 
 QUnit.test("Show apply button when applyFilter option is changed", function(assert) {
-    //arrange
+    // arrange
     var testElement = $('#container'),
         $button;
 
     this.options.filterRow.applyFilter = "auto";
     $.extend(this.columns, [{ caption: 'Column 1', allowFiltering: true, filterOperations: ['=', '<>'] }]);
 
-    //act
+    // act
     this.headerPanel.render(testElement);
 
-    //assert
+    // assert
     $button = testElement.find(".dx-apply-button");
     assert.equal($button.length, 0, "apply button class");
 
-    //act
+    // act
     this.options.filterRow.applyFilter = "onClick";
     this.headerPanel.component.isReady = function() {
         return true;
@@ -1176,26 +1176,26 @@ QUnit.test("Show apply button when applyFilter option is changed", function(asse
     this.headerPanel.optionChanged({ name: "filterRow" });
     this.headerPanel.endUpdate();
 
-    //assert
+    // assert
     $button = testElement.find(".dx-apply-button");
     assert.equal($button.length, 1, "apply button class");
 });
 
 QUnit.test("Hide apply button when applyFilter option is changed", function(assert) {
-    //arrange
+    // arrange
     var testElement = $('#container'),
         $button;
 
     this.options.filterRow.applyFilter = "onClick";
     $.extend(this.columns, [{ caption: 'Column 1', allowFiltering: true, filterOperations: ['=', '<>'] }]);
 
-    //act
+    // act
     this.headerPanel.isVisible = function() {
         return true;
     };
     this.headerPanel.render(testElement);
 
-    //act
+    // act
     this.options.filterRow.applyFilter = "auto";
     this.headerPanel.component.isReady = function() {
         return true;
@@ -1204,13 +1204,13 @@ QUnit.test("Hide apply button when applyFilter option is changed", function(asse
     this.headerPanel.optionChanged({ name: "filterRow" });
     this.headerPanel.endUpdate();
 
-    //assert
+    // assert
     $button = testElement.find(".dx-apply-button");
     assert.equal($button.length, 0, "apply button class");
 });
 
 QUnit.test("Filter row with headers when set option onCellPrepared", function(assert) {
-    //arrange
+    // arrange
     var testElement = $('#container'),
         resultOptions,
         countCallCellPrepared = 0;
@@ -1228,10 +1228,10 @@ QUnit.test("Filter row with headers when set option onCellPrepared", function(as
 
     this.columnHeadersView.init();
 
-    //act
+    // act
     this.columnHeadersView.render(testElement);
 
-    //assert
+    // assert
     assert.equal(countCallCellPrepared, 10, "countCallCellPrepared");
     assert.equal(resultOptions.columnIndex, 2, "columnIndex");
     assert.strictEqual(resultOptions.rowType, "filter", "rowType");
@@ -1239,7 +1239,7 @@ QUnit.test("Filter row with headers when set option onCellPrepared", function(as
 });
 
 QUnit.test("Filter row with headers when set option onRowPrepared", function(assert) {
-    //arrange
+    // arrange
     var testElement = $('#container'),
         resultOptions,
         countCallRowPrepared = 0;
@@ -1257,18 +1257,18 @@ QUnit.test("Filter row with headers when set option onRowPrepared", function(ass
 
     this.columnHeadersView.init();
 
-    //act
+    // act
     this.columnHeadersView.render(testElement);
 
-    //assert
+    // assert
     assert.equal(countCallRowPrepared, 2, "countCallRowPrepared");
     assert.strictEqual(resultOptions.rowType, "filter", "rowType");
     assert.deepEqual(resultOptions.columns, [{ caption: 'Column 1' }, { caption: 'Column 2' }, { caption: 'Column 3' }, { caption: 'Column 4' }, { caption: 'Column 5' }], "columns");
 });
 
-//T480331
+// T480331
 QUnit.test("State of the 'Apply filter' button should be saved after repaint", function(assert) {
-    //arrange
+    // arrange
     var $testElement = $('#container'),
         $button,
         filterRowInput;
@@ -1285,16 +1285,16 @@ QUnit.test("State of the 'Apply filter' button should be saved after repaint", f
     filterRowInput.trigger('keyup');
     this.clock.tick();
 
-    //act
+    // act
     this.headerPanel.render();
 
-    //assert
+    // assert
     $button = $testElement.find(".dx-apply-button");
     assert.notOk($button.hasClass("dx-state-disabled"), "button is enabled");
 });
 
 QUnit.testInActiveWindow("Title is not appended for menu item of filter row", function(assert) {
-    //arrange
+    // arrange
     var testElement = $('#container'),
         $filterMenu,
         $rootMenuItem;
@@ -1311,7 +1311,7 @@ QUnit.testInActiveWindow("Title is not appended for menu item of filter row", fu
         'notEqual': 'test not equals'
     };
 
-    //act
+    // act
     this.columnHeadersView.render(testElement);
 
     $filterMenu = $(".dx-filter-menu").first();
@@ -1324,7 +1324,7 @@ QUnit.testInActiveWindow("Title is not appended for menu item of filter row", fu
 
     $filterMenu.trigger("mousemove");
 
-    //assert
+    // assert
     assert.equal($filterMenu.attr("title"), undefined, "title of menu item");
 });
 
@@ -1389,9 +1389,9 @@ function getFilterMenuItem($columnHeadersView, index) {
     return filterMenuItems.find('.dx-menu-item').eq(index);
 }
 
-//T104040
+// T104040
 QUnit.test("Not apply filter when changed filter operation with empty filter value", function(assert) {
-    //arrange
+    // arrange
     var that = this,
         testElement = $("#container"),
         filterRowInput,
@@ -1416,29 +1416,29 @@ QUnit.test("Not apply filter when changed filter operation with empty filter val
     $(rootMenuItem).trigger("dxclick");
     filterMenuItems = $("#qunit-fixture").find('.dx-overlay-content').first().find('li');
 
-    //act
+    // act
     filterRowInput.val("test");
     filterRowInput.trigger("change");
 
-    //assert
+    // assert
     assert.equal(countApplyFilter, 1, "apply filter");
 
-    //act
-    filterMenuItems.find(".dx-menu-item").last().trigger("dxclick"); //reset filter
+    // act
+    filterMenuItems.find(".dx-menu-item").last().trigger("dxclick"); // reset filter
 
-    //assert
+    // assert
     assert.equal(filterRowInput.val(), "", "input value");
     assert.equal(countApplyFilter, 2, "apply filter");
 
-    //act
-    filterMenuItems.find(".dx-menu-item").first().trigger("dxclick"); //contains filter operation
+    // act
+    filterMenuItems.find(".dx-menu-item").first().trigger("dxclick"); // contains filter operation
 
-    //assert
+    // assert
     assert.equal(countApplyFilter, 2, "not apply filter");
 });
 
 QUnit.test('Return to selectedFilterOperation when reset is chosen', function(assert) {
-    //arrange
+    // arrange
     var testElement = $('#container');
 
     $.extend(this.options.columns, [{
@@ -1465,21 +1465,21 @@ QUnit.test('Return to selectedFilterOperation when reset is chosen', function(as
         initViews: true
     });
 
-    //act
+    // act
     this.columnHeadersView.render(testElement);
     var $columnHeadersView = $(this.columnHeadersView.element());
 
-    getFilterMenuItem($columnHeadersView, 3).trigger('dxclick'); //startswith
+    getFilterMenuItem($columnHeadersView, 3).trigger('dxclick'); // startswith
 
-    getFilterMenuItem($columnHeadersView, 6).trigger('dxclick'); //reset
+    getFilterMenuItem($columnHeadersView, 6).trigger('dxclick'); // reset
 
-    //assert
+    // assert
     assert.ok(getFilterMenuItem($columnHeadersView, 5).hasClass("dx-menu-item-selected"));
     assert.equal(getFilterMenuItem($columnHeadersView, 5).find(".dx-menu-item-text").text(), "Not equals");
 });
 
 QUnit.testInActiveWindow('Filter row with menu: focus behavior', function(assert) {
-    //arrange
+    // arrange
     var $testElement = $('#container'),
         $filterMenu,
         rootMenuItem,
@@ -1489,7 +1489,7 @@ QUnit.testInActiveWindow('Filter row with menu: focus behavior', function(assert
         initViews: true
     });
 
-    //act
+    // act
     this.columnHeadersView.render($testElement);
 
     $filterMenu = $(this.columnHeadersView.element().find('.dx-menu').first());
@@ -1520,9 +1520,9 @@ QUnit.testInActiveWindow('Filter row with menu: focus behavior', function(assert
     assert.ok($filterMenu.parent().find("input").is(":focus"), "filter input is focused");
 });
 
-//T189448
+// T189448
 QUnit.test('Filter row - focus editor', function(assert) {
-    //arrange
+    // arrange
     var that = this,
         $testElement = $('#container').addClass("dx-datagrid-borders");
 
@@ -1532,7 +1532,7 @@ QUnit.test('Filter row - focus editor', function(assert) {
 
     that.columnHeadersView.render($testElement);
 
-    //act
+    // act
     that.editorFactoryController.focus($testElement.find("td").first());
     that.clock.tick();
 
@@ -1540,7 +1540,7 @@ QUnit.test('Filter row - focus editor', function(assert) {
 });
 
 QUnit.test("Filter row with menu for number column", function(assert) {
-    //arrange
+    // arrange
     var that = this,
         $filterMenu,
         rootMenuItem,
@@ -1550,24 +1550,24 @@ QUnit.test("Filter row with menu for number column", function(assert) {
         initViews: true
     });
 
-    //act
+    // act
     that.columnHeadersView.render($testElement);
 
     $filterMenu = $testElement.find(".dx-menu").last();
 
-    //assert
+    // assert
     assert.equal($filterMenu.length, 1, "has menu");
 
-    //act
+    // act
     rootMenuItem = $filterMenu.find(".dx-menu-item");
     $(rootMenuItem).trigger("dxclick");
 
-    //assert
+    // assert
     assert.ok(!!$("#qunit-fixture").find(".dx-menu-item:contains('Between')").length, "has filter range operation");
 });
 
 QUnit.test("Filter row with menu for date column", function(assert) {
-    //arrange
+    // arrange
     var that = this,
         $filterMenu,
         rootMenuItem,
@@ -1578,25 +1578,25 @@ QUnit.test("Filter row with menu for date column", function(assert) {
         initViews: true
     });
 
-    //act
+    // act
     that.columnHeadersView.render($testElement);
 
     $filterMenu = $testElement.find(".dx-menu").last();
 
-    //assert
+    // assert
     assert.equal($filterMenu.length, 1, "has menu");
 
-    //act
+    // act
     rootMenuItem = $filterMenu.find(".dx-menu-item");
     $(rootMenuItem).trigger("dxclick");
 
-    //assert
+    // assert
     assert.ok(!!$("#qunit-fixture").find(".dx-menu-item:contains('Between')").length, "has filter range operation");
 });
 
-//T428602
+// T428602
 QUnit.test("Date column - select filter operation via api", function(assert) {
-    //arrange
+    // arrange
     var that = this,
         $testElement = $('#container').addClass("dx-datagrid-borders");
 
@@ -1605,20 +1605,20 @@ QUnit.test("Date column - select filter operation via api", function(assert) {
         initViews: true
     });
 
-    //act
+    // act
     that.columnHeadersView.render($testElement);
 
-    //act
+    // act
     that.columnOption(2, "selectedFilterOperation", "between");
 
-    //assert
+    // assert
     assert.equal($testElement.find(".dx-filter-range-content").length, 1, "has filter range content");
     assert.equal($(".dx-viewport").children(".dx-datagrid-filter-range-overlay").length, 0, "no overlay wrapper");
 });
 
-//T428602
+// T428602
 QUnit.test("Date column - select filter operation via menu", function(assert) {
-    //arrange
+    // arrange
     var that = this,
         $filterMenu,
         $menuItem,
@@ -1632,21 +1632,21 @@ QUnit.test("Date column - select filter operation via menu", function(assert) {
 
     $filterMenu = $testElement.find(".dx-menu").last();
 
-    //assert
+    // assert
     assert.equal($filterMenu.length, 1, "has menu");
 
-    //arrange
+    // arrange
     $menuItem = $filterMenu.find(".dx-menu-item");
     $($menuItem).trigger("dxclick"); // show menu
     $("#qunit-fixture").find(".dx-menu-item:contains('Between')").trigger("dxclick"); // select filter operation is 'between'
 
-    //assert
+    // assert
     assert.equal($testElement.find(".dx-filter-range-content").length, 1, "has filter range content");
     assert.equal($(".dx-viewport").children(".dx-datagrid-filter-range-overlay").length, 1, "has overlay wrapper");
 });
 
 QUnit.test("Show filter range popup when column with selectedFilterOperation is 'isBetween'", function(assert) {
-    //arrange
+    // arrange
     var that = this,
         $testElement = $('#container').addClass("dx-datagrid-borders");
 
@@ -1657,20 +1657,20 @@ QUnit.test("Show filter range popup when column with selectedFilterOperation is 
 
     that.columnHeadersView.render($testElement);
 
-    //assert
+    // assert
     assert.equal($testElement.find(".dx-filter-range-content").length, 1, "has filter range content");
 
-    //act
+    // act
     $($testElement.find("td").last().find(".dx-filter-range-content")).trigger("focusin");
     that.clock.tick();
 
-    //assert
+    // assert
     assert.equal($(".dx-viewport").children(".dx-datagrid-filter-range-overlay").length, 1, "has overlay wrapper");
     assert.equal($(".dx-viewport").children(".dx-datagrid-filter-range-overlay").find(".dx-numberbox").length, 2, "count number box");
 });
 
 QUnit.test("Show filter range popup when column with selectedFilterOperation is 'isBetween' and filter value is array", function(assert) {
-    //arrange
+    // arrange
     var that = this,
         $endRange,
         $startRange,
@@ -1681,18 +1681,18 @@ QUnit.test("Show filter range popup when column with selectedFilterOperation is 
         initViews: true
     });
 
-    //act
+    // act
     that.columnHeadersView.render($testElement);
 
-    //assert
+    // assert
     assert.equal($testElement.find(".dx-filter-range-content").length, 1, "has filter range content");
     assert.strictEqual($testElement.find(".dx-filter-range-content").text(), "15 - 18", "filter range value");
 
-    //act
+    // act
     $($testElement.find("td").last().find(".dx-filter-range-content")).trigger("focusin");
     that.clock.tick();
 
-    //assert
+    // assert
     $startRange = $(".dx-viewport").children(".dx-datagrid-filter-range-overlay").find(".dx-numberbox").first();
     $endRange = $(".dx-viewport").children(".dx-datagrid-filter-range-overlay").find(".dx-numberbox").last();
     assert.equal($startRange.length, 1, "has number box");
@@ -1702,7 +1702,7 @@ QUnit.test("Show filter range popup when column with selectedFilterOperation is 
 });
 
 QUnit.test("Not calculated filter expression when range not has a start value", function(assert) {
-    //arrange
+    // arrange
     var that = this,
         $testElement = $('#container').addClass("dx-datagrid-borders");
 
@@ -1711,17 +1711,17 @@ QUnit.test("Not calculated filter expression when range not has a start value", 
         initViews: true
     });
 
-    //act
+    // act
     that.columnHeadersView.render($testElement);
 
-    //assert
+    // assert
     assert.equal($testElement.find(".dx-filter-range-content").length, 1, "has filter range content");
     assert.strictEqual($testElement.find(".dx-filter-range-content").text(), " - 18", "filter range value");
     assert.ok(!that.getCombinedFilter(), "not has filter");
 });
 
 QUnit.test("Not calculated filter expression when range not has a end value", function(assert) {
-    //arrange
+    // arrange
     var that = this,
         $testElement = $('#container').addClass("dx-datagrid-borders");
 
@@ -1730,17 +1730,17 @@ QUnit.test("Not calculated filter expression when range not has a end value", fu
         initViews: true
     });
 
-    //act
+    // act
     that.columnHeadersView.render($testElement);
 
-    //assert
+    // assert
     assert.equal($testElement.find(".dx-filter-range-content").length, 1, "has filter range content");
     assert.strictEqual($testElement.find(".dx-filter-range-content").text(), "15", "filter range value");
     assert.ok(!that.getCombinedFilter(), "not has filter");
 });
 
 QUnit.test("Calculated filter expression when range has start value and end value", function(assert) {
-    //arrange
+    // arrange
     var that = this,
         filter,
         $testElement = $('#container').addClass("dx-datagrid-borders");
@@ -1750,10 +1750,10 @@ QUnit.test("Calculated filter expression when range has start value and end valu
         initViews: true
     });
 
-    //act
+    // act
     that.columnHeadersView.render($testElement);
 
-    //assert
+    // assert
     filter = that.getCombinedFilter();
     assert.equal($testElement.find(".dx-filter-range-content").length, 1, "has filter range content");
     assert.strictEqual($testElement.find(".dx-filter-range-content").text(), "15 - 18", "filter range value");
@@ -1765,9 +1765,9 @@ QUnit.test("Calculated filter expression when range has start value and end valu
     assert.equal(filter[2][2], 18, "value of the second filter");
 });
 
-//T312151
+// T312151
 QUnit.test("Reset filter range when selectedFilterOperation is 'between'", function(assert) {
-    //arrange
+    // arrange
     var that = this,
         $testElement = $('#container').addClass("dx-datagrid-borders");
 
@@ -1778,20 +1778,20 @@ QUnit.test("Reset filter range when selectedFilterOperation is 'between'", funct
 
     that.columnHeadersView.render($testElement);
 
-    //assert
+    // assert
     assert.equal($testElement.find(".dx-filter-range-content").length, 1, "has filter range content");
     assert.strictEqual($testElement.find(".dx-filter-range-content").text(), "100 - 200", "filter range value");
 
-    //act
+    // act
     that.columnOption("age", "filterValue", undefined);
 
-    //assert
+    // assert
     assert.strictEqual($testElement.find(".dx-filter-range-content").html(), "&nbsp;", "filter range value");
 });
 
-//T325295
+// T325295
 QUnit.test("Reset filter range when changed selectedFilterOperation", function(assert) {
-    //arrange
+    // arrange
     var that = this,
         column,
         $filterMenu,
@@ -1806,29 +1806,29 @@ QUnit.test("Reset filter range when changed selectedFilterOperation", function(a
 
     that.columnHeadersView.render($testElement);
 
-    //assert
+    // assert
     assert.equal($testElement.find(".dx-filter-range-content").length, 1, "has filter range content");
     assert.strictEqual($testElement.find(".dx-filter-range-content").text(), "100 - 200", "filter range value");
 
-    //arrange
+    // arrange
     $filterMenu = $testElement.find(".dx-menu").last();
     $rootMenuItem = $filterMenu.find(".dx-menu-item");
     $($rootMenuItem).trigger("dxclick"); // show operation chooser
 
-    //act
+    // act
     $filterMenuItems = $("#qunit-fixture").find(".dx-overlay-content").first().find("li");
     $($filterMenuItems.find(".dx-menu-item")[0]).trigger("dxclick"); // change selectedFilterOperation on '='
 
-    //assert
+    // assert
     column = that.columnsController.getVisibleColumns()[1];
     assert.strictEqual(column.selectedFilterOperation, "=", "selected filter operation");
     assert.strictEqual($testElement.find("input").last().val(), "", "text of the cell");
     assert.strictEqual(column.filterValue, null, "filter value of the column");
 });
 
-//T325295
+// T325295
 QUnit.test("Reset filter value when changed selectedFilterOperation on 'between'", function(assert) {
-    //arrange
+    // arrange
     var that = this,
         column,
         $filterMenu,
@@ -1843,28 +1843,28 @@ QUnit.test("Reset filter value when changed selectedFilterOperation on 'between'
 
     that.columnHeadersView.render($testElement);
 
-    //assert
+    // assert
     assert.strictEqual($testElement.find("input").last().val(), "100", "filter value");
 
-    //arrange
+    // arrange
     $filterMenu = $testElement.find(".dx-menu").last();
     $rootMenuItem = $filterMenu.find(".dx-menu-item");
     $($rootMenuItem).trigger("dxclick"); // show operation chooser
 
-    //act
+    // act
     $filterMenuItems = $("#qunit-fixture").find(".dx-overlay-content").first().find("li");
     $($filterMenuItems.find(".dx-menu-item")[6]).trigger("dxclick"); // change selectedFilterOperation on 'between'
 
-    //assert
+    // assert
     column = that.columnsController.getVisibleColumns()[1];
     assert.strictEqual(column.selectedFilterOperation, "between", "selected filter operation");
     assert.strictEqual($(".dx-viewport").children(".dx-datagrid-filter-range-overlay").find("input").eq(0).val(), "", "start value of the range");
     assert.strictEqual(column.filterValue, null, "filter value of the column");
 });
 
-//T306826
+// T306826
 QUnit.test("Apply filter by range when entering the filter value quickly", function(assert) {
-    //arrange
+    // arrange
     var that = this,
         filter,
         $startRangeInput,
@@ -1878,27 +1878,27 @@ QUnit.test("Apply filter by range when entering the filter value quickly", funct
 
     that.columnHeadersView.render($testElement);
 
-    //assert
+    // assert
     assert.equal($testElement.find(".dx-filter-range-content").length, 1, "has filter range content");
 
-    //arrange
+    // arrange
     $($testElement.find("td").last().find(".dx-filter-range-content")).trigger("focusin");
     that.clock.tick();
 
-    //assert
+    // assert
     $startRangeInput = $(".dx-viewport").children(".dx-datagrid-filter-range-overlay").find(".dx-numberbox").first().find(TEXTEDITOR_INPUT_SELECTOR);
     assert.equal($startRangeInput.length, 1, "has input");
     $endRangeInput = $(".dx-viewport").children(".dx-datagrid-filter-range-overlay").find(".dx-numberbox").last().find(TEXTEDITOR_INPUT_SELECTOR);
     assert.equal($endRangeInput.length, 1, "has input");
 
-    //act
+    // act
     $startRangeInput.val(17);
     $($startRangeInput).trigger("change");
     $endRangeInput.val(18);
     $($endRangeInput).trigger("change");
     that.clock.tick(750);
 
-    //assert
+    // assert
     assert.strictEqual($startRangeInput.val(), "17", "start value of the range");
     assert.strictEqual($endRangeInput.val(), "18", "end value of the range");
     assert.equal(that.dataController.items().length, 3, "count items");
@@ -1911,9 +1911,9 @@ QUnit.test("Apply filter by range when entering the filter value quickly", funct
     assert.equal(filter[2][2], 18, "value of the second filter");
 });
 
-//T318603
+// T318603
 QUnit.test("filter by 0 value for number column", function(assert) {
-    //arrange
+    // arrange
     var that = this,
         testElement = $("#container"),
         $filterRowInput,
@@ -1931,21 +1931,21 @@ QUnit.test("filter by 0 value for number column", function(assert) {
 
     $filterRowInput = testElement.find(TEXTEDITOR_INPUT_SELECTOR).eq(1);
 
-    //act
+    // act
     $filterRowInput.val("0");
     $($filterRowInput).trigger("change");
 
     $filterRowInput = testElement.find(TEXTEDITOR_INPUT_SELECTOR).eq(1);
 
-    //assert
+    // assert
     assert.equal(countApplyFilter, 1, "applyFilter called once");
     assert.strictEqual(that.columnsController.columnOption(1, "filterValue"), 0, "filterValue is changed to 0");
     assert.equal($filterRowInput.val(), "0", "input value");
 });
 
-//T386403
+// T386403
 QUnit.test("buffered filter is not applied on refresh when applyFilter mode is onClick", function(assert) {
-    //arrange
+    // arrange
     var that = this,
         testElement = $("#container"),
         $filterRowInput,
@@ -1966,7 +1966,7 @@ QUnit.test("buffered filter is not applied on refresh when applyFilter mode is o
 
     $filterRowInput = testElement.find(TEXTEDITOR_INPUT_SELECTOR).eq(1);
 
-    //act
+    // act
     $filterRowInput.val("1");
     $($filterRowInput).trigger("change");
 
@@ -1974,17 +1974,17 @@ QUnit.test("buffered filter is not applied on refresh when applyFilter mode is o
 
     $filterRowInput = testElement.find("input").eq(1);
 
-    //assert
+    // assert
     assert.equal(countApplyFilter, 0, "applyFilter called once");
     assert.strictEqual(that.columnsController.columnOption(1, "bufferedFilterValue"), 1, "bufferedFilterValue is changed to 1");
     assert.strictEqual(that.columnsController.columnOption(1, "filterValue"), undefined, "filterValue is not changed");
     assert.strictEqual(that.dataController.getCombinedFilter(), undefined, "combinedFilter does not exist");
 
-    //act
+    // act
     var $button = testElement.find(".dx-apply-button");
     $($button).trigger("dxclick");
 
-    //assert
+    // assert
     assert.equal(countApplyFilter, 1, "applyFilter called once");
     assert.strictEqual(that.columnsController.columnOption(1, "bufferedFilterValue"), undefined, "bufferedFilterValue is changed to undefined");
     assert.strictEqual(that.columnsController.columnOption(1, "filterValue"), 1, "filterValue is changed to 1");
@@ -1994,9 +1994,9 @@ QUnit.test("buffered filter is not applied on refresh when applyFilter mode is o
     assert.equal(testElement.find(TEXTEDITOR_INPUT_SELECTOR).eq(1).val(), "1", "input value");
 });
 
-//T429643
+// T429643
 QUnit.test("Filter by range when column with customizeText and filter value is array", function(assert) {
-    //arrange
+    // arrange
     var that = this,
         $testElement = $('#container').addClass("dx-datagrid-borders");
 
@@ -2020,17 +2020,17 @@ QUnit.test("Filter by range when column with customizeText and filter value is a
         initViews: true
     });
 
-    //act
+    // act
     that.columnHeadersView.render($testElement);
 
-    //assert
+    // assert
     assert.equal($testElement.find(".dx-filter-range-content").length, 1, "has filter range content");
     assert.strictEqual($testElement.find(".dx-filter-range-content").text(), "6/7 - 8/7", "filter range value");
     assert.equal(that.dataController.items().length, 1, "count item");
 });
 
 QUnit.test("Rows view is not rendered when value is entered to editor of the filter row (applyFilter mode is onClick)", function(assert) {
-    //arrange
+    // arrange
     var $testElement = $('#container'),
         isRowsRendered;
 
@@ -2039,7 +2039,7 @@ QUnit.test("Rows view is not rendered when value is entered to editor of the fil
         initViews: true
     });
 
-    //act
+    // act
     this.columnHeadersView.render($testElement);
     this.rowsView.render($testElement);
 
@@ -2052,12 +2052,12 @@ QUnit.test("Rows view is not rendered when value is entered to editor of the fil
 
     this.clock.tick(700);
 
-    //assert
+    // assert
     assert.ok(!isRowsRendered, "items of rows view is not rendered");
 });
 
 QUnit.test("Reset an invalid value of filter row for the DateBox editor", function(assert) {
-    //arrange
+    // arrange
     var $testElement = $('#container');
 
     this.items = [
@@ -2065,14 +2065,14 @@ QUnit.test("Reset an invalid value of filter row for the DateBox editor", functi
     ];
 
     this.options.columns = [{ dataField: "date", dataType: "date" }];
-    //T528529
+    // T528529
     this.options.filterRow.resetOperationText = "My Reset";
 
     setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'filterRow', 'editorFactory'], {
         initViews: true
     });
 
-    //act
+    // act
     this.columnHeadersView.render($testElement);
 
     var $input = $(".dx-datebox input");
@@ -2081,18 +2081,18 @@ QUnit.test("Reset an invalid value of filter row for the DateBox editor", functi
 
     var $resetMenuItem = $(getFilterMenuItem(this.columnHeadersView.element(), 7));
 
-    $($resetMenuItem).trigger('dxclick'); //reset
+    $($resetMenuItem).trigger('dxclick'); // reset
 
-    //assert
+    // assert
     assert.equal($resetMenuItem.text(), "My Reset");
     var dateBox = $(".dx-datebox").dxDateBox("instance");
     assert.ok(!dateBox.option("text"), "text option");
     assert.ok(dateBox.option("isValid"), "isValid option");
 });
 
-//T502318
+// T502318
 QUnit.test("There are no errors on repaint a filter row when filter range popup is visible", function(assert) {
-    //arrange
+    // arrange
     var that = this,
         $testElement = $('#container').addClass("dx-datagrid-borders");
 
@@ -2106,19 +2106,19 @@ QUnit.test("There are no errors on repaint a filter row when filter range popup 
     $($testElement.find("td").last().find(".dx-filter-range-content")).trigger("focusin");
     that.clock.tick();
 
-    //assert
+    // assert
     assert.equal($(".dx-viewport").children(".dx-datagrid-filter-range-overlay").length, 1, "has overlay wrapper");
 
-    //act
+    // act
     that.columnHeadersView.render($testElement);
     that.columnHeadersView.resize();
 
-    //assert
+    // assert
     assert.equal($(".dx-viewport").children(".dx-datagrid-filter-range-overlay").length, 0, "hasn't overlay wrapper");
 });
 
 QUnit.test("Add custom tabIndex to filter range content", function(assert) {
-    //arrange
+    // arrange
     var that = this,
         $filterMenu,
         $menuItem,
@@ -2140,14 +2140,14 @@ QUnit.test("Add custom tabIndex to filter range content", function(assert) {
 
     $filterRangeContent = $(".dx-filter-range-content");
 
-    //assert
+    // assert
     assert.equal($filterRangeContent.attr("tabIndex"), "3", "tabIndex of filter range content");
 });
 
 if(device.deviceType === "desktop") {
-    //T306751
+    // T306751
     QUnit.testInActiveWindow("Filter range - keyboard navigation", function(assert) {
-        //arrange
+        // arrange
         var that = this,
             $cells,
             $numberBoxElements,
@@ -2160,31 +2160,31 @@ if(device.deviceType === "desktop") {
         that.updateDimensions = noop;
         that.columnHeadersView.render($testElement);
 
-        //assert
+        // assert
         assert.equal($testElement.find(".dx-filter-range-content").length, 1, "has filter range content");
 
-        //act
-        $($testElement.find(".dx-filter-range-content")).trigger("focusin"); //show range
+        // act
+        $($testElement.find(".dx-filter-range-content")).trigger("focusin"); // show range
 
-        //assert
+        // assert
         $cells = $testElement.find("td");
         $numberBoxElements = $(".dx-viewport").children(".dx-datagrid-filter-range-overlay").find(".dx-numberbox");
         assert.equal($cells.first().find(".dx-datagrid-filter-range-overlay").length, 1, "has filter range popup");
         assert.equal($(".dx-viewport").children(".dx-datagrid-filter-range-overlay").length, 1, "has popup wrapper");
         assert.equal($numberBoxElements.length, 2, "count number box");
 
-        //act
+        // act
         $($numberBoxElements.last().find(TEXTEDITOR_INPUT_SELECTOR)).trigger($.Event("keydown", { which: 9 })); // focus on menu of the second cell, hide range
 
-        //assert
+        // assert
         assert.equal($cells.first().find(".dx-filter-range-content").length, 1, "has filter range content");
         assert.ok(!$(".dx-viewport").children(".dx-datagrid-filter-range-overlay").length, "not has popup wrapper");
         assert.ok($cells.last().find(".dx-menu").first().is(":focus"), "focus on menu of the second cell");
     });
 
-    //T306751
+    // T306751
     QUnit.testInActiveWindow("Filter range - keyboard navigation with key pressed the shift", function(assert) {
-        //arrange
+        // arrange
         var that = this,
             $cells,
             $numberBoxElements,
@@ -2197,23 +2197,23 @@ if(device.deviceType === "desktop") {
         that.updateDimensions = noop;
         that.columnHeadersView.render($testElement);
 
-        //assert
+        // assert
         assert.equal($testElement.find(".dx-filter-range-content").length, 1, "has filter range content");
 
-        //act
-        $($testElement.find(".dx-filter-range-content")).trigger("focusin"); //show range
+        // act
+        $($testElement.find(".dx-filter-range-content")).trigger("focusin"); // show range
 
-        //assert
+        // assert
         $cells = $testElement.find("td");
         $numberBoxElements = $(".dx-viewport").children(".dx-datagrid-filter-range-overlay").find(".dx-numberbox");
         assert.equal($cells.first().find(".dx-datagrid-filter-range-overlay").length, 1, "has filter range popup");
         assert.equal($(".dx-viewport").children(".dx-datagrid-filter-range-overlay").length, 1, "has popup wrapper");
         assert.equal($numberBoxElements.length, 2, "count number box");
 
-        //act
+        // act
         $($numberBoxElements.first().find("input")).trigger($.Event("keydown", { which: 9, shiftKey: true })); // focus on menu of the first cell, hide range
 
-        //assert
+        // assert
         assert.equal($cells.first().find(".dx-filter-range-content").length, 1, "has filter range content");
         assert.ok(!$(".dx-viewport").children(".dx-datagrid-filter-range-popup").length, "not has popup wrapper");
         assert.ok($cells.first().find(".dx-menu").first().is(":focus"), "focus on menu of the first cell");

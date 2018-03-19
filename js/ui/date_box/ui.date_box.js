@@ -296,27 +296,29 @@ var DateBox = DropDownEditor.inherit({
             {
                 device: { platform: "ios" },
                 options: {
-                    /**
-                    * @name dxDateBoxOptions_pickerType
-                    * @publicName pickerType
-                    * @default 'native' @for iOS
-                    */
-                    pickerType: PICKER_TYPE.native,
                     showPopupTitle: true
                 }
             },
             {
-                device: function(device) {
-                    return device.platform === "android";
+                device: { platform: "android" },
+                options: {
+                    buttonsLocation: "bottom after"
+                }
+            },
+            {
+                device: function() {
+                    var realDevice = devices.real(),
+                        platform = realDevice.platform;
+                    return platform === "ios" || platform === "android";
                 },
                 options: {
                     /**
                     * @name dxDateBoxOptions_pickerType
                     * @publicName pickerType
+                    * @default 'native' @for iOS
                     * @default 'native' @for Android
                     */
-                    pickerType: PICKER_TYPE.native,
-                    buttonsLocation: "bottom after"
+                    pickerType: PICKER_TYPE.native
                 }
             },
             {
@@ -336,12 +338,12 @@ var DateBox = DropDownEditor.inherit({
                 }
             },
             {
-                device: function() {
+                device: function(currentDevice) {
                     var realDevice = devices.real(),
                         platform = realDevice.platform,
                         version = realDevice.version,
                         isPhone = realDevice.phone;
-                    return platform === "generic" && isPhone || platform === "win" && isPhone || (platform === "android" && compareVersions(version, [4, 4]) < 0);
+                    return platform === "generic" && currentDevice.deviceType !== "desktop" || platform === "win" && isPhone || (platform === "android" && compareVersions(version, [4, 4]) < 0);
                 },
                 options: {
                     /**
@@ -468,16 +470,22 @@ var DateBox = DropDownEditor.inherit({
         return STRATEGY_NAME.list;
     },
 
-    _render: function() {
+    _initMarkup: function() {
         this.$element().addClass(DATEBOX_CLASS);
+        this._renderSubmitElement();
+
+        this.callBase();
 
         this._refreshFormatClass();
         this._refreshPickerTypeClass();
-        this._renderSubmitElement();
+
+        this._strategy.renderInputMinMax(this._input());
+    },
+
+    _render: function() {
         this.callBase();
 
         this._updateSize();
-        this._strategy.renderInputMinMax(this._input());
     },
 
     _renderDimensions: function() {

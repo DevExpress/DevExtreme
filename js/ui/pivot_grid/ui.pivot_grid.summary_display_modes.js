@@ -515,7 +515,7 @@ function processDataCell(data, rowIndex, columnIndex, isRunningTotalCalculation)
     if(!originalCell) {
         return;
     }
-    //T571071
+    // T571071
     if(values.allowResetting || !isRunningTotalCalculation) {
         data.values[rowIndex][columnIndex] = originalCell.slice();
     }

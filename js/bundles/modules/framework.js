@@ -70,7 +70,7 @@ DevExpress.framework.html.HtmlApplication = require("../../framework/html/html_a
 DevExpress.framework.html.layoutSets = require("../../framework/html/presets").layoutSets;
 DevExpress.framework.html.animationSets = require("../../framework/html/presets").animationSets;
 
-//TODO: discuss publishing this
+// TODO: discuss publishing this
 DevExpress.framework.html.DefaultLayoutController = require("../../framework/html/layout_controller").DefaultLayoutController;
 DevExpress.framework.html.layoutSets = require("../../framework/html/layout_controller").layoutSets;
 

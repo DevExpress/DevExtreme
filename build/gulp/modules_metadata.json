@@ -684,6 +684,7 @@
     "name": "viz/themes",
     "exports": {
       "currentTheme": "viz.currentTheme",
+      "getTheme": "viz.getTheme",
       "refreshTheme": "viz.refreshTheme",
       "registerTheme": "viz.registerTheme"
     }

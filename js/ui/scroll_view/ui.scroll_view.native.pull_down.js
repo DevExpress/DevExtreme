@@ -28,7 +28,7 @@ var PullDownNativeScrollViewStrategy = NativeStrategy.inherit({
         this._$pullDown = scrollView._$pullDown;
         this._$bottomPocket = scrollView._$bottomPocket;
         this._$refreshingText = scrollView._$refreshingText;
-        this._$scrollViewContent = scrollView.content();
+        this._$scrollViewContent = $(scrollView.content());
 
         this._initCallbacks();
     },

@@ -215,7 +215,7 @@ var Button = Widget.inherit({
         }, this);
     },
 
-    _render: function() {
+    _initMarkup: function() {
         this.$element().addClass(BUTTON_CLASS);
         this._renderType();
 
@@ -226,6 +226,8 @@ var Button = Widget.inherit({
         this._updateAriaLabel();
 
         this.callBase();
+
+        this._updateContent();
     },
 
     _renderInkRipple: function() {
@@ -262,7 +264,7 @@ var Button = Widget.inherit({
         }
     },
 
-    _renderContentImpl: function() {
+    _updateContent: function() {
         var $element = this.$element(),
             data = this._getContentData();
 
@@ -389,7 +391,7 @@ var Button = Widget.inherit({
             .addClass("dx-button-" + type);
 
         if(!this.$element().hasClass(BUTTON_HAS_ICON_CLASS) && type === "back") {
-            this._renderContentImpl();
+            this._updateContent();
         }
     },
 
@@ -400,16 +402,16 @@ var Button = Widget.inherit({
                 break;
             case "icon":
             case "text":
-                this._renderContentImpl();
+                this._updateContent();
                 this._updateAriaLabel();
                 break;
             case "type":
                 this._refreshType(args.previousValue);
-                this._renderContentImpl();
+                this._updateContent();
                 this._updateAriaLabel();
                 break;
             case "template":
-                this._renderContentImpl();
+                this._updateContent();
                 break;
             case "useInkRipple":
                 this._invalidate();

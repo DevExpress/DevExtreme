@@ -37,23 +37,6 @@ var baseBarSeriesMethods = {
         settings["clip-path"] = null;
     },
 
-    _clearingAnimation: function(drawComplete) {
-        var that = this,
-            settings = that._oldGetAffineCoordOptions() || that._getAffineCoordOptions();
-
-        that._labelsGroup && that._labelsGroup.animate({ opacity: 0.001 }, { duration: that._defaultDuration, partitionDuration: 0.5 }, function() {
-            that._markersGroup.animate(settings, { partitionDuration: 0.5 }, function() {
-                that._markersGroup.attr({
-                    scaleX: null,
-                    scaleY: null,
-                    translateX: 0,
-                    translateY: 0
-                });
-                drawComplete();
-            });
-        });
-    },
-
     _setGroupsSettings: function(animationEnabled, firstDrawing) {
         var that = this,
             settings = {};
@@ -121,7 +104,9 @@ var baseBarSeriesMethods = {
     _patchMarginOptions: function(options) {
         options.checkInterval = true;
         return options;
-    }
+    },
+
+    _defaultAggregator: "sum"
 };
 
 exports.chart.bar = _extend({}, chartSeries, baseBarSeriesMethods, {
@@ -174,7 +159,7 @@ exports.polar.bar = _extend({}, polarSeries, baseBarSeriesMethods, {
         markersSettings["class"] = "dxc-markers";
         that._applyMarkerClipRect(markersSettings);
         groupSettings = _extend({}, markersSettings);
-        delete groupSettings.opacity;                   //T110796
+        delete groupSettings.opacity;                   // T110796
         that._markersGroup.attr(groupSettings);
     },
 

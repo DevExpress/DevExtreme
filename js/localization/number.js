@@ -15,10 +15,10 @@ var MAX_LARGE_NUMBER_POWER = 4,
 var NUMERIC_FORMATS = ["currency", "fixedpoint", "exponential", "percent", "decimal"];
 
 var LargeNumberFormatPostfixes = {
-    1: 'K', //kilo
-    2: 'M', //mega
-    3: 'B', //billions
-    4: 'T' //tera
+    1: 'K', // kilo
+    2: 'M', // mega
+    3: 'B', // billions
+    4: 'T' // tera
 };
 
 var LargeNumberFormatPowers = {
@@ -133,15 +133,16 @@ var numberLocalization = dependencyInjector({
 
     _addZeroes: function(value, precision) {
         var multiplier = Math.pow(10, precision);
+        var sign = value < 0 ? "-" : "";
 
-        value = ((value * multiplier) >>> 0) / multiplier;
+        value = ((Math.abs(value) * multiplier) >>> 0) / multiplier;
 
         var result = value.toString();
         while(result.length < precision) {
             result = "0" + result;
         }
 
-        return result;
+        return sign + result;
     },
 
     _addGroupSeparators: function(value) {
@@ -234,7 +235,7 @@ var numberLocalization = dependencyInjector({
         });
     },
 
-    _getSign: function(text, format) {
+    getSign: function(text, format) {
         if(text.charAt(0) === "-") {
             return -1;
         }
@@ -242,9 +243,9 @@ var numberLocalization = dependencyInjector({
             return 1;
         }
 
-        var negativeEtalon = this.format(-1, format),
-            separators = this._getSeparators(),
+        var separators = this._getSeparators(),
             regExp = new RegExp("[0-9" + escapeRegExp(separators.decimalSeparator + separators.thousandsSeparator) + "]+", "g"),
+            negativeEtalon = this.format(-1, format).replace(regExp, "1"),
             cleanedText = text.replace(regExp, "1");
 
         return cleanedText === negativeEtalon ? -1 : 1;
@@ -312,7 +313,7 @@ var numberLocalization = dependencyInjector({
             return null;
         }
 
-        return parsed * this._getSign(text, format);
+        return parsed * this.getSign(text, format);
     }
 });
 

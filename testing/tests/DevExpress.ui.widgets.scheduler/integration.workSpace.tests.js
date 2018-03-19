@@ -609,7 +609,6 @@ QUnit.test("Cell data should be applied when resources are loaded", function(ass
     });
 
 
-
 });
 
 QUnit.test("Cell data should be updated after view changing", function(assert) {
@@ -636,7 +635,6 @@ QUnit.test("Cell data should be updated after view changing", function(assert) {
         startDate: new Date(2016, 8, 4),
         endDate: new Date(2016, 8, 4, 0, 30)
     }, "Cell data is OK!");
-
 
 
 });
@@ -1128,7 +1126,6 @@ QUnit.test("dateCellTemplate should have correct options in agenda view", functi
 });
 
 
-
 QUnit.test("Agenda has right arguments in resourceCellTemplate arguments", function(assert) {
     var params;
 
@@ -1287,6 +1284,31 @@ QUnit.test("Timepanel text should be calculated correctly if DST makes sense (T4
     assert.equal($cells.eq(2).text(), dateLocalization.format(new Date(2016, 10, 6, 2), "shorttime"), "Cell text is OK");
 });
 
+QUnit.test("DateTimeIndicator should show correct time in current time zone", function(assert) {
+    var currentDate = new Date(2018, 1, 4);
+
+    this.createInstance({
+        dataSource: [],
+        views: ["week"],
+        currentView: "week",
+        cellDuration: 60,
+        showCurrentTimeIndicator: true,
+        currentDate: currentDate,
+        indicatorTime: new Date(2018, 1, 4, 9, 30),
+        height: 600
+    });
+
+    var indicatorPositionBefore = this.instance.$element().find(".dx-scheduler-date-time-indicator").position(),
+        cellHeight = $(this.instance.$element()).find(".dx-scheduler-date-table td").eq(0).outerHeight();
+
+    this.instance.option("timeZone", "Europe/Berlin");
+
+    var indicatorPositionAfter = this.instance.$element().find(".dx-scheduler-date-time-indicator").position(),
+        tzDiff = this.instance.fire("getClientTimezoneOffset", currentDate) / 3600000 + this.instance.fire("getTimezone");
+
+    assert.equal(indicatorPositionAfter.top, indicatorPositionBefore.top + cellHeight * tzDiff, "indicator has correct position");
+});
+
 QUnit.test("Tables should take css class after width calculation(T491453)", function(assert) {
     assert.expect(1);
 
@@ -1335,6 +1357,28 @@ QUnit.test("ScrollTo of dateTable scrollable shouldn't be called when dateTable 
     assert.notOk(dateTableScrollToSpy.calledOnce, "dateTable scrollTo was not called");
 });
 
+QUnit.test("OnScroll of header scrollable shouldn't be called when dateTable scrollable scroll in timeLine view", function(assert) {
+    this.createInstance({
+        currentDate: new Date(2017, 3, 16),
+        dataSource: [],
+        currentView: "timelineWeek",
+        height: 500
+    });
+
+    var callCount = 0;
+
+    var headerScrollable = this.instance.$element().find(".dx-scheduler-header-scrollable").dxScrollable("instance"),
+        dateTableScrollable = this.instance.$element().find(".dx-scheduler-date-table-scrollable").dxScrollable("instance");
+
+    headerScrollable.option("onScroll", function() {
+        callCount++;
+    });
+
+    dateTableScrollable.scrollBy(1000);
+
+    assert.equal(callCount, 0, "header onScroll was not called");
+});
+
 QUnit.test("ScrollTo of dateTable & header scrollable should are called when headerScrollable scroll", function(assert) {
     this.createInstance({
         currentDate: new Date(2017, 3, 16),
@@ -1352,6 +1396,28 @@ QUnit.test("ScrollTo of dateTable & header scrollable should are called when hea
 
     assert.ok(dateTableScrollToSpy.calledOnce, "dateTable scrollTo was called");
     assert.notOk(headerScrollToSpy.calledOnce, "header scrollTo wasn't called");
+});
+
+QUnit.test("OnScroll of dateTable scrollable shouldn't be called when header scrollable scroll in timeLine view", function(assert) {
+    this.createInstance({
+        currentDate: new Date(2017, 3, 16),
+        dataSource: [],
+        currentView: "timelineWeek",
+        height: 500
+    });
+
+    var callCount = 0;
+
+    var headerScrollable = this.instance.$element().find(".dx-scheduler-header-scrollable").dxScrollable("instance"),
+        dateTableScrollable = this.instance.$element().find(".dx-scheduler-date-table-scrollable").dxScrollable("instance");
+
+    dateTableScrollable.option("onScroll", function() {
+        callCount++;
+    });
+
+    headerScrollable.scrollBy(1000);
+
+    assert.equal(callCount, 0, "dateTable onScroll was not called");
 });
 
 QUnit.test("ScrollTo of sidebar scrollable shouldn't be called when sidebar scrollable scroll and crossScrollingEnabled is turn on", function(assert) {
@@ -1372,6 +1438,29 @@ QUnit.test("ScrollTo of sidebar scrollable shouldn't be called when sidebar scro
 
     assert.notOk(sideBarScrollToSpy.calledOnce, "sidebar scrollTo was not called");
     assert.ok(dateTableScrollToSpy.calledOnce, "dateTable scrollTo was called");
+});
+
+QUnit.test("OnScroll of sidebar scrollable shouldn't be called when dateTable scrollable scroll and crossScrollingEnabled is turn on", function(assert) {
+    this.createInstance({
+        currentDate: new Date(2017, 3, 16),
+        dataSource: [],
+        crossScrollingEnabled: true,
+        currentView: "week",
+        height: 500
+    });
+
+    var callCount = 0;
+
+    var sideBarScrollable = this.instance.$element().find(".dx-scheduler-sidebar-scrollable").dxScrollable("instance"),
+        dateTableScrollable = this.instance.$element().find(".dx-scheduler-date-table-scrollable").dxScrollable("instance");
+
+    sideBarScrollable.option("onScroll", function() {
+        callCount++;
+    });
+
+    dateTableScrollable.scrollBy(1000);
+
+    assert.equal(callCount, 0, "sidebar onScroll was not called");
 });
 
 QUnit.test("intervalCount should be passed to workSpace", function(assert) {

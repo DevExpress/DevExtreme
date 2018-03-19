@@ -32,13 +32,13 @@ window.internals = {
 
 window.DATA = (function() {
     return [
-        //0
+        // 0
         [
             { key: 1, text: "Item 1" },
             { key: 2, text: "Item 2" },
             { key: 3, text: "Item 3" }
         ],
-        //1
+        // 1
         [
             {
                 key: 1, text: "Item 1", items: [
@@ -52,7 +52,7 @@ window.DATA = (function() {
             },
             { key: 2, text: "Item 2" }
         ],
-        //2
+        // 2
         [
             {
                 key: 1, text: "Item 1", items: [
@@ -62,7 +62,7 @@ window.DATA = (function() {
             },
             { key: 2, text: "Item 2" }
         ],
-        //3
+        // 3
         [
             {
                 itemId: 1,
@@ -73,7 +73,7 @@ window.DATA = (function() {
             },
             { itemId: 2, itemName: "Item 2" }
         ],
-        //4
+        // 4
         [
             { "Id": 1, "ParentId": 0, "Name": "Animals" },
             { "Id": 2, "ParentId": 1, "Name": "Cat" },
@@ -84,10 +84,10 @@ window.DATA = (function() {
             { "Id": 12, "ParentId": 0, "Name": "Birds" },
             { "Id": 13, "ParentId": 12, "Name": "Akekee" }
         ],
-        //5
+        // 5
         [
             {
-                    //id: "!/#$%&'()*+,./:;<=>?@[\]^`{|}~",
+                    // id: "!/#$%&'()*+,./:;<=>?@[\]^`{|}~",
                 id: 1,
                 text: "Item 1",
                 items: [
@@ -155,7 +155,7 @@ window.dataID = [
     { id: 2, "elternId": 1, text: "Cat" },
     { id: 3, "elternId": 2, text: "Abyssinian" },
     { id: 4, "elternId": 0, text: "Birds" },
-    { id: 5, "elternId": 4, text: "Akekee" },
+    { id: 5, "elternId": 4, text: "Akekee" }
 ];
 
 window.initTree = function(options) {
@@ -200,7 +200,6 @@ require("./treeViewParts/accessibility.js");
 require("./treeViewParts/animation.js");
 require("./treeViewParts/checkboxes.js");
 require("./treeViewParts/events.js");
-require("./treeViewParts/expandedItems.js");
 require("./treeViewParts/expandedItems.js");
 require("./treeViewParts/focusing.js");
 require("./treeViewParts/initialization.js");

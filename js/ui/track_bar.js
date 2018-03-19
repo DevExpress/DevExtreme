@@ -40,14 +40,22 @@ var TrackBar = Editor.inherit({
         });
     },
 
-    _render: function() {
+    _initMarkup: function() {
         this.$element().addClass(TRACKBAR_CLASS);
         this._renderWrapper();
         this._renderContainer();
         this._renderRange();
 
         this._renderValue();
+
+        this._setRangeStyles();
         this.callBase();
+    },
+
+    _render: function() {
+        this.callBase();
+
+        this._setRangeStyles(this._rangeStylesConfig());
     },
 
     _renderWrapper: function() {
@@ -90,7 +98,6 @@ var TrackBar = Editor.inherit({
         }
 
         var ratio = (min === max) ? 0 : (val - min) / (max - min);
-        !this._needPreventAnimation && this._setRangeStyles({ width: ratio * 100 + "%" });
 
         this.setAria({
             "valuemin": this.option("min"),
@@ -101,27 +108,40 @@ var TrackBar = Editor.inherit({
         this._currentRatio = ratio;
     },
 
+    _rangeStylesConfig: function() {
+        return { width: this._currentRatio * 100 + "%" };
+    },
+
     _setRangeStyles: function(options) {
         fx.stop(this._$range);
 
-        if(!this._needPreventAnimation) {
-            fx.animate(this._$range, {
-                type: "custom",
-                duration: 100,
-                to: options
-            });
+        if(!options) {
+            this._$range.css({ width: 0 });
+            return;
         }
+
+        if(this._needPreventAnimation) {
+            return;
+        }
+
+        fx.animate(this._$range, {
+            type: "custom",
+            duration: 100,
+            to: options
+        });
     },
 
     _optionChanged: function(args) {
         switch(args.name) {
             case "value":
                 this._renderValue();
+                this._setRangeStyles(this._rangeStylesConfig());
                 this.callBase(args);
                 break;
             case "max":
             case "min":
                 this._renderValue();
+                this._setRangeStyles(this._rangeStylesConfig());
                 break;
             default:
                 this.callBase(args);

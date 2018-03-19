@@ -8,10 +8,8 @@ var $ = require("jquery"),
     titleModule = require("viz/core/title"),
     dxChart = require("viz/chart"),
     dxPieChart = require("viz/pie_chart"),
-    baseChartModule = require("viz/chart_components/base_chart");
-
-/* global setupSeriesFamily */
-require("../../helpers/chartMocks.js");
+    baseChartModule = require("viz/chart_components/base_chart"),
+    setupSeriesFamily = require("../../helpers/chartMocks.js").setupSeriesFamily;
 
 setupSeriesFamily();
 QUnit.testStart(function() {
@@ -35,8 +33,8 @@ var chartContainerCounter = 1,
             executeAsyncMock.setup();
         },
         afterEach: function() {
-            //terrible hack to remove our DOM elements which became global variables
-            //http://stackoverflow.com/questions/3434278/ie-chrome-are-dom-tree-elements-global-variables-here
+            // terrible hack to remove our DOM elements which became global variables
+            // http://stackoverflow.com/questions/3434278/ie-chrome-are-dom-tree-elements-global-variables-here
             this.$container.remove();
             if(QUnit.config["noglobals"]) {
                 $("#" + containerName).remove();
@@ -127,7 +125,7 @@ QUnit.test("MultiAxis with title and inverted axis", function(assert) {
         ],
         valueAxis: [{
             axisDivisionFactor: 50,
-            visible: true, //B231173
+            visible: true, // B231173
             min: 0,
             tickInterval: 50,
             name: "axis2",
@@ -144,11 +142,11 @@ QUnit.test("MultiAxis with title and inverted axis", function(assert) {
             }
         }, {
             axisDivisionFactor: 50,
-            visible: true, //B231173
+            visible: true, // B231173
             name: "axis1",
             min: 0,
             max: 5,
-            inverted: true, //B231235
+            inverted: true, // B231235
             grid: {
                 visible: true
             },
@@ -159,14 +157,14 @@ QUnit.test("MultiAxis with title and inverted axis", function(assert) {
             }
         }, {
             axisDivisionFactor: 50,
-            visible: true, //B231173
+            visible: true, // B231173
             name: "axis3",
             min: 0,
             max: 11,
             grid: {
                 visible: true
             },
-            title: "title", //B231060
+            title: "title", // B231060
             label: {
                 font: {
                     color: "green"
@@ -182,7 +180,7 @@ QUnit.test("MultiAxis with title and inverted axis", function(assert) {
     });
 
     assert.ok(chart);
-    //B231181
+    // B231181
     assert.deepEqual(chart._valueAxes[1].getTicksValues().majorTicksValues, [0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6, 6.5], "second value axis tick values");
     assert.deepEqual(chart._valueAxes[2].getTicksValues().majorTicksValues, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13], "third value axis tick values");
 });
@@ -214,7 +212,7 @@ QUnit.test("Problem with two axis and range", function(assert) {
 });
 
 QUnit.test("dxChart reinitialization - series - dataSource", function(assert) {
-    //arrange
+    // arrange
     var chart = this.$container.dxChart({
         dataSource: [{ arg: "January", val1: 24, val2: 0, val3: 15 },
             { arg: "February", val1: 0, val2: 34, val3: 40 },
@@ -228,7 +226,7 @@ QUnit.test("dxChart reinitialization - series - dataSource", function(assert) {
         }],
         title: "original"
     });
-    //act
+    // act
     chart = this.$container.dxChart({
         series: [{
             name: "Third",
@@ -239,7 +237,7 @@ QUnit.test("dxChart reinitialization - series - dataSource", function(assert) {
         }
     });
 
-    //assert
+    // assert
     chart = this.$container.dxChart("instance");
     assert.ok(chart);
     assert.equal(chart.series.length, 1, "Series number");
@@ -247,7 +245,7 @@ QUnit.test("dxChart reinitialization - series - dataSource", function(assert) {
 });
 
 QUnit.test("dxChart reinitialization - dataSource - correct axes/data types", function(assert) {
-    //arrange
+    // arrange
     var chart = this.createChart({
         dataSource: [],
         series: [{
@@ -256,7 +254,7 @@ QUnit.test("dxChart reinitialization - dataSource - correct axes/data types", fu
         }],
         title: "original"
     });
-    //act
+    // act
     assert.equal(chart._argumentAxes[0].getOptions().type, "continuous");
     assert.equal(chart._argumentAxes[0].getOptions().dataType, undefined);
     assert.equal(chart._valueAxes[0].getOptions().type, "continuous");
@@ -267,16 +265,16 @@ QUnit.test("dxChart reinitialization - dataSource - correct axes/data types", fu
             { arg: "February", val1: new Date(100000) }]
     });
 
-    //assert
+    // assert
     assert.ok(chart);
     assert.equal(chart._argumentAxes[0].getOptions().type, "discrete");
-    //equal(chart._argumentAxes[0].getOptions().dataType, "string");
+    // equal(chart._argumentAxes[0].getOptions().dataType, "string");
     assert.equal(chart._valueAxes[0].getOptions().type, "continuous");
-    //equal(chart._valueAxes[0].getOptions().dataType, "datetime");
+    // equal(chart._valueAxes[0].getOptions().dataType, "datetime");
 });
 
 QUnit.test("dxChart reinitialization - dataSource - correct axes min max", function(assert) {
-    //arrange
+    // arrange
     var chart = this.createChart({
         dataSource: [],
         series: [{
@@ -294,13 +292,13 @@ QUnit.test("dxChart reinitialization - dataSource - correct axes min max", funct
     argAxis.setBusinessRange = sinon.spy(function() { return argFunction.apply(argAxis, arguments); });
     valAxis.setBusinessRange = sinon.spy(function() { return valFunction.apply(valAxis, arguments); });
 
-    //act
+    // act
     this.$container.dxChart({
         dataSource: [{ arg: 223, val1: 1 },
             { arg: 445, val1: 4 }]
     });
 
-    //assert
+    // assert
     assert.equal(argAxis.setBusinessRange.lastCall.args[0].min, 223);
     assert.equal(argAxis.setBusinessRange.lastCall.args[0].max, 445);
     assert.equal(valAxis.setBusinessRange.lastCall.args[0].min, 1);
@@ -308,7 +306,7 @@ QUnit.test("dxChart reinitialization - dataSource - correct axes min max", funct
 });
 
 QUnit.test("dxChart with vertical axis with title", function(assert) {
-    //arrange, act
+    // arrange, act
     this.$container.width("300px");
     this.$container.dxChart({
         valueAxis: {
@@ -316,12 +314,12 @@ QUnit.test("dxChart with vertical axis with title", function(assert) {
             position: "left"
         }
     });
-    //assert
+    // assert
     assert.equal(this.$container.find(".dxc-val-title").text(), "some title");
 });
 
 QUnit.test("dxChart with horizontal axis with title", function(assert) {
-    //arrange, act
+    // arrange, act
     this.$container.width("300px");
     this.$container.dxChart({
         valueAxis: {
@@ -329,11 +327,11 @@ QUnit.test("dxChart with horizontal axis with title", function(assert) {
             position: "bottom"
         }
     });
-    //assert
+    // assert
     assert.equal(this.$container.find(".dxc-val-title").text(), "some title");
 });
 
-//T353296
+// T353296
 // must be in axis (but with real renderer)
 QUnit.test("valid text in strip's labels", function(assert) {
     this.createChart({
@@ -360,7 +358,7 @@ QUnit.test("valid text in strip's labels", function(assert) {
     assert.strictEqual($($(this.$container.find(".dxc-arg-axis-labels")[0]).children()[0]).text(), "SomeValue");
 });
 
-//T485059
+// T485059
 QUnit.test("Chart was rendered with series template & dataSource = null", function(assert) {
     var drawn = sinon.spy();
 
@@ -652,7 +650,7 @@ var VALIDATE_GROUPS = [
     "dxc-scale-breaks",
     "dxc-labels-group",
     "dxc-crosshair-cursor",
-    //"dxc-title",
+    // "dxc-title",
     "dxc-legend"
 ];
 
@@ -791,7 +789,7 @@ QUnit.test("Get pane index when panes is object", function(assert) {
         }, this.$container),
         paneIndex = chart._getPaneIndex("pane-name");
 
-    //assert
+    // assert
     assert.equal(paneIndex, 0, "Pane index should be 0");
 });
 
@@ -809,7 +807,7 @@ QUnit.test("Get pane index when panes is array", function(assert) {
         paneIndex2 = chart._getPaneIndex("pane2"),
         paneIndex3 = chart._getPaneIndex("pane3");
 
-    //assert
+    // assert
     assert.equal(paneIndex1, 0, "First pane index should be 0");
     assert.equal(paneIndex2, 1, "Second pane index should be 1");
     assert.equal(paneIndex3, 2, "Third pane index should be 2");
@@ -832,7 +830,7 @@ QUnit.test("Get pane border visibility when commonPaneSettings border is undefin
         borderVisible1 = chart._getPaneBorderVisibility(0),
         borderVisible2 = chart._getPaneBorderVisibility(1);
 
-    //assert
+    // assert
     assert.equal(borderVisible1, true, "First pane border should be visible");
     assert.equal(borderVisible2, false, "Second pane border should not be visible");
 });
@@ -862,7 +860,7 @@ QUnit.test("Get pane border visibility when commonPaneSettings border is visible
         borderVisible2 = chart._getPaneBorderVisibility(1),
         borderVisible3 = chart._getPaneBorderVisibility(2);
 
-    //assert
+    // assert
     assert.equal(borderVisible1, true, "First pane border should be visible");
     assert.equal(borderVisible2, true, "Second pane border should be visible");
     assert.equal(borderVisible3, false, "Third pane border should not be visible");
@@ -893,13 +891,13 @@ QUnit.test("Get pane border visibility when commonPaneSettings border is not vis
         borderVisible2 = chart._getPaneBorderVisibility(1),
         borderVisible3 = chart._getPaneBorderVisibility(2);
 
-    //assert
+    // assert
     assert.equal(borderVisible1, false, "First pane border should not be visible");
     assert.equal(borderVisible2, true, "Second pane border should be visible");
     assert.equal(borderVisible3, false, "Third pane border should not be visible");
 });
 
-//T336349, T503616
+// T336349, T503616
 QUnit.module("Option changing in onDrawn after zooming", {
     beforeEach: function() {
         this.legendShiftSpy = sinon.spy(legendModule.Legend.prototype, "shift");
@@ -916,7 +914,7 @@ QUnit.module("Option changing in onDrawn after zooming", {
 });
 
 QUnit.test("Legend and title should have original place", function(assert) {
-    //act
+    // act
     var chart = createChartInstance({
         dataSource: [{ arg: 1, val: 2 }],
         series: [{
@@ -933,13 +931,13 @@ QUnit.test("Legend and title should have original place", function(assert) {
     });
     chart.zoomArgument(0, 1);
 
-    //assert
+    // assert
     assert.deepEqual(this.legendShiftSpy.getCall(0).args, this.legendShiftSpy.getCall(1).args, "the same place");
     assert.deepEqual(this.titleShiftSpy.getCall(0).args, this.titleShiftSpy.getCall(1).args, "title shift");
 });
 
 QUnit.test('T295685. Do not expand range on adaptive layout', function(assert) {
-    //arrange
+    // arrange
     var chart = createChartInstance({
         dataSource: [],
         series: [{
@@ -951,10 +949,10 @@ QUnit.test('T295685. Do not expand range on adaptive layout', function(assert) {
         },
         title: 'original'
     }, $("#chartContainer"));
-    //act
+    // act
     chart.option("size", { width: 50, height: 50 });
 
-    //assert
+    // assert
     assert.equal(chart._argumentAxes[0].getTranslator().getBusinessRange().min, 0, "min arg");
     assert.equal(chart._argumentAxes[0].getTranslator().getBusinessRange().max, 10, "max arg");
     assert.equal(chart._valueAxes[0].getTranslator().getBusinessRange().min, 0, "min val");
@@ -964,7 +962,7 @@ QUnit.test('T295685. Do not expand range on adaptive layout', function(assert) {
 QUnit.test("Pie chart with sizeGroup, change option in between rendering steps - legend and title should have original place", function(assert) {
     var that = this,
         done = assert.async();
-    //act
+    // act
     var chart = $("#chartContainer").dxPieChart({
         sizeGroup: "test-group",
         dataSource: [{ arg: 1, val: 2 }],
@@ -974,7 +972,7 @@ QUnit.test("Pie chart with sizeGroup, change option in between rendering steps -
             visible: true
         },
         onDrawn: function() {
-            //assert
+            // assert
             assert.deepEqual(that.legendShiftSpy.getCall(0).args, that.legendShiftSpy.getCall(1).args, "the same place");
             assert.deepEqual(that.titleShiftSpy.getCall(0).args, that.titleShiftSpy.getCall(1).args, "title shift");
             done();
@@ -992,7 +990,7 @@ QUnit.module("T218011 for dashboards. Private method for getting visible argumen
 QUnit.test("Category", function(assert) {
     var categories = ["A", "B", "C", "D", "E"];
 
-    //act
+    // act
     var chart = createChartInstance({
         argumentAxis: {
             categories: categories
@@ -1002,14 +1000,14 @@ QUnit.test("Category", function(assert) {
         }]
     }, this.$container);
 
-    //assert
+    // assert
     assert.deepEqual(chart.getVisibleArgumentBounds(), { minVisible: "A", maxVisible: "E" });
 });
 
 QUnit.test("Category. After zoomArgument", function(assert) {
     var categories = ["A", "B", "C", "D", "E"];
 
-    //act
+    // act
     var chart = createChartInstance({
         argumentAxis: {
             categories: categories
@@ -1019,12 +1017,12 @@ QUnit.test("Category. After zoomArgument", function(assert) {
         }]
     }, this.$container);
     chart.zoomArgument("B", "C");
-    //assert
+    // assert
     assert.deepEqual(chart.getVisibleArgumentBounds(), { minVisible: "B", maxVisible: "C" });
 });
 
 QUnit.test("Numeric", function(assert) {
-    //act
+    // act
     var chart = createChartInstance({
         dataSource: [{ arg: 20, val: 10 }, { arg: 40, val: 11 }],
         series: {
@@ -1035,12 +1033,12 @@ QUnit.test("Numeric", function(assert) {
         }
     }, this.$container);
 
-    //assert
+    // assert
     assert.deepEqual(chart.getVisibleArgumentBounds(), { minVisible: 20, maxVisible: 40 });
 });
 
 QUnit.test("Numeric. After zoomArgument", function(assert) {
-    //act
+    // act
     var chart = createChartInstance({
         dataSource: [{ arg: 20, val: 10 }, { arg: 40, val: 11 }],
         series: {
@@ -1048,7 +1046,7 @@ QUnit.test("Numeric. After zoomArgument", function(assert) {
         }
     }, this.$container);
     chart.zoomArgument(25, 30);
-    //assert
+    // assert
     assert.deepEqual(chart.getVisibleArgumentBounds(), { minVisible: 25, maxVisible: 30 });
 });
 
@@ -1111,9 +1109,9 @@ QUnit.test("Pie chart groups and classes", function(assert) {
     assert.equal($container.find(".dxc-legend").length, 1, "There is one legend group");
 });
 
-//T412270
+// T412270
 QUnit.test("select point after dataSource updating", function(assert) {
-    //arrange
+    // arrange
     var dataSource = [{ arg: "arg1", val: 1 }],
         chart = this.createPieChart({
             series: [{}],
@@ -1140,7 +1138,7 @@ QUnit.module("T576725", $.extend({}, moduleSetup, {
 }));
 
 QUnit.test("Overlapping of the labels should be taken into account canvas with legend and title.", function(assert) {
-    //arrange
+    // arrange
     var dataSource = [],
         chart;
 

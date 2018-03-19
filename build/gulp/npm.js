@@ -20,12 +20,12 @@ var headerPipes = require('./header-pipes.js');
 var compressionPipes = require('./compression-pipes.js');
 var version = require('../../package.json').version;
 
-var SRC_GLOBS = [
-    'js/**/*.js',
-    '!js/bundles/*.js',
-    '!js/bundles/modules/parts/*.js',
-    '!js/viz/vector_map.utils/*.js',
-    '!js/viz/docs/*.js'
+var TRANSPILED_GLOBS = [
+    context.TRANSPILED_PATH + '/**/*.js',
+    '!' + context.TRANSPILED_PATH + '/bundles/*.js',
+    '!' + context.TRANSPILED_PATH + '/bundles/modules/parts/*.js',
+    '!' + context.TRANSPILED_PATH + '/viz/vector_map.utils/*.js',
+    '!' + context.TRANSPILED_PATH + '/viz/docs/*.js'
 ];
 
 var JSON_GLOBS = [
@@ -35,6 +35,7 @@ var JSON_GLOBS = [
 
 var DIST_GLOBS = [
     'artifacts/**/*.*',
+    '!' + context.TRANSPILED_PATH,
     '!artifacts/npm/**/*.*',
     '!artifacts/js/dx.aspnet.mvc.js',
     '!artifacts/js/angular**/*.*',
@@ -70,10 +71,10 @@ var addDefaultExport = lazyPipe().pipe(function() {
     });
 });
 
-gulp.task('npm-sources', ['bundler-config', 'npm-dts-generator'], function() {
+gulp.task('npm-sources', ['npm-dts-generator'], function() {
     return merge(
 
-        gulp.src(SRC_GLOBS)
+        gulp.src(TRANSPILED_GLOBS)
             .pipe(compressionPipes.removeDebug())
             .pipe(addDefaultExport())
             .pipe(headerPipes.starLicense())
@@ -105,6 +106,7 @@ gulp.task('npm-sources', ['bundler-config', 'npm-dts-generator'], function() {
 
 var widgetNameByPath = require("./ts").widgetNameByPath;
 var generateJQueryAugmentation = require("./ts").generateJQueryAugmentation;
+var getAugmentationOptionsPath = require("./ts").getAugmentationOptionsPath;
 
 gulp.task('npm-dts-generator', function() {
     var tsModules = MODULES.map(function(moduleMeta) {
@@ -124,7 +126,15 @@ gulp.task('npm-dts-generator', function() {
                 if(jQueryAugmentation) {
                     jQueryAugmentation = `declare global {\n${jQueryAugmentation}}\n`;
                 }
-                return jQueryAugmentation + `export default DevExpress.${globalPath};`;
+
+                var result = jQueryAugmentation + `export default DevExpress.${globalPath};`;
+
+                var widgetOptionsPath = getAugmentationOptionsPath(globalPath);
+                if(widgetOptionsPath) {
+                    result += `\nexport type IOptions = DevExpress.${widgetOptionsPath};`;
+                }
+
+                return result;
             });
 
             exports = '\n\n' + exportProperties.join('\n');

@@ -4,26 +4,26 @@ var widgets = {
     Accordion: require("ui/accordion"),
     ActionSheet: require("ui/action_sheet"),
     Autocomplete: require("ui/autocomplete"),
-    //BarGauge: require("viz/bar_gauge"),
-    //Box: require("ui/box"),
-    //Bullet: require("viz/Bullet"),
+    BarGauge: require("viz/bar_gauge"),
+    Box: require("ui/box"),
+    Bullet: require("viz/bullet"),
     Button: require("ui/button"),
     Calendar: require("ui/calendar"),
-    //Chart: require("viz/chart"),
+    Chart: require("viz/chart"),
     CheckBox: require("ui/check_box"),
-    //CircularGauge: require("viz/circular_gauge"),
+    CircularGauge: require("viz/circular_gauge"),
     ColorBox: require("ui/color_box"),
     ContextMenu: require("ui/context_menu"),
-    //DataGrid: require("ui/data_grid"),
-    //DateBox: require("ui/date_box"),
+    DataGrid: require("ui/data_grid"),
+    DateBox: require("ui/date_box"),
     DeferRendering: require("ui/defer_rendering"),
     DropDownBox: require("ui/drop_down_box"),
     FileUploader: require("ui/file_uploader"),
-    //FilterBuilder: require("ui/filter_builder"),
-    //Form: require("ui/form"),
-    //Funnel: require("viz/funnel"),
+    FilterBuilder: require("ui/filter_builder"),
+    Form: require("ui/form"),
+    Funnel: require("viz/funnel"),
     Gallery: require("ui/gallery"),
-    //LinearGauge: require("viz/linear_gauge"),
+    LinearGauge: require("viz/linear_gauge"),
     List: require("ui/list"),
     LoadIndicator: require("ui/load_indicator"),
     LoadPanel: require("ui/load_panel"),
@@ -34,26 +34,26 @@ var widgets = {
     NavBar: require("ui/nav_bar"),
     NumberBox: require("ui/number_box"),
     Panorama: require("ui/panorama"),
-    //PieChart: require("viz/pie_chart"),
+    PieChart: require("viz/pie_chart"),
     Pivot: require("ui/pivot"),
     PivotGrid: require("ui/pivot_grid"),
     PivotGridFieldChooser: require("ui/pivot_grid_field_chooser"),
-    //PolarChart: require("viz/polar_chart"),
+    PolarChart: require("viz/polar_chart"),
     Popover: require("ui/popover"),
     Popup: require("ui/popup"),
     ProgressBar: require("ui/progress_bar"),
-    //RangeSelector: require("viz/range_selector"),
+    RangeSelector: require("viz/range_selector"),
     RangeSlider: require("ui/range_slider"),
     RadioGroup: require("ui/radio_group"),
     Resizable: require("ui/resizable"),
-    //ResponsiveBox: require("ui/responsive_box"),
-    //Scheduler: require("ui/scheduler"),
+    ResponsiveBox: require("ui/responsive_box"),
+    Scheduler: require("ui/scheduler"),
     ScrollView: require("ui/scroll_view"),
     SelectBox: require("ui/select_box"),
     SlideOut: require("ui/slide_out"),
     SlideOutView: require("ui/slide_out_view"),
     Slider: require("ui/slider"),
-    //Sparkline: require("viz/sparkline"),
+    Sparkline: require("viz/sparkline"),
     Switch: require("ui/switch"),
     TabPanel: require("ui/tab_panel"),
     Tabs: require("ui/tabs"),
@@ -61,25 +61,18 @@ var widgets = {
     TextArea: require("ui/text_area"),
     TextBox: require("ui/text_box"),
     TileView: require("ui/tile_view"),
-    //Toast: require("ui/toast"),
+    Toast: require("ui/toast"),
     Toolbar: require("ui/toolbar"),
     Tooltip: require("ui/tooltip"),
-    //TreeList: require("ui/tree_list"),
-    //TreeMap: require("viz/tree_map"),
+    TreeList: require("ui/tree_list"),
+    TreeMap: require("viz/tree_map"),
     TreeView: require("ui/tree_view"),
     ValidationGroup: require("ui/validation_group"),
     ValidationSummary: require("ui/validation_summary"),
-    Validator: require("ui/validator"),
-    //VectorMap: require("viz/vector_map")
+    VectorMap: require("viz/vector_map")
 };
 
-QUnit.module("Scripts loading");
-
-QUnit.test("Widgets", function(assert) {
-    for(var widget in widgets) {
-        assert.ok(widgets[widget], widget);
-    }
-});
+var DataSource = require("data/data_source");
 
 QUnit.module("Widget creation", {
     beforeEach: function() {
@@ -92,7 +85,78 @@ QUnit.module("Widget creation", {
     }
 });
 
-QUnit.test("Button", function(assert) {
-    this.instance = new widgets.Button(this.element);
-    assert.ok(this.instance);
+var optionChangeExcluded = [
+    "ActionSheet",
+    "ContextMenu",
+    "DataGrid",
+    "DateBox",
+    "FileUploader",
+    "Gallery",
+    "List",
+    "LoadPanel",
+    "NavBar",
+    "Panorama",
+    "Pivot",
+    "PivotGrid",
+    "PivotGridFieldChooser",
+    "Popover",
+    "Popup",
+    "ProgressBar",
+    "Resizable",
+    "ResponsiveBox",
+    "Scheduler",
+    "ScrollView",
+    "SlideOut",
+    "SlideOutView",
+    "Switch",
+    "TileView",
+    "Toast",
+    "Toolbar",
+    "Tooltip",
+    "TreeList"
+];
+
+Object.keys(widgets).forEach(function(widget) {
+    QUnit.test(widget + " created", function(assert) {
+        this.instance = new widgets[widget](this.element);
+        assert.ok(true, "it's possible to create " + widget);
+    });
+
+    QUnit[optionChangeExcluded.indexOf(widget) < 0 ? "test" : "skip"](widget + " optionChanged", function(assert) {
+        this.instance = new widgets[widget](this.element);
+        var options = this.instance.option();
+
+        for(var optionName in options) {
+            var prevValue = options[optionName],
+                newValue = prevValue;
+
+             // NOTE: some widgets doesn't support dataSource === null
+            if(optionName === "dataSource") {
+                // NOTE: dxResponsiveBox supports only plain object in items
+                var item = widget === "dxResponsiveBox" ? { text: 1 } : 1;
+                item = widget === "dxScheduler" ? { text: 1, startDate: new Date(2015, 0, 1) } : item;
+
+                newValue = new DataSource([item]);
+                options[optionName] = newValue;
+            }
+
+            // The most critical scenarios for the server-side rendering
+            if(optionName === "visible") {
+                prevValue = false;
+                newValue = true;
+                options[optionName] = newValue;
+            }
+
+            if(optionName === "width" || optionName === "height") {
+                newValue = 555;
+                options[optionName] = newValue;
+            }
+
+            this.instance.beginUpdate();
+            this.instance._notifyOptionChanged(optionName, newValue, prevValue);
+            this.instance.endUpdate();
+
+            assert.ok(true, "it's possible to change option " + optionName);
+        }
+    });
 });

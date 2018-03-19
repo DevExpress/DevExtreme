@@ -83,11 +83,11 @@ SeriesDataSource = function(options) {
     if(options.dataSource && seriesTemplate) {
         templatedSeries = vizUtils.processSeriesTemplate(seriesTemplate, options.dataSource);
     }
-    that._useAggregation = options.chart.useAggregation;
+
     that._series = that._calculateSeries(options, templatedSeries);
 
     negativesAsZeroes = themeManager.getOptions("negativesAsZeroes");
-    negativesAsZeros = themeManager.getOptions("negativesAsZeros"); //misspelling case
+    negativesAsZeros = themeManager.getOptions("negativesAsZeros"); // misspelling case
 
     that._seriesFamilies = processSeriesFamilies(that._series,
         themeManager.getOptions('equalBarWidth'),
@@ -114,8 +114,8 @@ SeriesDataSource.prototype = {
             chartThemeManager = that._themeManager,
             hasSeriesTemplate = !!chartThemeManager.getOptions('seriesTemplate'),
             allSeriesOptions = hasSeriesTemplate ? templatedSeries : options.chart.series,
-            seriesValueType = options.chart.valueAxis && options.chart.valueAxis.valueType,
             dataSourceField,
+            valueAxis = that._valueAxis,
             i,
             newSeries,
             groupsData;
@@ -142,9 +142,9 @@ SeriesDataSource.prototype = {
             data = particularSeriesOptions.data || options.dataSource;
 
             seriesTheme = chartThemeManager.getOptions("series", particularSeriesOptions, allSeriesOptions.length);
-            seriesTheme.argumentField = seriesTheme.argumentField || options.dataSourceField;//B253068
+            seriesTheme.argumentField = seriesTheme.argumentField || options.dataSourceField;// B253068
             if(data && data.length > 0) {
-                //TODO
+                // TODO
                 newSeries = new seriesModule.Series({
                     renderer: options.renderer,
                     argumentAxis: options.argumentAxis,
@@ -163,7 +163,8 @@ SeriesDataSource.prototype = {
                 groups: [{
                     series: series,
                     valueOptions: {
-                        valueType: dataSourceField ? options.valueType : seriesValueType
+                        type: valueAxis.type,
+                        valueType: dataSourceField ? options.valueType : valueAxis.valueType
                     }
                 }],
                 argumentOptions: {
@@ -178,16 +179,26 @@ SeriesDataSource.prototype = {
                 series[i].updateData(parsedData[series[i].getArgumentField()]);
 
             }
+
+            that._createPoints(series);
         }
         return series;
     },
 
+    _createPoints: function(series) {
+        var viewport = new rangeModule.Range(),
+            axis = series[0].getArgumentAxis();
+
+        series.forEach(function(s) {
+            viewport.addRange(s.getArgumentRange());
+        });
+
+        axis.getTranslator().updateBusinessRange(viewport);
+
+        series.forEach(function(s) { s.createPoints(); });
+    },
+
     adjustSeriesDimensions: function() {
-        if(this._useAggregation) {
-            each(this._series, function(_, s) {
-                s.resamplePoints(s.getArgumentAxis().getTranslator().canvasLength);
-            });
-        }
         each(this._seriesFamilies, function(_, family) {
             family.adjustSeriesDimensions();
         });
@@ -196,15 +207,14 @@ SeriesDataSource.prototype = {
     getBoundRange: function() {
         var that = this,
             rangeData,
-            valueAxisMin = that._valueAxis.min,
-            valueAxisMax = that._valueAxis.max,
+            valueAxis = that._valueAxis,
             valRange = new rangeModule.Range({
-                min: valueAxisMin,
-                minVisible: valueAxisMin,
-                max: valueAxisMax,
-                maxVisible: valueAxisMax,
-                axisType: that._valueAxis.type,
-                base: that._valueAxis.logarithmBase
+                min: valueAxis.min,
+                minVisible: valueAxis.min,
+                max: valueAxis.max,
+                maxVisible: valueAxis.max,
+                axisType: valueAxis.type,
+                base: valueAxis.logarithmBase
             }),
             argRange = new rangeModule.Range({}),
             rangeYSize,
@@ -219,11 +229,11 @@ SeriesDataSource.prototype = {
         });
 
         if(valRange.isDefined() && argRange.isDefined()) {
-            minIndent = that._valueAxis.inverted ? that._indent.top : that._indent.bottom;
-            maxIndent = that._valueAxis.inverted ? that._indent.bottom : that._indent.top;
+            minIndent = valueAxis.inverted ? that._indent.top : that._indent.bottom;
+            maxIndent = valueAxis.inverted ? that._indent.bottom : that._indent.top;
             rangeYSize = valRange.max - valRange.min;
             rangeVisibleSizeY = (typeUtils.isNumeric(valRange.maxVisible) ? valRange.maxVisible : valRange.max) - (typeUtils.isNumeric(valRange.minVisible) ? valRange.minVisible : valRange.min);
-            //B253717
+            // B253717
             if(typeUtils.isDate(valRange.min)) {
                 valRange.min = new Date(valRange.min.valueOf() - rangeYSize * minIndent);
             } else {
@@ -239,7 +249,7 @@ SeriesDataSource.prototype = {
                 valRange.maxVisible = valRange.maxVisible ? valRange.maxVisible + rangeVisibleSizeY * maxIndent : undefined;
                 valRange.minVisible = valRange.minVisible ? valRange.minVisible - rangeVisibleSizeY * minIndent : undefined;
             }
-            valRange.invert = that._valueAxis.inverted;
+            valRange.invert = valueAxis.inverted;
         }
 
         return { arg: argRange, val: valRange };

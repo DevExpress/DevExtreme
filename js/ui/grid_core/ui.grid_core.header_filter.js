@@ -2,6 +2,7 @@
 
 var eventsEngine = require("../../events/core/events_engine"),
     modules = require("./ui.grid_core.modules"),
+    filterUtils = require("../shared/filtering"),
     gridCoreUtils = require("./ui.grid_core.utils"),
     headerFilterCore = require("./ui.grid_core.header_filter_core"),
     headerFilterMixin = headerFilterCore.headerFilterMixin,
@@ -30,7 +31,7 @@ var DATE_INTERVAL_FORMATS = {
 
 var HeaderFilterController = modules.ViewController.inherit((function() {
     var getFormatOptions = function(value, column, currentLevel) {
-        var groupInterval = gridCoreUtils.getGroupInterval(column),
+        var groupInterval = filterUtils.getGroupInterval(column),
             result = gridCoreUtils.getFormatOptionsByColumn(column, "headerFilter");
 
         if(groupInterval) {
@@ -157,6 +158,7 @@ var HeaderFilterController = modules.ViewController.inherit((function() {
                 group = gridCoreUtils.getHeaderFilterGroupParameters(column, dataSource && dataSource.remoteOperations().grouping),
                 headerFilterDataSource = column.headerFilter && column.headerFilter.dataSource,
                 headerFilterOptions = that.option("headerFilter"),
+                isLookup = false,
                 options = {
                     component: that.component
                 };
@@ -166,6 +168,7 @@ var HeaderFilterController = modules.ViewController.inherit((function() {
             if(typeUtils.isDefined(headerFilterDataSource) && !typeUtils.isFunction(headerFilterDataSource)) {
                 options.dataSource = normalizeDataSourceOptions(headerFilterDataSource);
             } else if(column.lookup) {
+                isLookup = true;
                 dataSource = column.lookup.dataSource;
                 if(typeUtils.isFunction(dataSource) && !isWrapped(dataSource)) {
                     dataSource = dataSource({});
@@ -185,7 +188,7 @@ var HeaderFilterController = modules.ViewController.inherit((function() {
                     useDefaultSearch: true,
                     load: function(options) {
                         var d = new Deferred();
-                        //TODO remove in 16.1
+                        // TODO remove in 16.1
                         options.dataField = column.dataField || column.name;
 
                         dataSource.load(options).done(function(data) {
@@ -210,7 +213,7 @@ var HeaderFilterController = modules.ViewController.inherit((function() {
             options.dataSource.postProcess = function(data) {
                 var items = data;
 
-                if(column.lookup) {
+                if(isLookup) {
                     if(this.pageIndex() === 0 && !this.searchValue()) {
                         items = items.slice(0);
                         items.unshift(null);
@@ -242,7 +245,7 @@ var HeaderFilterController = modules.ViewController.inherit((function() {
                 var visibleIndex = that._columnsController.getVisibleIndex(columnIndex),
                     view = isGroupPanel ? that.getView("headerPanel") : that.getView("columnHeadersView"),
                     $columnElement = view.getColumnElements().eq(isGroupPanel ? column.groupIndex : visibleIndex),
-                    groupInterval = gridCoreUtils.getGroupInterval(column);
+                    groupInterval = filterUtils.getGroupInterval(column);
 
                 var options = extend(column, {
                     type: groupInterval && groupInterval.length > 1 ? "tree" : "list",
@@ -372,8 +375,8 @@ var INVERTED_BINARY_OPERATIONS = {
     "<=": ">",
     "contains": "notcontains",
     "notcontains": "contains",
-    "startswith": "notcontains", //TODO
-    "endswith": "notcontains" //TODO
+    "startswith": "notcontains", // TODO
+    "endswith": "notcontains" // TODO
 };
 
 function invertFilterExpression(filter) {

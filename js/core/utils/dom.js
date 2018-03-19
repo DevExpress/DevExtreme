@@ -28,7 +28,7 @@ var clearSelection = function() {
     if(selection.empty) {
         selection.empty();
     } else if(selection.removeAllRanges) {
-        //T522811
+        // T522811
         try {
             selection.removeAllRanges();
         } catch(e) {}
@@ -53,7 +53,6 @@ var closestCommonParent = function(startTarget, endTarget) {
         }
     }
 };
-
 
 
 var triggerVisibilityChangeEvent = function(eventName) {
@@ -166,9 +165,10 @@ var clipboardText = function(event, text) {
 };
 
 var contains = function(container, element) {
-    if(element) {
-        element = domAdapter.isTextNode(element) ? element.parentNode : element;
+    if(!element) {
+        return false;
     }
+    element = domAdapter.isTextNode(element) ? element.parentNode : element;
 
     return domAdapter.isDocument(container) ? container.body.contains(element) : container.contains(element);
 };

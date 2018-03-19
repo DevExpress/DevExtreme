@@ -2,10 +2,10 @@
 
 /* global Promise */
 var deferredUtils = require("../../core/utils/deferred"),
-    window = require("../../core/utils/window").getWindow(),
+    windowUtils = require("../../core/utils/window"),
     Deferred = deferredUtils.Deferred,
     when = deferredUtils.when,
-    promise = window ? window.Promise : Promise;
+    promise = windowUtils.hasWindow() ? windowUtils.getWindow().Promise : Promise;
 
 if(!promise) {
     // NOTE: This is an incomplete Promise polyfill but it is enough for creation purposes

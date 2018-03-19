@@ -331,7 +331,7 @@ QUnit.test("arrow keys should not be prevented", function(assert) {
         "ArrowUp",
         "ArrowRight",
         "ArrowDown",
-        //IE9
+        // IE9
         "Left",
         "Up",
         "Right",

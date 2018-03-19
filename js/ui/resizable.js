@@ -141,6 +141,18 @@ var Resizable = DOMComponent.inherit({
             * @action
             */
             onResizeEnd: null
+            /**
+             * @name dxResizableOptions_width
+             * @publicName width
+             * @fires dxResizableOptions_onResize
+             * @inheritdoc
+             */
+            /**
+             * @name dxResizableOptions_height
+             * @publicName height
+             * @fires dxResizableOptions_onResize
+             * @inheritdoc
+             */
         });
     },
 
@@ -149,10 +161,14 @@ var Resizable = DOMComponent.inherit({
         this.$element().addClass(RESIZABLE_CLASS);
     },
 
+    _initMarkup: function() {
+        this.callBase();
+        this._renderHandles();
+    },
+
     _render: function() {
         this.callBase();
         this._renderActions();
-        this._renderHandles();
     },
 
     _renderActions: function() {
@@ -219,9 +235,12 @@ var Resizable = DOMComponent.inherit({
         this._movingSides = this._getMovingSides(e);
 
         this._elementLocation = translator.locate($element);
+
+        var elementRect = $element.get(0).getBoundingClientRect();
+
         this._elementSize = {
-            width: $element.outerWidth(),
-            height: $element.outerHeight()
+            width: elementRect.width,
+            height: elementRect.height
         };
 
         this._renderDragOffsets(e);
@@ -279,8 +298,9 @@ var Resizable = DOMComponent.inherit({
         if(offset.x || this.option("stepPrecision") === "strict") this._renderWidth(width);
         if(offset.y || this.option("stepPrecision") === "strict") this._renderHeight(height);
 
-        var offsetTop = offset.y - ((this.$element().outerHeight() || height) - height),
-            offsetLeft = offset.x - ((this.$element().outerWidth() || width) - width);
+        var elementRect = $element.get(0).getBoundingClientRect(),
+            offsetTop = offset.y - ((elementRect.height || height) - height),
+            offsetLeft = offset.x - ((elementRect.width || width) - width);
 
         translator.move($element, {
             top: location.top + (sides.top ? offsetTop : 0),

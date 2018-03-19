@@ -229,45 +229,43 @@ Series.prototype = {
         return rangeCalculator.getPointsInViewPort(this);
     },
 
-    _createPoint: function(data, pointsArray, index) {
+    _createPoint: function(data, index, oldPoint, dataIndex) {
         data.index = index;
         var that = this,
-            point = pointsArray[index],
             pointsByArgument = that.pointsByArgument,
-            options,
-            arg,
+            options = that._getCreatingPointOptions(data, dataIndex),
+            arg = data.argument.valueOf(),
+            point = oldPoint,
             pointByArgument;
 
-        if(that._checkData(data)) {
-            options = that._getCreatingPointOptions(data);
-            if(point) {
-                point.update(data, options);
-            } else {
-                point = new pointModule.Point(that, data, options);
-                if(that.isSelected() && includePointsMode(that.lastSelectionMode)) {
-                    point.setView(SELECTION);
-                }
-                pointsArray.push(point);
+        if(point) {
+            point.update(data, options);
+        } else {
+            point = new pointModule.Point(that, data, options);
+            if(that.isSelected() && includePointsMode(that.lastSelectionMode)) {
+                point.setView(SELECTION);
             }
-
-            if(point.hasValue()) {
-                that.customizePoint(point, data);
-            }
-
-            arg = point.argument.valueOf();
-            pointByArgument = pointsByArgument[arg];
-            if(pointByArgument) {
-                pointByArgument.push(point);
-            } else {
-                pointsByArgument[arg] = [point];
-            }
-
-            return true;
         }
+
+        pointByArgument = pointsByArgument[arg];
+        if(pointByArgument) {
+            pointByArgument.push(point);
+        } else {
+            pointsByArgument[arg] = [point];
+        }
+
+        if(point.hasValue()) {
+            that.customizePoint(point, data, dataIndex);
+        }
+        return point;
     },
 
     getRangeData: function() {
         return this._visible ? this._getRangeData() : getEmptyBusinessRange();
+    },
+
+    getArgumentRange: function() {
+        return this._visible ? rangeCalculator.getArgumentRange(this) : getEmptyBusinessRange();
     },
 
     getViewport: function() {
@@ -280,19 +278,6 @@ Series.prototype = {
             group.dispose();
             this[groupName] = null;
         }
-    },
-
-    _saveOldAnimationMethods: function() {
-        var that = this;
-        that._oldClearingAnimation = that._clearingAnimation;
-        that._oldUpdateElement = that._updateElement;
-        that._oldGetAffineCoordOptions = that._getAffineCoordOptions;
-    },
-
-    _deleteOldAnimationMethods: function() {
-        this._oldClearingAnimation = null;
-        this._oldUpdateElement = null;
-        this._oldGetAffineCoordOptions = null;
     },
 
     updateOptions: function(newOptions) {
@@ -311,9 +296,6 @@ Series.prototype = {
 
         if(oldType !== that.type) {
             that._firstDrawing = true;
-
-            that._saveOldAnimationMethods();
-
             that._resetType(oldType, widgetType);
             that._setType(that.type, widgetType);
         }
@@ -345,11 +327,6 @@ Series.prototype = {
         });
     },
 
-    _correctPointsLength: function(length, points) {
-        this._disposePoints(this._oldPoints);
-        this._oldPoints = points.splice(length, points.length);
-    },
-
     getErrorBarRangeCorrector: _noop,
 
     updateDataType: function(settings) {
@@ -366,40 +343,99 @@ Series.prototype = {
         return this._options;
     },
 
-    _resetRangeData: function() {
-        this._rangeData = getEmptyBusinessRange();
+    _getOldPoint: function(data, oldPointsByArgument, index) {
+        var arg = data.argument && data.argument.valueOf(),
+            point = (oldPointsByArgument[arg] || [])[0];
+
+        if(point) {
+            oldPointsByArgument[arg].splice(0, 1);
+        }
+
+        return point;
     },
 
     updateData: function(data) {
         var that = this,
-            points = that._originalPoints || [],
-            lastPointIndex = 0,
-            options = that._options,
-            i = 0,
-            len = data.length;
+            options = that._options;
 
-        that.pointsByArgument = {};
+        data = data || [];
 
-        that._resetRangeData();
-
-        if(data && data.length) {
+        if(data.length) {
             that._canRenderCompleteHandle = true;
         }
 
-        that._beginUpdateData(data);
-
-        while(i < len) {
-            if(that._createPoint(that._getPointData(data[i], options), points, lastPointIndex)) {
-                lastPointIndex++;
+        that._data = data.reduce(function(data, dataItem, index) {
+            var pointDataItem = that._getPointData(dataItem, options);
+            if(that._checkData(pointDataItem)) {
+                pointDataItem.index = index;
+                data.push(pointDataItem);
             }
-            i++;
+            return data;
+        }, []);
+
+        that._endUpdateData();
+    },
+
+    _getData: function() {
+        var data = this._data || [];
+
+        if(this.useAggregation()) {
+            data = this._aggregateData(data);
         }
 
-        that._disposePoints(that._aggregatedPoints);
-        that._aggregatedPoints = null;
-        that._points = that._originalPoints = points;
-        that._correctPointsLength(lastPointIndex, points);
-        that._endUpdateData();
+        return data;
+    },
+
+    useAggregation: function() {
+        var aggregation = this.getOptions().aggregation;
+
+        return aggregation && aggregation.enabled;
+    },
+
+    createPoints: function() {
+        var that = this,
+            allPoints = that._allPoints = (that._points || []).slice(),
+            oldPointsByArgument = that.pointsByArgument || {},
+            data = that._getData(),
+            points;
+
+        that.pointsByArgument = {};
+
+        that._calculateErrorBars(data);
+
+        points = data.map(function(dataItem, index) {
+            var oldPoint = that._getOldPoint(dataItem, oldPointsByArgument, index),
+                p = that._createPoint(dataItem, index, oldPoint, dataItem.index);
+
+            if(!oldPoint) {
+                allPoints.push(p);
+            }
+            return p;
+        });
+
+        that._oldPoints = Object.keys(oldPointsByArgument).reduce(function(points, key) {
+            var argPoints = oldPointsByArgument[key];
+            if(argPoints.length) {
+                points.push.apply(points, argPoints);
+            }
+            return points;
+        }, []);
+
+        that._points = points;
+        that._pointsToDraw = null;
+    },
+
+    prepareToDrawing: function(animationEnabled) {
+        var that = this,
+            points = that._points || [],
+            allPoints = that._allPoints || [];
+
+        if(animationEnabled && !that._firstDrawing) {
+            that._pointsToDraw = allPoints;
+            that._drawElements(true, false);
+        } else {
+            that._pointsToDraw = points;
+        }
     },
 
     getTemplateFields: function() {
@@ -411,11 +447,25 @@ Series.prototype = {
         }, this);
     },
 
-    resamplePoints: function(canvasLength) {
+    _removeOldSegments: function() {
+        var that = this,
+            startIndex = that._segments.length;
+
+        _each(that._graphics.splice(startIndex, that._graphics.length) || [], function(_, elem) {
+            that._removeElement(elem);
+        });
+        if(that._trackers) {
+            _each(that._trackers.splice(startIndex, that._trackers.length) || [], function(_, elem) {
+                elem.remove();
+            });
+        }
+    },
+
+    _aggregateData: function(data) {
         var that = this,
             categories,
             sizePoint = that._getPointSize(),
-            pointsLength = that.getAllPoints().length,
+            pointsLength = data.length,
             discreteMin,
             discreteMax,
             count,
@@ -430,7 +480,7 @@ Series.prototype = {
             tickInterval;
 
         if(pointsLength && pointsLength > 1) {
-            count = canvasLength / sizePoint;
+            count = argTranslator.canvasLength / sizePoint;
             count = count <= 1 ? 1 : count;
 
             if(isDiscrete) {
@@ -449,48 +499,73 @@ Series.prototype = {
                 tickInterval = (minMaxDefined ? (max - min) : (businessRange.maxVisible - businessRange.minVisible)) / count;
             }
 
-            that._points = that._resample(tickInterval, min - tickInterval, max + tickInterval, minMaxDefined);
+            return that._resample(tickInterval, min - tickInterval, max + tickInterval, minMaxDefined, data);
         }
+
+        return [];
     },
 
-    _removeOldSegments: function(startIndex) {
+    _drawElements: function(animationEnabled, firstDrawing) {
+        var that = this,
+            points = that._pointsToDraw || [],
+            closeSegment = points[0] && points[0].hasValue() && that._options.closed,
+            groupForPoint = {
+                markers: that._markersGroup,
+                errorBars: that._errorBarGroup
+            },
+
+            segments;
+
+        that._drawnPoints = [];
+        that._graphics = that._graphics || [];
+        that._segments = [];
+
+        segments = points.reduce(function(segments, p) {
+            var segment = segments[segments.length - 1];
+            p.translate();
+            if(p.hasValue() && p.hasCoords()) {
+                that._drawPoint({ point: p, groups: groupForPoint, hasAnimation: animationEnabled, firstDrawing: firstDrawing });
+                segment.push(p);
+            } else {
+                if(!p.hasCoords()) {
+                    p.setInvisibility();
+                }
+                segment.length && segments.push([]);
+            }
+
+            return segments;
+        }, [[]]);
+
+        segments.forEach(function(segment, index) {
+            if(segment.length) {
+                that._drawSegment(segment, animationEnabled, index, closeSegment && index === this.length - 1);
+            }
+        }, segments);
+
+        that._firstDrawing = points.length ? false : true;
+
+        that._removeOldSegments();
+
+        animationEnabled && that._animate(firstDrawing);
+    },
+
+    _drawComplete: function() {
         var that = this;
-        _each(that._graphics.splice(startIndex, that._graphics.length) || [], function(_, elem) {
-            that._removeElement(elem);
-        });
-        if(that._trackers) {
-            _each(that._trackers.splice(startIndex, that._trackers.length) || [], function(_, elem) {
-                elem.remove();
-            });
-        }
+        that._disposePoints(that._oldPoints);
+        that._oldPoints = null;
+        that._pointsToDraw = null;
+        that._allPoints = that._points;
     },
 
     draw: function(animationEnabled, hideLayoutLabels, legendCallback) {
         var that = this,
-            drawComplete;
-
-        if(that._oldClearingAnimation && animationEnabled && that._firstDrawing) {
-            drawComplete = function() {
-                that._draw(true, hideLayoutLabels);
-            };
-            that._oldClearingAnimation(drawComplete);
-        } else {
-            that._draw(animationEnabled, hideLayoutLabels, legendCallback);
-        }
-    },
-
-    _draw: function(animationEnabled, hideLayoutLabels, legendCallback) {
-        var that = this,
-            points = that._points || [],
-            segment = [],
-            segmentCount = 0,
-            firstDrawing = that._firstDrawing,
-            closeSegment = points[0] && points[0].hasValue() && that._options.closed,
-            groupForPoint;
+            firstDrawing = that._firstDrawing;
 
         that._legendCallback = legendCallback || that._legendCallback;
-        that._graphics = that._graphics || [];
-        that._prepareSeriesToDrawing();
+
+        if(!that._pointsToDraw) {
+            that.prepareToDrawing(false);
+        }
 
         if(!that._visible) {
             animationEnabled = false;
@@ -502,44 +577,18 @@ Series.prototype = {
 
         that._applyVisibleArea();
         that._setGroupsSettings(animationEnabled, firstDrawing);
-        that._segments = [];
-        that._drawnPoints = [];
-        that._firstDrawing = points.length ? false : true;
 
-        groupForPoint = {
-            markers: that._markersGroup,
-            errorBars: that._errorBarGroup
-        };
-
-        points.forEach(function(p, i) {
-            p.translate();
-
-            if(p.hasValue() && p.hasCoords()) {
-                that._drawPoint({ point: p, groups: groupForPoint, hasAnimation: animationEnabled, firstDrawing: firstDrawing });
-                segment.push(p);
-            } else {
-                if(!p.hasCoords()) {
-                    p.setInvisibility();
-                }
-                if(segment.length) {
-                    that._drawSegment(segment, animationEnabled, segmentCount++);
-                    segment = [];
-                }
-            }
-        });
-        segment.length && that._drawSegment(segment, animationEnabled, segmentCount++, closeSegment);
-        that._removeOldSegments(segmentCount);
-        that._defaultSegments = that._generateDefaultSegments();
+        that._drawElements(animationEnabled, firstDrawing);
 
         hideLayoutLabels && that.hideLabels();
-
-        animationEnabled && that._animate(firstDrawing);
 
         if(that.isSelected()) {
             that._changeStyle(that.lastSelectionMode, undefined, true);
         } else if(that.isHovered()) {
             that._changeStyle(that.lastHoverMode, undefined, true);
         }
+
+        this._drawComplete();
     },
 
     _setLabelGroupSettings: function(animationEnabled) {
@@ -695,7 +744,7 @@ Series.prototype = {
         return this.areLabelsVisible() && this._options.label && this._options.label.visible;
     },
 
-    customizePoint: function(point, pointData) {
+    customizePoint: function(point, pointData, dataItem) {
         var that = this,
             options = that._options,
             customizePoint = options.customizePoint,
@@ -723,7 +772,7 @@ Series.prototype = {
         }
 
         if(useLabelCustomOptions || usePointCustomOptions) {
-            pointOptions = that._parsePointOptions(that._preparePointOptions(customOptions), customLabelOptions || options.label, pointData);
+            pointOptions = that._parsePointOptions(that._preparePointOptions(customOptions), customLabelOptions || options.label, pointData, dataItem);
             pointOptions.styles.useLabelCustomOptions = useLabelCustomOptions;
             pointOptions.styles.usePointCustomOptions = usePointCustomOptions;
 
@@ -751,8 +800,8 @@ Series.prototype = {
         that._options.visibilityChanged();
     },
 
-    //TODO. Problem related to 'point' option for bar-like series. Revisit this code once options parsing is changed
-    //see T243839, T231939
+    // TODO. Problem related to 'point' option for bar-like series. Revisit this code once options parsing is changed
+    // see T243839, T231939
     _updatePointsVisibility: _noop,
 
     hideLabels: function() {
@@ -761,10 +810,10 @@ Series.prototype = {
         });
     },
 
-    _parsePointOptions: function(pointOptions, labelOptions, data) {
+    _parsePointOptions: function(pointOptions, labelOptions, data, dataIndex) {
         var that = this,
             options = that._options,
-            styles = that._createPointStyles(pointOptions, data),
+            styles = that._createPointStyles(pointOptions, data, dataIndex),
             parsedOptions = _extend({}, pointOptions, {
                 type: options.type,
                 rotated: options.rotated,
@@ -791,18 +840,49 @@ Series.prototype = {
         return _extend(false, {}, this._getOptionsForPoint(), { hoverStyle: {}, selectionStyle: {} });
     },
 
-    _resample: function(ticksInterval, min, max, isDefinedMinMax) {
+    _getAggregationMethod: function() {
+        var options = this.getOptions().aggregation,
+            method = _normalizeEnum(options.method),
+            aggregator = method !== "custom" ? this._aggregators[method] : options.calculate;
+
+        if(!aggregator) {
+            return this._aggregators[this._defaultAggregator];
+        }
+
+        return aggregator;
+    },
+
+    _fusionData: function(data, interval, aggregationInterval) {
+        var options = this.getOptions(),
+            aggregationMethod = this._getAggregationMethod(),
+            underlyingData = data.map(function(item) { return item.data; }),
+            aggregationInfo = {
+                data: underlyingData,
+                aggregationInterval: aggregationInterval,
+                intervalStart: interval,
+                intervalEnd: typeUtils.isDate(interval) ? new Date(interval.getTime() + aggregationInterval) : interval + aggregationInterval
+            },
+            aggregatedData = aggregationMethod(aggregationInfo, this),
+            pointData = aggregatedData && this._getPointData(aggregatedData, options);
+
+        if(pointData && this._checkData(pointData)) {
+            pointData.aggregationInfo = aggregationInfo;
+            return pointData;
+        }
+
+        return null;
+    },
+
+    _resample: function(aggregationInterval, min, max, isDefinedMinMax, data) {
         var that = this,
-            fusionPoints = [],
-            nowIndexTicks = 0,
-            lastPointIndex = 0,
+            dataInInterval = [],
             pointData,
             minTick,
-            state = 0,
-            originalPoints = that.getAllPoints();
+            aggregatedData,
+            state = 0;
 
-        function addFirstFusionPoint(point) {
-            fusionPoints.push(point);
+        function addFirstDataItem(point) {
+            dataInInterval.push(point);
             minTick = point.argument;
 
             if(isDefinedMinMax) {
@@ -817,42 +897,43 @@ Series.prototype = {
         }
 
         if(that.argumentAxisType === DISCRETE || that.valueAxisType === DISCRETE) {
-            return _map(originalPoints, function(point, index) {
-                if(index % ticksInterval === 0) {
+            return _map(data, function(point, index) {
+                if(index % aggregationInterval === 0) {
                     return point;
                 }
-                point.setInvisibility();
                 return null;
             });
         }
 
-        that._aggregatedPoints = that._aggregatedPoints || [];
-        _each(originalPoints, function(_, point) {
-            point.setInvisibility();
-
-            if(!fusionPoints.length) {
-                addFirstFusionPoint(point);
-            } else if(!state && Math.abs(minTick - point.argument) < ticksInterval) {
-                fusionPoints.push(point);
+        aggregatedData = data.reduce(function(aggregatedPoints, point) {
+            if(!dataInInterval.length) {
+                addFirstDataItem(point);
+            } else if(!state && Math.abs(minTick - point.argument) < aggregationInterval) {
+                dataInInterval.push(point);
             } else if(!(state === 1 && point.argument < min) && !(state === 2 && point.argument > max)) {
-                pointData = that._fusionPoints(fusionPoints, minTick, nowIndexTicks);
-                nowIndexTicks++;
-                if(that._createPoint(pointData, that._aggregatedPoints, lastPointIndex)) {
-                    lastPointIndex++;
+                pointData = that._fusionData(dataInInterval, minTick, aggregationInterval);
+
+                if(pointData) {
+                    aggregatedPoints.push(pointData);
                 }
-                fusionPoints = [];
-                addFirstFusionPoint(point);
+
+                dataInInterval = [];
+                addFirstDataItem(point);
             }
-        });
-        if(fusionPoints.length) {
-            pointData = that._fusionPoints(fusionPoints, minTick, nowIndexTicks);
-            if(that._createPoint(pointData, that._aggregatedPoints, lastPointIndex)) {
-                lastPointIndex++;
+
+            return aggregatedPoints;
+
+        }, []);
+
+        if(dataInInterval.length) {
+            pointData = that._fusionData(dataInInterval, minTick, aggregationInterval);
+            if(pointData) {
+                aggregatedData.push(pointData);
             }
         }
-        that._correctPointsLength(lastPointIndex, that._aggregatedPoints);
+
         that._endUpdateData();
-        return that._aggregatedPoints;
+        return aggregatedData;
     },
 
     canRenderCompleteHandle: function() {
@@ -874,7 +955,7 @@ Series.prototype = {
     },
 
     getAllPoints: function() {
-        return (this._originalPoints || []).slice();
+        return (this._points || []).slice();
     },
 
     getPointByPos: function(pos) {
@@ -1078,10 +1159,9 @@ Series.prototype = {
 
     _deletePoints: function() {
         var that = this;
-        that._disposePoints(that._originalPoints);
-        that._disposePoints(that._aggregatedPoints);
         that._disposePoints(that._oldPoints);
-        that._points = that._oldPoints = that._aggregatedPoints = that._originalPoints = that._drawnPoints = null;
+        that._disposePoints(that._points);
+        that._points = that._oldPoints = that._drawnPoints = null;
     },
 
     _deleteTrackers: function() {
@@ -1119,7 +1199,6 @@ Series.prototype = {
             that._pointOptions =
 
             that._drawnPoints =
-            that._aggregatedPoints =
             that.pointsByArgument =
             that._segments =
             that._prevSeries = null;

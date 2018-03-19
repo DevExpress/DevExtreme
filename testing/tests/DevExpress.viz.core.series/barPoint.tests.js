@@ -4,10 +4,9 @@ var $ = require("jquery"),
     vizMocks = require("../../helpers/vizMocks.js"),
     pointModule = require("viz/series/points/base_point"),
     labelModule = require("viz/series/points/label"),
-    originalLabel = labelModule.Label;
-
-/* global MockTranslator */
-require("../../helpers/chartMocks.js");
+    originalLabel = labelModule.Label,
+    chartMocks = require("../../helpers/chartMocks.js"),
+    MockTranslator = chartMocks.MockTranslator;
 
 var createPoint = function(series, data, options) {
     options = options || {};
@@ -1310,7 +1309,7 @@ QUnit.test("Get Graphic Settings", function(assert) {
         renderer = new vizMocks.Renderer();
     point.graphic = renderer.rect(250, 100, 430, 133);
 
-    //act
+    // act
     var settings = point.getGraphicSettings();
 
     assert.equal(settings.x, 250);
@@ -1753,6 +1752,48 @@ QUnit.test("Outside, rotated, label under the point, label height > point height
     assert.equal(label.shift.firstCall.args[1], 22);
 
     assert.equal(point._label.draw.callCount, 0);
+});
+
+// T605894
+QUnit.test("Label's border is equal of point's border", function(assert) {
+    this.label.getBoundingRect.returns({ width: 30, height: 15 });
+    this.options.resolveLabelsOverlapping = true;
+    this.data.value = 20;
+    this.options.label.position = "inside";
+
+    var point = createPoint(this.series, this.data, this.options),
+        label = point._label;
+
+    point.x = 33;
+    point.y = 22;
+    point.width = 35;
+    point.height = 15;
+
+    point.correctLabelPosition(label);
+
+    assert.equal(point._label.draw.callCount, 1);
+    assert.strictEqual(point._label.draw.lastCall.args[0], false);
+});
+
+// T605894
+QUnit.test("Label's border is equal of point's border. Rotated chart", function(assert) {
+    this.label.getBoundingRect.returns({ width: 30, height: 15 });
+    this.options.resolveLabelsOverlapping = true;
+    this.data.value = 20;
+    this.options.label.position = "inside";
+
+    var point = createPoint(this.series, this.data, this.options),
+        label = point._label;
+
+    point.x = 33;
+    point.y = 22;
+    point.width = 30;
+    point.height = 25;
+
+    point.correctLabelPosition(label);
+
+    assert.equal(point._label.draw.callCount, 1);
+    assert.strictEqual(point._label.draw.lastCall.args[0], false);
 });
 
 QUnit.test("Default, inside, not rotated with negative value", function(assert) {
@@ -2233,7 +2274,7 @@ QUnit.test("get radius", function(assert) {
     assert.equal(point.getPointRadius(), 0);
 });
 
-//Helpers
+// Helpers
 
 function createLabel(pointBBox) {
     var point = createPoint(this.series, this.data, this.options),

@@ -224,14 +224,11 @@ var Toolbar = ToolbarBase.inherit({
     },
 
     _render: function() {
-        this.callBase();
-        this._menuStrategy.renderMenuItems();
-    },
-
-    _renderContentImpl: function() {
-        this.callBase();
         this._hideOverflowItems();
         this._renderMenu();
+
+        this.callBase();
+        this._menuStrategy.renderMenuItems();
     },
 
     _renderItem: function(index, item, itemContainer, $after) {

@@ -38,7 +38,7 @@ var barPointStrategy = {
         return labelPoint.x >= figure.x && labelPoint.x <= figure.x + figure.width && labelPoint.y >= figure.y && labelPoint.y <= figure.y + figure.height;
     },
 
-    prepareLabelPoints: function(bBox, isRotated) {
+    prepareLabelPoints: function(bBox, isRotated, _textSize, angle) {
         var x1 = bBox.x,
             xc = x1 + bBox.width / 2,
             x2 = x1 + bBox.width - 1,
@@ -46,7 +46,7 @@ var barPointStrategy = {
             yc = y1 + bBox.height / 2,
             y2 = y1 + bBox.height - 1;
 
-        return [
+        return (_math.abs(angle) % 90) === 0 ? [
             [x1, y1],
             [isRotated ? x1 : xc, isRotated ? yc : y1],
             [x2, y1],
@@ -54,7 +54,8 @@ var barPointStrategy = {
             [x1, y2],
             [isRotated ? x2 : xc, isRotated ? yc : y2],
             [x2, y2]
-        ];
+        ] :
+            [[xc, yc]];
     },
 
     isRotated: function(bBox, figure) {

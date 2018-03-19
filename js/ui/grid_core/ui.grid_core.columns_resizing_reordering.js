@@ -228,9 +228,7 @@ var ColumnsSeparatorView = SeparatorView.inherit({
         if($element && (this._isShown || force)) {
             if(this._isTransparent) {
                 $element.addClass(columnsSeparatorTransparent);
-                if($element.css("display") === "none") {
-                    $element.show();
-                }
+                $element.show();
             } else {
                 if($element.hasClass(columnsSeparatorTransparent)) {
                     $element.removeClass(columnsSeparatorTransparent);
@@ -275,9 +273,7 @@ var BlockSeparatorView = SeparatorView.inherit({
         this.callBase();
 
         this.getController("data").loadingChanged.add(function(isLoading) {
-            var element = that.element();
-
-            if(!isLoading && element && element.css("display") !== "none") {
+            if(!isLoading) {
                 that.hide();
             }
         });
@@ -417,7 +413,7 @@ var DraggingHeaderView = modules.View.inherit({
         this.getController("data").loadingChanged.add(function(isLoading) {
             var element = that.element();
 
-            if(!isLoading && element && element.css("display") !== "none") {
+            if(!isLoading && element) {
                 element.hide();
             }
         });
@@ -435,12 +431,13 @@ var DraggingHeaderView = modules.View.inherit({
             sourceColumnElement: options.columnElement,
             sourceLocation: options.sourceLocation
         };
-        that._onSelectStart = domAdapter.getProperty(domAdapter.getDocument(), "onselectstart");
 
-        var onSelectStart = function() {
+        var document = domAdapter.getDocument();
+        that._onSelectStart = document["onselectstart"];
+
+        document["onselectstart"] = function() {
             return false;
         };
-        domAdapter.setProperty(domAdapter.getDocument(), "onselectstart", onSelectStart);
 
         that._controller.drag(that._dropOptions);
 
@@ -556,7 +553,7 @@ var DraggingHeaderView = modules.View.inherit({
         that._dragOptions = null;
         that._dropOptions = null;
         that._isDragging = false;
-        domAdapter.setProperty(domAdapter.getDocument(), "onselectstart", that._onSelectStart || null);
+        domAdapter.getDocument()["onselectstart"] = that._onSelectStart || null;
     }
 });
 
@@ -998,7 +995,9 @@ var TablePositionViewController = modules.ViewController.inherit({
         that._pagerView = this.getView("pagerView");
 
         that._rowsView.resizeCompleted.add(function() {
-            that.update();
+            if(that.option("allowColumnResizing")) {
+                that.update();
+            }
         });
     },
 

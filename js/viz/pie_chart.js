@@ -128,7 +128,19 @@ var dxPieChart = BaseChart.inherit({
     },
 
     _processSingleSeries: function(singleSeries) {
+        this.callBase(singleSeries);
         singleSeries.arrangePoints();
+    },
+
+    _handleSeriesDataUpdated: function() {
+        var maxPointCount = 0;
+        this.series.forEach(function(s) {
+            maxPointCount = Math.max(s.getPointsCount(), maxPointCount);
+        });
+        this.series.forEach(function(s) {
+            s.setMaxPointsCount(maxPointCount);
+        });
+        this.callBase();
     },
 
     _getLegendTargets: function() {
@@ -338,7 +350,7 @@ var dxPieChart = BaseChart.inherit({
         this._abstractSeries = null;
     },
 
-    //DEPRECATED_15_2
+    // DEPRECATED_15_2
     getSeries: function() {
         errors.log("W0002", "dxPieChart", "getSeries", "15.2", "Use the 'getAllSeries' method instead");
         return this.series[0];
@@ -393,7 +405,7 @@ var dxPieChart = BaseChart.inherit({
     },
 
     getSizeGroupLayout: function() {
-        return this._sizeGroupLayout;
+        return this._sizeGroupLayout || {};
     }
 });
 
@@ -409,12 +421,12 @@ var pieSizeEqualizer = (function() {
     function equalize(group, allPies) {
         var pies = allPies.filter(function(p) { return p.getSizeGroup() === group; }),
             minRadius = Math.min.apply(null, pies.map(function(p) { return p.getSizeGroupLayout().radius; })),
-            layout = pies.filter(function(p) { return p.getSizeGroupLayout().radius === minRadius; })[0].getSizeGroupLayout();
+            minPie = pies.filter(function(p) { return p.getSizeGroupLayout().radius === minRadius; });
 
         pies.forEach(function(p) {
             p.render({
                 force: true,
-                sizeGroupLayout: layout
+                sizeGroupLayout: minPie.length ? minPie[0].getSizeGroupLayout() : {}
             });
         });
     }

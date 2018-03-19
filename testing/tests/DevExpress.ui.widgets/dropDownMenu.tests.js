@@ -424,10 +424,13 @@ QUnit.test("click outside of popup hides drop-down list", function(assert) {
     assert.equal(popup.option("visible"), false);
 });
 
-QUnit.test("click on list item hides drop-down list", function(assert) {
-    assert.expect(3);
+QUnit.test("click on list item hides drop-down list if closeOnClick=true", function(assert) {
+    assert.expect(4);
 
-    this.ddMenu.option("items", [1, 2, 3]);
+    this.ddMenu.option({
+        items: [1, 2, 3],
+        closeOnClick: false
+    });
     this.toggleMenu();
 
     var popup = this.popup,
@@ -439,7 +442,11 @@ QUnit.test("click on list item hides drop-down list", function(assert) {
     assert.equal(popup.option("visible"), true, "click on list does not hide popup");
 
     $($list.find(".dx-list-item").first()).trigger("dxclick");
-    assert.equal(popup.option("visible"), false, "click on item hides popup");
+    assert.equal(popup.option("visible"), true, "popup is visible");
+
+    this.ddMenu.option("closeOnClick", true);
+    $($list.find(".dx-list-item").first()).trigger("dxclick");
+    assert.equal(popup.option("visible"), false, "popup is hidden");
 });
 
 QUnit.test("click on list item is not outside click for popup", function(assert) {
@@ -634,7 +641,6 @@ QUnit.test("B233109: dropDownMenu menu interference", function(assert) {
     assert.equal(popup1.option("visible"), false);
     assert.equal(popup2.option("visible"), false);
 });
-
 
 
 QUnit.test("B250811 - Cancel item in overflow menu on Android does not work", function(assert) {

@@ -1,20 +1,20 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    eventsEngine = require("../../events/core/events_engine"),
-    Class = require("../../core/class"),
-    stringUtils = require("../../core/utils/string"),
-    registerComponent = require("../../core/component_registrator"),
-    commonUtils = require("../../core/utils/common"),
-    each = require("../../core/utils/iterator").each,
-    typeUtils = require("../../core/utils/type"),
-    extend = require("../../core/utils/extend").extend,
-    clickEvent = require("../../events/click"),
-    messageLocalization = require("../../localization/message"),
-    Widget = require("../widget/ui.widget"),
-    SelectBox = require("../select_box"),
-    NumberBox = require("../number_box"),
-    eventUtils = require("../../events/utils");
+var $ = require("../core/renderer"),
+    eventsEngine = require("../events/core/events_engine"),
+    Class = require("../core/class"),
+    stringUtils = require("../core/utils/string"),
+    registerComponent = require("../core/component_registrator"),
+    commonUtils = require("../core/utils/common"),
+    each = require("../core/utils/iterator").each,
+    typeUtils = require("../core/utils/type"),
+    extend = require("../core/utils/extend").extend,
+    clickEvent = require("../events/click"),
+    messageLocalization = require("../localization/message"),
+    Widget = require("./widget/ui.widget"),
+    SelectBox = require("./select_box"),
+    NumberBox = require("./number_box"),
+    eventUtils = require("../events/utils");
 
 var PAGES_LIMITER = 4,
     PAGER_CLASS = 'dx-pager',
@@ -474,11 +474,12 @@ var Pager = Widget.inherit({
             pagesSizesLength = pageSizes && pageSizes.length,
             $element = that.$element();
 
+        that._$pagesSizeChooser && that._$pagesSizeChooser.remove();
+
         if(!showPageSizes || !pagesSizesLength) {
             return;
         }
 
-        that._$pagesSizeChooser && that._$pagesSizeChooser.remove();
         that._$pagesSizeChooser = $('<div>').addClass(PAGER_PAGE_SIZES_CLASS).appendTo($element);
 
         if(that.option("lightModeEnabled")) {
@@ -537,12 +538,21 @@ var Pager = Widget.inherit({
 
     _renderContentImpl: function() {
         this.$element()
-            .addClass(PAGER_CLASS)
             .toggleClass(LIGHT_MODE_CLASS, this.option("lightModeEnabled"));
 
         this._toggleVisibility(this.option("visible"));
         this._updatePageSizes(true);
         this._updatePages(true);
+    },
+
+    _initMarkup: function() {
+        var $element = this.$element();
+
+        $element.addClass(PAGER_CLASS);
+
+        var $pageSize = $('<div>').addClass(PAGER_PAGE_CLASS);
+
+        this._$pagesChooser = $('<div>').addClass(PAGER_PAGES_CLASS).append($pageSize).appendTo($element);
     },
 
     _render: function() {

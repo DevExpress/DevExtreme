@@ -202,9 +202,6 @@ var testBaselineOffset = function($labelContainer, $valueContainer) {
 };
 
 
-
-
-
 module.exports = function(themeName, options) {
     if(!checkThatTestingIsPossible()) {
         return;

@@ -94,11 +94,6 @@ module.exports = {
              * @default false
              */
             /**
-             * @name dxDataGridOptions_paging
-             * @publicName paging
-             * @type object
-             */
-            /**
              * @name dxTreeListOptions_remoteOperations_sorting
              * @publicName sorting
              * @type boolean
@@ -116,6 +111,16 @@ module.exports = {
              * @type boolean
              * @default false
              */
+            /**
+             * @name dxDataGridOptions_paging
+             * @publicName paging
+             * @type object
+             */
+            /**
+             * @name dxTreeListOptions_paging
+             * @publicName paging
+             * @type object
+             */
             paging: {
                 /**
                  * @name dxDataGridOptions_paging_enabled
@@ -125,17 +130,19 @@ module.exports = {
                  */
                 enabled: true,
                 /**
-                 * @name dxDataGridOptions_paging_pageSize
+                 * @name GridBaseOptions_paging_pageSize
                  * @publicName pageSize
                  * @type number
                  * @default 20
+                 * @fires dxDataGridOptions_onOptionChanged
                  */
                 pageSize: undefined,
                 /**
-                 * @name dxDataGridOptions_paging_pageIndex
+                 * @name GridBaseOptions_paging_pageIndex
                  * @publicName pageIndex
                  * @type number
                  * @default 0
+                 * @fires dxDataGridOptions_onOptionChanged
                  */
                 pageIndex: undefined
             }
@@ -181,6 +188,32 @@ module.exports = {
     },
     controllers: {
         data: modules.Controller.inherit({}).include(DataHelperMixin).inherit((function() {
+            var changePaging = function(that, optionName, value) {
+                var dataSource = that._dataSource;
+
+                if(dataSource) {
+                    if(value !== undefined) {
+                        if(dataSource[optionName]() !== value) {
+                            if(optionName === "pageSize") {
+                                dataSource.pageIndex(0);
+                            }
+                            dataSource[optionName](value);
+
+                            that._skipProcessingPagingChange = true;
+                            that.option("paging." + optionName, value);
+                            that._skipProcessingPagingChange = false;
+
+                            return dataSource[optionName === "pageIndex" ? "load" : "reload"]()
+                                .done(that.pageChanged.fire.bind(that.pageChanged));
+                        }
+                        return Deferred().resolve().promise();
+                    }
+                    return dataSource[optionName]();
+                }
+
+                return 0;
+            };
+
             var members = {
                 init: function() {
                     var that = this;
@@ -268,7 +301,9 @@ module.exports = {
                         case "scrolling":
                         case "paging":
                             handled();
-                            reload();
+                            if(!that.skipProcessingPagingChange(args.fullName)) {
+                                reload();
+                            }
                             break;
                         case "rtlEnabled":
                             reload();
@@ -328,7 +363,7 @@ module.exports = {
                         this.updateItems(changes.length === 1 ? changes[0] : {});
                     }
                 },
-                //Handlers
+                // Handlers
                 _handleCustomizeStoreLoadOptions: function(e) {
                     var columnsController = this._columnsController,
                         dataSource = this._dataSource,
@@ -365,7 +400,7 @@ module.exports = {
                         filterValue,
                         filterValues;
 
-                    //B255430
+                    // B255430
                     var updateItemsHandler = function() {
                         that._columnsController.columnsChanged.remove(updateItemsHandler);
                         that.updateItems();
@@ -389,7 +424,7 @@ module.exports = {
                         }
 
                         if(!that._needApplyFilter && !gridCoreUtils.checkChanges(optionNames, ["width", "visibleWidth", "filterValue", "bufferedFilterValue", "selectedFilterOperation", "filterValues", "filterType"])) {
-                            //TODO remove resubscribing
+                            // TODO remove resubscribing
                             that._columnsController.columnsChanged.add(updateItemsHandler);
                         }
 
@@ -870,7 +905,7 @@ module.exports = {
                     return !this.items().length;
                 },
                 /**
-                 * @name dxDataGridMethods_pageCount
+                 * @name GridBaseMethods_pageCount
                  * @publicName pageCount()
                  * @return numeric
                  */
@@ -896,6 +931,7 @@ module.exports = {
                                 isCustomLoading: true,
                                 storeLoadOptions: {},
                                 loadOptions: {
+                                    filter: that.getCombinedFilter(),
                                     group: dataSource.group(),
                                     sort: dataSource.sort()
                                 }
@@ -1003,64 +1039,31 @@ module.exports = {
                     return result;
                 },
                 /**
-                * @name dxDataGridMethods_pageIndex
+                * @name GridBaseMethods_pageIndex
                 * @publicName pageIndex()
                 * @return numeric
                 */
                 /**
-                * @name dxDataGridMethods_pageIndex
+                * @name GridBaseMethods_pageIndex
                 * @publicName pageIndex(newIndex)
                 * @param1 newIndex:numeric
                 * @return Promise<void>
                 */
                 pageIndex: function(value) {
-                    var that = this,
-                        pagingOptions = that.option("paging"),
-                        dataSource = that._dataSource;
-
-                    if(dataSource) {
-                        if(value !== undefined) {
-                            if(dataSource.pageIndex() !== value) {
-                                dataSource.pageIndex(value);
-                                if(pagingOptions) {
-                                    pagingOptions.pageIndex = value;
-                                }
-                                return dataSource.load().done(that.pageChanged.fire.bind(that.pageChanged));
-                            }
-                            return Deferred().resolve().promise();
-                        }
-                        return dataSource.pageIndex();
-                    }
-                    return 0;
+                    return changePaging(this, "pageIndex", value);
                 },
                 /**
-                * @name dxDataGridMethods_pageSize
+                * @name GridBaseMethods_pageSize
                 * @publicName pageSize()
                 * @return numeric
                 */
                 /**
-                * @name dxDataGridMethods_pageSize
+                * @name GridBaseMethods_pageSize
                 * @publicName pageSize(value)
                 * @param1 value:numeric
                 */
                 pageSize: function(value) {
-                    var that = this,
-                        pagingOptions = that.option("paging"),
-                        dataSource = that._dataSource;
-
-                    if(value === undefined) {
-                        return dataSource ? dataSource.pageSize() : 0;
-                    }
-                    if(dataSource) {
-                        if(dataSource.pageSize() !== value) {
-                            dataSource.pageIndex(0);
-                            dataSource.pageSize(value);
-                            if(pagingOptions) {
-                                pagingOptions.pageSize = value;
-                            }
-                            return dataSource.reload().done(that.pageChanged.fire.bind(that.pageChanged));
-                        }
-                    }
+                    return changePaging(this, "pageSize", value);
                 },
                 /**
                  * @name GridBaseMethods_beginCustomLoading
@@ -1121,6 +1124,18 @@ module.exports = {
                     if(rowIndexes.length > 1 || typeUtils.isDefined(rowIndexes[0])) {
                         this.updateItems({ changeType: "update", rowIndices: rowIndexes });
                     }
+                },
+
+                skipProcessingPagingChange: function(fullName) {
+                    return this._skipProcessingPagingChange && (fullName === "paging.pageIndex" || fullName === "paging.pageSize");
+                },
+
+                getUserState: function() {
+                    return {
+                        searchText: this.option("searchPanel.text"),
+                        pageIndex: this.pageIndex(),
+                        pageSize: this.pageSize()
+                    };
                 }
             };
 

@@ -12,7 +12,7 @@ QUnit.testStart(function() {
     $("#qunit-fixture").html(markup);
 });
 
-//DEPRECATED 16_2 start
+// DEPRECATED 16_2 start
 QUnit.module("selectedRange", function(hook) {
     hook.beforeEach(function() {
         this.rangeSelector = $("#container").dxRangeSelector({
@@ -42,14 +42,14 @@ QUnit.module("selectedRange", function(hook) {
         assert.deepEqual(this.rangeSelector.getSelectedRange(), { startValue: 3, endValue: 7 });
     });
 
-    //B234562
+    // B234562
     QUnit.test("range after resize", function(assert) {
         this.rangeSelector.option("selectedRange", { startValue: 4, endValue: 5 });
         this.rangeSelector.option("size", { width: 100, height: 300 });
         assert.deepEqual(this.rangeSelector.getSelectedRange(), { startValue: 4, endValue: 5 });
     });
 
-    //T173590
+    // T173590
     QUnit.test("range with discrete data", function(assert) {
         var spy = sinon.spy();
         this.rangeSelector.option({
@@ -76,6 +76,14 @@ QUnit.module("selectedRange", function(hook) {
         this.rangeSelector.option("selectedRange", { startValue: 3, endValue: 6 });
         this.rangeSelector.resetSelectedRange();
         assert.deepEqual(this.rangeSelector.getSelectedRange(), { startValue: 1, endValue: 11 });
+    });
+
+    QUnit.test("Reset selected range", function(assert) {
+        var incidentOccurred = sinon.spy();
+        this.rangeSelector.option({ onIncidentOccurred: incidentOccurred });
+        this.rangeSelector.resetSelectedRange();
+
+        assert.equal(incidentOccurred.callCount, 0);
     });
 
     QUnit.test("parse custom selected range", function(assert) {
@@ -113,6 +121,7 @@ QUnit.module("selectedRange", function(hook) {
         });
 
         assert.deepEqual(this.rangeSelector.getSelectedRange(), { startValue: 1, endValue: 11 });
+        assert.equal(spy.callCount, 1);
         assert.deepEqual(spy.getCall(0).args[0].target.id, "E2203");
         assert.deepEqual(spy.getCall(0).args[0].target.text, "The range you are trying to set is invalid");
     });
@@ -181,6 +190,7 @@ QUnit.module("selectedRange", function(hook) {
         });
 
         assert.deepEqual(this.rangeSelector.getSelectedRange(), { startValue: 1, endValue: 11 });
+        assert.equal(spy.callCount, 1);
         assert.deepEqual(spy.getCall(0).args[0].target.id, "E2203");
         assert.deepEqual(spy.getCall(0).args[0].target.text, "The range you are trying to set is invalid");
     });
@@ -296,7 +306,7 @@ QUnit.module("'onSelectedRangeChanged' event", function() {
         assert.strictEqual(count, 1);
     });
 
-    //T467225
+    // T467225
     QUnit.test("Triggered after several cases", function(assert) {
         var count = 0,
             range = $("#container").width(600).dxRangeSelector({
@@ -331,7 +341,7 @@ QUnit.module("T385539. Change selectedRange with scale options at the same time"
     });
 
     QUnit.test("selectedRange is set correctly", function(assert) {
-        //act
+        // act
         this.rangeSelector.option({
             scale: {
                 startValue: 30,
@@ -348,11 +358,11 @@ QUnit.module("T385539. Change selectedRange with scale options at the same time"
     });
 
     QUnit.test("onSelectedRangeChanged triggered correctly", function(assert) {
-        //arrange
+        // arrange
         var selectedRange;
         this.rangeSelector.option("onSelectedRangeChanged", function(e) { selectedRange = e; });
 
-        //act
+        // act
         this.rangeSelector.option({
             scale: {
                 startValue: 30,
@@ -369,11 +379,11 @@ QUnit.module("T385539. Change selectedRange with scale options at the same time"
     });
 
     QUnit.test("No errors fired", function(assert) {
-        //arrange
+        // arrange
         var errorsFired = [];
         this.rangeSelector.option("onIncidentOccurred", function(e) { errorsFired.push(e.target); });
 
-        //act
+        // act
         this.rangeSelector.option({
             scale: {
                 startValue: 30,
@@ -439,7 +449,7 @@ QUnit.module("T413379", function(hook) {
         assert.equal(this.incidentOccurred.callCount, 0);
     });
 });
-//DEPRECATED 16_2 end
+// DEPRECATED 16_2 end
 
 QUnit.module("Value", function(hook) {
     hook.beforeEach(function() {
@@ -527,6 +537,7 @@ QUnit.module("Value", function(hook) {
         });
 
         assert.deepEqual(this.rangeSelector.getValue(), [1, 11]);
+        assert.equal(spy.callCount, 1);
         assert.deepEqual(spy.getCall(0).args[0].target.id, "E2203");
         assert.deepEqual(spy.getCall(0).args[0].target.text, "The range you are trying to set is invalid");
     });
@@ -570,8 +581,20 @@ QUnit.module("Value", function(hook) {
         });
 
         assert.deepEqual(this.rangeSelector.getValue(), [1, 11]);
+        assert.equal(spy.callCount, 1);
         assert.deepEqual(spy.getCall(0).args[0].target.id, "E2203");
         assert.deepEqual(spy.getCall(0).args[0].target.text, "The range you are trying to set is invalid");
+    });
+
+    QUnit.test("Warnings rising on using setValue method", function(assert) {
+        var spy = sinon.spy();
+        this.rangeSelector.option({
+            onIncidentOccurred: spy
+        });
+
+        this.rangeSelector.setValue([1, 12]);
+
+        assert.strictEqual(spy.getCall(0).args[0].target.id, "E2203");
     });
 });
 

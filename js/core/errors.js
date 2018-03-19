@@ -142,6 +142,12 @@ module.exports = errorUtils({
     E0024: "DevExtreme bundle already included",
 
     /**
+    * @name Errors and Warnings_E0025
+    * @publicName E0025
+    */
+    E0025: "Unexpected argument type",
+
+    /**
     * @name Errors and Warnings_E0100
     * @publicName E0100
     */

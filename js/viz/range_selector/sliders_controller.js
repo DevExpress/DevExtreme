@@ -219,8 +219,8 @@ SlidersController.prototype = {
         arg = arg || {};
         var that = this,
             translator = that._params.translator,
-            startValue = translator.isValid(arg.startValue) ? translator.parse(arg.startValue) : translator.getRange()[0],
-            endValue = translator.isValid(arg.endValue) ? translator.parse(arg.endValue) : translator.getRange()[1],
+            startValue = translator.isValid(arg.startValue) ? translator.getCorrectValue(arg.startValue, +1) : translator.getRange()[0],
+            endValue = translator.isValid(arg.endValue) ? translator.getCorrectValue(arg.endValue, -1) : translator.getRange()[1],
             values;
 
         startValue = isNumeric(startValue) ? adjust(startValue) : startValue;

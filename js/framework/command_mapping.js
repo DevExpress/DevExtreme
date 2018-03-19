@@ -49,7 +49,7 @@ var CommandMapping = Class.inherit({
                 return inArray(commandName, that._existingCommands) < 0 && inArray(commandName, commands) === index;
             });
         if(result.length !== 0) {
-            //https://js.devexpress.com/Documentation/ApiReference/SPA_Framework/HtmlApplication/Configuration/#commandMapping
+            // https://js.devexpress.com/Documentation/ApiReference/SPA_Framework/HtmlApplication/Configuration/#commandMapping
             throw errors.Error("E3005", result.join("', '"), (result.length === 1 ? " is" : "s are"));
         }
     },

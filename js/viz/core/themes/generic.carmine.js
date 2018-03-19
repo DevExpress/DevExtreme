@@ -96,7 +96,9 @@ registerTheme({
         }
     },
     sparkline: {
-        pointColor: BACKGROUND_COLOR
+        pointColor: BACKGROUND_COLOR,
+        minColor: "#f0ad4e",
+        maxColor: "#f74d61"
     },
     treeMap: {
         group: {
@@ -118,5 +120,8 @@ registerTheme({
         legend: {
             markerColor: ACCENT_COLOR
         }
+    },
+    bullet: {
+        color: ACCENT_COLOR
     }
 }, "generic.light");

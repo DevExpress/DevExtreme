@@ -1,24 +1,20 @@
 "use strict";
 
-var extend = require("../../core/utils/extend").extend,
+var _extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
-    each = require("../../core/utils/iterator").each,
+    _each = require("../../core/utils/iterator").each,
     rangeCalculator = require("./helpers/range_data_calculator"),
     typeUtils = require("../../core/utils/type"),
     vizUtils = require("../core/utils"),
 
-    _each = each,
-    _extend = extend,
     _noop = require("../../core/utils/common").noop,
     _isDefined = typeUtils.isDefined,
     _isString = typeUtils.isString,
     _map = vizUtils.map,
     _normalizeEnum = vizUtils.normalizeEnum,
     math = Math,
-    _floor = math.floor,
     _abs = math.abs,
     _sqrt = math.sqrt,
-    _min = math.min,
     _max = math.max,
 
     DEFAULT_SYMBOL_POINT_SIZE = 2,
@@ -27,7 +23,6 @@ var extend = require("../../core/utils/extend").extend,
 
     HIGH_ERROR = "highError",
     LOW_ERROR = "lowError",
-    ORIGINAL = "original",
 
     VARIANCE = "variance",
     STANDARD_DEVIATION = "stddeviation",
@@ -52,8 +47,8 @@ function sum(array) {
 }
 
 function isErrorBarTypeCorrect(type) {
-    //TODO why UNDEFINED is here
-    //return inArray(type, [FIXED, PERCENT, VARIANCE, STANDARD_DEVIATION, STANDARD_ERROR, UNDEFINED]) !== -1;
+    // TODO why UNDEFINED is here
+    // return inArray(type, [FIXED, PERCENT, VARIANCE, STANDARD_DEVIATION, STANDARD_ERROR, UNDEFINED]) !== -1;
     return inArray(type, [FIXED, PERCENT, VARIANCE, STANDARD_DEVIATION, STANDARD_ERROR]) !== -1;
 }
 
@@ -61,6 +56,55 @@ function variance(array, expectedValue) {
     return sum(_map(array, function(value) {
         return (value - expectedValue) * (value - expectedValue);
     })) / array.length;
+}
+
+function calculateAvgErrorBars(result, data, series) {
+    var errorBarsOptions = series.getOptions().valueErrorBar,
+        valueField = series.getValueFields()[0],
+        lowValueField = errorBarsOptions.lowValueField || LOW_ERROR,
+        highValueField = errorBarsOptions.highValueField || HIGH_ERROR;
+
+    if(series.areErrorBarsVisible() && errorBarsOptions.type === undefined) {
+        var fusionData = data.reduce(function(result, item) {
+            if(_isDefined(item[lowValueField])) {
+                result[0] += item[valueField] - item[lowValueField];
+                result[1]++;
+            }
+            if(_isDefined(item[highValueField])) {
+                result[2] += item[highValueField] - item[valueField];
+                result[3]++;
+            }
+
+            return result;
+        }, [0, 0, 0, 0]);
+
+        if(fusionData[1]) {
+            result[lowValueField] = result[valueField] - fusionData[0] / fusionData[1];
+        }
+        if(fusionData[2]) {
+            result[highValueField] = result[valueField] + fusionData[2] / fusionData[3];
+        }
+    }
+
+    return result;
+}
+function calculateSumErrorBars(result, data, series) {
+    var errorBarsOptions = series.getOptions().valueErrorBar,
+        lowValueField = errorBarsOptions.lowValueField || LOW_ERROR,
+        highValueField = errorBarsOptions.highValueField || HIGH_ERROR;
+
+    if(series.areErrorBarsVisible() && errorBarsOptions.type === undefined) {
+        result[lowValueField] = 0;
+        result[highValueField] = 0;
+        result = data.reduce(function(result, item) {
+            result[lowValueField] += item[lowValueField];
+            result[highValueField] += item[highValueField];
+
+            return result;
+        }, result);
+    }
+
+    return result;
 }
 
 var baseScatterMethods = {
@@ -77,15 +121,6 @@ var baseScatterMethods = {
     _prepareSegment: _noop,
 
     _drawSegment: _noop,
-
-    _generateDefaultSegments: _noop,
-
-    _prepareSeriesToDrawing: function() {
-        var that = this;
-        that._deleteOldAnimationMethods();
-        that._disposePoints(that._oldPoints);
-        that._oldPoints = null;
-    },
 
     _appendInGroup: function() {
         this._group.append(this._extGroups.seriesGroup);
@@ -140,7 +175,7 @@ var baseScatterMethods = {
         var that = this,
             settings = that._createPointStyles(that._getMarkerGroupOptions()).normal;
         settings["class"] = "dxc-markers";
-        settings.opacity = 1; //T172577
+        settings.opacity = 1; // T172577
         that._applyMarkerClipRect(settings);
         that._markersGroup.attr(settings);
     },
@@ -271,7 +306,8 @@ var baseScatterMethods = {
         var pointData = {
             value: data[options.valueField || "val"],
             argument: data[options.argumentField || "arg"],
-            tag: data[options.tagField || "tag"]
+            tag: data[options.tagField || "tag"],
+            data: data
         };
 
         this._fillErrorBars(data, pointData, options);
@@ -302,16 +338,6 @@ var baseScatterMethods = {
         }
     },
 
-    _clearingAnimation: function(drawComplete) {
-        var that = this,
-            params = { opacity: 0.001 },
-            options = { duration: that._defaultDuration, partitionDuration: 0.5 };
-
-        that._labelsGroup && that._labelsGroup.animate(params, options, function() {
-            that._markersGroup && that._markersGroup.animate(params, options, drawComplete);
-        });
-    },
-
     _animateComplete: function() {
         var that = this,
             animationSettings = { duration: that._defaultDuration };
@@ -333,52 +359,90 @@ var baseScatterMethods = {
         return this._options.point.visible ? this._options.point.size : DEFAULT_SYMBOL_POINT_SIZE;
     },
 
-    _calcMedianValue: function(fusionPoints, valueField) {
-        var result,
-            allValue = _map(fusionPoints, function(point) { return _isDefined(point[valueField]) ? point[valueField] : null; });
+    _defaultAggregator: "avg",
 
-        allValue.sort(function(a, b) { return a - b; });
+    _aggregators: {
+        avg: function(aggregationInfo, series) {
+            var result = {},
+                valueField = series.getValueFields()[0],
+                aggregate = aggregationInfo.data.reduce(function(result, item) {
+                    result[0] += item[valueField];
+                    result[1]++;
+                    return result;
+                }, [0, 0]);
 
-        result = allValue[_floor(allValue.length / 2)];
+            result[valueField] = aggregate[0] / aggregate[1];
+            result[series.getArgumentField()] = aggregationInfo.intervalStart;
 
-        return _isDefined(result) ? result : null;
-    },
+            result = calculateAvgErrorBars(result, aggregationInfo.data, series);
 
-    _calcErrorBarValues: function(fusionPoints) {
-        if(!fusionPoints.length) {
-            return {};
+            return result;
+        },
+
+        sum: function(aggregationInfo, series) {
+            var result = {},
+                valueField = series.getValueFields()[0];
+
+            result[valueField] = aggregationInfo.data.reduce(function(result, item) {
+                result += item[valueField];
+                return result;
+            }, 0);
+
+            result[series.getArgumentField()] = aggregationInfo.intervalStart;
+
+            result = calculateSumErrorBars(result, aggregationInfo.data, series);
+
+            return result;
+        },
+
+        count: function(aggregationInfo, series) {
+            var result = {},
+                valueField = series.getValueFields()[0];
+
+            result[valueField] = aggregationInfo.data.reduce(function(result, item) {
+                return ++result;
+            }, 0);
+
+            result[series.getArgumentField()] = aggregationInfo.intervalStart;
+
+            return result;
+        },
+
+        min: function(aggregationInfo, series) {
+            var result = {},
+                valueField = series.getValueFields()[0],
+                data = aggregationInfo.data,
+                itemWithMinPoint = data[0];
+
+            itemWithMinPoint = data.reduce(function(result, item) {
+                if(item[valueField] < result[valueField]) {
+                    return item;
+                }
+                return result;
+            }, itemWithMinPoint);
+
+            result[series.getArgumentField()] = aggregationInfo.intervalStart;
+
+            return _extend({}, itemWithMinPoint, result);
+        },
+
+        max: function(aggregationInfo, series) {
+            var result = {},
+                valueField = series.getValueFields()[0],
+                data = aggregationInfo.data,
+                itemWithMinPoint = data[0];
+
+            itemWithMinPoint = data.reduce(function(result, item) {
+                if(item[valueField] > result[valueField]) {
+                    return item;
+                }
+                return result;
+            }, itemWithMinPoint);
+
+            result[series.getArgumentField()] = aggregationInfo.intervalStart;
+
+            return _extend({}, itemWithMinPoint, result);
         }
-
-        var lowValue = fusionPoints[0].lowError,
-            highValue = fusionPoints[0].highError,
-            i = 1,
-            length = fusionPoints.length,
-            lowError,
-            highError;
-
-        for(i; i < length; i++) {
-            lowError = fusionPoints[i].lowError;
-            highError = fusionPoints[i].highError;
-            if(_isDefined(lowError) && _isDefined(highError)) {
-                lowValue = _min(lowError, lowValue);
-                highValue = _max(highError, highValue);
-            }
-        }
-
-        return { low: lowValue, high: highValue };
-    },
-
-    _fusionPoints: function(fusionPoints, tick, index) {
-        var errorBarValues = this._calcErrorBarValues(fusionPoints);
-        return {
-            value: this._calcMedianValue(fusionPoints, "value"),
-            argument: tick,
-            tag: null,
-            index: index,
-            seriesName: this.name,
-            lowError: errorBarValues.low,
-            highError: errorBarValues.high
-        };
     },
 
     _endUpdateData: function() {
@@ -424,9 +488,9 @@ var baseScatterMethods = {
             meanValue,
             processDataItem,
             addSubError = function(_i, item) {
-                value = item[valueField];
-                item[lowValueField] = value - floatErrorValue;
-                item[highValueField] = value + floatErrorValue;
+                value = item.value;
+                item.lowError = value - floatErrorValue;
+                item.highError = value + floatErrorValue;
             };
 
         switch(errorBarType) {
@@ -435,20 +499,20 @@ var baseScatterMethods = {
                 break;
             case PERCENT:
                 processDataItem = function(_, item) {
-                    value = item[valueField];
+                    value = item.value;
                     var error = value * floatErrorValue / 100;
-                    item[lowValueField] = value - error;
-                    item[highValueField] = value + error;
+                    item.lowError = value - error;
+                    item.highError = value + error;
                 };
                 break;
-            case UNDEFINED: //TODO: rework this
+            case UNDEFINED: // TODO: rework this
                 processDataItem = function(_, item) {
-                    item[lowValueField] = item[ORIGINAL + lowValueField];
-                    item[highValueField] = item[ORIGINAL + highValueField];
+                    item.lowError = item.data[lowValueField];
+                    item.highError = item.data[highValueField];
                 };
                 break;
             default:
-                valueArray = _map(data, function(item) { return _isDefined(item[valueField]) ? item[valueField] : null; });
+                valueArray = _map(data, function(item) { return _isDefined(item.data[valueField]) ? item.data[valueField] : null; });
                 valueArrayLength = valueArray.length;
                 floatErrorValue = floatErrorValue || 1;
                 switch(errorBarType) {
@@ -460,8 +524,8 @@ var baseScatterMethods = {
                         meanValue = sum(valueArray) / valueArrayLength;
                         floatErrorValue = _sqrt(variance(valueArray, meanValue)) * floatErrorValue;
                         processDataItem = function(_, item) {
-                            item[lowValueField] = meanValue - floatErrorValue;
-                            item[highValueField] = meanValue + floatErrorValue;
+                            item.lowError = meanValue - floatErrorValue;
+                            item.highError = meanValue + floatErrorValue;
                         };
                         break;
                     case STANDARD_ERROR:
@@ -474,16 +538,12 @@ var baseScatterMethods = {
         processDataItem && _each(data, processDataItem);
     },
 
-    _beginUpdateData: function(data) {
-        this._calculateErrorBars(data);
-    },
-
     _patchMarginOptions: function(options) {
         var pointOptions = this._getCreatingPointOptions(),
             styles = pointOptions.styles,
             maxSize = [styles.normal, styles.hover, styles.selection]
                 .reduce(function(max, style) {
-                    return Math.max(max, style.r * 2 + style["stroke-width"]);
+                    return _max(max, style.r * 2 + style["stroke-width"]);
                 }, 0);
 
         options.size = pointOptions.visible ? maxSize : 0;

@@ -141,7 +141,7 @@
                     assert.ok($layoutFooter.children(".dx-active-view").find(".dx-toolbar").hasClass("layout-toolbar-bottom"));
                     assert.ok(!$layoutFooter.children(".dx-active-view").find(".dx-toolbar").hasClass("dx-state-invisible"));
 
-                    //show another view (without toolbar)
+                    // show another view (without toolbar)
                     layoutController.showView({
                         viewName: "for-B251293-without-appbar",
                         model: {
@@ -283,7 +283,7 @@
                     assert.equal(items[1].title, "c2");
                     assert.equal($pivot.find(".dx-pivot-item:not(.dx-pivot-item-hidden) .view-content:visible").length, 1);
 
-                    layoutController.deactivate();//logoff
+                    layoutController.deactivate();// logoff
 
                     var newNavigation = layoutHelper.prepareNavigation([
                             { title: "c2", id: "c2" },
@@ -291,7 +291,7 @@
                     ], commandMapping);
 
                     layoutController.renderNavigation(newNavigation);
-                    layoutController.activate();//logon
+                    layoutController.activate();// logon
                     layoutController.showView(viewInfo).then(function() {
                         items = pivot.option("items");
                         assert.equal(items.length, 2);
@@ -336,14 +336,14 @@
                     assert.equal(items[1].title, "c3");
                     assert.equal($pivot.find(".dx-pivot-item:not(.dx-pivot-item-hidden) .view-content:visible").length, 1);
 
-                    layoutController.deactivate();//logoff
+                    layoutController.deactivate();// logoff
 
                     navigation[0].option("visible", false);
                     navigation[1].option("visible", true);
                     navigation[2].option("visible", false);
 
-                    //layoutController.renderNavigation(navigation);
-                    layoutController.activate();//logon
+                    // layoutController.renderNavigation(navigation);
+                    layoutController.activate();// logon
                     layoutController.showView(viewInfo).then(function() {
                         items = pivot.option("items");
                         assert.equal(items.length, 1);

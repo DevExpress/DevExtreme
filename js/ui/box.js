@@ -19,10 +19,6 @@ var BOX_CLASS = "dx-box",
     BOX_ITEM_CLASS = "dx-box-item",
     BOX_ITEM_DATA_KEY = "dxBoxItemData";
 
-var flexGrowProp = styleUtils.styleProp("flexGrow");
-var flexShrinkProp = styleUtils.styleProp("flexShrink");
-var flexPropPrefix = styleUtils.stylePropPrefix("flexDirection");
-
 var MINSIZE_MAP = {
     "row": "minWidth",
     "col": "minHeight"
@@ -107,6 +103,10 @@ var FlexLayoutStrategy = Class.inherit({
     },
 
     renderItems: function($items) {
+        var flexGrowProp = styleUtils.styleProp("flexGrow");
+        var flexShrinkProp = styleUtils.styleProp("flexShrink");
+        var flexPropPrefix = styleUtils.stylePropPrefix("flexDirection");
+
         var direction = this._option("direction");
 
         each($items, function() {
@@ -127,8 +127,7 @@ var FlexLayoutStrategy = Class.inherit({
                     width: "auto",
                     height: "auto",
                     display: styleUtils.stylePropPrefix("flexDirection") + "flex",
-                    flexDirection: $item.children().css("flexDirection") || "column",
-                    flexBasis: 0
+                    flexDirection: $(itemContent)[0].style.flexDirection || "column"
                 });
 
                 // NOTE: workaround for jQuery version < 1.11.1 (T181692)
@@ -220,7 +219,7 @@ var FallbackLayoutStrategy = Class.inherit({
             boxSize = this._$element[FALLBACK_MAIN_SIZE_MAP[direction]](),
             freeSpace = boxSize - totalItemSize;
 
-        //NOTE: clear margins
+        // NOTE: clear margins
         this._setItemsMargins($items, direction, 0);
 
         switch(align) {
@@ -604,19 +603,19 @@ var Box = CollectionWidget.inherit({
         return this._queue.shift();
     },
 
-    _render: function() {
-        this._renderActions();
-        this.callBase();
+    _initMarkup: function() {
         this.$element().addClass(BOX_CLASS);
-        this._renderBox();
+        this._layout.renderBox();
+        this.callBase();
+        this._renderAlign();
+        this._renderActions();
     },
 
     _renderActions: function() {
         this._onItemStateChanged = this._createActionByOption("onItemStateChanged");
     },
 
-    _renderBox: function() {
-        this._layout.renderBox();
+    _renderAlign: function() {
         this._layout.renderAlign();
         this._layout.renderCrossAlign();
     },

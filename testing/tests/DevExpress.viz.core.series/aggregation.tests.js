@@ -4,11 +4,8 @@ var $ = require("jquery"),
     vizMocks = require("../../helpers/vizMocks.js"),
     Series = require("viz/series/base_series").Series,
     pointModule = require("viz/series/points/base_point"),
-    originalPoint = pointModule.Point;
-
-/* global insertMockFactory, MockTranslator */
-require("../../helpers/chartMocks.js");
-
+    chartMocks = require("../../helpers/chartMocks.js"),
+    MockTranslator = chartMocks.MockTranslator;
 
 require("viz/chart");
 
@@ -27,6 +24,9 @@ var createSeries = function(options, renderSettings) {
 
     options = $.extend(true, {
         widgetType: "chart",
+        aggregation: {
+            enabled: undefined
+        },
         containerBackgroundColor: "containerColor",
         type: "scatter",
         argumentField: "arg",
@@ -61,900 +61,37 @@ var createSeries = function(options, renderSettings) {
     return new Series(renderSettings, options);
 };
 
-QUnit.module("One Value. Fusion function.", {
-    beforeEach: function() {
-        insertMockFactory();
-        this.renderer = new vizMocks.Renderer();
-        this.translator = new MockTranslator({
-            translateX: { "First": 10, "Second": 20, "Third": 30, "Fourth": 40, "canvas_position_default": "defaultX" },
-            translateY: { 1: 100, 2: 200, 3: 300, 4: 400, "canvas_position_default": "defaultY" },
-            getCanvasVisibleArea: { minX: 0, maxX: 700, minY: 0, maxY: 500 },
-
-        });
-        this.createPoint = sinon.stub(pointModule, "Point", function(series, data, options) {
-            return { argument: data.argument, value: data.value, series: series };
-        });
-        this.series = createSeries({});
-    },
-
-    afterEach: function() {
-        this.createPoint.restore();
-    }
-});
-
-QUnit.test("Fusion three  points", function(assert) {
-    var result,
-        tick = 1,
-        points = [this.createPoint(this.series, { value: 1 }), this.createPoint(this.series, { value: 2 }), this.createPoint(this.series, { value: 3 })];
-    this.createPoint.reset();
-
-    //act
-    result = this.series._fusionPoints(points, tick);
-
-    assert.ok(result);
-    assert.equal(result.argument, tick);
-    assert.equal(result.value, 2);
-});
-
-QUnit.test("Fusion two  points", function(assert) {
-    var result,
-        tick = 1,
-        points = [this.createPoint(this.series, { value: 1 }), this.createPoint(this.series, { value: 2 })];
-    this.createPoint.reset();
-
-    //act
-    result = this.series._fusionPoints(points, tick);
-
-    assert.ok(result);
-
-    assert.equal(result.argument, tick);
-    assert.equal(result.value, 2);
-});
-
-QUnit.test("Fusion many points", function(assert) {
-    var result,
-        tick = 4,
-        points = [this.createPoint(this.series, { value: 2 }), this.createPoint(this.series, { value: 2 }), this.createPoint(this.series, { value: 100 }), this.createPoint(this.series, { value: 2 }),
-            this.createPoint(this.series, { value: 2 }), this.createPoint(this.series, { value: 4 })];
-    this.createPoint.reset();
-
-    //act
-    result = this.series._fusionPoints(points, tick);
-
-    assert.ok(result);
-
-    assert.equal(result.argument, tick);
-    assert.equal(result.value, 2);
-});
-
-QUnit.test("Fusion many points. With null ", function(assert) {
-    var result,
-        tick = 3,
-        points = [this.createPoint(this.series, { value: 2 }), this.createPoint(this.series, { value: null }), this.createPoint(this.series, { value: null }), this.createPoint(this.series, { value: 2 }),
-            this.createPoint(this.series, { value: null }), this.createPoint(this.series, { value: 4 })];
-    this.createPoint.reset();
-
-    //act
-    result = this.series._fusionPoints(points, tick);
-
-    assert.ok(result);
-
-    assert.equal(result.argument, tick);
-    assert.equal(result.value, 2);
-});
-
-QUnit.test("Fusion many points. Only null ", function(assert) {
-    var result,
-        tick = 2,
-        points = [this.createPoint(this.series, { value: null }), this.createPoint(this.series, { value: null }), this.createPoint(this.series, { value: null }), this.createPoint(this.series, { value: null })];
-    this.createPoint.reset();
-
-    result = this.series._fusionPoints(points, tick);
-
-    assert.ok(result);
-
-    assert.equal(result.argument, tick);
-    assert.strictEqual(result.value, null);
-});
-
-QUnit.test("Fusion many points. Result zero", function(assert) {
-    var result,
-        tick = 2,
-        points = [this.createPoint(this.series, { value: -1 }), this.createPoint(this.series, { value: 1 }), this.createPoint(this.series, { value: null }), this.createPoint(this.series, { value: 0 })];
-    this.createPoint.reset();
-
-    result = this.series._fusionPoints(points, tick);
-
-    assert.ok(result);
-
-    assert.equal(result.argument, tick);
-    assert.strictEqual(result.value, 0);
-});
-
-QUnit.module("RangeValue. Fusion function", {
-    beforeEach: function() {
-        insertMockFactory();
-        this.renderer = new vizMocks.Renderer();
-        this.translator = new MockTranslator({
-            translateX: { "First": 10, "Second": 20, "Third": 30, "Fourth": 40, "canvas_position_default": "defaultX" },
-            translateY: { 1: 100, 2: 200, 3: 300, 4: 400, "canvas_position_default": "defaultY" },
-            getCanvasVisibleArea: { minX: 0, maxX: 700, minY: 0, maxY: 500 },
-
-        });
-        this.createPoint = sinon.stub(pointModule, "Point", function(series, data, options) {
-            return { argument: data.argument, value: data.value, minValue: data.minValue, series: series };
-        });
-        this.series = createSeries({
-            type: "rangearea"
-        });
-    },
-
-    afterEach: function() {
-        this.createPoint.restore();
-    }
-});
-
-QUnit.test("Fusion three points.", function(assert) {
-    var result,
-        tick = 1,
-        points = [this.createPoint(this.series, { minValue: 1, value: 10 }), this.createPoint(this.series, { minValue: 2, value: 20 }), this.createPoint(this.series, { minValue: 3, value: 30 })];
-    this.createPoint.reset();
-
-    result = this.series._fusionPoints(points, tick);
-
-    assert.ok(result);
-
-    assert.equal(result.argument, tick);
-    assert.strictEqual(result.value, 20);
-    assert.strictEqual(result.minValue, 2);
-    assert.strictEqual(result.tag, null);
-
-});
-
-QUnit.test("Fusion two  points.", function(assert) {
-    var result,
-        tick = 3,
-        points = [this.createPoint(this.series, { minValue: 1, value: 10 }), this.createPoint(this.series, { minValue: 2, value: 20 })];
-    this.createPoint.reset();
-
-    result = this.series._fusionPoints(points, tick);
-
-    assert.ok(result);
-
-    assert.equal(result.argument, tick);
-    assert.strictEqual(result.value, 20);
-    assert.strictEqual(result.minValue, 2);
-    assert.strictEqual(result.tag, null);
-});
-
-QUnit.test("Fusion many  points.", function(assert) {
-    var result,
-        tick = 2,
-        points = [this.createPoint(this.series, { minValue: 1, value: 10 }), this.createPoint(this.series, { minValue: 2, value: 20 }), this.createPoint(this.series, { minValue: 100, value: 1000 }),
-            this.createPoint(this.series, { minValue: 2, value: 20 }), this.createPoint(this.series, { minValue: 2, value: 20 }), this.createPoint(this.series, { minValue: 4, value: 40 })];
-    this.createPoint.reset();
-
-    result = this.series._fusionPoints(points, tick);
-
-    assert.ok(result);
-
-    assert.equal(result.argument, tick);
-    assert.strictEqual(result.value, 20);
-    assert.strictEqual(result.minValue, 2);
-    assert.strictEqual(result.tag, null);
-});
-
-QUnit.test("Fusion many  points. With null", function(assert) {
-    var result,
-        tick = 1,
-        points = [this.createPoint(this.series, { minValue: null, value: 10 }), this.createPoint(this.series, { minValue: 2, value: null }), this.createPoint(this.series, { minValue: 100, value: 1000 }),
-            this.createPoint(this.series, { minValue: 2, value: 20 }), this.createPoint(this.series, { minValue: 2, value: null }), this.createPoint(this.series, { minValue: 4, value: null })];
-    this.createPoint.reset();
-
-    result = this.series._fusionPoints(points, tick);
-
-    assert.ok(result);
-
-    assert.equal(result.argument, tick);
-    assert.strictEqual(result.value, 20);
-    assert.strictEqual(result.minValue, 2);
-    assert.strictEqual(result.tag, null);
-});
-
-QUnit.test("Fusion many  points. Only null", function(assert) {
-    var result,
-        tick = 1,
-        points = [this.createPoint(this.series, { minValue: null, value: null }), this.createPoint(this.series, { minValue: null, value: null }), this.createPoint(this.series, { minValue: null, value: null }),
-            this.createPoint(this.series, { minValue: null, value: null }), this.createPoint(this.series, { minValue: null, value: null }), this.createPoint(this.series, { minValue: null, value: null })];
-    this.createPoint.reset();
-
-    result = this.series._fusionPoints(points, tick);
-
-    assert.ok(result);
-
-    assert.equal(result.argument, tick);
-    assert.strictEqual(result.value, null);
-    assert.strictEqual(result.minValue, null);
-    assert.strictEqual(result.tag, null);
-});
-
-QUnit.test("Fusion many  points. Skip Value", function(assert) {
-    var result,
-        tick = 1,
-        points = [this.createPoint(this.series, { minValue: 32, value: null }), this.createPoint(this.series, { minValue: 6, value: null }), this.createPoint(this.series, { minValue: 3, value: null }),
-            this.createPoint(this.series, { minValue: 2, value: null }), this.createPoint(this.series, { minValue: 1, value: null }), this.createPoint(this.series, { minValue: 12, value: null })];
-    this.createPoint.reset();
-
-    result = this.series._fusionPoints(points, tick);
-
-    assert.ok(result);
-
-    assert.equal(result.argument, tick);
-    assert.strictEqual(result.value, null);
-    assert.strictEqual(result.minValue, null);
-    assert.strictEqual(result.tag, null);
-});
-
-QUnit.test("Fusion many  points. Skip min Value", function(assert) {
-    var result,
-        tick = 1,
-        points = [this.createPoint(this.series, { minValue: null, value: 3 }), this.createPoint(this.series, { minValue: null, value: 4 }), this.createPoint(this.series, { minValue: null, value: 6 }),
-            this.createPoint(this.series, { minValue: null, value: 1 }), this.createPoint(this.series, { minValue: null, value: 3 }), this.createPoint(this.series, { minValue: null, value: 14 })];
-    this.createPoint.reset();
-
-    result = this.series._fusionPoints(points, tick);
-
-    assert.ok(result);
-
-    assert.equal(result.argument, tick);
-    assert.strictEqual(result.value, null);
-    assert.strictEqual(result.minValue, null);
-    assert.strictEqual(result.tag, null);
-});
-
-QUnit.module("Bubble. Fusion function", {
-    beforeEach: function() {
-        insertMockFactory();
-        this.renderer = new vizMocks.Renderer();
-        this.translator = new MockTranslator({
-            translateX: { "First": 10, "Second": 20, "Third": 30, "Fourth": 40, "canvas_position_default": "defaultX" },
-            translateY: { 1: 100, 2: 200, 3: 300, 4: 400, "canvas_position_default": "defaultY" },
-            getCanvasVisibleArea: { minX: 0, maxX: 700, minY: 0, maxY: 500 },
-
-        });
-        this.createPoint = sinon.stub(pointModule, "Point", function(series, data, options) {
-            return { argument: data.argument, value: data.value, size: data.size, series: series };
-        });
-        this.series = createSeries({
-            type: "bubble"
-        });
-    },
-
-    afterEach: function() {
-        this.createPoint.restore();
-    }
-});
-
-QUnit.test("fusion two points", function(assert) {
-    var points = [this.createPoint(this.series, { argument: 15, value: 6, size: 7 }), this.createPoint(this.series, { argument: 30, value: 10, size: 4 })],
-        tick = 4,
-        result;
-
-    this.createPoint.reset();
-    result = this.series._fusionPoints(points, tick);
-
-    assert.ok(result);
-
-    assert.equal(result.argument, tick);
-    assert.strictEqual(result.value, 10);
-    assert.strictEqual(result.size, 7);
-    assert.strictEqual(result.tag, null);
-});
-
-QUnit.test("fusion three points", function(assert) {
-    var points = [this.createPoint(this.series, { argument: 15, value: 6, size: 7 }), this.createPoint(this.series, { argument: 15, value: 6, size: 12 }), this.createPoint(this.series, { argument: 30, value: 3, size: 4 })],
-        tick = 4,
-        result;
-    this.createPoint.reset();
-
-    result = this.series._fusionPoints(points, tick);
-
-    assert.ok(result);
-
-    assert.equal(result.argument, tick);
-    assert.strictEqual(result.value, 6);
-    assert.strictEqual(result.size, 7);
-    assert.strictEqual(result.tag, null);
-});
-
-QUnit.test("fusion many points", function(assert) {
-    var points = [this.createPoint(this.series, { argument: 15, value: 6, size: 7 }), this.createPoint(this.series, { argument: 2, value: 10, size: 17 }), this.createPoint(this.series, { argument: 15, value: 6, size: 12 }), this.createPoint(this.series, { argument: 30, value: 3, size: 4 })],
-        tick = 4,
-        result;
-    this.createPoint.reset();
-
-    result = this.series._fusionPoints(points, tick);
-
-    assert.ok(result);
-
-    assert.equal(result.argument, tick);
-    assert.strictEqual(result.value, 6);
-    assert.strictEqual(result.size, 12);
-    assert.strictEqual(result.tag, null);
-});
-
-QUnit.module("Finance. Fusion function.", {
-    beforeEach: function() {
-        insertMockFactory();
-        this.renderer = new vizMocks.Renderer();
-        this.translator = new MockTranslator({
-            translateX: { "First": 10, "Second": 20, "Third": 30, "Fourth": 40, "canvas_position_default": "defaultX" },
-            translateY: { 1: 100, 2: 200, 3: 300, 4: 400, "canvas_position_default": "defaultY" },
-            getCanvasVisibleArea: { minX: 0, maxX: 700, minY: 0, maxY: 500 },
-
-        });
-        this.createPoint = sinon.stub(pointModule, "Point", function(series, data, options) {
-            var stub = sinon.createStubInstance(originalPoint);
-            stub.hasValue.returns(true);
-            stub.openValue = data.openValue;
-            stub.closeValue = data.closeValue;
-            stub.highValue = data.highValue;
-            stub.lowValue = data.lowValue;
-            stub.argument = data.argument;
-            return stub;
-        });
-        this.series = createSeries({
-            type: "stock"
-        });
-    },
-
-    afterEach: function() {
-        this.createPoint.restore();
-    }
-});
-
-QUnit.test("Fusion two points", function(assert) {
-    var result,
-        tick = 1,
-        points = [this.createPoint(this.series, {
-            openValue: 1000,
-            closeValue: 2000,
-            highValue: 4000,
-            lowValue: 500,
-            _isFinancial: true
-        }),
-            this.createPoint(this.series, {
-                openValue: 1000,
-                closeValue: 5000,
-                highValue: 7000,
-                lowValue: 700,
-                _isFinancial: true
-            })],
-        fusionPointOptions = {
-            argument: tick,
-            openValue: 1000,
-            closeValue: 5000,
-            highValue: 7000,
-            lowValue: 500,
-            reductionValue: 7000
-        };
-    this.createPoint.reset();
-    this.series.level = "high";
-
-    result = this.series._fusionPoints(points, tick);
-
-    assert.ok(result);
-
-    assert.equal(result.argument, fusionPointOptions.argument);
-    assert.strictEqual(result.openValue, fusionPointOptions.openValue);
-    assert.strictEqual(result.closeValue, fusionPointOptions.closeValue);
-    assert.strictEqual(result.highValue, fusionPointOptions.highValue);
-    assert.strictEqual(result.lowValue, fusionPointOptions.lowValue);
-    assert.strictEqual(result.reductionValue, fusionPointOptions.reductionValue);
-    assert.strictEqual(result.tag, null);
-});
-
-QUnit.test("Fusion two points & ending null points", function(assert) {
-    var result,
-        tick = 1,
-        points = [this.createPoint(this.series, {
-            openValue: 1000,
-            closeValue: 2000,
-            highValue: 4000,
-            lowValue: 500,
-            _isFinancial: true
-        }), this.createPoint(this.series,
-            {
-                openValue: 1000,
-                closeValue: 5000,
-                highValue: 7000,
-                lowValue: 700,
-                _isFinancial: true
-            }), this.createPoint(this.series,
-                {
-                    openValue: null,
-                    closeValue: null,
-                    highValue: null,
-                    lowValue: null,
-                    _isFinancial: true
-                })],
-        fusionPointOptions = {
-            openValue: 1000,
-            closeValue: 5000,
-            highValue: 7000,
-            lowValue: 500,
-            options: {},
-            reductionValue: 500,
-            argument: tick
-        };
-    points[2].hasValue.returns(false);
-    this.createPoint.reset();
-
-    this.series.level = "low";
-
-    result = this.series._fusionPoints(points, tick);
-
-    assert.ok(result);
-
-    assert.equal(result.argument, fusionPointOptions.argument);
-    assert.strictEqual(result.openValue, fusionPointOptions.openValue);
-    assert.strictEqual(result.closeValue, fusionPointOptions.closeValue);
-    assert.strictEqual(result.highValue, fusionPointOptions.highValue);
-    assert.strictEqual(result.lowValue, fusionPointOptions.lowValue);
-    assert.strictEqual(result.reductionValue, fusionPointOptions.reductionValue);
-});
-
-QUnit.test("Fusion two points & beginning null points", function(assert) {
-    var result,
-        tick = 1,
-        points = [
-            this.createPoint(this.series,
-                {
-                    openValue: null,
-                    closeValue: null,
-                    highValue: null,
-                    lowValue: null,
-                    _isFinancial: true
-                }),
-            this.createPoint(this.series, {
-                openValue: 1000,
-                closeValue: 2000,
-                highValue: 4000,
-                lowValue: 500,
-                _isFinancial: true
-            }), this.createPoint(this.series,
-                {
-                    openValue: 1000,
-                    closeValue: 5000,
-                    highValue: 7000,
-                    lowValue: 700,
-                    _isFinancial: true
-                })],
-        fusionPointOptions = {
-            argument: tick,
-            openValue: 1000,
-            closeValue: 5000,
-            highValue: 7000,
-            lowValue: 500,
-            options: {},
-            reductionValue: 5000
-        };
-    this.createPoint.reset();
-    points[0].hasValue.returns(false);
-
-    result = this.series._fusionPoints(points, tick);
-
-    assert.ok(result);
-
-    assert.equal(result.argument, fusionPointOptions.argument);
-    assert.strictEqual(result.openValue, fusionPointOptions.openValue);
-    assert.strictEqual(result.closeValue, fusionPointOptions.closeValue);
-    assert.strictEqual(result.highValue, fusionPointOptions.highValue);
-    assert.strictEqual(result.lowValue, fusionPointOptions.lowValue);
-    assert.strictEqual(result.reductionValue, fusionPointOptions.reductionValue);
-});
-
-QUnit.test("Fusion two points & centre null points", function(assert) {
-    var result,
-        tick = 1,
-        points = [
-            this.createPoint(this.series, {
-                openValue: 1000,
-                closeValue: 2000,
-                highValue: 4000,
-                lowValue: 500,
-                _isFinancial: true
-            }),
-            this.createPoint(this.series,
-                {
-                    openValue: null,
-                    closeValue: null,
-                    highValue: null,
-                    lowValue: null,
-                    _isFinancial: true
-                }),
-            this.createPoint(this.series,
-                {
-                    openValue: 1000,
-                    closeValue: 5000,
-                    highValue: 7000,
-                    lowValue: 700,
-                    _isFinancial: true
-                })],
-        fusionPointOptions = {
-            argument: tick,
-            openValue: 1000,
-            closeValue: 5000,
-            highValue: 7000,
-            lowValue: 500,
-            reductionValue: 5000
-        };
-    this.createPoint.reset();
-    points[1].hasValue.returns(false);
-
-    result = this.series._fusionPoints(points, tick);
-
-    assert.ok(result);
-
-    assert.equal(result.argument, fusionPointOptions.argument);
-    assert.strictEqual(result.openValue, fusionPointOptions.openValue);
-    assert.strictEqual(result.closeValue, fusionPointOptions.closeValue);
-    assert.strictEqual(result.highValue, fusionPointOptions.highValue);
-    assert.strictEqual(result.lowValue, fusionPointOptions.lowValue);
-    assert.strictEqual(result.reductionValue, fusionPointOptions.reductionValue);
-});
-
-QUnit.test("Fusion two points & centre null points", function(assert) {
-    var result,
-        tick = 1,
-        points = [
-            this.createPoint(this.series, {
-                openValue: null,
-                closeValue: null,
-                highValue: null,
-                lowValue: null,
-                _isFinancial: true
-            }),
-            this.createPoint(this.series,
-                {
-                    openValue: null,
-                    closeValue: null,
-                    highValue: null,
-                    lowValue: null,
-                    _isFinancial: true
-                }),
-            this.createPoint(this.series,
-                {
-                    openValue: null,
-                    closeValue: null,
-                    highValue: 3000,
-                    lowValue: 4000,
-                    _isFinancial: true
-                })],
-        fusionPointOptions = {
-            argument: tick,
-            openValue: null,
-            closeValue: null,
-            highValue: 3000,
-            lowValue: 4000,
-            reductionValue: null
-        };
-    this.createPoint.reset();
-
-    points[0].hasValue.returns(false);
-    points[1].hasValue.returns(false);
-
-    result = this.series._fusionPoints(points, tick);
-
-    assert.ok(result);
-
-    assert.equal(result.argument, fusionPointOptions.argument);
-    assert.strictEqual(result.openValue, fusionPointOptions.openValue);
-    assert.strictEqual(result.closeValue, fusionPointOptions.closeValue);
-    assert.strictEqual(result.highValue, fusionPointOptions.highValue);
-    assert.strictEqual(result.lowValue, fusionPointOptions.lowValue);
-    assert.strictEqual(result.reductionValue, fusionPointOptions.reductionValue);
-});
-
-QUnit.test("Fusion points, openValue in the first point is null", function(assert) {
-    var result,
-        tick = 1,
-        points = [
-            this.createPoint(this.series, {
-                openValue: null,
-                closeValue: 2000,
-                highValue: 3000,
-                lowValue: 700,
-                _isFinancial: true
-            }),
-            this.createPoint(this.series,
-                {
-                    openValue: 2000,
-                    closeValue: 3000,
-                    highValue: 4000,
-                    lowValue: 1000,
-                    _isFinancial: true
-                }),
-            this.createPoint(this.series,
-                {
-                    openValue: 700,
-                    closeValue: 888,
-                    highValue: 3000,
-                    lowValue: 4000,
-                    _isFinancial: true
-                })],
-        fusionPointOptions = {
-            argument: tick,
-            openValue: null,
-            closeValue: 888,
-            highValue: 4000,
-            lowValue: 700,
-            reductionValue: 888
-        };
-    this.createPoint.reset();
-
-    result = this.series._fusionPoints(points, tick);
-
-    assert.ok(result);
-
-    assert.equal(result.argument, fusionPointOptions.argument);
-    assert.strictEqual(result.openValue, fusionPointOptions.openValue);
-    assert.strictEqual(result.closeValue, fusionPointOptions.closeValue);
-    assert.strictEqual(result.highValue, fusionPointOptions.highValue);
-    assert.strictEqual(result.lowValue, fusionPointOptions.lowValue);
-    assert.strictEqual(result.reductionValue, fusionPointOptions.reductionValue);
-    assert.strictEqual(result.isReduction, false);
-});
-
-QUnit.test("Set point reduction false", function(assert) {
-    var result,
-        tick = 1,
-        points = [
-            this.createPoint(this.series, {
-                openValue: null,
-                closeValue: 2000,
-                highValue: 3000,
-                lowValue: 700,
-                _isFinancial: true
-            }),
-            this.createPoint(this.series,
-                {
-                    openValue: 2000,
-                    closeValue: 3000,
-                    highValue: 4000,
-                    lowValue: 1000,
-                    _isFinancial: true
-                }),
-            this.createPoint(this.series,
-                {
-                    openValue: 700,
-                    closeValue: 888,
-                    highValue: 3000,
-                    lowValue: 4000,
-                    _isFinancial: true
-                })],
-        fusionPointOptions = {
-            argument: tick,
-            openValue: null,
-            closeValue: 888,
-            highValue: 4000,
-            lowValue: 700,
-            reductionValue: 888
-        };
-    this.createPoint.reset();
-
-    this.series._fusionPoints(points, tick);
-
-    result = this.series._fusionPoints(points, tick);
-
-    assert.ok(result);
-
-    assert.equal(result.argument, fusionPointOptions.argument);
-    assert.strictEqual(result.openValue, fusionPointOptions.openValue);
-    assert.strictEqual(result.closeValue, fusionPointOptions.closeValue);
-    assert.strictEqual(result.highValue, fusionPointOptions.highValue);
-    assert.strictEqual(result.lowValue, fusionPointOptions.lowValue);
-    assert.strictEqual(result.reductionValue, fusionPointOptions.reductionValue);
-    assert.strictEqual(result.isReduction, false);
-});
-
-QUnit.test("Set point reduction true", function(assert) {
-    var result,
-        tick = 1,
-        points = [
-            this.createPoint(this.series, {
-                openValue: null,
-                closeValue: 2000,
-                highValue: 3000,
-                lowValue: 700,
-                _isFinancial: true
-            }),
-            this.createPoint(this.series,
-                {
-                    openValue: 2000,
-                    closeValue: 3000,
-                    highValue: 4000,
-                    lowValue: 1000,
-                    _isFinancial: true
-                }),
-            this.createPoint(this.series,
-                {
-                    openValue: 700,
-                    closeValue: 888,
-                    highValue: 3000,
-                    lowValue: 4000,
-                    _isFinancial: true
-                })],
-        points1 = [
-            this.createPoint(this.series, {
-                openValue: null,
-                closeValue: 2000,
-                highValue: 3000,
-                lowValue: 700,
-                _isFinancial: true
-            }),
-            this.createPoint(this.series,
-                {
-                    openValue: 2000,
-                    closeValue: 3000,
-                    highValue: 4000,
-                    lowValue: 1000,
-                    _isFinancial: true
-                }),
-            this.createPoint(this.series,
-                {
-                    openValue: 700,
-                    closeValue: 340,
-                    highValue: 3000,
-                    lowValue: 4000,
-                    _isFinancial: true
-                })];
-    this.createPoint.reset();
-
-    this.series._fusionPoints(points, tick);
-
-    result = this.series._fusionPoints(points1, tick);
-
-    assert.ok(result);
-    assert.strictEqual(result.isReduction, true);
-
-
-});
-
-QUnit.test("Fusion points, closeValue in the last point is null", function(assert) {
-    var result,
-        tick = 1,
-        points = [
-            this.createPoint(this.series, {
-                openValue: 500,
-                closeValue: 5000,
-                highValue: 3000,
-                lowValue: 700,
-                _isFinancial: true
-            }),
-            this.createPoint(this.series,
-                {
-                    openValue: 2000,
-                    closeValue: 3000,
-                    highValue: 4000,
-                    lowValue: 1000,
-                    _isFinancial: true
-                }),
-            this.createPoint(this.series,
-                {
-                    openValue: 700,
-                    closeValue: null,
-                    highValue: 3000,
-                    lowValue: 4000,
-                    _isFinancial: true
-                })],
-        fusionPointOptions = {
-            argument: tick,
-            openValue: 500,
-            closeValue: null,
-            highValue: 4000,
-            lowValue: 700,
-            reductionValue: null
-        };
-    this.createPoint.reset();
-
-    result = this.series._fusionPoints(points, tick);
-
-    assert.ok(result);
-
-    assert.equal(result.argument, fusionPointOptions.argument);
-    assert.strictEqual(result.openValue, fusionPointOptions.openValue);
-    assert.strictEqual(result.closeValue, fusionPointOptions.closeValue);
-    assert.strictEqual(result.highValue, fusionPointOptions.highValue);
-    assert.strictEqual(result.lowValue, fusionPointOptions.lowValue);
-    assert.strictEqual(result.reductionValue, fusionPointOptions.reductionValue);
-});
-
-QUnit.test("Fusion points, openValue in 1-st point and closeValue in last point undefined", function(assert) {
-    var result,
-        tick = 1,
-        points = [
-            this.createPoint(this.series, {
-                openValue: undefined,
-                closeValue: 5000,
-                highValue: 3000,
-                lowValue: 700,
-                _isFinancial: true
-            }),
-            this.createPoint(this.series,
-                {
-                    openValue: 2000,
-                    closeValue: 3000,
-                    highValue: 4000,
-                    lowValue: 1000,
-                    _isFinancial: true
-                }),
-            this.createPoint(this.series,
-                {
-                    openValue: 700,
-                    closeValue: undefined,
-                    highValue: 3000,
-                    lowValue: 4000,
-                    _isFinancial: true
-                })],
-        fusionPointOptions = {
-            argument: tick,
-            openValue: 2000,
-            closeValue: 3000,
-            highValue: 4000,
-            lowValue: 700,
-            reductionValue: 3000
-        };
-    this.createPoint.reset();
-
-    result = this.series._fusionPoints(points, tick);
-
-    assert.ok(result);
-
-    assert.equal(result.argument, fusionPointOptions.argument);
-    assert.strictEqual(result.openValue, fusionPointOptions.openValue);
-    assert.strictEqual(result.closeValue, fusionPointOptions.closeValue);
-    assert.strictEqual(result.highValue, fusionPointOptions.highValue);
-    assert.strictEqual(result.lowValue, fusionPointOptions.lowValue);
-    assert.strictEqual(result.reductionValue, fusionPointOptions.reductionValue);
-});
-
-QUnit.test("Fusion points, point empty array", function(assert) {
-    var result,
-        tick = 1,
-        points = [];
-    this.createPoint.reset();
-
-    result = this.series._fusionPoints(points, tick);
-
-    assert.ok(result);
-
-    assert.deepEqual(result, {});
-});
-
-
 QUnit.module("Sampler points", {
     beforeEach: function() {
         this.createPoint = sinon.stub(pointModule, "Point", function(series, data, options) {
-            return { argument: data.argument, value: data.value, series: series, setInvisibility: sinon.stub(), hasValue: sinon.stub().returns(true), updateOptions: sinon.spy() };
+            return {
+                argument: data.argument,
+                value: data.value,
+                series: series,
+                setInvisibility: sinon.stub(),
+                hasValue: sinon.stub().returns(true),
+                updateOptions: sinon.spy(),
+                dispose: sinon.spy()
+            };
         });
 
         var that = this,
             viewport;
 
-        this.setup = function(min, max) {
-            that.translator = that.getTranslator(min, max);
+        this.setup = function(min, max, canvasLength) {
+            that.translator = that.getTranslator(min, max, canvasLength);
             viewport = {
                 min: min,
                 max: max
             };
         };
 
-        this.getTranslator = function(min, max) {
+        this.getTranslator = function(min, max, canvasLength) {
             var translator = new MockTranslator({
                 minVisible: min,
                 maxVisible: max
             });
+            translator.canvasLength = canvasLength;
             return translator;
         };
 
@@ -967,7 +104,9 @@ QUnit.module("Sampler points", {
             }
         };
 
-        this.series = createSeries({}, {
+        this.series = createSeries({
+            aggregation: { enabled: true }
+        }, {
             argumentAxis: this.argumentAxis
         });
         this.createFusionPoints = function(options, datetime) {
@@ -1010,20 +149,20 @@ QUnit.test("T382881, Series is not sorted", function(assert) {
             { arg: 6, val: 10 }
         ],
         fusionPoints = [
-            { arg: 10, val: 10 },
-            { arg: 1, val: 8 },
+            { arg: 10, val: 6 },
+            { arg: 1, val: 6.5 },
             { arg: 3, val: 9 },
-            { arg: 7, val: 22 },
-            { arg: 4, val: 21 },
+            { arg: 7, val: 17 },
+            { arg: 4, val: 19.5 },
             { arg: 6, val: 10 }
         ];
 
     this.series.updateData(points);
-    this.setup(1, 10);
-    //Act
-    this.series.resamplePoints(10);
+    this.setup(1, 10, 10);
+    // Act
+    this.series.createPoints();
 
-    //Assert
+    // Assert
     checkResult(assert, this.series.getPoints(), fusionPoints, 6);
 });
 
@@ -1046,7 +185,7 @@ QUnit.test("10 points -> 5 points. All points", function(assert) {
                 interval: 2
             },
             values: [{
-                startValue: 200,
+                startValue: 150,
                 interval: 100
             }]
         },
@@ -1055,8 +194,8 @@ QUnit.test("10 points -> 5 points. All points", function(assert) {
     this.series.updateData(this.createFusionPoints(options));
     var spy = sinon.spy(this.series, "_endUpdateData");
 
-    this.setup(0, 9);
-    this.series.resamplePoints(10);
+    this.setup(0, 9, 10);
+    this.series.createPoints();
 
     checkResult(assert, this.series.getPoints(), fusionPoints, 5);
     assert.ok(spy.calledOnce);
@@ -1077,8 +216,8 @@ QUnit.test("10 points -> 10 points. All points", function(assert) {
         points = this.createFusionPoints(options);
 
     this.series.updateData(points);
-    this.setup(0, 9);
-    this.series.resamplePoints(20);
+    this.setup(0, 9, 20);
+    this.series.createPoints();
 
     checkResult(assert, this.series.getPoints(), points, 10);
 });
@@ -1102,7 +241,7 @@ QUnit.test("9 points -> 5 points. All points", function(assert) {
                 interval: 2
             },
             values: [{
-                startValue: 200,
+                startValue: 150,
                 interval: 100
             }]
         },
@@ -1112,8 +251,8 @@ QUnit.test("9 points -> 5 points. All points", function(assert) {
     fusionPoints[4] = { arg: points[8].arg, val: points[8].val };
 
     this.series.updateData(points);
-    this.setup(0, 8);
-    this.series.resamplePoints(10);
+    this.setup(0, 8, 10);
+    this.series.createPoints();
 
     checkResult(assert, this.series.getPoints(), fusionPoints, 5);
 });
@@ -1137,15 +276,15 @@ QUnit.test("20 points -> 4 points. CustomTick", function(assert) {
                 interval: 2
             },
             values: [{
-                startValue: 200,
+                startValue: 150,
                 interval: 100
             }]
         },
         fusionPoints = this.createFusionPoints(optionsFusionPoints);
 
-    this.setup(0, 19);
+    this.setup(0, 19, 20);
     this.series.updateData(this.createFusionPoints(options)),
-    this.series.resamplePoints(20);
+    this.series.createPoints();
 
     checkResult(assert, this.series.getPoints(), fusionPoints, 10);
 });
@@ -1169,7 +308,7 @@ QUnit.test("7 points -> 3 points. CustomTick", function(assert) {
                 interval: 2
             },
             values: [{
-                startValue: 200,
+                startValue: 150,
                 interval: 100
             }]
         },
@@ -1179,8 +318,8 @@ QUnit.test("7 points -> 3 points. CustomTick", function(assert) {
     fusionPoints[3] = { arg: points[6].arg, val: points[6].val };
 
     this.series.updateData(this.createFusionPoints(options));
-    this.setup(0, 6);
-    this.series.resamplePoints(10);
+    this.setup(0, 6, 10);
+    this.series.createPoints();
 
     checkResult(assert, this.series.getPoints(), fusionPoints, 4);
 });
@@ -1206,9 +345,9 @@ QUnit.test("9 points -> 9 points. Skip point in centre. CustomTick", function(as
     });
 
     this.series.updateData(points);
-    this.setup(0, 9);
+    this.setup(0, 9, 20);
 
-    this.series.resamplePoints(20);
+    this.series.createPoints();
 
     checkResult(assert, this.series.getPoints(), fusionPoints, 9);
 });
@@ -1227,15 +366,15 @@ QUnit.test("10 points -> 3 points. CustomTick", function(assert) {
         },
         fusionPoints = [{ arg: 0, val: 200 },
             { arg: 6, val: 800 },
-            { arg: 11, val: 1400 }
+            { arg: 11, val: 1350 }
         ],
         points = this.createFusionPoints(options);
     points.splice(3, 3);
     points.splice(6, 2);
 
     this.series.updateData(points);
-    this.setup(0, 14);
-    this.series.resamplePoints(9);
+    this.setup(0, 14, 9);
+    this.series.createPoints();
 
     checkResult(assert, this.series.getPoints(), fusionPoints, 3);
 });
@@ -1261,225 +400,13 @@ QUnit.test("10 points -> 10 points. All points. Datetime", function(assert) {
     });
 
     this.series.updateData(points);
-    this.setup(0, 24 * 60 * 60 * 1000 * 9);
-    this.series.resamplePoints(20);
+    this.setup(0, 24 * 60 * 60 * 1000 * 9, 20);
+    this.series.createPoints();
 
     checkResult(assert, this.series.getPoints(), fusionPoints, 10);
 });
 
-QUnit.test("Customize Point without result", function(assert) {
-    var options = {
-            argument: {
-                startValue: 0,
-                endValue: 10,
-                interval: 1
-            },
-            values: [{
-                startValue: 100,
-                interval: 100
-            }]
-        },
-        customizePointSpy = sinon.stub(),
-        customizeLabelSpy = sinon.stub(),
-        series = createSeries({
-            type: "scatter",
-            point: {
-                size: 0,
-                border: {
-                    width: 0
-                },
-                hoverStyle: {
-                    size: 0,
-                    border: {
-                        width: 0
-                    }
-                },
-                selectionStyle: {
-                    size: 0,
-                    border: {
-                        width: 0
-                    }
-                }
-            },
-            customizePoint: customizePointSpy,
-            customizeLabel: customizeLabelSpy,
-            name: "name"
-        }, {
-            argumentAxis: this.argumentAxis
-        });
-    series.updateData(this.createFusionPoints(options));
-    this.createPoint.reset();
-
-    this.setup(0, 9);
-    series.resamplePoints(10);
-
-    assert.equal(this.createPoint.callCount, 5, "points");
-    assert.deepEqual(this.createPoint.getCall(0).args[2].styles, {
-        "hover": {
-            "r": 0,
-            "fill": "containerColor",
-            "stroke-width": 0
-        },
-        "normal": {
-            "r": 0,
-            "stroke-width": 0,
-            opacity: undefined
-        },
-        "selection": {
-            "r": 0,
-            "fill": "containerColor",
-            "stroke-width": 0
-        }
-    });
-
-    assert.deepEqual(this.createPoint.getCall(0).args[2].label, {
-        "attributes": {
-            "font": {}
-        },
-        "background": {
-            "stroke": "none",
-            "stroke-width": 0
-        },
-        "connector": {
-            "stroke": "none",
-            "stroke-width": 0
-        },
-        "visible": true
-    });
-
-    assert.strictEqual(series.getPoints()[0].updateOptions.callCount, 0);
-
-    assert.ok(customizePointSpy.callCount, this.createPoint.callCount);
-    assert.deepEqual(customizePointSpy.lastCall.args, [{
-        seriesName: "name",
-        argument: this.createPoint.lastCall.args[1].argument,
-        value: this.createPoint.lastCall.args[1].value,
-        index: 4,
-        tag: null,
-        series: series
-    }]);
-});
-
-QUnit.test("Customize Point with result", function(assert) {
-    var options = {
-            argument: {
-                startValue: 0,
-                endValue: 10,
-                interval: 1
-            },
-            values: [{
-                startValue: 100,
-                interval: 100
-            }]
-        },
-        customizePointSpy = sinon.stub(),
-        customizeLabelSpy = sinon.stub(),
-        series = createSeries({
-            type: "scatter",
-            point: {
-                size: 0,
-                border: {
-                    width: 0
-                },
-                hoverStyle: {
-                    size: 0,
-                    border: {
-                        width: 0
-                    }
-                },
-                selectionStyle: {
-                    size: 0,
-                    border: {
-                        width: 0
-                    }
-                }
-            },
-            customizePoint: customizePointSpy,
-            customizeLabel: customizeLabelSpy,
-            name: "name"
-        }, {
-            argumentAxis: this.argumentAxis
-        });
-    series.updateData(this.createFusionPoints(options));
-    this.createPoint.reset();
-
-    customizePointSpy.returns({ color: "customColor" });
-    customizeLabelSpy.returns({ font: { size: "customSize" } });
-    this.setup(0, 9);
-
-    series.resamplePoints(10);
-
-    assert.equal(this.createPoint.callCount, 5);
-
-    assert.deepEqual(series.getPoints()[0].updateOptions.lastCall.args[0].styles, {
-        "usePointCustomOptions": true,
-        "useLabelCustomOptions": true,
-        "hover": {
-            "fill": "containerColor",
-            "stroke": "customColor",
-            "stroke-width": 0,
-            "r": 0
-        },
-        "normal": {
-            "fill": "customColor",
-            "stroke": "customColor",
-            "stroke-width": 0,
-            "visibility": "hidden",
-            "r": 0
-        },
-        "selection": {
-            "fill": "containerColor",
-            "stroke": "customColor",
-            "stroke-width": 0,
-            "r": 0
-        }
-    });
-
-    assert.deepEqual(series.getPoints()[0].updateOptions.lastCall.args[0].label, {
-        "argumentFormat": undefined,
-        "argumentPrecision": undefined,
-        "attributes": {
-            "font": {
-                "color": undefined,
-                "size": "customSize"
-            }
-        },
-        "background": {
-            "dashStyle": undefined,
-            "fill": "customColor",
-            "stroke": "none",
-            "stroke-width": 0
-        },
-        "connector": {
-            "stroke": "none",
-            "stroke-width": 0
-        },
-        "customizeText": undefined,
-        "format": undefined,
-        "horizontalOffset": undefined,
-        "percentPrecision": undefined,
-        "position": undefined,
-        "precision": undefined,
-        "radialOffset": undefined,
-        "rotationAngle": undefined,
-        "showForZeroValues": undefined,
-        "verticalOffset": undefined,
-        "visible": true,
-        "alignment": undefined,
-    });
-
-    assert.ok(customizePointSpy.callCount, this.createPoint.callCount);
-    assert.deepEqual(customizePointSpy.lastCall.args, [{
-        seriesName: "name",
-        argument: this.createPoint.lastCall.args[1].argument,
-        value: this.createPoint.lastCall.args[1].value,
-        index: 4,
-        tag: null,
-        series: series
-    }]);
-});
-
-//T172772
+// T172772
 QUnit.test("Aggregation one point", function(assert) {
     var options = {
         argument: {
@@ -1494,8 +421,8 @@ QUnit.test("Aggregation one point", function(assert) {
     };
 
     this.series.updateData(this.createFusionPoints(options));
-    this.setup(0, 9);
-    this.series.resamplePoints(20);
+    this.setup(0, 9, 20);
+    this.series.createPoints();
 
     assert.deepEqual(this.series.getPoints(), this.series.getAllPoints());
 });
@@ -1513,19 +440,19 @@ QUnit.test("After zooming", function(assert) {
             }]
         },
         fusionPoints = [{ arg: 0, val: 100 },
-        { arg: 39, val: 142 },
-        { arg: 45, val: 148 },
-        { arg: 51, val: 154 },
-        { arg: 57, val: 160 },
-        { arg: 63, val: 166 },
-        { arg: 69, val: 172 },
-        { arg: 75, val: 178 },
-        { arg: 81, val: 184 },
+        { arg: 39, val: 141.5 },
+        { arg: 45, val: 147.5 },
+        { arg: 51, val: 153.5 },
+        { arg: 57, val: 159.5 },
+        { arg: 63, val: 165.5 },
+        { arg: 69, val: 171.5 },
+        { arg: 75, val: 177.5 },
+        { arg: 81, val: 183.5 },
         { arg: 87, val: 187 }];
 
     this.series.updateData(this.createFusionPoints(options));
-    this.setup(45, 75);
-    this.series.resamplePoints(10);
+    this.setup(45, 75, 10);
+    this.series.createPoints(10);
 
     checkResult(assert, this.series.getPoints(), fusionPoints, 10);
 });
@@ -1554,8 +481,8 @@ QUnit.test("After zooming, series is not sorting", function(assert) {
         { arg: 6, val: 300 }];
 
     this.series.updateData(points);
-    this.setup(3, 6);
-    this.series.resamplePoints(6);
+    this.setup(3, 6, 6);
+    this.series.createPoints();
 
     checkResult(assert, this.series.getPoints(), fusionPoints, 9);
 });
@@ -1579,17 +506,17 @@ QUnit.test("T370495, Series starts from the middle of the x-axis, 10 -> 3 points
                 interval: 2
             },
             values: [{
-                startValue: 200,
+                startValue: 175,
                 interval: 100
             }]
         },
         fusionPoints = this.createFusionPoints(optionsFusionPoints);
 
-    fusionPoints[2].val = 1050;
+    fusionPoints[2].val = 1025;
 
     this.series.updateData(this.createFusionPoints(options));
-    this.setup(0, 9);
-    this.series.resamplePoints(10);
+    this.setup(0, 9, 10);
+    this.series.createPoints();
 
     checkResult(assert, this.series.getPoints(), fusionPoints, 3);
 });
@@ -1603,8 +530,8 @@ QUnit.module("Sampler points, discrete", {
         var that = this,
             viewport;
 
-        this.setup = function(min, max, categories) {
-            that.translator = that.getTranslator(min, max, categories);
+        this.setup = function(min, max, categories, canvasLength) {
+            that.translator = that.getTranslator(min, max, categories, canvasLength);
             viewport = {
                 min: min,
                 max: max
@@ -1620,16 +547,19 @@ QUnit.module("Sampler points, discrete", {
             }
         };
 
-        this.getTranslator = function(min, max, categories) {
+        this.getTranslator = function(min, max, categories, canvasLength) {
             var translator = new MockTranslator({
                 minVisible: min,
                 maxVisible: max,
                 categories: categories
             });
+            translator.canvasLength = canvasLength;
             return translator;
         };
 
-        this.series = createSeries({}, {
+        this.series = createSeries({
+            aggregation: { enabled: true },
+        }, {
             argumentAxis: this.argumentAxis
         });
 
@@ -1683,11 +613,11 @@ QUnit.test("T382881, Series is not sorted", function(assert) {
         categories = $.map(points, function(item) { return item.arg; });
 
     this.series.updateData(points);
-    this.setup(undefined, 10, categories);
-    //Act
-    this.series.resamplePoints(10);
+    this.setup(undefined, 10, categories, 10);
+    // Act
+    this.series.createPoints();
 
-    //Assert
+    // Assert
     checkResult(assert, this.series.getPoints(), fusionPoints, 5);
 });
 
@@ -1699,7 +629,7 @@ QUnit.test("10 points -> 5 points. All points", function(assert) {
                 interval: 1
             },
             values: [{
-                startValue: 100,
+                startValue: 150,
                 interval: 100
             }]
         },
@@ -1711,38 +641,12 @@ QUnit.test("10 points -> 5 points. All points", function(assert) {
         }),
         categories = $.map(points, function(item) { return item.arg; });
     this.series.updateData(points);
-    this.setup(0, 9, categories);
-    this.series.resamplePoints(10);
+    this.setup(0, 9, categories, 10);
+
+    this.series.createPoints();
 
     checkResult(assert, this.series.getPoints(), fusionPoints, 5);
-});
-
-QUnit.test("10 points -> 5 points. Check Invisibility", function(assert) {
-    var options = {
-            argument: {
-                startValue: 0,
-                endValue: 10,
-                interval: 1
-            },
-            values: [{
-                startValue: 100,
-                interval: 100
-            }]
-        },
-        points = this.createFusionPoints(options),
-        categories = $.map(points, function(item) { return item.arg; });
-    this.series.updateData(points);
-    this.setup(0, 9, categories);
-
-    this.series.resamplePoints(10);
-
-    $.each(this.series.getAllPoints(), function(index, point) {
-        if((index % 2)) {
-            assert.ok(point.setInvisibility.calledOnce);
-        } else {
-            assert.ok(!point.setInvisibility.called);
-        }
-    });
+    assert.deepEqual(this.series.getRangeData().arg.categories.length, 10, "range data should hava all categories");
 });
 
 QUnit.test("10 points -> 5 points. All points. ValueAxisType = discrete", function(assert) {
@@ -1767,8 +671,8 @@ QUnit.test("10 points -> 5 points. All points. ValueAxisType = discrete", functi
         valueAxisType: "discrete"
     });
     this.series.updateData(points);
-    this.setup(0, 9);
-    this.series.resamplePoints(10);
+    this.setup(0, 9, undefined, 10);
+    this.series.createPoints();
 
     checkResult(assert, this.series.getPoints(), fusionPoints, 5);
 });
@@ -1795,8 +699,8 @@ QUnit.test("10 points -> 5 points. ValueAxisType = discrete, interval 2", functi
         valueAxisType: "discrete"
     });
     this.series.updateData(points);
-    this.setup(0, 19);
-    this.series.resamplePoints(10);
+    this.setup(0, 19, undefined, 10);
+    this.series.createPoints();
 
     checkResult(assert, this.series.getPoints(), fusionPoints, 5);
 });
@@ -1816,12 +720,11 @@ QUnit.test("10 points -> 10 points.", function(assert) {
         points = this.createFusionPoints(options, true),
         categories = $.map(points, function(item) { return item.arg; });
 
-    this.setup(0, 9, categories);
+    this.setup(0, 9, categories, 20);
 
-    this.translator.canvasLength = 20;
     this.series.updateData(points);
 
-    this.series.resamplePoints(20);
+    this.series.createPoints();
 
     checkResult(assert, this.series.getPoints(), points, 10);
 });
@@ -1845,9 +748,9 @@ QUnit.test("10 points -> 10 points. ValueAxisType = discrete", function(assert) 
     });
     this.series.updateData(points);
 
-    this.setup(0, 9);
+    this.setup(0, 9, undefined, 20);
 
-    this.series.resamplePoints(20);
+    this.series.createPoints();
     checkResult(assert, this.series.getPoints(), points, 10);
 });
 
@@ -1867,9 +770,9 @@ QUnit.test("After zooming", function(assert) {
         categories = $.map(points, function(item) { return item.arg; });
 
     this.series.updateData(points);
-    this.setup(3, 6, categories);
+    this.setup(3, 6, categories, 20);
 
-    this.series.resamplePoints(20);
+    this.series.createPoints();
 
     checkResult(assert, this.series.getPoints(), points, 10);
 });
@@ -1894,7 +797,475 @@ QUnit.test("After zooming, value axis is discrete", function(assert) {
     });
     this.series.updateData(points);
 
-    this.setup(3, 6, categories);
-    this.series.resamplePoints(20);
+    this.setup(3, 6, categories, 20);
+    this.series.createPoints();
     checkResult(assert, this.series.getPoints(), points, 10);
+});
+
+QUnit.module("Aggregation methods", {
+    beforeEach: function() {
+        this.createPoint = sinon.stub(pointModule, "Point", function(series, data, options) {
+
+            return {
+                argument: data.argument,
+                aggregationInfo: data.aggregationInfo,
+                openValue: data.openValue,
+                closeValue: data.closeValue,
+                highValue: data.highValue,
+                lowValue: data.lowValue,
+                lowError: data.lowError,
+                highError: data.highError,
+                value: data.value,
+                minValue: data.minValue,
+                size: data.size,
+                series: series,
+                setInvisibility: sinon.stub(),
+                hasValue: sinon.stub().returns(true),
+                updateOptions: sinon.spy(),
+                dispose: sinon.spy()
+            };
+        });
+
+        var that = this,
+            viewport;
+
+        this.setup = function(min, max, canvasLength) {
+            that.translator = that.getTranslator(min, max, canvasLength);
+            viewport = {
+                min: min,
+                max: max
+            };
+        };
+
+        this.getTranslator = function(min, max, canvasLength) {
+            var translator = new MockTranslator({
+                minVisible: min,
+                maxVisible: max
+            });
+            translator.canvasLength = canvasLength;
+            return translator;
+        };
+
+        this.argumentAxis = {
+            getTranslator: function() {
+                return that.translator;
+            },
+            getViewport: function() {
+                return viewport;
+            }
+        };
+
+        this.createSeries = function(method, type, options) {
+            options = $.extend(true, {}, {
+                type: type || "scatter",
+                argumentField: "arg",
+                rangeValue1Field: "val1",
+                rangeValue2Field: "val2",
+                sizeField: "size",
+                aggregation: {
+                    enabled: true,
+                    method: method
+                }
+            }, options);
+
+            return createSeries(options, {
+                argumentAxis: that.argumentAxis
+            });
+        };
+
+        this.aggregateData = function(method, data, type, options) {
+            var series = that.createSeries(method, type, options);
+
+            that.series = series;
+
+            series.updateData(data);
+            series.createPoints();
+
+            return series.getAllPoints();
+        };
+
+        this.data = [
+            { "arg": 0, "val": 100 },
+            { "arg": 2, "val": 300 },
+            { "arg": 4, "val": 500 },
+            { "arg": 6, "val": 700 },
+            { "arg": 8, "val": 900 }
+        ];
+
+        this.setup(0, 10, 2);
+    },
+
+    afterEach: function() {
+        this.createPoint.restore();
+    }
+});
+
+QUnit.test("Aggregation is disabled", function(assert) {
+    var points = this.aggregateData("unknown", this.data, "line", { aggregation: { enabled: false } });
+    assert.equal(points.length, 5);
+    assert.equal(points[0].aggregationInfo, undefined);
+});
+
+QUnit.test("Pass aggregationInfo into point", function(assert) {
+    var points = this.aggregateData("avg", this.data);
+    assert.equal(points.length, 1);
+    assert.deepEqual(points[0].aggregationInfo.data, this.data);
+    assert.equal(points[0].aggregationInfo.aggregationInterval, 10);
+    assert.equal(points[0].aggregationInfo.intervalStart, 0);
+    assert.equal(points[0].aggregationInfo.intervalEnd, 10);
+});
+
+QUnit.test("Avg", function(assert) {
+    var points = this.aggregateData("avg", this.data);
+    assert.equal(points.length, 1);
+    assert.equal(points[0].argument, 0);
+    assert.equal(points[0].value, 500);
+});
+
+QUnit.test("Sum", function(assert) {
+    var points = this.aggregateData("sum", this.data);
+    assert.equal(points.length, 1);
+    assert.equal(points[0].argument, 0);
+    assert.equal(points[0].value, 2500);
+});
+
+QUnit.test("Count", function(assert) {
+    var points = this.aggregateData("count", this.data);
+    assert.equal(points.length, 1);
+    assert.equal(points[0].argument, 0);
+    assert.equal(points[0].value, 5);
+});
+
+QUnit.test("Min", function(assert) {
+    var points = this.aggregateData("min", this.data);
+    assert.equal(points.length, 1);
+    assert.equal(points[0].argument, 0);
+    assert.equal(points[0].value, 100);
+});
+
+QUnit.test("Max", function(assert) {
+    var points = this.aggregateData("Max", this.data);
+    assert.equal(points.length, 1);
+    assert.equal(points[0].argument, 0);
+    assert.equal(points[0].value, 900);
+});
+
+QUnit.test("Default aggregation method is avg", function(assert) {
+    var points = this.aggregateData("unknown", this.data);
+    assert.equal(points.length, 1);
+    assert.equal(points[0].argument, 0);
+    assert.equal(points[0].value, 500);
+});
+
+QUnit.test("Default aggregation method is sum, for bar series", function(assert) {
+    var points = this.aggregateData("unknown", this.data, "bar");
+    assert.equal(points.length, 1);
+    assert.equal(points[0].argument, 0);
+    assert.equal(points[0].value, 2500);
+});
+
+QUnit.test("Can set a custom function", function(assert) {
+    var points = this.aggregateData("custom", this.data, "scatter", {
+        aggregation: {
+            calculate: function() {
+                return {
+                    arg: 1,
+                    val: 2
+                };
+            }
+        }
+    });
+
+    assert.equal(points.length, 1);
+    assert.equal(points[0].argument, 1);
+    assert.equal(points[0].value, 2);
+});
+
+QUnit.test("Can skip a point", function(assert) {
+    var points = this.aggregateData("custom", this.data, "scatter", {
+        aggregation: {
+            calculate: function() {
+                return {
+                    arg: undefined,
+                    val: 2
+                };
+            }
+        }
+    });
+    assert.equal(points.length, 0);
+});
+
+QUnit.test("Can return nothing from custom callback", function(assert) {
+    var points = this.aggregateData("custom", this.data, "scatter", {
+        aggregation: {
+            calculate: function() {
+            }
+        }
+    });
+    assert.equal(points.length, 0);
+});
+
+QUnit.test("series pass aggregation info into custom callback", function(assert) {
+    var customMethod = sinon.spy();
+    this.aggregateData("custom", this.data, "scatter", {
+        aggregation: {
+            calculate: customMethod
+        }
+    });
+
+    assert.deepEqual(customMethod.lastCall.args[0].data, this.data);
+    assert.equal(customMethod.lastCall.args[0].intervalStart, 0);
+    assert.equal(customMethod.lastCall.args[0].intervalEnd, 10);
+
+    assert.equal(customMethod.lastCall.args[0].aggregationInterval, 10);
+
+    assert.equal(customMethod.lastCall.args[1], this.series);
+});
+
+QUnit.test("ohlc. Financial series", function(assert) {
+    var points = this.aggregateData("any", [
+        { arg: 0, open: 2, high: 5, low: 0, close: 4 },
+        { arg: 2, open: 1, high: 7, low: 1, close: 6 },
+        { arg: 4, open: 5, high: 5, low: 3, close: 3 },
+        { arg: 6, open: 4, high: 9, low: 2, close: 30 },
+        { arg: 8, open: 4, high: 9, low: 2, close: 5 }
+    ], "stock");
+
+    assert.equal(points.length, 1);
+    assert.equal(points[0].argument, 0);
+    assert.equal(points[0].openValue, 2);
+    assert.equal(points[0].closeValue, 5);
+    assert.equal(points[0].lowValue, 0);
+    assert.equal(points[0].highValue, 9);
+});
+
+QUnit.test("ohlc with null high values. Financial series", function(assert) {
+    var points = this.aggregateData("any", [
+        { arg: 0, open: 2, high: null, low: 0, close: 4 },
+        { arg: 2, open: 1, high: null, low: 1, close: 6 },
+        { arg: 4, open: 5, high: null, low: 3, close: 3 },
+        { arg: 6, open: 4, high: null, low: 2, close: 30 },
+        { arg: 8, open: 4, high: null, low: 2, close: 5 }
+    ], "stock");
+
+    assert.equal(points.length, 1);
+    assert.equal(points[0].argument, 0);
+    assert.equal(points[0].openValue, 2);
+    assert.equal(points[0].closeValue, 5);
+    assert.equal(points[0].lowValue, 0);
+    assert.strictEqual(points[0].highValue, null);
+});
+
+QUnit.test("ohlc with null low values. Financial series", function(assert) {
+    var points = this.aggregateData("any", [
+        { arg: 0, open: 2, high: 5, low: null, close: 4 },
+        { arg: 2, open: 1, high: 7, low: null, close: 6 },
+        { arg: 4, open: 5, high: 5, low: null, close: 3 },
+        { arg: 6, open: 4, high: 9, low: null, close: 30 },
+        { arg: 8, open: 4, high: 9, low: null, close: 5 }
+    ], "stock");
+
+    assert.equal(points.length, 1);
+    assert.equal(points[0].argument, 0);
+    assert.equal(points[0].openValue, 2);
+    assert.equal(points[0].closeValue, 5);
+    assert.equal(points[0].lowValue, null);
+    assert.strictEqual(points[0].highValue, 9);
+});
+
+QUnit.test("Range. range series", function(assert) {
+    var points = this.aggregateData("any", [
+        { arg: 0, val1: 2, val2: 5 },
+        { arg: 2, val1: 1, val2: 7 },
+        { arg: 4, val1: 5, val2: 5 },
+        { arg: 6, val1: 4, val2: 9 },
+        { arg: 8, val1: 4, val2: 9 }
+    ], "rangebar");
+
+    assert.equal(points.length, 1);
+    assert.equal(points[0].argument, 0);
+    assert.equal(points[0].minValue, 1);
+    assert.equal(points[0].value, 9);
+});
+
+QUnit.test("Range. range series. skip null points", function(assert) {
+    var points = this.aggregateData("sun", [
+        { arg: 0, val1: 2, val2: 5 },
+        { arg: 2, val1: null, val2: null },
+        { arg: 4, val1: 5, val2: 5 },
+        { arg: 6, val1: 4, val2: 8 },
+        { arg: 8, val1: null, val2: null }
+    ], "rangebar");
+
+    assert.equal(points.length, 1);
+    assert.equal(points[0].argument, 0);
+    assert.equal(points[0].minValue, 2);
+    assert.equal(points[0].value, 8);
+});
+
+QUnit.test("Use avg method for value and size in Bubble series", function(assert) {
+    var points = this.aggregateData("sum", [
+        { arg: 0, val: 2, size: 5 },
+        { arg: 2, val: 3, size: 6 },
+        { arg: 4, val: 5, size: 5 },
+        { arg: 6, val: 4, size: 8 },
+        { arg: 8, val: 4, size: 9 }
+    ], "bubble");
+
+    assert.equal(points.length, 1);
+    assert.equal(points[0].argument, 0);
+    assert.equal(points[0].size, 6.6);
+    assert.equal(points[0].value, 3.6);
+});
+
+QUnit.test("Avg. Calculate error bars", function(assert) {
+    var data = [
+            { arg: 0, val: 100, low: null, high: 120 },
+            { arg: 2, val: 300, low: 280, high: 340 },
+            { arg: 4, val: 500, low: 450, high: undefined },
+            { arg: 6, val: 700, low: 600, high: 710 },
+            { arg: 8, val: 900, low: 850, high: 960 }
+        ],
+        points = this.aggregateData("avg", data, "scatter", {
+            valueErrorBar: {
+                lowValueField: "low",
+                highValueField: "high",
+            }
+        });
+
+    assert.equal(points.length, 1);
+    assert.equal(points[0].argument, 0);
+    assert.equal(points[0].value, 500);
+    assert.equal(points[0].lowError, 445);
+    assert.equal(points[0].highError, 532.5);
+});
+
+QUnit.test("Calculate error bars. Each value is null or undefined", function(assert) {
+    var data = [
+            { arg: 0, val: 100, low: null, high: null },
+            { arg: 2, val: 300, low: null, high: null },
+            { arg: 4, val: 500, low: undefined, high: undefined },
+            { arg: 6, val: 700, low: undefined, high: undefined },
+            { arg: 8, val: 900, low: null, high: null }
+        ],
+        points = this.aggregateData("avg", data, "scatter", {
+            valueErrorBar: {
+                lowValueField: "low",
+                highValueField: "high",
+            }
+        });
+
+    assert.equal(points.length, 1);
+    assert.strictEqual(points[0].lowError, undefined);
+    assert.strictEqual(points[0].highError, undefined);
+});
+
+QUnit.test("Avg. With fixed error bars", function(assert) {
+    var data = [
+            { arg: 0, val: 100, low: null, high: 120 },
+            { arg: 2, val: 300, low: 280, high: 340 },
+            { arg: 4, val: 500, low: 450, high: undefined },
+            { arg: 6, val: 700, low: 600, high: 710 },
+            { arg: 8, val: 900, low: 850, high: 960 }
+        ],
+        points = this.aggregateData("avg", data, "scatter", {
+            valueErrorBar: {
+                type: "fixed",
+                value: 1
+            }
+        });
+
+    assert.equal(points.length, 1);
+    assert.equal(points[0].argument, 0);
+    assert.equal(points[0].value, 500);
+    assert.equal(points[0].lowError, 499);
+    assert.equal(points[0].highError, 501);
+});
+
+QUnit.test("Sum. Calculate error bars", function(assert) {
+    var data = [
+            { arg: 0, val: 100, low: 80, high: 120 },
+            { arg: 2, val: 300, low: 280, high: 340 },
+            { arg: 4, val: 500, low: 450, high: 520 },
+            { arg: 6, val: 700, low: 600, high: 710 },
+            { arg: 8, val: 900, low: 850, high: 960 }
+        ],
+        points = this.aggregateData("sum", data, "scatter", {
+            valueErrorBar: {
+                lowValueField: "low",
+                highValueField: "high",
+            }
+        });
+
+    assert.equal(points.length, 1);
+    assert.equal(points[0].argument, 0);
+    assert.equal(points[0].value, 2500);
+    assert.equal(points[0].lowError, 2260);
+    assert.equal(points[0].highError, 2650);
+});
+
+QUnit.test("Min. Calculate error bars", function(assert) {
+    var data = [
+            { arg: 0, val: 100, low: null, high: 120 },
+            { arg: 2, val: 300, low: 280, high: 340 },
+            { arg: 4, val: 500, low: 450, high: undefined },
+            { arg: 6, val: 700, low: 600, high: 710 },
+            { arg: 8, val: 900, low: 850, high: 960 }
+        ],
+        points = this.aggregateData("min", data, "scatter", {
+            valueErrorBar: {
+                lowValueField: "low",
+                highValueField: "high",
+            }
+        });
+
+    assert.equal(points.length, 1);
+    assert.equal(points[0].argument, 0);
+    assert.equal(points[0].value, 100);
+    assert.strictEqual(points[0].lowError, null);
+    assert.equal(points[0].highError, 120);
+});
+
+QUnit.test("Max. Calculate error bars", function(assert) {
+    var data = [
+            { arg: 0, val: 100, low: null, high: 120 },
+            { arg: 2, val: 300, low: 280, high: 340 },
+            { arg: 4, val: 500, low: 450, high: undefined },
+            { arg: 6, val: 700, low: 600, high: 710 },
+            { arg: 8, val: 900, low: 850, high: 960 }
+        ],
+        points = this.aggregateData("max", data, "scatter", {
+            valueErrorBar: {
+                lowValueField: "low",
+                highValueField: "high",
+            }
+        });
+
+    assert.equal(points.length, 1);
+    assert.equal(points[0].argument, 0);
+    assert.equal(points[0].value, 900);
+    assert.strictEqual(points[0].lowError, 850);
+    assert.equal(points[0].highError, 960);
+});
+
+QUnit.test("Count. Do not calculate error bars", function(assert) {
+    var data = [
+            { arg: 0, val: 100, low: null, high: 120 },
+            { arg: 2, val: 300, low: 280, high: 340 },
+            { arg: 4, val: 500, low: 450, high: undefined },
+            { arg: 6, val: 700, low: 600, high: 710 },
+            { arg: 8, val: 900, low: 850, high: 960 }
+        ],
+        points = this.aggregateData("count", data, "scatter", {
+            valueErrorBar: {
+                lowValueField: "low",
+                highValueField: "high",
+            }
+        });
+
+    assert.equal(points.length, 1);
+    assert.equal(points[0].argument, 0);
+    assert.equal(points[0].value, 5);
+    assert.strictEqual(points[0].lowError, undefined);
+    assert.strictEqual(points[0].highError, undefined);
 });

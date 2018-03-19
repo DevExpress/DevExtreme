@@ -120,7 +120,7 @@ var ThemeManager = BaseThemeManager.inherit((function() {
                 userCommonSettings = that._userOptions.commonSeriesSettings || {},
                 themeCommonSettings = theme.commonSeriesSettings,
                 widgetType = that._themeSection.split(".").slice(-1)[0],
-                type = _normalizeEnum(userOptions.type || userCommonSettings.type || themeCommonSettings.type || (widgetType === "pie" && theme.type)), //userCommonSettings.type && themeCommonSettings.type deprecated in 15.2 in pie
+                type = _normalizeEnum(userOptions.type || userCommonSettings.type || themeCommonSettings.type || (widgetType === "pie" && theme.type)), // userCommonSettings.type && themeCommonSettings.type deprecated in 15.2 in pie
                 settings,
                 palette = that.palette,
                 isBar = ~type.indexOf("bar"),
@@ -140,7 +140,9 @@ var ThemeManager = BaseThemeManager.inherit((function() {
                 userOptions.visible = seriesVisibility;
             }
 
-            settings = extend(true, {}, themeCommonSettings, themeCommonSettings[type], userCommonSettings, userCommonSettings[type], userOptions);
+            settings = extend(true, { aggregation: {} }, themeCommonSettings, themeCommonSettings[type], userCommonSettings, userCommonSettings[type], userOptions);
+
+            settings.aggregation.enabled = normalizeAggregationEnabled(settings.aggregation, that.getOptions("useAggregation"));
             settings.type = type;
             settings.widgetType = widgetType;
             settings.containerBackgroundColor = containerBackgroundColor;
@@ -171,6 +173,10 @@ var ThemeManager = BaseThemeManager.inherit((function() {
             userOptions = typeUtils.isPlainObject(userOptions) ? userOptions : _isDefined(userOptions) ? { enabled: !!userOptions } : {};
             return mergeOptions.call(this, name, userOptions);
         }
+    };
+
+    var normalizeAggregationEnabled = function(aggregation, useAggregation) {
+        return !!(!_isDefined(aggregation.enabled) ? useAggregation : aggregation.enabled);
     };
 
     return {

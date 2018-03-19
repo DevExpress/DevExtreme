@@ -12,7 +12,7 @@ var Callbacks = require("../../core/utils/callbacks"),
     commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
     virtualScrolling = require("../grid_core/ui.grid_core.virtual_scrolling_core"),
-    stateStoring = require("../grid_core/ui.grid_core.state_storing"),
+    stateStoring = require("../grid_core/ui.grid_core.state_storing_core"),
     PivotGridDataSource = require("./data_source"),
     pivotGridUtils = require("./ui.pivot_grid.utils"),
     foreachTree = pivotGridUtils.foreachTree,
@@ -280,7 +280,7 @@ exports.DataController = Class.inherit((function() {
 
             if(childrenStack[depth + 1]) {
                 node.children = childrenStack[depth + 1];
-                //T541266
+                // T541266
                 for(var i = depth + 1; i < childrenStack.length; i++) {
                     childrenStack[i] = undefined;
                 }
@@ -942,7 +942,7 @@ exports.DataController = Class.inherit((function() {
                     that._handleProgressChanged(0.8 + 0.1 * rowOptions.progress + 0.1 * columnOptions.progress);
                 },
                 rowOptions = {
-                    isEmptyGrandTotal: data.isEmptyGrandTotalRow, //TODO bool or array
+                    isEmptyGrandTotal: data.isEmptyGrandTotalRow, // TODO bool or array
                     texts: options.texts || {},
                     hiddenTotals: hiddenTotals,
                     hiddenValues: hiddenValues,

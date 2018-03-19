@@ -77,6 +77,7 @@ module.exports = {
                  * @publicName text
                  * @type string
                  * @default ""
+                 * @fires GridBaseOptions_onOptionChanged
                  */
                 text: "",
                 /**
@@ -197,8 +198,6 @@ module.exports = {
                                             .addClass(that.addWidgetPrefix(SEARCH_PANEL_CLASS))
                                             .appendTo(container);
 
-                                    that.setAria("label", messageLocalization.format("dxDataGrid-ariaSearchInGrid"), $search);
-
                                     that.getController("editorFactory").createEditor($search, {
                                         width: searchPanelOptions.width,
                                         placeholder: searchPanelOptions.placeholder,
@@ -207,6 +206,11 @@ module.exports = {
                                         updateValueTimeout: FILTERING_TIMEOUT,
                                         setValue: function(value) {
                                             dataController.searchByText(value);
+                                        },
+                                        editorOptions: {
+                                            inputAttr: {
+                                                "aria-label": messageLocalization.format("dxDataGrid-ariaSearchInGrid")
+                                            }
                                         }
                                     });
 
@@ -334,7 +338,7 @@ module.exports = {
                 _renderCore: function() {
                     this.callBase.apply(this, arguments);
 
-                    //T103538
+                    // T103538
                     if(this.option("rowTemplate")) {
                         if(this.option("templatesRenderAsynchronously")) {
                             clearTimeout(this._highlightTimer);

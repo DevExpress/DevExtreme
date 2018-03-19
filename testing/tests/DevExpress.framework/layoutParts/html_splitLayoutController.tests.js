@@ -196,7 +196,7 @@
             secondController = new htmlFrameworkMocks.MockLayoutController();
 
         createLayoutController({ device: { platform: 'test' } }, function(options) {
-            //refactor tests: replace createLayoutController with initLayoutController since we have the instance here in test
+            // refactor tests: replace createLayoutController with initLayoutController since we have the instance here in test
             try {
                 return new MultipaneLayoutController({
                     name: "test-split",
@@ -535,7 +535,7 @@
                         navigationManager.navigate("detail-view/2");
                     },
                     function(navigatedArgs) {
-                        navigationManager.back({ stack: "test" });//stack is passed by application while creating a back command
+                        navigationManager.back({ stack: "test" });// stack is passed by application while creating a back command
                     },
                     function(navigatedArgs) {
                         var stacks = navigationManager.navigationStacks,
@@ -610,15 +610,15 @@
 
             var steps = [
                     function() {
-                        //create the 'detail-view' stack
+                        // create the 'detail-view' stack
                         navigationManager.navigate("detail-view/1");
                     },
                     function() {
-                        //add the second item to the 'test' stack
+                        // add the second item to the 'test' stack
                         navigationManager.navigate("test/1");
                     },
                     function() {
-                        //add the second item to the 'detail-view' stack
+                        // add the second item to the 'detail-view' stack
                         navigationManager.navigate("detail-view/2");
                         assert.ok(app.canBack("test"), "It's possible to go back in the 'test' stack (T394291)");
                     },
@@ -633,7 +633,7 @@
 
             navigationManager.on("navigated", doStep);
 
-            //create the 'test' stack
+            // create the 'test' stack
             app.navigate("test");
         });
     });
@@ -930,7 +930,7 @@
                     viewTemplateInfo: {
                         pane: "master"
                     },
-                    uri: "test", //pane: 'master'
+                    uri: "test", // pane: 'master'
                     navigateOptions: {
                         stack: "master_pane"
                     }
@@ -978,7 +978,6 @@
 
         });
     });
-
 
 
     QUnit.module("Throw error tests");

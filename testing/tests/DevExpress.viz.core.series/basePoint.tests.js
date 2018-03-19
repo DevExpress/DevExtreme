@@ -5,10 +5,9 @@ var $ = require("jquery"),
     Series = require("viz/series/base_series").Series,
     pointModule = require("viz/series/points/base_point"),
     labelModule = require("viz/series/points/label"),
-    originalLabel = labelModule.Label;
-
-/* global MockTranslator */
-require("../../helpers/chartMocks.js");
+    originalLabel = labelModule.Label,
+    chartMocks = require("../../helpers/chartMocks.js"),
+    MockTranslator = chartMocks.MockTranslator;
 
 var createPoint = function(series, data, options) {
     options = options || {};
@@ -78,6 +77,7 @@ QUnit.test("Tag", function(assert) {
 });
 
 QUnit.test("Create simple point", function(assert) {
+    var aggregationInfo = this.simpleData.aggregationInfo = {};
     var point = createPoint(this.series, this.simpleData, this.options);
 
     assert.ok(point, "Point should be created");
@@ -92,6 +92,8 @@ QUnit.test("Create simple point", function(assert) {
 
     assert.strictEqual(point.lowError, undefined, "lowError should be undefined");
     assert.strictEqual(point.highError, undefined, "highError should be undefined");
+
+    assert.strictEqual(point.aggregationInfo, aggregationInfo, "aggregationInfo should be object");
 });
 
 QUnit.test("CretePoint with errorBar", function(assert) {
@@ -403,7 +405,7 @@ QUnit.test("Update simple to simple without data", function(assert) {
     point.drawMarker = function() {
         drawMarkerCalled++;
     };
-    //act
+    // act
     var newOptions = $.extend(true, {}, this.options, { type: "area" });
     point.update(data, newOptions);
     point.translate();
@@ -424,7 +426,7 @@ QUnit.test("Update simple to simple with data", function(assert) {
     point.drawMarker = function() {
         drawMarkerCalled++;
     };
-    //act
+    // act
     data = { argument: 2, value: 2 };
     point.update(data, this.options);
     point.translate();
@@ -816,7 +818,7 @@ QUnit.test("Apply normal style", function(assert) {
 
     assert.ok(!point.graphic.stub("toForeground").called);
     assert.deepEqual(point.graphic.stub("attr").secondCall.args[0], { style: "normal" });
-    //TO-DO rework it and delete test
+    // TO-DO rework it and delete test
     assert.deepEqual(point.graphic.stub("attr").firstCall.args[0], {
         fill: null,
         stroke: null,
@@ -862,7 +864,7 @@ QUnit.test("T333557", function(assert) {
     point.translate();
     point.draw(this.renderer, this.groups);
 
-    //act
+    // act
     point.applyStyle('hover');
     point.applyStyle('normal');
     this.options.styles.normal = { style: 'newStyle', fill: 'green' };
@@ -870,7 +872,7 @@ QUnit.test("T333557", function(assert) {
     point.update(this.data, this.options);
     point.draw(this.renderer, this.groups);
 
-    //assert
+    // assert
     assert.deepEqual(point.graphic.stub("attr").lastCall.args[0].style, "newStyle");
     assert.deepEqual(point.graphic.stub("attr").lastCall.args[0].fill, "green");
 });
@@ -880,7 +882,7 @@ QUnit.test("Draw point without state", function(assert) {
     point.translate();
     point.draw(this.renderer, this.groups);
 
-    //assert
+    // assert
     assert.deepEqual(point.graphic.stub("attr").firstCall.args[0].style, "normal");
 });
 
@@ -888,9 +890,9 @@ QUnit.test("Release hover state", function(assert) {
     var point = createPoint(this.series, this.data, this.options);
     point.translate();
     point.draw(this.renderer, this.groups);
-    //act
+    // act
     point.releaseHoverState();
-    //assert
+    // assert
     assert.ok(point.graphic.stub("toBackground").calledOnce);
 });
 
@@ -943,7 +945,7 @@ QUnit.module("point views", {
         var point = createPoint(this.series, this.data, this.options);
         point.translate();
         point.draw(this.renderer, this.groups);
-        //point.graphic.stub("attr").reset();
+        // point.graphic.stub("attr").reset();
 
         this.point = point;
 
@@ -959,7 +961,7 @@ QUnit.test("apply view", function(assert) {
     assert.strictEqual(this.getCurrentStyle(), "normal");
 });
 
-    //hover view
+    // hover view
 QUnit.test("apply view/ hovered point", function(assert) {
     this.point.fullState = 1;
     this.point.applyView();
@@ -1004,7 +1006,7 @@ QUnit.test("set hover view n times, reset hover view n times", function(assert) 
     assert.strictEqual(this.getCurrentStyle(), "normal");
 });
 
-    //selection view
+    // selection view
 QUnit.test("apply view. selected point", function(assert) {
     this.point.fullState = 2;
     this.point.applyView();
@@ -1048,7 +1050,7 @@ QUnit.test("set selection view n times, reset selection view n times", function(
 
     assert.strictEqual(this.getCurrentStyle(), "normal");
 });
-    //hover & selection
+    // hover & selection
 QUnit.test("apply view. hovered and selected point", function(assert) {
     this.point.fullState = 3;
     this.point.applyView();
@@ -1183,20 +1185,20 @@ QUnit.module("Event binding", {
 QUnit.test("Point selection event passed to series", function(assert) {
     var point = createPoint(this.series, this.data, this.options);
 
-    //act
+    // act
     point.select();
 
-    //assert
+    // assert
     assert.ok(this.series.selectPoint.calledOnce);
     assert.strictEqual(this.series.selectPoint.lastCall.args[0], point, "Point should be selectied on series level");
 });
 
 QUnit.test("Point clear selection event passed to series", function(assert) {
     var point = createPoint(this.series, this.data, this.options);
-    //act
+    // act
     point.clearSelection();
 
-    //assert
+    // assert
     assert.ok(this.series.deselectPoint.calledOnce);
     assert.strictEqual(this.series.deselectPoint.lastCall.args[0], point, "Point selection should be cleared on series level");
 });
@@ -1204,10 +1206,10 @@ QUnit.test("Point clear selection event passed to series", function(assert) {
 QUnit.test("Point hover passed to series", function(assert) {
     var point = createPoint(this.series, this.data, this.options);
 
-    //act
+    // act
     point.hover();
 
-    //assert
+    // assert
     assert.ok(this.series.hoverPoint.calledOnce);
     assert.strictEqual(this.series.hoverPoint.lastCall.args[0], point);
 });
@@ -1215,30 +1217,30 @@ QUnit.test("Point hover passed to series", function(assert) {
 QUnit.test("Point clear hover passed to series", function(assert) {
     var point = createPoint(this.series, this.data, this.options);
 
-    //act
+    // act
     point.clearHover();
 
-    //assert
+    // assert
     assert.ok(this.series.clearPointHover.calledOnce);
 });
 
 QUnit.test("Point showTooltip event passed to series", function(assert) {
     var point = createPoint(this.series, this.data, this.options);
 
-    //act
+    // act
     point.showTooltip();
 
-    //assert
+    // assert
     assert.ok(this.series.showPointTooltip.calledOnce);
     assert.strictEqual(this.series.showPointTooltip.lastCall.args[0], point, "Point should be selection on series level");
 });
 
 QUnit.test("Point hideTooltip selection event passed to series", function(assert) {
     var point = createPoint(this.series, this.data, this.options);
-    //act
+    // act
     point.hideTooltip();
 
-    //assert
+    // assert
     assert.ok(this.series.hidePointTooltip.calledOnce);
     assert.strictEqual(this.series.hidePointTooltip.lastCall.args[0], point, "Point selected should be cleared on series level");
 });
@@ -1378,7 +1380,7 @@ QUnit.test("Get color with customize point point hasn't value", function(assert)
     this.data.value = null;
 
     var point = createPoint(this.series, this.data, this.options);
-    //act
+    // act
     point.getColor();
 
     assert.strictEqual(this.series.customizePoint.callCount, 1);
@@ -1391,7 +1393,7 @@ QUnit.test("Get color with customize point point hasn't value and has customized
     this.options.styles.usePointCustomOptions = true;
 
     var point = createPoint(this.series, this.data, this.options);
-    //act
+    // act
     point.getColor();
 
     assert.strictEqual(this.series.customizePoint.callCount, 0);
@@ -1473,7 +1475,7 @@ QUnit.test("getBoundingRect", function(assert) {
     });
 });
 
-//Helpers
+// Helpers
 function createSimplePoint(coord) {
     var point = createPoint({}, [{}], { widgetType: "chart", visible: true, styles: { normal: { r: 6 }, hover: { r: 6 } } });
     point.x = coord.x;

@@ -310,7 +310,7 @@ var ValidationSummary = CollectionWidget.inherit({
         this.option("items", items);
     },
 
-    _render: function() {
+    _initMarkup: function() {
         this.$element().addClass(VALIDATION_SUMMARY_CLASS);
         this.callBase();
     },

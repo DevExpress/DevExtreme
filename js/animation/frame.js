@@ -1,6 +1,7 @@
 "use strict";
 
-var window = require("../core/utils/window").getWindow(),
+var windowUtils = require("../core/utils/window"),
+    window = windowUtils.hasWindow() ? windowUtils.getWindow() : {},
     callOnce = require("../core/utils/call_once");
 
 var FRAME_ANIMATION_STEP_TIME = 1000 / 60,

@@ -437,7 +437,7 @@ var HtmlApplication = Application.inherit({
             });
         });
 
-        feedbackEvents.lock(result);//prevents UI feedback from blinking during transition
+        feedbackEvents.lock(result);// prevents UI feedback from blinking during transition
 
         return result;
     },
@@ -565,7 +565,7 @@ var HtmlApplication = Application.inherit({
             var transitionDeferred = $.Deferred(),
                 skipAnimation = false;
 
-            //NOTE: It's needed to prevent creating a closure. Can't be declared in a loop because of JSHint check.
+            // NOTE: It's needed to prevent creating a closure. Can't be declared in a loop because of JSHint check.
             var getControllerDeactivator = function(controllerToDeactivate, d) {
                 return function() {
                     controllerToDeactivate.deactivate().done(function() {
@@ -580,7 +580,9 @@ var HtmlApplication = Application.inherit({
                 if(controllerToDeactivate.isOverlay) {
                     skipAnimation = true;
                 } else {
-                    that.transitionExecutor.leave(controllerToDeactivate.element(), LAYOUT_CHANGE_ANIMATION_NAME, { direction: direction });
+                    if(!skipAnimation) {
+                        that.transitionExecutor.leave(controllerToDeactivate.element(), LAYOUT_CHANGE_ANIMATION_NAME, { direction: direction });
+                    }
                 }
 
                 transitionDeferred.promise().done(getControllerDeactivator(controllerToDeactivate, d));

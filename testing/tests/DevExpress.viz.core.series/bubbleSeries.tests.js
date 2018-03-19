@@ -3,11 +3,10 @@
 var $ = require("jquery"),
     vizMocks = require("../../helpers/vizMocks.js"),
     pointModule = require("viz/series/points/base_point"),
-    Series = require("viz/series/base_series").Series;
-
-/* global insertMockFactory, MockAxis */
-require("../../helpers/chartMocks.js");
-
+    Series = require("viz/series/base_series").Series,
+    chartMocks = require("../../helpers/chartMocks.js"),
+    insertMockFactory = chartMocks.insertMockFactory,
+    MockAxis = chartMocks.MockAxis;
 
 require("viz/chart");
 
@@ -55,7 +54,7 @@ var createPoint = function() {
     stub.hasCoords.returns(true);
     stub.isInVisibleArea.returns(true);
 
-    stub._options = {};//see T243839
+    stub._options = {};// see T243839
     return stub;
 };
 
@@ -106,6 +105,7 @@ QUnit.test("Creation bubble point", function(assert) {
         data = [{ arg: 1, val: 3, size: 5 }],
         points;
     series.updateData(data);
+    series.createPoints();
 
     points = series.getPoints();
     assert.ok(points, "Points should be created");
@@ -123,6 +123,7 @@ QUnit.test("Creation with errorBars", function(assert) {
         points;
 
     series.updateData(data);
+    series.createPoints();
 
     points = series.getPoints();
     assert.ok(points, "Points should be created");
@@ -170,9 +171,9 @@ QUnit.test("Update template field", function(assert) {
         label: { visible: false }
 
     }, { renderer: this.renderer });
-    //act
+    // act
     series.updateTemplateFieldNames();
-    //assert
+    // assert
     assert.equal(series._options.valueField, "valueFieldbubbleSeries");
     assert.equal(series._options.sizeField, "sizeFieldbubbleSeries");
     assert.equal(series._options.tagField, "tagFieldbubbleSeries");
@@ -186,9 +187,9 @@ QUnit.test("Update template field. Default values", function(assert) {
         label: { visible: false }
 
     }, { renderer: this.renderer });
-    //act
+    // act
     series.updateTemplateFieldNames();
-    //assert
+    // assert
     assert.equal(series._options.valueField, "valbubbleSeries");
     assert.equal(series._options.sizeField, "sizebubbleSeries");
     assert.equal(series._options.tagField, "tagbubbleSeries");
@@ -200,9 +201,9 @@ QUnit.test("Draw without data", function(assert) {
         point: { visible: false }
 
     });
-    //act
+    // act
     series.draw(false);
-    //assert
+    // assert
 
     checkGroups(assert, series);
 
@@ -215,13 +216,14 @@ QUnit.test("Draw simple data without animation", function(assert) {
 
     });
     series.updateData(this.data);
+    series.createPoints();
     $.each(series._points, function(i, pt) {
         pt.x = pt.argument;
         pt.y = pt.value;
     });
-    //act
+    // act
     series.draw(false);
-    //assert
+    // assert
     checkGroups(assert, series);
 
     $.each(series._points, function(i, p) {
@@ -236,13 +238,14 @@ QUnit.test("Draw simple data with animation", function(assert) {
         }),
         complete;
     series.updateData(this.data);
+    series.createPoints();
     $.each(series._points, function(i, pt) {
         pt.x = pt.argument;
         pt.y = pt.value;
     });
-    //act
+    // act
     series.draw(true);
-    //assert
+    // assert
     checkGroups(assert, series);
 
     assert.equal(series._labelsGroup._stored_settings.opacity, 0.001);
@@ -275,15 +278,16 @@ QUnit.module("Bubble. Points animation", {
             valueAxis: new MockAxis({ renderer: this.renderer })
         });
         this.series.updateData(this.data);
+        this.series.createPoints();
     },
     afterEach: environment.afterEach
 });
 
 QUnit.test("Draw without animation", function(assert) {
     var series = this.series;
-    //act
+    // act
     series.draw(false);
-    //assert
+    // assert
     $.each(series._points, function(i, p) {
         assert.ok(p.draw.calledOnce);
         assert.equal(p.draw.firstCall.args[0], series._renderer, "renderer pass to point " + i);
@@ -294,48 +298,11 @@ QUnit.test("Draw without animation", function(assert) {
 
 QUnit.test("Draw with animation", function(assert) {
     var series = this.series;
-    //act
+    // act
     series.draw(true);
-    //assert
+    // assert
     $.each(series._points, function(i, p) {
         assert.ok(p.draw.calledOnce);
-        assert.equal(p.draw.firstCall.args[0], series._renderer, "renderer pass to point " + i);
-        assert.equal(p.draw.firstCall.args[1].markers, series._markersGroup, "markers group pass to point " + i);
-        assert.equal(p.draw.firstCall.args[2], true, "animation should be enabled " + i);
-    });
-});
-
-QUnit.test("Draw aggregated points with animation", function(assert) {
-    var series = createSeries({
-            type: seriesType,
-            useAggregation: true
-        }, {
-
-            argumentAxis: new MockAxis({ renderer: this.renderer }),
-            valueAxis: new MockAxis({ renderer: this.renderer })
-        }),
-        aggregatedPoints = [this.createPoint(), this.createPoint()];
-    series.updateData(this.data);
-    series.resamplePoints = function() {
-        this._points = aggregatedPoints;
-        this._lastPointIndex = this._points.length;
-    };
-    //act
-    series.resamplePoints();
-    //act
-    series.draw(true);
-    series.drawTrackers();
-    //assert
-    assert.ok(series._originalPoints.length);
-    $.each(series._originalPoints, function(i, p) {
-        assert.ok(!p.draw.callCount);
-        assert.ok(!p.animate.callCount);
-    });
-
-    assert.ok(series._drawnPoints.length);
-    $.each(series._drawnPoints, function(i, p) {
-        assert.ok(p.draw.calledOnce);
-        assert.ok(p.animate.calledOnce);
         assert.equal(p.draw.firstCall.args[0], series._renderer, "renderer pass to point " + i);
         assert.equal(p.draw.firstCall.args[1].markers, series._markersGroup, "markers group pass to point " + i);
         assert.equal(p.draw.firstCall.args[2], true, "animation should be enabled " + i);
@@ -385,6 +352,7 @@ QUnit.module("Bubble. Point styles", {
 QUnit.test("Style in point", function(assert) {
     var series = createSeries(this.options);
     series.updateData(this.data);
+    series.createPoints();
 
     assert.deepEqual(this.createPoint.firstCall.args[2].styles, {
         hover: {
@@ -417,6 +385,7 @@ QUnit.test("Style in point group", function(assert) {
         valueAxis: new MockAxis({ renderer: this.renderer })
     });
     series.updateData(this.data);
+    series.createPoints();
     series.draw(false);
 
     assert.deepEqual(series._markersGroup._stored_settings, {
@@ -434,6 +403,7 @@ QUnit.test("All options defined", function(assert) {
     this.options.selectionStyle.border.dashStyle = "s-b-dashStyle";
     var series = createSeries(this.options);
     series.updateData(this.data);
+    series.createPoints();
 
     assert.deepEqual((series._getPointOptions().styles), {
         hover: {
@@ -479,15 +449,24 @@ QUnit.test("customizePoint object", function(assert) {
             name: "seriesName"
         });
     series.updateData(this.data);
+    series.createPoints();
 
     assert.ok(series);
     assert.equal(spy.callCount, 2);
 
-    assert.deepEqual(spy.firstCall.args, [{ argument: "arg1", value: "val1", size: "size1", seriesName: "seriesName", tag: "tag1", index: 0, series: series }]);
-    assert.deepEqual(spy.firstCall.thisValue, { argument: "arg1", value: "val1", size: "size1", seriesName: "seriesName", tag: "tag1", index: 0, series: series });
+    var expectedArg = {
+        argument: "arg1",
+        value: "val1",
+        size: "size1",
+        seriesName: "seriesName",
+        tag: "tag1",
+        index: 0,
+        series: series,
+        data: this.data[0]
+    };
 
-    assert.deepEqual(spy.secondCall.args, [{ argument: "arg2", value: "val2", seriesName: "seriesName", size: "size2", tag: "tag2", index: 1, series: series }]);
-    assert.deepEqual(spy.secondCall.thisValue, { argument: "arg2", value: "val2", seriesName: "seriesName", size: "size2", tag: "tag2", index: 1, series: series });
+    assert.deepEqual(spy.firstCall.args, [expectedArg]);
+    assert.deepEqual(spy.firstCall.thisValue, expectedArg);
 });
 
 QUnit.test("customize point color. all", function(assert) {
@@ -531,6 +510,7 @@ QUnit.test("customize point color. all", function(assert) {
         }
     });
     series.updateData(this.data);
+    series.createPoints();
 
     assert.deepEqual(series.getAllPoints()[0].updateOptions.lastCall.args[0].styles, {
         usePointCustomOptions: true,
@@ -739,6 +719,7 @@ QUnit.test("Argument is undefined", function(assert) {
         series = createSeries(this.options);
 
     series.updateData(data);
+    series.createPoints();
 
     assert.equal(series._points.length, 0);
 });
@@ -748,6 +729,7 @@ QUnit.test("Argument is null", function(assert) {
         series = createSeries(this.options);
 
     series.updateData(data);
+    series.createPoints();
 
     assert.equal(series._points.length, 0);
 });
@@ -757,6 +739,7 @@ QUnit.test("Value is undefined", function(assert) {
         series = createSeries(this.options);
 
     series.updateData(data);
+    series.createPoints();
 
     assert.equal(series._points.length, 0);
 });
@@ -766,6 +749,7 @@ QUnit.test("Value is null", function(assert) {
         series = createSeries(this.options);
 
     series.updateData(data);
+    series.createPoints();
 
     assert.equal(series._points.length, 1);
 });
@@ -775,6 +759,7 @@ QUnit.test("size is undefined", function(assert) {
         series = createSeries(this.options);
 
     series.updateData(data);
+    series.createPoints();
 
     assert.equal(series._points.length, 0);
 });
@@ -784,136 +769,9 @@ QUnit.test("size is null", function(assert) {
         series = createSeries(this.options);
 
     series.updateData(data);
+    series.createPoints();
 
     assert.equal(series._points.length, 0);
-});
-
-QUnit.module("Bubble. Update animation", {
-    beforeEach: function() {
-        environment.beforeEach.call(this);
-        this.data = [{ arg: "arg1", val: "val1", size: "size1", tag: "tag1" }, { arg: "arg2", val: "val2", size: "size2", tag: "tag2" }];
-    },
-    afterEach: environment.afterEach,
-    createSeries: function() {
-        return createSeries({
-            type: "bubble"
-        }, {
-            argumentAxis: new MockAxis({ renderer: this.renderer }),
-            valueAxis: new MockAxis({ renderer: this.renderer })
-        });
-    }
-});
-
-QUnit.test("Update. Check label clearing", function(assert) {
-    var series = this.createSeries(),
-        newOptions = $.extend(true, {}, series.getOptions(), { type: "line" });
-
-    series.updateData(this.data);
-    series.draw(false);
-    series.updateOptions(newOptions);
-
-    var clearingSpy = sinon.spy(series, "_oldClearingAnimation"),
-        labelSpy = sinon.spy(series._labelsGroup, "animate");
-    series.draw(true);
-
-    assert.ok(clearingSpy.calledOnce);
-
-    assert.ok(labelSpy.calledOnce);
-    assert.equal(labelSpy.lastCall.args.length, 3);
-    assert.deepEqual(labelSpy.lastCall.args[0], { opacity: 0.001 });
-    assert.deepEqual(labelSpy.lastCall.args[1], { duration: 400, partitionDuration: 0.5 });
-    assert.ok(labelSpy.lastCall.args[2]);
-});
-
-QUnit.test("Update. Check point animating when old point count = new point count", function(assert) {
-    var series = this.createSeries(),
-        newOptions = $.extend(true, {}, series.getOptions(), { type: "line" });
-
-    series.updateData(this.data);
-    series.draw(false);
-    series.updateOptions(newOptions);
-
-    series.draw(true);
-    series._labelsGroup.stub("animate").lastCall.args[2]();
-
-    $.each(series._drawnPoints, function(i, point) {
-        assert.equal(point.animate.callCount, 1);
-        assert.deepEqual(point.animate.lastCall.args[1], { r: 0 });
-        assert.equal(point.animate.lastCall.args[2], 0.5);
-        if(i === series._drawnPoints.length - 1) {
-            assert.ok(point.animate.lastCall.args[0]);
-        } else {
-            assert.strictEqual(point.animate.lastCall.args[0], undefined);
-        }
-    });
-});
-
-QUnit.test("Update. Check point animating when old point count < new point count", function(assert) {
-    var series = this.createSeries(),
-        newOptions = $.extend(true, {}, series.getOptions(), { type: "line" }),
-        newData = [{ arg: "arg1", val: "val1", size: "size1", tag: "tag1" },
-        { arg: "arg2", val: "val2", size: "size2", tag: "tag2" },
-    { arg: "arg3", val: "val3", size: "size3", tag: "tag3" }];
-
-    series.updateData(this.data);
-    series.draw(false);
-    series.updateOptions(newOptions);
-    series.updateData(newData);
-
-    series.draw(true);
-    series._labelsGroup.stub("animate").lastCall.args[2]();
-
-    $.each(series._drawnPoints, function(i, point) {
-        assert.equal(point.animate.callCount, 1);
-        assert.deepEqual(point.animate.lastCall.args[1], { r: 0 });
-        assert.equal(point.animate.lastCall.args[2], 0.5);
-        if(i === series._drawnPoints.length - 1) {
-            assert.ok(point.animate.lastCall.args[0]);
-        } else {
-            assert.strictEqual(point.animate.lastCall.args[0], undefined);
-        }
-    });
-});
-
-QUnit.test("Update. Check point animating when old point count > new point count", function(assert) {
-    var series = this.createSeries(),
-        newOptions = $.extend(true, {}, series.getOptions(), { type: "line" }),
-        newData = [{ arg: "arg1", val: "val1", size: "size1", tag: "tag1" }];
-
-    series.updateData(this.data);
-    series.draw(false);
-    series.updateOptions(newOptions);
-    series.updateData(newData);
-
-    series.draw(true);
-    series._labelsGroup.stub("animate").lastCall.args[2]();
-
-    $.each(series._drawnPoints, function(i, point) {
-        assert.equal(point.animate.callCount, 1);
-        assert.deepEqual(point.animate.lastCall.args[1], { r: 0 });
-        assert.equal(point.animate.lastCall.args[2], 0.5);
-        if(i === series._drawnPoints.length - 1) {
-            assert.ok(point.animate.lastCall.args[0]);
-        } else {
-            assert.strictEqual(point.animate.lastCall.args[0], undefined);
-        }
-    });
-});
-
-QUnit.test("Update. Check draw calling", function(assert) {
-    var series = this.createSeries(),
-        newOptions = $.extend(true, {}, series.getOptions(), { type: "line" });
-
-    series.updateData(this.data);
-    series.draw(false);
-    series.updateOptions(newOptions);
-
-    var drawSpy = sinon.spy(series, "_draw");
-    series.draw(true);
-    series._labelsGroup.stub("animate").lastCall.args[2]();
-    series._points[series._points.length - 1].animate.lastCall.args[0]();
-
-    assert.ok(drawSpy.calledOnce);
 });
 
 QUnit.module("Series visibility", environment);
@@ -926,10 +784,11 @@ QUnit.test("Hide visible series", function(assert) {
         point: { visible: true }
     });
     series.updateData([{ arg: 1, val: 10, size: 1 }, { arg: 2, val: 20, size: 1 }, { arg: 3, val: 30, size: 1 }, { arg: 4, val: 40, size: 1 }]);
+    series.createPoints();
     series.hide();
 
     var points = series.getPoints();
-    //see T243839
+    // see T243839
     $.each(points, function(_, point) {
         assert.ok(point._options.visible === false);
     });
@@ -943,11 +802,12 @@ QUnit.test("Show invisible series", function(assert) {
         point: { visible: false }
     });
     series.updateData([{ arg: 1, val: 10, size: 1 }, { arg: 2, val: 20, size: 1 }, { arg: 3, val: 30, size: 1 }, { arg: 4, val: 40, size: 1 }]);
+    series.createPoints();
 
     series.show();
 
     var points = series.getPoints();
-    //see T243839
+    // see T243839
     $.each(points, function(_, point) {
         assert.ok(point._options.visible === true);
     });

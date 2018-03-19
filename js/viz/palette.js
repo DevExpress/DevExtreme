@@ -61,7 +61,7 @@ var palettes = {
         gradientSet: ["#eeacc5", "#7b5685"]
     },
 
-    //generic color schemes related palettes
+    // generic color schemes related palettes
     "carmine": {
         simpleSet: ["#fb7764", "#73d47f", "#fed85e", "#d47683", "#dde392", "#757ab2"],
         indicatingSet: ["#5cb85c", "#f0ad4e", "#d9534f"],
@@ -147,7 +147,7 @@ function RingBuf(buf) {
     };
 }
 
-function RepeatColors(palette, parameters) {
+function AlternateColors(palette, parameters) {
     var stepHighlight = parameters.useHighlight ? HIGHLIGHTING_STEP : 0,
         paletteSteps = new RingBuf([0, stepHighlight, -stepHighlight]),
         currentPalette = [];
@@ -336,12 +336,12 @@ function BlendColors(palette, parameters) {
 function Palette(palette, parameters, themeDefaultPalette) {
     parameters = parameters || {};
 
-    var extensionMode = parameters.extensionMode,
+    var extensionMode = (parameters.extensionMode || "").toLowerCase(),
         keyPalette = selectPaletteOnSeniority(palette, themeDefaultPalette),
         colors = getPalette(keyPalette, { type: parameters.type || "simpleSet" });
 
-    if(extensionMode === "repeat") {
-        this._extensionStrategy = RepeatColors(colors, parameters);
+    if(extensionMode === "alternate") {
+        this._extensionStrategy = AlternateColors(colors, parameters);
     } else if(extensionMode === "extrapolate") {
         this._extensionStrategy = ExtrapolateColors(colors);
     } else {

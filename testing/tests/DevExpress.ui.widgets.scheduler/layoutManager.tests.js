@@ -15,9 +15,19 @@ var $ = require("jquery"),
     HorizontalMonthLineAppointmentsStrategy = require("ui/scheduler/ui.scheduler.appointments.strategy.horizontal_month_line"),
     Color = require("color"),
     dataUtils = require("core/element_data"),
+    devices = require("core/devices"),
     CustomStore = require("data/custom_store");
 
-var APPOINTMENT_DEFAULT_OFFSET = 25;
+var APPOINTMENT_DEFAULT_OFFSET = 25,
+    APPOINTMENT_MOBILE_OFFSET = 50;
+
+function getOffset() {
+    if(devices.current().deviceType !== "desktop") {
+        return APPOINTMENT_MOBILE_OFFSET;
+    } else {
+        return APPOINTMENT_DEFAULT_OFFSET;
+    }
+}
 
 var checkAppointmentUpdatedCallbackArgs = function(assert, actual, expected) {
     assert.deepEqual(actual.old, expected.old, "Old data is OK");
@@ -217,7 +227,7 @@ QUnit.test("Appointment has right sortedIndex", function(assert) {
     assert.equal(dataUtils.data($appointments.get(3), "dxAppointmentSettings").sortedIndex, 3, "app has right sortedIndex");
 });
 
-//NOTE: check sortedIndex for long appt parts
+// NOTE: check sortedIndex for long appt parts
 QUnit.test("Compact parts of long appointment shouldn't have sortedIndex", function(assert) {
     this.createInstance(
         {
@@ -1321,7 +1331,8 @@ QUnit.test("Two rival appointments should have correct positions, vertical strat
     var $appointment = $(this.instance.$element().find(".dx-scheduler-appointment")),
         $tableCell = $(this.instance.$element().find(".dx-scheduler-date-table-cell").eq(0)),
         cellHeight = $tableCell.outerHeight(),
-        cellWidth = $tableCell.outerWidth();
+        cellWidth = $tableCell.outerWidth(),
+        offset = getOffset();
 
     assert.equal($appointment.length, 2, "All appointments are rendered");
 
@@ -1330,11 +1341,11 @@ QUnit.test("Two rival appointments should have correct positions, vertical strat
 
     assert.equal(firstAppointmentPosition.top, 0, "appointment is rendered in right place");
     assert.roughEqual(firstAppointmentPosition.left, cellWidth + 100, 1, "appointment is rendered in right place");
-    assert.roughEqual($appointment.eq(0).outerWidth(), 51.5, 1, "appointment has a right size");
+    assert.roughEqual($appointment.eq(0).outerWidth(), (cellWidth - offset) / 2, 1, "appointment has a right size");
 
     assert.equal(secondAppointmentPosition.top, 2 * cellHeight, "appointment is rendered in right place");
     assert.roughEqual(secondAppointmentPosition.left, cellWidth + $appointment.eq(0).outerWidth() + 100, 1, "appointment is rendered in right place");
-    assert.roughEqual($appointment.eq(1).outerWidth(), 51.5, 1, "appointment has a right size");
+    assert.roughEqual($appointment.eq(1).outerWidth(), (cellWidth - offset) / 2, 1, "appointment has a right size");
 });
 
 QUnit.test("Three rival appointments with two columns should have correct positions, vertical strategy", function(assert) {
@@ -1356,6 +1367,7 @@ QUnit.test("Three rival appointments with two columns should have correct positi
         $tableCell = $(this.instance.$element().find(".dx-scheduler-date-table-cell").eq(0)),
         cellHeight = $tableCell.outerHeight(),
         cellWidth = $tableCell.outerWidth(),
+        offset = getOffset(),
         firstAppointmentPosition = translator.locate($appointment.eq(0)),
         secondAppointmentPosition = translator.locate($appointment.eq(1)),
         thirdAppointmentPosition = translator.locate($appointment.eq(2));
@@ -1363,15 +1375,15 @@ QUnit.test("Three rival appointments with two columns should have correct positi
     assert.equal($appointment.length, 3, "All appointments are rendered");
     assert.equal(firstAppointmentPosition.top, 0, "appointment is rendered in right place");
     assert.roughEqual(firstAppointmentPosition.left, cellWidth + 100, 1, "appointment is rendered in right place");
-    assert.roughEqual($appointment.eq(0).outerWidth(), 51.5, 1, "appointment has a right size");
+    assert.roughEqual($appointment.eq(0).outerWidth(), (cellWidth - offset) / 2, 1, "appointment has a right size");
 
     assert.equal(secondAppointmentPosition.top, 2 * cellHeight, "appointment is rendered in right place");
     assert.roughEqual(secondAppointmentPosition.left, cellWidth + $appointment.eq(0).outerWidth() + 100, 1, "appointment is rendered in right place");
-    assert.roughEqual($appointment.eq(1).outerWidth(), 51.5, 1, "appointment has a right size");
+    assert.roughEqual($appointment.eq(1).outerWidth(), (cellWidth - offset) / 2, 1, "appointment has a right size");
 
     assert.equal(thirdAppointmentPosition.top, 0, "appointment is rendered in right place");
     assert.roughEqual(thirdAppointmentPosition.left, cellWidth + $appointment.eq(0).outerWidth() + 100, 1, "appointment is rendered in right place");
-    assert.roughEqual($appointment.eq(1).outerWidth(), 51.5, 1, "appointment has a right size");
+    assert.roughEqual($appointment.eq(1).outerWidth(), (cellWidth - offset) / 2, 1, "appointment has a right size");
 });
 
 QUnit.test("Four rival appointments with three columns should have correct positions, vertical strategy", function(assert) {
@@ -1395,7 +1407,8 @@ QUnit.test("Four rival appointments with three columns should have correct posit
         $tableCell = $(this.instance.$element().find(".dx-scheduler-date-table-cell").eq(0)),
         cellHeight = $tableCell.outerHeight(),
         cellWidth = $tableCell.outerWidth(),
-        expectedAppWidth = (cellWidth - APPOINTMENT_DEFAULT_OFFSET) / 3;
+        offset = getOffset(),
+        expectedAppWidth = (cellWidth - offset) / 3;
 
     assert.equal($appointment.length, 4, "All appointments are rendered");
 
@@ -1430,17 +1443,18 @@ QUnit.test("Rival duplicated appointments should have correct positions", functi
 
     var $appointment = $(this.instance.$element().find(".dx-scheduler-appointment")),
         $tableCell = $(this.instance.$element().find(".dx-scheduler-date-table-cell").eq(0)),
-        cellWidth = $tableCell.outerWidth();
+        cellWidth = $tableCell.outerWidth(),
+        offset = getOffset();
 
     assert.equal($appointment.length, 3, "All appointments are rendered");
     assert.deepEqual(translator.locate($appointment.eq(0)), { top: 0, left: cellWidth + 100 }, "appointment is rendered in right place");
-    assert.equal($appointment.eq(0).outerWidth(), 89, "appointment has a right size");
+    assert.equal($appointment.eq(0).outerWidth(), cellWidth - offset, "appointment has a right size");
 
     assert.deepEqual(translator.locate($appointment.eq(1)), { top: 0, left: 2 * cellWidth + 100 }, "appointment is rendered in right place");
-    assert.roughEqual($appointment.eq(1).outerWidth(), 44.5, 1, "appointment has a right size");
+    assert.roughEqual($appointment.eq(1).outerWidth(), (cellWidth - offset) / 2, 1, "appointment has a right size");
 
-    assert.deepEqual(translator.locate($appointment.eq(2)), { top: 0, left: 2 * cellWidth + 100 + 44.5 }, "appointment is rendered in right place");
-    assert.roughEqual($appointment.eq(2).outerWidth(), 44.5, 1, "appointment has a right size");
+    assert.deepEqual(translator.locate($appointment.eq(2)), { top: 0, left: 2 * cellWidth + 100 + (cellWidth - offset) / 2 }, "appointment is rendered in right place");
+    assert.roughEqual($appointment.eq(2).outerWidth(), (cellWidth - offset) / 2, 1, "appointment has a right size");
 });
 
 QUnit.test("More than 3 all-day appointments should be grouped", function(assert) {

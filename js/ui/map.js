@@ -142,6 +142,7 @@ var Map = Widget.inherit({
             /**
             * @name dxMapOptions_width
             * @publicName width
+            * @inheritdoc
             * @default 300
             */
             width: 300,
@@ -149,6 +150,7 @@ var Map = Widget.inherit({
             /**
             * @name dxMapOptions_height
             * @publicName height
+            * @inheritdoc
             * @default 300
             */
             height: 300,

@@ -15,7 +15,7 @@ QUnit.test("IE9 do not save without proxy", function(assert) {
         return;
     }
 
-    //arrange
+    // arrange
     var fileSaved = false,
         warningSend = null,
         _errorsLog = errors.log,
@@ -23,13 +23,13 @@ QUnit.test("IE9 do not save without proxy", function(assert) {
         _saveByProxy = fileSaver._saveByProxy,
         _saveBase64As = fileSaver._saveBase64As;
 
-    //act
+    // act
     errors.log = function(errorCode) { warningSend = errorCode; return; };
     fileSaver._saveBlobAs = fileSaver._saveBase64As = fileSaver._saveByProxy = function() { fileSaved = true; return; };
 
     fileSaver.saveAs("test", "EXCEL", null, undefined);
 
-    //assert
+    // assert
     assert.ok(!fileSaved, "File wasn't load");
     assert.equal(warningSend, "E1034", "Warning E1034 was sent");
 
@@ -54,7 +54,7 @@ QUnit.test("exportLinkElement generate", function(assert) {
     var clock = sinon.useFakeTimers();
 
     try {
-        //act
+        // act
         var clickHandler = function(e) {
                 $(e.target).attr('rel', 'clicked');
                 e.preventDefault();
@@ -63,14 +63,14 @@ QUnit.test("exportLinkElement generate", function(assert) {
 
         clock.tick();
 
-        //assert
+        // assert
         assert.ok(testExportLink);
         assert.ok(String($(testExportLink).attr("href")).indexOf("blob:") !== -1, "ExportLink href corrected");
         assert.equal($(testExportLink).attr("download"), "test.xlsx", "ExportLink download attribute corrected");
         assert.equal($(testExportLink).css("display"), "none", "ExportLink is styled display none");
         assert.equal($(testExportLink).attr("rel"), "clicked", "ExportLink is clicked");
 
-        //T596771
+        // T596771
         assert.notOk($(testExportLink).parent().length, "link is removed");
         assert.ok(fileSaver._objectUrlRevoked, "objectURL is revoked");
     } finally {
@@ -81,10 +81,10 @@ QUnit.test("exportLinkElement generate", function(assert) {
 QUnit.test("Proxy Url exportForm generate", function(assert) {
     var originalTrigger = eventsEngine.trigger;
     eventsEngine.trigger = $.noop;
-    //act
+    // act
     var testForm = fileSaver._saveByProxy("#", "testFile.xlsx", "EXCEL", "testData");
 
-    //assert
+    // assert
     assert.equal(testForm.attr("action"), "#", "Set proxy as form action");
     assert.equal(testForm.children("input[name=contentType]").eq(0).val(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Set contentType in form Post data");
     assert.equal(testForm.children("input[name=fileName]").eq(0).val(), "testFile.xlsx", "Set fileName in form Post data");
@@ -94,7 +94,7 @@ QUnit.test("Proxy Url exportForm generate", function(assert) {
 });
 
 QUnit.test("Save blob by _winJSBlobSave on winJS devices", function(assert) {
-    //arrange
+    // arrange
     if(!browser.msie && typeUtils.isFunction(window.Blob)) {
         var _winJSBlobSave = fileSaver._winJSBlobSave,
             isCalled = false;
@@ -102,10 +102,10 @@ QUnit.test("Save blob by _winJSBlobSave on winJS devices", function(assert) {
             window.WinJS = {};
             fileSaver._winJSBlobSave = function() { isCalled = true; };
 
-            //act
+            // act
             fileSaver.saveAs("test", "EXCEL", [], "testUrl");
 
-            //assert
+            // assert
             assert.ok(isCalled);
         } finally {
             delete window.WinJS;
@@ -118,7 +118,7 @@ QUnit.test("Save blob by _winJSBlobSave on winJS devices", function(assert) {
 
 
 QUnit.test("Save base64 via proxyUrl for IE < 10", function(assert) {
-    //act
+    // act
     if(browser.msie && parseInt(browser.version) < 10) {
         var _formDownloader = fileSaver._linkDownloader,
             isCalled;
@@ -127,7 +127,7 @@ QUnit.test("Save base64 via proxyUrl for IE < 10", function(assert) {
 
         fileSaver.saveAs("test", "EXCEL", [], "testUrl");
 
-        //assert
+        // assert
         assert.ok(isCalled);
 
         fileSaver._linkDownloader = _formDownloader;
@@ -142,14 +142,14 @@ QUnit.test("Save base 64 for Safari", function(assert) {
             assert.ok(true, "This test not for IE browsers");
             return;
         }
-        //arrange
+        // arrange
         var exportLinkElementClicked = false,
             _linkDownloader = fileSaver._linkDownloader;
 
         fileSaver._linkDownloader = function() { exportLinkElementClicked = true; };
         fileSaver.saveAs("test", "EXCEL");
 
-        //assert
+        // assert
         assert.ok(exportLinkElementClicked, "ExportLink href generated");
 
         fileSaver._linkDownloader = _linkDownloader;
@@ -164,18 +164,18 @@ QUnit.test("No E1034 on iPad", function(assert) {
         assert.ok(true, "This test for iPad devices");
         return;
     }
-    //arrange
+    // arrange
     var warningSend = null,
         _devExpressLog = errors.log,
         _linkDownloader = fileSaver._linkDownloader;
 
-    //act
+    // act
     fileSaver._linkDownloader = function() { return; };
     errors.log = function(errorCode) { warningSend = errorCode; return; };
 
     fileSaver.saveAs("test", "EXCEL", new Blob([], { type: "test/plain" }));
 
-    //assert
+    // assert
     assert.ok(warningSend !== "E1034", "Warning E1034 wasn't sent");
 
     errors.log = _devExpressLog;
@@ -185,7 +185,7 @@ QUnit.test("No E1034 on iPad", function(assert) {
 
 QUnit.test("Blob is saved via msSaveOrOpenBlob method", function(assert) {
     if(browser.msie && parseInt(browser.version) > 9) {
-        //arrange
+        // arrange
         var isCalled,
             _msSaveOrOpenBlob = navigator.msSaveOrOpenBlob;
 
@@ -193,10 +193,10 @@ QUnit.test("Blob is saved via msSaveOrOpenBlob method", function(assert) {
             isCalled = true;
         };
 
-        //act
+        // act
         fileSaver._saveBlobAs("test", "EXCEL", new Blob([], { type: "test/plain" }));
 
-        //assert
+        // assert
         assert.ok(fileSaver._blobSaved, "blob is saved");
         assert.ok(isCalled, "msSaveOrOpenBlob method is called");
 
@@ -213,7 +213,7 @@ QUnit.test("SaveBlobAs is called after saveAs", function(assert) {
         return;
     }
 
-    //arrange
+    // arrange
     var saveBlobAs = fileSaver._saveBlobAs,
         isSaveBlobAs = false;
 
@@ -221,11 +221,11 @@ QUnit.test("SaveBlobAs is called after saveAs", function(assert) {
         isSaveBlobAs = true;
     };
 
-    //act
+    // act
     fileSaver.saveAs("test", "EXCEl");
 
     fileSaver._saveBlobAs = saveBlobAs;
 
-    //assert
+    // assert
     assert.ok(isSaveBlobAs);
 });

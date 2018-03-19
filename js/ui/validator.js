@@ -85,8 +85,8 @@ var Validator = DOMComponent.inherit({
             * @type_function_param1_field1 name:string
             * @type_function_param1_field2 isValid:boolean
             * @type_function_param1_field3 value:Object
-            * @type_function_param1_field4 validationRules:Array<Object>
-            * @type_function_param1_field5 brokenRule:Object
+            * @type_function_param1_field4 validationRules:Array<RequiredRule,NumericRule,RangeRule,StringLengthRule,CustomRule,CompareRule,PatternRule,EmailRule>
+            * @type_function_param1_field5 brokenRule:RequiredRule|NumericRule|RangeRule|StringLengthRule|CustomRule|CompareRule|PatternRule|EmailRule
             * @action
             */
 
@@ -190,7 +190,7 @@ var Validator = DOMComponent.inherit({
         }
     },
 
-    _render: function() {
+    _initMarkup: function() {
         this.$element().addClass(VALIDATOR_CLASS);
         this.callBase();
     },
@@ -217,10 +217,11 @@ var Validator = DOMComponent.inherit({
         }
     },
 
+
     /**
     * @name dxValidatorMethods_validate
     * @publicName validate()
-    * @return Object
+    * @return dxValidatorResult
     */
     validate: function() {
         var that = this,
@@ -233,6 +234,7 @@ var Validator = DOMComponent.inherit({
                 rule.validator = that;
                 return rule;
             }),
+
             result;
 
         if(bypass) {

@@ -9,9 +9,7 @@ var debug = require("../../core/utils/console").debug,
     _math = Math,
     _floor = _math.floor,
     _max = _math.max,
-    _abs = _math.abs,
-
-    _map = require("../core/utils").map;
+    _abs = _math.abs;
 
 var getValueAxesPerPanes = function(valueAxes) {
     var result = {};
@@ -29,34 +27,30 @@ var getValueAxesPerPanes = function(valueAxes) {
 
 var linearConverter = {
     transform: function(v, b) {
-        return vizUtils.getLog(v, b);
+        return adjust(vizUtils.getLog(v, b));
     },
 
     addInterval: function(v, i) {
-        return v + i;
+        return adjust(v + i);
     },
 
     getInterval: function(base, tickInterval) {
         return tickInterval;
-    },
-
-    adjustValue: _floor
+    }
 };
 
 var logConverter = {
     transform: function(v, b) {
-        return vizUtils.raiseTo(v, b);
+        return adjust(vizUtils.raiseTo(v, b));
     },
 
     addInterval: function(v, i) {
-        return v * i;
+        return adjust(v * i);
     },
 
     getInterval: function(base, tickInterval) {
         return _math.pow(base, tickInterval);
-    },
-
-    adjustValue: adjust
+    }
 };
 
 var convertAxisInfo = function(axisInfo, converter) {
@@ -67,8 +61,7 @@ var convertAxisInfo = function(axisInfo, converter) {
         tickValues = axisInfo.tickValues,
         tick,
         ticks = [],
-        interval,
-        i;
+        interval;
 
     axisInfo.minValue = converter.transform(axisInfo.minValue, base);
     axisInfo.oldMinValue = converter.transform(axisInfo.oldMinValue, base);
@@ -81,10 +74,9 @@ var convertAxisInfo = function(axisInfo, converter) {
     }
 
     interval = converter.getInterval(base, axisInfo.tickInterval);
-
     tick = converter.transform(tickValues[0], base);
-    for(i = 0; i < tickValues.length; i++) {
-        ticks.push(converter.adjustValue(tick));
+    while(ticks.length < tickValues.length) {
+        ticks.push(tick);
         tick = converter.addInterval(tick, interval);
     }
 
@@ -93,27 +85,24 @@ var convertAxisInfo = function(axisInfo, converter) {
 };
 
 var populateAxesInfo = function(axes) {
-    return _map(axes, function(axis) {
+    return axes.reduce(function(result, axis) {
         var ticksValues = axis.getTicksValues(),
             majorTicks = ticksValues.majorTicksValues,
             options = axis.getOptions(),
-            minValue,
-            maxValue,
-            axisInfo = null,
-            businessRange,
-            tickInterval,
-            synchronizedValue;
+            businessRange = axis.getTranslator().getBusinessRange(),
+            minValue = businessRange.minVisible,
+            maxValue = businessRange.maxVisible,
+            axisInfo,
+
+            tickInterval = axis._tickInterval,
+            synchronizedValue = options.synchronizedValue;
 
         if(majorTicks && majorTicks.length > 0 &&
             typeUtils.isNumeric(majorTicks[0]) &&
             options.type !== "discrete" &&
-            !axis.getTranslator().getBusinessRange().stubData
+            !businessRange.stubData &&
+            !(businessRange.breaks && businessRange.breaks.length)
         ) {
-            businessRange = axis.getTranslator().getBusinessRange();
-            tickInterval = axis._tickInterval;
-            minValue = businessRange.minVisible;
-            maxValue = businessRange.maxVisible;
-            synchronizedValue = options.synchronizedValue;
 
             if(minValue === maxValue && _isDefined(synchronizedValue)) {
                 tickInterval = _abs(majorTicks[0] - synchronizedValue) || 1;
@@ -145,12 +134,14 @@ var populateAxesInfo = function(axes) {
 
             convertAxisInfo(axisInfo, linearConverter);
 
+            result.push(axisInfo);
+
             ///#DEBUG
             debug.assert(axisInfo.tickInterval !== undefined && axisInfo.tickInterval !== null, "tickInterval was not provided");
             ///#ENDDEBUG
         }
-        return axisInfo;
-    });
+        return result;
+    }, []);
 };
 
 var updateTickValues = function(axesInfo) {
@@ -193,7 +184,7 @@ var updateTickValues = function(axesInfo) {
 };
 
 var getAxisRange = function(axisInfo) {
-    return (axisInfo.maxValue - axisInfo.minValue) || 1; //T153054
+    return (axisInfo.maxValue - axisInfo.minValue) || 1; // T153054
 };
 
 var getMainAxisInfo = function(axesInfo) {
@@ -324,7 +315,6 @@ var applyMinMaxValues = function(axesInfo) {
             range.max = range.maxVisible;
         }
 
-        range.isSynchronized = true;
         axis.getTranslator().updateBusinessRange(range);
         axis.setTicks({ majorTicks: info.tickValues, minorTicks: info.minorValues });
     });

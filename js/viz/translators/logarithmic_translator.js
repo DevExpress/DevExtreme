@@ -46,7 +46,12 @@ module.exports = {
         return numericTranslator.isValid.call(this, getLog(value, this._businessRange.base));
     },
 
-    parse: numericTranslator.parse,
+    _parse: numericTranslator._parse,
+
+    getCorrectValue: function(value, direction) {
+        var b = this._businessRange.base;
+        return raiseTo(numericTranslator.getCorrectValue.call(this, getLog(value, b), direction), b);
+    },
 
     to: function(value, direction) {
         return numericTranslator.to.call(this, getLog(value, this._businessRange.base), direction);

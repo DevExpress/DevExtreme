@@ -36,11 +36,11 @@ var commonUtils = require("../../core/utils/common"),
     REFRESH_SERIES_DATA_INIT_ACTION_OPTIONS = [
         "series",
         "commonSeriesSettings",
-        "containerBackgroundColor",
         "dataPrepareSettings",
         "seriesSelectionMode",
         "pointSelectionMode",
-        "synchronizeMultiAxes"
+        "synchronizeMultiAxes",
+        "resolveLabelsOverlapping"
     ],
 
     REFRESH_SERIES_FAMILIES_ACTION_OPTIONS = [
@@ -51,7 +51,7 @@ var commonUtils = require("../../core/utils/common"),
         "barGroupPadding",
         "barGroupWidth",
         "negativesAsZeroes",
-        "negativesAsZeros" //misspelling case
+        "negativesAsZeros" // misspelling case
     ],
 
     FORCE_RENDER_REFRESH_ACTION_OPTIONS = [
@@ -314,9 +314,9 @@ function setTemplateFields(data, templateData, series) {
 
 function checkOverlapping(firstRect, secondRect) {
     return ((firstRect.x <= secondRect.x && secondRect.x <= firstRect.x + firstRect.width) ||
-           (firstRect.x >= secondRect.x && firstRect.x <= secondRect.x + secondRect.width)) &&
-           ((firstRect.y <= secondRect.y && secondRect.y <= firstRect.y + firstRect.height) ||
-           (firstRect.y >= secondRect.y && firstRect.y <= secondRect.y + secondRect.height));
+        (firstRect.x >= secondRect.x && firstRect.x <= secondRect.x + secondRect.width)) &&
+        ((firstRect.y <= secondRect.y && secondRect.y <= firstRect.y + firstRect.height) ||
+            (firstRect.y >= secondRect.y && firstRect.y <= secondRect.y + secondRect.height));
 }
 
 var overlapping = {
@@ -346,11 +346,6 @@ var BaseChart = BaseWidget.inherit({
     _rootClassPrefix: "dxc",
 
     _rootClass: "dxc-chart",
-
-    _init: function() {
-        this._savedBusinessRange = {};
-        this.callBase.apply(this, arguments);
-    },
 
     _initialChanges: ["REINIT"],
 
@@ -402,25 +397,25 @@ var BaseChart = BaseWidget.inherit({
 
     _reinit: function() {
         var that = this;
-            //_skipRender = !that._initialized;
+        // _skipRender = !that._initialized;
 
         _setCanvasValues(that._canvas);
         that._reinitAxes();
         // NOTE: T273635
         // Changing the `_initialized` flag prevents `_render` which is synchronously called from the `_updateDataSource` when data source is local and series rendering is synchronous
         // This is possible because `_render` checks the `_initialized` flag
-        //if (!_skipRender) {
+        // if (!_skipRender) {
         that._skipRender = true;        // T273635, T351032
-        //}
+        // }
         that._updateDataSource();
         if(!that.series) {
             that._dataSpecificInit(false);
         }
-        //if (!_skipRender) {
+        // if (!_skipRender) {
         that._skipRender = false;       // T273635, T351032
-        //}
+        // }
         that._correctAxes();
-        /*_skipRender || */that._forceRender();
+        /* _skipRender || */that._forceRender();
     },
 
     _correctAxes: noop,
@@ -484,9 +479,9 @@ var BaseChart = BaseWidget.inherit({
         disposeObject("_crosshair");
 
         that.layoutManager =
-        that._userOptions =
-        that._canvas =
-        that._groupsData = null;
+            that._userOptions =
+            that._canvas =
+            that._groupsData = null;
 
         unlinkGroup("_stripsGroup");
         unlinkGroup("_gridGroup");
@@ -533,19 +528,19 @@ var BaseChart = BaseWidget.inherit({
     },
 
     _applySize: function() {
-        //if (this._initialized) {
+        // if (this._initialized) {
         //    this._resize();
-        //}
+        // }
         this._processRefreshData(RESIZE_REFRESH_ACTION);
     },
 
-    //_resize: function () {
-    //    if (this._updateLockCount) {//T244164
+    // _resize: function () {
+    //    if (this._updateLockCount) {// T244164
     //        this._processRefreshData(RESIZE_REFRESH_ACTION);
     //    } else {
     //        this._render(this.__renderOptions || { animate: false, isResize: true });
     //    }
-    //},
+    // },
 
     _resize: function() {
         this._doRender(this.__renderOptions || { animate: false, isResize: true });
@@ -595,11 +590,11 @@ var BaseChart = BaseWidget.inherit({
             drawOptions,
             recreateCanvas;
 
-        if(/*!that._initialized || */that._skipRender) return; // NOTE: Because _render can be called from _init!
+        if(/* !that._initialized || */that._skipRender) return; // NOTE: Because _render can be called from _init!
 
         if(that._canvas.width === 0 && that._canvas.height === 0) return;
 
-        that._resetIsReady(); //T207606
+        that._resetIsReady(); // T207606
         drawOptions = that._prepareDrawOptions(_options);
         recreateCanvas = drawOptions.recreateCanvas;
 
@@ -710,7 +705,7 @@ var BaseChart = BaseWidget.inherit({
 
     _calculateSeriesLayout: function(drawOptions, isRotated) {
         drawOptions.hideLayoutLabels = this.layoutManager.needMoreSpaceForPanesCanvas(this._getLayoutTargets(), isRotated)
-                                        && !this._themeManager.getOptions("adaptiveLayout").keepLabels;
+            && !this._themeManager.getOptions("adaptiveLayout").keepLabels;
 
         this._updateSeriesDimensions(drawOptions);
     },
@@ -815,7 +810,7 @@ var BaseChart = BaseWidget.inherit({
         that._axesGroup.linkRemove().clear();               // TODO: Must be removed in the same place where appended (advanced chart)
         that._constantLinesGroup.linkRemove().clear();      // TODO: Must be removed in the same place where appended (advanced chart)
         that._labelAxesGroup.linkRemove().clear();          // TODO: Must be removed in the same place where appended (advanced chart)
-        //that._seriesGroup.linkRemove().clear();
+        // that._seriesGroup.linkRemove().clear();
         that._labelsGroup.linkRemove().clear();
         that._crosshairCursorGroup.linkRemove().clear();
         that._scaleBreaksGroup.linkRemove().clear();
@@ -870,7 +865,7 @@ var BaseChart = BaseWidget.inherit({
             newRefreshActionPosition = inArray(newRefreshAction, ACTIONS_BY_PRIORITY);
         if(!this._currentRefreshData || (currentRefreshActionPosition >= 0 && newRefreshActionPosition < currentRefreshActionPosition)) {
             this._currentRefreshData = newRefreshAction;
-            //this._invalidate();
+            // this._invalidate();
         }
     },
 
@@ -947,7 +942,8 @@ var BaseChart = BaseWidget.inherit({
         commonAxisSettings: "AXES_AND_PANES",
         panes: "AXES_AND_PANES",
         defaultPane: "AXES_AND_PANES",
-        useAggregation: 'AXES_AND_PANES',
+        useAggregation: "AXES_AND_PANES",
+        containerBackgroundColor: "AXES_AND_PANES",
 
         rotated: "ROTATED",
 
@@ -1057,6 +1053,16 @@ var BaseChart = BaseWidget.inherit({
         this._dataSpecificInit(true);
     },
 
+    _processSingleSeries: function(singleSeries) {
+        singleSeries.createPoints();
+    },
+
+    _handleSeriesDataUpdated: function() {
+        this.series.forEach(function(s) {
+            this._processSingleSeries(s);
+        }, this);
+    },
+
     _dataSpecificInit: function(needRedraw) {
         var that = this;
         that.series = that.series || that._populateSeries();
@@ -1093,8 +1099,9 @@ var BaseChart = BaseWidget.inherit({
 
         that.series.forEach(function(singleSeries) {
             singleSeries.updateData(parsedData[singleSeries.getArgumentField()]);
-            that._processSingleSeries(singleSeries);
         });
+
+        that._handleSeriesDataUpdated();
 
         that._organizeStackPoints();
     },
@@ -1246,7 +1253,7 @@ var BaseChart = BaseWidget.inherit({
         return that.series;
     },
 
-    //API
+    // API
     getAllSeries: function getAllSeries() {
         return this.series.slice();
     },

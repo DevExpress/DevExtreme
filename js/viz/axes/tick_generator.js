@@ -78,11 +78,11 @@ function correctMinValueByEndOnTick(floorFunc, ceilFunc, resolveEndOnTick, endOn
     if(typeUtils.isDefined(endOnTick)) {
         return endOnTick ? floorFunc : ceilFunc;
     }
-    return function(value, interval, businessViewInfo) {
+    return function(value, interval, businessViewInfo, forceEndOnTick) {
         var ceilTickValue = ceilFunc(value, interval),
             floorTickValue = floorFunc(value, interval);
 
-        if(value - floorTickValue === 0 || !typeUtils.isDefined(businessViewInfo) || resolveEndOnTick(value, floorTickValue, interval, businessViewInfo)) {
+        if(value - floorTickValue === 0 || !typeUtils.isDefined(businessViewInfo) || resolveEndOnTick(value, floorTickValue, interval, businessViewInfo) || forceEndOnTick) {
             return floorTickValue;
         }
         return ceilTickValue;
@@ -376,6 +376,10 @@ function calculateTicks(addInterval, correctMinValue, adjustInterval, resolveEnd
 
         if(cur > max) {
             cur = correctMinValue(min, adjustInterval(businessDelta / 2), businessViewInfo);
+            if(cur > max) {
+                endOnTick = true;
+                cur = correctMinValue(min, tickInterval, businessViewInfo, endOnTick);
+            }
         }
         cur = correctTickValue(cur);
 
@@ -416,7 +420,7 @@ function calculateMinorTicks(updateTickInterval, addInterval, correctMinValue, c
             return [];
         }
 
-        //min to first tick
+        // min to first tick
         var cur = correctTickValue(correctMinValue(min, tickInterval, min), minorTickInterval),
             ticks = [];
 
@@ -426,7 +430,7 @@ function calculateMinorTicks(updateTickInterval, addInterval, correctMinValue, c
             cur = addInterval(cur, minorTickInterval);
         }
 
-        //between ticks
+        // between ticks
         var middleTicks = majorTicks.reduce(function(r, tick) {
             tickBalance = maxCount - 1;
             if(r.prevTick === null) {
@@ -448,7 +452,7 @@ function calculateMinorTicks(updateTickInterval, addInterval, correctMinValue, c
 
         ticks = ticks.concat(middleTicks.minors);
 
-        //last tick to max
+        // last tick to max
         minorTickInterval = updateTickInterval(minorTickInterval, ceil(max, tickInterval, min), factor);
         cur = correctTickValue(lastMajor, minorTickInterval);
         while(cur < max) {
@@ -523,7 +527,7 @@ function generator(options, getBusinessDelta, calculateTickInterval, calculateMi
     }
 
     function generateMajorTicks(ticks, data, businessDelta, screenDelta, tickInterval, forceTickInterval, customTicks, breaks) {
-        if(customTicks.majors && !options.showCalculatedTicks) { //DEPRECATED IN 15_2
+        if(customTicks.majors && !options.showCalculatedTicks) { // DEPRECATED IN 15_2
             ticks.breaks = breaks;
             return ticks;
         }
@@ -562,7 +566,7 @@ function generator(options, getBusinessDelta, calculateTickInterval, calculateMi
         if(!options.calculateMinors) {
             return ticks;
         }
-        if(customTicks.minors && !options.showMinorCalculatedTicks) { //DEPRECATED IN 15_2
+        if(customTicks.minors && !options.showMinorCalculatedTicks) { // DEPRECATED IN 15_2
             return ticks;
         }
 
@@ -594,7 +598,7 @@ function generator(options, getBusinessDelta, calculateTickInterval, calculateMi
 
         if(!isNaN(businessDelta)) {
             result = generateMajorTicks(result, data, businessDelta, screenDelta, tickInterval, forceTickInterval, customTicks, breaks || []);
-            if(!options.skipTickGeneration) {
+            if(!options.skipTickGeneration && businessDelta > 0) {
                 result = generateMinorTicks(result, data, businessDelta, screenDelta, minorTickInterval, minorTickCount, customTicks);
             }
         }
@@ -687,13 +691,13 @@ function dateGenerator(options) {
         if("years" in intervalObject) {
             value.setFullYear(floorNumber(value.getFullYear(), intervalObject.years, 0));
         } else if("quarters" in intervalObject) {
-            //correctDateWithUnitBeginning is enough here
+            // correctDateWithUnitBeginning is enough here
         } else if("months" in intervalObject) {
             value.setMonth(floorNumber(value.getMonth(), intervalObject.months, 0));
         } else if("weeks" in intervalObject) {
-            //correctDateWithUnitBeginning is enough here
+            // correctDateWithUnitBeginning is enough here
         } else if("days" in intervalObject) {
-            //correctDateWithUnitBeginning is enough here
+            // correctDateWithUnitBeginning is enough here
         } else if("hours" in intervalObject) {
             value.setHours(floorNumber(value.getHours(), intervalObject.hours, 0));
         } else if("minutes" in intervalObject) {

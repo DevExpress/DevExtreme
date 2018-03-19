@@ -401,10 +401,10 @@ QUnit.test("unselectItem for last item if 'allPages' selectAllMode", function(as
     var instance = $element.dxList("instance");
     assert.equal(loading.callCount, 1, "one load during creation");
 
-    //act
+    // act
     instance.unselectItem(0);
 
-    //assert
+    // assert
     assert.equal(loading.callCount, 1, "no load during unselect last item");
     assert.deepEqual(instance.option("selectedItems"), [], "selected items is empty");
 });
@@ -431,10 +431,10 @@ QUnit.test("change selectedItemKeys to invisible items should perform load with 
     var loading = sinon.spy();
     ds.store().on("loading", loading);
 
-    //act
+    // act
     instance.option("selectedItemKeys", [4]);
 
-    //assert
+    // assert
     assert.equal(loading.callCount, 1, "one load during change selectedRowKeys");
     assert.deepEqual(loading.lastCall.args[0].filter, ["this", "=", 4], "load during change selectedRowKeys");
     assert.deepEqual(instance.option("selectedItems"), [4], "selected items is empty");
@@ -498,7 +498,7 @@ QUnit.test("selectedItems should not be cleaned after reordering if store key sp
     assert.equal(listInstance.option("selectedItems")[0], items[0], "first item is selected");
 });
 
-//T525081
+// T525081
 QUnit.test("selection works well after clean all selected items and selectAllMode is 'allPages'", function(assert) {
     var items = [1, 2, 3],
         selectionChangedSpy = sinon.spy();
@@ -521,9 +521,9 @@ QUnit.test("selection works well after clean all selected items and selectAllMod
     assert.equal(selectionChangedSpy.callCount, 3, "'selectionChanged' event has been fired 3 times");
 });
 
-//T567757
+// T567757
 QUnit.test("Selecting all filtered items when selectAllMode is 'allPages'", function(assert) {
-    //arrange
+    // arrange
     var items = [1, 2, 3, 4, 5],
         $selectAll;
 
@@ -539,18 +539,18 @@ QUnit.test("Selecting all filtered items when selectAllMode is 'allPages'", func
         searchValue: "1"
     }).dxList("instance");
 
-    //act
+    // act
     instance.selectItem(0);
 
-    //assert
+    // assert
     $selectAll = $("#list").find(".dx-list-select-all-checkbox");
     assert.ok($selectAll.hasClass("dx-checkbox-checked"), "selectAll checkbox is checked");
     assert.deepEqual(instance.option("selectedItems"), [1], "selected items");
 
-    //act
+    // act
     instance.option("searchValue", "");
 
-    //assert
+    // assert
     $selectAll = $("#list").find(".dx-list-select-all-checkbox");
     assert.ok($selectAll.hasClass("dx-checkbox-indeterminate"), "selectAll checkbox is indeterminate");
 });

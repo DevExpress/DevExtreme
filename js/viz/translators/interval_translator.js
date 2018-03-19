@@ -36,7 +36,7 @@ module.exports = {
         }
         interval = interval || that._options.interval;
 
-        //TODO B253861
+        // TODO B253861
         if(!that.isValid(bp, interval)) {
             return null;
         }
@@ -55,7 +55,7 @@ module.exports = {
         return this.from(pos, direction);
     },
 
-    //TODO
+    // TODO
     getInterval: function() {
         return Math.round(this._canvasOptions.ratioOfCanvasRange * (this._businessRange.interval || Math.abs(this._canvasOptions.rangeMax - this._canvasOptions.rangeMin)));
     },
@@ -95,7 +95,7 @@ module.exports = {
         return true;
     },
 
-    parse: function(value) {
+    _parse: function(value) {
         return this._businessRange.dataType === "datetime" ? (isNumber(value) ? new Date(value) : value) : Number(value);
     },
 

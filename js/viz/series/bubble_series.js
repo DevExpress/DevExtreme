@@ -54,14 +54,24 @@ exports.chart.bubble = _extend({}, scatterSeries, {
         return pointData;
     },
 
-    _fusionPoints: function(fusionPoints, tick) {
-        var calcMedianValue = scatterSeries._calcMedianValue;
-        return {
-            size: calcMedianValue.call(this, fusionPoints, "size"),
-            value: calcMedianValue.call(this, fusionPoints, "value"),
-            argument: tick,
-            tag: null
-        };
+    _aggregators: {
+        avg: function(aggregationInfo, series) {
+            var result = {},
+                valueField = series.getValueFields()[0],
+                sizeField = series.getSizeField(),
+                aggregate = aggregationInfo.data.reduce(function(result, item) {
+                    result[0] += item[valueField];
+                    result[1] += item[sizeField];
+                    result[2]++;
+                    return result;
+                }, [0, 0, 0]);
+
+            result[valueField] = aggregate[0] / aggregate[2];
+            result[sizeField] = aggregate[1] / aggregate[2];
+            result[series.getArgumentField()] = aggregationInfo.intervalStart;
+
+            return result;
+        }
     },
 
     getValueFields: function() {
@@ -80,19 +90,6 @@ exports.chart.bubble = _extend({}, scatterSeries, {
         options.valueField = that.getValueFields()[0] + name;
         options.sizeField = that.getSizeField() + name;
         options.tagField = that.getTagField() + name;
-    },
-
-    _clearingAnimation: function(drawComplete) {
-        var that = this,
-            partitionDuration = 0.5,
-            lastPointIndex = that._drawnPoints.length - 1,
-            labelsGroup = that._labelsGroup;
-
-        labelsGroup && labelsGroup.animate({ opacity: 0.001 }, { duration: that._defaultDuration, partitionDuration: partitionDuration }, function() {
-            _each(that._drawnPoints || [], function(i, p) {
-                p.animate(i === lastPointIndex ? drawComplete : undefined, { r: 0 }, partitionDuration);
-            });
-        });
     },
 
     _animate: function() {

@@ -56,7 +56,7 @@ QUnit.module("Synchronize columns", {
 });
 
 QUnit.test("Synchronization widths of columns when 'columnAutoWidth' option is enabled", function(assert) {
-    //arrange
+    // arrange
     var done = assert.async(),
         $cellElement,
         realWidth = 0,
@@ -78,14 +78,14 @@ QUnit.test("Synchronization widths of columns when 'columnAutoWidth' option is e
         }, { columnAutoWidth: true }),
         $testElement = $("<div />").width(350).appendTo($("#treeList"));
 
-    //act
+    // act
     gridView.render($testElement);
     columnsController.columnsChanged.fire({
         changeTypes: { columns: true, length: 1 },
         optionNames: { visibleWidth: true, length: 1 }
     });
 
-    //assert
+    // assert
     // wait for a font to load
     setTimeout(function() {
         $cellElement = $testElement.find(".dx-treelist-rowsview").find("tbody > tr").first().children().first();
