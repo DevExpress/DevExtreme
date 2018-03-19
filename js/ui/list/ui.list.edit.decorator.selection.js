@@ -95,9 +95,20 @@ registerDecorator(
             }
         },
 
-        moveFocusFromList: function(itemIndex) {
-            if(this._$selectAll && (itemIndex === 0 || itemIndex === this._list._getLastItemIndex())) {
-                this._selectAllCheckBox.focus();
+        handleKeyboardEvents: function(itemIndex, moveFocus) {
+            if(this._$selectAll && moveFocus && (itemIndex === 0 || itemIndex === this._list._getLastItemIndex())) {
+                this._list.option("focusedElement", undefined);
+                this._selectAllCheckBox.$element().addClass("dx-state-focused");
+                return true;
+            } else {
+                this._selectAllCheckBox.$element().removeClass("dx-state-focused");
+                return false;
+            }
+        },
+
+        handleEnterPressing: function() {
+            if(this._selectAllCheckBox.$element().hasClass("dx-state-focused")) {
+                this._selectAllCheckBox.option("value", !this._selectAllCheckBox.option("value"));
                 return true;
             }
         },
@@ -114,18 +125,6 @@ registerDecorator(
                 .appendTo($selectAll);
 
             this._list.itemsContainer().prepend($selectAll);
-
-            this._selectAllCheckBox.registerKeyHandler("upArrow", (function() {
-                var index = this._list._getLastItemIndex();
-
-                this._list.focusListItem(index);
-            }).bind(this));
-
-            this._selectAllCheckBox.registerKeyHandler("downArrow", (function() {
-                var index = 0;
-
-                this._list.focusListItem(index);
-            }).bind(this));
 
             this._updateSelectAllState();
             this._attachSelectAllHandler();
