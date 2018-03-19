@@ -2415,18 +2415,15 @@ QUnit.test("focusing on selectAll checkbox after down/up pressing", function(ass
     this.clock.tick();
     assert.ok($selectAllCheckBox.hasClass("dx-state-focused"), "selectAll checkbox is focused");
 
-    keyboard = keyboardMock($selectAllCheckBox);
     keyboard.keyDown("up");
     this.clock.tick();
     assert.ok(!$selectAllCheckBox.hasClass("dx-state-focused"), "selectAll checkbox isn't focused");
     assert.ok($lastItem.hasClass("dx-state-focused"), "last item is focused");
 
-    keyboard = keyboardMock($element);
     keyboard.keyDown("down");
     this.clock.tick();
     assert.ok($selectAllCheckBox.hasClass("dx-state-focused"), "selectAll checkbox is focused");
 
-    keyboard = keyboardMock($selectAllCheckBox);
     keyboard.keyDown("down");
     this.clock.tick();
     assert.ok(!$selectAllCheckBox.hasClass("dx-state-focused"), "selectAll checkbox isn't focused");
