@@ -133,21 +133,6 @@ QUnit.test("Return all categories", function(assert) {
     assert.deepEqual(this.axis._majorTicks.map(value), ["cat1", "cat2", "cat3", "cat4", "cat5"]);
 });
 
-QUnit.test("Do not calculate tickInterval if ratio of (categories count) to (count by spacingFactor) less than 4", function(assert) {
-    this.createAxis();
-    this.updateOptions({
-        argumentType: "string",
-        type: "discrete"
-    });
-
-    this.axis.setBusinessRange({ categories: getArray(79, 1).map(function(_, i) { return i; }), addRange: function() { } });
-
-    // act
-    this.axis.createTicks(canvas(1000));
-
-    assert.deepEqual(this.axis._tickInterval, 1);
-});
-
 QUnit.test("Calculate tickInterval if ratio of (categories count) to (count by spacingFactor) more than 4", function(assert) {
     this.createAxis();
     this.updateOptions({
