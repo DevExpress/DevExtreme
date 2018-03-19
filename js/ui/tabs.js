@@ -24,6 +24,8 @@ var TABS_CLASS = "dx-tabs",
     TABS_SCROLLABLE_CLASS = "dx-tabs-scrollable",
     TABS_NAV_BUTTONS_CLASS = "dx-tabs-nav-buttons",
 
+    OVERFLOW_HIDDEN_CLASS = "dx-overflow-hidden",
+
     TABS_ITEM_CLASS = "dx-tab",
     TABS_ITEM_SELECTED_CLASS = "dx-tab-selected",
 
@@ -255,6 +257,8 @@ var Tabs = CollectionWidget.inherit({
         this.setAria("role", "tab", this.itemElements());
 
         this.option("useInkRipple") && this._renderInkRipple();
+
+        this.$element().addClass(OVERFLOW_HIDDEN_CLASS);
     },
 
     _render: function() {
@@ -265,6 +269,7 @@ var Tabs = CollectionWidget.inherit({
 
     _renderScrolling: function() {
         this.$element().removeClass(TABS_EXPANDED_CLASS);
+        this.$element().removeClass(OVERFLOW_HIDDEN_CLASS);
 
         if(this._allowScrolling()) {
             if(!this._scrollable) {
