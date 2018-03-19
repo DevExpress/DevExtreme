@@ -30,11 +30,9 @@ QUnit.testStart(function() {
 });
 
 var TABPANEL_CLASS = "dx-tabpanel",
-    MULTIVIEW_CLASS = "dx-multiview",
     TABS_CLASS = "dx-tabs",
     MULTIVIEW_ITEM_CLASS = "dx-multiview-item",
     TABS_ITEM_CLASS = "dx-tab",
-    MUTIVIEW_WRAPPER_CLASS = "dx-multiview-wrapper",
     SELECTED_ITEM_CLASS = "dx-item-selected",
     TABPANEL_CONTAINER_CLASS = "dx-tabpanel-container";
 
@@ -42,44 +40,10 @@ var toSelector = function(cssClass) {
     return "." + cssClass;
 };
 
-var nestedElementsCount = function($element, cssClass) {
-    return $element.find(toSelector(cssClass)).length;
-};
-
-
 QUnit.module("rendering", {
     beforeEach: function() {
         this.$tabPanel = $("#tabPanel").dxTabPanel();
     }
-});
-
-QUnit.test("rendering widget test", function(assert) {
-    assert.expect(1);
-    assert.ok(this.$tabPanel.hasClass(TABPANEL_CLASS), "widget class added");
-});
-
-QUnit.test("rendering tabs widget test", function(assert) {
-    assert.expect(1);
-    assert.ok(this.$tabPanel.find("." + TABS_CLASS), "tabs widget added");
-});
-
-QUnit.test("rendering multiview widget test", function(assert) {
-    assert.expect(1);
-    assert.ok(this.$tabPanel.hasClass(MULTIVIEW_CLASS), "multiview widget added");
-});
-
-QUnit.test("count of nested widget elements test", function(assert) {
-    assert.expect(1);
-
-    var items = [{ text: "user", icon: "user", title: "Personal Data", firstName: "John", lastName: "Smith" },
-                    { text: "comment", icon: "comment", title: "Contacts", phone: "(555)555-5555", email: "John.Smith@example.com" }];
-
-    this.$tabPanel.dxTabPanel("instance").option("dataSource", items);
-
-    var tabsCount = nestedElementsCount(this.$tabPanel.find("." + TABS_CLASS), TABS_ITEM_CLASS);
-    var multiViewItemsCount = nestedElementsCount(this.$tabPanel.find("." + MUTIVIEW_WRAPPER_CLASS), MULTIVIEW_ITEM_CLASS);
-
-    assert.equal(tabsCount, multiViewItemsCount, "tab widget items count and multiview widget items count is equal");
 });
 
 QUnit.test("container should consider tabs height", function(assert) {
@@ -214,43 +178,6 @@ QUnit.test("items option test", function(assert) {
     assert.deepEqual(this.tabWidgetInstance.option("items"), [], "option <items> of nested tabs widget successfully changed");
 });
 
-QUnit.test("items option test - changing a single item at runtime", function(assert) {
-    var items = [
-        { text: "Greg", title: "Name" }
-    ];
-
-    var $tabPanel = $("<div>").appendTo("#qunit-fixture");
-    var tabPanel = $tabPanel.dxTabPanel({
-        items: items
-    }).dxTabPanel("instance");
-
-    tabPanel.option("items[0].title", "test");
-
-    assert.equal($tabPanel.find(toSelector(TABS_ITEM_CLASS)).eq(0).text(),
-        "test", "option <items> of nested tabs widget successfully changed - tabs were rerendered");
-});
-
-QUnit.test("itemTitleTemplate options test", function(assert) {
-    assert.expect(2);
-
-    var $tabPanel = $("#tabPanel").dxTabPanel({
-        items: this.items,
-        itemTitleTemplate: $("<span>Template</span>")
-    });
-    var tabPanelInstance = $tabPanel.dxTabPanel("instance");
-    var tabWidgetInstance = $tabPanel.find(toSelector(TABS_CLASS)).dxTabs("instance");
-
-    assert.deepEqual(this.tabWidgetInstance.itemElements().eq(0).text(),
-        "Template",
-        "option <itemTitleTemplate> successfully passed to nested tabs widget");
-
-    tabPanelInstance.option("itemTitleTemplate", $("<span>Changed template</span>"));
-
-    assert.deepEqual(tabWidgetInstance.itemElements().eq(0).text(),
-        "Changed template",
-        "option <itemTitleTemplate> of nested tabs widget successfully changed");
-});
-
 QUnit.test("itemHoldTimeout option test", function(assert) {
     assert.expect(2);
 
@@ -288,16 +215,6 @@ QUnit.test("hoverStateEnabled option", function(assert) {
 QUnit.test("loop option (T318329)", function(assert) {
     this.tabPanelInstance.option("loop", true);
     assert.ok(this.tabWidgetInstance.option("loopItemFocus"), "option has been passed to tabs");
-});
-
-QUnit.test("disabled item should be rendered correctly", function(assert) {
-    this.tabPanelInstance.option("items[1].disabled", true);
-
-    var $disabledItem = this.tabPanelInstance.itemElements().eq(1),
-        $tabs = this.$tabPanel.find("." + TABS_ITEM_CLASS);
-
-    assert.ok($disabledItem.hasClass("dx-state-disabled"), "Item is disabled");
-    assert.notEqual($tabs.length, 0, "Tabs are rendered");
 });
 
 QUnit.module("action handlers", {
@@ -596,21 +513,6 @@ QUnit.testInActiveWindow("tabs focusedElement lose focused class", function(asse
 });
 
 QUnit.module("aria accessibility");
-
-QUnit.test("aria role", function(assert) {
-    var $element = $("#tabPanel").dxTabPanel();
-    assert.equal($element.attr("role"), "tabpanel");
-});
-
-QUnit.test("tabpanel should NOT have aria-activedescendant", function(assert) {
-    var $element = $("#tabPanel").dxTabPanel({ items: [1, 2] }),
-        instance = $element.dxTabPanel("instance");
-
-    assert.equal($element.attr("aria-activedescendant"), undefined, "aria-activedescendant does not exist");
-
-    instance.option("focusedElement", $element.find(".dx-item:eq(1)"));
-    assert.equal($element.attr("aria-activedescendant"), undefined, "aria-activedescendant does not exist after selection update");
-});
 
 QUnit.test("active tab should have aria-controls attribute pointing to active multiview item", function(assert) {
     var $element = $("#tabPanel").dxTabPanel({
