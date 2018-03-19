@@ -138,86 +138,23 @@ QUnit.module("Sampler points", {
     }
 });
 
-QUnit.test("aggregationInterval from argAxis", function(assert) {
+QUnit.test("getTicks calling", function(assert) {
     var points = [
             { arg: 1, val: 1 },
             { arg: 2, val: 2 },
-            { arg: 4, val: 3 },
-            { arg: 6, val: 4 },
-            { arg: 8, val: 5 },
-            { arg: 9, val: 6 },
-            { arg: 10, val: 7 },
-            { arg: 12, val: 8 },
-            { arg: 14, val: 9 },
-            { arg: 15, val: 10 }
-        ],
-        fusionPoints = [
-            { arg: 1, val: 2 },
-            { arg: 4, val: 3 },
-            { arg: 6, val: 4 },
-            { arg: 8, val: 6 },
-            { arg: 10, val: 7 },
-            { arg: 12, val: 8 },
-            { arg: 14, val: 9 }
-        ];
-
-    this.series.updateData(points);
-    this.argumentAxis.getOptions = function() {
-        return {
-            aggregationInterval: 2
-        };
-    };
-    this.setup(1, 10, 10);
-
-    // Act
-    this.series.createPoints();
-
-    // Assert
-    checkResult(assert, this.series.getPoints(), fusionPoints, 7);
-});
-
-QUnit.test("aggregationGroupWidth from axis options", function(assert) {
-    var points = [
-        { arg: 1, val: 1 },
-        { arg: 2, val: 2 }
+            { arg: 4, val: 3 }
     ];
 
     this.series.updateData(points);
-    this.argumentAxis.getOptions = function() {
-        return {
-            aggregationGroupWidth: 2
-        };
-    };
-    this.argumentAxis.getTicks = sinon.stub().returns({});
+
+    this.argumentAxis.getTicks = sinon.spy(function() { return {}; });
     this.setup(1, 10, 10);
 
     // Act
     this.series.createPoints();
 
     // Assert
-    assert.strictEqual(this.argumentAxis.getTicks.lastCall.args[1], 2);
-});
-
-QUnit.test("aggregationGroupWidth from axis marginOptions options", function(assert) {
-    var points = [
-        { arg: 1, val: 1 },
-        { arg: 2, val: 2 }
-    ];
-
-    this.series.updateData(points);
-    this.argumentAxis.getOptions = function() {
-        return {
-            aggregationGroupWidth: 2
-        };
-    };
-    this.argumentAxis.getTicks = sinon.stub().returns({});
-    this.setup(1, 10, 10);
-
-    // Act
-    this.series.createPoints();
-
-    // Assert
-    assert.strictEqual(this.argumentAxis.getTicks.lastCall.args[1], 2);
+    assert.strictEqual(this.argumentAxis.getTicks.callCount, 1);
 });
 
 QUnit.test("T382881, Series is not sorted", function(assert) {

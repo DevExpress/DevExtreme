@@ -1142,16 +1142,18 @@ Axis.prototype = {
         return ticks;
     },
 
-    getTicks: function(tickInterval, divisionFactor) {
+    getTicks: function() {
         var options = this._options,
             customTicks = options.customTicks,
             customMinorTicks = options.customMinorTicks,
+            tickInterval = options.aggregationInterval,
+            marginOptions = this._marginOptions,
             viewPort = this.getTranslator().getBusinessRange();
 
-        return getTickGenerator(extend({}, {
+        return getTickGenerator(extend({}, options, {
             endOnTick: true,
-            axisDivisionFactor: divisionFactor
-        }, options), _noop, false)(
+            axisDivisionFactor: options.aggregationGroupWidth || marginOptions && marginOptions.size || 2
+        }), _noop, false)(
             {
                 min: viewPort.minVisible,
                 max: viewPort.maxVisible,
@@ -1162,7 +1164,7 @@ Axis.prototype = {
             },
             this._getScreenDelta(),
             tickInterval,
-            tickInterval !== null,
+            isDefined(tickInterval),
             {
                 majors: customTicks,
                 minors: customMinorTicks
@@ -1186,7 +1188,7 @@ Axis.prototype = {
 
         that.updateCanvas(canvas);
 
-        that._estimatedTickInterval = that._getTicks(new rangeModule.Range(this._seriesData), _noop, true).tickInterval;
+        that._estimatedTickInterval = that._getTicks(new rangeModule.Range(this._seriesData), _noop, true).tickInterval; // tickInterval calculation
         range = that._getViewportRange();
 
         ticks = that._createTicksAndLabelFormat(range);

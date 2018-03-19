@@ -918,13 +918,15 @@ QUnit.test("Add extra tick (logarithmic, numeric) for the bar point is equal to 
     assert.deepEqual(this.axis._tickInterval, 1);
 });
 
-QUnit.test("getTicks method", function(assert) {
+QUnit.test("getTicks with tickInterval", function(assert) {
     var ticks;
 
     this.createAxis();
+
     this.updateOptions({
         argumentType: "numeric",
-        type: "continuous"
+        type: "continuous",
+        aggregationInterval: 2
     });
 
     this.axis.setBusinessRange({ minVisible: 1, maxVisible: 10, addRange: function() { } });
@@ -932,25 +934,6 @@ QUnit.test("getTicks method", function(assert) {
     // act
 
     ticks = this.axis.getTicks();
-
-    assert.strictEqual(this.axis._tickInterval, ticks.tickInterval);
-    assert.deepEqual(this.axis._majorTicks.map(value), ticks.ticks);
-});
-
-QUnit.test("getTicks with tickInterval", function(assert) {
-    var ticks;
-
-    this.createAxis();
-    this.updateOptions({
-        argumentType: "numeric",
-        type: "continuous"
-    });
-
-    this.axis.setBusinessRange({ minVisible: 1, maxVisible: 10, addRange: function() { } });
-    this.axis.createTicks(canvas(1000));
-    // act
-
-    ticks = this.axis.getTicks(2);
 
     assert.strictEqual(ticks.tickInterval, 2);
     assert.deepEqual(ticks.ticks, [0, 2, 4, 6, 8, 10]);
@@ -962,19 +945,58 @@ QUnit.test("getTicks. Ticks was generated with endOnTick", function(assert) {
     this.createAxis();
     this.updateOptions({
         argumentType: "numeric",
-        type: "continuous"
+        type: "continuous",
+        aggregationInterval: 5
     });
 
     this.axis.setBusinessRange({ minVisible: 4, maxVisible: 12, addRange: function() { } });
     this.axis.createTicks(canvas(170));
     // act
 
-    ticks = this.axis.getTicks(5);
+    ticks = this.axis.getTicks();
 
     assert.deepEqual(ticks.ticks, [0, 5, 10, 15]);
 });
 
 QUnit.test("getTicks. With divisionFactor", function(assert) {
+    var ticks;
+
+    this.createAxis();
+    this.updateOptions({
+        argumentType: "numeric",
+        type: "continuous",
+        aggregationGroupWidth: 20
+    });
+
+    this.axis.setBusinessRange({ minVisible: 1, maxVisible: 10, addRange: function() { } });
+    this.axis.createTicks(canvas(170));
+    // act
+
+    ticks = this.axis.getTicks();
+
+    assert.deepEqual(ticks.ticks, [0, 2, 4, 6, 8, 10]);
+});
+
+QUnit.test("getTicks. Without divisionFactor", function(assert) {
+    var ticks;
+
+    this.createAxis();
+    this.updateOptions({
+        argumentType: "numeric",
+        type: "continuous"
+    });
+
+    this.axis.setBusinessRange({ minVisible: 1, maxVisible: 10, addRange: function() { } });
+    this.axis.createTicks(canvas(170));
+    this.axis.setMarginOptions({ size: 20 });
+    // act
+
+    ticks = this.axis.getTicks();
+
+    assert.deepEqual(ticks.ticks, [0, 2, 4, 6, 8, 10]);
+});
+
+QUnit.test("getTicks. Default divisionFactor", function(assert) {
     var ticks;
 
     this.createAxis();
@@ -987,9 +1009,12 @@ QUnit.test("getTicks. With divisionFactor", function(assert) {
     this.axis.createTicks(canvas(170));
     // act
 
-    ticks = this.axis.getTicks(undefined, 20);
+    ticks = this.axis.getTicks();
 
-    assert.deepEqual(ticks.ticks, [0, 2, 4, 6, 8, 10]);
+    assert.strictEqual(ticks.ticks.length, 46);
+    assert.strictEqual(ticks.tickInterval, 0.2);
+    assert.strictEqual(ticks.ticks[0], 1);
+    assert.strictEqual(ticks.ticks[45], 10);
 });
 
 QUnit.module("Numeric. Minor ticks", environment);

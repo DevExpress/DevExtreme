@@ -477,10 +477,7 @@ Series.prototype = {
             isDiscrete = that.argumentAxisType === DISCRETE || that.valueAxisType === DISCRETE,
             businessRange = argTranslator.getBusinessRange(),
             minMaxDefined = _isDefined(min) && _isDefined(max),
-            aggregationInfo,
-            tickInterval,
-            argumentAxisOptions = argumentAxis.getOptions(),
-            aggregationInterval = argumentAxisOptions.aggregationInterval;// move to axis
+            tickInterval;
 
         if(pointsLength && pointsLength > 1) {
             count = argTranslator.canvasLength / sizePoint;
@@ -502,10 +499,7 @@ Series.prototype = {
                 tickInterval = (minMaxDefined ? (max - min) : (businessRange.maxVisible - businessRange.minVisible)) / count;
             }
 
-            aggregationInterval = _isDefined(aggregationInterval) ? aggregationInterval : null;
-            aggregationInfo = aggregationInterval ? { tickInterval: aggregationInterval } : argumentAxis.getTicks(aggregationInterval, argumentAxisOptions.aggregationGroupWidth);
-
-            return that._resample(aggregationInfo, min - tickInterval, max + tickInterval, minMaxDefined, data);
+            return that._resample(argumentAxis.getTicks(), min - tickInterval, max + tickInterval, minMaxDefined, data);
         }
 
         return [];
