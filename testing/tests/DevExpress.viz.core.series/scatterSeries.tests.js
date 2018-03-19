@@ -2854,7 +2854,8 @@ QUnit.test("Return point size", function(assert) {
 
     assert.deepEqual(series.getMarginOptions(), {
         size: 6,
-        percentStick: false
+        percentStick: false,
+        sourcePointSize: 6
     });
 });
 
@@ -2869,7 +2870,8 @@ QUnit.test("Point is invisible - return 0", function(assert) {
 
     assert.deepEqual(series.getMarginOptions(), {
         size: 0,
-        percentStick: false
+        percentStick: false,
+        sourcePointSize: 0
     });
 });
 
@@ -2900,7 +2902,8 @@ QUnit.test("Add max border width", function(assert) {
 
     assert.deepEqual(series.getMarginOptions(), {
         size: 30,
-        percentStick: false
+        percentStick: false,
+        sourcePointSize: 6
     });
 });
 
@@ -2915,6 +2918,71 @@ QUnit.test("Polar point. getMarginOptions returns point size", function(assert) 
     });
     assert.deepEqual(series.getMarginOptions(), {
         size: 6,
-        percentStick: false
+        percentStick: false,
+        sourcePointSize: 6
+    });
+});
+
+QUnit.test("getMarginOptions can returns size without borders (sourcePointSize)", function(assert) {
+    var series = createSeries({
+        type: seriesType,
+        point: {
+            visible: true,
+            size: 6,
+            border: {
+                visible: true,
+                width: 10
+            },
+            hoverStyle: {
+                border: {
+                    visible: true,
+                    width: 10
+                }
+            },
+            selectionStyle: {
+                border: {
+                    visible: true,
+                    width: 12
+                }
+            }
+        }
+    });
+
+    assert.deepEqual(series.getMarginOptions(), {
+        size: 30,
+        percentStick: false,
+        sourcePointSize: 6
+    });
+});
+
+QUnit.test("getMarginOptions returns '0' as sourcePointStyle when points are invisible", function(assert) {
+    var series = createSeries({
+        type: seriesType,
+        point: {
+            visible: false,
+            size: 6,
+            border: {
+                visible: true,
+                width: 10
+            },
+            hoverStyle: {
+                border: {
+                    visible: true,
+                    width: 10
+                }
+            },
+            selectionStyle: {
+                border: {
+                    visible: true,
+                    width: 12
+                }
+            }
+        }
+    });
+
+    assert.deepEqual(series.getMarginOptions(), {
+        size: 0,
+        percentStick: false,
+        sourcePointSize: 0
     });
 });

@@ -988,7 +988,7 @@ QUnit.test("getTicks. Without divisionFactor", function(assert) {
 
     this.axis.setBusinessRange({ minVisible: 1, maxVisible: 10, addRange: function() { } });
     this.axis.createTicks(canvas(170));
-    this.axis.setMarginOptions({ size: 20 });
+    this.axis.setMarginOptions({ sourcePointSize: 10 });
     // act
 
     ticks = this.axis.getTicks();
