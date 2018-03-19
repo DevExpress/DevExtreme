@@ -791,3 +791,55 @@ QUnit.test("After zooming, value axis is discrete", function(assert) {
     this.series.createPoints();
     checkResult(assert, this.series.getPoints(), points, 10);
 });
+
+QUnit.test("Custom aggregation", function(assert) {
+    const calculate = sinon.stub().returns({
+        arg: 1,
+        val: 2
+    });
+
+    this.series.updateOptions($.extend(this.series.getOptions(), {
+        aggregation: {
+            method: "custom",
+            calculate,
+            enabled: true
+        }
+    }));
+    const options = {
+        argument: {
+            startValue: 0,
+            endValue: 11,
+            interval: 1
+        },
+        values: [{
+            startValue: 100,
+            interval: 100
+        }]
+    };
+    const data = this.createFusionPoints(options);
+
+    this.series.updateDataType({
+        valueAxisType: "discrete"
+    });
+    this.series.updateData(data);
+    this.setup(0, 19, undefined, 10);
+    this.series.createPoints();
+
+    const point = this.series.getAllPoints()[0];
+    assert.equal(point.value, 2);
+    assert.equal(point.argument, 1);
+    assert.equal(calculate.callCount, 4);
+    assert.deepEqual(calculate.firstCall.args[0], {
+        aggregationInterval: 3,
+        data: [data[0], data[1], data[2]],
+        intervalEnd: undefined,
+        intervalStart: undefined
+    });
+
+    assert.deepEqual(calculate.lastCall.args[0], {
+        aggregationInterval: 3,
+        data: [data[9], data[10]],
+        intervalEnd: undefined,
+        intervalStart: undefined
+    });
+});

@@ -840,20 +840,24 @@ Series.prototype = {
         return _extend(false, {}, this._getOptionsForPoint(), { hoverStyle: {}, selectionStyle: {} });
     },
 
-    _getAggregationMethod: function() {
-        var options = this.getOptions().aggregation,
-            method = _normalizeEnum(options.method),
-            aggregator = method !== "custom" ? this._aggregators[method] : options.calculate;
+    _getAggregationMethod: function(isDiscrete) {
+        const options = this.getOptions().aggregation;
+        const method = _normalizeEnum(options.method);
+        const customAggregator = method === "custom" && options.calculate;
 
-        if(!aggregator) {
-            return this._aggregators[this._defaultAggregator];
+        let aggregator;
+
+        if(isDiscrete) {
+            aggregator = ({ data }) => data[0];
+        } else {
+            aggregator = this._aggregators[method] || this._aggregators[this._defaultAggregator];
         }
 
-        return aggregator;
+        return customAggregator || aggregator;
     },
 
-    _fusionData(data, { intervalStart, intervalEnd, aggregationInterval }) {
-        var aggregationMethod = this._getAggregationMethod(),
+    _fusionData(data, { intervalStart, intervalEnd, aggregationInterval }, isDiscrete) {
+        var aggregationMethod = this._getAggregationMethod(isDiscrete),
             underlyingData = data.map(item => item.data),
             aggregationInfo = {
                 data: underlyingData,
@@ -875,15 +879,25 @@ Series.prototype = {
     _resample: function({ tickInterval, ticks }, data) {
         var that = this,
             aggregatedData = [],
+            isDiscrete = that.argumentAxisType === DISCRETE || that.valueAxisType === DISCRETE,
             dataIndex = 0;
 
-        if(that.argumentAxisType === DISCRETE || that.valueAxisType === DISCRETE) {
-            return data.reduce((result, dataItem, index) => {
-                if(index % tickInterval === 0) {
-                    result.push(dataItem);
+        if(isDiscrete) {
+            return data.reduce((result, dataItem, index, data) => {
+                result[1].push(dataItem);
+                if(index === data.length - 1 || (index + 1) % tickInterval === 0) {
+                    const dataInInterval = result[1];
+                    const aggregatedDataItem = this._fusionData(dataInInterval, {
+                        aggregationInterval: tickInterval
+                    }, isDiscrete);
+                    if(aggregatedDataItem) {
+                        result[0].push(aggregatedDataItem);
+                    }
+                    result[1] = [];
                 }
+
                 return result;
-            }, []);
+            }, [[], []])[0];
         }
 
         for(let i = 1; i < ticks.length; i++) {
