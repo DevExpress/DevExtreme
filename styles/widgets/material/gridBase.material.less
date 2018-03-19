@@ -14,7 +14,7 @@
 
     @MATERIAL_GRID_BASE_TEXTEDITOR_INPUT_PADDING: 32px;
     @MATERIAL_GRID_BASE_HEADER_PANEL_MARGIN: 14px 0;
-    @MATERIAL_GRID_BASE_MENU_ITEM_PADDING: 6px 5px 7px;
+    @MATERIAL_GRID_BASE_MENU_ITEM_PADDING: 12px 4px;
     @MATERIAL_GRID_BASE_COLUMN_CHOOSER_PADDING: 20px;
     @MATERIAL_GRID_BASE_COLUMN_CHOOSER_PADDINGS: 0px @MATERIAL_GRID_BASE_COLUMN_CHOOSER_PADDING @MATERIAL_GRID_BASE_COLUMN_CHOOSER_PADDING @MATERIAL_GRID_BASE_COLUMN_CHOOSER_PADDING;
     @MATERIAL_GRID_BASE_COLUMN_CHOOSER_ITEM_MARGIN: 10px;
@@ -61,6 +61,46 @@
     }
 
     .dx-@{widgetName}, .dx-@{widgetName}-container {
+
+        .dx-menu {
+            background-color: transparent;
+            height: 100%;
+
+            .dx-menu-item {
+                .dx-menu-item-content {
+                    padding: @MATERIAL_GRID_BASE_MENU_ITEM_PADDING;
+    
+                    .dx-icon {
+                        .dx-icon-sizing(@MATERIAL_GRID_BASE_FILTER_ICON_SIZE);
+                        margin: 0px 3px;
+                    }
+                }
+            }
+        }
+
+        &.dx-filter-menu {
+            .dx-menu-item-content {
+                .dx-icon {
+                    .dx-icon-sizing(@MATERIAL_GRID_BASE_FILTER_ICON_SIZE - 4);
+                    &.dx-icon-filter-operation-default {
+                        margin-top: 2px;
+                    }
+                }
+            }
+        }
+    
+        .dx-editor-with-menu {
+            height: @MATERIAL_GRID_BASE_CELL_HEIGHT;
+            .dx-menu-item-content {
+                .dx-icon {
+                    .dx-icon-sizing(@MATERIAL_GRID_BASE_FILTER_ICON_SIZE - 4);
+                    &.dx-icon-filter-operation-default {
+                        margin-top: 2px;
+                    }
+                }
+            }
+        }
+
         .dx-menu-item-has-icon {
             .dx-icon {
                 color: ~"@{@{widgetName}-menu-icon-color}";
@@ -71,12 +111,12 @@
             .dx-menu-items-container {
                 .dx-icon-context-menu-sort-asc {
                     .dx-icon-sortuptext;
-                    .dx-icon-sizing(@MATERIAL_GRID_BASE_HEADER_ICON_SIZE);
+                    .dx-icon-sizing(@MATERIAL_GRID_BASE_FILTER_ICON_SIZE - 4);
                 }
 
                 .dx-icon-context-menu-sort-desc {
                     .dx-icon-sortdowntext;
-                    .dx-icon-sizing(@MATERIAL_GRID_BASE_HEADER_ICON_SIZE);
+                    .dx-icon-sizing(@MATERIAL_GRID_BASE_FILTER_ICON_SIZE - 4);
                 }
             }
         }
@@ -144,22 +184,6 @@
 
     .dx-@{widgetName} {
         line-height: inherit;
-
-        .dx-menu {
-            background-color: transparent;
-            height: 100%;
-
-            .dx-menu-item {
-                .dx-menu-item-content {
-                    padding: @MATERIAL_GRID_BASE_MENU_ITEM_PADDING;
-
-                    .dx-icon {
-                        .dx-icon-sizing(@MATERIAL_GRID_BASE_FILTER_ICON_SIZE);
-                        margin: 0px 3px;
-                    }
-                }
-            }
-        }
 
         .dx-row-alt {
             & > td {
@@ -534,47 +558,25 @@
     .dx-@{widgetName}-filter-row {
         background-color: ~"@{@{widgetName}-filter-row-background-color}";
         .dx-menu {
+            left: -(@MATERIAL_GRID_BASE_CELL_HORIZONTAL_PADDING - 2);
+            .dx-menu-horizontal {
+                .dx-menu-items-container {
+                    height: 100%;
+                    top: 2px;
+                    position: absolute;
+
+                    .dx-menu-item-wrapper {
+                        height: 100%;
+                    }
+                }
+            }
             .dx-overlay-content {
                 color: @menu-color;
             }
         }
 
-        .dx-menu-item {
-            &.dx-state-focused {
-                background-color: transparent;
-
-                &:after {
-                    border: 2px solid ~"@{@{widgetName}-focused-border-color}";
-                }
-
-                &.dx-menu-item-expanded {
-                    background-color: ~"@{@{widgetName}-base-background-color}";
-
-                    &:after {
-                        border-color: transparent;
-                    }
-                }
-            }
-        }
-
-        .dx-menu-item-has-submenu {
-            &.dx-state-hover {
-                background-color: transparent;
-            }
-
-            &.dx-menu-item-expanded.dx-state-hover {
-                background-color: ~"@{@{widgetName}-editor-bg}";
-            }
-        }
-
         .dx-filter-modified {
             background-color: ~"@{@{widgetName}-cell-modified-border-color}";
-        }
-
-        .dx-menu-item-content {
-            .dx-icon {
-                color: ~"@{@{widgetName}-menu-icon-color}";
-            }
         }
 
         td .dx-editor-container .dx-filter-range-content {
@@ -601,29 +603,6 @@
                 .dx-texteditor-input {
                     font-size: @MATERIAL_GRID_BASE_CELL_FONT_SIZE;
                     height: @MATERIAL_GRID_BASE_CELL_HEIGHT + 1;
-                }
-            }
-        }
-    }
-
-    &.dx-filter-menu {
-        .dx-menu-item-content {
-            .dx-icon {
-                .dx-icon-sizing(@MATERIAL_GRID_BASE_FILTER_ICON_SIZE);
-                &.dx-icon-filter-operation-default {
-                    margin-top: 2px;
-                }
-            }
-        }
-    }
-
-    .dx-editor-with-menu {
-        height: @MATERIAL_GRID_BASE_CELL_HEIGHT;
-        .dx-menu-item-content {
-            .dx-icon {
-                .dx-icon-sizing(@MATERIAL_GRID_BASE_FILTER_ICON_SIZE);
-                &.dx-icon-filter-operation-default {
-                    margin-top: 2px;
                 }
             }
         }
@@ -684,10 +663,17 @@
     .dx-@{widgetName}-export-button {
         .dx-icon-export-to {
             .dx-icon-export;
+            .dx-icon-sizing(@MATERIAL_BASE_ICON_SIZE);
         }
 
         .dx-icon-export-excel-button {
             .dx-icon-exportxlsx;
+            .dx-icon-sizing(@MATERIAL_BASE_ICON_SIZE);
+        }
+    }
+
+    .dx-datagrid-export-menu {
+        .dx-menu-item .dx-icon-exportxlsx {
             .dx-icon-sizing(@MATERIAL_BASE_ICON_SIZE);
         }
     }
