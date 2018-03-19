@@ -102,6 +102,7 @@ registerDecorator(
                 return true;
             } else {
                 this._selectAllCheckBox.$element().removeClass("dx-state-focused");
+                this._list.focusListItem(itemIndex);
                 return false;
             }
         },
