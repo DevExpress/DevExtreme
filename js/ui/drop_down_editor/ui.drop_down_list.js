@@ -84,6 +84,7 @@ var DropDownList = DropDownEditor.inherit({
             * @name dxDropDownListOptions_displayValue
             * @publicName displayValue
             * @type string
+            * @readonly
             * @default undefined
             * @ref
             */
