@@ -16,6 +16,7 @@ var $ = require("jquery"),
     Button = require("ui/button"),
     CheckBox = require("ui/check_box"),
     ColorBox = require("ui/color_box"),
+    DataGrid = require("ui/data_grid"),
     DateBox = require("ui/date_box"),
     DateView = require("ui/date_box/ui.date_view"),
     DateViewRoller = require("ui/date_box/ui.date_view_roller"),
@@ -1311,5 +1312,53 @@ testComponentDefaults(Form,
     },
     function() {
         themes.current(this.originalCurrentTheme);
+    }
+);
+
+testComponentDefaults(DataGrid,
+    {},
+    {
+        showRowLines: true,
+        showColumnLines: false
+    },
+    function() {
+        this.originalCurrentTheme = themes.current();
+        themes.current("material.light");
+    },
+    function() {
+        themes.current(this.originalCurrentTheme);
+    }
+);
+
+testComponentDefaults(DataGrid,
+    { platform: devices.current().platform },
+    {
+        showRowLines: false
+    },
+    function() {
+        this.originalRealDevice = devices.real();
+        devices.real({
+            platform: "android"
+        });
+    },
+    function() {
+        themes.current(this.originalCurrentTheme);
+    }
+);
+
+testComponentDefaults(DataGrid,
+    {},
+    {
+        grouping: { expandMode: "rowClick" },
+        showRowLines: true
+    },
+    function() {
+        this.originalRealDevice = devices.real();
+        devices.real({
+            platform: "ios"
+        });
+    },
+    function() {
+        devices.real(this.originalRealDevice);
     }
 );
