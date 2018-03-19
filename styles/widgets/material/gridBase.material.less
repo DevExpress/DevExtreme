@@ -717,6 +717,10 @@
         }
 
         .dx-data-row {
+            &:not(.dx-edit-row) .dx-cell-modified {
+                background-color: ~"@{@{widgetName}-cell-modified-border-color}";
+            }
+
             .dx-validator.dx-@{widgetName}-invalid {
                 background-color: ~"@{@{widgetName}-row-invalid-faded-border-color}";
 
@@ -735,10 +739,6 @@
                     background-color: @VALIDATION_MESSAGE_BACKGROUND_COLOR;
                     color: @VALIDATION_MESSAGE_COLOR;
                 }
-            }
-
-            &:not(.dx-edit-row) .dx-cell-modified {
-                background-color: ~"@{@{widgetName}-cell-modified-border-color}";
             }
         }
 
