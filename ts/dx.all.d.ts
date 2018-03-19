@@ -1976,6 +1976,8 @@ declare module DevExpress.ui {
         onSelectionChanged?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, currentSelectedRowKeys?: Array<any>, currentDeselectedRowKeys?: Array<any>, selectedRowKeys?: Array<any>, selectedRowsData?: Array<any> }) => any);
         /** A handler for the toolbarPreparing event. Executed before the toolbar is created. */
         onToolbarPreparing?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, toolbarOptions?: dxToolbarOptions }) => any);
+        pager?: { visible?: string | boolean, showPageSizeSelector?: boolean, allowedPageSizes?: Array<number> | string, showNavigationButtons?: boolean, showInfo?: boolean, infoText?: string };
+        paging?: any;
         /** Specifies whether rows should be shaded differently. */
         rowAlternationEnabled?: boolean;
         /** Overridden. A configuration object specifying scrolling options. */
@@ -2044,6 +2046,10 @@ declare module DevExpress.ui {
         undeleteRow?: string;
         /** Specifies text for a hint appearing when a user pauses on the button that cancels changes in a cell. Applies only if editing.mode is "cell" and data validation is enabled. */
         validationCancelChanges?: string;
+    }
+    export interface GridBasePaging {
+        pageIndex?: number;
+        pageSize?: number;
     }
     /** Overridden. A configuration object specifying scrolling options. */
     export interface GridBaseScrolling {
@@ -2158,6 +2164,11 @@ declare module DevExpress.ui {
         isRowSelected(key: any): boolean;
         /** Gets a data object's key. */
         keyOf(obj: any): any;
+        pageCount(): number;
+        pageIndex(): number;
+        pageIndex(newIndex: number): Promise<void> & JQueryPromise<void>;
+        pageSize(): number;
+        pageSize(value: number): void;
         /** Reloads data in the widget. */
         refresh(): Promise<void> & JQueryPromise<void>;
         /** Repaints specific rows. */
@@ -2226,10 +2237,8 @@ declare module DevExpress.ui {
         onRowClick?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, data?: any, key?: any, values?: Array<any>, columns?: Array<any>, rowIndex?: number, rowType?: string, isSelected?: boolean, isExpanded?: boolean, groupIndex?: number, rowElement?: DevExpress.core.dxElement, handled?: boolean }) => any) | string;
         /** A handler for the rowPrepared event. */
         onRowPrepared?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, data?: any, key?: any, values?: Array<any>, columns?: Array<dxDataGridColumn>, rowIndex?: number, rowType?: string, groupIndex?: number, isSelected?: boolean, isExpanded?: boolean, rowElement?: DevExpress.core.dxElement }) => any);
-        /** Specifies the options of a grid pager. */
-        pager?: { visible?: string | boolean, showPageSizeSelector?: boolean, allowedPageSizes?: Array<number> | string, showNavigationButtons?: boolean, showInfo?: boolean, infoText?: string };
         /** Specifies paging options. */
-        paging?: { enabled?: boolean, pageSize?: number, pageIndex?: number };
+        paging?: dxDataGridPaging;
         /** Specifies the operations that must be performed on the server side. */
         remoteOperations?: string | boolean | { sorting?: boolean, filtering?: boolean, paging?: boolean, grouping?: boolean, groupPaging?: boolean, summary?: boolean };
         /** Specifies a custom template for rows. */
@@ -2257,6 +2266,11 @@ declare module DevExpress.ui {
         removeEnabled?: any;
         /** Contains options that specify texts for editing-related UI elements. */
         texts?: any;
+    }
+    /** Specifies paging options. */
+    export interface dxDataGridPaging extends GridBasePaging {
+        /** Specifies whether DataGrid loads data page by page or all at once. */
+        enabled?: boolean;
     }
     /** Configures scrolling. */
     export interface dxDataGridScrolling extends GridBaseScrolling {
@@ -2312,16 +2326,6 @@ declare module DevExpress.ui {
         isRowSelected(data: any): boolean;
         /** Checks whether a row with a specific key is selected. */
         isRowSelected(key: any): boolean;
-        /** Gets the total page count. */
-        pageCount(): number;
-        /** The current page index. */
-        pageIndex(): number;
-        /** Switches a grid to a specified page. */
-        pageIndex(newIndex: number): Promise<void> & JQueryPromise<void>;
-        /** Gets the current page size. */
-        pageSize(): number;
-        /** Sets the page size. */
-        pageSize(value: number): void;
         /** @deprecated Use deleteRow instead. */
         removeRow(rowIndex: number): void;
         /** Gets the total row count. */
@@ -3329,6 +3333,8 @@ declare module DevExpress.ui {
         focusStateEnabled?: boolean;
         /** A Boolean value specifying whether or not to display the widget in full-screen mode. */
         fullScreen?: boolean;
+        /** Specifies the widget's height in pixels. */
+        height?: any;
         /** A handler for the resize event. */
         onResize?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any }) => any);
         /** A handler for the resizeEnd event. */
@@ -3349,6 +3355,8 @@ declare module DevExpress.ui {
         titleTemplate?: template | ((titleElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /** Specifies items displayed on the top or bottom toolbar of the popup window. */
         toolbarItems?: Array<dxPopupToolbarItem>;
+        /** Specifies the widget's width in pixels. */
+        width?: any;
     }
     /** Configures widget visibility animations. This object contains two fields: show and hide. */
     export interface dxPopupAnimation extends dxOverlayAnimation {
@@ -3443,6 +3451,8 @@ declare module DevExpress.ui {
     export interface dxResizableOptions extends DOMComponentOptions {
         /** Specifies which borders of the widget element are used as a handle. */
         handles?: string;
+        /** Specifies the widget's height. */
+        height?: any;
         /** Specifies the upper height boundary for resizing. */
         maxHeight?: number;
         /** Specifies the upper width boundary for resizing. */
@@ -3457,6 +3467,8 @@ declare module DevExpress.ui {
         onResizeEnd?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, width?: number, height?: number }) => any);
         /** A handler for the resizeStart event. */
         onResizeStart?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, width?: number, height?: number }) => any);
+        /** Specifies the widget's width. */
+        width?: any;
     }
     /** The Resizable widget enables its content to be resizable in the UI. */
     export class dxResizable extends DOMComponent {
@@ -4057,6 +4069,7 @@ declare module DevExpress.ui {
         onRowClick?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, data?: any, key?: any, values?: Array<any>, columns?: Array<any>, rowIndex?: number, rowType?: string, isSelected?: boolean, isExpanded?: boolean, rowElement?: DevExpress.core.dxElement, handled?: boolean }) => any) | string;
         /** A handler for the rowPrepared event. Executed after the widget creates a row. */
         onRowPrepared?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, data?: any, key?: any, values?: Array<any>, columns?: Array<dxTreeListColumn>, rowIndex?: number, rowType?: string, isSelected?: boolean, isExpanded?: boolean, rowElement?: DevExpress.core.dxElement }) => any);
+        paging?: dxTreeListPaging;
         /** Specifies which data field provides parent keys. */
         parentIdExpr?: string | Function;
         /** Specifies what operations are performed on the server. */
@@ -4077,6 +4090,9 @@ declare module DevExpress.ui {
     export interface dxTreeListEditingTexts extends GridBaseEditingTexts {
         /** Specifies text for the button that adds a new nested row. Applies if the editing.mode is "batch" or "cell". */
         addRowToNode?: string;
+    }
+    export interface dxTreeListPaging extends GridBasePaging {
+        enabled?: boolean;
     }
     /** Configures scrolling. */
     export interface dxTreeListScrolling extends GridBaseScrolling {
@@ -4882,7 +4898,7 @@ declare module DevExpress.ui {
         visible?: boolean;
         /** Specifies the position of the column regarding other columns in the resulting widget. */
         visibleIndex?: number;
-        /** Specifies the column's width in pixels or percentages. Ignored if less than minWidth. */
+        /** Specifies the column's width in pixels or as a percentage. Ignored if it is less than minWidth. */
         width?: number | string;
     }
     export interface dxTreeListColumn extends GridBaseColumn {
@@ -5394,7 +5410,7 @@ declare module DevExpress.viz {
         formats?: Array<string>;
         /** Enables the printing feature in the widget. Applies only if the export.enabled option is true. */
         printingEnabled?: boolean;
-        /** Specifies the URL of the server-side proxy that streams the resulting file to the end user to enable exporting in IE9 and Safari browsers. */
+        /** Specifies the URL of the server-side proxy that streams the resulting file to the end user to enable exporting in the Safari browser. */
         proxyUrl?: string;
     }
     /** Configures the loading indicator. */
