@@ -65,16 +65,14 @@ var ListEdit = ListBase.inherit({
 
         var enter = function(e) {
             if(this._editProvider.handleEnterPressing()) {
-                return;
+                parent.enter.apply(this, arguments);
             }
-            parent.enter.apply(this, arguments);
         };
 
         var space = function(e) {
-            if(this._editProvider.handleEnterPressing()) {
-                return;
+            if(!this._editProvider.handleEnterPressing()) {
+                parent.space.apply(this, arguments);
             }
-            parent.space.apply(this, arguments);
         };
 
         return extend({}, parent, {
