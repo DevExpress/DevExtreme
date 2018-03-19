@@ -87,7 +87,6 @@ QUnit.module("Widget creation", {
 
 var optionChangeExcluded = [
     "ActionSheet",
-    "Calendar",
     "ContextMenu",
     "DataGrid",
     "DateBox",
@@ -95,7 +94,6 @@ var optionChangeExcluded = [
     "Gallery",
     "List",
     "LoadPanel",
-    "MultiView",
     "NavBar",
     "Panorama",
     "Pivot",
@@ -111,7 +109,6 @@ var optionChangeExcluded = [
     "SlideOut",
     "SlideOutView",
     "Switch",
-    "TabPanel",
     "TileView",
     "Toast",
     "Toolbar",
