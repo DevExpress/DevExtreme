@@ -101,14 +101,20 @@ var HeaderFilterController = modules.ViewController.inherit((function() {
                 item.value = path.join("/");
             }
 
-            item.text = gridCoreUtils.formatValue(displayValue, getFormatOptions(displayValue, column, currentLevel));
-
-            if(!item.text) {
-                item.text = options.headerFilterOptions.texts.emptyValue;
-            }
+            item.text = this.getHeaderItemText(displayValue, column, currentLevel, options.headerFilterOptions);
 
             delete item.key;
             return item;
+        },
+
+        getHeaderItemText: function(displayValue, column, currentLevel, headerFilterOptions) {
+            var text = gridCoreUtils.formatValue(displayValue, getFormatOptions(displayValue, column, currentLevel));
+
+            if(!text) {
+                text = headerFilterOptions.texts.emptyValue;
+            }
+
+            return text;
         },
 
         _processGroupItems: function(groupItems, currentLevel, path, options) {
@@ -237,23 +243,34 @@ var HeaderFilterController = modules.ViewController.inherit((function() {
         },
 
         showHeaderFilterMenu: function(columnIndex, isGroupPanel) {
+            var columnsController = this._columnsController,
+                visibleIndex = columnsController.getVisibleIndex(columnIndex),
+                view = isGroupPanel ? this.getView("headerPanel") : this.getView("columnHeadersView"),
+                column = columnsController.getColumns()[columnIndex],
+                $columnElement = $columnElement || view.getColumnElements().eq(isGroupPanel ? column.groupIndex : visibleIndex);
+
+            this.showHeaderFilterMenuBase({
+                columnElement: $columnElement,
+                columnIndex: columnIndex,
+                applyFilter: true,
+                apply: function() {
+                    columnsController.columnOption(columnIndex, {
+                        filterValues: this.filterValues,
+                        filterType: this.filterType
+                    });
+                }
+            });
+        },
+
+        showHeaderFilterMenuBase: function(options) {
             var that = this,
-                column = extend(true, {}, that._columnsController.getColumns()[columnIndex]);
+                column = extend(true, {}, that._columnsController.getColumns()[options.columnIndex]);
 
             if(column) {
-                var visibleIndex = that._columnsController.getVisibleIndex(columnIndex),
-                    view = isGroupPanel ? that.getView("headerPanel") : that.getView("columnHeadersView"),
-                    $columnElement = view.getColumnElements().eq(isGroupPanel ? column.groupIndex : visibleIndex),
-                    groupInterval = filterUtils.getGroupInterval(column);
+                var groupInterval = filterUtils.getGroupInterval(column);
 
-                var options = extend(column, {
+                extend(options, column, {
                     type: groupInterval && groupInterval.length > 1 ? "tree" : "list",
-                    apply: function() {
-                        that._columnsController.columnOption(columnIndex, {
-                            filterValues: this.filterValues,
-                            filterType: this.filterType
-                        });
-                    },
                     onShowing: function(e) {
                         var dxResizableInstance = e.component.overlayContent().dxResizable("instance");
 
@@ -272,7 +289,11 @@ var HeaderFilterController = modules.ViewController.inherit((function() {
 
                 options.dataSource = that.getDataSource(options);
 
-                that._headerFilterView.showHeaderFilterMenu($columnElement, options);
+                if(!options.applyFilter) {
+                    options.dataSource.filter = null;
+                }
+
+                that._headerFilterView.showHeaderFilterMenu(options.columnElement, options);
             }
         },
 

@@ -1,6 +1,7 @@
 "use strict";
 
-var modules = require("./ui.grid_core.modules"),
+var $ = require("../../core/renderer"),
+    modules = require("./ui.grid_core.modules"),
     utils = require("../filter_builder/utils"),
     gridCoreUtils = require("./ui.grid_core.utils");
 
@@ -119,26 +120,78 @@ var FilterSyncController = modules.Controller.inherit((function() {
         syncHeaderFilter: function(column) {
             this._setFilterValue(this._getSyncHeaderFilter(this.option("filterValue"), column));
         },
+
+        getFilterOperations: function() {
+            return [anyOf(this.component)];
+        }
     };
 })());
 
-function anyOf(field, filterValue) {
-    var result = [],
-        isExclude = field.filterType === "exclude",
-        lastIndex = filterValue.length - 1;
-    filterValue.forEach(function(value, index) {
-        if(utils.isCondition(value) || utils.isGroup(value)) {
-            var filterExpression = utils.getFilterExpression(value, [field], [], "headerFilter");
-            result.push(isExclude ? ["!", filterExpression] : filterExpression);
-        } else {
-            result.push(utils.getFilterExpression([field.dataField, isExclude ? "<>" : "=", value], [field], [], "headerFilter"));
+function anyOf(grid) {
+    var calculateFilterExpression = function(filterValue, field) {
+        var result = [],
+            isExclude = field.filterType === "exclude",
+            lastIndex = filterValue.length - 1;
+        filterValue.forEach(function(value, index) {
+            if(utils.isCondition(value) || utils.isGroup(value)) {
+                var filterExpression = utils.getFilterExpression(value, [field], [], "headerFilter");
+                result.push(isExclude ? ["!", filterExpression] : filterExpression);
+            } else {
+                result.push(utils.getFilterExpression([field.dataField, isExclude ? "<>" : "=", value], [field], [], "headerFilter"));
+            }
+            index !== lastIndex && result.push(isExclude ? "and" : "or");
+        });
+        if(result.length === 1) {
+            result = result[0];
         }
-        index !== lastIndex && result.push(isExclude ? "and" : "or");
-    });
-    if(result.length === 1) {
-        result = result[0];
-    }
-    return result;
+        return result;
+    };
+
+    var headerFilterController = grid && grid.getController("headerFilter"),
+        customizeText = function(fieldInfo) {
+            var values = fieldInfo.value || [],
+                column = grid.columnOption(fieldInfo.field.dataField),
+                texts = values.map(function(value) {
+                    var text = headerFilterController.getHeaderItemText(value, column, 0, grid.option("headerFilter"));
+                    return text;
+                });
+
+            return texts.join(", ");
+        };
+    return {
+        name: "anyof",
+        dataTypes: ["string", "date", "datetime", "number"],
+        calculateFilterExpression: calculateFilterExpression,
+        editorTemplate: function(conditionInfo, container) {
+            var div = $("<div>")
+                    .addClass("dx-filterbuilder-item-value-text")
+                    .text(customizeText(conditionInfo))
+                    .appendTo(container),
+                column = grid.columnOption(conditionInfo.field.dataField);
+
+            var setValue = function(value) {
+                div.text(customizeText({
+                    field: conditionInfo.field,
+                    value: value
+                }));
+                conditionInfo.setValue(value);
+            };
+
+            headerFilterController.showHeaderFilterMenuBase({
+                columnElement: div,
+                columnIndex: column.index,
+                apply: function() {
+                    setValue(this.filterValues);
+                    headerFilterController.hideHeaderFilterMenu();
+                },
+                onHidden: function() {
+                    $("body").trigger("dxpointerdown");
+                }
+            });
+            return container;
+        },
+        customizeText: customizeText
+    };
 }
 
 var DataControllerFilterSyncExtender = {
@@ -151,14 +204,7 @@ var DataControllerFilterSyncExtender = {
             filters = [that.callBase()],
             columns = that.getController("columns").getColumns(),
             filterValue = this.option("filterValue"),
-            calculatedFilterValue = utils.getFilterExpression(filterValue, columns, [{
-                name: "anyof",
-                calculateFilterExpression: function(filterValue, field) {
-                    if(filterValue && filterValue.length > 0) {
-                        return anyOf(field, filterValue);
-                    }
-                }
-            }], "filterBuilder");
+            calculatedFilterValue = utils.getFilterExpression(filterValue, columns, [anyOf()], "filterBuilder");
 
         if(calculatedFilterValue) {
             filters.push(calculatedFilterValue);
@@ -226,7 +272,7 @@ var ColumnHeadersViewFilterSyncExtender = {
         } else {
             this.callBase(args);
         }
-    },
+    }
 };
 
 module.exports = {
@@ -257,7 +303,7 @@ module.exports = {
             data: DataControllerFilterSyncExtender
         },
         views: {
-            columnHeadersView: ColumnHeadersViewFilterSyncExtender,
+            columnHeadersView: ColumnHeadersViewFilterSyncExtender
         }
     }
 };

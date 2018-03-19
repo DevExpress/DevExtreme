@@ -198,9 +198,11 @@ exports.HeaderFilterView = modules.View.inherit({
                 ],
                 resizeEnabled: true,
                 onShowing: function(e) {
+                    e.component.$content().parent().addClass("dx-dropdowneditor-overlay");
                     that._initializeListContainer(options);
                     options.onShowing && options.onShowing(e);
                 },
+                onHidden: options.onHidden,
                 onInitialized: function(e) {
                     var component = e.component;
                     // T321243
