@@ -121,6 +121,7 @@ var CollectionWidget = Widget.inherit({
             * @name CollectionWidgetOptions_items
             * @publicName items
             * @type Array<string, object>
+            * @fires CollectionWidgetOptions_onOptionChanged
             */
             items: [],
 
@@ -635,6 +636,7 @@ var CollectionWidget = Widget.inherit({
     },
 
     _refreshContent: function() {
+        this._prepareContent();
         this._renderContent();
     },
 
@@ -713,7 +715,21 @@ var CollectionWidget = Widget.inherit({
         this.onFocusedItemChanged = this._createActionByOption("onFocusedItemChanged");
 
         this.$element().addClass(COLLECTION_CLASS);
+        this._prepareContent();
     },
+
+    _prepareContent: function() {
+        var that = this;
+
+        commonUtils.deferRender(function() {
+            that._renderContentImpl();
+        });
+    },
+
+    _renderContent: function() {
+        this._fireContentReadyAction();
+    },
+
     _render: function() {
         this.callBase();
 

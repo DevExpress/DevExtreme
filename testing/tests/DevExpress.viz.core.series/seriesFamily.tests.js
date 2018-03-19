@@ -3,10 +3,11 @@
 var $ = require("jquery"),
     vizMocks = require("../../helpers/vizMocks.js"),
     pointModule = require("viz/series/points/base_point"),
-    SeriesFamily = require("viz/core/series_family").SeriesFamily;
-
-/* global MockTranslator, MockPoint, MockSeries */
-require("../../helpers/chartMocks.js");
+    SeriesFamily = require("viz/core/series_family").SeriesFamily,
+    chartMocks = require("../../helpers/chartMocks.js"),
+    MockTranslator = chartMocks.MockTranslator,
+    MockPoint = chartMocks.MockPoint,
+    MockSeries = chartMocks.MockSeries;
 
 var ZERO = 0;
 

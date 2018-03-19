@@ -280,10 +280,6 @@ var TileView = CollectionWidget.inherit({
         this._fireContentReadyAction();
     },
 
-    _renderContent: function() {
-        this._renderContentImpl();
-    },
-
     _updateScrollView: function() {
         this._scrollView.option("direction", this.option("direction"));
         this._scrollView.update();

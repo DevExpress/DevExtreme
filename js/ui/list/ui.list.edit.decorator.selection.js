@@ -95,6 +95,13 @@ registerDecorator(
             }
         },
 
+        moveFocusFromList: function(itemIndex) {
+            if(this._$selectAll && (itemIndex === 0 || itemIndex === this._list._getLastItemIndex())) {
+                this._selectAllCheckBox.focus();
+                return true;
+            }
+        },
+
         _renderSelectAll: function() {
             var $selectAll = this._$selectAll = $("<div>").addClass(SELECT_DECORATOR_SELECT_ALL_CLASS);
 
@@ -107,6 +114,18 @@ registerDecorator(
                 .appendTo($selectAll);
 
             this._list.itemsContainer().prepend($selectAll);
+
+            this._selectAllCheckBox.registerKeyHandler("upArrow", (function() {
+                var index = this._list._getLastItemIndex();
+
+                this._list.focusListItem(index);
+            }).bind(this));
+
+            this._selectAllCheckBox.registerKeyHandler("downArrow", (function() {
+                var index = 0;
+
+                this._list.focusListItem(index);
+            }).bind(this));
 
             this._updateSelectAllState();
             this._attachSelectAllHandler();

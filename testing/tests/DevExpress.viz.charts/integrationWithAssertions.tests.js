@@ -8,10 +8,8 @@ var $ = require("jquery"),
     titleModule = require("viz/core/title"),
     dxChart = require("viz/chart"),
     dxPieChart = require("viz/pie_chart"),
-    baseChartModule = require("viz/chart_components/base_chart");
-
-/* global setupSeriesFamily */
-require("../../helpers/chartMocks.js");
+    baseChartModule = require("viz/chart_components/base_chart"),
+    setupSeriesFamily = require("../../helpers/chartMocks.js").setupSeriesFamily;
 
 setupSeriesFamily();
 QUnit.testStart(function() {

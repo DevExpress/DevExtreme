@@ -47,7 +47,7 @@ function discreteGenerator(options) {
 
         return {
             ticks: categories,
-            tickInterval: interval > 4 ? mathCeil(interval) : 1
+            tickInterval: mathCeil(interval)
         };
     };
 }

@@ -5,10 +5,9 @@ var $ = require("jquery"),
     Series = require("viz/series/base_series").Series,
     pointModule = require("viz/series/points/base_point"),
     labelModule = require("viz/series/points/label"),
-    originalLabel = labelModule.Label;
-
-/* global MockTranslator */
-require("../../helpers/chartMocks.js");
+    originalLabel = labelModule.Label,
+    chartMocks = require("../../helpers/chartMocks.js"),
+    MockTranslator = chartMocks.MockTranslator;
 
 var createPoint = function(series, data, options) {
     options = options || {};
@@ -78,6 +77,7 @@ QUnit.test("Tag", function(assert) {
 });
 
 QUnit.test("Create simple point", function(assert) {
+    var aggregationInfo = this.simpleData.aggregationInfo = {};
     var point = createPoint(this.series, this.simpleData, this.options);
 
     assert.ok(point, "Point should be created");
@@ -92,6 +92,8 @@ QUnit.test("Create simple point", function(assert) {
 
     assert.strictEqual(point.lowError, undefined, "lowError should be undefined");
     assert.strictEqual(point.highError, undefined, "highError should be undefined");
+
+    assert.strictEqual(point.aggregationInfo, aggregationInfo, "aggregationInfo should be object");
 });
 
 QUnit.test("CretePoint with errorBar", function(assert) {

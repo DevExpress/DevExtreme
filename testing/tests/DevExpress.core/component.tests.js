@@ -4,7 +4,9 @@ var $ = require("jquery"),
     noop = require("core/utils/common").noop,
     Component = require("core/component"),
     errors = require("core/errors"),
-    devices = require("core/devices");
+    devices = require("core/devices"),
+    config = require("core/config");
+
 
 var TestComponent = Component.inherit({
 
@@ -1441,4 +1443,30 @@ QUnit.test("_createActionByOption should not override user 'afterExecute' option
     });
 
     executeAction({ });
+});
+
+QUnit.test("action should be wrapped only once (T611040)", function(assert) {
+    var originFlag = config().wrapActionsBeforeExecute;
+    config({ wrapActionsBeforeExecute: true });
+
+    var instance = new TestComponent({
+        onTestEvent: noop
+    });
+    var count = 0;
+
+    instance.option("beforeActionExecute", function(component, action, config) {
+        return function() {
+            count++;
+            return action.apply(this, arguments);
+        };
+    });
+
+    var executeAction = instance._createActionByOption("onTestEvent");
+
+    executeAction();
+    executeAction();
+    assert.equal(count, 2);
+
+
+    config({ wrapActionsBeforeExecute: originFlag });
 });

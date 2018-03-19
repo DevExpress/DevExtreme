@@ -5,10 +5,10 @@ var $ = require("jquery"),
     commons = require("./chartParts/commons.js"),
     scrollBarClassModule = require("viz/chart_components/scroll_bar"),
     trackerModule = require("viz/chart_components/tracker"),
-    Translator2D = require("viz/translators/translator2d").Translator2D;
-
-/* global MockSeries, seriesMockData, categories */
-require("../../helpers/chartMocks.js");
+    Translator2D = require("viz/translators/translator2d").Translator2D,
+    chartMocks = require("../../helpers/chartMocks.js"),
+    MockSeries = chartMocks.MockSeries,
+    categories = chartMocks.categories;
 
 $('<div id="chartContainer">').appendTo("#qunit-fixture");
 
@@ -41,7 +41,7 @@ QUnit.test("chart pass common series viewport to value axis on zoom", function(a
         max: 12
     });
 
-    seriesMockData.series.push(series1, series2);
+    chartMocks.seriesMockData.series.push(series1, series2);
 
     var chart = this.createChart({
         series: [{ type: "line" }, { type: "line" }]
@@ -60,7 +60,7 @@ QUnit.test("T576295. chart is not zoom value axis if series is not return their 
 
     series.getViewport.returns({});
 
-    seriesMockData.series.push(series);
+    chartMocks.seriesMockData.series.push(series);
 
     var chart = this.createChart({
         series: [{ type: "line" }]
@@ -73,7 +73,7 @@ QUnit.test("T576295. chart is not zoom value axis if series is not return their 
 });
 
 QUnit.test("chart with single value axis. Zooming with all null/undefined values", function(assert) {
-    seriesMockData.series.push(new MockSeries());
+    chartMocks.seriesMockData.series.push(new MockSeries());
     var chart = this.createChart({
             argumentAxis: {
                 argumentType: "numeric"
@@ -91,8 +91,8 @@ QUnit.test("chart with single value axis. Zooming with all null/undefined values
 });
 
 QUnit.test("chart with single value axis. Zooming with one null/undefined values", function(assert) {
-    seriesMockData.series.push(new MockSeries());
-    seriesMockData.series.push(new MockSeries());
+    chartMocks.seriesMockData.series.push(new MockSeries());
+    chartMocks.seriesMockData.series.push(new MockSeries());
     var chart = this.createChart({
             argumentAxis: {
                 argumentType: "numeric"
@@ -113,8 +113,8 @@ QUnit.test("chart with single value axis. Zooming with one null/undefined values
 });
 
 QUnit.test("Reset zooming on dataSource Changed", function(assert) {
-    seriesMockData.series.push(new MockSeries());
-    seriesMockData.series.push(new MockSeries());
+    chartMocks.seriesMockData.series.push(new MockSeries());
+    chartMocks.seriesMockData.series.push(new MockSeries());
     var chart = this.createChart({
         argumentAxis: {
             argumentType: "numeric"
@@ -142,8 +142,8 @@ QUnit.test("No reset zooming on series changed", function(assert) {
     var series1 = new MockSeries(),
         series2 = new MockSeries();
 
-    seriesMockData.series.push(series1);
-    seriesMockData.series.push(series2);
+    chartMocks.seriesMockData.series.push(series1);
+    chartMocks.seriesMockData.series.push(series2);
 
     var chart = this.createChart({
         argumentAxis: {
@@ -176,7 +176,7 @@ QUnit.test("chart with single value axis. Adjust on zoom = false", function(asse
     var series1 = new MockSeries({}),
         series2 = new MockSeries({});
 
-    seriesMockData.series.push(series1, series2);
+    chartMocks.seriesMockData.series.push(series1, series2);
 
     var chart = this.createChart({
         series: [{ type: "line" }, { type: "line" }],
@@ -198,7 +198,7 @@ QUnit.test("showZero has affect to value axis on zoom", function(assert) {
     });
     series.showZero = true;
 
-    seriesMockData.series.push(series);
+    chartMocks.seriesMockData.series.push(series);
 
     var chart = this.createChart({
         series: [{ type: "line" }]
@@ -226,7 +226,7 @@ QUnit.test("MultiAxis chart", function(assert) {
         max: 12
     });
 
-    seriesMockData.series.push(series1, series2);
+    chartMocks.seriesMockData.series.push(series1, series2);
 
     var chart = this.createChart({
 
@@ -265,7 +265,7 @@ QUnit.test("Zoom all argument axis", function(assert) {
         max: 12
     });
 
-    seriesMockData.series.push(series1, series2);
+    chartMocks.seriesMockData.series.push(series1, series2);
 
     var chart = this.createChart({
         series: [{
@@ -305,7 +305,7 @@ QUnit.test("Zoom argument axis, two series, one of them is not visible", functio
         max: 12
     });
 
-    seriesMockData.series.push(series1, series2);
+    chartMocks.seriesMockData.series.push(series1, series2);
 
     var chart = this.createChart({
         series: [{
@@ -330,7 +330,7 @@ QUnit.test("chart with single value with aggregation. Adjust on zoom = true", fu
         max: 15
     });
 
-    seriesMockData.series.push(series1);
+    chartMocks.seriesMockData.series.push(series1);
 
     this.createChart({
         adjustOnZoom: true,
@@ -348,7 +348,7 @@ QUnit.test("chart with single value with aggregation. Adjust on zoom = false", f
     var series1 = new MockSeries({});
 
     series1.useAggregation.returns(true);
-    seriesMockData.series.push(series1);
+    chartMocks.seriesMockData.series.push(series1);
 
     this.createChart({
         adjustOnZoom: false,
@@ -370,7 +370,7 @@ QUnit.test("Aggregation with min and max on argument axis, without zooming", fun
 
     series1.getViewport.returns({ min: 50, max: 60 });
     series1.useAggregation.returns(true);
-    seriesMockData.series.push(series1);
+    chartMocks.seriesMockData.series.push(series1);
 
     this.createChart({
         adjustOnZoom: true,
@@ -400,7 +400,7 @@ QUnit.test("Aggregation. One of the series without points", function(assert) {
         max: null
     });
 
-    seriesMockData.series.push(series1, series2);
+    chartMocks.seriesMockData.series.push(series1, series2);
 
     this.createChart({
         adjustOnZoom: true,
@@ -416,7 +416,7 @@ QUnit.test("Aggregation. One of the series without points", function(assert) {
 QUnit.test("Event, zoomEnd", function(assert) {
     var zoomEnd = sinon.spy(),
         series = new MockSeries();
-    seriesMockData.series.push(series);
+    chartMocks.seriesMockData.series.push(series);
 
     var chart = this.createChart({
         series: { type: "line" },
@@ -437,7 +437,7 @@ QUnit.test("Event, zoomEnd", function(assert) {
 });
 
 QUnit.test("Event, zoomStart", function(assert) {
-    seriesMockData.series.push(new MockSeries());
+    chartMocks.seriesMockData.series.push(new MockSeries());
     var zoomStart = sinon.spy();
     var chart = this.createChart({
         series: { type: "line" },
@@ -451,7 +451,7 @@ QUnit.test("Event, zoomStart", function(assert) {
 
 // T520370
 QUnit.test("zoom end event, not rendered chart", function(assert) {
-    seriesMockData.series.push(new MockSeries({}));
+    chartMocks.seriesMockData.series.push(new MockSeries({}));
     var zoomEnd = sinon.spy();
     var chart = this.createChart({
         series: { type: "line" },
@@ -483,8 +483,8 @@ QUnit.test("dxChart with two Series on one pane and different value axis", funct
     var stubSeries1 = new MockSeries({ range: { val: { min: 15, max: 80 } } }),
         stubSeries2 = new MockSeries({ range: { val: { min: 1, max: 5 } } });
 
-    seriesMockData.series.push(stubSeries1);
-    seriesMockData.series.push(stubSeries2);
+    chartMocks.seriesMockData.series.push(stubSeries1);
+    chartMocks.seriesMockData.series.push(stubSeries2);
     var axis1Ticks = [20, 40, 60, 80],
         axis2Ticks = [1, 2, 3, 4, 5];
     // act
@@ -547,8 +547,8 @@ QUnit.test("dxChart with two Series on one pane and different value axis. synchr
     var stubSeries1 = new MockSeries({ range: { val: { min: 15, max: 80 } } }),
         stubSeries2 = new MockSeries({ range: { val: { min: 1, max: 5 } } });
 
-    seriesMockData.series.push(stubSeries1);
-    seriesMockData.series.push(stubSeries2);
+    chartMocks.seriesMockData.series.push(stubSeries1);
+    chartMocks.seriesMockData.series.push(stubSeries2);
     var axis1Ticks = [20, 40, 60, 80],
         axis2Ticks = [1, 2, 3, 4, 5];
     // act
@@ -611,8 +611,8 @@ QUnit.test("dxChart with two Series on one pane and different value axis. Rotate
     var stubSeries1 = new MockSeries({ range: { val: { min: 15, max: 80 } } }),
         stubSeries2 = new MockSeries({ range: { val: { min: 1, max: 5 } } });
 
-    seriesMockData.series.push(stubSeries1);
-    seriesMockData.series.push(stubSeries2);
+    chartMocks.seriesMockData.series.push(stubSeries1);
+    chartMocks.seriesMockData.series.push(stubSeries2);
     var axis1Ticks = [20, 40, 60, 80],
         axis2Ticks = [1, 2, 3, 4, 5];
     // act
@@ -675,8 +675,8 @@ QUnit.test("simple chart with two panes", function(assert) {
     var stubSeries1 = new MockSeries({ range: { arg: { min: 15, max: 80 } } }),
         stubSeries2 = new MockSeries({ range: { arg: { min: 1, max: 5 } } });
 
-    seriesMockData.series.push(stubSeries1);
-    seriesMockData.series.push(stubSeries2);
+    chartMocks.seriesMockData.series.push(stubSeries1);
+    chartMocks.seriesMockData.series.push(stubSeries2);
     // act
     var chart = this.createChart({
         argumentAxis: {
@@ -713,8 +713,8 @@ QUnit.test("Rotated chart with two panes", function(assert) {
     var stubSeries1 = new MockSeries({ range: { arg: { min: 15, max: 80 } } }),
         stubSeries2 = new MockSeries({ range: { arg: { min: 1, max: 5 } } });
 
-    seriesMockData.series.push(stubSeries1);
-    seriesMockData.series.push(stubSeries2);
+    chartMocks.seriesMockData.series.push(stubSeries1);
+    chartMocks.seriesMockData.series.push(stubSeries2);
     // act
     var chart = this.createChart({
         rotated: true,
@@ -749,8 +749,8 @@ QUnit.test("Rotated chart with two panes", function(assert) {
 QUnit.test("chart with one empty pane", function(assert) {
     var stubSeries1 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
 
-    seriesMockData.series.push(stubSeries1);
-    // seriesMockData.series.push(stubSeries2);
+    chartMocks.seriesMockData.series.push(stubSeries1);
+    // chartMocks.seriesMockData.series.push(stubSeries2);
     // act
     var chart = this.createChart({
         argumentAxis: {
@@ -966,7 +966,7 @@ QUnit.test("chart with empty panes. three value Axis", function(assert) {
 QUnit.test("Rotated chart with one empty pane", function(assert) {
     var stubSeries1 = new MockSeries({ range: { val: { min: 15, max: 80 }, arg: { min: -1, max: 10 } } });
 
-    seriesMockData.series.push(stubSeries1);
+    chartMocks.seriesMockData.series.push(stubSeries1);
     // act
     var chart = this.createChart({
         rotated: true,
@@ -1363,7 +1363,7 @@ QUnit.test("Options changed - rotated (true->false)", function(assert) {
 // T382491
 QUnit.test("empty categories in axis & continuous data", function(assert) {
     // arrange
-    seriesMockData.series.push(new MockSeries({
+    chartMocks.seriesMockData.series.push(new MockSeries({
         range: {
             val: { min: 0, max: 10 }, arg: { categories: [], axisType: "continuous", min: 1, max: 3 }
         }

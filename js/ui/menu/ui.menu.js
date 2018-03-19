@@ -369,12 +369,17 @@ var Menu = MenuBase.inherit({
         }).bind(this));
     },
 
-    _render: function() {
+    _initMarkup: function() {
         this._visibleSubmenu = null;
-        this.callBase();
         this.$element().addClass(DX_MENU_CLASS);
-        this._isAdaptivityEnabled() && this._initAdaptivity();
+
+        this.callBase();
         this.setAria("role", "menubar");
+    },
+
+    _render: function() {
+        this.callBase();
+        this._initAdaptivity();
     },
 
     _renderHamburgerButton: function() {

@@ -464,6 +464,24 @@ QUnit.test("Show the form when an adaptive row is expanded", function(assert) {
     assert.equal($(".dx-field-item-content").text(), "Psy", "text of item");
 });
 
+// T531265
+QUnit.test("Adaptive row form should contains only visible columns", function(assert) {
+    // arrange
+    $(".dx-datagrid").width(200);
+    setupDataGrid(this);
+    this.rowsView.render($("#container"));
+    this.adaptiveColumnsController.updateHidingQueue(this.columnsController.getColumns());
+    this.resizingController.updateDimensions();
+    this.clock.tick();
+
+    // act
+    $(".dx-data-row .dx-datagrid-adaptive-more").first().trigger("dxclick");
+
+    // assert
+    var $formElement = $(".dx-master-detail-row .dx-form");
+    assert.equal($formElement.find(".dx-datagrid-hidden-column").length, 0, "form doesn't contains hidden columns");
+});
+
 QUnit.test("Text of form item is displayed in according with the displayExpr option of lookup", function(assert) {
     // arrange
     $(".dx-datagrid").width(200);

@@ -1291,15 +1291,15 @@ QUnit.test("DateTimeIndicator should show correct time in current time zone", fu
         currentView: "week",
         cellDuration: 60,
         showCurrentTimeIndicator: true,
-        currentDate: new Date(2018, 1, 4),
-        indicatorTime: new Date(2018, 1, 4, 9, 30),
+        currentDate: new Date(2018, 3, 4),
+        indicatorTime: new Date(2018, 3, 4, 9, 30),
         height: 600
     });
 
     var indicatorPositionBefore = this.instance.$element().find(".dx-scheduler-date-time-indicator").position(),
         cellHeight = $(this.instance.$element()).find(".dx-scheduler-date-table td").eq(0).outerHeight();
 
-    this.instance.option("timeZone", "Europe/Berlin");
+    this.instance.option("timeZone", "America/Dominica");
 
     var indicatorPositionAfter = this.instance.$element().find(".dx-scheduler-date-time-indicator").position(),
         tzDiff = this.instance.fire("getClientTimezoneOffset") / 3600000 + this.instance.fire("getTimezone");

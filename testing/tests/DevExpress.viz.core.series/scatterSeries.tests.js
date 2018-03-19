@@ -5,10 +5,11 @@ var $ = require("jquery"),
     vizMocks = require("../../helpers/vizMocks.js"),
     pointModule = require("viz/series/points/base_point"),
     labelModule = require("viz/series/points/label"),
-    Series = require("viz/series/base_series").Series;
-
-/* global insertMockFactory, MockTranslator, MockAxis */
-require("../../helpers/chartMocks.js");
+    Series = require("viz/series/base_series").Series,
+    chartMocks = require("../../helpers/chartMocks.js"),
+    insertMockFactory = chartMocks.insertMockFactory,
+    MockTranslator = chartMocks.MockTranslator,
+    MockAxis = chartMocks.MockAxis;
 
 require("viz/chart");
 

@@ -4,11 +4,10 @@ var $ = require("jquery"),
     vizMocks = require("../../helpers/vizMocks.js"),
     Color = require("color"),
     Series = require("viz/series/base_series").Series,
-    pointModule = require("viz/series/points/base_point");
-
-/* global insertMockFactory, MockTranslator, MockAxis */
-require("../../helpers/chartMocks.js");
-
+    pointModule = require("viz/series/points/base_point"),
+    chartMocks = require("../../helpers/chartMocks.js"),
+    MockAxis = chartMocks.MockAxis,
+    MockTranslator = chartMocks.MockTranslator;
 
 require("viz/chart");
 
@@ -66,7 +65,6 @@ var mockPoints = [createPoint(), createPoint(), createPoint(), createPoint(), cr
 
 var environment = {
     beforeEach: function() {
-        insertMockFactory();
         var mockPointIndex = 0;
         this.renderer = new vizMocks.Renderer();
         this.seriesGroup = this.renderer.g();

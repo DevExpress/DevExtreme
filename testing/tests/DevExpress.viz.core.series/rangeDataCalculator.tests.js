@@ -1,11 +1,8 @@
 "use strict";
 
-/* global MockTranslator */
 var $ = require("jquery"),
     vizMocks = require("../../helpers/vizMocks.js"),
     Series = require("viz/series/base_series").Series;
-
-require("../../helpers/chartMocks.js");
 
 require("viz/chart");
 
@@ -26,8 +23,11 @@ var createSeries = function(options, renderSettings, widgetType) {
     renderSettings.argumentAxis = renderSettings.argumentAxis || {
         getViewport: function() {},
         calculateInterval: function(a, b) { return Math.abs(a - b); },
-        getTranslator: function() {
-            return new MockTranslator({});
+        getTicks: function() {
+            return {
+                tickInterval: 1,
+                ticks: [2, 5, 10, 20, 25]
+            };
         }
     };
     options = $.extend(true, {
