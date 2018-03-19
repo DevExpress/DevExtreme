@@ -96,7 +96,7 @@ registerDecorator(
         },
 
         handleKeyboardEvents: function(itemIndex, moveFocus) {
-            if(this._$selectAll && moveFocus && (itemIndex === 0 || itemIndex === this._list._getLastItemIndex())) {
+            if(this._$selectAll && this._needMoveFocus(itemIndex, moveFocus)) {
                 this._list.option("focusedElement", undefined);
                 this._selectAllCheckBox.$element().addClass("dx-state-focused");
                 return true;
@@ -105,6 +105,10 @@ registerDecorator(
                 this._list.focusListItem(itemIndex);
                 return false;
             }
+        },
+
+        _needMoveFocus: function(itemIndex, moveFocus) {
+            return moveFocus && (itemIndex === 0 || itemIndex === this._list._getLastItemIndex());
         },
 
         handleEnterPressing: function() {
