@@ -1098,7 +1098,10 @@ testComponentDefaults(TreeList,
     { platform: devices.current().platform },
     {
         showRowLines: true,
-        showColumnLines: false
+        showColumnLines: false,
+        headerFilter: {
+            height: 315
+        }
     },
     function() {
         this.originalCurrentTheme = themes.current();

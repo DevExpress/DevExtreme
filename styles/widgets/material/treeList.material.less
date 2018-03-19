@@ -7,17 +7,11 @@
 @TREELIST_ICON_CONTAINER_PADDING_RIGHT: @MATERIAL_GRID_BASE_CHECKBOX_SIZE + @MATERIAL_GRID_BASE_CELL_HORIZONTAL_PADDING;
 
 .dx-treelist-rowsview {
-    .dx-treelist-table:not(.dx-treelist-table-fixed) {
-        .dx-treelist-empty-space {
-            width: @TREELIST_EMPTY_SPACE_WIDTH;
-        }
-    }
-
     .dx-treelist-empty-space {
         position: relative;
         display: inline-block;
         color: @treelist-spin-icon-color;
-        .dx-icon-spinup;
+        .dx-icon-chevronup;
         width: @TREELIST_EMPTY_SPACE_WIDTH;
 
         &:before {
@@ -26,7 +20,7 @@
     }
 
     .dx-treelist-expanded span {
-        .dx-icon-spindown;
+        .dx-icon-chevrondown;
         .dx-icon-font-centered-sizing(@MATERIAL_BASE_ICON_SIZE);
         cursor: pointer;
 
@@ -38,7 +32,7 @@
     }
 
     .dx-treelist-collapsed span {
-        .dx-icon-spinright;
+        .dx-icon-chevronright;
         .dx-icon-font-centered-sizing(@MATERIAL_BASE_ICON_SIZE);
         cursor: pointer;
 
@@ -95,8 +89,7 @@
     }
 }
 
-.dx-treelist-icon-container.dx-editor-inline-block, 
-.dx-treelist-select-all {
+.dx-treelist-icon-container.dx-editor-inline-block {
     .dx-checkbox {
         top: 50%;
         margin-top: -@MATERIAL_GRID_BASE_CHECKBOX_SIZE/2;
@@ -110,11 +103,16 @@
         left: 0px;
         background-color: @treelist-base-background-color;
         margin-left: @TREELIST_CHECKBOX_PADDING_LEFT;
+        top: @MATERIAL_GRID_BASE_HEADER_CELL_VERTICAL_PADDING + (@MATERIAL_BASE_ICON_SIZE - @MATERIAL_GRID_BASE_CHECKBOX_SIZE)/2;
     }
 }
 
 .dx-treelist .dx-treelist-headers .dx-treelist-content .dx-treelist-table .dx-header-row > .dx-treelist-select-all {
     padding-left: @TREELIST_EDITOR_CELL_PADDING_LEFT;
+}
+
+.dx-treelist .dx-treelist-headers .dx-column-indicators {
+    vertical-align: top;
 }
 
 .dx-rtl {

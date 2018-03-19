@@ -88,7 +88,16 @@ var TreeList = Widget.inherit({
                     * @type boolean
                     * @default false @for Material
                     */
-                    showColumnLines: false
+                    showColumnLines: false,
+                    /**
+                     * @name GridBaseOptions_headerFilter_height
+                     * @publicName height
+                     * @type number
+                     * @default 315 @for Material
+                     */
+                    headerFilter: {
+                        height: 315
+                    }
                 }
             }
         ]);
