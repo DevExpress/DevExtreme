@@ -1,9 +1,10 @@
 "use strict";
 
-var $ = require("jquery");
-var noop = require("core/utils/common").noop;
-var renderer = require("core/renderer");
-var eventsEngine = require("events/core/events_engine");
+var $ = require("jquery"),
+    noop = require("core/utils/common").noop,
+    renderer = require("core/renderer"),
+    eventsEngine = require("events/core/events_engine"),
+    keyboardMock = require("../../helpers/keyboardMock.js");
 
 QUnit.testStart(function() {
     var markup =
@@ -2506,7 +2507,7 @@ QUnit.test("The cell should be editable after cancel removing the row", function
 });
 
 if(browser.msie && parseInt(browser.version) <= 11) {
-    QUnit.test("Update value immediately on the keyup event for row edit mode", function(assert) {
+    QUnit.test("Update value for row edit mode", function(assert) {
         // arrange
         this.options.editing = {
             allowUpdating: true,
@@ -2535,16 +2536,15 @@ if(browser.msie && parseInt(browser.version) <= 11) {
             }
         });
         var $input = $editor.find("input").first();
-
-        $input
-            .val("new value")
-            .trigger("keyup");
+        var keyboard = keyboardMock($input);
+        keyboard.type("new value");
+        keyboard.change();
 
         // assert
         assert.equal(resultValue, "new value");
     });
 
-    QUnit.test("Update value immediately on the keyup event for form edit mode", function(assert) {
+    QUnit.test("Update value for form edit mode", function(assert) {
         // arrange
         this.options.editing = {
             allowUpdating: true,
@@ -2573,13 +2573,84 @@ if(browser.msie && parseInt(browser.version) <= 11) {
             }
         });
         var $input = $editor.find("input").first();
+        var keyboard = keyboardMock($input);
+        keyboard.type("new value");
+        keyboard.change();
 
-        $input
+        // assert
+        assert.equal(resultValue, "new value");
+    });
+
+    QUnit.test("Do not update value on keyup event for row edit mode", function(assert) {
+        // arrange
+        this.options.editing = {
+            allowUpdating: true,
+            mode: 'row'
+        };
+
+        this.editingController._editRowIndex = 0;
+
+        var resultValue,
+            $editor = $("<div/>").appendTo($("#container")),
+            template = this.editingController.getColumnTemplate({
+                rowType: "data",
+                row: {
+                    rowIndex: 0
+                },
+                column: {
+                    allowEditing: true,
+                    setCellValue: $.noop
+                }
+            });
+
+        // act
+        template($editor, {
+            setValue: function(value) {
+                resultValue = value;
+            }
+        });
+        $editor.find("input").first()
             .val("new value")
             .trigger("keyup");
 
         // assert
-        assert.equal(resultValue, "new value");
+        assert.equal(resultValue, undefined);
+    });
+
+    QUnit.test("Do not update value on keyup event for form edit mode", function(assert) {
+        // arrange
+        this.options.editing = {
+            allowUpdating: true,
+            mode: 'form'
+        };
+
+        this.editingController._editRowIndex = 0;
+
+        var resultValue,
+            $editor = $("<div/>").appendTo($("#container")),
+            template = this.editingController.getColumnTemplate({
+                rowType: "data",
+                row: {
+                    rowIndex: 0
+                },
+                column: {
+                    allowEditing: true,
+                    setCellValue: $.noop
+                }
+            });
+
+        // act
+        template($editor, {
+            setValue: function(value) {
+                resultValue = value;
+            }
+        });
+        $editor.find("input").first()
+            .val("new value")
+            .trigger("keyup");
+
+        // assert
+        assert.equal(resultValue, undefined);
     });
 }
 
