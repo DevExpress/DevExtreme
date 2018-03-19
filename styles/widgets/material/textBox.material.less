@@ -1,3 +1,4 @@
+@MATERIAL_SEARCHBOX_ICON_HORIZONTAL_PADDING: @MATERIAL_TEXTEDITOR_ICON_CONTAINER_SIZE + 6;
 .dx-searchbox {
     .dx-icon-search {
         .dx-icon-search;
@@ -8,17 +9,16 @@
             text-indent: 0;
             color: @textbox-search-icon-color;
         }
-        bottom: @MATERIAL_TEXTEDITOR_BOTTOM_PADDING - 2;
         color: @texteditor-placeholder-color;
     }
 
     .dx-texteditor-input,
     .dx-placeholder:before {
-        padding-left: @MATERIAL_TEXTEDITOR_ICON_CONTAINER_SIZE;
+        padding-left: @MATERIAL_SEARCHBOX_ICON_HORIZONTAL_PADDING;
 
         .dx-rtl &,
         .dx-rtl& {
-            padding-right: @MATERIAL_TEXTEDITOR_ICON_CONTAINER_SIZE;
+            padding-right: @MATERIAL_SEARCHBOX_ICON_HORIZONTAL_PADDING;
         }
     }
 }
