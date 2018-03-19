@@ -60,7 +60,7 @@ var createSeries = function(options, renderSettings) {
 QUnit.module("Sampler points, discrete", {
     beforeEach: function() {
         this.argumentAxis = {
-            getTicks() {
+            getAggregationInfo() {
                 return {};
             }
         };
@@ -115,7 +115,7 @@ QUnit.test("T382881, Series is not sorted", function(assert) {
             { arg: 5, val: 1 }
         ];
 
-    this.argumentAxis.getTicks = () => { return { tickInterval: 2 }; };
+    this.argumentAxis.getAggregationInfo = () => { return { interval: 2 }; };
 
     this.series.updateData(points);
     // Act
@@ -146,7 +146,7 @@ QUnit.test("10 points -> 5 points. All points. ValueAxisType = discrete", functi
     this.series.updateDataType({
         valueAxisType: "discrete"
     });
-    this.argumentAxis.getTicks = () => { return { tickInterval: 2 }; };
+    this.argumentAxis.getAggregationInfo = () => { return { interval: 2 }; };
     this.series.updateData(points);
     this.series.createPoints();
 
@@ -167,7 +167,7 @@ QUnit.test("10 points -> 10 points.", function(assert) {
         },
         points = this.createFusionPoints(options, true);
 
-    this.argumentAxis.getTicks = () => { return { tickInterval: 1 }; };
+    this.argumentAxis.getAggregationInfo = () => { return { interval: 1 }; };
     this.series.updateData(points);
 
     this.series.createPoints();
@@ -204,9 +204,9 @@ QUnit.test("Custom aggregation", function(assert) {
     this.series.updateDataType({
         valueAxisType: "discrete"
     });
-    this.argumentAxis.getTicks = () => { return { tickInterval: 3 }; };
+    this.argumentAxis.getAggregationInfo = () => { return { interval: 3 }; };
     this.series.updateData(data);
-    this.series.createPoints();
+    this.series.createPoints(true);
 
     const point = this.series.getAllPoints()[0];
     assert.equal(point.value, 2);
@@ -231,13 +231,29 @@ QUnit.module("Aggregation methods", {
     beforeEach: function() {
         var that = this;
 
+        this.getBusinessRange = function() {
+            return {
+                min: 0,
+                max: 10,
+                minVisible: 0,
+                maxVisible: 10
+            };
+        };
         this.argumentAxis = {
-            getTicks() {
+            getAggregationInfo() {
                 return {
-                    tickInterval: 10,
+                    interval: 10,
                     ticks: [0, 10]
                 };
-            }
+            },
+            getTranslator() {
+                return {
+                    getBusinessRange() {
+                        return that.getBusinessRange();
+                    }
+                };
+            },
+            getViewport() { }
         };
 
         this.createSeries = function(method, type, options) {
@@ -258,13 +274,13 @@ QUnit.module("Aggregation methods", {
             });
         };
 
-        this.aggregateData = function(method, data, type, options) {
+        this.aggregateData = function(method, data, type, options, createAllPoints) {
             var series = that.createSeries(method, type, options);
 
             that.series = series;
 
             series.updateData(data);
-            series.createPoints();
+            series.createPoints(createAllPoints);
 
             return series.getAllPoints();
         };
@@ -399,6 +415,80 @@ QUnit.test("series pass aggregation info into custom callback", function(assert)
     assert.equal(customMethod.lastCall.args[0].aggregationInterval, 10);
 
     assert.equal(customMethod.lastCall.args[1], this.series);
+});
+
+QUnit.test("Create points called twice (getAllPoints raises createPoints)", function(assert) {
+    var customMethod = sinon.spy();
+    this.aggregateData("custom", this.data, "line", {
+        aggregation: {
+            calculate: customMethod
+        }
+    });
+
+    assert.ok(customMethod.calledTwice);
+});
+
+QUnit.test("Zooming raises createPoints when created all points", function(assert) {
+    var customMethod = sinon.spy();
+    this.aggregateData("custom", this.data, "line", {
+        aggregation: {
+            calculate: customMethod
+        }
+    }, true);
+
+    this.getBusinessRange = function() {
+        return {
+            min: 0,
+            max: 10,
+            minVisible: 2,
+            maxVisible: 8
+        };
+    };
+
+    customMethod.reset();
+    this.series.createPoints();
+
+    assert.ok(customMethod.calledOnce);
+});
+
+QUnit.test("Scrolling not raises createPoints if created all points", function(assert) {
+    var customMethod = sinon.spy();
+    this.getBusinessRange = function() {
+        return {
+            min: 0,
+            max: 10,
+            minVisible: 2,
+            maxVisible: 8
+        };
+    };
+    this.aggregateData("custom", this.data, "line", {
+        aggregation: {
+            calculate: customMethod
+        }
+    }, true);
+
+    this.getBusinessRange = function() {
+        return {
+            min: 0,
+            max: 10,
+            minVisible: 0,
+            maxVisible: 6
+        };
+    };
+    this.series.createPoints();
+
+    assert.ok(customMethod.calledOnce);
+});
+
+QUnit.test("Create points called once (getAllPoints not raises createPoints if all points exists)", function(assert) {
+    var customMethod = sinon.spy();
+    this.aggregateData("custom", this.data, "line", {
+        aggregation: {
+            calculate: customMethod
+        }
+    }, true);
+
+    assert.ok(customMethod.calledOnce);
 });
 
 QUnit.test("ohlc. Financial series", function(assert) {
@@ -650,7 +740,7 @@ QUnit.test("Count. Do not calculate error bars", function(assert) {
 });
 
 QUnit.test("Points grouping by intervals", function(assert) {
-    this.argumentAxis.getTicks = () => { return { tickInterval: 5, ticks: [0, 5, 10] }; };
+    this.argumentAxis.getAggregationInfo = () => { return { interval: 5, ticks: [0, 5, 10, 15] }; };
     var points = this.aggregateData("avg", this.data);
     assert.equal(points.length, 2);
     assert.equal(points[0].argument, 0);

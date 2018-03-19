@@ -984,7 +984,13 @@ var MockAxis = exports.MockAxis = function(renderOptions) {
         resetZoom: sinon.spy(),
         drawScaleBreaks: sinon.spy(),
         resetTypes: sinon.spy(),
-        setMarginOptions: sinon.spy()
+        setMarginOptions: sinon.spy(),
+        getAggregationInfo: function() {
+            return {
+                interval: null,
+                ticks: []
+            };
+        }
     };
 };
 

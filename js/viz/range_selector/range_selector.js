@@ -486,7 +486,7 @@ function updateScaleOptions(scaleOptions, seriesDataSource, translatorRange, tic
     }
 }
 
-function prepareScaleOptions(scaleOption, seriesDataSource, incidentOccurred, containerColor) {
+function prepareScaleOptions(scaleOption, calculatedValueType, incidentOccurred, containerColor) {
     var parsedValue = 0,
         valueType = parseUtils.correctValueType(_normalizeEnum(scaleOption.valueType)),
         parser,
@@ -504,9 +504,7 @@ function prepareScaleOptions(scaleOption, seriesDataSource, incidentOccurred, co
             }
         };
 
-    if(seriesDataSource) {
-        valueType = seriesDataSource.getCalculatedValueType() || valueType;
-    }
+    valueType = calculatedValueType || valueType;
 
     if(!valueType) {
         valueType = calculateValueType(scaleOption.startValue, scaleOption.endValue) || "numeric";
@@ -886,18 +884,41 @@ var dxRangeSelector = require("../core/base_widget").inherit({
     //     that._getOption("behavior")
     // ]);
     // that._axis.update(that._getOption("scale"));
+    _completeSeriesDataSourceCreation(scaleOptions, seriesDataSource) {
+        var rect = this._clientRect;
+
+        this._axis.updateOptions({
+            type: scaleOptions.type,
+            dataType: scaleOptions.dataType,
+            logarithmBase: scaleOptions.logarithmBase,
+            aggregationGroupWidth: scaleOptions.aggregationGroupWidth,
+            aggregationInterval: scaleOptions.aggregationInterval,
+            isHorizontal: true,
+            label: {
+                overlappingBehavior: {}
+            }
+        });
+
+        this._axis.updateCanvas({
+            left: rect[0], top: rect[1], width: rect[2] - rect[0], height: rect[3] - rect[1]
+        });
+
+        seriesDataSource.createPoints();
+    },
+
     _updateContent: function(canvas) {
-        var that = this,
-            chartOptions = that.option("chart"),
-            seriesDataSource = that._createSeriesDataSource(chartOptions),
-            isCompactMode = !((seriesDataSource && seriesDataSource.isShowChart()) || that.option("background.image.url")),
-            scaleOptions = prepareScaleOptions(that._getOption("scale"), seriesDataSource, that._incidentOccurred, this._getOption("containerBackgroundColor", true)),
-            argTranslatorRange = calculateTranslatorRange(seriesDataSource, scaleOptions),
-            tickIntervalsInfo = updateTickIntervals(scaleOptions, canvas.width, that._incidentOccurred, argTranslatorRange),
-            sliderMarkerOptions,
-            indents,
-            rangeContainerCanvas,
-            chartThemeManager = seriesDataSource && seriesDataSource.isShowChart() && seriesDataSource.getThemeManager();
+        let that = this;
+        let chartOptions = that.option("chart");
+        let seriesDataSource = that._createSeriesDataSource(chartOptions);
+        let isCompactMode = !((seriesDataSource && seriesDataSource.isShowChart()) || that.option("background.image.url"));
+        let scaleOptions = prepareScaleOptions(that._getOption("scale"), seriesDataSource && seriesDataSource.getCalculatedValueType(), that._incidentOccurred, this._getOption("containerBackgroundColor", true));
+        seriesDataSource && that._completeSeriesDataSourceCreation(scaleOptions, seriesDataSource);
+        let argTranslatorRange = calculateTranslatorRange(seriesDataSource, scaleOptions);
+        let tickIntervalsInfo = updateTickIntervals(scaleOptions, canvas.width, that._incidentOccurred, argTranslatorRange);
+        let sliderMarkerOptions;
+        let indents;
+        let rangeContainerCanvas;
+        let chartThemeManager = seriesDataSource && seriesDataSource.isShowChart() && seriesDataSource.getThemeManager();
 
         if(chartThemeManager) {
             // TODO: Looks like usage of "chartThemeManager" can be replaced with "that._getOption("chart").valueAxis.logarithmBase - check it
@@ -1174,6 +1195,18 @@ AxisWrapper.prototype = {
 
     getFullTicks: function() {
         return this._axis.getFullTicks();
+    },
+
+    updateCanvas(canvas) {
+        this._axis.updateCanvas(canvas);
+    },
+
+    updateOptions(opt) {
+        this._axis.updateOptions(opt);
+    },
+
+    getAggregationInfo() {
+        return this._axis.getAggregationInfo();
     },
 
     getTranslator: function() {

@@ -1054,7 +1054,7 @@ var BaseChart = BaseWidget.inherit({
     },
 
     _processSingleSeries: function(singleSeries) {
-        singleSeries.createPoints();
+        singleSeries.createPoints(false);
     },
 
     _handleSeriesDataUpdated: function() {

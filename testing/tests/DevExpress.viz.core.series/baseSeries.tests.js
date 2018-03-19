@@ -127,9 +127,6 @@ var environment = {
             _animate: function() {
                 this.animated = true;
             },
-            _getPointSize: function() {
-                return 10;
-            },
             _createPointStyles: function() {
 
             },

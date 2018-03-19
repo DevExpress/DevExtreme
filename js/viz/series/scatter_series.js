@@ -17,7 +17,6 @@ var _extend = require("../../core/utils/extend").extend,
     _sqrt = math.sqrt,
     _max = math.max,
 
-    DEFAULT_SYMBOL_POINT_SIZE = 2,
     DEFAULT_TRACKER_WIDTH = 12,
     DEFAULT_DURATION = 400,
 
@@ -355,10 +354,6 @@ var baseScatterMethods = {
         });
     },
 
-    _getPointSize: function() {
-        return this._options.point.visible ? this._options.point.size : DEFAULT_SYMBOL_POINT_SIZE;
-    },
-
     _defaultAggregator: "avg",
 
     _aggregators: {
@@ -547,7 +542,7 @@ var baseScatterMethods = {
                 }, 0);
 
         options.size = pointOptions.visible ? maxSize : 0;
-        options.sourcePointSize = pointOptions.visible ? pointOptions.size : 0;
+        options.sizePointNormalState = pointOptions.visible ? styles.normal.r * 2 + styles.normal["stroke-width"] : 0;
 
         return options;
     }

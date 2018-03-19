@@ -492,7 +492,24 @@ var dxRangeSelector = {
         * @type boolean
         * @default false
         */
-        endOnTick: false
+        endOnTick: false,
+        /**
+        * @name dxrangeselectoroptions_scale_aggregationGroupWidth
+        * @publicName aggregationGroupWidth
+        * @type number
+        * @default undefined
+        * @default 10 @for dxChartSeriesTypes_BarSeries
+        * @default 10 @for dxChartSeriesTypes_StackedBarSeries
+        * @default 10 @for dxChartSeriesTypes_FullStackedBarSeries
+        */
+        aggregationGroupWidth: 10,
+        /**
+        * @name dxrangeselectoroptions_scale_aggregationInterval
+        * @publicName aggregationInterval
+        * @extends VizTimeIntervalEnum
+        * @inherits VizTimeInterval
+        */
+        aggregationInterval: undefined,
     },
     /**
     * @name dxrangeselectoroptions_slidermarker
