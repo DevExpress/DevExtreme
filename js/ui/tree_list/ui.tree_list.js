@@ -12,6 +12,7 @@ require("./ui.tree_list.validating");
 require("./ui.tree_list.virtual_scrolling");
 require("./ui.tree_list.filter_row");
 require("./ui.tree_list.header_filter");
+require("./ui.tree_list.pager");
 require("./ui.tree_list.columns_resizing_reordering");
 require("./ui.tree_list.column_fixing");
 require("./ui.tree_list.adaptivity");

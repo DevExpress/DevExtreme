@@ -35,13 +35,6 @@ exports.DataController = dataControllerModule.controllers.data.inherit((function
             };
         },
 
-        _setPagingOptions: function(dataSource) {
-            var isVirtualScrolling = this.option("scrolling.mode") === "virtual";
-
-            dataSource.paginate(isVirtualScrolling);
-            dataSource.requireTotalCount(true);
-        },
-
         _loadOnOptionChange: function() {
             this._dataSource.load();
         },
@@ -310,7 +303,16 @@ treeListCore.registerModule("data", {
             * @action
             */
             onNodesInitialized: null,
-            maxFilterLengthInRequest: 1500
+            maxFilterLengthInRequest: 1500,
+            paging: {
+                /**
+                 * @name dxTreeListOptions_paging_enabled
+                 * @publicName enabled
+                 * @type boolean
+                 * @default false
+                 */
+                enabled: false
+            }
         });
     },
     controllers: {
