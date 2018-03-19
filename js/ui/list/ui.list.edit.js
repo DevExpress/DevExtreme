@@ -34,10 +34,10 @@ var ListEdit = ListBase.inherit({
                 that.reorderItem(that.option("focusedElement"), $prevItem);
                 that.scrollToItem(that.option("focusedElement"));
             } else {
-                if(focusedItemIndex === 0 && this._editProvider.handleKeyboardEvents(focusedItemIndex, true)) {
+                if(focusedItemIndex === 0 && this._editProvider.handleKeyboardEvents(focusedItemIndex, false)) {
                     return;
                 } else {
-                    this._editProvider.handleKeyboardEvents(focusedItemIndex, false);
+                    this._editProvider.handleKeyboardEvents(focusedItemIndex, true);
                 }
                 parent.upArrow(e);
             }
@@ -54,10 +54,10 @@ var ListEdit = ListBase.inherit({
                 that.reorderItem(that.option("focusedElement"), $nextItem);
                 that.scrollToItem(that.option("focusedElement"));
             } else {
-                if(focusedItemIndex === this._getLastItemIndex() && this._editProvider.handleKeyboardEvents(focusedItemIndex, true)) {
+                if(focusedItemIndex === this._getLastItemIndex() && this._editProvider.handleKeyboardEvents(focusedItemIndex, false)) {
                     return;
                 } else {
-                    this._editProvider.handleKeyboardEvents(focusedItemIndex, false);
+                    this._editProvider.handleKeyboardEvents(focusedItemIndex, true);
                 }
                 parent.downArrow(e);
             }
