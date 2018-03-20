@@ -784,7 +784,6 @@ var SchedulerWorkSpace = Widget.inherit({
     _render: function() {
         this.callBase();
 
-        this._shader = new VerticalShader();
         this._renderDateTimeIndication();
         this._setIndicationUpdateInterval();
     },
@@ -809,6 +808,8 @@ var SchedulerWorkSpace = Widget.inherit({
         this._renderDateTable();
 
         this._renderAllDayPanel();
+
+        this._shader = new VerticalShader();
     },
 
     _renderDateTimeIndication: noop,

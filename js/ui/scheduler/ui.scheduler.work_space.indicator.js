@@ -225,6 +225,13 @@ var SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
         this.$element().find("." + SCHEDULER_DATE_TIME_INDICATOR_CLASS).remove();
     },
 
+    _cleanWorkSpace: function() {
+        this.callBase();
+
+        this._renderDateTimeIndication();
+        this._setIndicationUpdateInterval();
+    },
+
     _optionChanged: function(args) {
 
         switch(args.name) {
