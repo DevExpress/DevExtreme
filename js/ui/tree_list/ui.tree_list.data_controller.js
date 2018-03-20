@@ -305,12 +305,19 @@ treeListCore.registerModule("data", {
             */
             onNodesInitialized: null,
             maxFilterLengthInRequest: 1500,
+            /**
+             * @name dxTreeListOptions_paging
+             * @publicName paging
+             * @type object
+             * @inheritdoc
+             */
             paging: {
                 /**
                  * @name dxTreeListOptions_paging_enabled
                  * @publicName enabled
                  * @type boolean
                  * @default false
+                 * @inheritdoc
                  */
                 enabled: false
             }
