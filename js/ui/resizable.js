@@ -480,11 +480,11 @@ var Resizable = DOMComponent.inherit({
                 break;
             case "minWidth":
             case "maxWidth":
-                this._renderWidth(this.$element().outerWidth());
+                this._readyToRender && this._renderWidth(this.$element().outerWidth());
                 break;
             case "minHeight":
             case "maxHeight":
-                this._renderHeight(this.$element().outerHeight());
+                this._readyToRender && this._renderHeight(this.$element().outerHeight());
                 break;
             case "onResize":
             case "onResizeStart":
