@@ -90,7 +90,6 @@ var optionChangeExcluded = [
     "ContextMenu",
     "DataGrid",
     "DateBox",
-    "FileUploader",
     "Gallery",
     "LoadPanel",
     "NavBar",

@@ -549,9 +549,12 @@ var FileUploader = Editor.inherit({
         this._renderSelectButton();
         this._renderInputContainer();
         this._renderUploadButton();
+
+        this._doPreventRecreatingFiles = true;
     },
 
     _render: function() {
+        this._doPreventRecreatingFiles = false;
         this._renderDragEvents();
 
         this._renderFiles();
@@ -1334,7 +1337,9 @@ var FileUploader = Editor.inherit({
                 this._$inputLabel.text(value);
                 break;
             case "showFileList":
-                this._renderFiles();
+                if(!this._doPreventRecreatingFiles) {
+                    this._renderFiles();
+                }
                 break;
             case "uploadUrl":
             case "progress":
