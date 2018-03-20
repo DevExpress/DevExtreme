@@ -699,7 +699,11 @@ QUnit.test("drag should not crash with multiple touches", function(assert) {
         return;
     }
 
-    var $element = $("#element");
+    var $element = $("#element"),
+        extendTarget = function(config, pageX, pageY) {
+            config.pageX = pageX;
+            config.pageY = pageY;
+        };
 
     var startFired = 0,
         endFired = 0;
@@ -711,8 +715,16 @@ QUnit.test("drag should not crash with multiple touches", function(assert) {
         endFired++;
     });
 
-    $element.trigger($.Event("touchstart", { touches: [{ identifier: 1, pageX: 0, pageY: 0 }], targetTouches: [1], changedTouches: [{ identifier: 1 }] }));
-    $element.trigger($.Event("touchmove", { touches: [{ identifier: 1, pageX: 100, pageY: 200 }], targetTouches: [1], changedTouches: [{ identifier: 1 }] }));
+    var touchStartParams = { touches: [{ identifier: 1, pageX: 0, pageY: 0 }], targetTouches: [1], changedTouches: [{ identifier: 1 }] },
+        touchMoveParams = { touches: [{ identifier: 1, pageX: 100, pageY: 200 }], targetTouches: [1], changedTouches: [{ identifier: 1 }] };
+
+    if(!QUnit.urlParams["nojquery"]) {
+        extendTarget(touchStartParams, 0, 0);
+        extendTarget(touchMoveParams, 100, 200);
+    }
+
+    $element.trigger($.Event("touchstart", touchStartParams));
+    $element.trigger($.Event("touchmove", touchMoveParams));
 
     $element.trigger($.Event("touchstart", { touches: [1, 2], targetTouches: [1, 2], changedTouches: [{ identifier: 2 }] }));
 
@@ -729,7 +741,11 @@ QUnit.test("drag correctly works with FireFox on touch-based devices (T602186)",
         return;
     }
 
-    var $element = $("#element");
+    var $element = $("#element"),
+        extendTarget = function(config, pageX, pageY) {
+            config.pageX = pageX;
+            config.pageY = pageY;
+        };
 
     $element.on(dragEvents.start, function(e) {
         assert.equal(e.pageX, 45, "correct drag start pageX argument");
@@ -740,9 +756,21 @@ QUnit.test("drag correctly works with FireFox on touch-based devices (T602186)",
         assert.equal(e.pageY, 75, "correct drag move pageY argument");
     });
 
-    $element.trigger($.Event("touchstart", { pageX: 0, pageY: 0, touches: [{ identifier: 1, pageX: 45, pageY: 50 }], targetTouches: [1], changedTouches: [{ identifier: 1 }] }));
-    $element.trigger($.Event("touchmove", { pageX: 100, pageY: 200, touches: [{ identifier: 1, pageX: 70, pageY: 75 }], targetTouches: [1], changedTouches: [{ identifier: 1 }] }));
-    $element.trigger($.Event("touchend", { touches: [], targetTouches: [1], changedTouches: [{ identifier: 1 }] }));
+    var touchStartParams = { pageX: 0, pageY: 0, touches: [{ identifier: 1, pageX: 45, pageY: 50 }], targetTouches: [1], changedTouches: [{ identifier: 1, pageX: 45, pageY: 50 }] },
+        touchMoveParams = { pageX: 145, pageY: 100, touches: [{ identifier: 1, pageX: 70, pageY: 75 }], targetTouches: [1], changedTouches: [{ identifier: 1, pageX: 70, pageY: 75 }] },
+        touchEndParams = { touches: [], targetTouches: [1], changedTouches: [{ identifier: 1 }] };
+
+    if(QUnit.urlParams["nojquery"]) {
+        extendTarget(touchStartParams, 0, 0);
+        extendTarget(touchMoveParams, 145, 100);
+    } else {
+        extendTarget(touchStartParams, 45, 50);
+        extendTarget(touchMoveParams, 70, 75);
+    }
+
+    $element.trigger($.Event("touchstart", touchStartParams));
+    $element.trigger($.Event("touchmove", touchMoveParams));
+    $element.trigger($.Event("touchend", touchEndParams));
 });
 
 QUnit.test("drag move should not prevent default if e._cancelPreventDefault is true", function(assert) {
