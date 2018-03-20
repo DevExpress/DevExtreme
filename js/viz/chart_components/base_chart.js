@@ -36,11 +36,11 @@ var commonUtils = require("../../core/utils/common"),
     REFRESH_SERIES_DATA_INIT_ACTION_OPTIONS = [
         "series",
         "commonSeriesSettings",
-        "containerBackgroundColor",
         "dataPrepareSettings",
         "seriesSelectionMode",
         "pointSelectionMode",
-        "synchronizeMultiAxes"
+        "synchronizeMultiAxes",
+        "resolveLabelsOverlapping"
     ],
 
     REFRESH_SERIES_FAMILIES_ACTION_OPTIONS = [
@@ -314,9 +314,9 @@ function setTemplateFields(data, templateData, series) {
 
 function checkOverlapping(firstRect, secondRect) {
     return ((firstRect.x <= secondRect.x && secondRect.x <= firstRect.x + firstRect.width) ||
-           (firstRect.x >= secondRect.x && firstRect.x <= secondRect.x + secondRect.width)) &&
-           ((firstRect.y <= secondRect.y && secondRect.y <= firstRect.y + firstRect.height) ||
-           (firstRect.y >= secondRect.y && firstRect.y <= secondRect.y + secondRect.height));
+        (firstRect.x >= secondRect.x && firstRect.x <= secondRect.x + secondRect.width)) &&
+        ((firstRect.y <= secondRect.y && secondRect.y <= firstRect.y + firstRect.height) ||
+            (firstRect.y >= secondRect.y && firstRect.y <= secondRect.y + secondRect.height));
 }
 
 var overlapping = {
@@ -346,11 +346,6 @@ var BaseChart = BaseWidget.inherit({
     _rootClassPrefix: "dxc",
 
     _rootClass: "dxc-chart",
-
-    _init: function() {
-        this._savedBusinessRange = {};
-        this.callBase.apply(this, arguments);
-    },
 
     _initialChanges: ["REINIT"],
 
@@ -402,7 +397,7 @@ var BaseChart = BaseWidget.inherit({
 
     _reinit: function() {
         var that = this;
-            // _skipRender = !that._initialized;
+        // _skipRender = !that._initialized;
 
         _setCanvasValues(that._canvas);
         that._reinitAxes();
@@ -484,9 +479,9 @@ var BaseChart = BaseWidget.inherit({
         disposeObject("_crosshair");
 
         that.layoutManager =
-        that._userOptions =
-        that._canvas =
-        that._groupsData = null;
+            that._userOptions =
+            that._canvas =
+            that._groupsData = null;
 
         unlinkGroup("_stripsGroup");
         unlinkGroup("_gridGroup");
@@ -710,7 +705,7 @@ var BaseChart = BaseWidget.inherit({
 
     _calculateSeriesLayout: function(drawOptions, isRotated) {
         drawOptions.hideLayoutLabels = this.layoutManager.needMoreSpaceForPanesCanvas(this._getLayoutTargets(), isRotated)
-                                        && !this._themeManager.getOptions("adaptiveLayout").keepLabels;
+            && !this._themeManager.getOptions("adaptiveLayout").keepLabels;
 
         this._updateSeriesDimensions(drawOptions);
     },
@@ -947,7 +942,8 @@ var BaseChart = BaseWidget.inherit({
         commonAxisSettings: "AXES_AND_PANES",
         panes: "AXES_AND_PANES",
         defaultPane: "AXES_AND_PANES",
-        useAggregation: 'AXES_AND_PANES',
+        useAggregation: "AXES_AND_PANES",
+        containerBackgroundColor: "AXES_AND_PANES",
 
         rotated: "ROTATED",
 

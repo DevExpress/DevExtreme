@@ -39,11 +39,20 @@ require("ui/switch");
 var DATE_TABLE_CELL_CLASS = "dx-scheduler-date-table-cell",
     APPOINTMENT_CLASS = "dx-scheduler-appointment";
 
-var APPOINTMENT_DEFAULT_OFFSET = 25;
+var APPOINTMENT_DEFAULT_OFFSET = 25,
+    APPOINTMENT_MOBILE_OFFSET = 50;
 
 function getDeltaTz(schedulerTz, date) {
     var defaultTz = date.getTimezoneOffset() * 60000;
     return schedulerTz * 3600000 + defaultTz;
+}
+
+function getOffset() {
+    if(devices.current().deviceType !== "desktop") {
+        return APPOINTMENT_MOBILE_OFFSET;
+    } else {
+        return APPOINTMENT_DEFAULT_OFFSET;
+    }
 }
 
 QUnit.module("Integration: Appointments", {
@@ -888,14 +897,15 @@ QUnit.test("Two vertical neighbor appointments should be placed correctly", func
 
     var $commonAppointments = this.instance.$element().find(".dx-scheduler-scrollable-appointments .dx-scheduler-appointment"),
         $allDayAppts = this.instance.$element().find(".dx-scheduler-all-day-appointment"),
-        cellWidth = this.instance.$element().find("." + DATE_TABLE_CELL_CLASS).eq(0).outerWidth();
+        cellWidth = this.instance.$element().find("." + DATE_TABLE_CELL_CLASS).eq(0).outerWidth(),
+        appointmentOffset = getOffset();
 
     assert.roughEqual(translator.locate($commonAppointments.eq(0)).left, 100, 2.001, "Left position is OK");
     assert.roughEqual(translator.locate($commonAppointments.eq(1)).left, 100, 2.001, "Left position is OK");
     assert.roughEqual(translator.locate($allDayAppts.eq(0)).left, 100, 2.001, "Left position is OK");
 
-    assert.roughEqual($commonAppointments.eq(0).outerWidth(), cellWidth - APPOINTMENT_DEFAULT_OFFSET, 1.001, "Width is OK");
-    assert.roughEqual($commonAppointments.eq(1).outerWidth(), cellWidth - APPOINTMENT_DEFAULT_OFFSET, 1.001, "Width is OK");
+    assert.roughEqual($commonAppointments.eq(0).outerWidth(), cellWidth - appointmentOffset, 1.001, "Width is OK");
+    assert.roughEqual($commonAppointments.eq(1).outerWidth(), cellWidth - appointmentOffset, 1.001, "Width is OK");
     assert.roughEqual($allDayAppts.eq(0).outerWidth(), cellWidth, 1.001, "Width is OK");
 });
 
@@ -3101,7 +3111,8 @@ QUnit.test("Appointment width should depend on cell width", function(assert) {
 
     var workSpace = this.instance.getWorkSpace(),
         defaultGetCellWidthMethod = workSpace.getCellWidth,
-        CELL_WIDTH = 777;
+        CELL_WIDTH = 777,
+        offset = getOffset();
 
     workSpace.getCellWidth = function() {
         return CELL_WIDTH;
@@ -3111,7 +3122,7 @@ QUnit.test("Appointment width should depend on cell width", function(assert) {
             { id: 1, text: "Item 1", startDate: new Date(2015, 2, 18), endDate: new Date(2015, 2, 18, 0, 30) }
         ]);
 
-        assert.equal(this.instance.$element().find("." + APPOINTMENT_CLASS).first().outerWidth(), CELL_WIDTH - APPOINTMENT_DEFAULT_OFFSET, "Appointment width is OK");
+        assert.equal(this.instance.$element().find("." + APPOINTMENT_CLASS).first().outerWidth(), CELL_WIDTH - offset, "Appointment width is OK");
 
     } finally {
         workSpace.getCellWidth = defaultGetCellWidthMethod;
@@ -3955,9 +3966,10 @@ QUnit.test("Appointments should have correct position, rtl mode, editing=false",
         dataSource: [appointment]
     });
 
-    var $appointment = $(this.instance.$element()).find("." + APPOINTMENT_CLASS).eq(0);
+    var $appointment = $(this.instance.$element()).find("." + APPOINTMENT_CLASS).eq(0),
+        appointmentOffset = getOffset();
 
-    assert.roughEqual($appointment.position().left, APPOINTMENT_DEFAULT_OFFSET, 2, "Appointment left is correct on init");
+    assert.roughEqual($appointment.position().left, appointmentOffset, 2, "Appointment left is correct on init");
 });
 
 QUnit.test("Appointment should be rendered correctly with expressions on init", function(assert) {
@@ -5159,3 +5171,21 @@ QUnit.test("Scheduler should add only one appointment at multiple 'done' button 
     assert.equal($appointments.length, 1, "right appointment quantity");
 });
 
+QUnit.test("Appointment should have right width on mobile devices & desktop in week view", function(assert) {
+    this.createInstance({
+        dataSource: [{
+            text: "a",
+            startDate: new Date(2018, 2, 13, 1),
+            endDate: new Date(2018, 2, 13, 3)
+        }],
+        currentDate: new Date(2018, 2, 13),
+        views: ["week"],
+        currentView: "week"
+    });
+
+    var expectedOffset = getOffset(),
+        $appointments = this.instance.$element().find("." + APPOINTMENT_CLASS),
+        cellWidth = this.instance.$element().find("." + DATE_TABLE_CELL_CLASS).eq(0).outerWidth();
+
+    assert.roughEqual($appointments.eq(0).outerWidth(), cellWidth - expectedOffset, 1.001, "Width is OK");
+});

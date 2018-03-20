@@ -22,7 +22,7 @@ var $ = require("jquery"),
     MockDataController = dataGridMocks.MockDataController,
     dataUtils = require("core/element_data");
 
-var Pager = require("ui/data_grid/pager");
+var Pager = require("ui/pager");
 
 
 QUnit.module("Pager", {

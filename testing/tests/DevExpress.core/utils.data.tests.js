@@ -426,6 +426,22 @@ QUnit.test("multi-level prop instead of function", function(assert) {
     assert.equal(called, 0);
 });
 
+QUnit.test("not existing multi-level prop assignment", function(assert) {
+    assert.expect(1);
+
+    var obj = {
+        prop: {}
+    };
+
+    Object.defineProperty(obj.prop, "subProp", {
+        set: function(value) {
+            assert.equal(typeof value, "string", "the last-level prop should not become an empty object");
+        }
+    });
+
+    SETTER("prop.subProp")(obj, "Test value");
+});
+
 QUnit.module("setter with wrapped variables", {
     beforeEach: function() {
         variableWrapper.inject(mockVariableWrapper);

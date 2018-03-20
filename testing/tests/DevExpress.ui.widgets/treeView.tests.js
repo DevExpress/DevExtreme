@@ -155,7 +155,7 @@ window.dataID = [
     { id: 2, "elternId": 1, text: "Cat" },
     { id: 3, "elternId": 2, text: "Abyssinian" },
     { id: 4, "elternId": 0, text: "Birds" },
-    { id: 5, "elternId": 4, text: "Akekee" },
+    { id: 5, "elternId": 4, text: "Akekee" }
 ];
 
 window.initTree = function(options) {
@@ -200,7 +200,6 @@ require("./treeViewParts/accessibility.js");
 require("./treeViewParts/animation.js");
 require("./treeViewParts/checkboxes.js");
 require("./treeViewParts/events.js");
-require("./treeViewParts/expandedItems.js");
 require("./treeViewParts/expandedItems.js");
 require("./treeViewParts/focusing.js");
 require("./treeViewParts/initialization.js");

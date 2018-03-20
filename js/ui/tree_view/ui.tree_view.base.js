@@ -6,6 +6,7 @@ var $ = require("../../core/renderer"),
     messageLocalization = require("../../localization/message"),
     clickEvent = require("../../events/click"),
     commonUtils = require("../../core/utils/common"),
+    windowUtils = require("../../core/utils/window"),
     typeUtils = require("../../core/utils/type"),
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
@@ -350,7 +351,6 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
              * @publicName onSelectionChanged
              * @extends Action
              * @action
-             * @inheritdoc
              */
 
             /**
@@ -834,7 +834,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
     _fireContentReadyAction: function() {
         this.callBase();
 
-        if(this._scrollableContainer) {
+        if(this._scrollableContainer && windowUtils.hasWindow()) {
             this._scrollableContainer.update();
         }
     },

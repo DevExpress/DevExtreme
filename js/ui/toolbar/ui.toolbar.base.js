@@ -100,12 +100,13 @@ var ToolbarBase = CollectionWidget.inherit({
     },
 
     _initMarkup: function() {
-        this.callBase();
         this._renderToolbar();
+        this._renderSections();
+
+        this.callBase();
     },
 
     _render: function() {
-        this._renderSections();
         this.setAria("role", "toolbar");
         this.callBase();
         this._arrangeItems();

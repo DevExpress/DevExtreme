@@ -713,7 +713,7 @@ module.exports = {
                 _cellPrepared: function($cell, options) {
                     this.callBase.apply(this, arguments);
 
-                    if(options.column.visibleWidth === HIDDEN_COLUMNS_WIDTH) {
+                    if(options.row.rowType !== ADAPTIVE_ROW_TYPE && options.column.visibleWidth === HIDDEN_COLUMNS_WIDTH) {
                         $cell.addClass(this.addWidgetPrefix(HIDDEN_COLUMN_CLASS));
                     }
                 },
@@ -945,7 +945,7 @@ module.exports = {
                 _toggleBestFitMode: function(isBestFit) {
                     isBestFit && this._adaptiveColumnsController._removeCssClassesFromColumns();
                     this.callBase(isBestFit);
-                    if(this.option("advancedRendering") && this.option("columnAutoWidth") && this._adaptiveColumnsController.getHidingColumnsQueue().length) {
+                    if(this.option("advancedRendering") && this._adaptiveColumnsController.getHidingColumnsQueue().length) {
                         var $rowsTable = this._rowsView._getTableElement();
                         $rowsTable.css("width", isBestFit ? "auto" : "");
 

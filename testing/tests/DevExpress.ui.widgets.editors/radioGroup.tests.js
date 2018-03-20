@@ -38,13 +38,7 @@ var moduleConfig = {
 };
 
 
-QUnit.module("buttons group rendering", moduleConfig);
-
-QUnit.test("widget should be rendered", function(assert) {
-    var $radioGroup = $("#radioGroup").dxRadioGroup();
-
-    assert.ok($radioGroup.hasClass(RADIO_GROUP_CLASS), "widget class added");
-});
+QUnit.module("buttons group rendering");
 
 QUnit.test("onContentReady fired after the widget is fully ready", function(assert) {
     assert.expect(2);
@@ -58,93 +52,6 @@ QUnit.test("onContentReady fired after the widget is fully ready", function(asse
             assert.ok($(e.element).find("." + RADIO_BUTTON_CLASS).length);
         }
     });
-});
-
-QUnit.test("widget should generate buttons", function(assert) {
-    var $radioGroup = $("#radioGroup").dxRadioGroup({
-        items: [
-            { text: "0" },
-            { text: "1" },
-            { text: "2" }
-        ]
-    });
-
-    assert.equal($radioGroup.find(toSelector(RADIO_BUTTON_CLASS)).length, 3, "buttons generated");
-});
-
-QUnit.test("empty message should not be generated if no items", function(assert) {
-    var $radioGroup = $("#radioGroup").dxRadioGroup();
-
-    assert.equal($radioGroup.find(".dx-scrollview-content").text(), "", "empty message is not shown");
-});
-
-QUnit.test("widget should correctly process 'disabled' option changed", function(assert) {
-    var $radioGroup = $("#radioGroup").dxRadioGroup({
-        items: [
-            { text: "0" },
-            { text: "1" },
-            { text: "2" }
-        ],
-        disabled: true
-    });
-
-    assert.ok($radioGroup.find(".dx-collection").hasClass("dx-state-disabled"), "inner collection has disabled-state class");
-
-    var radioGroup = $radioGroup.dxRadioGroup("instance");
-    radioGroup.option("disabled", false);
-
-    assert.ok(!$radioGroup.find(".dx-collection").hasClass("dx-state-disabled"), "inner collection hasn't disabled-state class");
-});
-
-
-QUnit.module("buttons rendering", moduleConfig);
-
-QUnit.test("button markup item if item.value is specified", function(assert) {
-    var $radioGroup = $("#radioGroup").dxRadioGroup({
-        items: [
-            { text: "0", value: "0" }
-        ],
-        valueExpr: "value"
-    });
-
-    var $radioButton = $radioGroup.find(toSelector(RADIO_BUTTON_CLASS)).eq(0);
-    assert.equal($radioButton.text(), "0", "text rendered correctly");
-});
-
-QUnit.test("button markup item if item.value is not specified", function(assert) {
-    var $radioGroup = $("#radioGroup").dxRadioGroup({
-        items: [
-            { text: "0" }
-        ],
-        valueExpr: "value"
-    });
-
-    var $radioButton = $radioGroup.find(toSelector(RADIO_BUTTON_CLASS)).eq(0);
-    assert.equal($radioButton.text(), "0", "text rendered correctly");
-});
-
-QUnit.test("button markup item if item is primitive string", function(assert) {
-    var $radioGroup = $("#radioGroup").dxRadioGroup({
-        items: [
-            "0"
-        ]
-    });
-
-    var $radioButton = $radioGroup.find(toSelector(RADIO_BUTTON_CLASS)).eq(0);
-    assert.equal($radioButton.text(), "0", "text rendered correctly");
-});
-
-QUnit.test("button markup item if item has html", function(assert) {
-    var $radioGroup = $("#radioGroup").dxRadioGroup({
-        items: [
-            { html: "<input type='radio' value='foo'>" }
-        ]
-    });
-
-    var $radioButton = $radioGroup.find(toSelector(RADIO_BUTTON_CLASS)).find("input");
-
-    assert.equal($radioButton.prop("type"), "radio", "input type rendered correctly");
-    assert.equal($radioButton.prop("value"), "foo", "input value rendered correctly");
 });
 
 
@@ -188,24 +95,6 @@ QUnit.test("On the tablet radio group must use a horizontal layout", function(as
 
 QUnit.module("hidden input");
 
-QUnit.test("a hidden input should be rendered", function(assert) {
-    var $element = $("#radioGroup").dxRadioGroup(),
-        $input = $element.find("input");
-
-    assert.equal($input.length, 1, "input is rendered");
-    assert.equal($input.attr("type"), "hidden", "the input type is 'hidden'");
-});
-
-QUnit.test("the hidden input should have correct value on widget init", function(assert) {
-    var $element = $("#radioGroup").dxRadioGroup({
-            items: [1, 2, 3],
-            value: 2
-        }),
-        $input = $element.find("input");
-
-    assert.equal($input.val(), "2", "input value is correct");
-});
-
 QUnit.test("the hidden input should get correct value on widget value change", function(assert) {
     var $element = $("#radioGroup").dxRadioGroup({
             items: [1, 2, 3],
@@ -216,44 +105,6 @@ QUnit.test("the hidden input should get correct value on widget value change", f
 
     instance.option("value", 1);
     assert.equal($input.val(), "1", "input value is correct");
-});
-
-QUnit.test("the hidden input should get display text as value if widget value is an object", function(assert) {
-    var items = [{ id: 1, text: "one" }],
-        $element = $("#radioGroup").dxRadioGroup({
-            items: items,
-            value: items[0],
-            displayExpr: "text"
-        }),
-        $input = $element.find("input");
-
-    assert.equal($input.val(), items[0].text, "input value is correct");
-});
-
-QUnit.test("the hidden input should get value in respect of the 'valueExpr' option", function(assert) {
-    var items = [{ id: 1, text: "one" }],
-        $element = $("#radioGroup").dxRadioGroup({
-            items: items,
-            value: items[0].id,
-            valueExpr: "id",
-            displayExpr: "text"
-        }),
-        $input = $element.find("input");
-
-    assert.equal($input.val(), items[0].id, "input value is correct");
-});
-
-
-QUnit.module("the 'name' option");
-
-QUnit.test("widget hidden input should get the 'name' attribute with a correct value", function(assert) {
-    var expectedName = "some_name",
-        $element = $("#radioGroup").dxRadioGroup({
-            name: expectedName
-        }),
-        $input = $element.find("input");
-
-    assert.equal($input.attr("name"), expectedName, "the hidden input 'name' attribute has correct value");
 });
 
 
@@ -269,25 +120,6 @@ QUnit.test("repaint of widget shouldn't reset value option", function(assert) {
 
     radioGroup.repaint();
     assert.strictEqual(radioGroup.option("value"), items[1]);
-});
-
-QUnit.test("item checked on start", function(assert) {
-    var done = assert.async();
-
-    executeAsyncMock.teardown();
-
-    var items = [{ text: "0" }, { text: "1" }];
-    var $radioGroup = $("#radioGroup").dxRadioGroup({
-        dataSource: items,
-        value: items[1]
-    });
-
-    var radioGroup = $radioGroup.dxRadioGroup("instance");
-
-    setTimeout(function() {
-        assert.equal($(radioGroup.itemElements()).filter(toSelector(RADIO_BUTTON_CHECKED_CLASS)).length, 1, "one item checked");
-        done();
-    });
 });
 
 QUnit.test("value is changed on item click", function(assert) {
@@ -361,74 +193,8 @@ QUnit.test("value should be correct if valueExpr is a string", function(assert) 
     assert.equal($(radioGroup.itemElements()).find(toSelector(RADIO_BUTTON_CHECKED_CLASS)).length, 0, "no items selected");
 });
 
-QUnit.test("value should be correct if valueExpr is a string", function(assert) {
-    var items = [
-        { number: 0, caption: "zero" },
-        { number: 1, caption: "one" }
-    ];
-
-    var radioGroup = $("#radioGroup")
-        .dxRadioGroup({
-            dataSource: items,
-            valueExpr: "number",
-            itemRender: function(item) {
-                return item.caption;
-            },
-            value: 0
-        })
-        .dxRadioGroup("instance");
-
-    var $firstItem = $(radioGroup.itemElements()).eq(0);
-
-    assert.ok($firstItem.hasClass(RADIO_BUTTON_CHECKED_CLASS), "item with zero value rendered correctly");
-});
-
 
 QUnit.module("widget sizing render", moduleConfig);
-
-QUnit.test("default", function(assert) {
-    var $element = $("#widget").dxRadioGroup({
-        items: [
-            { text: "0" },
-            { text: "1" },
-            { text: "2" },
-            { text: "3" }
-        ]
-    });
-
-    assert.ok($element.outerWidth() > 0, "outer width of the element must be more than zero");
-});
-
-QUnit.test("constructor", function(assert) {
-    var $element = $("#widget").dxRadioGroup({
-            items: [
-                { text: "0" },
-                { text: "1" },
-                { text: "2" },
-                { text: "3" }
-            ],
-            width: 400
-        }),
-        instance = $element.dxRadioGroup("instance");
-
-    assert.strictEqual(instance.option("width"), 400);
-    assert.strictEqual($element.outerWidth(), 400, "outer width of the element must be equal to custom width");
-});
-
-QUnit.test("root with custom width", function(assert) {
-    var $element = $("#widthRootStyle").dxRadioGroup({
-            items: [
-                { text: "0" },
-                { text: "1" },
-                { text: "2" },
-                { text: "3" }
-            ]
-        }),
-        instance = $element.dxRadioGroup("instance");
-
-    assert.strictEqual(instance.option("width"), undefined);
-    assert.strictEqual($element.outerWidth(), 300, "outer width of the element must be equal to custom width");
-});
 
 QUnit.test("change width", function(assert) {
     var $element = $("#widget").dxRadioGroup({
@@ -615,25 +381,4 @@ QUnit.testInActiveWindow("the 'focus()' method should set focused class to widge
 
     instance.focus();
     assert.ok($radioGroup.hasClass("dx-state-focused"), "widget got focused class");
-});
-
-
-QUnit.module("aria accessibility");
-
-QUnit.test("aria role", function(assert) {
-    var $element = $("#radioGroup").dxRadioGroup({ focusStateEnabled: true });
-    assert.equal($element.attr("role"), "radiogroup", "aria role is correct");
-    assert.ok($element.attr("aria-activedescendant"), "aria-activedescendant should be on element with role");
-});
-
-QUnit.test("radio role should be included in radiogroup", function(assert) {
-    assert.expect(6);
-
-    var items = [1, 2, 3],
-        $element = $("#radioGroup").dxRadioGroup({ items: items, value: items[0] });
-
-    $element.find("." + RADIO_BUTTON_CLASS).each(function(i, radioButton) {
-        assert.equal($(radioButton).attr("role"), "radio", " role for button " + i + " is correct");
-        assert.equal($(radioButton).attr("aria-checked"), "" + (i === 0), i + "checked state for button " + i + " is correct");
-    });
 });

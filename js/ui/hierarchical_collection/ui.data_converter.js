@@ -169,7 +169,7 @@ var DataConverter = Class.inherit({
                 var currentElementKey = element.internalFields && element.internalFields.key || that._dataAccessors.getters.key(element),
                     items = that._dataAccessors.getters.items(element);
 
-                if(currentElementKey === key) {
+                if(currentElementKey.toString() === key.toString()) {
                     result = element;
                     return false;
                 }

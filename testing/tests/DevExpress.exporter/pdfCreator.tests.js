@@ -5,12 +5,7 @@ var $ = require("jquery"),
     getData = require("client_exporter").pdf.getData,
     pdfCreator = require("client_exporter/pdf_creator").__tests,
     isFunction = require("core/utils/type").isFunction,
-    imageCreator = require("client_exporter/image_creator").imageCreator,
-    browser = require("core/utils/browser");
-
-if(browser.msie && parseInt(browser.version) < 10) {
-    return;
-}
+    imageCreator = require("client_exporter/image_creator").imageCreator;
 
 QUnit.module("PDF content test", {
     beforeEach: function() {

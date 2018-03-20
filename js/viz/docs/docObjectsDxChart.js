@@ -20,12 +20,50 @@ var chartSeriesObject = {
 }
 
 /**
+* @name chartPointAggregationInfoObject
+* @publicName aggregationInfo
+* @type object
+*/
+var chartPointAggregationInfoObject = {
+    /**
+    * @name chartPointAggregationInfoObject_data
+    * @publicName data
+    * @type Array<any>
+    */
+    data: null,
+    /**
+    * @name chartPointAggregationInfoObject_aggregationInterval
+    * @publicName aggregationInterval
+    * @type any
+    */
+    aggregationInterval: null,
+    /**
+    * @name chartPointAggregationInfoObject_intervalStart
+    * @publicName intervalStart
+    * @type any
+    */
+    intervalStart: null,
+    /**
+    * @name chartPointAggregationInfoObject_intervalEnd
+    * @publicName intervalEnd
+    * @type any
+    */
+    intervalEnd: null
+}
+
+/**
 * @name chartPointObject
 * @publicName Point
 * @type object
 * @inherits basePointObject
 */
 var chartPointObject = {
+    /**
+    * @name chartPointObjectFields_aggregationInfo
+    * @publicName aggregationInfo
+    * @type chartPointAggregationInfoObject
+    */
+    aggregationInfo: null,
     /**
     * @name chartPointObjectFields_originalMinValue
     * @publicName originalMinValue

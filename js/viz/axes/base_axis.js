@@ -1099,6 +1099,7 @@ Axis.prototype = {
         var majors = ticks.majorTicks || [];
         this._majorTicks = majors.map(createMajorTick(this, this._renderer, this._getSkippedCategory(majors)));
         this._minorTicks = (ticks.minorTicks || []).map(createMinorTick(this, this._renderer));
+        this._isSynchronized = true;
     },
 
     _getTicks: function(viewPort, incidentOccurred, skipTickGeneration) {
@@ -1153,8 +1154,8 @@ Axis.prototype = {
         if(!canvas) {
             return;
         }
-        that._majorTicks = that._minorTicks = null;
 
+        that._isSynchronized = false;
         that.updateCanvas(canvas);
 
         that._estimatedTickInterval = that._getTicks(new rangeModule.Range(this._seriesData), _noop, true).tickInterval;
@@ -1168,6 +1169,8 @@ Axis.prototype = {
             if(boundaryTicks.length > 1) {
                 that._boundaryTicks = that._boundaryTicks.concat([boundaryTicks[1]].map(createBoundaryTick(that, renderer, false)));
             }
+        } else {
+            that._boundaryTicks = [];
         }
 
         var minors = (ticks.minorTicks || []).filter(function(minor) {
@@ -1199,7 +1202,7 @@ Axis.prototype = {
             length = ticks.length,
             translator = that._translator;
 
-        if(translator.getBusinessRange().isSynchronized) {
+        if(that._isSynchronized) {
             return;
         }
         if(that._options.type !== constants.discrete) {
@@ -1362,13 +1365,13 @@ Axis.prototype = {
 
         initTickCoords(that._majorTicks);
         initTickCoords(that._minorTicks);
-        initTickCoords(that._boundaryTicks || []);
+        initTickCoords(that._boundaryTicks);
 
         that._drawAxis();
         that._drawTitle();
         drawTickMarks(that._majorTicks);
         drawTickMarks(that._minorTicks);
-        drawTickMarks(that._boundaryTicks || []);
+        drawTickMarks(that._boundaryTicks);
         drawGrids(that._majorTicks, drawGridLine);
         drawGrids(that._minorTicks, drawGridLine);
         callAction(that._majorTicks, "drawLabel", that._getViewportRange());
@@ -1421,17 +1424,17 @@ Axis.prototype = {
 
         initTickCoords(that._majorTicks);
         initTickCoords(that._minorTicks);
-        initTickCoords(that._boundaryTicks || []);
+        initTickCoords(that._boundaryTicks);
 
         cleanUpInvalidTicks(that._majorTicks);
         cleanUpInvalidTicks(that._minorTicks);
-        cleanUpInvalidTicks(that._boundaryTicks || []);
+        cleanUpInvalidTicks(that._boundaryTicks);
 
         that._updateAxisElementPosition();
 
         updateTicksPosition(that._majorTicks);
         updateTicksPosition(that._minorTicks);
-        updateTicksPosition(that._boundaryTicks || []);
+        updateTicksPosition(that._boundaryTicks);
 
         callAction(that._majorTicks, "updateLabelPosition");
 
@@ -1601,7 +1604,7 @@ Axis.prototype = {
         if(this._options.type === constants.discrete) {
             return convertTicksToValues(majors);
         } else {
-            return convertTicksToValues(majors.concat(this._minorTicks, this._boundaryTicks || []))
+            return convertTicksToValues(majors.concat(this._minorTicks, this._boundaryTicks))
                 .sort(function(a, b) {
                     return valueOf(a) - valueOf(b);
                 });

@@ -52,6 +52,11 @@ var RadioCollection = CollectionWidget.inherit({
 
     _keyboardEventBindingTarget: function() {
         return this._focusTarget();
+    },
+
+    _refreshContent: function() {
+        this._prepareContent();
+        this._renderContent();
     }
 });
 
@@ -175,14 +180,14 @@ var RadioGroup = Editor.inherit({
         this._renderSubmitElement();
         this.setAria("role", "radiogroup");
 
+        this._renderRadios();
+        this.option("useInkRipple") && this._renderInkRipple();
+
         this.callBase();
     },
 
     _render: function() {
-        this._renderRadios();
         this._renderLayout();
-
-        this.option("useInkRipple") && this._renderInkRipple();
         this.callBase();
         this._updateItemsSize();
     },

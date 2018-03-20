@@ -54,14 +54,24 @@ exports.chart.bubble = _extend({}, scatterSeries, {
         return pointData;
     },
 
-    _fusionPoints: function(fusionPoints, tick) {
-        var calcMedianValue = scatterSeries._calcMedianValue;
-        return {
-            size: calcMedianValue.call(this, fusionPoints, "size"),
-            value: calcMedianValue.call(this, fusionPoints, "value"),
-            argument: tick,
-            tag: null
-        };
+    _aggregators: {
+        avg: function(aggregationInfo, series) {
+            var result = {},
+                valueField = series.getValueFields()[0],
+                sizeField = series.getSizeField(),
+                aggregate = aggregationInfo.data.reduce(function(result, item) {
+                    result[0] += item[valueField];
+                    result[1] += item[sizeField];
+                    result[2]++;
+                    return result;
+                }, [0, 0, 0]);
+
+            result[valueField] = aggregate[0] / aggregate[2];
+            result[sizeField] = aggregate[1] / aggregate[2];
+            result[series.getArgumentField()] = aggregationInfo.intervalStart;
+
+            return result;
+        }
     },
 
     getValueFields: function() {

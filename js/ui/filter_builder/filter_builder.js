@@ -282,6 +282,7 @@ var FilterBuilder = Widget.inherit({
              * @publicName value
              * @type Filter expression
              * @default null
+             * @fires dxFilterBuilderOptions_onValueChanged
              */
             value: null,
 

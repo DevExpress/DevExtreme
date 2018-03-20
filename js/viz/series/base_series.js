@@ -364,8 +364,6 @@ Series.prototype = {
             that._canRenderCompleteHandle = true;
         }
 
-        that._beginUpdateData(data);
-
         that._data = data.reduce(function(data, dataItem, index) {
             var pointDataItem = that._getPointData(dataItem, options);
             if(that._checkData(pointDataItem)) {
@@ -398,11 +396,14 @@ Series.prototype = {
         var that = this,
             allPoints = that._allPoints = (that._points || []).slice(),
             oldPointsByArgument = that.pointsByArgument || {},
+            data = that._getData(),
             points;
 
         that.pointsByArgument = {};
 
-        points = that._getData().map(function(dataItem, index) {
+        that._calculateErrorBars(data);
+
+        points = data.map(function(dataItem, index) {
             var oldPoint = that._getOldPoint(dataItem, oldPointsByArgument, index),
                 p = that._createPoint(dataItem, index, oldPoint, dataItem.index);
 
@@ -839,17 +840,49 @@ Series.prototype = {
         return _extend(false, {}, this._getOptionsForPoint(), { hoverStyle: {}, selectionStyle: {} });
     },
 
-    _resample: function(ticksInterval, min, max, isDefinedMinMax, data) {
+    _getAggregationMethod: function() {
+        var options = this.getOptions().aggregation,
+            method = _normalizeEnum(options.method),
+            aggregator = method !== "custom" ? this._aggregators[method] : options.calculate;
+
+        if(!aggregator) {
+            return this._aggregators[this._defaultAggregator];
+        }
+
+        return aggregator;
+    },
+
+    _fusionData: function(data, interval, aggregationInterval) {
+        var options = this.getOptions(),
+            aggregationMethod = this._getAggregationMethod(),
+            underlyingData = data.map(function(item) { return item.data; }),
+            aggregationInfo = {
+                data: underlyingData,
+                aggregationInterval: aggregationInterval,
+                intervalStart: interval,
+                intervalEnd: typeUtils.isDate(interval) ? new Date(interval.getTime() + aggregationInterval) : interval + aggregationInterval
+            },
+            aggregatedData = aggregationMethod(aggregationInfo, this),
+            pointData = aggregatedData && this._getPointData(aggregatedData, options);
+
+        if(pointData && this._checkData(pointData)) {
+            pointData.aggregationInfo = aggregationInfo;
+            return pointData;
+        }
+
+        return null;
+    },
+
+    _resample: function(aggregationInterval, min, max, isDefinedMinMax, data) {
         var that = this,
-            fusionPoints = [],
-            nowIndexTicks = 0,
+            dataInInterval = [],
             pointData,
             minTick,
             aggregatedData,
             state = 0;
 
-        function addFirstFusionPoint(point) {
-            fusionPoints.push(point);
+        function addFirstDataItem(point) {
+            dataInInterval.push(point);
             minTick = point.argument;
 
             if(isDefinedMinMax) {
@@ -865,7 +898,7 @@ Series.prototype = {
 
         if(that.argumentAxisType === DISCRETE || that.valueAxisType === DISCRETE) {
             return _map(data, function(point, index) {
-                if(index % ticksInterval === 0) {
+                if(index % aggregationInterval === 0) {
                     return point;
                 }
                 return null;
@@ -873,27 +906,30 @@ Series.prototype = {
         }
 
         aggregatedData = data.reduce(function(aggregatedPoints, point) {
-            if(!fusionPoints.length) {
-                addFirstFusionPoint(point);
-            } else if(!state && Math.abs(minTick - point.argument) < ticksInterval) {
-                fusionPoints.push(point);
+            if(!dataInInterval.length) {
+                addFirstDataItem(point);
+            } else if(!state && Math.abs(minTick - point.argument) < aggregationInterval) {
+                dataInInterval.push(point);
             } else if(!(state === 1 && point.argument < min) && !(state === 2 && point.argument > max)) {
-                pointData = that._fusionPoints(fusionPoints, minTick, nowIndexTicks);
-                nowIndexTicks++;
+                pointData = that._fusionData(dataInInterval, minTick, aggregationInterval);
 
-                aggregatedPoints.push(pointData);
+                if(pointData) {
+                    aggregatedPoints.push(pointData);
+                }
 
-                fusionPoints = [];
-                addFirstFusionPoint(point);
+                dataInInterval = [];
+                addFirstDataItem(point);
             }
 
             return aggregatedPoints;
 
         }, []);
 
-        if(fusionPoints.length) {
-            pointData = that._fusionPoints(fusionPoints, minTick, nowIndexTicks);
-            aggregatedData.push(pointData);
+        if(dataInInterval.length) {
+            pointData = that._fusionData(dataInInterval, minTick, aggregationInterval);
+            if(pointData) {
+                aggregatedData.push(pointData);
+            }
         }
 
         that._endUpdateData();

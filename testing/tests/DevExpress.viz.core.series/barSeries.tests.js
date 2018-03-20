@@ -4,11 +4,10 @@ var $ = require("jquery"),
     vizMocks = require("../../helpers/vizMocks.js"),
     Color = require("color"),
     Series = require("viz/series/base_series").Series,
-    pointModule = require("viz/series/points/base_point");
-
-/* global insertMockFactory, MockTranslator, MockAxis */
-require("../../helpers/chartMocks.js");
-
+    pointModule = require("viz/series/points/base_point"),
+    chartMocks = require("../../helpers/chartMocks.js"),
+    MockAxis = chartMocks.MockAxis,
+    MockTranslator = chartMocks.MockTranslator;
 
 require("viz/chart");
 
@@ -66,7 +65,6 @@ var mockPoints = [createPoint(), createPoint(), createPoint(), createPoint(), cr
 
 var environment = {
     beforeEach: function() {
-        insertMockFactory();
         var mockPointIndex = 0;
         this.renderer = new vizMocks.Renderer();
         this.seriesGroup = this.renderer.g();
@@ -764,11 +762,18 @@ QUnit.test("customizePoint object", function(assert) {
     assert.ok(series);
     assert.equal(spy.callCount, 2);
 
-    assert.deepEqual(spy.firstCall.args, [{ argument: "arg1", value: "val1", seriesName: "seriesName", tag: "tag1", index: 0, series: series }]);
-    assert.deepEqual(spy.firstCall.thisValue, { argument: "arg1", value: "val1", seriesName: "seriesName", tag: "tag1", index: 0, series: series });
+    var expectedArg = {
+        argument: "arg1",
+        value: "val1",
+        seriesName: "seriesName",
+        tag: "tag1",
+        index: 0,
+        series: series,
+        data: this.data[0]
+    };
 
-    assert.deepEqual(spy.secondCall.args, [{ argument: "arg2", value: "val2", seriesName: "seriesName", tag: "tag2", index: 1, series: series }]);
-    assert.deepEqual(spy.secondCall.thisValue, { argument: "arg2", value: "val2", seriesName: "seriesName", tag: "tag2", index: 1, series: series });
+    assert.deepEqual(spy.firstCall.args, [expectedArg]);
+    assert.deepEqual(spy.firstCall.thisValue, expectedArg);
 });
 
 QUnit.test("customize point color. all", function(assert) {

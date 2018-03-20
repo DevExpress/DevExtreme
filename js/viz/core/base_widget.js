@@ -123,7 +123,7 @@ var getEmptyComponent = function() {
 
     EmptyComponent.inherit = function(config) {
         for(var field in config) {
-            if(typeUtils.isFunction(config[field]) && field.substr(0, 1) !== "_" || field === "_dispose") {
+            if(typeUtils.isFunction(config[field]) && field.substr(0, 1) !== "_" || field === "_dispose" || field === "_optionChanged") {
                 config[field] = noop;
             }
         }

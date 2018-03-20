@@ -104,7 +104,9 @@ var baseBarSeriesMethods = {
     _patchMarginOptions: function(options) {
         options.checkInterval = true;
         return options;
-    }
+    },
+
+    _defaultAggregator: "sum"
 };
 
 exports.chart.bar = _extend({}, chartSeries, baseBarSeriesMethods, {

@@ -94,11 +94,6 @@ module.exports = {
              * @default false
              */
             /**
-             * @name dxDataGridOptions_paging
-             * @publicName paging
-             * @type object
-             */
-            /**
              * @name dxTreeListOptions_remoteOperations_sorting
              * @publicName sorting
              * @type boolean
@@ -116,6 +111,16 @@ module.exports = {
              * @type boolean
              * @default false
              */
+            /**
+             * @name dxDataGridOptions_paging
+             * @publicName paging
+             * @type object
+             */
+            /**
+             * @name dxTreeListOptions_paging
+             * @publicName paging
+             * @type object
+             */
             paging: {
                 /**
                  * @name dxDataGridOptions_paging_enabled
@@ -125,17 +130,19 @@ module.exports = {
                  */
                 enabled: true,
                 /**
-                 * @name dxDataGridOptions_paging_pageSize
+                 * @name GridBaseOptions_paging_pageSize
                  * @publicName pageSize
                  * @type number
                  * @default 20
+                 * @fires dxDataGridOptions_onOptionChanged
                  */
                 pageSize: undefined,
                 /**
-                 * @name dxDataGridOptions_paging_pageIndex
+                 * @name GridBaseOptions_paging_pageIndex
                  * @publicName pageIndex
                  * @type number
                  * @default 0
+                 * @fires dxDataGridOptions_onOptionChanged
                  */
                 pageIndex: undefined
             }
@@ -898,7 +905,7 @@ module.exports = {
                     return !this.items().length;
                 },
                 /**
-                 * @name dxDataGridMethods_pageCount
+                 * @name GridBaseMethods_pageCount
                  * @publicName pageCount()
                  * @return numeric
                  */
@@ -1032,12 +1039,12 @@ module.exports = {
                     return result;
                 },
                 /**
-                * @name dxDataGridMethods_pageIndex
+                * @name GridBaseMethods_pageIndex
                 * @publicName pageIndex()
                 * @return numeric
                 */
                 /**
-                * @name dxDataGridMethods_pageIndex
+                * @name GridBaseMethods_pageIndex
                 * @publicName pageIndex(newIndex)
                 * @param1 newIndex:numeric
                 * @return Promise<void>
@@ -1046,12 +1053,12 @@ module.exports = {
                     return changePaging(this, "pageIndex", value);
                 },
                 /**
-                * @name dxDataGridMethods_pageSize
+                * @name GridBaseMethods_pageSize
                 * @publicName pageSize()
                 * @return numeric
                 */
                 /**
-                * @name dxDataGridMethods_pageSize
+                * @name GridBaseMethods_pageSize
                 * @publicName pageSize(value)
                 * @param1 value:numeric
                 */

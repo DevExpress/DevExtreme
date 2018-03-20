@@ -24,43 +24,73 @@ var ListEdit = ListBase.inherit({
         };
 
         var moveFocusedItemUp = function(e) {
+            var focusedItemIndex = that._editStrategy.getNormalizedIndex(that.option("focusedElement"));
+
             if(e.shiftKey && that.option("allowItemReordering")) {
                 e.preventDefault();
 
-                var focusedItemIndex = that._editStrategy.getNormalizedIndex(that.option("focusedElement")),
-                    $prevItem = that._editStrategy.getItemElement(focusedItemIndex - 1);
+                var $prevItem = that._editStrategy.getItemElement(focusedItemIndex - 1);
 
                 that.reorderItem(that.option("focusedElement"), $prevItem);
                 that.scrollToItem(that.option("focusedElement"));
             } else {
+                if(focusedItemIndex === 0 && this._editProvider.handleKeyboardEvents(focusedItemIndex, false)) {
+                    return;
+                } else {
+                    this._editProvider.handleKeyboardEvents(focusedItemIndex, true);
+                }
                 parent.upArrow(e);
             }
         };
 
         var moveFocusedItemDown = function(e) {
+            var focusedItemIndex = that._editStrategy.getNormalizedIndex(that.option("focusedElement"));
+
             if(e.shiftKey && that.option("allowItemReordering")) {
                 e.preventDefault();
 
-                var focusedItemIndex = that._editStrategy.getNormalizedIndex(that.option("focusedElement")),
-                    $nextItem = that._editStrategy.getItemElement(focusedItemIndex + 1);
+                var $nextItem = that._editStrategy.getItemElement(focusedItemIndex + 1);
 
                 that.reorderItem(that.option("focusedElement"), $nextItem);
                 that.scrollToItem(that.option("focusedElement"));
             } else {
+                if(focusedItemIndex === this._getLastItemIndex() && this._editProvider.handleKeyboardEvents(focusedItemIndex, false)) {
+                    return;
+                } else {
+                    this._editProvider.handleKeyboardEvents(focusedItemIndex, true);
+                }
                 parent.downArrow(e);
+            }
+        };
+
+        var enter = function(e) {
+            if(!this._editProvider.handleEnterPressing()) {
+                parent.enter.apply(this, arguments);
+            }
+        };
+
+        var space = function(e) {
+            if(!this._editProvider.handleEnterPressing()) {
+                parent.space.apply(this, arguments);
             }
         };
 
         return extend({}, parent, {
             del: deleteFocusedItem,
             upArrow: moveFocusedItemUp,
-            downArrow: moveFocusedItemDown
+            downArrow: moveFocusedItemDown,
+            enter: enter,
+            space: space
         });
     },
 
     _updateSelection: function() {
         this._editProvider.afterItemsRendered();
         this.callBase();
+    },
+
+    _getLastItemIndex: function() {
+        return this._itemElements().length - 1;
     },
 
     _refreshItemElements: function() {
@@ -378,6 +408,14 @@ var ListEdit = ListBase.inherit({
     _clean: function() {
         this._disposeEditProvider();
         this.callBase();
+    },
+
+    focusListItem: function(index) {
+        var $item = this._editStrategy.getItemElement(index);
+
+        this.option("focusedElement", $item);
+        this.focus();
+        this.scrollToItem(this.option("focusedElement"));
     },
 
     _optionChanged: function(args) {

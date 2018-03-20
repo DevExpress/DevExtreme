@@ -2605,7 +2605,68 @@ QUnit.testStart(function() {
         $(this.instance.$element().find(".dx-scheduler-appointment").eq(1)).trigger("dxclick");
     });
 
-    QUnit.test("Cell click option should be passed to scheduler", function(assert) {
+    QUnit.test("onAppointmentContextMenu should fires when appointment context menu is triggered", function(assert) {
+        assert.expect(3);
+
+        var items = [{
+            startDate: new Date(2015, 2, 10),
+            endDate: new Date(2015, 2, 13),
+            text: "Task caption"
+        }, {
+            startDate: new Date(2015, 2, 15),
+            endDate: new Date(2015, 2, 20),
+            text: "Task caption"
+        }];
+
+        this.createInstance({
+            dataSource: new DataSource({
+                store: items
+            }),
+            views: ["month"],
+            currentView: "month",
+            maxAppointmentsPerCell: null,
+            currentDate: new Date(2015, 2, 9),
+            onAppointmentContextMenu: function(e) {
+                assert.deepEqual(isRenderer(e.appointmentElement), !!config().useJQuery, "appointmentElement is correct");
+                assert.deepEqual($(e.appointmentElement)[0], $item[0], "appointmentElement is correct");
+                assert.strictEqual(e.appointmentData, items[0], "appointmentData is correct");
+            }
+        });
+
+        var $item = $(this.instance.$element().find(".dx-scheduler-appointment").eq(0));
+        $($item).trigger("dxcontextmenu");
+    });
+
+    QUnit.test("Args of onAppointmentContextMenu should contain data about particular appt", function(assert) {
+        assert.expect(2);
+
+        var items = [{
+            text: "Task caption",
+            start: { date: new Date(2015, 2, 10, 1) },
+            end: { date: new Date(2015, 2, 10, 2) },
+            recurrence: { rule: "FREQ=DAILY" }
+        }];
+
+        this.createInstance({
+            dataSource: new DataSource(items),
+            views: ["week"],
+            currentView: "week",
+            currentDate: new Date(2015, 2, 9),
+            startDateExpr: "start.date",
+            endDateExpr: "end.date",
+            recurrenceRuleExpr: "recurrence.rule",
+            onAppointmentContextMenu: function(e) {
+                var targetedAppointmentData = e.targetedAppointmentData;
+
+                assert.equal(targetedAppointmentData.start.date.getTime(), new Date(2015, 2, 11, 1).getTime(), "Start date is OK");
+                assert.equal(targetedAppointmentData.end.date.getTime(), new Date(2015, 2, 11, 2).getTime(), "End date is OK");
+            }
+        });
+
+        $(this.instance.$element().find(".dx-scheduler-appointment").eq(1)).trigger("dxcontextmenu");
+    });
+
+    QUnit.test("Cell click option should be passed to workSpace", function(assert) {
         this.createInstance({
             currentView: 'month',
             onCellClick: sinon.stub().returns(1)
@@ -2618,7 +2679,33 @@ QUnit.testStart(function() {
         assert.deepEqual(workspaceMonth.option("onCellClick")(), this.instance.option("onCellClick")(), "scheduler has correct onCellClick after option change");
     });
 
-    QUnit.test("onAppointmentDblClick option should be passed to scheduler", function(assert) {
+    QUnit.test("onCellContextMenu option should be passed to workSpace", function(assert) {
+        this.createInstance({
+            currentView: 'month',
+            onCellContextMenu: sinon.stub().returns(1)
+        });
+        var workspaceMonth = this.instance.getWorkSpace();
+
+        assert.deepEqual(workspaceMonth.option("onCellContextMenu")(), this.instance.option("onCellContextMenu")(), "scheduler has correct onCellContextMenu");
+
+        this.instance.option("onCellContextMenu", sinon.stub().returns(2));
+        assert.deepEqual(workspaceMonth.option("onCellContextMenu")(), this.instance.option("onCellContextMenu")(), "scheduler has correct onCellContextMenu after option change");
+    });
+
+    QUnit.test("onAppointmentContextMenu option should be passed to appointments", function(assert) {
+        this.createInstance({
+            currentView: 'month',
+            onAppointmentContextMenu: sinon.stub().returns(1)
+        });
+
+        var appointments = this.instance.getAppointmentsInstance();
+        assert.deepEqual(appointments.option("onItemContextMenu")(), this.instance.option("onAppointmentContextMenu")(), "scheduler has correct onAppointmentContextMenu");
+
+        this.instance.option("onAppointmentContextMenu", sinon.stub().returns(2));
+        assert.deepEqual(appointments.option("onItemContextMenu")(), this.instance.option("onAppointmentContextMenu")(), "scheduler has correct onAppointmentContextMenu after option change");
+    });
+
+    QUnit.test("onAppointmentDblClick option should be passed to appointments", function(assert) {
         this.createInstance({
             currentView: 'month',
             onAppointmentDblClick: sinon.stub().returns(1)

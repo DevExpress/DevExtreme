@@ -619,7 +619,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
     _getWidths: function($cellElements) {
         var result = [],
-            advancedRendering = this.option("advancedRendering") && this.option("columnAutoWidth"),
+            advancedRendering = this.option("advancedRendering"),
             width,
             clientRect;
 
@@ -666,29 +666,34 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         return result;
     },
 
-    setColumnWidths: function(widths, $tableElement, columns) {
+    setColumnWidths: function(widths, $tableElement, columns, fixed) {
         var $cols,
             i,
             width,
             minWidth,
             columnIndex,
-            advancedRendering = this.option("advancedRendering") && this.option("columnAutoWidth");
+            columnAutoWidth = this.option("columnAutoWidth"),
+            advancedRendering = this.option("advancedRendering");
 
         $tableElement = $tableElement || this._getTableElement();
 
         if($tableElement && $tableElement.length && widths) {
             columnIndex = 0;
             $cols = $tableElement.find("col");
+            if(advancedRendering) {
+                $cols.css("width", "auto");
+            }
             columns = columns || this.getColumns(null, $tableElement);
-
             for(i = 0; i < columns.length; i++) {
-                if(advancedRendering) {
+                if(advancedRendering && columnAutoWidth && !fixed) {
                     width = columns[i].width;
 
-                    if(width) {
+                    if(width && !columns[i].command) {
+                        width = columns[i].visibleWidth || width;
+
                         width = getWidthStyle(width);
                         minWidth = getWidthStyle(columns[i].minWidth || width);
-                        var $rows = $tableElement.children().children(".dx-row");
+                        var $rows = $rows || $tableElement.children().children(".dx-row");
                         for(var rowIndex = 0; rowIndex < $rows.length; rowIndex++) {
                             var cell = $rows[rowIndex].cells[i];
                             if(cell) {

@@ -374,18 +374,18 @@ var Gallery = CollectionWidget.inherit({
     },
 
     _initMarkup: function() {
-        this.callBase();
         this._renderWrapper();
         this._renderItemsContainer();
-    },
 
-    _render: function() {
         this.$element().addClass(GALLERY_CLASS);
         this.$element().toggleClass(GALLERY_LOOP_CLASS, this.option("loop"));
 
+        this.callBase();
+    },
+
+    _render: function() {
         this._renderDragHandler();
 
-        this.callBase();
         this._renderContainerPosition();
         this._renderItemSizes();
         this._renderItemPositions();
@@ -404,11 +404,8 @@ var Gallery = CollectionWidget.inherit({
             "role": "listbox",
             "label": "gallery"
         });
-        this._fireContentReadyAction();
-    },
 
-    _renderContent: function() {
-        this._renderContentImpl();
+        this.callBase();
     },
 
     _dimensionChanged: function() {

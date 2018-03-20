@@ -8,10 +8,6 @@ var $ = require("jquery"),
     testingMarkupEnd = "</svg>",
     browser = require("core/utils/browser");
 
-if(browser.msie && parseInt(browser.version) < 10) {
-    return;
-}
-
 function setupCanvasStub(drawnElements, paths) {
     var prototype = window.CanvasRenderingContext2D.prototype,
         canvasPrototype = window.HTMLCanvasElement.prototype;

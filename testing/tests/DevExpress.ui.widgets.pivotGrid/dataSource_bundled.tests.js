@@ -4478,9 +4478,47 @@ QUnit.test("Sort by summary with path", function(assert) {
     var data = dataSource.getData();
 
     assert.strictEqual(data.rows.length, 3);
-    assert.strictEqual(data.rows[0].value, "C");
-    assert.strictEqual(data.rows[1].value, "A");
-    assert.strictEqual(data.rows[2].value, "B");
+    assert.strictEqual(data.rows[0].value, "A");
+    assert.strictEqual(data.rows[1].value, "B");
+    assert.strictEqual(data.rows[2].value, "C");
+});
+
+QUnit.test("Sorting with null values", function(assert) {
+    var def = $.Deferred();
+    this.testStore.load.returns(def);
+
+    var dataSource = createDataSource({
+        fields: [
+            { dataField: "ShipVia", area: "row", sortOrder: "asc" },
+            { summaryType: 'count', area: "data" }
+        ],
+        store: this.testStore
+    });
+
+    var storeData = {
+        columns: [],
+        rows: [
+            { value: null, index: 1 },
+            { value: "[1]", index: 2 },
+            { value: "[2]", index: 3 },
+            { value: "[3]", index: 4 },
+            { value: "[4]", index: 5 },
+            { value: "[5]", index: 6 },
+            { value: "Value", index: 7 },
+            { value: "[11]", index: 8 },
+            { value: "[11]", index: 9 },
+            { value: "[21]", index: 10 },
+            { value: "[22]", index: 11 },
+            { value: "[23]", index: 12 }
+        ],
+        values: [[1]],
+        grandTotalColumnIndex: 0,
+        grandTotalRowIndex: 0
+    };
+
+    def.resolve(storeData);
+
+    assert.deepEqual(prepareLoadedData(dataSource.getData().rows)[0].value, null, "sorted correctly");
 });
 
 

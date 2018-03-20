@@ -9,7 +9,8 @@ var $ = require("../core/renderer"),
     Tabs = require("./tabs"),
     iconUtils = require("../core/utils/icon"),
     getPublicElement = require("../core/utils/dom").getPublicElement,
-    BindableTemplate = require("./widget/bindable_template");
+    BindableTemplate = require("./widget/bindable_template"),
+    windowUtils = require("../core/utils/window");
 
 var TABPANEL_CLASS = "dx-tabpanel",
     TABPANEL_TABS_CLASS = "dx-tabpanel-tabs",
@@ -209,11 +210,11 @@ var TabPanel = MultiView.inherit({
         this.setAria("role", "tabpanel");
     },
 
-    _render: function() {
+    _initMarkup: function() {
+        this.callBase();
+
         this._createTitleActions();
         this._renderLayout();
-
-        this.callBase();
     },
 
     _initTemplates: function() {
@@ -284,11 +285,13 @@ var TabPanel = MultiView.inherit({
     },
 
     _updateLayout: function() {
-        var tabsHeight = this._$tabContainer.outerHeight();
-        this._$container.css({
-            "marginTop": -tabsHeight,
-            "paddingTop": tabsHeight
-        });
+        if(windowUtils.hasWindow()) {
+            var tabsHeight = this._$tabContainer.outerHeight();
+            this._$container.css({
+                "marginTop": -tabsHeight,
+                "paddingTop": tabsHeight
+            });
+        }
     },
 
     _refreshActiveDescendant: function() {

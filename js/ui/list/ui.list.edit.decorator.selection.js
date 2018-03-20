@@ -22,7 +22,9 @@ var SELECT_DECORATOR_ENABLED_CLASS = "dx-list-select-decorator-enabled",
     SELECT_CHECKBOX_CLASS = "dx-list-select-checkbox",
 
     SELECT_RADIO_BUTTON_CONTAINER_CLASS = "dx-list-select-radiobutton-container",
-    SELECT_RADIO_BUTTON_CLASS = "dx-list-select-radiobutton";
+    SELECT_RADIO_BUTTON_CLASS = "dx-list-select-radiobutton",
+
+    FOCUSED_STATE_CLASS = "dx-state-focused";
 
 var CLICK_EVENT_NAME = eventUtils.addNamespace(clickEvent.name, "dxListEditDecorator");
 
@@ -92,6 +94,29 @@ registerDecorator(
                 this._renderSelectAll();
             } else {
                 this._updateSelectAllState();
+            }
+        },
+
+        handleKeyboardEvents: function(itemIndex, focusOnList) {
+            if(this._$selectAll && this._needMoveFocus(itemIndex, focusOnList)) {
+                this._list.option("focusedElement", undefined);
+                this._selectAllCheckBox.$element().addClass(FOCUSED_STATE_CLASS);
+                return true;
+            } else {
+                this._selectAllCheckBox.$element().removeClass(FOCUSED_STATE_CLASS);
+                this._list.focusListItem(itemIndex);
+                return false;
+            }
+        },
+
+        _needMoveFocus: function(itemIndex, focusOnList) {
+            return !focusOnList && (itemIndex === 0 || itemIndex === this._list._getLastItemIndex());
+        },
+
+        handleEnterPressing: function() {
+            if(this._selectAllCheckBox.$element().hasClass(FOCUSED_STATE_CLASS)) {
+                this._selectAllCheckBox.option("value", !this._selectAllCheckBox.option("value"));
+                return true;
             }
         },
 

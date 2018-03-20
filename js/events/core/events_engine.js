@@ -107,7 +107,15 @@ var getHandlersController = function(element, eventName) {
     return {
         addHandler: function(handler, selector, data) {
             var callHandler = function(e, extraParameters) {
-                var handlerArgs = [e];
+                var handlerArgs = [e],
+                    target = e.currentTarget,
+                    relatedTarget = e.relatedTarget,
+                    secondaryTargetIsInside,
+                    result;
+
+                if(eventName in NATIVE_EVENTS_TO_SUBSCRIBE) {
+                    secondaryTargetIsInside = relatedTarget && target && (relatedTarget === target || target.contains(relatedTarget));
+                }
 
                 if(extraParameters !== undefined) {
                     handlerArgs.push(extraParameters);
@@ -115,7 +123,9 @@ var getHandlersController = function(element, eventName) {
 
                 special.callMethod(eventName, "handle", element, [ e, data ]);
 
-                var result = handler.apply(e.currentTarget, handlerArgs);
+                if(!secondaryTargetIsInside) {
+                    result = handler.apply(target, handlerArgs);
+                }
 
                 if(result === false) {
                     e.preventDefault();
@@ -522,6 +532,11 @@ initEvent(normalizeEventArguments(function(src, config) {
     }
 
     addProperty("which", calculateWhich, that);
+
+    if(src.type.startsWith("touch")) {
+        delete config.pageX;
+        delete config.pageY;
+    }
 
     extend(that, config);
 

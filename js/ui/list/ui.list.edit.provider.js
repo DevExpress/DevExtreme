@@ -228,6 +228,14 @@ var EditProvider = Class.inherit({
         return this._eventHandler("handleClick", $itemElement, e);
     },
 
+    handleKeyboardEvents: function(itemIndex, focusOnList) {
+        return this._eventHandler("handleKeyboardEvents", itemIndex, focusOnList);
+    },
+
+    handleEnterPressing: function() {
+        return this._eventHandler("handleEnterPressing");
+    },
+
     contextMenuHandlerExists: function() {
         return this._handlerExists("handleContextMenu");
     },

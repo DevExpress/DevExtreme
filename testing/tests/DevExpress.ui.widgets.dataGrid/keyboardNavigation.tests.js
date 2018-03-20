@@ -4824,48 +4824,56 @@ QUnit.module("Keyboard navigation with real dataController and columnsController
         this.clock.restore();
     }
 }, function() {
-    QUnit.testInActiveWindow("First input is focused when row is edited from a cell template", function(assert) {
+    QUnit.testInActiveWindow("Focus must be after cell click if edit mode == 'cell'", function(assert) {
         // arrange
-        var that = this;
-        that.$element = function() {
+        this.$element = function() {
             return $("#container");
         };
-        that.options = {
-            editing: {
-                allowUpdating: true,
-                mode: "form",
-                texts: {
-                    editRow: "Edit"
-                }
-            }
-        };
 
-        that.columns = [ "name", "phone",
-            { dataField: "room",
-                cellTemplate: function($element, options) {
-                    $("<div/>")
-                        .appendTo($element)
-                        .attr("id", "editButton")
-                        .text("edit")
-                        .click(function() {
-                            that.editingController.editRow(options.row.rowIndex);
-                        });
-                }
-            }
-        ];
+        this.options = {
+            useKeyboard: true,
+            editing: { mode: 'cell' }
+        };
 
         this.setupModule();
 
         // act
-        that.gridView.render($("#container"));
-        $("#editButton")
-            .trigger("dxpointerdown.dxDataGridKeyboardNavigation")
-            .click();
+        this.gridView.render($("#container"));
+        var keyboardNavigationController = this.gridView.component.keyboardNavigationController;
+        var $cell = $(this.rowsView.element().find(".dx-row").eq(1).find("td").eq(1));
+        $cell.trigger(CLICK_EVENT);
 
         this.clock.tick();
 
         // assert
-        assert.equal($("input:focus").val(), "Alex", "value of first editor");
+        assert.ok(!keyboardNavigationController._isHiddenFocus, "not hidden focus");
+        assert.notOk($cell.hasClass("dx-cell-focus-disabled"), "cell has no .dx-cell-focus-disabled");
+        assert.notOk($cell.hasClass("dx-focused"), "cell has .dx-focused");
+    });
+
+    QUnit.testInActiveWindow("Focus must be after cell click if edit mode == 'batch'", function(assert) {
+        // arrange
+        this.$element = function() {
+            return $("#container");
+        };
+
+        this.options = {
+            useKeyboard: true,
+            editing: { mode: 'batch' }
+        };
+
+        this.setupModule();
+
+        // act
+        this.gridView.render($("#container"));
+        var keyboardNavigationController = this.gridView.component.keyboardNavigationController;
+        var $cell = $(this.rowsView.element().find(".dx-row").eq(1).find("td").eq(1));
+        $cell.trigger(CLICK_EVENT);
+
+        // assert
+        assert.ok(!keyboardNavigationController._isHiddenFocus, "not hidden focus");
+        assert.notOk($cell.hasClass("dx-cell-focus-disabled"), "cell has no .dx-cell-focus-disabled");
+        assert.notOk($cell.hasClass("dx-focused"), "cell has .dx-focused");
     });
 
     QUnit.testInActiveWindow("Reset focused cell when click on expand column of master detail", function(assert) {
@@ -5023,5 +5031,49 @@ QUnit.module("Keyboard navigation with real dataController and columnsController
         assert.ok(this.keyboardNavigationController._focusedCellPosition, "focusedCellPosition");
         assert.equal(this.keyboardNavigationController._focusedCellPosition.columnIndex, 1, "cellIndex");
         assert.equal(this.keyboardNavigationController._focusedCellPosition.rowIndex, 0, "rowIndex");
+    });
+
+    QUnit.testInActiveWindow("First input is focused when row is edited from a cell template", function(assert) {
+        // arrange
+        var that = this;
+        that.$element = function() {
+            return $("#container");
+        };
+        that.options = {
+            editing: {
+                allowUpdating: true,
+                mode: "form",
+                texts: {
+                    editRow: "Edit"
+                }
+            }
+        };
+
+        that.columns = [ "name", "phone",
+            { dataField: "room",
+                cellTemplate: function($element, options) {
+                    $("<div/>")
+                        .appendTo($element)
+                        .attr("id", "editButton")
+                        .text("edit")
+                        .click(function() {
+                            that.editingController.editRow(options.row.rowIndex);
+                        });
+                }
+            }
+        ];
+
+        this.setupModule();
+
+        // act
+        that.gridView.render($("#container"));
+        $("#editButton")
+            .trigger("dxpointerdown.dxDataGridKeyboardNavigation")
+            .click();
+
+        this.clock.tick();
+
+        // assert
+        assert.equal($("input:focus").val(), "Alex", "value of first editor");
     });
 });

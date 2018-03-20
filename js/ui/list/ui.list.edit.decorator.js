@@ -88,6 +88,10 @@ var EditDecorator = Class.inherit({
 
     handleClick: noop,
 
+    handleKeyboardEvents: noop,
+
+    handleEnterPressing: noop,
+
     handleContextMenu: noop,
 
     _swipeStartHandler: noop,

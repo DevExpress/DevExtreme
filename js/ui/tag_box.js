@@ -10,6 +10,7 @@ var $ = require("../core/renderer"),
     isDefined = require("../core/utils/type").isDefined,
     arrayUtils = require("../core/utils/array"),
     typeUtils = require("../core/utils/type"),
+    windowUtils = require("../core/utils/window"),
     iteratorUtils = require("../core/utils/iterator"),
     extend = require("../core/utils/extend").extend,
     messageLocalization = require("../localization/message"),
@@ -201,7 +202,7 @@ var TagBox = SelectBox.inherit({
     },
 
     _scrollContainer: function(direction) {
-        if(this.option("multiline")) {
+        if(this.option("multiline") || !windowUtils.hasWindow()) {
             return;
         }
 
@@ -1100,17 +1101,21 @@ var TagBox = SelectBox.inherit({
         return this._selectedItems.slice();
     },
 
+    _completeSelection: function(value) {
+        if(!this.option("showSelectionControls")) {
+            this._setValue(value);
+        }
+    },
+
+
     _setValue: function(value) {
         if(value === null) {
             return;
         }
 
-        if(this.option("showSelectionControls")) {
-            return;
-        }
-
-        var valueIndex = this._valueIndex(value),
-            values = this._getValue().slice();
+        var useButtons = this.option("applyValueMode") === "useButtons",
+            valueIndex = this._valueIndex(value),
+            values = (useButtons ? this._list.option("selectedItemKeys") : this._getValue()).slice();
 
         if(valueIndex >= 0) {
             values.splice(valueIndex, 1);
@@ -1118,7 +1123,11 @@ var TagBox = SelectBox.inherit({
             values.push(value);
         }
 
-        this.option("value", values);
+        if(this.option("applyValueMode") === "useButtons") {
+            this._list.option("selectedItemKeys", values);
+        } else {
+            this.option("value", values);
+        }
     },
 
     _isSelectedValue: function(value, cache) {

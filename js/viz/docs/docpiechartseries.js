@@ -11,11 +11,11 @@
 */
 var commonPieChartSeries = {
     /**
-	* @name dxPieChartSeriesTypes_CommonPieChartSeries_color
-	* @publicName color
-	* @type string
-	* @default undefined
-	*/
+    * @name dxPieChartSeriesTypes_CommonPieChartSeries_color
+    * @publicName color
+    * @type string
+    * @default undefined
+    */
     color: undefined,
     /**
     * @name dxPieChartSeriesTypes_CommonPieChartSeries_minsegmentsize
@@ -25,10 +25,10 @@ var commonPieChartSeries = {
     */
     minSegmentSize: undefined,
     /**
-	* @name dxPieChartSeriesTypes_CommonPieChartSeries_smallvaluesgrouping
-	* @publicName smallValuesGrouping
-	* @type object
-	*/
+    * @name dxPieChartSeriesTypes_CommonPieChartSeries_smallvaluesgrouping
+    * @publicName smallValuesGrouping
+    * @type object
+    */
     smallValuesGrouping: {
         /**
          * @name dxPieChartSeriesTypes_CommonPieChartSeries_smallvaluesgrouping_mode
@@ -60,18 +60,18 @@ var commonPieChartSeries = {
         groupName: 'others',
     },
     /**
-	* @name dxPieChartSeriesTypes_CommonPieChartSeries_valuefield
-	* @publicName valueField
-	* @type string
-	* @default 'val'
-	*/
+    * @name dxPieChartSeriesTypes_CommonPieChartSeries_valuefield
+    * @publicName valueField
+    * @type string
+    * @default 'val'
+    */
     valueField: 'val',
     /**
-	* @name dxPieChartSeriesTypes_CommonPieChartSeries_argumentfield
-	* @publicName argumentField
-	* @type string
-	* @default 'arg'
-	*/
+    * @name dxPieChartSeriesTypes_CommonPieChartSeries_argumentfield
+    * @publicName argumentField
+    * @type string
+    * @default 'arg'
+    */
     argumentField: 'arg',
     /**
     * @name dxPieChartSeriesTypes_CommonPieChartSeries_argumentType
@@ -81,38 +81,38 @@ var commonPieChartSeries = {
     */
     argumentType: undefined,
     /**
-	* @name dxPieChartSeriesTypes_CommonPieChartSeries_tagfield
-	* @publicName tagField
-	* @type string
-	* @default 'tag'
-	*/
+    * @name dxPieChartSeriesTypes_CommonPieChartSeries_tagfield
+    * @publicName tagField
+    * @type string
+    * @default 'tag'
+    */
     tagField: 'tag',
     /**
-	* @name dxPieChartSeriesTypes_CommonPieChartSeries_border
-	* @publicName border
-	* @type object
-	*/
+    * @name dxPieChartSeriesTypes_CommonPieChartSeries_border
+    * @publicName border
+    * @type object
+    */
     border: {
         /**
-		* @name dxPieChartSeriesTypes_CommonPieChartSeries_border_visible
-		* @publicName visible
-		* @type boolean
-		* @default false
-		*/
+        * @name dxPieChartSeriesTypes_CommonPieChartSeries_border_visible
+        * @publicName visible
+        * @type boolean
+        * @default false
+        */
         visible: false,
         /**
-		* @name dxPieChartSeriesTypes_CommonPieChartSeries_border_width
-		* @publicName width
-		* @type number
-		* @default 2
-		*/
+        * @name dxPieChartSeriesTypes_CommonPieChartSeries_border_width
+        * @publicName width
+        * @type number
+        * @default 2
+        */
         width: 2,
         /**
-		* @name dxPieChartSeriesTypes_CommonPieChartSeries_border_color
-		* @publicName color
-		* @type string
-		* @default undefined
-		*/
+        * @name dxPieChartSeriesTypes_CommonPieChartSeries_border_color
+        * @publicName color
+        * @type string
+        * @default undefined
+        */
         color: undefined,
         /**
        * @name dxPieChartSeriesTypes_CommonPieChartSeries_border_dashstyle
@@ -130,30 +130,30 @@ var commonPieChartSeries = {
     */
     hoverMode: 'onlyPoint',
     /**
-	* @name dxPieChartSeriesTypes_CommonPieChartSeries_selectionmode
-	* @publicName selectionMode
-	* @type Enums.PieChartSeriesInteractionMode
-	    * @default 'onlyPoint'
-	*/
+    * @name dxPieChartSeriesTypes_CommonPieChartSeries_selectionmode
+    * @publicName selectionMode
+    * @type Enums.PieChartSeriesInteractionMode
+        * @default 'onlyPoint'
+    */
     selectionMode: 'onlyPoint',
     /**
-	* @name dxPieChartSeriesTypes_CommonPieChartSeries_hoverstyle
-	* @publicName hoverStyle
-	* @type object
-	*/
+    * @name dxPieChartSeriesTypes_CommonPieChartSeries_hoverstyle
+    * @publicName hoverStyle
+    * @type object
+    */
     hoverStyle: {
         /**
-		* @name dxPieChartSeriesTypes_CommonPieChartSeries_hoverstyle_color
-		* @publicName color
-		* @type string
-		* @default undefined
-		*/
+        * @name dxPieChartSeriesTypes_CommonPieChartSeries_hoverstyle_color
+        * @publicName color
+        * @type string
+        * @default undefined
+        */
         color: undefined,
         /**
-		* @name dxPieChartSeriesTypes_CommonPieChartSeries_hoverstyle_hatching
-		* @publicName hatching
-		* @type object
-		*/
+        * @name dxPieChartSeriesTypes_CommonPieChartSeries_hoverstyle_hatching
+        * @publicName hatching
+        * @type object
+        */
         hatching: {
             /**
             * @name dxPieChartSeriesTypes_CommonPieChartSeries_hoverstyle_hatching_direction
@@ -163,18 +163,18 @@ var commonPieChartSeries = {
             */
             direction: 'right',
             /**
-			* @name dxPieChartSeriesTypes_CommonPieChartSeries_hoverstyle_hatching_width
-			* @publicName width
-			* @type number
-			* @default 4
-			*/
+            * @name dxPieChartSeriesTypes_CommonPieChartSeries_hoverstyle_hatching_width
+            * @publicName width
+            * @type number
+            * @default 4
+            */
             width: 4,
             /**
-			* @name dxPieChartSeriesTypes_CommonPieChartSeries_hoverstyle_hatching_step
-			* @publicName step
-			* @type number
-			* @default 10
-			*/
+            * @name dxPieChartSeriesTypes_CommonPieChartSeries_hoverstyle_hatching_step
+            * @publicName step
+            * @type number
+            * @default 10
+            */
             step: 10,
             /**
             * @name dxPieChartSeriesTypes_CommonPieChartSeries_hoverstyle_hatching_opacity
@@ -185,31 +185,31 @@ var commonPieChartSeries = {
             opacity: 0.75
         },
         /**
-		* @name dxPieChartSeriesTypes_CommonPieChartSeries_hoverstyle_border
-		* @publicName border
-		* @type object
-		*/
+        * @name dxPieChartSeriesTypes_CommonPieChartSeries_hoverstyle_border
+        * @publicName border
+        * @type object
+        */
         border: {
             /**
-			* @name dxPieChartSeriesTypes_CommonPieChartSeries_hoverstyle_border_visible
-			* @publicName visible
-			* @type boolean
-			* @default false
-			*/
+            * @name dxPieChartSeriesTypes_CommonPieChartSeries_hoverstyle_border_visible
+            * @publicName visible
+            * @type boolean
+            * @default false
+            */
             visible: false,
             /**
-			* @name dxPieChartSeriesTypes_CommonPieChartSeries_hoverstyle_border_width
-			* @publicName width
-			* @type number
-			* @default 3
-			*/
+            * @name dxPieChartSeriesTypes_CommonPieChartSeries_hoverstyle_border_width
+            * @publicName width
+            * @type number
+            * @default 3
+            */
             width: 3,
             /**
-			* @name dxPieChartSeriesTypes_CommonPieChartSeries_hoverstyle_border_color
-			* @publicName color
-			* @type string
-			* @default undefined
-			*/
+            * @name dxPieChartSeriesTypes_CommonPieChartSeries_hoverstyle_border_color
+            * @publicName color
+            * @type string
+            * @default undefined
+            */
             color: undefined,
             /**
             * @name dxPieChartSeriesTypes_CommonPieChartSeries_hoverstyle_border_dashstyle
@@ -221,23 +221,23 @@ var commonPieChartSeries = {
         }
     },
     /**
-	* @name dxPieChartSeriesTypes_CommonPieChartSeries_selectionstyle
-	* @publicName selectionStyle
-	* @type object
-	*/
+    * @name dxPieChartSeriesTypes_CommonPieChartSeries_selectionstyle
+    * @publicName selectionStyle
+    * @type object
+    */
     selectionStyle: {
         /**
-		* @name dxPieChartSeriesTypes_CommonPieChartSeries_selectionstyle_color
-		* @publicName color
-		* @type string
-		* @default undefined
-		*/
+        * @name dxPieChartSeriesTypes_CommonPieChartSeries_selectionstyle_color
+        * @publicName color
+        * @type string
+        * @default undefined
+        */
         color: undefined,
         /**
-		* @name dxPieChartSeriesTypes_CommonPieChartSeries_selectionstyle_hatching
-		* @publicName hatching
-		* @type object
-		*/
+        * @name dxPieChartSeriesTypes_CommonPieChartSeries_selectionstyle_hatching
+        * @publicName hatching
+        * @type object
+        */
         hatching: {
             /**
             * @name dxPieChartSeriesTypes_CommonPieChartSeries_selectionstyle_hatching_direction
@@ -247,18 +247,18 @@ var commonPieChartSeries = {
             */
             direction: 'right',
             /**
-			* @name dxPieChartSeriesTypes_CommonPieChartSeries_selectionstyle_hatching_width
-			* @publicName width
-			* @type number
-			* @default 4
-			*/
+            * @name dxPieChartSeriesTypes_CommonPieChartSeries_selectionstyle_hatching_width
+            * @publicName width
+            * @type number
+            * @default 4
+            */
             width: 4,
             /**
-			* @name dxPieChartSeriesTypes_CommonPieChartSeries_selectionstyle_hatching_step
-			* @publicName step
-			* @type number
-			* @default 10
-			*/
+            * @name dxPieChartSeriesTypes_CommonPieChartSeries_selectionstyle_hatching_step
+            * @publicName step
+            * @type number
+            * @default 10
+            */
             step: 10,
             /**
             * @name dxPieChartSeriesTypes_CommonPieChartSeries_selectionstyle_hatching_opacity
@@ -269,31 +269,31 @@ var commonPieChartSeries = {
             opacity: 0.5
         },
         /**
-		* @name dxPieChartSeriesTypes_CommonPieChartSeries_selectionstyle_border
-		* @publicName border
-		* @type object
-		*/
+        * @name dxPieChartSeriesTypes_CommonPieChartSeries_selectionstyle_border
+        * @publicName border
+        * @type object
+        */
         border: {
             /**
-			* @name dxPieChartSeriesTypes_CommonPieChartSeries_selectionstyle_border_visible
-			* @publicName visible
-			* @type boolean
-			* @default false
-			*/
+            * @name dxPieChartSeriesTypes_CommonPieChartSeries_selectionstyle_border_visible
+            * @publicName visible
+            * @type boolean
+            * @default false
+            */
             visible: false,
             /**
-			* @name dxPieChartSeriesTypes_CommonPieChartSeries_selectionstyle_border_width
-			* @publicName width
-			* @type number
-			* @default 3
-			*/
+            * @name dxPieChartSeriesTypes_CommonPieChartSeries_selectionstyle_border_width
+            * @publicName width
+            * @type number
+            * @default 3
+            */
             width: 3,
             /**
-			* @name dxPieChartSeriesTypes_CommonPieChartSeries_selectionstyle_border_color
-			* @publicName color
-			* @type string
-			* @default undefined
-			*/
+            * @name dxPieChartSeriesTypes_CommonPieChartSeries_selectionstyle_border_color
+            * @publicName color
+            * @type string
+            * @default undefined
+            */
             color: undefined,
             /**
             * @name dxPieChartSeriesTypes_CommonPieChartSeries_selectionstyle_border_dashstyle
@@ -305,65 +305,65 @@ var commonPieChartSeries = {
         }
     },
     /**
-	* @name dxPieChartSeriesTypes_CommonPieChartSeries_maxlabelcount
-	* @publicName maxLabelCount
-	* @type number
-	* @default undefined
-	*/
+    * @name dxPieChartSeriesTypes_CommonPieChartSeries_maxlabelcount
+    * @publicName maxLabelCount
+    * @type number
+    * @default undefined
+    */
     maxLabelCount: undefined,
     /**
-	* @name dxPieChartSeriesTypes_CommonPieChartSeries_segmentsdirection
-	* @publicName segmentsDirection
-	* @type Enums.PieChartSegmentsDirection
-	* @default 'clockwise'
-	    * @deprecated dxpiechartoptions_segmentsdirection
-	*/
+    * @name dxPieChartSeriesTypes_CommonPieChartSeries_segmentsdirection
+    * @publicName segmentsDirection
+    * @type Enums.PieChartSegmentsDirection
+    * @default 'clockwise'
+        * @deprecated dxpiechartoptions_segmentsdirection
+    */
     segmentsDirection: 'clockwise',
     /**
-	* @name dxPieChartSeriesTypes_CommonPieChartSeries_startangle
-	* @publicName startAngle
-	* @type number
-	* @default 0
+    * @name dxPieChartSeriesTypes_CommonPieChartSeries_startangle
+    * @publicName startAngle
+    * @type number
+    * @default 0
     * @deprecated dxpiechartoptions_startangle
-	*/
+    */
     startAngle: 0,
     /**
-	* @name dxPieChartSeriesTypes_CommonPieChartSeries_innerradius
-	* @publicName innerRadius
-	* @type number
-	* @default 0.5
-	* @propertyOf dxPieChartSeriesTypes_DoughnutSeries
+    * @name dxPieChartSeriesTypes_CommonPieChartSeries_innerradius
+    * @publicName innerRadius
+    * @type number
+    * @default 0.5
+    * @propertyOf dxPieChartSeriesTypes_DoughnutSeries
     * @deprecated dxpiechartoptions_innerradius
-	*/
+    */
     innerRadius: 0.5,
     /**
-	* @name dxPieChartSeriesTypes_CommonPieChartSeries_label
-	* @publicName label
-	* @type object
-	*/
+    * @name dxPieChartSeriesTypes_CommonPieChartSeries_label
+    * @publicName label
+    * @type object
+    */
     label: {
         /**
-		* @name dxPieChartSeriesTypes_CommonPieChartSeries_label_customizetext
-		* @publicName customizeText
-		* @type function(pointInfo)
+        * @name dxPieChartSeriesTypes_CommonPieChartSeries_label_customizetext
+        * @publicName customizeText
+        * @type function(pointInfo)
         * @type_function_param1 pointInfo:object
         * @type_function_return string
         * @notUsedInTheme
-		*/
+        */
         customizeText: undefined,
         /**
-		* @name dxPieChartSeriesTypes_CommonPieChartSeries_label_visible
-		* @publicName visible
-		* @type boolean
-		* @default false
-		*/
+        * @name dxPieChartSeriesTypes_CommonPieChartSeries_label_visible
+        * @publicName visible
+        * @type boolean
+        * @default false
+        */
         visible: false,
         /**
-		* @name dxPieChartSeriesTypes_CommonPieChartSeries_label_rotationangle
-		* @publicName rotationAngle
-		* @type number
-		* @default 0
-		*/
+        * @name dxPieChartSeriesTypes_CommonPieChartSeries_label_rotationangle
+        * @publicName rotationAngle
+        * @type number
+        * @default 0
+        */
         rotationAngle: 0,
         /**
         * @name dxPieChartSeriesTypes_CommonPieChartSeries_label_radialoffset
@@ -373,10 +373,10 @@ var commonPieChartSeries = {
         */
         radialOffset: 0,
         /**
-		* @name dxPieChartSeriesTypes_CommonPieChartSeries_label_format
-		* @publicName format
-		* @extends CommonVizFormat
-		*/
+        * @name dxPieChartSeriesTypes_CommonPieChartSeries_label_format
+        * @publicName format
+        * @extends CommonVizFormat
+        */
         format: '',
         /**
         * @name dxPieChartSeriesTypes_CommonPieChartSeries_label_precision

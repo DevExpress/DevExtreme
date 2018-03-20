@@ -5,10 +5,9 @@ var $ = require("jquery"),
     labelModule = require("viz/series/points/label"),
     pointModule = require("viz/series/points/base_point"),
     tooltipModule = require("viz/core/tooltip"),
-    originalLabel = labelModule.Label;
-
-/* global MockTranslator */
-require("../../helpers/chartMocks.js");
+    originalLabel = labelModule.Label,
+    chartMocks = require("../../helpers/chartMocks.js"),
+    MockTranslator = chartMocks.MockTranslator;
 
 require("viz/chart");
 

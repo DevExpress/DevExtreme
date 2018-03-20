@@ -318,6 +318,7 @@ var Scheduler = Widget.inherit({
                 * @publicName currentView
                 * @type Enums.SchedulerViewType
                 * @default "day"
+                * @fires dxSchedulerOptions_onOptionChanged
                 */
             currentView: "day", // TODO: should we calculate currentView if views array contains only one item, for example 'month'?
                 /**
@@ -325,6 +326,7 @@ var Scheduler = Widget.inherit({
                 * @publicName currentDate
                 * @type Date|number|string
                 * @default new Date()
+                * @fires dxSchedulerOptions_onOptionChanged
                 */
             currentDate: dateUtils.trimTime(new Date()),
                 /**
@@ -661,6 +663,21 @@ var Scheduler = Widget.inherit({
                 */
             onAppointmentDblClick: null,
 
+            /**
+                * @name dxSchedulerOptions_onAppointmentContextMenu
+                * @publicName onAppointmentContextMenu
+                * @type function(e)|string
+                * @extends Action
+                * @type_function_param1 e:object
+                * @type_function_param1_field4 appointmentData:object
+                * @type_function_param1_field5 targetedAppointmentData:object
+                * @type_function_param1_field6 appointmentElement:dxElement
+                * @type_function_param1_field7 jQueryEvent:jQuery.Event:deprecated(event)
+                * @type_function_param1_field8 event:event
+                * @action
+                */
+            onAppointmentContextMenu: null,
+
                 /**
                 * @name dxSchedulerOptions_onCellClick
                 * @publicName onCellClick
@@ -675,6 +692,20 @@ var Scheduler = Widget.inherit({
                 * @action
                 */
             onCellClick: null,
+
+            /**
+                * @name dxSchedulerOptions_onCellContextMenu
+                * @publicName onCellContextMenu
+                * @type function(e)|string
+                * @extends Action
+                * @type_function_param1 e:object
+                * @type_function_param1_field4 cellData:object
+                * @type_function_param1_field5 cellElement:dxElement
+                * @type_function_param1_field6 jQueryEvent:jQuery.Event:deprecated(event)
+                * @type_function_param1_field7 event:event
+                * @action
+                */
+            onCellContextMenu: null,
 
                 /**
                 * @name dxSchedulerOptions_onAppointmentAdding
@@ -1219,10 +1250,16 @@ var Scheduler = Widget.inherit({
             case "onAppointmentDblClick":
                 this._appointments.option(name, this._createActionByOption(name));
                 break;
+            case "onAppointmentContextMenu":
+                this._appointments.option("onItemContextMenu", this._createActionByOption(name));
+                break;
             case "noDataText":
             case "allowMultipleCellSelection":
             case "accessKey":
             case "onCellClick":
+                this._workSpace.option(name, value);
+                break;
+            case "onCellContextMenu":
                 this._workSpace.option(name, value);
                 break;
             case "crossScrollingEnabled":
@@ -1784,6 +1821,7 @@ var Scheduler = Widget.inherit({
             observer: this,
             onItemRendered: this._getAppointmentRenderedAction(),
             onItemClick: this._createActionByOption("onAppointmentClick"),
+            onItemContextMenu: this._createActionByOption("onAppointmentContextMenu"),
             onAppointmentDblClick: this._createActionByOption("onAppointmentDblClick"),
             tabIndex: this.option("tabIndex"),
             focusStateEnabled: this.option("focusStateEnabled"),
@@ -1909,6 +1947,7 @@ var Scheduler = Widget.inherit({
         result.startDate = countConfig.startDate;
         result.groups = groups;
         result.onCellClick = this._createActionByOption("onCellClick");
+        result.onCellContextMenu = this._createActionByOption("onCellContextMenu");
         result.min = new Date(this._dateOption("min"));
         result.max = new Date(this._dateOption("max"));
         result.currentDate = dateUtils.trimTime(new Date(this._dateOption("currentDate")));

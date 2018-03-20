@@ -127,7 +127,7 @@ var FlexLayoutStrategy = Class.inherit({
                     width: "auto",
                     height: "auto",
                     display: styleUtils.stylePropPrefix("flexDirection") + "flex",
-                    flexDirection: $item.children().css("flexDirection") || "column"
+                    flexDirection: $(itemContent)[0].style.flexDirection || "column"
                 });
 
                 // NOTE: workaround for jQuery version < 1.11.1 (T181692)
@@ -603,12 +603,12 @@ var Box = CollectionWidget.inherit({
         return this._queue.shift();
     },
 
-    _render: function() {
-        this._renderActions();
+    _initMarkup: function() {
+        this.$element().addClass(BOX_CLASS);
         this._layout.renderBox();
         this.callBase();
-        this.$element().addClass(BOX_CLASS);
         this._renderAlign();
+        this._renderActions();
     },
 
     _renderActions: function() {
