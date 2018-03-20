@@ -149,7 +149,7 @@
         &.dx-list-select-decorator-enabled {
             .dx-list-item {
                 &.dx-state-hover {
-                    .dx-radiobutton-icon:before, .dx-checkbox-icon {
+                    .dx-radiobutton-icon:before {
                         border-color: @checkbox-hover-border-color;
                     }
                 }
@@ -158,6 +158,20 @@
                     .dx-radiobutton {
                         .box-shadow(none);
                     }
+
+                    .dx-checkbox {
+                        .dx-checkbox-icon:after {
+                            background-color: fade(@checkbox-border-color, 10%);
+                            .scale(1);
+                        }
+                        &.dx-checkbox-checked,
+                        &.dx-checkbox-indeterminate {
+                            .dx-checkbox-icon:after {
+                                background-color: fade(@checkbox-bg, 10%);
+                                .scale(1);
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -165,6 +179,11 @@
         &:not(.dx-list-select-decorator-enabled) {
             .dx-list-item {
                 .item-states();
+
+                &.dx-state-focused {
+                    background-color: @list-item-hover-bg;
+                    color: @list-item-hover-color;
+                }
             }
         }
     }

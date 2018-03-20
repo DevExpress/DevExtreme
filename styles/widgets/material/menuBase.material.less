@@ -15,7 +15,7 @@
     }
 
     &.dx-state-focused {
-        background-color: @menu-item-selected-bg;
+        background-color: @menu-item-hover-bg;
     }
 }
 
@@ -29,7 +29,8 @@
 }
 
 .dx-menu-item-expanded,
-.dx-menu-item-expanded.dx-state-hover {
+.dx-menu-item-expanded.dx-state-hover,
+.dx-menu-item-expanded.dx-state-focused {
     color: @menu-item-expanded-color;
     background-color: @menu-item-selected-bg;
 }
