@@ -78,13 +78,16 @@
 
 .dx-scheduler-all-day-title-mixin(@GENERIC_SCHEDULER_HEADER_HEIGHT + @GENERIC_SCHEDULER_HEADER_PANEL_TOP_GAP);
 
+
 .dx-scheduler-work-space-week,
 .dx-scheduler-work-space-work-week {
     .dx-scheduler-all-day-title {
         top: @GENERIC_SCHEDULER_HEADER_HEIGHT + @GENERIC_SCHEDULER_WORKSPACE_DATE_TABLE_CELL_HEIGHT;
     }
 
-    .dx-scheduler-all-day-title-mixin(@GENERIC_SCHEDULER_HEADER_HEIGHT + @GENERIC_SCHEDULER_WORKSPACE_DATE_TABLE_CELL_HEIGHT);
+    &:not(.dx-scheduler-work-space-horizontal-grouped) {
+        .dx-scheduler-all-day-title-mixin(@GENERIC_SCHEDULER_HEADER_HEIGHT + @GENERIC_SCHEDULER_WORKSPACE_DATE_TABLE_CELL_HEIGHT);
+    }
 }
 
 .dx-scheduler-all-day-table {
