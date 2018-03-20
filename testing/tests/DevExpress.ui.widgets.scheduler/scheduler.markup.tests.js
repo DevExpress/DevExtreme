@@ -3,8 +3,7 @@
 import $ from "jquery";
 // import fx from "animation/fx";
 import SchedulerWorkSpace from "ui/scheduler/ui.scheduler.work_space";
-
-// import dxScheduler from "ui/scheduler/ui.scheduler";
+import "ui/scheduler/ui.scheduler";
 // import DataSource from "data/data_source/data_source";
 // import dxSchedulerAppointmentModel from "ui/scheduler/ui.scheduler.appointment_model";
 "use strict";
