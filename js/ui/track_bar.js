@@ -124,11 +124,15 @@ var TrackBar = Editor.inherit({
             return;
         }
 
-        fx.animate(this._$range, {
-            type: "custom",
-            duration: 100,
-            to: options
-        });
+        if(this._readyToRender) {
+            fx.animate(this._$range, {
+                type: "custom",
+                duration: 100,
+                to: options
+            });
+        } else {
+            this._$range.css(options);
+        }
     },
 
     _optionChanged: function(args) {
