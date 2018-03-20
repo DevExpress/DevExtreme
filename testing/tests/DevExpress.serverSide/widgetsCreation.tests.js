@@ -105,7 +105,6 @@ var optionChangeExcluded = [
     "ScrollView",
     "SlideOut",
     "SlideOutView",
-    "Switch",
     "TileView",
     "Toast",
     "Toolbar",
