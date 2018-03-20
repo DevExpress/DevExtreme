@@ -16,7 +16,8 @@ var $ = require("../../core/renderer"),
     ValidationEngine = require("../validation_engine"),
     Validator = require("../validator"),
     Tooltip = require("../tooltip"),
-    Overlay = require("../overlay");
+    Overlay = require("../overlay"),
+    themes = require("../themes");
 
 var INVALIDATE_CLASS = "invalid",
     REVERT_TOOLTIP_CLASS = "revert-tooltip",
@@ -574,6 +575,8 @@ module.exports = {
                     var that = this,
                         needRepaint,
                         $highlightContainer = $cell.find("." + CELL_HIGHLIGHT_OUTLINE),
+                        isMaterial = /material/.test(themes.current()),
+                        overlayTarget = $highlightContainer.length && !isMaterial ? $highlightContainer : $cell,
                         isOverlayVisible = $cell.find(".dx-dropdowneditor-overlay").is(":visible"),
                         myPosition = isOverlayVisible ? "top right" : "top " + alignment,
                         atPosition = isOverlayVisible ? "top left" : "bottom " + alignment;
@@ -585,7 +588,7 @@ module.exports = {
                         .text(message)
                         .appendTo($cell),
                         {
-                            target: $highlightContainer.length ? $highlightContainer : $cell,
+                            target: overlayTarget,
                             container: $cell,
                             shading: false,
                             width: 'auto',

@@ -67,6 +67,7 @@ var $ = require("jquery"),
     config = require("core/config"),
     keyboardMock = require("../../helpers/keyboardMock.js"),
     ajaxMock = require("../../helpers/ajaxMock.js"),
+    themes = require("ui/themes"),
 
     DX_STATE_HOVER_CLASS = "dx-state-hover",
     TEXTEDITOR_INPUT_SELECTOR = ".dx-texteditor-input";
@@ -9259,4 +9260,47 @@ QUnit.test("CustomizeText formatting", function(assert) {
             return Math.round(options.value) + ' rub';
         }
     }), '216 rub');
+});
+
+QUnit.testInActiveWindow("Validation message should be positioned relative cell in material theme", function(assert) {
+    // arrange
+    var overlayTarget,
+        origThemes = themes.current,
+        clock = sinon.useFakeTimers(),
+        dataGrid = createDataGrid({
+            loadingTimeout: undefined,
+            dataSource: [{ Test: "" }],
+            editing: {
+                mode: "batch",
+                allowUpdating: true
+            },
+            columns: [{
+                dataField: "Test",
+                validationRules: [{ type: "required" }]
+            }]
+        });
+
+    // act
+    dataGrid.editCell(0, 0);
+    clock.tick();
+
+    // assert
+    overlayTarget = dataGrid.$element().find(".dx-invalid-message").data("dxOverlay").option("target");
+    assert.ok(overlayTarget.hasClass("dx-highlight-outline"), "target in generic theme");
+
+    // act
+    dataGrid.closeEditCell();
+    clock.tick();
+
+    themes.current = function() { return "material"; };
+
+    dataGrid.editCell(0, 0);
+    clock.tick();
+
+    // assert
+    overlayTarget = dataGrid.$element().find(".dx-invalid-message").data("dxOverlay").option("target");
+    assert.ok(overlayTarget.hasClass("dx-editor-cell"), "target in material theme");
+
+    themes.current = origThemes;
+    clock.restore();
 });
