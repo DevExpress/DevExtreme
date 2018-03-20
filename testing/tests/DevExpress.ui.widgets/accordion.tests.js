@@ -33,8 +33,7 @@ QUnit.testStart(function() {
     $("#qunit-fixture").html(markup);
 });
 
-var ACCORDION_CLASS = "dx-accordion",
-    ACCORDION_WRAPPER_CLASS = "dx-accordion-wrapper",
+var ACCORDION_WRAPPER_CLASS = "dx-accordion-wrapper",
     ACCORDION_ITEM_CLASS = "dx-accordion-item",
     ACCORDION_ITEM_TITLE_CLASS = "dx-accordion-item-title",
     ACCORDION_ITEM_BODY_CLASS = "dx-accordion-item-body",
@@ -67,44 +66,12 @@ var moduleSetup = {
 
 QUnit.module("widget rendering", moduleSetup);
 
-QUnit.test("widget rendering", function(assert) {
-    this.$element.dxAccordion();
-
-    assert.ok(this.$element.hasClass(ACCORDION_CLASS), "widget class was added");
-    assert.equal(this.$element.find("." + ACCORDION_WRAPPER_CLASS).length, 1, "widget wrapper class was added");
-});
-
-QUnit.test("widget items rendering", function(assert) {
-    this.$element.dxAccordion({
-        items: this.items
-    });
-
-    var $container = this.$element.find("." + ACCORDION_WRAPPER_CLASS),
-        $items = $container.find("." + ACCORDION_ITEM_CLASS);
-
-    assert.equal($items.length, 3, "items were added");
-    assert.equal($items.eq(0).find("." + ACCORDION_ITEM_TITLE_CLASS).length, 1, "container has item title");
-    assert.equal($items.eq(0).find("." + ACCORDION_ITEM_BODY_CLASS).length, 1, "container has item content");
-});
-
-QUnit.test("first item is opened as default state", function(assert) {
-    this.$element.dxAccordion({
-        items: this.items
-    });
-
-    assert.ok(this.$element.find("." + ACCORDION_ITEM_BODY_CLASS).eq(0).is(":visible"), "first item is opened");
-});
-
 QUnit.test("item content is hidden when item is not opened", function(assert) {
     var instance = this.$element.dxAccordion({
             items: this.items,
             selectedIndex: 0
         }).dxAccordion("instance"),
-        $items = this.$element.find("." + ACCORDION_ITEM_CLASS),
-        $openedItems = this.$element.find("." + ACCORDION_ITEM_OPENED_CLASS);
-
-    assert.ok($items.eq(0).hasClass(ACCORDION_ITEM_OPENED_CLASS), "first item is opened so it has 'item opened' class");
-    assert.equal($openedItems.length, 1, "only opened item has 'item opened' class");
+        $items = this.$element.find("." + ACCORDION_ITEM_CLASS);
 
     instance.expandItem(1);
 
@@ -165,8 +132,6 @@ QUnit.test("Item body should be rendered on item opening when the 'deferRenderin
         }),
         instance = $element.dxAccordion("instance");
 
-    assert.equal($element.find("." + ACCORDION_ITEM_BODY_CLASS).length, 1, "body is rendered only for one item which is opened on init");
-
     instance.option("selectedIndex", 1);
     assert.equal($element.find("." + ACCORDION_ITEM_BODY_CLASS).length, 2, "body is rendered for just opened item");
 });
@@ -197,17 +162,6 @@ QUnit.test("Item body should be rendered on item changing and selectionChanging 
     instance.option("selectedIndex", 1);
 
     assert.equal($element.find("." + ACCORDION_ITEM_BODY_CLASS).length, 2, "bodies were rendered");
-});
-
-QUnit.test("Body should be rendered for each item on init when the 'deferRendering' option is false", function(assert) {
-    var $element = this.$element.dxAccordion({
-        items: this.items,
-        selectedIndex: 0,
-        multiple: false,
-        deferRendering: false
-    });
-
-    assert.equal($element.find("." + ACCORDION_ITEM_BODY_CLASS).length, this.items.length, "body is rendered for each item");
 });
 
 QUnit.test("Widget should be rerendered on the 'deferRendering' option change", function(assert) {
@@ -252,19 +206,6 @@ QUnit.module("nested accordion", moduleSetup);
 QUnit.test("nested widget rendering", function(assert) {
     var that = this;
 
-    this.$element.dxAccordion({
-        items: this.items,
-        itemTemplate: function() {
-            return $("<div>").dxAccordion({ items: that.items });
-        }
-    });
-
-    assert.equal(this.$element.dxAccordion("itemElements").length, 3, "only first level items");
-});
-
-QUnit.test("nested widget rendering", function(assert) {
-    var that = this;
-
     var nested;
     this.$element.dxAccordion({
         items: this.items,
@@ -280,36 +221,6 @@ QUnit.test("nested widget rendering", function(assert) {
 
 
 QUnit.module("widget options", moduleSetup);
-
-QUnit.test("items option", function(assert) {
-    this.$element.dxAccordion({
-        items: this.items
-    });
-
-    var $item = this.$element.find("." + ACCORDION_ITEM_CLASS).eq(0);
-
-    assert.equal($item.find("." + ACCORDION_ITEM_TITLE_CLASS).text(), "Title 1", "item title is correct");
-    assert.equal($item.find("." + ACCORDION_ITEM_BODY_CLASS).text(), "Text 1", "item content is correct");
-});
-
-QUnit.test("out of range 'selectedIndex' option", function(assert) {
-    var instance = this.$element.dxAccordion({
-        items: this.items,
-        selectedIndex: -1
-    }).dxAccordion("instance");
-
-    assert.equal(instance.option("selectedIndex"), 0, "'selectedIndex' option set to first when trying to set index which is out of range (-1)");
-    assert.ok(this.$element.find("." + ACCORDION_ITEM_BODY_CLASS).eq(0).is(":visible"), "first item is opened when index is out of range (-1)");
-
-    this.$element.data("dxAccordion", null);
-    instance = this.$element.dxAccordion({
-        items: this.items,
-        selectedIndex: 5
-    }).dxAccordion("instance");
-
-    assert.equal(instance.option("selectedIndex"), 0, "'selectedIndex' option set to first when trying to set index which is out of range (5)");
-    assert.ok(this.$element.find("." + ACCORDION_ITEM_BODY_CLASS).eq(0).is(":visible"), "first item is opened when index is out of range (5)");
-});
 
 QUnit.test("'onItemTitleClick' option", function(assert) {
     var actionFiredValue = 0;
@@ -328,38 +239,6 @@ QUnit.test("'onItemTitleClick' option", function(assert) {
     assert.equal(actionFiredValue, 1, "first item was clicked");
     $($titles.eq(1)).trigger("dxclick");
     assert.equal(actionFiredValue, 2, "second item was clicked");
-});
-
-QUnit.test("itemTitleTemplate", function(assert) {
-    this.$element.dxAccordion({
-        items: this.items,
-        itemTitleTemplate: function(itemData) {
-            return $("<div>")
-                .addClass("item-title-render-first")
-                .text("User title: " + itemData.title);
-        }
-    });
-
-    var $userElement = this.$element.find("." + ACCORDION_ITEM_TITLE_CLASS).eq(0);
-
-    assert.ok($userElement.children().hasClass("item-title-render-first"), "title has specified element");
-    assert.equal($userElement.text(), "User title: " + this.items[0].title, "text in user element is correct");
-});
-
-QUnit.test("itemTemplate", function(assert) {
-    this.$element.dxAccordion({
-        items: this.items,
-        itemTemplate: function(itemData, itemIndex, itemElement) {
-            return $("<div>")
-                .addClass("item-content-render-first")
-                .text("User content: " + itemData.text);
-        }
-    });
-
-    var $userElement = this.$element.find("." + ACCORDION_ITEM_BODY_CLASS).eq(0);
-
-    assert.ok($userElement.children().hasClass("item-content-render-first"), "content has specified element");
-    assert.equal($userElement.text(), "User content: " + this.items[0].text, "text in user element is correct");
 });
 
 QUnit.test("'onItemHold' option", function(assert) {
@@ -410,20 +289,6 @@ QUnit.test("'onSelectionChanged' option", function(assert) {
     assert.equal(actionFiredValue, 1, "action is fired");
 });
 
-QUnit.test("dataSource option with using array", function(assert) {
-    this.$element.dxAccordion({
-        dataSource: this.items
-    });
-
-    var $items = this.$element.find("." + ACCORDION_ITEM_CLASS),
-        $title = $items.eq(0).find("." + ACCORDION_ITEM_TITLE_CLASS),
-        $content = $items.eq(0).find("." + ACCORDION_ITEM_BODY_CLASS);
-
-    assert.equal($items.length, this.items.length, "all items is rendered");
-    assert.equal($title.text(), this.items[0].title, "title text is correct");
-    assert.equal($content.text(), this.items[0].text, "content text is correct");
-});
-
 QUnit.test("dataSource option with using DataSource", function(assert) {
     var loadActionFiredValue = 0,
         items = this.items;
@@ -470,8 +335,6 @@ QUnit.test("Closed class should be set after selection changed", function(assert
     var $element = this.$element,
         $titles = $element.find("." + ACCORDION_ITEM_CLASS);
 
-    assert.equal($element.find("." + ACCORDION_ITEM_CLOSED_CLASS).length, $titles.length - 1, "one item content is visible");
-
     $($titles.eq(1)).trigger('dxclick');
 
     assert.equal($titles.eq(0).hasClass(ACCORDION_ITEM_CLOSED_CLASS), true, "one item content is visible");
@@ -486,7 +349,6 @@ QUnit.test("multiple option", function(assert) {
 
     var $titles = this.$element.find("." + ACCORDION_ITEM_TITLE_CLASS);
 
-    assert.equal(this.$element.find("." + ACCORDION_ITEM_OPENED_CLASS).length, 1, "one item content is visible");
     $($titles.eq(1)).trigger("dxclick");
     assert.equal(this.$element.find("." + ACCORDION_ITEM_OPENED_CLASS).length, 2, "two item content is visible");
     $($titles.eq(2)).trigger("dxclick");
@@ -524,8 +386,6 @@ QUnit.test("disabled state option", function(assert) {
         items: this.items,
         disabled: true
     });
-
-    assert.ok(this.$element.hasClass("dx-state-disabled"), "widget has 'disabled' class");
 
     $(this.$element.find("." + ACCORDION_ITEM_TITLE_CLASS).eq(1)).trigger("dxclick");
     assert.ok(this.$element.find("." + ACCORDION_ITEM_CLASS).eq(0).hasClass(ACCORDION_ITEM_OPENED_CLASS), "no reaction after clicking on disabled widget");
@@ -635,14 +495,6 @@ QUnit.test("height option in static mode when widget is multiple", function(asse
     assert.equal($element.find("." + ACCORDION_WRAPPER_CLASS).height(), widgetHeight, "item container height is correct");
 });
 
-QUnit.test("Value from plain data source is should be encoded", function(assert) {
-    var $accordion = $("#accordion").dxAccordion({
-            dataSource: ["<b>Test item</b>"]
-        }),
-        $titleTemplate = $accordion.find("." + ACCORDION_ITEM_TITLE_CLASS);
-
-    assert.equal($titleTemplate.text(), "<b>Test item</b>");
-});
 
 QUnit.module("widget options changed", moduleSetup);
 
@@ -876,17 +728,6 @@ QUnit.test("'onItemRendered' option", function(assert) {
     assert.equal(actionValue, this.items.length, "'onItemRendered' fired once for each item");
 });
 
-QUnit.test("disabled state option of single item on init", function(assert) {
-    this.$element.dxAccordion({
-        items: [
-            { title: "Title 1", text: "Text 1" },
-            { title: "Title 2", text: "Text 2", disabled: true }
-        ]
-    }).dxAccordion("instance");
-
-    assert.ok(this.$element.find("." + ACCORDION_ITEM_CLASS).eq(1).hasClass("dx-state-disabled"), "item has disabled-state class");
-});
-
 
 QUnit.module("widget behavior", moduleSetup);
 
@@ -1103,12 +944,6 @@ QUnit.test("selectedIndex changes by keyboard", function(assert) {
 
 QUnit.module("aria accessibility");
 
-QUnit.test("aria role", function(assert) {
-    var $element = $("#accordion").dxAccordion();
-
-    assert.equal($element.attr("role"), "tablist", "role is correct");
-});
-
 QUnit.test("aria-multiselectable property", function(assert) {
     var $element = $("#accordion").dxAccordion({
             multiple: false
@@ -1121,15 +956,6 @@ QUnit.test("aria-multiselectable property", function(assert) {
     assert.equal($element.attr("aria-multiselectable"), "true", "multiselectable on option change");
 });
 
-QUnit.test("role for items", function(assert) {
-    var $element = $("#accordion").dxAccordion({
-            items: [{ title: "Title 1", text: "Text 1" }]
-        }),
-        $item = $element.find(".dx-accordion-item");
-
-    assert.equal($item.attr("role"), "tab", "role for item is correct");
-});
-
 QUnit.test("body should be hidden if item is closed", function(assert) {
     var accordion = new Accordion($("#accordion"), {
             items: [{ title: "Title 1", text: "Text 1" }],
@@ -1139,57 +965,9 @@ QUnit.test("body should be hidden if item is closed", function(assert) {
         }),
         $itemBody = accordion.itemElements().eq(0).find("." + ACCORDION_ITEM_BODY_CLASS);
 
-    assert.equal($itemBody.attr("aria-hidden"), "true", "body not readable");
-
     accordion.expandItem(0);
     assert.equal($itemBody.attr("aria-hidden"), "false", "body readable");
 
     accordion.collapseItem(0);
     assert.equal($itemBody.attr("aria-hidden"), "true", "body readable");
-});
-
-
-QUnit.module("default title template", {
-    prepareItemTest: function(data) {
-        var accordion = new Accordion($("<div>"), {
-            items: [data]
-        });
-
-        return accordion.itemElements().eq(0).find("." + ACCORDION_ITEM_TITLE_CLASS).contents();
-    }
-});
-
-QUnit.test("template should be rendered correctly with title", function(assert) {
-    var $content = this.prepareItemTest({
-        title: "test",
-        icon: "test"
-    });
-
-    assert.equal($content.text(), "test");
-    assert.equal($content.filter(".dx-icon-test").length, 1);
-});
-
-QUnit.test("template should be rendered correctly with icon path", function(assert) {
-    var $content = this.prepareItemTest({
-        icon: "test.png"
-    });
-
-    assert.equal($content.filter(".dx-icon[src='test.png']").length, 1);
-});
-
-QUnit.test("template should be rendered correctly with external icon", function(assert) {
-    var $content = this.prepareItemTest({
-        icon: "fa fa-icon"
-    });
-
-    assert.equal($content.filter(".fa.fa-icon").length, 1);
-});
-
-QUnit.test("template should be rendered correctly with title with html", function(assert) {
-    var $content = this.prepareItemTest({
-        title: "test",
-        html: "[test]"
-    });
-
-    assert.equal($content.text(), "test");
 });
