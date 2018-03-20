@@ -5,7 +5,6 @@ var pointerMock = require("../../helpers/pointerMock.js");
 var $ = require("jquery"),
     noop = require("core/utils/common").noop,
     isRenderer = require("core/utils/type").isRenderer,
-    dxScheduler = require("ui/scheduler/ui.scheduler"),
     translator = require("animation/translator"),
     devices = require("core/devices"),
     domUtils = require("core/utils/dom"),
@@ -61,15 +60,6 @@ QUnit.testStart(function() {
             this.clock.restore();
             fx.off = false;
         }
-    });
-
-    QUnit.test("Scheduler should be initialized", function(assert) {
-        assert.ok(this.instance instanceof dxScheduler, "Scheduler was initialized");
-    });
-
-    QUnit.test("Scheduler should have a right css classes", function(assert) {
-        assert.ok(this.instance.$element().hasClass("dx-scheduler"), "Scheduler has 'dx-scheduler' css class");
-        assert.ok(this.instance.$element().hasClass("dx-widget"), "Scheduler has 'dx-widget' css class");
     });
 
     QUnit.test("Scheduler should have task model instance", function(assert) {
