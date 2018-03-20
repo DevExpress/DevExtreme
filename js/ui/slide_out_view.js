@@ -13,7 +13,8 @@ var $ = require("../core/renderer"),
     Widget = require("./widget/ui.widget"),
     Swipeable = require("../events/gesture/swipeable"),
     EmptyTemplate = require("./widget/empty_template"),
-    Deferred = require("../core/utils/deferred").Deferred;
+    Deferred = require("../core/utils/deferred").Deferred,
+    windowUtils = require("../core/utils/window");
 
 var SLIDEOUTVIEW_CLASS = "dx-slideoutview",
     SLIDEOUTVIEW_WRAPPER_CLASS = "dx-slideoutview-wrapper",
@@ -188,16 +189,9 @@ var SlideOutView = Widget.inherit({
         this._defaultTemplates["content"] = new EmptyTemplate(this);
     },
 
-    _render: function() {
+    _initMarkup: function() {
         this.callBase();
 
-        this._renderShield();
-        this._toggleMenuPositionClass();
-        this._initSwipeHandlers();
-        this._dimensionChanged();
-    },
-
-    _renderContentImpl: function() {
         this._renderMarkup();
 
         var menuTemplate = this._getTemplate(this.option("menuTemplate")),
@@ -210,6 +204,16 @@ var SlideOutView = Widget.inherit({
             container: this.content(),
             noModel: true
         });
+
+        this._renderShield();
+        this._toggleMenuPositionClass();
+    },
+
+    _render: function() {
+        this.callBase();
+
+        this._initSwipeHandlers();
+        this._dimensionChanged();
     },
 
     _renderMarkup: function() {
@@ -292,6 +296,7 @@ var SlideOutView = Widget.inherit({
     },
 
     _renderPosition: function(offset, animate) {
+        if(!windowUtils.hasWindow()) return;
         var pos = this._calculatePixelOffset(offset) * this._getRTLSignCorrection();
 
         this._toggleHideMenuCallback(offset);
