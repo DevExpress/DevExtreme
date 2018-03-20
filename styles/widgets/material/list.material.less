@@ -17,6 +17,8 @@
     @MATERIAL_LIST_NEXT_BUTTON_HORIZONTAL_PADDING: 58px;
 
     @MATERIAL_LIST_MAIN_FONT_SIZE: 16px;
+
+    @MATERIAL_LIST_SEARCH_ICONS_BOTTOM: 11px;
 }
 
 .dx-size-compact() {
@@ -72,8 +74,9 @@
             padding-bottom: @MATERIAL_LIST_SEARCHBOX_VERTICAL_PADDING - 1px;
         }
 
-        .dx-icon-search {
-            margin-bottom: 5px;
+        .dx-icon-search, .dx-icon-clear {
+            bottom: @MATERIAL_LIST_SEARCH_ICONS_BOTTOM;
+            top: auto;
         }
 
         .dx-clear-button-area {
@@ -84,7 +87,6 @@
                 border: 0;
                 font-size: @MATERIAL_BASE_ICON_SIZE;
                 color: @base-icon-color;
-                bottom: 11px;
             }
         }
     }
