@@ -699,11 +699,7 @@ QUnit.test("drag should not crash with multiple touches", function(assert) {
         return;
     }
 
-    var $element = $("#element"),
-        extendTarget = function(config, pageX, pageY) {
-            config.pageX = pageX;
-            config.pageY = pageY;
-        };
+    var $element = $("#element");
 
     var startFired = 0,
         endFired = 0;
@@ -715,16 +711,8 @@ QUnit.test("drag should not crash with multiple touches", function(assert) {
         endFired++;
     });
 
-    var touchStartParams = { touches: [{ identifier: 1, pageX: 0, pageY: 0 }], targetTouches: [1], changedTouches: [{ identifier: 1 }] },
-        touchMoveParams = { touches: [{ identifier: 1, pageX: 100, pageY: 200 }], targetTouches: [1], changedTouches: [{ identifier: 1 }] };
-
-    if(!QUnit.urlParams["nojquery"]) {
-        extendTarget(touchStartParams, 0, 0);
-        extendTarget(touchMoveParams, 100, 200);
-    }
-
-    $element.trigger($.Event("touchstart", touchStartParams));
-    $element.trigger($.Event("touchmove", touchMoveParams));
+    $element.trigger($.Event("touchstart", { pageX: 0, pageY: 0, touches: [{ identifier: 1, pageX: 0, pageY: 0 }], targetTouches: [1], changedTouches: [{ identifier: 1 }] }));
+    $element.trigger($.Event("touchmove", { pageX: 100, pageY: 200, touches: [{ identifier: 1, pageX: 100, pageY: 200 }], targetTouches: [1], changedTouches: [{ identifier: 1 }] }));
 
     $element.trigger($.Event("touchstart", { touches: [1, 2], targetTouches: [1, 2], changedTouches: [{ identifier: 2 }] }));
 
