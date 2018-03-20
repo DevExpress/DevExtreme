@@ -288,6 +288,9 @@ var HeaderFilterController = modules.ViewController.inherit((function() {
                 });
 
                 options.dataSource = that.getDataSource(options);
+                if(options.isCustomOperation) {
+                    options.filterType = "include";
+                }
 
                 if(!options.applyFilter) {
                     options.dataSource.filter = null;

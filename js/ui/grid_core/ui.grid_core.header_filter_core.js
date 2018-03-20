@@ -75,7 +75,7 @@ exports.HeaderFilterView = modules.View.inherit({
     applyHeaderFilter: function(options) {
         var that = this,
             list = that.getListContainer(),
-            isSelectAll = !list.option("searchValue") && list.$element().find(".dx-checkbox").eq(0).hasClass("dx-checkbox-checked"),
+            isSelectAll = !list.option("searchValue") && !options.isCustomOperation && list.$element().find(".dx-checkbox").eq(0).hasClass("dx-checkbox-checked"),
             filterValues = [];
 
         var fillSelectedItemKeys = function(filterValues, items, isExclude) {
@@ -239,7 +239,7 @@ exports.HeaderFilterView = modules.View.inherit({
         if(options.type === "tree") {
             that._listContainer = that._createComponent($("<div>").appendTo($content),
                 TreeView, extend(widgetOptions, {
-                    showCheckBoxesMode: 'selectAll',
+                    showCheckBoxesMode: options.isCustomOperation ? "normal" : "selectAll",
                     keyExpr: "id"
                 }));
         } else {
@@ -248,7 +248,7 @@ exports.HeaderFilterView = modules.View.inherit({
                     searchExpr: that._getSearchExpr(options),
                     pageLoadMode: "scrollBottom",
                     showSelectionControls: true,
-                    selectionMode: "all",
+                    selectionMode: options.isCustomOperation ? "multiple" : "all",
                     onSelectionChanged: function(e) {
                         var items = e.component.option("items"),
                             selectedItems = e.component.option("selectedItems");

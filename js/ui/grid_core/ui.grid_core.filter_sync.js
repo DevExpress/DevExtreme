@@ -129,8 +129,17 @@ var DataControllerFilterSyncExtender = {
         var that = this,
             filters = [that.callBase()],
             columns = that.getController("columns").getColumns(),
-            filterValue = this.option("filterValue"),
-            calculatedFilterValue = utils.getFilterExpression(filterValue, columns, [customOperations.anyOf(), customOperations.noneOf()], "filterBuilder");
+            filterValue = this.option("filterValue");
+
+        if(this.option("filterSyncEnabled")) {
+            var currentColumn = this.getController("headerFilter").getCurrentColumn();
+            if(currentColumn && filterValue) {
+                filterValue = utils.syncFilters(filterValue, [currentColumn.dataField, "=", null], HEADER_FILTER_OPERATIONS);
+            }
+        }
+
+        var calculatedFilterValue = utils.getFilterExpression(filterValue, columns, [customOperations.anyOf(), customOperations.noneOf()], "filterBuilder");
+
 
         if(calculatedFilterValue) {
             filters.push(calculatedFilterValue);

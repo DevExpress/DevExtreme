@@ -455,6 +455,56 @@ QUnit.module("getCombinedFilter", {
         // assert
         assert.deepEqual(this.getCombinedFilter(true), undefined, "combined filter");
     });
+
+    QUnit.test("skip currentColumn header filter value when filterSyncEnabled = true", function(assert) {
+        // arrange
+        var filterRowFilter = ["Test", "=", 2];
+
+        // act
+        this.setupDataGrid({
+            dataSource: [],
+            filterSyncEnabled: true,
+            columns: [{ dataField: "Test", filterType: "exclude", headerFilter: { dataSource: [1, 2, 3, 4, 5] }, dataType: "number" }],
+            filterValue: [["Test", "anyof", [1, 2, 3]], "and", filterRowFilter]
+        });
+
+        this.headerFilterController.getCurrentColumn = function() {
+            return { dataField: "Test" };
+        };
+
+        // assert
+        assert.deepEqual(this.getCombinedFilter(true), filterRowFilter, "combined filter");
+    });
+
+    QUnit.test("add currentColumn header filter value when filterSyncEnabled = false", function(assert) {
+        // arrange
+        var filterRowFilter = ["Test", "=", 2];
+
+        // act
+        this.setupDataGrid({
+            dataSource: [],
+            filterSyncEnabled: false,
+            columns: [{ dataField: "Test", filterType: "exclude", headerFilter: { dataSource: [1, 2, 3, 4, 5] }, dataType: "number" }],
+            filterValue: [["Test", "anyof", [1, 2, 3]], "and", filterRowFilter]
+        });
+
+        this.headerFilterController.getCurrentColumn = function() {
+            return { dataField: "Test" };
+        };
+
+        // assert
+        assert.deepEqual(this.getCombinedFilter(true), [
+            [
+                ["Test", "=", 1],
+                "or",
+                ["Test", "=", 2],
+                "or",
+                ["Test", "=", 3]
+            ],
+            "and",
+            filterRowFilter
+        ], "combined filter");
+    });
 });
 
 QUnit.module("Sync on initialization", {

@@ -9,7 +9,7 @@ function baseOperation(grid) {
     var calculateFilterExpression = function(filterValue, field) {
         var result = [],
             lastIndex = filterValue.length - 1;
-        filterValue.forEach(function(value, index) {
+        filterValue && filterValue.forEach(function(value, index) {
             if(utils.isCondition(value) || utils.isGroup(value)) {
                 var filterExpression = utils.getFilterExpression(value, [field], [], "headerFilter");
                 result.push(filterExpression);
@@ -62,7 +62,8 @@ function baseOperation(grid) {
                 },
                 onHidden: function() {
                     $("body").trigger("dxpointerdown");
-                }
+                },
+                isCustomOperation: true
             });
             return container;
         },
