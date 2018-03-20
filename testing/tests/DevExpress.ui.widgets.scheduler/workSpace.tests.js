@@ -180,6 +180,26 @@ QUnit.testStart(function() {
             "Exception messages should be correct"
         );
     });
+
+    QUnit.test("Workspace scrollable should work correctly after changing currentDate", function(assert) {
+        this.instance.option("height", 200);
+        this.instance.option("currentDate", new Date());
+
+        var $element = this.instance.$element();
+
+        assert.notEqual($element.find(".dx-scrollbar-vertical").css("display"), "none", "Scrollable works correctly");
+    });
+
+    QUnit.test("Workspace scrollable should work correctly after changing currentDate, crossScrollingEnabled = true", function(assert) {
+        this.instance.option("crossScrollingEnabled", true);
+        this.instance.option("height", 200);
+        this.instance.option("currentDate", new Date());
+
+        var $element = this.instance.$element();
+
+        assert.notEqual($element.find(".dx-scrollbar-vertical").css("display"), "none", "Scrollable works correctly");
+    });
+
 })("Work Space Base");
 
 (function() {
@@ -750,7 +770,7 @@ QUnit.testStart(function() {
             currentDate: new Date(2016, 2, 14)
         });
 
-        assert.equal(spy.callCount, 344);
+        assert.equal(spy.callCount, 343);
         spy.restore();
     });
 })("Work Space Week");

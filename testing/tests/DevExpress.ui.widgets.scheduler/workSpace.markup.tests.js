@@ -253,25 +253,6 @@ QUnit.module("Workspace markup", moduleConfig, () => {
         assert.ok($element.find(".dx-scheduler-date-table").parent().hasClass("dx-scrollable-content"), "Scrollable contains date table");
     });
 
-    QUnit.test("Workspace scrollable should work correctly after changing currentDate", (assert) => {
-        this.instance.option("height", 200);
-        this.instance.option("currentDate", new Date());
-
-        const $element = this.instance.$element();
-
-        assert.notEqual($element.find(".dx-scrollbar-vertical").css("display"), "none", "Scrollable works correctly");
-    });
-
-    QUnit.test("Workspace scrollable should work correctly after changing currentDate, crossScrollingEnabled = true", (assert) => {
-        this.instance.option("crossScrollingEnabled", true);
-        this.instance.option("height", 200);
-        this.instance.option("currentDate", new Date());
-
-        const $element = this.instance.$element();
-
-        assert.notEqual($element.find(".dx-scrollbar-vertical").css("display"), "none", "Scrollable works correctly");
-    });
-
     QUnit.test("Time panel cells and rows should have special css classes", (assert) => {
         const $element = this.instance.$element(),
             $row = $element.find(".dx-scheduler-time-panel tr").first(),
