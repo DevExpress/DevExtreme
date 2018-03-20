@@ -101,7 +101,6 @@ var optionChangeExcluded = [
     "Popover",
     "Popup",
     "ProgressBar",
-    "Resizable",
     "ResponsiveBox",
     "Scheduler",
     "ScrollView",
