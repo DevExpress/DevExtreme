@@ -112,18 +112,13 @@ module.exports = {
              * @default false
              */
             /**
-             * @name dxDataGridOptions_paging
-             * @publicName paging
-             * @type object
-             */
-            /**
-             * @name dxTreeListOptions_paging
+             * @name GridBaseOptions_paging
              * @publicName paging
              * @type object
              */
             paging: {
                 /**
-                 * @name dxDataGridOptions_paging_enabled
+                 * @name GridBaseOptions_paging_enabled
                  * @publicName enabled
                  * @type boolean
                  * @default true
@@ -134,7 +129,7 @@ module.exports = {
                  * @publicName pageSize
                  * @type number
                  * @default 20
-                 * @fires dxDataGridOptions_onOptionChanged
+                 * @fires GridBaseOptions_onOptionChanged
                  */
                 pageSize: undefined,
                 /**
@@ -142,7 +137,7 @@ module.exports = {
                  * @publicName pageIndex
                  * @type number
                  * @default 0
-                 * @fires dxDataGridOptions_onOptionChanged
+                 * @fires GridBaseOptions_onOptionChanged
                  */
                 pageIndex: undefined
             }
