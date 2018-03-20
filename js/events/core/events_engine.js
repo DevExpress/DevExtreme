@@ -526,7 +526,7 @@ initEvent(normalizeEventArguments(function(src, config) {
 
     addProperty("which", calculateWhich, that);
 
-    if(src.type.startsWith("touch")) {
+    if(src.type.indexOf("touch") === 0) {
         delete config.pageX;
         delete config.pageY;
     }
