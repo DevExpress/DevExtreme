@@ -367,51 +367,6 @@ QUnit.test("delete button click should delete list item", function(assert) {
     $deleteButton.trigger("dxclick");
 });
 
-QUnit.test("button should have icon and no text for the Material theme", function(assert) {
-    var origCurrent = themes.current;
-    themes.current = function() { return "material"; };
-
-    var $list = $($("#templated-list").dxList({
-        items: ["0"],
-        allowItemDeleting: true,
-        itemDeleteMode: "test"
-    }));
-
-    var $item = $list.find(toSelector(LIST_ITEM_CLASS)).eq(0);
-
-    $item.trigger("dxpreparetodelete");
-
-    var deleteButton = $item.find(toSelector("dx-button")).dxButton("instance");
-
-    assert.equal(deleteButton.option("icon"), "trash", "button has trash icon for the Material theme");
-    assert.equal(deleteButton.option("text").length, 0, "button hasn't text for the Material theme");
-
-    themes.current = origCurrent;
-});
-
-QUnit.test("button should have text and no icon for the Generic theme", function(assert) {
-    var origCurrent = themes.current;
-    themes.current = function() { return "generic"; };
-
-    var $list = $($("#templated-list").dxList({
-        items: ["0"],
-        allowItemDeleting: true,
-        itemDeleteMode: "test"
-    }));
-
-    var $item = $list.find(toSelector(LIST_ITEM_CLASS)).eq(0);
-
-    $item.trigger("dxpreparetodelete");
-
-    var deleteButton = $item.find(toSelector("dx-button")).dxButton("instance");
-
-    assert.equal(deleteButton.option("icon"), "", "button has no icon for the Generic theme");
-    assert.ok(deleteButton.option("text").length > 0, "button has a text for the Generic theme");
-
-    themes.current = origCurrent;
-});
-
-
 var TOGGLE_DELETE_SWITCH_CLASS = "dx-list-toggle-delete-switch";
 
 QUnit.module("toggle delete decorator");

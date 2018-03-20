@@ -2,6 +2,7 @@
     @MATERIAL_LIST_BORDER_WIDTH: 1px;
     @MATERIAL_LIST_VERTICAL_PADDING: 8px;
 
+    @MATERIAL_LIST_ITEM_HEIGHT: 48px;
     @MATERIAL_LIST_ITEM_VERTICAL_PADDING: 14px;
     @MATERIAL_LIST_ITEM_HORIZONTAL_PADDING: 16px;
     @MATERIAL_LIST_ITEM_BORDER_WIDTH: 1px;
@@ -36,8 +37,6 @@
 
 @MATERIAL_LIST_BORDER: @MATERIAL_LIST_BORDER_WIDTH solid @list-border-color;
 @MATERIAL_LIST_ITEM_BORDER: @MATERIAL_LIST_ITEM_BORDER_WIDTH solid @list-border-color;
-@MATERIAL_LIST_SEARCH_EDITOR_HEIGHT: round(@MATERIAL_BASE_LINE_HEIGHT * @MATERIAL_BASE_FONT_SIZE) + @MATERIAL_BASE_INLINE_BORDEREDWIDGET_TOP_PADDING + @MATERIAL_BASE_INLINE_BORDEREDWIDGET_BOTTOM_PADDING + 2*@MATERIAL_BASE_BORDER_WIDTH;
-
 
 .dx-list-item-chevron {
     .rotate(0);
@@ -140,7 +139,7 @@
         }
 
         &.dx-list-with-search .dx-scrollable-wrapper {
-            height: calc(~"100% - "@MATERIAL_LIST_SEARCH_EDITOR_HEIGHT);
+            height: calc(~"100% - "@MATERIAL_LIST_ITEM_HEIGHT);
         }
 
         .dx-empty-message {
@@ -231,6 +230,10 @@
         &.dx-state-hover, &.dx-state-active {
             background-color: @list-item-hover-bg;
             color: @list-item-hover-color;
+
+            .dx-list-switchable-delete-button-inner-wrapper {
+                background-color: @list-item-hover-bg;
+            }
         }
 
         &:first-of-type {
@@ -437,15 +440,13 @@
         }
     }
 
-    .dx-button.dx-list-switchable-delete-button {
-        margin-right: 0;
-        width: 58px;
-        height: 100%;
-        box-shadow: inset 3px 0px 5px -3px @list-button-delete-shadow-color, 
-            inset 0px 3px 5px -3px @list-button-delete-shadow-color, 
-            inset 0px -3px 5px -3px @list-button-delete-shadow-color;
+    .dx-list-switchable-delete-button-inner-wrapper {
+        padding-right: (@MATERIAL_LIST_ITEM_HEIGHT - @MATERIAL_BUTTON_HEIGHT)/2;
+        background-color: @base-bg;
+    }
 
-        border-radius: 0;
+    .dx-button.dx-list-switchable-delete-button {
+        .dx-button-flat-styling(@button-danger-bg);
     }
 
     .dx-list-context-menucontent {
