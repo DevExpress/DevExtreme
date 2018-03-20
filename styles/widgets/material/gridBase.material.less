@@ -22,7 +22,7 @@
     @MATERIAL_GRID_BASE_HEADER_PANEL_PADDING: 0 14px 0 24px;
     
     @MATERIAL_GRID_BASE_COMMAND_EDIT_COLUMN_WIDTH: 85px;
-    @MATERIAL_GRID_BASE_ADAPTIVE_TEXT_PADDING: 8px;
+    @MATERIAL_GRID_BASE_ADAPTIVE_COLUMN_HEIGHT: 40px;
     @MATERIAL_GRID_BASE_TREEVIEW_SEARCH_MARGIN: 10px;
 }
 
@@ -37,7 +37,6 @@
     @MATERIAL_GRID_BASE_GROUPPANEL_ITEM_MARGIN: 5px;
     @MATERIAL_GRID_BASE_COMMAND_SELECT_COLUMN_WIDTH: 55px;
     @MATERIAL_GRID_BASE_COMMAND_EDIT_COLUMN_WIDTH: 70px;
-    @MATERIAL_GRID_BASE_ADAPTIVE_TEXT_PADDING: 6px;
     @MATERIAL_GRID_BASE_TREEVIEW_SEARCH_MARGIN: 5px;
 }
 
@@ -721,13 +720,15 @@
             }
         }
 
-        .dx-data-row {
+        .dx-data-row, .dx-adaptive-detail-row {
             &:not(.dx-edit-row) .dx-cell-modified {
                 background-color: ~"@{@{widgetName}-cell-modified-border-color}";
             }
 
-            .dx-validator.dx-@{widgetName}-invalid {
-                background-color: ~"@{@{widgetName}-row-invalid-faded-border-color}";
+            .dx-validator {
+                &.dx-@{widgetName}-invalid, &.dx-invalid {
+                    background-color: ~"@{@{widgetName}-row-invalid-faded-border-color}";
+                }
             }
 
             .dx-invalid-message {
@@ -748,32 +749,37 @@
         .dx-set-checkbox-border-color-as-background();
 
         .dx-adaptive-detail-row {
-            .dx-adaptive-item-text {
-                padding-top: @MATERIAL_GRID_BASE_ADAPTIVE_TEXT_PADDING;
-                padding-bottom: @MATERIAL_GRID_BASE_ADAPTIVE_TEXT_PADDING;
-                padding-left: @MATERIAL_GRID_BASE_ADAPTIVE_TEXT_PADDING;
+            .dx-field-item-label {
+                padding: 0 @MATERIAL_GRID_BASE_CELL_HORIZONTAL_PADDING;
+            }
+            .dx-field-item-content {
+                padding-left: @MATERIAL_GRID_BASE_CELL_HORIZONTAL_PADDING;
+                padding-right: @MATERIAL_GRID_BASE_CELL_HORIZONTAL_PADDING;
+                line-height: @MATERIAL_GRID_BASE_ADAPTIVE_COLUMN_HEIGHT;
+                height: @MATERIAL_GRID_BASE_ADAPTIVE_COLUMN_HEIGHT;
+                font-size: @MATERIAL_GRID_BASE_CELL_FONT_SIZE;
+
+                &.dx-focused {
+                    padding: 0;
+                }
             }
 
-            .dx-@{widgetName}-invalid {
-                border: 1px solid ~"@{@{widgetName}-row-invalid-faded-border-color}";
+            .dx-texteditor-input {
+                padding-left: @MATERIAL_GRID_BASE_CELL_HORIZONTAL_PADDING;
+                padding-right: @MATERIAL_GRID_BASE_CELL_HORIZONTAL_PADDING;
+                background: ~"@{@{widgetName}-editor-bg}";
+                font-size: @MATERIAL_GRID_BASE_CELL_FONT_SIZE;
+                height: @MATERIAL_GRID_BASE_ADAPTIVE_COLUMN_HEIGHT;
+                line-height: @MATERIAL_GRID_BASE_ADAPTIVE_COLUMN_HEIGHT;
+            }
 
-                &.dx-adaptive-item-text {
-                    padding-top: @MATERIAL_GRID_BASE_ADAPTIVE_TEXT_PADDING - 1px;
-                    padding-bottom: @MATERIAL_GRID_BASE_ADAPTIVE_TEXT_PADDING - 1px;
-                    padding-left: @MATERIAL_GRID_BASE_ADAPTIVE_TEXT_PADDING - 1px;
-                }
+            .dx-texteditor-container:after, .dx-texteditor-container:before {
+                content: none;
             }
         }
 
         .dx-item-modified {
-            .border-radius(@base-border-radius);
-            border: 2px solid ~"@{@{widgetName}-cell-modified-border-color}";
-
-            &.dx-adaptive-item-text {
-                padding-top: @MATERIAL_GRID_BASE_ADAPTIVE_TEXT_PADDING - 2px;
-                padding-bottom: @MATERIAL_GRID_BASE_ADAPTIVE_TEXT_PADDING - 2px;
-                padding-left: @MATERIAL_GRID_BASE_ADAPTIVE_TEXT_PADDING - 2px;
-            }
+            background-color: ~"@{@{widgetName}-cell-modified-border-color}";
         }
 
         .dx-selection.dx-row,
