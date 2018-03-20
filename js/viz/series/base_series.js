@@ -364,9 +364,9 @@ Series.prototype = {
             that._canRenderCompleteHandle = true;
         }
 
-        that._data = data.reduce(function(data, dataItem, index) {
-            var pointDataItem = that._getPointData(dataItem, options);
-            if(that._checkData(pointDataItem)) {
+        that._data = data.reduce((data, dataItem, index) => {
+            const pointDataItem = that._getPointData(dataItem, options);
+            if(_isDefined(pointDataItem.argument)) {
                 pointDataItem.index = index;
                 data.push(pointDataItem);
             }
@@ -403,15 +403,19 @@ Series.prototype = {
 
         that._calculateErrorBars(data);
 
-        points = data.map(function(dataItem, index) {
-            var oldPoint = that._getOldPoint(dataItem, oldPointsByArgument, index),
-                p = that._createPoint(dataItem, index, oldPoint, dataItem.index);
 
-            if(!oldPoint) {
-                allPoints.push(p);
+        points = data.reduce((points, pointDataItem, index) => {
+            if(that._checkData(pointDataItem)) {
+                const oldPoint = that._getOldPoint(pointDataItem, oldPointsByArgument, index);
+                const point = that._createPoint(pointDataItem, index, oldPoint, pointDataItem.index);
+                pointDataItem.index = index;
+                if(!oldPoint) {
+                    allPoints.push(point);
+                }
+                points.push(point);
             }
-            return p;
-        });
+            return points;
+        }, []);
 
         that._oldPoints = Object.keys(oldPointsByArgument).reduce(function(points, key) {
             var argPoints = oldPointsByArgument[key];
