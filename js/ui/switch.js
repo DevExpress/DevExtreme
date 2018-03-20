@@ -1,9 +1,7 @@
 "use strict";
 
 var $ = require("../core/renderer"),
-    windowUtils = require("../core/utils/window"),
-    hasWindow = windowUtils.hasWindow,
-    window = windowUtils.getWindow(),
+    window = require("../core/utils/window").getWindow(),
     eventsEngine = require("../events/core/events_engine"),
     devices = require("../core/devices"),
     extend = require("../core/utils/extend").extend,
@@ -310,7 +308,7 @@ var Switch = Editor.inherit({
     },
 
     _renderPosition: function(state, swipeOffset) {
-        if(!hasWindow()) {
+        if(!this._readyToRender) {
             return;
         }
 
