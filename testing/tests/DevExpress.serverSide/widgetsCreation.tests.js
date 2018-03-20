@@ -92,7 +92,6 @@ var optionChangeExcluded = [
     "DateBox",
     "FileUploader",
     "Gallery",
-    "List",
     "LoadPanel",
     "NavBar",
     "Panorama",
