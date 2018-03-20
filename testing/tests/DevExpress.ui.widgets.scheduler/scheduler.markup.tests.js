@@ -3,6 +3,8 @@
 import $ from "jquery";
 // import fx from "animation/fx";
 import SchedulerWorkSpace from "ui/scheduler/ui.scheduler.work_space";
+import SchedulerResourcesManager from "ui/scheduler/ui.scheduler.resource_manager";
+import dateLocalization from "localization/date";
 import "ui/scheduler/ui.scheduler";
 // import DataSource from "data/data_source/data_source";
 // import dxSchedulerAppointmentModel from "ui/scheduler/ui.scheduler.appointment_model";
@@ -51,16 +53,65 @@ const WORKSPACE_CLASS = "dx-scheduler-work-space",
     DATE_TABLE_CLASS = "dx-scheduler-date-table",
     ALL_DAY_TITLE_CLASS = "dx-scheduler-all-day-title",
 
+    CELL_CLASS = "dx-scheduler-date-table-cell",
+    HORIZONTAL_SIZES_CLASS = "dx-scheduler-cell-sizes-horizontal",
     VERTICAL_SIZES_CLASS = "dx-scheduler-cell-sizes-vertical";
-
-    // CELL_CLASS = "dx-scheduler-date-table-cell",
-    // HORIZONTAL_SIZES_CLASS = "dx-scheduler-cell-sizes-horizontal",
-    // VERTICAL_SIZES_CLASS = "dx-scheduler-cell-sizes-vertical",
-    // DROPPABLE_CELL_CLASS = "dx-scheduler-date-table-droppable-cell",
-    // ALL_DAY_TABLE_CELL_CLASS = "dx-scheduler-all-day-table-cell";
 
 const toSelector = cssClass => "." + cssClass;
 
+const stubInvokeMethod = function(instance, options) {
+    options = options || {};
+    sinon.stub(instance, "invoke", function() {
+        var subscribe = arguments[0];
+        if(subscribe === "createResourcesTree") {
+            return new SchedulerResourcesManager().createResourcesTree(arguments[1]);
+        }
+        if(subscribe === "getResourceTreeLeaves") {
+            var resources = instance.resources || [{ field: "one", dataSource: [{ id: 1 }, { id: 2 }] }];
+            return new SchedulerResourcesManager(resources).getResourceTreeLeaves(arguments[1], arguments[2]);
+        }
+        if(subscribe === "getTimezone") {
+            return options.tz || 3;
+        }
+        if(subscribe === "getTimezoneOffset") {
+            return -180 * 60000;
+        }
+        if(subscribe === "convertDateByTimezone") {
+            var date = new Date(arguments[1]);
+
+            var tz = options.tz;
+
+            if(tz) {
+                var tzOffset = new Date().getTimezoneOffset() * 60000,
+                    dateInUTC = date.getTime() + tzOffset;
+
+                date = new Date(dateInUTC + (tz * 3600000));
+            }
+
+            return date;
+        }
+    });
+};
+
+var checkRowsAndCells = function($element, assert, interval, start) {
+    interval = interval || 0.5;
+    start = start || 0;
+    var cellCount = (24 - start) / interval,
+        cellDuration = 3600000 * interval;
+
+    assert.equal($element.find(".dx-scheduler-time-panel-row").length, cellCount, "Time panel has a right count of rows");
+    assert.equal($element.find(".dx-scheduler-time-panel-cell").length, cellCount, "Time panel has a right count of cells");
+
+    $element.find(".dx-scheduler-time-panel-cell").each(function(index) {
+        var time;
+        if(index % 2 === 0) {
+            time = dateLocalization.format(new Date(new Date(1970, 0).getTime() + cellDuration * index + start * 3600000), "shorttime");
+        } else {
+            time = "";
+        }
+        assert.equal($(this).text(), time, "Time is OK");
+    });
+};
 
 // const moduleConfig = {
 //     beforeEach: () => {
@@ -338,6 +389,155 @@ QUnit.module("Workspace markup", moduleConfig, () => {
     });
 });
 
+
+const dayModuleConfig = {
+    beforeEach: () => {
+        this.createInstance = (options) => {
+            if(this.instance) {
+                //this.instance.invoke.restore();
+                delete this.instance;
+            }
+
+            this.instance = $("#scheduler-work-space").dxSchedulerWorkSpaceDay().dxSchedulerWorkSpaceDay("instance");
+            stubInvokeMethod(this.instance, options);
+        };
+
+        this.createInstance();
+    }
+};
+
+QUnit.module("Workspace Day markup", dayModuleConfig, () => {
+    QUnit.test("Scheduler workspace day should have a right css class", (assert) => {
+        const $element = this.instance.$element();
+
+        assert.ok($element.hasClass("dx-scheduler-work-space-day"), "dxSchedulerWorkSpaceDay has 'dx-scheduler-workspace-day' css class");
+    });
+
+    QUnit.test("Date table cells should have a special css classes", (assert) => {
+        const $element = this.instance.$element(),
+            classes = $element.find(".dx-scheduler-date-table td").attr("class").split(" ");
+
+        assert.ok($.inArray(CELL_CLASS, classes) > -1, "Cell has a css class");
+        assert.ok($.inArray(HORIZONTAL_SIZES_CLASS, classes) > -1, "Cell has a css class");
+        assert.ok($.inArray(VERTICAL_SIZES_CLASS, classes) > -1, "Cell has a css class");
+    });
+
+    QUnit.test("Scheduler all day panel should contain one row", (assert) => {
+        this.instance.option("showAllDayPanel", true);
+
+        const $allDayPanel = this.instance.$element().find(".dx-scheduler-all-day-panel");
+
+        assert.equal($allDayPanel.find("tbody tr").length, 1, "All day panel contains 1 row");
+        assert.equal($allDayPanel.find("tbody tr>td").length, 1, "All day panel contains 1 cell");
+    });
+
+    QUnit.test("Scheduler workspace date-table rows and cells should have correct css-class", (assert) => {
+        var $element = this.instance.$element(),
+            $dateTable = $element.find(".dx-scheduler-date-table"),
+            $row = $dateTable.find("tr").first(),
+            $cell = $row.find("td").first();
+
+        assert.ok($row.hasClass("dx-scheduler-date-table-row"), "Row class is correct");
+        assert.ok($cell.hasClass("dx-scheduler-date-table-cell"), "Cell class is correct");
+    });
+
+    QUnit.test("Scheduler workspace day view", (assert) => {
+        var $element = this.instance.$element(),
+            cellCounter = 0;
+
+
+        assert.equal($element.find(".dx-scheduler-date-table tbody tr").length, 48, "Date table has 48 rows");
+        assert.equal($element.find(".dx-scheduler-date-table tbody tr>td").length, 48, "Date table has 48 cells");
+
+        $element.find(".dx-scheduler-date-table tbody tr").each(function() {
+            if($(this).find("td").length === 1) {
+                cellCounter++;
+            }
+        });
+
+        assert.equal(cellCounter, 48, "Each row has a single cell");
+    });
+
+    QUnit.test("Scheduler workspace day grouped view", (assert) => {
+        var $element = this.instance.$element(),
+            cellCounter = 0;
+
+        this.instance.option("groups", [{ name: "one", items: [{ id: 1, text: "a" }, { id: 2, text: "b" }] }]);
+
+        assert.equal($element.find(".dx-scheduler-date-table tbody tr").length, 48, "Date table has 48 rows");
+        assert.equal($element.find(".dx-scheduler-date-table tbody tr>td").length, 96, "Date table has 96 cells");
+
+        $element.find(".dx-scheduler-date-table tbody tr").each(function() {
+            if($(this).find("td").length === 2) {
+                cellCounter++;
+            }
+        });
+
+        assert.equal(cellCounter, 48, "Each row has a two cells");
+    });
+
+    QUnit.test("Grouped cells should have a right group field in dxCellData", (assert) => {
+        var $element = this.instance.$element();
+
+        this.instance.option("groups", [{ name: "one", items: [{ id: 1, text: "a" }, { id: 2, text: "b" }] }]);
+
+        assert.deepEqual($element.find(".dx-scheduler-date-table tbody tr>td").eq(0).data("dxCellData").groups, {
+            one: 1
+        }, "Cell group is OK");
+        assert.deepEqual($element.find(".dx-scheduler-date-table tbody tr>td").eq(1).data("dxCellData").groups, { one: 2 }, "Cell group is OK");
+    });
+
+    QUnit.test("Scheduler workspace day view should not contain a single header", (assert) => {
+        var $element = this.instance.$element();
+
+        assert.equal($element.find(".dx-scheduler-header-row th").length, 0, "Date table has not header cell");
+    });
+
+    QUnit.test("Scheduler workspace day grouped view should contain a few headers", (assert) => {
+        var $element = this.instance.$element();
+
+        this.instance.option("groups", [
+            {
+                name: "one",
+                items: [{ id: 1, text: "a" }, { id: 2, text: "b" }]
+            },
+            {
+                name: "two",
+                items: [{ id: 1, text: "c" }, { id: 2, text: "d" }]
+            }
+        ]);
+
+        assert.equal($element.find(".dx-scheduler-header-row th").length, 0, "Date table has not header cell");
+        assert.equal($element.find(".dx-scheduler-group-row").eq(0).find("th").attr("colspan"), "2", "Group header has a right 'colspan'");
+        assert.strictEqual($element.find(".dx-scheduler-group-row").eq(1).find("th").attr("colspan"), undefined, "Group header has a right 'colspan'");
+    });
+
+    QUnit.test("Time panel should have 24 rows and 24 cells", (assert) => {
+        checkRowsAndCells(this.instance.$element(), assert);
+    });
+
+    QUnit.test("Time panel should have 22 rows and 22 cells for hoursInterval = 1 & startDayHour = 2", (assert) => {
+        this.instance.option({
+            hoursInterval: 1,
+            startDayHour: 2
+        });
+
+        checkRowsAndCells(this.instance.$element(), assert, 1, 2);
+    });
+
+    QUnit.test("Cell count should depend on start/end day hour & hoursInterval", (assert) => {
+        var $element = this.instance.$element();
+
+        this.instance.option({
+            currentDate: new Date(2015, 2, 1),
+            startDayHour: 8,
+            endDayHour: 20,
+            hoursInterval: 2.5
+        });
+
+        assert.equal($element.find(".dx-scheduler-date-table-cell").length, 5, "Cell count is OK");
+    });
+});
 // QUnit.module("Scheduler markup", moduleConfig, () => {
 //     QUnit.test("Scheduler should be initialized", (assert) => {
 //         assert.ok(this.instance instanceof dxScheduler, "Scheduler was initialized");
