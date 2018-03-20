@@ -5,6 +5,7 @@ var $ = require("../../core/renderer"),
     registerComponent = require("../../core/component_registrator"),
     dateUtils = require("../../core/utils/date"),
     extend = require("../../core/utils/extend").extend,
+    windowUtils = require("../../core/utils/window"),
     toMs = dateUtils.dateToMilliseconds;
 
 var SCHEDULER_DATE_TIME_INDICATOR_CLASS = "dx-scheduler-date-time-indicator",
@@ -146,9 +147,11 @@ var SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
     },
 
     _refreshDateTimeIndication: function() {
-        this._cleanDateTimeIndicator();
-        this._shader && this._shader.clean();
-        this._renderDateTimeIndication();
+        if(windowUtils.hasWindow()) {
+            this._cleanDateTimeIndicator();
+            this._shader && this._shader.clean();
+            this._renderDateTimeIndication();
+        }
     },
 
     _isCurrentTime: function(date) {
