@@ -502,3 +502,20 @@ QUnit.test("Options of template have the 'component'", function(assert) {
     // assert
     assert.ok(callRenderTemplate, "call render of template");
 });
+
+// T616759
+QUnit.test("The title attribute should not be set for content inside detail row", function(assert) {
+    // arrange
+    var $table,
+        $container = $('#container').width(200);
+
+    this.option("cellHintEnabled", true);
+    $table = $(this.columnsView._createTable());
+    $container.html($("<div class = 'dx-datagrid-rowsview dx-datagrid-nowrap' />").append($table.append(this.columnsView._createColGroup(this.columns), '<tr class="dx-row dx-master-detail-row"><td><div id="content" style="overflow: hidden;"><div style="width: 600px; height: 30px;">Test</div></div></td></tr>')));
+
+    // act
+    $("#content").trigger("mousemove");
+
+    // assert
+    assert.strictEqual($("#content").attr("title"), undefined, "not has attribute title");
+});
