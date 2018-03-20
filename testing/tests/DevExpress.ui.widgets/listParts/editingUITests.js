@@ -804,6 +804,7 @@ QUnit.test("button should have no inkRipple after fast swipe for Material theme"
         clock.tick(400);
     }
 
+    clock.restore();
     themes.current = origCurrent;
 });
 
