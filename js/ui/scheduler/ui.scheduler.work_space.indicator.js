@@ -228,8 +228,10 @@ var SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
     _cleanWorkSpace: function() {
         this.callBase();
 
-        this._renderDateTimeIndication();
-        this._setIndicationUpdateInterval();
+        if(windowUtils.hasWindow()) {
+            this._renderDateTimeIndication();
+            this._setIndicationUpdateInterval();
+        }
     },
 
     _optionChanged: function(args) {
