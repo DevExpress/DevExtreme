@@ -2149,17 +2149,12 @@
         text-align: center;
     }
 
-    .dx-scheduler-all-day-title {
-        margin-left: @SCHEDULER_LEFT_COLUMN_WIDTH;
-    }
-
+    .dx-scheduler-all-day-title,
     .dx-scheduler-all-day-table {
         margin-left: @SCHEDULER_LEFT_COLUMN_WIDTH;
     }
     
-    .dx-scheduler-time-panel{
-        //margin-left: -@SCHEDULER_LEFT_COLUMN_WIDTH;
-
+    .dx-scheduler-time-panel {
         .dx-scheduler-time-panel-row:before {
             display: table-cell;
             width: @SCHEDULER_LEFT_COLUMN_WIDTH;
@@ -2168,7 +2163,7 @@
     }
 
     .dx-scheduler-date-table {
-        margin-left: -(@SCHEDULER_LEFT_COLUMN_WIDTH)*2;
+        margin-left: -(@SCHEDULER_LEFT_COLUMN_WIDTH * 2);
 
         .dx-scheduler-date-table-row:before {
             width: @SCHEDULER_LEFT_COLUMN_WIDTH * 2;

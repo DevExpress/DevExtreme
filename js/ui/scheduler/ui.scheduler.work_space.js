@@ -93,6 +93,7 @@ var COMPONENT_CLASS = "dx-scheduler-work-space",
     CELL_DATA = "dxCellData",
 
     DATE_TABLE_MIN_CELL_WIDTH = 75,
+    DATE_TABLE_CELL_BORDER = 1,
 
     DAY_MS = toMs("day"),
     HOUR_MS = toMs("hour");
@@ -713,6 +714,10 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _visibilityChanged: function(visible) {
+        if(visible && this._isHorizontalGroupedWorkSpace()) {
+            this._setHorizontalGroupHeaderCellsHeight();
+        }
+
         if(visible && this.option("crossScrollingEnabled")) {
             this._setTableSizes();
         }
@@ -757,6 +762,10 @@ var SchedulerWorkSpace = Widget.inherit({
         this._$allDayTable.width(width);
 
         this._attachHeaderTableClasses();
+
+        if(this._isHorizontalGroupedWorkSpace()) {
+            this._setHorizontalGroupHeaderCellsHeight();
+        }
     },
 
     _getWorkSpaceMinWidth: function() {
@@ -821,6 +830,7 @@ var SchedulerWorkSpace = Widget.inherit({
         this._renderDateTable();
 
         this._renderAllDayPanel();
+        this._setHorizontalGroupHeaderCellsHeight();
 
         this._shader = new VerticalShader();
         this._renderDateTimeIndication();
@@ -1209,7 +1219,7 @@ var SchedulerWorkSpace = Widget.inherit({
 
     _calculateTimeCellRepeatCount: function() {
         if(this._isHorizontalGroupedWorkSpace()) {
-            this._getGroupCount() || 1;
+            return this._getGroupCount() || 1;
         }
 
         return 1;
@@ -1242,9 +1252,14 @@ var SchedulerWorkSpace = Widget.inherit({
 
     _getTimeCellDate: function(i) {
         var startViewDate = new Date(this.getStartViewDate()),
-            timeCellDuration = this.getCellDuration();
+            timeCellDuration = this.getCellDuration(),
+            lastCellInDay = this._calculateDayDuration() / this.option("hoursInterval");
 
-        startViewDate.setMilliseconds(startViewDate.getMilliseconds() + timeCellDuration * i);
+        if(i < lastCellInDay) {
+            startViewDate.setMilliseconds(startViewDate.getMilliseconds() + timeCellDuration * i);
+        } else {
+            startViewDate.setMilliseconds(startViewDate.getMilliseconds() + timeCellDuration * (i % lastCellInDay));
+        }
 
         return startViewDate;
     },
@@ -1667,6 +1682,13 @@ var SchedulerWorkSpace = Widget.inherit({
     _getCells: function(allDay) {
         var cellClass = allDay ? ALL_DAY_TABLE_CELL_CLASS : DATE_TABLE_CELL_CLASS;
         return this.$element().find("." + cellClass);
+    },
+
+    _setHorizontalGroupHeaderCellsHeight: function() {
+        var cellHeight = this.getCellHeight() - DATE_TABLE_CELL_BORDER * 2,
+            dateTableHeight = cellHeight * this._getRowCount();
+
+        this._getGroupHeaderCellsContent().css("height", dateTableHeight);
     },
 
     _getGroupHeaderCellsContent: function() {
