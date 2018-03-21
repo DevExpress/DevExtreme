@@ -99,7 +99,6 @@ var optionChangeExcluded = [
     "ProgressBar",
     "Scheduler",
     "ScrollView",
-    "SlideOut",
     "Switch",
     "TileView",
     "Toast",
