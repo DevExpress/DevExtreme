@@ -6,6 +6,13 @@ import SchedulerResourcesManager from "ui/scheduler/ui.scheduler.resource_manage
 import dateLocalization from "localization/date";
 import "ui/scheduler/ui.scheduler";
 
+QUnit.testStart(() => {
+    const markup =
+        '<div id="scheduler-work-space">';
+
+    $("#qunit-fixture").html(markup);
+});
+
 const WORKSPACE_CLASS = "dx-scheduler-work-space",
     WORKSPACE_WITH_COUNT_CLASS = "dx-scheduler-work-space-count",
     HEADER_PANEL_CLASS = "dx-scheduler-header-panel",

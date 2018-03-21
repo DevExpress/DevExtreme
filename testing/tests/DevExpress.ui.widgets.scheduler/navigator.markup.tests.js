@@ -9,6 +9,13 @@ import "ui/scheduler/ui.scheduler";
 
 "use strict";
 
+QUnit.testStart(() => {
+    const markup =
+        '<div id="navigator"> </div>';
+
+    $("#qunit-fixture").html(markup);
+});
+
 const moduleConfig = {
     beforeEach: () => {
         devices.current({ platform: "generic" });

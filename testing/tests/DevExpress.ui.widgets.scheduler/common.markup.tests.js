@@ -8,6 +8,13 @@ import dateUtils from "core/utils/date";
 import dxSchedulerAppointmentModel from "ui/scheduler/ui.scheduler.appointment_model";
 "use strict";
 
+QUnit.testStart(() => {
+    const markup =
+        '<div id="scheduler"> </div>';
+
+    $("#qunit-fixture").html(markup);
+});
+
 const moduleConfig = {
     beforeEach: () => {
         this.clock = sinon.useFakeTimers();
