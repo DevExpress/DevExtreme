@@ -244,27 +244,29 @@ var HeaderFilterController = modules.ViewController.inherit((function() {
 
         showHeaderFilterMenu: function(columnIndex, isGroupPanel) {
             var columnsController = this._columnsController,
-                visibleIndex = columnsController.getVisibleIndex(columnIndex),
-                view = isGroupPanel ? this.getView("headerPanel") : this.getView("columnHeadersView"),
-                column = columnsController.getColumns()[columnIndex],
-                $columnElement = $columnElement || view.getColumnElements().eq(isGroupPanel ? column.groupIndex : visibleIndex);
+                column = extend(true, {}, this._columnsController.getColumns()[columnIndex]);
+            if(column) {
+                var visibleIndex = columnsController.getVisibleIndex(columnIndex),
+                    view = isGroupPanel ? this.getView("headerPanel") : this.getView("columnHeadersView"),
+                    $columnElement = $columnElement || view.getColumnElements().eq(isGroupPanel ? column.groupIndex : visibleIndex);
 
-            this.showHeaderFilterMenuBase({
-                columnElement: $columnElement,
-                columnIndex: columnIndex,
-                applyFilter: true,
-                apply: function() {
-                    columnsController.columnOption(columnIndex, {
-                        filterValues: this.filterValues,
-                        filterType: this.filterType
-                    });
-                }
-            });
+                this.showHeaderFilterMenuBase({
+                    columnElement: $columnElement,
+                    column: column,
+                    applyFilter: true,
+                    apply: function() {
+                        columnsController.columnOption(columnIndex, {
+                            filterValues: this.filterValues,
+                            filterType: this.filterType
+                        });
+                    }
+                });
+            }
         },
 
         showHeaderFilterMenuBase: function(options) {
             var that = this,
-                column = extend(true, {}, that._columnsController.getColumns()[options.columnIndex]);
+                column = options.column;
 
             if(column) {
                 var groupInterval = filterUtils.getGroupInterval(column);
@@ -288,11 +290,8 @@ var HeaderFilterController = modules.ViewController.inherit((function() {
                 });
 
                 options.dataSource = that.getDataSource(options);
-                if(options.isCustomOperation) {
-                    options.filterType = "include";
-                }
 
-                if(!options.applyFilter) {
+                if(options.isCustomOperation) {
                     options.dataSource.filter = null;
                 }
 

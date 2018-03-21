@@ -43,7 +43,7 @@ function baseOperation(grid) {
                     .addClass("dx-filterbuilder-item-value-text")
                     .text(customizeText(conditionInfo))
                     .appendTo(container),
-                column = grid.columnOption(conditionInfo.field.dataField);
+                column = extend(true, {}, grid.columnOption(conditionInfo.field.dataField));
 
             var setValue = function(value) {
                 div.text(customizeText({
@@ -53,9 +53,12 @@ function baseOperation(grid) {
                 conditionInfo.setValue(value);
             };
 
+            column.filterType = "include";
+            column.filterValue = conditionInfo.value;
+
             headerFilterController.showHeaderFilterMenuBase({
                 columnElement: div,
-                columnIndex: column.index,
+                column: column,
                 apply: function() {
                     setValue(this.filterValues);
                     headerFilterController.hideHeaderFilterMenu();
