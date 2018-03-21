@@ -96,7 +96,6 @@ var optionChangeExcluded = [
     "PivotGrid",
     "Popover",
     "Popup",
-    "ProgressBar",
     "Scheduler",
     "ScrollView",
     "Switch",
