@@ -6214,6 +6214,30 @@ QUnit.test("CustomStore load options when remoteOperations auto and summary exis
     assert.deepEqual(this.dataController.items()[0].summaryCells, [[{ summaryType: "count", value: 1 }], []], "group summaryCells");
 });
 
+// T615903
+QUnit.test("No errors if wrong extra parameter is returned in CustomStore", function(assert) {
+    this.options = {
+        dataSource: {
+            load: function(options) {
+                return $.Deferred().resolve([
+                    { name: 'Alex', age: 19 },
+                    { name: 'Dan', age: 25 }
+                ], "success");
+            }
+        },
+        scrolling: {
+            mode: "infinite"
+        }
+    };
+
+    // act
+    this.setupDataGridModules();
+    this.clock.tick();
+
+    // assert
+    assert.equal(this.dataController.items().length, 2, "two items are loaded");
+});
+
 QUnit.test("CustomStore load options when remote summary enabled", function(assert) {
     var storeLoadOptions;
     this.options = {
