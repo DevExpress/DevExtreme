@@ -4,6 +4,7 @@ var $ = require("../../core/renderer"),
     dataUtils = require("../../core/element_data"),
     Callbacks = require("../../core/utils/callbacks"),
     commonUtils = require("../../core/utils/common"),
+    windowUtils = require("../../core/utils/window"),
     getDefaultAlignment = require("../../core/utils/position").getDefaultAlignment,
     extend = require("../../core/utils/extend").extend,
     Widget = require("../widget/ui.widget"),
@@ -186,6 +187,10 @@ var Editor = Widget.inherit({
 
         $element.toggleClass(INVALID_CLASS, !isValid);
         this.setAria("invalid", !isValid || undefined);
+
+        if(!windowUtils.hasWindow()) {
+            return;
+        }
 
         if(this._$validationMessage) {
             this._$validationMessage.remove();

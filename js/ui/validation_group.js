@@ -50,7 +50,7 @@ var ValidationGroup = DOMComponent.inherit({
         this.callBase();
     },
 
-    _render: function() {
+    _initMarkup: function() {
         var $element = this.$element();
         $element.addClass(VALIDATION_ENGINE_CLASS);
 

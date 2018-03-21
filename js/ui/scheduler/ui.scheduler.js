@@ -1763,8 +1763,9 @@ var Scheduler = Widget.inherit({
 
     _renderFocusTarget: noop,
 
-    _render: function() {
+    _initMarkup: function() {
         this.callBase();
+
         this._processCurrentView();
         this._renderHeader();
 
@@ -1772,8 +1773,6 @@ var Scheduler = Widget.inherit({
 
         this._appointments = this._createComponent("<div>", SchedulerAppointments, this._appointmentsConfig());
         this._appointments.option("itemTemplate", this._getAppointmentTemplate("appointmentTemplate"));
-
-        this._toggleSmallClass();
 
         this._loadResources().done((function(resources) {
             this._renderWorkSpace(resources);
@@ -1789,6 +1788,14 @@ var Scheduler = Widget.inherit({
             this._filterAppointmentsByDate();
             this._reloadDataSource();
         }).bind(this));
+    },
+
+    _render: function() {
+        this.callBase();
+
+        this._toggleSmallClass();
+
+        this._workSpaceRecalculation && this._workSpaceRecalculation.resolve();
     },
 
     _renderHeader: function() {
@@ -1918,8 +1925,6 @@ var Scheduler = Widget.inherit({
 
         domUtils.triggerResizeEvent(this._workSpace.$element());
         this._workSpace._refreshDateTimeIndication();
-
-        this._workSpaceRecalculation.resolve();
     },
 
     _workSpaceConfig: function(groups, countConfig) {
@@ -2008,7 +2013,7 @@ var Scheduler = Widget.inherit({
         delete this._workSpace;
 
         this._renderWorkSpace(groups);
-
+        this._workSpaceRecalculation.resolve();
         this._appointments.option({
             fixedContainer: this._workSpace.getFixedContainer(),
             allDayContainer: this._workSpace.getAllDayContainer()

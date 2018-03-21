@@ -1,9 +1,9 @@
 "use strict";
 
 var $ = require("jquery"),
-    Box = require("ui/box"),
-    domUtils = require("core/utils/dom"),
-    registerComponent = require("core/component_registrator");
+    domUtils = require("core/utils/dom");
+
+require("ui/box");
 
 require("common.css!");
 require("ui/scroll_view/ui.scrollable");
@@ -37,8 +37,7 @@ QUnit.testStart(function() {
     $("#qunit-fixture").html(markup);
 });
 
-var BOX_CLASS = "dx-box",
-    BOX_ITEM_CLASS = "dx-box-item";
+var BOX_ITEM_CLASS = "dx-box-item";
 
 var relativeOffset = function($element, $relativeElement) {
     $relativeElement = $relativeElement || $element.parent();
@@ -52,29 +51,6 @@ var relativeOffset = function($element, $relativeElement) {
     };
 };
 
-
-QUnit.module("render");
-
-QUnit.test("render", function(assert) {
-    var $box = $("#box").dxBox({
-        items: [1, 2]
-    });
-
-    assert.ok($box.hasClass(BOX_CLASS), "necessary class attached");
-    var $items = $box.find("." + BOX_ITEM_CLASS);
-    assert.equal($items.length, 2, "items rendered");
-
-    assert.equal($items.eq(0).text(), "1", "first item rendered");
-    assert.equal($items.eq(1).text(), "2", "second item rendered");
-});
-
-QUnit.test("strategy class", function(assert) {
-    var $box = $("#box").dxBox({
-        _layoutStrategy: "test"
-    });
-
-    assert.ok($box.hasClass("dx-box-test"), "class attached");
-});
 
 QUnit.module("Scrollable integration");
 
@@ -428,28 +404,6 @@ QUnit.test("default shrink option", function(assert) {
     assert.equal($thirdItem.width(), 0, "third item has correct size");
 });
 
-QUnit.test("render box in dxBox", function(assert) {
-    var $box = $("#box").dxBox({
-        items: [{ box: { direction: "row" } }]
-    });
-
-    var $innerBox = $box.find("." + BOX_CLASS);
-    assert.equal($innerBox.length, 1, "box was rendered");
-    var innerBox = $innerBox.dxBox("instance");
-    assert.ok(innerBox instanceof Box, "box was created inside box");
-});
-
-QUnit.test("box pass _layoutStrategy to children box", function(assert) {
-    var $box = $("#box").dxBox({
-        _layoutStrategy: 'test',
-        items: [{ box: {} }]
-    });
-
-    var innerBox = $box.find(".dx-box").dxBox("instance");
-
-    assert.equal(innerBox.option("_layoutStrategy"), "test", "_layoutStrategy was passed to children box");
-});
-
 QUnit.test("minSize & maxSize", function(assert) {
     var boxSize = 100;
     var minSize = 80;
@@ -543,60 +497,6 @@ QUnit.test("shrink may be set to 0", function(assert) {
     assert.equal($items.eq(0).height(), firstItemSize - (firstItemSize + secondItemSize - boxSize) / (firstItemShrink + secondItemShrink) * firstItemShrink);
     assert.equal($items.eq(1).height(), secondItemSize - (firstItemSize + secondItemSize - boxSize) / (firstItemShrink + secondItemShrink) * secondItemShrink);
 });
-
-QUnit.test("box must have a correct flex direction on items rendering (T604581)", function(assert) {
-    new Box($("#box"), {
-        direction: "col",
-        items: [{ baseSize: 100 }],
-        itemTemplate: function(item) {
-            if(this.option("_layoutStrategy") === "flex") {
-                assert.equal(this._$element.css("flexDirection"), "column");
-            } else {
-                assert.ok(true);
-            }
-        }
-    });
-});
-
-QUnit.module("template rendering");
-
-QUnit.test("innerBox with template", function(assert) {
-    var $box = $("#boxWithInnerBox").dxBox({
-        items: [
-            {
-                box: {
-                    items: [{ template: "testTemplate" }]
-                }
-            }
-        ]
-    });
-
-    assert.equal($.trim($box.text()), "test", "inner box rendered with template");
-});
-
-QUnit.test("innerBox with item renderer", function(assert) {
-    var $box = $("#box").dxBox({
-        items: [
-            {
-                box: {
-                    items: [{ test: function() { return "1"; } }, { test: function() { return "2"; } }]
-                }
-            }
-        ],
-        itemTemplate: function(item) {
-            return "test" + item.test();
-        }
-    });
-
-    assert.equal($.trim($box.text()), "test1test2", "inner box rendered");
-});
-
-QUnit.test("innerBox with nested box item", function(assert) {
-    var $box = $("#nestedBox").dxBox({});
-
-    assert.equal($.trim($box.text()), "Box1", "inner box rendered");
-});
-
 
 QUnit.module("fallback strategy");
 
@@ -722,56 +622,4 @@ QUnit.test("crossAlign for column direction", function(assert) {
     box.option("crossAlign", "stretch");
     assert.equal(relativeOffset($item).left, 0, "item positioned for crossAlign: stretch");
     assert.equal($item.width(), boxSize, "element is stretched over container");
-});
-
-
-QUnit.module("rendering box item");
-
-QUnit.test("callstack should not grow when nesting is growing", function(assert) {
-    var originalBox = Box;
-    var deep = 0;
-    registerComponent(
-        "dxBox",
-        Box.inherit({
-            _render: function() {
-                deep++;
-                this.callBase.apply(this, arguments);
-            },
-            _renderItem: function() {
-                var currentDeep = deep;
-                this.callBase.apply(this, arguments);
-                assert.equal(deep, currentDeep, "deep is normal");
-            }
-        })
-    );
-    try {
-        $("#box").dxBox({
-            items: [{
-                box:
-                {
-                    items: [{
-                        box: { items: ['1'] }
-                    }]
-                }
-            }]
-        });
-    } finally {
-        registerComponent("dxBox", originalBox);
-    }
-});
-
-QUnit.test("onItemStateChanged action should fire after item visibility changed", function(assert) {
-    var items = [{ text: "Item 1" }],
-        itemStateChangedHandler = sinon.spy(),
-        $box = $("#box").dxBox({ items: items, onItemStateChanged: itemStateChangedHandler }),
-        box = $box.dxBox("instance");
-
-    box.option("items[0].visible", false);
-
-    var callArguments = itemStateChangedHandler.getCall(0).args[0];
-
-    assert.equal(itemStateChangedHandler.callCount, 1, "itemStateChanged handler was called");
-    assert.equal(callArguments.name, "visible", "name argument is correct");
-    assert.equal(callArguments.state, false, "state argument is correct");
-    assert.equal(callArguments.oldState, true, "oldState argument is correct");
 });

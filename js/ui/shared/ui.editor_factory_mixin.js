@@ -40,7 +40,7 @@ var EditorFactoryMixin = (function() {
     var getTextEditorConfig = function(options) {
         var isValueChanged = false,
             data = {},
-            isEnterBug = checkEnterBug(),
+            isEnterBug = !options.updateValueImmediately && checkEnterBug(),
             sharedData = options.sharedData || data;
 
         return getResultConfig({

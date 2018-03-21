@@ -9,11 +9,12 @@ var $ = require("jquery"),
     seriesModule = require("viz/series/base_series"),
     Series = seriesModule.Series,
     mixins = seriesModule.mixins,
-    chartSeriesNS = mixins.chart;
-
-/* global insertMockFactory, MockTranslator, MockPoint, MockAxis */
-require("../../helpers/chartMocks.js");
-
+    chartSeriesNS = mixins.chart,
+    chartMocks = require("../../helpers/chartMocks.js"),
+    insertMockFactory = chartMocks.insertMockFactory,
+    MockTranslator = chartMocks.MockTranslator,
+    MockPoint = chartMocks.MockPoint,
+    MockAxis = chartMocks.MockAxis;
 
 require("viz/chart");
 

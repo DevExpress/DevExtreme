@@ -39,6 +39,7 @@ var refreshStrategies = {
 var isServerSide = !windowUtils.hasWindow();
 
 var scrollViewServerConfig = {
+    finishLoading: noop,
     release: noop,
     refresh: noop,
     _optionChanged: function(args) {

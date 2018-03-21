@@ -4,10 +4,10 @@ var vizMocks = require("../../helpers/vizMocks.js"),
     tooltipModule = require("viz/core/tooltip"),
     labelModule = require("viz/series/points/label"),
     pointModule = require("viz/series/points/base_point"),
-    originalLabel = labelModule.Label;
-
-/* global MockTranslator, MockSeries */
-require("../../helpers/chartMocks.js");
+    originalLabel = labelModule.Label,
+    chartMocks = require("../../helpers/chartMocks.js"),
+    MockTranslator = chartMocks.MockTranslator,
+    MockSeries = chartMocks.MockSeries;
 
 var createPoint = function(series, data, options) {
     options = options || {};

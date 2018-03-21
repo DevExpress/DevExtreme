@@ -795,7 +795,7 @@ var SchedulerWorkSpace = Widget.inherit({
 
     _getCellCount: noop,
 
-    _render: function() {
+    _initMarkup: function() {
         this.callBase();
 
         if(!this.option("crossScrollingEnabled")) {
@@ -808,6 +808,12 @@ var SchedulerWorkSpace = Widget.inherit({
 
         this._renderView();
         this._attachEvents();
+    },
+    _render: function() {
+        this.callBase();
+
+        this._renderDateTimeIndication();
+        this._setIndicationUpdateInterval();
     },
 
     _toggleGroupedClass: function() {
@@ -833,8 +839,6 @@ var SchedulerWorkSpace = Widget.inherit({
         this._setHorizontalGroupHeaderCellsHeight();
 
         this._shader = new VerticalShader();
-        this._renderDateTimeIndication();
-        this._setIndicationUpdateInterval();
     },
 
     _renderDateTimeIndication: noop,

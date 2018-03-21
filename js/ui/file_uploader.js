@@ -549,9 +549,12 @@ var FileUploader = Editor.inherit({
         this._renderSelectButton();
         this._renderInputContainer();
         this._renderUploadButton();
+
+        this._preventRecreatingFiles = true;
     },
 
     _render: function() {
+        this._preventRecreatingFiles = false;
         this._renderDragEvents();
 
         this._renderFiles();
@@ -747,9 +750,9 @@ var FileUploader = Editor.inherit({
         var value = this.option("value").slice();
         value.splice(inArray(file.value, value), 1);
 
-        this._doPreventRecreatingFiles = true;
+        this._preventRecreatingFiles = true;
         this.option("value", value);
-        this._doPreventRecreatingFiles = false;
+        this._preventRecreatingFiles = false;
 
         this.$element().toggleClass(FILEUPLOADER_EMPTY_CLASS, !this._files.length);
 
@@ -1297,7 +1300,7 @@ var FileUploader = Editor.inherit({
             case "value":
                 !value.length && this._$fileInput.val("");
 
-                if(!this._doPreventRecreatingFiles) {
+                if(!this._preventRecreatingFiles) {
                     this._createFiles();
                     this._renderFiles();
                 }
@@ -1334,7 +1337,9 @@ var FileUploader = Editor.inherit({
                 this._$inputLabel.text(value);
                 break;
             case "showFileList":
-                this._renderFiles();
+                if(!this._preventRecreatingFiles) {
+                    this._renderFiles();
+                }
                 break;
             case "uploadUrl":
             case "progress":

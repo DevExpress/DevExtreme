@@ -6,11 +6,9 @@ var noop = require("core/utils/common").noop,
     statesConsts = require("viz/components/consts").states,
     labelModule = require("viz/series/points/label"),
     tooltipModule = require("viz/core/tooltip"),
-    originalLabel = labelModule.Label;
-
-/* global MockAngularTranslator */
-require("../../helpers/chartMocks.js");
-
+    originalLabel = labelModule.Label,
+    chartMocks = require("../../helpers/chartMocks.js"),
+    MockAngularTranslator = chartMocks.MockAngularTranslator;
 
 var defaultCorrection = {
     radiusInner: 0,

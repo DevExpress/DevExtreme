@@ -29,6 +29,14 @@ var toSelector = function(cssClass) {
     return "." + cssClass;
 };
 
+var isDeviceDesktop = function(assert) {
+    if(devices.real().deviceType !== "desktop") {
+        assert.ok(true, "skip this test on mobile devices");
+        return false;
+    }
+    return true;
+};
+
 var ScrollViewMock = DOMComponent.inherit({
 
     NAME: "dxScrollView",
@@ -2178,7 +2186,38 @@ QUnit.test("list scroll to focused item after press up/down arrows", function(as
     assert.equal(instance.scrollTop(), 0, "item scrolled to visible area at top when up arrow were pressed");
 });
 
-QUnit.test("focusing on selectAll checkbox after down / up pressing", function(assert) {
+QUnit.test("'enter'/'space' keys pressing on selectAll checkbox", function(assert) {
+    if(!isDeviceDesktop(assert)) return;
+    assert.expect(3);
+
+    var $element = $("#list").dxList({
+            showSelectionControls: true,
+            selectionMode: "all",
+            focusStateEnabled: true,
+            items: [0, 1, 2, 3, 4]
+        }),
+        keyboard = keyboardMock($element),
+        $selectAllCheckBox = $element.find(".dx-list-select-all-checkbox"),
+        $firstItem = $element.find(toSelector(LIST_ITEM_CLASS)).eq(0);
+
+    $firstItem.trigger("dxpointerdown");
+    this.clock.tick();
+
+    keyboard.keyDown("up");
+    this.clock.tick();
+    assert.ok($selectAllCheckBox.hasClass("dx-state-focused"), "selectAll checkbox is focused");
+
+    $element.trigger($.Event("keydown", { which: 13 }));
+
+    assert.ok($selectAllCheckBox.hasClass("dx-checkbox-checked"), "selectAll checkbox is checked");
+
+    $element.trigger($.Event("keydown", { which: 32 }));
+
+    assert.ok(!$selectAllCheckBox.hasClass("dx-checkbox-checked"), "selectAll checkbox isn't checked");
+});
+
+QUnit.test("focusing on selectAll checkbox after 'down'/'up' pressing", function(assert) {
+    if(!isDeviceDesktop(assert)) return;
     assert.expect(6);
 
     var $element = $("#list").dxList({
@@ -2199,18 +2238,15 @@ QUnit.test("focusing on selectAll checkbox after down / up pressing", function(a
     this.clock.tick();
     assert.ok($selectAllCheckBox.hasClass("dx-state-focused"), "selectAll checkbox is focused");
 
-    keyboard = keyboardMock($selectAllCheckBox);
     keyboard.keyDown("up");
     this.clock.tick();
     assert.ok(!$selectAllCheckBox.hasClass("dx-state-focused"), "selectAll checkbox isn't focused");
     assert.ok($lastItem.hasClass("dx-state-focused"), "last item is focused");
 
-    keyboard = keyboardMock($element);
     keyboard.keyDown("down");
     this.clock.tick();
     assert.ok($selectAllCheckBox.hasClass("dx-state-focused"), "selectAll checkbox is focused");
 
-    keyboard = keyboardMock($selectAllCheckBox);
     keyboard.keyDown("down");
     this.clock.tick();
     assert.ok(!$selectAllCheckBox.hasClass("dx-state-focused"), "selectAll checkbox isn't focused");

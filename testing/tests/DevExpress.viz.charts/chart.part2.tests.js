@@ -2,9 +2,11 @@
 
 var $ = require("jquery"),
     commons = require("./chartParts/commons.js"),
-    vizUtils = require("viz/core/utils");
+    vizUtils = require("viz/core/utils"),
+    chartMocks = require("../../helpers/chartMocks.js"),
+    MockSeries = chartMocks.MockSeries,
+    commonMethodsForTests = chartMocks.commonMethodsForTests;
 
-/* global MockSeries, seriesMockData, commonMethodsForTests */
 require("../../helpers/chartMocks.js");
 
 $('<div id="chartContainer">').appendTo("#qunit-fixture");
@@ -30,7 +32,7 @@ QUnit.test("Pass rotation info to Business range (rotated = false)", function(as
 });
 
 QUnit.test("Calculate business range for continuous without indent", function(assert) {
-    seriesMockData.series.push(new MockSeries({
+    chartMocks.seriesMockData.series.push(new MockSeries({
         range: {
             val: {
                 min: 0,
@@ -60,7 +62,7 @@ QUnit.test("Calculate business range for continuous without indent", function(as
 });
 
 QUnit.test("Calculate business range for continuous with default indent", function(assert) {
-    seriesMockData.series.push(new MockSeries({
+    chartMocks.seriesMockData.series.push(new MockSeries({
         range: {
             val: {
                 min: -1,
@@ -82,7 +84,7 @@ QUnit.test("Calculate business range for continuous with default indent", functi
 });
 
 QUnit.test("Calculate business range for categories from Axis and continuous values from Series", function(assert) {
-    seriesMockData.series.push(new MockSeries({
+    chartMocks.seriesMockData.series.push(new MockSeries({
         range: {
             val: {
                 min: -1,
@@ -101,7 +103,7 @@ QUnit.test("Calculate business range for categories from Axis and continuous val
 });
 
 QUnit.test("Calculate business range merged with Value Axis range (no indent)", function(assert) {
-    seriesMockData.series.push(new MockSeries({
+    chartMocks.seriesMockData.series.push(new MockSeries({
         range: {
             val: {
                 min: 0,
@@ -132,7 +134,7 @@ QUnit.test("Calculate business range merged with Value Axis range (no indent)", 
 });
 
 QUnit.test("Calculate business range merged with Argument Axis range (no indent)", function(assert) {
-    seriesMockData.series.push(new MockSeries({
+    chartMocks.seriesMockData.series.push(new MockSeries({
         range: {
             arg: {
                 min: 0,
@@ -167,7 +169,7 @@ QUnit.test("Calculate business range merged with Argument Axis range (no indent)
 
 QUnit.test("Two ranges for two panes - data from series, indents from common axis", function(assert) {
     // arrange
-    seriesMockData.series.push(new MockSeries({
+    chartMocks.seriesMockData.series.push(new MockSeries({
         range: {
             val: {
                 min: 0,
@@ -175,7 +177,7 @@ QUnit.test("Two ranges for two panes - data from series, indents from common axi
             }
         }
     }));
-    seriesMockData.series.push(new MockSeries({
+    chartMocks.seriesMockData.series.push(new MockSeries({
         range: {
             val: {
                 min: 101,
@@ -233,7 +235,7 @@ QUnit.test("Two ranges for two panes - data from series, indents from common axi
 
 QUnit.test("Two ranges for two panes. One axis with showZero = true, another one with showZero = false", function(assert) {
     // arrange
-    seriesMockData.series.push(new MockSeries({
+    chartMocks.seriesMockData.series.push(new MockSeries({
         range: {
             val: {
                 min: 10,
@@ -241,7 +243,7 @@ QUnit.test("Two ranges for two panes. One axis with showZero = true, another one
             }
         }
     }));
-    seriesMockData.series.push(new MockSeries({
+    chartMocks.seriesMockData.series.push(new MockSeries({
         range: {
             val: {
                 min: -100,
@@ -249,7 +251,7 @@ QUnit.test("Two ranges for two panes. One axis with showZero = true, another one
             }
         }
     }));
-    seriesMockData.series.push(new MockSeries({
+    chartMocks.seriesMockData.series.push(new MockSeries({
         range: {
             val: {
                 min: 20,
@@ -324,21 +326,21 @@ QUnit.test("Two ranges for two panes. One axis with showZero = true, another one
 
 QUnit.test("Two ranges for two panes. One axis with showZero = true, another one with showZero = false. Rotated chart", function(assert) {
     // arrange
-    seriesMockData.series.push(new MockSeries({
+    chartMocks.seriesMockData.series.push(new MockSeries({
         range: {
             val: {
                 min: 10, max: 100
             }
         }
     }));
-    seriesMockData.series.push(new MockSeries({
+    chartMocks.seriesMockData.series.push(new MockSeries({
         range: {
             val: {
                 min: -100, max: -10
             }
         }
     }));
-    seriesMockData.series.push(new MockSeries({
+    chartMocks.seriesMockData.series.push(new MockSeries({
         range: {
             val: {
                 min: 20, max: 200
@@ -412,8 +414,8 @@ QUnit.test("Two ranges for two panes. One axis with showZero = true, another one
 });
 
 QUnit.test("Two Series, one of them is not visible", function(assert) {
-    seriesMockData.series.push(new MockSeries({ visible: false, range: { arg: { categories: ["A", "B", "C"] } } }));
-    seriesMockData.series.push(new MockSeries({ range: { arg: { categories: ["D", "E", "F"] } } }));
+    chartMocks.seriesMockData.series.push(new MockSeries({ visible: false, range: { arg: { categories: ["A", "B", "C"] } } }));
+    chartMocks.seriesMockData.series.push(new MockSeries({ range: { arg: { categories: ["D", "E", "F"] } } }));
 
     var chart = this.createChart({
         dataSource: [{ arg: "A", val: 1 }, { arg: "B", val: 2 }, { arg: "C", val: 3 }, { arg: "D", val: 1 }, { arg: "E", val: 2 }, { arg: "F", val: 3 }],
@@ -424,7 +426,7 @@ QUnit.test("Two Series, one of them is not visible", function(assert) {
 });
 
 QUnit.test("Categories in series is not sort", function(assert) {
-    seriesMockData.series.push(new MockSeries({ range: { arg: { categories: ["A", "D", "E", "C", "F"] } } }));
+    chartMocks.seriesMockData.series.push(new MockSeries({ range: { arg: { categories: ["A", "D", "E", "C", "F"] } } }));
 
     var chart = this.createChart({
         dataSource: [{ arg: "A", val: 1 }, { arg: "B", val: 2 }, { arg: "C", val: 3 }, { arg: "D", val: 1 }, { arg: "E", val: 2 }, { arg: "F", val: 3 }],
@@ -436,7 +438,7 @@ QUnit.test("Categories in series is not sort", function(assert) {
 
 // T474125
 QUnit.test("Sort categories in series, dateTime", function(assert) {
-    seriesMockData.series.push(new MockSeries({ range: { arg: { categories: [new Date(2017, 6, 2), new Date(2017, 2, 2), new Date(2017, 1, 2), new Date(2017, 8, 2)] } } }));
+    chartMocks.seriesMockData.series.push(new MockSeries({ range: { arg: { categories: [new Date(2017, 6, 2), new Date(2017, 2, 2), new Date(2017, 1, 2), new Date(2017, 8, 2)] } } }));
 
     var chart = this.createChart({
         dataSource: [{ arg: new Date(2017, 1, 2), val: 1 }, { arg: new Date(2017, 2, 2), val: 2 }, { arg: new Date(2017, 6, 2), val: 3 }, { arg: new Date(2017, 8, 2), val: 1 }],
@@ -450,7 +452,7 @@ QUnit.test("Sort categories in series, dateTime", function(assert) {
 });
 
 QUnit.test("Series is not discrete, argument axis has empty categories, category filtering should be successful", function(assert) {
-    seriesMockData.series.push(new MockSeries({ range: { arg: { } } }));
+    chartMocks.seriesMockData.series.push(new MockSeries({ range: { arg: { } } }));
 
     var chart = this.createChart({
         argumentAxis: { mockRange: { categories: [] } },
@@ -476,7 +478,7 @@ QUnit.test("Canvas creation from options", function(assert) {
         bottom: 80
     };
     var stubSeries = new MockSeries();
-    seriesMockData.series.push(stubSeries);
+    chartMocks.seriesMockData.series.push(stubSeries);
     var chart = this.createChart({
         margin: chartOptions,
         series: [{ type: "line" }]
@@ -858,7 +860,7 @@ QUnit.test("defaultPane specified, no panes with givenName - defaultPane is the 
 QUnit.module("Merge marginOptions", commons.environment);
 
 QUnit.test("Pass merged marginOptions to axes", function(assert) {
-    seriesMockData.series.push(new MockSeries({
+    chartMocks.seriesMockData.series.push(new MockSeries({
         marginOptions: {
             checkInterval: false,
             size: 8,
@@ -866,7 +868,7 @@ QUnit.test("Pass merged marginOptions to axes", function(assert) {
         }
     }));
 
-    seriesMockData.series.push(new MockSeries({
+    chartMocks.seriesMockData.series.push(new MockSeries({
         marginOptions: {
             checkInterval: true,
             size: 5,
@@ -892,7 +894,7 @@ QUnit.test("Pass merged marginOptions to axes", function(assert) {
 });
 
 QUnit.test("Merge options witout size", function(assert) {
-    seriesMockData.series.push(new MockSeries({}));
+    chartMocks.seriesMockData.series.push(new MockSeries({}));
 
     var chart = this.createChart({
         series: [{}]
@@ -902,7 +904,7 @@ QUnit.test("Merge options witout size", function(assert) {
 });
 
 QUnit.test("Pass merged marginOptions to axes when two value axis", function(assert) {
-    seriesMockData.series.push(new MockSeries({
+    chartMocks.seriesMockData.series.push(new MockSeries({
         marginOptions: {
             checkInterval: false,
             size: 8,
@@ -910,7 +912,7 @@ QUnit.test("Pass merged marginOptions to axes when two value axis", function(ass
         }
     }));
 
-    seriesMockData.series.push(new MockSeries({
+    chartMocks.seriesMockData.series.push(new MockSeries({
         marginOptions: {
             checkInterval: true,
             size: 5,
@@ -951,7 +953,7 @@ QUnit.test("Pass merged marginOptions to axes when two value axis", function(ass
 });
 
 QUnit.test("Process margin for bubble", function(assert) {
-    seriesMockData.series.push(new MockSeries({
+    chartMocks.seriesMockData.series.push(new MockSeries({
         marginOptions: {
             processBubbleSize: true
         }
@@ -976,7 +978,7 @@ QUnit.test("Process margin for bubble", function(assert) {
 });
 
 QUnit.test("Process margin for bubble. Rotated chart", function(assert) {
-    seriesMockData.series.push(new MockSeries({
+    chartMocks.seriesMockData.series.push(new MockSeries({
         marginOptions: {
             processBubbleSize: true
         }
