@@ -111,12 +111,6 @@ var SchedulerHeader = Widget.inherit({
         this._renderNavigator();
         this._renderViewSwitcher();
     },
-    _render: function() {
-        // this.callBase();
-
-        // this._renderNavigator();
-        // this._renderViewSwitcher();
-    },
 
     _renderNavigator: function() {
         this._navigator = this._createComponent("<div>", SchedulerNavigator, {
