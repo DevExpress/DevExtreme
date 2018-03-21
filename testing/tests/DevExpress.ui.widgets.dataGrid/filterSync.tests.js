@@ -4,6 +4,7 @@ require("ui/data_grid/ui.data_grid");
 
 var $ = require("jquery"),
     dataGridMocks = require("../../helpers/dataGridMocks.js"),
+    customOperations = require("ui/shared/custom_operations"),
     fx = require("animation/fx"),
     setupDataGridModules = dataGridMocks.setupDataGridModules;
 
@@ -803,3 +804,209 @@ QUnit.module("Real dataGrid", {
     });
 });
 
+QUnit.module("Custom operations texts", {
+    beforeEach: function() {
+        this.getAnyOfOperation = function(field, dataSource) {
+            var dataGrid = $("#container").dxDataGrid({
+                dataSource: dataSource || [{}],
+                loadingTimeout: undefined,
+                columns: [field]
+            }).dxDataGrid("instance");
+            return customOperations.anyOf(dataGrid);
+        };
+    }
+}, function() {
+    QUnit.test("string value", function(assert) {
+        // arrange
+        var result,
+            field = {
+                dataField: "field",
+            },
+            anyOfOperation = this.getAnyOfOperation(field);
+
+        // act
+        result = anyOfOperation.customizeText({
+            value: ["100", "200"],
+            field: field
+        });
+
+        // assert
+        assert.equal(result, "100, 200");
+    });
+
+    QUnit.test("date value", function(assert) {
+        // arrange
+        var result,
+            field = {
+                dataField: "field",
+                dataType: "date"
+            },
+            anyOfOperation = this.getAnyOfOperation(field);
+
+        // act
+        result = anyOfOperation.customizeText({
+            value: ["2014/1/1", "2014/2/4"],
+            field: field
+        });
+
+        // assert
+        assert.equal(result, "2014/1/1, 2014/2/4");
+    });
+
+    QUnit.test("date value and custom item", function(assert) {
+        // arrange
+        var result,
+            field = {
+                dataField: "field",
+                dataType: "date",
+                headerFilter: {
+                    dataSource: function(data) {
+                        data.dataSource.postProcess = function(results) {
+                            results.push({
+                                text: "Weekends",
+                                value: "weekends"
+                            });
+                            return results;
+                        };
+                    }
+                }
+            },
+            dataSource = [{ field: "2014/1/1" }, { field: "2014/1/3" }, { field: "2014/2/4" }],
+            anyOfOperation = this.getAnyOfOperation(field, dataSource);
+
+        // act
+        anyOfOperation.customizeText({
+            value: ["2014/1/1", "2014/2/4", "weekends"],
+            field: field
+        }).done(function(data) {
+            result = data;
+        });
+
+        // assert
+        assert.equal(result, "2014/January/1, 2014/February/4, Weekends");
+    });
+
+    QUnit.test("lookup", function(assert) {
+        // arrange
+        var result,
+            field = {
+                dataField: "field",
+                lookup: {
+                    valueExpr: "id",
+                    displayExpr: "text",
+                    dataSource: [{
+                        id: "California",
+                        text: "California Text"
+                    },
+                    {
+                        id: "Nevada",
+                        text: "Nevada Text"
+                    },
+                    {
+                        id: "Colorado",
+                        text: "Colorado Text"
+                    }]
+                }
+            },
+            dataSource = [{ field: "2014/1/1" }, { field: "2014/1/3" }, { field: "2014/2/4" }],
+            anyOfOperation = this.getAnyOfOperation(field, dataSource);
+
+        // act
+        anyOfOperation.customizeText({
+            value: ["Nevada", "Colorado"],
+            field: field
+        }).done(function(data) {
+            result = data;
+        });
+
+        // assert
+        assert.equal(result, "Nevada Text, Colorado Text");
+    });
+
+    QUnit.test("data source as a function", function(assert) {
+        // arrange
+        var operationText = "Weekends",
+            result,
+            field = {
+                dataField: "field",
+                headerFilter: {
+                    dataSource: function(data) {
+                        data.dataSource.postProcess = function(results) {
+                            results.push({
+                                text: operationText,
+                                value: "weekends"
+                            });
+                            return results;
+                        };
+                    }
+                }
+            },
+            anyOfOperation = this.getAnyOfOperation(field);
+
+        // act
+        anyOfOperation.customizeText({
+            value: ["weekends"],
+            field: field
+        }).done(function(data) {
+            result = data;
+        });
+
+        // assert
+        assert.equal(result, operationText);
+
+        // assert
+        assert.equal(result, operationText);
+    });
+
+    QUnit.test("data source as a function", function(assert) {
+        // arrange
+        var result,
+            dataSourceOptions = [{
+                text: "Less than $3000",
+                value: ["SaleAmount", "<", 3000]
+            }, {
+                text: "$3000 - $5000",
+                value: [["SaleAmount", ">=", 3000], ["SaleAmount", "<", 5000]]
+            }],
+            field = {
+                dataField: "field",
+                headerFilter: {
+                    dataSource: dataSourceOptions
+                }
+            },
+            anyOfOperation = this.getAnyOfOperation(field);
+
+        // act
+        anyOfOperation.customizeText({
+            value: [dataSourceOptions[0].value, dataSourceOptions[1].value],
+            field: field
+        }).done(function(data) {
+            result = data;
+        });
+
+        // assert
+        assert.equal(result, dataSourceOptions[0].text + ", " + dataSourceOptions[1].text);
+    });
+
+    QUnit.test("groupInterval", function(assert) {
+        // arrange
+        var result,
+            field = {
+                dataField: "field",
+                dataType: "number",
+                headerFilter: {
+                    groupInterval: 100
+                }
+            },
+            anyOfOperation = this.getAnyOfOperation(field);
+
+        // act
+        result = anyOfOperation.customizeText({
+            value: [100, 200],
+            field: field
+        });
+
+        // assert
+        assert.equal(result, "100 - 200, 200 - 300");
+    });
+});

@@ -75,7 +75,7 @@ exports.HeaderFilterView = modules.View.inherit({
     applyHeaderFilter: function(options) {
         var that = this,
             list = that.getListContainer(),
-            isSelectAll = !list.option("searchValue") && !options.isCustomOperation && list.$element().find(".dx-checkbox").eq(0).hasClass("dx-checkbox-checked"),
+            isSelectAll = !list.option("searchValue") && !options.isFilterBuilder && list.$element().find(".dx-checkbox").eq(0).hasClass("dx-checkbox-checked"),
             filterValues = [];
 
         var fillSelectedItemKeys = function(filterValues, items, isExclude) {
@@ -239,7 +239,7 @@ exports.HeaderFilterView = modules.View.inherit({
         if(options.type === "tree") {
             that._listContainer = that._createComponent($("<div>").appendTo($content),
                 TreeView, extend(widgetOptions, {
-                    showCheckBoxesMode: options.isCustomOperation ? "normal" : "selectAll",
+                    showCheckBoxesMode: options.isFilterBuilder ? "normal" : "selectAll",
                     keyExpr: "id"
                 }));
         } else {
@@ -248,12 +248,12 @@ exports.HeaderFilterView = modules.View.inherit({
                     searchExpr: that._getSearchExpr(options),
                     pageLoadMode: "scrollBottom",
                     showSelectionControls: true,
-                    selectionMode: options.isCustomOperation ? "multiple" : "all",
+                    selectionMode: options.isFilterBuilder ? "multiple" : "all",
                     onSelectionChanged: function(e) {
                         var items = e.component.option("items"),
                             selectedItems = e.component.option("selectedItems");
 
-                        if(!e.component._selectedItemsUpdating && !e.component.option("searchValue")) {
+                        if(!e.component._selectedItemsUpdating && !e.component.option("searchValue") && !options.isFilterBuilder) {
                             if(selectedItems.length === 0 && items.length && (!options.filterValues || options.filterValues.length <= 1)) {
                                 options.filterType = "include";
                                 options.filterValues = [];

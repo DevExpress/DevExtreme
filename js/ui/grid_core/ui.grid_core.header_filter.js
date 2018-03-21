@@ -291,7 +291,7 @@ var HeaderFilterController = modules.ViewController.inherit((function() {
 
                 options.dataSource = that.getDataSource(options);
 
-                if(options.isCustomOperation) {
+                if(options.isFilterBuilder) {
                     options.dataSource.filter = null;
                 }
 

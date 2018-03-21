@@ -3,6 +3,8 @@
 var $ = require("../../core/renderer"),
     messageLocalization = require("../../localization/message"),
     extend = require("../../core/utils/extend").extend,
+    DataSourceModule = require("../../data/data_source/data_source"),
+    deferredUtils = require("../../core/utils/deferred"),
     utils = require("../filter_builder/utils");
 
 function baseOperation(grid) {
@@ -24,16 +26,49 @@ function baseOperation(grid) {
         return result;
     };
 
+    var getFullText = function(itemText, parentText) {
+        return parentText ? parentText + "/" + itemText : itemText;
+    };
+
+    var getSelectedItemsTexts = function(items, parentText) {
+        var result = [];
+        items.forEach(function(item) {
+            if(item.items) {
+                var selectedItemsTexts = getSelectedItemsTexts(item.items, getFullText(item.text, parentText));
+                result = result.concat(selectedItemsTexts);
+            }
+            item.selected && result.push(getFullText(item.text, parentText));
+        });
+        return result;
+    };
+
     var headerFilterController = grid && grid.getController("headerFilter"),
         customizeText = function(fieldInfo) {
             var values = fieldInfo.value || [],
                 column = grid.columnOption(fieldInfo.field.dataField),
-                texts = values.map(function(value) {
+                headerFilter = column && column.headerFilter,
+                lookup = column && column.lookup;
+
+            if((headerFilter && headerFilter.dataSource) || (lookup && lookup.dataSource)) {
+                column = extend({}, column, { filterType: "include", filterValues: values });
+                var dataSourceOptions = headerFilterController.getDataSource(column);
+                dataSourceOptions.paginate = false;
+                var dataSource = new DataSourceModule.DataSource(dataSourceOptions),
+                    result = new deferredUtils.Deferred();
+
+                dataSource.load().done(function(items) {
+                    texts = getSelectedItemsTexts(items);
+                    result.resolve(texts.join(", "));
+                });
+                return result;
+            } else {
+                var texts = values.map(function(value) {
                     var text = headerFilterController.getHeaderItemText(value, column, 0, grid.option("headerFilter"));
                     return text;
                 });
 
-            return texts.join(", ") || messageLocalization.format("dxFilterBuilder-enterValueText");
+                return texts.join(", ");
+            }
         };
     return {
         dataTypes: ["string", "date", "datetime", "number"],
@@ -41,20 +76,16 @@ function baseOperation(grid) {
         editorTemplate: function(conditionInfo, container) {
             var div = $("<div>")
                     .addClass("dx-filterbuilder-item-value-text")
-                    .text(customizeText(conditionInfo))
+                    .text(conditionInfo.text)
                     .appendTo(container),
                 column = extend(true, {}, grid.columnOption(conditionInfo.field.dataField));
 
             var setValue = function(value) {
-                div.text(customizeText({
-                    field: conditionInfo.field,
-                    value: value
-                }));
                 conditionInfo.setValue(value);
             };
 
             column.filterType = "include";
-            column.filterValues = conditionInfo.value;
+            column.filterValues = conditionInfo.value ? conditionInfo.value.slice() : [];
 
             headerFilterController.showHeaderFilterMenuBase({
                 columnElement: div,
@@ -66,7 +97,7 @@ function baseOperation(grid) {
                 onHidden: function() {
                     $("body").trigger("dxpointerdown");
                 },
-                isCustomOperation: true
+                isFilterBuilder: true
             });
             return container;
         },

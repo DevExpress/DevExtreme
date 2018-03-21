@@ -9,6 +9,7 @@ var $ = require("../../core/renderer"),
     extend = require("../../core/utils/extend").extend,
     messageLocalization = require("../../localization/message"),
     utils = require("./utils"),
+    deferredUtils = require("../../core/utils/deferred"),
     TreeView = require("../tree_view"),
     Popup = require("../popup"),
     EditorFactoryMixin = require("../shared/ui.editor_factory_mixin");
@@ -930,6 +931,7 @@ var FilterBuilder = Widget.inherit({
     _createValueText: function(item, field, $container) {
         var that = this,
             $text = $("<div>")
+                .html("&nbsp;")
                 .addClass(FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS)
                 .attr("tabindex", 0)
                 .appendTo($container),
@@ -944,7 +946,9 @@ var FilterBuilder = Widget.inherit({
                 setText(valueText);
             });
         } else {
-            setText(utils.getCurrentValueText(field, value, customOperation));
+            deferredUtils.when(utils.getCurrentValueText(field, value, customOperation)).done(function(valueText) {
+                setText(valueText);
+            });
         }
 
         that._subscribeOnClickAndEnterKey($text, function(e) {
@@ -987,16 +991,17 @@ var FilterBuilder = Widget.inherit({
                 return that._createValueText(item, field, $container);
             };
 
-        $container.empty();
-
         var options = {
             value: value === "" ? null : value,
             filterOperation: utils.getOperationValue(item),
             isValueChanged: true,
             setValue: function(data) {
                 value = data === null ? "" : data;
-            }
+            },
+            text: $container.text()
         };
+
+        $container.empty();
 
         var $editor = that._createValueEditor($container, field, options);
 
