@@ -748,17 +748,15 @@ var LayoutManager = Widget.inherit({
     },
 
     _addWrapperInvalidClass: function(editorInstance) {
-        var wrapperClass = "." + FIELD_ITEM_CONTENT_WRAPPER_CLASS;
-        if(/material/.test(themes.current())) {
-            var toggleInvalidClass = function(e) {
+        var wrapperClass = "." + FIELD_ITEM_CONTENT_WRAPPER_CLASS,
+            toggleInvalidClass = function(e) {
                 $(e.element).parents(wrapperClass)
-                    .toggleClass(INVALID_CLASS, e.event.type === "focusin" && !e.component.option("isValid"));
+                    .toggleClass(INVALID_CLASS, e.event.type === "focusin" && e.component.option("isValid") === false);
             };
 
-            editorInstance
-                .on("focusIn", toggleInvalidClass)
-                .on("focusOut", toggleInvalidClass);
-        }
+        editorInstance
+            .on("focusIn", toggleInvalidClass)
+            .on("focusOut", toggleInvalidClass);
     },
 
     _createEditor: function($container, renderOptions, editorOptions) {
@@ -793,7 +791,9 @@ var LayoutManager = Widget.inherit({
                 editorInstance.setAria("required", renderOptions.isRequired);
                 that._registerEditorInstance(editorInstance, renderOptions);
 
-                that._addWrapperInvalidClass(editorInstance);
+                if(/material/.test(themes.current())) {
+                    that._addWrapperInvalidClass(editorInstance);
+                }
 
                 if(renderOptions.dataField) {
                     that._bindDataField(editorInstance, renderOptions, $container);
