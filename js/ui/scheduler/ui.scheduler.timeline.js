@@ -166,8 +166,6 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
         this._renderDateTable();
 
         this._shader = new HorizontalShader();
-        this._renderDateTimeIndication();
-        this._setIndicationUpdateInterval();
 
         this._$sidebarTable.appendTo(this._sidebarScrollable.$content());
 

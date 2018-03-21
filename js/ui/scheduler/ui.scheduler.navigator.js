@@ -325,11 +325,16 @@ var SchedulerNavigator = Widget.inherit({
 
     _renderFocusTarget: noop,
 
+    _initMarkup: function() {
+        this.callBase();
+
+        this._renderCaption();
+    },
+
     _render: function() {
         this.callBase();
 
         this._renderPopover();
-        this._renderCaption();
         this._renderCaptionKeys();
     },
 
