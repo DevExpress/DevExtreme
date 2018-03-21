@@ -219,17 +219,16 @@ var Accordion = CollectionWidget.inherit({
 
     _initMarkup: function() {
         this._deferredItems = [];
-
         this.callBase();
-    },
-
-    _render: function() {
-        this.callBase();
-
         this.setAria({
             "role": "tablist",
             "multiselectable": this.option("multiple")
         });
+    },
+
+    _render: function() {
+        this.callBase();
+        this._updateItemHeightsWrapper(true);
         this._attachItemTitleClickAction();
     },
 
@@ -313,14 +312,15 @@ var Accordion = CollectionWidget.inherit({
         this._itemElements().addClass(ACCORDION_ITEM_CLOSED_CLASS);
         this.setAria("hidden", true, this._itemContents());
 
-        this._updateItems(addedSelection, removedSelection, true);
+        this._updateItems(addedSelection, removedSelection);
     },
 
     _updateSelection: function(addedSelection, removedSelection) {
-        this._updateItems(addedSelection, removedSelection, false);
+        this._updateItems(addedSelection, removedSelection);
+        this._updateItemHeightsWrapper(false);
     },
 
-    _updateItems: function(addedSelection, removedSelection, skipAnimation) {
+    _updateItems: function(addedSelection, removedSelection) {
         var $items = this._itemElements(),
             that = this;
 
@@ -338,8 +338,10 @@ var Accordion = CollectionWidget.inherit({
                 .removeClass(ACCORDION_ITEM_OPENED_CLASS);
             that.setAria("hidden", true, $item.find("." + ACCORDION_ITEM_BODY_CLASS));
         });
+    },
 
-        if(that.option("templatesRenderAsynchronously")) {
+    _updateItemHeightsWrapper: function(skipAnimation) {
+        if(this.option("templatesRenderAsynchronously")) {
             this._animationTimer = setTimeout(function() {
                 this._updateItemHeights(skipAnimation);
             }.bind(this));

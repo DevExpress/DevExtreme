@@ -311,12 +311,12 @@ var CollectionWidget = BaseCollectionWidget.inherit({
         }
 
         this.callBase();
-    },
-    _render: function() {
-        this.callBase();
 
         var selectedItemIndices = this._getSelectedItemIndices();
         this._renderSelection(selectedItemIndices, []);
+    },
+    _render: function() {
+        this.callBase();
 
         this._rendering = false;
     },

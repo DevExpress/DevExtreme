@@ -68,7 +68,9 @@ QUnit.test("first should be opened as default state", function(assert) {
         items: this.items
     });
 
-    assert.ok(this.$element.find("." + ACCORDION_ITEM_BODY_CLASS).eq(0).is(":visible"), "first item is opened");
+    var $items = this.$element.find("." + ACCORDION_ITEM_CLASS);
+
+    assert.ok($items.eq(0).hasClass(ACCORDION_ITEM_OPENED_CLASS), "first item is opened");
 });
 
 QUnit.test("item content is hidden when item is not opened", function(assert) {
@@ -140,7 +142,7 @@ QUnit.test("out of range 'selectedIndex' option", function(assert) {
     }).dxAccordion("instance");
 
     assert.equal(instance.option("selectedIndex"), 0, "'selectedIndex' option set to first when trying to set index which is out of range (-1)");
-    assert.ok(this.$element.find("." + ACCORDION_ITEM_BODY_CLASS).eq(0).is(":visible"), "first item is opened when index is out of range (-1)");
+    assert.ok(this.$element.find("." + ACCORDION_ITEM_CLASS).eq(0).hasClass(ACCORDION_ITEM_OPENED_CLASS), "first item is opened when index is out of range (-1)");
 
     this.$element.data("dxAccordion", null);
     instance = this.$element.dxAccordion({
@@ -149,7 +151,7 @@ QUnit.test("out of range 'selectedIndex' option", function(assert) {
     }).dxAccordion("instance");
 
     assert.equal(instance.option("selectedIndex"), 0, "'selectedIndex' option set to first when trying to set index which is out of range (5)");
-    assert.ok(this.$element.find("." + ACCORDION_ITEM_BODY_CLASS).eq(0).is(":visible"), "first item is opened when index is out of range (5)");
+    assert.ok(this.$element.find("." + ACCORDION_ITEM_CLASS).hasClass(ACCORDION_ITEM_OPENED_CLASS), "first item is opened when index is out of range (5)");
 });
 
 QUnit.test("itemTitleTemplate", function(assert) {
