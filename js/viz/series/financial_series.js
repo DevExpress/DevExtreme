@@ -122,19 +122,6 @@ exports.stock = _extend({}, scatterSeries, {
         };
     },
 
-    updateTemplateFieldNames: function() {
-        var that = this,
-            options = that._options,
-            valueFields = that.getValueFields(),
-            name = that.name;
-
-        options.openValueField = valueFields[0] + name;
-        options.highValueField = valueFields[1] + name;
-        options.lowValueField = valueFields[2] + name;
-        options.closeValueField = valueFields[3] + name;
-        options.tagField = that.getTagField() + name;
-    },
-
     _getDefaultStyle: function(options) {
         var that = this,
             mainPointColor = options.color || that._options.mainSeriesColor;

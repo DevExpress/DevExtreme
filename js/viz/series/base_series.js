@@ -366,7 +366,7 @@ Series.prototype = {
 
         that._data = data.reduce((data, dataItem, index) => {
             const pointDataItem = that._getPointData(dataItem, options);
-            if(_isDefined(pointDataItem.argument)) {
+            if(_isDefined(pointDataItem.argument) && (!options.nameField || dataItem[options.nameField] === this.name)) {
                 pointDataItem.index = index;
                 data.push(pointDataItem);
             }
@@ -440,15 +440,6 @@ Series.prototype = {
         } else {
             that._pointsToDraw = points;
         }
-    },
-
-    getTemplateFields: function() {
-        return this.getValueFields().concat(this.getTagField(), this.getSizeField()).map(function(field) {
-            return {
-                templateField: field + this.name,
-                originalField: field
-            };
-        }, this);
     },
 
     _removeOldSegments: function() {

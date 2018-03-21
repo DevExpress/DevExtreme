@@ -22,17 +22,6 @@ var baseRangeSeries = {
         return _isDefined(data.argument) && data.value !== undefined && data.minValue !== undefined;
     },
 
-    updateTemplateFieldNames: function() {
-        var that = this,
-            options = that._options,
-            valueFields = that.getValueFields(),
-            name = that.name;
-
-        options.rangeValue1Field = valueFields[0] + name;
-        options.rangeValue2Field = valueFields[1] + name;
-        options.tagField = that.getTagField() + name;
-    },
-
     getValueRangeInitialValue: scatterSeries.getValueRangeInitialValue,
 
     _getPointData: function(data, options) {

@@ -578,6 +578,21 @@ QUnit.test("Update series data when points are not empty. Old points length > ne
     assert.equal(series.getAllPoints().length, 1);
 });
 
+QUnit.test("Create points for dataItems with coresponding series (series template)", function(assert) {
+    var options = { type: "mockType", argumentField: "arg", valueField: "val", nameField: "series", name: "1", label: { visible: false } },
+        series = createSeries(options),
+        data = [{ arg: 1, val: 10, series: "1" }, { arg: 2, val: 20, series: "2" }];
+
+    series.updateData(data);
+    series.createPoints();
+
+    assert.ok(series.getAllPoints(), "Series points should be created");
+    assert.equal(series.getAllPoints().length, 1, "Series should have 1 point");
+    assert.equal(series.getAllPoints()[0].mockOptions.argument, 1, "Arg");
+    assert.equal(series.getAllPoints()[0].mockOptions.value, 10, "Val");
+    assert.ok(series.canRenderCompleteHandle());
+});
+
 QUnit.test("Update series data when points are not empty. Old points length < new points length", function(assert) {
     var options = { type: "mockType", argumentField: "arg", valueField: "val", label: { visible: false } },
         series = createSeries(options, {
@@ -4443,33 +4458,6 @@ QUnit.test("getOpacity", function(assert) {
     var series = createSeries({ opacity: "seriesOpacity" });
 
     assert.strictEqual(series.getOpacity(), "seriesOpacity", "Opacity should be correct");
-});
-
-QUnit.test("getTemplateFields returns templated fields for value, size and tag fields", function(assert) {
-    // arrange
-    var series = createSeries({ name: "SeriesName" }, this.renderOptions),
-        tf;
-
-    series.getValueFields && (series.getValueFields = function() { return ["valueField1", "valueField2"]; });
-    series.getTagField && (series.getTagField = function() { return "tagField"; });
-    series.getSizeField && (series.getSizeField = function() { return "sizeField"; });
-
-    // act
-    tf = series.getTemplateFields();
-
-    assert.deepEqual(tf, [{
-        templateField: "valueField1SeriesName",
-        originalField: "valueField1"
-    }, {
-        templateField: "valueField2SeriesName",
-        originalField: "valueField2"
-    }, {
-        templateField: "tagFieldSeriesName",
-        originalField: "tagField"
-    }, {
-        templateField: "sizeFieldSeriesName",
-        originalField: "sizeField"
-    }]);
 });
 
 QUnit.test("getStackName returns null", function(assert) {

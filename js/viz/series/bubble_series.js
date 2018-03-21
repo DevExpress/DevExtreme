@@ -82,16 +82,6 @@ exports.chart.bubble = _extend({}, scatterSeries, {
         return this._options.sizeField || "size";
     },
 
-    updateTemplateFieldNames: function() {
-        var that = this,
-            options = that._options,
-            name = that.name;
-
-        options.valueField = that.getValueFields()[0] + name;
-        options.sizeField = that.getSizeField() + name;
-        options.tagField = that.getTagField() + name;
-    },
-
     _animate: function() {
         var that = this,
             lastPointIndex = that._drawnPoints.length - 1,

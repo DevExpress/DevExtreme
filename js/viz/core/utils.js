@@ -281,7 +281,7 @@ extend(exports, {
 
     processSeriesTemplate: function(seriesTemplate, items) {
         var customizeSeries = typeUtils.isFunction(seriesTemplate.customizeSeries) ? seriesTemplate.customizeSeries : noop,
-            nameField = seriesTemplate.nameField || 'series',
+            nameField = seriesTemplate.nameField,
             generatedSeries = {},
             seriesOrder = [],
             series,

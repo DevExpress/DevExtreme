@@ -2447,38 +2447,6 @@ var checkTwoGroups = function(assert, series) {
         checkVisibility({ type: "fixed", displayMode: "all" }, "datetime", undefined, false, "fixed, displayMode all");
     });
 
-    QUnit.test("Update template field", function(assert) {
-        var series = createSeries({
-            type: seriesType,
-            name: "lineSeries",
-            valueField: "valueField",
-            tagField: "tagField",
-            point: { visible: false },
-            label: { visible: false }
-
-        }, this.renderer);
-        // act
-        series.updateTemplateFieldNames();
-        // assert
-        assert.equal(series._options.valueField, "valueFieldlineSeries");
-        assert.equal(series._options.tagField, "tagFieldlineSeries");
-    });
-
-    QUnit.test("Update template field. Default Values", function(assert) {
-        var series = createSeries({
-            type: seriesType,
-            name: "lineSeries",
-            point: { visible: false },
-            label: { visible: false }
-
-        }, this.renderer);
-        // act
-        series.updateTemplateFieldNames();
-        // assert
-        assert.equal(series._options.valueField, "vallineSeries");
-        assert.equal(series._options.tagField, "taglineSeries");
-    });
-
     QUnit.module("Check visible area", {
         beforeEach: function() {
             environment.beforeEach.call(this);

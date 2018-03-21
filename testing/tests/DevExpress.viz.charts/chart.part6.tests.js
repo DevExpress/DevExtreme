@@ -956,8 +956,6 @@ QUnit.test("SeriesTemplate.", function(assert) {
         stubSeries3 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } }),
         stubSeries4 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } }, isUpdated: false });
 
-    sinon.spy(stubSeries4, "getTemplateFields");
-
     chartMocks.seriesMockData.series.push(stubSeries1, stubSeries2, stubSeries3, stubSeries4);
     var chart = this.createChart({
         dataSource: [{ series: "s1", x: 1, y: 1 }, { series: "s2", x: 2, y: 2 }, { series: "s3", x: 3, y: 3 }, { series: "s4", x: 3, y: 3 }],
@@ -987,7 +985,6 @@ QUnit.test("SeriesTemplate.", function(assert) {
     assert.equal(commons.getTrackerStub().stub("updateSeries").lastCall.args[0], chart.series, "series updating for tracker");
     assert.strictEqual(this.validateData.callCount, 1, "validation");
     assert.ok(chart.seriesFamilies[0].adjustSeriesValues.calledOnce, "SeriesFamilies should adjust series values");
-    assert.ok(!stubSeries4.getTemplateFields.called, "get template fields");
 });
 // seriesTemplate with incorrect nameField
 QUnit.test("SeriesTemplate. B239844", function(assert) {

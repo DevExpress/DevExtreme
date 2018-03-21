@@ -2816,7 +2816,7 @@ QUnit.test("Get Range data when several points, data with undefined argument", f
     var series = createSeries({ type: "line" });
     series.updateData([
         { arg: undefined, val: 0 },
-        { arg: 0, val: 0 },
+        { arg: 0, val: undefined },
         { arg: 1, val: 0 },
         { arg: 2, val: 0 },
         { arg: null, val: 0 }

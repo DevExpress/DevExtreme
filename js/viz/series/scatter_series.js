@@ -133,14 +133,6 @@ var baseScatterMethods = {
         };
     },
 
-    updateTemplateFieldNames: function() {
-        var that = this,
-            options = that._options;
-
-        options.valueField = that.getValueFields()[0] + that.name;
-        options.tagField = that.getTagField() + that.name;
-    },
-
     _applyElementsClipRect: function(settings) {
         settings["clip-path"] = this._paneClipRectID;
     },
