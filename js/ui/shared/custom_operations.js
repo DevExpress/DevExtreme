@@ -54,7 +54,7 @@ function baseOperation(grid) {
             };
 
             column.filterType = "include";
-            column.filterValue = conditionInfo.value;
+            column.filterValues = conditionInfo.value;
 
             headerFilterController.showHeaderFilterMenuBase({
                 columnElement: div,
