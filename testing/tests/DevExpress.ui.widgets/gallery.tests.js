@@ -12,6 +12,7 @@ var $ = require("jquery"),
     pointerMock = require("../../helpers/pointerMock.js"),
     keyboardMock = require("../../helpers/keyboardMock.js");
 
+require("ui/gallery");
 require("common.css!");
 
 QUnit.testStart(function() {
