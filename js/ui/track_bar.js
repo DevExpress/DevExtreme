@@ -4,6 +4,7 @@ var $ = require("../core/renderer"),
     Editor = require("./editor/editor"),
     registerComponent = require("../core/component_registrator"),
     extend = require("../core/utils/extend").extend,
+    windowUtils = require("../core/utils/window"),
     fx = require("../animation/fx");
 
 var TRACKBAR_CLASS = "dx-trackbar",
@@ -120,19 +121,15 @@ var TrackBar = Editor.inherit({
             return;
         }
 
-        if(this._needPreventAnimation) {
+        if(this._needPreventAnimation || !windowUtils.hasWindow()) {
             return;
         }
 
-        if(this._readyToRender) {
-            fx.animate(this._$range, {
-                type: "custom",
-                duration: 100,
-                to: options
-            });
-        } else {
-            this._$range.css(options);
-        }
+        fx.animate(this._$range, {
+            type: "custom",
+            duration: 100,
+            to: options
+        });
     },
 
     _optionChanged: function(args) {
