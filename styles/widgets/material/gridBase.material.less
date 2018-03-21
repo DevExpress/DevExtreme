@@ -918,7 +918,7 @@
             }
         }
 
-        .dx-@{widgetName} {
+        .dx-@{widgetName}, .dx-@{widgetName}-container {
             .dx-menu {
                 .dx-menu-item-has-submenu.dx-menu-item-has-icon {
                     .dx-icon {
@@ -929,10 +929,12 @@
             .dx-@{widgetName}-content .dx-@{widgetName}-table .dx-row {
                 > td, > td.dx-cell-modified:not(.dx-field-item-content), > td.dx-@{widgetName}-invalid:not(.dx-field-item-content) {
                     &:first-of-type {
+                        padding-left: @MATERIAL_GRID_BASE_CELL_HORIZONTAL_PADDING;
                         padding-right: @MATERIAL_GRID_BASE_CELL_FIRST_COLUMN_PADDING;
                     }
     
                     &:last-of-type {
+                        padding-right: @MATERIAL_GRID_BASE_CELL_HORIZONTAL_PADDING;
                         padding-left: @MATERIAL_GRID_BASE_CELL_LAST_COLUMN_PADDING;
                     }
     
