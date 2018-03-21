@@ -151,11 +151,9 @@ var SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
     },
 
     _refreshDateTimeIndication: function() {
-        // if(windowUtils.hasWindow()) {
         this._cleanDateTimeIndicator();
         this._shader && this._shader.clean();
         this._renderDateTimeIndication();
-        // }
     },
 
     _isCurrentTime: function(date) {
@@ -232,10 +230,8 @@ var SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
     _cleanWorkSpace: function() {
         this.callBase();
 
-        // if(windowUtils.hasWindow()) {
         this._renderDateTimeIndication();
         this._setIndicationUpdateInterval();
-        // }
     },
 
     _optionChanged: function(args) {
