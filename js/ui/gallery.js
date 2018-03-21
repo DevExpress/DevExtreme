@@ -357,7 +357,7 @@ var Gallery = CollectionWidget.inherit({
     },
 
     _itemsPerPage: function() {
-        var itemsPerPage = Math.floor(1 / this._itemPercentWidth());
+        var itemsPerPage = windowUtils.hasWindow() ? Math.floor(1 / this._itemPercentWidth()) : 1;
 
         return Math.min(itemsPerPage, this._itemsCount());
     },
@@ -1151,8 +1151,6 @@ var Gallery = CollectionWidget.inherit({
     },
 
     _optionChanged: function(args) {
-        var value = args.value;
-
         switch(args.name) {
             case "width":
             case "initialItemWidth":
@@ -1165,31 +1163,36 @@ var Gallery = CollectionWidget.inherit({
             case "animationEnabled":
                 break;
             case "loop":
-                this.option("loopItemFocus", value);
-                this.$element().toggleClass(GALLERY_LOOP_CLASS, value);
-                this._renderDuplicateItems();
-                this._renderItemPositions();
-                this._renderNavButtonsVisibility();
-                return;
+                this.$element().toggleClass(GALLERY_LOOP_CLASS, args.value);
+                this.option("loopItemFocus", args.value);
+
+                if(windowUtils.hasWindow()) {
+                    this._renderDuplicateItems();
+                    this._renderItemPositions();
+                    this._renderNavButtonsVisibility();
+                }
+                break;
             case "showIndicator":
                 this._renderIndicator();
-                return;
+                break;
             case "showNavButtons":
                 this._renderNavButtons();
-                return;
+                break;
             case "slideshowDelay":
                 this._setupSlideShow();
-                return;
+                break;
             case "wrapAround":
             case "stretchImages":
-                this._renderItemSizes();
-                this._renderItemPositions();
-                this._renderItemVisibility();
+                if(windowUtils.hasWindow()) {
+                    this._renderItemSizes();
+                    this._renderItemPositions();
+                    this._renderItemVisibility();
+                }
                 break;
             case "swipeEnabled":
             case "indicatorEnabled":
                 this._renderUserInteraction();
-                return;
+                break;
             default:
                 this.callBase(args);
         }
