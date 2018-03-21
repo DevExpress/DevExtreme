@@ -5,6 +5,7 @@ var $ = require("../core/renderer"),
     registerComponent = require("../core/component_registrator"),
     commonUtils = require("../core/utils/common"),
     typeUtils = require("../core/utils/type"),
+    windowUtils = require("../core/utils/window"),
     extend = require("../core/utils/extend").extend,
     getPublicElement = require("../core/utils/dom").getPublicElement,
     fx = require("../animation/fx"),
@@ -381,6 +382,11 @@ var Gallery = CollectionWidget.inherit({
         this.$element().toggleClass(GALLERY_LOOP_CLASS, this.option("loop"));
 
         this.callBase();
+
+        this.setAria({
+            "role": "listbox",
+            "label": "gallery"
+        });
     },
 
     _render: function() {
@@ -399,11 +405,6 @@ var Gallery = CollectionWidget.inherit({
         this._setupSlideShow();
 
         this._reviseDimensions();
-
-        this.setAria({
-            "role": "listbox",
-            "label": "gallery"
-        });
 
         this.callBase();
     },
@@ -440,6 +441,11 @@ var Gallery = CollectionWidget.inherit({
     },
 
     _renderItems: function(items) {
+        if(!windowUtils.hasWindow()) {
+            var selectedIndex = this.option("selectedIndex");
+
+            items = items.length > selectedIndex ? items.slice(selectedIndex, selectedIndex + 1) : items.slice(0, 1);
+        }
         this.callBase(items);
 
         this._loadNextPageIfNeeded();
