@@ -1,49 +1,10 @@
 "use strict";
 
 import $ from "jquery";
-// import fx from "animation/fx";
 import SchedulerWorkSpace from "ui/scheduler/ui.scheduler.work_space";
 import SchedulerResourcesManager from "ui/scheduler/ui.scheduler.resource_manager";
 import dateLocalization from "localization/date";
 import "ui/scheduler/ui.scheduler";
-// import DataSource from "data/data_source/data_source";
-// import dxSchedulerAppointmentModel from "ui/scheduler/ui.scheduler.appointment_model";
-"use strict";
-
-// const pointerMock = require("../../helpers/pointerMock.js");
-
-// const $ = require("jquery"),
-//     noop = require("core/utils/common").noop,
-//     isRenderer = require("core/utils/type").isRenderer,
-//     dxScheduler = require("ui/scheduler/ui.scheduler"),
-//     translator = require("animation/translator"),
-//     devices = require("core/devices"),
-//     domUtils = require("core/utils/dom"),
-//     dateUtils = require("core/utils/date"),
-//     errors = require("ui/widget/ui.errors"),
-//     Color = require("color"),
-//     fx = require("animation/fx"),
-//     config = require("core/config"),
-//     dxSchedulerAppointmentModel = require("ui/scheduler/ui.scheduler.appointment_model"),
-//     dxSchedulerWorkSpace = require("ui/scheduler/ui.scheduler.work_space"),
-//     dxSchedulerWorkSpaceDay = require("ui/scheduler/ui.scheduler.work_space_day"),
-//     dragEvents = require("events/drag"),
-//     DataSource = require("data/data_source/data_source").DataSource,
-//     CustomStore = require("data/custom_store"),
-//     SchedulerTimezones = require("ui/scheduler/ui.scheduler.timezones"),
-//     dataUtils = require("core/element_data"),
-//     keyboardMock = require("../../helpers/keyboardMock.js");
-
-// require("common.css!");
-// require("generic_light.css!");
-
-QUnit.testStart(() => {
-    const markup =
-        '<div id="scheduler"> </div>\
-        <div id="scheduler-work-space"> </div>';
-
-    $("#qunit-fixture").html(markup);
-});
 
 const WORKSPACE_CLASS = "dx-scheduler-work-space",
     WORKSPACE_WITH_COUNT_CLASS = "dx-scheduler-work-space-count",
@@ -114,41 +75,9 @@ const checkRowsAndCells = function($element, assert, interval, start) {
     });
 };
 
-// const moduleConfig = {
-//     beforeEach: () => {
-//         this.clock = sinon.useFakeTimers();
-
-//         this.instance = $("#scheduler").dxScheduler().dxScheduler("instance");
-//         this.checkDateTime = function(assert, actualDate, expectedDate, messagePrefix) {
-//             assert.equal(actualDate.getHours(), expectedDate.getHours(), messagePrefix + "Hours're OK");
-//             assert.equal(actualDate.getMinutes(), expectedDate.getMinutes(), messagePrefix + "Minutes're OK");
-//             assert.equal(actualDate.getSeconds(), expectedDate.getSeconds(), messagePrefix + "Seconds're OK");
-//             assert.equal(actualDate.getMilliseconds(), expectedDate.getMilliseconds(), messagePrefix + "Milliseconds're OK");
-//         };
-//         fx.off = true;
-//         this.tasks = [
-//             {
-//                 text: "Task 1",
-//                 startDate: new Date(2015, 1, 9, 1, 0),
-//                 endDate: new Date(2015, 1, 9, 2, 0)
-//             },
-//             {
-//                 text: "Task 2",
-//                 startDate: new Date(2015, 1, 9, 11, 0),
-//                 endDate: new Date(2015, 1, 9, 12, 0)
-//             }
-//         ];
-//     },
-//     afterEach: () => {
-//         this.clock.restore();
-//         fx.off = false;
-//     }
-// };
-
 const moduleConfig = {
     beforeEach: () =>{
         this.instance = $("#scheduler-work-space").dxSchedulerWorkSpace().dxSchedulerWorkSpace("instance");
-        // stubInvokeMethod(this.instance);
     }
 };
 
@@ -1169,28 +1098,3 @@ QUnit.module("Workspace Month markup", monthModuleConfig, () => {
         assert.equal($firstDayOfMonthCells.last().text(), "Aug 1", "Cell has a right text");
     });
 });
-// QUnit.module("Scheduler markup", moduleConfig, () => {
-//     QUnit.test("Scheduler should be initialized", (assert) => {
-//         assert.ok(this.instance instanceof dxScheduler, "Scheduler was initialized");
-//     });
-
-//     QUnit.test("Scheduler should have a right css classes", (assert) => {
-//         assert.ok(this.instance.$element().hasClass("dx-scheduler"), "Scheduler has 'dx-scheduler' css class");
-//         assert.ok(this.instance.$element().hasClass("dx-widget"), "Scheduler has 'dx-widget' css class");
-//     });
-
-//     QUnit.test("Scheduler should not fail when dataSource is set", (assert) => {
-//         const data = new DataSource.DataSource({
-//             store: this.tasks
-//         });
-
-//         const instance = $("#scheduler").dxScheduler({
-//             dataSource: data,
-//             views: ["day"],
-//             currentView: "day"
-//         }).dxScheduler("instance");
-
-//         assert.ok(instance._appointmentModel instanceof dxSchedulerAppointmentModel, "Task model is initialized on scheduler init");
-//         assert.ok(instance._appointmentModel._dataSource instanceof DataSource, "Task model has data source instance");
-//     });
-// });
