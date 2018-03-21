@@ -1,0 +1,98 @@
+"use strict";
+
+import $ from "jquery";
+import fx from "animation/fx";
+import dxScheduler from "ui/scheduler/ui.scheduler";
+import DataSource from "data/data_source/data_source";
+import dateUtils from "core/utils/date";
+import dxSchedulerAppointmentModel from "ui/scheduler/ui.scheduler.appointment_model";
+"use strict";
+
+
+QUnit.testStart(() => {
+    const markup =
+        '<div id="scheduler"> </div>\
+        <div id="scheduler-work-space"> </div>';
+
+    $("#qunit-fixture").html(markup);
+});
+
+const moduleConfig = {
+    beforeEach: () => {
+        this.clock = sinon.useFakeTimers();
+
+        this.instance = $("#scheduler").dxScheduler().dxScheduler("instance");
+        this.checkDateTime = function(assert, actualDate, expectedDate, messagePrefix) {
+            assert.equal(actualDate.getHours(), expectedDate.getHours(), messagePrefix + "Hours're OK");
+            assert.equal(actualDate.getMinutes(), expectedDate.getMinutes(), messagePrefix + "Minutes're OK");
+            assert.equal(actualDate.getSeconds(), expectedDate.getSeconds(), messagePrefix + "Seconds're OK");
+            assert.equal(actualDate.getMilliseconds(), expectedDate.getMilliseconds(), messagePrefix + "Milliseconds're OK");
+        };
+        fx.off = true;
+        this.tasks = [
+            {
+                text: "Task 1",
+                startDate: new Date(2015, 1, 9, 1, 0),
+                endDate: new Date(2015, 1, 9, 2, 0)
+            },
+            {
+                text: "Task 2",
+                startDate: new Date(2015, 1, 9, 11, 0),
+                endDate: new Date(2015, 1, 9, 12, 0)
+            }
+        ];
+    },
+    afterEach: () => {
+        this.clock.restore();
+        fx.off = false;
+    }
+};
+
+QUnit.module("Scheduler markup", moduleConfig, () => {
+    QUnit.test("Scheduler should be initialized", (assert) => {
+        assert.ok(this.instance instanceof dxScheduler, "Scheduler was initialized");
+    });
+
+    QUnit.test("Scheduler should have a right css classes", (assert) => {
+        assert.ok(this.instance.$element().hasClass("dx-scheduler"), "Scheduler has 'dx-scheduler' css class");
+        assert.ok(this.instance.$element().hasClass("dx-widget"), "Scheduler has 'dx-widget' css class");
+    });
+
+    QUnit.test("Scheduler should not fail when dataSource is set", (assert) => {
+        const data = new DataSource.DataSource({
+            store: this.tasks
+        });
+
+        const instance = $("#scheduler").dxScheduler({
+            dataSource: data,
+            views: ["day"],
+            currentView: "day",
+            currentDate: new Date(2015, 1, 9)
+        }).dxScheduler("instance");
+
+        assert.ok(instance._appointmentModel instanceof dxSchedulerAppointmentModel, "Task model is initialized on scheduler init");
+        assert.ok(instance._appointmentModel._dataSource instanceof DataSource.DataSource, "Task model has data source instance");
+    });
+
+    QUnit.test("Header & work space currentDate should not contain information about hours, minutes, seconds", (assert) => {
+        var currentDate = this.instance.option("currentDate"),
+            header = this.instance.getHeader(),
+            workSpace = this.instance.getWorkSpace(),
+            headerCurrentDate = header.option("currentDate"),
+            workSpaceCurrentDate = workSpace.option("currentDate");
+
+        this.checkDateTime(assert, headerCurrentDate, dateUtils.trimTime(currentDate), "header date");
+        this.checkDateTime(assert, workSpaceCurrentDate, dateUtils.trimTime(currentDate), "work space date");
+
+        this.instance.option("currentDate", new Date(2015, 1, 1, 10, 10, 10, 10));
+
+        currentDate = this.instance.option("currentDate");
+
+        headerCurrentDate = header.option("currentDate"),
+        workSpaceCurrentDate = workSpace.option("currentDate");
+
+        this.checkDateTime(assert, currentDate, new Date(2015, 1, 1, 10, 10, 10, 10), "current date: ");
+        this.checkDateTime(assert, headerCurrentDate, new Date(2015, 1, 1), "header date: ");
+        this.checkDateTime(assert, workSpaceCurrentDate, new Date(2015, 1, 1), "work space date ");
+    });
+});

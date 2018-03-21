@@ -8,7 +8,6 @@ var $ = require("jquery"),
     translator = require("animation/translator"),
     devices = require("core/devices"),
     domUtils = require("core/utils/dom"),
-    dateUtils = require("core/utils/date"),
     errors = require("ui/widget/ui.errors"),
     Color = require("color"),
     fx = require("animation/fx"),
@@ -23,6 +22,7 @@ var $ = require("jquery"),
     dataUtils = require("core/element_data"),
     keyboardMock = require("../../helpers/keyboardMock.js");
 
+require("ui/scheduler/ui.scheduler");
 require("common.css!");
 require("generic_light.css!");
 
@@ -84,28 +84,6 @@ QUnit.testStart(function() {
         this.instance.option({ dataSource: this.tasks });
 
         assert.notOk(this.instance._appointmentModel._dataSource.paginate(), "Paginate is false");
-    });
-
-    QUnit.test("Header & work space currentDate should not contain information about hours, minutes, seconds", function(assert) {
-        var currentDate = this.instance.option("currentDate"),
-            header = this.instance.getHeader(),
-            workSpace = this.instance.getWorkSpace(),
-            headerCurrentDate = header.option("currentDate"),
-            workSpaceCurrentDate = workSpace.option("currentDate");
-
-        this.checkDateTime(assert, headerCurrentDate, dateUtils.trimTime(currentDate), "header date");
-        this.checkDateTime(assert, workSpaceCurrentDate, dateUtils.trimTime(currentDate), "work space date");
-
-        this.instance.option("currentDate", new Date(2015, 1, 1, 10, 10, 10, 10));
-
-        currentDate = this.instance.option("currentDate");
-
-        headerCurrentDate = header.option("currentDate"),
-        workSpaceCurrentDate = workSpace.option("currentDate");
-
-        this.checkDateTime(assert, currentDate, new Date(2015, 1, 1, 10, 10, 10, 10), "current date: ");
-        this.checkDateTime(assert, headerCurrentDate, new Date(2015, 1, 1), "header date: ");
-        this.checkDateTime(assert, workSpaceCurrentDate, new Date(2015, 1, 1), "work space date ");
     });
 
     QUnit.test("Rendering inside invisible element", function(assert) {
