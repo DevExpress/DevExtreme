@@ -1390,20 +1390,6 @@ QUnit.testStart(function() {
         assert.ok($workSpace.hasClass("dx-scheduler-work-space-overlapping"), "workspace has right class");
     });
 
-    QUnit.test("Workspace shouldn't have specific class if maxAppointmentsPerCell=null", function(assert) {
-        this.createInstance({
-            currentView: "Week",
-            maxAppointmentsPerCell: null,
-            views: [{
-                type: "week",
-                name: "Week",
-            }]
-        });
-
-        var $workSpace = this.instance.getWorkSpace().$element();
-        assert.notOk($workSpace.hasClass("dx-scheduler-work-space-overlapping"), "workspace hasn't class");
-    });
-
     QUnit.test("cellDuration is passed to workspace", function(assert) {
         this.createInstance({
             currentView: "week",
@@ -3331,23 +3317,6 @@ QUnit.testStart(function() {
         afterEach: function() {
             this.clock.restore();
         }
-    });
-
-    QUnit.test("Scheduler should have specific viewName setting of the view", function(assert) {
-        this.createInstance({
-            views: [{
-                type: "day",
-                name: "Test Day"
-            }, "week"],
-            cellDuration: 40,
-            currentView: "day",
-            useDropDownViewSwitcher: false
-        });
-
-        var $header = $(this.instance.getHeader().$element());
-
-        assert.equal($header.find(".dx-tab").eq(0).text(), "Test Day");
-        assert.equal($header.find(".dx-tab").eq(1).text(), "Week");
     });
 
     QUnit.test("Scheduler should have specific cellDuration setting of the view", function(assert) {
