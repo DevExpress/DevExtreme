@@ -926,6 +926,22 @@
                     }
                 }
             }
+            .dx-@{widgetName}-content .dx-@{widgetName}-table .dx-row {
+                > td, > td.dx-cell-modified:not(.dx-field-item-content), > td.dx-@{widgetName}-invalid:not(.dx-field-item-content) {
+                    &:first-of-type {
+                        padding-right: @MATERIAL_GRID_BASE_CELL_FIRST_COLUMN_PADDING;
+                    }
+    
+                    &:last-of-type {
+                        padding-left: @MATERIAL_GRID_BASE_CELL_LAST_COLUMN_PADDING;
+                    }
+    
+                    &.dx-command-select {
+                        padding-right: @MATERIAL_GRID_BASE_CELL_FIRST_COLUMN_PADDING;
+                        padding-left: @MATERIAL_GRID_BASE_CELL_FIRST_COLUMN_PADDING - @MATERIAL_GRID_BASE_CELL_HORIZONTAL_PADDING;
+                    }
+                }
+            }
         }
 
         .dx-@{widgetName}-rowsview {
