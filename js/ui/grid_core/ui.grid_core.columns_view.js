@@ -196,6 +196,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
                     isDataRow = $row.hasClass("dx-data-row"),
                     isHeaderRow = $row.hasClass("dx-header-row"),
                     isGroupRow = $row.hasClass("dx-group-row"),
+                    isMasterDetailRow = $row.hasClass(DETAIL_ROW_CLASS),
                     isFilterRow = $row.hasClass(that.addWidgetPrefix(FILTER_ROW_CLASS)),
                     visibleColumns = that._columnsController.getVisibleColumns(),
                     rowOptions = $row.data("options"),
@@ -204,7 +205,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
                     column = cellOptions ? cellOptions.column : visibleColumns[columnIndex],
                     msieCorrection = browser.msie ? 1 : 0;
 
-                if(!isFilterRow && (!isDataRow || (isDataRow && column && !column.cellTemplate)) &&
+                if(!isMasterDetailRow && !isFilterRow && (!isDataRow || (isDataRow && column && !column.cellTemplate)) &&
                     (!isHeaderRow || (isHeaderRow && column && !column.headerCellTemplate)) &&
                     (!isGroupRow || (isGroupRow && column && (column.groupIndex === undefined || !column.groupCellTemplate)))) {
                     if($element.data(CELL_HINT_VISIBLE)) {

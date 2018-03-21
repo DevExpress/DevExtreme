@@ -1,11 +1,10 @@
 "use strict";
 
-/* global fields */
-
 var $ = require("jquery");
 
 var FILTER_BUILDER_ITEM_VALUE_CLASS = "dx-filterbuilder-item-value",
-    FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS = "dx-filterbuilder-item-value-text";
+    FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS = "dx-filterbuilder-item-value-text",
+    fields = require("../../../helpers/filterBuilderTestData.js");
 
 require("ui/filter_builder/filter_builder");
 

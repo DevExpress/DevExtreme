@@ -605,9 +605,6 @@ var FilterBuilder = Widget.inherit({
     _initMarkup: function() {
         this.$element().addClass(FILTER_BUILDER_CLASS);
         this.callBase();
-    },
-
-    _renderContentImpl: function() {
         this._createGroupElementByCriteria(this._model)
             .appendTo(this.$element());
     },

@@ -1,9 +1,8 @@
 "use strict";
 
-/* global fields */
-
 var utils = require("ui/filter_builder/utils"),
-    between = require("ui/filter_builder/between");
+    between = require("ui/filter_builder/between"),
+    fields = require("../../../helpers/filterBuilderTestData.js");
 
 var condition1 = ["CompanyName", "=", "Super Mart of the West"],
     condition2 = ["CompanyName", "=", "and"],

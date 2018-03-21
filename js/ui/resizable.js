@@ -8,6 +8,7 @@ var $ = require("../core/renderer"),
     inArray = require("../core/utils/array").inArray,
     each = require("../core/utils/iterator").each,
     typeUtils = require("../core/utils/type"),
+    windowUtils = require("../core/utils/window"),
     translator = require("../animation/translator"),
     fitIntoRange = require("../core/utils/math").fitIntoRange,
     DOMComponent = require("../core/dom_component"),
@@ -480,11 +481,11 @@ var Resizable = DOMComponent.inherit({
                 break;
             case "minWidth":
             case "maxWidth":
-                this._readyToRender && this._renderWidth(this.$element().outerWidth());
+                windowUtils.hasWindow() && this._renderWidth(this.$element().outerWidth());
                 break;
             case "minHeight":
             case "maxHeight":
-                this._readyToRender && this._renderHeight(this.$element().outerHeight());
+                windowUtils.hasWindow() && this._renderHeight(this.$element().outerHeight());
                 break;
             case "onResize":
             case "onResizeStart":
