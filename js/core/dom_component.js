@@ -140,7 +140,6 @@ var DOMComponent = Component.inherit({
     _renderComponent: function() {
         this._initMarkup();
         if(windowUtils.hasWindow()) {
-            this._readyToRender = true;
             this._render();
         }
     },
