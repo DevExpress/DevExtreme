@@ -13,12 +13,10 @@
     @MATERIAL_LIST_SELECT_ALL_LABEL_MARGIN_TOP: 3px;
     @MATERIAL_LIST_DELETEBUTTON_PADDING: 3px;
 
-    @MATERIAL_LIST_SEARCHBOX_VERTICAL_PADDING: 8px;
+    @MATERIAL_LIST_SEARCHBOX_VERTICAL_PADDING: 6px;
     @MATERIAL_LIST_NEXT_BUTTON_HORIZONTAL_PADDING: 58px;
 
     @MATERIAL_LIST_MAIN_FONT_SIZE: 16px;
-
-    @MATERIAL_LIST_SEARCH_ICONS_BOTTOM: 11px;
 }
 
 .dx-size-compact() {
@@ -56,7 +54,7 @@
 }
 
 .dx-list-search {
-    padding-top: @MATERIAL_LIST_SEARCHBOX_VERTICAL_PADDING;
+    padding-top: @MATERIAL_LIST_SEARCHBOX_VERTICAL_PADDING - 2px;
     margin: 0 @MATERIAL_LIST_ITEM_HORIZONTAL_PADDING;
 
     &.dx-searchbox {
@@ -71,12 +69,11 @@
         }
 
         .dx-texteditor-container {
-            padding-bottom: @MATERIAL_LIST_SEARCHBOX_VERTICAL_PADDING - 1px;
-        }
+            padding-bottom: @MATERIAL_LIST_SEARCHBOX_VERTICAL_PADDING;
 
-        .dx-icon-search, .dx-icon-clear {
-            bottom: @MATERIAL_LIST_SEARCH_ICONS_BOTTOM;
-            top: auto;
+            .dx-texteditor-input {
+                margin-top: @MATERIAL_LIST_SEARCHBOX_VERTICAL_PADDING;
+            }
         }
 
         .dx-clear-button-area {
@@ -491,8 +488,9 @@
         }
 
         .dx-list-item-before-bag {
-            .dx-icon-toggle-delete {
-                margin: @MATERIAL_LIST_ITEM_VERTICAL_PADDING / 2 @item_horizontal_padding @MATERIAL_LIST_ITEM_VERTICAL_PADDING / 2 @item_horizontal_padding / 2;
+            .dx-button.dx-list-toggle-delete-switch {
+                margin-right: @item_horizontal_padding - 1px;
+                margin-left: 0;
             }
 
             .dx-list-select-checkbox,
@@ -509,8 +507,12 @@
         }
 
         .dx-list-switchable-delete-button {
-            margin-left: @item_horizontal_padding;
             margin-right: 0;
+        }
+
+        .dx-list-switchable-delete-button-inner-wrapper {
+            padding-left: (@MATERIAL_LIST_ITEM_HEIGHT - @MATERIAL_BUTTON_HEIGHT)/2;
+            padding-right: 0;
         }
     }
 
