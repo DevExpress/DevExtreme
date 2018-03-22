@@ -1269,9 +1269,11 @@ var Scheduler = Widget.inherit({
                 }).bind(this));
                 break;
             case "cellDuration":
-                this._appointments.option("items", []);
-                this._updateOption("workSpace", "hoursInterval", value / 60);
-                this._appointments.option("items", this._getAppointmentsToRepaint());
+                if(this._readyToRenderAppointments) {
+                    this._appointments.option("items", []);
+                    this._updateOption("workSpace", "hoursInterval", value / 60);
+                    this._appointments.option("items", this._getAppointmentsToRepaint());
+                }
                 break;
             case "tabIndex":
             case "focusStateEnabled":
@@ -1781,6 +1783,8 @@ var Scheduler = Widget.inherit({
             this._filterAppointmentsByDate();
             this._reloadDataSource();
         }).bind(this));
+
+        this._readyToRenderAppointments = false;
     },
 
     _render: function() {
@@ -1788,6 +1792,7 @@ var Scheduler = Widget.inherit({
 
         this._toggleSmallClass();
 
+        this._readyToRenderAppointments = true;
         this._workSpaceRecalculation && this._workSpaceRecalculation.resolve();
     },
 
@@ -2006,11 +2011,14 @@ var Scheduler = Widget.inherit({
         delete this._workSpace;
 
         this._renderWorkSpace(groups);
-        this._workSpaceRecalculation.resolve();
-        this._appointments.option({
-            fixedContainer: this._workSpace.getFixedContainer(),
-            allDayContainer: this._workSpace.getAllDayContainer()
-        });
+
+        if(this._readyToRenderAppointments) {
+            this._workSpaceRecalculation.resolve();
+            this._appointments.option({
+                fixedContainer: this._workSpace.getFixedContainer(),
+                allDayContainer: this._workSpace.getAllDayContainer()
+            });
+        }
     },
 
     getWorkSpaceScrollable: function() {
