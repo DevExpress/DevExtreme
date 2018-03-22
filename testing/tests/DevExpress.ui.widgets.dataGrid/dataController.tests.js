@@ -128,6 +128,17 @@ QUnit.test("Raise warning if keyExp is set and dataSource is not an array", func
     errors.log.restore();
 });
 
+QUnit.test("Not raise W1011 warning if dataSource is undefined", function(assert) {
+    // arrange, act
+    sinon.spy(errors, "log");
+    this.applyOptions({ keyExpr: "name", dataSource: undefined });
+    this.dataController.init();
+
+    // assert
+    assert.equal(errors.log.callCount, 0, "Warning about keyExpr is not raised");
+    errors.log.restore();
+});
+
 QUnit.test("changed on initialize", function(assert) {
     var changedCount = 0;
     var lastArgs;
