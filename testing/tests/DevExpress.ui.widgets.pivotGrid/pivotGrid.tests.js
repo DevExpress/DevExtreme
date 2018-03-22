@@ -194,7 +194,7 @@ QUnit.test("No data", function(assert) {
     assert.equal($noDataElement.length, 1);
     assert.ok($noDataElement.is(":visible"));
     assert.equal($noDataElement.text(), 'No data');
-    assert.ok(contentReadyCallback.calledOnce);
+    assert.ok(contentReadyCallback.calledOnce, "contentReadyCallback called once");
 });
 
 QUnit.test("Empty store", function(assert) {
