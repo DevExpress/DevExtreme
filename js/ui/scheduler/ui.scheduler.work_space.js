@@ -1675,11 +1675,19 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _getCellByCoordinates: function(cellCoordinates, groupIndex) {
-        return this._$dateTable
-            .find("tr")
-            .eq(cellCoordinates.rowIndex)
-            .find("td")
-            .eq(cellCoordinates.cellIndex + groupIndex * this._getCellCount());
+        if(this.option("grouping")) {
+            return this._$dateTable
+                .find("tr")
+                .eq(cellCoordinates.rowIndex + groupIndex * this._getRowCount())
+                .find("td")
+                .eq(cellCoordinates.cellIndex);
+        } else {
+            return this._$dateTable
+                .find("tr")
+                .eq(cellCoordinates.rowIndex)
+                .find("td")
+                .eq(cellCoordinates.cellIndex + groupIndex * this._getCellCount());
+        }
     },
 
     _getCells: function(allDay) {
@@ -1797,8 +1805,8 @@ var SchedulerWorkSpace = Widget.inherit({
             left: position.left + shift.left,
             rowIndex: position.rowIndex,
             cellIndex: position.cellIndex,
-            hMax: this.getMaxAllowedPosition()[groupIndex],
-            vMax: this.getMaxAllowedVerticalPosition(),
+            hMax: this.option("grouping") ? this.getMaxAllowedPosition()[0] : this.getMaxAllowedPosition()[groupIndex],
+            vMax: this.option("grouping") ? this.getMaxAllowedVerticalPosition()[groupIndex] : this.getMaxAllowedPosition()[0],
             groupIndex: groupIndex
         };
     },
@@ -1938,12 +1946,22 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     getMaxAllowedVerticalPosition: function() {
-        if(!this._maxAllowedVerticalPosition) {
-            var rows = this._getRowCount(),
-                row = this._$dateTable.find("tr:nth-child(" + rows + "n)"),
-                maxPosition = $(row).position().top + $(row).outerHeight();
 
-            this._maxAllowedVerticalPosition = Math.round(maxPosition);
+        if(!this._maxAllowedVerticalPosition) {
+            var that = this;
+            this._maxAllowedVerticalPosition = [];
+
+            var rows = this._getRowCount();
+            this._$dateTable
+                .find("tr")
+                .first()
+                .find("tr:nth-child(" + rows + "n)")
+                .each(function(_, row) {
+
+                    var maxPosition = $(row).position().top + $(row).outerHeight();
+
+                    that._maxAllowedVerticalPosition.push(Math.round(maxPosition));
+                });
         }
 
         return this._maxAllowedVerticalPosition;

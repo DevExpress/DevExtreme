@@ -30,7 +30,17 @@
     <script>
         $(function() {
             $("#scheduler").dxScheduler({
-                dataSource: [],
+                dataSource: [{
+                    text: "1",
+                    startDate: new Date(2018, 2, 16, 10),
+                    endDate: new Date(2018, 2, 16, 11),
+                    priorityId: 1
+                }, {
+                    text: "2",
+                    startDate: new Date(2018, 2, 16, 12),
+                    endDate: new Date(2018, 2, 16, 12, 30),
+                    priorityId: 2
+                }],
                 views: ["day", {
                     type: "week",
                     name: "week",
@@ -49,6 +59,7 @@
                 ],
                 showAllDayPanel: false,
                 startDayHour: 9,
+                endDayHour: 14,
                 height: 600
             });
         });
