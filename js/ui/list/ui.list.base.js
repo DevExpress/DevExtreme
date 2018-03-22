@@ -857,7 +857,7 @@ var ListBase = CollectionWidget.inherit({
 
         if(value) {
             if(/material/.test(themes.current())) {
-                this._inkRippleTimeout = setTimeout(function() {
+                this._inkRippleTimer = setTimeout(function() {
                     that._inkRipple.showWave(config);
                 }, LIST_FEEDBACK_SHOW_TIMEOUT / 2);
             } else {
@@ -867,8 +867,6 @@ var ListBase = CollectionWidget.inherit({
             this._inkRipple.hideWave(config);
         }
     },
-
-    _inkRippleTimeout: null,
 
     _postprocessRenderItem: function(args) {
         this._refreshItemElements();
@@ -963,6 +961,7 @@ var ListBase = CollectionWidget.inherit({
     },
 
     _clean: function() {
+        clearTimeout(this._inkRippleTimer);
         if(this._$nextButton) {
             this._$nextButton.remove();
             this._$nextButton = null;
