@@ -759,6 +759,10 @@ var ListBase = CollectionWidget.inherit({
             each(items, this._renderGroup.bind(this));
             this._attachGroupCollapseEvent();
             this._renderEmptyMessage();
+
+            if(/material/.test(themes.current())) {
+                this.attachGroupHeaderInkRippleEvents();
+            }
         } else {
             this.callBase.apply(this, arguments);
         }
@@ -864,16 +868,7 @@ var ListBase = CollectionWidget.inherit({
         }
     },
 
-    _renderItem: function() {
-        var item = this.callBase.apply(this, arguments),
-            that = this;
-
-        eventsEngine.on(item, swipeEvents.start, function() {
-            clearTimeout(that._inkRippleTimeout);
-        });
-
-        return item;
-    },
+    _inkRippleTimeout: null,
 
     _postprocessRenderItem: function(args) {
         this._refreshItemElements();
@@ -927,7 +922,9 @@ var ListBase = CollectionWidget.inherit({
         this._createItemByTemplate(groupTemplate, renderArgs);
 
         if(/material/.test(themes.current())) {
-            this._createGroupHeaderIndicator($groupHeaderElement);
+            $("<div>")
+                .addClass(LIST_GROUP_HEADER_INDICATOR_CLASS)
+                .prependTo($groupHeaderElement);
         }
 
         this._renderingGroupIndex = index;
@@ -947,19 +944,17 @@ var ListBase = CollectionWidget.inherit({
         });
     },
 
-    _createGroupHeaderIndicator: function(headerElement) {
-        var that = this;
+    attachGroupHeaderInkRippleEvents: function() {
+        var that = this,
+            selector = "." + LIST_GROUP_HEADER_CLASS,
+            $element = this.$element();
 
-        $("<div>")
-            .addClass(LIST_GROUP_HEADER_INDICATOR_CLASS)
-            .prependTo(headerElement);
-
-        eventsEngine.on(headerElement, "dxpointerdown", function(e) {
-            that._toggleActiveState(headerElement, true, e);
+        eventsEngine.on($element, "dxpointerdown", selector, function(e) {
+            that._toggleActiveState($(e.currentTarget), true, e);
         });
 
-        eventsEngine.on(headerElement, "dxpointerup dxhoverend", function(e) {
-            that._toggleActiveState(headerElement, false);
+        eventsEngine.on($element, "dxpointerup dxhoverend", selector, function(e) {
+            that._toggleActiveState($(e.currentTarget), false);
         });
     },
 

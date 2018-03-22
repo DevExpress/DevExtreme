@@ -48,6 +48,8 @@ var EditDecorator = Class.inherit({
             return;
         }
 
+        clearTimeout(this._list._inkRippleTimeout);
+
         this._swipeStartHandler($itemElement, e);
     },
 
