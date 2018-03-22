@@ -84,4 +84,6 @@ QUnit.test("Render with data", function(assert) {
     // assert
     assert.ok(pivotGrid.$element().hasClass("dx-pivotgrid"), "has dx-pivotgrid class");
     assert.equal(pivotGrid.$element().children().length > 0, windowUtils.hasWindow(), "empty rectangle");
+
+    clock.restore();
 });
