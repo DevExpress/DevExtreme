@@ -1,7 +1,8 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
-    window = require("../../core/utils/window").getWindow(),
+    windowUtils = require("../../core/utils/window"),
+    window = windowUtils.getWindow(),
     eventsEngine = require("../../events/core/events_engine"),
     commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
@@ -1252,6 +1253,10 @@ module.exports = {
                         animation = dataController.isLoaded() ? loadPanelOptions.animation : null,
                         $element = that.element(),
                         visibilityOptions;
+
+                    if(!windowUtils.hasWindow()) {
+                        return;
+                    }
 
                     if(!loadPanel && messageText !== undefined && dataController.isLocalStore() && loadPanelOptions.enabled === "auto" && $element) {
                         that._renderLoadPanel($element, $element.parent());

@@ -88,18 +88,15 @@ QUnit.module("Widget creation", {
 var optionChangeExcluded = [
     "ActionSheet",
     "ContextMenu",
-    "DataGrid",
     "DateBox",
     "LoadPanel",
-    "PivotGrid",
     "Popover",
     "Popup",
     "ScrollView",
     "TileView",
     "Toast",
     "Toolbar",
-    "Tooltip",
-    "TreeList"
+    "Tooltip"
 ];
 
 Object.keys(widgets).forEach(function(widget) {
@@ -110,7 +107,8 @@ Object.keys(widgets).forEach(function(widget) {
 
     QUnit[optionChangeExcluded.indexOf(widget) < 0 ? "test" : "skip"](widget + " optionChanged", function(assert) {
         this.instance = new widgets[widget](this.element);
-        var options = this.instance.option();
+        var options = this.instance.option(),
+            clock = widget === "DataGrid" || widget === "TreeList" ? sinon.useFakeTimers() : null;
 
         for(var optionName in options) {
             var prevValue = options[optionName],
@@ -143,6 +141,10 @@ Object.keys(widgets).forEach(function(widget) {
             this.instance.endUpdate();
 
             assert.ok(true, "it's possible to change option " + optionName);
+        }
+
+        if(clock) {
+            clock.restore();
         }
     });
 });

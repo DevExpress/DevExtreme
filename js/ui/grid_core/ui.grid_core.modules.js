@@ -10,6 +10,7 @@ var $ = require("../../core/renderer"),
     each = require("../../core/utils/iterator").each,
     errors = require("../widget/ui.errors"),
     messageLocalization = require("../../localization/message"),
+    hasWindow = require("../../core/utils/window").hasWindow(),
 
     WIDGET_WITH_LEGACY_CONTAINER_NAME = "dxDataGrid";
 
@@ -194,7 +195,7 @@ var View = ModuleItem.inherit({
 
     _invalidate: function(requireResize, requireReady) {
         this._requireRender = true;
-        this.component._requireResize = this.component._requireResize || requireResize;
+        this.component._requireResize = hasWindow && (this.component._requireResize || requireResize);
         this._requireReady = this._requireReady || requireReady;
     },
 

@@ -1011,7 +1011,7 @@ var PivotGrid = Widget.inherit({
                 that.callBase(args);
                 that._renderFieldChooser();
                 that._renderContextMenu();
-                that._renderLoadPanel(that._dataArea.groupElement(), that.$element());
+                windowUtils.hasWindow() && that._renderLoadPanel(that._dataArea.groupElement(), that.$element());
                 that._invalidate();
                 break;
             case "export":
@@ -1032,8 +1032,10 @@ var PivotGrid = Widget.inherit({
                 that._renderDescriptionArea();
                 break;
             case "loadPanel":
-                that._renderLoadPanel(that._dataArea.groupElement(), that.$element());
-                that._invalidate();
+                if(windowUtils.hasWindow()) {
+                    that._renderLoadPanel(that._dataArea.groupElement(), that.$element());
+                    that._invalidate();
+                }
                 break;
             case "fieldPanel":
                 that._renderDescriptionArea();
@@ -1786,8 +1788,14 @@ var PivotGrid = Widget.inherit({
             rowHeights,
             rowFieldsHeader = that._rowFields,
             columnsAreaRowCount,
-            needSynchronizeFieldPanel = rowFieldsHeader.isVisible() && that.option("rowHeaderLayout") !== "tree",
+            needSynchronizeFieldPanel,
             d = new Deferred();
+
+        if(!windowUtils.hasWindow()) {
+            return;
+        }
+
+        needSynchronizeFieldPanel = rowFieldsHeader.isVisible() && that.option("rowHeaderLayout") !== "tree",
 
         ///#DEBUG
         that.__scrollBarUseNative = scrollBarInfo.scrollBarUseNative;

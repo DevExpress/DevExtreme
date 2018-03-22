@@ -3,7 +3,8 @@
 var modules = require("./ui.grid_core.modules"),
     Pager = require("../pager"),
     inArray = require("../../core/utils/array").inArray,
-    isDefined = require("../../core/utils/type").isDefined;
+    isDefined = require("../../core/utils/type").isDefined,
+    hasWindow = require("../../core/utils/window").hasWindow();
 
 var PAGER_CLASS = "pager",
     MAX_PAGES_COUNT = 10;
@@ -135,7 +136,7 @@ var PagerView = modules.View.inherit({
 
             if(!isDataSource) {
                 that._invalidate();
-                if(isPager && that.component) {
+                if(hasWindow && isPager && that.component) {
                     that.component.resize();
                 }
             }
