@@ -146,7 +146,7 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
 
             getVirtualContentSize: function() { return 0; },
 
-            getContentOffset: function(type) { return options.virtualItemsCount ? options.virtualItemsCount[type] * 20 : 0; },
+            getContentOffset: function(type) { return options.virtualItemsCount ? options.virtualItemsCount[type || "begin"] * 20 : 0; },
 
             itemsCount: function() {
                 return options.itemsCount;

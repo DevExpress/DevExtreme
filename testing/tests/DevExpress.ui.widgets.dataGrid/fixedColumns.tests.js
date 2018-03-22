@@ -1328,12 +1328,19 @@ QUnit.test("Synchronize position fixed table with main table when scrolling mode
         scrollableInstance,
         $testElement = $("#container");
 
-    that.setupDataGrid({
+    var dataOptions = {
         virtualItemsCount: {
             begin: 0,
             end: 800
         }
-    });
+    };
+
+    that.setupDataGrid(dataOptions);
+
+    that.options.scrolling = {
+        mode: "virtual"
+    };
+
     that.rowsView.render($testElement);
     that.rowsView.height(50);
     that.rowsView.resize();
@@ -1351,11 +1358,17 @@ QUnit.test("Synchronize position fixed table with main table when scrolling mode
 
     var scrollChanged = function(e) {
         // assert
-        assert.equal($fixTable.position().top, (-e.top + $table.position().top), "fixed table - position top");
+        assert.ok($fixTable.position().top < 0, "position top is defined");
+        assert.ok($table.find(".dx-virtual-row").eq(0).height() > 0, "virtual row has height");
+        assert.equal($fixTable.position().top, (-e.top + $table.find(".dx-virtual-row").eq(0).height()), "fixed table - position top");
         that.rowsView.scrollChanged.remove(scrollChanged);
         done();
     };
     that.rowsView.scrollChanged.add(scrollChanged);
+
+    dataOptions.virtualItemsCount.begin = 800;
+    dataOptions.virtualItemsCount.end = 0;
+    that.rowsView.resize();
 
     // act
     scrollableInstance.scrollTo({ y: 20000 });

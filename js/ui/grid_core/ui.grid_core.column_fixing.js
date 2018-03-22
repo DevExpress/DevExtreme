@@ -700,9 +700,10 @@ var RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
     _updateFixedTablePosition: function(scrollTop) {
         if(this._fixedTableElement && this._tableElement) {
             var editorFactory = this.getController("editorFactory"),
-                $focusedElement = editorFactory.focus();
-
-            this._fixedTableElement.css("top", scrollTop + this._tableElement.position().top);
+                $focusedElement = editorFactory.focus(),
+                dataController = this._dataController,
+                offset = dataController.getContentOffset ? dataController.getContentOffset() : 0;
+            this._fixedTableElement.css("top", scrollTop + offset);
 
             if($focusedElement) {
                 editorFactory.focus($focusedElement);
