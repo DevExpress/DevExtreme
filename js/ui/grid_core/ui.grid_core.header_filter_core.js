@@ -75,7 +75,7 @@ exports.HeaderFilterView = modules.View.inherit({
     applyHeaderFilter: function(options) {
         var that = this,
             list = that.getListContainer(),
-            isSelectAll = !list.option("searchValue") && list.$element().find(".dx-checkbox").eq(0).hasClass("dx-checkbox-checked"),
+            isSelectAll = !list.option("searchValue") && !options.isFilterBuilder && list.$element().find(".dx-checkbox").eq(0).hasClass("dx-checkbox-checked"),
             filterValues = [];
 
         var fillSelectedItemKeys = function(filterValues, items, isExclude) {
@@ -198,9 +198,11 @@ exports.HeaderFilterView = modules.View.inherit({
                 ],
                 resizeEnabled: true,
                 onShowing: function(e) {
+                    e.component.$content().parent().addClass("dx-dropdowneditor-overlay");
                     that._initializeListContainer(options);
                     options.onShowing && options.onShowing(e);
                 },
+                onHidden: options.onHidden,
                 onInitialized: function(e) {
                     var component = e.component;
                     // T321243
@@ -237,7 +239,7 @@ exports.HeaderFilterView = modules.View.inherit({
         if(options.type === "tree") {
             that._listContainer = that._createComponent($("<div>").appendTo($content),
                 TreeView, extend(widgetOptions, {
-                    showCheckBoxesMode: 'selectAll',
+                    showCheckBoxesMode: options.isFilterBuilder ? "normal" : "selectAll",
                     keyExpr: "id"
                 }));
         } else {
@@ -246,12 +248,12 @@ exports.HeaderFilterView = modules.View.inherit({
                     searchExpr: that._getSearchExpr(options),
                     pageLoadMode: "scrollBottom",
                     showSelectionControls: true,
-                    selectionMode: "all",
+                    selectionMode: options.isFilterBuilder ? "multiple" : "all",
                     onSelectionChanged: function(e) {
                         var items = e.component.option("items"),
                             selectedItems = e.component.option("selectedItems");
 
-                        if(!e.component._selectedItemsUpdating && !e.component.option("searchValue")) {
+                        if(!e.component._selectedItemsUpdating && !e.component.option("searchValue") && !options.isFilterBuilder) {
                             if(selectedItems.length === 0 && items.length && (!options.filterValues || options.filterValues.length <= 1)) {
                                 options.filterType = "include";
                                 options.filterValues = [];
@@ -323,7 +325,7 @@ exports.headerFilterMixin = {
             rootElement.find("." + HEADER_FILTER_CLASS).remove();
 
             if(allowHeaderFiltering(column)) {
-                $headerFilterIndicator = this.callBase(options).toggleClass("dx-header-filter-empty", !column.filterValues || !column.filterValues.length);
+                $headerFilterIndicator = this.callBase(options).toggleClass("dx-header-filter-empty", this._isHeaderFilterEmpty(column));
             }
 
             return $headerFilterIndicator;
@@ -331,6 +333,11 @@ exports.headerFilterMixin = {
 
         return this.callBase(options);
     },
+
+    _isHeaderFilterEmpty: function(column) {
+        return !column.filterValues || !column.filterValues.length;
+    },
+
     _getIndicatorClassName: function(name) {
         if(name === "headerFilter") {
             return HEADER_FILTER_CLASS;

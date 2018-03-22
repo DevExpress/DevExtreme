@@ -227,6 +227,8 @@
         "dxFilterBuilder-filterOperationNotContains": "Não contém",
         "dxFilterBuilder-filterOperationEndsWith": "Termina com",
         "dxFilterBuilder-filterOperationIsBlank": "É vazio",
-        "dxFilterBuilder-filterOperationIsNotBlank": "Não é vazio"
+        "dxFilterBuilder-filterOperationIsNotBlank": "Não é vazio",
+        "dxFilterBuilder-filterOperationAnyOf": "!TODO",
+        "dxFilterBuilder-filterOperationNoneOf": "!TODO"
     }
 }

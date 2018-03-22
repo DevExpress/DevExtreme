@@ -118,21 +118,21 @@ module.exports = (function() {
 
     var getFilterExpressionForNumber = function(filterValue, selectedFilterOperation, target) {
         var column = this,
-            interval,
-            startFilterValue,
-            endFilterValue,
             selector = getFilterSelector(column, target),
-            values = ("" + filterValue).split("/"),
-            value = Number(values[values.length - 1]),
-            isExclude = column.filterType === "exclude",
             groupInterval = module.exports.getGroupInterval(column);
 
         if(target === "headerFilter" && groupInterval && typeUtils.isDefined(filterValue)) {
-            interval = groupInterval[values.length - 1];
-            startFilterValue = [selector, isExclude ? "<" : ">=", value];
-            endFilterValue = [selector, isExclude ? ">=" : "<", value + interval];
+            var values = ("" + filterValue).split("/"),
+                value = Number(values[values.length - 1]),
+                interval,
+                startFilterValue,
+                endFilterValue;
 
-            return [startFilterValue, isExclude ? "or" : "and", endFilterValue];
+            interval = groupInterval[values.length - 1];
+            startFilterValue = [selector, ">=", value];
+            endFilterValue = [selector, "<", value + interval];
+            var condition = [startFilterValue, "and", endFilterValue];
+            return condition;
         }
 
         return [selector, selectedFilterOperation || "=", filterValue];
