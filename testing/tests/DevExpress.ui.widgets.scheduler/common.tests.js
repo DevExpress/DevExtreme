@@ -1418,24 +1418,6 @@ QUnit.testStart(function() {
         assert.equal(workSpaceMonth.option("accessKey"), this.instance.option("accessKey"), "workspace has correct accessKey afterChange");
     });
 
-    QUnit.test("crossScrollingEnabled option should be passed to work space", function(assert) {
-        this.createInstance();
-
-        assert.strictEqual(this.instance.getWorkSpace().option("crossScrollingEnabled"), false, "option is OK");
-
-        this.instance.option("crossScrollingEnabled", true);
-        assert.strictEqual(this.instance.getWorkSpace().option("crossScrollingEnabled"), true, "option is OK");
-    });
-
-    QUnit.test("crossScrollingEnabled option should works correctly with agenda view", function(assert) {
-        this.createInstance({
-            crossScrollingEnabled: true,
-            currentView: "agenda"
-        });
-
-        assert.ok(true, "Widget was successfully initialized");
-    });
-
     QUnit.test("the 'width' option should be passed to work space on option changed if horizontal scrolling is enabled", function(assert) {
         this.createInstance();
         this.instance.option("crossScrollingEnabled", true);

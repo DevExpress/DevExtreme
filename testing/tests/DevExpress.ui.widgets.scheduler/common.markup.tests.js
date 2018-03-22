@@ -167,4 +167,22 @@ QUnit.module("Scheduler with config", {
         var $workSpace = this.instance.getWorkSpace().$element();
         assert.notOk($workSpace.hasClass("dx-scheduler-work-space-overlapping"), "workspace hasn't class");
     });
+
+    QUnit.test("Scheduler should not fail when crossScrollingEnabled is set", (assert) => {
+        this.createInstance();
+
+        assert.strictEqual(this.instance.getWorkSpace().option("crossScrollingEnabled"), false, "option is OK");
+
+        this.instance.option("crossScrollingEnabled", true);
+        assert.strictEqual(this.instance.getWorkSpace().option("crossScrollingEnabled"), true, "option is OK");
+    });
+
+    QUnit.test("Scheduler should not fail when crossScrollingEnabled is set, agenda view", (assert) => {
+        this.createInstance({
+            crossScrollingEnabled: true,
+            currentView: "agenda"
+        });
+
+        assert.ok(true, "Widget was successfully initialized");
+    });
 });
