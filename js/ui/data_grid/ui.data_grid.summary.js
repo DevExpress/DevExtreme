@@ -283,7 +283,7 @@ var SummaryDataSourceAdapterClientExtender = (function() {
                 totalAggregates = calculateAggregates(that, summary, options.data, groups.length);
 
                 options.data = sortGroupsBySummary(options.data, groups, summary);
-                options.extra = options.extra || {};
+                options.extra = typeUtils.isPlainObject(options.extra) ? options.extra : {};
                 options.extra.summary = totalAggregates;
             }
 
