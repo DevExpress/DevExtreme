@@ -244,12 +244,12 @@ var getRequestHeaders = function(options) {
 
 var sendRequest = function(options) {
 
-    if(this.ajaxStrategy && !options.responseType && !options.upload) {
-        return this.ajaxStrategy(options);
+    if(ajaxStrategy && !options.responseType && !options.upload) {
+        return ajaxStrategy(options);
     }
 
     var xhr = httpRequest.getXhr(),
-        d = options.deferred ? options.deferred : new Deferred(),
+        d = new Deferred(),
         result = d.promise(),
         async = isDefined(options.async) ? options.async : true,
         dataType = options.dataType,
@@ -355,9 +355,7 @@ var sendRequest = function(options) {
     return result;
 };
 
-var setStrategy = function(s) {
+exports.sendRequest = injector({ sendRequest: sendRequest });
+exports.setStrategy = function(s) {
     ajaxStrategy = s;
 };
-
-exports.sendRequest = injector({ sendRequest: sendRequest });
-exports.setStrategy = setStrategy;
