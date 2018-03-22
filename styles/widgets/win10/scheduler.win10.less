@@ -117,7 +117,9 @@
     }
 }
 
-.dx-scheduler-all-day-title-mixin(@WIN10_SCHEDULER_HEADER_HEIGHT + @SCHEDULER_HEADER_PANEL_TOP_GAP);
+&:not(.dx-scheduler-work-space-horizontal-grouped) {
+    .dx-scheduler-all-day-title-mixin(@WIN10_SCHEDULER_HEADER_HEIGHT + @SCHEDULER_HEADER_PANEL_TOP_GAP);
+}
 
 .dx-scheduler-work-space-week,
 .dx-scheduler-work-space-work-week {
