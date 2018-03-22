@@ -144,41 +144,6 @@ var environmentWithSinonStubPoint = {
 
     seriesType = "rangebar";
 
-    QUnit.test("Update template field", function(assert) {
-        var series = createSeries({
-            type: seriesType,
-            name: "rangeSeries",
-            rangeValue1Field: "rangeValue1Field",
-            rangeValue2Field: "rangeValue2Field",
-            tagField: "tagField",
-            point: { visible: false },
-            label: { visible: false }
-
-        }, { renderer: this.renderer });
-        // act
-        series.updateTemplateFieldNames();
-        // assert
-        assert.equal(series._options.rangeValue1Field, "rangeValue1FieldrangeSeries");
-        assert.equal(series._options.rangeValue2Field, "rangeValue2FieldrangeSeries");
-        assert.equal(series._options.tagField, "tagFieldrangeSeries");
-    });
-
-    QUnit.test("Update template field. Default Values", function(assert) {
-        var series = createSeries({
-            type: seriesType,
-            name: "rangeSeries",
-            point: { visible: false },
-            label: { visible: false }
-
-        }, { renderer: this.renderer });
-        // act
-        series.updateTemplateFieldNames();
-        // assert
-        assert.equal(series._options.rangeValue1Field, "val1rangeSeries");
-        assert.equal(series._options.rangeValue2Field, "val2rangeSeries");
-        assert.equal(series._options.tagField, "tagrangeSeries");
-    });
-
     QUnit.test("getValueFields default", function(assert) {
         var series = createSeries({
             type: seriesType

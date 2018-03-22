@@ -16,7 +16,6 @@ var lineSeries = require("./line_series").chart.line,
 
 exports.chart = {};
 exports.chart.bubble = _extend({}, scatterSeries, {
-    _fillErrorBars: _noop,
 
     getErrorBarRangeCorrector: _noop,
 
@@ -46,12 +45,15 @@ exports.chart.bubble = _extend({}, scatterSeries, {
         return _isDefined(data.argument) && _isDefined(data.size) && data.value !== undefined;
     },
 
-    _getPointData: function(data, options) {
-        var pointData = scatterSeries._getPointData.call(this, data, options);
+    _getPointDataSelector: function(data, options) {
+        const sizeField = this.getSizeField();
+        const baseGetter = scatterSeries._getPointDataSelector.call(this);
 
-        pointData.size = data[options.sizeField || "size"];
-
-        return pointData;
+        return (data) => {
+            const pointData = baseGetter(data);
+            pointData.size = data[sizeField];
+            return pointData;
+        };
     },
 
     _aggregators: {
@@ -80,16 +82,6 @@ exports.chart.bubble = _extend({}, scatterSeries, {
 
     getSizeField: function() {
         return this._options.sizeField || "size";
-    },
-
-    updateTemplateFieldNames: function() {
-        var that = this,
-            options = that._options,
-            name = that.name;
-
-        options.valueField = that.getValueFields()[0] + name;
-        options.sizeField = that.getSizeField() + name;
-        options.tagField = that.getTagField() + name;
     },
 
     _animate: function() {

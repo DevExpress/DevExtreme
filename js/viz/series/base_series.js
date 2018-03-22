@@ -364,9 +364,11 @@ Series.prototype = {
             that._canRenderCompleteHandle = true;
         }
 
-        that._data = data.reduce(function(data, dataItem, index) {
-            var pointDataItem = that._getPointData(dataItem, options);
-            if(that._checkData(pointDataItem)) {
+        const dataSelector = this._getPointDataSelector();
+
+        that._data = data.reduce((data, dataItem, index) => {
+            const pointDataItem = dataSelector(dataItem);
+            if(_isDefined(pointDataItem.argument) && (!options.nameField || dataItem[options.nameField] === this.name)) {
                 pointDataItem.index = index;
                 data.push(pointDataItem);
             }
@@ -403,15 +405,19 @@ Series.prototype = {
 
         that._calculateErrorBars(data);
 
-        points = data.map(function(dataItem, index) {
-            var oldPoint = that._getOldPoint(dataItem, oldPointsByArgument, index),
-                p = that._createPoint(dataItem, index, oldPoint, dataItem.index);
 
-            if(!oldPoint) {
-                allPoints.push(p);
+        points = data.reduce((points, pointDataItem, index) => {
+            if(that._checkData(pointDataItem)) {
+                const oldPoint = that._getOldPoint(pointDataItem, oldPointsByArgument, index);
+                const point = that._createPoint(pointDataItem, index, oldPoint, pointDataItem.index);
+                pointDataItem.index = index;
+                if(!oldPoint) {
+                    allPoints.push(point);
+                }
+                points.push(point);
             }
-            return p;
-        });
+            return points;
+        }, []);
 
         that._oldPoints = Object.keys(oldPointsByArgument).reduce(function(points, key) {
             var argPoints = oldPointsByArgument[key];
@@ -436,15 +442,6 @@ Series.prototype = {
         } else {
             that._pointsToDraw = points;
         }
-    },
-
-    getTemplateFields: function() {
-        return this.getValueFields().concat(this.getTagField(), this.getSizeField()).map(function(field) {
-            return {
-                templateField: field + this.name,
-                originalField: field
-            };
-        }, this);
     },
 
     _removeOldSegments: function() {
@@ -852,7 +849,7 @@ Series.prototype = {
         return aggregator;
     },
 
-    _fusionData: function(data, interval, aggregationInterval) {
+    _fusionData: function(data, interval, aggregationInterval, dataSelector) {
         var options = this.getOptions(),
             aggregationMethod = this._getAggregationMethod(),
             underlyingData = data.map(function(item) { return item.data; }),
@@ -863,7 +860,7 @@ Series.prototype = {
                 intervalEnd: typeUtils.isDate(interval) ? new Date(interval.getTime() + aggregationInterval) : interval + aggregationInterval
             },
             aggregatedData = aggregationMethod(aggregationInfo, this),
-            pointData = aggregatedData && this._getPointData(aggregatedData, options);
+            pointData = aggregatedData && dataSelector(aggregatedData, options);
 
         if(pointData && this._checkData(pointData)) {
             pointData.aggregationInfo = aggregationInfo;
@@ -879,7 +876,8 @@ Series.prototype = {
             pointData,
             minTick,
             aggregatedData,
-            state = 0;
+            state = 0,
+            dataSelector = this._getPointDataSelector();
 
         function addFirstDataItem(point) {
             dataInInterval.push(point);
@@ -911,7 +909,7 @@ Series.prototype = {
             } else if(!state && Math.abs(minTick - point.argument) < aggregationInterval) {
                 dataInInterval.push(point);
             } else if(!(state === 1 && point.argument < min) && !(state === 2 && point.argument > max)) {
-                pointData = that._fusionData(dataInInterval, minTick, aggregationInterval);
+                pointData = that._fusionData(dataInInterval, minTick, aggregationInterval, dataSelector);
 
                 if(pointData) {
                     aggregatedPoints.push(pointData);
@@ -926,7 +924,7 @@ Series.prototype = {
         }, []);
 
         if(dataInInterval.length) {
-            pointData = that._fusionData(dataInInterval, minTick, aggregationInterval);
+            pointData = that._fusionData(dataInInterval, minTick, aggregationInterval, dataSelector);
             if(pointData) {
                 aggregatedData.push(pointData);
             }

@@ -13,7 +13,6 @@ var _noop = require("../../core/utils/common").noop,
     objectUtils = require("../../core/utils/object"),
     baseStackedSeries = {
         getErrorBarRangeCorrector: _noop,
-        _fillErrorBars: _noop,
         _calculateErrorBars: _noop,
         _updateOptions: function(options) {
             this._stackName = "axis_" + (options.axis || "default");
