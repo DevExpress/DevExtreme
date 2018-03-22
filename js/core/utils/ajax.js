@@ -241,122 +241,123 @@ var getRequestHeaders = function(options) {
     return headers;
 };
 
-module.exports = injector({
-    sendRequest: function(options) {
 
-        if(this.ajaxStrategy && !options.responseType && !options.upload) {
-            return this.ajaxStrategy(options);
-        }
+var sendRequest = function(options) {
 
-        var xhr = httpRequest.getXhr(),
-            d = options.deferred ? options.deferred : new Deferred(),
-            result = d.promise(),
-            async = isDefined(options.async) ? options.async : true,
-            dataType = options.dataType,
-            timeout = options.timeout || 0,
-            timeoutId;
-
-        options.crossDomain = isCrossDomain(options.url);
-        var needScriptEvaluation = dataType === "jsonp" || dataType === "script";
-
-        if(options.cache === undefined) {
-            options.cache = !needScriptEvaluation;
-        }
-
-        var callbackName = getJsonpOptions(options),
-            headers = getRequestHeaders(options),
-            requestOptions = getRequestOptions(options, headers),
-            url = requestOptions.url,
-            parameters = requestOptions.parameters;
-
-        if(callbackName) {
-            window[callbackName] = function(data) {
-                d.resolve(data, SUCCESS, xhr);
-            };
-        }
-
-        if(options.crossDomain && needScriptEvaluation) {
-            var reject = function() {
-                    d.reject(xhr, ERROR);
-                },
-                resolve = function() {
-                    if(dataType === "jsonp") return;
-                    d.resolve(null, SUCCESS, xhr);
-                };
-
-            evalCrossDomainScript(url).then(resolve, reject);
-            return result;
-        }
-
-        if(options.crossDomain && !("withCredentials" in xhr)) {
-            d.reject(xhr, ERROR);
-            return result;
-        }
-
-        xhr.open(
-            getMethod(options),
-            url,
-            async,
-            options.username,
-            options.password);
-
-        if(async) {
-            xhr.timeout = timeout;
-            timeoutId = setHttpTimeout(timeout, xhr, d);
-        }
-
-        xhr["onreadystatechange"] = function(e) {
-            if(xhr.readyState === 4) {
-                clearTimeout(timeoutId);
-                if(isStatusSuccess(xhr.status)) {
-                    if(hasContent(xhr.status)) {
-                        postProcess(d, xhr, dataType);
-                    } else {
-                        d.resolve(null, NO_CONTENT, xhr);
-                    }
-                } else {
-                    d.reject(xhr, xhr.customStatus || ERROR);
-                }
-            }
-        };
-
-        if(options.upload) {
-            xhr.upload["onprogress"] = options.upload["onprogress"];
-            xhr.upload["onloadstart"] = options.upload["onloadstart"];
-            xhr.upload["onabort"] = options.upload["onabort"];
-        }
-
-        if(options.xhrFields) {
-            for(var field in options.xhrFields) {
-                xhr[field] = options.xhrFields[field];
-            }
-        }
-
-        if(options.responseType === "arraybuffer") {
-            xhr.responseType = options.responseType;
-        }
-
-        for(var name in headers) {
-            if(headers.hasOwnProperty(name) && isDefined(headers[name])) {
-                xhr.setRequestHeader(name, headers[name]);
-            }
-        }
-
-        if(options.beforeSend) {
-            options.beforeSend(xhr);
-        }
-
-        xhr.send(parameters);
-
-        result.abort = function() {
-            xhr.abort();
-        };
-
-        return result;
-    },
-
-    setStrategy: function(s) {
-        ajaxStrategy = s;
+    if(this.ajaxStrategy && !options.responseType && !options.upload) {
+        return this.ajaxStrategy(options);
     }
-});
 
+    var xhr = httpRequest.getXhr(),
+        d = options.deferred ? options.deferred : new Deferred(),
+        result = d.promise(),
+        async = isDefined(options.async) ? options.async : true,
+        dataType = options.dataType,
+        timeout = options.timeout || 0,
+        timeoutId;
+
+    options.crossDomain = isCrossDomain(options.url);
+    var needScriptEvaluation = dataType === "jsonp" || dataType === "script";
+
+    if(options.cache === undefined) {
+        options.cache = !needScriptEvaluation;
+    }
+
+    var callbackName = getJsonpOptions(options),
+        headers = getRequestHeaders(options),
+        requestOptions = getRequestOptions(options, headers),
+        url = requestOptions.url,
+        parameters = requestOptions.parameters;
+
+    if(callbackName) {
+        window[callbackName] = function(data) {
+            d.resolve(data, SUCCESS, xhr);
+        };
+    }
+
+    if(options.crossDomain && needScriptEvaluation) {
+        var reject = function() {
+                d.reject(xhr, ERROR);
+            },
+            resolve = function() {
+                if(dataType === "jsonp") return;
+                d.resolve(null, SUCCESS, xhr);
+            };
+
+        evalCrossDomainScript(url).then(resolve, reject);
+        return result;
+    }
+
+    if(options.crossDomain && !("withCredentials" in xhr)) {
+        d.reject(xhr, ERROR);
+        return result;
+    }
+
+    xhr.open(
+        getMethod(options),
+        url,
+        async,
+        options.username,
+        options.password);
+
+    if(async) {
+        xhr.timeout = timeout;
+        timeoutId = setHttpTimeout(timeout, xhr, d);
+    }
+
+    xhr["onreadystatechange"] = function(e) {
+        if(xhr.readyState === 4) {
+            clearTimeout(timeoutId);
+            if(isStatusSuccess(xhr.status)) {
+                if(hasContent(xhr.status)) {
+                    postProcess(d, xhr, dataType);
+                } else {
+                    d.resolve(null, NO_CONTENT, xhr);
+                }
+            } else {
+                d.reject(xhr, xhr.customStatus || ERROR);
+            }
+        }
+    };
+
+    if(options.upload) {
+        xhr.upload["onprogress"] = options.upload["onprogress"];
+        xhr.upload["onloadstart"] = options.upload["onloadstart"];
+        xhr.upload["onabort"] = options.upload["onabort"];
+    }
+
+    if(options.xhrFields) {
+        for(var field in options.xhrFields) {
+            xhr[field] = options.xhrFields[field];
+        }
+    }
+
+    if(options.responseType === "arraybuffer") {
+        xhr.responseType = options.responseType;
+    }
+
+    for(var name in headers) {
+        if(headers.hasOwnProperty(name) && isDefined(headers[name])) {
+            xhr.setRequestHeader(name, headers[name]);
+        }
+    }
+
+    if(options.beforeSend) {
+        options.beforeSend(xhr);
+    }
+
+    xhr.send(parameters);
+
+    result.abort = function() {
+        xhr.abort();
+    };
+
+    return result;
+};
+
+var setStrategy = function(s) {
+    ajaxStrategy = s;
+};
+
+exports.sendRequest = injector({ sendRequest: sendRequest });
+exports.setStrategy = setStrategy;
