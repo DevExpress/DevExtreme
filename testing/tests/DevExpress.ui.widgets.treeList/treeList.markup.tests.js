@@ -67,18 +67,19 @@ QUnit.test("markup with dataSource", function(assert) {
 
     assert.equal($rowsView.length, 1, "rows view");
     assert.notOk($rowsView.hasClass("dx-empty"), "rows view is not empty");
-    assert.equal($rowsView.find("table").length, 2, "main table + virtual table");
+    assert.equal($rowsView.find("table").length, 1, "one table");
     assert.equal($rowsView.find(".dx-data-row").length, 2, "data row count");
     assert.equal($rowsView.find(".dx-data-row td").length, 6, "rows view has 6 data cells");
-    assert.equal($rowsView.find("td").length, 12, "rows view has 12 cells (6 data cells + 3 free space cells + 3 virtual cells)");
+    assert.equal($rowsView.find("td").length, 15, "rows view has 15 cells (6 data cells + 3 free space cells + 6 virtual cells)");
 
-    assert.equal($rowsView.find("td").eq(0).find(".dx-treelist-expanded").length, 1, "first row is expanded");
-    assert.equal($rowsView.find("td").eq(0).text(), "1", "value of the first cell of the first row");
-    assert.equal($rowsView.find("td").eq(1).text(), "0", "value of the second cell of the first row");
-    assert.equal($rowsView.find("td").eq(2).text(), "Alex", "value of the third cell of the first row");
+    var $dataCells = $rowsView.find(".dx-data-row td");
+    assert.equal($dataCells.find(".dx-treelist-expanded").length, 1, "first row is expanded");
+    assert.equal($dataCells.eq(0).text(), "1", "value of the first cell of the first row");
+    assert.equal($dataCells.eq(1).text(), "0", "value of the second cell of the first row");
+    assert.equal($dataCells.eq(2).text(), "Alex", "value of the third cell of the first row");
 
-    assert.equal($rowsView.find("td").eq(3).find(".dx-treelist-collapsed").length, 1, "first row is collapsed");
-    assert.equal($rowsView.find("td").eq(3).text(), "2", "value of the first cell of the first row");
-    assert.equal($rowsView.find("td").eq(4).text(), "1", "value of the second cell of the first row");
-    assert.equal($rowsView.find("td").eq(5).text(), "Bob", "value of the third cell of the first row");
+    assert.equal($dataCells.eq(3).find(".dx-treelist-collapsed").length, 1, "first row is collapsed");
+    assert.equal($dataCells.eq(3).text(), "2", "value of the first cell of the first row");
+    assert.equal($dataCells.eq(4).text(), "1", "value of the second cell of the first row");
+    assert.equal($dataCells.eq(5).text(), "Bob", "value of the third cell of the first row");
 });

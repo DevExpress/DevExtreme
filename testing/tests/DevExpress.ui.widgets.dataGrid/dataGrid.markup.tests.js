@@ -126,9 +126,10 @@ QUnit.test("markup with virtual scrolling", function(assert) {
     });
 
     this.clock.tick(30);
-
-    assert.equal($element.find(".dx-datagrid-rowsview .dx-datagrid-table").length, 2, "two row tables are rendered");
-    assert.equal($element.find(".dx-datagrid-rowsview .dx-datagrid-table").eq(0).hasClass("dx-datagrid-table-content"), windowUtils.hasWindow(), "table-content class");
+    var $virtualRows = $element.find(".dx-datagrid-rowsview .dx-datagrid-table .dx-virtual-row");
+    assert.equal($virtualRows.length, 2, "two virtual rows are rendered");
+    assert.equal($virtualRows.get(0).style.height, "0px", "first virtual row height");
+    assert.equal($virtualRows.get(1).style.height, "0px", "second virtual row height");
 });
 
 QUnit.test("markup with editing", function(assert) {

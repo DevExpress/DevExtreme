@@ -294,9 +294,10 @@ exports.VirtualScrollController = Class.inherit((function() {
             var that = this,
                 scrollingTimeout = Math.min(that.option("scrolling.timeout") || 0, that._dataSource.changingDuration());
 
-            if(isNear && scrollingTimeout < that.option("scrolling.renderingThreshold")) {
+            if(scrollingTimeout < that.option("scrolling.renderingThreshold")) {
                 scrollingTimeout = that.option("scrolling.minTimeout") || 0;
             }
+
 
             clearTimeout(that._scrollTimeoutID);
             if(scrollingTimeout > 0) {
@@ -344,11 +345,11 @@ exports.VirtualScrollController = Class.inherit((function() {
                 }
             }
         },
-        getContentOffset: function() {
+        getContentOffset: function(type) {
             var that = this,
                 virtualItemsCount = that.virtualItemsCount();
 
-            return virtualItemsCount ? Math.floor(virtualItemsCount.begin * that._viewportItemSize * that._sizeRatio) : 0;
+            return virtualItemsCount ? Math.floor((type ? virtualItemsCount[type] : virtualItemsCount.begin) * that._viewportItemSize * that._sizeRatio) : 0;
         },
         getVirtualContentSize: function() {
             var that = this,

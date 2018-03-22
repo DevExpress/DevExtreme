@@ -317,6 +317,17 @@ var baseFixedColumns = {
         }
     },
 
+    _createColGroup: function(columns) {
+        if(this.option("advancedRendering") && this._isFixedTableRendering) {
+            var visibleColumns = this._columnsController.getVisibleColumns();
+            var useVisibleColumns = visibleColumns.filter(function(column) { return !column.width; }).length;
+            if(useVisibleColumns) {
+                columns = visibleColumns;
+            }
+        }
+        return this.callBase(columns);
+    },
+
     _getClientHeight: function(element) {
         var boundingClientRectElement = element.getBoundingClientRect && element.getBoundingClientRect();
 
@@ -325,8 +336,6 @@ var baseFixedColumns = {
 
     synchronizeRows: function() {
         var that = this,
-            rows = that._getRows(),
-            detailRowCount = rows.filter(function(row) { return row.rowType && row.rowType.indexOf("detail") === 0; }).length,
             rowHeight,
             fixedRowHeight,
             rowHeights = [],
@@ -337,9 +346,6 @@ var baseFixedColumns = {
             $rowElements,
             $fixedRowElements;
 
-        if(that.option("advancedRendering") && !detailRowCount) {
-            return;
-        }
 
         if(that._isFixedColumns && that._tableElement && that._fixedTableElement) {
             heightTable = that._getClientHeight(that._tableElement.get(0));
