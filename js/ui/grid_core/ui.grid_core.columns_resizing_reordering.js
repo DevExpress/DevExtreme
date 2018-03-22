@@ -442,10 +442,10 @@ var DraggingHeaderView = modules.View.inherit({
         that._controller.drag(that._dropOptions);
 
         that.element().css({
-            textAlign: columnElement && columnElement.css("text-align"),
+            textAlign: columnElement && columnElement.css("textAlign"),
             height: columnElement && columnElement.height(),
             width: columnElement && columnElement.width(),
-            whiteSpace: columnElement && columnElement.css("white-space")
+            whiteSpace: columnElement && columnElement.css("whiteSpace")
         })
             .addClass(that.addWidgetPrefix(HEADERS_DRAG_ACTION_CLASS))
             .text(options.sourceColumn.caption);

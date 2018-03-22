@@ -165,11 +165,11 @@ QUnit.test("Text alignment by default", function(assert) {
     $summaryItems = $(".dx-datagrid-summary-item");
 
     assert.equal($summaryItems.length, 5, "cells count");
-    assert.equal($summaryItems.eq(0).css("text-align"), "left");
-    assert.equal($summaryItems.eq(1).css("text-align"), "left");
-    assert.equal($summaryItems.eq(2).css("text-align"), "left");
-    assert.equal($summaryItems.eq(3).css("text-align"), "right");
-    assert.equal($summaryItems.eq(4).css("text-align"), "right");
+    assert.equal($summaryItems.eq(0).css("textAlign"), "left");
+    assert.equal($summaryItems.eq(1).css("textAlign"), "left");
+    assert.equal($summaryItems.eq(2).css("textAlign"), "left");
+    assert.equal($summaryItems.eq(3).css("textAlign"), "right");
+    assert.equal($summaryItems.eq(4).css("textAlign"), "right");
 });
 
 QUnit.test("Customize text alignment", function(assert) {
@@ -192,11 +192,11 @@ QUnit.test("Customize text alignment", function(assert) {
     $summaryItems = $(".dx-datagrid-summary-item");
 
     assert.equal($summaryItems.length, 5, "cells count");
-    assert.equal($summaryItems.eq(0).css("text-align"), "center", "count");
-    assert.equal($summaryItems.eq(1).css("text-align"), "center", "min");
-    assert.equal($summaryItems.eq(2).css("text-align"), "center", "max");
-    assert.equal($summaryItems.eq(3).css("text-align"), "right", "sum");
-    assert.equal($summaryItems.eq(4).css("text-align"), "right", "avg");
+    assert.equal($summaryItems.eq(0).css("textAlign"), "center", "count");
+    assert.equal($summaryItems.eq(1).css("textAlign"), "center", "min");
+    assert.equal($summaryItems.eq(2).css("textAlign"), "center", "max");
+    assert.equal($summaryItems.eq(3).css("textAlign"), "right", "sum");
+    assert.equal($summaryItems.eq(4).css("textAlign"), "right", "avg");
 });
 
 QUnit.test("Repeated rendering", function(assert) {

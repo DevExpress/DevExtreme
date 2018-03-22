@@ -315,7 +315,7 @@ QUnit.test("Changing the input value of closed colorbox must change color previe
 
     $("." + COLOR_BOX_INPUT_CLASS).val("#0000ff").trigger("change");
 
-    assert.equal(new Color($colorBoxResultsPreview.css("background-color")).toHex().toLowerCase(), "#0000ff");
+    assert.equal(new Color($colorBoxResultsPreview.css("backgroundColor")).toHex().toLowerCase(), "#0000ff");
 });
 
 QUnit.test("Changing the input value of opened colorbox must change color preview and dropdown elements", function(assert) {
@@ -324,7 +324,7 @@ QUnit.test("Changing the input value of opened colorbox must change color previe
 
     $("." + COLOR_BOX_INPUT_CLASS).val("#0000ff").trigger("change");
 
-    assert.equal(new Color($colorBoxResultsPreview.css("background-color")).toHex().toLowerCase(), "#0000ff");
+    assert.equal(new Color($colorBoxResultsPreview.css("backgroundColor")).toHex().toLowerCase(), "#0000ff");
 
     this.checkColor({
         r: 0,
@@ -342,8 +342,8 @@ QUnit.test("Update colors preview", function(assert) {
 
     showColorBox.call(this);
 
-    var currentColor = colorPicker._$currentColor.css("background-color"),
-        newColor = colorPicker._$newColor.css("background-color");
+    var currentColor = colorPicker._$currentColor.css("backgroundColor"),
+        newColor = colorPicker._$newColor.css("backgroundColor");
 
     assert.equal(new Color(currentColor).toHex(), "#d0ff00");
     assert.equal(new Color(newColor).toHex(), "#d0ff00");
@@ -356,7 +356,7 @@ QUnit.test("Validate value of colorbox input", function(assert) {
 
     $($colorBoxInput.val("unknown value")).trigger("change");
 
-    assert.equal(new Color($colorBoxResultsPreview.css("background-color")).toHex().toLowerCase(), "#ff0000");
+    assert.equal(new Color($colorBoxResultsPreview.css("backgroundColor")).toHex().toLowerCase(), "#ff0000");
     assert.equal($colorBoxInput.val(), "#ff0000");
 });
 
@@ -367,7 +367,7 @@ QUnit.test("Validate value of colorbox hex-input", function(assert) {
 
     $($colorBoxInput.val("#zzzzzz")).trigger("change");
 
-    assert.equal(new Color($colorBoxResultsPreview.css("background-color")).toHex().toLowerCase(), "#ff0000");
+    assert.equal(new Color($colorBoxResultsPreview.css("backgroundColor")).toHex().toLowerCase(), "#ff0000");
     assert.equal($colorBoxInput.val(), "#ff0000");
 });
 
@@ -505,7 +505,7 @@ QUnit.test("Color changed in preview if value is valid", function(assert) {
 
     $input.val("");
     keyboard.type("#0");
-    var previewColor = new Color($colorPreview.css("background-color"));
+    var previewColor = new Color($colorPreview.css("backgroundColor"));
     var currentColor = new Color(colorBox.option("value"));
 
     assert.equal(previewColor.toHex(), currentColor.toHex(), "show current value when color is invalid");
@@ -514,7 +514,7 @@ QUnit.test("Color changed in preview if value is valid", function(assert) {
         .type("0f")
         .press("enter");
 
-    previewColor = new Color($colorPreview.css("background-color"));
+    previewColor = new Color($colorPreview.css("backgroundColor"));
     currentColor = new Color($input.val());
 
     assert.equal(previewColor.toHex(), currentColor.toHex(), "show color if input value is valid");

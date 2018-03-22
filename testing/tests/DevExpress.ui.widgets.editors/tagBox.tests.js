@@ -3737,7 +3737,7 @@ QUnit.test("it is should be possible to scroll tag container natively on mobile 
 
         var $tagContainer = $tagBox.find("." + TAGBOX_TAG_CONTAINER_CLASS);
 
-        assert.equal($tagContainer.css("overflow-x"), "auto", "the overflow css property is correct");
+        assert.equal($tagContainer.css("overflowX"), "auto", "the overflow css property is correct");
     } finally {
         devices.real(currentDevice);
         $tagBox && $tagBox.remove();
@@ -3821,9 +3821,9 @@ QUnit.test("tags container should be scrolled on mobile devices", function(asser
     var $container = this.$element.find("." + TAGBOX_TAG_CONTAINER_CLASS);
 
     if(devices.real().deviceType === "desktop") {
-        assert.equal($container.css("overflow-x"), "hidden", "overflow-x has a 'hidden' value on desktop");
+        assert.equal($container.css("overflowX"), "hidden", "overflow-x has a 'hidden' value on desktop");
     } else {
-        assert.equal($container.css("overflow-x"), "auto", "overflow-x has a 'auto' value on mobile");
+        assert.equal($container.css("overflowX"), "auto", "overflow-x has a 'auto' value on mobile");
     }
 });
 

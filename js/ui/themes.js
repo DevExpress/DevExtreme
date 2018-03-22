@@ -39,7 +39,7 @@ function readThemeMarker() {
         result;
 
     try {
-        result = element.css("font-family");
+        result = element.css("fontFamily");
         if(!result) {
             return null;
         }

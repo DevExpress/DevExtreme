@@ -192,8 +192,8 @@ var testBaselineOffset = function($labelContainer, $valueContainer) {
     try {
         $imgForLabel = $("<img/>").height(1).width(1).appendTo($labelContainer);
         $imgForInput = $("<img/>").height(1).width(1).appendTo($valueContainer);
-        $imgForLabel.closest(".dx-field-label").css("white-space", "nowrap");
-        $imgForInput.closest(".dx-field-value").css("white-space", "nowrap");
+        $imgForLabel.closest(".dx-field-label").css("whiteSpace", "nowrap");
+        $imgForInput.closest(".dx-field-value").css("whiteSpace", "nowrap");
         QUnit.assert.roughEqual($imgForLabel.offset().top, $imgForInput.offset().top, 0.99);
     } finally {
         $imgForLabel.remove();

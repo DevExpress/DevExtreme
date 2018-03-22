@@ -2195,11 +2195,11 @@ QUnit.test("switching useNative to false turns off native scrolling", function(a
     });
 
     var $container = $scrollable.find("." + SCROLLABLE_CONTAINER_CLASS);
-    assert.notEqual($container.css("overflow-y"), "hidden");
+    assert.notEqual($container.css("overflowY"), "hidden");
 
     $scrollable.dxScrollable("option", "useNative", false);
 
-    assert.equal($container.css("overflow-y"), "hidden");
+    assert.equal($container.css("overflowY"), "hidden");
 });
 
 QUnit.test("scrollToElement", function(assert) {

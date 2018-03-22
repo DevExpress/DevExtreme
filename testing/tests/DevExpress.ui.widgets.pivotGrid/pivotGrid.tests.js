@@ -1221,7 +1221,7 @@ QUnit.test("onCellPrepared event cellElement must be attached to dom and have co
         onCellPrepared: function(e) {
             if(e.cell.text === "2010") {
                 assert.equal($(e.cellElement).closest(document).length, 1, "cellElement is attached to dom");
-                assert.equal($(e.cellElement).css("text-align"), "left", "cellElement text-align");
+                assert.equal($(e.cellElement).css("textAlign"), "left", "cellElement text-align");
                 isCellPreparedCalled = true;
             }
         }
@@ -2066,7 +2066,7 @@ QUnit.test("pivot grid render", function(assert) {
 
     assert.strictEqual(pivotGrid.$element().css("overflow"), "hidden");
     // T428108
-    assert.strictEqual($(mainTable).css("table-layout"), "auto", "table-layout css property on pivotGrid table element");
+    assert.strictEqual($(mainTable).css("tableLayout"), "auto", "table-layout css property on pivotGrid table element");
 });
 
 QUnit.test("disable word wrapping", function(assert) {

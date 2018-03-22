@@ -95,7 +95,7 @@ QUnit.test("DropDown menu should be painted", function(assert) {
     this.color = "#0000ff";
     var $dropDownMenu = this.renderDropDownAppointmentsContainer();
 
-    assert.equal(new Color($dropDownMenu.css("background-color")).toHex(), this.color, "Color is OK");
+    assert.equal(new Color($dropDownMenu.css("backgroundColor")).toHex(), this.color, "Color is OK");
 });
 
 QUnit.test("DropDown menu should not be painted if items have different colors", function(assert) {
@@ -108,7 +108,7 @@ QUnit.test("DropDown menu should not be painted if items have different colors",
         colors: ["#fff000", "#000fff"]
     });
 
-    assert.notEqual(new Color($dropDownMenu.css("background-color")).toHex(), this.color, "Color is OK");
+    assert.notEqual(new Color($dropDownMenu.css("backgroundColor")).toHex(), this.color, "Color is OK");
 });
 
 QUnit.test("DropDown menu should have a correct markup", function(assert) {

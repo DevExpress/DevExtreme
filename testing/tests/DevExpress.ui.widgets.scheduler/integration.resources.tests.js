@@ -341,8 +341,8 @@ QUnit.test("Paint appts if groups array don't contain all resources", function(a
 
     var $appointments = this.instance.$element().find(".dx-scheduler-appointment");
 
-    assert.equal(new Color($appointments.eq(0).css("background-color")).toHex(), "#ff0000", "Color is OK");
-    assert.equal(new Color($appointments.eq(1).css("background-color")).toHex(), "#0000ff", "Color is OK");
+    assert.equal(new Color($appointments.eq(0).css("backgroundColor")).toHex(), "#ff0000", "Color is OK");
+    assert.equal(new Color($appointments.eq(1).css("backgroundColor")).toHex(), "#0000ff", "Color is OK");
 });
 
 QUnit.test("Resources should not be reloaded when details popup is opening", function(assert) {
@@ -429,5 +429,5 @@ QUnit.test("Appointment should have correct color after resources option changin
         }]);
 
     var $appointments = this.instance.$element().find(".dx-scheduler-appointment");
-    assert.equal(new Color($appointments.eq(0).css("background-color")).toHex(), "#ff0000", "Color is OK");
+    assert.equal(new Color($appointments.eq(0).css("backgroundColor")).toHex(), "#ff0000", "Color is OK");
 });

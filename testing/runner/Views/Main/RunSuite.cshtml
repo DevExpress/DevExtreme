@@ -23,6 +23,7 @@
         if(!isSelfSufficientTest) {
             if(Model.NoJQuery || isNoJQueryTest || isServerSideTest) {
                 yield return Url.Content("~/testing/helpers/jQueryEventsPatch.js");
+                yield return Url.Content("~/testing/helpers/argumentsValidator.js");
                 yield return Url.Content("~/testing/helpers/dataPatch.js");
                 yield return Url.Content("~/artifacts/transpiled/integration/jquery/component_registrator.js");
             } else {

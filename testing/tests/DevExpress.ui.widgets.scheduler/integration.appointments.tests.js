@@ -62,7 +62,7 @@ QUnit.module("Integration: Appointments", {
             this.instance = $("#scheduler").dxScheduler($.extend(options, { maxAppointmentsPerCell: options && options.maxAppointmentsPerCell || null })).dxScheduler("instance");
         };
         this.getAppointmentColor = function($task, checkedProperty) {
-            checkedProperty = checkedProperty || "background-color";
+            checkedProperty = checkedProperty || "backgroundColor";
             return new Color($task.css(checkedProperty)).toHex();
         };
         this.clock = sinon.useFakeTimers();

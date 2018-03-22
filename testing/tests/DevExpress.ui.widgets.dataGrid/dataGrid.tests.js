@@ -3819,7 +3819,7 @@ QUnit.test("Keep horizontal scroller position after grouping column with native 
 
 // T362355
 QUnit.test("Keep vertical browser scroll position after refresh with freespace row", function(assert) {
-    $("#qunit-fixture").css("overflow-y", "auto").height(50);
+    $("#qunit-fixture").css("overflowY", "auto").height(50);
 
     var items = [];
     for(var i = 0; i < 21; i++) {
@@ -6460,7 +6460,7 @@ QUnit.test("Group row has correct text-align in RTL", function(assert) {
 
     // assert
     assert.ok(groupedRows.length, "We have grouped row");
-    assert.equal(cells.eq(1).css("text-align"), "right", "Grouped cell has correct text-align");
+    assert.equal(cells.eq(1).css("textAlign"), "right", "Grouped cell has correct text-align");
 });
 
 QUnit.test("CellTemplate and master-detail template cells has correct text-align in RTL", function(assert) {
@@ -6496,7 +6496,7 @@ QUnit.test("CellTemplate and master-detail template cells has correct text-align
             }
         }),
         getCellTextAlignByButtonNumber = function(buttonNumber) {
-            return $(dataGrid.$element()).find(".dx-button").eq(buttonNumber).closest("td").css("text-align");
+            return $(dataGrid.$element()).find(".dx-button").eq(buttonNumber).closest("td").css("textAlign");
         };
 
     // assert

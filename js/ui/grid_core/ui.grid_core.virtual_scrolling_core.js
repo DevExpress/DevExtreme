@@ -72,7 +72,7 @@ exports.subscribeToExternalScrollers = function($element, scrollChangedHandler, 
         var eventsStrategy = widgetScrollStrategy;
 
         if(!scrollable) {
-            scrollable = isDocument && $(window) || $scrollElement.css("overflow-y") === "auto" && $scrollElement;
+            scrollable = isDocument && $(window) || $scrollElement.css("overflowY") === "auto" && $scrollElement;
             eventsStrategy = eventsEngine;
             if(!scrollable) return;
         }

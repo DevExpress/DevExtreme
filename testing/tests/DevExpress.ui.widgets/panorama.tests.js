@@ -60,13 +60,13 @@ var position = function($element) {
 };
 
 var backgroundPosition = function($element) {
-    return parseInt($element.css("background-position").split(" ")[0], 10);
+    return parseInt($element.css("backgroundPosition").split(" ")[0], 10);
     // TODO: use when jQuery solve bug in ie10
     // return parseInt($element.css("background-position-x"), 10);
 };
 
 var moveBackground = function($element, position) {
-    $element.css("background-position", position + "px 0%");
+    $element.css("backgroundPosition", position + "px 0%");
     // TODO: use when jQuery solve bug in firefox
     // $element.css("background-position-x", position);
 };

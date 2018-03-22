@@ -808,10 +808,10 @@ QUnit.test("shading color should be customized by option", function(assert) {
         }).dxOverlay("instance"),
         $wrapper = $(overlay.$content().parent());
 
-    assert.ok(/rgb\(255,\s?0,\s?0\)/.test($wrapper.css("background-color")));
+    assert.ok(/rgb\(255,\s?0,\s?0\)/.test($wrapper.css("backgroundColor")));
 
     overlay.option("shading", false);
-    assert.ok(!/rgb\(255,\s?0,\s?0\)/.test($wrapper.css("background-color")));
+    assert.ok(!/rgb\(255,\s?0,\s?0\)/.test($wrapper.css("backgroundColor")));
 });
 
 

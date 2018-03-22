@@ -37,7 +37,7 @@ var renderSummaryCell = function(cell, options) {
             for(i = 0; i < summaryItems.length; i++) {
                 summaryItem = summaryItems[i];
                 $summaryItems.push($("<div>")
-                    .css("text-align", summaryItem.alignment || column.alignment)
+                    .css("textAlign", summaryItem.alignment || column.alignment)
                     .addClass(DATAGRID_SUMMARY_ITEM_CLASS)
                     .addClass(DATAGRID_TEXT_CONTENT_CLASS)
                     .addClass(summaryItem.cssClass)

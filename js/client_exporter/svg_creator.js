@@ -87,7 +87,7 @@ exports.svgCreator = {
             svgElem = elem.childNodes[0],
             $svgObject = $(svgElem);
 
-        $svgObject.css("background-color", options.backgroundColor);
+        $svgObject.css("backgroundColor", options.backgroundColor);
         markup = xmlVersion + getSvgMarkup($svgObject.get(0));
 
         that._prepareImages(svgElem).done(function() {

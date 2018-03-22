@@ -76,7 +76,7 @@ QUnit.test("onContentReady fired after the widget is fully ready", function(asse
         visible: true,
         indicatorSrc: url,
         onContentReady: function(e) {
-            assert.ok($(e.element).find("." + LOADINDICATOR_IMAGE).css("background-image"));
+            assert.ok($(e.element).find("." + LOADINDICATOR_IMAGE).css("backgroundImage"));
             assert.ok($(e.element).hasClass(LOADINDICATOR_CLASS));
         }
     });

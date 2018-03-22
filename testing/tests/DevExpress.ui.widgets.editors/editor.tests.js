@@ -458,7 +458,7 @@ var Fixture = Class.inherit({
         });
 
         var $content = $element.find(".dx-invalid-message .dx-overlay-content");
-        assert.equal($content.css("white-space"), "normal", "text is not wrapped");
+        assert.equal($content.css("whiteSpace"), "normal", "text is not wrapped");
     });
 
     QUnit.test("Validation message should have correct width for small content", function(assert) {

@@ -43,7 +43,7 @@ var initMobileViewport = function(options) {
             "overflow": "hidden"
         });
     } else {
-        $("html").css("-ms-overflow-style", "-ms-autohiding-scrollbar");
+        $("html").css("msOverflowStyle", "-ms-autohiding-scrollbar");
     }
 
     if(!allowSelection && support.supportProp("user-select")) {
@@ -51,7 +51,7 @@ var initMobileViewport = function(options) {
     }
 
     $(metaSelector).attr("content", metaVerbs.join());
-    $("html").css("-ms-touch-action", msTouchVerbs.join(" ") || "none");
+    $("html").css("msTouchAction", msTouchVerbs.join(" ") || "none");
 
     realDevice = devices.real();
 

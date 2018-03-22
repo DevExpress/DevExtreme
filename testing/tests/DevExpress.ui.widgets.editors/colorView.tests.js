@@ -121,7 +121,7 @@ QUnit.test("Render palette", function(assert) {
         $gradientWhite = $palette.find(".dx-colorview-palette-gradient-white"),
         $gradientBlack = $palette.find(".dx-colorview-palette-gradient-black"),
         $colorChooser = $palette.find(".dx-colorview-palette-handle"),
-        paletteBackground = $palette.css("background-color");
+        paletteBackground = $palette.css("backgroundColor");
 
     assert.equal($palette.length, 1);
     assert.equal(new Color(paletteBackground).toHex(), "#ff0000");
@@ -723,7 +723,7 @@ QUnit.test("Preview for current color should be updated when value was changed",
     }).dxColorView("instance");
 
     colorView.option("value", "green");
-    assert.equal(new Color(colorView._$currentColor.css("background-color")).toHex(), "#008000");
+    assert.equal(new Color(colorView._$currentColor.css("backgroundColor")).toHex(), "#008000");
 });
 
 QUnit.test("Click on label should not focus the input (T179488)", function(assert) {

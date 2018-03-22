@@ -28,6 +28,13 @@ var DRAG_START_EVENT_NAME = eventUtils.addNamespace(dragEvents.start, "dropDownA
     DRAG_UPDATE_EVENT_NAME = eventUtils.addNamespace(dragEvents.move, "dropDownAppointments"),
     DRAG_END_EVENT_NAME = eventUtils.addNamespace(dragEvents.end, "dropDownAppointments");
 
+var SIDE_BORDER_COLOR_STYLES = {
+    "left": "borderLeftColor",
+    "top": "borderTopColor",
+    "right": "borderRightColor",
+    "bottom": "borderBottomColor"
+};
+
 var dropDownAppointments = Class.inherit({
     render: function(options, instance) {
         var coordinates = options.coordinates,
@@ -90,7 +97,7 @@ var dropDownAppointments = Class.inherit({
             }
 
             if(color && paintButton) {
-                $menu.css("background-color", color);
+                $menu.css("backgroundColor", color);
             }
         }).bind(this));
     },
@@ -102,7 +109,7 @@ var dropDownAppointments = Class.inherit({
     },
 
     _applyInnerShadow: function($element) {
-        $element.css("box-shadow", "inset " + $element.outerWidth() + "px 0 0 0 rgba(0, 0, 0, 0.3)");
+        $element.css("boxShadow", "inset " + $element.outerWidth() + "px 0 0 0 rgba(0, 0, 0, 0.3)");
     },
 
     _createAppointmentClickAction: function() {
@@ -267,7 +274,7 @@ var dropDownAppointments = Class.inherit({
         }
 
         color && color.done((function(color) {
-            appointmentElement.css("border-" + borderSide + "-color", color);
+            appointmentElement.css(SIDE_BORDER_COLOR_STYLES[borderSide], color);
         }).bind(this));
 
         var startDate = this.instance.fire("getField", "startDate", appointmentData),
