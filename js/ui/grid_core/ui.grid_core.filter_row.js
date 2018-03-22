@@ -142,14 +142,12 @@ var ColumnHeadersViewFilterRowExtender = (function() {
         var value = options.value === "" ? null : options.value,
             $editorContainer = options.container,
             column = that._columnsController.columnOption(options.column.index),
-            filterValue = getFilterValue(that, column.index, $editorContainer),
-            isOnClickMode = isOnClickApplyFilterMode(that),
-            normalizedValue = normalizeFilterValue(that, value, column, $editorContainer);
+            filterValue = getFilterValue(that, column.index, $editorContainer);
 
         if(!isDefined(filterValue) && !isDefined(value)) return;
 
         that._applyFilterViewController.setHighLight($editorContainer, filterValue !== value);
-        that._columnsController.columnOption(column.index, isOnClickMode ? "bufferedFilterValue" : "filterValue", normalizedValue, options.notFireEvent);
+        that._columnsController.columnOption(column.index, isOnClickApplyFilterMode(that) ? "bufferedFilterValue" : "filterValue", normalizeFilterValue(that, value, column, $editorContainer), options.notFireEvent);
     };
 
     return {

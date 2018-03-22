@@ -139,8 +139,6 @@ var DataControllerFilterSyncExtender = {
         }
 
         var calculatedFilterValue = utils.getFilterExpression(filterValue, columns, [customOperations.anyOf(), customOperations.noneOf()], "filterBuilder");
-
-
         if(calculatedFilterValue) {
             filters.push(calculatedFilterValue);
         }

@@ -730,15 +730,6 @@ function filterHasField(filter, dataField) {
         return filter[0] === dataField;
     }
 
-    for(var i = 0; i < filter.length; i++) {
-        var item = filter[i];
-        if(isCondition(item) || isGroup(item)) {
-            if(filterHasField(item, dataField)) {
-                return true;
-            }
-        }
-    }
-
     return filter.some(function(item) {
         return (isCondition(item) || isGroup(item)) && filterHasField(item, dataField);
     });
