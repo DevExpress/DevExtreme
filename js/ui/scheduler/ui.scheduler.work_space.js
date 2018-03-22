@@ -835,7 +835,9 @@ var SchedulerWorkSpace = Widget.inherit({
         this._renderDateTable();
 
         this._renderAllDayPanel();
-        this._setHorizontalGroupHeaderCellsHeight();
+        if(this._isHorizontalGroupedWorkSpace()) {
+            this._setHorizontalGroupHeaderCellsHeight();
+        }
 
         this._shader = new VerticalShader();
     },
@@ -1675,7 +1677,7 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _getCellByCoordinates: function(cellCoordinates, groupIndex) {
-        if(this.option("grouping")) {
+        if(this._isHorizontalGroupedWorkSpace()) {
             return this._$dateTable
                 .find("tr")
                 .eq(cellCoordinates.rowIndex + groupIndex * this._getRowCount())
@@ -1805,8 +1807,8 @@ var SchedulerWorkSpace = Widget.inherit({
             left: position.left + shift.left,
             rowIndex: position.rowIndex,
             cellIndex: position.cellIndex,
-            hMax: this.option("grouping") ? this.getMaxAllowedPosition()[0] : this.getMaxAllowedPosition()[groupIndex],
-            vMax: this.option("grouping") ? this.getMaxAllowedVerticalPosition()[groupIndex] : this.getMaxAllowedPosition()[0],
+            hMax: this._isHorizontalGroupedWorkSpace() ? this.getMaxAllowedPosition()[0] : this.getMaxAllowedPosition()[groupIndex],
+            vMax: this._isHorizontalGroupedWorkSpace() ? this.getMaxAllowedVerticalPosition()[groupIndex] : this.getMaxAllowedVerticalPosition()[0],
             groupIndex: groupIndex
         };
     },
