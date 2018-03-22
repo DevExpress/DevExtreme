@@ -92,7 +92,6 @@ var optionChangeExcluded = [
     "DateBox",
     "Gallery",
     "LoadPanel",
-    "Pivot",
     "PivotGrid",
     "Popover",
     "Popup",

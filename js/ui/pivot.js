@@ -302,6 +302,7 @@ var Pivot = CollectionWidget.inherit({
         this._renderContentTemplate();
         this.callBase();
     },
+
     _render: function() {
         this.callBase();
 
