@@ -14,20 +14,13 @@ require("common.css!");
 QUnit.testStart(function() {
     var markup =
         '<style>\
-            #animated {\
-                position: absolute\
-            }\
-            \
             .dx-pivottabs-container {\
                 height: 40px;\
             }\
-            \
             .dx-pivot-itemcontainer {\
                 height: 50px;\
             }\
         </style>\
-        \
-        <div id="animated"></div>\
         <div id="pivot"></div>';
 
     $("#qunit-fixture").html(markup);
