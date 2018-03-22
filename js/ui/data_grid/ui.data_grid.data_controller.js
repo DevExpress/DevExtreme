@@ -14,7 +14,7 @@ exports.DataController = dataControllerModule.controllers.data.inherit((function
         _getSpecificDataSourceOption: function() {
             var dataSource = this.option("dataSource");
 
-            if(!Array.isArray(dataSource) && this.option("keyExpr")) {
+            if(dataSource && !Array.isArray(dataSource) && this.option("keyExpr")) {
                 errors.log("W1011");
             }
 
