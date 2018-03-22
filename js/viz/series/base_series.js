@@ -405,12 +405,12 @@ Series.prototype = {
 
         that._calculateErrorBars(data);
 
-
-        points = data.reduce((points, pointDataItem, index) => {
+        points = data.reduce((points, pointDataItem) => {
             if(that._checkData(pointDataItem)) {
-                const oldPoint = that._getOldPoint(pointDataItem, oldPointsByArgument, index);
-                const point = that._createPoint(pointDataItem, index, oldPoint, pointDataItem.index);
-                pointDataItem.index = index;
+                const pointIndex = points.length;
+                const oldPoint = that._getOldPoint(pointDataItem, oldPointsByArgument, pointIndex);
+                const point = that._createPoint(pointDataItem, pointIndex, oldPoint, pointDataItem.index);
+                pointDataItem.index = pointIndex;
                 if(!oldPoint) {
                     allPoints.push(point);
                 }
