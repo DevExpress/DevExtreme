@@ -2011,11 +2011,14 @@ var Scheduler = Widget.inherit({
         delete this._workSpace;
 
         this._renderWorkSpace(groups);
-        this._workSpaceRecalculation.resolve();
-        this._appointments.option({
-            fixedContainer: this._workSpace.getFixedContainer(),
-            allDayContainer: this._workSpace.getAllDayContainer()
-        });
+
+        if(this._readyToRenderAppointments) {
+            this._workSpaceRecalculation.resolve();
+            this._appointments.option({
+                fixedContainer: this._workSpace.getFixedContainer(),
+                allDayContainer: this._workSpace.getAllDayContainer()
+            });
+        }
     },
 
     getWorkSpaceScrollable: function() {

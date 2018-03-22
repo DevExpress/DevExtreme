@@ -71,6 +71,38 @@ QUnit.module("Scheduler markup", moduleConfig, () => {
         assert.ok(instance._appointmentModel._dataSource instanceof DataSource.DataSource, "Task model has data source instance");
     });
 
+    QUnit.test("Scheduler should not fail when dataSource is set, timelineView", (assert) => {
+        const data = new DataSource.DataSource({
+            store: this.tasks
+        });
+
+        const instance = $("#scheduler").dxScheduler({
+            dataSource: data,
+            views: ["timelineDay"],
+            currentView: "timelineDay",
+            currentDate: new Date(2015, 1, 9)
+        }).dxScheduler("instance");
+
+        assert.ok(instance._appointmentModel instanceof dxSchedulerAppointmentModel, "Task model is initialized on scheduler init");
+        assert.ok(instance._appointmentModel._dataSource instanceof DataSource.DataSource, "Task model has data source instance");
+    });
+
+    QUnit.test("Scheduler should not fail when dataSource is set, agenda", (assert) => {
+        const data = new DataSource.DataSource({
+            store: this.tasks
+        });
+
+        const instance = $("#scheduler").dxScheduler({
+            dataSource: data,
+            views: ["agenda"],
+            currentView: "agenda",
+            currentDate: new Date(2015, 1, 9)
+        }).dxScheduler("instance");
+
+        assert.ok(instance._appointmentModel instanceof dxSchedulerAppointmentModel, "Task model is initialized on scheduler init");
+        assert.ok(instance._appointmentModel._dataSource instanceof DataSource.DataSource, "Task model has data source instance");
+    });
+
     QUnit.test("Header & work space currentDate should not contain information about hours, minutes, seconds", (assert) => {
         var currentDate = this.instance.option("currentDate"),
             header = this.instance.getHeader(),
