@@ -24,13 +24,21 @@ var baseRangeSeries = {
 
     getValueRangeInitialValue: scatterSeries.getValueRangeInitialValue,
 
-    _getPointData: function(data, options) {
-        return {
-            tag: data[options.tagField || "tag"],
-            minValue: data[options.rangeValue1Field || "val1"],
-            value: data[options.rangeValue2Field || "val2"],
-            argument: data[options.argumentField || "arg"],
-            data: data
+    _getPointDataSelector: function(data) {
+        const valueFields = this.getValueFields();
+        const val1Field = valueFields[0];
+        const val2Field = valueFields[1];
+        const tagField = this.getTagField();
+        const argumentField = this.getArgumentField();
+
+        return (data) => {
+            return {
+                tag: data[tagField],
+                minValue: data[val1Field],
+                value: data[val2Field],
+                argument: data[argumentField],
+                data: data
+            };
         };
     },
 

@@ -181,7 +181,7 @@ var ThemeManager = BaseThemeManager.inherit((function() {
         seriesTemplate() {
             const value = mergeOptions.call(this, "seriesTemplate");
             if(value) {
-                value.nameField = value.nameField || 'series';
+                value.nameField = value.nameField || "series";
             }
             return value;
         }

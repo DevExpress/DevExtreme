@@ -139,13 +139,15 @@ var environment = {
             _preparePointOptions: function() {
                 return this._options.point;
             },
-            _getPointData: function(dataItem) {
-                return {
-                    argument: dataItem.arg,
-                    value: typeUtils.isDefined(dataItem.val1) ? dataItem.val1 : dataItem.val,
-                    minValue: dataItem.val2,
-                    highValue: dataItem.h,
-                    lowValue: dataItem.l
+            _getPointDataSelector: function() {
+                return function(dataItem) {
+                    return {
+                        argument: dataItem.arg,
+                        value: typeUtils.isDefined(dataItem.val1) ? dataItem.val1 : dataItem.val,
+                        minValue: dataItem.val2,
+                        highValue: dataItem.h,
+                        lowValue: dataItem.l
+                    };
                 };
             },
             _resample: function() {

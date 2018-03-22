@@ -75,15 +75,18 @@ exports.stock = _extend({}, scatterSeries, {
         return _isDefined(data.argument) && data.highValue !== undefined && data.lowValue !== undefined && data.openValue !== undefined && data.closeValue !== undefined;
     },
 
-    _getPointData: function(data, options) {
+    _getPointDataSelector: function(data, options) {
         var that = this,
             level,
-            openValueField = options.openValueField || "open",
-            closeValueField = options.closeValueField || "close",
-            highValueField = options.highValueField || "high",
-            lowValueField = options.lowValueField || "low",
-            reductionValue;
-        that.level = options.reduction.level;
+            valueFields = that.getValueFields(),
+            argumentField = that.getArgumentField(),
+            openValueField = valueFields[0],
+            highValueField = valueFields[1],
+            lowValueField = valueFields[2],
+            closeValueField = valueFields[3];
+
+        that.level = that._options.reduction.level;
+
         switch(_normalizeEnum(that.level)) {
             case "open":
                 level = openValueField;
@@ -99,18 +102,32 @@ exports.stock = _extend({}, scatterSeries, {
                 that.level = "close";
                 break;
         }
-        reductionValue = data[level];
 
-        return {
-            argument: data[options.argumentField || "date"],
-            highValue: data[highValueField],
-            lowValue: data[lowValueField],
-            closeValue: data[closeValueField],
-            openValue: data[openValueField],
-            reductionValue: reductionValue,
-            tag: data[options.tagField || "tag"],
-            isReduction: that._checkReduction(reductionValue),
-            data: data
+        let prevLevelValue;
+
+        return (data) => {
+            const reductionValue = data[level];
+
+            let isReduction = false;
+
+            if(reductionValue !== null) {
+                if(_isDefined(prevLevelValue)) {
+                    isReduction = reductionValue < prevLevelValue;
+                }
+                prevLevelValue = reductionValue;
+            }
+
+            return {
+                argument: data[argumentField],
+                highValue: data[highValueField],
+                lowValue: data[lowValueField],
+                closeValue: data[closeValueField],
+                openValue: data[openValueField],
+                reductionValue: reductionValue,
+                tag: data[that.getTagField()],
+                isReduction: isReduction,
+                data: data
+            };
         };
     },
 
@@ -166,20 +183,7 @@ exports.stock = _extend({}, scatterSeries, {
     },
 
     _endUpdateData: function() {
-        delete this.prevLevelValue;
         delete this._predefinedPointOptions;
-    },
-
-    _checkReduction: function(value) {
-        var that = this,
-            result = false;
-        if(value !== null) {
-            if(_isDefined(that.prevLevelValue)) {
-                result = value < that.prevLevelValue;
-            }
-            that.prevLevelValue = value;
-        }
-        return result;
     },
 
     _defaultAggregator: "ohlc",
