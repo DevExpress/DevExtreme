@@ -4,7 +4,7 @@ require("ui/data_grid/ui.data_grid");
 
 var $ = require("jquery"),
     dataGridMocks = require("../../helpers/dataGridMocks.js"),
-    customOperations = require("ui/shared/custom_operations"),
+    customOperations = require("ui/grid_core/ui.grid_core.filter_custom_operations"),
     fx = require("animation/fx"),
     setupDataGridModules = dataGridMocks.setupDataGridModules;
 

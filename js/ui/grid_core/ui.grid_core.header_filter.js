@@ -403,7 +403,15 @@ function invertFilterExpression(filter) {
 }
 
 var DataControllerFilterRowExtender = {
-    _calculateHeaderFilterAdditionalFilter: function() {
+    _skipCalculateColumnFilters: function() {
+        return false;
+    },
+
+    _calculateAdditionalFilter: function() {
+        if(this._skipCalculateColumnFilters()) {
+            return this.callBase();
+        }
+
         var that = this,
             filters = [that.callBase()],
             columns = that._columnsController.getVisibleColumns(),
@@ -444,18 +452,6 @@ var DataControllerFilterRowExtender = {
         });
 
         return gridCoreUtils.combineFilters(filters);
-    },
-
-    _needCalculateColumnsFilters: function() {
-        return true;
-    },
-
-    _calculateAdditionalFilter: function() {
-        if(this._needCalculateColumnsFilters()) {
-            return this._calculateHeaderFilterAdditionalFilter();
-        } else {
-            return gridCoreUtils.combineFilters([this.callBase()]);
-        }
     }
 };
 

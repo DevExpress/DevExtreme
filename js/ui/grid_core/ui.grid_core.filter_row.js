@@ -600,7 +600,15 @@ var ColumnHeadersViewFilterRowExtender = (function() {
 })();
 
 var DataControllerFilterRowExtender = {
-    _calculateFilterRowAdditionalFilter: function() {
+    _skipCalculateColumnFilters: function() {
+        return false;
+    },
+
+    _calculateAdditionalFilter: function() {
+        if(this._skipCalculateColumnFilters()) {
+            return this.callBase();
+        }
+
         var filters = [this.callBase()],
             columns = this._columnsController.getVisibleColumns();
 
@@ -614,18 +622,6 @@ var DataControllerFilterRowExtender = {
         });
 
         return gridCoreUtils.combineFilters(filters);
-    },
-
-    _needCalculateColumnsFilters: function() {
-        return true;
-    },
-
-    _calculateAdditionalFilter: function() {
-        if(this._needCalculateColumnsFilters()) {
-            return this._calculateFilterRowAdditionalFilter();
-        } else {
-            return gridCoreUtils.combineFilters([this.callBase()]);
-        }
     }
 };
 

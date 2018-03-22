@@ -3,7 +3,7 @@
 var modules = require("./ui.grid_core.modules"),
     utils = require("../filter_builder/utils"),
     gridCoreUtils = require("./ui.grid_core.utils"),
-    customOperations = require("../shared/custom_operations");
+    customOperations = require("./ui.grid_core.filter_custom_operations");
 
 var FILTER_ROW_OPERATIONS = ["=", "<>", "<", "<=", ">", ">=", "notcontains", "contains", "startswith", "endswith", "between"],
     HEADER_FILTER_OPERATIONS = ["anyof", "noneof"];
@@ -82,9 +82,9 @@ var FilterSyncController = modules.Controller.inherit((function() {
         },
 
         _setFilterValue: function(filterValue) {
-            this.skipSyncFilterValue = true;
+            this._skipSyncFilterValue = true;
             this.option("filterValue", filterValue);
-            this.skipSyncFilterValue = false;
+            this._skipSyncFilterValue = false;
         },
 
         _getSyncFilterRow: function(filterValue, column, value) {
@@ -121,8 +121,8 @@ var FilterSyncController = modules.Controller.inherit((function() {
 })());
 
 var DataControllerFilterSyncExtender = {
-    _needCalculateColumnsFilters: function() {
-        return !this.option("filterSyncEnabled");
+    _skipCalculateColumnFilters: function() {
+        return this.option("filterSyncEnabled");
     },
 
     _calculateAdditionalFilter: function() {
@@ -159,7 +159,7 @@ var DataControllerFilterSyncExtender = {
             case "filterValue":
                 this._applyFilter();
                 var filterSyncController = this.getController("filterSync");
-                if(!filterSyncController.skipSyncFilterValue && this.option("filterSyncEnabled")) {
+                if(!filterSyncController._skipSyncFilterValue && this.option("filterSyncEnabled")) {
                     filterSyncController.syncFilterValue();
                 }
                 args.handled = true;
