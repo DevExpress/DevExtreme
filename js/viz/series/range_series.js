@@ -45,9 +45,11 @@ var baseRangeSeries = {
     _defaultAggregator: "range",
 
     _aggregators: {
-        range: function(aggregationInfo, series) {
+        range({ intervalStart, data }, series) {
+            if(!data.length) {
+                return;
+            }
             var result = {},
-                data = aggregationInfo.data,
                 valueFields = series.getValueFields(),
                 val1Field = valueFields[0],
                 val2Field = valueFields[1];
@@ -55,7 +57,7 @@ var baseRangeSeries = {
             result[val1Field] = -Infinity;
             result[val2Field] = Infinity;
 
-            result = data.reduce(function(result, item) {
+            result = data.reduce((result, item) => {
                 var minValue = Math.min(item[val1Field], item[val2Field]);
                 var maxValue = Math.max(item[val1Field], item[val2Field]);
 
@@ -69,7 +71,7 @@ var baseRangeSeries = {
                 return result;
             });
 
-            result[series.getArgumentField()] = aggregationInfo.intervalStart;
+            result[series.getArgumentField()] = intervalStart;
 
             return result;
         }
