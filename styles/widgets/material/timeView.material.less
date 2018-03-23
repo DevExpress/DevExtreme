@@ -1,0 +1,76 @@
+.dx-size-default() {
+    @MATERIAL_TIMEVIEW_CLOCK_MIN_SIZE: 252px;
+    @MATERIAL_TIMEVIEW_CLOCK_IMAGE_MIN_SIZE: 215px;
+    @MATERIAL_TIMEVIEW_FIELD_MIN_HEIGHT: 35px;
+    @MATERIAL_TIMEVIEW_ARROW_HEIGHT_REDUCE: 0px;
+    @MATERIAL_TIMEVIEW_FIELD_NUMBERBOX_REDUCE: 0px;
+    @MATERIAL_TIMEVIEW_CLOCK_ADDITIONAL_SIZE: 8px;
+    @MATERIAL_TIMEVIEW_TIME_SEPARATOR_MARGIN: 5px;
+    @MATERIAL_TIMEVIEW_FORMAT12_WIDTH: 58px;
+}
+.dx-size-compact() {
+    @MATERIAL_TIMEVIEW_CLOCK_MIN_SIZE: 161px;
+    @MATERIAL_TIMEVIEW_FIELD_MIN_HEIGHT: 32px;
+    @MATERIAL_TIMEVIEW_ARROW_HEIGHT_REDUCE: 20px;
+    @MATERIAL_TIMEVIEW_FIELD_NUMBERBOX_REDUCE: 16px;
+    @MATERIAL_TIMEVIEW_CLOCK_ADDITIONAL_SIZE: 8px;
+    @MATERIAL_TIMEVIEW_TIME_SEPARATOR_MARGIN: 5px;
+    @MATERIAL_TIMEVIEW_FORMAT12_WIDTH: 55px;
+}
+
+
+.dx-timeview {
+    height: auto;
+    width: auto;
+    background-color: @timeview-bg
+}
+
+.dx-timeview-clock {
+    min-height: @MATERIAL_TIMEVIEW_CLOCK_MIN_SIZE + @MATERIAL_TIMEVIEW_CLOCK_ADDITIONAL_SIZE;
+    min-width: @MATERIAL_TIMEVIEW_CLOCK_MIN_SIZE + @MATERIAL_TIMEVIEW_CLOCK_ADDITIONAL_SIZE;
+
+    background: @timeview-clock-bg no-repeat 50% 50%;
+    background-size: @MATERIAL_TIMEVIEW_CLOCK_IMAGE_MIN_SIZE;
+}
+
+.dx-timeview-hourarrow {
+    background-image: @timeview-hourarrow-bg;
+    background-size: 5px 57px - @MATERIAL_TIMEVIEW_ARROW_HEIGHT_REDUCE;
+}
+
+.dx-timeview-minutearrow {
+    background-image: @timeview-minutearrow-bg;
+    background-size: 5px 79px - @MATERIAL_TIMEVIEW_ARROW_HEIGHT_REDUCE / 2;
+}
+
+.dx-timeview-format12 {
+    width: @MATERIAL_TIMEVIEW_FORMAT12_WIDTH;
+
+    margin-left: @MATERIAL_TIMEVIEW_TIME_SEPARATOR_MARGIN;
+    margin-right: auto;
+
+    &.dx-dropdowneditor-button-visible .dx-texteditor-input {
+        padding-right: 24px;
+    }
+
+    &.dx-rtl, .dx-rtl & {
+        margin-left: auto;
+        margin-right: @MATERIAL_TIMEVIEW_TIME_SEPARATOR_MARGIN;
+    }
+}
+
+.dx-timeview-time-separator {
+    margin: 0 @MATERIAL_TIMEVIEW_TIME_SEPARATOR_MARGIN;
+}
+
+.dx-timeview-field {
+    min-height: @MATERIAL_TIMEVIEW_FIELD_MIN_HEIGHT;
+}
+
+.dx-timeview-field .dx-numberbox {
+    width: 50px - @MATERIAL_TIMEVIEW_FIELD_NUMBERBOX_REDUCE;
+
+    &.dx-numberbox-spin-touch-friendly {
+        width: 110px - @MATERIAL_TIMEVIEW_FIELD_NUMBERBOX_REDUCE;
+    }
+}

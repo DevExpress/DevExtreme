@@ -20,7 +20,8 @@ var $ = require("../../core/renderer"),
     LayoutManager = require("./ui.form.layout_manager"),
     TabPanel = require("../tab_panel"),
     Scrollable = require("../scroll_view/ui.scrollable"),
-    Deferred = require("../../core/utils/deferred").Deferred;
+    Deferred = require("../../core/utils/deferred").Deferred,
+    themes = require("../themes");
 
 require("../validation_summary");
 require("../validation_group");
@@ -635,6 +636,32 @@ var Form = Widget.inherit({
              * @default undefined
              */
         });
+    },
+
+    _defaultOptionsRules: function() {
+        return this.callBase().concat([
+            {
+                device: function() {
+                    return /material/.test(themes.current());
+                },
+                options: {
+                    /**
+                     * @name dxFormOptions_showColonAfterLabel
+                     * @publicName showColonAfterLabel
+                     * @type boolean
+                     * @default false @for material
+                     */
+                    showColonAfterLabel: false,
+                    /**
+                     * @name dxFormOptions_labelLocation
+                     * @publicName labelLocation
+                     * @type Enums.FormLabelLocation
+                     * @default "top" @for material
+                     */
+                    labelLocation: "top"
+                }
+            }
+        ]);
     },
 
     _setOptionsByReference: function() {

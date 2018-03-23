@@ -1,7 +1,5 @@
 "use strict";
 
-/* global createMockDevices */
-
 QUnit.testStart(function() {
     var markup =
 '<style>\
@@ -69,6 +67,7 @@ var $ = require("jquery"),
     config = require("core/config"),
     keyboardMock = require("../../helpers/keyboardMock.js"),
     ajaxMock = require("../../helpers/ajaxMock.js"),
+    themes = require("ui/themes"),
 
     DX_STATE_HOVER_CLASS = "dx-state-hover",
     TEXTEDITOR_INPUT_SELECTOR = ".dx-texteditor-input";
@@ -3636,66 +3635,6 @@ QUnit.test("Horizontal scroll position of footer view is changed_T251448", funct
     // assert
     assert.equal(dataGrid._views.rowsView.getScrollable().scrollLeft(), 300, "scroll left of rows view");
     assert.equal($headersView.scrollLeft(), 300, "scroll left of headers view");
-});
-
-window.createMockDevices = function(devices, platform) {
-    $.extend(devices, {
-        isSimulator: function() {
-            return false;
-        },
-        real: function() {
-            return { platform: platform, version: [0] };
-        },
-        current: function() {
-            return { platform: platform, version: [0] };
-        }
-    });
-};
-
-QUnit.test("ExpandMode by default for non desktop platform", function(assert) {
-    var origDevices = $.extend({}, devices),
-        dataGrid;
-
-    createMockDevices(devices, "ios");
-
-    dataGrid = createDataGrid({ width: 120, height: 230 });
-
-    assert.equal(dataGrid.option("grouping.expandMode"), "rowClick", "On non-desktop device expand group row on click");
-    $.extend(devices, origDevices);
-});
-
-QUnit.test("ShowRowLines by default for iOs platform", function(assert) {
-    var origDevices = $.extend({}, devices),
-        dataGrid;
-
-    createMockDevices(devices, "ios");
-
-    dataGrid = createDataGrid({ width: 120, height: 230 });
-
-    assert.ok(dataGrid.option("showRowLines"), "showRowLines option");
-    $.extend(devices, origDevices);
-});
-
-QUnit.test("ShowRowLines by default for iOs7 platform", function(assert) {
-    var origDevices = $.extend({}, devices),
-        dataGrid;
-
-    createMockDevices(devices, "ios");
-    dataGrid = createDataGrid();
-
-    assert.ok(dataGrid.option("showRowLines"), "showRowLines option");
-    $.extend(devices, origDevices);
-});
-
-QUnit.test("ShowRowLines for android platform", function(assert) {
-    var origDevices = $.extend({}, devices),
-        dataGrid;
-
-    createMockDevices(devices, "android");
-    dataGrid = createDataGrid();
-
-    assert.ok(!dataGrid.option("showRowLines"), "showRowLines option");
-    $.extend(devices, origDevices);
 });
 
 QUnit.test("Keep horizontal scroller position after refresh with native scrolling", function(assert) {
@@ -9321,4 +9260,47 @@ QUnit.test("CustomizeText formatting", function(assert) {
             return Math.round(options.value) + ' rub';
         }
     }), '216 rub');
+});
+
+QUnit.testInActiveWindow("Validation message should be positioned relative cell in material theme", function(assert) {
+    // arrange
+    var overlayTarget,
+        origThemes = themes.current,
+        clock = sinon.useFakeTimers(),
+        dataGrid = createDataGrid({
+            loadingTimeout: undefined,
+            dataSource: [{ Test: "" }],
+            editing: {
+                mode: "batch",
+                allowUpdating: true
+            },
+            columns: [{
+                dataField: "Test",
+                validationRules: [{ type: "required" }]
+            }]
+        });
+
+    // act
+    dataGrid.editCell(0, 0);
+    clock.tick();
+
+    // assert
+    overlayTarget = dataGrid.$element().find(".dx-invalid-message").data("dxOverlay").option("target");
+    assert.ok(overlayTarget.hasClass("dx-highlight-outline"), "target in generic theme");
+
+    // act
+    dataGrid.closeEditCell();
+    clock.tick();
+
+    themes.current = function() { return "material"; };
+
+    dataGrid.editCell(0, 0);
+    clock.tick();
+
+    // assert
+    overlayTarget = dataGrid.$element().find(".dx-invalid-message").data("dxOverlay").option("target");
+    assert.ok(overlayTarget.hasClass("dx-editor-cell"), "target in material theme");
+
+    themes.current = origThemes;
+    clock.restore();
 });

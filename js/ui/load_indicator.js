@@ -124,7 +124,7 @@ var LoadIndicator = Widget.inherit({
             },
             {
                 device: function() {
-                    return themeName() === "android5";
+                    return /(android5|material)/.test(themeName());
                 },
                 options: {
                     _animatingSegmentCount: 2,

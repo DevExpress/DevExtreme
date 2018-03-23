@@ -29,6 +29,7 @@ namespace StyleCompiler
 
         public const string
             THEME_GENERIC = "generic",
+            THEME_MATERIAL = "material",
             THEME_IOS7 = "ios7",
             THEME_ANDROID5 = "android5",
             THEME_WIN8 = "win8",
@@ -58,10 +59,11 @@ namespace StyleCompiler
                 new CssDistributionInfo {
                     LicenseInfo = EULA_DEVEXTREME,
                     Modules = new[] { MODULE_WIDGETS_BASE },
-                    SupportedThemes = new[] { THEME_GENERIC, THEME_IOS7, THEME_ANDROID5, THEME_WIN8, THEME_WIN10 },
+                    SupportedThemes = new[] { THEME_GENERIC, THEME_MATERIAL, THEME_IOS7, THEME_ANDROID5, THEME_WIN8, THEME_WIN10 },
 
                     SupportedSizeSchemes = new Dictionary<string,string[]> {
-                        { THEME_GENERIC, new[] { SIZE_SCHEME_DEFAULT, SIZE_SCHEME_COMPACT } }
+                        { THEME_GENERIC, new[] { SIZE_SCHEME_DEFAULT, SIZE_SCHEME_COMPACT } },
+                        { THEME_MATERIAL, new[] { SIZE_SCHEME_DEFAULT } }
                     }
                 }
             },
@@ -109,6 +111,11 @@ namespace StyleCompiler
                 Name = THEME_GENERIC,
                 PublicName = string.Empty,
                 ColorSchemeNames = new[] { COLOR_SCHEME_LIGHT, COLOR_SCHEME_DARK, COLOR_SCHEME_CARMINE, COLOR_SCHEME_DARKMOON, COLOR_SCHEME_SOFTBLUE, COLOR_SCHEME_DARKVIOLET, COLOR_SCHEME_GREENMIST, COLOR_SCHEME_CONTRAST }
+            },
+            new KnownThemeInfo {
+                Name = THEME_MATERIAL,
+                PublicName = THEME_MATERIAL,
+                ColorSchemeNames = new[] { COLOR_SCHEME_LIGHT }
             },
             new KnownThemeInfo {
                 Name = THEME_WIN10,
@@ -361,12 +368,6 @@ namespace StyleCompiler
             public string LicenseInfo = "For internal use only";
             public ModuleStyleInfo StyleInfo;
             public string[] RequireModules = new string[0];
-        }
-
-
-        public static string GetIconsPath(string sourcePath)
-        {
-            return Path.Combine(sourcePath, "../icons");
         }
 
         public static bool IsDefaultSizeScheme(string value)

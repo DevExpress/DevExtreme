@@ -9,6 +9,7 @@
 *.eot   binary
 *.ttf   binary
 *.woff  binary
+*.woff2  binary
 
 # verctor-map shape files
 *.dbf   binary

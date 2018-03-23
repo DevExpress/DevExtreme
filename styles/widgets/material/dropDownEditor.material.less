@@ -1,0 +1,154 @@
+@MATERIAL_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE: @MATERIAL_BASE_ICON_SIZE;
+
+@MATERIAL_DROPDOWNEDITOR_CLEAR_ICON_CONTAINER_SIZE:
+    @MATERIAL_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE -
+    @MATERIAL_INVALID_BADGE_HALFHORIZONTAL_PADDING;
+
+@MATERIAL_DROPDOWNEDITOR_BUTTON_WITH_CLEAR_PADDING:
+    @MATERIAL_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE +
+    @MATERIAL_DROPDOWNEDITOR_CLEAR_ICON_CONTAINER_SIZE;
+
+@MATERIAL_DROPDOWNEDITOR_INVALID_BADGE_OFFSET:
+    @MATERIAL_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE +
+    @MATERIAL_INVALID_BADGE_HALFHORIZONTAL_PADDING;
+
+@MATERIAL_DROPDOWNEDITOR_INVALID_BADGE_WITH_CLEAR_OFFSET:
+    @MATERIAL_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE +
+    @MATERIAL_DROPDOWNEDITOR_CLEAR_ICON_CONTAINER_SIZE +
+    @MATERIAL_INVALID_BADGE_HALFHORIZONTAL_PADDING;
+
+@MATERIAL_DROPDOWNEDITOR_INVALID_BADGE_SIZE: @MATERIAL_INVALID_BADGE_SIZE + @MATERIAL_INVALID_BADGE_HORIZONTAL_PADDING;
+
+.dx-dropdowneditor-button-icon() {
+    width: @MATERIAL_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE;
+    height: 100%;
+
+    .dx-icon-font-centered-sizing(@MATERIAL_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE);
+}
+
+.dx-dropdowneditor-button {
+    width: @MATERIAL_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE;
+
+    .dx-state-disabled &,
+    .dx-state-disabled & {
+        .dx-dropdowneditor-icon {
+            opacity: 1;
+        }
+    }
+
+    .dx-state-readonly & {
+        .dx-dropdowneditor-icon {
+            opacity: 1;
+        }
+    }
+}
+
+.dx-dropdowneditor-icon {
+    color: @dropdowneditor-icon-color;
+    .dx-icon-spindown;
+    .dx-dropdowneditor-button-icon();
+}
+
+.dx-dropdowneditor-input-wrapper {
+    .dx-texteditor.dx-state-focused {
+        border: none;
+        box-shadow: none;
+    }
+}
+
+.dx-dropdowneditor .dx-clear-button-area {
+    width: @MATERIAL_DROPDOWNEDITOR_CLEAR_ICON_CONTAINER_SIZE;
+}
+
+.dx-dropdowneditor-button-visible {
+    &.dx-show-clear-button .dx-texteditor-input {
+        padding-right: @MATERIAL_DROPDOWNEDITOR_BUTTON_WITH_CLEAR_PADDING;
+
+        .dx-rtl &,
+        .dx-rtl& {
+            padding-right: @MATERIAL_BASE_INLINE_BORDEREDWIDGET_HORIZONTAL_PADDING;
+            padding-left: @MATERIAL_DROPDOWNEDITOR_BUTTON_WITH_CLEAR_PADDING;
+        }
+
+        .dx-rtl.dx-searchbox&,
+        .dx-rtl .dx-searchbox& {
+            padding-right: @MATERIAL_TEXTEDITOR_ICON_CONTAINER_SIZE;
+        }
+    }
+
+    .dx-texteditor-input {
+        padding-right: @MATERIAL_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE;
+
+        .dx-rtl &,
+        .dx-rtl& {
+            padding-right: @MATERIAL_BASE_INLINE_BORDEREDWIDGET_HORIZONTAL_PADDING;
+            padding-left: @MATERIAL_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE;
+        }
+    }
+}
+
+.invalid-dropdowneditor-input-padding() {
+    &.dx-dropdowneditor-button-visible {
+        .dx-texteditor-input {
+            padding-right: @MATERIAL_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE + @MATERIAL_DROPDOWNEDITOR_INVALID_BADGE_SIZE;
+        }
+
+        &.dx-rtl .dx-texteditor-input {
+            padding: @MATERIAL_TEXTEDITOR_INPUT_PADDING;
+            padding-left: @MATERIAL_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE + @MATERIAL_DROPDOWNEDITOR_INVALID_BADGE_SIZE;
+        }
+
+        &.dx-show-clear-button {
+            .dx-texteditor-input {
+                padding-right: @MATERIAL_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE + @MATERIAL_DROPDOWNEDITOR_INVALID_BADGE_SIZE + @MATERIAL_DROPDOWNEDITOR_CLEAR_ICON_CONTAINER_SIZE;
+            }
+
+            &.dx-rtl .dx-texteditor-input {
+                padding: @MATERIAL_TEXTEDITOR_INPUT_PADDING;
+                padding-left: @MATERIAL_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE + @MATERIAL_DROPDOWNEDITOR_INVALID_BADGE_SIZE + @MATERIAL_DROPDOWNEDITOR_CLEAR_ICON_CONTAINER_SIZE;
+            }
+        }
+    }
+}
+
+.dx-invalid {
+    .invalid-dropdowneditor-input-padding();
+}
+
+.dx-dropdowneditor.dx-dropdowneditor-active,
+.dx-dropdowneditor-button.dx-state-active {
+    .dx-dropdowneditor-icon {
+        color: @dropdowneditor-icon-active-color;
+        opacity: 1;
+        .dx-icon-spinup;
+        .dx-dropdowneditor-button-icon();
+    }
+}
+
+.dx-invalid.dx-dropdowneditor {
+    .dx-texteditor-container {
+        &:after {
+            right: @MATERIAL_DROPDOWNEDITOR_INVALID_BADGE_OFFSET;
+
+            .dx-rtl &,
+            .dx-rtl& {
+                right: auto;
+                left: @MATERIAL_DROPDOWNEDITOR_INVALID_BADGE_OFFSET;
+            }
+        }
+    }
+
+    &.dx-show-clear-button:not(.dx-texteditor-empty) {
+        .dx-texteditor-container {
+            &:after {
+                right: @MATERIAL_DROPDOWNEDITOR_INVALID_BADGE_WITH_CLEAR_OFFSET;
+
+                .dx-rtl &,
+                .dx-rtl& {
+                    right: auto;
+                    left: @MATERIAL_DROPDOWNEDITOR_INVALID_BADGE_WITH_CLEAR_OFFSET;
+                }
+            }
+        }
+    }
+}

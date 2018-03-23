@@ -9,7 +9,8 @@ var $ = require("jquery"),
     browser = require("core/utils/browser"),
     domUtils = require("core/utils/dom"),
     config = require("core/config"),
-    internals = require("ui/form/ui.form").__internals;
+    internals = require("ui/form/ui.form").__internals,
+    themes = require("ui/themes");
 
 require("ui/text_area");
 
@@ -1134,6 +1135,34 @@ QUnit.test("Refresh form when visibility changed to 'true' in msie browser", fun
     // assert
     assert.equal(refreshStub.callCount, expectedRefreshCount, "Refresh on visibility changed to 'true' if browser is IE or Edge");
     refreshStub.restore();
+});
+
+QUnit.test("Hide helper text when validation message shows for material theme", function(assert) {
+    var origCurrent = themes.current;
+    themes.current = function() { return "material"; };
+
+    var form = $("#form").dxForm({
+        formData: {
+            name: "User",
+            lastName: ""
+        },
+        items: [
+            { dataField: "name", helpText: "First name field" },
+            { dataField: "lastName", isRequired: true, helpText: "Last name field" }
+        ]
+    }).dxForm("instance");
+
+    form.validate();
+    form.getEditor("lastName").focus();
+
+    assert.ok(form.getEditor("lastName").$element().parents(".dx-field-item-content-wrapper").hasClass(INVALID_CLASS), "invalid css class");
+
+    form.getEditor("name").focus();
+    assert.ok(!form.getEditor("lastName").$element().parents(".dx-field-item-content-wrapper").hasClass(INVALID_CLASS), "not invalid css class");
+    assert.ok(!form.getEditor("name").$element().parents(".dx-field-item-content-wrapper").hasClass(INVALID_CLASS), "not invalid css class");
+
+    themes.current = origCurrent;
+
 });
 
 QUnit.test("The formData is updated correctly when formData has 'undefined' value", function(assert) {

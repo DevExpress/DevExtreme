@@ -1,0 +1,135 @@
+.dx-theme-marker {
+    font-family: "dx.material@{MATERIAL_COLOR_POSTFIX}@{MATERIAL_SIZE_POSTFIX}";
+}
+
+.dx-viewport.dx-theme-material {
+    .dx-theme-accent-as-text-color {
+        color: @base-accent;
+    }
+
+    .dx-theme-text-color {
+        color: @base-text-color;
+    }
+
+    .dx-theme-background-color-as-text-color {
+        color: @base-bg;
+    }
+
+    .dx-theme-border-color-as-text-color {
+        color: @base-border-color;
+    }
+
+    .dx-theme-accent-as-background-color {
+        background-color: @base-accent;
+        fill: @base-accent;
+    }
+
+    .dx-theme-text-color-as-background-color {
+        background-color: @base-text-color;
+        fill: @base-text-color;
+    }
+
+    .dx-theme-background-color {
+        background-color: @base-bg;
+        fill: @base-bg;
+    }
+
+    .dx-theme-border-color-as-background-color {
+        background-color: @base-border-color;
+        fill: @base-border-color;
+    }
+
+    .dx-theme-accent-as-border-color {
+        border-color: @base-accent;
+    }
+
+    .dx-theme-text-color-as-border-color {
+        border-color: @base-text-color;
+    }
+
+    .dx-theme-background-color-as-border-color {
+        border-color: @base-bg;
+    }
+
+    .dx-theme-border-color {
+        border-color: @base-border-color;
+    }
+}
+
+.dx-base-typography() {
+    color: @typography-color;
+    font-weight: normal;
+    font-size: @MATERIAL_BASE_FONT_SIZE;
+    font-family: @base-font-family;
+    line-height: @MATERIAL_BASE_LINE_HEIGHT;
+
+    input, textarea {
+        font-family: @base-font-family;
+        line-height: @MATERIAL_BASE_LINE_HEIGHT;
+    }
+}
+
+.disabled-widget(@opacity: @texteditor-disabled-opacity) {
+    opacity: @opacity;
+    .user-select(none);
+    zoom: 1;
+    cursor: default;
+}
+
+
+.dx-size-default() {
+    @MATERIAL_INVALID_BADGE_SIZE: @MATERIAL_BASE_ICON_SIZE;
+}
+.dx-size-compact() {
+    @MATERIAL_INVALID_BADGE_SIZE: @MATERIAL_BASE_ICON_SIZE + 2px;
+}
+@MATERIAL_INVALID_BADGE_HORIZONTAL_PADDING: 0; // TODO make calculating (@MATERIAL_BASE_INLINE_BORDEREDWIDGET_INNER_SIZE - @MATERIAL_INVALID_BADGE_SIZE) / 2;
+@MATERIAL_INVALID_BADGE_HALFHORIZONTAL_PADDING: @MATERIAL_INVALID_BADGE_HORIZONTAL_PADDING / 2;
+
+.dx-invalid-material-badge() {
+    pointer-events: none;
+    font-weight: bold;
+    background-color: @badge-invalid-bg;
+    color: @base-selected-text-color;
+    content: '!';
+    position: absolute;
+    top: 50%;
+    margin-top: -@MATERIAL_INVALID_BADGE_SIZE/2;
+    width: @MATERIAL_INVALID_BADGE_SIZE;
+    height: @MATERIAL_INVALID_BADGE_SIZE;
+    .border-radius(@radius: ~"50%");
+    text-align: center;
+    line-height: @MATERIAL_INVALID_BADGE_SIZE;
+    font-size: @MATERIAL_BASE_FONT_SIZE - 1px;
+}
+
+
+.dx-inkripple {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+}
+
+.dx-inkripple-wave {
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.16);
+    border-radius: 50%;
+    opacity: 0;
+    transform: scale(0);
+    pointer-events: none;
+}
+
+.dx-inkripple-showing {
+    transition: transform 0.1s linear;
+    opacity: 1;
+    transform: scale(1);
+}
+
+.dx-inkripple-hiding {
+    transition: transform 0.1s linear, opacity 0.1s linear;
+    transform: scale(1.01);
+    opacity: 0;
+}

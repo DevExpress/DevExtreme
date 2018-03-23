@@ -1,0 +1,32 @@
+@MATERIAL_SEARCHBOX_ICON_HORIZONTAL_PADDING: @MATERIAL_TEXTEDITOR_ICON_CONTAINER_SIZE + 6;
+.dx-searchbox {
+    .dx-icon-search {
+        .dx-icon-search;
+        .dx-texteditor-icon();
+
+        &:before {
+            position: static;
+            text-indent: 0;
+            color: @textbox-search-icon-color;
+        }
+        color: @texteditor-placeholder-color;
+    }
+
+    .dx-texteditor-input,
+    .dx-placeholder:before {
+        padding-left: @MATERIAL_SEARCHBOX_ICON_HORIZONTAL_PADDING;
+
+        .dx-rtl &,
+        .dx-rtl& {
+            padding-right: @MATERIAL_SEARCHBOX_ICON_HORIZONTAL_PADDING;
+        }
+    }
+}
+
+.dx-searchbar {
+    padding-bottom: 5px;
+
+    .dx-texteditor {
+        margin: 0;
+    }
+}

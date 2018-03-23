@@ -1,0 +1,75 @@
+//@import "https://fonts.googleapis.com/css?family=Roboto:300,400,500";
+
+@font-face {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 300;
+    src: local('Roboto Light'), local('Roboto-Light'),
+         url(~"fonts/Roboto-300.woff2") format('woff2'),
+         url(~"fonts/Roboto-300.woff") format('woff'),
+         url(~"fonts/Roboto-300.ttf") format('truetype');
+}
+
+@font-face {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Roboto'), local('Roboto-Regular'),
+         url(~"fonts/Roboto-400.woff2") format('woff2'), 
+         url(~"fonts/Roboto-400.woff") format('woff'),
+         url(~"fonts/Roboto-400.ttf") format('truetype');
+}
+
+@font-face {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 500;
+    src: local('Roboto Medium'), local('Roboto-Medium'),
+         url(~"fonts/Roboto-500.woff2") format('woff2'), 
+         url(~"fonts/Roboto-500.woff") format('woff'),
+         url(~"fonts/Roboto-500.ttf") format('truetype');
+}
+
+.dx-theme-material-typography {
+    background-color: @typography-bg;
+    .dx-base-typography();
+
+    h1, .dx-font-xl {
+        font-weight: 200;
+        font-size: @MATERIAL_XL_FONT_SIZE;
+    }
+
+    h2, .dx-font-l {
+        font-weight: normal;
+        font-size: @MATERIAL_L_FONT_SIZE;
+    }
+
+    h3 {
+        font-weight: normal;
+        font-size: @MATERIAL_H3_FONT_SIZE;
+    }
+
+    .dx-font-m {
+        font-weight: normal;
+        font-size: @MATERIAL_M_FONT_SIZE;
+    }
+
+    h4, .dx-font-s {
+        font-weight: 500;
+        font-size: @MATERIAL_S_FONT_SIZE;
+    }
+
+    h5 {
+        font-weight: 700;
+        font-size: @MATERIAL_H5_FONT_SIZE;
+    }
+
+    h6, small, .dx-font-xs {
+        font-weight: 800;
+        font-size: @MATERIAL_XS_FONT_SIZE;
+    }
+
+    a {
+        color: @typography-link-color;
+    }
+}

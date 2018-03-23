@@ -188,7 +188,7 @@ var Button = Widget.inherit({
             },
             {
                 device: function() {
-                    return /android5/.test(themes.current());
+                    return /(android5|material)/.test(themes.current());
                 },
                 options: {
                     useInkRipple: true

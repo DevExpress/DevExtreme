@@ -1064,6 +1064,7 @@ QUnit.test("Set highlight to editor container when filter is changed", function(
     // arrange
     var testElement = $('#container'),
         $editorContainer,
+        $filterCellContainer,
         filterRowInput;
 
     this.options.filterRow.applyFilter = "onClick";
@@ -1079,7 +1080,9 @@ QUnit.test("Set highlight to editor container when filter is changed", function(
     this.clock.tick(0);
 
     $editorContainer = filterRowInput.closest(".dx-editor-container");
+    $filterCellContainer = filterRowInput.closest(".dx-editor-cell");
     assert.ok($editorContainer.hasClass("dx-highlight-outline"), "highlight for editor container");
+    assert.ok($filterCellContainer.hasClass("dx-filter-modified"), "highlight for editor container");
     assert.deepEqual(this.columnsController.updateOptions[0], {
         columnIndex: 0,
         optionName: "bufferedFilterValue",
@@ -1091,6 +1094,7 @@ QUnit.test("Remove highlights from editor container when filter is applied", fun
     // arrange
     var testElement = $('#container'),
         $editorContainer,
+        $filterCellContainer,
         $button,
         filterRowInput;
 
@@ -1113,6 +1117,8 @@ QUnit.test("Remove highlights from editor container when filter is applied", fun
     $button = testElement.find(".dx-apply-button");
     $editorContainer = $(this.columnHeadersView.element().find(".dx-highlight-outline"));
     assert.equal($editorContainer.length, 0, "highlights");
+    $filterCellContainer = $(this.columnHeadersView.element().find(".dx-filter-modified"));
+    assert.equal($filterCellContainer.length, 0, "highlights");
     assert.ok($button.hasClass("dx-state-disabled"), "button is enabled");
     // assert.ok(this.dataController._isFilterApplied, "is filter applied");
 

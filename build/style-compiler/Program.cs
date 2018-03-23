@@ -145,14 +145,20 @@ namespace StyleCompiler
                 }
             }
 
-            var iconsSrcFolder = LessRegistry.GetIconsPath(sourcePath);
-            var iconsDestFolder = Path.Combine(outputPath, "icons");
+            CopyFonts(sourcePath, outputPath, "icons");
+            CopyFonts(sourcePath, outputPath, "fonts");
+        }
 
-            Directory.GetFiles(iconsSrcFolder, "*.*", SearchOption.AllDirectories).ToList()
+        static void CopyFonts(string sourcePath, string outputPath, string folder)
+        {
+            var fontsSrcFolder = Path.Combine(sourcePath, "..", folder);
+            var fontsDestFolder = Path.Combine(outputPath, folder);
+
+            Directory.GetFiles(fontsSrcFolder, "*.*", SearchOption.AllDirectories).ToList()
                 .ForEach(fileName =>
                 {
-                    string relativePath = fileName.Remove(0, iconsSrcFolder.Length);
-                    string destFileName = iconsDestFolder + relativePath;
+                    string relativePath = fileName.Remove(0, fontsSrcFolder.Length);
+                    string destFileName = fontsDestFolder + relativePath;
                     if (!Directory.Exists(Path.GetDirectoryName(destFileName)))
                     {
                         Directory.CreateDirectory(Path.GetDirectoryName(destFileName));

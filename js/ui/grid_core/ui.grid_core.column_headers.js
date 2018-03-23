@@ -19,7 +19,8 @@ var CELL_CONTENT_CLASS = "text-content",
     VISIBILITY_HIDDEN_CLASS = "dx-visibility-hidden",
     TEXT_CONTENT_ALIGNMENT_CLASS_PREFIX = "dx-text-content-alignment-",
     SORT_INDICATOR_CLASS = "dx-sort-indicator",
-    HEADER_FILTER_INDICATOR_CLASS = "dx-header-filter-indicator";
+    HEADER_FILTER_INDICATOR_CLASS = "dx-header-filter-indicator",
+    MULTI_ROW_HEADER_CLASS = "dx-header-multi-row";
 
 module.exports = {
     defaultOptions: function() {
@@ -174,6 +175,10 @@ module.exports = {
                     that.setAria("role", "presentation", $container);
 
                     that._updateContent(that._renderTable());
+
+                    if(that.getRowCount() > 1) {
+                        $container.addClass(MULTI_ROW_HEADER_CLASS);
+                    }
 
                     that.callBase.apply(that, arguments);
                 },
