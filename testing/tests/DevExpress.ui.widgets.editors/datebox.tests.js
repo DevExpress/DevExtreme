@@ -2355,12 +2355,11 @@ QUnit.test("date box should contain calendar and time view inside box in small s
 QUnit.test("date box should have compact view when showAnalogClock option is true", function(assert) {
     var $element = $("#dateBox").dxDateBox({
             type: "datetime",
-            pickerType: "calendar",
-            compactMode: true
+            pickerType: "calendar"
         }),
         instance = $element.dxDateBox("instance");
 
-    instance.option("compactMode", true);
+    instance.option("showAnalogClock", true);
     instance.open();
 
     var $content = $(instance._popup.$content()),
