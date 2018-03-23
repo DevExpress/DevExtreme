@@ -146,6 +146,7 @@
         "dxDataGrid-ariaSearchInGrid": "Hledat v datové mřížce",
         "dxDataGrid-ariaSelectAll": "Vybrat vše",
         "dxDataGrid-ariaSelectRow": "Vybrat řádek",
+        "dxDataGrid-filterBuilderPopupTitle": "!TODO",
 
         "dxTreeList-ariaTreeList": "Tree list",
         "dxTreeList-editingAddRowToNode": "Přidat",
@@ -261,7 +262,6 @@
         "dxFilterBuilder-filterOperationIsBlank": "Je prázdné",
         "dxFilterBuilder-filterOperationIsNotBlank": "Není prázdné",
         "dxFilterBuilder-filterOperationAnyOf": "!TODO",
-        "dxFilterBuilder-filterOperationNoneOf": "!TODO",
-        "dxFilterBuilder-name": "!TODO"
+        "dxFilterBuilder-filterOperationNoneOf": "!TODO"
     }
 }

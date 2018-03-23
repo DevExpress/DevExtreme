@@ -146,6 +146,7 @@
         "dxDataGrid-ariaSearchInGrid": "Hae tietoriviltä",
         "dxDataGrid-ariaSelectAll": "Valitse kaikki",
         "dxDataGrid-ariaSelectRow": "Valitse rivi",
+        "dxDataGrid-filterBuilderPopupTitle": "!TODO",
 
         "dxTreeList-ariaTreeList": "Puu",
         "dxTreeList-editingAddRowToNode": "Lisää",
@@ -261,7 +262,6 @@
         "dxFilterBuilder-filterOperationIsBlank": "On tyhjä",
         "dxFilterBuilder-filterOperationIsNotBlank": "Ei ole tyhjä",
         "dxFilterBuilder-filterOperationAnyOf": "!TODO",
-        "dxFilterBuilder-filterOperationNoneOf": "!TODO",
-        "dxFilterBuilder-name": "!TODO"
+        "dxFilterBuilder-filterOperationNoneOf": "!TODO"
     }
 }

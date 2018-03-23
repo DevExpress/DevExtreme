@@ -25,7 +25,7 @@ var FilterBuilderView = modules.View.inherit({
         var that = this;
 
         return extend({
-            title: messageLocalization.format("dxFilterBuilder-name"),
+            title: messageLocalization.format("dxDataGrid-filterBuilderPopupTitle"),
             contentTemplate: function($contentElement) {
                 return that._getPopupContentTemplate($contentElement);
             },

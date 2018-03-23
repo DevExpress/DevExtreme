@@ -134,6 +134,7 @@
         "dxDataGrid-ariaSearchInGrid": "Buscar en la rejilla de datos",
         "dxDataGrid-ariaSelectAll": "Seleccionar todo",
         "dxDataGrid-ariaSelectRow": "Seleccionar fila",
+        "dxDataGrid-filterBuilderPopupTitle": "!TODO",
         "dxTreeList-ariaTreeList": "Lista de árbol",
         "dxTreeList-editingAddRowToNode": "Añadir",
         "dxPager-infoText": "Página {0} de {1} ({2} elementos)",
@@ -229,7 +230,6 @@
         "dxFilterBuilder-filterOperationIsBlank": "Vacio",
         "dxFilterBuilder-filterOperationIsNotBlank": "No vacio",
         "dxFilterBuilder-filterOperationAnyOf": "!TODO",
-        "dxFilterBuilder-filterOperationNoneOf": "!TODO",
-        "dxFilterBuilder-name": "!TODO"
+        "dxFilterBuilder-filterOperationNoneOf": "!TODO"
     }
 }
