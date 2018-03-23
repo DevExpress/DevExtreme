@@ -65,7 +65,6 @@ function isOnClickApplyFilterMode(that) {
     return that.option("filterRow.applyFilter") === "onClick";
 }
 
-
 var ColumnHeadersViewFilterRowExtender = (function() {
     var getEditorInstance = function($editorContainer) {
         var $editor = $editorContainer && $editorContainer.children(),
@@ -602,10 +601,17 @@ var ColumnHeadersViewFilterRowExtender = (function() {
 })();
 
 var DataControllerFilterRowExtender = {
+    _skipCalculateColumnFilters: function() {
+        return false;
+    },
+
     _calculateAdditionalFilter: function() {
-        var that = this,
-            filters = [that.callBase()],
-            columns = that._columnsController.getVisibleColumns();
+        if(this._skipCalculateColumnFilters()) {
+            return this.callBase();
+        }
+
+        var filters = [this.callBase()],
+            columns = this._columnsController.getVisibleColumns();
 
         iteratorUtils.each(columns, function() {
             var filter;
@@ -643,13 +649,14 @@ exports.ApplyFilterViewController = modules.ViewController.inherit({
 
         columnsController.beginUpdate();
         for(var i = 0; i < columns.length; i++) {
-            if(columns[i].bufferedFilterValue !== undefined) {
-                columnsController.columnOption(i, "filterValue", columns[i].bufferedFilterValue);
-                columns[i].bufferedFilterValue = undefined;
+            var column = columns[i];
+            if(column.bufferedFilterValue !== undefined) {
+                columnsController.columnOption(i, "filterValue", column.bufferedFilterValue);
+                column.bufferedFilterValue = undefined;
             }
-            if(columns[i].bufferedSelectedFilterOperation !== undefined) {
-                columnsController.columnOption(i, "selectedFilterOperation", columns[i].bufferedSelectedFilterOperation);
-                columns[i].bufferedSelectedFilterOperation = undefined;
+            if(column.bufferedSelectedFilterOperation !== undefined) {
+                columnsController.columnOption(i, "selectedFilterOperation", column.bufferedSelectedFilterOperation);
+                column.bufferedSelectedFilterOperation = undefined;
             }
         }
         columnsController.endUpdate();

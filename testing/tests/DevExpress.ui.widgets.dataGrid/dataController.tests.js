@@ -128,6 +128,17 @@ QUnit.test("Raise warning if keyExp is set and dataSource is not an array", func
     errors.log.restore();
 });
 
+QUnit.test("Not raise W1011 warning if dataSource is undefined", function(assert) {
+    // arrange, act
+    sinon.spy(errors, "log");
+    this.applyOptions({ keyExpr: "name", dataSource: undefined });
+    this.dataController.init();
+
+    // assert
+    assert.equal(errors.log.callCount, 0, "Warning about keyExpr is not raised");
+    errors.log.restore();
+});
+
 QUnit.test("changed on initialize", function(assert) {
     var changedCount = 0;
     var lastArgs;
@@ -6212,6 +6223,30 @@ QUnit.test("CustomStore load options when remoteOperations auto and summary exis
     assert.deepEqual(this.dataController.items()[0].rowType, "group", "first row type");
     // T328430
     assert.deepEqual(this.dataController.items()[0].summaryCells, [[{ summaryType: "count", value: 1 }], []], "group summaryCells");
+});
+
+// T615903
+QUnit.test("No errors if wrong extra parameter is returned in CustomStore", function(assert) {
+    this.options = {
+        dataSource: {
+            load: function(options) {
+                return $.Deferred().resolve([
+                    { name: 'Alex', age: 19 },
+                    { name: 'Dan', age: 25 }
+                ], "success");
+            }
+        },
+        scrolling: {
+            mode: "infinite"
+        }
+    };
+
+    // act
+    this.setupDataGridModules();
+    this.clock.tick();
+
+    // assert
+    assert.equal(this.dataController.items().length, 2, "two items are loaded");
 });
 
 QUnit.test("CustomStore load options when remote summary enabled", function(assert) {

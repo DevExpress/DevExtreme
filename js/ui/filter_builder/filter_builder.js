@@ -9,6 +9,7 @@ var $ = require("../../core/renderer"),
     extend = require("../../core/utils/extend").extend,
     messageLocalization = require("../../localization/message"),
     utils = require("./utils"),
+    deferredUtils = require("../../core/utils/deferred"),
     TreeView = require("../tree_view"),
     Popup = require("../popup"),
     EditorFactoryMixin = require("../shared/ui.editor_factory_mixin");
@@ -34,6 +35,7 @@ var FILTER_BUILDER_CLASS = "dx-filterbuilder",
     FILTER_BUILDER_ADD_CONDITION_CLASS = FILTER_BUILDER_CLASS + "-add-condition",
     ACTIVE_CLASS = "dx-state-active",
     FILTER_BUILDER_MENU_CUSTOM_OPERATION_CLASS = FILTER_BUILDER_CLASS + "-menu-custom-operation",
+    SOURCE = "filterBuilder",
 
     TAB_KEY = 9,
     ENTER_KEY = 13,
@@ -552,7 +554,7 @@ var FilterBuilder = Widget.inherit({
     getFilterExpression: function() {
         var fields = this._getNormalizedFields(),
             value = extend(true, [], this._model);
-        return utils.getFilterExpression(utils.getNormalizedFilter(value, fields), fields, this._customOperations);
+        return utils.getFilterExpression(utils.getNormalizedFilter(value, fields), fields, this._customOperations, SOURCE);
     },
 
     _getNormalizedFields: function() {
@@ -605,9 +607,6 @@ var FilterBuilder = Widget.inherit({
     _initMarkup: function() {
         this.$element().addClass(FILTER_BUILDER_CLASS);
         this.callBase();
-    },
-
-    _renderContentImpl: function() {
         this._createGroupElementByCriteria(this._model)
             .appendTo(this.$element());
     },
@@ -929,6 +928,7 @@ var FilterBuilder = Widget.inherit({
     _createValueText: function(item, field, $container) {
         var that = this,
             $text = $("<div>")
+                .html("&nbsp;")
                 .addClass(FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS)
                 .attr("tabindex", 0)
                 .appendTo($container),
@@ -943,7 +943,9 @@ var FilterBuilder = Widget.inherit({
                 setText(valueText);
             });
         } else {
-            setText(utils.getCurrentValueText(field, value, customOperation));
+            deferredUtils.when(utils.getCurrentValueText(field, value, customOperation)).done(function(valueText) {
+                setText(valueText);
+            });
         }
 
         that._subscribeOnClickAndEnterKey($text, function(e) {
@@ -986,16 +988,17 @@ var FilterBuilder = Widget.inherit({
                 return that._createValueText(item, field, $container);
             };
 
-        $container.empty();
-
         var options = {
             value: value === "" ? null : value,
             filterOperation: utils.getOperationValue(item),
             isValueChanged: true,
             setValue: function(data) {
                 value = data === null ? "" : data;
-            }
+            },
+            text: $container.text()
         };
+
+        $container.empty();
 
         var $editor = that._createValueEditor($container, field, options);
 
@@ -1058,7 +1061,7 @@ var FilterBuilder = Widget.inherit({
             });
         } else {
             this._editorFactory.createEditor.call(this, $editor, extend({}, field, options, {
-                parentType: "filterBuilder"
+                parentType: SOURCE
             }));
         }
         return $editor;

@@ -1,7 +1,8 @@
 "use strict";
 
 var $ = require("../core/renderer"),
-    window = require("../core/utils/window").getWindow(),
+    windowUtils = require("../core/utils/window"),
+    window = windowUtils.getWindow(),
     eventsEngine = require("../events/core/events_engine"),
     devices = require("../core/devices"),
     extend = require("../core/utils/extend").extend,
@@ -308,6 +309,10 @@ var Switch = Editor.inherit({
     },
 
     _renderPosition: function(state, swipeOffset) {
+        if(!windowUtils.hasWindow()) {
+            return;
+        }
+
         var marginDirection = this._marginDirection(),
             resetMarginDirection = marginDirection === "Left" ? "Right" : "Left";
 
@@ -430,8 +435,8 @@ var Switch = Editor.inherit({
     },
 
     _setLabelsText: function() {
-        this._$labelOn.text(this.option("onText"));
-        this._$labelOff.text(this.option("offText"));
+        this._$labelOn && this._$labelOn.text(this.option("onText"));
+        this._$labelOff && this._$labelOff.text(this.option("offText"));
     },
 
     _visibilityChanged: function(visible) {

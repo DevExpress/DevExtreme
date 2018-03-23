@@ -28,6 +28,7 @@ require("ui/tag_box");
 require("ui/lookup");
 require("ui/text_area");
 require("ui/radio_group");
+require("ui/range_slider");
 
 require("common.css!");
 
@@ -1162,6 +1163,31 @@ QUnit.test("Generate items from layoutData and items", function(assert) {
         },
         "Correct Data"
     );
+});
+
+QUnit.test("Render RangeSlider", function(assert) {
+    // arrange, act
+    var layoutManager = $("#container").dxLayoutManager({
+        layoutData: {
+            range: [1, 5]
+        },
+        items: [
+            {
+                dataField: "range",
+                editorType: "dxRangeSlider"
+            },
+            {
+                dataField: "noRange",
+                editorType: "dxRangeSlider"
+            }
+        ]
+    }).dxLayoutManager("instance");
+
+    // assert
+    assert.deepEqual(layoutManager.getEditor("range").option("value"), [1, 5], "Editor's value correct");
+
+    layoutManager.getEditor("noRange").option("value", [2, 6]);
+    assert.deepEqual(layoutManager.option("layoutData.noRange"), [2, 6], "data updated");
 });
 
 QUnit.test("Check data when generate items from layoutData and items with initial value", function(assert) {

@@ -15,6 +15,8 @@ var dataErrors = require("../../data/errors").errors,
 var DEFAULT_DATA_TYPE = "string",
     EMPTY_MENU_ICON = "icon-none",
     AND_GROUP_OPERATION = "and",
+    EQUAL_OPERATION = "=",
+    NOT_EQUAL_OPERATION = "<>",
     DATATYPE_OPERATIONS = {
         "number": ["=", "<>", "<", ">", "<=", ">=", "isblank", "isnotblank"],
         "string": ["contains", "notcontains", "startswith", "endswith", "=", "<>", "isblank", "isnotblank"],
@@ -114,8 +116,11 @@ function getGroupMenuItem(group, availableGroups) {
 }
 
 function getCriteriaOperation(criteria) {
-    var value = "";
+    if(isCondition(criteria)) {
+        return AND_GROUP_OPERATION;
+    }
 
+    var value = "";
     for(var i = 0; i < criteria.length; i++) {
         var item = criteria[i];
         if(!Array.isArray(item)) {
@@ -125,7 +130,6 @@ function getCriteriaOperation(criteria) {
             value = item;
         }
     }
-
     return value;
 }
 
@@ -315,7 +319,7 @@ function convertToInnerCondition(condition, customOperations) {
 
     if(condition.length < 3) {
         condition[2] = condition[1];
-        condition[1] = "=";
+        condition[1] = EQUAL_OPERATION;
     }
     return condition;
 }
@@ -353,21 +357,21 @@ function getNormalizedFields(fields) {
     }, []);
 }
 
-function getConditionFilterExpression(condition, fields, customOperations) {
+function getConditionFilterExpression(condition, fields, customOperations, target) {
     var field = getField(condition[0], fields),
         filterExpression = convertToInnerCondition(condition, customOperations),
         customOperation = customOperations.length && getCustomOperation(customOperations, filterExpression[1]);
 
     if(customOperation && customOperation.calculateFilterExpression) {
-        return customOperation.calculateFilterExpression.apply(customOperation, [filterExpression[2], field]);
+        return customOperation.calculateFilterExpression.apply(customOperation, [filterExpression[2], field, target]);
     } else if(field.calculateFilterExpression) {
-        return field.calculateFilterExpression.apply(field, [filterExpression[2], filterExpression[1]]);
+        return field.calculateFilterExpression.apply(field, [filterExpression[2], filterExpression[1], target]);
     } else {
-        return filterUtils.defaultCalculateFilterExpression.apply(field, [filterExpression[2], filterExpression[1]], "filterBuilder");
+        return filterUtils.defaultCalculateFilterExpression.apply(field, [filterExpression[2], filterExpression[1], target]);
     }
 }
 
-function getFilterExpression(value, fields, customOperations) {
+function getFilterExpression(value, fields, customOperations, target) {
     if(value === null) {
         return null;
     }
@@ -375,7 +379,7 @@ function getFilterExpression(value, fields, customOperations) {
     var criteria = getGroupCriteria(value);
 
     if(isCondition(criteria)) {
-        return getConditionFilterExpression(criteria, fields, customOperations) || null;
+        return getConditionFilterExpression(criteria, fields, customOperations, target) || null;
     } else {
         var result = [],
             filterExpression,
@@ -388,7 +392,7 @@ function getFilterExpression(value, fields, customOperations) {
                     result.push(filterExpression);
                 }
             } else if(isCondition(criteria[i])) {
-                filterExpression = getConditionFilterExpression(criteria[i], fields, customOperations);
+                filterExpression = getConditionFilterExpression(criteria[i], fields, customOperations, target);
                 if(filterExpression) {
                     i && result.push(groupValue);
                     result.push(filterExpression);
@@ -576,10 +580,10 @@ function updateConditionByOperation(condition, operation, customOperations) {
     }
 
     if(operation === "isblank") {
-        condition[1] = "=";
+        condition[1] = EQUAL_OPERATION;
         condition[2] = null;
     } else if(operation === "isnotblank") {
-        condition[1] = "<>";
+        condition[1] = NOT_EQUAL_OPERATION;
         condition[2] = null;
     } else {
         customOperation = getCustomOperation(customOperations, condition[1]);
@@ -594,7 +598,7 @@ function updateConditionByOperation(condition, operation, customOperations) {
 function getOperationValue(condition) {
     var caption;
     if(condition[2] === null) {
-        if(condition[1] === "=") {
+        if(condition[1] === EQUAL_OPERATION) {
             caption = "isblank";
         } else {
             caption = "isnotblank";
@@ -636,6 +640,101 @@ function getMergedOperations(customOperations, betweenCaption) {
     return result;
 }
 
+function isMatchedCondition(filter, addedFilterDataField, operations) {
+    return filter[0] === addedFilterDataField && operations.indexOf(filter[1]) !== -1;
+}
+
+function syncFilters(filter, addedFilter, operations) {
+    var canPush = addedFilter[2] !== null;
+    if(filter === null || filter.length === 0) return canPush ? addedFilter : null;
+
+    if(isCondition(filter)) {
+        if(!canPush) return null;
+
+        if(isMatchedCondition(filter, addedFilter[0], operations)) {
+            return addedFilter;
+        } else {
+            return [filter, AND_GROUP_OPERATION, addedFilter];
+        }
+    }
+
+    var groupValue = getGroupValue(filter);
+    if(groupValue !== AND_GROUP_OPERATION) {
+        return [addedFilter, "and", filter];
+    }
+
+    var result = [];
+    filter.forEach(function(item) {
+        if(isCondition(item)) {
+            if(isMatchedCondition(item, addedFilter[0], operations)) {
+                if(canPush) {
+                    result.push(addedFilter);
+                    canPush = false;
+                } else {
+                    result.splice(result.length - 1, 1);
+                }
+            } else {
+                result.push(item);
+            }
+        } else {
+            (result.length || isGroup(item)) && result.push(item);
+        }
+    });
+
+    if(canPush) {
+        result.push(AND_GROUP_OPERATION);
+        result.push(addedFilter);
+    }
+
+    return result.length === 1 ? result[0] : result;
+}
+
+function getMatchedCondition(filter, dataField, operations) {
+    if(filter === null || filter.length === 0) return null;
+
+    if(isCondition(filter)) {
+        if(isMatchedCondition(filter, dataField, operations)) {
+            return filter;
+        } else {
+            return null;
+        }
+    }
+
+    var groupValue = getGroupValue(filter);
+    if(groupValue !== AND_GROUP_OPERATION) {
+        return null;
+    }
+
+    var result = null,
+        hasDataFieldValue = false;
+    filter.forEach(function(item) {
+        if(isCondition(item)) {
+            if(isMatchedCondition(item, dataField, operations)) {
+                if(hasDataFieldValue) {
+                    result = null;
+                } else {
+                    result = item;
+                    hasDataFieldValue = true;
+                }
+            }
+        }
+    });
+
+    return result;
+}
+
+function filterHasField(filter, dataField) {
+    if(filter === null || filter.length === 0) return false;
+
+    if(isCondition(filter)) {
+        return filter[0] === dataField;
+    }
+
+    return filter.some(function(item) {
+        return (isCondition(item) || isGroup(item)) && filterHasField(item, dataField);
+    });
+}
+
 exports.isValidCondition = isValidCondition;
 exports.isEmptyGroup = isEmptyGroup;
 exports.getOperationFromAvailable = getOperationFromAvailable;
@@ -667,3 +766,6 @@ exports.setFocusToBody = setFocusToBody;
 exports.getFilterExpression = getFilterExpression;
 exports.getCustomOperation = getCustomOperation;
 exports.getMergedOperations = getMergedOperations;
+exports.syncFilters = syncFilters;
+exports.getMatchedCondition = getMatchedCondition;
+exports.filterHasField = filterHasField;

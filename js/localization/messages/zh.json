@@ -259,6 +259,8 @@
     "dxFilterBuilder-filterOperationNotContains": "不包含",
     "dxFilterBuilder-filterOperationEndsWith": "结束于",
     "dxFilterBuilder-filterOperationIsBlank": "空",
-    "dxFilterBuilder-filterOperationIsNotBlank": "不为空"
+    "dxFilterBuilder-filterOperationIsNotBlank": "不为空",
+    "dxFilterBuilder-filterOperationAnyOf": "!TODO",
+    "dxFilterBuilder-filterOperationNoneOf": "!TODO"
   }
 }

@@ -38,12 +38,10 @@ QUnit.testStart(function() {
 });
 
 
-var PIVOT_CLASS = "dx-pivot",
-    PIVOT_AUTOHEIGHT_CLASS = "dx-pivot-autoheight",
+var PIVOT_AUTOHEIGHT_CLASS = "dx-pivot-autoheight",
 
     PIVOT_TABS_CONTAINER_CLASS = "dx-pivottabs-container",
 
-    PIVOT_ITEM_CONTAINER_CLASS = "dx-pivot-itemcontainer",
     PIVOT_ITEM_WRAPPER_CLASS = "dx-pivot-itemwrapper",
 
     PIVOT_ITEM_CLASS = "dx-pivot-item",
@@ -159,64 +157,6 @@ var pivotTabsMock = {
         Pivot.mockPivotTabs(this.originalPivotTabs);
     }
 };
-
-
-QUnit.module("pivot rendering", {
-    beforeEach: function() {
-        pivotTabsMock.setup();
-
-        fx.off = true;
-    },
-    afterEach: function() {
-        pivotTabsMock.teardown();
-
-        fx.off = false;
-    }
-});
-
-QUnit.test("widget should be rendered", function(assert) {
-    var $pivot = $("#pivot").dxPivot();
-
-    assert.ok($pivot.hasClass(PIVOT_CLASS), "widget class added");
-});
-
-QUnit.test("selected index should be equal 0", function(assert) {
-    var pivot = $("#pivot").dxPivot().dxPivot("instance");
-
-    assert.equal(pivot.option("selectedIndex"), 0, "selectedIndex equals 0");
-});
-
-
-QUnit.module("markup", {
-    beforeEach: function() {
-        pivotTabsMock.setup();
-
-        fx.off = true;
-    },
-    afterEach: function() {
-        pivotTabsMock.teardown();
-
-        fx.off = false;
-    }
-});
-
-QUnit.test("pivot tabs should be rendered", function(assert) {
-    var $pivot = $("#pivot").dxPivot();
-
-    assert.equal($pivot.find(toSelector(PIVOT_TABS_CONTAINER_CLASS)).length, 1, "pivot tabs container rendered");
-});
-
-QUnit.test("pivot item should be rendered", function(assert) {
-    var $pivot = $("#pivot").dxPivot({
-        items: [{ title: "all", text: "all content" }, { title: "unread", text: "unread content" }, { title: "favorites", text: "favorites content" }]
-    });
-
-    var $itemContainer = $pivot.find(toSelector(PIVOT_ITEM_CONTAINER_CLASS)),
-        $itemWrapper = $itemContainer.find(toSelector(PIVOT_ITEM_WRAPPER_CLASS));
-
-    assert.equal($itemContainer.length, 1, "pivot current content container rendered");
-    assert.equal($itemWrapper.text(), "all content", "pivot current content rendered with proper data");
-});
 
 
 QUnit.module("sizing", {
@@ -356,115 +296,6 @@ QUnit.test("shown event should be fired on item showing", function(assert) {
     } finally {
         domUtils.triggerShownEvent = origTriggerShownEvent;
     }
-});
-
-
-QUnit.module("content template", {
-    beforeEach: function() {
-        pivotTabsMock.setup();
-
-        fx.off = true;
-    },
-    afterEach: function() {
-        pivotTabsMock.teardown();
-
-        fx.off = false;
-    }
-});
-
-QUnit.test("content should be rendered from content template if specified", function(assert) {
-    var $pivot = $("#pivot").dxPivot({
-            selectedIndex: 0,
-            items: [{ title: "all", text: "all content" }, { title: "unread", text: "unread content" }],
-            contentTemplate: function(container) {
-                assert.equal(isRenderer(container), !!config().useJQuery, "container is correct");
-                return "<div>content</div>";
-            }
-        }),
-        $itemWrapper = $pivot.find(toSelector(PIVOT_ITEM_WRAPPER_CLASS));
-
-    assert.equal($itemWrapper.text(), "content", "content rendered");
-});
-
-QUnit.test("content should be rendered from content template only once", function(assert) {
-    var renderTimes = 0;
-
-    var $pivot = $("#pivot").dxPivot({
-            selectedIndex: 0,
-            items: [{ title: "all", text: "all content" }, { title: "unread", text: "unread content" }],
-            contentTemplate: function() {
-                renderTimes++;
-                return "<div>content</div>";
-            }
-        }),
-        pivot = $pivot.dxPivot("instance"),
-        $itemWrapper = $pivot.find(toSelector(PIVOT_ITEM_WRAPPER_CLASS));
-
-    pivot.repaint();
-    assert.equal(renderTimes, 1, "content rendered only once");
-    assert.equal($itemWrapper.text(), "content", "content was not lost");
-});
-
-QUnit.test("content should be hidden after selected index change", function(assert) {
-    var $pivot = $("#pivot").dxPivot({
-            selectedIndex: 0,
-            items: [{ title: "all", text: "all content" }, { title: "unread", text: "unread content" }],
-            contentTemplate: function() {
-                return "<div>content</div>";
-            }
-        }),
-        pivot = $pivot.dxPivot("instance"),
-        $itemWrapper = $pivot.find(toSelector(PIVOT_ITEM_WRAPPER_CLASS));
-
-    pivot.option("selectedIndex", 1);
-    assert.equal($itemWrapper.find("." + PIVOT_ITEM_HIDDEN_CLASS).length, 0, "content was not hidden");
-});
-
-QUnit.test("content should be rerendered if content template changed", function(assert) {
-    var $pivot = $("#pivot").dxPivot({
-            selectedIndex: 0,
-            items: [{ title: "all", text: "all content" }, { title: "unread", text: "unread content" }],
-            contentTemplate: function() {
-                return "<div>content</div>";
-            }
-        }),
-        pivot = $pivot.dxPivot("instance"),
-        $itemWrapper = $pivot.find(toSelector(PIVOT_ITEM_WRAPPER_CLASS));
-
-    pivot.option("contentTemplate", function() { return null; }); // TODO: may be null?
-    assert.equal($itemWrapper.text(), "all content", "content rendered");
-});
-
-
-QUnit.module("item title template", {
-    beforeEach: function() {
-        fx.off = true;
-    },
-    afterEach: function() {
-        fx.off = false;
-    }
-});
-
-QUnit.test("itemTitleTemplate should have correct arguments", function(assert) {
-    $("#pivot").dxPivot({
-        items: [{ title: "all", text: "all content" }],
-        itemTitleTemplate: function(itemData, itemIndex, itemElement) {
-            assert.equal(isRenderer(itemElement), !!config().useJQuery, "itemElement is correct");
-            return 1;
-        }
-    });
-});
-
-QUnit.test("titleTemplate for item should have correct arguments", function(assert) {
-    $("#pivot").dxPivot({
-        items: [{
-            titleTemplate: function(itemData, itemIndex, itemElement) {
-                assert.equal(isRenderer(itemElement), !!config().useJQuery, "itemElement is correct");
-                return "all";
-            },
-            text: "all content"
-        }]
-    });
 });
 
 

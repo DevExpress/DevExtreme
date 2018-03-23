@@ -281,7 +281,7 @@ extend(exports, {
 
     processSeriesTemplate: function(seriesTemplate, items) {
         var customizeSeries = typeUtils.isFunction(seriesTemplate.customizeSeries) ? seriesTemplate.customizeSeries : noop,
-            nameField = seriesTemplate.nameField || 'series',
+            nameField = seriesTemplate.nameField,
             generatedSeries = {},
             seriesOrder = [],
             series,
@@ -295,10 +295,9 @@ extend(exports, {
             if(nameField in data) {
                 series = generatedSeries[data[nameField]];
                 if(!series) {
-                    series = generatedSeries[data[nameField]] = { name: data[nameField], data: [] };
+                    series = generatedSeries[data[nameField]] = { name: data[nameField] };
                     seriesOrder.push(series.name);
                 }
-                series.data.push(data);
             }
         }
         return map(seriesOrder, function(orderedName) {

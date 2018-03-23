@@ -2,7 +2,6 @@
 
 var $ = require("jquery");
 
-require("common.css!");
 require("ui/nav_bar");
 
 QUnit.testStart(function() {

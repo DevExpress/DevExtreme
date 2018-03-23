@@ -68,7 +68,8 @@ var FORM_EDITOR_BY_DEFAULT = "dxTextBox",
 
     SIMPLE_ITEM_TYPE = "simple",
 
-    DATA_OPTIONS = ["dataSource", "items"];
+    DATA_OPTIONS = ["dataSource", "items"],
+    EDITORS_WITH_ARRAY_VALUE = ["dxTagBox", "dxRangeSlider"];
 
 var LayoutManager = Widget.inherit({
     _getDefaultOptions: function() {
@@ -677,7 +678,7 @@ var LayoutManager = Widget.inherit({
             isDeepExtend = true,
             editorOptions;
 
-        if(options.editorType === "dxTagBox") {
+        if(EDITORS_WITH_ARRAY_VALUE.indexOf(options.editorType) !== -1) {
             defaultEditorOptions.value = defaultEditorOptions.value || [];
         }
 

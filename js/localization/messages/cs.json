@@ -259,6 +259,8 @@
         "dxFilterBuilder-filterOperationNotContains": "Neobsahuje",
         "dxFilterBuilder-filterOperationEndsWith": "Končí na",
         "dxFilterBuilder-filterOperationIsBlank": "Je prázdné",
-        "dxFilterBuilder-filterOperationIsNotBlank": "Není prázdné"
+        "dxFilterBuilder-filterOperationIsNotBlank": "Není prázdné",
+        "dxFilterBuilder-filterOperationAnyOf": "!TODO",
+        "dxFilterBuilder-filterOperationNoneOf": "!TODO"
     }
 }

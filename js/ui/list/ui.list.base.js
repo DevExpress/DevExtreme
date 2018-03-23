@@ -19,6 +19,7 @@ var $ = require("../../core/renderer"),
     Button = require("../button"),
     eventUtils = require("../../events/utils"),
     themes = require("../themes"),
+    windowUtils = require("../../core/utils/window"),
     ScrollView = require("../scroll_view"),
     deviceDependentOptions = require("../scroll_view/ui.scrollable").deviceDependentOptions,
     CollectionWidget = require("../collection/ui.collection_widget.edit"),
@@ -694,7 +695,7 @@ var ListBase = CollectionWidget.inherit({
     },
 
     _dataSourceChangedHandler: function(newItems) {
-        if(!this._shouldAppendItems()) {
+        if(!this._shouldAppendItems() && windowUtils.hasWindow()) {
             this._scrollView && this._scrollView.scrollTo(0);
         }
 
@@ -1025,9 +1026,13 @@ var ListBase = CollectionWidget.inherit({
     },
 
     _refresh: function() {
-        var scrollTop = this._scrollView.scrollTop();
-        this.callBase();
-        scrollTop && this._scrollView.scrollTo(scrollTop);
+        if(!windowUtils.hasWindow()) {
+            this.callBase();
+        } else {
+            var scrollTop = this._scrollView.scrollTop();
+            this.callBase();
+            scrollTop && this._scrollView.scrollTo(scrollTop);
+        }
     },
 
     _optionChanged: function(args) {

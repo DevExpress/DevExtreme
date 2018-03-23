@@ -4,6 +4,7 @@ var $ = require("../core/renderer"),
     Editor = require("./editor/editor"),
     registerComponent = require("../core/component_registrator"),
     extend = require("../core/utils/extend").extend,
+    windowUtils = require("../core/utils/window"),
     fx = require("../animation/fx");
 
 var TRACKBAR_CLASS = "dx-trackbar",
@@ -120,7 +121,7 @@ var TrackBar = Editor.inherit({
             return;
         }
 
-        if(this._needPreventAnimation) {
+        if(this._needPreventAnimation || !windowUtils.hasWindow()) {
             return;
         }
 
