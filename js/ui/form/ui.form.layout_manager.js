@@ -298,11 +298,12 @@ var LayoutManager = Widget.inherit({
         });
     },
 
-    _render: function() {
+    _initMarkup: function() {
         this._clearEditorInstances();
         this.$element().addClass(FORM_LAYOUT_MANAGER_CLASS);
 
         this.callBase();
+        this._renderResponsiveBox();
     },
 
     _clearEditorInstances: function() {
@@ -311,11 +312,6 @@ var LayoutManager = Widget.inherit({
 
     _hasBrowserFlex: function() {
         return styleUtils.styleProp(LAYOUT_STRATEGY_FLEX) === LAYOUT_STRATEGY_FLEX;
-    },
-
-    _renderContentImpl: function() {
-        this.callBase();
-        this._renderResponsiveBox();
     },
 
     _renderResponsiveBox: function() {
@@ -410,10 +406,12 @@ var LayoutManager = Widget.inherit({
 
     _getColCount: function() {
         var colCount = this.option("colCount"),
-            colCountByScreen = this.option("colCountByScreen");
+            colCountByScreen = this.option("colCountByScreen"),
+            hasWindow = windowUtils.hasWindow();
 
         if(colCountByScreen) {
-            var currentColCount = colCountByScreen[windowUtils.getCurrentScreenFactor(this.option("screenByWidth"))];
+            var screenFactor = hasWindow ? windowUtils.getCurrentScreenFactor(this.option("screenByWidth")) : "lg",
+                currentColCount = colCountByScreen[screenFactor];
             colCount = currentColCount || colCount;
         }
 
@@ -422,7 +420,7 @@ var LayoutManager = Widget.inherit({
                 return this._cashedColCount;
             }
 
-            this._cashedColCount = colCount = this._getMaxColCount();
+            this._cashedColCount = colCount = hasWindow ? this._getMaxColCount() : 1;
         }
 
         return colCount < 1 ? 1 : colCount;
