@@ -154,8 +154,10 @@
 }
 
 .dx-scheduler-work-space-month {
-    .dx-scheduler-group-mixin(@GENERIC_SCHEDULER_HEADER_PANEL_TABLE_CELL_HEIGHT + @GENERIC_SCHEDULER_HEADER_PANEL_TOP_GAP);
-
+    &:not(.dx-scheduler-work-space-horizontal-grouped) {
+        .dx-scheduler-group-mixin(@GENERIC_SCHEDULER_HEADER_PANEL_TABLE_CELL_HEIGHT + @GENERIC_SCHEDULER_HEADER_PANEL_TOP_GAP);
+    }
+    
     .dx-scheduler-appointment-content {
         font-size: @GENERIC_SCHEDULER_APPOINTMENT_MONTH_TEXT_SIZE;
     }
