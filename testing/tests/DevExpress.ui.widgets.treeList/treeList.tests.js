@@ -188,6 +188,8 @@ QUnit.test("Columns hiding - columnHidingEnabled is true", function(assert) {
     assert.ok($cellElement.eq(1).hasClass("dx-treelist-hidden-column"), "second cell is hidden");
     assert.notOk($cellElement.eq(2).hasClass("dx-command-adaptive-hidden"), "adaptive cell is visible");
 
+    this.clock.tick(300);
+
     // act
     treeList.option("width", 800);
 
@@ -223,7 +225,7 @@ QUnit.test("Height rows view", function(assert) {
     assert.equal(treeList.$element().find(".dx-treelist-rowsview").outerHeight(), 200, "height rows view");
 });
 
-QUnit.test("Virtual scrolling enabled by default and should render two tables in rowsView", function(assert) {
+QUnit.test("Virtual scrolling enabled by default and should render two virtual rows", function(assert) {
     var treeList = createTreeList({
         columns: ["name", "age"],
         dataSource: [
@@ -236,15 +238,13 @@ QUnit.test("Virtual scrolling enabled by default and should render two tables in
     // act
     this.clock.tick();
 
-
     // assert
     assert.equal(treeList.option("scrolling.mode"), "virtual", "scrolling mode is virtual");
     var $rowsViewTables = $(treeList.$element().find(".dx-treelist-rowsview table"));
-    assert.equal($rowsViewTables.length, 2, "two tables are rendered");
-    assert.equal($rowsViewTables.eq(0).find(".dx-data-row").length, 3, "three data rows in first table");
-    assert.equal($rowsViewTables.eq(1).find(".dx-data-row").length, 0, "no data rows in second table");
-    assert.equal($rowsViewTables.eq(0).find(".dx-freespace-row").length, 1, "one freespace row in first table");
-    assert.equal($rowsViewTables.eq(1).find(".dx-freespace-row").length, 1, "one freespace row in second table");
+    assert.equal($rowsViewTables.length, 1, "one table are rendered");
+    assert.equal($rowsViewTables.eq(0).find(".dx-data-row").length, 3, "three data rows in table");
+    assert.equal($rowsViewTables.eq(0).find(".dx-virtual-row").length, 2, "two virtual rows in table");
+    assert.equal($rowsViewTables.eq(0).find(".dx-freespace-row").length, 1, "one freespace row in table");
 });
 
 

@@ -146,7 +146,7 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
 
             getVirtualContentSize: function() { return 0; },
 
-            getContentOffset: function() { return 0; },
+            getContentOffset: function(type) { return options.virtualItemsCount ? options.virtualItemsCount[type || "begin"] * 20 : 0; },
 
             itemsCount: function() {
                 return options.itemsCount;
@@ -880,6 +880,7 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
         that.options = that.options || {};
 
         that.options.rtlEnabled = !!that.options.rtlEnabled;
+        that.options.advancedRendering = true;
 
         that.option = function(options, value) {
             var result = that.options,
