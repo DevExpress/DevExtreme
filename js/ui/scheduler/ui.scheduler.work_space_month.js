@@ -46,7 +46,12 @@ var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
     },
 
     _calculateCellIndex: function(rowIndex, cellIndex) {
-        cellIndex = cellIndex % this._getCellCount();
+        if(this._isHorizontalGroupedWorkSpace()) {
+            rowIndex = rowIndex % this._getRowCount();
+        } else {
+            cellIndex = cellIndex % this._getCellCount();
+        }
+
         return rowIndex * this._getCellCount() + cellIndex;
     },
 
@@ -154,8 +159,10 @@ var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
     },
 
     _getDate: function(week, day) {
-        var result = new Date(this._firstViewDate);
-        result.setDate(result.getDate() + week * DAYS_IN_WEEK + day);
+        var result = new Date(this._firstViewDate),
+            lastRowInDay = this._getRowCount();
+
+        result.setDate(result.getDate() + (week % lastRowInDay) * DAYS_IN_WEEK + day);
         return result;
     },
 
@@ -253,7 +260,9 @@ var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
         return position;
     },
 
-    scrollToTime: noop
+    scrollToTime: noop,
+
+    _setHorizontalGroupHeaderCellsHeight: noop
 });
 
 registerComponent("dxSchedulerWorkSpaceMonth", SchedulerWorkSpaceMonth);

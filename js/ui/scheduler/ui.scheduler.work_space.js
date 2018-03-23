@@ -1310,6 +1310,7 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _prepareCellData: function(rowIndex, cellIndex) {
+
         var startDate = this._getDateByCellIndexes(rowIndex, cellIndex),
             endDate = this.calculateEndDate(startDate),
             data = {
@@ -1331,6 +1332,9 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _getGroupIndex: function(rowIndex, cellIndex) {
+        if(this._isHorizontalGroupedWorkSpace) {
+            return Math.floor(rowIndex / this._getRowCount());
+        }
         return Math.floor(cellIndex / this._getCellCount());
     },
 
@@ -1503,8 +1507,13 @@ var SchedulerWorkSpace = Widget.inherit({
     _getFormat: abstract,
 
     _calculateCellIndex: function(rowIndex, cellIndex) {
+        // if(this._isHorizontalGroupedWorkSpace()) {
+        //     rowIndex = rowIndex % this._getRowCount();
+        //     return this._getCellCount() * rowIndex + cellIndex;
+        // } else {
         cellIndex = cellIndex % this._getCellCount();
         return this._getRowCount() * cellIndex + rowIndex;
+        // }
     },
 
     _renderTableBody: function(options, delayCellTemplateRendering) {
