@@ -261,6 +261,7 @@
         "dxFilterBuilder-filterOperationIsBlank": "Is blank",
         "dxFilterBuilder-filterOperationIsNotBlank": "Is not blank",
         "dxFilterBuilder-filterOperationAnyOf": "Any of",
-        "dxFilterBuilder-filterOperationNoneOf": "None of"
+        "dxFilterBuilder-filterOperationNoneOf": "None of",
+        "dxFilterBuilder-name": "Filter Builder"
     }
 }

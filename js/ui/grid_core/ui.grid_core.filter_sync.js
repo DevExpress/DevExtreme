@@ -114,8 +114,13 @@ var FilterSyncController = modules.Controller.inherit((function() {
             this._setFilterValue(this._getSyncHeaderFilter(this.option("filterValue"), column));
         },
 
-        getFilterOperations: function() {
-            return [customOperations.anyOf(this.component), customOperations.noneOf(this.component)];
+        getCustomFilterOperations: function() {
+            var filterBuilderCustomOperations = this.option("filterBuilder.customOperations") || [];
+            return [customOperations.anyOf(this.component), customOperations.noneOf(this.component)].concat(filterBuilderCustomOperations);
+        },
+
+        publicMethods: function() {
+            return ["getCustomFilterOperations"];
         }
     };
 })());

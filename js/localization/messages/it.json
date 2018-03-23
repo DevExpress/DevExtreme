@@ -261,6 +261,7 @@
         "dxFilterBuilder-filterOperationIsBlank": "E' vuoto",
         "dxFilterBuilder-filterOperationIsNotBlank": "Non è vuoto",
         "dxFilterBuilder-filterOperationAnyOf": "!TODO",
-        "dxFilterBuilder-filterOperationNoneOf": "!TODO"
+        "dxFilterBuilder-filterOperationNoneOf": "!TODO",
+        "dxFilterBuilder-name": "!TODO"
     }
 }

@@ -229,6 +229,7 @@
         "dxFilterBuilder-filterOperationIsBlank": "Пусто",
         "dxFilterBuilder-filterOperationIsNotBlank": "Не пусто",
         "dxFilterBuilder-filterOperationAnyOf": "Любой из",
-        "dxFilterBuilder-filterOperationNoneOf": "Ни один из"
+        "dxFilterBuilder-filterOperationNoneOf": "Ни один из",
+        "dxFilterBuilder-name": "Конструктор фильтра"
     }
 }

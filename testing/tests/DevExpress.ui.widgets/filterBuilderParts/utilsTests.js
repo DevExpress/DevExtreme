@@ -7,6 +7,9 @@ var utils = require("ui/filter_builder/utils"),
 var FILTER_ROW_OPERATIONS = ["=", "<>", "<", "<=", ">", ">=", "notcontains", "contains", "startswith", "endswith", "between"],
     HEADER_FILTER_OPERATIONS = ["anyof", "noneof"];
 
+var FILTER_ROW_OPERATIONS = ["=", "<>", "<", "<=", ">", ">=", "notcontains", "contains", "startswith", "endswith", "between"],
+    HEADER_FILTER_OPERATIONS = ["anyof", "noneof"];
+
 var condition1 = ["CompanyName", "=", "Super Mart of the West"],
     condition2 = ["CompanyName", "=", "and"],
     condition3 = ["CompanyName", "=", "Super Mart of the West3"],

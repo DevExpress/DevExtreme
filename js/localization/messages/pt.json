@@ -229,6 +229,7 @@
         "dxFilterBuilder-filterOperationIsBlank": "É vazio",
         "dxFilterBuilder-filterOperationIsNotBlank": "Não é vazio",
         "dxFilterBuilder-filterOperationAnyOf": "!TODO",
-        "dxFilterBuilder-filterOperationNoneOf": "!TODO"
+        "dxFilterBuilder-filterOperationNoneOf": "!TODO",
+        "dxFilterBuilder-name": "!TODO"
     }
 }
