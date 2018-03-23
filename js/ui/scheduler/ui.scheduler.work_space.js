@@ -25,7 +25,8 @@ var $ = require("../../core/renderer"),
     dragEvents = require("../../events/drag"),
     Scrollable = require("../scroll_view/ui.scrollable"),
     tableCreator = require("./ui.scheduler.table_creator"),
-    VerticalShader = require("./ui.scheduler.currentTimeShader.vertical");
+    VerticalShader = require("./ui.scheduler.currentTimeShader.vertical"),
+    TimelineHeaderFormatter = require("./ui.scheduler.timeline_header_formatter");
 
 var COMPONENT_CLASS = "dx-scheduler-work-space",
     GROUPED_WORKSPACE_CLASS = "dx-scheduler-work-space-grouped",
@@ -1069,7 +1070,8 @@ var SchedulerWorkSpace = Widget.inherit({
                         container: getPublicElement($cell)
                     }));
                 } else {
-                    $cell.text(text);
+                    // TODO for all view types
+                    TimelineHeaderFormatter.fillDateHeaderCell($cell, text);
                 }
 
                 $headerRow.append($cell);

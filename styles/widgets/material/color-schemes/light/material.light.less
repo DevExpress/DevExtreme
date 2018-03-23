@@ -1566,7 +1566,7 @@
 * @type color
 * @group scheduler
 */
-@SCHEDULER_BASE_BORDER_COLOR: fade(@base-border-color, 60%);
+@SCHEDULER_BASE_BORDER_COLOR: @base-border-color;
 
 @scheduler-cell-active-bg: fade(darken(@base-bg, 13.3%), 70%);
 
@@ -1578,13 +1578,13 @@
 */
 @scheduler-cell-hover-bg: @base-hover-color;
 
-@scheduler-group-separator-border-color: darken(@base-border-color, 20%);
+@scheduler-group-separator-border-color: @base-border-color;
 /**
 * @name 20. Hour separator color
 * @type color
 * @group scheduler
 */
-@SCHEDULER_ACCENT_BORDER_COLOR: darken(@base-border-color, 10%);
+@SCHEDULER_ACCENT_BORDER_COLOR: @base-border-color;
 
 /**
 * @name 60. First day of month separator color
@@ -1628,7 +1628,7 @@
 * @type color
 * @group scheduler
 */
-@SCHEDULER_PANEL_TEXT_COLOR: @base-text-color;
+@SCHEDULER_PANEL_TEXT_COLOR: fade(@base-text-color, 54%);
 
 /**
 * @name 5. Workspace color
@@ -1666,7 +1666,7 @@
 
 @scheduler-group-header-color: @SCHEDULER_PANEL_TEXT_COLOR;
 
-@scheduler-header-bg: @base-hover-color;
+@scheduler-header-bg: @base-bg;
 @scheduler-alldaypanel-bg: @base-element-bg;
 
 @scheduler-recurence-editor-bg: @base-element-bg;

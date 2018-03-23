@@ -47,7 +47,8 @@ var $ = require("../../core/renderer"),
     when = deferredUtils.when,
     Deferred = deferredUtils.Deferred,
     EmptyTemplate = require("../widget/empty_template"),
-    BindableTemplate = require("../widget/bindable_template");
+    BindableTemplate = require("../widget/bindable_template"),
+    themes = require("../themes");
 
 var WIDGET_CLASS = "dx-scheduler",
     WIDGET_SMALL_CLASS = "dx-scheduler-small",
@@ -1066,6 +1067,19 @@ var Scheduler = Widget.inherit({
 
     _defaultOptionsRules: function() {
         return this.callBase().concat([
+            {
+                device: function() {
+                    /material/.test(themes.current());// TODO dos not work at all
+                },
+                options: {
+                    /**
+                     * @name dxSchedulerOptions_useDropDownViewSwitcher
+                     * @publicName useDropDownViewSwitcher
+                     * @default true @for Material
+                     */
+                    useDropDownViewSwitcher: true,
+                }
+            },
             {
                 device: function() {
                     return devices.real().deviceType === "desktop" && !devices.isSimulator();
