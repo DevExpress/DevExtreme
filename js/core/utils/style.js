@@ -2,6 +2,7 @@
 
 var camelize = require("./inflector").camelize,
     callOnce = require("./call_once"),
+    typeUtils = require("./type"),
     domAdapter = require("../dom_adapter");
 
 var jsPrefixes = ["", "Webkit", "Moz", "O", "Ms"],
@@ -37,14 +38,15 @@ var forEachPrefixes = function(prop, callBack) {
         }
     }
 
-    return result;
+    return result || "";
 };
 
 var styleProp = function(name) {
     if(name in getStyles()) {
-	    return name;
+        return name;
     }
 
+    var originalName = name;
     name = name.charAt(0).toUpperCase() + name.substr(1);
     for(var i = 1; i < jsPrefixes.length; i++) {
         var prefixedProp = jsPrefixes[i].toLowerCase() + name;
@@ -52,6 +54,8 @@ var styleProp = function(name) {
             return prefixedProp;
         }
     }
+
+    return originalName;
 };
 
 var stylePropPrefix = function(prop) {
@@ -62,5 +66,27 @@ var stylePropPrefix = function(prop) {
     });
 };
 
+
+var pxExceptions = [
+    "fillOpacity",
+    "columnCount",
+    "flexGrow",
+    "flexShrink",
+    "fontWeight",
+    "lineHeight",
+    "opacity",
+    "zIndex",
+    "zoom"
+];
+
+var normalizeStyleProp = function(prop, value) {
+    if(typeUtils.isNumeric(value) && pxExceptions.indexOf(prop) === -1) {
+        value += "px";
+    }
+
+    return value;
+};
+
 exports.styleProp = styleProp;
 exports.stylePropPrefix = stylePropPrefix;
+exports.normalizeStyleProp = normalizeStyleProp;
