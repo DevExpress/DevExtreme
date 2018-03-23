@@ -6,6 +6,7 @@ var $ = require("../../core/renderer"),
 
 var TIMELINE_CLASS = "dx-scheduler-timeline-week",
     HEADER_PANEL_CELL_CLASS = "dx-scheduler-header-panel-cell",
+    HEADER_PANEL_WEEK_CELL_CLASS = "dx-scheduler-header-panel-week-cell",
     HEADER_ROW_CLASS = "dx-scheduler-header-row";
 
 var SchedulerTimelineWeek = SchedulerTimeline.inherit({
@@ -43,7 +44,7 @@ var SchedulerTimelineWeek = SchedulerTimeline.inherit({
                 $th.text(text);
             }
 
-            $th.addClass(HEADER_PANEL_CELL_CLASS).addClass("some-class").attr("colSpan", colspan);
+            $th.addClass(HEADER_PANEL_CELL_CLASS).addClass(HEADER_PANEL_WEEK_CELL_CLASS).attr("colSpan", colspan);
             $cells.push($th);
 
             this._incrementDate(firstViewDate);
