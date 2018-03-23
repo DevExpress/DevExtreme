@@ -130,12 +130,12 @@ var DateBox = DropDownEditor.inherit({
             type: "date",
 
             /**
-             * @name dxDateBoxOptions_compactMode
-             * @publicName compactMode
+             * @name dxDateBoxOptions_showAnalogClock
+             * @publicName showAnalogClock
              * @type boolean
              * @default false
              */
-            compactMode: false,
+            showAnalogClock: false,
 
             /**
             * @name dxDateBoxOptions_value
@@ -872,7 +872,7 @@ var DateBox = DropDownEditor.inherit({
             case "invalidDateMessage":
             case "dateOutOfRangeMessage":
             case "adaptivityEnabled":
-            case "compactMode":
+            case "showAnalogClock":
                 break;
             default:
                 this.callBase.apply(this, arguments);

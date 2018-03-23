@@ -2352,7 +2352,7 @@ QUnit.test("date box should contain calendar and time view inside box in small s
     }
 });
 
-QUnit.test("date box should have compact view when compactMode option is true", function(assert) {
+QUnit.test("date box should have compact view when showAnalogClock option is true", function(assert) {
     var $element = $("#dateBox").dxDateBox({
             type: "datetime",
             pickerType: "calendar",
