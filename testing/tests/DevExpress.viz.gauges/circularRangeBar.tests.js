@@ -131,7 +131,7 @@ QUnit.test('render - with text', function(assert) {
         'class': 'dxg-text', align: 'center', text: '25.0'
     }, '_text settings');
     assert.deepEqual(rangeBar._text._stored_styles, {
-        'font-family': 'Font', fill: 'black'
+        'fontFamily': 'Font', fill: 'black'
     }, '_text font styles');
     assert.roughEqual(rangeBar._text._stored_settings.x, 200 + (89 + 40 * 0.6) * Math.cos(Math.PI * 3 / 4), 1E-4, '_text x');
     assert.roughEqual(rangeBar._text._stored_settings.y, 100 - (89 + 16 * 0.6) * Math.sin(Math.PI * 3 / 4) + 2, 1E-4, '_text y');
@@ -163,7 +163,7 @@ QUnit.test('render - currentValue and baseValue are reversed, with text', functi
         'class': 'dxg-text', align: 'center', text: '75.0'
     }, '_text settings');
     assert.deepEqual(rangeBar._text._stored_styles, {
-        'font-family': 'Font', fill: 'black'
+        'fontFamily': 'Font', fill: 'black'
     }, '_text font styles');
     assert.roughEqual(rangeBar._text._stored_settings.x, 200 + (89 + 40 * 0.6) * Math.cos(Math.PI * 1 / 4), 1E-4, '_text x');
     assert.roughEqual(rangeBar._text._stored_settings.y, 100 - (89 + 16 * 0.6) * Math.sin(Math.PI * 1 / 4) + 2, 1E-4, '_text y');
