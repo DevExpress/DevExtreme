@@ -399,14 +399,14 @@ QUnit.test("The formData with composite object is updated correctly when formDat
 
 
 QUnit.module("Tabs", {
-    beforeEach: () => {
+    beforeEach: function() {
         var that = this;
         that.clock = sinon.useFakeTimers();
 
         responsiveBoxScreenMock.setup.call(this, 1200);
     },
 
-    afterEach: () => {
+    afterEach: function() {
         this.clock.restore();
         responsiveBoxScreenMock.teardown.call(this);
     }
