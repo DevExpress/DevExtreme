@@ -2401,3 +2401,31 @@ QUnit.test("getColumnElements by band column with hidden children where filter r
     // assert
     assert.ok(!$columnElements, "no cells");
 });
+
+QUnit.test("DataGrid headers has dx-header-multi-row class for multi-row headers (bands)", function(assert) {
+    // arrange
+    var $testElement = $('#container');
+    this.columns = [{ caption: "Band column 1", columns: ["Column1", "Column2"] }, "Column3", { caption: "Band column 2", columns: ["Column4", "Column5"] }];
+    this.setupDataGrid();
+
+    // act
+    this.columnHeadersView.render($testElement);
+
+    // assert
+    var $headers = $testElement.find(".dx-datagrid-headers");
+    assert.ok($headers.hasClass("dx-header-multi-row"));
+});
+
+QUnit.test("DataGrid headers has no dx-header-multi-row class for single-row headers", function(assert) {
+    // arrange
+    var $testElement = $('#container');
+    this.columns = [{ caption: "Band column 1" }, "Column3", { caption: "Band column 2" }];
+    this.setupDataGrid();
+
+    // act
+    this.columnHeadersView.render($testElement);
+
+    // assert
+    var $headers = $testElement.find(".dx-datagrid-headers");
+    assert.notOk($headers.hasClass("dx-header-multi-row"));
+});

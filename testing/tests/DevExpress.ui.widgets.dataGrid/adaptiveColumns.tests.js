@@ -24,7 +24,8 @@ var $ = require("jquery"),
     eventsEngine = require("events/core/events_engine"),
     typeUtils = require("core/utils/type"),
     config = require("core/config"),
-    renderer = require("core/renderer");
+    renderer = require("core/renderer"),
+    themes = require("ui/themes");
 
 function setupDataGrid(that, $dataGridContainer) {
     that.$element = function() {
@@ -1564,6 +1565,27 @@ QUnit.test("Row elements are should get only once when CSS for hidden column is 
 
     // assert
     assert.ok(this.rowsView._getRowElements.calledOnce);
+});
+
+QUnit.test("Form has 2 columns in material theme", function(assert) {
+    var origThemes = themes.current;
+    themes.current = function() { return "material"; };
+    // arrange, act
+    $(".dx-datagrid").width(200);
+    setupDataGrid(this);
+    this.rowsView.render($("#container"));
+    $(".dx-data-row .dx-datagrid-adaptive-more").first().trigger("dxclick");
+    this.clock.tick();
+
+    var form = $("#container").find(".dx-form").dxForm("instance");
+    var colWidth = form.option("colCount");
+    var screenByWidth = form.option("screenByWidth");
+
+    // assert
+    assert.equal(colWidth, 2);
+    assert.ok(screenByWidth);
+
+    themes.current = origThemes;
 });
 
 QUnit.module("API", {

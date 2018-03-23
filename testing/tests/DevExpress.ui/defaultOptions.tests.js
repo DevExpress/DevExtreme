@@ -16,6 +16,7 @@ var $ = require("jquery"),
     Button = require("ui/button"),
     CheckBox = require("ui/check_box"),
     ColorBox = require("ui/color_box"),
+    DataGrid = require("ui/data_grid"),
     DateBox = require("ui/date_box"),
     DateView = require("ui/date_box/ui.date_view"),
     DateViewRoller = require("ui/date_box/ui.date_view_roller"),
@@ -49,9 +50,11 @@ var $ = require("jquery"),
     TabPanel = require("ui/tab_panel"),
     TagBox = require("ui/tag_box"),
     Toast = require("ui/toast"),
+    TreeList = require("ui/tree_list"),
     TreeView = require("ui/tree_view"),
     FileUploader = require("ui/file_uploader"),
-    Toolbar = require("ui/toolbar");
+    Toolbar = require("ui/toolbar"),
+    Form = require("ui/form");
 
 
 QUnit.testStart(function() {
@@ -949,6 +952,21 @@ testComponentDefaults(LoadIndicator,
 testComponentDefaults(LoadIndicator,
     {},
     {
+        _animatingSegmentCount: 2,
+        _animatingSegmentInner: true
+    },
+    function() {
+        this.originalCurrentTheme = themes.current();
+        themes.current("material");
+    },
+    function() {
+        themes.current(this.originalCurrentTheme);
+    }
+);
+
+testComponentDefaults(LoadIndicator,
+    {},
+    {
         _animatingSegmentCount: 7,
         _animatingSegmentInner: false
     },
@@ -1056,6 +1074,38 @@ testComponentDefaults(List,
     function() {
         this.originalCurrentTheme = themes.current();
         themes.current("android5");
+    },
+    function() {
+        themes.current(this.originalCurrentTheme);
+    }
+);
+
+testComponentDefaults(List,
+    { platform: devices.current().platform },
+    {
+        useInkRipple: true
+    },
+    function() {
+        this.originalCurrentTheme = themes.current();
+        themes.current("material.light");
+    },
+    function() {
+        themes.current(this.originalCurrentTheme);
+    }
+);
+
+testComponentDefaults(TreeList,
+    { platform: devices.current().platform },
+    {
+        showRowLines: true,
+        showColumnLines: false,
+        headerFilter: {
+            height: 315
+        }
+    },
+    function() {
+        this.originalCurrentTheme = themes.current();
+        themes.current("material.light");
     },
     function() {
         themes.current(this.originalCurrentTheme);
@@ -1250,5 +1300,68 @@ testComponentDefaults(FileUploader,
     function() {
         browser.msie = this._origMSIE;
         browser.version = this._origMSIEVersion;
+    }
+);
+
+testComponentDefaults(Form,
+    {},
+    {
+        labelLocation: "top",
+        showColonAfterLabel: false
+    },
+    function() {
+        this.originalCurrentTheme = themes.current();
+        themes.current("material.light");
+    },
+    function() {
+        themes.current(this.originalCurrentTheme);
+    }
+);
+
+testComponentDefaults(DataGrid,
+    {},
+    {
+        showRowLines: true,
+        showColumnLines: false
+    },
+    function() {
+        this.originalCurrentTheme = themes.current();
+        themes.current("material.light");
+    },
+    function() {
+        themes.current(this.originalCurrentTheme);
+    }
+);
+
+testComponentDefaults(DataGrid,
+    { platform: devices.current().platform },
+    {
+        showRowLines: false
+    },
+    function() {
+        this.originalRealDevice = devices.real();
+        devices.real({
+            platform: "android"
+        });
+    },
+    function() {
+        themes.current(this.originalCurrentTheme);
+    }
+);
+
+testComponentDefaults(DataGrid,
+    {},
+    {
+        grouping: { expandMode: "rowClick" },
+        showRowLines: true
+    },
+    function() {
+        this.originalRealDevice = devices.real();
+        devices.real({
+            platform: "ios"
+        });
+    },
+    function() {
+        devices.real(this.originalRealDevice);
     }
 );

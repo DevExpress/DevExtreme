@@ -57,6 +57,7 @@ var FILTERING_TIMEOUT = 700,
     FOCUSED_CLASS = "dx-focused",
     CELL_FOCUS_DISABLED_CLASS = "dx-cell-focus-disabled",
     FILTER_RANGE_CONTENT_CLASS = "dx-filter-range-content",
+    FILTER_MODIFIED_CLASS = "dx-filter-modified",
 
     EDITORS_INPUT_SELECTOR = "input:not([type='hidden'])";
 
@@ -635,7 +636,9 @@ exports.ApplyFilterViewController = modules.ViewController.inherit({
 
     setHighLight: function($element, value) {
         if(isOnClickApplyFilterMode(this)) {
-            $element && $element.toggleClass(HIGHLIGHT_OUTLINE_CLASS, value);
+            $element &&
+            $element.toggleClass(HIGHLIGHT_OUTLINE_CLASS, value) &&
+            $element.closest("." + EDITOR_CELL_CLASS).toggleClass(FILTER_MODIFIED_CLASS, value);
             this._getHeaderPanel().enableApplyButton(value);
         }
     },
@@ -662,8 +665,9 @@ exports.ApplyFilterViewController = modules.ViewController.inherit({
 
     removeHighLights: function() {
         if(isOnClickApplyFilterMode(this)) {
-            var columnHeadersView = this.getView("columnHeadersView");
-            columnHeadersView.element().find("." + this.addWidgetPrefix(FILTER_ROW_CLASS) + " ." + HIGHLIGHT_OUTLINE_CLASS).removeClass(HIGHLIGHT_OUTLINE_CLASS);
+            var columnHeadersViewElement = this.getView("columnHeadersView").element();
+            columnHeadersViewElement.find("." + this.addWidgetPrefix(FILTER_ROW_CLASS) + " ." + HIGHLIGHT_OUTLINE_CLASS).removeClass(HIGHLIGHT_OUTLINE_CLASS);
+            columnHeadersViewElement.find("." + this.addWidgetPrefix(FILTER_ROW_CLASS) + " ." + FILTER_MODIFIED_CLASS).removeClass(FILTER_MODIFIED_CLASS);
             this._getHeaderPanel().enableApplyButton(false);
         }
     }

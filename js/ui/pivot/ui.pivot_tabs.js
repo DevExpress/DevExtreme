@@ -177,6 +177,9 @@ var PivotTabs = CollectionWidget.inherit({
 
         this.callBase();
 
+        this._calculateMaxOffsets(this._getSelectedItemIndices());
+        this._updateTabsPositions();
+
         this._renderGhostTab();
     },
 
@@ -477,9 +480,6 @@ var PivotTabs = CollectionWidget.inherit({
     },
 
     _renderSelection: function(current) {
-        this._calculateMaxOffsets(current);
-
-        this._updateTabsPositions();
         this._itemElements().eq(current).addClass(PIVOT_TAB_SELECTED_CLASS);
     },
 
