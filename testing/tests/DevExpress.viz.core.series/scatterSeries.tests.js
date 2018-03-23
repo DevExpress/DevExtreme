@@ -138,6 +138,23 @@ var checkTwoGroups = function(assert, series) {
         assert.equal(this.createPoint.firstCall.args[1].value, 3, "Value should be correct");
     });
 
+    QUnit.test("Point should have correct index", function(assert) {
+        var series = createSeries({ type: "scatter", label: { visible: false } }),
+            data = [{ arg: 1, val: 10 }, { arg: 2, val: undefined }, { arg: 3, val: 20 }];
+
+        series.updateData(data);
+        series.createPoints();
+
+        assert.ok(series.getAllPoints(), "Series points should be created");
+        assert.equal(series.getAllPoints().length, 2, "Series should have 1 point");
+
+        assert.equal(this.createPoint.getCall(0).args[1].index, 0, "index");
+        assert.equal(this.createPoint.getCall(0).args[1].argument, 1, "argument");
+
+        assert.equal(this.createPoint.getCall(1).args[1].index, 1, "index");
+        assert.equal(this.createPoint.getCall(1).args[1].argument, 3, "argument");
+    });
+
     QUnit.module("Series with valueErrorBar", {
         beforeEach: function() {
             environment.beforeEach.call(this);
@@ -2403,38 +2420,6 @@ var checkTwoGroups = function(assert, series) {
         checkVisibility({ type: "fixed", displayMode: "all" }, undefined, "discrete", false, "fixed, displayMode all");
         checkVisibility({ type: "fixed", displayMode: "all" }, undefined, "logarithmic", false, "fixed, displayMode all");
         checkVisibility({ type: "fixed", displayMode: "all" }, "datetime", undefined, false, "fixed, displayMode all");
-    });
-
-    QUnit.test("Update template field", function(assert) {
-        var series = createSeries({
-            type: seriesType,
-            name: "lineSeries",
-            valueField: "valueField",
-            tagField: "tagField",
-            point: { visible: false },
-            label: { visible: false }
-
-        }, this.renderer);
-        // act
-        series.updateTemplateFieldNames();
-        // assert
-        assert.equal(series._options.valueField, "valueFieldlineSeries");
-        assert.equal(series._options.tagField, "tagFieldlineSeries");
-    });
-
-    QUnit.test("Update template field. Default Values", function(assert) {
-        var series = createSeries({
-            type: seriesType,
-            name: "lineSeries",
-            point: { visible: false },
-            label: { visible: false }
-
-        }, this.renderer);
-        // act
-        series.updateTemplateFieldNames();
-        // assert
-        assert.equal(series._options.valueField, "vallineSeries");
-        assert.equal(series._options.tagField, "taglineSeries");
     });
 
     QUnit.module("Check visible area", {

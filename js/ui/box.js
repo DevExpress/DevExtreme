@@ -6,6 +6,8 @@ var $ = require("../core/renderer"),
     registerComponent = require("../core/component_registrator"),
     extend = require("../core/utils/extend").extend,
     noop = require("../core/utils/common").noop,
+    windowUtils = require("../core/utils/window"),
+    inflector = require("../core/utils/inflector"),
     isDefined = require("../core/utils/type").isDefined,
     styleUtils = require("../core/utils/style"),
     each = require("../core/utils/iterator").each,
@@ -67,6 +69,28 @@ var BoxItem = CollectionWidgetItem.inherit({
     },
 });
 
+var setFlexProp = function(element, prop, value) {
+    // NOTE: workaround for jQuery version < 1.11.1 (T181692)
+    value = styleUtils.normalizeStyleProp(prop, value);
+    element.style[styleUtils.styleProp(prop)] = value;
+
+    // NOTE: workaround for Domino issue https://github.com/fgnass/domino/issues/119
+    if(!windowUtils.hasWindow()) {
+        if(value === "" || !isDefined(value)) {
+            return;
+        }
+
+        var cssName = inflector.dasherize(prop);
+        var styleExpr = cssName + ": " + value + ";";
+
+        if(!element.attributes.style) {
+            element.setAttribute("style", styleExpr);
+        } else if(element.attributes.style.value.indexOf(styleExpr) < 0) {
+            element.attributes.style.value += " " + styleExpr;
+        }
+    }
+};
+
 var FlexLayoutStrategy = Class.inherit({
     ctor: function($element, option) {
         this._$element = $element;
@@ -75,9 +99,9 @@ var FlexLayoutStrategy = Class.inherit({
 
     renderBox: function() {
         this._$element.css({
-            display: styleUtils.stylePropPrefix("flexDirection") + "flex",
-            flexDirection: FLEX_DIRECTION_MAP[this._option("direction")]
+            display: styleUtils.stylePropPrefix("flexDirection") + "flex"
         });
+        setFlexProp(this._$element.get(0), "flexDirection", FLEX_DIRECTION_MAP[this._option("direction")]);
     },
 
     renderAlign: function() {
@@ -103,35 +127,30 @@ var FlexLayoutStrategy = Class.inherit({
     },
 
     renderItems: function($items) {
-        var flexGrowProp = styleUtils.styleProp("flexGrow");
-        var flexShrinkProp = styleUtils.styleProp("flexShrink");
         var flexPropPrefix = styleUtils.stylePropPrefix("flexDirection");
-
         var direction = this._option("direction");
 
         each($items, function() {
             var $item = $(this);
             var item = $item.data(BOX_ITEM_DATA_KEY);
 
-            $item.css({ display: flexPropPrefix + "flex", flexBasis: item.baseSize || 0 })
+            $item.css({ display: flexPropPrefix + "flex" })
                 .css(MAXSIZE_MAP[direction], item.maxSize || "none")
                 .css(MINSIZE_MAP[direction], item.minSize || "0");
 
-            // NOTE: workaround for jQuery version < 1.11.1 (T181692)
-            var itemStyle = $item.get(0).style;
-            itemStyle[flexGrowProp] = item.ratio;
-            itemStyle[flexShrinkProp] = isDefined(item.shrink) ? item.shrink : SHRINK;
+            setFlexProp($item.get(0), "flexBasis", item.baseSize || 0);
+            setFlexProp($item.get(0), "flexGrow", item.ratio);
+            setFlexProp($item.get(0), "flexShrink", isDefined(item.shrink) ? item.shrink : SHRINK);
 
             $item.children().each(function(_, itemContent) {
                 $(itemContent).css({
                     width: "auto",
                     height: "auto",
-                    display: styleUtils.stylePropPrefix("flexDirection") + "flex",
-                    flexDirection: $item.children().css("flexDirection") || "column"
+                    display: styleUtils.stylePropPrefix("flexDirection") + "flex"
                 });
 
-                // NOTE: workaround for jQuery version < 1.11.1 (T181692)
-                itemContent.style[flexGrowProp] = 1;
+                setFlexProp(itemContent, "flexGrow", 1);
+                setFlexProp(itemContent, "flexDirection", $(itemContent)[0].style.flexDirection || "column");
             });
         });
     },
@@ -608,12 +627,7 @@ var Box = CollectionWidget.inherit({
         this._layout.renderBox();
         this.callBase();
         this._renderAlign();
-    },
-
-    _render: function() {
         this._renderActions();
-
-        this.callBase();
     },
 
     _renderActions: function() {

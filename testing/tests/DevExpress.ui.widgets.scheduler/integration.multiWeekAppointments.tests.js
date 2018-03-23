@@ -695,17 +695,17 @@ QUnit.test("Multi-week grouped appointments should be painted correctly", functi
 
     var $appointments = $(this.instance.$element()).find(".dx-scheduler-appointment");
 
-    assert.equal(new Color($appointments.eq(0).css("background-color")).toHex(), "#8bb6ff", "Color is OK");
-    assert.equal(new Color($appointments.eq(1).css("background-color")).toHex(), "#8bb6ff", "Color is OK");
-    assert.equal(new Color($appointments.eq(2).css("background-color")).toHex(), "#8bb6ff", "Color is OK");
+    assert.equal(new Color($appointments.eq(0).css("backgroundColor")).toHex(), "#8bb6ff", "Color is OK");
+    assert.equal(new Color($appointments.eq(1).css("backgroundColor")).toHex(), "#8bb6ff", "Color is OK");
+    assert.equal(new Color($appointments.eq(2).css("backgroundColor")).toHex(), "#8bb6ff", "Color is OK");
 
-    assert.equal(new Color($appointments.eq(3).css("background-color")).toHex(), "#ff8b8b", "Color is OK");
-    assert.equal(new Color($appointments.eq(4).css("background-color")).toHex(), "#ff8b8b", "Color is OK");
-    assert.equal(new Color($appointments.eq(5).css("background-color")).toHex(), "#ff8b8b", "Color is OK");
+    assert.equal(new Color($appointments.eq(3).css("backgroundColor")).toHex(), "#ff8b8b", "Color is OK");
+    assert.equal(new Color($appointments.eq(4).css("backgroundColor")).toHex(), "#ff8b8b", "Color is OK");
+    assert.equal(new Color($appointments.eq(5).css("backgroundColor")).toHex(), "#ff8b8b", "Color is OK");
 
-    assert.equal(new Color($appointments.eq(6).css("background-color")).toHex(), "#8bffa6", "Color is OK");
-    assert.equal(new Color($appointments.eq(7).css("background-color")).toHex(), "#8bffa6", "Color is OK");
-    assert.equal(new Color($appointments.eq(8).css("background-color")).toHex(), "#8bffa6", "Color is OK");
+    assert.equal(new Color($appointments.eq(6).css("backgroundColor")).toHex(), "#8bffa6", "Color is OK");
+    assert.equal(new Color($appointments.eq(7).css("backgroundColor")).toHex(), "#8bffa6", "Color is OK");
+    assert.equal(new Color($appointments.eq(8).css("backgroundColor")).toHex(), "#8bffa6", "Color is OK");
 });
 
 QUnit.test("Multi-week appointments should have a correct left offset on day view, rtl mode", function(assert) {

@@ -5,11 +5,9 @@ var pointerMock = require("../../helpers/pointerMock.js");
 var $ = require("jquery"),
     noop = require("core/utils/common").noop,
     isRenderer = require("core/utils/type").isRenderer,
-    dxScheduler = require("ui/scheduler/ui.scheduler"),
     translator = require("animation/translator"),
     devices = require("core/devices"),
     domUtils = require("core/utils/dom"),
-    dateUtils = require("core/utils/date"),
     errors = require("ui/widget/ui.errors"),
     Color = require("color"),
     fx = require("animation/fx"),
@@ -24,6 +22,7 @@ var $ = require("jquery"),
     dataUtils = require("core/element_data"),
     keyboardMock = require("../../helpers/keyboardMock.js");
 
+require("ui/scheduler/ui.scheduler");
 require("common.css!");
 require("generic_light.css!");
 
@@ -63,15 +62,6 @@ QUnit.testStart(function() {
         }
     });
 
-    QUnit.test("Scheduler should be initialized", function(assert) {
-        assert.ok(this.instance instanceof dxScheduler, "Scheduler was initialized");
-    });
-
-    QUnit.test("Scheduler should have a right css classes", function(assert) {
-        assert.ok(this.instance.$element().hasClass("dx-scheduler"), "Scheduler has 'dx-scheduler' css class");
-        assert.ok(this.instance.$element().hasClass("dx-widget"), "Scheduler has 'dx-widget' css class");
-    });
-
     QUnit.test("Scheduler should have task model instance", function(assert) {
         var data = new DataSource({
             store: this.tasks
@@ -94,28 +84,6 @@ QUnit.testStart(function() {
         this.instance.option({ dataSource: this.tasks });
 
         assert.notOk(this.instance._appointmentModel._dataSource.paginate(), "Paginate is false");
-    });
-
-    QUnit.test("Header & work space currentDate should not contain information about hours, minutes, seconds", function(assert) {
-        var currentDate = this.instance.option("currentDate"),
-            header = this.instance.getHeader(),
-            workSpace = this.instance.getWorkSpace(),
-            headerCurrentDate = header.option("currentDate"),
-            workSpaceCurrentDate = workSpace.option("currentDate");
-
-        this.checkDateTime(assert, headerCurrentDate, dateUtils.trimTime(currentDate), "header date");
-        this.checkDateTime(assert, workSpaceCurrentDate, dateUtils.trimTime(currentDate), "work space date");
-
-        this.instance.option("currentDate", new Date(2015, 1, 1, 10, 10, 10, 10));
-
-        currentDate = this.instance.option("currentDate");
-
-        headerCurrentDate = header.option("currentDate"),
-        workSpaceCurrentDate = workSpace.option("currentDate");
-
-        this.checkDateTime(assert, currentDate, new Date(2015, 1, 1, 10, 10, 10, 10), "current date: ");
-        this.checkDateTime(assert, headerCurrentDate, new Date(2015, 1, 1), "header date: ");
-        this.checkDateTime(assert, workSpaceCurrentDate, new Date(2015, 1, 1), "work space date ");
     });
 
     QUnit.test("Rendering inside invisible element", function(assert) {
@@ -1422,20 +1390,6 @@ QUnit.testStart(function() {
         assert.ok($workSpace.hasClass("dx-scheduler-work-space-overlapping"), "workspace has right class");
     });
 
-    QUnit.test("Workspace shouldn't have specific class if maxAppointmentsPerCell=null", function(assert) {
-        this.createInstance({
-            currentView: "Week",
-            maxAppointmentsPerCell: null,
-            views: [{
-                type: "week",
-                name: "Week",
-            }]
-        });
-
-        var $workSpace = this.instance.getWorkSpace().$element();
-        assert.notOk($workSpace.hasClass("dx-scheduler-work-space-overlapping"), "workspace hasn't class");
-    });
-
     QUnit.test("cellDuration is passed to workspace", function(assert) {
         this.createInstance({
             currentView: "week",
@@ -1462,24 +1416,6 @@ QUnit.testStart(function() {
 
         this.instance.option("accessKey", "k");
         assert.equal(workSpaceMonth.option("accessKey"), this.instance.option("accessKey"), "workspace has correct accessKey afterChange");
-    });
-
-    QUnit.test("crossScrollingEnabled option should be passed to work space", function(assert) {
-        this.createInstance();
-
-        assert.strictEqual(this.instance.getWorkSpace().option("crossScrollingEnabled"), false, "option is OK");
-
-        this.instance.option("crossScrollingEnabled", true);
-        assert.strictEqual(this.instance.getWorkSpace().option("crossScrollingEnabled"), true, "option is OK");
-    });
-
-    QUnit.test("crossScrollingEnabled option should works correctly with agenda view", function(assert) {
-        this.createInstance({
-            crossScrollingEnabled: true,
-            currentView: "agenda"
-        });
-
-        assert.ok(true, "Widget was successfully initialized");
     });
 
     QUnit.test("the 'width' option should be passed to work space on option changed if horizontal scrolling is enabled", function(assert) {
@@ -2245,7 +2181,7 @@ QUnit.testStart(function() {
             onAppointmentRendered: function(args) {
                 var $appointment = $(args.appointmentElement);
 
-                assert.equal(new Color($appointment.css("background-color")).toHex(), "#ff0000", "Resource color is applied");
+                assert.equal(new Color($appointment.css("backgroundColor")).toHex(), "#ff0000", "Resource color is applied");
                 assert.ok($appointment.attr("data-groupid-1"), "Resource data attribute is defined");
                 assert.ok($appointment.hasClass("dx-scheduler-appointment-recurrence"), "Recurrent class is defined");
                 assert.ok($appointment.hasClass("dx-draggable"), "Draggable class is defined");
@@ -3363,23 +3299,6 @@ QUnit.testStart(function() {
         afterEach: function() {
             this.clock.restore();
         }
-    });
-
-    QUnit.test("Scheduler should have specific viewName setting of the view", function(assert) {
-        this.createInstance({
-            views: [{
-                type: "day",
-                name: "Test Day"
-            }, "week"],
-            cellDuration: 40,
-            currentView: "day",
-            useDropDownViewSwitcher: false
-        });
-
-        var $header = $(this.instance.getHeader().$element());
-
-        assert.equal($header.find(".dx-tab").eq(0).text(), "Test Day");
-        assert.equal($header.find(".dx-tab").eq(1).text(), "Week");
     });
 
     QUnit.test("Scheduler should have specific cellDuration setting of the view", function(assert) {

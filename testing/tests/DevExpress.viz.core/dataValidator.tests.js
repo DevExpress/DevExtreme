@@ -594,9 +594,7 @@ QUnit.test("Numeric from numbers", function(assert) {
     checkParsedData(parsedData, {
         "arg": {
             arg: [1, 2, 3, 4, 5],
-            "originalarg": [1, 2, 3, 4, 5],
-            val: [11, 22, 33, 44, 55],
-            "originalval": [11, 22, 33, 44, 55]
+            val: [11, 22, 33, 44, 55]
         }
     }, { assert: assert });
 });
@@ -612,7 +610,7 @@ QUnit.test("Numeric from numbers. logarithmic axis", function(assert) {
             argumentAxisType: "logarithmic"
         }), incidentOccurred);
 
-    checkParsedData(parsedData, { "arg": { arg: [1, 2, null, null, 5], "originalarg": [1, 2, 0, -4, 5], val: [null, 22, 33, null, null], "originalval": [0, 22, 33, -44, 0] } }, { assert: assert });
+    checkParsedData(parsedData, { "arg": { arg: [1, 2, null, null, 5], val: [null, 22, 33, null, null] } }, { assert: assert });
 
     assert.equal(incidentOccurred.callCount, 5);
     assert.equal(incidentOccurred.getCall(0).args[0], "E2004");
@@ -641,9 +639,7 @@ QUnit.test("DataSource with null values. logarithmic axis", function(assert) {
     checkParsedData(parsedData, {
         "arg": {
             arg: [1, 2, null, 4, 5],
-            "originalarg": [1, 2, null, 4, 5],
-            val: [null, 22, 33, 44, 55],
-            "originalval": [null, 22, 33, 44, 55]
+            val: [null, 22, 33, 44, 55]
         }
     }, { assert: assert });
 
@@ -661,9 +657,7 @@ QUnit.test("Numeric from string. logarithmic axis", function(assert) {
 
     checkParsedData(parsedData, {
         "arg": {
-            "originalval": ["0", "22", "33", "-44", "0"],
             val: [null, 22, 33, null, null],
-            "originalarg": ["1", "2", "0", "-4", "5"],
             arg: [1, 2, null, null, 5]
         }
     }, { assert: assert });
@@ -678,9 +672,7 @@ QUnit.test("Numeric from strings", function(assert) {
 
     checkParsedData(parsedData, {
         "arg": {
-            "originalval": ["11", "22", "33", "44", "55"],
             val: [11, 22, 33, 44, 55],
-            "originalarg": ["1", "2", "3", "4", "5"],
             arg: [1, 2, 3, 4, 5]
         }
     }, { assert: assert, compare: "deepEqual" });
@@ -711,9 +703,7 @@ QUnit.test("Numeric from dates", function(assert) {
 
     checkParsedData(parsedData, {
         "arg": {
-            "originalval": [date11, date22, date33, date44, date55],
             val: [11, 22, 33, 44, 55],
-            "originalarg": [date1, date2, date3, date4, date5],
             arg: [1, 2, 3, 4, 5]
         }
     }, { assert: assert });
@@ -745,9 +735,7 @@ QUnit.test("Datetime from dates", function(assert) {
 
     checkParsedData(parsedData, {
         "arg": {
-            "originalval": [date11, date22, date33, date44, date55],
             val: [date11, date22, date33, date44, date55],
-            "originalarg": [date1, date2, date3, date4, date5],
             arg: [date1, date2, date3, date4, date5]
         }
     }, { assert: assert, compare: "deepEqual" });
@@ -778,9 +766,7 @@ QUnit.test("Datetime from strings", function(assert) {
 
     checkParsedData(parsedData, {
         "arg": {
-            "originalval": [date11.toString(), date22.toString(), date33.toString(), date44.toString(), date55.toString()],
             val: [date11, date22, date33, date44, date55],
-            "originalarg": [date1.toString(), date2.toString(), date3.toString(), date4.toString(), date5.toString()],
             arg: [date1, date2, date3, date4, date5]
         }
     }, { assert: assert, compare: "deepEqual" });
@@ -811,9 +797,7 @@ QUnit.test("Datetime from numbers", function(assert) {
 
     checkParsedData(parsedData, {
         "arg": {
-            "originalval": [10000, 20000, 30000, 40000, 50000],
             val: [date11, date22, date33, date44, date55],
-            "originalarg": [1000, 2000, 3000, 4000, 5000],
             arg: [date1, date2, date3, date4, date5]
         }
     }, { assert: assert, compare: "deepEqual" });
@@ -827,9 +811,7 @@ QUnit.test("String from strings", function(assert) {
 
     checkParsedData(parsedData, {
         "arg": {
-            "originalval": ["11", "22", "33", "44", "55"],
             val: ["11", "22", "33", "44", "55"],
-            "originalarg": ["1", "2", "3", "4", "5"],
             arg: ["1", "2", "3", "4", "5"]
         }
     }, { assert: assert });
@@ -843,9 +825,7 @@ QUnit.test("String from numbers", function(assert) {
 
     checkParsedData(parsedData, {
         "arg": {
-            "originalval": [11, 22, 33, 44, 55],
             val: ["11", "22", "33", "44", "55"],
-            "originalarg": [1, 2, 3, 4, 5],
             arg: ["1", "2", "3", "4", "5"]
         }
     }, { assert: assert });
@@ -876,9 +856,7 @@ QUnit.test("String from dates", function(assert) {
 
     checkParsedData(parsedData, {
         "arg": {
-            "originalval": [date11, date22, date33, date44, date55],
             val: ["" + date11, "" + date22, "" + date33, "" + date44, "" + date55],
-            "originalarg": [date1, date2, date3, date4, date5],
             arg: ["" + date1, "" + date2, "" + date3, "" + date4, "" + date5]
         }
     }, { assert: assert });
@@ -894,8 +872,26 @@ QUnit.test("Size field values always parsed to Numeric", function(assert) {
 
     checkParsedData(parsedData, {
         "arg": {
-            "originalsize": ["111", "222", "333"],
             size: [111, 222, 333]
+        }
+    }, { assert: assert });
+});
+
+QUnit.test("Parsed data should have all fields from source data", function(assert) {
+    var parsedData = testValidateData([
+        { arg: 1, val: 11, extra: "1" },
+        { arg: 2, val: 22, extra: "2" }
+    ],
+        createGroupsData({
+            argumentType: "numeric",
+            valueType: "numeric"
+        }));
+
+    checkParsedData(parsedData, {
+        "arg": {
+            arg: [1, 2],
+            val: [11, 22],
+            extra: ["1", "2"]
         }
     }, { assert: assert });
 });
@@ -1760,9 +1756,7 @@ QUnit.test("merge. series has more than one the same arguments", function(assert
     checkParsedData(parsedData, {
         "arg": {
             arg: ["oranges", "oranges", "apples", "kiwi", "kiwi", "bananas"],
-            "originalarg": ["oranges", "oranges", "apples", "kiwi", "kiwi", "bananas"],
-            val: [22, 45, 11, 18, 2, 29],
-            "originalval": [22, 45, 11, 18, 2, 29]
+            val: [22, 45, 11, 18, 2, 29]
         }
     }, { assert: assert });
 });
@@ -1782,11 +1776,8 @@ QUnit.test("merge. series has more than one the same arguments, more than one va
     checkParsedData(parsedData, {
         "arg": {
             arg: ["oranges", "oranges", "apples", "kiwi", "kiwi", "bananas"],
-            "originalarg": ["oranges", "oranges", "apples", "kiwi", "kiwi", "bananas"],
             val1: [11, 33, 22, 44, 66, 55],
-            val2: [111, 333, 222, 444, 666, 555],
-            "originalval1": [11, 33, 22, 44, 66, 55],
-            "originalval2": [111, 333, 222, 444, 666, 555]
+            val2: [111, 333, 222, 444, 666, 555]
         }
     }, { assert: assert });
 });
@@ -1814,15 +1805,11 @@ QUnit.test("merge. series has two groups", function(assert) {
     checkParsedData(parsedData, {
         arg1: {
             arg1: ["oranges", "oranges", "apples", "kiwi", "kiwi", "bananas"],
-            "originalarg1": ["oranges", "oranges", "apples", "kiwi", "kiwi", "bananas"],
-            val1: [11, 33, 22, 44, 66, 55],
-            "originalval1": [11, 33, 22, 44, 66, 55]
+            val1: [11, 33, 22, 44, 66, 55]
         },
         arg2: {
             arg2: ["potatoes", "potatoes", "cucumbers", "tomatoes", "tomatoes", "garlic"],
-            val2: [111, 444, 222, 333, 555, 666],
-            "originalarg2": ["potatoes", "potatoes", "cucumbers", "tomatoes", "tomatoes", "garlic"],
-            "originalval2": [111, 444, 222, 333, 555, 666]
+            val2: [111, 444, 222, 333, 555, 666]
         }
     }, { assert: assert });
 });
@@ -1838,9 +1825,7 @@ QUnit.test("merge. argument type is not discrete", function(assert) {
     checkParsedData(parsedData, {
         "arg": {
             arg: [22, 11, 33, 44, 55, 66],
-            "originalarg": [22, 11, 33, 44, 55, 66],
-            val: [22, 11, 45, 18, 29, 2],
-            "originalval": [22, 11, 45, 18, 29, 2]
+            val: [22, 11, 45, 18, 29, 2]
         }
     }, { assert: assert });
 });
@@ -1857,9 +1842,7 @@ QUnit.test("mode - smallValueThreshold. groupName is default", function(assert) 
     checkParsedData(parsedData, {
         "arg": {
             arg: ["apples", "oranges", "tomatoes", "kiwi", "bananas", "others"],
-            "originalarg": ["apples", "oranges", "tomatoes", "kiwi", "bananas", undefined],
-            val1: [undefined, 33, undefined, 44, 55, 33],
-            "originalval1": [undefined, 33, undefined, 44, 55, undefined]
+            val1: [undefined, 33, undefined, 44, 55, 33]
         }
     }, { assert: assert });
 });
@@ -1878,9 +1861,7 @@ QUnit.test("mode - smallValueThreshold. groupName is defined as string", functio
     checkParsedData(parsedData, {
         "arg": {
             arg: ["apples", "oranges", "tomatoes", "kiwi", "bananas", "another values"],
-            "originalarg": ["apples", "oranges", "tomatoes", "kiwi", "bananas", undefined],
-            val1: [undefined, 33, undefined, 44, 55, 33],
-            "originalval1": [undefined, 33, undefined, 44, 55, undefined]
+            val1: [undefined, 33, undefined, 44, 55, 33]
         }
     }, { assert: assert });
 });
@@ -1898,9 +1879,7 @@ QUnit.test("mode - smallValueThreshold. groupName is defined as not string", fun
     checkParsedData(parsedData, {
         "arg": {
             arg: ["apples", "oranges", "tomatoes", "kiwi", "bananas", "123"],
-            "originalarg": ["apples", "oranges", "tomatoes", "kiwi", "bananas", undefined],
-            val1: [undefined, 33, undefined, 44, 55, 33],
-            "originalval1": [undefined, 33, undefined, 44, 55, undefined]
+            val1: [undefined, 33, undefined, 44, 55, 33]
         }
     }, { assert: assert });
 });
@@ -1916,9 +1895,7 @@ QUnit.test("mode - smallValueThreshold. threshold is not specified", function(as
     checkParsedData(parsedData, {
         "arg": {
             arg: ["apples", "oranges", "tomatoes", "kiwi", "bananas"],
-            "originalarg": ["apples", "oranges", "tomatoes", "kiwi", "bananas"],
-            val1: [22, 33, 11, 44, 55],
-            "originalval1": [22, 33, 11, 44, 55]
+            val1: [22, 33, 11, 44, 55]
         }
     }, { assert: assert });
 });
@@ -1934,9 +1911,7 @@ QUnit.test("mode - smallValueThreshold. threshold is zero", function(assert) {
     checkParsedData(parsedData, {
         "arg": {
             arg: ["apples", "oranges", "tomatoes", "kiwi", "bananas"],
-            "originalarg": ["apples", "oranges", "tomatoes", "kiwi", "bananas"],
-            val1: [0, 33, 0, 44, 55],
-            "originalval1": [0, 33, 0, 44, 55]
+            val1: [0, 33, 0, 44, 55]
         }
     }, { assert: assert });
 });
@@ -1952,9 +1927,7 @@ QUnit.test("mode - smallValueThreshold. threshold less zero", function(assert) {
     checkParsedData(parsedData, {
         "arg": {
             arg: ["apples", "oranges", "tomatoes", "kiwi", "bananas"],
-            "originalarg": ["apples", "oranges", "tomatoes", "kiwi", "bananas"],
-            val1: [0, 33, 0, 44, 55],
-            "originalval1": [0, 33, 0, 44, 55]
+            val1: [0, 33, 0, 44, 55]
         }
     }, { assert: assert });
 });
@@ -1971,9 +1944,7 @@ QUnit.test("mode - smallValueThreshold. threshold is more than max data", functi
     checkParsedData(parsedData, {
         "arg": {
             arg: ["apples", "oranges", "tomatoes", "kiwi", "bananas", "others"],
-            "originalarg": ["apples", "oranges", "tomatoes", "kiwi", "bananas", undefined],
-            val1: [undefined, undefined, undefined, undefined, undefined, 152],
-            "originalval1": [undefined, undefined, undefined, undefined, undefined, undefined]
+            val1: [undefined, undefined, undefined, undefined, undefined, 152]
         }
     }, { assert: assert });
 });
@@ -1991,9 +1962,7 @@ QUnit.test("mode - smallValueThreshold. some series has the same name", function
     checkParsedData(parsedData, {
         "arg": {
             arg: ["apples", "apples", "oranges", "kiwi", "bananas", "others"],
-            "originalarg": ["apples", "apples", "oranges", "kiwi", "bananas", undefined],
-            val1: [undefined, undefined, undefined, 44, 55, 66],
-            "originalval1": [undefined, undefined, undefined, 44, 55, undefined]
+            val1: [undefined, undefined, undefined, 44, 55, 66]
         }
     }, { assert: assert });
 });
@@ -2010,9 +1979,7 @@ QUnit.test("mode - topN", function(assert) {
     checkParsedData(parsedData, {
         "arg": {
             arg: ["apples", "oranges", "tomatoes", "kiwi", "bananas", "others"],
-            "originalarg": ["apples", "oranges", "tomatoes", "kiwi", "bananas", undefined],
-            val1: [undefined, undefined, undefined, 44, 55, 66],
-            "originalval1": [undefined, undefined, undefined, 44, 55, undefined]
+            val1: [undefined, undefined, undefined, 44, 55, 66]
         }
     }, { assert: assert });
 });
@@ -2029,9 +1996,7 @@ QUnit.test("mode - topN, top count is not defined", function(assert) {
     checkParsedData(parsedData, {
         "arg": {
             arg: ["apples", "oranges", "tomatoes", "kiwi", "bananas"],
-            "originalarg": ["apples", "oranges", "tomatoes", "kiwi", "bananas"],
-            val1: [22, 33, 11, 44, 55],
-            "originalval1": [22, 33, 11, 44, 55]
+            val1: [22, 33, 11, 44, 55]
         }
     }, { assert: assert });
 });
@@ -2048,9 +2013,7 @@ QUnit.test("mode - topN, top count is zero", function(assert) {
     checkParsedData(parsedData, {
         "arg": {
             arg: ["apples", "oranges", "tomatoes", "kiwi", "bananas", "others"],
-            "originalarg": ["apples", "oranges", "tomatoes", "kiwi", "bananas", undefined],
-            val1: [undefined, undefined, undefined, undefined, undefined, 165],
-            "originalval1": [undefined, undefined, undefined, undefined, undefined, undefined]
+            val1: [undefined, undefined, undefined, undefined, undefined, 165]
         }
     }, { assert: assert });
 });
@@ -2079,11 +2042,8 @@ QUnit.test("mode - topN, some objects has same name", function(assert) {
     checkParsedData(parsedData, {
         "arg": {
             arg: ["apples", "apples", "oranges", "oranges", "kiwi", "bananas", "others", "others"],
-            "originalarg": ["apples", "apples", "oranges", "oranges", "kiwi", "bananas", undefined, undefined],
             val1: [undefined, undefined, undefined, undefined, 44, 55, 73, undefined],
-            val2: [77, undefined, undefined, undefined, 65, undefined, undefined, 66],
-            "originalval1": [undefined, undefined, undefined, undefined, 44, 55, undefined, undefined],
-            "originalval2": [77, undefined, undefined, undefined, 65, undefined, undefined, undefined]
+            val2: [77, undefined, undefined, undefined, 65, undefined, undefined, 66]
         }
     }, { assert: assert });
 });

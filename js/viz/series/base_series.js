@@ -360,9 +360,11 @@ Series.prototype = {
             that._canRenderCompleteHandle = true;
         }
 
-        that._data = data.reduce(function(data, dataItem, index) {
-            var pointDataItem = that._getPointData(dataItem, options);
-            if(that._checkData(pointDataItem)) {
+        const dataSelector = this._getPointDataSelector();
+
+        that._data = data.reduce((data, dataItem, index) => {
+            const pointDataItem = dataSelector(dataItem);
+            if(_isDefined(pointDataItem.argument) && (!options.nameField || dataItem[options.nameField] === this.name)) {
                 pointDataItem.index = index;
                 data.push(pointDataItem);
             }
@@ -448,15 +450,19 @@ Series.prototype = {
 
         that._calculateErrorBars(data);
 
-        points = data.map(function(dataItem, index) {
-            var oldPoint = that._getOldPoint(dataItem, oldPointsByArgument, index),
-                p = that._createPoint(dataItem, index, oldPoint, dataItem.index);
-
-            if(!oldPoint) {
-                allPoints.push(p);
+        points = data.reduce((points, pointDataItem) => {
+            if(that._checkData(pointDataItem)) {
+                const pointIndex = points.length;
+                const oldPoint = that._getOldPoint(pointDataItem, oldPointsByArgument, pointIndex);
+                const point = that._createPoint(pointDataItem, pointIndex, oldPoint, pointDataItem.index);
+                pointDataItem.index = pointIndex;
+                if(!oldPoint) {
+                    allPoints.push(point);
+                }
+                points.push(point);
             }
-            return p;
-        });
+            return points;
+        }, []);
 
         that._oldPoints = Object.keys(oldPointsByArgument).reduce(function(points, key) {
             var argPoints = oldPointsByArgument[key];
@@ -481,15 +487,6 @@ Series.prototype = {
         } else {
             that._pointsToDraw = points;
         }
-    },
-
-    getTemplateFields: function() {
-        return this.getValueFields().concat(this.getTagField(), this.getSizeField()).map(function(field) {
-            return {
-                templateField: field + this.name,
-                originalField: field
-            };
-        }, this);
     },
 
     _removeOldSegments: function() {
@@ -857,19 +854,15 @@ Series.prototype = {
         return customAggregator || aggregator;
     },
 
-    _fusionData(data, { intervalStart, intervalEnd, aggregationInterval }, isDiscrete) {
+    _fusionData: function(data, aggregationInfo, isDiscrete, dataSelector) {
         var aggregationMethod = this._getAggregationMethod(isDiscrete),
-            underlyingData = data.map(item => item.data),
-            aggregationInfo = {
-                data: underlyingData,
-                intervalStart,
-                aggregationInterval,
-                intervalEnd
-            },
-            aggregatedData = aggregationMethod(aggregationInfo, this),
-            pointData = aggregatedData && this._getPointData(aggregatedData, this.getOptions());
+            underlyingData = data.map(item => item.data);
 
-        if(data.length && pointData && this._checkData(pointData)) {
+        aggregationInfo.data = underlyingData;
+        const aggregatedData = data.length && aggregationMethod(aggregationInfo, this);
+        const pointData = aggregatedData && dataSelector(aggregatedData);
+
+        if(pointData && this._checkData(pointData)) {
             pointData.aggregationInfo = aggregationInfo;
             return pointData;
         }
@@ -881,7 +874,8 @@ Series.prototype = {
         var that = this,
             aggregatedData = [],
             isDiscrete = that.argumentAxisType === DISCRETE || that.valueAxisType === DISCRETE,
-            dataIndex = 0;
+            dataIndex = 0,
+            dataSelector = this._getPointDataSelector();
 
         if(isDiscrete) {
             return data.reduce((result, dataItem, index, data) => {
@@ -890,7 +884,7 @@ Series.prototype = {
                     const dataInInterval = result[1];
                     const aggregatedDataItem = this._fusionData(dataInInterval, {
                         aggregationInterval: interval
-                    }, isDiscrete);
+                    }, isDiscrete, dataSelector);
                     if(aggregatedDataItem) {
                         result[0].push(aggregatedDataItem);
                     }
@@ -912,7 +906,7 @@ Series.prototype = {
                 intervalStart: ticks[i - 1],
                 intervalEnd,
                 aggregationInterval: interval
-            });
+            }, isDiscrete, dataSelector);
             if(aggregatedDataItem) {
                 aggregatedData.push(aggregatedDataItem);
             }

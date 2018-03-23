@@ -24,7 +24,8 @@ var $ = require("../../core/renderer"),
     inflector = require("../../core/utils/inflector"),
     Widget = require("../widget/ui.widget"),
     Validator = require("../validator"),
-    ResponsiveBox = require("../responsive_box");
+    ResponsiveBox = require("../responsive_box"),
+    themes = require("../themes");
 
 require("../text_box");
 require("../number_box");
@@ -60,12 +61,15 @@ var FORM_EDITOR_BY_DEFAULT = "dxTextBox",
 
     FLEX_LAYOUT_CLASS = "dx-flex-layout",
 
+    INVALID_CLASS = "dx-invalid",
+
     LAYOUT_STRATEGY_FLEX = "flex",
     LAYOUT_STRATEGY_FALLBACK = "fallback",
 
     SIMPLE_ITEM_TYPE = "simple",
 
-    DATA_OPTIONS = ["dataSource", "items"];
+    DATA_OPTIONS = ["dataSource", "items"],
+    EDITORS_WITH_ARRAY_VALUE = ["dxTagBox", "dxRangeSlider"];
 
 var LayoutManager = Widget.inherit({
     _getDefaultOptions: function() {
@@ -628,7 +632,7 @@ var LayoutManager = Widget.inherit({
                 .appendTo($labelContent);
 
             if(options.alignment) {
-                $label.css("text-align", options.alignment);
+                $label.css("textAlign", options.alignment);
             }
 
             $labelContent.append(this._renderLabelMark(options.isRequired));
@@ -674,7 +678,7 @@ var LayoutManager = Widget.inherit({
             isDeepExtend = true,
             editorOptions;
 
-        if(options.editorType === "dxTagBox") {
+        if(EDITORS_WITH_ARRAY_VALUE.indexOf(options.editorType) !== -1) {
             defaultEditorOptions.value = defaultEditorOptions.value || [];
         }
 
@@ -744,6 +748,18 @@ var LayoutManager = Widget.inherit({
         return validationRules;
     },
 
+    _addWrapperInvalidClass: function(editorInstance) {
+        var wrapperClass = "." + FIELD_ITEM_CONTENT_WRAPPER_CLASS,
+            toggleInvalidClass = function(e) {
+                $(e.element).parents(wrapperClass)
+                    .toggleClass(INVALID_CLASS, e.event.type === "focusin" && e.component.option("isValid") === false);
+            };
+
+        editorInstance
+            .on("focusIn", toggleInvalidClass)
+            .on("focusOut", toggleInvalidClass);
+    },
+
     _createEditor: function($container, renderOptions, editorOptions) {
         var that = this,
             template = renderOptions.template,
@@ -775,6 +791,10 @@ var LayoutManager = Widget.inherit({
                 editorInstance.setAria("describedby", renderOptions.helpID);
                 editorInstance.setAria("required", renderOptions.isRequired);
                 that._registerEditorInstance(editorInstance, renderOptions);
+
+                if(/material/.test(themes.current())) {
+                    that._addWrapperInvalidClass(editorInstance);
+                }
 
                 if(renderOptions.dataField) {
                     that._bindDataField(editorInstance, renderOptions, $container);

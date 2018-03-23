@@ -387,7 +387,7 @@ var Scrollable = DOMComponent.inherit({
     },
 
     _createActions: function() {
-        this._strategy.createActions();
+        this._strategy && this._strategy.createActions();
     },
 
     _clean: function() {
@@ -608,10 +608,12 @@ var Scrollable = DOMComponent.inherit({
     * @return Promise<void>
     */
     update: function() {
-        var that = this;
-        return when(that._strategy.update()).done(function() {
-            that._updateAllowedDirection();
-        });
+        if(!this._strategy) {
+            return;
+        }
+        return when(this._strategy.update()).done((function() {
+            this._updateAllowedDirection();
+        }).bind(this));
     },
 
     /**

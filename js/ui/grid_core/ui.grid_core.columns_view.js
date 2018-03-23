@@ -196,6 +196,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
                     isDataRow = $row.hasClass("dx-data-row"),
                     isHeaderRow = $row.hasClass("dx-header-row"),
                     isGroupRow = $row.hasClass("dx-group-row"),
+                    isMasterDetailRow = $row.hasClass(DETAIL_ROW_CLASS),
                     isFilterRow = $row.hasClass(that.addWidgetPrefix(FILTER_ROW_CLASS)),
                     visibleColumns = that._columnsController.getVisibleColumns(),
                     rowOptions = $row.data("options"),
@@ -204,7 +205,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
                     column = cellOptions ? cellOptions.column : visibleColumns[columnIndex],
                     msieCorrection = browser.msie ? 1 : 0;
 
-                if(!isFilterRow && (!isDataRow || (isDataRow && column && !column.cellTemplate)) &&
+                if(!isMasterDetailRow && !isFilterRow && (!isDataRow || (isDataRow && column && !column.cellTemplate)) &&
                     (!isHeaderRow || (isHeaderRow && column && !column.headerCellTemplate)) &&
                     (!isGroupRow || (isGroupRow && column && (column.groupIndex === undefined || !column.groupCellTemplate)))) {
                     if($element.data(CELL_HINT_VISIBLE)) {
@@ -619,7 +620,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
     _getWidths: function($cellElements) {
         var result = [],
-            advancedRendering = this.option("advancedRendering") && this.option("columnAutoWidth"),
+            advancedRendering = this.option("advancedRendering"),
             width,
             clientRect;
 
@@ -666,29 +667,34 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         return result;
     },
 
-    setColumnWidths: function(widths, $tableElement, columns) {
+    setColumnWidths: function(widths, $tableElement, columns, fixed) {
         var $cols,
             i,
             width,
             minWidth,
             columnIndex,
-            advancedRendering = this.option("advancedRendering") && this.option("columnAutoWidth");
+            columnAutoWidth = this.option("columnAutoWidth"),
+            advancedRendering = this.option("advancedRendering");
 
         $tableElement = $tableElement || this._getTableElement();
 
         if($tableElement && $tableElement.length && widths) {
             columnIndex = 0;
             $cols = $tableElement.find("col");
+            if(advancedRendering) {
+                $cols.css("width", "auto");
+            }
             columns = columns || this.getColumns(null, $tableElement);
-
             for(i = 0; i < columns.length; i++) {
-                if(advancedRendering) {
+                if(advancedRendering && columnAutoWidth && !fixed) {
                     width = columns[i].width;
 
-                    if(width) {
+                    if(width && !columns[i].command) {
+                        width = columns[i].visibleWidth || width;
+
                         width = getWidthStyle(width);
                         minWidth = getWidthStyle(columns[i].minWidth || width);
-                        var $rows = $tableElement.children().children(".dx-row");
+                        var $rows = $rows || $tableElement.children().children(".dx-row");
                         for(var rowIndex = 0; rowIndex < $rows.length; rowIndex++) {
                             var cell = $rows[rowIndex].cells[i];
                             if(cell) {

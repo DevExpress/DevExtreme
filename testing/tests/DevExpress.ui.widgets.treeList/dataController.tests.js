@@ -22,7 +22,10 @@ var setupModule = function() {
         keyExpr: "id",
         parentIdExpr: "parentId",
         rootValue: 0,
-        expandedRowKeys: []
+        expandedRowKeys: [],
+        paging: {
+            enabled: false
+        }
     };
 
     setupTreeListModules(this, ["data", "columns", "masterDetail"]);

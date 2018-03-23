@@ -195,7 +195,7 @@ module.exports = errorUtils(errors.ERROR_MESSAGES, {
      * @name Errors and Warnings_E1041
      * @publicName E1041
      */
-    E1041: "The JSZip script is referenced after DevExtreme scripts",
+    E1041: "The JSZip script is referenced after the DevExtreme scripts or not referenced at all",
 
     /**
     * @name Errors and Warnings_E1042

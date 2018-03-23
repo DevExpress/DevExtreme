@@ -791,6 +791,62 @@ function createThemeManager(options, themeGroupName) {
         assert.equal(theme.aggregation.enabled, true);
     });
 
+    QUnit.test("Get seriesTemplate. Option is not set", function(assert) {
+        var themeManager = createThemeManager({
+        });
+        themeManager.setTheme({});
+        var theme = themeManager.getOptions("seriesTemplate");
+
+        assert.ok(!theme);
+    });
+
+    QUnit.test("Get seriesTemplate. Option is set", function(assert) {
+        var themeManager = createThemeManager({
+            seriesTemplate: {}
+        });
+        themeManager.setTheme({});
+        var value = themeManager.getOptions("seriesTemplate");
+
+        assert.deepEqual(value, {
+            nameField: "series"
+        });
+    });
+
+    QUnit.test("Get seriesTemplate. Option with custom nameField", function(assert) {
+        var themeManager = createThemeManager({
+            seriesTemplate: {
+                nameField: "custom"
+            }
+        });
+        themeManager.setTheme({});
+        var value = themeManager.getOptions("seriesTemplate");
+
+        assert.deepEqual(value, {
+            nameField: "custom"
+        });
+    });
+
+    QUnit.test("Do not pass name field to series config if series template is not used", function(assert) {
+        var themeManager = createThemeManager({
+        });
+        themeManager.setTheme({});
+        var theme = themeManager.getOptions("series", {});
+
+        assert.ok(!theme.nameField);
+    });
+
+    QUnit.test("Pass name field to series config if series template is used", function(assert) {
+        var themeManager = createThemeManager({
+            seriesTemplate: {
+                nameField: "name"
+            }
+        });
+        themeManager.setTheme({});
+        var theme = themeManager.getOptions("series", {});
+
+        assert.equal(theme.nameField, "name");
+    });
+
     QUnit.test('Apply next series theme chart is bar. Point options are in series options field', function(assert) {
         // arrange
         var themeManager = createThemeManager({

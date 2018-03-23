@@ -5,6 +5,7 @@ var $ = require("../core/renderer"),
     registerComponent = require("../core/component_registrator"),
     commonUtils = require("../core/utils/common"),
     typeUtils = require("../core/utils/type"),
+    windowUtils = require("../core/utils/window"),
     extend = require("../core/utils/extend").extend,
     getPublicElement = require("../core/utils/dom").getPublicElement,
     fx = require("../animation/fx"),
@@ -356,7 +357,7 @@ var Gallery = CollectionWidget.inherit({
     },
 
     _itemsPerPage: function() {
-        var itemsPerPage = Math.floor(1 / this._itemPercentWidth());
+        var itemsPerPage = windowUtils.hasWindow() ? Math.floor(1 / this._itemPercentWidth()) : 1;
 
         return Math.min(itemsPerPage, this._itemsCount());
     },
@@ -381,6 +382,11 @@ var Gallery = CollectionWidget.inherit({
         this.$element().toggleClass(GALLERY_LOOP_CLASS, this.option("loop"));
 
         this.callBase();
+
+        this.setAria({
+            "role": "listbox",
+            "label": "gallery"
+        });
     },
 
     _render: function() {
@@ -399,11 +405,6 @@ var Gallery = CollectionWidget.inherit({
         this._setupSlideShow();
 
         this._reviseDimensions();
-
-        this.setAria({
-            "role": "listbox",
-            "label": "gallery"
-        });
 
         this.callBase();
     },
@@ -440,6 +441,11 @@ var Gallery = CollectionWidget.inherit({
     },
 
     _renderItems: function(items) {
+        if(!windowUtils.hasWindow()) {
+            var selectedIndex = this.option("selectedIndex");
+
+            items = items.length > selectedIndex ? items.slice(selectedIndex, selectedIndex + 1) : items.slice(0, 1);
+        }
         this.callBase(items);
 
         this._loadNextPageIfNeeded();
@@ -1145,8 +1151,6 @@ var Gallery = CollectionWidget.inherit({
     },
 
     _optionChanged: function(args) {
-        var value = args.value;
-
         switch(args.name) {
             case "width":
             case "initialItemWidth":
@@ -1159,31 +1163,36 @@ var Gallery = CollectionWidget.inherit({
             case "animationEnabled":
                 break;
             case "loop":
-                this.option("loopItemFocus", value);
-                this.$element().toggleClass(GALLERY_LOOP_CLASS, value);
-                this._renderDuplicateItems();
-                this._renderItemPositions();
-                this._renderNavButtonsVisibility();
-                return;
+                this.$element().toggleClass(GALLERY_LOOP_CLASS, args.value);
+                this.option("loopItemFocus", args.value);
+
+                if(windowUtils.hasWindow()) {
+                    this._renderDuplicateItems();
+                    this._renderItemPositions();
+                    this._renderNavButtonsVisibility();
+                }
+                break;
             case "showIndicator":
                 this._renderIndicator();
-                return;
+                break;
             case "showNavButtons":
                 this._renderNavButtons();
-                return;
+                break;
             case "slideshowDelay":
                 this._setupSlideShow();
-                return;
+                break;
             case "wrapAround":
             case "stretchImages":
-                this._renderItemSizes();
-                this._renderItemPositions();
-                this._renderItemVisibility();
+                if(windowUtils.hasWindow()) {
+                    this._renderItemSizes();
+                    this._renderItemPositions();
+                    this._renderItemVisibility();
+                }
                 break;
             case "swipeEnabled":
             case "indicatorEnabled":
                 this._renderUserInteraction();
-                return;
+                break;
             default:
                 this.callBase(args);
         }

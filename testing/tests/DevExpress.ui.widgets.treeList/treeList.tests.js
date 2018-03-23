@@ -41,6 +41,18 @@ var createTreeList = function(options) {
     return treeList;
 };
 
+var generateData = function(count) {
+    var i = 1,
+        result = [];
+
+    while(i < count * 2) {
+        result.push({ id: i }, { id: i + 1, parentId: i });
+        i += 2;
+    }
+
+    return result;
+};
+
 QUnit.test("Empty options", function(assert) {
     var treeList = createTreeList({}),
         $treeListElement = $(treeList.$element()),
@@ -318,7 +330,7 @@ QUnit.test("Filter menu items should have icons", function(assert) {
     // assert
     $menuItemElements = $(".dx-overlay-wrapper").find(".dx-menu-item");
     assert.ok($menuItemElements.length > 0, "has filter menu items");
-    assert.equal($menuItemElements.first().find(".dx-icon").css("font-family"), "DXIcons", "first item has icon");
+    assert.equal($menuItemElements.first().find(".dx-icon").css("fontFamily"), "DXIcons", "first item has icon");
 });
 
 QUnit.test("Header Filter", function(assert) {
@@ -504,6 +516,68 @@ QUnit.test("Aria accessibility", function(assert) {
     assert.equal($dataRows.eq(2).attr("aria-level"), "0", "third data row - value of 'aria-level' attribute");
 });
 
+QUnit.test("filterSyncEnabled is working in TreeList", function(assert) {
+    // act
+    var treeList = createTreeList({
+        filterSyncEnabled: true,
+        columns: [{ dataField: "field", allowHeaderFiltering: true, filterValues: [2] }]
+    });
+
+    // act
+    treeList.columnOption("field", { filterValues: [2] });
+
+    // assert
+    assert.deepEqual(treeList.option("filterValue"), ["field", "anyof", [2]]);
+});
+
+QUnit.test("filterBulider is working in TreeList", function(assert) {
+    // arrange
+    var handlerInit = sinon.spy();
+
+    // act
+    var treeList = createTreeList({
+        filterBuilder: {
+            onInitialized: handlerInit
+        },
+        columns: [{ dataField: "field" }]
+    });
+
+    // assert
+    assert.equal(handlerInit.called, 0);
+
+    // act
+    treeList.option("filterBuilderPopup.visible", true);
+
+    // assert
+    assert.equal(handlerInit.called, 1);
+});
+
+QUnit.test("TreeList with paging", function(assert) {
+    // arrange, act
+    var $treeListElement,
+        treeList = createTreeList({
+            autoExpandAll: true,
+            dataSource: generateData(5),
+            paging: {
+                pageSize: 5
+            },
+            pager: {
+                visible: true,
+                showPageSizeSelector: true,
+                allowedPageSizes: [2, 5, 8]
+            }
+        });
+
+    this.clock.tick();
+
+    // assert
+    $treeListElement = $(treeList.$element());
+    assert.strictEqual($treeListElement.find(".dx-treelist-pager").length, 1, "has pager");
+    assert.strictEqual($treeListElement.find(".dx-page").length, 2, "number of containers for page");
+    assert.ok($treeListElement.find(".dx-page").first().hasClass("dx-selection"), "current page - first");
+    assert.strictEqual($treeListElement.find(".dx-page-size").length, 3, "number of containers for page sizes");
+});
+
 QUnit.module("Option Changed", {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
@@ -572,19 +646,8 @@ QUnit.test("Change options and call selectRows", function(assert) {
 // T576806
 QUnit.test("Pages should be correctly loaded after change dataSource and selectedRowKeys options", function(assert) {
     var treeList = createTreeList({
-            autoExpandAll: true
-        }),
-        generateData = function(count) {
-            var i = 1,
-                result = [];
-
-            while(i < count * 2) {
-                result.push({ id: i }, { id: i + 1, parentId: i });
-                i += 2;
-            }
-
-            return result;
-        };
+        autoExpandAll: true
+    });
 
     this.clock.tick(30);
 

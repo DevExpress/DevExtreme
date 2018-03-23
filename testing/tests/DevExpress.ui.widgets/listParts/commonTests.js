@@ -18,6 +18,7 @@ var $ = require("jquery"),
     swipeEvents = require("events/swipe"),
     ScrollView = require("ui/scroll_view"),
     errors = require("ui/widget/ui.errors"),
+    themes = require("ui/themes"),
     devices = require("core/devices");
 
 var LIST_ITEM_CLASS = "dx-list-item",
@@ -255,6 +256,42 @@ QUnit.test("group body should be not collapsed by click on header in disabled st
 
     $groupHeader.trigger("dxclick");
     assert.ok(!$group.hasClass(LIST_GROUP_COLLAPSED_CLASS), "collapsed class is not present");
+});
+
+var LIST_GROUP_HEADER_INDICATOR_CLASS = "dx-list-group-header-indicator";
+
+QUnit.test("group header collapsed indicator element for the Material theme", function(assert) {
+    var origCurrent = themes.current;
+    themes.current = function() { return "material"; };
+
+    var $element = this.element.dxList({
+        items: [{ key: "a", items: ["0"] }],
+        grouped: true,
+        collapsibleGroups: true
+    });
+
+    var $groupHeader = $element.find(toSelector(LIST_GROUP_CLASS) + " " + toSelector(LIST_GROUP_HEADER_CLASS));
+
+    assert.equal($groupHeader.find(toSelector(LIST_GROUP_HEADER_INDICATOR_CLASS)).length, 1, "group header has the collapsed indicator element for the Material theme");
+
+    themes.current = origCurrent;
+});
+
+QUnit.test("no group header collapsed indicator element for the Generic theme", function(assert) {
+    var origCurrent = themes.current;
+    themes.current = function() { return "generic"; };
+
+    var $element = this.element.dxList({
+        items: [{ key: "a", items: ["0"] }],
+        grouped: true,
+        collapsibleGroups: true
+    });
+
+    var $groupHeader = $element.find(toSelector(LIST_GROUP_CLASS) + " " + toSelector(LIST_GROUP_HEADER_CLASS));
+
+    assert.equal($groupHeader.find(toSelector(LIST_GROUP_HEADER_INDICATOR_CLASS)).length, 0, "group header should not have collapsed indicator element for the Generic theme");
+
+    themes.current = origCurrent;
 });
 
 QUnit.test("group collapsing is animated", function(assert) {
@@ -1574,6 +1611,47 @@ QUnit.test("appending items on 'more' button", function(assert) {
     assert.equal(element.dxList("instance")._startIndexForAppendedItems, null, "does not expecting appending items if all items rendered");
 });
 
+QUnit.test("more button should have default type for the Material theme", function(assert) {
+    var origCurrent = themes.current;
+    themes.current = function() { return "material"; };
+
+    var element = this.element.dxList({
+        dataSource: {
+            store: new ArrayStore([1, 2, 3, 4]),
+            pageSize: 2
+        },
+        pageLoadMode: "nextButton",
+        scrollingEnabled: true
+    });
+
+    var button = element.find(".dx-list-next-button .dx-button").dxButton("instance");
+
+    assert.equal(button.option("type"), "default", "more button should have default type for the Material theme");
+
+    themes.current = origCurrent;
+});
+
+QUnit.test("more button should have undefined type for the Generic theme", function(assert) {
+    var origCurrent = themes.current;
+    themes.current = function() { return "generic"; };
+
+    var element = this.element.dxList({
+        dataSource: {
+            store: new ArrayStore([1, 2, 3, 4]),
+            pageSize: 2
+        },
+        pageLoadMode: "nextButton",
+        scrollingEnabled: true
+    });
+
+    var button = element.find(".dx-list-next-button .dx-button").dxButton("instance");
+
+    assert.equal(button.option("type"), undefined, "more button should have undefined type for the Generic theme");
+
+    themes.current = origCurrent;
+});
+
+
 QUnit.test("should not expect appending items if items were appended just now", function(assert) {
     var element = this.element.dxList({
         pageLoadMode: "scrollBottom",
@@ -2186,7 +2264,37 @@ QUnit.test("list scroll to focused item after press up/down arrows", function(as
     assert.equal(instance.scrollTop(), 0, "item scrolled to visible area at top when up arrow were pressed");
 });
 
-QUnit.test("focusing on selectAll checkbox after down/up pressing", function(assert) {
+QUnit.test("'enter'/'space' keys pressing on selectAll checkbox", function(assert) {
+    if(!isDeviceDesktop(assert)) return;
+    assert.expect(3);
+
+    var $element = $("#list").dxList({
+            showSelectionControls: true,
+            selectionMode: "all",
+            focusStateEnabled: true,
+            items: [0, 1, 2, 3, 4]
+        }),
+        keyboard = keyboardMock($element),
+        $selectAllCheckBox = $element.find(".dx-list-select-all-checkbox"),
+        $firstItem = $element.find(toSelector(LIST_ITEM_CLASS)).eq(0);
+
+    $firstItem.trigger("dxpointerdown");
+    this.clock.tick();
+
+    keyboard.keyDown("up");
+    this.clock.tick();
+    assert.ok($selectAllCheckBox.hasClass("dx-state-focused"), "selectAll checkbox is focused");
+
+    $element.trigger($.Event("keydown", { which: 13 }));
+
+    assert.ok($selectAllCheckBox.hasClass("dx-checkbox-checked"), "selectAll checkbox is checked");
+
+    $element.trigger($.Event("keydown", { which: 32 }));
+
+    assert.ok(!$selectAllCheckBox.hasClass("dx-checkbox-checked"), "selectAll checkbox isn't checked");
+});
+
+QUnit.test("focusing on selectAll checkbox after 'down'/'up' pressing", function(assert) {
     if(!isDeviceDesktop(assert)) return;
     assert.expect(6);
 
@@ -2208,18 +2316,15 @@ QUnit.test("focusing on selectAll checkbox after down/up pressing", function(ass
     this.clock.tick();
     assert.ok($selectAllCheckBox.hasClass("dx-state-focused"), "selectAll checkbox is focused");
 
-    keyboard = keyboardMock($selectAllCheckBox);
     keyboard.keyDown("up");
     this.clock.tick();
     assert.ok(!$selectAllCheckBox.hasClass("dx-state-focused"), "selectAll checkbox isn't focused");
     assert.ok($lastItem.hasClass("dx-state-focused"), "last item is focused");
 
-    keyboard = keyboardMock($element);
     keyboard.keyDown("down");
     this.clock.tick();
     assert.ok($selectAllCheckBox.hasClass("dx-state-focused"), "selectAll checkbox is focused");
 
-    keyboard = keyboardMock($selectAllCheckBox);
     keyboard.keyDown("down");
     this.clock.tick();
     assert.ok(!$selectAllCheckBox.hasClass("dx-state-focused"), "selectAll checkbox isn't focused");

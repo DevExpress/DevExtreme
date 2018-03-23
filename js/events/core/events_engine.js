@@ -533,6 +533,11 @@ initEvent(normalizeEventArguments(function(src, config) {
 
     addProperty("which", calculateWhich, that);
 
+    if(src.type.indexOf("touch") === 0) {
+        delete config.pageX;
+        delete config.pageY;
+    }
+
     extend(that, config);
 
     that.guid = ++guid;

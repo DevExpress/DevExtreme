@@ -159,7 +159,7 @@ var baseFixedColumns = {
                 }
             }
 
-            if(isEmptyCell) {
+            if(isEmptyCell && (!that.option("advancedRendering") || column.command === "detail")) {
                 $cell
                     .html("&nbsp;")
                     .addClass(column.cssClass);
@@ -296,17 +296,25 @@ var baseFixedColumns = {
     },
 
     setColumnWidths: function(widths) {
-        var columns;
+        var columns,
+            useVisibleColumns = false;
 
         this.callBase.apply(this, arguments);
+
         if(this._fixedTableElement) {
-            if(widths && widths.length && !this.isScrollbarVisible(true)) {
+            if(this.option("advancedRendering")) {
+                useVisibleColumns = widths && widths.filter(function(width) { return width === "auto"; }).length;
+            } else {
+                useVisibleColumns = widths && widths.length && !this.isScrollbarVisible(true);
+            }
+            if(useVisibleColumns) {
                 columns = this._columnsController.getVisibleColumns();
             }
-            this.callBase(widths, this._fixedTableElement, columns);
+            this.callBase(widths, this._fixedTableElement, columns, true);
         }
-
-        this.synchronizeRows();
+        if(widths && widths.length) {
+            this.synchronizeRows();
+        }
     },
 
     _getClientHeight: function(element) {
@@ -317,6 +325,8 @@ var baseFixedColumns = {
 
     synchronizeRows: function() {
         var that = this,
+            rows = that._getRows(),
+            detailRowCount = rows.filter(function(row) { return row.rowType && row.rowType.indexOf("detail") === 0; }).length,
             rowHeight,
             fixedRowHeight,
             rowHeights = [],
@@ -326,6 +336,10 @@ var baseFixedColumns = {
             heightFixedTable,
             $rowElements,
             $fixedRowElements;
+
+        if(that.option("advancedRendering") && !detailRowCount) {
+            return;
+        }
 
         if(that._isFixedColumns && that._tableElement && that._fixedTableElement) {
             heightTable = that._getClientHeight(that._tableElement.get(0));

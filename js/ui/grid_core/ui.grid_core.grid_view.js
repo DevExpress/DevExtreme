@@ -20,7 +20,7 @@ var TABLE_CLASS = "table",
     HIDDEN_COLUMNS_WIDTH = "adaptiveHidden",
     EDITORS_INPUT_SELECTOR = "input:not([type='hidden'])",
 
-    VIEW_NAMES = ["columnsSeparatorView", "blockSeparatorView", "trackerView", "headerPanel", "columnHeadersView", "rowsView", "footerView", "columnChooserView", "pagerView", "draggingHeaderView", "contextMenuView", "errorView", "headerFilterView"];
+    VIEW_NAMES = ["columnsSeparatorView", "blockSeparatorView", "trackerView", "headerPanel", "columnHeadersView", "rowsView", "footerView", "columnChooserView", "pagerView", "draggingHeaderView", "contextMenuView", "errorView", "headerFilterView", "filterBuilderView"];
 
 var isPercentWidth = function(width) {
     return typeUtils.isString(width) && width.slice(-1) === "%";
@@ -101,7 +101,7 @@ var ResizingController = modules.ViewController.inherit({
     },
 
     _getBestFitWidths: function() {
-        if(this.option("advancedRendering") && this.option("columnAutoWidth")) {
+        if(this.option("advancedRendering")) {
             return this._rowsView.getColumnWidths();
         }
 
@@ -152,11 +152,11 @@ var ResizingController = modules.ViewController.inherit({
         var $element = this.component.$element(),
             that = this;
 
-        if(this.option("advancedRendering") && this.option("columnAutoWidth")) {
+        if(this.option("advancedRendering")) {
             var $rowsTable = that._rowsView._getTableElement(),
                 $rowsFixedTable = that._rowsView.getTableElements().eq(1);
 
-            $rowsTable.css("table-layout", isBestFit ? "auto" : "fixed");
+            $rowsTable.css("tableLayout", isBestFit ? "auto" : "fixed");
             $rowsTable.children("colgroup").css("display", isBestFit ? "none" : "");
             $rowsFixedTable.toggleClass(this.addWidgetPrefix(TABLE_FIXED_CLASS), !isBestFit);
 
@@ -177,6 +177,7 @@ var ResizingController = modules.ViewController.inherit({
             columnsController = that._columnsController,
             visibleColumns = columnsController.getVisibleColumns(),
             columnAutoWidth = that.option("columnAutoWidth"),
+            advancedRendering = that.option("advancedRendering"),
             needBestFit = that._needBestFit(),
             hasMinWidth = false,
             resetBestFitMode,
@@ -199,7 +200,7 @@ var ResizingController = modules.ViewController.inherit({
             };
 
         !needBestFit && each(visibleColumns, function(index, column) {
-            if(column.width === "auto" || column.fixed) {
+            if(column.width === "auto" || (!advancedRendering && column.fixed)) {
                 needBestFit = true;
                 return false;
             }
@@ -325,7 +326,7 @@ var ResizingController = modules.ViewController.inherit({
 
             if(totalWidth <= contentWidth) {
                 lastColumnIndex = resultWidths.length - 1;
-                while(lastColumnIndex >= 0 && visibleColumns[lastColumnIndex] && (visibleColumns[lastColumnIndex].command || resultWidths[lastColumnIndex] === HIDDEN_COLUMNS_WIDTH)) {
+                while(lastColumnIndex >= 0 && visibleColumns[lastColumnIndex] && (visibleColumns[lastColumnIndex].command || resultWidths[lastColumnIndex] === HIDDEN_COLUMNS_WIDTH || visibleColumns[lastColumnIndex].fixed)) {
                     lastColumnIndex--;
                 }
                 if(lastColumnIndex >= 0) {

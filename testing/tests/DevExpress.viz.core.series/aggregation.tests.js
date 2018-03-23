@@ -214,16 +214,12 @@ QUnit.test("Custom aggregation", function(assert) {
     assert.equal(calculate.callCount, 4);
     assert.deepEqual(calculate.firstCall.args[0], {
         aggregationInterval: 3,
-        data: [data[0], data[1], data[2]],
-        intervalEnd: undefined,
-        intervalStart: undefined
+        data: [data[0], data[1], data[2]]
     });
 
     assert.deepEqual(calculate.lastCall.args[0], {
         aggregationInterval: 3,
-        data: [data[9], data[10]],
-        intervalEnd: undefined,
-        intervalStart: undefined
+        data: [data[9], data[10]]
     });
 });
 

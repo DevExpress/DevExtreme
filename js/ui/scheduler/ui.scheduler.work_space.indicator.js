@@ -5,6 +5,7 @@ var $ = require("../../core/renderer"),
     registerComponent = require("../../core/component_registrator"),
     dateUtils = require("../../core/utils/date"),
     extend = require("../../core/utils/extend").extend,
+    windowUtils = require("../../core/utils/window"),
     toMs = dateUtils.dateToMilliseconds;
 
 var SCHEDULER_DATE_TIME_INDICATOR_CLASS = "dx-scheduler-date-time-indicator",
@@ -26,6 +27,10 @@ var SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
     },
 
     needRenderDateTimeIndication: function() {
+        if(!windowUtils.hasWindow()) {
+            return false;
+        }
+
         var today = this._getToday();
 
         return today >= dateUtils.trimTime(new Date(this.getStartViewDate()));
@@ -220,6 +225,13 @@ var SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
 
     _cleanDateTimeIndicator: function() {
         this.$element().find("." + SCHEDULER_DATE_TIME_INDICATOR_CLASS).remove();
+    },
+
+    _cleanWorkSpace: function() {
+        this.callBase();
+
+        this._renderDateTimeIndication();
+        this._setIndicationUpdateInterval();
     },
 
     _optionChanged: function(args) {

@@ -1,0 +1,170 @@
+.dx-size-default() {
+    @MATERIAL_SWITCH_HEIGHT: 20px;
+    @MATERIAL_SWITCH_WIDTH: 36px;
+    @MATERIAL_SWITCH_RADIUS: @MATERIAL_SWITCH_HEIGHT / 2;
+    @MATERIAL_SWITCH_HANDLE_WIDTH: 14px;
+    @MATERIAL_SWITCH_HANDLE_OFFSET: 2px;
+    @MATERIAL_SWITCH_HANDLE_SHADOW: 0 1px 4px 0 rgba(0, 0, 0, .2);
+    @MATERIAL_SWITCH_CONTAINER_ADJUSTMENT: 6px;
+    @MATERIAL_SWITCH_FONT_SIZE: 9px;
+    @MATERIAL_SWITCH_ON_OFF_ADDING_PADDING: 2px;
+}
+
+.dx-size-compact() {
+    @MATERIAL_SWITCH_HEIGHT: 18px;
+    @MATERIAL_SWITCH_WIDTH: 36px;
+    @MATERIAL_SWITCH_HANDLE_WIDTH: 14px;
+    @MATERIAL_SWITCH_HANDLE_OFFSET: 1px;
+    @MATERIAL_SWITCH_CONTAINER_ADJUSTMENT: 4px;
+    @MATERIAL_SWITCH_FONT_SIZE: 9px;
+    @MATERIAL_SWITCH_ON_OFF_ADDING_PADDING: 0;
+}
+
+@MATERIAL_SWITCH_TRANSITION: all .4s cubic-bezier(0.23, 1, 0.32, 1);
+@MATERIAL_ON_VALUE_SWITCH_SHADOW: 0 0 0 15px fade(@switch-handle-on-bg, 10%);
+@MATERIAL_SWITCH_SHADOW: 0 0 0 15px fade(@base-text-color, 10%);
+
+.dx-switch-wrapper {
+    position: relative;
+}
+
+.dx-switch {
+    width: @MATERIAL_SWITCH_WIDTH;
+    height: @MATERIAL_SWITCH_HEIGHT;
+
+    &.dx-state-readonly,
+    &.dx-state-disabled {
+        .dx-switch-handle:before {
+            background-color: darken(@base-element-bg, 26%);
+        }
+
+        .dx-switch-container:before {
+            background-color: fade(@base-text-color, 12%);
+        }
+    }
+
+    &.dx-state-active,
+    &.dx-state-focused {
+        .dx-switch-handle:before {
+            .box-shadow(@MATERIAL_SWITCH_SHADOW);
+            .border-radius(50%)
+        }
+    }
+}
+
+.dx-switch-on-value,
+.dx-switch {
+    &.dx-state-readonly.dx-state-focused {
+        .dx-switch-handle:before {
+            .box-shadow(@MATERIAL_SWITCH_SHADOW);
+            .border-radius(50%)
+        }
+    }
+}
+
+.dx-switch-container {
+    overflow: visible;
+    margin-top: -3px;
+    height: @MATERIAL_SWITCH_HEIGHT;
+
+    &:before {
+        position: absolute;
+        content: '';
+        width: 100%;
+        height: 14px;
+        .border-radius(500px);
+        background-color: @switch-bg;
+        margin: 3px 0;
+    }
+}
+
+.dx-switch-inner {
+    width: 100%;
+    height: 100%;
+}
+
+.dx-switch-on,
+.dx-switch-off {
+    float: left;
+    margin-left: -@MATERIAL_SWITCH_RADIUS;
+    padding: 4px 0;
+    width: 50%;
+    height: @MATERIAL_SWITCH_HEIGHT;
+    color: transparent;
+    text-align: center;
+    line-height: 100%;
+}
+
+.dx-switch-on {
+    background: transparent;
+    width: 100%;
+}
+
+.dx-switch-off {
+    display: none;
+    padding-bottom: 10px;
+    background-color: transparent;
+}
+
+.dx-switch-handle {
+    position: relative;
+    float: left;
+    margin-left: -@MATERIAL_SWITCH_RADIUS;
+    width: @MATERIAL_SWITCH_HEIGHT;
+    height: @MATERIAL_SWITCH_HEIGHT;
+    background-color: @switch-handle-off-bg;
+    .box-shadow(@MATERIAL_SWITCH_HANDLE_SHADOW);
+    .border-radius(@switch-handle-border-radius);
+
+    &:before {
+        display: block;
+        content: ' ';
+        width: 100%;
+        height: 100%;
+        background-color: @switch-handle-off-bg;
+        .border-radius(@switch-handle-border-radius);
+        .transition(@MATERIAL_SWITCH_TRANSITION);
+    }
+}
+
+.dx-switch-on-value {
+    .dx-switch-container:before {
+        background-color: @switch-on-bg;
+    }
+
+    .dx-switch-handle:before {
+        background-color: @switch-handle-on-bg;
+    }
+
+    &.dx-state-active,
+    &.dx-state-focused {
+        .dx-switch-handle:before {
+            .box-shadow(@MATERIAL_ON_VALUE_SWITCH_SHADOW);
+            .border-radius(50%)
+        }
+    }
+}
+
+.dx-rtl .dx-switch,
+.dx-switch.dx-rtl {
+    .dx-switch-on,
+    .dx-switch-off {
+        float: right;
+        padding-left: @MATERIAL_SWITCH_HANDLE_WIDTH + @MATERIAL_SWITCH_ON_OFF_ADDING_PADDING;
+        padding-right: @MATERIAL_SWITCH_HANDLE_OFFSET;
+    }
+
+    .dx-switch-off {
+        margin-left: 0;
+    }
+
+    .dx-switch-handle {
+        float: right;
+        margin-left: 0;
+        margin-right: -@MATERIAL_SWITCH_RADIUS;
+    }
+
+    .dx-switch-container {
+        margin: 0 0 0 -@MATERIAL_SWITCH_CONTAINER_ADJUSTMENT;
+    }
+}

@@ -160,41 +160,6 @@ QUnit.module("Bubble series. Draw", {
 var checkGroups = checkTwoGroups,
     seriesType = "bubble";
 
-QUnit.test("Update template field", function(assert) {
-    var series = createSeries({
-        type: seriesType,
-        name: "bubbleSeries",
-        valueField: "valueField",
-        sizeField: "sizeField",
-        tagField: "tagField",
-        point: { visible: false },
-        label: { visible: false }
-
-    }, { renderer: this.renderer });
-    // act
-    series.updateTemplateFieldNames();
-    // assert
-    assert.equal(series._options.valueField, "valueFieldbubbleSeries");
-    assert.equal(series._options.sizeField, "sizeFieldbubbleSeries");
-    assert.equal(series._options.tagField, "tagFieldbubbleSeries");
-});
-
-QUnit.test("Update template field. Default values", function(assert) {
-    var series = createSeries({
-        type: seriesType,
-        name: "bubbleSeries",
-        point: { visible: false },
-        label: { visible: false }
-
-    }, { renderer: this.renderer });
-    // act
-    series.updateTemplateFieldNames();
-    // assert
-    assert.equal(series._options.valueField, "valbubbleSeries");
-    assert.equal(series._options.sizeField, "sizebubbleSeries");
-    assert.equal(series._options.tagField, "tagbubbleSeries");
-});
-
 QUnit.test("Draw without data", function(assert) {
     var series = this.createSeries({
         type: seriesType,

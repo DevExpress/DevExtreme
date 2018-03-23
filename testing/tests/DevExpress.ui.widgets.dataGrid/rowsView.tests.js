@@ -229,8 +229,8 @@ QUnit.test('Render scrollable', function(assert) {
     assert.equal($scrollableContent.length, 1, 'scrollable content count');
     assert.equal($scrollableScrollbar.length, 2, 'scrollable scrollbar count');
     // T575726
-    assert.equal($scrollableContent.css("z-index"), "auto", 'scrollable content z-index');
-    assert.equal($scrollableScrollbar.css("z-index"), "auto", 'scrollable scrollbar z-index');
+    assert.equal($scrollableContent.css("zIndex"), "auto", 'scrollable content z-index');
+    assert.equal($scrollableScrollbar.css("zIndex"), "auto", 'scrollable scrollbar z-index');
 
     var scrollable = $scrollable.dxScrollable("instance");
     assert.strictEqual(scrollable.option("useNative"), false, 'scrollable useNative');

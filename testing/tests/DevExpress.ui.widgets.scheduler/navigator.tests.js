@@ -3,11 +3,11 @@
 var $ = require("jquery"),
     noop = require("core/utils/common").noop,
     devices = require("core/devices"),
-    SchedulerNavigator = require("ui/scheduler/ui.scheduler.navigator"),
     fx = require("animation/fx"),
     dateLocalization = require("localization/date"),
     keyboardMock = require("../../helpers/keyboardMock.js");
 
+require("ui/scheduler/ui.scheduler.navigator");
 require("common.css!");
 require("generic_light.css!");
 
@@ -26,45 +26,6 @@ QUnit.module("Navigator", {
     afterEach: function() {
         fx.off = false;
     }
-});
-
-QUnit.test("Scheduler navigator should be initialized", function(assert) {
-    assert.ok(this.instance instanceof SchedulerNavigator, "dxSchedulerNavigator was initialized");
-});
-
-QUnit.test("Scheduler navigator should have a right css class", function(assert) {
-    var $element = this.instance.$element();
-
-    assert.ok($element.hasClass("dx-scheduler-navigator"), "dxSchedulerNavigator has 'dx-scheduler-navigator' css class");
-});
-
-QUnit.test("Scheduler navigator should contain the 'next' button", function(assert) {
-    var $element = this.instance.$element();
-
-    var $button = $element.find(".dx-scheduler-navigator-next");
-
-    assert.equal($button.length, 1, "Navigator 'next' is rendered");
-    assert.ok($button.hasClass("dx-button"), "Navigator 'next' is dxButton");
-    assert.equal($button.attr("aria-label"), "Next period", "Navigator 'next' button has right label");
-});
-
-QUnit.test("Scheduler navigator should contain the 'previous' button", function(assert) {
-    var $element = this.instance.$element();
-
-    var $button = $element.find(".dx-scheduler-navigator-previous");
-
-    assert.equal($button.length, 1, "Navigator 'previous' is rendered");
-    assert.ok($button.hasClass("dx-button"), "Navigator 'previous' is dxButton");
-    assert.equal($button.attr("aria-label"), "Previous period", "Navigator 'previous' button has right label");
-});
-
-QUnit.test("Scheduler navigator should contain the 'caption' button", function(assert) {
-    var $element = this.instance.$element();
-
-    var $button = $element.find(".dx-scheduler-navigator-caption");
-
-    assert.equal($button.length, 1, "Navigation 'caption' is rendered");
-    assert.ok($button.hasClass("dx-button"), "Navigator 'caption' is dxButton");
 });
 
 QUnit.test("Click on 'next' button should notify observer", function(assert) {
@@ -192,65 +153,6 @@ QUnit.test("Navigator should throw an error if step is undefined", function(asse
     );
 });
 
-QUnit.test("Caption should be OK with default options", function(assert) {
-    var $element = this.instance.$element(),
-        button = $element.find(".dx-scheduler-navigator-caption").dxButton("instance"),
-        date = new Date(),
-        caption = [dateLocalization.format(date, "day"), dateLocalization.format(date, "monthAndYear")].join(" ");
-
-    assert.equal(button.option("text"), caption, "Caption is OK");
-});
-
-QUnit.test("Caption should be OK when step and date are changed", function(assert) {
-    var $element = this.instance.$element(),
-        button = $element.find(".dx-scheduler-navigator-caption").dxButton("instance"),
-        date = new Date(2015, 0, 24),
-        caption = "24 January 2015";
-
-    this.instance.option("firstDayOfWeek", 1);
-    this.instance.option("date", date);
-    assert.equal(button.option("text"), caption, "Step is day: Caption is OK");
-
-    var weekDateString = devices.real().generic ? "25 January 2015" : "25 Jan 2015";
-
-    caption = "19-" + weekDateString;
-
-    this.instance.option("step", "week");
-    assert.equal(button.option("text"), caption, "Step is week: Caption is OK");
-
-    weekDateString = devices.real().generic ? "23 January 2015" : "23 Jan 2015",
-    caption = "19-" + weekDateString;
-
-    this.instance.option("step", "workWeek");
-    assert.equal(button.option("text"), caption, "Step is workWeek: Caption is OK");
-
-    caption = dateLocalization.format(date, "monthandyear");
-    this.instance.option("step", "month");
-    assert.equal(button.option("text"), caption, "Step is month: Caption is OK");
-
-
-    this.instance.option("step", "agenda");
-
-    weekDateString = devices.real().generic ? "30 January 2015" : "30 Jan 2015";
-    caption = "24-" + weekDateString;
-
-    assert.equal(button.option("text"), caption, "Step is agenda: Caption is OK");
-});
-
-QUnit.test("Caption should be OK for workWeek view & firstDayOfWeek = 0", function(assert) {
-    var $element = this.instance.$element(),
-        button = $element.find(".dx-scheduler-navigator-caption").dxButton("instance"),
-        date = new Date(2015, 0, 24);
-
-    this.instance.option("firstDayOfWeek", 0);
-    this.instance.option("date", date);
-
-    var caption = devices.real().generic ? "19-23 January 2015" : "19-23 Jan 2015";
-
-    this.instance.option("step", "workWeek");
-    assert.equal(button.option("text"), caption, "Step is workWeek: Caption is OK");
-});
-
 QUnit.test("Click on 'next' button should notify observer, day with intervalCount", function(assert) {
     var $element = this.instance.$element(),
         $nextButton = $element.find(".dx-scheduler-navigator-next"),
@@ -267,72 +169,6 @@ QUnit.test("Click on 'next' button should notify observer, day with intervalCoun
     assert.ok(updateSpy.calledOnce, "Observer is notified");
     assert.deepEqual(updateSpy.getCall(0).args[0], "currentDateUpdated", "Correct method of observer is called");
     assert.deepEqual(updateSpy.getCall(0).args[1], new Date(2015, 4, 28), "Arguments are OK");
-});
-
-QUnit.test("Caption should be OK for Day with intervalCount", function(assert) {
-    var $element = this.instance.$element(),
-        button = $element.find(".dx-scheduler-navigator-caption").dxButton("instance"),
-        date = new Date(2015, 4, 25),
-        caption = "25-27 May 2015";
-
-    this.instance.option("date", date);
-    this.instance.option("intervalCount", 3);
-
-    assert.equal(button.option("text"), caption, "Caption is OK");
-});
-
-QUnit.test("Caption should be OK for workWeek view with intervalCount", function(assert) {
-    var $element = this.instance.$element(),
-        button = $element.find(".dx-scheduler-navigator-caption").dxButton("instance"),
-        date = new Date(2015, 4, 25),
-        caption = "25 May-12 Jun 2015";
-
-    this.instance.option("firstDayOfWeek", 1);
-    this.instance.option("date", date);
-    this.instance.option("intervalCount", 3),
-    this.instance.option("step", "workWeek");
-
-    assert.equal(button.option("text"), caption, "Caption is OK");
-});
-
-QUnit.test("Caption should be OK for week view with intervalCount", function(assert) {
-    var $element = this.instance.$element(),
-        button = $element.find(".dx-scheduler-navigator-caption").dxButton("instance"),
-        date = new Date(2015, 4, 25),
-        caption = "25 May-14 Jun 2015";
-
-    this.instance.option("firstDayOfWeek", 1);
-    this.instance.option("date", date);
-    this.instance.option("intervalCount", 3),
-    this.instance.option("step", "week");
-
-    assert.equal(button.option("text"), caption, "Caption is OK");
-});
-
-QUnit.test("Caption should be OK for Month with intervalCount", function(assert) {
-    var $element = this.instance.$element(),
-        button = $element.find(".dx-scheduler-navigator-caption").dxButton("instance"),
-        date = new Date(2017, 4, 25),
-        caption = "Jun-Jul 2017";
-
-    this.instance.option("date", date);
-    this.instance.option("intervalCount", 2);
-    this.instance.option("step", "month");
-
-    assert.equal(button.option("text"), caption, "Caption is OK");
-});
-
-QUnit.test("Caption should be OK for Month with intervalCount for different years", function(assert) {
-    var $element = this.instance.$element(),
-        button = $element.find(".dx-scheduler-navigator-caption").dxButton("instance"),
-        date = new Date(2017, 10, 25),
-        caption = "Dec 2017-Feb 2018";
-
-    this.instance.option("date", date);
-    this.instance.option("intervalCount", 3);
-    this.instance.option("step", "month");
-
-    assert.equal(button.option("text"), caption, "Caption is OK");
 });
 
 QUnit.test("Click on 'next' button should notify observer, week with intervalCount", function(assert) {
@@ -711,75 +547,6 @@ QUnit.test("Min & Max options are passed to calendar", function(assert) {
     this.instance.option("max", new Date(2015, 1, 5));
     assert.deepEqual(calendar.option("max"), new Date(2015, 1, 5), "Calendar have a right max");
 });
-
-QUnit.test("Caption should be OK for workWeek view, if date = Sunday", function(assert) {
-    var $element = this.instance.$element(),
-        button = $element.find(".dx-scheduler-navigator-caption").dxButton("instance"),
-        date = new Date(2016, 0, 10);
-
-    this.instance.option("firstDayOfWeek", 0);
-    this.instance.option("date", date);
-
-    var caption = devices.real().generic ? "11-15 January 2016" : "11-15 Jan 2016";
-
-    this.instance.option("step", "workWeek");
-    assert.equal(button.option("text"), caption, "Step is workWeek: Caption is OK");
-});
-
-QUnit.test("Caption should be OK for workWeek view, if date = Sunday and firstDayOfWeek != 0", function(assert) {
-    var $element = this.instance.$element(),
-        button = $element.find(".dx-scheduler-navigator-caption").dxButton("instance"),
-        date = new Date(2016, 0, 10);
-
-    this.instance.option("firstDayOfWeek", 3);
-    this.instance.option("date", date);
-
-    var caption = devices.real().generic ? "6-12 January 2016" : "6-12 Jan 2016";
-
-    this.instance.option("step", "workWeek");
-    assert.equal(button.option("text"), caption, "Step is workWeek: Caption is OK");
-});
-
-QUnit.test("Caption should be OK for workWeek view, if date = Saturday & firstDayOfWeek = 6", function(assert) {
-    var $element = this.instance.$element(),
-        button = $element.find(".dx-scheduler-navigator-caption").dxButton("instance"),
-        date = new Date(2016, 0, 9);
-
-    this.instance.option("firstDayOfWeek", 6);
-    this.instance.option("date", date);
-
-    var caption = devices.real().generic ? "11-15 January 2016" : "11-15 Jan 2016";
-
-    this.instance.option("step", "workWeek");
-    assert.equal(button.option("text"), caption, "Step is workWeek: Caption is OK");
-});
-
-QUnit.test("Caption should be OK for workWeek view, if date = Sunday & firstDayOfWeek = 6", function(assert) {
-    var $element = this.instance.$element(),
-        button = $element.find(".dx-scheduler-navigator-caption").dxButton("instance"),
-        date = new Date(2016, 0, 10);
-
-    this.instance.option("firstDayOfWeek", 6);
-    this.instance.option("date", date);
-
-    var caption = devices.real().generic ? "11-15 January 2016" : "11-15 Jan 2016";
-
-    this.instance.option("step", "workWeek");
-    assert.equal(button.option("text"), caption, "Step is workWeek: Caption is OK");
-});
-
-QUnit.test("Caption should be OK for week view, if date = Sunday & firstDayOfWeek = 1", function(assert) {
-    var $element = this.instance.$element(),
-        button = $element.find(".dx-scheduler-navigator-caption").dxButton("instance"),
-        date = new Date(2015, 2, 1);
-
-    this.instance.option("firstDayOfWeek", 1);
-    this.instance.option("date", date);
-
-    this.instance.option("step", "week");
-    assert.equal(button.option("text"), "23 Feb-1 Mar 2015", "Step is week: Caption is OK");
-});
-
 
 QUnit.module("Navigator Keyboard Navigation", {
     beforeEach: function() {

@@ -8,6 +8,7 @@ var $ = require("../core/renderer"),
     inArray = require("../core/utils/array").inArray,
     each = require("../core/utils/iterator").each,
     typeUtils = require("../core/utils/type"),
+    windowUtils = require("../core/utils/window"),
     translator = require("../animation/translator"),
     fitIntoRange = require("../core/utils/math").fitIntoRange,
     DOMComponent = require("../core/dom_component"),
@@ -33,6 +34,12 @@ var RESIZABLE = "dxResizable",
     DRAGSTART_EVENT_NAME = eventUtils.addNamespace(dragEvents.move, RESIZABLE),
     DRAGSTART_END_EVENT_NAME = eventUtils.addNamespace(dragEvents.end, RESIZABLE);
 
+var SIDE_BORDER_WIDTH_STYLES = {
+    "left": "borderLeftWidth",
+    "top": "borderTopWidth",
+    "right": "borderRightWidth",
+    "bottom": "borderBottomWidth"
+};
 /**
 * @name dxResizable
 * @publicName dxResizable
@@ -280,7 +287,7 @@ var Resizable = DOMComponent.inherit({
 
     _getBorderWidth: function($element, direction) {
         if(typeUtils.isWindow($element.get(0))) return 0;
-        var borderWidth = $element.css("border-" + direction + "-width");
+        var borderWidth = $element.css(SIDE_BORDER_WIDTH_STYLES[direction]);
         return parseInt(borderWidth) || 0;
     },
 
@@ -480,11 +487,11 @@ var Resizable = DOMComponent.inherit({
                 break;
             case "minWidth":
             case "maxWidth":
-                this._renderWidth(this.$element().outerWidth());
+                windowUtils.hasWindow() && this._renderWidth(this.$element().outerWidth());
                 break;
             case "minHeight":
             case "maxHeight":
-                this._renderHeight(this.$element().outerHeight());
+                windowUtils.hasWindow() && this._renderHeight(this.$element().outerHeight());
                 break;
             case "onResize":
             case "onResizeStart":

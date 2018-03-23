@@ -34,8 +34,10 @@ var ListEdit = ListBase.inherit({
                 that.reorderItem(that.option("focusedElement"), $prevItem);
                 that.scrollToItem(that.option("focusedElement"));
             } else {
-                if(this._editProvider.moveFocusFromList(focusedItemIndex)) {
+                if(focusedItemIndex === 0 && this._editProvider.handleKeyboardEvents(focusedItemIndex, false)) {
                     return;
+                } else {
+                    this._editProvider.handleKeyboardEvents(focusedItemIndex, true);
                 }
                 parent.upArrow(e);
             }
@@ -52,17 +54,33 @@ var ListEdit = ListBase.inherit({
                 that.reorderItem(that.option("focusedElement"), $nextItem);
                 that.scrollToItem(that.option("focusedElement"));
             } else {
-                if(this._editProvider.moveFocusFromList(focusedItemIndex)) {
+                if(focusedItemIndex === this._getLastItemIndex() && this._editProvider.handleKeyboardEvents(focusedItemIndex, false)) {
                     return;
+                } else {
+                    this._editProvider.handleKeyboardEvents(focusedItemIndex, true);
                 }
                 parent.downArrow(e);
+            }
+        };
+
+        var enter = function(e) {
+            if(!this._editProvider.handleEnterPressing()) {
+                parent.enter.apply(this, arguments);
+            }
+        };
+
+        var space = function(e) {
+            if(!this._editProvider.handleEnterPressing()) {
+                parent.space.apply(this, arguments);
             }
         };
 
         return extend({}, parent, {
             del: deleteFocusedItem,
             upArrow: moveFocusedItemUp,
-            downArrow: moveFocusedItemDown
+            downArrow: moveFocusedItemDown,
+            enter: enter,
+            space: space
         });
     },
 

@@ -132,14 +132,6 @@ var baseScatterMethods = {
         };
     },
 
-    updateTemplateFieldNames: function() {
-        var that = this,
-            options = that._options;
-
-        options.valueField = that.getValueFields()[0] + that.name;
-        options.tagField = that.getTagField() + that.name;
-    },
-
     _applyElementsClipRect: function(settings) {
         settings["clip-path"] = this._paneClipRectID;
     },
@@ -301,28 +293,37 @@ var baseScatterMethods = {
         return rangeCalculator.getRangeData(this);
     },
 
-    _getPointData: function(data, options) {
-        var pointData = {
-            value: data[options.valueField || "val"],
-            argument: data[options.argumentField || "arg"],
-            tag: data[options.tagField || "tag"],
-            data: data
-        };
+    _getPointDataSelector: function() {
+        const valueField = this.getValueFields()[0];
+        const argumentField = this.getArgumentField();
+        const tagField = this.getTagField();
+        const areErrorBarsVisible = this.areErrorBarsVisible();
+        let lowValueField, highValueField;
 
-        this._fillErrorBars(data, pointData, options);
-        return pointData;
+        if(areErrorBarsVisible) {
+            const errorBarOptions = this._options.valueErrorBar;
+            lowValueField = errorBarOptions.lowValueField || LOW_ERROR;
+            highValueField = errorBarOptions.highValueField || HIGH_ERROR;
+        }
+
+        return (data) => {
+            const pointData = {
+                value: data[valueField],
+                argument: data[argumentField],
+                tag: data[tagField],
+                data: data
+            };
+
+            if(areErrorBarsVisible) {
+                pointData.lowError = data[lowValueField];
+                pointData.highError = data[highValueField];
+            }
+            return pointData;
+        };
     },
 
     _errorBarsEnabled: function() {
         return (this.valueAxisType !== DISCRETE && this.valueAxisType !== LOGARITHMIC && this.valueType !== DATETIME);
-    },
-
-    _fillErrorBars: function(data, pointData, options) {
-        var errorBars = options.valueErrorBar;
-        if(this.areErrorBarsVisible()) {
-            pointData.lowError = data[errorBars.lowValueField || LOW_ERROR];
-            pointData.highError = data[errorBars.highValueField || HIGH_ERROR];
-        }
     },
 
     _drawPoint: function(options) {

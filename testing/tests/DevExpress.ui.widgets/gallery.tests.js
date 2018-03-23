@@ -1,7 +1,6 @@
 "use strict";
 
 var $ = require("jquery"),
-    Gallery = require("ui/gallery"),
     DataSource = require("data/data_source/data_source").DataSource,
     ArrayStore = require("data/array_store"),
     fx = require("animation/fx"),
@@ -13,6 +12,7 @@ var $ = require("jquery"),
     pointerMock = require("../../helpers/pointerMock.js"),
     keyboardMock = require("../../helpers/keyboardMock.js");
 
+require("ui/gallery");
 require("common.css!");
 
 QUnit.testStart(function() {
@@ -735,15 +735,6 @@ QUnit.test("default", function(assert) {
     assert.equal($gallery.find("." + NAV_PREV_BUTTON_CLASS).length, 1);
     assert.equal($gallery.find("." + NAV_NEXT_BUTTON_CLASS).hasClass(DX_WIDGET_CLASS), true);
     assert.equal($gallery.find("." + NAV_PREV_BUTTON_CLASS).hasClass(DX_WIDGET_CLASS), true);
-});
-
-QUnit.test("gallery img should have appropriate class", function(assert) {
-    var $gallery = $("#gallerySimple").dxGallery({
-            items: [0, 1, 2, 3]
-        }),
-        $galleryItems = $gallery.find("." + GALLERY_ITEM_CLASS);
-
-    assert.ok($galleryItems.eq(0).find("img").hasClass("dx-gallery-item-image"), "right class was passed");
 });
 
 QUnit.test("selectedIndex option on init", function(assert) {
@@ -2532,60 +2523,4 @@ QUnit.test("next dataSource page should be loaded on indicator click", function(
     $gallery.find("." + INDICATOR_ITEM_CLASS).eq(2).trigger("dxclick");
     $items = $gallery.find("." + GALLERY_ITEM_CLASS);
     assert.equal($items.filter(":visible").length, 8, "rendered items count is correct");
-});
-
-QUnit.module("aria accessibility");
-
-QUnit.test("aria role", function(assert) {
-    var $element = $("#widget").dxGallery();
-
-    assert.equal($element.attr("role"), "listbox", "aria role is correct");
-});
-
-QUnit.test("aria label", function(assert) {
-    var $element = $("#widget").dxGallery();
-
-    assert.equal($element.attr("aria-label"), "gallery", "widget should have aria-label to have difference from text list");
-});
-
-QUnit.test("aria role for items", function(assert) {
-    var $element = $("#widget").dxGallery({ items: [1] }),
-        $item = $element.find("." + GALLERY_ITEM_CLASS);
-
-    assert.equal($item.attr("role"), "option", "item's role is correct");
-});
-
-
-QUnit.module("default template", {
-    prepareItemTest: function(data) {
-        var gallery = new Gallery($("<div>"), {
-            items: [data]
-        });
-
-        return gallery.itemElements().eq(0).find(".dx-item-content").contents();
-    }
-});
-
-QUnit.test("template should be rendered correctly with image as string", function(assert) {
-    var $content = this.prepareItemTest("test");
-    var $img = $content.filter("img");
-
-    assert.equal($img.length, 1);
-    assert.equal($img.attr("src"), "test");
-});
-
-QUnit.test("template should be rendered correctly with imageSrc", function(assert) {
-    var $content = this.prepareItemTest({ imageSrc: "test.jpg" });
-    var $img = $content.filter("img");
-
-    assert.equal($img.length, 1);
-    assert.equal($img.attr("src"), "test.jpg");
-});
-
-QUnit.test("template should be rendered correctly with imageSrc & imageAlt", function(assert) {
-    var $content = this.prepareItemTest({ imageSrc: "test.jpg", imageAlt: "test" });
-    var $img = $content.filter("img");
-
-    assert.equal($img.length, 1);
-    assert.equal($img.attr("alt"), "test");
 });

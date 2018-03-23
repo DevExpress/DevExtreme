@@ -179,8 +179,8 @@ var testVerticalAlign = function($parent, inputSelector, isContainer, testVertic
 
 var testVerticalOffset = function($label, $value) {
     var isIE9 = document.all && !document.atob;
-    var labelOffset = Math.round($label.offset().top - parseInt($label.css("margin-top")) - isIE9 ? parseInt($label.css("border-top-width")) : 0),
-        valueOffset = Math.round($value.offset().top - parseInt($value.css("margin-top")) - isIE9 ? parseInt($value.css("border-top-width")) : 0);
+    var labelOffset = Math.round($label.offset().top - parseInt($label.css("margin-top")) - isIE9 ? parseInt($label.css("borderTopWidth")) : 0),
+        valueOffset = Math.round($value.offset().top - parseInt($value.css("margin-top")) - isIE9 ? parseInt($value.css("borderTopWidth")) : 0);
 
     QUnit.assert.equal(labelOffset, valueOffset, "Top offset equal");
 };
@@ -192,8 +192,8 @@ var testBaselineOffset = function($labelContainer, $valueContainer) {
     try {
         $imgForLabel = $("<img/>").height(1).width(1).appendTo($labelContainer);
         $imgForInput = $("<img/>").height(1).width(1).appendTo($valueContainer);
-        $imgForLabel.closest(".dx-field-label").css("white-space", "nowrap");
-        $imgForInput.closest(".dx-field-value").css("white-space", "nowrap");
+        $imgForLabel.closest(".dx-field-label").css("whiteSpace", "nowrap");
+        $imgForInput.closest(".dx-field-value").css("whiteSpace", "nowrap");
         QUnit.assert.roughEqual($imgForLabel.offset().top, $imgForInput.offset().top, 0.99);
     } finally {
         $imgForLabel.remove();
@@ -419,11 +419,11 @@ module.exports = function(themeName, options) {
             var cloneTextArea = $("<div>").css("display", "inline-block")
                     .css("vertical-align", "top")
                     .css("padding-top", $valueInput.css("padding-top"))
-                    .css("padding-bottom", $valueInput.css("padding-bottom"))
+                    .css("paddingBottom", $valueInput.css("paddingBottom"))
                     .css("margin-top", $valueInput.css("margin-top"))
-                    .css("margin-bottom", $valueInput.css("margin-bottom"))
-                    .css("border-top-width", $valueInput.css("border-top-width"))
-                    .css("border-bottom-width", $valueInput.css("border-bottom-width"))
+                    .css("marginBottom", $valueInput.css("marginBottom"))
+                    .css("borderTopWidth", $valueInput.css("borderTopWidth"))
+                    .css("borderBottomWidth", $valueInput.css("borderBottomWidth"))
                     .css("border-top-style", $valueInput.css("border-top-style"))
                     .css("border-bottom-style", $valueInput.css("border-bottom-style"))
                     .prependTo($valueInput.parent());
@@ -442,11 +442,11 @@ module.exports = function(themeName, options) {
             var cloneTextArea = $("<div>").css("display", "inline-block")
                     .css("vertical-align", "top")
                     .css("padding-top", $valueInput.css("padding-top"))
-                    .css("padding-bottom", $valueInput.css("padding-bottom"))
+                    .css("paddingBottom", $valueInput.css("paddingBottom"))
                     .css("margin-top", $valueInput.css("margin-top"))
-                    .css("margin-bottom", $valueInput.css("margin-bottom"))
-                    .css("border-top-width", $valueInput.css("border-top-width"))
-                    .css("border-bottom-width", $valueInput.css("border-bottom-width"))
+                    .css("marginBottom", $valueInput.css("marginBottom"))
+                    .css("borderTopWidth", $valueInput.css("borderTopWidth"))
+                    .css("borderBottomWidth", $valueInput.css("borderBottomWidth"))
                     .css("border-top-style", $valueInput.css("border-top-style"))
                     .css("border-bottom-style", $valueInput.css("border-bottom-style"))
                     .prependTo($valueInput.parent());

@@ -134,6 +134,7 @@
         "dxDataGrid-ariaSearchInGrid": "Suchen in der Datentabelle",
         "dxDataGrid-ariaSelectAll": "Alle auswählen",
         "dxDataGrid-ariaSelectRow": "Zeile auswählen",
+        "dxDataGrid-filterBuilderPopupTitle": "!TODO",
         "dxTreeList-ariaTreeList": "Strukturliste",
         "dxTreeList-editingAddRowToNode": "Hinzufügen",
         "dxPager-infoText": "Seite {0} von {1} ({2} Elemente)",
@@ -227,6 +228,8 @@
         "dxFilterBuilder-filterOperationNotContains": "Enthält nicht",
         "dxFilterBuilder-filterOperationEndsWith": "Endet mit",
         "dxFilterBuilder-filterOperationIsBlank": "Ist leer",
-        "dxFilterBuilder-filterOperationIsNotBlank": "Ist nicht leer"
+        "dxFilterBuilder-filterOperationIsNotBlank": "Ist nicht leer",
+        "dxFilterBuilder-filterOperationAnyOf": "!TODO",
+        "dxFilterBuilder-filterOperationNoneOf": "!TODO"
     }
 }

@@ -661,7 +661,7 @@ QUnit.test("Grouped appointments schould have correct colors", function(assert) 
 
     var $dropDownMenu = $(this.instance.$element()).find(".dx-scheduler-dropdown-appointments");
 
-    assert.equal(new Color($dropDownMenu.css("background-color")).toHex(), "#0000ff", "ddAppointment is rendered");
+    assert.equal(new Color($dropDownMenu.css("backgroundColor")).toHex(), "#0000ff", "ddAppointment is rendered");
 });
 
 QUnit.test("Grouped appointments schould have correct colors when resourses store is asynchronous", function(assert) {
@@ -711,7 +711,7 @@ QUnit.test("Grouped appointments schould have correct colors when resourses stor
 
     var $dropDownMenu = $(this.instance.$element()).find(".dx-scheduler-dropdown-appointments");
     this.clock.tick(300);
-    assert.equal(new Color($dropDownMenu.css("background-color")).toHex(), "#0000ff", "ddAppointment is rendered");
+    assert.equal(new Color($dropDownMenu.css("backgroundColor")).toHex(), "#0000ff", "ddAppointment is rendered");
 });
 
 QUnit.test("Grouped appointments should be reinitialized if datasource is changed", function(assert) {

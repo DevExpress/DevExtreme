@@ -1,7 +1,5 @@
 "use strict";
 
-/* global createMockDevices */
-
 QUnit.testStart(function() {
     var markup =
 '<style>\
@@ -69,6 +67,7 @@ var $ = require("jquery"),
     config = require("core/config"),
     keyboardMock = require("../../helpers/keyboardMock.js"),
     ajaxMock = require("../../helpers/ajaxMock.js"),
+    themes = require("ui/themes"),
 
     DX_STATE_HOVER_CLASS = "dx-state-hover",
     TEXTEDITOR_INPUT_SELECTOR = ".dx-texteditor-input";
@@ -303,7 +302,7 @@ QUnit.test("Vertical scrollbar spacing should not be added when widget does not 
     clock.tick();
 
     // assert
-    assert.equal($(dataGrid.$element()).find(".dx-datagrid-headers").css("padding-right"), "0px");
+    assert.equal($(dataGrid.$element()).find(".dx-datagrid-headers").css("paddingRight"), "0px");
 
     clock.restore();
 });
@@ -2125,6 +2124,66 @@ QUnit.test("Resize grid after column resizing to right when columnResizingMode i
     }
 });
 
+QUnit.test("Column widths should be correct after resize column to show scroll if fixed column is exists", function(assert) {
+    // arrange
+    var $dataGrid = $("#dataGrid").dxDataGrid({
+            width: 400,
+            loadingTimeout: undefined,
+            dataSource: [{}],
+            columns: [
+                { dataField: "field1", width: 100 },
+                { dataField: "field2", width: 100 },
+                { dataField: "field3", width: 100, fixed: true, fixedPosition: "right" }
+            ]
+        }),
+        instance = $dataGrid.dxDataGrid("instance"),
+        $colGroups;
+
+    // act
+    instance.columnOption(0, "width", 400);
+    instance.columnOption(0, "visibleWidth", 400);
+    instance.updateDimensions();
+
+    // assert
+    $colGroups = $dataGrid.find(".dx-datagrid-rowsview colgroup");
+    assert.strictEqual($colGroups.length, 2);
+
+    assert.strictEqual($colGroups.eq(0).children().get(0).style.width, "400px");
+    assert.strictEqual($colGroups.eq(0).children().get(1).style.width, "100px");
+    assert.strictEqual($colGroups.eq(0).children().get(2).style.width, "100px");
+
+    assert.strictEqual($colGroups.eq(1).children().get(0).style.width, "auto");
+    assert.strictEqual($colGroups.eq(1).children().get(1).style.width, "auto");
+    assert.strictEqual($colGroups.eq(1).children().get(2).style.width, "100px");
+});
+
+QUnit.test("Last cell should have correct width after resize column to hide scroll if fixed column is exists and columnAutoWidth is enabled", function(assert) {
+    // arrange
+    var $dataGrid = $("#dataGrid").dxDataGrid({
+            width: 400,
+            loadingTimeout: undefined,
+            columnAutoWidth: true,
+            dataSource: [{}],
+            columns: [
+                { dataField: "field1", width: 250 },
+                { dataField: "field2", width: 100 },
+                { dataField: "field3", width: 100, fixed: true, fixedPosition: "right" }
+            ]
+        }),
+        instance = $dataGrid.dxDataGrid("instance");
+
+    // act
+    instance.columnOption(0, "width", 100);
+    instance.columnOption(0, "visibleWidth", 100);
+    instance.updateDimensions();
+
+    // assert
+    var $rows = $(instance.getRowElement(0));
+
+    assert.strictEqual($rows.eq(0).children().last().get(0).offsetWidth, 100);
+    assert.strictEqual($rows.eq(1).children().last().get(0).offsetWidth, 100);
+});
+
 QUnit.test("Initialize grid with any columns when columnMinWidth option is assigned", function(assert) {
     $("#container").width(200);
     // arrange
@@ -2284,7 +2343,7 @@ QUnit.test("column headers visibility when hide removing row in batch editing mo
 
     // assert
     assert.strictEqual(dataGrid.getView("rowsView").getScrollbarWidth(), 0, "vertical scrollbar width");
-    assert.strictEqual($dataGrid.find(".dx-datagrid-headers").css("padding-right"), "0px", "no headers right padding");
+    assert.strictEqual($dataGrid.find(".dx-datagrid-headers").css("paddingRight"), "0px", "no headers right padding");
 });
 
 QUnit.test("Disable rows hover", function(assert) {
@@ -2795,7 +2854,7 @@ QUnit.test("height from style after updateDimensions when rendering to container
 // T362517
 QUnit.test("max-height from styles", function(assert) {
     // arrange, act
-    var $dataGrid = $("#dataGrid").css("max-height", 400).dxDataGrid({
+    var $dataGrid = $("#dataGrid").css("maxHeight", 400).dxDataGrid({
             loadingTimeout: undefined,
             dataSource: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
             columns: [
@@ -3578,66 +3637,6 @@ QUnit.test("Horizontal scroll position of footer view is changed_T251448", funct
     assert.equal($headersView.scrollLeft(), 300, "scroll left of headers view");
 });
 
-window.createMockDevices = function(devices, platform) {
-    $.extend(devices, {
-        isSimulator: function() {
-            return false;
-        },
-        real: function() {
-            return { platform: platform, version: [0] };
-        },
-        current: function() {
-            return { platform: platform, version: [0] };
-        }
-    });
-};
-
-QUnit.test("ExpandMode by default for non desktop platform", function(assert) {
-    var origDevices = $.extend({}, devices),
-        dataGrid;
-
-    createMockDevices(devices, "ios");
-
-    dataGrid = createDataGrid({ width: 120, height: 230 });
-
-    assert.equal(dataGrid.option("grouping.expandMode"), "rowClick", "On non-desktop device expand group row on click");
-    $.extend(devices, origDevices);
-});
-
-QUnit.test("ShowRowLines by default for iOs platform", function(assert) {
-    var origDevices = $.extend({}, devices),
-        dataGrid;
-
-    createMockDevices(devices, "ios");
-
-    dataGrid = createDataGrid({ width: 120, height: 230 });
-
-    assert.ok(dataGrid.option("showRowLines"), "showRowLines option");
-    $.extend(devices, origDevices);
-});
-
-QUnit.test("ShowRowLines by default for iOs7 platform", function(assert) {
-    var origDevices = $.extend({}, devices),
-        dataGrid;
-
-    createMockDevices(devices, "ios");
-    dataGrid = createDataGrid();
-
-    assert.ok(dataGrid.option("showRowLines"), "showRowLines option");
-    $.extend(devices, origDevices);
-});
-
-QUnit.test("ShowRowLines for android platform", function(assert) {
-    var origDevices = $.extend({}, devices),
-        dataGrid;
-
-    createMockDevices(devices, "android");
-    dataGrid = createDataGrid();
-
-    assert.ok(!dataGrid.option("showRowLines"), "showRowLines option");
-    $.extend(devices, origDevices);
-});
-
 QUnit.test("Keep horizontal scroller position after refresh with native scrolling", function(assert) {
     var done = assert.async(),
         dataGrid,
@@ -3759,7 +3758,7 @@ QUnit.test("Keep horizontal scroller position after grouping column with native 
 
 // T362355
 QUnit.test("Keep vertical browser scroll position after refresh with freespace row", function(assert) {
-    $("#qunit-fixture").css("overflow-y", "auto").height(50);
+    $("#qunit-fixture").css("overflowY", "auto").height(50);
 
     var items = [];
     for(var i = 0; i < 21; i++) {
@@ -6400,7 +6399,7 @@ QUnit.test("Group row has correct text-align in RTL", function(assert) {
 
     // assert
     assert.ok(groupedRows.length, "We have grouped row");
-    assert.equal(cells.eq(1).css("text-align"), "right", "Grouped cell has correct text-align");
+    assert.equal(cells.eq(1).css("textAlign"), "right", "Grouped cell has correct text-align");
 });
 
 QUnit.test("CellTemplate and master-detail template cells has correct text-align in RTL", function(assert) {
@@ -6436,7 +6435,7 @@ QUnit.test("CellTemplate and master-detail template cells has correct text-align
             }
         }),
         getCellTextAlignByButtonNumber = function(buttonNumber) {
-            return $(dataGrid.$element()).find(".dx-button").eq(buttonNumber).closest("td").css("text-align");
+            return $(dataGrid.$element()).find(".dx-button").eq(buttonNumber).closest("td").css("textAlign");
         };
 
     // assert
@@ -9261,4 +9260,47 @@ QUnit.test("CustomizeText formatting", function(assert) {
             return Math.round(options.value) + ' rub';
         }
     }), '216 rub');
+});
+
+QUnit.testInActiveWindow("Validation message should be positioned relative cell in material theme", function(assert) {
+    // arrange
+    var overlayTarget,
+        origThemes = themes.current,
+        clock = sinon.useFakeTimers(),
+        dataGrid = createDataGrid({
+            loadingTimeout: undefined,
+            dataSource: [{ Test: "" }],
+            editing: {
+                mode: "batch",
+                allowUpdating: true
+            },
+            columns: [{
+                dataField: "Test",
+                validationRules: [{ type: "required" }]
+            }]
+        });
+
+    // act
+    dataGrid.editCell(0, 0);
+    clock.tick();
+
+    // assert
+    overlayTarget = dataGrid.$element().find(".dx-invalid-message").data("dxOverlay").option("target");
+    assert.ok(overlayTarget.hasClass("dx-highlight-outline"), "target in generic theme");
+
+    // act
+    dataGrid.closeEditCell();
+    clock.tick();
+
+    themes.current = function() { return "material"; };
+
+    dataGrid.editCell(0, 0);
+    clock.tick();
+
+    // assert
+    overlayTarget = dataGrid.$element().find(".dx-invalid-message").data("dxOverlay").option("target");
+    assert.ok(overlayTarget.hasClass("dx-editor-cell"), "target in material theme");
+
+    themes.current = origThemes;
+    clock.restore();
 });

@@ -981,6 +981,75 @@ QUnit.test("tags should have a right display texts for acceptCustomValue and pre
     assert.equal($tags.eq(1).text(), "two");
 });
 
+QUnit.test("custom item should be selected in list but tag should not be rendered in useButtons mode", function(assert) {
+    var store = new ArrayStore([{ id: 1, name: "Alex" }]),
+        $tagBox = $("#tagBox").dxTagBox({
+            dataSource: store,
+            onCustomItemCreating: function(e) {
+                e.customItem = store.insert({ id: 2, name: e.text }).done(function() {
+                    instance.getDataSource().reload();
+                });
+            },
+            value: [],
+            acceptCustomValue: true,
+            applyValueMode: "useButtons",
+            valueExpr: "id",
+            displayExpr: "name",
+            opened: true
+        }),
+        instance = $tagBox.dxTagBox("instance"),
+        $input = $tagBox.find(".dx-texteditor-input"),
+        keyboard = keyboardMock($input);
+
+    keyboard
+        .type("123")
+        .press('enter');
+
+    this.clock.tick();
+
+    var $tags = $tagBox.find(".dx-tag"),
+        $listItems = $(instance.content()).find(".dx-list-item.dx-list-item-selected");
+
+    assert.equal($tags.length, 0, "tags should not be rendered before button click");
+    assert.equal($listItems.length, 1, "list item should be selected after enter press");
+});
+
+QUnit.test("custom item should be selected in list but tag should not be rendered in useButtons mode with checkboxes", function(assert) {
+    var store = new ArrayStore([{ id: 1, name: "Alex" }]),
+        $tagBox = $("#tagBox").dxTagBox({
+            dataSource: store,
+            onCustomItemCreating: function(e) {
+                e.customItem = store.insert({ id: 2, name: e.text }).done(function() {
+                    instance.getDataSource().reload();
+                });
+            },
+            value: [],
+            acceptCustomValue: true,
+            showSelectionControls: true,
+            applyValueMode: "useButtons",
+            valueExpr: "id",
+            displayExpr: "name",
+            opened: true
+        }),
+        instance = $tagBox.dxTagBox("instance"),
+        $input = $tagBox.find(".dx-texteditor-input"),
+        keyboard = keyboardMock($input);
+
+    keyboard
+        .type("123")
+        .press('enter');
+
+    this.clock.tick();
+
+    var $tags = $tagBox.find(".dx-tag"),
+        $listItems = $(instance.content()).find(".dx-list-item.dx-list-item-selected"),
+        checkbox = $listItems.eq(0).find(".dx-list-select-checkbox").dxCheckBox("instance");
+
+    assert.equal($tags.length, 0, "tags should not be rendered before button click");
+    assert.equal($listItems.length, 1, "list item should be selected after enter press");
+    assert.equal(checkbox.option("value"), true, "checkbox is checked");
+});
+
 
 QUnit.module("placeholder");
 
@@ -3455,7 +3524,6 @@ QUnit.test("value should keep initial tag order with object items", function(ass
     assert.deepEqual(this.instance.option("value"), [items[1].id, items[0].id], "tags order is correct");
 });
 
-
 QUnit.test("value should keep initial tag order with object items and 'this' valueExpr", function(assert) {
     this.reinit({
         items: [{ id: 1, name: "Alex" }, { id: 2, name: "John" }, { id: 3, name: "Max" }],
@@ -3669,7 +3737,7 @@ QUnit.test("it is should be possible to scroll tag container natively on mobile 
 
         var $tagContainer = $tagBox.find("." + TAGBOX_TAG_CONTAINER_CLASS);
 
-        assert.equal($tagContainer.css("overflow-x"), "auto", "the overflow css property is correct");
+        assert.equal($tagContainer.css("overflowX"), "auto", "the overflow css property is correct");
     } finally {
         devices.real(currentDevice);
         $tagBox && $tagBox.remove();
@@ -3753,9 +3821,9 @@ QUnit.test("tags container should be scrolled on mobile devices", function(asser
     var $container = this.$element.find("." + TAGBOX_TAG_CONTAINER_CLASS);
 
     if(devices.real().deviceType === "desktop") {
-        assert.equal($container.css("overflow-x"), "hidden", "overflow-x has a 'hidden' value on desktop");
+        assert.equal($container.css("overflowX"), "hidden", "overflow-x has a 'hidden' value on desktop");
     } else {
-        assert.equal($container.css("overflow-x"), "auto", "overflow-x has a 'auto' value on mobile");
+        assert.equal($container.css("overflowX"), "auto", "overflow-x has a 'auto' value on mobile");
     }
 });
 

@@ -46,38 +46,13 @@ QUnit.testStart(function() {
                     <div class="content dx-invisible-while-pending-rendering">content</div>\
                 </div>\
             </div>\
-        </div>\
-        <div id="animation">\
-            <div class="defer-rendering"></div>\
-        </div>\
-        <style>\
-            .test-staggering-item,\
-            test-no-staggering-item {\
-                    height: 10px;\
-                    width: 10px;\
-            }\
-        </style>\
-        <div id="staggering-animation" style="position: absolute; width: 100px; height: 100px; top: 0; left: 0">\
-            <div class="defer-rendering" style="position: absolute; width: 100%; height: 100%">\
-                <div class="item1 test-staggering-item"></div>\
-                <div class="item2 test-staggering-item"></div>\
-                <div class="item3 test-no-staggering-item"></div>\
-            </div>\
         </div>';
 
     $("#qunit-fixture").html(markup);
 });
 
-var savedTransitionExecutor;
 
-QUnit.module("dxDeferRendering", {
-    beforeEach: function() {
-        savedTransitionExecutor = TransitionExecutorModule.TransitionExecutor;
-    },
-    afterEach: function() {
-        TransitionExecutorModule.TransitionExecutor = savedTransitionExecutor;
-    }
-});
+QUnit.module("dxDeferRendering");
 
 QUnit.test("dxDeferRendering warps content transparently (doesn't affect css styles)", function(assert) {
     var $deferRendering = $("#renderContent")
@@ -96,12 +71,10 @@ QUnit.test("renderContent", function(assert) {
         .dxDeferRendering()
         .dxDeferRendering("instance");
 
-    assert.ok(!$test.find(".item").is(":visible"));
     assert.equal($test.find(".dx-pending-rendering").length, 1);
     assert.ok($test.find(".dx-pending-rendering").is(".dx-pending-rendering-manual"));
 
     deferRendering.renderContent().done(function() {
-        assert.ok($test.find(".item").is(":visible"));
         assert.equal($test.find(".dx-pending-rendering").length, 0);
         assert.equal($test.find(".dx-pending-rendering-manual").length, 0);
 
@@ -118,13 +91,11 @@ QUnit.test("render delegate", function(assert) {
         .dxDeferRendering()
         .dxDeferRendering("instance");
 
-    assert.ok(!$test.find(".item").is(":visible"));
     assert.equal($test.find(".dx-pending-rendering").length, 1);
     assert.ok($test.find(".dx-pending-rendering").is(".dx-pending-rendering-manual"));
 
     var render = dataUtils.data($test.find(".dx-pending-rendering").get(0), "dx-render-delegate");
     render().done(function() {
-        assert.ok($test.find(".item").is(":visible"));
         assert.equal($test.find(".dx-pending-rendering").length, 0);
         assert.equal($test.find(".dx-pending-rendering-manual").length, 0);
 
@@ -157,7 +128,7 @@ QUnit.test("renderWhen option (deferred)", function(assert) {
         options = {
             renderWhen: $.Deferred(),
             onShown: function() {
-                assert.ok(!$test.find(".item").is(".dx-invisible-while-pending-rendering"));
+                assert.ok(!$test.find(".item").hasClass("dx-invisible-while-pending-rendering"));
                 assert.equal($test.find(".dx-pending-rendering").length, 0);
                 assert.equal($test.find(".dx-pending-rendering-manual").length, 0);
 
@@ -171,8 +142,7 @@ QUnit.test("renderWhen option (deferred)", function(assert) {
         .dxDeferRendering(options)
         .dxDeferRendering("instance");
 
-    assert.ok(!$test.find(".item").is(":visible"));
-    assert.ok($test.find(".item").is(".dx-invisible-while-pending-rendering"));
+    assert.ok($test.find(".item").hasClass("dx-invisible-while-pending-rendering"));
     assert.equal($test.find(".dx-pending-rendering").length, 1);
     assert.ok(!$test.find(".dx-pending-rendering").is(".dx-invisible-while-pending-rendering"));
     assert.ok(!$test.find(".dx-pending-rendering").is(".dx-pending-rendering-manual"));
@@ -185,8 +155,7 @@ QUnit.test("renderWhen option (boolean)", function(assert) {
         options = {
             renderWhen: false,
             onShown: function() {
-                assert.ok($test.find(".item").is(":visible"));
-                assert.ok(!$test.find(".item").is(".dx-invisible-while-pending-rendering"));
+                assert.ok(!$test.find(".item").hasClass("dx-invisible-while-pending-rendering"));
                 assert.equal($test.find(".dx-pending-rendering").length, 0);
                 assert.equal($test.find(".dx-pending-rendering-manual").length, 0);
 
@@ -200,11 +169,10 @@ QUnit.test("renderWhen option (boolean)", function(assert) {
         .dxDeferRendering(options)
         .dxDeferRendering("instance");
 
-    assert.ok(!$test.find(".item").is(":visible"));
-    assert.ok($test.find(".item").is(".dx-invisible-while-pending-rendering"));
+    assert.ok($test.find(".item").hasClass("dx-invisible-while-pending-rendering"));
     assert.equal($test.find(".dx-pending-rendering").length, 1);
-    assert.ok(!$test.find(".dx-pending-rendering").is(".dx-invisible-while-pending-rendering"));
-    assert.ok(!$test.find(".dx-pending-rendering").is(".dx-pending-rendering-manual"));
+    assert.ok(!$test.find(".dx-pending-rendering").hasClass("dx-invisible-while-pending-rendering"));
+    assert.ok(!$test.find(".dx-pending-rendering").hasClass("dx-pending-rendering-manual"));
 
     deferRendering.option("renderWhen", true);
 });
@@ -215,11 +183,11 @@ QUnit.test("children are hidden while pending rendering", function(assert) {
             renderWhen: $.Deferred(),
             onShown: function() {
                 assert.equal($test.find(".item1").length, 1);
-                assert.ok(!$test.find(".item1").is(".dx-invisible-while-pending-rendering"));
+                assert.ok(!$test.find(".item1").hasClass("dx-invisible-while-pending-rendering"));
                 assert.equal($test.find(".item2").length, 1);
-                assert.ok(!$test.find(".item2").is(".dx-invisible-while-pending-rendering"));
+                assert.ok(!$test.find(".item2").hasClass("dx-invisible-while-pending-rendering"));
                 assert.equal($test.find(".dx-deferrendering").length, 1);
-                assert.ok(!$test.find(".dx-deferrendering").is(".dx-hidden"));
+                assert.ok(!$test.find(".dx-deferrendering").hasClass("dx-hidden"));
 
                 done();
             }
@@ -232,11 +200,11 @@ QUnit.test("children are hidden while pending rendering", function(assert) {
         .dxDeferRendering("instance");
 
     assert.equal($test.find(".item1").length, 1);
-    assert.ok($test.find(".item1").is(".dx-invisible-while-pending-rendering"));
+    assert.ok($test.find(".item1").hasClass("dx-invisible-while-pending-rendering"));
     assert.equal($test.find(".item2").length, 1);
-    assert.ok($test.find(".item2").is(".dx-invisible-while-pending-rendering"));
+    assert.ok($test.find(".item2").hasClass("dx-invisible-while-pending-rendering"));
     assert.equal($test.find(".dx-deferrendering").length, 1);
-    assert.ok(!$test.find(".dx-deferrendering").is(".dx-hidden"));
+    assert.ok(!$test.find(".dx-deferrendering").hasClass("dx-hidden"));
 
     options.renderWhen.resolve();
 });
@@ -304,12 +272,12 @@ QUnit.test("Custom LoadIndicator (T392031)", function(assert) {
         .dxDeferRendering(options)
         .dxDeferRendering("instance");
 
-    assert.ok($test.find(".indicator").is(":visible"), "load indicator is visible before rendering content");
-    assert.ok(!$test.find(".content").is(":visible"), "content is not visible before rendering content");
+    assert.ok($(deferRendering.element()).hasClass("dx-pending-rendering"));
+    assert.ok($test.find(".indicator").hasClass("dx-visible-while-pending-rendering"), "load indicator is visible before rendering content");
+    assert.ok($test.find(".content").hasClass("dx-invisible-while-pending-rendering"), "content is not visible before rendering content");
 
     deferRendering.renderContent().done(function() {
-        assert.ok(!$test.find(".indicator").is(":visible"), "load indicator is not visible after rendering content");
-        assert.ok($test.find(".content").is(":visible"), "load indicator is not visible after rendering content");
+        assert.ok(!$(deferRendering.element()).hasClass("dx-pending-rendering"));
 
         done();
     });
@@ -328,13 +296,12 @@ QUnit.test("Custom LoadIndicator with wrapper (T392031)", function(assert) {
         .dxDeferRendering(options)
         .dxDeferRendering("instance");
 
-    assert.ok($test.find(".indicator").is(":visible"), "load indicator is visible before rendering content");
-    assert.ok(!$test.find(".content").is(":visible"), "content is not visible before rendering content");
+    assert.ok($(deferRendering.element()).hasClass("dx-pending-rendering"));
+    assert.ok($test.find(".indicator").hasClass("dx-visible-while-pending-rendering"), "load indicator is visible before rendering content");
+    assert.ok($test.find(".content").hasClass("dx-invisible-while-pending-rendering"), "content is not visible before rendering content");
 
     deferRendering.renderContent().done(function() {
-        assert.ok(!$test.find(".indicator").is(":visible"), "load indicator is not visible after rendering content");
-        assert.ok($test.find(".content").is(":visible"), "load indicator is not visible after rendering content");
-
+        assert.ok(!$(deferRendering.element()).hasClass("dx-pending-rendering"));
         done();
     });
 });
@@ -375,231 +342,6 @@ QUnit.test("loading state with rendered content", function(assert) {
     deferRendering.option("renderWhen", true);
 });
 
-QUnit.test("animation option", function(assert) {
-    assert.expect(5);
-
-    var done = assert.async(),
-        animation = {
-            type: "test"
-        },
-        options = {
-            animation: animation,
-            renderWhen: $.Deferred(),
-            onRendered: function() {
-                assert.equal(enterLog.length, 0);
-                assert.equal(startLog.length, 0);
-            },
-            onShown: function() {
-                assert.equal(enterLog.length, 1);
-                assert.equal(enterLog[0].$element[0], $test.find(".dx-deferrendering")[0]);
-                assert.equal(enterLog[0].config.type, "test");
-
-                done();
-            }
-        },
-        enterLog = [],
-        startLog = [],
-        $test = $("#animation");
-
-    TransitionExecutorModule.TransitionExecutor = TransitionExecutorModule.TransitionExecutor.inherit({
-        enter: function($el, config) {
-            enterLog.push({
-                $element: $el,
-                config: config
-            });
-        },
-        start: function(config) {
-            startLog.push(config);
-            return $.Deferred().resolve().promise();
-        }
-    });
-
-
-    $test
-        .find(".defer-rendering")
-        .dxDeferRendering(options)
-        .dxDeferRendering("instance");
-
-    options.renderWhen.resolve();
-});
-
-QUnit.test("staggering animation options", function(assert) {
-    assert.expect(7);
-
-    var done = assert.async(),
-        animation = {
-            type: "test"
-        },
-        options = {
-            animation: animation,
-            staggerItemSelector: ".test-staggering-item",
-            renderWhen: $.Deferred(),
-            onShown: function() {
-                assert.equal(enterLog.length, 2);
-                assert.ok(enterLog[0].$element.is(".item1"));
-                assert.ok(enterLog[0].config.type, "test");
-                assert.ok(enterLog[1].$element.is(".item2"));
-                assert.ok(enterLog[1].config.type, "test");
-
-                assert.equal(startLog.length, 1);
-                assert.equal(startLog[0], undefined);
-
-                done();
-            }
-        },
-        enterLog = [],
-        startLog = [],
-        $test = $("#staggering-animation")
-        .clone()
-        .appendTo($("body"));
-
-    TransitionExecutorModule.TransitionExecutor = TransitionExecutorModule.TransitionExecutor.inherit({
-        enter: function($el, config) {
-            enterLog.push({
-                $element: $el,
-                config: config
-            });
-        },
-        start: function(config) {
-            startLog.push(config);
-            return $.Deferred().resolve().promise();
-        }
-    });
-
-    $test
-        .find(".defer-rendering")
-        .dxDeferRendering(options)
-        .dxDeferRendering("instance");
-
-    options.renderWhen.resolve();
-});
-
-QUnit.test("staggering animation with items that are outside the screen", function(assert) {
-    assert.expect(5);
-
-    var done = assert.async(),
-        animation = {
-            type: "test"
-        },
-        options = {
-            animation: animation,
-            staggerItemSelector: ".test-staggering-item",
-            renderWhen: $.Deferred(),
-            onShown: function() {
-                assert.equal(enterLog.length, 1, "the top item is not visible");
-                assert.ok(enterLog[0].$element.is(".item2"));
-                assert.ok(enterLog[0].config.type, "test");
-
-                assert.equal(startLog.length, 1);
-                assert.equal(startLog[0], undefined);
-
-                done();
-            }
-        },
-        enterLog = [],
-        startLog = [],
-        $test = $("#staggering-animation")
-        .clone()
-        .appendTo($("body"))
-        .css("top", "-15px");// Hide the top item. It's of 10px height
-
-    TransitionExecutorModule.TransitionExecutor = TransitionExecutorModule.TransitionExecutor.inherit({
-        enter: function($el, config) {
-            enterLog.push({
-                $element: $el,
-                config: config
-            });
-        },
-        start: function(config) {
-            startLog.push(config);
-            return $.Deferred().resolve().promise();
-        }
-    });
-
-    $test
-        .find(".defer-rendering")
-        .dxDeferRendering(options)
-        .dxDeferRendering("instance");
-
-    options.renderWhen.resolve();
-});
-
-QUnit.test("stops on dispose (T315643)", function(assert) {
-    var animation = {
-            type: "test"
-        },
-        options = {
-            animation: animation,
-            renderWhen: $.Deferred()
-        },
-        stopLog = [],
-        $test = $("#animation");
-
-    TransitionExecutorModule.TransitionExecutor = TransitionExecutorModule.TransitionExecutor.inherit({
-        enter: function($el, config) {
-        },
-        start: function(config) {
-            return $.Deferred().resolve().promise();
-        },
-        stop: function() {
-            stopLog.push(arguments);
-            return $.Deferred().resolve().promise();
-        }
-    });
-
-
-    $test
-        .find(".defer-rendering")
-        .dxDeferRendering(options)
-        .dxDeferRendering("instance");
-
-    assert.equal(stopLog.length, 0);
-
-    options.renderWhen.resolve();
-    assert.equal(stopLog.length, 0);
-
-    $test.remove();
-    assert.equal(stopLog.length, 1, "T315643");
-    assert.equal(stopLog[0][0], true, "T370098");
-});
-
-QUnit.test("stops animation on the 'renderWhen' option toggling (T574848)", function(assert) {
-    var options = {
-            animation: {
-                type: "test"
-            },
-            renderWhen: false
-        },
-        stopLog = [],
-        $test = $("#animation");
-
-    TransitionExecutorModule.TransitionExecutor = TransitionExecutorModule.TransitionExecutor.inherit({
-        enter: $.noop,
-        leave: $.noop,
-        start: function(config) {
-            return $.Deferred().resolve().promise();
-        },
-        stop: function() {
-            stopLog.push(arguments);
-            return $.Deferred().resolve().promise();
-        }
-    });
-
-    var deferRendering = $test
-        .find(".defer-rendering")
-        .dxDeferRendering(options)
-        .dxDeferRendering("instance");
-
-    assert.equal(stopLog.length, 0);
-
-    deferRendering.option("renderWhen", true);
-    assert.equal(stopLog.length, 0);
-
-    deferRendering.option("renderWhen", false);
-    deferRendering.option("renderWhen", true);
-    assert.equal(stopLog.length, 1, "T574848");
-});
-
 QUnit.test("should support Promise/A+ standard", function(assert) {
     var resolve;
     var promise = new Promise(function(onResolve) {
@@ -609,7 +351,7 @@ QUnit.test("should support Promise/A+ standard", function(assert) {
     var options = {
             renderWhen: promise,
             onShown: function() {
-                assert.ok(!$test.find(".item").is(".dx-invisible-while-pending-rendering"));
+                assert.ok(!$test.find(".item").hasClass("dx-invisible-while-pending-rendering"));
                 assert.equal($test.find(".dx-pending-rendering").length, 0);
                 assert.equal($test.find(".dx-pending-rendering-manual").length, 0);
             }
@@ -621,11 +363,11 @@ QUnit.test("should support Promise/A+ standard", function(assert) {
         .dxDeferRendering(options)
         .dxDeferRendering("instance");
 
-    assert.ok(!$test.find(".item").is(":visible"));
-    assert.ok($test.find(".item").is(".dx-invisible-while-pending-rendering"));
+    // assert.ok(!$test.find(".item").is(":visible"));
+    assert.ok($test.find(".item").hasClass("dx-invisible-while-pending-rendering"));
     assert.equal($test.find(".dx-pending-rendering").length, 1);
-    assert.ok(!$test.find(".dx-pending-rendering").is(".dx-invisible-while-pending-rendering"));
-    assert.ok(!$test.find(".dx-pending-rendering").is(".dx-pending-rendering-manual"));
+    assert.ok(!$test.find(".dx-pending-rendering").hasClass("dx-invisible-while-pending-rendering"));
+    assert.ok(!$test.find(".dx-pending-rendering").hasClass("dx-pending-rendering-manual"));
 
     resolve();
 

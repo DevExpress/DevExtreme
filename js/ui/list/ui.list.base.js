@@ -19,6 +19,7 @@ var $ = require("../../core/renderer"),
     Button = require("../button"),
     eventUtils = require("../../events/utils"),
     themes = require("../themes"),
+    windowUtils = require("../../core/utils/window"),
     ScrollView = require("../scroll_view"),
     deviceDependentOptions = require("../scroll_view/ui.scrollable").deviceDependentOptions,
     CollectionWidget = require("../collection/ui.collection_widget.edit"),
@@ -33,6 +34,7 @@ var LIST_CLASS = "dx-list",
     LIST_GROUP_BODY_CLASS = "dx-list-group-body",
     LIST_COLLAPSIBLE_GROUPS_CLASS = "dx-list-collapsible-groups",
     LIST_GROUP_COLLAPSED_CLASS = "dx-list-group-collapsed",
+    LIST_GROUP_HEADER_INDICATOR_CLASS = "dx-list-group-header-indicator",
     LIST_HAS_NEXT_CLASS = "dx-has-next",
     LIST_NEXT_BUTTON_CLASS = "dx-list-next-button",
     SELECT_ALL_SELECTOR = ".dx-list-select-all",
@@ -496,7 +498,7 @@ var ListBase = CollectionWidget.inherit({
             },
             {
                 device: function() {
-                    return /android5/.test(themes.current());
+                    return /(android5|material)/.test(themes.current());
                 },
                 options: {
                     useInkRipple: true
@@ -693,7 +695,7 @@ var ListBase = CollectionWidget.inherit({
     },
 
     _dataSourceChangedHandler: function(newItems) {
-        if(!this._shouldAppendItems()) {
+        if(!this._shouldAppendItems() && windowUtils.hasWindow()) {
             this._scrollView && this._scrollView.scrollTo(0);
         }
 
@@ -758,6 +760,10 @@ var ListBase = CollectionWidget.inherit({
             each(items, this._renderGroup.bind(this));
             this._attachGroupCollapseEvent();
             this._renderEmptyMessage();
+
+            if(/material/.test(themes.current())) {
+                this.attachGroupHeaderInkRippleEvents();
+            }
         } else {
             this.callBase.apply(this, arguments);
         }
@@ -839,6 +845,7 @@ var ListBase = CollectionWidget.inherit({
 
     _toggleActiveState: function($element, value, e) {
         this.callBase.apply(this, arguments);
+        var that = this;
 
         if(!this._inkRipple) {
             return;
@@ -850,7 +857,13 @@ var ListBase = CollectionWidget.inherit({
         };
 
         if(value) {
-            this._inkRipple.showWave(config);
+            if(/material/.test(themes.current())) {
+                this._inkRippleTimer = setTimeout(function() {
+                    that._inkRipple.showWave(config);
+                }, LIST_FEEDBACK_SHOW_TIMEOUT / 2);
+            } else {
+                that._inkRipple.showWave(config);
+            }
         } else {
             this._inkRipple.hideWave(config);
         }
@@ -907,6 +920,12 @@ var ListBase = CollectionWidget.inherit({
 
         this._createItemByTemplate(groupTemplate, renderArgs);
 
+        if(/material/.test(themes.current())) {
+            $("<div>")
+                .addClass(LIST_GROUP_HEADER_INDICATOR_CLASS)
+                .prependTo($groupHeaderElement);
+        }
+
         this._renderingGroupIndex = index;
 
         var $groupBody = $("<div>")
@@ -924,11 +943,26 @@ var ListBase = CollectionWidget.inherit({
         });
     },
 
+    attachGroupHeaderInkRippleEvents: function() {
+        var that = this,
+            selector = "." + LIST_GROUP_HEADER_CLASS,
+            $element = this.$element();
+
+        eventsEngine.on($element, "dxpointerdown", selector, function(e) {
+            that._toggleActiveState($(e.currentTarget), true, e);
+        });
+
+        eventsEngine.on($element, "dxpointerup dxhoverend", selector, function(e) {
+            that._toggleActiveState($(e.currentTarget), false);
+        });
+    },
+
     _createGroupRenderAction: function() {
         this._groupRenderAction = this._createActionByOption("onGroupRendered");
     },
 
     _clean: function() {
+        clearTimeout(this._inkRippleTimer);
         if(this._$nextButton) {
             this._$nextButton.remove();
             this._$nextButton = null;
@@ -978,6 +1012,7 @@ var ListBase = CollectionWidget.inherit({
         this._createComponent($button, Button, {
             text: this.option("nextButtonText"),
             onClick: this._nextButtonHandler.bind(this),
+            type: /material/.test(themes.current()) ? "default" : undefined,
             integrationOptions: {}
         });
 
@@ -991,9 +1026,13 @@ var ListBase = CollectionWidget.inherit({
     },
 
     _refresh: function() {
-        var scrollTop = this._scrollView.scrollTop();
-        this.callBase();
-        scrollTop && this._scrollView.scrollTo(scrollTop);
+        if(!windowUtils.hasWindow()) {
+            this.callBase();
+        } else {
+            var scrollTop = this._scrollView.scrollTop();
+            this.callBase();
+            scrollTop && this._scrollView.scrollTo(scrollTop);
+        }
     },
 
     _optionChanged: function(args) {

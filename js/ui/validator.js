@@ -190,7 +190,7 @@ var Validator = DOMComponent.inherit({
         }
     },
 
-    _render: function() {
+    _initMarkup: function() {
         this.$element().addClass(VALIDATOR_CLASS);
         this.callBase();
     },

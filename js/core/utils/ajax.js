@@ -8,7 +8,7 @@ var window = windowUtils.getWindow();
 var extendFromObject = require("./extend").extendFromObject;
 var isDefined = require("./type").isDefined;
 var Promise = require("../polyfills/promise");
-var ajaxStrategy;
+var injector = require("./dependency_injector");
 
 var SUCCESS = "success",
     ERROR = "error",
@@ -240,12 +240,8 @@ var getRequestHeaders = function(options) {
     return headers;
 };
 
+
 var sendRequest = function(options) {
-
-    if(ajaxStrategy && !options.responseType && !options.upload) {
-        return ajaxStrategy(options);
-    }
-
     var xhr = httpRequest.getXhr(),
         d = new Deferred(),
         result = d.promise(),
@@ -353,7 +349,4 @@ var sendRequest = function(options) {
     return result;
 };
 
-exports.sendRequest = sendRequest;
-exports.setStrategy = function(s) {
-    ajaxStrategy = s;
-};
+module.exports = injector({ sendRequest: sendRequest });

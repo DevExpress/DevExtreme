@@ -635,7 +635,7 @@ var TagBox = SelectBox.inherit({
         eventsEngine.off($element, mouseWheelEvent);
 
         if(devices.real().deviceType !== "desktop") {
-            this._$tagsContainer && this._$tagsContainer.css("overflow-x", isMultiline ? "" : "auto");
+            this._$tagsContainer && this._$tagsContainer.css("overflowX", isMultiline ? "" : "auto");
             return;
         }
 
@@ -1101,17 +1101,21 @@ var TagBox = SelectBox.inherit({
         return this._selectedItems.slice();
     },
 
+    _completeSelection: function(value) {
+        if(!this.option("showSelectionControls")) {
+            this._setValue(value);
+        }
+    },
+
+
     _setValue: function(value) {
         if(value === null) {
             return;
         }
 
-        if(this.option("showSelectionControls")) {
-            return;
-        }
-
-        var valueIndex = this._valueIndex(value),
-            values = this._getValue().slice();
+        var useButtons = this.option("applyValueMode") === "useButtons",
+            valueIndex = this._valueIndex(value),
+            values = (useButtons ? this._list.option("selectedItemKeys") : this._getValue()).slice();
 
         if(valueIndex >= 0) {
             values.splice(valueIndex, 1);
@@ -1119,7 +1123,11 @@ var TagBox = SelectBox.inherit({
             values.push(value);
         }
 
-        this.option("value", values);
+        if(this.option("applyValueMode") === "useButtons") {
+            this._list.option("selectedItemKeys", values);
+        } else {
+            this.option("value", values);
+        }
     },
 
     _isSelectedValue: function(value, cache) {

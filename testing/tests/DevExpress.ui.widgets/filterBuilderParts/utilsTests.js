@@ -1,9 +1,11 @@
 "use strict";
 
-/* global fields */
-
 var utils = require("ui/filter_builder/utils"),
-    between = require("ui/filter_builder/between");
+    between = require("ui/filter_builder/between"),
+    fields = require("../../../helpers/filterBuilderTestData.js");
+
+var FILTER_ROW_OPERATIONS = ["=", "<>", "<", "<=", ">", ">=", "notcontains", "contains", "startswith", "endswith", "between"],
+    HEADER_FILTER_OPERATIONS = ["anyof", "noneof"];
 
 var condition1 = ["CompanyName", "=", "Super Mart of the West"],
     condition2 = ["CompanyName", "=", "and"],
@@ -165,6 +167,7 @@ QUnit.module("Utils", function() {
         assert.equal(utils.getGroupValue(["or"]), "or");
         assert.equal(utils.getGroupValue(["!", ["or"]]), "!or");
         assert.equal(utils.getGroupValue(["!", ["and"]]), "!and");
+        assert.equal(utils.getGroupValue(["!", ["column", "operation", "value"]]), "!and");
         assert.equal(utils.getGroupValue([["column", "operation", "value"]]), "and");
         assert.equal(utils.getGroupValue([["column", "operation", "value"], ["column", "operation", "value"]]), "and");
     });
@@ -1506,5 +1509,356 @@ QUnit.module("Between operation", function() {
         });
         // assert
         assert.equal(text, "0 - 1", "text with startValue & endValue");
+    });
+});
+
+QUnit.module("filterHasField", function() {
+    QUnit.test("filter = null", function(assert) {
+        var hasField = utils.filterHasField(null, "field");
+        assert.notOk(hasField);
+    });
+
+    QUnit.test("filter = condition with field", function(assert) {
+        var hasField = utils.filterHasField(["field", "=", 1], "field");
+        assert.ok(hasField);
+    });
+
+    QUnit.test("filter = condition without field", function(assert) {
+        var hasField = utils.filterHasField(["field2", "=", 1], "field");
+        assert.notOk(hasField);
+    });
+
+    QUnit.test("filter = group with field", function(assert) {
+        var hasField = utils.filterHasField([["field2", "=", 2], "and", ["field", "=", 1]], "field");
+        assert.ok(hasField);
+    });
+
+    QUnit.test("filter = group without field", function(assert) {
+        var hasField = utils.filterHasField([["field2", "=", 2], "and", ["field2", "=", 1]], "field");
+        assert.notOk(hasField);
+    });
+
+    QUnit.test("filter = group with inner group with field", function(assert) {
+        var hasField = utils.filterHasField([["field2", "=", 1], "and", [["field2", "=", 2], "and", ["field", "=", 1]]], "field");
+        assert.ok(hasField);
+    });
+
+    QUnit.test("filter = group with inner group without field", function(assert) {
+        var hasField = utils.filterHasField([["field2", "=", 1], "and", [["field2", "=", 2], "and", ["field2", "=", 1]]], "field");
+        assert.notOk(hasField);
+    });
+});
+
+QUnit.module("Filter sync", function() {
+    QUnit.test("null with field condition", function(assert) {
+        // arrange
+        var filter = null,
+            addedFilter = ["field", "=", 2];
+
+        // act
+        var result = utils.syncFilters(filter, addedFilter, FILTER_ROW_OPERATIONS);
+
+        // assert
+        assert.deepEqual(result, addedFilter, "result = addedFilter");
+    });
+
+    QUnit.test("empty with field condition", function(assert) {
+        // arrange
+        var filter = [],
+            addedFilter = ["field", "=", 2];
+
+        // act
+        var result = utils.syncFilters(filter, addedFilter, FILTER_ROW_OPERATIONS);
+
+        // assert
+        assert.deepEqual(result, addedFilter, "result = addedFilter");
+    });
+
+    QUnit.test("condition with same field condition", function(assert) {
+        // arrange
+        var filter = ["field", "=", 1],
+            addedFilter = ["field", "=", 2];
+
+        // act
+        var result = utils.syncFilters(filter, addedFilter, FILTER_ROW_OPERATIONS);
+
+        // assert
+        assert.deepEqual(result, addedFilter, "result = addedFilter");
+    });
+
+    QUnit.test("condition with another field condition", function(assert) {
+        // arrange
+        var filter = ["field", "=", 1],
+            addedFilter = ["field2", "=", 2];
+
+        // act
+        var result = utils.syncFilters(filter, addedFilter, FILTER_ROW_OPERATIONS);
+
+        // assert
+        assert.deepEqual(result, [["field", "=", 1], "and", ["field2", "=", 2]], "result = addedFilter");
+    });
+
+    QUnit.test("condition & condition with null value", function(assert) {
+        // arrange
+        var filter = ["field", "=", 1],
+            addedFilter = ["field", "=", null];
+
+        // act
+        var result = utils.syncFilters(filter, addedFilter, FILTER_ROW_OPERATIONS);
+
+        // assert
+        assert.equal(result, null, "result = null");
+    });
+
+    QUnit.test("null & condition with null value", function(assert) {
+        // arrange
+        var filter = null,
+            addedFilter = ["field", "=", null];
+
+        // act
+        var result = utils.syncFilters(filter, addedFilter, FILTER_ROW_OPERATIONS);
+
+        // assert
+        assert.equal(result, null, "result = null");
+    });
+
+    QUnit.test("condition in the begining of group replace with null value", function(assert) {
+        // arrange
+        var filter = [["field", "=", 1], "and", ["field2", "=", 2]],
+            addedFilter = ["field", "=", null];
+
+        // act
+        var result = utils.syncFilters(filter, addedFilter, FILTER_ROW_OPERATIONS);
+
+        // assert
+        assert.deepEqual(result, ["field2", "=", 2], "result = field2");
+    });
+
+    QUnit.test("condition in the ending of group replace with null value", function(assert) {
+        // arrange
+        var filter = [["field2", "=", 2], "and", ["field", "=", 1]],
+            addedFilter = ["field", "=", null];
+
+        // act
+        var result = utils.syncFilters(filter, addedFilter, FILTER_ROW_OPERATIONS);
+
+        // assert
+        assert.deepEqual(result, ["field2", "=", 2], "result = field2");
+    });
+
+    QUnit.test("group with same field condition", function(assert) {
+        // arrange
+        var filter = [["field", "=", 1], "and", ["field2", "=", 3], "and", ["field", "=", 4]],
+            addedFilter = ["field", "=", 2];
+
+        // act
+        var result = utils.syncFilters(filter, addedFilter, FILTER_ROW_OPERATIONS);
+
+        // assert
+        assert.deepEqual(result, [["field", "=", 2], "and", ["field2", "=", 3]], "result = addedFilter");
+    });
+
+    QUnit.test("group with another field condition", function(assert) {
+        // arrange
+        var filter = [["field", "=", 1], "and", ["field2", "=", 3]],
+            addedFilter = ["field3", "=", 2];
+
+        // act
+        var result = utils.syncFilters(filter, addedFilter, FILTER_ROW_OPERATIONS);
+
+        // assert
+        assert.deepEqual(result, [["field", "=", 1], "and", ["field2", "=", 3], "and", ["field3", "=", 2]], "result = addedFilter");
+    });
+
+    QUnit.test("add anyof to condition without anyof", function(assert) {
+        // arrange
+        var filter = ["field", "=", 1],
+            addedFilter = ["field", "anyof", [2]];
+
+        // act
+        var result = utils.syncFilters(filter, addedFilter, HEADER_FILTER_OPERATIONS);
+
+        // assert
+        assert.deepEqual(result, [["field", "=", 1], "and", ["field", "anyof", [2]]]);
+    });
+
+    QUnit.test("add anyof to condition with noneof", function(assert) {
+        // arrange
+        var filter = ["field", "noneof", [1]],
+            addedFilter = ["field", "anyof", [2]];
+
+        // act
+        var result = utils.syncFilters(filter, addedFilter, HEADER_FILTER_OPERATIONS);
+
+        // assert
+        assert.deepEqual(result, ["field", "anyof", [2]]);
+    });
+
+    QUnit.test("add anyof to group without anyof", function(assert) {
+        // arrange
+        var filter = [["field", "=", 1], "and", ["field2", "=", 3]],
+            addedFilter = ["field", "anyof", [2]];
+
+        // act
+        var result = utils.syncFilters(filter, addedFilter, HEADER_FILTER_OPERATIONS);
+
+        // assert
+        assert.deepEqual(result, [["field", "=", 1], "and", ["field2", "=", 3], "and", ["field", "anyof", [2]]]);
+    });
+
+    QUnit.test("add condition to group with 'or' operation", function(assert) {
+        // arrange
+        var filter = [["field", "=", 1], "or", ["field2", "=", 3]],
+            addedFilter = ["field", "=", 2];
+
+        // act
+        var result = utils.syncFilters(filter, addedFilter, FILTER_ROW_OPERATIONS);
+
+        // assert
+        assert.deepEqual(result, [["field", "=", 2], "and", [["field", "=", 1], "or", ["field2", "=", 3]]]);
+    });
+
+    QUnit.test("add condition to group with 'not and' operation", function(assert) {
+        // arrange
+        var filter = ["!", [["field", "=", 1], "and", ["field2", "=", 3]]],
+            addedFilter = ["field", "=", 2];
+
+        // act
+        var result = utils.syncFilters(filter, addedFilter, FILTER_ROW_OPERATIONS);
+
+        // assert
+        assert.deepEqual(result, [["field", "=", 2], "and", ["!", [["field", "=", 1], "and", ["field2", "=", 3]]]]);
+    });
+});
+
+QUnit.module("getMatchedCondition", function() {
+    QUnit.test("from null", function(assert) {
+        // arrange
+        var filter = null;
+
+        // act
+        var result = utils.getMatchedCondition(filter, "field", FILTER_ROW_OPERATIONS);
+
+        // assert
+        assert.deepEqual(result, null);
+    });
+
+    QUnit.test("from filter = field condition", function(assert) {
+        // arrange
+        var filter = ["field", "=", 1];
+
+        // act
+        var result = utils.getMatchedCondition(filter, "field", FILTER_ROW_OPERATIONS);
+
+        // assert
+        assert.deepEqual(result, ["field", "=", 1]);
+    });
+
+    QUnit.test("from filter != field condition", function(assert) {
+        // arrange
+        var filter = ["field2", "=", 1];
+
+        // act
+        var result = utils.getMatchedCondition(filter, "field", FILTER_ROW_OPERATIONS);
+
+        // assert
+        assert.deepEqual(result, null);
+    });
+
+    QUnit.test("from filter with one field condition", function(assert) {
+        // arrange
+        var filter = [["field", "=", 1], "and", ["field2", "=", 3]];
+
+        // act
+        var result = utils.getMatchedCondition(filter, "field", FILTER_ROW_OPERATIONS);
+
+        // assert
+        assert.deepEqual(result, ["field", "=", 1]);
+    });
+
+    QUnit.test("from filter with two field condition", function(assert) {
+        // arrange
+        var filter = [["field", "=", 1], "and", ["field", "=", 3]];
+
+        // act
+        var result = utils.getMatchedCondition(filter, "field", FILTER_ROW_OPERATIONS);
+
+        // assert
+        assert.deepEqual(result, null);
+    });
+
+    QUnit.test("from filter with anyof in group", function(assert) {
+        // arrange
+        var filter = [["field2", "=", 3], "and", ["field", "anyof", [1]]];
+        // act
+        var result = utils.getMatchedCondition(filter, "field", FILTER_ROW_OPERATIONS);
+        // assert
+        assert.deepEqual(result, null);
+    });
+
+    QUnit.test("from filter == field condition with not available operation", function(assert) {
+        // arrange
+        var filter = ["field", "=", 1];
+
+        // act
+        var result = utils.getMatchedCondition(filter, "field", HEADER_FILTER_OPERATIONS);
+
+        // assert
+        assert.deepEqual(result, null);
+    });
+
+    QUnit.test("from filter == field condition with anyof", function(assert) {
+        // arrange
+        var filter = ["field", "anyof", [1]];
+
+        // act
+        var result = utils.getMatchedCondition(filter, "field", HEADER_FILTER_OPERATIONS);
+
+        // assert
+        assert.deepEqual(result[2], [1]);
+    });
+
+    QUnit.test("from filter with two field condition and 'or' group value", function(assert) {
+        // arrange
+        var filter = [["field", "anyof", [1]], "or", ["field", "anyof", [2]]];
+
+        // act
+        var result = utils.getMatchedCondition(filter, "field", HEADER_FILTER_OPERATIONS);
+
+        // assert
+        assert.deepEqual(result, null);
+    });
+
+    QUnit.test("ignore field for 'or' group value", function(assert) {
+        // arrange
+        var filter = [["field", "=", 1], "or", ["field", "anyof", [2]]];
+
+        // act
+        var result = utils.getMatchedCondition(filter, "field", HEADER_FILTER_OPERATIONS);
+
+        // assert
+        assert.deepEqual(result, null);
+    });
+
+    QUnit.test("ignore field for 'not and' group value", function(assert) {
+        // arrange
+        var filter = ["!", [["field", "=", 1], "and", ["field", "anyof", [2]]]];
+
+        // act
+        var result = utils.getMatchedCondition(filter, "field", HEADER_FILTER_OPERATIONS);
+
+        // assert
+        assert.deepEqual(result, null);
+    });
+
+    QUnit.test("from filter with two field condition and one is not available", function(assert) {
+        // arrange
+        var filter = [["field", "=", 1], "and", ["field", "anyof", [2]]];
+
+        // act
+        var result = utils.getMatchedCondition(filter, "field", FILTER_ROW_OPERATIONS);
+
+        // assert
+        assert.deepEqual(result, ["field", "=", 1]);
     });
 });

@@ -10,6 +10,7 @@ var $ = require("../../core/renderer"),
     browser = require("../../core/utils/browser"),
     Widget = require("../widget/ui.widget"),
     gridCore = require("./ui.data_grid.core"),
+    themes = require("../themes"),
     callModuleItemsMethod = gridCore.callModuleItemsMethod;
 
 var DATAGRID_ROW_SELECTOR = ".dx-row",
@@ -162,6 +163,36 @@ var DataGrid = Widget.inherit({
                     * @default true @for iOS
                     */
                     showRowLines: true
+                }
+            },
+            {
+                device: function() {
+                    return /material/.test(themes.current());
+                },
+                options: {
+                    /**
+                    * @name GridBaseOptions_showRowLines
+                    * @publicName showRowLines
+                    * @type boolean
+                    * @default true @for Material
+                    */
+                    showRowLines: true,
+                    /**
+                    * @name GridBaseOptions_showColumnLines
+                    * @publicName showColumnLines
+                    * @type boolean
+                    * @default false @for Material
+                    */
+                    showColumnLines: false,
+                    /**
+                     * @name GridBaseOptions_headerFilter_height
+                     * @publicName height
+                     * @type number
+                     * @default 315 @for Material
+                     */
+                    headerFilter: {
+                        height: 315
+                    }
                 }
             },
             {

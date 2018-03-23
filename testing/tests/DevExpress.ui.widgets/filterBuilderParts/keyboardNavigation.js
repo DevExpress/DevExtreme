@@ -1,10 +1,9 @@
 "use strict";
 
-/* global fields */
-
 var $ = require("jquery"),
     utils = require("ui/filter_builder/utils"),
-    keyboardMock = require("../../../helpers/keyboardMock.js");
+    keyboardMock = require("../../../helpers/keyboardMock.js"),
+    fields = require("../../../helpers/filterBuilderTestData.js");
 
 require("ui/filter_builder/filter_builder");
 

@@ -209,47 +209,6 @@ var checkGroups = function(assert, series) {
         },
     });
 
-    QUnit.test("Update template field", function(assert) {
-        var series = createSeries({
-            type: seriesType,
-            name: "financialSeries",
-            openValueField: "open",
-            closeValueField: "close",
-            lowValueField: "low",
-            highValueField: "high",
-            tagField: "tagField",
-            point: { visible: false },
-            label: { visible: false }
-
-        }, { renderer: this.renderer });
-        // act
-        series.updateTemplateFieldNames();
-        // assert
-        assert.equal(series._options.openValueField, "openfinancialSeries");
-        assert.equal(series._options.closeValueField, "closefinancialSeries");
-        assert.equal(series._options.lowValueField, "lowfinancialSeries");
-        assert.equal(series._options.highValueField, "highfinancialSeries");
-        assert.equal(series._options.tagField, "tagFieldfinancialSeries");
-    });
-
-    QUnit.test("Update template field when defaults are used", function(assert) {
-        var series = createSeries({
-            type: seriesType,
-            name: "financialSeries",
-            point: { visible: false },
-            label: { visible: false }
-
-        }, { renderer: this.renderer });
-        // act
-        series.updateTemplateFieldNames();
-        // assert
-        assert.equal(series._options.openValueField, "openfinancialSeries");
-        assert.equal(series._options.closeValueField, "closefinancialSeries");
-        assert.equal(series._options.lowValueField, "lowfinancialSeries");
-        assert.equal(series._options.highValueField, "highfinancialSeries");
-        assert.equal(series._options.tagField, "tagfinancialSeries");
-    });
-
     QUnit.test("Draw without data", function(assert) {
         var series = this.createSeries({
             type: seriesType,

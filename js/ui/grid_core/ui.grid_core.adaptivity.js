@@ -15,6 +15,7 @@ var $ = require("../../core/renderer"),
     modules = require("./ui.grid_core.modules"),
     Form = require("../form"),
     gridCoreUtils = require("./ui.grid_core.utils"),
+    themes = require("../themes"),
 
     COLUMN_HEADERS_VIEW = "columnHeadersView",
     ROWS_VIEW = "rowsView",
@@ -473,16 +474,23 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
     createFormByHiddenColumns: function(container, options) {
         var that = this,
             $container = $(container),
+            isMaterial = /material/.test(themes.current()),
             userFormOptions = {
                 items: that._getFormItemsByHiddenColumns(that._hiddenColumns),
                 formID: "dx-" + new Guid()
-            };
+            },
+            defaultFormOptions = isMaterial ?
+            {
+                colCount: 2,
+                screenByWidth: function() { return "lg"; }
+            } :
+            {};
 
         this.executeAction("onAdaptiveDetailRowPreparing", { formOptions: userFormOptions });
 
         that._$itemContents = null;
 
-        that._form = that._createComponent($("<div>").appendTo($container), Form, extend({}, userFormOptions, {
+        that._form = that._createComponent($("<div>").appendTo($container), Form, extend(defaultFormOptions, userFormOptions, {
             customizeItem: function(item) {
                 var column = item.column || that._columnsController.columnOption(item.name || item.dataField);
                 if(column) {
@@ -945,7 +953,7 @@ module.exports = {
                 _toggleBestFitMode: function(isBestFit) {
                     isBestFit && this._adaptiveColumnsController._removeCssClassesFromColumns();
                     this.callBase(isBestFit);
-                    if(this.option("advancedRendering") && this.option("columnAutoWidth") && this._adaptiveColumnsController.getHidingColumnsQueue().length) {
+                    if(this.option("advancedRendering") && this._adaptiveColumnsController.getHidingColumnsQueue().length) {
                         var $rowsTable = this._rowsView._getTableElement();
                         $rowsTable.css("width", isBestFit ? "auto" : "");
 

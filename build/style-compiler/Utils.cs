@@ -35,6 +35,7 @@ namespace StyleCompiler
                 case ".eot": return "application/vnd.ms-fontobject";
                 case ".ttf": return "application/font-sfnt";
                 case ".woff": return "application/font-woff";
+                case ".woff2": return "application/font-woff2";
                 case ".png": return "image/png";
                 case ".gif": return "image/gif";
                 case ".svg": return "image/svg+xml";

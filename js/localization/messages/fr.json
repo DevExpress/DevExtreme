@@ -146,6 +146,7 @@
         "dxDataGrid-ariaSearchInGrid": "Rechercher dans la grille",
         "dxDataGrid-ariaSelectAll": "Sélectionner tout",
         "dxDataGrid-ariaSelectRow": "Sélectionner ligne",
+        "dxDataGrid-filterBuilderPopupTitle": "!TODO",
 
         "dxTreeList-ariaTreeList": "Liste arborescente",
         "dxTreeList-editingAddRowToNode": "Ajouter",
@@ -171,7 +172,7 @@
         "dxPivotGrid-columnFieldArea": "Déposer les champs de colonne ici",
         "dxPivotGrid-dataFieldArea": "Déposer les champs de données ici",
         "dxPivotGrid-rowFieldArea": "Déposer les champs de ligne ici",
-        "dxPivotGrid-filterFieldArea": "Déposer les champs de filtre ici",        
+        "dxPivotGrid-filterFieldArea": "Déposer les champs de filtre ici",
 
         "dxScheduler-editorLabelTitle": "Titre",
         "dxScheduler-editorLabelStartDate": "Date de début",
@@ -259,6 +260,8 @@
         "dxFilterBuilder-filterOperationNotContains": "Ne contient pas",
         "dxFilterBuilder-filterOperationEndsWith": "Finit par",
         "dxFilterBuilder-filterOperationIsBlank": "Est vide",
-        "dxFilterBuilder-filterOperationIsNotBlank": "N'est pas vide"
+        "dxFilterBuilder-filterOperationIsNotBlank": "N'est pas vide",
+        "dxFilterBuilder-filterOperationAnyOf": "!TODO",
+        "dxFilterBuilder-filterOperationNoneOf": "!TODO"
     }
 }

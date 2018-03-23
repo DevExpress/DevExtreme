@@ -272,30 +272,13 @@ var appendElements = function(element, nextSibling) {
     }
 };
 
-var pxExceptions = [
-    "fillOpacity",
-    "columnCount",
-    "flexGrow",
-    "flexShrink",
-    "fontWeight",
-    "lineHeight",
-    "opacity",
-    "zIndex",
-    "zoom"
-];
-
 var setCss = function(name, value) {
     if(!this[0] || !this[0].style) return;
 
     name = styleUtils.styleProp(name);
     for(var i = 0; i < this.length; i++) {
-        if(typeUtils.isNumeric(value) && pxExceptions.indexOf(name) === -1) {
-            value += "px";
-        }
-
-        this[i].style[name] = value;
+        this[i].style[name] = styleUtils.normalizeStyleProp(name, value);
     }
-
 };
 
 initRender.prototype.css = function(name, value) {

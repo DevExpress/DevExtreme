@@ -183,7 +183,8 @@
             .append('<link rel="dx-theme" data-theme="android5.light" href="' + SystemJS.normalizeSync('android5_light.css') + '" />')
             .append('<link rel="dx-theme" data-theme="ios7.default" href="' + SystemJS.normalizeSync('ios7_default.css') + '" />')
             .append('<link rel="dx-theme" data-theme="win8.black" href="' + SystemJS.normalizeSync('win8_black.css') + '" />')
-            .append('<link rel="dx-theme" data-theme="win10.black" href="' + SystemJS.normalizeSync('win10_black.css') + '" />');
+            .append('<link rel="dx-theme" data-theme="win10.black" href="' + SystemJS.normalizeSync('win10_black.css') + '" />')
+            .append('<link rel="dx-theme" data-theme="material.light" href="' + SystemJS.normalizeSync('material_light.css') + '" />');
     };
 
 }();

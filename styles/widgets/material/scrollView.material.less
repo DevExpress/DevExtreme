@@ -1,0 +1,33 @@
+.dx-scrollable-native.dx-scrollable-native-android .dx-scrollview-pull-down {
+    background-color: @scrollable-bg;
+    .box-shadow(0 1px 4px 0 @scrollview-shadow-color);
+}
+
+.dx-scrollview-scrollbottom-loading {
+    .dx-scrollview-scrollbottom-image {
+        width: 24px;
+        height: 24px;
+    }
+}
+
+.dx-scrollview-scrollbottom-indicator, 
+.dx-scrollview-pull-down-indicator {
+    margin-right: 0;
+    height: 42px;
+    width: 42px;
+    border-radius: 21px;
+    display: inline-flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0px 1px 3px 1px @scrollview-shadow-color;
+
+    > .dx-loadindicator {
+        height: 24px;
+        width: 24px;
+
+        > .dx-loadindicator-wrapper {
+            font-size: 24px;
+        }
+    }
+}

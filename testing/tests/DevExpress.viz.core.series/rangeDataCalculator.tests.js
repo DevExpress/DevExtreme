@@ -2813,6 +2813,24 @@ QUnit.test("Get Range data when several points", function(assert) {
     assert.deepEqual(rangeData.categories, undefined, "Categories arg should be correct");
 });
 
+QUnit.test("Get Range data when several points, data with undefined argument", function(assert) {
+    var series = createSeries({ type: "line" });
+    series.updateData([
+        { arg: undefined, val: 0 },
+        { arg: 0, val: undefined },
+        { arg: 1, val: 0 },
+        { arg: 2, val: 0 },
+        { arg: null, val: 0 }
+    ]);
+
+    var rangeData = series.getArgumentRange();
+
+    assert.ok(rangeData, "Range data should be created");
+    assert.strictEqual(rangeData.min, 0, "Min arg should be undefined");
+    assert.strictEqual(rangeData.max, 2, "Max arg should be undefined");
+    assert.deepEqual(rangeData.categories, undefined, "Categories arg should be correct");
+});
+
 QUnit.test("Get argument range when discrete data", function(assert) {
     var series = createSeries({ type: "line", argumentAxisType: "discrete" });
     series.updateData([{ arg: 0, val: 0 }, { arg: 1, val: 0 }, { arg: 2, val: 0 }]);
