@@ -860,11 +860,11 @@ QUnit.test("Appointments should have correct width & height", function(assert) {
         var $appointments = this.instance.$element().find(".dx-scheduler-appointment");
 
         assert.roughEqual($appointments.eq(0).outerHeight(), 2.001, rowHeight, "Appointment height is OK");
-        assert.equal(parseInt($appointments.eq(0).css("margin-bottom"), 10), 5, "Appointment offset is OK");
+        assert.equal(parseInt($appointments.eq(0).css("marginBottom"), 10), 5, "Appointment offset is OK");
         assert.roughEqual($appointments.eq(0).outerWidth(), 2.001, expectedWidth, "Appointment width is OK");
 
         assert.roughEqual($appointments.eq(1).outerHeight(), 2.001, rowHeight, "Appointment height is OK");
-        assert.equal(parseInt($appointments.eq(1).css("margin-bottom"), 10), 20, "Appointment offset is OK");
+        assert.equal(parseInt($appointments.eq(1).css("marginBottom"), 10), 20, "Appointment offset is OK");
         assert.roughEqual($appointments.eq(1).outerWidth(), 2.001, expectedWidth, "Appointment width is OK");
 
     } finally {
@@ -890,11 +890,11 @@ QUnit.test("Grouped appointments should have a right offsets", function(assert) 
 
     var $appointments = this.instance.$element().find(".dx-scheduler-appointment");
 
-    assert.equal(parseInt($appointments.eq(0).css("margin-bottom"), 10), 5, "Appointment offset is OK");
-    assert.equal(parseInt($appointments.eq(1).css("margin-bottom"), 10), 20, "Appointment offset is OK");
+    assert.equal(parseInt($appointments.eq(0).css("marginBottom"), 10), 5, "Appointment offset is OK");
+    assert.equal(parseInt($appointments.eq(1).css("marginBottom"), 10), 20, "Appointment offset is OK");
 
-    assert.equal(parseInt($appointments.eq(2).css("margin-bottom"), 10), 5, "Appointment offset is OK");
-    assert.equal(parseInt($appointments.eq(3).css("margin-bottom"), 10), 20, "Appointment offset is OK");
+    assert.equal(parseInt($appointments.eq(2).css("marginBottom"), 10), 5, "Appointment offset is OK");
+    assert.equal(parseInt($appointments.eq(3).css("marginBottom"), 10), 20, "Appointment offset is OK");
 });
 
 QUnit.test("Tooltip should appear by appointment click", function(assert) {

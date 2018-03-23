@@ -228,7 +228,7 @@ QUnit.test("render label", function(assert) {
     // act
     crosshair.render();
     // assert
-    checkText(assert, this.renderer.text, "0", 0, 0, { align: "right" }, { 'font-size': 14, fill: "red" });
+    checkText(assert, this.renderer.text, "0", 0, 0, { align: "right" }, { 'fontSize': 14, fill: "red" });
     checkRect(assert, this.renderer.rect, 0, 0, 0, 0, { fill: "blue" });
 
     assert.ok(this.renderer.text.lastCall.returnValue.attr.called);
@@ -244,7 +244,7 @@ QUnit.test("render label, position of axis is right", function(assert) {
     crosshair.render();
     // assert
     assert.ok(crosshair);
-    checkText(assert, this.renderer.text, "0", 0, 0, { align: "left" }, { 'font-size': 14, fill: "red" });
+    checkText(assert, this.renderer.text, "0", 0, 0, { align: "left" }, { 'fontSize': 14, fill: "red" });
     checkRect(assert, this.renderer.rect, 0, 0, 0, 0, { fill: "blue" });
 });
 
@@ -521,7 +521,7 @@ QUnit.test("render label", function(assert) {
     // act
     crosshair.render();
     // assert
-    checkText(assert, this.renderer.text, "0", 0, 0, { align: "center" }, { 'font-size': 14, fill: "red" });
+    checkText(assert, this.renderer.text, "0", 0, 0, { align: "center" }, { 'fontSize': 14, fill: "red" });
     checkRect(assert, this.renderer.rect, 0, 0, 0, 0, { fill: "blue" });
     assert.ok(this.renderer.text.lastCall.returnValue.attr.called);
     assert.ok(this.renderer.text.lastCall.returnValue.append.calledAfter(this.renderer.rect.lastCall.returnValue.append));
@@ -535,7 +535,7 @@ QUnit.test("render with label, position is bottom", function(assert) {
     // act
     crosshair.render();
     // assert
-    checkText(assert, this.renderer.text, "0", 0, 0, { align: "center" }, { 'font-size': 14, fill: "red" });
+    checkText(assert, this.renderer.text, "0", 0, 0, { align: "center" }, { 'fontSize': 14, fill: "red" });
     checkRect(assert, this.renderer.rect, 0, 0, 0, 0, { fill: "blue" });
 });
 

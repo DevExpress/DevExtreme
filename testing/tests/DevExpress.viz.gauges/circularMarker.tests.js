@@ -194,7 +194,7 @@ QUnit.test('render', function(assert) {
     assert.ok(marker._text, '_text');
     assert.strictEqual(marker._text.parent, marker._rootElement, '_text parent');
     assert.deepEqual(marker._text._stored_settings, { x: tc.cx, y: tc.cy + 2, align: 'center', text: '25.0' }, '_text settings');
-    assert.deepEqual(marker._text._stored_styles, { fill: 'fontColor', 'font-size': 'fontSize' }, '_text font styles');
+    assert.deepEqual(marker._text._stored_styles, { fill: 'fontColor', 'fontSize': 'fontSize' }, '_text font styles');
 });
 
 // T346511

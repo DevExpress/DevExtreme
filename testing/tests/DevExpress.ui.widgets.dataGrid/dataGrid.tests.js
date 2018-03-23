@@ -303,7 +303,7 @@ QUnit.test("Vertical scrollbar spacing should not be added when widget does not 
     clock.tick();
 
     // assert
-    assert.equal($(dataGrid.$element()).find(".dx-datagrid-headers").css("padding-right"), "0px");
+    assert.equal($(dataGrid.$element()).find(".dx-datagrid-headers").css("paddingRight"), "0px");
 
     clock.restore();
 });
@@ -2344,7 +2344,7 @@ QUnit.test("column headers visibility when hide removing row in batch editing mo
 
     // assert
     assert.strictEqual(dataGrid.getView("rowsView").getScrollbarWidth(), 0, "vertical scrollbar width");
-    assert.strictEqual($dataGrid.find(".dx-datagrid-headers").css("padding-right"), "0px", "no headers right padding");
+    assert.strictEqual($dataGrid.find(".dx-datagrid-headers").css("paddingRight"), "0px", "no headers right padding");
 });
 
 QUnit.test("Disable rows hover", function(assert) {
@@ -2855,7 +2855,7 @@ QUnit.test("height from style after updateDimensions when rendering to container
 // T362517
 QUnit.test("max-height from styles", function(assert) {
     // arrange, act
-    var $dataGrid = $("#dataGrid").css("max-height", 400).dxDataGrid({
+    var $dataGrid = $("#dataGrid").css("maxHeight", 400).dxDataGrid({
             loadingTimeout: undefined,
             dataSource: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
             columns: [

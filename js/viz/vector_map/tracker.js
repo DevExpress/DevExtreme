@@ -393,7 +393,7 @@ Tracker.prototype = {
     _detachHandlers: function() {
         var that = this;
         if(that._isTouchEnabled) {
-            that._root.css({ "touch-action": "", "msTouchAction": "", "-webkit-user-select": "" }).
+            that._root.css({ "touch-action": "", "msTouchAction": "", "-webkit-userSelect": "" }).
                 off(_addNamespace("MSHoldVisual", _NAME)).
                 off(_addNamespace("contextmenu", _NAME));
         }
@@ -404,7 +404,7 @@ Tracker.prototype = {
     _attachHandlers: function() {
         var that = this;
         if(that._isTouchEnabled) {
-            that._root.css({ "touch-action": "none", "msTouchAction": "none", "-webkit-user-select": "none" }).
+            that._root.css({ "touch-action": "none", "msTouchAction": "none", "-webkit-userSelect": "none" }).
                 on(_addNamespace("MSHoldVisual", _NAME), function(event) {
                     event.preventDefault();
                 }).

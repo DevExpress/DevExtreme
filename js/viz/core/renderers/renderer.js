@@ -35,7 +35,7 @@ var pxAddingExceptions = {
     "fill-opacity": true,
     "flex-grow": true,
     "flex-shrink": true,
-    "fontWeight": true,
+    "font-weight": true,
     "line-height": true,
     "opacity": true,
     "order": true,
@@ -49,9 +49,9 @@ var KEY_TEXT = "text",
     KEY_STROKE = "stroke",
     KEY_STROKE_WIDTH = "stroke-width",
     KEY_STROKE_OPACITY = "stroke-opacity",
-    KEY_FONT_SIZE = "fontSize",
-    KEY_FONT_STYLE = "fontStyle",
-    KEY_FONT_WEIGHT = "fontWeight",
+    KEY_FONT_SIZE = "font-size",
+    KEY_FONT_STYLE = "font-style",
+    KEY_FONT_WEIGHT = "font-weight",
     KEY_TEXT_DECORATION = "text-decoration",
     NONE = "none",
 
@@ -1521,9 +1521,9 @@ function Renderer(options) {
         "stroke-width": 0
     }).attr({ "class": options.cssClass }).css({
         "line-height": "normal", // T179515
-        "-ms-user-select": NONE,
-        "-moz-user-select": NONE,
-        "-webkit-user-select": NONE,
+        "msUserSelect": NONE,
+        "-moz-userSelect": NONE,
+        "-webkit-userSelect": NONE,
         "-webkit-tap-highlight-color": "rgba(0, 0, 0, 0)",
         display: "block",
         overflow: "hidden"

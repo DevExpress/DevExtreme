@@ -38,16 +38,16 @@ var initMobileViewport = function(options) {
 
     if(!allowPan && !allowZoom) {
         $("html, body").css({
-            "-ms-content-zooming": "none",
-            "-ms-user-select": "none",
+            "msContentZooming": "none",
+            "msUserSelect": "none",
             "overflow": "hidden"
         });
     } else {
         $("html").css("msOverflowStyle", "-ms-autohiding-scrollbar");
     }
 
-    if(!allowSelection && support.supportProp("user-select")) {
-        $(".dx-viewport").css(styleUtils.styleProp("user-select"), "none");
+    if(!allowSelection && support.supportProp("userSelect")) {
+        $(".dx-viewport").css(styleUtils.styleProp("userSelect"), "none");
     }
 
     $(metaSelector).attr("content", metaVerbs.join());

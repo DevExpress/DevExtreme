@@ -1576,7 +1576,7 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test("Compose styles, do not process style names", function(assert) {
         // act
-        var result = this.rect.css({ "fontSize": 13, "cursor": "pointer" });
+        var result = this.rect.css({ "font-size": 13, "cursor": "pointer" });
 
         // assert
         assert.equal(result, this.rect);
@@ -1587,11 +1587,11 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test("Merge existing styles with new ones", function(assert) {
         // arrange
-        this.rect.css({ "fontSize": 13, "cursor": "pointer" });
+        this.rect.css({ "font-size": 13, "cursor": "pointer" });
         this.rect.element.setAttribute.reset();
 
         // act
-        var result = this.rect.css({ "fontFamily": "SegoeUI", cursor: "default" });
+        var result = this.rect.css({ "font-family": "SegoeUI", cursor: "default" });
 
         // assert
         assert.equal(result, this.rect);
@@ -1602,7 +1602,7 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test("Empty styles do not clear existing ones", function(assert) {
         // arrange
-        this.rect.css({ "fontSize": 13, "cursor": "pointer" });
+        this.rect.css({ "font-size": 13, "cursor": "pointer" });
         this.rect.element.setAttribute.reset();
 
         // act
@@ -1617,11 +1617,11 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test("Special cases. value is undefined (does not take effect)", function(assert) {
         // arrange
-        this.rect.css({ "fontSize": 13, "cursor": "pointer" });
+        this.rect.css({ "font-size": 13, "cursor": "pointer" });
         this.rect.element.setAttribute.reset();
 
         // act
-        var result = this.rect.css({ "fontSize": undefined, cursor: "default" });
+        var result = this.rect.css({ "font-size": undefined, cursor: "default" });
 
         // assert
         assert.equal(result, this.rect);
@@ -1632,11 +1632,11 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test("Special cases. value is null (does not take effect)", function(assert) {
         // arrange
-        this.rect.css({ "fontSize": 13, "cursor": "pointer" });
+        this.rect.css({ "font-size": 13, "cursor": "pointer" });
         this.rect.element.setAttribute.reset();
 
         // act
-        var result = this.rect.css({ "fontSize": null, cursor: "default" });
+        var result = this.rect.css({ "font-size": null, cursor: "default" });
 
         // assert
         assert.equal(result, this.rect);
@@ -1647,11 +1647,11 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test("Special cases. value is empty string (deletes style)", function(assert) {
         // arrange
-        this.rect.css({ "fontSize": 13, "cursor": "pointer" });
+        this.rect.css({ "font-size": 13, "cursor": "pointer" });
         this.rect.element.setAttribute.reset();
 
         // act
-        var result = this.rect.css({ "fontSize": "", cursor: "default" });
+        var result = this.rect.css({ "font-size": "", cursor: "default" });
 
         // assert
         assert.equal(result, this.rect);
@@ -1666,7 +1666,7 @@ function checkDashStyle(assert, elem, result, style, value) {
                 "fill-opacity": 0.2,
                 "flex-grow": 1,
                 "flex-shrink": 1,
-                "fontWeight": 2,
+                "font-weight": 2,
                 "line-height": 3,
                 "opacity": 0.3,
                 "order": 2,
@@ -1674,7 +1674,7 @@ function checkDashStyle(assert, elem, result, style, value) {
                 "widows": 1,
                 "z-index": 4,
                 "zoom": 2,
-                "fontSize": "12pt",
+                "font-size": "12pt",
                 "left": 30,
                 "width": 400
             },
@@ -4983,7 +4983,7 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test("Multiline text, line height from font size", function(assert) {
         // arrange
-        var text = this.createText().css({ "fontSize": 18 }),
+        var text = this.createText().css({ "font-size": 18 }),
             attrs = { text: "simple text\r\nwith multiple\nlines", x: 10, y: 20 },
             result;
 
@@ -5002,7 +5002,7 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test("Multiline text, line height from font size(em)", function(assert) {
         // arrange
-        var text = this.createText().css({ "fontSize": "0.9em" }),
+        var text = this.createText().css({ "font-size": "0.9em" }),
             attrs = { text: "simple text\r\nwith multiple\nlines", x: 10, y: 20 },
             result;
 
@@ -5021,7 +5021,7 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test("Multiline text, line height from font size(absolute size)", function(assert) {
         // arrange
-        var text = this.createText().css({ "fontSize": "large" }),
+        var text = this.createText().css({ "font-size": "large" }),
             attrs = { text: "simple text\r\nwith multiple\nlines", x: 10, y: 20 },
             result;
 
@@ -5088,7 +5088,7 @@ function checkDashStyle(assert, elem, result, style, value) {
 
         this.checkTspans(assert, text, [
             { x: 10, y: 20, style: { fontWeight: "", fill: "" }, text: "Text " },
-            { style: { "fontWeight": "bold", fill: "#010101;" }, text: "bold" }
+            { style: { "font-weight": "bold", fill: "#010101;" }, text: "bold" }
         ], { x: 10, y: 20 });
     });
 
@@ -5104,9 +5104,9 @@ function checkDashStyle(assert, elem, result, style, value) {
 
         this.checkTspans(assert, text, [
             { x: 30, y: 20, text: "Simple Text" },
-            { text: "Bold", style: { "fontWeight": "bold;" } },
-            { text: "Bold Italic", style: { "fontWeight": "bold", "fontStyle": "italic;" } },
-            { text: "Underline Bold italic", style: { "fontWeight": "bold", "fontStyle": "italic", "text-decoration": "underline;" } }
+            { text: "Bold", style: { "font-weight": "bold;" } },
+            { text: "Bold Italic", style: { "font-weight": "bold", "fontStyle": "italic;" } },
+            { text: "Underline Bold italic", style: { "font-weight": "bold", "fontStyle": "italic", "text-decoration": "underline;" } }
         ], { x: 30, y: 20 });
     });
 
@@ -5115,15 +5115,15 @@ function checkDashStyle(assert, elem, result, style, value) {
 
         this.checkTspans(assert, text, [
             { x: 0, y: 0, text: "Simple Text" },
-            { text: "Bold", style: { "fontWeight": "bold", "fontSize": "15px;" } },
-            { text: "Bold Italic", style: { "fontWeight": "bold", "fontSize": "15px", "fontStyle": "italic;", } },
-            { text: "Underline Bold italic", style: { "fontWeight": "bold", "fontSize": "15px", "fontStyle": "italic", "text-decoration": "underline;", } },
+            { text: "Bold", style: { "font-weight": "bold", "font-size": "15px;" } },
+            { text: "Bold Italic", style: { "font-weight": "bold", "font-size": "15px", "fontStyle": "italic;", } },
+            { text: "Underline Bold italic", style: { "font-weight": "bold", "font-size": "15px", "fontStyle": "italic", "text-decoration": "underline;", } },
         ], { x: 0, y: 0 });
     });
 
     // T177039
     QUnit.test("Inheritance settings font size for multiline text", function(assert) {
-        var text = this.createText().attr({ text: "<span>line1</span>\n<span style='font-size:16px;'>line2</span>\n<span>line3</span>", x: 1, y: 2 }).css({ "fontSize": 18 });
+        var text = this.createText().attr({ text: "<span>line1</span>\n<span style='font-size:16px;'>line2</span>\n<span>line3</span>", x: 1, y: 2 }).css({ "font-size": 18 });
 
         this.checkTspans(assert, text, [
             { x: 1, y: 2, text: "line1" },
@@ -5215,7 +5215,7 @@ function checkDashStyle(assert, elem, result, style, value) {
             result;
 
         // act
-        result = text.css({ "fontSize": 18 });
+        result = text.css({ "font-size": 18 });
 
         // assert
         assert.strictEqual(result, text, "method result");
@@ -5245,7 +5245,7 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     // T177039
     QUnit.test("Partial font size is less than common font size / not first element", function(assert) {
-        var text = this.createText().attr({ x: 1, y: 2, text: "Line 1<br/>Line 2-1<span font-size='18px'>Line 2-2</span>Line 2-3\nLine 3" }).css({ "fontSize": 20 });
+        var text = this.createText().attr({ x: 1, y: 2, text: "Line 1<br/>Line 2-1<span font-size='18px'>Line 2-2</span>Line 2-3\nLine 3" }).css({ "font-size": 20 });
 
         this.checkTspans(assert, text, [
             { x: 1, y: 2, text: "Line 1" },
@@ -5258,7 +5258,7 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     // T177039
     QUnit.test("Partial font size is less than common font size / first element", function(assert) {
-        var text = this.createText().attr({ x: 1, y: 2, text: "Line 1<br/><span style='font-size: 18px;'>Line 2-1</span>Line 2-2\nLine 3" }).css({ "fontSize": 20 });
+        var text = this.createText().attr({ x: 1, y: 2, text: "Line 1<br/><span style='font-size: 18px;'>Line 2-1</span>Line 2-2\nLine 3" }).css({ "font-size": 20 });
 
         this.checkTspans(assert, text, [
             { x: 1, y: 2, text: "Line 1" },
@@ -5270,7 +5270,7 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     // T177039
     QUnit.test("Partial font size is greater than common font size / not first element", function(assert) {
-        var text = this.createText().attr({ x: 1, y: 2, text: "Line 1<br/>Line 2-1<span style='font-size: 18px;'>Line 2-2</span>Line 2-3\nLine 3" }).css({ "fontSize": 10 });
+        var text = this.createText().attr({ x: 1, y: 2, text: "Line 1<br/>Line 2-1<span style='font-size: 18px;'>Line 2-2</span>Line 2-3\nLine 3" }).css({ "font-size": 10 });
 
         this.checkTspans(assert, text, [
             { x: 1, y: 2, text: "Line 1" },
@@ -5283,7 +5283,7 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     // T177039
     QUnit.test("Partial font size is greater than common font size / first element", function(assert) {
-        var text = this.createText().attr({ x: 1, y: 2, text: "Line 1<br/><span style='font-size: 18px;'>Line 2-1</span>Line 2-2\nLine 3" }).css({ "fontSize": 10 });
+        var text = this.createText().attr({ x: 1, y: 2, text: "Line 1<br/><span style='font-size: 18px;'>Line 2-1</span>Line 2-2\nLine 3" }).css({ "font-size": 10 });
 
         this.checkTspans(assert, text, [
             { x: 1, y: 2, text: "Line 1" },
@@ -5359,7 +5359,7 @@ function checkDashStyle(assert, elem, result, style, value) {
         this.checkTspans(assert, text, [
             { x: 10, y: 20, text: "Line 1" },
             { x: 10, dy: "16px", text: "Line 2-1" },
-            { text: "Line 2-2", style: { "fontSize": "16px;" } },
+            { text: "Line 2-2", style: { "font-size": "16px;" } },
             { x: 10, dy: 12, text: "Line 3" }
         ], { x: 10, y: 20 }, { stroke: "black", "stroke-width": 3, "stroke-opacity": 0.4 });
     });
@@ -5395,7 +5395,7 @@ function checkDashStyle(assert, elem, result, style, value) {
         this.checkTspans(assert, text, [
             { x: 0, y: 0, text: "Line 1" },
             { x: 0, dy: "16px", text: "Line 2-1" },
-            { text: "Line 2-2", style: { "fontSize": "16px;" } },
+            { text: "Line 2-2", style: { "font-size": "16px;" } },
             { x: 0, dy: 12, text: "Line 3" }
         ], { x: 0, y: 0 });
     });

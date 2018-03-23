@@ -17,7 +17,7 @@ QUnit.skip("Animation performance test", function(assert) {
         "transitionProperty": "none"
     });
 
-    $div.css("z-index", 1);
+    $div.css("zIndex", 1);
     $div.css("left", 0);
     $div.css("opacity", 1);
     $div.css("transform", "translate(1000px,0px)");
@@ -27,7 +27,7 @@ QUnit.skip("Animation performance test", function(assert) {
         "transitionProperty": "none"
     });
 
-    $div2.css("z-index", 1);
+    $div2.css("zIndex", 1);
     $div2.css("left", 0);
     $div2.css("opacity", 1);
     $div2.css("transform", "translate(1000px,0px)");

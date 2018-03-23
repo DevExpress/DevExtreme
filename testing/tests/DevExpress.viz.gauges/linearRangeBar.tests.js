@@ -210,7 +210,7 @@ QUnit.test('render - horizontal, top, with text', function(assert) {
     assert.strictEqual(rangeBar._line.parent, rangeBar._rootElement, '_line parent');
 
     assert.deepEqual(rangeBar._text._stored_settings, { x: 325, y: 119, 'class': 'dxg-text', align: 'center', text: '25.0' }, '_text settings');
-    assert.deepEqual(rangeBar._text._stored_styles, { 'font-family': 'Font', fill: 'black' }, '_text font style');
+    assert.deepEqual(rangeBar._text._stored_styles, { 'fontFamily': 'Font', fill: 'black' }, '_text font style');
 
     assert.deepEqual(rangeBar._line._stored_settings, {
         points: [325, 100, 325, 109, 327, 109, 327, 100],
@@ -236,7 +236,7 @@ QUnit.test('render - horizontal, bottom, with text', function(assert) {
     assert.strictEqual(rangeBar._line.parent, rangeBar._rootElement, '_line parent');
 
     assert.deepEqual(rangeBar._text._stored_settings, { x: 325, y: 85, 'class': 'dxg-text', align: 'center', text: '25.0' }, '_text settings');
-    assert.deepEqual(rangeBar._text._stored_styles, { 'font-family': 'Font', fill: 'black' }, '_text font style');
+    assert.deepEqual(rangeBar._text._stored_styles, { 'fontFamily': 'Font', fill: 'black' }, '_text font style');
 
     assert.deepEqual(rangeBar._line._stored_settings, {
         points: [325, 100, 325, 91, 327, 91, 327, 100],
@@ -261,7 +261,7 @@ QUnit.test('render - vertical, left, with text', function(assert) {
     assert.strictEqual(rangeBar._line.parent, rangeBar._rootElement, '_line parent');
 
     assert.deepEqual(rangeBar._text._stored_settings, { x: 211, y: 327, 'class': 'dxg-text', align: 'left', text: '25.0' }, '_text settings');
-    assert.deepEqual(rangeBar._text._stored_styles, { 'font-family': 'Font', fill: 'black' }, '_text font style');
+    assert.deepEqual(rangeBar._text._stored_styles, { 'fontFamily': 'Font', fill: 'black' }, '_text font style');
 
     assert.deepEqual(rangeBar._line._stored_settings, {
         points: [200, 325, 200, 327, 209, 327, 209, 325],
@@ -288,7 +288,7 @@ QUnit.test('render - vertical, right, with text', function(assert) {
     assert.strictEqual(rangeBar._line.parent, rangeBar._rootElement, '_line parent');
 
     assert.deepEqual(rangeBar._text._stored_settings, { x: 189, y: 327, 'class': 'dxg-text', align: 'right', text: '25.0' }, '_text settings');
-    assert.deepEqual(rangeBar._text._stored_styles, { 'font-family': 'Font', fill: 'black' }, '_text font style');
+    assert.deepEqual(rangeBar._text._stored_styles, { 'fontFamily': 'Font', fill: 'black' }, '_text font style');
 
     assert.deepEqual(rangeBar._line._stored_settings, {
         points: [200, 325, 200, 327, 191, 327, 191, 325],
@@ -313,7 +313,7 @@ QUnit.test('render - currentValue and baseValue are reversed, with text', functi
     assert.strictEqual(rangeBar._line.parent, rangeBar._rootElement, '_line parent');
 
     assert.deepEqual(rangeBar._text._stored_settings, { x: 375, y: 119, 'class': 'dxg-text', align: 'center', text: '75.0' }, '_text settings');
-    assert.deepEqual(rangeBar._text._stored_styles, { 'font-family': 'Font', fill: 'black' }, '_text font style');
+    assert.deepEqual(rangeBar._text._stored_styles, { 'fontFamily': 'Font', fill: 'black' }, '_text font style');
 
     assert.deepEqual(rangeBar._line._stored_settings, {
         points: [373, 100, 373, 109, 375, 109, 375, 100],

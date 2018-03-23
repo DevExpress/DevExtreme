@@ -1042,7 +1042,7 @@ var checkTwoGroups = function(assert, series) {
                     size: 'font-size',
                     weight: 'font-weight',
                     cursor: "font-cursor",
-                    family: "fontFamily"
+                    family: "font-family"
                 }
             },
             point: {
@@ -1081,9 +1081,9 @@ var checkTwoGroups = function(assert, series) {
             "attributes": {
                 "font": {
                     "color": "font-color",
-                    "size": "fontSize",
-                    "weight": "fontWeight",
-                    "family": "fontFamily",
+                    "size": "font-size",
+                    "weight": "font-weight",
+                    "family": "font-family",
                     "cursor": "font-cursor"
                 }
             },

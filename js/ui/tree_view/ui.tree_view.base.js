@@ -1212,10 +1212,10 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             type: "custom",
             duration: this.option("animationEnabled") ? 400 : 0,
             from: {
-                "max-height": state ? 0 : nodeHeight
+                "maxHeight": state ? 0 : nodeHeight
             },
             to: {
-                "max-height": state ? nodeHeight : 0
+                "maxHeight": state ? nodeHeight : 0
             },
             start: function() {
                 $nodeContainer.addClass(OPENED_NODE_CONTAINER_CLASS);

@@ -145,9 +145,9 @@ QUnit.test("Check options are processed", function(assert) {
     assert.deepEqual(options.font, { size: 14, family: 'FontFamily', weight: 300, color: 'red' });
 
     assert.deepEqual(fontOptions, {
-        'font-size': 14,
-        'font-family': 'FontFamily',
-        'font-weight': 300,
+        'fontSize': 14,
+        'fontFamily': 'FontFamily',
+        'fontWeight': 300,
         fill: 'red'
     });
 });
@@ -160,7 +160,7 @@ QUnit.test("Check exceptions", function(assert) {
     assert.deepEqual(options.font, { cursor: 'default', opacity: 0.3, size: 14 });
 
     assert.deepEqual(fontOptions, {
-        'font-size': 14,
+        'fontSize': 14,
         opacity: 0.3,
         cursor: 'default'
     });

@@ -94,9 +94,9 @@ QUnit.test('Creation', function(assert) {
     }], "root's class");
     assert.deepEqual(renderer.root.css.firstCall.args[0], {
         "-webkit-tap-highlight-color": "rgba(0, 0, 0, 0)",
-        "-moz-user-select": "none",
-        "-ms-user-select": "none",
-        "-webkit-user-select": "none",
+        "-moz-userSelect": "none",
+        "msUserSelect": "none",
+        "-webkit-userSelect": "none",
         display: "block",
         overflow: "hidden",
         "line-height": "normal" // T179515
