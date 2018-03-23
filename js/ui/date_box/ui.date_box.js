@@ -130,6 +130,14 @@ var DateBox = DropDownEditor.inherit({
             type: "date",
 
             /**
+             * @name dxDateBoxOptions_showAnalogClock
+             * @publicName showAnalogClock
+             * @type boolean
+             * @default false
+             */
+            showAnalogClock: false,
+
+            /**
             * @name dxDateBoxOptions_value
             * @publicName value
             * @type Date|number|string
@@ -864,6 +872,7 @@ var DateBox = DropDownEditor.inherit({
             case "invalidDateMessage":
             case "dateOutOfRangeMessage":
             case "adaptivityEnabled":
+            case "showAnalogClock":
                 break;
             default:
                 this.callBase.apply(this, arguments);

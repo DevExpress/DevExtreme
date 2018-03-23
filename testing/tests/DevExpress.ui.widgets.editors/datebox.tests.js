@@ -2352,6 +2352,26 @@ QUnit.test("date box should contain calendar and time view inside box in small s
     }
 });
 
+QUnit.test("date box should have compact view when showAnalogClock option is true", function(assert) {
+    var $element = $("#dateBox").dxDateBox({
+            type: "datetime",
+            pickerType: "calendar"
+        }),
+        instance = $element.dxDateBox("instance");
+
+    instance.option("showAnalogClock", true);
+    instance.open();
+
+    var $content = $(instance._popup.$content()),
+        box = Box.getInstance($content.find("." + BOX_CLASS)),
+        $clock = $content.find(".dx-timeview-clock");
+
+    assert.equal(box.option("direction"), "row", "correct box direction specified");
+    assert.ok(box.itemElements().eq(0).find("." + CALENDAR_CLASS).length, "calendar rendered");
+    assert.ok(box.itemElements().eq(0).find("." + TIMEVIEW_CLASS).length, "timeview rendered");
+    assert.equal($clock.length, 0, "clock was not rendered");
+});
+
 QUnit.test("date box wrapper adaptivity class depends on the screen size", function(assert) {
     var LARGE_SCREEN_SIZE = 2000,
         SMALL_SCREEN_SIZE = 300;
