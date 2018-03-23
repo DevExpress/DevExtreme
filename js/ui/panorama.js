@@ -753,6 +753,7 @@ var Panorama = CollectionWidget.inherit({
         this.callBase();
         this._initBackgroundImage();
         this._itemsRenderStrategy.render();
+        this._updateSelection();
     },
 
     _updatePositions: function(offset) {
@@ -941,7 +942,7 @@ var Panorama = CollectionWidget.inherit({
         }
     },
 
-    _renderSelection: function() {
+    _updateSelection: function() {
         if(!this._indexChangeOnAnimation) {
             this._updatePositions();
         }
