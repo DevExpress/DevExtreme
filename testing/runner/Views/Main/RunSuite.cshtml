@@ -273,6 +273,9 @@
 
         Promise.all(imports)
         .then(function() {
+            if(@Json.Serialize(isServerSideTest) && window.navigator.userAgent.toLowerCase().indexOf("webkit") < 0) {
+                return;
+            }
             return SystemJS.import("@Url.Content(Model.ScriptVirtualPath)");
         })
         .then(function() {
