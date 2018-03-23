@@ -119,7 +119,7 @@ Object.keys(widgets).forEach(function(widget) {
              // NOTE: some widgets doesn't support dataSource === null
             if(optionName === "dataSource") {
                 // NOTE: dxResponsiveBox supports only plain object in items
-                var item = widget === "dxResponsiveBox" ? { text: 1 } : 1;
+                var item = widget === "ResponsiveBox" ? { text: 1 } : 1;
                 item = widget === "dxScheduler" ? { text: 1, startDate: new Date(2015, 0, 1) } : item;
 
                 newValue = new DataSource([item]);

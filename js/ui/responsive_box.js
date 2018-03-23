@@ -16,7 +16,9 @@ var $ = require("../core/renderer"),
 var RESPONSIVE_BOX_CLASS = "dx-responsivebox",
     SCREEN_SIZE_CLASS_PREFIX = RESPONSIVE_BOX_CLASS + "-screen-",
     BOX_ITEM_CLASS = "dx-box-item",
-    BOX_ITEM_DATA_KEY = "dxBoxItemData";
+    BOX_ITEM_DATA_KEY = "dxBoxItemData",
+
+    HD_SCREEN_WIDTH = 1920;
 
 /**
 * @name dxResponsiveBox
@@ -233,7 +235,7 @@ var ResponsiveBox = CollectionWidget.inherit({
         return BOX_ITEM_DATA_KEY;
     },
 
-    _render: function() {
+    _initMarkup: function() {
         this.callBase();
         this.$element().addClass(RESPONSIVE_BOX_CLASS);
 
@@ -252,10 +254,6 @@ var ResponsiveBox = CollectionWidget.inherit({
     },
 
     _renderItems: function() {
-        if(!windowUtils.hasWindow()) {
-            return;
-        }
-
         this._setScreenSize();
 
         this._screenItems = this._itemsByScreen();
@@ -360,7 +358,7 @@ var ResponsiveBox = CollectionWidget.inherit({
     },
 
     _screenWidth: function() {
-        return $(window).width();
+        return windowUtils.hasWindow() ? $(window).width() : HD_SCREEN_WIDTH;
     },
 
     _createEmptyCell: function() {
