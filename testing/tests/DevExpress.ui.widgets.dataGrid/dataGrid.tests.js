@@ -302,7 +302,7 @@ QUnit.test("Vertical scrollbar spacing should not be added when widget does not 
     clock.tick();
 
     // assert
-    assert.equal($(dataGrid.$element()).find(".dx-datagrid-headers").css("padding-right"), "0px");
+    assert.equal($(dataGrid.$element()).find(".dx-datagrid-headers").css("paddingRight"), "0px");
 
     clock.restore();
 });
@@ -2343,7 +2343,7 @@ QUnit.test("column headers visibility when hide removing row in batch editing mo
 
     // assert
     assert.strictEqual(dataGrid.getView("rowsView").getScrollbarWidth(), 0, "vertical scrollbar width");
-    assert.strictEqual($dataGrid.find(".dx-datagrid-headers").css("padding-right"), "0px", "no headers right padding");
+    assert.strictEqual($dataGrid.find(".dx-datagrid-headers").css("paddingRight"), "0px", "no headers right padding");
 });
 
 QUnit.test("Disable rows hover", function(assert) {
@@ -2854,7 +2854,7 @@ QUnit.test("height from style after updateDimensions when rendering to container
 // T362517
 QUnit.test("max-height from styles", function(assert) {
     // arrange, act
-    var $dataGrid = $("#dataGrid").css("max-height", 400).dxDataGrid({
+    var $dataGrid = $("#dataGrid").css("maxHeight", 400).dxDataGrid({
             loadingTimeout: undefined,
             dataSource: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
             columns: [
@@ -3758,7 +3758,7 @@ QUnit.test("Keep horizontal scroller position after grouping column with native 
 
 // T362355
 QUnit.test("Keep vertical browser scroll position after refresh with freespace row", function(assert) {
-    $("#qunit-fixture").css("overflow-y", "auto").height(50);
+    $("#qunit-fixture").css("overflowY", "auto").height(50);
 
     var items = [];
     for(var i = 0; i < 21; i++) {
@@ -6399,7 +6399,7 @@ QUnit.test("Group row has correct text-align in RTL", function(assert) {
 
     // assert
     assert.ok(groupedRows.length, "We have grouped row");
-    assert.equal(cells.eq(1).css("text-align"), "right", "Grouped cell has correct text-align");
+    assert.equal(cells.eq(1).css("textAlign"), "right", "Grouped cell has correct text-align");
 });
 
 QUnit.test("CellTemplate and master-detail template cells has correct text-align in RTL", function(assert) {
@@ -6435,7 +6435,7 @@ QUnit.test("CellTemplate and master-detail template cells has correct text-align
             }
         }),
         getCellTextAlignByButtonNumber = function(buttonNumber) {
-            return $(dataGrid.$element()).find(".dx-button").eq(buttonNumber).closest("td").css("text-align");
+            return $(dataGrid.$element()).find(".dx-button").eq(buttonNumber).closest("td").css("textAlign");
         };
 
     // assert

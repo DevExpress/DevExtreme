@@ -146,6 +146,7 @@
         "dxDataGrid-ariaSearchInGrid": "Search in data grid",
         "dxDataGrid-ariaSelectAll": "Select all",
         "dxDataGrid-ariaSelectRow": "Select row",
+        "dxDataGrid-filterBuilderPopupTitle": "Filter Builder",
 
         "dxTreeList-ariaTreeList": "Tree list",
         "dxTreeList-editingAddRowToNode": "Add",

@@ -87,6 +87,22 @@ QUnit.module("Scheduler markup", moduleConfig, () => {
         assert.ok(instance._appointmentModel._dataSource instanceof DataSource.DataSource, "Task model has data source instance");
     });
 
+    QUnit.test("Scheduler should not fail when dataSource is set, timelineWeek", (assert) => {
+        const data = new DataSource.DataSource({
+            store: this.tasks
+        });
+
+        const instance = $("#scheduler").dxScheduler({
+            dataSource: data,
+            views: ["timelineWeek"],
+            currentView: "timelineWeek",
+            currentDate: new Date(2015, 1, 9)
+        }).dxScheduler("instance");
+
+        assert.ok(instance._appointmentModel instanceof dxSchedulerAppointmentModel, "Task model is initialized on scheduler init");
+        assert.ok(instance._appointmentModel._dataSource instanceof DataSource.DataSource, "Task model has data source instance");
+    });
+
     QUnit.test("Scheduler should not fail when dataSource is set, agenda", (assert) => {
         const data = new DataSource.DataSource({
             store: this.tasks

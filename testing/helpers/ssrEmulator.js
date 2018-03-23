@@ -158,7 +158,10 @@ var serverSideDOMAdapter = require("./serverSideDOMAdapterPatch.js");
 
     var styleObj = {};
 
-    serverStyles.forEach(style => styleObj[style] = "");
+    serverStyles.forEach(function(style) {
+        styleObj[style] = "";
+    });
+
     document.createElement = function(tagName) {
         return tagName === "dx" ? { style: styleObj } : originalCreateElement.apply(this, arguments);
     };

@@ -1531,7 +1531,7 @@ QUnit.module("popover content size");
 QUnit.test("popover content height is reduced to fit in boundaries by height", function(assert) {
     fixtures.customBoundary.create();
     try {
-        var $content = $("<div>").css("background-color", "black").width(20).height(200);
+        var $content = $("<div>").css("backgroundColor", "black").width(20).height(200);
         var $popover = $("#what").append($content),
             $target = $("#where"),
             $boundary = $("#boundary");
@@ -1565,7 +1565,7 @@ QUnit.test("popover content height is not reduced when fit is allowed", function
     fixtures.customBoundary.create();
     var contentSize = 100;
     try {
-        var $content = $("<div>").css("background-color", "black").width(20).height(contentSize);
+        var $content = $("<div>").css("backgroundColor", "black").width(20).height(contentSize);
         var $popover = $("#what").append($content),
             $target = $("#where"),
             $boundary = $("#boundary"),
@@ -1596,7 +1596,7 @@ QUnit.test("popover content height is not reduced when fit is allowed", function
 QUnit.test("popover content height shrinking considers existing offset", function(assert) {
     fixtures.customBoundary.create();
     try {
-        var $content = $("<div>").css("background-color", "black").width(20).height(200);
+        var $content = $("<div>").css("backgroundColor", "black").width(20).height(200);
         var verticalOffset = 50;
         var $popover = $("#what").append($content),
             $target = $("#where"),

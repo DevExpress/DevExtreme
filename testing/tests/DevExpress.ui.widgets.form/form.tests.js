@@ -1401,7 +1401,7 @@ QUnit.test("UpdateDimensions", function(assert) {
             template: function() {
                 return $("<div/>")
                     .attr("id", "testBlock")
-                    .css({ height: 300, "background-color": "red" });
+                    .css({ height: 300, "backgroundColor": "red" });
             }
         }]
     });

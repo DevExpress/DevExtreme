@@ -1122,7 +1122,7 @@ QUnit.test("Dragging Fields", function(assert) {
     fields = this.$container.find(".dx-area-field");
 
     function getBorderColor($elem) {
-        return $elem.css("border-color") || $elem.css("border-left-color");
+        return $elem.css("border-color") || $elem.css("borderLeftColor");
     }
 
     function assertDragging(field, area, cancelExpected) {

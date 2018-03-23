@@ -43,7 +43,7 @@ var PANORAMA_CLASS = "dx-panorama",
 
 
 var moveBackground = function($element, position) {
-    $element.css("background-position", position + "px 0%");
+    $element.css("backgroundPosition", position + "px 0%");
 };
 
 var position = function($element) {
@@ -61,7 +61,7 @@ var animation = {
 
     backgroundMove: function($element, position, completeAction) {
         return fx.animate($element, {
-            to: { "background-position": position + "px 0%" },
+            to: { "backgroundPosition": position + "px 0%" },
             duration: PANORAMA_BACKGROUND_MOVE_DURATION,
             easing: PANORAMA_BACKGROUND_MOVE_EASING,
             complete: completeAction
@@ -704,7 +704,7 @@ var Panorama = CollectionWidget.inherit({
     _initBackgroundImage: function() {
         var backgroundUrl = this.option("backgroundImage.url");
         if(backgroundUrl) {
-            this.$element().css("background-image", "url(" + backgroundUrl + ")");
+            this.$element().css("backgroundImage", "url(" + backgroundUrl + ")");
         }
     },
 
@@ -753,6 +753,7 @@ var Panorama = CollectionWidget.inherit({
         this.callBase();
         this._initBackgroundImage();
         this._itemsRenderStrategy.render();
+        this._updateSelection();
     },
 
     _updatePositions: function(offset) {
@@ -941,7 +942,7 @@ var Panorama = CollectionWidget.inherit({
         }
     },
 
-    _renderSelection: function() {
+    _updateSelection: function() {
         if(!this._indexChangeOnAnimation) {
             this._updatePositions();
         }

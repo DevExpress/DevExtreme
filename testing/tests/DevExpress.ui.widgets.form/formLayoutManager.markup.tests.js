@@ -496,7 +496,7 @@ QUnit.module("Layout manager", () => {
 
         // assert
         assert.ok($label.parent().hasClass(internals.LABEL_VERTICAL_ALIGNMENT_CLASS), "Field item contains label that has vertical align");
-        assert.equal($label.css("text-align"), "left", "Label has text-align left");
+        assert.equal($label.css("textAlign"), "left", "Label has text-align left");
     });
 
     QUnit.test("Render label with position top and alignment center", (assert) => {
@@ -515,7 +515,7 @@ QUnit.module("Layout manager", () => {
 
         // assert
         assert.ok($label.parent().hasClass(internals.LABEL_VERTICAL_ALIGNMENT_CLASS), "Field item contains label that has vertical align");
-        assert.equal($label.css("text-align"), "center", "Label has text-align center");
+        assert.equal($label.css("textAlign"), "center", "Label has text-align center");
     });
 
     QUnit.test("Render label with position top and alignment right", (assert) => {
@@ -534,7 +534,7 @@ QUnit.module("Layout manager", () => {
 
         // assert
         assert.ok($label.parent().hasClass(internals.LABEL_VERTICAL_ALIGNMENT_CLASS), "Field item contains label that has vertical align");
-        assert.equal($label.css("text-align"), "right", "Label has text-align right");
+        assert.equal($label.css("textAlign"), "right", "Label has text-align right");
     });
 
     QUnit.test("Render label with horizontal alignment (left) ", (assert) => {
@@ -568,7 +568,7 @@ QUnit.module("Layout manager", () => {
             $label = $testContainer.find("." + internals.FIELD_ITEM_CLASS + " label").first();
 
         // assert
-        assert.equal($label.css("text-align"), "left", "Label has text-align left");
+        assert.equal($label.css("textAlign"), "left", "Label has text-align left");
     });
 
     QUnit.test("Render label with default position and alignment center", (assert) => {
@@ -585,7 +585,7 @@ QUnit.module("Layout manager", () => {
             $label = $testContainer.find("." + internals.FIELD_ITEM_CLASS + " label").first();
 
         // assert
-        assert.equal($label.css("text-align"), "center", "Label has text-align center");
+        assert.equal($label.css("textAlign"), "center", "Label has text-align center");
     });
 
     QUnit.test("Render label with showColonAfterLabel", (assert) => {

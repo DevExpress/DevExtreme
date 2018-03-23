@@ -532,8 +532,8 @@ QUnit.test('Draw filterRow', function(assert) {
     var inputs = this.columnHeadersView.element().find('input');
     assert.equal($filterCell.attr('aria-label'), 'Column ' + this.columns[0].caption + ', Filter cell');
     assert.equal(inputs.length, 2, 'inputs count');
-    assert.equal(inputs.eq(0).css("text-align"), "left", "left alignment");
-    assert.equal(inputs.eq(1).css("text-align"), "right", "right alignment");
+    assert.equal(inputs.eq(0).css("textAlign"), "left", "left alignment");
+    assert.equal(inputs.eq(1).css("textAlign"), "right", "right alignment");
 });
 
 QUnit.test('Invalidate instead of render when filterRow and sorting option is changed', function(assert) {

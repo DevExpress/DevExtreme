@@ -286,7 +286,7 @@ QUnit.test("widget has correct height with auto resize mode and the 'maxHeight' 
     var elementHeight = $element.outerHeight(),
         inputHeight = $input.outerHeight();
 
-    $element.css("max-height", "");
+    $element.css("maxHeight", "");
     $input.css("height", 0);
     var heightDifference = $element.outerHeight() - $input.outerHeight();
 

@@ -179,7 +179,7 @@ QUnit.test("width and height should take into consideration borders and paddings
     var $element = renderer("<div>");
     document.getElementById("qunit-fixture").appendChild($element.get(0));
 
-    $element.css("box-sizing", "border-box");
+    $element.css("boxSizing", "border-box");
     $element.css("padding", "3px 4px");
     $element.css("border", "4px solid");
 
@@ -211,7 +211,7 @@ QUnit.test("width and height should take into consideration borders and paddings
         var $element = renderer("<div>");
         document.getElementById("qunit-fixture").appendChild($element.get(0));
 
-        $element.css("box-sizing", "border-box");
+        $element.css("boxSizing", "border-box");
         $element.css("padding", 3);
         $element.css("border", "4px solid");
 
@@ -236,7 +236,7 @@ QUnit.test("width and height should take into consideration borders and paddings
         var $element = renderer("<div>");
         document.getElementById("qunit-fixture").appendChild($element.get(0));
 
-        $element.css("box-sizing", "border-box");
+        $element.css("boxSizing", "border-box");
         $element.css("padding", 3);
         $element.css("border", "4px solid");
 

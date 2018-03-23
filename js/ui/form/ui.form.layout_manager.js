@@ -633,7 +633,7 @@ var LayoutManager = Widget.inherit({
                 .appendTo($labelContent);
 
             if(options.alignment) {
-                $label.css("text-align", options.alignment);
+                $label.css("textAlign", options.alignment);
             }
 
             $labelContent.append(this._renderLabelMark(options.isRequired));

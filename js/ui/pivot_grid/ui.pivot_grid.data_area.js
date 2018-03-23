@@ -48,7 +48,7 @@ exports.DataArea = areaItem.AreaItem.inherit({
     },
 
     processScroll: function(useNativeScrolling) {
-        this._groupElement.css('border-top-width', 0)
+        this._groupElement.css('borderTopWidth', 0)
             .dxScrollable({
                 useNative: !!useNativeScrolling,
                 useSimulatedScrollbar: !useNativeScrolling,

@@ -513,7 +513,7 @@ function createGridView(options, userOptions) {
         }));
 
         // assert
-        assert.strictEqual(gridView.getView("columnHeadersView").element().css('padding-right'), '0px');
+        assert.strictEqual(gridView.getView("columnHeadersView").element().css('paddingRight'), '0px');
         assert.strictEqual(gridView.getView("rowsView").getScrollbarWidth(), 0);
     });
 
@@ -607,7 +607,7 @@ function createGridView(options, userOptions) {
         var scrollerWidth = gridView.getView("rowsView").getScrollbarWidth();
 
         assert.strictEqual(scrollerWidth, 0);
-        assert.strictEqual(headersContainer.css('padding-right'), '0px');
+        assert.strictEqual(headersContainer.css('paddingRight'), '0px');
     });
     // ////////////////////////////
 
@@ -892,7 +892,7 @@ function createGridView(options, userOptions) {
 
     QUnit.test("Render scrollable when there is max height (T427967)", function(assert) {
         // arrange, act
-        var $testElement = $('#container').css("max-height", 100),
+        var $testElement = $('#container').css("maxHeight", 100),
             gridView = this.createGridView({
                 columnsController: new MockColumnsController([{ caption: 'Column 1', visible: true }]),
                 dataController: new MockDataController({
@@ -1843,9 +1843,9 @@ function createGridView(options, userOptions) {
             // assert
             fixedContent = testElement.find(".dx-datagrid-rowsview").children(".dx-datagrid-content-fixed");
             assert.ok(parseFloat(fixedContent.css("margin-right")) > 0, "margin right in fixed content");
-            assert.ok(parseFloat(fixedContent.css("margin-bottom")) > 0, "margin bottom in fixed content");
+            assert.ok(parseFloat(fixedContent.css("marginBottom")) > 0, "margin bottom in fixed content");
             fixedContent = testElement.find(".dx-datagrid-headers").children(".dx-datagrid-content-fixed");
-            assert.ok(parseFloat(fixedContent.css("padding-right")) > 0, "padding right in fixed content");
+            assert.ok(parseFloat(fixedContent.css("paddingRight")) > 0, "padding right in fixed content");
         });
     }
 
