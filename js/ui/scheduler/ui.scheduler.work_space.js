@@ -1507,13 +1507,13 @@ var SchedulerWorkSpace = Widget.inherit({
     _getFormat: abstract,
 
     _calculateCellIndex: function(rowIndex, cellIndex) {
-        // if(this._isHorizontalGroupedWorkSpace()) {
-        //     rowIndex = rowIndex % this._getRowCount();
-        //     return this._getCellCount() * rowIndex + cellIndex;
-        // } else {
-        cellIndex = cellIndex % this._getCellCount();
+        if(this._isHorizontalGroupedWorkSpace()) {
+            rowIndex = rowIndex % this._getRowCount();
+        } else {
+            cellIndex = cellIndex % this._getCellCount();
+        }
+
         return this._getRowCount() * cellIndex + rowIndex;
-        // }
     },
 
     _renderTableBody: function(options, delayCellTemplateRendering) {
