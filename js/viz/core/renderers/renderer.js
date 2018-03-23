@@ -1521,10 +1521,10 @@ function Renderer(options) {
         "stroke-width": 0
     }).attr({ "class": options.cssClass }).css({
         "line-height": "normal", // T179515
-        "msUserSelect": NONE,
-        "mozUserSelect": NONE,
-        "webkitUserSelect": NONE,
-        "webkitTapHighlightColor": "rgba(0, 0, 0, 0)",
+        "-ms-user-select": NONE,
+        "-moz-user-select": NONE,
+        "-webkit-user-select": NONE,
+        "-webkit-tap-highlight-color": "rgba(0, 0, 0, 0)",
         display: "block",
         overflow: "hidden"
     });

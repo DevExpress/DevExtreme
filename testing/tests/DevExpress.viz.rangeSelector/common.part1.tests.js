@@ -11,7 +11,7 @@ QUnit.module("Basic", commons.environment);
 QUnit.test("Renderer", function(assert) {
     this.createWidget();
 
-    assert.deepEqual(this.renderer.root.css.lastCall.args, [{ "msTouchAction": "pan-y", "touch-action": "pan-y" }], "root settings");
+    assert.deepEqual(this.renderer.root.css.lastCall.args, [{ "-ms-touch-action": "pan-y", "touch-action": "pan-y" }], "root settings");
 });
 
 // B219560

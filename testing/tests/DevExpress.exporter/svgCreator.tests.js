@@ -48,7 +48,7 @@ QUnit.test("getData", function(assert) {
     // arrange. act
     var done = assert.async(),
         versionXML = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\" ?>",
-        testingMarkup = "<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"dxc dxc-chart\" style=\"line-height: normal; overflow: hidden; display: block; ms-user-select: none; -ms-touch-action: pan-x pan-y pinch-zoom; touch-action: pan-x pan-y pinch-zoom; -moz-user-select: none; -webkit-user-select: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);\" fill=\"none\" stroke=\"none\" stroke-width=\"0\" width=\"500\" height=\"250\" version=\"1.1\"><path stroke=\"#ff0000\" stroke-width=\"2\" d=\"M 36 181 L 184 98 L 331 280\" /></svg>",
+        testingMarkup = "<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"dxc dxc-chart\" style=\"line-height: normal; overflow: hidden; display: block; -ms-user-select: none; -ms-touch-action: pan-x pan-y pinch-zoom; touch-action: pan-x pan-y pinch-zoom; -moz-user-select: none; -webkit-user-select: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);\" fill=\"none\" stroke=\"none\" stroke-width=\"0\" width=\"500\" height=\"250\" version=\"1.1\"><path stroke=\"#ff0000\" stroke-width=\"2\" d=\"M 36 181 L 184 98 L 331 280\" /></svg>",
         deferred = svgCreator.getData(testingMarkup, {});
 
     assert.expect(3);
@@ -91,7 +91,7 @@ QUnit.test("getData. markup with image", function(assert) {
     // arrange. act
     var done = assert.async(),
         imageHtml = "<image xlink:href=\"../../testing/content/LightBlueSky.jpg\" width=\"300\" height=\"200\"></image>",
-        testingMarkup = "<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' version='1.1' fill='none' stroke='none' stroke-width='0' class='dxc dxc-chart' style='line-height:normal;ms-user-select:none;-moz-user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:rgba(0, 0, 0, 0);display:block;overflow:hidden;touch-action:pan-x pan-y pinch-zoom;-ms-touch-action:pan-x pan-y pinch-zoom;' width='500' height='250'>" + imageHtml + "</svg>",
+        testingMarkup = "<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' version='1.1' fill='none' stroke='none' stroke-width='0' class='dxc dxc-chart' style='line-height:normal;-ms-user-select:none;-moz-user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:rgba(0, 0, 0, 0);display:block;overflow:hidden;touch-action:pan-x pan-y pinch-zoom;-ms-touch-action:pan-x pan-y pinch-zoom;' width='500' height='250'>" + imageHtml + "</svg>",
         deferred = svgCreator.getData(testingMarkup, {});
 
     assert.expect(1);
@@ -110,7 +110,7 @@ QUnit.test("getData. markup with background-color", function(assert) {
 
     // arrange. act
     var done = assert.async(),
-        testingMarkup = "<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' version='1.1' fill='none' stroke='none' stroke-width='0' class='dxc dxc-chart' style='line-height:normal;ms-user-select:none;-moz-user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:rgba(0, 0, 0, 0);display:block;overflow:hidden;touch-action:pan-x pan-y pinch-zoom;-ms-touch-action:pan-x pan-y pinch-zoom;' width='500' height='250'><text>test</text></svg>",
+        testingMarkup = "<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' version='1.1' fill='none' stroke='none' stroke-width='0' class='dxc dxc-chart' style='line-height:normal;-ms-user-select:none;-moz-user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:rgba(0, 0, 0, 0);display:block;overflow:hidden;touch-action:pan-x pan-y pinch-zoom;-ms-touch-action:pan-x pan-y pinch-zoom;' width='500' height='250'><text>test</text></svg>",
         deferred = svgCreator.getData(testingMarkup, { backgroundColor: "#aaa" });
 
     assert.expect(1);
@@ -135,7 +135,7 @@ QUnit.test("getData returns base64 when blob is not supported", function(assert)
         done = assert.async(),
         _getBlob = svgCreator._getBlob,
         _getBase64 = svgCreator._getBase64,
-        testingMarkup = "<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' version='1.1' fill='none' stroke='none' stroke-width='0' class='dxc dxc-chart' style='line-height:normal;ms-user-select:none;-moz-user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:rgba(0, 0, 0, 0);display:block;overflow:hidden;touch-action:pan-x pan-y pinch-zoom;-ms-touch-action:pan-x pan-y pinch-zoom;' width='500' height='250'><text>test</text></svg>";
+        testingMarkup = "<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' version='1.1' fill='none' stroke='none' stroke-width='0' class='dxc dxc-chart' style='line-height:normal;-ms-user-select:none;-moz-user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:rgba(0, 0, 0, 0);display:block;overflow:hidden;touch-action:pan-x pan-y pinch-zoom;-ms-touch-action:pan-x pan-y pinch-zoom;' width='500' height='250'><text>test</text></svg>";
 
     svgCreator._getBlob = function() {
         return "blobData";

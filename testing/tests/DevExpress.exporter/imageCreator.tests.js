@@ -4,7 +4,7 @@ var $ = require("jquery"),
     devices = require("core/devices"),
     imageCreator = require("client_exporter").image.creator,
     typeUtils = require("core/utils/type"),
-    testingMarkupStart = "<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' version='1.1' fill='none' stroke='none' stroke-width='0' class='dxc dxc-chart' style='line-height:normal;msUserSelect:none;-moz-userSelect:none;-webkit-userSelect:none;-webkit-tap-highlight-color:rgba(0, 0, 0, 0);display:block;overflow:hidden;touch-action:pan-x pan-y pinch-zoom;-ms-touch-action:pan-x pan-y pinch-zoom;' width='500' height='250'>",
+    testingMarkupStart = "<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' version='1.1' fill='none' stroke='none' stroke-width='0' class='dxc dxc-chart' style='line-height:normal;-ms-user-select:none;-moz-user-select::none;-webkit-user-select::none;-webkit-tap-highlight-color:rgba(0, 0, 0, 0);display:block;overflow:hidden;touch-action:pan-x pan-y pinch-zoom;-ms-touch-action:pan-x pan-y pinch-zoom;' width='500' height='250'>",
     testingMarkupEnd = "</svg>",
     browser = require("core/utils/browser");
 
@@ -1596,7 +1596,7 @@ QUnit.test("getData returns Blob when it supported by Browser", function(assert)
         done = assert.async(),
         _getBlob = imageCreator._getBlob,
         _getBase64 = imageCreator._getBase64,
-        testingMarkup = "<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' version='1.1' fill='none' stroke='none' stroke-width='0' class='dxc dxc-chart' style='line-height:normal;msUserSelect:none;-moz-userSelect:none;-webkit-userSelect:none;-webkit-tap-highlight-color:rgba(0, 0, 0, 0);display:block;overflow:hidden;touch-action:pan-x pan-y pinch-zoom;-ms-touch-action:pan-x pan-y pinch-zoom;' width='500' height='250'><text>test</text></svg>";
+        testingMarkup = "<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' version='1.1' fill='none' stroke='none' stroke-width='0' class='dxc dxc-chart' style='line-height:normal;-ms-user-select:none;-moz-user-select::none;-webkit-user-select::none;-webkit-tap-highlight-color:rgba(0, 0, 0, 0);display:block;overflow:hidden;touch-action:pan-x pan-y pinch-zoom;-ms-touch-action:pan-x pan-y pinch-zoom;' width='500' height='250'><text>test</text></svg>";
 
     imageCreator._getBlob = function() {
         return "blobData";
@@ -1632,7 +1632,7 @@ QUnit.test("getData returns Base64 when Blob not supported by Browser", function
         done = assert.async(),
         _getBlob = imageCreator._getBlob,
         _getBase64 = imageCreator._getBase64,
-        testingMarkup = "<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' version='1.1' fill='none' stroke='none' stroke-width='0' class='dxc dxc-chart' style='line-height:normal;msUserSelect:none;-moz-userSelect:none;-webkit-userSelect:none;-webkit-tap-highlight-color:rgba(0, 0, 0, 0);display:block;overflow:hidden;touch-action:pan-x pan-y pinch-zoom;-ms-touch-action:pan-x pan-y pinch-zoom;' width='500' height='250'><text>test</text></svg>";
+        testingMarkup = "<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' version='1.1' fill='none' stroke='none' stroke-width='0' class='dxc dxc-chart' style='line-height:normal;-ms-user-select:none;-moz-user-select::none;-webkit-user-select::none;-webkit-tap-highlight-color:rgba(0, 0, 0, 0);display:block;overflow:hidden;touch-action:pan-x pan-y pinch-zoom;-ms-touch-action:pan-x pan-y pinch-zoom;' width='500' height='250'><text>test</text></svg>";
 
     imageCreator._getBlob = function() {
         return "blobData";
@@ -1668,7 +1668,7 @@ QUnit.test("getData returns Base64 when Blob not supported by Browser", function
         done = assert.async(),
         _getBlob = imageCreator._getBlob,
         _getBase64 = imageCreator._getBase64,
-        testingMarkup = "<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' version='1.1' fill='none' stroke='none' stroke-width='0' class='dxc dxc-chart' style='line-height:normal;msUserSelect:none;-moz-userSelect:none;-webkit-userSelect:none;-webkit-tap-highlight-color:rgba(0, 0, 0, 0);display:block;overflow:hidden;touch-action:pan-x pan-y pinch-zoom;-ms-touch-action:pan-x pan-y pinch-zoom;' width='500' height='250'><text>test</text></svg>";
+        testingMarkup = "<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' version='1.1' fill='none' stroke='none' stroke-width='0' class='dxc dxc-chart' style='line-height:normal;-ms-user-select:none;-moz-user-select::none;-webkit-user-select::none;-webkit-tap-highlight-color:rgba(0, 0, 0, 0);display:block;overflow:hidden;touch-action:pan-x pan-y pinch-zoom;-ms-touch-action:pan-x pan-y pinch-zoom;' width='500' height='250'><text>test</text></svg>";
 
     imageCreator._getBlob = function() {
         return "blobData";

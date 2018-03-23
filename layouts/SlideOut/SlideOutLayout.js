@@ -122,9 +122,9 @@
         _refreshVisibility: function() {
             // NOTE : T111662 - View rendering only after tap on it
             if(devices.real().platform === "android") {
-                this.$slideOut.css("backfaceVisibility", "hidden");
-                this.$slideOut.css("backfaceVisibility");
-                this.$slideOut.css("backfaceVisibility", "visible");
+                this.$slideOut.css("backface-visibility", "hidden");
+                this.$slideOut.css("backface-visibility");
+                this.$slideOut.css("backface-visibility", "visible");
             }
         },
 
