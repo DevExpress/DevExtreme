@@ -411,6 +411,47 @@ QUnit.module("Tabs", {
         responsiveBoxScreenMock.teardown.call(this);
     }
 });
+QUnit.test("items aren't tiny", function(assert) {
+    // arrange, act
+    let testContainer = $("#form");
+
+    testContainer.dxForm({
+        formData: {
+            firstName: "John",
+            lastName: "Smith",
+            sex: true,
+            order: 101,
+            photo: "image.png",
+            address: {
+                city: "Test City",
+                room: 11,
+                house: 7,
+                street: "Test street"
+            }
+        },
+        items: [
+            {
+                itemType: "group",
+                colCount: 2,
+                items: ["firstName", "lastName"]
+            },
+            {
+                itemType: "tabbed",
+                tabPanelOptions: { animationEnabled: true },
+                tabs: [
+                    {
+                        title: "Address1",
+                        items: ["address.city", "address.street"]
+                    },
+                    {
+                        title: "Address2",
+                        items: ["address.room", "address.house"]
+                    }]
+            }]
+    });
+    // assert
+    assert.ok(testContainer.find(".dx-multiview-item .dx-textbox").first().width() / testContainer.width() > 0.5, "Editors are not tiny");
+});
 
 QUnit.test("Render tabs when formData is changed", function(assert) {
     // arrange, act

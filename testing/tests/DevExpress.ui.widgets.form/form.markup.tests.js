@@ -3,6 +3,7 @@
 import $ from "jquery";
 import resizeCallbacks from "core/utils/resize_callbacks";
 import consoleUtils from "core/utils/console";
+import windowUtils from "core/utils/window";
 import responsiveBoxScreenMock from "../../helpers/responsiveBoxScreenMock.js";
 import typeUtils from "core/utils/type";
 import config from "core/config";
@@ -13,7 +14,7 @@ import "ui/text_area";
 import "common.css!";
 import "generic_light.css!";
 
-const { test, skip } = QUnit;
+const { test } = QUnit;
 
 QUnit.testStart(() => {
     const markup =
@@ -758,6 +759,7 @@ QUnit.module("Form", () => {
                         },
                         {
                             itemType: "tabbed",
+                            tabPanelOptions: { deferRendering: windowUtils.hasWindow() ? true : false },
                             cssClass: "custom-tabbed-class",
                             tabs: [{
                                 title: "test",
@@ -1230,7 +1232,7 @@ QUnit.module("Tabs", {
         responsiveBoxScreenMock.teardown.call(this);
     }
 }, () => {
-    skip("Render tabs", (assert) => {
+    test("Render tabs", (assert) => {
         // arrange, act
         let testContainer = $("#form");
 
@@ -1256,7 +1258,7 @@ QUnit.module("Tabs", {
                 },
                 {
                     itemType: "tabbed",
-                    tabPanelOptions: { animationEnabled: true },
+                    tabPanelOptions: { animationEnabled: true, deferRendering: windowUtils.hasWindow() ? true : false },
                     tabs: [
                         {
                             title: "Address1",
@@ -1278,11 +1280,10 @@ QUnit.module("Tabs", {
         assert.equal(tabPanelItems.length, 2, "items count in tab panel");
         assert.equal(tabPanelItems[0].title, "Address1", "title of tab 1");
         assert.equal(tabPanelItems[1].title, "Address2", "title of tab 2");
-        assert.equal(testContainer.find(".dx-multiview-item ." + internals.FORM_LAYOUT_MANAGER_CLASS).length, 1, "layout manager inside multiview item");
-        assert.ok(testContainer.find(".dx-multiview-item .dx-textbox").first().width() / testContainer.width() > 0.5, "Editors are not tiny");
+        assert.notEqual(testContainer.find(".dx-multiview-item ." + internals.FORM_LAYOUT_MANAGER_CLASS).length, 0, "layout manager inside multiview item");
     });
 
-    skip("Render tabs with groups", (assert) => {
+    test("Render tabs with groups", (assert) => {
         // arrange, act
         let clock = sinon.useFakeTimers();
         let testContainer = $("#form");
@@ -1303,6 +1304,7 @@ QUnit.module("Tabs", {
             items: [
                 {
                     itemType: "tabbed",
+                    tabPanelOptions: { deferRendering: windowUtils.hasWindow() ? true : false },
                     tabs: [
                         {
                             title: "Other1",
@@ -1340,11 +1342,11 @@ QUnit.module("Tabs", {
         assert.equal($groups.eq(0).find("." + internals.FIELD_ITEM_CLASS).length, 2, "group 1");
 
         // assert
-        assert.equal($groups.length, 1);
+        assert.notEqual($groups.length, 0);
         clock.restore();
     });
 
-    skip("tabElement argument of tabTemplate option is correct", (assert) => {
+    test("tabElement argument of tabTemplate option is correct", (assert) => {
         let testContainer = $("#form");
         testContainer.dxForm({
             formData: {
@@ -1353,6 +1355,7 @@ QUnit.module("Tabs", {
             items: [
                 {
                     itemType: "tabbed",
+                    tabPanelOptions: { deferRendering: windowUtils.hasWindow() ? true : false },
                     tabs: [
                         {
                             items: ["firstName"],
