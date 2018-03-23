@@ -146,6 +146,7 @@
         "dxDataGrid-ariaSearchInGrid": "Hae tietoriviltä",
         "dxDataGrid-ariaSelectAll": "Valitse kaikki",
         "dxDataGrid-ariaSelectRow": "Valitse rivi",
+        "dxDataGrid-filterBuilderPopupTitle": "!TODO",
 
         "dxTreeList-ariaTreeList": "Puu",
         "dxTreeList-editingAddRowToNode": "Lisää",
