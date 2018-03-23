@@ -90,7 +90,7 @@ var CalendarWithTimeStrategy = CalendarStrategy.inherit({
     },
 
     _isShrinkView: function() {
-        return this.dateBox.option("adaptivityEnabled") && this._isSmallScreen();
+        return this.dateBox.option("compactMode") || (this.dateBox.option("adaptivityEnabled") && this._isSmallScreen());
     },
 
     _getBoxItems: function() {
