@@ -2,6 +2,7 @@
 
 var domAdapter = require("../../core/dom_adapter"),
     windowUtils = require("../../core/utils/window"),
+    inflector = require("../../core/utils/inflector"),
     window = windowUtils.getWindow(),
     $ = require("../../core/renderer"),
     rendererModule = require("./renderers/renderer"),
@@ -121,7 +122,11 @@ Tooltip.prototype = {
         that._shadow.attr(that._shadowSettings);
 
         // text area
-        that._textGroupHtml.css(that._textFontStyles);
+        var normalizedCSS = {};
+        for(var name in that._textFontStyles) {
+            normalizedCSS[inflector.camelize(name)] = that._textFontStyles[name];
+        }
+        that._textGroupHtml.css(normalizedCSS);
         that._textGroup.css(that._textFontStyles);
         that._text.css(that._textFontStyles);
 
