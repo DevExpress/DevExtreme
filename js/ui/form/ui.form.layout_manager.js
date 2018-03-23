@@ -406,11 +406,10 @@ var LayoutManager = Widget.inherit({
 
     _getColCount: function() {
         var colCount = this.option("colCount"),
-            colCountByScreen = this.option("colCountByScreen"),
-            hasWindow = windowUtils.hasWindow();
+            colCountByScreen = this.option("colCountByScreen");
 
         if(colCountByScreen) {
-            var screenFactor = hasWindow ? windowUtils.getCurrentScreenFactor(this.option("screenByWidth")) : "lg",
+            var screenFactor = windowUtils.hasWindow() ? windowUtils.getCurrentScreenFactor(this.option("screenByWidth")) : "lg",
                 currentColCount = colCountByScreen[screenFactor];
             colCount = currentColCount || colCount;
         }
@@ -420,13 +419,17 @@ var LayoutManager = Widget.inherit({
                 return this._cashedColCount;
             }
 
-            this._cashedColCount = colCount = hasWindow ? this._getMaxColCount() : 1;
+            this._cashedColCount = colCount = this._getMaxColCount();
         }
 
         return colCount < 1 ? 1 : colCount;
     },
 
     _getMaxColCount: function() {
+        if(!windowUtils.hasWindow()) {
+            return 1;
+        }
+
         var minColWidth = this.option("minColWidth"),
             width = this.$element().width(),
             itemsCount = this._items.length,

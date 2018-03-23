@@ -834,17 +834,26 @@ var Form = Widget.inherit({
 
     _initMarkup: function() {
         this._clearCachedInstances();
+        this._prepareFormData();
+        this.$element().addClass(FORM_CLASS);
+
         this.callBase();
+
+        this.setAria("role", "form", this.$element());
+
+        if(this.option("scrollingEnabled")) {
+            this._renderScrollable();
+        }
+
+        this._renderLayout();
+        this._renderValidationSummary();
+
+        this._attachSyncSubscriptions();
+        this._cachedScreenFactor = this._getCurrentScreenFactor();
     },
 
-    _render: function() {
-        this._prepareFormData();
-
-        this.callBase();
-        this.$element().addClass(FORM_CLASS);
-        this._attachSyncSubscriptions();
-
-        this._cachedScreenFactor = windowUtils.getCurrentScreenFactor(this.option("screenByWidth"));
+    _getCurrentScreenFactor: function() {
+        return windowUtils.hasWindow() ? windowUtils.getCurrentScreenFactor(this.option("screenByWidth")) : "lg";
     },
 
     _clearCachedInstances: function() {
@@ -867,18 +876,6 @@ var Form = Widget.inherit({
         this._groupsColCount = [];
         this._cachedColCountOptions = [];
         delete this._cachedScreenFactor;
-    },
-
-    _renderContentImpl: function() {
-        this.callBase();
-        this.setAria("role", "form", this.$element());
-
-        if(this.option("scrollingEnabled")) {
-            this._renderScrollable();
-        }
-
-        this._renderLayout();
-        this._renderValidationSummary();
     },
 
     _renderScrollable: function() {
@@ -1520,7 +1517,7 @@ var Form = Widget.inherit({
     },
 
     _dimensionChanged: function() {
-        var currentScreenFactor = windowUtils.getCurrentScreenFactor(this.option("screenByWidth"));
+        var currentScreenFactor = this._getCurrentScreenFactor();
 
         if(this._cachedScreenFactor !== currentScreenFactor) {
             if(this._isColCountChanged(this._cachedScreenFactor, currentScreenFactor)) {
