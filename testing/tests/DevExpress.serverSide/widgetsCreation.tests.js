@@ -86,7 +86,6 @@ QUnit.module("Widget creation", {
 });
 
 var optionChangeExcluded = [
-    "ActionSheet",
     "ContextMenu",
     "DateBox",
     "LoadPanel",

@@ -289,7 +289,7 @@ var ActionSheet = CollectionWidget.inherit({
     },
 
     _mapPopupOption: function(optionName) {
-        this._popup.option(optionName, this.option(optionName));
+        this._popup && this._popup.option(optionName, this.option(optionName));
     },
 
     _isPopoverMode: function() {
@@ -298,7 +298,7 @@ var ActionSheet = CollectionWidget.inherit({
 
     _renderPopupTitle: function() {
         this._mapPopupOption("showTitle");
-        this._popup._wrapper().toggleClass(ACTION_SHEET_WITHOUT_TITLE_CLASS, !this.option("showTitle"));
+        this._popup && this._popup._wrapper().toggleClass(ACTION_SHEET_WITHOUT_TITLE_CLASS, !this.option("showTitle"));
     },
 
     _clean: function() {
@@ -412,7 +412,7 @@ var ActionSheet = CollectionWidget.inherit({
                 that = this;
 
             this._$cancelButton = $("<div>").addClass(ACTION_SHEET_CANCEL_BUTTON_CLASS)
-                .appendTo(this._popup.$content());
+                .appendTo(this._popup && this._popup.$content());
             this._createComponent(this._$cancelButton, Button, {
                 disabled: false,
                 text: this.option("cancelText"),
