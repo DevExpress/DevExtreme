@@ -813,6 +813,10 @@ var Form = Widget.inherit({
     },
 
     _alignLabelsInColumn: function(options) {
+        if(!windowUtils.hasWindow()) {
+            return;
+        }
+
         this._createHiddenElement(options.layoutManager);
         if(options.inOneColumn) {
             this._applyLabelsWidth(options.$container, options.excludeTabbed, true);
