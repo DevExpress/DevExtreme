@@ -1008,7 +1008,7 @@ QUnit.test("Native datebox should have specific class & button should have point
     assert.ok($element.hasClass("dx-datebox-native"), "class is correct");
     assert.equal($element.dxDateBox("instance")._strategy.NAME, "Native", "correct strategy is chosen");
 
-    assert.equal($element.find(".dx-texteditor-buttons-container").css("pointer-events"), "none");
+    assert.equal($element.find(".dx-texteditor-buttons-container").css("pointerEvents"), "none");
 });
 
 QUnit.test("pickerType should be 'rollers' on android < 4.4 (Q588373, Q588012)", function(assert) {

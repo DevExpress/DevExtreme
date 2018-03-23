@@ -234,7 +234,7 @@ QUnit.test("Draw fixed table for rowsView", function(assert) {
 
     // assert
     // T248250
-    assert.equal($testElement.find(".dx-datagrid-rowsview").find(".dx-scrollable-content").css("z-index"), 2, "z-index in the scrollable container");
+    assert.equal($testElement.find(".dx-datagrid-rowsview").find(".dx-scrollable-content").css("zIndex"), 2, "z-index in the scrollable container");
 
     assert.equal($testElement.find(".dx-datagrid-rowsview").children(".dx-scrollable-wrapper").find(".dx-datagrid-content").length, 1, "has main content");
     assert.ok($testElement.find(".dx-datagrid-rowsview").children(".dx-datagrid-content-fixed").length, "has fix content");
@@ -1008,9 +1008,9 @@ QUnit.test("Draw fixed table for summary", function(assert) {
 
     // T445226
     assert.equal($footerContentElements.filter(":not(.dx-datagrid-content-fixed)").css("padding-top"), "7px", "padding top of main content");
-    assert.equal($footerContentElements.filter(":not(.dx-datagrid-content-fixed)").css("padding-bottom"), "7px", "padding bottom of main content");
+    assert.equal($footerContentElements.filter(":not(.dx-datagrid-content-fixed)").css("paddingBottom"), "7px", "padding bottom of main content");
     assert.equal($footerContentElements.filter(".dx-datagrid-content-fixed").css("padding-top"), "7px", "padding top of fixed content");
-    assert.equal($footerContentElements.filter(".dx-datagrid-content-fixed").css("padding-bottom"), "7px", "padding bottom of fixed content");
+    assert.equal($footerContentElements.filter(".dx-datagrid-content-fixed").css("paddingBottom"), "7px", "padding bottom of fixed content");
 });
 
 // T232872

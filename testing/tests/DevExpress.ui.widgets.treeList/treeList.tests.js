@@ -330,7 +330,7 @@ QUnit.test("Filter menu items should have icons", function(assert) {
     // assert
     $menuItemElements = $(".dx-overlay-wrapper").find(".dx-menu-item");
     assert.ok($menuItemElements.length > 0, "has filter menu items");
-    assert.equal($menuItemElements.first().find(".dx-icon").css("font-family"), "DXIcons", "first item has icon");
+    assert.equal($menuItemElements.first().find(".dx-icon").css("fontFamily"), "DXIcons", "first item has icon");
 });
 
 QUnit.test("Header Filter", function(assert) {

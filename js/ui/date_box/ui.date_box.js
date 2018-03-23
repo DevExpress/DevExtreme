@@ -64,15 +64,15 @@ var calculateWidth = function(value, $input, $element) {
     var IE_ROUNDING_ERROR = 10;
     var NATIVE_BUTTONS_WIDTH = 48;
     var $longestValueElement = $("<div>").text(value).css({
-        "font-style": $input.css("font-style"),
-        "font-variant": $input.css("font-variant"),
-        "font-weight": $input.css("font-weight"),
-        "font-size": $input.css("font-size"),
-        "font-family": $input.css("font-family"),
-        "letter-spacing": $input.css("letter-spacing"),
+        "fontStyle": $input.css("fontStyle"),
+        "fontVariant": $input.css("fontVariant"),
+        "fontWeight": $input.css("fontWeight"),
+        "fontSize": $input.css("fontSize"),
+        "fontFamily": $input.css("fontFamily"),
+        "letterSpacing": $input.css("letterSpacing"),
         "border": $input.css("border"),
         "visibility": "hidden",
-        "white-space": "nowrap",
+        "whiteSpace": "nowrap",
         "position": "absolute",
         "float": "left"
     });

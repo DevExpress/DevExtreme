@@ -88,9 +88,9 @@ var forceRepaint = function($element) {
             inScrollView = $parents.is(".dx-scrollable-native");
 
         if(!inScrollView) {
-            $parents.css("backface-visibility", "hidden");
-            $parents.css("backface-visibility");
-            $parents.css("backface-visibility", "visible");
+            $parents.css("backfaceVisibility", "hidden");
+            $parents.css("backfaceVisibility");
+            $parents.css("backfaceVisibility", "visible");
         }
     }
 };
@@ -837,7 +837,7 @@ var Overlay = Widget.inherit({
         this._$wrapper.toggleClass(OVERLAY_MODAL_CLASS, this.option("shading") && !this.option("container"));
         this._$wrapper.toggleClass(OVERLAY_SHADER_CLASS, visible && this.option("shading"));
 
-        this._$wrapper.css("background-color", this.option("shading") ? this.option("shadingColor") : "");
+        this._$wrapper.css("backgroundColor", this.option("shading") ? this.option("shadingColor") : "");
 
         this._toggleTabTerminator(visible && this.option("shading"));
     },

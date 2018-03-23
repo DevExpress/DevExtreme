@@ -30,7 +30,7 @@ QUnit.module("Integration: Recurring Appointments", {
             this.instance = $("#scheduler").dxScheduler($.extend(options, { height: 600 })).dxScheduler("instance");
         };
         this.getAppointmentColor = function($task) {
-            return new Color($task.css("background-color")).toHex();
+            return new Color($task.css("backgroundColor")).toHex();
         };
         this.clock = sinon.useFakeTimers();
     },

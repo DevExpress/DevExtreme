@@ -243,7 +243,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
             var deferredColor = this._getAppointmentColor($item, item.settings[index].groupIndex);
             deferredColor.done(function(color) {
                 if(color) {
-                    $item.css("background-color", color);
+                    $item.css("backgroundColor", color);
                 }
             });
         }).bind(this));
@@ -534,7 +534,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
 
             deferredColor.done(function(color) {
                 if(color) {
-                    $appointment.css("background-color", color);
+                    $appointment.css("backgroundColor", color);
                 }
             });
 
