@@ -15,6 +15,7 @@ require("./ui.data_grid.virtual_scrolling");
 require("./ui.data_grid.filter_row");
 require("./ui.data_grid.header_filter");
 require("./ui.data_grid.filter_sync");
+require("./ui.data_grid.filter_builder");
 require("./ui.data_grid.search");
 require("./ui.data_grid.pager");
 require("./ui.data_grid.columns_resizing_reordering");

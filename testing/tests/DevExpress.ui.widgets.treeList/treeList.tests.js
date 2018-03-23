@@ -530,6 +530,28 @@ QUnit.test("filterSyncEnabled is working in TreeList", function(assert) {
     assert.deepEqual(treeList.option("filterValue"), ["field", "anyof", [2]]);
 });
 
+QUnit.test("filterBulider is working in TreeList", function(assert) {
+    // arrange
+    var handlerInit = sinon.spy();
+
+    // act
+    var treeList = createTreeList({
+        filterBuilder: {
+            onInitialized: handlerInit
+        },
+        columns: [{ dataField: "field" }]
+    });
+
+    // assert
+    assert.equal(handlerInit.called, 0);
+
+    // act
+    treeList.option("filterBuilderPopup.visible", true);
+
+    // assert
+    assert.equal(handlerInit.called, 1);
+});
+
 QUnit.test("TreeList with paging", function(assert) {
     // arrange, act
     var $treeListElement,
