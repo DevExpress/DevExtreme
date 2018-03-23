@@ -20,7 +20,7 @@ var TABLE_CLASS = "table",
     HIDDEN_COLUMNS_WIDTH = "adaptiveHidden",
     EDITORS_INPUT_SELECTOR = "input:not([type='hidden'])",
 
-    VIEW_NAMES = ["columnsSeparatorView", "blockSeparatorView", "trackerView", "headerPanel", "columnHeadersView", "rowsView", "footerView", "columnChooserView", "pagerView", "draggingHeaderView", "contextMenuView", "errorView", "headerFilterView", "filterBuilderView"];
+    VIEW_NAMES = ["columnsSeparatorView", "blockSeparatorView", "trackerView", "headerPanel", "columnHeadersView", "rowsView", "footerView", "columnChooserView", "pagerView", "draggingHeaderView", "contextMenuView", "errorView", "headerFilterView", "filterBuilderView", "filterPanelView"];
 
 var isPercentWidth = function(width) {
     return typeUtils.isString(width) && width.slice(-1) === "%";

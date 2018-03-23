@@ -29,11 +29,6 @@ var FilterBuilderView = modules.View.inherit({
             contentTemplate: function($contentElement) {
                 return that._getPopupContentTemplate($contentElement);
             },
-            onShowing: function() {
-                if(that._filterBuilder.option("value") !== that.option("filterValue")) {
-                    that._filterBuilder.option("value", that.option("filterValue"));
-                }
-            },
             onOptionChanged: function(args) {
                 if(args.name === "visible") {
                     that.option("filterBuilderPopup.visible", args.value);
@@ -61,10 +56,11 @@ var FilterBuilderView = modules.View.inherit({
             return column;
         });
 
-        this._filterBuilder = this._createComponent($filterBuilderContainer, FilterBuilder, extend(this.option("filterBuilder"), {
+        this._filterBuilder = this._createComponent($filterBuilderContainer, FilterBuilder, extend({
+            value: this.option("filterValue"),
             customOperations: customOperations,
             fields: fields
-        }));
+        }, this.option("filterBuilder")));
 
         this._createComponent($contentElement, ScrollView, { direction: "both" });
     },
