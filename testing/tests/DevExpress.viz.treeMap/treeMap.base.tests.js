@@ -1058,7 +1058,7 @@ QUnit.test("simple labels creation", function(assert) {
     $.each(this.renderer.text.returnValues.slice(1, 2), function(i, text) {
         assert.strictEqual(text.append.lastCall.args[0], labelsGroup, "text appended - " + i);
         assert.strictEqual(text.css.lastCall.args[0].fill, "someColor");
-        assert.strictEqual(text.css.lastCall.args[0]["fontSize"], "someSize");
+        assert.strictEqual(text.css.lastCall.args[0]["font-size"], "someSize");
         assert.deepEqual(text.attr.firstCall.args[0], {
             filter: "shadowFilter.id", stroke: "#000000", "stroke-width": 1, "stroke-opacity": 0.3
         });
@@ -1140,7 +1140,7 @@ QUnit.test("texts changing", function(assert) {
     });
 
     assert.strictEqual(this.renderer.text.lastCall.returnValue.css.lastCall.args[0].fill, "newcolor");
-    assert.strictEqual(this.renderer.text.lastCall.returnValue.css.lastCall.args[0]["fontSize"], "newsize");
+    assert.strictEqual(this.renderer.text.lastCall.returnValue.css.lastCall.args[0]["font-size"], "newsize");
 });
 
 QUnit.test("texts positions correcting after font options changing", function(assert) {

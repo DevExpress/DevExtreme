@@ -179,7 +179,7 @@ QUnit.test("Refresh with label", function(assert) {
     assert.deepEqual(this.str.setState.lastCall.args, [this.element.figure, styles, 0], "setState");
     assert.deepEqual(text.attr.getCall(1).args, [{ text: "Hello", x: 0, y: 0 }], "text settings 1");
     assert.deepEqual(text.attr.getCall(2).args, [{ align: "center", stroke: "red", "stroke-width": 2, "stroke-opacity": 0.3 }], "text settings 2");
-    assert.deepEqual(text.css.lastCall.args, [{ "fontSize": 10, "fontFamily": "fam" }], "text styles");
+    assert.deepEqual(text.css.lastCall.args, [{ "font-size": 10, "font-family": "fam" }], "text styles");
     assert.deepEqual(text.data.lastCall.args, ["test-key", { index: this.index, name: "test-name" }], "text data");
     assert.deepEqual(text.append.lastCall.args, [this.element.figure.root], "text is appended");
     assert.strictEqual(this.str.projectLabel.callCount, 0, "label is not projected");

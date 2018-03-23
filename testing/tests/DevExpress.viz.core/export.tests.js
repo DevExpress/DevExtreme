@@ -145,10 +145,10 @@ QUnit.test("List creation", function(assert) {
     // printing text
     assert.deepEqual(this.renderer.text.getCall(0).args, ["Print"], "Printing text params");
     assert.deepEqual(this.renderer.text.getCall(0).returnValue.css.getCall(0).args[0], {
-        "fontSize": 16,
-        "fontFamily": "'Segoe UI Light', 'Helvetica Neue Light', 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
+        "font-size": 16,
+        "font-family": "'Segoe UI Light', 'Helvetica Neue Light', 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
         fill: "#707070",
-        "fontWeight": 200,
+        "font-weight": 200,
         "pointer-events": "none",
         cursor: "pointer"
     }, "Printing text style");
@@ -163,11 +163,11 @@ QUnit.test("List creation", function(assert) {
     // JPEG group
     assert.deepEqual(this.renderer.text.getCall(1).args, ["JPEG file"], "JPEG text params");
     assert.deepEqual(this.renderer.text.getCall(1).returnValue.css.getCall(0).args[0], {
-        "fontSize": 16,
-        "fontFamily": "'Segoe UI Light', 'Helvetica Neue Light', 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
+        "font-size": 16,
+        "font-family": "'Segoe UI Light', 'Helvetica Neue Light', 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
         fill: "#707070",
         "pointer-events": "none",
-        "fontWeight": 200,
+        "font-weight": 200,
         cursor: "pointer"
     }, "JPEG text style");
     assert.deepEqual(this.renderer.rect.getCall(3).returnValue.data.getCall(0).args[0], {
@@ -182,11 +182,11 @@ QUnit.test("List creation", function(assert) {
     // PNG group
     assert.deepEqual(this.renderer.text.getCall(2).args, ["PNG file"], "PNG text params");
     assert.deepEqual(this.renderer.text.getCall(2).returnValue.css.getCall(0).args[0], {
-        "fontSize": 16,
-        "fontFamily": "'Segoe UI Light', 'Helvetica Neue Light', 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
+        "font-size": 16,
+        "font-family": "'Segoe UI Light', 'Helvetica Neue Light', 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
         fill: "#707070",
         "pointer-events": "none",
-        "fontWeight": 200,
+        "font-weight": 200,
         cursor: "pointer"
     }, "PNG text style");
     assert.deepEqual(this.renderer.rect.getCall(4).returnValue.data.getCall(0).args[0], {
@@ -227,11 +227,11 @@ QUnit.test("List creation, without printing", function(assert) {
         y: 62
     }, "JPEG text attrs");
     assert.deepEqual(this.renderer.text.getCall(0).returnValue.css.getCall(0).args[0], {
-        "fontSize": 16,
-        "fontFamily": "'Segoe UI Light', 'Helvetica Neue Light', 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
+        "font-size": 16,
+        "font-family": "'Segoe UI Light', 'Helvetica Neue Light', 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
         fill: "#707070",
         "pointer-events": "none",
-        "fontWeight": 200,
+        "font-weight": 200,
         cursor: "pointer"
     }, "jpeg text style");
 });
@@ -258,11 +258,11 @@ QUnit.test("List creation, without formats", function(assert) {
     }, "Printing text attributes");
 
     assert.deepEqual(this.renderer.text.getCall(0).returnValue.css.getCall(0).args[0], {
-        "fontSize": 16,
-        "fontFamily": "'Segoe UI Light', 'Helvetica Neue Light', 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
+        "font-size": 16,
+        "font-family": "'Segoe UI Light', 'Helvetica Neue Light', 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
         fill: "#707070",
         "pointer-events": "none",
-        "fontWeight": 200,
+        "font-weight": 200,
         cursor: "pointer"
     }, "Printing text style");
 });
@@ -538,11 +538,11 @@ QUnit.test("Set options", function(assert) {
         "y": 62
     }, "PNG text attributes");
     assert.deepEqual(this.renderer.text.getCall(0).returnValue.css.getCall(0).args[0], {
-        "fontSize": 16,
-        "fontFamily": "'Segoe UI Light', 'Helvetica Neue Light', 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
+        "font-size": 16,
+        "font-family": "'Segoe UI Light', 'Helvetica Neue Light', 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
         fill: "#707070",
         "pointer-events": "none",
-        "fontWeight": 200,
+        "font-weight": 200,
         cursor: "pointer"
     }, "PNG text style");
 });

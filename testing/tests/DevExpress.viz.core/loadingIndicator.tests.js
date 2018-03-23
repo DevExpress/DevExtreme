@@ -121,7 +121,7 @@ QUnit.test("Set options / `show` is false", function(assert) {
 
     assert.deepEqual(this.rect.attr.lastCall.args, [{ fill: "red" }], "rect settings");
     assert.deepEqual(this.text.attr.lastCall.args, [{ text: "Loading..." }], "text settings");
-    assert.deepEqual(this.text.css.lastCall.args, [{ fill: "blue", "fontSize": 13 }], "text css");
+    assert.deepEqual(this.text.css.lastCall.args, [{ fill: "blue", "font-size": 13 }], "text css");
     assert.strictEqual(show.lastCall, null, "show is not called");
     assert.deepEqual(hide.lastCall.args, [], "hide is called");
 });
@@ -135,7 +135,7 @@ QUnit.test("Set options / `show` is true", function(assert) {
 
     assert.deepEqual(this.rect.attr.lastCall.args, [{ fill: "red" }], "rect settings");
     assert.deepEqual(this.text.attr.lastCall.args, [{ text: "Loading..." }], "text settings");
-    assert.deepEqual(this.text.css.lastCall.args, [{ fill: "blue", "fontSize": 13 }], "text css");
+    assert.deepEqual(this.text.css.lastCall.args, [{ fill: "blue", "font-size": 13 }], "text css");
     assert.deepEqual(show.lastCall.args, [], "show is called");
     assert.strictEqual(hide.lastCall, null, "hide is not called");
 });

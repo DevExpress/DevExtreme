@@ -117,7 +117,7 @@ QUnit.test("getData. markup with background-color", function(assert) {
     $.when(deferred).done(function(blob) {
         try {
             // assert
-            assert.equal($(blob.arrayBuffer[0]).eq(1).css("backgroundColor"), "rgb(170, 170, 170)", "Svg elementbackground color is correct");
+            assert.equal($(blob.arrayBuffer[0]).eq(1).css("background-color"), "rgb(170, 170, 170)", "Svg elementbackground color is correct");
         } finally {
             done();
         }

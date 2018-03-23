@@ -166,8 +166,8 @@ QUnit.test("Slider marker settings", function(assert) {
 
     assert.deepEqual(this.sliderCloud(0).attr.getCall(0).args, [{ fill: "yellow" }], "cloud 1");
     assert.deepEqual(this.sliderCloud(1).attr.getCall(0).args, [{ fill: "yellow" }], "cloud 2");
-    assert.deepEqual(this.sliderText(0).css.lastCall.args, [{ "fontSize": 9, "fontFamily": "fam" }], "text 1");
-    assert.deepEqual(this.sliderText(1).css.lastCall.args, [{ "fontSize": 9, "fontFamily": "fam" }], "text 2");
+    assert.deepEqual(this.sliderText(0).css.lastCall.args, [{ "font-size": 9, "font-family": "fam" }], "text 1");
+    assert.deepEqual(this.sliderText(1).css.lastCall.args, [{ "font-size": 9, "font-family": "fam" }], "text 2");
 });
 
 QUnit.test("Slider text formatting", function(assert) {

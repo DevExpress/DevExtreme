@@ -2260,7 +2260,7 @@ QUnit.test("Estimate draws title text and remove it", function(assert) {
     }, "lebel settings");
 
     assert.deepEqual(textElement.css.lastCall.args[0], {
-        "fontWeight": "bold"
+        "font-weight": "bold"
     }, "lebel style");
 
     assert.strictEqual(textElement.append.lastCall.args[0], this.renderer.root, "element appended");
@@ -2478,7 +2478,7 @@ QUnit.test("Estimate draws constant lines with outside labels", function(assert)
     }, "lebel settings");
 
     assert.deepEqual(textElement.css.lastCall.args[0], {
-        "fontWeight": "bold"
+        "font-weight": "bold"
     }, "lebel style");
 
     assert.strictEqual(textElement.append.lastCall.args[0], group, "element appended");
@@ -2490,7 +2490,7 @@ QUnit.test("Estimate draws constant lines with outside labels", function(assert)
     }, "lebel settings");
 
     assert.deepEqual(textElement.css.lastCall.args[0], {
-        "fontWeight": "bold"
+        "font-weight": "bold"
     }, "lebel style");
 
     assert.strictEqual(textElement.append.lastCall.args[0], group, "element appended");

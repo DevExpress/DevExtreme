@@ -5105,8 +5105,8 @@ function checkDashStyle(assert, elem, result, style, value) {
         this.checkTspans(assert, text, [
             { x: 30, y: 20, text: "Simple Text" },
             { text: "Bold", style: { "font-weight": "bold;" } },
-            { text: "Bold Italic", style: { "font-weight": "bold", "fontStyle": "italic;" } },
-            { text: "Underline Bold italic", style: { "font-weight": "bold", "fontStyle": "italic", "text-decoration": "underline;" } }
+            { text: "Bold Italic", style: { "font-weight": "bold", "font-style": "italic;" } },
+            { text: "Underline Bold italic", style: { "font-weight": "bold", "font-style": "italic", "text-decoration": "underline;" } }
         ], { x: 30, y: 20 });
     });
 
@@ -5116,8 +5116,8 @@ function checkDashStyle(assert, elem, result, style, value) {
         this.checkTspans(assert, text, [
             { x: 0, y: 0, text: "Simple Text" },
             { text: "Bold", style: { "font-weight": "bold", "font-size": "15px;" } },
-            { text: "Bold Italic", style: { "font-weight": "bold", "font-size": "15px", "fontStyle": "italic;", } },
-            { text: "Underline Bold italic", style: { "font-weight": "bold", "font-size": "15px", "fontStyle": "italic", "text-decoration": "underline;", } },
+            { text: "Bold Italic", style: { "font-weight": "bold", "font-size": "15px", "font-style": "italic;", } },
+            { text: "Underline Bold italic", style: { "font-weight": "bold", "font-size": "15px", "font-style": "italic", "text-decoration": "underline;", } },
         ], { x: 0, y: 0 });
     });
 

@@ -2,7 +2,6 @@
 
 var noop = require("../../core/utils/common").noop,
     typeUtils = require("../../core/utils/type"),
-    inflector = require("../../core/utils/inflector"),
     extend = require("../../core/utils/extend").extend,
     each = require("../../core/utils/iterator").each,
     adjust = require("../../core/utils/math").adjust,
@@ -256,7 +255,7 @@ extend(exports, {
             } else if(key === "color") {
                 key = "fill";
             } else {
-                key = inflector.camelize("font-" + key);
+                key = "font-" + key;
             }
             fontOptions[key] = value;
         });

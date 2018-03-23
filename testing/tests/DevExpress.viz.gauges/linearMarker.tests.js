@@ -285,7 +285,7 @@ QUnit.test('render - horizontal, top', function(assert) {
     assert.ok(marker._text, '_text');
     assert.strictEqual(marker._text.parent, marker._rootElement, '_text parent');
     assert.deepEqual(marker._text._stored_settings, { x: tc.cx, y: tc.cy + 2, align: 'center', text: '25.0' }, '_text settings');
-    assert.deepEqual(marker._text._stored_styles, { fill: 'someColor', 'fontSize': 'someSize' }, '_text font style');
+    assert.deepEqual(marker._text._stored_styles, { fill: 'someColor', 'font-size': 'someSize' }, '_text font style');
 });
 
 QUnit.test('render - horizontal, bottom', function(assert) {
@@ -316,7 +316,7 @@ QUnit.test('render - horizontal, bottom', function(assert) {
     assert.ok(marker._text, '_text');
     assert.strictEqual(marker._text.parent, marker._rootElement, '_text parent');
     assert.deepEqual(marker._text._stored_settings, { x: tc.cx, y: tc.cy + 2, align: 'center', text: '25.0' }, '_text settings');
-    assert.deepEqual(marker._text._stored_styles, { fill: 'someColor', 'fontSize': 'someSize' }, '_text font style');
+    assert.deepEqual(marker._text._stored_styles, { fill: 'someColor', 'font-size': 'someSize' }, '_text font style');
 });
 
 QUnit.test('render - vertical, left', function(assert) {
@@ -347,7 +347,7 @@ QUnit.test('render - vertical, left', function(assert) {
     assert.ok(marker._text, '_text');
     assert.strictEqual(marker._text.parent, marker._rootElement, '_text parent');
     assert.deepEqual(marker._text._stored_settings, { x: tc.cx, y: tc.cy + 2, align: 'center', text: '25.0' }, '_text settings');
-    assert.deepEqual(marker._text._stored_styles, { fill: 'someColor', 'fontSize': 'someSize' }, '_text font style');
+    assert.deepEqual(marker._text._stored_styles, { fill: 'someColor', 'font-size': 'someSize' }, '_text font style');
 });
 
 QUnit.test('render - vertical, right', function(assert) {
@@ -379,7 +379,7 @@ QUnit.test('render - vertical, right', function(assert) {
     assert.ok(marker._text, '_text');
     assert.strictEqual(marker._text.parent, marker._rootElement, '_text parent');
     assert.deepEqual(marker._text._stored_settings, { x: tc.cx, y: tc.cy + 2, align: 'center', text: '25.0' }, '_text settings');
-    assert.deepEqual(marker._text._stored_styles, { fill: 'someColor', 'fontSize': 'someSize' }, '_text font style');
+    assert.deepEqual(marker._text._stored_styles, { fill: 'someColor', 'font-size': 'someSize' }, '_text font style');
 });
 
 QUnit.test('_getTextCloudOptions - horizontal, top', function(assert) {

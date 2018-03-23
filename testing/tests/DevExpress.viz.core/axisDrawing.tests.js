@@ -2162,9 +2162,9 @@ QUnit.test("Check styles", function(assert) {
     assert.deepEqual(renderer.text.getCall(0).returnValue.attr.getCall(0).args, [{ opacity: 0.34, align: "center" }], "Text args");
     assert.deepEqual(renderer.text.getCall(0).returnValue.css.getCall(0).args, [{
         fill: "#123456",
-        "fontFamily": "Tahoma2",
-        "fontSize": 10,
-        "fontWeight": 200
+        "font-family": "Tahoma2",
+        "font-size": 10,
+        "font-weight": 200
     }], "css");
 });
 
@@ -2752,9 +2752,9 @@ QUnit.test("Vertical axis. Horizontal alignment - left", function(assert) {
     assert.deepEqual(renderer.text.getCall(0).args, ["test1", 10, 40], "args");
     assert.deepEqual(renderer.text.getCall(0).returnValue.css.getCall(0).args[0], {
         fill: "#333333",
-        "fontFamily": "Tahoma1",
-        "fontSize": 13,
-        "fontWeight": 700
+        "font-family": "Tahoma1",
+        "font-size": 13,
+        "font-weight": 700
     }, "css");
     assert.deepEqual(renderer.text.getCall(0).returnValue.attr.lastCall.args[0], { translateX: 10 - 6 - (1 + 12), translateY: 40 - 2 - 6 / 2 }, "Text args");
     assert.deepEqual(renderer.text.getCall(0).returnValue.append.getCall(0).args[0], leftGroup);
@@ -2762,9 +2762,9 @@ QUnit.test("Vertical axis. Horizontal alignment - left", function(assert) {
     assert.deepEqual(renderer.text.getCall(1).args, ["test2", 10, 60], "args");
     assert.deepEqual(renderer.text.getCall(1).returnValue.css.getCall(0).args[0], {
         fill: "#444444",
-        "fontFamily": "Tahoma2",
-        "fontSize": 15,
-        "fontWeight": 700
+        "font-family": "Tahoma2",
+        "font-size": 15,
+        "font-weight": 700
     }, "css");
     assert.deepEqual(renderer.text.getCall(1).returnValue.attr.lastCall.args[0], { translateX: 10 - 8 - (3 + 14), translateY: 60 - 4 - 8 / 2 }, "Text args");
     assert.deepEqual(renderer.text.getCall(1).returnValue.append.getCall(0).args[0], leftGroup);
@@ -3051,9 +3051,9 @@ QUnit.test("Vertical axis. Horizontal alignment - left. Vertical alignment - top
     assert.deepEqual(renderer.text.getCall(0).args, ["test1", 10, 40], "args");
     assert.deepEqual(renderer.text.getCall(0).returnValue.css.getCall(0).args[0], {
         fill: "#333333",
-        "fontFamily": "Tahoma1",
-        "fontSize": 13,
-        "fontWeight": 700
+        "font-family": "Tahoma1",
+        "font-size": 13,
+        "font-weight": 700
     }, "css");
     assert.deepEqual(renderer.text.getCall(0).returnValue.attr.lastCall.args[0], { translateX: 10 + 6 - 1, translateY: 40 - 5 - 2 - 6 }, "Text args");
     assert.deepEqual(renderer.text.getCall(0).returnValue.append.getCall(0).args[0], insideGroup);
@@ -3061,9 +3061,9 @@ QUnit.test("Vertical axis. Horizontal alignment - left. Vertical alignment - top
     assert.deepEqual(renderer.text.getCall(1).args, ["test2", 10, 60], "args");
     assert.deepEqual(renderer.text.getCall(1).returnValue.css.getCall(0).args[0], {
         fill: "#444444",
-        "fontFamily": "Tahoma2",
-        "fontSize": 15,
-        "fontWeight": 700
+        "font-family": "Tahoma2",
+        "font-size": 15,
+        "font-weight": 700
     }, "css");
     assert.deepEqual(renderer.text.getCall(1).returnValue.attr.lastCall.args[0], { translateX: 10 + 8 - 3, translateY: 60 - 7 - 4 - 8 }, "Text args");
     assert.deepEqual(renderer.text.getCall(1).returnValue.append.getCall(0).args[0], insideGroup);
@@ -3604,9 +3604,9 @@ QUnit.test("Horizontal top", function(assert) {
     assert.deepEqual(renderer.text.getCall(0).returnValue.attr.lastCall.args[0], { translateY: 30 - 5 - (2 + 6) }, "Text args");
     assert.deepEqual(renderer.text.getCall(0).returnValue.css.lastCall.args[0], {
         "fill": "#123456",
-        "fontWeight": 200,
-        "fontSize": 10,
-        "fontFamily": "Tahoma"
+        "font-weight": 200,
+        "font-size": 10,
+        "font-family": "Tahoma"
     }, "Text css");
 
     var group = this.renderer.g.getCall(5).returnValue;
@@ -3870,12 +3870,12 @@ QUnit.test("Full markers", function(assert) {
 
     assert.equal(text.callCount, 2);
     assert.deepEqual(text.getCall(0).args, ["25", 10, 80], "Marker text");
-    assert.deepEqual(text.getCall(0).returnValue.css.lastCall.args[0], { fill: "green", "fontSize": 12 });
+    assert.deepEqual(text.getCall(0).returnValue.css.lastCall.args[0], { fill: "green", "font-size": 12 });
     assert.deepEqual(text.getCall(0).returnValue.append.firstCall.args[0], group);
     assert.deepEqual(text.getCall(0).returnValue.attr.lastCall.args[0], { translateX: 10 + 5 + 2 - 1, translateY: 80 + 11 - 2 });
 
     assert.deepEqual(text.getCall(1).args, ["Sunday, 26", 50, 80], "Marker text");
-    assert.deepEqual(text.getCall(1).returnValue.css.lastCall.args[0], { fill: "green", "fontSize": 12 });
+    assert.deepEqual(text.getCall(1).returnValue.css.lastCall.args[0], { fill: "green", "font-size": 12 });
     assert.deepEqual(text.getCall(1).returnValue.append.firstCall.args[0], group);
     assert.deepEqual(text.getCall(1).returnValue.attr.lastCall.args[0], { translateX: 50 + 5 + 2 - 3, translateY: 80 + 11 - 4 });
 
@@ -4020,12 +4020,12 @@ QUnit.test("First marker without line", function(assert) {
 
     assert.equal(text.callCount, 2);
     assert.deepEqual(text.getCall(0).args, ["Sunday, 26", 20, 80]);
-    assert.deepEqual(text.getCall(0).returnValue.css.lastCall.args[0], { fill: "green", "fontSize": 12 });
+    assert.deepEqual(text.getCall(0).returnValue.css.lastCall.args[0], { fill: "green", "font-size": 12 });
     assert.deepEqual(text.getCall(0).returnValue.append.firstCall.args[0], group);
     assert.deepEqual(text.getCall(0).returnValue.attr.lastCall.args[0], { translateX: 20 + 5 + 2 - 3, translateY: 80 + 11 - 4 });
 
     assert.deepEqual(text.getCall(1).args, ["Saturday, 25", 0, 80]);
-    assert.deepEqual(text.getCall(1).returnValue.css.lastCall.args[0], { fill: "green", "fontSize": 12 });
+    assert.deepEqual(text.getCall(1).returnValue.css.lastCall.args[0], { fill: "green", "font-size": 12 });
     assert.deepEqual(text.getCall(1).returnValue.append.firstCall.args[0], group);
     assert.deepEqual(text.getCall(1).returnValue.attr.lastCall.args[0], { translateX: 0 + 5 + 2 - 1, translateY: 80 + 11 - 2 });
 
@@ -6949,17 +6949,17 @@ QUnit.test("Styles and attributes", function(assert) {
     assert.deepEqual(renderer.text.getCall(0).args[0], "test1", "args");
     assert.deepEqual(renderer.text.getCall(0).returnValue.css.getCall(0).args[0], {
         fill: "#222222",
-        "fontFamily": "Tahoma1",
-        "fontSize": 15,
-        "fontWeight": 400
+        "font-family": "Tahoma1",
+        "font-size": 15,
+        "font-weight": 400
     }, "css");
 
     assert.deepEqual(renderer.text.getCall(1).args[0], "test2", "args");
     assert.deepEqual(renderer.text.getCall(1).returnValue.css.getCall(0).args[0], {
         fill: "#444444",
-        "fontFamily": "Tahoma2",
-        "fontSize": 17,
-        "fontWeight": 700
+        "font-family": "Tahoma2",
+        "font-size": 17,
+        "font-weight": 700
     }, "css");
 
     var group = this.renderer.g.getCall(9).returnValue;

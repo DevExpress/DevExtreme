@@ -342,7 +342,7 @@ QUnit.test("Customize / changes are accumulated", function(assert) {
     assert.strictEqual(this.tile(1).attr.lastCall.args[0].fill, "red", "tile settings");
     assert.strictEqual(this.tile(1).attr.lastCall.args[0].stroke, "black", "tile settings");
     assert.strictEqual(this.renderer.text.returnValues[0].css.lastCall.args[0].fill, "red", "label settings");
-    assert.strictEqual(this.renderer.text.returnValues[0].css.lastCall.args[0]["fontSize"], 20, "label settings");
+    assert.strictEqual(this.renderer.text.returnValues[0].css.lastCall.args[0]["font-size"], 20, "label settings");
 });
 
 QUnit.test("Nodes initialized event", function(assert) {

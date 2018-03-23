@@ -682,7 +682,7 @@ QUnit.test("draw labels", function(assert) {
             x: Math.round(20 + axis.getRadius() * Math.cos(33 * Math.PI / 180)),
             y: Math.round(50 + axis.getRadius() * Math.sin(33 * Math.PI / 180))
         }]);
-        assert.deepEqual(this.renderer.text.getCall(i).returnValue.css.firstCall.args[0], { "fontSize": 12, fill: "black" });
+        assert.deepEqual(this.renderer.text.getCall(i).returnValue.css.firstCall.args[0], { "font-size": 12, fill: "black" });
         assert.equal(this.renderer.text.getCall(i).returnValue.append.firstCall.args[0], this.renderSettings.axesContainerGroup.children[0].children[0]);
     }
 });
