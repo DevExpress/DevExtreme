@@ -155,12 +155,27 @@
     position: relative;
 
     .dx-pivotgridfieldchooser-container {
+        display: flex;
+        flex-direction: row;
+        height: 100%;
         overflow: hidden;
+    }
+
+    .dx-pivotgridfieldchooser-container.dx-l-2 {
+        flex-direction: column;
+    }
+
+    .dx-layout-2 {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
     }
 
     .dx-col {
         width: 50%;
-        float: left;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
     }
 
     .dx-area-caption {

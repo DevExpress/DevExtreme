@@ -1,6 +1,8 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    hasWindow = require("../../core/utils/window").hasWindow(),
+    hasWindow = false,
     eventsEngine = require("../../events/core/events_engine"),
     ArrayStore = require("../../data/array_store"),
     clickEvent = require("../../events/click"),
@@ -161,8 +163,12 @@ var FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).in
 
     },
 
-    _renderContentImpl: function() {
-        this._headerFilterView.render(this.$element());
+    _initMarkup: function() {
+        this.callBase();
+
+        if(hasWindow) {
+            this._headerFilterView.render(this.$element());
+        }
     },
 
     renderSortable: function() {
