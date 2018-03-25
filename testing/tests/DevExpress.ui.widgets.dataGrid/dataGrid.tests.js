@@ -4686,7 +4686,8 @@ QUnit.test("The same page should not load when scrolling in virtual mode", funct
 
         // assert
         assert.deepEqual(pageIndexesForLoad, [0, 1, 2, 3]);
-        assert.strictEqual(dataGrid.getVisibleRows().length, 80);
+        assert.strictEqual(dataGrid.getVisibleRows().length, 60);
+        assert.strictEqual(dataGrid.getVisibleRows()[0].data.room, 120);
     } finally {
         clock.restore();
     }
@@ -6497,7 +6498,7 @@ QUnit.testInActiveWindow("Tab key should open editor in next cell when virtual s
     this.clock.tick();
     var rowData = dataGrid.getTopVisibleRowData();
 
-    dataGrid.editCell(rowData.index + 1, 0);
+    dataGrid.editCell(dataGrid.getRowIndexByKey(rowData) + 1, 0);
     this.clock.tick();
 
     $(dataGrid.$element()).find(".dx-textbox").dxTextBox("instance").option("value", "Test");

@@ -214,7 +214,7 @@ exports.VirtualScrollController = Class.inherit((function() {
         }
     };
 
-    var processChanged = function(that, changed, changeType, isDelayChanged) {
+    var processChanged = function(that, changed, changeType, isDelayChanged, removeCount) {
         var dataSource = that._dataSource,
             items = dataSource.items(),
             change;
@@ -223,12 +223,21 @@ exports.VirtualScrollController = Class.inherit((function() {
                 changeType: changeType,
                 items: items
             };
+            if(removeCount) {
+                change.removeCount = removeCount;
+            }
         }
         var viewportItems = that._dataSource.viewportItems();
         if(changeType === "append") {
             viewportItems.push.apply(viewportItems, items);
+            if(removeCount) {
+                viewportItems.splice(0, removeCount);
+            }
         } else if(changeType === "prepend") {
             viewportItems.unshift.apply(viewportItems, items);
+            if(removeCount) {
+                viewportItems.splice(-removeCount);
+            }
         } else {
             that._dataSource.viewportItems(items);
         }
@@ -260,6 +269,7 @@ exports.VirtualScrollController = Class.inherit((function() {
             that._viewportSize = 0;
             that._viewportItemSize = 20;
             that._viewportItemIndex = -1;
+            that._itemSizes = {};
             that._sizeRatio = 1;
             that._items = [];
             that._cache = [];
@@ -297,7 +307,9 @@ exports.VirtualScrollController = Class.inherit((function() {
             if(scrollingTimeout < that.option("scrolling.renderingThreshold")) {
                 scrollingTimeout = that.option("scrolling.minTimeout") || 0;
             }
-
+            if(!isNear) {
+                that._itemSizes = {};
+            }
 
             clearTimeout(that._scrollTimeoutID);
             if(scrollingTimeout > 0) {
@@ -318,24 +330,43 @@ exports.VirtualScrollController = Class.inherit((function() {
             var that = this,
                 virtualItemsCount = that.virtualItemsCount(),
                 sizeRatio = that._sizeRatio || 1,
-                itemSize = that._viewportItemSize,
-                offset = virtualItemsCount ? Math.floor(virtualItemsCount.begin * itemSize * sizeRatio) : 0;
+                viewportItemSize = that._viewportItemSize,
+                offset = that.getContentOffset();
 
             that._position = position;
 
             if(virtualItemsCount && position >= offset && position <= offset + that._contentSize) {
-                that._setViewportPositionCore(virtualItemsCount.begin + (position - offset) / itemSize, true);
+                var itemOffset = 0,
+                    itemSize;
+
+                do {
+                    itemSize = that._itemSizes[virtualItemsCount.begin + itemOffset] || viewportItemSize;
+                    offset += itemSize;
+                    itemOffset += offset < position ? 1 : (position - offset + itemSize) / itemSize;
+                } while(offset < position);
+
+                that._setViewportPositionCore(virtualItemsCount.begin + itemOffset, true);
             } else {
-                that._setViewportPositionCore(position / (itemSize * sizeRatio));
+                that._setViewportPositionCore(position / (viewportItemSize * sizeRatio));
             }
         },
         setContentSize: function(size) {
             var that = this,
+                sizes = Array.isArray(size) && size,
                 virtualItemsCount = that.virtualItemsCount();
+
+            if(sizes) {
+                size = sizes.reduce((a, b) => a + b, 0);
+            }
 
             that._contentSize = size;
 
             if(virtualItemsCount) {
+                if(sizes) {
+                    sizes.forEach((size, index) => {
+                        that._itemSizes[virtualItemsCount.begin + index] = size;
+                    });
+                }
                 var virtualContentSize = (virtualItemsCount.begin + virtualItemsCount.end + that.itemsCount()) * that._viewportItemSize;
                 var contentHeightLimit = exports.getContentHeightLimit(browser);
                 if(virtualContentSize > contentHeightLimit) {
@@ -347,9 +378,25 @@ exports.VirtualScrollController = Class.inherit((function() {
         },
         getContentOffset: function(type) {
             var that = this,
-                virtualItemsCount = that.virtualItemsCount();
+                virtualItemsCount = that.virtualItemsCount(),
+                isEnd = type === "end",
+                itemCount;
 
-            return virtualItemsCount ? Math.floor((type ? virtualItemsCount[type] : virtualItemsCount.begin) * that._viewportItemSize * that._sizeRatio) : 0;
+            if(!virtualItemsCount) return 0;
+
+            itemCount = isEnd ? virtualItemsCount.end : virtualItemsCount.begin;
+
+            var offset = 0,
+                totalItemsCount = that._dataSource.totalItemsCount();
+
+            Object.keys(that._itemSizes).forEach(itemIndex => {
+                if(isEnd ? (itemIndex >= totalItemsCount - virtualItemsCount.end) : (itemIndex < virtualItemsCount.begin)) {
+                    offset += that._itemSizes[itemIndex];
+                    itemCount--;
+                }
+            });
+
+            return Math.floor(offset + itemCount * that._viewportItemSize * that._sizeRatio);
         },
         getVirtualContentSize: function() {
             var that = this,
@@ -487,29 +534,28 @@ exports.VirtualScrollController = Class.inherit((function() {
 
                 cacheItem = { pageIndex: dataSource.pageIndex(), itemsCount: that.itemsCount(true) };
 
-                if(that.option("scrolling.removeInvisiblePages")) {
+                if(that.option("advancedRendering") !== false && that.option("scrolling.removeInvisiblePages") && isVirtualMode(that)) {
                     removeInvisiblePages = that._cache.length > Math.max(getPreloadPageCount(this), 2);
                 } else {
                     processDelayChanged(that, callBase, { isDelayed: true });
                 }
 
+                var removeCount = 0;
                 if(beginPageIndex === dataSource.pageIndex() + 1) {
                     if(removeInvisiblePages) {
-                        that._cache.pop();
-                    } else {
-                        changeType = "prepend";
+                        removeCount = that._cache.pop().itemsCount;
                     }
+                    changeType = "prepend";
                     that._cache.unshift(cacheItem);
                 } else {
                     if(removeInvisiblePages) {
-                        that._cache.shift();
-                    } else {
-                        changeType = "append";
+                        removeCount = that._cache.shift().itemsCount;
                     }
+                    changeType = "append";
                     that._cache.push(cacheItem);
                 }
 
-                processChanged(that, callBase, that._cache.length > 1 ? changeType : undefined, lastCacheLength === 0);
+                processChanged(that, callBase, that._cache.length > 1 ? changeType : undefined, lastCacheLength === 0, removeCount);
                 that._delayDeferred = that.load().done(function() {
                     if(processDelayChanged(that, callBase)) {
                         that.load(); // needed for infinite scrolling when height is not defined
@@ -534,6 +580,7 @@ exports.VirtualScrollController = Class.inherit((function() {
 
         reset: function() {
             this._cache = [];
+            this._itemSizes = {};
         },
 
         subscribeToWindowScrollEvents: function($element) {

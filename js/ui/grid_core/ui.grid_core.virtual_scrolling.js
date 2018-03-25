@@ -246,6 +246,14 @@ var VirtualScrollingRowsViewExtender = (function() {
             dataController.pageChanged.add(function() {
                 that.scrollToPage(dataController.pageIndex());
             });
+
+            if(that.option("advancedRendering") && dataController.pageIndex() > 0) {
+                var resizeHandler = function() {
+                    that.resizeCompleted.remove(resizeHandler);
+                    that.scrollToPage(dataController.pageIndex());
+                };
+                that.resizeCompleted.add(resizeHandler);
+            }
         },
 
         scrollToPage: function(pageIndex) {
@@ -259,7 +267,6 @@ var VirtualScrollingRowsViewExtender = (function() {
             } else {
                 scrollPosition = 0;
             }
-
             that.scrollTo({ y: scrollPosition, x: that._scrollLeft });
         },
 
@@ -316,11 +323,25 @@ var VirtualScrollingRowsViewExtender = (function() {
 
             if(changeType === "append" || changeType === "prepend") {
                 contentTable = contentElement.children().first();
-                tableElement.children("tbody")[changeType === "append" ? "appendTo" : "prependTo"](contentTable);
+                var $tBodies = tableElement.children("tbody");
+                if(that.option("advancedRendering") && $tBodies.length === 1) {
+                    contentTable.children("tbody")[changeType === "append" ? "append" : "prepend"]($tBodies.children());
+                } else {
+                    $tBodies[changeType === "append" ? "appendTo" : "prependTo"](contentTable);
+                }
                 tableElement.remove();
                 var $rowElements = that._getFreeSpaceRowElements(contentTable);
                 for(var i = 0; i < $rowElements.length - 1; i++) {
                     $rowElements.eq(i).remove();
+                }
+                if(change.removeCount) {
+                    var rowElements = that._getRowElements(contentTable).toArray();
+                    if(changeType === "append") {
+                        rowElements = rowElements.slice(0, change.removeCount);
+                    } else {
+                        rowElements = rowElements.slice(-change.removeCount);
+                    }
+                    rowElements.map(rowElement => $(rowElement).remove());
                 }
             } else {
                 that.callBase.apply(that, arguments);
@@ -330,13 +351,17 @@ var VirtualScrollingRowsViewExtender = (function() {
         },
         _updateContentPosition: function(isRender) {
             var that = this;
+
             if(that.option("advancedRendering") && isVirtualMode(that)) {
                 var dataController = that._dataController;
                 var rowHeight = that._rowHeight || 20;
                 dataController.viewportItemSize(rowHeight);
                 if(!isRender) {
-                    var contentHeight = that._getRowsHeight(that._tableElement);
-                    dataController.setContentSize(contentHeight);
+                    var rowHeights = that._getRowElements(that._tableElement).toArray().map(function(row) {
+                        return row.getBoundingClientRect().height;
+                    });
+
+                    dataController.setContentSize(rowHeights);
                 }
                 var top = dataController.getContentOffset("begin");
                 var bottom = dataController.getContentOffset("end");
@@ -346,10 +371,6 @@ var VirtualScrollingRowsViewExtender = (function() {
                 var $bottomRow = $rows.get(1) ? $rows.eq(1) : that._createEmptyRow().addClass("dx-virtual-row");
                 $topRow.prependTo($body.first()).css("height", top);
                 $bottomRow.appendTo($body.last()).css("height", bottom);
-
-                if(that._scrollTop < top && !that._isScrollByEvent && that._dataController.pageIndex() > 0) {
-                    that.scrollTo({ top: top, left: that._scrollLeft });
-                }
             } else {
                 commonUtils.deferUpdate(function() {
                     that._updateContentPositionCore();
@@ -593,6 +614,7 @@ module.exports = {
                 updateTimeout: 300,
                 minTimeout: 0,
                 renderingThreshold: 100,
+                removeInvisiblePages: true,
                 /**
                  * @name dxDataGridOptions_scrolling_mode
                  * @publicName mode

@@ -622,9 +622,15 @@ module.exports = {
                         switch(changeType) {
                             case "prepend":
                                 that._items.unshift.apply(that._items, items);
+                                if(change.removeCount) {
+                                    that._items.splice(-change.removeCount);
+                                }
                                 break;
                             case "append":
                                 that._items.push.apply(that._items, items);
+                                if(change.removeCount) {
+                                    that._items.splice(0, change.removeCount);
+                                }
                                 break;
                             case "update":
                                 var prevIndex = -1,

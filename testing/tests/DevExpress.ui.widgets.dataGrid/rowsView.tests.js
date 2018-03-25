@@ -5190,9 +5190,10 @@ QUnit.test("Scrollbar should be correct updated when specified a remote data", f
 
 QUnit.module('Virtual scrolling', {
     beforeEach: function() {
-        this.createRowsView = function() {
+        this.createRowsView = function(items, dataController) {
             var rowsView = createRowsView.apply(this, arguments);
             var x = new virtualScrollingCore.VirtualScrollController(this, { pageIndex: function() {} });
+            rowsView._dataController._itemSizes = {};
             rowsView._dataController.getVirtualContentSize = x.getVirtualContentSize;
             rowsView._dataController.getContentOffset = x.getContentOffset;
             rowsView._dataController.viewportItemSize = x.viewportItemSize;
@@ -5200,7 +5201,13 @@ QUnit.module('Virtual scrolling', {
             rowsView._dataController.setViewportPosition = x.setViewportPosition;
             rowsView._dataController._setViewportPositionCore = x._setViewportPositionCore;
             rowsView._dataController.option = rowsView.option.bind(rowsView);
-            rowsView._dataController._dataSource = { changingDuration: function() { return 50; } };
+            rowsView._dataController._dataSource = {
+                changingDuration: function() { return 50; },
+                totalItemsCount: function() {
+                    var virtualItemsCount = dataController.virtualItemsCount();
+                    return items.length + virtualItemsCount.begin + virtualItemsCount.end;
+                }
+            };
 
             return rowsView;
         };
@@ -6157,9 +6164,8 @@ QUnit.test("Last data row of the last tbody should not have border bottom width"
 
     // assert
     $tbodyElements = $(rowsView.element().find("tbody"));
-    assert.strictEqual($tbodyElements.length, 2, "count tbody");
-    assert.notStrictEqual($tbodyElements.eq(0).children(".dx-data-row:nth-last-child(2)").children().first().css("borderBottomWidth"), "0px", "bottom border is visible");
-    assert.strictEqual($tbodyElements.eq(1).children(".dx-data-row:nth-last-child(2)").children().first().css("borderBottomWidth"), "0px", "bottom border is hidden");
+    assert.strictEqual($tbodyElements.length, 1, "count tbody");
+    assert.strictEqual($tbodyElements.eq(0).children(".dx-data-row:nth-last-child(2)").children().first().css("borderBottomWidth"), "0px", "bottom border is hidden");
 });
 
 // T487466
@@ -6216,7 +6222,7 @@ QUnit.test("Vertical scroll position should be correct after render rows when sc
     rowsView.scrollChanged.add(function() {
         // assert
         $tableElement = $testElement.find("table").first();
-        assert.equal($tableElement.find("tbody").length, 2, "count page");
+        assert.equal($tableElement.find(".dx-data-row").length, 6, "row count");
         assert.equal(rowsView._scrollTop, scrollTop, "scroll top");
         done();
     });
