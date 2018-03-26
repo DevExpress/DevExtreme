@@ -31,7 +31,7 @@ QUnit.performanceTest("dxScheduler should force minimum relayout count on creati
         });
     };
 
-    assert.measureStyleRecalculation(measureFunction, 8);
+    assert.measureStyleRecalculation(measureFunction, 7);
 });
 
 QUnit.performanceTest("dxScheduler should force minimum relayout count on creation if showAllDayPanel = true", function(assert) {
@@ -42,7 +42,7 @@ QUnit.performanceTest("dxScheduler should force minimum relayout count on creati
         });
     };
 
-    assert.measureStyleRecalculation(measureFunction, 7);
+    assert.measureStyleRecalculation(measureFunction, 8);
 });
 
 QUnit.performanceTest("dxScheduler day view should force minimum relayout count on creation with appointments", function(assert) {
