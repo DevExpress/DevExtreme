@@ -1537,6 +1537,7 @@ var SchedulerWorkSpace = Widget.inherit({
         this._shader && this._shader.clean();
         this._$timePanel.empty();
         this._$allDayTable.empty();
+        this._$groupTable.empty();
         delete this._hiddenInterval;
         delete this._interval;
     },
