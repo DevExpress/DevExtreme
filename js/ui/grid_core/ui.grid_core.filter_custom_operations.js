@@ -71,7 +71,7 @@ function baseOperation(grid) {
             }
         };
     return {
-        dataTypes: ["string", "date", "datetime", "number"],
+        dataTypes: ["string", "date", "datetime", "number", "boolean", "object"],
         calculateFilterExpression: calculateFilterExpression,
         editorTemplate: function(conditionInfo, container) {
             var div = $("<div>")

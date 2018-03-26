@@ -284,7 +284,7 @@ QUnit.test("toast should have base z-index greater than overlay", function(asser
     var $toast = $("#toast").dxToast({ visible: true }),
         $content = $toast.dxToast("instance").$content();
 
-    assert.equal($content.css("z-index"), 18001, "toast's z-index is correct");
+    assert.equal($content.css("zIndex"), 18001, "toast's z-index is correct");
 });
 
 

@@ -32,8 +32,8 @@ QUnit.test("expand item should be animated if option animationEnabled is true", 
             config.duration = 0;
 
             assert.equal($element.get(0), $nodeContainer.get(0), "correct element was animated");
-            assert.equal(config.from["max-height"], 0, "starting from zero height");
-            assert.equal(config.to["max-height"], $nodeContainer.height(), "starting from zero height");
+            assert.equal(config.from["maxHeight"], 0, "starting from zero height");
+            assert.equal(config.to["maxHeight"], $nodeContainer.height(), "starting from zero height");
 
             config.start = (function() {
                 var orig = config.start;
@@ -49,7 +49,7 @@ QUnit.test("expand item should be animated if option animationEnabled is true", 
                 return function() {
                     orig();
 
-                    assert.equal($nodeContainer.css("max-height"), "none", "max-height was reset");
+                    assert.equal($nodeContainer.css("maxHeight"), "none", "max-height was reset");
                     assert.ok($nodeContainer.hasClass(internals.OPENED_NODE_CONTAINER_CLASS), "node container displayed");
                 };
             })();
@@ -91,8 +91,8 @@ QUnit.test("collapse item should be animated if option animationEnabled is true"
 
             assert.equal($element.get(0), $nodeContainer.get(0), "correct element was animated");
 
-            assert.equal(config.from["max-height"], $nodeContainer.height(), "starting from real height");
-            assert.equal(config.to["max-height"], 0, "starting to zero height");
+            assert.equal(config.from["maxHeight"], $nodeContainer.height(), "starting from real height");
+            assert.equal(config.to["maxHeight"], 0, "starting to zero height");
 
             config.start = (function() {
                 var orig = config.start;
@@ -108,7 +108,7 @@ QUnit.test("collapse item should be animated if option animationEnabled is true"
                 return function() {
                     orig();
 
-                    assert.equal($nodeContainer.css("max-height"), "none", "max-height was reset");
+                    assert.equal($nodeContainer.css("maxHeight"), "none", "max-height was reset");
                     assert.ok(!$nodeContainer.hasClass(internals.OPENED_NODE_CONTAINER_CLASS), "node container displayed");
                 };
             })();

@@ -207,7 +207,7 @@ var stubInvokeMethod = function(instance, options) {
         });
 
         var $element = this.instance.$element();
-        assert.equal($element.find("." + SCHEDULER_DATE_TIME_SHADER_CLASS).css("pointer-events"), "none", "Shader has correct pointer-events");
+        assert.equal($element.find("." + SCHEDULER_DATE_TIME_SHADER_CLASS).css("pointerEvents"), "none", "Shader has correct pointer-events");
     });
 
     QUnit.test("Shader on allDayPanel should be rendered if needed, Day view", function(assert) {

@@ -313,7 +313,7 @@ QUnit.test("selection shouldn't be prevented in native scroll", function(assert)
     $element.on("dxscrollstart", { isNative: true }, $.noop);
 
     pointer.start().down().move(20);
-    assert.equal($gestureCover.css("pointer-events"), "none", "gestureCover is disabled");
+    assert.equal($gestureCover.css("pointerEvents"), "none", "gestureCover is disabled");
 });
 
 $.each([

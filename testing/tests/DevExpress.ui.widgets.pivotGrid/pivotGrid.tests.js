@@ -1221,7 +1221,7 @@ QUnit.test("onCellPrepared event cellElement must be attached to dom and have co
         onCellPrepared: function(e) {
             if(e.cell.text === "2010") {
                 assert.equal($(e.cellElement).closest(document).length, 1, "cellElement is attached to dom");
-                assert.equal($(e.cellElement).css("text-align"), "left", "cellElement text-align");
+                assert.equal($(e.cellElement).css("textAlign"), "left", "cellElement text-align");
                 isCellPreparedCalled = true;
             }
         }
@@ -2066,7 +2066,7 @@ QUnit.test("pivot grid render", function(assert) {
 
     assert.strictEqual(pivotGrid.$element().css("overflow"), "hidden");
     // T428108
-    assert.strictEqual($(mainTable).css("table-layout"), "auto", "table-layout css property on pivotGrid table element");
+    assert.strictEqual($(mainTable).css("tableLayout"), "auto", "table-layout css property on pivotGrid table element");
 });
 
 QUnit.test("disable word wrapping", function(assert) {
@@ -2260,8 +2260,8 @@ QUnit.test("resize when height changed to no scroll", function(assert) {
         pivotGrid = createPivotGrid(this.testOptions, assert);
 
     assert.ok(pivotGrid._rowsArea.hasScroll(), 'has vertical scroll');
-    assert.equal(pivotGrid.$element().find(".dx-area-data-cell").css('border-bottom-width'), '0px', 'data area border bottom width');
-    assert.equal(pivotGrid.$element().find(".dx-area-row-cell").css('border-bottom-width'), '0px', 'row area border bottom width');
+    assert.equal(pivotGrid.$element().find(".dx-area-data-cell").css('borderBottomWidth'), '0px', 'data area border bottom width');
+    assert.equal(pivotGrid.$element().find(".dx-area-row-cell").css('borderBottomWidth'), '0px', 'row area border bottom width');
 
     var scrollable = pivotGrid._dataArea.groupElement().dxScrollable('instance');
 
@@ -2279,8 +2279,8 @@ QUnit.test("resize when height changed to no scroll", function(assert) {
     assert.ok(pivotGrid, 'pivotGrid container is rendered');
     assert.ok(!pivotGrid._rowsArea.hasScroll(), 'no has vertical scroll after resize');
 
-    assert.ok(parseFloat(pivotGrid.$element().find(".dx-area-data-cell").css('border-bottom-width')) > 0, 'data area border bottom width');
-    assert.ok(parseFloat(pivotGrid.$element().find(".dx-area-row-cell").css('border-bottom-width')) > 0, 'row area border bottom width');
+    assert.ok(parseFloat(pivotGrid.$element().find(".dx-area-data-cell").css('borderBottomWidth')) > 0, 'data area border bottom width');
+    assert.ok(parseFloat(pivotGrid.$element().find(".dx-area-row-cell").css('borderBottomWidth')) > 0, 'row area border bottom width');
 
     if(devices.real().ios) {
         assert.roughEqual(pivotGrid._dataArea.groupElement().dxScrollable("scrollHeight"), pivotGrid._dataArea.groupElement().dxScrollable("clientHeight"), 1.2, 'client height equal scroll height');
@@ -2375,8 +2375,8 @@ if(!devices.real().ios) {
 
         // assert
         assert.ok(!pivotGrid._rowsArea.hasScroll(), 'has vertical scroll');
-        assert.ok(parseFloat(pivotGrid.$element().find(".dx-area-data-cell").css('border-bottom-width')) > 0, 'data area border bottom width');
-        assert.ok(parseFloat(pivotGrid.$element().find(".dx-area-row-cell").css('border-bottom-width')) > 0, 'row area border bottom width');
+        assert.ok(parseFloat(pivotGrid.$element().find(".dx-area-data-cell").css('borderBottomWidth')) > 0, 'data area border bottom width');
+        assert.ok(parseFloat(pivotGrid.$element().find(".dx-area-row-cell").css('borderBottomWidth')) > 0, 'row area border bottom width');
         assert.equal(pivotGrid._dataArea.groupElement().dxScrollable("scrollHeight"), pivotGrid._dataArea.groupElement().dxScrollable("clientHeight"), 'client height equal scroll height');
     });
 }
@@ -2391,8 +2391,8 @@ QUnit.test("no bottom border if vertical scroll when small height", function(ass
 
     // assert
     assert.ok(pivotGrid._rowsArea.hasScroll(), 'has vertical scroll');
-    assert.equal(parseFloat(pivotGrid.$element().find(".dx-area-data-cell").css('border-bottom-width')), 0, 'data area border bottom width');
-    assert.equal(parseFloat(pivotGrid.$element().find(".dx-area-row-cell").css('border-bottom-width')), 0, 'row area border bottom width');
+    assert.equal(parseFloat(pivotGrid.$element().find(".dx-area-data-cell").css('borderBottomWidth')), 0, 'data area border bottom width');
+    assert.equal(parseFloat(pivotGrid.$element().find(".dx-area-row-cell").css('borderBottomWidth')), 0, 'row area border bottom width');
 });
 
 QUnit.test("bottom border if horizontal scroll", function(assert) {
@@ -2406,8 +2406,8 @@ QUnit.test("bottom border if horizontal scroll", function(assert) {
     // assert
     assert.ok(!pivotGrid._rowsArea.hasScroll(), 'has vertical scroll');
     assert.ok(pivotGrid._columnsArea.hasScroll(), 'has horizontal scroll');
-    assert.ok(parseFloat(pivotGrid.$element().find(".dx-area-data-cell").css('border-bottom-width')) > 0, 'data area border bottom width');
-    assert.ok(parseFloat(pivotGrid.$element().find(".dx-area-row-cell").css('border-bottom-width')) > 0, 'row area border bottom width when no scrollbar width');
+    assert.ok(parseFloat(pivotGrid.$element().find(".dx-area-data-cell").css('borderBottomWidth')) > 0, 'data area border bottom width');
+    assert.ok(parseFloat(pivotGrid.$element().find(".dx-area-row-cell").css('borderBottomWidth')) > 0, 'row area border bottom width when no scrollbar width');
 });
 
 QUnit.test('mergeArraysByMaxValue', function(assert) {
@@ -4486,11 +4486,11 @@ QUnit.test('Set border bottom width to zero for all cells in a last row', functi
 
     // assert
     assert.equal($(rows[1].cells[0]).text(), '1', 'row 1 cell 0 text');
-    assert.equal($(rows[1].cells[0]).css('border-bottom-width'), '0px', 'row 1 cell 0 border-bottom-width style');
+    assert.equal($(rows[1].cells[0]).css('borderBottomWidth'), '0px', 'row 1 cell 0 border-bottom-width style');
     assert.equal($(rows[2].cells[0]).text(), '21', 'row 2 cell 0 text');
-    assert.equal($(rows[2].cells[0]).css('border-bottom-width'), '0px', 'row 2 cell 0 border-bottom-width style');
+    assert.equal($(rows[2].cells[0]).css('borderBottomWidth'), '0px', 'row 2 cell 0 border-bottom-width style');
     assert.equal($(rows[2].cells[1]).text(), '22', 'row 2 cell 1 text');
-    assert.equal($(rows[2].cells[1]).css('border-bottom-width'), '0px', 'row 2 cell 1 border-bottom-width style');
+    assert.equal($(rows[2].cells[1]).css('borderBottomWidth'), '0px', 'row 2 cell 1 border-bottom-width style');
 });
 
 QUnit.test('Add the verticalScroll css style when pivot grid has a vertical scrollbar', function(assert) {

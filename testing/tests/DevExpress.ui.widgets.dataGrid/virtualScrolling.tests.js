@@ -330,13 +330,13 @@ QUnit.test("Scroll with rendering faster then rendering thresholdTime. Far scrol
 
     this.scrollController.setViewportPosition(this.contentSize * 4);
 
-    assert.strictEqual(this.externalDataChangedHandler.callCount, 0);
+    assert.strictEqual(this.externalDataChangedHandler.callCount, 2);
     clock.tick(10);
     this.scrollController.setViewportPosition(this.contentSize * 2);
 
     clock.tick(69);
 
-    assert.strictEqual(this.externalDataChangedHandler.callCount, 2);
+    assert.strictEqual(this.externalDataChangedHandler.callCount, 4);
 
     clock.restore();
 });

@@ -23,6 +23,7 @@
         if(!isSelfSufficientTest) {
             if(Model.NoJQuery || isNoJQueryTest || isServerSideTest) {
                 yield return Url.Content("~/testing/helpers/jQueryEventsPatch.js");
+                yield return Url.Content("~/testing/helpers/argumentsValidator.js");
                 yield return Url.Content("~/testing/helpers/dataPatch.js");
                 yield return Url.Content("~/artifacts/transpiled/integration/jquery/component_registrator.js");
             } else {
@@ -272,6 +273,9 @@
 
         Promise.all(imports)
         .then(function() {
+            if(@Json.Serialize(isServerSideTest) && window.navigator.userAgent.toLowerCase().indexOf("webkit") < 0) {
+                return;
+            }
             return SystemJS.import("@Url.Content(Model.ScriptVirtualPath)");
         })
         .then(function() {

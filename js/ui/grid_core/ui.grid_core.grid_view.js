@@ -20,7 +20,7 @@ var TABLE_CLASS = "table",
     HIDDEN_COLUMNS_WIDTH = "adaptiveHidden",
     EDITORS_INPUT_SELECTOR = "input:not([type='hidden'])",
 
-    VIEW_NAMES = ["columnsSeparatorView", "blockSeparatorView", "trackerView", "headerPanel", "columnHeadersView", "rowsView", "footerView", "columnChooserView", "pagerView", "draggingHeaderView", "contextMenuView", "errorView", "headerFilterView"];
+    VIEW_NAMES = ["columnsSeparatorView", "blockSeparatorView", "trackerView", "headerPanel", "columnHeadersView", "rowsView", "footerView", "columnChooserView", "pagerView", "draggingHeaderView", "contextMenuView", "errorView", "headerFilterView", "filterBuilderView"];
 
 var isPercentWidth = function(width) {
     return typeUtils.isString(width) && width.slice(-1) === "%";
@@ -156,7 +156,7 @@ var ResizingController = modules.ViewController.inherit({
             var $rowsTable = that._rowsView._getTableElement(),
                 $rowsFixedTable = that._rowsView.getTableElements().eq(1);
 
-            $rowsTable.css("table-layout", isBestFit ? "auto" : "fixed");
+            $rowsTable.css("tableLayout", isBestFit ? "auto" : "fixed");
             $rowsTable.children("colgroup").css("display", isBestFit ? "none" : "");
             $rowsFixedTable.toggleClass(this.addWidgetPrefix(TABLE_FIXED_CLASS), !isBestFit);
 

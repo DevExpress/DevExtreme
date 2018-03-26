@@ -44,6 +44,13 @@ var POPOVER_CLASS = "dx-popover",
         "left": { my: "right center", at: "left center", collision: "flip fit" }
     },
 
+    SIDE_BORDER_WIDTH_STYLES = {
+        "left": "borderLeftWidth",
+        "top": "borderTopWidth",
+        "right": "borderRightWidth",
+        "bottom": "borderBottomWidth"
+    },
+
     getEventName = function(that, optionName) {
         var optionValue = that.option(optionName);
 
@@ -473,7 +480,7 @@ var Popover = Popup.inherit({
     },
 
     _getContentBorderWidth: function(side) {
-        var borderWidth = this._$content.css("border-" + side + "-width");
+        var borderWidth = this._$content.css(SIDE_BORDER_WIDTH_STYLES[side]);
         return parseInt(borderWidth) || 0;
     },
 
