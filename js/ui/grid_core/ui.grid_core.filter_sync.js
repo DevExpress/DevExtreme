@@ -133,7 +133,7 @@ var DataControllerFilterSyncExtender = {
     _calculateAdditionalFilter: function() {
         var that = this;
 
-        if(!that.option("filterPanel.applyFilterValue")) {
+        if(that.option("filterPanel.applyFilterValue") === false) {
             return that.callBase();
         }
 
