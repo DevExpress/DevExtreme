@@ -1332,7 +1332,7 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _getGroupIndex: function(rowIndex, cellIndex) {
-        if(this._isHorizontalGroupedWorkSpace) {
+        if(this._isHorizontalGroupedWorkSpace()) {
             return Math.floor(rowIndex / this._getRowCount());
         }
         return Math.floor(cellIndex / this._getCellCount());
