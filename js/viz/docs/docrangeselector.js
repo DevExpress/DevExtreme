@@ -497,6 +497,7 @@ var dxRangeSelector = {
         * @name dxrangeselectoroptions_scale_aggregationGroupWidth
         * @publicName aggregationGroupWidth
         * @type number
+        * @default undefined
         */
         aggregationGroupWidth: 10,
         /**

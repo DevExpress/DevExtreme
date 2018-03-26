@@ -1687,6 +1687,7 @@ var dxChart = {
         * @name dxchartoptions_argumentaxis_aggregationGroupWidth
         * @publicName aggregationGroupWidth
         * @type number
+        * @default undefined
         */
         aggregationGroupWidth: 10,
         /**
