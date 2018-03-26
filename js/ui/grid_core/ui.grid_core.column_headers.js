@@ -127,7 +127,9 @@ module.exports = {
                     return resultTemplate;
                 },
 
-                _handleDataChanged: function() {
+                _handleDataChanged: function(e) {
+                    if(e.changeType !== "refresh") return;
+
                     if(this._isGroupingChanged || this._requireReady) {
                         this._isGroupingChanged = false;
                         this.render();
