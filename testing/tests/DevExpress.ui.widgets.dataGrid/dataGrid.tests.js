@@ -6586,7 +6586,7 @@ QUnit.testInActiveWindow("Tab key should open editor in next cell when virtual s
     this.clock.tick();
 
     // assert
-    assert.equal(dataGrid.getTopVisibleRowData().index, rowData.index, "scroll position is not changed");
+    assert.roughEqual(dataGrid.getTopVisibleRowData().index, rowData.index, 1.01, "scroll position is not changed");
     assert.equal($(dataGrid.$element()).find("input").val(), "198", "editor in second column with correct row index is opened");
     assert.ok($(dataGrid.$element()).find("input").closest("td").hasClass("dx-focused"), "cell with editor is focused");
 });
