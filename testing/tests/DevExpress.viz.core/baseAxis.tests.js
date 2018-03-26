@@ -1,18 +1,18 @@
 "use strict";
 
-var $ = require("jquery"),
-    noop = require("core/utils/common").noop,
-    tickGeneratorModule = require("viz/axes/tick_generator"),
-    errors = require("viz/core/errors_warnings"),
-    translator2DModule = require("viz/translators/translator2d"),
-    dxErrors = errors.ERROR_MESSAGES,
-    originalAxis = require("viz/axes/base_axis").Axis,
-    vizMocks = require("../../helpers/vizMocks.js"),
-    StubTranslator = vizMocks.stubClass(translator2DModule.Translator2D, {
-        updateBusinessRange: function(range) {
-            this.getBusinessRange.returns(range);
-        }
-    });
+import $ from "jquery";
+import vizMocks from "../../helpers/vizMocks.js";
+import { noop } from "core/utils/common";
+import tickGeneratorModule from "viz/axes/tick_generator";
+import { ERROR_MESSAGES as dxErrors } from "viz/core/errors_warnings";
+import { Axis as originalAxis } from "viz/axes/base_axis";
+import translator2DModule from "viz/translators/translator2d";
+
+const StubTranslator = vizMocks.stubClass(translator2DModule.Translator2D, {
+    updateBusinessRange: function(range) {
+        this.getBusinessRange.returns(range);
+    }
+});
 
 var environment = {
     beforeEach: function() {
@@ -1278,6 +1278,41 @@ QUnit.test("margins calculation. Range interval with tickInterval + tickInterval
         },
         isArgumentAxis: true
     });
+});
+
+QUnit.test("margins calculation. Range interval with tickInterval + tickInterval estimation + aggregationInterval", function(assert) {
+    const getTickGeneratorReturns = (tickInterval) => {
+        return {
+            ticks: [],
+            minorTicks: [],
+            tickInterval: tickInterval || 10
+        };
+    };
+
+    this.tickGeneratorSpy = sinon.stub();
+    this.tickGeneratorSpy.returns(getTickGeneratorReturns());
+    this.tickGeneratorSpy.onCall(1).returns(getTickGeneratorReturns(5));
+    this.tickGeneratorSpy.onCall(2).returns(getTickGeneratorReturns(3));
+
+    const axis = this.createAxis(true, {
+        valueMarginsEnabled: true
+    });
+
+    axis.setBusinessRange({
+        min: 100,
+        max: 220,
+        interval: 20
+    });
+    axis.updateCanvas(this.canvas);
+    axis.getAggregationInfo();
+
+    axis.setMarginOptions({
+        checkInterval: true
+    });
+
+    axis.createTicks(this.canvas);
+
+    assert.equal(this.translator.stub("updateBusinessRange").lastCall.args[0].interval, 3, "interval");
 });
 
 QUnit.test("marginOptions.checkInterval on valueAxis - ignore interval", function(assert) {
