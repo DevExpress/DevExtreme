@@ -341,11 +341,18 @@ var VirtualScrollingRowsViewExtender = (function() {
                 var top = dataController.getContentOffset("begin");
                 var bottom = dataController.getContentOffset("end");
                 var $body = that._tableElement.children("tbody");
-                var $rows = $body.children(".dx-virtual-row");
-                var $topRow = $rows.get(0) ? $rows.eq(0) : that._createEmptyRow().addClass("dx-virtual-row");
-                var $bottomRow = $rows.get(1) ? $rows.eq(1) : that._createEmptyRow().addClass("dx-virtual-row");
-                $topRow.prependTo($body.first()).css("height", top);
-                $bottomRow.appendTo($body.last()).css("height", bottom);
+
+                $body.children(".dx-virtual-row").remove();
+
+                if(top) {
+                    var $topRow = that._createEmptyRow().addClass("dx-virtual-row");
+                    $topRow.prependTo($body.first()).css("height", top);
+                }
+
+                if(bottom) {
+                    var $bottomRow = that._createEmptyRow().addClass("dx-virtual-row");
+                    $bottomRow.appendTo($body.last()).css("height", bottom);
+                }
 
                 if(that._scrollTop < top && !that._isScrollByEvent && that._dataController.pageIndex() > 0) {
                     that.scrollTo({ top: top, left: that._scrollLeft });

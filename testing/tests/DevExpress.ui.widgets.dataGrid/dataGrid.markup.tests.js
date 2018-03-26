@@ -120,16 +120,16 @@ QUnit.test("markup with columns resizing/reordering", function(assert) {
 
 QUnit.test("markup with virtual scrolling", function(assert) {
     var $element = $("#dataGrid").dxDataGrid({
-        height: 300,
+        height: 100,
+        paging: { pageSize: 4 },
         scrolling: { mode: "virtual" },
-        dataSource: [{ id: 1, name: "Alex" }]
+        dataSource: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}]
     });
 
     this.clock.tick(30);
     var $virtualRows = $element.find(".dx-datagrid-rowsview .dx-datagrid-table .dx-virtual-row");
-    assert.equal($virtualRows.length, 2, "two virtual rows are rendered");
-    assert.equal($virtualRows.get(0).style.height, "0px", "first virtual row height");
-    assert.equal($virtualRows.get(1).style.height, "0px", "second virtual row height");
+    assert.equal($virtualRows.length, 1, "one virtual row is rendered");
+    assert.equal($virtualRows.get(0).style.height, "40px", "first virtual row height");
 });
 
 QUnit.test("markup with editing", function(assert) {

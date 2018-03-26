@@ -2368,7 +2368,7 @@ QUnit.test('Show grouped columns with continuation messages', function(assert) {
 QUnit.test('Show grouped columns when virtual scrolling enabled', function(assert) {
     // arrange
     var rows = [{ rowType: 'group', groupIndex: 0, isExpanded: true, values: [1], data: { isContinuationOnNextPage: true } }],
-        dataController = new MockDataController({ items: rows }),
+        dataController = new MockDataController({ items: rows, virtualItemsCount: { begin: 10, end: 0 } }),
         rowsView = this.createRowsView(rows, dataController, [{ groupIndex: 0, caption: 'column 1', allowCollapsing: true }]),
         testElement = $('#container');
 
@@ -5967,7 +5967,7 @@ QUnit.test('rowHeight calculation when freeSpace row shown', function(assert) {
 QUnit.test("Add group space class for master detail", function(assert) {
     // arrange
     var rows = [{ rowType: 'data', values: [true, 1] }, { rowType: 'detail', data: { detailInfo: 'Test Detail Information' } }],
-        dataController = new MockDataController({ items: rows, virtualItemsCount: 7 }),
+        dataController = new MockDataController({ items: rows, virtualItemsCount: { begin: 10, end: 10 } }),
         rowsView = this.createRowsView(rows, dataController, [{ command: 'expand' }, {}]),
         $tables,
         testElement = $('#container');

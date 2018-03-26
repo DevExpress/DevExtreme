@@ -3232,7 +3232,7 @@ QUnit.test("columns width when all columns have width and scrolling mode is virt
     // assert
     assert.equal($dataGridTables.length, 2);
     assert.equal($dataGridTables.eq(0).find(".dx-row").first().find("td").last().outerWidth(), 100);
-    assert.equal($dataGridTables.eq(1).find(".dx-row").first().find("td").last().outerWidth(), 100);
+    assert.equal($dataGridTables.eq(1).find(".dx-data-row").first().find("td").last().outerWidth(), 100);
 });
 
 // T144297

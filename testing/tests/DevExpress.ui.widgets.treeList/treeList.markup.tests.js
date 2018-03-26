@@ -70,7 +70,7 @@ QUnit.test("markup with dataSource", function(assert) {
     assert.equal($rowsView.find("table").length, 1, "one table");
     assert.equal($rowsView.find(".dx-data-row").length, 2, "data row count");
     assert.equal($rowsView.find(".dx-data-row td").length, 6, "rows view has 6 data cells");
-    assert.equal($rowsView.find("td").length, 15, "rows view has 15 cells (6 data cells + 3 free space cells + 6 virtual cells)");
+    assert.equal($rowsView.find("td").length, 9, "rows view has 15 cells (6 data cells + 3 free space cells)");
 
     var $dataCells = $rowsView.find(".dx-data-row td");
     assert.equal($dataCells.find(".dx-treelist-expanded").length, 1, "first row is expanded");
