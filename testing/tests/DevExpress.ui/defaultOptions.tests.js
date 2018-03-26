@@ -1334,22 +1334,6 @@ testComponentDefaults(DataGrid,
 );
 
 testComponentDefaults(DataGrid,
-    { platform: devices.current().platform },
-    {
-        showRowLines: false
-    },
-    function() {
-        this.originalRealDevice = devices.real();
-        devices.real({
-            platform: "android"
-        });
-    },
-    function() {
-        themes.current(this.originalCurrentTheme);
-    }
-);
-
-testComponentDefaults(DataGrid,
     {},
     {
         grouping: { expandMode: "rowClick" },
