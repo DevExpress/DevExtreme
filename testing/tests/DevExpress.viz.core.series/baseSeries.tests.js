@@ -127,9 +127,6 @@ var environment = {
             _animate: function() {
                 this.animated = true;
             },
-            _getPointSize: function() {
-                return 10;
-            },
             _createPointStyles: function() {
 
             },
@@ -1454,105 +1451,6 @@ QUnit.test("Dispose old points after drawing", function(assert) {
     assert.ok(points[0].disposed);
     assert.ok(points[1].disposed);
     assert.ok(!points[2].disposed);
-});
-
-QUnit.module("Drawing with resample data", {
-    beforeEach: function() {
-        var that = this;
-
-        environment.beforeEach.call(this);
-        this.seriesGroup = this.renderer.g({});
-
-        this.setupAggregation = function(min, max, canvasLength) {
-            var translator = getTranslator(min, max, undefined, undefined, canvasLength);
-
-            that.argumentAxis.getTranslator = function() { return translator; };
-            that.argumentAxis.getViewport.returns({
-                min: min,
-                max: max
-            });
-        };
-
-        this.argumentAxis = new MockAxis({
-            renderer: this.renderer
-        });
-
-        this.series = createSeries({
-            aggregation: {
-                enabled: true
-            }
-        }, {
-            seriesGroup: this.seriesGroup,
-            labelsGroup: this.renderer.g(),
-            argumentAxis: this.argumentAxis,
-            valueAxis: new MockAxis({
-                renderer: this.renderer
-            })
-        });
-        this.renderer = this.series._renderer;
-    }
-});
-
-QUnit.test("With Resample Points", function(assert) {
-    var series = this.series;
-    this.setupAggregation(1, 4, 15);
-
-    series.updateData([{ arg: 1, val: 22 }, { arg: 2, val: 33 }, { arg: 3, val: 11 }, { arg: 4, val: 44 }]);
-    series.createPoints();
-
-    assert.deepEqual(series.resampleArgs[0], 2);
-});
-
-QUnit.test("With Resample Points, Some interval", function(assert) {
-    var series = this.series,
-        tickInterval = (4 - 3) / 1.5;
-
-    this.setupAggregation(3, 4, 15);
-
-    series.updateData([{ arg: 1, val: 22 }, { arg: 2, val: 33 }, { arg: 3, val: 11 }, { arg: 4, val: 44 }, { arg: 5, val: 55 }, { arg: 6, val: 66 }]);
-    series.createPoints();
-
-    assert.deepEqual(series.resampleArgs.slice(0, 4), [tickInterval, 3 - tickInterval, 4 + tickInterval, true]);
-});
-
-QUnit.test("With Resample Points, Some point", function(assert) {
-    var series = this.series;
-
-    this.setupAggregation(3, 3, 15);
-
-    series.updateData([{ arg: 1, val: 22 }, { arg: 2, val: 33 }, { arg: 3, val: 11 }, { arg: 4, val: 44 }, { arg: 5, val: 55 }, { arg: 6, val: 66 }]);
-    series.createPoints();
-
-    assert.deepEqual(series.resampleArgs.slice(0, 4), [0, 3, 3, true]);
-});
-
-QUnit.test("Draw aggragated points", function(assert) {
-    var series = createSeries({
-        type: "scatter",
-        aggregation: { enabled: true }
-    }, {
-        argumentAxis: this.argumentAxis,
-        valueAxis: new MockAxis({
-            renderer: this.renderer
-        })
-    });
-
-    var data = [];
-    for(var i = 0; i < 100; i++) {
-        data.push({ arg: i, val: i * 2 });
-    }
-    this.setupAggregation(0, 99, 10);
-
-    series.updateData(data);
-    series.createPoints();
-
-    series.draw(false);
-
-    assert.ok(series.getPoints().length);
-    series.prepareToDrawing(true);
-    series.draw(false);
-
-    assert.equal(series.getVisiblePoints().length, 5);
 });
 
 QUnit.module("Disposing", {

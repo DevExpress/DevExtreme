@@ -207,17 +207,19 @@ exports.stock = _extend({}, scatterSeries, {
                     result[lowValueField] = Math.min(result[lowValueField], item[lowValueField]);
                 }
                 return result;
-            });
+            }, result);
             result[valueFields[0]] = data[0][valueFields[0]];
             result[valueFields[3]] = data[data.length - 1][valueFields[3]];
+            if(!isFinite(result[highValueField])) {
+                result[highValueField] = null;
+            }
+            if(!isFinite(result[lowValueField])) {
+                result[lowValueField] = null;
+            }
             result[series.getArgumentField()] = aggregationInfo.intervalStart;
 
             return result;
         }
-    },
-
-    _getPointSize: function() {
-        return DEFAULT_FINANCIAL_POINT_SIZE;
     },
 
     getValueFields: function() {
@@ -238,6 +240,7 @@ exports.stock = _extend({}, scatterSeries, {
                 }, 0);
 
         options.size = DEFAULT_FINANCIAL_POINT_SIZE + border;
+        options.sizePointNormalState = DEFAULT_FINANCIAL_POINT_SIZE + styles.normal["stroke-width"];
 
         return options;
     }

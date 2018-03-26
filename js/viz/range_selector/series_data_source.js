@@ -153,14 +153,17 @@ SeriesDataSource.prototype = {
                 series[i].updateData(parsedData[series[i].getArgumentField()]);
 
             }
-
-            that._createPoints(series);
         }
         return series;
     },
 
-    _createPoints: function(series) {
-        var viewport = new rangeModule.Range(),
+    createPoints() {
+        if(this._series.length === 0) {
+            return;
+        }
+
+        var series = this._series,
+            viewport = new rangeModule.Range(),
             axis = series[0].getArgumentAxis();
 
         series.forEach(function(s) {
