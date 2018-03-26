@@ -855,10 +855,9 @@ Series.prototype = {
     },
 
     _fusionData: function(data, aggregationInfo, isDiscrete, dataSelector) {
-        var aggregationMethod = this._getAggregationMethod(isDiscrete),
-            underlyingData = data.map(item => item.data);
+        var aggregationMethod = this._getAggregationMethod(isDiscrete);
 
-        aggregationInfo.data = underlyingData;
+        aggregationInfo.data = data.map(item => item.data);
         const aggregatedData = data.length && aggregationMethod(aggregationInfo, this);
         const pointData = aggregatedData && dataSelector(aggregatedData);
 

@@ -1688,9 +1688,9 @@ var dxChart = {
         * @publicName aggregationGroupWidth
         * @type number
         * @default undefined
-        * @default 10 @for dxChartSeriesTypes_BarSeries
-        * @default 10 @for dxChartSeriesTypes_StackedBarSeries
-        * @default 10 @for dxChartSeriesTypes_FullStackedBarSeries
+        * @default 10 @for bar
+        * @default 10 @for stacked_bar
+        * @default 10 @for full-stacked_bar
         */
         aggregationGroupWidth: 10,
         /**
