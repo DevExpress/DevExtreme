@@ -131,13 +131,18 @@ var DataControllerFilterSyncExtender = {
     },
 
     _calculateAdditionalFilter: function() {
-        var that = this,
-            filters = [that.callBase()],
-            columns = that.getController("columns").getColumns(),
-            filterValue = this.option("filterValue");
+        var that = this;
 
-        if(this.option("filterSyncEnabled")) {
-            var currentColumn = this.getController("headerFilter").getCurrentColumn();
+        if(!that.option("filterPanel.applyFilterValue")) {
+            return that.callBase();
+        }
+
+        var filters = [that.callBase()],
+            columns = that.getController("columns").getColumns(),
+            filterValue = that.option("filterValue");
+
+        if(that.option("filterSyncEnabled")) {
+            var currentColumn = that.getController("headerFilter").getCurrentColumn();
             if(currentColumn && filterValue) {
                 filterValue = utils.syncFilters(filterValue, [currentColumn.dataField, "=", null], HEADER_FILTER_OPERATIONS);
             }

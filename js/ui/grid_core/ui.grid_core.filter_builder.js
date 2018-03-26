@@ -117,7 +117,14 @@ module.exports = {
              * @type dxFilterBuilderOptions
              * @default {}
              */
-            filterBuilder: {},
+            filterBuilder: {
+                groupOperationDescriptions: {
+                    and: messageLocalization.format("dxFilterBuilder-and"),
+                    or: messageLocalization.format("dxFilterBuilder-or"),
+                    notAnd: messageLocalization.format("dxFilterBuilder-notAnd"),
+                    notOr: messageLocalization.format("dxFilterBuilder-notOr"),
+                },
+            },
 
             /**
              * @name GridBaseOptions_filterPopup

@@ -135,6 +135,7 @@
         "dxDataGrid-ariaSelectAll": "Выбрать всё",
         "dxDataGrid-ariaSelectRow": "Выбрать строку",
         "dxDataGrid-filterBuilderPopupTitle": "Конструктор фильтра",
+        "dxDataGrid-filterPanelCreateFilter": "Создать фильтр",
         "dxTreeList-ariaTreeList": "Иерархическая таблица данных",
         "dxTreeList-editingAddRowToNode": "Добавить",
         "dxPager-infoText": "Страница {0} из {1} (Всего элементов: {2})",
