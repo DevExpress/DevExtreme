@@ -1566,8 +1566,9 @@ QUnit.test("Row elements are should get only once when CSS for hidden column is 
 });
 
 QUnit.test("Form has 2 columns in material theme", function(assert) {
-    var origThemes = themes.current;
-    themes.current = function() { return "material"; };
+    var origIsMaterial = themes.isMaterial;
+    themes.isMaterial = function() { return true; };
+
     // arrange, act
     $(".dx-datagrid").width(200);
     setupDataGrid(this);
@@ -1583,7 +1584,7 @@ QUnit.test("Form has 2 columns in material theme", function(assert) {
     assert.equal(colWidth, 2);
     assert.ok(screenByWidth);
 
-    themes.current = origThemes;
+    themes.isMaterial = origIsMaterial;
 });
 
 QUnit.module("API", {
