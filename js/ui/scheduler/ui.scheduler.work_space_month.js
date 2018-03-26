@@ -252,7 +252,12 @@ var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
     _getCellPositionByIndex: function(index, groupIndex) {
         var position = this.callBase(index, groupIndex),
             rowIndex = this._getCellCoordinatesByIndex(index).rowIndex,
+            calculatedTopOffset;
+        if(!this._isHorizontalGroupedWorkSpace()) {
             calculatedTopOffset = this.getCellHeight() * rowIndex;
+        } else {
+            calculatedTopOffset = this.getCellHeight() * (rowIndex + groupIndex * this._getRowCount());
+        }
 
         if(calculatedTopOffset) {
             position.top = calculatedTopOffset;

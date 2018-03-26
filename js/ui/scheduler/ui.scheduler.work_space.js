@@ -1957,15 +1957,12 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     getMaxAllowedVerticalPosition: function() {
-
         if(!this._maxAllowedVerticalPosition) {
             var that = this;
             this._maxAllowedVerticalPosition = [];
 
             var rows = this._getRowCount();
             this._$dateTable
-                .find("tr")
-                .first()
                 .find("tr:nth-child(" + rows + "n)")
                 .each(function(_, row) {
 
