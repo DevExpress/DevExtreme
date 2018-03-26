@@ -8,7 +8,8 @@ import "ui/scheduler/ui.scheduler";
 
 QUnit.testStart(() => {
     const markup =
-        '<div id="scheduler-work-space">';
+        '<div id="scheduler-work-space">\
+        <div id="scheduler-work-space-grouped">';
 
     $("#qunit-fixture").html(markup);
 });
@@ -490,6 +491,51 @@ QUnit.module("Workspace Day markup", dayModuleConfig, () => {
     });
 });
 
+const dayWithGroupingModuleConfig = {
+    beforeEach: () => {
+        this.instance = $("#scheduler-work-space-grouped").dxSchedulerWorkSpaceDay({
+            grouping: "horizontal",
+            startDayHour: 8,
+            endDayHour: 20
+        }).dxSchedulerWorkSpaceDay("instance");
+        stubInvokeMethod(this.instance);
+
+        this.instance.option("groups", [{ name: "a", items: [{ id: 1, text: "a.1" }, { id: 2, text: "a.2" }] }]);
+    }
+};
+
+QUnit.module("Workspace Day markup with gorizontal grouping", dayWithGroupingModuleConfig, () => {
+    QUnit.test("Scheduler workspace day should have a right css class", (assert) => {
+        const $element = this.instance.$element();
+
+        assert.ok($element.hasClass("dx-scheduler-work-space-horizontal-grouped"), "Workspace has 'dx-scheduler-work-space-horizontal-grouped' css class");
+    });
+
+    QUnit.test("Scheduler workspace Day should have a right rows count", (assert) => {
+        const $element = this.instance.$element();
+
+        assert.equal($element.find(".dx-scheduler-date-table tbody tr").length, 48, "Workspace has 96 rows");
+    });
+
+    QUnit.test("Time panel should have 48 rows and 48 cells", (assert) => {
+        const $element = this.instance.$element();
+
+        let cellCount = $element.find(".dx-scheduler-date-table tbody tr").length;
+
+        assert.equal($element.find(".dx-scheduler-time-panel-row").length, cellCount, "Time panel has a right count of rows");
+        assert.equal($element.find(".dx-scheduler-time-panel-cell").length, cellCount, "Time panel has a right count of cells");
+    });
+
+    QUnit.test("Grouped cells should have a right group field in dxCellData", (assert) => {
+        const $element = this.instance.$element();
+
+        assert.deepEqual($element.find(".dx-scheduler-date-table tbody tr>td").eq(0).data("dxCellData").groups, {
+            a: 1
+        }, "Cell group is OK");
+        assert.deepEqual($element.find(".dx-scheduler-date-table tbody tr>td").eq(25).data("dxCellData").groups, { a: 2 }, "Cell group is OK");
+    });
+});
+
 const weekModuleConfig = {
     beforeEach: () => {
         this.instance = $("#scheduler-work-space").dxSchedulerWorkSpaceWeek({
@@ -662,6 +708,53 @@ QUnit.module("Workspace Week markup", weekModuleConfig, () => {
                 assert.notOk($(this).hasClass("dx-scheduler-last-group-cell"), "Header panel cell hasn't last-group class");
             }
         });
+    });
+});
+
+const weekWithGroupingModuleConfig = {
+    beforeEach: () => {
+        this.instance = $("#scheduler-work-space-grouped").dxSchedulerWorkSpaceWeek({
+            grouping: "horizontal",
+            startDayHour: 8,
+            endDayHour: 20
+        }).dxSchedulerWorkSpaceWeek("instance");
+        stubInvokeMethod(this.instance);
+
+        this.instance.option("groups", [{ name: "a", items: [{ id: 1, text: "a.1" }, { id: 2, text: "a.2" }] }]);
+    }
+};
+
+QUnit.module("Workspace Week markup with gorizontal grouping", weekWithGroupingModuleConfig, () => {
+    QUnit.test("Scheduler workspace day should have a right css class", (assert) => {
+        const $element = this.instance.$element();
+
+        assert.ok($element.hasClass("dx-scheduler-work-space-horizontal-grouped"), "Workspace has 'dx-scheduler-work-space-horizontal-grouped' css class");
+    });
+
+    QUnit.test("Scheduler workspace Week should have a right rows count", (assert) => {
+        const $element = this.instance.$element();
+
+        assert.equal($element.find(".dx-scheduler-date-table tbody tr").length, 48, "Workspace has 96 rows");
+    });
+
+    QUnit.test("Time panel should have 48 rows and 48 cells", (assert) => {
+        const $element = this.instance.$element();
+
+        let cellCount = $element.find(".dx-scheduler-date-table tbody tr").length;
+
+        assert.equal($element.find(".dx-scheduler-time-panel-row").length, cellCount, "Time panel has a right count of rows");
+        assert.equal($element.find(".dx-scheduler-time-panel-cell").length, cellCount, "Time panel has a right count of cells");
+    });
+
+    QUnit.test("Grouped cells should have a right group field in dxCellData", (assert) => {
+        let $element = this.instance.$element(),
+            $cells = $element.find(".dx-scheduler-date-table tbody tr>td"),
+            cellCount = $cells.length;
+
+        assert.deepEqual($cells.eq(0).data("dxCellData").groups, {
+            a: 1
+        }, "Cell group is OK");
+        assert.deepEqual($cells.eq(cellCount / 2).data("dxCellData").groups, { a: 2 }, "Cell group is OK");
     });
 });
 
@@ -1103,5 +1196,62 @@ QUnit.module("Workspace Month markup", monthModuleConfig, () => {
 
         assert.equal($firstDayOfMonthCells.first().text(), "Jun 1", "Cell has a right text");
         assert.equal($firstDayOfMonthCells.last().text(), "Aug 1", "Cell has a right text");
+    });
+});
+
+const monthWithGroupingModuleConfig = {
+    beforeEach: () => {
+        this.instance = $("#scheduler-work-space-grouped").dxSchedulerWorkSpaceMonth({
+            grouping: "horizontal",
+            startDayHour: 8,
+            endDayHour: 20
+        }).dxSchedulerWorkSpaceMonth("instance");
+        stubInvokeMethod(this.instance);
+
+        this.instance.option("groups", [{ name: "a", items: [{ id: 1, text: "a.1" }, { id: 2, text: "a.2" }] }]);
+    }
+};
+
+QUnit.module("Workspace Month markup with gorizontal grouping", monthWithGroupingModuleConfig, () => {
+    QUnit.test("Scheduler workspace day should have a right css class", (assert) => {
+        const $element = this.instance.$element();
+
+        assert.ok($element.hasClass("dx-scheduler-work-space-horizontal-grouped"), "Workspace has 'dx-scheduler-work-space-horizontal-grouped' css class");
+    });
+
+    QUnit.test("Scheduler workspace month should have correct rows and cells count", (assert) => {
+        const $element = this.instance.$element();
+        let cellCounter = 0;
+
+        assert.equal($element.find(".dx-scheduler-date-table tbody tr").length, 12, "Date table has 6 rows");
+        assert.equal($element.find(".dx-scheduler-date-table tbody tr>td").length, 84, "Date table has 126 cells");
+
+        $element.find(".dx-scheduler-date-table tbody tr").each(function() {
+            if($(this).find("td").length === 7) {
+                cellCounter++;
+            }
+        });
+
+        assert.equal(cellCounter, 12, "Each row has a 7 cells");
+    });
+
+    QUnit.test("Grouped cells should have a right group field in dxCellData", (assert) => {
+        let $element = this.instance.$element(),
+            $cells = $element.find(".dx-scheduler-date-table tbody tr>td"),
+            cellCount = $cells.length;
+
+        assert.deepEqual($cells.eq(0).data("dxCellData").groups, {
+            a: 1
+        }, "Cell group is OK");
+        assert.deepEqual($cells.eq(cellCount / 2).data("dxCellData").groups, { a: 2 }, "Cell group is OK");
+    });
+
+    QUnit.test("Scheduler workspace month view should have a dates with other-month class", (assert) => {
+        const $element = this.instance.$element();
+
+        this.instance.option("currentDate", new Date(2015, 2, 1));
+
+        const $cells = $element.find(".dx-scheduler-date-table-other-month");
+        assert.equal($cells.length, 22, "Other-month cells count is correct");
     });
 });
