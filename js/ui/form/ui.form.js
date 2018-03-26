@@ -649,14 +649,14 @@ var Form = Widget.inherit({
                      * @name dxFormOptions_showColonAfterLabel
                      * @publicName showColonAfterLabel
                      * @type boolean
-                     * @default false @for material
+                     * @default false @for Material
                      */
                     showColonAfterLabel: false,
                     /**
                      * @name dxFormOptions_labelLocation
                      * @publicName labelLocation
                      * @type Enums.FormLabelLocation
-                     * @default "top" @for material
+                     * @default "top" @for Material
                      */
                     labelLocation: "top"
                 }
