@@ -2,7 +2,10 @@
 
 var $ = require("../../core/renderer"),
     modules = require("./ui.grid_core.modules"),
-    CheckBox = require("../check_box");
+    eventsEngine = require("../../events/core/events_engine"),
+    messageLocalization = require("../../localization/message"),
+    CheckBox = require("../check_box"),
+    utils = require("../filter_builder/utils");
 
 var FILTER_PANEL_CLASS = "filter-panel",
     FILTER_PANEL_TEXT_CLASS = FILTER_PANEL_CLASS + "-text",
@@ -34,19 +37,12 @@ var FilterPanelView = modules.View.inherit({
     _getCheckElement: function() {
         var that = this,
             $element = $("<div>")
-                .addClass(FILTER_PANEL_CHECKBOX_CLASS);
+                .addClass(this.addWidgetPrefix(FILTER_PANEL_CHECKBOX_CLASS));
 
         that._createComponent($element, CheckBox, {
-            value: that.option("filterValue") !== null,
+            value: that.option("filterPanel.applyFilterValue"),
             onValueChanged: function(e) {
-                if(e.value) {
-                    that.option("filterValue", that._filterValueBuffer);
-                } else {
-                    that._skipClearBuffer = true;
-                    that._filterValueBuffer = that.option("filterValue");
-                    that.option("filterValue", null);
-                    that._skipClearBuffer = false;
-                }
+                that.option("filterPanel.applyFilterValue", e.value);
             }
         });
         return $element;
@@ -54,33 +50,35 @@ var FilterPanelView = modules.View.inherit({
 
     _getTextElement: function() {
         var that = this,
-            $textElement = $("<div>")
-            .addClass(FILTER_PANEL_TEXT_CLASS)
-            .text(this.option("filterValue") || this._filterValueBuffer || "Create Filter")
-            .click(function() {
-                if(that._filterValueBuffer) {
-                    that.option("filterBuilder.value", that._filterValueBuffer);
-                } else {
-                    that.option("filterBuilder.value", that.option("filterValue"));
-                }
-                that.option("filterBuilderPopup.visible", true);
-            });
+            $textElement = $("<div>").addClass(this.addWidgetPrefix(FILTER_PANEL_TEXT_CLASS)),
+            filterText,
+            filterValue = this.option("filterValue");
+        if(filterValue) {
+            var customizeFilterText = this.option("filterPanel.customizeFilterText");
+            if(customizeFilterText) {
+                filterText = customizeFilterText(filterValue);
+            } else {
+                var columns = that.getController("columns").getColumns();
+                filterText = utils.getFilterText(filterValue, this.getController("filterSync").getCustomFilterOperations(), columns, that.option("filterRow.operationDescriptions"), that.option("filterBuilder.groupOperationDescriptions"));
+            }
+        } else {
+            filterText = this.option("filterPanel.createFilterText");
+        }
+        $textElement.text(filterText);
+        eventsEngine.on($textElement, "click", function() {
+            that.option("filterBuilderPopup.visible", true);
+        });
         return $textElement;
     },
 
     _getRemoveButtonElement: function() {
         var that = this,
             $element = $("<div>")
-                .addClass(FILTER_PANEL_CLEAR_FILTER_CLASS)
-                .text("Clear filter")
-                .click(function() {
-                    if(that._filterValueBuffer) {
-                        that._filterValueBuffer = null;
-                        that._renderPanelElement();
-                    } else {
-                        that.option("filterValue", null);
-                    }
-                });
+                .addClass(this.addWidgetPrefix(FILTER_PANEL_CLEAR_FILTER_CLASS))
+                .text("Clear filter");
+        eventsEngine.on($element, "click", function() {
+            that.option("filterValue", null);
+        });
         return $element;
     },
 
@@ -88,9 +86,7 @@ var FilterPanelView = modules.View.inherit({
         switch(args.name) {
             case "filterValue":
                 this._invalidate();
-                if(!this._skipClearBuffer) {
-                    this._filterValueBuffer = null;
-                }
+                this.option("filterPanel.applyFilterValue", true);
                 args.handled = true;
                 break;
             case "filterPanel":
@@ -107,15 +103,62 @@ module.exports = {
     defaultOptions: function() {
         return {
             /**
-             * @name GridBaseOptions_filterBuilder
-             * @publicName filterBuilder
+             * @name GridBaseOptions_filterPanel
+             * @publicName filterPanel
              * @type dxFilterPanelOptions
              * @default {}
              */
-            filterPanel: {},
+            filterPanel: {
+                /**
+                 * @name GridBaseOptions_filterPanel_visible
+                 * @publicName visible
+                 * @type boolean
+                 * @default false
+                 */
+                visible: false,
+
+                /**
+                 * @name GridBaseOptions_filterPanel_applyFilterValue
+                 * @publicName applyFilterValue
+                 * @type boolean
+                 * @default true
+                 */
+                applyFilterValue: true,
+                /**
+                 * @name GridBaseOptions_filterPanel_createFilterText
+                 * @publicName createFilterText
+                 * @type string
+                 * @default "Create Filter"
+                 */
+                createFilterText: messageLocalization.format("dxDataGrid-filterPanelCreateFilter"),
+
+                /**
+                 * @name GridBaseOptions_filterPanel_customizeFilterText
+                 * @publicName customizeFilterText
+                 * @type function(filterValue)
+                 * @type_function_param1 filterValue:object
+                 * @type_function_return string
+                 */
+            },
         };
     },
     views: {
         filterPanelView: FilterPanelView
+    },
+    extenders: {
+        controllers: {
+            data: {
+                optionChanged: function(args) {
+                    switch(args.name) {
+                        case "filterPanel":
+                            this._applyFilter();
+                            args.handled = true;
+                            break;
+                        default:
+                            this.callBase(args);
+                    }
+                }
+            }
+        },
     }
 };

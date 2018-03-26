@@ -1862,3 +1862,61 @@ QUnit.module("getMatchedCondition", function() {
         assert.deepEqual(result, ["field", "=", 1]);
     });
 });
+
+QUnit.module("getFilterText", function() {
+    QUnit.test("from condition", function(assert) {
+        // arrange
+        var filter = ["field", "=", "1"];
+
+        // act
+        var result = utils.getFilterText(filter, [], [{ dataField: "field", caption: "Field" }], { equal: "Equals" });
+
+        // assert
+        assert.deepEqual(result, "[Field] Equals '1'");
+    });
+
+    QUnit.test("from condition with array value", function(assert) {
+        // arrange
+        var filter = ["field", "between", [1, 2]];
+
+        // act
+        var result = utils.getFilterText(filter, [{ name: "between", caption: "Between" }], [{ dataField: "field", caption: "Field" }]);
+
+        // assert
+        assert.deepEqual(result, "[Field] Between('1', '2')");
+    });
+
+    QUnit.test("from group", function(assert) {
+        // arrange
+        var filter = [["field", "=", "1"], "and", ["field", "=", "2"]];
+
+        // act
+        var result = utils.getFilterText(filter, [], [{ dataField: "field", caption: "Field" }], { equal: "Equals" }, { and: "And" });
+
+        // assert
+        assert.deepEqual(result, "[Field] Equals '1' And [Field] Equals '2'");
+    });
+
+    QUnit.test("from group with inner group", function(assert) {
+        // arrange
+        var filter = [["field", "=", "1"], "and", ["field", "=", "2"], "and", [["field", "=", "3"], "or", ["field", "=", "4"]]];
+
+        // act
+        var result = utils.getFilterText(filter, [], [{ dataField: "field", caption: "Field" }], { equal: "Equals" }, { and: "And", or: "Or" });
+
+        // assert
+        assert.deepEqual(result, "[Field] Equals '1' And [Field] Equals '2' And ([Field] Equals '3' Or [Field] Equals '4')");
+    });
+
+
+    QUnit.test("from group with inner group", function(assert) {
+        // arrange
+        var filter = ["!", [["field", "=", "1"], "and", ["field", "=", "2"]]];
+
+        // act
+        var result = utils.getFilterText(filter, [], [{ dataField: "field", caption: "Field" }], { equal: "Equals" }, { notAnd: "Not And", and: "And" });
+
+        // assert
+        assert.deepEqual(result, "Not ([Field] Equals '1' And [Field] Equals '2')");
+    });
+});

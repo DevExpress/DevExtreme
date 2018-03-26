@@ -735,6 +735,52 @@ function filterHasField(filter, dataField) {
     });
 }
 
+function getConditionText(filterValue, customOperations, fields, filterOperationDescriptions) {
+    var operation = filterValue[1],
+        customOperation = getCustomOperation(customOperations, operation),
+        operationText = customOperation ? customOperation.caption || inflector.captionize(customOperation.name) : getCaptionByOperation(operation, filterOperationDescriptions),
+        field = getField(filterValue[0], fields),
+        fieldText = field.caption,
+        value = filterValue[2],
+        valueText;
+
+    if(Array.isArray(value)) {
+        valueText = `('${value.join("', '")}')`;
+    } else {
+        valueText = ` '${getCurrentValueText(field, value, customOperation)}'`;
+    }
+
+    return `[${fieldText}] ${operationText}${valueText}`;
+}
+
+function getGroupText(filterValue, customOperations, fields, filterOperationDescriptions, groupOperationDescriptions) {
+    var result = [],
+        groupValue = getGroupValue(filterValue);
+
+    filterValue.forEach(function(item) {
+        if(isCondition(item)) {
+            result.push(getConditionText(item, customOperations, fields, filterOperationDescriptions));
+        } else if(isGroup(item)) {
+            result.push(`(${getGroupText(item, customOperations, fields, filterOperationDescriptions, groupOperationDescriptions)})`);
+        }
+    });
+
+    if(groupValue[0] === "!") {
+        var groupText = groupOperationDescriptions["not" + groupValue.substring(1, 2).toUpperCase() + groupValue.substring(2)].split(" ");
+        return `${groupText[0]} ${result}`;
+    }
+
+    return result.join(` ${groupOperationDescriptions[groupValue]} `);
+}
+
+function getFilterText(filterValue, customOperations, fields, filterOperationDescriptions, groupOperationDescriptions) {
+    if(isCondition(filterValue)) {
+        return getConditionText(filterValue, customOperations, fields, filterOperationDescriptions);
+    }
+
+    return getGroupText(filterValue, customOperations, fields, filterOperationDescriptions, groupOperationDescriptions);
+}
+
 exports.isValidCondition = isValidCondition;
 exports.isEmptyGroup = isEmptyGroup;
 exports.getOperationFromAvailable = getOperationFromAvailable;
@@ -769,3 +815,4 @@ exports.getMergedOperations = getMergedOperations;
 exports.syncFilters = syncFilters;
 exports.getMatchedCondition = getMatchedCondition;
 exports.filterHasField = filterHasField;
+exports.getFilterText = getFilterText;

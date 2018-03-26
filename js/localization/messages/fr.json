@@ -147,6 +147,7 @@
         "dxDataGrid-ariaSelectAll": "Sélectionner tout",
         "dxDataGrid-ariaSelectRow": "Sélectionner ligne",
         "dxDataGrid-filterBuilderPopupTitle": "!TODO",
+        "dxDataGrid-filterPanelCreateFilter": "!TODO",
 
         "dxTreeList-ariaTreeList": "Liste arborescente",
         "dxTreeList-editingAddRowToNode": "Ajouter",

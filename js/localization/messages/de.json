@@ -135,6 +135,7 @@
         "dxDataGrid-ariaSelectAll": "Alle auswählen",
         "dxDataGrid-ariaSelectRow": "Zeile auswählen",
         "dxDataGrid-filterBuilderPopupTitle": "!TODO",
+        "dxDataGrid-filterPanelCreateFilter": "!TODO",
         "dxTreeList-ariaTreeList": "Strukturliste",
         "dxTreeList-editingAddRowToNode": "Hinzufügen",
         "dxPager-infoText": "Seite {0} von {1} ({2} Elemente)",
