@@ -2798,7 +2798,7 @@ QUnit.test("Return point size", function(assert) {
     });
 });
 
-QUnit.test("Point is invisible - return 0", function(assert) {
+QUnit.test("getMarginOptions when point is invisible", function(assert) {
     var series = createSeries({
         type: seriesType,
         point: {
@@ -2810,7 +2810,7 @@ QUnit.test("Point is invisible - return 0", function(assert) {
     assert.deepEqual(series.getMarginOptions(), {
         size: 0,
         percentStick: false,
-        sizePointNormalState: 0
+        sizePointNormalState: 2
     });
 });
 
@@ -2859,37 +2859,5 @@ QUnit.test("Polar point. getMarginOptions returns point size", function(assert) 
         size: 6,
         percentStick: false,
         sizePointNormalState: 6
-    });
-});
-
-QUnit.test("getMarginOptions returns '0' as sourcePointStyle when points are invisible", function(assert) {
-    var series = createSeries({
-        type: seriesType,
-        point: {
-            visible: false,
-            size: 6,
-            border: {
-                visible: true,
-                width: 10
-            },
-            hoverStyle: {
-                border: {
-                    visible: true,
-                    width: 10
-                }
-            },
-            selectionStyle: {
-                border: {
-                    visible: true,
-                    width: 12
-                }
-            }
-        }
-    });
-
-    assert.deepEqual(series.getMarginOptions(), {
-        size: 0,
-        percentStick: false,
-        sizePointNormalState: 0
     });
 });
