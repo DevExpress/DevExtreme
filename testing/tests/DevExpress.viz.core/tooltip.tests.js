@@ -64,7 +64,7 @@ QUnit.module("Main functionality", {
         this.patchFontOptions = sinon.stub(vizUtils, "patchFontOptions", function(arg) {
             var obj = {};
             for(var key in arg) {
-                obj[key + "_patched"] = arg[key];
+                obj[key + "Patched"] = arg[key];
             }
             return obj;
         });

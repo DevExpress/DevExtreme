@@ -134,6 +134,7 @@
         "dxDataGrid-ariaSearchInGrid": "Pesquisar na grelha de dados",
         "dxDataGrid-ariaSelectAll": "Seleccionar todos",
         "dxDataGrid-ariaSelectRow": "Seleccionar linha",
+        "dxDataGrid-filterBuilderPopupTitle": "!TODO",
         "dxTreeList-ariaTreeList": "Lista em árvore",
         "dxTreeList-editingAddRowToNode": "Adicionar",
         "dxPager-infoText": "Página {0} de {1} ({2} itens)",

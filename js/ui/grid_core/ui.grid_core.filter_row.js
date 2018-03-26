@@ -387,7 +387,7 @@ var ColumnHeadersViewFilterRowExtender = (function() {
                     }
 
                     if(column.alignment) {
-                        $cell.find(EDITORS_INPUT_SELECTOR).first().css("text-align", column.alignment);
+                        $cell.find(EDITORS_INPUT_SELECTOR).first().css("textAlign", column.alignment);
                     }
 
                     if(column.filterOperations && column.filterOperations.length) {

@@ -679,7 +679,7 @@ QUnit.test("toolbar items container should get correct z-index in 'listTop' stra
     var $container = this.$element.find("." + TOOLBAR_ITEMS_CONTAINER_CLASS);
     var $overlayContent = this.$element.find(".dx-overlay-content");
 
-    assert.ok($container.css("z-index") - $overlayContent.css("z-index") > 0, "toolbar items container z-index is correct");
+    assert.ok($container.css("zIndex") - $overlayContent.css("zIndex") > 0, "toolbar items container z-index is correct");
 });
 
 QUnit.test("toolbar items container should be rendered directly in widget's element", function(assert) {

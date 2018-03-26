@@ -254,8 +254,15 @@ var MultiView = CollectionWidget.inherit({
         return renderContentDeferred.promise();
     },
 
+    _render: function() {
+        this.callBase();
+        var selectedItemIndices = this._getSelectedItemIndices();
+        this._updateItemsPosition(selectedItemIndices[0]);
+        this._updateItemsVisibility(selectedItemIndices[0]);
+    },
+
     _renderSelection: function(addedSelection) {
-        this._updateItems(addedSelection[0]);
+        this._updateItemsVisibility(addedSelection[0]);
     },
 
     _updateItems: function(selectedIndex, newIndex) {

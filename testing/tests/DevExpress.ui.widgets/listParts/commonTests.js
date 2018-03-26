@@ -261,8 +261,8 @@ QUnit.test("group body should be not collapsed by click on header in disabled st
 var LIST_GROUP_HEADER_INDICATOR_CLASS = "dx-list-group-header-indicator";
 
 QUnit.test("group header collapsed indicator element for the Material theme", function(assert) {
-    var origCurrent = themes.current;
-    themes.current = function() { return "material"; };
+    var origIsMaterial = themes.isMaterial;
+    themes.isMaterial = function() { return true; };
 
     var $element = this.element.dxList({
         items: [{ key: "a", items: ["0"] }],
@@ -274,13 +274,10 @@ QUnit.test("group header collapsed indicator element for the Material theme", fu
 
     assert.equal($groupHeader.find(toSelector(LIST_GROUP_HEADER_INDICATOR_CLASS)).length, 1, "group header has the collapsed indicator element for the Material theme");
 
-    themes.current = origCurrent;
+    themes.isMaterial = origIsMaterial;
 });
 
 QUnit.test("no group header collapsed indicator element for the Generic theme", function(assert) {
-    var origCurrent = themes.current;
-    themes.current = function() { return "generic"; };
-
     var $element = this.element.dxList({
         items: [{ key: "a", items: ["0"] }],
         grouped: true,
@@ -290,8 +287,6 @@ QUnit.test("no group header collapsed indicator element for the Generic theme", 
     var $groupHeader = $element.find(toSelector(LIST_GROUP_CLASS) + " " + toSelector(LIST_GROUP_HEADER_CLASS));
 
     assert.equal($groupHeader.find(toSelector(LIST_GROUP_HEADER_INDICATOR_CLASS)).length, 0, "group header should not have collapsed indicator element for the Generic theme");
-
-    themes.current = origCurrent;
 });
 
 QUnit.test("group collapsing is animated", function(assert) {
@@ -1612,8 +1607,8 @@ QUnit.test("appending items on 'more' button", function(assert) {
 });
 
 QUnit.test("more button should have default type for the Material theme", function(assert) {
-    var origCurrent = themes.current;
-    themes.current = function() { return "material"; };
+    var origIsMaterial = themes.isMaterial;
+    themes.isMaterial = function() { return true; };
 
     var element = this.element.dxList({
         dataSource: {
@@ -1628,13 +1623,10 @@ QUnit.test("more button should have default type for the Material theme", functi
 
     assert.equal(button.option("type"), "default", "more button should have default type for the Material theme");
 
-    themes.current = origCurrent;
+    themes.isMaterial = origIsMaterial;
 });
 
 QUnit.test("more button should have undefined type for the Generic theme", function(assert) {
-    var origCurrent = themes.current;
-    themes.current = function() { return "generic"; };
-
     var element = this.element.dxList({
         dataSource: {
             store: new ArrayStore([1, 2, 3, 4]),
@@ -1647,8 +1639,6 @@ QUnit.test("more button should have undefined type for the Generic theme", funct
     var button = element.find(".dx-list-next-button .dx-button").dxButton("instance");
 
     assert.equal(button.option("type"), undefined, "more button should have undefined type for the Generic theme");
-
-    themes.current = origCurrent;
 });
 
 

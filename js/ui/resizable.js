@@ -34,6 +34,12 @@ var RESIZABLE = "dxResizable",
     DRAGSTART_EVENT_NAME = eventUtils.addNamespace(dragEvents.move, RESIZABLE),
     DRAGSTART_END_EVENT_NAME = eventUtils.addNamespace(dragEvents.end, RESIZABLE);
 
+var SIDE_BORDER_WIDTH_STYLES = {
+    "left": "borderLeftWidth",
+    "top": "borderTopWidth",
+    "right": "borderRightWidth",
+    "bottom": "borderBottomWidth"
+};
 /**
 * @name dxResizable
 * @publicName dxResizable
@@ -281,7 +287,7 @@ var Resizable = DOMComponent.inherit({
 
     _getBorderWidth: function($element, direction) {
         if(typeUtils.isWindow($element.get(0))) return 0;
-        var borderWidth = $element.css("border-" + direction + "-width");
+        var borderWidth = $element.css(SIDE_BORDER_WIDTH_STYLES[direction]);
         return parseInt(borderWidth) || 0;
     },
 

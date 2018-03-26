@@ -229,8 +229,8 @@ QUnit.test('Render scrollable', function(assert) {
     assert.equal($scrollableContent.length, 1, 'scrollable content count');
     assert.equal($scrollableScrollbar.length, 2, 'scrollable scrollbar count');
     // T575726
-    assert.equal($scrollableContent.css("z-index"), "auto", 'scrollable content z-index');
-    assert.equal($scrollableScrollbar.css("z-index"), "auto", 'scrollable scrollbar z-index');
+    assert.equal($scrollableContent.css("zIndex"), "auto", 'scrollable content z-index');
+    assert.equal($scrollableScrollbar.css("zIndex"), "auto", 'scrollable scrollbar z-index');
 
     var scrollable = $scrollable.dxScrollable("instance");
     assert.strictEqual(scrollable.option("useNative"), false, 'scrollable useNative');
@@ -1977,7 +1977,7 @@ QUnit.test('Free space row with a command column and cssClass', function(assert)
 QUnit.test('Freespace row must be empty for virtual scroller and non-first page', function(assert) {
     // arrange
     var dataController = new MockDataController({ items: this.items, virtualItemsCount: { begin: 20, end: 0 } }),
-        rowsView = this.createRowsView(this.items, dataController),
+        rowsView = this.createRowsView(this.items, dataController, null, false, { scrolling: { mode: "virtual" } }),
         $testElement = $('#container');
 
     // act
@@ -2380,11 +2380,12 @@ QUnit.test('Show grouped columns when virtual scrolling enabled', function(asser
     rowsView.render(testElement);
 
     // assert
-    assert.ok($(testElement.find('tbody > tr')[0]).hasClass("dx-group-row"));
-    assert.equal($(testElement.find('tbody > tr')[0]).find('td').length, 2);
-    assert.ok($(testElement.find('tbody > tr')[0]).find('td').first().hasClass("dx-datagrid-group-space"));
-    assert.ok($(testElement.find('tbody > tr')[0]).find('td').first().children().first().hasClass("dx-datagrid-group-opened"));
-    assert.equal($(testElement.find('tbody > tr')[0]).find('td').last().text(), 'column 1: 1');
+    assert.ok(testElement.find('tbody > tr').eq(0).hasClass("dx-virtual-row"));
+    assert.ok($(testElement.find('tbody > tr')[1]).hasClass("dx-group-row"));
+    assert.equal($(testElement.find('tbody > tr')[1]).find('td').length, 2);
+    assert.ok($(testElement.find('tbody > tr')[1]).find('td').first().hasClass("dx-datagrid-group-space"));
+    assert.ok($(testElement.find('tbody > tr')[1]).find('td').first().children().first().hasClass("dx-datagrid-group-opened"));
+    assert.equal($(testElement.find('tbody > tr')[1]).find('td').last().text(), 'column 1: 1');
 });
 
 // B254928
@@ -3756,8 +3757,8 @@ QUnit.test("Width of column in master detail are not changed when it is changed 
     assert.equal($colgroup.length, 2);
     assert.equal($cols1[0].style.width, "100px", "col1 of parent");
     assert.equal($cols1[1].style.width, "100px", "col2 of parent");
-    assert.equal($cols2[0].style.width, "", "col1 of master");
-    assert.equal($cols2[1].style.width, "", "col2 of master");
+    assert.equal($cols2[0].style.width, "auto", "col1 of master");
+    assert.equal($cols2[1].style.width, "auto", "col2 of master");
 
     detailDataGrid.dispose();
 });
@@ -4728,10 +4729,10 @@ QUnit.test("Customize columns with virtual scrolling", function(assert) {
 
     that.columnsController._customizeColumns(that.columnsController._columns);
     that.rowsView._contentHeight = 0;
-    that.rowsView.resize();
+    that.rowsView.render();
 
     $colGroups = $("colgroup");
-    $cols = $colGroups.eq(1).find("col");
+    $cols = $colGroups.eq(0).find("col");
 
     // assert
     assert.equal($cols[0].style.width, "13px", "colgroup2 col 1");
@@ -5241,11 +5242,11 @@ QUnit.test('Render rows with virtual items', function(assert) {
     assert.equal(options.viewportSize, Math.round(90 / rowHeight));
 
     assert.equal(content.length, 1);
-    assert.equal(content.children().length, 2);
+    assert.equal(content.children().length, 1);
     assert.equal(content.children().eq(0)[0].tagName, 'TABLE');
-    assert.equal(content.children().eq(0).find('tbody > tr').length, 4, '3 data row + 1 freespace row');
-    assert.equal(content.children().eq(1)[0].tagName, 'TABLE');
-    assert.roughEqual(content.children().eq(1).height(), rowHeight * (10 + 7) + content.find('.dx-datagrid-table-content').first().outerHeight(), 1);
+    assert.equal(content.children().eq(0).find('tbody > tr').length, 6, '3 data row + 1 freespace row + 2 virtual row');
+    assert.roughEqual(content.children().eq(0).find(".dx-virtual-row").eq(0).height(), rowHeight * 10, 1);
+    assert.roughEqual(content.children().eq(0).find(".dx-virtual-row").eq(1).height(), rowHeight * 7, 1);
     assert.equal(content.children().eq(1).find("." + "dx-datagrid-group-space").length, 0, "group space class");
 });
 
@@ -5285,13 +5286,13 @@ QUnit.test('Render rows with virtual items count is more 1 000 000', function(as
     assert.ok(heightRatio > 0 && heightRatio < 1, "heightRatio is defined and in (0, 1)");
 
     assert.equal(content.length, 1);
-    assert.equal(content.children().length, 2);
+    assert.equal(content.children().length, 1);
     assert.equal(content.children().eq(0)[0].tagName, 'TABLE');
-    assert.equal(content.children().eq(0).find('tbody > tr').length, 4, '3 data row + 1 freespace row');
-    assert.equal(content.children().eq(1)[0].tagName, 'TABLE');
-    assert.roughEqual(content.children().eq(1).height(), rowHeight * heightRatio * 10000000 + content.find('.dx-datagrid-table-content').first().outerHeight(), 1);
-    assert.ok(content.children().eq(1).height() < 16000000, "height is less then height limit");
-    assert.equal(content.children().eq(1).find("." + "dx-datagrid-group-space").length, 0, "group space class");
+    assert.equal(content.children().eq(0).find('tbody > tr').length, 6, '3 data row + 1 freespace row + 2 virtual row');
+    assert.roughEqual(content.children().eq(0).find(".dx-virtual-row").eq(0).height(), rowHeight * heightRatio * 7000000, 1);
+    assert.roughEqual(content.children().eq(0).find(".dx-virtual-row").eq(1).height(), rowHeight * heightRatio * 3000000, 1);
+    assert.ok(content.children().eq(0).height() < 16000000, "height is less then height limit");
+    assert.equal(content.children().eq(0).find("." + "dx-datagrid-group-space").length, 0, "group space class");
 });
 
 if(browser.msie) {
@@ -5606,11 +5607,11 @@ QUnit.test('Render rows with virtual items after render with not virtual items',
     assert.equal(options.viewportSize, Math.round(90 / rowHeight));
 
     assert.equal(content.length, 1);
-    assert.equal(content.children().length, 2);
+    assert.equal(content.children().length, 1);
     assert.equal(content.children().eq(0)[0].tagName, 'TABLE');
-    assert.equal(content.children().eq(0).find('tbody > tr').length, 4, '3 data row + 1 freespace row');
-    assert.equal(content.children().eq(1)[0].tagName, 'TABLE');
-    assert.roughEqual(content.children().eq(1).height(), rowHeight * (10 + 7) + content.find('.dx-datagrid-table-content').first().outerHeight(), 1);
+    assert.equal(content.children().eq(0).find('tbody > tr').length, 6, '3 data row + 1 freespace row + 2 virtual row');
+    assert.roughEqual(content.children().eq(0).find(".dx-virtual-row").eq(0).height(), rowHeight * 10, 1);
+    assert.roughEqual(content.children().eq(0).find(".dx-virtual-row").eq(1).height(), rowHeight * 7, 1);
 });
 
 QUnit.test('Render rows at end when virtual scrolling', function(assert) {
@@ -5662,11 +5663,11 @@ QUnit.test('Render rows at end when virtual scrolling', function(assert) {
     assert.equal(rowHeight, rowsView._rowHeight);
 
     assert.equal(content.length, 1);
-    assert.equal(content.children().length, 2);
+    assert.equal(content.children().length, 1);
     assert.equal(content.children().eq(0)[0].tagName, 'TABLE');
-    assert.equal(content.children().eq(0).find('tbody > tr').length, 7, '3 data row + 3 data row + 1 freespace row');
-    assert.equal(content.children().eq(1)[0].tagName, 'TABLE');
-    assert.roughEqual(content.children().eq(1).height(), rowHeight * (10 + 4) + content.find('.dx-datagrid-table-content').first().outerHeight(), 1);
+    assert.equal(content.children().eq(0).find('tbody > tr').length, 9, '3 data row + 3 data row + 1 freespace row + 2 virtual row');
+    assert.roughEqual(content.children().eq(0).find(".dx-virtual-row").eq(0).height(), rowHeight * 10, 1);
+    assert.roughEqual(content.children().eq(0).find(".dx-virtual-row").eq(1).height(), rowHeight * 4, 1);
 });
 
 // T423722
@@ -5731,12 +5732,12 @@ QUnit.test('Render rows at end when virtual scrolling enabled and rowTemplate is
     assert.equal(rowHeight, rowsView._rowHeight);
 
     assert.equal(content.length, 1);
-    assert.equal(content.children().length, 2);
+    assert.equal(content.children().length, 1);
     assert.equal(content.children().eq(0)[0].tagName, 'TABLE');
-    assert.equal(content.children().eq(0).find('tbody > tr').length, 7, '3 data row + 3 data row + 1 freespace row');
-    assert.equal(content.children().eq(0).find('tbody > tr').eq(3).text(), "4", 'row 4 text');
-    assert.equal(content.children().eq(1)[0].tagName, 'TABLE');
-    assert.roughEqual(content.children().eq(1).height(), rowHeight * (10 + 4) + content.find('.dx-datagrid-table-content').first().outerHeight(), 1);
+    assert.equal(content.children().eq(0).find('tbody > tr').length, 9, '3 data row + 3 data row + 1 freespace row + 2 virtual row');
+    assert.equal(content.children().eq(0).find('tbody > tr').eq(4).text(), "4", 'row 4 text');
+    assert.roughEqual(content.children().eq(0).find(".dx-virtual-row").eq(0).height(), rowHeight * 10, 1);
+    assert.roughEqual(content.children().eq(0).find(".dx-virtual-row").eq(1).height(), rowHeight * 4, 1);
 });
 
 
@@ -5899,6 +5900,10 @@ QUnit.test('Update rowsView on changed', function(assert) {
         rowsView = this.createRowsView(options.items, dataController),
         testElement = $('#container');
 
+    this.options.scrolling = {
+        mode: 'virtual'
+    };
+
     rowsView.render(testElement);
     rowsView.height(60);
     rowsView.resize();
@@ -5925,45 +5930,11 @@ QUnit.test('Update rowsView on changed', function(assert) {
     var content = testElement.find('.dx-scrollable-content').children();
 
     assert.equal(content.length, 1);
-    assert.equal(content.children().length, 2);
-    assert.equal(content.children().eq(0).find('tbody > tr').length, 7);
-    assert.equal(Math.floor(content.children().last().height()), Math.floor(rowHeight * (12 + 1) + content.find('.dx-datagrid-table-content').first().outerHeight()));
-    assert.equal(getText(getCells(content.children().find('tbody > tr').eq(0))), '4');
-});
-
-QUnit.test('render rowsView with topRowsCount/bottomRowsCount div height > PIXELS_LIMIT', function(assert) {
-    // arrange
-    var virtualItemsCount = {
-        begin: 61000,
-        end: 32000
-    };
-
-    var options = {
-            items: [
-            { values: [1] },
-            { values: [2] },
-            { values: [3] }
-            ],
-            virtualItemsCount: virtualItemsCount
-        },
-        dataController = new MockDataController(options),
-        rowsView = this.createRowsView(options.items, dataController),
-        testElement = $('#container');
-
-    // act
-    rowsView.render(testElement);
-    rowsView.height(60);
-    rowsView.resize();
-    var rowHeight = rowsView._rowHeight;
-    var content = testElement.find('.dx-scrollable-content').children();
-
-    // assert
-    assert.equal(content.length, 1);
-    assert.equal(content.children().length, 2);
-
-    assert.roughEqual(content.children().last().height(), rowHeight * (virtualItemsCount.begin + virtualItemsCount.end) + content.find('.dx-datagrid-table-content').first().outerHeight(), 1);
-    assert.equal(content.children().last()[0].rows.length, Math.ceil((rowHeight * (virtualItemsCount.begin + virtualItemsCount.end) + content.find('.dx-datagrid-table-content').first().outerHeight()) / 250000));
-    assert.equal($(content.children().last()[0].rows[0]).height(), 250000);
+    assert.equal(content.children().length, 1);
+    assert.equal(content.children().eq(0).find('tbody > tr').length, 9);
+    assert.roughEqual(content.children().eq(0).find(".dx-virtual-row").eq(0).height(), rowHeight * 12, 1);
+    assert.roughEqual(content.children().eq(0).find(".dx-virtual-row").eq(1).height(), rowHeight * 1, 1);
+    assert.equal(getText(getCells(content.children().find('tbody > tr').eq(1))), '4');
 });
 
 QUnit.test('rowHeight calculation when freeSpace row shown', function(assert) {
@@ -6011,7 +5982,7 @@ QUnit.test("Add group space class for master detail", function(assert) {
     $tables = testElement.find('table');
 
     // assert
-    assert.equal($tables.eq(1).find("." + "dx-datagrid-group-space").length, 1);
+    assert.equal($tables.eq(0).find(".dx-virtual-row .dx-datagrid-group-space").length, 2);
 });
 
 QUnit.test("Change column visibility_T194439", function(assert) {
@@ -6059,8 +6030,8 @@ QUnit.test("Change column visibility_T194439", function(assert) {
 
     // assert
     $tables = $(".dx-datagrid-table");
+    assert.equal($tables.length, 1, "one table with content");
     assert.equal($tables.eq(0).find("col").length, 2, "table with content");
-    assert.equal($tables.eq(1).find("col").length, 2, "virtual table");
 });
 
 QUnit.test("Change column lines visibility_T194439", function(assert) {
@@ -6228,7 +6199,7 @@ QUnit.test("Vertical scroll position should be correct after render rows when sc
     assert.equal($tableElement.find("tbody").length, 1, "count page");
 
     // act
-    scrollTop = $tableElement.position().top - 50;
+    scrollTop = $tableElement.find(".dx-virtual-row").eq(0).height() - 50;
     rowsView.scrollTo(scrollTop);
     options.items = [
         { rowType: "data", values: [10] },

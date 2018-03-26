@@ -257,7 +257,7 @@ QUnit.test("Particular recurrence appt should have a correct data", function(ass
         var $appt = $(this);
 
         assert.equal($appt.find(".dx-scheduler-appointment-title").text(), "a", "Title is OK");
-        assert.equal(new Color($appt.css("background-color")).toHex(), "#ff0000", "Appointment color is OK");
+        assert.equal(new Color($appt.css("backgroundColor")).toHex(), "#ff0000", "Appointment color is OK");
 
         $appt.trigger("dxdblclick");
         apptIndex++;
@@ -509,11 +509,11 @@ QUnit.test("Grouped appointments should have a correct color", function(assert) 
 
     var $appointments = this.instance.$element().find(".dx-scheduler-appointment");
 
-    assert.equal(new Color($appointments.eq(0).css("background-color")).toHex(), "#ff0000", "Appointment color is OK");
-    assert.equal(new Color($appointments.eq(1).css("background-color")).toHex(), "#ff0000", "Appointment color is OK");
+    assert.equal(new Color($appointments.eq(0).css("backgroundColor")).toHex(), "#ff0000", "Appointment color is OK");
+    assert.equal(new Color($appointments.eq(1).css("backgroundColor")).toHex(), "#ff0000", "Appointment color is OK");
 
-    assert.equal(new Color($appointments.eq(2).css("background-color")).toHex(), "#0000ff", "Appointment color is OK");
-    assert.equal(new Color($appointments.eq(3).css("background-color")).toHex(), "#0000ff", "Appointment color is OK");
+    assert.equal(new Color($appointments.eq(2).css("backgroundColor")).toHex(), "#0000ff", "Appointment color is OK");
+    assert.equal(new Color($appointments.eq(3).css("backgroundColor")).toHex(), "#0000ff", "Appointment color is OK");
 });
 
 QUnit.test("Grouped appointments should be rendered if resources aren't defined", function(assert) {
@@ -860,11 +860,11 @@ QUnit.test("Appointments should have correct width & height", function(assert) {
         var $appointments = this.instance.$element().find(".dx-scheduler-appointment");
 
         assert.roughEqual($appointments.eq(0).outerHeight(), 2.001, rowHeight, "Appointment height is OK");
-        assert.equal(parseInt($appointments.eq(0).css("margin-bottom"), 10), 5, "Appointment offset is OK");
+        assert.equal(parseInt($appointments.eq(0).css("marginBottom"), 10), 5, "Appointment offset is OK");
         assert.roughEqual($appointments.eq(0).outerWidth(), 2.001, expectedWidth, "Appointment width is OK");
 
         assert.roughEqual($appointments.eq(1).outerHeight(), 2.001, rowHeight, "Appointment height is OK");
-        assert.equal(parseInt($appointments.eq(1).css("margin-bottom"), 10), 20, "Appointment offset is OK");
+        assert.equal(parseInt($appointments.eq(1).css("marginBottom"), 10), 20, "Appointment offset is OK");
         assert.roughEqual($appointments.eq(1).outerWidth(), 2.001, expectedWidth, "Appointment width is OK");
 
     } finally {
@@ -890,11 +890,11 @@ QUnit.test("Grouped appointments should have a right offsets", function(assert) 
 
     var $appointments = this.instance.$element().find(".dx-scheduler-appointment");
 
-    assert.equal(parseInt($appointments.eq(0).css("margin-bottom"), 10), 5, "Appointment offset is OK");
-    assert.equal(parseInt($appointments.eq(1).css("margin-bottom"), 10), 20, "Appointment offset is OK");
+    assert.equal(parseInt($appointments.eq(0).css("marginBottom"), 10), 5, "Appointment offset is OK");
+    assert.equal(parseInt($appointments.eq(1).css("marginBottom"), 10), 20, "Appointment offset is OK");
 
-    assert.equal(parseInt($appointments.eq(2).css("margin-bottom"), 10), 5, "Appointment offset is OK");
-    assert.equal(parseInt($appointments.eq(3).css("margin-bottom"), 10), 20, "Appointment offset is OK");
+    assert.equal(parseInt($appointments.eq(2).css("marginBottom"), 10), 5, "Appointment offset is OK");
+    assert.equal(parseInt($appointments.eq(3).css("marginBottom"), 10), 20, "Appointment offset is OK");
 });
 
 QUnit.test("Tooltip should appear by appointment click", function(assert) {

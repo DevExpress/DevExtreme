@@ -110,7 +110,7 @@ registerDecorator(
             var $deleteButton = $("<div>")
                 .addClass(SLIDE_MENU_BUTTON_CLASS)
                 .addClass(SLIDE_MENU_BUTTON_DELETE_CLASS)
-                .text(/material/.test(themes.current())
+                .text(themes.isMaterial()
                     ? ""
                     : messageLocalization.format("dxListEditDecorator-delete"));
 

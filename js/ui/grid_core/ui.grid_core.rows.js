@@ -1,7 +1,8 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
-    window = require("../../core/utils/window").getWindow(),
+    windowUtils = require("../../core/utils/window"),
+    window = windowUtils.getWindow(),
     eventsEngine = require("../../events/core/events_engine"),
     commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
@@ -671,21 +672,25 @@ module.exports = {
                     }
                 },
 
-                _renderFreeSpaceRow: function(tableElement, options) {
+                _createEmptyRow: function() {
                     var that = this,
                         i,
-                        freeSpaceRowElement = that._createRow(),
+                        $row = that._createRow(),
                         columns = this.getColumns();
 
-                    freeSpaceRowElement
-                        .addClass(FREE_SPACE_CLASS)
-                        .toggleClass(COLUMN_LINES_CLASS, that.option("showColumnLines"));
+                    $row.toggleClass(COLUMN_LINES_CLASS, that.option("showColumnLines"));
 
                     for(i = 0; i < columns.length; i++) {
-                        freeSpaceRowElement.append(that._createCell({ column: columns[i], rowType: "freeSpace", columnIndex: i, columns: columns }));
+                        $row.append(that._createCell({ column: columns[i], rowType: "freeSpace", columnIndex: i, columns: columns }));
                     }
 
-                    that._appendRow(tableElement, freeSpaceRowElement, appendFreeSpaceRowTemplate);
+                    return $row;
+                },
+
+                _renderFreeSpaceRow: function(tableElement, options) {
+                    var freeSpaceRowElement = this._createEmptyRow().addClass(FREE_SPACE_CLASS);
+
+                    this._appendRow(tableElement, freeSpaceRowElement, appendFreeSpaceRowTemplate);
                 },
 
                 _checkRowKeys: function(options) {
@@ -706,7 +711,7 @@ module.exports = {
                 },
 
                 _getRowsHeight: function($tableElement) {
-                    var $rowElements = $tableElement.children("tbody").children().not("." + FREE_SPACE_CLASS);
+                    var $rowElements = $tableElement.children("tbody").children().not(".dx-virtual-row").not("." + FREE_SPACE_CLASS);
 
                     return $rowElements.toArray().reduce(function(sum, row) {
                         return sum + row.getBoundingClientRect().height;
@@ -1253,6 +1258,10 @@ module.exports = {
                         $element = that.element(),
                         visibilityOptions;
 
+                    if(!windowUtils.hasWindow()) {
+                        return;
+                    }
+
                     if(!loadPanel && messageText !== undefined && dataController.isLocalStore() && loadPanelOptions.enabled === "auto" && $element) {
                         that._renderLoadPanel($element, $element.parent());
                         loadPanel = that._loadPanel;
@@ -1305,7 +1314,7 @@ module.exports = {
                         tableElement = that._getTableElement();
 
                     if(items.length && tableElement) {
-                        rowElements = tableElement.children("tbody").children(".dx-row, .dx-error-row").filter(":visible").not("." + FREE_SPACE_CLASS);
+                        rowElements = that._getRowElements(tableElement).filter(":visible");
 
                         for(itemIndex = 0; itemIndex < items.length; itemIndex++) {
                             prevOffsetTop = offsetTop;

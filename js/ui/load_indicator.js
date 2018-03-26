@@ -199,7 +199,7 @@ var LoadIndicator = Widget.inherit({
         this._$wrapper.addClass(LOADINDICATOR_IMAGE_CLASS);
 
         if(indicatorSrc) {
-            this._$wrapper.css("background-image", "url(" + indicatorSrc + ")");
+            this._$wrapper.css("backgroundImage", "url(" + indicatorSrc + ")");
         }
     },
 
@@ -246,7 +246,7 @@ var LoadIndicator = Widget.inherit({
     },
 
     _removeMarkupForImage: function() {
-        this._$wrapper.css("background-image", "none");
+        this._$wrapper.css("backgroundImage", "none");
     },
 
     _optionChanged: function(args) {

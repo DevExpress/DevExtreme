@@ -101,7 +101,7 @@ var GoogleStaticProvider = Provider.inherit({
     },
 
     clean: function() {
-        this._$container.css("background-image", "none");
+        this._$container.css("backgroundImage", "none");
         eventsEngine.off(this._$container, this._addEventNamespace(clickEvent.name));
 
         return Promise.resolve();

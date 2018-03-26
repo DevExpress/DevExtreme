@@ -96,7 +96,7 @@ QUnit.test("clearSelection should not run if selectionType is 'Caret'", function
 QUnit.module("initMobileViewPort");
 
 QUnit.test("allowSelection should be detected by realDevice", function(assert) {
-    if(!support.supportProp("user-select")) {
+    if(!support.supportProp("userSelect")) {
         assert.expect(0);
         return;
     }
@@ -113,7 +113,7 @@ QUnit.test("allowSelection should be detected by realDevice", function(assert) {
 
         initMobileViewport();
 
-        assert.equal($viewPort.css(styleUtils.styleProp("user-select")), "none", "allow selection detected by real device");
+        assert.equal($viewPort.css(styleUtils.styleProp("userSelect")), "none", "allow selection detected by real device");
     } finally {
         devices.real(originalRealDevice);
         devices.current(originalCurrentDevice);
