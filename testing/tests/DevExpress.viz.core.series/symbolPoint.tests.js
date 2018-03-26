@@ -1,16 +1,15 @@
 "use strict";
+import $ from "jquery";
+import vizMocks from "../../helpers/vizMocks.js";
+import pointModule from "viz/series/points/base_point";
+import labelModule from "viz/series/points/label";
+import { MockTranslator } from "../../helpers/chartMocks.js";
+import tooltipModule from "viz/core/tooltip";
+import { states as statesConsts } from "viz/components/consts";
 
-var $ = require("jquery"),
-    vizMocks = require("../../helpers/vizMocks.js"),
-    statesConsts = require("viz/components/consts").states,
-    tooltipModule = require("viz/core/tooltip"),
-    labelModule = require("viz/series/points/label"),
-    pointModule = require("viz/series/points/base_point"),
-    chartMocks = require("../../helpers/chartMocks.js"),
-    originalLabel = labelModule.Label,
-    MockTranslator = chartMocks.MockTranslator;
+const originalLabel = labelModule.Label;
 
-var createPoint = function(series, data, options) {
+const createPoint = function(series, data, options) {
     options = options || {};
     options.type = options.type || "line";
     return new pointModule.Point(series, data, options);

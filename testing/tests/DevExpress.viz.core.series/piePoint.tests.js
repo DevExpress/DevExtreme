@@ -1,14 +1,14 @@
 "use strict";
 
-var noop = require("core/utils/common").noop,
-    vizMocks = require("../../helpers/vizMocks.js"),
-    pointModule = require("viz/series/points/base_point"),
-    statesConsts = require("viz/components/consts").states,
-    labelModule = require("viz/series/points/label"),
-    tooltipModule = require("viz/core/tooltip"),
-    originalLabel = labelModule.Label,
-    chartMocks = require("../../helpers/chartMocks.js"),
-    MockAngularTranslator = chartMocks.MockAngularTranslator;
+import * as vizMocks from "../../helpers/vizMocks.js";
+import { noop } from "core/utils/common";
+import pointModule from "viz/series/points/base_point";
+import labelModule from "viz/series/points/label";
+import { MockAngularTranslator } from "../../helpers/chartMocks.js";
+import { states as statesConsts } from "viz/components/consts";
+import tooltipModule from "viz/core/tooltip";
+
+const originalLabel = labelModule.Label;
 
 var defaultCorrection = {
     radiusInner: 0,
