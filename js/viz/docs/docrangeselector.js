@@ -498,9 +498,6 @@ var dxRangeSelector = {
         * @publicName aggregationGroupWidth
         * @type number
         * @default undefined
-        * @default 10 @for bar
-        * @default 10 @for stacked_bar
-        * @default 10 @for full-stacked_bar
         */
         aggregationGroupWidth: 10,
         /**
