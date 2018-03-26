@@ -747,11 +747,14 @@ var Panorama = CollectionWidget.inherit({
         this._$wrapper.append(this._$itemsContainer);
     },
 
-    _render: function() {
+    _initMarkup() {
         this.$element().addClass(PANORAMA_CLASS);
-
         this.callBase();
         this._initBackgroundImage();
+    },
+
+    _render: function() {
+        this.callBase();
         this._itemsRenderStrategy.render();
         this._updateSelection();
     },
