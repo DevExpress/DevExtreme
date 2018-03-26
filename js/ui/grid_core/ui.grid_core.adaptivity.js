@@ -474,12 +474,11 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
     createFormByHiddenColumns: function(container, options) {
         var that = this,
             $container = $(container),
-            isMaterial = /material/.test(themes.current()),
             userFormOptions = {
                 items: that._getFormItemsByHiddenColumns(that._hiddenColumns),
                 formID: "dx-" + new Guid()
             },
-            defaultFormOptions = isMaterial ?
+            defaultFormOptions = themes.isMaterial() ?
             {
                 colCount: 2,
                 screenByWidth: function() { return "lg"; }

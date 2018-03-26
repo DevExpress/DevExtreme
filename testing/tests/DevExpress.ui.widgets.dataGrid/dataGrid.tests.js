@@ -9307,7 +9307,7 @@ QUnit.test("CustomizeText formatting", function(assert) {
 QUnit.testInActiveWindow("Validation message should be positioned relative cell in material theme", function(assert) {
     // arrange
     var overlayTarget,
-        origThemes = themes.current,
+        origIsMaterial = themes.isMaterial,
         clock = sinon.useFakeTimers(),
         dataGrid = createDataGrid({
             loadingTimeout: undefined,
@@ -9334,7 +9334,7 @@ QUnit.testInActiveWindow("Validation message should be positioned relative cell 
     dataGrid.closeEditCell();
     clock.tick();
 
-    themes.current = function() { return "material"; };
+    themes.isMaterial = function() { return true; };
 
     dataGrid.editCell(0, 0);
     clock.tick();
@@ -9343,6 +9343,6 @@ QUnit.testInActiveWindow("Validation message should be positioned relative cell 
     overlayTarget = dataGrid.$element().find(".dx-invalid-message").data("dxOverlay").option("target");
     assert.ok(overlayTarget.hasClass("dx-editor-cell"), "target in material theme");
 
-    themes.current = origThemes;
+    themes.isMaterial = origIsMaterial;
     clock.restore();
 });

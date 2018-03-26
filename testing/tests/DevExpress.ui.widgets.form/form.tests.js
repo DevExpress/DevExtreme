@@ -334,8 +334,8 @@ QUnit.test("Refresh form when visibility changed to 'true' in msie browser", fun
 });
 
 QUnit.test("Hide helper text when validation message shows for material theme", function(assert) {
-    var origCurrent = themes.current;
-    themes.current = function() { return "material"; };
+    var origIsMaterial = themes.isMaterial;
+    themes.isMaterial = function() { return true; };
 
     var form = $("#form").dxForm({
         formData: {
@@ -357,7 +357,7 @@ QUnit.test("Hide helper text when validation message shows for material theme", 
     assert.ok(!form.getEditor("lastName").$element().parents(".dx-field-item-content-wrapper").hasClass(INVALID_CLASS), "not invalid css class");
     assert.ok(!form.getEditor("name").$element().parents(".dx-field-item-content-wrapper").hasClass(INVALID_CLASS), "not invalid css class");
 
-    themes.current = origCurrent;
+    themes.isMaterial = origIsMaterial;
 
 });
 

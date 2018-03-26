@@ -167,7 +167,7 @@ var DataGrid = Widget.inherit({
             },
             {
                 device: function() {
-                    return /material/.test(themes.current());
+                    return themes.isMaterial();
                 },
                 options: {
                     /**
