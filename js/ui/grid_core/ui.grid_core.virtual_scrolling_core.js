@@ -124,7 +124,31 @@ exports.VirtualScrollController = Class.inherit((function() {
             return 0;
         }
 
-        return (pageSize && that._viewportSize > 0) ? Math.ceil(that._viewportSize / pageSize) : 1;
+        var realViewportSize = that._viewportSize;
+
+        if(isVirtualMode(that) && that.option("advancedRendering") && that.option("scrolling.removeInvisiblePages") && false) {
+            realViewportSize = 0;
+
+            var viewportSize = that._viewportSize * that._viewportItemSize;
+
+            var offset = that.getContentOffset();
+            var position = that._position || 0;
+
+            var virtualItemsCount = that.virtualItemsCount();
+            var totalItemsCount = that._dataSource.totalItemsCount();
+
+            for(var itemIndex = virtualItemsCount.begin; itemIndex < totalItemsCount; itemIndex++) {
+                if(offset >= position + viewportSize) break;
+
+                var itemSize = that._itemSizes[itemIndex] || that._viewportItemSize;
+                offset += itemSize;
+                if(offset >= position) {
+                    realViewportSize++;
+                }
+            }
+        }
+
+        return (pageSize && realViewportSize > 0) ? Math.ceil(realViewportSize / pageSize) : 1;
     };
 
     var getPreloadPageCount = function(that, previous) {
@@ -440,8 +464,8 @@ exports.VirtualScrollController = Class.inherit((function() {
                 }
                 if(that.pageIndex() !== newPageIndex || needLoad) {
                     that.pageIndex(newPageIndex);
-                    that.load();
                 }
+                that.load();
             }
         },
         viewportItemSize: function(size) {
