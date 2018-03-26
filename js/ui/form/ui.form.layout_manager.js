@@ -793,7 +793,7 @@ var LayoutManager = Widget.inherit({
                 editorInstance.setAria("required", renderOptions.isRequired);
                 that._registerEditorInstance(editorInstance, renderOptions);
 
-                if(/material/.test(themes.current())) {
+                if(themes.isMaterial()) {
                     that._addWrapperInvalidClass(editorInstance);
                 }
 
