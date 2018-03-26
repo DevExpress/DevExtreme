@@ -507,14 +507,6 @@
 @checkbox-indeterminate-bg: @base-accent;
 
 /**
-* @name 70. Focused state border color
-* @type color
-* @group editors.checkbox
-* @paletteColorOpacity 1
-*/
-@checkbox-focused-borderd-color: @base-focus-color;
-
-/**
 * @name 40. Background color
 * @type color
 * @group editors.checkbox
@@ -1885,8 +1877,8 @@
 * @group navigations.treeview
 * @paletteColorOpacity 1
 */
-@treeview-focused-bg: @base-focus-color;
-@treeview-focus-color: @base-inverted-text-color;
+@treeview-focused-bg: @base-hover-color;
+@treeview-focus-color: @base-text-color;
 /**
 * @name 90. Hovered state background color
 * @type color
@@ -1908,7 +1900,7 @@
 * @group navigations.treeview
 */
 @treeview-item-selected-color: @treeview-color;
-@treeview-item-selected-bg: darken(@base-bg, 10%);
+@treeview-item-selected-bg: darken(@base-bg, 12%);
 
 /**
 * @name 120. Spin icon color
