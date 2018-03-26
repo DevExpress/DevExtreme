@@ -299,11 +299,9 @@ QUnit.test("Hidden columns must have zero widths for virtual scrolling table", f
     var $tables = $(".dx-datagrid-rowsview table");
 
     // assert
-    assert.equal($tables.length, 2, "Table count");
+    assert.equal($tables.length, 1, "Table count");
     assert.ok(checkAdaptiveWidth($tables.eq(0).find("col").get(2).style.width), "Third column is hidden in first table");
     assert.ok(checkAdaptiveWidth($tables.eq(0).find("col").get(3).style.width), "Fourth column is hidden in first table");
-    assert.ok(checkAdaptiveWidth($tables.eq(1).find("col").get(2).style.width), "Third column is hidden in second table");
-    assert.ok(checkAdaptiveWidth($tables.eq(1).find("col").get(3).style.width), "Fourth column is hidden in second table");
 });
 
 // T402287

@@ -302,7 +302,7 @@ QUnit.test("Vertical scrollbar spacing should not be added when widget does not 
     clock.tick();
 
     // assert
-    assert.equal($(dataGrid.$element()).find(".dx-datagrid-headers").css("padding-right"), "0px");
+    assert.equal($(dataGrid.$element()).find(".dx-datagrid-headers").css("paddingRight"), "0px");
 
     clock.restore();
 });
@@ -1039,40 +1039,42 @@ QUnit.test("Resizing columns should work correctly when scrolling mode is 'virtu
     assert.ok(rowHeight > 50, "rowHeight > 50");
     assert.strictEqual(instance.getVisibleRows().length, 4, "row count");
 
-    // arrange
-    instance.pageIndex(10);
-
     setTimeout(function() {
-        // act
-        resizeController = instance.getController("columnsResizer");
-        resizeController._isResizing = true;
-        resizeController._targetPoint = { columnIndex: 1 };
-        resizeController._setupResizingInfo(-9900);
-        resizeController._moveSeparator({
-            event: {
-                data: resizeController,
-                type: "mousemove",
-                pageX: -9600,
-                preventDefault: commonUtils.noop
-            }
-        });
-        resizeController._endResizing({
-            event: {
-                data: resizeController
-            }
-        });
-
-        // assert
-        assert.strictEqual(instance.pageIndex(), 10, "current page index");
+        // arrange
+        instance.pageIndex(10);
 
         setTimeout(function() {
-            assert.notStrictEqual(rowsView._rowHeight, rowHeight, "row height has changed");
-            assert.ok(rowsView._rowHeight < 50, "rowHeight < 50");
-            assert.strictEqual(instance.getVisibleRows().length, 8, "row count");
+            // act
+            resizeController = instance.getController("columnsResizer");
+            resizeController._isResizing = true;
+            resizeController._targetPoint = { columnIndex: 1 };
+            resizeController._setupResizingInfo(-9900);
+            resizeController._moveSeparator({
+                event: {
+                    data: resizeController,
+                    type: "mousemove",
+                    pageX: -9600,
+                    preventDefault: commonUtils.noop
+                }
+            });
+            resizeController._endResizing({
+                event: {
+                    data: resizeController
+                }
+            });
+
+            // assert
             assert.strictEqual(instance.pageIndex(), 10, "current page index");
-            done();
+
+            setTimeout(function() {
+                assert.notStrictEqual(rowsView._rowHeight, rowHeight, "row height has changed");
+                assert.ok(rowsView._rowHeight < 50, "rowHeight < 50");
+                assert.strictEqual(instance.getVisibleRows().length, 8, "row count");
+                assert.strictEqual(instance.pageIndex(), 10, "current page index");
+                done();
+            }, 200);
         }, 200);
-    }, 200);
+    }, 300);
 });
 
 // T596274
@@ -2343,7 +2345,7 @@ QUnit.test("column headers visibility when hide removing row in batch editing mo
 
     // assert
     assert.strictEqual(dataGrid.getView("rowsView").getScrollbarWidth(), 0, "vertical scrollbar width");
-    assert.strictEqual($dataGrid.find(".dx-datagrid-headers").css("padding-right"), "0px", "no headers right padding");
+    assert.strictEqual($dataGrid.find(".dx-datagrid-headers").css("paddingRight"), "0px", "no headers right padding");
 });
 
 QUnit.test("Disable rows hover", function(assert) {
@@ -2649,7 +2651,7 @@ QUnit.test("aria-rowindex aria-colindex if virtual scrolling", function(assert) 
         }
     }).dxDataGrid("instance");
 
-    clock.tick();
+    clock.tick(300);
 
     rowsView = dataGrid._views.rowsView;
     row = rowsView.element().find(".dx-data-row").eq(0);
@@ -2854,7 +2856,7 @@ QUnit.test("height from style after updateDimensions when rendering to container
 // T362517
 QUnit.test("max-height from styles", function(assert) {
     // arrange, act
-    var $dataGrid = $("#dataGrid").css("max-height", 400).dxDataGrid({
+    var $dataGrid = $("#dataGrid").css("maxHeight", 400).dxDataGrid({
             loadingTimeout: undefined,
             dataSource: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
             columns: [
@@ -3084,7 +3086,6 @@ QUnit.test("Resize columns for virtual scrolling", function(assert) {
 
     // assert
     assert.equal($tables.eq(0).find("col").eq(0).width(), 400, "width of first column for first table");
-    assert.equal($tables.eq(1).find("col").eq(0).width(), 400, "width of first column for second table");
 });
 
 QUnit.testInActiveWindow("Focus search textbox after change search text", function(assert) {
@@ -3137,10 +3138,9 @@ QUnit.test("columns width when all columns have width and scrolling mode is virt
 
     var $dataGridTables = $dataGrid.find(".dx-datagrid-table");
     // assert
-    assert.equal($dataGridTables.length, 3);
+    assert.equal($dataGridTables.length, 2);
     assert.equal($dataGridTables.eq(0).find(".dx-row").first().find("td").last().outerWidth(), 700);
     assert.equal($dataGridTables.eq(1).find(".dx-row").first().find("td").last().outerWidth(), 700);
-    assert.equal($dataGridTables.eq(2).find(".dx-row").first().find("td").last().outerWidth(), 700);
 });
 
 // T422575, T411642
@@ -3190,12 +3190,10 @@ QUnit.test("column widths should be synchronized when scrolling mode is virtual 
     var $dataGridTables = $dataGrid.find(".dx-datagrid-table");
     // assert
     assert.equal(contentReadyCallCount, 1);
-    assert.equal($dataGridTables.length, 3);
+    assert.equal($dataGridTables.length, 2);
     assert.equal($dataGridTables.eq(0).find(".dx-row").first().find("td").eq(0).outerWidth(), $dataGridTables.eq(1).find(".dx-row").first().find("td").eq(0).outerWidth());
-    assert.equal($dataGridTables.eq(0).find(".dx-row").first().find("td").eq(0).outerWidth(), $dataGridTables.eq(2).find(".dx-row").first().find("td").eq(0).outerWidth());
 
     assert.equal($dataGridTables.eq(0).find(".dx-row").first().find("td").eq(1).outerWidth(), $dataGridTables.eq(1).find(".dx-row").first().find("td").eq(1).outerWidth());
-    assert.equal($dataGridTables.eq(0).find(".dx-row").first().find("td").eq(1).outerWidth(), $dataGridTables.eq(2).find(".dx-row").first().find("td").eq(1).outerWidth());
 
     clock.restore();
 });
@@ -3232,8 +3230,9 @@ QUnit.test("columns width when all columns have width and scrolling mode is virt
     var $dataGridTables = $dataGrid.find(".dx-datagrid-content").not(".dx-datagrid-content-fixed").find(".dx-datagrid-table");
 
     // assert
-    assert.equal($dataGridTables.length, 3);
+    assert.equal($dataGridTables.length, 2);
     assert.equal($dataGridTables.eq(0).find(".dx-row").first().find("td").last().outerWidth(), 100);
+    assert.equal($dataGridTables.eq(1).find(".dx-row").first().find("td").last().outerWidth(), 100);
 });
 
 // T144297
@@ -3758,7 +3757,7 @@ QUnit.test("Keep horizontal scroller position after grouping column with native 
 
 // T362355
 QUnit.test("Keep vertical browser scroll position after refresh with freespace row", function(assert) {
-    $("#qunit-fixture").css("overflow-y", "auto").height(50);
+    $("#qunit-fixture").css("overflowY", "auto").height(50);
 
     var items = [];
     for(var i = 0; i < 21; i++) {
@@ -4504,7 +4503,6 @@ QUnit.testInActiveWindow("Height virtual table should be updated to show validat
     // assert
     $tableElements = dataGrid.$element().find(".dx-datagrid-rowsview").find("table");
     assert.roughEqual($tableElements.eq(0).outerHeight(), 35, 3, "height main table");
-    assert.roughEqual($tableElements.eq(1).outerHeight(), 35, 3, "height virtual table");
 
     // act
     dataGrid.editCell(0, 0);
@@ -4513,7 +4511,6 @@ QUnit.testInActiveWindow("Height virtual table should be updated to show validat
     // assert
     $tableElements = dataGrid.$element().find(".dx-datagrid-rowsview").find("table");
     assert.roughEqual($tableElements.eq(0).outerHeight(), 68, 3, "height main table");
-    assert.roughEqual($tableElements.eq(1).outerHeight(), 68, 3, "height virtual table");
 
     dataGrid.closeEditCell();
     clock.tick();
@@ -4521,7 +4518,6 @@ QUnit.testInActiveWindow("Height virtual table should be updated to show validat
     // assert
     $tableElements = dataGrid.$element().find(".dx-datagrid-rowsview").find("table");
     assert.roughEqual($tableElements.eq(0).outerHeight(), 35, 3, "height main table");
-    assert.roughEqual($tableElements.eq(1).outerHeight(), 35, 3, "height virtual table");
     clock.restore();
 });
 
@@ -5524,7 +5520,7 @@ QUnit.test("dataSource change when scrolling mode virtual", function(assert) {
         dataSource: [{ test: 1 }, { test: 2 }]
     });
 
-    this.clock.tick();
+    this.clock.tick(300);
 
     // act
     dataGrid.option("dataSource", [{ test: 3 }, { test: 4 }]);
@@ -6399,7 +6395,7 @@ QUnit.test("Group row has correct text-align in RTL", function(assert) {
 
     // assert
     assert.ok(groupedRows.length, "We have grouped row");
-    assert.equal(cells.eq(1).css("text-align"), "right", "Grouped cell has correct text-align");
+    assert.equal(cells.eq(1).css("textAlign"), "right", "Grouped cell has correct text-align");
 });
 
 QUnit.test("CellTemplate and master-detail template cells has correct text-align in RTL", function(assert) {
@@ -6435,7 +6431,7 @@ QUnit.test("CellTemplate and master-detail template cells has correct text-align
             }
         }),
         getCellTextAlignByButtonNumber = function(buttonNumber) {
-            return $(dataGrid.$element()).find(".dx-button").eq(buttonNumber).closest("td").css("text-align");
+            return $(dataGrid.$element()).find(".dx-button").eq(buttonNumber).closest("td").css("textAlign");
         };
 
     // assert
@@ -6582,7 +6578,6 @@ QUnit.testInActiveWindow("Tab key should open editor in next cell when virtual s
 
     this.clock.tick();
     var rowData = dataGrid.getTopVisibleRowData();
-
     dataGrid.editCell(dataGrid.getRowIndexByKey(array[198]), 0);
     this.clock.tick();
 
@@ -6830,6 +6825,53 @@ QUnit.test("loading count after refresh when scrolling mode virtual", function(a
     // assert
     assert.equal(loadingCount, 2, "virtual scrolling load 2 pages");
     assert.equal(contentReadyCount, 1, "contentReady is called once");
+});
+
+QUnit.test("synchronous render and asynchronous updateDimensions during paging if virtual scrolling is enabled", function(assert) {
+    // arrange, act
+
+    var array = [];
+    for(var i = 0; i < 50; i++) {
+        array.push({ test: i });
+    }
+    var dataGrid = createDataGrid({
+        onContentReady: function() {
+            contentReadyCount++;
+        },
+        height: 100,
+        scrolling: {
+            mode: "virtual"
+        },
+        paging: {
+            pageSize: 5
+        },
+        dataSource: {
+            store: array
+        }
+    });
+
+    this.clock.tick();
+
+    var resizingController = dataGrid.getController("resizing");
+
+    sinon.spy(resizingController, "updateDimensions");
+
+    var contentReadyCount = 0;
+
+    // act
+    dataGrid.pageIndex(5);
+
+    // assert
+    assert.equal(contentReadyCount, 2, "contentReady is called without timeout");
+    assert.equal(dataGrid.getVisibleRows().length, 10, "row count");
+    assert.equal(dataGrid.getVisibleRows()[0].data.test, 25, "top visible row");
+    assert.equal(resizingController.updateDimensions.callCount, 0, "updateDimensions is not called");
+
+    // act
+    this.clock.tick(300);
+
+    // assert
+    assert.equal(resizingController.updateDimensions.callCount, 1, "updateDimensions is called with timeout");
 });
 
 // T551304
