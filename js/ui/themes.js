@@ -26,7 +26,7 @@ var context,
     knownThemes,
     currentThemeName,
     pendingThemeName,
-    materialTheme;
+    isMaterialTheme;
 
 var timerId;
 
@@ -179,14 +179,13 @@ function init(options) {
     processMarkup();
 
     currentThemeName = undefined;
-    materialTheme = undefined;
+    isMaterialTheme = undefined;
     current(options);
 }
 
 function current(options) {
     if(!arguments.length) {
         currentThemeName = currentThemeName || readThemeMarker();
-        setMaterialThemeSign();
         return currentThemeName;
     }
 
@@ -239,7 +238,7 @@ function current(options) {
         }
     }
 
-    setMaterialThemeSign();
+    isMaterialTheme = /material/.test(currentThemeName || readThemeMarker());
 
     attachCssClasses(viewPortUtils.originalViewPort(), currentThemeName);
 }
@@ -316,13 +315,8 @@ function themeReady(callback) {
     themeReadyCallback.add(callback);
 }
 
-function setMaterialThemeSign() {
-    var currentTheme = currentThemeName || readThemeMarker();
-    materialTheme = /material/.test(currentTheme);
-}
-
 function isMaterial() {
-    return materialTheme;
+    return isMaterialTheme;
 }
 
 var initDeferred = new Deferred();
@@ -399,6 +393,6 @@ exports.resetTheme = function() {
     $activeThemeLink && $activeThemeLink.attr("href", "about:blank");
     currentThemeName = null;
     pendingThemeName = null;
-    materialTheme = false;
+    isMaterialTheme = false;
 };
 
