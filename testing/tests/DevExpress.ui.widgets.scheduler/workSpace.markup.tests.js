@@ -23,6 +23,8 @@ const WORKSPACE_CLASS = "dx-scheduler-work-space",
     DATE_TABLE_CLASS = "dx-scheduler-date-table",
     ALL_DAY_TITLE_CLASS = "dx-scheduler-all-day-title",
 
+    HORIZONTAL_GROUP_TABLE_CLASS = "dx-scheduler-work-space-horizontal-group-table",
+
     CELL_CLASS = "dx-scheduler-date-table-cell",
     HORIZONTAL_SIZES_CLASS = "dx-scheduler-cell-sizes-horizontal",
     VERTICAL_SIZES_CLASS = "dx-scheduler-cell-sizes-vertical";
@@ -515,6 +517,18 @@ QUnit.module("Workspace Day markup with gorizontal grouping", dayWithGroupingMod
         const $element = this.instance.$element();
 
         assert.ok($element.hasClass("dx-scheduler-work-space-horizontal-grouped"), "Workspace has 'dx-scheduler-work-space-horizontal-grouped' css class");
+    });
+
+    QUnit.test("Date table should have right group header", (assert) => {
+        const $element = this.instance.$element();
+
+        assert.equal($element.find("." + HORIZONTAL_GROUP_TABLE_CLASS).length, 1, "Group header is rendered");
+    });
+
+    QUnit.test("Date table should have right group header cells count", (assert) => {
+        const $element = this.instance.$element();
+
+        assert.equal($element.find(".dx-scheduler-group-header").length, 2, "Group header cells count is ok");
     });
 
     QUnit.test("Scheduler workspace Day should have a right rows count", (assert) => {
@@ -1278,4 +1292,17 @@ QUnit.module("Workspace Month markup with gorizontal grouping", monthWithGroupin
             assert.equal($(this).text(), date, "Time is OK");
         });
     });
+
+    QUnit.test("Date table should have right group header", (assert) => {
+        const $element = this.instance.$element();
+
+        assert.equal($element.find("." + HORIZONTAL_GROUP_TABLE_CLASS).length, 1, "Group header is rendered");
+    });
+
+    QUnit.test("Date table should have right group header cells count", (assert) => {
+        const $element = this.instance.$element();
+
+        assert.equal($element.find(".dx-scheduler-group-header").length, 2, "Group header cells count is ok");
+    });
+
 });
