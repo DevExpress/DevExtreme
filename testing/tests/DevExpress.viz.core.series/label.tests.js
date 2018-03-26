@@ -1,13 +1,12 @@
 "use strict";
 
-var $ = require("jquery"),
-    vizMocks = require("../../helpers/vizMocks.js"),
-    labelModule = require("viz/series/points/label"),
-    pointModule = require("viz/series/points/base_point"),
-    chartMocks = require("../../helpers/chartMocks.js"),
-    MockTranslator = chartMocks.MockTranslator;
+import $ from "jquery";
+import * as vizMocks from "../../helpers/vizMocks.js";
+import pointModule from "viz/series/points/base_point";
+import labelModule from "viz/series/points/label";
+import { MockTranslator } from "../../helpers/chartMocks.js";
 
-var environment = {
+const environment = {
     beforeEach: function() {
         this.renderer = new vizMocks.Renderer();
         this.data = {

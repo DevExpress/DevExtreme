@@ -1,22 +1,15 @@
 "use strict";
 
-var $ = require("jquery"),
-    vizMocks = require("../../helpers/vizMocks.js"),
-    commonUtils = require("core/utils/common"),
-    typeUtils = require("core/utils/type"),
-    pointModule = require("viz/series/points/base_point"),
-    originalPoint = pointModule.Point,
-    seriesModule = require("viz/series/base_series"),
-    Series = seriesModule.Series,
-    mixins = seriesModule.mixins,
-    chartSeriesNS = mixins.chart,
-    chartMocks = require("../../helpers/chartMocks.js"),
-    insertMockFactory = chartMocks.insertMockFactory,
-    MockTranslator = chartMocks.MockTranslator,
-    MockPoint = chartMocks.MockPoint,
-    MockAxis = chartMocks.MockAxis;
+import $ from "jquery";
+import vizMocks from "../../helpers/vizMocks.js";
+import commonUtils from "core/utils/common";
+import typeUtils from "core/utils/type";
+import pointModule from "viz/series/points/base_point";
+import { Series, mixins } from "viz/series/base_series";
+import { insertMockFactory, MockTranslator, MockPoint, MockAxis } from "../../helpers/chartMocks.js";
 
-require("viz/chart");
+const originalPoint = pointModule.Point;
+const chartSeriesNS = mixins.chart;
 
 var createSeries = function(options, settings) {
     settings = settings || {};
