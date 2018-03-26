@@ -713,6 +713,10 @@ var SelectBox = DropDownList.inherit({
             actionResult = this._customItemCreatingAction(params),
             item = commonUtils.ensureDefined(actionResult, params.customItem);
 
+        if(isDefined(actionResult)) {
+            errors.log("W0015", "onCustomItemCreating", "customItem");
+        }
+
         return item;
     },
 

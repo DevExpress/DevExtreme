@@ -182,7 +182,7 @@ module.exports = errorUtils({
     * @name Errors and Warnings_E0121
     * @publicName E0121
     */
-    E0121: "The onCustomItemCreating action should return an item or Promise of jQuery Deferred object resolved when an item is created",
+    E0121: "The customItem field of the onCustomItemCreating action should contain an item or Promise of jQuery Deferred object resolved when an item is created",
 
 
     /**
@@ -280,5 +280,11 @@ module.exports = errorUtils({
     * @name Errors and Warnings_W0014
     * @publicName W0014
     */
-    W0014: "{0} - '{1}' type is deprecated in {2}. {3}"
+    W0014: "{0} - '{1}' type is deprecated in {2}. {3}",
+
+    /**
+    * @name Errors and Warnings_W0015
+    * @publicName W0015
+    */
+    W0015: "Instead of returning a value from the '{0}' function, write it into the '{1}' field of the function's parameter."
 });
