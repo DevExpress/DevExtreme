@@ -1,6 +1,6 @@
 "use strict";
 
-var $ = require("../core/renderer"),
+var $ = require("../../core/renderer"),
     themes = require("../themes");
 
 var TimelineHeaderFormatter = {

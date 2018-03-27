@@ -24,6 +24,8 @@
     @MATERIAL_SCHEDULER_APPOINTMENT_TRANSPARENT_RIGHT_BORDER: 1px solid transparent;
 
     @MATERIAL_SCHEDULER_APPOINTMENT_TOOLTIP_WIDTH: 270px;
+    @MATERIAL_SCHEDULER_WORKSPACE_MONTH_CELL_LEFT_OFFSET: 8px;
+    @MATERIAL_SCHEDULER_WORKSPACE_MONTH_HEADER_HEIGHT: 22px;
 }
 
 .dx-size-compact() {
@@ -193,7 +195,7 @@
     }
 }
 
-.dx-scheduler-work-space-month {
+.dx-scheduler-work-space.dx-scheduler-work-space-month {
     .dx-scheduler-group-mixin(@MATERIAL_SCHEDULER_HEADER_PANEL_TABLE_CELL_HEIGHT + @MATERIAL_SCHEDULER_HEADER_PANEL_TOP_GAP);
 
     .dx-scheduler-appointment-content {
@@ -207,6 +209,26 @@
 
     .dx-scheduler-header-panel {
         border-bottom: none;
+        //height: @MATERIAL_SCHEDULER_WORKSPACE_MONTH_HEADER_HEIGHT;
+    }
+
+    .dx-scheduler-date-table-cell {
+        font-size: @MATERIAL_SCHEDULER_MONTH_DATE_TEXT_SIZE;
+        text-align: left;
+        padding: @MATERIAL_SCHEDULER_WORKSPACE_MONTH_CELL_LEFT_OFFSET;
+    }
+
+    .dx-scheduler-header-panel-cell {
+        height: @MATERIAL_SCHEDULER_WORKSPACE_MONTH_HEADER_HEIGHT;
+        .dx-scheduler-header-panel-cell-firstline {
+            margin-left: @MATERIAL_SCHEDULER_WORKSPACE_MONTH_CELL_LEFT_OFFSET;
+            line-height: @MATERIAL_SCHEDULER_WORKSPACE_MONTH_HEADER_HEIGHT;
+        }
+    }
+
+    .dx-scheduler-dropdown-appointments {
+        margin-top: 10px;
+        margin-left: 40px;
     }
 }
 
@@ -232,7 +254,8 @@
         min-width: auto;
         width: auto;
         .dx-button-content {
-            padding: 3px 0;
+            padding: 4px 0;
+            font-size: 12px;
         }
     }
 }
@@ -491,12 +514,6 @@
             padding: 2px 10px 3px 10px;
         }
     }
-}
-
-.dx-scheduler-work-space-month .dx-scheduler-date-table-cell {
-    font-size: @MATERIAL_SCHEDULER_MONTH_DATE_TEXT_SIZE;
-    text-align: left;
-    padding-left: 15px; // TODO the same that in header?
 }
 
 .dx-scheduler-header-panel,

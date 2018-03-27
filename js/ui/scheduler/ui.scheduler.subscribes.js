@@ -242,10 +242,6 @@ var subscribes = {
         return this.getLayoutManager().getRenderingStrategyInstance().getCompactAppointmentGroupMaxWidth(this._getViewCountConfig().intervalCount);
     },
 
-    getDefaultCellWidth: function() {
-        return this.getLayoutManager().getRenderingStrategyInstance().getDefaultCellWidth();
-    },
-
     getStartDate: function(appointmentData, skipNormalize) {
         return this._getStartDate(appointmentData, skipNormalize);
     },

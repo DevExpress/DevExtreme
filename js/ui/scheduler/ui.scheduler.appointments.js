@@ -858,9 +858,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
                 cellButtonWidth = buttonWidth;
 
             if(themes.isMaterial()) {
-                var cellWidth = this.invoke("getDefaultCellWidth");
                 cellButtonWidth -= APPOINTMENT_GROUP_MATERIAL_OFFSET;
-                left += cellWidth - buttonWidth - APPOINTMENT_GROUP_MATERIAL_OFFSET;
             }
 
             this.notifyObserver("renderDropDownAppointments", {
