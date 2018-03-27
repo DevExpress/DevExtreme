@@ -1,16 +1,17 @@
 "use strict";
 
-var $ = require("jquery"),
-    translator2DModule = require("viz/translators/translator2d"),
-    vizUtilsModule = require("viz/core/utils"),
-    Axis = require("viz/axes/base_axis").Axis,
-    vizMocks = require("../../helpers/vizMocks.js"),
-    rangeModule = require("viz/translators/range"),
-    StubTranslator = vizMocks.stubClass(translator2DModule.Translator2D, {
-        updateBusinessRange: function(range) {
-            this.getBusinessRange.returns(range);
-        }
-    });
+import $ from "jquery";
+import vizMocks from "../../helpers/vizMocks.js";
+import vizUtilsModule from "viz/core/utils";
+import { Axis } from "viz/axes/base_axis";
+import translator2DModule from "viz/translators/translator2d";
+import rangeModule from "viz/translators/range";
+
+const StubTranslator = vizMocks.stubClass(translator2DModule.Translator2D, {
+    updateBusinessRange: function(range) {
+        this.getBusinessRange.returns(range);
+    }
+});
 
 function getArray(len, content) {
     var i,
@@ -1069,6 +1070,22 @@ QUnit.test("getAggregationInfo should have ticks out from bounds", function(asse
     assert.strictEqual(aggregationInfo.interval, 5);
     assert.strictEqual(aggregationInfo.ticks[0], 0);
     assert.strictEqual(aggregationInfo.ticks[aggregationInfo.ticks.length - 1], 100);
+});
+
+QUnit.test("aggregationInfo should not genrate tick if min or max is undefined", function(assert) {
+    this.createAxis();
+    this.updateOptions({
+        valueType: "datetime",
+        type: "continuous"
+    });
+
+    this.axis.setBusinessRange({ addRange: function() { } });
+    this.axis.createTicks(canvas(400));
+
+    const aggregationInfo = this.axis.getAggregationInfo();
+
+    assert.strictEqual(aggregationInfo.interval, undefined);
+    assert.deepEqual(aggregationInfo.ticks, []);
 });
 
 QUnit.test("getAggregationInfo for discrete axis", function(assert) {
