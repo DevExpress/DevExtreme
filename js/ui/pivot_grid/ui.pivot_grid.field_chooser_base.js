@@ -2,7 +2,6 @@
 
 var $ = require("../../core/renderer"),
     hasWindow = require("../../core/utils/window").hasWindow(),
-    hasWindow = false,
     eventsEngine = require("../../events/core/events_engine"),
     ArrayStore = require("../../data/array_store"),
     clickEvent = require("../../events/click"),

@@ -2,7 +2,6 @@
 
 var $ = require("../../core/renderer"),
     hasWindow = require("../../core/utils/window").hasWindow(),
-    hasWindow = false,
     iconUtils = require("../../core/utils/icon"),
     isDefined = require("../../core/utils/type").isDefined,
     extend = require("../../core/utils/extend").extend,
@@ -630,31 +629,27 @@ var FieldChooser = BaseFieldChooser.inherit({
             .text(caption)
             .appendTo($fieldsHeaderContainer);
 
-        $fieldsContainer = $(DIV).addClass("dx-area-fields").addClass(AREA_DRAG_CLASS);
-        if(hasWindow) {
-            $fieldsContainer.height(0);
-        }
-        $fieldsContainer.appendTo($areaContainer);
+        $fieldsContainer = $(DIV).addClass("dx-area-fields")
+            .addClass(AREA_DRAG_CLASS)
+            .appendTo($areaContainer);
 
         if(area !== "all") {
-            $fieldsContent = $(DIV).addClass("dx-area-field-container").appendTo($fieldsContainer);
-            render = function() {
-                that._renderAreaFields($fieldsContent, area);
-            };
-
-            that._dataChangedHandlers.push(render);
-            render();
-            $fieldsContainer
-                .attr("group", area)
-                .attr("allow-scrolling", true)
-                .dxScrollable();
+            $fieldsContainer.attr("group", area).attr("allow-scrolling", true);
+            if(hasWindow) {
+                $fieldsContent = $(DIV).addClass("dx-area-field-container").appendTo($fieldsContainer);
+                render = function() {
+                    that._renderAreaFields($fieldsContent, area);
+                };
+                that._dataChangedHandlers.push(render);
+                render();
+                $fieldsContainer.dxScrollable();
+            }
         } else {
             $areaContainer.addClass("dx-all-fields");
-            if(that.option("layout") === 2) {
-                $areaContainer.addClass("dx-all-fields-l-2");
+            if(hasWindow) {
+                $fieldsContainer.addClass("dx-treeview-border-visible");
+                that._renderFieldsTreeView($fieldsContainer);
             }
-            $fieldsContainer.addClass("dx-treeview-border-visible");
-            that._renderFieldsTreeView($fieldsContainer);
         }
     },
 
@@ -691,29 +686,7 @@ var FieldChooser = BaseFieldChooser.inherit({
     * @publicName updateDimensions()
     */
     updateDimensions: function() {
-        var $element = this.$element(),
-            $container = $element.children(".dx-pivotgridfieldchooser-container"),
-            $cols = $element.find(".dx-col"),
-            $areaElements = $element.find(".dx-area-fields"),
-            $scrollableElements = $element.find(".dx-area .dx-scrollable"),
-            areaHeight;
-
-        $areaElements.height(0);
-
-        if(this.option("layout") === 0) {
-            areaHeight = Math.floor(($element.height() - $container.height()) / 3);
-            $areaElements.height(areaHeight);
-            $areaElements.eq(0).height($cols.eq(1).height() - $cols.eq(0).height() + areaHeight);
-        } else if(this.option("layout") === 1) {
-            areaHeight = Math.floor(($element.height() - $container.height()) / 4);
-            $areaElements.height(areaHeight);
-            $areaElements.eq(0).height($cols.eq(1).height() - $cols.eq(0).height() + areaHeight);
-        } else {
-            areaHeight = Math.floor(($element.height() - $container.height()) / 4);
-            $areaElements.height(areaHeight);
-            $areaElements.eq(0).height(areaHeight * 2);
-        }
-
+        var $scrollableElements = this.$element().find(".dx-area .dx-scrollable");
         $scrollableElements.dxScrollable("update");
     },
 

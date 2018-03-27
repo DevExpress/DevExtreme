@@ -439,27 +439,29 @@
     .dx-area {
         padding: 5px;
         display: flex;
-        flex-basis: 133px;
-        flex-grow: 0;
+        height: 33.33%;
         flex-direction: column;
     }
 
-    .dx-pivotgridfieldchooser-container.dx-l-2 .dx-area {
-        flex-basis: 114px;
+    .dx-layout-2 {
+        height: 57%;
+        .dx-area {
+            height: 50%;
+        }
     }
 
     .dx-area.dx-all-fields {
-        flex-grow: 2;
+        flex-grow: 1;
     }
 
     .dx-area .dx-area-fields {
         margin-top: 3px;
         border: @PIVOTGRID_BORDER;
+        height: 100%;
     }
 
-    .dx-area-fields-header {
-        display: flex;
-        align-items: center;
+    .dx-area-fields-header .dx-area-caption {
+        align-self: center;
     }
 
     .dx-area-fields[group] {

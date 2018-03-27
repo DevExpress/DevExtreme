@@ -67,28 +67,30 @@ QUnit.test("Init markup", function(assert) {
 
     var $cols = $container.find(".dx-col"),
         $areas = $cols.find(".dx-area"),
-        $fields = $areas.find(".dx-area .dx-area-fields");
+        $headers = $areas.children(".dx-area-fields-header");
 
     // assert
     assert.ok(fieldChooser);
     assert.ok($container.hasClass("dx-pivotgridfieldchooser"), "container has dx-pivotgridfieldchooser class");
     assert.ok($container.hasClass("dx-pivotgrid-fields-container"), "container has dx-pivotgrid-fields-container class");
     assert.equal($cols.length, 2, "container has 2 columns");
+    assert.equal($cols.find(".dx-area.dx-all-fields").length, 1, "all fields area");
     assert.equal($cols.eq(0).find(".dx-area").length, 2, "1st col areas count");
     assert.equal($cols.eq(1).find(".dx-area").length, 3, "2nd col areas count");
-    assert.equal($areas.children(".dx-area-icon").length, 5, "areas has icons");
-    assert.equal($areas.children(".dx-area-caption").length, 5, "areas has captions");
-    assert.equal($fields.children().length > 0, windowUtils.hasWindow(), "fields content");
+    assert.equal($headers.length, 5, "area headers count");
+    assert.equal($headers.children(".dx-area-icon").length, 5, "areas has icons");
+    assert.equal($headers.children(".dx-area-caption").length, 5, "areas has captions");
+    assert.equal($areas.find(".dx-area-fields").children().length > 0, windowUtils.hasWindow(), "fields content");
 });
 
 QUnit.test("Empty DataSource", function(assert) {
-    var dataSourceOptions = {},
-        $cols = $container.find(".dx-col"),
-        $areas = $cols.find(".dx-area"),
-        $fields = $areas.find(".dx-area .dx-area-fields");
-
+    var dataSourceOptions = {};
     // act
     setupFieldChooser(dataSourceOptions);
+
+    var $cols = $container.find(".dx-col"),
+        $areas = $cols.find(".dx-area"),
+        $headers = $areas.children(".dx-area-fields-header");
 
     // assert
     assert.ok(fieldChooser);
@@ -96,10 +98,12 @@ QUnit.test("Empty DataSource", function(assert) {
     assert.ok($container.hasClass("dx-pivotgridfieldchooser"), "container has dx-pivotgridfieldchooser class");
     assert.ok($container.hasClass("dx-pivotgrid-fields-container"), "container has dx-pivotgrid-fields-container class");
     assert.equal($cols.length, 2, "container has 2 columns");
+    assert.equal($cols.find(".dx-area.dx-all-fields").length, 1, "all fields area");
     assert.equal($cols.eq(0).find(".dx-area").length, 2, "1st col areas count");
     assert.equal($cols.eq(1).find(".dx-area").length, 3, "2nd col areas count");
-    assert.equal($areas.children(".dx-area-icon").length, 5, "areas has icons");
-    assert.equal($areas.children(".dx-area-caption").length, 5, "areas has captions");
-    assert.equal($fields.children().length > 0, windowUtils.hasWindow(), "fields content");
+    assert.equal($headers.length, 5, "area headers count");
+    assert.equal($headers.children(".dx-area-icon").length, 5, "areas has icons");
+    assert.equal($headers.children(".dx-area-caption").length, 5, "areas has captions");
+    assert.equal($areas.find(".dx-area-fields").children().length > 0, windowUtils.hasWindow(), "fields content");
     assert.strictEqual(dataSource.load.callCount, 0);
 });
