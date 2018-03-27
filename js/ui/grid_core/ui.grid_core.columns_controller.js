@@ -106,6 +106,7 @@ module.exports = {
              * @name dxDataGridOptions_columns
              * @publicName columns
              * @type Array<dxDataGridColumn>
+             * @fires dxDataGridOptions_onOptionChanged
              * @default undefined
              */
             /**
