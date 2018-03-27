@@ -998,8 +998,8 @@ QUnit.test("Scheduler timeline workweek should contain two rows in header panel"
 });
 
 QUnit.test("Scheduler timeline workweek should contain two spans in header panel cell in Material theme", function(assert) {
-    var origThemes = themes.current;
-    themes.current = function() { return "material"; };
+    var origIsMaterial = themes.isMaterial;
+    themes.isMaterial = function() { return true; };
     this.instance.option({
         currentDate: new Date(2015, 9, 29),
         firstDayOfWeek: 1,
@@ -1021,7 +1021,7 @@ QUnit.test("Scheduler timeline workweek should contain two spans in header panel
         assert.ok($cell.find("span").last().hasClass("dx-scheduler-header-panel-cell-secondline"), "second span has correct class");
         assert.equal($cell.attr("colspan"), 2, "Cell colspan is OK");
     }
-    themes.current = origThemes;
+    themes.isMaterial = origIsMaterial;
 });
 
 

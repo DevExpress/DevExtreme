@@ -177,10 +177,10 @@
             margin-top: @MATERIAL_SCHEDULER_HEADER_PANEL_TOP_GAP;
         }
         
-        .dx-scheduler-all-day-title-mixin(@MATERIAL_SCHEDULER_HEADER_HEIGHT + @MATERIAL_SCHEDULER_WORKSPACE_DATE_TABLE_CELL_HEIGHT);
+        .dx-scheduler-all-day-title-mixin(@MATERIAL_SCHEDULER_HEADER_HEIGHT + @MATERIAL_SCHEDULER_HEADER_PANEL_TABLE_CELL_HEIGHT);
        
         .dx-scheduler-all-day-title {
-            top: @MATERIAL_SCHEDULER_HEADER_HEIGHT + @MATERIAL_SCHEDULER_WORKSPACE_DATE_TABLE_CELL_HEIGHT;// TODO @MATERIAL_SCHEDULER_HEADER_HEIGHT + @MATERIAL_SCHEDULER_HEADER_PANEL_TABLE_CELL_HEIGHT instead?
+            top: @MATERIAL_SCHEDULER_HEADER_HEIGHT + @MATERIAL_SCHEDULER_HEADER_PANEL_TABLE_CELL_HEIGHT;
         }
     }
 
@@ -225,8 +225,16 @@
     }
 }
 
-.dx-scheduler-dropdown-appointments .dx-button-content {
-    padding: 0;
+.dx-scheduler-dropdown-appointments {
+    position: absolute;
+    &.dx-button {
+        height: 20px;
+        min-width: auto;
+        width: auto;
+        .dx-button-content {
+            padding: 3px 0;
+        }
+    }
 }
 
 .dx-scheduler-header {

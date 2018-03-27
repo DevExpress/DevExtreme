@@ -1069,19 +1069,6 @@ var Scheduler = Widget.inherit({
         return this.callBase().concat([
             {
                 device: function() {
-                    /material/.test(themes.current());// TODO dos not work at all
-                },
-                options: {
-                    /**
-                     * @name dxSchedulerOptions_useDropDownViewSwitcher
-                     * @publicName useDropDownViewSwitcher
-                     * @default true @for Material
-                     */
-                    useDropDownViewSwitcher: true,
-                }
-            },
-            {
-                device: function() {
                     return devices.real().deviceType === "desktop" && !devices.isSimulator();
                 },
                 options: {
@@ -1122,6 +1109,19 @@ var Scheduler = Widget.inherit({
                         allowDragging: false,
                         allowResizing: false
                     }
+                }
+            },
+            {
+                device: function() {
+                    return themes.isMaterial();
+                },
+                options: {
+                        /**
+                         * @name dxSchedulerOptions_useDropDownViewSwitcher
+                         * @publicName useDropDownViewSwitcher
+                         * @default true @for Material
+                         */
+                    useDropDownViewSwitcher: true,
                 }
             }
         ]);
