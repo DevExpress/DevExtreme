@@ -1,15 +1,11 @@
 "use strict";
 
-var $ = require("jquery"),
-    noop = require("core/utils/common").noop,
-    vizMocks = require("../../helpers/vizMocks.js"),
-    seriesDataSourceModule = require("viz/range_selector/series_data_source"),
-    SeriesDataSource = seriesDataSourceModule.SeriesDataSource,
-    ThemeManager = require("viz/components/chart_theme_manager").ThemeManager,
-    chartMocks = require("../../helpers/chartMocks.js"),
-    setupSeriesFamily = chartMocks.setupSeriesFamily,
-    MockTranslator = chartMocks.MockTranslator,
-    MockAxis = chartMocks.MockAxis;
+import $ from "jquery";
+import { noop } from "core/utils/common";
+import vizMocks from "../../helpers/vizMocks.js";
+import { SeriesDataSource } from "viz/range_selector/series_data_source";
+import { ThemeManager } from "viz/components/chart_theme_manager";
+import chartMocks from "../../helpers/chartMocks.js";
 
 function createSeriesDataSource(options) {
     var seriesDataSource = new SeriesDataSource(options);
@@ -20,10 +16,10 @@ function createSeriesDataSource(options) {
 
 var environment = {
     beforeEach: function() {
-        this.argumentAxis = new MockAxis({ renderer: new vizMocks.Renderer() });
+        this.argumentAxis = new chartMocks.MockAxis({ renderer: new vizMocks.Renderer() });
         this.argumentAxis.calculateInterval = function(a, b) { return Math.abs(a - b); };
 
-        sinon.stub(this.argumentAxis, "getTranslator").returns(new MockTranslator({}));
+        sinon.stub(this.argumentAxis, "getTranslator").returns(new chartMocks.MockTranslator({}));
     }
 };
 
@@ -992,7 +988,7 @@ var checkPoints = function(assert, series, argumentArray, valueArray) {
 QUnit.module("SeriesDataSource seriesFamilies", {
     beforeEach: function() {
         environment.beforeEach.call(this);
-        setupSeriesFamily();
+        chartMocks.setupSeriesFamily();
     }
 });
 
