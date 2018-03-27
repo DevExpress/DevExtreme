@@ -135,7 +135,7 @@
 * @type color
 * @group badges
 */
-@badge-bg: #757575;
+@badge-bg: @base-accent;
 
 /**
 * @name 20. Badge text color
@@ -750,49 +750,51 @@
 
 // Tabs
 /**
-* @name 40. Bottom layer background color
+* @name 30. Bottom layer background color
 * @type color
 * @group navigations.tabs
 */
 @tabs-tab-bg: darken(@base-bg, 3%);
 
-/**
-* @name 20. Selected item background color
-* @type color
-* @group navigations.tabs
-*/
-@tabs-tab-selected-bg: @base-bg;
-
-@tabs-tab-selected-color: @base-text-color;
-
 @tabs-tab-icon-color: @base-icon-color;
-@tabs-tab-icon-selected-color: @tabs-tab-icon-color;
-
-@tabs-tab-button-disabled-opacity: @button-disabled-icon-opacity;
 
 /**
-* @name 30. Border color
-* @type color
-* @group navigations.tabs
-*/
-@tabs-border-color: @base-border-color;
-
-/**
-* @name 40. Focus border color
+* @name 20. Selected tab text color
 * @type color
 * @group navigations.tabs
 * @paletteColorOpacity 1
 */
-@tabs-focused-border-color: @base-focus-color;
+@tabs-tab-selected-color: @base-accent;
+
+@tabs-tab-icon-selected-color: @base-accent;
+
+@tabs-tab-button-disabled-opacity: @button-disabled-icon-opacity;
 
 /**
-* @name 40. Hover background color
+* @name 10. Tab text color
 * @type color
 * @group navigations.tabs
+* @paletteColorOpacity 1
 */
-@tabs-tab-hover-bg: @base-element-bg;
+@tabs-tab-color: fade(@base-text-color, 54%);
 
-@tabs-tab-active-bg: fade(darken(@tabs-tab-bg, 62.5%), 20%);
+/**
+* @name 40. Selected tab bottom border color
+* @type color
+* @group navigations.tabs
+* @paletteColorOpacity 1
+*/
+@tabs-selected-tab-bottom-border-color: @base-accent;
+
+/**
+* @name 50. Hovered tab background color
+* @type color
+* @group navigations.tabs
+* @paletteColorOpacity 1
+*/
+@tabs-hovered-tab-bg-color: darken(@base-bg, 7%);
+
+
 
 // TagBox
 

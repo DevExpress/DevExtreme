@@ -1274,6 +1274,21 @@ testComponentDefaults(Tabs,
     }
 );
 
+testComponentDefaults(Tabs,
+    { },
+    {
+        useInkRipple: true,
+        showNavButtons: false
+    },
+    function() {
+        this.originalCurrentTheme = themes.current();
+        themes.current("material.light");
+    },
+    function() {
+        themes.current(this.originalCurrentTheme);
+    }
+);
+
 testComponentDefaults(NumberBox,
         { platform: devices.current().platform },
         { mode: "number" },
