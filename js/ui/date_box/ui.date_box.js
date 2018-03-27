@@ -115,7 +115,9 @@ var DateBox = DropDownEditor.inherit({
             "formatString": { since: "16.1", alias: "displayFormat" },
 
             "useNative": { since: "15.1", message: "'useNative' option is deprecated in 15.1. Use the 'pickerType' option instead" },
-            "useCalendar": { since: "15.1", message: "'useCalendar' option is deprecated in 15.1. Use the 'pickerType' option instead" }
+            "useCalendar": { since: "15.1", message: "'useCalendar' option is deprecated in 15.1. Use the 'pickerType' option instead" },
+            "maxZoomLevel": { since: "18.1", alias: "calendarOptions.maxZoomLevel" },
+            "minZoomLevel": { since: "18.1", alias: "calendarOptions.minZoomLevel" }
         });
     },
 
@@ -215,22 +217,6 @@ var DateBox = DropDownEditor.inherit({
             disabledDates: null,
 
             /**
-            * @name dxDateBoxOptions_maxZoomLevel
-            * @publicName maxZoomLevel
-            * @type Enums.CalendarZoomLevel
-            * @default 'month'
-            */
-            maxZoomLevel: "month",
-
-            /**
-            * @name dxDateBoxOptions_minZoomLevel
-            * @publicName minZoomLevel
-            * @type Enums.CalendarZoomLevel
-            * @default 'century'
-            */
-            minZoomLevel: "century",
-
-            /**
             * @name dxDateBoxOptions_useNative
             * @publicName useNative
             * @type boolean
@@ -294,7 +280,15 @@ var DateBox = DropDownEditor.inherit({
             * @type boolean
             * @default false
             */
-            adaptivityEnabled: false
+            adaptivityEnabled: false,
+
+            /**
+            * @name dxDateBoxOptions_calendarOptions
+            * @publicName calendarOptions
+            * @type dxCalendarOptions
+            * @default {}
+            */
+            calendarOptions: {}
 
         });
     },
@@ -837,8 +831,7 @@ var DateBox = DropDownEditor.inherit({
             case "readOnly":
             case "interval":
             case "disabledDates":
-            case "minZoomLevel":
-            case "maxZoomLevel":
+            case "calendarOptions":
                 this._invalidate();
                 break;
             case "displayFormat":
