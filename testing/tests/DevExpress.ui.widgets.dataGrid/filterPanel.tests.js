@@ -7,7 +7,9 @@ var $ = require("jquery"),
     setupDataGridModules = dataGridMocks.setupDataGridModules;
 
 var FILTER_PANEL_CLASS = "dx-datagrid-filter-panel",
-    FILTER_PANEL_TEXT_CLASS = FILTER_PANEL_CLASS + "-text";
+    FILTER_PANEL_TEXT_CLASS = FILTER_PANEL_CLASS + "-text",
+    FILTER_PANEL_CLEAR_FILTER_CLASS = FILTER_PANEL_CLASS + "-clear-filter",
+    FILTER_PANEL_CHECKBOX_CLASS = FILTER_PANEL_CLASS + "-checkbox";
 
 QUnit.testStart(function() {
     var markup =
@@ -108,5 +110,23 @@ QUnit.module("Filter Panel", {
 
         // assert
         assert.equal(this.filterPanelView.element().find("." + FILTER_PANEL_TEXT_CLASS).text(), "field,=,1_test", "check createFilterText");
+    });
+
+    QUnit.test("can customize hints", function(assert) {
+        // arrange, act
+        this.initFilterPanelView({
+            filterPanel: {
+                visible: true,
+                filterPanelClearFilterHintText: "test0",
+                applyFilterHintText: "test1"
+            },
+            dataSource: [],
+            filterValue: ["field", "=", "1"],
+            columns: [{ dataField: "field" }]
+        });
+
+        // assert
+        assert.equal(this.filterPanelView.element().find("." + FILTER_PANEL_CLEAR_FILTER_CLASS).attr("title"), "test0", "check hint for clearFilter");
+        assert.equal(this.filterPanelView.element().find("." + FILTER_PANEL_CHECKBOX_CLASS).attr("title"), "test1", "check hint for applyFilter");
     });
 });
