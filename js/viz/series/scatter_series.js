@@ -358,74 +358,76 @@ var baseScatterMethods = {
     _defaultAggregator: "avg",
 
     _aggregators: {
-        avg: function(aggregationInfo, series) {
+        avg({ data, intervalStart }, series) {
+            if(!data.length) {
+                return;
+            }
             var result = {},
                 valueField = series.getValueFields()[0],
-                aggregate = aggregationInfo.data.reduce(function(result, item) {
+                aggregate = data.reduce((result, item) => {
                     result[0] += item[valueField];
                     result[1]++;
                     return result;
                 }, [0, 0]);
 
             result[valueField] = aggregate[0] / aggregate[1];
-            result[series.getArgumentField()] = aggregationInfo.intervalStart;
+            result[series.getArgumentField()] = intervalStart;
 
-            result = calculateAvgErrorBars(result, aggregationInfo.data, series);
+            result = calculateAvgErrorBars(result, data, series);
 
             return result;
         },
 
-        sum: function(aggregationInfo, series) {
+        sum({ intervalStart, data }, series) {
+            if(!data.length) {
+                return;
+            }
             var result = {},
                 valueField = series.getValueFields()[0];
 
-            result[valueField] = aggregationInfo.data.reduce(function(result, item) {
+            result[valueField] = data.reduce((result, item) => {
                 result += item[valueField];
                 return result;
             }, 0);
 
-            result[series.getArgumentField()] = aggregationInfo.intervalStart;
+            result[series.getArgumentField()] = intervalStart;
 
-            result = calculateSumErrorBars(result, aggregationInfo.data, series);
+            result = calculateSumErrorBars(result, data, series);
 
             return result;
         },
 
-        count: function(aggregationInfo, series) {
+        count({ data, intervalStart }, series) {
             var result = {},
                 valueField = series.getValueFields()[0];
 
-            result[valueField] = aggregationInfo.data.reduce(function(result, item) {
-                return ++result;
-            }, 0);
+            result[valueField] = data.length;
 
-            result[series.getArgumentField()] = aggregationInfo.intervalStart;
+            result[series.getArgumentField()] = intervalStart;
 
             return result;
         },
 
-        min: function(aggregationInfo, series) {
+        min({ intervalStart, data }, series) {
             var result = {},
                 valueField = series.getValueFields()[0],
-                data = aggregationInfo.data,
                 itemWithMinPoint = data[0];
 
-            itemWithMinPoint = data.reduce(function(result, item) {
+            itemWithMinPoint = data.reduce((result, item) => {
                 if(item[valueField] < result[valueField]) {
                     return item;
                 }
                 return result;
             }, itemWithMinPoint);
 
-            result[series.getArgumentField()] = aggregationInfo.intervalStart;
+            result[series.getArgumentField()] = intervalStart;
 
             return _extend({}, itemWithMinPoint, result);
         },
 
-        max: function(aggregationInfo, series) {
+        max({ intervalStart, data }, series) {
             var result = {},
                 valueField = series.getValueFields()[0],
-                data = aggregationInfo.data,
                 itemWithMinPoint = data[0];
 
             itemWithMinPoint = data.reduce(function(result, item) {
@@ -435,7 +437,7 @@ var baseScatterMethods = {
                 return result;
             }, itemWithMinPoint);
 
-            result[series.getArgumentField()] = aggregationInfo.intervalStart;
+            result[series.getArgumentField()] = intervalStart;
 
             return _extend({}, itemWithMinPoint, result);
         }
@@ -543,7 +545,7 @@ var baseScatterMethods = {
                 }, 0);
 
         options.size = pointOptions.visible ? maxSize : 0;
-        options.sizePointNormalState = pointOptions.visible ? styles.normal.r * 2 + styles.normal["stroke-width"] : 0;
+        options.sizePointNormalState = pointOptions.visible ? styles.normal.r * 2 + styles.normal["stroke-width"] : 2;
 
         return options;
     }

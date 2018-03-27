@@ -761,7 +761,7 @@ var ListBase = CollectionWidget.inherit({
             this._attachGroupCollapseEvent();
             this._renderEmptyMessage();
 
-            if(/material/.test(themes.current())) {
+            if(themes.isMaterial()) {
                 this.attachGroupHeaderInkRippleEvents();
             }
         } else {
@@ -857,7 +857,7 @@ var ListBase = CollectionWidget.inherit({
         };
 
         if(value) {
-            if(/material/.test(themes.current())) {
+            if(themes.isMaterial()) {
                 this._inkRippleTimer = setTimeout(function() {
                     that._inkRipple.showWave(config);
                 }, LIST_FEEDBACK_SHOW_TIMEOUT / 2);
@@ -920,7 +920,7 @@ var ListBase = CollectionWidget.inherit({
 
         this._createItemByTemplate(groupTemplate, renderArgs);
 
-        if(/material/.test(themes.current())) {
+        if(themes.isMaterial()) {
             $("<div>")
                 .addClass(LIST_GROUP_HEADER_INDICATOR_CLASS)
                 .prependTo($groupHeaderElement);
@@ -1012,7 +1012,7 @@ var ListBase = CollectionWidget.inherit({
         this._createComponent($button, Button, {
             text: this.option("nextButtonText"),
             onClick: this._nextButtonHandler.bind(this),
-            type: /material/.test(themes.current()) ? "default" : undefined,
+            type: themes.isMaterial() ? "default" : undefined,
             integrationOptions: {}
         });
 

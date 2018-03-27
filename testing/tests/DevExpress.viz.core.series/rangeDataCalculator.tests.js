@@ -1,10 +1,8 @@
 "use strict";
 
-var $ = require("jquery"),
-    vizMocks = require("../../helpers/vizMocks.js"),
-    Series = require("viz/series/base_series").Series;
-
-require("viz/chart");
+import $ from "jquery";
+import vizMocks from "../../helpers/vizMocks.js";
+import { Series } from "viz/series/base_series";
 
 function getOriginalData(data) {
     return $.map(data, function(item) {

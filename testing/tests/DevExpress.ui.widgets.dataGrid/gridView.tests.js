@@ -1708,7 +1708,7 @@ function createGridView(options, userOptions) {
         });
 
         // assert
-        assert.strictEqual(colWidths, totalWidths, "synchronize widths by columns");
+        assert.roughEqual(colWidths, totalWidths, 0.1, "synchronize widths by columns");
     });
 
     QUnit.test("Disable the bestFit mode before correctColumnWidths", function(assert) {

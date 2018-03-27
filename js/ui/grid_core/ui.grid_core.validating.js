@@ -575,7 +575,7 @@ module.exports = {
                     var that = this,
                         needRepaint,
                         $highlightContainer = $cell.find("." + CELL_HIGHLIGHT_OUTLINE),
-                        isMaterial = /material/.test(themes.current()),
+                        isMaterial = themes.isMaterial(),
                         overlayTarget = $highlightContainer.length && !isMaterial ? $highlightContainer : $cell,
                         isOverlayVisible = $cell.find(".dx-dropdowneditor-overlay").is(":visible"),
                         myPosition = isOverlayVisible ? "top right" : "top " + alignment,

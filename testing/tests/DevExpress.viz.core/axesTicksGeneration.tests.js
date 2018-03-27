@@ -1051,6 +1051,26 @@ QUnit.test("getAggregationInfo with min/max", function(assert) {
     assert.strictEqual(aggregationInfo.ticks[aggregationInfo.ticks.length - 1], 7);
 });
 
+QUnit.test("getAggregationInfo should have ticks out from bounds", function(assert) {
+    var aggregationInfo;
+
+    this.createAxis();
+    this.updateOptions({
+        argumentType: "numeric",
+        type: "continuous",
+        aggregationInterval: 5
+    });
+
+    this.axis.setBusinessRange({ min: 1, minVisible: 1, maxVisible: 100, max: 100, addRange: function() { } });
+    this.axis.createTicks(canvas(400));
+
+    aggregationInfo = this.axis.getAggregationInfo();
+
+    assert.strictEqual(aggregationInfo.interval, 5);
+    assert.strictEqual(aggregationInfo.ticks[0], 0);
+    assert.strictEqual(aggregationInfo.ticks[aggregationInfo.ticks.length - 1], 100);
+});
+
 QUnit.test("getAggregationInfo for discrete axis", function(assert) {
     var aggregationInfo;
 
@@ -1069,7 +1089,7 @@ QUnit.test("getAggregationInfo for discrete axis", function(assert) {
     assert.deepEqual(aggregationInfo.ticks, []);
 });
 
-QUnit.test("skip ckecking on getAggregationInfo", function(assert) {
+QUnit.test("skip ckecking max count ticks on getAggregationInfo", function(assert) {
     var aggregationInfo;
 
     this.createAxis();
@@ -1084,7 +1104,7 @@ QUnit.test("skip ckecking on getAggregationInfo", function(assert) {
 
     aggregationInfo = this.axis.getAggregationInfo();
 
-    assert.strictEqual(aggregationInfo.ticks.length, 121);
+    assert.strictEqual(aggregationInfo.ticks.length, 41);
 });
 
 QUnit.test("datetime getAggregationInfo", function(assert) {

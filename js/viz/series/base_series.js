@@ -167,6 +167,10 @@ function Series(settings, options) {
     that.updateOptions(options);
 }
 
+function getData(pointData) {
+    return pointData.data;
+}
+
 exports.Series = Series;
 
 exports.mixins = seriesNS.mixins;
@@ -854,39 +858,42 @@ Series.prototype = {
         return customAggregator || aggregator;
     },
 
-    _fusionData: function(data, aggregationInfo, isDiscrete, dataSelector) {
-        var aggregationMethod = this._getAggregationMethod(isDiscrete);
-
-        aggregationInfo.data = data.map(item => item.data);
-        const aggregatedData = data.length && aggregationMethod(aggregationInfo, this);
-        const pointData = aggregatedData && dataSelector(aggregatedData);
-
-        if(pointData && this._checkData(pointData)) {
-            pointData.aggregationInfo = aggregationInfo;
-            return pointData;
-        }
-
-        return null;
-    },
-
     _resample({ interval, ticks }, data) {
         var that = this,
-            aggregatedData = [],
             isDiscrete = that.argumentAxisType === DISCRETE || that.valueAxisType === DISCRETE,
             dataIndex = 0,
-            dataSelector = this._getPointDataSelector();
+            dataSelector = this._getPointDataSelector(),
+            options = that.getOptions(),
+            addAggregatedData = (target, data, aggregationInfo) => {
+                if(!data) {
+                    return;
+                }
+                const processData = (d) => {
+                    const pointData = d && dataSelector(d, options);
+                    if(pointData && that._checkData(pointData)) {
+                        pointData.aggregationInfo = aggregationInfo;
+                        target.push(pointData);
+                    }
+                };
+
+                if(data.length) {
+                    data.forEach(processData);
+                } else {
+                    processData(data);
+                }
+            },
+            aggregationMethod = this._getAggregationMethod(isDiscrete);
 
         if(isDiscrete) {
             return data.reduce((result, dataItem, index, data) => {
                 result[1].push(dataItem);
                 if(index === data.length - 1 || (index + 1) % interval === 0) {
                     const dataInInterval = result[1];
-                    const aggregatedDataItem = this._fusionData(dataInInterval, {
-                        aggregationInterval: interval
-                    }, isDiscrete, dataSelector);
-                    if(aggregatedDataItem) {
-                        result[0].push(aggregatedDataItem);
-                    }
+                    const aggregationInfo = {
+                        aggregationInterval: interval,
+                        data: dataInInterval.map(getData)
+                    };
+                    addAggregatedData(result[0], aggregationMethod(aggregationInfo, that));
                     result[1] = [];
                 }
 
@@ -894,21 +901,25 @@ Series.prototype = {
             }, [[], []])[0];
         }
 
+        const aggregatedData = [];
+
         for(let i = 1; i < ticks.length; i++) {
             const intervalEnd = ticks[i];
+            const intervalStart = ticks[i - 1];
             const dataInInterval = [];
             while(data[dataIndex] && data[dataIndex].argument < intervalEnd) {
-                dataInInterval.push(data[dataIndex]);
+                if(data[dataIndex].argument >= intervalStart) {
+                    dataInInterval.push(data[dataIndex]);
+                }
                 dataIndex++;
             }
-            const aggregatedDataItem = this._fusionData(dataInInterval, {
-                intervalStart: ticks[i - 1],
+            const aggregationInfo = {
+                intervalStart,
                 intervalEnd,
-                aggregationInterval: interval
-            }, isDiscrete, dataSelector);
-            if(aggregatedDataItem) {
-                aggregatedData.push(aggregatedDataItem);
-            }
+                aggregationInterval: interval,
+                data: dataInInterval.map(getData)
+            };
+            addAggregatedData(aggregatedData, aggregationMethod(aggregationInfo, that), aggregationInfo);
         }
 
         that._endUpdateData();

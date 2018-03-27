@@ -1,17 +1,12 @@
 "use strict";
 
-var $ = require("jquery"),
-    noop = require("core/utils/common").noop,
-    vizMocks = require("../../helpers/vizMocks.js"),
-    pointModule = require("viz/series/points/base_point"),
-    labelModule = require("viz/series/points/label"),
-    Series = require("viz/series/base_series").Series,
-    chartMocks = require("../../helpers/chartMocks.js"),
-    insertMockFactory = chartMocks.insertMockFactory,
-    MockTranslator = chartMocks.MockTranslator,
-    MockAxis = chartMocks.MockAxis;
-
-require("viz/chart");
+import $ from "jquery";
+import vizMocks from "../../helpers/vizMocks.js";
+import { noop } from "core/utils/common";
+import pointModule from "viz/series/points/base_point";
+import labelModule from "viz/series/points/label";
+import { Series } from "viz/series/base_series";
+import { insertMockFactory, MockAxis, MockTranslator } from "../../helpers/chartMocks.js";
 
 var createSeries = function(options, renderSettings) {
     renderSettings = renderSettings || {};
@@ -2803,7 +2798,7 @@ QUnit.test("Return point size", function(assert) {
     });
 });
 
-QUnit.test("Point is invisible - return 0", function(assert) {
+QUnit.test("getMarginOptions when point is invisible", function(assert) {
     var series = createSeries({
         type: seriesType,
         point: {
@@ -2815,7 +2810,7 @@ QUnit.test("Point is invisible - return 0", function(assert) {
     assert.deepEqual(series.getMarginOptions(), {
         size: 0,
         percentStick: false,
-        sizePointNormalState: 0
+        sizePointNormalState: 2
     });
 });
 
@@ -2864,37 +2859,5 @@ QUnit.test("Polar point. getMarginOptions returns point size", function(assert) 
         size: 6,
         percentStick: false,
         sizePointNormalState: 6
-    });
-});
-
-QUnit.test("getMarginOptions returns '0' as sourcePointStyle when points are invisible", function(assert) {
-    var series = createSeries({
-        type: seriesType,
-        point: {
-            visible: false,
-            size: 6,
-            border: {
-                visible: true,
-                width: 10
-            },
-            hoverStyle: {
-                border: {
-                    visible: true,
-                    width: 10
-                }
-            },
-            selectionStyle: {
-                border: {
-                    visible: true,
-                    width: 12
-                }
-            }
-        }
-    });
-
-    assert.deepEqual(series.getMarginOptions(), {
-        size: 0,
-        percentStick: false,
-        sizePointNormalState: 0
     });
 });

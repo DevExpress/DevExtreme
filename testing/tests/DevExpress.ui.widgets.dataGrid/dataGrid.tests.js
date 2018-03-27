@@ -3232,7 +3232,7 @@ QUnit.test("columns width when all columns have width and scrolling mode is virt
     // assert
     assert.equal($dataGridTables.length, 2);
     assert.equal($dataGridTables.eq(0).find(".dx-row").first().find("td").last().outerWidth(), 100);
-    assert.equal($dataGridTables.eq(1).find(".dx-row").first().find("td").last().outerWidth(), 100);
+    assert.equal($dataGridTables.eq(1).find(".dx-data-row").first().find("td").last().outerWidth(), 100);
 });
 
 // T144297
@@ -6586,7 +6586,7 @@ QUnit.testInActiveWindow("Tab key should open editor in next cell when virtual s
     this.clock.tick();
 
     // assert
-    assert.equal(dataGrid.getTopVisibleRowData().index, rowData.index, "scroll position is not changed");
+    assert.roughEqual(dataGrid.getTopVisibleRowData().index, rowData.index, 1.01, "scroll position is not changed");
     assert.equal($(dataGrid.$element()).find("input").val(), "198", "editor in second column with correct row index is opened");
     assert.ok($(dataGrid.$element()).find("input").closest("td").hasClass("dx-focused"), "cell with editor is focused");
 });
@@ -9307,7 +9307,7 @@ QUnit.test("CustomizeText formatting", function(assert) {
 QUnit.testInActiveWindow("Validation message should be positioned relative cell in material theme", function(assert) {
     // arrange
     var overlayTarget,
-        origThemes = themes.current,
+        origIsMaterial = themes.isMaterial,
         clock = sinon.useFakeTimers(),
         dataGrid = createDataGrid({
             loadingTimeout: undefined,
@@ -9334,7 +9334,7 @@ QUnit.testInActiveWindow("Validation message should be positioned relative cell 
     dataGrid.closeEditCell();
     clock.tick();
 
-    themes.current = function() { return "material"; };
+    themes.isMaterial = function() { return true; };
 
     dataGrid.editCell(0, 0);
     clock.tick();
@@ -9343,6 +9343,6 @@ QUnit.testInActiveWindow("Validation message should be positioned relative cell 
     overlayTarget = dataGrid.$element().find(".dx-invalid-message").data("dxOverlay").option("target");
     assert.ok(overlayTarget.hasClass("dx-editor-cell"), "target in material theme");
 
-    themes.current = origThemes;
+    themes.isMaterial = origIsMaterial;
     clock.restore();
 });

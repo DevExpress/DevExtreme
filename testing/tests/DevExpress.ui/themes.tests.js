@@ -445,6 +445,18 @@ require("style-compiler-test-server/known-css-files");
         assert.equal($element.hasClass("dx-theme-oldtheme-typography"), false, "old typography class deleted");
     });
 
+    QUnit.test("isMaterial return right value after themes switching", function(assert) {
+        this.writeToFrame("<link rel='dx-theme' href='style1.css' data-theme='material.light' />");
+        this.writeToFrame("<link rel='dx-theme' href='style2.css' data-theme='generic.light' />");
+        themes.init({ context: this.frameDoc(), theme: "generic.light" });
+        themes.resetTheme();
+        assert.notOk(themes.isMaterial(), "isMaterial after reset");
+        themes.current("generic.light");
+        assert.notOk(themes.isMaterial(), "isMaterial after activate generic.light");
+        themes.current("material.light");
+        assert.ok(themes.isMaterial(), "isMaterial after activate material.light");
+    });
+
 })();
 
 
