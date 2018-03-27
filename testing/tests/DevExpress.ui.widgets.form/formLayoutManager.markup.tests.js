@@ -496,7 +496,9 @@ QUnit.module("Layout manager", () => {
 
         // assert
         assert.ok($label.parent().hasClass(internals.LABEL_VERTICAL_ALIGNMENT_CLASS), "Field item contains label that has vertical align");
-        assert.equal($label.css("textAlign"), "left", "Label has text-align left");
+
+        var textAlign = $label.get(0).style.textAlign;
+        assert.equal(textAlign, "left", "Label has text-align left");
     });
 
     QUnit.test("Render label with position top and alignment center", (assert) => {
@@ -515,7 +517,9 @@ QUnit.module("Layout manager", () => {
 
         // assert
         assert.ok($label.parent().hasClass(internals.LABEL_VERTICAL_ALIGNMENT_CLASS), "Field item contains label that has vertical align");
-        assert.equal($label.css("textAlign"), "center", "Label has text-align center");
+
+        var textAlign = $label.get(0).style.textAlign;
+        assert.equal(textAlign, "center", "Label has text-align center");
     });
 
     QUnit.test("Render label with position top and alignment right", (assert) => {
@@ -534,7 +538,9 @@ QUnit.module("Layout manager", () => {
 
         // assert
         assert.ok($label.parent().hasClass(internals.LABEL_VERTICAL_ALIGNMENT_CLASS), "Field item contains label that has vertical align");
-        assert.equal($label.css("textAlign"), "right", "Label has text-align right");
+
+        var textAlign = $label.get(0).style.textAlign;
+        assert.equal(textAlign, "right", "Label has text-align right");
     });
 
     QUnit.test("Render label with horizontal alignment (left) ", (assert) => {
@@ -568,7 +574,8 @@ QUnit.module("Layout manager", () => {
             $label = $testContainer.find("." + internals.FIELD_ITEM_CLASS + " label").first();
 
         // assert
-        assert.equal($label.css("textAlign"), "left", "Label has text-align left");
+        var textAlign = $label.get(0).style.textAlign;
+        assert.equal(textAlign, "left", "Label has text-align left");
     });
 
     QUnit.test("Render label with default position and alignment center", (assert) => {
@@ -585,7 +592,8 @@ QUnit.module("Layout manager", () => {
             $label = $testContainer.find("." + internals.FIELD_ITEM_CLASS + " label").first();
 
         // assert
-        assert.equal($label.css("textAlign"), "center", "Label has text-align center");
+        var textAlign = $label.get(0).style.textAlign;
+        assert.equal(textAlign, "center", "Label has text-align center");
     });
 
     QUnit.test("Render label with showColonAfterLabel", (assert) => {
@@ -2516,7 +2524,7 @@ QUnit.module("Render multiple columns", () => {
 
     QUnit.test("Render when 'colCount' is 'auto' and have 1 item", (assert) => {
         // arrange
-        let $testContainer = $("#container").width(450);
+        let $testContainer = $("#container").css("width", 450);
 
         $testContainer.dxLayoutManager({
             layoutData: {
@@ -2536,7 +2544,7 @@ QUnit.module("Render multiple columns", () => {
 
     QUnit.test("Correct colCount when width is less that minColWidth and colCount is auto", (assert) => {
         // arrange
-        let $testContainer = $("#container").width(450);
+        let $testContainer = $("#container").css("width", 450);
 
         $testContainer.dxLayoutManager({
             layoutData: {
@@ -2557,7 +2565,7 @@ QUnit.module("Render multiple columns", () => {
 
     QUnit.test("Render when 'colCount' is 'auto' and have 3 items", (assert) => {
         // arrange
-        let $testContainer = $("#container").width(450);
+        let $testContainer = $("#container").css("width", 450);
 
         $testContainer.dxLayoutManager({
             layoutData: {
@@ -2580,7 +2588,7 @@ QUnit.module("Render multiple columns", () => {
 
     QUnit.test("Change minColWidth when colCount is auto", (assert) => {
         // arrange
-        let $testContainer = $("#container").width(450);
+        let $testContainer = $("#container").css("width", 450);
 
         $testContainer.dxLayoutManager({
             layoutData: {
@@ -2610,7 +2618,7 @@ QUnit.module("Render multiple columns", () => {
 
     QUnit.test("Clear item watchers after disposing", (assert) => {
         // arrange
-        let $testContainer = $("#container").width(450);
+        let $testContainer = $("#container").css("width", 450);
 
         $testContainer.dxLayoutManager({
             layoutData: {
