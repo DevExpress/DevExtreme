@@ -48,7 +48,6 @@ QUnit.testStart(function() {
 });
 
 var MULTIVIEW_CLASS = "dx-multiview",
-    MULTIVIEW_WRAPPER_CLASS = "dx-multiview-wrapper",
     MULTIVIEW_ITEM_CONTAINER_CLASS = "dx-multiview-item-container",
 
     MULTIVIEW_ITEM_CLASS = "dx-multiview-item",
@@ -107,37 +106,6 @@ var animationCapturing = {
 
 
 QUnit.module("rendering");
-
-QUnit.test("widget should be rendered", function(assert) {
-    var $multiView = $("#multiView").dxMultiView();
-
-    assert.ok($multiView.hasClass(MULTIVIEW_CLASS), "widget class added");
-});
-
-QUnit.test("wrapper should be rendered", function(assert) {
-    var $multiView = $("#multiView").dxMultiView(),
-        $wrapper = $multiView.children(toSelector(MULTIVIEW_WRAPPER_CLASS));
-
-    assert.equal($wrapper.length, 1, "wrapper was rendered");
-});
-
-QUnit.test("item container should be rendered", function(assert) {
-    var $multiView = $("#multiView").dxMultiView(),
-        $wrapper = $multiView.children(toSelector(MULTIVIEW_WRAPPER_CLASS)),
-        $itemContainer = $wrapper.children(toSelector(MULTIVIEW_ITEM_CONTAINER_CLASS));
-
-    assert.equal($itemContainer.length, 1, "item container was rendered");
-});
-
-QUnit.test("items should be rendered", function(assert) {
-    var $multiView = $("#multiView").dxMultiView({
-            items: [1, 2]
-        }),
-        $itemContainer = $multiView.find(toSelector(MULTIVIEW_ITEM_CONTAINER_CLASS));
-
-    var $items = $itemContainer.children(toSelector(MULTIVIEW_ITEM_CLASS));
-    assert.equal($items.length, 2, "items was rendered");
-});
 
 QUnit.test("height should be correctly updated on dxshown event", function(assert) {
     var $container;
@@ -817,16 +785,6 @@ QUnit.test("onItemRendered should be fired after item was rendered", function(as
     assert.deepEqual(renderedItems, [this.items[0], this.items[1]], "item was rendered");
 });
 
-QUnit.test("item containers should be rendered if deferRendering is true", function(assert) {
-    var $element = this.$element.dxMultiView({
-        items: this.items,
-        selectedIndex: 0,
-        deferRendering: true
-    });
-
-    assert.equal($element.find("." + MULTIVIEW_ITEM_CLASS).length, 4, "containers rendered");
-});
-
 QUnit.test("item content should be rendered for selected item if deferRendering is true", function(assert) {
     var $element = this.$element.dxMultiView({
             items: this.items,
@@ -961,13 +919,6 @@ QUnit.module("aria accessibility", {
     afterEach: function() {
         fx.off = false;
     }
-});
-
-QUnit.test("aria role for each item", function(assert) {
-    var $multiView = $("#multiView").dxMultiView({ items: [1, 2] }),
-        $item = $multiView.find(".dx-item:first");
-
-    assert.equal($item.attr("role"), "tabpanel");
 });
 
 QUnit.test("selected item should have unique id", function(assert) {

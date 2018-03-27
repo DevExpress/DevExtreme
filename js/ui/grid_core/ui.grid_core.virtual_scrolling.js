@@ -128,6 +128,15 @@ var VirtualScrollingDataSourceAdapterExtender = (function() {
 
             this._virtualScrollController.handleDataChanged(callBase);
         },
+        _customizeRemoteOperations: function(options, isReload, operationTypes) {
+            var that = this;
+
+            if(that.option("advancedRendering") && isVirtualMode(that) && !operationTypes.reload && operationTypes.paging && that._renderTime < that.option("scrolling.renderingThreshold")) {
+                options.delay = undefined;
+            }
+
+            that.callBase.apply(that, arguments);
+        },
         items: function() {
             return this._items;
         },
@@ -268,14 +277,21 @@ var VirtualScrollingRowsViewExtender = (function() {
             }
         },
 
+        _getRowElements: function(tableElement) {
+            var $rows = this.callBase(tableElement);
+
+            return $rows && $rows.not(".dx-virtual-row");
+        },
+
         _renderContent: function(contentElement, tableElement) {
             var that = this,
                 virtualItemsCount = that._dataController.virtualItemsCount();
 
-            if(virtualItemsCount) {
+            if(virtualItemsCount && !that.option("advancedRendering")) {
                 if(windowUtils.hasWindow()) {
                     tableElement.addClass(that.addWidgetPrefix(TABLE_CONTENT_CLASS));
                 }
+
                 if(!contentElement.children().length) {
                     contentElement.append(tableElement);
                 } else {
@@ -286,11 +302,10 @@ var VirtualScrollingRowsViewExtender = (function() {
                     contentElement.append(that._createTable());
                     that._contentHeight = 0;
                 }
-
                 return contentElement;
-            } else {
-                return that.callBase.apply(that, arguments);
             }
+
+            return that.callBase.apply(that, arguments);
         },
 
         _updateContent: function(tableElement, change) {
@@ -313,16 +328,39 @@ var VirtualScrollingRowsViewExtender = (function() {
 
             that._updateBottomLoading();
         },
-        _updateContentPosition: function() {
+        _updateContentPosition: function(isRender) {
             var that = this;
-            commonUtils.deferUpdate(function() {
-                that._updateContentPositionCore();
-            });
+            if(that.option("advancedRendering") && isVirtualMode(that)) {
+                var dataController = that._dataController;
+                var rowHeight = that._rowHeight || 20;
+                dataController.viewportItemSize(rowHeight);
+                if(!isRender) {
+                    var contentHeight = that._getRowsHeight(that._tableElement);
+                    dataController.setContentSize(contentHeight);
+                }
+                var top = dataController.getContentOffset("begin");
+                var bottom = dataController.getContentOffset("end");
+                var $body = that._tableElement.children("tbody");
+                var $rows = $body.children(".dx-virtual-row");
+                var $topRow = $rows.get(0) ? $rows.eq(0) : that._createEmptyRow().addClass("dx-virtual-row");
+                var $bottomRow = $rows.get(1) ? $rows.eq(1) : that._createEmptyRow().addClass("dx-virtual-row");
+                $topRow.prependTo($body.first()).css("height", top);
+                $bottomRow.appendTo($body.last()).css("height", bottom);
+
+                if(that._scrollTop < top && !that._isScrollByEvent && that._dataController.pageIndex() > 0) {
+                    that.scrollTo({ top: top, left: that._scrollLeft });
+                }
+            } else {
+                commonUtils.deferUpdate(function() {
+                    that._updateContentPositionCore();
+                });
+            }
         },
         _updateContentPositionCore: function() {
             var that = this,
                 contentElement,
                 contentHeight,
+                top,
                 $tables,
                 $contentTable,
                 virtualTable,
@@ -342,7 +380,7 @@ var VirtualScrollingRowsViewExtender = (function() {
                 that._dataController.setContentSize(that._contentTableHeight);
 
                 contentHeight = that._dataController.getVirtualContentSize();
-                var top = that._dataController.getContentOffset();
+                top = that._dataController.getContentOffset();
 
                 commonUtils.deferRender(function() {
                     translator.move($contentTable, { left: 0, top: top });
@@ -552,8 +590,9 @@ module.exports = {
         return {
             scrolling: {
                 timeout: 300,
+                updateTimeout: 300,
                 minTimeout: 0,
-                renderingThreshold: 150,
+                renderingThreshold: 100,
                 /**
                  * @name dxDataGridOptions_scrolling_mode
                  * @publicName mode
@@ -598,7 +637,38 @@ module.exports = {
                 gridCoreUtils.proxyMethod(members, "setViewportPosition");
 
                 return members;
-            })()
+            })(),
+            resizing: {
+                resize: function() {
+                    var that = this,
+                        callBase = that.callBase;
+
+                    if(that.option("advancedRendering") && isVirtualMode(that)) {
+                        clearTimeout(that._resizeTimeout);
+                        var diff = new Date() - that._lastTime;
+                        var updateTimeout = that.option("scrolling.updateTimeout");
+                        if(that._lastTime && diff < updateTimeout) {
+                            that._resizeTimeout = setTimeout(function() {
+                                callBase.apply(that);
+                                that._lastTime = new Date();
+                            }, updateTimeout);
+                            that._lastTime = new Date();
+                        } else {
+                            callBase.apply(that);
+                            if(that._dataController.isLoaded()) {
+                                that._lastTime = new Date();
+                            }
+                        }
+
+                    } else {
+                        return callBase.apply(that);
+                    }
+                },
+                dispose: function() {
+                    this.callBase.apply(this, arguments);
+                    clearTimeout(this._resizeTimeout);
+                }
+            }
         },
         views: {
             rowsView: VirtualScrollingRowsViewExtender

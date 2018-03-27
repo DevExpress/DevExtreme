@@ -25,7 +25,8 @@ var context,
     $activeThemeLink,
     knownThemes,
     currentThemeName,
-    pendingThemeName;
+    pendingThemeName,
+    isMaterialTheme;
 
 var timerId;
 
@@ -39,7 +40,7 @@ function readThemeMarker() {
         result;
 
     try {
-        result = element.css("font-family");
+        result = element.css("fontFamily");
         if(!result) {
             return null;
         }
@@ -178,6 +179,7 @@ function init(options) {
     processMarkup();
 
     currentThemeName = undefined;
+    isMaterialTheme = undefined;
     current(options);
 }
 
@@ -235,6 +237,8 @@ function current(options) {
             throw errors.Error("E0021", currentThemeName);
         }
     }
+
+    isMaterialTheme = /material/.test(currentThemeName || readThemeMarker());
 
     attachCssClasses(viewPortUtils.originalViewPort(), currentThemeName);
 }
@@ -311,6 +315,10 @@ function themeReady(callback) {
     themeReadyCallback.add(callback);
 }
 
+function isMaterial() {
+    return isMaterialTheme;
+}
+
 var initDeferred = new Deferred();
 
 function autoInit() {
@@ -379,10 +387,12 @@ exports.detachCssClasses = detachCssClasses;
 
 exports.themeNameFromDevice = themeNameFromDevice;
 exports.waitForThemeLoad = waitForThemeLoad;
+exports.isMaterial = isMaterial;
 
 exports.resetTheme = function() {
     $activeThemeLink && $activeThemeLink.attr("href", "about:blank");
     currentThemeName = null;
     pendingThemeName = null;
+    isMaterialTheme = false;
 };
 

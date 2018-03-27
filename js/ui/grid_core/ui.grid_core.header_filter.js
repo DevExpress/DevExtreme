@@ -9,7 +9,6 @@ var eventsEngine = require("../../events/core/events_engine"),
     messageLocalization = require("../../localization/message"),
     allowHeaderFiltering = headerFilterCore.allowHeaderFiltering,
     clickEvent = require("../../events/click"),
-    dataUtils = require("../../data/utils"),
     dataCoreUtils = require("../../core/utils/data"),
     each = require("../../core/utils/iterator").each,
     typeUtils = require("../../core/utils/type"),
@@ -102,14 +101,20 @@ var HeaderFilterController = modules.ViewController.inherit((function() {
                 item.value = path.join("/");
             }
 
-            item.text = gridCoreUtils.formatValue(displayValue, getFormatOptions(displayValue, column, currentLevel));
-
-            if(!item.text) {
-                item.text = options.headerFilterOptions.texts.emptyValue;
-            }
+            item.text = this.getHeaderItemText(displayValue, column, currentLevel, options.headerFilterOptions);
 
             delete item.key;
             return item;
+        },
+
+        getHeaderItemText: function(displayValue, column, currentLevel, headerFilterOptions) {
+            var text = gridCoreUtils.formatValue(displayValue, getFormatOptions(displayValue, column, currentLevel));
+
+            if(!text) {
+                text = headerFilterOptions.texts.emptyValue;
+            }
+
+            return text;
         },
 
         _processGroupItems: function(groupItems, currentLevel, path, options) {
@@ -238,23 +243,36 @@ var HeaderFilterController = modules.ViewController.inherit((function() {
         },
 
         showHeaderFilterMenu: function(columnIndex, isGroupPanel) {
-            var that = this,
-                column = extend(true, {}, that._columnsController.getColumns()[columnIndex]);
-
+            var columnsController = this._columnsController,
+                column = extend(true, {}, this._columnsController.getColumns()[columnIndex]);
             if(column) {
-                var visibleIndex = that._columnsController.getVisibleIndex(columnIndex),
-                    view = isGroupPanel ? that.getView("headerPanel") : that.getView("columnHeadersView"),
-                    $columnElement = view.getColumnElements().eq(isGroupPanel ? column.groupIndex : visibleIndex),
-                    groupInterval = filterUtils.getGroupInterval(column);
+                var visibleIndex = columnsController.getVisibleIndex(columnIndex),
+                    view = isGroupPanel ? this.getView("headerPanel") : this.getView("columnHeadersView"),
+                    $columnElement = $columnElement || view.getColumnElements().eq(isGroupPanel ? column.groupIndex : visibleIndex);
 
-                var options = extend(column, {
-                    type: groupInterval && groupInterval.length > 1 ? "tree" : "list",
+                this.showHeaderFilterMenuBase({
+                    columnElement: $columnElement,
+                    column: column,
+                    applyFilter: true,
                     apply: function() {
-                        that._columnsController.columnOption(columnIndex, {
+                        columnsController.columnOption(columnIndex, {
                             filterValues: this.filterValues,
                             filterType: this.filterType
                         });
-                    },
+                    }
+                });
+            }
+        },
+
+        showHeaderFilterMenuBase: function(options) {
+            var that = this,
+                column = options.column;
+
+            if(column) {
+                var groupInterval = filterUtils.getGroupInterval(column);
+
+                extend(options, column, {
+                    type: groupInterval && groupInterval.length > 1 ? "tree" : "list",
                     onShowing: function(e) {
                         var dxResizableInstance = e.component.overlayContent().dxResizable("instance");
 
@@ -273,7 +291,11 @@ var HeaderFilterController = modules.ViewController.inherit((function() {
 
                 options.dataSource = that.getDataSource(options);
 
-                that._headerFilterView.showHeaderFilterMenu($columnElement, options);
+                if(options.isFilterBuilder) {
+                    options.dataSource.filter = null;
+                }
+
+                that._headerFilterView.showHeaderFilterMenu(options.columnElement, options);
             }
         },
 
@@ -322,12 +344,22 @@ var ColumnHeadersViewHeaderFilterExtender = extend({}, headerFilterCore.headerFi
         $indicator && this._subscribeToIndicatorEvent($indicator, column, indicatorName);
     },
 
+    _updateHeaderFilterIndicators: function() {
+        if(this.option("headerFilter.visible")) {
+            this._updateIndicators("headerFilter");
+        }
+    },
+
+    _needUpdateFilterIndicators: function() {
+        return true;
+    },
+
     _columnOptionChanged: function(e) {
         var optionNames = e.optionNames;
 
         if(gridCoreUtils.checkChanges(optionNames, ["filterValues", "filterType"])) {
-            if(this.option("headerFilter.visible")) {
-                this._updateIndicators("headerFilter");
+            if(this._needUpdateFilterIndicators()) {
+                this._updateHeaderFilterIndicators();
             }
             return;
         }
@@ -366,48 +398,20 @@ var HeaderPanelHeaderFilterExtender = extend({}, headerFilterMixin, {
     }
 });
 
-var INVERTED_BINARY_OPERATIONS = {
-    "=": "<>",
-    "<>": "=",
-    ">": "<=",
-    ">=": "<",
-    "<": ">=",
-    "<=": ">",
-    "contains": "notcontains",
-    "notcontains": "contains",
-    "startswith": "notcontains", // TODO
-    "endswith": "notcontains" // TODO
-};
-
 function invertFilterExpression(filter) {
-    var i,
-        currentGroupOperation,
-        result;
-
-    if(Array.isArray(filter[0])) {
-        result = [];
-        for(i = 0; i < filter.length; i++) {
-            if(Array.isArray(filter[i])) {
-                if(currentGroupOperation) {
-                    result.push(currentGroupOperation);
-                }
-                result.push(invertFilterExpression(filter[i]));
-                currentGroupOperation = "or";
-            } else {
-                currentGroupOperation = dataUtils.isConjunctiveOperator(filter[i]) ? "or" : "and";
-            }
-        }
-        return result;
-    }
-
-    result = dataUtils.normalizeBinaryCriterion(filter);
-    result[1] = INVERTED_BINARY_OPERATIONS[result[1]] || result[1];
-
-    return result;
+    return ["!", filter];
 }
 
 var DataControllerFilterRowExtender = {
+    _skipCalculateColumnFilters: function() {
+        return false;
+    },
+
     _calculateAdditionalFilter: function() {
+        if(this._skipCalculateColumnFilters()) {
+            return this.callBase();
+        }
+
         var that = this,
             filters = [that.callBase()],
             columns = that._columnsController.getVisibleColumns(),
@@ -422,19 +426,18 @@ var DataControllerFilterRowExtender = {
             }
 
             if(allowHeaderFiltering(column) && column.calculateFilterExpression && Array.isArray(column.filterValues) && column.filterValues.length) {
-                var filterValues = [],
-                    isExclude = column.filterType === "exclude";
+                var filterValues = [];
 
                 each(column.filterValues, function(_, filterValue) {
 
                     if(Array.isArray(filterValue)) {
-                        filter = isExclude ? invertFilterExpression(filterValue) : filterValue;
+                        filter = filterValue;
                     } else {
                         if(column.deserializeValue && !gridCoreUtils.isDateType(column.dataType) && column.dataType !== "number") {
                             filterValue = column.deserializeValue(filterValue);
                         }
 
-                        filter = column.createFilterExpression(filterValue, isExclude ? "<>" : "=", "headerFilter");
+                        filter = column.createFilterExpression(filterValue, "=", "headerFilter");
                     }
                     if(filter) {
                         filter.columnIndex = column.index;
@@ -442,9 +445,9 @@ var DataControllerFilterRowExtender = {
                     filterValues.push(filter);
                 });
 
-                filterValues = gridCoreUtils.combineFilters(filterValues, isExclude ? "and" : "or");
+                filterValues = gridCoreUtils.combineFilters(filterValues, "or");
 
-                filters.push(filterValues);
+                filters.push(column.filterType === "exclude" ? ["!", filterValues] : filterValues);
             }
         });
 

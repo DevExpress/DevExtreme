@@ -1,0 +1,24 @@
+.dx-slideoutview-styling() {
+    .dx-slideoutview-menu-content,
+    .dx-slideoutview-content {
+        background-color: @slideoutview-bg;
+    }
+
+    .dx-slideoutview-content {
+        border-color: @slideoutview-content-border-color;
+    }
+}
+
+@MATERIAL_SLIDEOUTVIEW_BORDER_WIDTH: @MATERIAL_BASE_BORDER_WIDTH;
+
+.dx-slideout-sizing() {
+    .dx-slideoutview-content {
+        .box-sizing(content-box);
+        margin-left: -@MATERIAL_SLIDEOUTVIEW_BORDER_WIDTH;
+        border-style: solid;
+        border-width: 0 @MATERIAL_SLIDEOUTVIEW_BORDER_WIDTH;
+    }
+}
+
+.dx-slideout-sizing();
+.dx-slideoutview-styling();

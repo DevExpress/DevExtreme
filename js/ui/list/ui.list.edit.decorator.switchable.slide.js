@@ -12,6 +12,7 @@ var $ = require("../../core/renderer"),
     registerDecorator = require("./ui.list.edit.decorator_registry").register,
     SwitchableEditDecorator = require("./ui.list.edit.decorator.switchable"),
     fx = require("../../animation/fx"),
+    themes = require("../themes"),
     ActionSheet = require("../action_sheet");
 
 var LIST_EDIT_DECORATOR = "dxListEditDecorator",
@@ -109,7 +110,9 @@ registerDecorator(
             var $deleteButton = $("<div>")
                 .addClass(SLIDE_MENU_BUTTON_CLASS)
                 .addClass(SLIDE_MENU_BUTTON_DELETE_CLASS)
-                .text(messageLocalization.format("dxListEditDecorator-delete"));
+                .text(themes.isMaterial()
+                    ? ""
+                    : messageLocalization.format("dxListEditDecorator-delete"));
 
             eventsEngine.on($deleteButton, CLICK_EVENT_NAME, (function(e) {
                 e.stopPropagation();

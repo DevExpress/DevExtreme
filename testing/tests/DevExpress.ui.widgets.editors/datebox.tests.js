@@ -1008,7 +1008,7 @@ QUnit.test("Native datebox should have specific class & button should have point
     assert.ok($element.hasClass("dx-datebox-native"), "class is correct");
     assert.equal($element.dxDateBox("instance")._strategy.NAME, "Native", "correct strategy is chosen");
 
-    assert.equal($element.find(".dx-texteditor-buttons-container").css("pointer-events"), "none");
+    assert.equal($element.find(".dx-texteditor-buttons-container").css("pointerEvents"), "none");
 });
 
 QUnit.test("pickerType should be 'rollers' on android < 4.4 (Q588373, Q588012)", function(assert) {
@@ -2350,6 +2350,26 @@ QUnit.test("date box should contain calendar and time view inside box in small s
     } finally {
         renderer.fn.width = originalWidthFunction;
     }
+});
+
+QUnit.test("date box should have compact view when showAnalogClock option is true", function(assert) {
+    var $element = $("#dateBox").dxDateBox({
+            type: "datetime",
+            pickerType: "calendar"
+        }),
+        instance = $element.dxDateBox("instance");
+
+    instance.option("showAnalogClock", true);
+    instance.open();
+
+    var $content = $(instance._popup.$content()),
+        box = Box.getInstance($content.find("." + BOX_CLASS)),
+        $clock = $content.find(".dx-timeview-clock");
+
+    assert.equal(box.option("direction"), "row", "correct box direction specified");
+    assert.ok(box.itemElements().eq(0).find("." + CALENDAR_CLASS).length, "calendar rendered");
+    assert.ok(box.itemElements().eq(0).find("." + TIMEVIEW_CLASS).length, "timeview rendered");
+    assert.equal($clock.length, 0, "clock was not rendered");
 });
 
 QUnit.test("date box wrapper adaptivity class depends on the screen size", function(assert) {

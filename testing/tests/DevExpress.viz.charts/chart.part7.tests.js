@@ -696,67 +696,6 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
         },
     }));
 
-    QUnit.test("SeriesTemplate. Default nameField", function(assert) {
-        var stubSeries1 = new MockSeries({
-            name: "first", range: { minX: 15, maxX: 80, minY: -1, maxY: 10 }, valueField: "y",
-            argumentField: "x",
-            tagField: "tag"
-        });
-        var stubSeries2 = new MockSeries({
-            name: "second", range: { minX: 15, maxX: 80, minY: -1, maxY: 10 }, valueField: "y",
-            argumentField: "x",
-            tagField: "tag"
-        });
-        var stubSeries3 = new MockSeries({
-            name: "third", range: { minX: 15, maxX: 80, minY: -1, maxY: 10 }, valueField: "y",
-            argumentField: "x",
-            tagField: "tag"
-        });
-
-        chartMocks.seriesMockData.series.push(stubSeries1, stubSeries2, stubSeries3);
-
-        var chart = this.createChart({
-            commonSeriesSettings: {
-                valueField: "y",
-                argumentField: "x",
-                tagField: "tag"
-            },
-            dataSource: [{ series: "s1", x: 1, y: 1, tag: "a" }, { series: "s2", x: 2, y: 2, tag: "b" }, { series: "s3", x: 3, y: 3, tag: "c" }],
-            seriesTemplate: { customizeSeries: function(sName) { return { type: "spline-" + sName }; } }
-        });
-        // Assert
-        assert.ok(chart.series);
-        assert.equal(chart.series.length, 3);
-        assert.equal(chart.series[0].getOptions().name, "first");
-        assert.equal(chart.series[0].type, "spline-s1");
-
-        assert.equal(chart.series[0].reinitializedData[0]["yfirst"], 1);
-        assert.equal(chart.series[0].reinitializedData[1]["ysecond"], 2);
-        assert.equal(chart.series[0].reinitializedData[2]["ythird"], 3);
-        assert.equal(chart.series[0].reinitializedData[0]["tagfirst"], "a");
-        assert.equal(chart.series[0].reinitializedData[1]["tagsecond"], "b");
-        assert.equal(chart.series[0].reinitializedData[2]["tagthird"], "c");
-        assert.ok(chart.series[0].updatedFields);
-        assert.equal(chart.series[1].getOptions().name, "second");
-        assert.equal(chart.series[1].type, "spline-s2");
-        assert.equal(chart.series[1].reinitializedData[0]["yfirst"], 1);
-        assert.equal(chart.series[1].reinitializedData[1]["ysecond"], 2);
-        assert.equal(chart.series[1].reinitializedData[2]["ythird"], 3);
-        assert.equal(chart.series[1].reinitializedData[0]["tagfirst"], "a");
-        assert.equal(chart.series[1].reinitializedData[1]["tagsecond"], "b");
-        assert.equal(chart.series[1].reinitializedData[2]["tagthird"], "c");
-        assert.ok(chart.series[1].updatedFields);
-        assert.equal(chart.series[2].getOptions().name, "third");
-        assert.equal(chart.series[2].type, "spline-s3");
-        assert.equal(chart.series[2].reinitializedData[0]["yfirst"], 1);
-        assert.equal(chart.series[2].reinitializedData[1]["ysecond"], 2);
-        assert.equal(chart.series[2].reinitializedData[2]["ythird"], 3);
-        assert.equal(chart.series[2].reinitializedData[0]["tagfirst"], "a");
-        assert.equal(chart.series[2].reinitializedData[1]["tagsecond"], "b");
-        assert.equal(chart.series[2].reinitializedData[2]["tagthird"], "c");
-        assert.ok(chart.series[2].updatedFields);
-    });
-
     QUnit.test("SeriesTemplate. Custom nameField. Series ignored", function(assert) {
         var stubSeries1 = new MockSeries({ range: { minX: 15, maxX: 80, minY: -1, maxY: 10 } });
         var stubSeries2 = new MockSeries({ range: { minX: 15, maxX: 80, minY: -1, maxY: 10 } });

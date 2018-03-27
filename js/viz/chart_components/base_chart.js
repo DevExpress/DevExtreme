@@ -302,16 +302,6 @@ function getLegendSettings(legendDataField) {
     };
 }
 
-function setTemplateFields(data, templateData, series) {
-    _each(data, function(_, data) {
-        _each(series.getTemplateFields(), function(_, field) {
-            data[field.templateField] = data[field.originalField];
-        });
-        templateData.push(data);
-    });
-    series.updateTemplateFieldNames();
-}
-
 function checkOverlapping(firstRect, secondRect) {
     return ((firstRect.x <= secondRect.x && secondRect.x <= firstRect.x + firstRect.width) ||
         (firstRect.x >= secondRect.x && firstRect.x <= secondRect.x + secondRect.width)) &&
@@ -1054,7 +1044,7 @@ var BaseChart = BaseWidget.inherit({
     },
 
     _processSingleSeries: function(singleSeries) {
-        singleSeries.createPoints();
+        singleSeries.createPoints(false);
     },
 
     _handleSeriesDataUpdated: function() {
@@ -1087,10 +1077,7 @@ var BaseChart = BaseWidget.inherit({
             seriesTemplate = themeManager.getOptions("seriesTemplate");
 
         if(seriesTemplate) {
-            that._templatedSeries = vizUtils.processSeriesTemplate(seriesTemplate, data);
-            that._populateSeries();
-            delete that._templatedSeries;
-            data = that.templateData || data;
+            that._populateSeries(data);
         }
 
         that._groupSeries();
@@ -1175,17 +1162,16 @@ var BaseChart = BaseWidget.inherit({
         return _isDefined(this.option("dataSource")) && this._dataIsLoaded();
     },
 
-    _populateSeries: function() {
+    _populateSeries: function(data) {
         var that = this,
             themeManager = that._themeManager,
-            hasSeriesTemplate = !!themeManager.getOptions("seriesTemplate"),
-            seriesOptions = hasSeriesTemplate ? that._templatedSeries : that.option("series"),
+            seriesTemplate = themeManager.getOptions("seriesTemplate"),
+            seriesOptions = seriesTemplate ? vizUtils.processSeriesTemplate(seriesTemplate, data || []) : that.option("series"),
             allSeriesOptions = (_isArray(seriesOptions) ? seriesOptions : (seriesOptions ? [seriesOptions] : [])),
             extraOptions = that._getExtraOptions(),
             particularSeriesOptions,
             particularSeries,
             seriesTheme,
-            data,
             i,
             seriesVisibilityChanged = function() {
                 that._specialProcessSeries();
@@ -1198,7 +1184,6 @@ var BaseChart = BaseWidget.inherit({
 
         that._disposeSeries();
         that.series = [];
-        that.templateData = [];
         themeManager.resetPalette();
         eventPipe = function(data) {
             that.series.forEach(function(currentSeries) {
@@ -1212,9 +1197,6 @@ var BaseChart = BaseWidget.inherit({
             if(!particularSeriesOptions.name) {
                 particularSeriesOptions.name = "Series " + (i + 1).toString();
             }
-
-            data = particularSeriesOptions.data;
-            particularSeriesOptions.data = null;
 
             particularSeriesOptions.rotated = that._isRotated();
             particularSeriesOptions.customizePoint = themeManager.getOptions("customizePoint");
@@ -1243,11 +1225,7 @@ var BaseChart = BaseWidget.inherit({
                 that._incidentOccurred("E2101", [seriesTheme.type]);
             } else {
                 particularSeries.index = that.series.length;
-                that._processSingleSeries(particularSeries);
                 that.series.push(particularSeries);
-                if(hasSeriesTemplate) {
-                    setTemplateFields(data, that.templateData, particularSeries);
-                }
             }
         }
         return that.series;

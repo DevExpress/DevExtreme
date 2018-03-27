@@ -7,6 +7,7 @@ var registerComponent = require("../../core/component_registrator"),
     extend = require("../../core/utils/extend").extend,
     Widget = require("../widget/ui.widget"),
     treeListCore = require("./ui.tree_list.core"),
+    themes = require("../themes"),
     callModuleItemsMethod = treeListCore.callModuleItemsMethod;
 
 var DATAGRID_ROW_SELECTOR = ".dx-row",
@@ -65,6 +66,41 @@ var TreeList = Widget.inherit({
             }
         });
         return result;
+    },
+
+    _defaultOptionsRules: function() {
+        return this.callBase().concat([
+            {
+                device: function() {
+                    return themes.isMaterial();
+                },
+                options: {
+                    /**
+                    * @name GridBaseOptions_showRowLines
+                    * @publicName showRowLines
+                    * @type boolean
+                    * @default true @for Material
+                    */
+                    showRowLines: true,
+                    /**
+                    * @name GridBaseOptions_showColumnLines
+                    * @publicName showColumnLines
+                    * @type boolean
+                    * @default false @for Material
+                    */
+                    showColumnLines: false,
+                    /**
+                     * @name GridBaseOptions_headerFilter_height
+                     * @publicName height
+                     * @type number
+                     * @default 315 @for Material
+                     */
+                    headerFilter: {
+                        height: 315
+                    }
+                }
+            }
+        ]);
     },
 
     _init: function() {

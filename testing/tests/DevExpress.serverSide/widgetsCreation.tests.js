@@ -86,24 +86,16 @@ QUnit.module("Widget creation", {
 });
 
 var optionChangeExcluded = [
-    "ActionSheet",
     "ContextMenu",
-    "DataGrid",
     "DateBox",
-    "Gallery",
     "LoadPanel",
-    "Pivot",
-    "PivotGrid",
     "Popover",
     "Popup",
-    "Scheduler",
     "ScrollView",
-    "Switch",
     "TileView",
     "Toast",
     "Toolbar",
-    "Tooltip",
-    "TreeList"
+    "Tooltip"
 ];
 
 Object.keys(widgets).forEach(function(widget) {
@@ -114,7 +106,8 @@ Object.keys(widgets).forEach(function(widget) {
 
     QUnit[optionChangeExcluded.indexOf(widget) < 0 ? "test" : "skip"](widget + " optionChanged", function(assert) {
         this.instance = new widgets[widget](this.element);
-        var options = this.instance.option();
+        var options = this.instance.option(),
+            clock = widget === "DataGrid" || widget === "TreeList" ? sinon.useFakeTimers() : null;
 
         for(var optionName in options) {
             var prevValue = options[optionName],
@@ -123,7 +116,7 @@ Object.keys(widgets).forEach(function(widget) {
              // NOTE: some widgets doesn't support dataSource === null
             if(optionName === "dataSource") {
                 // NOTE: dxResponsiveBox supports only plain object in items
-                var item = widget === "dxResponsiveBox" ? { text: 1 } : 1;
+                var item = widget === "ResponsiveBox" ? { text: 1 } : 1;
                 item = widget === "dxScheduler" ? { text: 1, startDate: new Date(2015, 0, 1) } : item;
 
                 newValue = new DataSource([item]);
@@ -147,6 +140,10 @@ Object.keys(widgets).forEach(function(widget) {
             this.instance.endUpdate();
 
             assert.ok(true, "it's possible to change option " + optionName);
+        }
+
+        if(clock) {
+            clock.restore();
         }
     });
 });

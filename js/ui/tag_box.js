@@ -635,7 +635,7 @@ var TagBox = SelectBox.inherit({
         eventsEngine.off($element, mouseWheelEvent);
 
         if(devices.real().deviceType !== "desktop") {
-            this._$tagsContainer && this._$tagsContainer.css("overflow-x", isMultiline ? "" : "auto");
+            this._$tagsContainer && this._$tagsContainer.css("overflowX", isMultiline ? "" : "auto");
             return;
         }
 

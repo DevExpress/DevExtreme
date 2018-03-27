@@ -75,15 +75,18 @@ exports.stock = _extend({}, scatterSeries, {
         return _isDefined(data.argument) && data.highValue !== undefined && data.lowValue !== undefined && data.openValue !== undefined && data.closeValue !== undefined;
     },
 
-    _getPointData: function(data, options) {
+    _getPointDataSelector: function(data, options) {
         var that = this,
             level,
-            openValueField = options.openValueField || "open",
-            closeValueField = options.closeValueField || "close",
-            highValueField = options.highValueField || "high",
-            lowValueField = options.lowValueField || "low",
-            reductionValue;
-        that.level = options.reduction.level;
+            valueFields = that.getValueFields(),
+            argumentField = that.getArgumentField(),
+            openValueField = valueFields[0],
+            highValueField = valueFields[1],
+            lowValueField = valueFields[2],
+            closeValueField = valueFields[3];
+
+        that.level = that._options.reduction.level;
+
         switch(_normalizeEnum(that.level)) {
             case "open":
                 level = openValueField;
@@ -99,18 +102,32 @@ exports.stock = _extend({}, scatterSeries, {
                 that.level = "close";
                 break;
         }
-        reductionValue = data[level];
 
-        return {
-            argument: data[options.argumentField || "date"],
-            highValue: data[highValueField],
-            lowValue: data[lowValueField],
-            closeValue: data[closeValueField],
-            openValue: data[openValueField],
-            reductionValue: reductionValue,
-            tag: data[options.tagField || "tag"],
-            isReduction: that._checkReduction(reductionValue),
-            data: data
+        let prevLevelValue;
+
+        return (data) => {
+            const reductionValue = data[level];
+
+            let isReduction = false;
+
+            if(reductionValue !== null) {
+                if(_isDefined(prevLevelValue)) {
+                    isReduction = reductionValue < prevLevelValue;
+                }
+                prevLevelValue = reductionValue;
+            }
+
+            return {
+                argument: data[argumentField],
+                highValue: data[highValueField],
+                lowValue: data[lowValueField],
+                closeValue: data[closeValueField],
+                openValue: data[openValueField],
+                reductionValue: reductionValue,
+                tag: data[that.getTagField()],
+                isReduction: isReduction,
+                data: data
+            };
         };
     },
 
@@ -120,19 +137,6 @@ exports.stock = _extend({}, scatterSeries, {
             "stroke-width": style.width,
             fill: style.color || innerColor
         };
-    },
-
-    updateTemplateFieldNames: function() {
-        var that = this,
-            options = that._options,
-            valueFields = that.getValueFields(),
-            name = that.name;
-
-        options.openValueField = valueFields[0] + name;
-        options.highValueField = valueFields[1] + name;
-        options.lowValueField = valueFields[2] + name;
-        options.closeValueField = valueFields[3] + name;
-        options.tagField = that.getTagField() + name;
     },
 
     _getDefaultStyle: function(options) {
@@ -179,20 +183,7 @@ exports.stock = _extend({}, scatterSeries, {
     },
 
     _endUpdateData: function() {
-        delete this.prevLevelValue;
         delete this._predefinedPointOptions;
-    },
-
-    _checkReduction: function(value) {
-        var that = this,
-            result = false;
-        if(value !== null) {
-            if(_isDefined(that.prevLevelValue)) {
-                result = value < that.prevLevelValue;
-            }
-            that.prevLevelValue = value;
-        }
-        return result;
     },
 
     _defaultAggregator: "ohlc",
@@ -216,17 +207,19 @@ exports.stock = _extend({}, scatterSeries, {
                     result[lowValueField] = Math.min(result[lowValueField], item[lowValueField]);
                 }
                 return result;
-            });
+            }, result);
             result[valueFields[0]] = data[0][valueFields[0]];
             result[valueFields[3]] = data[data.length - 1][valueFields[3]];
+            if(!isFinite(result[highValueField])) {
+                result[highValueField] = null;
+            }
+            if(!isFinite(result[lowValueField])) {
+                result[lowValueField] = null;
+            }
             result[series.getArgumentField()] = aggregationInfo.intervalStart;
 
             return result;
         }
-    },
-
-    _getPointSize: function() {
-        return DEFAULT_FINANCIAL_POINT_SIZE;
     },
 
     getValueFields: function() {
@@ -247,6 +240,7 @@ exports.stock = _extend({}, scatterSeries, {
                 }, 0);
 
         options.size = DEFAULT_FINANCIAL_POINT_SIZE + border;
+        options.sizePointNormalState = DEFAULT_FINANCIAL_POINT_SIZE + styles.normal["stroke-width"];
 
         return options;
     }

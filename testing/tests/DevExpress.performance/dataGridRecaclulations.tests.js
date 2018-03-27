@@ -12,7 +12,7 @@ var createDataGridMeasureFunction = function(options) {
     return function() {
         var clock = sinon.useFakeTimers();
         $("#container").dxDataGrid(options);
-        clock.tick(50);
+        clock.tick(100);
         clock.restore();
     };
 };
@@ -54,7 +54,7 @@ QUnit.performanceTest("render with columnFixing", function(assert) {
         }
     });
 
-    assert.measureStyleRecalculation(measureFunction, 14);
+    assert.measureStyleRecalculation(measureFunction, 15);
 });
 
 QUnit.performanceTest("render with virtual scrolling", function(assert) {
@@ -64,7 +64,7 @@ QUnit.performanceTest("render with virtual scrolling", function(assert) {
         scrolling: { mode: "virtual" }
     });
 
-    assert.measureStyleRecalculation(measureFunction, 7);
+    assert.measureStyleRecalculation(measureFunction, 14);
 });
 
 QUnit.performanceTest("updateDimensions", function(assert) {
@@ -99,7 +99,7 @@ QUnit.performanceTest("updateDimensions with columnFixing", function(assert) {
 
     var measureFunction = createDataGridMeasureFunction("updateDimensions");
 
-    assert.measureStyleRecalculation(measureFunction, 2);
+    assert.measureStyleRecalculation(measureFunction, 5);
 });
 
 QUnit.performanceTest("updateDimensions with virtual scrolling", function(assert) {
@@ -111,7 +111,7 @@ QUnit.performanceTest("updateDimensions with virtual scrolling", function(assert
 
     var measureFunction = createDataGridMeasureFunction("updateDimensions");
 
-    assert.measureStyleRecalculation(measureFunction, 6);
+    assert.measureStyleRecalculation(measureFunction, 1);
 });
 
 QUnit.performanceTest("refresh", function(assert) {
@@ -146,7 +146,7 @@ QUnit.performanceTest("refresh with columnFixing", function(assert) {
 
     var measureFunction = createDataGridMeasureFunction("refresh");
 
-    assert.measureStyleRecalculation(measureFunction, 3);
+    assert.measureStyleRecalculation(measureFunction, 7);
 });
 
 QUnit.performanceTest("refresh with virtual scrolling", function(assert) {
@@ -158,5 +158,5 @@ QUnit.performanceTest("refresh with virtual scrolling", function(assert) {
 
     var measureFunction = createDataGridMeasureFunction("refresh");
 
-    assert.measureStyleRecalculation(measureFunction, 7);
+    assert.measureStyleRecalculation(measureFunction, 1);
 });

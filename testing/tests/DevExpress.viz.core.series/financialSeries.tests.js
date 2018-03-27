@@ -192,7 +192,8 @@ var checkGroups = function(assert, series) {
 
         assert.deepEqual(series.getMarginOptions(), {
             size: 14,
-            percentStick: false
+            percentStick: false,
+            sizePointNormalState: 12
         });
     });
 
@@ -206,47 +207,6 @@ var checkGroups = function(assert, series) {
                 valueAxis: new MockAxis({ renderer: this.renderer })
             });
         },
-    });
-
-    QUnit.test("Update template field", function(assert) {
-        var series = createSeries({
-            type: seriesType,
-            name: "financialSeries",
-            openValueField: "open",
-            closeValueField: "close",
-            lowValueField: "low",
-            highValueField: "high",
-            tagField: "tagField",
-            point: { visible: false },
-            label: { visible: false }
-
-        }, { renderer: this.renderer });
-        // act
-        series.updateTemplateFieldNames();
-        // assert
-        assert.equal(series._options.openValueField, "openfinancialSeries");
-        assert.equal(series._options.closeValueField, "closefinancialSeries");
-        assert.equal(series._options.lowValueField, "lowfinancialSeries");
-        assert.equal(series._options.highValueField, "highfinancialSeries");
-        assert.equal(series._options.tagField, "tagFieldfinancialSeries");
-    });
-
-    QUnit.test("Update template field when defaults are used", function(assert) {
-        var series = createSeries({
-            type: seriesType,
-            name: "financialSeries",
-            point: { visible: false },
-            label: { visible: false }
-
-        }, { renderer: this.renderer });
-        // act
-        series.updateTemplateFieldNames();
-        // assert
-        assert.equal(series._options.openValueField, "openfinancialSeries");
-        assert.equal(series._options.closeValueField, "closefinancialSeries");
-        assert.equal(series._options.lowValueField, "lowfinancialSeries");
-        assert.equal(series._options.highValueField, "highfinancialSeries");
-        assert.equal(series._options.tagField, "tagfinancialSeries");
     });
 
     QUnit.test("Draw without data", function(assert) {
@@ -1068,48 +1028,6 @@ var checkGroups = function(assert, series) {
         });
 
 
-    });
-
-    QUnit.test("_get Point size visible point", function(assert) {
-        var series = createSeries({
-            type: seriesType,
-            point: {
-                size: 10,
-                hoverStyle: {
-                    size: 50
-                },
-                selectionStyle: {
-                    size: 100,
-                },
-                visible: true
-            }
-        });
-
-        series.updateData(this.data);
-        series.createPoints();
-
-        assert.equal(series._getPointSize(), 10);
-    });
-
-    QUnit.test("_get Point size invisible point", function(assert) {
-        var series = createSeries({
-            type: seriesType,
-            point: {
-                size: 10,
-                hoverStyle: {
-                    size: 50
-                },
-                selectionStyle: {
-                    size: 100,
-                },
-                visible: false
-            }
-        });
-
-        series.updateData(this.data);
-        series.createPoints();
-
-        assert.equal(series._getPointSize(), 10);
     });
 
     QUnit.module("StockSeries. Customize Point", {

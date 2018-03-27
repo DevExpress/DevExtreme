@@ -15,6 +15,7 @@ var $ = require("../../core/renderer"),
     modules = require("./ui.grid_core.modules"),
     Form = require("../form"),
     gridCoreUtils = require("./ui.grid_core.utils"),
+    themes = require("../themes"),
 
     COLUMN_HEADERS_VIEW = "columnHeadersView",
     ROWS_VIEW = "rowsView",
@@ -476,13 +477,19 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
             userFormOptions = {
                 items: that._getFormItemsByHiddenColumns(that._hiddenColumns),
                 formID: "dx-" + new Guid()
-            };
+            },
+            defaultFormOptions = themes.isMaterial() ?
+            {
+                colCount: 2,
+                screenByWidth: function() { return "lg"; }
+            } :
+            {};
 
         this.executeAction("onAdaptiveDetailRowPreparing", { formOptions: userFormOptions });
 
         that._$itemContents = null;
 
-        that._form = that._createComponent($("<div>").appendTo($container), Form, extend({}, userFormOptions, {
+        that._form = that._createComponent($("<div>").appendTo($container), Form, extend(defaultFormOptions, userFormOptions, {
             customizeItem: function(item) {
                 var column = item.column || that._columnsController.columnOption(item.name || item.dataField);
                 if(column) {

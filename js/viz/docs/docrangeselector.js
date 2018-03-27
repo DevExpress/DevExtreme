@@ -492,7 +492,24 @@ var dxRangeSelector = {
         * @type boolean
         * @default false
         */
-        endOnTick: false
+        endOnTick: false,
+        /**
+        * @name dxrangeselectoroptions_scale_aggregationGroupWidth
+        * @publicName aggregationGroupWidth
+        * @type number
+        * @default undefined
+        * @default 10 @for bar
+        * @default 10 @for stacked_bar
+        * @default 10 @for full-stacked_bar
+        */
+        aggregationGroupWidth: 10,
+        /**
+        * @name dxrangeselectoroptions_scale_aggregationInterval
+        * @publicName aggregationInterval
+        * @extends VizTimeIntervalEnum
+        * @inherits VizTimeInterval
+        */
+        aggregationInterval: undefined,
     },
     /**
     * @name dxrangeselectoroptions_slidermarker

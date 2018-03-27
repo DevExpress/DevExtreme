@@ -130,6 +130,7 @@ var ThemeManager = BaseThemeManager.inherit((function() {
                 mainSeriesColor,
                 resolveLabelsOverlapping = that.getOptions("resolveLabelsOverlapping"),
                 containerBackgroundColor = that.getOptions("containerBackgroundColor"),
+                seriesTemplate = applyParticularTheme.seriesTemplate.call(this),
                 seriesVisibility;
 
             if(isBar || isBubble) {
@@ -166,12 +167,23 @@ var ThemeManager = BaseThemeManager.inherit((function() {
                 settings.label.position = "outside";
             }
 
+            if(seriesTemplate) {
+                settings.nameField = seriesTemplate.nameField;
+            }
+
             return settings;
         },
         animation: function(name) {
             var userOptions = this._userOptions[name];
             userOptions = typeUtils.isPlainObject(userOptions) ? userOptions : _isDefined(userOptions) ? { enabled: !!userOptions } : {};
             return mergeOptions.call(this, name, userOptions);
+        },
+        seriesTemplate() {
+            const value = mergeOptions.call(this, "seriesTemplate");
+            if(value) {
+                value.nameField = value.nameField || "series";
+            }
+            return value;
         }
     };
 

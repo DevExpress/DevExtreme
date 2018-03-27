@@ -62,7 +62,7 @@ QUnit.module("Integration: Appointments", {
             this.instance = $("#scheduler").dxScheduler($.extend(options, { maxAppointmentsPerCell: options && options.maxAppointmentsPerCell || null })).dxScheduler("instance");
         };
         this.getAppointmentColor = function($task, checkedProperty) {
-            checkedProperty = checkedProperty || "background-color";
+            checkedProperty = checkedProperty || "backgroundColor";
             return new Color($task.css(checkedProperty)).toHex();
         };
         this.clock = sinon.useFakeTimers();
@@ -3764,11 +3764,11 @@ QUnit.test("DropDown appointment should be painted depend on resource color", fu
     dropDown.open();
     var ddAppointments = dropDown._list.$element().find(".dx-scheduler-dropdown-appointment");
 
-    assert.equal(this.getAppointmentColor(ddAppointments.eq(0), "border-left-color"), "#ff0000", "Appointment color is OK");
-    assert.equal(this.getAppointmentColor(ddAppointments.eq(1), "border-left-color"), "#ff0000", "Appointment color is OK");
-    assert.equal(this.getAppointmentColor(ddAppointments.eq(2), "border-left-color"), "#0000ff", "Appointment color is OK");
-    assert.equal(this.getAppointmentColor(ddAppointments.eq(3), "border-left-color"), "#0000ff", "Appointment color is OK");
-    assert.equal(this.getAppointmentColor(ddAppointments.eq(4), "border-left-color"), "#0000ff", "Appointment color is OK");
+    assert.equal(this.getAppointmentColor(ddAppointments.eq(0), "borderLeftColor"), "#ff0000", "Appointment color is OK");
+    assert.equal(this.getAppointmentColor(ddAppointments.eq(1), "borderLeftColor"), "#ff0000", "Appointment color is OK");
+    assert.equal(this.getAppointmentColor(ddAppointments.eq(2), "borderLeftColor"), "#0000ff", "Appointment color is OK");
+    assert.equal(this.getAppointmentColor(ddAppointments.eq(3), "borderLeftColor"), "#0000ff", "Appointment color is OK");
+    assert.equal(this.getAppointmentColor(ddAppointments.eq(4), "borderLeftColor"), "#0000ff", "Appointment color is OK");
 });
 
 QUnit.test("DropDown appointment should be painted depend on resource color when resourses store is asynchronous", function(assert) {
@@ -3821,11 +3821,11 @@ QUnit.test("DropDown appointment should be painted depend on resource color when
     dropDown.open();
     var ddAppointments = dropDown._list.$element().find(".dx-scheduler-dropdown-appointment");
 
-    assert.equal(this.getAppointmentColor(ddAppointments.eq(0), "border-left-color"), "#ff0000", "Appointment color is OK");
-    assert.equal(this.getAppointmentColor(ddAppointments.eq(1), "border-left-color"), "#ff0000", "Appointment color is OK");
-    assert.equal(this.getAppointmentColor(ddAppointments.eq(2), "border-left-color"), "#0000ff", "Appointment color is OK");
-    assert.equal(this.getAppointmentColor(ddAppointments.eq(3), "border-left-color"), "#0000ff", "Appointment color is OK");
-    assert.equal(this.getAppointmentColor(ddAppointments.eq(4), "border-left-color"), "#0000ff", "Appointment color is OK");
+    assert.equal(this.getAppointmentColor(ddAppointments.eq(0), "borderLeftColor"), "#ff0000", "Appointment color is OK");
+    assert.equal(this.getAppointmentColor(ddAppointments.eq(1), "borderLeftColor"), "#ff0000", "Appointment color is OK");
+    assert.equal(this.getAppointmentColor(ddAppointments.eq(2), "borderLeftColor"), "#0000ff", "Appointment color is OK");
+    assert.equal(this.getAppointmentColor(ddAppointments.eq(3), "borderLeftColor"), "#0000ff", "Appointment color is OK");
+    assert.equal(this.getAppointmentColor(ddAppointments.eq(4), "borderLeftColor"), "#0000ff", "Appointment color is OK");
 });
 
 QUnit.test("DropDown appointments should not be duplicated when items option change (T503748)", function(assert) {

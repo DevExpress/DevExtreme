@@ -1545,7 +1545,7 @@ var EditingController = modules.ViewController.inherit((function() {
                 template = function(container, options) {
                     var $container = $(container);
 
-                    $container.css("text-align", "center");
+                    $container.css("textAlign", "center");
                     options.rtlEnabled = that.option("rtlEnabled");
 
                     editingOptions = that.option("editing") || {};
@@ -2174,7 +2174,7 @@ module.exports = {
                             .toggleClass(CELL_FOCUS_DISABLED_CLASS, !isEditableCell);
 
                         if(alignment) {
-                            $cell.find(EDITORS_INPUT_SELECTOR).first().css("text-align", alignment);
+                            $cell.find(EDITORS_INPUT_SELECTOR).first().css("textAlign", alignment);
                         }
                     }
 

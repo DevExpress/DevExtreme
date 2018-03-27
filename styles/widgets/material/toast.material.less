@@ -1,0 +1,64 @@
+.dx-size-default() {
+    @MATERIAL_TOAST_LINE_HEIGHT: 32px;
+    @MATERIAL_TOAST_ICON_SIZE: 35px;
+    @MATERIAL_TOAST_CONTENT_PADDING: 10px;
+}
+.dx-size-compact() {
+    @MATERIAL_TOAST_LINE_HEIGHT: 25px;
+    @MATERIAL_TOAST_ICON_SIZE: 25px;
+    @MATERIAL_TOAST_CONTENT_PADDING: 5px;
+}
+
+@MATERIAL_TOAST_SHADOW: 0px 2px 3px 0px @toast-shadow-color;
+
+
+.dx-toast-content {
+    color: @toast-color;
+    font-size: @MATERIAL_BASE_FONT_SIZE;
+    font-weight: 600;
+    line-height: @MATERIAL_TOAST_LINE_HEIGHT;
+    padding: @MATERIAL_TOAST_CONTENT_PADDING;
+    .box-shadow(@MATERIAL_TOAST_SHADOW);
+    .border-radius(@toast-border-radius);
+}
+
+.dx-toast-icon {
+    width: @MATERIAL_TOAST_ICON_SIZE;
+    height: @MATERIAL_TOAST_ICON_SIZE;
+}
+
+.dx-toast-info {
+    background-color: @toast-info-bg;
+
+    .dx-toast-icon {
+        background-image: @toast-info-icon-image-bg;
+    }
+}
+
+.dx-toast-message {
+    line-height: 16px;
+}
+
+.dx-toast-warning {
+    background-color: @toast-warning-bg;
+
+    .dx-toast-icon {
+        background-image: @toast-warning-icon-image-bg;
+    }
+}
+
+.dx-toast-error {
+    background-color: @toast-error-bg;
+
+    .dx-toast-icon {
+        background-image: @toast-error-icon-image-bg;
+    }
+}
+
+.dx-toast-success {
+    background-color: @toast-success-bg;
+
+    .dx-toast-icon {
+        background-image: @toast-success-icon-image-bg;
+    }
+}

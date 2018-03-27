@@ -95,7 +95,7 @@ exports.pie = _extend({}, barSeries, {
     },
 
     getPointsCount: function() {
-        return this._data.length;
+        return this._data.filter(d => this._checkData(d)).length;
     },
 
     setMaxPointsCount: function(count) {

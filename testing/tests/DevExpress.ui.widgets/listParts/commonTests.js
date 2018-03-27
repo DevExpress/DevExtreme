@@ -18,6 +18,7 @@ var $ = require("jquery"),
     swipeEvents = require("events/swipe"),
     ScrollView = require("ui/scroll_view"),
     errors = require("ui/widget/ui.errors"),
+    themes = require("ui/themes"),
     devices = require("core/devices");
 
 var LIST_ITEM_CLASS = "dx-list-item",
@@ -255,6 +256,37 @@ QUnit.test("group body should be not collapsed by click on header in disabled st
 
     $groupHeader.trigger("dxclick");
     assert.ok(!$group.hasClass(LIST_GROUP_COLLAPSED_CLASS), "collapsed class is not present");
+});
+
+var LIST_GROUP_HEADER_INDICATOR_CLASS = "dx-list-group-header-indicator";
+
+QUnit.test("group header collapsed indicator element for the Material theme", function(assert) {
+    var origIsMaterial = themes.isMaterial;
+    themes.isMaterial = function() { return true; };
+
+    var $element = this.element.dxList({
+        items: [{ key: "a", items: ["0"] }],
+        grouped: true,
+        collapsibleGroups: true
+    });
+
+    var $groupHeader = $element.find(toSelector(LIST_GROUP_CLASS) + " " + toSelector(LIST_GROUP_HEADER_CLASS));
+
+    assert.equal($groupHeader.find(toSelector(LIST_GROUP_HEADER_INDICATOR_CLASS)).length, 1, "group header has the collapsed indicator element for the Material theme");
+
+    themes.isMaterial = origIsMaterial;
+});
+
+QUnit.test("no group header collapsed indicator element for the Generic theme", function(assert) {
+    var $element = this.element.dxList({
+        items: [{ key: "a", items: ["0"] }],
+        grouped: true,
+        collapsibleGroups: true
+    });
+
+    var $groupHeader = $element.find(toSelector(LIST_GROUP_CLASS) + " " + toSelector(LIST_GROUP_HEADER_CLASS));
+
+    assert.equal($groupHeader.find(toSelector(LIST_GROUP_HEADER_INDICATOR_CLASS)).length, 0, "group header should not have collapsed indicator element for the Generic theme");
 });
 
 QUnit.test("group collapsing is animated", function(assert) {
@@ -1573,6 +1605,42 @@ QUnit.test("appending items on 'more' button", function(assert) {
 
     assert.equal(element.dxList("instance")._startIndexForAppendedItems, null, "does not expecting appending items if all items rendered");
 });
+
+QUnit.test("more button should have default type for the Material theme", function(assert) {
+    var origIsMaterial = themes.isMaterial;
+    themes.isMaterial = function() { return true; };
+
+    var element = this.element.dxList({
+        dataSource: {
+            store: new ArrayStore([1, 2, 3, 4]),
+            pageSize: 2
+        },
+        pageLoadMode: "nextButton",
+        scrollingEnabled: true
+    });
+
+    var button = element.find(".dx-list-next-button .dx-button").dxButton("instance");
+
+    assert.equal(button.option("type"), "default", "more button should have default type for the Material theme");
+
+    themes.isMaterial = origIsMaterial;
+});
+
+QUnit.test("more button should have undefined type for the Generic theme", function(assert) {
+    var element = this.element.dxList({
+        dataSource: {
+            store: new ArrayStore([1, 2, 3, 4]),
+            pageSize: 2
+        },
+        pageLoadMode: "nextButton",
+        scrollingEnabled: true
+    });
+
+    var button = element.find(".dx-list-next-button .dx-button").dxButton("instance");
+
+    assert.equal(button.option("type"), undefined, "more button should have undefined type for the Generic theme");
+});
+
 
 QUnit.test("should not expect appending items if items were appended just now", function(assert) {
     var element = this.element.dxList({

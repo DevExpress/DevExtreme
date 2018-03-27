@@ -1304,5 +1304,61 @@ QUnit.module("Workspace Month markup with gorizontal grouping", monthWithGroupin
 
         assert.equal($element.find(".dx-scheduler-group-header").length, 2, "Group header cells count is ok");
     });
+});
 
+const scrollingModuleConfig = {
+    beforeEach: () => {
+        this.instance = $("#scheduler-work-space").dxSchedulerWorkSpaceWeek({
+            crossScrollingEnabled: true,
+            width: 100
+        }).dxSchedulerWorkSpaceWeek("instance");
+    }
+};
+
+QUnit.module("Workspace with crossScrollingEnabled markup", scrollingModuleConfig, () => {
+    QUnit.test("Workspace should have correct class", (assert) => {
+        assert.ok(this.instance.$element().hasClass("dx-scheduler-work-space-both-scrollbar"), "CSS class is OK");
+        this.instance.option("crossScrollingEnabled", false);
+        assert.notOk(this.instance.$element().hasClass("dx-scheduler-work-space-both-scrollbar"), "CSS class is OK");
+    });
+
+    QUnit.test("Three scrollable elements should be rendered", (assert) => {
+        var $dateTableScrollable = this.instance.$element().find(".dx-scheduler-date-table-scrollable"),
+            $timePanelScrollable = this.instance.$element().find(".dx-scheduler-sidebar-scrollable"),
+            $headerScrollable = this.instance.$element().find(".dx-scheduler-header-scrollable");
+
+        assert.equal($dateTableScrollable.length, 1, "Date table scrollable was rendered");
+        assert.ok($dateTableScrollable.data("dxScrollable"), "Date table scrollable is instance of dxScrollable");
+
+        assert.equal($timePanelScrollable.length, 1, "Time panel scrollable was rendered");
+        assert.ok($timePanelScrollable.data("dxScrollable"), "Time panel scrollable is instance of dxScrollable");
+
+        assert.equal($headerScrollable.length, 1, "Header scrollable was rendered");
+        assert.ok($headerScrollable.data("dxScrollable"), "Header scrollable is instance of dxScrollable");
+    });
+
+    QUnit.test("Time panel scrollable should contain time panel", (assert) => {
+        var timePanelScrollable = this.instance.$element().find(".dx-scheduler-sidebar-scrollable").dxScrollable("instance"),
+            scrollableContent = timePanelScrollable.$content();
+
+        assert.equal(scrollableContent.find(".dx-scheduler-time-panel").length, 1, "Time panel exists");
+    });
+
+    QUnit.test("Header scrollable should have right config", (assert) => {
+        var headerScrollable = this.instance.$element().find(".dx-scheduler-header-scrollable").dxScrollable("instance");
+
+        assert.equal(headerScrollable.option("direction"), "horizontal", "Direction is OK");
+        assert.strictEqual(headerScrollable.option("showScrollbar"), false, "showScrollbar is OK");
+        assert.strictEqual(headerScrollable.option("bounceEnabled"), false, "bounceEnabled is OK");
+        assert.strictEqual(headerScrollable.option("updateManually"), true, "updateManually is OK");
+    });
+
+    QUnit.test("Time panel scrollable should have right config", (assert) => {
+        var timePanelScrollable = this.instance.$element().find(".dx-scheduler-sidebar-scrollable").dxScrollable("instance");
+
+        assert.equal(timePanelScrollable.option("direction"), "vertical", "Direction is OK");
+        assert.strictEqual(timePanelScrollable.option("showScrollbar"), false, "showScrollbar is OK");
+        assert.strictEqual(timePanelScrollable.option("bounceEnabled"), false, "bounceEnabled is OK");
+        assert.strictEqual(timePanelScrollable.option("updateManually"), true, "updateManually is OK");
+    });
 });

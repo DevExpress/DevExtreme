@@ -188,6 +188,8 @@ QUnit.test("Columns hiding - columnHidingEnabled is true", function(assert) {
     assert.ok($cellElement.eq(1).hasClass("dx-treelist-hidden-column"), "second cell is hidden");
     assert.notOk($cellElement.eq(2).hasClass("dx-command-adaptive-hidden"), "adaptive cell is visible");
 
+    this.clock.tick(300);
+
     // act
     treeList.option("width", 800);
 
@@ -223,7 +225,7 @@ QUnit.test("Height rows view", function(assert) {
     assert.equal(treeList.$element().find(".dx-treelist-rowsview").outerHeight(), 200, "height rows view");
 });
 
-QUnit.test("Virtual scrolling enabled by default and should render two tables in rowsView", function(assert) {
+QUnit.test("Virtual scrolling enabled by default and should render two virtual rows", function(assert) {
     var treeList = createTreeList({
         columns: ["name", "age"],
         dataSource: [
@@ -236,15 +238,13 @@ QUnit.test("Virtual scrolling enabled by default and should render two tables in
     // act
     this.clock.tick();
 
-
     // assert
     assert.equal(treeList.option("scrolling.mode"), "virtual", "scrolling mode is virtual");
     var $rowsViewTables = $(treeList.$element().find(".dx-treelist-rowsview table"));
-    assert.equal($rowsViewTables.length, 2, "two tables are rendered");
-    assert.equal($rowsViewTables.eq(0).find(".dx-data-row").length, 3, "three data rows in first table");
-    assert.equal($rowsViewTables.eq(1).find(".dx-data-row").length, 0, "no data rows in second table");
-    assert.equal($rowsViewTables.eq(0).find(".dx-freespace-row").length, 1, "one freespace row in first table");
-    assert.equal($rowsViewTables.eq(1).find(".dx-freespace-row").length, 1, "one freespace row in second table");
+    assert.equal($rowsViewTables.length, 1, "one table are rendered");
+    assert.equal($rowsViewTables.eq(0).find(".dx-data-row").length, 3, "three data rows in table");
+    assert.equal($rowsViewTables.eq(0).find(".dx-virtual-row").length, 2, "two virtual rows in table");
+    assert.equal($rowsViewTables.eq(0).find(".dx-freespace-row").length, 1, "one freespace row in table");
 });
 
 
@@ -330,7 +330,7 @@ QUnit.test("Filter menu items should have icons", function(assert) {
     // assert
     $menuItemElements = $(".dx-overlay-wrapper").find(".dx-menu-item");
     assert.ok($menuItemElements.length > 0, "has filter menu items");
-    assert.equal($menuItemElements.first().find(".dx-icon").css("font-family"), "DXIcons", "first item has icon");
+    assert.equal($menuItemElements.first().find(".dx-icon").css("fontFamily"), "DXIcons", "first item has icon");
 });
 
 QUnit.test("Header Filter", function(assert) {
@@ -514,6 +514,42 @@ QUnit.test("Aria accessibility", function(assert) {
     assert.equal($dataRows.eq(1).attr("aria-level"), "1", "second data row - value of 'aria-level' attribute");
     assert.equal($dataRows.eq(2).attr("aria-expanded"), undefined, "third data row hasn't the 'aria-expanded' attribute");
     assert.equal($dataRows.eq(2).attr("aria-level"), "0", "third data row - value of 'aria-level' attribute");
+});
+
+QUnit.test("filterSyncEnabled is working in TreeList", function(assert) {
+    // act
+    var treeList = createTreeList({
+        filterSyncEnabled: true,
+        columns: [{ dataField: "field", allowHeaderFiltering: true, filterValues: [2] }]
+    });
+
+    // act
+    treeList.columnOption("field", { filterValues: [2] });
+
+    // assert
+    assert.deepEqual(treeList.option("filterValue"), ["field", "anyof", [2]]);
+});
+
+QUnit.test("filterBulider is working in TreeList", function(assert) {
+    // arrange
+    var handlerInit = sinon.spy();
+
+    // act
+    var treeList = createTreeList({
+        filterBuilder: {
+            onInitialized: handlerInit
+        },
+        columns: [{ dataField: "field" }]
+    });
+
+    // assert
+    assert.equal(handlerInit.called, 0);
+
+    // act
+    treeList.option("filterBuilderPopup.visible", true);
+
+    // assert
+    assert.equal(handlerInit.called, 1);
 });
 
 QUnit.test("TreeList with paging", function(assert) {

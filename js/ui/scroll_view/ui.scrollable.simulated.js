@@ -456,7 +456,7 @@ var Scroller = Class.inherit({
     },
 
     _contentSize: function() {
-        var isOverflowHidden = this._$content.css("overflow-" + this._axis) === "hidden",
+        var isOverflowHidden = this._$content.css("overflow" + this._axis.toUpperCase()) === "hidden",
             contentSize = this._$content[this._dimension]();
 
         if(!isOverflowHidden) {

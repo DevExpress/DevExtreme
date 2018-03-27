@@ -12,6 +12,7 @@ var typeUtils = require("../../core/utils/type"),
     VALUE_TYPE = "valueType",
     ARGUMENT_TYPE = "argumentType",
 
+    extend = require("../../core/utils/extend").extend,
     axisTypeParser = require("../core/utils").enumParser([STRING, NUMERIC, DATETIME]),
     _getParser = require("./parse_utils").getParser,
 
@@ -28,7 +29,7 @@ function groupingValues(data, others, valueField, index) {
         data.slice(index).forEach(function(cell) {
             if(_isDefined(cell[valueField])) {
                 others[valueField] += cell[valueField];
-                cell[valueField] = cell["original" + valueField] = undefined;
+                cell[valueField] = undefined;
             }
         });
     }
@@ -169,10 +170,6 @@ function prepareParsers(groupsData, skipFields, incidentOccurred) {
             if(series.getSizeField()) {
                 cache[series.getSizeField()] = sizeParser;
             }
-
-            if(series.getTagField()) {
-                cache[series.getTagField()] = eigen;
-            }
         });
     });
     for(var field in cache) {
@@ -187,14 +184,13 @@ function prepareParsers(groupsData, skipFields, incidentOccurred) {
 function getParsedCell(cell, parsers) {
     var i,
         ii = parsers.length,
-        obj = {},
+        obj = extend({}, cell),
         field,
         value;
     for(i = 0; i < ii; ++i) {
         field = parsers[i][0];
         value = cell[field];
         obj[field] = parsers[i][1](value, field);
-        obj["original" + field] = value;
     }
     return obj;
 }

@@ -127,9 +127,6 @@ var environment = {
             _animate: function() {
                 this.animated = true;
             },
-            _getPointSize: function() {
-                return 10;
-            },
             _createPointStyles: function() {
 
             },
@@ -139,13 +136,15 @@ var environment = {
             _preparePointOptions: function() {
                 return this._options.point;
             },
-            _getPointData: function(dataItem) {
-                return {
-                    argument: dataItem.arg,
-                    value: typeUtils.isDefined(dataItem.val1) ? dataItem.val1 : dataItem.val,
-                    minValue: dataItem.val2,
-                    highValue: dataItem.h,
-                    lowValue: dataItem.l
+            _getPointDataSelector: function() {
+                return function(dataItem) {
+                    return {
+                        argument: dataItem.arg,
+                        value: typeUtils.isDefined(dataItem.val1) ? dataItem.val1 : dataItem.val,
+                        minValue: dataItem.val2,
+                        highValue: dataItem.h,
+                        lowValue: dataItem.l
+                    };
                 };
             },
             _resample: function() {
@@ -576,6 +575,21 @@ QUnit.test("Update series data when points are not empty. Old points length > ne
     assert.equal(series.getAllPoints()[0].mockOptions.argument, 3, "Arg");
     assert.equal(series.getAllPoints()[0].mockOptions.value, 4, "Val");
     assert.equal(series.getAllPoints().length, 1);
+});
+
+QUnit.test("Create points for dataItems with coresponding series (series template)", function(assert) {
+    var options = { type: "mockType", argumentField: "arg", valueField: "val", nameField: "series", name: "1", label: { visible: false } },
+        series = createSeries(options),
+        data = [{ arg: 1, val: 10, series: "1" }, { arg: 2, val: 20, series: "2" }];
+
+    series.updateData(data);
+    series.createPoints();
+
+    assert.ok(series.getAllPoints(), "Series points should be created");
+    assert.equal(series.getAllPoints().length, 1, "Series should have 1 point");
+    assert.equal(series.getAllPoints()[0].mockOptions.argument, 1, "Arg");
+    assert.equal(series.getAllPoints()[0].mockOptions.value, 10, "Val");
+    assert.ok(series.canRenderCompleteHandle());
 });
 
 QUnit.test("Update series data when points are not empty. Old points length < new points length", function(assert) {
@@ -1437,105 +1451,6 @@ QUnit.test("Dispose old points after drawing", function(assert) {
     assert.ok(points[0].disposed);
     assert.ok(points[1].disposed);
     assert.ok(!points[2].disposed);
-});
-
-QUnit.module("Drawing with resample data", {
-    beforeEach: function() {
-        var that = this;
-
-        environment.beforeEach.call(this);
-        this.seriesGroup = this.renderer.g({});
-
-        this.setupAggregation = function(min, max, canvasLength) {
-            var translator = getTranslator(min, max, undefined, undefined, canvasLength);
-
-            that.argumentAxis.getTranslator = function() { return translator; };
-            that.argumentAxis.getViewport.returns({
-                min: min,
-                max: max
-            });
-        };
-
-        this.argumentAxis = new MockAxis({
-            renderer: this.renderer
-        });
-
-        this.series = createSeries({
-            aggregation: {
-                enabled: true
-            }
-        }, {
-            seriesGroup: this.seriesGroup,
-            labelsGroup: this.renderer.g(),
-            argumentAxis: this.argumentAxis,
-            valueAxis: new MockAxis({
-                renderer: this.renderer
-            })
-        });
-        this.renderer = this.series._renderer;
-    }
-});
-
-QUnit.test("With Resample Points", function(assert) {
-    var series = this.series;
-    this.setupAggregation(1, 4, 15);
-
-    series.updateData([{ arg: 1, val: 22 }, { arg: 2, val: 33 }, { arg: 3, val: 11 }, { arg: 4, val: 44 }]);
-    series.createPoints();
-
-    assert.deepEqual(series.resampleArgs[0], 2);
-});
-
-QUnit.test("With Resample Points, Some interval", function(assert) {
-    var series = this.series,
-        tickInterval = (4 - 3) / 1.5;
-
-    this.setupAggregation(3, 4, 15);
-
-    series.updateData([{ arg: 1, val: 22 }, { arg: 2, val: 33 }, { arg: 3, val: 11 }, { arg: 4, val: 44 }, { arg: 5, val: 55 }, { arg: 6, val: 66 }]);
-    series.createPoints();
-
-    assert.deepEqual(series.resampleArgs.slice(0, 4), [tickInterval, 3 - tickInterval, 4 + tickInterval, true]);
-});
-
-QUnit.test("With Resample Points, Some point", function(assert) {
-    var series = this.series;
-
-    this.setupAggregation(3, 3, 15);
-
-    series.updateData([{ arg: 1, val: 22 }, { arg: 2, val: 33 }, { arg: 3, val: 11 }, { arg: 4, val: 44 }, { arg: 5, val: 55 }, { arg: 6, val: 66 }]);
-    series.createPoints();
-
-    assert.deepEqual(series.resampleArgs.slice(0, 4), [0, 3, 3, true]);
-});
-
-QUnit.test("Draw aggragated points", function(assert) {
-    var series = createSeries({
-        type: "scatter",
-        aggregation: { enabled: true }
-    }, {
-        argumentAxis: this.argumentAxis,
-        valueAxis: new MockAxis({
-            renderer: this.renderer
-        })
-    });
-
-    var data = [];
-    for(var i = 0; i < 100; i++) {
-        data.push({ arg: i, val: i * 2 });
-    }
-    this.setupAggregation(0, 99, 10);
-
-    series.updateData(data);
-    series.createPoints();
-
-    series.draw(false);
-
-    assert.ok(series.getPoints().length);
-    series.prepareToDrawing(true);
-    series.draw(false);
-
-    assert.equal(series.getVisiblePoints().length, 5);
 });
 
 QUnit.module("Disposing", {
@@ -4443,33 +4358,6 @@ QUnit.test("getOpacity", function(assert) {
     var series = createSeries({ opacity: "seriesOpacity" });
 
     assert.strictEqual(series.getOpacity(), "seriesOpacity", "Opacity should be correct");
-});
-
-QUnit.test("getTemplateFields returns templated fields for value, size and tag fields", function(assert) {
-    // arrange
-    var series = createSeries({ name: "SeriesName" }, this.renderOptions),
-        tf;
-
-    series.getValueFields && (series.getValueFields = function() { return ["valueField1", "valueField2"]; });
-    series.getTagField && (series.getTagField = function() { return "tagField"; });
-    series.getSizeField && (series.getSizeField = function() { return "sizeField"; });
-
-    // act
-    tf = series.getTemplateFields();
-
-    assert.deepEqual(tf, [{
-        templateField: "valueField1SeriesName",
-        originalField: "valueField1"
-    }, {
-        templateField: "valueField2SeriesName",
-        originalField: "valueField2"
-    }, {
-        templateField: "tagFieldSeriesName",
-        originalField: "tagField"
-    }, {
-        templateField: "sizeFieldSeriesName",
-        originalField: "sizeField"
-    }]);
 });
 
 QUnit.test("getStackName returns null", function(assert) {

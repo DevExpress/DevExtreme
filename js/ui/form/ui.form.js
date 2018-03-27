@@ -20,7 +20,8 @@ var $ = require("../../core/renderer"),
     LayoutManager = require("./ui.form.layout_manager"),
     TabPanel = require("../tab_panel"),
     Scrollable = require("../scroll_view/ui.scrollable"),
-    Deferred = require("../../core/utils/deferred").Deferred;
+    Deferred = require("../../core/utils/deferred").Deferred,
+    themes = require("../themes");
 
 require("../validation_summary");
 require("../validation_group");
@@ -637,6 +638,32 @@ var Form = Widget.inherit({
         });
     },
 
+    _defaultOptionsRules: function() {
+        return this.callBase().concat([
+            {
+                device: function() {
+                    return themes.isMaterial();
+                },
+                options: {
+                    /**
+                     * @name dxFormOptions_showColonAfterLabel
+                     * @publicName showColonAfterLabel
+                     * @type boolean
+                     * @default false @for Material
+                     */
+                    showColonAfterLabel: false,
+                    /**
+                     * @name dxFormOptions_labelLocation
+                     * @publicName labelLocation
+                     * @type Enums.FormLabelLocation
+                     * @default "top" @for Material
+                     */
+                    labelLocation: "top"
+                }
+            }
+        ]);
+    },
+
     _setOptionsByReference: function() {
         this.callBase();
 
@@ -786,6 +813,10 @@ var Form = Widget.inherit({
     },
 
     _alignLabelsInColumn: function(options) {
+        if(!windowUtils.hasWindow()) {
+            return;
+        }
+
         this._createHiddenElement(options.layoutManager);
         if(options.inOneColumn) {
             this._applyLabelsWidth(options.$container, options.excludeTabbed, true);
@@ -807,17 +838,26 @@ var Form = Widget.inherit({
 
     _initMarkup: function() {
         this._clearCachedInstances();
+        this._prepareFormData();
+        this.$element().addClass(FORM_CLASS);
+
         this.callBase();
+
+        this.setAria("role", "form", this.$element());
+
+        if(this.option("scrollingEnabled")) {
+            this._renderScrollable();
+        }
+
+        this._renderLayout();
+        this._renderValidationSummary();
+
+        this._attachSyncSubscriptions();
+        this._cachedScreenFactor = this._getCurrentScreenFactor();
     },
 
-    _render: function() {
-        this._prepareFormData();
-
-        this.callBase();
-        this.$element().addClass(FORM_CLASS);
-        this._attachSyncSubscriptions();
-
-        this._cachedScreenFactor = windowUtils.getCurrentScreenFactor(this.option("screenByWidth"));
+    _getCurrentScreenFactor: function() {
+        return windowUtils.hasWindow() ? windowUtils.getCurrentScreenFactor(this.option("screenByWidth")) : "lg";
     },
 
     _clearCachedInstances: function() {
@@ -840,18 +880,6 @@ var Form = Widget.inherit({
         this._groupsColCount = [];
         this._cachedColCountOptions = [];
         delete this._cachedScreenFactor;
-    },
-
-    _renderContentImpl: function() {
-        this.callBase();
-        this.setAria("role", "form", this.$element());
-
-        if(this.option("scrollingEnabled")) {
-            this._renderScrollable();
-        }
-
-        this._renderLayout();
-        this._renderValidationSummary();
     },
 
     _renderScrollable: function() {
@@ -1493,7 +1521,7 @@ var Form = Widget.inherit({
     },
 
     _dimensionChanged: function() {
-        var currentScreenFactor = windowUtils.getCurrentScreenFactor(this.option("screenByWidth"));
+        var currentScreenFactor = this._getCurrentScreenFactor();
 
         if(this._cachedScreenFactor !== currentScreenFactor) {
             if(this._isColCountChanged(this._cachedScreenFactor, currentScreenFactor)) {

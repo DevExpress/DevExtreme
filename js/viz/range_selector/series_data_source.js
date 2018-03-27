@@ -45,21 +45,8 @@ var processSeriesFamilies = function(series, equalBarWidth, minBubbleSize, maxBu
     return families;
 };
 
-// TODO: This is copypaste from the same name method in the advancedChart.js
-function setTemplateFields(data, templateData, series) {
-    each(data, function(_, data) {
-        each(series.getTemplateFields(), function(_, field) {
-            data[field.templateField] = data[field.originalField];
-        });
-        templateData.push(data);
-    });
-    series.updateTemplateFieldNames();
-}
-
 SeriesDataSource = function(options) {
     var that = this,
-        templatedSeries,
-        seriesTemplate,
         themeManager = that._themeManager = createThemeManager(options.chart),
         topIndent,
         bottomIndent,
@@ -78,13 +65,7 @@ SeriesDataSource = function(options) {
     that._valueAxis = themeManager.getOptions('valueAxisRangeSelector') || {};
     that._hideChart = false;
 
-    seriesTemplate = themeManager.getOptions('seriesTemplate');
-
-    if(options.dataSource && seriesTemplate) {
-        templatedSeries = vizUtils.processSeriesTemplate(seriesTemplate, options.dataSource);
-    }
-
-    that._series = that._calculateSeries(options, templatedSeries);
+    that._series = that._calculateSeries(options);
 
     negativesAsZeroes = themeManager.getOptions("negativesAsZeroes");
     negativesAsZeros = themeManager.getOptions("negativesAsZeros"); // misspelling case
@@ -104,23 +85,22 @@ SeriesDataSource = function(options) {
 SeriesDataSource.prototype = {
     constructor: SeriesDataSource,
 
-    _calculateSeries: function(options, templatedSeries) {
+    _calculateSeries: function(options) {
         var that = this,
             series = [],
             particularSeriesOptions,
             seriesTheme,
-            data,
+            data = options.dataSource || [],
             parsedData,
             chartThemeManager = that._themeManager,
-            hasSeriesTemplate = !!chartThemeManager.getOptions('seriesTemplate'),
-            allSeriesOptions = hasSeriesTemplate ? templatedSeries : options.chart.series,
+            seriesTemplate = chartThemeManager.getOptions('seriesTemplate'),
+            allSeriesOptions = seriesTemplate ? vizUtils.processSeriesTemplate(seriesTemplate, data) : options.chart.series,
             dataSourceField,
             valueAxis = that._valueAxis,
             i,
             newSeries,
             groupsData;
 
-        that.templateData = [];
         if(options.dataSource && !allSeriesOptions) {
             dataSourceField = options.dataSourceField || 'arg';
             allSeriesOptions = {
@@ -139,8 +119,6 @@ SeriesDataSource.prototype = {
 
             particularSeriesOptions.rotated = false;
 
-            data = particularSeriesOptions.data || options.dataSource;
-
             seriesTheme = chartThemeManager.getOptions("series", particularSeriesOptions, allSeriesOptions.length);
             seriesTheme.argumentField = seriesTheme.argumentField || options.dataSourceField;// B253068
             if(data && data.length > 0) {
@@ -152,11 +130,7 @@ SeriesDataSource.prototype = {
                 }, seriesTheme);
                 series.push(newSeries);
             }
-            if(hasSeriesTemplate) {
-                setTemplateFields(data, that.templateData, newSeries);
-            }
         }
-        data = hasSeriesTemplate ? that.templateData : data;
 
         if(series.length) {
             groupsData = {
@@ -179,14 +153,17 @@ SeriesDataSource.prototype = {
                 series[i].updateData(parsedData[series[i].getArgumentField()]);
 
             }
-
-            that._createPoints(series);
         }
         return series;
     },
 
-    _createPoints: function(series) {
-        var viewport = new rangeModule.Range(),
+    createPoints() {
+        if(this._series.length === 0) {
+            return;
+        }
+
+        var series = this._series,
+            viewport = new rangeModule.Range(),
             axis = series[0].getArgumentAxis();
 
         series.forEach(function(s) {

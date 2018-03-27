@@ -24,7 +24,8 @@ var $ = require("jquery"),
     eventsEngine = require("events/core/events_engine"),
     typeUtils = require("core/utils/type"),
     config = require("core/config"),
-    renderer = require("core/renderer");
+    renderer = require("core/renderer"),
+    themes = require("ui/themes");
 
 function setupDataGrid(that, $dataGridContainer) {
     that.$element = function() {
@@ -298,11 +299,9 @@ QUnit.test("Hidden columns must have zero widths for virtual scrolling table", f
     var $tables = $(".dx-datagrid-rowsview table");
 
     // assert
-    assert.equal($tables.length, 2, "Table count");
+    assert.equal($tables.length, 1, "Table count");
     assert.ok(checkAdaptiveWidth($tables.eq(0).find("col").get(2).style.width), "Third column is hidden in first table");
     assert.ok(checkAdaptiveWidth($tables.eq(0).find("col").get(3).style.width), "Fourth column is hidden in first table");
-    assert.ok(checkAdaptiveWidth($tables.eq(1).find("col").get(2).style.width), "Third column is hidden in second table");
-    assert.ok(checkAdaptiveWidth($tables.eq(1).find("col").get(3).style.width), "Fourth column is hidden in second table");
 });
 
 // T402287
@@ -1564,6 +1563,28 @@ QUnit.test("Row elements are should get only once when CSS for hidden column is 
 
     // assert
     assert.ok(this.rowsView._getRowElements.calledOnce);
+});
+
+QUnit.test("Form has 2 columns in material theme", function(assert) {
+    var origIsMaterial = themes.isMaterial;
+    themes.isMaterial = function() { return true; };
+
+    // arrange, act
+    $(".dx-datagrid").width(200);
+    setupDataGrid(this);
+    this.rowsView.render($("#container"));
+    $(".dx-data-row .dx-datagrid-adaptive-more").first().trigger("dxclick");
+    this.clock.tick();
+
+    var form = $("#container").find(".dx-form").dxForm("instance");
+    var colWidth = form.option("colCount");
+    var screenByWidth = form.option("screenByWidth");
+
+    // assert
+    assert.equal(colWidth, 2);
+    assert.ok(screenByWidth);
+
+    themes.isMaterial = origIsMaterial;
 });
 
 QUnit.module("API", {

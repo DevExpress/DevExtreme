@@ -16,6 +16,7 @@ var $ = require("jquery"),
     decoratorRegistry = require("ui/list/ui.list.edit.decorator_registry"),
     SwitchableEditDecorator = require("ui/list/ui.list.edit.decorator.switchable"),
     SwitchableButtonEditDecorator = require("ui/list/ui.list.edit.decorator.switchable.button"),
+    themes = require("ui/themes"),
     DataSource = require("data/data_source/data_source").DataSource,
     ArrayStore = require("data/array_store");
 
@@ -366,7 +367,6 @@ QUnit.test("delete button click should delete list item", function(assert) {
     $deleteButton.trigger("dxclick");
 });
 
-
 var TOGGLE_DELETE_SWITCH_CLASS = "dx-list-toggle-delete-switch";
 
 QUnit.module("toggle delete decorator");
@@ -713,6 +713,98 @@ QUnit.test("click on button should not remove item if widget disabled", function
     pointerMock($item).start().swipeStart().swipe(-0.5).swipeEnd(-1);
     list.option("disabled", true);
     $deleteButton.trigger("dxclick");
+});
+
+QUnit.test("button should have no text for the Material theme", function(assert) {
+    var origIsMaterial = themes.isMaterial;
+    themes.isMaterial = function() { return true; };
+
+
+    var $list = $($("#templated-list").dxList({
+        items: ["0"],
+        allowItemDeleting: true,
+        itemDeleteMode: "slideItem"
+    }));
+
+    var $items = $list.find(toSelector(LIST_ITEM_CLASS)),
+        $item = $items.eq(0);
+
+    pointerMock($item).start().swipeStart().swipe(-0.5).swipeEnd(-1, -0.5);
+
+    var $deleteButton = $item.find(toSelector(SLIDE_MENU_BUTTON_CLASS));
+
+    assert.equal($deleteButton.text(), "", "button has no text for Material theme");
+
+    themes.isMaterial = origIsMaterial;
+});
+
+QUnit.test("button should have no text for the Generic theme", function(assert) {
+    var $list = $($("#templated-list").dxList({
+        items: ["0"],
+        allowItemDeleting: true,
+        itemDeleteMode: "slideItem"
+    }));
+
+    var $items = $list.find(toSelector(LIST_ITEM_CLASS)),
+        $item = $items.eq(0);
+
+    pointerMock($item).start().swipeStart().swipe(-0.5).swipeEnd(-1, -0.5);
+
+    var $deleteButton = $item.find(toSelector(SLIDE_MENU_BUTTON_CLASS));
+
+    assert.ok($deleteButton.text().length > 0, "button has a text for Generic theme");
+});
+
+var INKRIPPLE_WAVE_SHOWING_CLASS = "dx-inkripple-showing",
+    INKRIPPLE_MATERIAL_SHOW_TIMEOUT = 100;
+
+QUnit.test("button should have no inkRipple after fast swipe for Material theme", function(assert) {
+    var origIsMaterial = themes.isMaterial,
+        origCurrent = themes.current,
+        clock = sinon.useFakeTimers();
+
+    themes.isMaterial = function() { return true; };
+    themes.current = function() { return "material"; };
+
+    var $list = $($("#templated-list").dxList({
+        items: ["0"],
+        allowItemDeleting: true,
+        itemDeleteMode: "slideItem"
+    }));
+
+    var $item = $list.find(toSelector(LIST_ITEM_CLASS)).eq(0);
+    var pointer = pointerMock($item);
+
+    var args,
+        inkRippleShowingWave,
+        testArgs = [{
+            afterTouchTimeout: INKRIPPLE_MATERIAL_SHOW_TIMEOUT,
+            afterSwipeTimeout: INKRIPPLE_MATERIAL_SHOW_TIMEOUT,
+            result: 0,
+            message: "button has no inkRipple after short touch before swipe for Material theme",
+        }, {
+            afterTouchTimeout: INKRIPPLE_MATERIAL_SHOW_TIMEOUT * 1.2,
+            afterSwipeTimeout: INKRIPPLE_MATERIAL_SHOW_TIMEOUT * 0.8,
+            result: 1,
+            message: "button has inkRipple after long touch before swipe for Material theme",
+        }];
+
+    for(var i = 0; i < testArgs.length; i++) {
+        args = testArgs[i];
+
+        pointer.start("touch").down();
+        clock.tick(args.afterTouchTimeout);
+        pointer.start().swipeStart().swipe(-0.5).swipeEnd(-1);
+        clock.tick(args.afterSwipeTimeout);
+        inkRippleShowingWave = $item.find(toSelector(INKRIPPLE_WAVE_SHOWING_CLASS));
+        assert.equal(inkRippleShowingWave.length, args.result, args.message);
+        pointer.start("touch").up();
+        clock.tick(400);
+    }
+
+    clock.restore();
+    themes.isMaterial = origIsMaterial;
+    themes.current = origCurrent;
 });
 
 QUnit.test("swipe should prepare item for delete in RTL mode", function(assert) {

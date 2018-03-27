@@ -5,6 +5,7 @@ var $ = require("../../core/renderer"),
     extend = require("../../core/utils/extend").extend,
     registerComponent = require("../../core/component_registrator"),
     SchedulerWorkSpace = require("./ui.scheduler.work_space.indicator"),
+    windowUtils = require("../../core/utils/window"),
     dateUtils = require("../../core/utils/date"),
     tableCreator = require("./ui.scheduler.table_creator"),
     HorizontalShader = require("./ui.scheduler.currentTimeShader.horizontal");
@@ -267,6 +268,9 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
     },
 
     _setGroupHeaderCellsHeight: function() {
+        if(!windowUtils.hasWindow()) {
+            return;
+        }
         var cellHeight = this.getCellHeight() - DATE_TABLE_CELL_BORDER * 2;
         cellHeight = this._ensureGroupHeaderCellsHeight(cellHeight);
 

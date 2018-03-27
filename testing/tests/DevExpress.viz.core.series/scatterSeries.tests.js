@@ -138,6 +138,23 @@ var checkTwoGroups = function(assert, series) {
         assert.equal(this.createPoint.firstCall.args[1].value, 3, "Value should be correct");
     });
 
+    QUnit.test("Point should have correct index", function(assert) {
+        var series = createSeries({ type: "scatter", label: { visible: false } }),
+            data = [{ arg: 1, val: 10 }, { arg: 2, val: undefined }, { arg: 3, val: 20 }];
+
+        series.updateData(data);
+        series.createPoints();
+
+        assert.ok(series.getAllPoints(), "Series points should be created");
+        assert.equal(series.getAllPoints().length, 2, "Series should have 1 point");
+
+        assert.equal(this.createPoint.getCall(0).args[1].index, 0, "index");
+        assert.equal(this.createPoint.getCall(0).args[1].argument, 1, "argument");
+
+        assert.equal(this.createPoint.getCall(1).args[1].index, 1, "index");
+        assert.equal(this.createPoint.getCall(1).args[1].argument, 3, "argument");
+    });
+
     QUnit.module("Series with valueErrorBar", {
         beforeEach: function() {
             environment.beforeEach.call(this);
@@ -1355,48 +1372,6 @@ var checkTwoGroups = function(assert, series) {
         });
     });
 
-    QUnit.test("_get Point size visible point", function(assert) {
-        var series = createSeries({
-            type: seriesType,
-            point: {
-                size: 10,
-                hoverStyle: {
-                    size: 50
-                },
-                selectionStyle: {
-                    size: 100
-                },
-                visible: true
-            }
-        });
-
-        series.updateData(this.data);
-        series.createPoints();
-
-        assert.equal(series._getPointSize(), 10);
-    });
-
-    QUnit.test("_get Point size invisible point", function(assert) {
-        var series = createSeries({
-            type: seriesType,
-            point: {
-                size: 10,
-                hoverStyle: {
-                    size: 50
-                },
-                selectionStyle: {
-                    size: 100
-                },
-                visible: false
-            }
-        });
-
-        series.updateData(this.data);
-        series.createPoints();
-
-        assert.equal(series._getPointSize(), 2);
-    });
-
     QUnit.module("Scatter. Customize point", {
         beforeEach: function() {
             environment.beforeEach.call(this);
@@ -2447,38 +2422,6 @@ var checkTwoGroups = function(assert, series) {
         checkVisibility({ type: "fixed", displayMode: "all" }, "datetime", undefined, false, "fixed, displayMode all");
     });
 
-    QUnit.test("Update template field", function(assert) {
-        var series = createSeries({
-            type: seriesType,
-            name: "lineSeries",
-            valueField: "valueField",
-            tagField: "tagField",
-            point: { visible: false },
-            label: { visible: false }
-
-        }, this.renderer);
-        // act
-        series.updateTemplateFieldNames();
-        // assert
-        assert.equal(series._options.valueField, "valueFieldlineSeries");
-        assert.equal(series._options.tagField, "tagFieldlineSeries");
-    });
-
-    QUnit.test("Update template field. Default Values", function(assert) {
-        var series = createSeries({
-            type: seriesType,
-            name: "lineSeries",
-            point: { visible: false },
-            label: { visible: false }
-
-        }, this.renderer);
-        // act
-        series.updateTemplateFieldNames();
-        // assert
-        assert.equal(series._options.valueField, "vallineSeries");
-        assert.equal(series._options.tagField, "taglineSeries");
-    });
-
     QUnit.module("Check visible area", {
         beforeEach: function() {
             environment.beforeEach.call(this);
@@ -2855,7 +2798,8 @@ QUnit.test("Return point size", function(assert) {
 
     assert.deepEqual(series.getMarginOptions(), {
         size: 6,
-        percentStick: false
+        percentStick: false,
+        sizePointNormalState: 6
     });
 });
 
@@ -2870,7 +2814,8 @@ QUnit.test("Point is invisible - return 0", function(assert) {
 
     assert.deepEqual(series.getMarginOptions(), {
         size: 0,
-        percentStick: false
+        percentStick: false,
+        sizePointNormalState: 0
     });
 });
 
@@ -2901,7 +2846,8 @@ QUnit.test("Add max border width", function(assert) {
 
     assert.deepEqual(series.getMarginOptions(), {
         size: 30,
-        percentStick: false
+        percentStick: false,
+        sizePointNormalState: 26
     });
 });
 
@@ -2916,6 +2862,39 @@ QUnit.test("Polar point. getMarginOptions returns point size", function(assert) 
     });
     assert.deepEqual(series.getMarginOptions(), {
         size: 6,
-        percentStick: false
+        percentStick: false,
+        sizePointNormalState: 6
+    });
+});
+
+QUnit.test("getMarginOptions returns '0' as sourcePointStyle when points are invisible", function(assert) {
+    var series = createSeries({
+        type: seriesType,
+        point: {
+            visible: false,
+            size: 6,
+            border: {
+                visible: true,
+                width: 10
+            },
+            hoverStyle: {
+                border: {
+                    visible: true,
+                    width: 10
+                }
+            },
+            selectionStyle: {
+                border: {
+                    visible: true,
+                    width: 12
+                }
+            }
+        }
+    });
+
+    assert.deepEqual(series.getMarginOptions(), {
+        size: 0,
+        percentStick: false,
+        sizePointNormalState: 0
     });
 });

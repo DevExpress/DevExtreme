@@ -532,8 +532,8 @@ QUnit.test('Draw filterRow', function(assert) {
     var inputs = this.columnHeadersView.element().find('input');
     assert.equal($filterCell.attr('aria-label'), 'Column ' + this.columns[0].caption + ', Filter cell');
     assert.equal(inputs.length, 2, 'inputs count');
-    assert.equal(inputs.eq(0).css("text-align"), "left", "left alignment");
-    assert.equal(inputs.eq(1).css("text-align"), "right", "right alignment");
+    assert.equal(inputs.eq(0).css("textAlign"), "left", "left alignment");
+    assert.equal(inputs.eq(1).css("textAlign"), "right", "right alignment");
 });
 
 QUnit.test('Invalidate instead of render when filterRow and sorting option is changed', function(assert) {
@@ -2400,4 +2400,32 @@ QUnit.test("getColumnElements by band column with hidden children where filter r
 
     // assert
     assert.ok(!$columnElements, "no cells");
+});
+
+QUnit.test("DataGrid headers has dx-header-multi-row class for multi-row headers (bands)", function(assert) {
+    // arrange
+    var $testElement = $('#container');
+    this.columns = [{ caption: "Band column 1", columns: ["Column1", "Column2"] }, "Column3", { caption: "Band column 2", columns: ["Column4", "Column5"] }];
+    this.setupDataGrid();
+
+    // act
+    this.columnHeadersView.render($testElement);
+
+    // assert
+    var $headers = $testElement.find(".dx-datagrid-headers");
+    assert.ok($headers.hasClass("dx-header-multi-row"));
+});
+
+QUnit.test("DataGrid headers has no dx-header-multi-row class for single-row headers", function(assert) {
+    // arrange
+    var $testElement = $('#container');
+    this.columns = [{ caption: "Band column 1" }, "Column3", { caption: "Band column 2" }];
+    this.setupDataGrid();
+
+    // act
+    this.columnHeadersView.render($testElement);
+
+    // assert
+    var $headers = $testElement.find(".dx-datagrid-headers");
+    assert.notOk($headers.hasClass("dx-header-multi-row"));
 });

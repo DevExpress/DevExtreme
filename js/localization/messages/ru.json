@@ -134,6 +134,7 @@
         "dxDataGrid-ariaSearchInGrid": "Искать в таблице данных",
         "dxDataGrid-ariaSelectAll": "Выбрать всё",
         "dxDataGrid-ariaSelectRow": "Выбрать строку",
+        "dxDataGrid-filterBuilderPopupTitle": "Конструктор фильтра",
         "dxTreeList-ariaTreeList": "Иерархическая таблица данных",
         "dxTreeList-editingAddRowToNode": "Добавить",
         "dxPager-infoText": "Страница {0} из {1} (Всего элементов: {2})",
@@ -227,6 +228,8 @@
         "dxFilterBuilder-filterOperationNotContains": "Не содержит",
         "dxFilterBuilder-filterOperationEndsWith": "Заканчивается на",
         "dxFilterBuilder-filterOperationIsBlank": "Пусто",
-        "dxFilterBuilder-filterOperationIsNotBlank": "Не пусто"
+        "dxFilterBuilder-filterOperationIsNotBlank": "Не пусто",
+        "dxFilterBuilder-filterOperationAnyOf": "Любой из",
+        "dxFilterBuilder-filterOperationNoneOf": "Ни один из"
     }
 }

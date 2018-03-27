@@ -1051,11 +1051,11 @@ var SchedulerWorkSpace = Widget.inherit({
         headerPanelHeight && this._headerScrollable && this._headerScrollable.$element().height(headerPanelHeight + allDayPanelHeight);
 
         headerPanelHeight && this._dateTableScrollable.$element().css({
-            "padding-bottom": allDayPanelHeight + headerPanelHeight + "px",
+            "paddingBottom": allDayPanelHeight + headerPanelHeight + "px",
             "marginBottom": -1 * ((parseInt(headerPanelHeight, 10)) + allDayPanelHeight) + "px"
         });
         headerPanelHeight && this._sidebarScrollable && this._sidebarScrollable.$element().css({
-            "padding-bottom": allDayPanelHeight + headerPanelHeight + "px",
+            "paddingBottom": allDayPanelHeight + headerPanelHeight + "px",
             "marginBottom": -1 * ((parseInt(headerPanelHeight, 10)) + allDayPanelHeight) + "px"
         });
 

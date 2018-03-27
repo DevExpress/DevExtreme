@@ -17,7 +17,6 @@ var _extend = require("../../core/utils/extend").extend,
     _sqrt = math.sqrt,
     _max = math.max,
 
-    DEFAULT_SYMBOL_POINT_SIZE = 2,
     DEFAULT_TRACKER_WIDTH = 12,
     DEFAULT_DURATION = 400,
 
@@ -131,14 +130,6 @@ var baseScatterMethods = {
             fill: styleOptions.color || defaultColor,
             hatching: styleOptions.hatching ? _extend({}, styleOptions.hatching, { direction: "right" }) : undefined
         };
-    },
-
-    updateTemplateFieldNames: function() {
-        var that = this,
-            options = that._options;
-
-        options.valueField = that.getValueFields()[0] + that.name;
-        options.tagField = that.getTagField() + that.name;
     },
 
     _applyElementsClipRect: function(settings) {
@@ -302,28 +293,37 @@ var baseScatterMethods = {
         return rangeCalculator.getRangeData(this);
     },
 
-    _getPointData: function(data, options) {
-        var pointData = {
-            value: data[options.valueField || "val"],
-            argument: data[options.argumentField || "arg"],
-            tag: data[options.tagField || "tag"],
-            data: data
-        };
+    _getPointDataSelector: function() {
+        const valueField = this.getValueFields()[0];
+        const argumentField = this.getArgumentField();
+        const tagField = this.getTagField();
+        const areErrorBarsVisible = this.areErrorBarsVisible();
+        let lowValueField, highValueField;
 
-        this._fillErrorBars(data, pointData, options);
-        return pointData;
+        if(areErrorBarsVisible) {
+            const errorBarOptions = this._options.valueErrorBar;
+            lowValueField = errorBarOptions.lowValueField || LOW_ERROR;
+            highValueField = errorBarOptions.highValueField || HIGH_ERROR;
+        }
+
+        return (data) => {
+            const pointData = {
+                value: data[valueField],
+                argument: data[argumentField],
+                tag: data[tagField],
+                data: data
+            };
+
+            if(areErrorBarsVisible) {
+                pointData.lowError = data[lowValueField];
+                pointData.highError = data[highValueField];
+            }
+            return pointData;
+        };
     },
 
     _errorBarsEnabled: function() {
         return (this.valueAxisType !== DISCRETE && this.valueAxisType !== LOGARITHMIC && this.valueType !== DATETIME);
-    },
-
-    _fillErrorBars: function(data, pointData, options) {
-        var errorBars = options.valueErrorBar;
-        if(this.areErrorBarsVisible()) {
-            pointData.lowError = data[errorBars.lowValueField || LOW_ERROR];
-            pointData.highError = data[errorBars.highValueField || HIGH_ERROR];
-        }
     },
 
     _drawPoint: function(options) {
@@ -353,10 +353,6 @@ var baseScatterMethods = {
         _each(that._drawnPoints || [], function(i, p) {
             p.animate(i === lastPointIndex ? function() { that._animateComplete(); } : undefined, { translateX: p.x, translateY: p.y });
         });
-    },
-
-    _getPointSize: function() {
-        return this._options.point.visible ? this._options.point.size : DEFAULT_SYMBOL_POINT_SIZE;
     },
 
     _defaultAggregator: "avg",
@@ -547,6 +543,7 @@ var baseScatterMethods = {
                 }, 0);
 
         options.size = pointOptions.visible ? maxSize : 0;
+        options.sizePointNormalState = pointOptions.visible ? styles.normal.r * 2 + styles.normal["stroke-width"] : 0;
 
         return options;
     }

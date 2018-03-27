@@ -1,0 +1,50 @@
+.dx-textarea {
+    height: auto;
+    margin: 2px;
+    border-radius: @texteditor-border-radius;
+    box-shadow: 0 0 0 1px @texteditor-border-color;
+
+    &.dx-state-hover {
+        box-shadow: 0 0 0 2px @texteditor-hover-border-color;
+    }
+
+    &.dx-state-focused, &.dx-state-active {
+        box-shadow: 0 0 0 2px @texteditor-focused-border-color;
+    }
+
+    &.dx-state-disabled,
+    &.dx-state-readonly,
+    &.dx-state-readonly.dx-state-hover {
+        box-shadow: 0 0 0 1px @texteditor-border-color;
+
+        .dx-texteditor-input {
+            color: fade(@texteditor-color, 38%);
+        }
+    }
+
+     &.dx-invalid {
+        box-shadow: 0 0 0 1px @texteditor-invalid-faded-border-color;
+
+        &.dx-state-hover {
+            box-shadow: 0 0 0 2px @texteditor-invalid-faded-border-color;
+        }
+
+        &.dx-state-focused {
+            box-shadow: 0 0 0 1px @texteditor-invalid-focused-border-color;
+        }
+     }
+
+    .dx-texteditor-input {
+        padding: 10px;
+    }
+
+    .dx-icon-clear {
+        top: 0;
+        margin-top: 0;
+    }
+
+    &.dx-invalid .dx-texteditor-container:after {
+        top: @MATERIAL_BASE_INLINE_BORDEREDWIDGET_TOP_PADDING;
+        margin-top: 0;
+    }
+}

@@ -11,6 +11,13 @@ var $ = require("jquery"),
     MockTranslator = chartMocks.MockTranslator,
     MockAxis = chartMocks.MockAxis;
 
+function createSeriesDataSource(options) {
+    var seriesDataSource = new SeriesDataSource(options);
+
+    seriesDataSource.createPoints();
+    return seriesDataSource;
+}
+
 var environment = {
     beforeEach: function() {
         this.argumentAxis = new MockAxis({ renderer: new vizMocks.Renderer() });
@@ -22,13 +29,32 @@ var environment = {
 
 QUnit.module("SeriesDataSource", environment);
 
-QUnit.test("SeriesDataSource class is declared", function(assert) {
-    assert.ok(SeriesDataSource);
+QUnit.test("no draw points on creation", function(assert) {
+    var seriesDataSource = new SeriesDataSource({
+        dataSource: [
+            { x: 10, y1: 0 },
+            { x: 15, y1: 6 },
+            { x: 20, y1: 8 }
+        ],
+        chart: {
+            commonSeriesSettings: {
+                type: "area"
+            },
+            series: {
+                argumentField: "x",
+                valueField: "y1"
+            }
+        },
+        renderer: new vizMocks.Renderer(),
+        argumentAxis: this.argumentAxis
+    });
+
+    assert.strictEqual(seriesDataSource.getSeries()[0].getAllPoints().length, 0);
 });
 
 QUnit.test("one series", function(assert) {
     // arrange, act
-    var seriesDataSource = new SeriesDataSource({
+    var seriesDataSource = createSeriesDataSource({
         dataSource: [
                     { x: 10, y1: 0 },
                     { x: 15, y1: 6 },
@@ -69,7 +95,7 @@ QUnit.test("one series", function(assert) {
 
 QUnit.test("B235735", function(assert) {
     // arrange, act
-    var seriesDataSource = new SeriesDataSource({
+    var seriesDataSource = createSeriesDataSource({
         dataSource: [{ x: 10, y1: 0 }],
         chart: {
             commonSeriesSettings: {
@@ -88,7 +114,7 @@ QUnit.test("B235735", function(assert) {
 });
 
 QUnit.test("theme manager", function(assert) {
-    var seriesDataSource = new SeriesDataSource({
+    var seriesDataSource = createSeriesDataSource({
         dataSource: [{ x: 10, y1: 0 }],
         chart: {
             commonSeriesSettings: {
@@ -111,7 +137,7 @@ QUnit.test("theme manager", function(assert) {
 QUnit.test("datetime in chart valueAxis", function(assert) {
     // arrange
     var range,
-        seriesDataSource = new SeriesDataSource({
+        seriesDataSource = createSeriesDataSource({
             dataSource: [
                 { y: new Date(1980, 5, 17), x: new Date(1980, 5, 18) },
                 { y: new Date(1980, 6, 17), x: new Date(1980, 6, 18) }
@@ -139,7 +165,7 @@ QUnit.test("datetime in chart valueAxis", function(assert) {
 
 QUnit.test("seriesDateSource with categories", function(assert) {
     // arrange/act
-    var seriesDataSource = new SeriesDataSource({
+    var seriesDataSource = createSeriesDataSource({
         dataSource: [
                 { x: 10, y1: 3, y2: 5 },
                 { x: 50, y1: 16, y2: 1 }
@@ -170,7 +196,7 @@ QUnit.test("seriesDateSource with categories", function(assert) {
 });
 
 QUnit.test("argument categories", function(assert) {
-    var seriesDataSource = new SeriesDataSource({
+    var seriesDataSource = createSeriesDataSource({
         dataSource: [
                     { arg: "a1", val: 2 },
                     { arg: "a2", val: 2 }
@@ -187,7 +213,7 @@ QUnit.test("argument categories", function(assert) {
 
 QUnit.test("several series", function(assert) {
     // arrange, act
-    var seriesDataSource = new SeriesDataSource({
+    var seriesDataSource = createSeriesDataSource({
         dataSource: [
                 { x: 10, y1: 3, y2: 5 },
                 { x: 50, y1: 16, y2: 1 }
@@ -230,7 +256,7 @@ QUnit.test("several series", function(assert) {
 
 QUnit.test("several series. Set valueType", function(assert) {
     // arrange, act
-    var seriesDataSource = new SeriesDataSource({
+    var seriesDataSource = createSeriesDataSource({
         dataSource: [
                 { x: 10, y1: 3, y2: 5 },
                 { x: 50, y1: 16, y2: 1 }
@@ -253,7 +279,7 @@ QUnit.test("several series. Set valueType", function(assert) {
 QUnit.test("series theme", function(assert) {
 
     // arrange, act
-    var seriesDataSource = new SeriesDataSource({
+    var seriesDataSource = createSeriesDataSource({
         dataSource: [
                 { x: 10, y1: 3, y2: 5 },
                 { x: 50, y1: 16, y2: 1 }
@@ -288,7 +314,7 @@ QUnit.test("series theme", function(assert) {
 QUnit.test("Pass series count to themeManager", function(assert) {
 
     // arrange, act
-    var seriesDataSource = new SeriesDataSource({
+    var seriesDataSource = createSeriesDataSource({
         dataSource: [
             { x: 10, y1: 3, y2: 5 },
             { x: 50, y1: 16, y2: 1 }
@@ -327,7 +353,7 @@ QUnit.test("Pass series count to themeManager", function(assert) {
 
 QUnit.test("getBoundRange with topIndent, bottomIndent", function(assert) {
     // arrange, act
-    var seriesDataSource = new SeriesDataSource({
+    var seriesDataSource = createSeriesDataSource({
         dataSource: [{ arg: 1, val: 0 },
                     { arg: 3, val: 200 },
                     { arg: 5, val: 12 }
@@ -355,7 +381,7 @@ QUnit.test("getBoundRange with topIndent, bottomIndent", function(assert) {
 
 QUnit.test("getBoundRange with topIndent>1, bottomIndent<0", function(assert) {
     // arrange, act
-    var seriesDataSource = new SeriesDataSource({
+    var seriesDataSource = createSeriesDataSource({
         dataSource: [{ arg: 1, val: 0 },
                     { arg: 3, val: 200 },
                     { arg: 5, val: 12 }],
@@ -382,7 +408,7 @@ QUnit.test("getBoundRange with topIndent>1, bottomIndent<0", function(assert) {
 
 QUnit.test("getBoundRange if no series", function(assert) {
     // arrange, act
-    var seriesDataSource = new SeriesDataSource({
+    var seriesDataSource = createSeriesDataSource({
         chart: {
             commonSeriesSettings: {
                 type: "area"
@@ -401,7 +427,7 @@ QUnit.test("getBoundRange if no series", function(assert) {
 
 QUnit.test("getBoundRange with topIndent, bottomIndent, valueAxis min", function(assert) {
     // arrange, act
-    var seriesDataSource = new SeriesDataSource({
+    var seriesDataSource = createSeriesDataSource({
         dataSource: [{ arg: 1, val: 0 },
                     { arg: 3, val: 200 },
                     { arg: 5, val: 12 }],
@@ -431,7 +457,7 @@ QUnit.test("getBoundRange with topIndent, bottomIndent, valueAxis min", function
 
 QUnit.test("getBoundRange with topIndent, bottomIndent, valueAxis max", function(assert) {
     // arrange, act
-    var seriesDataSource = new SeriesDataSource({
+    var seriesDataSource = createSeriesDataSource({
         dataSource: [{ arg: 1, val: 0 },
                     { arg: 3, val: 200 },
                     { arg: 5, val: 12 }],
@@ -460,7 +486,7 @@ QUnit.test("getBoundRange with topIndent, bottomIndent, valueAxis max", function
 // B230855
 QUnit.test("getBoundRange with valueAxis min/max", function(assert) {
     // arrange, act
-    var seriesDataSource = new SeriesDataSource({
+    var seriesDataSource = createSeriesDataSource({
         dataSource: [{ arg: 1, val: 0 },
                     { arg: 3, val: 200 },
                     { arg: 5, val: 12 }],
@@ -489,7 +515,7 @@ QUnit.test("getBoundRange with valueAxis min/max", function(assert) {
 
 QUnit.test("getBoundRange valueAxis inverted", function(assert) {
     // arrange, act
-    var seriesDataSource = new SeriesDataSource({
+    var seriesDataSource = createSeriesDataSource({
         dataSource: [{ arg: 1, val: 0 },
                     { arg: 3, val: 200 },
                     { arg: 5, val: 12 }],
@@ -514,7 +540,7 @@ QUnit.test("getBoundRange valueAxis inverted", function(assert) {
 
 QUnit.test("getBoundRange with topIndent, bottomIndent, valueAxis inverted", function(assert) {
     // arrange, act
-    var seriesDataSource = new SeriesDataSource({
+    var seriesDataSource = createSeriesDataSource({
         dataSource: [
                     { arg: 1, val: 0 },
                     { arg: 3, val: 200 },
@@ -543,7 +569,7 @@ QUnit.test("getBoundRange with topIndent, bottomIndent, valueAxis inverted", fun
 
 QUnit.test("several series getBoundRange", function(assert) {
     // arrange, act
-    var seriesDataSource = new SeriesDataSource({
+    var seriesDataSource = createSeriesDataSource({
         dataSource: [{ arg: 1, val: 3, arg1: 4, val1: 10 },
                         { arg: 3, val: 6, arg1: 7, val1: 5 },
                         { arg: 5, val: 12, arg1: 9, val1: 2 }],
@@ -570,7 +596,7 @@ QUnit.test("several series getBoundRange", function(assert) {
 
 QUnit.test("getBoundRange for simple dataSource", function(assert) {
     // arrange, act
-    var seriesDataSource = new SeriesDataSource({
+    var seriesDataSource = createSeriesDataSource({
         dataSource: [{ val: 1, arg: 100 }, { val: 2, arg: 5 }, { val: 3, arg: 16 }],
         chart: {
             commonSeriesSettings: {
@@ -588,7 +614,7 @@ QUnit.test("getBoundRange for simple dataSource", function(assert) {
 
 QUnit.test("getBoundRange for objects dataSource default dataSourceField", function(assert) {
     // arrange, act
-    var seriesDataSource = new SeriesDataSource({
+    var seriesDataSource = createSeriesDataSource({
         dataSource: [
                 { arg: 10, y1: 3, y2: 5 },
                 { arg: 50, y1: 16, y2: 1 }
@@ -609,7 +635,7 @@ QUnit.test("getBoundRange for objects dataSource default dataSourceField", funct
 
 QUnit.test("getBoundRange for objects dataSource with dataSourceField", function(assert) {
     // arrange, act
-    var seriesDataSource = new SeriesDataSource({
+    var seriesDataSource = createSeriesDataSource({
         dataSource: [
                 { x: 10, y1: 3, y2: 5 },
                 { x: 50, y1: 16, y2: 1 }
@@ -631,7 +657,7 @@ QUnit.test("getBoundRange for objects dataSource with dataSourceField", function
 
 QUnit.test("several series getBoundRange with valueAxis min/max", function(assert) {
     // arrange, act
-    var seriesDataSource = new SeriesDataSource({
+    var seriesDataSource = createSeriesDataSource({
         dataSource: [{ arg: 1, val: 3, arg1: 4, val1: 10 },
                     { arg: 3, val: 6, arg1: 7, val1: 5 },
                     { arg: 5, val: 12, arg1: 9, val1: 2 }],
@@ -662,7 +688,7 @@ QUnit.test("several series getBoundRange with valueAxis min/max", function(asser
 // B253591
 QUnit.test("getBoundRange of Line series with equal values", function(assert) {
     // arrange, act
-    var seriesDataSource = new SeriesDataSource({
+    var seriesDataSource = createSeriesDataSource({
         dataSource: [{ arg: 1, val: 10 },
                     { arg: 3, val: 10 },
                     { arg: 5, val: 10 }],
@@ -687,7 +713,7 @@ QUnit.test("getBoundRange of Line series with equal values", function(assert) {
 
 QUnit.test("getBoundRange valueAxis has logarithmic type", function(assert) {
     // arrange, act
-    var seriesDataSource = new SeriesDataSource({
+    var seriesDataSource = createSeriesDataSource({
         dataSource: [{ arg: 1, val: 4 },
                     { arg: 3, val: 200 },
                     { arg: 5, val: 12 }],
@@ -712,7 +738,7 @@ QUnit.test("getBoundRange valueAxis has logarithmic type", function(assert) {
 
 // T602076
 QUnit.test("Logarithmic value axis. 'Type' option should be passed to the series", function(assert) {
-    var seriesDataSource = new SeriesDataSource({
+    var seriesDataSource = createSeriesDataSource({
         dataSource: [{ arg: 1, val: 4 },
                     { arg: 3, val: 200 },
                     { arg: 5, val: 12 }],
@@ -734,7 +760,7 @@ QUnit.test("Logarithmic value axis. 'Type' option should be passed to the series
 });
 
 QUnit.test("'valueType' option should be passed to the series", function(assert) {
-    var seriesDataSource = new SeriesDataSource({
+    var seriesDataSource = createSeriesDataSource({
         dataSource: [{ arg: 1, val: 4 },
                     { arg: 3, val: 200 },
                     { arg: 5, val: 12 }],
@@ -756,7 +782,7 @@ QUnit.test("'valueType' option should be passed to the series", function(assert)
 
 QUnit.test("dataSource is null or is empty", function(assert) {
     // arrange, act
-    var seriesDataSource = new SeriesDataSource({
+    var seriesDataSource = createSeriesDataSource({
         chart: {
             commonSeriesSettings: {
                 type: "area"
@@ -776,7 +802,7 @@ QUnit.test("dataSource is null or is empty", function(assert) {
     assert.ok(seriesDataSource.isEmpty());
 
     // arrange, act
-    seriesDataSource = new SeriesDataSource({
+    seriesDataSource = createSeriesDataSource({
         chart: {
             commonSeriesSettings: {
                 type: "area"
@@ -796,7 +822,7 @@ QUnit.test("dataSource is null or is empty", function(assert) {
 // B253068
 QUnit.test("with dataSourceField", function(assert) {
     // arrange,act
-    var seriesDataSource = new SeriesDataSource({
+    var seriesDataSource = createSeriesDataSource({
         dataSource: [{ x: 10, y: 0 }, { x: 15, y: 6 }],
         dataSourceField: "x",
         chart: {
@@ -822,7 +848,7 @@ QUnit.test("with dataSourceField", function(assert) {
 // T612521
 QUnit.test("No chart, dataSourceField, arguments as string, valueType = datetime - pass datetime as value and argument types. T612521", function(assert) {
     // arrange,act
-    var seriesDataSource = new SeriesDataSource({
+    var seriesDataSource = createSeriesDataSource({
         dataSource: [{ x: "2018-02-01T00:00:00" }, { x: "2018-03-01T00:00:00" }],
         dataSourceField: "x",
         valueType: "datetime",
@@ -839,7 +865,7 @@ QUnit.test("No chart, dataSourceField, arguments as string, valueType = datetime
 // B254994
 QUnit.test("argumentField in commonSeriesSettings", function(assert) {
     // arrange,act
-    var seriesDataSource = new SeriesDataSource({
+    var seriesDataSource = createSeriesDataSource({
         dataSource: [{ x: 10, y: 0 }, { x: 15, y: 6 }],
         chart: {
             commonSeriesSettings: {
@@ -867,7 +893,7 @@ QUnit.test("argumentField in commonSeriesSettings", function(assert) {
 
 QUnit.test("without dataSourceField, (valueField from commonSeriesSettings)", function(assert) {
     // arrange,act
-    var seriesDataSource = new SeriesDataSource({
+    var seriesDataSource = createSeriesDataSource({
         dataSource: [{ x: 10, y: 0 }, { x: 15, y: 6 }],
         chart: {
             commonSeriesSettings: {
@@ -904,7 +930,7 @@ var seriesTemplateDataSource = [
 
 QUnit.test("seriesTemplate", function(assert) {
     // arrange,act
-    var seriesDataSource = new SeriesDataSource({
+    var seriesDataSource = createSeriesDataSource({
         dataSource: seriesTemplateDataSource,
         chart: {
             commonSeriesSettings: {
@@ -934,7 +960,7 @@ QUnit.test("seriesTemplate", function(assert) {
 
 QUnit.test("seriesTemplate, incorrect nameField", function(assert) {
     // arrange,act
-    var seriesDataSource = new SeriesDataSource({
+    var seriesDataSource = createSeriesDataSource({
         dataSource: seriesTemplateDataSource,
         chart: {
             commonSeriesSettings: {
@@ -971,7 +997,7 @@ QUnit.module("SeriesDataSource seriesFamilies", {
 });
 
 QUnit.test("empty dataSource", function(assert) {
-    var seriesDataSource = new SeriesDataSource({
+    var seriesDataSource = createSeriesDataSource({
         dataSource: null,
         chart: {
             commonSeriesSettings: {
@@ -988,7 +1014,7 @@ QUnit.test("empty dataSource", function(assert) {
 });
 
 QUnit.test("one type for all series", function(assert) {
-    var seriesDataSource = new SeriesDataSource({
+    var seriesDataSource = createSeriesDataSource({
         dataSource: [{ arg: 1, val: 3, arg1: 4, val1: 10 },
                         { arg: 3, val: 6, arg1: 7, val1: 5 },
                         { arg: 5, val: 12, arg1: 9, val1: 2 }],
@@ -1016,7 +1042,7 @@ QUnit.test("one type for all series", function(assert) {
 });
 
 QUnit.test("adjustSeriesDimensions", function(assert) {
-    var seriesDataSource = new SeriesDataSource(
+    var seriesDataSource = createSeriesDataSource(
         {
             dataSource: [
                 { arg: 1, val: 3, arg1: 4, val1: 10 },
@@ -1059,7 +1085,7 @@ QUnit.test("adjustSeriesDimensions", function(assert) {
 QUnit.test("SeriesDataSource updates axes' translator with argument range", function(assert) {
     this.argumentAxis.getTranslator().updateBusinessRange = sinon.spy();
 
-    new SeriesDataSource(
+    createSeriesDataSource(
         {
             dataSource: [
                 { arg: 1, val: 3, arg1: 4, val1: 10 },
@@ -1092,7 +1118,7 @@ QUnit.test("SeriesDataSource updates axes' translator with argument range", func
 });
 
 QUnit.test("several types for all series", function(assert) {
-    var seriesDataSource = new SeriesDataSource({
+    var seriesDataSource = createSeriesDataSource({
         dataSource: [
                     { arg: 1, val: 3, arg1: 4, val1: 10, arg2: 5, val2: 10 },
                     { arg: 3, val: 6, arg1: 7, val1: 5, arg2: 8, val2: 5 },
@@ -1132,7 +1158,7 @@ QUnit.test("several types for all series", function(assert) {
 });
 
 QUnit.test("Calculated valueType - numeric", function(assert) {
-    var seriesDataSource = new SeriesDataSource({
+    var seriesDataSource = createSeriesDataSource({
         dataSource: [
                     { arg: 1, val: 3 },
                     { arg: 3, val: 6 },
@@ -1155,7 +1181,7 @@ QUnit.test("Calculated valueType - numeric", function(assert) {
 });
 
 QUnit.test("Calculated valueType - datetime", function(assert) {
-    var seriesDataSource = new SeriesDataSource({
+    var seriesDataSource = createSeriesDataSource({
         dataSource: [
     { arg: new Date(12312), val: 3 },
                     { arg: new Date(342354), val: 6 },
@@ -1178,7 +1204,7 @@ QUnit.test("Calculated valueType - datetime", function(assert) {
 });
 
 QUnit.test("Calculated valueType - string", function(assert) {
-    var seriesDataSource = new SeriesDataSource({
+    var seriesDataSource = createSeriesDataSource({
         dataSource: [
     { arg: "a", val: 3 },
                     { arg: "b", val: 6 },
@@ -1201,7 +1227,7 @@ QUnit.test("Calculated valueType - string", function(assert) {
 });
 
 QUnit.test("seriesDataSource with bubbleSize option", function(assert) {
-    var seriesDataSource = new SeriesDataSource({
+    var seriesDataSource = createSeriesDataSource({
         dataSource: [{ arg: "a", val: 3 },
                     { arg: "b", val: 6 },
                     { arg: "c", val: 12 }
@@ -1227,7 +1253,7 @@ QUnit.test("seriesDataSource with bubbleSize option", function(assert) {
 });
 
 QUnit.test("seriesDataSource with equalBarWidth option", function(assert) {
-    var seriesDataSource = new SeriesDataSource({
+    var seriesDataSource = createSeriesDataSource({
         dataSource: [{ arg: "a", val: 3 },
                     { arg: "b", val: 6 },
                     { arg: "c", val: 12 }
@@ -1248,7 +1274,7 @@ QUnit.test("seriesDataSource with equalBarWidth option", function(assert) {
 });
 
 QUnit.test("seriesDataSource with barGroupPadding option", function(assert) {
-    var seriesDataSource = new SeriesDataSource({
+    var seriesDataSource = createSeriesDataSource({
         dataSource: [{ arg: "a", val: 3 }],
         chart: {
             barGroupPadding: 0.6,
@@ -1263,7 +1289,7 @@ QUnit.test("seriesDataSource with barGroupPadding option", function(assert) {
 });
 
 QUnit.test("seriesDataSource with barGroupWidth option", function(assert) {
-    var seriesDataSource = new SeriesDataSource({
+    var seriesDataSource = createSeriesDataSource({
         dataSource: [{ arg: "a", val: 3 }],
         chart: {
             barGroupWidth: 300,
@@ -1278,7 +1304,7 @@ QUnit.test("seriesDataSource with barGroupWidth option", function(assert) {
 });
 
 QUnit.test("seriesDataSource with equalBarWidth option is false", function(assert) {
-    var seriesDataSource = new SeriesDataSource({
+    var seriesDataSource = createSeriesDataSource({
         dataSource: [
     { arg: "a", val: 3 },
                     { arg: "b", val: 6 },
@@ -1300,7 +1326,7 @@ QUnit.test("seriesDataSource with equalBarWidth option is false", function(asser
 });
 
 QUnit.test("seriesDataSource with barWidth option", function(assert) {
-    var seriesDataSource = new SeriesDataSource({
+    var seriesDataSource = createSeriesDataSource({
         dataSource: [{ arg: "a", val: 3 },
                     { arg: "b", val: 6 },
                     { arg: "c", val: 12 }],
@@ -1320,7 +1346,7 @@ QUnit.test("seriesDataSource with barWidth option", function(assert) {
 });
 
 QUnit.test("seriesDataSource with negativesAsZeroes option", function(assert) {
-    var seriesDataSource = new SeriesDataSource({
+    var seriesDataSource = createSeriesDataSource({
         dataSource: [{ arg: "a", val: 3 },
                     { arg: "b", val: 6 },
                     { arg: "c", val: 12 }],
@@ -1340,7 +1366,7 @@ QUnit.test("seriesDataSource with negativesAsZeroes option", function(assert) {
 });
 
 QUnit.test("seriesDataSource with negativesAsZeros (misspelled) option", function(assert) {
-    var seriesDataSource = new SeriesDataSource({
+    var seriesDataSource = createSeriesDataSource({
         dataSource: [{ arg: "a", val: 3 },
                     { arg: "b", val: 6 },
                     { arg: "c", val: 12 }],
@@ -1360,7 +1386,7 @@ QUnit.test("seriesDataSource with negativesAsZeros (misspelled) option", functio
 });
 
 QUnit.test("seriesDataSource with negativesAsZeroes (correct + misspelled) option", function(assert) {
-    var seriesDataSource = new SeriesDataSource({
+    var seriesDataSource = createSeriesDataSource({
         dataSource: [{ arg: "a", val: 3 },
                     { arg: "b", val: 6 },
                     { arg: "c", val: 12 }],
@@ -1384,7 +1410,7 @@ QUnit.module("Merge marginOptions", environment);
 
 QUnit.test("Return max size", function(assert) {
     // arrange
-    var seriesDataSource = new SeriesDataSource({
+    var seriesDataSource = createSeriesDataSource({
         dataSource: [{ arg: 1, val: 0 }],
         chart: {
             commonSeriesSettings: {
@@ -1412,7 +1438,7 @@ QUnit.test("Return max size", function(assert) {
 
 QUnit.test("If there is bar series return checkInterval option", function(assert) {
     // arrange
-    var seriesDataSource = new SeriesDataSource({
+    var seriesDataSource = createSeriesDataSource({
         dataSource: [{ arg: 1, val: 0 }],
         chart: {
             commonSeriesSettings: {
@@ -1440,7 +1466,7 @@ QUnit.test("If there is bar series return checkInterval option", function(assert
 
 QUnit.test("Calculate size for bubble - height < width", function(assert) {
     // arrange
-    var seriesDataSource = new SeriesDataSource({
+    var seriesDataSource = createSeriesDataSource({
         dataSource: [{ arg: 1, val: 0, size: 1 }],
         chart: {
             commonSeriesSettings: {
@@ -1468,7 +1494,7 @@ QUnit.test("Calculate size for bubble - height < width", function(assert) {
 
 QUnit.test("Calculate size for bubble - height < width", function(assert) {
     // arrange
-    var seriesDataSource = new SeriesDataSource({
+    var seriesDataSource = createSeriesDataSource({
         dataSource: [{ arg: 1, val: 0, size: 1 }],
         chart: {
             commonSeriesSettings: {

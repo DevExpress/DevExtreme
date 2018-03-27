@@ -883,13 +883,15 @@ QUnit.test("Pass merged marginOptions to axes", function(assert) {
     assert.deepEqual(chart._valueAxes[0].setMarginOptions.lastCall.args[0], {
         size: 8,
         checkInterval: true,
-        percentStick: true
+        percentStick: true,
+        sizePointNormalState: 0
     });
 
     assert.deepEqual(chart._argumentAxes[0].setMarginOptions.lastCall.args[0], {
         size: 8,
         checkInterval: true,
-        percentStick: true
+        percentStick: true,
+        sizePointNormalState: 0
     });
 });
 
@@ -936,19 +938,22 @@ QUnit.test("Pass merged marginOptions to axes when two value axis", function(ass
     assert.deepEqual(chart._valueAxes[0].setMarginOptions.lastCall.args[0], {
         checkInterval: false,
         size: 8,
-        percentStick: false
+        percentStick: false,
+        sizePointNormalState: 0
     });
 
     assert.deepEqual(chart._valueAxes[1].setMarginOptions.lastCall.args[0], {
         checkInterval: true,
         size: 5,
-        percentStick: true
+        percentStick: true,
+        sizePointNormalState: 0
     });
 
     assert.deepEqual(chart._argumentAxes[0].setMarginOptions.lastCall.args[0], {
         size: 8,
         checkInterval: true,
-        percentStick: true
+        percentStick: true,
+        sizePointNormalState: 0
     });
 });
 
@@ -1003,3 +1008,33 @@ QUnit.test("Process margin for bubble. Rotated chart", function(assert) {
     assert.deepEqual(chart._valueAxes[0].setMarginOptions.lastCall.args[0].size, 100);
 });
 
+QUnit.test("pointSize merging", function(assert) {
+    chartMocks.seriesMockData.series.push(new MockSeries({
+        marginOptions: {
+            checkInterval: false,
+            size: 8,
+            percentStick: true,
+            sizePointNormalState: 8
+        }
+    }));
+
+    chartMocks.seriesMockData.series.push(new MockSeries({
+        marginOptions: {
+            checkInterval: true,
+            size: 5,
+            percentStick: false,
+            sizePointNormalState: 5
+        }
+    }));
+
+    var chart = this.createChart({
+        series: [{}, {}]
+    });
+
+    assert.deepEqual(chart._argumentAxes[0].setMarginOptions.lastCall.args[0], {
+        size: 8,
+        checkInterval: true,
+        percentStick: true,
+        sizePointNormalState: 8
+    });
+});

@@ -1,0 +1,107 @@
+.dx-size-default() {
+    @MATERIAL_NUMBERBOX_SPIN_CONTAINER_WIDTH: 24px;
+    @MATERIAL_NUMBERBOX_SPIN_PADDING: 1px;
+    @MATERIAL_NUMBERBOX_TOUCH_FRIENDLY_SPIN_CONTAINER_WIDTH: 74px;
+    @MATERIAL_NUMBERBOX_CLEAR_BUTTON_AREA_WIDTH: 32px;
+}
+.dx-size-compact() {
+    @MATERIAL_NUMBERBOX_SPIN_CONTAINER_WIDTH: 20px;
+    @MATERIAL_NUMBERBOX_SPIN_PADDING: 1px;
+    @MATERIAL_NUMBERBOX_TOUCH_FRIENDLY_SPIN_CONTAINER_WIDTH: 60px;
+    @MATERIAL_NUMBERBOX_CLEAR_BUTTON_AREA_WIDTH: 20px;
+}
+
+
+.dx-numberbox-spin-container {
+    overflow: hidden;
+    width: @MATERIAL_NUMBERBOX_SPIN_CONTAINER_WIDTH;
+    .border-radius(@numberbox-spin-container-border-radius);
+
+    .dx-state-disabled & {
+        opacity: 1;
+    }
+}
+
+.dx-numberbox-spin-up-icon {
+    .dx-icon-spinup;
+    color: @numberbox-spin-icon-color;
+}
+
+.dx-numberbox-spin-down-icon {
+    .dx-icon-spindown;
+    color: @numberbox-spin-icon-color;
+}
+
+.dx-numberbox-spin-up-icon,
+.dx-numberbox-spin-down-icon {
+    .dx-icon-font-centered-sizing(@MATERIAL_BASE_ICON_SIZE);
+    .border-radius(@numberbox-spin-icon-border-radius);
+}
+
+.dx-numberbox-spin.dx-show-clear-button .dx-texteditor-input {
+    padding-right: @MATERIAL_NUMBERBOX_SPIN_CONTAINER_WIDTH + @MATERIAL_NUMBERBOX_CLEAR_BUTTON_AREA_WIDTH;
+}
+
+
+.dx-numberbox-spin-button {
+    padding: @MATERIAL_NUMBERBOX_SPIN_PADDING;
+    height: 50%;
+}
+
+.dx-numberbox-spin {
+    .validation-icon-position(@MATERIAL_NUMBERBOX_SPIN_CONTAINER_WIDTH);
+
+    &.dx-show-clear-button:not(.dx-texteditor-empty) {
+        .validation-icon-position(@MATERIAL_NUMBERBOX_SPIN_CONTAINER_WIDTH + @MATERIAL_TEXTEDITOR_ICON_CONTAINER_SIZE);
+    }
+}
+
+.dx-numberbox-spin-touch-friendly {
+    .validation-icon-position(@MATERIAL_NUMBERBOX_TOUCH_FRIENDLY_SPIN_CONTAINER_WIDTH);
+
+    &.dx-show-clear-button:not(.dx-texteditor-empty) {
+        .validation-icon-position(@MATERIAL_NUMBERBOX_TOUCH_FRIENDLY_SPIN_CONTAINER_WIDTH + @MATERIAL_TEXTEDITOR_ICON_CONTAINER_SIZE);
+    }
+
+    .dx-numberbox-spin-container {
+        width: @MATERIAL_NUMBERBOX_TOUCH_FRIENDLY_SPIN_CONTAINER_WIDTH;
+    }
+
+    .dx-numberbox-spin-container {
+        border-left: none;
+    }
+
+    &.dx-show-clear-button .dx-texteditor-input {
+        padding-right: @MATERIAL_NUMBERBOX_TOUCH_FRIENDLY_SPIN_CONTAINER_WIDTH + @MATERIAL_NUMBERBOX_CLEAR_BUTTON_AREA_WIDTH;
+    }
+
+    .dx-numberbox-spin-up-icon,.dx-numberbox-spin-down-icon{
+        background-position: center;
+    }
+}
+
+
+.dx-rtl .dx-numberbox,
+.dx-numberbox.dx-rtl {
+    &.dx-numberbox-spin-touch-friendly {
+        .dx-numberbox-spin-container {
+            border-right: none;
+        }
+
+        &.dx-show-clear-button .dx-texteditor-input {
+            padding-left: @MATERIAL_NUMBERBOX_TOUCH_FRIENDLY_SPIN_CONTAINER_WIDTH + @MATERIAL_NUMBERBOX_CLEAR_BUTTON_AREA_WIDTH;
+        }
+    }
+
+    &.dx-numberbox-spin {
+        &.dx-show-clear-button {
+            .dx-texteditor-input {
+                padding-left: @MATERIAL_NUMBERBOX_SPIN_CONTAINER_WIDTH + @MATERIAL_NUMBERBOX_CLEAR_BUTTON_AREA_WIDTH;
+            }
+        }
+
+        .dx-texteditor-input {
+            padding-right: @MATERIAL_BASE_INLINE_BORDEREDWIDGET_HORIZONTAL_PADDING;
+        }
+    }
+}

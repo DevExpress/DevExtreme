@@ -574,14 +574,6 @@ exports.MockSeries = function MockSeries(options) {
         },
         _segmentPoints: commonUtils.noop,
         sort: commonUtils.noop,
-        updateTemplateFieldNames: function() {
-            this.updatedFields = true;
-        },
-        getTemplateFields: function() {
-            return [{ originalField: this._options.valueField, templateField: this._options.valueField + this.name },
-            { originalField: this._options.tagField, templateField: this._options.tagField + this.name },
-            { originalField: this._options.sizeField, templateField: this._options.sizeField + this.name }];
-        },
         isUpdated: typeUtils.isDefined(options.isUpdated) ? options.isUpdated : true,
 
         getOptions: function() {
@@ -984,7 +976,13 @@ var MockAxis = exports.MockAxis = function(renderOptions) {
         resetZoom: sinon.spy(),
         drawScaleBreaks: sinon.spy(),
         resetTypes: sinon.spy(),
-        setMarginOptions: sinon.spy()
+        setMarginOptions: sinon.spy(),
+        getAggregationInfo: function() {
+            return {
+                interval: null,
+                ticks: []
+            };
+        }
     };
 };
 

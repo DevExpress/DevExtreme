@@ -390,13 +390,13 @@ QUnit.test("new shown overlay should be displayed with greater z-index (Q518355)
 
     overlay1.show();
     var $content1 = $(overlay1.$content()),
-        contentZIndex = parseInt($content1.css("z-index"), 10),
-        wrapperZIndex = parseInt($content1.parent().css("z-index"), 10);
+        contentZIndex = parseInt($content1.css("zIndex"), 10),
+        wrapperZIndex = parseInt($content1.parent().css("zIndex"), 10);
 
     overlay2.show();
     var $content2 = $(overlay2.$content());
-    assert.equal(parseInt($content2.css("z-index"), 10), contentZIndex + 1);
-    assert.equal(parseInt($content2.parent().css("z-index"), 10), wrapperZIndex + 1);
+    assert.equal(parseInt($content2.css("zIndex"), 10), contentZIndex + 1);
+    assert.equal(parseInt($content2.parent().css("zIndex"), 10), wrapperZIndex + 1);
 });
 
 QUnit.test("Cancel visibility change in hiding", function(assert) {
@@ -808,10 +808,10 @@ QUnit.test("shading color should be customized by option", function(assert) {
         }).dxOverlay("instance"),
         $wrapper = $(overlay.$content().parent());
 
-    assert.ok(/rgb\(255,\s?0,\s?0\)/.test($wrapper.css("background-color")));
+    assert.ok(/rgb\(255,\s?0,\s?0\)/.test($wrapper.css("backgroundColor")));
 
     overlay.option("shading", false);
-    assert.ok(!/rgb\(255,\s?0,\s?0\)/.test($wrapper.css("background-color")));
+    assert.ok(!/rgb\(255,\s?0,\s?0\)/.test($wrapper.css("backgroundColor")));
 });
 
 
@@ -1138,7 +1138,7 @@ QUnit.test("'animation.hide.from.position' should be configured according to wid
 QUnit.test("pointer events should be disabled during hide animation", function(assert) {
     assert.expect(2);
 
-    if(!$("body").css("pointer-events")) {
+    if(!$("body").css("pointerEvents")) {
         assert.expect(0);
         return;
     }
@@ -1146,10 +1146,10 @@ QUnit.test("pointer events should be disabled during hide animation", function(a
     var animationConfig = {
         duration: 0,
         start: function() {
-            assert.equal(instance.$content().css("pointer-events"), "none", "start of the hiding animation has correct pointer-events");
+            assert.equal(instance.$content().css("pointerEvents"), "none", "start of the hiding animation has correct pointer-events");
         },
         complete: function() {
-            assert.equal(instance.$content().css("pointer-events"), originalPointerEvents, "complete of the hiding animation has correct pointer-events");
+            assert.equal(instance.$content().css("pointerEvents"), originalPointerEvents, "complete of the hiding animation has correct pointer-events");
         }
     };
 
@@ -1160,7 +1160,7 @@ QUnit.test("pointer events should be disabled during hide animation", function(a
             }
         }),
         instance = $element.dxOverlay("instance"),
-        originalPointerEvents = instance.$content().css("pointer-events");
+        originalPointerEvents = instance.$content().css("pointerEvents");
 
     instance.hide();
 });
@@ -3018,7 +3018,7 @@ QUnit.test("scroll event prevented on overlay", function(assert) {
 
 QUnit.test("scroll event does not prevent gestures", function(assert) {
     var $gestureCover = $(".dx-gesture-cover");
-    var originalPointerEvents = $gestureCover.css("pointer-events");
+    var originalPointerEvents = $gestureCover.css("pointerEvents");
 
     var $overlay = $("#overlay").dxOverlay({
         shading: true,
@@ -3030,10 +3030,10 @@ QUnit.test("scroll event does not prevent gestures", function(assert) {
 
     $($shader).on({
         "dxdragstart": function() {
-            assert.equal($gestureCover.css("pointer-events"), originalPointerEvents, "selection is enabled");
+            assert.equal($gestureCover.css("pointerEvents"), originalPointerEvents, "selection is enabled");
         },
         "dxdragend": function() {
-            assert.equal($gestureCover.css("pointer-events"), originalPointerEvents, "selection is enabled");
+            assert.equal($gestureCover.css("pointerEvents"), originalPointerEvents, "selection is enabled");
         }
     });
 
@@ -3071,8 +3071,8 @@ QUnit.test("overlay should render with correct z-index by default", function(ass
         $content = $(overlay.content()),
         $wrapper = $content.parent();
 
-    assert.equal($content.css("z-index"), 1501, "z-index for content is correct");
-    assert.equal($wrapper.css("z-index"), 1501, "z-index for wrapper is correct");
+    assert.equal($content.css("zIndex"), 1501, "z-index for content is correct");
+    assert.equal($wrapper.css("zIndex"), 1501, "z-index for wrapper is correct");
 });
 
 QUnit.test("base z-index should be changed using the static method", function(assert) {
@@ -3085,6 +3085,6 @@ QUnit.test("base z-index should be changed using the static method", function(as
         $content = $(overlay.content()),
         $wrapper = $content.parent();
 
-    assert.equal($content.css("z-index"), 10001, "z-index for content is correct");
-    assert.equal($wrapper.css("z-index"), 10001, "z-index for wrapper is correct");
+    assert.equal($content.css("zIndex"), 10001, "z-index for content is correct");
+    assert.equal($wrapper.css("zIndex"), 10001, "z-index for wrapper is correct");
 });
