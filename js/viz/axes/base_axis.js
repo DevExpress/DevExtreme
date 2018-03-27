@@ -1186,21 +1186,21 @@ Axis.prototype = {
             tickInterval = generateTicks(options.aggregationInterval, true, minVisible, maxVisible).tickInterval;
 
         if(options.type !== constants.discrete) {
-            let min = useAllAggregatedPoints ? viewPort.min : minVisible,
-                max = useAllAggregatedPoints ? viewPort.max : maxVisible,
-                add = getAddFunction({
+            const min = useAllAggregatedPoints ? viewPort.min : minVisible;
+            const max = useAllAggregatedPoints ? viewPort.max : maxVisible;
+            if(isDefined(min) && isDefined(max)) {
+                const add = getAddFunction({
                     base: options.logarithmBase,
                     axisType: options.type,
                     dataType: options.dataType
-                }, false, true),
-                maxMinDistance = useAllAggregatedPoints ? 0 : add(max, min, -1),
-                start = add(min, maxMinDistance, -1),
-                end = add(max, maxMinDistance);
-
-            start = start < viewPort.min ? viewPort.min : start;
-            end = end > viewPort.max ? viewPort.max : end;
-
-            ticks = generateTicks(tickInterval, false, start, end).ticks;
+                }, false, true);
+                const maxMinDistance = useAllAggregatedPoints ? 0 : add(max, min, -1);
+                let start = add(min, maxMinDistance, -1);
+                let end = add(max, maxMinDistance);
+                start = start < viewPort.min ? viewPort.min : start;
+                end = end > viewPort.max ? viewPort.max : end;
+                ticks = generateTicks(tickInterval, false, start, end).ticks;
+            }
         }
 
         that._aggregationInterval = tickInterval;

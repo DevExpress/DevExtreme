@@ -1071,6 +1071,24 @@ QUnit.test("getAggregationInfo should have ticks out from bounds", function(asse
     assert.strictEqual(aggregationInfo.ticks[aggregationInfo.ticks.length - 1], 100);
 });
 
+QUnit.test("aggregationInfo should not genrate tick if min or max is undefined", function(assert) {
+    var aggregationInfo;
+
+    this.createAxis();
+    this.updateOptions({
+        valueType: "datetime",
+        type: "continuous"
+    });
+
+    this.axis.setBusinessRange({ addRange: function() { } });
+    this.axis.createTicks(canvas(400));
+
+    aggregationInfo = this.axis.getAggregationInfo();
+
+    assert.strictEqual(aggregationInfo.interval, undefined);
+    assert.deepEqual(aggregationInfo.ticks, []);
+});
+
 QUnit.test("getAggregationInfo for discrete axis", function(assert) {
     var aggregationInfo;
 
