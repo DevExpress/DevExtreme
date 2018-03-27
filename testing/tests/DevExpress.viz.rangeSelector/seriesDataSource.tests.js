@@ -1432,7 +1432,9 @@ QUnit.test("Return max size", function(assert) {
     // assert
     assert.deepEqual(marginOptions, {
         size: 38,
-        checkInterval: undefined
+        checkInterval: undefined,
+        sizePointNormalState: 30,
+        percentStick: false
     });
 });
 
@@ -1460,7 +1462,9 @@ QUnit.test("If there is bar series return checkInterval option", function(assert
     // assert
     assert.deepEqual(marginOptions, {
         size: 20,
-        checkInterval: true
+        checkInterval: true,
+        sizePointNormalState: 12,
+        percentStick: false
     });
 });
 
@@ -1488,11 +1492,13 @@ QUnit.test("Calculate size for bubble - height < width", function(assert) {
     // assert
     assert.deepEqual(marginOptions, {
         size: 10,
-        checkInterval: undefined
+        checkInterval: undefined,
+        sizePointNormalState: 0,
+        percentStick: false
     });
 });
 
-QUnit.test("Calculate size for bubble - height < width", function(assert) {
+QUnit.test("Calculate size for bubble - height > width", function(assert) {
     // arrange
     var seriesDataSource = createSeriesDataSource({
         dataSource: [{ arg: 1, val: 0, size: 1 }],
@@ -1516,6 +1522,8 @@ QUnit.test("Calculate size for bubble - height < width", function(assert) {
     // assert
     assert.deepEqual(marginOptions, {
         size: 20,
-        checkInterval: undefined
+        checkInterval: undefined,
+        sizePointNormalState: 0,
+        percentStick: false
     });
 });

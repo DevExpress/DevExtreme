@@ -1560,6 +1560,9 @@ QUnit.test("With chart - pass marginOptions to axis", function(assert) {
     assert.deepEqual(this.axis.setMarginOptions.lastCall.args, [{
         margin: "options"
     }]);
+
+    assert.strictEqual(this.axis.setMarginOptions.callCount, 2);
+    assert.strictEqual(this.seriesDataSource.getMarginOptions.callCount, 2);
 });
 
 QUnit.test("Without chart - do not pass marginOptions to axis", function(assert) {
