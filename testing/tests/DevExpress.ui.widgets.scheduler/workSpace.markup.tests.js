@@ -512,7 +512,7 @@ const dayWithGroupingModuleConfig = {
     }
 };
 
-QUnit.module("Workspace Day markup with gorizontal grouping", dayWithGroupingModuleConfig, () => {
+QUnit.module("Workspace Day markup with horizontal grouping", dayWithGroupingModuleConfig, () => {
     QUnit.test("Scheduler workspace day should have a right css class", (assert) => {
         const $element = this.instance.$element();
 
@@ -748,7 +748,7 @@ const weekWithGroupingModuleConfig = {
     }
 };
 
-QUnit.module("Workspace Week markup with gorizontal grouping", weekWithGroupingModuleConfig, () => {
+QUnit.module("Workspace Week markup with horizontal grouping", weekWithGroupingModuleConfig, () => {
     QUnit.test("Scheduler workspace day should have a right css class", (assert) => {
         const $element = this.instance.$element();
 
@@ -1231,7 +1231,7 @@ const monthWithGroupingModuleConfig = {
     }
 };
 
-QUnit.module("Workspace Month markup with gorizontal grouping", monthWithGroupingModuleConfig, () => {
+QUnit.module("Workspace Month markup with horizontal grouping", monthWithGroupingModuleConfig, () => {
     QUnit.test("Scheduler workspace day should have a right css class", (assert) => {
         const $element = this.instance.$element();
 
