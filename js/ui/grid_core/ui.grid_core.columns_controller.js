@@ -100,13 +100,13 @@ module.exports = {
              * @name GridBaseOptions_columns
              * @publicName columns
              * @type Array<GridBaseColumn>
+             * @fires GridBaseOptions_onOptionChanged
              * @default undefined
              */
             /**
              * @name dxDataGridOptions_columns
              * @publicName columns
              * @type Array<dxDataGridColumn>
-             * @fires dxDataGridOptions_onOptionChanged
              * @default undefined
              */
             /**
