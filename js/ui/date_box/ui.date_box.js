@@ -850,6 +850,8 @@ var DateBox = DropDownEditor.inherit({
             case "interval":
             case "disabledDates":
             case "calendarOptions":
+            case "minZoomLevel":
+            case "maxZoomLevel":
                 this._invalidate();
                 break;
             case "displayFormat":
