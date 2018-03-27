@@ -1480,3 +1480,36 @@ QUnit.test("intervalCount should be passed to workSpace", function(assert) {
     assert.equal(workSpace.option("intervalCount"), 2, "option intervalCount was passed");
 });
 
+QUnit.test("WorkSpace should be refreshed after groups changed", function(assert) {
+    this.createInstance({
+        groups: ["resource1"],
+        resources: [
+            {
+                displayExpr: "name",
+                valueExpr: "key",
+                field: "resource1",
+                dataSource: [
+                    { key: 1, name: "One" },
+                    { key: 2, name: "Two" }
+                ]
+            },
+            {
+                field: "resource2",
+                dataSource: [
+                    { id: 1, text: "Room 1" }
+                ]
+            }
+        ]
+    });
+
+    var refreshStub = sinon.stub(this.instance, "_refreshWorkSpace");
+
+    try {
+        this.instance.option("groups", ["resource2"]);
+
+        assert.ok(refreshStub.calledOnce, "Workspace was refreshed");
+
+    } finally {
+        refreshStub.restore();
+    }
+});
