@@ -148,6 +148,8 @@
         "dxDataGrid-ariaSelectRow": "Seleziona riga",
         "dxDataGrid-filterBuilderPopupTitle": "!TODO",
         "dxDataGrid-filterPanelCreateFilter": "!TODO",
+        "dxDataGrid-filterPanelClearFilterHint": "!TODO",
+        "dxDataGrid-filterPanelApplyFilterHint": "!TODO",
 
         "dxTreeList-ariaTreeList": "Albero",
         "dxTreeList-editingAddRowToNode": "Aggiungi",

@@ -148,6 +148,8 @@
         "dxDataGrid-ariaSelectRow": "Valitse rivi",
         "dxDataGrid-filterBuilderPopupTitle": "!TODO",
         "dxDataGrid-filterPanelCreateFilter": "!TODO",
+        "dxDataGrid-filterPanelClearFilterHint": "!TODO",
+        "dxDataGrid-filterPanelApplyFilterHint": "!TODO",
 
         "dxTreeList-ariaTreeList": "Puu",
         "dxTreeList-editingAddRowToNode": "Lisää",

@@ -27,10 +27,12 @@ var FilterPanelView = modules.View.inherit({
 
         if(this.option("filterValue") || this._filterValueBuffer) {
             $element.append(this._getCheckElement())
+                .append(this._getFilterElement())
                 .append(this._getTextElement())
                 .append(this._getRemoveButtonElement());
         } else {
-            $element.append(this._getTextElement());
+            $element.append(this._getFilterElement())
+                .append(this._getTextElement());
         }
     },
 
@@ -44,6 +46,16 @@ var FilterPanelView = modules.View.inherit({
             onValueChanged: function(e) {
                 that.option("filterPanel.applyFilterValue", e.value);
             }
+        });
+        $element.attr("title", this.option("filterPanel.applyFilterHintText"));
+        return $element;
+    },
+
+    _getFilterElement: function() {
+        var that = this,
+            $element = $("<div>").addClass("dx-icon-filter");
+        eventsEngine.on($element, "click", function() {
+            that.option("filterBuilderPopup.visible", true);
         });
         return $element;
     },
@@ -64,10 +76,10 @@ var FilterPanelView = modules.View.inherit({
         } else {
             filterText = this.option("filterPanel.createFilterText");
         }
-        $textElement.text(filterText);
         eventsEngine.on($textElement, "click", function() {
             that.option("filterBuilderPopup.visible", true);
         });
+        $textElement.text(filterText);
         return $textElement;
     },
 
@@ -75,7 +87,7 @@ var FilterPanelView = modules.View.inherit({
         var that = this,
             $element = $("<div>")
                 .addClass(this.addWidgetPrefix(FILTER_PANEL_CLEAR_FILTER_CLASS))
-                .text("Clear filter");
+                .attr("title", this.option("filterPanel.filterPanelClearFilterHintText"));
         eventsEngine.on($element, "click", function() {
             that.option("filterValue", null);
         });
@@ -124,6 +136,7 @@ module.exports = {
                  * @default true
                  */
                 applyFilterValue: true,
+
                 /**
                  * @name GridBaseOptions_filterPanel_createFilterText
                  * @publicName createFilterText
@@ -131,6 +144,22 @@ module.exports = {
                  * @default "Create Filter"
                  */
                 createFilterText: messageLocalization.format("dxDataGrid-filterPanelCreateFilter"),
+
+                /**
+                 * @name GridBaseOptions_filterPanel_applyFilterHintText
+                 * @publicName applyFilterHintText
+                 * @type string
+                 * @default "Apply Filter"
+                 */
+                applyFilterHintText: messageLocalization.format("dxDataGrid-filterPanelApplyFilterHint"),
+
+                /**
+                 * @name GridBaseOptions_filterPanel_clearFilterHintText
+                 * @publicName filterPanelClearFilterHintText
+                 * @type string
+                 * @default "Clear Filter"
+                 */
+                filterPanelClearFilterHintText: messageLocalization.format("dxDataGrid-filterPanelClearFilterHint"),
 
                 /**
                  * @name GridBaseOptions_filterPanel_customizeFilterText
@@ -159,6 +188,6 @@ module.exports = {
                     }
                 }
             }
-        },
+        }
     }
 };

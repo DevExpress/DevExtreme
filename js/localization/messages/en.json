@@ -148,6 +148,8 @@
         "dxDataGrid-ariaSelectRow": "Select row",
         "dxDataGrid-filterBuilderPopupTitle": "Filter Builder",
         "dxDataGrid-filterPanelCreateFilter": "Create Filter",
+        "dxDataGrid-filterPanelClearFilterHint": "Clear Filter",
+        "dxDataGrid-filterPanelApplyFilterHint": "Apply Filter",
 
         "dxTreeList-ariaTreeList": "Tree list",
         "dxTreeList-editingAddRowToNode": "Add",
