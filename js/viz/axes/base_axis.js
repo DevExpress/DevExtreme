@@ -1203,6 +1203,8 @@ Axis.prototype = {
             ticks = generateTicks(tickInterval, false, start, end).ticks;
         }
 
+        that._aggregationInterval = tickInterval;
+
         return {
             interval: tickInterval,
             ticks: ticks
@@ -1331,6 +1333,7 @@ Axis.prototype = {
         addToArgs(this._tickInterval);
         addToArgs(this._estimatedTickInterval);
         isDefined(interval) && minArgs.push(interval);
+        addToArgs(this._aggregationInterval);
 
         return _min.apply(this, minArgs);
     },
