@@ -1333,7 +1333,7 @@ Axis.prototype = {
         addToArgs(this._tickInterval);
         addToArgs(this._estimatedTickInterval);
         isDefined(interval) && minArgs.push(interval);
-        isDefined(this._aggregationInterval) && minArgs.push(this._aggregationInterval);
+        addToArgs(this._aggregationInterval);
 
         return _min.apply(this, minArgs);
     },

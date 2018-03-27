@@ -1290,18 +1290,17 @@ QUnit.test("margins calculation. Range interval with tickInterval + tickInterval
     };
 
     this.tickGeneratorSpy = sinon.stub();
-    this.tickGeneratorSpy.returns(getTickGeneratorReturns());
-    this.tickGeneratorSpy.onCall(1).returns(getTickGeneratorReturns(5));
-    this.tickGeneratorSpy.onCall(2).returns(getTickGeneratorReturns(3));
+    this.tickGeneratorSpy.onCall(0).returns(getTickGeneratorReturns({ days: 2 }));
+    this.tickGeneratorSpy.returns(getTickGeneratorReturns("month"));
 
     const axis = this.createAxis(true, {
-        valueMarginsEnabled: true
+        valueMarginsEnabled: true,
+        dataType: "datetime"
     });
 
     axis.setBusinessRange({
-        min: 100,
-        max: 220,
-        interval: 20
+        min: new Date(2018, 2, 27),
+        max: new Date(2018, 3, 27)
     });
     axis.updateCanvas(this.canvas);
     axis.getAggregationInfo();
@@ -1312,7 +1311,7 @@ QUnit.test("margins calculation. Range interval with tickInterval + tickInterval
 
     axis.createTicks(this.canvas);
 
-    assert.equal(this.translator.stub("updateBusinessRange").lastCall.args[0].interval, 3, "interval");
+    assert.equal(this.translator.stub("updateBusinessRange").lastCall.args[0].interval, 2 * 1000 * 3600 * 24, "interval");
 });
 
 QUnit.test("marginOptions.checkInterval on valueAxis - ignore interval", function(assert) {
