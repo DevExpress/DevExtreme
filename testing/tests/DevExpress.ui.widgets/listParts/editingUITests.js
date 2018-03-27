@@ -716,8 +716,9 @@ QUnit.test("click on button should not remove item if widget disabled", function
 });
 
 QUnit.test("button should have no text for the Material theme", function(assert) {
-    var origCurrent = themes.current;
-    themes.current = function() { return "material"; };
+    var origIsMaterial = themes.isMaterial;
+    themes.isMaterial = function() { return true; };
+
 
     var $list = $($("#templated-list").dxList({
         items: ["0"],
@@ -734,13 +735,10 @@ QUnit.test("button should have no text for the Material theme", function(assert)
 
     assert.equal($deleteButton.text(), "", "button has no text for Material theme");
 
-    themes.current = origCurrent;
+    themes.isMaterial = origIsMaterial;
 });
 
 QUnit.test("button should have no text for the Generic theme", function(assert) {
-    var origCurrent = themes.current;
-    themes.current = function() { return "generic"; };
-
     var $list = $($("#templated-list").dxList({
         items: ["0"],
         allowItemDeleting: true,
@@ -755,17 +753,17 @@ QUnit.test("button should have no text for the Generic theme", function(assert) 
     var $deleteButton = $item.find(toSelector(SLIDE_MENU_BUTTON_CLASS));
 
     assert.ok($deleteButton.text().length > 0, "button has a text for Generic theme");
-
-    themes.current = origCurrent;
 });
 
 var INKRIPPLE_WAVE_SHOWING_CLASS = "dx-inkripple-showing",
     INKRIPPLE_MATERIAL_SHOW_TIMEOUT = 100;
 
 QUnit.test("button should have no inkRipple after fast swipe for Material theme", function(assert) {
-    var origCurrent = themes.current,
+    var origIsMaterial = themes.isMaterial,
+        origCurrent = themes.current,
         clock = sinon.useFakeTimers();
 
+    themes.isMaterial = function() { return true; };
     themes.current = function() { return "material"; };
 
     var $list = $($("#templated-list").dxList({
@@ -805,6 +803,7 @@ QUnit.test("button should have no inkRipple after fast swipe for Material theme"
     }
 
     clock.restore();
+    themes.isMaterial = origIsMaterial;
     themes.current = origCurrent;
 });
 

@@ -41,6 +41,7 @@ var vizUtils = require("../core/utils"),
 
     DEFAULT_AXIS_DIVISION_FACTOR = 50,
     DEFAULT_MINOR_AXIS_DIVISION_FACTOR = 15,
+    DEFAULT_AGGREGATION_GROUP_WIDTH = 10,
 
     Axis;
 
@@ -62,6 +63,7 @@ function getTickGenerator(options, incidentOccurred, skipTickGeneration) {
 
         firstDayOfWeek: options.workWeek && options.workWeek[0],
         skipTickGeneration: skipTickGeneration,
+        skipCalculationLimits: options.skipCalculationLimits,
 
         showCalculatedTicks: options.tick.showCalculatedTicks, // DEPRECATED IN 15_2
         showMinorCalculatedTicks: options.minorTick.showCalculatedTicks // DEPRECATED IN 15_2
@@ -160,23 +162,23 @@ function removeInvalidTick(ticks, i) {
     return false;
 }
 
-function getAddFunction(range, correctZeroLevel) {
+function getAddFunction(range, correctZeroLevel, processMargin) {
     // T170398
     if(range.dataType === "datetime") {
-        return function(rangeValue, marginValue) {
-            return new Date(rangeValue.getTime() + marginValue);
+        return function(rangeValue, marginValue, sign = 1) {
+            return new Date(rangeValue.getTime() + sign * (processMargin ? marginValue.getTime() : marginValue));
         };
     }
 
     if(range.axisType === "logarithmic") {
-        return function(rangeValue, marginValue) {
-            var log = vizUtils.getLog(rangeValue, range.base) + marginValue;
+        return function(rangeValue, marginValue, sign = 1) {
+            var log = vizUtils.getLog(rangeValue, range.base) + sign * (processMargin ? vizUtils.getLog(marginValue, range.base) : marginValue);
             return vizUtils.raiseTo(log, range.base);
         };
     }
 
-    return function(rangeValue, marginValue) {
-        var newValue = rangeValue + marginValue;
+    return function(rangeValue, marginValue, sign = 1) {
+        var newValue = rangeValue + sign * marginValue;
         return correctZeroLevel && newValue * rangeValue <= 0 ? 0 : newValue;
     };
 }
@@ -241,6 +243,33 @@ function correctMarginExtremum(value, margins, maxMinDistance, roundingMethod) {
     }
     maxDivider = vizUtils.raiseTo(dividerPower, 10);
     return adjust(roundingMethod(adjust(value / maxDivider)) * maxDivider);
+}
+
+function configureGenerator(options, axisDivisionFactor, viewPort, screenDelta) {
+    var tickGeneratorOptions = extend({}, options, {
+        endOnTick: true,
+        axisDivisionFactor: axisDivisionFactor,
+        skipCalculationLimits: true
+    });
+
+    return function(tickInterval, skipTickGeneration, min, max) {
+        return getTickGenerator(tickGeneratorOptions, _noop, skipTickGeneration)(
+            {
+                min: min,
+                max: max,
+                categories: viewPort.categories,
+                isSpacedMargin: viewPort.isSpacedMargin,
+                checkMinDataVisibility: viewPort.checkMinDataVisibility,
+                checkMaxDataVisibility: viewPort.checkMaxDataVisibility
+            },
+            screenDelta,
+            tickInterval,
+            isDefined(tickInterval),
+            {
+                majors: options.customTicks
+            }
+            );
+    };
 }
 
 Axis = exports.Axis = function(renderSettings) {
@@ -1143,6 +1172,45 @@ Axis.prototype = {
         return ticks;
     },
 
+    getAggregationInfo(useAllAggregatedPoints) {
+        let that = this,
+            options = that._options,
+            marginOptions = that._marginOptions,
+            axisDivisionFactor = options.aggregationGroupWidth || marginOptions && (marginOptions.sizePointNormalState) || DEFAULT_AGGREGATION_GROUP_WIDTH,
+            viewPort = that.getTranslator().getBusinessRange(),
+            zoomArgs = that._zoomArgs,
+            minVisible = zoomArgs && zoomArgs.min || viewPort.minVisible,
+            maxVisible = zoomArgs && zoomArgs.max || viewPort.maxVisible,
+            ticks = [],
+            generateTicks = configureGenerator(options, axisDivisionFactor, viewPort, that._getScreenDelta()),
+            tickInterval = generateTicks(options.aggregationInterval, true, minVisible, maxVisible).tickInterval;
+
+        if(options.type !== constants.discrete) {
+            const min = useAllAggregatedPoints ? viewPort.min : minVisible;
+            const max = useAllAggregatedPoints ? viewPort.max : maxVisible;
+            if(isDefined(min) && isDefined(max)) {
+                const add = getAddFunction({
+                    base: options.logarithmBase,
+                    axisType: options.type,
+                    dataType: options.dataType
+                }, false, true);
+                const maxMinDistance = useAllAggregatedPoints ? 0 : add(max, min, -1);
+                let start = add(min, maxMinDistance, -1);
+                let end = add(max, maxMinDistance);
+                start = start < viewPort.min ? viewPort.min : start;
+                end = end > viewPort.max ? viewPort.max : end;
+                ticks = generateTicks(tickInterval, false, start, end).ticks;
+            }
+        }
+
+        that._aggregationInterval = tickInterval;
+
+        return {
+            interval: tickInterval,
+            ticks: ticks
+        };
+    },
+
     createTicks: function(canvas) {
         var that = this,
             renderer = that._renderer,
@@ -1158,7 +1226,7 @@ Axis.prototype = {
         that._isSynchronized = false;
         that.updateCanvas(canvas);
 
-        that._estimatedTickInterval = that._getTicks(new rangeModule.Range(this._seriesData), _noop, true).tickInterval;
+        that._estimatedTickInterval = that._getTicks(new rangeModule.Range(this._seriesData), _noop, true).tickInterval; // tickInterval calculation
         range = that._getViewportRange();
 
         ticks = that._createTicksAndLabelFormat(range);
@@ -1265,6 +1333,7 @@ Axis.prototype = {
         addToArgs(this._tickInterval);
         addToArgs(this._estimatedTickInterval);
         isDefined(interval) && minArgs.push(interval);
+        addToArgs(this._aggregationInterval);
 
         return _min.apply(this, minArgs);
     },

@@ -2368,7 +2368,7 @@ QUnit.test('Show grouped columns with continuation messages', function(assert) {
 QUnit.test('Show grouped columns when virtual scrolling enabled', function(assert) {
     // arrange
     var rows = [{ rowType: 'group', groupIndex: 0, isExpanded: true, values: [1], data: { isContinuationOnNextPage: true } }],
-        dataController = new MockDataController({ items: rows }),
+        dataController = new MockDataController({ items: rows, virtualItemsCount: { begin: 10, end: 0 } }),
         rowsView = this.createRowsView(rows, dataController, [{ groupIndex: 0, caption: 'column 1', allowCollapsing: true }]),
         testElement = $('#container');
 
@@ -5338,13 +5338,13 @@ if(browser.msie) {
         assert.ok(heightRatio > 0 && heightRatio < 1, "heightRatio is defined and in (0, 1)");
 
         assert.equal(content.length, 1);
-        assert.equal(content.children().length, 2);
+        assert.equal(content.children().length, 1);
         assert.equal(content.children().eq(0)[0].tagName, 'TABLE');
-        assert.equal(content.children().eq(0).find('tbody > tr').length, 4, '3 data row + 1 freespace row');
-        assert.equal(content.children().eq(1)[0].tagName, 'TABLE');
-        assert.roughEqual(content.children().eq(1).height(), rowHeight * heightRatio * 200000 + content.find('.dx-datagrid-table-content').first().outerHeight(), 1);
-        assert.ok(content.children().eq(1).height() < 5000000, "height is less then height limit");
-        assert.equal(content.children().eq(1).find(".dx-datagrid-group-space").length, 0, "group space class");
+        assert.equal(content.children().eq(0).find('tbody > tr').length, 6, '3 data row + 1 freespace row + 2 virtual row');
+        assert.roughEqual(content.children().eq(0).find(".dx-virtual-row").eq(0).height(), rowHeight * heightRatio * 150000, 1);
+        assert.roughEqual(content.children().eq(0).find(".dx-virtual-row").eq(1).height(), rowHeight * heightRatio * 50000, 1);
+        assert.ok(content.children().eq(0).height() < 5000000, "height is less then height limit");
+        assert.equal(content.children().eq(0).find(".dx-datagrid-group-space").length, 0, "group space class");
     });
 }
 
@@ -5974,7 +5974,7 @@ QUnit.test('rowHeight calculation when freeSpace row shown', function(assert) {
 QUnit.test("Add group space class for master detail", function(assert) {
     // arrange
     var rows = [{ rowType: 'data', values: [true, 1] }, { rowType: 'detail', data: { detailInfo: 'Test Detail Information' } }],
-        dataController = new MockDataController({ items: rows, virtualItemsCount: 7 }),
+        dataController = new MockDataController({ items: rows, virtualItemsCount: { begin: 10, end: 10 } }),
         rowsView = this.createRowsView(rows, dataController, [{ command: 'expand' }, {}]),
         $tables,
         testElement = $('#container');

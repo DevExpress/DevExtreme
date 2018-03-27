@@ -1,17 +1,12 @@
 "use strict";
 
-var $ = require("jquery"),
-    noop = require("core/utils/common").noop,
-    vizMocks = require("../../helpers/vizMocks.js"),
-    pointModule = require("viz/series/points/base_point"),
-    labelModule = require("viz/series/points/label"),
-    Series = require("viz/series/base_series").Series,
-    chartMocks = require("../../helpers/chartMocks.js"),
-    insertMockFactory = chartMocks.insertMockFactory,
-    MockTranslator = chartMocks.MockTranslator,
-    MockAxis = chartMocks.MockAxis;
-
-require("viz/chart");
+import $ from "jquery";
+import vizMocks from "../../helpers/vizMocks.js";
+import { noop } from "core/utils/common";
+import pointModule from "viz/series/points/base_point";
+import labelModule from "viz/series/points/label";
+import { Series } from "viz/series/base_series";
+import { insertMockFactory, MockAxis, MockTranslator } from "../../helpers/chartMocks.js";
 
 var createSeries = function(options, renderSettings) {
     renderSettings = renderSettings || {};
@@ -1370,48 +1365,6 @@ var checkTwoGroups = function(assert, series) {
                 "stroke-width": "s-b-width"
             }
         });
-    });
-
-    QUnit.test("_get Point size visible point", function(assert) {
-        var series = createSeries({
-            type: seriesType,
-            point: {
-                size: 10,
-                hoverStyle: {
-                    size: 50
-                },
-                selectionStyle: {
-                    size: 100
-                },
-                visible: true
-            }
-        });
-
-        series.updateData(this.data);
-        series.createPoints();
-
-        assert.equal(series._getPointSize(), 10);
-    });
-
-    QUnit.test("_get Point size invisible point", function(assert) {
-        var series = createSeries({
-            type: seriesType,
-            point: {
-                size: 10,
-                hoverStyle: {
-                    size: 50
-                },
-                selectionStyle: {
-                    size: 100
-                },
-                visible: false
-            }
-        });
-
-        series.updateData(this.data);
-        series.createPoints();
-
-        assert.equal(series._getPointSize(), 2);
     });
 
     QUnit.module("Scatter. Customize point", {
@@ -2840,11 +2793,12 @@ QUnit.test("Return point size", function(assert) {
 
     assert.deepEqual(series.getMarginOptions(), {
         size: 6,
-        percentStick: false
+        percentStick: false,
+        sizePointNormalState: 6
     });
 });
 
-QUnit.test("Point is invisible - return 0", function(assert) {
+QUnit.test("getMarginOptions when point is invisible", function(assert) {
     var series = createSeries({
         type: seriesType,
         point: {
@@ -2855,7 +2809,8 @@ QUnit.test("Point is invisible - return 0", function(assert) {
 
     assert.deepEqual(series.getMarginOptions(), {
         size: 0,
-        percentStick: false
+        percentStick: false,
+        sizePointNormalState: 2
     });
 });
 
@@ -2886,7 +2841,8 @@ QUnit.test("Add max border width", function(assert) {
 
     assert.deepEqual(series.getMarginOptions(), {
         size: 30,
-        percentStick: false
+        percentStick: false,
+        sizePointNormalState: 26
     });
 });
 
@@ -2901,6 +2857,7 @@ QUnit.test("Polar point. getMarginOptions returns point size", function(assert) 
     });
     assert.deepEqual(series.getMarginOptions(), {
         size: 6,
-        percentStick: false
+        percentStick: false,
+        sizePointNormalState: 6
     });
 });

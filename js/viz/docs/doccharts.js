@@ -1684,6 +1684,20 @@ var dxChart = {
         */
         singleWorkdays: undefined,
         /**
+        * @name dxchartoptions_argumentaxis_aggregationGroupWidth
+        * @publicName aggregationGroupWidth
+        * @type number
+        * @default undefined
+        */
+        aggregationGroupWidth: 10,
+        /**
+        * @name dxchartoptions_argumentaxis_aggregationInterval
+        * @publicName aggregationInterval
+        * @extends VizTimeIntervalEnum
+        * @inherits VizTimeInterval
+        */
+        aggregationInterval: undefined,
+        /**
         * @name dxchartoptions_argumentaxis_label
         * @publicName label
         * @type object

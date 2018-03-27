@@ -227,11 +227,18 @@ QUnit.test("Height rows view", function(assert) {
 
 QUnit.test("Virtual scrolling enabled by default and should render two virtual rows", function(assert) {
     var treeList = createTreeList({
+        height: 50,
+        paging: { pageSize: 2, pageIndex: 1 },
         columns: ["name", "age"],
         dataSource: [
-            { id: 1, parentId: 0, name: "Name 3", age: 19 },
-            { id: 2, parentId: 0, name: "Name 1", age: 19 },
-            { id: 3, parentId: 0, name: "Name 2", age: 18 }
+            { id: 1, parentId: 0, name: "Name 1", age: 19 },
+            { id: 2, parentId: 0, name: "Name 2", age: 19 },
+            { id: 3, parentId: 0, name: "Name 3", age: 18 },
+            { id: 4, parentId: 0, name: "Name 4", age: 18 },
+            { id: 5, parentId: 0, name: "Name 5", age: 18 },
+            { id: 6, parentId: 0, name: "Name 6", age: 18 },
+            { id: 7, parentId: 0, name: "Name 7", age: 18 },
+            { id: 8, parentId: 0, name: "Name 8", age: 18 }
         ]
     });
 
@@ -242,7 +249,7 @@ QUnit.test("Virtual scrolling enabled by default and should render two virtual r
     assert.equal(treeList.option("scrolling.mode"), "virtual", "scrolling mode is virtual");
     var $rowsViewTables = $(treeList.$element().find(".dx-treelist-rowsview table"));
     assert.equal($rowsViewTables.length, 1, "one table are rendered");
-    assert.equal($rowsViewTables.eq(0).find(".dx-data-row").length, 3, "three data rows in table");
+    assert.equal($rowsViewTables.eq(0).find(".dx-data-row").length, 4, "three data rows in table");
     assert.equal($rowsViewTables.eq(0).find(".dx-virtual-row").length, 2, "two virtual rows in table");
     assert.equal($rowsViewTables.eq(0).find(".dx-freespace-row").length, 1, "one freespace row in table");
 });

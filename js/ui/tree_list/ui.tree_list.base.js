@@ -72,7 +72,7 @@ var TreeList = Widget.inherit({
         return this.callBase().concat([
             {
                 device: function() {
-                    return /material/.test(themes.current());
+                    return themes.isMaterial();
                 },
                 options: {
                     /**

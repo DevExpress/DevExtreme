@@ -1274,6 +1274,21 @@ testComponentDefaults(Tabs,
     }
 );
 
+testComponentDefaults(Tabs,
+    { },
+    {
+        useInkRipple: true,
+        showNavButtons: false
+    },
+    function() {
+        this.originalCurrentTheme = themes.current();
+        themes.current("material.light");
+    },
+    function() {
+        themes.current(this.originalCurrentTheme);
+    }
+);
+
 testComponentDefaults(NumberBox,
         { platform: devices.current().platform },
         { mode: "number" },
@@ -1327,22 +1342,6 @@ testComponentDefaults(DataGrid,
     function() {
         this.originalCurrentTheme = themes.current();
         themes.current("material.light");
-    },
-    function() {
-        themes.current(this.originalCurrentTheme);
-    }
-);
-
-testComponentDefaults(DataGrid,
-    { platform: devices.current().platform },
-    {
-        showRowLines: false
-    },
-    function() {
-        this.originalRealDevice = devices.real();
-        devices.real({
-            platform: "android"
-        });
     },
     function() {
         themes.current(this.originalCurrentTheme);

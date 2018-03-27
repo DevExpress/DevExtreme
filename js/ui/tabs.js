@@ -198,6 +198,20 @@ var Tabs = CollectionWidget.inherit({
                 options: {
                     useInkRipple: true
                 }
+            },
+            {
+                device: function() {
+                    return themes.isMaterial();
+                },
+                options: {
+                    useInkRipple: true,
+                    /**
+                    * @name dxTabsOptions_showNavButtons
+                    * @publicName showNavButtons
+                    * @default false @for Material
+                    */
+                    showNavButtons: false
+                }
             }
         ]);
     },

@@ -298,11 +298,12 @@ var LayoutManager = Widget.inherit({
         });
     },
 
-    _render: function() {
+    _initMarkup: function() {
         this._clearEditorInstances();
         this.$element().addClass(FORM_LAYOUT_MANAGER_CLASS);
 
         this.callBase();
+        this._renderResponsiveBox();
     },
 
     _clearEditorInstances: function() {
@@ -311,11 +312,6 @@ var LayoutManager = Widget.inherit({
 
     _hasBrowserFlex: function() {
         return styleUtils.styleProp(LAYOUT_STRATEGY_FLEX) === LAYOUT_STRATEGY_FLEX;
-    },
-
-    _renderContentImpl: function() {
-        this.callBase();
-        this._renderResponsiveBox();
     },
 
     _renderResponsiveBox: function() {
@@ -413,7 +409,8 @@ var LayoutManager = Widget.inherit({
             colCountByScreen = this.option("colCountByScreen");
 
         if(colCountByScreen) {
-            var currentColCount = colCountByScreen[windowUtils.getCurrentScreenFactor(this.option("screenByWidth"))];
+            var screenFactor = windowUtils.hasWindow() ? windowUtils.getCurrentScreenFactor(this.option("screenByWidth")) : "lg",
+                currentColCount = colCountByScreen[screenFactor];
             colCount = currentColCount || colCount;
         }
 
@@ -429,6 +426,10 @@ var LayoutManager = Widget.inherit({
     },
 
     _getMaxColCount: function() {
+        if(!windowUtils.hasWindow()) {
+            return 1;
+        }
+
         var minColWidth = this.option("minColWidth"),
             width = this.$element().width(),
             itemsCount = this._items.length,
@@ -792,7 +793,7 @@ var LayoutManager = Widget.inherit({
                 editorInstance.setAria("required", renderOptions.isRequired);
                 that._registerEditorInstance(editorInstance, renderOptions);
 
-                if(/material/.test(themes.current())) {
+                if(themes.isMaterial()) {
                     that._addWrapperInvalidClass(editorInstance);
                 }
 

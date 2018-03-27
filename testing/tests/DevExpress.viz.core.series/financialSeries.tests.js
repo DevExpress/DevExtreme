@@ -1,14 +1,10 @@
 "use strict";
 
-var $ = require("jquery"),
-    vizMocks = require("../../helpers/vizMocks.js"),
-    Series = require("viz/series/base_series").Series,
-    pointModule = require("viz/series/points/base_point"),
-    chartMocks = require("../../helpers/chartMocks.js"),
-    insertMockFactory = chartMocks.insertMockFactory,
-    MockAxis = chartMocks.MockAxis;
-
-require("viz/chart");
+import $ from "jquery";
+import * as vizMocks from "../../helpers/vizMocks.js";
+import pointModule from "viz/series/points/base_point";
+import { Series } from "viz/series/base_series";
+import { MockAxis, insertMockFactory } from "../../helpers/chartMocks.js";
 
 var createPoint = function() {
     var stub = sinon.createStubInstance(pointModule.Point);
@@ -192,7 +188,8 @@ var checkGroups = function(assert, series) {
 
         assert.deepEqual(series.getMarginOptions(), {
             size: 14,
-            percentStick: false
+            percentStick: false,
+            sizePointNormalState: 10
         });
     });
 
@@ -1027,48 +1024,6 @@ var checkGroups = function(assert, series) {
         });
 
 
-    });
-
-    QUnit.test("_get Point size visible point", function(assert) {
-        var series = createSeries({
-            type: seriesType,
-            point: {
-                size: 10,
-                hoverStyle: {
-                    size: 50
-                },
-                selectionStyle: {
-                    size: 100,
-                },
-                visible: true
-            }
-        });
-
-        series.updateData(this.data);
-        series.createPoints();
-
-        assert.equal(series._getPointSize(), 10);
-    });
-
-    QUnit.test("_get Point size invisible point", function(assert) {
-        var series = createSeries({
-            type: seriesType,
-            point: {
-                size: 10,
-                hoverStyle: {
-                    size: 50
-                },
-                selectionStyle: {
-                    size: 100,
-                },
-                visible: false
-            }
-        });
-
-        series.updateData(this.data);
-        series.createPoints();
-
-        assert.equal(series._getPointSize(), 10);
     });
 
     QUnit.module("StockSeries. Customize Point", {

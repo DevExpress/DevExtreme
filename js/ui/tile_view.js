@@ -7,6 +7,7 @@ var $ = require("../core/renderer"),
     iteratorUtils = require("../core/utils/iterator"),
     isDefined = require("../core/utils/type").isDefined,
     extend = require("../core/utils/extend").extend,
+    windowUtils = require("../core/utils/window"),
     getPublicElement = require("../core/utils/dom").getPublicElement,
     ScrollView = require("./scroll_view"),
     CollectionWidget = require("./collection/ui.collection_widget.edit");
@@ -239,7 +240,7 @@ var TileView = CollectionWidget.inherit({
     _dataSourceLoadingChangedHandler: function(isLoading) {
         var scrollView = this._scrollView;
 
-        if(!scrollView) {
+        if(!scrollView || !scrollView.startLoading) {
             return;
         }
 
@@ -270,7 +271,7 @@ var TileView = CollectionWidget.inherit({
         this._scrollView.option("onUpdated", this._renderGeometry.bind(this));
     },
 
-    _render: function() {
+    _initMarkup: function() {
         this.callBase();
 
         this._cellsPerDimension = 1;
@@ -302,14 +303,18 @@ var TileView = CollectionWidget.inherit({
                 return Math.round(item[config.itemCrossRatio] || 1);
             }));
 
-        this._cellsPerDimension = Math.floor(this.$element()[config.crossDimension]() / (this.option(config.baseItemCrossDimension) + itemMargin));
+        var crossDimensionValue = windowUtils.hasWindow() ?
+            this.$element()[config.crossDimension]() : parseInt(this.$element().get(0).style[config.crossDimension]);
+
+        this._cellsPerDimension = Math.floor(crossDimensionValue / (this.option(config.baseItemCrossDimension) + itemMargin));
         this._cellsPerDimension = Math.max(this._cellsPerDimension, maxItemCrossRatio);
         this._cells = [];
         this._cells.push(new Array(this._cellsPerDimension));
 
         this._arrangeItems(items);
-
-        this._$container[config.mainDimension](this._cells.length * this.option(config.baseItemMainDimension) + (this._cells.length + 1) * itemMargin);
+        if(windowUtils.hasWindow()) {
+            this._$container[config.mainDimension](this._cells.length * this.option(config.baseItemMainDimension) + (this._cells.length + 1) * itemMargin);
+        }
     },
 
     _arrangeItems: function(items) {

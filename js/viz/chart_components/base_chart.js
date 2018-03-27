@@ -1044,7 +1044,7 @@ var BaseChart = BaseWidget.inherit({
     },
 
     _processSingleSeries: function(singleSeries) {
-        singleSeries.createPoints();
+        singleSeries.createPoints(false);
     },
 
     _handleSeriesDataUpdated: function() {
@@ -1225,7 +1225,6 @@ var BaseChart = BaseWidget.inherit({
                 that._incidentOccurred("E2101", [seriesTheme.type]);
             } else {
                 particularSeries.index = that.series.length;
-                that._processSingleSeries(particularSeries);
                 that.series.push(particularSeries);
             }
         }
