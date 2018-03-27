@@ -1484,7 +1484,6 @@
 // dxPivotGrid
 @PIVOTGRID_AREA_BACKGROUND: @base-bg;
 
-
 /**
 * @name 10. Border color
 * @type color
@@ -1497,7 +1496,10 @@
 * @type color
 * @group pivotgrid
 */
-@PIVOTGRID_AREA_COLOR: lighten(@base-text-color, 38.5%);
+@PIVOTGRID_AREA_COLOR: fade(@base-text-color, 54%);
+
+@pivotgrid-field-area-box-text-color: @PIVOTGRID_AREA_COLOR;
+@pivotgrid-field-area-box-background-color: darken(@base-bg, 9.5%);
 
 /**
 * @name 30. Data text color
@@ -1525,7 +1527,7 @@
 * @type color
 * @group pivotgrid
 */
-@PIVOTGRID_FIELD_AREA_TEXT_COLOR: darken(@PIVOTGRID_AREA_COLOR, 26.2%);
+@PIVOTGRID_FIELD_AREA_TEXT_COLOR: fade(darken(@PIVOTGRID_AREA_COLOR, 26.2%), 30%);
 
 @PIVOTGRID_ACCENT_COLOR: @base-accent;
 @PIVOTGRID_DRAG_HEADER_BORDER_COLOR: fade(@PIVOTGRID_ACCENT_COLOR, 50%);
@@ -1547,7 +1549,7 @@
 * @type color
 * @group pivotgrid
 */
-@pivotgrid-spin-icon-color: lighten(@base-icon-color, 38.5%);
+@pivotgrid-spin-icon-color: @PIVOTGRID_AREA_COLOR;
 
 //
 //dxScheduler
