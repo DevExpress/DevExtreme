@@ -1265,9 +1265,10 @@ var Scheduler = Widget.inherit({
                 break;
             case "crossScrollingEnabled":
                 this._loadResources().done((function(resources) {
-                    this._appointments.option("items", []);
                     this._refreshWorkSpace(resources);
-                    this._appointments.option("items", this._getAppointmentsToRepaint());
+                    if(this._readyToRenderAppointments) {
+                        this._appointments.option("items", this._getAppointmentsToRepaint());
+                    }
                 }).bind(this));
                 break;
             case "cellDuration":
