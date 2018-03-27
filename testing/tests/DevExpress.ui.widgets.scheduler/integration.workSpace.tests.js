@@ -1301,7 +1301,7 @@ QUnit.test("DateTimeIndicator should show correct time in current time zone", fu
     var indicatorPositionBefore = this.instance.$element().find(".dx-scheduler-date-time-indicator").position(),
         cellHeight = $(this.instance.$element()).find(".dx-scheduler-date-table td").eq(0).outerHeight();
 
-    this.instance.option("timeZone", "Europe/Berlin");
+    this.instance.option("timeZone", "Asia/Yekaterinburg");
 
     var indicatorPositionAfter = this.instance.$element().find(".dx-scheduler-date-time-indicator").position(),
         tzDiff = this.instance.fire("getClientTimezoneOffset", currentDate) / 3600000 + this.instance.fire("getTimezone");
@@ -1480,3 +1480,36 @@ QUnit.test("intervalCount should be passed to workSpace", function(assert) {
     assert.equal(workSpace.option("intervalCount"), 2, "option intervalCount was passed");
 });
 
+QUnit.test("WorkSpace should be refreshed after groups changed", function(assert) {
+    this.createInstance({
+        groups: ["resource1"],
+        resources: [
+            {
+                displayExpr: "name",
+                valueExpr: "key",
+                field: "resource1",
+                dataSource: [
+                    { key: 1, name: "One" },
+                    { key: 2, name: "Two" }
+                ]
+            },
+            {
+                field: "resource2",
+                dataSource: [
+                    { id: 1, text: "Room 1" }
+                ]
+            }
+        ]
+    });
+
+    var refreshStub = sinon.stub(this.instance, "_refreshWorkSpace");
+
+    try {
+        this.instance.option("groups", ["resource2"]);
+
+        assert.ok(refreshStub.calledOnce, "Workspace was refreshed");
+
+    } finally {
+        refreshStub.restore();
+    }
+});

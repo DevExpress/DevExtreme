@@ -2575,17 +2575,18 @@ QUnit.test("Appointments should be repainted if the 'crossScrollingEnabled' is c
         dataSource: [{
             text: "a",
             startDate: new Date(2015, 6, 10, 0),
+            endDate: new Date(2015, 6, 10, 4),
             ownerId: 1
         }],
         crossScrollingEnabled: true
     });
 
     var appointmentsInst = this.instance.getAppointmentsInstance(),
-        repaintStub = sinon.stub(appointmentsInst, "repaint");
+        items = appointmentsInst.option("items");
 
     this.instance.option("crossScrollingEnabled", false);
 
-    assert.ok(repaintStub.calledOnce, "Appointments are repainted");
+    assert.notDeepEqual(appointmentsInst.option("items"), items, "Appointments are repainted");
 });
 
 QUnit.test("Appointment should have correct position while horizontal dragging", function(assert) {
