@@ -176,12 +176,14 @@ var EditingController = modules.ViewController.inherit((function() {
         },
 
         _handleDataChanged: function(args) {
-            if(this.option("scrolling.mode") === "standard") {
-                this.resetRowAndPageIndices();
-            }
+            var that = this,
+                editForm = that._editForm;
 
+            if(that.option("scrolling.mode") === "standard") {
+                that.resetRowAndPageIndices();
+            }
             if(args.changeType === "prepend") {
-                each(this._editData, function(_, editData) {
+                each(that._editData, function(_, editData) {
                     editData.rowIndex += args.items.length;
 
                     if(editData.type === DATA_EDIT_DATA_INSERT_TYPE) {
@@ -191,6 +193,10 @@ var EditingController = modules.ViewController.inherit((function() {
                         }).length;
                     }
                 });
+            }
+
+            if(args.changeType === "refresh" && getEditMode(that) === EDIT_MODE_POPUP && editForm && editForm.option("visible")) {
+                editForm.repaint();
             }
         },
 
