@@ -1,16 +1,16 @@
 "use strict";
 
-var $ = require("jquery"),
-    baseWidgetModule = require("viz/core/base_widget"),
-    commons = require("./rangeSelectorParts/commons.js"),
-    slidersControllerModule = require("viz/range_selector/sliders_controller"),
-    seriesDataSourceModule = require("viz/range_selector/series_data_source"),
-    _SeriesDataSource = seriesDataSourceModule.SeriesDataSource,
-    dataSourceModule = require("data/data_source/data_source"),
-    dateLocalization = require("localization/date"),
-    axisModule = require("viz/axes/base_axis");
+import $ from "jquery";
+import baseWidgetModule from "viz/core/base_widget";
+import commons from "./rangeSelectorParts/commons.js";
+import slidersControllerModule from "viz/range_selector/sliders_controller";
+import seriesDataSourceModule from "viz/range_selector/series_data_source";
+import dataSourceModule from "data/data_source/data_source";
+import dateLocalization from "localization/date";
+import axisModule from "viz/axes/base_axis";
 
-var formatsAreEqual = function(format1, format2) {
+const _SeriesDataSource = seriesDataSourceModule.SeriesDataSource;
+const formatsAreEqual = function(format1, format2) {
     var testDate = new Date(0, 1, 2, 3, 4, 5, 6);
 
     return dateLocalization.format(testDate, format1) === dateLocalization.format(testDate, format2);
@@ -1560,6 +1560,9 @@ QUnit.test("With chart - pass marginOptions to axis", function(assert) {
     assert.deepEqual(this.axis.setMarginOptions.lastCall.args, [{
         margin: "options"
     }]);
+
+    assert.strictEqual(this.axis.setMarginOptions.callCount, 2);
+    assert.strictEqual(this.seriesDataSource.getMarginOptions.callCount, 2);
 });
 
 QUnit.test("Without chart - do not pass marginOptions to axis", function(assert) {

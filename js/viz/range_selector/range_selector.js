@@ -885,7 +885,10 @@ var dxRangeSelector = require("../core/base_widget").inherit({
     // ]);
     // that._axis.update(that._getOption("scale"));
     _completeSeriesDataSourceCreation(scaleOptions, seriesDataSource) {
-        var rect = this._clientRect;
+        const rect = this._clientRect;
+        const canvas = {
+            left: rect[0], top: rect[1], width: rect[2] - rect[0], height: rect[3] - rect[1]
+        };
 
         this._axis.updateOptions({
             type: scaleOptions.type,
@@ -899,9 +902,8 @@ var dxRangeSelector = require("../core/base_widget").inherit({
             }
         });
 
-        this._axis.updateCanvas({
-            left: rect[0], top: rect[1], width: rect[2] - rect[0], height: rect[3] - rect[1]
-        });
+        seriesDataSource.isShowChart() && this._axis.setMarginOptions(seriesDataSource.getMarginOptions(canvas));
+        this._axis.updateCanvas(canvas);
 
         seriesDataSource.createPoints();
     },
@@ -1191,6 +1193,10 @@ AxisWrapper.prototype = {
             createDateMarkersEvent(options, axis.getMarkerTrackers(), this._updateSelectedRangeCallback);
         }
         axis.drawScaleBreaks({ start: canvas.top, end: canvas.top + canvas.height });
+    },
+
+    setMarginOptions(options) {
+        this._axis.setMarginOptions(options);
     },
 
     getFullTicks: function() {

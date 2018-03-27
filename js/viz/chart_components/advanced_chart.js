@@ -16,19 +16,11 @@ var extend = require("../../core/utils/extend").extend,
     _noop = require("../../core/utils/common").noop,
     _extend = extend,
     vizUtils = require("../core/utils"),
-    _map = vizUtils.map;
+    _map = vizUtils.map,
+    mergeMarginOptions = vizUtils.mergeMarginOptions;
 
 function prepareAxis(axisOptions) {
     return _isArray(axisOptions) ? axisOptions.length === 0 ? [{}] : axisOptions : [axisOptions];
-}
-
-function mergeMarginOptions(opt1, opt2) {
-    return {
-        checkInterval: opt1.checkInterval || opt2.checkInterval,
-        size: Math.max(opt1.size || 0, opt2.size || 0),
-        percentStick: opt1.percentStick || opt2.percentStick,
-        sizePointNormalState: Math.max(opt1.sizePointNormalState || 0, opt2.sizePointNormalState || 0)
-    };
 }
 
 function processBubbleMargin(opt, bubbleSize) {

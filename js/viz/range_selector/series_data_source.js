@@ -241,11 +241,7 @@ SeriesDataSource.prototype = {
             if(seriesOptions.processBubbleSize === true) {
                 seriesOptions.size = bubbleSize;
             }
-
-            return {
-                checkInterval: marginOptions.checkInterval || seriesOptions.checkInterval,
-                size: Math.max(marginOptions.size || 0, seriesOptions.size || 0)
-            };
+            return vizUtils.mergeMarginOptions(marginOptions, seriesOptions);
         }, {});
     },
 
