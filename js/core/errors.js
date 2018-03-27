@@ -182,7 +182,7 @@ module.exports = errorUtils({
     * @name Errors and Warnings_E0121
     * @publicName E0121
     */
-    E0121: "The customItem field of the onCustomItemCreating action should contain an item or Promise of jQuery Deferred object resolved when an item is created",
+    E0121: "The 'customItem' field of the 'onCustomItemCreating' function's parameter should contain a custom item or a Promise that is resolved after the item is created.",
 
 
     /**
