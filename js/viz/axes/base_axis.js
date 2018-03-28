@@ -65,6 +65,8 @@ function getTickGenerator(options, incidentOccurred, skipTickGeneration) {
         skipTickGeneration: skipTickGeneration,
         skipCalculationLimits: options.skipCalculationLimits,
 
+        generateExtraTick: options.generateExtraTick,
+
         showCalculatedTicks: options.tick.showCalculatedTicks, // DEPRECATED IN 15_2
         showMinorCalculatedTicks: options.minorTick.showCalculatedTicks // DEPRECATED IN 15_2
     });
@@ -249,7 +251,8 @@ function configureGenerator(options, axisDivisionFactor, viewPort, screenDelta) 
     var tickGeneratorOptions = extend({}, options, {
         endOnTick: true,
         axisDivisionFactor: axisDivisionFactor,
-        skipCalculationLimits: true
+        skipCalculationLimits: true,
+        generateExtraTick: true
     });
 
     return function(tickInterval, skipTickGeneration, min, max) {

@@ -938,7 +938,7 @@ QUnit.test("getAggregationInfo. Ticks was generated with endOnTick", function(as
     const aggregationInfo = this.axis.getAggregationInfo(undefined, {});
 
     assert.deepEqual(aggregationInfo.ticks[0], -5);
-    assert.deepEqual(aggregationInfo.ticks[aggregationInfo.ticks.length - 1], 20);
+    assert.deepEqual(aggregationInfo.ticks[aggregationInfo.ticks.length - 1], 25);
 });
 
 QUnit.test("getAggregationInfo. With divisionFactor", function(assert) {
@@ -992,10 +992,10 @@ QUnit.test("getAggregationInfo. Default divisionFactor", function(assert) {
 
     const aggregationInfo = this.axis.getAggregationInfo(undefined, {});
 
-    assert.strictEqual(aggregationInfo.ticks.length, 28);
+    assert.strictEqual(aggregationInfo.ticks.length, 29);
     assert.strictEqual(aggregationInfo.interval, 1);
     assert.strictEqual(aggregationInfo.ticks[0], -8);
-    assert.strictEqual(aggregationInfo.ticks[aggregationInfo.ticks.length - 1], 19);
+    assert.strictEqual(aggregationInfo.ticks[aggregationInfo.ticks.length - 1], 20);
 });
 
 QUnit.test("getAggregationInfo with zooming", function(assert) {
@@ -1012,9 +1012,9 @@ QUnit.test("getAggregationInfo with zooming", function(assert) {
     const aggregationInfo = this.axis.getAggregationInfo(undefined, {});
 
     assert.strictEqual(aggregationInfo.interval, 0.2);
-    assert.strictEqual(aggregationInfo.ticks.length, 31);
+    assert.strictEqual(aggregationInfo.ticks.length, 32);
     assert.strictEqual(aggregationInfo.ticks[0], 1);
-    assert.strictEqual(aggregationInfo.ticks[aggregationInfo.ticks.length - 1], 7);
+    assert.strictEqual(aggregationInfo.ticks[aggregationInfo.ticks.length - 1], 7.2);
 });
 
 QUnit.test("getAggregationInfo with min/max", function(assert) {
@@ -1032,9 +1032,9 @@ QUnit.test("getAggregationInfo with min/max", function(assert) {
     const aggregationInfo = this.axis.getAggregationInfo(undefined, {});
 
     assert.strictEqual(aggregationInfo.interval, 0.2);
-    assert.strictEqual(aggregationInfo.ticks.length, 31);
+    assert.strictEqual(aggregationInfo.ticks.length, 32);
     assert.strictEqual(aggregationInfo.ticks[0], 1);
-    assert.strictEqual(aggregationInfo.ticks[aggregationInfo.ticks.length - 1], 7);
+    assert.strictEqual(aggregationInfo.ticks[aggregationInfo.ticks.length - 1], 7.2);
 });
 
 QUnit.test("getAggregationInfo should have ticks out from bounds", function(assert) {
@@ -1052,7 +1052,7 @@ QUnit.test("getAggregationInfo should have ticks out from bounds", function(asse
 
     assert.strictEqual(aggregationInfo.interval, 5);
     assert.strictEqual(aggregationInfo.ticks[0], 0);
-    assert.strictEqual(aggregationInfo.ticks[aggregationInfo.ticks.length - 1], 100);
+    assert.strictEqual(aggregationInfo.ticks[aggregationInfo.ticks.length - 1], 105);
 });
 
 QUnit.test("aggregationInfo should not genrate tick if min or max is undefined", function(assert) {
@@ -1100,7 +1100,7 @@ QUnit.test("skip ckecking max count ticks on getAggregationInfo", function(asser
 
     const aggregationInfo = this.axis.getAggregationInfo(undefined, {});
 
-    assert.strictEqual(aggregationInfo.ticks.length, 41);
+    assert.strictEqual(aggregationInfo.ticks.length, 42);
 });
 
 QUnit.test("datetime getAggregationInfo", function(assert) {
@@ -1116,7 +1116,7 @@ QUnit.test("datetime getAggregationInfo", function(assert) {
 
     const aggregationInfo = this.axis.getAggregationInfo(undefined, {});
 
-    assert.strictEqual(aggregationInfo.ticks.length, 79);
+    assert.strictEqual(aggregationInfo.ticks.length, 80);
 });
 
 QUnit.test("logarithmic getAggregationInfo", function(assert) {
