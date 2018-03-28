@@ -1172,12 +1172,12 @@ Axis.prototype = {
         return ticks;
     },
 
-    getAggregationInfo(useAllAggregatedPoints) {
+    getAggregationInfo(useAllAggregatedPoints, range) {
         let that = this,
             options = that._options,
             marginOptions = that._marginOptions,
             axisDivisionFactor = options.aggregationGroupWidth || marginOptions && (marginOptions.sizePointNormalState) || DEFAULT_AGGREGATION_GROUP_WIDTH,
-            viewPort = that.getTranslator().getBusinessRange(),
+            viewPort = new rangeModule.Range(that.getTranslator().getBusinessRange()).addRange(range),
             zoomArgs = that._zoomArgs,
             minVisible = zoomArgs && zoomArgs.min || viewPort.minVisible,
             maxVisible = zoomArgs && zoomArgs.max || viewPort.maxVisible,
