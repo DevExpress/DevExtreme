@@ -38,7 +38,6 @@ var TOOLBAR_CLASS = "dx-toolbar",
     TOOLBAR_MENU_BUTTON_CLASS = "dx-toolbar-menu-button",
     TOOLBAR_LIST_VISIBLE_CLASS = "dx-toolbar-list-visible",
     TOOLBAR_ITEMS_CONTAINER_CLASS = "dx-toolbar-items-container",
-    TOOLBAR_GROUP_CLASS = "dx-toolbar-group",
 
     DROP_DOWN_MENU_CLASS = "dx-dropdownmenu";
 
@@ -46,55 +45,6 @@ QUnit.module("render", {
     beforeEach: function() {
         this.element = $("#toolbar");
     }
-});
-
-QUnit.test("containers", function(assert) {
-    this.element.dxToolbar({});
-
-    var beforeContainer = this.element.find("." + TOOLBAR_BEFORE_CONTAINER_CLASS);
-    assert.equal(beforeContainer.length, 1);
-
-    var afterContainer = this.element.find("." + TOOLBAR_AFTER_CONTAINER_CLASS);
-    assert.equal(afterContainer.length, 1);
-
-    var centerContainer = this.element.find("." + TOOLBAR_CENTER_CONTAINER_CLASS);
-    assert.equal(centerContainer.length, 1);
-});
-
-QUnit.test("items - widgets", function(assert) {
-    this.element.dxToolbar({
-        items: [
-            { location: 'before', widget: 'button', options: { text: 'Before Button' } },
-            { location: 'after', widget: 'button', options: { text: 'After Button' } },
-            {
-                location: 'center', widget: 'tabs', options: {
-                    items: [{ text: "Tab 1" }, { text: "Tab 2" }, { text: "Tab 3" }]
-                }
-            }
-        ]
-    });
-
-    var items = this.element.find("." + TOOLBAR_ITEM_CLASS);
-    assert.equal(items.length, 3);
-
-    assert.equal(items.eq(0).text(), "Before Button");
-    assert.equal(items.eq(1).text(), "Tab 1Tab 2Tab 3");
-    assert.equal(items.eq(2).text(), "After Button");
-
-});
-
-QUnit.test("items - label", function(assert) {
-    this.element.dxToolbar({
-        items: [
-            { location: 'center', text: 'Label' }
-        ]
-    });
-
-    var label = this.element.find("." + TOOLBAR_ITEM_CLASS);
-
-    assert.equal(label.length, 1);
-    assert.equal(label.text(), "Label");
-    assert.ok(label.hasClass(TOOLBAR_LABEL_CLASS));
 });
 
 QUnit.test("label correctly fits into container", function(assert) {
@@ -142,19 +92,6 @@ QUnit.test("items - long labels", function(assert) {
 
 });
 
-QUnit.test("items - custom html", function(assert) {
-    this.element.dxToolbar({
-        items: [
-            { location: 'center', html: '<b>Label</b>' }
-        ]
-    });
-
-    var label = this.element.find("b");
-    assert.equal(label.length, 1);
-    assert.equal(label.text(), "Label");
-    assert.ok(this.element.find("." + TOOLBAR_ITEM_CLASS).hasClass(TOOLBAR_LABEL_CLASS));
-});
-
 QUnit.test("items - long custom html", function(assert) {
     this.element.dxToolbar({
         items: [
@@ -183,34 +120,6 @@ QUnit.test("items - long custom html", function(assert) {
     assert.ok(parseFloat($label.css("max-width")) < maxLabelWidth);
 });
 
-QUnit.test("items - location", function(assert) {
-    var element = this.element.dxToolbar({
-        items: [
-            { location: 'before', text: 'before' },
-            { location: 'after', text: 'after' },
-            { location: 'center', text: 'center' }
-        ]
-    });
-
-    $.each(["before", "after", "center"], function() {
-        assert.equal(element.find("." + TOOLBAR_CLASS + "-" + this).text(), this);
-    });
-});
-
-QUnit.test("items - location", function(assert) {
-    var element = this.element.dxToolbar({
-        items: [
-            { location: 'before', text: 'before' },
-            { location: 'after', text: 'after' },
-            { location: 'center', text: 'center' }
-        ]
-    });
-
-    $.each(["before", "after", "center"], function() {
-        assert.equal(element.find("." + TOOLBAR_CLASS + "-" + this).text(), this);
-    });
-});
-
 QUnit.test("Center element has correct margin with RTL", function(assert) {
     var element = this.element.dxToolbar({
             rtlEnabled: true,
@@ -222,20 +131,6 @@ QUnit.test("Center element has correct margin with RTL", function(assert) {
         margin = element.find("." + TOOLBAR_CLASS + "-center").get(0).style.margin;
 
     assert.equal(margin, "0px auto", "aligned by center");
-});
-
-
-QUnit.module("option change handlers", {
-    beforeEach: function() {
-        this.element = $("#toolbar");
-    }
-});
-
-QUnit.test("items", function(assert) {
-    var instance = this.element.dxToolbar({ items: [{ location: "center", text: "0" }] }).dxToolbar("instance");
-
-    instance.option("items", [{ location: "center", text: "1" }]);
-    assert.equal(this.element.text(), "1");
 });
 
 
@@ -722,24 +617,6 @@ QUnit.test("it should be possible to expand toolbar with no items in submenu", f
 });
 
 
-QUnit.module("regressions", {
-    beforeEach: function() {
-        this.element = $("#toolbar").dxToolbar({});
-        this.instance = this.element.dxToolbar("instance");
-    }
-});
-
-QUnit.test("B231277", function(assert) {
-    this.instance.option("items", [{ location: "center" }]);
-    assert.equal($.trim(this.element.text()), "");
-
-    this.instance.option("items", [{ location: "center", text: undefined }]);
-    assert.equal($.trim(this.element.text()), "");
-
-    this.instance.option("items", [{ location: "center", text: null }]);
-    assert.equal($.trim(this.element.text()), "");
-});
-
 QUnit.module("widget sizing render");
 
 QUnit.test("default", function(assert) {
@@ -893,69 +770,6 @@ QUnit.test("title should be centered considering different before/after block wi
 
     var $center = $element.find(".dx-toolbar-center").eq(0);
     assert.equal(parseInt($center.css("margin-left")), 60);
-});
-
-
-QUnit.module("aria accessibility");
-
-QUnit.test("aria role", function(assert) {
-    var $element = $("#widget").dxToolbar();
-
-    assert.equal($element.attr("role"), "toolbar", "role is correct");
-});
-
-
-QUnit.module("item groups", {
-    beforeEach: function() {
-        this.$element = $("#widget");
-        this.groups = [
-            {
-                location: "before",
-                items: [
-                    { location: "before", text: "Item A-1" },
-                    { location: "after", text: "Item A-2" }
-                ]
-            },
-            {
-                items: [
-                    { text: "Item B-1", visible: false },
-                    { text: "Item B-2" },
-                    { text: "Item B-3" }
-                ]
-            },
-            {
-                location: "after",
-                items: [
-                    { text: "Item C-1" },
-                    { text: "Item C-2" }
-                ]
-            }
-        ];
-    }
-});
-
-QUnit.test("toolbar should show item groups", function(assert) {
-    var $element = this.$element.dxToolbar({
-            items: this.groups
-        }),
-        $groups = $element.find("." + TOOLBAR_GROUP_CLASS);
-
-    assert.equal($groups.length, 3, "3 groups rendered");
-    assert.equal($groups.eq(0).find("." + TOOLBAR_ITEM_CLASS).length, 2, "first group contains 2 items");
-    assert.equal($groups.eq(1).find("." + TOOLBAR_ITEM_CLASS).length, 3, "second group contains 3 items");
-});
-
-QUnit.test("toolbar groups should be placed inside toolbar blocks", function(assert) {
-    var $element = this.$element.dxToolbar({
-            items: this.groups
-        }),
-        $before = $element.find("." + TOOLBAR_BEFORE_CONTAINER_CLASS).eq(0),
-        $center = $element.find("." + TOOLBAR_CENTER_CONTAINER_CLASS).eq(0),
-        $after = $element.find("." + TOOLBAR_AFTER_CONTAINER_CLASS).eq(0);
-
-    assert.equal($before.find("." + TOOLBAR_ITEM_CLASS).length, 2, "2 items are in before");
-    assert.equal($center.find("." + TOOLBAR_ITEM_CLASS).length, 3, "3 items are in center");
-    assert.equal($after.find("." + TOOLBAR_ITEM_CLASS).length, 2, "2 items are in after");
 });
 
 
@@ -1606,102 +1420,6 @@ QUnit.module("default template", {
 
         return toolbar.itemElements().eq(0).find(".dx-item-content").contents();
     }
-});
-
-QUnit.test("template should be rendered correctly with text", function(assert) {
-    var $content = this.prepareItemTest("custom");
-
-    assert.equal($content.text(), "custom");
-});
-
-QUnit.test("template should be rendered correctly with boolean", function(assert) {
-    var $content = this.prepareItemTest(true);
-
-    assert.equal($.trim($content.text()), "true");
-});
-
-QUnit.test("template should be rendered correctly with number", function(assert) {
-    var $content = this.prepareItemTest(1);
-
-    assert.equal($.trim($content.text()), "1");
-});
-
-QUnit.test("template should be rendered correctly with text", function(assert) {
-    var $content = this.prepareItemTest({ text: "custom" });
-
-    assert.equal($.trim($content.text()), "custom");
-});
-
-QUnit.test("template should be rendered correctly with html", function(assert) {
-    var $content = this.prepareItemTest({ html: "<span>test</span>" });
-
-    var $span = $content.is("span") ? $content : $content.children();
-    assert.ok($span.length);
-    assert.equal($span.text(), "test");
-});
-
-QUnit.test("template should be rendered correctly with htmlstring", function(assert) {
-    var $content = this.prepareItemTest("<span>test</span>");
-
-    assert.equal($content.text(), "<span>test</span>");
-});
-
-QUnit.test("template should be rendered correctly with html & text", function(assert) {
-    var $content = this.prepareItemTest({ text: "text", html: "<span>test</span>" });
-
-    var $span = $content.is("span") ? $content : $content.children();
-
-    assert.ok($span.length);
-    assert.equal($content.text(), "test");
-});
-
-QUnit.test("template should be rendered correctly with button without options", function(assert) {
-    var $content = this.prepareItemTest({ widget: "button" });
-
-    var button = $content.filter(".dx-button");
-    assert.equal(button.length, 1);
-});
-
-QUnit.test("template should be rendered correctly with dxbutton without options", function(assert) {
-    var $content = this.prepareItemTest({ widget: "dxButton" });
-
-    var button = $content.filter(".dx-button");
-    assert.equal(button.length, 1);
-});
-
-QUnit.test("template should be rendered correctly with button", function(assert) {
-    var $content = this.prepareItemTest({ widget: "button", options: { text: "test" } });
-
-    var button = $content.filter(".dx-button");
-    assert.equal(button.length, 1);
-    assert.equal($.trim(button.text()), "test");
-});
-
-QUnit.test("template should be rendered correctly with dxtabs", function(assert) {
-    var $content = this.prepareItemTest({ widget: "dxTabs", options: { items: [{ text: "test" }] } });
-
-    var tabs = $content.filter(".dx-tabs");
-
-    assert.equal(tabs.length, 1);
-    assert.equal(tabs.find(".dx-tab").length, 1);
-    assert.equal($.trim(tabs.text()), "test");
-});
-
-QUnit.test("template should be rendered correctly with tabs", function(assert) {
-    var $content = this.prepareItemTest({ widget: "tabs", options: { items: [{ text: "test" }] } });
-
-    var tabs = $content.filter(".dx-tabs");
-
-    assert.equal(tabs.length, 1);
-    assert.equal(tabs.find(".dx-tab").length, 1);
-    assert.equal($.trim(tabs.text()), "test");
-});
-
-QUnit.test("template should be rendered correctly with dropDownMenu", function(assert) {
-    var $content = this.prepareItemTest({ widget: "dropDownMenu", options: { items: [{ text: "test" }] } });
-
-    var dropDown = $content.filter(".dx-dropdownmenu");
-    assert.equal(dropDown.length, 1);
 });
 
 QUnit.test("T430159 dropdown menu should be closed after click on item if location is defined", function(assert) {
