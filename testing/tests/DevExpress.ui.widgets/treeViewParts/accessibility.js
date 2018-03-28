@@ -22,52 +22,19 @@ QUnit.module("aria accessibility", {
     }
 });
 
-QUnit.test("aria role", function(assert) {
-    assert.equal(this.$element.attr("role"), "tree", "role is correct");
-});
-
-QUnit.test("aria role for items", function(assert) {
-    var $item = this.$element.find(".dx-treeview-node");
-    assert.equal($item.attr("role"), "treeitem", "role is correct");
-});
-
-QUnit.test("aria label for items", function(assert) {
-    var $item1 = this.$element.find(".dx-treeview-node:eq(0)"),
-        $item2 = this.$element.find(".dx-treeview-node:eq(1)");
-
-    assert.equal($item1.attr("aria-label"), "Item 1", "label for 1st item is correct");
-    assert.equal($item2.attr("aria-label"), "Item 11", "label for 2nd ite is correct");
-});
-
-QUnit.test("aria role for item levels", function(assert) {
-    var $item = this.$element.find(".dx-treeview-node-container");
-    assert.equal($item.attr("role"), "group", "role is correct");
-});
-
 QUnit.test("aria expanded for items", function(assert) {
     var $item1 = this.$element.find(".dx-treeview-node:eq(0)"),
         $itemElements = this.instance.itemElements();
 
-    assert.equal($item1.attr("aria-expanded"), "true", "expanded item has aria-expanded as true");
-
     this.instance.collapseItem($itemElements[0]);
     this.clock.tick(0);
+
     assert.equal($item1.attr("aria-expanded"), "false", "aria-expanded changing on item collapsing");
-});
-
-QUnit.test("aria level for items", function(assert) {
-    var $item1 = this.$element.find(".dx-treeview-node:eq(0)"),
-        $item2 = this.$element.find(".dx-treeview-node:eq(1)");
-
-    assert.equal($item1.attr("aria-level"), "1", "level set correct");
-    assert.equal($item2.attr("aria-level"), "2", "level set correct");
 });
 
 QUnit.test("aria selected for items via API", function(assert) {
     var $item = this.$element.find(".dx-treeview-node:eq(0)"),
         $itemElements = this.instance.itemElements();
-
-    assert.equal($item.attr("aria-selected"), "false", "item is unselected by default");
 
     this.instance.selectItem($itemElements[0]);
     assert.equal($item.attr("aria-selected"), "true", "item is selected");
