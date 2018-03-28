@@ -1017,8 +1017,8 @@ QUnit.test("Scheduler timeline workweek should contain two spans in header panel
         var $cell = $firstRowCells.eq(i);
         assert.equal($cell.text(), formatWeekdayAndDay(new Date(2015, 9, startDate + i)), "Cell text is OK");
         assert.equal($cell.find("span").length, 2, "Cell contains two spans in material theme");
-        assert.ok($cell.find("span").first().hasClass("dx-scheduler-header-panel-cell-firstline"), "first span has correct class");
-        assert.ok($cell.find("span").last().hasClass("dx-scheduler-header-panel-cell-secondline"), "second span has correct class");
+        assert.ok($cell.find("span").first().hasClass("dx-scheduler-header-panel-cell-date"), "first span has correct class");
+        assert.ok($cell.find("span").last().hasClass("dx-scheduler-header-panel-cell-date"), "second span has correct class");
         assert.equal($cell.attr("colspan"), 2, "Cell colspan is OK");
     }
     themes.isMaterial = origIsMaterial;

@@ -2,8 +2,7 @@
 
 var $ = require("../../core/renderer"),
     registerComponent = require("../../core/component_registrator"),
-    SchedulerTimeline = require("./ui.scheduler.timeline"),
-    TimelineHeaderFormatter = require("./ui.scheduler.timeline_header_formatter");
+    SchedulerTimeline = require("./ui.scheduler.timeline");
 
 var TIMELINE_CLASS = "dx-scheduler-timeline-week",
     HEADER_PANEL_CELL_CLASS = "dx-scheduler-header-panel-cell",
@@ -42,7 +41,7 @@ var SchedulerTimelineWeek = SchedulerTimeline.inherit({
 
                 cellTemplate.render(templateOptions);
             } else {
-                TimelineHeaderFormatter.fillDateHeaderCell($th, text);
+                $th.text(text);
             }
 
             $th.addClass(HEADER_PANEL_CELL_CLASS).addClass(HEADER_PANEL_WEEK_CELL_CLASS).attr("colSpan", colspan);

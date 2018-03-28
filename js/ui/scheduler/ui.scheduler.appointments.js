@@ -33,7 +33,7 @@ var COMPONENT_CLASS = "dx-scheduler-scrollable-appointments",
     APPOINTMENT_DATE_CLASS = "dx-scheduler-appointment-content-date",
     RECURRING_ICON_CLASS = "dx-scheduler-appointment-recurrence-icon",
     ALL_DAY_CONTENT_CLASS = "dx-scheduler-appointment-content-allday",
-    APPOINTMENT_GROUP_MATERIAL_OFFSET = 8,
+    APPOINTMENT_GROUP_BUTTON_MATERIAL_OFFSET = 20,
 
     DBLCLICK_EVENT_NAME = eventUtils.addNamespace(dblclickEvent.name, "dxSchedulerAppointment");
 
@@ -846,7 +846,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
             rtlOffset = 0;
 
         if(this.option("rtlEnabled")) {
-            rtlOffset = buttonWidth; // TODO rtlOffset in material theme
+            rtlOffset = buttonWidth;
         }
 
         each(this._virtualAppointments, (function(groupIndex) {
@@ -858,7 +858,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
                 cellButtonWidth = buttonWidth;
 
             if(themes.isMaterial()) {
-                cellButtonWidth -= APPOINTMENT_GROUP_MATERIAL_OFFSET;
+                cellButtonWidth -= APPOINTMENT_GROUP_BUTTON_MATERIAL_OFFSET;
             }
 
             this.notifyObserver("renderDropDownAppointments", {

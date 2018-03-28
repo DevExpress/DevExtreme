@@ -1122,6 +1122,18 @@ var Scheduler = Widget.inherit({
                          * @default true @for Material
                          */
                     useDropDownViewSwitcher: true,
+                    dateCellTemplate: function(data, index, element) {
+                        var text = data.text;
+
+                        text.split(" ").forEach(function(text, index) {
+                            var span = $("<span>")
+                                .text(text)
+                                .addClass("dx-scheduler-header-panel-cell-date");
+
+                            element.append(span);
+                            if(!index) element.append(" ");
+                        });
+                    }
                 }
             }
         ]);
