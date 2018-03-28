@@ -38,8 +38,7 @@ var toSelector = function(cssClass) {
 };
 
 var backgroundPosition = function($element) {
-    var backgroundPosition = $element.get(0).style.backgroundPosition || "0% 0%";
-    return parseInt(backgroundPosition.split(" ")[0], 10);
+    return parseInt($element.css("background-position").split(" ")[0], 10);
 };
 
 var image = {
