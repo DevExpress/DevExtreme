@@ -2954,3 +2954,66 @@ QUnit.module("Layout manager responsibility", {
         assert.ok($testContainer.hasClass(internals.LAYOUT_MANAGER_ONE_COLUMN), "Layout manager has one column mode");
     });
 });
+
+
+QUnit.module("Button item", () => {
+    QUnit.test("Base rendering", (assert) => {
+        // arrange, act
+        let $testContainer = $("#container");
+
+        $testContainer.dxLayoutManager({
+            items: [{
+                itemType: "button"
+            }, {
+                itemType: "button",
+                buttonOptions: { text: "Test" }
+            }]
+        });
+
+        let $buttonItems = $testContainer.find(".dx-field-button-item"),
+            secondButtonText = $buttonItems.last().text();
+
+        // assert
+        assert.equal($buttonItems.length, 2, "There are 2 button items");
+        assert.ok($buttonItems.first().hasClass("dx-field-item"), "Item has a field-item class");
+        assert.ok($buttonItems.first().hasClass("dx-field-button-item"), "Item has a field-button-item class");
+        assert.equal(secondButtonText, "Test", "Button gets the correct config");
+    });
+
+    QUnit.test("cssClass", (assert) => {
+        // arrange, act
+        let $testContainer = $("#container");
+
+        $testContainer.dxLayoutManager({
+            items: [{
+                itemType: "button",
+                cssClass: "privateClass"
+            }]
+        });
+
+        let $buttonItem = $testContainer.find(".dx-field-button-item");
+        // assert
+        assert.ok($buttonItem.hasClass("privateClass"), "Item has a custom class");
+    });
+
+    QUnit.test("column class", (assert) => {
+        // arrange, act
+        let $testContainer = $("#container");
+
+        $testContainer.dxLayoutManager({
+            colCount: 2,
+            items: [{
+                itemType: "button"
+            }, {
+                itemType: "button"
+            }]
+        });
+
+        let $buttonItems = $testContainer.find(".dx-field-button-item");
+        // assert
+        assert.ok($buttonItems.first().hasClass("dx-col-0"), "Correct column index");
+        assert.ok($buttonItems.first().hasClass("dx-first-col"), "Correct column index");
+        assert.ok($buttonItems.last().hasClass("dx-col-1"), "Correct column index");
+        assert.ok($buttonItems.last().hasClass("dx-last-col"), "Correct column index");
+    });
+});
