@@ -413,6 +413,27 @@ QUnit.testStart(function() {
         cellData.cellCustomField = "cell-custom-data";
         assert.strictEqual($element.find("." + CELL_CLASS).first().data("dxCellData").cellCustomField, undefined, "Cell data is not affected");
     });
+
+    QUnit.test("Cells have right cellData in horizontal grouped WorkSpace Day view", function(assert) {
+        this.instance.option({
+            currentDate: new Date(2018, 2, 16),
+            grouping: "horizontal",
+            startDayHour: 9,
+            groups: [{
+                name: "one",
+                items: [{ id: 1, text: "a" }, { id: 2, text: "b" }]
+            }]
+        });
+
+        var firstCellData = this.instance.$element().find(".dx-scheduler-date-table-cell").eq(0).data("dxCellData"),
+            secondCellData = this.instance.$element().find(".dx-scheduler-date-table-cell").eq(36).data("dxCellData");
+
+        assert.deepEqual(firstCellData.startDate, new Date(2018, 2, 16, 9), "cell has right startDate");
+        assert.deepEqual(firstCellData.endDate, new Date(2018, 2, 16, 9, 30), "cell has right endtDate");
+
+        assert.deepEqual(secondCellData.startDate, new Date(2018, 2, 16, 12), "cell has right startDate");
+        assert.deepEqual(secondCellData.endDate, new Date(2018, 2, 16, 12, 30), "cell has right endtDate");
+    });
 })("Work Space Day");
 
 (function() {
@@ -773,6 +794,27 @@ QUnit.testStart(function() {
         assert.equal(spy.callCount, 344);
         spy.restore();
     });
+
+    QUnit.test("Cells have right cellData in horizontal grouped WorkSpace Week view", function(assert) {
+        this.instance.option({
+            currentDate: new Date(2018, 2, 16),
+            grouping: "horizontal",
+            startDayHour: 9,
+            groups: [{
+                name: "one",
+                items: [{ id: 1, text: "a" }, { id: 2, text: "b" }]
+            }]
+        });
+
+        var firstCellData = this.instance.$element().find(".dx-scheduler-date-table-cell").eq(25).data("dxCellData"),
+            secondCellData = this.instance.$element().find(".dx-scheduler-date-table-cell").eq(248).data("dxCellData");
+
+        assert.deepEqual(firstCellData.startDate, new Date(2018, 2, 15, 10, 30), "cell has right startDate");
+        assert.deepEqual(firstCellData.endDate, new Date(2018, 2, 15, 11), "cell has right endtDate");
+
+        assert.deepEqual(secondCellData.startDate, new Date(2018, 2, 14, 11, 30), "cell has right startDate");
+        assert.deepEqual(secondCellData.endDate, new Date(2018, 2, 14, 12), "cell has right endtDate");
+    });
 })("Work Space Week");
 
 (function() {
@@ -1049,6 +1091,26 @@ QUnit.testStart(function() {
         } finally {
             this.instance.getStartViewDate = origGetFirstViewDate;
         }
+    });
+
+    QUnit.test("Cells have right cellData in horizontal grouped WorkSpace Month view", function(assert) {
+        this.instance.option({
+            currentDate: new Date(2018, 2, 1),
+            grouping: "horizontal",
+            groups: [{
+                name: "one",
+                items: [{ id: 1, text: "a" }, { id: 2, text: "b" }]
+            }]
+        });
+
+        var firstCellData = this.instance.$element().find(".dx-scheduler-date-table-cell").eq(0).data("dxCellData"),
+            secondCellData = this.instance.$element().find(".dx-scheduler-date-table-cell").eq(51).data("dxCellData");
+
+        assert.deepEqual(firstCellData.startDate, new Date(2018, 1, 25, 0), "cell has right startDate");
+        assert.deepEqual(firstCellData.endDate, new Date(2018, 1, 26, 0), "cell has right endtDate");
+
+        assert.deepEqual(secondCellData.startDate, new Date(2018, 2, 6, 0), "cell has right startDate");
+        assert.deepEqual(secondCellData.endDate, new Date(2018, 2, 7, 0), "cell has right endtDate");
     });
 
 })("Work Space Month");
