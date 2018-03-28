@@ -1130,7 +1130,7 @@ var Scheduler = Widget.inherit({
                                 .text(text)
                                 .addClass("dx-scheduler-header-panel-cell-date");
 
-                            element.append(span);
+                            $(element).append(span);
                             if(!index) element.append(" ");
                         });
                     }

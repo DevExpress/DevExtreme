@@ -17,8 +17,7 @@ var $ = require("jquery"),
     dateLocalization = require("localization/date"),
     resizeCallbacks = require("core/utils/resize_callbacks"),
     dateUtils = require("core/utils/date"),
-    dataUtils = require("core/element_data"),
-    themes = require("ui/themes");
+    dataUtils = require("core/element_data");
 
 QUnit.testStart(function() {
     $("#qunit-fixture").html('<div id="scheduler-timeline"></div>\
@@ -996,34 +995,6 @@ QUnit.test("Scheduler timeline workweek should contain two rows in header panel"
     }
 
 });
-
-QUnit.test("Scheduler timeline workweek should contain two spans in header panel cell in Material theme", function(assert) {
-    var origIsMaterial = themes.isMaterial;
-    themes.isMaterial = function() { return true; };
-    this.instance.option({
-        currentDate: new Date(2015, 9, 29),
-        firstDayOfWeek: 1,
-        startDayHour: 4,
-        endDayHour: 5
-    });
-
-    var $rows = this.instance.$element().find(".dx-scheduler-header-row"),
-        $firstRowCells = $rows.first().find("th"),
-        startDate = 26;
-
-    assert.equal($rows.length, 2, "There are 2 rows in header panel");
-
-    for(var i = 0; i < 5; i++) {
-        var $cell = $firstRowCells.eq(i);
-        assert.equal($cell.text(), formatWeekdayAndDay(new Date(2015, 9, startDate + i)), "Cell text is OK");
-        assert.equal($cell.find("span").length, 2, "Cell contains two spans in material theme");
-        assert.ok($cell.find("span").first().hasClass("dx-scheduler-header-panel-cell-date"), "first span has correct class");
-        assert.ok($cell.find("span").last().hasClass("dx-scheduler-header-panel-cell-date"), "second span has correct class");
-        assert.equal($cell.attr("colspan"), 2, "Cell colspan is OK");
-    }
-    themes.isMaterial = origIsMaterial;
-});
-
 
 QUnit.test("Scheduler timeline workweek view should be correct, if currentDate is Monday, but firstDayOfWeek = 0", function(assert) {
     var $element = this.instance.$element();
