@@ -7,9 +7,7 @@ var extend = require("../../core/utils/extend").extend,
     chartSeries = scatterSeries.chart,
     polarSeries = scatterSeries.polar,
     _extend = extend,
-    _each = each,
-
-    DEFAULT_BAR_POINT_SIZE = 3;
+    _each = each;
 
 exports.chart = {};
 exports.polar = {};
@@ -93,10 +91,6 @@ var baseBarSeriesMethods = {
                 });
             };
         that._animatePoints(firstDrawing, complete, animateFunc);
-    },
-
-    _getPointSize: function() {
-        return DEFAULT_BAR_POINT_SIZE;
     },
 
     getValueRangeInitialValue: areaSeries.getValueRangeInitialValue,

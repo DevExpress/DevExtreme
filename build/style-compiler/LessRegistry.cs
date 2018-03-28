@@ -47,7 +47,9 @@ namespace StyleCompiler
             COLOR_SCHEME_DARKMOON = "darkmoon",
             COLOR_SCHEME_SOFTBLUE = "softblue",
             COLOR_SCHEME_DARKVIOLET = "darkviolet",
-            COLOR_SCHEME_GREENMIST = "greenmist";
+            COLOR_SCHEME_GREENMIST = "greenmist",
+
+            COLOR_SCHEME_BLUELIGHT = "blue." + COLOR_SCHEME_LIGHT;
 
         public const string
             SIZE_SCHEME_DEFAULT = "default",
@@ -115,7 +117,7 @@ namespace StyleCompiler
             new KnownThemeInfo {
                 Name = THEME_MATERIAL,
                 PublicName = THEME_MATERIAL,
-                ColorSchemeNames = new[] { COLOR_SCHEME_LIGHT }
+                ColorSchemeNames = new[] { COLOR_SCHEME_BLUELIGHT }
             },
             new KnownThemeInfo {
                 Name = THEME_WIN10,

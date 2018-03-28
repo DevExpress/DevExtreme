@@ -2,19 +2,15 @@
 
 var seriesNS = {},
     typeUtils = require("../../core/utils/type"),
-    extend = require("../../core/utils/extend").extend,
-    inArray = require("../../core/utils/array").inArray,
-    each = require("../../core/utils/iterator").each,
+    _extend = require("../../core/utils/extend").extend,
+    _each = require("../../core/utils/iterator").each,
     pointModule = require("./points/base_point"),
     _isDefined = typeUtils.isDefined,
     vizUtils = require("../core/utils"),
-    _map = vizUtils.map,
-    _each = each,
-    _extend = extend,
+    mathUtils = require("../../core/utils/math"),
     _isEmptyObject = typeUtils.isEmptyObject,
     _normalizeEnum = vizUtils.normalizeEnum,
     _noop = require("../../core/utils/common").noop,
-    _inArray = inArray,
     states = require("../components/consts").states,
 
     rangeCalculator = require("./helpers/range_data_calculator"),
@@ -69,10 +65,10 @@ seriesNS.mixins = {
 seriesNS.mixins.chart.scatter = scatterSeries.chart;
 seriesNS.mixins.polar.scatter = scatterSeries.polar;
 
-extend(seriesNS.mixins.pie, pieSeries);
-extend(seriesNS.mixins.chart, lineSeries.chart, areaSeries.chart, barSeries.chart, rangeSeries.chart,
+_extend(seriesNS.mixins.pie, pieSeries);
+_extend(seriesNS.mixins.chart, lineSeries.chart, areaSeries.chart, barSeries.chart, rangeSeries.chart,
     bubbleSeries.chart, financialSeries, stackedSeries.chart);
-extend(seriesNS.mixins.polar, lineSeries.polar, areaSeries.polar, barSeries.polar, rangeSeries.polar, bubbleSeries.polar, stackedSeries.polar);
+_extend(seriesNS.mixins.polar, lineSeries.polar, areaSeries.polar, barSeries.polar, rangeSeries.polar, bubbleSeries.polar, stackedSeries.polar);
 
 function includePointsMode(mode) {
     mode = _normalizeEnum(mode);
@@ -169,6 +165,10 @@ function Series(settings, options) {
     that._argumentAxis = settings.argumentAxis;
     that._legendCallback = _noop;
     that.updateOptions(options);
+}
+
+function getData(pointData) {
+    return pointData.data;
 }
 
 exports.Series = Series;
@@ -378,11 +378,11 @@ Series.prototype = {
         that._endUpdateData();
     },
 
-    _getData: function() {
+    _getData() {
         var data = this._data || [];
 
         if(this.useAggregation()) {
-            data = this._aggregateData(data);
+            data = this._resample(this.getArgumentAxis().getAggregationInfo(this._useAllAggregatedPoints), data);
         }
 
         return data;
@@ -394,7 +394,56 @@ Series.prototype = {
         return aggregation && aggregation.enabled;
     },
 
-    createPoints: function() {
+    createPoints: function(useAllAggregatedPoints) {
+        var that = this,
+            isAggregationZooming = that.useAggregation() && that._checkZooming();
+
+        if(_isDefined(useAllAggregatedPoints) || !that._useAllAggregatedPoints || isAggregationZooming) {
+            that._normalizeUsingAllAggregatedPoints(useAllAggregatedPoints);
+            that._createPoints();
+            return true;
+        }
+        return false;
+    },
+
+    _checkZooming: function() {
+        var that = this,
+            argumentAxis = that.getArgumentAxis(),
+            viewport,
+            businessRange,
+            min,
+            max,
+            distance,
+            precision,
+            viewportSizeChanged;
+
+        if(!argumentAxis || !argumentAxis.getTranslator) {
+            return false;
+        }
+
+        viewport = argumentAxis.getViewport();
+        businessRange = argumentAxis.getTranslator().getBusinessRange();
+        min = viewport ? viewport.min : businessRange.minVisible;
+        max = viewport ? viewport.max : businessRange.maxVisible;
+
+        if(that.argumentAxisType === "logarithmic") {
+            min = vizUtils.getLog(min, businessRange.base);
+            max = vizUtils.getLog(max, businessRange.base);
+        }
+        distance = that.argumentAxisType === DISCRETE ? vizUtils.getCategoriesInfo(businessRange.categories, min, max).categories.length : Math.abs(max - min);
+        precision = mathUtils.getPrecision(distance);
+        precision = precision > 1 ? Math.pow(10, precision - 2) : 1;
+        viewportSizeChanged = Math.round((that._viewportLength - distance) * precision) / precision !== 0;
+        that._viewportLength = distance;
+
+        return viewportSizeChanged;
+    },
+
+    _normalizeUsingAllAggregatedPoints: function(useAllAggregatedPoints) {
+        this._useAllAggregatedPoints = this.useAggregation() && (this.argumentAxisType === DISCRETE || ((this._data || []).length > 1 && !!useAllAggregatedPoints));
+    },
+
+    _createPoints: function() {
         var that = this,
             allPoints = that._allPoints = (that._points || []).slice(),
             oldPointsByArgument = that.pointsByArgument || {},
@@ -456,50 +505,6 @@ Series.prototype = {
                 elem.remove();
             });
         }
-    },
-
-    _aggregateData: function(data) {
-        var that = this,
-            categories,
-            sizePoint = that._getPointSize(),
-            pointsLength = data.length,
-            discreteMin,
-            discreteMax,
-            count,
-            argumentAxis = that.getArgumentAxis(),
-            viewport = argumentAxis.getViewport(),
-            min = viewport && viewport.min,
-            max = viewport && viewport.max,
-            argTranslator = argumentAxis.getTranslator(),
-            isDiscrete = that.argumentAxisType === DISCRETE || that.valueAxisType === DISCRETE,
-            businessRange = argTranslator.getBusinessRange(),
-            minMaxDefined = _isDefined(min) && _isDefined(max),
-            tickInterval;
-
-        if(pointsLength && pointsLength > 1) {
-            count = argTranslator.canvasLength / sizePoint;
-            count = count <= 1 ? 1 : count;
-
-            if(isDiscrete) {
-                if(that.argumentAxisType === DISCRETE) {
-                    categories = businessRange.categories;
-                    discreteMin = _inArray(min, categories);
-                    discreteMax = _inArray(max, categories);
-
-                    if(discreteMin !== -1 && discreteMax !== -1) {
-                        categories = categories.slice(discreteMin, discreteMax + 1);
-                    }
-                    pointsLength = categories.length;
-                }
-                tickInterval = Math.ceil(pointsLength / count);
-            } else {
-                tickInterval = (minMaxDefined ? (max - min) : (businessRange.maxVisible - businessRange.minVisible)) / count;
-            }
-
-            return that._resample(tickInterval, min - tickInterval, max + tickInterval, minMaxDefined, data);
-        }
-
-        return [];
     },
 
     _drawElements: function(animationEnabled, firstDrawing) {
@@ -837,97 +842,84 @@ Series.prototype = {
         return _extend(false, {}, this._getOptionsForPoint(), { hoverStyle: {}, selectionStyle: {} });
     },
 
-    _getAggregationMethod: function() {
-        var options = this.getOptions().aggregation,
-            method = _normalizeEnum(options.method),
-            aggregator = method !== "custom" ? this._aggregators[method] : options.calculate;
+    _getAggregationMethod: function(isDiscrete) {
+        const options = this.getOptions().aggregation;
+        const method = _normalizeEnum(options.method);
+        const customAggregator = method === "custom" && options.calculate;
 
-        if(!aggregator) {
-            return this._aggregators[this._defaultAggregator];
+        let aggregator;
+
+        if(isDiscrete) {
+            aggregator = ({ data }) => data[0];
+        } else {
+            aggregator = this._aggregators[method] || this._aggregators[this._defaultAggregator];
         }
 
-        return aggregator;
+        return customAggregator || aggregator;
     },
 
-    _fusionData: function(data, interval, aggregationInterval, dataSelector) {
-        var options = this.getOptions(),
-            aggregationMethod = this._getAggregationMethod(),
-            underlyingData = data.map(function(item) { return item.data; }),
-            aggregationInfo = {
-                data: underlyingData,
-                aggregationInterval: aggregationInterval,
-                intervalStart: interval,
-                intervalEnd: typeUtils.isDate(interval) ? new Date(interval.getTime() + aggregationInterval) : interval + aggregationInterval
-            },
-            aggregatedData = aggregationMethod(aggregationInfo, this),
-            pointData = aggregatedData && dataSelector(aggregatedData, options);
-
-        if(pointData && this._checkData(pointData)) {
-            pointData.aggregationInfo = aggregationInfo;
-            return pointData;
-        }
-
-        return null;
-    },
-
-    _resample: function(aggregationInterval, min, max, isDefinedMinMax, data) {
+    _resample({ interval, ticks }, data) {
         var that = this,
-            dataInInterval = [],
-            pointData,
-            minTick,
-            aggregatedData,
-            state = 0,
-            dataSelector = this._getPointDataSelector();
+            isDiscrete = that.argumentAxisType === DISCRETE || that.valueAxisType === DISCRETE,
+            dataIndex = 0,
+            dataSelector = this._getPointDataSelector(),
+            options = that.getOptions(),
+            addAggregatedData = (target, data, aggregationInfo) => {
+                if(!data) {
+                    return;
+                }
+                const processData = (d) => {
+                    const pointData = d && dataSelector(d, options);
+                    if(pointData && that._checkData(pointData)) {
+                        pointData.aggregationInfo = aggregationInfo;
+                        target.push(pointData);
+                    }
+                };
 
-        function addFirstDataItem(point) {
-            dataInInterval.push(point);
-            minTick = point.argument;
-
-            if(isDefinedMinMax) {
-                if(point.argument < min) {
-                    state = 1;
-                } else if(point.argument > max) {
-                    state = 2;
+                if(data.length) {
+                    data.forEach(processData);
                 } else {
-                    state = 0;
+                    processData(data);
                 }
-            }
+            },
+            aggregationMethod = this._getAggregationMethod(isDiscrete);
+
+        if(isDiscrete) {
+            return data.reduce((result, dataItem, index, data) => {
+                result[1].push(dataItem);
+                if(index === data.length - 1 || (index + 1) % interval === 0) {
+                    const dataInInterval = result[1];
+                    const aggregationInfo = {
+                        aggregationInterval: interval,
+                        data: dataInInterval.map(getData)
+                    };
+                    addAggregatedData(result[0], aggregationMethod(aggregationInfo, that));
+                    result[1] = [];
+                }
+
+                return result;
+            }, [[], []])[0];
         }
 
-        if(that.argumentAxisType === DISCRETE || that.valueAxisType === DISCRETE) {
-            return _map(data, function(point, index) {
-                if(index % aggregationInterval === 0) {
-                    return point;
+        const aggregatedData = [];
+
+        for(let i = 1; i < ticks.length; i++) {
+            const intervalEnd = ticks[i];
+            const intervalStart = ticks[i - 1];
+            const dataInInterval = [];
+            while(data[dataIndex] && (data[dataIndex].argument < intervalEnd || i === ticks.length - 1 && data[dataIndex].argument <= intervalEnd)) {
+                if(data[dataIndex].argument >= intervalStart) {
+                    dataInInterval.push(data[dataIndex]);
                 }
-                return null;
-            });
-        }
-
-        aggregatedData = data.reduce(function(aggregatedPoints, point) {
-            if(!dataInInterval.length) {
-                addFirstDataItem(point);
-            } else if(!state && Math.abs(minTick - point.argument) < aggregationInterval) {
-                dataInInterval.push(point);
-            } else if(!(state === 1 && point.argument < min) && !(state === 2 && point.argument > max)) {
-                pointData = that._fusionData(dataInInterval, minTick, aggregationInterval, dataSelector);
-
-                if(pointData) {
-                    aggregatedPoints.push(pointData);
-                }
-
-                dataInInterval = [];
-                addFirstDataItem(point);
+                dataIndex++;
             }
-
-            return aggregatedPoints;
-
-        }, []);
-
-        if(dataInInterval.length) {
-            pointData = that._fusionData(dataInInterval, minTick, aggregationInterval, dataSelector);
-            if(pointData) {
-                aggregatedData.push(pointData);
-            }
+            const aggregationInfo = {
+                intervalStart,
+                intervalEnd,
+                aggregationInterval: interval,
+                data: dataInInterval.map(getData)
+            };
+            addAggregatedData(aggregatedData, aggregationMethod(aggregationInfo, that), aggregationInfo);
         }
 
         that._endUpdateData();
@@ -953,10 +945,12 @@ Series.prototype = {
     },
 
     getAllPoints: function() {
+        this._createAllAggregatedPoints();
         return (this._points || []).slice();
     },
 
     getPointByPos: function(pos) {
+        this._createAllAggregatedPoints();
         return (this._points || [])[pos];
     },
 
@@ -1069,7 +1063,18 @@ Series.prototype = {
     },
 
     getPointsByArg: function(arg) {
-        return this.pointsByArgument[arg.valueOf()] || [];
+        var that = this,
+            argValue = arg.valueOf(),
+            points = that.pointsByArgument[argValue];
+
+        if(!points && that._createAllAggregatedPoints()) {
+            points = that.pointsByArgument[argValue];
+        }
+        return points || [];
+    },
+
+    _createAllAggregatedPoints: function() {
+        return this.useAggregation() && !this._useAllAggregatedPoints && this.createPoints(true);
     },
 
     getPointsByKeys: function(arg) {

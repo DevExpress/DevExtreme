@@ -1,15 +1,11 @@
 "use strict";
 
-var $ = require("jquery"),
-    noop = require("core/utils/common").noop,
-    vizMocks = require("../../helpers/vizMocks.js"),
-    pointModule = require("viz/series/points/base_point"),
-    labelModule = require("viz/series/points/label"),
-    Series = require("viz/series/base_series").Series;
-
-require("../../helpers/chartMocks.js");
-
-require("viz/chart");
+import $ from "jquery";
+import * as vizMocks from "../../helpers/vizMocks.js";
+import { noop } from "core/utils/common";
+import pointModule from "viz/series/points/base_point";
+import labelModule from "viz/series/points/label";
+import { Series } from "viz/series/base_series";
 
 var createSeries = function(options, renderSettings) {
     renderSettings = renderSettings || {};

@@ -11792,6 +11792,42 @@ QUnit.testInActiveWindow("Form should repaint after change data of the column wi
     assert.ok($popupContent.find(".dx-texteditor").eq(1).hasClass("dx-state-focused"), "second cell is focused");
 });
 
+// T613963
+QUnit.testInActiveWindow("Form should repaint after change lookup dataSource", function(assert) {
+    // arrange
+    var that = this,
+        $popupContent;
+
+    that.columns[4] = {
+        dataField: "room",
+        lookup: {
+            valueExpr: "id",
+            displayExpr: "name",
+            dataSource: [{ id: 1, name: "Room 1" }]
+        }
+    };
+    that.setupModules(that);
+    that.renderRowsView();
+
+    that.editRow(0);
+    that.clock.tick(500);
+    that.preparePopupHelpers();
+    $popupContent = $(that.editPopupInstance.content());
+
+    // assert
+    var selectBox = $popupContent.find(".dx-selectbox").dxSelectBox("instance");
+    selectBox.open();
+    assert.equal(selectBox.getDataSource().items().length, 1, "lookup has 1 item");
+
+    // act
+    that.columnOption("room", "lookup.dataSource", [{ id: 1, name: "Room 1" }, { id: 2, name: "Room 2" }]);
+
+    // assert
+    selectBox = $popupContent.find(".dx-selectbox").dxSelectBox("instance");
+    selectBox.open();
+    assert.equal(selectBox.getDataSource().items().length, 2, "lookup has 2 items");
+});
+
 QUnit.test("Repaint of popup is should be called when form layout is changed", function(assert) {
     var that = this,
         screenFactor = "xs";

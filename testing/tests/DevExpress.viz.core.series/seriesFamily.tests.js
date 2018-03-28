@@ -1,13 +1,10 @@
 "use strict";
 
-var $ = require("jquery"),
-    vizMocks = require("../../helpers/vizMocks.js"),
-    pointModule = require("viz/series/points/base_point"),
-    SeriesFamily = require("viz/core/series_family").SeriesFamily,
-    chartMocks = require("../../helpers/chartMocks.js"),
-    MockTranslator = chartMocks.MockTranslator,
-    MockPoint = chartMocks.MockPoint,
-    MockSeries = chartMocks.MockSeries;
+import $ from "jquery";
+import vizMocks from "../../helpers/vizMocks.js";
+import pointModule from "viz/series/points/base_point";
+import { MockTranslator, MockSeries, MockPoint } from "../../helpers/chartMocks.js";
+import { SeriesFamily } from "viz/core/series_family";
 
 var ZERO = 0;
 

@@ -47,7 +47,7 @@ function discreteGenerator(options) {
 
         return {
             ticks: categories,
-            tickInterval: interval > 4 ? mathCeil(interval) : 1
+            tickInterval: mathCeil(interval)
         };
     };
 }
@@ -210,34 +210,38 @@ function calculateMinorTickInterval(businessDelta, screenDelta, tickInterval, ax
     }, 0);
 }
 
-function calculateTickIntervalLog(businessDelta, screenDelta, tickInterval, forceTickInterval, axisDivisionFactor, multipliers, allowDecimals) {
-    var interval = getIntervalByFactor(businessDelta, screenDelta, axisDivisionFactor),
-        result = 0;
+function getCalculateTickIntervalLog(skipCalculationLimits) {
+    return function(businessDelta, screenDelta, tickInterval, forceTickInterval, axisDivisionFactor, multipliers, allowDecimals) {
+        var interval = getIntervalByFactor(businessDelta, screenDelta, axisDivisionFactor),
+            result = 0;
 
-    if(!forceTickInterval || !tickInterval) {
-        if(interval > 0) {
-            result = adjustIntervalLog(interval, multipliers);
+        if(!forceTickInterval || !tickInterval) {
+            if(interval > 0) {
+                result = getAdjustIntervalLog(skipCalculationLimits)(interval, multipliers);
+            }
+
+            if(!tickInterval || (!forceTickInterval && tickInterval < result)) {
+                tickInterval = result;
+            }
         }
 
-        if(!tickInterval || (!forceTickInterval && tickInterval < result)) {
-            tickInterval = result;
-        }
-    }
-
-    return tickInterval;
+        return tickInterval;
+    };
 }
 
-function adjustIntervalLog(interval, multipliers) {
-    var factor = getMultiplierFactor(interval);
+function getAdjustIntervalLog(skipCalculationLimits) {
+    return function(interval, multipliers) {
+        var factor = getMultiplierFactor(interval);
 
-    multipliers = multipliers || LOGARITHMIC_MULTIPLIERS;
+        multipliers = multipliers || LOGARITHMIC_MULTIPLIERS;
 
-    if(factor < 1) {
-        factor = 1;
-    }
-    return multipliers.concat(multipliers[0] * 10).reduce(function(r, m) {
-        return r < interval ? m * factor : r;
-    }, 0);
+        if(!skipCalculationLimits && factor < 1) {
+            factor = 1;
+        }
+        return multipliers.concat(multipliers[0] * 10).reduce(function(r, m) {
+            return r < interval ? m * factor : r;
+        }, 0);
+    };
 }
 
 function getDataTimeMultipliers(gapSize) {
@@ -535,7 +539,7 @@ function generator(options, getBusinessDelta, calculateTickInterval, calculateMi
         var gaps = breaks.filter(function(b) { return b.gapSize; }),
             majorTicks;
 
-        tickInterval = correctUserTickInterval(tickInterval, businessDelta, screenDelta);
+        tickInterval = options.skipCalculationLimits ? tickInterval : correctUserTickInterval(tickInterval, businessDelta, screenDelta);
         tickInterval = calculateTickInterval(
             businessDelta,
             screenDelta,
@@ -667,12 +671,12 @@ function logarithmicGenerator(options) {
     return generator(
         options,
         getBusinessDeltaLog(base),
-        calculateTickIntervalLog,
+        getCalculateTickIntervalLog(options.skipCalculationLimits),
         calculateMinorTickInterval,
         getTickIntervalByCustomTicks(log, getValue),
         getTickIntervalByCustomTicks(getValue, getValue),
         getValue,
-        calculateTicks(addIntervalLog(base), correctMinValueByEndOnTick(floor, ceil, resolveEndOnTickLog(base), options.endOnTick), adjustIntervalLog, resolveEndOnTickLog(base), resolveExtraTickForHiddenDataPointLog(base)),
+        calculateTicks(addIntervalLog(base), correctMinValueByEndOnTick(floor, ceil, resolveEndOnTickLog(base), options.endOnTick), getAdjustIntervalLog(options.skipCalculationLimits), resolveEndOnTickLog(base), resolveExtraTickForHiddenDataPointLog(base)),
         calculateMinorTicks(updateTickInterval, addInterval, floor, ceilNumber, ceil),
         getScaleBreaksProcessor(getValue, log, function(value, correction) {
             return raise(log(value) + correction);

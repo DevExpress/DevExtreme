@@ -391,6 +391,15 @@ extend(exports, {
             horizontalOffset2 = _round(_sqrt(horizontalOffset1 * horizontalOffset1 + verticalOffset1 * verticalOffset1 - verticalOffset2 * verticalOffset2)),
             dx = (isPositive ? +horizontalOffset2 : -horizontalOffset2) || horizontalOffset1;
         return { x: center.x + (isPositive ? dx : dx - bBox.width), y: bBox.y + dy };
+    },
+
+    mergeMarginOptions(opt1, opt2) {
+        return {
+            checkInterval: opt1.checkInterval || opt2.checkInterval,
+            size: Math.max(opt1.size || 0, opt2.size || 0),
+            percentStick: opt1.percentStick || opt2.percentStick,
+            sizePointNormalState: Math.max(opt1.sizePointNormalState || 0, opt2.sizePointNormalState || 0)
+        };
     }
 });
 

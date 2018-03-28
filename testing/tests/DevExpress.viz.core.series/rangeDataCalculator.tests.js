@@ -1,12 +1,8 @@
 "use strict";
 
-var $ = require("jquery"),
-    vizMocks = require("../../helpers/vizMocks.js"),
-    Series = require("viz/series/base_series").Series,
-    chartMocks = require("../../helpers/chartMocks.js"),
-    MockTranslator = chartMocks.MockTranslator;
-
-require("viz/chart");
+import $ from "jquery";
+import vizMocks from "../../helpers/vizMocks.js";
+import { Series } from "viz/series/base_series";
 
 function getOriginalData(data) {
     return $.map(data, function(item) {
@@ -25,8 +21,11 @@ var createSeries = function(options, renderSettings, widgetType) {
     renderSettings.argumentAxis = renderSettings.argumentAxis || {
         getViewport: function() {},
         calculateInterval: function(a, b) { return Math.abs(a - b); },
-        getTranslator: function() {
-            return new MockTranslator({});
+        getAggregationInfo: function() {
+            return {
+                interval: 1,
+                ticks: [2, 5, 10, 20, 25]
+            };
         }
     };
     options = $.extend(true, {
