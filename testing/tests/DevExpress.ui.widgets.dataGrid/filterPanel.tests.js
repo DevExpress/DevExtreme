@@ -117,8 +117,7 @@ QUnit.module("Filter Panel", {
         this.initFilterPanelView({
             filterPanel: {
                 visible: true,
-                filterPanelClearFilterHintText: "test0",
-                applyFilterHintText: "test1"
+                applyFilterHintText: "test0"
             },
             dataSource: [],
             filterValue: ["field", "=", "1"],
@@ -126,7 +125,22 @@ QUnit.module("Filter Panel", {
         });
 
         // assert
-        assert.equal(this.filterPanelView.element().find("." + FILTER_PANEL_CLEAR_FILTER_CLASS).attr("title"), "test0", "check hint for clearFilter");
-        assert.equal(this.filterPanelView.element().find("." + FILTER_PANEL_CHECKBOX_CLASS).attr("title"), "test1", "check hint for applyFilter");
+        assert.equal(this.filterPanelView.element().find("." + FILTER_PANEL_CHECKBOX_CLASS).attr("title"), "test0", "check hint for applyFilter");
+    });
+
+    QUnit.test("clearFilterText", function(assert) {
+        // arrange, act
+        this.initFilterPanelView({
+            filterPanel: {
+                visible: true,
+                clearFilterText: "test0"
+            },
+            dataSource: [],
+            filterValue: ["field", "=", "1"],
+            columns: [{ dataField: "field" }]
+        });
+
+        // assert
+        assert.equal(this.filterPanelView.element().find("." + FILTER_PANEL_CLEAR_FILTER_CLASS).text(), "test0", "check clearFilterText");
     });
 });

@@ -120,9 +120,13 @@
         vertical-align: middle;
     }
 
-    .dx-datagrid-filter-panel-text:hover {
-        text-decoration: underline;
-        cursor: pointer;
+    .dx-datagrid-filter-panel-text {
+        max-width: 82%;
+        .dx-overflow();
+        &:hover {
+            text-decoration: underline;
+            cursor: pointer;
+        }
     }
 
     .dx-datagrid-filter-panel-checkbox {
