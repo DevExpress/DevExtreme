@@ -905,8 +905,6 @@ QUnit.test("Add extra tick (logarithmic, numeric) for the bar point is equal to 
 });
 
 QUnit.test("getAggregationInfo with tickInterval", function(assert) {
-    var aggregationInfo;
-
     this.createAxis();
 
     this.updateOptions({
@@ -915,11 +913,11 @@ QUnit.test("getAggregationInfo with tickInterval", function(assert) {
         aggregationInterval: 2
     });
 
-    this.axis.setBusinessRange({ minVisible: 1, maxVisible: 10, addRange: function() { } });
+    this.axis.setBusinessRange({ minVisible: 1, maxVisible: 10 });
     this.axis.createTicks(canvas(1000));
     // act
 
-    aggregationInfo = this.axis.getAggregationInfo();
+    const aggregationInfo = this.axis.getAggregationInfo(undefined, {});
 
     assert.strictEqual(aggregationInfo.interval, 2);
     assert.deepEqual(aggregationInfo.ticks[0], -8);
@@ -927,8 +925,6 @@ QUnit.test("getAggregationInfo with tickInterval", function(assert) {
 });
 
 QUnit.test("getAggregationInfo. Ticks was generated with endOnTick", function(assert) {
-    var aggregationInfo;
-
     this.createAxis();
     this.updateOptions({
         argumentType: "numeric",
@@ -936,19 +932,16 @@ QUnit.test("getAggregationInfo. Ticks was generated with endOnTick", function(as
         aggregationInterval: 5
     });
 
-    this.axis.setBusinessRange({ minVisible: 4, maxVisible: 12, addRange: function() { } });
+    this.axis.setBusinessRange({ minVisible: 4, maxVisible: 12, addRange: sinon.stub().returnsThis() });
     this.axis.createTicks(canvas(170));
     // act
-
-    aggregationInfo = this.axis.getAggregationInfo();
+    const aggregationInfo = this.axis.getAggregationInfo(undefined, {});
 
     assert.deepEqual(aggregationInfo.ticks[0], -5);
     assert.deepEqual(aggregationInfo.ticks[aggregationInfo.ticks.length - 1], 20);
 });
 
 QUnit.test("getAggregationInfo. With divisionFactor", function(assert) {
-    var aggregationInfo;
-
     this.createAxis();
     this.updateOptions({
         argumentType: "numeric",
@@ -956,11 +949,11 @@ QUnit.test("getAggregationInfo. With divisionFactor", function(assert) {
         aggregationGroupWidth: 20
     });
 
-    this.axis.setBusinessRange({ minVisible: 1, maxVisible: 10, addRange: function() { } });
+    this.axis.setBusinessRange({ minVisible: 1, maxVisible: 10, addRange: sinon.stub().returnsThis() });
     this.axis.createTicks(canvas(170));
     // act
 
-    aggregationInfo = this.axis.getAggregationInfo();
+    const aggregationInfo = this.axis.getAggregationInfo(undefined, {});
 
     assert.strictEqual(aggregationInfo.interval, 2);
     assert.deepEqual(aggregationInfo.ticks[0], -8);
@@ -968,20 +961,18 @@ QUnit.test("getAggregationInfo. With divisionFactor", function(assert) {
 });
 
 QUnit.test("getAggregationInfo. Without divisionFactor", function(assert) {
-    var aggregationInfo;
-
     this.createAxis();
     this.updateOptions({
         argumentType: "numeric",
         type: "continuous"
     });
 
-    this.axis.setBusinessRange({ minVisible: 1, maxVisible: 10, addRange: function() { } });
+    this.axis.setBusinessRange({ minVisible: 1, maxVisible: 10, addRange: sinon.stub().returnsThis() });
     this.axis.createTicks(canvas(170));
     this.axis.setMarginOptions({ sizePointNormalState: 20 });
     // act
 
-    aggregationInfo = this.axis.getAggregationInfo();
+    const aggregationInfo = this.axis.getAggregationInfo(undefined, {});
 
     assert.strictEqual(aggregationInfo.interval, 2);
     assert.deepEqual(aggregationInfo.ticks[0], -8);
@@ -989,19 +980,17 @@ QUnit.test("getAggregationInfo. Without divisionFactor", function(assert) {
 });
 
 QUnit.test("getAggregationInfo. Default divisionFactor", function(assert) {
-    var aggregationInfo;
-
     this.createAxis();
     this.updateOptions({
         argumentType: "numeric",
         type: "continuous"
     });
 
-    this.axis.setBusinessRange({ minVisible: 1, maxVisible: 10, addRange: function() { } });
+    this.axis.setBusinessRange({ minVisible: 1, maxVisible: 10, addRange: sinon.stub().returnsThis() });
     this.axis.createTicks(canvas(170));
     // act
 
-    aggregationInfo = this.axis.getAggregationInfo();
+    const aggregationInfo = this.axis.getAggregationInfo(undefined, {});
 
     assert.strictEqual(aggregationInfo.ticks.length, 28);
     assert.strictEqual(aggregationInfo.interval, 1);
@@ -1010,19 +999,17 @@ QUnit.test("getAggregationInfo. Default divisionFactor", function(assert) {
 });
 
 QUnit.test("getAggregationInfo with zooming", function(assert) {
-    var aggregationInfo;
-
     this.createAxis();
     this.updateOptions({
         argumentType: "numeric",
         type: "continuous"
     });
 
-    this.axis.setBusinessRange({ min: 1, max: 10, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 1, max: 10, addRange: sinon.stub().returnsThis() });
     this.axis.zoom(3, 5);
     this.axis.createTicks(canvas(170));
 
-    aggregationInfo = this.axis.getAggregationInfo();
+    const aggregationInfo = this.axis.getAggregationInfo(undefined, {});
 
     assert.strictEqual(aggregationInfo.interval, 0.2);
     assert.strictEqual(aggregationInfo.ticks.length, 31);
@@ -1031,8 +1018,6 @@ QUnit.test("getAggregationInfo with zooming", function(assert) {
 });
 
 QUnit.test("getAggregationInfo with min/max", function(assert) {
-    var aggregationInfo;
-
     this.createAxis();
     this.updateOptions({
         argumentType: "numeric",
@@ -1041,10 +1026,10 @@ QUnit.test("getAggregationInfo with min/max", function(assert) {
         max: 5
     });
 
-    this.axis.setBusinessRange({ min: 1, max: 10, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 1, max: 10, addRange: sinon.stub().returnsThis() });
     this.axis.createTicks(canvas(170));
 
-    aggregationInfo = this.axis.getAggregationInfo();
+    const aggregationInfo = this.axis.getAggregationInfo(undefined, {});
 
     assert.strictEqual(aggregationInfo.interval, 0.2);
     assert.strictEqual(aggregationInfo.ticks.length, 31);
@@ -1053,8 +1038,6 @@ QUnit.test("getAggregationInfo with min/max", function(assert) {
 });
 
 QUnit.test("getAggregationInfo should have ticks out from bounds", function(assert) {
-    var aggregationInfo;
-
     this.createAxis();
     this.updateOptions({
         argumentType: "numeric",
@@ -1062,10 +1045,10 @@ QUnit.test("getAggregationInfo should have ticks out from bounds", function(asse
         aggregationInterval: 5
     });
 
-    this.axis.setBusinessRange({ min: 1, minVisible: 1, maxVisible: 100, max: 100, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 1, minVisible: 1, maxVisible: 100, max: 100, addRange: sinon.stub().returnsThis() });
     this.axis.createTicks(canvas(400));
 
-    aggregationInfo = this.axis.getAggregationInfo();
+    const aggregationInfo = this.axis.getAggregationInfo(undefined, {});
 
     assert.strictEqual(aggregationInfo.interval, 5);
     assert.strictEqual(aggregationInfo.ticks[0], 0);
@@ -1079,36 +1062,32 @@ QUnit.test("aggregationInfo should not genrate tick if min or max is undefined",
         type: "continuous"
     });
 
-    this.axis.setBusinessRange({ addRange: function() { } });
+    this.axis.setBusinessRange({ addRange: sinon.stub().returnsThis() });
     this.axis.createTicks(canvas(400));
 
-    const aggregationInfo = this.axis.getAggregationInfo();
+    const aggregationInfo = this.axis.getAggregationInfo(undefined, {});
 
     assert.strictEqual(aggregationInfo.interval, undefined);
     assert.deepEqual(aggregationInfo.ticks, []);
 });
 
 QUnit.test("getAggregationInfo for discrete axis", function(assert) {
-    var aggregationInfo;
-
     this.createAxis();
     this.updateOptions({
         argumentType: "string",
         type: "discrete"
     });
 
-    this.axis.setBusinessRange({ categories: ["a", "b", "c"], addRange: function() { } });
+    this.axis.setBusinessRange({ categories: ["a", "b", "c"], addRange: sinon.stub().returnsThis() });
     this.axis.createTicks(canvas(170));
 
-    aggregationInfo = this.axis.getAggregationInfo();
+    const aggregationInfo = this.axis.getAggregationInfo(undefined, {});
 
     assert.strictEqual(aggregationInfo.interval, 1);
     assert.deepEqual(aggregationInfo.ticks, []);
 });
 
 QUnit.test("skip ckecking max count ticks on getAggregationInfo", function(assert) {
-    var aggregationInfo;
-
     this.createAxis();
     this.updateOptions({
         argumentType: "numeric",
@@ -1116,36 +1095,31 @@ QUnit.test("skip ckecking max count ticks on getAggregationInfo", function(asser
         aggregationInterval: 0.1
     });
 
-    this.axis.setBusinessRange({ min: 1, max: 5, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 1, max: 5, addRange: sinon.stub().returnsThis() });
     this.axis.createTicks(canvas(10));
 
-    aggregationInfo = this.axis.getAggregationInfo();
+    const aggregationInfo = this.axis.getAggregationInfo(undefined, {});
 
     assert.strictEqual(aggregationInfo.ticks.length, 41);
 });
 
 QUnit.test("datetime getAggregationInfo", function(assert) {
-    var aggregationInfo;
-
     this.createAxis();
     this.updateOptions({
         valueType: "datetime",
-        type: "continuous",
-        endOnTick: false
+        type: "continuous"
     });
 
-    this.axis.setBusinessRange({ minVisible: new Date(2012, 3, 1, 12, 3, 5, 123), maxVisible: new Date(2012, 3, 1, 12, 3, 5, 149) });
+    this.axis.setBusinessRange({ minVisible: new Date(2012, 3, 1, 12, 3, 5, 123), maxVisible: new Date(2012, 3, 1, 12, 3, 5, 149), addRange: sinon.stub().returnsThis() });
     this.axis.createTicks(canvas(300));
     // act
 
-    aggregationInfo = this.axis.getAggregationInfo();
+    const aggregationInfo = this.axis.getAggregationInfo(undefined, {});
 
     assert.strictEqual(aggregationInfo.ticks.length, 79);
 });
 
 QUnit.test("logarithmic getAggregationInfo", function(assert) {
-    var aggregationInfo;
-
     this.createAxis();
     this.updateOptions({
         argumentType: "numeric",
@@ -1153,13 +1127,29 @@ QUnit.test("logarithmic getAggregationInfo", function(assert) {
         logarithmBase: 10
     });
 
-    this.axis.setBusinessRange({ minVisible: 0.01, maxVisible: 10, addRange: function() { } });
+    this.axis.setBusinessRange({ minVisible: 0.01, maxVisible: 10, addRange: sinon.stub().returnsThis() });
     this.axis.createTicks(canvas(450));
 
     // assert
-    aggregationInfo = this.axis.getAggregationInfo();
+    const aggregationInfo = this.axis.getAggregationInfo(undefined, {});
 
     assert.strictEqual(aggregationInfo.ticks.length, 91);
+});
+
+QUnit.test("getAggregationInfo with dataRange", function(assert) {
+    this.createAxis();
+    this.updateOptions({
+        argumentType: "numeric",
+        type: "continuous"
+    });
+
+    this.axis.setBusinessRange({ min: 1, max: 5 });
+    this.axis.createTicks(canvas(10));
+
+    const aggregationInfo = this.axis.getAggregationInfo(undefined, new rangeModule.Range({ min: 1, max: 6 }));
+
+    assert.strictEqual(aggregationInfo.ticks.length, 3);
+    assert.strictEqual(aggregationInfo.ticks[aggregationInfo.ticks.length - 1], 10);
 });
 
 QUnit.module("Numeric. Minor ticks", environment);
