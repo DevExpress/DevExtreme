@@ -4,13 +4,14 @@ var BaseAppointmentsStrategy = require("./ui.scheduler.appointments.strategy.bas
     extend = require("../../core/utils/extend").extend,
     isNumeric = require("../../core/utils/type").isNumeric,
     devices = require("../../core/devices"),
-    dateUtils = require("../../core/utils/date");
+    dateUtils = require("../../core/utils/date"),
+    themes = require("../themes");
 
 var WEEK_APPOINTMENT_DEFAULT_OFFSET = 25,
     WEEK_APPOINTMENT_MOBILE_OFFSET = 50,
     ALLDAY_APPOINTMENT_MIN_OFFSET = 5,
     ALLDAY_APPOINTMENT_MAX_OFFSET = 20,
-    APPOINTMENT_COUNT_PER_CELL = 2;
+    APPOINTMENT_COUNT_PER_CELL = themes.isMaterial() ? 1 : 2;
 
 var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
     getDeltaTime: function(args, initialSize, appointment) {
