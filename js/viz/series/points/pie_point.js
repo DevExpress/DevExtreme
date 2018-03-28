@@ -1,7 +1,6 @@
 "use strict";
 
 var extend = require("../../../core/utils/extend").extend,
-    CONNECTOR_LENGTH = 20,
     symbolPoint = require("./symbol_point"),
 
     _extend = extend,
@@ -70,6 +69,10 @@ module.exports = _extend({}, symbolPoint, {
         this._maxLabelLength = maxLabelLength;
     },
 
+    getMaxLabelLength: function(maxLabelLength) {
+        return this._maxLabelLength || 0;
+    },
+
     _updateLabelData: function() {
         this._label.setData(this._getLabelFormatObject());
     },
@@ -135,10 +138,11 @@ module.exports = _extend({}, symbolPoint, {
             leftBorderX = visibleArea.minX,
             angleOfPoint = _normalizeAngle(that.middleAngle),
             centerX = that.centerX,
+            connectorOffset = options.connectorOffset,
             x = coord.x;
 
         if(options.position === "columns") {
-            rad += CONNECTOR_LENGTH;
+            rad += connectorOffset;
             if(angleOfPoint <= 90 || angleOfPoint >= 270) {
                 x = that._maxLabelLength ? centerX + rad + that._maxLabelLength - labelWidth : rightBorderX;
                 x = x > rightBorderX ? rightBorderX : x;
@@ -147,14 +151,14 @@ module.exports = _extend({}, symbolPoint, {
                 x = x < leftBorderX ? leftBorderX : x;
             }
             coord.x = x;
-        } else if(moveLabelsFromCenter) {
+        } else if(moveLabelsFromCenter || connectorOffset !== 0) {
             if(angleOfPoint <= 90 || angleOfPoint >= 270) {
-                if(x < centerX) {
-                    x = centerX;
+                if((x - connectorOffset) < centerX) {
+                    x = centerX + connectorOffset;
                 }
             } else {
-                if(x + labelWidth > centerX) {
-                    x = centerX - labelWidth;
+                if(x + labelWidth + connectorOffset > centerX) {
+                    x = centerX - labelWidth - connectorOffset;
                 }
             }
             coord.x = x;

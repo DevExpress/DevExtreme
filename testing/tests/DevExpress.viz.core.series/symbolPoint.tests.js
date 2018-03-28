@@ -2786,10 +2786,13 @@ QUnit.test("Get graphic bbox when point is image and invisible", function(assert
 
 QUnit.test("create label", function(assert) {
     var point = createPoint(this.series, this.data, this.options);
+
     assert.ok(this.labelFactory.calledOnce);
-    assert.equal(this.labelFactory.args[0][0].renderer, point.series._renderer);
-    assert.equal(this.labelFactory.args[0][0].labelsGroup, point.series._labelsGroup);
-    assert.deepEqual(this.labelFactory.args[0][0].point, point);
+    assert.deepEqual(this.labelFactory.args[0][0], {
+        renderer: point.series._renderer,
+        labelsGroup: point.series._labelsGroup,
+        point: point
+    });
 });
 
 QUnit.test("show label on draw", function(assert) {
