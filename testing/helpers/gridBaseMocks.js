@@ -487,7 +487,13 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                 }
             },
 
-            addCommandColumn: function() { },
+            addCommandColumn: function(commandColumn) {
+                columns && columns.forEach(function(column, index) {
+                    if(column.command === commandColumn.command) {
+                        columns[index] = commandColumn;
+                    }
+                });
+            },
 
             changeSortOrder: function(columnIndex, sortOrder) {
                 var column,

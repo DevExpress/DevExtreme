@@ -34,6 +34,10 @@ var ROWS_VIEW_CLASS = "rowsview",
 
     LOADPANEL_HIDE_TIMEOUT = 200;
 
+var getExpandCellTemplate = function(column, hasExpandIcon) {
+    return hasExpandIcon ? column.cellTemplate || gridCoreUtils.getExpandCellTemplate() : null;
+};
+
 module.exports = {
     defaultOptions: function() {
         return {
@@ -805,7 +809,11 @@ module.exports = {
                             value: isExpanded,
                             row: row,
                             rowIndex: rowIndex,
-                            column: { command: "expand", cssClass: columns[i].cssClass },
+                            column: {
+                                command: "expand",
+                                cssClass: columns[i].cssClass,
+                                cellTemplate: getExpandCellTemplate(columns[i], isExpanded !== null)
+                            },
                             columnIndex: i
                         });
                     }

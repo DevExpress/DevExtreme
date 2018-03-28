@@ -78,6 +78,15 @@ QUnit.module('Headers', {
                 }
             }
         });
+
+        this.defaultSelectionHeaderTemplate = (container, options) => {
+            var column = options.column,
+                $cellElement = $(container).parent();
+
+            $cellElement.addClass("dx-editor-cell");
+            this.columnHeadersView._renderSelectAllCheckBox($cellElement, column);
+            this.columnHeadersView._attachSelectAllCheckBoxClickEvent($cellElement);
+        };
     },
     afterEach: function() {
         this.dispose();
@@ -356,7 +365,7 @@ QUnit.test('Updating column header after change grouping', function(assert) {
 
 
 // T259458
-QUnit.test('Command column do not use headerCellTemplate', function(assert) { // arrange
+QUnit.skip('Command column do not use headerCellTemplate', function(assert) { // arrange
     var testElement = $('#container'),
         headerCellTemplateCalled = [],
         customHeaderTemplate = function(header, info) {
@@ -1164,7 +1173,7 @@ QUnit.test('Select all is completed', function(assert) {
     // arrange
     var testElement = $('#container');
 
-    $.extend(this.columns, [{ command: 'select', dataType: 'boolean' }, { index: 0 }, { index: 1 }]);
+    $.extend(this.columns, [{ command: 'select', dataType: 'boolean', headerCellTemplate: this.defaultSelectionHeaderTemplate }, { index: 0 }, { index: 1 }]);
 
     this.options.selection = { allowSelectAll: true };
 
@@ -1181,7 +1190,7 @@ QUnit.test('Select all checkbox state when isSelected items exists', function(as
     // arrange
     var testElement = $('#container');
 
-    $.extend(this.columns, [{ command: 'select', dataType: 'boolean' }, { index: 0 }, { index: 1 }]);
+    $.extend(this.columns, [{ command: 'select', dataType: 'boolean', headerCellTemplate: this.defaultSelectionHeaderTemplate }, { index: 0 }, { index: 1 }]);
     this.selectionController.selectRows([1]);
 
     this.options.selection = { allowSelectAll: true };
@@ -1199,7 +1208,7 @@ QUnit.test('Click Select all checkbox when isSelected items exists', function(as
     // arrange
     var testElement = $('#container');
 
-    $.extend(this.columns, [{ command: 'select', dataType: 'boolean' }, { index: 0 }, { index: 1 }]);
+    $.extend(this.columns, [{ command: 'select', dataType: 'boolean', headerCellTemplate: this.defaultSelectionHeaderTemplate }, { index: 0 }, { index: 1 }]);
     this.selectionController.selectRows([1]);
 
     this.options.selection = { allowSelectAll: true };
@@ -1219,7 +1228,7 @@ QUnit.test('Select all button when isSelected items exists and when allowSelectA
     // arrange
     var testElement = $('#container');
 
-    $.extend(this.columns, [{ command: 'select', dataType: 'boolean' }, { index: 0 }, { index: 1 }]);
+    $.extend(this.columns, [{ command: 'select', dataType: 'boolean', headerCellTemplate: this.defaultSelectionHeaderTemplate }, { index: 0 }, { index: 1 }]);
 
     this.selectionController.selectRows([1]);
 
@@ -1246,7 +1255,7 @@ QUnit.test('Select all is not work when allowSelectAll is false', function(asser
     // arrange
     var testElement = $('#container');
 
-    $.extend(this.columns, [{ command: 'select', dataType: 'boolean' }, { index: 0 }, { index: 1 }]);
+    $.extend(this.columns, [{ command: 'select', dataType: 'boolean', headerCellTemplate: this.defaultSelectionHeaderTemplate }, { index: 0 }, { index: 1 }]);
 
     this.options.selection = { allowSelectAll: false };
 
@@ -1271,7 +1280,7 @@ QUnit.test("onCellClick event should be fired after clicking on 'Select All' che
         cellClickEventFired,
         testElement = $('#container');
 
-    $.extend(this.columns, [{ command: 'select', dataType: 'boolean' }, { index: 0 }, { index: 1 }]);
+    $.extend(this.columns, [{ command: 'select', dataType: 'boolean', headerCellTemplate: this.defaultSelectionHeaderTemplate }, { index: 0 }, { index: 1 }]);
     this.options.selection = { allowSelectAll: true };
     this.options.onCellClick = function() {
         cellClickEventFired = true;
@@ -1291,7 +1300,7 @@ QUnit.test('Unselect all is completed', function(assert) {
     // arrange
     var testElement = $('#container');
 
-    $.extend(this.columns, [{ command: 'select', dataType: 'boolean' }, { index: 0 }, { index: 1 }]);
+    $.extend(this.columns, [{ command: 'select', dataType: 'boolean', headerCellTemplate: this.defaultSelectionHeaderTemplate }, { index: 0 }, { index: 1 }]);
 
     this.options.selection = { allowSelectAll: false };
     this.selectionController.selectAll();

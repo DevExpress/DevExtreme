@@ -14,7 +14,11 @@ var $ = require("../../core/renderer"),
     objectUtils = require("../../core/utils/object"),
     window = require("../../core/utils/window").getWindow();
 
-var NO_DATA_CLASS = "nodata",
+var DATAGRID_SELECTION_DISABLED_CLASS = "dx-selection-disabled",
+    DATAGRID_GROUP_OPENED_CLASS = "dx-datagrid-group-opened",
+    DATAGRID_GROUP_CLOSED_CLASS = "dx-datagrid-group-closed",
+    DATAGRID_EXPAND_CLASS = "dx-datagrid-expand",
+    NO_DATA_CLASS = "nodata",
     DATE_INTERVAL_SELECTORS = {
         "year": function(value) {
             return value && value.getFullYear();
@@ -404,6 +408,31 @@ module.exports = (function() {
         createObjectWithChanges: function(target, changes) {
             var result = target ? Object.create(target) : { };
             return objectUtils.deepExtendArraySafe(result, changes, false, true);
+        },
+
+        getExpandCellTemplate: function() {
+            return {
+                allowRenderToDetachedContainer: true,
+                render: function(container, options) {
+                    var rowsView,
+                        $container = $(container);
+
+                    if(typeUtils.isDefined(options.value) && !(options.data && options.data.isContinuation) && !options.row.inserted) {
+                        rowsView = options.component.getView("rowsView");
+                        $container
+                            .addClass(DATAGRID_EXPAND_CLASS)
+                            .addClass(DATAGRID_SELECTION_DISABLED_CLASS);
+
+                        $("<div>")
+                            .addClass(options.value ? DATAGRID_GROUP_OPENED_CLASS : DATAGRID_GROUP_CLOSED_CLASS)
+                            .appendTo($container);
+
+                        rowsView.setAria("label", options.value ? rowsView.localize("dxDataGrid-ariaCollapse") : rowsView.localize("dxDataGrid-ariaExpand"), $container);
+                    } else {
+                        $container.get(0).innerHTML = "&nbsp;";
+                    }
+                }
+            };
         },
 
         isDateType: isDateType

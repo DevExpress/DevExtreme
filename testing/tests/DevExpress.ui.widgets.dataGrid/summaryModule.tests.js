@@ -1054,7 +1054,7 @@ QUnit.test("Show group footer when edit column exists", function(assert) {
     assert.equal(testElement.find(".dx-datagrid-group-footer").length, 6, "has group footer rows");
     var $groupFooterEditCell = testElement.find(".dx-datagrid-group-footer").first().find("td").last();
     assert.ok($groupFooterEditCell.hasClass("dx-command-edit"), "is command edit cell");
-    assert.equal($groupFooterEditCell.text(), "", "edit column cell in group footer row is empty");
+    assert.equal($groupFooterEditCell.html(), "&nbsp;", "edit column cell in group footer row is empty");
 });
 
 

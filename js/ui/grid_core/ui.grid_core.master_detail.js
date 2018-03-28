@@ -55,7 +55,9 @@ module.exports = {
                     var expandColumns = this.callBase();
 
                     if(this.option("masterDetail.enabled")) {
-                        expandColumns.push({});
+                        expandColumns.push({
+                            cellTemplate: gridCoreUtils.getExpandCellTemplate()
+                        });
                     }
                     return expandColumns;
                 }

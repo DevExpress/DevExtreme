@@ -76,6 +76,26 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
         return key !== selectionFilter[0];
     };
 
+    var getSelectionCellTemplate = function() {
+        return (container, options) => {
+            var rowsView = options.component.getView("rowsView");
+
+            rowsView.renderSelectCheckBoxContainer($(container), options);
+        };
+    };
+
+    var getSelectionHeaderTemplate = function() {
+        return (container, options) => {
+            var column = options.column,
+                $cellElement = $(container).parent(),
+                columnHeadersView = options.component.getView("columnHeadersView");
+
+            $cellElement.addClass(EDITOR_CELL_CLASS);
+            columnHeadersView._renderSelectAllCheckBox($cellElement, column);
+            columnHeadersView._attachSelectAllCheckBoxClickEvent($cellElement);
+        };
+    };
+
     return {
         init: function() {
             var that = this,
@@ -142,7 +162,9 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
                 dataType: "boolean",
                 alignment: "center",
                 cssClass: COMMAND_SELECT_CLASS,
-                width: "auto"
+                width: "auto",
+                cellTemplate: getSelectionCellTemplate(),
+                headerCellTemplate: getSelectionHeaderTemplate()
             });
 
             columnsController.columnOption("command:select", "visible", isSelectColumnVisible);
@@ -691,24 +713,6 @@ module.exports = {
                         this._updateSelectAllValue();
                     }
                 },
-                _getDefaultTemplate: function(column) {
-                    var that = this;
-
-                    if(column.command === "select") {
-                        return function($cell, options) {
-                            var column = options.column;
-
-                            if(column.command === "select") {
-                                $cell.addClass(EDITOR_CELL_CLASS);
-
-                                that._renderSelectAllCheckBox($cell, column);
-                                that._attachSelectAllCheckBoxClickEvent($cell);
-                            }
-                        };
-                    } else {
-                        return that.callBase(column);
-                    }
-                },
 
                 _renderSelectAllCheckBox: function($container, column) {
                     var that = this,
@@ -763,18 +767,6 @@ module.exports = {
             },
 
             rowsView: {
-                _getDefaultTemplate: function(column) {
-                    var that = this;
-
-                    if(column.command === "select") {
-                        return function(container, options) {
-                            that.renderSelectCheckBoxContainer(container, options);
-                        };
-                    } else {
-                        return that.callBase(column);
-                    }
-                },
-
                 renderSelectCheckBoxContainer: function($container, options) {
                     if(options.rowType === "data" && !options.row.inserted) {
                         $container.addClass(EDITOR_CELL_CLASS);
@@ -782,6 +774,8 @@ module.exports = {
 
                         this.setAria("label", messageLocalization.format("dxDataGrid-ariaSelectRow"), $container);
                         this._renderSelectCheckBox($container, options);
+                    } else {
+                        $container.get(0).innerHTML = "&nbsp;";
                     }
                 },
 
