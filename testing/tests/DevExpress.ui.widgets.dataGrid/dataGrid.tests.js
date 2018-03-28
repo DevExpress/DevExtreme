@@ -2699,6 +2699,91 @@ QUnit.test("aria-colcount aria-rowcount if virtual scrolling", function(assert) 
     clock.restore();
 });
 
+QUnit.test("all visible items should be rendered if pageSize is small and virtual scrolling is enabled", function(assert) {
+    // arrange, act
+    var clock = sinon.useFakeTimers(),
+        array = [],
+        dataGrid;
+
+    for(var i = 1; i <= 15; i++) {
+        array.push({ id: i });
+    }
+
+    dataGrid = $("#dataGrid").dxDataGrid({
+        height: 400,
+        dataSource: array,
+        keyExpr: "id",
+        onRowPrepared: function(e) {
+            if(e.rowType === "data") {
+                $(e.rowElement).css("height", e.key === 1 ? 200 : 50);
+            }
+        },
+        paging: { pageSize: 2 },
+        scrolling: {
+            mode: "virtual",
+            useNative: false
+        }
+    }).dxDataGrid("instance");
+
+    clock.tick();
+
+    // act
+    dataGrid.getScrollable().scrollTo({ y: 300 });
+
+    clock.tick(300);
+
+    // assert
+    var visibleRows = dataGrid.getVisibleRows();
+    assert.equal(visibleRows.length, 10, "visible row count");
+    assert.equal(visibleRows[0].key, 3, "first visible row key");
+    assert.equal(visibleRows[visibleRows.length - 1].key, 12, "last visible row key");
+
+    clock.restore();
+});
+
+QUnit.test("visible items should be rendered if virtual scrolling and preload are enabled", function(assert) {
+    // arrange, act
+    var clock = sinon.useFakeTimers(),
+        array = [],
+        dataGrid;
+
+    for(var i = 1; i <= 15; i++) {
+        array.push({ id: i });
+    }
+
+    dataGrid = $("#dataGrid").dxDataGrid({
+        height: 400,
+        dataSource: array,
+        keyExpr: "id",
+        onRowPrepared: function(e) {
+            if(e.rowType === "data") {
+                $(e.rowElement).css("height", e.key === 1 ? 200 : 50);
+            }
+        },
+        paging: { pageSize: 2 },
+        scrolling: {
+            preloadEnabled: true,
+            mode: "virtual",
+            useNative: false
+        }
+    }).dxDataGrid("instance");
+
+    clock.tick();
+
+    // act
+    dataGrid.getScrollable().scrollTo({ y: 300 });
+
+    clock.tick(300);
+
+    // assert
+    var visibleRows = dataGrid.getVisibleRows();
+    assert.equal(visibleRows.length, 14, "visible row count");
+    assert.equal(visibleRows[0].key, 1, "first visible row key");
+    assert.equal(visibleRows[visibleRows.length - 1].key, 14, "last visible row key");
+
+    clock.restore();
+});
+
 QUnit.test("Freespace row have the correct height when using master-detail with virtual scrolling and container has fixed height", function(assert) {
     // arrange
     var array = [];
@@ -4686,7 +4771,8 @@ QUnit.test("The same page should not load when scrolling in virtual mode", funct
 
         // assert
         assert.deepEqual(pageIndexesForLoad, [0, 1, 2, 3]);
-        assert.strictEqual(dataGrid.getVisibleRows().length, 80);
+        assert.strictEqual(dataGrid.getVisibleRows().length, 60);
+        assert.strictEqual(dataGrid.getVisibleRows()[0].data.room, 120);
     } finally {
         clock.restore();
     }
@@ -6497,7 +6583,7 @@ QUnit.testInActiveWindow("Tab key should open editor in next cell when virtual s
     this.clock.tick();
     var rowData = dataGrid.getTopVisibleRowData();
 
-    dataGrid.editCell(rowData.index + 1, 0);
+    dataGrid.editCell(dataGrid.getRowIndexByKey(rowData) + 1, 0);
     this.clock.tick();
 
     $(dataGrid.$element()).find(".dx-textbox").dxTextBox("instance").option("value", "Test");
