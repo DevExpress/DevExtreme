@@ -653,6 +653,7 @@ QUnit.test("Change options and call selectRows", function(assert) {
 // T576806
 QUnit.test("Pages should be correctly loaded after change dataSource and selectedRowKeys options", function(assert) {
     var treeList = createTreeList({
+        height: 1500,
         autoExpandAll: true
     });
 
@@ -663,7 +664,7 @@ QUnit.test("Pages should be correctly loaded after change dataSource and selecte
         dataSource: generateData(20),
         selectedRowKeys: [1]
     });
-    this.clock.tick(60);
+    this.clock.tick(0);
 
     // assert
     assert.strictEqual(treeList.getVisibleRows().length, 40, "row count");
