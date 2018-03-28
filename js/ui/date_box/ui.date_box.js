@@ -115,7 +115,9 @@ var DateBox = DropDownEditor.inherit({
             "formatString": { since: "16.1", alias: "displayFormat" },
 
             "useNative": { since: "15.1", message: "'useNative' option is deprecated in 15.1. Use the 'pickerType' option instead" },
-            "useCalendar": { since: "15.1", message: "'useCalendar' option is deprecated in 15.1. Use the 'pickerType' option instead" }
+            "useCalendar": { since: "15.1", message: "'useCalendar' option is deprecated in 15.1. Use the 'pickerType' option instead" },
+            "maxZoomLevel": { since: "18.1", alias: "calendarOptions.maxZoomLevel" },
+            "minZoomLevel": { since: "18.1", alias: "calendarOptions.minZoomLevel" }
         });
     },
 
@@ -219,15 +221,17 @@ var DateBox = DropDownEditor.inherit({
             * @publicName maxZoomLevel
             * @type Enums.CalendarZoomLevel
             * @default 'month'
+            * @deprecated dxDateBoxOptions_calendarOptions
             */
             maxZoomLevel: "month",
 
-            /**
-            * @name dxDateBoxOptions_minZoomLevel
-            * @publicName minZoomLevel
-            * @type Enums.CalendarZoomLevel
-            * @default 'century'
-            */
+           /**
+           * @name dxDateBoxOptions_minZoomLevel
+           * @publicName minZoomLevel
+           * @type Enums.CalendarZoomLevel
+           * @default 'century'
+           * @deprecated dxDateBoxOptions_calendarOptions
+           */
             minZoomLevel: "century",
 
             /**
@@ -294,7 +298,15 @@ var DateBox = DropDownEditor.inherit({
             * @type boolean
             * @default false
             */
-            adaptivityEnabled: false
+            adaptivityEnabled: false,
+
+            /**
+            * @name dxDateBoxOptions_calendarOptions
+            * @publicName calendarOptions
+            * @type dxCalendarOptions
+            * @default {}
+            */
+            calendarOptions: {}
 
         });
     },
@@ -837,6 +849,7 @@ var DateBox = DropDownEditor.inherit({
             case "readOnly":
             case "interval":
             case "disabledDates":
+            case "calendarOptions":
             case "minZoomLevel":
             case "maxZoomLevel":
                 this._invalidate();
