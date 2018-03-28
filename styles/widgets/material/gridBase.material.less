@@ -128,6 +128,10 @@
             .dx-icon-sizing(@MATERIAL_GRID_BASE_HEADER_ICON_SIZE);
         }
 
+        .dx-header-filter:not(.dx-header-filter-empty) {
+            color: ~"@{@{widgetName}-active-header-filter-icon-color}";
+        }
+
         .dx-icon-filter-operation-equals {
             .dx-icon-equal;
         }
@@ -423,6 +427,10 @@
                 padding-top: 7px;
                 padding-bottom: 9px;
                 background-color: transparent;
+
+                .dx-toolbar-center {
+                    padding-right: 8px;
+                }
             }
 
             .dx-popup-content {
@@ -462,6 +470,10 @@
         & > td {
             background-color: ~"@{@{widgetName}-drop-highlight-bg}";
             color: ~"@{@{widgetName}-drop-highlight-color}";
+
+            .dx-header-filter {
+                color: ~"@{@{widgetName}-drop-highlight-color}";
+            }
         }
     }
 
