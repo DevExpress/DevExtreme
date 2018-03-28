@@ -249,7 +249,7 @@ QUnit.test("Virtual scrolling enabled by default and should render two virtual r
     assert.equal(treeList.option("scrolling.mode"), "virtual", "scrolling mode is virtual");
     var $rowsViewTables = $(treeList.$element().find(".dx-treelist-rowsview table"));
     assert.equal($rowsViewTables.length, 1, "one table are rendered");
-    assert.equal($rowsViewTables.eq(0).find(".dx-data-row").length, 4, "three data rows in table");
+    assert.equal($rowsViewTables.eq(0).find(".dx-data-row").length, 4, "data rows in table");
     assert.equal($rowsViewTables.eq(0).find(".dx-virtual-row").length, 2, "two virtual rows in table");
     assert.equal($rowsViewTables.eq(0).find(".dx-freespace-row").length, 1, "one freespace row in table");
 });
@@ -656,7 +656,7 @@ QUnit.test("Pages should be correctly loaded after change dataSource and selecte
         autoExpandAll: true
     });
 
-    this.clock.tick(30);
+    this.clock.tick(300);
 
     // act
     treeList.option({

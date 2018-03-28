@@ -13,7 +13,7 @@ var SCROLLING_MODE_INFINITE = "infinite",
     SCROLLING_MODE_VIRTUAL = "virtual";
 
 var isVirtualMode = function(that) {
-    return that.option("scrolling.mode") === SCROLLING_MODE_VIRTUAL;
+    return that.option("scrolling.mode") === SCROLLING_MODE_VIRTUAL || that._isVirtual;
 };
 
 var isAppendMode = function(that) {
@@ -191,7 +191,7 @@ exports.VirtualScrollController = Class.inherit((function() {
         if(beginPageIndex < 0) {
             result = that._pageIndex;
         } else if(!that._cache[that._pageIndex - beginPageIndex]) {
-            if(currentPageIsLoaded(that)) {
+            if(currentPageIsLoaded(that) || that._isVirtual) {
                 result = that._pageIndex;
             }
         } else if(beginPageIndex >= 0 && that._viewportSize >= 0) {
@@ -284,7 +284,7 @@ exports.VirtualScrollController = Class.inherit((function() {
     };
 
     return {
-        ctor: function(component, dataSource) {
+        ctor: function(component, dataSource, isVirtual) {
             var that = this;
             that._dataSource = dataSource;
             that.component = component;
@@ -297,6 +297,7 @@ exports.VirtualScrollController = Class.inherit((function() {
             that._sizeRatio = 1;
             that._items = [];
             that._cache = [];
+            that._isVirtual = isVirtual;
         },
         option: function() {
             return this.component.option.apply(this.component, arguments);
@@ -374,10 +375,12 @@ exports.VirtualScrollController = Class.inherit((function() {
                 that._setViewportPositionCore(position / (viewportItemSize * sizeRatio));
             }
         },
-        setContentSize: function(size) {
+        setContentSize: function(size, delta) {
             var that = this,
                 sizes = Array.isArray(size) && size,
                 virtualItemsCount = that.virtualItemsCount();
+
+            delta = delta || 0;
 
             if(sizes) {
                 size = sizes.reduce((a, b) => a + b, 0);
@@ -388,7 +391,7 @@ exports.VirtualScrollController = Class.inherit((function() {
             if(virtualItemsCount) {
                 if(sizes) {
                     sizes.forEach((size, index) => {
-                        that._itemSizes[virtualItemsCount.begin + index] = size;
+                        that._itemSizes[virtualItemsCount.begin - delta + index] = size;
                     });
                 }
                 var virtualContentSize = (virtualItemsCount.begin + virtualItemsCount.end + that.itemsCount()) * that._viewportItemSize;
@@ -462,6 +465,7 @@ exports.VirtualScrollController = Class.inherit((function() {
                     newPageIndex = Math.max(newPageIndex, 0);
                     newPageIndex = Math.min(newPageIndex, maxPageIndex);
                 }
+
                 if(that.pageIndex() !== newPageIndex || needLoad) {
                     that.pageIndex(newPageIndex);
                 }
@@ -604,7 +608,6 @@ exports.VirtualScrollController = Class.inherit((function() {
 
         reset: function() {
             this._cache = [];
-            this._itemSizes = {};
         },
 
         subscribeToWindowScrollEvents: function($element) {
