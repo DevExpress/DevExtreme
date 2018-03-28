@@ -87,7 +87,7 @@ var FilterPanelView = modules.View.inherit({
         var that = this,
             $element = $("<div>")
                 .addClass(this.addWidgetPrefix(FILTER_PANEL_CLEAR_FILTER_CLASS))
-                .attr("title", this.option("filterPanel.filterPanelClearFilterHintText"));
+                .text(this.option("filterPanel.clearFilterText"));
         eventsEngine.on($element, "click", function() {
             that.option("filterValue", null);
         });
@@ -138,6 +138,14 @@ module.exports = {
                 applyFilterValue: true,
 
                 /**
+                 * @name GridBaseOptions_filterPanel_clearFilterText
+                 * @publicName clearFilterText
+                 * @type string
+                 * @default "Clear"
+                 */
+                clearFilterText: messageLocalization.format("dxDataGrid-clearFilterText"),
+
+                /**
                  * @name GridBaseOptions_filterPanel_createFilterText
                  * @publicName createFilterText
                  * @type string
@@ -152,14 +160,6 @@ module.exports = {
                  * @default "Apply Filter"
                  */
                 applyFilterHintText: messageLocalization.format("dxDataGrid-filterPanelApplyFilterHint"),
-
-                /**
-                 * @name GridBaseOptions_filterPanel_clearFilterHintText
-                 * @publicName filterPanelClearFilterHintText
-                 * @type string
-                 * @default "Clear Filter"
-                 */
-                filterPanelClearFilterHintText: messageLocalization.format("dxDataGrid-filterPanelClearFilterHint"),
 
                 /**
                  * @name GridBaseOptions_filterPanel_customizeFilterText

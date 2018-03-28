@@ -148,7 +148,7 @@
         "dxDataGrid-ariaSelectRow": "Valitse rivi",
         "dxDataGrid-filterBuilderPopupTitle": "!TODO",
         "dxDataGrid-filterPanelCreateFilter": "!TODO",
-        "dxDataGrid-filterPanelClearFilterHint": "!TODO",
+        "dxDataGrid-clearFilterText": "!TODO",
         "dxDataGrid-filterPanelApplyFilterHint": "!TODO",
 
         "dxTreeList-ariaTreeList": "Puu",
