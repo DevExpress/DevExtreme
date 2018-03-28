@@ -2218,8 +2218,10 @@
             }
     
             .dx-scheduler-header-panel {
-                margin-left: 100px;
                 border-left: @SCHEDULER_BASE_BORDER;
+                .dx-scheduler-header-row {
+                    .dx-scheduler-pseudo-cell();
+                }
             }
         }
     
