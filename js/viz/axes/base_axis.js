@@ -1197,9 +1197,14 @@ Axis.prototype = {
                     axisType: options.type,
                     dataType: options.dataType
                 }, false, true);
-                const maxMinDistance = useAllAggregatedPoints ? 0 : add(max, min, -1);
-                let start = add(min, maxMinDistance, -1);
-                let end = add(max, maxMinDistance);
+
+                let start = min;
+                let end = max;
+                if(!useAllAggregatedPoints) {
+                    const maxMinDistance = add(max, min, -1);
+                    start = add(min, maxMinDistance, -1);
+                    end = add(max, maxMinDistance);
+                }
                 start = start < viewPort.min ? viewPort.min : start;
                 end = end > viewPort.max ? viewPort.max : end;
                 ticks = generateTicks(tickInterval, false, start, end).ticks;
