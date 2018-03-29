@@ -825,8 +825,8 @@ QUnit.test("last non required zero should not be typed", function(assert) {
 
     assert.equal(this.input.val(), "1.50", "zero type was not prevented");
 
-    this.input.blur();
-    assert.equal(this.input.val(), "1.5", "value was reformatted on focusout");
+    this.keyboard.press("enter");
+    assert.equal(this.input.val(), "1.5", "value was reformatted on value change");
 });
 
 QUnit.test("removing with group separators using delete key", function(assert) {
