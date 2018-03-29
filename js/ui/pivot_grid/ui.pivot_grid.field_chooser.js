@@ -180,7 +180,19 @@ var FieldChooser = BaseFieldChooser.inherit({
                  * @default 'All Fields'
                  */
                 allFields: messageLocalization.format("dxPivotGrid-allFields")
-            }
+            },
+            /**
+            * @name dxPivotGridFieldChooserOptions_applyChangesMode
+            * @publicName applyChangesMode
+            * @type string
+            * @default "instantly"
+            */
+           /**
+            * @name dxPivotGridFieldChooserOptions_state
+            * @publicName state
+            * @type string
+            * @default null
+            */
             /**
              * @name dxPivotGridFieldChooserOptions_headerFilter
              * @publicName headerFilter
@@ -289,6 +301,9 @@ var FieldChooser = BaseFieldChooser.inherit({
                 break;
             case "onContextMenuPreparing":
                 that._actions[args.name] = that._createActionByOption(args.name);
+                break;
+            case "currentState":
+            case "applyChangesMode":
                 break;
             default:
                 that.callBase(args);
@@ -505,6 +520,7 @@ var FieldChooser = BaseFieldChooser.inherit({
             treeView = that._createComponent(container, TreeView, {
                 dataSource: that._createFieldsDataSource(dataSource),
                 showCheckBoxesMode: 'normal',
+                keyExpr: "key",
                 searchEnabled: that.option("allowSearch"),
                 itemTemplate: function(itemData, itemIndex, itemElement) {
                     if(itemData.icon) {
@@ -536,6 +552,10 @@ var FieldChooser = BaseFieldChooser.inherit({
                         needSelectDefaultItem = true,
                         area;
 
+                    if(!e.event && !that._applyValueInstantly()) {
+                        return;
+                    }
+
                     if(data.items) {
                         if(data.selected) {
                             treeView.unselectItem(data);
@@ -564,13 +584,25 @@ var FieldChooser = BaseFieldChooser.inherit({
                             fields = [field];
                         }
                     }
-                    each(fields, function(_, field) {
-                        dataSource.field(field.index, {
-                            area: area,
-                            areaIndex: undefined
+                    if(that._applyValueInstantly()) {
+                        each(fields, function(_, field) {
+                            dataSource.field(field.index, {
+                                area: area,
+                                areaIndex: undefined
+                            });
                         });
-                    });
-                    dataSource.load();
+                        dataSource.load();
+                    } else {
+                        var extendedField = extend(true, {}, field);
+                        that._setInitialState();
+                        if(area) {
+                            that._updateState(extendedField, { area: area, areaIndex: that._getFieldsArea(area).find("dx-area-field").length });
+                            that._updateTargetArea(extendedField, { area: area });
+                        } else {
+                            that._updateState(extendedField, { area: null, areaIndex: null });
+                            that._removeFromSourceArea(extendedField);
+                        }
+                    }
                 }
             }),
 
@@ -589,10 +621,8 @@ var FieldChooser = BaseFieldChooser.inherit({
         that._dataChangedHandlers.push(dataChanged);
     },
 
-    _renderAreaFields: function($container, area) {
-        var that = this,
-            dataSource = that._dataSource,
-            fields = dataSource ? dataSource.getAreaFields(area, true) : [];
+    _renderAreaFields: function($container, area, fields) {
+        var that = this;
 
         $container.empty();
         each(fields, function(_, field) {
@@ -627,7 +657,8 @@ var FieldChooser = BaseFieldChooser.inherit({
         if(area !== "all") {
             $fieldsContent = $(DIV).addClass("dx-area-field-container").appendTo($fieldsContainer);
             render = function() {
-                that._renderAreaFields($fieldsContent, area);
+                var fields = that._dataSource ? that._dataSource.getAreaFields(area, true) : [];
+                that._renderAreaFields($fieldsContent, area, fields);
             };
 
             that._dataChangedHandlers.push(render);
