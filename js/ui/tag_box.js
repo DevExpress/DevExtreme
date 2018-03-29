@@ -783,13 +783,16 @@ var TagBox = SelectBox.inherit({
     _loadItem: function() {
         var dataSource = this._getDataSource(),
             filter = dataSource && dataSource.filter(),
+            searchValue = dataSource && dataSource.searchValue(),
             result;
 
         filter && dataSource.filter(this._userFilter || null);
+        searchValue && dataSource.searchValue(null);
 
         result = this.callBase.apply(this, arguments);
 
         filter && dataSource.filter(filter);
+        searchValue && dataSource.searchValue(searchValue);
 
         return result;
     },
