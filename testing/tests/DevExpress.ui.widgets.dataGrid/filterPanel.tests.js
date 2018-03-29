@@ -61,12 +61,12 @@ QUnit.module("Filter Panel", {
         assert.ok(this.filterPanelView.element().hasClass(FILTER_PANEL_CLASS));
     });
 
-    QUnit.test("filterApplied", function(assert) {
+    QUnit.test("filterEnabled", function(assert) {
         // arrange, act
         this.initFilterPanelView({
             filterPanel: {
                 visible: true,
-                filterApplied: true
+                filterEnabled: true
             },
             dataSource: [],
             filterValue: ["field", "=", "1"],
@@ -77,7 +77,7 @@ QUnit.module("Filter Panel", {
         assert.deepEqual(this.getCombinedFilter(true), ["field", "=", "1"], "check filterValue");
 
         // act
-        this.changeOption("filterPanel", "filterPanel.filterApplied", false);
+        this.changeOption("filterPanel", "filterPanel.filterEnabled", false);
 
         // assert
         assert.deepEqual(this.getCombinedFilter(true), undefined, "check filterValue");
@@ -107,9 +107,9 @@ QUnit.module("Filter Panel", {
         this.initFilterPanelView({
             filterPanel: {
                 visible: true,
-                customizeFilterText: function(filterValue, filterText) {
-                    assertFilterValue = filterValue;
-                    assertFilterText = filterText + "_test";
+                customizeText: function(e) {
+                    assertFilterValue = e.filterValue;
+                    assertFilterText = e.text + "_test";
                     return assertFilterText;
                 }
             },
@@ -119,8 +119,8 @@ QUnit.module("Filter Panel", {
         });
 
         // assert
-        assert.equal(this.filterPanelView.element().find("." + FILTER_PANEL_TEXT_CLASS).text(), assertFilterText, "check customizeFilterText");
-        assert.equal(assertFilterValue, filterValue, "check filter value in customizeFilterText function");
+        assert.equal(this.filterPanelView.element().find("." + FILTER_PANEL_TEXT_CLASS).text(), assertFilterText, "check customizeText");
+        assert.equal(assertFilterValue, filterValue, "check filter value in customizeText function");
     });
 
     QUnit.test("Filter text", function(assert) {
@@ -144,7 +144,7 @@ QUnit.module("Filter Panel", {
             filterPanel: {
                 visible: true,
                 texts: {
-                    applyFilterHintText: "test0"
+                    filterEnabled: "test0"
                 }
             },
             dataSource: [],

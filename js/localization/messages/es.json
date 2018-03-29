@@ -137,7 +137,7 @@
         "dxDataGrid-filterBuilderPopupTitle": "!TODO",
         "dxDataGrid-filterPanelCreateFilter": "!TODO",
         "dxDataGrid-filterPanelClearFilter": "!TODO",
-        "dxDataGrid-filterPanelApplyFilterHint": "!TODO",
+        "dxDataGrid-filterPanelFilterEnabled": "!TODO",
         "dxTreeList-ariaTreeList": "Lista de árbol",
         "dxTreeList-editingAddRowToNode": "Añadir",
         "dxPager-infoText": "Página {0} de {1} ({2} elementos)",
