@@ -347,14 +347,14 @@ var FieldChooser = BaseFieldChooser.inherit({
             that._renderArea($col2, "column");
             that._renderArea($col2, "data");
         }
+    },
 
-        if(hasWindow) {
-            that.renderSortable();
+    _render: function() {
+        this.callBase();
 
-            that.updateDimensions();
-
-            that._renderContextMenu();
-        }
+        this.renderSortable();
+        this.updateDimensions();
+        this._renderContextMenu();
     },
 
     _fireContentReadyAction: function() {
