@@ -547,8 +547,12 @@ module.exports = {
                 _beforeProcessItems: function(items) {
                     return items.slice(0);
                 },
+                getRowIndexDelta: function() {
+                    return 0;
+                },
                 _processItems: function(items, changeType) {
                     var that = this,
+                        rowIndexDelta = that.getRowIndexDelta(),
                         visibleColumns = that._columnsController.getVisibleColumns(),
                         visibleItems = that._items,
                         dataIndex = changeType === "append" && visibleItems.length > 0 ? visibleItems[visibleItems.length - 1].dataIndex + 1 : 0,
@@ -560,7 +564,7 @@ module.exports = {
 
                     each(items, function(index, item) {
                         if(typeUtils.isDefined(item)) {
-                            options.rowIndex = index;
+                            options.rowIndex = index - rowIndexDelta;
                             item = that._processItem(item, options);
                             result.push(item);
                         }
@@ -608,6 +612,7 @@ module.exports = {
                     var that = this,
                         items,
                         dataSource = that._dataSource,
+                        rowIndexDelta = that.getRowIndexDelta(),
                         changeType = change.changeType || "refresh";
 
                     change.changeType = changeType;
@@ -622,9 +627,15 @@ module.exports = {
                         switch(changeType) {
                             case "prepend":
                                 that._items.unshift.apply(that._items, items);
+                                if(change.removeCount) {
+                                    that._items.splice(-change.removeCount);
+                                }
                                 break;
                             case "append":
                                 that._items.push.apply(that._items, items);
+                                if(change.removeCount) {
+                                    that._items.splice(0, change.removeCount);
+                                }
                                 break;
                             case "update":
                                 var prevIndex = -1,
@@ -659,7 +670,7 @@ module.exports = {
                                         newNextItem,
                                         strict;
 
-                                    rowIndex += rowIndexCorrection;
+                                    rowIndex += rowIndexCorrection + rowIndexDelta;
 
                                     if(prevIndex === rowIndex) return;
 
@@ -697,7 +708,7 @@ module.exports = {
                                         return;
                                     }
 
-                                    change.rowIndices.push(rowIndex);
+                                    change.rowIndices.push(rowIndex - rowIndexDelta);
                                     change.changeTypes.push(changeType);
                                 });
                                 break;
@@ -723,6 +734,12 @@ module.exports = {
 
                     that._updateItemsCore(change);
 
+                    if(change.cancel) return;
+
+                    that._fireChanged(change);
+                },
+                _fireChanged: function(change) {
+                    var that = this;
                     commonUtils.deferRender(function() {
                         that.changed.fire(change);
                     });

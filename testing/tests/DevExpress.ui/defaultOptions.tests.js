@@ -1278,7 +1278,8 @@ testComponentDefaults(Tabs,
     { },
     {
         useInkRipple: true,
-        showNavButtons: false
+        showNavButtons: false,
+        selectOnFocus: false
     },
     function() {
         this.originalCurrentTheme = themes.current();
@@ -1286,6 +1287,41 @@ testComponentDefaults(Tabs,
     },
     function() {
         themes.current(this.originalCurrentTheme);
+    }
+);
+
+testComponentDefaults(Tabs,
+    {},
+    {
+        useInkRipple: false,
+        showNavButtons: true,
+        selectOnFocus: true
+    },
+    function() {
+        this._origDevice = devices.real();
+
+        devices.real({ platform: "generic", generic: true });
+    },
+    function() {
+        devices.real(this._origDevice);
+    }
+);
+
+testComponentDefaults(Tabs,
+    { platform: devices.current().platform },
+    {
+        useInkRipple: false,
+        showNavButtons: false,
+        selectOnFocus: true
+    },
+    function() {
+        this.originalRealDevice = devices.real();
+        devices.real({
+            platform: "ios"
+        });
+    },
+    function() {
+        devices.real(this.originalRealDevice);
     }
 );
 

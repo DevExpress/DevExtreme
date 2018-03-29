@@ -360,7 +360,7 @@ function addIntervalWithBreaks(addInterval, breaks, correctValue) {
 }
 
 function calculateTicks(addInterval, correctMinValue, adjustInterval, resolveEndOnTick, resolveExtraTickForHiddenDataPoint) {
-    return function(data, tickInterval, endOnTick, gaps, breaks, businessDelta, screenDelta, axisDivisionFactor) {
+    return function(data, tickInterval, endOnTick, gaps, breaks, businessDelta, screenDelta, axisDivisionFactor, generateExtraTick) {
         var correctTickValue = correctTickValueOnGapSize(addInterval, gaps),
             min = data.min,
             max = data.max,
@@ -387,7 +387,7 @@ function calculateTicks(addInterval, correctMinValue, adjustInterval, resolveEnd
         }
         cur = correctTickValue(cur);
 
-        while(cur < max) {
+        while(cur < max || generateExtraTick && cur <= max) {
             ticks.push(cur);
             cur = correctTickValue(addInterval(cur, tickInterval));
         }
@@ -553,7 +553,7 @@ function generator(options, getBusinessDelta, calculateTickInterval, calculateMi
         );
 
         if(!options.skipTickGeneration) {
-            majorTicks = calculateTicks(data, tickInterval, options.endOnTick, gaps, breaks, businessDelta, screenDelta, options.axisDivisionFactor);
+            majorTicks = calculateTicks(data, tickInterval, options.endOnTick, gaps, breaks, businessDelta, screenDelta, options.axisDivisionFactor, options.generateExtraTick);
 
             breaks = processScaleBreaks(breaks, tickInterval, screenDelta, options.axisDivisionFactor);
 

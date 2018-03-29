@@ -13,7 +13,7 @@ var SCROLLING_MODE_INFINITE = "infinite",
     SCROLLING_MODE_VIRTUAL = "virtual";
 
 var isVirtualMode = function(that) {
-    return that.option("scrolling.mode") === SCROLLING_MODE_VIRTUAL;
+    return that.option("scrolling.mode") === SCROLLING_MODE_VIRTUAL || that._isVirtual;
 };
 
 var isAppendMode = function(that) {
@@ -124,7 +124,31 @@ exports.VirtualScrollController = Class.inherit((function() {
             return 0;
         }
 
-        return (pageSize && that._viewportSize > 0) ? Math.ceil(that._viewportSize / pageSize) : 1;
+        var realViewportSize = that._viewportSize;
+
+        if(isVirtualMode(that) && that.option("advancedRendering") && that.option("scrolling.removeInvisiblePages")) {
+            realViewportSize = 0;
+
+            var viewportSize = that._viewportSize * that._viewportItemSize;
+
+            var offset = that.getContentOffset();
+            var position = that._position || 0;
+
+            var virtualItemsCount = that.virtualItemsCount();
+            var totalItemsCount = that._dataSource.totalItemsCount();
+
+            for(var itemIndex = virtualItemsCount.begin; itemIndex < totalItemsCount; itemIndex++) {
+                if(offset >= position + viewportSize) break;
+
+                var itemSize = that._itemSizes[itemIndex] || that._viewportItemSize;
+                offset += itemSize;
+                if(offset >= position) {
+                    realViewportSize++;
+                }
+            }
+        }
+
+        return (pageSize && realViewportSize > 0) ? Math.ceil(realViewportSize / pageSize) : 1;
     };
 
     var getPreloadPageCount = function(that, previous) {
@@ -167,7 +191,7 @@ exports.VirtualScrollController = Class.inherit((function() {
         if(beginPageIndex < 0) {
             result = that._pageIndex;
         } else if(!that._cache[that._pageIndex - beginPageIndex]) {
-            if(currentPageIsLoaded(that)) {
+            if(currentPageIsLoaded(that) || that._isVirtual) {
                 result = that._pageIndex;
             }
         } else if(beginPageIndex >= 0 && that._viewportSize >= 0) {
@@ -214,7 +238,7 @@ exports.VirtualScrollController = Class.inherit((function() {
         }
     };
 
-    var processChanged = function(that, changed, changeType, isDelayChanged) {
+    var processChanged = function(that, changed, changeType, isDelayChanged, removeCount) {
         var dataSource = that._dataSource,
             items = dataSource.items(),
             change;
@@ -223,12 +247,21 @@ exports.VirtualScrollController = Class.inherit((function() {
                 changeType: changeType,
                 items: items
             };
+            if(removeCount) {
+                change.removeCount = removeCount;
+            }
         }
         var viewportItems = that._dataSource.viewportItems();
         if(changeType === "append") {
             viewportItems.push.apply(viewportItems, items);
+            if(removeCount) {
+                viewportItems.splice(0, removeCount);
+            }
         } else if(changeType === "prepend") {
             viewportItems.unshift.apply(viewportItems, items);
+            if(removeCount) {
+                viewportItems.splice(-removeCount);
+            }
         } else {
             that._dataSource.viewportItems(items);
         }
@@ -251,7 +284,7 @@ exports.VirtualScrollController = Class.inherit((function() {
     };
 
     return {
-        ctor: function(component, dataSource) {
+        ctor: function(component, dataSource, isVirtual) {
             var that = this;
             that._dataSource = dataSource;
             that.component = component;
@@ -260,9 +293,11 @@ exports.VirtualScrollController = Class.inherit((function() {
             that._viewportSize = 0;
             that._viewportItemSize = 20;
             that._viewportItemIndex = -1;
+            that._itemSizes = {};
             that._sizeRatio = 1;
             that._items = [];
             that._cache = [];
+            that._isVirtual = isVirtual;
         },
         option: function() {
             return this.component.option.apply(this.component, arguments);
@@ -297,7 +332,9 @@ exports.VirtualScrollController = Class.inherit((function() {
             if(scrollingTimeout < that.option("scrolling.renderingThreshold")) {
                 scrollingTimeout = that.option("scrolling.minTimeout") || 0;
             }
-
+            if(!isNear) {
+                that._itemSizes = {};
+            }
 
             clearTimeout(that._scrollTimeoutID);
             if(scrollingTimeout > 0) {
@@ -318,24 +355,45 @@ exports.VirtualScrollController = Class.inherit((function() {
             var that = this,
                 virtualItemsCount = that.virtualItemsCount(),
                 sizeRatio = that._sizeRatio || 1,
-                itemSize = that._viewportItemSize,
-                offset = virtualItemsCount ? Math.floor(virtualItemsCount.begin * itemSize * sizeRatio) : 0;
+                viewportItemSize = that._viewportItemSize,
+                offset = that.getContentOffset();
 
             that._position = position;
 
             if(virtualItemsCount && position >= offset && position <= offset + that._contentSize) {
-                that._setViewportPositionCore(virtualItemsCount.begin + (position - offset) / itemSize, true);
+                var itemOffset = 0,
+                    itemSize;
+
+                do {
+                    itemSize = that._itemSizes[virtualItemsCount.begin + itemOffset] || viewportItemSize;
+                    offset += itemSize;
+                    itemOffset += offset < position ? 1 : (position - offset + itemSize) / itemSize;
+                } while(offset < position);
+
+                that._setViewportPositionCore(virtualItemsCount.begin + itemOffset, true);
             } else {
-                that._setViewportPositionCore(position / (itemSize * sizeRatio));
+                that._setViewportPositionCore(position / (viewportItemSize * sizeRatio));
             }
         },
-        setContentSize: function(size) {
+        setContentSize: function(size, delta) {
             var that = this,
+                sizes = Array.isArray(size) && size,
                 virtualItemsCount = that.virtualItemsCount();
+
+            delta = delta || 0;
+
+            if(sizes) {
+                size = sizes.reduce((a, b) => a + b, 0);
+            }
 
             that._contentSize = size;
 
             if(virtualItemsCount) {
+                if(sizes) {
+                    sizes.forEach((size, index) => {
+                        that._itemSizes[virtualItemsCount.begin - delta + index] = size;
+                    });
+                }
                 var virtualContentSize = (virtualItemsCount.begin + virtualItemsCount.end + that.itemsCount()) * that._viewportItemSize;
                 var contentHeightLimit = exports.getContentHeightLimit(browser);
                 if(virtualContentSize > contentHeightLimit) {
@@ -347,9 +405,25 @@ exports.VirtualScrollController = Class.inherit((function() {
         },
         getContentOffset: function(type) {
             var that = this,
-                virtualItemsCount = that.virtualItemsCount();
+                virtualItemsCount = that.virtualItemsCount(),
+                isEnd = type === "end",
+                itemCount;
 
-            return virtualItemsCount ? Math.floor((type ? virtualItemsCount[type] : virtualItemsCount.begin) * that._viewportItemSize * that._sizeRatio) : 0;
+            if(!virtualItemsCount) return 0;
+
+            itemCount = isEnd ? virtualItemsCount.end : virtualItemsCount.begin;
+
+            var offset = 0,
+                totalItemsCount = that._dataSource.totalItemsCount();
+
+            Object.keys(that._itemSizes).forEach(itemIndex => {
+                if(isEnd ? (itemIndex >= totalItemsCount - virtualItemsCount.end) : (itemIndex < virtualItemsCount.begin)) {
+                    offset += that._itemSizes[itemIndex];
+                    itemCount--;
+                }
+            });
+
+            return Math.floor(offset + itemCount * that._viewportItemSize * that._sizeRatio);
         },
         getVirtualContentSize: function() {
             var that = this,
@@ -391,10 +465,11 @@ exports.VirtualScrollController = Class.inherit((function() {
                     newPageIndex = Math.max(newPageIndex, 0);
                     newPageIndex = Math.min(newPageIndex, maxPageIndex);
                 }
+
                 if(that.pageIndex() !== newPageIndex || needLoad) {
                     that.pageIndex(newPageIndex);
-                    that.load();
                 }
+                that.load();
             }
         },
         viewportItemSize: function(size) {
@@ -487,29 +562,28 @@ exports.VirtualScrollController = Class.inherit((function() {
 
                 cacheItem = { pageIndex: dataSource.pageIndex(), itemsCount: that.itemsCount(true) };
 
-                if(that.option("scrolling.removeInvisiblePages")) {
-                    removeInvisiblePages = that._cache.length > Math.max(getPreloadPageCount(this), 2);
+                if(that.option("advancedRendering") !== false && that.option("scrolling.removeInvisiblePages") && isVirtualMode(that)) {
+                    removeInvisiblePages = that._cache.length > Math.max(getPreloadPageCount(this) + (that.option("scrolling.preloadEnabled") ? 1 : 0), 2);
                 } else {
                     processDelayChanged(that, callBase, { isDelayed: true });
                 }
 
+                var removeCount = 0;
                 if(beginPageIndex === dataSource.pageIndex() + 1) {
                     if(removeInvisiblePages) {
-                        that._cache.pop();
-                    } else {
-                        changeType = "prepend";
+                        removeCount = that._cache.pop().itemsCount;
                     }
+                    changeType = "prepend";
                     that._cache.unshift(cacheItem);
                 } else {
                     if(removeInvisiblePages) {
-                        that._cache.shift();
-                    } else {
-                        changeType = "append";
+                        removeCount = that._cache.shift().itemsCount;
                     }
+                    changeType = "append";
                     that._cache.push(cacheItem);
                 }
 
-                processChanged(that, callBase, that._cache.length > 1 ? changeType : undefined, lastCacheLength === 0);
+                processChanged(that, callBase, that._cache.length > 1 ? changeType : undefined, lastCacheLength === 0, removeCount);
                 that._delayDeferred = that.load().done(function() {
                     if(processDelayChanged(that, callBase)) {
                         that.load(); // needed for infinite scrolling when height is not defined
