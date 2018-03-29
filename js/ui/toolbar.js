@@ -226,11 +226,11 @@ var Toolbar = ToolbarBase.inherit({
     _initMarkup: function() {
         this.callBase();
         this._renderMenu();
-
     },
 
     _render: function() {
         this._hideOverflowItems();
+        this._menuStrategy._updateMenuVisibility();
         this.callBase();
         this._menuStrategy.renderMenuItems();
     },

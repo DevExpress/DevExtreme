@@ -82,6 +82,8 @@ var ToolbarStrategy = Class.inherit({
         return this._toolbar._getMenuItems();
     },
 
+    _updateMenuVisibility: noop,
+
     _renderMenuButton: function() {
         var buttonOptions = this._menuButtonOptions();
 
