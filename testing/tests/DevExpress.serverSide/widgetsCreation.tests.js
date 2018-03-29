@@ -85,18 +85,13 @@ QUnit.module("Widget creation", {
     }
 });
 
-var optionChangeExcluded = [
-    "DateBox",
-    "ScrollView"
-];
-
 Object.keys(widgets).forEach(function(widget) {
     QUnit.test(widget + " created", function(assert) {
         this.instance = new widgets[widget](this.element);
         assert.ok(true, "it's possible to create " + widget);
     });
 
-    QUnit[optionChangeExcluded.indexOf(widget) < 0 ? "test" : "skip"](widget + " optionChanged", function(assert) {
+    QUnit.test(widget + " optionChanged", function(assert) {
         this.instance = new widgets[widget](this.element);
         var options = this.instance.option(),
             clock = widget === "DataGrid" || widget === "TreeList" ? sinon.useFakeTimers() : null;
