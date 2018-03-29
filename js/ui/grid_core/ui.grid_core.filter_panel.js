@@ -66,12 +66,14 @@ var FilterPanelView = modules.View.inherit({
             filterText,
             filterValue = this.option("filterValue");
         if(filterValue) {
+            var columns = that.getController("columns").getColumns();
+            filterText = utils.getFilterText(filterValue, this.getController("filterSync").getCustomFilterOperations(), columns, that.option("filterRow.operationDescriptions"), that.option("filterBuilder.groupOperationDescriptions"));
             var customizeFilterText = this.option("filterPanel.customizeFilterText");
             if(customizeFilterText) {
-                filterText = customizeFilterText(filterValue);
-            } else {
-                var columns = that.getController("columns").getColumns();
-                filterText = utils.getFilterText(filterValue, this.getController("filterSync").getCustomFilterOperations(), columns, that.option("filterRow.operationDescriptions"), that.option("filterBuilder.groupOperationDescriptions"));
+                var customText = customizeFilterText(filterValue, filterText);
+                if(typeof customText === "string") {
+                    filterText = customText;
+                }
             }
         } else {
             filterText = this.option("filterPanel.createFilterText");
@@ -164,8 +166,9 @@ module.exports = {
                 /**
                  * @name GridBaseOptions_filterPanel_customizeFilterText
                  * @publicName customizeFilterText
-                 * @type function(filterValue)
+                 * @type function(filterValue, filterText)
                  * @type_function_param1 filterValue:object
+                 * @type_function_param2 filterText:string
                  * @type_function_return string
                  */
             },
