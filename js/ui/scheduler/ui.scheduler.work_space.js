@@ -858,11 +858,6 @@ var SchedulerWorkSpace = Widget.inherit({
 
     _render: function() {
         this.callBase();
-
-        if(this._isHorizontalGroupedWorkSpace()) {
-            this._setHorizontalGroupHeaderCellsHeight();
-        }
-
         this._renderDateTimeIndication();
         this._setIndicationUpdateInterval();
     },
@@ -894,8 +889,9 @@ var SchedulerWorkSpace = Widget.inherit({
 
         this._renderDateTable();
 
-        if(!this._isHorizontalGroupedWorkSpace()) {
-            this._renderAllDayPanel();
+        this._renderAllDayPanel();
+        if(this._isHorizontalGroupedWorkSpace()) {
+            this._setHorizontalGroupHeaderCellsHeight();
         }
 
         this._shader = new VerticalShader();
