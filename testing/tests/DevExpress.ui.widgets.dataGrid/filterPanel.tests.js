@@ -61,12 +61,12 @@ QUnit.module("Filter Panel", {
         assert.ok(this.filterPanelView.element().hasClass(FILTER_PANEL_CLASS));
     });
 
-    QUnit.test("applyFilterValue", function(assert) {
+    QUnit.test("filterApplied", function(assert) {
         // arrange, act
         this.initFilterPanelView({
             filterPanel: {
                 visible: true,
-                applyFilterValue: true
+                filterApplied: true
             },
             dataSource: [],
             filterValue: ["field", "=", "1"],
@@ -77,7 +77,7 @@ QUnit.module("Filter Panel", {
         assert.deepEqual(this.getCombinedFilter(true), ["field", "=", "1"], "check filterValue");
 
         // act
-        this.changeOption("filterPanel", "filterPanel.applyFilterValue", false);
+        this.changeOption("filterPanel", "filterPanel.filterApplied", false);
 
         // assert
         assert.deepEqual(this.getCombinedFilter(true), undefined, "check filterValue");
