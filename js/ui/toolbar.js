@@ -223,10 +223,14 @@ var Toolbar = ToolbarBase.inherit({
         this._defaultTemplates["actionSheetItem"] = new ChildDefaultTemplate("item", this);
     },
 
+    _initMarkup: function() {
+        this.callBase();
+        this._renderMenu();
+    },
+
     _render: function() {
         this._hideOverflowItems();
-        this._renderMenu();
-
+        this._menuStrategy._updateMenuVisibility();
         this.callBase();
         this._menuStrategy.renderMenuItems();
     },
