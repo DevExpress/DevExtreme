@@ -4865,6 +4865,90 @@ QUnit.test("The same page should not load when scrolling in virtual mode", funct
     }
 });
 
+
+QUnit.module("Rendered on server", {
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+    },
+    afterEach: function() {
+        this.clock.restore();
+    }
+});
+
+QUnit.test("Loading should be synchronously", function(assert) {
+    var dataSource = [{
+        id: 1, name: "test 1"
+    }, {
+        id: 2, name: "test 2"
+    }];
+
+    // act
+    var dataGrid = createDataGrid({
+        dataSource: dataSource,
+        integrationOptions: {
+            renderedOnServer: true
+        }
+    });
+
+    // assert
+    assert.equal(dataGrid.getVisibleRows().length, 2, "visible rows are exists");
+    assert.equal(dataGrid.$element().find(".dx-data-row").length, 2, "two data rows are rendered");
+
+    // act
+    dataGrid.columnOption("id", "filterValue", "2");
+});
+
+QUnit.test("dataSource changing should be synchronously", function(assert) {
+    var dataSource = [{
+        id: 1, name: "test 1"
+    }, {
+        id: 2, name: "test 2"
+    }];
+
+    var dataGrid = createDataGrid({
+        dataSource: [],
+        integrationOptions: {
+            renderedOnServer: true
+        }
+    });
+
+    // act
+    dataGrid.option("dataSource", dataSource);
+
+    // assert
+    assert.equal(dataGrid.getVisibleRows().length, 2, "visible rows are exists");
+    assert.equal(dataGrid.$element().find(".dx-data-row").length, 2, "two data rows are rendered");
+});
+
+QUnit.test("Runtime operation should be asynchronously", function(assert) {
+    var dataSource = [{
+        id: 1, name: "test 1"
+    }, {
+        id: 2, name: "test 2"
+    }];
+
+    var dataGrid = createDataGrid({
+        dataSource: dataSource,
+        integrationOptions: {
+            renderedOnServer: true
+        }
+    });
+
+    // act
+    dataGrid.columnOption("id", "filterValue", "2");
+
+    // assert
+    assert.equal(dataGrid.getVisibleRows().length, 2, "visible rows are exists");
+    assert.equal(dataGrid.$element().find(".dx-data-row").length, 2, "two data rows are rendered");
+
+    // act
+    this.clock.tick();
+
+    // assert
+    assert.equal(dataGrid.getVisibleRows().length, 1, "visible rows are filtered");
+    assert.equal(dataGrid.$element().find(".dx-data-row").length, 1, "filtered data rows are rendered");
+});
+
 QUnit.module("Assign options", {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
