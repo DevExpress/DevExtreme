@@ -836,6 +836,13 @@ QUnit.test("Aggregation with empty interval, Ohlc should not return point", func
     assert.equal(points.length, 0);
 });
 
+QUnit.test("Aggregation with empty interval, Bubble should not return point", function(assert) {
+    this.argumentAxis.getAggregationInfo = () => { return { interval: 5, ticks: [10, 15] }; };
+    const points = this.aggregateData("avg", this.data, "bubble");
+
+    assert.equal(points.length, 0);
+});
+
 QUnit.test("Take into account argumentRange on aggregation", function(assert) {
     this.argumentAxis.getAggregationInfo = sinon.spy(() => {
         return { interval: 5, ticks: [10, 15] };
