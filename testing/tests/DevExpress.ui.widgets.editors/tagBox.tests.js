@@ -13,6 +13,7 @@ var $ = require("jquery"),
     browser = require("core/utils/browser"),
     dataQuery = require("data/query"),
     isRenderer = require("core/utils/type").isRenderer,
+    errors = require("core/errors"),
     config = require("core/config");
 
 require("common.css!");
@@ -815,7 +816,7 @@ QUnit.test("onValueChanged should not be fired on the 'backspace' key press if t
 
 QUnit.module("the 'onCustomItemCreating' option", moduleSetup);
 
-QUnit.test("using the 'onCustomItemCreating' option", function(assert) {
+QUnit.test("using the 'onCustomItemCreating' option should throw a warning if handler returns an item", function(assert) {
     var $tagBox = $("#tagBox").dxTagBox({
             acceptCustomValue: true,
             displayExpr: "display",
@@ -829,7 +830,8 @@ QUnit.test("using the 'onCustomItemCreating' option", function(assert) {
         }),
         $input = $tagBox.find(".dx-texteditor-input"),
         keyboard = keyboardMock($input),
-        customValue = "Custom value";
+        customValue = "Custom value",
+        logStub = sinon.stub(errors, "log");
 
     keyboard
         .type(customValue)
@@ -840,6 +842,8 @@ QUnit.test("using the 'onCustomItemCreating' option", function(assert) {
     assert.deepEqual($tagBox.dxTagBox("option", "value"), ["value " + customValue]);
     assert.equal($tags.length, 1, "tag is added");
     assert.equal($tags.eq(0).text(), "display " + customValue);
+    assert.ok(logStub.calledOnce, "There was an one message");
+    assert.deepEqual(logStub.firstCall.args, ["W0015", "onCustomItemCreating", "customItem"], "Check warning parameters");
 });
 
 QUnit.test("creating custom item via the 'customItem' event parameter", function(assert) {
@@ -905,8 +909,8 @@ QUnit.test("the 'onCustomItemCreating' option with Deferred", function(assert) {
             acceptCustomValue: true,
             displayExpr: "display",
             valueExpr: "value",
-            onCustomItemCreating: function() {
-                return deferred.promise();
+            onCustomItemCreating: function(e) {
+                e.customItem = deferred.promise();
             }
         }),
         $input = $tagBox.find(".dx-texteditor-input"),
@@ -946,7 +950,7 @@ QUnit.test("the selected list items should be correct if custom item is in list"
         var items = tagBox.option("items").slice();
         items.push(e.text);
         tagBox.option("items", items);
-        return e.text;
+        e.customItem = e.text;
     });
 
     keyboardMock($input)
