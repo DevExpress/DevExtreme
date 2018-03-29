@@ -153,8 +153,7 @@ function getFilterOperations(field) {
 
 function getCaptionByOperation(operation, filterOperationDescriptions) {
     var operationName = filterOperationsDictionary.getNameByFilterOperation(operation);
-
-    return filterOperationDescriptions && filterOperationDescriptions[operationName];
+    return filterOperationDescriptions && filterOperationDescriptions[operationName] ? filterOperationDescriptions[operationName] : operationName;
 }
 
 function getOperationFromAvailable(operation, availableOperations) {

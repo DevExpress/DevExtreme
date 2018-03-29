@@ -26,7 +26,7 @@ QUnit.module("Filter Panel", {
     beforeEach: function() {
         this.initFilterPanelView = function(options) {
             this.options = options;
-            setupDataGridModules(this, ["columns", "data", "headerFilter", "filterSync", "filterBuilder", "filterPanel"], {
+            setupDataGridModules(this, ["columns", "filterRow", "data", "headerFilter", "filterSync", "filterBuilder", "filterPanel"], {
                 initViews: true
             });
             this.filterPanelView.render($("#container"));
@@ -96,20 +96,44 @@ QUnit.module("Filter Panel", {
         assert.equal(this.filterPanelView.element().find("." + FILTER_PANEL_TEXT_CLASS).text(), "test", "check createFilterText");
     });
 
-    QUnit.test("can customize text", function(assert) {
-        // arrange, act
+    QUnit.test("Can customize text", function(assert) {
+        // arrange
+        var assertFilterValue,
+            assertFilterText,
+            filterValue = ["field", "=", "1"];
+
         this.initFilterPanelView({
             filterPanel: {
                 visible: true,
-                customizeFilterText: function(filterValue) {
-                    return filterValue + "_test";
+                customizeFilterText: function(filterValue, filterText) {
+                    assertFilterValue = filterValue;
+                    assertFilterText = filterText + "_test";
+                    return assertFilterText;
                 }
             },
-            filterValue: ["field", "=", "1"]
+            dataSource: [],
+            filterValue: filterValue,
+            columns: [{ dataField: "field" }]
         });
 
         // assert
-        assert.equal(this.filterPanelView.element().find("." + FILTER_PANEL_TEXT_CLASS).text(), "field,=,1_test", "check createFilterText");
+        assert.equal(this.filterPanelView.element().find("." + FILTER_PANEL_TEXT_CLASS).text(), assertFilterText, "check customizeFilterText");
+        assert.equal(assertFilterValue, filterValue, "check filter value in customizeFilterText function");
+    });
+
+    QUnit.test("Filter text", function(assert) {
+        // arrange
+        this.initFilterPanelView({
+            filterPanel: {
+                visible: true
+            },
+            dataSource: [],
+            filterValue: ["field", "=", "1"],
+            columns: [{ dataField: "field" }]
+        });
+
+        // assert
+        assert.equal(this.filterPanelView.element().find("." + FILTER_PANEL_TEXT_CLASS).text(), "[Field] equal '1'", "check filter text");
     });
 
     QUnit.test("can customize hints", function(assert) {
