@@ -47,7 +47,7 @@ var FilterPanelView = modules.View.inherit({
                 that.option("filterPanel.filterApplied", e.value);
             }
         });
-        $element.attr("title", this.option("filterPanel.applyFilterHintText"));
+        $element.attr("title", this.option("filterPanel.texts.applyFilterHintText"));
         return $element;
     },
 
@@ -76,7 +76,7 @@ var FilterPanelView = modules.View.inherit({
                 }
             }
         } else {
-            filterText = this.option("filterPanel.createFilterText");
+            filterText = this.option("filterPanel.texts.createFilter");
         }
         eventsEngine.on($textElement, "click", function() {
             that.option("filterBuilderPopup.visible", true);
@@ -89,7 +89,7 @@ var FilterPanelView = modules.View.inherit({
         var that = this,
             $element = $("<div>")
                 .addClass(this.addWidgetPrefix(FILTER_PANEL_CLEAR_FILTER_CLASS))
-                .text(this.option("filterPanel.clearFilterText"));
+                .text(this.option("filterPanel.texts.clearFilter"));
         eventsEngine.on($element, "click", function() {
             that.option("filterValue", null);
         });
@@ -140,30 +140,6 @@ module.exports = {
                 filterApplied: true,
 
                 /**
-                 * @name GridBaseOptions_filterPanel_clearFilterText
-                 * @publicName clearFilterText
-                 * @type string
-                 * @default "Clear"
-                 */
-                clearFilterText: messageLocalization.format("dxDataGrid-clearFilterText"),
-
-                /**
-                 * @name GridBaseOptions_filterPanel_createFilterText
-                 * @publicName createFilterText
-                 * @type string
-                 * @default "Create Filter"
-                 */
-                createFilterText: messageLocalization.format("dxDataGrid-filterPanelCreateFilter"),
-
-                /**
-                 * @name GridBaseOptions_filterPanel_applyFilterHintText
-                 * @publicName applyFilterHintText
-                 * @type string
-                 * @default "Apply Filter"
-                 */
-                applyFilterHintText: messageLocalization.format("dxDataGrid-filterPanelApplyFilterHint"),
-
-                /**
                  * @name GridBaseOptions_filterPanel_customizeFilterText
                  * @publicName customizeFilterText
                  * @type function(filterValue, filterText)
@@ -171,6 +147,38 @@ module.exports = {
                  * @type_function_param2 filterText:string
                  * @type_function_return string
                  */
+
+                /**
+                 * @name GridBaseOptions_filterPanel_texts
+                 * @publicName texts
+                 * @type dxFilterPanelTexts
+                 * @default {}
+                 */
+                texts: {
+                    /**
+                     * @name GridBaseOptions_filterPanel_texts_applyFilterHintText
+                     * @publicName applyFilterHintText
+                     * @type string
+                     * @default "Apply Filter"
+                     */
+                    applyFilterHintText: messageLocalization.format("dxDataGrid-filterPanelApplyFilterHint"),
+
+                    /**
+                     * @name GridBaseOptions_filterPanel_texts_createFilter
+                     * @publicName createFilter
+                     * @type string
+                     * @default "Create Filter"
+                     */
+                    createFilter: messageLocalization.format("dxDataGrid-filterPanelCreateFilter"),
+
+                    /**
+                     * @name GridBaseOptions_filterPanel_texts_clearFilter
+                     * @publicName clearFilter
+                     * @type string
+                     * @default "Clear"
+                     */
+                    clearFilter: messageLocalization.format("dxDataGrid-filterPanelClearFilter"),
+                }
             },
         };
     },
