@@ -10,6 +10,8 @@ import config from "core/config";
 import typeUtils from "core/utils/type";
 import windowUtils from "core/utils/window";
 
+const { test } = QUnit;
+
 const createTestObject = () => {
     return {
         "ID": 1,
@@ -44,7 +46,7 @@ QUnit.testStart(() => {
 });
 
 QUnit.module("Layout manager", () => {
-    QUnit.test("Default render", (assert) => {
+    test("Default render", (assert) => {
         // arrange, act
         let $testContainer = $("#container").dxLayoutManager({
             items: [{
@@ -66,7 +68,7 @@ QUnit.module("Layout manager", () => {
         assert.ok($testContainer.find("." + internals.FIELD_ITEM_CLASS + "> ." + internals.FIELD_ITEM_CONTENT_CLASS + "> .dx-texteditor").length, 1, "editor has field-item-content class");
     });
 
-    QUnit.test("Default render with editorOptions.inputAttr", (assert) => {
+    test("Default render with editorOptions.inputAttr", (assert) => {
         // arrange, act
         let $testContainer = $("#container").dxLayoutManager({
             layoutData: {
@@ -87,7 +89,7 @@ QUnit.module("Layout manager", () => {
         assert.equal($testContainer.find("." + internals.FIELD_ITEM_CLASS + " .dx-texteditor-input").attr("alt"), "test", "attr merge successfully");
     });
 
-    QUnit.test("Default render with template", (assert) => {
+    test("Default render with template", (assert) => {
         // arrange, act
         let $testContainer = $("#container").dxLayoutManager({
                 layoutData: {
@@ -128,7 +130,7 @@ QUnit.module("Layout manager", () => {
         assert.equal($items.length, 2, "field items is rendered");
     });
 
-    QUnit.test("Default render with marks", (assert) => {
+    test("Default render with marks", (assert) => {
         // arrange, act
         let $testContainer = $("#container").dxLayoutManager({
                 items: [{
@@ -160,7 +162,7 @@ QUnit.module("Layout manager", () => {
         assert.ok(!$optionalItem.find("." + internals.FIELD_ITEM_OPTIONAL_MARK_CLASS).length, "field item hasn't optional mark");
     });
 
-    QUnit.test("Show optional marks", (assert) => {
+    test("Show optional marks", (assert) => {
         // arrange, act
         let $testContainer = $("#container").dxLayoutManager({
                 items: [{
@@ -181,7 +183,7 @@ QUnit.module("Layout manager", () => {
         assert.ok($optionalItem.find("." + internals.FIELD_ITEM_OPTIONAL_MARK_CLASS).length, "field item hasn optional mark");
     });
 
-    QUnit.test("Render custom marks", (assert) => {
+    test("Render custom marks", (assert) => {
         // arrange, act
         let $testContainer = $("#container").dxLayoutManager({
                 showOptionalMark: true,
@@ -206,7 +208,7 @@ QUnit.module("Layout manager", () => {
         assert.equal($.trim($optionalItem.find("." + internals.FIELD_ITEM_OPTIONAL_MARK_CLASS).text()), "-", "custom optional mark");
     });
 
-    QUnit.test("Change marks", (assert) => {
+    test("Change marks", (assert) => {
         // arrange
         let $testContainer = $("#container").dxLayoutManager({
                 showOptionalMark: true,
@@ -234,7 +236,7 @@ QUnit.module("Layout manager", () => {
         assert.equal($.trim($optionalItem.find("." + internals.FIELD_ITEM_OPTIONAL_MARK_CLASS).text()), "-", "custom optional mark");
     });
 
-    QUnit.test("Change marks visibility", (assert) => {
+    test("Change marks visibility", (assert) => {
         // arrange
         let $testContainer = $("#container").dxLayoutManager({
                 items: [{
@@ -261,7 +263,7 @@ QUnit.module("Layout manager", () => {
         assert.ok(!$optionalItem.find("." + internals.FIELD_ITEM_OPTIONAL_MARK_CLASS).length, "Item has optional mark");
     });
 
-    QUnit.test("Render read only layoutManager", (assert) => {
+    test("Render read only layoutManager", (assert) => {
         // arrange, act
         let $testContainer = $("#container").dxLayoutManager({
             readOnly: true,
@@ -275,7 +277,7 @@ QUnit.module("Layout manager", () => {
         assert.ok($testContainer.find("." + internals.FIELD_ITEM_CLASS + " .dx-texteditor").hasClass("dx-state-readonly"), "editor is read only");
     });
 
-    QUnit.test("Check that inner widgets change readOnly option at layoutManager optionChange", (assert) => {
+    test("Check that inner widgets change readOnly option at layoutManager optionChange", (assert) => {
         // arrange, act
         let $testContainer = $("#container").dxLayoutManager({
             items: [{
@@ -292,7 +294,7 @@ QUnit.module("Layout manager", () => {
         assert.ok($testContainer.find("." + internals.FIELD_ITEM_CLASS + " .dx-texteditor").hasClass("dx-state-readonly"), "editor is read only");
     });
 
-    QUnit.test("Check readOnly state for editor when readOnly is enabled in the editorOptions", (assert) => {
+    test("Check readOnly state for editor when readOnly is enabled in the editorOptions", (assert) => {
         // arrange, act
         let $testContainer = $("#container").dxLayoutManager({
             items: [{
@@ -308,7 +310,7 @@ QUnit.module("Layout manager", () => {
         assert.ok($testContainer.find("." + internals.FIELD_ITEM_CLASS + " .dx-texteditor").hasClass("dx-state-readonly"), "editor is read only");
     });
 
-    QUnit.test("Editor's read only state should not be reset on the dxForm 'readOnly' option changing", (assert) => {
+    test("Editor's read only state should not be reset on the dxForm 'readOnly' option changing", (assert) => {
         // arrange, act
         let $testContainer = $("#container").dxLayoutManager({
                 items: [{
@@ -329,7 +331,7 @@ QUnit.module("Layout manager", () => {
         assert.ok($textEditor.hasClass("dx-state-readonly"), "editor is read only");
     });
 
-    QUnit.test("Render label by default", (assert) => {
+    test("Render label by default", (assert) => {
         // arrange, act
         let $testContainer = $("#container").dxLayoutManager({
                 form: {
@@ -353,7 +355,7 @@ QUnit.module("Layout manager", () => {
         assert.ok($label.parent().hasClass(internals.LABEL_HORIZONTAL_ALIGNMENT_CLASS), "field item contains label has horizontal align class");
     });
 
-    QUnit.test("Check label alignment classes when browser is supported flex", (assert) => {
+    test("Check label alignment classes when browser is supported flex", (assert) => {
         // arrange, act
         let items = [{
                 dataField: "test1",
@@ -391,7 +393,7 @@ QUnit.module("Layout manager", () => {
         assert.ok($items.eq(4).hasClass(internals.FIELD_ITEM_LABEL_ALIGN_CLASS), "item have baseline alignment class");
     });
 
-    QUnit.test("Check label alignment classes when label location is 'top'", (assert) => {
+    test("Check label alignment classes when label location is 'top'", (assert) => {
         // arrange, act
         let $testContainer = $("#container").dxLayoutManager({
                 labelLocation: "top",
@@ -423,7 +425,7 @@ QUnit.module("Layout manager", () => {
         assert.ok(!$labels.eq(4).hasClass(internals.FIELD_ITEM_LABEL_BASELINE_CLASS), "label doesn't have baseline alignment class");
     });
 
-    QUnit.test("Render label for item without name or dateField", (assert) => {
+    test("Render label for item without name or dateField", (assert) => {
         // arrange, act
         let $testContainer = $("#container").dxLayoutManager({
                 form: {
@@ -444,7 +446,7 @@ QUnit.module("Layout manager", () => {
         assert.equal($label.attr("for"), $input.attr("input"), "input ID equal to label's 'for' attribute");
     });
 
-    QUnit.test("Render label with position top render before widget", (assert) => {
+    test("Render label with position top render before widget", (assert) => {
         // arrange, act
         let $testContainer = $("#container").dxLayoutManager({
                 items: [{
@@ -462,7 +464,7 @@ QUnit.module("Layout manager", () => {
         assert.ok($fieldItemChildren.first().is("label"), "Label is the first child");
     });
 
-    QUnit.test("Render label with position bottom render after widget", (assert) => {
+    test("Render label with position bottom render after widget", (assert) => {
         // arrange, act
         let $testContainer = $("#container").dxLayoutManager({
                 items: [{
@@ -480,7 +482,7 @@ QUnit.module("Layout manager", () => {
         assert.ok($fieldItemChildren.last().is("label"), "Label is the last child");
     });
 
-    QUnit.test("Render label with position top and alignment left", (assert) => {
+    test("Render label with position top and alignment left", (assert) => {
         // arrange, act
         let $testContainer = $("#container").dxLayoutManager({
                 items: [{
@@ -499,7 +501,7 @@ QUnit.module("Layout manager", () => {
         assert.equal($label.css("textAlign"), "left", "Label has text-align left");
     });
 
-    QUnit.test("Render label with position top and alignment center", (assert) => {
+    test("Render label with position top and alignment center", (assert) => {
         // arrange, act
         let $testContainer = $("#container").dxLayoutManager({
                 items: [{
@@ -518,7 +520,7 @@ QUnit.module("Layout manager", () => {
         assert.equal($label.css("textAlign"), "center", "Label has text-align center");
     });
 
-    QUnit.test("Render label with position top and alignment right", (assert) => {
+    test("Render label with position top and alignment right", (assert) => {
         // arrange, act
         let $testContainer = $("#container").dxLayoutManager({
                 items: [{
@@ -537,7 +539,7 @@ QUnit.module("Layout manager", () => {
         assert.equal($label.css("textAlign"), "right", "Label has text-align right");
     });
 
-    QUnit.test("Render label with horizontal alignment (left) ", (assert) => {
+    test("Render label with horizontal alignment (left) ", (assert) => {
         // arrange, act
         let $testContainer = $("#container").dxLayoutManager({
                 items: [{
@@ -554,7 +556,7 @@ QUnit.module("Layout manager", () => {
         assert.ok($fieldItem.hasClass(internals.LABEL_HORIZONTAL_ALIGNMENT_CLASS), "Field item contains label that has horizontal align");
     });
 
-    QUnit.test("Render label with default position and alignment left", (assert) => {
+    test("Render label with default position and alignment left", (assert) => {
         // arrange, act
         let $testContainer = $("#container").dxLayoutManager({
                 items: [{
@@ -571,7 +573,7 @@ QUnit.module("Layout manager", () => {
         assert.equal($label.css("textAlign"), "left", "Label has text-align left");
     });
 
-    QUnit.test("Render label with default position and alignment center", (assert) => {
+    test("Render label with default position and alignment center", (assert) => {
         // arrange, act
         let $testContainer = $("#container").dxLayoutManager({
                 items: [{
@@ -588,7 +590,7 @@ QUnit.module("Layout manager", () => {
         assert.equal($label.css("textAlign"), "center", "Label has text-align center");
     });
 
-    QUnit.test("Render label with showColonAfterLabel", (assert) => {
+    test("Render label with showColonAfterLabel", (assert) => {
         // arrange, act
         let $testContainer = $("#container").dxLayoutManager({
                 showColonAfterLabel: true,
@@ -603,7 +605,7 @@ QUnit.module("Layout manager", () => {
         assert.equal($label.text(), "Name:", "text of label");
     });
 
-    QUnit.test("Label is not rendered when name is defined", (assert) => {
+    test("Label is not rendered when name is defined", (assert) => {
         // arrange, act
         let $testContainer = $("#container").dxLayoutManager({
             items: [{
@@ -616,7 +618,7 @@ QUnit.module("Layout manager", () => {
         assert.ok(!$testContainer.find("." + internals.FIELD_ITEM_LABEL_CLASS).length);
     });
 
-    QUnit.test("If item is not visible we will not render them", (assert) => {
+    test("If item is not visible we will not render them", (assert) => {
         // arrange, act
         let $testContainer = $("#container").dxLayoutManager({
                 items: [{
@@ -636,7 +638,7 @@ QUnit.module("Layout manager", () => {
         assert.equal($fieldItems.last().find("." + internals.FIELD_ITEM_LABEL_CLASS).text(), "Phone", "Correct second item rendered");
     });
 
-    QUnit.test("Item should be removed from DOM if it's visibility changed", (assert) => {
+    test("Item should be removed from DOM if it's visibility changed", (assert) => {
         // arrange, act
         let $testContainer = $("#container").dxLayoutManager({
                 items: [{
@@ -661,7 +663,7 @@ QUnit.module("Layout manager", () => {
         assert.equal($fieldItems.last().find("." + internals.FIELD_ITEM_LABEL_CLASS).text(), "Phone", "Correct second item rendered");
     });
 
-    QUnit.test("Render items as array of strings", (assert) => {
+    test("Render items as array of strings", (assert) => {
         // arrange, act
         let $testContainer = $("#container").dxLayoutManager({
                 items: ["FirstName", "LastName"]
@@ -674,7 +676,7 @@ QUnit.module("Layout manager", () => {
         assert.equal($fieldItems.last().find("." + internals.FIELD_ITEM_LABEL_CLASS).text(), "Last Name", "Correct second item rendered");
     });
 
-    QUnit.test("Render mixed set of items(2 as strings, 1 as object)", (assert) => {
+    test("Render mixed set of items(2 as strings, 1 as object)", (assert) => {
         // arrange, act
         let $testContainer = $("#container").dxLayoutManager({
                 items: ["FirstName", {
@@ -690,7 +692,7 @@ QUnit.module("Layout manager", () => {
         assert.equal($fieldItems.last().find("." + internals.FIELD_ITEM_LABEL_CLASS).text(), "Last Name", "Correct third item rendered");
     });
 
-    QUnit.test("If label is not visible we will not render them", (assert) => {
+    test("If label is not visible we will not render them", (assert) => {
         // arrange, act
         let $testContainer = $("#container").dxLayoutManager({
                 items: [{
@@ -708,7 +710,7 @@ QUnit.module("Layout manager", () => {
         assert.equal($fieldItems.find("." + internals.FIELD_ITEM_CONTENT_CLASS).length, 1, "We have widget in field");
     });
 
-    QUnit.test("Render label with horizontal alignment (right) ", (assert) => {
+    test("Render label with horizontal alignment (right) ", (assert) => {
         // arrange, act
         let $testContainer = $("#container").dxLayoutManager({
                 items: [{
@@ -726,7 +728,7 @@ QUnit.module("Layout manager", () => {
         assert.ok($fieldItem.hasClass(internals.LABEL_HORIZONTAL_ALIGNMENT_CLASS), "Field item contains label that has horizontal align");
     });
 
-    QUnit.test("Default render with label", (assert) => {
+    test("Default render with label", (assert) => {
         // arrange, act
         let $testContainer = $("#container").dxLayoutManager({
                 showColonAfterLabel: true,
@@ -745,7 +747,7 @@ QUnit.module("Layout manager", () => {
         assert.equal($label.text(), "New label:", "text of label");
     });
 
-    QUnit.test("Colon symbol is not added to label when showColon is disabled for label", (assert) => {
+    test("Colon symbol is not added to label when showColon is disabled for label", (assert) => {
         // arrange, act
         let $testContainer = $("#container").dxLayoutManager({
                 showColonAfterLabel: true,
@@ -764,7 +766,7 @@ QUnit.module("Layout manager", () => {
         assert.equal($label.text(), "New label", "text of label");
     });
 
-    QUnit.test("Render editor with id attribute", (assert) => {
+    test("Render editor with id attribute", (assert) => {
         // arrange, act
         let $testContainer = $("#container").dxLayoutManager({
                 form: {
@@ -787,7 +789,7 @@ QUnit.module("Layout manager", () => {
         assert.equal($input.attr("id"), "dx_FormID_name", "id attr of input");
     });
 
-    QUnit.test("Render editor by default is data is unknown", (assert) => {
+    test("Render editor by default is data is unknown", (assert) => {
         // arrange, act
         let $testContainer = $("#container").dxLayoutManager({
             layoutData: {
@@ -801,7 +803,7 @@ QUnit.module("Layout manager", () => {
         assert.ok($editor.hasClass("dx-textbox"), "It is dxTextBox by default");
     });
 
-    QUnit.test("Generate several items in layout", (assert) => {
+    test("Generate several items in layout", (assert) => {
         // arrange, act
         let $testContainer = $("#container").dxLayoutManager({
                 items: [{
@@ -836,7 +838,7 @@ QUnit.module("Layout manager", () => {
         }
     });
 
-    QUnit.test("Generate items from layoutData", (assert) => {
+    test("Generate items from layoutData", (assert) => {
         // arrange, act
         let layoutManager = $("#container").dxLayoutManager({
             layoutData: {
@@ -875,7 +877,7 @@ QUnit.module("Layout manager", () => {
         }]);
     });
 
-    QUnit.test("Generate items from layoutData with unacceptable data", (assert) => {
+    test("Generate items from layoutData with unacceptable data", (assert) => {
         // arrange, act
         let layoutManager = $("#container").dxLayoutManager({
             layoutData: {
@@ -894,7 +896,7 @@ QUnit.module("Layout manager", () => {
         }]);
     });
 
-    QUnit.test("Generate items from layoutData and items", (assert) => {
+    test("Generate items from layoutData and items", (assert) => {
         // arrange, act
         let layoutManager = $("#container").dxLayoutManager({
             layoutData: {
@@ -938,7 +940,7 @@ QUnit.module("Layout manager", () => {
         );
     });
 
-    QUnit.test("Render RangeSlider", (assert) => {
+    test("Render RangeSlider", (assert) => {
         // arrange, act
         let layoutManager = $("#container").dxLayoutManager({
             layoutData: {
@@ -960,7 +962,7 @@ QUnit.module("Layout manager", () => {
         assert.deepEqual(layoutManager.option("layoutData.noRange"), [2, 6], "data updated");
     });
 
-    QUnit.test("Check data when generate items from layoutData and items with initial value", (assert) => {
+    test("Check data when generate items from layoutData and items with initial value", (assert) => {
         // arrange, act
         let layoutManager = $("#container").dxLayoutManager({
             layoutData: {
@@ -994,7 +996,7 @@ QUnit.module("Layout manager", () => {
         );
     });
 
-    QUnit.test("Rerender items after change 'items' option", (assert) => {
+    test("Rerender items after change 'items' option", (assert) => {
         // arrange
         let $testContainer = $("#container").dxLayoutManager({
                 items: [{
@@ -1030,7 +1032,7 @@ QUnit.module("Layout manager", () => {
         assert.ok($fieldItems.eq(1).find(".dx-datebox").length, "Second item is dxDateBox");
     });
 
-    QUnit.test("Generate items after change 'layoutData' option", (assert) => {
+    test("Generate items after change 'layoutData' option", (assert) => {
         // arrange
         let layoutManager = $("#container").dxLayoutManager({
             layoutData: {
@@ -1070,7 +1072,7 @@ QUnit.module("Layout manager", () => {
         }]);
     });
 
-    QUnit.test("Set values from layoutData", (assert) => {
+    test("Set values from layoutData", (assert) => {
         // arrange, act
         let $editors,
             $testContainer = $("#container");
@@ -1093,7 +1095,7 @@ QUnit.module("Layout manager", () => {
         assert.deepEqual($editors.eq(3).dxDateBox("instance").option("value"), new Date("10/10/2010"), "4 editor");
     });
 
-    QUnit.test("Value from layoutData shouldn't pass to the editor in case when the 'dataField' options isn't specified", (assert) => {
+    test("Value from layoutData shouldn't pass to the editor in case when the 'dataField' options isn't specified", (assert) => {
         // arrange, act
         let $testContainer = $("#container");
 
@@ -1113,7 +1115,7 @@ QUnit.module("Layout manager", () => {
         assert.equal(editor.option("value"), null, "Editor hasn't a value");
     });
 
-    QUnit.test("layoutData isn't updating on editor value change if the 'dataField' option isn't specified", (assert) => {
+    test("layoutData isn't updating on editor value change if the 'dataField' option isn't specified", (assert) => {
         // arrange, act
         let $testContainer = $("#container");
 
@@ -1136,7 +1138,7 @@ QUnit.module("Layout manager", () => {
         }, "layoutData keeps the same data");
     });
 
-    QUnit.test("Set value via editor options", (assert) => {
+    test("Set value via editor options", (assert) => {
         // arrange, act
         let $editors,
             $testContainer = $("#container");
@@ -1163,7 +1165,7 @@ QUnit.module("Layout manager", () => {
         assert.equal($editors.eq(2).dxNumberBox("instance").option("value"), 34);
     });
 
-    QUnit.test("Change item.visible on customizeItem works correct", (assert) => {
+    test("Change item.visible on customizeItem works correct", (assert) => {
         // arrange, act
         let $editors,
             $testContainer = $("#container");
@@ -1188,7 +1190,7 @@ QUnit.module("Layout manager", () => {
     });
 
 
-    QUnit.test("CustomizeItem work well after option change", (assert) => {
+    test("CustomizeItem work well after option change", (assert) => {
         // arrange, act
         let $editors,
             $testContainer = $("#container");
@@ -1218,7 +1220,7 @@ QUnit.module("Layout manager", () => {
         assert.equal($editors.eq(2).dxNumberBox("instance").option("value"), 34);
     });
 
-    QUnit.test("Get value from editor", (assert) => {
+    test("Get value from editor", (assert) => {
         // arrange
         let $editors,
             layoutManager,
@@ -1256,7 +1258,7 @@ QUnit.module("Layout manager", () => {
         });
     });
 
-    QUnit.test("Editors with object value correctly work with values from data", (assert) => {
+    test("Editors with object value correctly work with values from data", (assert) => {
         // arrange, act
         let layoutManager,
             $testContainer = $("#container"),
@@ -1291,7 +1293,7 @@ QUnit.module("Layout manager", () => {
         assert.equal(lookupCurrentItemText, "test2", "lookup has correct current item");
     });
 
-    QUnit.test("A layoutData object change at changing widget from items option", (assert) => {
+    test("A layoutData object change at changing widget from items option", (assert) => {
         // arrange
         let layoutManager,
             $testContainer = $("#container");
@@ -1322,7 +1324,7 @@ QUnit.module("Layout manager", () => {
         }, "Custom field data updated");
     });
 
-    QUnit.test("A layoutData is not changed when dataField is undefined_T310737", (assert) => {
+    test("A layoutData is not changed when dataField is undefined_T310737", (assert) => {
         // arrange
         let layoutManager,
             $testContainer = $("#container");
@@ -1356,7 +1358,7 @@ QUnit.module("Layout manager", () => {
         assert.equal(textBoxes[2].option("value"), "test3", "editor 3");
     });
 
-    QUnit.test("Set 'disabled' option to layoutManager and check internal element state", (assert) => {
+    test("Set 'disabled' option to layoutManager and check internal element state", (assert) => {
         // arrange
         let $editors,
             $testContainer = $("#container");
@@ -1381,7 +1383,7 @@ QUnit.module("Layout manager", () => {
         assert.equal($editors.eq(3).dxDateBox("instance").option("disabled"), true);
     });
 
-    QUnit.test("Label creates when item has no name but has 'label.text' option", (assert) => {
+    test("Label creates when item has no name but has 'label.text' option", (assert) => {
         // arrange, act
         let $testContainer = $("#container"),
             $label;
@@ -1402,7 +1404,7 @@ QUnit.module("Layout manager", () => {
         assert.equal($label.text(), "NewLabel", "Correct label's text");
     });
 
-    QUnit.test("Render field items from fieldData and items", (assert) => {
+    test("Render field items from fieldData and items", (assert) => {
         // arrange, act
         let $testContainer = $("#container"),
             layoutManager;
@@ -1421,7 +1423,7 @@ QUnit.module("Layout manager", () => {
         assert.ok($testContainer.find(".dx-button").length, "Form has button");
     });
 
-    QUnit.test("Render field items from fieldData and items when fieldData is a complex object", (assert) => {
+    test("Render field items from fieldData and items when fieldData is a complex object", (assert) => {
         // arrange, act
         let $testContainer = $("#container"),
             complexObject = {
@@ -1463,7 +1465,7 @@ QUnit.module("Layout manager", () => {
         assert.equal($inputs.eq(1).val(), "George", "Second input value");
     });
 
-    QUnit.test("Render field items from fieldData and items when fieldData is a complex object and custom label text", (assert) => {
+    test("Render field items from fieldData and items when fieldData is a complex object and custom label text", (assert) => {
         // arrange, act
         let $testContainer = $("#container"),
             complexObject = {
@@ -1510,7 +1512,7 @@ QUnit.module("Layout manager", () => {
         assert.equal($inputs.eq(1).val(), "George", "Second input value");
     });
 
-    QUnit.test("Render help text", (assert) => {
+    test("Render help text", (assert) => {
         // arrange, act
         let $testContainer = $("#container"),
             layoutManager;
@@ -1540,7 +1542,7 @@ QUnit.module("Layout manager", () => {
         assert.equal($fieldItems.eq(1).find("." + internals.FIELD_ITEM_HELP_TEXT_CLASS).length, 0, "Second field item has't help text element");
     });
 
-    QUnit.test("Change the order of items", (assert) => {
+    test("Change the order of items", (assert) => {
         // arrange, act
         let $testContainer = $("#container"),
             data = {
@@ -1582,7 +1584,7 @@ QUnit.module("Layout manager", () => {
         assert.equal($inputs.eq(2).val(), "40", "First input value");
     });
 
-    QUnit.test("Change the order of items with items without visibleIndex", (assert) => {
+    test("Change the order of items with items without visibleIndex", (assert) => {
         // arrange, act
         let $testContainer = $("#container"),
             data = {
@@ -1628,7 +1630,7 @@ QUnit.module("Layout manager", () => {
         assert.equal($inputs.eq(3).val(), "male", "Second input value");
     });
 
-    QUnit.test("Editor type for items where this option is not defined", (assert) => {
+    test("Editor type for items where this option is not defined", (assert) => {
         // arrange, act
         let $testContainer = $("#container"),
             layoutManager,
@@ -1653,7 +1655,7 @@ QUnit.module("Layout manager", () => {
         consoleErrorStub.restore();
     });
 
-    QUnit.test("Error is displayed in console when editorType is unsupported", (assert) => {
+    test("Error is displayed in console when editorType is unsupported", (assert) => {
         // arrange, act
         let $testContainer = $("#container"),
             errorMessage,
@@ -1679,7 +1681,7 @@ QUnit.module("Layout manager", () => {
         consoleUtils.logger.error = _error;
     });
 
-    QUnit.test("Form with dxRadioGroup that items are defined via 'dataSource' option renders without error", (assert) => {
+    test("Form with dxRadioGroup that items are defined via 'dataSource' option renders without error", (assert) => {
         // arrange
         let $testContainer = $("#container"),
             errorMessage,
@@ -1708,7 +1710,7 @@ QUnit.module("Layout manager", () => {
         }
     });
 
-    QUnit.test("Set value to the dxSelectBox editor from data option", (assert) => {
+    test("Set value to the dxSelectBox editor from data option", (assert) => {
         // arrange, act
         let $testContainer = $("#container"),
             selectBox,
@@ -1742,7 +1744,7 @@ QUnit.module("Layout manager", () => {
         assert.deepEqual(selectBox.option("value"), "SuperLCD 70");
     });
 
-    QUnit.test("Set default value to the dxSelectBox editor when dataField is not contained in a formData", (assert) => {
+    test("Set default value to the dxSelectBox editor when dataField is not contained in a formData", (assert) => {
         // arrange, act
         let $testContainer = $("#container"),
             selectBox;
@@ -1776,7 +1778,7 @@ QUnit.module("Layout manager", () => {
         assert.deepEqual(selectBox.option("value"), undefined);
     });
 
-    QUnit.test("Update value in dxSelectBox editor when data option is changed", (assert) => {
+    test("Update value in dxSelectBox editor when data option is changed", (assert) => {
         // arrange
         let $testContainer = $("#container"),
             selectBox,
@@ -1814,7 +1816,7 @@ QUnit.module("Layout manager", () => {
         assert.ok(!layoutManager._isFieldValueChanged);
     });
 
-    QUnit.test("Update data option of layout manager when value is changed in the dxSelectBox editor", (assert) => {
+    test("Update data option of layout manager when value is changed in the dxSelectBox editor", (assert) => {
         // arrange
         let $testContainer = $("#container"),
             selectBox,
@@ -1851,7 +1853,7 @@ QUnit.module("Layout manager", () => {
         assert.ok(!layoutManager._isValueChangedCalled);
     });
 
-    QUnit.test("Set value to the dxTagBox editor from data option", (assert) => {
+    test("Set value to the dxTagBox editor from data option", (assert) => {
         // arrange, act
         let $testContainer = $("#container"),
             tagBox,
@@ -1885,7 +1887,7 @@ QUnit.module("Layout manager", () => {
         assert.deepEqual(tagBox.option("value"), ["HD Video Player", "SuperLCD 70"]);
     });
 
-    QUnit.test("Set default value to the dxTagBox editor when dataField is not contained in a formData", (assert) => {
+    test("Set default value to the dxTagBox editor when dataField is not contained in a formData", (assert) => {
         // arrange, act
         let $testContainer = $("#container"),
             tagBox;
@@ -1919,7 +1921,7 @@ QUnit.module("Layout manager", () => {
         assert.deepEqual(tagBox.option("value"), []);
     });
 
-    QUnit.test("Update value in dxTagBox editor when data option is changed", (assert) => {
+    test("Update value in dxTagBox editor when data option is changed", (assert) => {
         // arrange
         let $testContainer = $("#container"),
             tagBox,
@@ -1957,7 +1959,7 @@ QUnit.module("Layout manager", () => {
         assert.ok(!layoutManager._isFieldValueChanged);
     });
 
-    QUnit.test("Update data option of layout manager when value is changed in the dxTagBox editor", (assert) => {
+    test("Update data option of layout manager when value is changed in the dxTagBox editor", (assert) => {
         // arrange
         let $testContainer = $("#container"),
             tagBox,
@@ -1994,7 +1996,7 @@ QUnit.module("Layout manager", () => {
         assert.ok(!layoutManager._isValueChangedCalled);
     });
 
-    QUnit.test("Update editor with nested dataField when layoutData changed", (assert) => {
+    test("Update editor with nested dataField when layoutData changed", (assert) => {
         // arrange
         let $testContainer = $("#container"),
             layoutManager;
@@ -2019,7 +2021,7 @@ QUnit.module("Layout manager", () => {
         assert.equal(layoutManager.getEditor("personalInfo.firstName").option("value"), "Jane", "Editor is up to date");
     });
 
-    QUnit.test("Render empty item", (assert) => {
+    test("Render empty item", (assert) => {
         // arrange, act
         let $testContainer = $("#container").dxLayoutManager({
             formData: {
@@ -2038,7 +2040,7 @@ QUnit.module("Layout manager", () => {
 
 
 QUnit.module("Render multiple columns", () => {
-    QUnit.test("Render layoutManager with 2 columns", (assert) => {
+    test("Render layoutManager with 2 columns", (assert) => {
         // arrange, act
         let layoutManager = $("#container").dxLayoutManager({
                 layoutData: createTestObject(),
@@ -2096,7 +2098,7 @@ QUnit.module("Render multiple columns", () => {
         }, "col 0 row 5");
     });
 
-    QUnit.test("Render layout items in order", (assert) => {
+    test("Render layout items in order", (assert) => {
         // arrange, act
         $("#container").dxLayoutManager({
             layoutData: {
@@ -2127,7 +2129,7 @@ QUnit.module("Render multiple columns", () => {
         assert.equal($editors.eq(4).val(), "test id", "4 input");
     });
 
-    QUnit.test("Check that layoutManager create correct rows count", (assert) => {
+    test("Check that layoutManager create correct rows count", (assert) => {
         // arrange, act
         let layoutManager = $("#container").dxLayoutManager({
             layoutData: createTestObject(),
@@ -2139,7 +2141,7 @@ QUnit.module("Render multiple columns", () => {
         assert.equal(layoutManager._getRowsCount(), 6, "11 items / 2 columns = 6 rows");
     });
 
-    QUnit.test("Check rows and cols in responsiveBox", (assert) => {
+    test("Check rows and cols in responsiveBox", (assert) => {
         // arrange, act
         $("#container").dxLayoutManager({
             layoutData: createTestObject(),
@@ -2154,7 +2156,7 @@ QUnit.module("Render multiple columns", () => {
         assert.equal(responsiveBox.option("rows").length, 6, "rows count");
     });
 
-    QUnit.test("Prepare items for col span", (assert) => {
+    test("Prepare items for col span", (assert) => {
         // arrange, act
         let layoutManager = $("#container").dxLayoutManager({
                 layoutData: createTestObject(),
@@ -2277,7 +2279,7 @@ QUnit.module("Render multiple columns", () => {
         }, "15 item");
     });
 
-    QUnit.test("Generate layout items for col span", (assert) => {
+    test("Generate layout items for col span", (assert) => {
         // arrange, act
         $("#container").dxLayoutManager({
             layoutData: createTestObject(),
@@ -2318,7 +2320,7 @@ QUnit.module("Render multiple columns", () => {
         assert.equal(items[10].location.colspan, undefined, "StateID has no colSpan");
     });
 
-    QUnit.test("Prepare items for col span when labelLocation is 'top' (T307223)", (assert) => {
+    test("Prepare items for col span when labelLocation is 'top' (T307223)", (assert) => {
         // arrange, act
         let layoutManager = $("#container").dxLayoutManager({
                 layoutData: createTestObject(),
@@ -2442,7 +2444,7 @@ QUnit.module("Render multiple columns", () => {
         }, "15 item");
     });
 
-    QUnit.test("Generate rows ratio for col span", (assert) => {
+    test("Generate rows ratio for col span", (assert) => {
         // arrange, act
         $("#container").dxLayoutManager({
             layoutData: createTestObject(),
@@ -2472,7 +2474,7 @@ QUnit.module("Render multiple columns", () => {
         assert.equal(rows.length, 4);
     });
 
-    QUnit.test("Change of editor's value changing 'layoutData' option", (assert) => {
+    test("Change of editor's value changing 'layoutData' option", (assert) => {
         // arrange
         let $testContainer = $("#container");
 
@@ -2491,7 +2493,7 @@ QUnit.module("Render multiple columns", () => {
         }, "Correct layoutData");
     });
 
-    QUnit.test("Change of editor's value changing 'items.editorOptions.value' option", (assert) => {
+    test("Change of editor's value changing 'items.editorOptions.value' option", (assert) => {
         // arrange
         let $testContainer = $("#container");
 
@@ -2514,7 +2516,7 @@ QUnit.module("Render multiple columns", () => {
         }, "Correct layoutData");
     });
 
-    QUnit.test("Render when 'colCount' is 'auto' and have 1 item", (assert) => {
+    test("Render when 'colCount' is 'auto' and have 1 item", (assert) => {
         // arrange
         let $testContainer = $("#container").width(450);
 
@@ -2534,7 +2536,7 @@ QUnit.module("Render multiple columns", () => {
         assert.equal(colCount, 1, "We have only 1 column, because have only one item");
     });
 
-    QUnit.test("Correct colCount when width is less that minColWidth and colCount is auto", (assert) => {
+    test("Correct colCount when width is less that minColWidth and colCount is auto", (assert) => {
         // arrange
         let $testContainer = $("#container").width(450);
 
@@ -2555,7 +2557,7 @@ QUnit.module("Render multiple columns", () => {
         assert.equal(colCount, 1, "Correct colCount");
     });
 
-    QUnit.test("Render when 'colCount' is 'auto' and have 3 items", (assert) => {
+    test("Render when 'colCount' is 'auto' and have 3 items", (assert) => {
         // arrange
         let $testContainer = $("#container").width(450);
 
@@ -2578,7 +2580,7 @@ QUnit.module("Render multiple columns", () => {
         assert.equal(colCount, expectedColCount, "We have only 2 columns");
     });
 
-    QUnit.test("Change minColWidth when colCount is auto", (assert) => {
+    test("Change minColWidth when colCount is auto", (assert) => {
         // arrange
         let $testContainer = $("#container").width(450);
 
@@ -2608,7 +2610,7 @@ QUnit.module("Render multiple columns", () => {
         invalidateStub.restore();
     });
 
-    QUnit.test("Clear item watchers after disposing", (assert) => {
+    test("Clear item watchers after disposing", (assert) => {
         // arrange
         let $testContainer = $("#container").width(450);
 
@@ -2630,7 +2632,7 @@ QUnit.module("Render multiple columns", () => {
         cleanWatcherStub.restore();
     });
 
-    QUnit.test("Render validate", (assert) => {
+    test("Render validate", (assert) => {
         // arrange, act
         let $container = $("#container");
 
@@ -2666,7 +2668,7 @@ QUnit.module("Render multiple columns", () => {
         assert.equal($container.find(".dx-validator [id='dx_FormID_FirstName']").length, 1, "validator for lastName");
     });
 
-    QUnit.test("Validation rules and required marks render", (assert) => {
+    test("Validation rules and required marks render", (assert) => {
         // arrange, act
         let $container = $("#container");
 
@@ -2714,7 +2716,7 @@ QUnit.module("Render multiple columns", () => {
 
 
 QUnit.module("Templates", () => {
-    QUnit.test("Render template", (assert) => {
+    test("Render template", (assert) => {
         // arrange
         let $testContainer = $("#container");
 
@@ -2751,7 +2753,7 @@ QUnit.module("Templates", () => {
         assert.equal(textArea.option("value"), layoutManager.option("layoutData.test"), "Widget's value equal to bound datafield");
     });
 
-    QUnit.test("Check template bound to data", (assert) => {
+    test("Check template bound to data", (assert) => {
         // arrange
         let $testContainer = $("#container");
 
@@ -2790,7 +2792,7 @@ QUnit.module("Templates", () => {
 
 
 QUnit.module("Public methods", () => {
-    QUnit.test("UpdateData, simple case", (assert) => {
+    test("UpdateData, simple case", (assert) => {
         // arrange
         let $testContainer = $("#container");
 
@@ -2810,7 +2812,7 @@ QUnit.module("Public methods", () => {
         assert.equal(layoutManager.option("layoutData.test2"), "qwerty", "Correct data");
     });
 
-    QUnit.test("UpdateData, update with object", (assert) => {
+    test("UpdateData, update with object", (assert) => {
         // arrange
         let $testContainer = $("#container");
 
@@ -2836,7 +2838,7 @@ QUnit.module("Public methods", () => {
         }, "Correct data");
     });
 
-    QUnit.test("Get editor instance", (assert) => {
+    test("Get editor instance", (assert) => {
         // arrange
         let $testContainer = $("#container");
 
@@ -2866,7 +2868,7 @@ QUnit.module("Public methods", () => {
 
 
 QUnit.module("Accessibility", () => {
-    QUnit.test("Check required state", (assert) => {
+    test("Check required state", (assert) => {
         // arrange
         let $testContainer = $("#container");
 
@@ -2885,7 +2887,7 @@ QUnit.module("Accessibility", () => {
         assert.equal($fieldItems.last().find("input").attr("aria-required"), "true", "Second item is required");
     });
 
-    QUnit.test("Check help text", (assert) => {
+    test("Check help text", (assert) => {
         // arrange
         let $testContainer = $("#container");
 
@@ -2915,7 +2917,7 @@ QUnit.module("Layout manager responsibility", {
         responsiveBoxScreenMock.teardown.call(this);
     }
 }, () => {
-    QUnit.test("Middle screen size", (assert) => {
+    test("Middle screen size", (assert) => {
         // arrange, act
         let $testContainer = $("#container");
 
@@ -2933,7 +2935,7 @@ QUnit.module("Layout manager responsibility", {
         assert.ok(!$testContainer.hasClass(internals.LAYOUT_MANAGER_ONE_COLUMN), "Layout manager hasn't one column mode");
     });
 
-    QUnit.test("Small screen size", (assert) => {
+    test("Small screen size", (assert) => {
         // arrange
         let $testContainer = $("#container");
 
@@ -2957,7 +2959,7 @@ QUnit.module("Layout manager responsibility", {
 
 
 QUnit.module("Button item", () => {
-    QUnit.test("Base rendering", (assert) => {
+    test("Base rendering", (assert) => {
         // arrange, act
         let $testContainer = $("#container");
 
@@ -2980,7 +2982,7 @@ QUnit.module("Button item", () => {
         assert.equal(secondButtonText, "Test", "Button gets the correct config");
     });
 
-    QUnit.test("cssClass", (assert) => {
+    test("cssClass", (assert) => {
         // arrange, act
         let $testContainer = $("#container");
 
@@ -2992,11 +2994,12 @@ QUnit.module("Button item", () => {
         });
 
         let $buttonItem = $testContainer.find(".dx-field-button-item");
+
         // assert
         assert.ok($buttonItem.hasClass("privateClass"), "Item has a custom class");
     });
 
-    QUnit.test("column class", (assert) => {
+    test("column class", (assert) => {
         // arrange, act
         let $testContainer = $("#container");
 
@@ -3010,10 +3013,31 @@ QUnit.module("Button item", () => {
         });
 
         let $buttonItems = $testContainer.find(".dx-field-button-item");
+
         // assert
         assert.ok($buttonItems.first().hasClass("dx-col-0"), "Correct column index");
         assert.ok($buttonItems.first().hasClass("dx-first-col"), "Correct column index");
         assert.ok($buttonItems.last().hasClass("dx-col-1"), "Correct column index");
         assert.ok($buttonItems.last().hasClass("dx-last-col"), "Correct column index");
+    });
+
+    test("alignment", (assert) => {
+        // arrange, act
+        let $testContainer = $("#container");
+
+        $testContainer.dxLayoutManager({
+            items: [{
+                itemType: "button"
+            }, {
+                itemType: "button",
+                alignment: "start"
+            }]
+        });
+
+        let $buttonItems = $testContainer.find(".dx-field-button-item");
+
+        // assert
+        assert.equal($buttonItems.first().css("textAlign"), "end", "By default buttons align by the end (right-side for LTR, left-side for RTL)");
+        assert.equal($buttonItems.last().css("textAlign"), "start", "Custom alignment accepted");
     });
 });
