@@ -1,14 +1,10 @@
 "use strict";
 
-var $ = require("jquery"),
-    vizMocks = require("../../helpers/vizMocks.js"),
-    Series = require("viz/series/base_series").Series,
-    pointModule = require("viz/series/points/base_point"),
-    chartMocks = require("../../helpers/chartMocks.js"),
-    insertMockFactory = chartMocks.insertMockFactory,
-    MockAxis = chartMocks.MockAxis;
-
-require("viz/chart");
+import $ from "jquery";
+import * as vizMocks from "../../helpers/vizMocks.js";
+import pointModule from "viz/series/points/base_point";
+import { Series } from "viz/series/base_series";
+import { MockAxis, insertMockFactory } from "../../helpers/chartMocks.js";
 
 var createPoint = function() {
     var stub = sinon.createStubInstance(pointModule.Point);
@@ -193,7 +189,7 @@ var checkGroups = function(assert, series) {
         assert.deepEqual(series.getMarginOptions(), {
             size: 14,
             percentStick: false,
-            sizePointNormalState: 12
+            sizePointNormalState: 10
         });
     });
 

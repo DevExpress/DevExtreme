@@ -30,6 +30,12 @@ var AppointmentLayoutManager = Class.inherit({
         }
     },
 
+    getGroupOrientation: function(options) {
+        if(this.instance._workSpace) {
+            options.callback(this.instance._workSpace.option("groupOrientation"));
+        }
+    },
+
     initRenderingStrategy: function(renderingStrategy) {
         var Strategy = RENDERING_STRATEGIES[renderingStrategy];
         this._renderingStrategyInstance = new Strategy(this.instance);
@@ -44,6 +50,11 @@ var AppointmentLayoutManager = Class.inherit({
                 this.instance._cellWidth = width;
                 this.instance._cellHeight = height;
                 this.instance._allDayCellHeight = allDayHeight;
+            }).bind(this)
+        });
+        this.getGroupOrientation({
+            callback: (function(groupOrientation) {
+                this.instance._groupOrientation = groupOrientation;
             }).bind(this)
         });
 

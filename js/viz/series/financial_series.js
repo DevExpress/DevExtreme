@@ -189,9 +189,11 @@ exports.stock = _extend({}, scatterSeries, {
     _defaultAggregator: "ohlc",
 
     _aggregators: {
-        "ohlc": function(aggregationInfo, series) {
+        "ohlc": ({ intervalStart, data }, series) => {
+            if(!data.length) {
+                return;
+            }
             var result = {},
-                data = aggregationInfo.data,
                 valueFields = series.getValueFields(),
                 highValueField = valueFields[1],
                 lowValueField = valueFields[2];
@@ -216,7 +218,7 @@ exports.stock = _extend({}, scatterSeries, {
             if(!isFinite(result[lowValueField])) {
                 result[lowValueField] = null;
             }
-            result[series.getArgumentField()] = aggregationInfo.intervalStart;
+            result[series.getArgumentField()] = intervalStart;
 
             return result;
         }
@@ -240,7 +242,7 @@ exports.stock = _extend({}, scatterSeries, {
                 }, 0);
 
         options.size = DEFAULT_FINANCIAL_POINT_SIZE + border;
-        options.sizePointNormalState = DEFAULT_FINANCIAL_POINT_SIZE + styles.normal["stroke-width"];
+        options.sizePointNormalState = DEFAULT_FINANCIAL_POINT_SIZE;
 
         return options;
     }

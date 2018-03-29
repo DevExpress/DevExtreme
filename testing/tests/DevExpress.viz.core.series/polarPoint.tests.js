@@ -1,15 +1,16 @@
 "use strict";
 
-var $ = require("jquery"),
-    vizMocks = require("../../helpers/vizMocks.js"),
-    pointModule = require("viz/series/points/base_point"),
-    defaultStyle = {
+import $ from "jquery";
+import vizMocks from "../../helpers/vizMocks.js";
+import pointModule from "viz/series/points/base_point";
+import labelModule from "viz/series/points/label";
+import { Series } from "viz/series/base_series";
+
+var defaultStyle = {
         normal: {
             r: 6
         }
     },
-    labelModule = require("viz/series/points/label"),
-    Series = require("viz/series/base_series").Series,
     series = sinon.createStubInstance(Series),
     label = sinon.createStubInstance(labelModule.Label),
     environment = {

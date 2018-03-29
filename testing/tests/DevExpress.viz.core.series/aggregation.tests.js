@@ -396,6 +396,29 @@ QUnit.test("Can return nothing from custom callback", function(assert) {
     assert.equal(points.length, 0);
 });
 
+QUnit.test("Can return several points for interval", function(assert) {
+    var points = this.aggregateData("custom", this.data, "scatter", {
+        aggregation: {
+            calculate: function() {
+                return [{
+                    arg: 1,
+                    val: 2
+                }, {
+                    arg: 2,
+                    val: 3
+                }];
+            }
+        }
+    });
+
+    assert.equal(points.length, 2);
+    assert.equal(points[0].argument, 1);
+    assert.equal(points[0].value, 2);
+
+    assert.equal(points[1].argument, 2);
+    assert.equal(points[1].value, 3);
+});
+
 QUnit.test("series pass aggregation info into custom callback", function(assert) {
     var customMethod = sinon.spy();
     this.aggregateData("custom", this.data, "scatter", {
@@ -743,4 +766,69 @@ QUnit.test("Points grouping by intervals", function(assert) {
     assert.equal(points[0].value, 300);
     assert.equal(points[1].argument, 5);
     assert.equal(points[1].value, 800);
+});
+
+QUnit.test("Aggregation with empty interval, Call custom calculation", function(assert) {
+    this.argumentAxis.getAggregationInfo = () => { return { interval: 5, ticks: [10, 15] }; };
+
+    var customMethod = sinon.spy();
+    this.aggregateData("custom", this.data, "scatter", {
+        aggregation: {
+            calculate: customMethod
+        }
+    }, true);
+
+    assert.equal(customMethod.callCount, 1);
+    assert.deepEqual(customMethod.lastCall.args[0], {
+        data: [],
+        aggregationInterval: 5,
+        intervalStart: 10,
+        intervalEnd: 15
+    });
+});
+
+QUnit.test("Aggregation with empty interval, Avg, min, max, sum should not return point", function(assert) {
+    this.argumentAxis.getAggregationInfo = () => { return { interval: 5, ticks: [10, 15] }; };
+
+    assert.equal(this.aggregateData("avg", this.data).length, 0);
+    assert.equal(this.aggregateData("min", this.data).length, 0);
+    assert.equal(this.aggregateData("max", this.data).length, 0);
+    assert.equal(this.aggregateData("sum", this.data).length, 0);
+});
+
+QUnit.test("Aggregation with empty interval, Count should create a point", function(assert) {
+    this.argumentAxis.getAggregationInfo = () => { return { interval: 5, ticks: [10, 15] }; };
+
+    const points = this.aggregateData("count", this.data);
+
+    assert.equal(points.length, 1);
+    assert.equal(points[0].argument, 10);
+    assert.equal(points[0].value, 0);
+});
+
+QUnit.test("Aggregation with empty interval, Range should not return point", function(assert) {
+    this.argumentAxis.getAggregationInfo = () => { return { interval: 5, ticks: [10, 15] }; };
+    const points = this.aggregateData("range", [
+        { arg: 0, val1: 2, val2: 5 },
+        { arg: 2, val1: 1, val2: 7 },
+        { arg: 4, val1: 5, val2: 5 },
+        { arg: 6, val1: 4, val2: 9 },
+        { arg: 8, val1: 4, val2: 9 }
+    ], "rangebar");
+
+    assert.equal(points.length, 0);
+});
+
+QUnit.test("Aggregation with empty interval, Ohlc should not return point", function(assert) {
+    this.argumentAxis.getAggregationInfo = () => { return { interval: 5, ticks: [10, 15] }; };
+
+    const points = this.aggregateData("ohlc", [
+        { arg: 0, open: 2, high: 5, low: 0, close: 4 },
+        { arg: 2, open: 1, high: 7, low: 1, close: 6 },
+        { arg: 4, open: 5, high: 5, low: 3, close: 3 },
+        { arg: 6, open: 4, high: 9, low: 2, close: 30 },
+        { arg: 8, open: 4, high: 9, low: 2, close: 5 }
+    ], "stock");
+
+    assert.equal(points.length, 0);
 });

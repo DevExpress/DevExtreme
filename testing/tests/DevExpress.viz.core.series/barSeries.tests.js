@@ -1,15 +1,11 @@
 "use strict";
 
-var $ = require("jquery"),
-    vizMocks = require("../../helpers/vizMocks.js"),
-    Color = require("color"),
-    Series = require("viz/series/base_series").Series,
-    pointModule = require("viz/series/points/base_point"),
-    chartMocks = require("../../helpers/chartMocks.js"),
-    MockAxis = chartMocks.MockAxis,
-    MockTranslator = chartMocks.MockTranslator;
-
-require("viz/chart");
+import $ from "jquery";
+import vizMocks from "../../helpers/vizMocks.js";
+import Color from "color";
+import pointModule from "viz/series/points/base_point";
+import { Series } from "viz/series/base_series";
+import { MockAxis, MockTranslator } from "../../helpers/chartMocks.js";
 
 var createSeries = function(options, renderSettings) {
     renderSettings = renderSettings || {};
