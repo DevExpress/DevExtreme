@@ -1,7 +1,8 @@
 "use strict";
 
 var $ = require("../core/renderer"),
-    window = require("../core/utils/window").getWindow(),
+    windowUtils = require("../core/utils/window"),
+    window = windowUtils.getWindow(),
     domAdapter = require("../core/dom_adapter"),
     eventsEngine = require("../events/core/events_engine"),
     registerComponent = require("../core/component_registrator"),
@@ -340,6 +341,13 @@ var Popover = Popup.inherit({
                         boundaryOffset: { h: 20, v: -10 },
                         collision: "fit"
                     }
+                }
+            }, {
+                device: function() {
+                    return !windowUtils.hasWindow();
+                },
+                options: {
+                    animation: null
                 }
             }
         ];

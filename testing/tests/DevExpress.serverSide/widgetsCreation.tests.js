@@ -86,14 +86,8 @@ QUnit.module("Widget creation", {
 });
 
 var optionChangeExcluded = [
-    "ContextMenu",
     "DateBox",
-    "LoadPanel",
-    "Popover",
-    "Popup",
-    "ScrollView",
-    "Toast",
-    "Tooltip"
+    "ScrollView"
 ];
 
 Object.keys(widgets).forEach(function(widget) {
