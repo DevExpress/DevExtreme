@@ -42,9 +42,9 @@ var FilterPanelView = modules.View.inherit({
                 .addClass(this.addWidgetPrefix(FILTER_PANEL_CHECKBOX_CLASS));
 
         that._createComponent($element, CheckBox, {
-            value: that.option("filterPanel.applyFilterValue"),
+            value: that.option("filterPanel.filterApplied"),
             onValueChanged: function(e) {
-                that.option("filterPanel.applyFilterValue", e.value);
+                that.option("filterPanel.filterApplied", e.value);
             }
         });
         $element.attr("title", this.option("filterPanel.applyFilterHintText"));
@@ -100,7 +100,7 @@ var FilterPanelView = modules.View.inherit({
         switch(args.name) {
             case "filterValue":
                 this._invalidate();
-                this.option("filterPanel.applyFilterValue", true);
+                this.option("filterPanel.filterApplied", true);
                 args.handled = true;
                 break;
             case "filterPanel":
@@ -132,12 +132,12 @@ module.exports = {
                 visible: false,
 
                 /**
-                 * @name GridBaseOptions_filterPanel_applyFilterValue
-                 * @publicName applyFilterValue
+                 * @name GridBaseOptions_filterPanel_filterApplied
+                 * @publicName filterApplied
                  * @type boolean
                  * @default true
                  */
-                applyFilterValue: true,
+                filterApplied: true,
 
                 /**
                  * @name GridBaseOptions_filterPanel_clearFilterText
