@@ -166,6 +166,10 @@ module.exports = gridCore.Controller.inherit((function() {
 
             var isReload = !that.isLoaded() && !that._isRefreshing;
 
+            if(that.option("integrationOptions.renderedOnServer") && !that.isLoaded()) {
+                options.delay = undefined;
+            }
+
             loadOptions = extend({}, options.storeLoadOptions);
 
             operationTypes = calculateOperationTypes(loadOptions, lastLoadOptions);
