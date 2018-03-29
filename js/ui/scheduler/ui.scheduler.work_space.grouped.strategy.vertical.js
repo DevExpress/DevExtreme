@@ -42,7 +42,7 @@ var VerticalGroupedStrategy = GroupedStrategy.inherit({
     addAdditionalGroupCellClasses: function(cellClass, index, i, j) {
         cellClass = this._addLastGroupCellClass(cellClass, i + 1);
 
-        return this._addFirstGroupCellClass(cellClass, index);
+        return this._addFirstGroupCellClass(cellClass, i + 1);
     },
 
     _addLastGroupCellClass: function(cellClass, index) {
@@ -54,7 +54,7 @@ var VerticalGroupedStrategy = GroupedStrategy.inherit({
     },
 
     _addFirstGroupCellClass: function(cellClass, index) {
-        if((index - 1) % this._workSpace._getCellCount() === 0) {
+        if((index - 1) % this._workSpace._getRowCount() === 0) {
             return cellClass + " " + this.getFirstGroupCellClass();
         }
 

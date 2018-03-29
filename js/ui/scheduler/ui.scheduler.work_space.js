@@ -855,6 +855,7 @@ var SchedulerWorkSpace = Widget.inherit({
         this._renderView();
         this._attachEvents();
     },
+
     _render: function() {
         this.callBase();
 
@@ -1300,7 +1301,9 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _getTimeCellClass: function(i) {
-        return TIME_PANEL_CELL_CLASS + " " + VERTICAL_SIZES_CLASS;
+        var cellClass = TIME_PANEL_CELL_CLASS + " " + VERTICAL_SIZES_CLASS;
+
+        return this._groupedStrategy.addAdditionalGroupCellClasses(cellClass, i, i);
     },
 
     _getTimeText: function(i) {
@@ -1753,9 +1756,10 @@ var SchedulerWorkSpace = Widget.inherit({
 
     _setHorizontalGroupHeaderCellsHeight: function() {
         var cellHeight = this.getCellHeight(),
+            allDayRowHeight = this.option("showAllDayPanel") ? cellHeight : 0,
             dateTableHeight = cellHeight * this._getRowCount();
 
-        this._getGroupHeaderCellsContent().css("height", dateTableHeight);
+        this._getGroupHeaderCellsContent().css("height", dateTableHeight + allDayRowHeight);
     },
 
     _getGroupHeaderCellsContent: function() {

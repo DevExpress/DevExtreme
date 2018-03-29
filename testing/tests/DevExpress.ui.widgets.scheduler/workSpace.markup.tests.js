@@ -578,14 +578,28 @@ QUnit.module("Workspace Day markup with horizontal grouping", dayWithGroupingMod
         assert.deepEqual($element.find(".dx-scheduler-date-table tbody tr>td").eq(25).data("dxCellData").groups, { a: 2 }, "Cell group is OK");
     });
 
-    QUnit.test("WorkSpace Day view cells should have right class when intervalCount and groups", (assert) => {
+    QUnit.test("WorkSpace Day view cells should have right class when groups", (assert) => {
         var rowCountInGroup = 24;
 
         this.instance.$element().find(".dx-scheduler-date-table-cell").each(function(index) {
             if((index + 1) % rowCountInGroup === 0) {
                 assert.ok($(this).hasClass("dx-scheduler-last-group-cell"), "Date table cell has last-group class");
+            } else if(index % rowCountInGroup === 0) {
+                assert.ok($(this).hasClass("dx-scheduler-first-group-cell"), "Date table cell has first-group class");
+            } else {
+                assert.notOk($(this).hasClass("dx-scheduler-last-group-cell"), "Date table cell hasn't last-group class");
+                assert.notOk($(this).hasClass("dx-scheduler-first-group-cell"), "Date table cell hasn't first-group class");
+            }
+        });
+
+        this.instance.$element().find(".dx-scheduler-time-panel-cell").each(function(index) {
+            if((index + 1) % rowCountInGroup === 0) {
+                assert.ok($(this).hasClass("dx-scheduler-last-group-cell"), "Date table cell has last-group class");
+            } else if(index % rowCountInGroup === 0) {
+                assert.ok($(this).hasClass("dx-scheduler-first-group-cell"), "Date table cell has first-group class");
             } else {
                 assert.notOk($(this).hasClass("dx-scheduler-last-group-cell"), "Date tale cell hasn't last-group class");
+                assert.notOk($(this).hasClass("dx-scheduler-first-group-cell"), "Date tale cell hasn't first-group class");
             }
         });
     });

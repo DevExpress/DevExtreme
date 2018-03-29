@@ -1480,3 +1480,44 @@ QUnit.test("intervalCount should be passed to workSpace", function(assert) {
     assert.equal(workSpace.option("intervalCount"), 2, "option intervalCount was passed");
 });
 
+QUnit.test("Group header should contain group header content with right height, groupOrientation = true", function(assert) {
+    var priorityData = [
+        {
+            text: "Low Priority",
+            id: 1,
+            color: "#1e90ff"
+        }, {
+            text: "High Priority",
+            id: 2,
+            color: "#ff9747"
+        }
+    ];
+
+    this.createInstance({
+        dataSource: [],
+        views: [{
+            type: "day",
+            name: "day",
+            groupOrientation: "vertical" }],
+        currentView: "day",
+        showAllDayPanel: true,
+        currentDate: new Date(2018, 2, 16),
+        groups: ["priorityId"],
+        resources: [{
+            fieldExpr: "priorityId",
+            allowMultiple: false,
+            dataSource: priorityData,
+            label: "Priority"
+        }
+        ],
+        startDayHour: 9,
+        endDayHour: 14,
+        height: 600
+    });
+
+    var header = this.instance.$element().find(".dx-scheduler-group-header"),
+        $headerContents = header.find(".dx-scheduler-group-header-content"),
+        cellHeight = this.instance.$element().find(".dx-scheduler-date-table-cell").eq(1).outerHeight();
+
+    assert.equal($headerContents.eq(0).outerHeight(), 11 * cellHeight, "Group header content has right height");
+});

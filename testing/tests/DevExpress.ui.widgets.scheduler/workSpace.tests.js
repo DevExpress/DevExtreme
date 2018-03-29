@@ -212,7 +212,7 @@ QUnit.testStart(function() {
                     delete this.instance;
                 }
 
-                this.instance = $("#scheduler-work-space").dxSchedulerWorkSpaceDay().dxSchedulerWorkSpaceDay("instance");
+                this.instance = $("#scheduler-work-space").dxSchedulerWorkSpaceDay(options).dxSchedulerWorkSpaceDay("instance");
                 stubInvokeMethod(this.instance, options);
             };
 
@@ -417,13 +417,13 @@ QUnit.testStart(function() {
     QUnit.test("Cells have right cellData in vertical grouped WorkSpace Day view", function(assert) {
         this.instance.option({
             currentDate: new Date(2018, 2, 16),
-            groupOrientation: "vertical",
-            startDayHour: 9,
-            showAllDayPanel: false,
             groups: [{
                 name: "one",
                 items: [{ id: 1, text: "a" }, { id: 2, text: "b" }]
-            }]
+            }],
+            groupOrientation: "vertical",
+            startDayHour: 9,
+            showAllDayPanel: false
         });
         var firstCellData = this.instance.$element().find(".dx-scheduler-date-table-cell").eq(0).data("dxCellData"),
             secondCellData = this.instance.$element().find(".dx-scheduler-date-table-cell").eq(36).data("dxCellData");
