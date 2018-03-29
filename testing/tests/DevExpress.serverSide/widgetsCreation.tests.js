@@ -93,7 +93,6 @@ var optionChangeExcluded = [
     "Popup",
     "ScrollView",
     "Toast",
-    "Toolbar",
     "Tooltip"
 ];
 
