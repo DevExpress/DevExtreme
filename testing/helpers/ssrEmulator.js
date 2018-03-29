@@ -167,6 +167,25 @@ var serverSideDOMAdapter = require("./serverSideDOMAdapterPatch.js");
     };
 })();
 
+(function emulateIncorrectMatches() {
+    // https://github.com/fgnass/domino/issues/121
+    var originalMatches = Element.prototype.matches;
+    Element.prototype.matches = function(selector) {
+        var selectorParts = selector.split(/\s|>/);
+        var lastSelectorPart = selectorParts[selectorParts.length - 1];
+        if(/^\.[\w|\-]+$/.test(lastSelectorPart)) {
+            lastSelectorPart = lastSelectorPart.substr(1);
+            var index = this.className.indexOf(lastSelectorPart);
+            var l = this.className[index + lastSelectorPart.length];
+            if(index > -1 && l && l !== " ") {
+                return false;
+            }
+        }
+
+        return originalMatches.apply(this, arguments);
+    };
+})();
+
 var domAdapterBackup = {};
 var makeDOMAdapterEmpty = function() {
     for(var field in domAdapter) {
