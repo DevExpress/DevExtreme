@@ -42,12 +42,12 @@ var FilterPanelView = modules.View.inherit({
                 .addClass(this.addWidgetPrefix(FILTER_PANEL_CHECKBOX_CLASS));
 
         that._createComponent($element, CheckBox, {
-            value: that.option("filterPanel.filterApplied"),
+            value: that.option("filterPanel.filterEnabled"),
             onValueChanged: function(e) {
-                that.option("filterPanel.filterApplied", e.value);
+                that.option("filterPanel.filterEnabled", e.value);
             }
         });
-        $element.attr("title", this.option("filterPanel.texts.applyFilterHintText"));
+        $element.attr("title", this.option("filterPanel.texts.filterEnabled"));
         return $element;
     },
 
@@ -68,9 +68,13 @@ var FilterPanelView = modules.View.inherit({
         if(filterValue) {
             var columns = that.getController("columns").getColumns();
             filterText = utils.getFilterText(filterValue, this.getController("filterSync").getCustomFilterOperations(), columns, that.option("filterRow.operationDescriptions"), that.option("filterBuilder.groupOperationDescriptions"));
-            var customizeFilterText = this.option("filterPanel.customizeFilterText");
-            if(customizeFilterText) {
-                var customText = customizeFilterText(filterValue, filterText);
+            var customizeText = this.option("filterPanel.customizeText");
+            if(customizeText) {
+                var customText = customizeText({
+                    component: that.component,
+                    filterValue: filterValue,
+                    text: filterText
+                });
                 if(typeof customText === "string") {
                     filterText = customText;
                 }
@@ -100,7 +104,7 @@ var FilterPanelView = modules.View.inherit({
         switch(args.name) {
             case "filterValue":
                 this._invalidate();
-                this.option("filterPanel.filterApplied", true);
+                this.option("filterPanel.filterEnabled", true);
                 args.handled = true;
                 break;
             case "filterPanel":
@@ -132,19 +136,21 @@ module.exports = {
                 visible: false,
 
                 /**
-                 * @name GridBaseOptions_filterPanel_filterApplied
-                 * @publicName filterApplied
+                 * @name GridBaseOptions_filterPanel_filterEnabled
+                 * @publicName filterEnabled
                  * @type boolean
                  * @default true
                  */
-                filterApplied: true,
+                filterEnabled: true,
 
                 /**
-                 * @name GridBaseOptions_filterPanel_customizeFilterText
-                 * @publicName customizeFilterText
-                 * @type function(filterValue, filterText)
-                 * @type_function_param1 filterValue:object
-                 * @type_function_param2 filterText:string
+                 * @name GridBaseOptions_filterPanel_customizeText
+                 * @publicName customizeText
+                 * @type function
+                 * @type_function_param1 e:object
+                 * @type_function_param1_field1 component:Component
+                 * @type_function_param1_field2 filterValue:object
+                 * @type_function_param1_field3 text:string
                  * @type_function_return string
                  */
 
@@ -156,12 +162,12 @@ module.exports = {
                  */
                 texts: {
                     /**
-                     * @name GridBaseOptions_filterPanel_texts_applyFilterHintText
-                     * @publicName applyFilterHintText
+                     * @name GridBaseOptions_filterPanel_texts_filterEnabled
+                     * @publicName filterEnabled
                      * @type string
                      * @default "Apply Filter"
                      */
-                    applyFilterHintText: messageLocalization.format("dxDataGrid-filterPanelApplyFilterHint"),
+                    filterEnabled: messageLocalization.format("dxDataGrid-filterPanelFilterEnabled"),
 
                     /**
                      * @name GridBaseOptions_filterPanel_texts_createFilter

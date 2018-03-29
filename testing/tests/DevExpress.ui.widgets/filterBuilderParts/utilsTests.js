@@ -1909,7 +1909,7 @@ QUnit.module("getFilterText", function() {
     });
 
 
-    QUnit.test("from group with inner group", function(assert) {
+    QUnit.test("from group with inner group with Not", function(assert) {
         // arrange
         var filter = ["!", [["field", "=", "1"], "and", ["field", "=", "2"]]];
 
