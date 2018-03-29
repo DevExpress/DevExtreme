@@ -1293,7 +1293,6 @@ testComponentDefaults(Tabs,
 testComponentDefaults(Tabs,
     {},
     {
-        useInkRipple: false,
         showNavButtons: true,
         selectOnFocus: true
     },
@@ -1310,7 +1309,6 @@ testComponentDefaults(Tabs,
 testComponentDefaults(Tabs,
     { platform: devices.current().platform },
     {
-        useInkRipple: false,
         showNavButtons: false,
         selectOnFocus: true
     },
