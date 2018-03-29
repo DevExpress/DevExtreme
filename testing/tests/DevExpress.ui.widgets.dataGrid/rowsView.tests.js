@@ -5257,6 +5257,46 @@ QUnit.test('Render rows with virtual items', function(assert) {
     assert.equal(content.children().eq(1).find("." + "dx-datagrid-group-space").length, 0, "group space class");
 });
 
+QUnit.test('Render rows if row rendering mode is virtual', function(assert) {
+    // arrange
+    var options = {
+            items: [
+                { values: [1] },
+                { values: [2] },
+                { values: [3] }
+            ],
+            virtualItemsCount: {
+                begin: 10,
+                end: 7
+            }
+        },
+        dataController = new MockDataController(options),
+        rowsView = this.createRowsView(options.items, dataController),
+        testElement = $('#container');
+
+    // act
+    this.options.scrolling = {
+        rowRenderingMode: 'virtual'
+    };
+    rowsView.render(testElement);
+    rowsView.height(90);
+    rowsView.resize();
+
+    var rowHeight = rowsView._rowHeight;
+
+    var content = testElement.find('.dx-scrollable-content').children();
+
+    assert.equal(options.viewportSize, Math.round(90 / rowHeight));
+
+    assert.equal(content.length, 1);
+    assert.equal(content.children().length, 1);
+    assert.equal(content.children().eq(0)[0].tagName, 'TABLE');
+    assert.equal(content.children().eq(0).find('tbody > tr').length, 6, '3 data row + 1 freespace row + 2 virtual row');
+    assert.roughEqual(content.children().eq(0).find(".dx-virtual-row").eq(0).height(), rowHeight * 10, 1);
+    assert.roughEqual(content.children().eq(0).find(".dx-virtual-row").eq(1).height(), rowHeight * 7, 1);
+    assert.equal(content.children().eq(1).find("." + "dx-datagrid-group-space").length, 0, "group space class");
+});
+
 // T154003
 QUnit.test('Render rows with virtual items count is more 1 000 000', function(assert) {
     // arrange

@@ -158,13 +158,13 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         return $element;
     },
 
-    _createTable: function(columns) {
+    _createTable: function(columns, isAppend) {
         var that = this,
             $table = $("<table>")
                 .addClass(that.addWidgetPrefix(TABLE_CLASS))
                 .addClass(that.addWidgetPrefix(TABLE_FIXED_CLASS));
 
-        if(columns) {
+        if(columns && !isAppend) {
             $table.append(that._createColGroup(columns));
             if(devices.real().ios) {
                 // T198380
@@ -175,7 +175,11 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             that.setAria("hidden", true, $table);
         }
 
-        $table.append("<tbody>");
+        $table.append($("<tbody>"));
+
+        if(isAppend) {
+            return $table;
+        }
 
         // T138469
         if(browser.mozilla) {
@@ -384,11 +388,11 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         }
     },
 
-    _renderCore: function() {
+    _renderCore: function(e) {
         var $root = this.element().parent();
 
         if(!$root || $root.parent().length) {
-            this.renderDelayedTemplates();
+            this.renderDelayedTemplates(e);
         }
     },
 
@@ -399,7 +403,8 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             $table;
 
         options.columns = that._columnsController.getVisibleColumns();
-        $table = that._createTable(options.columns);
+        var changeType = options.change && options.change.changeType;
+        $table = that._createTable(options.columns, changeType === "append" || changeType === "prepend");
 
         that._renderRows($table, options);
 

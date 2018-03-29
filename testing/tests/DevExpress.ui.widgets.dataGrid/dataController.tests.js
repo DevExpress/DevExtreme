@@ -2234,6 +2234,195 @@ QUnit.test("change sorting in onContentReady", function(assert) {
     assert.equal(countCallDataSourceChanged, 3, "count call changed of the dataSource");
 });
 
+
+var setupVirtualRenderingModule = function() {
+    var array = [];
+
+    for(var i = 0; i < 100; i++) {
+        array.push({
+            id: i,
+            value: 'value' + i.toString()
+        });
+    }
+    this.array = array;
+
+    this.clock = sinon.useFakeTimers();
+
+    var options = {
+        scrolling: { mode: 'virtual' },
+        keyExpr: "id",
+        paging: {
+            pageSize: 20
+        },
+        dataSource: array
+    };
+
+    setupDataGridModules(this, ['data', 'virtualScrolling', 'columns', 'filterRow', 'search', 'editing', 'grouping', 'headerFilter'], {
+        initDefaultOptions: true,
+        options: options
+    });
+
+
+    this.dataController.viewportItemSize(10);
+    this.dataController.viewportSize(9);
+    this.dataController._dataSource._renderTime = 50;
+
+    this.clock.tick();
+
+    this.changedArgs = [];
+
+    this.dataController.changed.add(e => {
+        this.changedArgs.push(e);
+    });
+};
+
+var teardownVirtualRenderingModule = function() {
+    this.dispose();
+    this.clock.restore();
+};
+
+QUnit.module("Virtual rendering", { beforeEach: setupVirtualRenderingModule, afterEach: teardownVirtualRenderingModule });
+
+QUnit.test("first render", function(assert) {
+    assert.strictEqual(this.dataController.pageIndex(), 0);
+    assert.strictEqual(this.dataController.items().length, 15);
+
+    assert.strictEqual(this.dataController.getContentOffset("begin"), 0);
+    assert.strictEqual(this.dataController.getContentOffset("end"), 850);
+});
+
+QUnit.test("scroll to before second render page", function(assert) {
+    this.dataController.setViewportPosition(49);
+
+    assert.strictEqual(this.dataController.pageIndex(), 0);
+    assert.strictEqual(this.dataController.items().length, 15);
+    assert.strictEqual(this.dataController.items()[0].key, 0);
+    assert.strictEqual(this.dataController.getContentOffset("begin"), 0);
+    assert.strictEqual(this.dataController.getContentOffset("end"), 850);
+});
+
+QUnit.test("scroll to second render page", function(assert) {
+    this.dataController.setViewportPosition(50);
+
+    assert.strictEqual(this.dataController.pageIndex(), 0);
+    assert.strictEqual(this.dataController.items().length, 15);
+    assert.strictEqual(this.dataController.items()[0].key, 5);
+    assert.strictEqual(this.dataController.getContentOffset("begin"), 50);
+    assert.strictEqual(this.dataController.getContentOffset("end"), 800);
+    assert.deepEqual(this.changedArgs, [{
+        changeType: "append",
+        removeCount: 5,
+        items: this.dataController.items().slice(10, 15)
+    }]);
+});
+
+QUnit.test("scroll to third render page", function(assert) {
+    this.dataController.setViewportPosition(100);
+
+    assert.strictEqual(this.dataController.pageIndex(), 0);
+    assert.strictEqual(this.dataController.items().length, 15);
+    assert.strictEqual(this.dataController.items()[0].key, 10);
+    assert.strictEqual(this.dataController.getContentOffset("begin"), 100);
+    assert.strictEqual(this.dataController.getContentOffset("end"), 750);
+});
+
+QUnit.test("scroll to second dataSource page", function(assert) {
+    this.dataController.setViewportPosition(100);
+    this.changedArgs = [];
+    this.dataController.setViewportPosition(200);
+
+    assert.strictEqual(this.dataController.pageIndex(), 1);
+    assert.strictEqual(this.dataController.items().length, 15);
+    assert.strictEqual(this.dataController.items()[0].key, 20);
+    assert.strictEqual(this.dataController.getContentOffset("begin"), 200);
+    assert.strictEqual(this.dataController.getContentOffset("end"), 650);
+    assert.deepEqual(this.changedArgs, [{
+        changeType: "append",
+        removeCount: 5,
+        items: this.dataController.items().slice(5, 10)
+    }, {
+        changeType: "append",
+        removeCount: 5,
+        items: this.dataController.items().slice(10, 15)
+    }]);
+});
+
+QUnit.test("scroll to far", function(assert) {
+    this.dataController.setViewportPosition(500);
+
+    assert.strictEqual(this.dataController.pageIndex(), 2);
+    assert.strictEqual(this.dataController.items().length, 15);
+    assert.strictEqual(this.dataController.items()[0].key, 50);
+    assert.strictEqual(this.dataController.getContentOffset("begin"), 500);
+    assert.strictEqual(this.dataController.getContentOffset("end"), 350);
+    assert.deepEqual(this.changedArgs, [{
+        changeType: "refresh",
+        items: this.dataController.items()
+    }, {
+        changeType: "append",
+        items: this.dataController.items().slice(5, 10)
+    }, {
+        changeType: "append",
+        items: this.dataController.items().slice(10, 15)
+    }]);
+});
+
+QUnit.test("scroll to previous render page", function(assert) {
+    this.dataController.setViewportPosition(500);
+    this.changedArgs = [];
+    this.dataController.setViewportPosition(450);
+
+    assert.strictEqual(this.dataController.items().length, 15);
+    assert.strictEqual(this.dataController.items()[0].key, 45);
+    assert.strictEqual(this.dataController.getContentOffset("begin"), 450);
+    assert.strictEqual(this.dataController.getContentOffset("end"), 400);
+    assert.deepEqual(this.changedArgs, [{
+        changeType: "prepend",
+        removeCount: 5,
+        items: this.dataController.items().slice(0, 5)
+    }]);
+});
+
+QUnit.test("disabled row render virtualization", function(assert) {
+    this.options.scrolling.rowRenderingMode = "standard";
+
+    this.dataController.optionChanged({ name: "scrolling", fullName: "scrolling.rowRenderingMode" });
+    this.dataController.viewportItemSize(10);
+    this.dataController.viewportSize(9);
+    this.clock.tick(0);
+
+    assert.strictEqual(this.dataController.items().length, 40);
+    assert.strictEqual(this.dataController.items()[0].key, 0);
+    assert.strictEqual(this.dataController.getContentOffset("begin"), 0);
+    assert.strictEqual(this.dataController.getContentOffset("end"), 600);
+    assert.deepEqual(this.changedArgs, [{
+        changeType: "refresh",
+        items: this.dataController.items()
+    }]);
+});
+
+QUnit.test("enabled row render virtualization and disabled scrolling mode virtual", function(assert) {
+    this.options.scrolling.rowRenderingMode = "virtual";
+    this.options.scrolling.mode = "standard";
+
+    this.dataController.optionChanged({ name: "scrolling" });
+    this.dataController.viewportItemSize(10);
+    this.dataController.viewportSize(9);
+    this.clock.tick(0);
+
+    assert.strictEqual(this.dataController.items().length, 15);
+    assert.strictEqual(this.dataController.items()[0].key, 0);
+    assert.strictEqual(this.dataController.getContentOffset("begin"), 0);
+    assert.strictEqual(this.dataController.getContentOffset("end"), 50);
+    assert.deepEqual(this.changedArgs, [{
+        changeType: "refresh",
+        items: this.dataController.items()
+    }, {
+        changeType: "append",
+        items: this.dataController.items().slice(10, 15)
+    }]);
+});
+
 // =================================
 // scrollingDataSource tests
 

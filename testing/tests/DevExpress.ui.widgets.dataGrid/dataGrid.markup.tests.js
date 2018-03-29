@@ -123,13 +123,14 @@ QUnit.test("markup with virtual scrolling", function(assert) {
         height: 100,
         paging: { pageSize: 4 },
         scrolling: { mode: "virtual" },
+        columns: ["id"],
         dataSource: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}]
     });
 
-    this.clock.tick(30);
+    this.clock.tick(300);
     var $virtualRows = $element.find(".dx-datagrid-rowsview .dx-datagrid-table .dx-virtual-row");
     assert.equal($virtualRows.length, 1, "one virtual row is rendered");
-    assert.equal($virtualRows.get(0).style.height, "40px", "first virtual row height");
+    assert.equal($virtualRows.get(0).style.height, windowUtils.hasWindow() ? "64px" : "40px", "first virtual row height");
 });
 
 QUnit.test("markup with editing", function(assert) {

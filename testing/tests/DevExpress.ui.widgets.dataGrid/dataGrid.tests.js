@@ -1028,7 +1028,8 @@ QUnit.test("Resizing columns should work correctly when scrolling mode is 'virtu
             },
             columns: [{ dataField: "name", width: 100 }, "description"],
             scrolling: {
-                mode: "virtual"
+                mode: "virtual",
+                rowRenderingMode: "standard"
             }
         }),
         instance = dataGrid.dxDataGrid("instance"),
@@ -2669,6 +2670,49 @@ QUnit.test("aria-rowindex aria-colindex if virtual scrolling", function(assert) 
     clock.restore();
 });
 
+QUnit.test("aria-rowindex if virtual row rendering", function(assert) {
+    // arrange, act
+    var clock = sinon.useFakeTimers(),
+        array = [],
+        dataGrid,
+        $row,
+        rowsView;
+
+    for(var i = 0; i < 100; i++) {
+        array.push({ author: "J. D. Salinger", title: "The Catcher in the Rye", year: 1951 });
+    }
+
+    dataGrid = $("#dataGrid").dxDataGrid({
+        height: 200,
+        dataSource: array,
+        paging: { pageSize: 50 },
+        scrolling: {
+            rowRenderingMode: "virtual",
+            useNative: false
+        }
+    }).dxDataGrid("instance");
+
+    clock.tick(300);
+
+    rowsView = dataGrid._views.rowsView;
+    $row = rowsView.element().find(".dx-data-row").eq(0);
+
+    // assert
+    assert.equal($row.attr("aria-rowindex"), 1, "aria-index is correct");
+
+    rowsView.scrollTo({ y: 3000 });
+
+    clock.tick();
+
+    $row = rowsView.element().find(".dx-data-row").first();
+    assert.notEqual($row.attr("aria-rowindex"), 1, "first row is changed");
+
+    $row = rowsView.element().find(".dx-data-row").last();
+    assert.equal($row.attr("aria-rowindex"), 50, "last row is correct after scrolling");
+
+    clock.restore();
+});
+
 // T595044
 QUnit.test("aria-colcount aria-rowcount if virtual scrolling", function(assert) {
     // arrange, act
@@ -2780,6 +2824,48 @@ QUnit.test("visible items should be rendered if virtual scrolling and preload ar
     assert.equal(visibleRows.length, 14, "visible row count");
     assert.equal(visibleRows[0].key, 1, "first visible row key");
     assert.equal(visibleRows[visibleRows.length - 1].key, 14, "last visible row key");
+
+    clock.restore();
+});
+
+QUnit.test("editing should starts correctly if scrolling mode is virtual", function(assert) {
+    // arrange, act
+    var clock = sinon.useFakeTimers(),
+        array = [],
+        dataGrid;
+
+    for(var i = 1; i <= 50; i++) {
+        array.push({ id: i });
+    }
+
+    dataGrid = $("#dataGrid").dxDataGrid({
+        height: 100,
+        dataSource: array,
+        keyExpr: "id",
+        onRowPrepared: function(e) {
+            $(e.rowElement).css("height", 50);
+        },
+        editing: {
+            mode: "row",
+            allowUpdating: true
+        },
+        scrolling: {
+            mode: "virtual",
+            useNative: false
+        }
+    }).dxDataGrid("instance");
+
+    clock.tick();
+
+    // act
+    dataGrid.getScrollable().scrollTo({ top: 500 });
+    dataGrid.editRow(1);
+
+    // assert
+    var visibleRows = dataGrid.getVisibleRows();
+    assert.equal(visibleRows.length, 15, "visible row count");
+    assert.equal(visibleRows[0].key, 6, "first visible row key");
+    assert.equal($(dataGrid.getRowElement(1, 0)).find(".dx-texteditor").length, 1, "row has editor");
 
     clock.restore();
 });
@@ -4754,6 +4840,7 @@ QUnit.test("The same page should not load when scrolling in virtual mode", funct
             },
             scrolling: {
                 mode: "virtual",
+                rowRenderingMode: "standard",
                 useNative: false
             }
         });
@@ -6948,7 +7035,7 @@ QUnit.test("synchronous render and asynchronous updateDimensions during paging i
     dataGrid.pageIndex(5);
 
     // assert
-    assert.equal(contentReadyCount, 2, "contentReady is called without timeout");
+    assert.equal(contentReadyCount, 1, "contentReady is called without timeout");
     assert.equal(dataGrid.getVisibleRows().length, 10, "row count");
     assert.equal(dataGrid.getVisibleRows()[0].data.test, 25, "top visible row");
     assert.equal(resizingController.updateDimensions.callCount, 0, "updateDimensions is not called");
@@ -7004,7 +7091,8 @@ QUnit.test("Duplicate rows should not be rendered if virtual scrolling enabled a
         height: 200,
         dataSource: array,
         scrolling: {
-            mode: "virtual"
+            mode: "virtual",
+            rowRenderingMode: "standard"
         },
         paging: {
             pageSize: 10
