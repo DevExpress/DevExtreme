@@ -136,7 +136,7 @@
         "dxDataGrid-ariaSelectRow": "Seleccionar fila",
         "dxDataGrid-filterBuilderPopupTitle": "!TODO",
         "dxDataGrid-filterPanelCreateFilter": "!TODO",
-        "dxDataGrid-clearFilterText": "!TODO",
+        "dxDataGrid-filterPanelClearFilter": "!TODO",
         "dxDataGrid-filterPanelApplyFilterHint": "!TODO",
         "dxTreeList-ariaTreeList": "Lista de árbol",
         "dxTreeList-editingAddRowToNode": "Añadir",

@@ -83,17 +83,19 @@ QUnit.module("Filter Panel", {
         assert.deepEqual(this.getCombinedFilter(true), undefined, "check filterValue");
     });
 
-    QUnit.test("createFilterText", function(assert) {
+    QUnit.test("createFilter", function(assert) {
         // arrange, act
         this.initFilterPanelView({
             filterPanel: {
                 visible: true,
-                createFilterText: "test"
+                texts: {
+                    createFilter: "test"
+                }
             }
         });
 
         // assert
-        assert.equal(this.filterPanelView.element().find("." + FILTER_PANEL_TEXT_CLASS).text(), "test", "check createFilterText");
+        assert.equal(this.filterPanelView.element().find("." + FILTER_PANEL_TEXT_CLASS).text(), "test", "check createFilter");
     });
 
     QUnit.test("Can customize text", function(assert) {
@@ -141,7 +143,9 @@ QUnit.module("Filter Panel", {
         this.initFilterPanelView({
             filterPanel: {
                 visible: true,
-                applyFilterHintText: "test0"
+                texts: {
+                    applyFilterHintText: "test0"
+                }
             },
             dataSource: [],
             filterValue: ["field", "=", "1"],
@@ -152,12 +156,14 @@ QUnit.module("Filter Panel", {
         assert.equal(this.filterPanelView.element().find("." + FILTER_PANEL_CHECKBOX_CLASS).attr("title"), "test0", "check hint for applyFilter");
     });
 
-    QUnit.test("clearFilterText", function(assert) {
+    QUnit.test("clearFilter", function(assert) {
         // arrange, act
         this.initFilterPanelView({
             filterPanel: {
                 visible: true,
-                clearFilterText: "test0"
+                texts: {
+                    clearFilter: "test0"
+                }
             },
             dataSource: [],
             filterValue: ["field", "=", "1"],
@@ -165,6 +171,6 @@ QUnit.module("Filter Panel", {
         });
 
         // assert
-        assert.equal(this.filterPanelView.element().find("." + FILTER_PANEL_CLEAR_FILTER_CLASS).text(), "test0", "check clearFilterText");
+        assert.equal(this.filterPanelView.element().find("." + FILTER_PANEL_CLEAR_FILTER_CLASS).text(), "test0", "check clearFilter");
     });
 });

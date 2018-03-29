@@ -136,7 +136,7 @@
         "dxDataGrid-ariaSelectRow": "行の選択",
         "dxDataGrid-filterBuilderPopupTitle": "!TODO",
         "dxDataGrid-filterPanelCreateFilter": "!TODO",
-        "dxDataGrid-clearFilterText": "!TODO",
+        "dxDataGrid-filterPanelClearFilter": "!TODO",
         "dxDataGrid-filterPanelApplyFilterHint": "!TODO",
         "dxTreeList-ariaTreeList": "ツリー リスト",
         "dxTreeList-editingAddRowToNode": "追加",
