@@ -381,12 +381,12 @@
 
 /**
  * @typedef {string} Enums.FormItemType
- * @enum {'empty'|'group'|'simple'|'tabbed'}
+ * @enum {'empty'|'group'|'simple'|'tabbed'|'button'}
  */
 
  /**
  * @typedef {string} Enums.FormItemAlignment
- * @enum {'center'|'left'|'right'|'start'|'end'}
+ * @enum {'center'|'end'|'left'|'right'|'start'}
  */
 
 /**
