@@ -86,13 +86,11 @@ QUnit.module("Widget creation", {
 });
 
 Object.keys(widgets).forEach(function(widget) {
-    QUnit.test(widget + " created", function(assert) {
+    QUnit.test(widget + " creating and optionChanged", function(assert) {
         this.instance = new widgets[widget](this.element);
-        assert.ok(true, "it's possible to create " + widget);
-    });
 
-    QUnit.test(widget + " optionChanged", function(assert) {
-        this.instance = new widgets[widget](this.element);
+        assert.ok(true, "it's possible to create " + widget);
+
         var options = this.instance.option(),
             clock = widget === "DataGrid" || widget === "TreeList" ? sinon.useFakeTimers() : null;
 
