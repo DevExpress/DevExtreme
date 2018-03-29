@@ -459,6 +459,31 @@ QUnit.test("selected items should be correct after item click with hideSelecterd
 
 QUnit.module("tags", moduleSetup);
 
+QUnit.test("tags for hidden items should be rendered after valueChange", function(assert) {
+    var $tagBox = $("#tagBox").dxTagBox({
+            dataSource: [{ id: 0, text: "aaa" }, { id: 1, text: "bbb" }, { id: 2, text: "000" }],
+            value: [0],
+            searchEnabled: true,
+            showSelectionControls: true,
+            searchTimeout: 0,
+            searchExpr: "text",
+            displayExpr: "text",
+            valueExpr: "id",
+            opened: true
+        }),
+        $input = $tagBox.find(".dx-texteditor-input"),
+        kb = keyboardMock($input);
+
+    kb.type("0");
+    this.clock.tick(0);
+    kb.press("enter");
+
+    var $tags = $tagBox.find("." + TAGBOX_TAG_CLASS);
+
+    assert.deepEqual($tags.eq(0).text(), "aaa", "first tag text is correct");
+    assert.deepEqual($tags.eq(1).text(), "000", "second tag text is correct");
+});
+
 QUnit.test("add/delete tags", function(assert) {
     var items = [1, 2, 3];
 
