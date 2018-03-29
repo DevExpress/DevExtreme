@@ -890,17 +890,12 @@ var dxRangeSelector = require("../core/base_widget").inherit({
             left: rect[0], top: rect[1], width: rect[2] - rect[0], height: rect[3] - rect[1]
         };
 
-        this._axis.updateOptions({
-            type: scaleOptions.type,
-            dataType: scaleOptions.dataType,
-            logarithmBase: scaleOptions.logarithmBase,
-            aggregationGroupWidth: scaleOptions.aggregationGroupWidth,
-            aggregationInterval: scaleOptions.aggregationInterval,
+        this._axis.updateOptions(extend({}, scaleOptions, {
             isHorizontal: true,
             label: {
                 overlappingBehavior: {}
             }
-        });
+        }));
 
         seriesDataSource.isShowChart() && this._axis.setMarginOptions(seriesDataSource.getMarginOptions(canvas));
         this._axis.updateCanvas(canvas);

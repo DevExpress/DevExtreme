@@ -374,6 +374,19 @@ QUnit.test("Update axis canvas before create series dataSorce", function(assert)
     assert.ok(argumentAxis.getTranslator().update.firstCall.calledBefore(spy.firstCall));
 });
 
+QUnit.test("Pass all scale options to axis on first update", function(assert) {
+    this.createWidget({
+        dataSource: [{}],
+        chart: {
+        },
+        scale: {
+            someOptions: true
+        }
+    });
+
+    var options = this.axis.updateOptions.secondCall.args[0];
+    assert.strictEqual(options.someOptions, true);
+});
 QUnit.module("logarithmic type", commons.environment);
 
 QUnit.test("scale. logarithmic type", function(assert) {
