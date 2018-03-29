@@ -760,13 +760,15 @@ QUnit.test("Count. Do not calculate error bars", function(assert) {
 });
 
 QUnit.test("Points grouping by intervals", function(assert) {
-    this.argumentAxis.getAggregationInfo = () => { return { interval: 5, ticks: [0, 6, 8] }; };
+    this.argumentAxis.getAggregationInfo = () => { return { interval: 5, ticks: [0, 6, 8, 10] }; };
     var points = this.aggregateData("avg", this.data);
-    assert.equal(points.length, 2);
+    assert.equal(points.length, 3);
     assert.equal(points[0].argument, 0);
     assert.equal(points[0].value, 300);
     assert.equal(points[1].argument, 6);
-    assert.equal(points[1].value, 800);
+    assert.equal(points[1].value, 700);
+    assert.equal(points[2].argument, 8);
+    assert.equal(points[2].value, 900);
 });
 
 QUnit.test("Aggregation with empty interval, Call custom calculation", function(assert) {
