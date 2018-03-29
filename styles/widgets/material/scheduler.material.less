@@ -56,7 +56,6 @@
 @MATERIAL_SCHEDULER_FOCUSED_TAB_BORDER: 1px solid @scheduler-tab-focused-border-color;
 @MATERIAL_SCHEDULER_RECURRENCE_EDITOR_BORDER: 1px solid @scheduler-recurence-editor-border-color;
 
-@MATERIAL_SCHEDULER_VIEW_SWITCHER_FONT_SIZE: @MATERIAL_BASE_FONT_SIZE;
 @MATERIAL_SCHEDULER_MONTH_DATE_TEXT_SIZE: 14px;
 @MATERIAL_SCHEDULER_APPOINTMENT_TOOLTIP_FONT_SIZE: @MATERIAL_H5_FONT_SIZE;
 
@@ -342,31 +341,30 @@
 }
 
 .dx-scheduler-view-switcher.dx-tabs {
-    font-size: @MATERIAL_SCHEDULER_VIEW_SWITCHER_FONT_SIZE;
+    background: none;
+    margin-right: 14px;
 
     .dx-tab {
-        &:not(.dx-tab-selected):not(.dx-state-hover) {
+        &:not(.dx-state-hover) {
             background: none;
         }
 
         &.dx-tab-selected {
-            background-color: @scheduler-tab-selected-bg;
-
             &:before {
-                background-color: @scheduler-tab-selected-before-bg;
+                bottom: 0;
+            }
+            &:after {
+                content: "";
+                display: inline-block;
+                height: 100%;
+                vertical-align: middle;
             }
         }
+    }
 
-        &.dx-state-focused:after {
-            border-left: @SCHEDULER_BASE_BORDER;
-            border-right: @SCHEDULER_BASE_BORDER;
-            border-top: @MATERIAL_SCHEDULER_FOCUSED_TAB_BORDER;
-            border-bottom: none;
-        }
-
-        &.dx-tab-selected:after {
-            height: @MATERIAL_SCHEDULER_HEADER_HEIGHT;
-        }
+    .dx-tabs-nav-button {
+        height: @MATERIAL_SCHEDULER_NAVIGATOR_HEIGHT;
+        margin-top: (@MATERIAL_SCHEDULER_HEADER_HEIGHT - @MATERIAL_SCHEDULER_NAVIGATOR_HEIGHT - 2) / 2;
     }
 }
 
