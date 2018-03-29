@@ -71,9 +71,9 @@ var Tabs = CollectionWidget.inherit({
             * @name dxTabsOptions_showNavButtons
             * @publicName showNavButtons
             * @type boolean
-            * @default false
+            * @default true
             */
-            showNavButtons: false,
+            showNavButtons: true,
 
             /**
             * @name dxTabsOptions_scrollByContent
@@ -160,14 +160,21 @@ var Tabs = CollectionWidget.inherit({
     _defaultOptionsRules: function() {
         return this.callBase().concat([
             {
-                device: { platform: "generic" },
+                device: function() {
+                    return devices.real().platform !== "generic";
+                },
                 options: {
                     /**
                     * @name dxTabsOptions_showNavButtons
                     * @publicName showNavButtons
-                    * @default true @for desktop
+                    * @default false @for mobile_devices
                     */
-                    showNavButtons: true,
+                    showNavButtons: false
+                }
+            },
+            {
+                device: { platform: "generic" },
+                options: {
                     /**
                     * @name dxTabsOptions_scrollByContent
                     * @publicName scrollByContent
@@ -210,7 +217,8 @@ var Tabs = CollectionWidget.inherit({
                     * @publicName showNavButtons
                     * @default false @for Material
                     */
-                    showNavButtons: false
+                    showNavButtons: false,
+                    selectOnFocus: false
                 }
             }
         ]);
