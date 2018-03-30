@@ -2559,11 +2559,11 @@ declare module DevExpress.ui {
         /** Specifies dependency between the screen factor and the count of columns in the form layout. */
         colCountByScreen?: any;
         /** Specifies a function that customizes a form item after it has been created. */
-        customizeItem?: ((item: dxFormSimpleItem | dxFormGroupItem | dxFormTabbedItem | dxFormEmptyItem) => any);
+        customizeItem?: ((item: dxFormSimpleItem | dxFormGroupItem | dxFormTabbedItem | dxFormEmptyItem | dxFormButtonItem) => any);
         /** Provides the Form's data. Gets updated every time form fields change. */
         formData?: any;
         /** Holds an array of form items. */
-        items?: Array<dxFormSimpleItem | dxFormGroupItem | dxFormTabbedItem | dxFormEmptyItem>;
+        items?: Array<dxFormSimpleItem | dxFormGroupItem | dxFormTabbedItem | dxFormEmptyItem | dxFormButtonItem>;
         /** Specifies the location of a label against the editor. */
         labelLocation?: string;
         /** The minimum column width used for calculating column count in the form layout. */
@@ -3329,8 +3329,6 @@ declare module DevExpress.ui {
     export interface dxPopupOptions extends dxOverlayOptions {
         /** Configures widget visibility animations. This object contains two fields: show and hide. */
         animation?: any;
-        /** @deprecated Use the toolbarItems option instead. */
-        buttons?: Array<any>;
         /** Specifies whether or not to allow a user to drag the popup window. */
         dragEnabled?: boolean;
         /** Specifies whether the widget can be focused using keyboard navigation. */
@@ -4763,7 +4761,7 @@ declare module DevExpress.ui {
         /** Specifies a CSS class to be applied to the form item. */
         cssClass?: string;
         /** Holds an array of form items displayed within the group. */
-        items?: Array<dxFormSimpleItem | dxFormGroupItem | dxFormTabbedItem | dxFormEmptyItem>;
+        items?: Array<dxFormSimpleItem | dxFormGroupItem | dxFormTabbedItem | dxFormEmptyItem | dxFormButtonItem>;
         /** Specifies the type of the current item. */
         itemType?: string;
         /** Specifies a name that identifies the form item. */
@@ -4788,7 +4786,7 @@ declare module DevExpress.ui {
         /** Holds a configuration object for the TabPanel widget used to display the current form item. */
         tabPanelOptions?: dxTabPanelOptions;
         /** An array of tab configuration objects. */
-        tabs?: Array<{ alignItemLabels?: boolean, title?: string, colCount?: number, colCountByScreen?: any, items?: Array<dxFormSimpleItem | dxFormGroupItem | dxFormTabbedItem | dxFormEmptyItem>, badge?: string, disabled?: boolean, icon?: string, tabTemplate?: template | ((tabData: any, tabIndex: number, tabElement: DevExpress.core.dxElement) => any), template?: template | ((tabData: any, tabIndex: number, tabElement: DevExpress.core.dxElement) => any) }>;
+        tabs?: Array<{ alignItemLabels?: boolean, title?: string, colCount?: number, colCountByScreen?: any, items?: Array<dxFormSimpleItem | dxFormGroupItem | dxFormTabbedItem | dxFormEmptyItem | dxFormButtonItem>, badge?: string, disabled?: boolean, icon?: string, tabTemplate?: template | ((tabData: any, tabIndex: number, tabElement: DevExpress.core.dxElement) => any), template?: template | ((tabData: any, tabIndex: number, tabElement: DevExpress.core.dxElement) => any) }>;
         /** Specifies whether or not the current form item is visible. */
         visible?: boolean;
         /** Specifies the sequence number of the item in a form, group or tab. */
@@ -4807,6 +4805,16 @@ declare module DevExpress.ui {
         /** Specifies whether or not the current form item is visible. */
         visible?: boolean;
         /** Specifies the sequence number of the item in a form, group or tab. */
+        visibleIndex?: number;
+    }
+    export interface dxFormButtonItem {
+        alignment?: string;
+        buttonOptions?: dxButtonOptions;
+        colSpan?: number;
+        cssClass?: string;
+        itemType?: string;
+        name?: string;
+        visible?: boolean;
         visibleIndex?: number;
     }
     export interface GridBaseColumn {
