@@ -310,7 +310,7 @@ var Gallery = CollectionWidget.inherit({
             } else {
                 $img.attr('src', String(data)).appendTo($container);
             }
-        }).bind(this), ["imageSrc", "imageAlt"], this.option("integrationOptions.watchMethod"));
+        }).bind(this), ["imageSrc", "imageAlt", "text", "html"], this.option("integrationOptions.watchMethod"));
     },
 
     _dataSourceOptions: function() {
