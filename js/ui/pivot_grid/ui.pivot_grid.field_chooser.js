@@ -1,8 +1,8 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
-    hasWindow = require("../../core/utils/window").hasWindow(),
     iconUtils = require("../../core/utils/icon"),
+    hasWindow = require("../../core/utils/window").hasWindow(),
     isDefined = require("../../core/utils/type").isDefined,
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
@@ -335,9 +335,9 @@ var FieldChooser = BaseFieldChooser.inherit({
             that._renderArea($col2, "column");
             that._renderArea($col2, "data");
         } else {
-            $container.addClass("dx-l-2");
+            $container.addClass("dx-layout-2");
             this._renderArea($container, "all");
-            var $layout2Container = $(DIV).addClass("dx-layout-2").appendTo($container);
+            var $layout2Container = $(DIV).addClass("dx-fields-container").appendTo($container);
 
             $col1 = $(DIV).addClass("dx-col").appendTo($layout2Container);
             $col2 = $(DIV).addClass("dx-col").appendTo($layout2Container);
@@ -347,14 +347,12 @@ var FieldChooser = BaseFieldChooser.inherit({
             that._renderArea($col2, "column");
             that._renderArea($col2, "data");
         }
-    },
-
-    _render: function() {
-        this.callBase();
 
         this.renderSortable();
-        this.updateDimensions();
+
         this._renderContextMenu();
+
+        this.updateDimensions();
     },
 
     _fireContentReadyAction: function() {
@@ -635,21 +633,17 @@ var FieldChooser = BaseFieldChooser.inherit({
 
         if(area !== "all") {
             $fieldsContainer.attr("group", area).attr("allow-scrolling", true);
-            if(hasWindow) {
-                $fieldsContent = $(DIV).addClass("dx-area-field-container").appendTo($fieldsContainer);
-                render = function() {
-                    that._renderAreaFields($fieldsContent, area);
-                };
-                that._dataChangedHandlers.push(render);
-                render();
-                $fieldsContainer.dxScrollable();
-            }
+            $fieldsContent = $(DIV).addClass("dx-area-field-container").appendTo($fieldsContainer);
+            render = function() {
+                that._renderAreaFields($fieldsContent, area);
+            };
+            that._dataChangedHandlers.push(render);
+            render();
+            $fieldsContainer.dxScrollable();
         } else {
             $areaContainer.addClass("dx-all-fields");
-            if(hasWindow) {
-                $fieldsContainer.addClass("dx-treeview-border-visible");
-                that._renderFieldsTreeView($fieldsContainer);
-            }
+            $fieldsContainer.addClass("dx-treeview-border-visible");
+            that._renderFieldsTreeView($fieldsContainer);
         }
     },
 
@@ -686,8 +680,12 @@ var FieldChooser = BaseFieldChooser.inherit({
     * @publicName updateDimensions()
     */
     updateDimensions: function() {
-        var $scrollableElements = this.$element().find(".dx-area .dx-scrollable");
-        $scrollableElements.dxScrollable("update");
+        var $element = this.$element();
+
+        if(hasWindow) {
+            var $scrollableElements = $element.find(".dx-area .dx-scrollable");
+            $scrollableElements.dxScrollable("update");
+        }
     },
 
     _visibilityChanged: function(visible) {
