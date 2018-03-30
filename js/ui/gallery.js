@@ -299,6 +299,8 @@ var Gallery = CollectionWidget.inherit({
             var $img = $('<img>').addClass(GALLERY_IMAGE_CLASS);
 
             if(typeUtils.isPlainObject(data)) {
+                this._prepareDefaultItemTemplate(data, $container);
+
                 $img.attr({
                     'src': data.imageSrc,
                     'alt': data.imageAlt
