@@ -13,6 +13,7 @@ var $ = require("../../core/renderer"),
     each = require("../../core/utils/iterator").each,
     inArray = require("../../core/utils/array").inArray,
     extend = require("../../core/utils/extend").extend,
+    windowUtils = require("../../core/utils/window"),
     getPublicElement = require("../../core/utils/dom").getPublicElement,
     fx = require("../../animation/fx"),
     positionUtils = require("../../animation/position"),
@@ -237,6 +238,17 @@ var ContextMenu = MenuBase.inherit((function() {
                 onCloseRootSubmenu: null,
                 onExpandLastSubmenu: null
             });
+        },
+
+        _defaultOptionsRules: function() {
+            return this.callBase().concat([{
+                device: function() {
+                    return !windowUtils.hasWindow();
+                },
+                options: {
+                    animation: null
+                }
+            }]);
         },
 
         _initActions: function() {

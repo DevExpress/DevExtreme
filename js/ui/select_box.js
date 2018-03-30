@@ -69,6 +69,10 @@ var SelectBox = DropDownList.inherit({
                     this._cleanInputSelection();
                 }
 
+                if(this._wasSearch()) {
+                    this._clearFilter();
+                }
+
                 parent.tab.apply(this, arguments);
             },
             upArrow: function() {

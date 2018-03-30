@@ -2501,6 +2501,24 @@ QUnit.test("item should not be reset on the 'tab' key press after popup is opene
     assert.equal(selectBox.option("value"), item, "value is correct");
 });
 
+QUnit.test("filter should be cleared after item selection via tab", function(assert) {
+    var $selectBox = $("#selectBox").dxSelectBox({
+            searchEnabled: true,
+            dataSource: ["aaa", "bbb"],
+            opened: true,
+            searchTimeout: 0
+        }),
+        $input = $selectBox.find("." + TEXTEDITOR_INPUT_CLASS),
+        selectBox = $selectBox.dxSelectBox("instance"),
+        keyboard = keyboardMock($input);
+
+    keyboard.type("a");
+    keyboard.press("tab");
+
+    assert.equal(selectBox.option("opened"), false, "selectBox was closed");
+    assert.equal(selectBox.getDataSource().searchValue(), null, "filter was cleared");
+});
+
 QUnit.test("Opening selectBox after search should not load data if the 'showDataBeforeSearch' option is false", function(assert) {
     var dataSource = new DataSource({
         load: function() {
