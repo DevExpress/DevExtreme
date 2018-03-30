@@ -709,3 +709,27 @@ QUnit.test("TreeList with columnAutoWidth should be rendered", function(assert) 
     assert.equal(treeList.$element().find(".dx-treelist-headers .dx-header-row").length, 1, "header row is rendered");
     assert.equal(treeList.$element().find(".dx-treelist-rowsview .dx-data-row").length, 1, "data row is rendered");
 });
+
+QUnit.test("Virtual columns", function(assert) {
+    // arrange, act
+    var columns = [];
+
+    for(var i = 1; i <= 20; i++) {
+        columns.push("field" + i);
+    }
+
+    var treeList = createTreeList({
+        width: 200,
+        columnWidth: 50,
+        dataSource: [{}],
+        columns: columns,
+        scrolling: {
+            columnRenderingMode: "virtual"
+        }
+    });
+
+    this.clock.tick(0);
+
+    // assert
+    assert.equal(treeList.getVisibleColumns().length, 6, "visible column count");
+});

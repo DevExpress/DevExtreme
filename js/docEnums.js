@@ -579,6 +579,16 @@
  * @enum {'standard'|'virtual'}
  */
 
+ /**
+ * @typedef {string} Enums.RowScrollingMode
+ * @enum {'auto'|'standard'|'virtual'}
+ */
+
+ /**
+ * @typedef {string} Enums.ColumnScrollingMode
+ * @enum {'standard'|'virtual'}
+ */
+
 /**
  * @typedef {string} Enums.TreeMapLayoutAlgorithm
  * @enum {'sliceanddice'|'squarified'|'strip'}

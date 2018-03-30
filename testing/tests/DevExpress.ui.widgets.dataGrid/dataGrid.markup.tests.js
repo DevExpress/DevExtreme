@@ -196,3 +196,17 @@ QUnit.test("markup with pager", function(assert) {
     assert.equal($pagerView.find(".dx-pages .dx-page").length, windowUtils.hasWindow() ? 2 : 1, "page size count");
     assert.equal($pagerView.find(".dx-pages .dx-page").eq(0).text(), windowUtils.hasWindow() ? "1" : "", "page size text");
 });
+
+QUnit.test("markup with virtual columns", function(assert) {
+    var $element = $("#dataGrid").dxDataGrid({
+        width: 400,
+        columnWidth: 100,
+        scrolling: { columnRenderingMode: "virtual" },
+        dataSource: [{}],
+        columns: ["field1", "field2", "field3", "field4", "field5", "field6", "field7", "field8"]
+    });
+
+    this.clock.tick(30);
+
+    assert.equal($element.find(".dx-header-row").children().length, windowUtils.hasWindow() ? 6 : 8, "column count");
+});
