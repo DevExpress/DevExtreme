@@ -2,10 +2,12 @@
 
 var $ = require("../../core/renderer"),
     modules = require("./ui.grid_core.modules"),
+    gridUtils = require("./ui.grid_core.utils"),
     eventsEngine = require("../../events/core/events_engine"),
     messageLocalization = require("../../localization/message"),
     CheckBox = require("../check_box"),
-    utils = require("../filter_builder/utils");
+    utils = require("../filter_builder/utils"),
+    inflector = require("../../core/utils/inflector");
 
 var FILTER_PANEL_CLASS = "filter-panel",
     FILTER_PANEL_TEXT_CLASS = FILTER_PANEL_CLASS + "-text",
@@ -62,13 +64,12 @@ var FilterPanelView = modules.View.inherit({
 
     _getTextElement: function() {
         var that = this,
-            $textElement = $("<div>").addClass(this.addWidgetPrefix(FILTER_PANEL_TEXT_CLASS)),
+            $textElement = $("<div>").addClass(that.addWidgetPrefix(FILTER_PANEL_TEXT_CLASS)),
             filterText,
-            filterValue = this.option("filterValue");
+            filterValue = that.option("filterValue");
         if(filterValue) {
-            var columns = that.getController("columns").getColumns();
-            filterText = utils.getFilterText(filterValue, this.getController("filterSync").getCustomFilterOperations(), columns, that.option("filterRow.operationDescriptions"), that.option("filterBuilder.groupOperationDescriptions"));
-            var customizeText = this.option("filterPanel.customizeText");
+            filterText = that.getFilterText(filterValue);
+            var customizeText = that.option("filterPanel.customizeText");
             if(customizeText) {
                 var customText = customizeText({
                     component: that.component,
@@ -80,7 +81,7 @@ var FilterPanelView = modules.View.inherit({
                 }
             }
         } else {
-            filterText = this.option("filterPanel.texts.createFilter");
+            filterText = that.option("filterPanel.texts.createFilter");
         }
         eventsEngine.on($textElement, "click", function() {
             that.option("filterBuilderPopup.visible", true);
@@ -114,6 +115,64 @@ var FilterPanelView = modules.View.inherit({
             default:
                 this.callBase(args);
         }
+    },
+
+    getConditionText: function(options) {
+        var operation = options.filterValue[1],
+            customOperation = utils.getCustomOperation(options.customOperations, operation),
+            operationText,
+            field = utils.getField(options.filterValue[0], options.columns),
+            fieldText = field.caption,
+            value = options.filterValue[2],
+            valueText;
+
+        if(customOperation) {
+            operationText = customOperation.caption || inflector.captionize(customOperation.name);
+        } else {
+            operationText = utils.getCaptionByOperation(operation, options.filterOperationDescriptions);
+        }
+
+        if(Array.isArray(value)) {
+            valueText = `('${value.join("', '")}')`;
+        } else {
+            var displayValue = gridUtils.getDisplayValue(field, value);
+            valueText = ` '${(utils.getCurrentValueText)(field, displayValue, customOperation)}'`;
+        }
+
+        return `[${fieldText}] ${operationText}${valueText}`;
+    },
+
+    getGroupText: function(options) {
+        var result = [],
+            filterValue = options.filterValue,
+            groupValue = utils.getGroupValue(filterValue);
+
+        filterValue.forEach(function(item) {
+            if(utils.isCondition(item)) {
+                result.push(this.getConditionText(options));
+            } else if(utils.isGroup(item)) {
+                result.push(`(${this.getGroupText(options)})`);
+            }
+        });
+
+        if(groupValue[0] === "!") {
+            var groupText = options.groupOperationDescriptions["not" + groupValue.substring(1, 2).toUpperCase() + groupValue.substring(2)].split(" ");
+            return `${groupText[0]} ${result}`;
+        }
+
+        return result.join(` ${options.groupOperationDescriptions[groupValue]} `);
+    },
+
+    getFilterText: function(filterValue) {
+        var that = this,
+            options = {
+                filterValue: filterValue,
+                customOperations: that.getController("filterSync").getCustomFilterOperations(),
+                columns: that.getController("columns").getColumns(),
+                filterOperationDescriptions: that.option("filterRow.operationDescriptions"),
+                groupOperationDescriptions: that.option("filterBuilder.groupOperationDescriptions")
+            };
+        return utils.isCondition(filterValue) ? that.getConditionText(options) : utils.getGroupText(options);
     }
 });
 
