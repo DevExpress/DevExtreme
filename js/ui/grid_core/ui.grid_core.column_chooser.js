@@ -128,6 +128,7 @@ var ColumnChooserView = columnsView.ColumnsView.inherit({
             theme = themes.current(),
             isGenericTheme = theme && theme.indexOf("generic") > -1,
             isAndroid5Theme = theme && theme.indexOf("android5") > -1,
+            isMaterial = theme && themes.isMaterial(),
             dxPopupOptions = {
                 visible: false,
                 shading: false,
@@ -135,7 +136,7 @@ var ColumnChooserView = columnsView.ColumnsView.inherit({
                 dragEnabled: true,
                 resizeEnabled: true,
                 toolbarItems: [
-                    { text: columnChooserOptions.title, toolbar: "top", location: isGenericTheme || isAndroid5Theme ? "before" : "center" }
+                    { text: columnChooserOptions.title, toolbar: "top", location: isGenericTheme || isAndroid5Theme || isMaterial ? "before" : "center" }
                 ],
                 position: that.getController("columnChooser").getPosition(),
                 width: columnChooserOptions.width,
@@ -149,7 +150,7 @@ var ColumnChooserView = columnsView.ColumnsView.inherit({
                 container: columnChooserOptions.container
             };
 
-        if(isGenericTheme) {
+        if(isGenericTheme || isMaterial) {
             extend(dxPopupOptions, { showCloseButton: true });
         } else {
             dxPopupOptions.toolbarItems[dxPopupOptions.toolbarItems.length] = { shortcut: "cancel" };

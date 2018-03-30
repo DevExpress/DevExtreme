@@ -15,9 +15,9 @@
     @MATERIAL_GRID_BASE_TEXTEDITOR_INPUT_PADDING: 32px;
     @MATERIAL_GRID_BASE_HEADER_PANEL_MARGIN: 14px 0;
     @MATERIAL_GRID_BASE_MENU_ITEM_PADDING: 12px 4px;
-    @MATERIAL_GRID_BASE_COLUMN_CHOOSER_PADDING: 20px;
-    @MATERIAL_GRID_BASE_COLUMN_CHOOSER_PADDINGS: 0px @MATERIAL_GRID_BASE_COLUMN_CHOOSER_PADDING @MATERIAL_GRID_BASE_COLUMN_CHOOSER_PADDING @MATERIAL_GRID_BASE_COLUMN_CHOOSER_PADDING;
-    @MATERIAL_GRID_BASE_COLUMN_CHOOSER_ITEM_MARGIN: 10px;
+    @MATERIAL_GRID_BASE_COLUMN_CHOOSER_HORIZONTAL_PADDING: 24px;
+    @MATERIAL_GRID_BASE_COLUMN_CHOOSER_PADDINGS: 16px @MATERIAL_GRID_BASE_COLUMN_CHOOSER_HORIZONTAL_PADDING 9px;;
+    @MATERIAL_GRID_BASE_COLUMN_CHOOSER_ITEM_MARGIN: 8px;
     @MATERIAL_GRID_BASE_GROUPPANEL_ITEM_MARGIN: 10px;
     @MATERIAL_GRID_BASE_HEADER_PANEL_PADDING: 0 14px 0 24px;
 
@@ -31,8 +31,8 @@
     @MATERIAL_GRID_BASE_TEXTEDITOR_INPUT_PADDING: 24px;
     @MATERIAL_GRID_BASE_HEADER_PANEL_MARGIN: 5px;
     @MATERIAL_GRID_BASE_MENU_ITEM_PADDING: 5px 3px 3px;
-    @MATERIAL_GRID_BASE_COLUMN_CHOOSER_PADDING: 10px;
-    @MATERIAL_GRID_BASE_COLUMN_CHOOSER_PADDINGS: 0px @MATERIAL_GRID_BASE_COLUMN_CHOOSER_PADDING @MATERIAL_GRID_BASE_COLUMN_CHOOSER_PADDING @MATERIAL_GRID_BASE_COLUMN_CHOOSER_PADDING;
+    @MATERIAL_GRID_BASE_COLUMN_CHOOSER_HORIZONTAL_PADDING: 10px;
+    @MATERIAL_GRID_BASE_COLUMN_CHOOSER_PADDINGS: 8px @MATERIAL_GRID_BASE_COLUMN_CHOOSER_HORIZONTAL_PADDING 4px;
     @MATERIAL_GRID_BASE_COLUMN_CHOOSER_ITEM_MARGIN: 5px;
     @MATERIAL_GRID_BASE_GROUPPANEL_ITEM_MARGIN: 5px;
     @MATERIAL_GRID_BASE_COMMAND_SELECT_COLUMN_WIDTH: 55px;
@@ -395,7 +395,7 @@
     .dx-@{widgetName}-column-chooser-list {
         .dx-empty-message {
             color: ~"@{@{widgetName}-columnchooser-message-color}";
-            padding: 0 @MATERIAL_GRID_BASE_COLUMN_CHOOSER_PADDING;
+            padding: 0 @MATERIAL_GRID_BASE_COLUMN_CHOOSER_HORIZONTAL_PADDING;
         }
     }
 
@@ -424,12 +424,11 @@
             background-color: ~"@{@{widgetName}-columnchooser-bg}";
 
             .dx-popup-title {
-                padding-top: 7px;
-                padding-bottom: 9px;
                 background-color: transparent;
+                border-bottom: 1px solid @popup-title-border-color;
 
-                .dx-toolbar-center {
-                    padding-right: 8px;
+                .dx-toolbar-label {
+                    font-size: @MATERIAL_M_FONT_SIZE;
                 }
             }
 
@@ -473,6 +472,13 @@
 
             .dx-header-filter {
                 color: ~"@{@{widgetName}-drop-highlight-color}";
+            }
+
+            .dx-checkbox {
+                .dx-checkbox-icon {
+                    background-color: ~"@{@{widgetName}-drop-highlight-color}";
+                    color: ~"@{@{widgetName}-drop-highlight-bg}";
+                }
             }
         }
     }
