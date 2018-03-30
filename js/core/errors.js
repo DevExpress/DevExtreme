@@ -283,7 +283,7 @@ module.exports = errorUtils({
     W0014: "{0} - '{1}' type is deprecated in {2}. {3}",
 
     /**
-    * @name Errors and Warnings_W0015
+    * @name ErrorsCore_W0015
     * @publicName W0015
     */
     W0015: "Instead of returning a value from the '{0}' function, write it into the '{1}' field of the function's parameter."
