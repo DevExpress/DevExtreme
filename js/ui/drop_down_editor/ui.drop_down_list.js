@@ -41,8 +41,9 @@ var DropDownList = DropDownEditor.inherit({
         var parent = this.callBase();
 
         return extend({}, parent, {
-            tab: function() {
+            tab: function(e) {
                 if(this.option("opened") && this.option("applyValueMode") === "instantly") {
+                    this._saveValueChangeEvent(e);
                     var $focusedItem = $(this._list.option("focusedElement"));
                     $focusedItem.length && this._setSelectedElement($focusedItem);
                 }
