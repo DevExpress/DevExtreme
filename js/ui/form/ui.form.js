@@ -637,7 +637,7 @@ var Form = Widget.inherit({
              */
             /**
             * @name dxFormButtonItem
-            * @publicName Button
+            * @publicName ButtonItem
             * @section FormItems
             * @type object
             */
