@@ -68,7 +68,7 @@ var FilterPanelView = modules.View.inherit({
             filterText,
             filterValue = that.option("filterValue");
         if(filterValue) {
-            filterText = that.getFilterText(filterValue);
+            filterText = that.getFilterText(filterValue, that.getController("filterSync").getCustomFilterOperations());
             var customizeText = that.option("filterPanel.customizeText");
             if(customizeText) {
                 var customText = customizeText({
@@ -117,13 +117,13 @@ var FilterPanelView = modules.View.inherit({
         }
     },
 
-    getConditionText: function(options) {
-        var operation = options.filterValue[1],
+    getConditionText: function(filterValue, options) {
+        var operation = filterValue[1],
             customOperation = utils.getCustomOperation(options.customOperations, operation),
             operationText,
-            field = utils.getField(options.filterValue[0], options.columns),
+            field = utils.getField(filterValue[0], options.columns),
             fieldText = field.caption,
-            value = options.filterValue[2],
+            value = filterValue[2],
             valueText;
 
         if(customOperation) {
@@ -142,16 +142,16 @@ var FilterPanelView = modules.View.inherit({
         return `[${fieldText}] ${operationText}${valueText}`;
     },
 
-    getGroupText: function(options) {
-        var result = [],
-            filterValue = options.filterValue,
+    getGroupText: function(filterValue, options) {
+        var that = this,
+            result = [],
             groupValue = utils.getGroupValue(filterValue);
 
         filterValue.forEach(function(item) {
             if(utils.isCondition(item)) {
-                result.push(this.getConditionText(options));
+                result.push(that.getConditionText(item, options));
             } else if(utils.isGroup(item)) {
-                result.push(`(${this.getGroupText(options)})`);
+                result.push(`(${that.getGroupText(item, options)})`);
             }
         });
 
@@ -163,16 +163,15 @@ var FilterPanelView = modules.View.inherit({
         return result.join(` ${options.groupOperationDescriptions[groupValue]} `);
     },
 
-    getFilterText: function(filterValue) {
+    getFilterText: function(filterValue, customOperations) {
         var that = this,
             options = {
-                filterValue: filterValue,
-                customOperations: that.getController("filterSync").getCustomFilterOperations(),
+                customOperations: customOperations,
                 columns: that.getController("columns").getColumns(),
                 filterOperationDescriptions: that.option("filterRow.operationDescriptions"),
                 groupOperationDescriptions: that.option("filterBuilder.groupOperationDescriptions")
             };
-        return utils.isCondition(filterValue) ? that.getConditionText(options) : utils.getGroupText(options);
+        return utils.isCondition(filterValue) ? that.getConditionText(filterValue, options) : that.getGroupText(filterValue, options);
     }
 });
 
