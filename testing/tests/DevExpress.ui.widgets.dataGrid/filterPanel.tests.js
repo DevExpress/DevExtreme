@@ -144,7 +144,7 @@ QUnit.module("Filter Panel", {
             filterPanel: {
                 visible: true,
                 texts: {
-                    filterEnabled: "test0"
+                    filterEnabledHint: "test0"
                 }
             },
             dataSource: [],

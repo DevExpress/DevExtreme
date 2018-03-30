@@ -149,7 +149,7 @@
         "dxDataGrid-filterBuilderPopupTitle": "!TODO",
         "dxDataGrid-filterPanelCreateFilter": "!TODO",
         "dxDataGrid-filterPanelClearFilter": "!TODO",
-        "dxDataGrid-filterPanelFilterEnabled": "!TODO",
+        "dxDataGrid-filterPanelFilterEnabledHint": "!TODO",
 
         "dxTreeList-ariaTreeList": "Trädlista",
         "dxTreeList-editingAddRowToNode": "Lägg till",

@@ -137,7 +137,7 @@
         "dxDataGrid-filterBuilderPopupTitle": "Конструктор фильтра",
         "dxDataGrid-filterPanelCreateFilter": "Создать фильтр",
         "dxDataGrid-filterPanelClearFilter": "Очистить",
-        "dxDataGrid-filterPanelFilterEnabled": "Применить фильтр",
+        "dxDataGrid-filterPanelFilterEnabledHint": "Применить фильтр",
         "dxTreeList-ariaTreeList": "Иерархическая таблица данных",
         "dxTreeList-editingAddRowToNode": "Добавить",
         "dxPager-infoText": "Страница {0} из {1} (Всего элементов: {2})",
