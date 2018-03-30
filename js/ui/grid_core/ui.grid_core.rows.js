@@ -520,7 +520,7 @@ module.exports = {
 
                 _setAriaRowIndex: function(row, $row) {
                     var component = this.component,
-                        isPagerMode = component.option("scrolling.mode") === "standard",
+                        isPagerMode = component.option("scrolling.mode") === "standard" && component.option("scrolling.rowRenderingMode") !== "virtual",
                         rowIndex = row.rowIndex + 1;
 
                     if(isPagerMode) {

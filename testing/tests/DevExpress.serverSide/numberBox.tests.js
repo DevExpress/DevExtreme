@@ -1,3 +1,3 @@
 "use strict";
 
-require("../DevExpress.ui.widgets/numberBox.markup.tests.js");
+require("../DevExpress.ui.widgets.editors/numberBox.markup.tests.js");

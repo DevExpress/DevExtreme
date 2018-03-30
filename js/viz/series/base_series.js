@@ -379,10 +379,10 @@ Series.prototype = {
     },
 
     _getData() {
-        var data = this._data || [];
+        let data = this._data || [];
 
         if(this.useAggregation()) {
-            data = this._resample(this.getArgumentAxis().getAggregationInfo(this._useAllAggregatedPoints), data);
+            data = this._resample(this.getArgumentAxis().getAggregationInfo(this._useAllAggregatedPoints, this.argumentAxisType !== DISCRETE ? this.getArgumentRange() : {}), data);
         }
 
         return data;
@@ -907,7 +907,7 @@ Series.prototype = {
             const intervalEnd = ticks[i];
             const intervalStart = ticks[i - 1];
             const dataInInterval = [];
-            while(data[dataIndex] && (data[dataIndex].argument < intervalEnd || i === ticks.length - 1 && data[dataIndex].argument <= intervalEnd)) {
+            while(data[dataIndex] && data[dataIndex].argument < intervalEnd) {
                 if(data[dataIndex].argument >= intervalStart) {
                     dataInInterval.push(data[dataIndex]);
                 }

@@ -469,3 +469,24 @@ QUnit.test("On initialization 'selectAll' item should have intermediate state if
 
     assert.ok($selectAll.hasClass("dx-checkbox-indeterminate"));
 });
+
+QUnit.test("On initialization 'selectAll' item should have intermediate state if at least one item is selected (ierarchical)", function(assert) {
+    var data = [{
+            id: "1",
+            expanded: true,
+            items: [{
+                id: "1_1",
+                selected: true
+            }, {
+                id: "1_2",
+                selected: false
+            }]
+        }],
+        $treeView = initTree({
+            showCheckBoxesMode: "selectAll",
+            dataSource: data
+        }),
+        $selectAll = $treeView.find("." + SELECT_ALL_ITEM_CLASS);
+
+    assert.ok($selectAll.hasClass("dx-checkbox-indeterminate"));
+});

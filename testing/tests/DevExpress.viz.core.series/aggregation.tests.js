@@ -270,11 +270,12 @@ QUnit.module("Aggregation methods", {
             });
         };
 
-        this.aggregateData = function(method, data, type, options, createAllPoints) {
+        this.aggregateData = function(method, data, type, options, createAllPoints, argumentAxisType) {
             var series = that.createSeries(method, type, options);
 
             that.series = series;
 
+            argumentAxisType && series.updateDataType({ argumentAxisType: argumentAxisType });
             series.updateData(data);
             series.createPoints(createAllPoints);
 
@@ -759,13 +760,15 @@ QUnit.test("Count. Do not calculate error bars", function(assert) {
 });
 
 QUnit.test("Points grouping by intervals", function(assert) {
-    this.argumentAxis.getAggregationInfo = () => { return { interval: 5, ticks: [0, 6, 8] }; };
+    this.argumentAxis.getAggregationInfo = () => { return { interval: 5, ticks: [0, 6, 8, 10] }; };
     var points = this.aggregateData("avg", this.data);
-    assert.equal(points.length, 2);
+    assert.equal(points.length, 3);
     assert.equal(points[0].argument, 0);
     assert.equal(points[0].value, 300);
     assert.equal(points[1].argument, 6);
-    assert.equal(points[1].value, 800);
+    assert.equal(points[1].value, 700);
+    assert.equal(points[2].argument, 8);
+    assert.equal(points[2].value, 900);
 });
 
 QUnit.test("Aggregation with empty interval, Call custom calculation", function(assert) {
@@ -831,4 +834,47 @@ QUnit.test("Aggregation with empty interval, Ohlc should not return point", func
     ], "stock");
 
     assert.equal(points.length, 0);
+});
+
+QUnit.test("Aggregation with empty interval, Bubble should not return point", function(assert) {
+    this.argumentAxis.getAggregationInfo = () => { return { interval: 5, ticks: [10, 15] }; };
+    const points = this.aggregateData("avg", this.data, "bubble");
+
+    assert.equal(points.length, 0);
+});
+
+QUnit.test("Take into account argumentRange on aggregation", function(assert) {
+    this.argumentAxis.getAggregationInfo = sinon.spy(() => {
+        return { interval: 5, ticks: [10, 15] };
+    });
+
+    this.aggregateData("avg", [
+        { arg: 0, val1: 2, val2: 5 },
+        { arg: 2, val1: 1, val2: 7 },
+        { arg: 4, val1: 5, val2: 5 },
+        { arg: 6, val1: 4, val2: 9 },
+        { arg: 8, val1: 4, val2: 9 }
+    ], "rangebar");
+
+    assert.deepEqual(this.argumentAxis.getAggregationInfo.lastCall.args[1], { min: 0, max: 8 });
+});
+
+QUnit.test("Skip argumentRange on aggregation for discrete data", function(assert) {
+    this.getBusinessRange = function() {
+        return {
+            minVisible: 0,
+            maxVisible: 10,
+            categories: []
+        };
+    };
+    this.argumentAxis.getAggregationInfo = sinon.spy(() => {
+        return { interval: 5, ticks: [10, 15] };
+    });
+
+
+    this.aggregateData("avg", [
+        { arg: 8, val1: 4, val2: 9 }
+    ], "rangebar", undefined, undefined, "discrete");
+
+    assert.deepEqual(this.argumentAxis.getAggregationInfo.lastCall.args[1], {});
 });

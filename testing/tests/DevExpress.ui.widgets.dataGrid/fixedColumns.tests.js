@@ -637,11 +637,11 @@ QUnit.test("Checking for presence of a free space row after scroll to second pag
 
     // assert
     $content = $testElement.find(".dx-datagrid-rowsview").children(".dx-scrollable-wrapper").find(".dx-datagrid-content");
-    assert.equal($content.find("tbody").length, 2, "count tbody of main content");
+    assert.equal($content.find("tbody").length, 1, "count tbody of main content");
     assert.equal($content.find(".dx-freespace-row").length, 1, "main content has free space row");
 
     $fixedContent = $testElement.find(".dx-datagrid-rowsview").children(".dx-datagrid-content-fixed");
-    assert.equal($fixedContent.find("tbody").length, 2, "count tbody of fixed content");
+    assert.equal($fixedContent.find("tbody").length, 1, "count tbody of fixed content");
     assert.equal($fixedContent.find(".dx-freespace-row").length, 1, "fixed content has free space row");
 });
 

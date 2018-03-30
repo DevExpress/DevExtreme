@@ -103,7 +103,7 @@ var showingWaveHandler = function(args, $wave) {
 
     $wave
         .addClass(INKRIPPLE_SHOWING_CLASS)
-        .css("transitionВuration", durationCss);
+        .css("transitionDuration", durationCss);
 };
 
 var getDurations = function(useHoldAnimation) {
@@ -117,7 +117,7 @@ var getDurations = function(useHoldAnimation) {
 var hideSelectedWave = function($wave) {
     $wave
         .removeClass(INKRIPPLE_HIDING_CLASS)
-        .css("transitionВuration", "");
+        .css("transitionDuration", "");
 };
 
 var hideWave = function(args, config) {
@@ -128,7 +128,7 @@ var hideWave = function(args, config) {
     $wave
         .addClass(INKRIPPLE_HIDING_CLASS)
         .removeClass(INKRIPPLE_SHOWING_CLASS)
-        .css("transitionВuration", durationCss);
+        .css("transitionDuration", durationCss);
 
     var animationDuration = Math.max(durations.hidingScale, durations.hidingOpacity);
     args.hidingTimeout = setTimeout(hideSelectedWave.bind(this, $wave), animationDuration);

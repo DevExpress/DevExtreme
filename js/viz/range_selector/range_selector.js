@@ -890,17 +890,12 @@ var dxRangeSelector = require("../core/base_widget").inherit({
             left: rect[0], top: rect[1], width: rect[2] - rect[0], height: rect[3] - rect[1]
         };
 
-        this._axis.updateOptions({
-            type: scaleOptions.type,
-            dataType: scaleOptions.dataType,
-            logarithmBase: scaleOptions.logarithmBase,
-            aggregationGroupWidth: scaleOptions.aggregationGroupWidth,
-            aggregationInterval: scaleOptions.aggregationInterval,
+        this._axis.updateOptions(extend({}, scaleOptions, {
             isHorizontal: true,
             label: {
                 overlappingBehavior: {}
             }
-        });
+        }));
 
         seriesDataSource.isShowChart() && this._axis.setMarginOptions(seriesDataSource.getMarginOptions(canvas));
         this._axis.updateCanvas(canvas);
@@ -1195,32 +1190,16 @@ AxisWrapper.prototype = {
         axis.drawScaleBreaks({ start: canvas.top, end: canvas.top + canvas.height });
     },
 
-    setMarginOptions(options) {
-        this._axis.setMarginOptions(options);
-    },
-
-    getFullTicks: function() {
-        return this._axis.getFullTicks();
-    },
-
-    updateCanvas(canvas) {
-        this._axis.updateCanvas(canvas);
-    },
-
-    updateOptions(opt) {
-        this._axis.updateOptions(opt);
-    },
-
-    getAggregationInfo() {
-        return this._axis.getAggregationInfo();
-    },
-
-    getTranslator: function() {
-        return this._axis.getTranslator();
-    },
-
     getViewport: function() {}
 };
+
+["setMarginOptions", "getFullTicks", "updateCanvas", "updateOptions", "getAggregationInfo", "getTranslator"].forEach(methodName => {
+    AxisWrapper.prototype[methodName] = function() {
+        const axis = this._axis;
+
+        return axis[methodName].apply(axis, arguments);
+    };
+});
 
 registerComponent("dxRangeSelector", dxRangeSelector);
 

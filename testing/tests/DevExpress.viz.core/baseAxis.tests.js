@@ -1303,7 +1303,7 @@ QUnit.test("margins calculation. Range interval with tickInterval + tickInterval
         max: new Date(2018, 3, 27)
     });
     axis.updateCanvas(this.canvas);
-    axis.getAggregationInfo();
+    axis.getAggregationInfo(undefined, {});
 
     axis.setMarginOptions({
         checkInterval: true

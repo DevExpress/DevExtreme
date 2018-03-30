@@ -2,7 +2,6 @@
     @MATERIAL_TABS_ITEM_PADDING: 12px;
     @MATERIAL_TAB_TEXT_LINE_HEIGHT: 24px;
     @MATERIAL_TAB_HEIGHT: 48px;
-    @MATERIAL_SCROLLABLE_TABS_LEFT_MARGIN: 72px;
 }
 
 @MATERIAL_TABS_BACKGROUND: darken(@base-bg, 4%);
@@ -15,29 +14,11 @@
     .dx-inkripple {
         overflow: hidden;
     }
-
-    &:not(.dx-tabs-nav-buttons) {
-        .dx-tabs-scrollable {
-            &:not(.dx-rtl) {
-                .dx-tab:first-child {
-                    margin-left: @MATERIAL_SCROLLABLE_TABS_LEFT_MARGIN - @MATERIAL_TABS_ITEM_PADDING;
-                } 
-            }
-
-            &.dx-rtl {
-                .dx-tab:first-child {
-                    margin-right: @MATERIAL_SCROLLABLE_TABS_LEFT_MARGIN - @MATERIAL_TABS_ITEM_PADDING;
-                } 
-            }
-        }
-    }
 }
 
 .dx-tabs-nav-buttons .dx-tabs-scrollable {
     margin-right: 36px;
     margin-left: 36px;
-    border-left: 1px solid @base-border-color;
-    border-right: 1px solid @base-border-color;
 }
 
 .dx-tabs-nav-button {
