@@ -384,11 +384,6 @@
  * @enum {'empty'|'group'|'simple'|'tabbed'|'button'}
  */
 
- /**
- * @typedef {string} Enums.FormButtonItemAlignment
- * @enum {'center'|'end'|'left'|'right'|'start'}
- */
-
 /**
  * @typedef {string} Enums.FunnelAlgorithm
  * @enum {'dynamicHeight'|'dynamicSlope'}
