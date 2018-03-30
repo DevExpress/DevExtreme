@@ -215,15 +215,9 @@ var Tabs = CollectionWidget.inherit({
     _initTemplates: function() {
         this.callBase();
 
-        this._defaultTemplates["item"] = new BindableTemplate(function($container, data) {
+        this._defaultTemplates["item"] = new BindableTemplate((function($container, data) {
             if(isPlainObject(data)) {
-                if(data.text) {
-                    $container.text(data.text);
-                }
-
-                if(data.html) {
-                    $container.html(data.html);
-                }
+                this._prepareDefaultItemTemplate(data, $container);
             } else {
                 $container.text(String(data));
             }
@@ -234,7 +228,7 @@ var Tabs = CollectionWidget.inherit({
 
             $container.wrapInner($("<span>").addClass(TABS_ITEM_TEXT_CLASS));
             $iconElement && $iconElement.prependTo($container);
-        }, ["text", "html", "icon", "iconSrc"], this.option("integrationOptions.watchMethod"));
+        }).bind(this), ["text", "html", "icon", "iconSrc"], this.option("integrationOptions.watchMethod"));
     },
 
     _itemClass: function() {
