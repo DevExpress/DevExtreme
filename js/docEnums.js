@@ -385,7 +385,7 @@
  */
 
  /**
- * @typedef {string} Enums.FormItemAlignment
+ * @typedef {string} Enums.FormButtonItemAlignment
  * @enum {'center'|'end'|'left'|'right'|'start'}
  */
 
