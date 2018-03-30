@@ -160,7 +160,7 @@ var Form = Widget.inherit({
              * @name dxFormOptions_customizeItem
              * @publicName customizeItem
              * @type function
-             * @type_function_param1 item:dxFormSimpleItem|dxFormGroupItem|dxFormTabbedItem|dxFormEmptyItem
+             * @type_function_param1 item:dxFormSimpleItem|dxFormGroupItem|dxFormTabbedItem|dxFormEmptyItem|dxFormButtonItem
              */
             customizeItem: null,
             /**
@@ -246,7 +246,7 @@ var Form = Widget.inherit({
             /**
              * @name dxFormOptions_items
              * @publicName items
-             * @type Array<dxFormSimpleItem,dxFormGroupItem,dxFormTabbedItem,dxFormEmptyItem>
+             * @type Array<dxFormSimpleItem,dxFormGroupItem,dxFormTabbedItem,dxFormEmptyItem,dxFormButtonItem>
              * @default undefined
              */
             items: undefined,
@@ -469,7 +469,7 @@ var Form = Widget.inherit({
             /**
              * @name dxFormGroupItem_items
              * @publicName items
-             * @type Array<dxFormSimpleItem,dxFormGroupItem,dxFormTabbedItem,dxFormEmptyItem>
+             * @type Array<dxFormSimpleItem,dxFormGroupItem,dxFormTabbedItem,dxFormEmptyItem,dxFormButtonItem>
              * @default undefined
              */
             /**
@@ -554,7 +554,7 @@ var Form = Widget.inherit({
             /**
              * @name dxFormTabbedItem_tabs_items
              * @publicName items
-             * @type Array<dxFormSimpleItem,dxFormGroupItem,dxFormTabbedItem,dxFormEmptyItem>
+             * @type Array<dxFormSimpleItem,dxFormGroupItem,dxFormTabbedItem,dxFormEmptyItem,dxFormButtonItem>
              * @default undefined
              */
             /**
@@ -634,6 +634,60 @@ var Form = Widget.inherit({
              * @publicName visibleIndex
              * @type number
              * @default undefined
+             */
+            /**
+            * @name dxFormButtonItem
+            * @publicName Button
+            * @section FormItems
+            * @type object
+            */
+            /**
+             * @name dxFormButtonItem_name
+             * @publicName name
+             * @type string
+             * @default undefined
+             */
+            /**
+             * @name dxFormButtonItem_colSpan
+             * @publicName colSpan
+             * @type number
+             * @default undefined
+             */
+            /**
+             * @name dxFormButtonItem_itemType
+             * @publicName itemType
+             * @type Enums.FormItemType
+             * @default "simple"
+             */
+            /**
+             * @name dxFormButtonItem_visible
+             * @publicName visible
+             * @type boolean
+             * @default true
+             */
+            /**
+             * @name dxFormButtonItem_cssClass
+             * @publicName cssClass
+             * @type string
+             * @default undefined
+             */
+            /**
+             * @name dxFormButtonItem_visibleIndex
+             * @publicName visibleIndex
+             * @type number
+             * @default undefined
+             */
+            /**
+             * @name dxFormButtonItem_buttonOptions
+             * @publicName buttonOptions
+             * @type dxButtonOptions
+             * @default undefined
+             */
+            /**
+             * @name dxFormButtonItem_alignment
+             * @publicName alignment
+             * @type Enums.FormButtonItemAlignment
+             * @default "end"
              */
         });
     },
