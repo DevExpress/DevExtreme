@@ -113,4 +113,18 @@ QUnit.module("default template", () => {
         assert.equal($img.length, 1);
         assert.equal($img.attr("alt"), "test");
     });
+
+    QUnit.test("template should be rendered correctly with html", (assert) => {
+        let $content = prepareItemTest({ html: "<span>test</span>" });
+
+        let $span = $content.is("span") ? $content : $content.children();
+        assert.ok($span.length);
+        assert.equal($span.text(), "test");
+    });
+
+    QUnit.test("template should be rendered correctly with text", (assert) => {
+        let $content = prepareItemTest({ text: "custom" });
+
+        assert.equal($.trim($content.text()), "custom");
+    });
 });
