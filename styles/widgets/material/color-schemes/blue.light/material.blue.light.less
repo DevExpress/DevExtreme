@@ -33,7 +33,7 @@
 * @type color
 * @group base.common
 */
-@base-border-color: #e0e0e0;
+@base-border-color: rgba(0,0,0, 0.07);
 
 /**
 * @name 10. Border radius
@@ -1574,7 +1574,7 @@
 */
 @scheduler-cell-hover-bg: @base-hover-color;
 
-@scheduler-group-separator-border-color: @base-border-color;
+@scheduler-group-separator-border-color: fade(@base-border-color, 25%);
 /**
 * @name 20. Hour separator color
 * @type color
