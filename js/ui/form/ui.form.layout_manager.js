@@ -526,7 +526,7 @@ var LayoutManager = Widget.inherit({
 
         $container
             .addClass(FIELD_BUTTON_ITEM_CLASS)
-            .css("textAlign", item.alignment ? item.alignment : "end");
+            .css("textAlign", item.alignment ? item.alignment : "right");
 
         this._createComponent($button, "dxButton", item.buttonOptions);
         this._addItemClasses($container, item.col);

@@ -3030,14 +3030,14 @@ QUnit.module("Button item", () => {
                 itemType: "button"
             }, {
                 itemType: "button",
-                alignment: "start"
+                alignment: "left"
             }]
         });
 
         let $buttonItems = $testContainer.find(".dx-field-button-item");
 
         // assert
-        assert.equal($buttonItems.first().css("textAlign"), "end", "By default buttons align by the end (right-side for LTR, left-side for RTL)");
-        assert.equal($buttonItems.last().css("textAlign"), "start", "Custom alignment accepted");
+        assert.equal($buttonItems.first().css("textAlign"), "right", "By default buttons align by the right");
+        assert.equal($buttonItems.last().css("textAlign"), "left", "Custom alignment accepted");
     });
 });
