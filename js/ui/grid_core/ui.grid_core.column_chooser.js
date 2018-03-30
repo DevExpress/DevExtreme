@@ -128,7 +128,7 @@ var ColumnChooserView = columnsView.ColumnsView.inherit({
             theme = themes.current(),
             isGenericTheme = theme && theme.indexOf("generic") > -1,
             isAndroid5Theme = theme && theme.indexOf("android5") > -1,
-            isMaterial = theme && themes.isMaterial(),
+            isMaterial = themes.isMaterial(),
             dxPopupOptions = {
                 visible: false,
                 shading: false,
