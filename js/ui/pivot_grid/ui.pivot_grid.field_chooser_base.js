@@ -157,7 +157,7 @@ var FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).in
 
         if(option === null) {
             state = {
-                fields: this._dataSource.fields()
+                fields: extend(true, [], this._dataSource.fields())
             };
             this.option("state", state);
         }
@@ -175,6 +175,13 @@ var FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).in
         switch(args.name) {
             case "dataSource":
                 this._refreshDataSource();
+                break;
+            case "applyChangesMode":
+                break;
+            case "state":
+                if(args.value === null) {
+                    this._dataSource.load();
+                }
                 break;
             case "headerFilter":
             case "allowFieldDragging":
@@ -333,7 +340,7 @@ var FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).in
                                 treeView.selectItem($item);
                             }
                         } else if(!targetArea) {
-                            treeView.unselectItem(extendedField.dataField);
+                            treeView.unselectItem(extendedField);
                             props = { area: null, areaIndex: null };
                         }
 

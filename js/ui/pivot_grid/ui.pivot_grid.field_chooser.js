@@ -250,6 +250,7 @@ var FieldChooser = BaseFieldChooser.inherit({
                 func();
             });
             that._fireContentReadyAction();
+            that.option("state", null);
         };
 
         if(that._dataSource) {
@@ -520,7 +521,7 @@ var FieldChooser = BaseFieldChooser.inherit({
             treeView = that._createComponent(container, TreeView, {
                 dataSource: that._createFieldsDataSource(dataSource),
                 showCheckBoxesMode: 'normal',
-                keyExpr: "key",
+                keyExpr: "dataField",
                 searchEnabled: that.option("allowSearch"),
                 itemTemplate: function(itemData, itemIndex, itemElement) {
                     if(itemData.icon) {
@@ -690,6 +691,34 @@ var FieldChooser = BaseFieldChooser.inherit({
         if(treeView) {
             treeView.option("searchValue", "");
             treeView.collapseAll();
+        }
+    },
+
+    /**
+    * @name dxPivotGridFieldChooserMethods_applyChanges
+    * @publicName applyChanges()
+    * @return PivotGridDataSource
+    */
+    applyChanges: function() {
+        var state = this.option("state");
+
+        if(isDefined(state)) {
+            state && this._dataSource.state(state);
+            this.option("state", null);
+        }
+    },
+
+    /**
+    * @name dxPivotGridFieldChooserMethods_cancelChanges
+    * @publicName cancelChanges()
+    * @return PivotGridDataSource
+    */
+    cancelChanges: function() {
+        if(isDefined(this.option("state"))) {
+            var state = this._dataSource.state();
+            this.option("state", null);
+
+            this._dataSource.state(state);
         }
     },
 

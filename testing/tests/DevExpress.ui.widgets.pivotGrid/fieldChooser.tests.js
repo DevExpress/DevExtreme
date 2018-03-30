@@ -1,20 +1,22 @@
 "use strict";
 
 QUnit.testStart(function() {
-    var markup = '<div id="container"></div>';
+    var markup = '<div id="container"></div><div id="pgfc"></div>';
     $("#qunit-fixture").html(markup);
 });
 
-require("common.css!");
-require("generic_light.css!");
-require("ui/pivot_grid/ui.pivot_grid.field_chooser");
+import "common.css!";
+import "generic_light.css!";
+import "ui/pivot_grid/ui.pivot_grid.field_chooser";
 
-var $ = require("jquery"),
-    pointerMock = require("../../helpers/pointerMock.js"),
-    domUtils = require("core/utils/dom"),
-    devices = require("core/devices"),
-    dataUtils = require("core/element_data"),
-    renderer = require("core/renderer");
+import PivotGridDataSource from "ui/pivot_grid/data_source";
+
+import $ from "jquery";
+import pointerMock from "../../helpers/pointerMock.js";
+import domUtils from "core/utils/dom";
+import devices from "core/devices";
+import dataUtils from "core/element_data";
+import renderer from "core/renderer";
 
 var createMockDataSource = function(options) {
     $.each(options.fields || [], function(index, field) {
@@ -2192,4 +2194,68 @@ QUnit.test("Apply filters", function(assert) {
     var fields = this.fieldChooser.option("state").fields;
     assert.deepEqual(fields[0], { dataField: "Field1", area: 'column', index: 0, allowFiltering: true, filterType: undefined, filterValues: [1] });
     assert.notOk($filterIndicator.hasClass("dx-header-filter-empty"));
+});
+
+QUnit.test("applyChanges", function(assert) {
+    this.fieldChooser = $("#pgfc").dxPivotGridFieldChooser({
+        applyChangesMode: "onDemand",
+        dataSource: new PivotGridDataSource({
+            fields: [
+                { dataField: "Field1", area: 'column', areaIndex: 0 },
+            ],
+            store: []
+        })
+    }).dxPivotGridFieldChooser("instance");
+
+    var changedArgs = {
+        sourceGroup: "column",
+        targetIndex: 0,
+        targetGroup: "row"
+    };
+
+    changedArgs.sourceElement = renderer($("#pgfc").find(".dx-area-field").eq(0));
+
+    var sortable = this.fieldChooser.$element().dxSortable("instance"),
+        onChangedHandler = sortable.option("onChanged");
+
+    // act
+    onChangedHandler(changedArgs);
+
+    this.fieldChooser.applyChanges();
+    this.clock.tick(1000);
+    var state = this.fieldChooser.getDataSource().state();
+    assert.equal(state.fields.length, 1, "one field");
+    assert.deepEqual(state.fields[0].dataField, "Field1");
+    assert.deepEqual(state.fields[0].area, 'row');
+});
+
+QUnit.test("cancelChanges", function(assert) {
+    this.fieldChooser = $("#pgfc").dxPivotGridFieldChooser({
+        applyChangesMode: "onDemand",
+        dataSource: new PivotGridDataSource({
+            fields: [
+                { dataField: "Field1", area: 'column', areaIndex: 0 },
+            ],
+            store: []
+        })
+    }).dxPivotGridFieldChooser("instance");
+
+    var changedArgs = {
+        sourceGroup: "column",
+        targetIndex: 0,
+        targetGroup: "row"
+    };
+
+    changedArgs.sourceElement = renderer($("#pgfc").find(".dx-area-field").eq(0));
+
+    var sortable = this.fieldChooser.$element().dxSortable("instance"),
+        onChangedHandler = sortable.option("onChanged");
+
+    // act
+    onChangedHandler(changedArgs);
+
+    this.fieldChooser.cancelChanges();
+    this.clock.tick(1000);
+
+    assert.strictEqual(this.fieldChooser.option("state"), null);
 });
