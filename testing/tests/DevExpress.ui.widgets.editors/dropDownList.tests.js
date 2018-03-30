@@ -137,6 +137,7 @@ QUnit.module("keyboard navigation", {
             dataSource: ["item 1", "item 2", "item 3"],
             applyValueMode: "instantly"
         });
+        this.clock = sinon.useFakeTimers();
         this.instance = this.$element.dxDropDownList("instance");
         this.$input = this.$element.find("." + TEXTEDITOR_INPUT_CLASS);
         this.popup = this.instance._popup;
@@ -145,6 +146,7 @@ QUnit.module("keyboard navigation", {
     },
     afterEach: function() {
         fx.off = false;
+        this.clock.restore();
     }
 });
 
@@ -194,6 +196,24 @@ QUnit.testInActiveWindow("popup hides on tab", function(assert) {
     this.instance.open();
     this.keyboard.keyDown("tab");
     assert.equal(this.instance.option("opened"), false, "popup is hidden");
+});
+
+QUnit.test("event should be a parameter for onValueChanged function after select an item via tab", function(assert) {
+    var valueChangedHandler = sinon.spy();
+
+    this.instance.option({
+        opened: true,
+        onValueChanged: valueChangedHandler
+    });
+
+    var $content = $(this.instance.content()),
+        list = $content.find(".dx-list").dxList("instance"),
+        $listItem = $content.find(LIST_ITEM_SELECTOR).eq(0);
+
+    list.option("focusedElement", $listItem);
+    this.keyboard.keyDown("tab");
+
+    assert.ok(valueChangedHandler.getCall(0).args[0].event, "event is defined");
 });
 
 QUnit.test("No item should be chosen after pressing tab", function(assert) {
