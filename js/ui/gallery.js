@@ -296,10 +296,13 @@ var Gallery = CollectionWidget.inherit({
         * @hidden
         * @inheritdoc
         */
-        this._defaultTemplates["item"] = new BindableTemplate(function($container, data) {
+
+        this._defaultTemplates["item"] = new BindableTemplate((function($container, data) {
             var $img = $('<img>').addClass(GALLERY_IMAGE_CLASS);
 
             if(typeUtils.isPlainObject(data)) {
+                this._prepareDefaultItemTemplate(data, $container);
+
                 $img.attr({
                     'src': data.imageSrc,
                     'alt': data.imageAlt
@@ -307,7 +310,7 @@ var Gallery = CollectionWidget.inherit({
             } else {
                 $img.attr('src', String(data)).appendTo($container);
             }
-        }, ["imageSrc", "imageAlt"], this.option("integrationOptions.watchMethod"));
+        }).bind(this), ["imageSrc", "imageAlt"], this.option("integrationOptions.watchMethod"));
     },
 
     _dataSourceOptions: function() {
