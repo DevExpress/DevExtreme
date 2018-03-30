@@ -602,13 +602,11 @@ if(device.deviceType !== "desktop") {
 QUnit.test("Close and cancel buttons for material theme", function(assert) {
     // arrange
     var testElement = $("#container"),
-        currentThemes = themes.current(),
         origIsMaterial = themes.isMaterial,
         columnChooserView = this.columnChooserView;
 
     this.setTestElement(testElement);
 
-    themes.current = function() { return "material"; };
     themes.isMaterial = function() { return true; };
 
     // act
@@ -620,7 +618,6 @@ QUnit.test("Close and cancel buttons for material theme", function(assert) {
     assert.ok(!$(".dx-button-text").length, "cancel button is hidden");
 
     themes.isMaterial = origIsMaterial;
-    themes.current(currentThemes);
 });
 
 
