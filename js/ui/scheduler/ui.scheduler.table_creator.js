@@ -94,17 +94,16 @@ var SchedulerTableCreator = {
                         td.innerHTML = "<div>" + options.getCellText(i, j) + "</div>";
                     }
                 }
-
-                if((i + 1) !== 0 && options.allDayElements && options.groupCount && ((i + 1) % rowCountInGroup === 0)) {
-                    if(options.allDayElements[allDayElementIndex]) {
-                        row = options.allDayElements[allDayElementIndex].find("tr");
-                        if(!row.length) {
-                            row = domAdapter.createElement("tr");
-                            row.append(options.allDayElements[allDayElementIndex].get(0));
-                        }
-                        allDayElementIndex++;
-                        tableBody.appendChild(row.get ? row.get(0) : row);
+            }
+            if((i + 1) !== 0 && options.allDayElements && options.groupCount && ((i + 1) % rowCountInGroup === 0)) {
+                if(options.allDayElements[allDayElementIndex]) {
+                    row = options.allDayElements[allDayElementIndex].find("tr");
+                    if(!row.length) {
+                        row = domAdapter.createElement("tr");
+                        row.append(options.allDayElements[allDayElementIndex].get(0));
                     }
+                    allDayElementIndex++;
+                    tableBody.appendChild(row.get ? row.get(0) : row);
                 }
             }
         }

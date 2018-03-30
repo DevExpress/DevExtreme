@@ -6,6 +6,7 @@ var $ = require("../../core/renderer"),
     dataUtils = require("../../core/element_data"),
     dateUtils = require("../../core/utils/date"),
     typeUtils = require("../../core/utils/type"),
+    windowUtils = require("../../core/utils/window"),
     getPublicElement = require("../../core/utils/dom").getPublicElement,
     extend = require("../../core/utils/extend").extend,
     each = require("../../core/utils/iterator").each,
@@ -535,9 +536,12 @@ var SchedulerWorkSpace = Widget.inherit({
     _getDateTableCellClass: function(i, j) {
         var cellClass = DATE_TABLE_CELL_CLASS + " " + HORIZONTAL_SIZES_CLASS + " " + VERTICAL_SIZES_CLASS;
 
-        return this._groupedStrategy.addAdditionalGroupCellClasses(cellClass, j + 1, i, j);
+        return this._needApplyLastGroupCellClass() ? this._groupedStrategy.addAdditionalGroupCellClasses(cellClass, j + 1, i, j) : cellClass;
     },
 
+    _needApplyLastGroupCellClass: function() {
+        return true;
+    },
     _getGroupRowClass: function() {
         return GROUP_ROW_CLASS;
     },
@@ -805,7 +809,7 @@ var SchedulerWorkSpace = Widget.inherit({
 
         this._$headerPanel.width(width);
         this._$dateTable.width(width);
-        this._$allDayTable.width(width);
+        this._$allDayTable && this._$allDayTable.width(width);
 
         this._attachHeaderTableClasses();
 
@@ -890,7 +894,7 @@ var SchedulerWorkSpace = Widget.inherit({
         this._renderDateTable();
 
         this._renderAllDayPanel();
-        if(this._isHorizontalGroupedWorkSpace()) {
+        if(this._isHorizontalGroupedWorkSpace() && windowUtils.hasWindow()) {
             this._setHorizontalGroupHeaderCellsHeight();
         }
 
@@ -1861,10 +1865,18 @@ var SchedulerWorkSpace = Widget.inherit({
             left: position.left + shift.left,
             rowIndex: position.rowIndex,
             cellIndex: position.cellIndex,
-            hMax: this._isHorizontalGroupedWorkSpace() ? this.getMaxAllowedPosition()[0] : this.getMaxAllowedPosition()[groupIndex],
-            vMax: this._isHorizontalGroupedWorkSpace() ? this.getMaxAllowedVerticalPosition()[groupIndex] : this.getMaxAllowedVerticalPosition()[0],
+            hMax: this._getHorizontalMax(groupIndex),
+            vMax: this._getVerticalMax(groupIndex),
             groupIndex: groupIndex
         };
+    },
+
+    _getHorizontalMax: function(groupIndex) {
+        return this._isHorizontalGroupedWorkSpace() ? this.getMaxAllowedPosition()[0] : this.getMaxAllowedPosition()[groupIndex];
+    },
+
+    _getVerticalMax: function(groupIndex) {
+        return this._isHorizontalGroupedWorkSpace() ? this.getMaxAllowedVerticalPosition()[groupIndex] : this.getMaxAllowedVerticalPosition()[0];
     },
 
     getCellIndexByDate: function(date, inAllDayRow) {

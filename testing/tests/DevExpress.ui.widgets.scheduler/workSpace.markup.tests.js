@@ -785,6 +785,7 @@ const weekWithGroupingModuleConfig = {
         this.instance = $("#scheduler-work-space-grouped").dxSchedulerWorkSpaceWeek({
             groupOrientation: "vertical",
             startDayHour: 8,
+            showAllDayPanel: false,
             endDayHour: 20
         }).dxSchedulerWorkSpaceWeek("instance");
         stubInvokeMethod(this.instance);
@@ -806,6 +807,13 @@ QUnit.module("Workspace Week markup with horizontal grouping", weekWithGroupingM
         assert.equal($element.find(".dx-scheduler-date-table tbody tr").length, 48, "Workspace has 48 rows");
     });
 
+    QUnit.test("Scheduler all day rows should be built into dateTable", (assert) => {
+        this.instance.option("showAllDayPanel", true);
+
+        const $allDayRows = this.instance.$element().find(toSelector(ALL_DAY_ROW_CLASS));
+
+        assert.equal($allDayRows.length, 2, "DateTable contains 2 allDay rows");
+    });
     QUnit.test("Time panel should have right rows count and cell text", (assert) => {
         checkRowsAndCells(this.instance.$element(), assert, 0.5, 8, 20, 2);
     });

@@ -41,10 +41,6 @@ var SchedulerWorkSpaceWeek = SchedulerWorkSpace.inherit({
         return toMs("day") * 7 * this.option("intervalCount");
     },
 
-    _builtAllDayRowsIntoDateTable: function() {
-        return false;
-    },
-
     _getCellsBetween: function($first, $last) {
         if(this._hasAllDayClass($last)) {
             return this.callBase($first, $last);
