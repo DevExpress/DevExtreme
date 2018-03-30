@@ -136,9 +136,9 @@ var DateBox = DropDownEditor.inherit({
              * @name dxDateBoxOptions_showAnalogClock
              * @publicName showAnalogClock
              * @type boolean
-             * @default false
+             * @default true
              */
-            showAnalogClock: false,
+            showAnalogClock: true,
 
             /**
             * @name dxDateBoxOptions_value
