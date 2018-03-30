@@ -47,7 +47,7 @@ var FilterPanelView = modules.View.inherit({
                 that.option("filterPanel.filterEnabled", e.value);
             }
         });
-        $element.attr("title", this.option("filterPanel.texts.filterEnabled"));
+        $element.attr("title", this.option("filterPanel.texts.filterEnabledHint"));
         return $element;
     },
 
@@ -162,14 +162,6 @@ module.exports = {
                  */
                 texts: {
                     /**
-                     * @name GridBaseOptions_filterPanel_texts_filterEnabled
-                     * @publicName filterEnabled
-                     * @type string
-                     * @default "Apply Filter"
-                     */
-                    filterEnabled: messageLocalization.format("dxDataGrid-filterPanelFilterEnabled"),
-
-                    /**
                      * @name GridBaseOptions_filterPanel_texts_createFilter
                      * @publicName createFilter
                      * @type string
@@ -184,6 +176,14 @@ module.exports = {
                      * @default "Clear"
                      */
                     clearFilter: messageLocalization.format("dxDataGrid-filterPanelClearFilter"),
+
+                    /**
+                     * @name GridBaseOptions_filterPanel_texts_filterEnabledHint
+                     * @publicName filterEnabledHint
+                     * @type string
+                     * @default "Apply Filter"
+                     */
+                    filterEnabledHint: messageLocalization.format("dxDataGrid-filterPanelFilterEnabledHint"),
                 }
             },
         };

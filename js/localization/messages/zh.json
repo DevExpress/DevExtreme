@@ -149,7 +149,7 @@
     "dxDataGrid-filterBuilderPopupTitle": "!TODO",
     "dxDataGrid-filterPanelCreateFilter": "!TODO",
     "dxDataGrid-filterPanelClearFilter": "!TODO",
-    "dxDataGrid-filterPanelFilterEnabled": "!TODO",
+    "dxDataGrid-filterPanelFilterEnabledHint": "!TODO",
 
     "dxTreeList-ariaTreeList": "树列表",
     "dxTreeList-editingAddRowToNode": "添加",
