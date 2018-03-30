@@ -2566,6 +2566,20 @@ QUnit.module("default template", {
     }
 });
 
+QUnit.test("template should be rendered correctly with text", function(assert) {
+    var $content = this.prepareItemTest({ text: "custom" });
+
+    assert.equal($.trim($content.text()), "custom");
+});
+
+QUnit.test("template should be rendered correctly with html", function(assert) {
+    var $content = this.prepareItemTest({ html: "<span>test</span>" });
+
+    var $span = $content.is("span") ? $content : $content.children();
+    assert.ok($span.length);
+    assert.equal($span.text(), "test");
+});
+
 QUnit.test("template should be rendered correctly with image as string", function(assert) {
     var $content = this.prepareItemTest("test");
     var $img = $content.filter("img");
