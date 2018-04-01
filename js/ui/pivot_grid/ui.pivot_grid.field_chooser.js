@@ -620,22 +620,15 @@ var FieldChooser = BaseFieldChooser.inherit({
 
     _getTreeViewFields: function(nodes, result) {
         var that = this;
-
         result = result || [];
 
-        if(nodes[0].field) {
-            result = result.concat(nodes);
-        } else {
+        if(!nodes[0].field) {
             each(nodes, function(_, node) {
-                if(node.items && node.items.length) {
-                    result = that._getTreeViewFields(node.items, result);
-                } else {
-                    result = result.concat(nodes);
-                }
+                result = node.items && node.items.length ? that._getTreeViewFields(node.items, result) : result.concat(nodes);
             });
         }
 
-        return result;
+        return result.concat(nodes);
     },
 
     _renderAreaFields: function($container, area, fields) {
