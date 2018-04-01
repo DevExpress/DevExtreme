@@ -312,7 +312,7 @@ var DataAdapter = Class.inherit({
         each(this._dataStructure, function(_, node) {
             var item1 = JSON.stringify(node.internalFields.item),
                 item2 = JSON.stringify(item);
-            if(item1 == item2) {
+            if(item1 === item2) {
                 result = node;
                 return false;
             }
