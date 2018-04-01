@@ -303,9 +303,6 @@ var FieldChooser = BaseFieldChooser.inherit({
             case "onContextMenuPreparing":
                 that._actions[args.name] = that._createActionByOption(args.name);
                 break;
-            case "currentState":
-            case "applyChangesMode":
-                break;
             default:
                 that.callBase(args);
         }
