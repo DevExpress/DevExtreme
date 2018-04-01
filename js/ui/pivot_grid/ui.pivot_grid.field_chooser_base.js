@@ -179,7 +179,7 @@ var FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).in
             case "applyChangesMode":
                 break;
             case "state":
-                if(args.value === null) {
+                if(args.value === null && args.previousValue !== null) {
                     this._dataSource.load();
                 }
                 break;
@@ -340,7 +340,16 @@ var FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).in
                                 treeView.selectItem($item);
                             }
                         } else if(!targetArea) {
-                            treeView.unselectItem(extendedField);
+                            var treeViewNodes = that._getTreeViewFields(that._createFieldsDataSource(that._dataSource)),
+                                treeViewNode;
+
+                            treeViewNodes.some(function(node) {
+                                if(node.field.dataField === extendedField.dataField) {
+                                    treeViewNode = node;
+                                    return true;
+                                }
+                            });
+                            treeView.unselectItem(treeViewNode);
                             props = { area: null, areaIndex: null };
                         }
 

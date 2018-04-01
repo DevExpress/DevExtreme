@@ -2102,11 +2102,18 @@ QUnit.test("move from area to treeview", function(assert) {
         onChangedHandler = sortable.option("onChanged");
     // act
     onChangedHandler(changedArgs);
+    this.clock.tick(1000);
 
     var fields = this.fieldChooser.option("state").fields;
     assert.deepEqual(fields[0], { dataField: "Field1", area: 'column', areaIndex: 0, index: 0 });
     assert.deepEqual(fields[1], { dataField: "Field2", area: null, areaIndex: null, index: 1 });
     assert.deepEqual(fields[2], { dataField: "Field3", area: 'column', areaIndex: 1, index: 2 });
+
+    var checkboxes = this.$container.find(".dx-checkbox");
+    assert.equal(checkboxes.length, 3, "checkboxes");
+
+    var checked = this.$container.find(".dx-checkbox-checked");
+    assert.equal(checked.length, 2, "checked checkboxes");
 });
 
 QUnit.test("select in treeview", function(assert) {

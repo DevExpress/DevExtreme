@@ -622,6 +622,26 @@ var FieldChooser = BaseFieldChooser.inherit({
         that._dataChangedHandlers.push(dataChanged);
     },
 
+    _getTreeViewFields: function(nodes, result) {
+        var that = this;
+
+        result = result || [];
+
+        if(nodes[0].field) {
+            result = result.concat(nodes);
+        } else {
+            each(nodes, function(_, node) {
+                if(node.items && node.items.length) {
+                    result = that._getTreeViewFields(node.items, result);
+                } else {
+                    result = result.concat(nodes);
+                }
+            });
+        }
+
+        return result;
+    },
+
     _renderAreaFields: function($container, area, fields) {
         var that = this;
 
