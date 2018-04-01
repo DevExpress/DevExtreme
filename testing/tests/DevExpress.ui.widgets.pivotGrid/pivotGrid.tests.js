@@ -695,6 +695,87 @@ QUnit.test("clear selection and filtering in field chooser treeview on popup hid
     assert.ok(resetTreeView.calledOnce, 'resetTreeView was called');
 });
 
+QUnit.test("create toolbar buttons in applyChangesMode onDemand case", function(assert) {
+    var pivotGrid = createPivotGrid({
+            dataSource: this.dataSource,
+            fieldChooser: {
+                applyChangesMode: "onDemand"
+            }
+        }, assert),
+        fieldChooserPopup = pivotGrid.getFieldChooserPopup();
+
+    this.clock.tick();
+
+    // act
+    fieldChooserPopup.show();
+    this.clock.tick(500);
+    // assert
+    assert.equal($(fieldChooserPopup._$bottom).find(".dx-toolbar-button").length, 2, '2 buttons in toolbar');
+});
+
+QUnit.test("apply changes in fieldchooser on button click in onDemand mode", function(assert) {
+    this.dataSource.fields[0].dataField = "field1";
+
+    var pivotGrid = createPivotGrid({
+            dataSource: this.dataSource,
+            allowSorting: true,
+            fieldChooser: {
+                applyChangesMode: "onDemand"
+            }
+        }, assert),
+        fieldChooserPopup = pivotGrid.getFieldChooserPopup();
+
+    this.clock.tick();
+
+    // act
+    fieldChooserPopup.show();
+    this.clock.tick(500);
+
+    var sortIcon = $(fieldChooserPopup.content()).find(".dx-sort").eq(0);
+    sortIcon.trigger("dxclick");
+    this.clock.tick(500);
+
+    assert.ok(sortIcon.hasClass("dx-sort-down"));
+    assert.notEqual(pivotGrid.getDataSource().state().fields[0].sortOrder, "desc", "ds state is not changed yet");
+
+    var applyButton = $(fieldChooserPopup._$bottom).find(".dx-button").eq(0);
+    applyButton.trigger("dxclick");
+    this.clock.tick(500);
+
+    assert.equal(pivotGrid.getDataSource().state().fields[0].sortOrder, "desc", "ds state is changed");
+});
+
+QUnit.test("cancel changes on fieldchooser hidding in onDemand mode", function(assert) {
+    this.dataSource.fields[0].dataField = "field1";
+
+    var pivotGrid = createPivotGrid({
+            dataSource: this.dataSource,
+            allowSorting: true,
+            fieldChooser: {
+                applyChangesMode: "onDemand"
+            }
+        }, assert),
+        fieldChooserPopup = pivotGrid.getFieldChooserPopup();
+
+    this.clock.tick();
+
+    // act
+    fieldChooserPopup.show();
+    this.clock.tick(500);
+
+    var sortIcon = $(fieldChooserPopup.content()).find(".dx-sort").eq(0);
+    sortIcon.trigger("dxclick");
+    this.clock.tick(500);
+
+    assert.ok(sortIcon.hasClass("dx-sort-down"));
+    assert.notEqual(pivotGrid.getDataSource().state().fields[0].sortOrder, "desc", "ds state is not changed yet");
+
+    fieldChooserPopup.hide();
+    this.clock.tick(500);
+
+    assert.notEqual(pivotGrid.getDataSource().state().fields[0].sortOrder, "desc", "ds state is not changed yet");
+});
+
 QUnit.test("Field panel should be updated on change headerFilter at runtime", function(assert) {
     var pivotGrid = createPivotGrid({
         dataSource: this.dataSource,
