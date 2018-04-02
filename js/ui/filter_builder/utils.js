@@ -153,8 +153,7 @@ function getFilterOperations(field) {
 
 function getCaptionByOperation(operation, filterOperationDescriptions) {
     var operationName = filterOperationsDictionary.getNameByFilterOperation(operation);
-
-    return filterOperationDescriptions && filterOperationDescriptions[operationName];
+    return filterOperationDescriptions && filterOperationDescriptions[operationName] ? filterOperationDescriptions[operationName] : operationName;
 }
 
 function getOperationFromAvailable(operation, availableOperations) {
@@ -485,7 +484,8 @@ function getCurrentValueText(field, value, customOperation) {
     } else if(field.customizeText) {
         valueText = field.customizeText.call(field, {
             value: value,
-            valueText: valueText
+            valueText: valueText,
+            target: "filterBuilder"
         });
     }
     return valueText;

@@ -147,6 +147,9 @@
         "dxDataGrid-ariaSelectAll": "Select all",
         "dxDataGrid-ariaSelectRow": "Select row",
         "dxDataGrid-filterBuilderPopupTitle": "Filter Builder",
+        "dxDataGrid-filterPanelCreateFilter": "Create Filter",
+        "dxDataGrid-filterPanelClearFilter": "Clear",
+        "dxDataGrid-filterPanelFilterEnabledHint": "Apply Filter",
 
         "dxTreeList-ariaTreeList": "Tree list",
         "dxTreeList-editingAddRowToNode": "Add",
