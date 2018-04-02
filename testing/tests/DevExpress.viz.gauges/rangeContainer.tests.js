@@ -469,7 +469,7 @@ QUnit.module('BaseRangeContainer - palette', $.extend({}, environment, {
 }));
 
 QUnit.test('no palette, no colors', function(assert) {
-    this.checkColors(assert, [null, null, null], null, ['#a3b97c', '#e1b676', '#ec7f83', 'none']);
+    this.checkColors(assert, [null, null, null], null, ['#97c95c', '#ffc720', '#f5564a', 'none']);
 });
 
 QUnit.test('no palette, colors', function(assert) {

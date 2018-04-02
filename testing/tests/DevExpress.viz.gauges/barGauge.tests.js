@@ -581,7 +581,7 @@ QUnit.module('Colors', $.extend({}, environment, {
 
 QUnit.test('Default', function(assert) {
     this.$container.dxBarGauge({ values: [10, 20, 30] });
-    this.checkColors(assert, '#e0e0e0', ['#5f8b95', '#ba4d51', '#af8a53']);
+    this.checkColors(assert, '#e0e0e0', ['#1db2f5', '#f5564a', '#97c95c']);
 });
 
 QUnit.test('Palette', function(assert) {
@@ -612,6 +612,7 @@ QUnit.test('Default palette', function(assert) {
 QUnit.test('Background color', function(assert) {
     this.$container.dxBarGauge({
         values: [10, 20, 30],
+        palette: "office",
         backgroundColor: 'black'
     });
     this.checkColors(assert, 'black', ['#5f8b95', '#ba4d51', '#af8a53']);
@@ -619,14 +620,14 @@ QUnit.test('Background color', function(assert) {
 
 //  B254364
 QUnit.test('Colors order is preserved during increasing bars count', function(assert) {
-    this.$container.dxBarGauge({ values: [10, 20, 30, 40] });
+    this.$container.dxBarGauge({ values: [10, 20, 30, 40], palette: "office" });
     this.$container.dxBarGauge('instance').values([5, 15, 25, 35, 45]);
     this.checkColors(assert, '#e0e0e0', ['#5f8b95', '#ba4d51', '#af8a53', '#955f71', '#859666']);
 });
 
 //  B254364
 QUnit.test('Colors order is preserved during decreasing bars count', function(assert) {
-    this.$container.dxBarGauge({ values: [10, 20, 30, 40] });
+    this.$container.dxBarGauge({ values: [10, 20, 30, 40], palette: "office" });
     this.$container.dxBarGauge('instance').values([5, 15, 25]);
     this.checkColors(assert, '#e0e0e0', ['#5f8b95', '#ba4d51', '#af8a53']);
 });
@@ -635,6 +636,7 @@ QUnit.test('Colors order is preserved during decreasing bars count', function(as
 QUnit.test('Connector color', function(assert) {
     this.$container.dxBarGauge({
         values: [10, 20, 30],
+        palette: "office",
         label: {
             connectorColor: 'red'
         }
@@ -688,6 +690,7 @@ QUnit.test('repair visibility for hidden connector', function(assert) {
 QUnit.test('Font color', function(assert) {
     this.$container.dxBarGauge({
         values: [10, 20, 30],
+        palette: "office",
         label: {
             font: { color: 'blue' }
         }

@@ -10,15 +10,28 @@ var vizUtils = require("./core/utils"),
     _extend = extend,
     _normalizeEnum = vizUtils.normalizeEnum,
     HIGHLIGHTING_STEP = 50,
-    DEFAULT = "default",
-    currentPaletteName = DEFAULT;
+    DEFAULT_PALETTE = "material",
+    currentPaletteName;
 
 var palettes = {
+    [DEFAULT_PALETTE]: {
+        simpleSet: ["#1db2f5", "#f5564a", "#97c95c", "#ffc720", "#eb3573", "#a63db8"],
+        indicatingSet: ["#97c95c", "#ffc720", "#f5564a"],
+        gradientSet: ["#1db2f5", "#97c95c"]
+    },
+
     "default": {
         simpleSet: ["#5f8b95", "#ba4d51", "#af8a53", "#955f71", "#859666", "#7e688c"],
         indicatingSet: ["#a3b97c", "#e1b676", "#ec7f83"],
         gradientSet: ["#5f8b95", "#ba4d51"]
     },
+
+    "office": {
+        simpleSet: ["#5f8b95", "#ba4d51", "#af8a53", "#955f71", "#859666", "#7e688c"],
+        indicatingSet: ["#a3b97c", "#e1b676", "#ec7f83"],
+        gradientSet: ["#5f8b95", "#ba4d51"]
+    },
+
     "harmony light": {
         simpleSet: ["#fcb65e", "#679ec5", "#ad79ce", "#7abd5c", "#e18e92", "#b6d623", "#b7abea", "#85dbd5"],
         indicatingSet: ["#b6d623", "#fcb65e", "#e18e92"],
@@ -91,10 +104,10 @@ var palettes = {
 
 function currentPalette(name) {
     if(name === undefined) {
-        return currentPaletteName;
+        return currentPaletteName || DEFAULT_PALETTE;
     } else {
         name = _normalizeEnum(name);
-        currentPaletteName = name in palettes ? name : DEFAULT;
+        currentPaletteName = name in palettes ? name : undefined;
     }
 }
 
@@ -109,7 +122,7 @@ function getPalette(palette, parameters) {
             result = palettes[_normalizeEnum(palette)];
         }
         if(!result) {
-            result = palettes[currentPaletteName];
+            result = palettes[currentPalette()];
         }
     }
     result = result || null;
@@ -439,8 +452,8 @@ function GradientPalette(source, themeDefaultPalette) {
 }
 
 function selectPaletteOnSeniority(source, themeDefaultPalette) {
-    var curPalette = currentPalette();
-    return source || (curPalette !== DEFAULT ? curPalette : themeDefaultPalette);
+    var curPalette = currentPaletteName;
+    return source || (curPalette === undefined ? themeDefaultPalette : currentPalette());
 }
 
 _extend(exports, {
