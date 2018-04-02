@@ -1733,10 +1733,6 @@ var SchedulerWorkSpace = Widget.inherit({
             .eq(indexes.cellIndex);
     },
 
-    _allDayOffset: function(groupIndex) {
-        return groupIndex;
-    },
-
     _getCells: function(allDay) {
         var cellClass = allDay ? ALL_DAY_TABLE_CELL_CLASS : DATE_TABLE_CELL_CLASS;
         return this.$element().find("." + cellClass);
