@@ -498,10 +498,20 @@
     padding-top: @MATERIAL_SCHEDULER_HEADER_HEIGHT;
     margin-top: -@MATERIAL_SCHEDULER_HEADER_HEIGHT;
 
+    &:not(.dx-scheduler-work-space-all-day)&:not(.dx-scheduler-work-space-month)&:not(.dx-scheduler-timeline) {
+        .dx-scheduler-header-panel {
+            border-bottom-width: 1px;
+        }
+        .dx-scheduler-all-day-title-hidden {
+            border-top: none;
+        }
+    }
+
     &.dx-scheduler-work-space-grouped {
         .dx-scheduler-all-day-title {
             border-top: @SCHEDULER_BASE_BORDER;
         }
+
 
         .dx-scheduler-date-table-cell {
             border-left: @SCHEDULER_BASE_BORDER;
@@ -512,7 +522,6 @@
                 border-bottom: none;
             }
         }
-
 
         &.dx-scheduler-agenda {
             .dx-scheduler-date-table-cell {
@@ -549,6 +558,10 @@
     &.dx-state-hover {
         background-color: @scheduler-cell-hover-bg;
         color: @SCHEDULER_WORKSPACE_HOVERED_CELL_COLOR;
+    }
+
+    &.dx-scheduler-focused-cell {
+        .box-shadow(none);
     }
 }
 
