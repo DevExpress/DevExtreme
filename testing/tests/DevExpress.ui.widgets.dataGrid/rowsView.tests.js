@@ -7073,3 +7073,111 @@ QUnit.test("Update loadPanel", function(assert) {
     assert.equal($loadPanelElement.position().top, loadPanelPosition.top, "position of the load panel is not changed");
     assert.ok(that.rowsView._loadPanel.option("visible"), "visible load panel");
 });
+
+QUnit.module("Customization of the command columns", {
+    beforeEach: function() {
+        this.items = [
+            { name: "Alex", age: 15, lastName: "Heart" },
+            { name: "Dan", age: 16, lastName: "Peyton" },
+            { name: "Vadim", age: 17, lastName: "Reagan" }
+        ];
+
+        this.options = {
+            columns: ["lastName", "name", "age"],
+            dataSource: {
+                asyncLoadEnabled: false,
+                store: this.items
+            },
+        };
+
+        this.clock = sinon.useFakeTimers();
+
+        this.setupDataGridModules = function() {
+            setupDataGridModules(this, ["data", "columns", "columnHeaders", "rows", "grouping", "masterDetail", "editing", "selection", "adaptivity"], {
+                initViews: true
+            });
+        };
+    },
+    afterEach: function() {
+        this.dispose && this.dispose();
+        this.clock.restore();
+    }
+}, function() {
+    QUnit.test("The edit column", function(assert) {
+        // arrange
+        var $testElement = $("#container");
+
+        this.options.editing = {
+            mode: "row",
+            allowUpdating: true,
+            texts: {
+                editRow: "Edit"
+            }
+        };
+        this.options.columns.push({
+            command: "edit",
+            cellTemplate: function(container, options) {
+                $(container).text("Test");
+            },
+            width: 200,
+            visibleIndex: -1
+        });
+        this.setupDataGridModules();
+
+        // act
+        this.rowsView.render($testElement);
+
+        // assert
+        assert.strictEqual($testElement.find(".dx-data-row").children().first().html(), "Test", "markup of the edit column");
+        assert.strictEqual($testElement.find("colgroup > col").first().get(0).style.width, "200px", "width of the edit column");
+    });
+
+    QUnit.test("The select column", function(assert) {
+        // arrange
+        var $testElement = $("#container");
+
+        this.options.selection = {
+            mode: "multiple",
+            showCheckBoxesMode: "always"
+        };
+        this.options.columns.push({
+            command: "select",
+            cellTemplate: function(container, options) {
+                $(container).text("Test");
+            },
+            width: 200,
+            visibleIndex: 0
+        });
+        this.setupDataGridModules();
+
+        // act
+        this.rowsView.render($testElement);
+
+        // assert
+        assert.strictEqual($testElement.find(".dx-data-row").children().last().html(), "Test", "markup of the select column");
+        assert.strictEqual($testElement.find("colgroup > col").last().get(0).style.width, "200px", "width of the select column");
+    });
+
+    QUnit.test("The adaptive column", function(assert) {
+        // arrange
+        var $testElement = $("#container").width(200);
+
+        this.options.columnHidingEnabled = true;
+        this.options.columns.push({
+            command: "adaptive",
+            cellTemplate: function(container, options) {
+                $(container).text("Test");
+            },
+            width: 100,
+            visibleIndex: -1
+        });
+        this.setupDataGridModules();
+
+        // act
+        this.rowsView.render($testElement);
+
+        // assert
+        assert.strictEqual($testElement.find(".dx-data-row").children().first().html(), "Test", "markup of the adaptive column");
+        assert.strictEqual($testElement.find("colgroup > col").first().get(0).style.width, "100px", "width of the adaptive column");
+    });
+});

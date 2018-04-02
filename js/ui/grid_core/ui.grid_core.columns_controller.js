@@ -657,7 +657,7 @@ module.exports = {
                     }
 
                     if(columnOptions.command) {
-                        return extend(true, {}, columnOptions);
+                        that.addCommandColumn(extend(true, {}, columnOptions), true);
                     } else {
                         commonColumnOptions = that.getCommonSettings();
                         if(userStateColumnOptions && userStateColumnOptions.name && userStateColumnOptions.dataField) {
@@ -1721,7 +1721,8 @@ module.exports = {
                         return extend({}, column, {
                             visibleWidth: null,
                             minWidth: null,
-                            cellTemplate: !typeUtils.isDefined(column.groupIndex) ? column.cellTemplate : null
+                            cellTemplate: !typeUtils.isDefined(column.groupIndex) ? column.cellTemplate : null,
+                            headerCellTemplate: null
                         }, expandColumn, { index: column.index });
                     });
 
@@ -2511,6 +2512,8 @@ module.exports = {
                         column = createColumn(that, options),
                         index = that._columns.length;
 
+                    if(!column) return;
+
                     that._columns.push(column);
 
                     if(column.isBand) {
@@ -2537,17 +2540,27 @@ module.exports = {
                         that.updateColumns(that._dataSource);
                     }
                 },
-                addCommandColumn: function(options) {
-                    var commandColumns = this._commandColumns,
-                        i;
+                addCommandColumn: function(options, isCustomCommandColumn) {
+                    var i,
+                        options1,
+                        options2,
+                        commandColumnIndex = -1,
+                        commandColumns = this._commandColumns;
 
                     for(i = 0; i < commandColumns.length; i++) {
                         if(commandColumns[i].command === options.command) {
-                            return;
+                            commandColumnIndex = i;
+                            break;
                         }
                     }
 
-                    commandColumns.push(options);
+                    if(commandColumnIndex >= 0) {
+                        options1 = isCustomCommandColumn ? commandColumns[commandColumnIndex] : options;
+                        options2 = isCustomCommandColumn ? options : commandColumns[commandColumnIndex];
+                        commandColumns[commandColumnIndex] = extend({}, options1, options2);
+                    } else {
+                        commandColumns.push(options);
+                    }
                 },
                 getUserState: function() {
                     var columns = this._columns,

@@ -155,6 +155,8 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
             var columnsController = this.getController("columns"),
                 isSelectColumnVisible = this.isSelectColumnVisible();
 
+            columnsController.columnOption("command:select", "visible", isSelectColumnVisible);
+
             columnsController.addCommandColumn({
                 command: "select",
                 visible: isSelectColumnVisible,
@@ -166,8 +168,6 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
                 cellTemplate: getSelectionCellTemplate(),
                 headerCellTemplate: getSelectionHeaderTemplate()
             });
-
-            columnsController.columnOption("command:select", "visible", isSelectColumnVisible);
         },
 
         _createSelection: function(options) {
@@ -309,6 +309,9 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
                         that.selectRows(args.value);
                     }
                     args.handled = true;
+                    break;
+                case "columnFixing":
+                    this._updateSelectColumn();
                     break;
             }
         },

@@ -363,36 +363,6 @@ QUnit.test('Updating column header after change grouping', function(assert) {
     assert.equal(cells.eq(2).text(), 'Column 3', 'header 3 text');
 });
 
-
-// T259458
-QUnit.skip('Command column do not use headerCellTemplate', function(assert) { // arrange
-    var testElement = $('#container'),
-        headerCellTemplateCalled = [],
-        customHeaderTemplate = function(header, info) {
-            headerCellTemplateCalled[info.column.caption] = true;
-            return;
-        };
-
-    $.extend(this.columns, [
-        {
-            caption: 'Column 1',
-            command: 'expand',
-            headerCellTemplate: customHeaderTemplate
-        },
-        {
-            caption: 'Column 2',
-            headerCellTemplate: customHeaderTemplate
-        }
-    ]);
-
-    // act
-    this.columnHeadersView.render(testElement);
-
-    // assert
-    assert.equal(headerCellTemplateCalled["Column 1"], undefined, 'headerCellTemplate not called in command column');
-    assert.equal(headerCellTemplateCalled["Column 2"], true, 'headerCellTemplate is called for not command column');
-});
-
 // T208247
 QUnit.test('Not updating column header after filtering', function(assert) {
     // arrange

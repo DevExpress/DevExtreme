@@ -5792,6 +5792,21 @@ QUnit.test("getGroupDataSourceParameters. Several group columns when calculateCe
     assert.deepEqual(groupParameters[1], { selector: 'field1', desc: false, isExpanded: false });
 });
 
+// T259458
+QUnit.test("The headerCellTemplate of the group column should not be applied for expand column", function(assert) {
+    // arrange
+    var expandColumns;
+
+    this.applyOptions({ columns: [{ dataField: "field", groupIndex: 0, headerCellTemplate: function() {} }] });
+
+    // act, assert
+    expandColumns = this.columnsController.getExpandColumns();
+    assert.strictEqual(expandColumns.length, 1, "count expand column");
+    assert.strictEqual(expandColumns[0].dataField, "field");
+    assert.strictEqual(expandColumns[0].groupIndex, 0);
+    assert.strictEqual(expandColumns[0].headerCellTemplate, null);
+});
+
 QUnit.module("ParseValue", { beforeEach: setupModule, afterEach: teardownModule });
 
 // T141564

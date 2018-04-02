@@ -1161,6 +1161,8 @@ var EditingController = modules.ViewController.inherit((function() {
             var that = this,
                 isEditColumnVisible = that._isEditColumnVisible();
 
+            that._columnsController.columnOption("command:edit", "visible", isEditColumnVisible);
+
             that._columnsController.addCommandColumn({
                 command: "edit",
                 visible: isEditColumnVisible,
@@ -1168,8 +1170,6 @@ var EditingController = modules.ViewController.inherit((function() {
                 width: "auto",
                 cellTemplate: that._getEditCellTemplate()
             });
-
-            that._columnsController.columnOption("command:edit", "visible", isEditColumnVisible);
         },
 
         _isEditColumnVisible: function() {
