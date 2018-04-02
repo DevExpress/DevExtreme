@@ -1093,7 +1093,7 @@ var commonSeries = {
         * @publicName calculate
         * @type function(aggregationInfo, series)
         * @type_function_param1 aggregationInfo:chartPointAggregationInfoObject
-        * @type_function_param2 series:baseSeriesObject
+        * @type_function_param2 series:chartSeriesObject
         * @type_function_return object|Array<object>
         * @default undefined
         */
