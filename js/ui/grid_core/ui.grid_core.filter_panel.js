@@ -188,7 +188,7 @@ module.exports = {
             /**
              * @name GridBaseOptions_filterPanel
              * @publicName filterPanel
-             * @type dxFilterPanelOptions
+             * @type object
              * @default {}
              */
             filterPanel: {
