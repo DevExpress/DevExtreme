@@ -1,15 +1,10 @@
 <!DOCTYPE html>
-
 <html>
 <head>
     <title>DevExtreme jQuery Example</title>
-
     <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.common.css"/>
-
     <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.light.css"/>
-
     <script type="text/javascript" src="../vendor/jquery/jquery-3.1.0.js"></script>
-
     <!--<script type="text/javascript" src="../vendor/cldr/cldr.js"></script>
     <script type="text/javascript" src="../vendor/cldr/cldr/event.js"></script>
     <script type="text/javascript" src="../vendor/cldr/cldr/supplemental.js"></script>
@@ -19,66 +14,18 @@
     <script type="text/javascript" src="../vendor/globalize/globalize/date.js"></script>
     <script type="text/javascript" src="../vendor/globalize/globalize/message.js"></script>
     <script type="text/javascript" src="../vendor/globalize/globalize/number.js"></script>-->
-
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js"></script>
    
 </head>
-
 <body>
-    <div id="scheduler"></div>
-
+    <div id="button"></div>
     <script>
         $(function() {
-            $("#scheduler").dxScheduler({
-                dataSource: [{
-                    text: "1",
-                    startDate: new Date(2018, 2, 16, 10),
-                    endDate: new Date(2018, 2, 16, 11),
-                    priorityId: 1
-                }, {
-                    text: "2",
-                    startDate: new Date(2018, 2, 16, 12),
-                    endDate: new Date(2018, 2, 16, 12, 30),
-                    priorityId: 2
-                }],
-                views: ["day", {
-                    type: "week",
-                    name: "week",
-                    grouping: "horizontal"
-                 }, "month", "timelineDay"],
-                currentView: "week",
-                currentDate: new Date(2018, 2, 16),
-                groups: ["priorityId"],
-                resources: [
-                    { 
-                        fieldExpr: "priorityId", 
-                        allowMultiple: false, 
-                        dataSource: priorityData,
-                        label: "Priority"
-                    }
-                ],
-                showAllDayPanel: false,
-                startDayHour: 9,
-                endDayHour: 14,
-                height: 600
+            $("#button").dxButton({
+                text: 'Click me!',
+                onClick: function() { alert("clicked"); }
             });
         });
-
-        var priorityData = [
-            {
-                text: "Low Priority",
-                id: 1,
-                color: "#1e90ff"
-            }, {
-                text: "High Priority",
-                id: 2,
-                color: "#ff9747"
-            }, {
-                text: "lala Priority",
-                id: 3,
-                color: "#ff9747"
-            }
-        ];
     </script>
 </body>
 </html>

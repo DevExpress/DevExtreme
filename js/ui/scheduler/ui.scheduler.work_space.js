@@ -1313,11 +1313,7 @@ var SchedulerWorkSpace = Widget.inherit({
             timeCellDuration = this.getCellDuration(),
             lastCellInDay = this._calculateDayDuration() / this.option("hoursInterval");
 
-        if(i < lastCellInDay) {
-            startViewDate.setMilliseconds(startViewDate.getMilliseconds() + timeCellDuration * i);
-        } else {
-            startViewDate.setMilliseconds(startViewDate.getMilliseconds() + timeCellDuration * (i % lastCellInDay));
-        }
+        startViewDate.setMilliseconds(startViewDate.getMilliseconds() + timeCellDuration * (i % lastCellInDay));
 
         return startViewDate;
     },
