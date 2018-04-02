@@ -1,36 +1,35 @@
 "use strict";
 
-var vizUtils = require("./core/utils"),
-    _floor = Math.floor,
-    _ceil = Math.ceil,
-    _Color = require("../color"),
-    extend = require("../core/utils/extend").extend,
-    _isArray = Array.isArray,
-    _isString = require("../core/utils/type").isString,
-    _extend = extend,
-    _normalizeEnum = vizUtils.normalizeEnum,
-    HIGHLIGHTING_STEP = 50,
-    DEFAULT_PALETTE = "material",
-    currentPaletteName;
+import { normalizeEnum } from "./core/utils";
+import { extend } from "../core/utils/extend";
+import errors from "../core/errors";
 
-var palettes = {
+const _floor = Math.floor;
+const _ceil = Math.ceil;
+const _Color = require("../color");
+const _isArray = Array.isArray;
+
+const _isString = require("../core/utils/type").isString;
+
+const HIGHLIGHTING_STEP = 50;
+const DEFAULT_PALETTE = "material";
+
+const officePalette = {
+    simpleSet: ["#5f8b95", "#ba4d51", "#af8a53", "#955f71", "#859666", "#7e688c"],
+    indicatingSet: ["#a3b97c", "#e1b676", "#ec7f83"],
+    gradientSet: ["#5f8b95", "#ba4d51"]
+};
+
+const palettes = {
     [DEFAULT_PALETTE]: {
         simpleSet: ["#1db2f5", "#f5564a", "#97c95c", "#ffc720", "#eb3573", "#a63db8"],
         indicatingSet: ["#97c95c", "#ffc720", "#f5564a"],
         gradientSet: ["#1db2f5", "#97c95c"]
     },
 
-    "default": {
-        simpleSet: ["#5f8b95", "#ba4d51", "#af8a53", "#955f71", "#859666", "#7e688c"],
-        indicatingSet: ["#a3b97c", "#e1b676", "#ec7f83"],
-        gradientSet: ["#5f8b95", "#ba4d51"]
-    },
+    "default": officePalette, // deprecated in 18.1
 
-    "office": {
-        simpleSet: ["#5f8b95", "#ba4d51", "#af8a53", "#955f71", "#859666", "#7e688c"],
-        indicatingSet: ["#a3b97c", "#e1b676", "#ec7f83"],
-        gradientSet: ["#5f8b95", "#ba4d51"]
-    },
+    "office": officePalette,
 
     "harmony light": {
         simpleSet: ["#fcb65e", "#679ec5", "#ad79ce", "#7abd5c", "#e18e92", "#b6d623", "#b7abea", "#85dbd5"],
@@ -102,11 +101,13 @@ var palettes = {
     }
 };
 
+let currentPaletteName;
+
 function currentPalette(name) {
     if(name === undefined) {
         return currentPaletteName || DEFAULT_PALETTE;
     } else {
-        name = _normalizeEnum(name);
+        name = normalizeEnum(name);
         currentPaletteName = name in palettes ? name : undefined;
     }
 }
@@ -119,7 +120,7 @@ function getPalette(palette, parameters) {
         return palette.slice(0);
     } else {
         if(_isString(palette)) {
-            result = palettes[_normalizeEnum(palette)];
+            result = palettes[normalizeEnum(palette)];
         }
         if(!result) {
             result = palettes[currentPalette()];
@@ -141,8 +142,8 @@ function registerPalette(name, palette) {
         item.gradientSet = _isArray(palette.gradientSet) ? palette.gradientSet.slice(0) : undefined;
     }
     if(item.simpleSet || item.indicatingSet || item.gradientSet) {
-        paletteName = _normalizeEnum(name);
-        _extend((palettes[paletteName] = palettes[paletteName] || {}), item);
+        paletteName = normalizeEnum(name);
+        extend((palettes[paletteName] = palettes[paletteName] || {}), item);
     }
 }
 
@@ -452,11 +453,16 @@ function GradientPalette(source, themeDefaultPalette) {
 }
 
 function selectPaletteOnSeniority(source, themeDefaultPalette) {
-    var curPalette = currentPaletteName;
-    return source || (curPalette === undefined ? themeDefaultPalette : currentPalette());
+    const result = source || (currentPaletteName === undefined ? themeDefaultPalette : currentPalette());
+
+    if(result === "default") {
+        errors.log("W0016", '"palette"', 'Default', "18.1", 'Use the "Office" value instead.');
+    }
+
+    return result;
 }
 
-_extend(exports, {
+extend(exports, {
     Palette: Palette,
     DiscretePalette: DiscretePalette,
     GradientPalette: GradientPalette,

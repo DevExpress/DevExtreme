@@ -1,8 +1,9 @@
 "use strict";
 
-var $ = require("jquery"),
-    Color = require("color"),
-    paletteModule = require("viz/palette");
+import $ from "jquery";
+import Color from "color";
+import paletteModule from "viz/palette";
+import errors from "core/errors";
 
 var environment = {
     beforeEach: function() {
@@ -167,6 +168,18 @@ QUnit.test('Disposing', function(assert) {
 QUnit.test('Palette is predefined', function(assert) {
     assert.strictEqual(new this.Palette('default', { type: 'simpleSet' }).getNextColor(), this.palettes['default'].simpleSet[0], 'default');
     assert.strictEqual(new this.Palette('Soft Pastel', { type: 'simpleSet' }).getNextColor(), this.palettes['soft pastel'].simpleSet[0], 'Soft Pastel');
+});
+
+QUnit.test("Throw warning when default palette name is used", function(assert) {
+    sinon.spy(errors, "log");
+
+    try {
+        new this.Palette('default', { type: 'simpleSet' });
+
+        assert.deepEqual(errors.log.lastCall.args, ["W0016", '"palette"', 'Default', "18.1", 'Use the "Office" value instead.']);
+    } finally {
+        errors.log.restore();
+    }
 });
 
 QUnit.test('Resolve theme palette', function(assert) {
