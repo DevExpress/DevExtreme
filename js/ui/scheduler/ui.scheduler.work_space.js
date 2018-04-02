@@ -403,12 +403,12 @@ var SchedulerWorkSpace = Widget.inherit({
             case "currentDate":
             case "groups":
             case "startDate":
-                this._initAllDayPanelElements();
+                this._createAllDayPanelElements();
                 this._cleanWorkSpace();
                 break;
             case "groupOrientation":
                 this._initGroupedStrategy();
-                this._initAllDayPanelElements();
+                this._createAllDayPanelElements();
                 this._cleanWorkSpace();
                 break;
             case "showAllDayPanel":
@@ -564,6 +564,7 @@ var SchedulerWorkSpace = Widget.inherit({
         this._$allDayContainer = $("<div>").addClass(ALL_DAY_CONTAINER_CLASS);
 
         this._initAllDayPanelElements();
+        this._createAllDayPanelElements();
 
         this._$timePanel = $("<table>").addClass(this._getTimePanelClass());
 
@@ -576,7 +577,9 @@ var SchedulerWorkSpace = Widget.inherit({
         this._allDayTitles = [];
         this._allDayTables = [];
         this._allDayPanels = [];
+    },
 
+    _createAllDayPanelElements: function() {
         var groupCount = this._getGroupCount();
 
         if(this._isVerticalGroupedWorkSpace() && groupCount !== 0) {
@@ -1276,7 +1279,7 @@ var SchedulerWorkSpace = Widget.inherit({
             cellTemplate: this.option("timeCellTemplate"),
             getCellText: this._getTimeText.bind(this),
             groupCount: this._getGroupCount(),
-            allDayElements: this._groupedStrategy.builtAllDayRowsIntoDateTable() ? this._allDayTitles : undefined
+            allDayElements: this._insertAllDayRowsIntoDateTable() ? this._allDayTitles : undefined
         });
     },
 
@@ -1335,7 +1338,7 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _insertAllDayRowsIntoDateTable: function() {
-        return this._groupedStrategy.builtAllDayRowsIntoDateTable();
+        return this._groupedStrategy.insertAllDayRowsIntoDateTable();
     },
 
     _getTotalCellCount: function(groupCount) {

@@ -24,7 +24,7 @@ var HorizontalGroupedStrategy = GroupedStrategy.inherit({
         return this._workSpace._getGroupCount() || 1;
     },
 
-    builtAllDayRowsIntoDateTable: function() {
+    insertAllDayRowsIntoDateTable: function() {
         return false;
     },
 

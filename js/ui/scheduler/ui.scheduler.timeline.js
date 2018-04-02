@@ -190,7 +190,7 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
         return false;
     },
 
-    _initAllDayPanelElements: noop,
+    _createAllDayPanelElements: noop,
 
     _renderView: function() {
         this._setFirstViewDate();

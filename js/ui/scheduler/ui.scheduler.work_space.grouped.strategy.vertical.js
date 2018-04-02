@@ -31,7 +31,7 @@ var VerticalGroupedStrategy = GroupedStrategy.inherit({
         return 1;
     },
 
-    builtAllDayRowsIntoDateTable: function() {
+    insertAllDayRowsIntoDateTable: function() {
         return this._workSpace.option("showAllDayPanel");
     },
 
