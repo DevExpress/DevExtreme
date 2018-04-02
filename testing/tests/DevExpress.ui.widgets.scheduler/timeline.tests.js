@@ -12,6 +12,8 @@ var $ = require("jquery"),
     SchedulerTimelineWeek = require("ui/scheduler/ui.scheduler.timeline_week"),
     SchedulerTimelineWorkWeek = require("ui/scheduler/ui.scheduler.timeline_work_week"),
     SchedulerTimelineMonth = require("ui/scheduler/ui.scheduler.timeline_month"),
+    SchedulerWorkSpaceHorizontalStrategy = require("ui/scheduler/ui.scheduler.work_space.grouped.strategy.horizontal"),
+    SchedulerWorkSpaceVerticalStrategy = require("ui/scheduler/ui.scheduler.work_space.grouped.strategy.vertical"),
     SchedulerResourcesManager = require("ui/scheduler/ui.scheduler.resource_manager"),
     domUtils = require("core/utils/dom"),
     dateLocalization = require("localization/date"),
@@ -74,6 +76,10 @@ QUnit.module("Timeline Base", {
 
 QUnit.test("Scheduler timeline should be initialized", function(assert) {
     assert.ok(this.instance instanceof SchedulerTimeline, "dxSchedulerTimeLine was initialized");
+});
+
+QUnit.test("Scheduler worktimelinespace day should have right groupedStrategy by default", function(assert) {
+    assert.ok(this.instance._groupedStrategy instanceof SchedulerWorkSpaceVerticalStrategy, "Grouped strategy is right");
 });
 
 QUnit.test("Scheduler timeline should have a right css class", function(assert) {
@@ -669,6 +675,10 @@ QUnit.module("Timeline Day, groupOrientation = horizontal", {
 
         this.instance.option("groups", [{ name: "one", items: [{ id: 1, text: "a" }, { id: 2, text: "b" }] }]);
     }
+});
+
+QUnit.test("Scheduler worktimelinespace day should have right groupedStrategy, groupOrientation = horizontal", function(assert) {
+    assert.ok(this.instance._groupedStrategy instanceof SchedulerWorkSpaceHorizontalStrategy, "Grouped strategy is right");
 });
 
 QUnit.test("Scheduler timeline day should have a right css class, groupOrientation = horizontal", function(assert) {

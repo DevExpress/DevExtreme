@@ -7,7 +7,7 @@ var VerticalGroupedStrategy = GroupedStrategy.inherit({
     prepareCellIndexes: function(cellCoordinates, groupIndex) {
         var rowIndex = cellCoordinates.rowIndex + groupIndex * this._workSpace._getRowCount();
 
-        if(this._workSpace.option("showAllDayPanel")) {
+        if(this._workSpace.supportAllDayRow() && this._workSpace.option("showAllDayPanel")) {
             rowIndex += groupIndex;
         }
 
@@ -63,6 +63,18 @@ var VerticalGroupedStrategy = GroupedStrategy.inherit({
         }
 
         return cellClass;
+    },
+
+    getHorizontalMax: function(groupIndex) {
+        return this._workSpace.getMaxAllowedPosition()[0];
+    },
+
+    getVerticalMax: function(groupIndex) {
+        return this._workSpace.getMaxAllowedVerticalPosition()[groupIndex];
+    },
+
+    calculateTimeCellRepeatCount: function() {
+        return this._workSpace._getGroupCount() || 1;
     }
 });
 

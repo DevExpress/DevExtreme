@@ -1997,6 +1997,7 @@ QUnit.testStart(function() {
 
         var $element = $("#scheduler-work-space").dxSchedulerWorkSpaceMonth({
             focusStateEnabled: true,
+            currentDate: new Date(2018, 2, 1),
             onCellContextMenu: function(e) {
                 assert.ok(true, "event is handled");
                 assert.equal(isRenderer(e.cellElement), !!config().useJQuery, "cell is correct");

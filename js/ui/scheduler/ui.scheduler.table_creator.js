@@ -11,23 +11,34 @@ var SchedulerTableCreator = {
     VERTICAL: "vertical",
     HORIZONTAL: "horizontal",
 
+    insertAllDayRow: function(allDayElements, tableBody, index) {
+        if(allDayElements[index]) {
+            var row = allDayElements[index].find("tr");
+
+            if(!row.length) {
+                row = domAdapter.createElement("tr");
+                row.append(allDayElements[index].get(0));
+            }
+
+            tableBody.appendChild(row.get ? row.get(0) : row);
+        }
+    },
+
     makeTable: function(options) {
         var tableBody = domAdapter.createElement("tbody"),
             templateCallbacks = [],
             row,
             rowCountInGroup = options.groupCount ? options.rowCount / options.groupCount : options.rowCount,
-            allDayElementIndex = 0;
+            allDayElementIndex = 0,
+            allDayElements = options.allDayElements;
 
         $(options.container).append(tableBody);
-        if(options.groupCount && options.allDayElements && options.allDayElements.length) {
-            row = options.allDayElements[0].find("tr");
-            if(!row.length) {
-                row = domAdapter.createElement("tr");
-                row.append(options.allDayElements[0].get(0));
-            }
+
+        if(allDayElements) {
+            this.insertAllDayRow(allDayElements, tableBody, 0);
             allDayElementIndex++;
-            tableBody.appendChild(row.get ? row.get(0) : row);
         }
+
         for(var i = 0; i < options.rowCount; i++) {
             row = domAdapter.createElement("tr");
             tableBody.appendChild(row);
@@ -95,16 +106,10 @@ var SchedulerTableCreator = {
                     }
                 }
             }
-            if((i + 1) !== 0 && options.allDayElements && options.groupCount && ((i + 1) % rowCountInGroup === 0)) {
-                if(options.allDayElements[allDayElementIndex]) {
-                    row = options.allDayElements[allDayElementIndex].find("tr");
-                    if(!row.length) {
-                        row = domAdapter.createElement("tr");
-                        row.append(options.allDayElements[allDayElementIndex].get(0));
-                    }
-                    allDayElementIndex++;
-                    tableBody.appendChild(row.get ? row.get(0) : row);
-                }
+
+            if(allDayElements && (i + 1) !== 0 && ((i + 1) % rowCountInGroup === 0)) {
+                this.insertAllDayRow(allDayElements, tableBody, allDayElementIndex);
+                allDayElementIndex++;
             }
         }
 

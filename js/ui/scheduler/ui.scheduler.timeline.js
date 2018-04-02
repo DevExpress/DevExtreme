@@ -313,6 +313,7 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
         if(this._isHorizontalGroupedWorkSpace()) {
             return;
         }
+
         var cellHeight = this.getCellHeight() - DATE_TABLE_CELL_BORDER * 2;
         cellHeight = this._ensureGroupHeaderCellsHeight(cellHeight);
 
@@ -350,24 +351,9 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
         };
     },
 
-    _getHorizontalMax: function(groupIndex) {
-        return this._isHorizontalGroupedWorkSpace() ? this.getMaxAllowedPosition()[groupIndex] : this.getMaxAllowedPosition()[0];
-    },
-
-    _getVerticalMax: function(groupIndex) {
-        return this._isHorizontalGroupedWorkSpace() ? this.getMaxAllowedVerticalPosition()[0] : this.getMaxAllowedVerticalPosition()[groupIndex];
-    },
 
     _getCellByCoordinates: function(cellCoordinates, groupIndex) {
-        var indexes = {};
-
-        if(this._isHorizontalGroupedWorkSpace()) {
-            indexes.rowIndex = cellCoordinates.rowIndex;
-            indexes.cellIndex = cellCoordinates.cellIndex + groupIndex * this._getCellCount();
-        } else {
-            indexes.rowIndex = cellCoordinates.rowIndex + groupIndex;
-            indexes.cellIndex = cellCoordinates.cellIndex;
-        }
+        var indexes = this._groupedStrategy.prepareCellIndexes(cellCoordinates, groupIndex);
 
         return this._$dateTable
             .find("tr")

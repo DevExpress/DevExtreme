@@ -2,6 +2,8 @@
 
 import $ from "jquery";
 import SchedulerWorkSpace from "ui/scheduler/ui.scheduler.work_space";
+import SchedulerWorkSpaceHorizontalStrategy from "ui/scheduler/ui.scheduler.work_space.grouped.strategy.horizontal";
+import SchedulerWorkSpaceVerticalStrategy from "ui/scheduler/ui.scheduler.work_space.grouped.strategy.vertical";
 import SchedulerResourcesManager from "ui/scheduler/ui.scheduler.resource_manager";
 import dateLocalization from "localization/date";
 import "ui/scheduler/ui.scheduler";
@@ -101,6 +103,10 @@ const moduleConfig = {
 QUnit.module("Workspace markup", moduleConfig, () => {
     QUnit.test("Scheduler workspace should be initialized", (assert) => {
         assert.ok(this.instance instanceof SchedulerWorkSpace, "dxSchedulerWorkSpace was initialized");
+    });
+
+    QUnit.test("Scheduler workspace day should have right groupedStrategy by default", (assert) => {
+        assert.ok(this.instance._groupedStrategy instanceof SchedulerWorkSpaceHorizontalStrategy, "Grouped strategy is right");
     });
 
     QUnit.test("Scheduler workspace should have a right css class", (assert) => {
@@ -519,6 +525,10 @@ QUnit.module("Workspace Day markup with horizontal grouping", dayWithGroupingMod
         const $element = this.instance.$element();
 
         assert.ok($element.hasClass("dx-scheduler-work-space-vertical-grouped"), "Workspace has 'dx-scheduler-work-space-vertical-grouped' css class");
+    });
+
+    QUnit.test("Scheduler workspace day should have right groupedStrategy, groupOrientation = vertical", (assert) => {
+        assert.ok(this.instance._groupedStrategy instanceof SchedulerWorkSpaceVerticalStrategy, "Grouped strategy is right");
     });
 
     QUnit.test("Scheduler all day rows should be built into dateTable", (assert) => {

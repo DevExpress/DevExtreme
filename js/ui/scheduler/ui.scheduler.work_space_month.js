@@ -46,7 +46,7 @@ var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
     },
 
     _calculateCellIndex: function(rowIndex, cellIndex) {
-        if(this._isHorizontalGroupedWorkSpace()) {
+        if(this._isVerticalGroupedWorkSpace()) {
             rowIndex = rowIndex % this._getRowCount();
         } else {
             cellIndex = cellIndex % this._getCellCount();
@@ -256,7 +256,7 @@ var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
         var position = this.callBase(index, groupIndex),
             rowIndex = this._getCellCoordinatesByIndex(index).rowIndex,
             calculatedTopOffset;
-        if(!this._isHorizontalGroupedWorkSpace()) {
+        if(!this._isVerticalGroupedWorkSpace()) {
             calculatedTopOffset = this.getCellHeight() * rowIndex;
         } else {
             calculatedTopOffset = this.getCellHeight() * (rowIndex + groupIndex * this._getRowCount());
