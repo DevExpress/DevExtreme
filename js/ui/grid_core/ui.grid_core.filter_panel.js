@@ -246,7 +246,7 @@ module.exports = {
                      * @name GridBaseOptions_filterPanel_texts_filterEnabledHint
                      * @publicName filterEnabledHint
                      * @type string
-                     * @default "Apply Filter"
+                     * @default "Enable the filter"
                      */
                     filterEnabledHint: messageLocalization.format("dxDataGrid-filterPanelFilterEnabledHint"),
                 }
