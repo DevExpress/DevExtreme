@@ -1044,6 +1044,7 @@ QUnit.test("getAggregationInfo should have ticks out from bounds", function(asse
         type: "continuous",
         aggregationInterval: 5
     });
+
     this.axis.setBusinessRange({ min: 1, minVisible: 1, maxVisible: 100, max: 100, addRange: sinon.stub().returnsThis() });
     this.axis.createTicks(canvas(400));
 
