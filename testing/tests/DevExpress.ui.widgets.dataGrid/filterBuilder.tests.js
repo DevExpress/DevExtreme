@@ -21,7 +21,7 @@ QUnit.module("Common", {
     beforeEach: function() {
         this.initFilterBuilderView = function(options) {
             this.options = options;
-            setupDataGridModules(this, ["columns", "headerFilter", "filterSync", "filterBuilder"], {
+            setupDataGridModules(this, ["columns", "headerFilter", "filterSync", "filterBuilder", "data"], {
                 initViews: true
             });
             this.filterBuilderView.render($("#container"));
