@@ -114,14 +114,19 @@
     }
 }
 
-.dx-scheduler-all-day-title-mixin(@ANDROID5_SCHEDULER_HEADER_HEIGHT + @SCHEDULER_HEADER_PANEL_TOP_GAP);
+&:not(.dx-scheduler-work-space-vertical-grouped) {
+    .dx-scheduler-all-day-title-mixin(@ANDROID5_SCHEDULER_HEADER_HEIGHT + @SCHEDULER_HEADER_PANEL_TOP_GAP);
+}
 
 .dx-scheduler-work-space-week,
 .dx-scheduler-work-space-work-week {
     .dx-scheduler-all-day-title {
         top: @ANDROID5_SCHEDULER_HEADER_HEIGHT + 50px;
     }
-    .dx-scheduler-all-day-title-mixin(@ANDROID5_SCHEDULER_HEADER_HEIGHT + 50px);
+    
+    &:not(.dx-scheduler-work-space-vertical-grouped) {
+        .dx-scheduler-all-day-title-mixin(@ANDROID5_SCHEDULER_HEADER_HEIGHT + 50px);
+    }
 }
 
 .dx-scheduler-work-space-both-scrollbar {
