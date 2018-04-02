@@ -6,6 +6,8 @@ var $ = require("../../core/renderer"),
     typeUtils = require("../../core/utils/type"),
     getPublicElement = require("../../core/utils/dom").getPublicElement;
 
+var ROW_SELECTOR = "tr";
+
 var SchedulerTableCreator = {
 
     VERTICAL: "vertical",
@@ -13,10 +15,10 @@ var SchedulerTableCreator = {
 
     insertAllDayRow: function(allDayElements, tableBody, index) {
         if(allDayElements[index]) {
-            var row = allDayElements[index].find("tr");
+            var row = allDayElements[index].find(ROW_SELECTOR);
 
             if(!row.length) {
-                row = domAdapter.createElement("tr");
+                row = domAdapter.createElement(ROW_SELECTOR);
                 row.append(allDayElements[index].get(0));
             }
 
@@ -40,8 +42,10 @@ var SchedulerTableCreator = {
         }
 
         for(var i = 0; i < options.rowCount; i++) {
-            row = domAdapter.createElement("tr");
+            row = domAdapter.createElement(ROW_SELECTOR);
             tableBody.appendChild(row);
+
+            var isLastRowInGroup = (i + 1) % rowCountInGroup === 0;
 
             if(options.rowClass) {
                 row.className = options.rowClass;
@@ -107,7 +111,7 @@ var SchedulerTableCreator = {
                 }
             }
 
-            if(allDayElements && (i + 1) !== 0 && ((i + 1) % rowCountInGroup === 0)) {
+            if(allDayElements && isLastRowInGroup) {
                 this.insertAllDayRow(allDayElements, tableBody, allDayElementIndex);
                 allDayElementIndex++;
             }
@@ -198,7 +202,7 @@ var SchedulerTableCreator = {
 
         function putCellsToRows() {
             cellStorage.forEach(function(cells) {
-                var row = domAdapter.createElement("tr");
+                var row = domAdapter.createElement(ROW_SELECTOR);
                 if(groupRowClass) {
                     row.className = groupRowClass;
                 }
