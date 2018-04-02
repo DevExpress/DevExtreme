@@ -7097,7 +7097,8 @@ QUnit.test("synchronous render and asynchronous updateDimensions during paging i
         },
         height: 100,
         scrolling: {
-            mode: "virtual"
+            mode: "virtual",
+            useNative: false
         },
         paging: {
             pageSize: 5
