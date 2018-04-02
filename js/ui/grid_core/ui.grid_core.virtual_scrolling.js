@@ -655,7 +655,7 @@ module.exports = {
                 preloadEnabled: false,
                 /**
                  * @name GridBaseOptions_scrolling_rowRenderingMode
-                 * @publicName mode
+                 * @publicName rowRenderingMode
                  * @type Enums.RowScrollingMode
                  * @default "auto"
                  */

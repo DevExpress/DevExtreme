@@ -87,7 +87,6 @@ var ColumnsControllerExtender = (function() {
                 changeTypes: { columns: true, length: 1 }
             });
             this._renderTime = new Date() - date;
-            // console.log(this._renderTime);
         },
         setScrollPosition: function(position) {
             var that = this,
@@ -173,7 +172,7 @@ module.exports = {
             scrolling: {
                 /**
                  * @name GridBaseOptions_scrolling_columnRenderingMode
-                 * @publicName mode
+                 * @publicName columnRenderingMode
                  * @type Enums.ColumnScrollingMode
                  * @default "standard"
                  */
