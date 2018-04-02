@@ -1,7 +1,8 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
-    window = require("../../core/utils/window").getWindow(),
+    windowUtils = require("../../core/utils/window"),
+    window = windowUtils.getWindow(),
     registerComponent = require("../../core/component_registrator"),
     typeUtils = require("../../core/utils/type"),
     each = require("../../core/utils/iterator").each,
@@ -135,9 +136,9 @@ var DateBox = DropDownEditor.inherit({
              * @name dxDateBoxOptions_showAnalogClock
              * @publicName showAnalogClock
              * @type boolean
-             * @default false
+             * @default true
              */
-            showAnalogClock: false,
+            showAnalogClock: true,
 
             /**
             * @name dxDateBoxOptions_value
@@ -547,12 +548,11 @@ var DateBox = DropDownEditor.inherit({
         var $element = this.$element(),
             widthOption = this.option("width"),
             isWidthSet = typeUtils.isDefined(widthOption) || (isRealWidthSet($element) && !this._isSizeUpdatable),
-            isElementVisible = $element.is(":visible"),
             pickerType = this._pickerType,
             // NOTE: no calculateWidth if type is rollers, why?
             shouldCalculateWidth = pickerType !== PICKER_TYPE.rollers && devices.current().platform === "generic";
 
-        if(isWidthSet || !(shouldCalculateWidth && isElementVisible)) {
+        if(!windowUtils.hasWindow() || isWidthSet || !(shouldCalculateWidth && $element.is(":visible"))) {
             return;
         }
 

@@ -40,6 +40,8 @@ var NUMBER_MULTIPLIERS = [1, 2, 2.5, 5],
     MINOR_DELIMITERS = [2, 4, 5, 8, 10],
     VISIBILITY_DELIMITER = 3;
 
+const MINUTE = 60 * 1000;
+
 function discreteGenerator(options) {
     return function(data, screenDelta, tickInterval, forceTickInterval) {
         var categories = vizUtils.getCategoriesInfo(data.categories, data.min, data.max).categories,
@@ -690,18 +692,19 @@ function dateGenerator(options) {
             intervalObject = typeUtils.isString(interval) ? dateUtils.getDateIntervalByString(interval.toLowerCase()) : interval,
             divider = dateToMilliseconds(interval);
 
-        value = dateUtils.correctDateWithUnitBeginning(value, intervalObject, null, options.firstDayOfWeek);
+        const correctDateWithUnitBeginning = v => dateUtils.correctDateWithUnitBeginning(v, intervalObject, null, options.firstDayOfWeek);
+        const floorAtStartDate = v => new Date(mathFloor((v.getTime() - v.getTimezoneOffset() * MINUTE) / divider) * divider + v.getTimezoneOffset() * MINUTE);
+
+        value = correctDateWithUnitBeginning(value);
 
         if("years" in intervalObject) {
             value.setFullYear(floorNumber(value.getFullYear(), intervalObject.years, 0));
         } else if("quarters" in intervalObject) {
-            // correctDateWithUnitBeginning is enough here
+            value = correctDateWithUnitBeginning(floorAtStartDate(value));
         } else if("months" in intervalObject) {
             value.setMonth(floorNumber(value.getMonth(), intervalObject.months, 0));
-        } else if("weeks" in intervalObject) {
-            // correctDateWithUnitBeginning is enough here
-        } else if("days" in intervalObject) {
-            // correctDateWithUnitBeginning is enough here
+        } else if("weeks" in intervalObject || "days" in intervalObject) {
+            value = correctDateWithUnitBeginning(floorAtStartDate(value));
         } else if("hours" in intervalObject) {
             value.setHours(floorNumber(value.getHours(), intervalObject.hours, 0));
         } else if("minutes" in intervalObject) {
@@ -709,7 +712,7 @@ function dateGenerator(options) {
         } else if("seconds" in intervalObject) {
             value.setSeconds(floorNumber(value.getSeconds(), intervalObject.seconds, 0));
         } else if("milliseconds" in intervalObject) {
-            value = new Date(mathFloor(value.getTime() / divider) * divider);
+            value = floorAtStartDate(value);
         }
 
         return value;
@@ -717,7 +720,8 @@ function dateGenerator(options) {
 
     function ceil(value, interval) {
         var newValue = floor(value, interval);
-        if(value - newValue > 0) {
+
+        while(value - newValue > 0) {
             newValue = addIntervalDate(newValue, interval);
         }
         return newValue;

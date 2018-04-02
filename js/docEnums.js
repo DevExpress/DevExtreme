@@ -381,7 +381,7 @@
 
 /**
  * @typedef {string} Enums.FormItemType
- * @enum {'empty'|'group'|'simple'|'tabbed'}
+ * @enum {'empty'|'group'|'simple'|'tabbed'|'button'}
  */
 
 /**

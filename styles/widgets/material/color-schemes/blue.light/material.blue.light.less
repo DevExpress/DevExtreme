@@ -1,4 +1,4 @@
-@MATERIAL_COLOR_POSTFIX: ".light";
+@MATERIAL_COLOR_POSTFIX: ".blue.light";
 
 /**
 * @name 1. Font family
@@ -1279,6 +1279,13 @@
 */
 @datagrid-filter-row-background-color: darken(@datagrid-base-background-color, 2%);
 
+/**
+* @name 190. Active header filter icon color
+* @type color
+* @group datagrid
+*/
+@datagrid-active-header-filter-icon-color: @base-accent;
+
 //TreeList
 /**
 * @name 10. Text color
@@ -1482,6 +1489,13 @@
 * @group datagrid
 */
 @treelist-filter-row-background-color: darken(@treelist-base-background-color, 2%);
+
+/**
+* @name 190. Active header filter icon color
+* @type color
+* @group datagrid
+*/
+@treelist-active-header-filter-icon-color: @base-accent;
 
 // dxPivotGrid
 @PIVOTGRID_AREA_BACKGROUND: @base-bg;

@@ -2195,6 +2195,30 @@ QUnit.test("endOnTick === true - calculate ticks outside or on data bounds", fun
     assert.deepEqual(this.axis._tickInterval, { "days": 2 });
 });
 
+QUnit.test("endOnTick === true - calculate ticks outside or on data bounds. Take into account local timezone offset", function(assert) {
+    this.createAxis();
+    this.updateOptions({
+        valueType: "datetime",
+        type: "continuous",
+        tickInterval: { "days": 2 },
+        endOnTick: true
+    });
+
+    this.axis.setBusinessRange({ minVisible: new Date(2017, 1, 3), maxVisible: new Date(2017, 1, 13), addRange: function() { } });
+
+    // act
+    this.axis.createTicks(canvas(300));
+
+    assert.deepEqual(this.axis._majorTicks.map(value), [
+        new Date(2017, 1, 3),
+        new Date(2017, 1, 5),
+        new Date(2017, 1, 7),
+        new Date(2017, 1, 9),
+        new Date(2017, 1, 11),
+        new Date(2017, 1, 13)].map(function(d) { return d.valueOf(); }));
+    assert.deepEqual(this.axis._tickInterval, { "days": 2 });
+});
+
 QUnit.test("Force user tick interval if it is too small for given screenDelta and spacing factor", function(assert) {
     this.createAxis();
     this.updateOptions({
@@ -2944,7 +2968,7 @@ QUnit.test("Do not move datetime ticks to work day if work day has tick", functi
     // act
     this.axis.createTicks(canvas(1000));
 
-    assert.deepEqual(this.axis._majorTicks.map(value), [new Date(2017, 8, 18).getTime(), new Date(2017, 8, 20).getTime(), new Date(2017, 8, 22).getTime()]);
+    assert.deepEqual(this.axis._majorTicks.map(value), [new Date(2017, 8, 19).getTime(), new Date(2017, 8, 21).getTime()]);
 });
 
 QUnit.test("Logarithmick with scale breaks", function(assert) {

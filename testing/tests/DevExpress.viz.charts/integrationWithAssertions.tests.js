@@ -1126,6 +1126,21 @@ QUnit.test("select point after dataSource updating", function(assert) {
     assert.strictEqual(chart.getAllSeries()[0].getAllPoints()[1].isSelected(), true);
 });
 
+QUnit.test("getAllPoints with enabled aggregation", function(assert) {
+    var chart = this.createChart({
+        dataSource: [{
+            arg: new Date(1994, 2, 1),
+            val: 1
+        }, {
+            arg: new Date(1994, 3, 1),
+            val: 1
+        }],
+        series: [{ aggregation: { enabled: true } }]
+    });
+
+    assert.strictEqual(chart.getAllSeries()[0].getAllPoints().length, 2);
+});
+
 QUnit.module("T576725", $.extend({}, moduleSetup, {
     beforeEach: function() {
         moduleSetup.beforeEach.call(this);

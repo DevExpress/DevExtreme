@@ -11,6 +11,7 @@ var $ = require("jquery"),
     CustomStore = require("data/custom_store"),
     fx = require("animation/fx"),
     isRenderer = require("core/utils/type").isRenderer,
+    errors = require("core/errors"),
     config = require("core/config");
 
 require("common.css!");
@@ -1758,7 +1759,7 @@ QUnit.test("T316005 - mousedown on inputWrapper should not be prevented if openO
     assert.ok(!event.isDefaultPrevented(), "default event is not prevented");
 });
 
-QUnit.test("The 'onCustomItemCreating' option", function(assert) {
+QUnit.test("The 'onCustomItemCreating' option should throw a warning if handler returns an item", function(assert) {
     var $selectBox = $("#selectBox").dxSelectBox({
             acceptCustomValue: true,
             displayExpr: "display",
@@ -1772,7 +1773,8 @@ QUnit.test("The 'onCustomItemCreating' option", function(assert) {
         }),
         $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS)),
         keyboard = keyboardMock($input),
-        customValue = "Custom value";
+        customValue = "Custom value",
+        logStub = sinon.stub(errors, "log");
 
     keyboard
         .type(customValue)
@@ -1780,6 +1782,8 @@ QUnit.test("The 'onCustomItemCreating' option", function(assert) {
 
     assert.equal($selectBox.dxSelectBox("option", "value"), "value " + customValue, "value is correct");
     assert.equal($input.val(), "display " + customValue, "displayed value is correct");
+    assert.ok(logStub.calledOnce, "There was an one message");
+    assert.deepEqual(logStub.firstCall.args, ["W0015", "onCustomItemCreating", "customItem"], "Check warning parameters");
 });
 
 QUnit.test("onCustomItemCreating should not be called when existing item selecting", function(assert) {
@@ -1860,8 +1864,8 @@ QUnit.test("The 'onCustomItemCreating' option with Deferred", function(assert) {
             acceptCustomValue: true,
             displayExpr: "display",
             valueExpr: "value",
-            onCustomItemCreating: function() {
-                return deferred.promise();
+            onCustomItemCreating: function(e) {
+                e.customItem = deferred.promise();
             }
         }),
         $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS)),
@@ -1895,7 +1899,7 @@ QUnit.test("The 'onCustomItemCreating' option with Promise", function(assert) {
             acceptCustomValue: true,
             displayExpr: "display",
             valueExpr: "value",
-            onCustomItemCreating: function() { return promise; }
+            onCustomItemCreating: function(e) { e.customItem = promise; }
         }),
         $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS)),
         keyboard = keyboardMock($input),
@@ -1927,8 +1931,8 @@ QUnit.test("Value should be reset if the 'onCustomItemCreating' deferred is reje
             acceptCustomValue: true,
             items: [1],
             value: 1,
-            onCustomItemCreating: function() {
-                return deferred.reject().promise();
+            onCustomItemCreating: function(e) {
+                e.customItem = deferred.reject().promise();
             }
         }),
         $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS)),
@@ -2033,7 +2037,7 @@ QUnit.test("Custom value should be selected in list if items were modified on cu
         items.push(e.text);
         selectBox.option("items", items);
 
-        return e.text;
+        e.customItem = e.text;
     });
 
     keyboardMock($input)
@@ -2495,6 +2499,24 @@ QUnit.test("item should not be reset on the 'tab' key press after popup is opene
 
     assert.equal($input.val(), item, "input value is correct");
     assert.equal(selectBox.option("value"), item, "value is correct");
+});
+
+QUnit.test("filter should be cleared after item selection via tab", function(assert) {
+    var $selectBox = $("#selectBox").dxSelectBox({
+            searchEnabled: true,
+            dataSource: ["aaa", "bbb"],
+            opened: true,
+            searchTimeout: 0
+        }),
+        $input = $selectBox.find("." + TEXTEDITOR_INPUT_CLASS),
+        selectBox = $selectBox.dxSelectBox("instance"),
+        keyboard = keyboardMock($input);
+
+    keyboard.type("a");
+    keyboard.press("tab");
+
+    assert.equal(selectBox.option("opened"), false, "selectBox was closed");
+    assert.equal(selectBox.getDataSource().searchValue(), null, "filter was cleared");
 });
 
 QUnit.test("Opening selectBox after search should not load data if the 'showDataBeforeSearch' option is false", function(assert) {
@@ -4102,7 +4124,7 @@ QUnit.testInActiveWindow("dxSelectBox should not filter a dataSource when the wi
             searchEnabled: true,
             onCustomItemCreating: function(e) {
                 $(e.element).remove();
-                return "";
+                e.customItem = "";
             }
         }).dxSelectBox("instance"),
         $input = instance.$element().find(toSelector(TEXTEDITOR_INPUT_CLASS)),
