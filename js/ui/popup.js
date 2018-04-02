@@ -330,6 +330,12 @@ var Popup = Overlay.inherit({
         this.callBase();
 
         extend(this._deprecatedOptions, {
+            /**
+            * @name dxPopupOptions_buttons
+            * @publicName buttons
+            * @type Array<Object>
+            * @deprecated dxPopupOptions_toolbarItems
+            */
             "buttons": { since: "16.1", alias: "toolbarItems" }
         });
     },
