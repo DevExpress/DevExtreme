@@ -31,10 +31,12 @@ require("../text_box");
 require("../number_box");
 require("../check_box");
 require("../date_box");
+require("../button");
 
 var FORM_EDITOR_BY_DEFAULT = "dxTextBox",
     FIELD_ITEM_CLASS = "dx-field-item",
     FIELD_EMPTY_ITEM_CLASS = "dx-field-empty-item",
+    FIELD_BUTTON_ITEM_CLASS = "dx-field-button-item",
     FIELD_ITEM_REQUIRED_CLASS = "dx-field-item-required",
     FIELD_ITEM_OPTIONAL_CLASS = "dx-field-item-optional",
     FIELD_ITEM_REQUIRED_MARK_CLASS = "dx-field-item-required-mark",
@@ -394,7 +396,16 @@ var LayoutManager = Widget.inherit({
                     $fieldItem.addClass(LAYOUT_MANAGER_LAST_COL_CLASS);
                 }
 
-                item.itemType === "empty" ? that._renderEmptyItem($fieldItem) : that._renderFieldItem(item, $fieldItem);
+                switch(item.itemType) {
+                    case "empty":
+                        that._renderEmptyItem($fieldItem);
+                        break;
+                    case "button":
+                        that._renderButtonItem(item, $fieldItem);
+                        break;
+                    default:
+                        that._renderFieldItem(item, $fieldItem);
+                }
             },
             cols: that._generateRatio(colCount),
             rows: that._generateRatio(that._getRowsCount(), true),
@@ -510,6 +521,26 @@ var LayoutManager = Widget.inherit({
             .html("&nbsp;");
     },
 
+    _renderButtonItem: function(item, $container) {
+        var $button = $("<div>").appendTo($container);
+
+        $container
+            .addClass(FIELD_BUTTON_ITEM_CLASS)
+            .css("textAlign", item.alignment ? item.alignment : "right");
+
+        this._createComponent($button, "dxButton", item.buttonOptions);
+        this._addItemClasses($container, item.col);
+
+        return $button;
+    },
+
+    _addItemClasses: function($item, column) {
+        $item
+            .addClass(FIELD_ITEM_CLASS)
+            .addClass(this.option("cssItemClass"))
+            .addClass(typeUtils.isDefined(column) ? "dx-col-" + column : "");
+    },
+
     _renderFieldItem: function(item, $container) {
         var that = this,
             name = that._getName(item),
@@ -520,11 +551,8 @@ var LayoutManager = Widget.inherit({
             helpID = item.helpText ? ("dx-" + new Guid()) : null,
             $label;
 
-        $container
-            .addClass(FIELD_ITEM_CLASS)
-            .addClass(isRequired ? FIELD_ITEM_REQUIRED_CLASS : FIELD_ITEM_OPTIONAL_CLASS)
-            .addClass(that.option("cssItemClass"))
-            .addClass(typeUtils.isDefined(item.col) ? "dx-col-" + item.col : "");
+        this._addItemClasses($container, item.col);
+        $container.addClass(isRequired ? FIELD_ITEM_REQUIRED_CLASS : FIELD_ITEM_OPTIONAL_CLASS);
 
         if(labelOptions.visible && labelOptions.text) {
             $label = that._renderLabel(labelOptions).appendTo($container);

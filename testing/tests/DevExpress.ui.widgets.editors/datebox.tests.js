@@ -1407,7 +1407,7 @@ QUnit.test("correct default value for 'minZoomLevel' option", function(assert) {
         }).dxDateBox("instance"),
         calendar = getInstanceWidget(instance);
 
-    assert.equal(calendar.option("minZoomLevel"), instance.option("minZoomLevel"), "'minZoomLevel' option value is correct");
+    assert.equal(calendar.option("minZoomLevel"), "century", "'minZoomLevel' option value is correct");
 });
 
 QUnit.test("correct default value for 'maxZoomLevel' option", function(assert) {
@@ -1418,45 +1418,45 @@ QUnit.test("correct default value for 'maxZoomLevel' option", function(assert) {
         }).dxDateBox("instance"),
         calendar = getInstanceWidget(instance);
 
-    assert.equal(calendar.option("maxZoomLevel"), instance.option("maxZoomLevel"), "'maxZoomLevel' option value is correct");
+    assert.equal(calendar.option("maxZoomLevel"), "month", "'maxZoomLevel' option value is correct");
 });
 
 QUnit.test("DateBox 'minZoomLevel' option should affect on Calendar 'minZoomLevel' option", function(assert) {
     var instance = $("#dateBox").dxDateBox({
             type: "date",
             pickerType: "calendar",
-            minZoomLevel: "year",
+            calendarOptions: { minZoomLevel: "year" },
             opened: true
         }).dxDateBox("instance"),
         calendar = getInstanceWidget(instance);
 
-    assert.equal(calendar.option("minZoomLevel"), instance.option("minZoomLevel"), "calendar 'minZoomLevel' option is correct on init");
+    assert.equal(calendar.option("minZoomLevel"), "year", "calendar 'minZoomLevel' option is correct on init");
 
     instance.close();
-    instance.option("minZoomLevel", "month");
+    instance.option("calendarOptions.minZoomLevel", "month");
     instance.open();
     calendar = getInstanceWidget(instance);
 
-    assert.equal(calendar.option("minZoomLevel"), instance.option("minZoomLevel"), "calendar 'minZoomLevel' option after dateBox option change");
+    assert.equal(calendar.option("minZoomLevel"), "month", "calendar 'minZoomLevel' option after dateBox option change");
 });
 
 QUnit.test("DateBox 'maxZoomLevel' option should affect on Calendar 'maxZoomLevel' option", function(assert) {
     var instance = $("#dateBox").dxDateBox({
             type: "date",
             pickerType: "calendar",
-            maxZoomLevel: "century",
+            calendarOptions: { maxZoomLevel: "century" },
             opened: true
         }).dxDateBox("instance"),
         calendar = getInstanceWidget(instance);
 
-    assert.equal(calendar.option("maxZoomLevel"), instance.option("maxZoomLevel"), "calendar 'maxZoomLevel' option is correct on init");
+    assert.equal(calendar.option("maxZoomLevel"), "century", "calendar 'maxZoomLevel' option is correct on init");
 
     instance.close();
-    instance.option("maxZoomLevel", "year");
+    instance.option("calendarOptions.maxZoomLevel", "year");
     instance.open();
     calendar = getInstanceWidget(instance);
 
-    assert.equal(calendar.option("maxZoomLevel"), instance.option("maxZoomLevel"), "calendar 'maxZoomLevel' option after dateBox option change");
+    assert.equal(calendar.option("maxZoomLevel"), "year", "calendar 'maxZoomLevel' option after dateBox option change");
 });
 
 QUnit.test("T208534 - calendar value should depend on datebox text option", function(assert) {
@@ -2352,14 +2352,14 @@ QUnit.test("date box should contain calendar and time view inside box in small s
     }
 });
 
-QUnit.test("date box should have compact view when showAnalogClock option is true", function(assert) {
+QUnit.test("date box should have compact view when showAnalogClock option is false", function(assert) {
     var $element = $("#dateBox").dxDateBox({
             type: "datetime",
             pickerType: "calendar"
         }),
         instance = $element.dxDateBox("instance");
 
-    instance.option("showAnalogClock", true);
+    instance.option("showAnalogClock", false);
     instance.open();
 
     var $content = $(instance._popup.$content()),

@@ -124,13 +124,15 @@ var CheckBox = Editor.inherit({
         this._$container = $("<div>").addClass(CHECKBOX_CONTAINER_CLASS);
         this.setAria("role", "checkbox");
 
+        this.$element()
+            .addClass(CHECKBOX_CLASS);
+
         this._renderValue();
         this._renderIcon();
         this._renderText();
         this.option("useInkRipple") && this._renderInkRipple();
 
         this.$element()
-            .addClass(CHECKBOX_CLASS)
             .append(this._$container);
 
         this.callBase();

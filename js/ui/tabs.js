@@ -71,9 +71,9 @@ var Tabs = CollectionWidget.inherit({
             * @name dxTabsOptions_showNavButtons
             * @publicName showNavButtons
             * @type boolean
-            * @default false
+            * @default true
             */
-            showNavButtons: false,
+            showNavButtons: true,
 
             /**
             * @name dxTabsOptions_scrollByContent
@@ -160,14 +160,21 @@ var Tabs = CollectionWidget.inherit({
     _defaultOptionsRules: function() {
         return this.callBase().concat([
             {
-                device: { platform: "generic" },
+                device: function() {
+                    return devices.real().platform !== "generic";
+                },
                 options: {
                     /**
                     * @name dxTabsOptions_showNavButtons
                     * @publicName showNavButtons
-                    * @default true @for desktop
+                    * @default false @for mobile_devices
                     */
-                    showNavButtons: true,
+                    showNavButtons: false
+                }
+            },
+            {
+                device: { platform: "generic" },
+                options: {
                     /**
                     * @name dxTabsOptions_scrollByContent
                     * @publicName scrollByContent
@@ -198,6 +205,21 @@ var Tabs = CollectionWidget.inherit({
                 options: {
                     useInkRipple: true
                 }
+            },
+            {
+                device: function() {
+                    return themes.isMaterial();
+                },
+                options: {
+                    useInkRipple: true,
+                    /**
+                    * @name dxTabsOptions_showNavButtons
+                    * @publicName showNavButtons
+                    * @default false @for Material
+                    */
+                    showNavButtons: false,
+                    selectOnFocus: false
+                }
             }
         ]);
     },
@@ -217,15 +239,9 @@ var Tabs = CollectionWidget.inherit({
     _initTemplates: function() {
         this.callBase();
 
-        this._defaultTemplates["item"] = new BindableTemplate(function($container, data) {
+        this._defaultTemplates["item"] = new BindableTemplate((function($container, data) {
             if(isPlainObject(data)) {
-                if(data.text) {
-                    $container.text(data.text);
-                }
-
-                if(data.html) {
-                    $container.html(data.html);
-                }
+                this._prepareDefaultItemTemplate(data, $container);
             } else {
                 $container.text(String(data));
             }
@@ -236,7 +252,7 @@ var Tabs = CollectionWidget.inherit({
 
             $container.wrapInner($("<span>").addClass(TABS_ITEM_TEXT_CLASS));
             $iconElement && $iconElement.prependTo($container);
-        }, ["text", "html", "icon", "iconSrc"], this.option("integrationOptions.watchMethod"));
+        }).bind(this), ["text", "html", "icon", "iconSrc"], this.option("integrationOptions.watchMethod"));
     },
 
     _itemClass: function() {

@@ -1,6 +1,6 @@
 "use strict";
 
-/* global DATA, internals, initTree */
+/* global DATA, initTree */
 
 var $ = require("jquery");
 
@@ -27,12 +27,6 @@ function initFixture(items) {
 
 QUnit.module("SelectAll mode");
 
-QUnit.test("Render 'selectAll' item", function(assert) {
-    initFixture.call(this, DATA[5]);
-    assert.equal(this.treeView._$selectAllItem.length, 1);
-    assert.ok(this.treeView._$selectAllItem.hasClass(internals.SELECT_ALL_ITEM_CLASS));
-});
-
 QUnit.test("Select all items", function(assert) {
     var data = [{ id: 1, text: "Item 1" }, { id: 2, text: "Item 2" }, { id: 3, text: "Item 3" }],
         that = this;
@@ -51,27 +45,6 @@ QUnit.test("Select all items", function(assert) {
 
     checkBox.option("value", false);
     checkState(false);
-});
-
-QUnit.test("On initialization 'selectAll' item should be selected if all items are selected", function(assert) {
-    var data = [{ id: 1, text: "item 1", selected: true }, { id: 2, text: "item 2", selected: true }];
-    initFixture.call(this, data);
-
-    assert.ok(this.treeView._$selectAllItem.dxCheckBox("instance").option("value"));
-});
-
-QUnit.test("On initialization 'selectAll' item should be unselected if all items are unselected", function(assert) {
-    var data = [{ id: 1, text: "item 1" }, { id: 2, text: "item 2" }];
-    initFixture.call(this, data);
-
-    assert.strictEqual(this.treeView._$selectAllItem.dxCheckBox("instance").option("value"), false);
-});
-
-QUnit.test("On initialization 'selectAll' item should have intermediate state if at least one item is selected", function(assert) {
-    var data = [{ id: 1, text: "item 1", selected: true }, { id: 2, text: "item 2" }];
-    initFixture.call(this, data);
-
-    assert.strictEqual(this.treeView._$selectAllItem.dxCheckBox("instance").option("value"), undefined);
 });
 
 QUnit.test("'selectAll' item should be selected if all items are selected", function(assert) {

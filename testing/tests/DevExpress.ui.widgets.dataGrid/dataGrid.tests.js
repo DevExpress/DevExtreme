@@ -1028,7 +1028,8 @@ QUnit.test("Resizing columns should work correctly when scrolling mode is 'virtu
             },
             columns: [{ dataField: "name", width: 100 }, "description"],
             scrolling: {
-                mode: "virtual"
+                mode: "virtual",
+                rowRenderingMode: "standard"
             }
         }),
         instance = dataGrid.dxDataGrid("instance"),
@@ -2669,6 +2670,49 @@ QUnit.test("aria-rowindex aria-colindex if virtual scrolling", function(assert) 
     clock.restore();
 });
 
+QUnit.test("aria-rowindex if virtual row rendering", function(assert) {
+    // arrange, act
+    var clock = sinon.useFakeTimers(),
+        array = [],
+        dataGrid,
+        $row,
+        rowsView;
+
+    for(var i = 0; i < 100; i++) {
+        array.push({ author: "J. D. Salinger", title: "The Catcher in the Rye", year: 1951 });
+    }
+
+    dataGrid = $("#dataGrid").dxDataGrid({
+        height: 200,
+        dataSource: array,
+        paging: { pageSize: 50 },
+        scrolling: {
+            rowRenderingMode: "virtual",
+            useNative: false
+        }
+    }).dxDataGrid("instance");
+
+    clock.tick(300);
+
+    rowsView = dataGrid._views.rowsView;
+    $row = rowsView.element().find(".dx-data-row").eq(0);
+
+    // assert
+    assert.equal($row.attr("aria-rowindex"), 1, "aria-index is correct");
+
+    rowsView.scrollTo({ y: 3000 });
+
+    clock.tick();
+
+    $row = rowsView.element().find(".dx-data-row").first();
+    assert.notEqual($row.attr("aria-rowindex"), 1, "first row is changed");
+
+    $row = rowsView.element().find(".dx-data-row").last();
+    assert.equal($row.attr("aria-rowindex"), 50, "last row is correct after scrolling");
+
+    clock.restore();
+});
+
 // T595044
 QUnit.test("aria-colcount aria-rowcount if virtual scrolling", function(assert) {
     // arrange, act
@@ -2695,6 +2739,133 @@ QUnit.test("aria-colcount aria-rowcount if virtual scrolling", function(assert) 
     // assert
     assert.equal(dataGrid.find(".dx-gridbase-container").attr("aria-rowcount"), 200, "aria-rowcount is correct");
     assert.equal(dataGrid.find(".dx-gridbase-container").attr("aria-colcount"), 3, "aria-colcount is correct");
+
+    clock.restore();
+});
+
+QUnit.test("all visible items should be rendered if pageSize is small and virtual scrolling is enabled", function(assert) {
+    // arrange, act
+    var clock = sinon.useFakeTimers(),
+        array = [],
+        dataGrid;
+
+    for(var i = 1; i <= 15; i++) {
+        array.push({ id: i });
+    }
+
+    dataGrid = $("#dataGrid").dxDataGrid({
+        height: 400,
+        dataSource: array,
+        keyExpr: "id",
+        onRowPrepared: function(e) {
+            if(e.rowType === "data") {
+                $(e.rowElement).css("height", e.key === 1 ? 200 : 50);
+            }
+        },
+        paging: { pageSize: 2 },
+        scrolling: {
+            mode: "virtual",
+            useNative: false
+        }
+    }).dxDataGrid("instance");
+
+    clock.tick();
+
+    // act
+    dataGrid.getScrollable().scrollTo({ y: 300 });
+
+    clock.tick(300);
+
+    // assert
+    var visibleRows = dataGrid.getVisibleRows();
+    assert.equal(visibleRows.length, 10, "visible row count");
+    assert.equal(visibleRows[0].key, 3, "first visible row key");
+    assert.equal(visibleRows[visibleRows.length - 1].key, 12, "last visible row key");
+
+    clock.restore();
+});
+
+QUnit.test("visible items should be rendered if virtual scrolling and preload are enabled", function(assert) {
+    // arrange, act
+    var clock = sinon.useFakeTimers(),
+        array = [],
+        dataGrid;
+
+    for(var i = 1; i <= 15; i++) {
+        array.push({ id: i });
+    }
+
+    dataGrid = $("#dataGrid").dxDataGrid({
+        height: 400,
+        dataSource: array,
+        keyExpr: "id",
+        onRowPrepared: function(e) {
+            if(e.rowType === "data") {
+                $(e.rowElement).css("height", e.key === 1 ? 200 : 50);
+            }
+        },
+        paging: { pageSize: 2 },
+        scrolling: {
+            preloadEnabled: true,
+            mode: "virtual",
+            useNative: false
+        }
+    }).dxDataGrid("instance");
+
+    clock.tick();
+
+    // act
+    dataGrid.getScrollable().scrollTo({ y: 300 });
+
+    clock.tick(300);
+
+    // assert
+    var visibleRows = dataGrid.getVisibleRows();
+    assert.equal(visibleRows.length, 14, "visible row count");
+    assert.equal(visibleRows[0].key, 1, "first visible row key");
+    assert.equal(visibleRows[visibleRows.length - 1].key, 14, "last visible row key");
+
+    clock.restore();
+});
+
+QUnit.test("editing should starts correctly if scrolling mode is virtual", function(assert) {
+    // arrange, act
+    var clock = sinon.useFakeTimers(),
+        array = [],
+        dataGrid;
+
+    for(var i = 1; i <= 50; i++) {
+        array.push({ id: i });
+    }
+
+    dataGrid = $("#dataGrid").dxDataGrid({
+        height: 100,
+        dataSource: array,
+        keyExpr: "id",
+        onRowPrepared: function(e) {
+            $(e.rowElement).css("height", 50);
+        },
+        editing: {
+            mode: "row",
+            allowUpdating: true
+        },
+        scrolling: {
+            mode: "virtual",
+            useNative: false
+        }
+    }).dxDataGrid("instance");
+
+    clock.tick();
+
+    // act
+    dataGrid.getScrollable().scrollTo({ top: 500 });
+    dataGrid.editRow(1);
+
+    // assert
+    var visibleRows = dataGrid.getVisibleRows();
+    assert.equal(visibleRows.length, 15, "visible row count");
+    assert.equal(visibleRows[0].key, 6, "first visible row key");
+    assert.equal($(dataGrid.getRowElement(1, 0)).find(".dx-texteditor").length, 1, "row has editor");
 
     clock.restore();
 });
@@ -4669,6 +4840,7 @@ QUnit.test("The same page should not load when scrolling in virtual mode", funct
             },
             scrolling: {
                 mode: "virtual",
+                rowRenderingMode: "standard",
                 useNative: false
             }
         });
@@ -4686,10 +4858,95 @@ QUnit.test("The same page should not load when scrolling in virtual mode", funct
 
         // assert
         assert.deepEqual(pageIndexesForLoad, [0, 1, 2, 3]);
-        assert.strictEqual(dataGrid.getVisibleRows().length, 80);
+        assert.strictEqual(dataGrid.getVisibleRows().length, 60);
+        assert.strictEqual(dataGrid.getVisibleRows()[0].data.room, 120);
     } finally {
         clock.restore();
     }
+});
+
+
+QUnit.module("Rendered on server", {
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+    },
+    afterEach: function() {
+        this.clock.restore();
+    }
+});
+
+QUnit.test("Loading should be synchronously", function(assert) {
+    var dataSource = [{
+        id: 1, name: "test 1"
+    }, {
+        id: 2, name: "test 2"
+    }];
+
+    // act
+    var dataGrid = createDataGrid({
+        dataSource: dataSource,
+        integrationOptions: {
+            renderedOnServer: true
+        }
+    });
+
+    // assert
+    assert.equal(dataGrid.getVisibleRows().length, 2, "visible rows are exists");
+    assert.equal(dataGrid.$element().find(".dx-data-row").length, 2, "two data rows are rendered");
+
+    // act
+    dataGrid.columnOption("id", "filterValue", "2");
+});
+
+QUnit.test("dataSource changing should be synchronously", function(assert) {
+    var dataSource = [{
+        id: 1, name: "test 1"
+    }, {
+        id: 2, name: "test 2"
+    }];
+
+    var dataGrid = createDataGrid({
+        dataSource: [],
+        integrationOptions: {
+            renderedOnServer: true
+        }
+    });
+
+    // act
+    dataGrid.option("dataSource", dataSource);
+
+    // assert
+    assert.equal(dataGrid.getVisibleRows().length, 2, "visible rows are exists");
+    assert.equal(dataGrid.$element().find(".dx-data-row").length, 2, "two data rows are rendered");
+});
+
+QUnit.test("Runtime operation should be asynchronously", function(assert) {
+    var dataSource = [{
+        id: 1, name: "test 1"
+    }, {
+        id: 2, name: "test 2"
+    }];
+
+    var dataGrid = createDataGrid({
+        dataSource: dataSource,
+        integrationOptions: {
+            renderedOnServer: true
+        }
+    });
+
+    // act
+    dataGrid.columnOption("id", "filterValue", "2");
+
+    // assert
+    assert.equal(dataGrid.getVisibleRows().length, 2, "visible rows are exists");
+    assert.equal(dataGrid.$element().find(".dx-data-row").length, 2, "two data rows are rendered");
+
+    // act
+    this.clock.tick();
+
+    // assert
+    assert.equal(dataGrid.getVisibleRows().length, 1, "visible rows are filtered");
+    assert.equal(dataGrid.$element().find(".dx-data-row").length, 1, "filtered data rows are rendered");
 });
 
 QUnit.module("Assign options", {
@@ -6497,7 +6754,7 @@ QUnit.testInActiveWindow("Tab key should open editor in next cell when virtual s
     this.clock.tick();
     var rowData = dataGrid.getTopVisibleRowData();
 
-    dataGrid.editCell(rowData.index + 1, 0);
+    dataGrid.editCell(dataGrid.getRowIndexByKey(rowData) + 1, 0);
     this.clock.tick();
 
     $(dataGrid.$element()).find(".dx-textbox").dxTextBox("instance").option("value", "Test");
@@ -6840,7 +7097,8 @@ QUnit.test("synchronous render and asynchronous updateDimensions during paging i
         },
         height: 100,
         scrolling: {
-            mode: "virtual"
+            mode: "virtual",
+            useNative: false
         },
         paging: {
             pageSize: 5
@@ -6862,7 +7120,7 @@ QUnit.test("synchronous render and asynchronous updateDimensions during paging i
     dataGrid.pageIndex(5);
 
     // assert
-    assert.equal(contentReadyCount, 2, "contentReady is called without timeout");
+    assert.equal(contentReadyCount, 1, "contentReady is called without timeout");
     assert.equal(dataGrid.getVisibleRows().length, 10, "row count");
     assert.equal(dataGrid.getVisibleRows()[0].data.test, 25, "top visible row");
     assert.equal(resizingController.updateDimensions.callCount, 0, "updateDimensions is not called");
@@ -6918,7 +7176,8 @@ QUnit.test("Duplicate rows should not be rendered if virtual scrolling enabled a
         height: 200,
         dataSource: array,
         scrolling: {
-            mode: "virtual"
+            mode: "virtual",
+            rowRenderingMode: "standard"
         },
         paging: {
             pageSize: 10

@@ -424,7 +424,7 @@ var Scrollable = DOMComponent.inherit({
                 break;
             case "disabled":
                 this._renderDisabledState();
-                this._strategy.disabledChanged();
+                this._strategy && this._strategy.disabledChanged();
                 break;
             case "updateManually":
                 break;
@@ -435,7 +435,7 @@ var Scrollable = DOMComponent.inherit({
 
     _resetInactiveDirection: function() {
         var inactiveProp = this._getInactiveProp();
-        if(!inactiveProp) {
+        if(!inactiveProp || !windowUtils.hasWindow()) {
             return;
         }
 

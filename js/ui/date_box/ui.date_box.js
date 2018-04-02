@@ -1,7 +1,8 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
-    window = require("../../core/utils/window").getWindow(),
+    windowUtils = require("../../core/utils/window"),
+    window = windowUtils.getWindow(),
     registerComponent = require("../../core/component_registrator"),
     typeUtils = require("../../core/utils/type"),
     each = require("../../core/utils/iterator").each,
@@ -115,7 +116,9 @@ var DateBox = DropDownEditor.inherit({
             "formatString": { since: "16.1", alias: "displayFormat" },
 
             "useNative": { since: "15.1", message: "'useNative' option is deprecated in 15.1. Use the 'pickerType' option instead" },
-            "useCalendar": { since: "15.1", message: "'useCalendar' option is deprecated in 15.1. Use the 'pickerType' option instead" }
+            "useCalendar": { since: "15.1", message: "'useCalendar' option is deprecated in 15.1. Use the 'pickerType' option instead" },
+            "maxZoomLevel": { since: "18.1", alias: "calendarOptions.maxZoomLevel" },
+            "minZoomLevel": { since: "18.1", alias: "calendarOptions.minZoomLevel" }
         });
     },
 
@@ -133,9 +136,9 @@ var DateBox = DropDownEditor.inherit({
              * @name dxDateBoxOptions_showAnalogClock
              * @publicName showAnalogClock
              * @type boolean
-             * @default false
+             * @default true
              */
-            showAnalogClock: false,
+            showAnalogClock: true,
 
             /**
             * @name dxDateBoxOptions_value
@@ -219,15 +222,17 @@ var DateBox = DropDownEditor.inherit({
             * @publicName maxZoomLevel
             * @type Enums.CalendarZoomLevel
             * @default 'month'
+            * @deprecated dxDateBoxOptions_calendarOptions
             */
             maxZoomLevel: "month",
 
-            /**
-            * @name dxDateBoxOptions_minZoomLevel
-            * @publicName minZoomLevel
-            * @type Enums.CalendarZoomLevel
-            * @default 'century'
-            */
+           /**
+           * @name dxDateBoxOptions_minZoomLevel
+           * @publicName minZoomLevel
+           * @type Enums.CalendarZoomLevel
+           * @default 'century'
+           * @deprecated dxDateBoxOptions_calendarOptions
+           */
             minZoomLevel: "century",
 
             /**
@@ -294,7 +299,15 @@ var DateBox = DropDownEditor.inherit({
             * @type boolean
             * @default false
             */
-            adaptivityEnabled: false
+            adaptivityEnabled: false,
+
+            /**
+            * @name dxDateBoxOptions_calendarOptions
+            * @publicName calendarOptions
+            * @type dxCalendarOptions
+            * @default {}
+            */
+            calendarOptions: {}
 
         });
     },
@@ -535,12 +548,11 @@ var DateBox = DropDownEditor.inherit({
         var $element = this.$element(),
             widthOption = this.option("width"),
             isWidthSet = typeUtils.isDefined(widthOption) || (isRealWidthSet($element) && !this._isSizeUpdatable),
-            isElementVisible = $element.is(":visible"),
             pickerType = this._pickerType,
             // NOTE: no calculateWidth if type is rollers, why?
             shouldCalculateWidth = pickerType !== PICKER_TYPE.rollers && devices.current().platform === "generic";
 
-        if(isWidthSet || !(shouldCalculateWidth && isElementVisible)) {
+        if(!windowUtils.hasWindow() || isWidthSet || !(shouldCalculateWidth && $element.is(":visible"))) {
             return;
         }
 
@@ -837,6 +849,7 @@ var DateBox = DropDownEditor.inherit({
             case "readOnly":
             case "interval":
             case "disabledDates":
+            case "calendarOptions":
             case "minZoomLevel":
             case "maxZoomLevel":
                 this._invalidate();

@@ -9,7 +9,14 @@
 .dx-badge {
     background-color: @badge-bg;
     color: @badge-color;
-    font-size: @MATERIAL_BASE_FONT_SIZE - 1px;
+    font-size: 12px;
     padding: 3px @MATERIAL_BADGE_HORIZONTAL_PADDING;
+    margin-left: 4px;
     line-height: normal;
+    margin-top: 1px;
+
+    .dx-rtl & {
+        margin-left: 0;
+        margin-right: 4px;
+    }
 }

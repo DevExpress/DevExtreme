@@ -1274,6 +1274,55 @@ testComponentDefaults(Tabs,
     }
 );
 
+testComponentDefaults(Tabs,
+    { },
+    {
+        useInkRipple: true,
+        showNavButtons: false,
+        selectOnFocus: false
+    },
+    function() {
+        this.originalCurrentTheme = themes.current();
+        themes.current("material.light");
+    },
+    function() {
+        themes.current(this.originalCurrentTheme);
+    }
+);
+
+testComponentDefaults(Tabs,
+    {},
+    {
+        showNavButtons: true,
+        selectOnFocus: true
+    },
+    function() {
+        this._origDevice = devices.real();
+
+        devices.real({ platform: "generic", generic: true });
+    },
+    function() {
+        devices.real(this._origDevice);
+    }
+);
+
+testComponentDefaults(Tabs,
+    { platform: devices.current().platform },
+    {
+        showNavButtons: false,
+        selectOnFocus: true
+    },
+    function() {
+        this.originalRealDevice = devices.real();
+        devices.real({
+            platform: "ios"
+        });
+    },
+    function() {
+        devices.real(this.originalRealDevice);
+    }
+);
+
 testComponentDefaults(NumberBox,
         { platform: devices.current().platform },
         { mode: "number" },

@@ -69,6 +69,10 @@ var SelectBox = DropDownList.inherit({
                     this._cleanInputSelection();
                 }
 
+                if(this._wasSearch()) {
+                    this._clearFilter();
+                }
+
                 parent.tab.apply(this, arguments);
             },
             upArrow: function() {
@@ -179,7 +183,6 @@ var SelectBox = DropDownList.inherit({
             * @type_function_param1 e:object
             * @type_function_param1_field4 text:string
             * @type_function_param1_field5 customItem:string|object|Promise<any>
-            * @type_function_return string|object|Promise<any>
             * @action
             * @default function(e) { if(!e.customItem) { e.customItem = e.text; } }
             */
@@ -712,6 +715,10 @@ var SelectBox = DropDownList.inherit({
             },
             actionResult = this._customItemCreatingAction(params),
             item = commonUtils.ensureDefined(actionResult, params.customItem);
+
+        if(isDefined(actionResult)) {
+            errors.log("W0015", "onCustomItemCreating", "customItem");
+        }
 
         return item;
     },

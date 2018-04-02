@@ -57,22 +57,25 @@ exports.chart.bubble = _extend({}, scatterSeries, {
     },
 
     _aggregators: {
-        avg: function(aggregationInfo, series) {
-            var result = {},
-                valueField = series.getValueFields()[0],
-                sizeField = series.getSizeField(),
-                aggregate = aggregationInfo.data.reduce(function(result, item) {
-                    result[0] += item[valueField];
-                    result[1] += item[sizeField];
-                    result[2]++;
-                    return result;
-                }, [0, 0, 0]);
+        avg({ data, intervalStart }, series) {
+            if(!data.length) {
+                return;
+            }
 
-            result[valueField] = aggregate[0] / aggregate[2];
-            result[sizeField] = aggregate[1] / aggregate[2];
-            result[series.getArgumentField()] = aggregationInfo.intervalStart;
+            const valueField = series.getValueFields()[0];
+            const sizeField = series.getSizeField();
+            const aggregate = data.reduce((result, item) => {
+                result[0] += item[valueField];
+                result[1] += item[sizeField];
+                result[2]++;
+                return result;
+            }, [0, 0, 0]);
 
-            return result;
+            return {
+                [valueField]: aggregate[0] / aggregate[2],
+                [sizeField]: aggregate[1] / aggregate[2],
+                [series.getArgumentField()]: intervalStart
+            };
         }
     },
 

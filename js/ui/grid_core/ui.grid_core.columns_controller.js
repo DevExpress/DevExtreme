@@ -100,6 +100,7 @@ module.exports = {
              * @name GridBaseOptions_columns
              * @publicName columns
              * @type Array<GridBaseColumn>
+             * @fires GridBaseOptions_onOptionChanged
              * @default undefined
              */
             /**

@@ -36,9 +36,15 @@ var DropDownMenuStrategy = ToolbarStrategy.inherit({
     },
 
     _widgetOptions: function() {
+        var that = this;
         return extend(this.callBase(), {
             deferRendering: true,
             menuWidget: ToolbarMenu,
+            onOptionChanged: function(e) {
+                if(e.name === "items") {
+                    that._updateMenuVisibility(e.value);
+                }
+            },
             popupPosition: {
                 at: "bottom right",
                 my: "top right"
@@ -46,11 +52,10 @@ var DropDownMenuStrategy = ToolbarStrategy.inherit({
         });
     },
 
-    _getMenuItems: function() {
-        var menuItems = this.callBase(),
-            isMenuVisible = menuItems.length && this._hasVisibleMenuItems(menuItems);
+    _updateMenuVisibility: function(menuItems) {
+        var items = menuItems || this._getMenuItems(),
+            isMenuVisible = items.length && this._hasVisibleMenuItems(items);
         this._toggleMenuVisibility(isMenuVisible);
-        return menuItems;
     },
 
     _toggleMenuVisibility: function(value) {

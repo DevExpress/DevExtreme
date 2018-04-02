@@ -379,10 +379,10 @@ Series.prototype = {
     },
 
     _getData() {
-        var data = this._data || [];
+        let data = this._data || [];
 
         if(this.useAggregation()) {
-            data = this._resample(this.getArgumentAxis().getAggregationInfo(this._useAllAggregatedPoints), data);
+            data = this._resample(this.getArgumentAxis().getAggregationInfo(this._useAllAggregatedPoints, this.argumentAxisType !== DISCRETE ? this.getArgumentRange() : {}), data);
         }
 
         return data;

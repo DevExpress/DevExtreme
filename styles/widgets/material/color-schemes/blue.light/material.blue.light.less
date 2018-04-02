@@ -1,4 +1,4 @@
-@MATERIAL_COLOR_POSTFIX: ".light";
+@MATERIAL_COLOR_POSTFIX: ".blue.light";
 
 /**
 * @name 1. Font family
@@ -135,7 +135,7 @@
 * @type color
 * @group badges
 */
-@badge-bg: #757575;
+@badge-bg: @base-accent;
 
 /**
 * @name 20. Badge text color
@@ -750,49 +750,51 @@
 
 // Tabs
 /**
-* @name 40. Bottom layer background color
+* @name 30. Bottom layer background color
 * @type color
 * @group navigations.tabs
 */
 @tabs-tab-bg: darken(@base-bg, 3%);
 
-/**
-* @name 20. Selected item background color
-* @type color
-* @group navigations.tabs
-*/
-@tabs-tab-selected-bg: @base-bg;
-
-@tabs-tab-selected-color: @base-text-color;
-
 @tabs-tab-icon-color: @base-icon-color;
-@tabs-tab-icon-selected-color: @tabs-tab-icon-color;
-
-@tabs-tab-button-disabled-opacity: @button-disabled-icon-opacity;
 
 /**
-* @name 30. Border color
-* @type color
-* @group navigations.tabs
-*/
-@tabs-border-color: @base-border-color;
-
-/**
-* @name 40. Focus border color
+* @name 20. Selected tab text color
 * @type color
 * @group navigations.tabs
 * @paletteColorOpacity 1
 */
-@tabs-focused-border-color: @base-focus-color;
+@tabs-tab-selected-color: @base-accent;
+
+@tabs-tab-icon-selected-color: @base-accent;
+
+@tabs-tab-button-disabled-opacity: 0;
 
 /**
-* @name 40. Hover background color
+* @name 10. Tab text color
 * @type color
 * @group navigations.tabs
+* @paletteColorOpacity 1
 */
-@tabs-tab-hover-bg: @base-element-bg;
+@tabs-tab-color: fade(@base-text-color, 54%);
 
-@tabs-tab-active-bg: fade(darken(@tabs-tab-bg, 62.5%), 20%);
+/**
+* @name 40. Selected tab bottom border color
+* @type color
+* @group navigations.tabs
+* @paletteColorOpacity 1
+*/
+@tabs-selected-tab-bottom-border-color: @base-accent;
+
+/**
+* @name 50. Hovered tab background color
+* @type color
+* @group navigations.tabs
+* @paletteColorOpacity 1
+*/
+@tabs-hovered-tab-bg-color: darken(@base-bg, 7%);
+
+
 
 // TagBox
 
@@ -1277,6 +1279,13 @@
 */
 @datagrid-filter-row-background-color: darken(@datagrid-base-background-color, 2%);
 
+/**
+* @name 190. Active header filter icon color
+* @type color
+* @group datagrid
+*/
+@datagrid-active-header-filter-icon-color: @base-accent;
+
 //TreeList
 /**
 * @name 10. Text color
@@ -1481,9 +1490,15 @@
 */
 @treelist-filter-row-background-color: darken(@treelist-base-background-color, 2%);
 
+/**
+* @name 190. Active header filter icon color
+* @type color
+* @group datagrid
+*/
+@treelist-active-header-filter-icon-color: @base-accent;
+
 // dxPivotGrid
 @PIVOTGRID_AREA_BACKGROUND: @base-bg;
-
 
 /**
 * @name 10. Border color
@@ -1497,7 +1512,10 @@
 * @type color
 * @group pivotgrid
 */
-@PIVOTGRID_AREA_COLOR: lighten(@base-text-color, 38.5%);
+@PIVOTGRID_AREA_COLOR: fade(@base-text-color, 54%);
+
+@pivotgrid-field-area-box-text-color: @PIVOTGRID_AREA_COLOR;
+@pivotgrid-field-area-box-background-color: darken(@base-bg, 9.5%);
 
 /**
 * @name 30. Data text color
@@ -1525,7 +1543,7 @@
 * @type color
 * @group pivotgrid
 */
-@PIVOTGRID_FIELD_AREA_TEXT_COLOR: darken(@PIVOTGRID_AREA_COLOR, 26.2%);
+@PIVOTGRID_FIELD_AREA_TEXT_COLOR: fade(darken(@PIVOTGRID_AREA_COLOR, 26.2%), 30%);
 
 @PIVOTGRID_ACCENT_COLOR: @base-accent;
 @PIVOTGRID_DRAG_HEADER_BORDER_COLOR: fade(@PIVOTGRID_ACCENT_COLOR, 50%);
@@ -1547,7 +1565,7 @@
 * @type color
 * @group pivotgrid
 */
-@pivotgrid-spin-icon-color: lighten(@base-icon-color, 38.5%);
+@pivotgrid-spin-icon-color: @PIVOTGRID_AREA_COLOR;
 
 //
 //dxScheduler

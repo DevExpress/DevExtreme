@@ -65,6 +65,8 @@ function getTickGenerator(options, incidentOccurred, skipTickGeneration) {
         skipTickGeneration: skipTickGeneration,
         skipCalculationLimits: options.skipCalculationLimits,
 
+        generateExtraTick: options.generateExtraTick,
+
         showCalculatedTicks: options.tick.showCalculatedTicks, // DEPRECATED IN 15_2
         showMinorCalculatedTicks: options.minorTick.showCalculatedTicks // DEPRECATED IN 15_2
     });
@@ -249,7 +251,8 @@ function configureGenerator(options, axisDivisionFactor, viewPort, screenDelta) 
     var tickGeneratorOptions = extend({}, options, {
         endOnTick: true,
         axisDivisionFactor: axisDivisionFactor,
-        skipCalculationLimits: true
+        skipCalculationLimits: true,
+        generateExtraTick: true
     });
 
     return function(tickInterval, skipTickGeneration, min, max) {
@@ -1172,12 +1175,12 @@ Axis.prototype = {
         return ticks;
     },
 
-    getAggregationInfo(useAllAggregatedPoints) {
+    getAggregationInfo(useAllAggregatedPoints, range) {
         let that = this,
             options = that._options,
             marginOptions = that._marginOptions,
             axisDivisionFactor = options.aggregationGroupWidth || marginOptions && (marginOptions.sizePointNormalState) || DEFAULT_AGGREGATION_GROUP_WIDTH,
-            viewPort = that.getTranslator().getBusinessRange(),
+            viewPort = new rangeModule.Range(that.getTranslator().getBusinessRange()).addRange(range),
             zoomArgs = that._zoomArgs,
             minVisible = zoomArgs && zoomArgs.min || viewPort.minVisible,
             maxVisible = zoomArgs && zoomArgs.max || viewPort.maxVisible,
@@ -1186,21 +1189,26 @@ Axis.prototype = {
             tickInterval = generateTicks(options.aggregationInterval, true, minVisible, maxVisible).tickInterval;
 
         if(options.type !== constants.discrete) {
-            let min = useAllAggregatedPoints ? viewPort.min : minVisible,
-                max = useAllAggregatedPoints ? viewPort.max : maxVisible,
-                add = getAddFunction({
+            const min = useAllAggregatedPoints ? viewPort.min : minVisible;
+            const max = useAllAggregatedPoints ? viewPort.max : maxVisible;
+            if(isDefined(min) && isDefined(max)) {
+                const add = getAddFunction({
                     base: options.logarithmBase,
                     axisType: options.type,
                     dataType: options.dataType
-                }, false, true),
-                maxMinDistance = useAllAggregatedPoints ? 0 : add(max, min, -1),
-                start = add(min, maxMinDistance, -1),
-                end = add(max, maxMinDistance);
+                }, false, true);
 
-            start = start < viewPort.min ? viewPort.min : start;
-            end = end > viewPort.max ? viewPort.max : end;
-
-            ticks = generateTicks(tickInterval, false, start, end).ticks;
+                let start = min;
+                let end = max;
+                if(!useAllAggregatedPoints) {
+                    const maxMinDistance = add(max, min, -1);
+                    start = add(min, maxMinDistance, -1);
+                    end = add(max, maxMinDistance);
+                }
+                start = start < viewPort.min ? viewPort.min : start;
+                end = end > viewPort.max ? viewPort.max : end;
+                ticks = generateTicks(tickInterval, false, start, end).ticks;
+            }
         }
 
         that._aggregationInterval = tickInterval;

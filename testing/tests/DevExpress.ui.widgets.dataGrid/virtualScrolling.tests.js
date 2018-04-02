@@ -436,7 +436,7 @@ QUnit.test("setViewport position. Scroll to third page after scroll to second pa
     assert.ok(mockDataSource.load.called);
 
     assert.strictEqual(this.externalDataChangedHandler.callCount, 2);
-    assert.deepEqual(this.externalDataChangedHandler.lastCall.args, [undefined]);
+    assert.deepEqual(this.externalDataChangedHandler.lastCall.args, [{ changeType: "append", items: [], removeCount: 20 }]);
 });
 
 QUnit.test("setViewport position. Scroll to far page", function(assert) {

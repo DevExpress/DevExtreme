@@ -598,6 +598,29 @@ if(device.deviceType !== "desktop") {
     });
 }
 
+
+QUnit.test("Close and cancel buttons for material theme", function(assert) {
+    // arrange
+    var testElement = $("#container"),
+        origIsMaterial = themes.isMaterial,
+        columnChooserView = this.columnChooserView;
+
+    this.setTestElement(testElement);
+
+    themes.isMaterial = function() { return true; };
+
+    // act
+    this.renderColumnChooser();
+    columnChooserView._popupContainer.toggle(true);
+
+    // assert
+    assert.ok($(".dx-closebutton").length, "close button is shown");
+    assert.ok(!$(".dx-button-text").length, "cancel button is hidden");
+
+    themes.isMaterial = origIsMaterial;
+});
+
+
 QUnit.test("Add non touch class when column chooser is shown on win phone", function(assert) {
     // arrange
     var testElement = $("#container");

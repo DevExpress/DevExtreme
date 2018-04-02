@@ -425,7 +425,9 @@ var Overlay = Widget.inherit({
             },
             options: {
                 width: null,
-                height: null
+                height: null,
+                animation: null,
+                _checkParentVisibility: false
             }
         }]);
     },
@@ -891,8 +893,10 @@ var Overlay = Widget.inherit({
     },
 
     _toggleSubscriptions: function(enabled) {
-        this._toggleHideTopOverlayCallback(enabled);
-        this._toggleParentsScrollSubscription(enabled);
+        if(windowUtils.hasWindow()) {
+            this._toggleHideTopOverlayCallback(enabled);
+            this._toggleParentsScrollSubscription(enabled);
+        }
     },
 
     _toggleHideTopOverlayCallback: function(subscribe) {
@@ -1201,7 +1205,7 @@ var Overlay = Widget.inherit({
     },
 
     _renderGeometry: function() {
-        if(this.option("visible")) {
+        if(this.option("visible") && windowUtils.hasWindow()) {
             this._renderGeometryImpl();
         }
     },

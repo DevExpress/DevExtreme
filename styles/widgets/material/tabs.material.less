@@ -1,65 +1,38 @@
 .dx-size-default() {
-    @MATERIAL_TABS_ITEM_PADDING: 9px;
-    @MATERIAL_TAB_TEXT_LINE_HEIGHT: 25px;
-
-    @MATERIAL_TABS_NAV_BUTTON_POSITION: 4px 6px;
-    @MATERIAL_TABS_NAV_BUTTON_SIZE: 20px;
+    @MATERIAL_TABS_ITEM_PADDING: 12px;
+    @MATERIAL_TAB_TEXT_LINE_HEIGHT: 24px;
+    @MATERIAL_TAB_HEIGHT: 48px;
 }
 
-.dx-size-compact() {
-    @MATERIAL_TABS_ITEM_PADDING: 4px;
-    @MATERIAL_TAB_TEXT_LINE_HEIGHT: 21px;
-
-    @MATERIAL_TABS_NAV_BUTTON_POSITION: 8px 5px;
-    @MATERIAL_TABS_NAV_BUTTON_SIZE: 13px;
-}
-
-@MATERIAL_TABS_BORDER_WIDTH: @MATERIAL_BASE_BORDER_WIDTH;
-@MATERIAL_TABS_BORDER: 1px solid @tabs-border-color;
-@MATERIAL_TABS_TRANSPARENT_BORDER: 1px solid @tabs-tab-bg;
-@MATERIAL_TAB_FOCUS_BORDER: 1px solid @tabs-focused-border-color;
-
-
-.dx-tabs-border-mixin(@border-horizontal, @border-vertical) {
-    &:after {
-        content: "";
-        pointer-events: none;
-        position: absolute;
-        top: -1px;
-        bottom: -1px;
-        right: -1px;
-        left: -1px;
-        border-right: @border-horizontal;
-        border-left: @border-horizontal;
-        border-top: @border-vertical;
-        border-bottom: @border-vertical;
-        z-index: 1;
-    }
-}
+@MATERIAL_TABS_BACKGROUND: darken(@base-bg, 4%);
 
 .dx-tabs {
-    border: @MATERIAL_TABS_BORDER;
+    padding: 0;
+    background-color: @MATERIAL_TABS_BACKGROUND;
+    position: relative;
+
+    .dx-inkripple {
+        overflow: hidden;
+    }
 }
 
-.dx-tabs-scrollable {
-    margin: -@MATERIAL_TABS_BORDER_WIDTH;
-    height: calc(~"100% + 2px");
-
-    .dx-tabs-wrapper {
-        border: @MATERIAL_TABS_BORDER;
-
-        .dx-tabs-nav-buttons & {
-            border-left: @MATERIAL_TABS_TRANSPARENT_BORDER;
-            border-right: @MATERIAL_TABS_TRANSPARENT_BORDER;
-        }
-    }
+.dx-tabs-nav-buttons .dx-tabs-scrollable {
+    margin-right: 36px;
+    margin-left: 36px;
 }
 
 .dx-tabs-nav-button {
     border: none;
     background-color: @tabs-tab-bg;
+    position: absolute;
+    height: @MATERIAL_TAB_HEIGHT;
+
     .border-radius(0);
     .box-shadow(none);
+
+    &.dx-button {
+        .dx-button-flat-styling(@button-normal-color);
+    }
 
     .dx-button-content {
         padding: 0;
@@ -71,6 +44,7 @@
 
     &.dx-state-disabled {
         opacity: 1;
+        background-color: @tabs-tab-bg;
 
         .dx-button-content {
             opacity: @tabs-tab-button-disabled-opacity;
@@ -81,58 +55,43 @@
 .dx-tab {
     padding: @MATERIAL_TABS_ITEM_PADDING;
     background-color: @tabs-tab-bg;
+    color: @tabs-tab-color;
+
+    &.dx-state-hover {
+        background-color: @tabs-hovered-tab-bg-color;
+    }
 
     .dx-icon {
         color: @tabs-tab-icon-color;
-        display: inline-block;
         vertical-align: middle;
         .dx-icon-sizing(@MATERIAL_BASE_ICON_SIZE);
-        .dx-icon-margin(@MATERIAL_BASE_ICON_SIZE/2);
-    }
-
-    &.dx-state-hover {
-        background-color: @tabs-tab-hover-bg;
-    }
-
-    &.dx-state-active {
-        background-color: @tabs-tab-active-bg;
-        color: @tabs-tab-selected-color;
-    }
-
-    &.dx-state-focused {
-        .dx-tabs-border-mixin(@MATERIAL_TAB_FOCUS_BORDER, @MATERIAL_TAB_FOCUS_BORDER);
+        margin: 0 auto;
     }
 
     &.dx-tab-selected {
-        background-color: @tabs-tab-selected-bg;
         color: @tabs-tab-selected-color;
-    }
-}
 
-.dx-tab-selected {
-    .dx-tabs-border-mixin(@MATERIAL_TABS_BORDER, none);
+        .dx-icon {
+            color: @tabs-tab-icon-selected-color;
+        }
 
-    .dx-icon {
-        color: @tabs-tab-icon-selected-color;
-    }
-
-    &:not(.dx-state-focused) {
-        & + & {
-            &:after {
-                border-left: @MATERIAL_TABS_TRANSPARENT_BORDER;
-
-                .dx-rtl & {
-                    border-left: @MATERIAL_TABS_BORDER;
-                    border-right: @MATERIAL_TABS_TRANSPARENT_BORDER;
-                }
-            }
+        &:before {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            height: 2px;
+            left: 0;
+            right: 0;
+            background-color: @tabs-selected-tab-bottom-border-color;
         }
     }
 }
 
-.dx-tab-text {
+.dx-tab-content, .dx-tab-text {
     vertical-align: middle;
+    text-transform: uppercase;
     line-height: @MATERIAL_TAB_TEXT_LINE_HEIGHT;
+    font-weight: 500;
 }
 
 .dx-state-disabled {
