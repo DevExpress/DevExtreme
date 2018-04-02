@@ -340,13 +340,6 @@
     }
 }
 
-.dx-scheduler-appointment-form-field-item-mixin() {
-    .dx-field-item {
-        padding-left: @SCHEDULER_APPOINTMENT_DETAILS_FORM_HORIZONTAL_OFFSET;
-        padding-right: @SCHEDULER_APPOINTMENT_DETAILS_FORM_HORIZONTAL_OFFSET;
-    }
-}
-
 .dx-scheduler-fixed-appointments {
     z-index: 100;
     position: absolute;
@@ -1750,10 +1743,8 @@
         }
     }
 
-    .dx-scheduler-appointment-form-field-item-mixin();
-
-    .dx-layout-manager-one-col {
-        .dx-scheduler-appointment-form-field-item-mixin();
+    .dx-form {
+        padding: 0 @SCHEDULER_APPOINTMENT_DETAILS_FORM_HORIZONTAL_OFFSET 0 @SCHEDULER_APPOINTMENT_DETAILS_FORM_HORIZONTAL_OFFSET;
     }
 
     .dx-scheduler-recurrence-rule-item {
