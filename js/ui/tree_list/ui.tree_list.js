@@ -21,3 +21,4 @@ require("./ui.tree_list.adaptivity");
 require("./ui.tree_list.selection");
 require("./ui.tree_list.search");
 require("./ui.tree_list.keyboard_navigation");
+require("./ui.tree_list.virtual_columns");

@@ -2785,6 +2785,29 @@ QUnit.test("all visible items should be rendered if pageSize is small and virtua
     clock.restore();
 });
 
+QUnit.test("virtual columns", function(assert) {
+    // arrange, act
+    var columns = [];
+
+    for(var i = 1; i <= 20; i++) {
+        columns.push("field" + i);
+    }
+
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        width: 200,
+        columnWidth: 50,
+        dataSource: [{}],
+        loadingTimeout: undefined,
+        columns: columns,
+        scrolling: {
+            columnRenderingMode: "virtual"
+        }
+    }).dxDataGrid("instance");
+
+    // assert
+    assert.equal(dataGrid.$element().find(".dx-data-row").children().length, 6, "visible column count");
+});
+
 QUnit.test("visible items should be rendered if virtual scrolling and preload are enabled", function(assert) {
     // arrange, act
     var clock = sinon.useFakeTimers(),

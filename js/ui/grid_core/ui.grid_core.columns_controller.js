@@ -1646,7 +1646,7 @@ module.exports = {
                             notFixedColumnCount = 0;
                             lastFixedPosition = null;
                             transparentColumnIndex = null;
-                            visibleColumns = that.getVisibleColumns(i);
+                            visibleColumns = that.getVisibleColumns(i, true);
 
                             for(j = 0; j < visibleColumns.length; j++) {
                                 prevColumn = visibleColumns[j - 1];
