@@ -6,7 +6,6 @@ var gulp = require('gulp');
 var footer = require('gulp-footer');
 var eol = require('gulp-eol');
 var replace = require('gulp-replace');
-var rename = require('gulp-rename');
 var merge = require('merge-stream');
 var file = require('gulp-file');
 var path = require('path');
@@ -98,8 +97,7 @@ gulp.task('npm-sources', ['npm-dts-generator'], function() {
         gulp.src(DIST_GLOBS)
             .pipe(gulp.dest(context.RESULT_NPM_PATH + '/dist')),
 
-        gulp.src('build/gulp/npm-readme.md')
-            .pipe(rename('README.md'))
+        gulp.src('README.md')
             .pipe(gulp.dest(context.RESULT_NPM_PATH))
     );
 });
