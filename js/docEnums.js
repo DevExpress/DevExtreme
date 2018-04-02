@@ -778,3 +778,8 @@
  * @typedef {string} Enums.ChartBubbleSeriesAggregationMethod
  * @enum {'avg'|'custom'}
  */
+
+ /**
+ * @typedef {string} Enums.GridColumnCommandType
+ * @enum {'adaptive'|'edit'|'select'}
+ */
