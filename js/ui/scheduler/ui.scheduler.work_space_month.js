@@ -78,7 +78,7 @@ var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
         return 0;
     },
 
-    _builtAllDayRowsIntoDateTable: function() {
+    _insertAllDayRowsIntoDateTable: function() {
         return false;
     },
     _getCellCoordinatesByIndex: function(index) {

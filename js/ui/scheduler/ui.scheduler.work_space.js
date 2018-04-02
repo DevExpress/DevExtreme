@@ -563,10 +563,6 @@ var SchedulerWorkSpace = Widget.inherit({
         this._$fixedContainer = $("<div>").addClass(FIXED_CONTAINER_CLASS);
         this._$allDayContainer = $("<div>").addClass(ALL_DAY_CONTAINER_CLASS);
 
-        this._allDayTitles = [];
-        this._allDayTables = [];
-        this._allDayPanels = [];
-
         this._initAllDayPanelElements();
 
         this._$timePanel = $("<table>").addClass(this._getTimePanelClass());
@@ -577,6 +573,10 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _initAllDayPanelElements: function() {
+        this._allDayTitles = [];
+        this._allDayTables = [];
+        this._allDayPanels = [];
+
         var groupCount = this._getGroupCount();
 
         if(this._isVerticalGroupedWorkSpace() && groupCount !== 0) {
@@ -677,7 +677,6 @@ var SchedulerWorkSpace = Widget.inherit({
     _createWorkSpaceStaticElements: function() {
         if(this._isVerticalGroupedWorkSpace()) {
             this._dateTableScrollable.$content().append(this._$allDayContainer, this._$groupTable, this._$timePanel, this._$dateTable);
-            this.$element().append(this._$fixedContainer, this._$headerPanel);
             this.$element().append(this._$fixedContainer, this._$headerPanel, this._dateTableScrollable.$element());
         } else {
             this._dateTableScrollable.$content().append(this._$timePanel, this._$dateTable);
@@ -1328,14 +1327,14 @@ var SchedulerWorkSpace = Widget.inherit({
             rowClass: this._getDateTableRowClass(),
             cellTemplate: this.option("dataCellTemplate"),
             getCellData: this._getCellData.bind(this),
-            allDayElements: this._builtAllDayRowsIntoDateTable() ? this._allDayPanels : undefined,
+            allDayElements: this._insertAllDayRowsIntoDateTable() ? this._allDayPanels : undefined,
             groupCount: groupCount
         });
 
         this._attachTablesEvents();
     },
 
-    _builtAllDayRowsIntoDateTable: function() {
+    _insertAllDayRowsIntoDateTable: function() {
         return this._groupedStrategy.builtAllDayRowsIntoDateTable();
     },
 

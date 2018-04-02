@@ -186,7 +186,7 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
         return this._$sidebarTable;
     },
 
-    _builtAllDayRowsIntoDateTable: function() {
+    _insertAllDayRowsIntoDateTable: function() {
         return false;
     },
 
