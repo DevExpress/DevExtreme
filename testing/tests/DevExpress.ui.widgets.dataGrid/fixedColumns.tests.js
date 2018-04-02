@@ -561,7 +561,7 @@ QUnit.test("Draw fixed table for rowsView with group row", function(assert) {
     // data row
     assert.equal($table.find("tbody > .dx-data-row").length, 2, "has data rows in main table");
     assert.equal($table.find("tbody > .dx-data-row").first().find("td").length, 5, "count cell in data row");
-    assert.strictEqual($table.find("tbody > .dx-data-row").first().find("td").eq(0).html(), "", "text a first cell in data row");
+    assert.strictEqual($table.find("tbody > .dx-data-row").first().find("td").eq(0).html(), "&nbsp;", "text a first cell in data row");
     assert.strictEqual($table.find("tbody > .dx-data-row").first().find("td").eq(1).html(), "test1", "text a second cell in data row");
     assert.strictEqual($table.find("tbody > .dx-data-row").first().find("td").eq(2).html(), "test3", "text a third cell in data row");
     assert.strictEqual($table.find("tbody > .dx-data-row").first().find("td").eq(3).html(), "test5", "text a fourth cell in data row");
