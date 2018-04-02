@@ -579,24 +579,3 @@ QUnit.test('Create palette with current case', function(assert) {
     assert.strictEqual(p.getNextColor(), 'c1');
 
 });
-
-QUnit.module('Integration');
-
-QUnit.test('Lightening palette', function(assert) {
-    assert.expect(0);
-
-    var $div = $('<div>').appendTo(document.body);
-    // act
-    var palette = new paletteModule.Palette('default', { useHighlight: true, extensionMode: "blend" });
-
-    for(var i = 0; i < 70; i++) {
-        $('<div>', {
-            css: {
-                width: 50,
-                height: 50,
-                backgroundColor: palette.getNextColor(70),
-                float: 'left'
-            }
-        }).appendTo($div);
-    }
-});
