@@ -222,7 +222,7 @@ module.exports = {
                 /**
                  * @name GridBaseOptions_filterPanel_texts
                  * @publicName texts
-                 * @type dxFilterPanelTexts
+                 * @type object
                  * @default {}
                  */
                 texts: {
