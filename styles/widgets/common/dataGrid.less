@@ -109,19 +109,18 @@
     }
 }
 
+.dx-datagrid-filter-panel,
+.dx-datagrid-filter-panel-left {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    min-width: 0;
+}
+
 .dx-datagrid-filter-panel {
-    position: relative;
     padding: 10px;
 
-    .dx-datagrid-filter-panel-checkbox,
-    .dx-icon-filter,
     .dx-datagrid-filter-panel-text {
-        display: inline-block;
-        vertical-align: middle;
-    }
-
-    .dx-datagrid-filter-panel-text {
-        max-width: 82%;
         .dx-overflow();
     }
     .dx-datagrid-filter-panel-text:hover,
@@ -135,6 +134,7 @@
     }
 
     .dx-icon-filter {
+        margin: auto;
         padding-right: 7px;
         cursor: pointer;
     }

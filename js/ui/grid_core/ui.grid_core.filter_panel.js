@@ -12,7 +12,8 @@ var $ = require("../../core/renderer"),
 var FILTER_PANEL_CLASS = "filter-panel",
     FILTER_PANEL_TEXT_CLASS = FILTER_PANEL_CLASS + "-text",
     FILTER_PANEL_CHECKBOX_CLASS = FILTER_PANEL_CLASS + "-checkbox",
-    FILTER_PANEL_CLEAR_FILTER_CLASS = FILTER_PANEL_CLASS + "-clear-filter";
+    FILTER_PANEL_CLEAR_FILTER_CLASS = FILTER_PANEL_CLASS + "-clear-filter",
+    FILTER_PANEL_LEFT_CONTAINER = FILTER_PANEL_CLASS + "-left";
 
 var FilterPanelView = modules.View.inherit({
     _renderCore: function() {
@@ -22,19 +23,25 @@ var FilterPanelView = modules.View.inherit({
     },
 
     _renderPanelElement: function() {
-        var $element = this.element();
-        $element.empty();
-        $element
-            .addClass(this.addWidgetPrefix(FILTER_PANEL_CLASS));
+        var that = this,
+            $element = that.element(),
+            $leftContainer;
 
-        if(this.option("filterValue") || this._filterValueBuffer) {
-            $element.append(this._getCheckElement())
-                .append(this._getFilterElement())
-                .append(this._getTextElement())
-                .append(this._getRemoveButtonElement());
+        $element
+            .empty()
+            .addClass(that.addWidgetPrefix(FILTER_PANEL_CLASS));
+        $leftContainer = $("<div>")
+            .addClass(that.addWidgetPrefix(FILTER_PANEL_LEFT_CONTAINER))
+            .appendTo($element);
+
+        if(that.option("filterValue") || that._filterValueBuffer) {
+            $leftContainer.append(that._getCheckElement())
+                .append(that._getFilterElement())
+                .append(that._getTextElement());
+            $element.append(that._getRemoveButtonElement());
         } else {
-            $element.append(this._getFilterElement())
-                .append(this._getTextElement());
+            $leftContainer.append(that._getFilterElement())
+                .append(that._getTextElement());
         }
     },
 
