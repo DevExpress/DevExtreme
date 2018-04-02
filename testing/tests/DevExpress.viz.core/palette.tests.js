@@ -2,18 +2,19 @@
 
 import $ from "jquery";
 import Color from "color";
-import paletteModule from "viz/palette";
+import { registerPalette, getPalette, Palette, DiscretePalette, _DEBUG_palettes, currentPalette, GradientPalette } from "viz/palette";
+
 import errors from "core/errors";
 
 var environment = {
     beforeEach: function() {
-        this.registerPalette = paletteModule.registerPalette;
-        this.getPalette = paletteModule.getPalette;
-        this.Palette = paletteModule.Palette;
-        this.DiscretePalette = paletteModule.DiscretePalette;
-        this.palettes = paletteModule._DEBUG_palettes;
+        this.registerPalette = registerPalette;
+        this.getPalette = getPalette;
+        this.Palette = Palette;
+        this.DiscretePalette = DiscretePalette;
+        this.palettes = _DEBUG_palettes;
         this.__original_palettes = $.extend(true, {}, this.palettes);
-        this.currentPalette = paletteModule.currentPalette;
+        this.currentPalette = currentPalette;
     },
     afterEach: function() {
         $.each(this.palettes, $.proxy(function(name) {
@@ -495,29 +496,29 @@ QUnit.test('More than 2 colors in source / less then size / 2', function(assert)
 QUnit.module("GradientPalette", environment);
 
 QUnit.test("not valid", function(assert) {
-    assert.strictEqual(new paletteModule.GradientPalette().getColor(0), paletteModule._DEBUG_palettes["material"].gradientSet[0], "undefined");
-    assert.strictEqual(new paletteModule.GradientPalette().getColor(1), paletteModule._DEBUG_palettes["material"].gradientSet[1], "unknown");
+    assert.strictEqual(new GradientPalette().getColor(0), _DEBUG_palettes["material"].gradientSet[0], "undefined");
+    assert.strictEqual(new GradientPalette().getColor(1), _DEBUG_palettes["material"].gradientSet[1], "unknown");
 });
 
 QUnit.test("predefined", function(assert) {
-    var palette = new paletteModule.GradientPalette("violet");
-    assert.strictEqual(palette.getColor(0), paletteModule._DEBUG_palettes["violet"].gradientSet[0], "0");
-    assert.strictEqual(palette.getColor(1), paletteModule._DEBUG_palettes["violet"].gradientSet[1], "1");
-    assert.strictEqual(palette.getColor(0.7), new Color(paletteModule._DEBUG_palettes["violet"].gradientSet[0]).blend(
-        paletteModule._DEBUG_palettes["violet"].gradientSet[1], 0.7).toHex(), "0.7");
+    var palette = new GradientPalette("violet");
+    assert.strictEqual(palette.getColor(0), _DEBUG_palettes["violet"].gradientSet[0], "0");
+    assert.strictEqual(palette.getColor(1), _DEBUG_palettes["violet"].gradientSet[1], "1");
+    assert.strictEqual(palette.getColor(0.7), new Color(_DEBUG_palettes["violet"].gradientSet[0]).blend(
+        _DEBUG_palettes["violet"].gradientSet[1], 0.7).toHex(), "0.7");
     assert.strictEqual(palette.getColor("test"), null, "not valid");
     assert.strictEqual(palette.getColor(-1), null, "out of range 1");
     assert.strictEqual(palette.getColor(2), null, "out of range 2");
 });
 
 QUnit.test("resolve theme palette", function(assert) {
-    assert.strictEqual(new paletteModule.GradientPalette(undefined, 'DARK VIOLET').getColor(0), paletteModule._DEBUG_palettes['dark violet'].gradientSet[0], 'Soft Pastel by currentPalette');
-    paletteModule.currentPalette('material');
-    assert.strictEqual(new paletteModule.GradientPalette(undefined, 'DARK VIOLET').getColor(0), paletteModule._DEBUG_palettes['material'].gradientSet[0], 'material');
+    assert.strictEqual(new GradientPalette(undefined, 'DARK VIOLET').getColor(0), _DEBUG_palettes['dark violet'].gradientSet[0], 'Soft Pastel by currentPalette');
+    currentPalette('material');
+    assert.strictEqual(new GradientPalette(undefined, 'DARK VIOLET').getColor(0), _DEBUG_palettes['material'].gradientSet[0], 'material');
 });
 
 QUnit.test("custom", function(assert) {
-    var palette = new paletteModule.GradientPalette(["#00ff00", "#ff0000"]);
+    var palette = new GradientPalette(["#00ff00", "#ff0000"]);
     assert.strictEqual(palette.getColor(0), "#00ff00", "0");
     assert.strictEqual(palette.getColor(1), "#ff0000", "1");
     assert.strictEqual(palette.getColor(0.3), new Color("#00ff00").blend("#ff0000", 0.3).toHex(), "0.3");
@@ -528,9 +529,9 @@ QUnit.test("custom", function(assert) {
 
 QUnit.module('Current palette', {
     beforeEach: function() {
-        this.currentPalette = paletteModule.currentPalette;
-        this.registerPalette = paletteModule.registerPalette;
-        this.Palette = paletteModule.Palette;
+        this.currentPalette = currentPalette;
+        this.registerPalette = registerPalette;
+        this.Palette = Palette;
     },
     afterEach: function() {
         this.currentPalette(null);

@@ -103,7 +103,7 @@ const palettes = {
 
 let currentPaletteName;
 
-function currentPalette(name) {
+export function currentPalette(name) {
     if(name === undefined) {
         return currentPaletteName || DEFAULT_PALETTE;
     } else {
@@ -112,7 +112,7 @@ function currentPalette(name) {
     }
 }
 
-function getPalette(palette, parameters) {
+export function getPalette(palette, parameters) {
     var result,
         type = parameters && parameters.type;
 
@@ -130,7 +130,7 @@ function getPalette(palette, parameters) {
     return type ? result ? result[type].slice(0) : result : result;
 }
 
-function registerPalette(name, palette) {
+export function registerPalette(name, palette) {
     var item = {},
         paletteName;
 
@@ -347,7 +347,7 @@ function BlendColors(palette, parameters) {
     };
 }
 
-function Palette(palette, parameters, themeDefaultPalette) {
+export function Palette(palette, parameters, themeDefaultPalette) {
     parameters = parameters || {};
 
     var extensionMode = (parameters.extensionMode || "").toLowerCase(),
@@ -406,7 +406,7 @@ function getLightness(color) {
     return color.r * 0.3 + color.g * 0.59 + color.b * 0.11;
 }
 
-function DiscretePalette(source, size, themeDefaultPalette) {
+export function DiscretePalette(source, size, themeDefaultPalette) {
     var keyPalette = selectPaletteOnSeniority(source, themeDefaultPalette),
         palette = size > 0 ? createDiscreteColors(getPalette(keyPalette, { type: "gradientSet" }), size) : [];
     this.getColor = function(index) {
@@ -441,7 +441,7 @@ function createDiscreteColors(source, count) {
     return gradient;
 }
 
-function GradientPalette(source, themeDefaultPalette) {
+export function GradientPalette(source, themeDefaultPalette) {
     // TODO: Looks like some new set is going to be added
     var keyPalette = selectPaletteOnSeniority(source, themeDefaultPalette),
         palette = getPalette(keyPalette, { type: "gradientSet" }),
@@ -462,15 +462,6 @@ function selectPaletteOnSeniority(source, themeDefaultPalette) {
     return result;
 }
 
-extend(exports, {
-    Palette: Palette,
-    DiscretePalette: DiscretePalette,
-    GradientPalette: GradientPalette,
-    registerPalette: registerPalette,
-    getPalette: getPalette,
-    currentPalette: currentPalette
-});
-
 ///#DEBUG
-exports._DEBUG_palettes = palettes;
+export const _DEBUG_palettes = palettes;
 ///#ENDDEBUG
