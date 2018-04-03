@@ -2271,8 +2271,10 @@ var setupVirtualRenderingModule = function() {
 
     this.changedArgs = [];
 
-    this.dataController.changed.add(e => {
-        this.changedArgs.push(e);
+    var that = this;
+
+    this.dataController.changed.add(function(e) {
+        that.changedArgs.push(e);
     });
 };
 

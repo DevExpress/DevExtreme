@@ -8,7 +8,8 @@ var MONTH_APPOINTMENT_HEIGHT_RATIO = 0.6,
     MONTH_APPOINTMENT_MIN_OFFSET = 26,
     MONTH_APPOINTMENT_MAX_OFFSET = 30,
     MONTH_DROPDOWN_APPOINTMENT_MIN_RIGHT_OFFSET = 36,
-    MONTH_DROPDOWN_APPOINTMENT_MAX_RIGHT_OFFSET = 60;
+    MONTH_DROPDOWN_APPOINTMENT_MAX_RIGHT_OFFSET = 60,
+    VERTICAL_GROUP_HEADER_WIDTH = 100;
 
 var HorizontalMonthRenderingStrategy = HorizontalMonthLineAppointmentsStrategy.inherit({
 
@@ -23,6 +24,10 @@ var HorizontalMonthRenderingStrategy = HorizontalMonthLineAppointmentsStrategy.i
             totalWidth = appointmentGeometry.reducedWidth + tailWidth,
             currentPartTop = appointmentSettings.top + this._defaultHeight,
             left = this._calculateMultiWeekAppointmentLeftOffset(appointmentSettings.hMax, fullWeekAppointmentWidth);
+
+        if(this.instance._groupOrientation === "vertical") {
+            left += VERTICAL_GROUP_HEADER_WIDTH;
+        }
 
         for(var i = 0; i < longPartCount; i++) {
             if(totalWidth > maxAppointmentWidth) {

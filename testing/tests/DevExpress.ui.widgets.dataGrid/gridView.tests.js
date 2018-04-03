@@ -1879,8 +1879,8 @@ function createGridView(options, userOptions) {
 
         // assert
         assert.equal($colElements.length, 3, "count col");
-        assert.strictEqual($colElements.eq(0).attr("style"), undefined, "width of the first col");
-        assert.strictEqual($colElements.eq(1).attr("style"), undefined, "width of the second col");
+        assert.notOk($colElements.eq(0).attr("style"), "width of the first col");
+        assert.notOk($colElements.eq(1).attr("style"), "width of the second col");
         assert.strictEqual($colElements.eq(2).attr("style"), "width: 100px;", "width of the third col");
     });
 }());

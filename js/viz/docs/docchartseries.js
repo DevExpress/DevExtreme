@@ -1093,7 +1093,7 @@ var commonSeries = {
         * @publicName calculate
         * @type function(aggregationInfo, series)
         * @type_function_param1 aggregationInfo:chartPointAggregationInfoObject
-        * @type_function_param2 series:baseSeriesObject
+        * @type_function_param2 series:chartSeriesObject
         * @type_function_return object|Array<object>
         * @default undefined
         */
@@ -1543,7 +1543,7 @@ var fullstackedbarSeries = {
     */
     selectionMode: 'onlyPoint',
     /**
-    * @name dxChartSeriesTypes_fullstackedsplineareaseries_aggregation
+    * @name dxChartSeriesTypes_fullstackedbarseries_aggregation
     * @publicName aggregation
     * @inheritdoc
     * @type object
@@ -2098,14 +2098,14 @@ var stackedareaSeries = {
     */
     selectionMode: 'includePoints',
     /**
-    * @name dxChartSeriesTypes_splineseries_aggregation
+    * @name dxChartSeriesTypes_stackedareaseries_aggregation
     * @publicName aggregation
     * @inheritdoc
     * @type object
     */
     aggregation: {
         /**
-        * @name dxChartSeriesTypes_splineseries_aggregation_method
+        * @name dxChartSeriesTypes_stackedareaseries_aggregation_method
         * @publicName method
         * @type Enums.ChartSingleValueSeriesAggregationMethod
         * @default 'avg'

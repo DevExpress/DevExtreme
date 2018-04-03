@@ -8,8 +8,14 @@
         border-bottom: @datagrid-border;
     }
 
-    > .dx-datagrid-pager, > .dx-datagrid-headers {
+    > .dx-datagrid-pager, > .dx-datagrid-headers, > .dx-datagrid-filter-panel {
         border-top: @datagrid-border;
+    }
+
+    > .dx-datagrid-filter-panel {
+        border-top-width: 0;
+        border-left: @datagrid-border;
+        border-right: @datagrid-border;
     }
 }
 
@@ -90,6 +96,11 @@
             .dx-datagrid-error-message();
         }
     }
+}
+
+.dx-datagrid-filter-panel {
+    color: @datagrid-base-color;
+    border-top: @datagrid-border;
 }
 
 .dx-datagrid-form-buttons-container {

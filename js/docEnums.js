@@ -381,7 +381,7 @@
 
 /**
  * @typedef {string} Enums.FormItemType
- * @enum {'empty'|'group'|'simple'|'tabbed'}
+ * @enum {'empty'|'group'|'simple'|'tabbed'|'button'}
  */
 
 /**
@@ -576,6 +576,16 @@
 
 /**
  * @typedef {string} Enums.TreeListScrollingMode
+ * @enum {'standard'|'virtual'}
+ */
+
+ /**
+ * @typedef {string} Enums.RowScrollingMode
+ * @enum {'auto'|'standard'|'virtual'}
+ */
+
+ /**
+ * @typedef {string} Enums.ColumnScrollingMode
  * @enum {'standard'|'virtual'}
  */
 

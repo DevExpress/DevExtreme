@@ -6,6 +6,7 @@ QUnit.testStart(() => {
     const markup =
         '<div id="scheduler"> </div>\
         <div id="scheduler-work-space"> </div>\
+        <div id="scheduler-work-space-grouped">\
         <div id="navigator"> </div>';
 
     $("#qunit-fixture").html(markup);

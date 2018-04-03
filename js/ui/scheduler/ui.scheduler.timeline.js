@@ -13,6 +13,8 @@ var $ = require("../../core/renderer"),
 var TIMELINE_CLASS = "dx-scheduler-timeline",
     GROUP_TABLE_CLASS = "dx-scheduler-group-table",
 
+    HORIZONTAL_GROUPED_WORKSPACE_CLASS = "dx-scheduler-work-space-horizontal-grouped",
+
     TIMELINE_GROUPED_ATTR = "dx-group-column-count";
 
 var HORIZONTAL = "horizontal",
@@ -33,6 +35,16 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
         }
 
         return this._$focusedCell;
+    },
+
+    _toggleGroupingDirectionClass: function() {
+        this.$element().toggleClass(HORIZONTAL_GROUPED_WORKSPACE_CLASS, this._isHorizontalGroupedWorkSpace() && this.option("groups"));
+    },
+
+    _getDefaultOptions: function() {
+        return extend(this.callBase(), {
+            groupOrientation: "vertical"
+        });
     },
 
     _getRightCell: function() {
@@ -76,13 +88,13 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
         return this._getCellCountInDay() * this.option("intervalCount");
     },
 
-    _getTotalCellCount: function() {
-        return this._getCellCount();
-    },
-
     _getTotalRowCount: function(groupCount) {
-        groupCount = groupCount || 1;
-        return this._getRowCount() * groupCount;
+        if(this._isHorizontalGroupedWorkSpace()) {
+            return this._getRowCount();
+        } else {
+            groupCount = groupCount || 1;
+            return this._getRowCount() * groupCount;
+        }
     },
 
     _getDateByIndex: function(index) {
@@ -96,9 +108,19 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
         return "shorttime";
     },
 
+    _needApplyLastGroupCellClass: function() {
+        return false;
+    },
+
     _calculateHiddenInterval: function(rowIndex, cellIndex) {
         var dayIndex = Math.floor(cellIndex / this._getCellCountInDay());
         return dayIndex * this._getHiddenInterval();
+    },
+
+    _getMillisecondsOffset: function(rowIndex, cellIndex) {
+        cellIndex = this._calculateCellIndex(rowIndex, cellIndex);
+
+        return this._getInterval() * cellIndex + this._calculateHiddenInterval(rowIndex, cellIndex);
     },
 
     _createWorkSpaceElements: function() {
@@ -153,9 +175,22 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
         return false;
     },
 
+    _isHorizontalGroupedWorkSpace: function() {
+        return this.option("groupOrientation") === "horizontal";
+    },
+
     _getGroupHeaderContainer: function() {
+        if(this._isHorizontalGroupedWorkSpace()) {
+            return this._$thead;
+        }
         return this._$sidebarTable;
     },
+
+    _insertAllDayRowsIntoDateTable: function() {
+        return false;
+    },
+
+    _createAllDayPanelElements: noop,
 
     _renderView: function() {
         this._setFirstViewDate();
@@ -260,7 +295,10 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
     },
 
     _makeGroupRows: function(groups) {
-        return tableCreator.makeGroupedTable(tableCreator.VERTICAL, groups, {
+        var tableCreatorStrategy = this.option("groupOrientation") === "vertical" ? tableCreator.VERTICAL : tableCreator.HORIZONTAL;
+
+        return tableCreator.makeGroupedTable(tableCreatorStrategy, groups, {
+            groupRowClass: this._getGroupRowClass(),
             groupHeaderRowClass: this._getGroupRowClass(),
             groupHeaderClass: this._getGroupHeaderClass(),
             groupHeaderContentClass: this._getGroupHeaderContentClass()
@@ -271,6 +309,11 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
         if(!windowUtils.hasWindow()) {
             return;
         }
+
+        if(this._isHorizontalGroupedWorkSpace()) {
+            return;
+        }
+
         var cellHeight = this.getCellHeight() - DATE_TABLE_CELL_BORDER * 2;
         cellHeight = this._ensureGroupHeaderCellsHeight(cellHeight);
 
@@ -308,28 +351,19 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
         };
     },
 
+
     _getCellByCoordinates: function(cellCoordinates, groupIndex) {
+        var indexes = this._groupedStrategy.prepareCellIndexes(cellCoordinates, groupIndex);
+
         return this._$dateTable
             .find("tr")
-            .eq(cellCoordinates.rowIndex + groupIndex)
+            .eq(indexes.rowIndex)
             .find("td")
-            .eq(cellCoordinates.cellIndex);
-    },
-
-    _calculateCellIndex: function(rowIndex, cellIndex) {
-        return cellIndex;
-    },
-
-    _getGroupIndex: function(rowIndex) {
-        return rowIndex;
+            .eq(indexes.cellIndex);
     },
 
     _getWorkSpaceWidth: function() {
         return this._$dateTable.outerWidth(true);
-    },
-
-    _calculateHeaderCellRepeatCount: function() {
-        return 1;
     },
 
     _getGroupIndexByCell: function($cell) {

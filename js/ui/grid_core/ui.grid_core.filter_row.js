@@ -601,12 +601,12 @@ var ColumnHeadersViewFilterRowExtender = (function() {
 })();
 
 var DataControllerFilterRowExtender = {
-    _skipCalculateColumnFilters: function() {
+    skipCalculateColumnFilters: function() {
         return false;
     },
 
     _calculateAdditionalFilter: function() {
-        if(this._skipCalculateColumnFilters()) {
+        if(this.skipCalculateColumnFilters()) {
             return this.callBase();
         }
 

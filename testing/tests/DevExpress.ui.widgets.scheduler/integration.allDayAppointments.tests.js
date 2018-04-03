@@ -1397,3 +1397,83 @@ QUnit.test("dropDown appointment should have correct container & position", func
     assert.roughEqual(translator.locate($dropDown).left, 228, 1.001, "Appointment position is OK");
     assert.roughEqual(translator.locate($dropDown).top, 0, 1.001, "Appointment position is OK");
 });
+
+QUnit.test("AllDay appointments should have correct height, groupOrientation = vertical", function(assert) {
+    var appointments = [
+        { ownerId: 1, startDate: new Date(2015, 2, 10, 1), endDate: new Date(2015, 2, 10, 1, 30), allDay: true, text: "caption1" },
+        { ownerId: 2, startDate: new Date(2015, 2, 10, 1), endDate: new Date(2015, 2, 10, 1, 30), allDay: true, text: "caption2" }];
+
+    this.createInstance({
+        currentDate: new Date(2015, 2, 10),
+        dataSource: appointments,
+        groupOrientation: "vertical",
+        currentView: "day",
+        showAllDayPanel: true,
+        groups: ["ownerId"],
+        resources: [
+            {
+                field: "ownerId",
+                label: "o",
+                allowMultiple: true,
+                dataSource: [
+                    {
+                        text: "a",
+                        id: 1
+                    },
+                    {
+                        text: "b",
+                        id: 2
+                    }
+                ]
+            }
+        ]
+    });
+
+    var allDayPanelHeight = $(this.instance.$element()).find(".dx-scheduler-all-day-table-cell").eq(0).outerHeight();
+
+    assert.equal($(this.instance.$element()).find(".dx-scheduler-all-day-appointment").eq(0).outerHeight(), allDayPanelHeight, "First appointment height is correct on init");
+    assert.equal($(this.instance.$element()).find(".dx-scheduler-all-day-appointment").eq(1).outerHeight(), allDayPanelHeight, "Second appointment height is correct on init");
+});
+
+QUnit.test("AllDay appointments should have correct position, groupOrientation = vertical", function(assert) {
+    var appointments = [
+        { ownerId: 1, startDate: new Date(2015, 2, 10, 1), endDate: new Date(2015, 2, 10, 1, 30), allDay: true, text: "caption1" },
+        { ownerId: 2, startDate: new Date(2015, 2, 10, 1), endDate: new Date(2015, 2, 10, 1, 30), allDay: true, text: "caption2" }];
+
+    this.createInstance({
+        dataSource: appointments,
+        currentDate: new Date(2015, 2, 10),
+        groupOrientation: "vertical",
+        currentView: "day",
+        showAllDayPanel: true,
+        groups: ["ownerId"],
+        resources: [
+            {
+                field: "ownerId",
+                label: "o",
+                allowMultiple: true,
+                dataSource: [
+                    {
+                        text: "a",
+                        id: 1
+                    },
+                    {
+                        text: "b",
+                        id: 2
+                    }
+                ]
+            }
+        ]
+    });
+
+    var $element = $(this.instance.$element()),
+        $appointments = $element.find(".dx-scheduler-appointment"),
+        firstPosition = translator.locate($appointments.eq(0)),
+        secondPosition = translator.locate($appointments.eq(1)),
+        $allDayRows = $element.find(".dx-scheduler-all-day-table-row"),
+        firstAllDayRowPosition = translator.locate($allDayRows.eq(0)),
+        secondAllDayRowPosition = translator.locate($allDayRows.eq(1));
+
+    assert.roughEqual(firstPosition.top, firstAllDayRowPosition.top, 1.5, "Appointment has correct top");
+    assert.roughEqual(secondPosition.top, secondAllDayRowPosition.top, 1.5, "Appointment has correct top");
+});
