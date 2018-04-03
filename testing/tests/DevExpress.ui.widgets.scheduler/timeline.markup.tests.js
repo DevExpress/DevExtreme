@@ -3,6 +3,8 @@
 import $ from "jquery";
 import SchedulerTimeline from "ui/scheduler/ui.scheduler.timeline";
 import SchedulerTimelineDay from "ui/scheduler/ui.scheduler.timeline_day";
+import SchedulerTimelineWeek from "ui/scheduler/ui.scheduler.timeline_week";
+import SchedulerTimelineWorkWeek from "ui/scheduler/ui.scheduler.timeline_work_week";
 import dataUtils from "core/element_data";
 import dateLocalization from "localization/date";
 import SchedulerWorkSpaceVerticalStrategy from "ui/scheduler/ui.scheduler.work_space.grouped.strategy.vertical";
@@ -427,5 +429,198 @@ QUnit.module("TimelineDay with horizontal grouping markup", timelineDayModuleCon
 
         assert.equal($groupRows.length, 1, "Row count is OK");
         assert.equal($firstRowCells.length, 2, "Cell count is OK");
+    });
+});
+
+let timelineWeekModuleConfig = {
+    beforeEach: () =>{
+        this.createInstance = function(options) {
+            if(this.instance) {
+                this.instance.invoke.restore();
+                delete this.instance;
+            }
+
+            this.instance = $("#scheduler-timeline").dxSchedulerTimelineWeek().dxSchedulerTimelineWeek("instance");
+            stubInvokeMethod(this.instance, options);
+        };
+
+        this.createInstance();
+    }
+};
+
+let formatWeekdayAndDay = function(date) {
+    return dateLocalization.getDayNames("abbreviated")[date.getDay()] + " " + dateLocalization.format(date, "day");
+};
+
+QUnit.module("TimelineWeek markup", timelineWeekModuleConfig, () => {
+    QUnit.test("Scheduler timeline week should be initialized", (assert) => {
+        assert.ok(this.instance instanceof SchedulerTimelineWeek, "dxSchedulerTimeLineWeek was initialized");
+    });
+
+    QUnit.test("Scheduler timeline week should have a right css class", (assert) => {
+        let $element = this.instance.$element();
+        assert.ok($element.hasClass("dx-scheduler-timeline"), "dxSchedulerTimelineWeek has 'dx-scheduler-timeline' css class");
+        assert.ok($element.hasClass("dx-scheduler-timeline-week"), "dxSchedulerTimelineWeek has 'dx-scheduler-timeline' css class");
+    });
+
+    QUnit.test("Scheduler timeline week view should have right cell & row count", (assert) => {
+        let $element = this.instance.$element();
+
+
+        assert.equal($element.find(".dx-scheduler-date-table-row").length, 1, "Date table has 1 rows");
+        assert.equal($element.find(".dx-scheduler-date-table-cell").length, 336, "Date table has 336 cells");
+    });
+
+    QUnit.test("Scheduler timeline week view should have right cell & row count is startDayHour and endDayHour are defined", (assert) => {
+        this.instance.option({
+            startDayHour: 9,
+            endDayHour: 10,
+            currentDate: new Date(2015, 9, 29),
+            groups: [
+                { name: "one", items: [{ id: 1, text: "a" }, { id: 2, text: "b" }] }
+            ]
+        });
+        let $element = this.instance.$element(),
+            $lastRow = $element.find(".dx-scheduler-header-row").last();
+
+
+        assert.equal($element.find(".dx-scheduler-date-table-row").length, 2, "Date table has 1 rows");
+        assert.equal($element.find(".dx-scheduler-date-table-cell").length, 28, "Date table has 28 cells");
+        assert.equal($lastRow.find(".dx-scheduler-header-panel-cell").length, 14, "Header row has 14 cells");
+
+        assert.equal($lastRow.find(".dx-scheduler-header-panel-cell").eq(2).text(), dateLocalization.format(new Date(2015, 9, 29, 9), "shorttime"));
+    });
+
+    QUnit.test("Scheduler timeline week header cells should have right class", (assert) => {
+        this.instance.option({
+            currentDate: new Date(2015, 9, 29)
+        });
+        let $element = this.instance.$element(),
+            $firstRow = $element.find(".dx-scheduler-header-row").first();
+
+        assert.equal($firstRow.find(".dx-scheduler-header-panel-week-cell").length, 7, "First row cells count and class is ok");
+    });
+
+    QUnit.test("Scheduler timeline week should have rigth first view date", (assert) => {
+        this.instance.option({
+            currentDate: new Date(2015, 9, 21),
+            firstDayOfWeek: 1,
+            startDayHour: 4
+        });
+
+        assert.deepEqual(this.instance.getStartViewDate(), new Date(2015, 9, 19, 4), "First view date is OK");
+    });
+
+    QUnit.test("Scheduler timeline week should contain two rows in header panel", (assert) => {
+        this.instance.option({
+            currentDate: new Date(2015, 9, 29),
+            firstDayOfWeek: 1,
+            startDayHour: 4,
+            endDayHour: 5
+        });
+
+        let $rows = this.instance.$element().find(".dx-scheduler-header-row"),
+            $firstRowCells = $rows.first().find(".dx-scheduler-header-panel-cell"),
+            startDate = 26;
+
+        assert.equal($rows.length, 2, "There are 2 rows in header panel");
+
+        for(var i = 0; i < 7; i++) {
+            var $cell = $firstRowCells.eq(i);
+            assert.equal($cell.text(), formatWeekdayAndDay(new Date(2015, 9, startDate + i)), "Cell text is OK");
+            assert.equal($cell.attr("colspan"), 2, "Cell colspan is OK");
+        }
+    });
+
+    QUnit.test("Cell count should depend on start/end day hour & hoursInterval", (assert) => {
+        var $element = this.instance.$element();
+
+        this.instance.option({
+            currentDate: new Date(2015, 2, 1),
+            firstDayOfWeek: 0,
+            startDayHour: 5,
+            endDayHour: 10,
+            hoursInterval: 0.75
+        });
+
+        assert.equal($element.find(".dx-scheduler-date-table-cell").length, 49, "Cell count is OK");
+    });
+});
+
+let timelineWorkWeekModuleConfig = {
+    beforeEach: () =>{
+        this.createInstance = function(options) {
+            if(this.instance) {
+                this.instance.invoke.restore();
+                delete this.instance;
+            }
+
+            this.instance = $("#scheduler-timeline").dxSchedulerTimelineWorkWeek().dxSchedulerTimelineWorkWeek("instance");
+            stubInvokeMethod(this.instance, options);
+        };
+
+        this.createInstance();
+    }
+};
+
+QUnit.module("TimelineWorkWeek markup", timelineWorkWeekModuleConfig, () => {
+    QUnit.test("Scheduler timeline work week should be initialized", (assert) => {
+        assert.ok(this.instance instanceof SchedulerTimelineWorkWeek, "dxSchedulerTimeLineWorkWeek was initialized");
+    });
+
+    QUnit.test("Scheduler timeline work week should have a right css class", (assert) => {
+        var $element = this.instance.$element();
+        assert.ok($element.hasClass("dx-scheduler-timeline"), "dxSchedulerTimelineWorkWeek has 'dx-scheduler-timeline' css class");
+        assert.ok($element.hasClass("dx-scheduler-timeline-work-week"), "dxSchedulerTimelineWorkWeek has 'dx-scheduler-timeline-work-week' css class");
+    });
+
+    QUnit.test("Scheduler timeline work week view should have right cell & row count", (assert) => {
+        var $element = this.instance.$element();
+        assert.equal($element.find(".dx-scheduler-date-table-row").length, 1, "Date table has 1 rows");
+        assert.equal($element.find(".dx-scheduler-date-table-cell").length, 240, "Date table has 240 cells");
+    });
+
+    QUnit.test("Scheduler timeline work week should have rigth first view date", (assert) => {
+        this.instance.option({
+            currentDate: new Date(2015, 9, 21),
+            firstDayOfWeek: 1,
+            startDayHour: 4
+        });
+
+        assert.deepEqual(this.instance.getStartViewDate(), new Date(2015, 9, 19, 4), "First view date is OK");
+    });
+
+    QUnit.test("Scheduler timeline workweek should contain two rows in header panel", (assert) => {
+        this.instance.option({
+            currentDate: new Date(2015, 9, 29),
+            firstDayOfWeek: 1,
+            startDayHour: 4,
+            endDayHour: 5
+        });
+
+        var $rows = this.instance.$element().find(".dx-scheduler-header-row"),
+            $firstRowCells = $rows.first().find("th"),
+            startDate = 26;
+
+        assert.equal($rows.length, 2, "There are 2 rows in header panel");
+
+        for(var i = 0; i < 5; i++) {
+            var $cell = $firstRowCells.eq(i);
+            assert.equal($cell.text(), formatWeekdayAndDay(new Date(2015, 9, startDate + i)), "Cell text is OK");
+            assert.equal($cell.attr("colspan"), 2, "Cell colspan is OK");
+        }
+    });
+
+    QUnit.test("Scheduler timeline workweek view should be correct, if currentDate is Monday, but firstDayOfWeek = 0", (assert) => {
+        var $element = this.instance.$element();
+
+        this.instance.option("firstDayOfWeek", 0);
+        this.instance.option("currentDate", new Date(2015, 4, 25));
+
+        var $headerCells = $element.find(".dx-scheduler-header-row th");
+
+        assert.equal($headerCells.first().text().toLowerCase(), dateLocalization.getDayNames("abbreviated")[1].toLowerCase() + " 25", "first header has a right text");
+        assert.equal($headerCells.eq(2).text().toLowerCase(), dateLocalization.getDayNames("abbreviated")[3].toLowerCase() + " 27", "3 header has a right text");
+        assert.equal($headerCells.eq(4).text().toLowerCase(), dateLocalization.getDayNames("abbreviated")[5].toLowerCase() + " 29", "last header has a right text");
     });
 });
