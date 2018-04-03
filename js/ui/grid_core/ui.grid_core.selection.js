@@ -76,24 +76,20 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
         return key !== selectionFilter[0];
     };
 
-    var getSelectionCellTemplate = function() {
-        return (container, options) => {
-            var rowsView = options.component.getView("rowsView");
+    var selectionCellTemplate = (container, options) => {
+        var rowsView = options.component.getView("rowsView");
 
-            rowsView.renderSelectCheckBoxContainer($(container), options);
-        };
+        rowsView.renderSelectCheckBoxContainer($(container), options);
     };
 
-    var getSelectionHeaderTemplate = function() {
-        return (container, options) => {
-            var column = options.column,
-                $cellElement = $(container).parent(),
-                columnHeadersView = options.component.getView("columnHeadersView");
+    var selectionHeaderTemplate = (container, options) => {
+        var column = options.column,
+            $cellElement = $(container).parent(),
+            columnHeadersView = options.component.getView("columnHeadersView");
 
-            $cellElement.addClass(EDITOR_CELL_CLASS);
-            columnHeadersView._renderSelectAllCheckBox($cellElement, column);
-            columnHeadersView._attachSelectAllCheckBoxClickEvent($cellElement);
-        };
+        $cellElement.addClass(EDITOR_CELL_CLASS);
+        columnHeadersView._renderSelectAllCheckBox($cellElement, column);
+        columnHeadersView._attachSelectAllCheckBoxClickEvent($cellElement);
     };
 
     return {
@@ -155,8 +151,6 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
             var columnsController = this.getController("columns"),
                 isSelectColumnVisible = this.isSelectColumnVisible();
 
-            columnsController.columnOption("command:select", "visible", isSelectColumnVisible);
-
             columnsController.addCommandColumn({
                 command: "select",
                 visible: isSelectColumnVisible,
@@ -165,9 +159,11 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
                 alignment: "center",
                 cssClass: COMMAND_SELECT_CLASS,
                 width: "auto",
-                cellTemplate: getSelectionCellTemplate(),
-                headerCellTemplate: getSelectionHeaderTemplate()
+                cellTemplate: selectionCellTemplate,
+                headerCellTemplate: selectionHeaderTemplate
             });
+
+            columnsController.columnOption("command:select", "visible", isSelectColumnVisible);
         },
 
         _createSelection: function(options) {

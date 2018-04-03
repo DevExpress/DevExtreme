@@ -52,6 +52,22 @@ function getDataCellElements($row) {
     return $row.find("td:not(.dx-datagrid-hidden-column):not([class*='dx-command-'])");
 }
 
+function adaptiveCellTemplate(container, options) {
+    var $adaptiveColumnButton,
+        $container = $(container),
+        adaptiveColumnsController = options.component.getController("adaptiveColumns");
+
+    if(options.rowType !== "groupFooter") {
+        $adaptiveColumnButton = $("<span>").addClass(adaptiveColumnsController.addWidgetPrefix(ADAPTIVE_COLUMN_BUTTON_CLASS));
+        eventsEngine.on($adaptiveColumnButton, eventUtils.addNamespace(clickEvent.name, ADAPTIVE_NAMESPACE), adaptiveColumnsController.createAction(function() {
+            adaptiveColumnsController.toggleExpandAdaptiveDetailRow(options.key);
+        }));
+        $adaptiveColumnButton.appendTo($container);
+    } else {
+        $container.get(0).innerHTML = "&nbsp;";
+    }
+}
+
 var AdaptiveColumnsController = modules.ViewController.inherit({
     _isRowEditMode: function() {
         var editMode = this._editingController.getEditMode();
@@ -378,23 +394,6 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
         }
     },
 
-    _getAdaptiveCellTemplate: function() {
-        return (container, options) => {
-            var $adaptiveColumnButton,
-                $container = $(container);
-
-            if(options.rowType !== "groupFooter") {
-                $adaptiveColumnButton = $("<span>").addClass(this.addWidgetPrefix(ADAPTIVE_COLUMN_BUTTON_CLASS));
-                eventsEngine.on($adaptiveColumnButton, eventUtils.addNamespace(clickEvent.name, ADAPTIVE_NAMESPACE), this.createAction(function() {
-                    this.toggleExpandAdaptiveDetailRow(options.key);
-                }));
-                $adaptiveColumnButton.appendTo($container);
-            } else {
-                $container.get(0).innerHTML = "&nbsp;";
-            }
-        };
-    },
-
     isFormEditMode: function() {
         var editMode = this._editingController.getEditMode();
 
@@ -598,7 +597,7 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
             adaptiveHidden: true,
             cssClass: ADAPTIVE_COLUMN_NAME_CLASS,
             width: "auto",
-            cellTemplate: that._getAdaptiveCellTemplate()
+            cellTemplate: adaptiveCellTemplate
         });
 
         that._columnsController.columnsChanged.add(function() {

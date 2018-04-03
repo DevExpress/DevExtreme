@@ -108,6 +108,31 @@ var EditingController = modules.ViewController.inherit((function() {
         };
     };
 
+    var editCellTemplate = (container, options) => {
+        var editingTexts,
+            editingOptions,
+            $container = $(container),
+            editingController = options.component.getController("editing"),
+            isRowMode = isRowEditMode(editingController);
+
+        if(options.rowType === "data") {
+            $container.css("textAlign", "center");
+            options.rtlEnabled = editingController.option("rtlEnabled");
+
+            editingOptions = editingController.option("editing") || {};
+            editingTexts = editingOptions.texts || {};
+
+            if(options.row && options.row.rowIndex === editingController._getVisibleEditRowIndex() && isRowMode) {
+                editingController._createLink($container, editingTexts.saveRowChanges, "saveEditData", options, "dx-link-save");
+                editingController._createLink($container, editingTexts.cancelRowChanges, "cancelEditData", options, "dx-link-cancel");
+            } else {
+                editingController._createEditingLinks($container, options, editingOptions, isRowMode);
+            }
+        } else {
+            $container.get(0).innerHTML = "&nbsp;";
+        }
+    };
+
     return {
         init: function() {
             var that = this;
@@ -1161,15 +1186,15 @@ var EditingController = modules.ViewController.inherit((function() {
             var that = this,
                 isEditColumnVisible = that._isEditColumnVisible();
 
-            that._columnsController.columnOption("command:edit", "visible", isEditColumnVisible);
-
             that._columnsController.addCommandColumn({
                 command: "edit",
                 visible: isEditColumnVisible,
                 cssClass: "dx-command-edit",
                 width: "auto",
-                cellTemplate: that._getEditCellTemplate()
+                cellTemplate: editCellTemplate
             });
+
+            that._columnsController.columnOption("command:edit", "visible", isEditColumnVisible);
         },
 
         _isEditColumnVisible: function() {
@@ -1512,34 +1537,6 @@ var EditingController = modules.ViewController.inherit((function() {
                 that._editForm.on("contentReady", function() {
                     that._editPopup && that._editPopup.repaint();
                 });
-            };
-        },
-
-        _getEditCellTemplate: function(options) {
-            var that = this;
-
-            return function(container, options) {
-                var editingTexts,
-                    editingOptions,
-                    $container = $(container),
-                    isRowMode = isRowEditMode(that);
-
-                if(options.rowType === "data") {
-                    $container.css("textAlign", "center");
-                    options.rtlEnabled = that.option("rtlEnabled");
-
-                    editingOptions = that.option("editing") || {};
-                    editingTexts = editingOptions.texts || {};
-
-                    if(options.row && options.row.rowIndex === that._getVisibleEditRowIndex() && isRowMode) {
-                        that._createLink($container, editingTexts.saveRowChanges, "saveEditData", options, "dx-link-save");
-                        that._createLink($container, editingTexts.cancelRowChanges, "cancelEditData", options, "dx-link-cancel");
-                    } else {
-                        that._createEditingLinks($container, options, editingOptions, isRowMode);
-                    }
-                } else {
-                    $container.get(0).innerHTML = "&nbsp;";
-                }
             };
         },
 

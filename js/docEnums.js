@@ -781,5 +781,5 @@
 
  /**
  * @typedef {string} Enums.GridCommandColumnType
- * @enum {'adaptive'|'edit'|'select'}
+ * @enum {'adaptive'|'edit'|'expand'|'select'}
  */

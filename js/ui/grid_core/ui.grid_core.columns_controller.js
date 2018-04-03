@@ -662,7 +662,7 @@ module.exports = {
                     }
 
                     if(columnOptions.command) {
-                        that.addCommandColumn(extend(true, {}, columnOptions), true);
+                        return extend(true, {}, columnOptions);
                     } else {
                         commonColumnOptions = that.getCommonSettings();
                         if(userStateColumnOptions && userStateColumnOptions.name && userStateColumnOptions.dataField) {
@@ -950,11 +950,12 @@ module.exports = {
                     bandColumnIndex,
                     parentBandColumns,
                     bandColumns = {},
-                    columns = [],
-                    bandColumnsCache = that.getBandColumnsCache();
+                    result = [],
+                    bandColumnsCache = that.getBandColumnsCache(),
+                    columns = that._columns.filter((column) => !column.command);
 
-                for(i = 0; i < that._columns.length; i++) {
-                    column = that._columns[i];
+                for(i = 0; i < columns.length; i++) {
+                    column = columns[i];
                     parentBandColumns = getParentBandColumns(i, bandColumnsCache.columnParentByIndex);
 
                     if(parentBandColumns.length) {
@@ -962,7 +963,7 @@ module.exports = {
                         bandColumns[bandColumnIndex] = bandColumns[bandColumnIndex] || [];
                         bandColumns[bandColumnIndex].push(column);
                     } else {
-                        columns.push(column);
+                        result.push(column);
                     }
                 }
 
@@ -970,7 +971,7 @@ module.exports = {
                     normalizeIndexes(bandColumns[key], "visibleIndex", currentColumn);
                 }
 
-                normalizeIndexes(columns, "visibleIndex", currentColumn);
+                normalizeIndexes(result, "visibleIndex", currentColumn);
             };
 
             var getColumnIndexByVisibleIndex = function(that, visibleIndex, location) {
@@ -1358,6 +1359,43 @@ module.exports = {
                 }
 
                 return str;
+            };
+
+            var mergeColumns = (columns, commandColumns, needToExtend) => {
+                var i,
+                    column,
+                    commandColumnIndex,
+                    columnIndexCorrection = needToExtend ? commandColumns.length : 0,
+                    result = extend(true, [], columns.length ? needToExtend && commandColumns.concat(columns) || columns : []),
+                    getCommandColumnIndex = (column) => {
+                        var result = -1;
+
+                        commandColumns.some((commandColumn, index) => {
+                            if(commandColumn.command === column.command) {
+                                result = index;
+                                return true;
+                            }
+                        });
+
+                        return result;
+                    };
+
+                if(result.length) {
+                    for(i = 0; i < columns.length; i++) {
+                        column = result[columnIndexCorrection + i];
+
+                        if(column && column.command) {
+                            commandColumnIndex = getCommandColumnIndex(column);
+
+                            if(commandColumnIndex >= 0) {
+                                result[commandColumnIndex] = extend({}, commandColumns[commandColumnIndex], column);
+                                needToExtend && result.splice(columnIndexCorrection + i, 1);
+                            }
+                        }
+                    }
+                }
+
+                return result;
             };
 
             return {
@@ -1778,14 +1816,14 @@ module.exports = {
                         result = [],
                         rowspanExpandColumns = 0,
                         firstPositiveIndexColumn,
-                        expandColumns = that.getExpandColumns(),
+                        expandColumns = mergeColumns(that.getExpandColumns(), that._columns),
                         rowCount = that.getRowCount(),
                         positiveIndexedColumns = [],
                         negativeIndexedColumns = [],
                         notGroupedColumnsCount = 0,
                         isFixedToEnd,
                         rtlEnabled = that.option("rtlEnabled"),
-                        columns = extend(true, [], that._columns.length ? that._commandColumns.concat(that._columns) : []),
+                        columns = mergeColumns(that._columns, that._commandColumns, true),
                         bandColumnsCache = that.getBandColumnsCache(),
                         columnDigitsCount = digitsCount(columns.length);
 
@@ -2517,8 +2555,6 @@ module.exports = {
                         column = createColumn(that, options),
                         index = that._columns.length;
 
-                    if(!column) return;
-
                     that._columns.push(column);
 
                     if(column.isBand) {
@@ -2545,27 +2581,17 @@ module.exports = {
                         that.updateColumns(that._dataSource);
                     }
                 },
-                addCommandColumn: function(options, isCustomCommandColumn) {
-                    var i,
-                        options1,
-                        options2,
-                        commandColumnIndex = -1,
-                        commandColumns = this._commandColumns;
+                addCommandColumn: function(options) {
+                    var commandColumns = this._commandColumns,
+                        i;
 
                     for(i = 0; i < commandColumns.length; i++) {
                         if(commandColumns[i].command === options.command) {
-                            commandColumnIndex = i;
-                            break;
+                            return;
                         }
                     }
 
-                    if(commandColumnIndex >= 0) {
-                        options1 = isCustomCommandColumn ? commandColumns[commandColumnIndex] : options;
-                        options2 = isCustomCommandColumn ? options : commandColumns[commandColumnIndex];
-                        commandColumns[commandColumnIndex] = extend({}, options1, options2);
-                    } else {
-                        commandColumns.push(options);
-                    }
+                    commandColumns.push(options);
                 },
                 getUserState: function() {
                     var columns = this._columns,
