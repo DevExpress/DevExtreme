@@ -88,8 +88,9 @@ exports.XmlaStore = Class.inherit((function() {
     }
 
     function mdxDescendants(level, levelMember, nextLevel) {
-        levelMember = levelMember ? "." + levelMember : "";
-        return "Descendants({" + level + levelMember + "}, " + nextLevel + ", SELF_AND_BEFORE)";
+        var memberExpression = levelMember ? levelMember : level;
+
+        return "Descendants({" + memberExpression + "}, " + nextLevel + ", SELF_AND_BEFORE)";
     }
 
     function getAllMember(dimension) {
@@ -140,7 +141,7 @@ exports.XmlaStore = Class.inherit((function() {
 
             if(i < path.length) {
                 if(isLastDimensionInGroup) {
-                    arg = "(" + dataField + "." + preparePathValue(path[i]) + ")";
+                    arg = "(" + dataField + "." + preparePathValue(path[i], dataField) + ")";
                 }
             } else if(i <= expandAllIndex) {
                 if(i === 0 && expandAllCount === 0) {
@@ -266,7 +267,7 @@ exports.XmlaStore = Class.inherit((function() {
             }
 
             each(filterValues, function(_, filterValue) {
-                var filterMdx = dataField + "." + preparePathValue(Array.isArray(filterValue) ? filterValue[filterValue.length - 1] : filterValue);
+                var filterMdx = dataField + "." + preparePathValue(Array.isArray(filterValue) ? filterValue[filterValue.length - 1] : filterValue, dataField);
                 if(field.filterType === "exclude") {
                     filterExpression.push(filterMdx + ".parent");
                     filterMdx = "Descendants(" + filterMdx + ")";
@@ -340,7 +341,7 @@ exports.XmlaStore = Class.inherit((function() {
             each(options.path, function(index, value) {
                 var dimension = options[options.headerName][index];
                 if(!dimension.hierarchyName || dimension.hierarchyName !== options[options.headerName][index + 1].hierarchyName) {
-                    slice.push(dimension.dataField + "." + preparePathValue(value));
+                    slice.push(dimension.dataField + "." + preparePathValue(value, dimension.dataField));
                 }
             });
         }
@@ -362,7 +363,7 @@ exports.XmlaStore = Class.inherit((function() {
             if(field.hierarchyName && (fields[index + 1] || {}).hierarchyName === field.hierarchyName) {
                 return;
             }
-            slice.push(field.dataField + "." + preparePathValue(value));
+            slice.push(field.dataField + "." + preparePathValue(value, field.dataField));
         });
     }
 
@@ -524,10 +525,15 @@ exports.XmlaStore = Class.inherit((function() {
         return cells;
     }
 
-    function preparePathValue(pathValue) {
+    function preparePathValue(pathValue, dataField) {
         if(pathValue) {
-            return (typeUtils.isString(pathValue) && pathValue.indexOf("&[") !== -1) ? pathValue : "[" + pathValue + "]";
+            pathValue = typeUtils.isString(pathValue) && pathValue.indexOf("&[") !== -1 ? pathValue : "[" + pathValue + "]";
+
+            if(dataField && pathValue.indexOf(dataField + ".") === 0) {
+                pathValue = pathValue.slice(dataField.length + 1, pathValue.length);
+            }
         }
+        return pathValue;
     }
 
     function getItem(hash, name, member, index) {
@@ -541,7 +547,7 @@ exports.XmlaStore = Class.inherit((function() {
         if(!item.value && member) {
             item.text = member.caption;
             item.value = member.value;
-            item.key = name ? name.slice(name.indexOf('&[')) : '';
+            item.key = name ? name : '';
             item.levelName = member.levelName;
             item.hierarchyName = member.hierarchyName;
             item.parentName = member.parentName;
