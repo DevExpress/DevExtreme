@@ -608,8 +608,10 @@ var FieldChooser = BaseFieldChooser.inherit({
         that._dataChangedHandlers.push(dataChanged);
     },
 
-    _renderAreaFields: function($container, area, fields) {
-        var that = this;
+    _renderAreaFields: function($container, area) {
+        var that = this,
+            dataSource = that._dataSource,
+            fields = dataSource ? dataSource.getAreaFields(area, true) : [];
 
         $container.empty();
         each(fields, function(_, field) {
@@ -644,8 +646,7 @@ var FieldChooser = BaseFieldChooser.inherit({
         if(area !== "all") {
             $fieldsContent = $(DIV).addClass("dx-area-field-container").appendTo($fieldsContainer);
             render = function() {
-                var fields = that._dataSource ? that._dataSource.getAreaFields(area, true) : [];
-                that._renderAreaFields($fieldsContent, area, fields);
+                that._renderAreaFields($fieldsContent, area);
             };
 
             that._dataChangedHandlers.push(render);
