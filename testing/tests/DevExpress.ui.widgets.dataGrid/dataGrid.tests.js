@@ -3807,14 +3807,15 @@ QUnit.test("Horizontal scroll position of footer view is changed_T251448", funct
     assert.equal($headersView.scrollLeft(), 300, "scroll left of headers view");
 });
 
-QUnit.test("Total summary row should be rendered if scrolling mode is virtual", function(assert) {
+QUnit.test("Total summary row should be rendered if row rendering mode is virtual", function(assert) {
     // arrange
     var clock = sinon.useFakeTimers(),
         $dataGrid = $("#dataGrid").dxDataGrid({
             width: 300,
             dataSource: [{ id: 1 }],
             scrolling: {
-                mode: "virtual"
+                mode: "virtual",
+                rowRenderingMode: "virtual"
             },
             summary: {
                 totalItems: [{
@@ -3830,6 +3831,8 @@ QUnit.test("Total summary row should be rendered if scrolling mode is virtual", 
     var $footerView = $dataGrid.find(".dx-datagrid-total-footer");
     assert.ok($footerView.is(":visible"), "footer view is visible");
     assert.ok($footerView.find(".dx-row").length, 1, "one footer row is rendered");
+
+    clock.restore();
 });
 
 QUnit.test("Keep horizontal scroller position after refresh with native scrolling", function(assert) {
