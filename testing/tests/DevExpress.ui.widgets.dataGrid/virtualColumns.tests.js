@@ -290,7 +290,8 @@ var setupRenderingModule = function() {
     this.setupVirtualColumns = function(options) {
         this.setupModules($.extend(true, {
             scrolling: {
-                columnRenderingMode: "virtual"
+                columnRenderingMode: "virtual",
+                useNative: false
             },
             columnWidth: 50,
             columns: this.columns,
