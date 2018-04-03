@@ -5,6 +5,7 @@ import SchedulerTimeline from "ui/scheduler/ui.scheduler.timeline";
 import SchedulerTimelineDay from "ui/scheduler/ui.scheduler.timeline_day";
 import SchedulerTimelineWeek from "ui/scheduler/ui.scheduler.timeline_week";
 import SchedulerTimelineWorkWeek from "ui/scheduler/ui.scheduler.timeline_work_week";
+import SchedulerTimelineMonth from "ui/scheduler/ui.scheduler.timeline_month";
 import dataUtils from "core/element_data";
 import dateLocalization from "localization/date";
 import SchedulerWorkSpaceVerticalStrategy from "ui/scheduler/ui.scheduler.work_space.grouped.strategy.vertical";
@@ -339,6 +340,62 @@ timelineDayModuleConfig = {
             }
 
             this.instance = $("#scheduler-timeline").dxSchedulerTimelineDay({
+                currentDate: new Date(2015, 9, 16)
+            }).dxSchedulerTimelineDay("instance");
+            stubInvokeMethod(this.instance, options);
+        };
+
+        this.createInstance();
+    }
+};
+
+QUnit.module("TimelineDay with intervalCount markup", timelineDayModuleConfig, () => {
+    QUnit.test("TimelineDay has right intervalCount of cells with view option intervalCount", (assert) => {
+        this.instance.option("intervalCount", 2);
+
+        var cells = this.instance.$element().find(".dx-scheduler-date-table-cell");
+        assert.equal(cells.length, this.instance._getCellCountInDay() * 2, "view has right cell count");
+
+        this.instance.option("intervalCount", 4);
+
+        cells = this.instance.$element().find(".dx-scheduler-date-table-cell");
+        assert.equal(cells.length, this.instance._getCellCountInDay() * 4, "view has right cell count");
+    });
+
+    QUnit.test("TimelineDay Day view cells have right cellData with view option intervalCount=2", (assert) => {
+        this.instance.option("intervalCount", 2);
+        this.instance.option("currentDate", new Date(2017, 5, 29));
+
+        var firstCellData = dataUtils.data(this.instance.$element().find(".dx-scheduler-date-table-cell").get(0), "dxCellData"),
+            secondCellData = dataUtils.data(this.instance.$element().find(".dx-scheduler-date-table-cell").get(95), "dxCellData");
+
+        assert.deepEqual(firstCellData.startDate, new Date(2017, 5, 29, 0), "cell has right startDate");
+        assert.deepEqual(firstCellData.endDate, new Date(2017, 5, 29, 0, 30), "cell has right endtDate");
+
+        assert.deepEqual(secondCellData.startDate, new Date(2017, 5, 30, 23, 30), "cell has right startDate");
+        assert.deepEqual(secondCellData.endDate, new Date(2017, 5, 31, 0), "cell has right endtDate");
+    });
+
+    QUnit.test("Get date range", (assert) => {
+        this.instance.option("currentDate", new Date(2015, 2, 16));
+        this.instance.option("intervalCount", 2);
+
+        assert.deepEqual(this.instance.getDateRange(), [new Date(2015, 2, 16, 0, 0), new Date(2015, 2, 17, 23, 59)], "Range is OK");
+
+        this.instance.option("intervalCount", 4);
+        assert.deepEqual(this.instance.getDateRange(), [new Date(2015, 2, 16, 0, 0), new Date(2015, 2, 19, 23, 59)], "Range is OK");
+    });
+});
+
+timelineDayModuleConfig = {
+    beforeEach: () =>{
+        this.createInstance = function(options) {
+            if(this.instance) {
+                this.instance.invoke.restore();
+                delete this.instance;
+            }
+
+            this.instance = $("#scheduler-timeline").dxSchedulerTimelineDay({
                 groupOrientation: "horizontal"
             }).dxSchedulerTimelineDay("instance");
             stubInvokeMethod(this.instance, options);
@@ -533,7 +590,7 @@ QUnit.module("TimelineWeek markup", timelineWeekModuleConfig, () => {
     });
 
     QUnit.test("Cell count should depend on start/end day hour & hoursInterval", (assert) => {
-        var $element = this.instance.$element();
+        let $element = this.instance.$element();
 
         this.instance.option({
             currentDate: new Date(2015, 2, 1),
@@ -544,6 +601,73 @@ QUnit.module("TimelineWeek markup", timelineWeekModuleConfig, () => {
         });
 
         assert.equal($element.find(".dx-scheduler-date-table-cell").length, 49, "Cell count is OK");
+    });
+});
+
+timelineWeekModuleConfig = {
+    beforeEach: () =>{
+        this.createInstance = function(options) {
+            if(this.instance) {
+                this.instance.invoke.restore();
+                delete this.instance;
+            }
+
+            this.instance = $("#scheduler-timeline").dxSchedulerTimelineWeek(options).dxSchedulerTimelineWeek("instance");
+            stubInvokeMethod(this.instance, options);
+        };
+
+        this.createInstance({
+            currentDate: new Date(2015, 9, 16)
+        });
+    }
+};
+
+QUnit.module("TimelineWeek with intervalCount markup", timelineWeekModuleConfig, () => {
+    QUnit.test("TimelineWeek has right count of cells with view option intervalCount", (assert) => {
+        this.instance.option("intervalCount", 2);
+
+        let cells = this.instance.$element().find(".dx-scheduler-date-table-cell");
+        assert.equal(cells.length, this.instance._getCellCountInDay() * 7 * 2, "view has right cell count");
+
+        this.instance.option("intervalCount", 4);
+
+        cells = this.instance.$element().find(".dx-scheduler-date-table-cell");
+        assert.equal(cells.length, this.instance._getCellCountInDay() * 7 * 4, "view has right cell count");
+    });
+
+    QUnit.test("TimelineWeek view cells have right cellData with view option intervalCount=2", (assert) => {
+        this.instance.option("intervalCount", 2);
+        this.instance.option("currentDate", new Date(2017, 5, 29));
+
+        let firstCellData = dataUtils.data(this.instance.$element().find(".dx-scheduler-date-table-cell").get(7 * 48), "dxCellData"),
+            secondCellData = dataUtils.data(this.instance.$element().find(".dx-scheduler-date-table-cell").get(2 * 7 * 48 - 1), "dxCellData");
+
+        assert.deepEqual(firstCellData.startDate, new Date(2017, 6, 2, 0), "cell has right startDate");
+        assert.deepEqual(firstCellData.endDate, new Date(2017, 6, 2, 0, 30), "cell has right endtDate");
+
+        assert.deepEqual(secondCellData.startDate, new Date(2017, 6, 8, 23, 30), "cell has right startDate");
+        assert.deepEqual(secondCellData.endDate, new Date(2017, 6, 9, 0), "cell has right endtDate");
+    });
+
+    QUnit.test("Get date range", (assert) => {
+        this.instance.option("currentDate", new Date(2017, 5, 26));
+        this.instance.option("intervalCount", 2);
+        this.instance.option("firstDayOfWeek", 1);
+
+        assert.deepEqual(this.instance.getDateRange(), [new Date(2017, 5, 26, 0, 0), new Date(2017, 6, 9, 23, 59)], "Range is OK");
+
+        this.instance.option("intervalCount", 4);
+        assert.deepEqual(this.instance.getDateRange(), [new Date(2017, 5, 26, 0, 0), new Date(2017, 6, 23, 23, 59)], "Range is OK");
+    });
+
+    QUnit.test("TimelineWeek view should contain right header if intervalCount=3", (assert) => {
+        this.instance.option("currentDate", new Date(2017, 5, 26));
+        this.instance.option("intervalCount", 3);
+
+        let $element = this.instance.$element(),
+            $firstRow = $element.find(".dx-scheduler-header-row").first();
+
+        assert.equal($firstRow.find(".dx-scheduler-header-panel-cell").length, 21, "Header row has 21 cells");
     });
 });
 
@@ -569,13 +693,13 @@ QUnit.module("TimelineWorkWeek markup", timelineWorkWeekModuleConfig, () => {
     });
 
     QUnit.test("Scheduler timeline work week should have a right css class", (assert) => {
-        var $element = this.instance.$element();
+        let $element = this.instance.$element();
         assert.ok($element.hasClass("dx-scheduler-timeline"), "dxSchedulerTimelineWorkWeek has 'dx-scheduler-timeline' css class");
         assert.ok($element.hasClass("dx-scheduler-timeline-work-week"), "dxSchedulerTimelineWorkWeek has 'dx-scheduler-timeline-work-week' css class");
     });
 
     QUnit.test("Scheduler timeline work week view should have right cell & row count", (assert) => {
-        var $element = this.instance.$element();
+        let $element = this.instance.$element();
         assert.equal($element.find(".dx-scheduler-date-table-row").length, 1, "Date table has 1 rows");
         assert.equal($element.find(".dx-scheduler-date-table-cell").length, 240, "Date table has 240 cells");
     });
@@ -598,29 +722,255 @@ QUnit.module("TimelineWorkWeek markup", timelineWorkWeekModuleConfig, () => {
             endDayHour: 5
         });
 
-        var $rows = this.instance.$element().find(".dx-scheduler-header-row"),
+        let $rows = this.instance.$element().find(".dx-scheduler-header-row"),
             $firstRowCells = $rows.first().find("th"),
             startDate = 26;
 
         assert.equal($rows.length, 2, "There are 2 rows in header panel");
 
-        for(var i = 0; i < 5; i++) {
-            var $cell = $firstRowCells.eq(i);
+        for(let i = 0; i < 5; i++) {
+            let $cell = $firstRowCells.eq(i);
             assert.equal($cell.text(), formatWeekdayAndDay(new Date(2015, 9, startDate + i)), "Cell text is OK");
             assert.equal($cell.attr("colspan"), 2, "Cell colspan is OK");
         }
     });
 
     QUnit.test("Scheduler timeline workweek view should be correct, if currentDate is Monday, but firstDayOfWeek = 0", (assert) => {
-        var $element = this.instance.$element();
+        let $element = this.instance.$element();
 
         this.instance.option("firstDayOfWeek", 0);
         this.instance.option("currentDate", new Date(2015, 4, 25));
 
-        var $headerCells = $element.find(".dx-scheduler-header-row th");
+        let $headerCells = $element.find(".dx-scheduler-header-row th");
 
         assert.equal($headerCells.first().text().toLowerCase(), dateLocalization.getDayNames("abbreviated")[1].toLowerCase() + " 25", "first header has a right text");
         assert.equal($headerCells.eq(2).text().toLowerCase(), dateLocalization.getDayNames("abbreviated")[3].toLowerCase() + " 27", "3 header has a right text");
         assert.equal($headerCells.eq(4).text().toLowerCase(), dateLocalization.getDayNames("abbreviated")[5].toLowerCase() + " 29", "last header has a right text");
+    });
+});
+
+timelineWorkWeekModuleConfig = {
+    beforeEach: () =>{
+        this.createInstance = function(options) {
+            if(this.instance) {
+                this.instance.invoke.restore();
+                delete this.instance;
+            }
+
+            this.instance = $("#scheduler-timeline").dxSchedulerTimelineWorkWeek(options).dxSchedulerTimelineWorkWeek("instance");
+            stubInvokeMethod(this.instance, options);
+        };
+
+        this.createInstance({
+            currentDate: new Date(2015, 9, 16)
+        });
+    }
+};
+
+QUnit.module("TimelineWorkWeek with intervalCount markup", timelineWorkWeekModuleConfig, () => {
+    QUnit.test("TimelineWorkWeek has right count of cells with view option intervalCount", (assert) => {
+        this.instance.option("intervalCount", 2);
+
+        let cells = this.instance.$element().find(".dx-scheduler-date-table-cell");
+        assert.equal(cells.length, this.instance._getCellCountInDay() * 5 * 2, "view has right cell count");
+
+        this.instance.option("intervalCount", 4);
+
+        cells = this.instance.$element().find(".dx-scheduler-date-table-cell");
+        assert.equal(cells.length, this.instance._getCellCountInDay() * 5 * 4, "view has right cell count");
+    });
+
+    QUnit.test("TimelineWorkWeek view cells have right cellData with view option intervalCount=2", (assert) => {
+        this.instance.option("intervalCount", 2);
+        this.instance.option("currentDate", new Date(2017, 5, 29));
+
+        let firstCellData = dataUtils.data(this.instance.$element().find(".dx-scheduler-date-table-cell").get(5 * 48), "dxCellData"),
+            secondCellData = dataUtils.data(this.instance.$element().find(".dx-scheduler-date-table-cell").get(2 * 5 * 48 - 1), "dxCellData");
+
+        assert.deepEqual(firstCellData.startDate, new Date(2017, 6, 3, 0), "cell has right startDate");
+        assert.deepEqual(firstCellData.endDate, new Date(2017, 6, 3, 0, 30), "cell has right endtDate");
+
+        assert.deepEqual(secondCellData.startDate, new Date(2017, 6, 7, 23, 30), "cell has right startDate");
+        assert.deepEqual(secondCellData.endDate, new Date(2017, 6, 8, 0), "cell has right endtDate");
+    });
+
+    QUnit.test("Get date range", (assert) => {
+        this.instance.option("currentDate", new Date(2017, 5, 26));
+        this.instance.option("intervalCount", 2);
+        this.instance.option("firstDayOfWeek", 1);
+
+        assert.deepEqual(this.instance.getDateRange(), [new Date(2017, 5, 26, 0, 0), new Date(2017, 6, 7, 23, 59)], "Range is OK");
+
+        this.instance.option("intervalCount", 4);
+        assert.deepEqual(this.instance.getDateRange(), [new Date(2017, 5, 26, 0, 0), new Date(2017, 6, 21, 23, 59)], "Range is OK");
+    });
+
+    QUnit.test("TimelineWorkWeek view should contain right header if intervalCount=3", (assert) => {
+        this.instance.option("currentDate", new Date(2017, 5, 26));
+        this.instance.option("intervalCount", 3);
+
+        let $element = this.instance.$element(),
+            $firstRow = $element.find(".dx-scheduler-header-row").first(),
+            $headerCells = $firstRow.find(".dx-scheduler-header-panel-cell");
+
+        assert.equal($headerCells.length, 15, "Header row has 15 cells");
+        assert.equal($headerCells.eq(0).text(), "Mon 26", "Header cell text is correct");
+        assert.equal($headerCells.eq(5).text(), "Mon 3", "Header cell text is correct");
+        assert.equal($headerCells.eq(14).text(), "Fri 14", "Header cell text is correct");
+    });
+});
+
+let timelineMonthModuleConfig = {
+    beforeEach: () =>{
+        this.createInstance = function(options) {
+            if(this.instance) {
+                this.instance.invoke.restore();
+                delete this.instance;
+            }
+
+            this.instance = $("#scheduler-timeline").dxSchedulerTimelineMonth(options).dxSchedulerTimelineMonth("instance");
+            stubInvokeMethod(this.instance, options);
+        };
+
+        this.createInstance({
+            currentDate: new Date(2015, 9, 16)
+        });
+    }
+};
+
+QUnit.module("TimelineMonth markup", timelineMonthModuleConfig, () => {
+    QUnit.test("Scheduler timeline month should be initialized", (assert) => {
+        assert.ok(this.instance instanceof SchedulerTimelineMonth, "dxSchedulerTimeLineMonth was initialized");
+    });
+
+    QUnit.test("Scheduler timeline month should have a right css class", (assert) => {
+        let $element = this.instance.$element();
+        assert.ok($element.hasClass("dx-scheduler-timeline"), "dxSchedulerTimelineMonth has 'dx-scheduler-timeline' css class");
+        assert.ok($element.hasClass("dx-scheduler-timeline-month"), "dxSchedulerTimelineMonth has 'dx-scheduler-timeline' css class");
+    });
+
+    QUnit.test("Scheduler timeline month view should have right cell & row count", (assert) => {
+        let $element = this.instance.$element();
+
+        assert.equal($element.find(".dx-scheduler-date-table-row").length, 1, "Date table has 1 rows");
+        assert.equal($element.find(".dx-scheduler-date-table-cell").length, 31, "Date table has 240 cells");
+    });
+
+    QUnit.test("Scheduler timeline month header panel should have right quantity of cells", (assert) => {
+        this.instance.option({
+            currentDate: new Date(2015, 8, 21)
+        });
+        let $element = this.instance.$element();
+
+        assert.equal($element.find(".dx-scheduler-header-panel-cell").length, 30, "Time panel has a right count of cells");
+        $element.find(".dx-scheduler-header-panel-cell").each(function(index) {
+            var header = formatWeekdayAndDay(new Date(new Date(2015, 8, 1).getTime() + 3600000 * 24 * index));
+            assert.equal($(this).text(), header, "Header text is OK");
+        });
+    });
+
+    QUnit.test("Scheduler timeline month should have rigth first view date", (assert) => {
+        this.instance.option({
+            currentDate: new Date(2015, 9, 21),
+            firstDayOfWeek: 1,
+            startDayHour: 4
+        });
+
+        assert.deepEqual(this.instance.getStartViewDate(), new Date(2015, 9, 1, 4), "First view date is OK");
+
+        this.instance.option({
+            startDayHour: 0
+        });
+
+        assert.deepEqual(this.instance.getStartViewDate(), new Date(2015, 9, 1, 0), "First view date is OK after startDayHour option changed");
+    });
+
+    QUnit.test("Each cell of scheduler timeline month should contain rigth jQuery dxCellData", (assert) => {
+        this.instance.option({
+            currentDate: new Date(2015, 3, 1),
+            startDayHour: 1,
+            endDayHour: 10,
+            firstDayOfWeek: 1
+        });
+
+        let $cells = this.instance.$element().find("." + CELL_CLASS);
+
+        $cells.each(function(index) {
+            assert.deepEqual(dataUtils.data($(this)[0], "dxCellData"), {
+                startDate: new Date(2015, 3, 1 + index, 1),
+                endDate: new Date(2015, 3, 1 + index, 10),
+                allDay: false
+            }, "data of first cell is rigth");
+        });
+    });
+
+    QUnit.test("Cells should have right date", (assert) => {
+        this.instance.option({
+            currentDate: new Date(2016, 3, 21),
+            firstDayOfWeek: 1,
+            hoursInterval: 1,
+            startDayHour: 8,
+            endDayHour: 20
+        });
+
+        let $cells = this.instance.$element().find("." + CELL_CLASS);
+        assert.deepEqual(dataUtils.data($cells.get(25), "dxCellData").startDate, new Date(2016, 3, 26, 8), "Date is OK");
+    });
+});
+
+timelineMonthModuleConfig = {
+    beforeEach: () =>{
+        this.createInstance = function(options) {
+            if(this.instance) {
+                this.instance.invoke.restore();
+                delete this.instance;
+            }
+
+            this.instance = $("#scheduler-timeline").dxSchedulerTimelineMonth(options).dxSchedulerTimelineMonth("instance");
+            stubInvokeMethod(this.instance, options);
+        };
+
+        this.createInstance({
+            currentDate: new Date(2015, 9, 16)
+        });
+    }
+};
+
+QUnit.module("TimelineMonth with intervalCount", timelineMonthModuleConfig, () => {
+    QUnit.test("TimelineMonth has right count of cells with view option intervalCount", (assert) => {
+        this.instance.option("intervalCount", 2);
+
+        let cells = this.instance.$element().find(".dx-scheduler-date-table-cell");
+        assert.equal(cells.length, 61, "view has right cell count");
+
+        this.instance.option("intervalCount", 4);
+
+        cells = this.instance.$element().find(".dx-scheduler-date-table-cell");
+        assert.equal(cells.length, 123, "view has right cell count");
+    });
+
+    QUnit.test("TimelineMonth view cells have right cellData with view option intervalCount=2", (assert) => {
+        this.instance.option("intervalCount", 2);
+        this.instance.option("currentDate", new Date(2017, 5, 29));
+
+        let firstCellData = dataUtils.data(this.instance.$element().find(".dx-scheduler-date-table-cell").get(0), "dxCellData"),
+            secondCellData = dataUtils.data(this.instance.$element().find(".dx-scheduler-date-table-cell").last().get(0), "dxCellData");
+
+        assert.deepEqual(firstCellData.startDate, new Date(2017, 5, 1, 0), "cell has right startDate");
+        assert.deepEqual(firstCellData.endDate, new Date(2017, 5, 2, 0), "cell has right endtDate");
+
+        assert.deepEqual(secondCellData.startDate, new Date(2017, 6, 31, 0), "cell has right startDate");
+        assert.deepEqual(secondCellData.endDate, new Date(2017, 7, 1, 0), "cell has right endtDate");
+    });
+
+    QUnit.test("Get date range", (assert) => {
+        this.instance.option("currentDate", new Date(2017, 5, 26));
+        this.instance.option("intervalCount", 2);
+        this.instance.option("firstDayOfWeek", 1);
+
+        assert.deepEqual(this.instance.getDateRange(), [new Date(2017, 5, 1), new Date(2017, 6, 31, 23, 59)], "Range is OK");
+
+        this.instance.option("intervalCount", 4);
+        assert.deepEqual(this.instance.getDateRange(), [new Date(2017, 5, 1), new Date(2017, 8, 30, 23, 59)], "Range is OK");
     });
 });
