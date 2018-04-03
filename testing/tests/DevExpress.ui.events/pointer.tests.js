@@ -5,7 +5,7 @@ var $ = require("jquery");
 QUnit.testStart(function() {
     var markup =
         '<div id="container">\
-            <div id="element"></div>\
+            <div id="element"><div id="delegated"></div></div>\
         </div>';
 
     $("#qunit-fixture").html(markup);

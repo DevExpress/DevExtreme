@@ -318,7 +318,7 @@ var baseFixedColumns = {
     },
 
     _createColGroup: function(columns) {
-        if(this.option("advancedRendering") && this._isFixedTableRendering) {
+        if(this.option("advancedRendering") && this._isFixedTableRendering && !this.option("columnAutoWidth")) {
             var visibleColumns = this._columnsController.getVisibleColumns();
             var useVisibleColumns = visibleColumns.filter(function(column) { return !column.width; }).length;
             if(useVisibleColumns) {

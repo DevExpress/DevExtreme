@@ -6,20 +6,46 @@ var $ = require("../../core/renderer"),
     typeUtils = require("../../core/utils/type"),
     getPublicElement = require("../../core/utils/dom").getPublicElement;
 
+var ROW_SELECTOR = "tr";
+
 var SchedulerTableCreator = {
 
     VERTICAL: "vertical",
     HORIZONTAL: "horizontal",
 
+    insertAllDayRow: function(allDayElements, tableBody, index) {
+        if(allDayElements[index]) {
+            var row = allDayElements[index].find(ROW_SELECTOR);
+
+            if(!row.length) {
+                row = domAdapter.createElement(ROW_SELECTOR);
+                row.append(allDayElements[index].get(0));
+            }
+
+            tableBody.appendChild(row.get ? row.get(0) : row);
+        }
+    },
+
     makeTable: function(options) {
         var tableBody = domAdapter.createElement("tbody"),
-            templateCallbacks = [];
+            templateCallbacks = [],
+            row,
+            rowCountInGroup = options.groupCount ? options.rowCount / options.groupCount : options.rowCount,
+            allDayElementIndex = 0,
+            allDayElements = options.allDayElements;
 
         $(options.container).append(tableBody);
 
+        if(allDayElements) {
+            this.insertAllDayRow(allDayElements, tableBody, 0);
+            allDayElementIndex++;
+        }
+
         for(var i = 0; i < options.rowCount; i++) {
-            var row = domAdapter.createElement("tr");
+            row = domAdapter.createElement(ROW_SELECTOR);
             tableBody.appendChild(row);
+
+            var isLastRowInGroup = (i + 1) % rowCountInGroup === 0;
 
             if(options.rowClass) {
                 row.className = options.rowClass;
@@ -83,7 +109,11 @@ var SchedulerTableCreator = {
                         td.innerHTML = "<div>" + options.getCellText(i, j) + "</div>";
                     }
                 }
+            }
 
+            if(allDayElements && isLastRowInGroup) {
+                this.insertAllDayRow(allDayElements, tableBody, allDayElementIndex);
+                allDayElementIndex++;
             }
         }
 
@@ -172,7 +202,7 @@ var SchedulerTableCreator = {
 
         function putCellsToRows() {
             cellStorage.forEach(function(cells) {
-                var row = domAdapter.createElement("tr");
+                var row = domAdapter.createElement(ROW_SELECTOR);
                 if(groupRowClass) {
                     row.className = groupRowClass;
                 }

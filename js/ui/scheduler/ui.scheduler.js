@@ -314,6 +314,14 @@ var Scheduler = Widget.inherit({
                 */
 
                 /**
+                * @name dxSchedulerOptions_views_groupOrientation
+                * @publicName groupOrientation
+                * @type string
+                * @default undefined
+                * @acceptValues 'vertical'|'horizontal'
+                */
+
+                /**
                 * @name dxSchedulerOptions_currentView
                 * @publicName currentView
                 * @type Enums.SchedulerViewType

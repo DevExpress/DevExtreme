@@ -147,6 +147,9 @@
         "dxDataGrid-ariaSelectAll": "Valitse kaikki",
         "dxDataGrid-ariaSelectRow": "Valitse rivi",
         "dxDataGrid-filterBuilderPopupTitle": "!TODO",
+        "dxDataGrid-filterPanelCreateFilter": "!TODO",
+        "dxDataGrid-filterPanelClearFilter": "!TODO",
+        "dxDataGrid-filterPanelFilterEnabledHint": "!TODO",
 
         "dxTreeList-ariaTreeList": "Puu",
         "dxTreeList-editingAddRowToNode": "Lisää",
