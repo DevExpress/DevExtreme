@@ -60,63 +60,6 @@ var processItems = function(groupItems, field) {
     });
 };
 
-function changeProps(field, props) {
-    if(props.sortOrder) {
-        field.sortOrder = props.sortOrder;
-        return;
-    }
-
-    if(props.filterType || props.filterValues !== undefined) {
-        field.filterValues = props.filterValues;
-        field.filterType = props.filterType;
-        return;
-    }
-
-    field.area = props.area;
-    field.areaIndex = props.areaIndex;
-}
-
-function updateAreaIndex(props, field, sourceField) {
-    var newAreaIndex = props.areaIndex,
-        prevAreaIndex = sourceField.areaIndex;
-    if(props.area === null && field.areaIndex > prevAreaIndex) {
-        field.areaIndex--;
-        return;
-    }
-
-    if(props.area !== sourceField.area) {
-        if(field.area === props.area) {
-            normalizeNewArea(newAreaIndex, field);
-        } else if(field.area === sourceField.area) {
-            normalizeOldArea(prevAreaIndex, field);
-        }
-    } else {
-        normalizeCurrentArea(newAreaIndex, prevAreaIndex, field);
-    }
-}
-
-function normalizeOldArea(prevAreaIndex, field) {
-    if(field.areaIndex > prevAreaIndex) {
-        field.areaIndex--;
-    }
-}
-
-function normalizeNewArea(newAreaIndex, field) {
-    if(field.areaIndex >= newAreaIndex) {
-        field.areaIndex++;
-    }
-}
-
-function normalizeCurrentArea(newAreaIndex, prevAreaIndex, field) {
-    if(field.areaIndex >= newAreaIndex) {
-        if(field.areaIndex === newAreaIndex && prevAreaIndex < newAreaIndex) {
-            field.areaIndex--;
-        } else if(prevAreaIndex >= field.areaIndex || newAreaIndex >= field.areaIndex) {
-            field.areaIndex++;
-        }
-    }
-}
-
 function getMainGroupField(dataSource, sourceField) {
     var field = sourceField;
     if(isDefined(sourceField.groupIndex)) {
@@ -149,18 +92,6 @@ var FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).in
         this._headerFilterView = new HeaderFilterView(this);
         this._refreshDataSource();
         this.subscribeToEvents();
-    },
-
-    _setInitialState: function() {
-        var option = this.option("state"),
-            state;
-
-        if(option === null) {
-            state = {
-                fields: extend(true, [], this._dataSource.fields())
-            };
-            this.option("state", state);
-        }
     },
 
     _refreshDataSource: function() {
@@ -325,124 +256,22 @@ var FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).in
                         });
                         dataSource.load();
                     } else {
-                        that._setInitialState();
-                        var treeView = that.$element().find(".dx-treeview").dxTreeView("instance"),
-                            props = { area: targetArea, areaIndex: e.targetIndex },
-                            extendedField = extend(true, {}, field), updatedField;
+                        var startState = dataSource.state(),
+                            state = that.option("state") || startState;
 
-                        if(!e.sourceGroup) {
-                            var $item = e.sourceElement.closest(".dx-treeview-item");
+                        dataSource.state(state, true);
+                        dataSource.field(getMainGroupField(dataSource, field).index, {
+                            area: targetArea,
+                            areaIndex: e.targetIndex
+                        });
 
-                            if($item.parent().hasClass("dx-state-selected")) {
-                                that._removeFromSourceArea(extendedField);
-                                that._updateTargetArea(extendedField, props);
-                            } else {
-                                treeView.selectItem($item);
-                            }
-                        } else if(!targetArea) {
-                            var treeViewNodes = that._getTreeViewFields(that._createFieldsDataSource(that._dataSource)),
-                                treeViewNode;
-
-                            treeViewNodes.some(function(node) {
-                                if(node.field.dataField === extendedField.dataField) {
-                                    treeViewNode = node;
-                                    return true;
-                                }
-                            });
-                            treeView.unselectItem(treeViewNode);
-                            props = { area: null, areaIndex: null };
-                        }
-
-                        updatedField = that._updateState(field, props);
-                        that._updateTargetArea(updatedField, props);
+                        that.option("state", dataSource.state());
+                        that.repaint();
+                        dataSource.state(startState, true);
                     }
                 }
             }
         }, that._getSortableOptions()));
-    },
-
-    _updateState: function(field, props) {
-        var that = this,
-            fields = that.option("state").fields,
-            updatedField;
-
-        field = extend(true, {}, field);
-
-        for(var i = 0; i < fields.length; i++) {
-            var item = fields[i];
-            if(field.dataField === item.dataField) {
-                changeProps(item, props);
-                updatedField = item;
-            } else if(props.area !== undefined) {
-                updateAreaIndex(props, item, field);
-            }
-        }
-
-        that.option("state", { fields: fields });
-
-        return updatedField;
-    },
-
-    _updateTargetArea: function(field, props) {
-        if(!props.area) return;
-
-        var that = this,
-            $targetArea = that._getFieldsArea(props.area),
-            $fieldsContent = $targetArea.find(".dx-area-field-container"),
-            $field = that.renderField(field, true),
-            $currentField = $fieldsContent.children() && $fieldsContent.children().eq(props.areaIndex);
-
-        $currentField.length ? $fieldsContent[0].insertBefore($field[0], $currentField[0]) : $fieldsContent.append($field);
-    },
-
-    _getFieldElementByData: function(field) {
-        var that = this,
-            $targetArea = that._getFieldsArea(field.area),
-            $fields = $targetArea.find(".dx-area-field"),
-            $resultField;
-
-        each($fields, function(_, $field) {
-            if($($field).data("field").dataField === field.dataField) {
-                $resultField = $($field);
-                return false;
-            }
-        });
-
-        return $resultField;
-    },
-
-    _removeFromSourceArea: function(field) {
-        var $fieldToRemove = this._getFieldElementByData(field);
-
-        $fieldToRemove && $fieldToRemove.remove();
-    },
-
-    _getFieldsArea: function(area) {
-        var $element = this.$element(),
-            $areaFields = $element.find(".dx-area-fields"),
-            index;
-
-        switch(area) {
-            case "all":
-                index = 0;
-                break;
-            case "filter":
-                index = 1;
-                break;
-            case "row":
-                index = 2;
-                break;
-            case "column":
-                index = 3;
-                break;
-            case "data":
-                index = 4;
-                break;
-            default:
-                index = 0;
-        }
-
-        return $($areaFields.eq(index));
     },
 
     _applyValueInstantly: function() {
@@ -514,14 +343,18 @@ var FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).in
                                 });
                                 dataSource.load();
                             } else {
-                                that._setInitialState();
+                                var startState = dataSource.state(),
+                                    state = that.option("state") || startState;
 
-                                that._updateState(mainGroupField, {
+                                dataSource.state(state, true);
+                                dataSource.field(mainGroupField.index, {
                                     filterValues: this.filterValues,
                                     filterType: this.filterType
                                 });
 
-                                that._getFieldElementByData(field).find(".dx-header-filter").toggleClass("dx-header-filter-empty", !this.filterValues);
+                                that.option("state", dataSource.state());
+                                that.repaint();
+                                dataSource.state(startState, true);
                             }
                         }
                     }));
@@ -532,13 +365,17 @@ var FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).in
                         });
                         dataSource.load();
                     } else {
-                        that._setInitialState();
-                        var rootElement = $(e.currentTarget),
-                            $sortArrow = rootElement.find(".dx-sort"),
-                            sortOrder = $sortArrow.hasClass("dx-sort-up") ? "desc" : "asc";
+                        var startState = dataSource.state(),
+                            state = that.option("state") || startState;
 
-                        that._updateState(field, { sortOrder: sortOrder });
-                        $sortArrow.toggleClass("dx-sort-up").toggleClass("dx-sort-down");
+                        dataSource.state(state, true);
+                        dataSource.field(field.index, {
+                            sortOrder: field.sortOrder === "desc" ? "asc" : "desc"
+                        });
+
+                        that.option("state", dataSource.state());
+                        that.repaint();
+                        dataSource.state(startState, true);
                     }
                 }
             };

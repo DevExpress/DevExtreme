@@ -1967,19 +1967,12 @@ QUnit.test("Search in headerFilter", function(assert) {
 
 QUnit.module("applyChangesMode: onDemand", {
     beforeEach: function() {
-        this.setup = function(dataSourceOptions, fieldChooserOptions) {
-            fieldChooserOptions = $.extend({ applyChangesMode: "onDemand" }, fieldChooserOptions);
-            if(dataSourceOptions) {
-                this.dataSource = createMockDataSource(dataSourceOptions);
-                fieldChooserOptions.dataSource = this.dataSource;
-            }
-            this.createFieldChooser(fieldChooserOptions);
+        this.setup = function(dataSource) {
+            this.fieldChooser = this.$container.dxPivotGridFieldChooser({
+                applyChangesMode: "onDemand",
+                dataSource: new PivotGridDataSource(dataSource)
+            }).dxPivotGridFieldChooser("instance");
         };
-
-        this.createFieldChooser = function(fieldChooserOptions) {
-            this.fieldChooser = this.$container.dxPivotGridFieldChooser(fieldChooserOptions).dxPivotGridFieldChooser("instance");
-        };
-
         this.$container = $("#container");
         this.clock = sinon.useFakeTimers();
     },
@@ -1988,83 +1981,21 @@ QUnit.module("applyChangesMode: onDemand", {
     }
 });
 
-QUnit.test("apply state on dragging", function(assert) {
-    var dataSourceOptions = {
-            fields: [
-                { dataField: "Field1", area: 'column', areaIndex: 0 },
-                { dataField: "Field2", area: 'column', areaIndex: 1 },
-                { dataField: "Field3", area: 'column', areaIndex: 2 }
-            ]
-        },
-        changedArgs = {
-            sourceGroup: "column",
-            targetIndex: 1,
-            targetGroup: "column"
-        };
-
-    this.setup(dataSourceOptions);
-
-    changedArgs.sourceElement = renderer(this.$container.find(".dx-area-field").eq(0));
-
-    var sortable = this.fieldChooser.$element().dxSortable("instance"),
-        onChangedHandler = sortable.option("onChanged");
-    // act
-    onChangedHandler(changedArgs);
-
-    var fields = this.fieldChooser.option("state").fields;
-    assert.deepEqual(fields[0], { dataField: "Field1", area: 'column', areaIndex: 1, index: 0 });
-    assert.deepEqual(fields[1], { dataField: "Field2", area: 'column', areaIndex: 0, index: 1 });
-    assert.deepEqual(fields[2], { dataField: "Field3", area: 'column', areaIndex: 2, index: 2 });
-});
-
-QUnit.test("change position inside area", function(assert) {
-    var dataSourceOptions = {
-            fields: [
-                { dataField: "Field1", area: 'column', areaIndex: 0 },
-                { dataField: "Field2", area: 'column', areaIndex: 1 },
-                { dataField: "Field3", area: 'column', areaIndex: 2 }
-            ]
-        },
-        changedArgs = {
-            sourceGroup: "column",
-            targetIndex: 0,
-            targetGroup: "column"
-        };
-
-    this.setup(dataSourceOptions);
-
-    changedArgs.sourceElement = renderer(this.$container.find(".dx-area-field").eq(2));
-
-    var sortable = this.fieldChooser.$element().dxSortable("instance"),
-        onChangedHandler = sortable.option("onChanged");
-    // act
-    onChangedHandler(changedArgs);
-
-    var fields = this.fieldChooser.option("state").fields;
-    assert.equal(fields[0].dataField, "Field1");
-    assert.equal(fields[0].areaIndex, "1");
-    assert.equal(fields[1].dataField, "Field2");
-    assert.equal(fields[1].areaIndex, "2");
-    assert.equal(fields[2].dataField, "Field3");
-    assert.equal(fields[2].areaIndex, "0");
-});
-
 QUnit.test("change position between areas", function(assert) {
-    var dataSourceOptions = {
-            fields: [
-                { dataField: "Field1", area: 'column', areaIndex: 0 },
-                { dataField: "Field2", area: 'column', areaIndex: 1 },
-                { dataField: "Field3", area: 'column', areaIndex: 2 },
-                { dataField: "Field4", area: 'row', areaIndex: 0 }
-            ]
-        },
-        changedArgs = {
-            sourceGroup: "column",
-            targetIndex: 0,
-            targetGroup: "row"
-        };
+    var dataSource = {};
+    dataSource.fields = [
+        { dataField: "Field1", area: 'column', areaIndex: 0 },
+        { dataField: "Field2", area: 'column', areaIndex: 1 },
+        { dataField: "Field3", area: 'row', areaIndex: 0 }
+    ];
+    this.setup(dataSource);
+    this.clock.tick(500);
 
-    this.setup(dataSourceOptions);
+    var changedArgs = {
+        sourceGroup: "column",
+        targetIndex: 0,
+        targetGroup: "row"
+    };
 
     changedArgs.sourceElement = renderer(this.$container.find(".dx-area-field").eq(0));
 
@@ -2072,42 +2003,44 @@ QUnit.test("change position between areas", function(assert) {
         onChangedHandler = sortable.option("onChanged");
     // act
     onChangedHandler(changedArgs);
+    this.clock.tick(500);
 
-    var fields = this.fieldChooser.option("state").fields;
-    assert.deepEqual(fields[0], { dataField: "Field1", area: 'row', areaIndex: 0, index: 0 });
-    assert.deepEqual(fields[1], { dataField: "Field2", area: 'column', areaIndex: 0, index: 1 });
-    assert.deepEqual(fields[2], { dataField: "Field3", area: 'column', areaIndex: 1, index: 2 });
-    assert.deepEqual(fields[3], { dataField: "Field4", area: 'row', areaIndex: 1, index: 3 });
+    var state = this.fieldChooser.option("state").fields;
+    assert.equal(state[0].dataField, "Field1");
+    assert.equal(state[0].areaIndex, "0");
+    assert.equal(state[0].area, "row");
+    assert.equal(state[1].dataField, "Field2");
+    assert.equal(state[1].areaIndex, "0");
+    assert.equal(state[1].area, "column");
+    assert.equal(state[2].dataField, "Field3");
+    assert.equal(state[2].areaIndex, "1");
+    assert.equal(state[2].area, "row");
 });
 
 QUnit.test("move from area to treeview", function(assert) {
-    var dataSourceOptions = {
-            fields: [
-                { dataField: "Field1", area: 'column', areaIndex: 0 },
-                { dataField: "Field2", area: 'column', areaIndex: 1 },
-                { dataField: "Field3", area: 'column', areaIndex: 2 }
-            ]
-        },
-        changedArgs = {
-            sourceGroup: "column",
-            targetIndex: 0,
-            targetGroup: undefined
-        };
+    var dataSource = {};
+    dataSource.fields = [
+        { dataField: "Field1", area: 'column', areaIndex: 0, index: 0 },
+        { dataField: "Field2", area: 'column', areaIndex: 1, index: 1 },
+        { dataField: "Field3", area: 'row', areaIndex: 0, index: 2 }
+    ];
 
-    this.setup(dataSourceOptions);
+    this.setup(dataSource);
+    this.clock.tick(500);
 
-    changedArgs.sourceElement = renderer(this.$container.find(".dx-area-field").eq(1));
+    var changedArgs = {
+        sourceGroup: "column",
+        targetGroup: undefined
+    };
+
+    changedArgs.sourceElement = renderer(this.$container.find(".dx-area-box").eq(1));
 
     var sortable = this.fieldChooser.$element().dxSortable("instance"),
         onChangedHandler = sortable.option("onChanged");
     // act
-    onChangedHandler(changedArgs);
-    this.clock.tick(1000);
 
-    var fields = this.fieldChooser.option("state").fields;
-    assert.deepEqual(fields[0], { dataField: "Field1", area: 'column', areaIndex: 0, index: 0 });
-    assert.deepEqual(fields[1], { dataField: "Field2", area: null, areaIndex: null, index: 1 });
-    assert.deepEqual(fields[2], { dataField: "Field3", area: 'column', areaIndex: 1, index: 2 });
+    onChangedHandler(changedArgs);
+    this.clock.tick(500);
 
     var checkboxes = this.$container.find(".dx-checkbox");
     assert.equal(checkboxes.length, 3, "checkboxes");
@@ -2117,73 +2050,45 @@ QUnit.test("move from area to treeview", function(assert) {
 });
 
 QUnit.test("select in treeview", function(assert) {
-    var dataSourceOptions = {
-        fields: [{ dataField: "Field1", sortOrder: "desc" }]
-    };
+    this.setup({ fields: [{ dataField: "Field1", index: 0 }] });
 
-    this.setup(dataSourceOptions);
-
-    this.$container.find(".dx-checkbox").eq(0).trigger("dxclick");
     // act
+    this.$container.find(".dx-checkbox").eq(0).trigger("dxclick");
 
     var fields = this.fieldChooser.option("state").fields;
-    assert.deepEqual(fields[0], { dataField: "Field1", area: 'column', areaIndex: 0, index: 0, sortOrder: "desc" });
+    assert.equal(fields[0].area, "column");
+    assert.equal(fields[0].areaIndex, 0);
 });
 
 QUnit.test("unselect in treeview", function(assert) {
-    var dataSourceOptions = {
-        fields: [{ dataField: "Field1", area: 'column', areaIndex: 0 }]
-    };
+    this.setup({ fields: [{ dataField: "Field1", area: 'column', areaIndex: 0, index: 0 }] });
 
-    this.setup(dataSourceOptions);
-
-    this.$container.find(".dx-checkbox").eq(0).trigger("dxclick");
     // act
+    this.$container.find(".dx-checkbox").eq(0).trigger("dxclick");
 
     var fields = this.fieldChooser.option("state").fields;
-    assert.deepEqual(fields[0], { dataField: "Field1", area: null, areaIndex: null, index: 0 });
+    assert.deepEqual(fields[0].area, undefined);
+    assert.deepEqual(fields[0].areaIndex, undefined);
 });
 
 QUnit.test("Change sort order", function(assert) {
-    var dataSourceOptions = {
-        fields: [
-            { index: 0, dataField: "Field1", area: 'row', allowSorting: true }
-        ],
-        rowFields: [
-            { index: 0, dataField: "Field1", area: 'row', allowSorting: true }
-        ],
-    };
-
-    this.setup(dataSourceOptions);
+    this.setup({ fields: [{ index: 0, dataField: "Field1", area: 'row', allowSorting: true }] });
+    this.clock.tick(500);
 
     // act
     var $sortIndicator = this.$container.find(".dx-area-fields[group=row] .dx-sort");
     $sortIndicator.parent().trigger("dxclick");
 
-    var fields = this.fieldChooser.option("state").fields;
-    assert.deepEqual(fields[0], { dataField: "Field1", area: 'row', index: 0, sortOrder: 'desc', allowSorting: true });
-    assert.ok($sortIndicator.hasClass("dx-sort-down"));
-
-    $sortIndicator.parent().trigger("dxclick");
-    this.fieldChooser.option("state").fields;
-    assert.deepEqual(fields[0], { dataField: "Field1", area: 'row', index: 0, sortOrder: 'asc', allowSorting: true });
-    assert.ok($sortIndicator.hasClass("dx-sort-up"));
+    var state = this.fieldChooser.option("state").fields;
+    assert.equal(state[0].sortOrder, "desc");
 });
 
 QUnit.test("Apply filters", function(assert) {
-    var dataSourceOptions = {
-        columnFields: [
-            { index: 0, dataField: "Field1", area: 'column', allowFiltering: true }
-        ],
-        fields: [
-            { index: 0, dataField: "Field1", area: 'column', allowFiltering: true }
-        ],
-        fieldValues: [
-            [{ value: 1 }, { value: 2 }, { value: 4 }, { value: 5 }]
-        ]
-    };
-
-    this.setup(dataSourceOptions);
+    this.setup({
+        fields: [{ index: 0, dataField: "Field1", area: 'column', allowFiltering: true }],
+        store: [{ Field1: "1" }, { Field1: "2" }]
+    });
+    this.clock.tick(500);
 
     var $filterIndicator = this.$container.find(".dx-area-fields[group=column] .dx-header-filter");
 
@@ -2195,12 +2100,11 @@ QUnit.test("Apply filters", function(assert) {
     var $filterMenuList = $(".dx-header-filter-menu .dx-list");
     $filterMenuList.find(".dx-checkbox").eq(1).trigger("dxclick");
 
-    $(".dx-header-filter-menu .dx-button").trigger("dxclick");
+    $(".dx-header-filter-menu .dx-button").eq(0).trigger("dxclick");
     this.clock.tick(500);
 
     var fields = this.fieldChooser.option("state").fields;
-    assert.deepEqual(fields[0], { dataField: "Field1", area: 'column', index: 0, allowFiltering: true, filterType: undefined, filterValues: [1] });
-    assert.notOk($filterIndicator.hasClass("dx-header-filter-empty"));
+    assert.deepEqual(fields[0].filterValues, ["1"]);
 });
 
 QUnit.test("applyChanges", function(assert) {

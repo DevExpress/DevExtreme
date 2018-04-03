@@ -735,7 +735,6 @@ QUnit.test("apply changes in fieldchooser on button click in onDemand mode", fun
     sortIcon.trigger("dxclick");
     this.clock.tick(500);
 
-    assert.ok(sortIcon.hasClass("dx-sort-down"));
     assert.notEqual(pivotGrid.getDataSource().state().fields[0].sortOrder, "desc", "ds state is not changed yet");
 
     var applyButton = $(fieldChooserPopup._$bottom).find(".dx-button").eq(0);
@@ -767,7 +766,6 @@ QUnit.test("cancel changes on fieldchooser hidding in onDemand mode", function(a
     sortIcon.trigger("dxclick");
     this.clock.tick(500);
 
-    assert.ok(sortIcon.hasClass("dx-sort-down"));
     assert.notEqual(pivotGrid.getDataSource().state().fields[0].sortOrder, "desc", "ds state is not changed yet");
 
     fieldChooserPopup.hide();

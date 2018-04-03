@@ -250,7 +250,6 @@ var FieldChooser = BaseFieldChooser.inherit({
                 func();
             });
             that._fireContentReadyAction();
-            that.option("state", null);
         };
 
         if(that._dataSource) {
@@ -590,15 +589,18 @@ var FieldChooser = BaseFieldChooser.inherit({
                         });
                         dataSource.load();
                     } else {
-                        var extendedField = extend(true, {}, field);
-                        that._setInitialState();
-                        if(area) {
-                            that._updateState(extendedField, { area: area, areaIndex: that._getFieldsArea(area).find("dx-area-field").length });
-                            that._updateTargetArea(extendedField, { area: area });
-                        } else {
-                            that._updateState(extendedField, { area: null, areaIndex: null });
-                            that._removeFromSourceArea(extendedField);
-                        }
+                        var startState = dataSource.state(),
+                            state = that.option("state") || startState;
+
+                        dataSource.state(state, true);
+                        dataSource.field(field.index, {
+                            area: area,
+                            areaIndex: undefined
+                        });
+                        var newState = dataSource.state();
+                        that.option("state", newState);
+                        that.repaint();
+                        dataSource.state(startState, true);
                     }
                 }
             }),
