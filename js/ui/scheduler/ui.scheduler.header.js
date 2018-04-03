@@ -15,9 +15,7 @@ var $ = require("../../core/renderer"),
     DropDownMenu = require("../drop_down_menu"),
     Tabs = require("../tabs"),
     errors = require("../../core/errors"),
-    messageLocalization = require("../../localization/message"),
-    themes = require("../themes");
-
+    messageLocalization = require("../../localization/message");
 
 var COMPONENT_CLASS = "dx-scheduler-header",
     VIEW_SWITCHER_CLASS = "dx-scheduler-view-switcher",
@@ -48,7 +46,8 @@ var SchedulerHeader = Widget.inherit({
             currentDate: new Date(),
             min: undefined,
             max: undefined,
-            useDropDownViewSwitcher: false
+            useDropDownViewSwitcher: false,
+            _dropDownButtonIcon: "overlay"
         });
     },
 
@@ -212,7 +211,7 @@ var SchedulerHeader = Widget.inherit({
 
         this._viewSwitcher = this._createComponent($element, DropDownMenu, {
             onItemClick: this._updateCurrentView.bind(this),
-            buttonIcon: themes.isMaterial() ? "chevrondown" : "overflow",
+            buttonIcon: this.option("_dropDownButtonIcon"),
             items: this.option("views"),
             itemTemplate: function(item) {
                 return $("<span>")

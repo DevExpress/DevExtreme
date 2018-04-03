@@ -5,9 +5,7 @@ var $ = require("../../core/renderer"),
     tooltip = require("../tooltip/ui.tooltip"),
     Button = require("../button"),
     FunctionTemplate = require("../widget/function_template"),
-    messageLocalization = require("../../localization/message"),
-    dateUtils = require("../../core/utils/date"),
-    themes = require("../themes");
+    dateUtils = require("../../core/utils/date");
 
 var APPOINTMENT_TOOLTIP_WRAPPER_CLASS = "dx-scheduler-appointment-tooltip-wrapper",
     APPOINTMENT_TOOLTIP_CLASS = "dx-scheduler-appointment-tooltip",
@@ -54,7 +52,7 @@ var appointmentTooltip = {
                 of: $appointment,
                 boundary: isAllDay ? instance.$element() : instance.getWorkSpaceScrollableContainer(),
                 collision: "fit flipfit",
-                offset: { x: 0, y: themes.isMaterial() ? 11 : 0 }
+                offset: { x: 0, y: this.instance.option("_appointmentTooltipVerticalOffset") }
             }
         });
     },
@@ -108,15 +106,25 @@ var appointmentTooltip = {
 
         var $buttons = $("<div>").addClass(APPOINTMENT_TOOLTIP_BUTTONS_CLASS);
 
-        if(themes.isMaterial()) {
-            $buttons.prependTo($tooltip);
+        this.instance.option("_appointmentTooltipButtonsPosition") === "bottom"
+            ? $buttons.prependTo($tooltip)
+            : $buttons.appendTo($tooltip);
+
+        if(this.instance.option("_appointmentTooltipCloseButton")) {
             this._getCloseButton().appendTo($buttons);
-            this._getTooltipBackgroundColor($appointment).done(function(color) {
-                $title.css("backgroundColor", color);
-                $buttons.css("backgroundColor", color);
+        }
+
+        if(this.instance.option("_useAppointmentColorForTooltip")) {
+            this.instance.getAppointmentsInstance().notifyObserver("getAppointmentColor", {
+                itemData: appointmentData,
+                groupIndex: $appointment.data("dxAppointmentSettings").groupIndex,
+                callback: function(d) {
+                    d.done(function(color) {
+                        $title.css("backgroundColor", color);
+                        $buttons.css("backgroundColor", color);
+                    });
+                }
             });
-        } else {
-            $buttons.appendTo($tooltip);
         }
 
         if(this.instance._editing.allowDeleting) {
@@ -165,9 +173,10 @@ var appointmentTooltip = {
     _getOpenButton: function(appointmentData, singleAppointmentData) {
         var that = this,
             allowUpdating = that.instance._editing.allowUpdating,
-            text = themes.isMaterial() ? null : messageLocalization.format("dxScheduler-openAppointment");
+            text = this.instance.option("_appointmentTooltipOpenButtonText");
+
         return (new Button($("<div>").addClass(APPOINTMENT_TOOLTIP_OPEN_BUTTON_CLASS), {
-            icon: allowUpdating ? "edit" : (themes.isMaterial() ? "edit" : ""),
+            icon: allowUpdating ? "edit" : this.instance.option("_appointmentTooltipOpenButtonIcon"),
             text: text,
             onClick: function() {
                 that.instance.showAppointmentPopup(appointmentData, false, singleAppointmentData);
@@ -184,11 +193,6 @@ var appointmentTooltip = {
                 that.hide();
             }
         })).$element();
-    },
-
-    _getTooltipBackgroundColor: function($appointment) {
-        var groupIndex = $appointment.data("dxAppointmentSettings").groupIndex;
-        return this.instance._appointments._getAppointmentColor($appointment, groupIndex);
     }
 };
 module.exports = appointmentTooltip;

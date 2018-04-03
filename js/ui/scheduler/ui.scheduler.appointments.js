@@ -23,8 +23,7 @@ var $ = require("../../core/renderer"),
     messageLocalization = require("../../localization/message"),
     CollectionWidget = require("../collection/ui.collection_widget.edit"),
     Draggable = require("../draggable"),
-    Deferred = require("../../core/utils/deferred").Deferred,
-    themes = require("../themes");
+    Deferred = require("../../core/utils/deferred").Deferred;
 
 var COMPONENT_CLASS = "dx-scheduler-scrollable-appointments",
     APPOINTMENT_ITEM_CLASS = "dx-scheduler-appointment",
@@ -33,7 +32,6 @@ var COMPONENT_CLASS = "dx-scheduler-scrollable-appointments",
     APPOINTMENT_DATE_CLASS = "dx-scheduler-appointment-content-date",
     RECURRING_ICON_CLASS = "dx-scheduler-appointment-recurrence-icon",
     ALL_DAY_CONTENT_CLASS = "dx-scheduler-appointment-content-allday",
-    APPOINTMENT_GROUP_BUTTON_MATERIAL_OFFSET = 20,
 
     DBLCLICK_EVENT_NAME = eventUtils.addNamespace(dblclickEvent.name, "dxSchedulerAppointment");
 
@@ -148,7 +146,8 @@ var SchedulerAppointments = CollectionWidget.inherit({
             allowDrag: true,
             allowResize: true,
             allowAllDayResize: true,
-            onAppointmentDblClick: null
+            onAppointmentDblClick: null,
+            _appointmentGroupButtonOffset: 0
         });
     },
 
@@ -854,12 +853,9 @@ var SchedulerAppointments = CollectionWidget.inherit({
                 virtualItems = virtualGroup.items,
                 virtualCoordinates = virtualGroup.coordinates,
                 $container = virtualGroup.isAllDay ? this.option("allDayContainer") : this.$element(),
-                left = virtualCoordinates.left,
-                cellButtonWidth = buttonWidth;
+                left = virtualCoordinates.left;
 
-            if(themes.isMaterial()) {
-                cellButtonWidth -= APPOINTMENT_GROUP_BUTTON_MATERIAL_OFFSET;
-            }
+            buttonWidth -= this.option("_appointmentGroupButtonOffset");
 
             this.notifyObserver("renderDropDownAppointments", {
                 $container: $container,
@@ -870,7 +866,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
                 items: virtualItems,
                 buttonColor: virtualGroup.buttonColor,
                 itemTemplate: this.option("itemTemplate"),
-                buttonWidth: cellButtonWidth,
+                buttonWidth: buttonWidth,
                 onAppointmentClick: this.option("onItemClick")
             });
         }).bind(this));

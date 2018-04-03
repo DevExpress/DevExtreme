@@ -924,7 +924,17 @@ var Scheduler = Widget.inherit({
                 */
             noDataText: messageLocalization.format("dxCollectionWidget-noDataText"),
 
-            allowMultipleCellSelection: true
+            allowMultipleCellSelection: true,
+            _appointmentTooltipVerticalOffset: 0,
+            _appointmentTooltipButtonsPosition: "bottom",
+            _appointmentTooltipCloseButton: false,
+            _useAppointmentColorForTooltip: false,
+            _appointmentTooltipOpenButtonText: messageLocalization.format("dxScheduler-openAppointment"),
+            _appointmentTooltipOpenButtonIcon: "",
+            _dropDownButtonIcon: "overflow",
+            _appointmentCountPerCell: 2,
+            _appointmentGroupButtonOffset: 0,
+            _appointmentOffset: 26
 
                 /**
                 * @name dxSchedulerOptions_activeStateEnabled
@@ -1133,7 +1143,18 @@ var Scheduler = Widget.inherit({
                             $(element).append(span);
                             if(!index) element.append(" ");
                         });
-                    }
+                    },
+
+                    _appointmentTooltipVerticalOffset: 11,
+                    _appointmentTooltipButtonsPosition: "bottom",
+                    _appointmentTooltipCloseButton: true,
+                    _useAppointmentColorForTooltip: true,
+                    _appointmentTooltipOpenButtonText: null,
+                    _appointmentTooltipOpenButtonIcon: "edit",
+                    _dropDownButtonIcon: "chevrondown",
+                    _appointmentCountPerCell: 1,
+                    _appointmentGroupButtonOffset: 20,
+                    _appointmentOffset: 30
                 }
             }
         ]);
@@ -1843,7 +1864,8 @@ var Scheduler = Widget.inherit({
             focusStateEnabled: this.option("focusStateEnabled"),
             width: this.option("width"),
             rtlEnabled: this.option("rtlEnabled"),
-            useDropDownViewSwitcher: this.option("useDropDownViewSwitcher")
+            useDropDownViewSwitcher: this.option("useDropDownViewSwitcher"),
+            _dropDownButtonIcon: this.option("_dropDownButtonIcon")
         }, currentViewOptions);
 
         result.observer = this;
@@ -1872,6 +1894,7 @@ var Scheduler = Widget.inherit({
             allowResize: this._allowResizing(),
             allowAllDayResize: this._allowAllDayResizing(),
             rtlEnabled: this.option("rtlEnabled"),
+            _appointmentGroupButtonOffset: this.option("_appointmentGroupButtonOffset"),
             onContentReady: function() {
                 that._workSpace && that._workSpace.option("allDayExpanded", that._isAllDayExpanded(that.getFilteredItems()));
             }
