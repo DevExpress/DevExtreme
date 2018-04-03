@@ -256,18 +256,10 @@ var FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).in
                         });
                         dataSource.load();
                     } else {
-                        var startState = dataSource.state(),
-                            state = that.option("state") || startState;
-
-                        dataSource.state(state, true);
-                        dataSource.field(getMainGroupField(dataSource, field).index, {
+                        that._changeState(getMainGroupField(dataSource, field), {
                             area: targetArea,
                             areaIndex: e.targetIndex
                         });
-
-                        that.option("state", dataSource.state());
-                        that.repaint();
-                        dataSource.state(startState, true);
                     }
                 }
             }
@@ -276,6 +268,20 @@ var FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).in
 
     _applyValueInstantly: function() {
         return this.option("applyChangesMode") === "instantly";
+    },
+
+    _changeState: function(field, props) {
+        var that = this,
+            dataSource = that._dataSource,
+            startState = dataSource.state(),
+            state = that.option("state") || startState;
+
+        dataSource.state(state, true);
+        dataSource.field(field.index, props);
+
+        that.option("state", dataSource.state());
+        that.repaint();
+        dataSource.state(startState, true);
     },
 
     _getFieldFromState: function(dataField) {
@@ -343,18 +349,10 @@ var FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).in
                                 });
                                 dataSource.load();
                             } else {
-                                var startState = dataSource.state(),
-                                    state = that.option("state") || startState;
-
-                                dataSource.state(state, true);
-                                dataSource.field(mainGroupField.index, {
+                                that._changeState(mainGroupField, {
                                     filterValues: this.filterValues,
                                     filterType: this.filterType
                                 });
-
-                                that.option("state", dataSource.state());
-                                that.repaint();
-                                dataSource.state(startState, true);
                             }
                         }
                     }));
@@ -365,17 +363,9 @@ var FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).in
                         });
                         dataSource.load();
                     } else {
-                        var startState = dataSource.state(),
-                            state = that.option("state") || startState;
-
-                        dataSource.state(state, true);
-                        dataSource.field(field.index, {
+                        that._changeState(field, {
                             sortOrder: field.sortOrder === "desc" ? "asc" : "desc"
                         });
-
-                        that.option("state", dataSource.state());
-                        that.repaint();
-                        dataSource.state(startState, true);
                     }
                 }
             };

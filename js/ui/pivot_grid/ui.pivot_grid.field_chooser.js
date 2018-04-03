@@ -589,18 +589,10 @@ var FieldChooser = BaseFieldChooser.inherit({
                         });
                         dataSource.load();
                     } else {
-                        var startState = dataSource.state(),
-                            state = that.option("state") || startState;
-
-                        dataSource.state(state, true);
-                        dataSource.field(field.index, {
+                        that._changeState(field, {
                             area: area,
                             areaIndex: undefined
                         });
-                        var newState = dataSource.state();
-                        that.option("state", newState);
-                        that.repaint();
-                        dataSource.state(startState, true);
                     }
                 }
             }),
