@@ -50,11 +50,6 @@ const stubInvokeMethod = (instance) => {
 const moduleConfig = {
     beforeEach: () =>{
         this.createInstance = function(options) {
-            if(this.instance) {
-                this.instance.invoke.restore();
-                delete this.instance;
-            }
-
             this.instance = $("#scheduler-timeline").dxSchedulerTimeline().dxSchedulerTimeline("instance");
             stubInvokeMethod(this.instance, options);
         };
@@ -173,11 +168,6 @@ QUnit.module("Timeline markup", moduleConfig, () => {
 let timelineDayModuleConfig = {
     beforeEach: () =>{
         this.createInstance = function(options) {
-            if(this.instance) {
-                this.instance.invoke.restore();
-                delete this.instance;
-            }
-
             this.instance = $("#scheduler-timeline").dxSchedulerTimelineDay().dxSchedulerTimelineDay("instance");
             stubInvokeMethod(this.instance, options);
         };
@@ -334,11 +324,6 @@ QUnit.module("TimelineDay markup", timelineDayModuleConfig, () => {
 timelineDayModuleConfig = {
     beforeEach: () =>{
         this.createInstance = function(options) {
-            if(this.instance) {
-                this.instance.invoke.restore();
-                delete this.instance;
-            }
-
             this.instance = $("#scheduler-timeline").dxSchedulerTimelineDay({
                 currentDate: new Date(2015, 9, 16)
             }).dxSchedulerTimelineDay("instance");
@@ -390,11 +375,6 @@ QUnit.module("TimelineDay with intervalCount markup", timelineDayModuleConfig, (
 timelineDayModuleConfig = {
     beforeEach: () =>{
         this.createInstance = function(options) {
-            if(this.instance) {
-                this.instance.invoke.restore();
-                delete this.instance;
-            }
-
             this.instance = $("#scheduler-timeline").dxSchedulerTimelineDay({
                 groupOrientation: "horizontal"
             }).dxSchedulerTimelineDay("instance");
@@ -492,11 +472,6 @@ QUnit.module("TimelineDay with horizontal grouping markup", timelineDayModuleCon
 let timelineWeekModuleConfig = {
     beforeEach: () =>{
         this.createInstance = function(options) {
-            if(this.instance) {
-                this.instance.invoke.restore();
-                delete this.instance;
-            }
-
             this.instance = $("#scheduler-timeline").dxSchedulerTimelineWeek().dxSchedulerTimelineWeek("instance");
             stubInvokeMethod(this.instance, options);
         };
@@ -607,11 +582,6 @@ QUnit.module("TimelineWeek markup", timelineWeekModuleConfig, () => {
 timelineWeekModuleConfig = {
     beforeEach: () =>{
         this.createInstance = function(options) {
-            if(this.instance) {
-                this.instance.invoke.restore();
-                delete this.instance;
-            }
-
             this.instance = $("#scheduler-timeline").dxSchedulerTimelineWeek(options).dxSchedulerTimelineWeek("instance");
             stubInvokeMethod(this.instance, options);
         };
@@ -674,11 +644,6 @@ QUnit.module("TimelineWeek with intervalCount markup", timelineWeekModuleConfig,
 let timelineWorkWeekModuleConfig = {
     beforeEach: () =>{
         this.createInstance = function(options) {
-            if(this.instance) {
-                this.instance.invoke.restore();
-                delete this.instance;
-            }
-
             this.instance = $("#scheduler-timeline").dxSchedulerTimelineWorkWeek().dxSchedulerTimelineWorkWeek("instance");
             stubInvokeMethod(this.instance, options);
         };
@@ -752,11 +717,6 @@ QUnit.module("TimelineWorkWeek markup", timelineWorkWeekModuleConfig, () => {
 timelineWorkWeekModuleConfig = {
     beforeEach: () =>{
         this.createInstance = function(options) {
-            if(this.instance) {
-                this.instance.invoke.restore();
-                delete this.instance;
-            }
-
             this.instance = $("#scheduler-timeline").dxSchedulerTimelineWorkWeek(options).dxSchedulerTimelineWorkWeek("instance");
             stubInvokeMethod(this.instance, options);
         };
@@ -823,11 +783,6 @@ QUnit.module("TimelineWorkWeek with intervalCount markup", timelineWorkWeekModul
 let timelineMonthModuleConfig = {
     beforeEach: () =>{
         this.createInstance = function(options) {
-            if(this.instance) {
-                this.instance.invoke.restore();
-                delete this.instance;
-            }
-
             this.instance = $("#scheduler-timeline").dxSchedulerTimelineMonth(options).dxSchedulerTimelineMonth("instance");
             stubInvokeMethod(this.instance, options);
         };
@@ -921,11 +876,6 @@ QUnit.module("TimelineMonth markup", timelineMonthModuleConfig, () => {
 timelineMonthModuleConfig = {
     beforeEach: () =>{
         this.createInstance = function(options) {
-            if(this.instance) {
-                this.instance.invoke.restore();
-                delete this.instance;
-            }
-
             this.instance = $("#scheduler-timeline").dxSchedulerTimelineMonth(options).dxSchedulerTimelineMonth("instance");
             stubInvokeMethod(this.instance, options);
         };
