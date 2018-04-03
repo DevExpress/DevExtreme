@@ -439,6 +439,7 @@ Point.prototype = {
     drawLabel: _noop,
     correctLabelPosition: _noop,
     setMaxLabelLength: _noop,
+    getMaxLabelLength: _noop,
     getMinValue: _noop,
     getMaxValue: _noop,
     dispose: function() {
