@@ -1089,7 +1089,7 @@ QUnit.module("items visibility", {
         this.clock = sinon.useFakeTimers();
         fx.off = true;
 
-        this.$element = $("#gallerySimple").dxGallery({ items: [0, 1, 2, 3, 4], width: 500 });
+        this.$element = $("#gallerySimple").dxGallery({ items: [0, 1, 2, 3, 4], width: 500, showNavButtons: true });
         this.instance = this.$element.dxGallery("instance");
     },
 
@@ -1125,6 +1125,20 @@ QUnit.test("all items should be visible on swipeStart", function(assert) {
     $.each($galleryItems, function(index, $item) {
         assert.notOk($($item).hasClass(GALLERY_INVISIBLE_ITEM_CLASS), "swiped item has not invisible class");
     });
+});
+
+
+QUnit.test("all items should be visible after click on a button", function(assert) {
+    var $nextNavButton = this.$element.find("." + NAV_NEXT_BUTTON_CLASS),
+        instance = this.instance;
+
+    var releaseItems = sinon.stub(instance, "_releaseInvisibleItems"),
+        renderItemsVisibility = sinon.stub(instance, "_renderItemVisibility");
+
+    $nextNavButton.trigger("dxclick");
+
+    assert.equal(releaseItems.callCount, 1);
+    assert.equal(renderItemsVisibility.callCount, 1);
 });
 
 QUnit.test("selected item shouldn't have invisible class", function(assert) {
