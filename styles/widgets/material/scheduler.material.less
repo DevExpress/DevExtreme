@@ -60,7 +60,7 @@
 @MATERIAL_SCHEDULER_MONTH_DATE_TEXT_SIZE: 14px;
 @MATERIAL_SCHEDULER_APPOINTMENT_TOOLTIP_FONT_SIZE: 20px;
 
-@MATERIAL_SCHEDULER_SWITCHER_LABEL_OFFSET: 60px;
+@MATERIAL_SCHEDULER_SWITCHER_LABEL_OFFSET: 10px;
 
 @SCHEDULER_FIRST_OF_MONTH_BORDER: 1px solid @SCHEDULER_FIRST_MONTH_BORDER_COLOR;
 
@@ -170,6 +170,7 @@
         height: @MATERIAL_SCHEDULER_WORKSPACE_MONTH_TIMELINE__TIME_HEIGHT;
         font-size: @MATERIAL_SCHEDULER_TIME_PANEL_FONT_SIZE;
         padding-left: @MATERIAL_SCHEDULER_HEADER_PANEL_MARGIN;
+        padding-right: @MATERIAL_SCHEDULER_HEADER_PANEL_MARGIN;
         vertical-align: middle;
     }
 
@@ -179,6 +180,7 @@
             height: @MATERIAL_SCHEDULER_WORKSPACE_MONTH_TIMELINE__TIME_HEIGHT;
             font-size: @MATERIAL_SCHEDULER_TIME_PANEL_FONT_SIZE;
             padding-left: @MATERIAL_SCHEDULER_HEADER_PANEL_MARGIN;
+            padding-right: @MATERIAL_SCHEDULER_HEADER_PANEL_MARGIN;
             padding-top: 11px;
         }
     }
@@ -440,15 +442,26 @@
 
 .dx-scheduler-view-switcher.dx-dropdownmenu {
     margin-top: (@MATERIAL_SCHEDULER_HEADER_HEIGHT - @MATERIAL_SCHEDULER_NAVIGATOR_HEIGHT) * 0.5 - 1px;
+    .dx-button-flat-styling(@button-normal-color);
+    z-index: 1;
 }
 
 .dx-scheduler-view-switcher-label {
-    margin-top: (@MATERIAL_SCHEDULER_HEADER_HEIGHT - @MATERIAL_SCHEDULER_NAVIGATOR_HEIGHT) * 0.8;
+    margin-top: (@MATERIAL_SCHEDULER_HEADER_HEIGHT - @MATERIAL_SCHEDULER_NAVIGATOR_HEIGHT) * 0.5 - 1px;
     right: @MATERIAL_SCHEDULER_SWITCHER_LABEL_OFFSET;
+    height: @MATERIAL_SCHEDULER_NAVIGATOR_HEIGHT;
+    line-height: 24px;
+    padding: (@MATERIAL_SCHEDULER_NAVIGATOR_HEIGHT - 24px) / 2 14px;
+    padding-right: @MATERIAL_SCHEDULER_NAVIGATOR_HEIGHT + 14;
+    z-index: 0;
+    background-color: rgba(0,0,0,0.05);
+    .border-radius(@base-border-radius);
 
     .dx-rtl & {
         left: @MATERIAL_SCHEDULER_SWITCHER_LABEL_OFFSET;
         right: auto;
+        padding-right: 14px;
+        padding-left: @MATERIAL_SCHEDULER_NAVIGATOR_HEIGHT + 14;
     }
 }
 
@@ -660,6 +673,7 @@
 
 .dx-scheduler-appointment {
     &,
+    .rtl &,
     .dx-scheduler-work-space-month &,
     .dx-scheduler-timeline & {
         border-left: @MATERIAL_SCHEDULER_APPOINTMENT_TRANSPARENT_LEFT_BORDER;
