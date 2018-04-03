@@ -34,9 +34,8 @@ var BaseWidget = {
 
     /**
     * @pseudo CommonVizPalette
-    * @type Array<string>|string
-    * @default "Default"
-    * @acceptValues "Default" | "Soft Pastel" | "Harmony Light" | "Pastel" | "Bright" | "Soft" | "Ocean" | "Vintage" | "Violet" | "Carmine" | "Dark Moon" | "Soft Blue" | "Dark Violet" | "Green Mist"
+    * @type Array<string>|Enums.VizPalette
+    * @default "Material"
     */
 
     /**

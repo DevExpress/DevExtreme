@@ -82,13 +82,13 @@ QUnit.test("Create labels with styles", function(assert) {
 
     assert.deepEqual(options.background, {
         dashStyle: "solid",
-        fill: "#5f8b95",
+        fill: "#1db2f5",
         stroke: "none",
         "stroke-width": 0
     }, "background");
 
     assert.deepEqual(options.connector, {
-        stroke: "#5f8b95",
+        stroke: "#1db2f5",
         "stroke-width": 1,
         opacity: 0.5
     }, "connector");

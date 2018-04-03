@@ -375,7 +375,7 @@ QUnit.test("Reset customization", function(assert) {
 
     root.getChild(0).resetCustomization();
 
-    assert.strictEqual(this.tile(0).attr.lastCall.args[0].fill, "#5f8b95", "settings");
+    assert.strictEqual(this.tile(0).attr.lastCall.args[0].fill, "#1db2f5", "settings");
 });
 
 QUnit.test("Nodes rendering event", function(assert) {

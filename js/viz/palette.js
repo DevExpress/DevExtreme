@@ -1,24 +1,36 @@
 "use strict";
 
-var vizUtils = require("./core/utils"),
-    _floor = Math.floor,
-    _ceil = Math.ceil,
-    _Color = require("../color"),
-    extend = require("../core/utils/extend").extend,
-    _isArray = Array.isArray,
-    _isString = require("../core/utils/type").isString,
-    _extend = extend,
-    _normalizeEnum = vizUtils.normalizeEnum,
-    HIGHLIGHTING_STEP = 50,
-    DEFAULT = "default",
-    currentPaletteName = DEFAULT;
+import { normalizeEnum } from "./core/utils";
+import { extend } from "../core/utils/extend";
+import errors from "../core/errors";
 
-var palettes = {
-    "default": {
-        simpleSet: ["#5f8b95", "#ba4d51", "#af8a53", "#955f71", "#859666", "#7e688c"],
-        indicatingSet: ["#a3b97c", "#e1b676", "#ec7f83"],
-        gradientSet: ["#5f8b95", "#ba4d51"]
+const _floor = Math.floor;
+const _ceil = Math.ceil;
+const _Color = require("../color");
+const _isArray = Array.isArray;
+
+const _isString = require("../core/utils/type").isString;
+
+const HIGHLIGHTING_STEP = 50;
+const DEFAULT_PALETTE = "material";
+
+const officePalette = {
+    simpleSet: ["#5f8b95", "#ba4d51", "#af8a53", "#955f71", "#859666", "#7e688c"],
+    indicatingSet: ["#a3b97c", "#e1b676", "#ec7f83"],
+    gradientSet: ["#5f8b95", "#ba4d51"]
+};
+
+const palettes = {
+    [DEFAULT_PALETTE]: {
+        simpleSet: ["#1db2f5", "#f5564a", "#97c95c", "#ffc720", "#eb3573", "#a63db8"],
+        indicatingSet: ["#97c95c", "#ffc720", "#f5564a"],
+        gradientSet: ["#1db2f5", "#97c95c"]
     },
+
+    "default": officePalette, // deprecated in 18.1
+
+    "office": officePalette,
+
     "harmony light": {
         simpleSet: ["#fcb65e", "#679ec5", "#ad79ce", "#7abd5c", "#e18e92", "#b6d623", "#b7abea", "#85dbd5"],
         indicatingSet: ["#b6d623", "#fcb65e", "#e18e92"],
@@ -89,16 +101,18 @@ var palettes = {
     }
 };
 
-function currentPalette(name) {
+let currentPaletteName;
+
+export function currentPalette(name) {
     if(name === undefined) {
-        return currentPaletteName;
+        return currentPaletteName || DEFAULT_PALETTE;
     } else {
-        name = _normalizeEnum(name);
-        currentPaletteName = name in palettes ? name : DEFAULT;
+        name = normalizeEnum(name);
+        currentPaletteName = name in palettes ? name : undefined;
     }
 }
 
-function getPalette(palette, parameters) {
+export function getPalette(palette, parameters) {
     var result,
         type = parameters && parameters.type;
 
@@ -106,17 +120,17 @@ function getPalette(palette, parameters) {
         return palette.slice(0);
     } else {
         if(_isString(palette)) {
-            result = palettes[_normalizeEnum(palette)];
+            result = palettes[normalizeEnum(palette)];
         }
         if(!result) {
-            result = palettes[currentPaletteName];
+            result = palettes[currentPalette()];
         }
     }
     result = result || null;
     return type ? result ? result[type].slice(0) : result : result;
 }
 
-function registerPalette(name, palette) {
+export function registerPalette(name, palette) {
     var item = {},
         paletteName;
 
@@ -128,8 +142,8 @@ function registerPalette(name, palette) {
         item.gradientSet = _isArray(palette.gradientSet) ? palette.gradientSet.slice(0) : undefined;
     }
     if(item.simpleSet || item.indicatingSet || item.gradientSet) {
-        paletteName = _normalizeEnum(name);
-        _extend((palettes[paletteName] = palettes[paletteName] || {}), item);
+        paletteName = normalizeEnum(name);
+        extend((palettes[paletteName] = palettes[paletteName] || {}), item);
     }
 }
 
@@ -333,7 +347,7 @@ function BlendColors(palette, parameters) {
     };
 }
 
-function Palette(palette, parameters, themeDefaultPalette) {
+export function Palette(palette, parameters, themeDefaultPalette) {
     parameters = parameters || {};
 
     var extensionMode = (parameters.extensionMode || "").toLowerCase(),
@@ -392,7 +406,7 @@ function getLightness(color) {
     return color.r * 0.3 + color.g * 0.59 + color.b * 0.11;
 }
 
-function DiscretePalette(source, size, themeDefaultPalette) {
+export function DiscretePalette(source, size, themeDefaultPalette) {
     var keyPalette = selectPaletteOnSeniority(source, themeDefaultPalette),
         palette = size > 0 ? createDiscreteColors(getPalette(keyPalette, { type: "gradientSet" }), size) : [];
     this.getColor = function(index) {
@@ -427,7 +441,7 @@ function createDiscreteColors(source, count) {
     return gradient;
 }
 
-function GradientPalette(source, themeDefaultPalette) {
+export function GradientPalette(source, themeDefaultPalette) {
     // TODO: Looks like some new set is going to be added
     var keyPalette = selectPaletteOnSeniority(source, themeDefaultPalette),
         palette = getPalette(keyPalette, { type: "gradientSet" }),
@@ -439,19 +453,15 @@ function GradientPalette(source, themeDefaultPalette) {
 }
 
 function selectPaletteOnSeniority(source, themeDefaultPalette) {
-    var curPalette = currentPalette();
-    return source || (curPalette !== DEFAULT ? curPalette : themeDefaultPalette);
+    const result = source || (currentPaletteName === undefined ? themeDefaultPalette : currentPalette());
+
+    if(result === "default") {
+        errors.log("W0016", '"palette"', 'Default', "18.1", 'Use the "Office" value instead.');
+    }
+
+    return result;
 }
 
-_extend(exports, {
-    Palette: Palette,
-    DiscretePalette: DiscretePalette,
-    GradientPalette: GradientPalette,
-    registerPalette: registerPalette,
-    getPalette: getPalette,
-    currentPalette: currentPalette
-});
-
 ///#DEBUG
-exports._DEBUG_palettes = palettes;
+export const _DEBUG_palettes = palettes;
 ///#ENDDEBUG
