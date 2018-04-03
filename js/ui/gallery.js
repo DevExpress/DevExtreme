@@ -423,7 +423,7 @@ var Gallery = CollectionWidget.inherit({
         this._renderItemSizes();
         this._renderItemPositions();
         this._renderIndicator();
-        this._renderContainerPosition(this._calculateIndexOffset(selectedIndex));
+        this._renderContainerPosition(this._calculateIndexOffset(selectedIndex), true);
         this._renderItemVisibility();
     },
 
@@ -543,7 +543,8 @@ var Gallery = CollectionWidget.inherit({
         return (1 - this._actualItemWidth() * itemsPerPage) / (itemsPerPage + 1);
     },
 
-    _renderContainerPosition: function(offset, animate) {
+    _renderContainerPosition: function(offset, hideItems, animate) {
+        this._releaseInvisibleItems();
         offset = offset || 0;
 
         var that = this,
@@ -565,11 +566,10 @@ var Gallery = CollectionWidget.inherit({
             positionReady = new Deferred().resolveWith(that);
         }
 
-        if(this._deferredAnimate) {
-            positionReady.done(function() {
-                that._deferredAnimate.resolveWith(that);
-            });
-        }
+        positionReady.done(function() {
+            this._deferredAnimate && that._deferredAnimate.resolveWith(that);
+            hideItems && this._renderItemVisibility();
+        });
 
         return positionReady.promise();
     },
@@ -1001,8 +1001,6 @@ var Gallery = CollectionWidget.inherit({
         }
 
         this.option("selectedIndex", paginatedIndex);
-
-        this._renderItemVisibility();
     },
 
     _setFocusOnSelect: function() {
@@ -1067,7 +1065,6 @@ var Gallery = CollectionWidget.inherit({
         this._renderNavButtonsVisibility();
 
         this._renderSelectedItem();
-        this._renderItemVisibility();
 
         this._relocateItems(addedSelection[0], removedSelection[0]);
 
@@ -1082,7 +1079,7 @@ var Gallery = CollectionWidget.inherit({
         var indexOffset = this._calculateIndexOffset(newIndex, prevIndex);
 
 
-        this._renderContainerPosition(indexOffset, this.option("animationEnabled") && !withoutAnimation).done(function() {
+        this._renderContainerPosition(indexOffset, true, this.option("animationEnabled") && !withoutAnimation).done(function() {
             this._setFocusOnSelect();
             this._userInteraction = false;
             this._setupSlideShow();
@@ -1225,7 +1222,6 @@ var Gallery = CollectionWidget.inherit({
         }
 
         this.option("selectedIndex", itemIndex);
-        this._renderItemVisibility();
         return this._deferredAnimate.promise();
     },
 
