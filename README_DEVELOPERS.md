@@ -35,11 +35,11 @@ Build results are stored in the "artifacts" directory.
 
 We conduct extensive in-house testing of DevExtreme on different browsers, mobile devices, functional tests for demos, etc. However, we only share some of them on GitHub: linters and automated tests for Google Chrome.
 
-Tests are in the [testing](testing) directory, and you can execute them are described below:
+You can execute tests in the [testing](testing) directory as described below:
 
 ### Locally in Browser
 
-Run "testing/launch" (for Mac and Linux) or "testing/launch.cmd" (for Windows). This command starts the testing server and opens the test running UI in the default web browser and is the primary way for development and debugging.
+Run the "testing/launch" (for Mac and Linux) or "testing/launch.cmd" (for Windows) command to start the testing server and open the test execution UI in the default browser. This is the main way of testing and debugging.
 
 ### Locally in Docker
 
@@ -54,7 +54,7 @@ Make the following replacements in the command line:
 - `REPO_PATH` - absolute path to the local git repository.
 - `TAG` - a Docker image tag. It should match the parent branch name (e.g. `16_2`). You can find the list of available tags on our [Docker Hub page](https://hub.docker.com/r/devexpress/devextreme-build/tags/).
 
-The Dockerfile used to build "devexpress/devextreme-build" images is in the [build/docker-image](build/docker-image/Dockerfile) directory.
+The Dockerfile for building "devexpress/devextreme-build" images is in the [build/docker-image](build/docker-image/Dockerfile) directory.
 
 A VNC server is available within the running container. To track test execution, add the `-p 5900:5900` parameter to the `docker run` command and connect to "localhost:5900" using any VNC client.
 
