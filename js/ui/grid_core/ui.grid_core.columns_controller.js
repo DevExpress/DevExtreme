@@ -604,7 +604,7 @@ module.exports = {
             /**
              * @name GridBaseColumn_command
              * @publicName command
-             * @type string|Enums.GridColumnCommandType
+             * @type string|Enums.GridCommandColumnType
              */
             regenerateColumnsByVisibleItems: false,
             /**
