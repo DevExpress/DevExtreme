@@ -66,7 +66,8 @@ function environmentWithStubLabels() {
             background: {},
             connector: {
                 "stroke-width": 1
-            }
+            },
+            connectorOffset: 0
         }
     };
     this.series = {
@@ -1005,6 +1006,7 @@ QUnit.test("columns if label in center", function(assert) {
 
 QUnit.test("columns with maxLabelLength", function(assert) {
     // arrange
+    this.options.label.connectorOffset = 20;
     var point = createPointWithStubLabel.call(this, { 0: 350, 10: 330, 20: 310 });
     point.setMaxLabelLength(30);
 
@@ -1021,6 +1023,18 @@ QUnit.test("not columns", function(assert) {
     var coord = point._correctLabelCoord({ x: 10, y: 10 });
 
     assert.deepEqual(coord, { x: 10, y: 10 });
+});
+
+QUnit.test("Point can return maxLabelLength", function(assert) {
+    // arrange
+    var point = createPoint(this.series, this.data, this.options);
+    point.setMaxLabelLength(30);
+
+    // act
+    var length = point.getMaxLabelLength();
+
+    // arrange
+    assert.equal(length, 30);
 });
 
 QUnit.module("update Coord", {
@@ -1062,6 +1076,25 @@ QUnit.test("T586419. not columns, move from center", function(assert) {
     assert.equal(point2._label.shift.args[0][0], 290);
     assert.equal(point3._label.shift.args[0][0], 320);
     assert.equal(point4._label.shift.args[0][0], 280);
+});
+
+QUnit.test("Not columns, do not move from center but with connector - correct x coordinate by connector offset", function(assert) {
+    this.options.label.position = "outside";
+    this.options.label.connectorOffset = 20;
+    var point1 = createPointWithStubLabel.call(this, { 0: 55, 10: 45, 20: 35 }, { x: 305, y: 10, width: 10, height: 10 }),
+        point2 = createPointWithStubLabel.call(this, { 0: 145, 10: 135, 20: 125 }, { x: 285, y: 10, width: 10, height: 10 }),
+        point3 = createPointWithStubLabel.call(this, { 0: 55, 10: 45, 20: 35 }, { x: 330, y: 10, width: 10, height: 10 }),
+        point4 = createPointWithStubLabel.call(this, { 0: 145, 10: 135, 20: 125 }, { x: 260, y: 10, width: 10, height: 10 });
+
+    point1.updateLabelCoord();
+    point2.updateLabelCoord();
+    point3.updateLabelCoord();
+    point4.updateLabelCoord();
+
+    assert.equal(point1._label.shift.args[0][0], 320);
+    assert.equal(point2._label.shift.args[0][0], 270);
+    assert.equal(point3._label.shift.args[0][0], 330);
+    assert.equal(point4._label.shift.args[0][0], 260);
 });
 
 QUnit.module("Check label position", {
