@@ -2874,6 +2874,7 @@ QUnit.test("editing should starts correctly if scrolling mode is virtual", funct
         },
         scrolling: {
             mode: "virtual",
+            rowRenderingMode: "virtual",
             useNative: false
         }
     }).dxDataGrid("instance");
@@ -7121,6 +7122,7 @@ QUnit.test("synchronous render and asynchronous updateDimensions during paging i
         height: 100,
         scrolling: {
             mode: "virtual",
+            rowRenderingMode: "virtual",
             useNative: false
         },
         paging: {
