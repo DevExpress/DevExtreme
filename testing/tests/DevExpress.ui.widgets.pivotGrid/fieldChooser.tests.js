@@ -2108,15 +2108,8 @@ QUnit.test("Apply filters", function(assert) {
 });
 
 QUnit.test("applyChanges", function(assert) {
-    this.fieldChooser = $("#pgfc").dxPivotGridFieldChooser({
-        applyChangesMode: "onDemand",
-        dataSource: new PivotGridDataSource({
-            fields: [
-                { dataField: "Field1", area: 'column', areaIndex: 0 },
-            ],
-            store: []
-        })
-    }).dxPivotGridFieldChooser("instance");
+    this.setup({ fields: [{ dataField: "Field1", area: 'column', areaIndex: 0 }] });
+    this.clock.tick(500);
 
     var changedArgs = {
         sourceGroup: "column",
@@ -2124,7 +2117,7 @@ QUnit.test("applyChanges", function(assert) {
         targetGroup: "row"
     };
 
-    changedArgs.sourceElement = renderer($("#pgfc").find(".dx-area-field").eq(0));
+    changedArgs.sourceElement = renderer(this.$container.find(".dx-area-field").eq(0));
 
     var sortable = this.fieldChooser.$element().dxSortable("instance"),
         onChangedHandler = sortable.option("onChanged");
@@ -2134,6 +2127,7 @@ QUnit.test("applyChanges", function(assert) {
 
     this.fieldChooser.applyChanges();
     this.clock.tick(1000);
+
     var state = this.fieldChooser.getDataSource().state();
     assert.equal(state.fields.length, 1, "one field");
     assert.deepEqual(state.fields[0].dataField, "Field1");
@@ -2141,15 +2135,7 @@ QUnit.test("applyChanges", function(assert) {
 });
 
 QUnit.test("cancelChanges", function(assert) {
-    this.fieldChooser = $("#pgfc").dxPivotGridFieldChooser({
-        applyChangesMode: "onDemand",
-        dataSource: new PivotGridDataSource({
-            fields: [
-                { dataField: "Field1", area: 'column', areaIndex: 0 },
-            ],
-            store: []
-        })
-    }).dxPivotGridFieldChooser("instance");
+    this.setup({ fields: [{ dataField: "Field1", area: 'column', areaIndex: 0 }] });
 
     var changedArgs = {
         sourceGroup: "column",
@@ -2157,7 +2143,7 @@ QUnit.test("cancelChanges", function(assert) {
         targetGroup: "row"
     };
 
-    changedArgs.sourceElement = renderer($("#pgfc").find(".dx-area-field").eq(0));
+    changedArgs.sourceElement = renderer(this.$container.find(".dx-area-field").eq(0));
 
     var sortable = this.fieldChooser.$element().dxSortable("instance"),
         onChangedHandler = sortable.option("onChanged");
