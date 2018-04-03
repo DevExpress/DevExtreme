@@ -6,6 +6,7 @@ import SchedulerTimelineDay from "ui/scheduler/ui.scheduler.timeline_day";
 import dataUtils from "core/element_data";
 import dateLocalization from "localization/date";
 import SchedulerWorkSpaceVerticalStrategy from "ui/scheduler/ui.scheduler.work_space.grouped.strategy.vertical";
+import SchedulerWorkSpaceHorizontalStrategy from "ui/scheduler/ui.scheduler.work_space.grouped.strategy.horizontal";
 import SchedulerResourcesManager from "ui/scheduler/ui.scheduler.resource_manager";
 import "ui/scheduler/ui.scheduler";
 
@@ -166,7 +167,7 @@ QUnit.module("Timeline markup", moduleConfig, () => {
     });
 });
 
-const timelineDayModuleConfig = {
+let timelineDayModuleConfig = {
     beforeEach: () =>{
         this.createInstance = function(options) {
             if(this.instance) {
@@ -314,7 +315,7 @@ QUnit.module("TimelineDay markup", timelineDayModuleConfig, () => {
     });
 
     QUnit.test("Cell count should depend on start/end day hour & hoursInterval", (assert) => {
-        var $element = this.instance.$element();
+        let $element = this.instance.$element();
 
         this.instance.option({
             currentDate: new Date(2015, 2, 1),
@@ -327,3 +328,104 @@ QUnit.module("TimelineDay markup", timelineDayModuleConfig, () => {
     });
 });
 
+timelineDayModuleConfig = {
+    beforeEach: () =>{
+        this.createInstance = function(options) {
+            if(this.instance) {
+                this.instance.invoke.restore();
+                delete this.instance;
+            }
+
+            this.instance = $("#scheduler-timeline").dxSchedulerTimelineDay({
+                groupOrientation: "horizontal"
+            }).dxSchedulerTimelineDay("instance");
+            stubInvokeMethod(this.instance, options);
+
+            this.instance.option("groups", [{ name: "one", items: [{ id: 1, text: "a" }, { id: 2, text: "b" }] }]);
+        };
+
+        this.createInstance();
+    }
+};
+
+QUnit.module("TimelineDay with horizontal grouping markup", timelineDayModuleConfig, () => {
+    QUnit.test("Scheduler timeline day should have right groupedStrategy, groupOrientation = horizontal", (assert) => {
+        assert.ok(this.instance._groupedStrategy instanceof SchedulerWorkSpaceHorizontalStrategy, "Grouped strategy is right");
+    });
+
+    QUnit.test("Scheduler timeline day should have a right css class, groupOrientation = horizontal", (assert) => {
+        let $element = this.instance.$element();
+        assert.ok($element.hasClass("dx-scheduler-work-space-horizontal-grouped"), "dxSchedulerTimelineDay has 'dx-scheduler-work-space-horizontal-grouped' css class");
+    });
+
+    QUnit.test("Scheduler timeline day view should have right cell & row count, groupOrientation = horizontal", (assert) => {
+        let $element = this.instance.$element();
+
+        assert.equal($element.find(".dx-scheduler-date-table-row").length, 1, "Date table has 1 rows");
+        assert.equal($element.find(".dx-scheduler-date-table-cell").length, 96, "Date table has 96 cells");
+    });
+
+    QUnit.test("Each cell of scheduler timeline day should contain rigth jQuery dxCellData, groupOrientation = horizontal", (assert) => {
+        this.instance.option({
+            currentDate: new Date(2015, 9, 21),
+            firstDayOfWeek: 1,
+            startDayHour: 5,
+            endDayHour: 8,
+            hoursInterval: 1
+        });
+
+        let $cells = this.instance.$element().find("." + CELL_CLASS);
+
+        assert.deepEqual(dataUtils.data($cells.get(0), "dxCellData"), {
+            startDate: new Date(2015, 9, 21, 5),
+            endDate: new Date(2015, 9, 21, 6),
+            allDay: false,
+            groups: {
+                one: 1
+            }
+        }, "data of first cell is rigth");
+
+        assert.deepEqual(dataUtils.data($cells.get(5), "dxCellData"), {
+            startDate: new Date(2015, 9, 21, 7),
+            endDate: new Date(2015, 9, 21, 8),
+            allDay: false,
+            groups: {
+                one: 2
+            }
+        }, "data of 5th cell is rigth");
+    });
+
+    QUnit.test("Header panel should have right quantity of cells, groupOrientation = horizontal", (assert) => {
+        this.instance.option({
+            currentDate: new Date(2015, 9, 21, 0, 0)
+        });
+        checkHeaderCells(this.instance.$element(), assert, 0.5, 2);
+    });
+
+    QUnit.test("Date table should have right quantity of cells, groupOrientation = horizontal", (assert) => {
+        var $element = this.instance.$element();
+
+        let $rows = $element.find(".dx-scheduler-date-table-row");
+
+        assert.equal($rows.length, 1, "Date table has 1 row");
+        assert.equal($rows.eq(0).find(".dx-scheduler-date-table-cell").length, 48 * 2, "The first group row has 96 cells");
+    });
+
+    QUnit.test("Header panel should contain group rows in grouped mode, groupOrientation = horizontal", (assert) => {
+        let $element = this.instance.$element();
+
+        let $groupRows = $element.find(".dx-scheduler-header-panel .dx-scheduler-group-row");
+
+        assert.strictEqual($groupRows.length, 1, "Header panel does not contain any group row");
+    });
+
+    QUnit.test("Group table should contain right rows and cells count, groupOrientation = horizontal", (assert) => {
+        let $element = this.instance.$element();
+
+        let $groupRows = $element.find(".dx-scheduler-group-row"),
+            $firstRowCells = $groupRows.eq(0).find(".dx-scheduler-group-header");
+
+        assert.equal($groupRows.length, 1, "Row count is OK");
+        assert.equal($firstRowCells.length, 2, "Cell count is OK");
+    });
+});
