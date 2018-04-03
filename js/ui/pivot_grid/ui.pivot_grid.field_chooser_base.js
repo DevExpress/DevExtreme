@@ -284,17 +284,6 @@ var FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).in
         dataSource.state(startState, true);
     },
 
-    _getFieldFromState: function(dataField) {
-        var result;
-        this.option("state").fields.some(function(field) {
-            if(field.dataField === dataField) {
-                result = field;
-                return true;
-            }
-        });
-        return result;
-    },
-
     _adjustSortableOnChangedArgs: function(e) {
         e.removeSourceElement = false;
         e.removeTargetElement = true;

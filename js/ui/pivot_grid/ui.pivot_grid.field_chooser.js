@@ -548,10 +548,6 @@ var FieldChooser = BaseFieldChooser.inherit({
                         needSelectDefaultItem = true,
                         area;
 
-                    if(!e.event && !that._applyValueInstantly()) {
-                        return;
-                    }
-
                     if(data.items) {
                         if(data.selected) {
                             treeView.unselectItem(data);
@@ -610,19 +606,6 @@ var FieldChooser = BaseFieldChooser.inherit({
             };
 
         that._dataChangedHandlers.push(dataChanged);
-    },
-
-    _getTreeViewFields: function(nodes, result) {
-        var that = this;
-        result = result || [];
-
-        if(!nodes[0].field) {
-            each(nodes, function(_, node) {
-                result = node.items && node.items.length ? that._getTreeViewFields(node.items, result) : result.concat(nodes);
-            });
-        }
-
-        return result.concat(nodes);
     },
 
     _renderAreaFields: function($container, area, fields) {
