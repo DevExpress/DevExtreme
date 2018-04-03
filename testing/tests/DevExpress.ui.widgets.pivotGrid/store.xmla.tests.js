@@ -2392,7 +2392,7 @@ define(function(require) {
             .always(done);
     });
 
-    QUnit.test("FilterValues using key value in row and column fields. Include filter", function(assert) {
+    QUnit.test("FilterValues using full key value in row and column fields. Include filter", function(assert) {
         var done = assert.async();
         this.store.load({
             columns: [],
@@ -4262,6 +4262,23 @@ define(function(require) {
         });
 
         assert.ok(this.getQuery().toLowerCase().indexOf("crossjoin") === -1);
+    });
+
+    QUnit.test("Use fields with expression. T620434", function(assert) {
+        this.store.load({
+            columns: [],
+            rows: [
+                { dataField: "[Ship Date].[Calendar].[Calendar]", hierarchyName: "[Ship Date].[Calendar]" },
+                { dataField: "[Ship Date].[Calendar].[Month]", hierarchyName: "[Ship Date].[Calendar]" }
+            ],
+            values: [{ dataField: "[Measures].[Customer Count]", caption: 'Count' }],
+            headerName: "rows",
+            path: ["[Ship Date].[Calendar Bla Bla].&[2002]"]
+        });
+
+        var query = this.getQuery();
+
+        assert.ok(query.indexOf("{[Ship Date].[Calendar Bla Bla].&[2002]}") >= 0, "Descendants argument has full key");
     });
 
     QUnit.module("getDrillDownItems", stubsEnvironment);
