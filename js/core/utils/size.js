@@ -33,7 +33,7 @@ var getBoxSizingOffset = function(name, elementStyles, boxParams) {
     return 0;
 };
 
-var getSize = function(element, name, include) {
+var getSize = function(element, name, include, ignoreInvisibility) {
     var elementStyles = window.getComputedStyle(element);
 
     var boxParams = getElementBoxParams(name, elementStyles);
@@ -43,8 +43,8 @@ var getSize = function(element, name, include) {
 
     var result = clientRect ? boundingClientRect : 0;
 
-    if(elementStyles.display === 'none' && !result) {
-        result = getSizeOfVisibleElement.apply(this, arguments);
+    if(!ignoreInvisibility && elementStyles.display === 'none' && !result) {
+        result = getSizeOfVisibleElement(element, name, include);
     }
 
     if(result <= 0) {
@@ -74,7 +74,7 @@ var testStyles = {
     visibility: "hidden"
 };
 
-var getSizeOfVisibleElement = function(element) {
+var getSizeOfVisibleElement = function(element, name, include) {
     var originalStyles = {},
         style;
 
@@ -83,7 +83,7 @@ var getSizeOfVisibleElement = function(element) {
         element.style[style] = testStyles[style];
     }
 
-    var result = getSize.apply(this, arguments);
+    var result = getSize(element, name, include, true);
 
     for(style in testStyles) {
         element.style[style] = originalStyles[style];
