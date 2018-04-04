@@ -47,7 +47,8 @@ var $ = require("../../core/renderer"),
     when = deferredUtils.when,
     Deferred = deferredUtils.Deferred,
     EmptyTemplate = require("../widget/empty_template"),
-    BindableTemplate = require("../widget/bindable_template");
+    BindableTemplate = require("../widget/bindable_template"),
+    themes = require("../themes");
 
 var WIDGET_CLASS = "dx-scheduler",
     WIDGET_SMALL_CLASS = "dx-scheduler-small",
@@ -316,9 +317,7 @@ var Scheduler = Widget.inherit({
                 /**
                 * @name dxSchedulerOptions_views_groupOrientation
                 * @publicName groupOrientation
-                * @type string
-                * @default undefined
-                * @acceptValues 'vertical'|'horizontal'
+                * @type Enums.Orientation
                 */
 
                 /**
@@ -931,7 +930,17 @@ var Scheduler = Widget.inherit({
                 */
             noDataText: messageLocalization.format("dxCollectionWidget-noDataText"),
 
-            allowMultipleCellSelection: true
+            allowMultipleCellSelection: true,
+            _appointmentTooltipOffset: { x: 0, y: 0 },
+            _appointmentTooltipButtonsPosition: "bottom",
+            _appointmentTooltipCloseButton: false,
+            _useAppointmentColorForTooltip: false,
+            _appointmentTooltipOpenButtonText: messageLocalization.format("dxScheduler-openAppointment"),
+            _appointmentTooltipOpenButtonIcon: "",
+            _dropDownButtonIcon: "overflow",
+            _appointmentCountPerCell: 2,
+            _appointmentGroupButtonOffset: 0,
+            _appointmentOffset: 26
 
                 /**
                 * @name dxSchedulerOptions_activeStateEnabled
@@ -1116,6 +1125,42 @@ var Scheduler = Widget.inherit({
                         allowDragging: false,
                         allowResizing: false
                     }
+                }
+            },
+            {
+                device: function() {
+                    return themes.isMaterial();
+                },
+                options: {
+                        /**
+                         * @name dxSchedulerOptions_useDropDownViewSwitcher
+                         * @publicName useDropDownViewSwitcher
+                         * @default true @for Material
+                         */
+                    useDropDownViewSwitcher: true,
+                    dateCellTemplate: function(data, index, element) {
+                        var text = data.text;
+
+                        text.split(" ").forEach(function(text, index) {
+                            var span = $("<span>")
+                                .text(text)
+                                .addClass("dx-scheduler-header-panel-cell-date");
+
+                            $(element).append(span);
+                            if(!index) element.append(" ");
+                        });
+                    },
+
+                    _appointmentTooltipOffset: { x: 0, y: 11 },
+                    _appointmentTooltipButtonsPosition: "bottom",
+                    _appointmentTooltipCloseButton: true,
+                    _useAppointmentColorForTooltip: true,
+                    _appointmentTooltipOpenButtonText: null,
+                    _appointmentTooltipOpenButtonIcon: "edit",
+                    _dropDownButtonIcon: "chevrondown",
+                    _appointmentCountPerCell: 1,
+                    _appointmentGroupButtonOffset: 20,
+                    _appointmentOffset: 30
                 }
             }
         ]);
@@ -1337,6 +1382,16 @@ var Scheduler = Widget.inherit({
             case "remoteFiltering":
             case "timeZone":
             case "dropDownAppointmentTemplate":
+            case "_appointmentTooltipOffset":
+            case "_appointmentTooltipButtonsPosition":
+            case "_appointmentTooltipCloseButton":
+            case "_useAppointmentColorForTooltip":
+            case "_appointmentTooltipOpenButtonText":
+            case "_appointmentTooltipOpenButtonIcon":
+            case "_dropDownButtonIcon":
+            case "_appointmentCountPerCell":
+            case "_appointmentGroupButtonOffset":
+            case "_appointmentOffset":
                 this.repaint();
                 break;
             case "dateSerializationFormat":
@@ -1825,7 +1880,8 @@ var Scheduler = Widget.inherit({
             focusStateEnabled: this.option("focusStateEnabled"),
             width: this.option("width"),
             rtlEnabled: this.option("rtlEnabled"),
-            useDropDownViewSwitcher: this.option("useDropDownViewSwitcher")
+            useDropDownViewSwitcher: this.option("useDropDownViewSwitcher"),
+            _dropDownButtonIcon: this.option("_dropDownButtonIcon")
         }, currentViewOptions);
 
         result.observer = this;
@@ -1854,6 +1910,7 @@ var Scheduler = Widget.inherit({
             allowResize: this._allowResizing(),
             allowAllDayResize: this._allowAllDayResizing(),
             rtlEnabled: this.option("rtlEnabled"),
+            _appointmentGroupButtonOffset: this.option("_appointmentGroupButtonOffset"),
             onContentReady: function() {
                 that._workSpace && that._workSpace.option("allDayExpanded", that._isAllDayExpanded(that.getFilteredItems()));
             }

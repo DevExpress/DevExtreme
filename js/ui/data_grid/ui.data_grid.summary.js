@@ -723,12 +723,10 @@ gridCore.registerModule("summary", {
                             dataSource = that._dataSource,
                             summaryTotalItems = that.option("summary.totalItems");
 
-                        that.callBase(change);
                         that._footerItems = [];
-
                         if(dataSource && summaryTotalItems && summaryTotalItems.length) {
                             totalAggregates = dataSource.totalAggregates();
-                            summaryCells = this._getSummaryCells(summaryTotalItems, totalAggregates);
+                            summaryCells = that._getSummaryCells(summaryTotalItems, totalAggregates);
 
                             if(summaryCells.length) {
                                 that._footerItems.push({
@@ -737,6 +735,7 @@ gridCore.registerModule("summary", {
                                 });
                             }
                         }
+                        that.callBase(change);
                     },
 
                     _getAggregates: function(summaryItems, remoteOperations) {

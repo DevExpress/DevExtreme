@@ -70,6 +70,17 @@ var HorizontalGroupedStrategy = GroupedStrategy.inherit({
 
     calculateTimeCellRepeatCount: function() {
         return 1;
+    },
+
+    getWorkSpaceMinWidth: function() {
+        var minWidth = this._workSpace._getWorkSpaceWidth(),
+            workspaceContainerWidth = this._workSpace.$element().outerWidth() - this._workSpace.getTimePanelWidth();
+
+        if(minWidth < workspaceContainerWidth) {
+            minWidth = workspaceContainerWidth;
+        }
+
+        return minWidth;
     }
 });
 

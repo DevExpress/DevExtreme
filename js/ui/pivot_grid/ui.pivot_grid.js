@@ -270,7 +270,14 @@ var PivotGrid = Widget.inherit({
                  * @type number
                  * @default 600
                  */
-                height: 600
+                height: 600,
+                /**
+                 * @name dxPivotGridOptions_fieldChooser_applyChangesMode
+                 * @publicName applyChangesMode
+                 * @type Enums.ApplyChangesMode
+                 * @default "instantly"
+                 */
+                applyChangesMode: "instantly"
                 /**
                  * @name dxPivotGridOptions_fieldChooser_texts
                  * @publicName texts
@@ -1129,6 +1136,31 @@ var PivotGrid = Widget.inherit({
         var that = this,
             container = that._pivotGridContainer,
             fieldChooserOptions = that.option("fieldChooser") || {},
+            toolbarItems = fieldChooserOptions.applyChangesMode === "onDemand" ? [
+                {
+                    toolbar: "bottom",
+                    location: "after",
+                    widget: "dxButton",
+                    options: {
+                        text: messageLocalization.format("OK"),
+                        onClick: function(e) {
+                            that._fieldChooserPopup.$content().dxPivotGridFieldChooser("applyChanges");
+                            that._fieldChooserPopup.hide();
+                        }
+                    }
+                },
+                {
+                    toolbar: "bottom",
+                    location: "after",
+                    widget: "dxButton",
+                    options: {
+                        text: messageLocalization.format("Cancel"),
+                        onClick: function(e) {
+                            that._fieldChooserPopup.hide();
+                        }
+                    }
+                }
+            ] : [],
             fieldChooserComponentOptions = {
                 layout: fieldChooserOptions.layout,
                 texts: fieldChooserOptions.texts || {},
@@ -1137,7 +1169,8 @@ var PivotGrid = Widget.inherit({
                 width: undefined,
                 height: undefined,
                 headerFilter: that.option("headerFilter"),
-                encodeHtml: that.option("encodeHtml")
+                encodeHtml: that.option("encodeHtml"),
+                applyChangesMode: fieldChooserOptions.applyChangesMode
             },
             popupOptions = {
                 shading: false,
@@ -1148,6 +1181,7 @@ var PivotGrid = Widget.inherit({
                 resizeEnabled: true,
                 minWidth: fieldChooserOptions.minWidth,
                 minHeight: fieldChooserOptions.minHeight,
+                toolbarItems: toolbarItems,
                 onResize: function(e) {
                     e.component.$content().dxPivotGridFieldChooser("updateDimensions");
                 },
@@ -1155,7 +1189,9 @@ var PivotGrid = Widget.inherit({
                     that._createComponent(e.component.content(), PivotGridFieldChooser, fieldChooserComponentOptions);
                 },
                 onHidden: function(e) {
-                    e.component.$content().dxPivotGridFieldChooser("resetTreeView");
+                    var fieldChooser = e.component.$content().dxPivotGridFieldChooser("instance");
+                    fieldChooser.resetTreeView();
+                    fieldChooser.option("state", null);
                 }
             };
 

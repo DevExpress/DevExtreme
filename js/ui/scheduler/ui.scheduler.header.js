@@ -17,7 +17,6 @@ var $ = require("../../core/renderer"),
     errors = require("../../core/errors"),
     messageLocalization = require("../../localization/message");
 
-
 var COMPONENT_CLASS = "dx-scheduler-header",
     VIEW_SWITCHER_CLASS = "dx-scheduler-view-switcher",
     VIEW_SWITCHER_LABEL_CLASS = "dx-scheduler-view-switcher-label";
@@ -47,7 +46,8 @@ var SchedulerHeader = Widget.inherit({
             currentDate: new Date(),
             min: undefined,
             max: undefined,
-            useDropDownViewSwitcher: false
+            useDropDownViewSwitcher: false,
+            _dropDownButtonIcon: "overlay"
         });
     },
 
@@ -173,7 +173,8 @@ var SchedulerHeader = Widget.inherit({
             },
             selectedItem: this.option("currentView"),
             tabIndex: this.option("tabIndex"),
-            focusStateEnabled: this.option("focusStateEnabled")
+            focusStateEnabled: this.option("focusStateEnabled"),
+            showNavButtons: true
         });
     },
 
@@ -210,6 +211,7 @@ var SchedulerHeader = Widget.inherit({
 
         this._viewSwitcher = this._createComponent($element, DropDownMenu, {
             onItemClick: this._updateCurrentView.bind(this),
+            buttonIcon: this.option("_dropDownButtonIcon"),
             items: this.option("views"),
             itemTemplate: function(item) {
                 return $("<span>")

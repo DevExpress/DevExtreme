@@ -16,7 +16,9 @@ var $ = require("jquery"),
     Color = require("color"),
     dataUtils = require("core/element_data"),
     devices = require("core/devices"),
-    CustomStore = require("data/custom_store");
+    CustomStore = require("data/custom_store"),
+    themes = require("ui/themes"),
+    dateLocalization = require("localization/date");
 
 var APPOINTMENT_DEFAULT_OFFSET = 25,
     APPOINTMENT_MOBILE_OFFSET = 50;
@@ -2118,5 +2120,36 @@ QUnit.test("One full-size appointment should have a correct height, Week view, '
     var tableCellHeight = this.instance.$element().find(".dx-scheduler-all-day-table-cell").eq(0).outerHeight();
 
     assert.roughEqual($(this.instance.$element().find(".dx-scheduler-all-day-appointment")).eq(0).outerHeight(), tableCellHeight, 1.5, "appointment height is correct");
+});
+
+QUnit.test("Scheduler timeline workweek should contain two spans in header panel cell in Material theme", function(assert) {
+    var origIsMaterial = themes.isMaterial;
+    themes.isMaterial = function() { return true; };
+
+    this.createInstance({
+        views: [ "week" ],
+        currentDate: new Date(2015, 9, 29),
+        firstDayOfWeek: 1,
+        startDayHour: 4,
+        endDayHour: 5,
+        currentView: "week"
+    });
+
+    var $rows = this.instance.$element().find(".dx-scheduler-header-row"),
+        $firstRowCells = $rows.first().find("th"),
+        startDate = 26;
+
+    var formatWeekdayAndDay = function(date) {
+        return dateLocalization.getDayNames("abbreviated")[date.getDay()] + " " + dateLocalization.format(date, "day");
+    };
+
+    for(var i = 0; i < 5; i++) {
+        var $cell = $firstRowCells.eq(i);
+        assert.equal($cell.text(), formatWeekdayAndDay(new Date(2015, 9, startDate + i)), "Cell text is OK");
+        assert.equal($cell.find("span").length, 2, "Cell contains two spans in material theme");
+        assert.ok($cell.find("span").first().hasClass("dx-scheduler-header-panel-cell-date"), "first span has correct class");
+        assert.ok($cell.find("span").last().hasClass("dx-scheduler-header-panel-cell-date"), "second span has correct class");
+    }
+    themes.isMaterial = origIsMaterial;
 });
 

@@ -5191,7 +5191,7 @@ QUnit.test("Appointment should have right width on mobile devices & desktop in w
     assert.roughEqual($appointments.eq(0).outerWidth(), cellWidth - expectedOffset, 1.001, "Width is OK");
 });
 
-QUnit.test("Appointments should be rendered correctly in horizontal grouped workspace Day", function(assert) {
+QUnit.test("Appointments should be rendered correctly in vertical grouped workspace Day", function(assert) {
     this.createInstance({
         dataSource: [{
             text: "a",
@@ -5235,7 +5235,7 @@ QUnit.test("Appointments should be rendered correctly in horizontal grouped work
     assert.equal($appointments.eq(1).position().left, 200, "correct left position");
 });
 
-QUnit.test("Appointments should be rendered correctly in horizontal grouped workspace Week", function(assert) {
+QUnit.test("Appointments should be rendered correctly in vertical grouped workspace Week", function(assert) {
     this.createInstance({
         dataSource: [{
             text: "a",
@@ -5280,7 +5280,7 @@ QUnit.test("Appointments should be rendered correctly in horizontal grouped work
     assert.equal($appointments.eq(1).position().left, 200 + cellWidth * 5, "correct left position");
 });
 
-QUnit.test("Appointments should be rendered correctly in horizontal grouped workspace Month", function(assert) {
+QUnit.test("Appointments should be rendered correctly in vertical grouped workspace Month", function(assert) {
     this.createInstance({
         dataSource: [{
             text: "a",
@@ -5319,12 +5319,12 @@ QUnit.test("Appointments should be rendered correctly in horizontal grouped work
         monthTopOffset = cellHeight * 0.4;
 
     assert.roughEqual($appointments.eq(0).position().top, cellHeight * 2 + monthTopOffset, 1, "correct top position");
-    assert.equal($appointments.eq(0).position().left, cellWidth * 5 + 100, "correct left position");
+    assert.roughEqual($appointments.eq(0).position().left, cellWidth * 5 + 100, 1, "correct left position");
     assert.roughEqual($appointments.eq(1).position().top, cellHeight * 8 + monthTopOffset, 1, "correct top position");
-    assert.equal($appointments.eq(1).position().left, cellWidth * 5 + 100, "correct left position");
+    assert.roughEqual($appointments.eq(1).position().left, cellWidth * 5 + 100, 1, "correct left position");
 });
 
-QUnit.test("Appointment should be dragged correctly between the groups in horizontal grouped workspace Day", function(assert) {
+QUnit.test("Appointment should be dragged correctly between the groups in vertical grouped workspace Day", function(assert) {
     this.createInstance({
         dataSource: [{
             text: "a",
@@ -5337,6 +5337,7 @@ QUnit.test("Appointment should be dragged correctly between the groups in horizo
             type: "day",
             groupOrientation: "vertical"
         }],
+        editing: true,
         currentView: "day",
         groups: ["id"],
         resources: [
@@ -5367,7 +5368,7 @@ QUnit.test("Appointment should be dragged correctly between the groups in horizo
     assert.deepEqual(appointmentData.id, 2, "Group is OK");
 });
 
-QUnit.test("Appointment should be dragged correctly between the groups in horizontal grouped workspace Week", function(assert) {
+QUnit.test("Appointment should be dragged correctly between the groups in vertical grouped workspace Week", function(assert) {
     this.createInstance({
         dataSource: [{
             text: "a",
@@ -5380,6 +5381,7 @@ QUnit.test("Appointment should be dragged correctly between the groups in horizo
             type: "week",
             groupOrientation: "vertical"
         }],
+        editing: true,
         currentView: "week",
         groups: ["id"],
         resources: [
@@ -5410,7 +5412,7 @@ QUnit.test("Appointment should be dragged correctly between the groups in horizo
     assert.deepEqual(appointmentData.id, 2, "Group is OK");
 });
 
-QUnit.test("Appointment should be dragged correctly between the groups in horizontal grouped workspace Month", function(assert) {
+QUnit.test("Appointment should be dragged correctly between the groups in vertical grouped workspace Month", function(assert) {
     this.createInstance({
         dataSource: [{
             text: "a",
@@ -5423,6 +5425,7 @@ QUnit.test("Appointment should be dragged correctly between the groups in horizo
             type: "month",
             groupOrientation: "vertical"
         }],
+        editing: true,
         currentView: "month",
         groups: ["id"],
         resources: [
@@ -5451,7 +5454,7 @@ QUnit.test("Appointment should be dragged correctly between the groups in horizo
 });
 
 
-QUnit.test("Long appt parts should have correct coordinates if duration > week in horizontal grouped workspace Month", function(assert) {
+QUnit.test("Long appt parts should have correct coordinates if duration > week in vertical grouped workspace Month", function(assert) {
     this.createInstance({
         dataSource: [{
             text: "a",
@@ -5484,7 +5487,7 @@ QUnit.test("Long appt parts should have correct coordinates if duration > week i
     assert.equal($secondPart.position().left, 100, 'correct left position');
 });
 
-QUnit.test("Long appt parts should have correct coordinates after drag to the last row cell in horizontal grouped workspace Month", function(assert) {
+QUnit.test("Long appt parts should have correct coordinates after drag to the last row cell in vertical grouped workspace Month", function(assert) {
     this.createInstance({
         dataSource: [{
             text: "a",
@@ -5497,6 +5500,7 @@ QUnit.test("Long appt parts should have correct coordinates after drag to the la
             type: "month",
             groupOrientation: "vertical"
         }],
+        editing: true,
         currentView: "month",
         groups: ["id"],
         resources: [
@@ -5525,7 +5529,7 @@ QUnit.test("Long appt parts should have correct coordinates after drag to the la
     assert.equal($secondPart.position().left, 100, 'correct left position');
 });
 
-QUnit.test("Hourly recurring appt should be rendred in horizontal grouped workspace Day", function(assert) {
+QUnit.test("Hourly recurring appt should be rendred in vertical grouped workspace Day", function(assert) {
     this.createInstance({
         dataSource: [{
             text: "a",

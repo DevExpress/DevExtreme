@@ -3,7 +3,7 @@
 var $ = require("jquery"),
     themeManagerModule = require("viz/components/chart_theme_manager"),
     backgroundColor = '#ffffff',
-    defaultColor = '#5f8b95',
+    defaultColor = '#1db2f5',
     paletteModule = require("viz/palette"),
     themeModule = require("viz/themes");
 
@@ -35,7 +35,7 @@ function createThemeManager(options, themeGroupName) {
 
     QUnit.module("Get options - series", {
         afterEach: function() {
-            paletteModule.currentPalette('default');
+            paletteModule.currentPalette(null);
         }
     });
 
@@ -718,7 +718,7 @@ function createThemeManager(options, themeGroupName) {
         // assert series theme
 
         assert.ok(theme);
-        assert.equal(theme.mainSeriesColor, '#5f8b95');
+        assert.equal(theme.mainSeriesColor, defaultColor);
         assert.equal(theme.color, undefined);
         assert.equal(theme.border.color, '#000001');
         assert.equal(theme.hoverStyle.color, '#111112');
@@ -754,7 +754,7 @@ function createThemeManager(options, themeGroupName) {
         // assert series theme
 
         assert.ok(theme);
-        assert.equal(theme.mainSeriesColor, '#5f8b95');
+        assert.equal(theme.mainSeriesColor, defaultColor);
         assert.equal(theme.color, undefined);
         assert.equal(theme.border.color, '#000001');
         assert.equal(theme.hoverStyle.color, '#111112');
@@ -1419,7 +1419,9 @@ function createThemeManager(options, themeGroupName) {
     QUnit.test('series options for pie. mainSeriesColor. resetPalette', function(assert) {
         // arrange
         var themeManager = createThemeManager({}, "pie");
-        themeManager.setTheme({});
+        themeManager.setTheme({
+            palette: "office"
+        });
         var seriesSettings = themeManager.getOptions("series", { type: "pie" });
 
         // assert pie theme
@@ -1435,7 +1437,9 @@ function createThemeManager(options, themeGroupName) {
     QUnit.test("series options for pie. mainSeriesColor", function(assert) {
         // arrange
         var themeManager = createThemeManager({}, "pie");
-        themeManager.setTheme({});
+        themeManager.setTheme({
+            palette: "office"
+        });
         var seriesSettings = themeManager.getOptions("series", { type: "pie" });
 
         // assert pie theme

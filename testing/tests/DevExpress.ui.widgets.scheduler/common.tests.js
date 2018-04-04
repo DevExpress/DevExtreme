@@ -20,7 +20,8 @@ var $ = require("jquery"),
     CustomStore = require("data/custom_store"),
     SchedulerTimezones = require("ui/scheduler/ui.scheduler.timezones"),
     dataUtils = require("core/element_data"),
-    keyboardMock = require("../../helpers/keyboardMock.js");
+    keyboardMock = require("../../helpers/keyboardMock.js"),
+    themes = require("ui/themes");
 
 require("ui/scheduler/ui.scheduler");
 require("common.css!");
@@ -3706,6 +3707,43 @@ QUnit.testStart(function() {
         this.instance.option("currentView", "day");
         $workSpace = this.instance.getWorkSpace().$element();
         assert.notOk($workSpace.hasClass("dx-scheduler-work-space-overlapping"), "workspace hasn't class");
+    });
+
+    QUnit.module("Options for Material theme in components", {
+        beforeEach: function() {
+            this.origIsMaterial = themes.isMaterial;
+            themes.isMaterial = function() { return true; };
+            this.createInstance = function(options) {
+                this.instance = $("#scheduler").dxScheduler(options).dxScheduler("instance");
+            };
+            this.clock = sinon.useFakeTimers();
+        },
+        afterEach: function() {
+            this.clock.restore();
+            themes.isMaterial = this.origIsMaterial;
+        }
+    });
+
+    QUnit.test("_dropDownButtonIcon option should be passed to SchedulerHeader", function(assert) {
+        this.createInstance({
+            currentView: "week",
+            showCurrentTimeIndicator: false
+        });
+
+        var header = this.instance.getHeader();
+
+        assert.equal(header.option("_dropDownButtonIcon"), "chevrondown", "header has correct _dropDownButtonIcon");
+    });
+
+    QUnit.test("_appointmentGroupButtonOffset option should be passed to SchedulerAppointments", function(assert) {
+        this.createInstance({
+            currentView: "week",
+            showCurrentTimeIndicator: false
+        });
+
+        var appointments = this.instance.getAppointmentsInstance();
+
+        assert.equal(appointments.option("_appointmentGroupButtonOffset"), 20, "SchedulerAppointments has correct _appointmentGroupButtonOffset");
     });
 
 })("View with configuration");

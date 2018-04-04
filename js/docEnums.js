@@ -41,7 +41,7 @@
 
 /**
  * @typedef {string} Enums.VizPalette
- * @enum {'Bright'|'Carmine'|'Dark Moon'|'Dark Violet'|'Default'|'Green Mist'|'Harmony Light'|'Ocean'|'Pastel'|'Soft'|'Soft Blue'|'Soft Pastel'|'Vintage'|'Violet'}
+ * @enum {'Bright'|'Default'|'Harmony Light'|'Ocean'|'Pastel'|'Soft'|'Soft Pastel'|'Vintage'|'Violet'|'Carmine'|'Dark Moon'|'Dark Violet'|'Green Mist'|'Soft Blue'|'Material'|'Office'}
  */
 
 /**
@@ -730,6 +730,11 @@
  */
 
 /**
+ * @typedef {string} Enums.ApplyChangesMode
+ * @enum {'instantly'|'onDemand'}
+ */
+
+/**
  * @typedef {string} Enums.PivotGridSummaryDisplayMode
  * @enum {'absoluteVariation'|'percentOfColumnGrandTotal'|'percentOfColumnTotal'|'percentOfGrandTotal'|'percentOfRowGrandTotal'|'percentOfRowTotal'|'percentVariation'}
  */
@@ -782,4 +787,14 @@
  /**
  * @typedef {string} Enums.GridCommandColumnType
  * @enum {'adaptive'|'edit'|'expand'|'select'}
+ */
+
+ /**
+ * @typedef {string} Enums.DataSourceStoreType
+ * @enum {'array'|'local'|'odata'}
+ */
+
+ /**
+ * @typedef {string} Enums.PivotGridStoreType
+ * @enum {'array'|'local'|'odata'|'xmla'}
  */

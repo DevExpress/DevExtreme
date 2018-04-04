@@ -73,6 +73,8 @@ var FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).in
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             allowFieldDragging: true,
+            applyChangesMode: "instantly",
+            state: null,
             headerFilter: {
                 width: 252,
                 height: 325,
@@ -104,6 +106,13 @@ var FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).in
         switch(args.name) {
             case "dataSource":
                 this._refreshDataSource();
+                break;
+            case "applyChangesMode":
+                break;
+            case "state":
+                if(args.value === null && args.previousValue !== null) {
+                    this.repaint();
+                }
                 break;
             case "headerFilter":
             case "allowFieldDragging":
@@ -192,7 +201,7 @@ var FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).in
                 if($sourceItem.hasClass("dx-area-box")) {
                     $item = $sourceItem.clone();
                     if(target === "drag") {
-                        iteratorUtils.each($sourceItem, function(index, sourceItem) {
+                        each($sourceItem, function(index, sourceItem) {
                             $item.eq(index).css("width", parseInt($(sourceItem).outerWidth(), 10) + IE_FIELD_WIDTH_CORRECTION);
                         });
                     }
@@ -204,7 +213,7 @@ var FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).in
                 }
                 if(target === "drag") {
                     var wrapperContainer = $(DIV);
-                    iteratorUtils.each($item, function(_, item) {
+                    each($item, function(_, item) {
                         var wrapper = $("<div>")
                             .addClass("dx-pivotgrid-fields-container")
                             .addClass("dx-widget")
@@ -238,14 +247,42 @@ var FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).in
                 that._adjustSortableOnChangedArgs(e);
 
                 if(field) {
-                    dataSource.field(getMainGroupField(dataSource, field).index, {
+                    that._applyChanges([getMainGroupField(dataSource, field)], {
                         area: e.targetGroup,
                         areaIndex: e.targetIndex
                     });
-                    dataSource.load();
                 }
             }
         }, that._getSortableOptions()));
+    },
+
+    _applyChanges(fields, props) {
+        const dataSource = this._dataSource;
+        if(this.option("applyChangesMode") === "instantly") {
+            fields.forEach(({ index })=>{
+                dataSource.field(index, props);
+            });
+            dataSource.load();
+        } else {
+            fields.forEach(({ index })=>{
+                this._changeState(index, props);
+            });
+        }
+    },
+
+    _changeState(fieldIndex, props) {
+        var that = this,
+            dataSource = that._dataSource,
+            startState = dataSource.state(),
+            state = that.option("state") || startState;
+
+        dataSource.state(state, true);
+        dataSource.field(fieldIndex, props);
+
+        that.option("state", dataSource.state());
+        that._clean(true);
+        that._renderComponent();
+        dataSource.state(startState, true);
     },
 
     _adjustSortableOnChangedArgs: function(e) {
@@ -295,18 +332,16 @@ var FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).in
                         },
 
                         apply: function() {
-                            dataSource.field(mainGroupField.index, {
+                            that._applyChanges([mainGroupField], {
                                 filterValues: this.filterValues,
                                 filterType: this.filterType
                             });
-                            dataSource.load();
                         }
                     }));
                 } else if(field.allowSorting && field.area !== "data") {
-                    dataSource.field(field.index, {
+                    that._applyChanges([field], {
                         sortOrder: field.sortOrder === "desc" ? "asc" : "desc"
                     });
-                    dataSource.load();
                 }
             };
 

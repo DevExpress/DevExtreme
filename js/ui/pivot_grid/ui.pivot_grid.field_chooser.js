@@ -180,7 +180,19 @@ var FieldChooser = BaseFieldChooser.inherit({
                  * @default 'All Fields'
                  */
                 allFields: messageLocalization.format("dxPivotGrid-allFields")
-            }
+            },
+            /**
+            * @name dxPivotGridFieldChooserOptions_applyChangesMode
+            * @publicName applyChangesMode
+            * @type Enums.ApplyChangesMode
+            * @default "instantly"
+            */
+           /**
+            * @name dxPivotGridFieldChooserOptions_state
+            * @publicName state
+            * @type object
+            * @default null
+            */
             /**
              * @name dxPivotGridFieldChooserOptions_headerFilter
              * @publicName headerFilter
@@ -295,7 +307,8 @@ var FieldChooser = BaseFieldChooser.inherit({
         }
     },
 
-    _clean: function() {
+    _clean: function(saveState) {
+        !saveState && this.option("state", null);
         this.$element().children("." + FIELDCHOOSER_CONTAINER_CLASS).remove();
     },
 
@@ -564,13 +577,11 @@ var FieldChooser = BaseFieldChooser.inherit({
                             fields = [field];
                         }
                     }
-                    each(fields, function(_, field) {
-                        dataSource.field(field.index, {
-                            area: area,
-                            areaIndex: undefined
-                        });
+
+                    that._applyChanges(fields, {
+                        area: area,
+                        areaIndex: undefined
                     });
-                    dataSource.load();
                 }
             }),
 
@@ -659,6 +670,32 @@ var FieldChooser = BaseFieldChooser.inherit({
         if(treeView) {
             treeView.option("searchValue", "");
             treeView.collapseAll();
+        }
+    },
+
+    /**
+    * @name dxPivotGridFieldChooserMethods_applyChanges
+    * @publicName applyChanges()
+    */
+    applyChanges: function() {
+        var state = this.option("state");
+
+        if(isDefined(state)) {
+            this._dataSource.state(state);
+            this.option("state", null);
+        }
+    },
+
+    /**
+    * @name dxPivotGridFieldChooserMethods_cancelChanges
+    * @publicName cancelChanges()
+    */
+    cancelChanges: function() {
+        if(isDefined(this.option("state"))) {
+            var state = this._dataSource.state();
+            this.option("state", null);
+
+            this._dataSource.state(state);
         }
     },
 
