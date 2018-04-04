@@ -802,6 +802,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
 
     _initMarkup: function() {
         this._renderScrollableContainer();
+        this._renderEmptyMessage(this._dataAdapter.getRootNodes());
         this.callBase();
         this.setAria("role", "tree");
     },
@@ -1262,9 +1263,11 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         $node.addClass(IS_LEAF);
     },
 
-    _renderContent: function() {
-        this._renderEmptyMessage(this._dataAdapter.getRootNodes());
+    _emptyMessageContainer: function() {
+        return this._scrollableContainer ? this._scrollableContainer.content() : this.callBase();
+    },
 
+    _renderContent: function() {
         var items = this.option("items");
         if(items && items.length) {
             this._contentAlreadyRendered = true;
