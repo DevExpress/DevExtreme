@@ -1117,6 +1117,40 @@ QUnit.testStart(function() {
 
 (function() {
 
+    QUnit.module("Work Space Month with horizontal grouping", {
+        beforeEach: function() {
+            this.instance = $("#scheduler-work-space").dxSchedulerWorkSpaceMonth({
+                currentDate: new Date(2018, 2, 1),
+                groupOrientation: "vertical",
+                crossScrollingEnabled: true
+            }).dxSchedulerWorkSpaceMonth("instance");
+
+            stubInvokeMethod(this.instance);
+
+            this.instance.option("groups", [{
+                name: "one",
+                items: [{ id: 1, text: "a" }, { id: 2, text: "b" }]
+            }]);
+        }
+    });
+
+    QUnit.test("Grouped work space should calculate max left position", function(assert) {
+        var $groupHeaderContents = this.instance.$element().find(".dx-scheduler-group-header-content");
+
+        assert.roughEqual($groupHeaderContents.eq(0).outerHeight(), 144, "Group header content height is OK");
+        assert.roughEqual($groupHeaderContents.eq(1).outerHeight(), 144, "Group header content height is OK");
+    });
+
+    QUnit.test("Group width calculation", function(assert) {
+        sinon.stub(this.instance, "getCellWidth").returns(50);
+
+        assert.equal(this.instance.getGroupWidth(), 350, "Group width is OK");
+    });
+
+})("Work Space Month");
+
+(function() {
+
     QUnit.module("Workspace Keyboard Navigation");
 
     QUnit.test("Month workspace navigation by arrows", function(assert) {
