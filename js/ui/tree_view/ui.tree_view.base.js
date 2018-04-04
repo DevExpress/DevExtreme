@@ -1260,6 +1260,10 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         $node.addClass(IS_LEAF);
     },
 
+    _emptyMessageContainer: function() {
+        return this._scrollableContainer ? this._scrollableContainer.content() : this.callBase();
+    },
+
     _renderContent: function() {
         this._renderEmptyMessage(this._dataAdapter.getRootNodes());
 

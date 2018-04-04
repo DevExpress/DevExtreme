@@ -742,10 +742,11 @@ QUnit.test("Repaint treeView on every dataSource modified - remove", function(as
 
 QUnit.test("TreeView should render correctly without items", function(assert) {
     var $treeView = initTree({
-        items: undefined
-    });
+            items: undefined
+        }),
+        $scrollableContent = $treeView.find(".dx-scrollable-content");
 
-    assert.equal($treeView.find(".dx-empty-message").length, 1, "empty message should be shown");
+    assert.equal($scrollableContent.find(".dx-empty-message").length, 1, "empty message should be shown inside scrollable content");
 });
 
 QUnit.test("Dynamic dataSource filter should work correctly", function(assert) {
