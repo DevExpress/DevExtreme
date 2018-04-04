@@ -698,3 +698,13 @@
  * @typedef {string} Enums.PositionResolveCollision
  * @enum {'fit'|'flip'|'flipfit'|'none'}
  */
+
+ /**
+ * @typedef {string} Enums.DataSourceStoreType
+ * @enum {'array'|'local'|'odata'}
+ */
+
+/**
+ * @typedef {string} Enums.PivotGridStoreType
+ * @enum {'array'|'local'|'odata'|'xmla'}
+ */
