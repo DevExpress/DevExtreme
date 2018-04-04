@@ -676,7 +676,6 @@ var FieldChooser = BaseFieldChooser.inherit({
     /**
     * @name dxPivotGridFieldChooserMethods_applyChanges
     * @publicName applyChanges()
-    * @return Promise<void>
     */
     applyChanges: function() {
         var state = this.option("state");
@@ -690,7 +689,6 @@ var FieldChooser = BaseFieldChooser.inherit({
     /**
     * @name dxPivotGridFieldChooserMethods_cancelChanges
     * @publicName cancelChanges()
-    * @return Promise<void>
     */
     cancelChanges: function() {
         if(isDefined(this.option("state"))) {
