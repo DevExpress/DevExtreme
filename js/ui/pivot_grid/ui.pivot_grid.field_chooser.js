@@ -577,20 +577,11 @@ var FieldChooser = BaseFieldChooser.inherit({
                             fields = [field];
                         }
                     }
-                    if(that._applyValueInstantly()) {
-                        each(fields, function(_, field) {
-                            dataSource.field(field.index, {
-                                area: area,
-                                areaIndex: undefined
-                            });
-                        });
-                        dataSource.load();
-                    } else {
-                        that._changeState(field, {
-                            area: area,
-                            areaIndex: undefined
-                        });
-                    }
+
+                    that._applyChanges(fields, {
+                        area: area,
+                        areaIndex: undefined
+                    });
                 }
             }),
 
@@ -691,7 +682,7 @@ var FieldChooser = BaseFieldChooser.inherit({
         var state = this.option("state");
 
         if(isDefined(state)) {
-            state && this._dataSource.state(state);
+            this._dataSource.state(state);
             this.option("state", null);
         }
     },

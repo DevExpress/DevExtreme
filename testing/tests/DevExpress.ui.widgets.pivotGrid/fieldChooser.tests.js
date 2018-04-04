@@ -1984,9 +1984,9 @@ QUnit.module("applyChangesMode: onDemand", {
 QUnit.test("change position between areas", function(assert) {
     var dataSource = {};
     dataSource.fields = [
-        { dataField: "Field1", area: 'column', areaIndex: 0 },
-        { dataField: "Field2", area: 'column', areaIndex: 1 },
-        { dataField: "Field3", area: 'row', areaIndex: 0 }
+        { dataField: "Field1", area: 'column', areaIndex: 0, index: 0 },
+        { dataField: "Field2", area: 'column', areaIndex: 1, index: 1 },
+        { dataField: "Field3", area: 'row', areaIndex: 0, index: 2 }
     ];
     this.setup(dataSource);
     this.clock.tick(500);
@@ -2007,13 +2007,13 @@ QUnit.test("change position between areas", function(assert) {
 
     var state = this.fieldChooser.option("state").fields;
     assert.equal(state[0].dataField, "Field1");
-    assert.equal(state[0].areaIndex, "0");
+    assert.equal(state[0].areaIndex, 0);
     assert.equal(state[0].area, "row");
     assert.equal(state[1].dataField, "Field2");
-    assert.equal(state[1].areaIndex, "0");
+    assert.equal(state[1].areaIndex, 0);
     assert.equal(state[1].area, "column");
     assert.equal(state[2].dataField, "Field3");
-    assert.equal(state[2].areaIndex, "1");
+    assert.equal(state[2].areaIndex, 1);
     assert.equal(state[2].area, "row");
 });
 
@@ -2108,7 +2108,7 @@ QUnit.test("Apply filters", function(assert) {
 });
 
 QUnit.test("applyChanges", function(assert) {
-    this.setup({ fields: [{ dataField: "Field1", area: 'column', areaIndex: 0 }] });
+    this.setup({ fields: [{ dataField: "Field1", area: 'column', areaIndex: 0, index: 0 }] });
     this.clock.tick(500);
 
     var changedArgs = {

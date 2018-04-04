@@ -247,37 +247,37 @@ var FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).in
                 that._adjustSortableOnChangedArgs(e);
 
                 if(field) {
-                    var targetArea = e.targetGroup;
-
-                    if(that._applyValueInstantly()) {
-                        dataSource.field(getMainGroupField(dataSource, field).index, {
-                            area: targetArea,
-                            areaIndex: e.targetIndex
-                        });
-                        dataSource.load();
-                    } else {
-                        that._changeState(getMainGroupField(dataSource, field), {
-                            area: targetArea,
-                            areaIndex: e.targetIndex
-                        });
-                    }
+                    that._applyChanges([getMainGroupField(dataSource, field)], {
+                        area: e.targetGroup,
+                        areaIndex: e.targetIndex
+                    });
                 }
             }
         }, that._getSortableOptions()));
     },
 
-    _applyValueInstantly: function() {
-        return this.option("applyChangesMode") === "instantly";
+    _applyChanges(fields, props) {
+        const dataSource = this._dataSource;
+        if(this.option("applyChangesMode") === "instantly") {
+            fields.forEach(({ index })=>{
+                dataSource.field(index, props);
+            });
+            dataSource.load();
+        } else {
+            fields.forEach(({ index })=>{
+                this._changeState(index, props);
+            });
+        }
     },
 
-    _changeState: function(field, props) {
+    _changeState(fieldIndex, props) {
         var that = this,
             dataSource = that._dataSource,
             startState = dataSource.state(),
             state = that.option("state") || startState;
 
         dataSource.state(state, true);
-        dataSource.field(field.index, props);
+        dataSource.field(fieldIndex, props);
 
         that.option("state", dataSource.state());
         that._clean(true);
@@ -332,31 +332,16 @@ var FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).in
                         },
 
                         apply: function() {
-                            if(that._applyValueInstantly()) {
-                                dataSource.field(mainGroupField.index, {
-                                    filterValues: this.filterValues,
-                                    filterType: this.filterType
-                                });
-                                dataSource.load();
-                            } else {
-                                that._changeState(mainGroupField, {
-                                    filterValues: this.filterValues,
-                                    filterType: this.filterType
-                                });
-                            }
+                            that._applyChanges([mainGroupField], {
+                                filterValues: this.filterValues,
+                                filterType: this.filterType
+                            });
                         }
                     }));
                 } else if(field.allowSorting && field.area !== "data") {
-                    if(that._applyValueInstantly()) {
-                        dataSource.field(field.index, {
-                            sortOrder: field.sortOrder === "desc" ? "asc" : "desc"
-                        });
-                        dataSource.load();
-                    } else {
-                        that._changeState(field, {
-                            sortOrder: field.sortOrder === "desc" ? "asc" : "desc"
-                        });
-                    }
+                    that._applyChanges([field], {
+                        sortOrder: field.sortOrder === "desc" ? "asc" : "desc"
+                    });
                 }
             };
 
