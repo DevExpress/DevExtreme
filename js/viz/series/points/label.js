@@ -126,10 +126,10 @@ var piePointStrategy = {
     prepareLabelPoints: function(bBox, rotatedBBox, isRotated, angle) {
         var xl = bBox.x,
             xr = xl + bBox.width,
-            xc = xl + bBox.width / 2,
+            xc = xl + _round(bBox.width / 2),
             yt = bBox.y,
             yb = yt + bBox.height,
-            yc = yt + bBox.height / 2,
+            yc = yt + _round(bBox.height / 2),
             points = [
                 [[xl, yt], [xr, yt]],
                 [[xr, yt], [xr, yb]],
@@ -139,7 +139,10 @@ var piePointStrategy = {
             cosSin = _getCosAndSin(angle);
 
         if(angle === 0) {
-            points = [
+            points = isRotated ? [
+                [xc, yt],
+                [xc, yb]
+            ] : [
                 [xl, yc],
                 [xr, yc]
             ];
@@ -157,8 +160,14 @@ var piePointStrategy = {
                     point2x = pair[1][0],
                     point2y = pair[1][1];
 
-                if((point1y >= yc && yc >= point2y) || (point1y <= yc && yc <= point2y)) {
-                    r.push([(yc - point1y) * (point2x - point1x) / (point2y - point1y) + point1x, yc]);
+                if(isRotated) {
+                    if((point1x >= xc && xc >= point2x) || (point1x <= xc && xc <= point2x)) {
+                        r.push([xc, (xc - point1x) * (point2y - point1y) / (point2x - point1x) + point1y]);
+                    }
+                } else {
+                    if((point1y >= yc && yc >= point2y) || (point1y <= yc && yc <= point2y)) {
+                        r.push([(yc - point1y) * (point2x - point1x) / (point2y - point1y) + point1x, yc]);
+                    }
                 }
                 return r;
             }, []);
@@ -166,11 +175,16 @@ var piePointStrategy = {
         return points;
     },
 
-    isRotated: function() { return false; },
+    isRotated: function(bBox, figure) {
+        return bBox.x < figure.x && figure.x < bBox.x + bBox.width;
+    },
 
     getFigureCenter: symbolPointStrategy.getFigureCenter,
 
-    findFigurePoint: function(figure, labelPoint, position, bBox, maxLabelLength) {
+    findFigurePoint: function(figure, labelPoint, isRotated, position, bBox, maxLabelLength) {
+        if(isRotated) {
+            return [figure.x, figure.y];
+        }
         var labelX = labelPoint[0],
             connector = CONNECTOR_LENGTH + (position === "columns" ? maxLabelLength - bBox.width : 0),
             offset = _abs(figure.x - labelX) >= connector ? connector : 0,
@@ -393,12 +407,14 @@ Label.prototype = {
             bBox = that._shiftBBox(that._bBoxWithoutRotation),
             rotatedBBox = that.getBoundingRect(),
             labelPoint,
-            points = [];
+            points = [],
+            isRotated;
 
         if(!strategy.isLabelInside(bBox, figure, options.position !== "inside")) {
-            points = strategy.prepareLabelPoints(bBox, rotatedBBox, strategy.isRotated(bBox, figure), -options.rotationAngle || 0);
+            isRotated = strategy.isRotated(bBox, figure);
+            points = strategy.prepareLabelPoints(bBox, rotatedBBox, isRotated, -options.rotationAngle || 0);
             labelPoint = getClosestCoord(strategy.getFigureCenter(figure), points);
-            points = strategy.findFigurePoint(figure, labelPoint, options.position, rotatedBBox, that._point ? that._point.getMaxLabelLength() : 0);
+            points = strategy.findFigurePoint(figure, labelPoint, isRotated, options.position, rotatedBBox, that._point ? that._point.getMaxLabelLength() : 0);
             points = points.concat(labelPoint);
         }
         return strategy.adjustPoints(points);
