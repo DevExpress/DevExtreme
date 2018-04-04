@@ -808,7 +808,7 @@ var SchedulerWorkSpace = Widget.inherit({
             cellWidth = DATE_TABLE_MIN_CELL_WIDTH;
         }
 
-        var minWidth = this._getWorkSpaceMinWidth(),
+        var minWidth = this._groupedStrategy.getWorkSpaceMinWidth(),
             $headerCells = this._$headerPanel
                 .find("tr")
                 .last()
@@ -829,17 +829,6 @@ var SchedulerWorkSpace = Widget.inherit({
         if(this._isVerticalGroupedWorkSpace()) {
             this._setHorizontalGroupHeaderCellsHeight();
         }
-    },
-
-    _getWorkSpaceMinWidth: function() {
-        var minWidth = this._getWorkSpaceWidth(),
-            workspaceContainerWidth = this.$element().outerWidth() - this.getTimePanelWidth();
-
-        if(minWidth < workspaceContainerWidth) {
-            minWidth = workspaceContainerWidth;
-        }
-
-        return minWidth;
     },
 
     _dimensionChanged: function() {
@@ -1625,6 +1614,10 @@ var SchedulerWorkSpace = Widget.inherit({
         return this._$timePanel.outerWidth();
     },
 
+    getGroupTableWidth: function() {
+        return this._$groupTable.outerWidth();
+    },
+
     _getCellCoordinatesByIndex: function(index) {
         var cellIndex = Math.floor(index / this._getRowCount()),
             rowIndex = index - this._getRowCount() * cellIndex;
@@ -1754,7 +1747,7 @@ var SchedulerWorkSpace = Widget.inherit({
 
     _setHorizontalGroupHeaderCellsHeight: function() {
         var cellHeight = this.getCellHeight(),
-            allDayRowHeight = this.option("showAllDayPanel") ? cellHeight : 0,
+            allDayRowHeight = this.option("showAllDayPanel") && this.supportAllDayRow() ? cellHeight : 0,
             dateTableHeight = cellHeight * this._getRowCount();
 
         this._getGroupHeaderCellsContent().css("height", dateTableHeight + allDayRowHeight);
