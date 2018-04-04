@@ -205,8 +205,7 @@ var DataSource = Class.inherit({
         /**
         * @name DataSourceOptions_store_type
         * @publicName type
-        * @type string
-        * @acceptValues 'array'|'local'|'odata'
+        * @type Enums.DataSourceStoreType
         */
 
         /**

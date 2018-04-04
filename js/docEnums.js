@@ -778,3 +778,13 @@
  * @typedef {string} Enums.ChartBubbleSeriesAggregationMethod
  * @enum {'avg'|'custom'}
  */
+
+ /**
+ * @typedef {string} Enums.DataSourceStoreType
+ * @enum {'array'|'local'|'odata'}
+ */
+
+/**
+ * @typedef {string} Enums.PivotGridStoreType
+ * @enum {'array'|'local'|'odata'|'xmla'}
+ */
