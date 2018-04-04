@@ -5319,9 +5319,9 @@ QUnit.test("Appointments should be rendered correctly in horizontal grouped work
         monthTopOffset = cellHeight * 0.4;
 
     assert.roughEqual($appointments.eq(0).position().top, cellHeight * 2 + monthTopOffset, 1, "correct top position");
-    assert.equal($appointments.eq(0).position().left, cellWidth * 5 + 100, "correct left position");
+    assert.roughEqual($appointments.eq(0).position().left, cellWidth * 5 + 100, 1, "correct left position");
     assert.roughEqual($appointments.eq(1).position().top, cellHeight * 8 + monthTopOffset, 1, "correct top position");
-    assert.equal($appointments.eq(1).position().left, cellWidth * 5 + 100, "correct left position");
+    assert.roughEqual($appointments.eq(1).position().left, cellWidth * 5 + 100, 1, "correct left position");
 });
 
 QUnit.test("Appointment should be dragged correctly between the groups in horizontal grouped workspace Day", function(assert) {
@@ -5337,6 +5337,7 @@ QUnit.test("Appointment should be dragged correctly between the groups in horizo
             type: "day",
             groupOrientation: "vertical"
         }],
+        editing: true,
         currentView: "day",
         groups: ["id"],
         resources: [
@@ -5380,6 +5381,7 @@ QUnit.test("Appointment should be dragged correctly between the groups in horizo
             type: "week",
             groupOrientation: "vertical"
         }],
+        editing: true,
         currentView: "week",
         groups: ["id"],
         resources: [
@@ -5423,6 +5425,7 @@ QUnit.test("Appointment should be dragged correctly between the groups in horizo
             type: "month",
             groupOrientation: "vertical"
         }],
+        editing: true,
         currentView: "month",
         groups: ["id"],
         resources: [
@@ -5497,6 +5500,7 @@ QUnit.test("Long appt parts should have correct coordinates after drag to the la
             type: "month",
             groupOrientation: "vertical"
         }],
+        editing: true,
         currentView: "month",
         groups: ["id"],
         resources: [
