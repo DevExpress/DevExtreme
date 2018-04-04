@@ -807,6 +807,9 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         var $nodeContainer = this._renderNodeContainer();
 
         this._renderScrollableContainer();
+
+        this._renderEmptyMessage(this._dataAdapter.getRootNodes());
+
         this._scrollableContainer.$content().append($nodeContainer);
 
         if(!this.option("items") || !this.option("items").length) {
@@ -1265,8 +1268,6 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _renderContent: function() {
-        this._renderEmptyMessage(this._dataAdapter.getRootNodes());
-
         var items = this.option("items");
         if(items && items.length) {
             this._contentAlreadyRendered = true;

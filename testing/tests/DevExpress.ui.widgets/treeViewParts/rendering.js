@@ -740,7 +740,7 @@ QUnit.test("Repaint treeView on every dataSource modified - remove", function(as
     assert.equal(treeView.option("items").length, 2);
 });
 
-QUnit.test("TreeView should render correctly without items", function(assert) {
+QUnit.test("TreeView should be rendered correctly without items", function(assert) {
     var $treeView = initTree({
             items: undefined
         }),
