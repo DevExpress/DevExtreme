@@ -244,6 +244,12 @@
     .dx-scheduler-header-scrollable {
         height: @baseHeight + 1px;
     }
+
+    &.dx-scheduler-work-space-vertical-grouped {
+        .dx-scheduler-header-scrollable {
+            height: @SCHEDULER_HEADER_PANEL_TOP_GAP;
+        }
+    }
 }
 
 .dx-scheduler-timeline-group-table-mixin() {
@@ -2288,6 +2294,20 @@
             }
         }
         
+        &.dx-scheduler-work-space-both-scrollbar {
+            .dx-scheduler-date-table-scrollable {
+                margin-left: 201px;
+            }
+
+            .dx-scheduler-date-table {
+                margin-left: 0
+            }
+
+            .dx-scheduler-all-day-table-row:before {
+                display: none;
+            }
+        }
+    
         &.dx-scheduler-work-space-month {
             .dx-scheduler-date-table {
                 margin-left: -100px;

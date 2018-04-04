@@ -688,14 +688,25 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _createWorkSpaceScrollableElements: function() {
-        this.$element().append(this._$fixedContainer);
-        this._createHeaderScrollable();
-        this._createSidebarScrollable();
-        this.$element().append(this._dateTableScrollable.$element());
+        if(this._isVerticalGroupedWorkSpace()) {
+            this.$element().append(this._$fixedContainer);
+            this._createHeaderScrollable();
+            this._createSidebarScrollable();
+            this.$element().append(this._dateTableScrollable.$element());
 
-        this._headerScrollable.$content().append(this._$headerPanel, this._$allDayContainer, this._$allDayPanel);
-        this._dateTableScrollable.$content().append(this._$dateTable);
-        this._sidebarScrollable.$content().append(this._$timePanel);
+            this._headerScrollable.$content().append(this._$headerPanel);
+            this._dateTableScrollable.$content().append(this._$dateTable);
+            this._sidebarScrollable.$content().append(this._$groupTable, this._$timePanel);
+        } else {
+            this.$element().append(this._$fixedContainer);
+            this._createHeaderScrollable();
+            this._createSidebarScrollable();
+            this.$element().append(this._dateTableScrollable.$element());
+
+            this._headerScrollable.$content().append(this._$headerPanel, this._$allDayContainer, this._$allDayPanel);
+            this._dateTableScrollable.$content().append(this._$dateTable);
+            this._sidebarScrollable.$content().append(this._$timePanel);
+        }
     },
 
     _createHeaderScrollable: function() {
