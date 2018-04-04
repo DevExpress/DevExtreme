@@ -18,7 +18,7 @@ var SchedulerTableCreator = {
             var row = allDayElements[index].find(ROW_SELECTOR);
 
             if(!row.length) {
-                row = domAdapter.createElement(ROW_SELECTOR);
+                row = $(domAdapter.createElement(ROW_SELECTOR));
                 row.append(allDayElements[index].get(0));
             }
 
