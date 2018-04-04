@@ -246,8 +246,16 @@
     }
 
     &.dx-scheduler-work-space-vertical-grouped {
-        .dx-scheduler-header-scrollable {
-            height: @SCHEDULER_HEADER_PANEL_TOP_GAP;
+        &.dx-scheduler-work-space-day {
+            .dx-scheduler-header-scrollable {
+                height: @SCHEDULER_HEADER_PANEL_TOP_GAP;
+                }
+        }
+
+        &.dx-scheduler-work-space-week {
+            .dx-scheduler-header-scrollable {
+                height: @SCHEDULER_HEADER_PANEL_TABLE_CELL_HEIGHT + @SCHEDULER_HEADER_PANEL_TOP_GAP;
+            }
         }
     }
 }
@@ -2277,7 +2285,7 @@
             }   
         }
 
-        &:not(.dx-scheduler-work-space-month):not(.dx-scheduler-timeline) {
+        &:not(.dx-scheduler-work-space-month):not(.dx-scheduler-timeline):not(.dx-scheduler-work-space-both-scrollbar) {
             .dx-scheduler-date-table {
                 margin-left: -(@SCHEDULER_LEFT_COLUMN_WIDTH * 2);
     
@@ -2306,6 +2314,20 @@
             .dx-scheduler-all-day-table-row:before {
                 display: none;
             }
+
+            .dx-scheduler-header-scrollable.dx-scrollable {
+                margin: 0 0 0 @SCHEDULER_LEFT_COLUMN_WIDTH * 2;
+            }
+
+            &.dx-scheduler-work-space-week {
+                .dx-scheduler-date-table-scrollable {
+                    padding-bottom: @SCHEDULER_HEADER_PANEL_OFFSET;
+                    margin-bottom: -@SCHEDULER_HEADER_PANEL_OFFSET;
+                }
+                .dx-scheduler-header-scrollable.dx-scrollable {
+                    padding-top: @SCHEDULER_HEADER_PANEL_TOP_GAP;
+                }
+            }
         }
     
         &.dx-scheduler-work-space-month {
@@ -2324,7 +2346,7 @@
             }
         }
     
-        &:not(.dx-scheduler-work-space-day) {
+        &:not(.dx-scheduler-work-space-day):not(.dx-scheduler-work-space-both-scrollbar) {
             .dx-scheduler-date-table-scrollable {
                 padding-bottom: @SCHEDULER_HEADER_PANEL_OFFSET;
                 margin-bottom: -@SCHEDULER_HEADER_PANEL_OFFSET;
