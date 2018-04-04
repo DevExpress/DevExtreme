@@ -9,8 +9,7 @@ var BaseAppointmentsStrategy = require("./ui.scheduler.appointments.strategy.bas
 var WEEK_APPOINTMENT_DEFAULT_OFFSET = 25,
     WEEK_APPOINTMENT_MOBILE_OFFSET = 50,
     ALLDAY_APPOINTMENT_MIN_OFFSET = 5,
-    ALLDAY_APPOINTMENT_MAX_OFFSET = 20,
-    APPOINTMENT_COUNT_PER_CELL = 2;
+    ALLDAY_APPOINTMENT_MAX_OFFSET = 20;
 
 var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
     getDeltaTime: function(args, initialSize, appointment) {
@@ -222,7 +221,7 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
     },
 
     _getDynamicAppointmentCountPerCell: function() {
-        return APPOINTMENT_COUNT_PER_CELL;
+        return this.instance.option("_appointmentCountPerCell");
     },
 
     _getAllDayAppointmentGeometry: function(coordinates) {
@@ -237,7 +236,7 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
         }
 
         var config = this.callBase(coordinates);
-        if(coordinates.count <= APPOINTMENT_COUNT_PER_CELL) {
+        if(coordinates.count <= this.instance.option("_appointmentCountPerCell")) {
             config.offset = 0;
         }
 
@@ -249,7 +248,7 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
     },
 
     _getDefaultRatio: function(coordinates, appointmentCountPerCell) {
-        return coordinates.count > APPOINTMENT_COUNT_PER_CELL ? 0.65 : 1;
+        return coordinates.count > this.instance.option("_appointmentCountPerCell") ? 0.65 : 1;
     },
 
     _getOffsets: function() {
