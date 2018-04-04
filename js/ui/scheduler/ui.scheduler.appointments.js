@@ -855,8 +855,6 @@ var SchedulerAppointments = CollectionWidget.inherit({
                 $container = virtualGroup.isAllDay ? this.option("allDayContainer") : this.$element(),
                 left = virtualCoordinates.left;
 
-            buttonWidth -= this.option("_appointmentGroupButtonOffset");
-
             this.notifyObserver("renderDropDownAppointments", {
                 $container: $container,
                 coordinates: {
@@ -866,7 +864,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
                 items: virtualItems,
                 buttonColor: virtualGroup.buttonColor,
                 itemTemplate: this.option("itemTemplate"),
-                buttonWidth: buttonWidth,
+                buttonWidth: buttonWidth - this.option("_appointmentGroupButtonOffset"),
                 onAppointmentClick: this.option("onItemClick")
             });
         }).bind(this));
