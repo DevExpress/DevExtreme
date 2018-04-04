@@ -607,8 +607,7 @@ module.exports = Class.inherit((function() {
             /**
             * @name PivotGridDataSourceOptions_store_type
             * @publicName type
-            * @type string
-            * @acceptValues 'array'|'local'|'odata'|'breeze'|'jaydata'|'xmla'
+            * @type Enums.PivotGridStoreType
             */
             that._store = store;
             that._data = { rows: [], columns: [], values: [] };
