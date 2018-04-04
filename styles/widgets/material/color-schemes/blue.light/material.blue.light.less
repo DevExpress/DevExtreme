@@ -1601,7 +1601,7 @@
 * @type color
 * @group scheduler
 */
-@SCHEDULER_FIRST_MONTH_BORDER_COLOR: darken(@base-border-color, 20%);
+@SCHEDULER_FIRST_MONTH_BORDER_COLOR: @base-border-color;
 
 @SCHEDULER_DROPPABLE_CELL_BACKGROUND_COLOR: darken(@base-element-bg, 5%);
 
@@ -1684,7 +1684,7 @@
 @scheduler-recurence-editor-border-color: darken(@base-element-bg, 5%);
 @SCHEDULER_OTHER_MONTH_CELL_OPACITY: .5;
 @SCHEDULER_FILL_FOCUSED_APPOINTMENT: false;
-@SCHEDULER_TIME_INDICATOR_BACKGROUND_COLOR: rgba(255, 255, 255, 0.5);
+@SCHEDULER_TIME_INDICATOR_BACKGROUND_COLOR: rgba(0, 0, 0, 0.03);
 @SCHEDULER_FIRST_MONTH_CELL_BACKGROUND_COLOR: fadeout(@SCHEDULER_APPOINTMENT_BASE_COLOR, 85%);
 @scheduler-appointment-tooltip-bg: @base-accent;
 @scheduler-appointment-tooltip-text-color: @base-inverted-text-color;

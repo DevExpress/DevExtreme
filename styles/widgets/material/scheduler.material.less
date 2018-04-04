@@ -453,6 +453,9 @@
 }
 
 .dx-scheduler-view-switcher.dx-dropdownmenu {
+    &:before {
+        display: none;
+    }
     margin-top: (@MATERIAL_SCHEDULER_HEADER_HEIGHT - @MATERIAL_SCHEDULER_NAVIGATOR_HEIGHT) * 0.5 - 1px;
     .dx-button-flat-styling(@button-normal-color);
     z-index: 1;
