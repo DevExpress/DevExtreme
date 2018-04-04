@@ -1137,8 +1137,8 @@ QUnit.testStart(function() {
     QUnit.test("Grouped work space should calculate max left position", function(assert) {
         var $groupHeaderContents = this.instance.$element().find(".dx-scheduler-group-header-content");
 
-        assert.roughEqual($groupHeaderContents.eq(0).outerHeight(), 144, "Group header content height is OK");
-        assert.roughEqual($groupHeaderContents.eq(1).outerHeight(), 144, "Group header content height is OK");
+        assert.roughEqual($groupHeaderContents.eq(0).outerHeight(), 144, 2, "Group header content height is OK");
+        assert.roughEqual($groupHeaderContents.eq(1).outerHeight(), 144, 2, "Group header content height is OK");
     });
 
     QUnit.test("Group width calculation", function(assert) {
