@@ -530,14 +530,6 @@ QUnit.test("Repaint treeView on every dataSource modified - remove", function(as
     assert.equal(treeView.option("items").length, 2);
 });
 
-QUnit.test("TreeView should render correctly without items", function(assert) {
-    var $treeView = initTree({
-        items: undefined
-    });
-
-    assert.equal($treeView.find(".dx-empty-message").length, 1, "empty message should be shown");
-});
-
 QUnit.test("Dynamic dataSource filter should work correctly", function(assert) {
     var data = $.extend(true, [], DATA[4]),
         dataSource = new DataSource({
