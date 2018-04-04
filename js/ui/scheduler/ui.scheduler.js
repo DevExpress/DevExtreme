@@ -1384,6 +1384,16 @@ var Scheduler = Widget.inherit({
             case "remoteFiltering":
             case "timeZone":
             case "dropDownAppointmentTemplate":
+            case "_appointmentTooltipOffset":
+            case "_appointmentTooltipButtonsPosition":
+            case "_appointmentTooltipCloseButton":
+            case "_useAppointmentColorForTooltip":
+            case "_appointmentTooltipOpenButtonText":
+            case "_appointmentTooltipOpenButtonIcon":
+            case "_dropDownButtonIcon":
+            case "_appointmentCountPerCell":
+            case "_appointmentGroupButtonOffset":
+            case "_appointmentOffset":
                 this.repaint();
                 break;
             case "dateSerializationFormat":
