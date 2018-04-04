@@ -66,6 +66,19 @@ QUnit.test("invisible element in parent with fixed size", function(assert) {
     });
 });
 
+QUnit.test("invisible element with content", function(assert) {
+    var $innerElement = $("<div/>");
+    this.$element.append($innerElement);
+
+    this.$element.attr("style", "display: none;");
+    $innerElement.attr("style", "width: 40px; height: 50px;");
+
+    assert.equal(sizeUtils.getSize(this.$element[0], "width", {}), 40);
+    assert.equal(sizeUtils.getSize(this.$element[0], "height", {}), 50);
+
+    $innerElement.remove();
+});
+
 QUnit.test("element with padding, marging, border without params", function(assert) {
     var expected, i;
 

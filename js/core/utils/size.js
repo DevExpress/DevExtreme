@@ -43,6 +43,10 @@ var getSize = function(element, name, include) {
 
     var result = clientRect ? boundingClientRect : 0;
 
+    if(elementStyles.display === 'none' && !result) {
+        result = getSizeOfVisibleElement.apply(this, arguments);
+    }
+
     if(result <= 0) {
         result = parseFloat(elementStyles[name] || element.style[name]) || 0;
 
@@ -64,6 +68,29 @@ var getSize = function(element, name, include) {
     return result;
 };
 
+var testStyles = {
+    display: 'block',
+    position: "absolute",
+    visibility: "hidden"
+};
+
+var getSizeOfVisibleElement = function(element) {
+    var originalStyles = {},
+        style;
+
+    for(style in testStyles) {
+        originalStyles[style] = element.style[style];
+        element.style[style] = testStyles[style];
+    }
+
+    var result = getSize.apply(this, arguments);
+
+    for(style in testStyles) {
+        element.style[style] = originalStyles[style];
+    }
+
+    return result;
+};
 
 exports.getSize = getSize;
 exports.getElementBoxParams = getElementBoxParams;
