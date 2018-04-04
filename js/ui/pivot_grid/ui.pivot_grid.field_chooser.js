@@ -307,7 +307,8 @@ var FieldChooser = BaseFieldChooser.inherit({
         }
     },
 
-    _clean: function() {
+    _clean: function(saveState) {
+        !saveState && this.option("state", null);
         this.$element().children("." + FIELDCHOOSER_CONTAINER_CLASS).remove();
     },
 

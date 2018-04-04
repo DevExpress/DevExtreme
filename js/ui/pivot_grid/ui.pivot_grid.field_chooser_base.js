@@ -111,7 +111,7 @@ var FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).in
                 break;
             case "state":
                 if(args.value === null && args.previousValue !== null) {
-                    this._dataSource.load();
+                    this.repaint();
                 }
                 break;
             case "headerFilter":
@@ -280,7 +280,8 @@ var FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).in
         dataSource.field(field.index, props);
 
         that.option("state", dataSource.state());
-        that.repaint();
+        that._clean(true);
+        that._renderComponent();
         dataSource.state(startState, true);
     },
 

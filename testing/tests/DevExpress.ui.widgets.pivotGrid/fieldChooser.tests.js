@@ -2156,3 +2156,26 @@ QUnit.test("cancelChanges", function(assert) {
 
     assert.strictEqual(this.fieldChooser.option("state"), null);
 });
+
+QUnit.test("cancel changes on field chooser repaint", function(assert) {
+    this.setup({ fields: [{ dataField: "Field1", area: 'column', areaIndex: 0 }] });
+
+    var changedArgs = {
+        sourceGroup: "column",
+        targetIndex: 0,
+        targetGroup: "row"
+    };
+
+    changedArgs.sourceElement = renderer(this.$container.find(".dx-area-field").eq(0));
+
+    var sortable = this.fieldChooser.$element().dxSortable("instance"),
+        onChangedHandler = sortable.option("onChanged");
+
+    // act
+    onChangedHandler(changedArgs);
+
+    this.fieldChooser.repaint();
+    this.clock.tick(1000);
+
+    assert.strictEqual(this.fieldChooser.option("state"), null);
+});
