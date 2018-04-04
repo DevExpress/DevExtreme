@@ -52,7 +52,7 @@ var appointmentTooltip = {
                 of: $appointment,
                 boundary: isAllDay ? instance.$element() : instance.getWorkSpaceScrollableContainer(),
                 collision: "fit flipfit",
-                offset: { x: 0, y: this.instance.option("_appointmentTooltipVerticalOffset") }
+                offset: this.instance.option("_appointmentTooltipOffset")
             }
         });
     },

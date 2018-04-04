@@ -1403,7 +1403,7 @@ testComponentDefaults(DataGrid,
 testComponentDefaults(Scheduler,
     {},
     {
-        _appointmentTooltipVerticalOffset: 11,
+        _appointmentTooltipOffset: { x: 0, y: 11 },
         _appointmentTooltipButtonsPosition: "bottom",
         _appointmentTooltipCloseButton: true,
         _useAppointmentColorForTooltip: true,

@@ -925,7 +925,7 @@ var Scheduler = Widget.inherit({
             noDataText: messageLocalization.format("dxCollectionWidget-noDataText"),
 
             allowMultipleCellSelection: true,
-            _appointmentTooltipVerticalOffset: 0,
+            _appointmentTooltipOffset: { x: 0, y: 0 },
             _appointmentTooltipButtonsPosition: "bottom",
             _appointmentTooltipCloseButton: false,
             _useAppointmentColorForTooltip: false,
@@ -1145,7 +1145,7 @@ var Scheduler = Widget.inherit({
                         });
                     },
 
-                    _appointmentTooltipVerticalOffset: 11,
+                    _appointmentTooltipOffset: { x: 0, y: 11 },
                     _appointmentTooltipButtonsPosition: "bottom",
                     _appointmentTooltipCloseButton: true,
                     _useAppointmentColorForTooltip: true,
