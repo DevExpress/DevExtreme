@@ -1936,10 +1936,11 @@ declare module DevExpress.ui {
         /** Indicates whether to show the error row. */
         errorRowEnabled?: boolean;
         filterBuilder?: dxFilterBuilderOptions;
+        filterPanel?: { visible?: boolean, filterEnabled?: boolean, customizeText?: ((e: { component?: Component, filterValue?: any, text?: string }) => string), texts?: { createFilter?: string, clearFilter?: string, filterEnabledHint?: string } };
         filterPopup?: dxPopupOptions;
         /** Configures the filter row. */
         filterRow?: { visible?: boolean, showOperationChooser?: boolean, showAllText?: string, resetOperationText?: string, applyFilter?: string, applyFilterText?: string, operationDescriptions?: { equal?: string, notEqual?: string, lessThan?: string, lessThanOrEqual?: string, greaterThan?: string, greaterThanOrEqual?: string, startsWith?: string, contains?: string, notContains?: string, endsWith?: string, between?: string }, betweenStartText?: string, betweenEndText?: string };
-        filterSyncEnabled?: boolean;
+        filterSyncEnabled?: string | boolean;
         filterValue?: string | Array<any> | Function;
         /** Configures the header filter feature. */
         headerFilter?: { height?: number, visible?: boolean, width?: number, allowSearch?: boolean, texts?: { emptyValue?: string, ok?: string, cancel?: string } };
@@ -2059,8 +2060,10 @@ declare module DevExpress.ui {
     }
     /** Overridden. A configuration object specifying scrolling options. */
     export interface GridBaseScrolling {
+        columnRenderingMode?: string;
         /** Specifies whether the widget should load pages adjacent to the current page. Applies only if scrolling.mode is "virtual". */
         preloadEnabled?: boolean;
+        rowRenderingMode?: string;
         /** Specifies whether a user can scroll the content with a swipe gesture. Applies only if useNative is false. */
         scrollByContent?: boolean;
         /** Specifies whether a user can scroll the content with the scrollbar. Applies only if useNative is false. */

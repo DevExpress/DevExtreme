@@ -35,33 +35,39 @@ define(function(require) {
         },
 
         CATEGORIES_DATA = [
-            { key: "&[4]", value: "Accessories", text: "Accessories", index: 1 },
-            { key: "&[1]", value: "Bikes", text: "Bikes", index: 2 },
-            { key: "&[3]", value: "Clothing", text: "Clothing", index: 3 }
+            { key: "[Product].[Category].&[4]", value: "Accessories", text: "Accessories", index: 1 },
+            { key: "[Product].[Category].&[1]", value: "Bikes", text: "Bikes", index: 2 },
+            { key: "[Product].[Category].&[3]", value: "Clothing", text: "Clothing", index: 3 }
+        ],
+
+        CATEGORIES_HIERARCHY_DATA = [
+            { key: "[Product].[Product Categories].[Category].&[4]", value: "Accessories", text: "Accessories", index: 1 },
+            { key: "[Product].[Product Categories].[Category].&[1]", value: "Bikes", text: "Bikes", index: 2 },
+            { key: "[Product].[Product Categories].[Category].&[3]", value: "Clothing", text: "Clothing", index: 3 }
         ],
 
         CATEGORIES_DATA_WITH_COMPONENTS = CATEGORIES_DATA.concat({
             index: 4,
             text: "Components",
             value: "Components",
-            key: "&[2]"
+            key: "[Product].[Category].&[2]"
         }),
 
         BIKES_SUBCATEGORY_DATA = [{
             index: 1,
-            key: "&[1]",
+            key: "[Product].[Product Categories].[Subcategory].&[1]",
             text: "Mountain Bikes",
             value: "Mountain Bikes"
         },
         {
             index: 2,
-            key: "&[2]",
+            key: "[Product].[Product Categories].[Subcategory].&[2]",
             text: "Road Bikes",
             value: "Road Bikes"
         },
         {
             index: 3,
-            key: "&[3]",
+            key: "[Product].[Product Categories].[Subcategory].&[3]",
             text: "Touring Bikes",
             value: "Touring Bikes"
         }],
@@ -70,22 +76,44 @@ define(function(require) {
             index: 1,
             text: "CY 2001",
             value: 2001,
-            key: "&[2001]"
+            key: "[Ship Date].[Calendar Year].&[2001]"
         }, {
             index: 2,
             text: "CY 2002",
             value: 2002,
-            key: "&[2002]"
+            key: "[Ship Date].[Calendar Year].&[2002]"
         }, {
             index: 3,
             text: "CY 2003",
             value: 2003,
-            key: "&[2003]"
+            key: "[Ship Date].[Calendar Year].&[2003]"
         }, {
             index: 4,
             text: "CY 2004",
             value: 2004,
-            key: "&[2004]"
+            key: "[Ship Date].[Calendar Year].&[2004]"
+        }],
+
+        CALENDAR_HIERARCHY_YEAR_DATA = [{
+            index: 1,
+            text: "CY 2001",
+            value: 2001,
+            key: "[Ship Date].[Calendar].[Calendar Year].&[2001]"
+        }, {
+            index: 2,
+            text: "CY 2002",
+            value: 2002,
+            key: "[Ship Date].[Calendar].[Calendar Year].&[2002]"
+        }, {
+            index: 3,
+            text: "CY 2003",
+            value: 2003,
+            key: "[Ship Date].[Calendar].[Calendar Year].&[2003]"
+        }, {
+            index: 4,
+            text: "CY 2004",
+            value: 2004,
+            key: "[Ship Date].[Calendar].[Calendar Year].&[2004]"
         }],
 
         ERROR_RESPONCE = '<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><soap:Fault xmlns="http://schemas.xmlsoap.org/soap/envelope/"><faultcode>XMLAnalysisError.0xc10a004d</faultcode><faultstring>Query (1, 77) The Fiscal hierarchy is used more than once in the Crossjoin function.</faultstring><detail><Error ErrorCode="3238658125" Description="Query (1, 77) The Fiscal hierarchy is used more than once in the Crossjoin function." Source="Microsoft SQL Server 2008 R2 Analysis Services" HelpFile=""><Location xmlns="http://schemas.microsoft.com/analysisservices/2003/engine" xmlns:ddl2="http://schemas.microsoft.com/analysisservices/2003/engine/2" xmlns:ddl2_2="http://schemas.microsoft.com/analysisservices/2003/engine/2/2" xmlns:ddl100="http://schemas.microsoft.com/analysisservices/2008/engine/100" xmlns:ddl100_100="http://schemas.microsoft.com/analysisservices/2008/engine/100/100" xmlns:ddl200="http://schemas.microsoft.com/analysisservices/2010/engine/200" xmlns:ddl200_200="http://schemas.microsoft.com/analysisservices/2010/engine/200/200"><Start><Line>1</Line><Column>77</Column></Start><End><Line>1</Line><Column>203</Column></End><LineOffset>0</LineOffset><TextLength>127</TextLength></Location></Error></detail></soap:Fault></soap:Body></soap:Envelope>',
@@ -228,7 +256,7 @@ define(function(require) {
             rows: [{ dataField: "[Ship Date].[Calendar Year]" }, { dataField: "[Ship Date].[Month Of Year]" }],
             values: [{ dataField: "[Measures].[Customer Count]", caption: 'Count' }],
             headerName: "rows",
-            path: ["&[2003]"]
+            path: [CALENDAR_YEAR_DATA[2].key]
         }).done(function(data) {
 
             assert.deepEqual(data.columns, CATEGORIES_DATA);
@@ -263,8 +291,8 @@ define(function(require) {
             rows: [{ dataField: "[Ship Date].[Calendar Year]" }, { dataField: "[Ship Date].[Month Of Year]" }],
             values: [{ dataField: "[Measures].[Customer Count]", caption: 'Count' }],
             headerName: "columns",
-            rowExpandedPaths: [["&[2003]"]],
-            path: ["&[1]"]
+            rowExpandedPaths: [[CALENDAR_YEAR_DATA[2].key]],
+            path: [CATEGORIES_DATA[1].key]
         }).done(function(data) {
             assert.strictEqual(data.columns.length, 3);
             assert.strictEqual(data.columns[0].text, "Mountain Bikes");
@@ -302,8 +330,8 @@ define(function(require) {
             rows: [{ dataField: "[Ship Date].[Calendar Year]" }, { dataField: "[Ship Date].[Month Of Year]" }],
             values: [{ dataField: "[Measures].[Customer Count]", caption: 'Count' }],
 
-            rowExpandedPaths: [["&[2003]"]],
-            columnExpandedPaths: [["&[1]"]]
+            rowExpandedPaths: [[CALENDAR_YEAR_DATA[2].key]],
+            columnExpandedPaths: [[CATEGORIES_DATA[1].key]]
         }).done(function(data) {
             assert.strictEqual(data.columns.length, 3);
             assert.strictEqual(data.columns[0].text, "Accessories");
@@ -351,7 +379,7 @@ define(function(require) {
             rows: [{ dataField: "[Ship Date].[Calendar Year]" }, { dataField: "[Ship Date].[Month Of Year]" }, { dataField: "[Ship Date].[Day Of Month]" }],
             values: [{ dataField: "[Measures].[Customer Count]", caption: 'Count' }],
             headerName: "rows",
-            path: ["&[2003]", "&[8]"]
+            path: [CALENDAR_YEAR_DATA[2].key, "[Ship Date].[Month Of Year].&[8]"]
         }).done(function(data) {
             assert.deepEqual(data.columns, CATEGORIES_DATA);
 
@@ -387,8 +415,8 @@ define(function(require) {
             rows: [{ dataField: "[Ship Date].[Calendar Year]" }, { dataField: "[Ship Date].[Month Of Year]" }, { dataField: "[Ship Date].[Day Of Month]" }],
             values: [{ dataField: "[Measures].[Customer Count]", caption: 'Count' }],
             headerName: "columns",
-            rowExpandedPaths: [["&[2003]"], ["&[2003]", "&[8]"]],
-            path: ["&[1]"]
+            rowExpandedPaths: [[CALENDAR_YEAR_DATA[2].key], [CALENDAR_YEAR_DATA[2].key, "[Ship Date].[Month Of Year].&[8]"]],
+            path: [CATEGORIES_DATA[1].key]
         }).done(function(data) {
             assert.strictEqual(data.columns.length, 3);
             assert.strictEqual(data.columns[0].text, "Mountain Bikes");
@@ -565,7 +593,7 @@ define(function(require) {
             ],
             values: [{ dataField: "[Measures].[Customer Count]", caption: 'Count' }],
             headerName: "rows",
-            path: ["&[2003]"]
+            path: [CALENDAR_YEAR_DATA[2].key]
         }).done(function(data) {
             assert.equal(data.columns.length, 3);
             assert.ok(!data.columns[0].children);
@@ -807,8 +835,8 @@ define(function(require) {
             }, { dataField: "[Ship Date].[Calendar].[Month]", hierarchyName: "[Ship Date].[Calendar]" }],
             values: [{ dataField: "[Measures].[Customer Count]", caption: 'Count' }]
         }).done(function(data) {
-            assert.deepEqual(data.columns, CATEGORIES_DATA);
-            assert.deepEqual(data.rows, CALENDAR_YEAR_DATA);
+            assert.deepEqual(data.columns, CATEGORIES_HIERARCHY_DATA);
+            assert.deepEqual(data.rows, CALENDAR_HIERARCHY_YEAR_DATA);
             assert.strictEqual(data.grandTotalColumnIndex, 0);
             assert.strictEqual(data.grandTotalRowIndex, 0);
             assert.deepEqual(data.values, [
@@ -835,9 +863,9 @@ define(function(require) {
             ],
             values: [{ dataField: "[Measures].[Customer Count]", caption: 'Count' }],
             headerName: "rows",
-            path: ["&[2003]"]
+            path: [CALENDAR_HIERARCHY_YEAR_DATA[2].key]
         }).done(function(data) {
-            assert.deepEqual(data.columns, CATEGORIES_DATA);
+            assert.deepEqual(data.columns, CATEGORIES_HIERARCHY_DATA);
 
             assert.strictEqual(data.rows.length, 12);
 
@@ -880,8 +908,8 @@ define(function(require) {
             values: [{ dataField: "[Measures].[Customer Count]", caption: 'Count' }],
 
             headerName: "columns",
-            rowExpandedPaths: [["&[2003]"]],
-            path: ["&[1]"]
+            rowExpandedPaths: [[CALENDAR_HIERARCHY_YEAR_DATA[2].key]],
+            path: [CATEGORIES_HIERARCHY_DATA[1].key]
         }).done(function(data) {
             assert.deepEqual(data.columns, BIKES_SUBCATEGORY_DATA);
             assert.strictEqual(data.rows.length, 4);
@@ -927,9 +955,9 @@ define(function(require) {
             ],
             values: [{ dataField: "[Measures].[Customer Count]", caption: 'Count' }],
             headerName: "rows",
-            path: ["&[2003]", "&[2003]&[8]"]
+            path: ["&[2003]", "[Ship Date].[Calendar].[Month].&[2003]&[8]"]
         }).done(function(data) {
-            assert.deepEqual(data.columns, CATEGORIES_DATA);
+            assert.deepEqual(data.columns, CATEGORIES_HIERARCHY_DATA);
             assert.strictEqual(data.rows.length, 31);
 
             assert.strictEqual(data.rows[0].text, "August 1, 2003");
@@ -975,8 +1003,11 @@ define(function(require) {
             ],
             values: [{ dataField: "[Measures].[Customer Count]", caption: 'Count' }],
             headerName: "columns",
-            rowExpandedPaths: [["&[2003]"], ["&[2003]", "&[2003]&[8]"]],
-            path: ["&[1]"]
+            rowExpandedPaths: [
+                [CALENDAR_HIERARCHY_YEAR_DATA[2].key],
+                [CALENDAR_HIERARCHY_YEAR_DATA[2].key, "[Ship Date].[Calendar].[Month].&[2003]&[8]"]
+            ],
+            path: [CATEGORIES_HIERARCHY_DATA[1].key]
         }).done(function(data) {
             assert.deepEqual(data.columns, BIKES_SUBCATEGORY_DATA);
             assert.strictEqual(data.rows.length, 4);
@@ -1201,7 +1232,7 @@ define(function(require) {
             ],
             values: [{ dataField: "[Measures].[Customer Count]", caption: 'Count' }],
             headerName: "rows",
-            path: ["&[2003]"]
+            path: [CALENDAR_HIERARCHY_YEAR_DATA[2].key]
         }).done(function(data) {
             assert.equal(data.columns.length, 3);
             assert.ok(!data.columns[0].children);
@@ -1258,7 +1289,7 @@ define(function(require) {
             ],
             values: [{ dataField: "[Measures].[Customer Count]", caption: 'Count' }],
             headerName: "rows",
-            path: ["&[2003]"]
+            path: [CALENDAR_HIERARCHY_YEAR_DATA[2].key]
         }).done(function(data) {
             assert.equal(data.columns.length, 3);
             assert.ok(!data.columns[0].children);
@@ -1327,7 +1358,7 @@ define(function(require) {
             headerName: "columns",
             path: ["&[1]"]
         }).done(function(data) {
-            var calendarYearData = $.map(CALENDAR_YEAR_DATA, function(item) {
+            var calendarYearData = $.map(CALENDAR_HIERARCHY_YEAR_DATA, function(item) {
                 return $.extend({}, item, { index: item.index - 1 });
             });
 
@@ -1592,8 +1623,8 @@ define(function(require) {
             values: [{ dataField: "[Measures].[Customer Count]", caption: 'Count' }],
 
             headerName: "rows",
-            columnExpandedPaths: [["&[2002]"], ["&[2003]"]],
-            path: ["&[1]"]
+            columnExpandedPaths: [["[Ship Date].[Calendar].[Calendar Year].&[2002]"], ["[Ship Date].[Calendar].[Calendar Year].&[2003]"]],
+            path: [CATEGORIES_DATA[1].key]
         }).done(function(data) {
             assert.strictEqual(getValue(data, data.rows[0], data.columns[1].children[2]), 278, "Mountain Bikes - CY2002->Silver");
             assert.strictEqual(getValue(data, data.rows[2], data.columns[2].children[4]), 295, "Touring Bikes - CY2003->Yellow");
@@ -1658,8 +1689,8 @@ define(function(require) {
             values: [{ dataField: "[Measures].[Customer Count]", caption: 'Count' }],
 
             headerName: "columns",
-            rowExpandedPaths: [["&[1]"]],
-            path: ["&[2003]"]
+            rowExpandedPaths: [[CATEGORIES_DATA[1].key]],
+            path: [CALENDAR_HIERARCHY_YEAR_DATA[2].key]
         }).done(function(data) {
 
             assert.strictEqual(getValue(data, data.rows[1].children[1], data.columns[0]), 1291, "Road Bikes - Black");
@@ -1822,7 +1853,7 @@ define(function(require) {
                 }
             ],
             headerName: "columns",
-            path: ["&[2004]"],
+            path: [CALENDAR_HIERARCHY_YEAR_DATA[3].key],
             values: [{ dataField: "[Measures].[Customer Count]", caption: 'Count' }]
         }).done(function(data) {
             assert.strictEqual(data.columns.length, 3);
@@ -2279,8 +2310,8 @@ define(function(require) {
             rows: [{ dataField: "[Ship Date].[Calendar].[Calendar Year]", hierarchyName: "[Ship Date].[Calendar]" }],
             values: [{ dataField: "[Measures].[Customer Count]", caption: 'Count' }]
         }).done(function(data) {
-            assert.deepEqual(data.columns, CATEGORIES_DATA);
-            assert.deepEqual(data.rows, CALENDAR_YEAR_DATA);
+            assert.deepEqual(data.columns, CATEGORIES_HIERARCHY_DATA);
+            assert.deepEqual(data.rows, CALENDAR_HIERARCHY_YEAR_DATA);
             assert.strictEqual(data.grandTotalColumnIndex, 0);
             assert.strictEqual(data.grandTotalRowIndex, 0);
             assert.deepEqual(data.values, [
@@ -2356,6 +2387,25 @@ define(function(require) {
             assert.strictEqual(data.grandTotalRowIndex, 0);
             assert.deepEqual(data.values, [
                 [[17366], [15114], [7990]]
+            ]);
+        }).fail(getFailCallBack(assert))
+            .always(done);
+    });
+
+    QUnit.test("FilterValues using full key value in row and column fields. Include filter", function(assert) {
+        var done = assert.async();
+        this.store.load({
+            columns: [],
+            rows: [{
+                dataField: "[Ship Date].[Calendar Year]",
+                filterValues: [CALENDAR_YEAR_DATA[1].key, CALENDAR_YEAR_DATA[2].key],
+                filterType: "include"
+            }],
+            values: [{ dataField: "[Measures].[Customer Count]", caption: 'Count' }]
+        }).done(function(data) {
+            assert.deepEqual(removeIndexesAndValue(data.rows), [
+                { text: "CY 2002" },
+                { text: "CY 2003" }
             ]);
         }).fail(getFailCallBack(assert))
             .always(done);
@@ -3581,7 +3631,7 @@ define(function(require) {
                     sortBy: "value"
                 }
             ],
-            path: ["&[2004]"],
+            path: [CALENDAR_HIERARCHY_YEAR_DATA[3].key],
             headerName: "rows",
             values: [{ dataField: "[Measures].[Customer Count]", caption: 'Count' }]
         }).done(function(data) {
@@ -4212,6 +4262,23 @@ define(function(require) {
         });
 
         assert.ok(this.getQuery().toLowerCase().indexOf("crossjoin") === -1);
+    });
+
+    QUnit.test("Use full item key in descendants expression. T620434", function(assert) {
+        this.store.load({
+            columns: [],
+            rows: [
+                { dataField: "[Ship Date].[Calendar].[Calendar]", hierarchyName: "[Ship Date].[Calendar]" },
+                { dataField: "[Ship Date].[Calendar].[Month]", hierarchyName: "[Ship Date].[Calendar]" }
+            ],
+            values: [{ dataField: "[Measures].[Customer Count]", caption: 'Count' }],
+            headerName: "rows",
+            path: ["[Ship Date].[Calendar Bla Bla].&[2002]"]
+        });
+
+        var query = this.getQuery();
+
+        assert.ok(query.indexOf("{[Ship Date].[Calendar Bla Bla].&[2002]}") >= 0, "Descendants argument has full key");
     });
 
     QUnit.module("getDrillDownItems", stubsEnvironment);

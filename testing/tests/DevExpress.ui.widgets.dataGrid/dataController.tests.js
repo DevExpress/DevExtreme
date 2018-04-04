@@ -2249,7 +2249,7 @@ var setupVirtualRenderingModule = function() {
     this.clock = sinon.useFakeTimers();
 
     var options = {
-        scrolling: { mode: 'virtual' },
+        scrolling: { mode: "virtual", rowRenderingMode: "virtual" },
         keyExpr: "id",
         paging: {
             pageSize: 20
@@ -2271,8 +2271,10 @@ var setupVirtualRenderingModule = function() {
 
     this.changedArgs = [];
 
-    this.dataController.changed.add(e => {
-        this.changedArgs.push(e);
+    var that = this;
+
+    this.dataController.changed.add(function(e) {
+        that.changedArgs.push(e);
     });
 };
 

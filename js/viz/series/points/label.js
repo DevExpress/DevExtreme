@@ -3,14 +3,17 @@
 var _format = require("../../core/format"),
     vizUtils = require("../../core/utils"),
     each = require("../../../core/utils/iterator").each,
+    extend = require("../../../core/utils/extend").extend,
     _degreesToRadians = vizUtils.degreesToRadians,
     _patchFontOptions = vizUtils.patchFontOptions,
     _math = Math,
     _round = _math.round,
     _floor = _math.floor,
+    _abs = _math.abs,
     _getCosAndSin = vizUtils.getCosAndSin,
     _rotateBBox = vizUtils.rotateBBox,
 
+    CONNECTOR_LENGTH = 12,
     LABEL_BACKGROUND_PADDING_X = 8,
     LABEL_BACKGROUND_PADDING_Y = 4;
 
@@ -33,20 +36,21 @@ function getClosestCoord(point, coords) {
 // We could always conside center of label as label point (with appropriate connector path clipping). In that case we do not depend neither on background nor on rotation.
 
 var barPointStrategy = {
-    // TODO: Use center of label (not left top corner) for checking if label is inside
     isLabelInside: function(labelPoint, figure) {
-        return labelPoint.x >= figure.x && labelPoint.x <= figure.x + figure.width && labelPoint.y >= figure.y && labelPoint.y <= figure.y + figure.height;
+        var xc = labelPoint.x + labelPoint.width / 2,
+            yc = labelPoint.y + labelPoint.height / 2;
+        return figure.x <= xc && xc <= figure.x + figure.width && figure.y <= yc && yc <= figure.y + figure.height;
     },
 
-    prepareLabelPoints: function(bBox, isRotated, _textSize, angle) {
-        var x1 = bBox.x,
-            xc = x1 + bBox.width / 2,
-            x2 = x1 + bBox.width - 1,
-            y1 = bBox.y,
-            yc = y1 + bBox.height / 2,
-            y2 = y1 + bBox.height - 1;
+    prepareLabelPoints: function(bBox, rotatedBBox, isRotated, angle) {
+        var x1 = rotatedBBox.x,
+            xc = x1 + rotatedBBox.width / 2,
+            x2 = x1 + rotatedBBox.width - 1,
+            y1 = rotatedBBox.y,
+            yc = y1 + rotatedBBox.height / 2,
+            y2 = y1 + rotatedBBox.height - 1;
 
-        return (_math.abs(angle) % 90) === 0 ? [
+        return (_abs(angle) % 90) === 0 ? [
             [x1, y1],
             [isRotated ? x1 : xc, isRotated ? yc : y1],
             [x2, y1],
@@ -78,8 +82,8 @@ var barPointStrategy = {
     },
 
     adjustPoints: function(points) {
-        var lineIsVertical = Math.abs(points[1] - points[3]) <= 1,
-            lineIsHorizontal = Math.abs(points[0] - points[2]) <= 1;
+        var lineIsVertical = _abs(points[1] - points[3]) <= 1,
+            lineIsHorizontal = _abs(points[0] - points[2]) <= 1;
 
         if(lineIsHorizontal) {
             points[0] = points[2];
@@ -119,37 +123,67 @@ var piePointStrategy = {
         return !isOutside;
     },
 
-    prepareLabelPoints: function(bBox, isRotated, textSize, angle) {
-        var xc = bBox.x + bBox.width / 2,
-            yc = bBox.y + bBox.height / 2,
+    prepareLabelPoints: function(bBox, rotatedBBox, isRotated, angle) {
+        var xl = bBox.x,
+            xr = xl + bBox.width,
+            xc = xl + bBox.width / 2,
+            yt = bBox.y,
+            yb = yt + bBox.height,
+            yc = yt + bBox.height / 2,
             points = [
-                [xc, yc - textSize[1] / 2],
-                [xc + textSize[0] / 2, yc],
-                [xc, yc + textSize[1] / 2],
-                [xc - textSize[0] / 2, yc],
+                [[xl, yt], [xr, yt]],
+                [[xr, yt], [xr, yb]],
+                [[xr, yb], [xl, yb]],
+                [[xl, yb], [xl, yt]]
             ],
-            rotatedPoints = [],
-            cosSin = _getCosAndSin(angle || 0);
-        points.forEach(function(point) {
-            rotatedPoints.push([
-                _round(((point[0] - xc) * cosSin.cos + (point[1] - yc) * cosSin.sin) + xc),
-                _round((-(point[0] - xc) * cosSin.sin + (point[1] - yc) * cosSin.cos) + yc)
-            ]);
-        });
-        return rotatedPoints;
+            cosSin = _getCosAndSin(angle);
+
+        if(angle === 0) {
+            points = [
+                [xl, yc],
+                [xr, yc]
+            ];
+        } else {
+            points = points.map(function(pair) {
+                return pair.map(function(point) {
+                    return [
+                        _round(((point[0] - xc) * cosSin.cos + (point[1] - yc) * cosSin.sin) + xc),
+                        _round((-(point[0] - xc) * cosSin.sin + (point[1] - yc) * cosSin.cos) + yc)
+                    ];
+                });
+            }).reduce(function(r, pair) {
+                var point1x = pair[0][0],
+                    point1y = pair[0][1],
+                    point2x = pair[1][0],
+                    point2y = pair[1][1];
+
+                if((point1y >= yc && yc >= point2y) || (point1y <= yc && yc <= point2y)) {
+                    r.push([(yc - point1y) * (point2x - point1x) / (point2y - point1y) + point1x, yc]);
+                }
+                return r;
+            }, []);
+        }
+        return points;
     },
 
     isRotated: function() { return false; },
 
     getFigureCenter: symbolPointStrategy.getFigureCenter,
 
-    findFigurePoint: function(figure, labelPoint) {
-        var x = figure.x + (figure.y - labelPoint[1]) / Math.tan(_degreesToRadians(figure.angle)),
-            point = [figure.x, figure.y];
-        if((figure.x <= x && x <= labelPoint[0]) || (figure.x >= x && x >= labelPoint[0])) {
-            point.push(_round(x), labelPoint[1]);
+    findFigurePoint: function(figure, labelPoint, position, bBox, maxLabelLength) {
+        var labelX = labelPoint[0],
+            connector = CONNECTOR_LENGTH + (position === "columns" ? maxLabelLength - bBox.width : 0),
+            offset = _abs(figure.x - labelX) >= connector ? connector : 0,
+            x = _round(figure.x + (figure.y - labelPoint[1]) / Math.tan(_degreesToRadians(figure.angle)));
+
+        if(!(figure.x <= x && x <= labelX) && !(labelX <= x && x <= figure.x)) {
+            if(figure.x <= labelX) {
+                x = labelX - offset;
+            } else {
+                x = labelX + offset;
+            }
         }
-        return point;
+        return [figure.x, figure.y, x, labelPoint[1]];
     },
 
     adjustPoints: function(points) {
@@ -334,7 +368,6 @@ Label.prototype = {
     _updateBackground: function(bBox) {
         var that = this;
 
-        that._textSize = [bBox.width, bBox.height];
         if(that._background) {
             bBox.x -= LABEL_BACKGROUND_PADDING_X;
             bBox.y -= LABEL_BACKGROUND_PADDING_Y;
@@ -342,6 +375,8 @@ Label.prototype = {
             bBox.height += 2 * LABEL_BACKGROUND_PADDING_Y;
             that._background.attr(bBox);
         }
+        that._bBoxWithoutRotation = extend({}, bBox);
+
         if(that._options.rotationAngle) {
             that._insideGroup.rotate(that._options.rotationAngle, bBox.x + bBox.width / 2, bBox.y + bBox.height / 2);
             // Angle is transformed from svg to right-handed cartesian space
@@ -353,16 +388,18 @@ Label.prototype = {
     _getConnectorPoints: function() {
         var that = this,
             figure = that._figure,
+            options = that._options,
             strategy = that._strategy || selectStrategy(figure),
-            bBox = that.getBoundingRect(),
+            bBox = that._shiftBBox(that._bBoxWithoutRotation),
+            rotatedBBox = that.getBoundingRect(),
             labelPoint,
-            figurePoint,
             points = [];
-        if(!strategy.isLabelInside(bBox, figure, that._options.position !== "inside")) {
-            points = strategy.prepareLabelPoints.call(this, bBox, strategy.isRotated(bBox, figure), this._textSize, -that._options.rotationAngle || 0);
+
+        if(!strategy.isLabelInside(bBox, figure, options.position !== "inside")) {
+            points = strategy.prepareLabelPoints(bBox, rotatedBBox, strategy.isRotated(bBox, figure), -options.rotationAngle || 0);
             labelPoint = getClosestCoord(strategy.getFigureCenter(figure), points);
-            figurePoint = strategy.findFigurePoint(figure, labelPoint);
-            points = figurePoint.concat(labelPoint);
+            points = strategy.findFigurePoint(figure, labelPoint, options.position, rotatedBBox, that._point ? that._point.getMaxLabelLength() : 0);
+            points = points.concat(labelPoint);
         }
         return strategy.adjustPoints(points);
     },
@@ -405,7 +442,10 @@ Label.prototype = {
 
     // TODO: Should not be called when not invisible (check for "_textContent" is to be removed)
     getBoundingRect: function() {
-        var bBox = this._bBox;
+        return this._shiftBBox(this._bBox);
+    },
+
+    _shiftBBox: function(bBox) {
         return this._textContent ? {
             x: bBox.x + this._x,
             y: bBox.y + this._y,
@@ -422,7 +462,8 @@ Label.prototype = {
             horizontalOffset: options.horizontalOffset,
             verticalOffset: options.verticalOffset,
             radialOffset: options.radialOffset,
-            position: options.position
+            position: options.position,
+            connectorOffset: (checkConnector(options.connector) ? CONNECTOR_LENGTH : 0) + (checkBackground(options.background) ? LABEL_BACKGROUND_PADDING_X : 0)
         };
     }
 };

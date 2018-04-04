@@ -22,6 +22,7 @@ var TABLE_CLASS = "table",
 
     SCROLLING_MODE_INFINITE = "infinite",
     SCROLLING_MODE_VIRTUAL = "virtual",
+    SCROLLING_MODE_STANDARD = "standard",
     PIXELS_LIMIT = 250000; // this limit is defined for IE
 
 var isVirtualMode = function(that) {
@@ -36,7 +37,7 @@ var isVirtualRowRendering = function(that) {
     var rowRenderingMode = that.option("scrolling.rowRenderingMode");
     if(rowRenderingMode === SCROLLING_MODE_VIRTUAL) {
         return true;
-    } else if(rowRenderingMode) {
+    } else if(rowRenderingMode === SCROLLING_MODE_STANDARD) {
         return false;
     }
 };
@@ -635,7 +636,7 @@ module.exports = {
                 timeout: 300,
                 updateTimeout: 300,
                 minTimeout: 0,
-                renderingThreshold: 100,
+                renderingThreshold: 150,
                 removeInvisiblePages: true,
                 rowPageSize: 5,
                 /**
@@ -651,7 +652,14 @@ module.exports = {
                  * @type boolean
                  * @default false
                  */
-                preloadEnabled: false
+                preloadEnabled: false,
+                /**
+                 * @name GridBaseOptions_scrolling_rowRenderingMode
+                 * @publicName rowRenderingMode
+                 * @type Enums.RowScrollingMode
+                 * @default "standard"
+                 */
+                rowRenderingMode: "standard"
             }
         };
     },
@@ -886,6 +894,7 @@ module.exports = {
                         clearTimeout(that._resizeTimeout);
                         var diff = new Date() - that._lastTime;
                         var updateTimeout = that.option("scrolling.updateTimeout");
+
                         if(that._lastTime && diff < updateTimeout) {
                             that._resizeTimeout = setTimeout(function() {
                                 callBase.apply(that);

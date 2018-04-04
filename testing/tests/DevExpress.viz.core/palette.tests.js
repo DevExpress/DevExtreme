@@ -1,24 +1,27 @@
 "use strict";
 
-var $ = require("jquery"),
-    Color = require("color"),
-    paletteModule = require("viz/palette");
+import $ from "jquery";
+import Color from "color";
+import { registerPalette, getPalette, Palette, DiscretePalette, _DEBUG_palettes, currentPalette, GradientPalette } from "viz/palette";
+
+import errors from "core/errors";
 
 var environment = {
     beforeEach: function() {
-        this.registerPalette = paletteModule.registerPalette;
-        this.getPalette = paletteModule.getPalette;
-        this.Palette = paletteModule.Palette;
-        this.DiscretePalette = paletteModule.DiscretePalette;
-        this.palettes = paletteModule._DEBUG_palettes;
+        this.registerPalette = registerPalette;
+        this.getPalette = getPalette;
+        this.Palette = Palette;
+        this.DiscretePalette = DiscretePalette;
+        this.palettes = _DEBUG_palettes;
         this.__original_palettes = $.extend(true, {}, this.palettes);
-        this.currentPalette = paletteModule.currentPalette;
+        this.currentPalette = currentPalette;
     },
     afterEach: function() {
         $.each(this.palettes, $.proxy(function(name) {
             delete this.palettes[name];
         }, this));
         $.extend(true, this.palettes, this.__original_palettes);
+        this.currentPalette(null);
     }
 };
 
@@ -113,8 +116,8 @@ QUnit.test('Get palette by unknown name', function(assert) {
         indicatingSet: ['d1', 'd2']
     });
 
-    assert.deepEqual(this.getPalette('Custom Palette 2', {}).simpleSet, this.palettes['default'].simpleSet, 'simpleSet');
-    assert.deepEqual(this.getPalette('Custom Palette 2', { type: 'indicatingSet' }), this.palettes['default'].indicatingSet, 'indicatingSet');
+    assert.deepEqual(this.getPalette('Custom Palette 2', {}).simpleSet, this.palettes['material'].simpleSet, 'simpleSet');
+    assert.deepEqual(this.getPalette('Custom Palette 2', { type: 'indicatingSet' }), this.palettes['material'].indicatingSet, 'indicatingSet');
 });
 
 QUnit.test('Get palette by name and theme', function(assert) {
@@ -168,11 +171,22 @@ QUnit.test('Palette is predefined', function(assert) {
     assert.strictEqual(new this.Palette('Soft Pastel', { type: 'simpleSet' }).getNextColor(), this.palettes['soft pastel'].simpleSet[0], 'Soft Pastel');
 });
 
+QUnit.test("Throw warning when default palette name is used", function(assert) {
+    sinon.spy(errors, "log");
+
+    try {
+        new this.Palette('default', { type: 'simpleSet' });
+
+        assert.deepEqual(errors.log.lastCall.args, ["W0016", '"palette"', 'Default', "18.1", 'Use the "Office" value instead.']);
+    } finally {
+        errors.log.restore();
+    }
+});
+
 QUnit.test('Resolve theme palette', function(assert) {
-    this.currentPalette('soft pastel');
-    assert.strictEqual(new this.Palette(undefined, { type: 'simpleSet' }, 'DARK VIOLET').getNextColor(), this.palettes['soft pastel'].simpleSet[0], 'Soft Pastel by currentPalette');
-    this.currentPalette('default');
-    assert.strictEqual(new this.Palette(undefined, { type: 'simpleSet' }, 'DARK VIOLET').getNextColor(), this.palettes['dark violet'].simpleSet[0], 'Dark Violet');
+    assert.strictEqual(new this.Palette(undefined, { type: 'simpleSet' }, 'DARK VIOLET').getNextColor(), this.palettes['dark violet'].simpleSet[0], 'Soft Pastel by currentPalette');
+    this.currentPalette('office');
+    assert.strictEqual(new this.Palette(undefined, { type: 'simpleSet' }, 'DARK VIOLET').getNextColor(), this.palettes['office'].simpleSet[0], 'Dark Violet');
 });
 
 QUnit.test('Custom palette by name', function(assert) {
@@ -191,7 +205,7 @@ QUnit.test('Custom palette by unknown name', function(assert) {
         indicatingSet: ['d1', 'd2']
     });
 
-    this.checkPalette(assert, new this.Palette('Custom Palette 2', { extensionMode: "alternate" }), this.palettes['default'].simpleSet, 'simpleSet');
+    this.checkPalette(assert, new this.Palette('Custom Palette 2', { extensionMode: "alternate" }), this.palettes['material'].simpleSet, 'simpleSet');
 });
 
 QUnit.test('Custom palette by array', function(assert) {
@@ -373,10 +387,10 @@ QUnit.test('Instance type', function(assert) {
 });
 
 QUnit.test('palette is not valid', function(assert) {
-    assert.strictEqual(new this.DiscretePalette('', 2).getColor(0), this.palettes['default'].gradientSet[0], 'empty string');
-    assert.strictEqual(new this.DiscretePalette(undefined, 2).getColor(0), this.palettes['default'].gradientSet[0], 'undefined');
-    assert.strictEqual(new this.DiscretePalette(null, 2).getColor(0), this.palettes['default'].gradientSet[0], 'null');
-    assert.strictEqual(new this.DiscretePalette('test', 2).getColor(0), this.palettes['default'].gradientSet[0], 'unknown name');
+    assert.strictEqual(new this.DiscretePalette('', 2).getColor(0), this.palettes['material'].gradientSet[0], 'empty string');
+    assert.strictEqual(new this.DiscretePalette(undefined, 2).getColor(0), this.palettes['material'].gradientSet[0], 'undefined');
+    assert.strictEqual(new this.DiscretePalette(null, 2).getColor(0), this.palettes['material'].gradientSet[0], 'null');
+    assert.strictEqual(new this.DiscretePalette('test', 2).getColor(0), this.palettes['material'].gradientSet[0], 'unknown name');
 });
 
 QUnit.test('palette is predefined', function(assert) {
@@ -386,10 +400,9 @@ QUnit.test('palette is predefined', function(assert) {
 });
 
 QUnit.test('resolve theme palette', function(assert) {
-    this.currentPalette('soft pastel');
-    assert.strictEqual(new this.DiscretePalette(undefined, 2, 'DARK VIOLET').getColor(0), this.palettes['soft pastel'].gradientSet[0], 'Soft Pastel by currentPalette');
-    this.currentPalette('default');
-    assert.strictEqual(new this.DiscretePalette(undefined, 2, 'DARK VIOLET').getColor(0), this.palettes['dark violet'].gradientSet[0], 'Dark Violet');
+    assert.strictEqual(new this.DiscretePalette(undefined, 2, 'DARK VIOLET').getColor(0), this.palettes['dark violet'].gradientSet[0], 'Soft Pastel by currentPalette');
+    this.currentPalette('material');
+    assert.strictEqual(new this.DiscretePalette(undefined, 2, 'DARK VIOLET').getColor(0), this.palettes['material'].gradientSet[0], 'Dark Violet');
 });
 
 QUnit.test('palette is custom object', function(assert) {
@@ -480,33 +493,32 @@ QUnit.test('More than 2 colors in source / less then size / 2', function(assert)
     assert.strictEqual(palette.getColor(4), colors[3], 'color 4');
 });
 
-QUnit.module("GradientPalette");
+QUnit.module("GradientPalette", environment);
 
 QUnit.test("not valid", function(assert) {
-    assert.strictEqual(new paletteModule.GradientPalette().getColor(0), paletteModule._DEBUG_palettes["default"].gradientSet[0], "undefined");
-    assert.strictEqual(new paletteModule.GradientPalette().getColor(1), paletteModule._DEBUG_palettes["default"].gradientSet[1], "unknown");
+    assert.strictEqual(new GradientPalette().getColor(0), _DEBUG_palettes["material"].gradientSet[0], "undefined");
+    assert.strictEqual(new GradientPalette().getColor(1), _DEBUG_palettes["material"].gradientSet[1], "unknown");
 });
 
 QUnit.test("predefined", function(assert) {
-    var palette = new paletteModule.GradientPalette("violet");
-    assert.strictEqual(palette.getColor(0), paletteModule._DEBUG_palettes["violet"].gradientSet[0], "0");
-    assert.strictEqual(palette.getColor(1), paletteModule._DEBUG_palettes["violet"].gradientSet[1], "1");
-    assert.strictEqual(palette.getColor(0.7), new Color(paletteModule._DEBUG_palettes["violet"].gradientSet[0]).blend(
-        paletteModule._DEBUG_palettes["violet"].gradientSet[1], 0.7).toHex(), "0.7");
+    var palette = new GradientPalette("violet");
+    assert.strictEqual(palette.getColor(0), _DEBUG_palettes["violet"].gradientSet[0], "0");
+    assert.strictEqual(palette.getColor(1), _DEBUG_palettes["violet"].gradientSet[1], "1");
+    assert.strictEqual(palette.getColor(0.7), new Color(_DEBUG_palettes["violet"].gradientSet[0]).blend(
+        _DEBUG_palettes["violet"].gradientSet[1], 0.7).toHex(), "0.7");
     assert.strictEqual(palette.getColor("test"), null, "not valid");
     assert.strictEqual(palette.getColor(-1), null, "out of range 1");
     assert.strictEqual(palette.getColor(2), null, "out of range 2");
 });
 
 QUnit.test("resolve theme palette", function(assert) {
-    paletteModule.currentPalette('soft pastel');
-    assert.strictEqual(new paletteModule.GradientPalette(undefined, 'DARK VIOLET').getColor(0), paletteModule._DEBUG_palettes['soft pastel'].gradientSet[0], 'Soft Pastel by currentPalette');
-    paletteModule.currentPalette('default');
-    assert.strictEqual(new paletteModule.GradientPalette(undefined, 'DARK VIOLET').getColor(0), paletteModule._DEBUG_palettes['dark violet'].gradientSet[0], 'Dark Violet');
+    assert.strictEqual(new GradientPalette(undefined, 'DARK VIOLET').getColor(0), _DEBUG_palettes['dark violet'].gradientSet[0], 'Soft Pastel by currentPalette');
+    currentPalette('material');
+    assert.strictEqual(new GradientPalette(undefined, 'DARK VIOLET').getColor(0), _DEBUG_palettes['material'].gradientSet[0], 'material');
 });
 
 QUnit.test("custom", function(assert) {
-    var palette = new paletteModule.GradientPalette(["#00ff00", "#ff0000"]);
+    var palette = new GradientPalette(["#00ff00", "#ff0000"]);
     assert.strictEqual(palette.getColor(0), "#00ff00", "0");
     assert.strictEqual(palette.getColor(1), "#ff0000", "1");
     assert.strictEqual(palette.getColor(0.3), new Color("#00ff00").blend("#ff0000", 0.3).toHex(), "0.3");
@@ -517,17 +529,17 @@ QUnit.test("custom", function(assert) {
 
 QUnit.module('Current palette', {
     beforeEach: function() {
-        this.currentPalette = paletteModule.currentPalette;
-        this.registerPalette = paletteModule.registerPalette;
-        this.Palette = paletteModule.Palette;
+        this.currentPalette = currentPalette;
+        this.registerPalette = registerPalette;
+        this.Palette = Palette;
     },
     afterEach: function() {
-        this.currentPalette('default');
+        this.currentPalette(null);
     }
 });
 
 QUnit.test('Getter', function(assert) {
-    assert.strictEqual(this.currentPalette(), 'default');
+    assert.strictEqual(this.currentPalette(), 'material');
 });
 
 QUnit.test('Setter', function(assert) {
@@ -545,14 +557,14 @@ QUnit.test('Setter - case sensitivity', function(assert) {
 QUnit.test('Setter - unexisting palette', function(assert) {
     this.currentPalette('AAAAAAAAA');
 
-    assert.strictEqual(this.currentPalette(), 'default');
+    assert.strictEqual(this.currentPalette(), 'material');
 });
 
 QUnit.test('Setter - unexisting palette after correct change ', function(assert) {
     this.currentPalette('pastel');
     this.currentPalette('AAAAAAAAA');
 
-    assert.strictEqual(this.currentPalette(), 'default');
+    assert.strictEqual(this.currentPalette(), 'material');
 });
 
 QUnit.test('Create palette with current case', function(assert) {
@@ -567,25 +579,4 @@ QUnit.test('Create palette with current case', function(assert) {
 
     assert.strictEqual(p.getNextColor(), 'c1');
 
-});
-
-QUnit.module('Integration');
-
-QUnit.test('Lightening palette', function(assert) {
-    assert.expect(0);
-
-    var $div = $('<div>').appendTo(document.body);
-    // act
-    var palette = new paletteModule.Palette('default', { useHighlight: true, extensionMode: "blend" });
-
-    for(var i = 0; i < 70; i++) {
-        $('<div>', {
-            css: {
-                width: 50,
-                height: 50,
-                backgroundColor: palette.getNextColor(70),
-                float: 'left'
-            }
-        }).appendTo($div);
-    }
 });

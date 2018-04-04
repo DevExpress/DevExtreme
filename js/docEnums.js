@@ -41,7 +41,7 @@
 
 /**
  * @typedef {string} Enums.VizPalette
- * @enum {'Bright'|'Carmine'|'Dark Moon'|'Dark Violet'|'Default'|'Green Mist'|'Harmony Light'|'Ocean'|'Pastel'|'Soft'|'Soft Blue'|'Soft Pastel'|'Vintage'|'Violet'}
+ * @enum {'Bright'|'Carmine'|'Dark Moon'|'Dark Violet'|'Default'|'Green Mist'|'Harmony Light'|'Ocean'|'Pastel'|'Soft'|'Soft Blue'|'Soft Pastel'|'Vintage'|'Violet'|'Material'|'Office'}
  */
 
 /**
@@ -576,6 +576,16 @@
 
 /**
  * @typedef {string} Enums.TreeListScrollingMode
+ * @enum {'standard'|'virtual'}
+ */
+
+ /**
+ * @typedef {string} Enums.RowScrollingMode
+ * @enum {'auto'|'standard'|'virtual'}
+ */
+
+ /**
+ * @typedef {string} Enums.ColumnScrollingMode
  * @enum {'standard'|'virtual'}
  */
 

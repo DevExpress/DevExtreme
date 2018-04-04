@@ -34,7 +34,6 @@ QUnit.module("Sync with FilterValue", {
                 initViews: true
             });
         };
-
     }
 }, function() {
     QUnit.test("equals", function(assert) {
@@ -616,6 +615,41 @@ QUnit.module("Real dataGrid", {
         this.clock.tick(700);
 
         assert.deepEqual(dataGrid.option("filterValue"), ["field", "=", 90]);
+    });
+
+    QUnit.test("filterSync === 'auto' with filterPanel", function(assert) {
+        var dataGrid = this.initDataGrid({
+            columns: [{ dataField: "field", dataType: "number", defaultFilterOperation: "=", allowFiltering: true, index: 0 }],
+            filterSyncEnabled: "auto",
+            filterPanel: { visible: true }
+        });
+        var filterRowInput = $(".dx-texteditor");
+        assert.equal(filterRowInput.length, 1);
+
+        filterRowInput.find(".dx-texteditor-input").val(90);
+        filterRowInput.find(".dx-texteditor-input").trigger("keyup");
+
+        this.clock.tick(700);
+
+        assert.deepEqual(dataGrid.option("filterValue"), ["field", "=", 90]);
+        assert.equal($(".dx-datagrid-filter-panel-text").text(), "[Field] Equals '90'", "filterPanel value synchronized");
+    });
+
+    QUnit.test("filterSync === 'auto' without filterPanel", function(assert) {
+        var dataGrid = this.initDataGrid({
+            columns: [{ dataField: "field", dataType: "number", defaultFilterOperation: "=", allowFiltering: true, index: 0 }],
+            filterSyncEnabled: "auto"
+        });
+        var filterRowInput = $(".dx-texteditor");
+        assert.equal(filterRowInput.length, 1);
+
+        filterRowInput.find(".dx-texteditor-input").val(90);
+        filterRowInput.find(".dx-texteditor-input").trigger("keyup");
+
+        this.clock.tick(700);
+
+        assert.equal(dataGrid.option("filterValue"), null, "filter has no synchronization");
+        assert.equal($(".dx-datagrid-filter-panel-text").length, 0, "filterPanel has no value");
     });
 
     QUnit.test("update filterValue after change filter text with selectedFilterOperation", function(assert) {

@@ -147,6 +147,9 @@
         "dxDataGrid-ariaSelectAll": "Vybrat vše",
         "dxDataGrid-ariaSelectRow": "Vybrat řádek",
         "dxDataGrid-filterBuilderPopupTitle": "!TODO",
+        "dxDataGrid-filterPanelCreateFilter": "!TODO",
+        "dxDataGrid-filterPanelClearFilter": "!TODO",
+        "dxDataGrid-filterPanelFilterEnabledHint": "!TODO",
 
         "dxTreeList-ariaTreeList": "Tree list",
         "dxTreeList-editingAddRowToNode": "Přidat",

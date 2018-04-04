@@ -3914,15 +3914,15 @@ if(window.INTRANET) {
         dataSource.on("changed", function() {
 
             assert.deepEqual(prepareLoadedData(dataSource.getData().columns), [
-                { key: "&[4]", value: "Accessories", index: 1 },
-                { key: "&[1]", value: "Bikes", index: 2 },
-                { key: "&[3]", value: "Clothing", index: 3 }
+                { key: "[Product].[Category].&[4]", value: "Accessories", index: 1 },
+                { key: "[Product].[Category].&[1]", value: "Bikes", index: 2 },
+                { key: "[Product].[Category].&[3]", value: "Clothing", index: 3 }
             ]);
             assert.deepEqual(prepareLoadedData(dataSource.getData().rows), [
-                { key: "&[2001]", value: 2001, index: 1 },
-                { key: "&[2002]", value: 2002, index: 2 },
-                { key: "&[2003]", value: 2003, index: 3 },
-                { key: "&[2004]", value: 2004, index: 4 }
+                { key: "[Ship Date].[Calendar Year].&[2001]", value: 2001, index: 1 },
+                { key: "[Ship Date].[Calendar Year].&[2002]", value: 2002, index: 2 },
+                { key: "[Ship Date].[Calendar Year].&[2003]", value: 2003, index: 3 },
+                { key: "[Ship Date].[Calendar Year].&[2004]", value: 2004, index: 4 }
             ]);
             assert.strictEqual(dataSource.getData().grandTotalColumnIndex, 0);
             assert.strictEqual(dataSource.getData().grandTotalRowIndex, 0);
@@ -3959,21 +3959,21 @@ if(window.INTRANET) {
 
         dataSource.on("changed", function() {
             assert.deepEqual(prepareLoadedData(dataSource.getData().columns), [
-                { key: "&[4]", value: "Accessories", index: 1 },
-                { key: "&[1]", value: "Bikes", index: 2 },
-                { key: "&[3]", value: "Clothing", index: 3 }
+                { key: "[Product].[Category].&[4]", value: "Accessories", index: 1 },
+                { key: "[Product].[Category].&[1]", value: "Bikes", index: 2 },
+                { key: "[Product].[Category].&[3]", value: "Clothing", index: 3 }
             ]);
 
             assert.deepEqual(dataSource.getData().rows.length, 12, "month count");
             assert.deepEqual(dataSource.getData().rows[0], {
                 index: 1,
-                key: "&[1]",
+                key: "[Ship Date].[Month of Year].&[1]",
                 text: "January",
                 value: 1
             }, "month 1");
             assert.deepEqual(dataSource.getData().rows[11], {
                 index: 12,
-                key: "&[12]",
+                key: "[Ship Date].[Month of Year].&[12]",
                 text: "December",
                 value: 12
             }, "month 12");
