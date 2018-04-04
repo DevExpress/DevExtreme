@@ -184,13 +184,13 @@ var FieldChooser = BaseFieldChooser.inherit({
             /**
             * @name dxPivotGridFieldChooserOptions_applyChangesMode
             * @publicName applyChangesMode
-            * @type string
+            * @type Enums.ApplyChangesMode
             * @default "instantly"
             */
            /**
             * @name dxPivotGridFieldChooserOptions_state
             * @publicName state
-            * @type string
+            * @type object
             * @default null
             */
             /**
@@ -676,7 +676,7 @@ var FieldChooser = BaseFieldChooser.inherit({
     /**
     * @name dxPivotGridFieldChooserMethods_applyChanges
     * @publicName applyChanges()
-    * @return PivotGridDataSource
+    * @return Promise<void>
     */
     applyChanges: function() {
         var state = this.option("state");
@@ -690,7 +690,7 @@ var FieldChooser = BaseFieldChooser.inherit({
     /**
     * @name dxPivotGridFieldChooserMethods_cancelChanges
     * @publicName cancelChanges()
-    * @return PivotGridDataSource
+    * @return Promise<void>
     */
     cancelChanges: function() {
         if(isDefined(this.option("state"))) {

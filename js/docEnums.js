@@ -720,6 +720,11 @@
  */
 
 /**
+ * @typedef {string} Enums.ApplyChangesMode
+ * @enum {'instantly'|'onDemand'}
+ */
+
+/**
  * @typedef {string} Enums.PivotGridSummaryDisplayMode
  * @enum {'absoluteVariation'|'percentOfColumnGrandTotal'|'percentOfColumnTotal'|'percentOfGrandTotal'|'percentOfRowGrandTotal'|'percentOfRowTotal'|'percentVariation'}
  */

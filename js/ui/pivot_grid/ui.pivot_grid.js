@@ -274,7 +274,7 @@ var PivotGrid = Widget.inherit({
                 /**
                  * @name dxPivotGridOptions_fieldChooser_applyChangesMode
                  * @publicName applyChangesMode
-                 * @type string
+                 * @type Enums.ApplyChangesMode
                  * @default "instantly"
                  */
                 applyChangesMode: "instantly"
