@@ -131,9 +131,8 @@ module.exports = {
                 /**
                  * @name GridBaseOptions_loadPanel_enabled
                  * @publicName enabled
-                 * @type string|boolean
+                 * @type Enums.Mode|boolean
                  * @default "auto"
-                 * @acceptValues "auto" | true | false
                  */
                 enabled: "auto",
                 /**
