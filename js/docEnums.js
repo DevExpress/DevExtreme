@@ -41,7 +41,7 @@
 
 /**
  * @typedef {string} Enums.VizPalette
- * @enum {'Bright'|'Carmine'|'Dark Moon'|'Dark Violet'|'Default'|'Green Mist'|'Harmony Light'|'Ocean'|'Pastel'|'Soft'|'Soft Blue'|'Soft Pastel'|'Vintage'|'Violet'|'Material'|'Office'}
+ * @enum {'Bright'|'Default'|'Harmony Light'|'Ocean'|'Pastel'|'Soft'|'Soft Pastel'|'Vintage'|'Violet'|'Carmine'|'Dark Moon'|'Dark Violet'|'Green Mist'|'Soft Blue'|'Material'|'Office'}
  */
 
 /**
