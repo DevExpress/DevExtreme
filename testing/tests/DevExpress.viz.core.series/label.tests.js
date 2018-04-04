@@ -43,7 +43,7 @@ const environment = {
         if(this.options.background.fill && this.options.background.fill !== "none") {
             this.renderer.bBoxTemplate = {
                 x: BBox.x + 8,
-                y: BBox.y + 8,
+                y: BBox.y + 4,
                 width: BBox.width - 16,
                 height: BBox.height - 8
             };
@@ -740,7 +740,7 @@ QUnit.test("Angle point cannot be calculated (acute angle) - take label point", 
     assert.deepEqual(label._connector._stored_settings.points, [70, 10, 87, 20, 100, 20]);
 });
 
-QUnit.test("rotated label - take point on horizontal intersection with label's edge", function(assert) {
+QUnit.test("Rotated label - take point on horizontal intersection with label's edge", function(assert) {
     this.options.rotationAngle = 35;
     var label = this.createLabelWithBBox({ x: 0, y: 0, height: 10, width: 20 }, { x: 344, y: 322, angle: 292 });
 
@@ -763,6 +763,39 @@ QUnit.test("Connector with angle could not be built between label and point. Lab
     label.shift(70, 15);
 
     assert.deepEqual(label._connector._stored_settings.points, [100, 10, 90, 20, 90, 20]);
+});
+
+QUnit.test("Label on top - build straight connector to the bottom center of label", function(assert) {
+    var label = this.createLabelWithBBox({ x: 0, y: 0, height: 10, width: 63 }, { x: 100, y: 50, angle: 80 });
+
+    label.shift(85, 20);
+
+    assert.deepEqual(label._connector._stored_settings.points, [100, 50, 117, 30]);
+});
+
+QUnit.test("Label on bottom - build straight connector to the top center of label", function(assert) {
+    var label = this.createLabelWithBBox({ x: 0, y: 0, height: 10, width: 63 }, { x: 100, y: 50, angle: 280 });
+
+    label.shift(85, 70);
+
+    assert.deepEqual(label._connector._stored_settings.points, [100, 50, 117, 70]);
+});
+
+QUnit.test("Rotated label on top - take point on vertical intersection with label's edge", function(assert) {
+    this.options.rotationAngle = 35;
+    var label = this.createLabelWithBBox({ x: 0, y: 0, height: 10, width: 20 }, { x: 100, y: 50, angle: 80 });
+
+    label.shift(85, 20);
+
+    assert.deepEqual(label._connector._stored_settings.points, [100, 50, 97, 36]);
+});
+
+QUnit.test("Label on top - build straight connector to the bottom center of label", function(assert) {
+    var label = this.createLabelWithBBox({ x: 0, y: 0, height: 10, width: 20 }, { x: 100, y: 50, angle: 80 });
+
+    label.shift(85, 20);
+
+    assert.deepEqual(label._connector._stored_settings.points, [100, 50, 95, 30]);
 });
 
 // T175028
