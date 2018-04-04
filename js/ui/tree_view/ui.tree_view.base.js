@@ -1185,26 +1185,16 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         that._dataSource.filter(that._combineFilter());
 
         return that._dataSource.load().done(function(newItems) {
-            if(!that._areItemsExists(newItems, that.option("items"))) {
+            if(!that._areItemsExists(newItems)) {
                 that._appendItems(newItems);
             }
         });
     },
 
-    _areItemsExists: function(newItems, items) {
-        var that = this,
-            keyOfRootItem = that.keyOf(newItems[0]),
-            isItemExists;
+    _areItemsExists: function(newItems) {
+        var keyOfRootItem = this.keyOf(newItems[0]);
 
-        each(items, function(index, item) {
-            isItemExists = that.keyOf(item) === keyOfRootItem;
-
-            if(isItemExists) {
-                return false;
-            }
-        });
-
-        return isItemExists;
+        return this._dataAdapter.getIndexByKey(keyOfRootItem) > -1;
     },
 
     _appendItems: function(newItems) {

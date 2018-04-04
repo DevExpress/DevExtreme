@@ -4,7 +4,8 @@ var Class = require("../../core/class"),
     extend = require("../../core/utils/extend").extend,
     errors = require("../../ui/widget/ui.errors"),
     each = require("../../core/utils/iterator").each,
-    typeUtils = require("../../core/utils/type");
+    typeUtils = require("../../core/utils/type"),
+    commonUtils = require("../../core/utils/common");
 
 var DataConverter = Class.inherit({
 
@@ -217,7 +218,7 @@ var DataConverter = Class.inherit({
     },
 
     getIndexByKey: function(key) {
-        return this._indexByKey[key];
+        return commonUtils.ensureDefined(this._indexByKey[key], -1);
     },
 
     createPlainStructure: function(items, rootValue, dataType) {
