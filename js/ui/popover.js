@@ -190,6 +190,12 @@ var Popover = Popup.inherit({
             },
 
             /**
+             * @name dxPopoverOptions_container
+             * @publicName container
+             * @hidden
+             */
+
+            /**
             * @name dxPopoverOptions_showtitle
             * @publicName showTitle
             * @type boolean
