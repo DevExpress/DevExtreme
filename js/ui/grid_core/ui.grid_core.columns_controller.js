@@ -1474,7 +1474,7 @@ module.exports = {
 
                     return extend({
                         allowFixing: this.option("columnFixing.enabled"),
-                        allowResizing: this.option("allowColumnResizing"),
+                        allowResizing: this.option("allowColumnResizing") || undefined,
                         allowReordering: this.option("allowColumnReordering"),
                         minWidth: this.option("columnMinWidth"),
                         autoExpandGroup: groupingOptions.autoExpandAll,

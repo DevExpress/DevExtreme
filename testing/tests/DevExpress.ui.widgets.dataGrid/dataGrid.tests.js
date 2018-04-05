@@ -3108,6 +3108,26 @@ QUnit.test("last column should have correct width if all columns have width and 
     clock.restore();
 });
 
+// T618230
+QUnit.test("last column with disabled allowResizing should not change width if all columns have width less grid's width", function(assert) {
+    // arrange, act
+    var $dataGrid = $("#dataGrid").dxDataGrid({
+        width: 400,
+        loadingTimeout: undefined,
+        dataSource: [{}],
+        columns: [
+            { dataField: "field1", width: 50 },
+            { dataField: "field2", width: 50 },
+            { dataField: "field3", width: 50 },
+            { dataField: "field4", width: 50, allowResizing: false }
+        ]
+    });
+
+    // assert
+    assert.equal($dataGrid.find(".dx-row").first().find("td").last().outerWidth(), 50, "last column have correct width");
+    assert.equal($dataGrid.find(".dx-row").first().find("td").last().prev().outerWidth(), 250, "previuos last column have correct width");
+});
+
 // T387828
 QUnit.test("columns width when all columns have width and dataGrid with fixed width", function(assert) {
     // arrange
