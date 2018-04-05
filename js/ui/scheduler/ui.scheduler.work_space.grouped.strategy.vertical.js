@@ -4,11 +4,15 @@ var GroupedStrategy = require("./ui.scheduler.work_space.grouped.strategy");
 
 
 var VerticalGroupedStrategy = GroupedStrategy.inherit({
-    prepareCellIndexes: function(cellCoordinates, groupIndex) {
+    prepareCellIndexes: function(cellCoordinates, groupIndex, inAllDayRow) {
         var rowIndex = cellCoordinates.rowIndex + groupIndex * this._workSpace._getRowCount();
 
         if(this._workSpace.supportAllDayRow() && this._workSpace.option("showAllDayPanel")) {
             rowIndex += groupIndex;
+
+            if(!inAllDayRow) {
+                rowIndex += 1;
+            }
         }
 
         return {

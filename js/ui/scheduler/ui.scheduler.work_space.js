@@ -1710,9 +1710,9 @@ var SchedulerWorkSpace = Widget.inherit({
         return this.$element().outerWidth() - this.getTimePanelWidth();
     },
 
-    _getCellPositionByIndex: function(index, groupIndex) {
+    _getCellPositionByIndex: function(index, groupIndex, inAllDayRow) {
         var cellCoordinates = this._getCellCoordinatesByIndex(index),
-            $cell = this._getCellByCoordinates(cellCoordinates, groupIndex),
+            $cell = this._getCellByCoordinates(cellCoordinates, groupIndex, inAllDayRow),
             result = this._getCellPosition($cell);
 
         this.setCellDataCache(cellCoordinates, groupIndex, $cell);
@@ -1735,8 +1735,8 @@ var SchedulerWorkSpace = Widget.inherit({
         return position;
     },
 
-    _getCellByCoordinates: function(cellCoordinates, groupIndex) {
-        var indexes = this._groupedStrategy.prepareCellIndexes(cellCoordinates, groupIndex);
+    _getCellByCoordinates: function(cellCoordinates, groupIndex, inAllDayRow) {
+        var indexes = this._groupedStrategy.prepareCellIndexes(cellCoordinates, groupIndex, inAllDayRow);
 
         return this._$dateTable
             .find("tr")
@@ -1849,7 +1849,7 @@ var SchedulerWorkSpace = Widget.inherit({
         groupIndex = groupIndex || 0;
 
         var index = this.getCellIndexByDate(date, inAllDayRow),
-            position = this._getCellPositionByIndex(index, groupIndex),
+            position = this._getCellPositionByIndex(index, groupIndex, inAllDayRow),
             shift = this.getPositionShift(inAllDayRow ? 0 : this.getTimeShift(date));
 
         if(!position) {

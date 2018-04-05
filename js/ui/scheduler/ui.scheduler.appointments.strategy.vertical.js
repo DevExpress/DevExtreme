@@ -221,10 +221,11 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
     },
 
     _getDynamicAppointmentCountPerCell: function() {
-        var calculatedAppointmentCount = this.callBase();
-
-        return Math.min(calculatedAppointmentCount, this.instance.option("_appointmentCountPerCell"));
-        // return this.instance.option("_appointmentCountPerCell");
+        if(this.instance._groupOrientation === "vertical") {
+            return this.callBase();
+        } else {
+            return this.instance.option("_appointmentCountPerCell");
+        }
     },
 
     _getAllDayAppointmentGeometry: function(coordinates) {
