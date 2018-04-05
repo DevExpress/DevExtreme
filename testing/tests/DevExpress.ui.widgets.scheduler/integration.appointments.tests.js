@@ -5388,6 +5388,56 @@ QUnit.test("Rival allDay appointments from different groups should be rendered c
     assert.equal($appointments.eq(1).position().left, 314, "correct left position of allDay appointment");
 });
 
+QUnit.test("Rival allDay appointments from same groups should be rendered correctly in vertical grouped workspace Week", function(assert) {
+    this.createInstance({
+        dataSource: [
+            {
+                text: "1",
+                id: 1,
+                allDay: true,
+                startDate: new Date(2018, 4, 21, 9, 30),
+                endDate: new Date(2018, 4, 21, 11, 30)
+            },
+            {
+                text: "2",
+                id: 1,
+                allDay: true,
+                startDate: new Date(2018, 4, 21, 9, 30),
+                endDate: new Date(2018, 4, 21, 11, 30)
+            },
+        ],
+        views: [{
+            type: "week",
+            groupOrientation: "vertical"
+        }],
+        currentView: "week",
+        groups: ["id"],
+        resources: [
+            {
+                field: "id",
+                dataSource: [
+                    { id: 1, text: "one" },
+                    { id: 2, text: "two" }
+                ]
+            }
+        ],
+        currentDate: new Date(2018, 4, 21),
+        startDayHour: 9,
+        endDayHour: 15,
+        cellDuration: 60,
+        showAllDayPanel: true,
+        maxAppointmentsPerCell: 'auto'
+    });
+
+    var $appointments = $(this.instance.$element()).find("." + APPOINTMENT_CLASS);
+
+    var cellHeight = $(this.instance.$element()).find("." + DATE_TABLE_CELL_CLASS).first().outerHeight();
+
+    assert.roughEqual($appointments.eq(0).position().top, 0.5 * cellHeight, 2, "correct top position of allDay appointment");
+    assert.roughEqual($appointments.eq(0).outerHeight(), 0.5 * cellHeight, 2, "correct size of allDay appointment");
+    assert.equal($appointments.eq(0).position().left, 314, "correct left position of allDay appointment");
+});
+
 QUnit.test("Rival appointments from one group should be rendered correctly in vertical grouped workspace Week", function(assert) {
     this.createInstance({
         dataSource: [
