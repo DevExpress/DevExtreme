@@ -191,8 +191,8 @@ QUnit.test("getSelectedRowKeys with non-recursive selection", function(assert) {
 
     // act, assert
     assert.deepEqual(this.getSelectedRowKeys(), [1, 2, 4], "actual selection");
-    assert.deepEqual(this.getSelectedRowKeys("excludeRecursive"), [1, 2, 4], "actual selection");
-    assert.deepEqual(this.getSelectedRowKeys("includeRecursive"), [1, 2, 4], "actual selection");
+    assert.deepEqual(this.getSelectedRowKeys("excludeRecursive"), [1], "only top");
+    assert.deepEqual(this.getSelectedRowKeys("all"), [1, 2, 4], "actual selection");
     assert.deepEqual(this.getSelectedRowKeys("leavesOnly"), [2], "only leaves selected");
 });
 
@@ -791,7 +791,7 @@ QUnit.test("getSelectedRowKeys with 'leavesOnly' parameter", function(assert) {
     errors.log.restore();
 });
 
-QUnit.test("getSelectedRowKeys with 'includeRecursive' parameter", function(assert) {
+QUnit.test("getSelectedRowKeys with 'all' parameter", function(assert) {
    // arrange
     var $testElement = $('#treeList');
 
@@ -808,7 +808,7 @@ QUnit.test("getSelectedRowKeys with 'includeRecursive' parameter", function(asse
     this.rowsView.render($testElement);
 
     // act, assert
-    assert.deepEqual(this.getSelectedRowKeys("includeRecursive"), [1, 2, 3, 4, 5], "all selected items");
+    assert.deepEqual(this.getSelectedRowKeys("all"), [1, 2, 3, 4, 5], "all selected items");
 });
 
 QUnit.test("getSelectedRowKeys with 'excludeRecursive' parameter", function(assert) {
@@ -830,7 +830,7 @@ QUnit.test("getSelectedRowKeys with 'excludeRecursive' parameter", function(asse
     this.rowsView.render($testElement);
 
      // act, assert
-    assert.deepEqual(this.getSelectedRowKeys("excludeRecursive"), [4, 6], "all selected items");
+    assert.deepEqual(this.getSelectedRowKeys("excludeRecursive"), [2, 4, 6], "all selected items");
 });
 
 QUnit.test("Selection state of rows should be updated on loadDescendants", function(assert) {
