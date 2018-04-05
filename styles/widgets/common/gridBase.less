@@ -1045,4 +1045,36 @@
             margin-right: 15px;
         }
     }
+
+    .dx-@{widgetName}-filter-panel,
+    .dx-@{widgetName}-filter-panel-left {
+        display: flex;
+        justify-content: space-between;
+        flex-direction: row;
+        min-width: 0;
+    }
+
+    .dx-@{widgetName}-filter-panel {
+        padding: 10px;
+
+        .dx-@{widgetName}-filter-panel-text {
+            .dx-overflow();
+        }
+        .dx-@{widgetName}-filter-panel-text:hover,
+        .dx-@{widgetName}-filter-panel-clear-filter:hover {
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        .dx-@{widgetName}-filter-panel-checkbox {
+            padding-right: 10px;
+        }
+
+        .dx-icon-filter {
+            margin: auto;
+            padding-right: 7px;
+            cursor: pointer;
+        }
+    }
+
 }
