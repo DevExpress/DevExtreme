@@ -8884,7 +8884,7 @@ QUnit.test("rowTemplate via dxTemplate should works with masterDetail template",
     $rowElements = $($(dataGrid.$element()).find(".dx-datagrid-rowsview").find("table > tbody").find(".dx-row"));
     assert.strictEqual($rowElements.length, 5, "row element count");
     assert.strictEqual($rowElements.eq(0).text(), "Row Content More info", "row 0 content");
-    assert.strictEqual($rowElements.eq(1).text(), "Test Details", "row 1 content");
+    assert.strictEqual($rowElements.eq(1).children().eq(1).text(), "Test Details", "row 1 content");
     assert.strictEqual($rowElements.eq(2).text(), "Row Content More info", "row 2 content");
     assert.strictEqual($rowElements.eq(3).text(), "Row Content More info", "row 3 content");
 });

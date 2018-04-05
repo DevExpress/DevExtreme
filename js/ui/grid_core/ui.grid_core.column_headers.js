@@ -104,7 +104,7 @@ module.exports = {
                 },
 
                 _getHeaderTemplate: function(column) {
-                    return !column.command && column.headerCellTemplate || { allowRenderToDetachedContainer: true, render: this._getDefaultTemplate(column) };
+                    return column.headerCellTemplate || { allowRenderToDetachedContainer: true, render: this._getDefaultTemplate(column) };
                 },
 
                 _processTemplate: function(template, options) {

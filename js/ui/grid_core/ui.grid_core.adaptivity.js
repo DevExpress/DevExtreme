@@ -52,6 +52,22 @@ function getDataCellElements($row) {
     return $row.find("td:not(.dx-datagrid-hidden-column):not([class*='dx-command-'])");
 }
 
+function adaptiveCellTemplate(container, options) {
+    var $adaptiveColumnButton,
+        $container = $(container),
+        adaptiveColumnsController = options.component.getController("adaptiveColumns");
+
+    if(options.rowType !== "groupFooter") {
+        $adaptiveColumnButton = $("<span>").addClass(adaptiveColumnsController.addWidgetPrefix(ADAPTIVE_COLUMN_BUTTON_CLASS));
+        eventsEngine.on($adaptiveColumnButton, eventUtils.addNamespace(clickEvent.name, ADAPTIVE_NAMESPACE), adaptiveColumnsController.createAction(function() {
+            adaptiveColumnsController.toggleExpandAdaptiveDetailRow(options.key);
+        }));
+        $adaptiveColumnButton.appendTo($container);
+    } else {
+        $container.get(0).innerHTML = "&nbsp;";
+    }
+}
+
 var AdaptiveColumnsController = modules.ViewController.inherit({
     _isRowEditMode: function() {
         var editMode = this._editingController.getEditMode();
@@ -580,7 +596,8 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
             visible: true,
             adaptiveHidden: true,
             cssClass: ADAPTIVE_COLUMN_NAME_CLASS,
-            width: "auto"
+            width: "auto",
+            cellTemplate: adaptiveCellTemplate
         });
 
         that._columnsController.columnsChanged.add(function() {
@@ -670,15 +687,6 @@ module.exports = {
                     var that = this,
                         column = options.column;
 
-                    if(column.command === ADAPTIVE_COLUMN_NAME && options.rowType !== "groupFooter") {
-                        return function(container) {
-                            var $adaptiveColumnButton = $("<span>").addClass(that.addWidgetPrefix(ADAPTIVE_COLUMN_BUTTON_CLASS));
-                            eventsEngine.on($adaptiveColumnButton, eventUtils.addNamespace(clickEvent.name, ADAPTIVE_NAMESPACE), that.createAction(function() {
-                                that._adaptiveColumnsController.toggleExpandAdaptiveDetailRow(options.key);
-                            }));
-                            $adaptiveColumnButton.appendTo($(container));
-                        };
-                    }
                     if(options.rowType === ADAPTIVE_ROW_TYPE && column.command === "detail") {
                         return function(container, options) {
                             that._adaptiveColumnsController.createFormByHiddenColumns($(container), options);

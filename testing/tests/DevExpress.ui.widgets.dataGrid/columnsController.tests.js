@@ -48,10 +48,10 @@ var processColumnsForCompare = function(columns, parameterNames, ignoreParameter
     return processedColumns;
 };
 
-var setupModule = function() {
+var setupModule = function(moduleNames) {
     executeAsyncMock.setup();
 
-    dataGridMocks.setupDataGridModules(this, ['columns', 'data', 'selection', 'editing', 'filterRow', 'masterDetail'], {
+    dataGridMocks.setupDataGridModules(this, ['columns', 'data', 'selection', 'editing', 'filterRow', 'masterDetail'].concat(moduleNames || []), {
         controllers: {
             data: new dataGridMocks.MockDataController({ items: [] })
         }
@@ -5792,6 +5792,21 @@ QUnit.test("getGroupDataSourceParameters. Several group columns when calculateCe
     assert.deepEqual(groupParameters[1], { selector: 'field1', desc: false, isExpanded: false });
 });
 
+// T259458
+QUnit.test("The headerCellTemplate of the group column should not be applied for expand column", function(assert) {
+    // arrange
+    var expandColumns;
+
+    this.applyOptions({ columns: [{ dataField: "field", groupIndex: 0, headerCellTemplate: function() {} }] });
+
+    // act, assert
+    expandColumns = this.columnsController.getExpandColumns();
+    assert.strictEqual(expandColumns.length, 1, "count expand column");
+    assert.strictEqual(expandColumns[0].dataField, "field");
+    assert.strictEqual(expandColumns[0].groupIndex, 0);
+    assert.strictEqual(expandColumns[0].headerCellTemplate, null);
+});
+
 QUnit.module("ParseValue", { beforeEach: setupModule, afterEach: teardownModule });
 
 // T141564
@@ -8088,5 +8103,116 @@ QUnit.module("onOptionChanged", {
 
         // assert
         assert.strictEqual(this._notifyOptionChanged.callCount, 0, "onOptionChanged is not fired");
+    });
+});
+
+QUnit.module("Customization of the command columns", {
+    beforeEach: function() {
+        setupModule.apply(this, [["adaptivity"]]);
+    },
+    afterEach: function() {
+        this.dispose && this.dispose();
+    }
+}, function() {
+    QUnit.test("The edit column", function(assert) {
+        // arrange
+        var editCellTemplate = function() {};
+
+        this.applyOptions({
+            editing: {
+                mode: "row",
+                allowUpdating: true,
+                texts: {
+                    editRow: "Edit"
+                }
+            },
+            columns: ["field1", "field2", {
+                command: "edit",
+                cellTemplate: editCellTemplate,
+                width: 200,
+                visibleIndex: -1
+            }]
+        });
+
+        // act, assert
+        assert.deepEqual(this.getVisibleColumns(["command", "cellTemplate", "width", "visibleIndex"])[0], {
+            command: "edit",
+            cellTemplate: editCellTemplate,
+            width: 200,
+            visibleIndex: -1
+        }, "edit column");
+    });
+
+    QUnit.test("The select column", function(assert) {
+        // arrange
+        var selectCellTemplate = function() {};
+
+        this.applyOptions({
+            selection: {
+                mode: "multiple",
+                showCheckBoxesMode: "always"
+            },
+            columns: ["field1", "field2", {
+                command: "select",
+                cellTemplate: selectCellTemplate,
+                width: 200,
+                visibleIndex: 0
+            }]
+        });
+
+        // act, assert
+        assert.deepEqual(this.getVisibleColumns(["command", "cellTemplate", "width", "visibleIndex"])[2], {
+            command: "select",
+            cellTemplate: selectCellTemplate,
+            width: 200,
+            visibleIndex: 0
+        }, "select column");
+    });
+
+    QUnit.test("The adaptive column", function(assert) {
+        // arrange
+        var adaptiveCellTemplate = function() {};
+
+        this.applyOptions({
+            columnHidingEnabled: true,
+            columns: ["field1", "field2", {
+                command: "adaptive",
+                cellTemplate: adaptiveCellTemplate,
+                width: 100,
+                visibleIndex: -1,
+                adaptiveHidden: false
+            }]
+        });
+
+        // act, assert
+        assert.deepEqual(this.getVisibleColumns(["command", "cellTemplate", "width", "visibleIndex"])[0], {
+            command: "adaptive",
+            cellTemplate: adaptiveCellTemplate,
+            width: 100,
+            visibleIndex: -1
+        }, "adaptive column");
+    });
+
+    QUnit.test("The expand column", function(assert) {
+        // arrange
+        var expandCellTemplate = function() {};
+
+        this.applyOptions({
+            columnHidingEnabled: true,
+            columns: [{ dataField: "field1", groupIndex: 0 }, "field2", {
+                command: "expand",
+                cellTemplate: expandCellTemplate,
+                width: 100
+            }]
+        });
+
+        // act, assert
+        assert.deepEqual(this.getVisibleColumns(["command", "groupIndex", "dataField", "cellTemplate", "width"])[0], {
+            command: "expand",
+            groupIndex: 0,
+            dataField: "field1",
+            cellTemplate: expandCellTemplate,
+            width: 100
+        }, "group column");
     });
 });

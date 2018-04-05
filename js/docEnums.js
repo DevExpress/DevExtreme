@@ -785,11 +785,21 @@
  */
 
  /**
+ * @typedef {string} Enums.GridCommandColumnType
+ * @enum {'adaptive'|'edit'|'expand'|'select'}
+ */
+
+ /**
+ * @typedef {string} Enums.TreeListCommandColumnType
+ * @enum {'adaptive'|'edit'}
+ */
+
+ /**
  * @typedef {string} Enums.DataSourceStoreType
  * @enum {'array'|'local'|'odata'}
  */
 
-/**
+ /**
  * @typedef {string} Enums.PivotGridStoreType
  * @enum {'array'|'local'|'odata'|'xmla'}
  */
