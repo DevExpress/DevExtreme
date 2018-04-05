@@ -790,6 +790,11 @@
  */
 
  /**
+ * @typedef {string} Enums.TreeListCommandColumnType
+ * @enum {'adaptive'|'edit'}
+ */
+
+ /**
  * @typedef {string} Enums.DataSourceStoreType
  * @enum {'array'|'local'|'odata'}
  */
