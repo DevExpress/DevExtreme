@@ -173,8 +173,7 @@ var SchedulerHeader = Widget.inherit({
             },
             selectedItem: this.option("currentView"),
             tabIndex: this.option("tabIndex"),
-            focusStateEnabled: this.option("focusStateEnabled"),
-            showNavButtons: true
+            focusStateEnabled: this.option("focusStateEnabled")
         });
     },
 
