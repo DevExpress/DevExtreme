@@ -56,20 +56,6 @@ var Autocomplete = DropDownList.inherit({
         });
     },
 
-    _setDeprecatedOptions: function() {
-        this.callBase();
-
-        extend(this._deprecatedOptions, {
-            /**
-             * @name dxAutocompleteOptions_displayExpr
-             * @publicName displayExpr
-             * @deprecated DataExpressionMixinOptions_valueExpr
-             * @inheritdoc
-             */
-            "displayExpr": { since: "15.2", alias: "valueExpr" }
-        });
-    },
-
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             /**
@@ -256,10 +242,16 @@ var Autocomplete = DropDownList.inherit({
     },
 
     _optionChanged: function(args) {
-        if(args.name === "maxItemCount") {
-            this._searchDataSource();
-        } else {
-            this.callBase(args);
+        switch(args.name) {
+            case "maxItemCount":
+                this._searchDataSource();
+                break;
+            case "valueExpr":
+                this._compileDisplayGetter();
+                this.callBase(args);
+                break;
+            default:
+                this.callBase(args);
         }
     },
 
