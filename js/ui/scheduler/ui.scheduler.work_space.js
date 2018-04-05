@@ -406,9 +406,13 @@ var SchedulerWorkSpace = Widget.inherit({
             case "hoursInterval":
             case "firstDayOfWeek":
             case "currentDate":
-            case "groups":
             case "startDate":
-                this._createAllDayPanelElements();
+                this._cleanWorkSpace();
+                break;
+            case "groups":
+                if(this._isVerticalGroupedWorkSpace()) {
+                    this._createAllDayPanelElements();
+                }
                 this._cleanWorkSpace();
                 break;
             case "groupOrientation":
