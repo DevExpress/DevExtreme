@@ -580,12 +580,12 @@
  */
 
  /**
- * @typedef {string} Enums.RowScrollingMode
- * @enum {'auto'|'standard'|'virtual'}
+ * @typedef {string} Enums.GridRowRenderingMode
+ * @enum {'standard'|'virtual'}
  */
 
  /**
- * @typedef {string} Enums.ColumnScrollingMode
+ * @typedef {string} Enums.GridColumnRenderingMode
  * @enum {'standard'|'virtual'}
  */
 

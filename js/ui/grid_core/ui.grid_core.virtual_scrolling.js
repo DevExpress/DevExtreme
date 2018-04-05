@@ -656,7 +656,7 @@ module.exports = {
                 /**
                  * @name GridBaseOptions_scrolling_rowRenderingMode
                  * @publicName rowRenderingMode
-                 * @type Enums.RowScrollingMode
+                 * @type Enums.GridRowRenderingMode
                  * @default "standard"
                  */
                 rowRenderingMode: "standard"
