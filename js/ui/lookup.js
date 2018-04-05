@@ -659,6 +659,13 @@ var Lookup = DropDownList.inherit({
             .appendTo(this.$element());
     },
 
+    _dataSourceOptions: function() {
+        return extend(this.callBase(), {
+            paginate: true
+        });
+    },
+
+
     _getSubmitElement: function() {
         return this._$submitElement;
     },
