@@ -441,6 +441,28 @@ QUnit.test("group should be expanded by the expandGroup method", function(assert
     }
 });
 
+QUnit.test("items on another page are selected when grouping is enabled", function(assert) {
+    var list = this.element.dxList({
+        dataSource: {
+            store: [
+                { key: "first", text: "item 1" },
+                { key: "second", text: "item 2" }
+            ],
+            pageSize: 1,
+            paginate: true,
+            group: "key"
+        },
+        grouped: true,
+        selectionMode: "multiple",
+        selectedItemKeys: ["item 1", "item 2"],
+        keyExpr: "text"
+    }).dxList("instance");
+
+    var selectedItems = list.option("selectedItems");
+
+    assert.equal(selectedItems.length, 2, "count of selected items");
+});
+
 QUnit.test("scrollView should be updated after group collapsed", function(assert) {
     try {
         List.mockScrollView(this.originalScrollView);
