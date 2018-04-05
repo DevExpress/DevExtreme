@@ -1258,17 +1258,9 @@ module.exports = {
             };
 
             var addExpandColumn = function(that) {
-                that.addCommandColumn({
-                    command: "expand",
-                    width: "auto",
-                    cssClass: COMMAND_EXPAND_CLASS,
-                    allowEditing: false, // T165142
-                    allowGrouping: false,
-                    allowSorting: false,
-                    allowResizing: false,
-                    allowReordering: false,
-                    allowHiding: false
-                });
+                var options = that._getExpandColumnOptions();
+
+                that.addCommandColumn(options);
             };
 
             var defaultSetCellValue = function(data, value) {
@@ -1365,32 +1357,24 @@ module.exports = {
                 var i,
                     column,
                     commandColumnIndex,
-                    columnIndexCorrection = needToExtend ? commandColumns.length : 0,
-                    result = extend(true, [], columns.length ? needToExtend && commandColumns.concat(columns) || columns : []),
-                    getCommandColumnIndex = (column) => {
-                        var result = -1;
-
-                        commandColumns.some((commandColumn, index) => {
-                            if(commandColumn.command === column.command) {
-                                result = index;
-                                return true;
-                            }
-                        });
-
-                        return result;
-                    };
+                    result = columns.length ? (needToExtend && commandColumns || columns).slice() : [],
+                    getCommandColumnIndex = (column) => commandColumns.reduce((result, commandColumn, index) => {
+                        return commandColumn.command === column.command ? index : result;
+                    }, -1);
 
                 if(result.length) {
                     for(i = 0; i < columns.length; i++) {
-                        column = result[columnIndexCorrection + i];
+                        column = columns[i];
 
-                        if(column && column.command) {
-                            commandColumnIndex = getCommandColumnIndex(column);
-
-                            if(commandColumnIndex >= 0) {
+                        commandColumnIndex = column && column.command ? getCommandColumnIndex(column) : -1;
+                        if(commandColumnIndex >= 0) {
+                            if(needToExtend) {
                                 result[commandColumnIndex] = extend({}, commandColumns[commandColumnIndex], column);
-                                needToExtend && result.splice(columnIndexCorrection + i, 1);
+                            } else {
+                                result[i] = extend({}, column, commandColumns[commandColumnIndex]);
                             }
+                        } else if(column && needToExtend) {
+                            result.push(extend({}, column));
                         }
                     }
                 }
@@ -1399,6 +1383,20 @@ module.exports = {
             };
 
             return {
+                _getExpandColumnOptions: function() {
+                    return {
+                        command: "expand",
+                        width: "auto",
+                        cssClass: COMMAND_EXPAND_CLASS,
+                        allowEditing: false, // T165142
+                        allowGrouping: false,
+                        allowSorting: false,
+                        allowResizing: false,
+                        allowReordering: false,
+                        allowHiding: false
+                    };
+                },
+
                 _getFirstItems: function(dataSource) {
                     var groupsCount,
                         items = [];

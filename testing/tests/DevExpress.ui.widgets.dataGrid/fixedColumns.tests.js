@@ -33,7 +33,9 @@ var $ = require("jquery"),
     dataGridMocks = require("../../helpers/dataGridMocks.js"),
     setupDataGridModules = dataGridMocks.setupDataGridModules,
     MockDataController = dataGridMocks.MockDataController,
-    MockColumnsController = dataGridMocks.MockColumnsController;
+    MockColumnsController = dataGridMocks.MockColumnsController,
+    gridCoreUtils = require("ui/grid_core/ui.grid_core.utils"),
+    expandCellTemplate = gridCoreUtils.getExpandCellTemplate();
 
 var generateData = function(countItems) {
     var j = 1,
@@ -539,7 +541,8 @@ QUnit.test("Draw fixed table for rowsView with group row", function(assert) {
     $.extend(that.columns[0], {
         groupIndex: 0,
         command: "expand",
-        allowCollapsing: true
+        allowCollapsing: true,
+        cellTemplate: expandCellTemplate
     });
 
     that.setupDataGrid();
@@ -694,7 +697,8 @@ QUnit.test("Draw fixed table for rowsView with summary by fixed column in group 
     $.extend(that.columns[0], {
         groupIndex: 0,
         command: "expand",
-        allowCollapsing: true
+        allowCollapsing: true,
+        cellTemplate: expandCellTemplate
     });
 
     that.setupDataGrid();
@@ -754,7 +758,8 @@ QUnit.test("Draw fixed table for rowsView with summary by unfixed column in grou
     $.extend(that.columns[0], {
         groupIndex: 0,
         command: "expand",
-        allowCollapsing: true
+        allowCollapsing: true,
+        cellTemplate: expandCellTemplate
     });
 
     that.setupDataGrid();
@@ -827,7 +832,8 @@ QUnit.test("Draw fixed table for rowsView with summary by fixed (on left side) a
     $.extend(that.columns[0], {
         groupIndex: 0,
         command: "expand",
-        allowCollapsing: true
+        allowCollapsing: true,
+        cellTemplate: expandCellTemplate
     });
 
     that.setupDataGrid();
@@ -900,7 +906,8 @@ QUnit.test("Draw fixed table for rowsView with summary by fixed (on right side) 
     $.extend(that.columns[0], {
         groupIndex: 0,
         command: "expand",
-        allowCollapsing: true
+        allowCollapsing: true,
+        cellTemplate: expandCellTemplate
     });
 
     that.setupDataGrid();

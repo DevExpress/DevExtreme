@@ -1019,7 +1019,7 @@ QUnit.test("Show group footer", function(assert) {
     // assert
     assert.equal(testElement.find(".dx-datagrid-group-footer").length, 6, "has group footer rows");
     assert.equal(testElement.find(".dx-datagrid-group-footer").first().find("td").length, 4, "count cell in group footer row");
-    assert.strictEqual(testElement.find(".dx-datagrid-group-footer").first().find("td").eq(0).text(), "", "text first cell in group footer row");
+    assert.strictEqual(testElement.find(".dx-datagrid-group-footer").first().find("td").eq(0).html(), "&nbsp;", "text first cell in group footer row");
     assert.strictEqual(testElement.find(".dx-datagrid-group-footer").first().find("td").eq(1).text(), "Count: 1", "text second cell in group footer row");
     assert.strictEqual(testElement.find(".dx-datagrid-group-footer").first().find("td").eq(2).text(), "", "text third cell in group footer row");
     assert.ok(!testElement.find(".dx-datagrid-group-footer").first().find(".dx-datagrid-expand").length, "not has expand cell in group footer row");

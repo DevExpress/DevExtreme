@@ -47,7 +47,8 @@ var $ = require("jquery"),
     MockDataController = dataGridMocks.MockDataController,
     MockColumnsController = dataGridMocks.MockColumnsController,
     MockSelectionController = dataGridMocks.MockSelectionController,
-    getCells = dataGridMocks.getCells;
+    getCells = dataGridMocks.getCells,
+    expandCellTemplate = gridCoreUtils.getExpandCellTemplate();
 
 function getText(element) {
     return $(element).text();
@@ -2274,7 +2275,7 @@ QUnit.test('Show grouped columns', function(assert) {
     // arrange
     var rows = [{ rowType: 'group', groupIndex: 0, isExpanded: true, values: [1], data: { isContinuationOnNextPage: true } }, { rowType: 'group', groupIndex: 1, isExpanded: false, values: [1, 2] }, { rowType: 'data', values: [null, null, 3] }],
         dataController = new MockDataController({ items: rows }),
-        rowsView = this.createRowsView(rows, dataController, [{ groupIndex: 0, caption: 'column 1', allowCollapsing: true, command: 'expand' }, { groupIndex: 1, caption: 'column 2', allowCollapsing: true, command: 'expand' }, {}]),
+        rowsView = this.createRowsView(rows, dataController, [{ groupIndex: 0, caption: 'column 1', allowCollapsing: true, command: 'expand', cellTemplate: expandCellTemplate }, { groupIndex: 1, caption: 'column 2', allowCollapsing: true, command: 'expand', cellTemplate: expandCellTemplate }, {}]),
         testElement = $('#container');
 
     this.options.grouping = {
@@ -2315,7 +2316,7 @@ QUnit.test('Show grouped columns with continuation messages', function(assert) {
     // arrange
     var rows = [{ rowType: 'group', groupIndex: 0, isExpanded: true, values: [1], data: { isContinuation: true } }, { rowType: 'group', groupIndex: 1, isExpanded: false, values: [1, 2], data: { isContinuationOnNextPage: true } }, { rowType: 'group', groupIndex: 2, isExpanded: false, values: [1, 2, 3], data: { isContinuation: true, isContinuationOnNextPage: true } }],
         dataController = new MockDataController({ items: rows }),
-        rowsView = this.createRowsView(rows, dataController, [{ groupIndex: 0, caption: 'column 1', allowCollapsing: true, command: "expand" }, { groupIndex: 1, caption: 'column 2', allowCollapsing: true, command: "expand" }, { groupIndex: 2, caption: 'column 3', allowCollapsing: true, command: "expand" }]),
+        rowsView = this.createRowsView(rows, dataController, [{ groupIndex: 0, caption: 'column 1', allowCollapsing: true, command: "expand", cellTemplate: expandCellTemplate }, { groupIndex: 1, caption: 'column 2', allowCollapsing: true, command: "expand", cellTemplate: expandCellTemplate }, { groupIndex: 2, caption: 'column 3', allowCollapsing: true, command: "expand", cellTemplate: expandCellTemplate }]),
         testElement = $('#container');
 
     this.options.grouping = {
@@ -2350,7 +2351,7 @@ QUnit.test('Show grouped columns when virtual scrolling enabled', function(asser
     // arrange
     var rows = [{ rowType: 'group', groupIndex: 0, isExpanded: true, values: [1], data: { isContinuationOnNextPage: true } }],
         dataController = new MockDataController({ items: rows, virtualItemsCount: { begin: 10, end: 0 } }),
-        rowsView = this.createRowsView(rows, dataController, [{ groupIndex: 0, caption: 'column 1', allowCollapsing: true }]),
+        rowsView = this.createRowsView(rows, dataController, [{ groupIndex: 0, caption: 'column 1', allowCollapsing: true, command: "expand", cellTemplate: expandCellTemplate }]),
         testElement = $('#container');
 
     this.options.scrolling = {
@@ -2398,12 +2399,13 @@ QUnit.test('Group template', function(assert) {
         rowsView = this.createRowsView(rows, dataController, [{
             command: 'expand',
             groupIndex: 0, caption: 'column 1', allowCollapsing: true,
+            cellTemplate: expandCellTemplate,
             groupCellTemplate: function(container, options) {
                 assert.equal(typeUtils.isRenderer(container), !!config().useJQuery, "rowElement is correct");
                 $('<div />')
                     .text(options.column.caption + " - " + options.text + ' (Count - ' + options.data.items.length + ')')
                     .appendTo(container);
-            } }, { groupIndex: 1, caption: 'column 2', allowCollapsing: true, command: 'expand' }, {}]),
+            } }, { groupIndex: 1, caption: 'column 2', allowCollapsing: true, command: 'expand', cellTemplate: expandCellTemplate }, {}]),
         testElement = $('#container');
 
     // act
@@ -2424,10 +2426,11 @@ QUnit.test('Group template returns jQuery element', function(assert) {
         rowsView = this.createRowsView(rows, dataController, [{
             command: 'expand',
             groupIndex: 0, caption: 'column 1', allowCollapsing: true,
+            cellTemplate: expandCellTemplate,
             groupCellTemplate: function(container, options) {
                 return $('<div />')
                     .text(options.column.caption + " - " + options.text + ' (Count - ' + options.data.items.length + ')');
-            } }, { groupIndex: 1, caption: 'column 2', allowCollapsing: true, command: 'expand' }, {}]),
+            } }, { groupIndex: 1, caption: 'column 2', allowCollapsing: true, command: 'expand', cellTemplate: expandCellTemplate }, {}]),
         testElement = $('#container');
 
     // act
@@ -2448,10 +2451,11 @@ QUnit.test('Group template returns DOM-element', function(assert) {
         rowsView = this.createRowsView(rows, dataController, [{
             command: 'expand',
             groupIndex: 0, caption: 'column 1', allowCollapsing: true,
+            cellTemplate: expandCellTemplate,
             groupCellTemplate: function(container, options) {
                 return ($('<div />')
                     .text(options.column.caption + " - " + options.text + ' (Count - ' + options.data.items.length + ')')).eq(0);
-            } }, { groupIndex: 1, caption: 'column 2', allowCollapsing: true, command: 'expand' }, {}]),
+            } }, { groupIndex: 1, caption: 'column 2', allowCollapsing: true, command: 'expand', cellTemplate: expandCellTemplate }, {}]),
         testElement = $('#container');
 
     // act
@@ -2506,7 +2510,7 @@ QUnit.test('Show grouped columns with select column', function(assert) {
     // arrange
     var rows = [{ rowType: 'group', groupIndex: 0, isExpanded: true, values: [1] }, { rowType: 'group', groupIndex: 1, isExpanded: false, values: [1, 2] }, { values: ['', '', 3] }],
         dataController = new MockDataController({ items: rows }),
-        rowsView = this.createRowsView(rows, dataController, [{ command: 'select' }, { command: 'expand', groupIndex: 0, caption: 'column 1', allowCollapsing: true }, { command: 'expand', groupIndex: 1, caption: 'column 2' }, {}]),
+        rowsView = this.createRowsView(rows, dataController, [{ command: 'select' }, { command: 'expand', groupIndex: 0, caption: 'column 1', allowCollapsing: true, cellTemplate: expandCellTemplate }, { command: 'expand', groupIndex: 1, caption: 'column 2', cellTemplate: expandCellTemplate }, {}]),
         testElement = $('#container');
 
     // act
@@ -2727,7 +2731,7 @@ QUnit.test('Show grouped columns and master detail', function(assert) {
     // arrange
     var rows = [{ rowType: 'group', groupIndex: 0, isExpanded: true, values: [1], data: { isContinuationOnNextPage: true } }, { rowType: 'group', groupIndex: 1, isExpanded: false, values: [1, 2] }, { rowType: 'data', values: [null, null, true, 3] }, { rowType: 'detail', data: { detailInfo: 'Test Detail Information' } }],
         dataController = new MockDataController({ items: rows }),
-        rowsView = this.createRowsView(rows, dataController, [{ groupIndex: 0, caption: 'column 1', allowCollapsing: true, command: 'expand' }, { groupIndex: 1, caption: 'column 2', allowCollapsing: true, command: 'expand' }, { command: 'expand', cellTemplate: gridCoreUtils.getExpandCellTemplate() }, {}]),
+        rowsView = this.createRowsView(rows, dataController, [{ groupIndex: 0, caption: 'column 1', allowCollapsing: true, command: 'expand', cellTemplate: expandCellTemplate }, { groupIndex: 1, caption: 'column 2', allowCollapsing: true, command: 'expand', cellTemplate: expandCellTemplate }, { command: 'expand', cellTemplate: expandCellTemplate }, {}]),
         testElement = $('#container');
 
     this.options.grouping = {
@@ -2769,8 +2773,8 @@ QUnit.test('Show grouped columns and master detail', function(assert) {
 
     assert.ok(!$(testElement.find('tbody > tr')[3]).hasClass("dx-group-row"));
     assert.equal($(testElement.find('tbody > tr')[3]).find('td').length, 4);
-    assert.equal($(testElement.find('tbody > tr')[3]).find('td').first().text(), '');
-    assert.equal($($(testElement.find('tbody > tr')[3]).find('td')[1]).text(), '');
+    assert.equal($(testElement.find('tbody > tr')[3]).find('td').first().html(), '&nbsp;');
+    assert.equal($($(testElement.find('tbody > tr')[3]).find('td')[1]).html(), '&nbsp;');
     assert.equal($(testElement.find('tbody > tr')[3]).find('td').last().text(), 'Test Detail Information');
 });
 
@@ -7072,112 +7076,4 @@ QUnit.test("Update loadPanel", function(assert) {
     assert.ok($loadPanelElement.length, "has load panel");
     assert.equal($loadPanelElement.position().top, loadPanelPosition.top, "position of the load panel is not changed");
     assert.ok(that.rowsView._loadPanel.option("visible"), "visible load panel");
-});
-
-QUnit.module("Customization of the command columns", {
-    beforeEach: function() {
-        this.items = [
-            { name: "Alex", age: 15, lastName: "Heart" },
-            { name: "Dan", age: 16, lastName: "Peyton" },
-            { name: "Vadim", age: 17, lastName: "Reagan" }
-        ];
-
-        this.options = {
-            columns: ["lastName", "name", "age"],
-            dataSource: {
-                asyncLoadEnabled: false,
-                store: this.items
-            },
-        };
-
-        this.clock = sinon.useFakeTimers();
-
-        this.setupDataGridModules = function() {
-            setupDataGridModules(this, ["data", "columns", "columnHeaders", "rows", "grouping", "masterDetail", "editing", "selection", "adaptivity"], {
-                initViews: true
-            });
-        };
-    },
-    afterEach: function() {
-        this.dispose && this.dispose();
-        this.clock.restore();
-    }
-}, function() {
-    QUnit.test("The edit column", function(assert) {
-        // arrange
-        var $testElement = $("#container");
-
-        this.options.editing = {
-            mode: "row",
-            allowUpdating: true,
-            texts: {
-                editRow: "Edit"
-            }
-        };
-        this.options.columns.push({
-            command: "edit",
-            cellTemplate: function(container, options) {
-                $(container).text("Test");
-            },
-            width: 200,
-            visibleIndex: -1
-        });
-        this.setupDataGridModules();
-
-        // act
-        this.rowsView.render($testElement);
-
-        // assert
-        assert.strictEqual($testElement.find(".dx-data-row").children().first().html(), "Test", "markup of the edit column");
-        assert.strictEqual($testElement.find("colgroup > col").first().get(0).style.width, "200px", "width of the edit column");
-    });
-
-    QUnit.test("The select column", function(assert) {
-        // arrange
-        var $testElement = $("#container");
-
-        this.options.selection = {
-            mode: "multiple",
-            showCheckBoxesMode: "always"
-        };
-        this.options.columns.push({
-            command: "select",
-            cellTemplate: function(container, options) {
-                $(container).text("Test");
-            },
-            width: 200,
-            visibleIndex: 0
-        });
-        this.setupDataGridModules();
-
-        // act
-        this.rowsView.render($testElement);
-
-        // assert
-        assert.strictEqual($testElement.find(".dx-data-row").children().last().html(), "Test", "markup of the select column");
-        assert.strictEqual($testElement.find("colgroup > col").last().get(0).style.width, "200px", "width of the select column");
-    });
-
-    QUnit.test("The adaptive column", function(assert) {
-        // arrange
-        var $testElement = $("#container").width(200);
-
-        this.options.columnHidingEnabled = true;
-        this.options.columns.push({
-            command: "adaptive",
-            cellTemplate: function(container, options) {
-                $(container).text("Test");
-            },
-            width: 100,
-            visibleIndex: -1
-        });
-        this.setupDataGridModules();
-
-        // act
-        this.rowsView.render($testElement);
-
-        // assert
-        assert.strictEqual($testElement.find(".dx-data-row").children().first().html(), "Test", "markup of the adaptive column");
-        assert.strictEqual($testElement.find("colgroup > col").first().get(0).style.width, "100px", "width of the adaptive column");
-    });
 });

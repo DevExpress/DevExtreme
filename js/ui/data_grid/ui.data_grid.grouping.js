@@ -738,7 +738,16 @@ gridCore.registerModule("grouping", {
     },
     extenders: {
         controllers: {
-            data: GroupingDataControllerExtender
+            data: GroupingDataControllerExtender,
+            columns: {
+                _getExpandColumnOptions: function() {
+                    var options = this.callBase.apply(this, arguments);
+
+                    options.cellTemplate = gridCore.getExpandCellTemplate();
+
+                    return options;
+                },
+            }
         },
         views: {
             headerPanel: GroupingHeaderPanelExtender,
