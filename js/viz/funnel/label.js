@@ -95,7 +95,7 @@ function getConnectorStrategy(options, inverted) {
             return [[x, y], [x1, y], [x1, y1], [x, y1]];
         },
 
-        isRotated: function() { return false; },
+        isHorizontal: function() { return true; },
 
         findFigurePoint: function(figure) {
             return getFigureCenter(figure);
