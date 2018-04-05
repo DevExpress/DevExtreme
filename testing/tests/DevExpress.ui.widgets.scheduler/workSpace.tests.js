@@ -677,7 +677,7 @@ QUnit.testStart(function() {
         assert.equal(cellData.endDate.toString(), new Date(2016, 10, 6, 2).toString(), "End date is OK");
     });
 
-    QUnit.skip("Get allDay cellData by coordinates", function(assert) {
+    QUnit.test("Get allDay cellData by coordinates", function(assert) {
         this.instance.option({
             currentDate: new Date(2015, 5, 30),
             firstDayOfWeek: 1,
