@@ -1,11 +1,9 @@
 "use strict";
 
-var $ = require("jquery"),
-    dataGridMocks = require("../../helpers/dataGridMocks.js");
-
-require("ui/data_grid/ui.data_grid");
-
-require("common.css!");
+import $ from "jquery";
+import dataGridMocks from "../../helpers/dataGridMocks.js";
+import "ui/data_grid/ui.data_grid";
+import "common.css!";
 
 var setupModule = function() {
     var columns = [];
@@ -290,7 +288,8 @@ var setupRenderingModule = function() {
     this.setupVirtualColumns = function(options) {
         this.setupModules($.extend(true, {
             scrolling: {
-                columnRenderingMode: "virtual"
+                columnRenderingMode: "virtual",
+                useNative: false
             },
             columnWidth: 50,
             columns: this.columns,

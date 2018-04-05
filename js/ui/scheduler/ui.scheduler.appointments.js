@@ -146,7 +146,8 @@ var SchedulerAppointments = CollectionWidget.inherit({
             allowDrag: true,
             allowResize: true,
             allowAllDayResize: true,
-            onAppointmentDblClick: null
+            onAppointmentDblClick: null,
+            _appointmentGroupButtonOffset: 0
         });
     },
 
@@ -863,7 +864,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
                 items: virtualItems,
                 buttonColor: virtualGroup.buttonColor,
                 itemTemplate: this.option("itemTemplate"),
-                buttonWidth: buttonWidth,
+                buttonWidth: buttonWidth - this.option("_appointmentGroupButtonOffset"),
                 onAppointmentClick: this.option("onItemClick")
             });
         }).bind(this));

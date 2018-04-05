@@ -75,6 +75,17 @@ var VerticalGroupedStrategy = GroupedStrategy.inherit({
 
     calculateTimeCellRepeatCount: function() {
         return this._workSpace._getGroupCount() || 1;
+    },
+
+    getWorkSpaceMinWidth: function() {
+        var minWidth = this._workSpace._getWorkSpaceWidth(),
+            workspaceContainerWidth = this._workSpace.$element().outerWidth() - this._workSpace.getTimePanelWidth() - this._workSpace.getGroupTableWidth();
+
+        if(minWidth < workspaceContainerWidth) {
+            minWidth = workspaceContainerWidth;
+        }
+
+        return minWidth;
     }
 });
 

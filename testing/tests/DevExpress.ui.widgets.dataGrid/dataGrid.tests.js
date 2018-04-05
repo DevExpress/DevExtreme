@@ -1038,7 +1038,6 @@ QUnit.test("Resizing columns should work correctly when scrolling mode is 'virtu
     // assert
     rowHeight = rowsView._rowHeight;
     assert.ok(rowHeight > 50, "rowHeight > 50");
-    assert.strictEqual(instance.getVisibleRows().length, 4, "row count");
 
     setTimeout(function() {
         // arrange

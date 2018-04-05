@@ -530,14 +530,6 @@ QUnit.test("Repaint treeView on every dataSource modified - remove", function(as
     assert.equal(treeView.option("items").length, 2);
 });
 
-QUnit.test("TreeView should render correctly without items", function(assert) {
-    var $treeView = initTree({
-        items: undefined
-    });
-
-    assert.equal($treeView.find(".dx-empty-message").length, 1, "empty message should be shown");
-});
-
 QUnit.test("Dynamic dataSource filter should work correctly", function(assert) {
     var data = $.extend(true, [], DATA[4]),
         dataSource = new DataSource({
@@ -561,6 +553,28 @@ QUnit.test("Dynamic dataSource filter should work correctly", function(assert) {
     dataSource.filter(['ParentId', '=', 12]);
     dataSource.load();
     assert.equal($treeView.option("items").length, 1, "only birds's children were loaded");
+});
+
+QUnit.test("existed items didn't append twice", function(assert) {
+    var dataSource = new DataSource({
+        store: new CustomStore({
+            load: function(options) {
+                return $.extend(true, [], DATA[4]);
+            }
+        })
+    });
+
+    var treeView = initTree({
+        dataStructure: "plain",
+        keyExpr: "Id",
+        displayExpr: "Name",
+        parentIdExpr: "ParentId",
+        dataSource: dataSource,
+        virtualModeEnabled: true
+    }).dxTreeView("instance");
+
+    treeView.expandItem(1);
+    assert.equal(treeView.option("items").length, 8, "all items were loaded");
 });
 
 QUnit.test("TreeView with empty dataSource should updates after item inserted in the Store", function(assert) {

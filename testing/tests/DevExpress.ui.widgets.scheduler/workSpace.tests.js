@@ -677,7 +677,7 @@ QUnit.testStart(function() {
         assert.equal(cellData.endDate.toString(), new Date(2016, 10, 6, 2).toString(), "End date is OK");
     });
 
-    QUnit.skip("Get allDay cellData by coordinates", function(assert) {
+    QUnit.test("Get allDay cellData by coordinates", function(assert) {
         this.instance.option({
             currentDate: new Date(2015, 5, 30),
             firstDayOfWeek: 1,
@@ -1117,6 +1117,40 @@ QUnit.testStart(function() {
 
 (function() {
 
+    QUnit.module("Work Space Month with horizontal grouping", {
+        beforeEach: function() {
+            this.instance = $("#scheduler-work-space").dxSchedulerWorkSpaceMonth({
+                currentDate: new Date(2018, 2, 1),
+                groupOrientation: "vertical",
+                crossScrollingEnabled: true
+            }).dxSchedulerWorkSpaceMonth("instance");
+
+            stubInvokeMethod(this.instance);
+
+            this.instance.option("groups", [{
+                name: "one",
+                items: [{ id: 1, text: "a" }, { id: 2, text: "b" }]
+            }]);
+        }
+    });
+
+    QUnit.test("Group table content should have right height", function(assert) {
+        var $groupHeaderContents = this.instance.$element().find(".dx-scheduler-group-header-content");
+
+        assert.roughEqual($groupHeaderContents.eq(0).outerHeight(), 144, 5, "Group header content height is OK");
+        assert.roughEqual($groupHeaderContents.eq(1).outerHeight(), 144, 5, "Group header content height is OK");
+    });
+
+    QUnit.test("Group width calculation", function(assert) {
+        sinon.stub(this.instance, "getCellWidth").returns(50);
+
+        assert.equal(this.instance.getGroupWidth(), 350, "Group width is OK");
+    });
+
+})("Work Space Month");
+
+(function() {
+
     QUnit.module("Workspace Keyboard Navigation");
 
     QUnit.test("Month workspace navigation by arrows", function(assert) {
@@ -1245,6 +1279,30 @@ QUnit.testStart(function() {
             startDate: new Date(2015, 2, 31),
             endDate: new Date(2015, 3, 1)
         }, "Arguments are OK");
+    });
+
+    QUnit.test("Workspace should handle enter/space key correctly if e.cancel=true", function(assert) {
+        var $element = $("#scheduler-work-space").dxSchedulerWorkSpaceMonth({
+                focusStateEnabled: true,
+                firstDayOfWeek: 1,
+                editing: true,
+                onCellClick: function(e) {
+                    e.cancel = true;
+                },
+                currentDate: new Date(2015, 3, 1)
+            }),
+            keyboard = keyboardMock($element),
+            instance = $element.dxSchedulerWorkSpaceMonth("instance"),
+            updateSpy = sinon.spy(noop);
+
+        instance.notifyObserver = updateSpy;
+
+        $($element.find("." + CELL_CLASS).eq(0)).trigger("focusin");
+        keyboard.keyDown("enter");
+        $($element).trigger("focusin");
+        keyboard.keyDown("enter");
+
+        assert.notOk(updateSpy.called, "Observer method was not called if e.cancel = true");
     });
 
     QUnit.test("Workspace should allow select several cells with shift & arrow", function(assert) {

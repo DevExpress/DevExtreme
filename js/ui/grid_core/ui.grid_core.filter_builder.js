@@ -127,8 +127,8 @@ module.exports = {
             },
 
             /**
-             * @name GridBaseOptions_filterPopup
-             * @publicName filterPopup
+             * @name GridBaseOptions_filterBuilderPopup
+             * @publicName filterBuilderPopup
              * @type dxPopupOptions
              * @default {}
              */

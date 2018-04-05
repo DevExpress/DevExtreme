@@ -1480,7 +1480,7 @@ QUnit.test("intervalCount should be passed to workSpace", function(assert) {
     assert.equal(workSpace.option("intervalCount"), 2, "option intervalCount was passed");
 });
 
-QUnit.test("Group header should contain group header content with right height, groupOrientation = true", function(assert) {
+QUnit.test("Group header should contain group header content with right height, groupOrientation = vertical", function(assert) {
     var priorityData = [
         {
             text: "Low Priority",

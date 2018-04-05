@@ -289,7 +289,7 @@ module.exports = errorUtils({
     W0015: "Instead of returning a value from the '{0}' function, write it into the '{1}' field of the function's parameter.",
 
     /**
-    * @name Errors and Warnings_W0016
+    * @name ErrorsCore_W0016
     * @publicName W0016
     */
     W0016: 'The "{0}" option does not accept the "{1}" value since v.{2}. {3}.'

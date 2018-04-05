@@ -9,7 +9,6 @@ var $ = require("../../core/renderer"),
     windowUtils = require("../../core/utils/window"),
     typeUtils = require("../../core/utils/type"),
     extend = require("../../core/utils/extend").extend,
-    inArray = require("../../core/utils/array").inArray,
     each = require("../../core/utils/iterator").each,
     getPublicElement = require("../../core/utils/dom").getPublicElement,
     CheckBox = require("../check_box"),
@@ -802,6 +801,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
 
     _initMarkup: function() {
         this._renderScrollableContainer();
+        this._renderEmptyMessage(this._dataAdapter.getRootNodes());
         this.callBase();
         this.setAria("role", "tree");
     },
@@ -1188,9 +1188,17 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         that._dataSource.filter(that._combineFilter());
 
         return that._dataSource.load().done(function(newItems) {
-            var areItemsAlreadyPresent = inArray(newItems[0], that.option("items")) + 1;
-            !areItemsAlreadyPresent && that._appendItems(newItems);
+            if(!that._areNodesExists(newItems)) {
+                that._appendItems(newItems);
+            }
         });
+    },
+
+    _areNodesExists: function(newItems, items) {
+        var keyOfRootItem = this.keyOf(newItems[0]),
+            fullData = this._dataAdapter.getFullData();
+
+        return !!this._dataAdapter.getNodeByKey(keyOfRootItem, fullData);
     },
 
     _appendItems: function(newItems) {
@@ -1262,9 +1270,11 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         $node.addClass(IS_LEAF);
     },
 
-    _renderContent: function() {
-        this._renderEmptyMessage(this._dataAdapter.getRootNodes());
+    _emptyMessageContainer: function() {
+        return this._scrollableContainer ? this._scrollableContainer.content() : this.callBase();
+    },
 
+    _renderContent: function() {
         var items = this.option("items");
         if(items && items.length) {
             this._contentAlreadyRendered = true;

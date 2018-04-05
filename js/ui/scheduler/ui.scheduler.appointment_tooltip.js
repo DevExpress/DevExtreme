@@ -5,13 +5,16 @@ var $ = require("../../core/renderer"),
     tooltip = require("../tooltip/ui.tooltip"),
     Button = require("../button"),
     FunctionTemplate = require("../widget/function_template"),
-    messageLocalization = require("../../localization/message"),
     dateUtils = require("../../core/utils/date");
 
-var APPOINTMENT_TOOLTIP_CLASS = "dx-scheduler-appointment-tooltip",
+var APPOINTMENT_TOOLTIP_WRAPPER_CLASS = "dx-scheduler-appointment-tooltip-wrapper",
+    APPOINTMENT_TOOLTIP_CLASS = "dx-scheduler-appointment-tooltip",
     APPOINTMENT_TOOLTIP_TITLE_CLASS = "dx-scheduler-appointment-tooltip-title",
     APPOINTMENT_TOOLTIP_DATE_CLASS = "dx-scheduler-appointment-tooltip-date",
-    APPOINTMENT_TOOLTIP_BUTTONS_CLASS = "dx-scheduler-appointment-tooltip-buttons";
+    APPOINTMENT_TOOLTIP_BUTTONS_CLASS = "dx-scheduler-appointment-tooltip-buttons",
+    APPOINTMENT_TOOLTIP_OPEN_BUTTON_CLASS = "dx-scheduler-appointment-tooltip-open-button",
+    APPOINTMENT_TOOLTIP_CLOSE_BUTTON_CLASS = "dx-scheduler-appointment-tooltip-close-button",
+    APPOINTMENT_TOOLTIP_DELETE_BUTTONS_CLASS = "dx-scheduler-appointment-tooltip-delete-button";
 
 var appointmentTooltip = {
     show: function(appointmentData, singleAppointmentData, $appointment, instance) {
@@ -25,13 +28,13 @@ var appointmentTooltip = {
         this.instance = instance;
         var isAllDay = instance.appointmentTakesAllDay(appointmentData);
 
-        this._initDynamicTemplate(appointmentData, singleAppointmentData);
+        this._initDynamicTemplate(appointmentData, singleAppointmentData, $appointment);
 
         var template = instance._getAppointmentTemplate("appointmentTooltipTemplate");
 
         this.hide();
 
-        this._$tooltip = $("<div>").appendTo(instance.$element());
+        this._$tooltip = $("<div>").appendTo(instance.$element()).addClass(APPOINTMENT_TOOLTIP_WRAPPER_CLASS);
 
         this._tooltip = instance._createComponent(this._$tooltip, Tooltip, {
             visible: true,
@@ -48,7 +51,8 @@ var appointmentTooltip = {
                 at: "top",
                 of: $appointment,
                 boundary: isAllDay ? instance.$element() : instance.getWorkSpaceScrollableContainer(),
-                collision: "fit flipfit"
+                collision: "fit flipfit",
+                offset: this.instance.option("_appointmentTooltipOffset")
             }
         });
     },
@@ -64,19 +68,19 @@ var appointmentTooltip = {
         tooltip.hide();
     },
 
-    _initDynamicTemplate: function(appointmentData, singleAppointmentData) {
+    _initDynamicTemplate: function(appointmentData, singleAppointmentData, $appointment) {
         var that = this;
 
         this.instance._defaultTemplates["appointmentTooltip"] = new FunctionTemplate(function(options) {
             var $container = $(options.container),
-                $tooltip = that._tooltipContent(appointmentData, singleAppointmentData);
+                $tooltip = that._tooltipContent(appointmentData, singleAppointmentData, $appointment);
             $tooltip.addClass($container.attr("class"));
             $container.replaceWith($tooltip);
             return $container;
         });
     },
 
-    _tooltipContent: function(appointmentData, singleAppointmentData) {
+    _tooltipContent: function(appointmentData, singleAppointmentData, $appointment) {
         var $tooltip = $("<div>").addClass(APPOINTMENT_TOOLTIP_CLASS);
 
         var isAllDay = this.instance.fire("getField", "allDay", appointmentData),
@@ -89,7 +93,7 @@ var appointmentTooltip = {
         startDate = this.instance.fire("convertDateByTimezone", startDate, startDateTimeZone);
         endDate = this.instance.fire("convertDateByTimezone", endDate, endDateTimeZone);
 
-        $("<div>")
+        var $title = $("<div>")
             .text(text)
             .addClass(APPOINTMENT_TOOLTIP_TITLE_CLASS)
             .appendTo($tooltip);
@@ -100,9 +104,28 @@ var appointmentTooltip = {
             .appendTo($tooltip);
 
 
-        var $buttons = $("<div>")
-                        .addClass(APPOINTMENT_TOOLTIP_BUTTONS_CLASS)
-                        .appendTo($tooltip);
+        var $buttons = $("<div>").addClass(APPOINTMENT_TOOLTIP_BUTTONS_CLASS);
+
+        this.instance.option("_appointmentTooltipButtonsPosition") === "bottom"
+            ? $buttons.prependTo($tooltip)
+            : $buttons.appendTo($tooltip);
+
+        if(this.instance.option("_appointmentTooltipCloseButton")) {
+            this._getCloseButton().appendTo($buttons);
+        }
+
+        if(this.instance.option("_useAppointmentColorForTooltip")) {
+            this.instance.getAppointmentsInstance().notifyObserver("getAppointmentColor", {
+                itemData: appointmentData,
+                groupIndex: $appointment.data("dxAppointmentSettings").groupIndex,
+                callback: function(d) {
+                    d.done(function(color) {
+                        $title.css("backgroundColor", color);
+                        $buttons.css("backgroundColor", color);
+                    });
+                }
+            });
+        }
 
         if(this.instance._editing.allowDeleting) {
             this._getDeleteButton(appointmentData, singleAppointmentData).appendTo($buttons);
@@ -135,7 +158,7 @@ var appointmentTooltip = {
 
     _getDeleteButton: function(appointmentData, singleAppointmentData) {
         var that = this;
-        return (new Button($("<div>"), {
+        return (new Button($("<div>").addClass(APPOINTMENT_TOOLTIP_DELETE_BUTTONS_CLASS), {
             icon: "trash",
             onClick: function() {
                 var startDate = that.instance.fire("getField", "startDate", singleAppointmentData);
@@ -149,12 +172,24 @@ var appointmentTooltip = {
 
     _getOpenButton: function(appointmentData, singleAppointmentData) {
         var that = this,
-            allowUpdating = that.instance._editing.allowUpdating;
-        return (new Button($("<div>"), {
-            icon: allowUpdating ? "edit" : "",
-            text: messageLocalization.format("dxScheduler-openAppointment"),
+            allowUpdating = that.instance._editing.allowUpdating,
+            text = this.instance.option("_appointmentTooltipOpenButtonText");
+
+        return (new Button($("<div>").addClass(APPOINTMENT_TOOLTIP_OPEN_BUTTON_CLASS), {
+            icon: allowUpdating ? "edit" : this.instance.option("_appointmentTooltipOpenButtonIcon"),
+            text: text,
             onClick: function() {
                 that.instance.showAppointmentPopup(appointmentData, false, singleAppointmentData);
+                that.hide();
+            }
+        })).$element();
+    },
+
+    _getCloseButton: function() {
+        var that = this;
+        return (new Button($("<div>").addClass(APPOINTMENT_TOOLTIP_CLOSE_BUTTON_CLASS), {
+            icon: "close",
+            onClick: function() {
                 that.hide();
             }
         })).$element();

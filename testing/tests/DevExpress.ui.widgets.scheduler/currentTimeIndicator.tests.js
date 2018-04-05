@@ -345,7 +345,7 @@ var stubInvokeMethod = function(instance, options) {
         assert.roughEqual($bottomShader.outerWidth(), cellWidth, 1.5, "Bottom shader has correct width");
     });
 
-    QUnit.skip("Shader should be rendered correctly, Day view with groups", function(assert) {
+    QUnit.test("Shader should be rendered correctly, Day view with groups", function(assert) {
         this.instance.option({
             indicatorTime: new Date(2017, 8, 6, 12, 45),
             intervalCount: 3
