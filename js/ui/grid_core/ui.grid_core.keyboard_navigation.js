@@ -20,6 +20,7 @@ var ROWS_VIEW_CLASS = "rowsview",
     GROUP_ROW_CLASS = "dx-group-row",
     EDIT_FORM_ITEM_CLASS = "edit-form-item",
     MASTER_DETAIL_ROW_CLASS = "dx-master-detail-row",
+    FREESPACE_ROW_CLASS = "dx-freespace-row",
     MASTER_DETAIL_CELL_CLASS = "dx-master-detail-cell",
     DROPDOWN_EDITOR_OVERLAY_CLASS = "dx-dropdowneditor-overlay",
     COMMAND_EXPAND_CLASS = "dx-command-expand",
@@ -40,6 +41,10 @@ function isGroupRow($row) {
 
 function isDetailRow($row) {
     return $row && $row.hasClass(MASTER_DETAIL_ROW_CLASS);
+}
+
+function isFreeSpaceRow($row) {
+    return $row && $row.hasClass(FREESPACE_ROW_CLASS);
 }
 
 function isCellElement($element) {
@@ -274,8 +279,13 @@ var KeyboardNavigationController = core.ViewController.inherit({
     },
 
     _focus: function($cell, disableFocus) {
-        var $row = $cell.parent(),
-            $focusedCell = this._getFocusedCell(),
+        var $row = $cell.parent();
+
+        if(isFreeSpaceRow($row)) {
+            return;
+        }
+
+        var $focusedCell = this._getFocusedCell(),
             focusedView = this._focusedView,
             $focusViewElement = focusedView && focusedView.element(),
             $focusElement;

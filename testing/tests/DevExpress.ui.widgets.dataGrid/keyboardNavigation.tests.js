@@ -4995,6 +4995,41 @@ QUnit.module("Keyboard navigation with real dataController and columnsController
         assert.equal(this.keyboardNavigationController._focusedCellPosition.rowIndex, 1, "rowIndex");
     });
 
+    QUnit.testInActiveWindow("freespace cells should not have a focus", function(assert) {
+        // arrange
+        var that = this;
+        that.$element = function() {
+            return $("#container");
+        };
+        that.data = [
+            { name: "Alex", phone: "555555", room: 0 },
+            { name: "Dan1", phone: "666666", room: 1 },
+            { name: "Dan2", phone: "777777", room: 2 },
+            { name: "Dan3", phone: "888888", room: 3 }
+        ];
+
+        that.options = {
+            height: 300,
+        };
+
+        that.setupModule();
+
+        // act
+        that.gridView.render($("#container"));
+
+        var $cell = $(that.rowsView.element().find(".dx-freespace-row").eq(0).find("td").eq(1));
+        $cell.trigger(CLICK_EVENT);
+
+        this.clock.tick();
+
+        // assert
+        $cell = $(that.rowsView.element().find(".dx-freespace-row").eq(0).find("td").eq(1));
+        assert.equal($cell.attr("tabIndex"), undefined, "freespace cell has no tabindex");
+        assert.notOk($cell.is(":focus"), "focus", "freespace cell has no focus");
+        assert.notOk($cell.hasClass("dx-cell-focus-disabled"), "freespace cell has no .dx-cell-focus-disabled");
+        assert.ok(this.keyboardNavigationController._focusedCellPosition, "focusedCellPosition");
+    });
+
     QUnit.testInActiveWindow("Focus must be saved after paging if last row cell selected and rowCount of the last page < then of the previus page", function(assert) {
         // arrange
         var that = this;
