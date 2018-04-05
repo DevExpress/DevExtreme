@@ -395,6 +395,56 @@ QUnit.test("group should be collapsed by the collapseGroup method", function(ass
     }
 });
 
+QUnit.test("group should be stay collapsed if collapseGroup method called twice", function(assert) {
+    fx.off = true;
+
+    try {
+        var $element = this.element.dxList({
+                items: [{ key: "a", items: ["0"] }, { key: "b", items: ["0"] }],
+                grouped: true,
+                collapsibleGroups: true
+            }),
+            instance = $element.dxList("instance");
+
+        var $group = $element.find("." + LIST_GROUP_CLASS);
+        var $groupBody = $group.eq(1).find("." + LIST_GROUP_BODY_CLASS);
+
+        instance.collapseGroup(1).done(function() {
+            instance.collapseGroup(1).done(function() {
+                assert.ok($group.eq(1).hasClass(LIST_GROUP_COLLAPSED_CLASS), "collapsed class is present");
+                assert.equal($groupBody.height(), 0, "group is still collapsed");
+            });
+        });
+    } finally {
+        fx.off = false;
+    }
+});
+
+QUnit.test("group should be stay expanded by the expandGroup method", function(assert) {
+    fx.off = true;
+
+    try {
+        var $element = this.element.dxList({
+                items: [{ key: "a", items: ["0"] }, { key: "b", items: ["0"] }],
+                grouped: true,
+                collapsibleGroups: true
+            }),
+            instance = $element.dxList("instance");
+
+        var $group = $element.find("." + LIST_GROUP_CLASS);
+
+        instance.expandGroup(1).done(function() {
+            var $groupBody = $group.eq(1).find("." + LIST_GROUP_BODY_CLASS);
+
+            assert.notOk($group.eq(1).hasClass(LIST_GROUP_COLLAPSED_CLASS), "group is expanded");
+            assert.notEqual($groupBody.height(), 0, "group is still expanded");
+        });
+    } finally {
+        fx.off = false;
+    }
+});
+
+
 QUnit.test("group should be expanded by the expandGroup method", function(assert) {
     var origAnimate = fx.animate;
 
