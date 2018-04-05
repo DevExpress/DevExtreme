@@ -315,19 +315,19 @@ var FieldChooser = BaseFieldChooser.inherit({
 
     _initMarkup: function() {
         var that = this,
-            element = this.$element(),
-            $container = $(DIV).addClass(FIELDCHOOSER_CONTAINER_CLASS).appendTo(element),
+            $element = this.$element(),
+            $container = $(DIV).addClass(FIELDCHOOSER_CONTAINER_CLASS).appendTo($element),
             layout = that.option("layout"),
             $col1,
             $col2;
 
-        element
+        that.callBase();
+
+        $element
             .addClass(FIELDCHOOSER_CLASS)
             .addClass(FIELDS_CONTAINER_CLASS);
 
         that._dataChangedHandlers = [];
-
-        that.callBase();
 
         if(layout === 0) {
             $col1 = $(DIV).addClass("dx-col").appendTo($container);
@@ -360,11 +360,13 @@ var FieldChooser = BaseFieldChooser.inherit({
             that._renderArea($col2, "column");
             that._renderArea($col2, "data");
         }
+    },
+
+    _renderContentImpl: function() {
+        this.callBase();
 
         this.renderSortable();
-
         this._renderContextMenu();
-
         this.updateDimensions();
     },
 
@@ -717,16 +719,12 @@ var FieldChooser = BaseFieldChooser.inherit({
     * @publicName updateDimensions()
     */
     updateDimensions: function() {
-        var $element = this.$element();
-
-        if(hasWindow) {
-            var $scrollableElements = $element.find(".dx-area .dx-scrollable");
-            $scrollableElements.dxScrollable("update");
-        }
+        var $scrollableElements = this.$element().find(".dx-area .dx-scrollable");
+        $scrollableElements.dxScrollable("update");
     },
 
     _visibilityChanged: function(visible) {
-        if(visible) {
+        if(visible && hasWindow) {
             this.updateDimensions();
         }
     }
