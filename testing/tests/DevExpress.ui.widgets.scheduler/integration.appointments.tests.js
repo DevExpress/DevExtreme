@@ -2510,6 +2510,56 @@ QUnit.test("Appointment should have correct position while dragging from group",
     assert.deepEqual(appointmentData.ownerId, { id: [2] }, "Resources is correct");
 });
 
+QUnit.test("Appointment should have correct position while dragging from group, vertical grouping", function(assert) {
+    this.createInstance({
+        currentDate: new Date(2015, 6, 10),
+        editing: true,
+        views: [{
+            type: "week",
+            name: "Week",
+            groupOrientation: "vertical"
+        }],
+        currentView: "week",
+        dataSource: [{
+            text: "a",
+            startDate: new Date(2015, 6, 7, 10),
+            endDate: new Date(2015, 6, 7, 10, 30),
+            ownerId: { id: 2 }
+        }],
+        startDayHour: 9,
+        endDayHour: 12,
+        groups: ["ownerId.id"],
+        resources: [
+            {
+                field: "ownerId.id",
+                allowMultiple: false,
+                dataSource: [
+                    { id: 1, text: "one" },
+                    { id: 2, text: "two" }
+                ]
+            }
+        ],
+        width: 800
+    });
+    var $appointment = $(this.instance.$element().find("." + APPOINTMENT_CLASS)).eq(0);
+
+    $appointment.trigger(dragEvents.start);
+
+    var startPosition = translator.locate($appointment);
+    assert.equal(startPosition.top, 500, "Start position is correct");
+    assert.equal(startPosition.left, 370, "Start position is correct");
+
+    $(this.instance.$element().find("." + DATE_TABLE_CELL_CLASS)).eq(7).trigger(dragEvents.enter);
+    $appointment.trigger(dragEvents.end);
+
+    this.clock.tick();
+    var appointmentData = dataUtils.data(this.instance.$element().find("." + APPOINTMENT_CLASS).get(0), "dxItemData");
+
+    assert.deepEqual(appointmentData.startDate, new Date(2015, 6, 5, 9, 30), "Start date is correct");
+    assert.deepEqual(appointmentData.endDate, new Date(2015, 6, 5, 10, 0), "End date is correct");
+    assert.deepEqual(appointmentData.ownerId, { id: [1] }, "Resources is correct");
+});
+
 QUnit.test("Appointment should be rendered correctly after changing view (T593699)", function(assert) {
     this.createInstance({
         currentDate: new Date(2015, 6, 10),

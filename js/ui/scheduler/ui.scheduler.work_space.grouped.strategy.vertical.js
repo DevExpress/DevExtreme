@@ -96,7 +96,11 @@ var VerticalGroupedStrategy = GroupedStrategy.inherit({
         }
 
         return minWidth;
-    }
+    },
+
+    getAllDayHeight: function() {
+        return 0;
+    },
 });
 
 module.exports = VerticalGroupedStrategy;
