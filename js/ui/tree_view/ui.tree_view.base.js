@@ -9,7 +9,6 @@ var $ = require("../../core/renderer"),
     windowUtils = require("../../core/utils/window"),
     typeUtils = require("../../core/utils/type"),
     extend = require("../../core/utils/extend").extend,
-    inArray = require("../../core/utils/array").inArray,
     each = require("../../core/utils/iterator").each,
     getPublicElement = require("../../core/utils/dom").getPublicElement,
     CheckBox = require("../check_box"),
@@ -1189,9 +1188,17 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         that._dataSource.filter(that._combineFilter());
 
         return that._dataSource.load().done(function(newItems) {
-            var areItemsAlreadyPresent = inArray(newItems[0], that.option("items")) + 1;
-            !areItemsAlreadyPresent && that._appendItems(newItems);
+            if(!that._areNodesExists(newItems)) {
+                that._appendItems(newItems);
+            }
         });
+    },
+
+    _areNodesExists: function(newItems, items) {
+        var keyOfRootItem = this.keyOf(newItems[0]),
+            fullData = this._dataAdapter.getFullData();
+
+        return !!this._dataAdapter.getNodeByKey(keyOfRootItem, fullData);
     },
 
     _appendItems: function(newItems) {
