@@ -170,7 +170,8 @@ var FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).in
 
     },
 
-    _renderContentImpl: function() {
+    _render: function() {
+        this.callBase();
         this._headerFilterView.render(this.$element());
     },
 
