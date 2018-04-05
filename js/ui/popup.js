@@ -349,14 +349,6 @@ var Popup = Overlay.inherit({
         ]);
     },
 
-    _setDeprecatedOptions: function() {
-        this.callBase();
-
-        extend(this._deprecatedOptions, {
-            "buttons": { since: "16.1", alias: "toolbarItems" }
-        });
-    },
-
     _iosAnimation: {
         show: {
             type: "slide",
