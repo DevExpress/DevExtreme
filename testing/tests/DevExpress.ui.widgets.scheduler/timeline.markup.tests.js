@@ -468,6 +468,12 @@ QUnit.module("TimelineDay with horizontal grouping markup", timelineDayModuleCon
         assert.equal($groupRows.length, 1, "Row count is OK");
         assert.equal($firstRowCells.length, 2, "Cell count is OK");
     });
+
+    QUnit.test("Last group cell should have right class", (assert) => {
+        let $element = this.instance.$element();
+
+        assert.ok($element.find(".dx-scheduler-date-table-cell").eq(47).hasClass("dx-scheduler-last-group-cell"), 'cell has correct class');
+    });
 });
 
 let timelineWeekModuleConfig = {

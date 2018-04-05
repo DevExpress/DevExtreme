@@ -94,6 +94,7 @@ var COMPONENT_CLASS = "dx-scheduler-work-space",
     CELL_DATA = "dxCellData",
 
     DATE_TABLE_MIN_CELL_WIDTH = 75,
+    DATE_TABLE_CELL_BORDER = 1,
 
     DAY_MS = toMs("day"),
     HOUR_MS = toMs("hour");
@@ -1753,7 +1754,7 @@ var SchedulerWorkSpace = Widget.inherit({
     _setHorizontalGroupHeaderCellsHeight: function() {
         var cellHeight = this.getCellHeight(),
             allDayRowHeight = this.option("showAllDayPanel") && this.supportAllDayRow() ? cellHeight : 0,
-            dateTableHeight = cellHeight * this._getRowCount();
+            dateTableHeight = cellHeight * this._getRowCount() - DATE_TABLE_CELL_BORDER * 2;
 
         this._getGroupHeaderCellsContent().css("height", dateTableHeight + allDayRowHeight);
     },

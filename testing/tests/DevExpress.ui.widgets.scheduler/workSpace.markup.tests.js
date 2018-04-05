@@ -32,6 +32,8 @@ const WORKSPACE_CLASS = "dx-scheduler-work-space",
     HORIZONTAL_SIZES_CLASS = "dx-scheduler-cell-sizes-horizontal",
     VERTICAL_SIZES_CLASS = "dx-scheduler-cell-sizes-vertical";
 
+const DATE_TABLE_CELL_BORDER = 1;
+
 const toSelector = cssClass => "." + cssClass;
 
 const stubInvokeMethod = function(instance, options) {
@@ -837,6 +839,14 @@ QUnit.module("Workspace Week markup with horizontal grouping", weekWithGroupingM
             a: 1
         }, "Cell group is OK");
         assert.deepEqual($cells.eq(cellCount / 2).data("dxCellData").groups, { a: 2 }, "Cell group is OK");
+    });
+
+    QUnit.test("Group header cells should have a correct height", (assert) => {
+        let $element = this.instance.$element(),
+            $groupHeaderCells = $element.find(".dx-scheduler-group-header-content"),
+            cellHeight = $element.find(".dx-scheduler-date-table tbody tr>td").first().outerHeight();
+
+        assert.equal($groupHeaderCells.eq(0).outerHeight(), cellHeight * 24 - DATE_TABLE_CELL_BORDER * 2, "Group header height is OK");
     });
 });
 
