@@ -5333,6 +5333,61 @@ QUnit.test("Appointments should be rendered correctly in vertical grouped worksp
     assert.equal($appointments.eq(1).position().left, 314, "correct left position of appointment");
 });
 
+QUnit.test("Rival allDay appointments from different groups should be rendered correctly in vertical grouped workspace Week", function(assert) {
+    this.createInstance({
+        dataSource: [
+            {
+                text: "1",
+                id: 1,
+                allDay: true,
+                startDate: new Date(2018, 4, 21, 9, 30),
+                endDate: new Date(2018, 4, 21, 11, 30)
+            },
+            {
+                text: "2",
+                id: 2,
+                allDay: true,
+                startDate: new Date(2018, 4, 21, 9, 30),
+                endDate: new Date(2018, 4, 21, 11, 30)
+            },
+        ],
+        views: [{
+            type: "week",
+            groupOrientation: "vertical"
+        }],
+        currentView: "week",
+        groups: ["id"],
+        resources: [
+            {
+                field: "id",
+                dataSource: [
+                    { id: 1, text: "one" },
+                    { id: 2, text: "two" }
+                ]
+            }
+        ],
+        currentDate: new Date(2018, 4, 21),
+        startDayHour: 9,
+        endDayHour: 15,
+        cellDuration: 60,
+        showAllDayPanel: true,
+        maxAppointmentsPerCell: 'auto'
+    });
+
+    var $appointments = $(this.instance.$element()).find("." + APPOINTMENT_CLASS);
+    assert.equal($appointments.length, 2, "two appointments are rendered");
+
+    var cellHeight = $(this.instance.$element()).find("." + DATE_TABLE_CELL_CLASS).first().outerHeight();
+
+    assert.equal($appointments.eq(0).position().top, 0, "correct top position of allDay appointment");
+    assert.roughEqual($appointments.eq(0).outerHeight(), 0.5 * cellHeight, 2, "correct size of allDay appointment");
+    assert.equal($appointments.eq(0).position().left, 314, "correct left position of allDay appointment");
+
+    assert.equal($appointments.eq(1).position().top, 7 * cellHeight, "correct top position of allDay appointment");
+    assert.roughEqual($appointments.eq(1).outerHeight(), 0.5 * cellHeight, 2, "correct size of allDay appointment");
+    assert.equal($appointments.eq(1).position().left, 314, "correct left position of allDay appointment");
+});
+
 QUnit.test("Appointments should be rendered correctly in vertical grouped workspace Month", function(assert) {
     this.createInstance({
         dataSource: [{
