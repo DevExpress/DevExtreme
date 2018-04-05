@@ -173,7 +173,7 @@ module.exports = {
                 /**
                  * @name GridBaseOptions_scrolling_columnRenderingMode
                  * @publicName columnRenderingMode
-                 * @type Enums.ColumnScrollingMode
+                 * @type Enums.GridColumnRenderingMode
                  * @default "standard"
                  */
                 columnRenderingMode: "standard",
