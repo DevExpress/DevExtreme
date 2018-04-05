@@ -789,6 +789,11 @@ var ListBase = CollectionWidget.inherit({
 
     _collapseGroupHandler: function($group, toggle) {
         var deferred = new Deferred();
+
+        if($group.hasClass(LIST_GROUP_COLLAPSED_CLASS) === toggle) {
+            return deferred.resolve();
+        }
+
         var $groupBody = $group.children("." + LIST_GROUP_BODY_CLASS);
 
         var startHeight = $groupBody.outerHeight();
