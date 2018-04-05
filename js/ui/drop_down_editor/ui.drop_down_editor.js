@@ -105,22 +105,6 @@ var DropDownEditor = TextBox.inherit({
         });
     },
 
-    _setDeprecatedOptions: function() {
-        this.callBase();
-
-        extend(this._deprecatedOptions, {
-            /**
-             * @name dxDropDownEditorOptions_fieldEditEnabled
-             * @publicName fieldEditEnabled
-             * @deprecated dxDropDownEditorOptions_acceptCustomValue
-             * @inheritdoc
-             */
-            "fieldEditEnabled": { since: "16.1", alias: "acceptCustomValue" },
-
-            "showDropButton": { since: "17.1", alias: "showDropDownButton" }
-        });
-    },
-
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             /**
