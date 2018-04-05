@@ -214,14 +214,18 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
 
     _sortCondition: function(a, b) {
         var allDayCondition = a.allDay - b.allDay,
-            condition = this.instance._groupOrientation === "horizontal" ? this._rowCondition(a, b) : this._columnCondition(a, b),
+            isAllDay = a.allDay && b.allDay,
+            condition = this.instance._groupOrientation === "vertical" && isAllDay ? this._columnCondition(a, b) : this._rowCondition(a, b),
             result = allDayCondition ? allDayCondition : condition;
-
         return this._fixUnstableSorting(result, a, b);
     },
 
     _getDynamicAppointmentCountPerCell: function() {
-        return this.instance.option("_appointmentCountPerCell");
+        if(this.instance._groupOrientation === "vertical") {
+            return this.callBase();
+        } else {
+            return this.instance.option("_appointmentCountPerCell");
+        }
     },
 
     _getAllDayAppointmentGeometry: function(coordinates) {
@@ -236,7 +240,7 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
         }
 
         var config = this.callBase(coordinates);
-        if(coordinates.count <= this.instance.option("_appointmentCountPerCell")) {
+        if(coordinates.count <= this._getDynamicAppointmentCountPerCell()) {
             config.offset = 0;
         }
 
