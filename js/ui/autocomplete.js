@@ -108,13 +108,6 @@ var Autocomplete = DropDownList.inherit({
             searchEnabled: true
 
             /**
-            * @name dxAutocompleteOptions_fieldEditEnabled
-            * @publicName fieldEditEnabled
-            * @hidden
-            * @inheritdoc
-            */
-
-            /**
             * @name dxAutocompleteOptions_acceptCustomValue
             * @publicName acceptCustomValue
             * @hidden
@@ -131,13 +124,6 @@ var Autocomplete = DropDownList.inherit({
             /**
             * @name dxAutocompleteOptions_showDataBeforeSearch
             * @publicName showDataBeforeSearch
-            * @hidden
-            * @inheritdoc
-            */
-
-            /**
-            * @name dxAutocompleteOptions_pagingEnabled
-            * @publicName pagingEnabled
             * @hidden
             * @inheritdoc
             */

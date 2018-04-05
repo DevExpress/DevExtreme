@@ -403,13 +403,6 @@ var Lookup = DropDownList.inherit({
             */
 
             /**
-            * @name dxLookupOptions_fieldEditEnabled
-            * @publicName fieldEditEnabled
-            * @deprecated
-            * @inheritdoc
-            */
-
-            /**
             * @name dxLookupOptions_acceptCustomValue
             * @publicName acceptCustomValue
             * @hidden

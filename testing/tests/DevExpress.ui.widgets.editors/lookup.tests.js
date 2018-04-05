@@ -2194,7 +2194,7 @@ QUnit.module("list options", {
 QUnit.test("list option bouncing", function(assert) {
     var dataSource = new DataSource({
         store: [1, 2, 3],
-        pageSize: 2
+        paginate: false
     });
 
     var $lookup = $("#lookupOptions").dxLookup({
@@ -2202,7 +2202,6 @@ QUnit.test("list option bouncing", function(assert) {
         pageLoadMode: "scrollBottom",
         nextButtonText: "test",
         pullRefreshEnabled: true,
-        pagingEnabled: false,
         pullingDownText: "testPulling",
         pulledDownText: "testPulled",
         refreshingText: "testRefresh",
@@ -2216,9 +2215,9 @@ QUnit.test("list option bouncing", function(assert) {
     var $list = $(toSelector(LIST_CLASS)),
         list = $list.dxList("instance");
 
-    assert.equal(list.option("pageLoadMode"), "scrollBottom", "showNextButton was bounced");
+    assert.equal(list.option("pageLoadMode"), "scrollBottom", "pageLoadMode was bounced");
     instance.option("pageLoadMode", "nextButton");
-    assert.equal(list.option("pageLoadMode"), "nextButton", "showNextButton was changed");
+    assert.equal(list.option("pageLoadMode"), "nextButton", "pageLoadMode was changed");
 
     assert.equal(list.option("nextButtonText"), "test", "nextButtonText was bounced");
     instance.option("nextButtonText", "testchange");

@@ -16,7 +16,7 @@ QUnit.test("selectAllText", function(assert) {
     assert.equal(treeView._$selectAllItem.dxCheckBox("instance").option("text"), "Select all items");
 });
 
-QUnit.test("selectAllEnabled", function(assert) {
+QUnit.test("selectAll mode", function(assert) {
     var treeView = initTree({
         showCheckBoxesMode: "selectAll",
         items: $.extend(true, [], DATA[5])
