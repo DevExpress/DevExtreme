@@ -105,7 +105,12 @@ var SchedulerWorkSpace = Widget.inherit({
                 e.stopPropagation();
 
                 if(this._focusedCells && this._focusedCells.length) {
-                    this._showAddAppointmentPopup($(this._focusedCells));
+                    var $itemElement = $(this.option("focusedElement"));
+
+                    e.target = this._focusedCells;
+                    this._showPopup = true;
+
+                    this._cellClickAction({ event: e, cellElement: $(this._focusedCells), cellData: this.getCellData($itemElement) });
                 }
             },
             arrowPressHandler = function(e, cell) {
