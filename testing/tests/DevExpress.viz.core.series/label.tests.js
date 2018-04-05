@@ -681,7 +681,7 @@ QUnit.test("Use external connector strategy", function(assert) {
             prepareLabelPoints: function(points) {
                 return [[100, 55]];
             },
-            isRotated: function(bBox, figure) {
+            isHorizontal: function(bBox, figure) {
                 return false;
             },
             findFigurePoint: function(figure, labelPoint) {
