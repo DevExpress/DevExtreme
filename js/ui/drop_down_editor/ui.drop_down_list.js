@@ -615,6 +615,12 @@ var DropDownList = DropDownEditor.inherit({
         return this._needPassDataSourceToList() ? this._dataSource : null;
     },
 
+    _dataSourceOptions: function() {
+        return {
+            paginate: false
+        };
+    },
+
     _dataSourceFromUrlLoadMode: function() {
         return "raw";
     },
