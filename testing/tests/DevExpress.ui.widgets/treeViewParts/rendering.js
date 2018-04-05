@@ -774,6 +774,28 @@ QUnit.test("Dynamic dataSource filter should work correctly", function(assert) {
     assert.equal($treeView.option("items").length, 1, "only birds's children were loaded");
 });
 
+QUnit.test("existed items didn't append twice", function(assert) {
+    var dataSource = new DataSource({
+        store: new CustomStore({
+            load: function(options) {
+                return $.extend(true, [], DATA[4]);
+            }
+        })
+    });
+
+    var treeView = initTree({
+        dataStructure: "plain",
+        keyExpr: "Id",
+        displayExpr: "Name",
+        parentIdExpr: "ParentId",
+        dataSource: dataSource,
+        virtualModeEnabled: true
+    }).dxTreeView("instance");
+
+    treeView.expandItem(1);
+    assert.equal(treeView.option("items").length, 8, "all items were loaded");
+});
+
 QUnit.test("TreeView with empty dataSource should updates after item inserted in the Store", function(assert) {
     var dataSource = new DataSource({
             store: new ArrayStore([])
