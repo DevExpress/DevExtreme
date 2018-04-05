@@ -3,6 +3,8 @@
 var $ = require("../../core/renderer"),
     isNumeric = require("../../core/utils/type").isNumeric,
     each = require("../../core/utils/iterator").each,
+    queryByOptions = require("../../data/store_helper").queryByOptions,
+    query = require("../../data/query"),
     EditStrategy = require("../collection/ui.collection_widget.edit.strategy.plain");
 
 
@@ -144,7 +146,18 @@ var GroupedEditStrategy = EditStrategy.inherit({
         return index;
     },
 
-    getItemsByKeys: function(keys) {
+    _getGroups: function(items) {
+        var dataSource = this._collectionWidget.getDataSource(),
+            group = dataSource && dataSource.group();
+
+        if(group) {
+            return queryByOptions(query(items), { group: group }).toArray();
+        }
+
+        return this._collectionWidget.option("items");
+    },
+
+    getItemsByKeys: function(keys, items) {
         var result = [];
 
         each(keys, function(_, key) {
@@ -160,8 +173,7 @@ var GroupedEditStrategy = EditStrategy.inherit({
                 };
             }.bind(this);
 
-            var itemMeta = getItemMeta(this._collectionWidget.option("items")) ||
-                           getItemMeta(this._collectionWidget.option("selectedItems"));
+            var itemMeta = getItemMeta(this._getGroups(items));
 
             if(!itemMeta) return;
 
