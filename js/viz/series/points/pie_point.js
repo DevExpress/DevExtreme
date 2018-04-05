@@ -151,7 +151,7 @@ module.exports = _extend({}, symbolPoint, {
                 x = x < leftBorderX ? leftBorderX : x;
             }
             coord.x = x;
-        } else if(moveLabelsFromCenter || connectorOffset !== 0) {
+        } else if(moveLabelsFromCenter) {
             if(angleOfPoint <= 90 || angleOfPoint >= 270) {
                 if((x - connectorOffset) < centerX) {
                     x = centerX + connectorOffset;
