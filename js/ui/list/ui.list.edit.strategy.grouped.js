@@ -146,14 +146,19 @@ var GroupedEditStrategy = EditStrategy.inherit({
         return index;
     },
 
-    getItemsByKeys: function(keys, items) {
-        var result = [],
-            dataSource = this._collectionWidget.getDataSource(),
+    _getGroups: function(items) {
+        var dataSource = this._collectionWidget.getDataSource(),
             group = dataSource && dataSource.group();
 
         if(group) {
             return queryByOptions(query(items), { group: group }).toArray();
         }
+
+        return this._collectionWidget.option("items");
+    },
+
+    getItemsByKeys: function(keys, items) {
+        var result = [];
 
         each(keys, function(_, key) {
             var getItemMeta = function(groups) {
@@ -168,8 +173,7 @@ var GroupedEditStrategy = EditStrategy.inherit({
                 };
             }.bind(this);
 
-            var itemMeta = getItemMeta(this._collectionWidget.option("items")) ||
-                           getItemMeta(this._collectionWidget.option("selectedItems"));
+            var itemMeta = getItemMeta(this._getGroups(items));
 
             if(!itemMeta) return;
 
