@@ -306,9 +306,6 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
                     }
                     args.handled = true;
                     break;
-                case "columnFixing":
-                    this._updateSelectColumn();
-                    break;
             }
         },
 
