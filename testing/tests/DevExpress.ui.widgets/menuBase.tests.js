@@ -579,7 +579,7 @@ QUnit.test('Select item on click', function(assert) {
         menuBase = createMenu({
             items: items,
             selectionMode: "single",
-            selectionByClick: true
+            selectByClick: true
         }),
         $item1 = menuBase.element.find('.' + DX_MENU_ITEM_CLASS).eq(0),
         $item2 = menuBase.element.find('.' + DX_MENU_ITEM_CLASS).eq(1);
@@ -608,7 +608,7 @@ QUnit.test('Select item after third click', function(assert) {
         menuBase = createMenu({
             items: items,
             selectionMode: "single",
-            selectionByClick: true
+            selectByClick: true
         }),
         $item1 = menuBase.element.find('.' + DX_MENU_ITEM_CLASS).eq(0);
 
@@ -687,7 +687,7 @@ QUnit.test("fire 'onSelectionChanged' action", function(assert) {
         menuBase = createMenu({
             items: items,
             selectionMode: "single",
-            selectionByClick: true,
+            selectByClick: true,
             onSelectionChanged: function() { actionCount++; }
         }),
         $item1 = menuBase.element.find('.' + DX_MENU_ITEM_CLASS).eq(0),
@@ -712,7 +712,7 @@ QUnit.test("onSelectionChanged should have correct API (T311914)", function(asse
         menuBase = createMenu({
             items: items,
             selectionMode: "single",
-            selectionByClick: true,
+            selectByClick: true,
             onSelectionChanged: function(e) {
                 assert.equal(e.component, this, "e.component should be an instance of menu");
                 assert.ok($(e.element).get(0).nodeType, "e.element should be dom node or jquery object");
@@ -740,7 +740,7 @@ QUnit.test('Prevent selection item on click', function(assert) {
         menuBase = createMenu({
             items: items,
             selectionMode: "single",
-            selectionByClick: true
+            selectByClick: true
         }),
         $items = menuBase.element.find('.' + DX_MENU_ITEM_CLASS),
         $item1 = $items.eq(1),

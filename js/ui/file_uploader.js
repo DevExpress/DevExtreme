@@ -86,27 +86,6 @@ var FileUploader = Editor.inherit({
         });
     },
 
-    _setDeprecatedOptions: function() {
-        this.callBase();
-
-        extend(this._deprecatedOptions, {
-            /**
-            * @name dxFileUploaderOptions_buttonText
-            * @publicName buttonText
-            * @deprecated dxFileUploaderOptions_selectButtonText
-            * @inheritdoc
-            */
-            "buttonText": { since: "15.1", alias: "selectButtonText" },
-            /**
-            * @name dxFileUploaderOptions_values
-            * @publicName values
-            * @deprecated dxFileUploaderOptions_value
-            * @inheritdoc
-            */
-            "values": { since: "16.1", alias: "value" }
-        });
-    },
-
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             /**

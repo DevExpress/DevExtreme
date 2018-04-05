@@ -77,20 +77,6 @@ var TextEditorBase = Editor.inherit({
         };
     },
 
-    _setDeprecatedOptions: function() {
-        this.callBase();
-
-        extend(this._deprecatedOptions, {
-            /**
-            * @name dxTextEditorOptions_attr
-            * @publicName attr
-            * @deprecated dxTextEditorOptions_inputAttr
-            * @inheritdoc
-            */
-            "attr": { since: "16.2", alias: "inputAttr" }
-        });
-    },
-
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             /**

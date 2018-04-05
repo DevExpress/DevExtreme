@@ -14,6 +14,7 @@ var Tooltip = Popover.inherit({
             /**
             * @name dxTooltipOptions_toolbarItems
             * @publicName toolbarItems
+             * @hidden
             * @inheritdoc
             */
             toolbarItems: [],

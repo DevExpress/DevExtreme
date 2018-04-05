@@ -445,43 +445,6 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         });
     },
 
-    _setDeprecatedOptions: function() {
-        this.callBase();
-
-        extend(this._deprecatedOptions, {
-            /**
-            * @name dxTreeViewOptions_showCheckBoxes
-            * @publicName showCheckBoxes
-            * @type boolean
-            * @default false
-            * @deprecated dxTreeViewOptions_showCheckBoxesMode
-            */
-            "showCheckBoxes": { since: "15.2", message: "use 'showCheckBoxesMode' option instead" },
-
-            /**
-            * @name dxTreeViewOptions_selectAllEnabled
-            * @publicName selectAllEnabled
-            * @type boolean
-            * @default false
-            * @deprecated dxTreeViewOptions_showCheckBoxesMode
-            */
-            "selectAllEnabled": { since: "15.2", message: "use 'showCheckBoxesMode' option instead" },
-
-            /**
-            * @name dxTreeViewOptions_onItemSelected
-            * @publicName onItemSelected
-            * @extends Action
-            * @deprecated dxTreeViewOptions_onItemSelectionChanged
-            * @type function(e)
-            * @type_function_param1 e:object
-             * @type_function_param1_field7 itemElement:dxElement
-             * @type_function_param1_field8 node:dxTreeViewNode
-            * @action
-            */
-            "onItemSelected": { since: "16.1", alias: "onItemSelectionChanged" }
-        });
-    },
-
     // TODO: implement these functions
     _initSelectedItems: commonUtils.noop,
     _syncSelectionOptions: commonUtils.noop,
@@ -533,12 +496,6 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             previousValue = args.previousValue;
 
         switch(name) {
-            case "showCheckBoxes":
-                this.option("showCheckBoxesMode", value ? "normal" : "none");
-                break;
-            case "selectAllEnabled":
-                this.option("showCheckBoxesMode", value ? "selectAll" : "normal");
-                break;
             case "selectAllText":
                 if(this._$selectAllItem) {
                     this._$selectAllItem.dxCheckBox("instance").option("text", value);
@@ -648,7 +605,6 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         this.callBase();
 
         this._initStoreChangeHandlers();
-        this._initCheckBoxesMode();
     },
 
     _dataSourceChangedHandler: function(newItems) {
@@ -891,22 +847,6 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
 
     _selectAllEnabled: function() {
         return this.option("showCheckBoxesMode") === "selectAll";
-    },
-
-    // todo: remove in 16.1 with deprecated showCheckBoxes and selectAllEnabled
-    _initCheckBoxesMode: function() {
-        if(this._showCheckboxes()) {
-            return;
-        }
-
-        this._suppressDeprecatedWarnings();
-
-        var showCheckboxes = this.option("showCheckBoxes"),
-            selectAllEnabled = this.option("selectAllEnabled");
-
-        this._resumeDeprecatedWarnings();
-
-        this.option("showCheckBoxesMode", showCheckboxes ? (selectAllEnabled ? "selectAll" : "normal") : "none");
     },
 
     _renderItems: function($nodeContainer, nodes) {

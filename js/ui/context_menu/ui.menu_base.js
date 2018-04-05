@@ -298,23 +298,6 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
         });
     },
 
-    _setDeprecatedOptions: function() {
-        this.callBase();
-
-        extend(this._deprecatedOptions, {
-
-            /**
-            * @name dxMenuBaseOptions_selectionByClick
-            * @publicName selectionByClick
-            * @type boolean
-            * @deprecated dxMenuBaseOptions_selectByClick
-            * @default false
-            */
-            selectionByClick: { since: "16.1", alias: "selectByClick" }
-
-        });
-    },
-
     _defaultOptionsRules: function() {
         return this.callBase().concat([
             {

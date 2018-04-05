@@ -255,20 +255,6 @@ var TagBox = SelectBox.inherit({
 
     _setNextValue: noop,
 
-    _setDeprecatedOptions: function() {
-        this.callBase();
-
-        extend(this._deprecatedOptions, {
-            /**
-            * @name dxTagBoxOptions_values
-            * @publicName values
-            * @deprecated dxTagBoxOptions_value
-            * @inheritdoc
-            */
-            "values": { since: "16.1", alias: "value" }
-        });
-    },
-
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             /**

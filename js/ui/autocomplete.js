@@ -56,20 +56,6 @@ var Autocomplete = DropDownList.inherit({
         });
     },
 
-    _setDeprecatedOptions: function() {
-        this.callBase();
-
-        extend(this._deprecatedOptions, {
-            /**
-            * @name dxAutocompleteOptions_displayExpr
-            * @publicName displayExpr
-            * @deprecated DataExpressionMixinOptions_valueExpr
-            * @inheritdoc
-            */
-            "displayExpr": { since: "15.2", alias: "valueExpr" }
-        });
-    },
-
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             /**

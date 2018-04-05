@@ -55,20 +55,6 @@ var DropDownMenu = Widget.inherit({
         });
     },
 
-    _setDeprecatedOptions: function() {
-        this.callBase();
-
-        extend(this._deprecatedOptions, {
-            /**
-            * @name dxDropDownMenuOptions_buttonIconSrc
-            * @publicName buttonIconSrc
-            * @deprecated dxDropDownMenuOptions_buttonIcon
-            * @inheritdoc
-            */
-            "buttonIconSrc": { since: "15.1", alias: "buttonIcon" }
-        });
-    },
-
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             /**
