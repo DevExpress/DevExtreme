@@ -74,7 +74,13 @@ var VerticalGroupedStrategy = GroupedStrategy.inherit({
     },
 
     getVerticalMax: function(groupIndex) {
-        return this._workSpace.getMaxAllowedVerticalPosition()[groupIndex];
+        var maxAllowedPosition = this._workSpace.getMaxAllowedVerticalPosition()[groupIndex];
+
+        if(this._workSpace.supportAllDayRow() && this._workSpace.option("showAllDayPanel")) {
+            maxAllowedPosition += maxAllowedPosition + this._workSpace.getCellHeight() * groupIndex;
+        }
+
+        return maxAllowedPosition;
     },
 
     calculateTimeCellRepeatCount: function() {

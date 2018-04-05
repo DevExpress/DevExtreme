@@ -5441,6 +5441,47 @@ QUnit.test("Rival appointments from one group should be rendered correctly in ve
     assert.equal($appointments.eq(1).position().left, 428, "correct left position of appointment");
 });
 
+QUnit.test("Appointment in bottom cell should be rendered cirrectly in vertical grouped workspace Week", function(assert) {
+    this.createInstance({
+        dataSource: [
+            {
+                text: "1",
+                id: 2,
+                startDate: new Date(2018, 4, 22, 13, 0),
+                endDate: new Date(2018, 4, 22, 17, 30)
+            },
+        ],
+        views: [{
+            type: "week",
+            groupOrientation: "vertical"
+        }],
+        currentView: "week",
+        groups: ["id"],
+        resources: [
+            {
+                field: "id",
+                dataSource: [
+                    { id: 1, text: "one" },
+                    { id: 2, text: "two" }
+                ]
+            }
+        ],
+        currentDate: new Date(2018, 4, 21),
+        startDayHour: 9,
+        endDayHour: 15,
+        cellDuration: 60,
+        showAllDayPanel: true,
+        maxAppointmentsPerCell: 'auto'
+    });
+
+    var $appointments = $(this.instance.$element()).find("." + APPOINTMENT_CLASS);
+
+    var cellHeight = $(this.instance.$element()).find("." + DATE_TABLE_CELL_CLASS).first().outerHeight();
+
+    assert.equal($appointments.eq(0).position().top, 12 * cellHeight, "correct top position of appointment");
+    assert.roughEqual($appointments.eq(0).outerHeight(), 100, 2, "correct size of appointment");
+});
+
 QUnit.test("Appointments should be rendered correctly in vertical grouped workspace Month", function(assert) {
     this.createInstance({
         dataSource: [{
