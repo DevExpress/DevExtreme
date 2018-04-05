@@ -1279,7 +1279,6 @@ testComponentDefaults(Tabs,
     { },
     {
         useInkRipple: true,
-        showNavButtons: false,
         selectOnFocus: false
     },
     function() {
