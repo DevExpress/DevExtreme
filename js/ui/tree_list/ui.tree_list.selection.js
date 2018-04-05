@@ -397,7 +397,7 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
                         result = [];
 
                     keys.forEach(key => {
-                        var parentKeys = that._getSelectedParentKeys(key, keys);
+                        const parentKeys = that._getSelectedParentKeys(key, keys);
                         !parentKeys.length && result.push(key);
                     });
 
