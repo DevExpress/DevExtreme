@@ -1,8 +1,9 @@
 .dx-size-default() {
-    @MATERIAL_ACCORDION_TITLE_PADDING: 9px 12px;
-    @MATERIAL_ACCORDION_BODY_PADDING: 8px 12px 22px;
+    @MATERIAL_ACCORDION_TITLE_PADDING: 16px 24px;
+    @MATERIAL_ACCORDION_OPENED_TITLE_PADDING: 24px 24px;
+    @MATERIAL_ACCORDION_BODY_PADDING: 24px;
 
-    @MATERIAL_ACCORDION_ARROW_LINE_HEIGHT: 24px;
+    @MATERIAL_ACCORDION_ARROW_LINE_HEIGHT: 16px;
 }
 
 .dx-size-compact() {
@@ -20,19 +21,14 @@
 }
 
 .dx-accordion-item {
-    border: 1px solid transparent;
-    border-top-color: @accordion-item-border-color;
+    border-top: 1px solid @accordion-item-border-color;
 
     &:last-child {
         border-bottom: 1px solid @accordion-item-border-color;
     }
 
-    &.dx-state-active:not(.dx-accordion-item-opened) {
-        .dx-icon {
-            color: @accordion-icon-active-color;
-        }
-
-        & > .dx-accordion-item-title {
+    &.dx-state-active, &.dx-state-focused {
+        > .dx-accordion-item-title {
             color: @accordion-title-active-color;
             background-color: @accordion-title-active-bg;
         }
@@ -42,35 +38,15 @@
         & > .dx-accordion-item-title {
             background-color: @accordion-item-hover-bg;
         }
-
-        &:not(:last-child):not(.dx-accordion-item-opened):not(.dx-state-focused) {
-            border-bottom-color: @accordion-item-hover-bg;
-        }
     }
 }
 
 .dx-accordion-item-opened {
-    border-color: @accordion-item-border-color;
-
-    &.dx-state-hover {
-        & > .dx-accordion-item-title {
-            background-color: @accordion-item-title-opened-bg;
-        }
-    }
-
     & > .dx-accordion-item-title {
-        background-color: @accordion-item-title-opened-bg;
+        padding: @MATERIAL_ACCORDION_OPENED_TITLE_PADDING;
 
         &:before {
             content: "\f014";
-        }
-    }
-
-    + .dx-accordion-item {
-        border-top-color: transparent;
-
-        &.dx-state-hover:not(.dx-state-focused) {
-            border-top-color: @accordion-item-hover-bg;
         }
     }
 }
@@ -78,7 +54,8 @@
 .dx-accordion-item-title {
     color: @accordion-title-color;
     padding: @MATERIAL_ACCORDION_TITLE_PADDING;
-    font-size: @MATERIAL_S_FONT_SIZE;
+    font-size: 15px;
+    line-height: @MATERIAL_ACCORDION_ARROW_LINE_HEIGHT;
 
     &:before {
         font-weight: normal;
@@ -86,16 +63,9 @@
         content: "\f016";
         font-family: DXIcons;
         font-size: @MATERIAL_BASE_ICON_SIZE;
-        margin-left: @MATERIAL_BASE_ICON_SIZE/2;
+        margin-left: 16px;
         margin-right: 0;
         line-height: @MATERIAL_ACCORDION_ARROW_LINE_HEIGHT;
-    }
-
-    .dx-icon {
-        .dx-icon-sizing(@MATERIAL_BASE_ICON_SIZE);
-        .dx-icon-margin(@MATERIAL_BASE_ICON_SIZE/2);
-        display: inline-block;
-        color: @accordion-icon-color;
     }
 }
 
@@ -105,15 +75,9 @@
     }
 }
 
-.dx-state-focused {
-    &.dx-accordion-item {
-        border-color: @accordion-item-focused-border-color;
-    }
-}
-
 .dx-accordion-item-body {
     padding: @MATERIAL_ACCORDION_BODY_PADDING;
-    font-size: @MATERIAL_BASE_FONT_SIZE;
+    font-size: 12px;
 }
 
 .dx-rtl {
