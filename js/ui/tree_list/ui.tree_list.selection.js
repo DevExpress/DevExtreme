@@ -461,31 +461,31 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
                 * @return Array<any>
                 */
                 getSelectedRowKeys(mode) {
-                    var that = this,
-                        selectedRowKeys = [];
+                    var that = this;
 
-                    if(that._dataController) {
-                        if(mode === true) {
-                            errors.log("W0002", "dxTreeList", "getSelectedRowKeys(leavesOnly)", "18.1", "Use the 'getSelectedRowKeys(mode)' method with a string parameter instead");
+                    if(!that._dataController) {
+                        return [];
+                    }
+
+                    if(mode === true) {
+                        errors.log("W0002", "dxTreeList", "getSelectedRowKeys(leavesOnly)", "18.1", "Use the 'getSelectedRowKeys(mode)' method with a string parameter instead");
+                    }
+
+                    var selectedRowKeys = that.callBase.apply(that, arguments);
+
+                    if(mode) {
+                        if(this.isRecursiveSelection()) {
+                            selectedRowKeys = this._getAllSelectedRowKeys(selectedRowKeys);
                         }
 
-                        selectedRowKeys = that.callBase.apply(that, arguments);
-
-                        if(mode) {
-                            if(this.isRecursiveSelection()) {
-                                selectedRowKeys = this._getAllSelectedRowKeys(selectedRowKeys);
-                            }
-
-                            if(mode !== "all") {
-                                if(mode === "excludeRecursive") {
-                                    selectedRowKeys = that._getParentSelectedRowKeys(selectedRowKeys);
-                                } else if(that._isModeLeavesOnly(mode)) {
-                                    selectedRowKeys = that._getLeafSelectedRowKeys(selectedRowKeys);
-                                }
+                        if(mode !== "all") {
+                            if(mode === "excludeRecursive") {
+                                selectedRowKeys = that._getParentSelectedRowKeys(selectedRowKeys);
+                            } else if(that._isModeLeavesOnly(mode)) {
+                                selectedRowKeys = that._getLeafSelectedRowKeys(selectedRowKeys);
                             }
                         }
                     }
-
                     return selectedRowKeys;
                 }
             }
