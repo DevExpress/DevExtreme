@@ -1078,7 +1078,7 @@ QUnit.test("T586419. not columns, move from center", function(assert) {
     assert.equal(point4._label.shift.args[0][0], 280);
 });
 
-QUnit.test("Not columns, do not move from center but with connector - correct x coordinate by connector offset", function(assert) {
+QUnit.test("Not columns, move from center but with connector - correct x coordinate by connector offset", function(assert) {
     this.options.label.position = "outside";
     this.options.label.connectorOffset = 20;
     var point1 = createPointWithStubLabel.call(this, { 0: 55, 10: 45, 20: 35 }, { x: 305, y: 10, width: 10, height: 10 }),
@@ -1086,10 +1086,10 @@ QUnit.test("Not columns, do not move from center but with connector - correct x 
         point3 = createPointWithStubLabel.call(this, { 0: 55, 10: 45, 20: 35 }, { x: 330, y: 10, width: 10, height: 10 }),
         point4 = createPointWithStubLabel.call(this, { 0: 145, 10: 135, 20: 125 }, { x: 260, y: 10, width: 10, height: 10 });
 
-    point1.updateLabelCoord();
-    point2.updateLabelCoord();
-    point3.updateLabelCoord();
-    point4.updateLabelCoord();
+    point1.updateLabelCoord(true);
+    point2.updateLabelCoord(true);
+    point3.updateLabelCoord(true);
+    point4.updateLabelCoord(true);
 
     assert.equal(point1._label.shift.args[0][0], 320);
     assert.equal(point2._label.shift.args[0][0], 270);
