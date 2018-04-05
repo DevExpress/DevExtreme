@@ -26,6 +26,8 @@ var $ = require("jquery"),
 
 require("ui/scheduler/ui.scheduler");
 
+var DATE_TABLE_CELL_BORDER = 1;
+
 QUnit.module("Integration: Work space", {
     beforeEach: function() {
         fx.off = true;
@@ -1519,7 +1521,7 @@ QUnit.test("Group header should contain group header content with right height, 
         $headerContents = header.find(".dx-scheduler-group-header-content"),
         cellHeight = this.instance.$element().find(".dx-scheduler-date-table-cell").eq(1).outerHeight();
 
-    assert.equal($headerContents.eq(0).outerHeight(), 11 * cellHeight, "Group header content has right height");
+    assert.equal($headerContents.eq(0).outerHeight(), 11 * cellHeight - 2 * DATE_TABLE_CELL_BORDER, "Group header content has right height");
 });
 
 QUnit.test("WorkSpace should be refreshed after groups changed", function(assert) {

@@ -2233,7 +2233,6 @@
                 flex-grow: 1;
                 flex-basis: 0;
 
-                border-left: @SCHEDULER_ACCENT_BORDER;
                 .flex-container(row, nowrap);
             }
 
@@ -2260,11 +2259,12 @@
         .dx-scheduler-group-header {
             height: auto;
             text-align: center;
-            border-bottom: @SCHEDULER_BASE_BORDER;
+            border-bottom: 2px solid @SCHEDULER_BASE_BORDER_COLOR;
+            padding: 0;
         }
         
         .dx-scheduler-header-panel {
-            border-bottom: 2px solid @SCHEDULER_BASE_BORDER_COLOR;
+            border-bottom: 1px solid @SCHEDULER_BASE_BORDER_COLOR;
         }
     
         &.dx-scheduler-work-space-day,
@@ -2276,7 +2276,6 @@
                 height: 50px !important;
                 line-height: 50px !important;
                 border-bottom: @SCHEDULER_BASE_BORDER;
-                border-right: @SCHEDULER_BASE_BORDER;
             }
         }
 
@@ -2301,17 +2300,16 @@
                 > div{
                     margin-top: 0px;
                 }
-        
             }  
 
             &.dx-scheduler-last-group-cell {
-                border-bottom: none;
+                border-bottom: 2px solid @SCHEDULER_BASE_BORDER_COLOR;
             } 
         }
 
         .dx-scheduler-date-table-cell {
             &.dx-scheduler-last-group-cell {
-                border-bottom: @SCHEDULER_BASE_BORDER;
+                border-bottom: 2px solid @SCHEDULER_BASE_BORDER_COLOR;
             }   
         }
 

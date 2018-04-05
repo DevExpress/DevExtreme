@@ -109,7 +109,7 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
     },
 
     _needApplyLastGroupCellClass: function() {
-        return false;
+        return true;
     },
 
     _calculateHiddenInterval: function(rowIndex, cellIndex) {
@@ -350,7 +350,6 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
             rowIndex: 0
         };
     },
-
 
     _getCellByCoordinates: function(cellCoordinates, groupIndex) {
         var indexes = this._groupedStrategy.prepareCellIndexes(cellCoordinates, groupIndex);
