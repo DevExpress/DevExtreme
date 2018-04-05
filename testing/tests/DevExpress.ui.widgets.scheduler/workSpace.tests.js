@@ -1281,6 +1281,30 @@ QUnit.testStart(function() {
         }, "Arguments are OK");
     });
 
+    QUnit.test("Workspace should handle enter/space key correctly if e.cancel=true", function(assert) {
+        var $element = $("#scheduler-work-space").dxSchedulerWorkSpaceMonth({
+                focusStateEnabled: true,
+                firstDayOfWeek: 1,
+                editing: true,
+                onCellClick: function(e) {
+                    e.cancel = true;
+                },
+                currentDate: new Date(2015, 3, 1)
+            }),
+            keyboard = keyboardMock($element),
+            instance = $element.dxSchedulerWorkSpaceMonth("instance"),
+            updateSpy = sinon.spy(noop);
+
+        instance.notifyObserver = updateSpy;
+
+        $($element.find("." + CELL_CLASS).eq(0)).trigger("focusin");
+        keyboard.keyDown("enter");
+        $($element).trigger("focusin");
+        keyboard.keyDown("enter");
+
+        assert.notOk(updateSpy.called, "Observer method was not called if e.cancel = true");
+    });
+
     QUnit.test("Workspace should allow select several cells with shift & arrow", function(assert) {
         var $element = $("#scheduler-work-space").dxSchedulerWorkSpaceMonth({
                 focusStateEnabled: true,
