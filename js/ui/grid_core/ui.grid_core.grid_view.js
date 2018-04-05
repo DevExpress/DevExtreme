@@ -326,7 +326,7 @@ var ResizingController = modules.ViewController.inherit({
 
             if(totalWidth <= contentWidth) {
                 lastColumnIndex = resultWidths.length - 1;
-                while(lastColumnIndex >= 0 && visibleColumns[lastColumnIndex] && (visibleColumns[lastColumnIndex].command || resultWidths[lastColumnIndex] === HIDDEN_COLUMNS_WIDTH || visibleColumns[lastColumnIndex].fixed)) {
+                while(lastColumnIndex >= 0 && visibleColumns[lastColumnIndex] && (visibleColumns[lastColumnIndex].command || resultWidths[lastColumnIndex] === HIDDEN_COLUMNS_WIDTH || visibleColumns[lastColumnIndex].fixed || visibleColumns[lastColumnIndex].allowResizing === false)) {
                     lastColumnIndex--;
                 }
                 if(lastColumnIndex >= 0) {
