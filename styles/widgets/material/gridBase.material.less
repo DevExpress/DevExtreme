@@ -24,6 +24,8 @@
     @MATERIAL_GRID_BASE_COMMAND_EDIT_COLUMN_WIDTH: 115px;
     @MATERIAL_GRID_BASE_ADAPTIVE_COLUMN_HEIGHT: 40px;
     @MATERIAL_GRID_BASE_TREEVIEW_SEARCH_MARGIN: 10px;
+    @MATERIAL_COMMAND_EDIT_ICON_SIZE: 18px;
+    @MATERIAL_COMMAND_EDIT_ICON_MARGIN: 5px;
 }
 
 .dx-size-compact() {
@@ -68,7 +70,7 @@
             .dx-menu-item {
                 .dx-menu-item-content {
                     padding: @MATERIAL_GRID_BASE_MENU_ITEM_PADDING;
-    
+
                     .dx-icon {
                         .dx-icon-sizing(@MATERIAL_GRID_BASE_FILTER_ICON_SIZE);
                         margin: 0px 3px;
@@ -87,7 +89,7 @@
                 }
             }
         }
-    
+
         .dx-editor-with-menu {
             height: @MATERIAL_GRID_BASE_CELL_HEIGHT;
             .dx-menu-item-content {
@@ -273,6 +275,11 @@
                     padding: 0 4px 0 8px;
                     line-height: 0;
                 }
+            }
+
+            .dx-command-edit-with-icons .dx-link {
+                .dx-icon-sizing(@MATERIAL_COMMAND_EDIT_ICON_SIZE);
+                .dx-icon-margin(@MATERIAL_COMMAND_EDIT_ICON_MARGIN);
             }
         }
     }
@@ -609,7 +616,7 @@
             padding: @MATERIAL_GRID_BASE_CELL_VERTICAL_PADDING 0 @MATERIAL_GRID_BASE_CELL_VERTICAL_PADDING @MATERIAL_GRID_BASE_TEXTEDITOR_INPUT_PADDING;
         }
 
-        .dx-@{widgetName} .dx-@{widgetName}-table & { 
+        .dx-@{widgetName} .dx-@{widgetName}-table & {
             > td {
                 padding-top: 0;
                 padding-bottom: 0;
@@ -954,12 +961,12 @@
                         padding-left: @MATERIAL_GRID_BASE_CELL_HORIZONTAL_PADDING;
                         padding-right: @MATERIAL_GRID_BASE_CELL_FIRST_COLUMN_PADDING;
                     }
-    
+
                     &:last-of-type {
                         padding-right: @MATERIAL_GRID_BASE_CELL_HORIZONTAL_PADDING;
                         padding-left: @MATERIAL_GRID_BASE_CELL_LAST_COLUMN_PADDING;
                     }
-    
+
                     &.dx-command-select {
                         padding-right: @MATERIAL_GRID_BASE_CELL_FIRST_COLUMN_PADDING;
                         padding-left: @MATERIAL_GRID_BASE_CELL_FIRST_COLUMN_PADDING - @MATERIAL_GRID_BASE_CELL_HORIZONTAL_PADDING;
