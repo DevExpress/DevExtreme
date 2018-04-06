@@ -1166,20 +1166,6 @@ var Scheduler = Widget.inherit({
         ]);
     },
 
-    _setDeprecatedOptions: function() {
-        this.callBase();
-
-        extend(this._deprecatedOptions, {
-                /**
-                * @name dxSchedulerOptions_horizontalScrollingEnabled
-                * @publicName horizontalScrollingEnabled
-                * @deprecated dxSchedulerOptions_crossScrollingEnabled
-                * @inheritdoc
-                */
-            "horizontalScrollingEnabled": { since: "16.1", alias: "crossScrollingEnabled" }
-        });
-    },
-
     _optionChanged: function(args) {
         var value = args.value,
             name = args.name;
