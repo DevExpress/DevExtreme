@@ -1,49 +1,42 @@
 "use strict";
 
-var vizUtils = require("../core/utils"),
-    typeUtils = require("../../core/utils/type"),
-    formatHelper = require("../../format_helper"),
-    each = require("../../core/utils/iterator").each,
-    extend = require("../../core/utils/extend").extend,
-    inArray = require("../../core/utils/array").inArray,
-    constants = require("./axes_constants"),
-    parseUtils = require("../components/parse_utils"),
-    tickGeneratorModule = require("./tick_generator"),
-    Translator2DModule = require("../translators/translator2d"),
-    rangeModule = require("../translators/range"),
-    tick = require("./tick").tick,
-    _format = require("./smart_formatter").smartFormatter,
-    adjust = require("../../core/utils/math").adjust,
-    dateToMilliseconds = require("../../core/utils/date").dateToMilliseconds,
-    convertTicksToValues = constants.convertTicksToValues,
+import { smartFormatter as _format, formatRange } from "./smart_formatter";
+import vizUtils from "../core/utils";
+import { isDefined, isFunction, isNumeric } from "../../core/utils/type";
+import constants from "./axes_constants";
+import { extend } from "../../core/utils/extend";
+import { inArray } from "../../core/utils/array";
+import formatHelper from "../../format_helper";
+import parseUtils from "../components/parse_utils";
+import tickGeneratorModule from "./tick_generator";
+import Translator2DModule from "../translators/translator2d";
+import rangeModule from "../translators/range";
+import { tick } from "./tick";
+import { adjust } from "../../core/utils/math";
+import { dateToMilliseconds } from "../../core/utils/date";
+import { noop as _noop } from "../../core/utils/common";
+import xyMethods from "./xy_axes";
+import polarMethods from "./polar_axes";
 
-    isDefined = typeUtils.isDefined,
-    isFunction = typeUtils.isFunction,
-    isNumeric = typeUtils.isNumeric,
-    patchFontOptions = vizUtils.patchFontOptions,
+const convertTicksToValues = constants.convertTicksToValues;
+const patchFontOptions = vizUtils.patchFontOptions;
+const _math = Math;
+const _abs = _math.abs;
+const _max = _math.max;
+const _min = _math.min;
 
-    _math = Math,
-    _abs = _math.abs,
-    _max = _math.max,
-    _min = _math.min,
+const DEFAULT_AXIS_LABEL_SPACING = 5;
+const MAX_GRID_BORDER_ADHENSION = 4;
 
-    _each = each,
-    _noop = require("../../core/utils/common").noop,
+const TOP = constants.top;
+const BOTTOM = constants.bottom;
+const LEFT = constants.left;
+const RIGHT = constants.right;
+const CENTER = constants.center;
 
-    DEFAULT_AXIS_LABEL_SPACING = 5,
-    MAX_GRID_BORDER_ADHENSION = 4,
-
-    TOP = constants.top,
-    BOTTOM = constants.bottom,
-    LEFT = constants.left,
-    RIGHT = constants.right,
-    CENTER = constants.center,
-
-    DEFAULT_AXIS_DIVISION_FACTOR = 50,
-    DEFAULT_MINOR_AXIS_DIVISION_FACTOR = 15,
-    DEFAULT_AGGREGATION_GROUP_WIDTH = 10,
-
-    Axis;
+const DEFAULT_AXIS_DIVISION_FACTOR = 50;
+const DEFAULT_MINOR_AXIS_DIVISION_FACTOR = 15;
+const DEFAULT_AGGREGATION_GROUP_WIDTH = 10;
 
 function getTickGenerator(options, incidentOccurred, skipTickGeneration) {
     return tickGeneratorModule.tickGenerator({
@@ -275,7 +268,7 @@ function configureGenerator(options, axisDivisionFactor, viewPort, screenDelta) 
     };
 }
 
-Axis = exports.Axis = function(renderSettings) {
+export const Axis = function(renderSettings) {
     var that = this;
 
     that._renderer = renderSettings.renderer;
@@ -784,6 +777,10 @@ Axis.prototype = {
         return isFunction(labelOptions.customizeHint) ? labelOptions.customizeHint.call(formatObject, formatObject) : undefined;
     },
 
+    formatRange(startValue, endValue, interval) {
+        return formatRange(startValue, endValue, interval, this.getOptions());
+    },
+
     _setTickOffset: function() {
         var options = this._options,
             discreteAxisDivisionMode = options.discreteAxisDivisionMode;
@@ -869,16 +866,14 @@ Axis.prototype = {
 
         switch(axisType) {
             case "xyAxes":
-                axisTypeMethods = require("./xy_axes");
+                axisTypeMethods = xyMethods;
                 break;
             case "polarAxes":
-                axisTypeMethods = require("./polar_axes");
+                axisTypeMethods = polarMethods;
                 break;
         }
 
-        _each(axisTypeMethods[drawingType], function(methodName, method) {
-            that[methodName] = method;
-        });
+        extend(that, axisTypeMethods[drawingType]);
     },
 
     _getSharpParam: function() {
