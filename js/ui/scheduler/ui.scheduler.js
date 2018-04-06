@@ -2110,6 +2110,10 @@ var Scheduler = Widget.inherit({
         return this._workSpace.getAllDayHeight();
     },
 
+    getWorkSpaceAllDayOffset: function() {
+        return this._workSpace.getAllDayOffset();
+    },
+
     getWorkSpaceHeaderPanelHeight: function() {
         return this._workSpace.getHeaderPanelHeight();
     },

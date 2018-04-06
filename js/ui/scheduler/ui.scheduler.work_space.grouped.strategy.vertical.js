@@ -96,7 +96,11 @@ var VerticalGroupedStrategy = GroupedStrategy.inherit({
         }
 
         return minWidth;
-    }
+    },
+
+    getAllDayOffset: function() {
+        return 0;
+    },
 });
 
 module.exports = VerticalGroupedStrategy;
