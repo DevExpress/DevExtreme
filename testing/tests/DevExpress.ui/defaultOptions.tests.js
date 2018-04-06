@@ -11,6 +11,7 @@ var $ = require("jquery"),
     publicComponentUtils = require("core/utils/public_component"),
 
     ActionSheet = require("ui/action_sheet"),
+    Accordion = require("ui/accordion"),
     Autocomplete = require("ui/autocomplete"),
     Box = require("ui/box"),
     Button = require("ui/button"),
@@ -1396,5 +1397,20 @@ testComponentDefaults(DataGrid,
     },
     function() {
         devices.real(this.originalRealDevice);
+    }
+);
+
+testComponentDefaults(Accordion,
+    {},
+    {
+        animationDuration: 200,
+        _animationEasing: "cubic-bezier(0.4, 0, 0.2, 1)"
+    },
+    function() {
+        this.originalCurrentTheme = themes.current();
+        themes.current("material.light");
+    },
+    function() {
+        themes.current(this.originalCurrentTheme);
     }
 );
