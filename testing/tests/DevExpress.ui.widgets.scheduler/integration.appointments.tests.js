@@ -2546,8 +2546,8 @@ QUnit.test("Appointment should have correct position while dragging from group, 
     $appointment.trigger(dragEvents.start);
 
     var startPosition = translator.locate($appointment);
-    assert.equal(startPosition.top, 500, "Start position is correct");
-    assert.equal(startPosition.left, 370, "Start position is correct");
+    assert.roughEqual(startPosition.top, 500, 1.5, "Start position is correct");
+    assert.roughEqual(startPosition.left, 370, 1.5, "Start position is correct");
 
     $(this.instance.$element().find("." + DATE_TABLE_CELL_CLASS)).eq(7).trigger(dragEvents.enter);
     $appointment.trigger(dragEvents.end);
@@ -2596,8 +2596,8 @@ QUnit.test("Appointment should have correct position while dragging into allDay 
     $appointment.trigger(dragEvents.start);
 
     var startPosition = translator.locate($appointment);
-    assert.equal(startPosition.top, 500, "Start position is correct");
-    assert.equal(startPosition.left, 370, "Start position is correct");
+    assert.roughEqual(startPosition.top, 500, 1.5, "Start position is correct");
+    assert.roughEqual(startPosition.left, 370, 1.5, "Start position is correct");
 
     $(this.instance.$element().find(".dx-scheduler-all-day-table-cell")).eq(11).trigger(dragEvents.enter);
     $appointment.trigger(dragEvents.end);
