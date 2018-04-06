@@ -94,6 +94,7 @@ var COMPONENT_CLASS = "dx-scheduler-work-space",
     CELL_DATA = "dxCellData",
 
     DATE_TABLE_MIN_CELL_WIDTH = 75,
+    DATE_TABLE_CELL_BORDER = 1,
 
     DAY_MS = toMs("day"),
     HOUR_MS = toMs("hour");
@@ -110,7 +111,12 @@ var SchedulerWorkSpace = Widget.inherit({
                 e.stopPropagation();
 
                 if(this._focusedCells && this._focusedCells.length) {
-                    this._showAddAppointmentPopup($(this._focusedCells));
+                    var $itemElement = $(this.option("focusedElement"));
+
+                    e.target = this._focusedCells;
+                    this._showPopup = true;
+
+                    this._cellClickAction({ event: e, cellElement: $(this._focusedCells), cellData: this.getCellData($itemElement) });
                 }
             },
             arrowPressHandler = function(e, cell) {
@@ -401,9 +407,13 @@ var SchedulerWorkSpace = Widget.inherit({
             case "hoursInterval":
             case "firstDayOfWeek":
             case "currentDate":
-            case "groups":
             case "startDate":
-                this._createAllDayPanelElements();
+                this._cleanWorkSpace();
+                break;
+            case "groups":
+                if(this._isVerticalGroupedWorkSpace()) {
+                    this._createAllDayPanelElements();
+                }
                 this._cleanWorkSpace();
                 break;
             case "groupOrientation":
@@ -697,6 +707,7 @@ var SchedulerWorkSpace = Widget.inherit({
         this._dateTableScrollable.$content().append(this._$dateTable);
 
         if(this._isVerticalGroupedWorkSpace()) {
+            this._dateTableScrollable.$content().prepend(this._$allDayContainer);
             this._sidebarScrollable.$content().append(this._$groupTable, this._$timePanel);
         } else {
             this._headerScrollable.$content().append(this._$allDayContainer, this._$allDayPanel);
@@ -1201,7 +1212,8 @@ var SchedulerWorkSpace = Widget.inherit({
             cellClass: this._getAllDayPanelCellClass.bind(this),
             rowClass: ALL_DAY_TABLE_ROW_CLASS,
             cellTemplate: this.option("dataCellTemplate"),
-            getCellData: this._getAllDayCellData.bind(this)
+            getCellData: this._getAllDayCellData.bind(this),
+            groupIndex: index
         }, true);
 
         this._toggleAllDayVisibility();
@@ -1214,7 +1226,7 @@ var SchedulerWorkSpace = Widget.inherit({
         return this._groupedStrategy.addAdditionalGroupCellClasses(cellClass, j + 1);
     },
 
-    _getAllDayCellData: function(cell, rowIndex, cellIndex) {
+    _getAllDayCellData: function(cell, rowIndex, cellIndex, groupIndex) {
         var startDate = this._getDateByCellIndexes(rowIndex, cellIndex);
 
         startDate = dateUtils.trimTime(startDate);
@@ -1225,7 +1237,7 @@ var SchedulerWorkSpace = Widget.inherit({
             allDay: true
         };
 
-        var groups = this._getCellGroups(this._getGroupIndex(rowIndex, cellIndex));
+        var groups = this._getCellGroups(groupIndex || this._getGroupIndex(rowIndex, cellIndex));
 
         if(groups.length) {
             data.groups = {};
@@ -1701,9 +1713,9 @@ var SchedulerWorkSpace = Widget.inherit({
         return this.$element().outerWidth() - this.getTimePanelWidth();
     },
 
-    _getCellPositionByIndex: function(index, groupIndex) {
+    _getCellPositionByIndex: function(index, groupIndex, inAllDayRow) {
         var cellCoordinates = this._getCellCoordinatesByIndex(index),
-            $cell = this._getCellByCoordinates(cellCoordinates, groupIndex),
+            $cell = this._getCellByCoordinates(cellCoordinates, groupIndex, inAllDayRow),
             result = this._getCellPosition($cell);
 
         this.setCellDataCache(cellCoordinates, groupIndex, $cell);
@@ -1726,8 +1738,8 @@ var SchedulerWorkSpace = Widget.inherit({
         return position;
     },
 
-    _getCellByCoordinates: function(cellCoordinates, groupIndex) {
-        var indexes = this._groupedStrategy.prepareCellIndexes(cellCoordinates, groupIndex);
+    _getCellByCoordinates: function(cellCoordinates, groupIndex, inAllDayRow) {
+        var indexes = this._groupedStrategy.prepareCellIndexes(cellCoordinates, groupIndex, inAllDayRow);
 
         return this._$dateTable
             .find("tr")
@@ -1744,7 +1756,7 @@ var SchedulerWorkSpace = Widget.inherit({
     _setHorizontalGroupHeaderCellsHeight: function() {
         var cellHeight = this.getCellHeight(),
             allDayRowHeight = this.option("showAllDayPanel") && this.supportAllDayRow() ? cellHeight : 0,
-            dateTableHeight = cellHeight * this._getRowCount();
+            dateTableHeight = cellHeight * this._getRowCount() - DATE_TABLE_CELL_BORDER * 2;
 
         this._getGroupHeaderCellsContent().css("height", dateTableHeight + allDayRowHeight);
     },
@@ -1840,7 +1852,7 @@ var SchedulerWorkSpace = Widget.inherit({
         groupIndex = groupIndex || 0;
 
         var index = this.getCellIndexByDate(date, inAllDayRow),
-            position = this._getCellPositionByIndex(index, groupIndex),
+            position = this._getCellPositionByIndex(index, groupIndex, inAllDayRow),
             shift = this.getPositionShift(inAllDayRow ? 0 : this.getTimeShift(date));
 
         if(!position) {
@@ -1964,6 +1976,10 @@ var SchedulerWorkSpace = Widget.inherit({
 
     getAllDayHeight: function() {
         return this.option("showAllDayPanel") ? this._getCells(true).first().outerHeight() || 0 : 0;
+    },
+
+    getAllDayOffset: function() {
+        return this._groupedStrategy.getAllDayOffset();
     },
 
     getMaxAllowedPosition: function() {

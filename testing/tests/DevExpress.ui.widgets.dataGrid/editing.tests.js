@@ -2506,6 +2506,52 @@ QUnit.test("The cell should be editable after cancel removing the row", function
     assert.ok($cellElement.find("input").length > 0, "has input");
 });
 
+QUnit.test("Edit Row with useIcons is true", function(assert) {
+    // arrange
+    var $editCellElement,
+        $testElement = $("#container");
+
+    this.options.editing = {
+        mode: "row",
+        allowUpdating: true,
+        allowDeleting: true,
+        useIcons: true,
+        texts: {
+            editRow: "Edit",
+            deleteRow: "Delete",
+            saveRowChanges: "Save",
+            cancelRowChanges: "Cancel"
+        }
+    };
+
+    this.editingController.init();
+    this.rowsView.render($testElement);
+
+    // assert
+    $editCellElement = $testElement.find("tbody > tr").first().children().last();
+    assert.ok($editCellElement.hasClass("dx-command-edit-with-icons"), "the edit cell has icons");
+    assert.strictEqual($editCellElement.find(".dx-link").length, 2, "icon count");
+    assert.ok($editCellElement.find(".dx-link").first().hasClass("dx-icon-edit"), "icon edit");
+    assert.strictEqual($editCellElement.find(".dx-icon-edit").attr("title"), "Edit", "title of the icon edit");
+    assert.strictEqual($editCellElement.find(".dx-icon-edit").text(), "", "text of the icon edit");
+    assert.ok($editCellElement.find(".dx-link").last().hasClass("dx-icon-trash"), "icon trash");
+    assert.strictEqual($editCellElement.find(".dx-icon-trash").attr("title"), "Delete", "title of the icon trash");
+    assert.strictEqual($editCellElement.find(".dx-icon-trash").text(), "", "text of the icon trash");
+
+    // act
+    this.editRow(0);
+
+    $editCellElement = $testElement.find("tbody > tr").first().children().last();
+    assert.ok($editCellElement.hasClass("dx-command-edit-with-icons"), "the edit cell has icons");
+    assert.strictEqual($editCellElement.find(".dx-link").length, 2, "icon count");
+    assert.ok($editCellElement.find(".dx-link").first().hasClass("dx-icon-save"), "icon save");
+    assert.strictEqual($editCellElement.find(".dx-icon-save").attr("title"), "Save", "title of the icon save");
+    assert.strictEqual($editCellElement.find(".dx-icon-save").text(), "", "text of the icon save");
+    assert.ok($editCellElement.find(".dx-link").last().hasClass("dx-icon-revert"), "icon revert");
+    assert.strictEqual($editCellElement.find(".dx-icon-revert").attr("title"), "Cancel", "title of the icon revert");
+    assert.strictEqual($editCellElement.find(".dx-icon-revert").text(), "", "text of the icon revert");
+});
+
 if(browser.msie && parseInt(browser.version) <= 11) {
     QUnit.test("Update value for row edit mode", function(assert) {
         // arrange

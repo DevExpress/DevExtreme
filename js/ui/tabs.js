@@ -212,12 +212,6 @@ var Tabs = CollectionWidget.inherit({
                 },
                 options: {
                     useInkRipple: true,
-                    /**
-                    * @name dxTabsOptions_showNavButtons
-                    * @publicName showNavButtons
-                    * @default false @for Material
-                    */
-                    showNavButtons: false,
                     selectOnFocus: false
                 }
             }

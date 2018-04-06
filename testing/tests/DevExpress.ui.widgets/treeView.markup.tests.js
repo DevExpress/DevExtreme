@@ -128,6 +128,15 @@ QUnit.module("markup", {
     }
 });
 
+QUnit.test("TreeView should render correctly without items", function(assert) {
+    var $treeView = initTree({
+            items: undefined
+        }),
+        $scrollableContent = $treeView.find(".dx-scrollable-content");
+
+    assert.equal($scrollableContent.find(".dx-empty-message").length, 1, "empty message should be shown inside scrollable content");
+});
+
 QUnit.test("data expressions should work on render", function(assert) {
     var $treeView = $("#treeView").dxTreeView({
         items: [

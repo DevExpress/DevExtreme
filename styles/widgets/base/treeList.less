@@ -8,8 +8,14 @@
         border-bottom: @treelist-border;
     }
 
-    > .dx-treelist-pager, > .dx-treelist-headers {
+    > .dx-treelist-pager, > .dx-treelist-headers, > .dx-treelist-filter-panel {
         border-top: @treelist-border;
+    }
+
+    > .dx-treelist-filter-panel {
+        border-top-width: 0;
+        border-left: @treelist-border;
+        border-right: @treelist-border;
     }
 }
 
@@ -90,6 +96,11 @@
             .dx-treelist-error-message();
         }
     }
+}
+
+.dx-treelist-filter-panel {
+    color: @treelist-base-color;
+    border-top: @treelist-border;
 }
 
 .dx-treelist-form-buttons-container {

@@ -580,12 +580,12 @@
  */
 
  /**
- * @typedef {string} Enums.RowScrollingMode
- * @enum {'auto'|'standard'|'virtual'}
+ * @typedef {string} Enums.GridRowRenderingMode
+ * @enum {'standard'|'virtual'}
  */
 
  /**
- * @typedef {string} Enums.ColumnScrollingMode
+ * @typedef {string} Enums.GridColumnRenderingMode
  * @enum {'standard'|'virtual'}
  */
 
@@ -730,6 +730,11 @@
  */
 
 /**
+ * @typedef {string} Enums.ApplyChangesMode
+ * @enum {'instantly'|'onDemand'}
+ */
+
+/**
  * @typedef {string} Enums.PivotGridSummaryDisplayMode
  * @enum {'absoluteVariation'|'percentOfColumnGrandTotal'|'percentOfColumnTotal'|'percentOfGrandTotal'|'percentOfRowGrandTotal'|'percentOfRowTotal'|'percentVariation'}
  */
@@ -777,4 +782,24 @@
  /**
  * @typedef {string} Enums.ChartBubbleSeriesAggregationMethod
  * @enum {'avg'|'custom'}
+ */
+
+ /**
+ * @typedef {string} Enums.GridCommandColumnType
+ * @enum {'adaptive'|'edit'|'expand'|'select'}
+ */
+
+ /**
+ * @typedef {string} Enums.TreeListCommandColumnType
+ * @enum {'adaptive'|'edit'}
+ */
+
+ /**
+ * @typedef {string} Enums.DataSourceStoreType
+ * @enum {'array'|'local'|'odata'}
+ */
+
+ /**
+ * @typedef {string} Enums.PivotGridStoreType
+ * @enum {'array'|'local'|'odata'|'xmla'}
  */

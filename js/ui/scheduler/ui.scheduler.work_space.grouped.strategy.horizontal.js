@@ -81,6 +81,10 @@ var HorizontalGroupedStrategy = GroupedStrategy.inherit({
         }
 
         return minWidth;
+    },
+
+    getAllDayOffset: function() {
+        return this._workSpace.getAllDayHeight();
     }
 });
 

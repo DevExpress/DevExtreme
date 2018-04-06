@@ -17,10 +17,7 @@ var DATAGRID_GROUP_PANEL_CLASS = "dx-datagrid-group-panel",
     DATAGRID_GROUP_PANEL_MESSAGE_CLASS = "dx-group-panel-message",
     DATAGRID_GROUP_PANEL_ITEM_CLASS = "dx-group-panel-item",
     DATAGRID_GROUP_PANEL_LABEL_CLASS = "dx-toolbar-label",
-    DATAGRID_GROUP_OPENED_CLASS = "dx-datagrid-group-opened",
-    DATAGRID_GROUP_CLOSED_CLASS = "dx-datagrid-group-closed",
     DATAGRID_EXPAND_CLASS = "dx-datagrid-expand",
-    DATAGRID_SELECTION_DISABLED_CLASS = "dx-selection-disabled",
     DATAGRID_GROUP_ROW_CLASS = "dx-group-row";
 
 var GroupingDataSourceAdapterExtender = (function() {
@@ -596,32 +593,6 @@ var GroupingRowsViewExtender = (function() {
                 e.event.preventDefault();
                 e.handled = true;
             }
-        },
-
-        _getCellTemplate: function(options) {
-            var that = this;
-
-            if(options.column.command === "expand") {
-                return {
-                    allowRenderToDetachedContainer: true,
-                    render: function($container, options) {
-                        if(typeUtils.isDefined(options.value) && !(options.data && options.data.isContinuation) && !options.row.inserted) {
-                            $container
-                                .addClass(DATAGRID_EXPAND_CLASS)
-                                .addClass(DATAGRID_SELECTION_DISABLED_CLASS);
-
-                            $("<div>")
-                                .addClass(options.value ? DATAGRID_GROUP_OPENED_CLASS : DATAGRID_GROUP_CLOSED_CLASS)
-                                .appendTo($container);
-
-                            that.setAria("label",
-                                options.value ? that.localize("dxDataGrid-ariaCollapse") : that.localize("dxDataGrid-ariaExpand"),
-                                $container);
-                        }
-                    }
-                };
-            }
-            return that.callBase(options);
         }
     };
 })();
@@ -767,7 +738,16 @@ gridCore.registerModule("grouping", {
     },
     extenders: {
         controllers: {
-            data: GroupingDataControllerExtender
+            data: GroupingDataControllerExtender,
+            columns: {
+                _getExpandColumnOptions: function() {
+                    var options = this.callBase.apply(this, arguments);
+
+                    options.cellTemplate = gridCore.getExpandCellTemplate();
+
+                    return options;
+                },
+            }
         },
         views: {
             headerPanel: GroupingHeaderPanelExtender,

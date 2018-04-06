@@ -33,7 +33,9 @@ var $ = require("jquery"),
     dataGridMocks = require("../../helpers/dataGridMocks.js"),
     setupDataGridModules = dataGridMocks.setupDataGridModules,
     MockDataController = dataGridMocks.MockDataController,
-    MockColumnsController = dataGridMocks.MockColumnsController;
+    MockColumnsController = dataGridMocks.MockColumnsController,
+    gridCoreUtils = require("ui/grid_core/ui.grid_core.utils"),
+    expandCellTemplate = gridCoreUtils.getExpandCellTemplate();
 
 var generateData = function(countItems) {
     var j = 1,
@@ -539,7 +541,8 @@ QUnit.test("Draw fixed table for rowsView with group row", function(assert) {
     $.extend(that.columns[0], {
         groupIndex: 0,
         command: "expand",
-        allowCollapsing: true
+        allowCollapsing: true,
+        cellTemplate: expandCellTemplate
     });
 
     that.setupDataGrid();
@@ -561,7 +564,7 @@ QUnit.test("Draw fixed table for rowsView with group row", function(assert) {
     // data row
     assert.equal($table.find("tbody > .dx-data-row").length, 2, "has data rows in main table");
     assert.equal($table.find("tbody > .dx-data-row").first().find("td").length, 5, "count cell in data row");
-    assert.strictEqual($table.find("tbody > .dx-data-row").first().find("td").eq(0).html(), "", "text a first cell in data row");
+    assert.strictEqual($table.find("tbody > .dx-data-row").first().find("td").eq(0).html(), "&nbsp;", "text a first cell in data row");
     assert.strictEqual($table.find("tbody > .dx-data-row").first().find("td").eq(1).html(), "test1", "text a second cell in data row");
     assert.strictEqual($table.find("tbody > .dx-data-row").first().find("td").eq(2).html(), "test3", "text a third cell in data row");
     assert.strictEqual($table.find("tbody > .dx-data-row").first().find("td").eq(3).html(), "test5", "text a fourth cell in data row");
@@ -577,7 +580,7 @@ QUnit.test("Draw fixed table for rowsView with group row", function(assert) {
     // data row
     assert.equal($fixTable.find("tbody > .dx-data-row").length, 2, "has data rows in fixed table");
     assert.equal($fixTable.find("tbody > .dx-data-row").first().find("td").length, 3, "count cell in data row");
-    assert.strictEqual($fixTable.find("tbody > .dx-data-row").first().find("td").eq(0).text(), "", "text a first cell in data row");
+    assert.strictEqual($fixTable.find("tbody > .dx-data-row").first().find("td").eq(0).html(), "&nbsp;", "text a first cell in data row");
     assert.strictEqual($fixTable.find("tbody > .dx-data-row").first().find("td").eq(1).html(), "&nbsp;", "text a second cell in data row");
     assert.equal($fixTable.find("tbody > .dx-data-row").first().find("td").eq(1).attr("colspan"), 3, "colspan a second cell in data row");
     if(browser.mozilla) {
@@ -694,7 +697,8 @@ QUnit.test("Draw fixed table for rowsView with summary by fixed column in group 
     $.extend(that.columns[0], {
         groupIndex: 0,
         command: "expand",
-        allowCollapsing: true
+        allowCollapsing: true,
+        cellTemplate: expandCellTemplate
     });
 
     that.setupDataGrid();
@@ -754,7 +758,8 @@ QUnit.test("Draw fixed table for rowsView with summary by unfixed column in grou
     $.extend(that.columns[0], {
         groupIndex: 0,
         command: "expand",
-        allowCollapsing: true
+        allowCollapsing: true,
+        cellTemplate: expandCellTemplate
     });
 
     that.setupDataGrid();
@@ -827,7 +832,8 @@ QUnit.test("Draw fixed table for rowsView with summary by fixed (on left side) a
     $.extend(that.columns[0], {
         groupIndex: 0,
         command: "expand",
-        allowCollapsing: true
+        allowCollapsing: true,
+        cellTemplate: expandCellTemplate
     });
 
     that.setupDataGrid();
@@ -900,7 +906,8 @@ QUnit.test("Draw fixed table for rowsView with summary by fixed (on right side) 
     $.extend(that.columns[0], {
         groupIndex: 0,
         command: "expand",
-        allowCollapsing: true
+        allowCollapsing: true,
+        cellTemplate: expandCellTemplate
     });
 
     that.setupDataGrid();

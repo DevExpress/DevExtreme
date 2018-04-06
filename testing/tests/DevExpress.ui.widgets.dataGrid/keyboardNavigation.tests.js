@@ -15,6 +15,7 @@ require("common.css!");
 require("ui/data_grid/ui.data_grid");
 
 var $ = require("jquery"),
+    gridCoreUtils = require("ui/grid_core/ui.grid_core.utils"),
     devices = require("core/devices"),
     keyboardMock = require("../../helpers/keyboardMock.js"),
     browser = require("core/utils/browser"),
@@ -4529,7 +4530,7 @@ QUnit.testInActiveWindow("Edit next cell after tab key when there is masterDetai
     var $testElement = $("#container");
 
     this.columns = [
-        { visible: true, command: "expand" },
+        { visible: true, command: "expand", cellTemplate: gridCoreUtils.getExpandCellTemplate() },
         { caption: "Column 1", visible: true, allowEditing: true, dataField: "Column2" }
     ];
     this.dataControllerOptions = {

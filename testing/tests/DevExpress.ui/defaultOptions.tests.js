@@ -41,6 +41,7 @@ var $ = require("jquery"),
     Popover = require("ui/popover"),
     RadioButton = require("ui/radio_group/radio_button"),
     RadioGroup = require("ui/radio_group"),
+    Scheduler = require("ui/scheduler/ui.scheduler"),
     Scrollable = require("ui/scroll_view/ui.scrollable"),
     ScrollView = require("ui/scroll_view"),
     SelectBox = require("ui/select_box"),
@@ -1279,7 +1280,6 @@ testComponentDefaults(Tabs,
     { },
     {
         useInkRipple: true,
-        showNavButtons: false,
         selectOnFocus: false
     },
     function() {
@@ -1400,6 +1400,7 @@ testComponentDefaults(DataGrid,
     }
 );
 
+
 testComponentDefaults(Accordion,
     {},
     {
@@ -1409,6 +1410,30 @@ testComponentDefaults(Accordion,
     function() {
         this.originalCurrentTheme = themes.current();
         themes.current("material.light");
+    },
+    function() {
+        themes.current(this.originalCurrentTheme);
+    }
+);
+  
+  
+testComponentDefaults(Scheduler,
+    {},
+    {
+        _appointmentTooltipOffset: { x: 0, y: 11 },
+        _appointmentTooltipButtonsPosition: "bottom",
+        _appointmentTooltipCloseButton: true,
+        _useAppointmentColorForTooltip: true,
+        _appointmentTooltipOpenButtonText: null,
+        _appointmentTooltipOpenButtonIcon: "edit",
+        _dropDownButtonIcon: "chevrondown",
+        _appointmentCountPerCell: 1,
+        _appointmentGroupButtonOffset: 20,
+        _appointmentOffset: 30
+    },
+    function() {
+        this.originalCurrentTheme = themes.current();
+        themes.current("material");
     },
     function() {
         themes.current(this.originalCurrentTheme);

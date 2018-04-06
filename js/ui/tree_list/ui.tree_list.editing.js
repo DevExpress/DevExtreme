@@ -56,7 +56,7 @@ var EditingController = editingModule.controllers.editing.inherit((function() {
                 editingTexts = editingOptions.texts || {};
 
             if(editingOptions.allowAdding && !(options.row.removed || options.row.inserted)) {
-                this._createLink(container, editingTexts.addRowToNode, "addRowByRowIndex", options, "dx-link-add");
+                this._createLink(container, editingTexts.addRowToNode, "addRowByRowIndex", options, editingOptions.useIcons);
             }
 
             callBase.apply(this, arguments);

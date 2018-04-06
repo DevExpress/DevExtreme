@@ -477,7 +477,7 @@ module.exports = {
                         column = options.column,
                         template;
 
-                    if(options.rowType === "group" && isDefined(column.groupIndex) && !column.showWhenGrouped) {
+                    if(options.rowType === "group" && isDefined(column.groupIndex) && !column.showWhenGrouped && !column.command) {
                         template = column.groupCellTemplate || { allowRenderToDetachedContainer: true, render: that._getDefaultGroupTemplate(column) };
                     } else {
                         template = column.cellTemplate || { allowRenderToDetachedContainer: true, render: that._getDefaultTemplate(column) };
@@ -787,6 +787,7 @@ module.exports = {
                 _renderGroupedCells: function($row, options) {
                     var row = options.row,
                         i,
+                        expandColumn,
                         columns = options.columns,
                         rowIndex = row.rowIndex,
                         isExpanded,
@@ -797,15 +798,20 @@ module.exports = {
                     for(i = 0; i <= groupCellOptions.columnIndex; i++) {
                         if(i === groupCellOptions.columnIndex && columns[i].allowCollapsing && options.scrollingMode !== "infinite") {
                             isExpanded = !!row.isExpanded;
+                            expandColumn = columns[i];
                         } else {
                             isExpanded = null;
+                            expandColumn = {
+                                command: "expand",
+                                cssClass: columns[i].cssClass
+                            };
                         }
 
                         this._renderCell($row, {
                             value: isExpanded,
                             row: row,
                             rowIndex: rowIndex,
-                            column: { command: "expand", cssClass: columns[i].cssClass },
+                            column: expandColumn,
                             columnIndex: i
                         });
                     }
@@ -954,7 +960,7 @@ module.exports = {
                     parameters.summaryItems = summaryCells && summaryCells[options.columnIndex];
                     parameters.resized = column.resizedCallbacks;
 
-                    if(isDefined(column.groupIndex)) {
+                    if(isDefined(column.groupIndex) && !column.command) {
                         groupingTextsOptions = that.option("grouping.texts");
                         scrollingMode = that.option("scrolling.mode");
                         if(scrollingMode !== "virtual" && scrollingMode !== "infinite") {

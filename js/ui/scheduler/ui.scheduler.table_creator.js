@@ -18,7 +18,7 @@ var SchedulerTableCreator = {
             var row = allDayElements[index].find(ROW_SELECTOR);
 
             if(!row.length) {
-                row = domAdapter.createElement(ROW_SELECTOR);
+                row = $(domAdapter.createElement(ROW_SELECTOR));
                 row.append(allDayElements[index].get(0));
             }
 
@@ -32,7 +32,8 @@ var SchedulerTableCreator = {
             row,
             rowCountInGroup = options.groupCount ? options.rowCount / options.groupCount : options.rowCount,
             allDayElementIndex = 0,
-            allDayElements = options.allDayElements;
+            allDayElements = options.allDayElements,
+            groupIndex = options.groupIndex;
 
         $(options.container).append(tableBody);
 
@@ -69,7 +70,7 @@ var SchedulerTableCreator = {
                     dataValue;
 
                 if(options.getCellData) {
-                    cellDataObject = options.getCellData(td, i, j);
+                    cellDataObject = options.getCellData(td, i, j, groupIndex);
                     dataKey = cellDataObject.key;
                     dataValue = cellDataObject.value;
                     dataKey && dataUtils.data(td, dataKey, dataValue);

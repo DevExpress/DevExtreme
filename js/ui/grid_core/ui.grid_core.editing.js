@@ -39,6 +39,8 @@ var EDIT_FORM_CLASS = "edit-form",
     ROW_SELECTED = "dx-selection",
     EDIT_ROW = "dx-edit-row",
     EDIT_BUTTON_CLASS = "dx-edit-button",
+    COMMAND_EDIT_CLASS = "dx-command-edit",
+    COMMAND_EDIT_WITH_ICONS_CLASS = COMMAND_EDIT_CLASS + "-with-icons",
 
     BUTTON_CLASS = "dx-button",
 
@@ -75,6 +77,23 @@ var EDIT_FORM_CLASS = "edit-form",
     CELL_BASED_MODES = [EDIT_MODE_BATCH, EDIT_MODE_CELL],
     MODES_WITH_DELAYED_FOCUS = [EDIT_MODE_ROW, EDIT_MODE_FORM];
 
+var EDIT_LINK_CLASS = {
+        saveEditData: "dx-link-save",
+        cancelEditData: "dx-link-cancel",
+        editRow: "dx-link-edit",
+        undeleteRow: "dx-link-undelete",
+        deleteRow: "dx-link-delete",
+        addRowByRowIndex: "dx-link-add"
+    },
+    EDIT_ICON_CLASS = {
+        saveEditData: "dx-icon-save",
+        cancelEditData: "dx-icon-revert",
+        editRow: "dx-icon-edit",
+        undeleteRow: "dx-icon-revert",
+        deleteRow: "dx-icon-trash",
+        addRowByRowIndex: "dx-icon-add"
+    };
+
 var getEditMode = function(that) {
     var editMode = that.option("editing.mode");
 
@@ -106,6 +125,31 @@ var EditingController = modules.ViewController.inherit((function() {
                 updateValueImmediately: isRowEditMode(that)
             }));
         };
+    };
+
+    var editCellTemplate = (container, options) => {
+        var editingTexts,
+            editingOptions,
+            $container = $(container),
+            editingController = options.component.getController("editing"),
+            isRowMode = isRowEditMode(editingController);
+
+        if(options.rowType === "data") {
+            $container.css("textAlign", "center");
+            options.rtlEnabled = editingController.option("rtlEnabled");
+
+            editingOptions = editingController.option("editing") || {};
+            editingTexts = editingOptions.texts || {};
+
+            if(options.row && options.row.rowIndex === editingController._getVisibleEditRowIndex() && isRowMode) {
+                editingController._createLink($container, editingTexts.saveRowChanges, "saveEditData", options, editingOptions.useIcons);
+                editingController._createLink($container, editingTexts.cancelRowChanges, "cancelEditData", options, editingOptions.useIcons);
+            } else {
+                editingController._createEditingLinks($container, options, editingOptions, isRowMode);
+            }
+        } else {
+            $container.get(0).innerHTML = "&nbsp;";
+        }
     };
 
     return {
@@ -1159,16 +1203,22 @@ var EditingController = modules.ViewController.inherit((function() {
 
         _updateEditColumn: function() {
             var that = this,
-                isEditColumnVisible = that._isEditColumnVisible();
+                useIcons = that.option("editing.useIcons"),
+                isEditColumnVisible = that._isEditColumnVisible(),
+                cssClass = COMMAND_EDIT_CLASS + (useIcons ? " " + COMMAND_EDIT_WITH_ICONS_CLASS : "");
 
             that._columnsController.addCommandColumn({
                 command: "edit",
                 visible: isEditColumnVisible,
-                cssClass: "dx-command-edit",
-                width: "auto"
+                cssClass: cssClass,
+                width: "auto",
+                cellTemplate: editCellTemplate
             });
 
-            that._columnsController.columnOption("command:edit", "visible", isEditColumnVisible);
+            that._columnsController.columnOption("command:edit", {
+                visible: isEditColumnVisible,
+                cssClass: cssClass
+            });
         },
 
         _isEditColumnVisible: function() {
@@ -1519,8 +1569,6 @@ var EditingController = modules.ViewController.inherit((function() {
                 column = options.column,
                 rowIndex = options.row && options.row.rowIndex,
                 template,
-                editingOptions,
-                editingTexts,
                 allowUpdating,
                 isRowMode = isRowEditMode(that),
                 isRowEditing = that.isEditRow(rowIndex),
@@ -1547,23 +1595,6 @@ var EditingController = modules.ViewController.inherit((function() {
                     }
                 }
                 template = column.editCellTemplate || getDefaultEditorTemplate(that);
-            } else if(column.command === "edit" && options.rowType === "data") {
-                template = function(container, options) {
-                    var $container = $(container);
-
-                    $container.css("textAlign", "center");
-                    options.rtlEnabled = that.option("rtlEnabled");
-
-                    editingOptions = that.option("editing") || {};
-                    editingTexts = editingOptions.texts || {};
-
-                    if(options.row && options.row.rowIndex === that._getVisibleEditRowIndex() && isRowMode) {
-                        that._createLink($container, editingTexts.saveRowChanges, "saveEditData", options, "dx-link-save");
-                        that._createLink($container, editingTexts.cancelRowChanges, "cancelEditData", options, "dx-link-cancel");
-                    } else {
-                        that._createEditingLinks($container, options, editingOptions, isRowMode);
-                    }
-                };
             } else if(column.command === "detail" && options.rowType === "detail" && isRowEditing) {
                 template = that.getEditFormTemplate(options);
             }
@@ -1571,12 +1602,19 @@ var EditingController = modules.ViewController.inherit((function() {
             return template;
         },
 
-        _createLink: function(container, text, methodName, options, linkClass) {
+        _createLink: function(container, text, methodName, options, useIcon) {
             var that = this,
                 $link = $("<a>")
-                .addClass(LINK_CLASS)
-                .addClass(linkClass)
-                .text(text);
+                    .addClass(LINK_CLASS)
+                    .addClass(EDIT_LINK_CLASS[methodName]);
+
+            if(useIcon) {
+                $link
+                    .addClass(EDIT_ICON_CLASS[methodName])
+                    .attr("title", text);
+            } else {
+                $link.text(text);
+            }
 
             eventsEngine.on($link, addNamespace(clickEvent.name, EDITING_NAMESPACE), that.createAction(function(params) {
                 var e = params.event;
@@ -1594,13 +1632,13 @@ var EditingController = modules.ViewController.inherit((function() {
             var editingTexts = editingOptions.texts || {};
 
             if(editingOptions.allowUpdating && isRowMode) {
-                this._createLink(container, editingTexts.editRow, "editRow", options, "dx-link-edit");
+                this._createLink(container, editingTexts.editRow, "editRow", options, editingOptions.useIcons);
             }
             if(editingOptions.allowDeleting) {
                 if(options.row.removed) {
-                    this._createLink(container, editingTexts.undeleteRow, "undeleteRow", options, "dx-link-undelete");
+                    this._createLink(container, editingTexts.undeleteRow, "undeleteRow", options, editingOptions.useIcons);
                 } else {
-                    this._createLink(container, editingTexts.deleteRow, "deleteRow", options, "dx-link-delete");
+                    this._createLink(container, editingTexts.deleteRow, "deleteRow", options, editingOptions.useIcons);
                 }
             }
         },
@@ -1849,6 +1887,13 @@ module.exports = {
                  * @default false
                  */
                 allowDeleting: false,
+                /**
+                 * @name GridBaseOptions_editing_useIcons
+                 * @publicName useIcons
+                 * @type boolean
+                 * @default false
+                 */
+                useIcons: false,
                 /**
                  * @name dxDataGridOptions_editing_texts
                  * @publicName texts

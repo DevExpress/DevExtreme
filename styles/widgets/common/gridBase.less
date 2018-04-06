@@ -16,6 +16,7 @@
     @GRID_TOTAL_FOOTER_PADDINGS: 7px;
     @GRID_COMMAND_SELECT_COLUMN_WIDTH: 70px;
     @GRID_COMMAND_EDIT_COLUMN_WIDTH: 100px;
+    @GRID_COMMAND_EDIT_COLUMN_WITH_ICONS_WIDTH: 80px;
     @GRID_COMMAND_EXPAND_COLUMN_WIDTH: 30px;
     @GRID_MASTERDETAIL_PADDING: 30px;
     @GRID_COMMAND_ADAPTIVE_COLUMN_WIDTH: 36px;
@@ -437,6 +438,15 @@
             .dx-command-edit {
                 width: @GRID_COMMAND_EDIT_COLUMN_WIDTH;
                 min-width: @GRID_COMMAND_EDIT_COLUMN_WIDTH;
+
+                &.dx-command-edit-with-icons {
+                    width: @GRID_COMMAND_EDIT_COLUMN_WITH_ICONS_WIDTH;
+                    min-width: @GRID_COMMAND_EDIT_COLUMN_WITH_ICONS_WIDTH;
+
+                    .dx-link {
+                        text-decoration: none;
+                    }
+                }
             }
 
             .dx-command-expand {
@@ -1045,4 +1055,36 @@
             margin-right: 15px;
         }
     }
+
+    .dx-@{widgetName}-filter-panel,
+    .dx-@{widgetName}-filter-panel-left {
+        display: flex;
+        justify-content: space-between;
+        flex-direction: row;
+        min-width: 0;
+    }
+
+    .dx-@{widgetName}-filter-panel {
+        padding: 10px;
+
+        .dx-@{widgetName}-filter-panel-text {
+            .dx-overflow();
+        }
+        .dx-@{widgetName}-filter-panel-text:hover,
+        .dx-@{widgetName}-filter-panel-clear-filter:hover {
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        .dx-@{widgetName}-filter-panel-checkbox {
+            padding-right: 10px;
+        }
+
+        .dx-icon-filter {
+            margin: auto;
+            padding-right: 7px;
+            cursor: pointer;
+        }
+    }
+
 }

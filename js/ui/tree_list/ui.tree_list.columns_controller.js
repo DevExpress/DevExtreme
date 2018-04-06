@@ -29,6 +29,11 @@ exports.ColumnsController = columnsControllerModule.controllers.columns.inherit(
 })());
 
 treeListCore.registerModule("columns", {
+    /**
+     * @name GridBaseColumn_command
+     * @publicName command
+     * @type string|Enums.TreeListCommandColumnType
+     */
     defaultOptions: columnsControllerModule.defaultOptions,
     controllers: {
         columns: exports.ColumnsController

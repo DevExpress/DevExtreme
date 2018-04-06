@@ -621,8 +621,7 @@ module.exports = Class.inherit((function() {
             /**
             * @name PivotGridDataSourceOptions_store_type
             * @publicName type
-            * @type string
-            * @acceptValues 'array'|'local'|'odata'|'breeze'|'jaydata'|'xmla'
+            * @type Enums.PivotGridStoreType
             */
             that._store = store;
             that._data = { rows: [], columns: [], values: [] };
@@ -1276,7 +1275,7 @@ module.exports = Class.inherit((function() {
         * @param1 state:object
         */
 
-        state: function(state) {
+        state: function(state, skipLoading) {
             var that = this;
 
             if(arguments.length) {
@@ -1290,14 +1289,14 @@ module.exports = Class.inherit((function() {
                     when(getFields(that)).done(function(fields) {
                         that._fields = setFieldsState(state.fields, fields);
                         that._fieldsPrepared(fields);
-                        that.load(state);
+                        !skipLoading && that.load(state);
                     }).always(function() {
                         that.endLoading();
                     });
                 } else {
                     that._fields = setFieldsState(state.fields, that._fields);
                     that._descriptions = that._createDescriptions();
-                    that.load(state);
+                    !skipLoading && that.load(state);
                 }
 
             } else {

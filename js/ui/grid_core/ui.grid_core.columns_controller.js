@@ -601,6 +601,11 @@ module.exports = {
              * @publicName formItem
              * @type dxFormSimpleItem
              */
+            /**
+             * @name GridBaseColumn_command
+             * @publicName command
+             * @type string|Enums.GridCommandColumnType
+             */
             regenerateColumnsByVisibleItems: false,
             /**
              * @name dxDataGridOptions_customizeColumns
@@ -945,11 +950,12 @@ module.exports = {
                     bandColumnIndex,
                     parentBandColumns,
                     bandColumns = {},
-                    columns = [],
-                    bandColumnsCache = that.getBandColumnsCache();
+                    result = [],
+                    bandColumnsCache = that.getBandColumnsCache(),
+                    columns = that._columns.filter((column) => !column.command);
 
-                for(i = 0; i < that._columns.length; i++) {
-                    column = that._columns[i];
+                for(i = 0; i < columns.length; i++) {
+                    column = columns[i];
                     parentBandColumns = getParentBandColumns(i, bandColumnsCache.columnParentByIndex);
 
                     if(parentBandColumns.length) {
@@ -957,7 +963,7 @@ module.exports = {
                         bandColumns[bandColumnIndex] = bandColumns[bandColumnIndex] || [];
                         bandColumns[bandColumnIndex].push(column);
                     } else {
-                        columns.push(column);
+                        result.push(column);
                     }
                 }
 
@@ -965,7 +971,7 @@ module.exports = {
                     normalizeIndexes(bandColumns[key], "visibleIndex", currentColumn);
                 }
 
-                normalizeIndexes(columns, "visibleIndex", currentColumn);
+                normalizeIndexes(result, "visibleIndex", currentColumn);
             };
 
             var getColumnIndexByVisibleIndex = function(that, visibleIndex, location) {
@@ -1252,17 +1258,9 @@ module.exports = {
             };
 
             var addExpandColumn = function(that) {
-                that.addCommandColumn({
-                    command: "expand",
-                    width: "auto",
-                    cssClass: COMMAND_EXPAND_CLASS,
-                    allowEditing: false, // T165142
-                    allowGrouping: false,
-                    allowSorting: false,
-                    allowResizing: false,
-                    allowReordering: false,
-                    allowHiding: false
-                });
+                var options = that._getExpandColumnOptions();
+
+                that.addCommandColumn(options);
             };
 
             var defaultSetCellValue = function(data, value) {
@@ -1355,7 +1353,50 @@ module.exports = {
                 return str;
             };
 
+            var mergeColumns = (columns, commandColumns, needToExtend) => {
+                var i,
+                    column,
+                    commandColumnIndex,
+                    result = columns.length ? (needToExtend && commandColumns || columns).slice() : [],
+                    getCommandColumnIndex = (column) => commandColumns.reduce((result, commandColumn, index) => {
+                        return commandColumn.command === column.command ? index : result;
+                    }, -1);
+
+                if(result.length) {
+                    for(i = 0; i < columns.length; i++) {
+                        column = columns[i];
+
+                        commandColumnIndex = column && column.command ? getCommandColumnIndex(column) : -1;
+                        if(commandColumnIndex >= 0) {
+                            if(needToExtend) {
+                                result[commandColumnIndex] = extend({}, commandColumns[commandColumnIndex], column);
+                            } else {
+                                result[i] = extend({}, column, commandColumns[commandColumnIndex]);
+                            }
+                        } else if(column && needToExtend) {
+                            result.push(extend({}, column));
+                        }
+                    }
+                }
+
+                return result;
+            };
+
             return {
+                _getExpandColumnOptions: function() {
+                    return {
+                        command: "expand",
+                        width: "auto",
+                        cssClass: COMMAND_EXPAND_CLASS,
+                        allowEditing: false, // T165142
+                        allowGrouping: false,
+                        allowSorting: false,
+                        allowResizing: false,
+                        allowReordering: false,
+                        allowHiding: false
+                    };
+                },
+
                 _getFirstItems: function(dataSource) {
                     var groupsCount,
                         items = [];
@@ -1535,7 +1576,7 @@ module.exports = {
 
                     return extend({
                         allowFixing: this.option("columnFixing.enabled"),
-                        allowResizing: this.option("allowColumnResizing"),
+                        allowResizing: this.option("allowColumnResizing") || undefined,
                         allowReordering: this.option("allowColumnReordering"),
                         minWidth: this.option("columnMinWidth"),
                         width: this.option("columnWidth"),
@@ -1718,7 +1759,12 @@ module.exports = {
                     }
 
                     expandColumns = iteratorUtils.map(expandColumns, function(column) {
-                        return extend({}, column, { visibleWidth: null, minWidth: null }, expandColumn, { index: column.index });
+                        return extend({}, column, {
+                            visibleWidth: null,
+                            minWidth: null,
+                            cellTemplate: !typeUtils.isDefined(column.groupIndex) ? column.cellTemplate : null,
+                            headerCellTemplate: null
+                        }, expandColumn, { index: column.index });
                     });
 
                     return expandColumns;
@@ -1768,14 +1814,14 @@ module.exports = {
                         result = [],
                         rowspanExpandColumns = 0,
                         firstPositiveIndexColumn,
-                        expandColumns = that.getExpandColumns(),
+                        expandColumns = mergeColumns(that.getExpandColumns(), that._columns),
                         rowCount = that.getRowCount(),
                         positiveIndexedColumns = [],
                         negativeIndexedColumns = [],
                         notGroupedColumnsCount = 0,
                         isFixedToEnd,
                         rtlEnabled = that.option("rtlEnabled"),
-                        columns = extend(true, [], that._columns.length ? that._commandColumns.concat(that._columns) : []),
+                        columns = mergeColumns(that._columns, that._commandColumns, true),
                         bandColumnsCache = that.getBandColumnsCache(),
                         columnDigitsCount = digitsCount(columns.length);
 

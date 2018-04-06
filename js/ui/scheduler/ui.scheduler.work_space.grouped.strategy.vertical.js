@@ -4,11 +4,15 @@ var GroupedStrategy = require("./ui.scheduler.work_space.grouped.strategy");
 
 
 var VerticalGroupedStrategy = GroupedStrategy.inherit({
-    prepareCellIndexes: function(cellCoordinates, groupIndex) {
+    prepareCellIndexes: function(cellCoordinates, groupIndex, inAllDayRow) {
         var rowIndex = cellCoordinates.rowIndex + groupIndex * this._workSpace._getRowCount();
 
         if(this._workSpace.supportAllDayRow() && this._workSpace.option("showAllDayPanel")) {
             rowIndex += groupIndex;
+
+            if(!inAllDayRow) {
+                rowIndex += 1;
+            }
         }
 
         return {
@@ -70,7 +74,13 @@ var VerticalGroupedStrategy = GroupedStrategy.inherit({
     },
 
     getVerticalMax: function(groupIndex) {
-        return this._workSpace.getMaxAllowedVerticalPosition()[groupIndex];
+        var maxAllowedPosition = this._workSpace.getMaxAllowedVerticalPosition()[groupIndex];
+
+        if(this._workSpace.supportAllDayRow() && this._workSpace.option("showAllDayPanel")) {
+            maxAllowedPosition += maxAllowedPosition + this._workSpace.getCellHeight() * groupIndex;
+        }
+
+        return maxAllowedPosition;
     },
 
     calculateTimeCellRepeatCount: function() {
@@ -86,7 +96,11 @@ var VerticalGroupedStrategy = GroupedStrategy.inherit({
         }
 
         return minWidth;
-    }
+    },
+
+    getAllDayOffset: function() {
+        return 0;
+    },
 });
 
 module.exports = VerticalGroupedStrategy;
