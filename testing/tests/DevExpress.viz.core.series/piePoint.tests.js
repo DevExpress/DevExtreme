@@ -918,7 +918,7 @@ QUnit.test("Draw label, position outside (-0.1 < angleFunctions.cos < 0.1)", fun
     var label = createCorrectionLabel.call(this, { 0: 300, 10: 270, 20: 240 });
 
     assert.equal(label.shift.args[0][0], 290);
-    assert.equal(label.shift.args[0][1], 295);
+    assert.equal(label.shift.args[0][1], 265);
 });
 
 QUnit.test("Draw label, position is invalid", function(assert) {
@@ -926,20 +926,20 @@ QUnit.test("Draw label, position is invalid", function(assert) {
     var label = createCorrectionLabel.call(this, { 0: 300, 10: 270, 20: 240 });
 
     assert.equal(label.shift.args[0][0], 290);
-    assert.equal(label.shift.args[0][1], 295);
+    assert.equal(label.shift.args[0][1], 265);
 });
 
 QUnit.test("Label position outside (angleFunctions.cos > 0.1)", function(assert) {
     var label = createCorrectionLabel.call(this, { 0: 300, 10: 10, 20: 240 });
 
-    assert.equal(label.shift.args[0][0], 448);
-    assert.equal(label.shift.args[0][1], 119);
+    assert.equal(label.shift.args[0][0], 418);
+    assert.equal(label.shift.args[0][1], 124);
 });
 
 QUnit.test("Label position outside (angleFunctions.cos < -0.1)", function(assert) {
     var label = createCorrectionLabel.call(this, { 0: 300, 10: 180, 20: 240 });
 
-    assert.equal(label.shift.args[0][0], 130);
+    assert.equal(label.shift.args[0][0], 160);
     assert.equal(label.shift.args[0][1], 145);
 });
 
@@ -949,12 +949,6 @@ QUnit.test("Draw label, position inside", function(assert) {
 
     assert.equal(label.shift.args[0][0], 290);
     assert.equal(label.shift.args[0][1], 205);
-});
-
-QUnit.test("draw label", function(assert) {
-    var label = createCorrectionLabel.call(this, { 0: 300, 10: 270, 20: 240 });
-    assert.equal(label.shift.args[0][0], 290);
-    assert.equal(label.shift.args[0][1], 295);
 });
 
 QUnit.test("hide label on draw if it invisible", function(assert) {
@@ -1002,19 +996,6 @@ QUnit.test("columns if label in center", function(assert) {
     var coord = point._correctLabelCoord({ x: 300, y: 10 });
 
     assert.deepEqual(coord, { x: 580, y: 10 });
-});
-
-QUnit.test("columns with maxLabelLength", function(assert) {
-    // arrange
-    this.options.label.connectorOffset = 20;
-    var point = createPointWithStubLabel.call(this, { 0: 350, 10: 330, 20: 310 });
-    point.setMaxLabelLength(30);
-
-    // act
-    var coord = point._correctLabelCoord({ x: 400, y: 10 });
-
-    // arrange
-    assert.deepEqual(coord, { x: 450, y: 10 }, "coords");
 });
 
 QUnit.test("not columns", function(assert) {
@@ -1111,6 +1092,7 @@ QUnit.test("Draw label (area of label < minY area of canvas)", function(assert) 
 
 QUnit.test("Draw label (area of label > maxY area of canvas)", function(assert) {
     this.series._visibleArea = { minX: 0, maxX: 600, minY: 0, maxY: 300 };
+    this.options.label.radialOffset = 30;
     var label = createCorrectionLabel.call(this, { 0: 300, 10: 270, 20: 240 });
 
     assert.equal(label.shift.args[0][0], 339);
@@ -1127,6 +1109,7 @@ QUnit.test("Draw label (area of label < minY area of canvas), first drawing", fu
 
 QUnit.test("Draw label (area of label > maxY area of canvas), first drawing", function(assert) {
     this.series._visibleArea = { minX: 0, maxX: 600, minY: 0, maxY: 300 };
+    this.options.label.radialOffset = 30;
     var label = createCorrectionLabel.call(this, { 0: 300, 10: 270, 20: 240 }, true);
 
     assert.equal(label.shift.args[0][0], 290);
@@ -1151,6 +1134,7 @@ QUnit.test("Draw label (area of label < minX area of canvas)", function(assert) 
 
 QUnit.test("Draw label (area of label > maxX area of canvas), first drawing", function(assert) {
     this.series._visibleArea = { minX: 0, maxX: 300, minY: 0, maxY: 600 };
+    this.options.label.radialOffset = 30;
     var label = createCorrectionLabel.call(this, { 0: 300, 10: 270, 20: 240 }, true);
 
     assert.equal(label.shift.args[0][0], 280);
@@ -1159,6 +1143,7 @@ QUnit.test("Draw label (area of label > maxX area of canvas), first drawing", fu
 
 QUnit.test("Draw label (area of label < minX area of canvas), first drawing", function(assert) {
     this.series._visibleArea = { minX: 300, maxX: 600, minY: 0, maxY: 600 };
+    this.options.label.radialOffset = 30;
     var label = createCorrectionLabel.call(this, { 0: 300, 10: 270, 20: 240 }, true);
 
     assert.equal(label.shift.args[0][0], 300);
