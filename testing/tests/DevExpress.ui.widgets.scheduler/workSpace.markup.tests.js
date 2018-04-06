@@ -520,7 +520,7 @@ const dayWithGroupingModuleConfig = {
     }
 };
 
-QUnit.module("Workspace Day markup with horizontal grouping", dayWithGroupingModuleConfig, () => {
+QUnit.module("Workspace Day markup with vertical grouping", dayWithGroupingModuleConfig, () => {
     QUnit.test("Scheduler workspace day should have a right css class", (assert) => {
         const $element = this.instance.$element();
 
@@ -586,6 +586,15 @@ QUnit.module("Workspace Day markup with horizontal grouping", dayWithGroupingMod
             a: 1
         }, "Cell group is OK");
         assert.deepEqual($element.find(".dx-scheduler-date-table tbody tr>td").eq(25).data("dxCellData").groups, { a: 2 }, "Cell group is OK");
+    });
+
+    QUnit.test("Grouped allDay cells should have a right group field in dxCellData", (assert) => {
+        this.instance.option("showAllDayPanel", true);
+
+        let $allDayCells = this.instance.$element().find(toSelector(ALL_DAY_TABLE_CELL_CLASS));
+
+        assert.deepEqual($allDayCells.eq(0).data("dxCellData").groups, { a: 1 }, "Cell group is OK");
+        assert.deepEqual($allDayCells.eq(1).data("dxCellData").groups, { a: 2 }, "Cell group is OK");
     });
 
     QUnit.test("WorkSpace Day view cells should have right class when groups", (assert) => {
@@ -804,7 +813,7 @@ const weekWithGroupingModuleConfig = {
     }
 };
 
-QUnit.module("Workspace Week markup with horizontal grouping", weekWithGroupingModuleConfig, () => {
+QUnit.module("Workspace Week markup with vertical grouping", weekWithGroupingModuleConfig, () => {
     QUnit.test("Scheduler workspace day should have a right css class", (assert) => {
         const $element = this.instance.$element();
 
@@ -1295,7 +1304,7 @@ const monthWithGroupingModuleConfig = {
     }
 };
 
-QUnit.module("Workspace Month markup with horizontal grouping", monthWithGroupingModuleConfig, () => {
+QUnit.module("Workspace Month markup with vertical grouping", monthWithGroupingModuleConfig, () => {
     QUnit.test("Scheduler workspace day should have a right css class", (assert) => {
         const $element = this.instance.$element();
 

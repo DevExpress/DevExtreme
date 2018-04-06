@@ -1210,7 +1210,8 @@ var SchedulerWorkSpace = Widget.inherit({
             cellClass: this._getAllDayPanelCellClass.bind(this),
             rowClass: ALL_DAY_TABLE_ROW_CLASS,
             cellTemplate: this.option("dataCellTemplate"),
-            getCellData: this._getAllDayCellData.bind(this)
+            getCellData: this._getAllDayCellData.bind(this),
+            groupIndex: index
         }, true);
 
         this._toggleAllDayVisibility();
@@ -1223,7 +1224,7 @@ var SchedulerWorkSpace = Widget.inherit({
         return this._groupedStrategy.addAdditionalGroupCellClasses(cellClass, j + 1);
     },
 
-    _getAllDayCellData: function(cell, rowIndex, cellIndex) {
+    _getAllDayCellData: function(cell, rowIndex, cellIndex, groupIndex) {
         var startDate = this._getDateByCellIndexes(rowIndex, cellIndex);
 
         startDate = dateUtils.trimTime(startDate);
@@ -1234,7 +1235,7 @@ var SchedulerWorkSpace = Widget.inherit({
             allDay: true
         };
 
-        var groups = this._getCellGroups(this._getGroupIndex(rowIndex, cellIndex));
+        var groups = this._getCellGroups(groupIndex || this._getGroupIndex(rowIndex, cellIndex));
 
         if(groups.length) {
             data.groups = {};
