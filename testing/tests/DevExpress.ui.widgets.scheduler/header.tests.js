@@ -153,6 +153,33 @@ QUnit.test("View switcher should be rendered correctly when views contains objec
     assert.equal($switcher.text(), "MonthTestDay", "ViewSwitcher was rendered correctly");
 });
 
+QUnit.test("View switcher label should be rendered correctly when views contains objects", function(assert) {
+    var instance = $("#scheduler-header").dxSchedulerHeader({
+        views: [{
+            type: "month"
+        }, {
+            type: "day",
+            name: "TestDay"
+        }],
+        currentView: {
+            type: "month"
+        },
+        useDropDownViewSwitcher: true
+    }).dxSchedulerHeader("instance");
+
+    var $element = instance.$element(),
+        $switcherLabel = $element.find(".dx-scheduler-view-switcher-label");
+
+    assert.equal($switcherLabel.text(), "Month", "ViewSwitcher label was rendered correctly");
+
+    instance.option("currentView", {
+        type: "day",
+        name: "TestDay"
+    });
+
+    assert.equal($switcherLabel.text(), "Day", "ViewSwitcher label was rendered correctly");
+});
+
 QUnit.test("currentView option should be passed correctly to the navigator", function(assert) {
     var views = [
         {
