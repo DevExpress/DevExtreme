@@ -2957,36 +2957,6 @@ QUnit.test("Tasks should have a right color", function(assert) {
     assert.equal(this.getAppointmentColor(tasks.eq(4)), "#cb7d7b", "Color is OK");
 });
 
-// Remove this test when the 'mainColor' property will be removed at all
-QUnit.test("Ungrouped tasks should have a right color(via the 'mainColor' field)", function(assert) {
-    try {
-        var data = new DataSource({
-            store: [
-                { text: "Item 1", ownerId: 2, startDate: new Date(2015, 1, 9), endDate: new Date(2015, 1, 9, 0, 30) },
-                { text: "Item 2", startDate: new Date(2015, 1, 9), endDate: new Date(2015, 1, 9, 0, 30) }
-            ]
-        });
-
-        this.createInstance({
-            currentDate: new Date(2015, 1, 9),
-            resources: [{
-                field: "ownerId",
-                mainColor: true,
-                dataSource: [{ id: 1, text: "John", color: "#ff0000" }, { id: 2, text: "Mike", color: "#0000ff" }]
-            }],
-            dataSource: data,
-            width: 700
-        });
-
-        var tasks = this.instance.$element().find("." + APPOINTMENT_CLASS);
-
-        assert.equal(this.getAppointmentColor(tasks.eq(0)), "#0000ff", "Color is OK");
-        assert.equal($.inArray(this.getAppointmentColor(tasks.eq(1)), ["#ff0000", "#0000ff"]), -1, "Color is OK");
-    } finally {
-        $(".dynamic-styles").remove();
-    }
-});
-
 QUnit.test("Ungrouped tasks should have a right color(via the 'useColorAsDefault' field)", function(assert) {
     try {
         var data = new DataSource({
