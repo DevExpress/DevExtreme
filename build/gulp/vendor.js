@@ -7,7 +7,6 @@ var merge = require('merge-stream');
 
 gulp.task('vendor', function() {
     return merge(
-        gulp.src('./vendor/angular-1.2/*').pipe(gulp.dest('artifacts/js/angular-1.2')),
         gulp.src([
             './node_modules/angular/angular?(.min).js',
             './vendor/angular-route/*',
