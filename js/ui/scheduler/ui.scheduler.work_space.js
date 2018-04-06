@@ -40,8 +40,6 @@ var COMPONENT_CLASS = "dx-scheduler-work-space",
     WORKSPACE_WITH_ODD_CELLS_CLASS = "dx-scheduler-work-space-odd-cells",
     WORKSPACE_WITH_OVERLAPPING_CLASS = "dx-scheduler-work-space-overlapping",
 
-    WORKSPACE_GROUPED_ATTR = "dx-group-row-count",
-
     TIME_PANEL_CLASS = "dx-scheduler-time-panel",
     TIME_PANEL_CELL_CLASS = "dx-scheduler-time-panel-cell",
     TIME_PANEL_ROW_CLASS = "dx-scheduler-time-panel-row",
@@ -1081,10 +1079,9 @@ var SchedulerWorkSpace = Widget.inherit({
         var $container = this._getGroupHeaderContainer(),
             groupCount = this._getGroupCount(),
             cellTemplates = [];
-
         if(groupCount) {
             var groupRows = this._makeGroupRows(this.option("groups"));
-            this._attachGroupCountAttr(groupRows.elements.length);
+            this._attachGroupCountAttr(groupCount);
             $container.append(groupRows.elements);
             cellTemplates = groupRows.cellTemplates;
         } else {
@@ -1101,11 +1098,15 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _detachGroupCountAttr: function() {
-        this.$element().removeAttr(WORKSPACE_GROUPED_ATTR);
+        var groupedAttr = this._groupedStrategy.getGroupCountAttr();
+
+        this.$element().removeAttr(groupedAttr.attr);
     },
 
     _attachGroupCountAttr: function(groupRowCount) {
-        this.$element().attr(WORKSPACE_GROUPED_ATTR, groupRowCount);
+        var groupedAttr = this._groupedStrategy.getGroupCountAttr(groupRowCount);
+
+        this.$element().attr(groupedAttr.attr, groupedAttr.count);
     },
 
     headerPanelOffsetRecalculate: function() {

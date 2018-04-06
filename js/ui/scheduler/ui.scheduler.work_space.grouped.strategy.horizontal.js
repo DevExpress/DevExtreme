@@ -2,6 +2,8 @@
 
 var GroupedStrategy = require("./ui.scheduler.work_space.grouped.strategy");
 
+var HORIZONTAL_GROUPED_ATTR = "dx-group-row-count";
+
 var HorizontalGroupedStrategy = GroupedStrategy.inherit({
     prepareCellIndexes: function(cellCoordinates, groupIndex) {
         return {
@@ -85,6 +87,13 @@ var HorizontalGroupedStrategy = GroupedStrategy.inherit({
 
     getAllDayOffset: function() {
         return this._workSpace.getAllDayHeight();
+    },
+
+    getGroupCountAttr: function(groupRowCount) {
+        return {
+            attr: HORIZONTAL_GROUPED_ATTR,
+            count: groupRowCount
+        };
     }
 });
 

@@ -336,6 +336,61 @@
     }
 }
 
+.dx-scheduler-vertical-group-table-mixin() {
+    .set-size(@size) {
+        .dx-scheduler-work-space-horizontal-group-table, {
+            width: @size;
+        }
+
+        .dx-scheduler-date-table {
+            margin-left: -(@size + @SCHEDULER_LEFT_COLUMN_WIDTH);
+
+            .dx-scheduler-date-table-row:before,
+            .dx-scheduler-all-day-table-row:before {
+                width: @size + @SCHEDULER_LEFT_COLUMN_WIDTH;
+            }
+        } 
+        
+        .dx-scheduler-header-panel {
+            .dx-scheduler-header-row:before {
+                width: @size + @SCHEDULER_LEFT_COLUMN_WIDTH;
+            }
+        }
+
+
+        .dx-scheduler-fixed-appointments {
+            left: @size + @SCHEDULER_LEFT_COLUMN_WIDTH;
+        }
+    }
+
+    /*.dx-scheduler-work-space-both-scrollbar {
+        .dx-scheduler-date-table-scrollable {
+            margin-left: 0;
+        }
+
+        .dx-scheduler-header-scrollable.dx-scrollable {
+            margin: 0;
+            padding: 0;
+
+            .dx-rtl & {
+                margin: 0;
+            }
+        }
+    }*/
+
+    &[dx-group-column-count='1'] {
+        .set-size(100px);
+    }
+
+    &[dx-group-column-count='2'] {
+        .set-size(160px);
+    }
+
+    &[dx-group-column-count='3'] {
+        .set-size(180px);
+    }
+}
+
 .dx-scheduler-appointment-focused-mixin() {
     &.dx-state-focused {
         .box-shadow(none);
@@ -2246,9 +2301,10 @@
         }
     }
     .dx-scheduler-work-space-vertical-grouped {
+        .dx-scheduler-vertical-group-table-mixin();
+
         .dx-scheduler-work-space-horizontal-group-table {
             float: left;
-            width: 100px;
             height: 100%;
             min-height: 100px;
             border-right: @SCHEDULER_BASE_BORDER;
@@ -2314,7 +2370,7 @@
         }
 
         &:not(.dx-scheduler-work-space-month):not(.dx-scheduler-timeline):not(.dx-scheduler-work-space-both-scrollbar) {
-            .dx-scheduler-date-table {
+            /*.dx-scheduler-date-table {
                 margin-left: -(@SCHEDULER_LEFT_COLUMN_WIDTH * 2);
     
                 .dx-scheduler-date-table-row:before,
@@ -2327,7 +2383,9 @@
                 .dx-scheduler-header-row:before {
                     width: @SCHEDULER_LEFT_COLUMN_WIDTH * 2;
                 }
-            }
+            }*/
+
+            .dx-scheduler-vertical-group-table-mixin();
         }
     
         &.dx-scheduler-work-space-month:not(.dx-scheduler-work-space-both-scrollbar) {
