@@ -97,7 +97,7 @@ var applyState = function(that, state) {
 
     that.option("searchPanel.text", searchText || "");
 
-    that.option("paging.pageSize", scrollingMode !== "virtual" && scrollingMode !== "infinite" && state.pageSize ? state.pageSize : that._initialPageSize);
+    that.option("paging.pageSize", scrollingMode !== "virtual" && scrollingMode !== "infinite" && isDefined(state.pageSize) ? state.pageSize : that._initialPageSize);
     that.option("paging.pageIndex", state.pageIndex || 0);
 };
 
