@@ -3036,53 +3036,6 @@ QUnit.test("Load collapsed groups, expand second level item, expand third level 
     assert.equal(dataSource.totalItemsCount(), 16, "total items count");
 });
 
-QUnit.test("Load collapsed groups, expand second level item, expand third level big item and go to third page when two groups", function(assert) {
-    var array = [{ field1: 1, field2: 2, field3: 3 },
-                    { field1: 2, field2: 3, field3: 4 },
-                    { field1: 2, field2: 4, field3: 5 },
-                    { field1: 2, field2: 4, field3: 6 },
-                    { field1: 2, field2: 4, field3: 7 },
-                    { field1: 2, field2: 4, field3: 8 },
-                    { field1: 2, field2: 4, field3: 9 },
-                    { field1: 3, field2: 5, field3: 10 }];
-
-    var dataSource = this.createDataSource({
-        store: array,
-        group: ["field1", "field2"],
-        pageSize: 4
-    });
-
-    dataSource.load();
-
-    // act
-    dataSource.changeRowExpand([2]);
-    dataSource.load();
-
-    dataSource.changeRowExpand([2, 4]);
-    dataSource.load();
-
-    dataSource.pageIndex(1);
-    dataSource.load();
-
-    dataSource.pageIndex(2);
-    dataSource.load();
-
-    // assert
-    assert.deepEqual(dataSource.items(), [
-        {
-            isContinuation: true,
-            key: 2,
-            items: [{
-                key: 4,
-                isContinuation: true,
-                isContinuationOnNextPage: true,
-                items: [array[4], array[5]]
-            }]
-        }], "items");
-
-    assert.equal(dataSource.totalItemsCount(), 16, "total items count");
-});
-
 QUnit.test("Expand third level group", function(assert) {
     var array = [
         /* 1 */
