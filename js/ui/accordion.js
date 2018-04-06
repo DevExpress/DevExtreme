@@ -27,6 +27,7 @@ var ACCORDION_CLASS = "dx-accordion",
     ACCORDION_ITEM_CLOSED_CLASS = "dx-accordion-item-closed",
     ACCORDION_ITEM_TITLE_CLASS = "dx-accordion-item-title",
     ACCORDION_ITEM_BODY_CLASS = "dx-accordion-item-body",
+    ACCORDION_ITEM_TITLE_CAPTION_CLASS = "dx-accordion-item-title-caption",
 
     ACCORDION_ITEM_DATA_KEY = "dxAccordionItemData";
 
@@ -168,7 +169,9 @@ var Accordion = CollectionWidget.inherit({
                 },
                 options: {
                     itemTitleTemplate: function(data) {
-                        return $("<div>").text(data.text).addClass("dx-accordion-item-title-caption");
+                        return $("<div>")
+                            .text(data.text)
+                            .addClass(ACCORDION_ITEM_TITLE_CAPTION_CLASS);
                     },
                      /**
                     * @name dxAccordionOptions_animationDuration
