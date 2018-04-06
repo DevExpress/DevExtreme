@@ -267,7 +267,7 @@ var subscribes = {
             containerSign = options.isFixedContainer ? -1 : 1;
 
         var scrollTop = !isAllDay ? this.getWorkSpaceScrollableScrollTop() : 0,
-            allDayPanelTopOffset = !isAllDay ? this.getWorkSpaceAllDayHeight() : 0,
+            allDayPanelTopOffset = !isAllDay ? this.getWorkSpaceAllDayOffset() : 0,
             headerHeight = this.getWorkSpaceHeaderPanelHeight(),
             scrollLeft = this.getWorkSpaceScrollableScrollLeft(),
             tableLeftOffset = this.getWorkSpaceDateTableOffset();

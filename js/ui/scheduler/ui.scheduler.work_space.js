@@ -1972,7 +1972,11 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     getAllDayHeight: function() {
-        return this._groupedStrategy.getAllDayHeight();
+        return this.option("showAllDayPanel") ? this._getCells(true).first().outerHeight() || 0 : 0;
+    },
+
+    getAllDayOffset: function() {
+        return this._groupedStrategy.getAllDayOffset();
     },
 
     getMaxAllowedPosition: function() {

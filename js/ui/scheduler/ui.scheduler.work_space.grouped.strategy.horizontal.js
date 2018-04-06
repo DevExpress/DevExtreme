@@ -83,8 +83,8 @@ var HorizontalGroupedStrategy = GroupedStrategy.inherit({
         return minWidth;
     },
 
-    getAllDayHeight: function() {
-        return this._workSpace.option("showAllDayPanel") ? this._workSpace._getCells(true).first().outerHeight() || 0 : 0;
+    getAllDayOffset: function() {
+        return this._workSpace.getAllDayHeight();
     }
 });
 
