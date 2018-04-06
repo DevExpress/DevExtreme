@@ -706,6 +706,7 @@ var SchedulerWorkSpace = Widget.inherit({
         this._dateTableScrollable.$content().append(this._$dateTable);
 
         if(this._isVerticalGroupedWorkSpace()) {
+            this._dateTableScrollable.$content().prepend(this._$allDayContainer);
             this._sidebarScrollable.$content().append(this._$groupTable, this._$timePanel);
         } else {
             this._headerScrollable.$content().append(this._$allDayContainer, this._$allDayPanel);
