@@ -10,7 +10,8 @@ var $ = require("jquery"),
     DataSource = require("data/data_source/data_source").DataSource,
     executeAsyncMock = require("../../helpers/executeAsyncMock.js"),
     pointerMock = require("../../helpers/pointerMock.js"),
-    keyboardMock = require("../../helpers/keyboardMock.js");
+    keyboardMock = require("../../helpers/keyboardMock.js"),
+    themes = require("ui/themes");
 
 require("common.css!");
 
@@ -198,6 +199,20 @@ QUnit.test("onContentReady action should be fired after opened item was rendered
 
     assert.equal(count, 1, "onContentReady was fired");
 
+});
+
+QUnit.test("Special title template in Material theme", function(assert) {
+    var origIsMaterial = themes.isMaterial;
+    themes.isMaterial = function() { return true; };
+
+    this.$element.dxAccordion({
+        items: this.items
+    });
+
+    var titleCaption = this.$element.find(".dx-accordion-item-title-caption");
+    assert.equal(titleCaption.length, this.items.length, "title has caption elements");
+
+    themes.isMaterial = origIsMaterial;
 });
 
 

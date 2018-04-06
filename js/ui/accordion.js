@@ -17,7 +17,8 @@ var $ = require("../core/renderer"),
     Deferred = deferredUtils.Deferred,
     BindableTemplate = require("./widget/bindable_template"),
     iconUtils = require("../core/utils/icon"),
-    isDefined = require("../core/utils/type").isDefined;
+    isDefined = require("../core/utils/type").isDefined,
+    themes = require("./themes");
 
 var ACCORDION_CLASS = "dx-accordion",
     ACCORDION_WRAPPER_CLASS = "dx-accordion-wrapper",
@@ -26,6 +27,7 @@ var ACCORDION_CLASS = "dx-accordion",
     ACCORDION_ITEM_CLOSED_CLASS = "dx-accordion-item-closed",
     ACCORDION_ITEM_TITLE_CLASS = "dx-accordion-item-title",
     ACCORDION_ITEM_BODY_CLASS = "dx-accordion-item-body",
+    ACCORDION_ITEM_TITLE_CAPTION_CLASS = "dx-accordion-item-title-caption",
 
     ACCORDION_ITEM_DATA_KEY = "dxAccordionItemData";
 
@@ -139,7 +141,8 @@ var Accordion = CollectionWidget.inherit({
 
             selectionByClick: true,
             activeStateEnabled: true,
-            _itemAttributes: { role: "tab" }
+            _itemAttributes: { role: "tab" },
+            _animationEasing: "ease"
         });
     },
 
@@ -158,6 +161,26 @@ var Accordion = CollectionWidget.inherit({
                     * @inheritdoc
                     */
                     focusStateEnabled: true
+                }
+            },
+            {
+                device: function() {
+                    return themes.isMaterial();
+                },
+                options: {
+                    itemTitleTemplate: function(data) {
+                        return $("<div>")
+                            .text(data.text)
+                            .addClass(ACCORDION_ITEM_TITLE_CAPTION_CLASS);
+                    },
+                     /**
+                    * @name dxAccordionOptions_animationDuration
+                    * @publicName animationDuration
+                    * @type number
+                    * @default 200 @for Material
+                    */
+                    animationDuration: 200,
+                    _animationEasing: "cubic-bezier(0.4, 0, 0.2, 1)"
                 }
             }
         ]);
@@ -391,7 +414,8 @@ var Accordion = CollectionWidget.inherit({
                 type: "custom",
                 from: { height: startHeight },
                 to: { height: endHeight },
-                duration: this.option("animationDuration")
+                duration: this.option("animationDuration"),
+                easing: this.option("_animationEasing")
             });
         }
 
@@ -449,6 +473,7 @@ var Accordion = CollectionWidget.inherit({
         switch(args.name) {
             case "animationDuration":
             case "onItemTitleClick":
+            case "_animationEasing":
                 break;
             case "collapsible":
                 this.option("selectionRequired", !this.option("collapsible"));
