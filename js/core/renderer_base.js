@@ -34,7 +34,7 @@ var initRender = function(selector, context) {
 
         [].push.apply(this, context.querySelectorAll(selector));
         return this;
-    } else if(selector.nodeType) {
+    } else if(selector.nodeType || typeUtils.isWindow(selector)) {
         this[0] = selector;
         this.length = 1;
         return this;
