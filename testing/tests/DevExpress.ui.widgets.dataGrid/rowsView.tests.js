@@ -67,9 +67,9 @@ function createRowsView(rows, dataController, columns, initDefaultOptions, userO
         }
     }
 
-    var defaultSelectionCellTemplate = (container, options) => {
+    var defaultSelectionCellTemplate = function(container, options) {
         this.dataGrid.rowsView.renderSelectCheckBoxContainer($(container), options);
-    };
+    }.bind(this);
 
     columns.forEach(function(column) {
         if(column.command === "select") {

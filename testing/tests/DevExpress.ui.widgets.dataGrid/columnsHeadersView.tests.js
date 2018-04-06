@@ -79,14 +79,14 @@ QUnit.module('Headers', {
             }
         });
 
-        this.defaultSelectionHeaderTemplate = (container, options) => {
+        this.defaultSelectionHeaderTemplate = function(container, options) {
             var column = options.column,
                 $cellElement = $(container).parent();
 
             $cellElement.addClass("dx-editor-cell");
             this.columnHeadersView._renderSelectAllCheckBox($cellElement, column);
             this.columnHeadersView._attachSelectAllCheckBoxClickEvent($cellElement);
-        };
+        }.bind(this);
     },
     afterEach: function() {
         this.dispose();
