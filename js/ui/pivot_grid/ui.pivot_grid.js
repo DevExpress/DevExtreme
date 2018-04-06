@@ -464,7 +464,14 @@ var PivotGrid = Widget.inherit({
                  * @type string
                  * @default undefined
                  */
-                proxyUrl: undefined
+                proxyUrl: undefined,
+                /**
+                 * @name dxPivotGridOptions_export_ignoreExcelErrors
+                 * @publicName ignoreExcelErrors
+                 * @type boolean
+                 * @default true
+                 */
+                ignoreExcelErrors: true
             },
             /**
              * @name dxPivotGridOptions_showRowTotals
