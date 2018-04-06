@@ -295,14 +295,21 @@
 * @type color
 * @group navigations.accordion
 */
-@accordion-title-active-bg: @base-focus-color;
+@accordion-title-active-bg: @base-hover-color;
 /**
 * @name 90. Item title hovered state background color
 * @type color
 * @group navigations.accordion
 */
 @accordion-item-hover-bg: @base-hover-color;
+/**
+* @name 100. Item background color
+* @type color
+* @group navigations.accordion
+*/
+@accordion-item-bg: @base-bg;
 @accordion-icon-color: fade(@base-icon-color, 38%);
+@accordion-title-hover-border-color: darken(@base-border-color, 6%);
 
 // Button
 
