@@ -563,6 +563,7 @@ exports.ExportController = dataGridCore.ViewController.inherit({}).include(expor
             format: "EXCEL",
             autoFilterEnabled: !!that.option("export.excelFilterEnabled"),
             rtlEnabled: that.option("rtlEnabled"),
+            ignoreErrors: that.option("export.ignoreExcelErrors"),
             exportingAction: that.getAction("onExporting"),
             exportedAction: that.getAction("onExported"),
             fileSavingAction: that.getAction("onFileSaving")
@@ -620,7 +621,6 @@ dataGridCore.registerModule("export", {
                  * @default undefined
                  */
                 excelWrapTextEnabled: undefined,
-
                 /**
                  * @name dxDataGridOptions_export_proxyUrl
                  * @publicName proxyUrl
@@ -628,7 +628,6 @@ dataGridCore.registerModule("export", {
                  * @default undefined
                  */
                 proxyUrl: undefined,
-
                 /**
                  * @name dxDataGridOptions_export_allowExportSelectedData
                  * @publicName allowExportSelectedData
@@ -636,7 +635,13 @@ dataGridCore.registerModule("export", {
                  * @default false
                  */
                 allowExportSelectedData: false,
-
+                /**
+                * @name dxDataGridOptions_export_ignoreExcelErrors
+                * @publicName ignoreExcelErrors
+                * @type boolean
+                * @default true
+                */
+                ignoreExcelErrors: true,
                 /**
                  * @name dxDataGridOptions_export_texts
                  * @publicName texts
