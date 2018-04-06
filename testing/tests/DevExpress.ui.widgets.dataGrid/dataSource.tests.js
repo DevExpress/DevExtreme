@@ -2815,6 +2815,36 @@ QUnit.test("Send count query on row expand when next level is group", function(a
     assert.strictEqual(loadingChanged.getCall(0).args[0].take, 1, "take");
 });
 
+QUnit.test("Send count query on row expand when next level is group if group by 3 levels", function(assert) {
+    var dataSource = this.createDataSource({
+            group: ["field2", "field1", "field3"],
+            pageSize: 2
+        }),
+        loadingChanged = sinon.stub();
+
+    dataSource.load();
+
+    dataSource.store().on("loading", loadingChanged);
+
+    dataSource.changeRowExpand([2]);
+
+    assert.deepEqual(dataSource.items(), [{
+        key: 2, items: null
+    }, {
+        key: 3, items: null
+    }], "loaded items");
+
+    assert.equal(dataSource.totalItemsCount(), 4, "total items count");
+    assert.strictEqual(loadingChanged.callCount, 1, "loading count");
+
+    assert.deepEqual(loadingChanged.getCall(0).args[0].group, [{ "desc": false, "selector": "field1" }], "group");
+    assert.strictEqual(loadingChanged.getCall(0).args[0].requireTotalCount, false, "require total count is not passed on loading");
+    assert.strictEqual(loadingChanged.getCall(0).args[0].requireGroupCount, true, "require group count is not passed on loading");
+    assert.deepEqual(loadingChanged.getCall(0).args[0].filter, ["field2", "=", 2], "filter");
+    assert.strictEqual(loadingChanged.getCall(0).args[0].skip, 0, "skip");
+    assert.strictEqual(loadingChanged.getCall(0).args[0].take, 1, "take");
+});
+
 // T493778
 QUnit.test("Send count query on row expand when next level is group if use native promises", function(assert) {
     var dataSource = this.createDataSource({
@@ -3004,6 +3034,99 @@ QUnit.test("Load collapsed groups, expand second level item, expand third level 
         }], "items");
 
     assert.equal(dataSource.totalItemsCount(), 16, "total items count");
+});
+
+QUnit.test("Load collapsed groups, expand second level item, expand third level big item and go to third page when two groups", function(assert) {
+    var array = [{ field1: 1, field2: 2, field3: 3 },
+                    { field1: 2, field2: 3, field3: 4 },
+                    { field1: 2, field2: 4, field3: 5 },
+                    { field1: 2, field2: 4, field3: 6 },
+                    { field1: 2, field2: 4, field3: 7 },
+                    { field1: 2, field2: 4, field3: 8 },
+                    { field1: 2, field2: 4, field3: 9 },
+                    { field1: 3, field2: 5, field3: 10 }];
+
+    var dataSource = this.createDataSource({
+        store: array,
+        group: ["field1", "field2"],
+        pageSize: 4
+    });
+
+    dataSource.load();
+
+    // act
+    dataSource.changeRowExpand([2]);
+    dataSource.load();
+
+    dataSource.changeRowExpand([2, 4]);
+    dataSource.load();
+
+    dataSource.pageIndex(1);
+    dataSource.load();
+
+    dataSource.pageIndex(2);
+    dataSource.load();
+
+    // assert
+    assert.deepEqual(dataSource.items(), [
+        {
+            isContinuation: true,
+            key: 2,
+            items: [{
+                key: 4,
+                isContinuation: true,
+                isContinuationOnNextPage: true,
+                items: [array[4], array[5]]
+            }]
+        }], "items");
+
+    assert.equal(dataSource.totalItemsCount(), 16, "total items count");
+});
+
+QUnit.test("Expand third level group", function(assert) {
+    var array = [
+        /* 1 */
+            /* 2 */
+                /* 3 */
+                    { field1: 1, field2: 2, field3: 3, id: 1 },
+                    { field1: 1, field2: 2, field3: 3, id: 2 },
+        /* 2 */ { field1: 2, field2: 2, field3: 4, id: 3 },
+        // ===
+        { field1: 3, field2: 3, field3: 5, id: 4 },
+        { field1: 4, field2: 3, field3: 5, id: 5 },
+        { field1: 5, field2: 3, field3: 5, id: 6 }
+    ];
+
+    var dataSource = this.createDataSource({
+        store: array,
+        group: ["field1", "field2", "field3"],
+        pageSize: 6
+    });
+
+    dataSource.load();
+
+    // act
+    dataSource.changeRowExpand([1]);
+    dataSource.load();
+
+    dataSource.changeRowExpand([1, 2]);
+    dataSource.load();
+
+    dataSource.changeRowExpand([1, 2, 3]);
+    dataSource.load();
+
+    // assert
+    assert.deepEqual(dataSource.items().length, 2, "group count on first levetl");
+
+    assert.deepEqual(dataSource.items()[0].items, [{
+        key: 2,
+        items: [{
+            key: 3,
+            items: [array[0], array[1]]
+        }]
+    }], "items");
+
+    assert.equal(dataSource.totalItemsCount(), 9, "total items count");
 });
 
 QUnit.test("Load collapsed groups and expand two items when two groups", function(assert) {
