@@ -1400,7 +1400,6 @@ testComponentDefaults(DataGrid,
     }
 );
 
-
 testComponentDefaults(Accordion,
     {},
     {
@@ -1415,8 +1414,7 @@ testComponentDefaults(Accordion,
         themes.current(this.originalCurrentTheme);
     }
 );
-  
-  
+
 testComponentDefaults(Scheduler,
     {},
     {
