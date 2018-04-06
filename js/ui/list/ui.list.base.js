@@ -584,11 +584,9 @@ var ListBase = CollectionWidget.inherit({
     },
 
     _initScrollView: function() {
-        this._suppressDeprecatedWarnings();
         var scrollingEnabled = this.option("scrollingEnabled"),
             pullRefreshEnabled = scrollingEnabled && this.option("pullRefreshEnabled"),
             autoPagingEnabled = scrollingEnabled && this._scrollBottomMode() && !!this._dataSource;
-        this._resumeDeprecatedWarnings();
 
         this._scrollView = this._createComponent(this.$element(), ScrollView, {
             disabled: this.option("disabled") || !scrollingEnabled,
@@ -652,10 +650,7 @@ var ListBase = CollectionWidget.inherit({
     },
 
     _shouldRenderNextButton: function() {
-        this._suppressDeprecatedWarnings();
-        var result = this._nextButtonMode() && this._dataSource && this._dataSource.isLoaded();
-        this._resumeDeprecatedWarnings();
-        return result;
+        return this._nextButtonMode() && this._dataSource && this._dataSource.isLoaded();
     },
 
     _dataSourceLoadingChangedHandler: function(isLoading) {
