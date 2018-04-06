@@ -5325,11 +5325,11 @@ QUnit.test("Appointments should be rendered correctly in vertical grouped worksp
 
     var cellHeight = $(this.instance.$element()).find("." + DATE_TABLE_CELL_CLASS).first().outerHeight();
 
-    assert.equal($appointments.eq(0).position().top, 7 * cellHeight, "correct top position of allDay appointment");
+    assert.roughEqual($appointments.eq(0).position().top, 7 * cellHeight, 1.5, "correct top position of allDay appointment");
     assert.roughEqual($appointments.eq(0).outerHeight(), 0.5 * cellHeight, 2, "correct size of allDay appointment");
     assert.equal($appointments.eq(0).position().left, 314, "correct left position of allDay appointment");
 
-    assert.equal($appointments.eq(1).position().top, 8.5 * cellHeight, "correct top position of appointment");
+    assert.roughEqual($appointments.eq(1).position().top, 8.5 * cellHeight, 1.5, "correct top position of appointment");
     assert.equal($appointments.eq(1).position().left, 314, "correct left position of appointment");
 });
 
@@ -5379,11 +5379,11 @@ QUnit.test("Rival allDay appointments from different groups should be rendered c
 
     var cellHeight = $(this.instance.$element()).find("." + DATE_TABLE_CELL_CLASS).first().outerHeight();
 
-    assert.equal($appointments.eq(0).position().top, 0, "correct top position of allDay appointment");
+    assert.roughEqual($appointments.eq(0).position().top, 0, 1.5, "correct top position of allDay appointment");
     assert.roughEqual($appointments.eq(0).outerHeight(), 0.5 * cellHeight, 2, "correct size of allDay appointment");
     assert.equal($appointments.eq(0).position().left, 314, "correct left position of allDay appointment");
 
-    assert.equal($appointments.eq(1).position().top, 7 * cellHeight, "correct top position of allDay appointment");
+    assert.roughEqual($appointments.eq(1).position().top, 7 * cellHeight, 1.5, "correct top position of allDay appointment");
     assert.roughEqual($appointments.eq(1).outerHeight(), 0.5 * cellHeight, 2, "correct size of allDay appointment");
     assert.equal($appointments.eq(1).position().left, 314, "correct left position of allDay appointment");
 });
@@ -5433,7 +5433,7 @@ QUnit.test("Rival allDay appointments from same groups should be rendered correc
 
     var cellHeight = $(this.instance.$element()).find("." + DATE_TABLE_CELL_CLASS).first().outerHeight();
 
-    assert.roughEqual($appointments.eq(0).position().top, 0.5 * cellHeight, 2, "correct top position of allDay appointment");
+    assert.roughEqual($appointments.eq(0).position().top, 0.5 * cellHeight, 2.5, "correct top position of allDay appointment");
     assert.roughEqual($appointments.eq(0).outerHeight(), 0.5 * cellHeight, 2, "correct size of allDay appointment");
     assert.equal($appointments.eq(0).position().left, 314, "correct left position of allDay appointment");
 });
@@ -5482,11 +5482,11 @@ QUnit.test("Rival appointments from one group should be rendered correctly in ve
 
     var cellHeight = $(this.instance.$element()).find("." + DATE_TABLE_CELL_CLASS).first().outerHeight();
 
-    assert.equal($appointments.eq(0).position().top, 8.5 * cellHeight, "correct top position of appointment");
+    assert.roughEqual($appointments.eq(0).position().top, 8.5 * cellHeight, 1.5, "correct top position of appointment");
     assert.roughEqual($appointments.eq(0).outerWidth(), 90, 2, "correct size of appointment");
     assert.equal($appointments.eq(0).position().left, 314, "correct left position of appointment");
 
-    assert.equal($appointments.eq(1).position().top, 8.5 * cellHeight, "correct top position of appointment");
+    assert.roughEqual($appointments.eq(1).position().top, 8.5 * cellHeight, 1.5, "correct top position of appointment");
     assert.roughEqual($appointments.eq(1).outerWidth(), 90, 2, "correct size of appointment");
     assert.equal($appointments.eq(1).position().left, 428, "correct left position of appointment");
 });
@@ -5528,7 +5528,7 @@ QUnit.test("Appointment in bottom cell should be rendered cirrectly in vertical 
 
     var cellHeight = $(this.instance.$element()).find("." + DATE_TABLE_CELL_CLASS).first().outerHeight();
 
-    assert.equal($appointments.eq(0).position().top, 12 * cellHeight, "correct top position of appointment");
+    assert.roughEqual($appointments.eq(0).position().top, 12 * cellHeight, 1.5, "correct top position of appointment");
     assert.roughEqual($appointments.eq(0).outerHeight(), 100, 2, "correct size of appointment");
 });
 
@@ -5571,9 +5571,9 @@ QUnit.test("Appointments should be rendered correctly in vertical grouped worksp
         monthTopOffset = cellHeight * 0.4;
 
     assert.roughEqual($appointments.eq(0).position().top, cellHeight * 2 + monthTopOffset, 1, "correct top position");
-    assert.roughEqual($appointments.eq(0).position().left, cellWidth * 5 + 100, 1, "correct left position");
-    assert.roughEqual($appointments.eq(1).position().top, cellHeight * 8 + monthTopOffset, 1, "correct top position");
-    assert.roughEqual($appointments.eq(1).position().left, cellWidth * 5 + 100, 1, "correct left position");
+    assert.roughEqual($appointments.eq(0).position().left, cellWidth * 5 + 100, 1.5, "correct left position");
+    assert.roughEqual($appointments.eq(1).position().top, cellHeight * 8 + monthTopOffset, 3.5, "correct top position");
+    assert.roughEqual($appointments.eq(1).position().left, cellWidth * 5 + 100, 1.5, "correct left position");
 });
 
 QUnit.test("Appointment should be dragged correctly between the groups in vertical grouped workspace Day", function(assert) {
