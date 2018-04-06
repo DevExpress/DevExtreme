@@ -257,12 +257,6 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
             * @type String
             */
             /**
-            * @name dxMenuBaseItemTemplate_iconSrc
-            * @publicName iconSrc
-            * @type String
-            * @deprecated dxMenuBaseItemTemplate_icon
-            */
-            /**
             * @name dxMenuBaseItemTemplate_text
             * @publicName text
             * @type String

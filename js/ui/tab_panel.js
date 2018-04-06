@@ -140,12 +140,6 @@ var TabPanel = MultiView.inherit({
             * @type String
             */
             /**
-            * @name dxTabPanelItemTemplate_iconSrc
-            * @publicName iconSrc
-            * @type String
-            * @deprecated dxTabPanelItemTemplate_icon
-            */
-            /**
             * @name dxTabPanelItemTemplate_badge
             * @publicName badge
             * @type String

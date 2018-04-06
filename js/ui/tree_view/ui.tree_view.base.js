@@ -420,12 +420,6 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             * @type String
             */
             /**
-            * @name dxTreeViewItemTemplate_iconSrc
-            * @publicName iconSrc
-            * @type String
-            * @deprecated dxTreeViewItemTemplate_icon
-            */
-            /**
             * @name dxTreeViewItemTemplate_items
             * @publicName items
             * @type Array<dxTreeViewItemTemplate>

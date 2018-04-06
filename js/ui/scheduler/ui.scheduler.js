@@ -379,14 +379,6 @@ var Scheduler = Widget.inherit({
                 */
             resources: [
                     /**
-                    * @name dxSchedulerOptions_resources_field
-                    * @publicName field
-                    * @deprecated dxSchedulerOptions_resources_fieldExpr
-                    * @type String
-                    * @default ""
-                    */
-
-                    /**
                     * @name dxSchedulerOptions_resources_fieldExpr
                     * @publicName fieldExpr
                     * @type String
@@ -410,14 +402,6 @@ var Scheduler = Widget.inherit({
                     /**
                     * @name dxSchedulerOptions_resources_allowMultiple
                     * @publicName allowMultiple
-                    * @type Boolean
-                    * @default false
-                    */
-
-                    /**
-                    * @name dxSchedulerOptions_resources_mainColor
-                    * @publicName mainColor
-                    * @deprecated dxSchedulerOptions_resources_useColorAsDefault
                     * @type Boolean
                     * @default false
                     */

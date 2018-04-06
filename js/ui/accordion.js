@@ -198,12 +198,6 @@ var Accordion = CollectionWidget.inherit({
         * @publicName icon
         * @type String
         */
-        /**
-        * @name dxAccordionItemTemplate_iconSrc
-        * @publicName iconSrc
-        * @type String
-        * @deprecated dxAccordionItemTemplate_icon
-        */
         this._defaultTemplates["title"] = new BindableTemplate(function($container, data) {
             if(isPlainObject(data)) {
                 if(data.title) {
