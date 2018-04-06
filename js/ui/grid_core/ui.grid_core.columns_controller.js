@@ -602,9 +602,14 @@ module.exports = {
              * @type dxFormSimpleItem
              */
             /**
-             * @name GridBaseColumn_command
+             * @name dxDataGridColumn_command
              * @publicName command
              * @type string|Enums.GridCommandColumnType
+             */
+            /**
+             * @name dxTreeListColumn_command
+             * @publicName command
+             * @type string|Enums.TreeListCommandColumnType
              */
             regenerateColumnsByVisibleItems: false,
             /**
