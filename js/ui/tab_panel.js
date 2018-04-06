@@ -217,13 +217,11 @@ var TabPanel = MultiView.inherit({
         this._defaultTemplates["title"] = new BindableTemplate(function($container, data) {
             $container.text(data.title || String(data));
 
-            var icon = data.icon,
-                iconSrc = data.iconSrc,
-                $iconElement = iconUtils.getImageContainer(icon || iconSrc);
+            var $iconElement = iconUtils.getImageContainer(data.icon);
 
             $container.wrapInner($("<span>").addClass(TABS_ITEM_TEXT_CLASS));
             $iconElement && $iconElement.prependTo($container);
-        }, ["title", "html", "icon", "iconSrc"], this.option("integrationOptions.watchMethod"));
+        }, ["title", "html", "icon"], this.option("integrationOptions.watchMethod"));
     },
 
     _createTitleActions: function() {

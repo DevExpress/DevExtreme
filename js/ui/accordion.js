@@ -204,11 +204,11 @@ var Accordion = CollectionWidget.inherit({
                     $container.text(data.title);
                 }
 
-                $container.append(iconUtils.getImageContainer(data.icon || data.iconSrc));
+                $container.append(iconUtils.getImageContainer(data.icon));
             } else {
                 $container.text(String(data));
             }
-        }, ["title", "icon", "iconSrc"], this.option("integrationOptions.watchMethod"));
+        }, ["title", "icon"], this.option("integrationOptions.watchMethod"));
     },
 
     _initMarkup: function() {

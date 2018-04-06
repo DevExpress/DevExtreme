@@ -167,17 +167,6 @@ QUnit.test('Render item with icon path', function(assert) {
     assert.ok($($menuItemContent.children()[0]).attr('src'), '1.png', 'image is right');
 });
 
-QUnit.test('Render item with iconSrc path', function(assert) {
-    var menuBase = createMenu({ items: [{ iconSrc: '1.png' }] }),
-        $itemWrappers = menuBase.element.find('.' + DX_MENU_ITEM_WRAPPER_CLASS),
-        $item = $itemWrappers.children(),
-        $menuItemContent = $item.children();
-
-    assert.ok($item.hasClass(DX_ITEM_HAS_ICON), 'item has dx-menu-item-has-icon class');
-    assert.ok($($menuItemContent.children()[0]).hasClass(DX_ICON_CLASS), 'there is dx-icon class inside item-content');
-    assert.ok($($menuItemContent.children()[0]).attr('src'), '1.png', 'image is right');
-});
-
 QUnit.test('Render item with expressions', function(assert) {
     var menuBase = createMenu({
             displayExpr: "name",

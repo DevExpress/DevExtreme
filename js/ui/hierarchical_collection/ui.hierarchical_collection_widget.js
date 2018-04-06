@@ -139,16 +139,14 @@ var HierarchicalCollectionWidget = CollectionWidget.inherit({
                 .append(this._getTextContainer(itemData))
                 .append(this._getPopoutContainer(itemData));
             that._addContentClasses(itemData, $container.parent());
-        }.bind(this), ["text", "html", "items", "icon", "iconSrc"], this.option("integrationOptions.watchMethod"), {
+        }.bind(this), ["text", "html", "items", "icon"], this.option("integrationOptions.watchMethod"), {
             "text": this._displayGetter,
             "items": this._itemsGetter
         });
     },
 
     _getIconContainer: function(itemData) {
-        var icon = itemData.icon || itemData.iconSrc; // deprecated since 15.1 (itemData.iconSrc)
-
-        return icon ? iconUtils.getImageContainer(icon) : undefined;
+        return itemData.icon ? iconUtils.getImageContainer(itemData.icon) : undefined;
     },
 
     _getTextContainer: function(itemData) {
