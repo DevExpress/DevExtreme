@@ -225,14 +225,19 @@ var SchedulerHeader = Widget.inherit({
             return;
         }
 
-        var currentViewText = messageLocalization.format("dxScheduler-switcher" + camelize(this.option("currentView"), true));
+        var currentViewText = messageLocalization.format("dxScheduler-switcher" + camelize(this._getCurrentViewType(), true));
+
         this._$viewSwitcherLabel.text(currentViewText);
+    },
+
+    _getCurrentViewName: function(currentView) {
+        return typeUtils.isObject(currentView) ? currentView.name || currentView.type : currentView;
     },
 
     _updateCurrentView: function(e) {
         var selectedItem = e.itemData || e.component.option("selectedItem");
 
-        var viewName = typeUtils.isObject(selectedItem) ? selectedItem.name || selectedItem.type : selectedItem;
+        var viewName = this._getCurrentViewName(selectedItem);
 
         this.notifyObserver("currentViewUpdated", viewName);
     },
