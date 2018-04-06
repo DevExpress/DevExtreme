@@ -226,7 +226,7 @@
 * @type color
 * @group editors.radiogroup
 */
-@radiogroup-border-color: @base-border-color;
+@radiogroup-border-color: fade(@base-text-color, 54%);
 
 /**
 * @name 10. Background color
@@ -236,21 +236,6 @@
 @radiogroup-bg: @base-element-bg;
 
 /**
-* @name 40. Active state background color
-* @type color
-* @group editors.radiogroup
-*/
-@radiobutton-active-bg: fade(darken(@radiogroup-bg, 62.5%), 20%);
-
-/**
-* @name 40. Hovered state border color
-* @type color
-* @group editors.radiogroup
-* @paletteColorOpacity 1
-*/
-@radiogroup-hover-border-color: fade(@base-accent, 40%);
-
-/**
 * @name 50. Focused state border color
 * @type color
 * @group editors.radiogroup
@@ -258,12 +243,8 @@
 */
 @radiobutton-focused-border-color: @base-focus-color;
 
-@radiobutton-invalid-hover-border-color: @base-invalid-color;
 @radiobutton-invalid-focused-border-color: @base-invalid-color;
 @radiobutton-invalid-faded-border-color: @base-invalid-faded-border-color;
-
-@radiogroup-readonly-border-color: lighten(@radiogroup-border-color, 9%);
-@radiogroup-readonly-bg: @radiogroup-bg;
 
 // Accordion
 /**
