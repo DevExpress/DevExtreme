@@ -645,3 +645,29 @@ QUnit.test("Edit batch - removed row should not have add link", function(assert)
     assert.equal($commandEditCellElement.length, 1, "has command edit cell");
     assert.equal($commandEditCellElement.find(".dx-link-add").length, 0, "link add isn't rendered");
 });
+
+QUnit.test("Edit row with useIcons is true", function(assert) {
+    // arrange
+    var $editCellElement,
+        $testElement = $("#container");
+
+    this.options.editing = {
+        mode: "row",
+        allowAdding: true,
+        useIcons: true,
+        texts: {
+            addRowToNode: "Add"
+        }
+    };
+
+    this.setupTreeList();
+    this.rowsView.render($testElement);
+
+    // assert
+    $editCellElement = $testElement.find("tbody > tr").first().children().last();
+    assert.ok($editCellElement.hasClass("dx-command-edit-with-icons"), "the edit cell has icons");
+    assert.strictEqual($editCellElement.find(".dx-link").length, 1, "icon count");
+    assert.ok($editCellElement.find(".dx-link").hasClass("dx-icon-add"), "icon add");
+    assert.strictEqual($editCellElement.find(".dx-icon-add").attr("title"), "Add", "title of the icon add");
+    assert.strictEqual($editCellElement.find(".dx-icon-add").text(), "", "text of the icon add");
+});
