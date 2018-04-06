@@ -646,12 +646,17 @@ function isMatchedCondition(filter, addedFilterDataField, operations) {
 
 function syncFilters(filter, addedFilter, operations) {
     var canPush = addedFilter[2] !== null;
-    if(filter === null || filter.length === 0) return canPush ? addedFilter : null;
+
+    if(filter === null || filter.length === 0) {
+        return canPush ? addedFilter : null;
+    }
 
     if(isCondition(filter)) {
-        if(!canPush) return null;
-
-        if(isMatchedCondition(filter, addedFilter[0], operations)) {
+        var containsAddedFilter = isMatchedCondition(filter, addedFilter[0], operations);
+        if(!canPush) {
+            return !containsAddedFilter ? filter : null;
+        }
+        if(containsAddedFilter) {
             return addedFilter;
         } else {
             return [filter, AND_GROUP_OPERATION, addedFilter];
@@ -680,6 +685,10 @@ function syncFilters(filter, addedFilter, operations) {
             (result.length || isGroup(item)) && result.push(item);
         }
     });
+
+    if(result.length === 0) {
+        return null;
+    }
 
     if(canPush) {
         result.push(AND_GROUP_OPERATION);

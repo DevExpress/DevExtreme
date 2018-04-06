@@ -1562,6 +1562,41 @@ QUnit.module("Filter sync", function() {
         assert.deepEqual(result, addedFilter, "result = addedFilter");
     });
 
+    QUnit.test("null with not matched added filter condition", function(assert) {
+        // arrange
+        var filter = ["field", "=", 2],
+            addedFilter = ["field0", "=", null];
+
+        // act
+        var result = utils.syncFilters(filter, addedFilter, FILTER_ROW_OPERATIONS);
+
+        // assert
+        assert.deepEqual(result, filter, "result = filter");
+    });
+
+    QUnit.test("null with matched added header filter condition", function(assert) {
+        // arrange
+        var filter0 = ["field", "anyof", ["matched"]],
+            filter1 = ["field", "noneof", ["matched"]],
+            addedFilter = ["field", "=", null];
+
+        // act, assert
+        assert.deepEqual(utils.syncFilters(filter0, addedFilter, HEADER_FILTER_OPERATIONS), null, "anyof result = null");
+        assert.deepEqual(utils.syncFilters(filter1, addedFilter, HEADER_FILTER_OPERATIONS), null, "noneof result = null");
+    });
+
+    QUnit.test("null with matched noneof filter condition", function(assert) {
+        // arrange
+        var filter = ["field", "noneof", ["matched"]],
+            addedFilter = ["field", "=", null];
+
+        // act
+        var result = utils.syncFilters(filter, addedFilter, HEADER_FILTER_OPERATIONS);
+
+        // assert
+        assert.deepEqual(result, null, "result = null");
+    });
+
     QUnit.test("empty with field condition", function(assert) {
         // arrange
         var filter = [],
