@@ -16,12 +16,12 @@ QUnit.testStart(function() {
         '<div id="dateBox"></div>\
         \
         <div id="several">\
-            <div id="dateboxWithDateFormat" data-bind="dxDateBox: { value: value, format: \'date\', useCalendar: false, useNative: true }"></div>\
-            <div id="dateboxWithDateTimeFormat" data-bind="dxDateBox: { value: value, format: \'datetime\', useCalendar: false, useNative: true }"></div>\
-            <div id="dateboxWithTimeFormat" data-bind="dxDateBox: { value: value, format: \'time\', useCalendar: false, useNative: true }"></div>\
+            <div id="dateboxWithDateFormat" data-bind="dxDateBox: { value: value, format: \'date\', pickerType: \'native\' }"></div>\
+            <div id="dateboxWithDateTimeFormat" data-bind="dxDateBox: { value: value, format: \'datetime\', pickerType: \'native\' }"></div>\
+            <div id="dateboxWithTimeFormat" data-bind="dxDateBox: { value: value, format: \'time\', pickerType: \'native\' }"></div>\
         </div>\
         \
-        <div id="B250640" data-bind="dxDateBox: { useNative: false, format: \'datetime\' }"></div>\
+        <div id="B250640" data-bind="dxDateBox: { pickerType: \'calendar\', format: \'datetime\' }"></div>\
         \
         <div id="Q468727" data-bind="dxDateBox: { value: value, format: \'datetime\' }"></div>';
 
@@ -42,7 +42,7 @@ var moduleConfig = {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers(new Date().valueOf());
 
-        this.$element = $("#dateBox")[widgetName]({ useCalendar: false });
+        this.$element = $("#dateBox")[widgetName]({ pickerType: 'native' });
         this.instance = this.$element[widgetName]("instance");
         this.$input = $.proxy(this.instance._input, this.instance);
     },
@@ -124,7 +124,7 @@ QUnit.module("dateView integration", {
             return false;
         };
         moduleConfig.beforeEach.apply(this, arguments);
-        this.instance.option("useNative", false);
+        this.instance.option("pickerType", 'calendar');
 
         this.popup = $.proxy(function() {
             return this._popup;
