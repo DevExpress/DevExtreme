@@ -375,6 +375,22 @@ exports.ExcelCreator = Class.inherit({
         return this._getXMLTag("pane", attributes);
     },
 
+    _getAutoFilterXML: function(maxCellIndex) {
+        if(this._options.autoFilterEnabled) {
+            return "<autoFilter ref=\"A" + this._dataProvider.getHeaderRowCount() + ":" + maxCellIndex + "\" />";
+        }
+
+        return "";
+    },
+
+    _getIgnoredErrorsXML: function(maxCellIndex) {
+        if(this._options.ignoreErrors) {
+            return "<ignoredErrors><ignoredError sqref=\"A1:" + maxCellIndex + "\" numberStoredAsText=\"1\" /></ignoredErrors>";
+        }
+
+        return "";
+    },
+
     _generateWorksheetXML: function() {
         var colIndex,
             rowIndex,
@@ -441,8 +457,7 @@ exports.ExcelCreator = Class.inherit({
         xmlRows = [];
 
         maxCellIndex = this._getCellIndex(this._maxIndex[0], this._maxIndex[1]);
-        xmlResult.push("</sheetData>" + (this._options.autoFilterEnabled ? "<autoFilter ref=\"A" + this._dataProvider.getHeaderRowCount() + ":" + maxCellIndex + "\" />" : "") + this._generateMergingXML()
-                   + "<ignoredErrors><ignoredError sqref=\"A1:" + maxCellIndex + "\" numberStoredAsText=\"1\" /></ignoredErrors></worksheet>");
+        xmlResult.push("</sheetData>" + this._getAutoFilterXML(maxCellIndex) + this._generateMergingXML() + this._getIgnoredErrorsXML(maxCellIndex) + "</worksheet>");
 
 
         this._zip.folder(XL_FOLDER_NAME).folder(WORKSHEETS_FOLDER).file(WORKSHEET_FILE_NAME, xmlResult.join(""));
