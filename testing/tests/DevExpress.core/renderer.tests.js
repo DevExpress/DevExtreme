@@ -2,6 +2,18 @@
 
 var renderer = require("core/renderer");
 
+QUnit.module("renderer");
+
+QUnit.test("renderer should return correct element if window contains element with id=toArray", function(assert) {
+    var element = renderer("<div>");
+    element.attr("id", "toArray");
+
+    document.getElementById("qunit-fixture").appendChild(element[0]);
+
+    var $window = renderer(window);
+    assert.equal($window[0], window);
+});
+
 QUnit.module("HTML main");
 
 QUnit.test("base", function(assert) {
