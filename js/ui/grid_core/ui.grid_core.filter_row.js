@@ -807,7 +807,9 @@ module.exports = {
                      * @type string
                      * @default "Between"
                      */
-                    between: messageLocalization.format("dxDataGrid-filterRowOperationBetween")
+                    between: messageLocalization.format("dxDataGrid-filterRowOperationBetween"),
+                    isBlank: messageLocalization.format("dxFilterBuilder-filterOperationIsBlank"),
+                    isNotBlank: messageLocalization.format("dxFilterBuilder-filterOperationIsNotBlank")
                 },
                 /**
                  * @name GridBaseOptions_filterRow_betweenStartText

@@ -204,10 +204,7 @@ QUnit.module("Filter Panel", {
         var filter = ["field", "between", [1, 2]];
         this.initFilterPanelView({
             filterPanel: {
-                visible: true,
-                texts: {
-                    clearFilter: "test0"
-                }
+                visible: true
             },
             dataSource: [],
             filterValue: filter,
@@ -222,6 +219,32 @@ QUnit.module("Filter Panel", {
 
         // assert
         assert.deepEqual(result, "[Field] Between('1', '2')");
+    });
+
+    QUnit.test("from isBlank / isNotBlank", function(assert) {
+        // arrange
+        var filter = [["field", "=", null], "and", ["field", "<>", null]];
+
+        this.initFilterPanelView({
+            filterPanel: {
+                visible: true
+            },
+            dataSource: [],
+            filterValue: filter,
+            filterRow: {
+                operationDescriptions: {
+                    isBlank: "Is Blank",
+                    isNotBlank: "Is Not Blank"
+                }
+            },
+            filterBuilder: {
+                groupOperationDescriptions: { and: "And" }
+            },
+            columns: [{ dataField: "field", caption: "Field" }]
+        });
+
+        // act, assert
+        assert.deepEqual(this.filterPanelView.getFilterText(filter, [], []), "[Field] Is Blank And [Field] Is Not Blank");
     });
 
     QUnit.test("from group", function(assert) {
@@ -280,7 +303,6 @@ QUnit.module("Filter Panel", {
         assert.deepEqual(result, "[Field] Equals '1' And [Field] Equals '2' And ([Field] Equals '3' Or [Field] Equals '4')");
     });
 
-
     QUnit.test("from group with inner group with Not", function(assert) {
         // arrange
         var filter = ["!", [["field", "=", "1"], "and", ["field", "=", "2"]]];
@@ -308,5 +330,45 @@ QUnit.module("Filter Panel", {
 
         // assert
         assert.deepEqual(result, "Not ([Field] Equals '1' And [Field] Equals '2')");
+    });
+
+    QUnit.test("filterBuilder customOperation", function(assert) {
+        // arrange
+        var filter = ["dateField", "testOperation"],
+            customFilter = ["dateField", "=", "10/10/2010"],
+            customExpressionCounter = 0;
+
+        // act, assert
+        this.initFilterPanelView({
+            filterPanel: {
+                visible: true,
+            },
+            dataSource: [],
+            filterValue: filter,
+            filterBuilder: {
+                customOperations: [{
+                    name: "testOperation",
+                    caption: "TestOperation",
+                    dataTypes: ["date"],
+                    icon: "check",
+                    hasValue: false,
+                    calculateFilterExpression: function(operation, obj) {
+                        ++customExpressionCounter;
+
+                        // assert
+                        assert.equal(obj.caption, "Date");
+                        return customFilter;
+                    }
+                }]
+            },
+            columns: [
+                { dataField: "field", caption: "Field" },
+                { dataField: "dateField", caption: "Date", dataType: "date" },
+            ]
+        });
+
+        // assert
+        assert.equal(this.filterPanelView.element().find(`.${FILTER_PANEL_TEXT_CLASS}`).text(), "[Date] TestOperation", "filterPanel text");
+        assert.ok(customExpressionCounter > 0, "calculateFilterExpression was called");
     });
 });

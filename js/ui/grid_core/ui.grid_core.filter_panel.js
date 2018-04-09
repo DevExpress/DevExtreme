@@ -1,5 +1,7 @@
 "use strict";
 
+import { isDefined } from "../../core/utils/type";
+
 var $ = require("../../core/renderer"),
     modules = require("./ui.grid_core.modules"),
     gridUtils = require("./ui.grid_core.utils"),
@@ -131,17 +133,19 @@ var FilterPanelView = modules.View.inherit({
             field = utils.getField(filterValue[0], options.columns),
             fieldText = field.caption,
             value = filterValue[2],
-            valueText;
+            valueText = "";
 
         if(customOperation) {
             operationText = customOperation.caption || inflector.captionize(customOperation.name);
+        } else if(value === null) {
+            operationText = utils.getCaptionByOperation(operation === "=" ? "isblank" : "isnotblank", options.filterOperationDescriptions);
         } else {
             operationText = utils.getCaptionByOperation(operation, options.filterOperationDescriptions);
         }
 
         if(Array.isArray(value)) {
             valueText = `('${value.join("', '")}')`;
-        } else {
+        } else if(isDefined(value)) {
             var displayValue = gridUtils.getDisplayValue(field, value);
             valueText = ` '${(utils.getCurrentValueText)(field, displayValue, customOperation)}'`;
         }
