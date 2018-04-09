@@ -928,7 +928,7 @@ declare module DevExpress.data {
         userData?: any;
     }
     export interface CustomStoreOptions extends StoreOptions {
-        /** Specifies a custom implementation of the byKey(key, extraOptions) method. */
+        /** Specifies a custom implementation of the byKey(key) method. */
         byKey?: ((key: any | string | number) => Promise<any> | JQueryPromise<any>);
         /** Specifies whether raw data should be saved in the cache. Applies only if loadMode is "raw". */
         cacheRawData?: boolean;
@@ -944,7 +944,7 @@ declare module DevExpress.data {
         totalCount?: ((loadOptions: { filter?: any, group?: any }) => Promise<number> | JQueryPromise<number>);
         /** Specifies a custom implementation of the update(key, values) method. */
         update?: ((key: any | string | number, values: any) => Promise<any> | JQueryPromise<any>);
-        /** Specifies whether or not the store combines the search expression with the filter expression. */
+        /** Specifies whether the store combines the search and filter expressions. Defaults to true if the loadMode is "raw" and false if it is "processed". */
         useDefaultSearch?: boolean;
     }
     /** A Store object that enables you to implement your own data access logic. */
@@ -2050,7 +2050,7 @@ declare module DevExpress.ui {
         scrollByContent?: boolean;
         /** Specifies whether a user can scroll the content with the scrollbar. Applies only if useNative is false. */
         scrollByThumb?: boolean;
-        /** Specifies when to show the scrollbar. Applies only if useNative is false. */
+        /** Specifies when to show scrollbars. Applies only if useNative is false. */
         showScrollbar?: string;
         /** Specifies whether the widget should use native or simulated scrolling. */
         useNative?: string | boolean;
@@ -2186,7 +2186,7 @@ declare module DevExpress.ui {
         /** Configures editing. */
         editing?: dxDataGridEditing;
         /** Configures client-side exporting. */
-        export?: { texts?: { excelFormat?: any, exportToExcel?: any, selectedRows?: any, exportTo?: string, exportAll?: string, exportSelectedRows?: string }, enabled?: boolean, fileName?: string, excelFilterEnabled?: boolean, excelWrapTextEnabled?: boolean, proxyUrl?: string, allowExportSelectedData?: boolean };
+        export?: { texts?: { excelFormat?: any, exportToExcel?: any, selectedRows?: any, exportTo?: string, exportAll?: string, exportSelectedRows?: string }, enabled?: boolean, fileName?: string, excelFilterEnabled?: boolean, excelWrapTextEnabled?: boolean, proxyUrl?: string, allowExportSelectedData?: boolean, ignoreExcelErrors?: boolean };
         /** Configures grouping. */
         grouping?: { groupContinuedMessage?: any, groupContinuesMessage?: any, autoExpandAll?: boolean, allowCollapsing?: boolean, contextMenuEnabled?: boolean, expandMode?: string, texts?: { groupContinuesMessage?: string, groupContinuedMessage?: string, groupByThisColumn?: string, ungroup?: string, ungroupAll?: string } };
         /** Configures the group panel. */
@@ -2549,7 +2549,7 @@ declare module DevExpress.ui {
         colCountByScreen?: any;
         /** Specifies a function that customizes a form item after it has been created. */
         customizeItem?: ((item: dxFormSimpleItem | dxFormGroupItem | dxFormTabbedItem | dxFormEmptyItem) => any);
-        /** An object providing data for the form. */
+        /** Provides the Form's data. Gets updated every time form fields change. */
         formData?: any;
         /** Holds an array of form items. */
         items?: Array<dxFormSimpleItem | dxFormGroupItem | dxFormTabbedItem | dxFormEmptyItem>;
@@ -3189,7 +3189,7 @@ declare module DevExpress.ui {
         /** Specifies a data source for the pivot grid. */
         dataSource?: Array<any> | DevExpress.data.PivotGridDataSource | DevExpress.data.PivotGridDataSourceOptions;
         /** Configures client-side exporting. */
-        export?: { enabled?: boolean, fileName?: string, proxyUrl?: string };
+        export?: { enabled?: boolean, fileName?: string, proxyUrl?: string, ignoreExcelErrors?: boolean };
         /** The Field Chooser configuration options. */
         fieldChooser?: { enabled?: boolean, allowSearch?: boolean, layout?: number, title?: string, width?: number, height?: number, texts?: { columnFields?: string, rowFields?: string, dataFields?: string, filterFields?: string, allFields?: string } };
         /** Configures the field panel. */
@@ -4845,7 +4845,7 @@ declare module DevExpress.ui {
         visible?: boolean;
         /** Specifies the position of the column regarding other columns in the resulting widget. */
         visibleIndex?: number;
-        /** Specifies the column's width in pixels or percentages. Ignored if less than minWidth. */
+        /** Specifies the column's width in pixels or as a percentage. Ignored if it is less than minWidth. */
         width?: number | string;
     }
     export interface dxTreeListColumn extends GridBaseColumn {
@@ -5320,7 +5320,7 @@ declare module DevExpress.viz {
         loadingIndicator?: BaseWidgetLoadingIndicator;
         /** Generates space around the widget. */
         margin?: BaseWidgetMargin;
-        /** A handler for the drawn event. Executed when the widget has finished drawing itself. */
+        /** A function that is executed when the widget's rendering has finished. */
         onDrawn?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any }) => any);
         /** A handler for the exported event. Executed after data from the widget is exported. */
         onExported?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any }) => any);
@@ -7990,7 +7990,7 @@ declare module DevExpress.viz.charts {
         dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions | string;
         /** Specifies options of the legend. */
         legend?: BaseChartLegend;
-        /** A handler for the done event. */
+        /** A function that is executed when all series are ready. */
         onDone?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any }) => any);
         /** A handler for the pointClick event. */
         onPointClick?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, target?: basePointObject }) => any) | string;
