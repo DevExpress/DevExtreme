@@ -1,15 +1,15 @@
 "use strict";
+import $ from "jquery";
+import translator2DModule from "viz/translators/translator2d";
+import tickGeneratorModule from "viz/axes/tick_generator";
+import { Axis } from "viz/axes/base_axis";
+import vizMocks from "../../helpers/vizMocks.js";
 
-var $ = require("jquery"),
-    translator2DModule = require("viz/translators/translator2d"),
-    tickGeneratorModule = require("viz/axes/tick_generator"),
-    Axis = require("viz/axes/base_axis").Axis,
-    vizMocks = require("../../helpers/vizMocks.js"),
-    StubTranslator = vizMocks.stubClass(translator2DModule.Translator2D, {
-        updateBusinessRange: function(range) {
-            this.getBusinessRange.returns(range);
-        }
-    });
+const StubTranslator = vizMocks.stubClass(translator2DModule.Translator2D, {
+    updateBusinessRange: function(range) {
+        this.getBusinessRange.returns(range);
+    }
+});
 
 function getArray(len) {
     var i,
