@@ -236,6 +236,11 @@ var numberLocalization = dependencyInjector({
     },
 
     getSign: function(text, format) {
+        var separators = this._getSeparators(),
+            cleanUpRegexp = new RegExp('[^0-9-\\' + escapeRegExp(separators.decimalSeparator) + ']', 'g');
+
+        text = text.replace(cleanUpRegexp, "");
+
         if(text.charAt(0) === "-") {
             return -1;
         }
@@ -243,8 +248,7 @@ var numberLocalization = dependencyInjector({
             return 1;
         }
 
-        var separators = this._getSeparators(),
-            regExp = new RegExp("[0-9" + escapeRegExp(separators.decimalSeparator + separators.thousandsSeparator) + "]+", "g"),
+        var regExp = new RegExp("[0-9" + escapeRegExp(separators.decimalSeparator + separators.thousandsSeparator) + "]+", "g"),
             negativeEtalon = this.format(-1, format).replace(regExp, "1"),
             cleanedText = text.replace(regExp, "1");
 
