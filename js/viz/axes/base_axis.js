@@ -268,7 +268,7 @@ function configureGenerator(options, axisDivisionFactor, viewPort, screenDelta) 
     };
 }
 
-export const Axis = function(renderSettings) {
+const Axis = exports.Axis = function(renderSettings) {
     var that = this;
 
     that._renderer = renderSettings.renderer;
