@@ -236,19 +236,15 @@ var numberLocalization = dependencyInjector({
     },
 
     getSign: function(text, format) {
-        var separators = this._getSeparators(),
-            cleanUpRegexp = new RegExp('[^0-9-\\' + escapeRegExp(separators.decimalSeparator) + ']', 'g');
-
-        text = text.replace(cleanUpRegexp, "");
-
-        if(text.charAt(0) === "-") {
+        if(text.replace(/[^0-9\-]/g, "").charAt(0) === "-") {
             return -1;
         }
         if(!format) {
             return 1;
         }
 
-        var regExp = new RegExp("[0-9" + escapeRegExp(separators.decimalSeparator + separators.thousandsSeparator) + "]+", "g"),
+        var separators = this._getSeparators(),
+            regExp = new RegExp("[0-9" + escapeRegExp(separators.decimalSeparator + separators.thousandsSeparator) + "]+", "g"),
             negativeEtalon = this.format(-1, format).replace(regExp, "1"),
             cleanedText = text.replace(regExp, "1");
 
