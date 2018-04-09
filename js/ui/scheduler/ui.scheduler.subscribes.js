@@ -211,7 +211,7 @@ var subscribes = {
             groups = this._getCurrentViewOption("groups"),
             isGrouped = groups && groups.length;
 
-        if(isGrouped) {
+        if(isGrouped && this.option("currentView") !== "agenda") {
             var groupBounds = this._workSpace.getGroupBounds(options.coordinates);
 
             if(allDay || this.fire("getRenderingStrategy") === "horizontalMonth") {
