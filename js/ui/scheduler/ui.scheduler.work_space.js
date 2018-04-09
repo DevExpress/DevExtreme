@@ -1081,7 +1081,7 @@ var SchedulerWorkSpace = Widget.inherit({
             cellTemplates = [];
         if(groupCount) {
             var groupRows = this._makeGroupRows(this.option("groups"));
-            this._attachGroupCountAttr(groupCount);
+            this._attachGroupCountAttr(groupCount, groupRows);
             $container.append(groupRows.elements);
             cellTemplates = groupRows.cellTemplates;
         } else {
@@ -1103,8 +1103,8 @@ var SchedulerWorkSpace = Widget.inherit({
         this.$element().removeAttr(groupedAttr.attr);
     },
 
-    _attachGroupCountAttr: function(groupRowCount) {
-        var groupedAttr = this._groupedStrategy.getGroupCountAttr(groupRowCount);
+    _attachGroupCountAttr: function(groupRowCount, groupRows) {
+        var groupedAttr = this._groupedStrategy.getGroupCountAttr(groupRowCount, groupRows);
 
         this.$element().attr(groupedAttr.attr, groupedAttr.count);
     },

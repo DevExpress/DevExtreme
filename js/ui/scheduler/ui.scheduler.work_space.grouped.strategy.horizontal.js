@@ -89,10 +89,10 @@ var HorizontalGroupedStrategy = GroupedStrategy.inherit({
         return this._workSpace.getAllDayHeight();
     },
 
-    getGroupCountAttr: function(groupRowCount) {
+    getGroupCountAttr: function(groupRowCount, groupRows) {
         return {
             attr: HORIZONTAL_GROUPED_ATTR,
-            count: groupRowCount
+            count: groupRows && groupRows.elements.length
         };
     }
 });
