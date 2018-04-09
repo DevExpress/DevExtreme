@@ -295,7 +295,7 @@ QUnit.test("Zero inner radius", function(assert) {
     assert.equal(this.point.radiusOuter, 20);
     assert.equal(this.point.centerX, 30);
     assert.equal(this.point.centerY, 40);
-    assert.equal(this.point.radiusLabels, 20);
+    assert.equal(this.point.radiusLabels, 50);
 });
 
 QUnit.test("Positive offset", function(assert) {
@@ -312,7 +312,7 @@ QUnit.test("Positive offset", function(assert) {
     assert.equal(this.point.radiusOuter, 20);
     assert.equal(this.point.centerX, 30);
     assert.equal(this.point.centerY, 40);
-    assert.equal(this.point.radiusLabels, 20);
+    assert.equal(this.point.radiusLabels, 50);
 });
 
 QUnit.module("coordsIn API", {
@@ -918,7 +918,7 @@ QUnit.test("Draw label, position outside (-0.1 < angleFunctions.cos < 0.1)", fun
     var label = createCorrectionLabel.call(this, { 0: 300, 10: 270, 20: 240 });
 
     assert.equal(label.shift.args[0][0], 290);
-    assert.equal(label.shift.args[0][1], 265);
+    assert.equal(label.shift.args[0][1], 295);
 });
 
 QUnit.test("Draw label, position is invalid", function(assert) {
@@ -926,20 +926,20 @@ QUnit.test("Draw label, position is invalid", function(assert) {
     var label = createCorrectionLabel.call(this, { 0: 300, 10: 270, 20: 240 });
 
     assert.equal(label.shift.args[0][0], 290);
-    assert.equal(label.shift.args[0][1], 265);
+    assert.equal(label.shift.args[0][1], 295);
 });
 
 QUnit.test("Label position outside (angleFunctions.cos > 0.1)", function(assert) {
     var label = createCorrectionLabel.call(this, { 0: 300, 10: 10, 20: 240 });
 
-    assert.equal(label.shift.args[0][0], 418);
-    assert.equal(label.shift.args[0][1], 124);
+    assert.equal(label.shift.args[0][0], 448);
+    assert.equal(label.shift.args[0][1], 119);
 });
 
 QUnit.test("Label position outside (angleFunctions.cos < -0.1)", function(assert) {
     var label = createCorrectionLabel.call(this, { 0: 300, 10: 180, 20: 240 });
 
-    assert.equal(label.shift.args[0][0], 160);
+    assert.equal(label.shift.args[0][0], 130);
     assert.equal(label.shift.args[0][1], 145);
 });
 
@@ -1092,7 +1092,6 @@ QUnit.test("Draw label (area of label < minY area of canvas)", function(assert) 
 
 QUnit.test("Draw label (area of label > maxY area of canvas)", function(assert) {
     this.series._visibleArea = { minX: 0, maxX: 600, minY: 0, maxY: 300 };
-    this.options.label.radialOffset = 30;
     var label = createCorrectionLabel.call(this, { 0: 300, 10: 270, 20: 240 });
 
     assert.equal(label.shift.args[0][0], 339);
@@ -1138,7 +1137,7 @@ QUnit.test("Draw label (area of label > maxX area of canvas), first drawing", fu
     var label = createCorrectionLabel.call(this, { 0: 300, 10: 270, 20: 240 }, true);
 
     assert.equal(label.shift.args[0][0], 280);
-    assert.equal(label.shift.args[0][1], 295);
+    assert.equal(label.shift.args[0][1], 325);
 });
 
 QUnit.test("Draw label (area of label < minX area of canvas), first drawing", function(assert) {
@@ -1147,7 +1146,7 @@ QUnit.test("Draw label (area of label < minX area of canvas), first drawing", fu
     var label = createCorrectionLabel.call(this, { 0: 300, 10: 270, 20: 240 }, true);
 
     assert.equal(label.shift.args[0][0], 300);
-    assert.equal(label.shift.args[0][1], 295);
+    assert.equal(label.shift.args[0][1], 325);
 });
 
 QUnit.module("set label ellipsis", {
@@ -1188,7 +1187,7 @@ QUnit.test("Multiple series, non-first series, columns - fit in column width", f
     var point = createPointWithStubLabel.call(this, { 0: 300, 10: 270, 20: 240 }, { x: 590, width: 185, y: 10, height: 30 });
     point.setLabelEllipsis();
 
-    assert.deepEqual(point._label.fit.args[0][0], 180);
+    assert.deepEqual(point._label.fit.args[0][0], 150);
 });
 
 QUnit.test("set label ellipsis. not drawn point", function(assert) {
