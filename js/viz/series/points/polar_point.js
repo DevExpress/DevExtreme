@@ -13,6 +13,8 @@ var extend = require("../../../core/utils/extend").extend,
     _math = Math,
     _max = _math.max,
 
+    RADIAL_LABEL_INDENT = require("../../components/consts").radialLabelIndent,
+
     ERROR_BARS_ANGLE_OFFSET = 90,
     CANVAS_POSITION_END = "canvas_position_end",
     CANVAS_POSITION_DEFAULT = "canvas_position_default";
@@ -47,6 +49,7 @@ exports.polarSymbolPoint = _extend({}, symbolPoint, {
 
         that.vx = normalizeAngle(coord.angle);
         that.vy = that.radiusOuter = that.radiusLabels = coord.radius;
+        that.radiusLabels += RADIAL_LABEL_INDENT;
 
         that.radius = coord.radius;
         that.middleAngle = -coord.angle;
@@ -156,6 +159,7 @@ exports.polarBarPoint = _extend({}, barPoint, {
         }
 
         that.radiusOuter = that.radiusLabels = _max(that.radiusInner, that.radius);
+        that.radiusLabels += RADIAL_LABEL_INDENT;
         that.radiusInner = that.defaultRadius = _math.min(that.radiusInner, that.radius);
 
         that.middleAngle = that.angle = -normalizeAngle(that.middleAngleCorrection - that.angle);
