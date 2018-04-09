@@ -272,15 +272,23 @@
 
 .dx-scheduler-timeline-horizontal-grouping-mixin(@baseHeight) {
     .set-size(@size) {
-        .dx-scheduler-date-table-scrollable {
+        &.dx-scheduler-work-space .dx-scheduler-date-table-scrollable {
             padding-bottom: @size;
             margin-bottom: @size;
         }
     }
 
     &.dx-scheduler-work-space {
-        &[dx-group-column-count='1'] {
+        &[dx-group-row-count='1'] {
             .set-size(@baseHeight + 40px);
+        }
+
+        &[dx-group-row-count='2'] {
+            .set-size(@baseHeight + 80px);
+        }
+
+        &[dx-group-row-count='3'] {
+            .set-size(@baseHeight + 120px);
         }
     }
 }
