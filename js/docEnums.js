@@ -580,11 +580,6 @@
  */
 
  /**
-* @typedef {string} Enums.TreeListGetSelectedKeysMode
-* @enum {'all'|'excludeRecursive'|'leavesOnly'}
-*/
-
- /**
  * @typedef {string} Enums.GridRowRenderingMode
  * @enum {'standard'|'virtual'}
  */
