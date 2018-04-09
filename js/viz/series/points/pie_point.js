@@ -13,9 +13,7 @@ var extend = require("../../../core/utils/extend").extend,
     _normalizeAngle = vizUtils.normalizeAngle,
     _getCosAndSin = vizUtils.getCosAndSin,
     _isDefined = require("../../../core/utils/type").isDefined,
-    getVerticallyShiftedAngularCoords = vizUtils.getVerticallyShiftedAngularCoords,
-
-    INDENT_FROM_PIE = require("../../components/consts").pieLabelIndent;
+    getVerticallyShiftedAngularCoords = vizUtils.getVerticallyShiftedAngularCoords;
 
 module.exports = _extend({}, symbolPoint, {
     _updateData: function(data) {
@@ -110,7 +108,7 @@ module.exports = _extend({}, symbolPoint, {
             rad = radiusInner + (radiusOuter - radiusInner) / 2 + options.radialOffset;
             x = that.centerX + rad * angleFunctions.cos - bBox.width / 2;
         } else {
-            rad = radiusLabels + options.radialOffset + INDENT_FROM_PIE;
+            rad = radiusLabels + options.radialOffset;
             if(angleFunctions.cos > 0.1) {
                 x = that.centerX + rad * angleFunctions.cos;
             } else if(angleFunctions.cos < -0.1) {
@@ -132,7 +130,6 @@ module.exports = _extend({}, symbolPoint, {
             bBox = label.getBoundingRect(),
             labelWidth = bBox.width,
             options = label.getLayoutOptions(),
-            rad = that.radiusLabels + options.radialOffset,
             visibleArea = that._getVisibleArea(),
             rightBorderX = visibleArea.maxX - labelWidth,
             leftBorderX = visibleArea.minX,
@@ -142,13 +139,10 @@ module.exports = _extend({}, symbolPoint, {
             x = coord.x;
 
         if(options.position === "columns") {
-            rad += connectorOffset;
             if(angleOfPoint <= 90 || angleOfPoint >= 270) {
-                x = that._maxLabelLength ? centerX + rad + that._maxLabelLength - labelWidth : rightBorderX;
-                x = x > rightBorderX ? rightBorderX : x;
+                x = rightBorderX;
             } else {
-                x = that._maxLabelLength ? centerX - rad - that._maxLabelLength : leftBorderX;
-                x = x < leftBorderX ? leftBorderX : x;
+                x = leftBorderX;
             }
             coord.x = x;
         } else if(moveLabelsFromCenter) {
