@@ -2,6 +2,7 @@
 
 var GroupedStrategy = require("./ui.scheduler.work_space.grouped.strategy");
 
+var VERTICAL_GROUPED_ATTR = "dx-group-column-count";
 
 var VerticalGroupedStrategy = GroupedStrategy.inherit({
     prepareCellIndexes: function(cellCoordinates, groupIndex, inAllDayRow) {
@@ -101,6 +102,17 @@ var VerticalGroupedStrategy = GroupedStrategy.inherit({
     getAllDayOffset: function() {
         return 0;
     },
+
+    getGroupCountAttr: function() {
+        return {
+            attr: VERTICAL_GROUPED_ATTR,
+            count: this._workSpace.option("groups") && this._workSpace.option("groups").length
+        };
+    },
+
+    getLeftOffset: function() {
+        return this._workSpace.getTimePanelWidth() + this._workSpace.getGroupTableWidth();
+    }
 });
 
 module.exports = VerticalGroupedStrategy;

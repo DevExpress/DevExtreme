@@ -2524,11 +2524,12 @@ QUnit.test("Appointment should have correct position while dragging from group, 
             text: "a",
             startDate: new Date(2015, 6, 7, 10),
             endDate: new Date(2015, 6, 7, 10, 30),
-            ownerId: { id: 2 }
+            ownerId: { id: 2 },
+            roomId: { id: 1 }
         }],
         startDayHour: 9,
         endDayHour: 12,
-        groups: ["ownerId.id"],
+        groups: ["ownerId.id", "roomId.id"],
         resources: [
             {
                 field: "ownerId.id",
@@ -2536,6 +2537,14 @@ QUnit.test("Appointment should have correct position while dragging from group, 
                 dataSource: [
                     { id: 1, text: "one" },
                     { id: 2, text: "two" }
+                ]
+            },
+            {
+                field: "roomId.id",
+                allowMultiple: false,
+                dataSource: [
+                    { id: 1, text: "room one" },
+                    { id: 2, text: "room two" }
                 ]
             }
         ],
@@ -2546,8 +2555,8 @@ QUnit.test("Appointment should have correct position while dragging from group, 
     $appointment.trigger(dragEvents.start);
 
     var startPosition = translator.locate($appointment);
-    assert.roughEqual(startPosition.top, 500, 1.5, "Start position is correct");
-    assert.roughEqual(startPosition.left, 370, 1.5, "Start position is correct");
+    assert.roughEqual(startPosition.top, 850, 1.5, "Start position is correct");
+    assert.roughEqual(startPosition.left, 413, 1.5, "Start position is correct");
 
     $(this.instance.$element().find("." + DATE_TABLE_CELL_CLASS)).eq(7).trigger(dragEvents.enter);
     $appointment.trigger(dragEvents.end);
