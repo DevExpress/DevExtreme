@@ -130,7 +130,6 @@ module.exports = _extend({}, symbolPoint, {
             bBox = label.getBoundingRect(),
             labelWidth = bBox.width,
             options = label.getLayoutOptions(),
-            rad = that.radiusLabels + options.radialOffset,
             visibleArea = that._getVisibleArea(),
             rightBorderX = visibleArea.maxX - labelWidth,
             leftBorderX = visibleArea.minX,
@@ -140,7 +139,6 @@ module.exports = _extend({}, symbolPoint, {
             x = coord.x;
 
         if(options.position === "columns") {
-            rad += connectorOffset;
             if(angleOfPoint <= 90 || angleOfPoint >= 270) {
                 x = rightBorderX;
             } else {

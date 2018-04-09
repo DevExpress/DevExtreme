@@ -237,7 +237,7 @@ QUnit.test("Nearest label topLeft", function(assert) {
         series = getStubSeries('pie', null, points),
         layoutManager = createLayoutManager({ minPiePercentage: 0.6 }),
         inner = 0,
-        outer = 119;
+        outer = 129;
 
     checkLayout(assert, layoutManager.applyPieChartSeriesLayout(canvas, series), canvas, inner, outer);
 });
@@ -248,7 +248,7 @@ QUnit.test("Nearest label topRight", function(assert) {
         series = getStubSeries('pie', null, points),
         layoutManager = createLayoutManager({ minPiePercentage: 0.7 }),
         inner = 0,
-        outer = 136;
+        outer = 146;
 
     checkLayout(assert, layoutManager.applyPieChartSeriesLayout(canvas, series), canvas, inner, outer);
 });
@@ -259,7 +259,7 @@ QUnit.test("Nearest label topCenter", function(assert) {
         series = getStubSeries('pie', null, points),
         layoutManager = createLayoutManager({ minPiePercentage: 0.7 }),
         inner = 0,
-        outer = 145;
+        outer = 155;
 
     checkLayout(assert, layoutManager.applyPieChartSeriesLayout(canvas, series), canvas, inner, outer);
 });
@@ -270,7 +270,7 @@ QUnit.test("Nearest label CenterLeft", function(assert) {
         series = getStubSeries('pie', null, points),
         layoutManager = createLayoutManager({ minPiePercentage: 0.7 }),
         inner = 0,
-        outer = 145;
+        outer = 155;
 
     checkLayout(assert, layoutManager.applyPieChartSeriesLayout(canvas, series), canvas, inner, outer);
 });
@@ -281,18 +281,7 @@ QUnit.test("Nearest label CenterRight", function(assert) {
         series = getStubSeries('pie', null, points),
         layoutManager = createLayoutManager({ minPiePercentage: 0.6 }),
         inner = 0,
-        outer = 115;
-
-    checkLayout(assert, layoutManager.applyPieChartSeriesLayout(canvas, series), canvas, inner, outer);
-});
-
-QUnit.test("Nearest label CenterCenter", function(assert) {
-    var CFPWSL = createFakePointsWithStubLabels,
-        points = [CFPWSL({ x: 490, y: 190, width: 10, height: 10 }, true, true)],
-        series = getStubSeries('pie', null, points),
-        layoutManager = createLayoutManager({ minPiePercentage: 0.6 }),
-        inner = 0,
-        outer = 111;
+        outer = 125;
 
     checkLayout(assert, layoutManager.applyPieChartSeriesLayout(canvas, series), canvas, inner, outer);
 });
@@ -303,7 +292,7 @@ QUnit.test("Nearest label BottomLeft", function(assert) {
         series = getStubSeries('pie', null, points),
         layoutManager = createLayoutManager({ minPiePercentage: 0.6 }),
         inner = 0,
-        outer = 131;
+        outer = 141;
 
     checkLayout(assert, layoutManager.applyPieChartSeriesLayout(canvas, series), canvas, inner, outer);
 });
@@ -314,7 +303,7 @@ QUnit.test("Nearest label BottomRight", function(assert) {
         series = getStubSeries('pie', null, points),
         layoutManager = createLayoutManager({ minPiePercentage: 0.6 }),
         inner = 0,
-        outer = 132;
+        outer = 142;
 
     checkLayout(assert, layoutManager.applyPieChartSeriesLayout(canvas, series), canvas, inner, outer);
 });
@@ -325,7 +314,7 @@ QUnit.test("Nearest label BottomCenter", function(assert) {
         series = getStubSeries('pie', null, points),
         layoutManager = createLayoutManager({ minPiePercentage: 0.6 }),
         inner = 0,
-        outer = 115;
+        outer = 125;
 
     checkLayout(assert, layoutManager.applyPieChartSeriesLayout(canvas, series), canvas, inner, outer);
 });
@@ -337,7 +326,7 @@ QUnit.test("Calculate of nearest label", function(assert) {
         series = getStubSeries('pie', null, points),
         layoutManager = createLayoutManager({ minPiePercentage: 0.6 }),
         inner = 0,
-        outer = 115;
+        outer = 125;
 
     checkLayout(assert, layoutManager.applyPieChartSeriesLayout(canvas, series), canvas, inner, outer);
 });
@@ -350,7 +339,7 @@ QUnit.test("Calculate of visible point with label with text", function(assert) {
         series = getStubSeries('pie', null, points),
         layoutManager = createLayoutManager({ minPiePercentage: 0.7 }),
         inner = 0,
-        outer = 132;
+        outer = 142;
 
     checkLayout(assert, layoutManager.applyPieChartSeriesLayout(canvas, series), canvas, inner, outer);
 });
@@ -396,20 +385,20 @@ QUnit.test("2 series, labels are fit in canvas", function(assert) {
     assert.deepEqual(series[0].setVisibleArea.args[0][0], {
         bottom: 20,
         height: 400,
-        left: 310.5,
-        right: 320.5,
+        left: 320.5,
+        right: 330.5,
         top: 10,
         width: 1000
     });
 
     assert.equal(series[1].correctLabelRadius.callCount, 1);
-    assert.equal(series[1].correctLabelRadius.args[0][0], 184);
+    assert.equal(series[1].correctLabelRadius.args[0][0], 174);
     assert.equal(series[1].setVisibleArea.callCount, 1);
     assert.deepEqual(series[1].setVisibleArea.args[0][0], {
         bottom: 20,
         height: 400,
-        left: 290.5,
-        right: 300.5,
+        left: 300.5,
+        right: 310.5,
         top: 10,
         width: 1000
     });
@@ -454,7 +443,7 @@ QUnit.test("2 series, labels are not fit in canvas", function(assert) {
 
 QUnit.test("2 series, labels are not fit in canvas, check margins", function(assert) {
     var CFPWSL = createFakePointsWithStubLabels,
-        points1 = [CFPWSL({ x: 400, y: 300, width: 40, height: 10 }, true, true)],
+        points1 = [CFPWSL({ x: 400, y: 300, width: 50, height: 10 }, true, true)],
         points2 = [CFPWSL({ x: 400, y: 300, width: 40, height: 10 }, true, true)],
         series = getNStubSeries('pie', null, [points1, points2]),
         layoutManager = createLayoutManager({ minPiePercentage: 0.7 }),
@@ -545,8 +534,8 @@ QUnit.test("2 series, first series has lables inside", function(assert) {
     assert.deepEqual(series[1].setVisibleArea.args[0][0], {
         bottom: 20,
         height: 400,
-        left: 315.5,
-        right: 325.5,
+        left: 325.5,
+        right: 335.5,
         top: 10,
         width: 1000
     });
@@ -569,8 +558,8 @@ QUnit.test("3 series, labels one of the series have inside position", function(a
     assert.deepEqual(series[0].setVisibleArea.args[0][0], {
         bottom: 20,
         height: 400,
-        left: 315.5,
-        right: 325.5,
+        left: 325.5,
+        right: 335.5,
         top: 10,
         width: 1000
     });
@@ -579,13 +568,13 @@ QUnit.test("3 series, labels one of the series have inside position", function(a
     assert.equal(series[1].setVisibleArea.callCount, 0);
 
     assert.equal(series[2].correctLabelRadius.callCount, 1);
-    assert.equal(series[2].correctLabelRadius.args[0][0], 179);
+    assert.equal(series[2].correctLabelRadius.args[0][0], 169);
     assert.equal(series[2].setVisibleArea.callCount, 1);
     assert.deepEqual(series[2].setVisibleArea.args[0][0], {
         bottom: 20,
         height: 400,
-        left: 295.5,
-        right: 305.5,
+        left: 305.5,
+        right: 315.5,
         top: 10,
         width: 1000
     });
