@@ -141,7 +141,7 @@ var VirtualScrollingDataSourceAdapterExtender = (function() {
         _customizeRemoteOperations: function(options, isReload, operationTypes) {
             var that = this;
 
-            if(that.option("advancedRendering") && isVirtualMode(that) && !operationTypes.reload && operationTypes.paging && that._renderTime < that.option("scrolling.renderingThreshold")) {
+            if(!that.option("legacyRendering") && isVirtualMode(that) && !operationTypes.reload && operationTypes.paging && that._renderTime < that.option("scrolling.renderingThreshold")) {
                 options.delay = undefined;
             }
 
@@ -257,7 +257,7 @@ var VirtualScrollingRowsViewExtender = (function() {
                 that.scrollToPage(dataController.pageIndex());
             });
 
-            if(that.option("advancedRendering") && dataController.pageIndex() > 0) {
+            if(!that.option("legacyRendering") && dataController.pageIndex() > 0) {
                 var resizeHandler = function() {
                     that.resizeCompleted.remove(resizeHandler);
                     that.scrollToPage(dataController.pageIndex());
@@ -306,7 +306,7 @@ var VirtualScrollingRowsViewExtender = (function() {
             var that = this,
                 virtualItemsCount = that._dataController.virtualItemsCount();
 
-            if(virtualItemsCount && !that.option("advancedRendering")) {
+            if(virtualItemsCount && that.option("legacyRendering")) {
                 if(windowUtils.hasWindow()) {
                     tableElement.addClass(that.addWidgetPrefix(TABLE_CONTENT_CLASS));
                 }
@@ -336,7 +336,7 @@ var VirtualScrollingRowsViewExtender = (function() {
             if(changeType === "append" || changeType === "prepend") {
                 contentTable = contentElement.children().first();
                 var $tBodies = tableElement.children("tbody");
-                if(that.option("advancedRendering") && $tBodies.length === 1) {
+                if(!that.option("legacyRendering") && $tBodies.length === 1) {
                     contentTable.children("tbody")[changeType === "append" ? "append" : "prepend"]($tBodies.children());
                 } else {
                     $tBodies[changeType === "append" ? "appendTo" : "prependTo"](contentTable);
@@ -364,7 +364,7 @@ var VirtualScrollingRowsViewExtender = (function() {
         _updateContentPosition: function(isRender) {
             var that = this;
 
-            if(that.option("advancedRendering") && (isVirtualMode(that) || isVirtualRowRendering(that))) {
+            if(!that.option("legacyRendering") && (isVirtualMode(that) || isVirtualRowRendering(that))) {
                 var dataController = that._dataController;
                 var rowHeight = that._rowHeight || 20;
                 dataController.viewportItemSize(rowHeight);
@@ -682,7 +682,7 @@ module.exports = {
                         var that = this,
                             virtualRowsRendering = isVirtualRowRendering(that);
 
-                        if(that.option("scrolling.mode") !== "virtual" && virtualRowsRendering !== true || virtualRowsRendering === false || !that.option("advancedRendering") || !that.option("scrolling.rowPageSize")) {
+                        if(that.option("scrolling.mode") !== "virtual" && virtualRowsRendering !== true || virtualRowsRendering === false || that.option("legacyRendering") || !that.option("scrolling.rowPageSize")) {
                             that._visibleItems = null;
                             that._rowsScrollController = null;
                             return;
@@ -890,7 +890,7 @@ module.exports = {
                     var that = this,
                         callBase = that.callBase;
 
-                    if(that.option("advancedRendering") && (isVirtualMode(that) || isVirtualRowRendering(that))) {
+                    if(!that.option("legacyRendering") && (isVirtualMode(that) || isVirtualRowRendering(that))) {
                         clearTimeout(that._resizeTimeout);
                         var diff = new Date() - that._lastTime;
                         var updateTimeout = that.option("scrolling.updateTimeout");
