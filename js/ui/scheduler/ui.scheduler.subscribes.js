@@ -208,17 +208,31 @@ var subscribes = {
     getResizableAppointmentArea: function(options) {
         var area,
             allDay = options.allDay,
-            groups = this._getCurrentViewOption("groups");
+            groups = this._getCurrentViewOption("groups"),
+            isGrouped = groups && groups.length;
 
-        if(groups && groups.length && (allDay || this.option("currentView") === "month")) {
+        if(isGrouped) {
             var groupBounds = this._workSpace.getGroupBounds(options.coordinates);
-            area = {
-                left: groupBounds.left,
-                right: groupBounds.right,
-                top: 0,
-                bottom: 0
-            };
+
+            if(allDay || this.fire("getRenderingStrategy") === "horizontalMonth") {
+                area = {
+                    left: groupBounds.left,
+                    right: groupBounds.right,
+                    top: 0,
+                    bottom: 0
+                };
+            }
+
+            if(!allDay && this.fire("getRenderingStrategy") === "vertical") {
+                area = {
+                    left: 0,
+                    right: 0,
+                    top: groupBounds.top,
+                    bottom: groupBounds.bottom
+                };
+            }
         }
+
         options.callback(area);
     },
 

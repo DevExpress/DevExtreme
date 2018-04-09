@@ -586,7 +586,8 @@ var SchedulerAppointments = CollectionWidget.inherit({
         this.notifyObserver("getResizableAppointmentArea", {
             coordinates: {
                 left: itemSetting.left,
-                top: 0
+                top: 0,
+                groupIndex: itemSetting.groupIndex
             },
             allDay: allDay,
             callback: function(result) {

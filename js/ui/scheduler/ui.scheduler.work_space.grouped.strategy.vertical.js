@@ -4,6 +4,8 @@ var GroupedStrategy = require("./ui.scheduler.work_space.grouped.strategy");
 
 var VERTICAL_GROUPED_ATTR = "dx-group-column-count";
 
+var DATE_HEADER_OFFSET = 10;
+
 var VerticalGroupedStrategy = GroupedStrategy.inherit({
     prepareCellIndexes: function(cellCoordinates, groupIndex, inAllDayRow) {
         var rowIndex = cellCoordinates.rowIndex + groupIndex * this._workSpace._getRowCount();
@@ -112,6 +114,37 @@ var VerticalGroupedStrategy = GroupedStrategy.inherit({
 
     getLeftOffset: function() {
         return this._workSpace.getTimePanelWidth() + this._workSpace.getGroupTableWidth();
+    },
+
+    getGroupBounds: function(coordinates) {
+        var cellCount = this._workSpace._getCellCount(),
+            groupIndex = coordinates.groupIndex,
+            $cells = this._workSpace._getCells(),
+            cellWidth = this._workSpace.getCellWidth(),
+            startOffset = $cells.eq(0).offset().left,
+            endOffset = $cells.eq(cellCount - 1).offset().left + cellWidth,
+            dayHeight = (this._workSpace._calculateDayDuration() / this._workSpace.option("hoursInterval")) * this._workSpace.getCellHeight(),
+            topOffset = groupIndex * dayHeight + this._workSpace._$thead.outerHeight() + this._workSpace.invoke("getHeaderHeight") + DATE_HEADER_OFFSET;
+
+        if(this._workSpace.option("showAllDayPanel") && this._workSpace.supportAllDayRow()) {
+            topOffset += this._workSpace.getCellHeight();
+        }
+
+        var bottomOffset = topOffset + dayHeight;
+
+        var result = {
+            left: startOffset,
+            right: endOffset,
+            top: topOffset,
+            bottom: bottomOffset
+        };
+
+        if(this._workSpace._isRTL()) {
+            result.left = endOffset - cellWidth * 2;
+            result.right = startOffset + cellWidth * 2;
+        }
+
+        return result;
     }
 });
 
