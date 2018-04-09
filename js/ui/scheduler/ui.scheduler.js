@@ -2119,7 +2119,7 @@ var Scheduler = Widget.inherit({
     },
 
     getWorkSpaceDateTableOffset: function() {
-        return !this.option("crossScrollingEnabled") || this.option("rtlEnabled") ? this._workSpace.getTimePanelWidth() : 0;
+        return !this.option("crossScrollingEnabled") || this.option("rtlEnabled") ? this._workSpace.getWorkSpaceLeftOffset() : 0;
     },
 
     getWorkSpace: function() {

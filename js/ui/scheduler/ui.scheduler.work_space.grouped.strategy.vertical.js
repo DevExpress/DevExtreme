@@ -108,6 +108,10 @@ var VerticalGroupedStrategy = GroupedStrategy.inherit({
             attr: VERTICAL_GROUPED_ATTR,
             count: this._workSpace.option("groups") && this._workSpace.option("groups").length
         };
+    },
+
+    getLeftOffset: function() {
+        return this._workSpace.getTimePanelWidth() + this._workSpace.getGroupTableWidth();
     }
 });
 

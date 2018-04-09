@@ -94,6 +94,10 @@ var HorizontalGroupedStrategy = GroupedStrategy.inherit({
             attr: HORIZONTAL_GROUPED_ATTR,
             count: groupRows && groupRows.elements.length
         };
+    },
+
+    getLeftOffset: function() {
+        return this._workSpace.getTimePanelWidth();
     }
 });
 

@@ -1627,6 +1627,10 @@ var SchedulerWorkSpace = Widget.inherit({
         return this._$groupTable.outerWidth();
     },
 
+    getWorkSpaceLeftOffset: function() {
+        return this._groupedStrategy.getLeftOffset();
+    },
+
     _getCellCoordinatesByIndex: function(index) {
         var cellIndex = Math.floor(index / this._getRowCount()),
             rowIndex = index - this._getRowCount() * cellIndex;
