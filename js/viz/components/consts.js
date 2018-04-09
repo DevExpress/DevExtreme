@@ -30,7 +30,7 @@ module.exports = {
         applySelected: "applySelected",
         resetItem: "resetItem"
     },
-    pieLabelIndent: 30,
+    radialLabelIndent: 30,
     pieLabelSpacing: 10,
     pieSeriesSpacing: 4
 };

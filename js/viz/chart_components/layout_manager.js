@@ -8,8 +8,7 @@ var extend = require("../../core/utils/extend").extend,
     _floor = Math.floor,
     _sqrt = Math.sqrt,
     consts = require("../components/consts"),
-    pieLabelIndent = consts.pieLabelIndent,
-    pieLabelSpacing = consts.pieLabelSpacing;
+    RADIAL_LABEL_INDENT = consts.radialLabelIndent;
 
 function getNearestCoord(firstCoord, secondCoord, pointCenterCoord) {
     var nearestCoord;
@@ -37,7 +36,7 @@ function getPieRadius(series, paneCenterX, paneCenterY, accessibleRadius, minR) 
                 var xCoords = getNearestCoord(labelBBox.x, labelBBox.x + labelBBox.width, paneCenterX),
                     yCoords = getNearestCoord(labelBBox.y, labelBBox.y + labelBBox.height, paneCenterY);
 
-                accessibleRadius = _min(_max(getLengthFromCenter(xCoords, yCoords, paneCenterX, paneCenterY) - pieLabelIndent - pieLabelSpacing, minR), accessibleRadius);
+                accessibleRadius = _min(_max(getLengthFromCenter(xCoords, yCoords, paneCenterX, paneCenterY) - RADIAL_LABEL_INDENT, minR), accessibleRadius);
                 radiusIsFound = true;
             }
             return radiusIsFound;
@@ -59,7 +58,9 @@ function getSizeLabels(series) {
 
         if(maxWidth) {
             res.outerLabelsCount++;
-            maxWidth += pieLabelSpacing;
+            if(res.outerLabelsCount > 1) {
+                maxWidth += consts.pieLabelSpacing;
+            }
         }
 
         res.sizes.push(maxWidth);
@@ -158,15 +159,15 @@ function toLayoutElementCoords(canvas) {
 function correctAvailableRadius(availableRadius, canvas, series, minR, paneCenterX, paneCenterY) {
     var sizeLabels = getSizeLabels(series),
         averageWidthLabels,
-        fullRadiusWithLabels = paneCenterX - canvas.left - (sizeLabels.outerLabelsCount > 0 ? sizeLabels.common + pieLabelIndent : 0);
+        fullRadiusWithLabels = paneCenterX - canvas.left - (sizeLabels.outerLabelsCount > 0 ? sizeLabels.common + RADIAL_LABEL_INDENT : 0);
 
     if(fullRadiusWithLabels < minR) {
         availableRadius = minR;
-        averageWidthLabels = (paneCenterX - availableRadius - pieLabelIndent - canvas.left) / sizeLabels.outerLabelsCount;
+        averageWidthLabels = (paneCenterX - availableRadius - RADIAL_LABEL_INDENT - canvas.left) / sizeLabels.outerLabelsCount;
     } else {
         availableRadius = _min(getPieRadius(series, paneCenterX, paneCenterY, availableRadius, minR), fullRadiusWithLabels);
     }
-    correctLabelRadius(sizeLabels.sizes, availableRadius + pieLabelIndent, series, canvas, averageWidthLabels);
+    correctLabelRadius(sizeLabels.sizes, availableRadius + RADIAL_LABEL_INDENT, series, canvas, averageWidthLabels);
 
     return availableRadius;
 }
