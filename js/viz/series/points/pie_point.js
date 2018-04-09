@@ -13,7 +13,8 @@ var extend = require("../../../core/utils/extend").extend,
     _normalizeAngle = vizUtils.normalizeAngle,
     _getCosAndSin = vizUtils.getCosAndSin,
     _isDefined = require("../../../core/utils/type").isDefined,
-    getVerticallyShiftedAngularCoords = vizUtils.getVerticallyShiftedAngularCoords;
+    getVerticallyShiftedAngularCoords = vizUtils.getVerticallyShiftedAngularCoords,
+    RADIAL_LABEL_INDENT = require("../../components/consts").radialLabelIndent;
 
 module.exports = _extend({}, symbolPoint, {
     _updateData: function(data) {
@@ -41,7 +42,7 @@ module.exports = _extend({}, symbolPoint, {
     correctPosition: function(correction) {
         var that = this;
         that.correctRadius(correction);
-        that.correctLabelRadius(correction.radiusOuter);
+        that.correctLabelRadius(correction.radiusOuter + RADIAL_LABEL_INDENT);
         that.centerX = correction.centerX;
         that.centerY = correction.centerY;
     },
