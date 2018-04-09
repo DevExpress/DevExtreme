@@ -80,7 +80,7 @@ module.exports = dependencyInjector({
         }
 
         if(dateDifferences.year && dateDifferences.month && dateDifferences.day) {
-            if(intervalFormat && intervalFormat !== 'year') {
+            if(intervalFormat && intervalFormat === 'month') {
                 return 'monthandyear';
             } else {
                 resultFormat.unshift('shortdate');
