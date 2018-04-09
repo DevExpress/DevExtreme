@@ -370,6 +370,11 @@
             .dx-scheduler-fixed-appointments {
                 left: @size;
             }
+
+            .dx-scheduler-date-table-row:before,
+            .dx-scheduler-header-row:before {
+                width: @size;
+            }
         }
     }
 
@@ -2368,15 +2373,17 @@
     
         &.dx-scheduler-work-space-month:not(.dx-scheduler-work-space-both-scrollbar) {
             .dx-scheduler-date-table {
-                .dx-scheduler-date-table-row {
-                    .dx-scheduler-pseudo-cell();
+                .dx-scheduler-date-table-row:before {
+                    content: "";
+                    display: table-cell;
                 }
             }
     
             .dx-scheduler-header-panel {
                 border-left: @SCHEDULER_BASE_BORDER;
-                .dx-scheduler-header-row {
-                    .dx-scheduler-pseudo-cell();
+                .dx-scheduler-header-row:before {
+                    content: "";
+                    display: table-cell;
                 }
             }
         }
