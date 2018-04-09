@@ -24,6 +24,9 @@ var HorizontalMonthRenderingStrategy = HorizontalMonthLineAppointmentsStrategy.i
             currentPartTop = appointmentSettings.top + this._defaultHeight,
             left = this._calculateMultiWeekAppointmentLeftOffset(appointmentSettings.hMax, fullWeekAppointmentWidth);
 
+        if(this.instance._groupOrientation === "vertical") {
+            left += this.instance.fire("getWorkSpaceDateTableOffset");
+        }
         for(var i = 0; i < longPartCount; i++) {
             if(totalWidth > maxAppointmentWidth) {
                 break;
