@@ -175,9 +175,7 @@ DataSourceAdapter = DataSourceAdapter.inherit((function() {
                         this._keySetter(item, key);
                     }
 
-                    if(this._parentIdGetter(item) === undefined) {
-                        this._parentIdSetter(item, parentId === undefined ? this.option("rootValue") : parentId);
-                    }
+                    this._parentIdSetter(item, parentId === undefined ? this.option("rootValue") : parentId);
 
                     result.push(item);
 
