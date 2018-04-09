@@ -149,9 +149,8 @@ var DataControllerFilterSyncExtender = {
             }
         }
 
-        var filterBuilderCustomOperations = that.option("filterBuilder.customOperations") || [];
-
-        var calculatedFilterValue = utils.getFilterExpression(filterValue, columns, [customOperations.anyOf(), customOperations.noneOf()].concat(filterBuilderCustomOperations), "filterBuilder");
+        var customOperations = that.getController("filterSync").getCustomFilterOperations();
+        var calculatedFilterValue = utils.getFilterExpression(filterValue, columns, customOperations, "filterBuilder");
         if(calculatedFilterValue) {
             filters.push(calculatedFilterValue);
         }
