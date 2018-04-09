@@ -500,9 +500,10 @@ module.exports = Class.inherit((function() {
         if(values && values.length && sortBySummaryFieldIndex >= 0 && isDefined(sliceIndex)) {
             return function(field) {
                 var rowIndex = areRows ? field.index : sliceIndex,
-                    columnIndex = areRows ? sliceIndex : field.index;
+                    columnIndex = areRows ? sliceIndex : field.index,
+                    value = ((values[rowIndex] || [[]])[columnIndex] || [])[sortBySummaryFieldIndex];
 
-                return ((values[rowIndex] || [[]])[columnIndex] || [])[sortBySummaryFieldIndex] || null; // TODO 0 -> null?
+                return isDefined(value) ? value : null;
             };
         }
     }

@@ -1630,6 +1630,42 @@ QUnit.test("change allowExpandAll, allowFiltering, allowSorting, allowSortingByS
     assert.strictEqual(pivotGrid.getDataSource().field(1).allowSortingBySummary, false);
 });
 
+QUnit.test("Sorting by Summary context menu with zero value", function(assert) {
+    var contextMenuArgs = [],
+        dataSourceInstance = new PivotGridDataSource({
+            fields: [
+                { dataField: "field1", area: "row" },
+                { dataField: "field2", area: "data", summaryType: "sum" }
+            ],
+            store: [
+                { field1: 'e1', field2: 0.0 },
+                { field1: 'e2', field2: -4.0 },
+                { field1: 'e3', field2: 1.0 },
+            ]
+        });
+
+    createPivotGrid({
+        onContextMenuPreparing: function(e) {
+            contextMenuArgs.push(e);
+        },
+        allowSortingBySummary: true,
+        dataSource: dataSourceInstance
+    }, assert);
+
+    this.clock.tick(500);
+
+    // act
+    $("#pivotGrid").find('.dx-pivotgrid-horizontal-headers td').last().trigger('dxcontextmenu');
+    contextMenuArgs[0].items[0].onItemClick();
+    this.clock.tick(500);
+
+    var $rows = $("#pivotGrid").find("tbody.dx-pivotgrid-vertical-headers").children();
+
+    assert.equal($rows.eq(0).text(), "e3");
+    assert.equal($rows.eq(1).text(), "e1");
+    assert.equal($rows.eq(2).text(), "e2");
+});
+
 QUnit.test("Sorting by Summary context menu", function(assert) {
     var contextMenuArgs = [],
         pivotGrid = createPivotGrid({
