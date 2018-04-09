@@ -457,7 +457,7 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
                 /**
                 * @name dxTreeListMethods_getSelectedRowKeys
                 * @publicName getSelectedRowKeys(mode)
-                * @param1 mode:Enums.TreeListGetSelectedKeysMode
+                * @param1 mode:string
                 * @return Array<any>
                 */
                 getSelectedRowKeys(mode) {

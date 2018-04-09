@@ -1212,3 +1212,27 @@ QUnit.test("Show NoData message when dataSource is empty and state is loaded", f
     // assert
     assert.equal($(".dx-datagrid-nodata").length, 1, "NoData message should be shown");
 });
+
+// T620172
+QUnit.test("Load pageSize from state when it is zero", function(assert) {
+    // arrange, act
+    this.setupDataGridModules({
+        stateStoring: {
+            enabled: true,
+            type: 'custom',
+            customLoad: function() {
+                return { pageSize: 0 };
+            },
+            customSave: function() {
+            }
+        },
+        loadingTimeout: null,
+        dataSource: {
+            pageSize: 10,
+            store: [{ id: 1 }, { id: 2 }, { id: 3 }]
+        }
+    });
+
+    // assert
+    assert.strictEqual(this.dataController.pageSize(), 0, "pageSize");
+});
