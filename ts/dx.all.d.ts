@@ -1936,8 +1936,8 @@ declare module DevExpress.ui {
         /** Indicates whether to show the error row. */
         errorRowEnabled?: boolean;
         filterBuilder?: dxFilterBuilderOptions;
+        filterBuilderPopup?: dxPopupOptions;
         filterPanel?: { visible?: boolean, filterEnabled?: boolean, customizeText?: ((e: { component?: Component, filterValue?: any, text?: string }) => string), texts?: { createFilter?: string, clearFilter?: string, filterEnabledHint?: string } };
-        filterPopup?: dxPopupOptions;
         /** Configures the filter row. */
         filterRow?: { visible?: boolean, showOperationChooser?: boolean, showAllText?: string, resetOperationText?: string, applyFilter?: string, applyFilterText?: string, operationDescriptions?: { equal?: string, notEqual?: string, lessThan?: string, lessThanOrEqual?: string, greaterThan?: string, greaterThanOrEqual?: string, startsWith?: string, contains?: string, notContains?: string, endsWith?: string, between?: string }, betweenStartText?: string, betweenEndText?: string };
         filterSyncEnabled?: string | boolean;
@@ -1982,7 +1982,9 @@ declare module DevExpress.ui {
         onSelectionChanged?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, currentSelectedRowKeys?: Array<any>, currentDeselectedRowKeys?: Array<any>, selectedRowKeys?: Array<any>, selectedRowsData?: Array<any> }) => any);
         /** A function that is executed before the toolbar is created. */
         onToolbarPreparing?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, toolbarOptions?: dxToolbarOptions }) => any);
+        /** Configures the pager. */
         pager?: { visible?: string | boolean, showPageSizeSelector?: boolean, allowedPageSizes?: Array<number> | string, showNavigationButtons?: boolean, showInfo?: boolean, infoText?: string };
+        /** Configures paging. */
         paging?: GridBasePaging;
         /** Specifies whether rows should be shaded differently. */
         rowAlternationEnabled?: boolean;
@@ -2027,6 +2029,7 @@ declare module DevExpress.ui {
         popup?: dxPopupOptions;
         /** Overriden. */
         texts?: GridBaseEditingTexts;
+        useIcons?: boolean;
     }
     /** Overriden. */
     export interface GridBaseEditingTexts {
@@ -2053,16 +2056,22 @@ declare module DevExpress.ui {
         /** Specifies text for a hint appearing when a user pauses on the button that cancels changes in a cell. Applies only if editing.mode is "cell" and data validation is enabled. */
         validationCancelChanges?: string;
     }
+    /** Configures paging. */
     export interface GridBasePaging {
+        /** Enables paging. */
         enabled?: boolean;
+        /** Specifies the page to be displayed using a zero-based index. */
         pageIndex?: number;
+        /** Specifies the page size. */
         pageSize?: number;
     }
     /** Overridden. A configuration object specifying scrolling options. */
     export interface GridBaseScrolling {
+        /** Specifies the rendering mode for columns. Applies when columns are left outside the viewport. */
         columnRenderingMode?: string;
         /** Specifies whether the widget should load pages adjacent to the current page. Applies only if scrolling.mode is "virtual". */
         preloadEnabled?: boolean;
+        /** Specifies the rendering mode for loaded rows. */
         rowRenderingMode?: string;
         /** Specifies whether a user can scroll the content with a swipe gesture. Applies only if useNative is false. */
         scrollByContent?: boolean;
@@ -2173,10 +2182,15 @@ declare module DevExpress.ui {
         isRowSelected(key: any): boolean;
         /** Gets a data object's key. */
         keyOf(obj: any): any;
+        /** Gets the total page count. */
         pageCount(): number;
+        /** Gets the current page index. */
         pageIndex(): number;
+        /** Switches the widget to a specific page using a zero-based index. */
         pageIndex(newIndex: number): Promise<void> & JQueryPromise<void>;
+        /** Gets the current page size. */
         pageSize(): number;
+        /** Sets the page size. */
         pageSize(value: number): void;
         /** Reloads data in the widget. */
         refresh(): Promise<void> & JQueryPromise<void>;
@@ -2213,7 +2227,7 @@ declare module DevExpress.ui {
         /** Configures editing. */
         editing?: dxDataGridEditing;
         /** Configures client-side exporting. */
-        export?: { texts?: { excelFormat?: any, exportToExcel?: any, selectedRows?: any, exportTo?: string, exportAll?: string, exportSelectedRows?: string }, enabled?: boolean, fileName?: string, excelFilterEnabled?: boolean, excelWrapTextEnabled?: boolean, proxyUrl?: string, allowExportSelectedData?: boolean };
+        export?: { texts?: { excelFormat?: any, exportToExcel?: any, selectedRows?: any, exportTo?: string, exportAll?: string, exportSelectedRows?: string }, enabled?: boolean, fileName?: string, excelFilterEnabled?: boolean, excelWrapTextEnabled?: boolean, proxyUrl?: string, allowExportSelectedData?: boolean, ignoreExcelErrors?: boolean };
         /** Configures grouping. */
         grouping?: { groupContinuedMessage?: any, groupContinuesMessage?: any, autoExpandAll?: boolean, allowCollapsing?: boolean, contextMenuEnabled?: boolean, expandMode?: string, texts?: { groupContinuesMessage?: string, groupContinuedMessage?: string, groupByThisColumn?: string, ungroup?: string, ungroupAll?: string } };
         /** Configures the group panel. */
@@ -2338,6 +2352,7 @@ declare module DevExpress.ui {
         adaptivityEnabled?: boolean;
         /** The text displayed on the Apply button. */
         applyButtonText?: string;
+        /** Configures the calendar's value picker. Applies only if the pickerType is "calendar". */
         calendarOptions?: dxCalendarOptions;
         /** The text displayed on the Cancel button. */
         cancelButtonText?: string;
@@ -3203,9 +3218,9 @@ declare module DevExpress.ui {
         /** Specifies a data source for the pivot grid. */
         dataSource?: Array<any> | DevExpress.data.PivotGridDataSource | DevExpress.data.PivotGridDataSourceOptions;
         /** Configures client-side exporting. */
-        export?: { enabled?: boolean, fileName?: string, proxyUrl?: string };
+        export?: { enabled?: boolean, fileName?: string, proxyUrl?: string, ignoreExcelErrors?: boolean };
         /** The Field Chooser configuration options. */
-        fieldChooser?: { enabled?: boolean, allowSearch?: boolean, layout?: number, title?: string, width?: number, height?: number, texts?: { columnFields?: string, rowFields?: string, dataFields?: string, filterFields?: string, allFields?: string } };
+        fieldChooser?: { enabled?: boolean, allowSearch?: boolean, layout?: number, title?: string, width?: number, height?: number, applyChangesMode?: string, texts?: { columnFields?: string, rowFields?: string, dataFields?: string, filterFields?: string, allFields?: string } };
         /** Configures the field panel. */
         fieldPanel?: { showColumnFields?: boolean, showFilterFields?: boolean, showDataFields?: boolean, showRowFields?: boolean, allowFieldDragging?: boolean, visible?: boolean, texts?: { columnFieldArea?: string, rowFieldArea?: string, filterFieldArea?: string, dataFieldArea?: string } };
         /** Configures the header filter feature. */
@@ -3269,6 +3284,7 @@ declare module DevExpress.ui {
     export interface dxPivotGridFieldChooserOptions extends WidgetOptions {
         /** Specifies whether searching is enabled in the field chooser. */
         allowSearch?: boolean;
+        applyChangesMode?: string;
         /** The data source of a PivotGrid widget. */
         dataSource?: DevExpress.data.PivotGridDataSource;
         /** Configures the header filter feature. */
@@ -3279,6 +3295,7 @@ declare module DevExpress.ui {
         layout?: number;
         /** A handler for the contextMenuPreparing event. */
         onContextMenuPreparing?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, items?: Array<any>, area?: string, field?: DevExpress.data.PivotGridDataSourceField, jQueryEvent?: JQueryEventObject, event?: event }) => any);
+        state?: any;
         /** Strings that can be changed or localized in the PivotGridFieldChooser widget. */
         texts?: { columnFields?: string, rowFields?: string, dataFields?: string, filterFields?: string, allFields?: string };
     }
@@ -3286,6 +3303,8 @@ declare module DevExpress.ui {
     export class dxPivotGridFieldChooser extends Widget {
         constructor(element: Element, options?: dxPivotGridFieldChooserOptions)
         constructor(element: JQuery, options?: dxPivotGridFieldChooserOptions)
+        applyChanges(): void;
+        cancelChanges(): void;
         /** Gets the PivotGridDataSource instance. */
         getDataSource(): DevExpress.data.PivotGridDataSource;
         /** Updates the widget to the size of its content. */
@@ -3332,6 +3351,8 @@ declare module DevExpress.ui {
     export interface dxPopupOptions extends dxOverlayOptions {
         /** Configures widget visibility animations. This object contains two fields: show and hide. */
         animation?: any;
+        /** Specifies the container in which to place the {WidgetName}. */
+        container?: string | Element | JQuery;
         /** Specifies whether or not to allow a user to drag the popup window. */
         dragEnabled?: boolean;
         /** Specifies whether the widget can be focused using keyboard navigation. */
@@ -4076,6 +4097,7 @@ declare module DevExpress.ui {
         onRowClick?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, data?: any, key?: any, values?: Array<any>, columns?: Array<any>, rowIndex?: number, rowType?: string, isSelected?: boolean, isExpanded?: boolean, rowElement?: DevExpress.core.dxElement, handled?: boolean }) => any) | string;
         /** A function that is executed after the widget creates a row. */
         onRowPrepared?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, data?: any, key?: any, values?: Array<any>, columns?: Array<dxTreeListColumn>, rowIndex?: number, rowType?: string, isSelected?: boolean, isExpanded?: boolean, rowElement?: DevExpress.core.dxElement }) => any);
+        /** Configures paging. */
         paging?: dxTreeListPaging;
         /** Specifies which data field provides parent keys. */
         parentIdExpr?: string | Function;
@@ -4098,7 +4120,9 @@ declare module DevExpress.ui {
         /** Specifies text for the button that adds a new nested row. Applies if the editing.mode is "batch" or "cell". */
         addRowToNode?: string;
     }
+    /** Configures paging. */
     export interface dxTreeListPaging extends GridBasePaging {
+        /** Enables paging. */
         enabled?: boolean;
     }
     /** Configures scrolling. */
@@ -4521,6 +4545,7 @@ declare module DevExpress.ui {
         calculateGroupValue?: string | ((rowData: any) => any);
         /** An array of grid columns. */
         columns?: Array<dxDataGridColumn>;
+        command?: string | string;
         /** Specifies a custom template for group cells. */
         groupCellTemplate?: template | ((cellElement: DevExpress.core.dxElement, cellInfo: any) => any);
         /** Specifies the index of a column when grid records are grouped by the values of this column. */
@@ -4734,7 +4759,7 @@ declare module DevExpress.ui {
         helpText?: string;
         /** Specifies whether the current form item is required. */
         isRequired?: boolean;
-        /** Specifies the type of the current item. */
+        /** Specifies the item's type. Set it to "simple" to create a simple item. */
         itemType?: string;
         /** Specifies options for the form item label. */
         label?: { text?: string, visible?: boolean, showColon?: boolean, location?: string, alignment?: string };
@@ -4765,7 +4790,7 @@ declare module DevExpress.ui {
         cssClass?: string;
         /** Holds an array of form items displayed within the group. */
         items?: Array<dxFormSimpleItem | dxFormGroupItem | dxFormTabbedItem | dxFormEmptyItem | dxFormButtonItem>;
-        /** Specifies the type of the current item. */
+        /** Specifies the item's type. Set it to "group" to create a group item. */
         itemType?: string;
         /** Specifies a name that identifies the form item. */
         name?: string;
@@ -4782,7 +4807,7 @@ declare module DevExpress.ui {
         colSpan?: number;
         /** Specifies a CSS class to be applied to the form item. */
         cssClass?: string;
-        /** Specifies the type of the current item. */
+        /** Specifies the item's type. Set it to "tabbed" to create a tabbed item. */
         itemType?: string;
         /** Specifies a name that identifies the form item. */
         name?: string;
@@ -4801,7 +4826,7 @@ declare module DevExpress.ui {
         colSpan?: number;
         /** Specifies a CSS class to be applied to the form item. */
         cssClass?: string;
-        /** Specifies the type of the current item. */
+        /** Specifies the item's type. Set it to "empty" to create an empty item. */
         itemType?: string;
         /** Specifies a name that identifies the form item. */
         name?: string;
@@ -4810,14 +4835,23 @@ declare module DevExpress.ui {
         /** Specifies the sequence number of the item in a form, group or tab. */
         visibleIndex?: number;
     }
+    /** Configures a button form item. */
     export interface dxFormButtonItem {
+        /** Specifies the button's horizontal alignment. */
         alignment?: string;
+        /** Configures the button. */
         buttonOptions?: dxButtonOptions;
+        /** Specifies how many columns the item spans. */
         colSpan?: number;
+        /** Specifies a CSS class to be applied to the item. */
         cssClass?: string;
+        /** Specifies the item's type. Set it to "button" to create a button item. */
         itemType?: string;
+        /** Specifies the item's identifier. */
         name?: string;
+        /** Specifies whether the item is visible. */
         visible?: boolean;
+        /** Specifies the item's position regarding other items in a group, tab, or the whole widget. */
         visibleIndex?: number;
     }
     export interface GridBaseColumn {
@@ -4929,6 +4963,7 @@ declare module DevExpress.ui {
     export interface dxTreeListColumn extends GridBaseColumn {
         /** Configures columns. */
         columns?: Array<dxTreeListColumn>;
+        command?: string | string;
     }
     /** This section describes the properties of a grid row. An object containing these properties comes to certain event-handling functions. */
     export interface dxDataGridRowObject {
@@ -5398,7 +5433,7 @@ declare module DevExpress.viz {
         loadingIndicator?: BaseWidgetLoadingIndicator;
         /** Generates space around the widget. */
         margin?: BaseWidgetMargin;
-        /** A handler for the drawn event. Executed when the widget has finished drawing itself. */
+        /** A function that is executed when the widget's rendering has finished. */
         onDrawn?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any }) => any);
         /** A handler for the exported event. Executed after data from the widget is exported. */
         onExported?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any }) => any);
@@ -5657,6 +5692,7 @@ declare module DevExpress.viz {
     }
     /** Describes settings supported by a series of the area type. */
     interface dxChartSeriesTypesAreaSeries extends dxChartSeriesTypesCommonSeries {
+        /** Configures data aggregation for the series. */
         aggregation?: dxChartSeriesTypesAreaSeriesAggregation;
         /** Specifies series elements to be highlighted when a user points to a series. */
         hoverMode?: string;
@@ -5667,7 +5703,9 @@ declare module DevExpress.viz {
         /** Specifies series elements to be highlighted when a user selects a series. */
         selectionMode?: string;
     }
+    /** Configures data aggregation for the series. */
     interface dxChartSeriesTypesAreaSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
+        /** Specifies how to aggregate series points. */
         method?: string;
     }
     /** Configures point labels. */
@@ -5682,6 +5720,7 @@ declare module DevExpress.viz {
     }
     /** Describes settings supported by a series of the bar type. */
     interface dxChartSeriesTypesBarSeries extends dxChartSeriesTypesCommonSeries {
+        /** Configures data aggregation for the series. */
         aggregation?: dxChartSeriesTypesBarSeriesAggregation;
         /** Specifies series elements to be highlighted when a user points to a series. */
         hoverMode?: string;
@@ -5690,7 +5729,9 @@ declare module DevExpress.viz {
         /** Specifies series elements to be highlighted when a user selects a bar. */
         selectionMode?: string;
     }
+    /** Configures data aggregation for the series. */
     interface dxChartSeriesTypesBarSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
+        /** Specifies how to aggregate series points. */
         method?: string;
     }
     /** Configures point labels. */
@@ -5700,6 +5741,7 @@ declare module DevExpress.viz {
     }
     /** Describes settings supported by a series of the bubble type. */
     interface dxChartSeriesTypesBubbleSeries extends dxChartSeriesTypesCommonSeries {
+        /** Configures data aggregation for the series. */
         aggregation?: dxChartSeriesTypesBubbleSeriesAggregation;
         /** Specifies series elements to be highlighted when a user points to a series. */
         hoverMode?: string;
@@ -5708,7 +5750,9 @@ declare module DevExpress.viz {
         /** Specifies series elements to be highlighted when a user selects a bubble. */
         selectionMode?: string;
     }
+    /** Configures data aggregation for the series. */
     interface dxChartSeriesTypesBubbleSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
+        /** Specifies how to aggregate series points. */
         method?: string;
     }
     /** Configures point labels. */
@@ -5718,6 +5762,7 @@ declare module DevExpress.viz {
     }
     /** Describes settings supported by a series of the candlestick type. */
     interface dxChartSeriesTypesCandleStickSeries extends dxChartSeriesTypesCommonSeries {
+        /** Configures data aggregation for the series. */
         aggregation?: dxChartSeriesTypesCandleStickSeriesAggregation;
         /** Specifies which data source field provides arguments for series points. */
         argumentField?: string;
@@ -5732,7 +5777,9 @@ declare module DevExpress.viz {
         /** Configures the appearance adopted by the series when a user selects it. */
         selectionStyle?: dxChartSeriesTypesCandleStickSeriesSelectionStyle;
     }
+    /** Configures data aggregation for the series. */
     interface dxChartSeriesTypesCandleStickSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
+        /** Specifies how to aggregate series points. */
         method?: string;
     }
     /** Configures the appearance adopted by the series when a user points to it. */
@@ -5762,6 +5809,7 @@ declare module DevExpress.viz {
     }
     /** An object that defines configuration options for chart series. */
     interface dxChartSeriesTypesCommonSeries {
+        /** Configures data aggregation for the series. */
         aggregation?: dxChartSeriesTypesCommonSeriesAggregation;
         /** Specifies which data source field provides arguments for series points. */
         argumentField?: string;
@@ -5834,9 +5882,13 @@ declare module DevExpress.viz {
         /** Specifies the width of the series line in pixels. Applies only to line-like series. */
         width?: number;
     }
+    /** Configures data aggregation for the series. */
     interface dxChartSeriesTypesCommonSeriesAggregation {
-        calculate?: ((aggregationInfo: chartPointAggregationInfoObject, series: baseSeriesObject) => any | Array<any>);
+        /** Specifies a custom aggregate function. Applies only if the aggregation method is "custom". */
+        calculate?: ((aggregationInfo: chartPointAggregationInfoObject, series: chartSeriesObject) => any | Array<any>);
+        /** Enables data aggregation for the series. */
         enabled?: boolean;
+        /** Specifies how to aggregate series points. */
         method?: string;
     }
     /** Configures the series border (in area-like series) or the series point border (in bar-like and bubble series). */
@@ -5982,6 +6034,7 @@ declare module DevExpress.viz {
     }
     /** Describes settings supported by a series of the full-stacked area type. */
     interface dxChartSeriesTypesFullStackedAreaSeries extends dxChartSeriesTypesCommonSeries {
+        /** Configures data aggregation for the series. */
         aggregation?: dxChartSeriesTypesFullStackedAreaSeriesAggregation;
         /** Specifies series elements to be highlighted when a user points to a series. */
         hoverMode?: string;
@@ -5992,7 +6045,9 @@ declare module DevExpress.viz {
         /** Specifies series elements to be highlighted when a user selects a series. */
         selectionMode?: string;
     }
+    /** Configures data aggregation for the series. */
     interface dxChartSeriesTypesFullStackedAreaSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
+        /** Specifies how to aggregate series points. */
         method?: string;
     }
     /** An object defining the label configuration options. */
@@ -6007,7 +6062,8 @@ declare module DevExpress.viz {
     }
     /** Describes settings supported by a series of the full-stacked bar type. */
     interface dxChartSeriesTypesFullStackedBarSeries extends dxChartSeriesTypesCommonSeries {
-        aggregation?: any;
+        /** Configures data aggregation for the series. */
+        aggregation?: dxChartSeriesTypesFullStackedBarSeriesAggregation;
         /** Specifies series elements to be highlighted when a user points to a series. */
         hoverMode?: string;
         /** Configures point labels. */
@@ -6015,7 +6071,9 @@ declare module DevExpress.viz {
         /** Specifies series elements to be highlighted when a user selects a bar. */
         selectionMode?: string;
     }
+    /** Configures data aggregation for the series. */
     interface dxChartSeriesTypesFullStackedBarSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
+        /** Specifies how to aggregate series points. */
         method?: string;
     }
     /** Configures point labels. */
@@ -6027,6 +6085,7 @@ declare module DevExpress.viz {
     }
     /** Describes settings supported by a series of the full-stacked line type. */
     interface dxChartSeriesTypesFullStackedLineSeries extends dxChartSeriesTypesCommonSeries {
+        /** Configures data aggregation for the series. */
         aggregation?: dxChartSeriesTypesFullStackedLineSeriesAggregation;
         /** Specifies series elements to be highlighted when a user points to a series. */
         hoverMode?: string;
@@ -6035,7 +6094,9 @@ declare module DevExpress.viz {
         /** Specifies series elements to be highlighted when a user selects a series. */
         selectionMode?: string;
     }
+    /** Configures data aggregation for the series. */
     interface dxChartSeriesTypesFullStackedLineSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
+        /** Specifies how to aggregate series points. */
         method?: string;
     }
     /** Configures point labels. */
@@ -6045,6 +6106,7 @@ declare module DevExpress.viz {
     }
     /** Describes settings supported by a series of the full-stacked spline area type. */
     interface dxChartSeriesTypesFullStackedSplineAreaSeries extends dxChartSeriesTypesCommonSeries {
+        /** Configures data aggregation for the series. */
         aggregation?: dxChartSeriesTypesFullStackedSplineAreaSeriesAggregation;
         /** Specifies series elements to be highlighted when a user points to a series. */
         hoverMode?: string;
@@ -6055,7 +6117,9 @@ declare module DevExpress.viz {
         /** Specifies series elements to be highlighted when a user selects a series. */
         selectionMode?: string;
     }
+    /** Configures data aggregation for the series. */
     interface dxChartSeriesTypesFullStackedSplineAreaSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
+        /** Specifies how to aggregate series points. */
         method?: string;
     }
     /** Configures point labels. */
@@ -6070,6 +6134,7 @@ declare module DevExpress.viz {
     }
     /** Describes settings supported by a series of the full-stacked spline area type. An object defining a series of the fullStackedSpline type. */
     interface dxChartSeriesTypesFullStackedSplineSeries extends dxChartSeriesTypesCommonSeries {
+        /** Configures data aggregation for the series. */
         aggregation?: dxChartSeriesTypesFullStackedSplineSeriesAggregation;
         /** Specifies series elements to be highlighted when a user points to a series. */
         hoverMode?: string;
@@ -6078,7 +6143,9 @@ declare module DevExpress.viz {
         /** Specifies series elements to be highlighted when a user selects a series. */
         selectionMode?: string;
     }
+    /** Configures data aggregation for the series. */
     interface dxChartSeriesTypesFullStackedSplineSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
+        /** Specifies how to aggregate series points. */
         method?: string;
     }
     /** Configures point labels. */
@@ -6088,6 +6155,7 @@ declare module DevExpress.viz {
     }
     /** Describes settings supported by a series of the line type. */
     interface dxChartSeriesTypesLineSeries extends dxChartSeriesTypesCommonSeries {
+        /** Configures data aggregation for the series. */
         aggregation?: dxChartSeriesTypesLineSeriesAggregation;
         /** Specifies series elements to be highlighted when a user points to a series. */
         hoverMode?: string;
@@ -6096,7 +6164,9 @@ declare module DevExpress.viz {
         /** Specifies series elements to be highlighted when a user selects a series. */
         selectionMode?: string;
     }
+    /** Configures data aggregation for the series. */
     interface dxChartSeriesTypesLineSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
+        /** Specifies how to aggregate series points. */
         method?: string;
     }
     /** Configures point labels. */
@@ -6106,6 +6176,7 @@ declare module DevExpress.viz {
     }
     /** Describes settings supported by a series of the range area type. */
     interface dxChartSeriesTypesRangeAreaSeries extends dxChartSeriesTypesCommonSeries {
+        /** Configures data aggregation for the series. */
         aggregation?: dxChartSeriesTypesRangeAreaSeriesAggregation;
         /** Specifies series elements to be highlighted when a user points to a series. */
         hoverMode?: string;
@@ -6116,7 +6187,9 @@ declare module DevExpress.viz {
         /** Specifies series elements to be highlighted when a user selects a series. */
         selectionMode?: string;
     }
+    /** Configures data aggregation for the series. */
     interface dxChartSeriesTypesRangeAreaSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
+        /** Specifies how to aggregate series points. */
         method?: string;
     }
     /** Configures point labels. */
@@ -6131,6 +6204,7 @@ declare module DevExpress.viz {
     }
     /** Describes settings supported by a series of the range bar type. */
     interface dxChartSeriesTypesRangeBarSeries extends dxChartSeriesTypesCommonSeries {
+        /** Configures data aggregation for the series. */
         aggregation?: dxChartSeriesTypesRangeBarSeriesAggregation;
         /** Specifies series elements to be highlighted when a user points to a series. */
         hoverMode?: string;
@@ -6139,7 +6213,9 @@ declare module DevExpress.viz {
         /** Specifies series elements to be highlighted when a user selects a range bar. */
         selectionMode?: string;
     }
+    /** Configures data aggregation for the series. */
     interface dxChartSeriesTypesRangeBarSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
+        /** Specifies how to aggregate series points. */
         method?: string;
     }
     /** Configures point labels. */
@@ -6149,11 +6225,14 @@ declare module DevExpress.viz {
     }
     /** Describes settings supported by a series of the scatter type. */
     interface dxChartSeriesTypesScatterSeries extends dxChartSeriesTypesCommonSeries {
+        /** Configures data aggregation for the series. */
         aggregation?: dxChartSeriesTypesScatterSeriesAggregation;
         /** Configures point labels. */
         label?: dxChartSeriesTypesScatterSeriesLabel;
     }
+    /** Configures data aggregation for the series. */
     interface dxChartSeriesTypesScatterSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
+        /** Specifies how to aggregate series points. */
         method?: string;
     }
     /** Configures point labels. */
@@ -6163,6 +6242,7 @@ declare module DevExpress.viz {
     }
     /** Describes settings supported by a series of the spline area type. */
     interface dxChartSeriesTypesSplineAreaSeries extends dxChartSeriesTypesCommonSeries {
+        /** Configures data aggregation for the series. */
         aggregation?: dxChartSeriesTypesSplineAreaSeriesAggregation;
         /** Specifies series elements to be highlighted when a user points to a series. */
         hoverMode?: string;
@@ -6173,7 +6253,9 @@ declare module DevExpress.viz {
         /** Specifies series elements to be highlighted when a user selects a series. */
         selectionMode?: string;
     }
+    /** Configures data aggregation for the series. */
     interface dxChartSeriesTypesSplineAreaSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
+        /** Specifies how to aggregate series points. */
         method?: string;
     }
     /** Configures point labels. */
@@ -6188,6 +6270,7 @@ declare module DevExpress.viz {
     }
     /** Describes settings supported by a series of the spline type. */
     interface dxChartSeriesTypesSplineSeries extends dxChartSeriesTypesCommonSeries {
+        /** Configures data aggregation for the series. */
         aggregation?: dxChartSeriesTypesSplineSeriesAggregation;
         /** Specifies series elements to be highlighted when a user points to a series. */
         hoverMode?: string;
@@ -6196,7 +6279,9 @@ declare module DevExpress.viz {
         /** Specifies series elements to be highlighted when a user selects a series. */
         selectionMode?: string;
     }
+    /** Configures data aggregation for the series. */
     interface dxChartSeriesTypesSplineSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
+        /** Specifies how to aggregate series points. */
         method?: string;
     }
     /** Configures point labels. */
@@ -6206,6 +6291,8 @@ declare module DevExpress.viz {
     }
     /** Describes settings supported by a series of the stacked area type. */
     interface dxChartSeriesTypesStackedAreaSeries extends dxChartSeriesTypesCommonSeries {
+        /** Configures data aggregation for the series. */
+        aggregation?: dxChartSeriesTypesStackedAreaSeriesAggregation;
         /** Specifies series elements to be highlighted when a user points to a series. */
         hoverMode?: string;
         /** Configures point labels. */
@@ -6214,6 +6301,11 @@ declare module DevExpress.viz {
         point?: dxChartSeriesTypesStackedAreaSeriesPoint;
         /** Specifies series elements to be highlighted when a user selects a series. */
         selectionMode?: string;
+    }
+    /** Configures data aggregation for the series. */
+    interface dxChartSeriesTypesStackedAreaSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
+        /** Specifies how to aggregate series points. */
+        method?: string;
     }
     /** Configures point labels. */
     interface dxChartSeriesTypesStackedAreaSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
@@ -6227,6 +6319,7 @@ declare module DevExpress.viz {
     }
     /** Describes settings supported by a series of the stacked bar type. */
     interface dxChartSeriesTypesStackedBarSeries extends dxChartSeriesTypesCommonSeries {
+        /** Configures data aggregation for the series. */
         aggregation?: dxChartSeriesTypesStackedBarSeriesAggregation;
         /** Specifies series elements to be highlighted when a user points to a series. */
         hoverMode?: string;
@@ -6235,7 +6328,9 @@ declare module DevExpress.viz {
         /** Specifies series elements to be highlighted when a user selects a bar. */
         selectionMode?: string;
     }
+    /** Configures data aggregation for the series. */
     interface dxChartSeriesTypesStackedBarSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
+        /** Specifies how to aggregate series points. */
         method?: string;
     }
     /** Configures point labels. */
@@ -6247,6 +6342,7 @@ declare module DevExpress.viz {
     }
     /** Describes settings supported by a series of the stacked line type. */
     interface dxChartSeriesTypesStackedLineSeries extends dxChartSeriesTypesCommonSeries {
+        /** Configures data aggregation for the series. */
         aggregation?: dxChartSeriesTypesStackedLineSeriesAggregation;
         /** Specifies series elements to be highlighted when a user points to a series. */
         hoverMode?: string;
@@ -6255,7 +6351,9 @@ declare module DevExpress.viz {
         /** Specifies series elements to be highlighted when a user selects a series. */
         selectionMode?: string;
     }
+    /** Configures data aggregation for the series. */
     interface dxChartSeriesTypesStackedLineSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
+        /** Specifies how to aggregate series points. */
         method?: string;
     }
     /** Configures point labels. */
@@ -6265,6 +6363,7 @@ declare module DevExpress.viz {
     }
     /** Describes settings supported by a series of the stacked spline area type. */
     interface dxChartSeriesTypesStackedSplineAreaSeries extends dxChartSeriesTypesCommonSeries {
+        /** Configures data aggregation for the series. */
         aggregation?: dxChartSeriesTypesStackedSplineAreaSeriesAggregation;
         /** Specifies series elements to be highlighted when a user points to a series. */
         hoverMode?: string;
@@ -6275,7 +6374,9 @@ declare module DevExpress.viz {
         /** Specifies series elements to be highlighted when a user selects a series. */
         selectionMode?: string;
     }
+    /** Configures data aggregation for the series. */
     interface dxChartSeriesTypesStackedSplineAreaSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
+        /** Specifies how to aggregate series points. */
         method?: string;
     }
     /** Configures point labels. */
@@ -6290,6 +6391,7 @@ declare module DevExpress.viz {
     }
     /** Describes settings supported by a series of the stacked spline type. */
     interface dxChartSeriesTypesStackedSplineSeries extends dxChartSeriesTypesCommonSeries {
+        /** Configures data aggregation for the series. */
         aggregation?: dxChartSeriesTypesStackedSplineSeriesAggregation;
         /** Specifies series elements to be highlighted when a user points to a series. */
         hoverMode?: string;
@@ -6298,7 +6400,9 @@ declare module DevExpress.viz {
         /** Specifies series elements to be highlighted when a user selects a series. */
         selectionMode?: string;
     }
+    /** Configures data aggregation for the series. */
     interface dxChartSeriesTypesStackedSplineSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
+        /** Specifies how to aggregate series points. */
         method?: string;
     }
     /** Configures point labels. */
@@ -6308,6 +6412,7 @@ declare module DevExpress.viz {
     }
     /** Describes settings supported by a series of the step rea type. */
     interface dxChartSeriesTypesStepAreaSeries extends dxChartSeriesTypesCommonSeries {
+        /** Configures data aggregation for the series. */
         aggregation?: dxChartSeriesTypesStepAreaSeriesAggregation;
         /** Configures the series border (in area-like series) or the series point border (in bar-like and bubble series). */
         border?: dxChartSeriesTypesStepAreaSeriesBorder;
@@ -6324,7 +6429,9 @@ declare module DevExpress.viz {
         /** Configures the appearance adopted by the series when a user selects it. */
         selectionStyle?: dxChartSeriesTypesStepAreaSeriesSelectionStyle;
     }
+    /** Configures data aggregation for the series. */
     interface dxChartSeriesTypesStepAreaSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
+        /** Specifies how to aggregate series points. */
         method?: string;
     }
     /** Configures the series border (in area-like series) or the series point border (in bar-like and bubble series). */
@@ -6364,6 +6471,7 @@ declare module DevExpress.viz {
     }
     /** Describes settings supported by a series of the step line type. */
     interface dxChartSeriesTypesStepLineSeries extends dxChartSeriesTypesCommonSeries {
+        /** Configures data aggregation for the series. */
         aggregation?: dxChartSeriesTypesStepLineSeriesAggregation;
         /** Specifies series elements to be highlighted when a user points to a series. */
         hoverMode?: string;
@@ -6372,7 +6480,9 @@ declare module DevExpress.viz {
         /** Specifies series elements to be highlighted when a user selects a series. */
         selectionMode?: string;
     }
+    /** Configures data aggregation for the series. */
     interface dxChartSeriesTypesStepLineSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
+        /** Specifies how to aggregate series points. */
         method?: string;
     }
     /** Configures point labels. */
@@ -6382,6 +6492,7 @@ declare module DevExpress.viz {
     }
     /** Describes settings supported by a series of the stock type. */
     interface dxChartSeriesTypesStockSeries extends dxChartSeriesTypesCommonSeries {
+        /** Configures data aggregation for the series. */
         aggregation?: dxChartSeriesTypesStockSeriesAggregation;
         /** Specifies which data source field provides arguments for series points. */
         argumentField?: string;
@@ -6392,7 +6503,9 @@ declare module DevExpress.viz {
         /** Specifies series elements to be highlighted when a user selects a point. */
         selectionMode?: string;
     }
+    /** Configures data aggregation for the series. */
     interface dxChartSeriesTypesStockSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
+        /** Specifies how to aggregate series points. */
         method?: string;
     }
     /** Configures point labels. */
@@ -6722,13 +6835,18 @@ declare module DevExpress.viz {
         pane: string;
     }
     export interface chartPointAggregationInfoObject {
+        /** Contains the length of the aggregation interval in axis units. If the interval is set in pixels, it will be converted to axis units. */
         aggregationInterval?: any;
+        /** Contains data objects that were aggregated into this point. */
         data?: Array<any>;
+        /** Contains the end value of the interval to which the point belongs. */
         intervalEnd?: any;
+        /** Contains the start value of the interval to which the point belongs. */
         intervalStart?: any;
     }
     /** This section describes the Point object, which represents a series point. */
     export class chartPointObject extends basePointObject {
+        /** Provides information about the aggregation interval and the data objects that fall within it. */
         aggregationInfo: chartPointAggregationInfoObject;
         /** Contains the first value of the point. This field is useful for points belonging to a series of the range area or range bar type only. */
         originalMinValue: string | number | Date;
@@ -7350,7 +7468,9 @@ declare module DevExpress.viz.charts {
     }
     /** Configures the argument axis. */
     export interface dxChartArgumentAxis extends dxChartCommonAxisSettings {
+        /** Specifies the length of aggregation intervals in pixels. May be ignored in favor of the aggregationInterval option. */
         aggregationGroupWidth?: number;
+        /** Specifies the length of aggregation intervals in axis units. Applies only to axes of continuous and logarithmic types. */
         aggregationInterval?: any;
         /** Casts arguments to a specified data type. */
         argumentType?: string;
@@ -8187,7 +8307,7 @@ declare module DevExpress.viz.charts {
         dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions | string;
         /** Specifies options of the legend. */
         legend?: BaseChartLegend;
-        /** A handler for the done event. */
+        /** A function that is executed when all series are ready. */
         onDone?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any }) => any);
         /** A handler for the pointClick event. */
         onPointClick?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, target?: basePointObject }) => any) | string;
