@@ -4399,20 +4399,6 @@ QUnit.test("Unnecessary a load calls do not happen of custom store when item is 
     assert.equal(loadCallCounter, 1);
 });
 
-QUnit.module("deprecated options");
-
-QUnit.test("the 'values' option changing should work correctly", function(assert) {
-    var items = [1, 2, 3],
-        tagBox = $("#tagBox").dxTagBox({
-            items: items,
-            values: items,
-            showSelectionControls: true
-        }).dxTagBox("instance");
-
-    tagBox.option("values", [items[0]]);
-    assert.deepEqual(tagBox.option("value"), [items[0]], "the 'values' option works correctly");
-});
-
 
 QUnit.module("regression", {
     beforeEach: function() {

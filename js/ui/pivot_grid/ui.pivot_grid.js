@@ -878,21 +878,6 @@ var PivotGrid = Widget.inherit({
         });
     },
 
-    _setDeprecatedOptions: function() {
-        this.callBase();
-
-        extend(this._deprecatedOptions, {
-            /**
-            * @name dxPivotGridOptions_useNativeScrolling
-            * @publicName useNativeScrolling
-            * @deprecated dxPivotGridOptions_scrolling_useNative
-            * @type string|boolean
-            * @inheritdoc
-            */
-            useNativeScrolling: { since: "15.2", alias: "scrolling.useNative" }
-        });
-    },
-
     _getDataControllerOptions: function() {
         var that = this;
         return {

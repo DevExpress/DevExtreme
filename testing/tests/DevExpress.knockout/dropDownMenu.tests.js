@@ -12,14 +12,14 @@ QUnit.testStart(function() {
     var markup =
         '<div id="dropDownMenuKO" data-bind="dxDropDownMenu: { items: items, onContentReady: onContentReady, opened: opened }">\
             <div data-options="dxTemplate: { name: \'item\' }">\
-                <img  class="my-icon" data-bind="attr: { src: iconSrc }" />\
+                <img  class="my-icon" data-bind="attr: { src: icon }" />\
                 <span class="my-text" data-bind="text: text"></span>\
             </div>\
         </div>\
         \
         <div id="dropDownMenuCustomTemplateName" data-bind="dxDropDownMenu: { items: items, itemTemplate: itemTemplate }">\
             <div data-options="dxTemplate: { name: \'itemWithIcon\' }">\
-                <img  class="my-icon" data-bind="attr: { src: iconSrc }" />\
+                <img  class="my-icon" data-bind="attr: { src: icon }" />\
                 <span class="my-text" data-bind="text: text"></span>\
             </div>\
         </div>\
@@ -58,15 +58,15 @@ QUnit.test("custom item template", function(assert) {
         items: [
             {
                 text: "0",
-                iconSrc: "http://1.png"
+                icon: "http://1.png"
             },
             {
                 text: "1",
-                iconSrc: "http://1.png"
+                icon: "http://1.png"
             },
             {
                 text: "2",
-                iconSrc: "http://3.png"
+                icon: "http://3.png"
             }
 
         ],
@@ -93,15 +93,15 @@ QUnit.test("custom template name", function(assert) {
             items: [
                 {
                     text: "0",
-                    iconSrc: "http://1.png"
+                    icon: "http://1.png"
                 },
                 {
                     text: "1",
-                    iconSrc: "http://1.png"
+                    icon: "http://1.png"
                 },
                 {
                     text: "2",
-                    iconSrc: "http://3.png"
+                    icon: "http://3.png"
                 }
 
             ],

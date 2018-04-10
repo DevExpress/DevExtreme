@@ -203,7 +203,7 @@ QUnit.test("collapseItem method should not reset item data", function(assert) {
     $treeView.find("." + internals.ITEM_CLASS).eq(0).trigger("dxclick");
 });
 
-QUnit.test("'selectAllEnabled' option is activated", function(assert) {
+QUnit.test("select all items using select all checkbox", function(assert) {
     var treeView = initTree({
         items: [{ text: "Item 1", expanded: true, items: [{ text: "Nested item" }] }, { text: "Item 2" }],
         showCheckBoxesMode: "selectAll"

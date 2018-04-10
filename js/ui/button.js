@@ -53,15 +53,6 @@ var Button = Widget.inherit({
     _setDeprecatedOptions: function() {
         this.callBase();
 
-        extend(this._deprecatedOptions, {
-            /**
-            * @name dxbuttonoptions_iconSrc
-            * @publicName iconSrc
-            * @deprecated dxButtonOptions_icon
-            * @inheritdoc
-            */
-            "iconSrc": { since: "15.1", alias: "icon" }
-        });
     },
 
     _getDefaultOptions: function() {

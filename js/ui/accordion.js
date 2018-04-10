@@ -221,23 +221,17 @@ var Accordion = CollectionWidget.inherit({
         * @publicName icon
         * @type String
         */
-        /**
-        * @name dxAccordionItemTemplate_iconSrc
-        * @publicName iconSrc
-        * @type String
-        * @deprecated dxAccordionItemTemplate_icon
-        */
         this._defaultTemplates["title"] = new BindableTemplate(function($container, data) {
             if(isPlainObject(data)) {
                 if(data.title) {
                     $container.text(data.title);
                 }
 
-                $container.append(iconUtils.getImageContainer(data.icon || data.iconSrc));
+                $container.append(iconUtils.getImageContainer(data.icon));
             } else {
                 $container.text(String(data));
             }
-        }, ["title", "icon", "iconSrc"], this.option("integrationOptions.watchMethod"));
+        }, ["title", "icon"], this.option("integrationOptions.watchMethod"));
     },
 
     _initMarkup: function() {

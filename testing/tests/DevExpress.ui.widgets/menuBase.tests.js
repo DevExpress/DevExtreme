@@ -167,17 +167,6 @@ QUnit.test('Render item with icon path', function(assert) {
     assert.ok($($menuItemContent.children()[0]).attr('src'), '1.png', 'image is right');
 });
 
-QUnit.test('Render item with iconSrc path', function(assert) {
-    var menuBase = createMenu({ items: [{ iconSrc: '1.png' }] }),
-        $itemWrappers = menuBase.element.find('.' + DX_MENU_ITEM_WRAPPER_CLASS),
-        $item = $itemWrappers.children(),
-        $menuItemContent = $item.children();
-
-    assert.ok($item.hasClass(DX_ITEM_HAS_ICON), 'item has dx-menu-item-has-icon class');
-    assert.ok($($menuItemContent.children()[0]).hasClass(DX_ICON_CLASS), 'there is dx-icon class inside item-content');
-    assert.ok($($menuItemContent.children()[0]).attr('src'), '1.png', 'image is right');
-});
-
 QUnit.test('Render item with expressions', function(assert) {
     var menuBase = createMenu({
             displayExpr: "name",
@@ -579,7 +568,7 @@ QUnit.test('Select item on click', function(assert) {
         menuBase = createMenu({
             items: items,
             selectionMode: "single",
-            selectionByClick: true
+            selectByClick: true
         }),
         $item1 = menuBase.element.find('.' + DX_MENU_ITEM_CLASS).eq(0),
         $item2 = menuBase.element.find('.' + DX_MENU_ITEM_CLASS).eq(1);
@@ -608,7 +597,7 @@ QUnit.test('Select item after third click', function(assert) {
         menuBase = createMenu({
             items: items,
             selectionMode: "single",
-            selectionByClick: true
+            selectByClick: true
         }),
         $item1 = menuBase.element.find('.' + DX_MENU_ITEM_CLASS).eq(0);
 
@@ -687,7 +676,7 @@ QUnit.test("fire 'onSelectionChanged' action", function(assert) {
         menuBase = createMenu({
             items: items,
             selectionMode: "single",
-            selectionByClick: true,
+            selectByClick: true,
             onSelectionChanged: function() { actionCount++; }
         }),
         $item1 = menuBase.element.find('.' + DX_MENU_ITEM_CLASS).eq(0),
@@ -712,7 +701,7 @@ QUnit.test("onSelectionChanged should have correct API (T311914)", function(asse
         menuBase = createMenu({
             items: items,
             selectionMode: "single",
-            selectionByClick: true,
+            selectByClick: true,
             onSelectionChanged: function(e) {
                 assert.equal(e.component, this, "e.component should be an instance of menu");
                 assert.ok($(e.element).get(0).nodeType, "e.element should be dom node or jquery object");
@@ -740,7 +729,7 @@ QUnit.test('Prevent selection item on click', function(assert) {
         menuBase = createMenu({
             items: items,
             selectionMode: "single",
-            selectionByClick: true
+            selectByClick: true
         }),
         $items = menuBase.element.find('.' + DX_MENU_ITEM_CLASS),
         $item1 = $items.eq(1),

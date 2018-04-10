@@ -6,7 +6,6 @@ var $ = require("../core/renderer"),
     support = require("../core/utils/support"),
     commonUtils = require("../core/utils/common"),
     domUtils = require("../core/utils/dom"),
-    typeUtils = require("../core/utils/type"),
     each = require("../core/utils/iterator").each,
     extend = require("../core/utils/extend").extend,
     inkRipple = require("./widget/utils.ink_ripple"),
@@ -59,28 +58,6 @@ var Lookup = DropDownList.inherit({
             enter: function() {
                 this._validatedOpening();
             }
-        });
-    },
-
-    _setDeprecatedOptions: function() {
-        this.callBase();
-
-        extend(this._deprecatedOptions, {
-            /**
-            * @name dxLookupOptions_showNextButton
-            * @type boolean
-            * @publicName showNextButton
-            * @deprecated #pageLoadMode
-            */
-            "showNextButton": { since: "15.1", message: "Use the 'pageLoadMode' option instead" },
-
-            /**
-            * @name dxLookupOptions_pagingEnabled
-            * @publicName pagingEnabled
-            * @deprecated DataSourceOptions_paginate
-            * @inheritdoc
-            */
-            "pagingEnabled": { since: "15.1", message: "Use the 'dataSource.paginate' option instead" }
         });
     },
 
@@ -426,13 +403,6 @@ var Lookup = DropDownList.inherit({
             */
 
             /**
-            * @name dxLookupOptions_fieldEditEnabled
-            * @publicName fieldEditEnabled
-            * @deprecated
-            * @inheritdoc
-            */
-
-            /**
             * @name dxLookupOptions_acceptCustomValue
             * @publicName acceptCustomValue
             * @hidden
@@ -657,17 +627,6 @@ var Lookup = DropDownList.inherit({
         ]);
     },
 
-    _dataSourceOptions: function() {
-        this._suppressDeprecatedWarnings();
-        var pagingEnabled = commonUtils.ensureDefined(this.option("pagingEnabled"), true);
-        pagingEnabled = typeUtils.isDefined(this.option("showNextButton")) ? pagingEnabled || this.option("showNextButton") : pagingEnabled;
-        this._resumeDeprecatedWarnings();
-
-        return extend(this.callBase(), {
-            paginate: pagingEnabled
-        });
-    },
-
     _initTemplates: function() {
         this.callBase();
 
@@ -692,6 +651,13 @@ var Lookup = DropDownList.inherit({
             .attr("type", "hidden")
             .appendTo(this.$element());
     },
+
+    _dataSourceOptions: function() {
+        return extend(this.callBase(), {
+            paginate: true
+        });
+    },
+
 
     _getSubmitElement: function() {
         return this._$submitElement;
@@ -1065,7 +1031,7 @@ var Lookup = DropDownList.inherit({
             onScroll: this.option("onScroll"),
             onPullRefresh: this.option("onPullRefresh"),
             onPageLoading: this.option("onPageLoading"),
-            pageLoadMode: this._getPageLoadMode(),
+            pageLoadMode: this.option("pageLoadMode"),
             nextButtonText: this.option("nextButtonText"),
             _keyboardProcessor: this._listKeyboardProcessor,
             onFocusIn: this._onFocusInHandler.bind(this),
@@ -1084,13 +1050,6 @@ var Lookup = DropDownList.inherit({
     _listContentReadyHandler: function() {
         this.callBase.apply(this, arguments);
         this._refreshSelected();
-    },
-
-    _getPageLoadMode: function() {
-        this._suppressDeprecatedWarnings();
-        var result = typeUtils.isDefined(this.option("showNextButton")) ? "nextButton" : this.option("pageLoadMode");
-        this._resumeDeprecatedWarnings();
-        return result;
     },
 
     _setFocusPolicy: function() {
@@ -1229,9 +1188,8 @@ var Lookup = DropDownList.inherit({
             case "groupTemplate":
                 this._setListOption(name);
                 break;
-            case "showNextButton":
             case "pageLoadMode":
-                this._setListOption("pageLoadMode", this._getPageLoadMode());
+                this._setListOption("pageLoadMode", this.option("pageLoadMode"));
                 break;
             case "cleanSearchOnOpening":
                 break;

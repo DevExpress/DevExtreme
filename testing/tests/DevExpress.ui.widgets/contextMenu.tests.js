@@ -1528,7 +1528,7 @@ QUnit.test("select item when space pressed", function(assert) {
     var items = [{ text: "item 1" }, { text: "item 2" }],
         instance = new ContextMenu(this.$element, {
             items: items,
-            selectionByClick: true,
+            selectByClick: true,
             focusStateEnabled: true,
             selectionMode: "single"
         });
@@ -1547,7 +1547,7 @@ QUnit.test("select item when space pressed", function(assert) {
 QUnit.test("when selectionMode is none, not select item when space pressed", function(assert) {
     var instance = new ContextMenu(this.$element, {
         items: [{ text: "item 1" }, { text: "item 2" }],
-        selectionByClick: true,
+        selectByClick: true,
         focusStateEnabled: true,
         selectionMode: "single"
     });
@@ -1566,7 +1566,7 @@ QUnit.test("select item when space pressed on inner level", function(assert) {
     var items = [{ text: "item 1" }, { text: "item 2", items: [{ text: "item 21" }, { text: "item 22" }] }],
         instance = new ContextMenu(this.$element, {
             items: items,
-            selectionByClick: true,
+            selectByClick: true,
             focusStateEnabled: true,
             selectionMode: "single"
         });
@@ -1587,7 +1587,7 @@ QUnit.test("onSelectionChanged handle fire when space pressed", function(assert)
     var itemSelected = 0,
         instance = new ContextMenu(this.$element, {
             items: [{ text: "item 1" }],
-            selectionByClick: true,
+            selectByClick: true,
             selectionMode: "single",
             focusStateEnabled: true,
             onSelectionChanged: function() {
@@ -1608,7 +1608,7 @@ QUnit.test("when selectionMode is none, onSelectionChanged handle not fire when 
     var itemSelected = 0,
         instance = new ContextMenu(this.$element, {
             items: [{ text: "item 1" }],
-            selectionByClick: true,
+            selectByClick: true,
             selectionMode: "none",
             focusStateEnabled: true,
             onSelectionChanged: function() {

@@ -2329,7 +2329,7 @@ QUnit.test("column headers visibility when hide removing row in batch editing mo
             dataSource: [{ col1: "1", col2: "2" }],
             loadingTimeout: undefined,
             editing: {
-                editMode: 'batch',
+                mode: 'batch',
                 allowDeleting: true
             },
             onCellPrepared: function(e) {
@@ -4763,7 +4763,7 @@ QUnit.testInActiveWindow("Height virtual table should be updated to show validat
     clock.restore();
 });
 
-QUnit.test("Error row is not hidden when rowKey is undefined by editMode is cell", function(assert) {
+QUnit.test("Error row is not hidden when rowKey is undefined by mode is cell", function(assert) {
     // arrange
     var clock = sinon.useFakeTimers();
     var dataGrid = createDataGrid({

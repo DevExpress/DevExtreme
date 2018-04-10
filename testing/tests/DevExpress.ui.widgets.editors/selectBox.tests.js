@@ -505,16 +505,16 @@ QUnit.test("dxSelectBox automatically scrolls to selected item on opening", func
     assert.ok($popupContent.offset().top + $popupContent.height() > $selectedItem.offset().top, "selected item is visible");
 });
 
-QUnit.test("dxSelectBox scrolls to the top when pagingEnabled=true and selectbox is editable and item is out of page", function(assert) {
+QUnit.test("dxSelectBox scrolls to the top when paging is enabled and selectbox is editable and item is out of page", function(assert) {
     var items = [];
     for(var i = 0; i <= 200; i++) {
         items.push(i);
     }
 
     var $selectBox = $("#selectBox").dxSelectBox({
-        pagingEnabled: true,
         searchEnabled: true,
         dataSource: {
+            paginate: true,
             store: items,
             pageSize: 100
         },
@@ -531,16 +531,16 @@ QUnit.test("dxSelectBox scrolls to the top when pagingEnabled=true and selectbox
     assert.ok($popupContent.offset().top <= $firstItem.offset().top, "first item is visible");
 });
 
-QUnit.test("dxSelectBox scroll to selected item when pagingEnabled=true and selectbox is editable and item is not out of page", function(assert) {
+QUnit.test("dxSelectBox scroll to selected item when paging is enabled and selectbox is editable and item is not out of page", function(assert) {
     var items = [];
     for(var i = 0; i <= 200; i++) {
         items.push(i);
     }
 
     var $selectBox = $("#selectBox").dxSelectBox({
-        pagingEnabled: true,
         searchEnabled: true,
         dataSource: {
+            paginate: true,
             store: items,
             pageSize: 100
         },
@@ -1103,15 +1103,17 @@ QUnit.test("item template", function(assert) {
     assert.equal($.trim($container.text()), "itemTemplate", "items rendered with item template");
 });
 
-QUnit.test("selectbox loads first page after first opening when pagingEnabled is true", function(assert) {
+QUnit.test("selectbox loads first page after first opening when paging is enabled", function(assert) {
     var items = [];
     for(var i = 0; i < 30; i++) {
         items.push(i);
     }
 
     var $selectBox = $("#selectBox").dxSelectBox({
-        pagingEnabled: true,
-        dataSource: new ArrayStore(items),
+        dataSource: {
+            store: new ArrayStore(items),
+            paginate: true
+        },
         deferRendering: true
     });
 

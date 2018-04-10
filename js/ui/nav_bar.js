@@ -60,7 +60,7 @@ var NavBar = Tabs.inherit({
         $itemElement.find("." + ITEM_CLASS)
             .addClass(NAVBAR_ITEM_CONTENT_CLASS);
 
-        if(!itemData.icon && !itemData.iconSrc) {
+        if(!itemData.icon) {
             $itemElement.addClass("dx-navbar-text-item");
         }
     }

@@ -117,28 +117,6 @@ var ListBase = CollectionWidget.inherit({
         });
     },
 
-    _setDeprecatedOptions: function() {
-        this.callBase();
-
-        extend(this._deprecatedOptions, {
-            /**
-            * @name dxListOptions_autoPagingEnabled
-            * @publicName autoPagingEnabled
-            * @deprecated #pageLoadMode
-            * @inheritdoc
-            */
-            "autoPagingEnabled": { since: "15.1", message: "Use the 'pageLoadMode' option instead" },
-
-            /**
-            * @name dxListOptions_showNextButton
-            * @publicName showNextButton
-            * @deprecated #pageLoadMode
-            * @inheritdoc
-            */
-            "showNextButton": { since: "15.1", message: "Use the 'pageLoadMode' option instead" }
-        });
-    },
-
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
 
@@ -586,14 +564,20 @@ var ListBase = CollectionWidget.inherit({
         this.setAria("role", "listbox");
     },
 
+    _scrollBottomMode: function() {
+        return this.option("pageLoadMode") === "scrollBottom";
+    },
+
+    _nextButtonMode: function() {
+        return this.option("pageLoadMode") === "nextButton";
+    },
+
     _dataSourceOptions: function() {
-        this._suppressDeprecatedWarnings();
-        var pagingEnabled = this.option("autoPagingEnabled");
-        pagingEnabled = typeUtils.isDefined(this.option("showNextButton")) ? pagingEnabled || this.option("showNextButton") : pagingEnabled;
-        this._resumeDeprecatedWarnings();
+        var scrollBottom = this._scrollBottomMode(),
+            nextButton = this._nextButtonMode();
 
         return extend(this.callBase(), {
-            paginate: typeUtils.isDefined(pagingEnabled) ? pagingEnabled : true
+            paginate: commonUtils.ensureDefined(scrollBottom || nextButton, true)
         });
     },
 
@@ -602,11 +586,9 @@ var ListBase = CollectionWidget.inherit({
     },
 
     _initScrollView: function() {
-        this._suppressDeprecatedWarnings();
         var scrollingEnabled = this.option("scrollingEnabled"),
             pullRefreshEnabled = scrollingEnabled && this.option("pullRefreshEnabled"),
-            autoPagingEnabled = scrollingEnabled && commonUtils.ensureDefined(this.option("autoPagingEnabled"), this.option("pageLoadMode") === "scrollBottom") && !!this._dataSource;
-        this._resumeDeprecatedWarnings();
+            autoPagingEnabled = scrollingEnabled && this._scrollBottomMode() && !!this._dataSource;
 
         this._scrollView = this._createComponent(this.$element(), ScrollView, {
             disabled: this.option("disabled") || !scrollingEnabled,
@@ -655,12 +637,10 @@ var ListBase = CollectionWidget.inherit({
     },
 
     _updateLoadingState: function(tryLoadMore) {
-        this._suppressDeprecatedWarnings();
         var isDataLoaded = !tryLoadMore || this._isLastPage(),
-            autoPagingEnabled = commonUtils.ensureDefined(this.option("autoPagingEnabled"), this.option("pageLoadMode") === "scrollBottom"),
-            stopLoading = isDataLoaded || !autoPagingEnabled,
+            scrollBottomMode = this._scrollBottomMode(),
+            stopLoading = isDataLoaded || !scrollBottomMode,
             hideLoadIndicator = stopLoading && !this._isDataSourceLoading();
-        this._resumeDeprecatedWarnings();
 
         if(stopLoading || this._scrollViewIsFull()) {
             this._scrollView.release(hideLoadIndicator);
@@ -672,10 +652,7 @@ var ListBase = CollectionWidget.inherit({
     },
 
     _shouldRenderNextButton: function() {
-        this._suppressDeprecatedWarnings();
-        var result = commonUtils.ensureDefined(this.option("showNextButton"), this.option("pageLoadMode") === "nextButton") && this._dataSource && this._dataSource.isLoaded();
-        this._resumeDeprecatedWarnings();
-        return result;
+        return this._nextButtonMode() && this._dataSource && this._dataSource.isLoaded();
     },
 
     _dataSourceLoadingChangedHandler: function(isLoading) {
@@ -1048,9 +1025,6 @@ var ListBase = CollectionWidget.inherit({
                 this._toggleNextButton(args.value);
                 this._initScrollView();
                 break;
-            case "showNextButton":
-                this._toggleNextButton(args.value);
-                break;
             case "dataSource":
                 this.callBase(args);
                 this._initScrollView();
@@ -1066,7 +1040,6 @@ var ListBase = CollectionWidget.inherit({
             case "scrollByThumb":
             case "scrollingEnabled":
             case "pullRefreshEnabled":
-            case "autoPagingEnabled":
                 this._initScrollView();
                 this._updateLoadingState();
                 break;

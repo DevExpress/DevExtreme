@@ -1041,21 +1041,3 @@ QUnit.test("TextEditor with mask option should firing the 'onChange' event", fun
     $input.triggerHandler("blur");
     assert.equal(handler.callCount, 2, "'change' event is not fired after focus out without value change");
 });
-
-
-QUnit.module("deprecated options");
-
-QUnit.test("the 'attr' option", function(assert) {
-    var $div;
-
-    try {
-        $div = $("<div>").appendTo($(document.body));
-
-        $div.dxTextEditor({ attr: { "data-test": "test" } });
-
-        var $input = $div.find("input");
-        assert.strictEqual($input.attr("data-test"), "test", "attribute is set for input");
-    } finally {
-        $div.remove();
-    }
-});

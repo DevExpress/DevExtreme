@@ -314,7 +314,7 @@ var ResourceManager = Class.inherit({
             result;
 
         iteratorUtils.each(resources, function(index, resource) {
-            if(resource.useColorAsDefault || resource.mainColor) {
+            if(resource.useColorAsDefault) {
                 result = resource;
                 return false;
             }
