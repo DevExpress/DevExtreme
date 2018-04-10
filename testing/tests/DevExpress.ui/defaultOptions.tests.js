@@ -1135,7 +1135,7 @@ testComponentDefaults(List,
     },
     function() {
         this.originalCurrentTheme = themes.current();
-        themes.current("material.light");
+        themes.current("material.blue.light");
     },
     function() {
         themes.current(this.originalCurrentTheme);
@@ -1153,7 +1153,7 @@ testComponentDefaults(TreeList,
     },
     function() {
         this.originalCurrentTheme = themes.current();
-        themes.current("material.light");
+        themes.current("material.blue.light");
     },
     function() {
         themes.current(this.originalCurrentTheme);
@@ -1330,7 +1330,7 @@ testComponentDefaults(Tabs,
     },
     function() {
         this.originalCurrentTheme = themes.current();
-        themes.current("material.light");
+        themes.current("material.blue.light");
     },
     function() {
         themes.current(this.originalCurrentTheme);
@@ -1407,7 +1407,7 @@ testComponentDefaults(Form,
     },
     function() {
         this.originalCurrentTheme = themes.current();
-        themes.current("material.light");
+        themes.current("material.blue.light");
     },
     function() {
         themes.current(this.originalCurrentTheme);
@@ -1423,7 +1423,7 @@ testComponentDefaults(DataGrid,
     },
     function() {
         this.originalCurrentTheme = themes.current();
-        themes.current("material.light");
+        themes.current("material.blue.light");
     },
     function() {
         themes.current(this.originalCurrentTheme);
@@ -1455,7 +1455,7 @@ testComponentDefaults(Accordion,
     },
     function() {
         this.originalCurrentTheme = themes.current();
-        themes.current("material.light");
+        themes.current("material.blue.light");
     },
     function() {
         themes.current(this.originalCurrentTheme);
