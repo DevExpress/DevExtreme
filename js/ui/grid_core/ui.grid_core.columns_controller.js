@@ -34,6 +34,8 @@ var USER_STATE_FIELD_NAMES_15_1 = ["filterValues", "filterType", "fixed", "fixed
     USER_STATE_FIELD_NAMES = ["visibleIndex", "dataField", "name", "dataType", "width", "visible", "sortOrder", "lastSortOrder", "sortIndex", "groupIndex", "filterValue", "selectedFilterOperation", "added"].concat(USER_STATE_FIELD_NAMES_15_1),
     COMMAND_EXPAND_CLASS = "dx-command-expand";
 
+var regExp = /columns\[(\d+)\]\.?/gi;
+
 module.exports = {
     defaultOptions: function() {
         return {
@@ -1142,13 +1144,54 @@ module.exports = {
                 }
             };
 
+            var getColumnFullPath = function(that, column) {
+                var result = [],
+                    bandColumnsCache = that.getBandColumnsCache(),
+                    callbackFilter = function(item) {
+                        return item.ownerBand === column.ownerBand;
+                    },
+                    columns = that._columns.filter(callbackFilter);
+
+                while(columns.length) {
+                    result.unshift("columns[" + columns.indexOf(column) + "]");
+
+                    column = bandColumnsCache.columnParentByIndex[column.index];
+                    columns = column ? that._columns.filter(callbackFilter) : [];
+                }
+
+                return result.join(".");
+            };
+
+            var getColumnByPath = function(that, path, columns) {
+                var column,
+                    columnIndexes = [];
+
+                path.replace(regExp, function(_, columnIndex) {
+                    columnIndexes.push(parseInt(columnIndex));
+                    return "";
+                });
+
+                if(columnIndexes.length) {
+                    if(columns) {
+                        column = columnIndexes.reduce(function(prevColumn, index) {
+                            return prevColumn ? prevColumn.columns[index] : columns[index];
+                        }, 0);
+                    } else {
+                        column = getColumnByIndexes(that, columnIndexes);
+                    }
+                }
+
+                return column;
+            };
+
             var columnOptionCore = function(that, column, optionName, value, notFireEvent) {
                 var optionGetter = dataCoreUtils.compileGetter(optionName),
                     columnIndex = column.index,
                     prevValue,
                     optionSetter,
                     columns,
-                    changeType;
+                    changeType,
+                    fullOptionName;
 
                 if(arguments.length === 3) {
                     return optionGetter(column, { functionsAsIs: true });
@@ -1174,7 +1217,8 @@ module.exports = {
                         // T346972
                         if(inArray(optionName, USER_STATE_FIELD_NAMES) < 0 && optionName !== "visibleWidth") {
                             columns = that.option("columns");
-                            column = columns && columns[columnIndex];
+                            fullOptionName = getColumnFullPath(that, column);
+                            column = getColumnByPath(that, fullOptionName, columns);
                             if(typeUtils.isString(column)) {
                                 column = columns[columnIndex] = { dataField: column };
                             }
@@ -1396,25 +1440,17 @@ module.exports = {
                 },
 
                 _columnOptionChanged: function(args) {
-                    var column,
-                        columnIndexes = [],
-                        columnOptionValue = {},
-                        columnOptionName = args.fullName.replace(/columns\[(\d+)\]\.?/gi, function(_, columnIndex) {
-                            columnIndexes.push(parseInt(columnIndex));
-                            return "";
-                        });
+                    var columnOptionValue = {},
+                        column = getColumnByPath(this, args.fullName),
+                        columnOptionName = args.fullName.replace(regExp, "");
 
-                    if(columnIndexes.length) {
-                        column = getColumnByIndexes(this, columnIndexes);
-
+                    if(column) {
                         if(columnOptionName) {
                             columnOptionValue[columnOptionName] = args.value;
                         } else {
                             columnOptionValue = args.value;
                         }
-                    }
 
-                    if(column) {
                         this.columnOption(column.index, columnOptionValue);
                         if(columnOptionName === "width") {
                             this.component._requireResize = true;
