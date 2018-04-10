@@ -704,6 +704,12 @@ QUnit.testStart(function() {
             endDate: new Date(2015, 5, 4, 7)
         });
         assert.ok(!result, "Appointment doesn't take all day");
+
+        result = this.instance.appointmentTakesAllDay({
+            startDate: new Date(2015, 5, 4, 6),
+            endDate: new Date(2015, 5, 4, 12)
+        });
+        assert.ok(!result, "Appointment doesn't take all day");
     });
 
     QUnit.test("Scheduler focus method should call workspace focus method when appointment wasn't updated", function(assert) {
