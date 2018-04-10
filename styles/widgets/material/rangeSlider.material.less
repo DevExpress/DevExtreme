@@ -1,9 +1,22 @@
-@MATERIAL_SLIDER_HANDLE_MARGIN: -7px;
+@MATERIAL_SLIDER_HANDLE_MARGIN: -14px;
 
 .dx-rangeslider-start-handle {
     margin-left: @MATERIAL_SLIDER_HANDLE_MARGIN;
 }
 
-.dx-rtl .dx-rangeslider-start-handle {
-    margin-right: @MATERIAL_SLIDER_HANDLE_MARGIN;
+.dx-state-disabled {
+    .dx-rangeslider-start-handle
+    {
+        margin-left: -5px;
+    }
+}
+
+.dx-rtl {
+    .dx-rangeslider-start-handle {
+        margin-right: @MATERIAL_SLIDER_HANDLE_MARGIN;
+    }
+
+    &.dx-state-disabled .dx-rangeslider-start-handle {
+        margin-right: -5px;
+   }
 }
