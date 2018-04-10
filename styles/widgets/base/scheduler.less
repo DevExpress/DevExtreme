@@ -357,6 +357,11 @@
             .dx-scheduler-all-day-table-row:before {
                 width: @size + @SCHEDULER_LEFT_COLUMN_WIDTH;
             }
+
+            .dx-rtl & {
+                margin-right: -(@size + @SCHEDULER_LEFT_COLUMN_WIDTH);
+                margin-left: 0;
+            }
         } 
         
         .dx-scheduler-header-panel {
@@ -368,15 +373,30 @@
 
         .dx-scheduler-fixed-appointments {
             left: @size + @SCHEDULER_LEFT_COLUMN_WIDTH;
+
+            .dx-rtl & {
+                right: @size + @SCHEDULER_LEFT_COLUMN_WIDTH;
+                left: 0;
+            }
         }
 
         &.dx-scheduler-work-space-month:not(.dx-scheduler-work-space-both-scrollbar) {
             .dx-scheduler-date-table {
                 margin-left: -@size;
+
+                 .dx-rtl & {
+                    margin-right: -@size;
+                    margin-left: 0;
+                }
             }
 
             .dx-scheduler-fixed-appointments {
                 left: @size;
+
+                 .dx-rtl & {
+                    right: @size;
+                    left: 0;
+                }
             }
 
             .dx-scheduler-date-table-row:before,
@@ -2464,6 +2484,11 @@
     }
 
     .dx-rtl {
+        .dx-scheduler-work-space-horizontal-group-table {
+            border-right: none;
+            border-left: @SCHEDULER_BASE_BORDER;
+        }
+
         .dx-scheduler-date-time-shader-all-day {
             margin-left: 0;
             margin-right: @SCHEDULER_LEFT_COLUMN_WIDTH;
@@ -2503,6 +2528,7 @@
             margin-left: 0;
         }
 
+        .dx-scheduler-work-space-horizontal-group-table,
         .dx-scheduler-time-panel {
             float: right;
         }
@@ -2513,7 +2539,8 @@
             padding-right: 0;
 
             &:after {
-                right: 0;
+                right: auto;
+                left: 0;
             }
         }
 
@@ -2527,7 +2554,7 @@
             }
         }
 
-        .dx-scheduler-work-space:not(.dx-scheduler-timeline):not(.dx-scheduler-work-space-month) {
+        .dx-scheduler-work-space:not(.dx-scheduler-timeline):not(.dx-scheduler-work-space-month):not(.dx-scheduler-work-space-vertical-grouped)  {
             .dx-scheduler-date-table {
                 float: right;
                 margin-left: 0;
