@@ -1372,7 +1372,8 @@ testComponentDefaults(DataGrid,
     {},
     {
         showRowLines: true,
-        showColumnLines: false
+        showColumnLines: false,
+        editing: { useIcons: true }
     },
     function() {
         this.originalCurrentTheme = themes.current();
