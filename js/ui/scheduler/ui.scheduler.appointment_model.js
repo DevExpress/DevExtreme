@@ -395,10 +395,21 @@ var AppointmentModel = Class.inherit({
         startDate = new Date(startDate);
         endDate = new Date(endDate);
 
-        var etalonDayDurationInHours = endDayHour - startDayHour,
-            appointmentDurationInHours = (endDate.getTime() - startDate.getTime()) / 3600000;
+        var dayDuration = 24,
+            appointmentDurationInHours = this._getAppointmentDurationInHours(startDate, endDate);
 
-        return appointmentDurationInHours >= etalonDayDurationInHours;
+        return (appointmentDurationInHours >= dayDuration) || this._appointmentHasShortDayDuration(startDate, endDate, startDayHour, endDayHour);
+    },
+
+    _appointmentHasShortDayDuration: function(startDate, endDate, startDayHour, endDayHour) {
+        var appointmentDurationInHours = this._getAppointmentDurationInHours(startDate, endDate),
+            shortDayDurationInHours = endDayHour - startDayHour;
+
+        return (appointmentDurationInHours >= shortDayDurationInHours && startDate.getHours() === startDayHour && endDate.getHours() === endDayHour);
+    },
+
+    _getAppointmentDurationInHours: function(startDate, endDate) {
+        return (endDate.getTime() - startDate.getTime()) / 3600000;
     },
 
     appointmentTakesSeveralDays: function(appointment) {
