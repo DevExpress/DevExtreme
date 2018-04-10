@@ -1,9 +1,7 @@
 .dx-size-default() {
-    @MATERIAL_TOAST_LINE_HEIGHT: 20px;
-    @MATERIAL_TOAST_CONTENT_PADDING: 14px 24px;
+    @MATERIAL_TOAST_CONTENT_PADDING: 0 24px;
 }
 .dx-size-compact() {
-    @MATERIAL_TOAST_LINE_HEIGHT: 25px;
     @MATERIAL_TOAST_CONTENT_PADDING: 5px;
 }
 
@@ -11,9 +9,12 @@
     color: @toast-color;
     font-size: @MATERIAL_BASE_FONT_SIZE;
     font-weight: 400;
-    line-height: @MATERIAL_TOAST_LINE_HEIGHT;
     padding: @MATERIAL_TOAST_CONTENT_PADDING;
     .border-radius(@toast-border-radius);
+
+    min-height: 48px;
+    display: flex;
+    align-items: center;
 }
 
 .dx-toast-icon {

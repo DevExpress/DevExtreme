@@ -58,8 +58,15 @@
 * @type color
 * @group base.common
 */
-@base-success:         #4CAF50;
 
+@base-success:         #4CAF50;
+/**
+* @name 90. Warning color
+* @type color
+* @group base.common
+*/
+
+@base-warning:         #f0ad4e;
 /**
 * @name 100. Danger color
 * @type color
@@ -843,7 +850,6 @@
 * @group overlays.toasts
 */
 @toast-color: #fff;
-@toast-shadow-color: transparent;
 
 @toast-border-radius: @base-border-radius;
 @toast-default-bg: #323232;
@@ -859,19 +865,19 @@
 * @type color
 * @group overlays.toasts
 */
-@toast-warning-bg: @toast-default-bg;
+@toast-warning-bg: @base-warning;
 /**
 * @name 40. Error background color
 * @type color
 * @group overlays.toasts
 */
-@toast-error-bg: @toast-default-bg;
+@toast-error-bg: @base-danger;
 /**
 * @name 50. Success background color
 * @type color
 * @group overlays.toasts
 */
-@toast-success-bg: @toast-default-bg;
+@toast-success-bg: @base-success;
 
 // LoadIndicator
 /**
