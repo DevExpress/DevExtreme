@@ -1174,7 +1174,10 @@ module.exports = {
                         // T346972
                         if(inArray(optionName, USER_STATE_FIELD_NAMES) < 0 && optionName !== "visibleWidth") {
                             columns = that.option("columns");
-                            column = columns && columns[columnIndex];
+                            column = findColumn({
+                                columns: columns,
+                                columnIndex: columnIndex
+                            });
                             if(typeUtils.isString(column)) {
                                 column = columns[columnIndex] = { dataField: column };
                             }
@@ -1295,6 +1298,32 @@ module.exports = {
                 }
 
                 return str;
+            };
+
+            var findColumn = function(options) {
+                var column,
+                    children,
+                    columns = options.columns,
+                    columnIndex = options.columnIndex;
+
+                options.index = options.index || 0;
+
+                for(var i = 0; i < columns.length; i++) {
+                    if(options.index === columnIndex) {
+                        return columns[i];
+                    }
+                    options.index++;
+                    children = columns[i].columns;
+
+                    if(Array.isArray(children) && children.length) {
+                        options.columns = children;
+                        column = findColumn(options);
+
+                        if(column) {
+                            return column;
+                        }
+                    }
+                }
             };
 
             return {
