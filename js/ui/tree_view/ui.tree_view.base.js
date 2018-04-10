@@ -1147,7 +1147,11 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
     _animateNodeContainer: function(node, state, e) {
         var $node = this._getNodeElement(node),
             $nodeContainer = $node.children("." + NODE_CONTAINER_CLASS),
-            nodeHeight = $nodeContainer.height();
+            nodeHeight;
+
+        // TODO: The height of node container is should be used when the container is shown (T606878)
+        $nodeContainer.addClass(OPENED_NODE_CONTAINER_CLASS);
+        nodeHeight = $nodeContainer.height();
 
         fx.stop($nodeContainer, true);
         fx.animate($nodeContainer, {
@@ -1158,9 +1162,6 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             },
             to: {
                 "maxHeight": state ? nodeHeight : 0
-            },
-            start: function() {
-                $nodeContainer.addClass(OPENED_NODE_CONTAINER_CLASS);
             },
             complete: (function() {
                 $nodeContainer.css("maxHeight", "none");
