@@ -36,6 +36,8 @@ var USER_STATE_FIELD_NAMES_15_1 = ["filterValues", "filterType", "fixed", "fixed
     IGNORE_COLUMN_OPTION_NAMES = { visibleWidth: true, bestFitWidth: true, bufferedFilterValue: true },
     COMMAND_EXPAND_CLASS = "dx-command-expand";
 
+var regExp = /columns\[(\d+)\]\.?/gi;
+
 module.exports = {
     defaultOptions: function() {
         return {
@@ -1194,7 +1196,7 @@ module.exports = {
                 var column,
                     columnIndexes = [];
 
-                path.replace(/columns\[(\d+)\]\.?/gi, function(_, columnIndex) {
+                path.replace(regExp, function(_, columnIndex) {
                     columnIndexes.push(parseInt(columnIndex));
                     return "";
                 });
@@ -1528,7 +1530,7 @@ module.exports = {
                 _columnOptionChanged: function(args) {
                     var columnOptionValue = {},
                         column = getColumnByPath(this, args.fullName),
-                        columnOptionName = args.fullName.replace(/columns\[(\d+)\]\.?/gi, "");
+                        columnOptionName = args.fullName.replace(regExp, "");
 
                     if(column) {
                         if(columnOptionName) {
