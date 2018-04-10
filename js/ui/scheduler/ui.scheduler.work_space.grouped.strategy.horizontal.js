@@ -98,6 +98,21 @@ var HorizontalGroupedStrategy = GroupedStrategy.inherit({
 
     getLeftOffset: function() {
         return this._workSpace.getTimePanelWidth();
+    },
+
+    getGroupBoundsOffset: function(cellCount, $cells, cellWidth, coordinates) {
+        var cellIndex = this._workSpace.getCellIndexByCoordinates(coordinates),
+            groupIndex = coordinates.groupIndex || Math.floor(cellIndex / cellCount),
+            startCellIndex = groupIndex * cellCount,
+            startOffset = $cells.eq(startCellIndex).offset().left - cellWidth / 2,
+            endOffset = $cells.eq(startCellIndex + cellCount - 1).offset().left + cellWidth + cellWidth / 2;
+
+        return {
+            left: startOffset,
+            right: endOffset,
+            top: 0,
+            bottom: 0
+        };
     }
 });
 

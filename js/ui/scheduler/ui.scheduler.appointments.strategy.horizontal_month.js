@@ -130,6 +130,14 @@ var HorizontalMonthRenderingStrategy = HorizontalMonthLineAppointmentsStrategy.i
     getCompactAppointmentGroupMaxWidth: function(intervalCount) {
         var offset = intervalCount > 1 ? MONTH_DROPDOWN_APPOINTMENT_MAX_RIGHT_OFFSET : MONTH_DROPDOWN_APPOINTMENT_MIN_RIGHT_OFFSET;
         return this.getDefaultCellWidth() - offset;
+    },
+
+    _needVerticalGroupBounds: function() {
+        return false;
+    },
+
+    _needHorizontalGroupBounds: function() {
+        return true;
     }
 });
 
