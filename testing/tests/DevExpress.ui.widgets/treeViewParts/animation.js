@@ -34,15 +34,7 @@ QUnit.test("expand item should be animated if option animationEnabled is true", 
             assert.equal($element.get(0), $nodeContainer.get(0), "correct element was animated");
             assert.equal(config.from["max-height"], 0, "starting from zero height");
             assert.equal(config.to["max-height"], $nodeContainer.height(), "starting from zero height");
-
-            config.start = (function() {
-                var orig = config.start;
-                return function() {
-                    orig();
-
-                    assert.ok($nodeContainer.hasClass(internals.OPENED_NODE_CONTAINER_CLASS), "node container displayed");
-                };
-            })();
+            assert.ok($nodeContainer.hasClass(internals.OPENED_NODE_CONTAINER_CLASS), "node container displayed");
 
             config.complete = (function() {
                 var orig = config.complete;
@@ -93,15 +85,7 @@ QUnit.test("collapse item should be animated if option animationEnabled is true"
 
             assert.equal(config.from["max-height"], $nodeContainer.height(), "starting from real height");
             assert.equal(config.to["max-height"], 0, "starting to zero height");
-
-            config.start = (function() {
-                var orig = config.start;
-                return function() {
-                    orig();
-
-                    assert.ok($nodeContainer.hasClass(internals.OPENED_NODE_CONTAINER_CLASS), "node container displayed");
-                };
-            })();
+            assert.ok($nodeContainer.hasClass(internals.OPENED_NODE_CONTAINER_CLASS), "node container displayed");
 
             config.complete = (function() {
                 var orig = config.complete;
