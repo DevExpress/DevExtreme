@@ -205,8 +205,7 @@ var PivotGrid = Widget.inherit({
                 /**
                  * @name dxPivotGridOptions_scrolling_useNative
                  * @publicName useNative
-                 * @type string|boolean
-                 * @default "auto"
+                 * @type boolean
                  */
                 useNative: "auto",
 
