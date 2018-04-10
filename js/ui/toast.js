@@ -14,7 +14,8 @@ var $ = require("../core/renderer"),
     inArray = require("../core/utils/array").inArray,
     pointerEvents = require("../events/pointer"),
     registerComponent = require("../core/component_registrator"),
-    Overlay = require("./overlay");
+    Overlay = require("./overlay"),
+    themes = require("./themes");
 
 var TOAST_CLASS = "dx-toast",
     TOAST_CLASS_PREFIX = TOAST_CLASS + "-",
@@ -327,6 +328,68 @@ var Toast = Overlay.inherit({
                         at: "bottom center",
                         my: "bottom center",
                         offset: "0 0"
+                    }
+                }
+            },
+            {
+                device: function() {
+                    return themes.isMaterial();
+                },
+                options: {
+                    /**
+                    * @name dxToastOptions_minWidth
+                    * @publicName minWidth
+                    * @default 288 @for Material
+                    * @inheritdoc
+                    */
+                    minWidth: 288,
+                    /**
+                    * @name dxToastOptions_maxWidth
+                    * @publicName maxWidth
+                    * @default 568 @for Material
+                    * @inheritdoc
+                    */
+                    maxWidth: 568,
+                    /**
+                    * @name dxToastOptions_position
+                    * @publicName position
+                    * @default { at: 'bottom center', my: 'bottom center', offset: '0 0' } @for Material
+                    * @inheritdoc
+                    */
+                    position: {
+                        at: "bottom center",
+                        my: "bottom center",
+                        offset: "0 0"
+                    },
+                    /**
+                    * @name dxToastOptions_animation
+                    * @publicName animation
+                    * @default {show: {type: 'slide', duration: 200, from: { position: {my: 'top', at: 'bottom', of: window}}}, hide: { type: 'slide', duration: 200, to: { position: {my: 'top', at: 'bottom', of: window}}}} @for Material
+                    * @inheritdoc
+                    */
+                    animation: {
+                        show: {
+                            type: "slide",
+                            duration: 200,
+                            from: {
+                                position: {
+                                    my: "top",
+                                    at: "bottom",
+                                    of: window
+                                }
+                            },
+                        },
+                        hide: {
+                            type: "slide",
+                            duration: 200,
+                            to: {
+                                position: {
+                                    my: "top",
+                                    at: "bottom",
+                                    of: window
+                                }
+                            },
+                        }
                     }
                 }
             }

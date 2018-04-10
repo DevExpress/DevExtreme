@@ -58,15 +58,8 @@
 * @type color
 * @group base.common
 */
-
 @base-success:         #4CAF50;
-/**
-* @name 90. Warning color
-* @type color
-* @group base.common
-*/
 
-@base-warning:         #f0ad4e;
 /**
 * @name 100. Danger color
 * @type color
@@ -676,17 +669,6 @@
 // Popover
 @popover-arrow-bg: @overlay-content-bg;
 
-// Toast
-/**
-* @name 10. Text color
-* @type color
-* @group overlays.toasts
-*/
-@toast-color: #fff;
-@toast-shadow-color: transparent;
-
-@toast-border-radius: @base-border-radius-large;
-
 // DropDownEditor
 
 /**
@@ -852,31 +834,44 @@
 @toolbar-bg: @base-bg;
 
 @toolbar-color: @base-text-color;
+
+
 // Toast
+/**
+* @name 10. Text color
+* @type color
+* @group overlays.toasts
+*/
+@toast-color: #fff;
+@toast-shadow-color: transparent;
+
+@toast-border-radius: @base-border-radius;
+@toast-default-bg: #323232;
+
 /**
 * @name 20. Info background color
 * @type color
 * @group overlays.toasts
 */
-@toast-info-bg: @base-accent;
+@toast-info-bg: @toast-default-bg;
 /**
 * @name 30. Warning background color
 * @type color
 * @group overlays.toasts
 */
-@toast-warning-bg: @base-warning;
+@toast-warning-bg: @toast-default-bg;
 /**
 * @name 40. Error background color
 * @type color
 * @group overlays.toasts
 */
-@toast-error-bg: @base-danger;
+@toast-error-bg: @toast-default-bg;
 /**
 * @name 50. Success background color
 * @type color
 * @group overlays.toasts
 */
-@toast-success-bg: @base-success;
+@toast-success-bg: @toast-default-bg;
 
 // LoadIndicator
 /**
@@ -1925,10 +1920,6 @@
 
 // Images
 @list-item-icon-toggle-delete-bg: url(images/widgets/material/color-schemes/light/list/delete.png);
-@toast-info-icon-image-bg: url(images/widgets/material/color-schemes/light/toast/info.png);
-@toast-warning-icon-image-bg: url(images/widgets/material/color-schemes/light/toast/warning.png);
-@toast-error-icon-image-bg: url(images/widgets/material/color-schemes/light/toast/error.png);
-@toast-success-icon-image-bg: url(images/widgets/material/color-schemes/light/toast/success.png);
 @sctollbar-button-horizontal-decrement-bg: url(images/widgets/material/color-schemes/light/scrollable/scrollbar-horizontal-arrow-start.png) no-repeat;
 @sctollbar-button-horizontal-increment-bg: url(images/widgets/material/color-schemes/light/scrollable/scrollbar-horizontal-arrow-end.png) no-repeat;
 @sctollbar-button-vertical-decrement-bg: url(images/widgets/material/color-schemes/light/scrollable/scrollbar-vertical-arrow-up.png) no-repeat;
