@@ -2071,7 +2071,19 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     getGroupBounds: function(coordinates) {
-        return this._groupedStrategy.getGroupBounds(coordinates);
+        var cellCount = this._getCellCount(),
+            $cells = this._getCells(),
+            cellWidth = this.getCellWidth(),
+            result = this._groupedStrategy.getGroupBoundsOffset(cellCount, $cells, cellWidth, coordinates);
+
+        if(this._isRTL()) {
+            var startOffset = result.left;
+
+            result.left = result.right - cellWidth * 2;
+            result.right = startOffset + cellWidth * 2;
+        }
+
+        return result;
     },
 
     getCellDataByCoordinates: function(coordinates, allDay) {

@@ -580,8 +580,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
     },
 
     _calculateResizableArea: function(itemSetting, appointmentData) {
-        var area = this.$element().closest(".dx-scrollable-content"),
-            allDay = itemSetting.allDay;
+        var area = this.$element().closest(".dx-scrollable-content");
 
         this.notifyObserver("getResizableAppointmentArea", {
             coordinates: {
@@ -589,7 +588,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
                 top: 0,
                 groupIndex: itemSetting.groupIndex
             },
-            allDay: allDay,
+            allDay: itemSetting.allDay,
             callback: function(result) {
                 if(result) {
                     area = result;

@@ -116,11 +116,8 @@ var VerticalGroupedStrategy = GroupedStrategy.inherit({
         return this._workSpace.getTimePanelWidth() + this._workSpace.getGroupTableWidth();
     },
 
-    getGroupBounds: function(coordinates) {
-        var cellCount = this._workSpace._getCellCount(),
-            groupIndex = coordinates.groupIndex,
-            $cells = this._workSpace._getCells(),
-            cellWidth = this._workSpace.getCellWidth(),
+    getGroupBoundsOffset: function(cellCount, $cells, cellWidth, coordinates) {
+        var groupIndex = coordinates.groupIndex,
             startOffset = $cells.eq(0).offset().left,
             endOffset = $cells.eq(cellCount - 1).offset().left + cellWidth,
             dayHeight = (this._workSpace._calculateDayDuration() / this._workSpace.option("hoursInterval")) * this._workSpace.getCellHeight(),
@@ -132,19 +129,12 @@ var VerticalGroupedStrategy = GroupedStrategy.inherit({
 
         var bottomOffset = topOffset + dayHeight;
 
-        var result = {
+        return {
             left: startOffset,
             right: endOffset,
             top: topOffset,
             bottom: bottomOffset
         };
-
-        if(this._workSpace._isRTL()) {
-            result.left = endOffset - cellWidth * 2;
-            result.right = startOffset + cellWidth * 2;
-        }
-
-        return result;
     }
 });
 

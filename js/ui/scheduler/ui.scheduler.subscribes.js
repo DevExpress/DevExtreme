@@ -211,24 +211,24 @@ var subscribes = {
             groups = this._getCurrentViewOption("groups"),
             isGrouped = groups && groups.length;
 
-        if(isGrouped && this.option("currentView") !== "agenda") {
-            var groupBounds = this._workSpace.getGroupBounds(options.coordinates);
-
-            if(allDay || this.fire("getRenderingStrategy") === "horizontalMonth") {
+        if(isGrouped) {
+            if(allDay || this.getLayoutManager().getRenderingStrategyInstance()._needHorizontalGroupBounds()) {
+                var horizontalGroupBounds = this._workSpace.getGroupBounds(options.coordinates);
                 area = {
-                    left: groupBounds.left,
-                    right: groupBounds.right,
+                    left: horizontalGroupBounds.left,
+                    right: horizontalGroupBounds.right,
                     top: 0,
                     bottom: 0
                 };
             }
 
-            if(!allDay && this.fire("getRenderingStrategy") === "vertical") {
+            if(this.getLayoutManager().getRenderingStrategyInstance()._needVerticalGroupBounds(allDay) && this._getCurrentViewOption("groupOrientation") === "vertical") {
+                var verticalGroupBounds = this._workSpace.getGroupBounds(options.coordinates);
                 area = {
                     left: 0,
                     right: 0,
-                    top: groupBounds.top,
-                    bottom: groupBounds.bottom
+                    top: verticalGroupBounds.top,
+                    bottom: verticalGroupBounds.bottom
                 };
             }
         }

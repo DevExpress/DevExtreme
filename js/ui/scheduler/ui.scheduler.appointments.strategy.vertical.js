@@ -264,6 +264,14 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
 
     _getMaxHeight: function() {
         return this._allDayHeight || this.getAppointmentMinSize();
+    },
+
+    _needVerticalGroupBounds: function(allDay) {
+        return !allDay;
+    },
+
+    _needHorizontalGroupBounds: function() {
+        return false;
     }
 });
 

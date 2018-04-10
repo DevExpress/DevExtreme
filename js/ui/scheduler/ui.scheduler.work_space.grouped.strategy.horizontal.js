@@ -100,30 +100,19 @@ var HorizontalGroupedStrategy = GroupedStrategy.inherit({
         return this._workSpace.getTimePanelWidth();
     },
 
-    getGroupBounds: function(coordinates) {
+    getGroupBoundsOffset: function(cellCount, $cells, cellWidth, coordinates) {
         var cellIndex = this._workSpace.getCellIndexByCoordinates(coordinates),
-            cellCount = this._workSpace._getCellCount(),
-            groupIndex = Math.floor(cellIndex / cellCount),
-            $cells = this._workSpace._getCells(),
-            cellWidth = this._workSpace.getCellWidth(),
+            groupIndex = coordinates.groupIndex || Math.floor(cellIndex / cellCount),
             startCellIndex = groupIndex * cellCount,
-
             startOffset = $cells.eq(startCellIndex).offset().left - cellWidth / 2,
             endOffset = $cells.eq(startCellIndex + cellCount - 1).offset().left + cellWidth + cellWidth / 2;
 
-        var result = {
+        return {
             left: startOffset,
             right: endOffset,
             top: 0,
             bottom: 0
         };
-
-        if(this._workSpace._isRTL()) {
-            result.left = endOffset - cellWidth * 2;
-            result.right = startOffset + cellWidth * 2;
-        }
-
-        return result;
     }
 });
 
