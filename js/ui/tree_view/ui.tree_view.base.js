@@ -1215,7 +1215,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             $nodeContainer = $node.children("." + NODE_CONTAINER_CLASS),
             nodeHeight;
 
-        // TODO: The height of node container is should be used when the container is shown (T606878)
+        // NOTE: The height of node container is should be used when the container is shown (T606878)
         $nodeContainer.addClass(OPENED_NODE_CONTAINER_CLASS);
         nodeHeight = $nodeContainer.height();
 
