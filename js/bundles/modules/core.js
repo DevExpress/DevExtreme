@@ -68,6 +68,7 @@ DevExpress.viewPort = require("../../core/utils/view_port").value;
 DevExpress.hideTopOverlay = require("../../mobile/hide_top_overlay");
 
 DevExpress.formatHelper = require("../../format_helper");
+DevExpress.config = require("../../core/config");
 
 DevExpress.animationPresets = require("../../animation/presets/presets").presets;
 DevExpress.fx = require("../../animation/fx");
