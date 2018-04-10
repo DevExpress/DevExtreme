@@ -1190,15 +1190,35 @@ module.exports = {
                 }
             };
 
+            var getColumnByPath = function(that, path, columns) {
+                var column,
+                    columnIndexes = [];
+
+                path.replace(/columns\[(\d+)\]\.?/gi, function(_, columnIndex) {
+                    columnIndexes.push(parseInt(columnIndex));
+                    return "";
+                });
+
+                if(columnIndexes.length) {
+                    if(columns) {
+                        column = columnIndexes.reduce(function(prevColumn, index) {
+                            return prevColumn ? prevColumn.columns[index] : columns[index];
+                        }, 0);
+                    } else {
+                        column = getColumnByIndexes(that, columnIndexes);
+                    }
+                }
+
+                return column;
+            };
+
             var fireOptionChanged = function(that, options) {
-                var fullOptionName,
-                    column = options.column,
-                    value = options.value,
+                var value = options.value,
                     optionName = options.optionName,
-                    prevValue = options.prevValue;
+                    prevValue = options.prevValue,
+                    fullOptionName = options.fullOptionName;
 
                 if(!IGNORE_COLUMN_OPTION_NAMES[optionName]) {
-                    fullOptionName = getColumnFullPath(that, column);
                     that._skipProcessingColumnsChange = true;
                     that.component._notifyOptionChanged(fullOptionName + "." + optionName, value, prevValue);
                     that._skipProcessingColumnsChange = false;
@@ -1211,7 +1231,8 @@ module.exports = {
                     prevValue,
                     optionSetter,
                     columns,
-                    changeType;
+                    changeType,
+                    fullOptionName;
 
                 if(arguments.length === 3) {
                     return optionGetter(column, { functionsAsIs: true });
@@ -1226,10 +1247,12 @@ module.exports = {
                     } else {
                         changeType = "columns";
                     }
+
                     optionSetter = dataCoreUtils.compileSetter(optionName);
                     optionSetter(column, value, { functionsAsIs: true });
+                    fullOptionName = getColumnFullPath(that, column);
                     fireOptionChanged(that, {
-                        column: column,
+                        fullOptionName: fullOptionName,
                         optionName: optionName,
                         value: value,
                         prevValue: prevValue
@@ -1243,10 +1266,7 @@ module.exports = {
                         // T346972
                         if(inArray(optionName, USER_STATE_FIELD_NAMES) < 0 && optionName !== "visibleWidth") {
                             columns = that.option("columns");
-                            column = findColumn({
-                                columns: columns,
-                                columnIndex: columnIndex
-                            });
+                            column = getColumnByPath(that, fullOptionName, columns);
                             if(typeUtils.isString(column)) {
                                 column = columns[columnIndex] = { dataField: column };
                             }
@@ -1359,32 +1379,6 @@ module.exports = {
                 }
 
                 return str;
-            };
-
-            var findColumn = function(options) {
-                var column,
-                    children,
-                    columns = options.columns,
-                    columnIndex = options.columnIndex;
-
-                options.index = options.index || 0;
-
-                for(var i = 0; i < columns.length; i++) {
-                    if(options.index === columnIndex) {
-                        return columns[i];
-                    }
-                    options.index++;
-                    children = columns[i].columns;
-
-                    if(Array.isArray(children) && children.length) {
-                        options.columns = children;
-                        column = findColumn(options);
-
-                        if(column) {
-                            return column;
-                        }
-                    }
-                }
             };
 
             var mergeColumns = (columns, commandColumns, needToExtend) => {
@@ -1532,25 +1526,17 @@ module.exports = {
                 },
 
                 _columnOptionChanged: function(args) {
-                    var column,
-                        columnIndexes = [],
-                        columnOptionValue = {},
-                        columnOptionName = args.fullName.replace(/columns\[(\d+)\]\.?/gi, function(_, columnIndex) {
-                            columnIndexes.push(parseInt(columnIndex));
-                            return "";
-                        });
+                    var columnOptionValue = {},
+                        column = getColumnByPath(this, args.fullName),
+                        columnOptionName = args.fullName.replace(/columns\[(\d+)\]\.?/gi, "");
 
-                    if(columnIndexes.length) {
-                        column = getColumnByIndexes(this, columnIndexes);
-
+                    if(column) {
                         if(columnOptionName) {
                             columnOptionValue[columnOptionName] = args.value;
                         } else {
                             columnOptionValue = args.value;
                         }
-                    }
 
-                    if(column) {
                         this.columnOption(column.index, columnOptionValue);
                         if(columnOptionName === "width") {
                             this.component._requireResize = true;
