@@ -368,7 +368,7 @@ QUnit.module("Filter Panel", {
         });
 
         // assert
-        assert.equal(this.filterPanelView.element().find(`.${FILTER_PANEL_TEXT_CLASS}`).text(), "[Date] TestOperation", "filterPanel text");
+        assert.equal(this.filterPanelView.element().find("." + FILTER_PANEL_TEXT_CLASS).text(), "[Date] TestOperation", "filterPanel text");
         assert.ok(customExpressionCounter > 0, "calculateFilterExpression was called");
     });
 });
