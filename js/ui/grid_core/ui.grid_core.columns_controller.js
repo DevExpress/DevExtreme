@@ -1142,13 +1142,54 @@ module.exports = {
                 }
             };
 
+            var getColumnFullPath = function(that, column) {
+                var result = [],
+                    bandColumnsCache = that.getBandColumnsCache(),
+                    callbackFilter = function(item) {
+                        return item.ownerBand === column.ownerBand;
+                    },
+                    columns = that._columns.filter(callbackFilter);
+
+                while(columns.length) {
+                    result.unshift("columns[" + columns.indexOf(column) + "]");
+
+                    column = bandColumnsCache.columnParentByIndex[column.index];
+                    columns = column ? that._columns.filter(callbackFilter) : [];
+                }
+
+                return result.join(".");
+            };
+
+            var getColumnByPath = function(that, path, columns) {
+                var column,
+                    columnIndexes = [];
+
+                path.replace(/columns\[(\d+)\]\.?/gi, function(_, columnIndex) {
+                    columnIndexes.push(parseInt(columnIndex));
+                    return "";
+                });
+
+                if(columnIndexes.length) {
+                    if(columns) {
+                        column = columnIndexes.reduce(function(prevColumn, index) {
+                            return prevColumn ? prevColumn.columns[index] : columns[index];
+                        }, 0);
+                    } else {
+                        column = getColumnByIndexes(that, columnIndexes);
+                    }
+                }
+
+                return column;
+            };
+
             var columnOptionCore = function(that, column, optionName, value, notFireEvent) {
                 var optionGetter = dataCoreUtils.compileGetter(optionName),
                     columnIndex = column.index,
                     prevValue,
                     optionSetter,
                     columns,
-                    changeType;
+                    changeType,
+                    fullOptionName;
 
                 if(arguments.length === 3) {
                     return optionGetter(column, { functionsAsIs: true });
@@ -1174,10 +1215,8 @@ module.exports = {
                         // T346972
                         if(inArray(optionName, USER_STATE_FIELD_NAMES) < 0 && optionName !== "visibleWidth") {
                             columns = that.option("columns");
-                            column = findColumn({
-                                columns: columns,
-                                columnIndex: columnIndex
-                            });
+                            fullOptionName = getColumnFullPath(that, column);
+                            column = getColumnByPath(that, fullOptionName, columns);
                             if(typeUtils.isString(column)) {
                                 column = columns[columnIndex] = { dataField: column };
                             }
@@ -1300,32 +1339,6 @@ module.exports = {
                 return str;
             };
 
-            var findColumn = function(options) {
-                var column,
-                    children,
-                    columns = options.columns,
-                    columnIndex = options.columnIndex;
-
-                options.index = options.index || 0;
-
-                for(var i = 0; i < columns.length; i++) {
-                    if(options.index === columnIndex) {
-                        return columns[i];
-                    }
-                    options.index++;
-                    children = columns[i].columns;
-
-                    if(Array.isArray(children) && children.length) {
-                        options.columns = children;
-                        column = findColumn(options);
-
-                        if(column) {
-                            return column;
-                        }
-                    }
-                }
-            };
-
             return {
                 _getFirstItems: function(dataSource) {
                     var groupsCount,
@@ -1425,25 +1438,17 @@ module.exports = {
                 },
 
                 _columnOptionChanged: function(args) {
-                    var column,
-                        columnIndexes = [],
-                        columnOptionValue = {},
-                        columnOptionName = args.fullName.replace(/columns\[(\d+)\]\.?/gi, function(_, columnIndex) {
-                            columnIndexes.push(parseInt(columnIndex));
-                            return "";
-                        });
+                    var columnOptionValue = {},
+                        column = getColumnByPath(this, args.fullName),
+                        columnOptionName = args.fullName.replace(/columns\[(\d+)\]\.?/gi, "");
 
-                    if(columnIndexes.length) {
-                        column = getColumnByIndexes(this, columnIndexes);
-
+                    if(column) {
                         if(columnOptionName) {
                             columnOptionValue[columnOptionName] = args.value;
                         } else {
                             columnOptionValue = args.value;
                         }
-                    }
 
-                    if(column) {
                         this.columnOption(column.index, columnOptionValue);
                         if(columnOptionName === "width") {
                             this.component._requireResize = true;
