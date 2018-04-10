@@ -130,7 +130,7 @@ module.exports = {
                 /**
                  * @name GridBaseOptions_loadPanel_enabled
                  * @publicName enabled
-                 * @type string|boolean
+                 * @type boolean
                  */
                 enabled: "auto",
                 /**
