@@ -370,7 +370,8 @@ var Toast = Overlay.inherit({
                     animation: {
                         show: {
                             type: "slide",
-                            duration: 200,
+                            duration: 250,
+                            easing: "cubic-bezier(0.4, 0, 1, 1)",
                             from: {
                                 position: {
                                     my: "top",
@@ -381,7 +382,8 @@ var Toast = Overlay.inherit({
                         },
                         hide: {
                             type: "slide",
-                            duration: 200,
+                            duration: 250,
+                            easing: "cubic-bezier(0.4, 0, 1, 1)",
                             to: {
                                 position: {
                                     my: "top",
