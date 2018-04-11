@@ -258,7 +258,7 @@ module.exports = gridCore.Controller.inherit((function() {
                 localPaging = options.remoteOperations && !options.remoteOperations.paging,
                 cachedPagesData = options.cachedPagesData,
                 needCache = this.option("cacheEnabled") !== false && options.storeLoadOptions,
-                needPageCache = needCache && !options.isCustomLoading && cachedPagesData && !this.option("legacyRendering"),
+                needPageCache = needCache && !options.isCustomLoading && cachedPagesData && (!localPaging || options.storeLoadOptions.group) && !this.option("legacyRendering"),
                 needPagingCache = needCache && localPaging,
                 needStoreCache = needPagingCache && !options.isCustomLoading;
 
