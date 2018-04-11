@@ -508,6 +508,18 @@ QUnit.test("toggleNodeDisabledState with expressions", function(assert) {
     assert.strictEqual(this.plainData[1].disable, false, "item was enabled");
 });
 
+QUnit.test("items accessor should be ignored if dataStructure is plain", function(assert) {
+    var dataAdapter = initDataAdapter({
+        items: [
+            { id: 1, parentId: 0, text: "Item 1", items: [{ id: 11, parentId: 1, text: "Item 11" }] },
+            { id: 2, parentId: 0, text: "Item 2" }
+        ],
+        dataType: "plain"
+    });
+
+    assert.equal(dataAdapter.getData().length, 2, "inner item should not be converted");
+});
+
 QUnit.test("getRootNodes", function(assert) {
     var items = [];
 

@@ -45,6 +45,9 @@ var DataConverter = Class.inherit({
     },
 
     _itemHasChildren: function(item) {
+        if(this._dataType === "plain") {
+            return;
+        }
         var items = this._dataAccessors.getters.items(item);
         return items && items.length;
     },
