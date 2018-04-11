@@ -2792,7 +2792,7 @@ declare module DevExpress.ui {
         /** The data source of a PivotGrid widget. */
         dataSource?: DevExpress.data.PivotGridDataSource;
 
-        
+
         onContentReady?: Function;
 
         /** A handler for the contextMenuPreparing event. */
@@ -2848,12 +2848,14 @@ declare module DevExpress.ui {
         /** Gets the PivotGridDataSource instance. */
         getDataSource(): DevExpress.data.PivotGridDataSource;
     }
-    
-    
+
+
     export interface dxFilterBuilderField {
         
 
         
+
+
         caption?: string;
 
         
