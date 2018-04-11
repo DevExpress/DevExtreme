@@ -1492,7 +1492,7 @@ QUnit.test("Default current state", function(assert) {
 
     this.setup(dataSourceOptions);
 
-    var state = that.fieldChooser.option("state");
+    var state = that.fieldChooser.option("pendingState");
 
     assert.deepEqual(state, null, "default state");
 });
@@ -2003,7 +2003,7 @@ QUnit.test("change position between areas", function(assert) {
     onChangedHandler(changedArgs);
     this.clock.tick(500);
 
-    var state = this.fieldChooser.option("state").fields;
+    var state = this.fieldChooser.option("pendingState").fields;
     assert.equal(state[0].dataField, "Field1");
     assert.equal(state[0].areaIndex, 0);
     assert.equal(state[0].area, "row");
@@ -2053,7 +2053,7 @@ QUnit.test("select in treeview", function(assert) {
     // act
     this.$container.find(".dx-checkbox").eq(0).trigger("dxclick");
 
-    var fields = this.fieldChooser.option("state").fields;
+    var fields = this.fieldChooser.option("pendingState").fields;
     assert.equal(fields[0].area, "column");
     assert.equal(fields[0].areaIndex, 0);
 });
@@ -2064,7 +2064,7 @@ QUnit.test("unselect in treeview", function(assert) {
     // act
     this.$container.find(".dx-checkbox").eq(0).trigger("dxclick");
 
-    var fields = this.fieldChooser.option("state").fields;
+    var fields = this.fieldChooser.option("pendingState").fields;
     assert.deepEqual(fields[0].area, undefined);
     assert.deepEqual(fields[0].areaIndex, undefined);
 });
@@ -2077,7 +2077,7 @@ QUnit.test("Change sort order", function(assert) {
     var $sortIndicator = this.$container.find(".dx-area-fields[group=row] .dx-sort");
     $sortIndicator.parent().trigger("dxclick");
 
-    var state = this.fieldChooser.option("state").fields;
+    var state = this.fieldChooser.option("pendingState").fields;
     assert.equal(state[0].sortOrder, "desc");
 });
 
@@ -2101,7 +2101,7 @@ QUnit.test("Apply filters", function(assert) {
     $(".dx-header-filter-menu .dx-button").eq(0).trigger("dxclick");
     this.clock.tick(500);
 
-    var fields = this.fieldChooser.option("state").fields;
+    var fields = this.fieldChooser.option("pendingState").fields;
     assert.deepEqual(fields[0].filterValues, ["1"]);
 });
 
@@ -2152,7 +2152,7 @@ QUnit.test("cancelChanges", function(assert) {
     this.fieldChooser.cancelChanges();
     this.clock.tick(1000);
 
-    assert.strictEqual(this.fieldChooser.option("state"), null);
+    assert.strictEqual(this.fieldChooser.option("pendingState"), null);
 });
 
 QUnit.test("cancel changes on field chooser repaint", function(assert) {
@@ -2175,5 +2175,5 @@ QUnit.test("cancel changes on field chooser repaint", function(assert) {
     this.fieldChooser.repaint();
     this.clock.tick(1000);
 
-    assert.strictEqual(this.fieldChooser.option("state"), null);
+    assert.strictEqual(this.fieldChooser.option("pendingState"), null);
 });

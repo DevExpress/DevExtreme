@@ -2602,6 +2602,9 @@ declare module DevExpress.ui {
             /** Specifies the field chooser height. */
             height?: number;
 
+            /** Specifies when changes in FieldChooser should be applied */
+            applyChangesMode?: string;
+
             /** Strings that can be changed or localized in the pivot grid's integrated Field Chooser. */
             texts?: {
                 /** The string to display instead of Row Fields. */
@@ -2792,7 +2795,12 @@ declare module DevExpress.ui {
         /** The data source of a PivotGrid widget. */
         dataSource?: DevExpress.data.PivotGridDataSource;
 
-        
+        /** Object with current FieldChooser state */
+        pendingState?: object;
+
+        /** Specifies when changes in FieldChooser should be applied */
+        applyChangesMode?: string;
+
         onContentReady?: Function;
 
         /** A handler for the contextMenuPreparing event. */
@@ -2847,6 +2855,12 @@ declare module DevExpress.ui {
 
         /** Gets the PivotGridDataSource instance. */
         getDataSource(): DevExpress.data.PivotGridDataSource;
+
+        /** Applies the pending state */
+        applyChanges(): void;
+
+        /** Discards the pending state to null */
+        cnacelChanges(): void;
     }
     
     
