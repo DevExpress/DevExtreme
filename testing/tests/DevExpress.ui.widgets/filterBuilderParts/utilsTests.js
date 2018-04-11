@@ -1568,21 +1568,10 @@ QUnit.module("Filter sync", function() {
         var result = utils.syncFilters(filter, addedFilter);
 
         // assert
-        assert.deepEqual(result, filter, "result = filter");
+        assert.deepEqual(result, [filter, "and", addedFilter], "result = filter");
     });
 
-    QUnit.test("null with matched added header filter condition", function(assert) {
-        // arrange
-        var filter0 = ["field", "anyof", ["matched"]],
-            filter1 = ["field", "noneof", ["matched"]],
-            addedFilter = ["field", "=", null];
-
-        // act, assert
-        assert.deepEqual(utils.syncFilters(filter0, addedFilter), null, "anyof result = null");
-        assert.deepEqual(utils.syncFilters(filter1, addedFilter), null, "noneof result = null");
-    });
-
-    QUnit.test("null with matched noneof filter condition", function(assert) {
+    QUnit.test("null with matched filter condition", function(assert) {
         // arrange
         var filter = ["field", "noneof", ["matched"]],
             addedFilter = ["field", "=", null];
@@ -1591,7 +1580,7 @@ QUnit.module("Filter sync", function() {
         var result = utils.syncFilters(filter, addedFilter);
 
         // assert
-        assert.deepEqual(result, null, "result = null");
+        assert.deepEqual(result, addedFilter, "result = null");
     });
 
     QUnit.test("empty with field condition", function(assert) {
@@ -1630,18 +1619,6 @@ QUnit.module("Filter sync", function() {
         assert.deepEqual(result, [["field", "=", 1], "and", ["field2", "=", 2]], "result = addedFilter");
     });
 
-    QUnit.test("condition & condition with null value", function(assert) {
-        // arrange
-        var filter = ["field", "=", 1],
-            addedFilter = ["field", "=", null];
-
-        // act
-        var result = utils.syncFilters(filter, addedFilter);
-
-        // assert
-        assert.equal(result, null, "result = null");
-    });
-
     QUnit.test("null & condition with null value", function(assert) {
         // arrange
         var filter = null,
@@ -1651,7 +1628,7 @@ QUnit.module("Filter sync", function() {
         var result = utils.syncFilters(filter, addedFilter);
 
         // assert
-        assert.equal(result, null, "result = null");
+        assert.equal(result, addedFilter, "result = null");
     });
 
     QUnit.test("condition in the begining of group replace with null value", function(assert) {
@@ -1663,7 +1640,7 @@ QUnit.module("Filter sync", function() {
         var result = utils.syncFilters(filter, addedFilter);
 
         // assert
-        assert.deepEqual(result, ["field2", "=", 2], "result = field2");
+        assert.deepEqual(result, [["field", "=", null], "and", ["field2", "=", 2]], "result = field2");
     });
 
     QUnit.test("condition in the ending of group replace with null value", function(assert) {
@@ -1675,7 +1652,7 @@ QUnit.module("Filter sync", function() {
         var result = utils.syncFilters(filter, addedFilter);
 
         // assert
-        assert.deepEqual(result, ["field2", "=", 2], "result = field2");
+        assert.deepEqual(result, [["field2", "=", 2], "and", ["field", "=", null]], "result = field2");
     });
 
     QUnit.test("group with same field condition", function(assert) {
