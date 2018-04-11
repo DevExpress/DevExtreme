@@ -797,3 +797,22 @@ QUnit.test("Scheduler appointment tooltip should has right content in Material t
 
     themes.isMaterial = origIsMaterial;
 });
+
+
+QUnit.test("Scheduler appointment tooltip should has buttons at the bottom in generic theme", function(assert) {
+    var data = new DataSource({
+        store: this.tasks
+    });
+
+    this.createInstance({ currentDate: new Date(2015, 1, 9), dataSource: data });
+
+    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(1).trigger("dxclick");
+    this.clock.tick(300);
+
+    var $tooltipContainers = $(".dx-scheduler-appointment-tooltip > div");
+    assert.ok($tooltipContainers.eq(0).hasClass("dx-scheduler-appointment-tooltip-title"), "first container - title container");
+    assert.ok($tooltipContainers.eq(1).hasClass("dx-scheduler-appointment-tooltip-date"), "second container - date container");
+    assert.ok($tooltipContainers.eq(2).hasClass("dx-scheduler-appointment-tooltip-buttons"), "third container - buttons container");
+
+    tooltip.hide();
+});
