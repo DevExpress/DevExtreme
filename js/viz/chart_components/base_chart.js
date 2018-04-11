@@ -1048,10 +1048,13 @@ var BaseChart = BaseWidget.inherit({
     },
 
     _handleSeriesDataUpdated: function() {
+        this._prepareSpatialParams();
         this.series.forEach(function(s) {
             this._processSingleSeries(s);
         }, this);
     },
+
+    _prepareSpatialParams: noop,
 
     _dataSpecificInit: function(needRedraw) {
         var that = this;

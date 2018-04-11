@@ -226,6 +226,45 @@ QUnit.test("Recreate series points on zooming if aggregation is enabled", functi
     assert.ok(chart.seriesFamilies[0].adjustSeriesValues.firstCall.calledAfter(series.createPoints.lastCall));
 });
 
+QUnit.test("Recreate series points on scrolling if aggregation is enabled", function(assert) {
+    // arrange
+    chartMocks.seriesMockData.series.push(new MockSeries());
+    chartMocks.seriesMockData.series[0].useAggregation.returns(true);
+
+    var chart = this.createChart({
+            dataSource: [{}],
+            series: [{ type: "line" }]
+        }),
+        series = chart.getAllSeries()[0];
+
+    series.createPoints.reset();
+
+    chart.zoomArgument(0, 1);
+    chart.zoomArgument(1, 2);
+
+    assert.ok(series.createPoints.calledTwice);
+});
+
+QUnit.test("Do not recreate series points on scrolling if aggregation is enabled and all points exists", function(assert) {
+    // arrange
+    chartMocks.seriesMockData.series.push(new MockSeries());
+    chartMocks.seriesMockData.series[0].useAggregation.returns(true);
+
+    var chart = this.createChart({
+            dataSource: [{}],
+            series: [{ type: "line" }]
+        }),
+        series = chart.getAllSeries()[0];
+
+    series.createPoints.reset();
+
+    chart.zoomArgument(0, 1);
+    series._useAllAggregatedPoints = true;
+    chart.zoomArgument(1, 2);
+
+    assert.ok(series.createPoints.calledOnce);
+});
+
 QUnit.test("Do not recreate series points on zooming if aggregation is not enabled", function(assert) {
     // arrange
     chartMocks.seriesMockData.series.push(new MockSeries());

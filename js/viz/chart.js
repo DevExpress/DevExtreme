@@ -6,6 +6,7 @@ var noop = require("../core/utils/common").noop,
     each = require("../core/utils/iterator").each,
     registerComponent = require("../core/component_registrator"),
     vizUtils = require("./core/utils"),
+    mathUtils = require("../core/utils/math"),
     overlapping = require("./chart_components/base_chart").overlapping,
     LayoutManagerModule = require("./chart_components/layout_manager"),
     multiAxesSynchronizer = require("./chart_components/multi_axes_synchronizer"),
@@ -560,12 +561,14 @@ var dxChart = AdvancedChart.inherit({
 
         that._updatePanesCanvases(drawOptions);
 
-        if(useAggregation) {
+        if(useAggregation && that._prepareSpatialParams()) {
             this._argumentAxes.forEach(function(axis) {
                 axis.updateCanvas(that._canvas);
             });
             series.forEach(function(series) {
-                if(series.useAggregation()) {
+                if(series.useAggregation() && (that._spatialParams.canvasSizeChanged ||
+                    that._spatialParams.viewportSizeChanged ||
+                    (that._spatialParams.viewportFrameChanged && !series._useAllAggregatedPoints))) {
                     series.createPoints();
                 }
             });
@@ -594,6 +597,42 @@ var dxChart = AdvancedChart.inherit({
         }
 
         return panesBorderOptions;
+    },
+
+    _prepareSpatialParams() {
+        let that = this,
+            spatialParams = that._spatialParams || { viewportMin: 0, viewportMax: 0 };
+        const argumentAxis = that._getArgumentAxis();
+
+        if(!argumentAxis || !argumentAxis.getTranslator()) {
+            return false;
+        }
+
+        const canvas = that._canvas;
+        const businessRange = argumentAxis.getTranslator().getBusinessRange();
+        let min = that._zoomMinArg ? that._zoomMinArg : 0;
+        let max = that._zoomMaxArg ? that._zoomMaxArg : 0;
+
+        if(businessRange.axisType === "logarithmic") {
+            min = vizUtils.getLog(min, businessRange.base);
+            max = vizUtils.getLog(max, businessRange.base);
+        }
+        const viewportDistance = businessRange.axisType === "discrete" ? vizUtils.getCategoriesInfo(businessRange.categories, min, max).categories.length : Math.abs(max - min);
+        let precision = mathUtils.getPrecision(viewportDistance);
+        precision = precision > 1 ? Math.pow(10, precision - 2) : 1;
+        spatialParams = {
+            viewportFrameChanged: spatialParams.viewportMin.valueOf() !== min.valueOf() || spatialParams.viewportMax.valueOf() !== max.valueOf(),
+            viewportSizeChanged: Math.round((spatialParams.viewportLength - viewportDistance) * precision) / precision !== 0,
+            canvasSizeChanged: spatialParams.canvasWidth - canvas.width !== 0 || spatialParams.canvasHeight - canvas.height !== 0,
+            viewportMin: min,
+            viewportMax: max,
+            canvasWidth: canvas.width,
+            canvasHeight: canvas.height,
+            viewportLength: viewportDistance
+        };
+        that._spatialParams = spatialParams;
+
+        return that._spatialParams.canvasSizeChanged || that._spatialParams.viewportFrameChanged;
     },
 
     _handleSeriesDataUpdated: function() {
