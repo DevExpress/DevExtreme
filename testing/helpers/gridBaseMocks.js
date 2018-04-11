@@ -886,7 +886,10 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
         that.options = that.options || {};
 
         that.options.rtlEnabled = !!that.options.rtlEnabled;
-        that.options.legacyRendering = false;
+
+        if(that.options.legacyRendering === undefined) {
+            that.options.legacyRendering = false;
+        }
 
         that.option = function(options, value) {
             var result = that.options,

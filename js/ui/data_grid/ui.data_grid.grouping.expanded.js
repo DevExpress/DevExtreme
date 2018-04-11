@@ -311,7 +311,6 @@ exports.GroupingHelper = groupingCore.GroupingHelper.inherit((function() {
                 }
                 if(!options.isCustomLoading) {
                     processGroupItems(that, data, [], options.skip, options.skipFirstItem, options.take);
-                    that.updateItemsCount(data, groupCount);
                 }
                 options.data = data;
                 if(options.collapsedItemsCount && options.extra && options.extra.totalCount >= 0) {

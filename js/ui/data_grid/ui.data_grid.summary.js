@@ -264,6 +264,12 @@ var SummaryDataSourceAdapterClientExtender = (function() {
                 }
             }
             this.callBase.apply(this, arguments);
+
+            var cachedExtra = options.cachedPagesData.extra;
+
+            if(cachedExtra && cachedExtra.summary && !options.isCustomLoading) {
+                options.storeLoadOptions.totalSummary = undefined;
+            }
         },
         _handleDataLoadedCore: function(options) {
             var that = this,
