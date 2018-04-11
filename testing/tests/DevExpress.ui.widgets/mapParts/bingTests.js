@@ -5,8 +5,7 @@
 var $ = require("jquery"),
     testing = require("./utils.js"),
     BingProvider = require("ui/map/provider.dynamic.bing"),
-    ajaxMock = require("../../../helpers/ajaxMock.js"),
-    browser = require("core/utils/browser");
+    ajaxMock = require("../../../helpers/ajaxMock.js");
 
 
 require("ui/map");
@@ -63,30 +62,6 @@ QUnit.module("bing provider", {
     }
 });
 
-QUnit.test("map initialize with loaded map", function(assert) {
-    if(!(browser.msie && parseInt(browser.version) < 11)) {
-        assert.ok(true, "Bing maps v7 specific test");
-        return;
-    }
-
-    var done = assert.async();
-
-    $.getScript("../../testing/helpers/forMap/bingMock.js").done(function() {
-        window.Microsoft.Maps.customFlag = true;
-
-        setTimeout(function() {
-            $("#map").dxMap({
-                provider: "bing",
-                onReady: $.proxy(function(e) {
-                    assert.ok(window.Microsoft.Maps.customFlag, "map loaded without getting script");
-
-                    done();
-                }, this)
-            });
-        });
-    });
-});
-
 QUnit.test("map initialize without loaded map", function(assert) {
     var done = assert.async();
 
@@ -131,10 +106,6 @@ QUnit.test("map ready action", function(assert) {
             assert.ok(window.Microsoft.options.credentials, "map credentials specified");
             assert.ok(e.originalMap instanceof Microsoft.Maps.Map, "map instance specified");
 
-            if(browser.msie && parseInt(browser.version) < 11) {
-                assert.equal(window.Microsoft.mapInitialized, true, "map initialized [V7 specific]");
-                assert.equal(window.Microsoft["tiledownloadcompleteHandlerRemoved"], true, "tiledownloadcomplete handler removed [V7 specific]");
-            }
             done();
         }
     });

@@ -13,7 +13,6 @@
     @MATERIAL_GRID_BASE_FILTER_ICON_SIZE: 22px;
 
     @MATERIAL_GRID_BASE_TEXTEDITOR_INPUT_PADDING: 32px;
-    @MATERIAL_GRID_BASE_HEADER_PANEL_MARGIN: 14px 0;
     @MATERIAL_GRID_BASE_MENU_ITEM_PADDING: 12px 4px;
     @MATERIAL_GRID_BASE_COLUMN_CHOOSER_HORIZONTAL_PADDING: 24px;
     @MATERIAL_GRID_BASE_COLUMN_CHOOSER_PADDINGS: 16px @MATERIAL_GRID_BASE_COLUMN_CHOOSER_HORIZONTAL_PADDING 9px;
@@ -31,7 +30,6 @@
 .dx-size-compact() {
     @MATERIAL_GRID_BASE_CELL_VERTICAL_PADDING: 5px;
     @MATERIAL_GRID_BASE_TEXTEDITOR_INPUT_PADDING: 24px;
-    @MATERIAL_GRID_BASE_HEADER_PANEL_MARGIN: 5px;
     @MATERIAL_GRID_BASE_MENU_ITEM_PADDING: 5px 3px 3px;
     @MATERIAL_GRID_BASE_COLUMN_CHOOSER_HORIZONTAL_PADDING: 10px;
     @MATERIAL_GRID_BASE_COLUMN_CHOOSER_PADDINGS: 8px @MATERIAL_GRID_BASE_COLUMN_CHOOSER_HORIZONTAL_PADDING 4px;
@@ -184,7 +182,6 @@
 
         .dx-column-indicators {
             height: @MATERIAL_GRID_BASE_HEADER_LINE_HEIGHT;
-            vertical-align: middle;
             > div {
                 .dx-icon-sizing(@MATERIAL_GRID_BASE_HEADER_ICON_SIZE);
             }
@@ -246,6 +243,7 @@
                 padding-right: @MATERIAL_GRID_BASE_CELL_HORIZONTAL_PADDING;
                 padding-left: @MATERIAL_GRID_BASE_CELL_HORIZONTAL_PADDING;
                 line-height: @MATERIAL_GRID_BASE_HEADER_LINE_HEIGHT;
+                vertical-align: middle;
 
                 &:first-of-type {
                     padding-left: @MATERIAL_GRID_BASE_CELL_FIRST_COLUMN_PADDING;
@@ -280,6 +278,7 @@
             .dx-command-edit-with-icons .dx-link {
                 .dx-icon-sizing(@MATERIAL_COMMAND_EDIT_ICON_SIZE);
                 .dx-icon-margin(@MATERIAL_COMMAND_EDIT_ICON_MARGIN);
+                vertical-align: middle;
             }
         }
     }
@@ -431,10 +430,6 @@
             background-color: ~"@{@{widgetName}-columnchooser-bg}";
 
             .dx-popup-title {
-                padding-top: 10px;
-                padding-bottom: 10px;
-                padding-right: 12px;
-
                 background-color: transparent;
                 border-bottom: 1px solid @popup-title-border-color;
 
@@ -551,10 +546,6 @@
                         color: ~"@{@{widgetName}-base-color}";
                     }
 
-                    .dx-@{widgetName}-text-content {
-                        vertical-align: middle;
-                    }
-
                     &:hover {
                         .dx-@{widgetName}-text-content {
                             color: ~"@{@{widgetName}-base-color}";
@@ -650,15 +641,6 @@
     .dx-@{widgetName}-header-panel {
         border-bottom: ~"@{@{widgetName}-border}";
         padding: @MATERIAL_GRID_BASE_HEADER_PANEL_PADDING;
-
-        .dx-toolbar {
-            margin: @MATERIAL_GRID_BASE_HEADER_PANEL_MARGIN;
-            .dx-toolbar-button {
-                .dx-button {
-                    .dx-button-flat-styling(@button-normal-color);
-                }
-            }
-        }
 
         .dx-apply-button {
             .dx-button-flat-styling(@button-success-color);

@@ -733,3 +733,33 @@ QUnit.test("Virtual columns", function(assert) {
     // assert
     assert.equal(treeList.getVisibleColumns().length, 6, "visible column count");
 });
+
+QUnit.test("Call getSelectedRowKeys with 'leavesOnly' parameter and wrong selectedKeys after dataSource change", function(assert) {
+    var treeList = createTreeList({
+        dataSource: [
+            { id: 1, field1: 'test1' },
+            { id: 2, parentId: 1, field1: 'test2' },
+            { id: 3, field1: 'test3' }
+        ],
+        selection: {
+            mode: "multiple",
+            recursive: true
+        },
+        selectedRowKeys: [1, 3],
+    });
+    this.clock.tick(30);
+
+    // act
+    treeList.option({
+        dataSource: [
+            { id: 1, field1: 'test1' },
+            { id: 2, parentId: 1, field1: 'test2' }
+        ]
+    });
+
+    // assert
+    assert.deepEqual(treeList.getSelectedRowKeys("leavesOnly"), [], "dataSource is not loaded yet");
+
+    this.clock.tick(30);
+    assert.deepEqual(treeList.getSelectedRowKeys("leavesOnly"), [2], "dataSource is reloaded");
+});

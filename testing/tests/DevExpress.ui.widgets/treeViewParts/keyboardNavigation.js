@@ -609,9 +609,9 @@ QUnit.test("focus remains on parent node if it's root after left arrow pressing"
     keyboard.keyDown("left");
 
     assert.ok($parentNode.hasClass("dx-state-focused"), "parent item take focus");
-}),
+});
 
-QUnit.test("'enter' key pressing fire onItemClick if showCheckBoxes option is false", function(assert) {
+QUnit.test("'enter' key pressing fire onItemClick", function(assert) {
     var clickFired = 0;
 
     var $treeView = initTree({
@@ -630,9 +630,9 @@ QUnit.test("'enter' key pressing fire onItemClick if showCheckBoxes option is fa
     keyboard.keyDown("enter");
 
     assert.equal(clickFired, 1);
-}),
+});
 
-QUnit.test("'enter' key pressing select/unselect nodes if showCheckBoxes option is true", function(assert) {
+QUnit.test("'enter' key pressing select/unselect nodes if checkboxes are visible", function(assert) {
     var $treeView = initTree({
             focusStateEnabled: true,
             showCheckBoxesMode: "normal",
@@ -649,9 +649,9 @@ QUnit.test("'enter' key pressing select/unselect nodes if showCheckBoxes option 
 
     keyboard.keyDown("enter");
     assert.equal($checkBox.dxCheckBox("instance").option("value"), true);
-}),
+});
 
-QUnit.test("'enter' key pressing fire onItemSelectionChanged if showCheckBoxes option is true", function(assert) {
+QUnit.test("'enter' key pressing fire onItemSelectionChanged if checkboxes are visible", function(assert) {
     var selectFired = 0;
 
     var $treeView = initTree({
@@ -670,9 +670,9 @@ QUnit.test("'enter' key pressing fire onItemSelectionChanged if showCheckBoxes o
 
     keyboard.keyDown("enter");
     assert.equal(selectFired, 1);
-}),
+});
 
-QUnit.test("'space' key pressing fire onItemClick if showCheckBoxes option is false", function(assert) {
+QUnit.test("'space' key pressing fire onItemClick", function(assert) {
     var clickFired = 0;
 
     var $treeView = initTree({
@@ -691,9 +691,9 @@ QUnit.test("'space' key pressing fire onItemClick if showCheckBoxes option is fa
     keyboard.keyDown("space");
 
     assert.equal(clickFired, 1);
-}),
+});
 
-QUnit.test("'space' key pressing select/unselect nodes if showCheckBoxes option is true", function(assert) {
+QUnit.test("'space' key pressing select/unselect nodes if checkboxes are visible", function(assert) {
     var $treeView = initTree({
             focusStateEnabled: true,
             showCheckBoxesMode: "normal",
@@ -709,9 +709,9 @@ QUnit.test("'space' key pressing select/unselect nodes if showCheckBoxes option 
 
     keyboard.keyDown("space");
     assert.equal($checkBox.dxCheckBox("instance").option("value"), true);
-}),
+});
 
-QUnit.test("'space' key pressing fire onItemSelectionChanged if showCheckBoxes option is true", function(assert) {
+QUnit.test("'space' key pressing fire onItemSelectionChanged if checkboxes are visible", function(assert) {
     var selectFired = 0;
 
     var $treeView = initTree({
@@ -730,7 +730,7 @@ QUnit.test("'space' key pressing fire onItemSelectionChanged if showCheckBoxes o
 
     keyboard.keyDown("space");
     assert.equal(selectFired, 1);
-}),
+});
 
 QUnit.test("T179601", function(assert) {
     var handle = function(args) {
@@ -742,7 +742,7 @@ QUnit.test("T179601", function(assert) {
             showCheckBoxesMode: "normal",
             height: 500,
             items: [{ id: 1, text: "Item 1", items: [{ id: 2, text: "Item 2" }] }, { id: 3, text: "item 3" }],
-            onItemSelected: handle
+            onItemSelectionChanged: handle
         }),
         keyboard = keyboardMock($treeView),
         $node = $treeView.find("." + internals.NODE_CLASS).eq(0),

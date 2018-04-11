@@ -878,6 +878,52 @@ testComponentDefaults(Toast,
     }
 );
 
+testComponentDefaults(Toast,
+    {},
+    {
+        position: {
+            my: "bottom center",
+            at: "bottom center",
+            offset: "0 0"
+        },
+        minWidth: 288,
+        maxWidth: 568,
+        animation: {
+            show: {
+                type: "slide",
+                duration: 250,
+                easing: "cubic-bezier(0.4, 0, 1, 1)",
+                from: {
+                    position: {
+                        my: "top",
+                        at: "bottom",
+                        of: window
+                    }
+                },
+            },
+            hide: {
+                type: "slide",
+                duration: 250,
+                easing: "cubic-bezier(0.4, 0, 1, 1)",
+                to: {
+                    position: {
+                        my: "top",
+                        at: "bottom",
+                        of: window
+                    }
+                },
+            }
+        }
+    },
+    function() {
+        this.originalCurrentTheme = themes.current();
+        themes.current("material");
+    },
+    function() {
+        themes.current(this.originalCurrentTheme);
+    }
+);
+
 testComponentDefaults(Toolbar,
     {},
     { submenuType: "actionSheet" },
@@ -1089,7 +1135,7 @@ testComponentDefaults(List,
     },
     function() {
         this.originalCurrentTheme = themes.current();
-        themes.current("material.light");
+        themes.current("material.blue.light");
     },
     function() {
         themes.current(this.originalCurrentTheme);
@@ -1107,7 +1153,7 @@ testComponentDefaults(TreeList,
     },
     function() {
         this.originalCurrentTheme = themes.current();
-        themes.current("material.light");
+        themes.current("material.blue.light");
     },
     function() {
         themes.current(this.originalCurrentTheme);
@@ -1284,7 +1330,7 @@ testComponentDefaults(Tabs,
     },
     function() {
         this.originalCurrentTheme = themes.current();
-        themes.current("material.light");
+        themes.current("material.blue.light");
     },
     function() {
         themes.current(this.originalCurrentTheme);
@@ -1361,7 +1407,7 @@ testComponentDefaults(Form,
     },
     function() {
         this.originalCurrentTheme = themes.current();
-        themes.current("material.light");
+        themes.current("material.blue.light");
     },
     function() {
         themes.current(this.originalCurrentTheme);
@@ -1372,11 +1418,12 @@ testComponentDefaults(DataGrid,
     {},
     {
         showRowLines: true,
-        showColumnLines: false
+        showColumnLines: false,
+        editing: { useIcons: true }
     },
     function() {
         this.originalCurrentTheme = themes.current();
-        themes.current("material.light");
+        themes.current("material.blue.light");
     },
     function() {
         themes.current(this.originalCurrentTheme);
@@ -1408,7 +1455,7 @@ testComponentDefaults(Accordion,
     },
     function() {
         this.originalCurrentTheme = themes.current();
-        themes.current("material.light");
+        themes.current("material.blue.light");
     },
     function() {
         themes.current(this.originalCurrentTheme);
@@ -1419,7 +1466,7 @@ testComponentDefaults(Scheduler,
     {},
     {
         _appointmentTooltipOffset: { x: 0, y: 11 },
-        _appointmentTooltipButtonsPosition: "bottom",
+        _appointmentTooltipButtonsPosition: "top",
         _appointmentTooltipCloseButton: true,
         _useAppointmentColorForTooltip: true,
         _appointmentTooltipOpenButtonText: null,

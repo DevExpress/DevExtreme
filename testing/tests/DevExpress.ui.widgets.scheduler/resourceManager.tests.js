@@ -491,19 +491,6 @@ QUnit.test("Get resource for painting by group", function(assert) {
     assert.equal(this.instance.getResourceForPainting(["ownerId", "roomId"]).field, "roomId", "Resource is right");
 });
 
-// Remove this test when the 'mainColor' property will be removed at all
-QUnit.test("Get resource for painting by the 'mainColor' field", function(assert) {
-    this.createInstance([
-        { field: "ownerId" },
-        { field: "roomId" },
-        { field: "managerId", mainColor: true },
-        { field: "groupId", mainColor: true }
-    ]);
-
-    assert.equal(this.instance.getResourceForPainting().field, "managerId", "Resource is right");
-    assert.equal(this.instance.getResourceForPainting(["ownerId", "roomId"]).field, "managerId", "Resource is right");
-});
-
 QUnit.test("Get resource for painting by the 'useColorAsDefault' field", function(assert) {
     this.createInstance([
         { field: "ownerId" },

@@ -624,7 +624,7 @@ QUnit.test("Toolbar commands", function(assert) {
 
 QUnit.test("Apply default options from command container for toolbar", function(assert) {
     var commandMapping = new CommandMapping();
-    commandMapping.setDefaults("toolbar", { icon: 'icon', title: 'title', iconSrc: 'icon-src', type: 'type' });
+    commandMapping.setDefaults("toolbar", { icon: 'icon', title: 'title', type: 'type' });
     commandMapping.mapCommands("toolbar", [
         { id: 'cmd' }
     ]);
@@ -645,13 +645,12 @@ QUnit.test("Apply default options from command container for toolbar", function(
 
     assert.equal("icon", item.options.icon, "Property icon has been forwarding");
     assert.equal("title", item.options.text, "Property title has been forwarding");
-    assert.equal("icon-src", item.options.iconSrc, "Property iconSrc has been forwarding");
     assert.equal("type", item.options.type, "Property type has been forwarding");
 });
 
 QUnit.test("Apply command options over default options for toolbar", function(assert) {
     var commandMapping = new CommandMapping();
-    commandMapping.setDefaults("toolbar", { icon: 'icon', title: 'title', iconSrc: 'icon-src', type: 'type' });
+    commandMapping.setDefaults("toolbar", { icon: 'icon', title: 'title', type: 'type' });
     commandMapping.mapCommands("toolbar", [
         { id: 'cmd' }
     ]);
@@ -846,7 +845,7 @@ QUnit.test("List commands with default template", function(assert) {
 
 QUnit.test("Apply default options from command container for list", function(assert) {
     var commandMapping = new CommandMapping();
-    commandMapping.setDefaults("list", { icon: 'icon', title: 'title', iconSrc: 'icon-src' });
+    commandMapping.setDefaults("list", { icon: 'icon', title: 'title' });
     commandMapping.mapCommands("list", [
         { id: 'cmd' }
     ]);
@@ -867,12 +866,11 @@ QUnit.test("Apply default options from command container for list", function(ass
 
     assert.equal("icon", item.icon, "Property icon has been forwarding");
     assert.equal("title", item.title, "Property title has been forwarding");
-    assert.equal("icon-src", item.iconSrc, "Property iconSrc has been forwarding");
 });
 
 QUnit.test("Apply command options over default options for list", function(assert) {
     var commandMapping = new CommandMapping();
-    commandMapping.setDefaults("list", { icon: 'icon', title: 'title', iconSrc: 'icon-src' });
+    commandMapping.setDefaults("list", { icon: 'icon', title: 'title' });
     commandMapping.mapCommands("list", [
         { id: 'cmd' }
     ]);
@@ -974,7 +972,7 @@ QUnit.test("NavBar commands", function(assert) {
 
 QUnit.test("Apply default options from command container for navbar", function(assert) {
     var commandMapping = new CommandMapping();
-    commandMapping.setDefaults("navBar", { icon: 'icon', title: 'title', iconSrc: 'icon-src' });
+    commandMapping.setDefaults("navBar", { icon: 'icon', title: 'title' });
     commandMapping.mapCommands("navBar", [
         { id: 'cmd' }
     ]);
@@ -995,12 +993,11 @@ QUnit.test("Apply default options from command container for navbar", function(a
 
     assert.equal("icon", item.icon, "Property icon has been forwarding");
     assert.equal("title", item.text, "Property title has been forwarding");
-    assert.equal("icon-src", item.iconSrc, "Property iconSrc has been forwarding");
 });
 
 QUnit.test("Apply command options over default options for navbar", function(assert) {
     var commandMapping = new CommandMapping();
-    commandMapping.setDefaults("navBar", { icon: 'icon', title: 'title', iconSrc: 'icon-src' });
+    commandMapping.setDefaults("navBar", { icon: 'icon', title: 'title' });
     commandMapping.mapCommands("navBar", [
         { id: 'cmd' }
     ]);

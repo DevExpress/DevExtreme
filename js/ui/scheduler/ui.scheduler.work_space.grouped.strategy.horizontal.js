@@ -2,6 +2,8 @@
 
 var GroupedStrategy = require("./ui.scheduler.work_space.grouped.strategy");
 
+var HORIZONTAL_GROUPED_ATTR = "dx-group-row-count";
+
 var HorizontalGroupedStrategy = GroupedStrategy.inherit({
     prepareCellIndexes: function(cellCoordinates, groupIndex) {
         return {
@@ -85,6 +87,32 @@ var HorizontalGroupedStrategy = GroupedStrategy.inherit({
 
     getAllDayOffset: function() {
         return this._workSpace.getAllDayHeight();
+    },
+
+    getGroupCountAttr: function(groupRowCount, groupRows) {
+        return {
+            attr: HORIZONTAL_GROUPED_ATTR,
+            count: groupRows && groupRows.elements.length
+        };
+    },
+
+    getLeftOffset: function() {
+        return this._workSpace.getTimePanelWidth();
+    },
+
+    getGroupBoundsOffset: function(cellCount, $cells, cellWidth, coordinates) {
+        var cellIndex = this._workSpace.getCellIndexByCoordinates(coordinates),
+            groupIndex = coordinates.groupIndex || Math.floor(cellIndex / cellCount),
+            startCellIndex = groupIndex * cellCount,
+            startOffset = $cells.eq(startCellIndex).offset().left - cellWidth / 2,
+            endOffset = $cells.eq(startCellIndex + cellCount - 1).offset().left + cellWidth + cellWidth / 2;
+
+        return {
+            left: startOffset,
+            right: endOffset,
+            top: 0,
+            bottom: 0
+        };
     }
 });
 

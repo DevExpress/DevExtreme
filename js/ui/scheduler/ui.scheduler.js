@@ -379,14 +379,6 @@ var Scheduler = Widget.inherit({
                 */
             resources: [
                     /**
-                    * @name dxSchedulerOptions_resources_field
-                    * @publicName field
-                    * @deprecated dxSchedulerOptions_resources_fieldExpr
-                    * @type String
-                    * @default ""
-                    */
-
-                    /**
                     * @name dxSchedulerOptions_resources_fieldExpr
                     * @publicName fieldExpr
                     * @type String
@@ -410,14 +402,6 @@ var Scheduler = Widget.inherit({
                     /**
                     * @name dxSchedulerOptions_resources_allowMultiple
                     * @publicName allowMultiple
-                    * @type Boolean
-                    * @default false
-                    */
-
-                    /**
-                    * @name dxSchedulerOptions_resources_mainColor
-                    * @publicName mainColor
-                    * @deprecated dxSchedulerOptions_resources_useColorAsDefault
                     * @type Boolean
                     * @default false
                     */
@@ -1152,7 +1136,7 @@ var Scheduler = Widget.inherit({
                     },
 
                     _appointmentTooltipOffset: { x: 0, y: 11 },
-                    _appointmentTooltipButtonsPosition: "bottom",
+                    _appointmentTooltipButtonsPosition: "top",
                     _appointmentTooltipCloseButton: true,
                     _useAppointmentColorForTooltip: true,
                     _appointmentTooltipOpenButtonText: null,
@@ -1164,20 +1148,6 @@ var Scheduler = Widget.inherit({
                 }
             }
         ]);
-    },
-
-    _setDeprecatedOptions: function() {
-        this.callBase();
-
-        extend(this._deprecatedOptions, {
-                /**
-                * @name dxSchedulerOptions_horizontalScrollingEnabled
-                * @publicName horizontalScrollingEnabled
-                * @deprecated dxSchedulerOptions_crossScrollingEnabled
-                * @inheritdoc
-                */
-            "horizontalScrollingEnabled": { since: "16.1", alias: "crossScrollingEnabled" }
-        });
     },
 
     _optionChanged: function(args) {
@@ -2119,7 +2089,7 @@ var Scheduler = Widget.inherit({
     },
 
     getWorkSpaceDateTableOffset: function() {
-        return !this.option("crossScrollingEnabled") || this.option("rtlEnabled") ? this._workSpace.getTimePanelWidth() : 0;
+        return !this.option("crossScrollingEnabled") || this.option("rtlEnabled") ? this._workSpace.getWorkSpaceLeftOffset() : 0;
     },
 
     getWorkSpace: function() {

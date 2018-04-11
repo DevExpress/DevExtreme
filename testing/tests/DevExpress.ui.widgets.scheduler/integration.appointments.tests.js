@@ -2524,11 +2524,12 @@ QUnit.test("Appointment should have correct position while dragging from group, 
             text: "a",
             startDate: new Date(2015, 6, 7, 10),
             endDate: new Date(2015, 6, 7, 10, 30),
-            ownerId: { id: 2 }
+            ownerId: { id: 2 },
+            roomId: { id: 1 }
         }],
         startDayHour: 9,
         endDayHour: 12,
-        groups: ["ownerId.id"],
+        groups: ["ownerId.id", "roomId.id"],
         resources: [
             {
                 field: "ownerId.id",
@@ -2536,6 +2537,14 @@ QUnit.test("Appointment should have correct position while dragging from group, 
                 dataSource: [
                     { id: 1, text: "one" },
                     { id: 2, text: "two" }
+                ]
+            },
+            {
+                field: "roomId.id",
+                allowMultiple: false,
+                dataSource: [
+                    { id: 1, text: "room one" },
+                    { id: 2, text: "room two" }
                 ]
             }
         ],
@@ -2546,8 +2555,8 @@ QUnit.test("Appointment should have correct position while dragging from group, 
     $appointment.trigger(dragEvents.start);
 
     var startPosition = translator.locate($appointment);
-    assert.roughEqual(startPosition.top, 500, 1.5, "Start position is correct");
-    assert.roughEqual(startPosition.left, 370, 1.5, "Start position is correct");
+    assert.roughEqual(startPosition.top, 850, 1.5, "Start position is correct");
+    assert.roughEqual(startPosition.left, 413, 1.5, "Start position is correct");
 
     $(this.instance.$element().find("." + DATE_TABLE_CELL_CLASS)).eq(7).trigger(dragEvents.enter);
     $appointment.trigger(dragEvents.end);
@@ -3055,36 +3064,6 @@ QUnit.test("Tasks should have a right color", function(assert) {
     assert.equal(this.getAppointmentColor(tasks.eq(2)), "#cb2824", "Color is OK");
     assert.equal(this.getAppointmentColor(tasks.eq(3)), "#cb7d7b", "Color is OK");
     assert.equal(this.getAppointmentColor(tasks.eq(4)), "#cb7d7b", "Color is OK");
-});
-
-// Remove this test when the 'mainColor' property will be removed at all
-QUnit.test("Ungrouped tasks should have a right color(via the 'mainColor' field)", function(assert) {
-    try {
-        var data = new DataSource({
-            store: [
-                { text: "Item 1", ownerId: 2, startDate: new Date(2015, 1, 9), endDate: new Date(2015, 1, 9, 0, 30) },
-                { text: "Item 2", startDate: new Date(2015, 1, 9), endDate: new Date(2015, 1, 9, 0, 30) }
-            ]
-        });
-
-        this.createInstance({
-            currentDate: new Date(2015, 1, 9),
-            resources: [{
-                field: "ownerId",
-                mainColor: true,
-                dataSource: [{ id: 1, text: "John", color: "#ff0000" }, { id: 2, text: "Mike", color: "#0000ff" }]
-            }],
-            dataSource: data,
-            width: 700
-        });
-
-        var tasks = this.instance.$element().find("." + APPOINTMENT_CLASS);
-
-        assert.equal(this.getAppointmentColor(tasks.eq(0)), "#0000ff", "Color is OK");
-        assert.equal($.inArray(this.getAppointmentColor(tasks.eq(1)), ["#ff0000", "#0000ff"]), -1, "Color is OK");
-    } finally {
-        $(".dynamic-styles").remove();
-    }
 });
 
 QUnit.test("Ungrouped tasks should have a right color(via the 'useColorAsDefault' field)", function(assert) {
@@ -5920,4 +5899,119 @@ QUnit.test("Hourly recurring appt should be rendred in vertical grouped workspac
     var $appointments = $(this.instance.$element()).find("." + APPOINTMENT_CLASS);
 
     assert.equal($appointments.length, 4, "Appointments are rendered");
+});
+
+QUnit.test("Appointment should be resized correctly to left side in horizontal grouped workspace Month", function(assert) {
+    this.createInstance({
+        dataSource: [{
+            text: "a",
+            startDate: new Date(2018, 2, 5, 12),
+            endDate: new Date(2018, 2, 5, 12, 30),
+            id: 1
+        }],
+        currentDate: new Date(2018, 2, 1),
+        views: [{
+            type: "month",
+            groupOrientation: "vertical"
+        }],
+        currentView: "month",
+        groups: ["id"],
+        resources: [
+            {
+                field: "id",
+                dataSource: [
+                    { id: 1, text: "one" },
+                    { id: 2, text: "two" }
+                ]
+            }
+        ]
+    });
+
+    var $element = $(this.instance.$element()),
+        cellWidth = $element.find("." + DATE_TABLE_CELL_CLASS).eq(0).outerWidth(),
+        pointer = pointerMock($element.find(".dx-resizable-handle-left").eq(0)).start();
+
+    pointer.dragStart().drag(-(cellWidth / 2), 0);
+    pointer.dragEnd();
+
+    var $appointment = $element.find("." + APPOINTMENT_CLASS).eq(0);
+
+    assert.equal($appointment.position().left, 100, "Left coordinate is correct");
+});
+
+QUnit.test("Appt shouldn't be resized to the group border in horizontal grouped workspace Day", function(assert) {
+    this.createInstance({
+        dataSource: [{
+            text: "a",
+            startDate: new Date(2018, 2, 16, 14),
+            endDate: new Date(2018, 2, 16, 15),
+            id: 1
+        }],
+        currentDate: new Date(2018, 2, 16),
+        views: [{
+            type: "day",
+            groupOrientation: "vertical"
+        }],
+        currentView: "day",
+        groups: ["id"],
+        resources: [
+            {
+                field: "id",
+                dataSource: [
+                    { id: 1, text: "one" },
+                    { id: 2, text: "two" }
+                ]
+            }
+        ],
+        startDayHour: 12,
+        endDayHour: 16,
+        showAllDayPanel: false
+    });
+
+    var $element = $(this.instance.$element()),
+        cellHeight = $(this.instance.$element()).find("." + DATE_TABLE_CELL_CLASS).eq(0).outerHeight(),
+        pointer = pointerMock($element.find(".dx-resizable-handle-bottom").eq(0)).start();
+
+    pointer.dragStart().drag(0, cellHeight * 2).dragEnd();
+
+    var $appointment = $element.find("." + APPOINTMENT_CLASS).eq(0);
+
+    assert.equal($appointment.position().top + $appointment.outerHeight(), cellHeight * 8, "Correct bottom coordinate");
+});
+
+QUnit.test("Appointment inside vertical grouped view should have a right resizable area in Day view", function(assert) {
+    this.createInstance({
+        dataSource: [{
+            text: "a",
+            startDate: new Date(2018, 2, 16, 14),
+            endDate: new Date(2018, 2, 16, 15),
+            id: 1
+        }],
+        currentDate: new Date(2018, 2, 16),
+        views: [{
+            type: "day",
+            groupOrientation: "vertical"
+        }],
+        currentView: "day",
+        groups: ["id"],
+        resources: [
+            {
+                field: "id",
+                dataSource: [
+                    { id: 1, text: "one" },
+                    { id: 2, text: "two" }
+                ]
+            }
+        ],
+        startDayHour: 12,
+        endDayHour: 16,
+        showAllDayPanel: false
+    });
+
+    var $appointment = $(this.instance.$element()).find("." + APPOINTMENT_CLASS).first(),
+        initialResizableAreaTop = $appointment.dxResizable("instance").option("area").top,
+        initialResizableAreaBottom = $appointment.dxResizable("instance").option("area").bottom;
+
+    assert.equal($appointment.dxResizable("instance").option("area").top, initialResizableAreaTop);
+    assert.equal($appointment.dxResizable("instance").option("area").bottom, initialResizableAreaBottom);
 });

@@ -1,38 +1,16 @@
 .dx-size-default() {
-    @MATERIAL_POPUP_CLOSEBUTTON_SIZE: 26px;
-    @MATERIAL_POPUP_CLOSEBUTTON_ICON_SIZE: 24px;
-
     @MATERIAL_POPUP_CONTENT_PADDING: 24px;
     @MATERIAL_POPUP_CONTENT_WITHTITLE_TOP_PADDING: 20px;
     @MATERIAL_POPUP_BUTTON_WIDTH: 64px;
     @MATERIAL_POPUP_BUTTON_MARGIN: 0 8px;
 
     @MATERIAL_POPUP_TOOLBAR_ITEM_SPACING: 8px;
-    @MATERIAL_POPUP_TOOLBARTOP_PADDING: 8px 8px 8px 24px;
-    @MATERIAL_POPUP_TOOLBARBOTTOM_PADDING: 8px 8px 8px 24px;
+    @MATERIAL_POPUP_TOOLBARTOP_PADDING: 0 8px 0 24px;
+    @MATERIAL_POPUP_TOOLBARBOTTOM_PADDING: 0 8px 0 24px;
+    @MATERIAL_POPUP_BOTTOM_TOOLBAR_HEIGHT: 52px;
 }
-.dx-size-compact() {
-    @MATERIAL_POPUP_CLOSEBUTTON_SIZE: 19px;
-    @MATERIAL_POPUP_CLOSEBUTTON_ICON_SIZE: 11px;
 
-    @MATERIAL_POPUP_CONTENT_PADDING: 10px;
-    @MATERIAL_POPUP_BUTTON_MARGIN: 0 5px;
-
-    @MATERIAL_POPUP_TOOLBAR_ITEM_SPACING: 5px;
-    @MATERIAL_POPUP_TOOLBARTOP_PADDING: 2px 10px;
-    @MATERIAL_POPUP_TOOLBARBOTTOM_PADDING: 10px;
-}
-@MATERIAL_POPUP_CLOSEBUTTON_OFFSET: (@MATERIAL_POPUP_CLOSEBUTTON_SIZE - @MATERIAL_POPUP_CLOSEBUTTON_ICON_SIZE) / 2;
-
-@MATERIAL_POPUP_TOOLBAR_HEIGHT: @MATERIAL_BASE_INLINE_WIDGET_HEIGHT;
 @MATERIAL_POPUP_TOOLBAR_LABEL_FONT_SIZE: @MATERIAL_M_FONT_SIZE;
-
-@MATERIAL_POPUP_CLOSEBUTTON_ICON_CONTAINER_SIZE: @MATERIAL_POPUP_CLOSEBUTTON_SIZE;
-
-@MATERIAL_MOBILE_POPUP_CLOSEBUTTON_SIZE: 37px;
-@MATERIAL_MOBILE_POPUP_CLOSEBUTTON_ICON_SIZE: 15px;
-@MATERIAL_MOBILE_POPUP_CLOSEBUTTON_OFFSET: (@MATERIAL_MOBILE_POPUP_CLOSEBUTTON_SIZE - @MATERIAL_MOBILE_POPUP_CLOSEBUTTON_ICON_SIZE) / 2;
-@MATERIAL_MOBILE_POPUP_CLOSEBUTTON_ICON_CONTAINER_SIZE: @MATERIAL_MOBILE_POPUP_CLOSEBUTTON_SIZE;
 
 @MATERIAL_POPUP_TITLE_BOTTOM_MARGIN: @MATERIAL_POPUP_CONTENT_WITHTITLE_TOP_PADDING - @MATERIAL_POPUP_CONTENT_PADDING;
 
@@ -47,12 +25,12 @@
         .border-radius(0);
     }
 
-    .dx-button:not(.dx-closebutton) {
+    .dx-button {
 
         &.dx-button-has-text {
             min-width: @MATERIAL_POPUP_BUTTON_WIDTH;
         }
-        .dx-button-flat-styling(@button-default-bg);
+        
     }
 }
 
@@ -66,49 +44,11 @@
     color: @popup-title-color;
 
     &.dx-toolbar {
-        .dx-toolbar-sizing(@MATERIAL_POPUP_TOOLBAR_HEIGHT, @MATERIAL_POPUP_TOOLBARTOP_PADDING, @MATERIAL_POPUP_TOOLBAR_LABEL_FONT_SIZE, @MATERIAL_POPUP_TOOLBAR_ITEM_SPACING );
+        .dx-toolbar-sizing(@MATERIAL_TOOLBAR_HEIGHT, @MATERIAL_POPUP_TOOLBARTOP_PADDING, @MATERIAL_POPUP_TOOLBAR_LABEL_FONT_SIZE, @MATERIAL_POPUP_TOOLBAR_ITEM_SPACING );
         .box-shadow(none);
-    }
 
-    .dx-closebutton {
-        display: block;
-        .dx-button-flat-styling(@base-icon-color);
-
-        .dx-button-content {
-            padding: 0;
-        }
-
-        .dx-icon {
-            .box-sizing(border-box);
-        }
-
-        .dx-closebutton-sizing(@size, @offset, @iconSize, @iconContainerSize) {
-            width: @size;
-            height: @size;
-            min-width: @size;
-            margin: 0 -@offset 0 @offset;
-
-            .dx-rtl & {
-                margin: 0 @offset 0 -@offset;
-            }
-
-            .dx-icon {
-                .dx-icon-sizing(@iconSize, @iconContainerSize);
-            }
-        }
-
-        .dx-closebutton-sizing(
-            @MATERIAL_POPUP_CLOSEBUTTON_SIZE,
-            @MATERIAL_POPUP_CLOSEBUTTON_OFFSET,
-            @MATERIAL_POPUP_CLOSEBUTTON_ICON_SIZE,
-            @MATERIAL_POPUP_CLOSEBUTTON_ICON_CONTAINER_SIZE);
-
-        .dx-device-mobile & {
-            .dx-closebutton-sizing(
-                @MATERIAL_MOBILE_POPUP_CLOSEBUTTON_SIZE,
-                @MATERIAL_MOBILE_POPUP_CLOSEBUTTON_OFFSET,
-                @MATERIAL_MOBILE_POPUP_CLOSEBUTTON_ICON_SIZE,
-                @MATERIAL_MOBILE_POPUP_CLOSEBUTTON_ICON_CONTAINER_SIZE);
+        .dx-button.dx-closebutton {
+            display: block;
         }
     }
 }
@@ -126,15 +66,19 @@
     color: @popup-bottom-color;
 
     &.dx-toolbar {
+        .dx-button {
+            .dx-button-flat-styling(@button-default-bg);
+        }
+
         .dx-toolbar-sizing(
-            @MATERIAL_POPUP_TOOLBAR_HEIGHT,
+            @MATERIAL_POPUP_BOTTOM_TOOLBAR_HEIGHT,
             @MATERIAL_POPUP_TOOLBARBOTTOM_PADDING,
             @MATERIAL_POPUP_TOOLBAR_LABEL_FONT_SIZE,
             @MATERIAL_POPUP_TOOLBAR_ITEM_SPACING
         );
         .dx-device-mobile & {
             .dx-toolbar-sizing(
-                @MATERIAL_POPUP_TOOLBAR_HEIGHT,
+                @MATERIAL_POPUP_BOTTOM_TOOLBAR_HEIGHT,
                 @MATERIAL_POPUP_TOOLBARBOTTOM_PADDING,
                 @MATERIAL_POPUP_TOOLBAR_LABEL_FONT_SIZE,
                 @MATERIAL_POPUP_TOOLBAR_ITEM_SPACING

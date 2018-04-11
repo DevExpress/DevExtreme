@@ -1,15 +1,15 @@
 "use strict";
+import $ from "jquery";
+import translator2DModule from "viz/translators/translator2d";
+import tickGeneratorModule from "viz/axes/tick_generator";
+import { Axis } from "viz/axes/base_axis";
+import vizMocks from "../../helpers/vizMocks.js";
 
-var $ = require("jquery"),
-    translator2DModule = require("viz/translators/translator2d"),
-    tickGeneratorModule = require("viz/axes/tick_generator"),
-    Axis = require("viz/axes/base_axis").Axis,
-    vizMocks = require("../../helpers/vizMocks.js"),
-    StubTranslator = vizMocks.stubClass(translator2DModule.Translator2D, {
-        updateBusinessRange: function(range) {
-            this.getBusinessRange.returns(range);
-        }
-    });
+const StubTranslator = vizMocks.stubClass(translator2DModule.Translator2D, {
+    updateBusinessRange: function(range) {
+        this.getBusinessRange.returns(range);
+    }
+});
 
 function getArray(len) {
     var i,
@@ -1407,4 +1407,96 @@ QUnit.test("Custom format for tick labels - use custom format", function(assert)
     assert.strictEqual(text.getCall(1).args[0], "June");
     assert.strictEqual(text.getCall(2).args[0], "July");
     assert.strictEqual(text.getCall(3).args[0], "July");
+});
+
+QUnit.module("Format date range.", {
+    createAxis: environment.createAxis,
+
+    beforeEach: function() {
+        environment.beforeEach.call(this);
+        this.createAxis({
+            isHorizontal: true,
+            argumentType: "datetime",
+            label: {
+                visible: true
+            },
+            marker: {
+                visible: true,
+                label: {}
+            }
+        });
+    },
+
+    afterEach: environment.afterEach
+});
+
+QUnit.test("interval is equal difference unit", function(assert) {
+    assert.strictEqual(this.axis.formatRange(new Date(2017, 0, 1), new Date(2018, 0, 1), "year"), "2017", "Year interval");
+    assert.strictEqual(this.axis.formatRange(new Date(2018, 2, 1), new Date(2018, 3, 1), "month"), "March 2018", "Month interval");
+    assert.strictEqual(this.axis.formatRange(new Date(2018, 2, 1), new Date(2018, 2, 2), "day"), "3/1/2018", "Day interval");
+    assert.strictEqual(this.axis.formatRange(new Date(2018, 2, 1, 10), new Date(2018, 2, 1, 11), "hour"), "3/1/2018 10:00 AM", "hour interval");
+});
+
+QUnit.test("interval is equal difference unit. IntervalEnd has next high unit", function(assert) {
+    assert.strictEqual(this.axis.formatRange(new Date(2017, 11, 1), new Date(2018, 0, 1), "month"), "December 2017", "Month interval");
+    assert.strictEqual(this.axis.formatRange(new Date(2017, 11, 1, 23), new Date(2017, 11, 2), "hour"), "12/1/2017 11:00 PM", "hour interval");
+});
+
+QUnit.test("Not unit interval", function(assert) {
+    assert.strictEqual(this.axis.formatRange(new Date(2017, 11, 15), new Date(2018, 0, 10), "week"), "12/15/2017 - 1/10/2018", "month in differnt years with different");
+
+    assert.strictEqual(this.axis.formatRange(new Date(2018, 2, 1), new Date(2018, 2, 7), "week"), "March 2018, 1 - 7", "week interval inside a month");
+    assert.strictEqual(this.axis.formatRange(new Date(2018, 2, 28), new Date(2018, 3, 4), "week"), "2018, Mar 28 - Apr 4", "week interval inside different months");
+});
+
+QUnit.test("Several unit interval", function(assert) {
+    assert.strictEqual(this.axis.formatRange(new Date(2017, 11, 1, 10), new Date(2017, 11, 1, 10, 15), { minutes: 15 }), "12/1/2017, 10:00 AM - 10:15 AM");
+});
+
+QUnit.module("Format numeric range.", {
+    createAxis(options) {
+        environment.createAxis.call(this, $.extend({
+            isHorizontal: true,
+            argumentType: "numeric",
+            label: {
+                visible: true
+            },
+            marker: {
+                visible: true,
+                label: {}
+            }
+        }, options));
+    },
+
+    beforeEach: function() {
+        environment.beforeEach.call(this);
+    },
+
+    afterEach: environment.afterEach
+});
+
+QUnit.test("Nimuric axis. Format range", function(assert) {
+    // act
+    this.createAxis();
+    assert.strictEqual(this.axis.formatRange(10000, 15000, 5000), "10K - 15K");
+});
+
+QUnit.test("Logarithmic axis. Format range", function(assert) {
+    // act
+    this.createAxis({
+        logarithmBase: 2,
+        argumentType: "numeric",
+        type: "logarithmic"
+    });
+    assert.strictEqual(this.axis.formatRange(100, 100000000, 6), "100 - 100000000");
+});
+
+QUnit.test("Discrete axis. Format range", function(assert) {
+    // act
+    this.createAxis({
+        logarithmBase: 2,
+        argumentType: "numeric",
+        type: "discrete"
+    });
+    assert.strictEqual(this.axis.formatRange(undefined, undefined, undefined), "");
 });

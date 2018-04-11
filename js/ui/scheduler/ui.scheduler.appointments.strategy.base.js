@@ -656,6 +656,14 @@ var BaseRenderingStrategy = Class.inherit({
 
     _getAppointmentDefaultWidth: function() {
         return APPOINTMENT_DEFAULT_WIDTH;
+    },
+
+    _needVerticalGroupBounds: function() {
+        return false;
+    },
+
+    _needHorizontalGroupBounds: function() {
+        return false;
     }
 });
 

@@ -106,7 +106,7 @@ var appointmentTooltip = {
 
         var $buttons = $("<div>").addClass(APPOINTMENT_TOOLTIP_BUTTONS_CLASS);
 
-        this.instance.option("_appointmentTooltipButtonsPosition") === "bottom"
+        this.instance.option("_appointmentTooltipButtonsPosition") === "top"
             ? $buttons.prependTo($tooltip)
             : $buttons.appendTo($tooltip);
 

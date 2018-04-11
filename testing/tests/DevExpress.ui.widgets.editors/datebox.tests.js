@@ -3267,41 +3267,14 @@ QUnit.test("T319039 - classes on DateBox should be correct after the 'pickerType
     }
 });
 
-
-QUnit.module("'useNative' deprecated options");
-
-QUnit.test("the 'pickerType' option should depend on the 'useNative' and 'useCalendar' options", function(assert) {
-    var $element = $("#dateBox").dxDateBox({
-            useNative: false,
-            useCalendar: true,
-            type: "date"
-        }),
-        instance = $element.dxDateBox("instance");
-
-    instance.option("type", "time");
-    assert.equal(instance._strategy.NAME, "List", "pickerType is correct when type is changed to 'time'");
-
-    instance.option("useCalendar", false);
-    assert.equal(instance._strategy.NAME, "DateView", "pickerType is correct when useCalendar: false, useNative: false");
-
-    instance.option("useNative", true);
-    assert.equal(instance._strategy.NAME, "Native", "pickerType is correct when useNative: true");
-});
-
-QUnit.test("the 'calendar' strategy should be used if the 'useCalendar' is true and the 'useNative' is false", function(assert) {
-    var $element = $("#dateBox").dxDateBox({ useCalendar: true, useNative: false }),
-        instance = $element.dxDateBox("instance");
-    assert.equal(instance._strategy.NAME, "Calendar", "strategy is correct");
-});
-
-QUnit.test("useCalendar = true and type = time should use time list (T248089)", function(assert) {
+QUnit.test("Calendar pickerType and time type should use time list (T248089)", function(assert) {
     var currentDevice = devices.real();
     devices.real({ platform: "android" });
 
     try {
         var $element = $("#dateBox").dxDateBox({
                 type: 'time',
-                useCalendar: true
+                pickerType: 'calendar'
             }),
             instance = $element.dxDateBox("instance");
 

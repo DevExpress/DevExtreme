@@ -1,10 +1,10 @@
-@MATERIAL_TOOLBAR_HEIGHT: @MATERIAL_BASE_INLINE_WIDGET_HEIGHT;
+@MATERIAL_TOOLBAR_HEIGHT: 56px;
 @MATERIAL_TOOLBAR_PADDING: 0;
 @MATERIAL_TOOLBAR_ITEM_SPACING: 5px;
 @MATERIAL_TOOLBAR_LABEL_FONT_SIZE: @MATERIAL_M_FONT_SIZE;
 @MATERIAL_TOOLBAR_SECTION_PADDING: 15px;
 
-@MATERIAL_MOBILE_TOOLBAR_HEIGHT: @MATERIAL_MOBILE_BASE_INLINE_WIDGET_SIZE;
+@MATERIAL_MOBILE_TOOLBAR_HEIGHT: @MATERIAL_TOOLBAR_HEIGHT;
 @MATERIAL_MOBILE_TOOLBAR_PADDING: 0;
 @MATERIAL_MOBILE_TOOLBAR_ITEM_SPACING: 5px;
 @MATERIAL_MOBILE_TOOLBAR_LABEL_FONT_SIZE: 20px;
@@ -17,7 +17,7 @@
     .dx-toolbar-before {
         padding-right: @MATERIAL_TOOLBAR_SECTION_PADDING;
 
-        .dx-rtl & {
+        .dx-rtl& {
             padding-right: 0;
             padding-left: @MATERIAL_TOOLBAR_SECTION_PADDING;
         }
@@ -26,7 +26,7 @@
     .dx-toolbar-after {
         padding-left: @MATERIAL_TOOLBAR_SECTION_PADDING;
 
-        .dx-rtl & {
+        .dx-rtl& {
             padding-left: 0;
             padding-right: @MATERIAL_TOOLBAR_SECTION_PADDING;
         }
@@ -45,7 +45,7 @@
     .dx-toolbar-menu-container {
         padding: 0 0 0 @item-spacing;
 
-        .dx-rtl & {
+        .dx-rtl& {
             padding: 0 @item-spacing 0 0;
         }
     }
@@ -61,7 +61,7 @@
             padding: 0;
         }
 
-        .dx-rtl & {
+        .dx-rtl& {
             padding: 0 0 0 @item-spacing;
 
             &:last-child {
@@ -72,6 +72,7 @@
 
     .dx-toolbar-label {
         font-size: @label-font-size;
+        font-weight: 500;
     }
 }
 
@@ -116,6 +117,13 @@
     &.dx-state-disabled {
         opacity: 1;
     }
+
+    .dx-toolbar-item-content,
+    .dx-toolbar-button {
+        > .dx-button {
+            .dx-button-flat-styling(@base-icon-color);
+        }
+    }
 }
 
 .dx-toolbar-after {
@@ -137,8 +145,15 @@
 .dx-toolbar-menu-section {
     border-bottom: 1px solid @base-border-color;
 
-    .dx-toolbar-hidden-button .dx-button-content {
-        padding: 0;
+    .dx-toolbar-hidden-button {
+        .dx-button {
+            height: @MATERIAL_LIST_ITEM_HEIGHT;
+            padding: 0;
+        }
+
+        .dx-button-content {
+            padding: 0 @MATERIAL_LIST_ITEM_HORIZONTAL_PADDING;
+        }
     }
 
     .dx-button-content {

@@ -126,7 +126,7 @@ exports.VirtualScrollController = Class.inherit((function() {
 
         var realViewportSize = that._viewportSize;
 
-        if(isVirtualMode(that) && that.option("advancedRendering") && that.option("scrolling.removeInvisiblePages")) {
+        if(isVirtualMode(that) && that.option("legacyRendering") === false && that.option("scrolling.removeInvisiblePages")) {
             realViewportSize = 0;
 
             var viewportSize = that._viewportSize * that._viewportItemSize;
@@ -562,7 +562,7 @@ exports.VirtualScrollController = Class.inherit((function() {
 
                 cacheItem = { pageIndex: dataSource.pageIndex(), itemsCount: that.itemsCount(true) };
 
-                if(that.option("advancedRendering") !== false && that.option("scrolling.removeInvisiblePages") && isVirtualMode(that)) {
+                if(!that.option("legacyRendering") && that.option("scrolling.removeInvisiblePages") && isVirtualMode(that)) {
                     removeInvisiblePages = that._cache.length > Math.max(getPreloadPageCount(this) + (that.option("scrolling.preloadEnabled") ? 1 : 0), 2);
                 } else {
                     processDelayChanged(that, callBase, { isDelayed: true });

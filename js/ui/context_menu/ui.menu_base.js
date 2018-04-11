@@ -257,12 +257,6 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
             * @type String
             */
             /**
-            * @name dxMenuBaseItemTemplate_iconSrc
-            * @publicName iconSrc
-            * @type String
-            * @deprecated dxMenuBaseItemTemplate_icon
-            */
-            /**
             * @name dxMenuBaseItemTemplate_text
             * @publicName text
             * @type String
@@ -295,23 +289,6 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
             * @type boolean
             * @default true
             */
-        });
-    },
-
-    _setDeprecatedOptions: function() {
-        this.callBase();
-
-        extend(this._deprecatedOptions, {
-
-            /**
-            * @name dxMenuBaseOptions_selectionByClick
-            * @publicName selectionByClick
-            * @type boolean
-            * @deprecated dxMenuBaseOptions_selectByClick
-            * @default false
-            */
-            selectionByClick: { since: "16.1", alias: "selectByClick" }
-
         });
     },
 
@@ -650,12 +627,10 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
 
     _addContentClasses: function(itemData, $itemFrame) {
         var hasText = itemData.text ? !!itemData.text.length : false,
-            hasIcon = !!(itemData.icon || itemData.iconSrc),
+            hasIcon = !!itemData.icon,
             hasSubmenu = itemData.items ? !!itemData.items.length : false;
 
         $itemFrame.toggleClass(DX_ITEM_HAS_TEXT, hasText);
-
-        // deprecated since 15.1 (itemData.iconSrc)
         $itemFrame.toggleClass(DX_ITEM_HAS_ICON, hasIcon);
 
         if(!this.hasIcons) {

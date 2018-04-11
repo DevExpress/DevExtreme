@@ -8216,3 +8216,25 @@ QUnit.module("Customization of the command columns", {
         }, "group column");
     });
 });
+
+// T622771
+QUnit.test("Update dataSource of the column lookup", function(assert) {
+    // arrange
+    this.applyOptions({
+        columns: [
+            { dataField: "TestField1", caption: "Column 1" },
+            {
+                caption: "Band Column 1", columns: [
+                    { dataField: "TestField2", caption: "Column 2" },
+                    { dataField: "TestField3", caption: "Column 3", lookup: { dataSource: [] } }
+                ]
+            }
+        ]
+    });
+
+    // act
+    this.columnOption("TestField3", "lookup.dataSource", [1, 2, 3]);
+
+    // assert
+    assert.deepEqual(this.columnOption("TestField3", "lookup.dataSource"), [1, 2, 3], "lookup datasource");
+});

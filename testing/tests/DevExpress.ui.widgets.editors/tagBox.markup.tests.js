@@ -390,14 +390,3 @@ QUnit.test("tagbox should not have a single line class if multiline is true", fu
     var $tagBox = $("#tagBox").dxTagBox({ multiline: true });
     assert.notOk($tagBox.hasClass(TAGBOX_SINGLE_LINE_CLASS), "there is no single line class on widget");
 });
-
-QUnit.test("the 'values' option should work correctly", function(assert) {
-    var $tagBox = $("#tagBox").dxTagBox({
-            items: [1, 2, 3],
-            values: [2],
-            showSelectionControls: true
-        }),
-        $tag = $tagBox.find("." + TAGBOX_TAG_CLASS);
-
-    assert.equal($tag.text(), "2", "the 'values' option works correctly");
-});

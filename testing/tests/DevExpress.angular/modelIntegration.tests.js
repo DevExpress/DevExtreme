@@ -174,31 +174,6 @@ QUnit.test("changing value from editor should set ngmodel dirty", function(asser
 $.each(["dxTagBox"/* , "dxFileUploader" */], function(_, widgetName) {
     QUnit.test("ngmodel should be bound with values option for " + widgetName, function(assert) {
         var $markup = $("<div></div>")
-            .attr(inflector.dasherize(widgetName), "{}")
-            .attr("ng-model", "value")
-            .appendTo(this.$controller);
-
-        this.app.controller("my-controller", ["$scope", function($scope) {
-            $scope.value = [1];
-        }]);
-
-        angular.bootstrap(this.$container, ["app"]);
-        assert.deepEqual($markup[widgetName]("option", "values"), [1], "value passed correctly");
-
-        var scope = $markup.scope();
-        scope.$apply(function() {
-            scope.value = [1, 2];
-        });
-        assert.deepEqual($markup[widgetName]("option", "values"), [1, 2], "value passed correctly");
-
-        $markup[widgetName]("option", "values", [1, 2, 3]);
-        assert.deepEqual(scope.value, [1, 2, 3], "value passed correctly");
-    });
-});
-
-$.each(["dxTagBox"/* , "dxFileUploader" */], function(_, widgetName) {
-    QUnit.test("ngmodel should be bound with values option for " + widgetName, function(assert) {
-        var $markup = $("<div></div>")
             .attr(inflector.dasherize(widgetName), "{bindingOptions: {values: 'value'}}")
             .appendTo(this.$controller);
 

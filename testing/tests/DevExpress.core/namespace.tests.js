@@ -8,6 +8,5 @@ require("bundles/modules/core");
 testGlobalExports({
     "DevExpress": DevExpress
 }, {
-    "VERSION": version,
-    "rtlEnabled": false
+    "VERSION": version
 });

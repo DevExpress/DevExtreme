@@ -59,20 +59,21 @@
 * @group base.common
 */
 
-@base-success:         #4CAF50;
+@base-success:         #8BC34A;
 /**
 * @name 90. Warning color
 * @type color
 * @group base.common
 */
 
-@base-warning:         #f0ad4e;
+@base-warning:         #FFC107;
+
 /**
 * @name 100. Danger color
 * @type color
 * @group base.common
 */
-@base-danger:          #E91E63;
+@base-danger:          #F44336;
 
 /**
 * @name 30. Link color
@@ -540,28 +541,25 @@
 * @type color
 * @group gallery
 */
-@gallery-indicator-focused-bg: darken(@base-accent, 15%);
+@gallery-indicator-focused-bg: @base-accent;
 
-@gallery-indicator-item-border-color: @base-accent;
+@gallery-indicator-item-border-color: fade(#000, 20%);
 @gallery-indicator-selected-border-color: fade(@gallery-indicator-bg, 80%);
 
-@gallery-navbutton-degradation-bg: @gallery-indicator-bg;
-
-
 @gallery-nav-arrow-color: @base-inverted-icon-color;
+@gallery-navbutton-color: fade(@base-text-color, 54%);
 /**
 * @name 30. Navigation button color
 * @type color
 * @group gallery
 */
-@gallery-navbutton-hover-color: fade(@base-accent, 50%);
+@gallery-navbutton-hover-color: @base-accent;
 /**
 * @name 30. Active navigation button color
 * @type color
 * @group gallery
 */
-@gallery-navbutton-active-color: fade(@base-accent, 70%);
-@gallery-navbutton-border-radius: @base-border-radius - 4px;
+@gallery-navbutton-active-color: @base-accent;
 
 // List
 /**
@@ -675,17 +673,6 @@
 
 // Popover
 @popover-arrow-bg: @overlay-content-bg;
-
-// Toast
-/**
-* @name 10. Text color
-* @type color
-* @group overlays.toasts
-*/
-@toast-color: #fff;
-@toast-shadow-color: transparent;
-
-@toast-border-radius: @base-border-radius-large;
 
 // DropDownEditor
 
@@ -852,13 +839,25 @@
 @toolbar-bg: @base-bg;
 
 @toolbar-color: @base-text-color;
+
+
 // Toast
+/**
+* @name 10. Text color
+* @type color
+* @group overlays.toasts
+*/
+@toast-color: #fff;
+
+@toast-border-radius: @base-border-radius;
+@toast-default-bg: #323232;
+
 /**
 * @name 20. Info background color
 * @type color
 * @group overlays.toasts
 */
-@toast-info-bg: @base-accent;
+@toast-info-bg: @toast-default-bg;
 /**
 * @name 30. Warning background color
 * @type color
@@ -903,30 +902,29 @@
 @loadpanel-content-border-radius: @base-border-radius-large;
 
 // Slider
-
 /**
 * @name 10. Slider bar background color
 * @type color
 * @group sliders
 */
-@slider-bar-bg: @base-border-color;
+@material-slider-bar-bg: fade(@base-text-color, 26%);
+@material-slider-bg: @base-accent;
+@material-slider-active: fade(@base-accent, 26%);
+@material-slider-disabled-bg: fade(@base-text-color, 26%);
 
 /**
-* @name 30. Selected range background color
+* @name 20. Slider tooltip background color
 * @type color
 * @group sliders
-* @paletteColorOpacity 1
 */
-@slider-range-bg: @base-accent;
-@slider-range-border-color: @slider-range-bg;
+@material-slider-tooltip-bg: @base-accent;
 
-@slider-handle-bg: @base-accent;
-@slider-handle-border-color: @base-bg;
-@slider-handle-active-bg: darken(@slider-handle-bg, 17%);
-@slider-handle-hover-bg: darken(@slider-handle-bg, 10%);
-@slider-handle-focused-bg: @slider-handle-hover-bg;
-
-@slider-handle-border-radius: @base-border-radius - 1px;
+/**
+* @name 30. Slider tooltip text color
+* @type color
+* @group sliders
+*/
+@material-slider-tooltip-color: @base-inverted-text-color;
 
 //ProgressBar
 
@@ -1925,10 +1923,6 @@
 
 // Images
 @list-item-icon-toggle-delete-bg: url(images/widgets/material/color-schemes/light/list/delete.png);
-@toast-info-icon-image-bg: url(images/widgets/material/color-schemes/light/toast/info.png);
-@toast-warning-icon-image-bg: url(images/widgets/material/color-schemes/light/toast/warning.png);
-@toast-error-icon-image-bg: url(images/widgets/material/color-schemes/light/toast/error.png);
-@toast-success-icon-image-bg: url(images/widgets/material/color-schemes/light/toast/success.png);
 @sctollbar-button-horizontal-decrement-bg: url(images/widgets/material/color-schemes/light/scrollable/scrollbar-horizontal-arrow-start.png) no-repeat;
 @sctollbar-button-horizontal-increment-bg: url(images/widgets/material/color-schemes/light/scrollable/scrollbar-horizontal-arrow-end.png) no-repeat;
 @sctollbar-button-vertical-decrement-bg: url(images/widgets/material/color-schemes/light/scrollable/scrollbar-vertical-arrow-up.png) no-repeat;
@@ -1994,18 +1988,18 @@
 * @type color
 * @group filterbuilder
 */
-@filterbuilder-plus-icon-color: fade(@base-success, 30%);
-@filterbuilder-plus-icon-hover-color: fadein(@filterbuilder-plus-icon-color, 20%);
-@filterbuilder-plus-icon-focus-color: fadein(@filterbuilder-plus-icon-color, 70%);
+@filterbuilder-plus-icon-color: fade(@base-success, 70%);
+@filterbuilder-plus-icon-hover-color: fadein(@filterbuilder-plus-icon-color, 100%);
+@filterbuilder-plus-icon-focus-color: fadein(@filterbuilder-plus-icon-color, 100%);
 
 /**
 * @name 10. Remove icon color
 * @type color
 * @group filterbuilder
 */
-@filterbuilder-remove-icon-color: fade(@base-danger, 30%);
-@filterbuilder-remove-icon-hover-color: fadein(@filterbuilder-remove-icon-color, 20%);
-@filterbuilder-remove-icon-focus-color: fadein(@filterbuilder-remove-icon-color, 70%);
+@filterbuilder-remove-icon-color: fade(@base-danger, 70%);
+@filterbuilder-remove-icon-hover-color: fadein(@filterbuilder-remove-icon-color, 100%);
+@filterbuilder-remove-icon-focus-color: fadein(@filterbuilder-remove-icon-color, 100%);
 
 /**
 * @name 10. Group operation button color

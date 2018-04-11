@@ -366,25 +366,6 @@ QUnit.test("showCheckBoxesMode option", function(assert) {
     assert.notOk($treeView.find(".dx-treeview-select-all-item").length, "selectAll item was not rendered");
 });
 
-QUnit.test("deprecated options selectAllEnabled and showCheckBoxes works correctly", function(assert) {
-    var $treeView = initTree({
-            items: [{ id: 1, html: "<b>Hello</b>" }],
-            showCheckBoxes: true,
-            selectAllEnabled: true
-        }),
-        instance = $treeView.dxTreeView("instance");
-
-    assert.ok($treeView.find(".dx-checkbox").length, "checkboxes was rendered");
-    assert.ok($treeView.find(".dx-treeview-select-all-item").length, "selectAll item was rendered");
-
-    instance.option("selectAllEnabled", false);
-    assert.ok($treeView.find(".dx-checkbox").length, "checkboxes was rendered");
-    assert.notOk($treeView.find(".dx-treeview-select-all-item").length, "selectAll item was not rendered");
-
-    instance.option("showCheckBoxes", false);
-    assert.notOk($treeView.find(".dx-checkbox").length, "there are no checkboxes");
-});
-
 QUnit.test("Repaint treeView on every dataSource modified - insert", function(assert) {
     var store = new ArrayStore({
         key: "id",

@@ -692,6 +692,54 @@ QUnit.test("Call forEachNode method with one parameter", function(assert) {
     assert.deepEqual(spy.getCall(2).args[0], this.dataController.getNodeByKey(3));
 });
 
+// T621620
+QUnit.test("Initialize from dataSource with hierarchical structure when 'parentIdExpr' option is specified", function(assert) {
+    // arrange
+    var items,
+        array = [
+            { name: "Category1", phone: "55-55-55", key: "key1" },
+            { name: "Category2", phone: "98-75-21", key: "key2", parentId: "key1", items: [
+                { name: "SubCategory1", phone: "55-66-77", key: "key3", parentId: "key2" },
+                { name: "SubCategory2", phone: "56-76-79", key: "key4", parentId: "key2" }]
+            }
+        ],
+        dataSource = createDataSource(array);
+
+    this.applyOptions({
+        itemsExpr: "items",
+        dataStructure: "tree",
+        keyExpr: "key",
+        parentIdExpr: "parentId",
+        expandedRowKeys: ["key2"]
+    });
+    this.dataController.setDataSource(dataSource);
+
+    // act
+    dataSource.load();
+
+    // assert
+    items = this.dataController.items();
+    assert.equal(items.length, 4, "count items");
+
+    assert.equal(items[0].key, "key1", "key of first item");
+    assert.deepEqual(items[0].data, { name: "Category1", phone: "55-55-55", key: "key1", parentId: 0 }, "data of first item");
+    assert.equal(items[0].level, 0, "level of first item");
+
+    assert.equal(items[1].key, "key2", "key of second item");
+    assert.deepEqual(items[1].data, { name: "Category2", phone: "98-75-21", key: "key2", parentId: 0 }, "data of second item");
+    assert.equal(items[1].level, 0, "level of second item");
+
+    assert.equal(items[2].key, "key3", "key of third item");
+    assert.deepEqual(items[2].data, { name: "SubCategory1", phone: "55-66-77", key: "key3", parentId: "key2" }, "data of third item");
+    assert.equal(items[2].level, 1, "level of third item");
+    assert.equal(items[2].node.parent.key, items[1].key, "third item has parentKey");
+
+    assert.equal(items[3].key, "key4", "key of fourth item");
+    assert.deepEqual(items[3].data, { name: "SubCategory2", phone: "56-76-79", key: "key4", parentId: "key2" }, "data of fourth item");
+    assert.equal(items[3].level, 1, "level of fourth item");
+    assert.equal(items[3].node.parent.key, items[1].key, "fourth item has parentKey");
+});
+
 QUnit.module("Expand/Collapse nodes", { beforeEach: setupModule, afterEach: teardownModule });
 
 QUnit.test("Expand node (plain structure)", function(assert) {

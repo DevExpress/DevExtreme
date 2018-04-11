@@ -66,19 +66,6 @@ var DropDownList = DropDownEditor.inherit({
         this.option("value", value);
     },
 
-    _setDeprecatedOptions: function() {
-        this.callBase();
-
-        extend(this._deprecatedOptions, {
-            /**
-            * @name dxDropDownListOptions_pagingEnabled
-            * @publicName pagingEnabled
-            * @deprecated DataSourceOptions_paginate
-            */
-            "pagingEnabled": { since: "15.1", message: "Use the 'dataSource.paginate' option instead" }
-        });
-    },
-
     _getDefaultOptions: function() {
         return extend(this.callBase(), extend(DataExpressionMixin._dataExpressionDefaultOptions(), {
             /**
@@ -148,14 +135,6 @@ var DropDownList = DropDownEditor.inherit({
             * @ref
             */
             selectedItem: null,
-
-            /**
-            * @name dxDropDownListOptions_pagingEnabled
-            * @publicName pagingEnabled
-            * @type boolean
-            * @default undefined
-            */
-            pagingEnabled: undefined,
 
             /**
             * @name dxDropDownListOptions_noDataText
@@ -637,11 +616,8 @@ var DropDownList = DropDownEditor.inherit({
     },
 
     _dataSourceOptions: function() {
-        this._suppressDeprecatedWarnings();
-        var pagingEnabled = this.option("pagingEnabled");
-        this._resumeDeprecatedWarnings();
         return {
-            paginate: commonUtils.ensureDefined(pagingEnabled, false)
+            paginate: false
         };
     },
 
@@ -893,7 +869,6 @@ var DropDownList = DropDownEditor.inherit({
             case "searchEnabled":
             case "showDataBeforeSearch":
             case "searchExpr":
-            case "pagingEnabled":
                 this._invalidate();
                 break;
             case "onContentReady":

@@ -438,8 +438,6 @@ Point.prototype = {
     updateLabelCoord: _noop,
     drawLabel: _noop,
     correctLabelPosition: _noop,
-    setMaxLabelLength: _noop,
-    getMaxLabelLength: _noop,
     getMinValue: _noop,
     getMaxValue: _noop,
     dispose: function() {
@@ -451,15 +449,15 @@ Point.prototype = {
     },
 
     getTooltipFormatObject: function(tooltip) {
-        var that = this,
-            tooltipFormatObject = that._getFormatObject(tooltip),
-            sharedTooltipValuesArray = [],
-            tooltipStackPointsFormatObject = [];
+        const that = this;
+        const tooltipFormatObject = that._getFormatObject(tooltip);
+        const sharedTooltipValuesArray = [];
+        const tooltipStackPointsFormatObject = [];
 
         if(that.stackPoints) {
             _each(that.stackPoints, function(_, point) {
                 if(!point.isVisible()) return;
-                var formatObject = point._getFormatObject(tooltip);
+                const formatObject = point._getFormatObject(tooltip);
                 tooltipStackPointsFormatObject.push(formatObject);
                 sharedTooltipValuesArray.push(formatObject.seriesName + ": " + formatObject.valueText);
             });
@@ -469,6 +467,15 @@ Point.prototype = {
                 valueText: sharedTooltipValuesArray.join("\n"),
                 stackName: that.stackPoints.stackName
             });
+        }
+
+        const aggregationInfo = that.aggregationInfo;
+        if(aggregationInfo) {
+            const axis = that.series.getArgumentAxis();
+            const rangeText = axis.formatRange(aggregationInfo.intervalStart, aggregationInfo.intervalEnd, aggregationInfo.aggregationInterval);
+            if(rangeText) {
+                tooltipFormatObject.valueText += `\n${rangeText}`;
+            }
 
         }
         return tooltipFormatObject;

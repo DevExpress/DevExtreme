@@ -99,24 +99,6 @@ var DateBox = DropDownEditor.inherit({
         this.callBase();
 
         extend(this._deprecatedOptions, {
-            /**
-            * @name dxDateBoxOptions_format
-            * @publicName format
-            * @deprecated dxDateBoxOptions_type
-            * @inheritdoc
-            */
-            "format": { since: "16.1", alias: "type" },
-
-            /**
-            * @name dxDateBoxOptions_formatString
-            * @publicName formatString
-            * @deprecated dxDateBoxOptions_displayFormat
-            * @inheritdoc
-            */
-            "formatString": { since: "16.1", alias: "displayFormat" },
-
-            "useNative": { since: "15.1", message: "'useNative' option is deprecated in 15.1. Use the 'pickerType' option instead" },
-            "useCalendar": { since: "15.1", message: "'useCalendar' option is deprecated in 15.1. Use the 'pickerType' option instead" },
             "maxZoomLevel": { since: "18.1", alias: "calendarOptions.maxZoomLevel" },
             "minZoomLevel": { since: "18.1", alias: "calendarOptions.minZoomLevel" }
         });
@@ -180,15 +162,6 @@ var DateBox = DropDownEditor.inherit({
             */
 
             /**
-            * @name dxDateBoxOptions_useCalendar
-            * @publicName useCalendar
-            * @type boolean
-            * @default false
-            * @deprecated dxDateBoxOptions_pickerType
-            */
-            useCalendar: false,
-
-            /**
             * @name dxDateBoxOptions_displayFormat
             * @publicName displayFormat
             * @type format
@@ -234,15 +207,6 @@ var DateBox = DropDownEditor.inherit({
            * @deprecated dxDateBoxOptions_calendarOptions
            */
             minZoomLevel: "century",
-
-            /**
-            * @name dxDateBoxOptions_useNative
-            * @publicName useNative
-            * @type boolean
-            * @default true
-            * @deprecated dxDateBoxOptions_pickerType
-            */
-            useNative: true,
 
             /**
             * @name dxDateBoxOptions_pickerType
@@ -391,12 +355,11 @@ var DateBox = DropDownEditor.inherit({
     _initOptions: function(options) {
         this._userOptions = extend({}, options);
         this.callBase(options);
-        this._updatePickerOptions(this._userOptions);
+        this._updatePickerOptions();
     },
 
-    _updatePickerOptions: function(userOptions) {
-        var pickerType = this._getPickerTypeByDeprecatedOptions(userOptions);
-
+    _updatePickerOptions: function() {
+        var pickerType = this.option("pickerType");
         var type = this.option("type");
 
         if(pickerType === PICKER_TYPE.list && (type === TYPE.datetime || type === TYPE.date)) {
@@ -409,26 +372,6 @@ var DateBox = DropDownEditor.inherit({
 
         this.option("showDropDownButton", devices.real().platform !== "generic" || pickerType !== PICKER_TYPE["native"]);
         this._pickerType = pickerType;
-    },
-
-    _getPickerTypeByDeprecatedOptions: function(userOptions) {
-        return userOptions.pickerType
-            ? userOptions.pickerType
-            : typeUtils.isDefined(userOptions.useCalendar) || typeUtils.isDefined(userOptions.useNative)
-                ? this._getPickerType()
-                : this._pickerType || this.option("pickerType");
-    },
-
-    _getPickerType: function() {
-        if(this.option().useCalendar) {
-            return this.option("type") === TYPE.time ? PICKER_TYPE.list : PICKER_TYPE.calendar;
-        }
-
-        if(this.option().useNative) {
-            return PICKER_TYPE["native"];
-        }
-
-        return PICKER_TYPE.rollers;
     },
 
     _init: function() {
@@ -473,10 +416,8 @@ var DateBox = DropDownEditor.inherit({
         var pickerType = this._pickerType;
 
         if(pickerType === PICKER_TYPE.rollers) {
-            return this.option().useCalendar ? STRATEGY_NAME.calendar : STRATEGY_NAME.dateView;
-        }
-
-        if(pickerType === PICKER_TYPE["native"]) {
+            return STRATEGY_NAME.dateView;
+        } else if(pickerType === PICKER_TYPE.native) {
             return STRATEGY_NAME["native"];
         }
 
@@ -812,14 +753,6 @@ var DateBox = DropDownEditor.inherit({
 
     _optionChanged: function(args) {
         switch(args.name) {
-            case "useCalendar":
-                this._updatePickerOptions({ useCalendar: args.value });
-                this._refreshStrategy();
-                break;
-            case "useNative":
-                this._updatePickerOptions({ useNative: args.value });
-                this._refreshStrategy();
-                break;
             case "showClearButton":
                 this.callBase.apply(this, arguments);
                 this._updateSize();

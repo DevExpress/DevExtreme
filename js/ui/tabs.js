@@ -144,12 +144,6 @@ var Tabs = CollectionWidget.inherit({
             * @type String
             */
             /**
-            * @name dxTabsItemTemplate_iconSrc
-            * @publicName iconSrc
-            * @type String
-            * @deprecated dxTabsItemTemplate_icon
-            */
-            /**
             * @name dxTabsItemTemplate_badge
             * @publicName badge
             * @type String
@@ -240,13 +234,11 @@ var Tabs = CollectionWidget.inherit({
                 $container.text(String(data));
             }
 
-            var icon = data.icon,
-                iconSrc = data.iconSrc,
-                $iconElement = iconUtils.getImageContainer(icon || iconSrc);
+            var $iconElement = iconUtils.getImageContainer(data.icon);
 
             $container.wrapInner($("<span>").addClass(TABS_ITEM_TEXT_CLASS));
             $iconElement && $iconElement.prependTo($container);
-        }).bind(this), ["text", "html", "icon", "iconSrc"], this.option("integrationOptions.watchMethod"));
+        }).bind(this), ["text", "html", "icon"], this.option("integrationOptions.watchMethod"));
     },
 
     _itemClass: function() {

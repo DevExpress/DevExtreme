@@ -39,7 +39,7 @@ QUnit.module("Tabs markup", () => {
         const tabsElement = $("#tabs").dxTabs({
             items: [
                 { text: "0", icon: "custom" },
-                { text: "1", iconSrc: "http://1.png" },
+                { text: "1", icon: "http://1.png" },
                 { text: "2" }
             ]
         });
@@ -216,11 +216,5 @@ QUnit.module("Default template", moduleConfig, () => {
         const $content = this.prepareItemTest({ icon: "fa fa-icon" });
 
         assert.equal($content.filter(".fa.fa-icon").length, 1);
-    });
-
-    QUnit.test("template should be rendered correctly with imageSrc", (assert) => {
-        const $content = this.prepareItemTest({ iconSrc: "test.jpg" });
-
-        assert.equal($content.filter(".dx-icon").attr("src"), "test.jpg");
     });
 });

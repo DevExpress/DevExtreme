@@ -58,9 +58,10 @@ var FilterBuilderView = modules.View.inherit({
 
         this._filterBuilder = this._createComponent($filterBuilderContainer, FilterBuilder, extend({
             value: this.option("filterValue"),
-            customOperations: customOperations,
             fields: fields
-        }, this.option("filterBuilder")));
+        }, this.option("filterBuilder"), {
+            customOperations: customOperations
+        }));
 
         this._createComponent($contentElement, ScrollView, { direction: "both" });
     },

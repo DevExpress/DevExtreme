@@ -1879,21 +1879,6 @@ QUnit.test("file list should not be extended if the 'multiple' option is false",
 });
 
 
-QUnit.module("deprecated options", moduleConfig);
-
-QUnit.test("the 'values' option should work correctly", function(assert) {
-    var $fileUploader = $("#fileuploader").dxFileUploader({
-            uploadMode: "useButtons"
-        }),
-        fileUploader = $fileUploader.dxFileUploader("instance");
-
-    simulateFileChoose($fileUploader, fakeFile);
-    assert.deepEqual(fileUploader.option("values"), [fakeFile], "the 'values' option works correctly with reading");
-
-    fileUploader.option("values", []);
-    assert.deepEqual(fileUploader.option("value"), [], "the 'values' option works correctly with writing");
-});
-
 QUnit.module("disabled option");
 
 QUnit.test("file input should be hidden when widget is disabled", function(assert) {

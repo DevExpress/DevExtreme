@@ -40,8 +40,6 @@ var COMPONENT_CLASS = "dx-scheduler-work-space",
     WORKSPACE_WITH_ODD_CELLS_CLASS = "dx-scheduler-work-space-odd-cells",
     WORKSPACE_WITH_OVERLAPPING_CLASS = "dx-scheduler-work-space-overlapping",
 
-    WORKSPACE_GROUPED_ATTR = "dx-group-row-count",
-
     TIME_PANEL_CLASS = "dx-scheduler-time-panel",
     TIME_PANEL_CELL_CLASS = "dx-scheduler-time-panel-cell",
     TIME_PANEL_ROW_CLASS = "dx-scheduler-time-panel-row",
@@ -1081,10 +1079,9 @@ var SchedulerWorkSpace = Widget.inherit({
         var $container = this._getGroupHeaderContainer(),
             groupCount = this._getGroupCount(),
             cellTemplates = [];
-
         if(groupCount) {
             var groupRows = this._makeGroupRows(this.option("groups"));
-            this._attachGroupCountAttr(groupRows.elements.length);
+            this._attachGroupCountAttr(groupCount, groupRows);
             $container.append(groupRows.elements);
             cellTemplates = groupRows.cellTemplates;
         } else {
@@ -1101,11 +1098,15 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _detachGroupCountAttr: function() {
-        this.$element().removeAttr(WORKSPACE_GROUPED_ATTR);
+        var groupedAttr = this._groupedStrategy.getGroupCountAttr();
+
+        this.$element().removeAttr(groupedAttr.attr);
     },
 
-    _attachGroupCountAttr: function(groupRowCount) {
-        this.$element().attr(WORKSPACE_GROUPED_ATTR, groupRowCount);
+    _attachGroupCountAttr: function(groupRowCount, groupRows) {
+        var groupedAttr = this._groupedStrategy.getGroupCountAttr(groupRowCount, groupRows);
+
+        this.$element().attr(groupedAttr.attr, groupedAttr.count);
     },
 
     headerPanelOffsetRecalculate: function() {
@@ -1626,6 +1627,10 @@ var SchedulerWorkSpace = Widget.inherit({
         return this._$groupTable.outerWidth();
     },
 
+    getWorkSpaceLeftOffset: function() {
+        return this._groupedStrategy.getLeftOffset();
+    },
+
     _getCellCoordinatesByIndex: function(index) {
         var cellIndex = Math.floor(index / this._getRowCount()),
             rowIndex = index - this._getRowCount() * cellIndex;
@@ -2066,23 +2071,15 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     getGroupBounds: function(coordinates) {
-        var cellIndex = this.getCellIndexByCoordinates(coordinates),
-            cellCount = this._getCellCount(),
-            groupIndex = Math.floor(cellIndex / cellCount),
+        var cellCount = this._getCellCount(),
             $cells = this._getCells(),
             cellWidth = this.getCellWidth(),
-            startCellIndex = groupIndex * cellCount,
-
-            startOffset = $cells.eq(startCellIndex).offset().left - cellWidth / 2,
-            endOffset = $cells.eq(startCellIndex + cellCount - 1).offset().left + cellWidth + cellWidth / 2;
-
-        var result = {
-            left: startOffset,
-            right: endOffset
-        };
+            result = this._groupedStrategy.getGroupBoundsOffset(cellCount, $cells, cellWidth, coordinates);
 
         if(this._isRTL()) {
-            result.left = endOffset - cellWidth * 2;
+            var startOffset = result.left;
+
+            result.left = result.right - cellWidth * 2;
             result.right = startOffset + cellWidth * 2;
         }
 

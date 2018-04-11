@@ -1,6 +1,7 @@
 .dx-size-default() {
     @MATERIAL_GALLERY_INDICATOR_SIZE: 8px;
     @MATERIAL_GALLERY_INDICATOR_SELECTED_SIZE: 12px;
+    @MATERIAL_GALLERY_BUTTON_PADDING: 8px;
 }
 
 .dx-size-compact() {
@@ -15,7 +16,6 @@
         top: 0;
         width: 34%;
         height: 100%;
-        background: @gallery-navbutton-degradation-bg;
         background: transparent;
         cursor: pointer;
 
@@ -33,8 +33,11 @@
             content: '';
             position: absolute;
             width: 32px;
-            height: 100%;
-            .border-radius(@gallery-navbutton-border-radius);
+            height: 32px;
+            background: @gallery-navbutton-color;
+            .border-radius(50%);
+            top: 50%;
+            margin-top: -16px;
         }
 
         &:before {
@@ -50,11 +53,11 @@
         .dx-icon-chevronleft;
 
          &:after {
-            left: 0;
+            left: @MATERIAL_GALLERY_BUTTON_PADDING;
         }
 
         &:before {
-            left: 0;
+            left: @MATERIAL_GALLERY_BUTTON_PADDING - 1;
             right: auto;
             margin-left: 0;
         }
@@ -64,11 +67,11 @@
         .dx-icon-chevronright;
 
          &:after {
-            right: 0;
+            right: @MATERIAL_GALLERY_BUTTON_PADDING;
         }
 
         &:before {
-            right: 0;
+            right: @MATERIAL_GALLERY_BUTTON_PADDING - 1;
             left: auto;
         }
     }
