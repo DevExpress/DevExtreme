@@ -2860,7 +2860,7 @@ declare module DevExpress.ui {
         applyChanges(): void;
 
         /** Discards the pending state to null */
-        cnacelChanges(): void;
+        cancelChanges(): void;
     }
     
     
