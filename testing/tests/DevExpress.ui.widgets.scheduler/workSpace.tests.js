@@ -429,10 +429,10 @@ QUnit.testStart(function() {
             secondCellData = this.instance.$element().find(".dx-scheduler-date-table-cell").eq(36).data("dxCellData");
 
         assert.deepEqual(firstCellData.startDate, new Date(2018, 2, 16, 9), "cell has right startDate");
-        assert.deepEqual(firstCellData.endDate, new Date(2018, 2, 16, 9, 30), "cell has right endtDate");
+        assert.deepEqual(firstCellData.endDate, new Date(2018, 2, 16, 9, 30), "cell has right endDate");
 
         assert.deepEqual(secondCellData.startDate, new Date(2018, 2, 16, 12), "cell has right startDate");
-        assert.deepEqual(secondCellData.endDate, new Date(2018, 2, 16, 12, 30), "cell has right endtDate");
+        assert.deepEqual(secondCellData.endDate, new Date(2018, 2, 16, 12, 30), "cell has right endDate");
     });
 })("Work Space Day");
 
@@ -2110,7 +2110,7 @@ QUnit.testStart(function() {
         assert.equal(index, 3, "Index is OK");
     });
 
-    QUnit.test("Grouped view", function(assert) {
+    QUnit.test("Horizontal grouped view", function(assert) {
         this.createInstance("Week", {
             width: 800,
             height: 800,
@@ -2119,6 +2119,21 @@ QUnit.testStart(function() {
         var index = this.instance.getCellIndexByCoordinates({ left: 200, top: 55 });
 
         assert.equal(index, 16, "Index is OK");
+    });
+
+    QUnit.test("Vertical grouped view", function(assert) {
+        this.createInstance("Week", {
+            width: 800,
+            height: 800,
+            groupOrientation: "vertical"
+        }, true);
+
+        stubInvokeMethod(this.instance);
+        this.instance.option("groups", [{ name: "a", items: [{ id: 1, text: "a.1" }, { id: 2, text: "a.2" }] }]);
+
+        var index = this.instance.getCellIndexByCoordinates({ left: 200, top: 55 });
+
+        assert.equal(index, 7, "Index is OK");
     });
 
     QUnit.test("Month view", function(assert) {
