@@ -640,11 +640,11 @@ function getMergedOperations(customOperations, betweenCaption) {
     return result;
 }
 
-function isMatchedCondition(filter, addedFilterDataField, operations) {
-    return filter[0] === addedFilterDataField && operations.indexOf(filter[1]) !== -1;
+function isMatchedCondition(filter, addedFilterDataField) {
+    return filter[0] === addedFilterDataField;
 }
 
-function syncFilters(filter, addedFilter, operations) {
+function syncFilters(filter, addedFilter) {
     var canPush = addedFilter[2] !== null;
 
     if(filter === null || filter.length === 0) {
@@ -652,7 +652,7 @@ function syncFilters(filter, addedFilter, operations) {
     }
 
     if(isCondition(filter)) {
-        var containsAddedFilter = isMatchedCondition(filter, addedFilter[0], operations);
+        var containsAddedFilter = isMatchedCondition(filter, addedFilter[0]);
         if(!canPush) {
             return !containsAddedFilter ? filter : null;
         }
@@ -671,7 +671,7 @@ function syncFilters(filter, addedFilter, operations) {
     var result = [];
     filter.forEach(function(item) {
         if(isCondition(item)) {
-            if(isMatchedCondition(item, addedFilter[0], operations)) {
+            if(isMatchedCondition(item, addedFilter[0])) {
                 if(canPush) {
                     result.push(addedFilter);
                     canPush = false;
@@ -698,35 +698,24 @@ function syncFilters(filter, addedFilter, operations) {
     return result.length === 1 ? result[0] : result;
 }
 
-function getMatchedCondition(filter, dataField, operations) {
-    if(filter === null || filter.length === 0) return null;
+function getMatchedConditions(filter, dataField) {
+    if(filter === null || filter.length === 0) return [];
 
     if(isCondition(filter)) {
-        if(isMatchedCondition(filter, dataField, operations)) {
-            return filter;
+        if(isMatchedCondition(filter, dataField)) {
+            return [filter];
         } else {
-            return null;
+            return [];
         }
     }
 
     var groupValue = getGroupValue(filter);
     if(groupValue !== AND_GROUP_OPERATION) {
-        return null;
+        return [];
     }
 
-    var result = null,
-        hasDataFieldValue = false;
-    filter.forEach(function(item) {
-        if(isCondition(item)) {
-            if(isMatchedCondition(item, dataField, operations)) {
-                if(hasDataFieldValue) {
-                    result = null;
-                } else {
-                    result = item;
-                    hasDataFieldValue = true;
-                }
-            }
-        }
+    var result = filter.filter(function(item) {
+        return isCondition(item) && isMatchedCondition(item, dataField);
     });
 
     return result;
@@ -776,5 +765,5 @@ exports.getFilterExpression = getFilterExpression;
 exports.getCustomOperation = getCustomOperation;
 exports.getMergedOperations = getMergedOperations;
 exports.syncFilters = syncFilters;
-exports.getMatchedCondition = getMatchedCondition;
+exports.getMatchedConditions = getMatchedConditions;
 exports.filterHasField = filterHasField;
