@@ -1466,7 +1466,7 @@ testComponentDefaults(Scheduler,
     {},
     {
         _appointmentTooltipOffset: { x: 0, y: 11 },
-        _appointmentTooltipButtonsPosition: "bottom",
+        _appointmentTooltipButtonsPosition: "top",
         _appointmentTooltipCloseButton: true,
         _useAppointmentColorForTooltip: true,
         _appointmentTooltipOpenButtonText: null,
