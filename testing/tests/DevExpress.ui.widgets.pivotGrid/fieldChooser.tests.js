@@ -797,25 +797,21 @@ if(devices.current().deviceType === "desktop") {
 }
 
 QUnit.test("Change filter values second time", function(assert) {
-    var dataSourceOptions = {
-        columnFields: [
-            { index: 0, caption: "Field 2", area: 'column', allowFiltering: true },
-            { index: 1, caption: "Field 3", area: 'column', filterValues: [8], allowFiltering: true }
-        ],
-        fieldValues: [
-            [{ value: 1 }, { value: 2 }, { value: 4 }, { value: 5 }],
-            [{ value: 6 }, { value: 7 }, { value: 8 }, { value: 9 }, { value: 10 }]
-        ]
-    };
+    this.fieldChooser = this.$container.dxPivotGridFieldChooser({
+        dataSource: new PivotGridDataSource({
+            fields: [
+                { index: 0, dataField: "field1", area: 'column', allowFiltering: true },
+                { index: 1, dataField: "field2", area: 'column', filterValues: [8], allowFiltering: true }
+            ],
+            store: [
+                { field1: 1, field2: 6 },
+                { field1: 2, field2: 7 },
+                { field1: 4, field2: 8 }
+            ]
+        })
+    }).dxPivotGridFieldChooser("instance");
 
-    this.setup(dataSourceOptions);
-
-    assert.ok(this.fieldChooser);
-    assert.ok(this.dataSource);
-
-    this.dataSource.field = function(id, options) {
-        $.extend(dataSourceOptions.columnFields[id], options);
-    };
+    this.clock.tick(500);
 
     var $filterIndicatorsInColumnArea = this.$container.find(".dx-area-fields[group=column] .dx-header-filter");
     assert.equal($filterIndicatorsInColumnArea.length, 2, 'filter indicators count');
@@ -826,14 +822,14 @@ QUnit.test("Change filter values second time", function(assert) {
 
     // act
     var $listItems = $(".dx-header-filter-menu .dx-list .dx-list-item");
-    assert.equal($listItems.length, 5);
+    assert.equal($listItems.length, 3);
     $listItems.eq(0).trigger("dxclick");
 
     var $buttons = $(".dx-header-filter-menu .dx-button");
     assert.equal($buttons.length, 2);
 
     $buttons.eq(0).trigger("dxclick");
-    this.clock.tick();
+    this.clock.tick(500);
 
     $filterIndicatorsInColumnArea = this.$container.find(".dx-area-fields[group=column] .dx-header-filter");
     $filterIndicatorsInColumnArea.eq(1).trigger("dxclick");
@@ -843,8 +839,8 @@ QUnit.test("Change filter values second time", function(assert) {
     var $filterMenuList = $(".dx-header-filter-menu .dx-list");
     assert.equal($filterMenuList.length, 1);
 
-    assert.equal($filterMenuList.find(".dx-list-item").length, 5, 'list item count');
-    assert.equal($filterMenuList.find(".dx-list-item-selected").length, 2, 'list selected item count');
+    assert.equal($filterMenuList.find(".dx-list-item").length, 3, 'list item count');
+    assert.equal($filterMenuList.find(".dx-checkbox-checked").length, 2, 'list selected item count');
 });
 
 QUnit.test("Change filter type for not group field", function(assert) {
@@ -1556,7 +1552,7 @@ QUnit.test("create event args from field", function(assert) {
     eventArgs = onContextMenuPreparingHandler.lastCall.args[0];
 
     assert.ok(eventArgs.event);
-    assert.strictEqual(eventArgs.field, this.fields[1]);
+    assert.deepEqual(eventArgs.field, this.fields[1]);
     assert.strictEqual(eventArgs.area, this.fields[1].area);
     assert.notOk(e.isDefaultPrevented(), "default behavior should not be prevented");
 });
@@ -2079,6 +2075,20 @@ QUnit.test("Change sort order", function(assert) {
 
     var state = this.fieldChooser.option("state").fields;
     assert.equal(state[0].sortOrder, "desc");
+});
+
+QUnit.test("Change sort order second time", function(assert) {
+    this.setup({ fields: [{ index: 0, dataField: "Field1", area: 'row', allowSorting: true }] });
+    this.clock.tick(500);
+
+    // act
+    var $sortIndicator = this.$container.find(".dx-area-fields[group=row] .dx-sort");
+    $sortIndicator.parent().trigger("dxclick");
+    $sortIndicator = this.$container.find(".dx-area-fields[group=row] .dx-sort");
+    $sortIndicator.parent().trigger("dxclick");
+
+    var state = this.fieldChooser.option("state").fields;
+    assert.equal(state[0].sortOrder, "asc");
 });
 
 QUnit.test("Apply filters", function(assert) {
