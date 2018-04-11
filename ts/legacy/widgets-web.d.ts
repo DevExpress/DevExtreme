@@ -2850,8 +2850,6 @@ declare module DevExpress.ui {
 
 
     }
-    
-    
     export interface dxFilterBuilderField {
         
 
