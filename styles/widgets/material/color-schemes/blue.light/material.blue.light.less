@@ -541,28 +541,25 @@
 * @type color
 * @group gallery
 */
-@gallery-indicator-focused-bg: darken(@base-accent, 15%);
+@gallery-indicator-focused-bg: @base-accent;
 
-@gallery-indicator-item-border-color: @base-accent;
+@gallery-indicator-item-border-color: fade(#000, 20%);
 @gallery-indicator-selected-border-color: fade(@gallery-indicator-bg, 80%);
 
-@gallery-navbutton-degradation-bg: @gallery-indicator-bg;
-
-
 @gallery-nav-arrow-color: @base-inverted-icon-color;
+@gallery-navbutton-color: fade(@base-text-color, 54%);
 /**
 * @name 30. Navigation button color
 * @type color
 * @group gallery
 */
-@gallery-navbutton-hover-color: fade(@base-accent, 50%);
+@gallery-navbutton-hover-color: @base-accent;
 /**
 * @name 30. Active navigation button color
 * @type color
 * @group gallery
 */
-@gallery-navbutton-active-color: fade(@base-accent, 70%);
-@gallery-navbutton-border-radius: @base-border-radius - 4px;
+@gallery-navbutton-active-color: @base-accent;
 
 // List
 /**
