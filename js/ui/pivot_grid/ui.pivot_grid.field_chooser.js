@@ -384,7 +384,6 @@ var FieldChooser = BaseFieldChooser.inherit({
 
         if(targetFieldElement.length) {
             field = targetFieldElement.data("field");
-
         }
 
         if(targetGroupElement.length) {
@@ -609,7 +608,7 @@ var FieldChooser = BaseFieldChooser.inherit({
     _renderAreaFields: function($container, area) {
         var that = this,
             dataSource = that._dataSource,
-            fields = dataSource ? dataSource.getAreaFields(area, true) : [];
+            fields = dataSource ? extend(true, [], dataSource.getAreaFields(area, true)) : [];
 
         $container.empty();
         each(fields, function(_, field) {

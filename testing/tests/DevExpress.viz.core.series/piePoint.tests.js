@@ -913,6 +913,7 @@ QUnit.module("Label", {
 });
 
 QUnit.test("Draw label, position outside (-0.1 < angleFunctions.cos < 0.1)", function(assert) {
+    this.options.label.position = 'outside';
     var label = createCorrectionLabel.call(this, { 0: 300, 10: 270, 20: 240 });
 
     assert.equal(label.shift.args[0][0], 290);
@@ -928,6 +929,7 @@ QUnit.test("Draw label, position is invalid", function(assert) {
 });
 
 QUnit.test("Label position outside (angleFunctions.cos > 0.1)", function(assert) {
+    this.options.label.position = 'outside';
     var label = createCorrectionLabel.call(this, { 0: 300, 10: 10, 20: 240 });
 
     assert.equal(label.shift.args[0][0], 448);
@@ -935,10 +937,35 @@ QUnit.test("Label position outside (angleFunctions.cos > 0.1)", function(assert)
 });
 
 QUnit.test("Label position outside (angleFunctions.cos < -0.1)", function(assert) {
+    this.options.label.position = 'outside';
     var label = createCorrectionLabel.call(this, { 0: 300, 10: 180, 20: 240 });
 
     assert.equal(label.shift.args[0][0], 130);
     assert.equal(label.shift.args[0][1], 145);
+});
+
+QUnit.test("Draw label, position columns and angleFunctions.cos < 0 (> -0.1)", function(assert) {
+    this.options.label.position = 'columns';
+    var label = createCorrectionLabel.call(this, { 0: 300, 10: 269, 20: 240 });
+
+    assert.equal(label.shift.args[0][0], 277);
+    assert.equal(label.shift.args[0][1], 295);
+});
+
+QUnit.test("Draw label, position columns and angleFunctions.cos > 0 (< 0.1)", function(assert) {
+    this.options.label.position = 'columns';
+    var label = createCorrectionLabel.call(this, { 0: 300, 10: 271, 20: 240 });
+
+    assert.equal(label.shift.args[0][0], 303);
+    assert.equal(label.shift.args[0][1], 295);
+});
+
+QUnit.test("Draw label, position columns and angleFunctions.cos === 0", function(assert) {
+    this.options.label.position = 'columns';
+    var label = createCorrectionLabel.call(this, { 0: 300, 10: 270, 20: 240 });
+
+    assert.equal(label.shift.args[0][0], 280);
+    assert.equal(label.shift.args[0][1], 295);
 });
 
 QUnit.test("Draw label, position inside", function(assert) {
@@ -1002,18 +1029,6 @@ QUnit.test("not columns", function(assert) {
     var coord = point._correctLabelCoord({ x: 10, y: 10 });
 
     assert.deepEqual(coord, { x: 10, y: 10 });
-});
-
-QUnit.test("Point can return maxLabelLength", function(assert) {
-    // arrange
-    var point = createPoint(this.series, this.data, this.options);
-    point.setMaxLabelLength(30);
-
-    // act
-    var length = point.getMaxLabelLength();
-
-    // arrange
-    assert.equal(length, 30);
 });
 
 QUnit.module("update Coord", {
@@ -1084,7 +1099,7 @@ QUnit.test("Draw label (area of label < minY area of canvas)", function(assert) 
     this.series._visibleArea = { minX: 0, maxX: 600, minY: 300, maxY: 600 };
     var label = createCorrectionLabel.call(this, { 0: 300, 10: 270, 20: 240 });
 
-    assert.equal(label.shift.args[0][0], 290);
+    assert.equal(label.shift.args[0][0], 280);
     assert.equal(label.shift.args[0][1], 300);
 });
 
@@ -1092,7 +1107,7 @@ QUnit.test("Draw label (area of label > maxY area of canvas)", function(assert) 
     this.series._visibleArea = { minX: 0, maxX: 600, minY: 0, maxY: 300 };
     var label = createCorrectionLabel.call(this, { 0: 300, 10: 270, 20: 240 });
 
-    assert.equal(label.shift.args[0][0], 339);
+    assert.equal(label.shift.args[0][0], 242);
     assert.equal(label.shift.args[0][1], 290);
 });
 
@@ -1100,7 +1115,7 @@ QUnit.test("Draw label (area of label < minY area of canvas), first drawing", fu
     this.series._visibleArea = { minX: 0, maxX: 600, minY: 300, maxY: 600 };
     var label = createCorrectionLabel.call(this, { 0: 300, 10: 270, 20: 240 }, true);
 
-    assert.equal(label.shift.args[0][0], 290);
+    assert.equal(label.shift.args[0][0], 280);
     assert.equal(label.shift.args[0][1], 300);
 });
 
@@ -1109,7 +1124,7 @@ QUnit.test("Draw label (area of label > maxY area of canvas), first drawing", fu
     this.options.label.radialOffset = 30;
     var label = createCorrectionLabel.call(this, { 0: 300, 10: 270, 20: 240 }, true);
 
-    assert.equal(label.shift.args[0][0], 290);
+    assert.equal(label.shift.args[0][0], 280);
     assert.equal(label.shift.args[0][1], 290);
 });
 

@@ -181,23 +181,24 @@ var piePointStrategy = {
 
     getFigureCenter: symbolPointStrategy.getFigureCenter,
 
-    findFigurePoint: function(figure, labelPoint, isHorizontal, position, bBox, maxLabelLength) {
+    findFigurePoint: function(figure, labelPoint, isHorizontal) {
         if(!isHorizontal) {
             return [figure.x, figure.y];
         }
         var labelX = labelPoint[0],
-            connector = CONNECTOR_LENGTH + (position === "columns" ? maxLabelLength - bBox.width : 0),
-            offset = _abs(figure.x - labelX) >= connector ? connector : 0,
-            x = _round(figure.x + (figure.y - labelPoint[1]) / Math.tan(_degreesToRadians(figure.angle)));
+            x = _round(figure.x + (figure.y - labelPoint[1]) / Math.tan(_degreesToRadians(figure.angle))),
+            points = [figure.x, figure.y, x, labelPoint[1]];
 
         if(!(figure.x <= x && x <= labelX) && !(labelX <= x && x <= figure.x)) {
-            if(figure.x <= labelX) {
-                x = labelX - offset;
+            if(_abs(figure.x - labelX) < CONNECTOR_LENGTH) {
+                points = [figure.x, figure.y];
+            } else if(figure.x <= labelX) {
+                points[2] = figure.x + CONNECTOR_LENGTH;
             } else {
-                x = labelX + offset;
+                points[2] = figure.x - CONNECTOR_LENGTH;
             }
         }
-        return [figure.x, figure.y, x, labelPoint[1]];
+        return points;
     },
 
     adjustPoints: function(points) {
@@ -414,7 +415,7 @@ Label.prototype = {
             isHorizontal = strategy.isHorizontal(bBox, figure);
             points = strategy.prepareLabelPoints(bBox, rotatedBBox, isHorizontal, -options.rotationAngle || 0);
             labelPoint = getClosestCoord(strategy.getFigureCenter(figure), points);
-            points = strategy.findFigurePoint(figure, labelPoint, isHorizontal, options.position, rotatedBBox, that._point ? that._point.getMaxLabelLength() : 0);
+            points = strategy.findFigurePoint(figure, labelPoint, isHorizontal);
             points = points.concat(labelPoint);
         }
         return strategy.adjustPoints(points);
