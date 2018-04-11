@@ -16,14 +16,14 @@ QUnit.testStart(function() {
         '<div id="dateBox"></div>\
         \
         <div id="several">\
-            <div id="dateboxWithDateFormat" data-bind="dxDateBox: { value: value, format: \'date\', pickerType: \'native\' }"></div>\
-            <div id="dateboxWithDateTimeFormat" data-bind="dxDateBox: { value: value, format: \'datetime\', pickerType: \'native\' }"></div>\
-            <div id="dateboxWithTimeFormat" data-bind="dxDateBox: { value: value, format: \'time\', pickerType: \'native\' }"></div>\
+            <div id="dateboxWithDateFormat" data-bind="dxDateBox: { value: value, type: \'date\', pickerType: \'native\' }"></div>\
+            <div id="dateboxWithDateTimeFormat" data-bind="dxDateBox: { value: value, type: \'datetime\', pickerType: \'native\' }"></div>\
+            <div id="dateboxWithTimeFormat" data-bind="dxDateBox: { value: value, type: \'time\', pickerType: \'native\' }"></div>\
         </div>\
         \
-        <div id="B250640" data-bind="dxDateBox: { pickerType: \'calendar\', format: \'datetime\' }"></div>\
+        <div id="B250640" data-bind="dxDateBox: { pickerType: \'calendar\', type: \'datetime\' }"></div>\
         \
-        <div id="Q468727" data-bind="dxDateBox: { value: value, format: \'datetime\' }"></div>';
+        <div id="Q468727" data-bind="dxDateBox: { value: value, type: \'datetime\' }"></div>';
 
     $("#qunit-fixture").html(markup);
 });
