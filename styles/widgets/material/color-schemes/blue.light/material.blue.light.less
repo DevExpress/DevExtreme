@@ -905,30 +905,29 @@
 @loadpanel-content-border-radius: @base-border-radius-large;
 
 // Slider
-
 /**
 * @name 10. Slider bar background color
 * @type color
 * @group sliders
 */
-@slider-bar-bg: @base-border-color;
+@material-slider-bar-bg: fade(@base-text-color, 26%);
+@material-slider-bg: @base-accent;
+@material-slider-active: fade(@base-accent, 26%);
+@material-slider-disabled-bg: fade(@base-text-color, 26%);
 
 /**
-* @name 30. Selected range background color
+* @name 20. Slider tooltip background color
 * @type color
 * @group sliders
-* @paletteColorOpacity 1
 */
-@slider-range-bg: @base-accent;
-@slider-range-border-color: @slider-range-bg;
+@material-slider-tooltip-bg: @base-accent;
 
-@slider-handle-bg: @base-accent;
-@slider-handle-border-color: @base-bg;
-@slider-handle-active-bg: darken(@slider-handle-bg, 17%);
-@slider-handle-hover-bg: darken(@slider-handle-bg, 10%);
-@slider-handle-focused-bg: @slider-handle-hover-bg;
-
-@slider-handle-border-radius: @base-border-radius - 1px;
+/**
+* @name 30. Slider tooltip text color
+* @type color
+* @group sliders
+*/
+@material-slider-tooltip-color: @base-inverted-text-color;
 
 //ProgressBar
 
