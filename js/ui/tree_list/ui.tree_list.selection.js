@@ -411,7 +411,7 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
 
                     keys.forEach(function(key) {
                         var node = dataController.getNodeByKey(key);
-                        !node.hasChildren && result.push(key);
+                        node && !node.hasChildren && result.push(key);
                     });
 
                     return result;
