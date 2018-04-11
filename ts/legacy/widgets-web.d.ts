@@ -2847,13 +2847,15 @@ declare module DevExpress.ui {
 
         /** Gets the PivotGridDataSource instance. */
         getDataSource(): DevExpress.data.PivotGridDataSource;
-
-
     }
+
+
     export interface dxFilterBuilderField {
         
 
         
+
+
         caption?: string;
 
         
