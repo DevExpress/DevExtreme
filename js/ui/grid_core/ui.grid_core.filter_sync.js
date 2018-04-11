@@ -3,15 +3,35 @@
 var modules = require("./ui.grid_core.modules"),
     utils = require("../filter_builder/utils"),
     gridCoreUtils = require("./ui.grid_core.utils"),
+    filterUtils = require("../shared/filtering"),
     customOperations = require("./ui.grid_core.filter_custom_operations");
 
 var FILTER_ROW_OPERATIONS = ["=", "<>", "<", "<=", ">", ">=", "notcontains", "contains", "startswith", "endswith", "between"];
 
 var FilterSyncController = modules.Controller.inherit((function() {
-    var getHeaderFilterFromCondition = function(headerFilterCondition) {
+    var getEmptyFilterValues = function() {
+        return {
+            filterType: "include",
+            filterValues: undefined
+        };
+    };
+
+    var getHeaderFilterFromCondition = function(headerFilterCondition, column) {
+        if(!headerFilterCondition) {
+            return getEmptyFilterValues();
+        }
+
         var filterType,
             selectedFilterOperation = headerFilterCondition[1],
-            filterValues = headerFilterCondition[2];
+            value = headerFilterCondition[2],
+            hasArrayValue = Array.isArray(value);
+
+        if(!hasArrayValue) {
+            var groupInterval = filterUtils.getGroupInterval(column);
+            if(groupInterval) {
+                return getEmptyFilterValues();
+            }
+        }
 
         switch(selectedFilterOperation) {
             case "anyof":
@@ -22,41 +42,36 @@ var FilterSyncController = modules.Controller.inherit((function() {
             case "<>":
                 filterType = "exclude";
                 break;
-            default: return;
+            default: return getEmptyFilterValues();
         }
 
         return {
             filterType: filterType,
-            filterValues: Array.isArray(filterValues) ? filterValues : [filterValues]
+            filterValues: hasArrayValue ? value : [value]
         };
     };
 
     var getConditionFromHeaderFilter = function(column) {
         var selectedOperation,
-            value;
+            value,
+            filterValues = column.filterValues;
 
-        if(!column.filterValues) return null;
+        if(!filterValues) return null;
 
-        if(column.filterValues.length === 1) {
+        var groupInterval = filterUtils.getGroupInterval(column);
+        if(!groupInterval && column.filterValues.length === 1 && !Array.isArray(filterValues[0])) {
             column.filterType === "exclude" ? selectedOperation = "<>" : selectedOperation = "=";
-            value = column.filterValues[0];
+            value = filterValues[0];
         } else {
             column.filterType === "exclude" ? selectedOperation = "noneof" : selectedOperation = "anyof";
-            value = column.filterValues;
+            value = filterValues;
         }
         return [column.dataField, selectedOperation, value];
     };
 
     var updateHeaderFilterCondition = function(columnsController, column, headerFilterCondition) {
-        if(headerFilterCondition) {
-            var headerFilter = getHeaderFilterFromCondition(headerFilterCondition);
-            headerFilter && columnsController.columnOption(column.dataField, headerFilter);
-        } else {
-            columnsController.columnOption(column.dataField, {
-                filterType: "include",
-                filterValues: undefined
-            });
-        }
+        var headerFilter = getHeaderFilterFromCondition(headerFilterCondition, column);
+        columnsController.columnOption(column.dataField, headerFilter);
     };
 
     var updateFilterRowCondition = function(columnsController, column, condition) {
