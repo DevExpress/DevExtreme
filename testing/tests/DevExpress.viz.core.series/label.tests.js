@@ -724,7 +724,7 @@ QUnit.test("Angle point can be calculated (obtuse angle). Positive angle. III pa
 
     label.shift(180, 320);
 
-    assert.deepEqual(label._connector._stored_settings.points, [220, 310, 212, 325, 200, 325]);
+    assert.deepEqual(label._connector._stored_settings.points, [220, 310, 208, 325, 200, 325]);
 });
 
 QUnit.test("Angle point can be calculated (obtuse angle). Obtuse angle. Positive angle. IV part", function(assert) {
@@ -757,7 +757,7 @@ QUnit.test("Connector with angle could not be built between label and point. Lab
 
     label.shift(100, 15);
 
-    assert.deepEqual(label._connector._stored_settings.points, [90, 10, 100, 20, 100, 20]);
+    assert.deepEqual(label._connector._stored_settings.points, [90, 10, 100, 20]);
 });
 
 QUnit.test("Connector with angle could not be built between label and point. Label on the left", function(assert) {
@@ -765,7 +765,7 @@ QUnit.test("Connector with angle could not be built between label and point. Lab
 
     label.shift(70, 15);
 
-    assert.deepEqual(label._connector._stored_settings.points, [100, 10, 90, 20, 90, 20]);
+    assert.deepEqual(label._connector._stored_settings.points, [100, 10, 90, 20]);
 });
 
 QUnit.test("Label on top - build straight connector to the bottom center of label", function(assert) {
@@ -807,18 +807,7 @@ QUnit.test("zero angle - build correct connector", function(assert) {
 
     label.shift(100, 15);
 
-    assert.deepEqual(label._connector._stored_settings.points, [80, 10, 88, 20, 100, 20]);
-});
-
-QUnit.test("Columns position. Take into account max label width", function(assert) {
-    this.point.getMaxLabelLength.returns(32);
-    this.options.position = "columns";
-
-    var label = this.createLabelWithBBox({ x: 0, y: 0, height: 10, width: 20 }, { x: 220, y: 100, angle: 45 });
-
-    label.shift(270, 150);
-
-    assert.deepEqual(label._connector._stored_settings.points, [220, 100, 246, 155, 270, 155]);
+    assert.deepEqual(label._connector._stored_settings.points, [80, 10, 92, 20, 100, 20]);
 });
 
 QUnit.module("Set options", $.extend({}, environment, {

@@ -37,28 +37,13 @@ exports.pie = _extend({}, barSeries, {
     },
 
     adjustLabels: function(moveLabelsFromCenter) {
-        var that = this,
-            points = that._points || [],
-            maxLabelLength,
-            labelsBBoxes = [];
-
-        _each(points, function(_, point) {
+        (this._points || []).forEach(function(point) {
             if(point._label.isVisible()) {
                 point.setLabelTrackerData();
                 if(point._label.getLayoutOptions().position !== INSIDE) {
                     point.setLabelEllipsis();
-                    labelsBBoxes.push(point._label.getBoundingRect().width);
+                    point.updateLabelCoord(moveLabelsFromCenter);
                 }
-            }
-        });
-        if(labelsBBoxes.length) {
-            maxLabelLength = _max.apply(null, labelsBBoxes);
-        }
-
-        _each(points, function(_, point) {
-            if(point._label.isVisible() && point._label.getLayoutOptions().position !== INSIDE) {
-                point.setMaxLabelLength(maxLabelLength);
-                point.updateLabelCoord(moveLabelsFromCenter);
             }
         });
     },
