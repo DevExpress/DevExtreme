@@ -531,10 +531,10 @@ QUnit.test("filterSyncEnabled is working in TreeList", function(assert) {
     });
 
     // act
-    treeList.columnOption("field", { filterValues: [2] });
+    treeList.columnOption("field", { filterValues: [2, 1] });
 
     // assert
-    assert.deepEqual(treeList.option("filterValue"), ["field", "anyof", [2]]);
+    assert.deepEqual(treeList.option("filterValue"), ["field", "anyof", [2, 1]]);
 });
 
 QUnit.test("filterBulider is working in TreeList", function(assert) {
