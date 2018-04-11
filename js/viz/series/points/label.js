@@ -190,7 +190,7 @@ var piePointStrategy = {
             points = [figure.x, figure.y, x, labelPoint[1]];
 
         if(!(figure.x <= x && x <= labelX) && !(labelX <= x && x <= figure.x)) {
-            if(_abs(figure.x - labelPoint[0]) < CONNECTOR_LENGTH) {
+            if(_abs(figure.x - labelX) < CONNECTOR_LENGTH) {
                 points = [figure.x, figure.y];
             } else if(figure.x <= labelX) {
                 points[2] = figure.x + CONNECTOR_LENGTH;
