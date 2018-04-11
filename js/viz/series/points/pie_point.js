@@ -64,14 +64,6 @@ module.exports = _extend({}, symbolPoint, {
         that._label.setDataField("percent", percent);
     },
 
-    setMaxLabelLength: function(maxLabelLength) {
-        this._maxLabelLength = maxLabelLength;
-    },
-
-    getMaxLabelLength: function(maxLabelLength) {
-        return this._maxLabelLength || 0;
-    },
-
     _updateLabelData: function() {
         this._label.setData(this._getLabelFormatObject());
     },
@@ -102,6 +94,7 @@ module.exports = _extend({}, symbolPoint, {
             radiusInner = that.radiusInner,
             radiusOuter = that.radiusOuter,
             radiusLabels = that.radiusLabels,
+            columnsPosition = position === 'columns',
             rad,
             x;
 
@@ -110,9 +103,9 @@ module.exports = _extend({}, symbolPoint, {
             x = that.centerX + rad * angleFunctions.cos - bBox.width / 2;
         } else {
             rad = radiusLabels + options.radialOffset;
-            if(angleFunctions.cos > 0.1) {
+            if(angleFunctions.cos > 0.1 || columnsPosition && angleFunctions.cos >= 0) {
                 x = that.centerX + rad * angleFunctions.cos;
-            } else if(angleFunctions.cos < -0.1) {
+            } else if(angleFunctions.cos < -0.1 || columnsPosition && angleFunctions.cos < 0) {
                 x = that.centerX + rad * angleFunctions.cos - bBox.width;
             } else {
                 x = that.centerX + rad * angleFunctions.cos - bBox.width / 2;
