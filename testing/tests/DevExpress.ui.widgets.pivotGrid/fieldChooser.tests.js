@@ -2087,7 +2087,7 @@ QUnit.test("Change sort order second time", function(assert) {
     $sortIndicator = this.$container.find(".dx-area-fields[group=row] .dx-sort");
     $sortIndicator.parent().trigger("dxclick");
 
-    var state = this.fieldChooser.option("state").fields;
+    var state = this.fieldChooser.option("pendingState").fields;
     assert.equal(state[0].sortOrder, "asc");
 });
 
