@@ -644,30 +644,20 @@ function isMatchedCondition(filter, addedFilterDataField) {
     return filter[0] === addedFilterDataField;
 }
 
-function syncFilters(filter, addedFilter) {
-    var canPush = addedFilter[2] !== null;
-
-    if(filter === null || filter.length === 0) {
-        return canPush ? addedFilter : null;
+function removeFieldConditionsFromFilter(filter, dataField) {
+    if(!filter || filter.length === 0) {
+        return null;
     }
 
     if(isCondition(filter)) {
-        var containsAddedFilter = isMatchedCondition(filter, addedFilter[0]);
-        if(!canPush) {
-            return !containsAddedFilter ? filter : null;
-        }
-        if(containsAddedFilter) {
-            return addedFilter;
-        } else {
-            return [filter, AND_GROUP_OPERATION, addedFilter];
-        }
+        var hasMatchedCondition = isMatchedCondition(filter, dataField);
+        return !hasMatchedCondition ? filter : null;
+    } else {
+        return syncConditionIntoGroup(filter, [dataField], false);
     }
+}
 
-    var groupValue = getGroupValue(filter);
-    if(groupValue !== AND_GROUP_OPERATION) {
-        return [addedFilter, "and", filter];
-    }
-
+function syncConditionIntoGroup(filter, addedFilter, canPush) {
     var result = [];
     filter.forEach(function(item) {
         if(isCondition(item)) {
@@ -696,6 +686,27 @@ function syncFilters(filter, addedFilter) {
     }
 
     return result.length === 1 ? result[0] : result;
+}
+
+function syncFilters(filter, addedFilter) {
+    if(filter === null || filter.length === 0) {
+        return addedFilter;
+    }
+
+    if(isCondition(filter)) {
+        if(isMatchedCondition(filter, addedFilter[0])) {
+            return addedFilter;
+        } else {
+            return [filter, AND_GROUP_OPERATION, addedFilter];
+        }
+    }
+
+    var groupValue = getGroupValue(filter);
+    if(groupValue !== AND_GROUP_OPERATION) {
+        return [addedFilter, "and", filter];
+    }
+
+    return syncConditionIntoGroup(filter, addedFilter, true);
 }
 
 function getMatchedConditions(filter, dataField) {
@@ -767,3 +778,4 @@ exports.getMergedOperations = getMergedOperations;
 exports.syncFilters = syncFilters;
 exports.getMatchedConditions = getMatchedConditions;
 exports.filterHasField = filterHasField;
+exports.removeFieldConditionsFromFilter = removeFieldConditionsFromFilter;

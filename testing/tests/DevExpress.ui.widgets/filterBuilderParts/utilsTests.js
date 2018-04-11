@@ -1751,6 +1751,63 @@ QUnit.module("Filter sync", function() {
     });
 });
 
+QUnit.module("Remove condition", function() {
+    QUnit.test("from condition with the same dataField", function(assert) {
+        // arrange
+        var filter = ["field", "=", 1];
+
+        // act
+        var result = utils.removeFieldConditionsFromFilter(filter, "field");
+
+        // assert
+        assert.equal(result, null);
+    });
+
+    QUnit.test("from condition with another dataField", function(assert) {
+        // arrange
+        var filter = ["field", "=", 1];
+
+        // act
+        var result = utils.removeFieldConditionsFromFilter(filter, "field2");
+
+        // assert
+        assert.equal(result, filter);
+    });
+
+    QUnit.test("from group with one field condition", function(assert) {
+        // arrange
+        var filter = [["field", "=", 1], "and", ["field2", "=", 2]];
+
+        // act
+        var result = utils.removeFieldConditionsFromFilter(filter, "field");
+
+        // assert
+        assert.deepEqual(result, ["field2", "=", 2]);
+    });
+
+    QUnit.test("from group with some field condition", function(assert) {
+        // arrange
+        var filter = [["field", "=", 1], "and", ["field2", "=", 2], "and", ["field", "=", 2], "and", ["field2", "=", 3], "and", ["field", "=", 4]];
+
+        // act
+        var result = utils.removeFieldConditionsFromFilter(filter, "field");
+
+        // assert
+        assert.deepEqual(result, [["field2", "=", 2], "and", ["field2", "=", 3]]);
+    });
+
+    QUnit.test("from group with inner group", function(assert) {
+        // arrange
+        var filter = [["field", "=", 1], "and", ["field2", "=", 2], "and", ["field", "=", 2], "and", [["field2", "=", 3], "and", ["field", "=", 4]]];
+
+        // act
+        var result = utils.removeFieldConditionsFromFilter(filter, "field");
+
+        // assert
+        assert.deepEqual(result, [["field2", "=", 2], "and", [["field2", "=", 3], "and", ["field", "=", 4]]]);
+    });
+});
+
 QUnit.module("getMatchedCondition", function() {
     QUnit.test("from null", function(assert) {
         // arrange
