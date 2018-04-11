@@ -179,7 +179,7 @@ var DataControllerFilterSyncExtender = {
         if(that.skipCalculateColumnFilters()) {
             var currentColumn = that.getController("headerFilter").getCurrentColumn();
             if(currentColumn && filterValue) {
-                filterValue = utils.removeFieldConditionsFromFilter(filterValue, currentColumn.dataField)
+                filterValue = utils.removeFieldConditionsFromFilter(filterValue, currentColumn.dataField);
             }
         }
         var customOperations = that.getController("filterSync").getCustomFilterOperations(),
