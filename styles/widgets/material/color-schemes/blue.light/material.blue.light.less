@@ -908,10 +908,24 @@
 * @type color
 * @group sliders
 */
-@MATERIAL_SLIDER_BAR_BACKGROUND: fade(@base-text-color, 26%);
-@MATERIAL_SLIDER_BACKGROUND: @base-accent;
-@MATERIAL_SLIDER_ACTIVE: fade(@base-accent, 26%);
-@MATERIAL_SLIDER_DISABLED_BACKGROUND: fade(@base-text-color, 26%);
+@material-slider-bar-bg: fade(@base-text-color, 26%);
+@material-slider-bg: @base-accent;
+@material-slider-active: fade(@base-accent, 26%);
+@material-slider-disabled-bg: fade(@base-text-color, 26%);
+
+/**
+* @name 20. Slider tooltip background color
+* @type color
+* @group sliders
+*/
+@material-slider-tooltip-bg: @base-accent;
+
+/**
+* @name 30. Slider tooltip text color
+* @type color
+* @group sliders
+*/
+@material-slider-tooltip-color: @base-inverted-text-color;
 
 //ProgressBar
 

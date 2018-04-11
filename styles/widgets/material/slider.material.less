@@ -16,7 +16,8 @@
 @MATERIAL_SLIDER_HANDLE_INNER_BORDER_WIDTH: 1px;
 @MATERIAL_SLIDER_HANDLE_INNER_DISABLED_SIZE: 2px;
 @MATERIAL_SLIDER_WRAPPER_HEIGHT: 32px;
-@MATERIAL_SLIDER_TOOLTIP_PADDING: 30px;
+@MATERIAL_SLIDER_TOOLTIP_WIDTH: 34px;
+@MATERIAL_SLIDER_DISABLED_TOOLTIP_TOP_MARGIN: 5px;
 
 .dx-slider-wrapper {
     height: @MATERIAL_SLIDER_WRAPPER_HEIGHT;
@@ -30,14 +31,14 @@
 .dx-slider-bar {
     margin-right: @MATERIAL_SLIDER_HANDLE_SIZE / 2 + @MATERIAL_SLIDER_HANDLE_ACTIVE_BORDER_WIDTH;
     margin-left: @MATERIAL_SLIDER_HANDLE_SIZE / 2 + @MATERIAL_SLIDER_HANDLE_ACTIVE_BORDER_WIDTH;
-    background: @MATERIAL_SLIDER_BAR_BACKGROUND;
+    background: @material-slider-bar-bg;
 }
 
 .dx-slider-range {
     top: @MATERIAL_SLIDER_BAR_HEIGHT / 2 - @MATERIAL_SLIDER_HANDLE_SIZE / 2;
 
     &.dx-slider-range-visible {
-        background: @MATERIAL_SLIDER_BACKGROUND;
+        background: @material-slider-bg;
     }
 }
 
@@ -57,26 +58,77 @@
         margin-left: -@MATERIAL_SLIDER_HANDLE_INNER_SIZE / 2;
         width: @MATERIAL_SLIDER_HANDLE_INNER_SIZE;
         height: @MATERIAL_SLIDER_HANDLE_INNER_SIZE;
-        background: @MATERIAL_SLIDER_BACKGROUND;
+        background: @material-slider-bg;
         content: "";
         .border-radius(@MATERIAL_SLIDER_RADIUS);
     }
 
-    .dx-tooltip-wrapper .dx-popup-content {
-        line-height: normal;
+    .dx-tooltip-wrapper {
+        .dx-overlay-content {
+            background-color: transparent;
+            &:before {
+                content: " ";
+                position: absolute;
+                width: @MATERIAL_SLIDER_TOOLTIP_WIDTH;
+                height: @MATERIAL_SLIDER_TOOLTIP_WIDTH;
+                border-radius: 0 50% 50% 50%;
+                transform: rotate(45deg);
+                display: block;
+                background-color: @material-slider-tooltip-bg;
+                top: 0;
+
+                .dx-slider-tooltip-position-top & {
+                    transform: rotate(-135deg);
+                    bottom: 0;
+                    margin-top: -5px;
+                }
+            }
+
+            .dx-popup-content {
+                line-height: normal;
+                font-size: 10px;
+                max-width: @MATERIAL_SLIDER_TOOLTIP_WIDTH;
+                min-width: @MATERIAL_SLIDER_TOOLTIP_WIDTH;
+                width: @MATERIAL_SLIDER_TOOLTIP_WIDTH;
+                text-overflow: ellipsis;
+                padding: @MATERIAL_SLIDER_TOOLTIP_WIDTH/2 - @MATERIAL_SLIDER_DISABLED_TOOLTIP_TOP_MARGIN - 1 3px 5px 3px;
+                color: @material-slider-tooltip-color;
+                position: relative;
+
+                .dx-slider-tooltip-position-top & {
+                    padding-top: 6px;
+                }
+            }
+
+            &.dx-state-disabled {
+                &:before {
+                    margin-top: @MATERIAL_SLIDER_DISABLED_TOOLTIP_TOP_MARGIN;
+                    .dx-slider-tooltip-position-top & {
+                        margin-top: -@MATERIAL_SLIDER_DISABLED_TOOLTIP_TOP_MARGIN;
+                    }
+                }
+                .dx-popup-content {
+                    padding-top: @MATERIAL_SLIDER_TOOLTIP_WIDTH/2;
+                    .dx-slider-tooltip-position-top & {
+                        padding-top: 6px;
+                        padding-bottom: @MATERIAL_SLIDER_TOOLTIP_WIDTH/2;
+                    }
+                }
+            }
+        }
     }
 
     .dx-inkripple-wave {
-        background-color: @MATERIAL_SLIDER_ACTIVE;
+        background-color: @material-slider-active;
     }
 }
 
 .dx-slider-tooltip-position-top {
-    padding-top: @MATERIAL_SLIDER_TOOLTIP_PADDING;
+    padding-top: @MATERIAL_SLIDER_TOOLTIP_WIDTH + 6;
 }
 
 .dx-slider-tooltip-position-bottom {
-    padding-bottom: @MATERIAL_SLIDER_TOOLTIP_PADDING;
+    padding-bottom: @MATERIAL_SLIDER_TOOLTIP_WIDTH + 6;
 }
 
 .dx-slider-label-position-bottom {
@@ -101,7 +153,7 @@
     }
 
     .dx-slider-range.dx-slider-range-visible {
-        background: @MATERIAL_SLIDER_DISABLED_BACKGROUND;
+        background: @material-slider-disabled-bg;
     }
 
     .dx-slider-handle {
@@ -122,7 +174,6 @@
 
         .dx-overlay-content{
             margin-top: -12px ;
-            margin-left: -11px ;
         }
     }
 }
