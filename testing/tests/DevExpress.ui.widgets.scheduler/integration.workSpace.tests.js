@@ -1558,3 +1558,36 @@ QUnit.test("WorkSpace should be refreshed after groups changed", function(assert
     }
 });
 
+QUnit.test("SelectedCellData option should have rigth data of focused cell", function(assert) {
+    this.createInstance({
+        dataSource: [],
+        views: ["week"],
+        currentView: "week",
+        showAllDayPanel: true,
+        currentDate: new Date(2018, 3, 11),
+        height: 600
+    });
+
+    var $cells = this.instance.$element().find(".dx-scheduler-date-table-cell");
+
+    $($cells.eq(0)).trigger("dxpointerdown");
+
+    assert.deepEqual(this.instance.option("selectedCellData"), [{ startDate: new Date(2018, 3, 8), endDate: new Date(2018, 3, 8, 0, 30), allDay: false }], "option has right value");
+});
+
+QUnit.test("SelectedCellData option should make cell in focused state", function(assert) {
+    this.createInstance({
+        dataSource: [],
+        views: ["week"],
+        currentView: "week",
+        showAllDayPanel: true,
+        selectedCellData: [{ startDate: new Date(2018, 3, 8), endDate: new Date(2018, 3, 8, 0, 30), allDay: false }],
+        currentDate: new Date(2018, 3, 11),
+        height: 600
+    });
+
+    var $cells = this.instance.$element().find(".dx-scheduler-date-table-cell");
+
+    assert.ok($($cells.eq(0)).hasClass("dx-state-focused", "correct cell is focused"));
+});
+

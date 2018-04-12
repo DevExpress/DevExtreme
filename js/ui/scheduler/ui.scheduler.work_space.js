@@ -161,6 +161,11 @@ var SchedulerWorkSpace = Widget.inherit({
             this._$dateTable.find("." + DATE_TABLE_CELL_CLASS).eq(0);
     },
 
+    _getAllFocusedCells: function() {
+        return this._focusedCells ||
+            this._$dateTable.find("." + DATE_TABLE_CELL_CLASS).eq(0);
+    },
+
     _getCellFromNextRow: function(direction) {
         var $currentCell = this._$focusedCell;
 
@@ -280,6 +285,10 @@ var SchedulerWorkSpace = Widget.inherit({
 
         this._toggleFocusedCellClass(true, $cell);
         this._$focusedCell = $cell;
+
+        var selectedCellData = this.getFocusedCellData();
+        this.option("selectedCellData", selectedCellData);
+        this._selectionChangedAction({ selectedCellData });
     },
 
     _correctCellForGroup: function($cell) {
@@ -339,11 +348,19 @@ var SchedulerWorkSpace = Widget.inherit({
 
     _releaseFocusedCell: function($cell) {
         $cell = $cell || $(this._focusedCells);
+
         if(isDefined($cell)) {
-            this._toggleFocusClass(false, $cell);
-            this._toggleFocusedCellClass(false, $cell);
-            this.setAria("label", undefined, $cell);
+            for(var i = 0; i < $cell.length; i++) {
+                this._deleteFocusClass($($cell[i]));
+            }
         }
+        this.option("selectedCellData", []);
+    },
+
+    _deleteFocusClass: function($cell) {
+        this._toggleFocusClass(false, $cell);
+        this._toggleFocusedCellClass(false, $cell);
+        this.setAria("label", undefined, $cell);
     },
 
     _focusInHandler: function(e) {
@@ -390,7 +407,8 @@ var SchedulerWorkSpace = Widget.inherit({
             indicatorTime: new Date(),
             indicatorUpdateInterval: 5 * toMs("minute"),
             shadeUntilCurrentTime: true,
-            groupOrientation: "horizontal"
+            groupOrientation: "horizontal",
+            selectedCellData: []
         });
     },
 
@@ -433,6 +451,9 @@ var SchedulerWorkSpace = Widget.inherit({
                 this.headerPanelOffsetRecalculate();
                 this._updateScrollable();
                 break;
+            case "onSelectionChanged":
+                this._createSelectionChangedAction();
+                break;
             case "onCellClick":
                 this._createCellClickAction();
                 break;
@@ -453,6 +474,8 @@ var SchedulerWorkSpace = Widget.inherit({
                 this._dimensionChanged();
                 break;
             case "allowMultipleCellSelection":
+                break;
+            case "selectedCellData":
                 break;
             default:
                 this.callBase(args);
@@ -865,6 +888,7 @@ var SchedulerWorkSpace = Widget.inherit({
 
         this._renderView();
         this._attachEvents();
+        this._setFocusOnCellByOption(this.option("selectedCellData"));
     },
 
     _render: function() {
@@ -913,6 +937,43 @@ var SchedulerWorkSpace = Widget.inherit({
     _renderDateTimeIndication: noop,
     _setIndicationUpdateInterval: noop,
     _refreshDateTimeIndication: noop,
+
+    _setFocusOnCellByOption: function(data) {
+        var cells = [];
+
+        this._releaseFocusedCell();
+
+        for(var i = 0; i < data.length; i++) {
+            var groups = data[i].groups,
+                groupIndex = groups ? this._getGroupIndexByResourceId(groups) : 0,
+                allDay = !!(data[i].allDay),
+                coordinates = this.getCoordinatesByDate(data[i].startDate, groupIndex, allDay),
+                $cell = this._getCellByCoordinates(coordinates, groupIndex);
+
+            if(isDefined($cell)) {
+                this._toggleFocusClass(true, $cell);
+                cells.push($cell);
+            }
+        }
+        this._focusedCells = cells;
+    },
+
+    _getGroupIndexByResourceId: function(id) {
+        var groups = this.option("groups"),
+            groupKey = Object.keys(id)[0],
+            groupValue = Object.values(id)[0],
+            tree = this.invoke("createResourcesTree", groups),
+            index = 0;
+
+        for(var i = 0; i < tree.length; i++) {
+
+            if(tree[i].name === groupKey && tree[i].value === groupValue) {
+                index = tree[i].leafIndex;
+            }
+        }
+
+        return index;
+    },
 
     _setFirstViewDate: function() {
         var firstDayOfWeek = isDefined(this._firstDayOfWeek()) ? this._firstDayOfWeek() : dateLocalization.firstDayOfWeekIndex();
@@ -963,6 +1024,7 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _attachEvents: function() {
+        this._createSelectionChangedAction();
         this._attachClickEvent();
         this._attachContextMenuEvent();
     },
@@ -1000,6 +1062,10 @@ var SchedulerWorkSpace = Widget.inherit({
                 that._moveToClosestNonStub(e.args[0].event);
             }
         });
+    },
+
+    _createSelectionChangedAction: function() {
+        this._selectionChangedAction = this._createActionByOption("onSelectionChanged");
     },
 
     _moveToClosestNonStub: function(e) {
@@ -1846,6 +1912,30 @@ var SchedulerWorkSpace = Widget.inherit({
 
     keepOriginalHours: function() {
         return false;
+    },
+
+    getFocusedCellData: function() {
+        var $focusedCells = this._getAllFocusedCells(),
+            result = [];
+
+        if($focusedCells.length > 1) {
+            result = this._getMultipleCellsData($focusedCells);
+        } else {
+            var data = this.getCellData($focusedCells);
+            data && result.push(data);
+        }
+
+        return result;
+    },
+
+    _getMultipleCellsData: function($cells) {
+        var data = [];
+
+        for(var i = 0; i < $cells.length; i++) {
+            data.push(dataUtils.data($cells[i], CELL_DATA));
+        }
+
+        return data;
     },
 
     getCellData: function($cell) {
