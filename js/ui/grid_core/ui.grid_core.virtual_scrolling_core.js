@@ -238,29 +238,29 @@ exports.VirtualScrollController = Class.inherit((function() {
         }
     };
 
-    var processChanged = function(that, changed, changeType, isDelayChanged, removeCount) {
+    var processChanged = function(that, changed, changeType, isDelayChanged, removeCacheItem) {
         var dataSource = that._dataSource,
-            items = dataSource.items(),
+            items = dataSource.items().slice(),
             change;
         if(changeType && !that._isDelayChanged) {
             change = {
                 changeType: changeType,
                 items: items
             };
-            if(removeCount) {
-                change.removeCount = removeCount;
+            if(removeCacheItem) {
+                change.removeCount = removeCacheItem.itemsCount;
             }
         }
         var viewportItems = that._dataSource.viewportItems();
         if(changeType === "append") {
             viewportItems.push.apply(viewportItems, items);
-            if(removeCount) {
-                viewportItems.splice(0, removeCount);
+            if(removeCacheItem) {
+                viewportItems.splice(0, removeCacheItem.itemsLength);
             }
         } else if(changeType === "prepend") {
             viewportItems.unshift.apply(viewportItems, items);
-            if(removeCount) {
-                viewportItems.splice(-removeCount);
+            if(removeCacheItem) {
+                viewportItems.splice(-removeCacheItem.itemsLength);
             }
         } else {
             that._dataSource.viewportItems(items);
@@ -560,7 +560,7 @@ exports.VirtualScrollController = Class.inherit((function() {
                     }
                 }
 
-                cacheItem = { pageIndex: dataSource.pageIndex(), itemsCount: that.itemsCount(true) };
+                cacheItem = { pageIndex: dataSource.pageIndex(), itemsLength: dataSource.items().length, itemsCount: that.itemsCount(true) };
 
                 if(!that.option("legacyRendering") && that.option("scrolling.removeInvisiblePages") && isVirtualMode(that)) {
                     removeInvisiblePages = that._cache.length > Math.max(getPreloadPageCount(this) + (that.option("scrolling.preloadEnabled") ? 1 : 0), 2);
@@ -568,22 +568,22 @@ exports.VirtualScrollController = Class.inherit((function() {
                     processDelayChanged(that, callBase, { isDelayed: true });
                 }
 
-                var removeCount = 0;
+                var removeCacheItem;
                 if(beginPageIndex === dataSource.pageIndex() + 1) {
                     if(removeInvisiblePages) {
-                        removeCount = that._cache.pop().itemsCount;
+                        removeCacheItem = that._cache.pop();
                     }
                     changeType = "prepend";
                     that._cache.unshift(cacheItem);
                 } else {
                     if(removeInvisiblePages) {
-                        removeCount = that._cache.shift().itemsCount;
+                        removeCacheItem = that._cache.shift();
                     }
                     changeType = "append";
                     that._cache.push(cacheItem);
                 }
 
-                processChanged(that, callBase, that._cache.length > 1 ? changeType : undefined, lastCacheLength === 0, removeCount);
+                processChanged(that, callBase, that._cache.length > 1 ? changeType : undefined, lastCacheLength === 0, removeCacheItem);
                 that._delayDeferred = that.load().done(function() {
                     if(processDelayChanged(that, callBase)) {
                         that.load(); // needed for infinite scrolling when height is not defined

@@ -29,6 +29,7 @@ var createDataSource = function(options) {
         options: {
             scrolling: options.scrolling,
             cacheEnabled: options.cacheEnabled,
+            legacyRendering: options.legacyRendering,
             remoteOperations: options.remoteOperations,
             loadingTimeout: options.loadingTimeout !== undefined ? options.loadingTimeout : (options.asyncLoadEnabled ? 0 : undefined)
         }
@@ -387,76 +388,6 @@ QUnit.test("pageCount calculation after change pageSize", function(assert) {
 
     // assert
     assert.equal(source.pageCount(), 2);
-});
-
-// B237822
-QUnit.test("pageCount calculation after reload when query count resolved after enumerate", function(assert) {
-    var dataSource = createDataSource({
-            store: TEN_NUMBERS,
-            pageSize: 3,
-            asyncLoadEnabled: true,
-            requireTotalCount: true,
-            remoteOperations: { filtering: true, sorting: true, paging: true }
-        }),
-        query = {
-            slice: function() {
-                return this;
-            },
-            countCalculator: null,
-            countDeferred: $.Deferred(),
-            count: function() {
-                this.countDeferred = $.Deferred();
-                if(this.countCalculator) {
-                    this.countDeferred.resolve(this.countCalculator());
-                }
-                return this.countDeferred;
-            },
-            enumerateCalculator: null,
-            enumerateDeferred: $.Deferred(),
-            enumerate: function() {
-                this.enumerateDeferred = $.Deferred();
-                if(this.enumerateCalculator) {
-                    this.enumerateDeferred.resolve(this.enumerateCalculator());
-                }
-                return this.enumerateDeferred;
-            }
-        },
-        finalized;
-
-    dataSource._dataSource._store.createQuery = function() {
-        return query;
-    };
-
-    query.enumerateCalculator = function() {
-        setTimeout(function() {
-            query.countDeferred.resolve(10);
-        });
-        return [1, 2, 3];
-    };
-
-    dataSource.load().done(function() {
-
-        query.enumerateCalculator = function() {
-            return [2, 3, 4];
-        };
-
-        query.countCalculator = function() {
-            return 9;
-        };
-
-        // act
-        dataSource.reload().done(function() {
-            finalized = true;
-        });
-    });
-
-    this.clock.tick();
-
-    // assert
-    assert.ok(finalized);
-    assert.equal(dataSource.pageCount(), 3);
-    assert.equal(dataSource.totalItemsCount(), 9);
-    assert.deepEqual(dataSource.items(), [2, 3, 4]);
 });
 
 QUnit.test("isLastPage and hasKnownLastPage for first page", function(assert) {
@@ -4024,7 +3955,7 @@ $.each(["Grouping without remoteOperations", "Grouping with remoteOperations", "
                     load: function() { return [{ group: "group 1", text: "text 1" }, { group: "group 1", text: "text 2" }, { group: "group 2", text: "text 3" }]; },
                     totalCount: function() { return -1; },
                     pageSize: 2,
-                    group: "group",
+                    group: [{ selector: "group", isExpanded: true }],
                     remoteOperations: { filtering: true, sorting: true, paging: true }
                 }),
                 messageError;
@@ -5432,7 +5363,7 @@ QUnit.module("Cache", {
             that.loadingCount = 0;
             return createDataSource($.extend({
                 store: {
-                    onLoading: function() {
+                    onLoading: function(e) {
                         that.loadingCount++;
                     },
                     type: "array",
@@ -5447,7 +5378,7 @@ QUnit.module("Cache", {
     }
 });
 
-QUnit.test("no caching when all remoteOperations", function(assert) {
+QUnit.test("caching when all remoteOperations", function(assert) {
     var dataSource = this.createDataSource({
         remoteOperations: {
             filtering: true,
@@ -5462,7 +5393,162 @@ QUnit.test("no caching when all remoteOperations", function(assert) {
     dataSource.reload();
 
     // assert
-    assert.deepEqual(this.loadingCount, 3, "three loading");
+    assert.deepEqual(this.loadingCount, 1, "one loading");
+});
+
+QUnit.test("no caching when all remoteOperations and legacyRendering is true", function(assert) {
+    var dataSource = this.createDataSource({
+        legacyRendering: true,
+        remoteOperations: {
+            filtering: true,
+            sorting: true,
+            paging: true
+        }
+    });
+    dataSource.load();
+
+    // act
+    dataSource.load();
+    dataSource.reload();
+
+    // assert
+    assert.deepEqual(this.loadingCount, 3, "three loadings");
+});
+
+QUnit.test("caching pages when all remoteOperations", function(assert) {
+    var dataSource = this.createDataSource({
+        remoteOperations: true
+    });
+    dataSource.load();
+
+    dataSource.pageIndex(1);
+    dataSource.load();
+
+    this.loadingCount = 0;
+
+    // act
+    dataSource.pageIndex(0);
+    dataSource.load();
+
+    // assert
+    assert.deepEqual(this.loadingCount, 0, "no loading");
+    assert.deepEqual(dataSource.items(), [1, 2, 3], "items are correct");
+});
+
+QUnit.test("reset pages cache on pageSize change when all remoteOperations", function(assert) {
+    var dataSource = this.createDataSource({
+        remoteOperations: true
+    });
+    dataSource.load();
+
+    this.loadingCount = 0;
+
+    // act
+    dataSource.pageSize(2);
+    dataSource.load();
+
+    // assert
+    assert.deepEqual(this.loadingCount, 1, "one loading");
+    assert.deepEqual(dataSource.items(), [1, 2], "items are correct");
+});
+
+QUnit.test("reset pages cache on filtering change when all remoteOperations", function(assert) {
+    var dataSource = this.createDataSource({
+        remoteOperations: true
+    });
+    dataSource.load();
+
+    this.loadingCount = 0;
+
+    // act
+    dataSource.filter(["this", ">", "4"]);
+    dataSource.load();
+
+    // assert
+    assert.deepEqual(this.loadingCount, 1, "one loading");
+    assert.deepEqual(dataSource.items(), [5, 6, 7], "items are correct");
+});
+
+QUnit.test("caching totalCount and summary on paging when all remoteOperations", function(assert) {
+    var that = this;
+    that.loadingArgs = [];
+
+    var dataSource = this.createDataSource({
+        load: function(options) {
+            that.loadingArgs.push(options);
+
+            var data = TEN_NUMBERS.slice(options.skip, options.skip + options.take);
+            return $.Deferred().resolve(data, {
+                totalCount: options.requireTotalCount ? TEN_NUMBERS.length : -1,
+                summary: options.totalSummary ? [666] : null
+            });
+        },
+        remoteOperations: true
+    });
+
+    dataSource.summary({
+        totalAggregates: [{
+            selector: "this",
+            aggregator: "sum"
+        }]
+    });
+
+    dataSource.load();
+
+    // act
+    dataSource.pageIndex(1);
+    dataSource.load();
+
+    // assert
+    assert.deepEqual(this.loadingArgs.length, 2, "two loading");
+    assert.deepEqual(this.loadingArgs[0].requireTotalCount, true, "requireTotalCount for first page");
+    assert.deepEqual(this.loadingArgs[0].totalSummary, [{ selector: "this", aggregator: "sum" }], "totalSummary for first page");
+    assert.deepEqual(this.loadingArgs[1].requireTotalCount, undefined, "no requireTotalCount for second page");
+    assert.deepEqual(this.loadingArgs[1].totalSummary, undefined, "no totalSummary for second page");
+});
+
+[false, true].forEach(function(groupPaging) {
+    QUnit.test("caching pages when remote " + (groupPaging ? "group paging" : "grouping"), function(assert) {
+        var that = this;
+        that.loadingArgs = [];
+
+        var dataSource = createDataSourceWithRemoteGrouping({
+            store: {
+                onLoading: function(e) {
+                    that.loadingArgs.push(e);
+                },
+                type: "array",
+                data: TEN_NUMBERS
+            },
+            paginate: true,
+            requireTotalCount: true,
+            pageSize: 3,
+            group: ["this"]
+        }, groupPaging);
+
+        dataSource.load();
+        dataSource.changeRowExpand([1]);
+        dataSource.load();
+
+        dataSource.pageIndex(1);
+        dataSource.load();
+
+        assert.deepEqual(this.loadingArgs.length, groupPaging ? 4 : 2, "loading count before cache");
+
+        this.loadingArgs = [];
+
+        // act
+        dataSource.pageIndex(0);
+        dataSource.load();
+
+        // assert
+        assert.deepEqual(this.loadingArgs.length, 0, "no loading");
+        assert.deepEqual(dataSource.items(), [
+            { key: 1, items: [1] },
+            { key: 2, items: null },
+        ], "items are correct");
+        assert.deepEqual(dataSource.totalItemsCount(), 11, "totalCount");
+    });
 });
 
 QUnit.test("no caching when cacheEnabled false", function(assert) {

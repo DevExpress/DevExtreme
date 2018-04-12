@@ -558,12 +558,6 @@ exports.GroupingHelper = groupingCore.GroupingHelper.inherit((function() {
             }
 
             loadGroupItems(that, options, loadedGroupCount, expandedInfo, 0, options.data);
-
-            if(!options.isCustomLoading) {
-                when(options.data).done(function(data) {
-                    that.updateItemsCount(data, groupCount);
-                });
-            }
         },
 
         _processSkips: function(items, skips, groupCount) {

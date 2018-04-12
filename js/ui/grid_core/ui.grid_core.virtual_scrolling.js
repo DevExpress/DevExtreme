@@ -172,6 +172,7 @@ var VirtualScrollingDataSourceAdapterExtender = (function() {
             var result = this.callBase.apply(this, arguments);
 
             this._virtualScrollController.reset();
+            this.resetPagesCache();
 
             updateLoading(this);
 
