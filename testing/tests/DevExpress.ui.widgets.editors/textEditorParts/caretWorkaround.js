@@ -5,7 +5,7 @@ var browser = require("core/utils/browser"),
     caret = require("ui/text_box/utils.caret");
 
 module.exports = function($input) {
-    // NOTE: We decided to return to this problem when Edge 17 is released
+    // NOTE: We decided to return to this problem when next Edge is released
     // Edge sets the caret to the end of the mask editor when iframe is used and focus is triggered by the focus() method
     var isEdge = browser.msie && browser.version >= 15 && browser.version < 18;
 
