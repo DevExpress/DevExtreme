@@ -673,6 +673,7 @@ QUnit.test("format: base", function(assert) {
     assert.equal(numberLocalization.format(12), "12");
     assert.equal(numberLocalization.format(1, { type: "decimal", precision: 2 }), "01");
     assert.equal(numberLocalization.format(1, { type: "decimal", precision: 3 }), "001");
+    assert.equal(numberLocalization.format(1.23456, { type: "decimal" }), "1.23456");
 });
 
 QUnit.test("format: precision", function(assert) {
