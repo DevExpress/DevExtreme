@@ -74,7 +74,7 @@ var FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).in
         return extend(this.callBase(), {
             allowFieldDragging: true,
             applyChangesMode: "instantly",
-            pendingState: null,
+            state: null,
             headerFilter: {
                 width: 252,
                 height: 325,
@@ -109,7 +109,7 @@ var FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).in
                 break;
             case "applyChangesMode":
                 break;
-            case "pendingState":
+            case "state":
                 if(args.value === null && args.previousValue !== null) {
                     this.repaint();
                 }
@@ -275,12 +275,12 @@ var FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).in
         var that = this,
             dataSource = that._dataSource,
             startState = dataSource.state(),
-            state = that.option("pendingState") || startState;
+            state = that.option("state") || startState;
 
         dataSource.state(state, true);
         dataSource.field(fieldIndex, props);
 
-        that.option("pendingState", dataSource.state());
+        that.option("state", dataSource.state());
         that._clean(true);
         that._renderComponent();
         dataSource.state(startState, true);
