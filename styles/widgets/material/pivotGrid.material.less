@@ -23,8 +23,12 @@
         font-size: @MATERIAL_PIVOTGRID_HEADERS_FONT_SIZE;
         font-weight: 500;
 
-        .dx-header-filter:not(.dx-header-filter-empty) {
+        .dx-header-filter {
             color: @base-accent;
+
+            &.dx-header-filter-empty {
+                color: @PIVOTGRID_AREA_COLOR;
+            }
         }
     }
 }
@@ -61,10 +65,10 @@
     .dx-area-description-cell {
         .dx-pivotgrid-toolbar {
             padding-left: 8px;
-        }
 
-        .dx-button {
-            .dx-button-flat-styling(@button-normal-color);
+            .dx-button {
+                .dx-button-flat-styling(@PIVOTGRID_AREA_COLOR);
+            }
         }
     }
 
@@ -76,9 +80,9 @@
     .dx-filter-header {
         .dx-pivotgrid-toolbar {
             .dx-button {
-                margin-top: 10px;
+                margin-top: 7px;
 
-                .dx-button-flat-styling(@button-normal-color);
+                .dx-button-flat-styling(@PIVOTGRID_AREA_COLOR);
             }
         }
     }
