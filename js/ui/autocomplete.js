@@ -94,6 +94,12 @@ var Autocomplete = DropDownList.inherit({
             searchEnabled: true
 
             /**
+            * @name dxAutocompleteOptions_displayExpr
+            * @publicName displayExpr
+            * @hidden
+            */
+
+            /**
             * @name dxAutocompleteOptions_acceptCustomValue
             * @publicName acceptCustomValue
             * @hidden
