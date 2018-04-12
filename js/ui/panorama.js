@@ -503,6 +503,7 @@ var PanoramaThreeAndMoreItemsRenderStrategy = PanoramaItemsRenderStrategy.inheri
 * @inherits CollectionWidget
 * @module ui/panorama
 * @export default
+* @deprecated
 */
 var Panorama = CollectionWidget.inherit({
 
