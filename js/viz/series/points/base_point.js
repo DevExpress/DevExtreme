@@ -130,6 +130,8 @@ Point.prototype = {
 
         this._dataItem = dataItem;
 
+        this.data = dataItem.data;
+
         that.lowError = dataItem.lowError;
         that.highError = dataItem.highError;
 
