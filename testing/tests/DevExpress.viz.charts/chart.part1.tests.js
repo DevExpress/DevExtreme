@@ -245,6 +245,69 @@ QUnit.test("Recreate series points on scrolling if aggregation is enabled", func
     assert.ok(series.createPoints.calledTwice);
 });
 
+QUnit.test("Recreate series points on zooming if aggregation is enabled (discrete argument axis)", function(assert) {
+    // arrange
+    chartMocks.seriesMockData.series.push(new MockSeries());
+    chartMocks.seriesMockData.series[0].useAggregation.returns(true);
+
+    var chart = this.createChart({
+            dataSource: [{}],
+            series: [{ type: "line" }],
+            argumentAxis: { type: "discrete" }
+        }),
+        series = chart.getAllSeries()[0],
+        oldGetBusinessRange = chart._argumentAxes[0].getTranslator().getBusinessRange;
+
+    series.createPoints.reset();
+    chart._argumentAxes[0].getTranslator = function() {
+        return {
+            getBusinessRange: function() {
+                return $.extend({}, oldGetBusinessRange.call(chart), {
+                    axisType: "discrete",
+                    categories: ["a", "b", "c", "d"]
+                });
+            }
+        };
+    };
+
+    chart.zoomArgument("a", "b");
+    chart.zoomArgument("b", "d");
+
+    assert.ok(series.createPoints.calledTwice);
+});
+
+QUnit.test("Do not recreate series points on scrolling if aggregation is enabled and all points exists (logarithmic argument axis)", function(assert) {
+    // arrange
+    chartMocks.seriesMockData.series.push(new MockSeries());
+    chartMocks.seriesMockData.series[0].useAggregation.returns(true);
+
+    var chart = this.createChart({
+            dataSource: [{}],
+            series: [{ type: "line" }],
+            argumentAxis: { type: "logarithmic" }
+        }),
+        series = chart.getAllSeries()[0],
+        oldGetBusinessRange = chart._argumentAxes[0].getTranslator().getBusinessRange;
+
+    series.createPoints.reset();
+    chart._argumentAxes[0].getTranslator = function() {
+        return {
+            getBusinessRange: function() {
+                return $.extend({}, oldGetBusinessRange.call(chart), {
+                    axisType: "logarithmic",
+                    base: 10
+                });
+            }
+        };
+    };
+
+    chart.zoomArgument(1, 10);
+    series._useAllAggregatedPoints = true;
+    chart.zoomArgument(10, 100);
+
+    assert.ok(series.createPoints.calledOnce);
+});
+
 QUnit.test("Do not recreate series points on scrolling if aggregation is enabled and all points exists", function(assert) {
     // arrange
     chartMocks.seriesMockData.series.push(new MockSeries());

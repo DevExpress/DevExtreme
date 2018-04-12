@@ -548,67 +548,80 @@ var dxChart = AdvancedChart.inherit({
         }
     },
 
-    _prepareToRender: function(drawOptions) {
-        var that = this,
-            panesBorderOptions = that._createPanesBorderOptions(),
-            series = that._getVisibleSeries(),
-            useAggregation = series.some(function(s) { return s.useAggregation(); });
+    _prepareToRender(drawOptions) {
+        const panesBorderOptions = this._createPanesBorderOptions();
 
-        that._createPanesBackground();
-        that._appendAxesGroups();
+        this._createPanesBackground();
+        this._appendAxesGroups();
 
-        that._transformed && that._resetTransform();
+        this._transformed && this._resetTransform();
 
-        that._updatePanesCanvases(drawOptions);
-
-        if(useAggregation && that._prepareSpatialParams()) {
-            this._argumentAxes.forEach(function(axis) {
-                axis.updateCanvas(that._canvas);
-            });
-            series.forEach(function(series) {
-                if(series.useAggregation() && (that._spatialParams.canvasSizeChanged ||
-                    that._spatialParams.viewportSizeChanged ||
-                    (that._spatialParams.viewportFrameChanged && !series._useAllAggregatedPoints))) {
-                    series.createPoints();
-                }
-            });
-            this._processSeriesFamilies();
-        }
-
-        if(useAggregation || (_isDefined(that._zoomMinArg) || _isDefined(that._zoomMaxArg)) && that._themeManager.getOptions("adjustOnZoom")) {
-            that._valueAxes.forEach(function(axis) {
-                var viewport = series.filter(function(s) {
-                    return s.getValueAxis() === axis;
-                }).reduce(function(range, s) {
-                    var seriesRange = s.getViewport();
-
-                    range.min = _isDefined(seriesRange.min) ? (range.min < seriesRange.min ? range.min : seriesRange.min) : range.min;
-                    range.max = _isDefined(seriesRange.max) ? (range.max > seriesRange.max ? range.max : seriesRange.max) : range.max;
-                    if(s.showZero) {
-                        range = new rangeModule.Range(range);
-                        range.correctValueZeroLevel();
-                    }
-                    return range;
-                }, {});
-                if(_isDefined(viewport.min) && _isDefined(viewport.max)) {
-                    axis.zoom(viewport.min, viewport.max);
-                }
-            });
-        }
+        this._updatePanesCanvases(drawOptions);
+        this._adjustViewport();
 
         return panesBorderOptions;
     },
 
-    _prepareSpatialParams() {
-        let that = this,
-            spatialParams = that._spatialParams || { viewportMin: 0, viewportMax: 0 };
-        const argumentAxis = that._getArgumentAxis();
+    _adjustViewport() {
+        const that = this,
+            series = that._getVisibleSeries(),
+            useAggregation = series.some(s => s.useAggregation()),
+            zoomArgsDefined = _isDefined(that._zoomMinArg) || _isDefined(that._zoomMaxArg),
+            adjustOnZoom = that._themeManager.getOptions("adjustOnZoom");
+
+        if(!useAggregation && !(zoomArgsDefined && adjustOnZoom)) {
+            return;
+        }
+
+        that._valueAxes.forEach(function(axis) {
+            const viewport = series.filter(s => {
+                return s.getValueAxis() === axis;
+            }).reduce((range, s) => {
+                var seriesRange = s.getViewport();
+
+                range.min = _isDefined(seriesRange.min) ? (range.min < seriesRange.min ? range.min : seriesRange.min) : range.min;
+                range.max = _isDefined(seriesRange.max) ? (range.max > seriesRange.max ? range.max : seriesRange.max) : range.max;
+                if(s.showZero) {
+                    range = new rangeModule.Range(range);
+                    range.correctValueZeroLevel();
+                }
+                return range;
+            }, {});
+            if(_isDefined(viewport.min) && _isDefined(viewport.max)) {
+                axis.zoom(viewport.min, viewport.max);
+            }
+        });
+    },
+
+    _recreateSizeDependentObjects(isCanvasChanged) {
+        const that = this,
+            series = that._getVisibleSeries(),
+            useAggregation = series.some(s => s.useAggregation()),
+            zoomChanged = that._isZooming();
+
+        if(!useAggregation) {
+            return;
+        }
+
+        that._argumentAxes.forEach(function(axis) {
+            axis.updateCanvas(that._canvas);
+        });
+        series.forEach(function(series) {
+            if(series.useAggregation() && (isCanvasChanged || zoomChanged || !series._useAllAggregatedPoints)) {
+                series.createPoints();
+            }
+        });
+        that._processSeriesFamilies();
+    },
+
+    _isZooming() {
+        const that = this,
+            argumentAxis = that._getArgumentAxis();
 
         if(!argumentAxis || !argumentAxis.getTranslator()) {
             return false;
         }
 
-        const canvas = that._canvas;
         const businessRange = argumentAxis.getTranslator().getBusinessRange();
         let min = that._zoomMinArg ? that._zoomMinArg : 0;
         let max = that._zoomMaxArg ? that._zoomMaxArg : 0;
@@ -620,19 +633,10 @@ var dxChart = AdvancedChart.inherit({
         const viewportDistance = businessRange.axisType === "discrete" ? vizUtils.getCategoriesInfo(businessRange.categories, min, max).categories.length : Math.abs(max - min);
         let precision = mathUtils.getPrecision(viewportDistance);
         precision = precision > 1 ? Math.pow(10, precision - 2) : 1;
-        spatialParams = {
-            viewportFrameChanged: spatialParams.viewportMin.valueOf() !== min.valueOf() || spatialParams.viewportMax.valueOf() !== max.valueOf(),
-            viewportSizeChanged: Math.round((spatialParams.viewportLength - viewportDistance) * precision) / precision !== 0,
-            canvasSizeChanged: spatialParams.canvasWidth - canvas.width !== 0 || spatialParams.canvasHeight - canvas.height !== 0,
-            viewportMin: min,
-            viewportMax: max,
-            canvasWidth: canvas.width,
-            canvasHeight: canvas.height,
-            viewportLength: viewportDistance
-        };
-        that._spatialParams = spatialParams;
+        const zoomChanged = Math.round((that._zoomLength - viewportDistance) * precision) / precision !== 0;
+        that._zoomLength = viewportDistance;
 
-        return that._spatialParams.canvasSizeChanged || that._spatialParams.viewportFrameChanged;
+        return zoomChanged;
     },
 
     _handleSeriesDataUpdated: function() {
@@ -1164,6 +1168,7 @@ var dxChart = AdvancedChart.inherit({
         that._zoomMaxArg = zoomArg && zoomArg.max;
         that._notApplyMargins = gesturesUsed; // TODO
 
+        that._recreateSizeDependentObjects(false);
         that._doRender({
             force: true,
             drawTitle: false,

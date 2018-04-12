@@ -513,7 +513,7 @@ Series.prototype = {
     _drawComplete() {
         const that = this;
         that._disposePoints(that._oldPoints);
-        that._drawnPoints = that._drawnPoints.filter(point => _isDefined(point.series));
+        that._drawnPoints = that._drawnPoints.filter(point => point.series !== null);
         that._oldPoints = null;
         that._pointsToDraw = null;
         that._allPoints = that._points;
