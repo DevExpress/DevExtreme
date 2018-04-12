@@ -152,11 +152,6 @@ var CalendarStrategy = DateBoxStrategy.inherit({
             dateBox.option("opened", false);
             this.dateBoxValue(this.getValue(), e.event);
         }
-    },
-
-    dispose: function() {
-        this.dateBox.off("optionChanged");
-        this.callBase();
     }
 });
 

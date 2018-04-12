@@ -1745,6 +1745,25 @@ QUnit.test("disabledDates argument contains correct component parameter", functi
     assert.equal(component.NAME, "dxDateBox", "Correct component");
 });
 
+QUnit.test("datebox with the 'datetime' type should keep event subscriptions", function(assert) {
+    var stub = sinon.stub(),
+        dateBox = $("#dateBox").dxDateBox({
+            type: "datetime",
+            pickerType: "calendar",
+            value: new Date(2015, 4, 12),
+            adaptivityEnabled: true,
+            onInitialized: function(e) {
+                e.component.on("optionChanged", stub);
+            }
+        }).dxDateBox("instance");
+
+    assert.equal(stub.callCount, 1, "set text on render");
+
+    dateBox.option("opened", true);
+
+    assert.equal(stub.callCount, 2, "'opened' optionChanged event has been raised");
+});
+
 
 QUnit.module("datebox w/ calendar", {
     beforeEach: function() {
