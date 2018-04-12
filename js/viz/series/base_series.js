@@ -7,7 +7,6 @@ var seriesNS = {},
     pointModule = require("./points/base_point"),
     _isDefined = typeUtils.isDefined,
     vizUtils = require("../core/utils"),
-    mathUtils = require("../../core/utils/math"),
     _isEmptyObject = typeUtils.isEmptyObject,
     _normalizeEnum = vizUtils.normalizeEnum,
     _noop = require("../../core/utils/common").noop,
@@ -394,49 +393,9 @@ Series.prototype = {
         return aggregation && aggregation.enabled;
     },
 
-    createPoints: function(useAllAggregatedPoints) {
-        var that = this,
-            isAggregationZooming = that.useAggregation() && that._checkZooming();
-
-        if(_isDefined(useAllAggregatedPoints) || !that._useAllAggregatedPoints || isAggregationZooming) {
-            that._normalizeUsingAllAggregatedPoints(useAllAggregatedPoints);
-            that._createPoints();
-            return true;
-        }
-        return false;
-    },
-
-    _checkZooming: function() {
-        var that = this,
-            argumentAxis = that.getArgumentAxis(),
-            viewport,
-            businessRange,
-            min,
-            max,
-            distance,
-            precision,
-            viewportSizeChanged;
-
-        if(!argumentAxis || !argumentAxis.getTranslator) {
-            return false;
-        }
-
-        viewport = argumentAxis.getViewport();
-        businessRange = argumentAxis.getTranslator().getBusinessRange();
-        min = viewport ? viewport.min : businessRange.minVisible;
-        max = viewport ? viewport.max : businessRange.maxVisible;
-
-        if(that.argumentAxisType === "logarithmic") {
-            min = vizUtils.getLog(min, businessRange.base);
-            max = vizUtils.getLog(max, businessRange.base);
-        }
-        distance = that.argumentAxisType === DISCRETE ? vizUtils.getCategoriesInfo(businessRange.categories, min, max).categories.length : Math.abs(max - min);
-        precision = mathUtils.getPrecision(distance);
-        precision = precision > 1 ? Math.pow(10, precision - 2) : 1;
-        viewportSizeChanged = Math.round((that._viewportLength - distance) * precision) / precision !== 0;
-        that._viewportLength = distance;
-
-        return viewportSizeChanged;
+    createPoints(useAllAggregatedPoints) {
+        this._normalizeUsingAllAggregatedPoints(useAllAggregatedPoints);
+        this._createPoints();
     },
 
     _normalizeUsingAllAggregatedPoints: function(useAllAggregatedPoints) {
@@ -551,9 +510,10 @@ Series.prototype = {
         animationEnabled && that._animate(firstDrawing);
     },
 
-    _drawComplete: function() {
-        var that = this;
+    _drawComplete() {
+        const that = this;
         that._disposePoints(that._oldPoints);
+        that._drawnPoints = that._drawnPoints.filter(point => point.series !== null);
         that._oldPoints = null;
         that._pointsToDraw = null;
         that._allPoints = that._points;
@@ -1074,7 +1034,11 @@ Series.prototype = {
     },
 
     _createAllAggregatedPoints: function() {
-        return this.useAggregation() && !this._useAllAggregatedPoints && this.createPoints(true);
+        if(this.useAggregation() && !this._useAllAggregatedPoints) {
+            this.createPoints(true);
+            return true;
+        }
+        return false;
     },
 
     getPointsByKeys: function(arg) {

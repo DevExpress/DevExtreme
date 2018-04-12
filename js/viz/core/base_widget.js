@@ -368,10 +368,13 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
         that._renderer.fixPlacement();
         if(areCanvasesDifferent(that._canvas, canvas) || that.__forceRender /* for charts */) {
             that._canvas = canvas;
+            that._recreateSizeDependentObjects(true);
             that._renderer.resize(canvas.width, canvas.height);
             that._change(["LAYOUT"]);
         }
     },
+
+    _recreateSizeDependentObjects: noop,
 
     _getMinSize: function() {
         return [0, 0];
