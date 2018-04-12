@@ -25,7 +25,7 @@ $("<div>")
 function checkDashStyle(assert, elem, result, style, value) {
     assert.equal(result, elem);
     assert.ok(!elem.element.getAttribute("dashStyle"));
-    assert.strictEqual((elem.element.getAttribute("stroke-dasharray") || "none").replace(/\s/g, ""), value.replace(/\s/g, ""));
+    assert.strictEqual((elem.element.getAttribute("stroke-dasharray") || "none").replace(/\s/g, "").replace(/px/g, ""), value.replace(/\s/g, ""));
     assert.strictEqual(elem._settings["dashStyle"], style);
 }
 
@@ -974,7 +974,7 @@ function checkDashStyle(assert, elem, result, style, value) {
         // assert
         assert.equal(result, rect);
         assert.strictEqual(rect.element.getAttribute("cy"), "100");
-        assert.strictEqual(rect.element.getAttribute("stroke-dasharray").replace(/\s/g, ""), "1,3");
+        assert.strictEqual(rect.element.getAttribute("stroke-dasharray").replace(/\s/g, "").replace(/px/g, ""), "1,3");
 
         assert.strictEqual(rect._settings["cy"], 100);
         assert.strictEqual(rect._settings["dashStyle"], "dot");
