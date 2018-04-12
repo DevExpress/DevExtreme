@@ -47,14 +47,12 @@ module.exports = {
             /**
              * @name dxDataGridOptions_remoteOperations
              * @publicName remoteOperations
-             * @type string|boolean|object
-             * @default "auto"
+             * @type boolean|object
              */
             /**
              * @name dxTreeListOptions_remoteOperations
              * @publicName remoteOperations
-             * @type string|object
-             * @default "auto"
+             * @type object
              */
             remoteOperations: "auto",
             /**

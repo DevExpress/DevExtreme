@@ -98,8 +98,7 @@ module.exports = {
                 /**
                  * @name GridBaseOptions_scrolling_useNative
                  * @publicName useNative
-                 * @type string|boolean
-                 * @default "auto"
+                 * @type boolean
                  */
                 useNative: "auto"
                 /**
@@ -131,9 +130,7 @@ module.exports = {
                 /**
                  * @name GridBaseOptions_loadPanel_enabled
                  * @publicName enabled
-                 * @type string|boolean
-                 * @default "auto"
-                 * @acceptValues "auto" | true | false
+                 * @type boolean
                  */
                 enabled: "auto",
                 /**

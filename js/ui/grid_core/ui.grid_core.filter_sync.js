@@ -273,9 +273,7 @@ module.exports = {
             /**
              * @name GridBaseOptions_filterSyncEnabled
              * @publicName filterSyncEnabled
-             * @type string|boolean
-             * @default "auto"
-             * @acceptValues "auto" | true | false
+             * @type boolean
              */
             filterSyncEnabled: "auto"
         };
