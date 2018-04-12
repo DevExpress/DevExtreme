@@ -369,6 +369,7 @@ define(function(require, exports, module) {
         assert.equal(numberLocalization.format(2, { minimumIntegerDigits: 3 }), "002");
         assert.equal(numberLocalization.format(12, { minimumIntegerDigits: 3 }), "012");
         assert.equal(numberLocalization.format(123, { minimumIntegerDigits: 3 }), "123");
+        assert.equal(numberLocalization.format(1.23456, { type: 'decimal' }), "1.23456");
     });
 
     QUnit.module("Localization currency with Globalize");
