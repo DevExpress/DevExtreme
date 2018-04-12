@@ -156,9 +156,8 @@ module.exports = {
                 /**
                  * @name GridBaseOptions_pager_visible
                  * @publicName visible
-                 * @type string|boolean
+                 * @type Enums.Mode|boolean
                  * @default "auto"
-                 * @acceptValues "auto" | true | false
                  */
                 visible: "auto",
                 /**
@@ -171,9 +170,8 @@ module.exports = {
                 /**
                  * @name GridBaseOptions_pager_allowedPageSizes
                  * @publicName allowedPageSizes
-                 * @type Array<number>|string
+                 * @type Array<number>|Enums.Mode
                  * @default "auto"
-                 * @acceptValues "auto"
                 */
                 allowedPageSizes: "auto"
                 /**
