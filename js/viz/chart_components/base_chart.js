@@ -1047,10 +1047,12 @@ var BaseChart = BaseWidget.inherit({
         singleSeries.createPoints(false);
     },
 
-    _handleSeriesDataUpdated: function() {
-        this.series.forEach(function(s) {
-            this._processSingleSeries(s);
-        }, this);
+    _handleSeriesDataUpdated() {
+        if(this._getVisibleSeries().some(s => s.useAggregation())) {
+            this._populateMarginOptions();
+        }
+
+        this.series.forEach(s => this._processSingleSeries(s), this);
     },
 
     _dataSpecificInit: function(needRedraw) {
