@@ -251,6 +251,7 @@ var FieldChooser = BaseFieldChooser.inherit({
                 func();
             });
             that._fireContentReadyAction();
+            that.option("state", that._dataSource.state());
         };
 
         if(that._dataSource) {
@@ -698,8 +699,6 @@ var FieldChooser = BaseFieldChooser.inherit({
     cancelChanges: function() {
         if(isDefined(this.option("state"))) {
             var state = this._dataSource.state();
-            this.option("state", null);
-
             this._dataSource.state(state);
         }
     },
