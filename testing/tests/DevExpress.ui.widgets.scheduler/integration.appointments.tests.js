@@ -5916,6 +5916,7 @@ QUnit.test("Appointment should be resized correctly to left side in horizontal g
         }],
         currentView: "month",
         groups: ["id"],
+        editing: true,
         resources: [
             {
                 field: "id",
@@ -5963,6 +5964,7 @@ QUnit.test("Appt shouldn't be resized to the group border in horizontal grouped 
                 ]
             }
         ],
+        editing: true,
         startDayHour: 12,
         endDayHour: 16,
         showAllDayPanel: false
@@ -5994,6 +5996,7 @@ QUnit.test("Appointment inside vertical grouped view should have a right resizab
         }],
         currentView: "day",
         groups: ["id"],
+        editing: true,
         resources: [
             {
                 field: "id",
