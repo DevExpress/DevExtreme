@@ -80,6 +80,22 @@
         .dx-treelist-edit-form {
             background-color: @treelist-base-background-color;
         }
+
+        .dx-virtual-row > td {
+            position: relative;
+
+            &:before {
+                display: block;
+                position: absolute;
+                left: 7px;
+                right: 7px;
+                top: 0;
+                bottom: 0;
+                content: '';
+                background-image: @treelist-text-stub-background-image-path;
+                background-repeat: no-repeat repeat;
+            }
+        }
     }
 
     .dx-treelist-filter-row .dx-filter-range-content {
@@ -146,6 +162,12 @@
                 &.dx-last-cell {
                     border-left: none;
                 }
+            }
+        }
+
+        .dx-treelist-rowsview {
+            .dx-virtual-row > td:before {
+                .flip-horizontally();
             }
         }
     }
