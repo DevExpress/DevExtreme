@@ -7,7 +7,7 @@ var browser = require("core/utils/browser"),
 module.exports = function($input) {
     // NOTE: We decided to return to this problem when Edge 17 is released
     // Edge 15 or 16 sets the caret to the end of the mask editor when iframe is used and focus is triggered by the focus() method
-    var isEdge15_16 = browser.msie && browser.version >= 15 && browser.version < 17;
+    var isEdge15_16 = browser.msie && browser.version >= 15 && browser.version < 18;
 
     var isDesktopChrome = ("chrome" in window) && ("app" in window.chrome) && ("isInstalled" in window.chrome.app),
         isChromeEmulatedIOS = isDesktopChrome && browser.safari,
