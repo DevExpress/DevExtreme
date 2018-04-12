@@ -2001,7 +2001,7 @@ var Scheduler = Widget.inherit({
             allowMultipleCellSelection: this.option("allowMultipleCellSelection"),
             selectedCellData: this.option("selectedCellData"),
             onSelectionChanged: (args) => {
-                this.option("selectedCellData", args.selectedCellData)
+                this.option("selectedCellData", args.selectedCellData);
             }
         }, currentViewOptions);
 
