@@ -45,7 +45,7 @@ QUnit.performanceTest("Accordion should force minimum relayout count on creation
         });
     };
 
-    assert.measureStyleRecalculation(measureFunction, 10);
+    assert.measureStyleRecalculation(measureFunction, 9);
 });
 
 QUnit.performanceTest("Accordion should force minimum relayout count on selection change", function(assert) {
