@@ -189,8 +189,8 @@ var FieldChooser = BaseFieldChooser.inherit({
             * @default "instantly"
             */
            /**
-            * @name dxPivotGridFieldChooserOptions_state
-            * @publicName state
+            * @name dxPivotGridFieldChooserOptions_pendingState
+            * @publicName pendingState
             * @type object
             * @default null
             */
@@ -309,7 +309,7 @@ var FieldChooser = BaseFieldChooser.inherit({
     },
 
     _clean: function(saveState) {
-        !saveState && this.option("state", null);
+        !saveState && this.option("pendingState", null);
         this.$element().children("." + FIELDCHOOSER_CONTAINER_CLASS).remove();
     },
 
@@ -683,11 +683,11 @@ var FieldChooser = BaseFieldChooser.inherit({
     * @publicName applyChanges()
     */
     applyChanges: function() {
-        var state = this.option("state");
+        var state = this.option("pendingState");
 
         if(isDefined(state)) {
             this._dataSource.state(state);
-            this.option("state", null);
+            this.option("pendingState", null);
         }
     },
 
@@ -696,9 +696,9 @@ var FieldChooser = BaseFieldChooser.inherit({
     * @publicName cancelChanges()
     */
     cancelChanges: function() {
-        if(isDefined(this.option("state"))) {
+        if(isDefined(this.option("pendingState"))) {
             var state = this._dataSource.state();
-            this.option("state", null);
+            this.option("pendingState", null);
 
             this._dataSource.state(state);
         }
