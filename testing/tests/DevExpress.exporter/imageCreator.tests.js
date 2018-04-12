@@ -1,7 +1,6 @@
 "use strict";
 
 var $ = require("jquery"),
-    devices = require("core/devices"),
     imageCreator = require("client_exporter").image.creator,
     typeUtils = require("core/utils/type"),
     testingMarkupStart = "<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' version='1.1' fill='none' stroke='none' stroke-width='0' class='dxc dxc-chart' style='line-height:normal;-ms-user-select:none;-moz-user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:rgba(0, 0, 0, 0);display:block;overflow:hidden;touch-action:pan-x pan-y pinch-zoom;-ms-touch-action:pan-x pan-y pinch-zoom;' width='500' height='250'>",
@@ -166,6 +165,22 @@ function setupCanvasStub(drawnElements, paths) {
 
         return matches && matches[0];
     }
+    prototype._font = "";
+
+    Object.defineProperty(prototype, "font", {
+        get: function() {
+            return prototype._font;
+        },
+        set: function(v) {
+            prototype._font = v;
+        }
+    });
+
+    sinon.stub(prototype, "measureText").returns({
+        width: 100,
+        height: 50
+    });
+
     // texts
     sinon.stub(prototype, "fillText", function() {
         var tempFont = this.font.replace(/px\s/g, "px__"),
@@ -264,6 +279,8 @@ function teardownCanvasStub() {
 
     // line dash
     prototype.setLineDash && prototype.setLineDash.restore();
+
+    prototype.measureText.restore();
 }
 
 function getData(markup, isFullMode) {
@@ -820,16 +837,9 @@ QUnit.test("Text", function(assert) {
         try {
             assert.equal(that.drawnElements.length, 2, "Canvas elements count");
 
-            var textElem = that.drawnElements[1],
-                realDevice = devices.real(),
-                deviceType = realDevice.deviceType,
-                mobileIOS = (deviceType === "phone" || deviceType === "tablet") && realDevice.platform === "ios";
+            var textElem = that.drawnElements[1];
 
-            if(!mobileIOS) {
-                assert.equal(textElem.style.weight, "bold", "Style weight");
-            } else {
-                assert.ok(true, "Not for mobile IOS Devices (bold attribute)");
-            }
+            assert.equal(textElem.style.weight, "bold", "Style weight");
 
             assert.equal(textElem.type, "text", "The second element on canvas is text");
             assert.equal(textElem.style.font, "\"Segoe UI Light\",\"Helvetica Neue Light\",\"Segoe UI\",\"Helvetica Neue\",\"Trebuchet MS\",Verdana", "Style font");
@@ -1088,10 +1098,6 @@ QUnit.test("Text with big amount of spaces", function(assert) {
 QUnit.test("Stroke text", function(assert) {
     var that = this,
         done = assert.async(),
-        realDevice = devices.real(),
-        isIPhone = realDevice.deviceType === "phone" ||
-                    realDevice.deviceType === "tablet" &&
-                    realDevice.platform === "ios",
         markup = testingMarkupStart + "<text x=\"50\" y=\"50\" text-anchor=\"start\" stroke-width=\"5\" style=\"fill:#222; font-family:\'Trebuchet MS\', Verdana; stroke: #F2f2f2; stroke-width: 5px;\"><tspan style=\"font-weight: bold; font-style: italic; \" stroke-opacity=\"0.7\">Age</tspan></text>" + testingMarkupEnd,
         imageBlob = getData(markup);
 
@@ -1103,11 +1109,7 @@ QUnit.test("Stroke text", function(assert) {
             assert.equal(that.drawnElements.length, 3, "Canvas elements count");
             assert.equal(strokeText.type, "strokeText", "The fird element on canvas is strokeText");
 
-            if(!isIPhone) {
-                assert.equal(strokeText.style.weight, "bold", "Stroke element style weight");
-            } else {
-                assert.ok(true, "Not for iPhone Devices (bold attribute)");
-            }
+            assert.equal(strokeText.style.weight, "bold", "Stroke element style weight");
 
             assert.equal(strokeText.style.font, "\"Trebuchet MS\",Verdana", "First line. Style font");
             assert.equal(strokeText.style.size, "10px", "Stroke element font-size");
@@ -1188,17 +1190,22 @@ QUnit.test("Text decoration", function(assert) {
         done = assert.async(),
         context = window.CanvasRenderingContext2D.prototype,
         markup = testingMarkupStart + "<text x=\"0\" y=\"50\" style=\"font-family:'Segoe UI Light'\" text-anchor=\"start\"><tspan>Before text... </tspan>"
-                                    + "<tspan x=\"500\" y=\"90\" text-anchor=\"end\" style=\"text-decoration:underline; font-size:38px; fill:#23FF23;\">Underlined text</tspan>"
-                                    + "<tspan x=\"250\" y=\"30\" text-anchor=\"center\" style=\"text-decoration:overline; font-size:24px; fill:#AAFF23;\">Overlined text</tspan>"
-                                    + "<tspan x=\"0\" y=\"160\" text-anchor=\"start\" style=\"text-decoration:line-through; font-size:14px; fill:#23FFFF;\">Line-through text</tspan>"
-                                    + "<tspan x=\"250\" y=\"190\" text-anchor=\"middle\">After text</tspan>"
-                                    + "<tspan x=\"250\" y=\"190\" text-anchor=\"middle\" style=\"text-decoration:line-through;\" fill=\"none\" stroke=\"none\">No filled text(no display)</tspan>"
-                                    + "<tspan x=\"250\" y=\"190\" text-anchor=\"middle\" style=\"text-decoration:line-through;\" fill=\"none\" stroke=\"#222\">No filled text(no display)</tspan>"
-                                    + "</text>"
-                                    + testingMarkupEnd,
-        imageBlob = getData(markup, {
-            width: 500, height: 250, format: "png"
-        });
+            + "<tspan x=\"500\" y=\"90\" text-anchor=\"end\" style=\"text-decoration:underline; font-size:38px; fill:#23FF23;\">Underlined text</tspan>"
+            + "<tspan x=\"250\" y=\"30\" text-anchor=\"center\" style=\"text-decoration:overline; font-size:24px; fill:#AAFF23;\">Overlined text</tspan>"
+            + "<tspan x=\"0\" y=\"160\" text-anchor=\"start\" style=\"text-decoration:line-through; font-size:14px; fill:#23FFFF;\">Line-through text</tspan>"
+            + "<tspan x=\"250\" y=\"190\" text-anchor=\"middle\">After text</tspan>"
+            + "<tspan x=\"250\" y=\"190\" text-anchor=\"middle\" style=\"text-decoration:line-through;\" fill=\"none\" stroke=\"none\">No filled text(no display)</tspan>"
+            + "<tspan x=\"250\" y=\"190\" text-anchor=\"middle\" style=\"text-decoration:line-through;\" fill=\"none\" stroke=\"#222\">No filled text(no display)</tspan>"
+            + "</text>"
+            + testingMarkupEnd;
+
+    context.measureText.withArgs("Underlined text").returns({
+        width: 50
+    });
+
+    var imageBlob = getData(markup, {
+        width: 500, height: 250, format: "png"
+    });
 
     assert.expect(29);
     $.when(imageBlob).done(function(blob) {
@@ -1218,21 +1225,21 @@ QUnit.test("Text decoration", function(assert) {
             assert.equal(underlineDecoration.args.x, 500, "Underline decoration line x");
             assert.roughEqual(underlineDecoration.args.y, 91.9, 0.5, "Underline decoration line y");
             assert.roughEqual(underlineDecoration.args.height, 1.9, 0.1, "Underline decoration line height");
-            assert.roughEqual(underlineDecoration.args.width, 249, 12, "Underline decoration line width");
+            assert.strictEqual(underlineDecoration.args.width, 50, "Underline decoration line width");
             assert.equal(that.drawnElements[4].style.fillStyle, "#23ff23", "Underline decoration line fill color");
 
             // Overline decoration assert
             assert.equal(overlineDecoration.args.x, 250, "Overline decoration line x");
             assert.roughEqual(overlineDecoration.args.y, 7.2, 0.5, "Overline decoration line y");
             assert.roughEqual(overlineDecoration.args.height, 1.2, 0.1, "Overline decoration line height");
-            assert.roughEqual(overlineDecoration.args.width, 143, 8, "Overline decoration line width");
+            assert.strictEqual(overlineDecoration.args.width, 100, 8, "Overline decoration line width");
             assert.equal(that.drawnElements[7].style.fillStyle, "#aaff23", "Overline decoration line fill color");
 
             // Line-through decoration assert
             assert.equal(lineThroughDecoration.args.x, 0, "Line-through decoration line x");
             assert.roughEqual(lineThroughDecoration.args.y, 154.8, 0.5, "Line-through decoration line y");
             assert.equal(lineThroughDecoration.args.height, 1, "Line-through decoration line height");
-            assert.roughEqual(lineThroughDecoration.args.width, 103, 5.5, "Line-through decoration line width");
+            assert.strictEqual(lineThroughDecoration.args.width, 100, "Line-through decoration line width");
             assert.equal(that.drawnElements[10].style.fillStyle, "#23ffff", "Line-through decoration line fill color");
 
 
@@ -1240,7 +1247,7 @@ QUnit.test("Text decoration", function(assert) {
             assert.equal(noDisplayDecoration.args.x, 250, "noDisplay line-through decoration line x");
             assert.roughEqual(noDisplayDecoration.args.y, 186.16, 0.5, "noDisplay line-through decoration line y");
             assert.equal(noDisplayDecoration.args.height, 1, "noDisplay line-through decoration line height");
-            assert.roughEqual(noDisplayDecoration.args.width, 104.5, 4.5, " noDisplay line-through decoration line width");
+            assert.strictEqual(noDisplayDecoration.args.width, 100, " noDisplay line-through decoration line width");
             assert.ok(that.drawnElements[14].type !== "stroke", "noDisplay line-through decoration has no stroke");
             assert.ok(that.drawnElements[14].type !== "fill", "noDisplay line-through decoration has no fill");
 
@@ -1248,7 +1255,7 @@ QUnit.test("Text decoration", function(assert) {
             assert.equal(noFillDecoration.args.x, 250, "noFill line-through decoration line x");
             assert.roughEqual(noFillDecoration.args.y, 186.16, 0.5, "noFill line-through decoration line y");
             assert.equal(noFillDecoration.args.height, 1, "noFill line-through decoration line height");
-            assert.roughEqual(noFillDecoration.args.width, 105.19, 5, " noFill line-through decoration line width");
+            assert.strictEqual(noFillDecoration.args.width, 100, " noFill line-through decoration line width");
             assert.ok(that.drawnElements[17].type === "stroke", "noFill line-through decoration has stroke");
         } finally {
             done();
