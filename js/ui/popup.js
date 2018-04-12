@@ -153,6 +153,13 @@ var Popup = Overlay.inherit({
             dragEnabled: false,
 
             /**
+            * @name dxPopupOptions_position
+            * @publicName position
+            * @type Enums.PositionAlignment|positionConfig|function
+            * @inheritdoc
+            */
+
+            /**
              * @name dxPopupOptions_resizeEnabled
              * @publicName resizeEnabled
              * @type boolean

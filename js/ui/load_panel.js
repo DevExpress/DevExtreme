@@ -59,6 +59,13 @@ var LoadPanel = Overlay.inherit({
             height: 90,
 
             /**
+            * @name dxLoadPanelOptions_position
+            * @publicName position
+            * @type Enums.PositionAlignment|positionConfig|function
+            * @inheritdoc
+            */
+
+            /**
             * @name dxLoadPanelOptions_animation
             * @publicName animation
             * @type object
