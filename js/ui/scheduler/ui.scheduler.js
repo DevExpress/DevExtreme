@@ -610,6 +610,15 @@ var Scheduler = Widget.inherit({
             maxAppointmentsPerCell: "auto",
 
                 /**
+                * @name dxSchedulerOptions_selectedCellData
+                * @publicName selectedCellData
+                * @readonly
+                * @type Array<any>
+                * @default []
+                */
+            selectedCellData: [],
+
+                /**
                 * @name dxSchedulerOptions_onAppointmentRendered
                 * @publicName onAppointmentRendered
                 * @extends Action
@@ -1279,6 +1288,7 @@ var Scheduler = Widget.inherit({
                 break;
             case "noDataText":
             case "allowMultipleCellSelection":
+            case "selectedCellData":
             case "accessKey":
             case "onCellClick":
                 this._workSpace.option(name, value);
@@ -1988,7 +1998,11 @@ var Scheduler = Widget.inherit({
             timeCellTemplate: this.option("timeCellTemplate"),
             resourceCellTemplate: this.option("resourceCellTemplate"),
             dateCellTemplate: this.option("dateCellTemplate"),
-            allowMultipleCellSelection: this.option("allowMultipleCellSelection")
+            allowMultipleCellSelection: this.option("allowMultipleCellSelection"),
+            selectedCellData: this.option("selectedCellData"),
+            onSelectionChanged: (args) => {
+                this.option("selectedCellData", args.selectedCellData)
+            }
         }, currentViewOptions);
 
         result.observer = this;
