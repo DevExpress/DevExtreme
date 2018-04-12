@@ -526,7 +526,9 @@ var NumberBoxMask = NumberBoxBase.inherit({
 
         this._lastKey = null;
 
-        var parsedValue = this._parseValue();
+        var clearedText = this._removeStubs(this._getInputVal());
+
+        var parsedValue = clearedText ? this._parseValue() : null;
         this.option("value", parsedValue);
     },
 

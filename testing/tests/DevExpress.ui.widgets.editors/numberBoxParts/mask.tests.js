@@ -401,6 +401,21 @@ QUnit.test("boundary value should correctly apply after second try to set overfl
 
 QUnit.module("format: text input", moduleConfig);
 
+QUnit.test("clearing numberbox via keyboard should be possible if non required format is used", function(assert) {
+    this.instance.option({
+        format: "$ #.##",
+        value: 1
+    });
+
+    this.keyboard
+        .caret(3)
+        .press("backspace")
+        .change();
+
+    assert.equal(this.input.val(), "", "text was cleared");
+    assert.equal(this.instance.option("value"), null, "value is correct");
+});
+
 QUnit.test("mask should work with arabic digit shaping", function(assert) {
     var arabicDigits = "٠١٢٣٤٥٦٧٨٩";
     var arabicSeparator = "٫";
