@@ -1932,13 +1932,13 @@ declare module DevExpress.ui {
         /** Configures the filter row. */
         filterRow?: { visible?: boolean, showOperationChooser?: boolean, showAllText?: string, resetOperationText?: string, applyFilter?: 'auto' | 'onClick', applyFilterText?: string, operationDescriptions?: { equal?: string, notEqual?: string, lessThan?: string, lessThanOrEqual?: string, greaterThan?: string, greaterThanOrEqual?: string, startsWith?: string, contains?: string, notContains?: string, endsWith?: string, between?: string }, betweenStartText?: string, betweenEndText?: string };
         /** Specifies whether to synchronize the filter row, header filter, and filter builder. The synchronized filter expression is stored in the filterValue option. */
-        filterSyncEnabled?: boolean;
+        filterSyncEnabled?: boolean | 'auto';
         /** Specifies a filter expression. */
         filterValue?: string | Array<any> | Function;
         /** Configures the header filter feature. */
         headerFilter?: { height?: number, visible?: boolean, width?: number, allowSearch?: boolean, texts?: { emptyValue?: string, ok?: string, cancel?: string } };
         /** Configures the load panel. */
-        loadPanel?: { enabled?: boolean, text?: string, width?: number, height?: number, showIndicator?: boolean, indicatorSrc?: string, showPane?: boolean };
+        loadPanel?: { enabled?: boolean | 'auto', text?: string, width?: number, height?: number, showIndicator?: boolean, indicatorSrc?: string, showPane?: boolean };
         /** Specifies text shown when the widget does not display any data. */
         noDataText?: string;
         /** A function that is executed before an adaptive detail row is rendered. */
@@ -1976,7 +1976,7 @@ declare module DevExpress.ui {
         /** A function that is executed before the toolbar is created. */
         onToolbarPreparing?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, toolbarOptions?: dxToolbarOptions }) => any);
         /** Configures the pager. */
-        pager?: { visible?: boolean, showPageSizeSelector?: boolean, allowedPageSizes?: Array<number>, showNavigationButtons?: boolean, showInfo?: boolean, infoText?: string };
+        pager?: { visible?: boolean | 'auto', showPageSizeSelector?: boolean, allowedPageSizes?: Array<number> | 'auto', showNavigationButtons?: boolean, showInfo?: boolean, infoText?: string };
         /** Configures paging. */
         paging?: GridBasePaging;
         /** Specifies whether rows should be shaded differently. */
@@ -2074,7 +2074,7 @@ declare module DevExpress.ui {
         /** Specifies when to show scrollbars. Applies only if useNative is false. */
         showScrollbar?: 'always' | 'never' | 'onHover' | 'onScroll';
         /** Specifies whether the widget should use native or simulated scrolling. */
-        useNative?: boolean;
+        useNative?: boolean | 'auto';
     }
     /** Overridden. */
     export interface GridBaseSelection {
@@ -2255,7 +2255,7 @@ declare module DevExpress.ui {
         /** A function that is executed after the widget creates a row. */
         onRowPrepared?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, data?: any, key?: any, values?: Array<any>, columns?: Array<dxDataGridColumn>, rowIndex?: number, rowType?: string, groupIndex?: number, isSelected?: boolean, isExpanded?: boolean, rowElement?: DevExpress.core.dxElement }) => any);
         /** Specifies the operations that must be performed on the server side. */
-        remoteOperations?: boolean | { sorting?: boolean, filtering?: boolean, paging?: boolean, grouping?: boolean, groupPaging?: boolean, summary?: boolean };
+        remoteOperations?: boolean | { sorting?: boolean, filtering?: boolean, paging?: boolean, grouping?: boolean, groupPaging?: boolean, summary?: boolean } | 'auto';
         /** Specifies a custom template for rows. */
         rowTemplate?: template | ((rowElement: DevExpress.core.dxElement, rowInfo: any) => any);
         /** Configures scrolling. */
@@ -3208,7 +3208,7 @@ declare module DevExpress.ui {
         /** Specifies the layout of items in the row header. */
         rowHeaderLayout?: 'standard' | 'tree';
         /** A configuration object specifying scrolling options. */
-        scrolling?: { mode?: 'standard' | 'virtual', useNative?: boolean };
+        scrolling?: { mode?: 'standard' | 'virtual', useNative?: boolean | 'auto' };
         /** Specifies whether the outer borders of the grid are visible or not. */
         showBorders?: boolean;
         /** Specifies whether to display the Grand Total column. */
@@ -4062,7 +4062,7 @@ declare module DevExpress.ui {
         /** Specifies which data field provides parent keys. */
         parentIdExpr?: string | Function;
         /** Specifies what operations are performed on the server. */
-        remoteOperations?: { sorting?: boolean, filtering?: boolean, grouping?: boolean };
+        remoteOperations?: { sorting?: boolean, filtering?: boolean, grouping?: boolean } | 'auto';
         /** Specifies the root node's identifier. Applies if dataStructure is 'plain'. */
         rootValue?: any;
         /** Configures scrolling. */
