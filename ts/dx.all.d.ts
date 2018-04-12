@@ -610,12 +610,6 @@ declare module DevExpress {
         /** Stops all started animations. */
         stop(): void;
     }
-    /** @deprecated Use requestAnimationFrame instead. */
-    export function requestAnimationFrame(): void;
-    /** @deprecated Use cancelAnimationFrame instead. */
-    export function cancelAnimationFrame(): void;
-    /** @deprecated */
-    export var rtlEnabled: boolean;
     export interface ComponentOptions {
         /** A handler for the disposing event. Executed when the widget is removed from the DOM using the remove(), empty(), or html() jQuery methods only. */
         onDisposing?: ((e: { component?: Component }) => any);
@@ -1670,8 +1664,6 @@ declare module DevExpress.ui {
     export interface dxAccordionItemTemplate extends CollectionWidgetItemTemplate {
         /** Specifies the name of the icon displayed by the widget item title. */
         icon?: string;
-        /** @deprecated Use icon instead. */
-        iconSrc?: string;
         /** Specifies text displayed for the widget item title. */
         title?: string;
     }
@@ -1714,8 +1706,6 @@ declare module DevExpress.ui {
         type?: string;
     }
     export interface dxAutocompleteOptions extends dxDropDownListOptions {
-        /** @deprecated Use the valueExpr option instead. */
-        displayExpr?: any;
         /** Specifies the maximum count of items displayed by the widget. */
         maxItemCount?: number;
         /** The minimum number of characters that must be entered into the text box to begin a search. */
@@ -1761,8 +1751,6 @@ declare module DevExpress.ui {
         hoverStateEnabled?: boolean;
         /** Specifies the icon to be displayed on the button. */
         icon?: string;
-        /** @deprecated Use the icon option instead. */
-        iconSrc?: any;
         /** A handler for the click event. */
         onClick?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, validationGroup?: any }) => any) | string;
         /** Specifies a custom template for the Button widget. */
@@ -1935,17 +1923,22 @@ declare module DevExpress.ui {
         editing?: GridBaseEditing;
         /** Indicates whether to show the error row. */
         errorRowEnabled?: boolean;
+        /** Configures the integrated filter builder. */
         filterBuilder?: dxFilterBuilderOptions;
+        /** Configures the popup in which the integrated filter builder is shown. */
         filterBuilderPopup?: dxPopupOptions;
+        /** Configures the filter panel. */
         filterPanel?: { visible?: boolean, filterEnabled?: boolean, customizeText?: ((e: { component?: Component, filterValue?: any, text?: string }) => string), texts?: { createFilter?: string, clearFilter?: string, filterEnabledHint?: string } };
         /** Configures the filter row. */
         filterRow?: { visible?: boolean, showOperationChooser?: boolean, showAllText?: string, resetOperationText?: string, applyFilter?: string, applyFilterText?: string, operationDescriptions?: { equal?: string, notEqual?: string, lessThan?: string, lessThanOrEqual?: string, greaterThan?: string, greaterThanOrEqual?: string, startsWith?: string, contains?: string, notContains?: string, endsWith?: string, between?: string }, betweenStartText?: string, betweenEndText?: string };
-        filterSyncEnabled?: string | boolean;
+        /** Specifies whether to synchronize the filter row, header filter, and filter builder. The synchronized filter expression is stored in the filterValue option. */
+        filterSyncEnabled?: boolean;
+        /** Specifies a filter expression. */
         filterValue?: string | Array<any> | Function;
         /** Configures the header filter feature. */
         headerFilter?: { height?: number, visible?: boolean, width?: number, allowSearch?: boolean, texts?: { emptyValue?: string, ok?: string, cancel?: string } };
         /** Configures the load panel. */
-        loadPanel?: { enabled?: string | boolean, text?: string, width?: number, height?: number, showIndicator?: boolean, indicatorSrc?: string, showPane?: boolean };
+        loadPanel?: { enabled?: boolean, text?: string, width?: number, height?: number, showIndicator?: boolean, indicatorSrc?: string, showPane?: boolean };
         /** Specifies text shown when the widget does not display any data. */
         noDataText?: string;
         /** A function that is executed before an adaptive detail row is rendered. */
@@ -1983,7 +1976,7 @@ declare module DevExpress.ui {
         /** A function that is executed before the toolbar is created. */
         onToolbarPreparing?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, toolbarOptions?: dxToolbarOptions }) => any);
         /** Configures the pager. */
-        pager?: { visible?: string | boolean, showPageSizeSelector?: boolean, allowedPageSizes?: Array<number> | string, showNavigationButtons?: boolean, showInfo?: boolean, infoText?: string };
+        pager?: { visible?: boolean, showPageSizeSelector?: boolean, allowedPageSizes?: Array<number>, showNavigationButtons?: boolean, showInfo?: boolean, infoText?: string };
         /** Configures paging. */
         paging?: GridBasePaging;
         /** Specifies whether rows should be shaded differently. */
@@ -1992,7 +1985,7 @@ declare module DevExpress.ui {
         scrolling?: GridBaseScrolling;
         /** Configures the search panel. */
         searchPanel?: { visible?: boolean, width?: number, placeholder?: string, highlightSearchText?: boolean, highlightCaseSensitive?: boolean, text?: string, searchVisibleColumnsOnly?: boolean };
-        /** Allows you to select rows or learn which rows are selected. */
+        /** Allows you to select rows or determine which rows are selected. */
         selectedRowKeys?: Array<any>;
         /** Overridden. */
         selection?: GridBaseSelection;
@@ -2029,6 +2022,7 @@ declare module DevExpress.ui {
         popup?: dxPopupOptions;
         /** Overriden. */
         texts?: GridBaseEditingTexts;
+        /** Specifies whether the editing column uses icons instead of links. */
         useIcons?: boolean;
     }
     /** Overriden. */
@@ -2080,7 +2074,7 @@ declare module DevExpress.ui {
         /** Specifies when to show scrollbars. Applies only if useNative is false. */
         showScrollbar?: string;
         /** Specifies whether the widget should use native or simulated scrolling. */
-        useNative?: string | boolean;
+        useNative?: boolean;
     }
     /** Overridden. */
     export interface GridBaseSelection {
@@ -2227,9 +2221,9 @@ declare module DevExpress.ui {
         /** Configures editing. */
         editing?: dxDataGridEditing;
         /** Configures client-side exporting. */
-        export?: { texts?: { excelFormat?: any, exportToExcel?: any, selectedRows?: any, exportTo?: string, exportAll?: string, exportSelectedRows?: string }, enabled?: boolean, fileName?: string, excelFilterEnabled?: boolean, excelWrapTextEnabled?: boolean, proxyUrl?: string, allowExportSelectedData?: boolean, ignoreExcelErrors?: boolean };
+        export?: { enabled?: boolean, fileName?: string, excelFilterEnabled?: boolean, excelWrapTextEnabled?: boolean, proxyUrl?: string, allowExportSelectedData?: boolean, ignoreExcelErrors?: boolean, texts?: { exportTo?: string, exportAll?: string, exportSelectedRows?: string } };
         /** Configures grouping. */
-        grouping?: { groupContinuedMessage?: any, groupContinuesMessage?: any, autoExpandAll?: boolean, allowCollapsing?: boolean, contextMenuEnabled?: boolean, expandMode?: string, texts?: { groupContinuesMessage?: string, groupContinuedMessage?: string, groupByThisColumn?: string, ungroup?: string, ungroupAll?: string } };
+        grouping?: { autoExpandAll?: boolean, allowCollapsing?: boolean, contextMenuEnabled?: boolean, expandMode?: string, texts?: { groupContinuesMessage?: string, groupContinuedMessage?: string, groupByThisColumn?: string, ungroup?: string, ungroupAll?: string } };
         /** Configures the group panel. */
         groupPanel?: { visible?: boolean | string, emptyPanelText?: string, allowColumnDragging?: boolean };
         /** Specifies which data field provides keys for data items. Applies only if data is a simple array. */
@@ -2261,7 +2255,7 @@ declare module DevExpress.ui {
         /** A function that is executed after the widget creates a row. */
         onRowPrepared?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, data?: any, key?: any, values?: Array<any>, columns?: Array<dxDataGridColumn>, rowIndex?: number, rowType?: string, groupIndex?: number, isSelected?: boolean, isExpanded?: boolean, rowElement?: DevExpress.core.dxElement }) => any);
         /** Specifies the operations that must be performed on the server side. */
-        remoteOperations?: string | boolean | { sorting?: boolean, filtering?: boolean, paging?: boolean, grouping?: boolean, groupPaging?: boolean, summary?: boolean };
+        remoteOperations?: boolean | { sorting?: boolean, filtering?: boolean, paging?: boolean, grouping?: boolean, groupPaging?: boolean, summary?: boolean };
         /** Specifies a custom template for rows. */
         rowTemplate?: template | ((rowElement: DevExpress.core.dxElement, rowInfo: any) => any);
         /** Configures scrolling. */
@@ -2277,14 +2271,6 @@ declare module DevExpress.ui {
     }
     /** Configures editing. */
     export interface dxDataGridEditing extends GridBaseEditing {
-        /** @deprecated Use the editing.allowUpdating option instead. */
-        editEnabled?: any;
-        /** @deprecated Use the editing.mode option instead. */
-        editMode?: any;
-        /** @deprecated Use the editing.allowAdding option instead. */
-        insertEnabled?: any;
-        /** @deprecated Use the editing.allowDeleting option instead. */
-        removeEnabled?: any;
         /** Contains options that specify texts for editing-related UI elements. */
         texts?: any;
     }
@@ -2364,10 +2350,6 @@ declare module DevExpress.ui {
         disabledDates?: Array<Date> | ((data: { component?: dxDateBox, date?: Date, view?: string }) => boolean);
         /** Specifies the date display format. Ignored if the pickerType option is 'native' */
         displayFormat?: format;
-        /** @deprecated Use the type option instead. */
-        format?: any;
-        /** @deprecated Use the displayFormat option instead. */
-        formatString?: any;
         /** Specifies the interval between neighboring values in the popup list in minutes. */
         interval?: number;
         /** Specifies the message displayed if the typed value is not a valid date or time. */
@@ -2388,10 +2370,6 @@ declare module DevExpress.ui {
         showAnalogClock?: boolean;
         /** A format used to display date/time information. */
         type?: string;
-        /** @deprecated Use the pickerType option instead. */
-        useCalendar?: boolean;
-        /** @deprecated Use the pickerType option instead. */
-        useNative?: boolean;
         /** An object or a value specifying the date and time currently selected using the date box. */
         value?: Date | number | string;
     }
@@ -2447,8 +2425,6 @@ declare module DevExpress.ui {
         activeStateEnabled?: boolean;
         /** The name of the icon to be displayed by the DropDownMenu button. */
         buttonIcon?: string;
-        /** @deprecated Use the buttonIcon option instead. */
-        buttonIconSrc?: any;
         /** The text displayed in the DropDownMenu button. */
         buttonText?: string;
         /** A data source used to fetch data to be displayed by the widget. */
@@ -2486,8 +2462,6 @@ declare module DevExpress.ui {
         accept?: string;
         /** Specifies if an end user can remove a file from the selection and interrupt uploading. */
         allowCanceling?: boolean;
-        /** @deprecated Use the selectButtonText option instead. */
-        buttonText?: any;
         /** Specifies whether the widget can be focused using keyboard navigation. */
         focusStateEnabled?: boolean;
         /** Specifies the text displayed on the area to which an end-user can drop a file. */
@@ -2532,8 +2506,6 @@ declare module DevExpress.ui {
         uploadUrl?: string;
         /** Specifies a File instance representing the selected file. Read-only when uploadMode is "useForm". */
         value?: Array<File>;
-        /** @deprecated Use the value option instead. */
-        values?: any;
     }
     /** The FileUploader widget enables an end user to upload files to the server. An end user can select files in the file explorer or drag and drop files to the FileUploader area on the page. */
     export class dxFileUploader extends Editor {
@@ -2689,8 +2661,6 @@ declare module DevExpress.ui {
         allowItemDeleting?: boolean;
         /** Specifies whether or not an end user can reorder list items. */
         allowItemReordering?: boolean;
-        /** @deprecated Use the pageLoadMode option instead. */
-        autoPagingEnabled?: any;
         /** A Boolean value specifying whether to enable or disable the bounce-back effect. */
         bounceEnabled?: boolean;
         /** Specifies whether or not an end-user can collapse groups. */
@@ -2759,8 +2729,6 @@ declare module DevExpress.ui {
         selectAllMode?: string;
         /** Specifies item selection mode. */
         selectionMode?: string;
-        /** @deprecated Use the pageLoadMode option instead. */
-        showNextButton?: any;
         /** Specifies when the widget shows the scrollbar. */
         showScrollbar?: string;
         /** Specifies whether or not to display controls used to select list items. */
@@ -2877,8 +2845,6 @@ declare module DevExpress.ui {
         clearButtonText?: string;
         /** Specifies whether to close the drop-down menu if a user clicks outside it. */
         closeOnOutsideClick?: boolean | (() => boolean);
-        /** @deprecated This option is deprecated, because the functionality controlled by it was not supposed to belong to the Lookup widget. Instead, we suggest that you use the SelectBox widget with the acceptCustomValue option set to true. */
-        fieldEditEnabled?: any;
         /** Specifies a custom template for the input field. Must contain the TextBox widget. */
         fieldTemplate?: template | ((selectedItem: any, fieldElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /** Specifies whether the widget can be focused using keyboard navigation. */
@@ -2905,8 +2871,6 @@ declare module DevExpress.ui {
         pageLoadingText?: string;
         /** Specifies whether the next page is loaded when a user scrolls the widget to the bottom or when the "next" button is clicked. */
         pageLoadMode?: string;
-        /** @deprecated Use the DataSource.paginate option instead. */
-        pagingEnabled?: any;
         /** The text displayed by the widget when nothing is selected. */
         placeholder?: string;
         /** Specifies the popup element's height. Applies only if fullScreen is false. */
@@ -2933,8 +2897,6 @@ declare module DevExpress.ui {
         showCancelButton?: boolean;
         /** Specifies whether or not to display the Clear button in the lookup window. */
         showClearButton?: boolean;
-        /** @deprecated Use the pageLoadMode option instead. */
-        showNextButton?: boolean;
         /** A Boolean value specifying whether or not to display the title in the popup window. */
         showPopupTitle?: boolean;
         /** The title of the lookup window. */
@@ -3244,7 +3206,7 @@ declare module DevExpress.ui {
         /** Specifies the layout of items in the row header. */
         rowHeaderLayout?: string;
         /** A configuration object specifying scrolling options. */
-        scrolling?: { mode?: string, useNative?: string | boolean };
+        scrolling?: { mode?: string, useNative?: boolean };
         /** Specifies whether the outer borders of the grid are visible or not. */
         showBorders?: boolean;
         /** Specifies whether to display the Grand Total column. */
@@ -3261,8 +3223,6 @@ declare module DevExpress.ui {
         stateStoring?: { enabled?: boolean, storageKey?: string, type?: string, customLoad?: (() => Promise<any> | JQueryPromise<any>), customSave?: ((state: any) => any), savingTimeout?: number };
         /** Strings that can be changed or localized in the PivotGrid widget. */
         texts?: { grandTotal?: string, total?: string, noData?: string, showFieldChooser?: string, expandAll?: string, collapseAll?: string, sortColumnBySummary?: string, sortRowBySummary?: string, removeAllSorting?: string, exportToExcel?: string, dataNotAvailable?: string };
-        /** @deprecated Use the scrolling.useNative option instead. */
-        useNativeScrolling?: string | boolean;
         /** Specifies whether long text in header items should be wrapped. */
         wordWrapEnabled?: boolean;
     }
@@ -3295,7 +3255,7 @@ declare module DevExpress.ui {
         layout?: number;
         /** A handler for the contextMenuPreparing event. */
         onContextMenuPreparing?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, items?: Array<any>, area?: string, field?: DevExpress.data.PivotGridDataSourceField, jQueryEvent?: JQueryEventObject, event?: event }) => any);
-        state?: any;
+        pendingState?: any;
         /** Strings that can be changed or localized in the PivotGridFieldChooser widget. */
         texts?: { columnFields?: string, rowFields?: string, dataFields?: string, filterFields?: string, allFields?: string };
     }
@@ -3351,7 +3311,7 @@ declare module DevExpress.ui {
     export interface dxPopupOptions extends dxOverlayOptions {
         /** Configures widget visibility animations. This object contains two fields: show and hide. */
         animation?: any;
-        /** Specifies the container in which to place the {WidgetName}. */
+        /** Specifies the container in which to place the widget. */
         container?: string | Element | JQuery;
         /** Specifies whether or not to allow a user to drag the popup window. */
         dragEnabled?: boolean;
@@ -3566,8 +3526,6 @@ declare module DevExpress.ui {
         focusStateEnabled?: boolean;
         /** Specifies the resource kinds by which the scheduler's appointments are grouped in a timetable. */
         groups?: Array<string>;
-        /** @deprecated Use the crossScrollingEnabled option instead. */
-        horizontalScrollingEnabled?: any;
         /** Specifies the time interval between when the date-time indicator changes its position, in milliseconds. */
         indicatorUpdateInterval?: number;
         /** The latest date the widget allows you to select. */
@@ -3615,7 +3573,7 @@ declare module DevExpress.ui {
         /** Specifies a custom template for resource headers. */
         resourceCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /** Specifies an array of resources available in the scheduler. */
-        resources?: Array<{ field?: string, fieldExpr?: string, colorExpr?: string, label?: string, allowMultiple?: boolean, mainColor?: boolean, useColorAsDefault?: boolean, valueExpr?: string | Function, displayExpr?: string | Function, dataSource?: string | Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions }>;
+        resources?: Array<{ fieldExpr?: string, colorExpr?: string, label?: string, allowMultiple?: boolean, useColorAsDefault?: boolean, valueExpr?: string | Function, displayExpr?: string | Function, dataSource?: string | Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions }>;
         /** Specifies whether to apply shading to cover the timetable up to the current time. */
         shadeUntilCurrentTime?: boolean;
         /** Specifies the "All-day" panel's visibility. Setting this option to false hides the panel along with the all-day appointments. */
@@ -3834,8 +3792,6 @@ declare module DevExpress.ui {
         badge?: string;
         /** Specifies the name of the icon displayed by the widget item. */
         icon?: string;
-        /** @deprecated Use icon instead. */
-        iconSrc?: string;
     }
     export interface dxTabPanelOptions extends dxMultiViewOptions {
         /** Specifies whether or not to animate the displayed item change. */
@@ -3872,8 +3828,6 @@ declare module DevExpress.ui {
         badge?: string;
         /** Specifies the name of the icon displayed by the widget item title. */
         icon?: string;
-        /** @deprecated Use icon instead. */
-        iconSrc?: string;
         /** Specifies a template that should be used to render the tab for this item only. */
         tabTemplate?: template | (() => string | Element | JQuery);
         /** Specifies the item title text displayed on a corresponding tab. */
@@ -3904,8 +3858,6 @@ declare module DevExpress.ui {
         tagTemplate?: template | ((itemData: any, itemElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /** Specifies the selected items. */
         value?: Array<string | number | any>;
-        /** @deprecated Use the value option instead. */
-        values?: any;
     }
     /** The TagBox widget is an editor that allows an end user to select multiple items from a drop-down list. */
     export class dxTagBox extends dxSelectBox {
@@ -3989,8 +3941,12 @@ declare module DevExpress.ui {
         displayTime?: number;
         /** Specifies the widget's height in pixels. */
         height?: any;
+        /** Specifies the maximum width the widget can reach while resizing. */
+        maxWidth?: any;
         /** The Toast message text. */
         message?: string;
+        /** Specifies the minimum width the widget can reach while resizing. */
+        minWidth?: any;
         /** Positions the widget. */
         position?: positionConfig | string;
         /** A Boolean value specifying whether or not the main screen is inactive while the widget is active. */
@@ -4102,7 +4058,7 @@ declare module DevExpress.ui {
         /** Specifies which data field provides parent keys. */
         parentIdExpr?: string | Function;
         /** Specifies what operations are performed on the server. */
-        remoteOperations?: string | { sorting?: boolean, filtering?: boolean, grouping?: boolean };
+        remoteOperations?: { sorting?: boolean, filtering?: boolean, grouping?: boolean };
         /** Specifies the root node's identifier. Applies if dataStructure is 'plain'. */
         rootValue?: any;
         /** Configures scrolling. */
@@ -4157,10 +4113,11 @@ declare module DevExpress.ui {
         getNodeByKey(key: any | string | number): dxTreeListNode;
         /** Gets the root node. */
         getRootNode(): dxTreeListNode;
-        /** Gets the currently selected rows' keys. */
+        /** Gets the keys of the rows selected explicitly via the API or via a click or tap. */
         getSelectedRowKeys(): Array<any>;
-        /** @deprecated */
+        /** @deprecated Use the getSelectedRowKeys(mode) method instead. */
         getSelectedRowKeys(leavesOnly: boolean): Array<any>;
+        /** Gets the selected rows' keys. */
         getSelectedRowKeys(mode: string): Array<any>;
         /** Gets data objects of currently selected rows. */
         getSelectedRowsData(): Array<any>;
@@ -4208,8 +4165,6 @@ declare module DevExpress.ui {
         onItemHold?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, node?: dxTreeViewNode }) => any);
         /** A handler for the itemRendered event. */
         onItemRendered?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, node?: dxTreeViewNode }) => any);
-        /** @deprecated Use the onItemSelectionChanged option instead. */
-        onItemSelected?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, itemElement?: DevExpress.core.dxElement, node?: dxTreeViewNode }) => any);
         /** A handler for the itemSelectionChanged event. */
         onItemSelectionChanged?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, node?: dxTreeViewNode, itemElement?: DevExpress.core.dxElement }) => any);
         /** A handler for the selectionChanged event. Executed after selecting an item or clearing its selection. */
@@ -4220,8 +4175,6 @@ declare module DevExpress.ui {
         rootValue?: any;
         /** A string value specifying available scrolling directions. */
         scrollDirection?: string;
-        /** @deprecated Use the showCheckBoxesMode option instead. */
-        selectAllEnabled?: boolean;
         /** Specifies the text displayed at the "Select All" check box. */
         selectAllText?: string;
         /** Specifies whether or not an item becomes selected if a user clicks it. */
@@ -4230,8 +4183,6 @@ declare module DevExpress.ui {
         selectionMode?: string;
         /** Specifies whether or not to select nodes recursively. */
         selectNodesRecursive?: boolean;
-        /** @deprecated Use the showCheckBoxesMode option instead. */
-        showCheckBoxes?: boolean;
         /** Specifies the current check boxes display mode. */
         showCheckBoxesMode?: string;
         /** Specifies if the virtual mode is enabled. */
@@ -4496,8 +4447,6 @@ declare module DevExpress.ui {
         items?: Array<dxMenuBaseItemTemplate>;
         /** Specifies whether or not an item becomes selected if a user clicks it. */
         selectByClick?: boolean;
-        /** @deprecated Use the selectByClick option instead. */
-        selectionByClick?: boolean;
         /** Specifies the selection mode supported by the menu. */
         selectionMode?: string;
         /** Specifies options of submenu showing and hiding. */
@@ -4521,8 +4470,6 @@ declare module DevExpress.ui {
         disabled?: boolean;
         /** The name of an icon to be displayed on the menu item. */
         icon?: string;
-        /** @deprecated Use icon instead. */
-        iconSrc?: string;
         /** Holds an array of menu items. */
         items?: Array<dxMenuBaseItemTemplate>;
         /** Specifies whether or not a user can select a menu item. */
@@ -4566,8 +4513,6 @@ declare module DevExpress.ui {
         deferRendering?: boolean;
         /** Specifies a custom template for the drop-down button. */
         dropDownButtonTemplate?: template | ((buttonData: { text?: string, icon?: string }, contentElement: DevExpress.core.dxElement) => string | Element | JQuery);
-        /** @deprecated Use the acceptCustomValue option instead. */
-        fieldEditEnabled?: any;
         /** A handler for the closed event. */
         onClosed?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any }) => any);
         /** A handler for the opened event. */
@@ -4609,8 +4554,6 @@ declare module DevExpress.ui {
         onSelectionChanged?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, selectedItem?: any }) => any);
         /** A handler for the valueChanged event. */
         onValueChanged?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, value?: any, previousValue?: any, jQueryEvent?: JQueryEventObject, event?: event }) => any);
-        /** @deprecated Use the DataSource.paginate option instead. */
-        pagingEnabled?: boolean;
         /** Specifies whether to allow searching. */
         searchEnabled?: boolean;
         /** Specifies the name of a data source item field or an expression whose value is compared to the search criterion. */
@@ -4690,6 +4633,7 @@ declare module DevExpress.ui {
     }
     /** The FilterBuilder's field structure. */
     export interface dxFilterBuilderField {
+        /** Specifies the field's custom filtering rules. */
         calculateFilterExpression?: ((filterValue: any, selectedFilterOperation: string) => string | Array<any> | Function);
         /** Specifies the data field's caption. */
         caption?: string;
@@ -5225,8 +5169,6 @@ declare module DevExpress.ui {
         constructor(element: JQuery, options?: dxSliderBaseOptions)
     }
     export interface dxTextEditorOptions extends EditorOptions {
-        /** @deprecated Use the inputAttr option instead. */
-        attr?: any;
         /** Specifies whether the widget can be focused using keyboard navigation. */
         focusStateEnabled?: boolean;
         /** Specifies whether the widget changes its state when a user pauses on it. */
@@ -5316,8 +5258,6 @@ declare module DevExpress.ui {
         hasItems?: boolean;
         /** The name of an icon to be displayed on the tree view item. */
         icon?: string;
-        /** @deprecated Use icon instead. */
-        iconSrc?: string;
         /** Holds an array of tree view items. */
         items?: Array<dxTreeViewItemTemplate>;
         /** Holds the key of the parent item. */
