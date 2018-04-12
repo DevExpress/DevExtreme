@@ -319,14 +319,36 @@ var AdvancedChart = BaseChart.inherit({
         that._scaleBreaksGroup.linkAppend();
     },
 
+    _populateMarginOptions() {
+        const that = this;
+        const bubbleSize = estimateBubbleSize(that.getSize(), that.panes.length, that._themeManager.getOptions("maxBubbleSize"), that._isRotated());
+        let argumentMarginOptions = {};
+
+        that._valueAxes.forEach(valueAxis => {
+            const groupSeries = that.series.filter(function(series) {
+                return series.getValueAxis() === valueAxis;
+            });
+            let marginOptions = {};
+
+            groupSeries.forEach(series => {
+                const seriesMarginOptions = processBubbleMargin(series.getMarginOptions(), bubbleSize);
+
+                marginOptions = mergeMarginOptions(marginOptions, seriesMarginOptions);
+                argumentMarginOptions = mergeMarginOptions(argumentMarginOptions, seriesMarginOptions);
+            });
+
+            valueAxis.setMarginOptions(marginOptions);
+        });
+
+        that._argumentAxes.forEach(a => a.setMarginOptions(argumentMarginOptions));
+    },
+
     _populateBusinessRange: function() {
         var that = this,
             businessRanges = [],
             rotated = that._isRotated(),
             argAxes = that._argumentAxes,
             argRange = new rangeModule.Range({ rotated: !!rotated }),
-            argumentMarginOptions = {},
-            bubbleSize = estimateBubbleSize(that.getSize(), that.panes.length, that._themeManager.getOptions("maxBubbleSize"), that._isRotated()),
             groupsData = that._groupsData;
 
         that.businessRanges = null;
@@ -344,19 +366,15 @@ var AdvancedChart = BaseChart.inherit({
                 groupAxisRange = valueAxis.getRangeData(),
                 groupSeries = that.series.filter(function(series) {
                     return series.getValueAxis() === valueAxis;
-                }),
-                marginOptions = {};
+                });
 
             groupRange.addRange(groupAxisRange);
 
             groupSeries.forEach(function(series) {
-                var seriesRange = series.getRangeData(),
-                    seriesMarginOptions = processBubbleMargin(series.getMarginOptions(), bubbleSize);
+                var seriesRange = series.getRangeData();
 
                 groupRange.addRange(seriesRange.val);
                 argRange.addRange(seriesRange.arg);
-                marginOptions = mergeMarginOptions(marginOptions, seriesMarginOptions);
-                argumentMarginOptions = mergeMarginOptions(argumentMarginOptions, seriesMarginOptions);
             });
 
             if(!groupRange.isDefined()) {
@@ -369,7 +387,6 @@ var AdvancedChart = BaseChart.inherit({
 
             valueAxis.setGroupSeries(groupSeries);
             valueAxis.setBusinessRange(groupRange);
-            valueAxis.setMarginOptions(marginOptions);
 
             businessRanges.push({ val: groupRange, arg: argRange });
         });
@@ -382,8 +399,9 @@ var AdvancedChart = BaseChart.inherit({
 
         that._argumentAxes.forEach(function(a) {
             a.setBusinessRange(argRange);
-            a.setMarginOptions(argumentMarginOptions);
         });
+
+        that._populateMarginOptions();
 
         that.businessRanges = businessRanges;
     },

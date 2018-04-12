@@ -1048,6 +1048,10 @@ var BaseChart = BaseWidget.inherit({
     },
 
     _handleSeriesDataUpdated: function() {
+        if(this._getVisibleSeries().some(s => s.useAggregation())) {
+            this._populateMarginOptions();
+        }
+
         this.series.forEach(function(s) {
             this._processSingleSeries(s);
         }, this);
