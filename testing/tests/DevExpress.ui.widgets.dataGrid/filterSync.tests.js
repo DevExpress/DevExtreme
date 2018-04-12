@@ -136,6 +136,20 @@ QUnit.module("Sync with FilterValue", {
         assert.deepEqual(this.columnsController.columnOption("field", "selectedFilterOperation"), "=");
     });
 
+    QUnit.test("skip header filter for equal operation if it has dataSource", function(assert) {
+        // arrange, act
+        this.setupDataGrid({
+            filterValue: ["field", "=", 2],
+            columns: [{ dataField: "field", filterValues: [1, 3], headerFilter: { dataSource: [10] } }],
+        });
+
+        // assert
+        assert.deepEqual(this.option("filterValue"), ["field", "=", 2]);
+        assert.deepEqual(this.columnsController.columnOption("field", "filterValues"), undefined);
+        assert.deepEqual(this.columnsController.columnOption("field", "filterValue"), 2);
+        assert.deepEqual(this.columnsController.columnOption("field", "selectedFilterOperation"), "=");
+    });
+
     QUnit.test("clear header filter & filterrow on initialization if filterValue = null", function(assert) {
         // arrange, act
         this.setupDataGrid({

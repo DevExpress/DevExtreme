@@ -18,6 +18,10 @@ var FilterSyncController = modules.Controller.inherit((function() {
         };
     };
 
+    var canSyncHeaderFilterWithFilterRow = function(column) {
+        return !filterUtils.getGroupInterval(column) && !(column.headerFilter && column.headerFilter.dataSource);
+    };
+
     var getHeaderFilterFromCondition = function(headerFilterCondition, column) {
         if(!headerFilterCondition) {
             return getEmptyFilterValues();
@@ -29,8 +33,7 @@ var FilterSyncController = modules.Controller.inherit((function() {
             hasArrayValue = Array.isArray(value);
 
         if(!hasArrayValue) {
-            var groupInterval = filterUtils.getGroupInterval(column);
-            if(groupInterval) {
+            if(!canSyncHeaderFilterWithFilterRow(column)) {
                 return getEmptyFilterValues();
             }
         }
@@ -60,8 +63,7 @@ var FilterSyncController = modules.Controller.inherit((function() {
 
         if(!filterValues) return null;
 
-        var groupInterval = filterUtils.getGroupInterval(column);
-        if(!groupInterval && column.filterValues.length === 1 && !Array.isArray(filterValues[0])) {
+        if(canSyncHeaderFilterWithFilterRow(column) && column.filterValues.length === 1 && !Array.isArray(filterValues[0])) {
             column.filterType === "exclude" ? selectedOperation = "<>" : selectedOperation = "=";
             value = filterValues[0];
         } else {
