@@ -39,6 +39,8 @@ DevExtreme supports deep integration with the following client-side technologies
 - [jQuery plugins](https://js.devexpress.com/Documentation/Guide/Getting_Started/Widget_Basics_-_jQuery/Create_and_Configure_a_Widget/)
 - [Knockout bindings](https://js.devexpress.com/Documentation/Guide/Getting_Started/Widget_Basics_-_Knockout/Create_and_Configure_a_Widget/)
 - [Angular](https://github.com/DevExpress/devextreme-angular#readme)
+- [React](https://github.com/DevExpress/devextreme-react#readme)
+- [Vue](https://github.com/DevExpress/devextreme-vue#readme)
 
 And server-side frameworks:
 
