@@ -354,6 +354,7 @@ var SchedulerWorkSpace = Widget.inherit({
                 this._deleteFocusClass($($cell[i]));
             }
         }
+        this.option("selectedCellData", []);
     },
 
     _deleteFocusClass: function($cell) {
