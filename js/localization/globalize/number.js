@@ -199,7 +199,8 @@ if(Globalize && Globalize.formatNumber) {
                 config = {
                     minimumIntegerDigits: formatConfig.precision || 1,
                     useGrouping: false,
-                    maximumFractionDigits: 0,
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 20,
                     round: value < 0 ? "ceil" : "floor"
                 };
             } else {
