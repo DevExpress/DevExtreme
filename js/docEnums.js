@@ -42,6 +42,7 @@
 /**
  * @typedef {string} Enums.VizPalette
  * @enum {'Bright'|'Default'|'Harmony Light'|'Ocean'|'Pastel'|'Soft'|'Soft Pastel'|'Vintage'|'Violet'|'Carmine'|'Dark Moon'|'Dark Violet'|'Green Mist'|'Soft Blue'|'Material'|'Office'}
+ * @member 'Default' @deprecated 'Material'
  */
 
 /**
