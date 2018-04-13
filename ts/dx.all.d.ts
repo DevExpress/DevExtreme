@@ -3136,7 +3136,7 @@ declare module DevExpress.ui {
         /** Specifies the widget content title. */
         title?: string;
     }
-    /** The Panorama widget is a full-screen widget that allows you to arrange items on a long horizontal canvas split into several views. Each view contains several items, and an end user navigates the views with the swipe gesture. The Panorama is often used as a navigation map on the first page of an application. */
+    /** @deprecated */
     export class dxPanorama extends CollectionWidget {
         constructor(element: Element, options?: dxPanoramaOptions)
         constructor(element: JQuery, options?: dxPanoramaOptions)
@@ -3156,7 +3156,7 @@ declare module DevExpress.ui {
         /** A Boolean value specifying whether or not to allow users to switch between items by swiping. */
         swipeEnabled?: boolean;
     }
-    /** The Pivot provides a quick way to manage multiple views. It includes a collection of views and a navigation header. An end user switches the views by swiping them or by clicking their titles on the navigation header. */
+    /** @deprecated */
     export class dxPivot extends CollectionWidget {
         constructor(element: Element, options?: dxPivotOptions)
         constructor(element: JQuery, options?: dxPivotOptions)
@@ -3257,7 +3257,7 @@ declare module DevExpress.ui {
         layout?: 0 | 1 | 2;
         /** A handler for the contextMenuPreparing event. */
         onContextMenuPreparing?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, items?: Array<any>, area?: string, field?: DevExpress.data.PivotGridDataSourceField, jQueryEvent?: JQueryEventObject, event?: event }) => any);
-        pendingState?: any;
+        state?: any;
         /** Strings that can be changed or localized in the PivotGridFieldChooser widget. */
         texts?: { columnFields?: string, rowFields?: string, dataFields?: string, filterFields?: string, allFields?: string };
     }
@@ -3578,6 +3578,7 @@ declare module DevExpress.ui {
         resourceCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /** Specifies an array of resources available in the scheduler. */
         resources?: Array<{ fieldExpr?: string, colorExpr?: string, label?: string, allowMultiple?: boolean, useColorAsDefault?: boolean, valueExpr?: string | Function, displayExpr?: string | Function, dataSource?: string | Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions }>;
+        selectedCellData?: Array<any>;
         /** Specifies whether to apply shading to cover the timetable up to the current time. */
         shadeUntilCurrentTime?: boolean;
         /** Specifies the "All-day" panel's visibility. Setting this option to false hides the panel along with the all-day appointments. */
@@ -6725,6 +6726,7 @@ declare module DevExpress.viz {
     }
     /** This section describes the Point object, which represents a series point. */
     export class basePointObject {
+        data: any;
         /** Provides information about the state of the point object. */
         fullState: number;
         /** Returns the point's argument value that was set in the data source. */
