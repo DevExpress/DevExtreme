@@ -2236,7 +2236,7 @@ QUnit.test('All translators process special cases', function(assert) {
     checkTranslator('special_case', 'special_case_processed', 'Discrete translator can process special case', { categories: ['a1', 'a2'], axisType: 'discrete', dataType: 'string' });
 });
 
-QUnit.module("Zooming and scrolling");
+QUnit.module("Zooming and scrolling", environment);
 
 QUnit.test('scroll. Scrolling page at right side (right edge of the chart, event not canceled)', function(assert) {
     var range = $.extend({ minVisible: 70, maxVisible: 99.5, invert: false }, numericRange),
@@ -2718,6 +2718,22 @@ QUnit.test('check reset zoom for single point. DateTime', function(assert) {
     translator.updateBusinessRange($.extend({}, datetimeRange, { min: new Date(2012, 9, 2), max: new Date(2012, 9, 2), minVisible: zoomInfo.min, maxVisible: zoomInfo.max }));
 
     assert.ok(translator.zoomArgsIsEqualCanvas(zoomInfo));
+});
+
+QUnit.test("Zoom. Min in the break after zoom", function(assert) {
+    var translator = createTranslatorWithScaleBreaks.call(this, {});
+
+    var zoomInfo = translator.zoom(700, 2);
+
+    assert.equal(zoomInfo.min, 200);
+    assert.equal(zoomInfo.max, 450);
+});
+
+QUnit.test("Zoom. Max in the break after zoom", function(assert) {
+    var translator = createTranslatorWithScaleBreaks.call(this, {});
+
+    var zoomInfo = translator.zoom(650, 2.3);
+    assert.equal(zoomInfo.max, 350);
 });
 
 QUnit.module('Zooming and scrolling. Discrete translator', {
