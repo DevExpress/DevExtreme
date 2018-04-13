@@ -1089,8 +1089,7 @@ var FilterBuilder = Widget.inherit({
             shading: false,
             width: "auto",
             height: "auto",
-            showTitle: false,
-            deferRendering: false
+            showTitle: false
         });
     },
 

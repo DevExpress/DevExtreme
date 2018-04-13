@@ -16,6 +16,7 @@ var
     FILTER_BUILDER_ITEM_OPERATION_CLASS = FILTER_BUILDER_CLASS + "-item-operation",
     FILTER_BUILDER_ITEM_VALUE_CLASS = FILTER_BUILDER_CLASS + "-item-value",
     FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS = FILTER_BUILDER_CLASS + "-item-value-text",
+    FILTER_BUILDER_OVERLAY_CLASS = FILTER_BUILDER_CLASS + "-overlay",
     FILTER_BUILDER_GROUP_OPERATION_CLASS = FILTER_BUILDER_CLASS + "-group-operation",
     FILTER_BUILDER_IMAGE_ADD_CLASS = "dx-icon-plus",
     FILTER_BUILDER_IMAGE_REMOVE_CLASS = "dx-icon-remove",
@@ -69,6 +70,21 @@ QUnit.module("Rendering", function() {
 
         var $menuItem = $(".dx-treeview-item").eq(1);
         assert.equal($menuItem.text(), "Budget");
+    });
+
+    // T619643
+    QUnit.test("deferRendering is enabled in menu", function(assert) {
+        var container = $("#container");
+
+        container.dxFilterBuilder({
+            fields: [{
+                dataField: "CompanyName"
+            }]
+        });
+
+        container.find("." + FILTER_BUILDER_GROUP_OPERATION_CLASS).trigger("dxclick");
+        var popupInstance = container.find("." + FILTER_BUILDER_OVERLAY_CLASS).dxPopup("instance");
+        assert.ok(popupInstance.option("deferRendering"));
     });
 
     QUnit.test("operation menu has between item with custom operation class", function(assert) {
@@ -390,7 +406,7 @@ QUnit.module("Rendering", function() {
         $("." + FILTER_BUILDER_GROUP_OPERATION_CLASS).trigger("dxclick");
 
         // assert
-        assert.notOk($container.find(".dx-filterbuilder-overlay").dxPopup("instance").option("target"), "popup target shoud not be set");
+        assert.notOk($container.find("." + FILTER_BUILDER_OVERLAY_CLASS).dxPopup("instance").option("target"), "popup target shoud not be set");
     });
 });
 
