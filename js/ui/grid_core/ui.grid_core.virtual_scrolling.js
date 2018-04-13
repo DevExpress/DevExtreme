@@ -363,12 +363,13 @@ var VirtualScrollingRowsViewExtender = (function() {
             that._updateBottomLoading();
         },
         _updateContentPosition: function(isRender) {
-            var that = this;
+            var that = this,
+                dataController = that._dataController,
+                rowHeight = that._rowHeight || 20;
+
+            dataController.viewportItemSize(rowHeight);
 
             if(!that.option("legacyRendering") && (isVirtualMode(that) || isVirtualRowRendering(that))) {
-                var dataController = that._dataController;
-                var rowHeight = that._rowHeight || 20;
-                dataController.viewportItemSize(rowHeight);
                 if(!isRender) {
                     var rowHeights = that._getRowElements(that._tableElement).toArray().map(function(row) {
                         return row.getBoundingClientRect().height;

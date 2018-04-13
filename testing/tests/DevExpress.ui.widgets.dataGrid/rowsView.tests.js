@@ -5820,6 +5820,7 @@ QUnit.test('Render rows at end when infinite scrolling', function(assert) {
     rowsView.resize();
 
     // assert
+    assert.ok(dataController.viewportItemSize() > 30, 'viewportItemSize is correct');
     assert.equal(content.children().eq(0).find('.dx-freespace-row').length, 1, 'only one freespace-row exists');
     assert.ok(content.children().eq(0).find('.dx-freespace-row').eq(0).is(":visible"), 'freespace row is visible');
 });
