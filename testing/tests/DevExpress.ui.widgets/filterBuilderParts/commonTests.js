@@ -184,7 +184,7 @@ QUnit.module("Rendering", function() {
             }]
         });
 
-        container.find("." + FILTER_BUILDER_GROUP_OPERATION_CLASS).click();
+        container.find("." + FILTER_BUILDER_GROUP_OPERATION_CLASS).trigger("dxclick");
         var popupInstance = container.find("." + FILTER_BUILDER_OVERLAY_CLASS).dxPopup("instance");
         assert.ok(popupInstance.option("deferRendering"));
     });
