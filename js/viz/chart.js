@@ -647,6 +647,10 @@ var dxChart = AdvancedChart.inherit({
             viewport.addRange(s.getArgumentRange());
         });
 
+        if(!viewport.isDefined()) {
+            viewport.setStubData(that._argumentAxes[0].getOptions().argumentType);
+        }
+
         that._argumentAxes.forEach(function(axis) {
             axis.updateCanvas(that._canvas);
             axis.setBusinessRange(viewport);
