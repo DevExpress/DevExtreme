@@ -95,6 +95,10 @@
                 background-image: @treelist-text-stub-background-image-path;
                 background-repeat: no-repeat repeat;
             }
+
+            &[style*="text-align: right"]:before {
+                .flip-horizontally();
+            }
         }
     }
 
@@ -166,8 +170,14 @@
         }
 
         .dx-treelist-rowsview {
-            .dx-virtual-row > td:before {
-                .flip-horizontally();
+            .dx-virtual-row > td {
+                &:before {
+                    .flip-horizontally();
+                }
+
+                &[style*="text-align: left"]:before {
+                    .scale(1);
+                }
             }
         }
     }

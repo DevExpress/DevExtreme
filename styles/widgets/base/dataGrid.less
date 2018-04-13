@@ -84,7 +84,7 @@
         .dx-virtual-row > td {
             position: relative;
 
-            &:before {
+            &:not(.dx-datagrid-group-space):before {
                 display: block;
                 position: absolute;
                 left: 7px;
@@ -94,6 +94,10 @@
                 content: '';
                 background-image: @datagrid-text-stub-background-image-path;
                 background-repeat: no-repeat repeat;
+            }
+
+            &[style*="text-align: right"]:before {
+                .flip-horizontally();
             }
         }
     }
@@ -166,8 +170,14 @@
         }
 
         .dx-datagrid-rowsview {
-            .dx-virtual-row > td:before {
-                .flip-horizontally();
+            .dx-virtual-row > td {
+                &:before {
+                    .flip-horizontally();
+                }
+
+                &[style*="text-align: left"]:before {
+                    .scale(1);
+                }
             }
         }
     }
