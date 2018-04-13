@@ -203,6 +203,26 @@ QUnit.test("Actions sequence with series on render chart", function(assert) {
     assert.deepEqual(argumentAxis.setBusinessRange.lastCall.args[0].max, 30);
 });
 
+QUnit.test("Set stub data for argument range if no data", function(assert) {
+    // arrange
+    var stubSeries = new MockSeries({});
+
+    chartMocks.seriesMockData.series.push(stubSeries);
+
+    stubSeries.getArgumentRange.returns({});
+
+    var chart = this.createChart({
+        series: [{ type: "line" }],
+        argumentAxis: {
+            argumentType: "datetime"
+        }
+    });
+    var argumentAxis = chart._argumentAxes[0];
+
+    assert.ok(argumentAxis.setBusinessRange.firstCall.args[0].min instanceof Date);
+    assert.ok(argumentAxis.setBusinessRange.firstCall.args[0].max instanceof Date);
+});
+
 QUnit.test("Recreate series points on zooming if aggregation is enabled", function(assert) {
     // arrange
     chartMocks.seriesMockData.series.push(new MockSeries());
