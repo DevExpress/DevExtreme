@@ -189,9 +189,10 @@ module.exports = Class.inherit((function() {
             newCell,
             rowIndex,
             columnIndex,
-            dataSourceCells = dataSource.values;
+            dataSourceCells = dataSource.values,
+            isNewDataSourceNotEmpty = newRowItemIndexesToCurrent.length + newColumnItemIndexesToCurrent.length;
 
-        if(newDataSourceCells) {
+        if(newDataSourceCells && isNewDataSourceNotEmpty) {
             for(newRowIndex = 0; newRowIndex <= newDataSourceCells.length; newRowIndex++) {
                 newRowCells = newDataSourceCells[newRowIndex];
                 rowIndex = newRowItemIndexesToCurrent[newRowIndex];
