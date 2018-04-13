@@ -42,7 +42,10 @@ var ColumnsControllerExtender = (function() {
         init: function() {
             var that = this;
             that.callBase();
-            that.setScrollPosition(0);
+
+            that._beginPageIndex = 0;
+            that._endPageIndex = 0;
+            that._position = 0;
         },
         getBeginPageIndex: function(position) {
             var visibleColumns = this.getVisibleColumns(undefined, true),
@@ -59,7 +62,11 @@ var ColumnsControllerExtender = (function() {
             return 0;
         },
         getTotalWidth: function() {
-            return parseFloat(this.option("width")) || this.getController("resizing")._lastWidth || this.component.$element().outerWidth();
+            var width = this.option("width");
+            if(typeof width === "number") {
+                return width;
+            }
+            return this.getController("resizing")._lastWidth || this.component.$element().outerWidth();
         },
         getEndPageIndex: function(position) {
             var visibleColumns = this.getVisibleColumns(undefined, true),
@@ -110,15 +117,12 @@ var ColumnsControllerExtender = (function() {
 
             if(that.isVirtualMode()) {
                 var beginPageIndex = that.getBeginPageIndex(position);
-                var endPageIndex = that.getEndPageIndex(position),
-                    isInitialized = !!that._endPageIndex;
+                var endPageIndex = that.getEndPageIndex(position);
 
                 if(position < that._position ? that._beginPageIndex !== beginPageIndex : that._endPageIndex !== endPageIndex) {
                     that._beginPageIndex = beginPageIndex;
                     that._endPageIndex = endPageIndex;
-                    if(isInitialized) {
-                        that._fireColumnsChanged();
-                    }
+                    that._fireColumnsChanged();
                 }
                 that._position = position;
             }
@@ -136,6 +140,12 @@ var ColumnsControllerExtender = (function() {
             var endFixedColumnCount = fixedColumns.length ? fixedColumns.length - transparentColumnIndex - 1 : 0;
 
             var pageSize = this.getColumnPageSize();
+
+            if(!this._beginPageIndex && !this._endPageIndex) {
+                this._beginPageIndex = this.getBeginPageIndex(this._position);
+                this._endPageIndex = this.getEndPageIndex(this._position);
+            }
+
             var beginPageIndex = this._beginPageIndex;
             var endPageIndex = this._endPageIndex;
 
