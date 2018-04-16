@@ -659,7 +659,8 @@ module.exports = {
 
             var createColumn = function(that, columnOptions, userStateColumnOptions, bandColumn) {
                 var commonColumnOptions = {},
-                    calculatedColumnOptions;
+                    calculatedColumnOptions,
+                    isDefaultCommandColumn;
 
                 if(columnOptions) {
                     if(typeUtils.isString(columnOptions)) {
@@ -669,7 +670,13 @@ module.exports = {
                     }
 
                     if(columnOptions.command) {
-                        return extend(true, {}, columnOptions);
+                        isDefaultCommandColumn = that._commandColumns.some((column) => column.command === columnOptions.command);
+
+                        if(!isDefaultCommandColumn) {
+                            commonColumnOptions.visible = true;
+                        }
+
+                        return extend(true, commonColumnOptions, columnOptions);
                     } else {
                         commonColumnOptions = that.getCommonSettings();
                         if(userStateColumnOptions && userStateColumnOptions.name && userStateColumnOptions.dataField) {
@@ -1399,9 +1406,9 @@ module.exports = {
                         commandColumnIndex = column && column.command ? getCommandColumnIndex(column) : -1;
                         if(commandColumnIndex >= 0) {
                             if(needToExtend) {
-                                result[commandColumnIndex] = extend({}, commandColumns[commandColumnIndex], column);
+                                result[commandColumnIndex] = extend({}, result[commandColumnIndex], column);
                             } else {
-                                result[i] = extend({}, column, commandColumns[commandColumnIndex]);
+                                result[i] = extend({}, result[i], commandColumns[commandColumnIndex]);
                             }
                         } else if(column && needToExtend) {
                             result.push(extend({}, column));
@@ -2468,7 +2475,7 @@ module.exports = {
                     var that = this,
                         i,
                         identifierOptionName = typeUtils.isString(identifier) && identifier.substr(0, identifier.indexOf(":")),
-                        columns = (identifier < 0 || identifierOptionName === "command") ? that._commandColumns : that._columns,
+                        columns = (identifier < 0 || identifierOptionName === "command") ? that._columns.concat(that._commandColumns) : that._columns,
                         needUpdateIndexes,
                         column;
 
