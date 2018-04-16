@@ -208,8 +208,7 @@ var SchedulerNavigator = Widget.inherit({
             min: undefined,
             max: undefined,
             firstDayOfWeek: undefined,
-            _useShortDateFormat: false,
-            _hideNavigatorPopoverArrow: false
+            _useShortDateFormat: false
         });
     },
 
@@ -371,9 +370,6 @@ var SchedulerNavigator = Widget.inherit({
     _popoverContentReadyHandler: function() {
         this._calendar = this._createComponent($("<div>"), Calendar, this._calendarOptions());
         this._calendar.$element().addClass(CALENDAR_CLASS);
-        if(this.option("_hideNavigatorPopoverArrow")) {
-            this._popover._$arrow.hide();
-        }
         this._popover.$content().append(this._calendar.$element());
     },
 

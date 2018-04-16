@@ -3752,15 +3752,4 @@ QUnit.testStart(function() {
         assert.equal(appointments.option("_appointmentGroupButtonOffset"), 20, "SchedulerAppointments has correct _appointmentGroupButtonOffset");
     });
 
-    QUnit.test("_hideNavigatorPopoverArrow option should be passed to SchedulerNavigator", function(assert) {
-        this.createInstance({
-            currentView: "week",
-            showCurrentTimeIndicator: false
-        });
-
-        var navigator = this.instance.getHeader()._navigator;
-
-        assert.equal(navigator.option("_hideNavigatorPopoverArrow"), true, "navigator has correct _hideNavigatorPopoverArrow");
-    });
-
 })("View with configuration");

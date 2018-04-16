@@ -933,8 +933,7 @@ var Scheduler = Widget.inherit({
             _dropDownButtonIcon: "overflow",
             _appointmentCountPerCell: 2,
             _appointmentGroupButtonOffset: 0,
-            _appointmentOffset: 26,
-            _hideNavigatorPopoverArrow: false
+            _appointmentOffset: 26
 
                 /**
                 * @name dxSchedulerOptions_activeStateEnabled
@@ -1154,8 +1153,7 @@ var Scheduler = Widget.inherit({
                     _dropDownButtonIcon: "chevrondown",
                     _appointmentCountPerCell: 1,
                     _appointmentGroupButtonOffset: 20,
-                    _appointmentOffset: 30,
-                    _hideNavigatorPopoverArrow: true
+                    _appointmentOffset: 30
                 }
             }
         ]);
@@ -1374,7 +1372,6 @@ var Scheduler = Widget.inherit({
             case "_appointmentCountPerCell":
             case "_appointmentGroupButtonOffset":
             case "_appointmentOffset":
-            case "_hideNavigatorPopoverArrow":
                 this.repaint();
                 break;
             case "dateSerializationFormat":
@@ -1864,8 +1861,7 @@ var Scheduler = Widget.inherit({
             width: this.option("width"),
             rtlEnabled: this.option("rtlEnabled"),
             useDropDownViewSwitcher: this.option("useDropDownViewSwitcher"),
-            _dropDownButtonIcon: this.option("_dropDownButtonIcon"),
-            _hideNavigatorPopoverArrow: this.option("_hideNavigatorPopoverArrow"),
+            _dropDownButtonIcon: this.option("_dropDownButtonIcon")
         }, currentViewOptions);
 
         result.observer = this;

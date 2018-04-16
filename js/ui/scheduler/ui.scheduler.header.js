@@ -47,8 +47,7 @@ var SchedulerHeader = Widget.inherit({
             min: undefined,
             max: undefined,
             useDropDownViewSwitcher: false,
-            _dropDownButtonIcon: "overlay",
-            _hideNavigatorPopoverArrow: false
+            _dropDownButtonIcon: "overlay"
         });
     },
 
@@ -123,8 +122,7 @@ var SchedulerHeader = Widget.inherit({
             firstDayOfWeek: this.option("firstDayOfWeek"),
             tabIndex: this.option("tabIndex"),
             focusStateEnabled: this.option("focusStateEnabled"),
-            observer: this.option("observer"),
-            _hideNavigatorPopoverArrow: this.option("_hideNavigatorPopoverArrow")
+            observer: this.option("observer")
         });
 
         this._navigator.$element().appendTo(this.$element());
