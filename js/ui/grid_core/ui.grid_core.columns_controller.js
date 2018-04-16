@@ -1018,6 +1018,7 @@ module.exports = {
 
             var applyUserState = function(that) {
                 var columnsUserState = that._columnsUserState,
+                    userStateFieldNames = that._getUserStateFieldNames(),
                     ignoreColumnOptionNames = that._ignoreColumnOptionNames || [],
                     columns = that._columns,
                     columnCountById = {},
@@ -1029,13 +1030,13 @@ module.exports = {
                     userStateColumnIndex,
                     i;
 
-                function applyFieldsState(column, userStateColumn) {
+                function applyFieldsState(column, userStateColumn, userStateFieldNames) {
                     var fieldName;
 
                     if(!userStateColumn) return;
 
-                    for(var index = 0; index < USER_STATE_FIELD_NAMES.length; index++) {
-                        fieldName = USER_STATE_FIELD_NAMES[index];
+                    for(var index = 0; index < userStateFieldNames.length; index++) {
+                        fieldName = userStateFieldNames[index];
 
                         if(inArray(fieldName, ignoreColumnOptionNames) >= 0) continue;
 
@@ -1080,7 +1081,7 @@ module.exports = {
                         column = columns[i];
                         userStateColumnIndex = userStateColumnIndexes[i];
                         if(that._hasUserState || allColumnsHaveState) {
-                            applyFieldsState(column, columnsUserState[userStateColumnIndex]);
+                            applyFieldsState(column, columnsUserState[userStateColumnIndex], userStateFieldNames);
                         }
                         if(userStateColumnIndex >= 0 && isDefined(columnsUserState[userStateColumnIndex].initialIndex)) {
                             resultColumns[userStateColumnIndex] = column;
@@ -1093,7 +1094,7 @@ module.exports = {
                         columnUserState = columnsUserState[i];
                         if(columnUserState.added && findUserStateColumn(columns, columnUserState) < 0) {
                             column = createColumn(that, columnUserState.added);
-                            applyFieldsState(column, columnUserState);
+                            applyFieldsState(column, columnUserState, userStateFieldNames);
                             resultColumns.push(column);
                             if(columnUserState.added.columns) {
                                 resultColumns = createColumnsFromOptions(that, resultColumns);
@@ -1266,7 +1267,7 @@ module.exports = {
 
                     if(!notFireEvent) {
                         // T346972
-                        if(inArray(optionName, USER_STATE_FIELD_NAMES) < 0 && optionName !== "visibleWidth") {
+                        if(inArray(optionName, that._getUserStateFieldNames()) < 0 && optionName !== "visibleWidth") {
                             columns = that.option("columns");
                             column = getColumnByPath(that, fullOptionName, columns);
                             if(typeUtils.isString(column)) {
@@ -1451,6 +1452,9 @@ module.exports = {
                         items = getFirstItemsCore(dataSource.items(), groupsCount) || [];
                     }
                     return items;
+                },
+                _getUserStateFieldNames: function() {
+                    return USER_STATE_FIELD_NAMES;
                 },
                 _endUpdateCore: function() {
                     fireColumnsChanged(this);
@@ -2616,6 +2620,7 @@ module.exports = {
                 getUserState: function() {
                     var columns = this._columns,
                         result = [],
+                        userStateFieldNames = this._getUserStateFieldNames(),
                         i;
 
                     function handleStateField(index, value) {
@@ -2626,7 +2631,7 @@ module.exports = {
 
                     for(i = 0; i < columns.length; i++) {
                         result[i] = {};
-                        iteratorUtils.each(USER_STATE_FIELD_NAMES, handleStateField);
+                        iteratorUtils.each(userStateFieldNames, handleStateField);
                     }
                     return result;
                 },

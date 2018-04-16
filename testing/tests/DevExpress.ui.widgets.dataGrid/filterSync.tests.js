@@ -565,6 +565,9 @@ QUnit.module("Real dataGrid", {
                 filterRow: {
                     visible: true
                 },
+                headerFilter: {
+                    visible: true
+                },
                 columns: [{ dataField: "field", filterValues: [1], filterType: "exclude", filterValue: 2, selectedFilterOperation: "=" }]
             }, options)).dxDataGrid("instance");
             return this.dataGrid;
@@ -844,6 +847,80 @@ QUnit.module("Real dataGrid", {
 
         // assert
         assert.equal(countCallFilterValueChanged, 1);
+    });
+
+    QUnit.test("Load filterValue from state when filterSyncEnabled = false", function(assert) {
+        // arrange, act
+        var dataGrid = this.initDataGrid({
+            filterSyncEnabled: false,
+            columns: ["field", "field2"],
+            stateStoring: {
+                enabled: true,
+                type: 'custom',
+                customLoad: function() {
+                    return {
+                        filterValue: ["field", "=", 1],
+                        columns: [{
+                            dataField: "field",
+                            filterValue: 2,
+                            selectedFilterOperation: ">"
+                        }, {
+                            dataField: "field2",
+                            filterValues: [2, 3],
+                            filterType: "exclude"
+                        }]
+                    };
+                },
+                customSave: function() {
+                }
+            }
+        });
+
+        this.clock.tick();
+
+        // assert
+        assert.strictEqual(dataGrid.columnOption("field", "filterValue"), 2);
+        assert.strictEqual(dataGrid.columnOption("field", "selectedFilterOperation"), ">");
+        assert.deepEqual(dataGrid.columnOption("field2", "filterValues"), [2, 3]);
+        assert.strictEqual(dataGrid.columnOption("field2", "filterType"), "exclude");
+        assert.deepEqual(dataGrid.option("filterValue"), ["field", "=", 1]);
+    });
+
+    QUnit.test("Load filterValue from state when filterSyncEnabled = true", function(assert) {
+        // arrange, act
+        var dataGrid = this.initDataGrid({
+            filterSyncEnabled: true,
+            columns: ["field", "field2"],
+            stateStoring: {
+                enabled: true,
+                type: 'custom',
+                customLoad: function() {
+                    return {
+                        filterValue: ["field", "=", 1],
+                        columns: [{
+                            dataField: "field",
+                            filterValue: 2,
+                            selectedFilterOperation: ">"
+                        }, {
+                            dataField: "field2",
+                            filterValues: [2, 3],
+                            filterType: "exclude"
+                        }]
+                    };
+                },
+                customSave: function() {
+                }
+            }
+        });
+
+        this.clock.tick();
+
+        // assert
+        assert.strictEqual(dataGrid.columnOption("field", "filterValue"), 1);
+        assert.strictEqual(dataGrid.columnOption("field", "selectedFilterOperation"), "=");
+        assert.deepEqual(dataGrid.columnOption("field2", "filterValues"), undefined);
+        assert.strictEqual(dataGrid.columnOption("field2", "filterType"), undefined);
+        assert.deepEqual(dataGrid.option("filterValue"), ["field", "=", 1]);
     });
 });
 

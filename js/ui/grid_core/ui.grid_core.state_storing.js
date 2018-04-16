@@ -13,6 +13,7 @@ var processLoadState = function(that) {
         selectionController = that.getController("selection"),
         exportController = that.getController("export"),
         dataController = that.getController("data"),
+        filterSyncController = that.getController("filterSync"),
         pagerView = that.getView("pagerView");
 
     if(columnsController) {
@@ -57,6 +58,15 @@ var processLoadState = function(that) {
         exportController.selectionOnlyChanged.add(function() {
             extend(that._state, {
                 exportSelectionOnly: exportController.selectionOnly()
+            });
+            that.isEnabled() && that.save();
+        });
+    }
+
+    if(filterSyncController) {
+        filterSyncController.filterValueChanged.add(function() {
+            extend(that._state, {
+                filterValue: filterSyncController.option("filterValue")
             });
             that.isEnabled() && that.save();
         });
@@ -198,6 +208,8 @@ module.exports = {
                     that.component.endUpdate();
 
                     that.option("searchPanel.text", searchText || "");
+
+                    that.option("filterValue", state.filterValue || null);
 
                     that.option("paging.pageSize", scrollingMode !== "virtual" && scrollingMode !== "infinite" && isDefined(state.pageSize) ? state.pageSize : that._initialPageSize);
                     that.option("paging.pageIndex", state.pageIndex || 0);
