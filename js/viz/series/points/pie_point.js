@@ -139,7 +139,7 @@ module.exports = _extend({}, symbolPoint, {
                 x = leftBorderX;
             }
             coord.x = x;
-        } else if(moveLabelsFromCenter) {
+        } else if(options.position !== "inside" && moveLabelsFromCenter) {
             if(angleOfPoint <= 90 || angleOfPoint >= 270) {
                 if((x - connectorOffset) < centerX) {
                     x = centerX + connectorOffset;
@@ -204,10 +204,15 @@ module.exports = _extend({}, symbolPoint, {
             label = that._label,
             box = label.getBoundingRect(),
             visibleArea = that._getVisibleArea(),
+            position = label.getLayoutOptions().position,
             width = box.width;
 
-        if(label.getLayoutOptions().position === "columns" && that.series.index > 0) {
+        if(position === "columns" && that.series.index > 0) {
             width = visibleArea.maxX - that.centerX - that.radiusLabels;
+        } else if(position === "inside") {
+            if(width > (visibleArea.maxX - visibleArea.minX)) {
+                width = visibleArea.maxX - visibleArea.minX;
+            }
         } else {
             if(box.x + width > visibleArea.maxX) {
                 width = visibleArea.maxX - box.x;
