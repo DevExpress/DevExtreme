@@ -8215,6 +8215,69 @@ QUnit.module("Customization of the command columns", {
             width: 100
         }, "group column");
     });
+
+    QUnit.test("Get command options via columnOption method", function(assert) {
+        // arrange
+        this.applyOptions({
+            editing: {
+                mode: "row",
+                allowUpdating: true,
+                texts: {
+                    editRow: "Edit"
+                }
+            },
+            columns: ["field1", "field2", {
+                command: "edit",
+                width: 200,
+                visibleIndex: -1
+            }]
+        });
+
+        // act, assert
+        assert.deepEqual(processColumnsForCompare([this.columnOption("command:edit")], ["command", "cellTemplate", "width", "visibleIndex"]), [{
+            command: "edit",
+            width: 200,
+            visibleIndex: -1
+        }], "edit column");
+    });
+
+    QUnit.test("Custom command column", function(assert) {
+        // arrange
+        this.applyOptions({
+            columnHidingEnabled: true,
+            columns: ["field1", "field2", {
+                command: "custom",
+                width: 100
+            }]
+        });
+
+        // act, assert
+        assert.deepEqual(this.getVisibleColumns()[2], {
+            command: "custom",
+            index: 2,
+            width: 100,
+            visible: true
+        }, "custom command column");
+    });
+
+    QUnit.test("Get custom command options via columnOption method", function(assert) {
+        // arrange
+        this.applyOptions({ columns: ["field1", "field2", { command: "custom", width: 100 }] });
+
+        // act, assert
+        assert.deepEqual(processColumnsForCompare([this.columnOption("command:custom")], ["command", "width", "visible"]), [{ command: "custom", width: 100, visible: true }], "options of the custom command column");
+    });
+
+    QUnit.test("Update custom command options via columnOption method", function(assert) {
+        // arrange
+        this.applyOptions({ columns: ["field1", "field2", { command: "custom", width: 100 }] });
+
+        // act
+        this.columnOption("command:custom", "width", 50);
+
+        // assert
+        assert.strictEqual(this.columnOption("command:custom", "width"), 50, "width of the custom command column");
+    });
 });
 
 // T622771
