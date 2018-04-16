@@ -922,6 +922,25 @@ QUnit.module("Real dataGrid", {
         assert.strictEqual(dataGrid.columnOption("field2", "filterType"), undefined);
         assert.deepEqual(dataGrid.option("filterValue"), ["field", "=", 1]);
     });
+
+    QUnit.test("Update state when applying filterValue", function(assert) {
+        var customSaveSpy = sinon.spy(),
+            dataGrid = this.initDataGrid({
+                stateStoring: {
+                    enabled: true,
+                    type: 'custom',
+                    customLoad: function() {
+                        return {};
+                    },
+                    customSave: customSaveSpy,
+                    savingTimeout: 0
+                }
+            });
+        this.clock.tick();
+        dataGrid.option("filterValue", ["field", "=", 1]);
+        this.clock.tick();
+        assert.deepEqual(customSaveSpy.lastCall.args[0].filterValue, ["field", "=", 1]);
+    });
 });
 
 QUnit.module("Custom operations texts", {
