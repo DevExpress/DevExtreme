@@ -2050,8 +2050,8 @@ QUnit.module("Headers reordering and resizing with fixed columns", {
                 caption: "Column 6", fixed: true, fixedPosition: "right", width: 200, allowReordering: true
             }];
 
-        that.setupDataGrid = function() {
-            that.options = {
+        that.setupDataGrid = function(options) {
+            that.options = options || {
                 showColumnHeaders: true,
                 columns: that.columns,
                 allowColumnReordering: true,
@@ -2479,6 +2479,44 @@ QUnit.test("Normalization visible index after dragging not fixed column in last 
     assert.equal(columns[4].visibleIndex, 2, "visibleIndex fifth column");
     assert.strictEqual(columns[5].caption, "Column 6", "caption sixth column");
     assert.equal(columns[5].visibleIndex, 4, "visibleIndex sixth column");
+});
+
+// T616780
+QUnit.test("Resizing -  get points by fixed columns when columnResizingMode is 'widget'", function(assert) {
+    // arrange
+    var that = this,
+        pointsByFixedColumns,
+        $testElement = $("#container").width(800);
+
+    that.setupDataGrid({
+        allowColumnResizing: false,
+        columnResizingMode: "widget",
+        showColumnHeaders: true,
+        columns: [
+            {
+                caption: "Column 1", fixed: true, width: 100, allowResizing: true
+            },
+            {
+                caption: "Column 2", fixed: true, width: 125, allowResizing: true
+            },
+            {
+                caption: "Column 3", fixed: true, width: 150
+            },
+            {
+                caption: "Column 4", width: 200
+            }
+        ]
+    });
+    that.columnHeadersView.render($testElement);
+
+    // act
+    that.columnsResizerController._generatePointsByColumns();
+    pointsByFixedColumns = that.columnsResizerController._pointsByFixedColumns;
+
+    // assert
+    assert.equal(pointsByFixedColumns.length, 2, "count points by columns");
+    assert.deepEqual(pointsByFixedColumns[0], { columnIndex: 0, index: 1, x: -9900, y: -10000 }, "first point");
+    assert.deepEqual(pointsByFixedColumns[1], { columnIndex: 1, index: 2, x: -9775, y: -10000 }, "second point");
 });
 
 QUnit.module("Fixed columns with band columns", {
