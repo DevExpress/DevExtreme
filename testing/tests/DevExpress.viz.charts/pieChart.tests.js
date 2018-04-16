@@ -1939,12 +1939,33 @@ var environment = {
     });
 
     QUnit.test("overlapping labels, position inside", function(assert) {
-        var pie = this.createPieChartWithLabels([{ x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 1, angle: 1 } },
-            { x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } }], "inside"),
+        var pie = this.createPieChartWithLabels([
+            { x: 150, y: 50, width: 20, height: 10, pointPosition: { y: 1, angle: 1 } },
+            { x: 165, y: 65, width: 20, height: 10, pointPosition: { y: 2, angle: 2 } },
+            { x: 155, y: 65, width: 20, height: 10, pointPosition: { y: 1, angle: 1 } },
+            { x: 150, y: 80, width: 20, height: 10, pointPosition: { y: 2, angle: 2 } }
+            ], "inside"),
             points = pie.getAllSeries()[0].getVisiblePoints();
 
-        assert.ok(!points[0].getLabels()[0].shift.called);
-        assert.ok(!points[1].getLabels()[0].shift.called);
+        this.checkLabelPosition(assert, points[0].getLabels()[0], [150, 50]);
+        this.checkLabelPosition(assert, points[1].getLabels()[0], [165, 65]);
+        this.checkLabelPosition(assert, points[2].getLabels()[0], [155, 75]);
+        this.checkLabelPosition(assert, points[3].getLabels()[0], [150, 85]);
+    });
+
+    QUnit.test("position inside, two labels on same row, but do not overlapp, one label horizontally overlap them - do not shift labels, there is no real overlapping", function(assert) {
+        var pie = this.createPieChartWithLabels([
+            { x: 150, y: 50, width: 20, height: 10, pointPosition: { y: 1, angle: 1 } },
+            { x: 140, y: 65, width: 20, height: 10, pointPosition: { y: 2, angle: 2 } },
+            { x: 160, y: 65, width: 20, height: 10, pointPosition: { y: 1, angle: 1 } },
+            { x: 150, y: 80, width: 20, height: 10, pointPosition: { y: 2, angle: 2 } }
+            ], "inside"),
+            points = pie.getAllSeries()[0].getVisiblePoints();
+
+        this.checkLabelPosition(assert, points[0].getLabels()[0], [150, 50]);
+        this.checkLabelPosition(assert, points[1].getLabels()[0], [140, 65]);
+        this.checkLabelPosition(assert, points[2].getLabels()[0], [160, 65]);
+        this.checkLabelPosition(assert, points[3].getLabels()[0], [150, 80]);
     });
 
     QUnit.test("T578429. Save initial labels' order after resolve overlapping, anticlockwise", function(assert) {
@@ -1983,6 +2004,16 @@ var environment = {
     QUnit.test("Do not Adjust labels after resolve overlapping in columns position", function(assert) {
         var pie = this.createPieChartWithLabels([{ x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 1, angle: 1 } },
             { x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } }], "columns"),
+            series = pie.getAllSeries()[0],
+            points = series.getVisiblePoints();
+
+        assert.equal(series.adjustLabels.callCount, 1);
+        assert.ok(!series.adjustLabels.lastCall.calledAfter(points[1].getLabels()[0].shift.lastCall));
+    });
+
+    QUnit.test("Do not Adjust labels after resolve overlapping in inside position", function(assert) {
+        var pie = this.createPieChartWithLabels([{ x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 1, angle: 1 } },
+            { x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } }], "inside"),
             series = pie.getAllSeries()[0],
             points = series.getVisiblePoints();
 
@@ -2034,5 +2065,22 @@ var environment = {
         this.checkLabelPosition(assert, points1[1].getLabels()[0], [150, 60]);
         this.checkLabelPosition(assert, points2[0].getLabels()[0], [155, 49]);
         this.checkLabelPosition(assert, points2[1].getLabels()[0], [155, 59]);
+    });
+
+    QUnit.test("two series, inside - all labels are resolved together", function(assert) {
+        var pie = this.createPieChartWithLabels([
+            { x: 150, y: 50, width: 20, height: 10, pointPosition: { y: 1, angle: 1 } },
+            { x: 165, y: 65, width: 20, height: 10, pointPosition: { y: 2, angle: 2 } }
+            ], [
+            { x: 155, y: 65, width: 20, height: 10, pointPosition: { y: 1, angle: 1 } },
+            { x: 150, y: 80, width: 20, height: 10, pointPosition: { y: 2, angle: 2 } }
+            ], "inside"),
+            points1 = pie.getAllSeries()[0].getVisiblePoints(),
+            points2 = pie.getAllSeries()[1].getVisiblePoints();
+
+        this.checkLabelPosition(assert, points1[0].getLabels()[0], [150, 50]);
+        this.checkLabelPosition(assert, points1[1].getLabels()[0], [165, 65]);
+        this.checkLabelPosition(assert, points2[0].getLabels()[0], [155, 75]);
+        this.checkLabelPosition(assert, points2[1].getLabels()[0], [150, 85]);
     });
 })();
