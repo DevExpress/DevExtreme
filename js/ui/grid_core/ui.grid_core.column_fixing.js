@@ -883,7 +883,8 @@ module.exports = {
 
                     _pointCreated: function(point, cellsLength, columns) {
                         var currentColumn,
-                            nextColumn;
+                            nextColumn,
+                            isWidgetResizingMode = this.option("columnResizingMode") === "widget";
 
                         if(point.index > 0 && point.index < cellsLength) {
                             currentColumn = columns[point.columnIndex - 1] || {};
@@ -891,7 +892,7 @@ module.exports = {
 
                             if(currentColumn.fixed || nextColumn.fixed) {
                                 point.columnIndex -= 1;
-                                return !((currentColumn.allowResizing || currentColumn.command === "transparent") && (nextColumn.allowResizing || nextColumn.command === "transparent"));
+                                return !((currentColumn.allowResizing || currentColumn.command === "transparent") && (isWidgetResizingMode || nextColumn.allowResizing || nextColumn.command === "transparent"));
                             }
                         }
 
