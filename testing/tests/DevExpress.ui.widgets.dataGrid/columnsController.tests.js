@@ -2846,6 +2846,33 @@ QUnit.test("updateColumnDataTypes shouldn't be called if all data types with ser
     assert.ok(spy.calledOnce, "updateColumnDataTypes is called once");
 });
 
+// T622253
+QUnit.test("columnsChanged shouldn't be called on applyDataSource if data types aren't updated", function(assert) {
+    // arrange
+    var columnsChangedCalled,
+        items = [{ name: "Test", age: null, country: null }, { name: "Test", age: null, country: null }],
+        dataSource = createMockDataSource(items);
+
+    this.applyOptions({
+        columns: [
+            { dataField: "name" },
+            { dataField: "age", dataType: "number" },
+            { dataField: "country", dataType: "string", lookup: { dataSource: ["test1", "test2"] } }
+        ]
+    });
+
+    this.columnsController.applyDataSource(dataSource);
+    this.columnsController.columnsChanged.add(function(e) {
+        columnsChangedCalled = true;
+    });
+
+    // act
+    this.columnsController.applyDataSource(dataSource);
+
+    // assert
+    assert.notOk(columnsChangedCalled, "columnsChanged isn't called");
+});
+
 QUnit.test("update column serializer for date type with iso8601 date time format", function(assert) {
     var defaultForceIsoDateParsing = config().forceIsoDateParsing;
 
