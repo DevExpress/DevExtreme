@@ -2833,7 +2833,7 @@ QUnit.test("updateColumnDataTypes shouldn't be called if all data types with ser
 });
 
 // T622253
-QUnit.test("columnsChanged shouldn't be called if not all data types have serializationFormats and there is lookup column", function(assert) {
+QUnit.test("columnsChanged shouldn't be called on applyDataSource if data types aren't updated", function(assert) {
     // arrange
     var columnsChangedCalled,
         items = [{ name: "Test", age: null, country: null }, { name: "Test", age: null, country: null }],
