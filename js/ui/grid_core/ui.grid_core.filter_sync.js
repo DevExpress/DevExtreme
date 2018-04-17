@@ -8,13 +8,7 @@ var modules = require("./ui.grid_core.modules"),
     filterUtils = require("../shared/filtering"),
     customOperations = require("./ui.grid_core.filter_custom_operations");
 
-var FILTER_ROW_OPERATIONS = ["=", "<>", "<", "<=", ">", ">=", "notcontains", "contains", "startswith", "endswith", "between"],
-    USER_STATE_DISABLED_COLUMN_FIELDS = ["filterValue", "selectedFilterOperation", "filterValues", "filterType"];
-
-var isFilterSyncEnabled = function() {
-    var filterSyncEnabledValue = this.option("filterSyncEnabled");
-    return filterSyncEnabledValue === "auto" ? this.option("filterPanel.visible") : filterSyncEnabledValue;
-};
+var FILTER_ROW_OPERATIONS = ["=", "<>", "<", "<=", ">", ">=", "notcontains", "contains", "startswith", "endswith", "between"];
 
 var FilterSyncController = modules.Controller.inherit((function() {
     var getEmptyFilterValues = function() {
@@ -139,10 +133,6 @@ var FilterSyncController = modules.Controller.inherit((function() {
             }
         },
 
-        callbackNames: function() {
-            return ["filterValueChanged"];
-        },
-
         _getSyncHeaderFilter: function(filterValue, column) {
             var filter = getConditionFromHeaderFilter(column);
             if(filter) {
@@ -173,7 +163,8 @@ var FilterSyncController = modules.Controller.inherit((function() {
 
 var DataControllerFilterSyncExtender = {
     skipCalculateColumnFilters: function() {
-        return isFilterSyncEnabled.call(this);
+        var filterSyncEnabledValue = this.option("filterSyncEnabled");
+        return filterSyncEnabledValue === "auto" ? this.option("filterPanel.visible") : filterSyncEnabledValue;
     },
 
     _calculateAdditionalFilter: function() {
@@ -214,9 +205,7 @@ var DataControllerFilterSyncExtender = {
         switch(args.name) {
             case "filterValue":
                 this._applyFilter();
-                let filterSyncController = this.getController("filterSync");
-                this.skipCalculateColumnFilters() && filterSyncController.syncFilterValue();
-                filterSyncController.filterValueChanged.fire();
+                this.skipCalculateColumnFilters() && this.getController("filterSync").syncFilterValue();
                 args.handled = true;
                 break;
             case "filterSyncEnabled":
@@ -243,16 +232,6 @@ var DataControllerFilterSyncExtender = {
             default:
                 this.callBase(args);
         }
-    }
-};
-
-
-var ColumnsControllerFilterSyncExtender = {
-    _getUserStateFieldNames: function() {
-        var userStateFieldNames = this.callBase();
-        return isFilterSyncEnabled.call(this)
-            ? userStateFieldNames.filter(fieldName => USER_STATE_DISABLED_COLUMN_FIELDS.indexOf(fieldName) === -1)
-            : userStateFieldNames;
     }
 };
 
@@ -302,8 +281,7 @@ module.exports = {
     },
     extenders: {
         controllers: {
-            data: DataControllerFilterSyncExtender,
-            columns: ColumnsControllerFilterSyncExtender
+            data: DataControllerFilterSyncExtender
         },
         views: {
             columnHeadersView: ColumnHeadersViewFilterSyncExtender

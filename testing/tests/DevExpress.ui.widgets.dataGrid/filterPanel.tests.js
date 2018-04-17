@@ -428,7 +428,7 @@ QUnit.module("Filter Panel", {
         this.clock.tick();
 
         this.option("filterPanel.filterEnabled", false);
-        this.filterPanelController.filterEnabledChanged.fire();
+        this.dataController.changed.fire();
 
         this.clock.tick();
 
