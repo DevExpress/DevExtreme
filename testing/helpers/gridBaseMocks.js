@@ -278,12 +278,6 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
         };
     };
 
-    exports.MockFilterPanelController = function(options) {
-        return {
-            filterEnabledChanged: $.Callbacks()
-        };
-    };
-
     exports.MockColumnsController = function(columns, commonColumnSettings) {
         for(var key in columns) {
             if(Array.isArray(columns[key])) {
