@@ -21,7 +21,7 @@ var currentTimeShader = Class.inherit({
     },
 
     clean: function() {
-        this._$container.find("." + DATE_TIME_SHADER_CLASS).remove();
+        this._$container && this._$container.find("." + DATE_TIME_SHADER_CLASS).remove();
     }
 });
 

@@ -848,6 +848,28 @@ var stubInvokeMethod = function(instance, options) {
         assert.equal($indicators.eq(1).position().top, 0);
     });
 
+    QUnit.test("Shader should have correct height, width and position", function(assert) {
+        this.instance.option("groups", [{ name: "a", items: [{ id: 1, text: "a.1" }, { id: 2, text: "a.2" }] }]);
+
+        this.instance.option({
+            indicatorTime: new Date(2017, 8, 5, 12, 45)
+        });
+
+        var $element = this.instance.$element(),
+            $shader = $element.find("." + SCHEDULER_DATE_TIME_SHADER_CLASS);
+
+        assert.equal($shader.length, 2, "Shaders count is correct");
+
+        assert.roughEqual($shader.eq(0).outerHeight(), 160, 1, "Shader has correct height");
+        assert.roughEqual($shader.eq(0).outerWidth(), 950, 1, "Shader has correct width");
+
+        assert.roughEqual($shader.eq(1).outerHeight(), 160, 1, "Shader has correct height");
+        assert.roughEqual($shader.eq(1).outerWidth(), 950, 1, "Shader has correct width");
+
+        assert.roughEqual($shader.eq(0).position().left, 0, 1, "Shader has correct left");
+        assert.roughEqual($shader.eq(1).position().left, 1200, 1, "Shader has correct left");
+    });
+
 })("DateTime indicator on TimelineDay View, horizontal grouping");
 
 (function() {
