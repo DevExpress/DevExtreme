@@ -26,7 +26,7 @@ QUnit.module("Filter Panel", {
     beforeEach: function() {
         this.initFilterPanelView = function(options) {
             this.options = options;
-            setupDataGridModules(this, ["columns", "filterRow", "data", "headerFilter", "filterSync", "filterBuilder", "filterPanel"], {
+            setupDataGridModules(this, ["stateStoring", "columns", "filterRow", "data", "headerFilter", "filterSync", "filterBuilder", "filterPanel"], {
                 initViews: true
             });
             this.filterPanelView.render($("#container"));
@@ -41,6 +41,10 @@ QUnit.module("Filter Panel", {
             this.filterPanelView.optionChanged({ name: name });
             this.filterPanelView.endUpdate();
         };
+        this.clock = sinon.useFakeTimers();
+    },
+    afterEach: function() {
+        this.clock.restore();
     }
 }, function() {
     QUnit.test("visible", function(assert) {
@@ -370,5 +374,64 @@ QUnit.module("Filter Panel", {
         // assert
         assert.equal(this.filterPanelView.element().find("." + FILTER_PANEL_TEXT_CLASS).text(), "[Date] TestOperation", "filterPanel text");
         assert.ok(customExpressionCounter > 0, "calculateFilterExpression was called");
+    });
+
+    QUnit.test("load filterEnabled from state storing", function(assert) {
+        // act, assert
+        this.initFilterPanelView({
+            filterPanel: {
+                visible: true,
+            },
+            dataSource: [],
+            stateStoring: {
+                enabled: true,
+                type: 'custom',
+                customLoad: function() {
+                    return {
+                        filterPanel: {
+                            filterEnabled: false
+                        }
+                    };
+                },
+                customSave: function() {
+                }
+            },
+            columns: ["field"]
+        });
+
+        this.clock.tick();
+
+        // assert
+        assert.notOk(this.option("filterPanel.filterEnabled"));
+    });
+
+    QUnit.test("Update state when applying filterPanel.filterEnabled", function(assert) {
+        var customSaveSpy = sinon.spy();
+
+        this.initFilterPanelView({
+            filterPanel: {
+                visible: true,
+            },
+            dataSource: [],
+            stateStoring: {
+                enabled: true,
+                type: 'custom',
+                customLoad: function() {
+                    return {};
+                },
+                customSave: customSaveSpy,
+                savingTimeout: 0
+            },
+            columns: ["field"]
+        });
+
+        this.clock.tick();
+
+        this.option("filterPanel.filterEnabled", false);
+        this.filterPanelController.filterEnabledChanged.fire();
+
+        this.clock.tick();
+
+        assert.notOk(customSaveSpy.lastCall.args[0].filterPanel.filterEnabled);
     });
 });

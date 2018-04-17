@@ -17,6 +17,15 @@ var FILTER_PANEL_CLASS = "filter-panel",
     FILTER_PANEL_CLEAR_FILTER_CLASS = FILTER_PANEL_CLASS + "-clear-filter",
     FILTER_PANEL_LEFT_CONTAINER = FILTER_PANEL_CLASS + "-left";
 
+
+var FilterPanelController = modules.Controller.inherit((function() {
+    return {
+        callbackNames: function() {
+            return ["filterEnabledChanged"];
+        }
+    };
+})());
+
 var FilterPanelView = modules.View.inherit({
     _renderCore: function() {
         if(this.option("filterPanel.visible")) {
@@ -119,6 +128,9 @@ var FilterPanelView = modules.View.inherit({
                 break;
             case "filterPanel":
                 this._invalidate();
+                if(args.fullName === "filterPanel.filterEnabled") {
+                    this.getController("filterPanel").filterEnabledChanged.fire();
+                }
                 args.handled = true;
                 break;
             default:
@@ -256,6 +268,9 @@ module.exports = {
                 }
             },
         };
+    },
+    controllers: {
+        filterPanel: FilterPanelController
     },
     views: {
         filterPanelView: FilterPanelView

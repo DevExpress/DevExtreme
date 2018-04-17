@@ -14,6 +14,7 @@ var processLoadState = function(that) {
         exportController = that.getController("export"),
         dataController = that.getController("data"),
         filterSyncController = that.getController("filterSync"),
+        filterPanelController = that.getController("filterPanel"),
         pagerView = that.getView("pagerView");
 
     if(columnsController) {
@@ -23,22 +24,19 @@ var processLoadState = function(that) {
                 currentColumnsStateHash = commonUtils.getKeyHash(that._state.columns);
 
             if(!equalByValue(currentColumnsStateHash, columnsStateHash)) {
-                extend(that._state, {
+                that.syncState({
                     columns: columnsState
                 });
-
-                that.isEnabled() && that.save();
             }
         });
     }
 
     if(selectionController) {
         selectionController.selectionChanged.add(function(e) {
-            extend(that._state, {
+            that.syncState({
                 selectedRowKeys: e.selectedRowKeys,
                 selectionFilter: e.selectionFilter
             });
-            that.isEnabled() && that.save();
         });
     }
 
@@ -47,28 +45,35 @@ var processLoadState = function(that) {
         dataController.changed.add(function() {
             var userState = dataController.getUserState();
 
-            extend(that._state, userState, {
+            that.syncState(extend({}, userState, {
                 allowedPageSizes: pagerView ? pagerView.getPageSizes() : undefined
-            });
-            that.isEnabled() && that.save();
+            }));
         });
     }
 
     if(exportController) {
         exportController.selectionOnlyChanged.add(function() {
-            extend(that._state, {
+            that.syncState({
                 exportSelectionOnly: exportController.selectionOnly()
             });
-            that.isEnabled() && that.save();
         });
     }
 
     if(filterSyncController) {
         filterSyncController.filterValueChanged.add(function() {
-            extend(that._state, {
+            that.syncState({
                 filterValue: filterSyncController.option("filterValue")
             });
-            that.isEnabled() && that.save();
+        });
+    }
+
+    if(filterPanelController) {
+        filterPanelController.filterEnabledChanged.add(function() {
+            that.syncState({
+                filterPanel: {
+                    filterEnabled: filterPanelController.option("filterPanel.filterEnabled")
+                }
+            });
         });
     }
 };
@@ -157,6 +162,11 @@ module.exports = {
                     this.callBase.apply(this, arguments);
                     processLoadState(this);
                 },
+                syncState: function(value) {
+                    extend(this._state, value);
+
+                    this.isEnabled() && this.save();
+                },
                 /**
                  * @name GridBaseMethods_state
                  * @publicName state()
@@ -210,6 +220,8 @@ module.exports = {
                     that.option("searchPanel.text", searchText || "");
 
                     that.option("filterValue", state.filterValue || null);
+
+                    that.option("filterPanel.filterEnabled", state.filterPanel ? state.filterPanel.filterEnabled : true);
 
                     that.option("paging.pageSize", scrollingMode !== "virtual" && scrollingMode !== "infinite" && isDefined(state.pageSize) ? state.pageSize : that._initialPageSize);
                     that.option("paging.pageIndex", state.pageIndex || 0);
