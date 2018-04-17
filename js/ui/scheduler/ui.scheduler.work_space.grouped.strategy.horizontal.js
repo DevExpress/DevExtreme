@@ -113,6 +113,14 @@ var HorizontalGroupedStrategy = GroupedStrategy.inherit({
             top: 0,
             bottom: 0
         };
+    },
+
+    shiftIndicator: function($indicator, height, rtlOffset, i) {
+        var offset = this._workSpace._getCellCount() * this._workSpace.getRoundedCellWidth(i - 1, 0) * i + this._workSpace.getIndicatorOffset(i) + i,
+            horizontalOffset = rtlOffset ? rtlOffset - offset : offset;
+
+        $indicator.css("left", horizontalOffset);
+        $indicator.css("top", height);
     }
 });
 

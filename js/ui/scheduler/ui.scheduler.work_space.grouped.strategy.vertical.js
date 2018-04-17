@@ -135,7 +135,20 @@ var VerticalGroupedStrategy = GroupedStrategy.inherit({
             top: topOffset,
             bottom: bottomOffset
         };
-    }
+    },
+
+    shiftIndicator: function($indicator, height, rtlOffset, i) {
+        var offset = this._workSpace.getIndicatorOffset(0),
+            horizontalOffset = rtlOffset ? rtlOffset - offset : offset,
+            verticalOffset = this._workSpace._getRowCount() * this._workSpace.getCellHeight() * i;
+
+        if(this._workSpace.supportAllDayRow() && this._workSpace.option("showAllDayPanel")) {
+            verticalOffset += this._workSpace.getCellHeight() * (i + 1);
+        }
+
+        $indicator.css("left", horizontalOffset + this._workSpace.getGroupTableWidth());
+        $indicator.css("top", height + verticalOffset);
+    },
 });
 
 module.exports = VerticalGroupedStrategy;

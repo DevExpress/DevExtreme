@@ -60,11 +60,9 @@ var SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
     _renderIndicator: function(height, rtlOffset, $container, groupCount) {
         for(var i = 0; i < groupCount; i++) {
             var $indicator = this._createIndicator($container);
-            var offset = this._getCellCount() * this.getRoundedCellWidth(i - 1, 0) * i + this.getIndicatorOffset(i) + i;
 
             $indicator.width(this.getCellWidth());
-            $indicator.css("left", rtlOffset ? rtlOffset - offset : offset);
-            $indicator.css("top", height);
+            this._groupedStrategy.shiftIndicator($indicator, height, rtlOffset, i);
         }
     },
 
