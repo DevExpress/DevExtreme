@@ -106,7 +106,7 @@ function checkStackOverlap(rollingStocks) {
         overlap = false;
 
     for(i = 0, iLength = rollingStocks.length - 1; i < iLength; i++) {
-        for(j = 0, jLength = rollingStocks.length; j < jLength; j++) {
+        for(j = i + 1, jLength = rollingStocks.length; j < jLength; j++) {
             if(i !== j && checkStacksOverlapping(rollingStocks[i], rollingStocks[j], true)) {
                 overlap = true;
                 break;

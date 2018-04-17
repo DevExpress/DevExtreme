@@ -103,9 +103,8 @@ function createPointWithStubLabelForDraw(translateData, isFirstDrawn) {
     return point;
 }
 
-function createCorrectionLabel(translateData, firstDrawing) {
+function createCorrectionLabel(translateData) {
     var point = createPointWithStubLabel.call(this, translateData);
-    point._isLabelDrawingWithoutPoints = firstDrawing;
     point.correctLabelPosition(point._label);
     return point._label;
 }
@@ -1037,7 +1036,7 @@ QUnit.module("update Coord", {
     beforeEach: environmentWithStubLabels
 });
 
-QUnit.test("not columns", function(assert) {
+QUnit.test("Outside", function(assert) {
     this.options.label.position = "outside";
     var point = createPointWithStubLabel.call(this, { 0: 350, 10: 330, 20: 310 });
     point.updateLabelCoord();
@@ -1046,7 +1045,7 @@ QUnit.test("not columns", function(assert) {
     assert.equal(point._label.shift.args[0][1], 15);
 });
 
-QUnit.test("with check position", function(assert) {
+QUnit.test("Outside. with check position", function(assert) {
     this.options.label.position = "outside";
     this.series._visibleArea = { minX: 15, maxX: 600, minY: 300, maxY: 600 };
     var point = createPointWithStubLabel.call(this, { 0: 350, 10: 330, 20: 310 });
@@ -1056,7 +1055,7 @@ QUnit.test("with check position", function(assert) {
     assert.equal(point._label.shift.args[0][1], 15);
 });
 
-QUnit.test("T586419. not columns, move from center", function(assert) {
+QUnit.test("T586419. Outside, move from center", function(assert) {
     this.options.label.position = "outside";
     var point1 = createPointWithStubLabel.call(this, { 0: 55, 10: 45, 20: 35 }, { x: 295, y: 10, width: 10, height: 10 }),
         point2 = createPointWithStubLabel.call(this, { 0: 145, 10: 135, 20: 125 }, { x: 295, y: 10, width: 10, height: 10 }),
@@ -1074,7 +1073,7 @@ QUnit.test("T586419. not columns, move from center", function(assert) {
     assert.equal(point4._label.shift.args[0][0], 280);
 });
 
-QUnit.test("Not columns, move from center but with connector - correct x coordinate by connector offset", function(assert) {
+QUnit.test("Outside, move from center but with connector - correct x coordinate by connector offset", function(assert) {
     this.options.label.position = "outside";
     this.options.label.connectorOffset = 20;
     var point1 = createPointWithStubLabel.call(this, { 0: 55, 10: 45, 20: 35 }, { x: 305, y: 10, width: 10, height: 10 }),
@@ -1091,6 +1090,24 @@ QUnit.test("Not columns, move from center but with connector - correct x coordin
     assert.equal(point2._label.shift.args[0][0], 270);
     assert.equal(point3._label.shift.args[0][0], 330);
     assert.equal(point4._label.shift.args[0][0], 260);
+});
+
+QUnit.test("Inside - do not correct coordinates even if 'move from center'", function(assert) {
+    this.options.label.position = "inside";
+    var point1 = createPointWithStubLabel.call(this, { 0: 55, 10: 45, 20: 35 }, { x: 295, y: 10, width: 10, height: 10 }),
+        point2 = createPointWithStubLabel.call(this, { 0: 145, 10: 135, 20: 125 }, { x: 295, y: 10, width: 10, height: 10 }),
+        point3 = createPointWithStubLabel.call(this, { 0: 55, 10: 45, 20: 35 }, { x: 320, y: 10, width: 10, height: 10 }),
+        point4 = createPointWithStubLabel.call(this, { 0: 145, 10: 135, 20: 125 }, { x: 280, y: 10, width: 10, height: 10 });
+
+    point1.updateLabelCoord(true);
+    point2.updateLabelCoord(true);
+    point3.updateLabelCoord(true);
+    point4.updateLabelCoord(true);
+
+    assert.equal(point1._label.shift.args[0][0], 295);
+    assert.equal(point2._label.shift.args[0][0], 295);
+    assert.equal(point3._label.shift.args[0][0], 320);
+    assert.equal(point4._label.shift.args[0][0], 280);
 });
 
 QUnit.module("Check label position", {
@@ -1113,23 +1130,6 @@ QUnit.test("Draw label (area of label > maxY area of canvas)", function(assert) 
     assert.equal(label.shift.args[0][1], 290);
 });
 
-QUnit.test("Draw label (area of label < minY area of canvas), first drawing", function(assert) {
-    this.series._visibleArea = { minX: 0, maxX: 600, minY: 300, maxY: 600 };
-    var label = createCorrectionLabel.call(this, { 0: 300, 10: 270, 20: 240 }, true);
-
-    assert.equal(label.shift.args[0][0], 280);
-    assert.equal(label.shift.args[0][1], 300);
-});
-
-QUnit.test("Draw label (area of label > maxY area of canvas), first drawing", function(assert) {
-    this.series._visibleArea = { minX: 0, maxX: 600, minY: 0, maxY: 300 };
-    this.options.label.radialOffset = 30;
-    var label = createCorrectionLabel.call(this, { 0: 300, 10: 270, 20: 240 }, true);
-
-    assert.equal(label.shift.args[0][0], 280);
-    assert.equal(label.shift.args[0][1], 290);
-});
-
 QUnit.test("Draw label (area of label > maxX area of canvas)", function(assert) {
     var point = createPointWithStubLabelForDraw.call(this, { 0: 300, 10: 270, 20: 240 });
     var coord = point._checkHorizontalLabelPosition({ x: 595, y: 295, width: 20, height: 10 }, point._label.getBoundingRect(), point._getVisibleArea());
@@ -1144,24 +1144,6 @@ QUnit.test("Draw label (area of label < minX area of canvas)", function(assert) 
 
     assert.equal(coord.x, 0);
     assert.equal(coord.y, 295);
-});
-
-QUnit.test("Draw label (area of label > maxX area of canvas), first drawing", function(assert) {
-    this.series._visibleArea = { minX: 0, maxX: 300, minY: 0, maxY: 600 };
-    this.options.label.radialOffset = 30;
-    var label = createCorrectionLabel.call(this, { 0: 300, 10: 270, 20: 240 }, true);
-
-    assert.equal(label.shift.args[0][0], 280);
-    assert.equal(label.shift.args[0][1], 325);
-});
-
-QUnit.test("Draw label (area of label < minX area of canvas), first drawing", function(assert) {
-    this.series._visibleArea = { minX: 300, maxX: 600, minY: 0, maxY: 600 };
-    this.options.label.radialOffset = 30;
-    var label = createCorrectionLabel.call(this, { 0: 300, 10: 270, 20: 240 }, true);
-
-    assert.equal(label.shift.args[0][0], 300);
-    assert.equal(label.shift.args[0][1], 325);
 });
 
 QUnit.module("set label ellipsis", {
@@ -1210,6 +1192,24 @@ QUnit.test("set label ellipsis. not drawn point", function(assert) {
     var point = createPointWithStubLabel.call(this, { 0: 300, 10: 270, 20: 240 });
     point.setLabelEllipsis();
     point.updateLabelCoord();
+});
+
+QUnit.test("Inside. Label is outside bound but label width less that visible area - do not reduce label", function(assert) {
+    this.options.label.position = "inside";
+    var point = createPointWithStubLabel.call(this, { 0: 300, 10: 270, 20: 240 }, { x: 590, width: 20, y: 10, height: 30 });
+
+    point.setLabelEllipsis();
+
+    assert.strictEqual(point._label.fit.callCount, 0);
+});
+
+QUnit.test("Inside. Label width more that visible area - fit in visible area", function(assert) {
+    this.options.label.position = "inside";
+    var point = createPointWithStubLabel.call(this, { 0: 300, 10: 270, 20: 240 }, { x: 590, width: 620, y: 10, height: 30 });
+
+    point.setLabelEllipsis();
+
+    assert.deepEqual(point._label.fit.args[0][0], 600);
 });
 
 QUnit.module("Connector", {
