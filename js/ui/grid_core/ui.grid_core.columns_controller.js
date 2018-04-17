@@ -2136,24 +2136,31 @@ module.exports = {
                             if(!column.dataType || (lookup && !lookup.dataType)) {
                                 for(i = 0; i < firstItems.length; i++) {
                                     value = column.calculateCellValue(firstItems[i]);
-                                    valueDataType = column.dataType || getValueDataType(value);
-                                    dataType = dataType || valueDataType;
-                                    if(dataType && valueDataType && dataType !== valueDataType) {
-                                        dataType = "string";
+
+                                    if(!column.dataType) {
+                                        valueDataType = getValueDataType(value);
+                                        dataType = dataType || valueDataType;
+                                        if(dataType && valueDataType && dataType !== valueDataType) {
+                                            dataType = "string";
+                                        }
                                     }
-                                    if(lookup) {
-                                        valueDataType = lookup.dataType || getValueDataType(gridCoreUtils.getDisplayValue(column, value, firstItems[i]));
+
+                                    if(lookup && !lookup.dataType) {
+                                        valueDataType = getValueDataType(gridCoreUtils.getDisplayValue(column, value, firstItems[i]));
                                         lookupDataType = lookupDataType || valueDataType;
                                         if(lookupDataType && valueDataType && lookupDataType !== valueDataType) {
                                             lookupDataType = "string";
                                         }
                                     }
                                 }
-                                column.dataType = dataType;
-                                if(lookup) {
-                                    lookup.dataType = lookupDataType;
-                                }
-                                if(dataType) {
+                                if(dataType || lookupDataType) {
+                                    if(dataType) {
+                                        column.dataType = dataType;
+                                    }
+
+                                    if(lookup && lookupDataType) {
+                                        lookup.dataType = lookupDataType;
+                                    }
                                     isColumnDataTypesUpdated = true;
                                 }
                             }
