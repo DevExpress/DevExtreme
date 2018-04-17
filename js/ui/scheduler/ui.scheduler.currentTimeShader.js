@@ -11,13 +11,15 @@ var currentTimeShader = Class.inherit({
         this._$container = workspace._dateTableScrollable.$content();
 
         this._$shader = $("<div>").addClass(DATE_TIME_SHADER_CLASS);
-        this._$container.append(this._$shader);
+
         this._renderShader();
 
         if(this._$shader && this._workspace.option("crossScrollingEnabled")) {
             this._$shader.css("marginTop", -this._$container.outerHeight());
             this._$shader.css("height", this._$container.outerHeight());
         }
+
+        this._$container.prepend(this._$shader);
     },
 
     clean: function() {
