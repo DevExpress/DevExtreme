@@ -293,22 +293,27 @@ var dxPieChart = BaseChart.inherit({
 
     _resolveLabelOverlappingShift: function() {
         var that = this,
-            series = that.series,
-            center = that._center,
-            inverseDirection = that.option("segmentsDirection") === "anticlockwise";
+            inverseDirection = that.option("segmentsDirection") === "anticlockwise",
+            seriesByPosition = that.series.reduce(function(r, s) {
+                (r[s.getOptions().label.position] || r.outside).push(s);
+                return r;
+            }, { inside: [], columns: [], outside: [] });
 
-        var columnsSeries = series.filter(function(s) { return s.getOptions().label.position === "columns"; });
-        var outsideSeries = series.filter(function(s) {
-            var p = s.getOptions().label.position;
-            return p !== "inside" && p !== "columns";
-        });
+        if(seriesByPosition.inside.length > 0) {
+            resolve(seriesByPosition.inside.reduce(function(r, singleSeries) {
+                return singleSeries.getVisiblePoints().reduce(function(r, point) {
+                    r.left.push(point);
+                    return r;
+                }, r);
+            }, { left: [], right: [] }), shiftInColumnFunction);
+        }
 
-        columnsSeries.forEach(function(singleSeries) {
+        seriesByPosition.columns.forEach(function(singleSeries) {
             resolve(dividePoints(singleSeries), shiftInColumnFunction);
         });
 
-        if(outsideSeries.length > 0) {
-            resolve(outsideSeries.reduce(function(r, singleSeries) {
+        if(seriesByPosition.outside.length > 0) {
+            resolve(seriesByPosition.outside.reduce(function(r, singleSeries) {
                 return dividePoints(singleSeries, r);
             }, null), shiftFunction);
             that._adjustSeriesLabels(true);
@@ -333,7 +338,7 @@ var dxPieChart = BaseChart.inherit({
         }
 
         function shiftFunction(box, length) {
-            return _getVerticallyShiftedAngularCoords(box, -length, center);
+            return _getVerticallyShiftedAngularCoords(box, -length, that._center);
         }
 
         function shiftInColumnFunction(box, length) {

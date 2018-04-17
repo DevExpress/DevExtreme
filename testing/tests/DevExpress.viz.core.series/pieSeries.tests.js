@@ -1974,9 +1974,9 @@ var checkTwoGroups = function(assert, series) {
 
         // arrange
         $.each(series.getPoints(), function(i, point) {
-            assert.ok(!point.setLabelEllipsis.called, "label ellipsis, point " + i);
+            assert.ok(point.setLabelEllipsis.called, "label ellipsis, point " + i);
             assert.ok(point.setLabelTrackerData.called, "label tracker data, point " + i);
-            assert.ok(!point.updateLabelCoord.called, "label coords, point " + i);
+            assert.ok(point.updateLabelCoord.called, "label coords, point " + i);
         });
     });
 })();
