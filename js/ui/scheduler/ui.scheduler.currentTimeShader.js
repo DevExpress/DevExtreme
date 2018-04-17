@@ -10,9 +10,8 @@ var currentTimeShader = Class.inherit({
         this._workspace = workspace;
         this._$container = workspace._dateTableScrollable.$content();
 
-        this._$shader = $("<div>").addClass(DATE_TIME_SHADER_CLASS);
+        this._$shader = this._createShader();
         this._shader = [];
-
         this._shader.push(this._$shader);
 
         this._renderShader();
@@ -25,6 +24,10 @@ var currentTimeShader = Class.inherit({
         this._shader.forEach((shader, index) => {
             this._$container.append(shader);
         });
+    },
+
+    _createShader: function() {
+        return $("<div>").addClass(DATE_TIME_SHADER_CLASS);
     },
 
     clean: function() {

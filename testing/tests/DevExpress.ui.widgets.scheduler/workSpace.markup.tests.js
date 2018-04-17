@@ -566,8 +566,18 @@ QUnit.module("Workspace Day markup with vertical grouping", dayWithGroupingModul
         assert.equal($element.find(".dx-scheduler-date-table tbody tr").length, 48, "Workspace has 48 rows");
     });
 
-    QUnit.test("Time panel should have right rows count and cell text", (assert) => {
+    QUnit.test("Time panel should have right rows count and cell text, even cells count", (assert) => {
         checkRowsAndCells(this.instance.$element(), assert, 0.5, 8, 20, 2);
+    });
+
+    QUnit.test("Time panel should have right rows count and cell text, odd cells count", (assert) => {
+        this.instance.option({
+            startDayHour: 9,
+            endDayHour: 16,
+            hoursInterval: 1
+        });
+
+        checkRowsAndCells(this.instance.$element(), assert, 1, 9, 16, 2);
     });
 
     QUnit.test("Time panel should have 48 rows and 48 cells", (assert) => {

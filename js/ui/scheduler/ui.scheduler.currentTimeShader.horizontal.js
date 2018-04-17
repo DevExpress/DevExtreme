@@ -1,9 +1,6 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    Shader = require("./ui.scheduler.currentTimeShader");
-
-var DATE_TIME_SHADER_CLASS = "dx-scheduler-date-time-shader";
+var Shader = require("./ui.scheduler.currentTimeShader");
 
 var HorizontalCurrentTimeShader = Shader.inherit({
     _renderShader: function() {
@@ -13,7 +10,7 @@ var HorizontalCurrentTimeShader = Shader.inherit({
 
         if(groupCount > 1) {
             for(var i = 1; i < groupCount; i++) {
-                var $shader = $("<div>").addClass(DATE_TIME_SHADER_CLASS);
+                var $shader = this._createShader();
                 this._customizeShader($shader, 1);
                 this._shader.push($shader);
             }

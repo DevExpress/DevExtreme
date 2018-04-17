@@ -1378,8 +1378,10 @@ var SchedulerWorkSpace = Widget.inherit({
 
     _getTimeText: function(i) {
         // T410490: incorrectly displaying time slots on Linux
-        var startViewDate = this._getTimeCellDate(i);
-        if(i % 2 === 0) {
+        var startViewDate = this._getTimeCellDate(i),
+            index = i % this._getRowCount();
+
+        if(index % 2 === 0) {
             return dateLocalization.format(startViewDate, "shorttime");
         }
         return "";
