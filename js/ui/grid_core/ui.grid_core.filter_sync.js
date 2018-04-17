@@ -205,9 +205,7 @@ var DataControllerFilterSyncExtender = {
         switch(args.name) {
             case "filterValue":
                 this._applyFilter();
-                if(this.skipCalculateColumnFilters()) {
-                    this.getController("filterSync").syncFilterValue();
-                }
+                this.skipCalculateColumnFilters() && this.getController("filterSync").syncFilterValue();
                 args.handled = true;
                 break;
             case "filterSyncEnabled":
@@ -215,7 +213,7 @@ var DataControllerFilterSyncExtender = {
                 break;
             case "columns":
                 if(this.skipCalculateColumnFilters()) {
-                    var columnInfo = this._parseColumnInfo(args.fullName),
+                    let columnInfo = this._parseColumnInfo(args.fullName),
                         column,
                         filterSyncController = this.getController("filterSync");
                     if(!filterSyncController._skipSyncColumnOptions) {

@@ -25,7 +25,6 @@ var processLoadState = function(that) {
                 extend(that._state, {
                     columns: columnsState
                 });
-
                 that.isEnabled() && that.save();
             }
         });
@@ -47,7 +46,9 @@ var processLoadState = function(that) {
             var userState = dataController.getUserState();
 
             extend(that._state, userState, {
-                allowedPageSizes: pagerView ? pagerView.getPageSizes() : undefined
+                allowedPageSizes: pagerView ? pagerView.getPageSizes() : undefined,
+                filterPanel: { filterEnabled: that.option("filterPanel.filterEnabled") },
+                filterValue: that.option("filterValue")
             });
             that.isEnabled() && that.save();
         });
@@ -198,6 +199,10 @@ module.exports = {
                     that.component.endUpdate();
 
                     that.option("searchPanel.text", searchText || "");
+
+                    that.option("filterValue", state.filterValue || null);
+
+                    that.option("filterPanel.filterEnabled", state.filterPanel ? state.filterPanel.filterEnabled : true);
 
                     that.option("paging.pageSize", scrollingMode !== "virtual" && scrollingMode !== "infinite" && isDefined(state.pageSize) ? state.pageSize : that._initialPageSize);
                     that.option("paging.pageIndex", state.pageIndex || 0);
