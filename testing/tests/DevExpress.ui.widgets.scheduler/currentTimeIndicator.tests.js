@@ -816,6 +816,41 @@ var stubInvokeMethod = function(instance, options) {
 })("DateTime indicator on TimelineDay View");
 
 (function() {
+    QUnit.module("DateTime indicator on TimelineDay View, horizontal grouping", {
+        beforeEach: function() {
+            this.instance = $("#scheduler-work-space").dxSchedulerTimelineDay({
+                showCurrentTimeIndicator: true,
+                currentDate: new Date(2017, 8, 5),
+                groupOrientation: "horizontal",
+                startDayHour: 8,
+                endDayHour: 14,
+                hoursInterval: 1,
+                height: 307
+            }).dxSchedulerTimelineDay("instance");
+            stubInvokeMethod(this.instance);
+        }
+    });
+
+    QUnit.test("DateTimeIndicator should be rendered correctly", function(assert) {
+        this.instance.option({
+            indicatorTime: new Date(2017, 8, 5, 12, 45)
+        });
+
+        this.instance.option("groups", [{ name: "a", items: [{ id: 1, text: "a.1" }, { id: 2, text: "a.2" }] }]);
+
+        var $element = this.instance.$element(),
+            $indicators = $element.find("." + SCHEDULER_DATE_TIME_INDICATOR_CLASS);
+
+        assert.equal($indicators.length, 2, "Indicator count is correct");
+        assert.equal($indicators.eq(0).position().left, 950);
+        assert.equal($indicators.eq(0).position().top, 0);
+        assert.equal($indicators.eq(1).position().left, 2150);
+        assert.equal($indicators.eq(1).position().top, 0);
+    });
+
+})("DateTime indicator on TimelineDay View, horizontal grouping");
+
+(function() {
     QUnit.module("DateTime indicator on other timelines");
 
     QUnit.test("Shader should have correct height & width, TimelineWeek view", function(assert) {
