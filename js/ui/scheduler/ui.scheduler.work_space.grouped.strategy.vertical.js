@@ -149,6 +149,39 @@ var VerticalGroupedStrategy = GroupedStrategy.inherit({
         $indicator.css("left", horizontalOffset + this._workSpace.getGroupTableWidth());
         $indicator.css("top", height + verticalOffset);
     },
+
+    getShaderOffset: function(i, width) {
+        var offset = this._workSpace.getGroupTableWidth();
+        return this._workSpace.option("rtlEnabled") ? this._$container.outerWidth() - offset - this._workSpace.getWorkSpaceLeftOffset() - width : offset;
+    },
+
+    getShaderTopOffset: function(i) {
+        return 0;
+    },
+
+    getShaderHeight: function() {
+        var height = this._workSpace.getIndicationHeight();
+
+        if(this._workSpace.supportAllDayRow() && this._workSpace.option("showAllDayPanel")) {
+            height += this._workSpace.getCellHeight();
+        }
+
+        return height;
+    },
+
+    getShaderMaxHeight: function() {
+        var height = this._workSpace._getRowCount() * this._workSpace.getCellHeight();
+
+        if(this._workSpace.supportAllDayRow() && this._workSpace.option("showAllDayPanel")) {
+            height += this._workSpace.getCellHeight();
+        }
+
+        return height;
+    },
+
+    getShaderWidth: function(i) {
+        return this._workSpace.getIndicationWidth(0);
+    }
 });
 
 module.exports = VerticalGroupedStrategy;

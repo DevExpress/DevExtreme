@@ -33,6 +33,10 @@ var GroupedStrategy = Class.inherit({
     getGroupCountAttr: abstract,
     getLeftOffset: abstract,
     shiftIndicator: abstract,
+    getShaderOffset: abstract,
+    getShaderTopOffset: abstract,
+    getShaderMaxHeight: abstract,
+    getShaderWidth: abstract
 });
 
 

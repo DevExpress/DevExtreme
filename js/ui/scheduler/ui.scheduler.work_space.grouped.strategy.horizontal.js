@@ -121,6 +121,29 @@ var HorizontalGroupedStrategy = GroupedStrategy.inherit({
 
         $indicator.css("left", horizontalOffset);
         $indicator.css("top", height);
+    },
+
+    getShaderOffset: function(i, width) {
+        var offset = this._workSpace._getCellCount() * this._workSpace.getRoundedCellWidth(i - 1) * i;
+        return this._workSpace.option("rtlEnabled") ? this._workSpace._dateTableScrollable.$content().outerWidth() - offset - this._workSpace.getTimePanelWidth() - width : offset;
+    },
+
+    getShaderTopOffset: function(i) {
+        return -this.getShaderMaxHeight() * (i > 0 ? 1 : 0);
+    },
+
+    getShaderHeight: function() {
+        var height = this._workSpace.getIndicationHeight();
+
+        return height;
+    },
+
+    getShaderMaxHeight: function() {
+        return this._workSpace._dateTableScrollable.$content().outerHeight();
+    },
+
+    getShaderWidth: function(i) {
+        return this._workSpace.getIndicationWidth(i);
     }
 });
 
