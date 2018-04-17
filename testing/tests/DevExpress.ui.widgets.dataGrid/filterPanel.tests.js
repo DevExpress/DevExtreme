@@ -426,10 +426,8 @@ QUnit.module("Filter Panel", {
         });
 
         this.clock.tick();
-
         this.option("filterPanel.filterEnabled", false);
         this.dataController.changed.fire();
-
         this.clock.tick();
 
         assert.notOk(customSaveSpy.lastCall.args[0].filterPanel.filterEnabled);
