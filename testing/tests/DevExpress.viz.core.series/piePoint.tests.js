@@ -103,8 +103,9 @@ function createPointWithStubLabelForDraw(translateData, isFirstDrawn) {
     return point;
 }
 
-function createCorrectionLabel(translateData) {
+function createCorrectionLabel(translateData, firstDrawing) {
     var point = createPointWithStubLabel.call(this, translateData);
+    point._isLabelDrawingWithoutPoints = firstDrawing;
     point.correctLabelPosition(point._label);
     return point._label;
 }
@@ -1130,6 +1131,23 @@ QUnit.test("Draw label (area of label > maxY area of canvas)", function(assert) 
     assert.equal(label.shift.args[0][1], 290);
 });
 
+QUnit.test("Draw label (area of label < minY area of canvas), first drawing", function(assert) {
+    this.series._visibleArea = { minX: 0, maxX: 600, minY: 300, maxY: 600 };
+    var label = createCorrectionLabel.call(this, { 0: 300, 10: 270, 20: 240 }, true);
+
+    assert.equal(label.shift.args[0][0], 280);
+    assert.equal(label.shift.args[0][1], 300);
+});
+
+QUnit.test("Draw label (area of label > maxY area of canvas), first drawing", function(assert) {
+    this.series._visibleArea = { minX: 0, maxX: 600, minY: 0, maxY: 300 };
+    this.options.label.radialOffset = 30;
+    var label = createCorrectionLabel.call(this, { 0: 300, 10: 270, 20: 240 }, true);
+
+    assert.equal(label.shift.args[0][0], 280);
+    assert.equal(label.shift.args[0][1], 290);
+});
+
 QUnit.test("Draw label (area of label > maxX area of canvas)", function(assert) {
     var point = createPointWithStubLabelForDraw.call(this, { 0: 300, 10: 270, 20: 240 });
     var coord = point._checkHorizontalLabelPosition({ x: 595, y: 295, width: 20, height: 10 }, point._label.getBoundingRect(), point._getVisibleArea());
@@ -1144,6 +1162,24 @@ QUnit.test("Draw label (area of label < minX area of canvas)", function(assert) 
 
     assert.equal(coord.x, 0);
     assert.equal(coord.y, 295);
+});
+
+QUnit.test("Draw label (area of label > maxX area of canvas), first drawing", function(assert) {
+    this.series._visibleArea = { minX: 0, maxX: 300, minY: 0, maxY: 600 };
+    this.options.label.radialOffset = 30;
+    var label = createCorrectionLabel.call(this, { 0: 300, 10: 270, 20: 240 }, true);
+
+    assert.equal(label.shift.args[0][0], 280);
+    assert.equal(label.shift.args[0][1], 325);
+});
+
+QUnit.test("Draw label (area of label < minX area of canvas), first drawing", function(assert) {
+    this.series._visibleArea = { minX: 300, maxX: 600, minY: 0, maxY: 600 };
+    this.options.label.radialOffset = 30;
+    var label = createCorrectionLabel.call(this, { 0: 300, 10: 270, 20: 240 }, true);
+
+    assert.equal(label.shift.args[0][0], 300);
+    assert.equal(label.shift.args[0][1], 325);
 });
 
 QUnit.module("set label ellipsis", {
