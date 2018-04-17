@@ -887,7 +887,9 @@ QUnit.test('Save user state when data changed', function(assert) {
         pageIndex: 0,
         pageSize: 40,
         allowedPageSizes: [10, 20, 40],
-        searchText: ''
+        searchText: '',
+        filterPanel: {},
+        filterValue: null
     });
 });
 
@@ -989,7 +991,9 @@ QUnit.test('Save user state when columns changed', function(assert) {
         pageIndex: 0,
         pageSize: 20,
         allowedPageSizes: [10, 20, 40],
-        searchText: ''
+        searchText: '',
+        filterPanel: {},
+        filterValue: null
     });
 });
 
@@ -1029,7 +1033,9 @@ QUnit.test('Save user state when grouping a column', function(assert) {
         pageIndex: 0,
         pageSize: 20,
         allowedPageSizes: [10, 20, 40],
-        searchText: ''
+        searchText: '',
+        filterPanel: {},
+        filterValue: null
     });
 });
 
@@ -1073,7 +1079,9 @@ QUnit.test("Not save user state when the visibleWidth option in column changed",
         pageIndex: 0,
         pageSize: 20,
         allowedPageSizes: [10, 20, 40],
-        searchText: ""
+        searchText: "",
+        filterPanel: {},
+        filterValue: null
     });
 
     // act
@@ -1087,7 +1095,9 @@ QUnit.test("Not save user state when the visibleWidth option in column changed",
         pageIndex: 0,
         pageSize: 20,
         allowedPageSizes: [10, 20, 40],
-        searchText: ""
+        searchText: "",
+        filterPanel: {},
+        filterValue: null
     });
 });
 
