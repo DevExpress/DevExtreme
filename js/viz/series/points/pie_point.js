@@ -74,7 +74,11 @@ module.exports = _extend({}, symbolPoint, {
             coord = that._getLabelCoords(that._label),
             visibleArea = that._getVisibleArea();
 
-        return that._getLabelExtraCoord(coord, that._checkLabelPosition(coord, bBox, visibleArea), bBox);
+        if(that._isLabelDrawingWithoutPoints) {
+            return that._checkLabelPosition(coord, bBox, visibleArea);
+        } else {
+            return that._getLabelExtraCoord(coord, that._checkVerticalLabelPosition(coord, bBox, visibleArea), bBox);
+        }
     },
 
     _getLabelPosition: function(options) {
@@ -154,7 +158,9 @@ module.exports = _extend({}, symbolPoint, {
         this.translate();
 
         // this function is called for drawing labels without points for checking size of labels
+        this._isLabelDrawingWithoutPoints = true;
         this._drawLabel();
+        this._isLabelDrawingWithoutPoints = false;
     },
 
     updateLabelCoord: function(moveLabelsFromCenter) {
