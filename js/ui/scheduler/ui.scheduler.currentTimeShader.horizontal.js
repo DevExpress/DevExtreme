@@ -15,7 +15,7 @@ var HorizontalCurrentTimeShader = Shader.inherit({
             for(var i = 1; i < groupCount; i++) {
                 var $shader = $("<div>").addClass(DATE_TIME_SHADER_CLASS);
                 this._customizeShader($shader, 1);
-                this._$container.append($shader);
+                this._shader.push($shader);
             }
         }
     },

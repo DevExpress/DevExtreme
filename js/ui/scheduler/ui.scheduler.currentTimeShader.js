@@ -11,6 +11,9 @@ var currentTimeShader = Class.inherit({
         this._$container = workspace._dateTableScrollable.$content();
 
         this._$shader = $("<div>").addClass(DATE_TIME_SHADER_CLASS);
+        this._shader = [];
+
+        this._shader.push(this._$shader);
 
         this._renderShader();
 
@@ -19,7 +22,9 @@ var currentTimeShader = Class.inherit({
             this._$shader.css("height", this._$container.outerHeight());
         }
 
-        this._$container.prepend(this._$shader);
+        this._shader.forEach((shader, index) => {
+            this._$container.append(shader);
+        });
     },
 
     clean: function() {
