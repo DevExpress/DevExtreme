@@ -416,6 +416,132 @@ var stubInvokeMethod = function(instance, options) {
 })("DateTime indicator on Day View");
 
 (function() {
+    QUnit.module("DateTime indicator on Day View, vertical grouping", {
+        beforeEach: function() {
+            this.clock = sinon.useFakeTimers();
+
+            this.instance = $("#scheduler-work-space").dxSchedulerWorkSpaceDay({
+                showCurrentTimeIndicator: true,
+                groupOrientation: "vertical",
+                currentDate: new Date(2017, 8, 5),
+                startDayHour: 8,
+                endDayHour: 14
+            }).dxSchedulerWorkSpaceDay("instance");
+            stubInvokeMethod(this.instance);
+        },
+        afterEach: function() {
+            this.clock.restore();
+        }
+    });
+
+    QUnit.test("DateTimeIndicator should have correct positions, Day view with groups, verticalGrouping", function(assert) {
+        this.instance.option({
+            shadeUntilCurrentTime: false,
+            indicatorTime: new Date(2017, 8, 5, 12, 45)
+        });
+
+        this.instance.option("groups", [{ name: "a", items: [{ id: 1, text: "a.1" }, { id: 2, text: "a.2" }] }]);
+
+        var $element = this.instance.$element(),
+            $indicators = $element.find("." + SCHEDULER_DATE_TIME_INDICATOR_CLASS),
+            cellHeight = this.instance.$element().find(".dx-scheduler-date-table-cell").eq(0).outerHeight();
+        assert.equal($indicators.length, 2, "Indicator count is correct");
+        assert.equal($indicators.eq(0).position().left, 100);
+        assert.equal($indicators.eq(0).position().top, 10.5 * cellHeight);
+        assert.equal($indicators.eq(1).position().left, 100);
+        assert.equal($indicators.eq(1).position().top, 23.5 * cellHeight);
+    });
+
+    QUnit.test("DateTimeIndicator should have correct positions, Day view with groups without allDay panels, verticalGrouping", function(assert) {
+        this.instance.option({
+            showAllDayPanel: false,
+            shadeUntilCurrentTime: false,
+            indicatorTime: new Date(2017, 8, 5, 12, 45)
+        });
+
+        this.instance.option("groups", [{ name: "a", items: [{ id: 1, text: "a.1" }, { id: 2, text: "a.2" }] }]);
+
+        var $element = this.instance.$element(),
+            $indicators = $element.find("." + SCHEDULER_DATE_TIME_INDICATOR_CLASS),
+            cellHeight = this.instance.$element().find(".dx-scheduler-date-table-cell").eq(0).outerHeight();
+        assert.equal($indicators.length, 2, "Indicator count is correct");
+        assert.equal($indicators.eq(0).position().left, 100);
+        assert.equal($indicators.eq(0).position().top, 9.5 * cellHeight);
+        assert.equal($indicators.eq(1).position().left, 100);
+        assert.equal($indicators.eq(1).position().top, 21.5 * cellHeight);
+    });
+
+    QUnit.test("DateTimeIndicator should have correct positions, Day view with groups with shader", function(assert) {
+        this.instance.option({
+            shadeUntilCurrentTime: true,
+            indicatorTime: new Date(2017, 8, 5, 12, 45)
+        });
+
+        this.instance.option("groups", [{ name: "a", items: [{ id: 1, text: "a.1" }, { id: 2, text: "a.2" }] }]);
+
+        var $element = this.instance.$element(),
+            $indicators = $element.find("." + SCHEDULER_DATE_TIME_INDICATOR_CLASS),
+            cellHeight = this.instance.$element().find(".dx-scheduler-date-table-cell").eq(0).outerHeight();
+        assert.equal($indicators.length, 2, "Indicator count is correct");
+        assert.equal($indicators.eq(0).position().left, 100);
+        assert.equal($indicators.eq(0).position().top, 10.5 * cellHeight);
+        assert.equal($indicators.eq(1).position().left, 100);
+        assert.equal($indicators.eq(1).position().top, 23.5 * cellHeight);
+    });
+
+    QUnit.test("AllDay Shader should not be wrapped by allDay panel", function(assert) {
+        this.instance.option({
+            indicatorTime: new Date(2017, 8, 5, 12, 45),
+            showAllDayPanel: true
+        });
+        var $element = this.instance.$element();
+
+        assert.notOk($element.find("." + SCHEDULER_DATE_TIME_SHADER_ALL_DAY_CLASS).parent().hasClass("dx-scheduler-all-day-panel"), "AllDay panel contains time indicator");
+    });
+
+    QUnit.test("Shader should be rendered correctly, Day view with groups", function(assert) {
+        this.instance.option({
+            indicatorTime: new Date(2017, 8, 6, 12, 45),
+            intervalCount: 3
+        });
+
+        this.instance.option("groups", [{ name: "a", items: [{ id: 1, text: "a.1" }, { id: 2, text: "a.2" }, { id: 3, text: "a.3" }] }]);
+
+        var $element = this.instance.$element(),
+            $shader = $element.find("." + SCHEDULER_DATE_TIME_SHADER_CLASS),
+            $cell = this.instance.$element().find(".dx-scheduler-date-table-cell").eq(0),
+            cellHeight = $cell.outerHeight(),
+            cellWidth = this.instance.getRoundedCellWidth(0);
+
+        assert.roughEqual($shader.outerHeight(), 10.5 * cellHeight, 1, "Shader has correct height");
+        assert.roughEqual($shader.outerWidth(), 3 * cellWidth + 100, 5, "Shader has correct width");
+
+        for(var i = 0; i <= 2; i++) {
+            var $topShader = $element.find("." + SCHEDULER_DATE_TIME_SHADER_TOP_CLASS).eq(i),
+                $bottomShader = $element.find("." + SCHEDULER_DATE_TIME_SHADER_BOTTOM_CLASS).eq(i);
+
+            assert.roughEqual($topShader.position().top, i * 13 * cellHeight, 2, "Shader has correct position");
+
+            assert.roughEqual($topShader.outerHeight(), 10.5 * cellHeight, 2.5, "Top shader has correct height");
+            assert.roughEqual($bottomShader.outerHeight(), 2.5 * cellHeight, 2.5, "Bottom shader has correct height");
+            assert.roughEqual($topShader.outerWidth(), 2 * cellWidth, 2.5, "Top shader has correct width");
+            assert.roughEqual($bottomShader.outerWidth(), cellWidth, 1.5, "Bottom shader has correct width");
+        }
+    });
+
+    QUnit.test("TimePanel currentTime cell should have specific class, Day view", function(assert) {
+        this.instance.option({
+            indicatorTime: new Date(2017, 8, 5, 12, 45)
+        });
+
+        var $element = this.instance.$element(),
+            $cell = $element.find(".dx-scheduler-time-panel-current-time-cell");
+
+        assert.equal($cell.length, 2, "Cells has specific class");
+    });
+})("DateTime indicator on Day View, vertical grouping");
+
+(function() {
     QUnit.module("DateTime indicator on Week View", {
         beforeEach: function() {
             this.instance = $("#scheduler-work-space").dxSchedulerWorkSpaceWeek({
@@ -665,6 +791,63 @@ var stubInvokeMethod = function(instance, options) {
         assert.ok($cell.hasClass("dx-scheduler-header-panel-current-time-cell"), "Cell has specific class");
     });
 })("DateTime indicator on TimelineDay View");
+
+(function() {
+    QUnit.module("DateTime indicator on TimelineDay View, horizontal grouping", {
+        beforeEach: function() {
+            this.instance = $("#scheduler-work-space").dxSchedulerTimelineDay({
+                showCurrentTimeIndicator: true,
+                currentDate: new Date(2017, 8, 5),
+                groupOrientation: "horizontal",
+                startDayHour: 8,
+                endDayHour: 14,
+                hoursInterval: 1,
+                height: 307
+            }).dxSchedulerTimelineDay("instance");
+            stubInvokeMethod(this.instance);
+        }
+    });
+
+    QUnit.test("DateTimeIndicator should be rendered correctly", function(assert) {
+        this.instance.option({
+            indicatorTime: new Date(2017, 8, 5, 12, 45)
+        });
+
+        this.instance.option("groups", [{ name: "a", items: [{ id: 1, text: "a.1" }, { id: 2, text: "a.2" }] }]);
+
+        var $element = this.instance.$element(),
+            $indicators = $element.find("." + SCHEDULER_DATE_TIME_INDICATOR_CLASS);
+
+        assert.equal($indicators.length, 2, "Indicator count is correct");
+        assert.equal($indicators.eq(0).position().left, 950);
+        assert.equal($indicators.eq(0).position().top, 0);
+        assert.equal($indicators.eq(1).position().left, 2150);
+        assert.equal($indicators.eq(1).position().top, 0);
+    });
+
+    QUnit.test("Shader should have correct height, width and position", function(assert) {
+        this.instance.option("groups", [{ name: "a", items: [{ id: 1, text: "a.1" }, { id: 2, text: "a.2" }] }]);
+
+        this.instance.option({
+            indicatorTime: new Date(2017, 8, 5, 12, 45)
+        });
+
+        var $element = this.instance.$element(),
+            $shader = $element.find("." + SCHEDULER_DATE_TIME_SHADER_CLASS);
+
+        assert.equal($shader.length, 2, "Shaders count is correct");
+
+        assert.roughEqual($shader.eq(0).outerHeight(), 160, 1, "Shader has correct height");
+        assert.roughEqual($shader.eq(0).outerWidth(), 950, 1, "Shader has correct width");
+
+        assert.roughEqual($shader.eq(1).outerHeight(), 160, 1, "Shader has correct height");
+        assert.roughEqual($shader.eq(1).outerWidth(), 950, 1, "Shader has correct width");
+
+        assert.roughEqual($shader.eq(0).position().left, 0, 1, "Shader has correct left");
+        assert.roughEqual($shader.eq(1).position().left, 1200, 1, "Shader has correct left");
+    });
+
+})("DateTime indicator on TimelineDay View, horizontal grouping");
 
 (function() {
     QUnit.module("DateTime indicator on other timelines");

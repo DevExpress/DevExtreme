@@ -31,7 +31,12 @@ var GroupedStrategy = Class.inherit({
     getWorkSpaceMinWidth: abstract,
     getAllDayHeight: abstract,
     getGroupCountAttr: abstract,
-    getLeftOffset: abstract
+    getLeftOffset: abstract,
+    shiftIndicator: abstract,
+    getShaderOffset: abstract,
+    getShaderTopOffset: abstract,
+    getShaderMaxHeight: abstract,
+    getShaderWidth: abstract
 });
 
 

@@ -221,11 +221,23 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
         return cellCount * cellWidth;
     },
 
-    _renderIndicator: function(height, rtlOffset, $container) {
-        var width = this.getIndicationWidth();
-        var $indicator = this._createIndicator($container);
-        $indicator.height($container.outerHeight());
-        $indicator.css("left", rtlOffset ? rtlOffset - width : width);
+    _renderIndicator: function(height, rtlOffset, $container, groupCount) {
+        var $indicator,
+            width = this.getIndicationWidth();
+
+        if(this.option("groupOrientation") === "vertical") {
+            $indicator = this._createIndicator($container);
+            $indicator.height($container.outerHeight());
+            $indicator.css("left", rtlOffset ? rtlOffset - width : width);
+        } else {
+            for(var i = 0; i < groupCount; i++) {
+                var offset = this._getCellCount() * this.getCellWidth() * i;
+                $indicator = this._createIndicator($container);
+                $indicator.height($container.outerHeight());
+
+                $indicator.css("left", rtlOffset ? rtlOffset - width - offset : width + offset);
+            }
+        }
     },
 
     _isVerticalShader: function() {

@@ -113,6 +113,37 @@ var HorizontalGroupedStrategy = GroupedStrategy.inherit({
             top: 0,
             bottom: 0
         };
+    },
+
+    shiftIndicator: function($indicator, height, rtlOffset, i) {
+        var offset = this._workSpace._getCellCount() * this._workSpace.getRoundedCellWidth(i - 1, 0) * i + this._workSpace.getIndicatorOffset(i) + i,
+            horizontalOffset = rtlOffset ? rtlOffset - offset : offset;
+
+        $indicator.css("left", horizontalOffset);
+        $indicator.css("top", height);
+    },
+
+    getShaderOffset: function(i, width) {
+        var offset = this._workSpace._getCellCount() * this._workSpace.getRoundedCellWidth(i - 1) * i;
+        return this._workSpace.option("rtlEnabled") ? this._workSpace._dateTableScrollable.$content().outerWidth() - offset - this._workSpace.getTimePanelWidth() - width : offset;
+    },
+
+    getShaderTopOffset: function(i) {
+        return -this.getShaderMaxHeight() * (i > 0 ? 1 : 0);
+    },
+
+    getShaderHeight: function() {
+        var height = this._workSpace.getIndicationHeight();
+
+        return height;
+    },
+
+    getShaderMaxHeight: function() {
+        return this._workSpace._dateTableScrollable.$content().outerHeight();
+    },
+
+    getShaderWidth: function(i) {
+        return this._workSpace.getIndicationWidth(i);
     }
 });
 
