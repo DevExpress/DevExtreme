@@ -1,9 +1,26 @@
 "use strict";
 
-var Shader = require("./ui.scheduler.currentTimeShader");
+var $ = require("../../core/renderer"),
+    Shader = require("./ui.scheduler.currentTimeShader");
+
+var DATE_TIME_SHADER_CLASS = "dx-scheduler-date-time-shader";
 
 var HorizontalCurrentTimeShader = Shader.inherit({
     _renderShader: function() {
+        var groupCount = this._workspace.option("groupOrientation") === "horizontal" ? this._workspace._getGroupCount() : 1;
+
+        this._customizeShader(this._$shader, 0);
+
+        if(groupCount > 1) {
+            for(var i = 1; i < groupCount; i++) {
+                var $shader = $("<div>").addClass(DATE_TIME_SHADER_CLASS);
+                this._customizeShader($shader, 1);
+                this._$container.append($shader);
+            }
+        }
+    },
+
+    _customizeShader: function($shader, groupIndex) {
         var shaderWidth = this._workspace.getIndicationWidth(),
             maxWidth = this._$container.outerWidth();
 
@@ -12,8 +29,10 @@ var HorizontalCurrentTimeShader = Shader.inherit({
         }
 
         if(shaderWidth > 0) {
-            this._$shader.width(shaderWidth);
+            $shader.width(shaderWidth);
         }
+
+        $shader.css("left", this._workspace._getCellCount() * this._workspace.getCellWidth() * groupIndex);
     },
 });
 
