@@ -615,11 +615,11 @@ var SchedulerWorkSpace = Widget.inherit({
 
         if(this._isVerticalGroupedWorkSpace() && groupCount !== 0) {
             for(var i = 0; i < groupCount; i++) {
-                this._$allDayTitle = $("<div>")
+                var $allDayTitle = $("<div>")
                     .addClass(ALL_DAY_TITLE_CLASS)
                     .text(messageLocalization.format("dxScheduler-allDay"));
 
-                this._allDayTitles.push(this._$allDayTitle);
+                this._allDayTitles.push($allDayTitle);
 
                 this._$allDayTable = $("<table>");
                 this._allDayTables.push(this._$allDayTable);
@@ -1183,7 +1183,7 @@ var SchedulerWorkSpace = Widget.inherit({
 
         var headerPanelHeight = this.getHeaderPanelHeight(),
             headerHeight = this.invoke("getHeaderHeight"),
-            allDayPanelHeight = this.supportAllDayRow() && this.option("showAllDayPanel") ? this.getAllDayHeight() : 0;
+            allDayPanelHeight = this.supportAllDayRow() && this.option("showAllDayPanel") ? this._groupedStrategy.getAllDayOffset() : 0;
 
         headerPanelHeight && this._headerScrollable && this._headerScrollable.$element().height(headerPanelHeight + allDayPanelHeight);
 
@@ -1323,7 +1323,7 @@ var SchedulerWorkSpace = Widget.inherit({
     _toggleAllDayVisibility: function() {
         var showAllDayPanel = this.option("showAllDayPanel");
         this._$allDayPanel.toggle(showAllDayPanel);
-        this._$allDayTitle.toggleClass(ALL_DAY_TITLE_HIDDEN_CLASS, !showAllDayPanel);
+        this._$allDayTitle && this._$allDayTitle.toggleClass(ALL_DAY_TITLE_HIDDEN_CLASS, !showAllDayPanel);
         this.$element().toggleClass(WORKSPACE_WITH_ALL_DAY_CLASS, showAllDayPanel);
 
         this._changeAllDayVisibility();
@@ -1836,7 +1836,7 @@ var SchedulerWorkSpace = Widget.inherit({
 
     _setHorizontalGroupHeaderCellsHeight: function() {
         var cellHeight = this.getCellHeight(),
-            allDayRowHeight = this.option("showAllDayPanel") && this.supportAllDayRow() ? cellHeight : 0,
+            allDayRowHeight = this.option("showAllDayPanel") && this.supportAllDayRow() ? this.getAllDayHeight() : 0,
             dateTableHeight = cellHeight * this._getRowCount() - DATE_TABLE_CELL_BORDER * 2;
 
         this._getGroupHeaderCellsContent().css("height", dateTableHeight + allDayRowHeight);
