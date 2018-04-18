@@ -761,7 +761,7 @@ var dxChart = AdvancedChart.inherit({
             drawAxesWithTicks(verticalAxes, !rotated && synchronizeMultiAxes, panesCanvases, panesBorderOptions);
             drawAxesWithTicks(horizontalAxes, rotated && synchronizeMultiAxes, panesCanvases, panesBorderOptions);
             that._renderScaleBreaks();
-            return;
+            return false;
         }
 
         if(that._scrollBar) {
