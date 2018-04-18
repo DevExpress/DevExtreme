@@ -1010,7 +1010,7 @@ QUnit.module("Sorting", { beforeEach: function() {
         if(!("loadingTimeout" in options)) {
             options.loadingTimeout = null;
         }
-        setupTreeListModules(this, ["data", "columns", "sorting"], {
+        setupTreeListModules(this, ["data", "columns", "sorting", "filterRow"], {
             initDefaultOptions: true,
             options: options
         });
@@ -1081,6 +1081,29 @@ QUnit.test("sortOrder changing by columnOption should be applied", function(asse
     assert.equal(items[0].data.name, "Name 3", "item 0 name value");
     assert.equal(items[1].data.name, "Name 2", "item 1 name value");
     assert.equal(items[2].data.name, "Name 1", "item 2 name value");
+});
+
+QUnit.test("Sorting when there is filter", function(assert) {
+    // arrange
+    this.setupTreeList({
+        dataSource: this.items,
+        columns: [{ dataField: "name" }, { dataField: "age", filterValue: "19" }]
+    });
+
+    // assert
+    var items = this.dataController.items();
+    assert.equal(items.length, 2, "count items");
+    assert.equal(items[0].data.name, "Name 3", "item 0 name value");
+    assert.equal(items[1].data.name, "Name 1", "item 1 name value");
+
+    // act
+    this.columnOption("name", "sortOrder", "asc");
+
+    // assert
+    items = this.dataController.items();
+    assert.equal(items.length, 2, "count items");
+    assert.equal(items[0].data.name, "Name 1", "item 0 name value");
+    assert.equal(items[1].data.name, "Name 3", "item 1 name value");
 });
 
 
