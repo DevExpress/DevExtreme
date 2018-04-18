@@ -2608,7 +2608,7 @@ QUnit.test("Appointment should have correct position while dragging from group, 
 
     var startPosition = translator.locate($appointment);
     assert.roughEqual(startPosition.top, 850, 1.5, "Start position is correct");
-    assert.roughEqual(startPosition.left, 413, 1.5, "Start position is correct");
+    assert.roughEqual(startPosition.left, 406, 1.5, "Start position is correct");
 
     $(this.instance.$element().find("." + DATE_TABLE_CELL_CLASS)).eq(7).trigger(dragEvents.enter);
     $appointment.trigger(dragEvents.end);
