@@ -10,6 +10,7 @@ var $ = require("jquery"),
     config = require("core/config"),
     messageLocalization = require("localization/message"),
     Scrollbar = require("ui/scroll_view/ui.scrollbar"),
+    themes = require("ui/themes"),
     pointerMock = require("../../helpers/pointerMock.js");
 
 require("common.css!");
@@ -642,6 +643,65 @@ QUnit.test("release cause release state", function(assert) {
         .down()
         .move(0, $topPocket.height() + 1)
         .up();
+});
+
+var SCROLLVIEW_PULLDOWN_VISIBLE_TEXT_CLASS = "dx-scrollview-pull-down-text-visible";
+
+QUnit.test("pulled down adds ready state for Material theme", function(assert) {
+    assert.expect(6);
+    var origIsMaterial = themes.isMaterial;
+    themes.isMaterial = function() { return true; };
+
+    var $scrollView = $("#scrollView").dxScrollView({
+        useNative: false,
+        inertiaEnabled: false,
+        onPullDown: noop
+    });
+
+    var $content = $scrollView.find("." + SCROLLABLE_CONTENT_CLASS),
+        $topPocket = $scrollView.find("." + SCROLLVIEW_TOP_POCKET_CLASS),
+        $pullDownText = $scrollView.find("." + SCROLLVIEW_PULLDOWN_TEXT_CLASS),
+        mouse = pointerMock($content).start();
+
+    mouse.down().move(0, $topPocket.height() + 1);
+
+    assert.ok(!$pullDownText.children().eq(0).hasClass(SCROLLVIEW_PULLDOWN_VISIBLE_TEXT_CLASS));
+    assert.ok($pullDownText.children().eq(1).hasClass(SCROLLVIEW_PULLDOWN_VISIBLE_TEXT_CLASS));
+    assert.ok(!$pullDownText.children().eq(2).hasClass(SCROLLVIEW_PULLDOWN_VISIBLE_TEXT_CLASS));
+
+    mouse.move(0, -10);
+    assert.ok($pullDownText.children().eq(0).hasClass(SCROLLVIEW_PULLDOWN_VISIBLE_TEXT_CLASS));
+    assert.ok(!$pullDownText.children().eq(1).hasClass(SCROLLVIEW_PULLDOWN_VISIBLE_TEXT_CLASS));
+    assert.ok(!$pullDownText.children().eq(2).hasClass(SCROLLVIEW_PULLDOWN_VISIBLE_TEXT_CLASS));
+
+    themes.isMaterial = origIsMaterial;
+});
+
+QUnit.test("pulled down adds loading state for Material theme", function(assert) {
+    assert.expect(3);
+    var origIsMaterial = themes.isMaterial;
+    themes.isMaterial = function() { return true; };
+
+    var $scrollView = $("#scrollView").dxScrollView({
+        useNative: false,
+        inertiaEnabled: false,
+        onPullDown: function() {
+            assert.ok(!$pullDownText.children().eq(0).hasClass(SCROLLVIEW_PULLDOWN_VISIBLE_TEXT_CLASS));
+            assert.ok(!$pullDownText.children().eq(1).hasClass(SCROLLVIEW_PULLDOWN_VISIBLE_TEXT_CLASS));
+            assert.ok($pullDownText.children().eq(2).hasClass(SCROLLVIEW_PULLDOWN_VISIBLE_TEXT_CLASS));
+        }
+    });
+    var $content = $scrollView.find("." + SCROLLABLE_CONTENT_CLASS),
+        $topPocket = $scrollView.find("." + SCROLLVIEW_TOP_POCKET_CLASS),
+        $pullDownText = $scrollView.find("." + SCROLLVIEW_PULLDOWN_TEXT_CLASS);
+
+    pointerMock($content)
+        .start()
+        .down()
+        .move(0, $topPocket.height() + 1)
+        .up();
+
+    themes.isMaterial = origIsMaterial;
 });
 
 QUnit.test("scrollview locked while pulldown loading", function(assert) {
