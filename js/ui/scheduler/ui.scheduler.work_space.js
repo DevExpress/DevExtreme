@@ -28,7 +28,7 @@ var $ = require("../../core/renderer"),
     HorizontalGroupedStrategy = require("./ui.scheduler.work_space.grouped.strategy.horizontal"),
     VerticalGroupedStrategy = require("./ui.scheduler.work_space.grouped.strategy.vertical"),
     tableCreator = require("./ui.scheduler.table_creator"),
-    VerticalShader = require("./ui.scheduler.currentTimeShader.vertical");
+    VerticalShader = require("./ui.scheduler.current_time_shader.vertical");
 
 var COMPONENT_CLASS = "dx-scheduler-work-space",
     GROUPED_WORKSPACE_CLASS = "dx-scheduler-work-space-grouped",

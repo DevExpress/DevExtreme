@@ -1,7 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
-    Shader = require("./ui.scheduler.currentTimeShader");
+    Shader = require("./ui.scheduler.current_time_shader");
 
 var DATE_TIME_SHADER_ALL_DAY_CLASS = "dx-scheduler-date-time-shader-all-day",
     DATE_TIME_SHADER_TOP_CLASS = "dx-scheduler-date-time-shader-top",
