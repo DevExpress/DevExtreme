@@ -1225,7 +1225,6 @@ module.exports = {
                             that._updateScrollable();
                         });
                     });
-                    that.setLoading(that._dataController.isLoading());
                 },
 
                 scrollTo: function(location) {
