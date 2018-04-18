@@ -679,7 +679,7 @@ var dxChart = AdvancedChart.inherit({
             that._valueAxes.concat(that._argumentAxes).forEach(function(axis) {
                 axis.drawScaleBreaks();
             });
-            return;
+            return false;
         }
 
         if(that._scrollBar) {
