@@ -172,19 +172,21 @@ function adjustStackedSeriesValues() {
         holesStack = {
             left: {},
             right: {}
-        };
+        },
+        lastSeriesInStack = {};
 
-    _each(series, function(seriesIndex, singleSeries) {
-        var points = singleSeries.getPoints(),
+    series.forEach(function(singleSeries) {
+        var stackName = singleSeries.getStackName(),
             hole = false;
-        singleSeries._prevSeries = series[seriesIndex - 1];
+
+        singleSeries._prevSeries = lastSeriesInStack[stackName];
+        lastSeriesInStack[stackName] = singleSeries;
 
         singleSeries.holes = extend(true, {}, holesStack);
 
-        _each(points, function(index, point) {
+        singleSeries.getPoints().forEach(function(point, index, points) {
             var value = point.initialValue,
                 argument = point.argument.valueOf(),
-                stackName = singleSeries.getStackName(),
                 stacks = (value >= 0) ? stackKeepers.positive : stackKeepers.negative,
                 currentStack;
 
@@ -220,10 +222,9 @@ function adjustStackedSeriesValues() {
         });
 
     });
-    _each(series, function(seriesIndex, singleSeries) {
-        var points = singleSeries.getPoints(),
-            holes = singleSeries.holes;
-        _each(points, function(index, point) {
+    series.forEach(function(singleSeries) {
+        var holes = singleSeries.holes;
+        singleSeries.getPoints().forEach(function(point) {
             var argument = point.argument.valueOf();
             point.resetHoles();
             !point._skipSetLeftHole && point.setHole(holes.left[argument] || holesStack.left[argument] && 0, "left");
@@ -233,11 +234,12 @@ function adjustStackedSeriesValues() {
         });
     });
     that._stackKeepers = stackKeepers;
-    _each(series, function(_, singleSeries) {
-        _each(singleSeries.getPoints(), function(_, point) {
+    series.forEach(function(singleSeries) {
+        singleSeries.getPoints().forEach(function(point) {
             var argument = point.argument.valueOf(),
-                absTotal = getAbsStackSumByArg(stackKeepers, singleSeries.getStackName(), argument),
-                total = getStackSumByArg(stackKeepers, singleSeries.getStackName(), argument);
+                stackName = singleSeries.getStackName(),
+                absTotal = getAbsStackSumByArg(stackKeepers, stackName, argument),
+                total = getStackSumByArg(stackKeepers, stackName, argument);
 
             point.setPercentValue(absTotal, total, holesStack.left[argument], holesStack.right[argument]);
         });

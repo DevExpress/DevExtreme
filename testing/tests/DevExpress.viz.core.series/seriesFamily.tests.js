@@ -3296,6 +3296,38 @@ QUnit.test("Set single series - matching points", function(assert) {
     checkStackedPoints(assert, mixedPoints1);
 });
 
+QUnit.module("Stacked Area series. misc");
+
+QUnit.test("Set three series in two groups - check prev series links and points", function(assert) {
+    var negativePoints1 = pointsForStacking.negativePoints1(),
+        negativePoints2 = pointsForStacking.negativePoints2(),
+        negativePoints3 = pointsForStacking.negativePoints3(),
+        series1 = createSeries({
+            points: negativePoints1,
+            axis: "axis1",
+            stack: "axis1_stack"
+        }, "axis1"),
+        series2 = createSeries({
+            points: negativePoints2,
+            axis: "axis1",
+            stack: "axis1_stack"
+        }, "axis1"),
+        series3 = createSeries({
+            points: negativePoints3,
+            axis: "axis2",
+            stack: "axis2_stack"
+        }, "axis2"),
+        series = [series1, series2, series3];
+
+    createSeriesFamily("stackedarea", series);
+
+    checkStackedPoints(assert, negativePoints1, negativePoints2);
+    checkStackedPoints(assert, negativePoints3);
+    assert.strictEqual(series1._prevSeries, undefined);
+    assert.strictEqual(series2._prevSeries, series1);
+    assert.strictEqual(series3._prevSeries, undefined);
+});
+
 QUnit.test("Set two series - matching points", function(assert) {
     var mixedPoints1 = pointsForStacking.mixedPoints1(),
         mixedPoints2 = pointsForStacking.mixedPoints2(),

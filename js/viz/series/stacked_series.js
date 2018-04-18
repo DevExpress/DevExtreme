@@ -79,7 +79,7 @@ function preparePointsForStackedAreaSegment(points) {
 
 exports.chart["stackedarea"] = _extend({}, chartAreaSeries, baseStackedSeries, {
     _prepareSegment: function(points, orderedPoints, rotated) {
-        return chartAreaSeries._prepareSegment.call(this, preparePointsForStackedAreaSegment(points, this._prevSeries), orderedPoints, rotated);
+        return chartAreaSeries._prepareSegment.call(this, preparePointsForStackedAreaSegment(points), orderedPoints, rotated);
     },
     _appendInGroup: function() {
         this._group.append(this._extGroups.seriesGroup).toBackground();
@@ -103,7 +103,7 @@ exports.chart["stackedsplinearea"] = _extend({}, areaSeries["splinearea"], baseS
     _prepareSegment: function(points, orderedPoints, rotated) {
         var that = this,
             areaSegment;
-        points = preparePointsForStackedAreaSegment(points, that._prevSeries);
+        points = preparePointsForStackedAreaSegment(points);
         if(!this._prevSeries || points.length === 1) {
             areaSegment = areaSeries["splinearea"]._prepareSegment.call(this, points, undefined, rotated);
         } else {
