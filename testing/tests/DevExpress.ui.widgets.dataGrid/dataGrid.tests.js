@@ -6138,6 +6138,36 @@ QUnit.test("begin custom loading", function(assert) {
     assert.equal(dataGrid.getView("rowsView")._loadPanel.option("message"), "Loading...");
 });
 
+// T619196
+QUnit.test("begin custom loading and refresh", function(assert) {
+    // arrange, act
+    var dataGrid = createDataGrid({
+        dataSource: [{ id: 1111 }]
+    });
+
+    // act
+    dataGrid.beginCustomLoading("Test");
+    dataGrid.refresh().done(function() {
+        dataGrid.endCustomLoading();
+    });
+
+    // assert
+    assert.equal(dataGrid.getView("rowsView")._loadPanel.option("message"), "Test");
+
+    // act
+    this.clock.tick();
+
+    // assert
+    assert.equal(dataGrid.getView("rowsView")._loadPanel.option("message"), "Test");
+
+    // act
+    this.clock.tick(200);
+
+    // assert
+    assert.strictEqual(dataGrid.getView("rowsView")._loadPanel.option("message"), "Loading...");
+    assert.strictEqual(dataGrid.getView("rowsView")._loadPanel.option("visible"), false);
+});
+
 QUnit.test("begin custom loading without message", function(assert) {
     // arrange, act
     var dataGrid = createDataGrid({
