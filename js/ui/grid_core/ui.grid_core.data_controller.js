@@ -745,8 +745,8 @@ module.exports = {
                 isLoading: function() {
                     return this._isLoading || this._isCustomLoading;
                 },
-                _fireLoadingChanged: function(messageText) {
-                    this.loadingChanged.fire(this.isLoading(), messageText);
+                _fireLoadingChanged: function() {
+                    this.loadingChanged.fire(this.isLoading(), this._loadingText);
                 },
                 _calculateAdditionalFilter: function() {
                     return null;
@@ -1082,7 +1082,8 @@ module.exports = {
                  */
                 beginCustomLoading: function(messageText) {
                     this._isCustomLoading = true;
-                    this._fireLoadingChanged(messageText || '');
+                    this._loadingText = messageText || '';
+                    this._fireLoadingChanged();
                 },
                 /**
                  * @name GridBaseMethods_endCustomLoading
@@ -1090,6 +1091,7 @@ module.exports = {
                  */
                 endCustomLoading: function() {
                     this._isCustomLoading = false;
+                    this._loadingText = undefined;
                     this._fireLoadingChanged();
                 },
                 /**
