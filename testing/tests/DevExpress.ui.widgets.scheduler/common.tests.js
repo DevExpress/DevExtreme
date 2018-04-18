@@ -1528,6 +1528,34 @@ QUnit.testStart(function() {
         assert.equal(this.instance.$element().find(".dx-scheduler-appointment").length, 0, "Appointments were removed");
     });
 
+    QUnit.test("selectedCellData option should be updated after view changing", function(assert) {
+        this.createInstance({
+            currentDate: new Date(2018, 4, 10),
+            views: ["week", "month"],
+            currentView: "week",
+            focusStateEnabled: true
+        });
+
+        var keyboard = keyboardMock(this.instance.getWorkSpace().$element()),
+            cells = this.instance.$element().find(".dx-scheduler-date-table-cell");
+
+        pointerMock(cells.eq(7)).start().click();
+        keyboard.keyDown("down", { shiftKey: true });
+
+        assert.deepEqual(this.instance.option("selectedCellData"), [{
+            startDate: new Date(2018, 4, 6, 0, 30),
+            endDate: new Date(2018, 4, 6, 1),
+            allDay: false
+        }, {
+            startDate: new Date(2018, 4, 6, 1),
+            endDate: new Date(2018, 4, 6, 1, 30),
+            allDay: false
+        }], "correct cell data");
+
+        this.instance.option("currentView", "month");
+        assert.deepEqual(this.instance.option("selectedCellData"), []);
+    });
+
 })("Options");
 
 (function() {

@@ -350,17 +350,12 @@ var SchedulerWorkSpace = Widget.inherit({
         $cell = $cell || $(this._focusedCells);
 
         if(isDefined($cell)) {
-            for(var i = 0; i < $cell.length; i++) {
-                this._deleteFocusClass($($cell[i]));
-            }
+            this._toggleFocusClass(false, $cell);
+            this._toggleFocusedCellClass(false, $cell);
+            this.setAria("label", undefined, $cell);
         }
-        this.option("selectedCellData", []);
-    },
 
-    _deleteFocusClass: function($cell) {
-        this._toggleFocusClass(false, $cell);
-        this._toggleFocusedCellClass(false, $cell);
-        this.setAria("label", undefined, $cell);
+        this.option("selectedCellData", []);
     },
 
     _focusInHandler: function(e) {
