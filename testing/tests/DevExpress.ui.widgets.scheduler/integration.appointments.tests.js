@@ -2510,6 +2510,58 @@ QUnit.test("Appointment should have correct position while dragging from group",
     assert.deepEqual(appointmentData.ownerId, { id: [2] }, "Resources is correct");
 });
 
+QUnit.test("getWorkSpaceScrollableScrollTop should be called while dragging from allDay panel, vertical grouping", function(assert) {
+    var spy = sinon.spy();
+    this.createInstance({
+        currentDate: new Date(2015, 6, 10),
+        editing: true,
+        views: [{
+            type: "week",
+            name: "Week",
+            groupOrientation: "vertical"
+        }],
+        currentView: "week",
+        dataSource: [{
+            text: "a",
+            startDate: new Date(2015, 6, 7, 10),
+            endDate: new Date(2015, 6, 7, 10, 30),
+            allDay: true,
+            ownerId: { id: 2 }
+        }],
+        startDayHour: 9,
+        endDayHour: 12,
+        groups: ["ownerId.id"],
+        resources: [
+            {
+                field: "ownerId.id",
+                allowMultiple: false,
+                dataSource: [
+                    { id: 1, text: "one" },
+                    { id: 2, text: "two" }
+                ]
+            }
+        ],
+        width: 800,
+        height: 500
+    });
+
+    var getScrollableOffset = this.instance.getWorkSpaceScrollableScrollTop;
+    this.instance.getWorkSpaceScrollableScrollTop = spy;
+
+    try {
+        var $appointment = $(this.instance.$element()).find("." + APPOINTMENT_CLASS).eq(0);
+        var pointer = pointerMock($appointment).start();
+        pointer.dragStart().drag(0, 100);
+
+        assert.ok(spy.calledOnce, "getWorkSpaceScrollableScrollTop was called");
+        assert.strictEqual(spy.getCall(0).args[0], true, "getWorkSpaceScrollableScrollTop was called with right args");
+
+        pointer.dragEnd();
+    } finally {
+        this.instance.getWorkSpaceScrollableScrollTop = getScrollableOffset;
+    }
+});
+
 QUnit.test("Appointment should have correct position while dragging from group, vertical grouping", function(assert) {
     this.createInstance({
         currentDate: new Date(2015, 6, 10),

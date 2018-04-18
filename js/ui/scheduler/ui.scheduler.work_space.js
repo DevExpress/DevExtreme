@@ -1671,6 +1671,10 @@ var SchedulerWorkSpace = Widget.inherit({
         return this._dateTableScrollable.scrollTop();
     },
 
+    getGroupedScrollableScrollTop: function(allDay) {
+        return this._groupedStrategy.getScrollableScrollTop(allDay);
+    },
+
     getScrollableScrollLeft: function() {
         return this._dateTableScrollable.scrollLeft();
     },

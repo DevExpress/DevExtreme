@@ -2078,8 +2078,8 @@ var Scheduler = Widget.inherit({
         return this._workSpace.getScrollable();
     },
 
-    getWorkSpaceScrollableScrollTop: function() {
-        return this._workSpace.getScrollableScrollTop();
+    getWorkSpaceScrollableScrollTop: function(allDay) {
+        return this._workSpace.getGroupedScrollableScrollTop(allDay);
     },
 
     getWorkSpaceScrollableScrollLeft: function() {
