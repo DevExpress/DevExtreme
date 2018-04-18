@@ -679,7 +679,7 @@ var dxChart = AdvancedChart.inherit({
             that._valueAxes.concat(that._argumentAxes).forEach(function(axis) {
                 axis.drawScaleBreaks();
             });
-            return;
+            return false;
         }
 
         if(that._scrollBar) {
@@ -711,6 +711,10 @@ var dxChart = AdvancedChart.inherit({
     },
 
     _shrinkAxes: function(drawOptions, sizeShortage, panesCanvases) {
+        if(!sizeShortage || !panesCanvases) {
+            return;
+        }
+
         var that = this,
             rotated = that._isRotated(),
             extendedArgAxes = (that._scrollBar ? [that._scrollBar] : []).concat(that._argumentAxes),

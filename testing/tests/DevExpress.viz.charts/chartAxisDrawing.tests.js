@@ -2346,3 +2346,80 @@ QUnit.test("Update axes size and shift with new margins (there is also scrollBar
         width: 220
     }); // T587219
 });
+
+QUnit.test("Do not shrink axis on zooming - only draw axes in old canvas (T624446)", function(assert) {
+    var argAxis = createAxisStubs(),
+        valAxis = createAxisStubs(),
+        scrollBar = this.setupScrollBar();
+
+    argAxis
+        .getMargins.returns({ left: 10, top: 7, right: 20, bottom: 13 });
+
+    valAxis
+        .getMargins.returns({ left: 18, top: 15, right: 10, bottom: 9 });
+
+    scrollBar
+        .getMargins.returns({ left: 0, top: 15, right: 0, bottom: 0 });
+
+    this.setupAxes([argAxis, valAxis]);
+
+    var chart = new dxChart(this.container, {
+        size: { width: 220, height: 110 },
+        adaptiveLayout: { width: 200, height: 100 },
+        scrollBar: { visible: true },
+        series: [{}],
+        dataSource: [{ arg: 1, val: 10 }],
+        legend: { visible: false }
+    });
+
+    var argAxisStub = this.axisStub.getCall(0).returnValue;
+
+    argAxisStub.draw.reset();
+    argAxisStub.getMargins.reset();
+    argAxisStub.estimateMargins.reset();
+    argAxisStub.updateSize.reset();
+    argAxisStub.shift.reset();
+    argAxisStub.createTicks.reset();
+    argAxisStub.drawScaleBreaks.reset();
+
+    var valAxisStub = this.axisStub.getCall(1).returnValue;
+
+    valAxisStub.draw.reset();
+    valAxisStub.getMargins.reset();
+    valAxisStub.estimateMargins.reset();
+    valAxisStub.updateSize.reset();
+    valAxisStub.shift.reset();
+    valAxisStub.createTicks.reset();
+    valAxisStub.drawScaleBreaks.reset();
+
+    scrollBar.updateSize.reset();
+
+    // act
+    chart.zoomArgument(2, 9);
+
+    // assert
+    assert.equal(valAxisStub.draw.lastCall.args[0], false, "draw valAxis");
+
+    assert.deepEqual(argAxisStub.draw_test_arg, {
+        left: 18,
+        right: 20,
+        top: 27,
+        bottom: 13,
+        originalLeft: 0,
+        originalRight: 0,
+        originalTop: 0,
+        originalBottom: 0,
+        width: 220,
+        height: 110
+    }, "draw argAxis canvas");
+
+    assert.equal(argAxisStub.updateSize.called, false);
+    assert.equal(valAxisStub.updateSize.called, false);
+    assert.equal(scrollBar.updateSize.called, false);
+
+    assert.equal(argAxisStub.shift.called, false);
+    assert.equal(valAxisStub.shift.called, false);
+
+    assert.ok(valAxisStub.drawScaleBreaks.called, "draw scaleBreaks for value axis");
+    assert.ok(argAxisStub.drawScaleBreaks.called, "draw scaleBreaks for argument axis");
+});
