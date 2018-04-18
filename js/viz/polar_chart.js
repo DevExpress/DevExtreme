@@ -82,7 +82,7 @@ var dxPolarChart = AdvancedChart.inherit({
         var valueAxis = this._getValueAxis(),
             argumentAxis = this._getArgumentAxis();
 
-        if(sizeShortage.width || sizeShortage.height) {
+        if(sizeShortage && (sizeShortage.width || sizeShortage.height)) {
             argumentAxis.hideOuterElements();
             argumentAxis.updateSize(this._canvas);
             valueAxis.updateSize(this._canvas);
