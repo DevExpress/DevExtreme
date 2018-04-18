@@ -144,6 +144,10 @@ var HorizontalGroupedStrategy = GroupedStrategy.inherit({
 
     getShaderWidth: function(i) {
         return this._workSpace.getIndicationWidth(i);
+    },
+
+    getScrollableScrollTop: function(allDay) {
+        return !allDay ? this._workSpace.getScrollable().scrollTop() : 0;
     }
 });
 

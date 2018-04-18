@@ -36,7 +36,8 @@ var GroupedStrategy = Class.inherit({
     getShaderOffset: abstract,
     getShaderTopOffset: abstract,
     getShaderMaxHeight: abstract,
-    getShaderWidth: abstract
+    getShaderWidth: abstract,
+    getScrollableScrollTop: abstract
 });
 
 

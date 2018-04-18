@@ -181,6 +181,10 @@ var VerticalGroupedStrategy = GroupedStrategy.inherit({
 
     getShaderWidth: function(i) {
         return this._workSpace.getIndicationWidth(0);
+    },
+
+    getScrollableScrollTop: function(allDay) {
+        return this._workSpace.getScrollable().scrollTop();
     }
 });
 

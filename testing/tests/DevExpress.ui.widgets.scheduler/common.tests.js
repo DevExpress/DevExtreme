@@ -806,6 +806,54 @@ QUnit.testStart(function() {
         });
     });
 
+    QUnit.test("getWorkSpaceScrollableScrollTop should return right value for allDay appointments depending on the group orientation", function(assert) {
+        assert.expect(4);
+
+        this.createInstance({
+            dataSource: [],
+            groups: ["owner.id"],
+            resources: [{
+                fieldExpr: "owner.id",
+                allowMultiple: true,
+                dataSource: [
+                    {
+                        id: 1,
+                        text: "A"
+                    }, {
+                        id: 2,
+                        text: "B"
+                    }
+                ]
+            }],
+            views: [{
+                type: "week",
+                name: "HWEEK",
+                groupOrientation: "horizontal"
+            },
+            {
+                type: "week",
+                name: "VWEEK",
+                groupOrientation: "vertical"
+            }],
+            currentView: "HWEEK",
+            height: 500
+        });
+
+        var scrollable = this.instance.getWorkSpace().getScrollable();
+        scrollable.scrollTo({ left: 0, top: 400 });
+
+        assert.equal(this.instance.getWorkSpaceScrollableScrollTop(), 400, "Returned value is right for not allDay appt and horizontal grouping");
+        assert.equal(this.instance.getWorkSpaceScrollableScrollTop(true), 0, "Returned value is right for allDay appt and horizontal grouping");
+
+        this.instance.option("currentView", "VWEEK");
+
+        scrollable = this.instance.getWorkSpace().getScrollable();
+        scrollable.scrollTo({ left: 0, top: 400 });
+
+        assert.equal(this.instance.getWorkSpaceScrollableScrollTop(), 400, "Returned value is right for not allDay appt and vertical grouping");
+        assert.equal(this.instance.getWorkSpaceScrollableScrollTop(true), 400, "Returned value is right for allDay appt and vertical grouping");
+    });
+
 })("Methods");
 
 (function() {
