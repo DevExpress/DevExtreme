@@ -8,7 +8,7 @@ var $ = require("../../core/renderer"),
     windowUtils = require("../../core/utils/window"),
     dateUtils = require("../../core/utils/date"),
     tableCreator = require("./ui.scheduler.table_creator"),
-    HorizontalShader = require("./ui.scheduler.currentTimeShader.horizontal");
+    HorizontalShader = require("./ui.scheduler.current_time_shader.horizontal");
 
 var TIMELINE_CLASS = "dx-scheduler-timeline",
     GROUP_TABLE_CLASS = "dx-scheduler-group-table",
