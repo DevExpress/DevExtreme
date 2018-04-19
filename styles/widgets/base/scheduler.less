@@ -250,7 +250,7 @@
         &.dx-scheduler-work-space-day {
             .dx-scheduler-header-scrollable {
                 height: @SCHEDULER_HEADER_PANEL_TOP_GAP;
-                }
+            }
         }
 
         &.dx-scheduler-work-space-week,
@@ -1221,7 +1221,7 @@
     .dx-scheduler-work-space-count {
         &.dx-scheduler-work-space-week {
             .dx-scheduler-header-panel-cell, .dx-scheduler-date-table-cell, .dx-scheduler-all-day-table-cell {
-                &:nth-child(7n):not(.dx-scheduler-last-group-cell) {
+                &:nth-child(7n){
                     border-right: @SCHEDULER_ACCENT_BORDER;
 
                     .dx-rtl & {
@@ -1233,7 +1233,7 @@
 
         &.dx-scheduler-work-space-work-week {
             .dx-scheduler-header-panel-cell, .dx-scheduler-date-table-cell, .dx-scheduler-all-day-table-cell {
-                &:nth-child(5n):not(.dx-scheduler-last-group-cell) {
+                &:nth-child(5n) {
                     border-right: @SCHEDULER_ACCENT_BORDER;
 
                     .dx-rtl & {
@@ -1245,7 +1245,7 @@
 
         &.dx-scheduler-work-space-day {
             .dx-scheduler-header-panel-cell, .dx-scheduler-date-table-cell, .dx-scheduler-all-day-table-cell {
-                &:nth-child(1n):not(.dx-scheduler-last-group-cell) {
+                &:nth-child(1n) {
                     border-right: @SCHEDULER_BASE_BORDER;
 
                     .dx-rtl & {
@@ -2446,6 +2446,11 @@
                 margin: 0 0 0 @SCHEDULER_LEFT_COLUMN_WIDTH * 2;
             }
 
+            .dx-scheduler-sidebar-scrollable,
+            .dx-scheduler-date-table-scrollable {
+                border-top: @SCHEDULER_BASE_BORDER;
+            }
+
             &.dx-scheduler-work-space-week,
             &.dx-scheduler-work-space-work-week,
             &.dx-scheduler-work-space-month {
@@ -2453,9 +2458,6 @@
                 .dx-scheduler-sidebar-scrollable {
                     padding-bottom: @SCHEDULER_HEADER_PANEL_OFFSET;
                     margin-bottom: -@SCHEDULER_HEADER_PANEL_OFFSET;
-                }
-                .dx-scheduler-header-scrollable.dx-scrollable {
-                    padding-top: @SCHEDULER_HEADER_PANEL_TOP_GAP;
                 }
             }
 
