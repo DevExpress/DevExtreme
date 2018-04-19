@@ -2080,7 +2080,10 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     getAllDayHeight: function() {
-        return this.option("showAllDayPanel") ? this._getCells(true).first().outerHeight() || 0 : 0;
+        if(!this.option("showAllDayPanel")) return 0;
+
+        var allDayTable = this.$element().find("." + ALL_DAY_TABLE_CLASS);
+        return allDayTable.outerHeight() || 0;
     },
 
     getAllDayOffset: function() {
