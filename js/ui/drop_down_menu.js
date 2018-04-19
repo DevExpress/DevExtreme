@@ -10,6 +10,7 @@ var $ = require("../core/renderer"),
     Popover = require("./popover"),
     DataHelperMixin = require("../data_helper"),
     List = require("./list"),
+    themes = require("./themes"),
     ChildDefaultTemplate = require("./widget/child_default_template");
 
 var DROP_DOWN_MENU_CLASS = "dx-dropdownmenu",
@@ -316,6 +317,14 @@ var DropDownMenu = Widget.inherit({
             config = this._buttonOptions();
 
         this._button = this._createComponent($button, Button, config);
+    },
+
+    _toggleActiveState: function($element, value, e) {
+        if(themes.isMaterial()) {
+            this._button._toggleActiveState($element, value, e);
+        } else {
+            this.callBase.apply(this, arguments);
+        }
     },
 
     _buttonOptions: function() {
