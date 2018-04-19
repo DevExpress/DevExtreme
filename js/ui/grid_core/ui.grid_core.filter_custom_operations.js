@@ -108,6 +108,7 @@ function baseOperation(grid) {
 function anyOf(grid) {
     return extend(baseOperation(grid), {
         name: "anyof",
+        icon: "selectall",
         caption: messageLocalization.format("dxFilterBuilder-filterOperationAnyOf")
     });
 }
@@ -122,6 +123,7 @@ function noneOf(grid) {
             return baseFilter[0] === "!" ? baseFilter : ["!", baseFilter];
         },
         name: "noneof",
+        icon: "unselectall",
         caption: messageLocalization.format("dxFilterBuilder-filterOperationNoneOf")
     });
 }
