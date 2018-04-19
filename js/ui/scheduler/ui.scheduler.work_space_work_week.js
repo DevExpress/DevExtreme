@@ -9,8 +9,9 @@ var registerComponent = require("../../core/component_registrator"),
 
 var WORK_WEEK_CLASS = "dx-scheduler-work-space-work-week";
 
-var weekendCounter = 0,
-    weekCounter = 0;
+var dayIndexes = [1, 2, 3, 4, 5];
+
+var weekCounter = 0;
 
 var SchedulerWorkSpaceWorkWeek = SchedulerWorkSpaceWeek.inherit({
 
@@ -29,27 +30,33 @@ var SchedulerWorkSpaceWorkWeek = SchedulerWorkSpaceWeek.inherit({
     _getDateByIndex: function(headerIndex) {
         var resultDate = new Date(this._firstViewDate);
 
-        if(headerIndex % this._getCellCount() === 0) {
-            weekendCounter = 0;
-            weekCounter = 0;
+        // if(headerIndex % this._getCellCount() === 0) {
+        //     weekendCounter = 0;
+        //     weekCounter = 0;
+        // }
+
+        resultDate.setDate(this._firstViewDate.getDate() + headerIndex + weekCounter);
+        var index = resultDate.getDay();
+
+        while(dayIndexes.indexOf(index) === -1) {
+            resultDate.setDate(resultDate.getDate() + 1);
+            index = resultDate.getDay();
+            weekCounter++;
         }
+        // var nextDay = resultDate.getDay() + 1;
 
-        resultDate.setDate(this._firstViewDate.getDate() + headerIndex + weekendCounter);
-        var nextDay = resultDate.getDay() + 1;
+        // if(nextDay % 6 === 0) {
+        //     weekendCounter = 2;
 
-        if(nextDay % 6 === 0) {
-            weekendCounter = 2;
-
-            if(nextDay === 6) {
-                weekCounter++;
-                weekendCounter *= weekCounter;
-            }
-        }
+        //     if(nextDay === 6) {
+        //         weekCounter++;
+        //         weekendCounter *= weekCounter;
+        //     }
+        // }
         return resultDate;
     },
 
     _renderView: function() {
-        weekendCounter = 0;
         weekCounter = 0;
         this.callBase();
     },
