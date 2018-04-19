@@ -2793,10 +2793,10 @@ QUnit.test("Range for dataSource with one point", function(assert) {
 
     var rangeData = series.getArgumentRange();
 
-    assert.ok(rangeData, "Range data should be created");
     assert.strictEqual(rangeData.min, 0, "Min arg should be undefined");
     assert.strictEqual(rangeData.max, 0, "Max arg should be undefined");
-    assert.deepEqual(rangeData.categories, undefined, "Categories arg should be correct");
+    assert.strictEqual(rangeData.interval, undefined, "data interval");
+    assert.strictEqual(rangeData.categories, undefined, "Categories arg should be correct");
 });
 
 QUnit.test("Get Range data when several points", function(assert) {
@@ -2808,7 +2808,26 @@ QUnit.test("Get Range data when several points", function(assert) {
     assert.ok(rangeData, "Range data should be created");
     assert.strictEqual(rangeData.min, 0, "Min arg should be undefined");
     assert.strictEqual(rangeData.max, 2, "Max arg should be undefined");
-    assert.deepEqual(rangeData.categories, undefined, "Categories arg should be correct");
+    assert.strictEqual(rangeData.interval, 1, "data interval");
+    assert.strictEqual(rangeData.categories, undefined, "Categories arg should be correct");
+});
+
+QUnit.test("Get argument range. Calculate interval", function(assert) {
+    var series = createSeries({ type: "line" });
+    series.updateData([{ arg: 0, val: 0 }, { arg: 1, val: 0 }, { arg: 5, val: 0 }]);
+
+    var rangeData = series.getArgumentRange();
+
+    assert.strictEqual(rangeData.interval, 1, "data interval");
+});
+
+QUnit.test("Get argument range. Calculate interval. Get min interval", function(assert) {
+    var series = createSeries({ type: "line" });
+    series.updateData([{ arg: 0, val: 0 }, { arg: 4, val: 0 }, { arg: 5, val: 0 }]);
+
+    var rangeData = series.getArgumentRange();
+
+    assert.strictEqual(rangeData.interval, 1, "data interval");
 });
 
 QUnit.test("Get Range data when several points, data with undefined argument", function(assert) {

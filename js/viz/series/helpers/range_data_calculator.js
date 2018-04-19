@@ -138,9 +138,16 @@ module.exports = {
                     categories: data.map(function(item) { return item.argument; })
                 };
             } else {
+                let interval;
+                if(data.length > 1) {
+                    const i1 = series.getArgumentAxis().calculateInterval(data[0].argument, data[1].argument);
+                    const i2 = series.getArgumentAxis().calculateInterval(data[data.length - 1].argument, data[data.length - 2].argument);
+                    interval = Math.min(i1, i2);
+                }
                 range = {
                     min: data[0].argument,
-                    max: data[data.length - 1].argument
+                    max: data[data.length - 1].argument,
+                    interval
                 };
             }
         }
