@@ -2068,6 +2068,22 @@ QUnit.testStart(function() {
         $($cell).trigger("dxcontextmenu");
     });
 
+    QUnit.test("Cells should be focused after onCellContextMenu event firing", function(assert) {
+        var $element = $("#scheduler-work-space").dxSchedulerWorkSpaceWeek({
+            focusStateEnabled: true,
+            currentDate: new Date(2018, 2, 1)
+        });
+        var keyboard = keyboardMock($element),
+            cells = $element.find("." + CELL_CLASS);
+
+        pointerMock(cells.eq(7)).start().click();
+        keyboard.keyDown("right", { shiftKey: true });
+        $(cells.eq(8)).trigger("dxcontextmenu");
+        $($element).trigger("focusout");
+
+        assert.equal(cells.filter(".dx-state-focused").length, 49, "right cells are focused");
+    });
+
 })("Workspace Mouse Interaction");
 
 

@@ -350,22 +350,18 @@ var SchedulerWorkSpace = Widget.inherit({
         $cell = $cell || $(this._focusedCells);
 
         if(isDefined($cell)) {
-            for(var i = 0; i < $cell.length; i++) {
-                this._deleteFocusClass($($cell[i]));
-            }
+            this._toggleFocusClass(false, $cell);
+            this._toggleFocusedCellClass(false, $cell);
+            this.setAria("label", undefined, $cell);
         }
-        this.option("selectedCellData", []);
-    },
 
-    _deleteFocusClass: function($cell) {
-        this._toggleFocusClass(false, $cell);
-        this._toggleFocusedCellClass(false, $cell);
-        this.setAria("label", undefined, $cell);
+        this.option("selectedCellData", []);
     },
 
     _focusInHandler: function(e) {
         if($(e.target).is(this._focusTarget()) && this._isCellClick !== false) {
             delete this._isCellClick;
+            delete this._contextMenuHandled;
             this.callBase.apply(this, arguments);
             var $cell = this._getFocusedCell();
             this._setFocusedCell($cell);
@@ -374,7 +370,10 @@ var SchedulerWorkSpace = Widget.inherit({
 
     _focusOutHandler: function() {
         this.callBase.apply(this, arguments);
-        this._releaseFocusedCell();
+
+        if(!this._contextMenuHandled) {
+            this._releaseFocusedCell();
+        }
     },
 
     _focusTarget: function() {
@@ -1119,10 +1118,13 @@ var SchedulerWorkSpace = Widget.inherit({
             eventName = eventUtils.addNamespace(contextMenuEvent.name, this.NAME);
 
         eventsEngine.off($element, eventName, cellSelector);
-        eventsEngine.on($element, eventName, cellSelector, (function(e) {
-            var $cell = $(e.target);
-            this._contextMenuAction({ event: e, cellElement: getPublicElement($cell), cellData: this.getCellData($cell) });
-        }).bind(this));
+        eventsEngine.on($element, eventName, cellSelector, this._contextMenuHandler.bind(this));
+    },
+
+    _contextMenuHandler: function(e) {
+        var $cell = $(e.target);
+        this._contextMenuAction({ event: e, cellElement: getPublicElement($cell), cellData: this.getCellData($cell) });
+        this._contextMenuHandled = true;
     },
 
     _createContextMenuAction: function() {

@@ -1207,6 +1207,7 @@ var Scheduler = Widget.inherit({
             case "currentView":
                 this._processCurrentView();
 
+                this.option("selectedCellData", []);
                 var viewCountConfig = this._getViewCountConfig();
                 this._appointments.option({
                     items: [],
