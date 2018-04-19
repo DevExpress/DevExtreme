@@ -11,7 +11,7 @@ Voted the best cross-platform component suite containing everything you need to 
 
 ## Download and Install
 
-This is a working repo for DevExtreme. To include DevExtreme to your project, use one of the distribution packages. If you use Visual Studio, then use the Windows installer for added features like project templates. Alternatively, download a plain zip archive of just the client-side library and its widgets:
+To include DevExtreme to your project, use one of the distribution packages. If you use Visual Studio, then use the Windows installer for added features like project templates. Alternatively, download a plain zip archive of just the client-side library and its widgets:
 
 - [Install from NPM](https://js.devexpress.com/Documentation/Guide/Getting_Started/Installation/npm_Package/)
 - [Install via Bower](https://js.devexpress.com/Documentation/Guide/Getting_Started/Installation/Bower_Package/)
@@ -22,16 +22,15 @@ This is a working repo for DevExtreme. To include DevExtreme to your project, us
 
 ## Getting Started
 
-After installation, you can add a widget to your app. Here's a simple [button example](https://js.devexpress.com/Documentation/Guide/Getting_Started/Widget_Basics_-_jQuery/Create_and_Configure_a_Widget/) using jQuery:
+After installation, you can add a widget to your app. Here's a simple button example:
 
 ```html
 <div id="buttonContainer"></div>
 ```
 
 ```js
-$(function () {
-    $("#buttonContainer").dxButton();
-});
+var element = document.getElementById('buttonContainer');
+var button = new DevExpress.ui.dxButton(element, { text: 'Hello World!' });
 ```
 
 DevExtreme supports deep integration with the following client-side technologies:
