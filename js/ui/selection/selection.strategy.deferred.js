@@ -171,10 +171,8 @@ module.exports = SelectionStrategy.inherit({
                 if(lastOperation !== "or" && currentOperation === "and") {
                     needAddFilter = false;
                     selectionFilter = [];
-                } else if(lastOperation !== "and" && currentOperation === "or") {
-                    needAddFilter = false;
-                } else if(lastOperation === "and" && currentOperation === "or") {
-                    needAddFilter = !isUnique;
+                } if(currentOperation === "or") {
+                    needAddFilter = lastOperation === "and" && !isUnique;
                 }
             }
 
