@@ -236,7 +236,7 @@
 
 .dx-scheduler-work-space-day {
     .dx-scheduler-scrollable-offset-mixin(0, @MATERIAL_SCHEDULER_ALL_DAY_TABLE_CELL_HEIGHT, @MATERIAL_SCHEDULER_COLLAPSED_ALL_DAY_TABLE_CELL_HEIGHT);
-
+    
     &:not(.dx-scheduler-work-space-grouped) {
         .dx-scheduler-all-day-title {
             top: @MATERIAL_SCHEDULER_HEADER_HEIGHT + 1;
@@ -547,9 +547,6 @@
     background-color: @scheduler-alldaypanel-bg;
     .dx-scheduler-all-day-table-cell {
         border-bottom: @SCHEDULER_BASE_BORDER;
-        .dx-scheduler-work-space-both-scrollbar & {
-            border-bottom-width: 2px;
-        }
     }
 }
 
@@ -571,6 +568,7 @@
             border-top: @SCHEDULER_BASE_BORDER;
         }
 
+
         .dx-scheduler-date-table-cell {
             border-left: @SCHEDULER_BASE_BORDER;
         }
@@ -591,14 +589,6 @@
             .dx-rtl & {
                 border-left: none;
                 border-right: none;
-            }
-        }
-
-        &.dx-scheduler-work-space-both-scrollbar:not(.dx-scheduler-agenda) {
-            .dx-scheduler-all-day-panel {
-                .dx-scheduler-first-group-cell {
-                    border-left: none;
-                }
             }
         }
     }
