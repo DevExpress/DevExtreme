@@ -29,9 +29,10 @@ After installation, you can add a widget to your app. Here's a simple [button ex
 ```
 
 ```js
-$(function () {
-    $("#buttonContainer").dxButton();
-});
+import Button from 'devextreme/ui/button';
+
+let element = document.getElementById('buttonContainer');
+let button = new Button(element, { text: 'Hello World!' });
 ```
 
 DevExtreme supports deep integration with the following client-side technologies:
