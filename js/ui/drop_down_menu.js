@@ -506,8 +506,8 @@ var DropDownMenu = Widget.inherit({
                 this._popup.option(POPUP_OPTION_MAP[name], value);
                 break;
             case "usePopover":
-            case "useInkRipple":
             case "menuWidget":
+            case "useInkRipple":
                 this._invalidate();
                 break;
             case "focusStateEnabled":
