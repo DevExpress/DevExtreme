@@ -22,17 +22,15 @@ To include DevExtreme to your project, use one of the distribution packages. If 
 
 ## Getting Started
 
-After installation, you can add a widget to your app. Here's a simple [button example](https://js.devexpress.com/Documentation/Guide/Getting_Started/Widget_Basics_-_jQuery/Create_and_Configure_a_Widget/) using jQuery:
+After installation, you can add a widget to your app. Here's a simple button example:
 
 ```html
 <div id="buttonContainer"></div>
 ```
 
 ```js
-import Button from 'devextreme/ui/button';
-
-let element = document.getElementById('buttonContainer');
-let button = new Button(element, { text: 'Hello World!' });
+var element = document.getElementById('buttonContainer');
+var button = new Button(element, { text: 'Hello World!' });
 ```
 
 DevExtreme supports deep integration with the following client-side technologies:
