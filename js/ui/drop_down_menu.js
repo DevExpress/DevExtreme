@@ -186,7 +186,8 @@ var DropDownMenu = Widget.inherit({
             onItemRendered: null,
             menuWidget: List,
             popupMaxHeight: undefined,
-            closeOnClick: true
+            closeOnClick: true,
+            useInkRipple: false
         });
     },
 
@@ -235,6 +236,14 @@ var DropDownMenu = Widget.inherit({
                             to: { scale: 0 }
                         }
                     }
+                }
+            },
+            {
+                device: function() {
+                    return themes.isMaterial();
+                },
+                options: {
+                    useInkRipple: true
                 }
             }
         ]);
@@ -320,11 +329,7 @@ var DropDownMenu = Widget.inherit({
     },
 
     _toggleActiveState: function($element, value, e) {
-        if(themes.isMaterial()) {
-            this._button._toggleActiveState($element, value, e);
-        } else {
-            this.callBase.apply(this, arguments);
-        }
+        this._button._toggleActiveState($element, value, e);
     },
 
     _buttonOptions: function() {
@@ -333,6 +338,7 @@ var DropDownMenu = Widget.inherit({
             icon: this.option("buttonIcon"),
             width: this.option("buttonWidth"),
             height: this.option("buttonHeight"),
+            useInkRipple: this.option("useInkRipple"),
             template: this.option("buttonTemplate"),
             focusStateEnabled: false,
             onClick: (function(e) {

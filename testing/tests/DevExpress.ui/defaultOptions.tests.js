@@ -275,6 +275,20 @@ testComponentDefaults(DropDownMenu,
     { usePopover: true }
 );
 
+testComponentDefaults(DropDownMenu,
+    {},
+    {
+        useInkRipple: true
+    },
+    function() {
+        this.originalCurrentTheme = themes.current();
+        themes.current("material");
+    },
+    function() {
+        themes.current(this.originalCurrentTheme);
+    }
+);
+
 testComponentDefaults(TextEditor,
     {},
     {
