@@ -2600,6 +2600,33 @@ QUnit.test("Min part. Rotated", function(assert) {
     assert.equal(cc.y, 400);
 });
 
+QUnit.test("Min part, min === max. Non-rotated - apply offset", function(assert) {
+    var point = createPoint(this.series, this.data, this.options);
+    point.x = 100;
+    point.minX = 111;
+    point.y = 200;
+    point.minY = 200;
+
+    var cc = point.getCoords(true);
+
+    assert.equal(cc.x, 100);
+    assert.equal(cc.y, 201);
+});
+
+QUnit.test("Min part, min === max. Rotated - apply offset", function(assert) {
+    this.options.rotated = true;
+    var point = createPoint(this.series, this.data, this.options);
+    point.x = 300;
+    point.minX = 300;
+    point.y = 400;
+    point.minY = 444;
+
+    var cc = point.getCoords(true);
+
+    assert.equal(cc.x, 299);
+    assert.equal(cc.y, 400);
+});
+
 QUnit.module("Get default coordinates", {
     beforeEach: function() {
         this.data = {

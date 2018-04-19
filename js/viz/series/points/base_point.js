@@ -367,10 +367,10 @@ Point.prototype = {
         }
 
         if(!that._options.rotated) {
-            return { x: that.x, y: that.minY };
+            return { x: that.x, y: that.minY + ((that.y - that.minY) ? 0 : 1) };
         }
 
-        return { x: that.minX, y: that.y };
+        return { x: that.minX - ((that.x - that.minX) ? 0 : 1), y: that.y };
     },
 
     getDefaultCoords: function() {
