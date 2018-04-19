@@ -445,16 +445,36 @@ require("style-compiler-test-server/known-css-files");
         assert.equal($element.hasClass("dx-theme-oldtheme-typography"), false, "old typography class deleted");
     });
 
+
+    QUnit.test("dx-color-scheme class for different themes", function(assert) {
+        this.writeToFrame("<link rel='dx-theme' href='style1.css' data-theme='generic.light' />");
+        this.writeToFrame("<link rel='dx-theme' href='style2.css' data-theme='generic.light.compact' />");
+        this.writeToFrame("<link rel='dx-theme' href='style3.css' data-theme='material.blue.light' />");
+        this.writeToFrame("<body class='dx-viewport'></body>");
+
+        themes.init({ context: this.frameDoc(), theme: "generic.light" });
+
+        viewPortUtils.value($(".dx-viewport", this.frameDoc()));
+        assert.ok($(".dx-theme-generic", this.frameDoc()).hasClass("dx-color-scheme-light"), "right dx-color-scheme class for generic");
+
+        themes.current("generic.light.compact");
+        assert.ok($(".dx-theme-generic", this.frameDoc()).hasClass("dx-color-scheme-light"), "right dx-color-scheme class for generic.compact");
+
+        themes.current("material.blue.light");
+        assert.ok($(".dx-theme-material", this.frameDoc()).hasClass("dx-color-scheme-blue-light"), "right dx-color-scheme class for material");
+    });
+
     QUnit.test("isMaterial return right value after themes switching", function(assert) {
-        this.writeToFrame("<link rel='dx-theme' href='style1.css' data-theme='material.light' />");
+        this.writeToFrame("<link rel='dx-theme' href='style1.css' data-theme='material.blue.light' />");
         this.writeToFrame("<link rel='dx-theme' href='style2.css' data-theme='generic.light' />");
         themes.init({ context: this.frameDoc(), theme: "generic.light" });
         themes.resetTheme();
         assert.notOk(themes.isMaterial(), "isMaterial after reset");
         themes.current("generic.light");
         assert.notOk(themes.isMaterial(), "isMaterial after activate generic.light");
-        themes.current("material.light");
-        assert.ok(themes.isMaterial(), "isMaterial after activate material.light");
+        themes.current("material.blue.light");
+        assert.ok(themes.isMaterial(), "isMaterial after activate material.blue.light");
+        themes.resetTheme();
     });
 
 })();

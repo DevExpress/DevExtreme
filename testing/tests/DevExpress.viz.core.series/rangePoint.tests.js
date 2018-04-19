@@ -2830,14 +2830,20 @@ function createLabels(x, y, minY) {
 
 QUnit.test("Create label", function(assert) {
     var point = createPoint(this.series, this.data, this.options);
-    assert.ok(this.labelFactory.calledTwice);
-    assert.equal(this.labelFactory.args[0][0].renderer, point.series._renderer);
-    assert.equal(this.labelFactory.args[0][0].labelsGroup, point.series._labelsGroup);
-    assert.equal(this.labelFactory.args[0][0].point, point);
 
-    assert.equal(this.labelFactory.args[1][0].renderer, point.series._renderer);
-    assert.equal(this.labelFactory.args[1][0].labelsGroup, point.series._labelsGroup);
-    assert.equal(this.labelFactory.args[1][0].point, point);
+    assert.ok(this.labelFactory.calledTwice);
+
+    assert.deepEqual(this.labelFactory.args[0][0], {
+        renderer: point.series._renderer,
+        labelsGroup: point.series._labelsGroup,
+        point: point
+    });
+
+    assert.deepEqual(this.labelFactory.args[1][0], {
+        renderer: point.series._renderer,
+        labelsGroup: point.series._labelsGroup,
+        point: point
+    });
 });
 
 QUnit.test("Get label format object", function(assert) {

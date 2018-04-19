@@ -1,7 +1,6 @@
 "use strict";
 
 var extend = require("../../../core/utils/extend").extend,
-    CONNECTOR_LENGTH = 20,
     symbolPoint = require("./symbol_point"),
 
     _extend = extend,
@@ -15,8 +14,7 @@ var extend = require("../../../core/utils/extend").extend,
     _getCosAndSin = vizUtils.getCosAndSin,
     _isDefined = require("../../../core/utils/type").isDefined,
     getVerticallyShiftedAngularCoords = vizUtils.getVerticallyShiftedAngularCoords,
-
-    INDENT_FROM_PIE = require("../../components/consts").pieLabelIndent;
+    RADIAL_LABEL_INDENT = require("../../components/consts").radialLabelIndent;
 
 module.exports = _extend({}, symbolPoint, {
     _updateData: function(data) {
@@ -44,7 +42,7 @@ module.exports = _extend({}, symbolPoint, {
     correctPosition: function(correction) {
         var that = this;
         that.correctRadius(correction);
-        that.correctLabelRadius(correction.radiusOuter);
+        that.correctLabelRadius(correction.radiusOuter + RADIAL_LABEL_INDENT);
         that.centerX = correction.centerX;
         that.centerY = correction.centerY;
     },
@@ -64,10 +62,6 @@ module.exports = _extend({}, symbolPoint, {
         that.minValue = correction;
         that.percent = percent;
         that._label.setDataField("percent", percent);
-    },
-
-    setMaxLabelLength: function(maxLabelLength) {
-        this._maxLabelLength = maxLabelLength;
     },
 
     _updateLabelData: function() {
@@ -100,6 +94,7 @@ module.exports = _extend({}, symbolPoint, {
             radiusInner = that.radiusInner,
             radiusOuter = that.radiusOuter,
             radiusLabels = that.radiusLabels,
+            columnsPosition = position === 'columns',
             rad,
             x;
 
@@ -107,10 +102,10 @@ module.exports = _extend({}, symbolPoint, {
             rad = radiusInner + (radiusOuter - radiusInner) / 2 + options.radialOffset;
             x = that.centerX + rad * angleFunctions.cos - bBox.width / 2;
         } else {
-            rad = radiusLabels + options.radialOffset + INDENT_FROM_PIE;
-            if(angleFunctions.cos > 0.1) {
+            rad = radiusLabels + options.radialOffset;
+            if(angleFunctions.cos > 0.1 || columnsPosition && angleFunctions.cos >= 0) {
                 x = that.centerX + rad * angleFunctions.cos;
-            } else if(angleFunctions.cos < -0.1) {
+            } else if(angleFunctions.cos < -0.1 || columnsPosition && angleFunctions.cos < 0) {
                 x = that.centerX + rad * angleFunctions.cos - bBox.width;
             } else {
                 x = that.centerX + rad * angleFunctions.cos - bBox.width / 2;
@@ -129,32 +124,29 @@ module.exports = _extend({}, symbolPoint, {
             bBox = label.getBoundingRect(),
             labelWidth = bBox.width,
             options = label.getLayoutOptions(),
-            rad = that.radiusLabels + options.radialOffset,
             visibleArea = that._getVisibleArea(),
             rightBorderX = visibleArea.maxX - labelWidth,
             leftBorderX = visibleArea.minX,
             angleOfPoint = _normalizeAngle(that.middleAngle),
             centerX = that.centerX,
+            connectorOffset = options.connectorOffset,
             x = coord.x;
 
         if(options.position === "columns") {
-            rad += CONNECTOR_LENGTH;
             if(angleOfPoint <= 90 || angleOfPoint >= 270) {
-                x = that._maxLabelLength ? centerX + rad + that._maxLabelLength - labelWidth : rightBorderX;
-                x = x > rightBorderX ? rightBorderX : x;
+                x = rightBorderX;
             } else {
-                x = that._maxLabelLength ? centerX - rad - that._maxLabelLength : leftBorderX;
-                x = x < leftBorderX ? leftBorderX : x;
+                x = leftBorderX;
             }
             coord.x = x;
-        } else if(moveLabelsFromCenter) {
+        } else if(options.position !== "inside" && moveLabelsFromCenter) {
             if(angleOfPoint <= 90 || angleOfPoint >= 270) {
-                if(x < centerX) {
-                    x = centerX;
+                if((x - connectorOffset) < centerX) {
+                    x = centerX + connectorOffset;
                 }
             } else {
-                if(x + labelWidth > centerX) {
-                    x = centerX - labelWidth;
+                if(x + labelWidth + connectorOffset > centerX) {
+                    x = centerX - labelWidth - connectorOffset;
                 }
             }
             coord.x = x;
@@ -212,10 +204,15 @@ module.exports = _extend({}, symbolPoint, {
             label = that._label,
             box = label.getBoundingRect(),
             visibleArea = that._getVisibleArea(),
+            position = label.getLayoutOptions().position,
             width = box.width;
 
-        if(label.getLayoutOptions().position === "columns" && that.series.index > 0) {
+        if(position === "columns" && that.series.index > 0) {
             width = visibleArea.maxX - that.centerX - that.radiusLabels;
+        } else if(position === "inside") {
+            if(width > (visibleArea.maxX - visibleArea.minX)) {
+                width = visibleArea.maxX - visibleArea.minX;
+            }
         } else {
             if(box.x + width > visibleArea.maxX) {
                 width = visibleArea.maxX - box.x;

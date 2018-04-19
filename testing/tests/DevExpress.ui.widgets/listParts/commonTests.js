@@ -395,6 +395,56 @@ QUnit.test("group should be collapsed by the collapseGroup method", function(ass
     }
 });
 
+QUnit.test("group should be stay collapsed if collapseGroup method called twice", function(assert) {
+    fx.off = true;
+
+    try {
+        var $element = this.element.dxList({
+                items: [{ key: "a", items: ["0"] }, { key: "b", items: ["0"] }],
+                grouped: true,
+                collapsibleGroups: true
+            }),
+            instance = $element.dxList("instance");
+
+        var $group = $element.find("." + LIST_GROUP_CLASS);
+        var $groupBody = $group.eq(1).find("." + LIST_GROUP_BODY_CLASS);
+
+        instance.collapseGroup(1).done(function() {
+            instance.collapseGroup(1).done(function() {
+                assert.ok($group.eq(1).hasClass(LIST_GROUP_COLLAPSED_CLASS), "collapsed class is present");
+                assert.equal($groupBody.height(), 0, "group is still collapsed");
+            });
+        });
+    } finally {
+        fx.off = false;
+    }
+});
+
+QUnit.test("group should be stay expanded by the expandGroup method", function(assert) {
+    fx.off = true;
+
+    try {
+        var $element = this.element.dxList({
+                items: [{ key: "a", items: ["0"] }, { key: "b", items: ["0"] }],
+                grouped: true,
+                collapsibleGroups: true
+            }),
+            instance = $element.dxList("instance");
+
+        var $group = $element.find("." + LIST_GROUP_CLASS);
+
+        instance.expandGroup(1).done(function() {
+            var $groupBody = $group.eq(1).find("." + LIST_GROUP_BODY_CLASS);
+
+            assert.notOk($group.eq(1).hasClass(LIST_GROUP_COLLAPSED_CLASS), "group is expanded");
+            assert.notEqual($groupBody.height(), 0, "group is still expanded");
+        });
+    } finally {
+        fx.off = false;
+    }
+});
+
+
 QUnit.test("group should be expanded by the expandGroup method", function(assert) {
     var origAnimate = fx.animate;
 
@@ -441,13 +491,34 @@ QUnit.test("group should be expanded by the expandGroup method", function(assert
     }
 });
 
+QUnit.test("items on another page are selected when grouping is enabled", function(assert) {
+    var list = this.element.dxList({
+        dataSource: {
+            store: [
+                { key: "first", text: "item 1" },
+                { key: "second", text: "item 2" }
+            ],
+            pageSize: 1,
+            paginate: true,
+            group: "key"
+        },
+        grouped: true,
+        selectionMode: "multiple",
+        selectedItemKeys: ["item 1", "item 2"],
+        keyExpr: "text"
+    }).dxList("instance");
+
+    var selectedItems = list.option("selectedItems");
+
+    assert.equal(selectedItems.length, 2, "count of selected items");
+});
+
 QUnit.test("scrollView should be updated after group collapsed", function(assert) {
     try {
         List.mockScrollView(this.originalScrollView);
         fx.off = true;
 
         var $element = this.element.dxList({
-                autoPagingEnabled: true,
                 dataSource: {
                     store: [{ key: "a", items: ["0", "1", "2", "3", "4"] }, { key: "b", items: ["0", "1", "2", "3", "4"] }],
                     pageSize: 1
@@ -603,34 +674,18 @@ var isElementHidden = function($element) {
     return (!$element.length || $element.is(":hidden"));
 };
 
-QUnit.test("showNextButton (deprecated showNextButton = true)", function(assert) {
+QUnit.test("show next button", function(assert) {
     this.element.dxList({
         dataSource: {
             store: [1, 2, 3],
             pageSize: 2
         },
-        showNextButton: true,
+        pageLoadMode: "nextButton",
         scrollingEnabled: true
     }).dxList("instance");
     var nextButton = $(".dx-list-next-button ", this.element);
 
     assert.equal(this.element.find(toSelector(LIST_ITEM_CLASS)).length, 2, "first page loaded");
-    $(".dx-button", nextButton).trigger("dxclick");
-    assert.equal(this.element.find(toSelector(LIST_ITEM_CLASS)).length, 3, "second page loaded");
-});
-
-QUnit.test("showNextButton (deprecated showNextButton = false)", function(assert) {
-    this.element.dxList({
-        dataSource: {
-            store: [1, 2, 3],
-            pageSize: 2
-        },
-        showNextButton: false,
-        scrollingEnabled: true
-    }).dxList("instance");
-    var nextButton = $(".dx-list-next-button ", this.element);
-
-    assert.equal(this.element.find(toSelector(LIST_ITEM_CLASS)).length, 3, "all data loaded");
     $(".dx-button", nextButton).trigger("dxclick");
     assert.equal(this.element.find(toSelector(LIST_ITEM_CLASS)).length, 3, "second page loaded");
 });
@@ -1223,7 +1278,7 @@ QUnit.test("pageLoading should be ordered for async dataSource (T233998)", funct
             },
             pageSize: 1
         },
-        autoPagingEnabled: true
+        pageLoadMode: "scrollBottom"
     });
 
     this.clock.tick(300);
@@ -1453,7 +1508,7 @@ QUnit.test("first item rendered when pageSize is 1 and dataSource set as array",
     }));
 
     var $list = this.element.dxList({
-        autoPagingEnabled: true,
+        pageLoadMode: "scrollBottom",
         dataSource: {
             store: [1, 2, 3, 4],
             pageSize: 1
@@ -1502,9 +1557,9 @@ QUnit.test("list should scroll to top if data source is load is happened", funct
 
 QUnit.module("infinite list scenario", moduleSetup);
 
-QUnit.test("appending items on scroll bottom (deprecated autoPagingEnabled = true)", function(assert) {
+QUnit.test("appending items on scroll bottom", function(assert) {
     var element = this.element.dxList({
-        autoPagingEnabled: true,
+        pageLoadMode: "scrollBottom",
         scrollingEnabled: true,
         dataSource: {
             store: new ArrayStore([1, 2, 3, 4]),
@@ -1520,7 +1575,7 @@ QUnit.test("appending items on scroll bottom (deprecated autoPagingEnabled = tru
 QUnit.test("scroll bottom action shouldn't load data if all items was loaded", function(assert) {
     var count = 0;
     var element = this.element.dxList({
-        autoPagingEnabled: true,
+        pageLoadMode: "scrollBottom",
         scrollingEnabled: true,
         dataSource: {
             load: function() {
@@ -1535,21 +1590,6 @@ QUnit.test("scroll bottom action shouldn't load data if all items was loaded", f
 
     element.dxScrollView("instance").scrollBottom();
     assert.equal(count, 1, "data source loaded, shouldn't load another page");
-});
-
-QUnit.test("appending items on scroll bottom (deprecated autoPagingEnabled = false)", function(assert) {
-    var element = this.element.dxList({
-        autoPagingEnabled: false,
-        scrollingEnabled: true,
-        dataSource: {
-            store: new ArrayStore([1, 2, 3, 4]),
-            pageSize: 2
-        }
-    });
-    assert.deepEqual(element.dxList("instance").option("items"), [1, 2, 3, 4], "correct items presented in options");
-
-    element.dxScrollView("instance").scrollBottom();
-    assert.deepEqual(element.dxList("instance").option("items"), [1, 2, 3, 4], "correct items presented in options");
 });
 
 QUnit.test("appending items on scroll bottom", function(assert) {

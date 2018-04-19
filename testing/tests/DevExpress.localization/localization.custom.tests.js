@@ -98,3 +98,7 @@ QUnit.test("format number by LDML pattern", function(assert) {
 QUnit.test("parse number by LDML pattern", function(assert) {
     assert.equal(numberLocalization.parse("١,٢٣٤.٥٠", "#,#0.00"), 1234.5);
 });
+
+QUnit.test("parse negative number in rtl mode", function(assert) {
+    assert.equal(numberLocalization.parse("\u061C-١٢٣"), -123);
+});

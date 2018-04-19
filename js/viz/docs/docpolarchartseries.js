@@ -1012,7 +1012,7 @@ var stackedbarPolarSeries = {
     /**
     * @name dxPolarChartSeriesTypes_stackedbarpolarseries_label_position
     * @publicName position
-    * @type string
+    * @type Enums.RelativePosition
     * @default 'inside'
     * @inheritdoc
     */

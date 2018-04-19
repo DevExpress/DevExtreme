@@ -8,8 +8,14 @@
         border-bottom: @treelist-border;
     }
 
-    > .dx-treelist-pager, > .dx-treelist-headers {
+    > .dx-treelist-pager, > .dx-treelist-headers, > .dx-treelist-filter-panel {
         border-top: @treelist-border;
+    }
+
+    > .dx-treelist-filter-panel {
+        border-top-width: 0;
+        border-left: @treelist-border;
+        border-right: @treelist-border;
     }
 }
 
@@ -74,6 +80,26 @@
         .dx-treelist-edit-form {
             background-color: @treelist-base-background-color;
         }
+
+        .dx-virtual-row > td {
+            position: relative;
+
+            &:before {
+                display: block;
+                position: absolute;
+                left: 7px;
+                right: 7px;
+                top: 0;
+                bottom: 0;
+                content: '';
+                background-image: @treelist-text-stub-background-image-path;
+                background-repeat: no-repeat repeat;
+            }
+
+            &[style*="text-align: right"]:before {
+                .flip-horizontally();
+            }
+        }
     }
 
     .dx-treelist-filter-row .dx-filter-range-content {
@@ -90,6 +116,11 @@
             .dx-treelist-error-message();
         }
     }
+}
+
+.dx-treelist-filter-panel {
+    color: @treelist-base-color;
+    border-top: @treelist-border;
 }
 
 .dx-treelist-form-buttons-container {
@@ -134,6 +165,18 @@
 
                 &.dx-last-cell {
                     border-left: none;
+                }
+            }
+        }
+
+        .dx-treelist-rowsview {
+            .dx-virtual-row > td {
+                &:before {
+                    .flip-horizontally();
+                }
+
+                &[style*="text-align: left"]:before {
+                    .scale(1);
                 }
             }
         }

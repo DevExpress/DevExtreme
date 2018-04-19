@@ -46,7 +46,12 @@ var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
     },
 
     _calculateCellIndex: function(rowIndex, cellIndex) {
-        cellIndex = cellIndex % this._getCellCount();
+        if(this._isVerticalGroupedWorkSpace()) {
+            rowIndex = rowIndex % this._getRowCount();
+        } else {
+            cellIndex = cellIndex % this._getCellCount();
+        }
+
         return rowIndex * this._getCellCount() + cellIndex;
     },
 
@@ -73,6 +78,9 @@ var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
         return 0;
     },
 
+    _insertAllDayRowsIntoDateTable: function() {
+        return false;
+    },
     _getCellCoordinatesByIndex: function(index) {
         var rowIndex = Math.floor(index / this._getCellCount()),
             cellIndex = index - this._getCellCount() * rowIndex;
@@ -154,8 +162,10 @@ var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
     },
 
     _getDate: function(week, day) {
-        var result = new Date(this._firstViewDate);
-        result.setDate(result.getDate() + week * DAYS_IN_WEEK + day);
+        var result = new Date(this._firstViewDate),
+            lastRowInDay = this._getRowCount();
+
+        result.setDate(result.getDate() + (week % lastRowInDay) * DAYS_IN_WEEK + day);
         return result;
     },
 
@@ -245,7 +255,12 @@ var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
     _getCellPositionByIndex: function(index, groupIndex) {
         var position = this.callBase(index, groupIndex),
             rowIndex = this._getCellCoordinatesByIndex(index).rowIndex,
+            calculatedTopOffset;
+        if(!this._isVerticalGroupedWorkSpace()) {
             calculatedTopOffset = this.getCellHeight() * rowIndex;
+        } else {
+            calculatedTopOffset = this.getCellHeight() * (rowIndex + groupIndex * this._getRowCount());
+        }
 
         if(calculatedTopOffset) {
             position.top = calculatedTopOffset;
@@ -253,7 +268,15 @@ var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
         return position;
     },
 
-    scrollToTime: noop
+    scrollToTime: noop,
+
+    _setHorizontalGroupHeaderCellsHeight: function() {
+        if(this.option("crossScrollingEnabled")) {
+            this.callBase();
+        } else {
+            return;
+        }
+    }
 });
 
 registerComponent("dxSchedulerWorkSpaceMonth", SchedulerWorkSpaceMonth);

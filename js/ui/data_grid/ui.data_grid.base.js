@@ -71,86 +71,6 @@ var DataGrid = Widget.inherit({
         return result;
     },
 
-    _setDeprecatedOptions: function() {
-        this.callBase();
-
-        extend(this._deprecatedOptions, {
-            /**
-            * @name dxDataGridOptions_editing_editMode
-            * @publicName editMode
-            * @deprecated GridBaseOptions_editing_mode
-            * @inheritdoc
-            */
-            "editing.editMode": { since: "15.2", alias: "editing.mode" },
-            /**
-            * @name dxDataGridOptions_editing_editEnabled
-            * @publicName editEnabled
-            * @deprecated GridBaseOptions_editing_allowUpdating
-            * @inheritdoc
-            */
-            "editing.editEnabled": { since: "15.2", alias: "editing.allowUpdating" },
-            /**
-            * @name dxDataGridOptions_editing_insertEnabled
-            * @publicName insertEnabled
-            * @deprecated GridBaseOptions_editing_allowAdding
-            * @inheritdoc
-            */
-            "editing.insertEnabled": { since: "15.2", alias: "editing.allowAdding" },
-            /**
-            * @name dxDataGridOptions_editing_removeEnabled
-            * @publicName removeEnabled
-            * @deprecated GridBaseOptions_editing_allowDeleting
-            * @inheritdoc
-            */
-            "editing.removeEnabled": { since: "15.2", alias: "editing.allowDeleting" },
-            /**
-            * @name dxDataGridOptions_grouping_groupContinuedMessage
-            * @publicName groupContinuedMessage
-            * @deprecated dxDataGridOptions_grouping_texts_groupContinuedMessage
-            * @inheritdoc
-            */
-            "grouping.groupContinuedMessage": { since: "16.1", alias: "grouping.texts.groupContinuedMessage" },
-            /**
-            * @name dxDataGridOptions_grouping_groupContinuesMessage
-            * @publicName groupContinuesMessage
-            * @deprecated dxDataGridOptions_grouping_texts_groupContinuesMessage
-            * @inheritdoc
-            */
-            "grouping.groupContinuesMessage": { since: "16.1", alias: "grouping.texts.groupContinuesMessage" },
-            /**
-            * @name dxDataGridOptions_export_texts_excelFormat
-            * @publicName excelFormat
-            * @deprecated dxDataGridOptions_export_texts_exportAll
-            * @inheritdoc
-            */
-            "export.texts.excelFormat": { since: "16.1", alias: "export.texts.exportAll" },
-            /**
-            * @name dxDataGridOptions_export_texts_exportToExcel
-            * @publicName exportToExcel
-            * @deprecated dxDataGridOptions_export_texts_exportAll
-            * @inheritdoc
-            */
-            "export.texts.exportToExcel": { since: "16.1", alias: "export.texts.exportAll" },
-            /**
-            * @name dxDataGridOptions_export_texts_selectedRows
-            * @publicName selectedRows
-            * @deprecated dxDataGridOptions_export_texts_exportSelectedRows
-            * @inheritdoc
-            */
-            "export.texts.selectedRows": { since: "16.1", alias: "export.texts.exportSelectedRows" },
-
-            "filterRow.operationDescriptions.>": { since: "16.2", alias: "filterRow.operationDescriptions.greaterThan" },
-            "filterRow.operationDescriptions.<": { since: "16.2", alias: "filterRow.operationDescriptions.lessThan" },
-            "filterRow.operationDescriptions.=": { since: "16.2", alias: "filterRow.operationDescriptions.equal" },
-            "filterRow.operationDescriptions.<>": { since: "16.2", alias: "filterRow.operationDescriptions.notEqual" },
-            "filterRow.operationDescriptions.<=": { since: "16.2", alias: "filterRow.operationDescriptions.lessThanOrEqual" },
-            "filterRow.operationDescriptions.>=": { since: "16.2", alias: "filterRow.operationDescriptions.greaterThanOrEqual" },
-            "filterRow.operationDescriptions.startswith": { since: "16.2", alias: "filterRow.operationDescriptions.startsWith" },
-            "filterRow.operationDescriptions.notcontains": { since: "16.2", alias: "filterRow.operationDescriptions.notContains" },
-            "filterRow.operationDescriptions.endswith": { since: "16.2", alias: "filterRow.operationDescriptions.endsWith" }
-        });
-    },
-
     _defaultOptionsRules: function() {
         return this.callBase().concat([
             {
@@ -192,6 +112,15 @@ var DataGrid = Widget.inherit({
                      */
                     headerFilter: {
                         height: 315
+                    },
+                    /**
+                     * @name GridBaseOptions_editing_useIcons
+                     * @publicName useIcons
+                     * @type boolean
+                     * @default true @for Material
+                     */
+                    editing: {
+                        useIcons: true
                     }
                 }
             },

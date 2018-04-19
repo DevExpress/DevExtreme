@@ -22,6 +22,7 @@ var ELEMENT_CLASS = "dx-scheduler-navigator",
     NEXT_BUTTON_CLASS = "dx-scheduler-navigator-next",
     CAPTION_BUTTON_CLASS = "dx-scheduler-navigator-caption",
     PREVIOUS_BUTTON_CLASS = "dx-scheduler-navigator-previous",
+    CALENDAR_POPOVER_CLASS = "dx-scheduler-navigator-calendar-popover",
 
     MONDAY_INDEX = 1;
 
@@ -341,7 +342,8 @@ var SchedulerNavigator = Widget.inherit({
     _renderPopover: function() {
         var overlayType = !devices.current().generic ? Popup : Popover;
 
-        this._popover = this._createComponent("<div>", overlayType, {
+        var popoverContainer = $("<div>").addClass(CALENDAR_POPOVER_CLASS);
+        this._popover = this._createComponent(popoverContainer, overlayType, {
             onContentReady: this._popoverContentReadyHandler.bind(this),
             defaultOptionsRules: [
                 {

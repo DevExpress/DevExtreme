@@ -189,9 +189,10 @@ module.exports = Class.inherit((function() {
             newCell,
             rowIndex,
             columnIndex,
-            dataSourceCells = dataSource.values;
+            dataSourceCells = dataSource.values,
+            isNewDataSourceNotEmpty = newRowItemIndexesToCurrent.length + newColumnItemIndexesToCurrent.length;
 
-        if(newDataSourceCells) {
+        if(newDataSourceCells && isNewDataSourceNotEmpty) {
             for(newRowIndex = 0; newRowIndex <= newDataSourceCells.length; newRowIndex++) {
                 newRowCells = newDataSourceCells[newRowIndex];
                 rowIndex = newRowItemIndexesToCurrent[newRowIndex];
@@ -500,9 +501,10 @@ module.exports = Class.inherit((function() {
         if(values && values.length && sortBySummaryFieldIndex >= 0 && isDefined(sliceIndex)) {
             return function(field) {
                 var rowIndex = areRows ? field.index : sliceIndex,
-                    columnIndex = areRows ? sliceIndex : field.index;
+                    columnIndex = areRows ? sliceIndex : field.index,
+                    value = ((values[rowIndex] || [[]])[columnIndex] || [])[sortBySummaryFieldIndex];
 
-                return ((values[rowIndex] || [[]])[columnIndex] || [])[sortBySummaryFieldIndex] || null; // TODO 0 -> null?
+                return isDefined(value) ? value : null;
             };
         }
     }
@@ -621,8 +623,7 @@ module.exports = Class.inherit((function() {
             /**
             * @name PivotGridDataSourceOptions_store_type
             * @publicName type
-            * @type string
-            * @acceptValues 'array'|'local'|'odata'|'breeze'|'jaydata'|'xmla'
+            * @type Enums.PivotGridStoreType
             */
             that._store = store;
             that._data = { rows: [], columns: [], values: [] };
@@ -1276,7 +1277,7 @@ module.exports = Class.inherit((function() {
         * @param1 state:object
         */
 
-        state: function(state) {
+        state: function(state, skipLoading) {
             var that = this;
 
             if(arguments.length) {
@@ -1290,14 +1291,14 @@ module.exports = Class.inherit((function() {
                     when(getFields(that)).done(function(fields) {
                         that._fields = setFieldsState(state.fields, fields);
                         that._fieldsPrepared(fields);
-                        that.load(state);
+                        !skipLoading && that.load(state);
                     }).always(function() {
                         that.endLoading();
                     });
                 } else {
                     that._fields = setFieldsState(state.fields, that._fields);
                     that._descriptions = that._createDescriptions();
-                    that.load(state);
+                    !skipLoading && that.load(state);
                 }
 
             } else {

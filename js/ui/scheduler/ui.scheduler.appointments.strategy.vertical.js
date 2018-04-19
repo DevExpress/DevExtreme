@@ -9,8 +9,7 @@ var BaseAppointmentsStrategy = require("./ui.scheduler.appointments.strategy.bas
 var WEEK_APPOINTMENT_DEFAULT_OFFSET = 25,
     WEEK_APPOINTMENT_MOBILE_OFFSET = 50,
     ALLDAY_APPOINTMENT_MIN_OFFSET = 5,
-    ALLDAY_APPOINTMENT_MAX_OFFSET = 20,
-    APPOINTMENT_COUNT_PER_CELL = 2;
+    ALLDAY_APPOINTMENT_MAX_OFFSET = 20;
 
 var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
     getDeltaTime: function(args, initialSize, appointment) {
@@ -215,13 +214,18 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
 
     _sortCondition: function(a, b) {
         var allDayCondition = a.allDay - b.allDay,
-            result = allDayCondition ? allDayCondition : this._rowCondition(a, b);
-
+            isAllDay = a.allDay && b.allDay,
+            condition = this.instance._groupOrientation === "vertical" && isAllDay ? this._columnCondition(a, b) : this._rowCondition(a, b),
+            result = allDayCondition ? allDayCondition : condition;
         return this._fixUnstableSorting(result, a, b);
     },
 
     _getDynamicAppointmentCountPerCell: function() {
-        return APPOINTMENT_COUNT_PER_CELL;
+        if(this.instance._groupOrientation === "vertical") {
+            return this.callBase();
+        } else {
+            return this.instance.option("_appointmentCountPerCell");
+        }
     },
 
     _getAllDayAppointmentGeometry: function(coordinates) {
@@ -236,7 +240,7 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
         }
 
         var config = this.callBase(coordinates);
-        if(coordinates.count <= APPOINTMENT_COUNT_PER_CELL) {
+        if(coordinates.count <= this._getDynamicAppointmentCountPerCell()) {
             config.offset = 0;
         }
 
@@ -248,7 +252,7 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
     },
 
     _getDefaultRatio: function(coordinates, appointmentCountPerCell) {
-        return coordinates.count > APPOINTMENT_COUNT_PER_CELL ? 0.65 : 1;
+        return coordinates.count > this.instance.option("_appointmentCountPerCell") ? 0.65 : 1;
     },
 
     _getOffsets: function() {
@@ -260,6 +264,14 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
 
     _getMaxHeight: function() {
         return this._allDayHeight || this.getAppointmentMinSize();
+    },
+
+    _needVerticalGroupBounds: function(allDay) {
+        return !allDay;
+    },
+
+    _needHorizontalGroupBounds: function() {
+        return false;
     }
 });
 

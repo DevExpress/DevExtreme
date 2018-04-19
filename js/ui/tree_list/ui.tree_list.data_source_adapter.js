@@ -11,7 +11,8 @@ var treeListCore = require("./ui.tree_list.core"),
     ArrayStore = require("../../data/array_store"),
     query = require("../../data/query"),
     DataSourceAdapter = require("../grid_core/ui.grid_core.data_source_adapter"),
-    Deferred = require("../../core/utils/deferred").Deferred;
+    Deferred = require("../../core/utils/deferred").Deferred,
+    queryByOptions = require("../../data/store_helper").queryByOptions;
 
 var DEFAULT_KEY_EXPRESSION = "id";
 
@@ -175,9 +176,7 @@ DataSourceAdapter = DataSourceAdapter.inherit((function() {
                         this._keySetter(item, key);
                     }
 
-                    if(this._parentIdGetter(item) === undefined) {
-                        this._parentIdSetter(item, parentId === undefined ? this.option("rootValue") : parentId);
-                    }
+                    this._parentIdSetter(item, parentId === undefined ? this.option("rootValue") : parentId);
 
                     result.push(item);
 
@@ -383,7 +382,7 @@ DataSourceAdapter = DataSourceAdapter.inherit((function() {
         _handleDataLoaded: function(options) {
             options.data = this._convertDataToPlainStructure(options.data);
             if(!options.remoteOperations.filtering) {
-                options.fullData = options.data;
+                options.fullData = queryByOptions(query(options.data), { sort: options.loadOptions && options.loadOptions.sort }).toArray();
             }
             this._updateHasItemsMap(options);
             this.callBase(options);

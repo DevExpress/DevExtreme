@@ -36,6 +36,8 @@ var USER_STATE_FIELD_NAMES_15_1 = ["filterValues", "filterType", "fixed", "fixed
     IGNORE_COLUMN_OPTION_NAMES = { visibleWidth: true, bestFitWidth: true, bufferedFilterValue: true },
     COMMAND_EXPAND_CLASS = "dx-command-expand";
 
+var regExp = /columns\[(\d+)\]\.?/gi;
+
 module.exports = {
     defaultOptions: function() {
         return {
@@ -647,7 +649,8 @@ module.exports = {
 
             var createColumn = function(that, columnOptions, userStateColumnOptions, bandColumn) {
                 var commonColumnOptions = {},
-                    calculatedColumnOptions;
+                    calculatedColumnOptions,
+                    isDefaultCommandColumn;
 
                 if(columnOptions) {
                     if(typeUtils.isString(columnOptions)) {
@@ -657,7 +660,13 @@ module.exports = {
                     }
 
                     if(columnOptions.command) {
-                        return extend(true, {}, columnOptions);
+                        isDefaultCommandColumn = that._commandColumns.some((column) => column.command === columnOptions.command);
+
+                        if(!isDefaultCommandColumn) {
+                            commonColumnOptions.visible = true;
+                        }
+
+                        return extend(true, commonColumnOptions, columnOptions);
                     } else {
                         commonColumnOptions = that.getCommonSettings();
                         if(userStateColumnOptions && userStateColumnOptions.name && userStateColumnOptions.dataField) {
@@ -945,11 +954,12 @@ module.exports = {
                     bandColumnIndex,
                     parentBandColumns,
                     bandColumns = {},
-                    columns = [],
-                    bandColumnsCache = that.getBandColumnsCache();
+                    result = [],
+                    bandColumnsCache = that.getBandColumnsCache(),
+                    columns = that._columns.filter((column) => !column.command);
 
-                for(i = 0; i < that._columns.length; i++) {
-                    column = that._columns[i];
+                for(i = 0; i < columns.length; i++) {
+                    column = columns[i];
                     parentBandColumns = getParentBandColumns(i, bandColumnsCache.columnParentByIndex);
 
                     if(parentBandColumns.length) {
@@ -957,7 +967,7 @@ module.exports = {
                         bandColumns[bandColumnIndex] = bandColumns[bandColumnIndex] || [];
                         bandColumns[bandColumnIndex].push(column);
                     } else {
-                        columns.push(column);
+                        result.push(column);
                     }
                 }
 
@@ -965,7 +975,7 @@ module.exports = {
                     normalizeIndexes(bandColumns[key], "visibleIndex", currentColumn);
                 }
 
-                normalizeIndexes(columns, "visibleIndex", currentColumn);
+                normalizeIndexes(result, "visibleIndex", currentColumn);
             };
 
             var getColumnIndexByVisibleIndex = function(that, visibleIndex, location) {
@@ -1179,15 +1189,35 @@ module.exports = {
                 }
             };
 
+            var getColumnByPath = function(that, path, columns) {
+                var column,
+                    columnIndexes = [];
+
+                path.replace(regExp, function(_, columnIndex) {
+                    columnIndexes.push(parseInt(columnIndex));
+                    return "";
+                });
+
+                if(columnIndexes.length) {
+                    if(columns) {
+                        column = columnIndexes.reduce(function(prevColumn, index) {
+                            return prevColumn ? prevColumn.columns[index] : columns[index];
+                        }, 0);
+                    } else {
+                        column = getColumnByIndexes(that, columnIndexes);
+                    }
+                }
+
+                return column;
+            };
+
             var fireOptionChanged = function(that, options) {
-                var fullOptionName,
-                    column = options.column,
-                    value = options.value,
+                var value = options.value,
                     optionName = options.optionName,
-                    prevValue = options.prevValue;
+                    prevValue = options.prevValue,
+                    fullOptionName = options.fullOptionName;
 
                 if(!IGNORE_COLUMN_OPTION_NAMES[optionName]) {
-                    fullOptionName = getColumnFullPath(that, column);
                     that._skipProcessingColumnsChange = true;
                     that.component._notifyOptionChanged(fullOptionName + "." + optionName, value, prevValue);
                     that._skipProcessingColumnsChange = false;
@@ -1200,7 +1230,8 @@ module.exports = {
                     prevValue,
                     optionSetter,
                     columns,
-                    changeType;
+                    changeType,
+                    fullOptionName;
 
                 if(arguments.length === 3) {
                     return optionGetter(column, { functionsAsIs: true });
@@ -1215,10 +1246,12 @@ module.exports = {
                     } else {
                         changeType = "columns";
                     }
+
                     optionSetter = dataCoreUtils.compileSetter(optionName);
                     optionSetter(column, value, { functionsAsIs: true });
+                    fullOptionName = getColumnFullPath(that, column);
                     fireOptionChanged(that, {
-                        column: column,
+                        fullOptionName: fullOptionName,
                         optionName: optionName,
                         value: value,
                         prevValue: prevValue
@@ -1232,7 +1265,7 @@ module.exports = {
                         // T346972
                         if(inArray(optionName, USER_STATE_FIELD_NAMES) < 0 && optionName !== "visibleWidth") {
                             columns = that.option("columns");
-                            column = columns && columns[columnIndex];
+                            column = getColumnByPath(that, fullOptionName, columns);
                             if(typeUtils.isString(column)) {
                                 column = columns[columnIndex] = { dataField: column };
                             }
@@ -1252,17 +1285,9 @@ module.exports = {
             };
 
             var addExpandColumn = function(that) {
-                that.addCommandColumn({
-                    command: "expand",
-                    width: "auto",
-                    cssClass: COMMAND_EXPAND_CLASS,
-                    allowEditing: false, // T165142
-                    allowGrouping: false,
-                    allowSorting: false,
-                    allowResizing: false,
-                    allowReordering: false,
-                    allowHiding: false
-                });
+                var options = that._getExpandColumnOptions();
+
+                that.addCommandColumn(options);
             };
 
             var defaultSetCellValue = function(data, value) {
@@ -1355,7 +1380,50 @@ module.exports = {
                 return str;
             };
 
+            var mergeColumns = (columns, commandColumns, needToExtend) => {
+                var i,
+                    column,
+                    commandColumnIndex,
+                    result = columns.length ? (needToExtend && commandColumns || columns).slice() : [],
+                    getCommandColumnIndex = (column) => commandColumns.reduce((result, commandColumn, index) => {
+                        return commandColumn.command === column.command ? index : result;
+                    }, -1);
+
+                if(result.length) {
+                    for(i = 0; i < columns.length; i++) {
+                        column = columns[i];
+
+                        commandColumnIndex = column && column.command ? getCommandColumnIndex(column) : -1;
+                        if(commandColumnIndex >= 0) {
+                            if(needToExtend) {
+                                result[commandColumnIndex] = extend({}, result[commandColumnIndex], column);
+                            } else {
+                                result[i] = extend({}, result[i], commandColumns[commandColumnIndex]);
+                            }
+                        } else if(column && needToExtend) {
+                            result.push(extend({}, column));
+                        }
+                    }
+                }
+
+                return result;
+            };
+
             return {
+                _getExpandColumnOptions: function() {
+                    return {
+                        command: "expand",
+                        width: "auto",
+                        cssClass: COMMAND_EXPAND_CLASS,
+                        allowEditing: false, // T165142
+                        allowGrouping: false,
+                        allowSorting: false,
+                        allowResizing: false,
+                        allowReordering: false,
+                        allowHiding: false
+                    };
+                },
+
                 _getFirstItems: function(dataSource) {
                     var groupsCount,
                         items = [];
@@ -1457,25 +1525,17 @@ module.exports = {
                 },
 
                 _columnOptionChanged: function(args) {
-                    var column,
-                        columnIndexes = [],
-                        columnOptionValue = {},
-                        columnOptionName = args.fullName.replace(/columns\[(\d+)\]\.?/gi, function(_, columnIndex) {
-                            columnIndexes.push(parseInt(columnIndex));
-                            return "";
-                        });
+                    var columnOptionValue = {},
+                        column = getColumnByPath(this, args.fullName),
+                        columnOptionName = args.fullName.replace(regExp, "");
 
-                    if(columnIndexes.length) {
-                        column = getColumnByIndexes(this, columnIndexes);
-
+                    if(column) {
                         if(columnOptionName) {
                             columnOptionValue[columnOptionName] = args.value;
                         } else {
                             columnOptionValue = args.value;
                         }
-                    }
 
-                    if(column) {
                         this.columnOption(column.index, columnOptionValue);
                         if(columnOptionName === "width") {
                             this.component._requireResize = true;
@@ -1535,7 +1595,7 @@ module.exports = {
 
                     return extend({
                         allowFixing: this.option("columnFixing.enabled"),
-                        allowResizing: this.option("allowColumnResizing"),
+                        allowResizing: this.option("allowColumnResizing") || undefined,
                         allowReordering: this.option("allowColumnReordering"),
                         minWidth: this.option("columnMinWidth"),
                         width: this.option("columnWidth"),
@@ -1646,7 +1706,7 @@ module.exports = {
                             notFixedColumnCount = 0;
                             lastFixedPosition = null;
                             transparentColumnIndex = null;
-                            visibleColumns = that.getVisibleColumns(i);
+                            visibleColumns = that.getVisibleColumns(i, true);
 
                             for(j = 0; j < visibleColumns.length; j++) {
                                 prevColumn = visibleColumns[j - 1];
@@ -1718,7 +1778,12 @@ module.exports = {
                     }
 
                     expandColumns = iteratorUtils.map(expandColumns, function(column) {
-                        return extend({}, column, { visibleWidth: null, minWidth: null }, expandColumn, { index: column.index });
+                        return extend({}, column, {
+                            visibleWidth: null,
+                            minWidth: null,
+                            cellTemplate: !typeUtils.isDefined(column.groupIndex) ? column.cellTemplate : null,
+                            headerCellTemplate: null
+                        }, expandColumn, { index: column.index });
                     });
 
                     return expandColumns;
@@ -1768,14 +1833,14 @@ module.exports = {
                         result = [],
                         rowspanExpandColumns = 0,
                         firstPositiveIndexColumn,
-                        expandColumns = that.getExpandColumns(),
+                        expandColumns = mergeColumns(that.getExpandColumns(), that._columns),
                         rowCount = that.getRowCount(),
                         positiveIndexedColumns = [],
                         negativeIndexedColumns = [],
                         notGroupedColumnsCount = 0,
                         isFixedToEnd,
                         rtlEnabled = that.option("rtlEnabled"),
-                        columns = extend(true, [], that._columns.length ? that._commandColumns.concat(that._columns) : []),
+                        columns = mergeColumns(that._columns, that._commandColumns, true),
                         bandColumnsCache = that.getBandColumnsCache(),
                         columnDigitsCount = digitsCount(columns.length);
 
@@ -2152,24 +2217,31 @@ module.exports = {
                             if(!column.dataType || (lookup && !lookup.dataType)) {
                                 for(i = 0; i < firstItems.length; i++) {
                                     value = column.calculateCellValue(firstItems[i]);
-                                    valueDataType = column.dataType || getValueDataType(value);
-                                    dataType = dataType || valueDataType;
-                                    if(dataType && valueDataType && dataType !== valueDataType) {
-                                        dataType = "string";
+
+                                    if(!column.dataType) {
+                                        valueDataType = getValueDataType(value);
+                                        dataType = dataType || valueDataType;
+                                        if(dataType && valueDataType && dataType !== valueDataType) {
+                                            dataType = "string";
+                                        }
                                     }
-                                    if(lookup) {
-                                        valueDataType = lookup.dataType || getValueDataType(gridCoreUtils.getDisplayValue(column, value, firstItems[i]));
+
+                                    if(lookup && !lookup.dataType) {
+                                        valueDataType = getValueDataType(gridCoreUtils.getDisplayValue(column, value, firstItems[i]));
                                         lookupDataType = lookupDataType || valueDataType;
                                         if(lookupDataType && valueDataType && lookupDataType !== valueDataType) {
                                             lookupDataType = "string";
                                         }
                                     }
                                 }
-                                column.dataType = dataType;
-                                if(lookup) {
-                                    lookup.dataType = lookupDataType;
-                                }
-                                if(dataType) {
+                                if(dataType || lookupDataType) {
+                                    if(dataType) {
+                                        column.dataType = dataType;
+                                    }
+
+                                    if(lookup && lookupDataType) {
+                                        lookup.dataType = lookupDataType;
+                                    }
                                     isColumnDataTypesUpdated = true;
                                 }
                             }
@@ -2400,7 +2472,7 @@ module.exports = {
                     var that = this,
                         i,
                         identifierOptionName = typeUtils.isString(identifier) && identifier.substr(0, identifier.indexOf(":")),
-                        columns = (identifier < 0 || identifierOptionName === "command") ? that._commandColumns : that._columns,
+                        columns = (identifier < 0 || identifierOptionName === "command") ? that._columns.concat(that._commandColumns) : that._columns,
                         needUpdateIndexes,
                         column;
 

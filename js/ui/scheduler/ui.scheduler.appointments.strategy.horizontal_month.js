@@ -24,6 +24,9 @@ var HorizontalMonthRenderingStrategy = HorizontalMonthLineAppointmentsStrategy.i
             currentPartTop = appointmentSettings.top + this._defaultHeight,
             left = this._calculateMultiWeekAppointmentLeftOffset(appointmentSettings.hMax, fullWeekAppointmentWidth);
 
+        if(this.instance._groupOrientation === "vertical") {
+            left += this.instance.fire("getWorkSpaceDateTableOffset");
+        }
         for(var i = 0; i < longPartCount; i++) {
             if(totalWidth > maxAppointmentWidth) {
                 break;
@@ -127,6 +130,14 @@ var HorizontalMonthRenderingStrategy = HorizontalMonthLineAppointmentsStrategy.i
     getCompactAppointmentGroupMaxWidth: function(intervalCount) {
         var offset = intervalCount > 1 ? MONTH_DROPDOWN_APPOINTMENT_MAX_RIGHT_OFFSET : MONTH_DROPDOWN_APPOINTMENT_MIN_RIGHT_OFFSET;
         return this.getDefaultCellWidth() - offset;
+    },
+
+    _needVerticalGroupBounds: function() {
+        return false;
+    },
+
+    _needHorizontalGroupBounds: function() {
+        return true;
     }
 });
 

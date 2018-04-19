@@ -38,14 +38,12 @@ var SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
 
     _renderDateTimeIndication: function() {
         if(this.needRenderDateTimeIndication()) {
-            var isVertical = this._isVerticalShader();
-
             if(this.option("shadeUntilCurrentTime")) {
                 this._shader.render(this);
             }
 
             if(this.option("showCurrentTimeIndicator") && this._needRenderDateTimeIndicator()) {
-                var groupCount = isVertical && this._getGroupCount() || 1,
+                var groupCount = this._getGroupCount() || 1,
                     $container = this._dateTableScrollable.$content(),
                     height = this.getIndicationHeight(),
                     rtlOffset = this._getRtlOffset(this.getCellWidth());
@@ -60,11 +58,9 @@ var SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
     _renderIndicator: function(height, rtlOffset, $container, groupCount) {
         for(var i = 0; i < groupCount; i++) {
             var $indicator = this._createIndicator($container);
-            var offset = this._getCellCount() * this.getRoundedCellWidth(i - 1, 0) * i + this.getIndicatorOffset(i) + i;
 
             $indicator.width(this.getCellWidth());
-            $indicator.css("left", rtlOffset ? rtlOffset - offset : offset);
-            $indicator.css("top", height);
+            this._groupedStrategy.shiftIndicator($indicator, height, rtlOffset, i);
         }
     },
 

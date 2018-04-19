@@ -56,12 +56,13 @@ var BaseStrategy = Class.inherit({
         return true;
     },
 
-    add: function(element) {
+    add: function(element, handleObj) {
         if(this._handlerCount <= 0 || this.noBubble) {
             element = this.noBubble ? element : domAdapter.getDocument();
+            this._selector = this.noBubble ? handleObj.selector : null;
 
             var that = this;
-            eventsEngine.on(element, this._originalEvents, function(e) {
+            eventsEngine.on(element, this._originalEvents, this._selector, function(e) {
                 that._handler(e);
             });
         }
@@ -85,7 +86,7 @@ var BaseStrategy = Class.inherit({
         element = this.noBubble ? element : domAdapter.getDocument();
 
         if(this._originalEvents !== "." + POINTER_EVENTS_NAMESPACE) {
-            eventsEngine.off(element, this._originalEvents);
+            eventsEngine.off(element, this._originalEvents, this._selector);
         }
     },
 

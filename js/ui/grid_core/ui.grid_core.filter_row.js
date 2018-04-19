@@ -601,12 +601,12 @@ var ColumnHeadersViewFilterRowExtender = (function() {
 })();
 
 var DataControllerFilterRowExtender = {
-    _skipCalculateColumnFilters: function() {
+    skipCalculateColumnFilters: function() {
         return false;
     },
 
     _calculateAdditionalFilter: function() {
-        if(this._skipCalculateColumnFilters()) {
+        if(this.skipCalculateColumnFilters()) {
             return this.callBase();
         }
 
@@ -807,7 +807,9 @@ module.exports = {
                      * @type string
                      * @default "Between"
                      */
-                    between: messageLocalization.format("dxDataGrid-filterRowOperationBetween")
+                    between: messageLocalization.format("dxDataGrid-filterRowOperationBetween"),
+                    isBlank: messageLocalization.format("dxFilterBuilder-filterOperationIsBlank"),
+                    isNotBlank: messageLocalization.format("dxFilterBuilder-filterOperationIsNotBlank")
                 },
                 /**
                  * @name GridBaseOptions_filterRow_betweenStartText

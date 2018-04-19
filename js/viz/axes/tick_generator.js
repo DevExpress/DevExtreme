@@ -163,7 +163,17 @@ function getMultiplierFactor(interval, factorDelta) {
     return mathPow(10, mathFloor(getLog(interval, 10)) + (factorDelta || 0));
 }
 
-function calculateTickInterval(businessDelta, screenDelta, tickInterval, forceTickInterval, axisDivisionFactor, multipliers, allowDecimals, addTickCount) {
+function calculateTickInterval(
+    businessDelta,
+    screenDelta,
+    tickInterval,
+    forceTickInterval,
+    axisDivisionFactor,
+    multipliers,
+    allowDecimals,
+    addTickCount,
+    _,
+    minTickInterval) {
     var interval = getIntervalByFactor(businessDelta, screenDelta, axisDivisionFactor, addTickCount),
         result = 1,
         onlyIntegers = allowDecimals === false;
@@ -175,6 +185,13 @@ function calculateTickInterval(businessDelta, screenDelta, tickInterval, forceTi
 
         if(!tickInterval || (!forceTickInterval && tickInterval < result)) {
             tickInterval = result;
+        }
+    }
+
+    if(!forceTickInterval && minTickInterval) {
+        minTickInterval = adjustInterval(minTickInterval, multipliers, onlyIntegers);
+        if(minTickInterval > tickInterval) {
+            tickInterval = minTickInterval;
         }
     }
 
@@ -213,17 +230,36 @@ function calculateMinorTickInterval(businessDelta, screenDelta, tickInterval, ax
 }
 
 function getCalculateTickIntervalLog(skipCalculationLimits) {
-    return function(businessDelta, screenDelta, tickInterval, forceTickInterval, axisDivisionFactor, multipliers, allowDecimals) {
-        var interval = getIntervalByFactor(businessDelta, screenDelta, axisDivisionFactor),
-            result = 0;
+    return function(
+        businessDelta,
+        screenDelta,
+        tickInterval,
+        forceTickInterval,
+        axisDivisionFactor,
+        multipliers,
+        allowDecimals,
+        _,
+        __,
+        minTickInterval
+    ) {
+        let interval = getIntervalByFactor(businessDelta, screenDelta, axisDivisionFactor);
+        let result = 0;
+        const adjustInterval = getAdjustIntervalLog(skipCalculationLimits);
 
         if(!forceTickInterval || !tickInterval) {
             if(interval > 0) {
-                result = getAdjustIntervalLog(skipCalculationLimits)(interval, multipliers);
+                result = adjustInterval(interval, multipliers);
             }
 
             if(!tickInterval || (!forceTickInterval && tickInterval < result)) {
                 tickInterval = result;
+            }
+        }
+
+        if(!forceTickInterval && minTickInterval) {
+            minTickInterval = adjustInterval(minTickInterval, multipliers);
+            if(minTickInterval > tickInterval) {
+                tickInterval = minTickInterval;
             }
         }
 
@@ -274,7 +310,18 @@ function yearsReducer(interval, factor) {
     };
 }
 
-function calculateTickIntervalDateTime(businessDelta, screenDelta, tickInterval, forceTickInterval, axisDivisionFactor, multipliers, allowDecimals, addTickCount, gapSize) {
+function calculateTickIntervalDateTime(
+    businessDelta,
+    screenDelta,
+    tickInterval,
+    forceTickInterval,
+    axisDivisionFactor,
+    multipliers,
+    allowDecimals,
+    addTickCount,
+    gapSize,
+    minTickInterval
+) {
     var interval = getIntervalByFactor(businessDelta, screenDelta, axisDivisionFactor),
         result;
 
@@ -285,6 +332,14 @@ function calculateTickIntervalDateTime(businessDelta, screenDelta, tickInterval,
             tickInterval = result;
         }
     }
+
+    if(!forceTickInterval && minTickInterval) {
+        minTickInterval = adjustIntervalDateTime(minTickInterval, multipliers, null, gapSize);
+        if(dateToMilliseconds(minTickInterval) > dateToMilliseconds(tickInterval)) {
+            tickInterval = minTickInterval;
+        }
+    }
+
 
     return tickInterval;
 }
@@ -551,7 +606,8 @@ function generator(options, getBusinessDelta, calculateTickInterval, calculateMi
             options.numberMultipliers,
             options.allowDecimals,
             breaks.length,
-            gaps[0] && gaps[0].gapSize.days
+            gaps[0] && gaps[0].gapSize.days,
+            options.minTickInterval
         );
 
         if(!options.skipTickGeneration) {

@@ -142,6 +142,30 @@ QUnit.test("deleteItem should remove an item", function(assert) {
     assert.equal($list.find(toSelector(LIST_ITEM_CLASS)).length, 2, "items were removed from the dom");
 });
 
+QUnit.test("deferred deleteItem should correctly update cached items after item removing", function(assert) {
+    var deferred,
+        $list = $("#templated-list").dxList({
+            items: [1, 2, 3, 4],
+            onItemDeleting: function(e) {
+                deferred = $.Deferred();
+                e.cancel = deferred.promise();
+            },
+            allowItemDeleting: true
+        }),
+        list = $list.dxList("instance"),
+        $items = $list.find(toSelector(LIST_ITEM_CLASS));
+
+    list.deleteItem($items.eq(0).get(0));
+    deferred.resolve();
+    assert.deepEqual(list.option("items"), [2, 3, 4], "delete item by node");
+    assert.equal(list._itemElements().length, 3, "item was removed from the cache");
+
+    list.deleteItem(0);
+    deferred.resolve();
+    assert.deepEqual(list.option("items"), [3, 4], "delete item by index");
+    assert.equal(list._itemElements().length, 2, "item was removed from the cache");
+});
+
 
 var groupedListData = {
     data: [

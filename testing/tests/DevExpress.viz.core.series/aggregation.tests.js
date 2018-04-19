@@ -62,6 +62,9 @@ QUnit.module("Sampler points, discrete", {
         this.argumentAxis = {
             getAggregationInfo() {
                 return {};
+            },
+            calculateInterval: function() {
+                return 1;
             }
         };
 
@@ -249,7 +252,10 @@ QUnit.module("Aggregation methods", {
                     }
                 };
             },
-            getViewport() { }
+            getViewport() { },
+            calculateInterval: function() {
+                return 1;
+            }
         };
 
         this.createSeries = function(method, type, options) {
@@ -446,58 +452,6 @@ QUnit.test("Create points called twice (getAllPoints raises createPoints)", func
     });
 
     assert.ok(customMethod.calledTwice);
-});
-
-QUnit.test("Zooming raises createPoints when created all points", function(assert) {
-    var customMethod = sinon.spy();
-    this.aggregateData("custom", this.data, "line", {
-        aggregation: {
-            calculate: customMethod
-        }
-    }, true);
-
-    this.getBusinessRange = function() {
-        return {
-            min: 0,
-            max: 10,
-            minVisible: 2,
-            maxVisible: 8
-        };
-    };
-
-    customMethod.reset();
-    this.series.createPoints();
-
-    assert.ok(customMethod.calledOnce);
-});
-
-QUnit.test("Scrolling not raises createPoints if created all points", function(assert) {
-    var customMethod = sinon.spy();
-    this.getBusinessRange = function() {
-        return {
-            min: 0,
-            max: 10,
-            minVisible: 2,
-            maxVisible: 8
-        };
-    };
-    this.aggregateData("custom", this.data, "line", {
-        aggregation: {
-            calculate: customMethod
-        }
-    }, true);
-
-    this.getBusinessRange = function() {
-        return {
-            min: 0,
-            max: 10,
-            minVisible: 0,
-            maxVisible: 6
-        };
-    };
-    this.series.createPoints();
-
-    assert.ok(customMethod.calledOnce);
 });
 
 QUnit.test("Create points called once (getAllPoints not raises createPoints if all points exists)", function(assert) {
@@ -856,7 +810,7 @@ QUnit.test("Take into account argumentRange on aggregation", function(assert) {
         { arg: 8, val1: 4, val2: 9 }
     ], "rangebar");
 
-    assert.deepEqual(this.argumentAxis.getAggregationInfo.lastCall.args[1], { min: 0, max: 8 });
+    assert.deepEqual(this.argumentAxis.getAggregationInfo.lastCall.args[1], { min: 0, max: 8, interval: 1 });
 });
 
 QUnit.test("Skip argumentRange on aggregation for discrete data", function(assert) {

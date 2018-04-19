@@ -117,6 +117,13 @@ var Popup = Overlay.inherit({
             showTitle: true,
 
             /**
+             * @name dxPopupOptions_container
+             * @publicName container
+             * @type string|Node|jQuery
+             * @default undefined
+             */
+
+            /**
             * @name dxPopupOptions_titleTemplate
             * @publicName titleTemplate
             * @type template|function
@@ -144,6 +151,13 @@ var Popup = Overlay.inherit({
             * @default false
             */
             dragEnabled: false,
+
+            /**
+            * @name dxPopupOptions_position
+            * @publicName position
+            * @type Enums.PositionAlignment|positionConfig|function
+            * @inheritdoc
+            */
 
             /**
              * @name dxPopupOptions_resizeEnabled
@@ -340,14 +354,6 @@ var Popup = Overlay.inherit({
                 }
             }
         ]);
-    },
-
-    _setDeprecatedOptions: function() {
-        this.callBase();
-
-        extend(this._deprecatedOptions, {
-            "buttons": { since: "16.1", alias: "toolbarItems" }
-        });
     },
 
     _iosAnimation: {

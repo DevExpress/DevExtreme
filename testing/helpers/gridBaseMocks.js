@@ -487,7 +487,13 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                 }
             },
 
-            addCommandColumn: function() { },
+            addCommandColumn: function(commandColumn) {
+                columns && columns.forEach(function(column, index) {
+                    if(column.command === commandColumn.command) {
+                        columns[index] = commandColumn;
+                    }
+                });
+            },
 
             changeSortOrder: function(columnIndex, sortOrder) {
                 var column,
@@ -880,7 +886,10 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
         that.options = that.options || {};
 
         that.options.rtlEnabled = !!that.options.rtlEnabled;
-        that.options.advancedRendering = true;
+
+        if(that.options.legacyRendering === undefined) {
+            that.options.legacyRendering = false;
+        }
 
         that.option = function(options, value) {
             var result = that.options,

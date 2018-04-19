@@ -202,6 +202,7 @@ QUnit.test("exportToExcel", function(assert) {
     assert.strictEqual(clientExporter.export.getCall(0).args[1].proxyUrl, undefined, "proxyUrl");
     assert.strictEqual(clientExporter.export.getCall(0).args[1].rtlEnabled, false, "rtlEnabled");
     assert.strictEqual(clientExporter.export.getCall(0).args[1].fileName, "PivotGrid", "fileName");
+    assert.strictEqual(clientExporter.export.getCall(0).args[1].ignoreErrors, true, "ignoreErrors");
 
     assert.ok(clientExporter.export.getCall(0).args[1].exportedAction, "exportedAction");
     assert.ok(clientExporter.export.getCall(0).args[1].exportingAction, "exportingAction");

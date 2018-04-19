@@ -1038,7 +1038,6 @@ QUnit.test("Resizing columns should work correctly when scrolling mode is 'virtu
     // assert
     rowHeight = rowsView._rowHeight;
     assert.ok(rowHeight > 50, "rowHeight > 50");
-    assert.strictEqual(instance.getVisibleRows().length, 4, "row count");
 
     setTimeout(function() {
         // arrange
@@ -2330,7 +2329,7 @@ QUnit.test("column headers visibility when hide removing row in batch editing mo
             dataSource: [{ col1: "1", col2: "2" }],
             loadingTimeout: undefined,
             editing: {
-                editMode: 'batch',
+                mode: 'batch',
                 allowDeleting: true
             },
             onCellPrepared: function(e) {
@@ -2785,6 +2784,29 @@ QUnit.test("all visible items should be rendered if pageSize is small and virtua
     clock.restore();
 });
 
+QUnit.test("virtual columns", function(assert) {
+    // arrange, act
+    var columns = [];
+
+    for(var i = 1; i <= 20; i++) {
+        columns.push("field" + i);
+    }
+
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        width: 200,
+        columnWidth: 50,
+        dataSource: [{}],
+        loadingTimeout: undefined,
+        columns: columns,
+        scrolling: {
+            columnRenderingMode: "virtual"
+        }
+    }).dxDataGrid("instance");
+
+    // assert
+    assert.equal(dataGrid.$element().find(".dx-data-row").children().length, 6, "visible column count");
+});
+
 QUnit.test("visible items should be rendered if virtual scrolling and preload are enabled", function(assert) {
     // arrange, act
     var clock = sinon.useFakeTimers(),
@@ -2851,6 +2873,7 @@ QUnit.test("editing should starts correctly if scrolling mode is virtual", funct
         },
         scrolling: {
             mode: "virtual",
+            rowRenderingMode: "virtual",
             useNative: false
         }
     }).dxDataGrid("instance");
@@ -3468,6 +3491,26 @@ QUnit.test("last column should have correct width if all columns have width and 
     clock.restore();
 });
 
+// T618230
+QUnit.test("last column with disabled allowResizing should not change width if all columns have width less grid's width", function(assert) {
+    // arrange, act
+    var $dataGrid = $("#dataGrid").dxDataGrid({
+        width: 400,
+        loadingTimeout: undefined,
+        dataSource: [{}],
+        columns: [
+            { dataField: "field1", width: 50 },
+            { dataField: "field2", width: 50 },
+            { dataField: "field3", width: 50 },
+            { dataField: "field4", width: 50, allowResizing: false }
+        ]
+    });
+
+    // assert
+    assert.equal($dataGrid.find(".dx-row").first().find("td").last().outerWidth(), 50, "last column have correct width");
+    assert.equal($dataGrid.find(".dx-row").first().find("td").last().prev().outerWidth(), 250, "previuos last column have correct width");
+});
+
 // T387828
 QUnit.test("columns width when all columns have width and dataGrid with fixed width", function(assert) {
     // arrange
@@ -3805,6 +3848,34 @@ QUnit.test("Horizontal scroll position of footer view is changed_T251448", funct
     // assert
     assert.equal(dataGrid._views.rowsView.getScrollable().scrollLeft(), 300, "scroll left of rows view");
     assert.equal($headersView.scrollLeft(), 300, "scroll left of headers view");
+});
+
+QUnit.test("Total summary row should be rendered if row rendering mode is virtual", function(assert) {
+    // arrange
+    var clock = sinon.useFakeTimers(),
+        $dataGrid = $("#dataGrid").dxDataGrid({
+            width: 300,
+            dataSource: [{ id: 1 }],
+            scrolling: {
+                mode: "virtual",
+                rowRenderingMode: "virtual"
+            },
+            summary: {
+                totalItems: [{
+                    column: "id",
+                    summaryType: "count"
+                }]
+            }
+        });
+
+    // act
+    clock.tick();
+
+    var $footerView = $dataGrid.find(".dx-datagrid-total-footer");
+    assert.ok($footerView.is(":visible"), "footer view is visible");
+    assert.ok($footerView.find(".dx-row").length, 1, "one footer row is rendered");
+
+    clock.restore();
 });
 
 QUnit.test("Keep horizontal scroller position after refresh with native scrolling", function(assert) {
@@ -4692,7 +4763,7 @@ QUnit.testInActiveWindow("Height virtual table should be updated to show validat
     clock.restore();
 });
 
-QUnit.test("Error row is not hidden when rowKey is undefined by editMode is cell", function(assert) {
+QUnit.test("Error row is not hidden when rowKey is undefined by mode is cell", function(assert) {
     // arrange
     var clock = sinon.useFakeTimers();
     var dataGrid = createDataGrid({
@@ -6491,6 +6562,36 @@ QUnit.test("begin custom loading", function(assert) {
     assert.equal(dataGrid.getView("rowsView")._loadPanel.option("message"), "Loading...");
 });
 
+// T619196
+QUnit.test("begin custom loading and refresh", function(assert) {
+    // arrange, act
+    var dataGrid = createDataGrid({
+        dataSource: [{ id: 1111 }]
+    });
+
+    // act
+    dataGrid.beginCustomLoading("Test");
+    dataGrid.refresh().done(function() {
+        dataGrid.endCustomLoading();
+    });
+
+    // assert
+    assert.equal(dataGrid.getView("rowsView")._loadPanel.option("message"), "Test");
+
+    // act
+    this.clock.tick();
+
+    // assert
+    assert.equal(dataGrid.getView("rowsView")._loadPanel.option("message"), "Test");
+
+    // act
+    this.clock.tick(200);
+
+    // assert
+    assert.strictEqual(dataGrid.getView("rowsView")._loadPanel.option("message"), "Loading...");
+    assert.strictEqual(dataGrid.getView("rowsView")._loadPanel.option("visible"), false);
+});
+
 QUnit.test("begin custom loading without message", function(assert) {
     // arrange, act
     var dataGrid = createDataGrid({
@@ -7098,6 +7199,7 @@ QUnit.test("synchronous render and asynchronous updateDimensions during paging i
         height: 100,
         scrolling: {
             mode: "virtual",
+            rowRenderingMode: "virtual",
             useNative: false
         },
         paging: {
@@ -8812,7 +8914,7 @@ QUnit.test("rowTemplate via dxTemplate should works with masterDetail template",
     $rowElements = $($(dataGrid.$element()).find(".dx-datagrid-rowsview").find("table > tbody").find(".dx-row"));
     assert.strictEqual($rowElements.length, 5, "row element count");
     assert.strictEqual($rowElements.eq(0).text(), "Row Content More info", "row 0 content");
-    assert.strictEqual($rowElements.eq(1).text(), "Test Details", "row 1 content");
+    assert.strictEqual($rowElements.eq(1).children().eq(1).text(), "Test Details", "row 1 content");
     assert.strictEqual($rowElements.eq(2).text(), "Row Content More info", "row 2 content");
     assert.strictEqual($rowElements.eq(3).text(), "Row Content More info", "row 3 content");
 });

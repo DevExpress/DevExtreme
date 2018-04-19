@@ -263,19 +263,6 @@ QUnit.test("root with custom width", function(assert) {
 });
 
 
-QUnit.module("dataSource integration");
-
-QUnit.test("'paginate' for dataSource depends on 'showNextButton' option (T172999)", function(assert) {
-    var lookup = $("#lookup").dxLookup({
-        dataSource: [],
-        pagingEnabled: false,
-        showNextButton: true
-    }).dxLookup("instance");
-
-    assert.ok(lookup._dataSource._paginate, "dataSource pagination is enabled");
-});
-
-
 QUnit.module("aria accessibility");
 
 QUnit.test("aria role", function(assert) {

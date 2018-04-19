@@ -531,10 +531,10 @@ QUnit.test("filterSyncEnabled is working in TreeList", function(assert) {
     });
 
     // act
-    treeList.columnOption("field", { filterValues: [2] });
+    treeList.columnOption("field", { filterValues: [2, 1] });
 
     // assert
-    assert.deepEqual(treeList.option("filterValue"), ["field", "anyof", [2]]);
+    assert.deepEqual(treeList.option("filterValue"), ["field", "anyof", [2, 1]]);
 });
 
 QUnit.test("filterBulider is working in TreeList", function(assert) {
@@ -708,4 +708,58 @@ QUnit.test("TreeList with columnAutoWidth should be rendered", function(assert) 
     // assert
     assert.equal(treeList.$element().find(".dx-treelist-headers .dx-header-row").length, 1, "header row is rendered");
     assert.equal(treeList.$element().find(".dx-treelist-rowsview .dx-data-row").length, 1, "data row is rendered");
+});
+
+QUnit.test("Virtual columns", function(assert) {
+    // arrange, act
+    var columns = [];
+
+    for(var i = 1; i <= 20; i++) {
+        columns.push("field" + i);
+    }
+
+    var treeList = createTreeList({
+        width: 200,
+        columnWidth: 50,
+        dataSource: [{}],
+        columns: columns,
+        scrolling: {
+            columnRenderingMode: "virtual"
+        }
+    });
+
+    this.clock.tick(0);
+
+    // assert
+    assert.equal(treeList.getVisibleColumns().length, 6, "visible column count");
+});
+
+QUnit.test("Call getSelectedRowKeys with 'leavesOnly' parameter and wrong selectedKeys after dataSource change", function(assert) {
+    var treeList = createTreeList({
+        dataSource: [
+            { id: 1, field1: 'test1' },
+            { id: 2, parentId: 1, field1: 'test2' },
+            { id: 3, field1: 'test3' }
+        ],
+        selection: {
+            mode: "multiple",
+            recursive: true
+        },
+        selectedRowKeys: [1, 3],
+    });
+    this.clock.tick(30);
+
+    // act
+    treeList.option({
+        dataSource: [
+            { id: 1, field1: 'test1' },
+            { id: 2, parentId: 1, field1: 'test2' }
+        ]
+    });
+
+    // assert
+    assert.deepEqual(treeList.getSelectedRowKeys("leavesOnly"), [], "dataSource is not loaded yet");
+
+    this.clock.tick(30);
+    assert.deepEqual(treeList.getSelectedRowKeys("leavesOnly"), [2], "dataSource is reloaded");
 });

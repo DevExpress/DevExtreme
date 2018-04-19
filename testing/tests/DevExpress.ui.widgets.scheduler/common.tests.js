@@ -20,7 +20,8 @@ var $ = require("jquery"),
     CustomStore = require("data/custom_store"),
     SchedulerTimezones = require("ui/scheduler/ui.scheduler.timezones"),
     dataUtils = require("core/element_data"),
-    keyboardMock = require("../../helpers/keyboardMock.js");
+    keyboardMock = require("../../helpers/keyboardMock.js"),
+    themes = require("ui/themes");
 
 require("ui/scheduler/ui.scheduler");
 require("common.css!");
@@ -703,6 +704,12 @@ QUnit.testStart(function() {
             endDate: new Date(2015, 5, 4, 7)
         });
         assert.ok(!result, "Appointment doesn't take all day");
+
+        result = this.instance.appointmentTakesAllDay({
+            startDate: new Date(2015, 5, 4, 6),
+            endDate: new Date(2015, 5, 4, 12)
+        });
+        assert.ok(!result, "Appointment doesn't take all day");
     });
 
     QUnit.test("Scheduler focus method should call workspace focus method when appointment wasn't updated", function(assert) {
@@ -797,6 +804,54 @@ QUnit.testStart(function() {
             assert.equal(offset, item.offset, item.tz + ": Common offset is OK");
             assert.equal(daylightOffset, item.daylightOffset, item.tz + ": DST offset is OK");
         });
+    });
+
+    QUnit.test("getWorkSpaceScrollableScrollTop should return right value for allDay appointments depending on the group orientation", function(assert) {
+        assert.expect(4);
+
+        this.createInstance({
+            dataSource: [],
+            groups: ["owner.id"],
+            resources: [{
+                fieldExpr: "owner.id",
+                allowMultiple: true,
+                dataSource: [
+                    {
+                        id: 1,
+                        text: "A"
+                    }, {
+                        id: 2,
+                        text: "B"
+                    }
+                ]
+            }],
+            views: [{
+                type: "week",
+                name: "HWEEK",
+                groupOrientation: "horizontal"
+            },
+            {
+                type: "week",
+                name: "VWEEK",
+                groupOrientation: "vertical"
+            }],
+            currentView: "HWEEK",
+            height: 500
+        });
+
+        var scrollable = this.instance.getWorkSpace().getScrollable();
+        scrollable.scrollTo({ left: 0, top: 400 });
+
+        assert.equal(this.instance.getWorkSpaceScrollableScrollTop(), 400, "Returned value is right for not allDay appt and horizontal grouping");
+        assert.equal(this.instance.getWorkSpaceScrollableScrollTop(true), 0, "Returned value is right for allDay appt and horizontal grouping");
+
+        this.instance.option("currentView", "VWEEK");
+
+        scrollable = this.instance.getWorkSpace().getScrollable();
+        scrollable.scrollTo({ left: 0, top: 400 });
+
+        assert.equal(this.instance.getWorkSpaceScrollableScrollTop(), 400, "Returned value is right for not allDay appt and vertical grouping");
+        assert.equal(this.instance.getWorkSpaceScrollableScrollTop(true), 400, "Returned value is right for allDay appt and vertical grouping");
     });
 
 })("Methods");
@@ -1519,6 +1574,34 @@ QUnit.testStart(function() {
         this.instance.option("currentView", "week");
 
         assert.equal(this.instance.$element().find(".dx-scheduler-appointment").length, 0, "Appointments were removed");
+    });
+
+    QUnit.test("selectedCellData option should be updated after view changing", function(assert) {
+        this.createInstance({
+            currentDate: new Date(2018, 4, 10),
+            views: ["week", "month"],
+            currentView: "week",
+            focusStateEnabled: true
+        });
+
+        var keyboard = keyboardMock(this.instance.getWorkSpace().$element()),
+            cells = this.instance.$element().find(".dx-scheduler-date-table-cell");
+
+        pointerMock(cells.eq(7)).start().click();
+        keyboard.keyDown("down", { shiftKey: true });
+
+        assert.deepEqual(this.instance.option("selectedCellData"), [{
+            startDate: new Date(2018, 4, 6, 0, 30),
+            endDate: new Date(2018, 4, 6, 1),
+            allDay: false
+        }, {
+            startDate: new Date(2018, 4, 6, 1),
+            endDate: new Date(2018, 4, 6, 1, 30),
+            allDay: false
+        }], "correct cell data");
+
+        this.instance.option("currentView", "month");
+        assert.deepEqual(this.instance.option("selectedCellData"), []);
     });
 
 })("Options");
@@ -3706,6 +3789,43 @@ QUnit.testStart(function() {
         this.instance.option("currentView", "day");
         $workSpace = this.instance.getWorkSpace().$element();
         assert.notOk($workSpace.hasClass("dx-scheduler-work-space-overlapping"), "workspace hasn't class");
+    });
+
+    QUnit.module("Options for Material theme in components", {
+        beforeEach: function() {
+            this.origIsMaterial = themes.isMaterial;
+            themes.isMaterial = function() { return true; };
+            this.createInstance = function(options) {
+                this.instance = $("#scheduler").dxScheduler(options).dxScheduler("instance");
+            };
+            this.clock = sinon.useFakeTimers();
+        },
+        afterEach: function() {
+            this.clock.restore();
+            themes.isMaterial = this.origIsMaterial;
+        }
+    });
+
+    QUnit.test("_dropDownButtonIcon option should be passed to SchedulerHeader", function(assert) {
+        this.createInstance({
+            currentView: "week",
+            showCurrentTimeIndicator: false
+        });
+
+        var header = this.instance.getHeader();
+
+        assert.equal(header.option("_dropDownButtonIcon"), "chevrondown", "header has correct _dropDownButtonIcon");
+    });
+
+    QUnit.test("_appointmentGroupButtonOffset option should be passed to SchedulerAppointments", function(assert) {
+        this.createInstance({
+            currentView: "week",
+            showCurrentTimeIndicator: false
+        });
+
+        var appointments = this.instance.getAppointmentsInstance();
+
+        assert.equal(appointments.option("_appointmentGroupButtonOffset"), 20, "SchedulerAppointments has correct _appointmentGroupButtonOffset");
     });
 
 })("View with configuration");

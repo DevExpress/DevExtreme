@@ -78,6 +78,7 @@ var animation = {
 * @inherits CollectionWidget
 * @module ui/pivot
 * @export default
+* @deprecated
 */
 var Pivot = CollectionWidget.inherit({
 

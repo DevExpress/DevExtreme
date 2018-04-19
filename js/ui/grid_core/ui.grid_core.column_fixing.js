@@ -159,7 +159,7 @@ var baseFixedColumns = {
                 }
             }
 
-            if(isEmptyCell && (!that.option("advancedRendering") || column.command === "detail")) {
+            if(isEmptyCell && (that.option("legacyRendering") || column.command === "detail")) {
                 $cell
                     .html("&nbsp;")
                     .addClass(column.cssClass);
@@ -302,10 +302,10 @@ var baseFixedColumns = {
         this.callBase.apply(this, arguments);
 
         if(this._fixedTableElement) {
-            if(this.option("advancedRendering")) {
-                useVisibleColumns = widths && widths.filter(function(width) { return width === "auto"; }).length;
-            } else {
+            if(this.option("legacyRendering")) {
                 useVisibleColumns = widths && widths.length && !this.isScrollbarVisible(true);
+            } else {
+                useVisibleColumns = widths && widths.filter(function(width) { return width === "auto"; }).length;
             }
             if(useVisibleColumns) {
                 columns = this._columnsController.getVisibleColumns();
@@ -318,7 +318,7 @@ var baseFixedColumns = {
     },
 
     _createColGroup: function(columns) {
-        if(this.option("advancedRendering") && this._isFixedTableRendering) {
+        if(!this.option("legacyRendering") && this._isFixedTableRendering && !this.option("columnAutoWidth")) {
             var visibleColumns = this._columnsController.getVisibleColumns();
             var useVisibleColumns = visibleColumns.filter(function(column) { return !column.width; }).length;
             if(useVisibleColumns) {
@@ -883,7 +883,8 @@ module.exports = {
 
                     _pointCreated: function(point, cellsLength, columns) {
                         var currentColumn,
-                            nextColumn;
+                            nextColumn,
+                            isWidgetResizingMode = this.option("columnResizingMode") === "widget";
 
                         if(point.index > 0 && point.index < cellsLength) {
                             currentColumn = columns[point.columnIndex - 1] || {};
@@ -891,7 +892,7 @@ module.exports = {
 
                             if(currentColumn.fixed || nextColumn.fixed) {
                                 point.columnIndex -= 1;
-                                return !((currentColumn.allowResizing || currentColumn.command === "transparent") && (nextColumn.allowResizing || nextColumn.command === "transparent"));
+                                return !((currentColumn.allowResizing || currentColumn.command === "transparent") && (isWidgetResizingMode || nextColumn.allowResizing || nextColumn.command === "transparent"));
                             }
                         }
 

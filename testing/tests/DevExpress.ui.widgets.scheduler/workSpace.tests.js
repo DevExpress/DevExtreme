@@ -212,7 +212,7 @@ QUnit.testStart(function() {
                     delete this.instance;
                 }
 
-                this.instance = $("#scheduler-work-space").dxSchedulerWorkSpaceDay().dxSchedulerWorkSpaceDay("instance");
+                this.instance = $("#scheduler-work-space").dxSchedulerWorkSpaceDay(options).dxSchedulerWorkSpaceDay("instance");
                 stubInvokeMethod(this.instance, options);
             };
 
@@ -412,6 +412,27 @@ QUnit.testStart(function() {
 
         cellData.cellCustomField = "cell-custom-data";
         assert.strictEqual($element.find("." + CELL_CLASS).first().data("dxCellData").cellCustomField, undefined, "Cell data is not affected");
+    });
+
+    QUnit.test("Cells have right cellData in vertical grouped WorkSpace Day view", function(assert) {
+        this.instance.option({
+            currentDate: new Date(2018, 2, 16),
+            groups: [{
+                name: "one",
+                items: [{ id: 1, text: "a" }, { id: 2, text: "b" }]
+            }],
+            groupOrientation: "vertical",
+            startDayHour: 9,
+            showAllDayPanel: false
+        });
+        var firstCellData = this.instance.$element().find(".dx-scheduler-date-table-cell").eq(0).data("dxCellData"),
+            secondCellData = this.instance.$element().find(".dx-scheduler-date-table-cell").eq(36).data("dxCellData");
+
+        assert.deepEqual(firstCellData.startDate, new Date(2018, 2, 16, 9), "cell has right startDate");
+        assert.deepEqual(firstCellData.endDate, new Date(2018, 2, 16, 9, 30), "cell has right endDate");
+
+        assert.deepEqual(secondCellData.startDate, new Date(2018, 2, 16, 12), "cell has right startDate");
+        assert.deepEqual(secondCellData.endDate, new Date(2018, 2, 16, 12, 30), "cell has right endDate");
     });
 })("Work Space Day");
 
@@ -773,6 +794,27 @@ QUnit.testStart(function() {
         assert.equal(spy.callCount, 344);
         spy.restore();
     });
+
+    QUnit.test("Cells have right cellData in horizontal grouped WorkSpace Week view", function(assert) {
+        this.instance.option({
+            currentDate: new Date(2018, 2, 16),
+            groupOrientation: "vertical",
+            startDayHour: 9,
+            groups: [{
+                name: "one",
+                items: [{ id: 1, text: "a" }, { id: 2, text: "b" }]
+            }]
+        });
+
+        var firstCellData = this.instance.$element().find(".dx-scheduler-date-table-cell").eq(25).data("dxCellData"),
+            secondCellData = this.instance.$element().find(".dx-scheduler-date-table-cell").eq(248).data("dxCellData");
+
+        assert.deepEqual(firstCellData.startDate, new Date(2018, 2, 15, 10, 30), "cell has right startDate");
+        assert.deepEqual(firstCellData.endDate, new Date(2018, 2, 15, 11), "cell has right endtDate");
+
+        assert.deepEqual(secondCellData.startDate, new Date(2018, 2, 14, 11, 30), "cell has right startDate");
+        assert.deepEqual(secondCellData.endDate, new Date(2018, 2, 14, 12), "cell has right endtDate");
+    });
 })("Work Space Week");
 
 (function() {
@@ -1051,6 +1093,60 @@ QUnit.testStart(function() {
         }
     });
 
+    QUnit.test("Cells have right cellData in horizontal grouped WorkSpace Month view", function(assert) {
+        this.instance.option({
+            currentDate: new Date(2018, 2, 1),
+            groupOrientation: "vertical",
+            groups: [{
+                name: "one",
+                items: [{ id: 1, text: "a" }, { id: 2, text: "b" }]
+            }]
+        });
+
+        var firstCellData = this.instance.$element().find(".dx-scheduler-date-table-cell").eq(0).data("dxCellData"),
+            secondCellData = this.instance.$element().find(".dx-scheduler-date-table-cell").eq(51).data("dxCellData");
+
+        assert.deepEqual(firstCellData.startDate, new Date(2018, 1, 25, 0), "cell has right startDate");
+        assert.deepEqual(firstCellData.endDate, new Date(2018, 1, 26, 0), "cell has right endtDate");
+
+        assert.deepEqual(secondCellData.startDate, new Date(2018, 2, 6, 0), "cell has right startDate");
+        assert.deepEqual(secondCellData.endDate, new Date(2018, 2, 7, 0), "cell has right endtDate");
+    });
+
+})("Work Space Month");
+
+(function() {
+
+    QUnit.module("Work Space Month with horizontal grouping", {
+        beforeEach: function() {
+            this.instance = $("#scheduler-work-space").dxSchedulerWorkSpaceMonth({
+                currentDate: new Date(2018, 2, 1),
+                groupOrientation: "vertical",
+                crossScrollingEnabled: true
+            }).dxSchedulerWorkSpaceMonth("instance");
+
+            stubInvokeMethod(this.instance);
+
+            this.instance.option("groups", [{
+                name: "one",
+                items: [{ id: 1, text: "a" }, { id: 2, text: "b" }]
+            }]);
+        }
+    });
+
+    QUnit.test("Group table content should have right height", function(assert) {
+        var $groupHeaderContents = this.instance.$element().find(".dx-scheduler-group-header-content");
+
+        assert.roughEqual($groupHeaderContents.eq(0).outerHeight(), 144, 5, "Group header content height is OK");
+        assert.roughEqual($groupHeaderContents.eq(1).outerHeight(), 144, 5, "Group header content height is OK");
+    });
+
+    QUnit.test("Group width calculation", function(assert) {
+        sinon.stub(this.instance, "getCellWidth").returns(50);
+
+        assert.equal(this.instance.getGroupWidth(), 350, "Group width is OK");
+    });
+
 })("Work Space Month");
 
 (function() {
@@ -1183,6 +1279,30 @@ QUnit.testStart(function() {
             startDate: new Date(2015, 2, 31),
             endDate: new Date(2015, 3, 1)
         }, "Arguments are OK");
+    });
+
+    QUnit.test("Workspace should handle enter/space key correctly if e.cancel=true", function(assert) {
+        var $element = $("#scheduler-work-space").dxSchedulerWorkSpaceMonth({
+                focusStateEnabled: true,
+                firstDayOfWeek: 1,
+                editing: true,
+                onCellClick: function(e) {
+                    e.cancel = true;
+                },
+                currentDate: new Date(2015, 3, 1)
+            }),
+            keyboard = keyboardMock($element),
+            instance = $element.dxSchedulerWorkSpaceMonth("instance"),
+            updateSpy = sinon.spy(noop);
+
+        instance.notifyObserver = updateSpy;
+
+        $($element.find("." + CELL_CLASS).eq(0)).trigger("focusin");
+        keyboard.keyDown("enter");
+        $($element).trigger("focusin");
+        keyboard.keyDown("enter");
+
+        assert.notOk(updateSpy.called, "Observer method was not called if e.cancel = true");
     });
 
     QUnit.test("Workspace should allow select several cells with shift & arrow", function(assert) {
@@ -1948,6 +2068,22 @@ QUnit.testStart(function() {
         $($cell).trigger("dxcontextmenu");
     });
 
+    QUnit.test("Cells should be focused after onCellContextMenu event firing", function(assert) {
+        var $element = $("#scheduler-work-space").dxSchedulerWorkSpaceWeek({
+            focusStateEnabled: true,
+            currentDate: new Date(2018, 2, 1)
+        });
+        var keyboard = keyboardMock($element),
+            cells = $element.find("." + CELL_CLASS);
+
+        pointerMock(cells.eq(7)).start().click();
+        keyboard.keyDown("right", { shiftKey: true });
+        $(cells.eq(8)).trigger("dxcontextmenu");
+        $($element).trigger("focusout");
+
+        assert.equal(cells.filter(".dx-state-focused").length, 49, "right cells are focused");
+    });
+
 })("Workspace Mouse Interaction");
 
 
@@ -1990,7 +2126,7 @@ QUnit.testStart(function() {
         assert.equal(index, 3, "Index is OK");
     });
 
-    QUnit.test("Grouped view", function(assert) {
+    QUnit.test("Horizontal grouped view", function(assert) {
         this.createInstance("Week", {
             width: 800,
             height: 800,
@@ -1999,6 +2135,21 @@ QUnit.testStart(function() {
         var index = this.instance.getCellIndexByCoordinates({ left: 200, top: 55 });
 
         assert.equal(index, 16, "Index is OK");
+    });
+
+    QUnit.test("Vertical grouped view", function(assert) {
+        this.createInstance("Week", {
+            width: 800,
+            height: 800,
+            groupOrientation: "vertical"
+        }, true);
+
+        stubInvokeMethod(this.instance);
+        this.instance.option("groups", [{ name: "a", items: [{ id: 1, text: "a.1" }, { id: 2, text: "a.2" }] }]);
+
+        var index = this.instance.getCellIndexByCoordinates({ left: 200, top: 55 });
+
+        assert.equal(index, 7, "Index is OK");
     });
 
     QUnit.test("Month view", function(assert) {

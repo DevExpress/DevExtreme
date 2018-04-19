@@ -9,7 +9,6 @@ var $ = require("../../core/renderer"),
     windowUtils = require("../../core/utils/window"),
     typeUtils = require("../../core/utils/type"),
     extend = require("../../core/utils/extend").extend,
-    inArray = require("../../core/utils/array").inArray,
     each = require("../../core/utils/iterator").each,
     getPublicElement = require("../../core/utils/dom").getPublicElement,
     CheckBox = require("../check_box"),
@@ -420,12 +419,6 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             * @type String
             */
             /**
-            * @name dxTreeViewItemTemplate_iconSrc
-            * @publicName iconSrc
-            * @type String
-            * @deprecated dxTreeViewItemTemplate_icon
-            */
-            /**
             * @name dxTreeViewItemTemplate_items
             * @publicName items
             * @type Array<dxTreeViewItemTemplate>
@@ -442,43 +435,6 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             * @type boolean
             * @default undefined
             */
-        });
-    },
-
-    _setDeprecatedOptions: function() {
-        this.callBase();
-
-        extend(this._deprecatedOptions, {
-            /**
-            * @name dxTreeViewOptions_showCheckBoxes
-            * @publicName showCheckBoxes
-            * @type boolean
-            * @default false
-            * @deprecated dxTreeViewOptions_showCheckBoxesMode
-            */
-            "showCheckBoxes": { since: "15.2", message: "use 'showCheckBoxesMode' option instead" },
-
-            /**
-            * @name dxTreeViewOptions_selectAllEnabled
-            * @publicName selectAllEnabled
-            * @type boolean
-            * @default false
-            * @deprecated dxTreeViewOptions_showCheckBoxesMode
-            */
-            "selectAllEnabled": { since: "15.2", message: "use 'showCheckBoxesMode' option instead" },
-
-            /**
-            * @name dxTreeViewOptions_onItemSelected
-            * @publicName onItemSelected
-            * @extends Action
-            * @deprecated dxTreeViewOptions_onItemSelectionChanged
-            * @type function(e)
-            * @type_function_param1 e:object
-             * @type_function_param1_field7 itemElement:dxElement
-             * @type_function_param1_field8 node:dxTreeViewNode
-            * @action
-            */
-            "onItemSelected": { since: "16.1", alias: "onItemSelectionChanged" }
         });
     },
 
@@ -533,12 +489,6 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             previousValue = args.previousValue;
 
         switch(name) {
-            case "showCheckBoxes":
-                this.option("showCheckBoxesMode", value ? "normal" : "none");
-                break;
-            case "selectAllEnabled":
-                this.option("showCheckBoxesMode", value ? "selectAll" : "normal");
-                break;
             case "selectAllText":
                 if(this._$selectAllItem) {
                     this._$selectAllItem.dxCheckBox("instance").option("text", value);
@@ -648,7 +598,6 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         this.callBase();
 
         this._initStoreChangeHandlers();
-        this._initCheckBoxesMode();
     },
 
     _dataSourceChangedHandler: function(newItems) {
@@ -802,6 +751,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
 
     _initMarkup: function() {
         this._renderScrollableContainer();
+        this._renderEmptyMessage(this._dataAdapter.getRootNodes());
         this.callBase();
         this.setAria("role", "tree");
     },
@@ -890,22 +840,6 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
 
     _selectAllEnabled: function() {
         return this.option("showCheckBoxesMode") === "selectAll";
-    },
-
-    // todo: remove in 16.1 with deprecated showCheckBoxes and selectAllEnabled
-    _initCheckBoxesMode: function() {
-        if(this._showCheckboxes()) {
-            return;
-        }
-
-        this._suppressDeprecatedWarnings();
-
-        var showCheckboxes = this.option("showCheckBoxes"),
-            selectAllEnabled = this.option("selectAllEnabled");
-
-        this._resumeDeprecatedWarnings();
-
-        this.option("showCheckBoxesMode", showCheckboxes ? (selectAllEnabled ? "selectAll" : "normal") : "none");
     },
 
     _renderItems: function($nodeContainer, nodes) {
@@ -1188,9 +1122,17 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         that._dataSource.filter(that._combineFilter());
 
         return that._dataSource.load().done(function(newItems) {
-            var areItemsAlreadyPresent = inArray(newItems[0], that.option("items")) + 1;
-            !areItemsAlreadyPresent && that._appendItems(newItems);
+            if(!that._areNodesExists(newItems)) {
+                that._appendItems(newItems);
+            }
         });
+    },
+
+    _areNodesExists: function(newItems, items) {
+        var keyOfRootItem = this.keyOf(newItems[0]),
+            fullData = this._dataAdapter.getFullData();
+
+        return !!this._dataAdapter.getNodeByKey(keyOfRootItem, fullData);
     },
 
     _appendItems: function(newItems) {
@@ -1205,7 +1147,11 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
     _animateNodeContainer: function(node, state, e) {
         var $node = this._getNodeElement(node),
             $nodeContainer = $node.children("." + NODE_CONTAINER_CLASS),
-            nodeHeight = $nodeContainer.height();
+            nodeHeight;
+
+        // NOTE: The height of node container is should be used when the container is shown (T606878)
+        $nodeContainer.addClass(OPENED_NODE_CONTAINER_CLASS);
+        nodeHeight = $nodeContainer.height();
 
         fx.stop($nodeContainer, true);
         fx.animate($nodeContainer, {
@@ -1216,9 +1162,6 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             },
             to: {
                 "maxHeight": state ? nodeHeight : 0
-            },
-            start: function() {
-                $nodeContainer.addClass(OPENED_NODE_CONTAINER_CLASS);
             },
             complete: (function() {
                 $nodeContainer.css("maxHeight", "none");
@@ -1262,9 +1205,11 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         $node.addClass(IS_LEAF);
     },
 
-    _renderContent: function() {
-        this._renderEmptyMessage(this._dataAdapter.getRootNodes());
+    _emptyMessageContainer: function() {
+        return this._scrollableContainer ? this._scrollableContainer.content() : this.callBase();
+    },
 
+    _renderContent: function() {
         var items = this.option("items");
         if(items && items.length) {
             this._contentAlreadyRendered = true;

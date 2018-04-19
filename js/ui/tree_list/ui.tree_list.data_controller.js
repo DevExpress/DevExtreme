@@ -309,7 +309,6 @@ treeListCore.registerModule("data", {
              * @name dxTreeListOptions_paging
              * @publicName paging
              * @type object
-             * @inheritdoc
              */
             paging: {
                 /**

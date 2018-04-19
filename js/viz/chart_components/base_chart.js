@@ -108,7 +108,7 @@ function checkStackOverlap(rollingStocks) {
         overlap = false;
 
     for(i = 0, iLength = rollingStocks.length - 1; i < iLength; i++) {
-        for(j = 0, jLength = rollingStocks.length; j < jLength; j++) {
+        for(j = i + 1, jLength = rollingStocks.length; j < jLength; j++) {
             if(i !== j && checkStacksOverlapping(rollingStocks[i], rollingStocks[j], true)) {
                 overlap = true;
                 break;
@@ -421,10 +421,10 @@ var BaseChart = BaseWidget.inherit({
         that._stripsGroup = renderer.g().attr({ "class": "dxc-strips-group" }).linkOn(root, "strips");                         // TODO: Must be created in the same place where used (advanced chart)
         that._gridGroup = renderer.g().attr({ "class": "dxc-grids-group" }).linkOn(root, "grids");                              // TODO: Must be created in the same place where used (advanced chart)
         that._axesGroup = renderer.g().attr({ "class": "dxc-axes-group" }).linkOn(root, "axes");                                // TODO: Must be created in the same place where used (advanced chart)
-        that._constantLinesGroup = renderer.g().attr({ "class": "dxc-constant-lines-group" }).linkOn(root, "constant-lines");   // TODO: Must be created in the same place where used (advanced chart)
         that._labelAxesGroup = renderer.g().attr({ "class": "dxc-strips-labels-group" }).linkOn(root, "strips-labels");         // TODO: Must be created in the same place where used (advanced chart)
         that._panesBorderGroup = renderer.g().attr({ "class": "dxc-border" }).linkOn(root, "border");                           // TODO: Must be created in the same place where used (chart)
         that._seriesGroup = renderer.g().attr({ "class": "dxc-series-group" }).linkOn(root, "series");
+        that._constantLinesGroup = renderer.g().attr({ "class": "dxc-constant-lines-group" }).linkOn(root, "constant-lines");   // TODO: Must be created in the same place where used (advanced chart)
         that._scaleBreaksGroup = renderer.g().attr({ "class": "dxc-scale-breaks" }).linkOn(root, "scale-breaks");
         that._labelsGroup = renderer.g().attr({ "class": "dxc-labels-group" }).linkOn(root, "labels");
         that._crosshairCursorGroup = renderer.g().attr({ "class": "dxc-crosshair-cursor" }).linkOn(root, "crosshair");
@@ -640,7 +640,7 @@ var BaseChart = BaseWidget.inherit({
             that._canvas,
             function(sizeShortage) {
                 var panesCanvases = that._renderAxes(drawOptions, preparedOptions, isRotated);
-                sizeShortage && that._shrinkAxes(drawOptions, sizeShortage, panesCanvases);
+                that._shrinkAxes(drawOptions, sizeShortage, panesCanvases);
             },
             layoutTargets,
             isRotated
@@ -1047,10 +1047,12 @@ var BaseChart = BaseWidget.inherit({
         singleSeries.createPoints(false);
     },
 
-    _handleSeriesDataUpdated: function() {
-        this.series.forEach(function(s) {
-            this._processSingleSeries(s);
-        }, this);
+    _handleSeriesDataUpdated() {
+        if(this._getVisibleSeries().some(s => s.useAggregation())) {
+            this._populateMarginOptions();
+        }
+
+        this.series.forEach(s => this._processSingleSeries(s), this);
     },
 
     _dataSpecificInit: function(needRedraw) {

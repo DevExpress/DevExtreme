@@ -695,6 +695,85 @@ QUnit.test("clear selection and filtering in field chooser treeview on popup hid
     assert.ok(resetTreeView.calledOnce, 'resetTreeView was called');
 });
 
+QUnit.test("create toolbar buttons in applyChangesMode onDemand case", function(assert) {
+    var pivotGrid = createPivotGrid({
+            dataSource: this.dataSource,
+            fieldChooser: {
+                applyChangesMode: "onDemand"
+            }
+        }, assert),
+        fieldChooserPopup = pivotGrid.getFieldChooserPopup();
+
+    this.clock.tick();
+
+    // act
+    fieldChooserPopup.show();
+    this.clock.tick(500);
+    // assert
+    assert.equal($(fieldChooserPopup._$bottom).find(".dx-toolbar-button").length, 2, '2 buttons in toolbar');
+});
+
+QUnit.test("apply changes in fieldchooser on button click in onDemand mode", function(assert) {
+    this.dataSource.fields[0].dataField = "field1";
+
+    var pivotGrid = createPivotGrid({
+            dataSource: this.dataSource,
+            allowSorting: true,
+            fieldChooser: {
+                applyChangesMode: "onDemand"
+            }
+        }, assert),
+        fieldChooserPopup = pivotGrid.getFieldChooserPopup();
+
+    this.clock.tick();
+
+    // act
+    fieldChooserPopup.show();
+    this.clock.tick(500);
+
+    var sortIcon = $(fieldChooserPopup.content()).find(".dx-sort").eq(0);
+    sortIcon.trigger("dxclick");
+    this.clock.tick(500);
+
+    assert.notEqual(pivotGrid.getDataSource().state().fields[0].sortOrder, "desc", "ds state is not changed yet");
+
+    var applyButton = $(fieldChooserPopup._$bottom).find(".dx-button").eq(0);
+    applyButton.trigger("dxclick");
+    this.clock.tick(500);
+
+    assert.equal(pivotGrid.getDataSource().state().fields[0].sortOrder, "desc", "ds state is changed");
+});
+
+QUnit.test("cancel changes on fieldchooser hidding in onDemand mode", function(assert) {
+    this.dataSource.fields[0].dataField = "field1";
+
+    var pivotGrid = createPivotGrid({
+            dataSource: this.dataSource,
+            allowSorting: true,
+            fieldChooser: {
+                applyChangesMode: "onDemand"
+            }
+        }, assert),
+        fieldChooserPopup = pivotGrid.getFieldChooserPopup();
+
+    this.clock.tick();
+
+    // act
+    fieldChooserPopup.show();
+    this.clock.tick(500);
+
+    var sortIcon = $(fieldChooserPopup.content()).find(".dx-sort").eq(0);
+    sortIcon.trigger("dxclick");
+    this.clock.tick(500);
+
+    assert.notEqual(pivotGrid.getDataSource().state().fields[0].sortOrder, "desc", "ds state is not changed yet");
+
+    fieldChooserPopup.hide();
+    this.clock.tick(500);
+
+    assert.notEqual(pivotGrid.getDataSource().state().fields[0].sortOrder, "desc", "ds state is not changed yet");
+});
+
 QUnit.test("Field panel should be updated on change headerFilter at runtime", function(assert) {
     var pivotGrid = createPivotGrid({
         dataSource: this.dataSource,
@@ -1549,6 +1628,42 @@ QUnit.test("change allowExpandAll, allowFiltering, allowSorting, allowSortingByS
 
     assert.strictEqual(pivotGrid.getDataSource().field(0).allowSortingBySummary, true);
     assert.strictEqual(pivotGrid.getDataSource().field(1).allowSortingBySummary, false);
+});
+
+QUnit.test("Sorting by Summary context menu with zero value", function(assert) {
+    var contextMenuArgs = [],
+        dataSourceInstance = new PivotGridDataSource({
+            fields: [
+                { dataField: "field1", area: "row" },
+                { dataField: "field2", area: "data", summaryType: "sum" }
+            ],
+            store: [
+                { field1: 'e1', field2: 0.0 },
+                { field1: 'e2', field2: -4.0 },
+                { field1: 'e3', field2: 1.0 },
+            ]
+        });
+
+    createPivotGrid({
+        onContextMenuPreparing: function(e) {
+            contextMenuArgs.push(e);
+        },
+        allowSortingBySummary: true,
+        dataSource: dataSourceInstance
+    }, assert);
+
+    this.clock.tick(500);
+
+    // act
+    $("#pivotGrid").find('.dx-pivotgrid-horizontal-headers td').last().trigger('dxcontextmenu');
+    contextMenuArgs[0].items[0].onItemClick();
+    this.clock.tick(500);
+
+    var $rows = $("#pivotGrid").find("tbody.dx-pivotgrid-vertical-headers").children();
+
+    assert.equal($rows.eq(0).text(), "e3");
+    assert.equal($rows.eq(1).text(), "e1");
+    assert.equal($rows.eq(2).text(), "e2");
 });
 
 QUnit.test("Sorting by Summary context menu", function(assert) {

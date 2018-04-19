@@ -48,10 +48,10 @@ var processColumnsForCompare = function(columns, parameterNames, ignoreParameter
     return processedColumns;
 };
 
-var setupModule = function() {
+var setupModule = function(moduleNames) {
     executeAsyncMock.setup();
 
-    dataGridMocks.setupDataGridModules(this, ['columns', 'data', 'selection', 'editing', 'filterRow', 'masterDetail'], {
+    dataGridMocks.setupDataGridModules(this, ['columns', 'data', 'selection', 'editing', 'filterRow', 'masterDetail'].concat(moduleNames || []), {
         controllers: {
             data: new dataGridMocks.MockDataController({ items: [] })
         }
@@ -2844,6 +2844,33 @@ QUnit.test("updateColumnDataTypes shouldn't be called if all data types with ser
 
     // assert
     assert.ok(spy.calledOnce, "updateColumnDataTypes is called once");
+});
+
+// T622253
+QUnit.test("columnsChanged shouldn't be called on applyDataSource if data types aren't updated", function(assert) {
+    // arrange
+    var columnsChangedCalled,
+        items = [{ name: "Test", age: null, country: null }, { name: "Test", age: null, country: null }],
+        dataSource = createMockDataSource(items);
+
+    this.applyOptions({
+        columns: [
+            { dataField: "name" },
+            { dataField: "age", dataType: "number" },
+            { dataField: "country", dataType: "string", lookup: { dataSource: ["test1", "test2"] } }
+        ]
+    });
+
+    this.columnsController.applyDataSource(dataSource);
+    this.columnsController.columnsChanged.add(function(e) {
+        columnsChangedCalled = true;
+    });
+
+    // act
+    this.columnsController.applyDataSource(dataSource);
+
+    // assert
+    assert.notOk(columnsChangedCalled, "columnsChanged isn't called");
 });
 
 QUnit.test("update column serializer for date type with iso8601 date time format", function(assert) {
@@ -5792,6 +5819,21 @@ QUnit.test("getGroupDataSourceParameters. Several group columns when calculateCe
     assert.deepEqual(groupParameters[1], { selector: 'field1', desc: false, isExpanded: false });
 });
 
+// T259458
+QUnit.test("The headerCellTemplate of the group column should not be applied for expand column", function(assert) {
+    // arrange
+    var expandColumns;
+
+    this.applyOptions({ columns: [{ dataField: "field", groupIndex: 0, headerCellTemplate: function() {} }] });
+
+    // act, assert
+    expandColumns = this.columnsController.getExpandColumns();
+    assert.strictEqual(expandColumns.length, 1, "count expand column");
+    assert.strictEqual(expandColumns[0].dataField, "field");
+    assert.strictEqual(expandColumns[0].groupIndex, 0);
+    assert.strictEqual(expandColumns[0].headerCellTemplate, null);
+});
+
 QUnit.module("ParseValue", { beforeEach: setupModule, afterEach: teardownModule });
 
 // T141564
@@ -8089,4 +8131,200 @@ QUnit.module("onOptionChanged", {
         // assert
         assert.strictEqual(this._notifyOptionChanged.callCount, 0, "onOptionChanged is not fired");
     });
+});
+
+QUnit.module("Customization of the command columns", {
+    beforeEach: function() {
+        setupModule.apply(this, [["adaptivity"]]);
+    },
+    afterEach: function() {
+        this.dispose && this.dispose();
+    }
+}, function() {
+    QUnit.test("The edit column", function(assert) {
+        // arrange
+        var editCellTemplate = function() {};
+
+        this.applyOptions({
+            editing: {
+                mode: "row",
+                allowUpdating: true,
+                texts: {
+                    editRow: "Edit"
+                }
+            },
+            columns: ["field1", "field2", {
+                command: "edit",
+                cellTemplate: editCellTemplate,
+                width: 200,
+                visibleIndex: -1
+            }]
+        });
+
+        // act, assert
+        assert.deepEqual(this.getVisibleColumns(["command", "cellTemplate", "width", "visibleIndex"])[0], {
+            command: "edit",
+            cellTemplate: editCellTemplate,
+            width: 200,
+            visibleIndex: -1
+        }, "edit column");
+    });
+
+    QUnit.test("The select column", function(assert) {
+        // arrange
+        var selectCellTemplate = function() {};
+
+        this.applyOptions({
+            selection: {
+                mode: "multiple",
+                showCheckBoxesMode: "always"
+            },
+            columns: ["field1", "field2", {
+                command: "select",
+                cellTemplate: selectCellTemplate,
+                width: 200,
+                visibleIndex: 0
+            }]
+        });
+
+        // act, assert
+        assert.deepEqual(this.getVisibleColumns(["command", "cellTemplate", "width", "visibleIndex"])[2], {
+            command: "select",
+            cellTemplate: selectCellTemplate,
+            width: 200,
+            visibleIndex: 0
+        }, "select column");
+    });
+
+    QUnit.test("The adaptive column", function(assert) {
+        // arrange
+        var adaptiveCellTemplate = function() {};
+
+        this.applyOptions({
+            columnHidingEnabled: true,
+            columns: ["field1", "field2", {
+                command: "adaptive",
+                cellTemplate: adaptiveCellTemplate,
+                width: 100,
+                visibleIndex: -1,
+                adaptiveHidden: false
+            }]
+        });
+
+        // act, assert
+        assert.deepEqual(this.getVisibleColumns(["command", "cellTemplate", "width", "visibleIndex"])[0], {
+            command: "adaptive",
+            cellTemplate: adaptiveCellTemplate,
+            width: 100,
+            visibleIndex: -1
+        }, "adaptive column");
+    });
+
+    QUnit.test("The expand column", function(assert) {
+        // arrange
+        var expandCellTemplate = function() {};
+
+        this.applyOptions({
+            columnHidingEnabled: true,
+            columns: [{ dataField: "field1", groupIndex: 0 }, "field2", {
+                command: "expand",
+                cellTemplate: expandCellTemplate,
+                width: 100
+            }]
+        });
+
+        // act, assert
+        assert.deepEqual(this.getVisibleColumns(["command", "groupIndex", "dataField", "cellTemplate", "width"])[0], {
+            command: "expand",
+            groupIndex: 0,
+            dataField: "field1",
+            cellTemplate: expandCellTemplate,
+            width: 100
+        }, "group column");
+    });
+
+    QUnit.test("Get command options via columnOption method", function(assert) {
+        // arrange
+        this.applyOptions({
+            editing: {
+                mode: "row",
+                allowUpdating: true,
+                texts: {
+                    editRow: "Edit"
+                }
+            },
+            columns: ["field1", "field2", {
+                command: "edit",
+                width: 200,
+                visibleIndex: -1
+            }]
+        });
+
+        // act, assert
+        assert.deepEqual(processColumnsForCompare([this.columnOption("command:edit")], ["command", "cellTemplate", "width", "visibleIndex"]), [{
+            command: "edit",
+            width: 200,
+            visibleIndex: -1
+        }], "edit column");
+    });
+
+    QUnit.test("Custom command column", function(assert) {
+        // arrange
+        this.applyOptions({
+            columnHidingEnabled: true,
+            columns: ["field1", "field2", {
+                command: "custom",
+                width: 100
+            }]
+        });
+
+        // act, assert
+        assert.deepEqual(this.getVisibleColumns()[2], {
+            command: "custom",
+            index: 2,
+            width: 100,
+            visible: true
+        }, "custom command column");
+    });
+
+    QUnit.test("Get custom command options via columnOption method", function(assert) {
+        // arrange
+        this.applyOptions({ columns: ["field1", "field2", { command: "custom", width: 100 }] });
+
+        // act, assert
+        assert.deepEqual(processColumnsForCompare([this.columnOption("command:custom")], ["command", "width", "visible"]), [{ command: "custom", width: 100, visible: true }], "options of the custom command column");
+    });
+
+    QUnit.test("Update custom command options via columnOption method", function(assert) {
+        // arrange
+        this.applyOptions({ columns: ["field1", "field2", { command: "custom", width: 100 }] });
+
+        // act
+        this.columnOption("command:custom", "width", 50);
+
+        // assert
+        assert.strictEqual(this.columnOption("command:custom", "width"), 50, "width of the custom command column");
+    });
+});
+
+// T622771
+QUnit.test("Update dataSource of the column lookup", function(assert) {
+    // arrange
+    this.applyOptions({
+        columns: [
+            { dataField: "TestField1", caption: "Column 1" },
+            {
+                caption: "Band Column 1", columns: [
+                    { dataField: "TestField2", caption: "Column 2" },
+                    { dataField: "TestField3", caption: "Column 3", lookup: { dataSource: [] } }
+                ]
+            }
+        ]
+    });
+
+    // act
+    this.columnOption("TestField3", "lookup.dataSource", [1, 2, 3]);
+
+    // assert
+    assert.deepEqual(this.columnOption("TestField3", "lookup.dataSource"), [1, 2, 3], "lookup datasource");
 });

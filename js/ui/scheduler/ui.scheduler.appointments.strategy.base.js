@@ -15,7 +15,6 @@ var APPOINTMENT_MIN_SIZE = 2,
     APPOINTMENT_DEFAULT_HEIGHT = 20,
     APPOINTMENT_DEFAULT_WIDTH = 40,
     COMPACT_THEME_APPOINTMENT_DEFAULT_HEIGHT = 18,
-    APPOINTMENT_DEFAULT_OFFSET = 26,
     COMPACT_THEME_APPOINTMENT_DEFAULT_OFFSET = 22,
     COMPACT_APPOINTMENT_DEFAULT_OFFSET = 3;
 
@@ -646,7 +645,9 @@ var BaseRenderingStrategy = Class.inherit({
     },
 
     _getAppointmentDefaultOffset: function() {
-        return this._isCompactTheme() ? COMPACT_THEME_APPOINTMENT_DEFAULT_OFFSET : APPOINTMENT_DEFAULT_OFFSET;
+        return this._isCompactTheme()
+            ? COMPACT_THEME_APPOINTMENT_DEFAULT_OFFSET
+            : this.instance.option("_appointmentOffset");
     },
 
     _getAppointmentDefaultHeight: function() {
@@ -655,6 +656,14 @@ var BaseRenderingStrategy = Class.inherit({
 
     _getAppointmentDefaultWidth: function() {
         return APPOINTMENT_DEFAULT_WIDTH;
+    },
+
+    _needVerticalGroupBounds: function() {
+        return false;
+    },
+
+    _needHorizontalGroupBounds: function() {
+        return false;
     }
 });
 

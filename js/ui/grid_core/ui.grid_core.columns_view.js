@@ -138,7 +138,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             $cell.addClass(this.addWidgetPrefix(GROUP_SPACE_CLASS));
         }
 
-        if(this.option("advancedRendering") && this.option("columnAutoWidth")) {
+        if(!this.option("legacyRendering") && this.option("columnAutoWidth")) {
             if(column.width || column.minWidth) {
                 cell.style.minWidth = getWidthStyle(column.minWidth || column.width);
             }
@@ -625,7 +625,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
     _getWidths: function($cellElements) {
         var result = [],
-            advancedRendering = this.option("advancedRendering"),
+            legacyRendering = this.option("legacyRendering"),
             width,
             clientRect;
 
@@ -635,7 +635,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
                 if(item.getBoundingClientRect) {
                     clientRect = item.getBoundingClientRect();
                     if(clientRect.width > width - 1) {
-                        width = advancedRendering ? clientRect.width : Math.ceil(clientRect.width);
+                        width = legacyRendering ? Math.ceil(clientRect.width) : clientRect.width;
                     }
                 }
 
@@ -679,19 +679,19 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             minWidth,
             columnIndex,
             columnAutoWidth = this.option("columnAutoWidth"),
-            advancedRendering = this.option("advancedRendering");
+            legacyRendering = this.option("legacyRendering");
 
         $tableElement = $tableElement || this._getTableElement();
 
         if($tableElement && $tableElement.length && widths) {
             columnIndex = 0;
             $cols = $tableElement.find("col");
-            if(advancedRendering) {
+            if(!legacyRendering) {
                 $cols.css("width", "auto");
             }
             columns = columns || this.getColumns(null, $tableElement);
             for(i = 0; i < columns.length; i++) {
-                if(advancedRendering && columnAutoWidth && !fixed) {
+                if(!legacyRendering && columnAutoWidth && !fixed) {
                     width = columns[i].width;
 
                     if(width && !columns[i].command) {

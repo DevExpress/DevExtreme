@@ -36,13 +36,24 @@
 @base-border-color: #343840;
 
 /**
-* @name 10. Border radius
+* @name 120. Border radius
 * @type text
 * @group base.common
 */
 @base-border-radius: 1px;
 
+/**
+* @name 122. Large border radius
+* @type text
+* @group base.common
+*/
 @base-border-radius-large: @base-border-radius + 2px;
+
+/**
+* @name 124. Small border radius
+* @type text
+* @group base.common
+*/
 @base-border-radius-small: @base-border-radius - 1px;
 @base-border-radius-exsmall: @base-border-radius - 2px;
 
@@ -1471,6 +1482,7 @@
 @datagrid-columnchooser-overlay-border-radius: @base-border-radius-large; // TODO: may be not need
 
 @datagrid-column-separator-bg: fade(@base-accent, 50%);
+@datagrid-text-stub-background-image-path: url(images/widgets/generic/color-schemes/darkviolet/grid/text-stub.png);
 
 // TreeList
 /**
@@ -1680,6 +1692,7 @@
 @treelist-columnchooser-overlay-border-radius: @base-border-radius-large; // TODO: may be not need
 
 @treelist-column-separator-bg: fade(@base-accent, 50%);
+@treelist-text-stub-background-image-path: url(images/widgets/generic/color-schemes/darkviolet/grid/text-stub.png);
 
 
 // dxPivotGrid

@@ -6,12 +6,23 @@ var BaseStrategy = require("events/pointer/base");
 var registerEvent = require("events/core/event_registrator");
 var special = require("../../../helpers/eventHelper.js").special;
 
-var TestEventMap = {
+
+var BubbledTestEventMap = {
     "dxpointerdown": "testdown",
     "dxpointermove": "testmove",
     "dxpointerup": "testup",
     "dxpointercancel": "testcancel"
 };
+
+var NoBubbledTestEventMap = {
+    "dxpointerenter": "testenter",
+    "dxpointerleave": "testleave"
+};
+
+var TestEventMap = $.extend({},
+    BubbledTestEventMap,
+    NoBubbledTestEventMap
+);
 
 
 QUnit.module("base events", {
@@ -71,6 +82,63 @@ $.each(TestEventMap, function(pointerEvent, originalEvent) {
         });
 
         $element.trigger(originalEvent);
+    });
+});
+
+$.each(NoBubbledTestEventMap, function(pointerEvent, originalEvent) {
+    QUnit.test("'" + pointerEvent + "' event should not bubble", function(assert) {
+        var $element = $("#element");
+        var counter = 0;
+        $(document).on(originalEvent, function(e) {
+            counter++;
+        });
+
+        $element.on(pointerEvent, function(e) {
+            assert.strictEqual(counter, 0, "'" + pointerEvent + "' did not bubble");
+        });
+
+        $element.trigger(originalEvent);
+
+        $(document).off(originalEvent);
+    });
+
+    QUnit.test("'" + pointerEvent + "' event should have delegated subscriptions", function(assert) {
+        var $element = $("#element");
+
+        $element.on(pointerEvent, "#delegated", function(e) {
+            assert.strictEqual(e.originalEvent.delegateTarget.id, "element", "'" + pointerEvent + "'  have subscription");
+        });
+
+
+        $element.children("#delegated").trigger(originalEvent);
+    });
+});
+
+$.each(BubbledTestEventMap, function(pointerEvent, originalEvent) {
+    QUnit.test("'" + pointerEvent + "' event should bubble", function(assert) {
+        var $element = $("#element");
+        var counter = 0;
+        $(document).on(originalEvent, function(e) {
+            counter++;
+        });
+
+        $element.on(pointerEvent, function(e) {
+            assert.strictEqual(counter, 1, "'" + pointerEvent + "' bubbled");
+        });
+
+        $element.trigger(originalEvent);
+
+        $(document).off(originalEvent);
+    });
+
+    QUnit.test("'" + pointerEvent + "' event should not have delegated subscriptions", function(assert) {
+        var $element = $("#element");
+
+        $element.on(pointerEvent, "#delegated", function(e) {
+            assert.strictEqual(e.originalEvent.delegateTarget.id, undefined, "'" + pointerEvent + "' not have subscription");
+        });
+
+        $element.children("#delegated").trigger(originalEvent);
     });
 });
 

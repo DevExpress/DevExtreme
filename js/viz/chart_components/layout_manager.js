@@ -8,8 +8,7 @@ var extend = require("../../core/utils/extend").extend,
     _floor = Math.floor,
     _sqrt = Math.sqrt,
     consts = require("../components/consts"),
-    pieLabelIndent = consts.pieLabelIndent,
-    pieLabelSpacing = consts.pieLabelSpacing;
+    RADIAL_LABEL_INDENT = consts.radialLabelIndent;
 
 function getNearestCoord(firstCoord, secondCoord, pointCenterCoord) {
     var nearestCoord;
@@ -30,48 +29,52 @@ function getLabelLayout(point) {
 }
 
 function getPieRadius(series, paneCenterX, paneCenterY, accessibleRadius, minR) {
-    var radiusIsFound = false;
-    series.forEach(function(singleSeries) {
-        if(radiusIsFound) {
-            return false;
-        }
-
-        singleSeries.getVisiblePoints().forEach(function(point) {
+    series.some(function(singleSeries) {
+        return singleSeries.getVisiblePoints().reduce(function(radiusIsFound, point) {
             var labelBBox = getLabelLayout(point);
             if(labelBBox) {
                 var xCoords = getNearestCoord(labelBBox.x, labelBBox.x + labelBBox.width, paneCenterX),
                     yCoords = getNearestCoord(labelBBox.y, labelBBox.y + labelBBox.height, paneCenterY);
 
-                accessibleRadius = _min(_max(getLengthFromCenter(xCoords, yCoords, paneCenterX, paneCenterY) - pieLabelIndent, minR), accessibleRadius);
+                accessibleRadius = _min(_max(getLengthFromCenter(xCoords, yCoords, paneCenterX, paneCenterY) - RADIAL_LABEL_INDENT, minR), accessibleRadius);
                 radiusIsFound = true;
             }
-        });
+            return radiusIsFound;
+        }, false);
     });
 
     return accessibleRadius;
 }
 
 function getSizeLabels(series) {
-    var sizes = [],
-        commonWidth = 0;
-    series.forEach(function(singleSeries) {
-        var maxWidth = 0;
-        singleSeries.getVisiblePoints().forEach(function(point) {
+    return series.reduce(function(res, singleSeries) {
+        var maxWidth = singleSeries.getVisiblePoints().reduce(function(width, point) {
             var labelBBox = getLabelLayout(point);
-            if(labelBBox) {
-                maxWidth = _max(labelBBox.width + pieLabelSpacing, maxWidth);
+            if(labelBBox && labelBBox.width > width) {
+                width = labelBBox.width;
             }
-        });
-        sizes.push(maxWidth);
-        commonWidth += maxWidth;
-    });
-    return { sizes: sizes, common: commonWidth };
+            return width;
+        }, 0);
+
+        if(maxWidth) {
+            res.outerLabelsCount++;
+            if(res.outerLabelsCount > 1) {
+                maxWidth += consts.pieLabelSpacing;
+            }
+        }
+
+        res.sizes.push(maxWidth);
+        res.common += maxWidth;
+        return res;
+    }, { sizes: [], common: 0, outerLabelsCount: 0 });
 }
 
 function correctLabelRadius(sizes, radius, series, canvas, averageWidthLabels) {
     var curRadius,
         i,
-        centerX = (canvas.width - canvas.left - canvas.right) / 2;
+        centerX = (canvas.width - canvas.left - canvas.right) / 2 + canvas.left,
+        runningWidth = 0;
+
     for(i = 0; i < series.length; i++) {
         if(sizes[i] === 0) {
             curRadius && (curRadius += sizes[i - 1]);
@@ -79,17 +82,16 @@ function correctLabelRadius(sizes, radius, series, canvas, averageWidthLabels) {
         }
         curRadius = _floor(curRadius ? curRadius + sizes[i - 1] : radius);
         series[i].correctLabelRadius(curRadius);
-        if(averageWidthLabels && i !== series.length - 1) {
-            sizes[i] = averageWidthLabels;
-            series[i].setVisibleArea({
-                left: centerX - radius - averageWidthLabels * (i + 1),
-                right: canvas.width - (centerX + radius + averageWidthLabels * (i + 1)),
-                top: canvas.top,
-                bottom: canvas.bottom,
-                width: canvas.width,
-                height: canvas.height
-            });
-        }
+        runningWidth += averageWidthLabels || sizes[i];
+        sizes[i] = averageWidthLabels || sizes[i];
+        series[i].setVisibleArea({
+            left: centerX - radius - runningWidth,
+            right: canvas.width - (centerX + radius + runningWidth),
+            top: canvas.top,
+            bottom: canvas.bottom,
+            width: canvas.width,
+            height: canvas.height
+        });
     }
 }
 
@@ -154,23 +156,18 @@ function toLayoutElementCoords(canvas) {
     });
 }
 
-function correctAvailableRadius(availableRadius, canvas, series, minPiePercentage, paneCenterX, paneCenterY) {
-    var minR = minPiePercentage * availableRadius,
-        sizeLabels = getSizeLabels(series),
-        countSeriesWithOuterLabels = 0,
+function correctAvailableRadius(availableRadius, canvas, series, minR, paneCenterX, paneCenterY) {
+    var sizeLabels = getSizeLabels(series),
         averageWidthLabels,
-        fullRadiusWithLabels = paneCenterX - sizeLabels.common + canvas.left;
+        fullRadiusWithLabels = paneCenterX - canvas.left - (sizeLabels.outerLabelsCount > 0 ? sizeLabels.common + RADIAL_LABEL_INDENT : 0);
 
     if(fullRadiusWithLabels < minR) {
         availableRadius = minR;
-        sizeLabels.sizes.forEach(function(size) {
-            size !== 0 && countSeriesWithOuterLabels++;
-        });
-        averageWidthLabels = (paneCenterX - availableRadius - canvas.left) / countSeriesWithOuterLabels;
+        averageWidthLabels = (paneCenterX - availableRadius - RADIAL_LABEL_INDENT - canvas.left) / sizeLabels.outerLabelsCount;
     } else {
         availableRadius = _min(getPieRadius(series, paneCenterX, paneCenterY, availableRadius, minR), fullRadiusWithLabels);
     }
-    correctLabelRadius(sizeLabels.sizes, availableRadius, series, canvas, averageWidthLabels);
+    correctLabelRadius(sizeLabels.sizes, availableRadius + RADIAL_LABEL_INDENT, series, canvas, averageWidthLabels);
 
     return availableRadius;
 }
@@ -188,16 +185,19 @@ LayoutManager.prototype = {
             paneCenterX = paneSpaceWidth / 2 + canvas.left,
             paneCenterY = paneSpaceHeight / 2 + canvas.top,
             piePercentage = this._options.piePercentage,
-            availableRadius;
+            availableRadius,
+            minR;
 
         if(_isNumber(piePercentage)) {
-            availableRadius = piePercentage * _min(canvas.height, canvas.width) / 2;
+            availableRadius = minR = piePercentage * _min(canvas.height, canvas.width) / 2;
         } else {
             availableRadius = _min(paneSpaceWidth, paneSpaceHeight) / 2;
-            if(!hideLayoutLabels) {
-                availableRadius = correctAvailableRadius(availableRadius, canvas, series, this._options.minPiePercentage, paneCenterX, paneCenterY);
-            }
+            minR = this._options.minPiePercentage * availableRadius;
         }
+        if(!hideLayoutLabels) {
+            availableRadius = correctAvailableRadius(availableRadius, canvas, series, minR, paneCenterX, paneCenterY);
+        }
+
         return {
             centerX: _floor(paneCenterX),
             centerY: _floor(paneCenterY),

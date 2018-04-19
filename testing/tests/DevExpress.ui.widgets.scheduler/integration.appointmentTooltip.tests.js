@@ -1,6 +1,7 @@
 "use strict";
 
-var $ = require("jquery");
+var $ = require("jquery"),
+    themes = require("ui/themes");
 
 QUnit.testStart(function() {
     $("#qunit-fixture").html(
@@ -186,7 +187,7 @@ QUnit.test("Scheduler appointment tooltip should has right content", function(as
     assert.equal($dates.length, 1, "dates container was rendered");
 
     var $buttons = $tooltip.find(".dx-scheduler-appointment-tooltip-buttons");
-    assert.equal($buttons.length, 1, "dates container was rendered");
+    assert.equal($buttons.length, 1, "buttons container was rendered");
 
     tooltip.hide();
 });
@@ -758,4 +759,60 @@ QUnit.test("Appointment tooltip should be hidden after immediately delete key pr
     assert.ok(notifyStub.called, "notify is called");
     assert.ok(notifyStub.withArgs("deleteAppointment").called, "deleteAppointment is called");
     assert.notOk(notifyStub.withArgs("showAppointmentTooltip").called, "showAppointmentTooltip isn't called");
+});
+
+
+QUnit.test("Scheduler appointment tooltip should has right content in Material theme", function(assert) {
+    var origIsMaterial = themes.isMaterial;
+    themes.isMaterial = function() { return true; };
+    var data = new DataSource({
+        store: this.tasks
+    });
+
+    this.createInstance({ currentDate: new Date(2015, 1, 9), dataSource: data });
+
+    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(1).trigger("dxclick");
+    this.clock.tick(300);
+
+    var $tooltip = $(".dx-scheduler-appointment-tooltip");
+
+    var $buttons = $tooltip.find(".dx-scheduler-appointment-tooltip-buttons");
+    assert.equal($buttons.length, 1, "buttons container was rendered");
+
+    var $openButton = $tooltip.find(".dx-scheduler-appointment-tooltip-open-button");
+    assert.equal($openButton.length, 1, "open button was rendered");
+
+    var $closeButton = $tooltip.find(".dx-scheduler-appointment-tooltip-close-button");
+    assert.equal($closeButton.length, 1, "open button was rendered");
+
+    var $deleteButton = $tooltip.find(".dx-scheduler-appointment-tooltip-delete-button");
+    assert.equal($deleteButton.length, 1, "open button was rendered");
+
+    var $tooltipContainers = $(".dx-scheduler-appointment-tooltip > div");
+    assert.ok($tooltipContainers.eq(0).hasClass("dx-scheduler-appointment-tooltip-buttons"), "first container - buttons container");
+    assert.ok($tooltipContainers.eq(1).hasClass("dx-scheduler-appointment-tooltip-title"), "second container - title container");
+    assert.ok($tooltipContainers.eq(2).hasClass("dx-scheduler-appointment-tooltip-date"), "third container - date container");
+
+    tooltip.hide();
+
+    themes.isMaterial = origIsMaterial;
+});
+
+
+QUnit.test("Scheduler appointment tooltip should has buttons at the bottom in generic theme", function(assert) {
+    var data = new DataSource({
+        store: this.tasks
+    });
+
+    this.createInstance({ currentDate: new Date(2015, 1, 9), dataSource: data });
+
+    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(1).trigger("dxclick");
+    this.clock.tick(300);
+
+    var $tooltipContainers = $(".dx-scheduler-appointment-tooltip > div");
+    assert.ok($tooltipContainers.eq(0).hasClass("dx-scheduler-appointment-tooltip-title"), "first container - title container");
+    assert.ok($tooltipContainers.eq(1).hasClass("dx-scheduler-appointment-tooltip-date"), "second container - date container");
+    assert.ok($tooltipContainers.eq(2).hasClass("dx-scheduler-appointment-tooltip-buttons"), "third container - buttons container");
+
+    tooltip.hide();
 });

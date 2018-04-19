@@ -566,13 +566,12 @@ QUnit.test("xl\\sharedStrings.xml file content", function(assert) {
 
 QUnit.test("xl\\worksheets\\sheet1.xml file content", function(assert) {
     // arrange
-    var expected =
-
-"<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><worksheet xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:mc=\"http://schemas.openxmlformats.org/markup-compatibility/2006\" mc:Ignorable=\"x14ac\" xmlns:x14ac=\"http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac\"><sheetPr><outlinePr summaryBelow=\"0\"/></sheetPr><dimension ref=\"A1:C1\"/><sheetViews><sheetView tabSelected=\"1\" workbookViewId=\"0\"><pane activePane=\"bottomLeft\" state=\"frozen\" ySplit=\"1\" topLeftCell=\"A2\" /></sheetView></sheetViews><sheetFormatPr defaultRowHeight=\"15\" outlineLevelRow=\"0\" x14ac:dyDescent=\"0.25\"/><cols><col width=\"13.57\" min=\"1\" max=\"1\" /><col width=\"27.86\" min=\"2\" max=\"2\" /><col width=\"20.71\" min=\"3\" max=\"3\" /><col width=\"22.14\" min=\"4\" max=\"4\" /></cols><sheetData><row r=\"1\" spans=\"1:4\" outlineLevel=\"0\" x14ac:dyDescent=\"0.25\"><c r=\"A1\" s=\"0\" t=\"b\"><v>true</v></c><c r=\"B1\" s=\"0\" t=\"s\"><v>0</v></c><c r=\"C1\" s=\"0\" t=\"n\"><v>12</v></c><c r=\"D1\" s=\"0\" t=\"n\"><v>41709.5</v></c></row><row r=\"2\" spans=\"1:4\" outlineLevel=\"0\" x14ac:dyDescent=\"0.25\"><c r=\"A2\" s=\"0\" t=\"b\"><v>true</v></c><c r=\"B2\" s=\"0\" t=\"s\"><v>1</v></c><c r=\"C2\" s=\"0\" t=\"n\"><v>122</v></c><c r=\"D2\" s=\"0\" t=\"n\"><v>41740.5</v></c></row><row r=\"3\" spans=\"1:4\" outlineLevel=\"1\" x14ac:dyDescent=\"0.25\"><c r=\"A3\" s=\"0\" t=\"b\"><v>false</v></c><c r=\"B3\" s=\"0\" t=\"s\"><v>2</v></c><c r=\"C3\" s=\"0\" t=\"n\"><v>1</v></c><c r=\"D3\" s=\"0\" t=\"n\"><v>41770.5</v></c></row><row r=\"4\" spans=\"1:4\" outlineLevel=\"1\" x14ac:dyDescent=\"0.25\"><c r=\"A4\" s=\"0\" t=\"b\"><v>false</v></c><c r=\"B4\" s=\"0\" t=\"s\"><v>3</v></c><c r=\"C4\" s=\"0\" t=\"n\"><v>4</v></c><c r=\"D4\" s=\"0\" t=\"n\"><v>41801.5</v></c></row><row r=\"5\" spans=\"1:4\" outlineLevel=\"1\" x14ac:dyDescent=\"0.25\"><c r=\"A5\" s=\"0\" t=\"b\"><v>true</v></c><c r=\"B5\" s=\"0\" t=\"s\"><v>4</v></c><c r=\"C5\" s=\"0\" t=\"n\"><v>5</v></c><c r=\"D5\" s=\"0\" t=\"n\"><v>41831.5</v></c></row><row r=\"6\" spans=\"1:4\" outlineLevel=\"1\" x14ac:dyDescent=\"0.25\"><c r=\"A6\" s=\"0\" t=\"b\"><v>true</v></c><c r=\"B6\" s=\"0\" t=\"s\"><v>3</v></c><c r=\"C6\" s=\"0\" t=\"n\"><v>5</v></c><c r=\"D6\" s=\"0\" t=\"n\"><v>41831.5</v></c></row></sheetData><autoFilter ref=\"A1:D6\" /><ignoredErrors><ignoredError sqref=\"A1:D6\" numberStoredAsText=\"1\" /></ignoredErrors></worksheet>",
+    var expected = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><worksheet xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:mc=\"http://schemas.openxmlformats.org/markup-compatibility/2006\" mc:Ignorable=\"x14ac\" xmlns:x14ac=\"http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac\"><sheetPr><outlinePr summaryBelow=\"0\"/></sheetPr><dimension ref=\"A1:C1\"/><sheetViews><sheetView tabSelected=\"1\" workbookViewId=\"0\"><pane activePane=\"bottomLeft\" state=\"frozen\" ySplit=\"1\" topLeftCell=\"A2\" /></sheetView></sheetViews><sheetFormatPr defaultRowHeight=\"15\" outlineLevelRow=\"0\" x14ac:dyDescent=\"0.25\"/><cols><col width=\"13.57\" min=\"1\" max=\"1\" /><col width=\"27.86\" min=\"2\" max=\"2\" /><col width=\"20.71\" min=\"3\" max=\"3\" /><col width=\"22.14\" min=\"4\" max=\"4\" /></cols><sheetData><row r=\"1\" spans=\"1:4\" outlineLevel=\"0\" x14ac:dyDescent=\"0.25\"><c r=\"A1\" s=\"0\" t=\"b\"><v>true</v></c><c r=\"B1\" s=\"0\" t=\"s\"><v>0</v></c><c r=\"C1\" s=\"0\" t=\"n\"><v>12</v></c><c r=\"D1\" s=\"0\" t=\"n\"><v>41709.5</v></c></row><row r=\"2\" spans=\"1:4\" outlineLevel=\"0\" x14ac:dyDescent=\"0.25\"><c r=\"A2\" s=\"0\" t=\"b\"><v>true</v></c><c r=\"B2\" s=\"0\" t=\"s\"><v>1</v></c><c r=\"C2\" s=\"0\" t=\"n\"><v>122</v></c><c r=\"D2\" s=\"0\" t=\"n\"><v>41740.5</v></c></row><row r=\"3\" spans=\"1:4\" outlineLevel=\"1\" x14ac:dyDescent=\"0.25\"><c r=\"A3\" s=\"0\" t=\"b\"><v>false</v></c><c r=\"B3\" s=\"0\" t=\"s\"><v>2</v></c><c r=\"C3\" s=\"0\" t=\"n\"><v>1</v></c><c r=\"D3\" s=\"0\" t=\"n\"><v>41770.5</v></c></row><row r=\"4\" spans=\"1:4\" outlineLevel=\"1\" x14ac:dyDescent=\"0.25\"><c r=\"A4\" s=\"0\" t=\"b\"><v>false</v></c><c r=\"B4\" s=\"0\" t=\"s\"><v>3</v></c><c r=\"C4\" s=\"0\" t=\"n\"><v>4</v></c><c r=\"D4\" s=\"0\" t=\"n\"><v>41801.5</v></c></row><row r=\"5\" spans=\"1:4\" outlineLevel=\"1\" x14ac:dyDescent=\"0.25\"><c r=\"A5\" s=\"0\" t=\"b\"><v>true</v></c><c r=\"B5\" s=\"0\" t=\"s\"><v>4</v></c><c r=\"C5\" s=\"0\" t=\"n\"><v>5</v></c><c r=\"D5\" s=\"0\" t=\"n\"><v>41831.5</v></c></row><row r=\"6\" spans=\"1:4\" outlineLevel=\"1\" x14ac:dyDescent=\"0.25\"><c r=\"A6\" s=\"0\" t=\"b\"><v>true</v></c><c r=\"B6\" s=\"0\" t=\"s\"><v>3</v></c><c r=\"C6\" s=\"0\" t=\"n\"><v>5</v></c><c r=\"D6\" s=\"0\" t=\"n\"><v>41831.5</v></c></row></sheetData><autoFilter ref=\"A1:D6\" /><ignoredErrors><ignoredError sqref=\"A1:D6\" numberStoredAsText=\"1\" /></ignoredErrors></worksheet>",
         done = assert.async();
 
     // act
     this.excelCreator._options.autoFilterEnabled = true;
+    this.excelCreator._options.ignoreErrors = true;
     this.excelCreator._generateContent();
 
     assert.expect(1);
@@ -580,6 +579,27 @@ QUnit.test("xl\\worksheets\\sheet1.xml file content", function(assert) {
         try {
             // assert
             assert.strictEqual(content, expected, "content of file");
+        } finally {
+            done();
+        }
+    });
+});
+
+QUnit.test("Disable ignore errors", function(assert) {
+    // arrange
+    var done = assert.async();
+
+    this.excelCreator._options.ignoreErrors = false;
+
+    // act
+    this.excelCreator._generateContent();
+
+    assert.expect(1);
+    var worksheetFile = this.excelCreator._zip.folder(internals.XL_FOLDER_NAME + "/" + internals.WORKSHEETS_FOLDER).file(internals.WORKSHEET_FILE_NAME);
+    worksheetFile.async("string").then(function(content) {
+        try {
+            // assert
+            assert.ok(content.indexOf("ignoredError") === -1);
         } finally {
             done();
         }

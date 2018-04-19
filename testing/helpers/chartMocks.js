@@ -969,6 +969,7 @@ var MockAxis = exports.MockAxis = function(renderOptions) {
         validateUnit: function(value) {
             return value;
         },
+        formatRange: sinon.stub(),
         zoom: sinon.spy(function(min, max) {
             return { min: min, max: max };
         }),

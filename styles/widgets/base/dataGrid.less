@@ -8,8 +8,14 @@
         border-bottom: @datagrid-border;
     }
 
-    > .dx-datagrid-pager, > .dx-datagrid-headers {
+    > .dx-datagrid-pager, > .dx-datagrid-headers, > .dx-datagrid-filter-panel {
         border-top: @datagrid-border;
+    }
+
+    > .dx-datagrid-filter-panel {
+        border-top-width: 0;
+        border-left: @datagrid-border;
+        border-right: @datagrid-border;
     }
 }
 
@@ -74,6 +80,26 @@
         .dx-datagrid-edit-form {
             background-color: @datagrid-base-background-color;
         }
+
+        .dx-virtual-row > td {
+            position: relative;
+
+            &:not(.dx-datagrid-group-space):before {
+                display: block;
+                position: absolute;
+                left: 7px;
+                right: 7px;
+                top: 0;
+                bottom: 0;
+                content: '';
+                background-image: @datagrid-text-stub-background-image-path;
+                background-repeat: no-repeat repeat;
+            }
+
+            &[style*="text-align: right"]:before {
+                .flip-horizontally();
+            }
+        }
     }
 
     .dx-datagrid-filter-row .dx-filter-range-content {
@@ -90,6 +116,11 @@
             .dx-datagrid-error-message();
         }
     }
+}
+
+.dx-datagrid-filter-panel {
+    color: @datagrid-base-color;
+    border-top: @datagrid-border;
 }
 
 .dx-datagrid-form-buttons-container {
@@ -134,6 +165,18 @@
 
                 &.dx-last-cell {
                     border-left: none;
+                }
+            }
+        }
+
+        .dx-datagrid-rowsview {
+            .dx-virtual-row > td {
+                &:before {
+                    .flip-horizontally();
+                }
+
+                &[style*="text-align: left"]:before {
+                    .scale(1);
                 }
             }
         }

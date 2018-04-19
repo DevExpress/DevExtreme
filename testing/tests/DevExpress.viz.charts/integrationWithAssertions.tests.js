@@ -643,10 +643,10 @@ var VALIDATE_GROUPS = [
     "dxc-strips-group",
     "dxc-grids-group",
     "dxc-axes-group",
-    "dxc-constant-lines-group",
     "dxc-strips-labels-group",
     "dxc-border",
     "dxc-series-group",
+    "dxc-constant-lines-group",
     "dxc-scale-breaks",
     "dxc-labels-group",
     "dxc-crosshair-cursor",
@@ -1138,7 +1138,7 @@ QUnit.test("getAllPoints with enabled aggregation", function(assert) {
         series: [{ aggregation: { enabled: true } }]
     });
 
-    assert.strictEqual(chart.getAllSeries()[0].getAllPoints().length, 2);
+    assert.strictEqual(chart.getAllSeries()[0].getAllPoints().length, 1);
 });
 
 QUnit.module("T576725", $.extend({}, moduleSetup, {

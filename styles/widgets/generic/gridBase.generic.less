@@ -13,6 +13,8 @@
     @GENERIC_GRID_BASE_CHECKBOX_FONTSIZE: 12px;
     @GENERIC_GRID_BASE_ADAPTIVE_TEXT_PADDING: 8px;
     @GENERIC_GRID_BASE_TREEVIEW_SEARCH_MARGIN: 10px;
+    @GENERIC_COMMAND_EDIT_ICON_SIZE: 18px;
+    @GENERIC_COMMAND_EDIT_ICON_MARGIN: 3px;
 }
 
 .dx-size-compact() {
@@ -30,6 +32,8 @@
     @GENERIC_GRID_BASE_CHECKBOX_FONTSIZE: 10px;
     @GENERIC_GRID_BASE_ADAPTIVE_TEXT_PADDING: 6px;
     @GENERIC_GRID_BASE_TREEVIEW_SEARCH_MARGIN: 5px;
+    @GENERIC_COMMAND_EDIT_ICON_SIZE: 14px;
+    @GENERIC_COMMAND_EDIT_ICON_MARGIN: 1px;
 }
 
 .grid-base(@widgetName) {
@@ -175,6 +179,17 @@
 
         .dx-row > td {
             padding: @GENERIC_GRID_BASE_CELL_PADDING;
+        }
+
+        .dx-@{widgetName}-content .dx-@{widgetName}-table .dx-row {
+            .dx-command-edit-with-icons .dx-link {
+                .dx-icon-sizing(@GENERIC_COMMAND_EDIT_ICON_SIZE);
+                margin: 0 @GENERIC_COMMAND_EDIT_ICON_MARGIN;
+            }
+        }
+
+        .dx-@{widgetName}-rowsview .dx-virtual-row > td[style*="text-align: right"]:before {
+            background-position-y: 34px;
         }
     }
 

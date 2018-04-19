@@ -11,6 +11,7 @@ var $ = require("jquery"),
     publicComponentUtils = require("core/utils/public_component"),
 
     ActionSheet = require("ui/action_sheet"),
+    Accordion = require("ui/accordion"),
     Autocomplete = require("ui/autocomplete"),
     Box = require("ui/box"),
     Button = require("ui/button"),
@@ -40,6 +41,7 @@ var $ = require("jquery"),
     Popover = require("ui/popover"),
     RadioButton = require("ui/radio_group/radio_button"),
     RadioGroup = require("ui/radio_group"),
+    Scheduler = require("ui/scheduler/ui.scheduler"),
     Scrollable = require("ui/scroll_view/ui.scrollable"),
     ScrollView = require("ui/scroll_view"),
     SelectBox = require("ui/select_box"),
@@ -271,6 +273,20 @@ testComponentDefaults(DropDownMenu,
         { platform: "ios", version: [6, 7, 8] }
     ],
     { usePopover: true }
+);
+
+testComponentDefaults(DropDownMenu,
+    {},
+    {
+        useInkRipple: true
+    },
+    function() {
+        this.originalCurrentTheme = themes.current();
+        themes.current("material");
+    },
+    function() {
+        themes.current(this.originalCurrentTheme);
+    }
 );
 
 testComponentDefaults(TextEditor,
@@ -812,6 +828,23 @@ testComponentDefaults(ScrollView,
     }
 );
 
+testComponentDefaults(ScrollView,
+    {},
+    {
+        pullingDownText: "",
+        pulledDownText: "",
+        refreshingText: "",
+        reachBottomText: ""
+    },
+    function() {
+        this.originalCurrentTheme = themes.current();
+        themes.current("material");
+    },
+    function() {
+        themes.current(this.originalCurrentTheme);
+    }
+);
+
 testComponentDefaults(TagBox,
     { platform: "android" },
     { showDropDownButton: false }
@@ -873,6 +906,52 @@ testComponentDefaults(Toast,
             at: "bottom center",
             offset: "0 0"
         }
+    }
+);
+
+testComponentDefaults(Toast,
+    {},
+    {
+        position: {
+            my: "bottom center",
+            at: "bottom center",
+            offset: "0 0"
+        },
+        minWidth: 288,
+        maxWidth: 568,
+        animation: {
+            show: {
+                type: "slide",
+                duration: 250,
+                easing: "cubic-bezier(0.4, 0, 1, 1)",
+                from: {
+                    position: {
+                        my: "top",
+                        at: "bottom",
+                        of: window
+                    }
+                },
+            },
+            hide: {
+                type: "slide",
+                duration: 250,
+                easing: "cubic-bezier(0.4, 0, 1, 1)",
+                to: {
+                    position: {
+                        my: "top",
+                        at: "bottom",
+                        of: window
+                    }
+                },
+            }
+        }
+    },
+    function() {
+        this.originalCurrentTheme = themes.current();
+        themes.current("material");
+    },
+    function() {
+        themes.current(this.originalCurrentTheme);
     }
 );
 
@@ -1087,7 +1166,7 @@ testComponentDefaults(List,
     },
     function() {
         this.originalCurrentTheme = themes.current();
-        themes.current("material.light");
+        themes.current("material.blue.light");
     },
     function() {
         themes.current(this.originalCurrentTheme);
@@ -1105,7 +1184,7 @@ testComponentDefaults(TreeList,
     },
     function() {
         this.originalCurrentTheme = themes.current();
-        themes.current("material.light");
+        themes.current("material.blue.light");
     },
     function() {
         themes.current(this.originalCurrentTheme);
@@ -1278,12 +1357,11 @@ testComponentDefaults(Tabs,
     { },
     {
         useInkRipple: true,
-        showNavButtons: false,
         selectOnFocus: false
     },
     function() {
         this.originalCurrentTheme = themes.current();
-        themes.current("material.light");
+        themes.current("material.blue.light");
     },
     function() {
         themes.current(this.originalCurrentTheme);
@@ -1360,7 +1438,7 @@ testComponentDefaults(Form,
     },
     function() {
         this.originalCurrentTheme = themes.current();
-        themes.current("material.light");
+        themes.current("material.blue.light");
     },
     function() {
         themes.current(this.originalCurrentTheme);
@@ -1371,11 +1449,12 @@ testComponentDefaults(DataGrid,
     {},
     {
         showRowLines: true,
-        showColumnLines: false
+        showColumnLines: false,
+        editing: { useIcons: true }
     },
     function() {
         this.originalCurrentTheme = themes.current();
-        themes.current("material.light");
+        themes.current("material.blue.light");
     },
     function() {
         themes.current(this.originalCurrentTheme);
@@ -1396,5 +1475,43 @@ testComponentDefaults(DataGrid,
     },
     function() {
         devices.real(this.originalRealDevice);
+    }
+);
+
+testComponentDefaults(Accordion,
+    {},
+    {
+        animationDuration: 200,
+        _animationEasing: "cubic-bezier(0.4, 0, 0.2, 1)"
+    },
+    function() {
+        this.originalCurrentTheme = themes.current();
+        themes.current("material.blue.light");
+    },
+    function() {
+        themes.current(this.originalCurrentTheme);
+    }
+);
+
+testComponentDefaults(Scheduler,
+    {},
+    {
+        _appointmentTooltipOffset: { x: 0, y: 11 },
+        _appointmentTooltipButtonsPosition: "top",
+        _appointmentTooltipCloseButton: true,
+        _useAppointmentColorForTooltip: true,
+        _appointmentTooltipOpenButtonText: null,
+        _appointmentTooltipOpenButtonIcon: "edit",
+        _dropDownButtonIcon: "chevrondown",
+        _appointmentCountPerCell: 1,
+        _appointmentGroupButtonOffset: 20,
+        _appointmentOffset: 30
+    },
+    function() {
+        this.originalCurrentTheme = themes.current();
+        themes.current("material");
+    },
+    function() {
+        themes.current(this.originalCurrentTheme);
     }
 );

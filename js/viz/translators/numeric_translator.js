@@ -18,7 +18,7 @@ module.exports = {
         return that.to(bp, direction);
     },
 
-    untranslate: function(pos, _, enableOutOfCanvas) {
+    untranslate: function(pos, _, enableOutOfCanvas, direction) {
         var that = this,
             canvasOptions = that._canvasOptions,
             startPoint = canvasOptions.startPoint;
@@ -26,7 +26,7 @@ module.exports = {
         if((!enableOutOfCanvas && (pos < startPoint || pos > canvasOptions.endPoint)) || !isDefined(canvasOptions.rangeMin) || !isDefined(canvasOptions.rangeMax)) {
             return null;
         }
-        return that.from(pos);
+        return that.from(pos, direction);
     },
 
     getInterval: function() {
@@ -70,8 +70,8 @@ module.exports = {
         scale = ((startPoint + translate) / newStart) || 1;
 
         return {
-            min: that.untranslate(newStart, undefined, true),
-            max: that.untranslate(newEnd, undefined, true),
+            min: that.untranslate(newStart, undefined, true, 1),
+            max: that.untranslate(newEnd, undefined, true, -1),
             translate: translate,
             scale: scale
         };

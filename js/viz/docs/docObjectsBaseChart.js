@@ -129,6 +129,12 @@ var BaseBaseSeries = {
 */
 var BasePoint = {
     /**
+    * @name basePointObjectFields_data
+    * @publicName data
+    * @type any
+    */
+    data: {},
+    /**
     * @name basePointObjectFields_fullstate
     * @publicName fullState
     * @type number

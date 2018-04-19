@@ -151,13 +151,6 @@ var ColorBox = DropDownEditor.inherit({
             */
 
             /**
-            * @name dxColorBoxOptions_fieldEditEnabled
-            * @publicName fieldEditEnabled
-            * @hidden
-            * @inheritdoc
-            */
-
-            /**
             * @name dxColorBoxOptions_maxLength
             * @publicName maxLength
             * @hidden

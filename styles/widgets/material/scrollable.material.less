@@ -1,16 +1,21 @@
-@SCROLLBAR_SIZE_THIN: 8px;
-@SCROLLBAR_SIZE: 15px;
+@SCROLLBAR_SIZE_THIN: 6px;
+@SCROLLBAR_SIZE: 13px;
 
 .dx-scrollable-content {
     -webkit-transform: none;
 }
 
 .dx-scrollable-scroll {
-    padding: 2px;
+    padding: 2px 0 2px 2px;
     background-color: transparent;
     opacity: 1;
     overflow: hidden;
     .transition(~"opacity 0s linear");
+
+    .dx-rtl & {
+        padding-left: 0;
+        padding-right: 2px;
+    }
 }
 
 .dx-scrollable-scroll.dx-state-invisible {
@@ -25,17 +30,8 @@
     box-shadow: 0 0 0 1px @scrollable-scroll-shadow-color;
 }
 
-
 .dx-scrollbar-hoverable {
     background-color: @scrollable-scrollbar-bg;
-
-    &.dx-state-hover, &.dx-scrollable-scrollbar-active {
-        background-color: @scrollable-scrollbar-active-bg;
-    }
-
-    &.dx-scrollable-scrollbar-active .dx-scrollable-scroll-content {
-        background-color: @scrollable-scroll-active-bg;
-    }
 
     .dx-scrollable-scroll.dx-state-invisible {
         opacity: 1;
@@ -200,18 +196,29 @@
 }
 
 .dx-scrollview-scrollbottom-text, 
-.dx-scrollview-pull-down-text,
+.dx-scrollview-pull-down-text {
+    margin-left: 10px;
+    top: (50px - @MATERIAL_BASE_FONT_SIZE) / 2;
+    display: inline-block;
+
+    .dx-rtl & {
+        margin-left: 0;
+        margin-right: 10px;
+    }
+}
+
+.dx-scrollview-pull-down-text {
+    div {
+        position: relative;
+    }
+}
+
 .dx-scrollview-pull-down-image {
     display: none;
 }
 
 .dx-scrollview-pull-down {
     text-align: center;
-}
-
-.dx-scrollview-pull-down-indicator {
-    position: relative;
-    margin-left: 0;
 }
 
 .dx-rtl .dx-scrollable,

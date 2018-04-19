@@ -15,6 +15,7 @@ require("common.css!");
 require("ui/data_grid/ui.data_grid");
 
 var $ = require("jquery"),
+    gridCoreUtils = require("ui/grid_core/ui.grid_core.utils"),
     devices = require("core/devices"),
     keyboardMock = require("../../helpers/keyboardMock.js"),
     browser = require("core/utils/browser"),
@@ -4529,7 +4530,7 @@ QUnit.testInActiveWindow("Edit next cell after tab key when there is masterDetai
     var $testElement = $("#container");
 
     this.columns = [
-        { visible: true, command: "expand" },
+        { visible: true, command: "expand", cellTemplate: gridCoreUtils.getExpandCellTemplate() },
         { caption: "Column 1", visible: true, allowEditing: true, dataField: "Column2" }
     ];
     this.dataControllerOptions = {
@@ -4993,6 +4994,41 @@ QUnit.module("Keyboard navigation with real dataController and columnsController
         assert.ok(this.keyboardNavigationController._focusedCellPosition, "focusedCellPosition");
         assert.equal(this.keyboardNavigationController._focusedCellPosition.columnIndex, 1, "cellIndex");
         assert.equal(this.keyboardNavigationController._focusedCellPosition.rowIndex, 1, "rowIndex");
+    });
+
+    QUnit.testInActiveWindow("freespace cells should not have a focus", function(assert) {
+        // arrange
+        var that = this;
+        that.$element = function() {
+            return $("#container");
+        };
+        that.data = [
+            { name: "Alex", phone: "555555", room: 0 },
+            { name: "Dan1", phone: "666666", room: 1 },
+            { name: "Dan2", phone: "777777", room: 2 },
+            { name: "Dan3", phone: "888888", room: 3 }
+        ];
+
+        that.options = {
+            height: 300,
+        };
+
+        that.setupModule();
+
+        // act
+        that.gridView.render($("#container"));
+
+        var $cell = $(that.rowsView.element().find(".dx-freespace-row").eq(0).find("td").eq(1));
+        $cell.trigger(CLICK_EVENT);
+
+        this.clock.tick();
+
+        // assert
+        $cell = $(that.rowsView.element().find(".dx-freespace-row").eq(0).find("td").eq(1));
+        assert.equal($cell.attr("tabIndex"), undefined, "freespace cell has no tabindex");
+        assert.notOk($cell.is(":focus"), "focus", "freespace cell has no focus");
+        assert.notOk($cell.hasClass("dx-cell-focus-disabled"), "freespace cell has no .dx-cell-focus-disabled");
+        assert.ok(this.keyboardNavigationController._focusedCellPosition, "focusedCellPosition");
     });
 
     QUnit.testInActiveWindow("Focus must be saved after paging if last row cell selected and rowCount of the last page < then of the previus page", function(assert) {

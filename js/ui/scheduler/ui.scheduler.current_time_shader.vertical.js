@@ -1,7 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
-    Shader = require("./ui.scheduler.currentTimeShader");
+    Shader = require("./ui.scheduler.current_time_shader");
 
 var DATE_TIME_SHADER_ALL_DAY_CLASS = "dx-scheduler-date-time-shader-all-day",
     DATE_TIME_SHADER_TOP_CLASS = "dx-scheduler-date-time-shader-top",
@@ -9,8 +9,8 @@ var DATE_TIME_SHADER_ALL_DAY_CLASS = "dx-scheduler-date-time-shader-all-day",
 
 var VerticalCurrentTimeShader = Shader.inherit({
     _renderShader: function() {
-        var shaderHeight = this._workspace.getIndicationHeight(),
-            maxHeight = this._$container.outerHeight(),
+        var shaderHeight = this._getShaderHeight(),
+            maxHeight = this._getShaderMaxHeight(),
             renderSolidShader = false;
 
         if(shaderHeight > maxHeight) {
@@ -28,7 +28,7 @@ var VerticalCurrentTimeShader = Shader.inherit({
                 this._renderAllDayShader(this._$container.outerWidth(), 0);
             } else {
                 for(var i = 0; i < groupCount; i++) {
-                    var shaderWidth = this._workspace.getIndicationWidth(i);
+                    var shaderWidth = this._getShaderWidth(i);
                     this._renderTopShader(this._$shader, shaderHeight, shaderWidth, i);
 
                     this._renderBottomShader(this._$shader, maxHeight - shaderHeight, shaderWidth, i);
@@ -43,7 +43,7 @@ var VerticalCurrentTimeShader = Shader.inherit({
         this._$topShader = $("<div>").addClass(DATE_TIME_SHADER_TOP_CLASS);
         width && this._$topShader.width(width) && this._$topShader.height(height);
 
-        this._$topShader.css("marginTop", -this._$container.outerHeight() * (i > 0 ? 1 : 0));
+        this._$topShader.css("marginTop", this._getShaderTopOffset(i));
         this._$topShader.css("left", this._getShaderOffset(i, width));
 
         $shader.append(this._$topShader);
@@ -70,8 +70,23 @@ var VerticalCurrentTimeShader = Shader.inherit({
     },
 
     _getShaderOffset: function(i, width) {
-        var offset = this._workspace._getCellCount() * this._workspace.getRoundedCellWidth(i - 1) * i;
-        return this._workspace.option("rtlEnabled") ? this._$container.outerWidth() - offset - this._workspace.getTimePanelWidth() - width : offset;
+        return this._workspace.getGroupedStrategy().getShaderOffset(i, width);
+    },
+
+    _getShaderTopOffset: function(i) {
+        return this._workspace.getGroupedStrategy().getShaderTopOffset(i);
+    },
+
+    _getShaderHeight: function(i, width) {
+        return this._workspace.getGroupedStrategy().getShaderHeight();
+    },
+
+    _getShaderMaxHeight: function(i, width) {
+        return this._workspace.getGroupedStrategy().getShaderMaxHeight();
+    },
+
+    _getShaderWidth: function(i) {
+        return this._workspace.getGroupedStrategy().getShaderWidth(i);
     },
 
     clean: function() {

@@ -702,6 +702,26 @@ var runTests = function() {
         }
     });
 
+    QUnit.test("widget works fine if selectedItemKeys is null", function(assert) {
+        var items = [
+            { id: 1, key: "key1", text: "Item 1" },
+            { id: 2, key: "key2", text: "Item 2" },
+            { id: 3, key: "key3", text: "Item 3" }
+        ];
+
+        var instance = new TestComponent(this.$element, {
+            items: items,
+            keyExpr: "id",
+            selectionMode: "multiple",
+            selectedItemKeys: null
+        });
+
+        assert.deepEqual(instance.option("selectedItems"), [], "selectedItems is correct");
+        assert.deepEqual(instance.option("selectedItem"), null, "selectedItem is correct");
+        assert.equal(instance.option("selectedIndex"), -1, "selectedIndex is correct");
+        assert.equal(instance.option("selectedItemKeys"), null, "selectedItemKeys is correct");
+    });
+
     QUnit.test("selectedItemKeys should work when it is set on initialization", function(assert) {
         var items = [
             { id: 1, key: "key1", text: "Item 1" },

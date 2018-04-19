@@ -238,8 +238,8 @@ QUnit.test("Default colorizing", function(assert) {
         dataSource: [{ name: "1", value: 1 }, { name: "2", value: 2 }]
     });
 
-    assert.strictEqual(this.tile(0).attr.firstCall.args[0].fill, "#5f8b95");
-    assert.strictEqual(this.tile(1).attr.firstCall.args[0].fill, "#ba4d51");
+    assert.strictEqual(this.tile(0).attr.firstCall.args[0].fill, "#1db2f5");
+    assert.strictEqual(this.tile(1).attr.firstCall.args[0].fill, "#f5564a");
 });
 
 QUnit.test("Headers height when labels are disabled", function(assert) {

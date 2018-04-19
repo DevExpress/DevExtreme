@@ -3,7 +3,7 @@ import $ from "jquery";
 import vizMocks from "../../helpers/vizMocks.js";
 import pointModule from "viz/series/points/base_point";
 import labelModule from "viz/series/points/label";
-import { MockTranslator } from "../../helpers/chartMocks.js";
+import { MockTranslator, MockAxis } from "../../helpers/chartMocks.js";
 import tooltipModule from "viz/core/tooltip";
 import { states as statesConsts } from "viz/components/consts";
 
@@ -2283,6 +2283,7 @@ QUnit.module("Tooltip", {
     beforeEach: function() {
         this.renderer = new vizMocks.Renderer();
         this.group = this.renderer.g();
+        const axis = this.axis = new MockAxis({ renderer: this.renderer });
         this.data = {
             value: 10,
             argument: 1
@@ -2298,7 +2299,10 @@ QUnit.module("Tooltip", {
             name: "series",
             isVisible: function() { return true; },
             isFullStackedSeries: function() { return false; },
-            getLabelVisibility: function() { return false; }
+            getLabelVisibility: function() { return false; },
+            getArgumentAxis() {
+                return axis;
+            }
         };
         var StubTooltip = vizMocks.stubClass(tooltipModule.Tooltip, {
             formatValue: function(value, specialFormat) {
@@ -2513,6 +2517,32 @@ QUnit.test("Get tooltip format object, stackPoints with stackName is created", f
 
     checkTooltipFormatObject(assert, formatObject.points[0], data1.argument, data1.value, data1.originalValue, data1.originalArgument, "series1", 0.375, 30);
     checkTooltipFormatObject(assert, formatObject.points[1], data2.argument, data2.value, data2.originalValue, data2.originalArgument, "series2", 0.5, 30);
+});
+
+QUnit.test("Get tooltip format object with aggreagation info", function(assert) {
+    this.axis.formatRange.returns("range");
+    this.data.aggregationInfo = {
+        intervalStart: 5,
+        intervalEnd: 10,
+        aggregationInterval: 5
+    };
+
+    const formatObject = createPoint(this.series, this.data, this.options).getTooltipFormatObject(this.tooltip);
+
+    assert.equal(formatObject.valueText, "10:undefined\nrange");
+});
+
+QUnit.test("Get tooltip format object with aggreagation info when format range resturn empty string", function(assert) {
+    this.axis.formatRange.returns("");
+    this.data.aggregationInfo = {
+        intervalStart: 5,
+        intervalEnd: 10,
+        aggregationInterval: 5
+    };
+
+    const formatObject = createPoint(this.series, this.data, this.options).getTooltipFormatObject(this.tooltip);
+
+    assert.equal(formatObject.valueText, "10:undefined");
 });
 
 var checkTooltipFormatObject = function(assert, point, argument, value, originalValue, originalArgument, seriesName, percent, total) {
@@ -2784,10 +2814,13 @@ QUnit.test("Get graphic bbox when point is image and invisible", function(assert
 
 QUnit.test("create label", function(assert) {
     var point = createPoint(this.series, this.data, this.options);
+
     assert.ok(this.labelFactory.calledOnce);
-    assert.equal(this.labelFactory.args[0][0].renderer, point.series._renderer);
-    assert.equal(this.labelFactory.args[0][0].labelsGroup, point.series._labelsGroup);
-    assert.deepEqual(this.labelFactory.args[0][0].point, point);
+    assert.deepEqual(this.labelFactory.args[0][0], {
+        renderer: point.series._renderer,
+        labelsGroup: point.series._labelsGroup,
+        point: point
+    });
 });
 
 QUnit.test("show label on draw", function(assert) {

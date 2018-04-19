@@ -464,7 +464,7 @@ var commonSeries = {
         * @name dxChartSeriesTypes_CommonSeries_point_hovermode
         * @publicName hoverMode
         * @type Enums.ChartPointInteractionMode
-                * @default 'onlyPoint'
+        * @default 'onlyPoint'
         * @propertyOf dxChartSeriesTypes_LineSeries,dxChartSeriesTypes_StackedLineSeries,dxChartSeriesTypes_FullStackedLineSeries,dxChartSeriesTypes_StackedSplineSeries,dxChartSeriesTypes_FullStackedSplineSeries,dxChartSeriesTypes_SplineSeries,dxChartSeriesTypes_StepLineSeries,dxChartSeriesTypes_AreaSeries,dxChartSeriesTypes_StackedAreaSeries,dxChartSeriesTypes_FullStackedAreaSeries,dxChartSeriesTypes_StackedSplineAreaSeries,dxChartSeriesTypes_FullStackedSplineAreaSeries,dxChartSeriesTypes_SplineAreaSeries,dxChartSeriesTypes_StepAreaSeries,dxChartSeriesTypes_RangeAreaSeries,dxChartSeriesTypes_ScatterSeries
         */
         hoverMode: 'onlyPoint',
@@ -1093,7 +1093,7 @@ var commonSeries = {
         * @publicName calculate
         * @type function(aggregationInfo, series)
         * @type_function_param1 aggregationInfo:chartPointAggregationInfoObject
-        * @type_function_param2 series:baseSeriesObject
+        * @type_function_param2 series:chartSeriesObject
         * @type_function_return object|Array<object>
         * @default undefined
         */
@@ -1299,7 +1299,7 @@ var candlestickSeries = {
             * @name dxChartSeriesTypes_candlestickseries_hoverstyle_hatching_direction
             * @publicName direction
             * @default 'none'
-            * @type string
+            * @type Enums.HatchingDirection
             * @inheritdoc
             */
             direction: 'none'
@@ -1323,7 +1323,7 @@ var candlestickSeries = {
             * @name dxChartSeriesTypes_candlestickseries_selectionstyle_hatching_direction
             * @publicName direction
             * @default 'none'
-            * @type string
+            * @type Enums.HatchingDirection
             * @inheritdoc
             */
             direction: 'none'
@@ -1520,7 +1520,7 @@ var fullstackedbarSeries = {
         /**
         * @name dxChartSeriesTypes_fullstackedbarseries_label_position
         * @publicName position
-        * @type string
+        * @type Enums.RelativePosition
         * @default 'inside'
         * @inheritdoc
         */
@@ -1543,7 +1543,7 @@ var fullstackedbarSeries = {
     */
     selectionMode: 'onlyPoint',
     /**
-    * @name dxChartSeriesTypes_fullstackedsplineareaseries_aggregation
+    * @name dxChartSeriesTypes_fullstackedbarseries_aggregation
     * @publicName aggregation
     * @inheritdoc
     * @type object
@@ -2098,14 +2098,14 @@ var stackedareaSeries = {
     */
     selectionMode: 'includePoints',
     /**
-    * @name dxChartSeriesTypes_splineseries_aggregation
+    * @name dxChartSeriesTypes_stackedareaseries_aggregation
     * @publicName aggregation
     * @inheritdoc
     * @type object
     */
     aggregation: {
         /**
-        * @name dxChartSeriesTypes_splineseries_aggregation_method
+        * @name dxChartSeriesTypes_stackedareaseries_aggregation_method
         * @publicName method
         * @type Enums.ChartSingleValueSeriesAggregationMethod
         * @default 'avg'
@@ -2215,7 +2215,7 @@ var stackedbarSeries = {
         /**
         * @name dxChartSeriesTypes_stackedbarseries_label_position
         * @publicName position
-        * @type string
+        * @type Enums.RelativePosition
         * @default 'inside'
         * @inheritdoc
         */

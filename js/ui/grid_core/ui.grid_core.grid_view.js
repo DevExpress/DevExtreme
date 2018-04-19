@@ -20,7 +20,7 @@ var TABLE_CLASS = "table",
     HIDDEN_COLUMNS_WIDTH = "adaptiveHidden",
     EDITORS_INPUT_SELECTOR = "input:not([type='hidden'])",
 
-    VIEW_NAMES = ["columnsSeparatorView", "blockSeparatorView", "trackerView", "headerPanel", "columnHeadersView", "rowsView", "footerView", "columnChooserView", "pagerView", "draggingHeaderView", "contextMenuView", "errorView", "headerFilterView", "filterBuilderView"];
+    VIEW_NAMES = ["columnsSeparatorView", "blockSeparatorView", "trackerView", "headerPanel", "columnHeadersView", "rowsView", "footerView", "columnChooserView", "filterPanelView", "pagerView", "draggingHeaderView", "contextMenuView", "errorView", "headerFilterView", "filterBuilderView"];
 
 var isPercentWidth = function(width) {
     return typeUtils.isString(width) && width.slice(-1) === "%";
@@ -101,7 +101,7 @@ var ResizingController = modules.ViewController.inherit({
     },
 
     _getBestFitWidths: function() {
-        if(this.option("advancedRendering")) {
+        if(!this.option("legacyRendering")) {
             return this._rowsView.getColumnWidths();
         }
 
@@ -152,7 +152,7 @@ var ResizingController = modules.ViewController.inherit({
         var $element = this.component.$element(),
             that = this;
 
-        if(this.option("advancedRendering")) {
+        if(!this.option("legacyRendering")) {
             var $rowsTable = that._rowsView._getTableElement(),
                 $rowsFixedTable = that._rowsView.getTableElements().eq(1);
 
@@ -177,7 +177,7 @@ var ResizingController = modules.ViewController.inherit({
             columnsController = that._columnsController,
             visibleColumns = columnsController.getVisibleColumns(),
             columnAutoWidth = that.option("columnAutoWidth"),
-            advancedRendering = that.option("advancedRendering"),
+            legacyRendering = that.option("legacyRendering"),
             needBestFit = that._needBestFit(),
             hasMinWidth = false,
             resetBestFitMode,
@@ -200,7 +200,7 @@ var ResizingController = modules.ViewController.inherit({
             };
 
         !needBestFit && each(visibleColumns, function(index, column) {
-            if(column.width === "auto" || (!advancedRendering && column.fixed)) {
+            if(column.width === "auto" || (legacyRendering && column.fixed)) {
                 needBestFit = true;
                 return false;
             }
@@ -269,7 +269,7 @@ var ResizingController = modules.ViewController.inherit({
     },
 
     _needStretch: function() {
-        return !this.option("advancedRendering");
+        return this.option("legacyRendering");
     },
 
     _getAverageColumnsWidth: function(resultWidths) {
@@ -326,7 +326,7 @@ var ResizingController = modules.ViewController.inherit({
 
             if(totalWidth <= contentWidth) {
                 lastColumnIndex = resultWidths.length - 1;
-                while(lastColumnIndex >= 0 && visibleColumns[lastColumnIndex] && (visibleColumns[lastColumnIndex].command || resultWidths[lastColumnIndex] === HIDDEN_COLUMNS_WIDTH || visibleColumns[lastColumnIndex].fixed)) {
+                while(lastColumnIndex >= 0 && visibleColumns[lastColumnIndex] && (visibleColumns[lastColumnIndex].command || resultWidths[lastColumnIndex] === HIDDEN_COLUMNS_WIDTH || visibleColumns[lastColumnIndex].fixed || visibleColumns[lastColumnIndex].allowResizing === false)) {
                     lastColumnIndex--;
                 }
                 if(lastColumnIndex >= 0) {
@@ -538,7 +538,7 @@ var ResizingController = modules.ViewController.inherit({
                 this.component._renderDimensions();
                 this.resize();
                 /* falls through */
-            case "advancedRendering":
+            case "legacyRendering":
                 args.handled = true;
                 return;
             default:
@@ -683,7 +683,7 @@ module.exports = {
              * @default false
              */
             showBorders: false,
-            advancedRendering: true
+            legacyRendering: false
         };
     },
     controllers: {

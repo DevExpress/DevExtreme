@@ -41,7 +41,8 @@
 
 /**
  * @typedef {string} Enums.VizPalette
- * @enum {'Bright'|'Carmine'|'Dark Moon'|'Dark Violet'|'Default'|'Green Mist'|'Harmony Light'|'Ocean'|'Pastel'|'Soft'|'Soft Blue'|'Soft Pastel'|'Vintage'|'Violet'}
+ * @enum {'Bright'|'Default'|'Harmony Light'|'Ocean'|'Pastel'|'Soft'|'Soft Pastel'|'Vintage'|'Violet'|'Carmine'|'Dark Moon'|'Dark Violet'|'Green Mist'|'Soft Blue'|'Material'|'Office'}
+ * @member 'Default' @deprecated 'Material'
  */
 
 /**
@@ -579,6 +580,16 @@
  * @enum {'standard'|'virtual'}
  */
 
+ /**
+ * @typedef {string} Enums.GridRowRenderingMode
+ * @enum {'standard'|'virtual'}
+ */
+
+ /**
+ * @typedef {string} Enums.GridColumnRenderingMode
+ * @enum {'standard'|'virtual'}
+ */
+
 /**
  * @typedef {string} Enums.TreeMapLayoutAlgorithm
  * @enum {'sliceanddice'|'squarified'|'strip'}
@@ -720,6 +731,11 @@
  */
 
 /**
+ * @typedef {string} Enums.ApplyChangesMode
+ * @enum {'instantly'|'onDemand'}
+ */
+
+/**
  * @typedef {string} Enums.PivotGridSummaryDisplayMode
  * @enum {'absoluteVariation'|'percentOfColumnGrandTotal'|'percentOfColumnTotal'|'percentOfGrandTotal'|'percentOfRowGrandTotal'|'percentOfRowTotal'|'percentVariation'}
  */
@@ -767,4 +783,14 @@
  /**
  * @typedef {string} Enums.ChartBubbleSeriesAggregationMethod
  * @enum {'avg'|'custom'}
+ */
+
+ /**
+ * @typedef {string} Enums.DataSourceStoreType
+ * @enum {'array'|'local'|'odata'}
+ */
+
+ /**
+ * @typedef {string} Enums.PivotGridStoreType
+ * @enum {'array'|'local'|'odata'|'xmla'}
  */

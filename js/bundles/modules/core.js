@@ -27,31 +27,6 @@ DevExpress.devices = require("../../core/devices");
 DevExpress.Color = require("../../color");
 
 var animationFrame = require("../../animation/frame");
-/**
- * @name requestAnimationFrame
- * @publicName requestAnimationFrame(callback)
- * @namespace DevExpress
- * @type method
- * @deprecated utils_requestAnimationFrame
- * @inheritdoc
- */
-DevExpress.requestAnimationFrame = function() {
-    errors.log("W0000", "DevExpress.requestAnimationFrame", "15.2", "Use the 'DevExpress.utils.requestAnimationFrame' method instead.");
-    return animationFrame.requestAnimationFrame.apply(animationFrame, arguments);
-};
-
-/**
- * @name cancelAnimationFrame
- * @publicName cancelAnimationFrame(requestID)
- * @namespace DevExpress
- * @type method
- * @deprecated utils_cancelAnimationFrame
- * @inheritdoc
- */
-DevExpress.cancelAnimationFrame = function() {
-    errors.log("W0000", "DevExpress.cancelAnimationFrame", "15.2", "Use the 'DevExpress.utils.cancelAnimationFrame' method instead.");
-    return animationFrame.cancelAnimationFrame.apply(animationFrame, arguments);
-};
 
 DevExpress.EventsMixin = require("../../core/events_mixin");
 
@@ -93,37 +68,7 @@ DevExpress.viewPort = require("../../core/utils/view_port").value;
 DevExpress.hideTopOverlay = require("../../mobile/hide_top_overlay");
 
 DevExpress.formatHelper = require("../../format_helper");
-
-var config = DevExpress.config = require("../../core/config");
-
-/**
- * @name rtlEnabled
- * @publicName rtlEnabled
- * @namespace DevExpress
- * @type boolean
- * @default false
- * @deprecated config
- */
-
-Object.defineProperty(DevExpress, 'rtlEnabled', {
-    get: function() {
-        errors.log("W0003", "DevExpress", "rtlEnabled", "16.1", "Use the 'DevExpress.config' method instead");
-        return config().rtlEnabled;
-    },
-    set: function(value) {
-        errors.log("W0003", "DevExpress", "rtlEnabled", "16.1", "Use the 'DevExpress.config' method instead");
-        config({ rtlEnabled: value });
-    }
-});
-
-Object.defineProperty(DevExpress, 'designMode', {
-    get: function() {
-        return config().designMode;
-    },
-    set: function(value) {
-        config({ designMode: value });
-    }
-});
+DevExpress.config = require("../../core/config");
 
 DevExpress.animationPresets = require("../../animation/presets/presets").presets;
 DevExpress.fx = require("../../animation/fx");

@@ -62,13 +62,6 @@ var DropDownBox = DropDownEditor.inherit({
              */
 
             /**
-             * @name dxDropDownBoxOptions_fieldEditEnabled
-             * @publicName fieldEditEnabled
-             * @inheritdoc
-             * @hidden
-             */
-
-            /**
              * @name dxDropDownBoxOptions_acceptCustomValue
              * @publicName acceptCustomValue
              * @type boolean

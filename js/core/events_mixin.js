@@ -18,6 +18,10 @@ module.exports = {
     },
 
     setEventsStrategy: function(strategy) {
+        if(typeof strategy === "function") {
+            strategy = strategy(this);
+        }
+
         this._eventsStrategy = strategy;
     },
 

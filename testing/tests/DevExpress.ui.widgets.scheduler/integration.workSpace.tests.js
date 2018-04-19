@@ -26,6 +26,8 @@ var $ = require("jquery"),
 
 require("ui/scheduler/ui.scheduler");
 
+var DATE_TABLE_CELL_BORDER = 1;
+
 QUnit.module("Integration: Work space", {
     beforeEach: function() {
         fx.off = true;
@@ -1480,6 +1482,48 @@ QUnit.test("intervalCount should be passed to workSpace", function(assert) {
     assert.equal(workSpace.option("intervalCount"), 2, "option intervalCount was passed");
 });
 
+QUnit.test("Group header should contain group header content with right height, groupOrientation = vertical", function(assert) {
+    var priorityData = [
+        {
+            text: "Low Priority",
+            id: 1,
+            color: "#1e90ff"
+        }, {
+            text: "High Priority",
+            id: 2,
+            color: "#ff9747"
+        }
+    ];
+
+    this.createInstance({
+        dataSource: [],
+        views: [{
+            type: "day",
+            name: "day",
+            groupOrientation: "vertical" }],
+        currentView: "day",
+        showAllDayPanel: true,
+        currentDate: new Date(2018, 2, 16),
+        groups: ["priorityId"],
+        resources: [{
+            fieldExpr: "priorityId",
+            allowMultiple: false,
+            dataSource: priorityData,
+            label: "Priority"
+        }
+        ],
+        startDayHour: 9,
+        endDayHour: 14,
+        height: 600
+    });
+
+    var header = this.instance.$element().find(".dx-scheduler-group-header"),
+        $headerContents = header.find(".dx-scheduler-group-header-content"),
+        cellHeight = this.instance.$element().find(".dx-scheduler-date-table-cell").eq(1).outerHeight();
+
+    assert.equal($headerContents.eq(0).outerHeight(), 11 * cellHeight - 2 * DATE_TABLE_CELL_BORDER, "Group header content has right height");
+});
+
 QUnit.test("WorkSpace should be refreshed after groups changed", function(assert) {
     this.createInstance({
         groups: ["resource1"],
@@ -1512,5 +1556,38 @@ QUnit.test("WorkSpace should be refreshed after groups changed", function(assert
     } finally {
         refreshStub.restore();
     }
+});
+
+QUnit.test("SelectedCellData option should have rigth data of focused cell", function(assert) {
+    this.createInstance({
+        dataSource: [],
+        views: ["week"],
+        currentView: "week",
+        showAllDayPanel: true,
+        currentDate: new Date(2018, 3, 11),
+        height: 600
+    });
+
+    var $cells = this.instance.$element().find(".dx-scheduler-date-table-cell");
+
+    $($cells.eq(0)).trigger("dxpointerdown");
+
+    assert.deepEqual(this.instance.option("selectedCellData"), [{ startDate: new Date(2018, 3, 8), endDate: new Date(2018, 3, 8, 0, 30), allDay: false }], "option has right value");
+});
+
+QUnit.test("SelectedCellData option should make cell in focused state", function(assert) {
+    this.createInstance({
+        dataSource: [],
+        views: ["week"],
+        currentView: "week",
+        showAllDayPanel: true,
+        selectedCellData: [{ startDate: new Date(2018, 3, 8), endDate: new Date(2018, 3, 8, 0, 30), allDay: false }],
+        currentDate: new Date(2018, 3, 11),
+        height: 600
+    });
+
+    var $cells = this.instance.$element().find(".dx-scheduler-date-table-cell");
+
+    assert.ok($($cells.eq(0)).hasClass("dx-state-focused", "correct cell is focused"));
 });
 

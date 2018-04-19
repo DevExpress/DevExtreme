@@ -123,6 +123,25 @@ exports.GroupingHelper = Class.inherit((function() {
         }
     };
 
+    var calculateItemsCount = function(that, items, groupsCount) {
+        var i,
+            result = 0;
+
+        if(items) {
+            if(!groupsCount) {
+                result = items.length;
+            } else {
+                for(i = 0; i < items.length; i++) {
+                    if(that._isGroupItemCountable(items[i])) {
+                        result++;
+                    }
+                    result += calculateItemsCount(that, items[i].items, groupsCount - 1);
+                }
+            }
+        }
+        return result;
+    };
+
     return {
         ctor: function(dataSourceAdapter) {
             this._dataSource = dataSourceAdapter;
@@ -131,7 +150,6 @@ exports.GroupingHelper = Class.inherit((function() {
         reset: function() {
             this._groupsInfo = [];
             this._totalCountCorrection = 0;
-            this._itemsCount = 0;
         },
         totalCountCorrection: function() {
             return this._totalCountCorrection;
@@ -148,28 +166,12 @@ exports.GroupingHelper = Class.inherit((function() {
             return scrollingMode === "virtual" || scrollingMode === "infinite";
         },
         itemsCount: function() {
-            return this._itemsCount;
-        },
-        updateItemsCount: function(data, groupsCount) {
-            function calculateItemsCount(that, items, groupsCount) {
-                var i,
-                    result = 0;
+            var dataSourceAdapter = this._dataSource,
+                dataSource = dataSourceAdapter._dataSource,
+                groupCount = gridCore.normalizeSortingInfo(dataSource.group() || []).length,
+                itemsCount = calculateItemsCount(this, dataSource.items(), groupCount);
 
-                if(items) {
-                    if(!groupsCount) {
-                        result = items.length;
-                    } else {
-                        for(i = 0; i < items.length; i++) {
-                            if(that._isGroupItemCountable(items[i])) {
-                                result++;
-                            }
-                            result += calculateItemsCount(that, items[i].items, groupsCount - 1);
-                        }
-                    }
-                }
-                return result;
-            }
-            this._itemsCount = calculateItemsCount(this, data, groupsCount);
+            return itemsCount;
         },
         foreachGroups: function(callback, childrenAtFirst, foreachCollapsedGroups, updateOffsets, updateParentOffsets) {
             var that = this;

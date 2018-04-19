@@ -8,12 +8,12 @@ var $ = require("../../core/renderer"),
     windowUtils = require("../../core/utils/window"),
     dateUtils = require("../../core/utils/date"),
     tableCreator = require("./ui.scheduler.table_creator"),
-    HorizontalShader = require("./ui.scheduler.currentTimeShader.horizontal");
+    HorizontalShader = require("./ui.scheduler.current_time_shader.horizontal");
 
 var TIMELINE_CLASS = "dx-scheduler-timeline",
     GROUP_TABLE_CLASS = "dx-scheduler-group-table",
 
-    TIMELINE_GROUPED_ATTR = "dx-group-column-count";
+    HORIZONTAL_GROUPED_WORKSPACE_CLASS = "dx-scheduler-work-space-horizontal-grouped";
 
 var HORIZONTAL = "horizontal",
     DATE_TABLE_CELL_HEIGHT = 75,
@@ -33,6 +33,16 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
         }
 
         return this._$focusedCell;
+    },
+
+    _toggleGroupingDirectionClass: function() {
+        this.$element().toggleClass(HORIZONTAL_GROUPED_WORKSPACE_CLASS, this._isHorizontalGroupedWorkSpace() && this.option("groups"));
+    },
+
+    _getDefaultOptions: function() {
+        return extend(this.callBase(), {
+            groupOrientation: "vertical"
+        });
     },
 
     _getRightCell: function() {
@@ -76,13 +86,13 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
         return this._getCellCountInDay() * this.option("intervalCount");
     },
 
-    _getTotalCellCount: function() {
-        return this._getCellCount();
-    },
-
     _getTotalRowCount: function(groupCount) {
-        groupCount = groupCount || 1;
-        return this._getRowCount() * groupCount;
+        if(this._isHorizontalGroupedWorkSpace()) {
+            return this._getRowCount();
+        } else {
+            groupCount = groupCount || 1;
+            return this._getRowCount() * groupCount;
+        }
     },
 
     _getDateByIndex: function(index) {
@@ -96,9 +106,19 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
         return "shorttime";
     },
 
+    _needApplyLastGroupCellClass: function() {
+        return true;
+    },
+
     _calculateHiddenInterval: function(rowIndex, cellIndex) {
         var dayIndex = Math.floor(cellIndex / this._getCellCountInDay());
         return dayIndex * this._getHiddenInterval();
+    },
+
+    _getMillisecondsOffset: function(rowIndex, cellIndex) {
+        cellIndex = this._calculateCellIndex(rowIndex, cellIndex);
+
+        return this._getInterval() * cellIndex + this._calculateHiddenInterval(rowIndex, cellIndex);
     },
 
     _createWorkSpaceElements: function() {
@@ -153,9 +173,22 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
         return false;
     },
 
+    _isHorizontalGroupedWorkSpace: function() {
+        return this.option("groupOrientation") === "horizontal";
+    },
+
     _getGroupHeaderContainer: function() {
+        if(this._isHorizontalGroupedWorkSpace()) {
+            return this._$thead;
+        }
         return this._$sidebarTable;
     },
+
+    _insertAllDayRowsIntoDateTable: function() {
+        return false;
+    },
+
+    _createAllDayPanelElements: noop,
 
     _renderView: function() {
         this._setFirstViewDate();
@@ -188,11 +221,23 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
         return cellCount * cellWidth;
     },
 
-    _renderIndicator: function(height, rtlOffset, $container) {
-        var width = this.getIndicationWidth();
-        var $indicator = this._createIndicator($container);
-        $indicator.height($container.outerHeight());
-        $indicator.css("left", rtlOffset ? rtlOffset - width : width);
+    _renderIndicator: function(height, rtlOffset, $container, groupCount) {
+        var $indicator,
+            width = this.getIndicationWidth();
+
+        if(this.option("groupOrientation") === "vertical") {
+            $indicator = this._createIndicator($container);
+            $indicator.height($container.outerHeight());
+            $indicator.css("left", rtlOffset ? rtlOffset - width : width);
+        } else {
+            for(var i = 0; i < groupCount; i++) {
+                var offset = this._getCellCount() * this.getCellWidth() * i;
+                $indicator = this._createIndicator($container);
+                $indicator.height($container.outerHeight());
+
+                $indicator.css("left", rtlOffset ? rtlOffset - width - offset : width + offset);
+            }
+        }
     },
 
     _isVerticalShader: function() {
@@ -260,7 +305,10 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
     },
 
     _makeGroupRows: function(groups) {
-        return tableCreator.makeGroupedTable(tableCreator.VERTICAL, groups, {
+        var tableCreatorStrategy = this.option("groupOrientation") === "vertical" ? tableCreator.VERTICAL : tableCreator.HORIZONTAL;
+
+        return tableCreator.makeGroupedTable(tableCreatorStrategy, groups, {
+            groupRowClass: this._getGroupRowClass(),
             groupHeaderRowClass: this._getGroupRowClass(),
             groupHeaderClass: this._getGroupHeaderClass(),
             groupHeaderContentClass: this._getGroupHeaderContentClass()
@@ -271,6 +319,11 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
         if(!windowUtils.hasWindow()) {
             return;
         }
+
+        if(this._isHorizontalGroupedWorkSpace()) {
+            return;
+        }
+
         var cellHeight = this.getCellHeight() - DATE_TABLE_CELL_BORDER * 2;
         cellHeight = this._ensureGroupHeaderCellsHeight(cellHeight);
 
@@ -293,14 +346,6 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
         return (dateTable.outerHeight() / dateTable.find(dateTableRowSelector).length) - DATE_TABLE_CELL_BORDER * 2;
     },
 
-    _detachGroupCountAttr: function() {
-        this.$element().removeAttr(TIMELINE_GROUPED_ATTR);
-    },
-
-    _attachGroupCountAttr: function() {
-        this.$element().attr(TIMELINE_GROUPED_ATTR, this.option("groups").length);
-    },
-
     _getCellCoordinatesByIndex: function(index) {
         return {
             cellIndex: index % this._getCellCount(),
@@ -309,27 +354,17 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
     },
 
     _getCellByCoordinates: function(cellCoordinates, groupIndex) {
+        var indexes = this._groupedStrategy.prepareCellIndexes(cellCoordinates, groupIndex);
+
         return this._$dateTable
             .find("tr")
-            .eq(cellCoordinates.rowIndex + groupIndex)
+            .eq(indexes.rowIndex)
             .find("td")
-            .eq(cellCoordinates.cellIndex);
-    },
-
-    _calculateCellIndex: function(rowIndex, cellIndex) {
-        return cellIndex;
-    },
-
-    _getGroupIndex: function(rowIndex) {
-        return rowIndex;
+            .eq(indexes.cellIndex);
     },
 
     _getWorkSpaceWidth: function() {
         return this._$dateTable.outerWidth(true);
-    },
-
-    _calculateHeaderCellRepeatCount: function() {
-        return 1;
     },
 
     _getGroupIndexByCell: function($cell) {

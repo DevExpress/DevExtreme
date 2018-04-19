@@ -2510,6 +2510,167 @@ QUnit.test("Appointment should have correct position while dragging from group",
     assert.deepEqual(appointmentData.ownerId, { id: [2] }, "Resources is correct");
 });
 
+QUnit.test("getWorkSpaceScrollableScrollTop should be called while dragging from allDay panel, vertical grouping", function(assert) {
+    var spy = sinon.spy();
+    this.createInstance({
+        currentDate: new Date(2015, 6, 10),
+        editing: true,
+        views: [{
+            type: "week",
+            name: "Week",
+            groupOrientation: "vertical"
+        }],
+        currentView: "week",
+        dataSource: [{
+            text: "a",
+            startDate: new Date(2015, 6, 7, 10),
+            endDate: new Date(2015, 6, 7, 10, 30),
+            allDay: true,
+            ownerId: { id: 2 }
+        }],
+        startDayHour: 9,
+        endDayHour: 12,
+        groups: ["ownerId.id"],
+        resources: [
+            {
+                field: "ownerId.id",
+                allowMultiple: false,
+                dataSource: [
+                    { id: 1, text: "one" },
+                    { id: 2, text: "two" }
+                ]
+            }
+        ],
+        width: 800,
+        height: 500
+    });
+
+    var getScrollableOffset = this.instance.getWorkSpaceScrollableScrollTop;
+    this.instance.getWorkSpaceScrollableScrollTop = spy;
+
+    try {
+        var $appointment = $(this.instance.$element()).find("." + APPOINTMENT_CLASS).eq(0);
+        var pointer = pointerMock($appointment).start();
+        pointer.dragStart().drag(0, 100);
+
+        assert.ok(spy.calledOnce, "getWorkSpaceScrollableScrollTop was called");
+        assert.strictEqual(spy.getCall(0).args[0], true, "getWorkSpaceScrollableScrollTop was called with right args");
+
+        pointer.dragEnd();
+    } finally {
+        this.instance.getWorkSpaceScrollableScrollTop = getScrollableOffset;
+    }
+});
+
+QUnit.test("Appointment should have correct position while dragging from group, vertical grouping", function(assert) {
+    this.createInstance({
+        currentDate: new Date(2015, 6, 10),
+        editing: true,
+        views: [{
+            type: "week",
+            name: "Week",
+            groupOrientation: "vertical"
+        }],
+        currentView: "week",
+        dataSource: [{
+            text: "a",
+            startDate: new Date(2015, 6, 7, 10),
+            endDate: new Date(2015, 6, 7, 10, 30),
+            ownerId: { id: 2 },
+            roomId: { id: 1 }
+        }],
+        startDayHour: 9,
+        endDayHour: 12,
+        groups: ["ownerId.id", "roomId.id"],
+        resources: [
+            {
+                field: "ownerId.id",
+                allowMultiple: false,
+                dataSource: [
+                    { id: 1, text: "one" },
+                    { id: 2, text: "two" }
+                ]
+            },
+            {
+                field: "roomId.id",
+                allowMultiple: false,
+                dataSource: [
+                    { id: 1, text: "room one" },
+                    { id: 2, text: "room two" }
+                ]
+            }
+        ],
+        width: 800
+    });
+    var $appointment = $(this.instance.$element().find("." + APPOINTMENT_CLASS)).eq(0);
+
+    $appointment.trigger(dragEvents.start);
+
+    var startPosition = translator.locate($appointment);
+    assert.roughEqual(startPosition.top, 850, 1.5, "Start position is correct");
+    assert.roughEqual(startPosition.left, 406, 1.5, "Start position is correct");
+
+    $(this.instance.$element().find("." + DATE_TABLE_CELL_CLASS)).eq(7).trigger(dragEvents.enter);
+    $appointment.trigger(dragEvents.end);
+
+    this.clock.tick();
+    var appointmentData = dataUtils.data(this.instance.$element().find("." + APPOINTMENT_CLASS).get(0), "dxItemData");
+
+    assert.deepEqual(appointmentData.startDate, new Date(2015, 6, 5, 9, 30), "Start date is correct");
+    assert.deepEqual(appointmentData.endDate, new Date(2015, 6, 5, 10, 0), "End date is correct");
+    assert.deepEqual(appointmentData.ownerId, { id: [1] }, "Resources is correct");
+});
+
+QUnit.test("Appointment should have correct position while dragging into allDay panel, vertical grouping", function(assert) {
+    this.createInstance({
+        currentDate: new Date(2015, 6, 10),
+        editing: true,
+        views: [{
+            type: "week",
+            name: "Week",
+            groupOrientation: "vertical"
+        }],
+        currentView: "week",
+        dataSource: [{
+            text: "a",
+            startDate: new Date(2015, 6, 7, 10),
+            endDate: new Date(2015, 6, 7, 10, 30),
+            ownerId: { id: 2 }
+        }],
+        startDayHour: 9,
+        endDayHour: 12,
+        groups: ["ownerId.id"],
+        resources: [
+            {
+                field: "ownerId.id",
+                allowMultiple: false,
+                dataSource: [
+                    { id: 1, text: "one" },
+                    { id: 2, text: "two" }
+                ]
+            }
+        ],
+        width: 800
+    });
+    var $appointment = $(this.instance.$element().find("." + APPOINTMENT_CLASS)).eq(0);
+
+    $appointment.trigger(dragEvents.start);
+
+    var startPosition = translator.locate($appointment);
+    assert.roughEqual(startPosition.top, 500, 1.5, "Start position is correct");
+    assert.roughEqual(startPosition.left, 370, 1.5, "Start position is correct");
+
+    $(this.instance.$element().find(".dx-scheduler-all-day-table-cell")).eq(11).trigger(dragEvents.enter);
+    $appointment.trigger(dragEvents.end);
+
+    this.clock.tick();
+    var appointmentData = dataUtils.data(this.instance.$element().find("." + APPOINTMENT_CLASS).get(0), "dxItemData");
+
+    assert.deepEqual(appointmentData.startDate, new Date(2015, 6, 9, 0), "Start date is correct");
+    assert.deepEqual(appointmentData.endDate, new Date(2015, 6, 9, 0, 30), "End date is correct");
+    assert.deepEqual(appointmentData.ownerId, { id: [2] }, "Resources is correct");
+});
+
 QUnit.test("Appointment should be rendered correctly after changing view (T593699)", function(assert) {
     this.createInstance({
         currentDate: new Date(2015, 6, 10),
@@ -2955,36 +3116,6 @@ QUnit.test("Tasks should have a right color", function(assert) {
     assert.equal(this.getAppointmentColor(tasks.eq(2)), "#cb2824", "Color is OK");
     assert.equal(this.getAppointmentColor(tasks.eq(3)), "#cb7d7b", "Color is OK");
     assert.equal(this.getAppointmentColor(tasks.eq(4)), "#cb7d7b", "Color is OK");
-});
-
-// Remove this test when the 'mainColor' property will be removed at all
-QUnit.test("Ungrouped tasks should have a right color(via the 'mainColor' field)", function(assert) {
-    try {
-        var data = new DataSource({
-            store: [
-                { text: "Item 1", ownerId: 2, startDate: new Date(2015, 1, 9), endDate: new Date(2015, 1, 9, 0, 30) },
-                { text: "Item 2", startDate: new Date(2015, 1, 9), endDate: new Date(2015, 1, 9, 0, 30) }
-            ]
-        });
-
-        this.createInstance({
-            currentDate: new Date(2015, 1, 9),
-            resources: [{
-                field: "ownerId",
-                mainColor: true,
-                dataSource: [{ id: 1, text: "John", color: "#ff0000" }, { id: 2, text: "Mike", color: "#0000ff" }]
-            }],
-            dataSource: data,
-            width: 700
-        });
-
-        var tasks = this.instance.$element().find("." + APPOINTMENT_CLASS);
-
-        assert.equal(this.getAppointmentColor(tasks.eq(0)), "#0000ff", "Color is OK");
-        assert.equal($.inArray(this.getAppointmentColor(tasks.eq(1)), ["#ff0000", "#0000ff"]), -1, "Color is OK");
-    } finally {
-        $(".dynamic-styles").remove();
-    }
 });
 
 QUnit.test("Ungrouped tasks should have a right color(via the 'useColorAsDefault' field)", function(assert) {
@@ -5189,4 +5320,753 @@ QUnit.test("Appointment should have right width on mobile devices & desktop in w
         cellWidth = this.instance.$element().find("." + DATE_TABLE_CELL_CLASS).eq(0).outerWidth();
 
     assert.roughEqual($appointments.eq(0).outerWidth(), cellWidth - expectedOffset, 1.001, "Width is OK");
+});
+
+QUnit.test("Appointments should be rendered correctly in vertical grouped workspace Day", function(assert) {
+    this.createInstance({
+        dataSource: [{
+            text: "a",
+            startDate: new Date(2018, 2, 1, 9),
+            endDate: new Date(2018, 2, 1, 10, 30),
+            id: 1
+        }, {
+            text: "b",
+            startDate: new Date(2018, 2, 1, 9),
+            endDate: new Date(2018, 2, 1, 10, 30),
+            id: 2
+        }],
+        currentDate: new Date(2018, 2, 1),
+        views: [{
+            type: "day",
+            groupOrientation: "vertical"
+        }],
+        currentView: "day",
+        groups: ["id"],
+        resources: [
+            {
+                field: "id",
+                dataSource: [
+                    { id: 1, text: "one" },
+                    { id: 2, text: "two" }
+                ]
+            }
+        ],
+        startDayHour: 9,
+        showAllDayPanel: false
+    });
+
+    var $appointments = $(this.instance.$element()).find("." + APPOINTMENT_CLASS);
+    assert.equal($appointments.length, 2, "two appointments are rendered");
+
+    var cellHeight = $(this.instance.$element()).find("." + DATE_TABLE_CELL_CLASS).first().outerHeight();
+
+    assert.equal($appointments.eq(0).position().top, 0, "correct top position");
+    assert.equal($appointments.eq(0).position().left, 200, "correct left position");
+    assert.equal($appointments.eq(1).position().top, cellHeight * 30, "correct top position");
+    assert.equal($appointments.eq(1).position().left, 200, "correct left position");
+});
+
+QUnit.test("Appointments should be rendered correctly in vertical grouped workspace Week", function(assert) {
+    this.createInstance({
+        dataSource: [{
+            text: "a",
+            startDate: new Date(2018, 2, 16, 9),
+            endDate: new Date(2018, 2, 16, 10, 30),
+            id: 1
+        }, {
+            text: "b",
+            startDate: new Date(2018, 2, 16, 9),
+            endDate: new Date(2018, 2, 16, 10, 30),
+            id: 2
+        }],
+        currentDate: new Date(2018, 2, 16),
+        views: [{
+            type: "week",
+            groupOrientation: "vertical"
+        }],
+        currentView: "week",
+        groups: ["id"],
+        resources: [
+            {
+                field: "id",
+                dataSource: [
+                    { id: 1, text: "one" },
+                    { id: 2, text: "two" }
+                ]
+            }
+        ],
+        startDayHour: 9,
+        showAllDayPanel: false
+    });
+
+    var $appointments = $(this.instance.$element()).find("." + APPOINTMENT_CLASS);
+    assert.equal($appointments.length, 2, "two appointments is rendered");
+
+    var cellHeight = $(this.instance.$element()).find("." + DATE_TABLE_CELL_CLASS).eq(0).outerHeight(),
+        cellWidth = $(this.instance.$element()).find("." + DATE_TABLE_CELL_CLASS).eq(0).outerWidth();
+
+    assert.equal($appointments.eq(0).position().top, 0, "correct top position");
+    assert.equal($appointments.eq(0).position().left, 200 + cellWidth * 5, "correct left position");
+    assert.equal($appointments.eq(1).position().top, cellHeight * 30, "correct top position");
+    assert.equal($appointments.eq(1).position().left, 200 + cellWidth * 5, "correct left position");
+});
+
+QUnit.test("Appointments should be rendered correctly in vertical grouped workspace Week, showAllDayPanel = true", function(assert) {
+    this.createInstance({
+        dataSource: [
+            {
+                text: "1",
+                id: 2,
+                startDate: new Date(2018, 4, 21, 9, 30),
+                endDate: new Date(2018, 4, 21, 11, 30)
+            },
+            {
+                text: "2",
+                id: 2,
+                allDay: true,
+                startDate: new Date(2018, 4, 21, 9, 30),
+                endDate: new Date(2018, 4, 21, 11, 30)
+            },
+        ],
+        views: [{
+            type: "week",
+            groupOrientation: "vertical"
+        }],
+        currentView: "week",
+        groups: ["id"],
+        resources: [
+            {
+                field: "id",
+                dataSource: [
+                    { id: 1, text: "one" },
+                    { id: 2, text: "two" }
+                ]
+            }
+        ],
+        currentDate: new Date(2018, 4, 21),
+        startDayHour: 9,
+        endDayHour: 15,
+        cellDuration: 60,
+        showAllDayPanel: true,
+        maxAppointmentsPerCell: 'auto'
+    });
+
+    var $appointments = $(this.instance.$element()).find("." + APPOINTMENT_CLASS);
+    assert.equal($appointments.length, 2, "two appointments are rendered");
+
+    var cellHeight = $(this.instance.$element()).find("." + DATE_TABLE_CELL_CLASS).first().outerHeight();
+
+    assert.roughEqual($appointments.eq(0).position().top, 7 * cellHeight, 1.5, "correct top position of allDay appointment");
+    assert.roughEqual($appointments.eq(0).outerHeight(), 0.5 * cellHeight, 2, "correct size of allDay appointment");
+    assert.equal($appointments.eq(0).position().left, 314, "correct left position of allDay appointment");
+
+    assert.roughEqual($appointments.eq(1).position().top, 8.5 * cellHeight, 1.5, "correct top position of appointment");
+    assert.equal($appointments.eq(1).position().left, 314, "correct left position of appointment");
+});
+
+QUnit.test("Rival allDay appointments from different groups should be rendered correctly in vertical grouped workspace Week", function(assert) {
+    this.createInstance({
+        dataSource: [
+            {
+                text: "1",
+                id: 1,
+                allDay: true,
+                startDate: new Date(2018, 4, 21, 9, 30),
+                endDate: new Date(2018, 4, 21, 11, 30)
+            },
+            {
+                text: "2",
+                id: 2,
+                allDay: true,
+                startDate: new Date(2018, 4, 21, 9, 30),
+                endDate: new Date(2018, 4, 21, 11, 30)
+            },
+        ],
+        views: [{
+            type: "week",
+            groupOrientation: "vertical"
+        }],
+        currentView: "week",
+        groups: ["id"],
+        resources: [
+            {
+                field: "id",
+                dataSource: [
+                    { id: 1, text: "one" },
+                    { id: 2, text: "two" }
+                ]
+            }
+        ],
+        currentDate: new Date(2018, 4, 21),
+        startDayHour: 9,
+        endDayHour: 15,
+        cellDuration: 60,
+        showAllDayPanel: true,
+        maxAppointmentsPerCell: 'auto'
+    });
+
+    var $appointments = $(this.instance.$element()).find("." + APPOINTMENT_CLASS);
+    assert.equal($appointments.length, 2, "two appointments are rendered");
+
+    var cellHeight = $(this.instance.$element()).find("." + DATE_TABLE_CELL_CLASS).first().outerHeight();
+
+    assert.roughEqual($appointments.eq(0).position().top, 0, 1.5, "correct top position of allDay appointment");
+    assert.roughEqual($appointments.eq(0).outerHeight(), 0.5 * cellHeight, 2, "correct size of allDay appointment");
+    assert.equal($appointments.eq(0).position().left, 314, "correct left position of allDay appointment");
+
+    assert.roughEqual($appointments.eq(1).position().top, 7 * cellHeight, 1.5, "correct top position of allDay appointment");
+    assert.roughEqual($appointments.eq(1).outerHeight(), 0.5 * cellHeight, 2, "correct size of allDay appointment");
+    assert.equal($appointments.eq(1).position().left, 314, "correct left position of allDay appointment");
+});
+
+QUnit.test("Rival allDay appointments from same groups should be rendered correctly in vertical grouped workspace Week", function(assert) {
+    this.createInstance({
+        dataSource: [
+            {
+                text: "1",
+                id: 1,
+                allDay: true,
+                startDate: new Date(2018, 4, 21, 9, 30),
+                endDate: new Date(2018, 4, 21, 11, 30)
+            },
+            {
+                text: "2",
+                id: 1,
+                allDay: true,
+                startDate: new Date(2018, 4, 21, 9, 30),
+                endDate: new Date(2018, 4, 21, 11, 30)
+            },
+        ],
+        views: [{
+            type: "week",
+            groupOrientation: "vertical"
+        }],
+        currentView: "week",
+        groups: ["id"],
+        resources: [
+            {
+                field: "id",
+                dataSource: [
+                    { id: 1, text: "one" },
+                    { id: 2, text: "two" }
+                ]
+            }
+        ],
+        currentDate: new Date(2018, 4, 21),
+        startDayHour: 9,
+        endDayHour: 15,
+        cellDuration: 60,
+        showAllDayPanel: true,
+        maxAppointmentsPerCell: 'auto'
+    });
+
+    var $appointments = $(this.instance.$element()).find("." + APPOINTMENT_CLASS);
+
+    var cellHeight = $(this.instance.$element()).find("." + DATE_TABLE_CELL_CLASS).first().outerHeight();
+
+    assert.roughEqual($appointments.eq(0).position().top, 0.5 * cellHeight, 2.5, "correct top position of allDay appointment");
+    assert.roughEqual($appointments.eq(0).outerHeight(), 0.5 * cellHeight, 2, "correct size of allDay appointment");
+    assert.equal($appointments.eq(0).position().left, 314, "correct left position of allDay appointment");
+});
+
+QUnit.test("Rival appointments from one group should be rendered correctly in vertical grouped workspace Week", function(assert) {
+    this.createInstance({
+        dataSource: [],
+        views: [{
+            type: "week",
+            groupOrientation: "vertical"
+        }],
+        currentView: "week",
+        groups: ["id"],
+        resources: [
+            {
+                field: "id",
+                dataSource: [
+                    { id: 1, text: "one" },
+                    { id: 2, text: "two" }
+                ]
+            }
+        ],
+        currentDate: new Date(2018, 4, 21),
+        startDayHour: 9,
+        endDayHour: 15,
+        cellDuration: 60,
+        showAllDayPanel: true,
+        maxAppointmentsPerCell: 'auto'
+    });
+
+    var defaultWidthStub = sinon.stub(this.instance.getRenderingStrategyInstance(), "_getAppointmentMaxWidth").returns(50);
+
+    this.instance.option("dataSource", [
+        {
+            text: "1",
+            id: 2,
+            startDate: new Date(2018, 4, 21, 9, 30),
+            endDate: new Date(2018, 4, 21, 11, 30)
+        },
+        {
+            text: "2",
+            id: 2,
+            startDate: new Date(2018, 4, 22, 9, 30),
+            endDate: new Date(2018, 4, 22, 11, 30)
+        },
+    ]);
+
+    var $appointments = $(this.instance.$element()).find("." + APPOINTMENT_CLASS);
+    assert.equal($appointments.length, 2, "two appointments are rendered");
+
+    var cellHeight = $(this.instance.$element()).find("." + DATE_TABLE_CELL_CLASS).first().outerHeight();
+
+    assert.roughEqual($appointments.eq(0).position().top, 8.5 * cellHeight, 1.5, "correct top position of appointment");
+    assert.roughEqual($appointments.eq(0).outerWidth(), 50, 2, "correct size of appointment");
+    assert.equal($appointments.eq(0).position().left, 314, "correct left position of appointment");
+
+    assert.roughEqual($appointments.eq(1).position().top, 8.5 * cellHeight, 1.5, "correct top position of appointment");
+    assert.roughEqual($appointments.eq(1).outerWidth(), 50, 2, "correct size of appointment");
+    assert.equal($appointments.eq(1).position().left, 428, "correct left position of appointment");
+
+    defaultWidthStub.restore();
+});
+
+QUnit.test("Appointment in bottom cell should be rendered cirrectly in vertical grouped workspace Week", function(assert) {
+    this.createInstance({
+        dataSource: [
+            {
+                text: "1",
+                id: 2,
+                startDate: new Date(2018, 4, 22, 13, 0),
+                endDate: new Date(2018, 4, 22, 17, 30)
+            },
+        ],
+        views: [{
+            type: "week",
+            groupOrientation: "vertical"
+        }],
+        currentView: "week",
+        groups: ["id"],
+        resources: [
+            {
+                field: "id",
+                dataSource: [
+                    { id: 1, text: "one" },
+                    { id: 2, text: "two" }
+                ]
+            }
+        ],
+        currentDate: new Date(2018, 4, 21),
+        startDayHour: 9,
+        endDayHour: 15,
+        cellDuration: 60,
+        showAllDayPanel: true,
+        maxAppointmentsPerCell: 'auto'
+    });
+
+    var $appointments = $(this.instance.$element()).find("." + APPOINTMENT_CLASS);
+
+    var cellHeight = $(this.instance.$element()).find("." + DATE_TABLE_CELL_CLASS).first().outerHeight();
+
+    assert.roughEqual($appointments.eq(0).position().top, 12 * cellHeight, 1.5, "correct top position of appointment");
+    assert.roughEqual($appointments.eq(0).outerHeight(), 100, 2, "correct size of appointment");
+});
+
+QUnit.test("Appointments should be rendered correctly in vertical grouped workspace Month", function(assert) {
+    this.createInstance({
+        dataSource: [{
+            text: "a",
+            startDate: new Date(2018, 2, 16, 9),
+            endDate: new Date(2018, 2, 16, 10, 30),
+            id: 1
+        }, {
+            text: "b",
+            startDate: new Date(2018, 2, 16, 9),
+            endDate: new Date(2018, 2, 16, 10, 30),
+            id: 2
+        }],
+        currentDate: new Date(2018, 2, 1),
+        views: [{
+            type: "month",
+            groupOrientation: "vertical"
+        }],
+        currentView: "month",
+        groups: ["id"],
+        resources: [
+            {
+                field: "id",
+                dataSource: [
+                    { id: 1, text: "one" },
+                    { id: 2, text: "two" }
+                ]
+            }
+        ]
+    });
+
+    var $appointments = $(this.instance.$element()).find("." + APPOINTMENT_CLASS);
+    assert.equal($appointments.length, 2, "two appointments is rendered");
+
+    var cellHeight = $(this.instance.$element()).find("." + DATE_TABLE_CELL_CLASS).eq(0).outerHeight(),
+        cellWidth = $(this.instance.$element()).find("." + DATE_TABLE_CELL_CLASS).eq(0).outerWidth(),
+        monthTopOffset = cellHeight * 0.4;
+
+    assert.roughEqual($appointments.eq(0).position().top, cellHeight * 2 + monthTopOffset, 1, "correct top position");
+    assert.roughEqual($appointments.eq(0).position().left, cellWidth * 5 + 100, 1.5, "correct left position");
+    assert.roughEqual($appointments.eq(1).position().top, cellHeight * 8 + monthTopOffset, 3.5, "correct top position");
+    assert.roughEqual($appointments.eq(1).position().left, cellWidth * 5 + 100, 1.5, "correct left position");
+});
+
+QUnit.test("Appointment should be dragged correctly between the groups in vertical grouped workspace Day", function(assert) {
+    this.createInstance({
+        dataSource: [{
+            text: "a",
+            startDate: new Date(2018, 2, 1, 12),
+            endDate: new Date(2018, 2, 1, 12, 30),
+            id: 1
+        }],
+        currentDate: new Date(2018, 2, 1),
+        views: [{
+            type: "day",
+            groupOrientation: "vertical"
+        }],
+        editing: true,
+        currentView: "day",
+        groups: ["id"],
+        resources: [
+            {
+                field: "id",
+                dataSource: [
+                    { id: 1, text: "one" },
+                    { id: 2, text: "two" }
+                ]
+            }
+        ],
+        startDayHour: 12,
+        endDayHour: 16,
+        showAllDayPanel: false
+    });
+
+    var $appointment = $(this.instance.$element()).find("." + APPOINTMENT_CLASS).eq(0);
+
+    $(this.instance.$element()).find("." + DATE_TABLE_CELL_CLASS).eq(10).trigger(dragEvents.enter);
+    $appointment.trigger(dragEvents.start);
+    $appointment.trigger(dragEvents.end);
+
+    this.clock.tick();
+    var appointmentData = dataUtils.data(this.instance.$element().find("." + APPOINTMENT_CLASS).get(0), "dxItemData");
+
+    assert.deepEqual(appointmentData.startDate, new Date(2018, 2, 1, 13), "Start date is correct");
+    assert.deepEqual(appointmentData.endDate, new Date(2018, 2, 1, 13, 30), "End date is correct");
+    assert.deepEqual(appointmentData.id, 2, "Group is OK");
+});
+
+QUnit.test("Appointment should be dragged correctly between the groups in vertical grouped workspace Week", function(assert) {
+    this.createInstance({
+        dataSource: [{
+            text: "a",
+            startDate: new Date(2018, 2, 16, 12),
+            endDate: new Date(2018, 2, 16, 12, 30),
+            id: 1
+        }],
+        currentDate: new Date(2018, 2, 16),
+        views: [{
+            type: "week",
+            groupOrientation: "vertical"
+        }],
+        editing: true,
+        currentView: "week",
+        groups: ["id"],
+        resources: [
+            {
+                field: "id",
+                dataSource: [
+                    { id: 1, text: "one" },
+                    { id: 2, text: "two" }
+                ]
+            }
+        ],
+        startDayHour: 12,
+        endDayHour: 16,
+        showAllDayPanel: false
+    });
+
+    var $appointment = $(this.instance.$element()).find("." + APPOINTMENT_CLASS).eq(0);
+
+    $(this.instance.$element()).find("." + DATE_TABLE_CELL_CLASS).eq(75).trigger(dragEvents.enter);
+    $appointment.trigger(dragEvents.start);
+    $appointment.trigger(dragEvents.end);
+
+    this.clock.tick();
+    var appointmentData = dataUtils.data(this.instance.$element().find("." + APPOINTMENT_CLASS).get(0), "dxItemData");
+
+    assert.deepEqual(appointmentData.startDate, new Date(2018, 2, 16, 13), "Start date is correct");
+    assert.deepEqual(appointmentData.endDate, new Date(2018, 2, 16, 13, 30), "End date is correct");
+    assert.deepEqual(appointmentData.id, 2, "Group is OK");
+});
+
+QUnit.test("Appointment should be dragged correctly between the groups in vertical grouped workspace Month", function(assert) {
+    this.createInstance({
+        dataSource: [{
+            text: "a",
+            startDate: new Date(2018, 2, 16, 12),
+            endDate: new Date(2018, 2, 16, 12, 30),
+            id: 1
+        }],
+        currentDate: new Date(2018, 2, 1),
+        views: [{
+            type: "month",
+            groupOrientation: "vertical"
+        }],
+        editing: true,
+        currentView: "month",
+        groups: ["id"],
+        resources: [
+            {
+                field: "id",
+                dataSource: [
+                    { id: 1, text: "one" },
+                    { id: 2, text: "two" }
+                ]
+            }
+        ]
+    });
+
+    var $appointment = $(this.instance.$element()).find("." + APPOINTMENT_CLASS).eq(0);
+
+    $(this.instance.$element()).find("." + DATE_TABLE_CELL_CLASS).eq(54).trigger(dragEvents.enter);
+    $appointment.trigger(dragEvents.start);
+    $appointment.trigger(dragEvents.end);
+
+    this.clock.tick();
+    var appointmentData = dataUtils.data(this.instance.$element().find("." + APPOINTMENT_CLASS).get(0), "dxItemData");
+
+    assert.deepEqual(appointmentData.startDate, new Date(2018, 2, 9, 12), "Start date is correct");
+    assert.deepEqual(appointmentData.endDate, new Date(2018, 2, 9, 12, 30), "End date is correct");
+    assert.deepEqual(appointmentData.id, 2, "Group is OK");
+});
+
+
+QUnit.test("Long appt parts should have correct coordinates if duration > week in vertical grouped workspace Month", function(assert) {
+    this.createInstance({
+        dataSource: [{
+            text: "a",
+            startDate: new Date(2018, 2, 11, 12),
+            endDate: new Date(2018, 2, 18, 11, 30),
+            id: 1
+        }],
+        currentDate: new Date(2018, 2, 1),
+        views: [{
+            type: "month",
+            groupOrientation: "vertical"
+        }],
+        currentView: "month",
+        groups: ["id"],
+        resources: [
+            {
+                field: "id",
+                dataSource: [
+                    { id: 1, text: "one" },
+                    { id: 2, text: "two" }
+                ]
+            }
+        ]
+    });
+
+    var $firstPart = $(this.instance.$element()).find("." + APPOINTMENT_CLASS).eq(0),
+        $secondPart = $(this.instance.$element()).find("." + APPOINTMENT_CLASS).eq(1);
+
+    assert.equal($firstPart.position().left, 100, 'correct left position');
+    assert.equal($secondPart.position().left, 100, 'correct left position');
+});
+
+QUnit.test("Long appt parts should have correct coordinates after drag to the last row cell in vertical grouped workspace Month", function(assert) {
+    this.createInstance({
+        dataSource: [{
+            text: "a",
+            startDate: new Date(2018, 2, 4, 12),
+            endDate: new Date(2018, 2, 5, 13, 30),
+            id: 1
+        }],
+        currentDate: new Date(2018, 2, 1),
+        views: [{
+            type: "month",
+            groupOrientation: "vertical"
+        }],
+        editing: true,
+        currentView: "month",
+        groups: ["id"],
+        resources: [
+            {
+                field: "id",
+                dataSource: [
+                    { id: 1, text: "one" },
+                    { id: 2, text: "two" }
+                ]
+            }
+        ]
+    });
+
+    var $appointment = $(this.instance.$element()).find("." + APPOINTMENT_CLASS).eq(0),
+        cellWidth = $(this.instance.$element()).find("." + DATE_TABLE_CELL_CLASS).eq(0).outerWidth();
+
+    $(this.instance.$element()).find("." + DATE_TABLE_CELL_CLASS).eq(6).trigger(dragEvents.enter);
+    $appointment.trigger(dragEvents.start);
+    $appointment.trigger(dragEvents.end);
+
+    this.clock.tick();
+    var $firstPart = $(this.instance.$element()).find("." + APPOINTMENT_CLASS).eq(0),
+        $secondPart = $(this.instance.$element()).find("." + APPOINTMENT_CLASS).eq(1);
+
+    assert.roughEqual($firstPart.position().left, 100 + cellWidth * 6, 2, 'correct left position');
+    assert.equal($secondPart.position().left, 100, 'correct left position');
+});
+
+QUnit.test("Hourly recurring appt should be rendred in vertical grouped workspace Day", function(assert) {
+    this.createInstance({
+        dataSource: [{
+            text: "a",
+            startDate: new Date(2018, 2, 16, 12, 30),
+            endDate: new Date(2018, 2, 16, 13, 15),
+            recurrenceRule: "FREQ=HOURLY",
+            id: 1
+        }],
+        currentDate: new Date(2018, 2, 16),
+        views: [{
+            type: "day",
+            groupOrientation: "vertical"
+        }],
+        currentView: "day",
+        groups: ["id"],
+        resources: [
+            {
+                field: "id",
+                dataSource: [
+                    { id: 1, text: "one" },
+                    { id: 2, text: "two" }
+                ]
+            }
+        ],
+        startDayHour: 12,
+        endDayHour: 16,
+        showAllDayPanel: false
+    });
+
+    var $appointments = $(this.instance.$element()).find("." + APPOINTMENT_CLASS);
+
+    assert.equal($appointments.length, 4, "Appointments are rendered");
+});
+
+QUnit.test("Appointment should be resized correctly to left side in horizontal grouped workspace Month", function(assert) {
+    this.createInstance({
+        dataSource: [{
+            text: "a",
+            startDate: new Date(2018, 2, 5, 12),
+            endDate: new Date(2018, 2, 5, 12, 30),
+            id: 1
+        }],
+        currentDate: new Date(2018, 2, 1),
+        views: [{
+            type: "month",
+            groupOrientation: "vertical"
+        }],
+        currentView: "month",
+        groups: ["id"],
+        editing: true,
+        resources: [
+            {
+                field: "id",
+                dataSource: [
+                    { id: 1, text: "one" },
+                    { id: 2, text: "two" }
+                ]
+            }
+        ]
+    });
+
+    var $element = $(this.instance.$element()),
+        cellWidth = $element.find("." + DATE_TABLE_CELL_CLASS).eq(0).outerWidth(),
+        pointer = pointerMock($element.find(".dx-resizable-handle-left").eq(0)).start();
+
+    pointer.dragStart().drag(-(cellWidth / 2), 0);
+    pointer.dragEnd();
+
+    var $appointment = $element.find("." + APPOINTMENT_CLASS).eq(0);
+
+    assert.equal($appointment.position().left, 100, "Left coordinate is correct");
+});
+
+QUnit.test("Appt shouldn't be resized to the group border in horizontal grouped workspace Day", function(assert) {
+    this.createInstance({
+        dataSource: [{
+            text: "a",
+            startDate: new Date(2018, 2, 16, 14),
+            endDate: new Date(2018, 2, 16, 15),
+            id: 1
+        }],
+        currentDate: new Date(2018, 2, 16),
+        views: [{
+            type: "day",
+            groupOrientation: "vertical"
+        }],
+        currentView: "day",
+        groups: ["id"],
+        resources: [
+            {
+                field: "id",
+                dataSource: [
+                    { id: 1, text: "one" },
+                    { id: 2, text: "two" }
+                ]
+            }
+        ],
+        editing: true,
+        startDayHour: 12,
+        endDayHour: 16,
+        showAllDayPanel: false
+    });
+
+    var $element = $(this.instance.$element()),
+        cellHeight = $(this.instance.$element()).find("." + DATE_TABLE_CELL_CLASS).eq(0).outerHeight(),
+        pointer = pointerMock($element.find(".dx-resizable-handle-bottom").eq(0)).start();
+
+    pointer.dragStart().drag(0, cellHeight * 2).dragEnd();
+
+    var $appointment = $element.find("." + APPOINTMENT_CLASS).eq(0);
+
+    assert.equal($appointment.position().top + $appointment.outerHeight(), cellHeight * 8, "Correct bottom coordinate");
+});
+
+QUnit.test("Appointment inside vertical grouped view should have a right resizable area in Day view", function(assert) {
+    this.createInstance({
+        dataSource: [{
+            text: "a",
+            startDate: new Date(2018, 2, 16, 14),
+            endDate: new Date(2018, 2, 16, 15),
+            id: 1
+        }],
+        currentDate: new Date(2018, 2, 16),
+        views: [{
+            type: "day",
+            groupOrientation: "vertical"
+        }],
+        currentView: "day",
+        groups: ["id"],
+        editing: true,
+        resources: [
+            {
+                field: "id",
+                dataSource: [
+                    { id: 1, text: "one" },
+                    { id: 2, text: "two" }
+                ]
+            }
+        ],
+        startDayHour: 12,
+        endDayHour: 16,
+        showAllDayPanel: false
+    });
+
+    var $appointment = $(this.instance.$element()).find("." + APPOINTMENT_CLASS).first(),
+        initialResizableAreaTop = $appointment.dxResizable("instance").option("area").top,
+        initialResizableAreaBottom = $appointment.dxResizable("instance").option("area").bottom;
+
+    assert.equal($appointment.dxResizable("instance").option("area").top, initialResizableAreaTop);
+    assert.equal($appointment.dxResizable("instance").option("area").bottom, initialResizableAreaBottom);
 });

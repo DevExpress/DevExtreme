@@ -331,8 +331,8 @@ var DataAdapter = Class.inherit({
         return nodes;
     },
 
-    getNodeByKey: function(key) {
-        return this._getByKey(this._getDataBySelectionMode(), key);
+    getNodeByKey: function(key, data) {
+        return this._getByKey(data || this._getDataBySelectionMode(), key);
     },
 
     getTreeNodes: function() {

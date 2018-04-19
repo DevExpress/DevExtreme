@@ -29,11 +29,6 @@ var FilterBuilderView = modules.View.inherit({
             contentTemplate: function($contentElement) {
                 return that._getPopupContentTemplate($contentElement);
             },
-            onShowing: function() {
-                if(that._filterBuilder.option("value") !== that.option("filterValue")) {
-                    that._filterBuilder.option("value", that.option("filterValue"));
-                }
-            },
             onOptionChanged: function(args) {
                 if(args.name === "visible") {
                     that.option("filterBuilderPopup.visible", args.value);
@@ -61,9 +56,11 @@ var FilterBuilderView = modules.View.inherit({
             return column;
         });
 
-        this._filterBuilder = this._createComponent($filterBuilderContainer, FilterBuilder, extend(this.option("filterBuilder"), {
-            customOperations: customOperations,
+        this._filterBuilder = this._createComponent($filterBuilderContainer, FilterBuilder, extend({
+            value: this.option("filterValue"),
             fields: fields
+        }, this.option("filterBuilder"), {
+            customOperations: customOperations
         }));
 
         this._createComponent($contentElement, ScrollView, { direction: "both" });
@@ -121,11 +118,18 @@ module.exports = {
              * @type dxFilterBuilderOptions
              * @default {}
              */
-            filterBuilder: {},
+            filterBuilder: {
+                groupOperationDescriptions: {
+                    and: messageLocalization.format("dxFilterBuilder-and"),
+                    or: messageLocalization.format("dxFilterBuilder-or"),
+                    notAnd: messageLocalization.format("dxFilterBuilder-notAnd"),
+                    notOr: messageLocalization.format("dxFilterBuilder-notOr"),
+                },
+            },
 
             /**
-             * @name GridBaseOptions_filterPopup
-             * @publicName filterPopup
+             * @name GridBaseOptions_filterBuilderPopup
+             * @publicName filterBuilderPopup
              * @type dxPopupOptions
              * @default {}
              */

@@ -130,7 +130,7 @@ QUnit.test("markup with virtual scrolling", function(assert) {
     this.clock.tick(300);
     var $virtualRows = $element.find(".dx-datagrid-rowsview .dx-datagrid-table .dx-virtual-row");
     assert.equal($virtualRows.length, 1, "one virtual row is rendered");
-    assert.equal($virtualRows.get(0).style.height, windowUtils.hasWindow() ? "64px" : "40px", "first virtual row height");
+    assert.ok(parseInt($virtualRows.get(0).style.height) > 20, "first virtual row height");
 });
 
 QUnit.test("markup with editing", function(assert) {
@@ -195,4 +195,18 @@ QUnit.test("markup with pager", function(assert) {
     assert.equal($pagerView.children().length, windowUtils.hasWindow() ? 2 : 1, "pager content is rendered");
     assert.equal($pagerView.find(".dx-pages .dx-page").length, windowUtils.hasWindow() ? 2 : 1, "page size count");
     assert.equal($pagerView.find(".dx-pages .dx-page").eq(0).text(), windowUtils.hasWindow() ? "1" : "", "page size text");
+});
+
+QUnit.test("markup with virtual columns", function(assert) {
+    var $element = $("#dataGrid").dxDataGrid({
+        width: 400,
+        columnWidth: 100,
+        scrolling: { columnRenderingMode: "virtual" },
+        dataSource: [{}],
+        columns: ["field1", "field2", "field3", "field4", "field5", "field6", "field7", "field8"]
+    });
+
+    this.clock.tick(30);
+
+    assert.equal($element.find(".dx-header-row").children().length, windowUtils.hasWindow() ? 6 : 8, "column count");
 });

@@ -33,7 +33,9 @@ var $ = require("jquery"),
     dataGridMocks = require("../../helpers/dataGridMocks.js"),
     setupDataGridModules = dataGridMocks.setupDataGridModules,
     MockDataController = dataGridMocks.MockDataController,
-    MockColumnsController = dataGridMocks.MockColumnsController;
+    MockColumnsController = dataGridMocks.MockColumnsController,
+    gridCoreUtils = require("ui/grid_core/ui.grid_core.utils"),
+    expandCellTemplate = gridCoreUtils.getExpandCellTemplate();
 
 var generateData = function(countItems) {
     var j = 1,
@@ -539,7 +541,8 @@ QUnit.test("Draw fixed table for rowsView with group row", function(assert) {
     $.extend(that.columns[0], {
         groupIndex: 0,
         command: "expand",
-        allowCollapsing: true
+        allowCollapsing: true,
+        cellTemplate: expandCellTemplate
     });
 
     that.setupDataGrid();
@@ -561,7 +564,7 @@ QUnit.test("Draw fixed table for rowsView with group row", function(assert) {
     // data row
     assert.equal($table.find("tbody > .dx-data-row").length, 2, "has data rows in main table");
     assert.equal($table.find("tbody > .dx-data-row").first().find("td").length, 5, "count cell in data row");
-    assert.strictEqual($table.find("tbody > .dx-data-row").first().find("td").eq(0).html(), "", "text a first cell in data row");
+    assert.strictEqual($table.find("tbody > .dx-data-row").first().find("td").eq(0).html(), "&nbsp;", "text a first cell in data row");
     assert.strictEqual($table.find("tbody > .dx-data-row").first().find("td").eq(1).html(), "test1", "text a second cell in data row");
     assert.strictEqual($table.find("tbody > .dx-data-row").first().find("td").eq(2).html(), "test3", "text a third cell in data row");
     assert.strictEqual($table.find("tbody > .dx-data-row").first().find("td").eq(3).html(), "test5", "text a fourth cell in data row");
@@ -577,7 +580,7 @@ QUnit.test("Draw fixed table for rowsView with group row", function(assert) {
     // data row
     assert.equal($fixTable.find("tbody > .dx-data-row").length, 2, "has data rows in fixed table");
     assert.equal($fixTable.find("tbody > .dx-data-row").first().find("td").length, 3, "count cell in data row");
-    assert.strictEqual($fixTable.find("tbody > .dx-data-row").first().find("td").eq(0).text(), "", "text a first cell in data row");
+    assert.strictEqual($fixTable.find("tbody > .dx-data-row").first().find("td").eq(0).html(), "&nbsp;", "text a first cell in data row");
     assert.strictEqual($fixTable.find("tbody > .dx-data-row").first().find("td").eq(1).html(), "&nbsp;", "text a second cell in data row");
     assert.equal($fixTable.find("tbody > .dx-data-row").first().find("td").eq(1).attr("colspan"), 3, "colspan a second cell in data row");
     if(browser.mozilla) {
@@ -694,7 +697,8 @@ QUnit.test("Draw fixed table for rowsView with summary by fixed column in group 
     $.extend(that.columns[0], {
         groupIndex: 0,
         command: "expand",
-        allowCollapsing: true
+        allowCollapsing: true,
+        cellTemplate: expandCellTemplate
     });
 
     that.setupDataGrid();
@@ -754,7 +758,8 @@ QUnit.test("Draw fixed table for rowsView with summary by unfixed column in grou
     $.extend(that.columns[0], {
         groupIndex: 0,
         command: "expand",
-        allowCollapsing: true
+        allowCollapsing: true,
+        cellTemplate: expandCellTemplate
     });
 
     that.setupDataGrid();
@@ -827,7 +832,8 @@ QUnit.test("Draw fixed table for rowsView with summary by fixed (on left side) a
     $.extend(that.columns[0], {
         groupIndex: 0,
         command: "expand",
-        allowCollapsing: true
+        allowCollapsing: true,
+        cellTemplate: expandCellTemplate
     });
 
     that.setupDataGrid();
@@ -900,7 +906,8 @@ QUnit.test("Draw fixed table for rowsView with summary by fixed (on right side) 
     $.extend(that.columns[0], {
         groupIndex: 0,
         command: "expand",
-        allowCollapsing: true
+        allowCollapsing: true,
+        cellTemplate: expandCellTemplate
     });
 
     that.setupDataGrid();
@@ -2043,8 +2050,8 @@ QUnit.module("Headers reordering and resizing with fixed columns", {
                 caption: "Column 6", fixed: true, fixedPosition: "right", width: 200, allowReordering: true
             }];
 
-        that.setupDataGrid = function() {
-            that.options = {
+        that.setupDataGrid = function(options) {
+            that.options = options || {
                 showColumnHeaders: true,
                 columns: that.columns,
                 allowColumnReordering: true,
@@ -2472,6 +2479,44 @@ QUnit.test("Normalization visible index after dragging not fixed column in last 
     assert.equal(columns[4].visibleIndex, 2, "visibleIndex fifth column");
     assert.strictEqual(columns[5].caption, "Column 6", "caption sixth column");
     assert.equal(columns[5].visibleIndex, 4, "visibleIndex sixth column");
+});
+
+// T616780
+QUnit.test("Resizing -  get points by fixed columns when columnResizingMode is 'widget'", function(assert) {
+    // arrange
+    var that = this,
+        pointsByFixedColumns,
+        $testElement = $("#container").width(800);
+
+    that.setupDataGrid({
+        allowColumnResizing: false,
+        columnResizingMode: "widget",
+        showColumnHeaders: true,
+        columns: [
+            {
+                caption: "Column 1", fixed: true, width: 100, allowResizing: true
+            },
+            {
+                caption: "Column 2", fixed: true, width: 125, allowResizing: true
+            },
+            {
+                caption: "Column 3", fixed: true, width: 150
+            },
+            {
+                caption: "Column 4", width: 200
+            }
+        ]
+    });
+    that.columnHeadersView.render($testElement);
+
+    // act
+    that.columnsResizerController._generatePointsByColumns();
+    pointsByFixedColumns = that.columnsResizerController._pointsByFixedColumns;
+
+    // assert
+    assert.equal(pointsByFixedColumns.length, 2, "count points by columns");
+    assert.deepEqual(pointsByFixedColumns[0], { columnIndex: 0, index: 1, x: -9900, y: -10000 }, "first point");
+    assert.deepEqual(pointsByFixedColumns[1], { columnIndex: 1, index: 2, x: -9775, y: -10000 }, "second point");
 });
 
 QUnit.module("Fixed columns with band columns", {

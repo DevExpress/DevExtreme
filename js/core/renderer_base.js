@@ -35,7 +35,7 @@ var initRender = function(selector, context) {
 
         [].push.apply(this, domAdapter.querySelectorAll(context, selector));
         return this;
-    } else if(domAdapter.isNode(selector)) {
+    } else if(domAdapter.isNode(selector) || typeUtils.isWindow(selector)) {
         this[0] = selector;
         this.length = 1;
         return this;

@@ -348,6 +348,10 @@
         }
     }
 
+    .dx-expand-icon-container{
+        width: @PIVOTGRID_ICON_SIZE;
+    }
+
     .dx-pivotgrid-horizontal-headers:last-child {
         border-bottom: 0;
     }
@@ -394,6 +398,7 @@
     .dx-icon-sorted{
         display: inline-block;
         margin-left: 5px;
+        width: @PIVOTGRID_ICON_SIZE;
     }
 
     .dx-menu-item .dx-icon {
@@ -438,16 +443,36 @@
 
     .dx-area {
         padding: 5px;
+        display: flex;
+        height: 33.33%;
+        flex-direction: column;
+    }
+
+    .dx-layout-2 .dx-fields-container {
+        height: 66%;
+        .dx-area {
+            height: 50%;
+        }
+    }
+
+    .dx-area.dx-all-fields {
+        flex-grow: 1;
     }
 
     .dx-area .dx-area-fields {
         margin-top: 3px;
         border: @PIVOTGRID_BORDER;
+        height: 100%;
+    }
+
+    .dx-area-fields-header .dx-area-caption {
+        align-self: center;
     }
 
     .dx-area-fields[group] {
         padding: 5px;
         background-color: @PIVOTGRID_TOTALCOLOR;
+        display: flex;
     }
 
     .dx-area-fields.dx-drag-target {
@@ -633,7 +658,7 @@
     }
 
     .dx-pivotgridfieldchooser-container .dx-col {
-        float: right;
+        display: flex;
     }
 
 

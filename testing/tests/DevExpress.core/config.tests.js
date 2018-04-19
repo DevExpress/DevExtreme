@@ -1,8 +1,6 @@
 "use strict";
 
-var $ = require("jquery"),
-    errors = require("core/errors"),
-    config = require("core/config");
+var config = require("core/config");
 
 require("bundles/modules/core");
 
@@ -31,37 +29,6 @@ QUnit.test("get/set", function(assert) {
         assert.equal(config().defaultCurrency, "EUR");
     } finally {
         config(originalConfig);
-    }
-});
-
-QUnit.test("DevExpress.rtlEnabled property is deprecated", function(assert) {
-    var originalRtlEnabled = config().rtlEnabled,
-        originalLog = errors.log,
-        log = [],
-        expectedWarning = ["W0003", "DevExpress", "rtlEnabled", "16.1", "Use the 'DevExpress.config' method instead"];
-
-    errors.log = function() {
-        log.push($.makeArray(arguments));
-    };
-
-    try {
-        DevExpress.rtlEnabled = true;
-
-        assert.equal(config().rtlEnabled, true);
-        assert.equal(log.length, 1);
-        assert.deepEqual(log[0], expectedWarning);
-
-        config({
-            rtlEnabled: false
-        });
-
-        assert.equal(DevExpress.rtlEnabled, false);
-        assert.equal(log.length, 2);
-        assert.deepEqual(log[1], expectedWarning);
-
-    } finally {
-        errors.log = originalLog;
-        config({ rtlEnabled: originalRtlEnabled });
     }
 });
 

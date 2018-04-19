@@ -146,7 +146,8 @@ var SchedulerAppointments = CollectionWidget.inherit({
             allowDrag: true,
             allowResize: true,
             allowAllDayResize: true,
-            onAppointmentDblClick: null
+            onAppointmentDblClick: null,
+            _appointmentGroupButtonOffset: 0
         });
     },
 
@@ -579,15 +580,15 @@ var SchedulerAppointments = CollectionWidget.inherit({
     },
 
     _calculateResizableArea: function(itemSetting, appointmentData) {
-        var area = this.$element().closest(".dx-scrollable-content"),
-            allDay = itemSetting.allDay;
+        var area = this.$element().closest(".dx-scrollable-content");
 
         this.notifyObserver("getResizableAppointmentArea", {
             coordinates: {
                 left: itemSetting.left,
-                top: 0
+                top: 0,
+                groupIndex: itemSetting.groupIndex
             },
-            allDay: allDay,
+            allDay: itemSetting.allDay,
             callback: function(result) {
                 if(result) {
                     area = result;
@@ -863,7 +864,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
                 items: virtualItems,
                 buttonColor: virtualGroup.buttonColor,
                 itemTemplate: this.option("itemTemplate"),
-                buttonWidth: buttonWidth,
+                buttonWidth: buttonWidth - this.option("_appointmentGroupButtonOffset"),
                 onAppointmentClick: this.option("onItemClick")
             });
         }).bind(this));
