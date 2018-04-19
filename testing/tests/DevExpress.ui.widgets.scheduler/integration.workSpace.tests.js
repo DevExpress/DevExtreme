@@ -983,23 +983,12 @@ QUnit.test("resourceCellTemplate should work correct in agenda view", function(a
     assert.notOk($cell2.hasClass("custom-group-cell-class"), "second cell has no class");
 });
 
-QUnit.test("dateCellTemplate should work correct", function(assert) {
+QUnit.test("dateCellTemplate should work correctly", function(assert) {
     this.createInstance({
         views: ["month"],
         currentView: "month",
         currentDate: new Date(2016, 8, 5),
-        dataSource: [{
-            text: "a",
-            ownerId: 1,
-            startDate: new Date(2016, 8, 5, 7),
-            endDate: new Date(2016, 8, 5, 8),
-        },
-        {
-            text: "b",
-            ownerId: 2,
-            startDate: new Date(2016, 8, 5, 10),
-            endDate: new Date(2016, 8, 5, 11),
-        }],
+        dataSource: [],
         firstDayOfWeek: 0,
         groups: ["ownerId"],
         resources: [
@@ -1025,7 +1014,34 @@ QUnit.test("dateCellTemplate should work correct", function(assert) {
     assert.notOk($cell2.hasClass("custom-group-cell-class"), "second cell has no class");
 });
 
-QUnit.test("dateCellTemplate should work correct in agenda view", function(assert) {
+QUnit.test("dateCellTemplate should work correctly in workWeek view", function(assert) {
+    var dayOfWeekNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+    this.createInstance({
+        views: ["workWeek"],
+        currentView: "workWeek",
+        currentDate: new Date(2016, 8, 5),
+        dataSource: [],
+        startDayHour: 7,
+        endDayHour: 23,
+        dateCellTemplate: function(cellData, index, container) {
+            $(container).append(
+                $("<div />")
+                    .addClass("name")
+                    .text(dayOfWeekNames[cellData.date.getDay()]),
+                $("<div />")
+                    .addClass("number")
+                    .text(cellData.date.getDate())
+            );
+        },
+    });
+
+    var $headerPanel = this.instance.$element().find(".dx-scheduler-header-panel");
+
+    assert.ok($headerPanel.text(), "Mon5Tue6Wed7Thu8Fri9");
+});
+
+QUnit.test("dateCellTemplate should work correctly in agenda view", function(assert) {
     this.createInstance({
         views: ["agenda"],
         currentView: "agenda",
