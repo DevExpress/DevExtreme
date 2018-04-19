@@ -99,30 +99,6 @@
     }
 
     .dx-@{widgetName} {
-        .dx-menu-base {
-            .dx-menu-item {
-                .dx-menu-item-content {
-                    padding: 8px 0px 0px 9px;
-
-                    .dx-icon {
-                        margin-right: 9px;
-                        min-width: ~"@{@{widgetName}-filter-operation-image-size}";
-                        height: ~"@{@{widgetName}-filter-operation-image-size}";
-                    }
-                }
-            }
-        }
-
-        .dx-editor-with-menu .dx-filter-menu {
-            .dx-menu-item-content {
-                padding-top: 3px;
-
-                .dx-icon-filter-operation-default {
-                    margin-top: 1px;
-                }
-            }
-        }
-
         .dx-row-alt {
             & > td {
                 background-color: ~"@{@{widgetName}-row-alternation-color}";
@@ -378,6 +354,29 @@
     }
 
     .dx-@{widgetName}-filter-row {
+        .dx-menu-base {
+            .dx-menu-item {
+                .dx-menu-item-content {
+                    padding: 8px 0px 0px 9px;
+
+                    .dx-icon {
+                        margin-right: 9px;
+                        min-width: ~"@{@{widgetName}-filter-operation-image-size}";
+                        height: ~"@{@{widgetName}-filter-operation-image-size}";
+                    }
+                }
+            }
+        }
+        .dx-editor-with-menu .dx-filter-menu {
+            .dx-menu-item-content {
+                padding-top: 3px;
+
+                .dx-icon-filter-operation-default {
+                    margin-top: 1px;
+                }
+            }
+        }
+
         .dx-menu .dx-overlay-content {
             color: @ANDROID5_TEXT;
         }
@@ -772,7 +771,7 @@
             }
         }
 
-        .dx-@{widgetName} {
+        .dx-@{widgetName}-filter-row {
             .dx-menu {
                 .dx-menu-item {
                     .dx-menu-item-content {
