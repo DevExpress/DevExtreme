@@ -10,6 +10,7 @@ var $ = require("../core/renderer"),
     Popover = require("./popover"),
     DataHelperMixin = require("../data_helper"),
     List = require("./list"),
+    themes = require("./themes"),
     ChildDefaultTemplate = require("./widget/child_default_template");
 
 var DROP_DOWN_MENU_CLASS = "dx-dropdownmenu",
@@ -185,7 +186,8 @@ var DropDownMenu = Widget.inherit({
             onItemRendered: null,
             menuWidget: List,
             popupMaxHeight: undefined,
-            closeOnClick: true
+            closeOnClick: true,
+            useInkRipple: false
         });
     },
 
@@ -234,6 +236,14 @@ var DropDownMenu = Widget.inherit({
                             to: { scale: 0 }
                         }
                     }
+                }
+            },
+            {
+                device: function() {
+                    return themes.isMaterial();
+                },
+                options: {
+                    useInkRipple: true
                 }
             }
         ]);
@@ -318,12 +328,17 @@ var DropDownMenu = Widget.inherit({
         this._button = this._createComponent($button, Button, config);
     },
 
+    _toggleActiveState: function($element, value, e) {
+        this._button._toggleActiveState($element, value, e);
+    },
+
     _buttonOptions: function() {
         return {
             text: this.option("buttonText"),
             icon: this.option("buttonIcon"),
             width: this.option("buttonWidth"),
             height: this.option("buttonHeight"),
+            useInkRipple: this.option("useInkRipple"),
             template: this.option("buttonTemplate"),
             focusStateEnabled: false,
             onClick: (function(e) {
@@ -492,6 +507,7 @@ var DropDownMenu = Widget.inherit({
                 break;
             case "usePopover":
             case "menuWidget":
+            case "useInkRipple":
                 this._invalidate();
                 break;
             case "focusStateEnabled":
