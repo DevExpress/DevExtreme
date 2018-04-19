@@ -30,10 +30,9 @@ var SchedulerWorkSpaceWorkWeek = SchedulerWorkSpaceWeek.inherit({
     _getDateByIndex: function(headerIndex) {
         var resultDate = new Date(this._firstViewDate);
 
-        // if(headerIndex % this._getCellCount() === 0) {
-        //     weekendCounter = 0;
-        //     weekCounter = 0;
-        // }
+        if(headerIndex % this._getCellCount() === 0) {
+            weekCounter = 0;
+        }
 
         resultDate.setDate(this._firstViewDate.getDate() + headerIndex + weekCounter);
         var index = resultDate.getDay();
@@ -43,16 +42,7 @@ var SchedulerWorkSpaceWorkWeek = SchedulerWorkSpaceWeek.inherit({
             index = resultDate.getDay();
             weekCounter++;
         }
-        // var nextDay = resultDate.getDay() + 1;
 
-        // if(nextDay % 6 === 0) {
-        //     weekendCounter = 2;
-
-        //     if(nextDay === 6) {
-        //         weekCounter++;
-        //         weekendCounter *= weekCounter;
-        //     }
-        // }
         return resultDate;
     },
 
