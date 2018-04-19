@@ -62,6 +62,9 @@ QUnit.module("Sampler points, discrete", {
         this.argumentAxis = {
             getAggregationInfo() {
                 return {};
+            },
+            calculateInterval: function() {
+                return 1;
             }
         };
 
@@ -249,7 +252,10 @@ QUnit.module("Aggregation methods", {
                     }
                 };
             },
-            getViewport() { }
+            getViewport() { },
+            calculateInterval: function() {
+                return 1;
+            }
         };
 
         this.createSeries = function(method, type, options) {
@@ -804,7 +810,7 @@ QUnit.test("Take into account argumentRange on aggregation", function(assert) {
         { arg: 8, val1: 4, val2: 9 }
     ], "rangebar");
 
-    assert.deepEqual(this.argumentAxis.getAggregationInfo.lastCall.args[1], { min: 0, max: 8 });
+    assert.deepEqual(this.argumentAxis.getAggregationInfo.lastCall.args[1], { min: 0, max: 8, interval: 1 });
 });
 
 QUnit.test("Skip argumentRange on aggregation for discrete data", function(assert) {

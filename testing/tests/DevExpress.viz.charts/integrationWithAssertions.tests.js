@@ -1138,7 +1138,7 @@ QUnit.test("getAllPoints with enabled aggregation", function(assert) {
         series: [{ aggregation: { enabled: true } }]
     });
 
-    assert.strictEqual(chart.getAllSeries()[0].getAllPoints().length, 2);
+    assert.strictEqual(chart.getAllSeries()[0].getAllPoints().length, 1);
 });
 
 QUnit.module("T576725", $.extend({}, moduleSetup, {
