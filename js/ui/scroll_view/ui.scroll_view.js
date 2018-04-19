@@ -15,6 +15,7 @@ var $ = require("../../core/renderer"),
     Scrollable = require("./ui.scrollable"),
     LoadIndicator = require("../load_indicator"),
     config = require("../../core/config"),
+    themes = require("./../themes"),
     LoadPanel = require("../load_panel");
 
 var SCROLLVIEW_CLASS = "dx-scrollview",
@@ -122,6 +123,44 @@ var ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
                 },
                 options: {
                     refreshStrategy: "slideDown"
+                }
+            },
+            {
+                device: function() {
+                    return themes.isMaterial();
+                },
+                options: {
+                    /**
+                    * @name dxScrollViewOptions_pullingDownText
+                    * @publicName pullingDownText
+                    * @type string
+                    * @default "" @for Material
+                    */
+                    pullingDownText: "",
+
+                    /**
+                     * @name dxScrollViewOptions_pulledDownText
+                     * @publicName pulledDownText
+                     * @type string
+                     * @default "" @for Material
+                     */
+                    pulledDownText: "",
+
+                    /**
+                     * @name dxScrollViewOptions_refreshingText
+                     * @publicName refreshingText
+                     * @type string
+                     * @default "" @for Material
+                     */
+                    refreshingText: "",
+
+                    /**
+                     * @name dxScrollViewOptions_reachBottomText
+                     * @publicName reachBottomText
+                     * @type string
+                     * @default "" @for Material
+                     */
+                    reachBottomText: ""
                 }
             }
         ]);

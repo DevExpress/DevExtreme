@@ -14,6 +14,7 @@ var SCROLLVIEW_PULLDOWN_REFRESHING_CLASS = "dx-scrollview-pull-down-loading",
     SCROLLVIEW_PULLDOWN_IMAGE_CLASS = "dx-scrollview-pull-down-image",
     SCROLLVIEW_PULLDOWN_INDICATOR_CLASS = "dx-scrollview-pull-down-indicator",
     SCROLLVIEW_PULLDOWN_TEXT_CLASS = "dx-scrollview-pull-down-text",
+    SCROLLVIEW_PULLDOWN_VISIBLE_TEXT_CLASS = "dx-scrollview-pull-down-text-visible",
 
     STATE_RELEASED = 0,
     STATE_READY = 1,
@@ -36,9 +37,22 @@ var ScrollViewScroller = simulatedStrategy.Scroller.inherit({
     },
 
     _refreshPullDownText: function() {
-        this._$pullingDownText.css("opacity", this._state === STATE_RELEASED ? 1 : 0);
-        this._$pulledDownText.css("opacity", this._state === STATE_READY ? 1 : 0);
-        this._$refreshingText.css("opacity", this._state === STATE_REFRESHING ? 1 : 0);
+        var that = this,
+            pullDownTextItems = [{
+                element: this._$pullingDownText,
+                visibleState: STATE_RELEASED
+            }, {
+                element: this._$pulledDownText,
+                visibleState: STATE_READY
+            }, {
+                element: this._$refreshingText,
+                visibleState: STATE_REFRESHING
+            }];
+
+        each(pullDownTextItems, function(_, item) {
+            var action = that._state === item.visibleState ? "addClass" : "removeClass";
+            item.element[action](SCROLLVIEW_PULLDOWN_VISIBLE_TEXT_CLASS);
+        });
     },
 
     _initCallbacks: function() {

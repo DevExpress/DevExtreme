@@ -814,6 +814,23 @@ testComponentDefaults(ScrollView,
     }
 );
 
+testComponentDefaults(ScrollView,
+    {},
+    {
+        pullingDownText: "",
+        pulledDownText: "",
+        refreshingText: "",
+        reachBottomText: ""
+    },
+    function() {
+        this.originalCurrentTheme = themes.current();
+        themes.current("material");
+    },
+    function() {
+        themes.current(this.originalCurrentTheme);
+    }
+);
+
 testComponentDefaults(TagBox,
     { platform: "android" },
     { showDropDownButton: false }
