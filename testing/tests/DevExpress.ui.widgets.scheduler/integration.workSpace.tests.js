@@ -1226,7 +1226,7 @@ QUnit.test("WorkSpace recalculation works fine after render resourceCellTemplate
         schedulerHeaderPanelHeight = parseInt(this.instance.$element().find(".dx-scheduler-header-panel").outerHeight(true), 10),
         $allDayTitle = this.instance.$element().find(".dx-scheduler-all-day-title"),
         $dateTableScrollable = this.instance.$element().find(".dx-scheduler-date-table-scrollable"),
-        allDayPanelHeight = this.instance._workSpace.getAllDayHeight(),
+        allDayPanelHeight = this.instance._workSpace._$allDayTable.outerHeight(),
         $sidebarScrollable = this.instance.$element().find(".dx-scheduler-sidebar-scrollable"),
         $headerScrollable = this.instance.$element().find(".dx-scheduler-header-scrollable");
 
@@ -1260,7 +1260,7 @@ QUnit.test("WorkSpace recalculation works fine after render dateCellTemplate if 
         schedulerHeaderPanelHeight = parseInt(this.instance.$element().find(".dx-scheduler-header-panel").outerHeight(true), 10),
         $allDayTitle = this.instance.$element().find(".dx-scheduler-all-day-title"),
         $dateTableScrollable = this.instance.$element().find(".dx-scheduler-date-table-scrollable"),
-        allDayPanelHeight = this.instance._workSpace.getAllDayHeight();
+        allDayPanelHeight = this.instance._workSpace._$allDayTable.outerHeight();
 
     assert.equal(parseInt($allDayTitle.css("top"), 10), schedulerHeaderHeight + schedulerHeaderPanelHeight, "All day title element top value");
     assert.roughEqual(parseInt($dateTableScrollable.css("paddingBottom"), 10), schedulerHeaderPanelHeight + allDayPanelHeight, 1, "dateTableScrollable element padding bottom");

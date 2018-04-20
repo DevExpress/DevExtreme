@@ -105,6 +105,10 @@ var VerticalGroupedStrategy = GroupedStrategy.inherit({
         return 0;
     },
 
+    getAllDayTableHeight: function() {
+        return 0;
+    },
+
     getGroupCountAttr: function() {
         return {
             attr: VERTICAL_GROUPED_ATTR,
