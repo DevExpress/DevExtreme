@@ -644,7 +644,7 @@ QUnit.test("Get visible bounds for timelineWeek, rtl mode", function(assert) {
 
 QUnit.module("Timeline Month", {
     beforeEach: function() {
-        this.instance = $("#scheduler-timeline").dxSchedulerTimelineMonth({ currentDate: new Date(2015, 9, 16) }).dxSchedulerTimelineMonth("instance");
+        this.instance = $("#scheduler-timeline").dxSchedulerTimelineMonth({ currentDate: new Date(2015, 9, 16), showCurrentTimeIndicator: false }).dxSchedulerTimelineMonth("instance");
         stubInvokeMethod(this.instance);
     }
 });
@@ -672,6 +672,17 @@ QUnit.test("Scrollables should be updated after currentDate changing", function(
     } finally {
         scrollable.update.restore();
     }
+});
+
+QUnit.test("getEndViewDate should return correct value", function(assert) {
+    this.instance.option({
+        firstDayOfWeek: 0,
+        startDayHour: 9,
+        endDayHour: 18,
+        currentDate: new Date(2018, 3, 20)
+    });
+
+    assert.deepEqual(this.instance.getEndViewDate(), new Date(2018, 3, 30, 17, 59), "End view date is OK");
 });
 
 QUnit.module("Timeline Keyboard Navigation", {
