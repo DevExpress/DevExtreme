@@ -27,7 +27,8 @@ var OPERATION_ICONS = {
         "notcontains": "notContains",
         "endswith": "endsWith",
         "isblank": "isBlank",
-        "isnotblank": "isNotBlank"
+        "isnotblank": "isNotBlank",
+        "between": "between"
     };
 
 module.exports = {
