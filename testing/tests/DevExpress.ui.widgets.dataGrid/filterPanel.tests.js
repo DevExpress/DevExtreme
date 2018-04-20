@@ -25,7 +25,25 @@ QUnit.testStart(function() {
 QUnit.module("Filter Panel", {
     beforeEach: function() {
         this.initFilterPanelView = function(options) {
-            this.options = options;
+            this.options = $.extend({
+                filterPanel: {
+                    visible: true
+                },
+                filterRow: {
+                    operationDescriptions: {
+                        equal: "Equals",
+                        isBlank: "Is Blank",
+                        isNotBlank: "Is Not Blank",
+                        between: "Between"
+                    }
+                },
+                filterValue: ["field", "=", "1"],
+                filterBuilder: {
+                    groupOperationDescriptions: { and: "And", notAnd: "Not And", or: "Or" }
+                },
+                dataSource: [],
+                columns: [{ dataField: "field", caption: "Field" }]
+            }, options);
             setupDataGridModules(this, ["stateStoring", "columns", "filterRow", "data", "headerFilter", "filterSync", "filterBuilder", "filterPanel"], {
                 initViews: true
             });
@@ -71,10 +89,7 @@ QUnit.module("Filter Panel", {
             filterPanel: {
                 visible: true,
                 filterEnabled: true
-            },
-            dataSource: [],
-            filterValue: ["field", "=", "1"],
-            columns: [{ dataField: "field" }]
+            }
         });
 
         // assert
@@ -95,7 +110,8 @@ QUnit.module("Filter Panel", {
                 texts: {
                     createFilter: "test"
                 }
-            }
+            },
+            filterValue: null
         });
 
         // assert
@@ -117,9 +133,7 @@ QUnit.module("Filter Panel", {
                     return assertFilterText;
                 }
             },
-            dataSource: [],
-            filterValue: filterValue,
-            columns: [{ dataField: "field" }]
+            filterValue: filterValue
         });
 
         // assert
@@ -129,17 +143,10 @@ QUnit.module("Filter Panel", {
 
     QUnit.test("Filter text", function(assert) {
         // arrange
-        this.initFilterPanelView({
-            filterPanel: {
-                visible: true
-            },
-            dataSource: [],
-            filterValue: ["field", "=", "1"],
-            columns: [{ dataField: "field" }]
-        });
+        this.initFilterPanelView();
 
         // assert
-        assert.equal(this.filterPanelView.element().find("." + FILTER_PANEL_TEXT_CLASS).text(), "[Field] equal '1'", "check filter text");
+        assert.equal(this.filterPanelView.element().find("." + FILTER_PANEL_TEXT_CLASS).text(), "[Field] Equals '1'", "check filter text");
     });
 
     QUnit.test("can customize hints", function(assert) {
@@ -150,10 +157,7 @@ QUnit.module("Filter Panel", {
                 texts: {
                     filterEnabledHint: "test0"
                 }
-            },
-            dataSource: [],
-            filterValue: ["field", "=", "1"],
-            columns: [{ dataField: "field" }]
+            }
         });
 
         // assert
@@ -168,10 +172,7 @@ QUnit.module("Filter Panel", {
                 texts: {
                     clearFilter: "test0"
                 }
-            },
-            dataSource: [],
-            filterValue: ["field", "=", "1"],
-            columns: [{ dataField: "field" }]
+            }
         });
 
         // assert
@@ -182,18 +183,7 @@ QUnit.module("Filter Panel", {
         // arrange
         var filter = ["field", "=", "1"];
         this.initFilterPanelView({
-            filterPanel: {
-                visible: true,
-                texts: {
-                    clearFilter: "test0"
-                }
-            },
-            dataSource: [],
-            filterValue: filter,
-            filterRow: {
-                operationDescriptions: { equal: "Equals" }
-            },
-            columns: [{ dataField: "field" }]
+            filterValue: filter
         });
 
         // act
@@ -203,23 +193,29 @@ QUnit.module("Filter Panel", {
         assert.deepEqual(result, "[Field] Equals '1'");
     });
 
-    QUnit.test("from condition with array value", function(assert) {
+    QUnit.test("from custom operation", function(assert) {
         // arrange
-        var filter = ["field", "between", [1, 2]];
+        var filter = ["field", "anyof", [1, 2]];
         this.initFilterPanelView({
-            filterPanel: {
-                visible: true
-            },
-            dataSource: [],
-            filterValue: filter,
-            filterRow: {
-                operationDescriptions: { equal: "Equals" }
-            },
-            columns: [{ dataField: "field", caption: "Field" }]
+            filterValue: filter
         });
 
         // act
-        var result = this.filterPanelView.getFilterText(filter, [{ name: "between", caption: "Between" }]);
+        var result = this.filterPanelView.getFilterText(filter, [{ name: "anyof", caption: "Any of" }]);
+
+        // assert
+        assert.deepEqual(result, "[Field] Any of('1', '2')");
+    });
+
+    QUnit.test("from between", function(assert) {
+        // arrange
+        var filter = ["field", "between", [1, 2]];
+        this.initFilterPanelView({
+            filterValue: filter
+        });
+
+        // act
+        var result = this.filterPanelView.getFilterText(filter, []);
 
         // assert
         assert.deepEqual(result, "[Field] Between('1', '2')");
@@ -230,21 +226,7 @@ QUnit.module("Filter Panel", {
         var filter = [["field", "=", null], "and", ["field", "<>", null]];
 
         this.initFilterPanelView({
-            filterPanel: {
-                visible: true
-            },
-            dataSource: [],
-            filterValue: filter,
-            filterRow: {
-                operationDescriptions: {
-                    isBlank: "Is Blank",
-                    isNotBlank: "Is Not Blank"
-                }
-            },
-            filterBuilder: {
-                groupOperationDescriptions: { and: "And" }
-            },
-            columns: [{ dataField: "field", caption: "Field" }]
+            filterValue: filter
         });
 
         // act, assert
@@ -255,21 +237,7 @@ QUnit.module("Filter Panel", {
         // arrange
         var filter = [["field", "=", "1"], "and", ["field", "=", "2"]];
         this.initFilterPanelView({
-            filterPanel: {
-                visible: true,
-                texts: {
-                    clearFilter: "test0"
-                }
-            },
-            dataSource: [],
-            filterValue: filter,
-            filterRow: {
-                operationDescriptions: { equal: "Equals" }
-            },
-            filterBuilder: {
-                groupOperationDescriptions: { and: "And" }
-            },
-            columns: [{ dataField: "field", caption: "Field" }]
+            filterValue: filter
         });
 
         // act
@@ -283,21 +251,7 @@ QUnit.module("Filter Panel", {
         // arrange
         var filter = [["field", "=", "1"], "and", ["field", "=", "2"], "and", [["field", "=", "3"], "or", ["field", "=", "4"]]];
         this.initFilterPanelView({
-            filterPanel: {
-                visible: true,
-                texts: {
-                    clearFilter: "test0"
-                }
-            },
-            dataSource: [],
-            filterValue: filter,
-            filterRow: {
-                operationDescriptions: { equal: "Equals" }
-            },
-            filterBuilder: {
-                groupOperationDescriptions: { and: "And", or: "Or" }
-            },
-            columns: [{ dataField: "field", caption: "Field" }]
+            filterValue: filter
         });
 
         // act
@@ -312,21 +266,7 @@ QUnit.module("Filter Panel", {
         var filter = ["!", [["field", "=", "1"], "and", ["field", "=", "2"]]];
 
         this.initFilterPanelView({
-            filterPanel: {
-                visible: true,
-                texts: {
-                    clearFilter: "test0"
-                }
-            },
-            dataSource: [],
-            filterValue: filter,
-            filterRow: {
-                operationDescriptions: { equal: "Equals" }
-            },
-            filterBuilder: {
-                groupOperationDescriptions: { notAnd: "Not And", and: "And" }
-            },
-            columns: [{ dataField: "field", caption: "Field" }]
+            filterValue: filter
         });
 
         // act
@@ -344,10 +284,6 @@ QUnit.module("Filter Panel", {
 
         // act, assert
         this.initFilterPanelView({
-            filterPanel: {
-                visible: true,
-            },
-            dataSource: [],
             filterValue: filter,
             filterBuilder: {
                 customOperations: [{
@@ -379,10 +315,6 @@ QUnit.module("Filter Panel", {
     QUnit.test("load filterEnabled from state storing", function(assert) {
         // act, assert
         this.initFilterPanelView({
-            filterPanel: {
-                visible: true,
-            },
-            dataSource: [],
             stateStoring: {
                 enabled: true,
                 type: 'custom',
@@ -395,8 +327,7 @@ QUnit.module("Filter Panel", {
                 },
                 customSave: function() {
                 }
-            },
-            columns: ["field"]
+            }
         });
 
         this.clock.tick();
@@ -409,10 +340,6 @@ QUnit.module("Filter Panel", {
         var customSaveSpy = sinon.spy();
 
         this.initFilterPanelView({
-            filterPanel: {
-                visible: true,
-            },
-            dataSource: [],
             stateStoring: {
                 enabled: true,
                 type: 'custom',
@@ -421,8 +348,7 @@ QUnit.module("Filter Panel", {
                 },
                 customSave: customSaveSpy,
                 savingTimeout: 0
-            },
-            columns: ["field"]
+            }
         });
 
         this.clock.tick();
