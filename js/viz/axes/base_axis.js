@@ -1741,7 +1741,7 @@ Axis.prototype = {
                 updateLabels(majorTicks, step, func);
                 break;
             case "stagger":
-                labelHeight = that._getMaxLabelHeight(that._options.position === TOP, boxes, behavior.staggeringSpacing);
+                labelHeight = that._getMaxLabelHeight(boxes, behavior.staggeringSpacing);
 
                 func = function(tick, index) {
                     if((index / (step - 1)) % 2 !== 0) {
