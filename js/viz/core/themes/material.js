@@ -6,9 +6,7 @@ var themeModule = require("../../themes"),
     FONT_FAMILY = "'Roboto', 'Helvetica', 'Arial', sans-serif",
 
     LIGHT_TITLE_COLOR = "rgba(0,0,0,0.87)",
-    LIGHT_LABEL_COLOR = "rgba(0,0,0,0.54)",
-
-    BLUE_ACCENT_COLOR = "#03A9F4";
+    LIGHT_LABEL_COLOR = "rgba(0,0,0,0.54)";
 
 registerTheme({
     name: "material",
@@ -94,32 +92,40 @@ registerTheme({
     }
 }, "material");
 
-registerTheme({
-    name: "material.blue.light",
-
-    rangeSelector: {
-        selectedRangeColor: BLUE_ACCENT_COLOR,
-        sliderMarker: {
-            color: BLUE_ACCENT_COLOR
+function registerMaterialColorScheme(accentName, themeName, accentColor) {
+    registerTheme({
+        name: "material." + accentName + "." + themeName,
+    
+        rangeSelector: {
+            selectedRangeColor: accentColor,
+            sliderMarker: {
+                color: accentColor
+            },
+            sliderHandle: {
+                color: accentColor
+            }
         },
-        sliderHandle: {
-            color: BLUE_ACCENT_COLOR
+    
+        map: {
+            "layer:marker:dot": {
+                color: accentColor
+            },
+            "layer:marker:bubble": {
+                color: accentColor
+            },
+            legend: {
+                markerColor: accentColor
+            }
+        },
+    
+        bullet: {
+            color: accentColor
         }
-    },
+    }, "material." + themeName);    
+}
 
-    map: {
-        "layer:marker:dot": {
-            color: BLUE_ACCENT_COLOR
-        },
-        "layer:marker:bubble": {
-            color: BLUE_ACCENT_COLOR
-        },
-        legend: {
-            markerColor: BLUE_ACCENT_COLOR
-        }
-    },
-
-    bullet: {
-        color: BLUE_ACCENT_COLOR
-    }
-}, "material.light");
+registerMaterialColorScheme("blue", "light", "#03A9F4");
+registerMaterialColorScheme("lime", "light", "#CDDC39");
+registerMaterialColorScheme("orange", "light", "#FF5722");
+registerMaterialColorScheme("purple", "light", "#9C27B0");
+registerMaterialColorScheme("teal", "light", "#009688");
