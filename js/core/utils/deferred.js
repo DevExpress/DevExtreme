@@ -60,16 +60,20 @@ var Deferred = function() {
 
         ["done", "fail"].forEach(function(method) {
             var callback = method === "done" ? resolve : reject;
-            if(!callback) return;
 
             this[method](function() {
-                var callbackResult = callback.apply(this, arguments);
+                if(!callback) {
+                    result[method === "done" ? "resolve" : "reject"].apply(this, arguments);
+                    return;
+                }
+
+                var callbackResult = callback && callback.apply(this, arguments);
                 if(isDeferred(callbackResult)) {
                     callbackResult.done(result.resolve).fail(result.reject);
                 } else if(isPromise(callbackResult)) {
                     callbackResult.then(result.resolve, result.reject);
                 } else {
-                    result.resolve(callbackResult);
+                    result.resolve.apply(this, callbackResult ? [callbackResult] : arguments);
                 }
             });
         }.bind(this));
