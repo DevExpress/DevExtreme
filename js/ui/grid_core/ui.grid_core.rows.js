@@ -5,6 +5,7 @@ var $ = require("../../core/renderer"),
     window = windowUtils.getWindow(),
     eventsEngine = require("../../events/core/events_engine"),
     commonUtils = require("../../core/utils/common"),
+    styleUtils = require("../../core/utils/style"),
     typeUtils = require("../../core/utils/type"),
     each = require("../../core/utils/iterator").each,
     extend = require("../../core/utils/extend").extend,
@@ -1048,11 +1049,11 @@ module.exports = {
                                 scrollingMode = that.option("scrolling.mode");
 
                                 if(freeSpaceRowCount > 0 && that._dataController.pageCount() > 1 && scrollingMode !== "virtual" && scrollingMode !== "infinite") {
-                                    freeSpaceRowElements.css("height", freeSpaceRowCount * that._rowHeight);
+                                    styleUtils.setHeight(freeSpaceRowElements, freeSpaceRowCount * that._rowHeight);
                                     isFreeSpaceRowVisible = true;
                                 }
                                 if(!isFreeSpaceRowVisible && $table) {
-                                    freeSpaceRowElements.css("height", 0);
+                                    styleUtils.setHeight(freeSpaceRowElements, 0);
                                 } else {
                                     freeSpaceRowElements.toggle(isFreeSpaceRowVisible);
                                 }
@@ -1244,7 +1245,7 @@ module.exports = {
                         that._hasHeight = hasHeight === undefined ? height !== "auto" : hasHeight;
 
                         if($element) {
-                            $element.css("height", height);
+                            styleUtils.setHeight($element, height);
                         }
                     } else {
                         return $element ? $element.outerHeight(true) : 0;

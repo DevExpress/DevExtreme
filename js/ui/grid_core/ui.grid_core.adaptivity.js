@@ -962,8 +962,7 @@ module.exports = {
                     this.callBase(isBestFit);
                     if(!this.option("legacyRendering") && this._adaptiveColumnsController.getHidingColumnsQueue().length) {
                         var $rowsTable = this._rowsView._getTableElement();
-                        $rowsTable.css("width", isBestFit ? "auto" : "");
-
+                        $rowsTable.get(0).style.width = isBestFit ? "auto" : "";
                     }
                 },
 

@@ -7,6 +7,7 @@ var $ = require("../../core/renderer"),
     clickEvent = require("../../events/click"),
     browser = require("../../core/utils/browser"),
     commonUtils = require("../../core/utils/common"),
+    styleUtils = require("../../core/utils/style"),
     getPublicElement = require("../../core/utils/dom").getPublicElement,
     typeUtils = require("../../core/utils/type"),
     iteratorUtils = require("../../core/utils/iterator"),
@@ -299,7 +300,10 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             width = HIDDEN_COLUMNS_WIDTH;
         }
 
-        return $("<col>").css("width", width);
+        var col = $("<col>");
+        styleUtils.setWidth(col, width);
+
+        return col;
     },
 
     renderDelayedTemplates: function() {
@@ -687,7 +691,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             columnIndex = 0;
             $cols = $tableElement.find("col");
             if(!legacyRendering) {
-                $cols.css("width", "auto");
+                styleUtils.setWidth($cols, "auto");
             }
             columns = columns || this.getColumns(null, $tableElement);
             for(i = 0; i < columns.length; i++) {
@@ -720,7 +724,8 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
                 if(typeof width === "number") {
                     width = width.toFixed(3) + "px";
                 }
-                $cols.eq(columnIndex).css("width", width || "auto");
+                styleUtils.setWidth($cols.eq(columnIndex), width || "auto");
+
                 columnIndex++;
             }
         }
