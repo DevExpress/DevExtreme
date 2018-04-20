@@ -327,7 +327,7 @@ QUnit.test("Next button shouldn't be disabled if current date is previous day be
 QUnit.test("Calendar popover has dx-scheduler-navigator-calendar-popover class", function(assert) {
     this.createInstance({});
 
-    var popover = $(this.instance.$element()).find(".dx-scheduler-navigator .dx-popover");
+    var popover = $(this.instance.$element()).find(".dx-scheduler-navigator .dx-overlay");
 
     assert.ok(popover.hasClass("dx-scheduler-navigator-calendar-popover"), "Calendar popover has dx-scheduler-navigator-calendar-popover class");
 });
