@@ -283,14 +283,14 @@ module.exports = {
                 maxLabelLength = getMaxSide(func, boxes);
 
             if(rotationAngle) {
-                maxLabelLength = getDistanceByAngle({ width: maxLabelLength, height: this._getMaxLabelHeight(false, boxes, 0) }, rotationAngle);
+                maxLabelLength = getDistanceByAngle({ width: maxLabelLength, height: this._getMaxLabelHeight(boxes, 0) }, rotationAngle);
             }
 
             return constants.getTicksCountInRange(this._majorTicks, this._isHorizontal ? "x" : "y", maxLabelLength);
         },
 
-        _getMaxLabelHeight: function(isNegative, boxes, spacing) {
-            return (isNegative ? -1 : 1) * (getMaxSide(function(box) { return box.height; }, boxes) + spacing);
+        _getMaxLabelHeight: function(boxes, spacing) {
+            return getMaxSide(function(box) { return box.height; }, boxes) + spacing;
         },
 
         _validateOverlappingMode: function(mode, displayMode) {

@@ -1451,9 +1451,9 @@ QUnit.test("Axis position is top", function(assert) {
     assert.deepEqual(this.arrayRemovedElements, [], "labels shouldn't decimated");
 
     assert.equal(texts.getCall(0).returnValue.attr.lastCall.args[0].translateY, 5, "0 text not moved");
-    assert.equal(texts.getCall(1).returnValue.attr.lastCall.args[0].translateY, 11, "1 text moved");
+    assert.equal(texts.getCall(1).returnValue.attr.lastCall.args[0].translateY, -3, "1 text moved");
     assert.equal(texts.getCall(2).returnValue.attr.lastCall.args[0].translateY, 5, "2 text not moved");
-    assert.equal(texts.getCall(3).returnValue.attr.lastCall.args[0].translateY, 10, "3 text moved");
+    assert.equal(texts.getCall(3).returnValue.attr.lastCall.args[0].translateY, -4, "3 text moved");
     assert.equal(texts.getCall(4).returnValue.attr.lastCall.args[0].translateY, 5, "4 text not moved");
 });
 
