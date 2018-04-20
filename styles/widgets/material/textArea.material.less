@@ -1,3 +1,5 @@
+@TEXTAREA_CONTENT_PADDING: 10px;
+
 .dx-textarea {
     height: auto;
     margin: 2px;
@@ -35,7 +37,11 @@
      }
 
     .dx-texteditor-input {
-        padding: 10px;
+        padding: @TEXTAREA_CONTENT_PADDING;
+    }
+
+    .dx-placeholder {
+        padding: (@TEXTAREA_CONTENT_PADDING - @MATERIAL_TEXTEDITOR_INPUT_VERTICAL_PADDING) @TEXTAREA_CONTENT_PADDING;
     }
 
     .dx-icon-clear {

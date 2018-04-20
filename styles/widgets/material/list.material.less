@@ -197,8 +197,10 @@
 
         &.dx-list-group-collapsed {
             .dx-list-group-header-indicator {
-                .dx-icon-chevrondown;
-                font-size: @MATERIAL_BASE_ICON_SIZE;
+                .dx-list-collapsible-groups & {
+                    .dx-icon-chevrondown;
+                    font-size: @MATERIAL_BASE_ICON_SIZE;
+                }
             }
         }
 
@@ -222,10 +224,12 @@
         border-top-color: transparent;
 
         .dx-list-group-header-indicator {
-            .dx-icon-chevronup;
-            font-size: @MATERIAL_BASE_ICON_SIZE;
-            float: right;
-            margin-top: -2px;
+            .dx-list-collapsible-groups & {
+                .dx-icon-chevronup;
+                font-size: @MATERIAL_BASE_ICON_SIZE;
+                float: right;
+                margin-top: -2px;
+            }
         }
 
         .dx-inkripple {
