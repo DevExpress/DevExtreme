@@ -19,7 +19,7 @@ var baseRangeSeries = {
     _createErrorBarGroup: _noop,
 
     _checkData: function(data) {
-        return _isDefined(data.argument) && data.value !== undefined && data.minValue !== undefined;
+        return scatterSeries._checkData(data) && data.minValue !== undefined && data.minValue === data.minValue;
     },
 
     getValueRangeInitialValue: scatterSeries.getValueRangeInitialValue,
@@ -49,29 +49,36 @@ var baseRangeSeries = {
             if(!data.length) {
                 return;
             }
-            var result = {},
-                valueFields = series.getValueFields(),
-                val1Field = valueFields[0],
-                val2Field = valueFields[1];
 
-            result[val1Field] = -Infinity;
-            result[val2Field] = Infinity;
+            const valueFields = series.getValueFields();
+            const val1Field = valueFields[0];
+            const val2Field = valueFields[1];
 
-            result = data.reduce((result, item) => {
-                var minValue = Math.min(item[val1Field], item[val2Field]);
-                var maxValue = Math.max(item[val1Field], item[val2Field]);
+            const result = data.reduce((result, item) => {
+                const val1 = item[val1Field];
+                const val2 = item[val2Field];
 
-                if(item[val1Field] === null || item[val2Field] === null) {
+                if(!_isDefined(val1) || !_isDefined(val2)) {
                     return result;
                 }
 
-                result[val1Field] = Math.min(result[val1Field], minValue);
-                result[val2Field] = Math.max(result[val2Field], maxValue);
+                result[val1Field] = Math.min(result[val1Field], Math.min(val1, val2));
+                result[val2Field] = Math.max(result[val2Field], Math.max(val1, val2));
 
                 return result;
+            }, {
+                [val1Field]: Infinity,
+                [val2Field]: -Infinity,
+                [series.getArgumentField()]: intervalStart
             });
 
-            result[series.getArgumentField()] = intervalStart;
+            if(!isFinite(result[val1Field]) || !isFinite(result[val2Field])) {
+                if(data.filter(i => i[val1Field] === null && i[val2Field] === null).length === data.length) {
+                    result[val1Field] = result[val2Field] = null;
+                } else {
+                    return;
+                }
+            }
 
             return result;
         }

@@ -106,6 +106,28 @@ function calculateSumErrorBars(result, data, series) {
     return result;
 }
 
+function getMinMaxAggregator(compare) {
+    return ({ intervalStart, data }, series) => {
+        const valueField = series.getValueFields()[0];
+        let targetData = data[0];
+
+        targetData = data.reduce((result, item) => {
+            const value = item[valueField];
+            if(result[valueField] === null) {
+                result = item;
+            }
+            if(value !== null && compare(value, result[valueField])) {
+                return item;
+            }
+            return result;
+        }, targetData);
+
+        return _extend({}, targetData, {
+            [series.getArgumentField()]: intervalStart
+        });
+    };
+}
+
 var baseScatterMethods = {
     _defaultDuration: DEFAULT_DURATION,
 
@@ -262,7 +284,7 @@ var baseScatterMethods = {
     },
 
     _checkData: function(data) {
-        return _isDefined(data.argument) && data.value !== undefined;
+        return _isDefined(data.argument) && data.value !== undefined && data.value === data.value;
     },
 
     getErrorBarRangeCorrector: function() {
@@ -362,85 +384,71 @@ var baseScatterMethods = {
             if(!data.length) {
                 return;
             }
-            var result = {},
-                valueField = series.getValueFields()[0],
-                aggregate = data.reduce((result, item) => {
-                    result[0] += item[valueField];
+            const valueField = series.getValueFields()[0];
+            const aggregationResult = data.reduce((result, item) => {
+                const value = item[valueField];
+                if(_isDefined(value)) {
+                    result[0] += value;
                     result[1]++;
-                    return result;
-                }, [0, 0]);
+                } else if(value === null) {
+                    result[2]++;
+                }
 
-            result[valueField] = aggregate[0] / aggregate[1];
-            result[series.getArgumentField()] = intervalStart;
+                return result;
+            }, [0, 0, 0]);
 
-            result = calculateAvgErrorBars(result, data, series);
-
-            return result;
+            return calculateAvgErrorBars({
+                [valueField]: aggregationResult[2] === data.length ? null : aggregationResult[0] / aggregationResult[1],
+                [series.getArgumentField()]: intervalStart
+            }, data, series);
         },
 
         sum({ intervalStart, data }, series) {
             if(!data.length) {
                 return;
             }
-            var result = {},
-                valueField = series.getValueFields()[0];
 
-            result[valueField] = data.reduce((result, item) => {
-                result += item[valueField];
+            const valueField = series.getValueFields()[0];
+            const aggregationResult = data.reduce((result, item) => {
+                const value = item[valueField];
+                if(value !== undefined) {
+                    result[0] += value;
+                }
+                if(value === null) {
+                    result[1]++;
+                } else if(value === undefined) {
+                    result[2]++;
+                }
                 return result;
-            }, 0);
+            }, [0, 0, 0]);
 
-            result[series.getArgumentField()] = intervalStart;
+            let value = aggregationResult[0];
 
-            result = calculateSumErrorBars(result, data, series);
+            if(aggregationResult[1] === data.length) {
+                value = null;
+            }
 
-            return result;
+            if(aggregationResult[2] === data.length) {
+                return;
+            }
+
+            return calculateSumErrorBars({
+                [valueField]: value,
+                [series.getArgumentField()]: intervalStart
+            }, data, series);
         },
 
         count({ data, intervalStart }, series) {
-            var result = {},
-                valueField = series.getValueFields()[0];
+            const valueField = series.getValueFields()[0];
 
-            result[valueField] = data.length;
-
-            result[series.getArgumentField()] = intervalStart;
-
-            return result;
+            return {
+                [series.getArgumentField()]: intervalStart,
+                [valueField]: data.filter(i => i[valueField] !== undefined).length
+            };
         },
 
-        min({ intervalStart, data }, series) {
-            var result = {},
-                valueField = series.getValueFields()[0],
-                itemWithMinPoint = data[0];
-
-            itemWithMinPoint = data.reduce((result, item) => {
-                if(item[valueField] < result[valueField]) {
-                    return item;
-                }
-                return result;
-            }, itemWithMinPoint);
-
-            result[series.getArgumentField()] = intervalStart;
-
-            return _extend({}, itemWithMinPoint, result);
-        },
-
-        max({ intervalStart, data }, series) {
-            var result = {},
-                valueField = series.getValueFields()[0],
-                itemWithMinPoint = data[0];
-
-            itemWithMinPoint = data.reduce(function(result, item) {
-                if(item[valueField] > result[valueField]) {
-                    return item;
-                }
-                return result;
-            }, itemWithMinPoint);
-
-            result[series.getArgumentField()] = intervalStart;
-
-            return _extend({}, itemWithMinPoint, result);
-        }
+        min: getMinMaxAggregator((a, b) => a < b),
+        max: getMinMaxAggregator((a, b) => a > b)
     },
 
     _endUpdateData: function() {
