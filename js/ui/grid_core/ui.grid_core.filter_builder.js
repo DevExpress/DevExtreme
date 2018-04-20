@@ -45,7 +45,8 @@ var FilterBuilderView = modules.View.inherit({
     },
 
     _getPopupContentTemplate: function($contentElement) {
-        var $filterBuilderContainer = $("<div>").appendTo($contentElement),
+        var $scrollViewContainer = $("<div>").appendTo($contentElement),
+            $filterBuilderContainer = $("<div>").appendTo($scrollViewContainer),
             fields = this.getController("columns").getColumns(),
             customOperations = this.getController("filterSync").getCustomFilterOperations();
 
@@ -63,7 +64,7 @@ var FilterBuilderView = modules.View.inherit({
             customOperations: customOperations
         }));
 
-        this._createComponent($contentElement, ScrollView, { direction: "both" });
+        this._createComponent($scrollViewContainer, ScrollView, { direction: "both" });
     },
 
     _getPopupToolbarItems: function() {
