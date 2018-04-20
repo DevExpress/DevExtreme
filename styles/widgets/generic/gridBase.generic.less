@@ -121,16 +121,18 @@
     .dx-@{widgetName} {
         line-height: inherit;
 
-        .dx-menu {
-            background-color: transparent;
-            height: 100%;
+        .dx-@{widgetName}-filter-row {
+            .dx-menu {
+                background-color: transparent;
+                height: 100%;
 
-            .dx-menu-item {
-                .dx-menu-item-content {
-                    padding: @GENERIC_GRID_BASE_MENU_ITEM_PADDING;
+                .dx-menu-item {
+                    .dx-menu-item-content {
+                        padding: @GENERIC_GRID_BASE_MENU_ITEM_PADDING;
 
-                    .dx-icon {
-                        margin: 0px 3px;
+                        .dx-icon {
+                            margin: 0px 3px;
+                        }
                     }
                 }
             }
@@ -826,16 +828,16 @@
             }
         }
 
-        .dx-@{widgetName} {
+        .dx-@{widgetName}-filter-row {
             .dx-menu {
                 .dx-menu-item-has-submenu.dx-menu-item-has-icon {
                     .dx-icon {
-                        margin: 0px 3px;
+                         margin: 0px 3px;
                     }
                 }
             }
 
-            .dx-@{widgetName}-filter-row td .dx-editor-container .dx-filter-range-content {
+            td .dx-editor-container .dx-filter-range-content {
                 padding: @GENERIC_GRID_BASE_CELL_PADDING @GENERIC_GRID_BASE_TEXTEDITOR_INPUT_PADDING @GENERIC_GRID_BASE_CELL_PADDING @GENERIC_GRID_BASE_CELL_PADDING;
             }
         }
