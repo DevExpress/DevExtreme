@@ -1444,6 +1444,21 @@ QUnit.test("selected list items should be correct if the default tag template is
     assert.deepEqual(list.option("selectedItems"), [items[0]], "the 'selectedItems' list option is correct");
 });
 
+QUnit.test("user can return default tag template from the custom function", function(assert) {
+    var $element = $("#tagBox").dxTagBox({
+            items: [{ id: 1, text: "item 1" }],
+            valueExpr: "id",
+            displayExpr: "text",
+            value: [1],
+            tagTemplate: function() {
+                return "tag";
+            }
+        }),
+        $tags = $element.find("." + TAGBOX_TAG_CLASS);
+
+    assert.equal($tags.text(), "item 1", "text is correct");
+});
+
 
 QUnit.module("showSelectionControls", moduleSetup);
 

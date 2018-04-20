@@ -509,6 +509,10 @@ var TagBox = SelectBox.inherit({
         this.callBase();
 
         this._defaultTemplates["tag"] = new BindableTemplate(function($container, data) {
+            if(this._displayGetterExpr()) {
+                data = this._displayGetter(data);
+            }
+
             var $tagContent = $("<div>").addClass(TAGBOX_TAG_CONTENT_CLASS);
 
             $("<span>")
@@ -520,7 +524,7 @@ var TagBox = SelectBox.inherit({
                 .appendTo($tagContent);
 
             $container.append($tagContent);
-        }, [], this.option("integrationOptions.watchMethod"));
+        }.bind(this), [this._displayGetterExpr()], this.option("integrationOptions.watchMethod"));
     },
 
     _renderSubmitElement: function() {
@@ -893,15 +897,7 @@ var TagBox = SelectBox.inherit({
         return this._tagElementsCache;
     },
 
-    _getDefaultTagTemplate: function() {
-        return this._defaultTemplates["tag"];
-    },
-
     _applyTagTemplate: function(item, $tag) {
-        if(this._displayGetterExpr() && this._tagTemplate === this._getDefaultTagTemplate()) {
-            item = this._displayGetter(item);
-        }
-
         this._tagTemplate.render({
             model: item,
             container: getPublicElement($tag)
@@ -1282,6 +1278,7 @@ var TagBox = SelectBox.inherit({
                 break;
             case "displayExpr":
                 this.callBase(args);
+                this._initTemplates();
                 this._invalidate();
                 break;
             case "tagTemplate":
