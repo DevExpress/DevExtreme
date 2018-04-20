@@ -58,24 +58,12 @@ function customizeText(conditionInfo) {
                 + (isDefined(endValue) ? formatUtils.getFormattedValueText(conditionInfo.field, endValue) : "?");
 }
 
-function calculateFilterExpression(filterValue, field) {
-    if(!filterValue || filterValue.length < 2) return null;
-
-    var startValue = filterValue[0],
-        endValue = filterValue[1];
-    if(!isDefined(startValue) && !isDefined(endValue)) {
-        return null;
-    }
-    return [[field.dataField, ">=", startValue], "and", [field.dataField, "<=", endValue]];
-}
-
 function getConfig(caption) {
     return {
         name: "between",
         caption: caption,
         icon: "range",
         dataTypes: ["number", "date", "datetime"],
-        calculateFilterExpression: calculateFilterExpression,
         editorTemplate: editorTemplate,
         customizeText: customizeText
     };
