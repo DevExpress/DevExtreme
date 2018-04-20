@@ -1185,7 +1185,7 @@ var SchedulerWorkSpace = Widget.inherit({
 
         var headerPanelHeight = this.getHeaderPanelHeight(),
             headerHeight = this.invoke("getHeaderHeight"),
-            allDayPanelHeight = this.supportAllDayRow() && this.option("showAllDayPanel") ? this._groupedStrategy.getAllDayOffset() : 0;
+            allDayPanelHeight = this.supportAllDayRow() && this.option("showAllDayPanel") ? this._groupedStrategy.getAllDayTableHeight() : 0;
 
         headerPanelHeight && this._headerScrollable && this._headerScrollable.$element().height(headerPanelHeight + allDayPanelHeight);
 
