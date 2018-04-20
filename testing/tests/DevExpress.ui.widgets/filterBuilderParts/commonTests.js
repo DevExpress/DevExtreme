@@ -810,7 +810,8 @@ QUnit.module("Create editor", function() {
 
         assert.strictEqual(args.value, "value", "filter value");
         assert.strictEqual(args.filterOperation, "=", "filter operation");
-        assert.deepEqual(args.field, fields[0], "field");
+        assert.strictEqual(args.field.dataField, fields[0].dataField);
+        assert.strictEqual(args.field.editorTemplate, fields[0].editorTemplate);
         assert.ok(args.setValue, "has setValue");
     });
 
@@ -842,7 +843,8 @@ QUnit.module("Create editor", function() {
 
         assert.strictEqual(args.value, 2, "filter value");
         assert.strictEqual(args.filterOperation, "lastDays", "filter operation");
-        assert.deepEqual(args.field, fields[0], "field");
+        assert.strictEqual(args.field.dataField, fields[0].dataField);
+        assert.strictEqual(args.field.editorTemplate, fields[0].editorTemplate);
         assert.ok(args.setValue, "has setValue");
     });
 
@@ -1205,6 +1207,32 @@ QUnit.module("Methods", function() {
             ],
             "and",
             ["OrderDate", ">", "1"]
+        ]);
+    });
+
+    // T624888
+    QUnit.test("between is available in field.calculateFilterExpression", function(assert) {
+        // arrange
+        var instance = $("#container").dxFilterBuilder({
+            value: [
+                ["field", "between", [1, 5]]
+            ],
+            fields: [{
+                dataField: "field",
+                dataType: "number",
+                calculateFilterExpression: function(filterValue, selectedFieldOperation, target) {
+                    assert.strictEqual(target, "filterBuilder");
+                    assert.strictEqual(selectedFieldOperation, "between");
+                    return [[this.dataField, ">", filterValue[0]], "and", [this.dataField, "<", filterValue[1]]];
+                }
+            }]
+        }).dxFilterBuilder("instance");
+
+        // act, assert
+        assert.deepEqual(instance.getFilterExpression(), [
+            ["field", ">", 1],
+            "and",
+            ["field", "<", 5]
         ]);
     });
 });

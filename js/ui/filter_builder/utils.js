@@ -350,6 +350,7 @@ function getNormalizedFields(fields) {
                     normalizedField[key] = field[key];
                 }
             }
+            normalizedField.defaultCalculateFilterExpression = filterUtils.defaultCalculateFilterExpression;
             result.push(normalizedField);
         }
         return result;
@@ -366,7 +367,7 @@ function getConditionFilterExpression(condition, fields, customOperations, targe
     } else if(field.calculateFilterExpression) {
         return field.calculateFilterExpression.apply(field, [filterExpression[2], filterExpression[1], target]);
     } else {
-        return filterUtils.defaultCalculateFilterExpression.apply(field, [filterExpression[2], filterExpression[1], target]);
+        return field.defaultCalculateFilterExpression.apply(field, [filterExpression[2], filterExpression[1], target]);
     }
 }
 

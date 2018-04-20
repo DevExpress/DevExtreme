@@ -433,17 +433,18 @@ QUnit.module("Utils", function() {
 
     // T603218
     QUnit.test("getNormalizedFields", function(assert) {
-        var normalizedFields = utils.getNormalizedFields([{
-            dataField: "Weight",
-            dataType: 'number',
-            width: 100
-        }, {
-        }]);
+        var field = {
+                dataField: "Weight",
+                dataType: "number",
+                width: 100
+            },
+            normalizedFields = utils.getNormalizedFields([field, { }]);
 
-        assert.deepEqual(normalizedFields, [{
-            dataField: "Weight",
-            dataType: 'number'
-        }]);
+        assert.strictEqual(normalizedFields.length, 1);
+        assert.strictEqual(normalizedFields[0].dataField, field.dataField);
+        assert.strictEqual(normalizedFields[0].dataType, field.dataType);
+        assert.ok(normalizedFields[0].defaultCalculateFilterExpression);
+        assert.notOk(normalizedFields[0].width);
     });
 });
 
@@ -1056,9 +1057,12 @@ QUnit.module("getAvailableOperations", {
 
 QUnit.module("Custom filter expressions", {
     beforeEach: function() {
-        this.fields = [{
+        this.fields = utils.getNormalizedFields([{
             dataField: "field1",
             calculateFilterExpression: function(filterValue, selectedFilterOperation) {
+                if(selectedFilterOperation === "between") {
+                    return this.defaultCalculateFilterExpression.apply(this, arguments);
+                }
                 return [
                     [this.dataField, "<>", filterValue],
                     "or",
@@ -1068,7 +1072,7 @@ QUnit.module("Custom filter expressions", {
         },
         {
             dataField: "field2"
-        }];
+        }]);
     }
 }, function() {
 
@@ -1238,6 +1242,23 @@ QUnit.module("Custom filter expressions", {
 
         // act, assert
         assert.deepEqual(utils.getFilterExpression(value, this.fields, customOperations), null);
+    });
+
+    QUnit.test("defaultCalculateFilterExpression is available in field.calculateFilterExpression", function(assert) {
+        // arrange
+        var fields = [{
+                dataField: "field",
+                calculateFilterExpression: function(filterValue, field) {
+                    return this.defaultCalculateFilterExpression.apply(this, arguments);
+                },
+                defaultCalculateFilterExpression: function() {
+                    return ["field", "=", "2"];
+                }
+            }],
+            value = ["field", "=", "1"];
+
+        // act, assert
+        assert.deepEqual(utils.getFilterExpression(value, fields, []), ["field", "=", "2"]);
     });
 });
 
@@ -1435,36 +1456,36 @@ QUnit.module("Between operation", function() {
 
     QUnit.test("between.calculateFilterExpression", function(assert) {
         // arrange
-        var customOperations = [];
+        var customOperations = [],
+            fields = utils.getNormalizedFields([{ dataField: "field" }]);
 
         // act
-        var mergedOperations = utils.getMergedOperations(customOperations, function() { }),
-            filterExpression = mergedOperations[0].calculateFilterExpression([1, 2], { dataField: "field" });
+        var filterExpression = utils.getFilterExpression(["field", "between", [1, 2]], fields, customOperations);
         // assert
         assert.deepEqual(filterExpression, [["field", ">=", 1], "and", ["field", "<=", 2]]);
 
         // act
-        filterExpression = mergedOperations[0].calculateFilterExpression([1], { dataField: "field" });
+        filterExpression = utils.getFilterExpression(["field", "between", [1]], fields, customOperations);
         // assert
         assert.deepEqual(filterExpression, null);
 
         // act
-        filterExpression = mergedOperations[0].calculateFilterExpression([], { dataField: "field" });
+        filterExpression = utils.getFilterExpression(["field", "between", []], fields, customOperations);
         // assert
         assert.deepEqual(filterExpression, null);
 
         // act
-        filterExpression = mergedOperations[0].calculateFilterExpression("", { dataField: "field" });
+        filterExpression = utils.getFilterExpression(["field", "between", ""], fields, customOperations);
         // assert
         assert.deepEqual(filterExpression, null);
 
         // act
-        filterExpression = mergedOperations[0].calculateFilterExpression(null, { dataField: "field" });
+        filterExpression = utils.getFilterExpression(null, fields, customOperations);
         // assert
         assert.deepEqual(filterExpression, null);
 
         // act
-        filterExpression = mergedOperations[0].calculateFilterExpression([null, null], { dataField: "field" });
+        filterExpression = utils.getFilterExpression(["field", "between", [null, null]], fields, customOperations);
         // assert
         assert.deepEqual(filterExpression, null);
     });
