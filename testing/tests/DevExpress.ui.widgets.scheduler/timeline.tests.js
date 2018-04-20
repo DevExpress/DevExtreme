@@ -674,7 +674,7 @@ QUnit.test("Scrollables should be updated after currentDate changing", function(
     }
 });
 
-QUnit.test("getEndView date should return correct value", function(assert) {
+QUnit.test("getEndViewDate should return correct value", function(assert) {
     this.instance.option({
         firstDayOfWeek: 0,
         startDayHour: 9,

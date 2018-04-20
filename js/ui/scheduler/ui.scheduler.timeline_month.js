@@ -39,7 +39,7 @@ var SchedulerTimelineMonth = SchedulerTimeline.inherit({
 
     getEndViewDate: function() {
         var dateOfLastViewCell = this.getDateOfLastViewCell();
-        return new Date(dateOfLastViewCell.getTime() + this._calculateDayDuration() * 3600000 - 60000);
+        return new Date(dateOfLastViewCell.getTime() + this._calculateDayDuration() * toMs("hour") - 60000);
     },
 
     _getCellCount: function() {
