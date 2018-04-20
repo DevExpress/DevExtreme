@@ -49,7 +49,11 @@ namespace StyleCompiler
             COLOR_SCHEME_DARKVIOLET = "darkviolet",
             COLOR_SCHEME_GREENMIST = "greenmist",
 
-            COLOR_SCHEME_BLUELIGHT = "blue." + COLOR_SCHEME_LIGHT;
+            COLOR_SCHEME_BLUE_LIGHT = "blue." + COLOR_SCHEME_LIGHT,
+            COLOR_SCHEME_ORANGE_LIGHT = "orange." + COLOR_SCHEME_LIGHT,
+            COLOR_SCHEME_LIME_LIGHT = "lime." + COLOR_SCHEME_LIGHT,
+            COLOR_SCHEME_PURPLE_LIGHT = "purple." + COLOR_SCHEME_LIGHT,
+            COLOR_SCHEME_TEAL_LIGHT = "teal." + COLOR_SCHEME_LIGHT;
 
         public const string
             SIZE_SCHEME_DEFAULT = "default",
@@ -117,7 +121,7 @@ namespace StyleCompiler
             new KnownThemeInfo {
                 Name = THEME_MATERIAL,
                 PublicName = THEME_MATERIAL,
-                ColorSchemeNames = new[] { COLOR_SCHEME_BLUELIGHT }
+                ColorSchemeNames = new[] { COLOR_SCHEME_BLUE_LIGHT, COLOR_SCHEME_ORANGE_LIGHT, COLOR_SCHEME_LIME_LIGHT, COLOR_SCHEME_PURPLE_LIGHT, COLOR_SCHEME_TEAL_LIGHT }
             },
             new KnownThemeInfo {
                 Name = THEME_WIN10,
@@ -394,9 +398,20 @@ namespace StyleCompiler
 
             var lessFiles = new List<string>();
 
-            var colorSchemeBasePart = String.Format("{0}/{1}/color-schemes/{2}/{1}.{2}", styleInfo.LessRoot, themeName, colorSchemeName);
-            lessFiles.Add(colorSchemeBasePart + ".less");
-            lessFiles.Add(colorSchemeBasePart + ".icons.less");
+            string colorSchemePath;
+            if(colorSchemeName.IndexOf('.') < 0) {
+                colorSchemePath = String.Format("{0}/{1}/color-schemes/{2}/{1}.{2}", styleInfo.LessRoot, themeName, colorSchemeName);
+                lessFiles.Add(colorSchemePath + ".less");
+                lessFiles.Add(colorSchemePath + ".icons.less");
+            } else {
+                var colorSchemeNameParts = colorSchemeName.Split('.');
+                var colorSchemeNameAccent = colorSchemeNameParts[0];
+                var colorSchemeNameBase = colorSchemeNameParts[1];
+                colorSchemePath = String.Format("{0}/{1}/color-schemes/", styleInfo.LessRoot, themeName);
+                lessFiles.Add(colorSchemePath + themeName + "." + colorSchemeNameBase + ".less");
+                lessFiles.Add(colorSchemePath + colorSchemeNameAccent + "/" + themeName + "." + colorSchemeNameAccent + ".less");
+                lessFiles.Add(colorSchemePath + themeName + "." + colorSchemeNameBase + ".icons.less");
+            }
 
             if (!String.IsNullOrEmpty(sizeSchemeName))
             {
