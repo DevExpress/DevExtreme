@@ -1885,8 +1885,12 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     getEndViewDate: function() {
-        var dateOfLastViewCell = this._getDateByCellIndexes(this._getRowCount() - 1, this._getCellCount() - 1);
+        var dateOfLastViewCell = this.getDateOfLastViewCell();
         return new Date(dateOfLastViewCell.getTime() + this.getCellDuration() - 60000);
+    },
+
+    getDateOfLastViewCell: function() {
+        return this._getDateByCellIndexes(this._getRowCount() - 1, this._getCellCount() - 1);
     },
 
     getCellDuration: function() {
