@@ -649,6 +649,16 @@
             margin-left: -2px;
             margin-top: -2px;
             height: 100%;
+            overflow: visible;
+
+            .dx-menu-horizontal {
+                height: 100%;
+
+                .dx-menu-item-text,
+                .dx-menu-item-popout {
+                    display: none;
+                }
+            }
         }
 
         .dx-menu-item.dx-state-focused {
@@ -690,21 +700,6 @@
         .dx-menu-item-highlight {
             font-weight: normal;
         }
-    }
-
-    .dx-@{widgetName}-filter-row {
-       .dx-menu {
-            overflow: visible;
-
-            .dx-menu-horizontal {
-                height: 100%;
-
-                .dx-menu-item-text,
-                .dx-menu-item-popout {
-                    display: none;
-                }
-            }
-       }
     }
 
     .dx-@{widgetName}-scroll-container {
