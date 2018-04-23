@@ -4,7 +4,8 @@ var $ = require("jquery"),
     noop = require("core/utils/common").noop,
     renderer = require("core/renderer"),
     eventsEngine = require("events/core/events_engine"),
-    keyboardMock = require("../../helpers/keyboardMock.js");
+    keyboardMock = require("../../helpers/keyboardMock.js"),
+    themes = require("ui/themes");
 
 QUnit.testStart(function() {
     var markup =
@@ -3215,6 +3216,35 @@ QUnit.test("Edit other row after inserting row when edit mode row", function(ass
     // assert
     assert.ok(!rowsView.element().find('tbody > tr').first().hasClass("dx-row-inserted"), "no has inserted row");
     assert.ok(rowsView.element().find('tbody > tr').eq(1).hasClass("dx-edit-row"), "has edit row");
+});
+
+QUnit.test("check grid toolbar buttons text option for material theme", function(assert) {
+    var origIsMaterial = themes.isMaterial;
+    themes.isMaterial = function() { return true; };
+
+    // arrange
+    var that = this,
+        headerPanel = this.headerPanel,
+        rowsView = this.rowsView,
+        headerPanelElement,
+        testElement = $('#container');
+
+    that.options.editing = {
+        mode: "batch",
+        allowUpdating: true,
+        allowAdding: true
+    };
+
+    headerPanel.render(testElement);
+    rowsView.render(testElement);
+
+    headerPanelElement = testElement.find('.dx-datagrid-header-panel').first();
+
+    var addRowButton = headerPanelElement.find(".dx-datagrid-addrow-button").dxButton("instance");
+
+    assert.equal(addRowButton.option("text"), "", "the text option is empty for grid toolbar buttons");
+
+    themes.isMaterial = origIsMaterial;
 });
 
 QUnit.test('Insert Row', function(assert) {

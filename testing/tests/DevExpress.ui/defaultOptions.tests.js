@@ -1180,6 +1180,9 @@ testComponentDefaults(TreeList,
         showColumnLines: false,
         headerFilter: {
             height: 315
+        },
+        editing: {
+            useIcons: true
         }
     },
     function() {
