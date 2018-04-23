@@ -1182,7 +1182,7 @@ var PivotGrid = Widget.inherit({
                 onHidden: function(e) {
                     var fieldChooser = e.component.$content().dxPivotGridFieldChooser("instance");
                     fieldChooser.resetTreeView();
-                    fieldChooser.option("state", null);
+                    fieldChooser.cancelChanges();
                 }
             };
 

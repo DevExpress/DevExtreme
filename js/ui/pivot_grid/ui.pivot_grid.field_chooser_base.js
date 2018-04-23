@@ -102,6 +102,12 @@ var FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).in
         }
     },
 
+    _changeStateSilently: function() {
+        this._skipStateOptionChange = true;
+        this.option("state", this._dataSource.state());
+        this._skipStateOptionChange = false;
+    },
+
     _optionChanged: function(args) {
         switch(args.name) {
             case "dataSource":
@@ -110,9 +116,7 @@ var FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).in
             case "applyChangesMode":
                 break;
             case "state":
-                if(args.value === null && args.previousValue !== null) {
-                    this.repaint();
-                }
+                !this._skipStateOptionChange && this._dataSource && this._dataSource.state(args.value);
                 break;
             case "headerFilter":
             case "allowFieldDragging":
@@ -167,10 +171,12 @@ var FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).in
     },
 
     _clean: function() {
-
     },
 
     _render: function() {
+        if(this._dataSource) {
+            this._changeStateSilently();
+        }
         this.callBase();
         this._headerFilterView.render(this.$element());
     },
@@ -280,8 +286,8 @@ var FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).in
         dataSource.state(state, true);
         dataSource.field(fieldIndex, props);
 
-        that.option("state", dataSource.state());
-        that._clean(true);
+        that._changeStateSilently();
+        that._clean();
         that._renderComponent();
         dataSource.state(startState, true);
     },

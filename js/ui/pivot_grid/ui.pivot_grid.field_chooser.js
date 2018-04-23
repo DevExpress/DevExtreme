@@ -251,7 +251,7 @@ var FieldChooser = BaseFieldChooser.inherit({
                 func();
             });
             that._fireContentReadyAction();
-            that.option("state", that._dataSource.state());
+            that._changeStateSilently();
         };
 
         if(that._dataSource) {
@@ -309,8 +309,7 @@ var FieldChooser = BaseFieldChooser.inherit({
         }
     },
 
-    _clean: function(saveState) {
-        !saveState && this.option("state", null);
+    _clean: function() {
         this.$element().children("." + FIELDCHOOSER_CONTAINER_CLASS).remove();
     },
 
@@ -688,7 +687,6 @@ var FieldChooser = BaseFieldChooser.inherit({
 
         if(isDefined(state)) {
             this._dataSource.state(state);
-            this.option("state", null);
         }
     },
 
