@@ -393,6 +393,59 @@ QUnit.test("Can skip a point", function(assert) {
     assert.equal(points.length, 0);
 });
 
+QUnit.test("Skip points with undefined and NaN values", function(assert) {
+    var points = this.aggregateData("custom", this.data, "scatter", {
+        aggregation: {
+            calculate: function() {
+                return [{
+                    arg: 1,
+                    val: NaN
+                }, {
+                    arg: 1,
+                    val: undefined
+                }];
+            }
+        }
+    });
+    assert.equal(points.length, 0);
+});
+
+QUnit.test("Skip points with undefined and NaN values, Range series", function(assert) {
+    var points = this.aggregateData("custom", this.data, "rangebar", {
+        aggregation: {
+            calculate: function() {
+                return [{
+                    arg: 1,
+                    val1: NaN,
+                    val2: NaN
+                }, {
+                    arg: 1,
+                    val2: undefined
+                }];
+            }
+        }
+    });
+    assert.equal(points.length, 0);
+});
+
+
+QUnit.test("Skip points with undefined and NaN values, Financial series", function(assert) {
+    var points = this.aggregateData("custom", this.data, "candlestick", {
+        aggregation: {
+            calculate: function() {
+                return [{
+                    arg: 1,
+                    high: NaN,
+                    low: NaN,
+                    open: 1,
+                    close: 1
+                }];
+            }
+        }
+    });
+    assert.equal(points.length, 0);
+});
+
 QUnit.test("Can return nothing from custom callback", function(assert) {
     var points = this.aggregateData("custom", this.data, "scatter", {
         aggregation: {
@@ -831,4 +884,78 @@ QUnit.test("Skip argumentRange on aggregation for discrete data", function(asser
     ], "rangebar", undefined, undefined, "discrete");
 
     assert.deepEqual(this.argumentAxis.getAggregationInfo.lastCall.args[1], {});
+});
+
+QUnit.test("Aggregation methods when one point has undefined value", function(assert) {
+    this.data[1].val = undefined;
+    assert.strictEqual(this.aggregateData("avg", this.data)[0].value, 550, "avg should skip the point");
+    assert.strictEqual(this.aggregateData("sum", this.data)[0].value, 2200, "sum should skip the point");
+    assert.strictEqual(this.aggregateData("min", this.data)[0].value, 100, "min should skip the point");
+    assert.strictEqual(this.aggregateData("max", this.data)[0].value, 900, "max should skip the point");
+});
+
+QUnit.test("Range aggregation when point has undefined value", function(assert) {
+    const data = [
+        { arg: 0, val1: 2, val2: 5 },
+        { arg: 2, val1: 1, val2: undefined },
+        { arg: 4, val1: undefined, val2: undefined },
+        { arg: 8, val1: 4, val2: 9 }
+    ];
+
+    const point = this.aggregateData("range", data, "rangebar")[0];
+    assert.strictEqual(point.value, 9);
+    assert.strictEqual(point.minValue, 2);
+});
+
+QUnit.test("Range aggregation when all points have undefined value", function(assert) {
+    const data = [
+        { arg: 0, val1: undefined, val2: undefined },
+        { arg: 8, val1: undefined, val2: undefined }
+    ];
+
+    assert.strictEqual(this.aggregateData("range", data, "rangebar").length, 0);
+});
+
+QUnit.test("Range aggregation when all points have null values", function(assert) {
+    const data = [
+        { arg: 0, val1: null, val2: null },
+        { arg: 8, val1: null, val2: null }
+    ];
+
+    const point = this.aggregateData("range", data, "rangebar")[0];
+    assert.strictEqual(point.value, null);
+    assert.strictEqual(point.minValue, null);
+});
+
+QUnit.test("Aggregation methods when one point has null value", function(assert) {
+    this.data[0].val = null;
+    assert.strictEqual(this.aggregateData("avg", this.data)[0].value, 600, "avg should skip the point");
+    assert.strictEqual(this.aggregateData("sum", this.data)[0].value, 2400, "sum should skip the point");
+    assert.strictEqual(this.aggregateData("min", this.data)[0].value, 300, "min should skip the point");
+    assert.strictEqual(this.aggregateData("max", this.data)[0].value, 900, "max should skip the point");
+});
+
+QUnit.test("Aggregation methods when all points values are null", function(assert) {
+    this.data = this.data.map(i => {
+        i.val = null;
+        return i;
+    });
+
+    assert.strictEqual(this.aggregateData("avg", this.data)[0].value, null, "avg should return a null point");
+    assert.strictEqual(this.aggregateData("sum", this.data)[0].value, null, "avg should return a null point");
+    assert.strictEqual(this.aggregateData("min", this.data)[0].value, null, "min should return a null point");
+    assert.strictEqual(this.aggregateData("max", this.data)[0].value, null, "max should return a null point");
+    assert.strictEqual(this.aggregateData("count", this.data)[0].value, 5, "count should return a point with 0 value");
+});
+
+QUnit.test("Aggregation methods when all points values are undefined", function(assert) {
+    this.data = this.data.map(i => {
+        i.val = undefined;
+        return i;
+    });
+
+    assert.strictEqual(this.aggregateData("avg", this.data).length, 0, "avg should skip a point");
+    assert.strictEqual(this.aggregateData("sum", this.data).length, 0, "sum should skip a point");
+    assert.strictEqual(this.aggregateData("min", this.data).length, 0, "min should skip a point");
+    assert.strictEqual(this.aggregateData("count", this.data)[0].value, 0, "count should return a point with 0 value");
 });

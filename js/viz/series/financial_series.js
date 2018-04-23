@@ -72,7 +72,13 @@ exports.stock = _extend({}, scatterSeries, {
     },
 
     _checkData: function(data) {
-        return _isDefined(data.argument) && data.highValue !== undefined && data.lowValue !== undefined && data.openValue !== undefined && data.closeValue !== undefined;
+        return _isDefined(data.argument) &&
+            data.highValue !== undefined &&
+            data.lowValue !== undefined &&
+            data.openValue !== undefined &&
+            data.closeValue !== undefined &&
+            data.highValue === data.highValue &&
+            data.lowValue === data.lowValue;
     },
 
     _getPointDataSelector: function(data, options) {
