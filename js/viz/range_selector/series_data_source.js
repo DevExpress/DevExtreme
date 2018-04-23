@@ -49,9 +49,7 @@ SeriesDataSource = function(options) {
     var that = this,
         themeManager = that._themeManager = createThemeManager(options.chart),
         topIndent,
-        bottomIndent,
-        negativesAsZeroes,
-        negativesAsZeros;
+        bottomIndent;
 
     themeManager._fontFields = ["commonSeriesSettings.label.font"];
     themeManager.setTheme(options.chart.theme);
@@ -66,20 +64,7 @@ SeriesDataSource = function(options) {
     that._hideChart = false;
 
     that._series = that._calculateSeries(options);
-
-    negativesAsZeroes = themeManager.getOptions("negativesAsZeroes");
-    negativesAsZeros = themeManager.getOptions("negativesAsZeros"); // misspelling case
-
-    that._seriesFamilies = processSeriesFamilies(that._series,
-        themeManager.getOptions('equalBarWidth'),
-        themeManager.getOptions('minBubbleSize'),
-        themeManager.getOptions('maxBubbleSize'),
-        {
-            barWidth: themeManager.getOptions('barWidth'),
-            barGroupPadding: themeManager.getOptions('barGroupPadding'),
-            barGroupWidth: themeManager.getOptions('barGroupWidth')
-        },
-        typeUtils.isDefined(negativesAsZeroes) ? negativesAsZeroes : negativesAsZeros);
+    that._seriesFamilies = [];
 };
 
 SeriesDataSource.prototype = {
@@ -164,7 +149,10 @@ SeriesDataSource.prototype = {
 
         var series = this._series,
             viewport = new rangeModule.Range(),
-            axis = series[0].getArgumentAxis();
+            axis = series[0].getArgumentAxis(),
+            themeManager = this._themeManager,
+            negativesAsZeroes = themeManager.getOptions("negativesAsZeroes"),
+            negativesAsZeros = themeManager.getOptions("negativesAsZeros"); // misspelling case
 
         series.forEach(function(s) {
             viewport.addRange(s.getArgumentRange());
@@ -173,6 +161,17 @@ SeriesDataSource.prototype = {
         axis.getTranslator().updateBusinessRange(viewport);
 
         series.forEach(function(s) { s.createPoints(); });
+
+        this._seriesFamilies = processSeriesFamilies(series,
+            themeManager.getOptions('equalBarWidth'),
+            themeManager.getOptions('minBubbleSize'),
+            themeManager.getOptions('maxBubbleSize'),
+            {
+                barWidth: themeManager.getOptions('barWidth'),
+                barGroupPadding: themeManager.getOptions('barGroupPadding'),
+                barGroupWidth: themeManager.getOptions('barGroupWidth')
+            },
+            typeUtils.isDefined(negativesAsZeroes) ? negativesAsZeroes : negativesAsZeros);
     },
 
     adjustSeriesDimensions: function() {

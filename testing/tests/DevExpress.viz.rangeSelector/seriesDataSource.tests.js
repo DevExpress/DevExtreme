@@ -1402,6 +1402,28 @@ QUnit.test("seriesDataSource with negativesAsZeroes (correct + misspelled) optio
     assert.deepEqual(seriesDataSource._seriesFamilies[0].options.negativesAsZeroes, "correct-option");
 });
 
+QUnit.test("Create series points before series families processing", function(assert) {
+    var seriesDataSource = createSeriesDataSource({
+        dataSource: [{ arg: 1, val: 3, arg1: 4, val1: 10 },
+                        { arg: 3, val: 6, arg1: 7, val1: 5 },
+                        { arg: 5, val: 12, arg1: 9, val1: 2 }],
+        chart: {
+            commonSeriesSettings: {
+                type: "area"
+            },
+            series: [{}, {
+                valueField: "val1",
+                argumentField: "arg1"
+            }]
+        },
+        incidentOccurred: noop,
+        renderer: new vizMocks.Renderer(),
+        argumentAxis: this.argumentAxis
+    });
+
+    assert.equal(seriesDataSource._seriesFamilies[0].allSeriesHavePoints, true);
+});
+
 QUnit.module("Merge marginOptions", environment);
 
 QUnit.test("Return max size", function(assert) {
