@@ -1169,14 +1169,14 @@ QUnit.test("not empty data", function(assert) {
     // assert
 
     pivotGridUtils.foreachTree(this.data.rows, function(items) {
-        assert.strictEqual(items[0].isEmpty, false);
+        assert.deepEqual(items[0].isEmpty, [false]);
     });
 
     pivotGridUtils.foreachTree(this.data.columns, function(items) {
         assert.deepEqual(items[0].isEmpty, [false]);
     });
 
-    assert.strictEqual(this.data.isEmptyGrandTotalRow, false);
+    assert.deepEqual(this.data.isEmptyGrandTotalRow, [false]);
     assert.deepEqual(this.data.isEmptyGrandTotalColumn, [false]);
 });
 
@@ -1187,14 +1187,14 @@ QUnit.test("not empty data when no summary calculations", function(assert) {
     // assert
 
     pivotGridUtils.foreachTree(this.data.rows, function(items) {
-        assert.strictEqual(items[0].isEmpty, false);
+        assert.deepEqual(items[0].isEmpty, [false]);
     });
 
     pivotGridUtils.foreachTree(this.data.columns, function(items) {
         assert.deepEqual(items[0].isEmpty, [false]);
     });
 
-    assert.strictEqual(this.data.isEmptyGrandTotalRow, false);
+    assert.deepEqual(this.data.isEmptyGrandTotalRow, [false]);
     assert.deepEqual(this.data.isEmptyGrandTotalColumn, [false]);
 });
 
@@ -1207,14 +1207,14 @@ QUnit.test("Empty data", function(assert) {
     // assert
 
     pivotGridUtils.foreachTree(this.data.rows, function(items) {
-        assert.strictEqual(items[0].isEmpty, true);
+        assert.deepEqual(items[0].isEmpty, [true]);
     });
 
     pivotGridUtils.foreachTree(this.data.columns, function(items) {
         assert.deepEqual(items[0].isEmpty, [true]);
     });
 
-    assert.strictEqual(this.data.isEmptyGrandTotalRow, true);
+    assert.deepEqual(this.data.isEmptyGrandTotalRow, [true]);
     assert.deepEqual(this.data.isEmptyGrandTotalColumn, [true]);
 });
 
@@ -1231,14 +1231,14 @@ QUnit.test("Empty GrandTotal row", function(assert) {
     // assert
 
     pivotGridUtils.foreachTree(this.data.rows, function(items) {
-        assert.strictEqual(items[0].isEmpty, false);
+        assert.deepEqual(items[0].isEmpty, [false]);
     });
 
     pivotGridUtils.foreachTree(this.data.columns, function(items) {
         assert.deepEqual(items[0].isEmpty, [false]);
     });
 
-    assert.strictEqual(this.data.isEmptyGrandTotalRow, true);
+    assert.deepEqual(this.data.isEmptyGrandTotalRow, [true]);
     assert.deepEqual(this.data.isEmptyGrandTotalColumn, [false]);
 });
 
@@ -1255,7 +1255,7 @@ QUnit.test("empty column", function(assert) {
     // assert
 
     pivotGridUtils.foreachTree(this.data.rows, function(items) {
-        assert.strictEqual(items[0].isEmpty, false);
+        assert.deepEqual(items[0].isEmpty, [false]);
     });
 
     pivotGridUtils.foreachTree(this.data.columns, function(items) {
@@ -1267,7 +1267,7 @@ QUnit.test("empty column", function(assert) {
         }
     });
 
-    assert.strictEqual(this.data.isEmptyGrandTotalRow, false);
+    assert.deepEqual(this.data.isEmptyGrandTotalRow, [false]);
     assert.deepEqual(this.data.isEmptyGrandTotalColumn, [false]);
 });
 
@@ -1287,9 +1287,9 @@ QUnit.test("empty row", function(assert) {
         var path = pivotGridUtils.createPath(items);
 
         if(path[0] === 1991) {
-            assert.strictEqual(items[0].isEmpty, true, path.join("."));
+            assert.deepEqual(items[0].isEmpty, [true], path.join("."));
         } else {
-            assert.strictEqual(items[0].isEmpty, false, path.join("."));
+            assert.deepEqual(items[0].isEmpty, [false], path.join("."));
         }
     });
 
@@ -1298,7 +1298,7 @@ QUnit.test("empty row", function(assert) {
         assert.deepEqual(items[0].isEmpty, [false], path);
     });
 
-    assert.strictEqual(this.data.isEmptyGrandTotalRow, false);
+    assert.deepEqual(this.data.isEmptyGrandTotalRow, [false]);
     assert.deepEqual(this.data.isEmptyGrandTotalColumn, [false]);
 });
 
@@ -1310,7 +1310,7 @@ QUnit.test("summary display mode is wrong", function(assert) {
 
     pivotGridUtils.foreachTree(this.data.rows, function(items) {
         var path = pivotGridUtils.createPath(items);
-        assert.strictEqual(items[0].isEmpty, false, path.join("."));
+        assert.deepEqual(items[0].isEmpty, [false], path.join("."));
     });
 
     pivotGridUtils.foreachTree(this.data.columns, function(items) {
@@ -1318,7 +1318,7 @@ QUnit.test("summary display mode is wrong", function(assert) {
         assert.deepEqual(items[0].isEmpty, [false], path);
     });
 
-    assert.strictEqual(this.data.isEmptyGrandTotalRow, false);
+    assert.deepEqual(this.data.isEmptyGrandTotalRow, [false]);
     assert.deepEqual(this.data.isEmptyGrandTotalColumn, [false]);
 });
 
@@ -1408,14 +1408,14 @@ QUnit.test("not empty data", function(assert) {
     // assert
 
     pivotGridUtils.foreachTree(this.data.rows, function(items) {
-        assert.strictEqual(items[0].isEmpty, false);
+        assert.deepEqual(items[0].isEmpty, [false, false]);
     });
 
     pivotGridUtils.foreachTree(this.data.columns, function(items) {
         assert.deepEqual(items[0].isEmpty, [false, false]);
     });
 
-    assert.strictEqual(this.data.isEmptyGrandTotalRow, false);
+    assert.deepEqual(this.data.isEmptyGrandTotalRow, [false, false]);
     assert.deepEqual(this.data.isEmptyGrandTotalColumn, [false, false]);
 });
 
@@ -1432,7 +1432,7 @@ QUnit.test("Empty cell for first field cells", function(assert) {
 
     pivotGridUtils.foreachTree(this.data.rows, function(items) {
         var path = pivotGridUtils.createPath(items);
-        assert.strictEqual(items[0].isEmpty, false, path.join("."));
+        assert.deepEqual(items[0].isEmpty, [true, false], path.join("."));
     });
 
     pivotGridUtils.foreachTree(this.data.columns, function(items) {
@@ -1440,7 +1440,7 @@ QUnit.test("Empty cell for first field cells", function(assert) {
         assert.deepEqual(items[0].isEmpty, [true, false], path);
     });
 
-    assert.strictEqual(this.data.isEmptyGrandTotalRow, false);
+    assert.deepEqual(this.data.isEmptyGrandTotalRow, [true, false]);
     assert.deepEqual(this.data.isEmptyGrandTotalColumn, [true, false]);
 });
 
@@ -1455,7 +1455,7 @@ QUnit.test("Empty cell for first field cells if second field without calculate s
 
     pivotGridUtils.foreachTree(this.data.rows, function(items) {
         var path = pivotGridUtils.createPath(items);
-        assert.strictEqual(items[0].isEmpty, false, path.join("."));
+        assert.deepEqual(items[0].isEmpty, [true, false], path.join("."));
     });
 
     pivotGridUtils.foreachTree(this.data.columns, function(items) {
@@ -1463,7 +1463,7 @@ QUnit.test("Empty cell for first field cells if second field without calculate s
         assert.deepEqual(items[0].isEmpty, [true, false], path);
     });
 
-    assert.strictEqual(this.data.isEmptyGrandTotalRow, false);
+    assert.deepEqual(this.data.isEmptyGrandTotalRow, [true, false]);
     assert.deepEqual(this.data.isEmptyGrandTotalColumn, [true, false]);
 });
 
@@ -1478,7 +1478,7 @@ QUnit.test("summary display mode is wrong in first data field", function(assert)
 
     pivotGridUtils.foreachTree(this.data.rows, function(items) {
         var path = pivotGridUtils.createPath(items);
-        assert.strictEqual(items[0].isEmpty, false, path.join("."));
+        assert.deepEqual(items[0].isEmpty, [false, false], path.join("."));
     });
 
     pivotGridUtils.foreachTree(this.data.columns, function(items) {
@@ -1486,6 +1486,6 @@ QUnit.test("summary display mode is wrong in first data field", function(assert)
         assert.deepEqual(items[0].isEmpty, [false, false], path);
     });
 
-    assert.strictEqual(this.data.isEmptyGrandTotalRow, false);
+    assert.deepEqual(this.data.isEmptyGrandTotalRow, [false, false]);
     assert.deepEqual(this.data.isEmptyGrandTotalColumn, [false, false]);
 });

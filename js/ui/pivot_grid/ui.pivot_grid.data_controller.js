@@ -942,7 +942,7 @@ exports.DataController = Class.inherit((function() {
                     that._handleProgressChanged(0.8 + 0.1 * rowOptions.progress + 0.1 * columnOptions.progress);
                 },
                 rowOptions = {
-                    isEmptyGrandTotal: data.isEmptyGrandTotalRow, // TODO bool or array
+                    isEmptyGrandTotal: data.isEmptyGrandTotalRow,
                     texts: options.texts || {},
                     hiddenTotals: hiddenTotals,
                     hiddenValues: hiddenValues,

@@ -2397,10 +2397,10 @@ QUnit.test("Hide empty columns in a single group", function(assert) {
             ],
             rows: [{ value: 'Vasya', index: 0 }, { value: 'Piter', index: 1 }],
             columns: [{
-                value: 'A', index: 0, isEmpty: true,
+                value: 'A', index: 0, isEmpty: [true],
                 children: [{ value: 'P1', index: 1 }, { value: 'P2', index: 2 }]
             },
-            { value: 'C', index: 3, isEmpty: true }],
+            { value: 'C', index: 3, isEmpty: [true] }],
             values: [
                 [null, 2, 3, null, 12],
                 [null, 3, 4, null, 18],
@@ -2629,10 +2629,10 @@ QUnit.test("Hide empty rows in a single group", function(assert) {
             ],
             columns: [{ value: 'Vasya', index: 0 }, { value: 'Piter', index: 1 }],
             rows: [{
-                value: 'A', index: 0, isEmpty: true,
+                value: 'A', index: 0, isEmpty: [true],
                 children: [{ value: 'P1', index: 1 }, { value: 'P2', index: 2 }]
             },
-            { value: 'C', index: 3, isEmpty: true }],
+            { value: 'C', index: 3, isEmpty: [true] }],
             values: [
                 [null, null, null],
                 [2, 3, 5],
@@ -2757,9 +2757,9 @@ QUnit.test("Hide empty columns in different groups", function(assert) {
             rows: [{ value: 'Vasya', index: 0 }, { value: 'Piter', index: 1 }],
             columns: [{
                 value: 'A', index: 0,
-                children: [{ value: 'P1', index: 1, isEmpty: true }, { value: 'P2', index: 2 }]
+                children: [{ value: 'P1', index: 1, isEmpty: [true] }, { value: 'P2', index: 2 }]
             },
-            { value: 'C', index: 3, isEmpty: true }],
+            { value: 'C', index: 3, isEmpty: [true] }],
             values: [
                 [1, null, 3, null, 12],
                 [2, null, 4, null, 18],
@@ -2873,10 +2873,10 @@ QUnit.test("Not hide empty columns", function(assert) {
             ],
             rows: [{ value: 'Vasya', index: 0 }, { value: 'Piter', index: 1 }],
             columns: [{
-                value: 'A', index: 0, isEmpty: true,
+                value: 'A', index: 0, isEmpty: [true],
                 children: [{ value: 'P1', index: 1 }, { value: 'P2', index: 2 }]
             },
-            { value: 'C', index: 3, isEmpty: true }],
+            { value: 'C', index: 3, isEmpty: [true] }],
             values: [
                 [null, 2, 3, null, 12],
                 [null, 3, 4, null, 18],
@@ -2900,10 +2900,10 @@ QUnit.test("Not hide empty rows", function(assert) {
             ],
             columns: [{ value: 'Vasya', index: 0 }, { value: 'Piter', index: 1 }],
             rows: [{
-                value: 'A', index: 0, isEmpty: true,
+                value: 'A', index: 0, isEmpty: [true],
                 children: [{ value: 'P1', index: 1 }, { value: 'P2', index: 2 }]
             },
-            { value: 'C', index: 3, isEmpty: true }],
+            { value: 'C', index: 3, isEmpty: [true] }],
             values: [
                 [null, null, null],
                 [2, 3, 5],
@@ -2930,7 +2930,7 @@ QUnit.test("Hide all children items", function(assert) {
             columns: [{ value: 'Vasya', index: 0 }, { value: 'Piter', index: 1 }],
             rows: [{
                 value: 'A', index: 0,
-                children: [{ value: 'P1', index: 1, isEmpty: true }, { value: 'P2', index: 2, isEmpty: true }]
+                children: [{ value: 'P1', index: 1, isEmpty: [true] }, { value: 'P2', index: 2, isEmpty: [true] }]
             },
             { value: 'C', index: 3 }],
             values: [
@@ -3899,9 +3899,9 @@ QUnit.test("Hide empty columns in different groups", function(assert) {
             rows: [{ value: 'Vasya', index: 0 }, { value: 'Piter', index: 1 }],
             columns: [{
                 value: 'A', index: 0,
-                children: [{ value: 'P1', index: 1, isEmpty: true }, { value: 'P2', index: 2 }]
+                children: [{ value: 'P1', index: 1, isEmpty: [true] }, { value: 'P2', index: 2 }]
             },
-            { value: 'C', index: 3, isEmpty: true }],
+            { value: 'C', index: 3, isEmpty: [true] }],
             values: [
                 [1, null, 3, null, 12],
                 [2, null, 4, null, 18],
