@@ -1,5 +1,11 @@
 "use strict";
 
+let core = require("./localization/core");
+let message = require("./localization/message");
+let number = require("./localization/number");
+let date = require("./localization/date");
+require("./localization/currency");
+
 /**
 * @name localization
 * @publicName localization
@@ -22,7 +28,7 @@
 * @module localization
 * @export locale
 */
-exports.locale = require("./localization/core").locale;
+exports.locale = core.locale.bind(core);
 
 /**
 * @name localization_loadMessages
@@ -32,9 +38,65 @@ exports.locale = require("./localization/core").locale;
 * @module localization
 * @export loadMessages
 */
-exports.loadMessages = require("./localization/message").load;
+exports.loadMessages = message.load.bind(message);
+/**
+* @name localization_formatMessage
+* @publicName formatMessage()
+* @param1 key:string
+* @param2 value:string|Array<string>
+* @return string
+* @static
+* @module localization
+* @export formatMessage
+*/
+exports.formatMessage = message.format.bind(message);
 
-exports.message = require("./localization/message");
-exports.number = require("./localization/number");
-exports.date = require("./localization/date");
-exports.currency = require("./localization/currency");
+/**
+* @name localization_formatNumber
+* @publicName formatNumber()
+* @param1 value:number
+* @param2 format:format
+* @return string
+* @static
+* @module localization
+* @export formatNumber
+*/
+exports.formatNumber = number.format.bind(number);
+/**
+* @name localization_parseNumber
+* @publicName parseNumber()
+* @param1 text:string
+* @param2 format:format
+* @return number
+* @static
+* @module localization
+* @export parseNumber
+*/
+exports.parseNumber = number.parse.bind(number);
+
+/**
+* @name localization_formatDate
+* @publicName formatDate()
+* @param1 value:date
+* @param2 format:format
+* @return string
+* @static
+* @module localization
+* @export formatDate
+*/
+exports.formatDate = date.format.bind(date);
+/**
+* @name localization_parseDate
+* @publicName parseDate()
+* @param1 text:string
+* @param2 format:format
+* @return date
+* @static
+* @module localization
+* @export parseDate
+*/
+exports.parseDate = date.parse.bind(date);
+
+exports.message = message;
+exports.number = number;
+exports.date = date;
