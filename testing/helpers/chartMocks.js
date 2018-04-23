@@ -1004,7 +1004,8 @@ var MockSeriesFamily = Class.inherit({
         this.allSeriesHavePoints = (this.addedSeries || [])
             .reduce(function(r, s) { return r.concat(s); }, [])
             .reduce(function(r, s) {
-                return r && !!s.getAllPoints().length;
+
+                return r && (s.getAllPoints ? !!s.getAllPoints().length : true);
             }, true);
     },
     adjustSeriesDimensions: function() {
