@@ -46,7 +46,7 @@ var validateBusinessRange = function(businessRange) {
     return businessRange;
 };
 
-function valuesIsDefinedAndEqual(val1, val2) {
+function valuesAreDefinedAndEqual(val1, val2) {
     return isDefined(val1) && isDefined(val2) && val1.valueOf() === val2.valueOf();
 }
 
@@ -101,7 +101,7 @@ function getCanvasBounds(range) {
         max = getLog(max, base);
     }
 
-    if(valuesIsDefinedAndEqual(min, max)) {
+    if(valuesAreDefinedAndEqual(min, max)) {
         newMin = min.valueOf() - correction;
         newMax = max.valueOf() + correction;
 
@@ -114,7 +114,7 @@ function getCanvasBounds(range) {
         }
     }
 
-    if(valuesIsDefinedAndEqual(minVisible, maxVisible)) {
+    if(valuesAreDefinedAndEqual(minVisible, maxVisible)) {
         newMin = minVisible.valueOf() - correction;
         newMax = maxVisible.valueOf() + correction;
 
@@ -132,16 +132,26 @@ function getCanvasBounds(range) {
     return { base: base, rangeMin: min, rangeMax: max, rangeMinVisible: minVisible, rangeMaxVisible: maxVisible };
 }
 
+function getEqualityCorrection(range) {
+    var isDateTime = typeUtils.isDate(range.min) || typeUtils.isDate(range.max);
+
+    return isDateTime ? DATETIME_EQUALITY_CORRECTION : NUMBER_EQUALITY_CORRECTION;
+}
+
 function zoomArgsIsEqualCanvas(zoomArgs) {
+    var businessRange = this.getBusinessRange();
+
+    return valuesAreDefinedAndEqual(businessRange.min, businessRange.max) && this.isEqualRange(zoomArgs);
+}
+
+function isEqualRange(range) {
     var that = this,
         businessRange = that.getBusinessRange(),
         canvasOptions = getCanvasBounds(businessRange),
-        isDateTime = typeUtils.isDate(businessRange.min) || typeUtils.isDate(businessRange.max),
-        correctionPrecision = (isDateTime ? DATETIME_EQUALITY_CORRECTION : NUMBER_EQUALITY_CORRECTION) / 100;
+        correctionPrecision = getEqualityCorrection(businessRange) / 100;
 
-    return zoomArgs && valuesIsDefinedAndEqual(businessRange.min, businessRange.max) &&
-        _abs(zoomArgs.min - canvasOptions.rangeMin) <= correctionPrecision &&
-        _abs(zoomArgs.max - canvasOptions.rangeMax) <= correctionPrecision;
+    return range && _abs(range.min - canvasOptions.rangeMin) <= correctionPrecision &&
+        _abs(range.max - canvasOptions.rangeMax) <= correctionPrecision;
 }
 
 function getCheckingMethodsAboutBreaks(inverted) {
@@ -425,6 +435,7 @@ _Translator2d.prototype = {
     zoom: _noop,
     getMinScale: _noop,
     zoomArgsIsEqualCanvas: zoomArgsIsEqualCanvas,
+    isEqualRange: isEqualRange,
 
     // dxRangeSelector specific
 
