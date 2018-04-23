@@ -3361,6 +3361,23 @@ QUnit.testStart(function() {
         assert.equal(coords.left, targetCellPosition.left, "Cell coordinates are right");
     });
 
+    QUnit.test("'getCoordinatesByDate' should return right coordinates with view option intervalCount, short day duration", function(assert) {
+        this.createInstance({
+            intervalCount: 2,
+            currentDate: new Date(2017, 5, 25),
+            startDayHour: 10,
+            endDayHour: 13
+        });
+
+        var $element = this.instance.$element();
+
+        var coords = this.instance.getCoordinatesByDate(new Date(2017, 6, 6, 12, 0), 0, false),
+            targetCellPosition = $element.find(".dx-scheduler-date-table tbody td").eq(48).position();
+
+        assert.equal(coords.top, targetCellPosition.top, "Cell coordinates are right");
+        assert.equal(coords.left, targetCellPosition.left, "Cell coordinates are right");
+    });
+
     QUnit.test("WorkSpace WorkWeek view cells have right cellData with view option intervalCount", function(assert) {
         this.createInstance({
             intervalCount: 2,
