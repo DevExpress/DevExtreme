@@ -283,6 +283,45 @@ QUnit.test("catch handler should be called after reject", function(assert) {
     deferred.reject(3);
 });
 
+QUnit.test("catch handler shouldn't be called after resolve", function(assert) {
+    assert.expect(0);
+    var deferred = new Deferred();
+
+    deferred.catch(function(value) {
+        assert.ok(false);
+    });
+
+    deferred.resolve(3);
+});
+
+QUnit.test("catch handler should be called after reject in chain", function(assert) {
+    var deferred = new Deferred();
+
+    deferred.then(function() {
+        assert.ok(false, "resolve callback was called");
+    }).catch(function(value) {
+        assert.equal(value, 3, "argument is correct");
+    });
+
+    deferred.reject(3);
+});
+
+QUnit.test("complex chain should call resolve handlers after reject handlers", function(assert) {
+    assert.expect(2);
+    var deferred = new Deferred();
+    deferred.then(function() {
+        assert.ok(false, "resolve handler should't be called");
+    }).then(undefined, function() {
+        assert.ok(true, "reject should be called");
+    }).then(function() {
+        assert.ok(true, "resolve after reject should be called");
+    }, function() {
+        assert.ok(false, "reject after reject shouldn't be called");
+    });
+
+    deferred.reject(3);
+});
+
 QUnit.test("then.resolve handler should be called after resolve", function(assert) {
     var deferred = new Deferred();
 
@@ -307,6 +346,17 @@ QUnit.test("then.reject handler should be called after reject", function(assert)
     });
 
     deferred.reject(3, 5);
+});
+
+QUnit.test("then.reject handler shouldn't be called after resolve", function(assert) {
+    assert.expect(0);
+    var deferred = new Deferred();
+
+    deferred.then(undefined, function(value1) {
+        assert.ok(false, "callback wasn't called");
+    });
+
+    deferred.resolve(3);
 });
 
 QUnit.test("then should support chaining", function(assert) {
