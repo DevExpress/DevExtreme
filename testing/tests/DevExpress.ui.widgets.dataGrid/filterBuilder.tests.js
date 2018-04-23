@@ -20,7 +20,11 @@ QUnit.testStart(function() {
 QUnit.module("Common", {
     beforeEach: function() {
         this.initFilterBuilderView = function(options) {
-            this.options = options;
+            this.options = $.extend({
+                filterBuilderPopup: {},
+                columns: [{ dataField: "field" }],
+                filterBuilder: { }
+            }, options);
             setupDataGridModules(this, ["columns", "headerFilter", "filterSync", "filterBuilder", "data"], {
                 initViews: true
             });
@@ -48,8 +52,7 @@ QUnit.module("Common", {
             filterBuilderPopup: {
                 onShowing: handlerShow,
                 onHiding: handlerHide
-            },
-            columns: [{ dataField: "field" }]
+            }
         });
 
         // assert
@@ -76,11 +79,9 @@ QUnit.module("Common", {
 
         // act
         this.initFilterBuilderView({
-            filterBuilderPopup: {},
             filterBuilder: {
                 onInitialized: handlerInit
-            },
-            columns: [{ dataField: "field" }]
+            }
         });
 
         // assert
@@ -91,5 +92,18 @@ QUnit.module("Common", {
 
         // assert
         assert.equal(handlerInit.called, 1);
+    });
+
+    QUnit.test("filter builder popup has scrollview after the second showing", function(assert) {
+        // arrange, act
+        this.initFilterBuilderView({
+            filterBuilderPopup: { visible: true },
+        });
+
+        this.changeOption("filterBuilderPopup", "filterBuilderPopup.visible", false);
+        this.changeOption("filterBuilderPopup", "filterBuilderPopup.visible", true);
+
+        // assert
+        assert.ok($(".dx-popup-content .dx-scrollview-content").length);
     });
 });
