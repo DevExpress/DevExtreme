@@ -14,17 +14,25 @@ var FilterBuilderView = modules.View.inherit({
     },
 
     _updatePopupOptions: function() {
-        if(this.option("filterBuilderPopup.visible") && !this._filterBuilderPopup) {
+        if(this.option("filterBuilderPopup.visible")) {
             this._initPopup();
-        } else {
-            this._filterBuilderPopup && this._filterBuilderPopup.option(this._getPopupOptions());
+        } else if(this._filterBuilderPopup) {
+            this._filterBuilderPopup.hide();
         }
     },
 
-    _getPopupOptions: function() {
+    _disposePopup: function() {
+        this._filterBuilderPopup.dispose();
+        this._filterBuilderPopup = undefined;
+        this._filterBuilder.dispose();
+        this._filterBuilder = undefined;
+    },
+
+    _initPopup: function() {
         var that = this;
 
-        return extend({
+        that._filterBuilderPopup && that._disposePopup();
+        that._filterBuilderPopup = that._createComponent(that.element(), Popup, extend({
             title: messageLocalization.format("dxDataGrid-filterBuilderPopupTitle"),
             contentTemplate: function($contentElement) {
                 return that._getPopupContentTemplate($contentElement);
@@ -34,37 +42,12 @@ var FilterBuilderView = modules.View.inherit({
                     that.option("filterBuilderPopup.visible", args.value);
                 }
             },
-            toolbarItems: that._getPopupToolbarItems()
-        }, that.option("filterBuilderPopup"));
-    },
-
-    _initPopup: function() {
-        var that = this,
-            $popupContainer = this.element();
-        that._filterBuilderPopup = that._createComponent($popupContainer, Popup, extend(that._getPopupOptions()));
-    },
-
-    _getPopupContentTemplate: function($contentElement) {
-        var $scrollViewContainer = $("<div>").appendTo($contentElement),
-            $filterBuilderContainer = $("<div>").appendTo($scrollViewContainer),
-            fields = this.getController("columns").getColumns(),
-            customOperations = this.getController("filterSync").getCustomFilterOperations();
-
-        fields = fields.filter(function(item) {
-            return item.allowFiltering;
-        }).map(function(item) {
-            var column = extend({}, item, { filterOperations: null });
-            return column;
-        });
-
-        this._filterBuilder = this._createComponent($filterBuilderContainer, FilterBuilder, extend({
-            value: this.option("filterValue"),
-            fields: fields
-        }, this.option("filterBuilder"), {
-            customOperations: customOperations
+            toolbarItems: that._getPopupToolbarItems(),
+        }, that.option("filterBuilderPopup"), {
+            onHidden: function(e) {
+                that._disposePopup();
+            }
         }));
-
-        this._createComponent($scrollViewContainer, ScrollView, { direction: "both" });
     },
 
     _getPopupToolbarItems: function() {
@@ -95,6 +78,29 @@ var FilterBuilderView = modules.View.inherit({
                 }
             }
         ];
+    },
+
+    _getPopupContentTemplate: function(contentElement) {
+        var $contentElement = $(contentElement),
+            $filterBuilderContainer = $("<div>").appendTo($contentElement),
+            fields = this.getController("columns").getColumns(),
+            customOperations = this.getController("filterSync").getCustomFilterOperations();
+
+        fields = fields.filter(function(item) {
+            return item.allowFiltering;
+        }).map(function(item) {
+            var column = extend({}, item, { filterOperations: null });
+            return column;
+        });
+
+        this._filterBuilder = this._createComponent($filterBuilderContainer, FilterBuilder, extend({
+            value: this.option("filterValue"),
+            fields: fields
+        }, this.option("filterBuilder"), {
+            customOperations: customOperations
+        }));
+
+        this._createComponent($contentElement, ScrollView, { direction: "both" });
     },
 
     optionChanged: function(args) {
