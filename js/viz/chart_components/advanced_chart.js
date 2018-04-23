@@ -331,10 +331,12 @@ var AdvancedChart = BaseChart.inherit({
             let marginOptions = {};
 
             groupSeries.forEach(series => {
-                const seriesMarginOptions = processBubbleMargin(series.getMarginOptions(), bubbleSize);
+                if(series.isVisible()) {
+                    const seriesMarginOptions = processBubbleMargin(series.getMarginOptions(), bubbleSize);
 
-                marginOptions = mergeMarginOptions(marginOptions, seriesMarginOptions);
-                argumentMarginOptions = mergeMarginOptions(argumentMarginOptions, seriesMarginOptions);
+                    marginOptions = mergeMarginOptions(marginOptions, seriesMarginOptions);
+                    argumentMarginOptions = mergeMarginOptions(argumentMarginOptions, seriesMarginOptions);
+                }
             });
 
             valueAxis.setMarginOptions(marginOptions);
@@ -343,34 +345,39 @@ var AdvancedChart = BaseChart.inherit({
         that._argumentAxes.forEach(a => a.setMarginOptions(argumentMarginOptions));
     },
 
-    _populateBusinessRange: function() {
-        var that = this,
-            businessRanges = [],
-            rotated = that._isRotated(),
-            argAxes = that._argumentAxes,
-            argRange = new rangeModule.Range({ rotated: !!rotated }),
-            groupsData = that._groupsData;
+    _populateBusinessRange() {
+        const that = this;
+        const argRange = new rangeModule.Range();
 
-        that.businessRanges = null;
-
-        _each(argAxes, function(_, axis) {
-            argRange.addRange(axis.getRangeData());
+        that._argumentAxes.forEach(axis => argRange.addRange(axis.getRangeMargins()));
+        that._setBusinessRangeBySeriesData();
+        _each(that.businessRanges, (index, businessRange) => {
+            businessRange.arg.addRange(argRange);
+            businessRange.val.addRange(that._valueAxes[index].getRangeMargins());
         });
+    },
 
-        that._valueAxes.forEach(function(valueAxis) {
+    _setBusinessRangeBySeriesData() {
+        const that = this;
+        const businessRanges = [];
+        const rotated = that._isRotated();
+        const argAxes = that._argumentAxes;
+        const argRange = new rangeModule.Range({ rotated: !!rotated });
+        const groupsData = that._groupsData;
+
+        argAxes.forEach(axis => argRange.addRange(axis.getRangeOptions()));
+
+        that._valueAxes.forEach(valueAxis => {
             var groupRange = new rangeModule.Range({
                     rotated: !!rotated,
                     pane: valueAxis.pane,
                     axis: valueAxis.name
                 }),
-                groupAxisRange = valueAxis.getRangeData(),
-                groupSeries = that.series.filter(function(series) {
-                    return series.getValueAxis() === valueAxis;
-                });
+                groupSeries = that.series.filter(series => series.getValueAxis() === valueAxis);
 
-            groupRange.addRange(groupAxisRange);
+            groupRange.addRange(valueAxis.getRangeOptions());
 
-            groupSeries.forEach(function(series) {
+            groupSeries.forEach(series => {
                 var seriesRange = series.getRangeData();
 
                 groupRange.addRange(seriesRange.val);
@@ -397,9 +404,7 @@ var AdvancedChart = BaseChart.inherit({
             argRange.setStubData(argAxes[0].getOptions().argumentType);
         }
 
-        that._argumentAxes.forEach(function(a) {
-            a.setBusinessRange(argRange);
-        });
+        that._argumentAxes.forEach(a => a.setBusinessRange(argRange));
 
         that._populateMarginOptions();
 

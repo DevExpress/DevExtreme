@@ -908,6 +908,16 @@ var MockAxis = exports.MockAxis = function(renderOptions) {
         getRangeData: function() {
             return this._options.mockRange || {};
         },
+        getRangeMargins() { return this.getRangeData(); },
+        getRangeOptions() {
+            let rangeOptions = $.extend(true, {}, this.getRangeData());
+            delete rangeOptions["min"];
+            delete rangeOptions["max"];
+            delete rangeOptions["minVisible"];
+            delete rangeOptions["maxVisible"];
+
+            return rangeOptions;
+        },
         resetMock: function() {
             delete this.range;
             delete this.wasDrawn;
