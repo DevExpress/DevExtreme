@@ -46,7 +46,7 @@ var validateBusinessRange = function(businessRange) {
     return businessRange;
 };
 
-function valuesIsDefinedAndEqual(val1, val2) {
+function valuesAreDefinedAndEqual(val1, val2) {
     return isDefined(val1) && isDefined(val2) && val1.valueOf() === val2.valueOf();
 }
 
@@ -101,7 +101,7 @@ function getCanvasBounds(range) {
         max = getLog(max, base);
     }
 
-    if(valuesIsDefinedAndEqual(min, max)) {
+    if(valuesAreDefinedAndEqual(min, max)) {
         newMin = min.valueOf() - correction;
         newMax = max.valueOf() + correction;
 
@@ -114,7 +114,7 @@ function getCanvasBounds(range) {
         }
     }
 
-    if(valuesIsDefinedAndEqual(minVisible, maxVisible)) {
+    if(valuesAreDefinedAndEqual(minVisible, maxVisible)) {
         newMin = minVisible.valueOf() - correction;
         newMax = maxVisible.valueOf() + correction;
 
@@ -139,14 +139,19 @@ function getEqualityCorrection(range) {
 }
 
 function zoomArgsIsEqualCanvas(zoomArgs) {
-    var that = this,
-        businessRange = that.getBusinessRange(),
-        canvasOptions = getCanvasBounds(businessRange),
-        correctionPrecision = getEqualityCorrection(businessRange) / 100;
+    const businessRange = this.getBusinessRange();
 
-    return zoomArgs && valuesIsDefinedAndEqual(businessRange.min, businessRange.max) &&
-        _abs(zoomArgs.min - canvasOptions.rangeMin) <= correctionPrecision &&
-        _abs(zoomArgs.max - canvasOptions.rangeMax) <= correctionPrecision;
+    return valuesAreDefinedAndEqual(businessRange.min, businessRange.max) && this.isEqualRange(zoomArgs);
+}
+
+function isEqualRange(range) {
+    const that = this;
+    const businessRange = that.getBusinessRange();
+    const canvasOptions = getCanvasBounds(businessRange);
+    const correctionPrecision = getEqualityCorrection(businessRange) / 100;
+
+    return range && _abs(range.min - canvasOptions.rangeMin) <= correctionPrecision &&
+        _abs(range.max - canvasOptions.rangeMax) <= correctionPrecision;
 }
 
 function checkGestureEventsForScaleEdges(scrollThreshold, scale, scroll, touches, zoomArgs) {
@@ -159,7 +164,7 @@ function checkGestureEventsForScaleEdges(scrollThreshold, scale, scroll, touches
         scalingEventAtMin = scrollBarNearMin && ((businessRange.rotated ? scroll > 0 : scroll < 0) || scale !== 1),
         scalingEventAtMax = scrollBarNearMax && ((businessRange.rotated ? scroll < 0 : scroll > 0) || scale !== 1);
 
-    return (touches === 2 && scale === 1) || ((zoomArgs || isDiscreteAxis) && (!scrollBarNearMin && !scrollBarNearMax)) ||
+    return (touches === 2 && scale === 1) || ((zoomArgs || isDiscreteAxis || !this.isEqualRange({ min: businessRange.minVisible, max: businessRange.maxVisible })) && (!scrollBarNearMin && !scrollBarNearMax)) ||
         (!isOriginalScale && (scalingEventAtMin || scalingEventAtMax)) || (isOriginalScale && scale > 1);
 }
 
@@ -477,6 +482,7 @@ _Translator2d.prototype = {
     zoom: _noop,
     getMinScale: _noop,
     zoomArgsIsEqualCanvas: zoomArgsIsEqualCanvas,
+    isEqualRange: isEqualRange,
     checkScrollForOriginalScale: checkScrollForOriginalScale,
     scrollHasExtremePosition: scrollHasExtremePosition,
     checkGestureEventsForScaleEdges: checkGestureEventsForScaleEdges,

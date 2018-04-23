@@ -2358,6 +2358,16 @@ QUnit.test('scroll. Scrolling chart at center by 2 fingers (event canceled)', fu
     assert.ok(translator.checkGestureEventsForScaleEdges(SCROLL_THRESHOLD, 1, -23, 2, {}));
 });
 
+QUnit.test('scroll. Scrolling chart at center when zoomArgs is null, but min/max options are exists', function(assert) {
+    var range = $.extend({ minVisible: 10, maxVisible: 90, invert: false }, numericRange),
+        canvas = $.extend({}, canvasTemplate),
+        translator;
+
+    translator = new translator2DModule.Translator2D(range, canvas, { isHorizontal: true, breaksSize: 0 });
+
+    assert.ok(translator.checkGestureEventsForScaleEdges(SCROLL_THRESHOLD, 1, -23, 1, null));
+});
+
 QUnit.test('zoom. Zooming out chart (event canceled)', function(assert) {
     var range = $.extend({ minVisible: 10, maxVisible: 90, invert: false }, numericRange),
         canvas = $.extend({}, canvasTemplate),
