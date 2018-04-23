@@ -1742,9 +1742,13 @@ var SchedulerWorkSpace = Widget.inherit({
 
     _getHiddenInterval: function() {
         if(this._hiddenInterval === undefined) {
-            this._hiddenInterval = DAY_MS - this.option("hoursInterval") * this._getCellCountInDay() * HOUR_MS;
+            this._hiddenInterval = DAY_MS - this._getDayDurationInMs();
         }
         return this._hiddenInterval;
+    },
+
+    _getDayDurationInMs: function() {
+        return this.option("hoursInterval") * this._getCellCountInDay() * HOUR_MS;
     },
 
     _getIntervalBetween: function(currentDate, allDay) {
@@ -1753,10 +1757,11 @@ var SchedulerWorkSpace = Widget.inherit({
             timeZoneOffset = dateUtils.getTimezonesDifference(firstViewDate, currentDate),
             fullInterval = currentDate.getTime() - firstViewDate.getTime() - timeZoneOffset,
             days = this._getDaysOfInterval(fullInterval, startDayTime),
-            result = (days - this._getWeekendsCount(days)) * DAY_MS;
+            weekendsCount = this._getWeekendsCount(days),
+            result = (days - weekendsCount) * DAY_MS;
 
         if(!allDay) {
-            result = fullInterval - (days + this._getWeekendsCount(days)) * this._getHiddenInterval();
+            result = fullInterval - days * this._getHiddenInterval() - weekendsCount * this._getDayDurationInMs();
         }
 
         return result;
