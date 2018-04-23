@@ -289,7 +289,7 @@ var FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).in
         dataSource.state(state, true);
         dataSource.field(fieldIndex, props);
 
-        this.option("state", this._dataSource.state());
+        that.option("state", dataSource.state());
         that._clean(true);
         that._renderComponent();
         dataSource.state(startState, true);
