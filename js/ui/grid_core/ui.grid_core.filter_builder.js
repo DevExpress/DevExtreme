@@ -50,6 +50,29 @@ var FilterBuilderView = modules.View.inherit({
         }));
     },
 
+    _getPopupContentTemplate: function(contentElement) {
+        var $contentElement = $(contentElement),
+            $filterBuilderContainer = $("<div>").appendTo($contentElement),
+            fields = this.getController("columns").getColumns(),
+            customOperations = this.getController("filterSync").getCustomFilterOperations();
+
+        fields = fields.filter(function(item) {
+            return item.allowFiltering;
+        }).map(function(item) {
+            var column = extend({}, item, { filterOperations: null });
+            return column;
+        });
+
+        this._filterBuilder = this._createComponent($filterBuilderContainer, FilterBuilder, extend({
+            value: this.option("filterValue"),
+            fields: fields
+        }, this.option("filterBuilder"), {
+            customOperations: customOperations
+        }));
+
+        this._createComponent($contentElement, ScrollView, { direction: "both" });
+    },
+
     _getPopupToolbarItems: function() {
         var that = this;
         return [
@@ -78,29 +101,6 @@ var FilterBuilderView = modules.View.inherit({
                 }
             }
         ];
-    },
-
-    _getPopupContentTemplate: function(contentElement) {
-        var $contentElement = $(contentElement),
-            $filterBuilderContainer = $("<div>").appendTo($contentElement),
-            fields = this.getController("columns").getColumns(),
-            customOperations = this.getController("filterSync").getCustomFilterOperations();
-
-        fields = fields.filter(function(item) {
-            return item.allowFiltering;
-        }).map(function(item) {
-            var column = extend({}, item, { filterOperations: null });
-            return column;
-        });
-
-        this._filterBuilder = this._createComponent($filterBuilderContainer, FilterBuilder, extend({
-            value: this.option("filterValue"),
-            fields: fields
-        }, this.option("filterBuilder"), {
-            customOperations: customOperations
-        }));
-
-        this._createComponent($contentElement, ScrollView, { direction: "both" });
     },
 
     optionChanged: function(args) {
