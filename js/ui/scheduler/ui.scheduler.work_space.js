@@ -1753,10 +1753,11 @@ var SchedulerWorkSpace = Widget.inherit({
             timeZoneOffset = dateUtils.getTimezonesDifference(firstViewDate, currentDate),
             fullInterval = currentDate.getTime() - firstViewDate.getTime() - timeZoneOffset,
             days = this._getDaysOfInterval(fullInterval, startDayTime),
-            result = (days - this._getWeekendsCount(days)) * DAY_MS;
+            weekendsCount = this._getWeekendsCount(days),
+            result = (days - weekendsCount) * DAY_MS;
 
         if(!allDay) {
-            result = fullInterval - (days + this._getWeekendsCount(days)) * this._getHiddenInterval();
+            result = fullInterval - this._getHiddenInterval() * (days) - weekendsCount * this._getCellCountInDay() * this.option("hoursInterval") * HOUR_MS;
         }
 
         return result;
