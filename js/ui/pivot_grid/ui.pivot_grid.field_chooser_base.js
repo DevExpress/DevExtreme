@@ -69,6 +69,10 @@ function getMainGroupField(dataSource, sourceField) {
     return field;
 }
 
+function getStringState(state) {
+    return JSON.stringify([state.fields, state.columnExpandedPaths, state.rowExpandedPaths]);
+}
+
 var FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).inherit(headerFilter.headerFilterMixin).inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
@@ -110,8 +114,14 @@ var FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).in
             case "applyChangesMode":
                 break;
             case "state":
-                if(args.value === null && args.previousValue !== null) {
-                    this.repaint();
+                if(this._skipStateChange || !this._dataSource) {
+                    break;
+                }
+                if(getStringState(this._dataSource.state()) === getStringState(args.value)) {
+                    this._clean(true);
+                    this._renderComponent();
+                } else {
+                    this._dataSource.state(args.value);
                 }
                 break;
             case "headerFilter":
@@ -167,7 +177,6 @@ var FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).in
     },
 
     _clean: function() {
-
     },
 
     _render: function() {

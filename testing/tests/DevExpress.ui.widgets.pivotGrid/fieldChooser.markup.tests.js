@@ -27,6 +27,11 @@ var createMockDataSource = function(options) {
         fields: function() {
             return options.fields;
         },
+        state: function() {
+            return {
+                fields: options.fields
+            };
+        },
         load: sinon.stub(),
         on: sinon.stub(),
         off: sinon.stub(),
