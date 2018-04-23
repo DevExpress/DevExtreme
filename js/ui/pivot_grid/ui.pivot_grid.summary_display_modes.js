@@ -535,7 +535,7 @@ exports.applyDisplaySummaryMode = function(descriptions, data) {
     foreachTree(rowElements, function(rowPath) {
         var rowItem = rowPath[0];
 
-        rowItem.isEmpty = true;
+        rowItem.isEmpty = [];
 
         data.values[rowItem.index] = data.values[rowItem.index] || [];
 
@@ -565,9 +565,11 @@ exports.applyDisplaySummaryMode = function(descriptions, data) {
                 if(columnItem.isEmpty[i] === undefined) {
                     columnItem.isEmpty[i] = true;
                 }
+                if(rowItem.isEmpty[i] === undefined) {
+                    rowItem.isEmpty[i] = true;
+                }
                 if(!isEmptyCell) {
-                    columnItem.isEmpty[i] = false;
-                    rowItem.isEmpty = false;
+                    rowItem.isEmpty[i] = columnItem.isEmpty[i] = false;
                 }
             }
         }, false);
