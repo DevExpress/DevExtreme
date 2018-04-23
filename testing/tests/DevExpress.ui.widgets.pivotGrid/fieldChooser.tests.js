@@ -1976,6 +1976,8 @@ QUnit.test("Default current state", function(assert) {
         { dataField: "Field3", area: 'row', areaIndex: 0, index: 2 }
     ];
     this.setup(dataSource);
+    this.fieldChooser.getDataSource().load();
+    this.clock.tick(500);
 
     var state = this.fieldChooser.option("state");
 

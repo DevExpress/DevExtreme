@@ -251,7 +251,9 @@ var FieldChooser = BaseFieldChooser.inherit({
                 func();
             });
             that._fireContentReadyAction();
-            that._changeStateSilently();
+            that._skipStateChange = true;
+            that.option("state", that._dataSource.state());
+            that._skipStateChange = false;
         };
 
         if(that._dataSource) {
@@ -309,7 +311,8 @@ var FieldChooser = BaseFieldChooser.inherit({
         }
     },
 
-    _clean: function() {
+    _clean: function(skipStateSetting) {
+        !skipStateSetting && this._dataSource && this.option("state", this._dataSource.state());
         this.$element().children("." + FIELDCHOOSER_CONTAINER_CLASS).remove();
     },
 
@@ -695,10 +698,7 @@ var FieldChooser = BaseFieldChooser.inherit({
     * @publicName cancelChanges()
     */
     cancelChanges: function() {
-        if(isDefined(this.option("state"))) {
-            var state = this._dataSource.state();
-            this._dataSource.state(state);
-        }
+        this.option("state", this._dataSource.state());
     },
 
     /**

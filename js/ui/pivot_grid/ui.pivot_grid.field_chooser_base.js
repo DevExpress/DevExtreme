@@ -69,6 +69,10 @@ function getMainGroupField(dataSource, sourceField) {
     return field;
 }
 
+function getStringState(state) {
+    return JSON.stringify([state.fields, state.columnExpandedPaths, state.rowExpandedPaths]);
+}
+
 var FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).inherit(headerFilter.headerFilterMixin).inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
@@ -102,12 +106,6 @@ var FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).in
         }
     },
 
-    _changeStateSilently: function() {
-        this._skipStateOptionChange = true;
-        this.option("state", this._dataSource.state());
-        this._skipStateOptionChange = false;
-    },
-
     _optionChanged: function(args) {
         switch(args.name) {
             case "dataSource":
@@ -116,7 +114,15 @@ var FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).in
             case "applyChangesMode":
                 break;
             case "state":
-                !this._skipStateOptionChange && this._dataSource && this._dataSource.state(args.value);
+                if(this._skipStateChange || !this._dataSource) {
+                    break;
+                }
+                if(getStringState(this._dataSource.state()) === getStringState(args.value)) {
+                    this._clean(true);
+                    this._renderComponent();
+                } else {
+                    this._dataSource.state(args.value);
+                }
                 break;
             case "headerFilter":
             case "allowFieldDragging":
@@ -174,9 +180,6 @@ var FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).in
     },
 
     _render: function() {
-        if(this._dataSource) {
-            this._changeStateSilently();
-        }
         this.callBase();
         this._headerFilterView.render(this.$element());
     },
@@ -286,8 +289,8 @@ var FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).in
         dataSource.state(state, true);
         dataSource.field(fieldIndex, props);
 
-        that._changeStateSilently();
-        that._clean();
+        this.option("state", this._dataSource.state());
+        that._clean(true);
         that._renderComponent();
         dataSource.state(startState, true);
     },
