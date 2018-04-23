@@ -2369,7 +2369,8 @@
                 position: relative;
                 height: 50px !important;
                 line-height: 50px !important;
-                border-bottom: @SCHEDULER_BASE_BORDER;
+                border-bottom: none;
+                border-right: none;
             }
         }
 
@@ -2391,6 +2392,8 @@
         
         .dx-scheduler-time-panel-cell {
             &.dx-scheduler-first-group-cell {
+                border-top: @SCHEDULER_BASE_BORDER;
+                
                 > div{
                     margin-top: 0px;
                 }
@@ -2398,7 +2401,7 @@
 
             &.dx-scheduler-last-group-cell {
                 border-bottom: none;
-                box-shadow: inset 0 -1px 0 @SCHEDULER_BASE_BORDER_COLOR;;
+                box-shadow: inset 0 -1px 0 @SCHEDULER_BASE_BORDER_COLOR;
             } 
         }
 
