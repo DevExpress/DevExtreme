@@ -87,6 +87,25 @@ var normalizeStyleProp = function(prop, value) {
     return value;
 };
 
+var setDimensionProperty = function(elements, propertyName, value) {
+    if(elements) {
+        value = typeUtils.isNumeric(value) ? value += "px" : value;
+        for(var i = 0; i < elements.length; ++i) {
+            elements[i].style[propertyName] = value;
+        }
+    }
+};
+
+var setWidth = function(elements, value) {
+    setDimensionProperty(elements, "width", value);
+};
+
+var setHeight = function(elements, value) {
+    setDimensionProperty(elements, "height", value);
+};
+
 exports.styleProp = styleProp;
 exports.stylePropPrefix = stylePropPrefix;
 exports.normalizeStyleProp = normalizeStyleProp;
+exports.setWidth = setWidth;
+exports.setHeight = setHeight;

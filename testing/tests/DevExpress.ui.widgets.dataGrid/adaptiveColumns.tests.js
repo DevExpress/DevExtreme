@@ -84,6 +84,32 @@ QUnit.test("Show adaptive command column", function(assert) {
     assert.equal($(".dx-data-row .dx-datagrid-adaptive-more").length, 2, "command adaptive element");
 });
 
+// T626221 - jQuery 3.3.1 fixes:
+// https://github.com/jquery/jquery/issues/3698
+// https://github.com/jquery/jquery/pull/3738
+QUnit.test("Check adaptive column rendering not use $.css() to change element's width/height", function(assert) {
+    var cssFunc = renderer.fn.css,
+        cssInvokeCounter = 0;
+
+    renderer.fn.css = function(name) {
+        if(name === "width" || name === "height") {
+            ++cssInvokeCounter;
+        }
+    };
+
+    // arrange, act
+    $(".dx-datagrid").width(200);
+    setupDataGrid(this);
+    this.rowsView.render($("#container"));
+    this.resizingController.updateDimensions();
+    this.clock.tick();
+
+    // assert
+    assert.equal(cssInvokeCounter, 0, "no $.css() invokes for width/height CSS properties");
+
+    renderer.fn.css = cssFunc;
+});
+
 // T516888
 QUnit.test("Column hiding should not work if column resizing enabled and columnResizingMode is widget", function(assert) {
     // arrange, act
