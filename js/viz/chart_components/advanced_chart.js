@@ -313,27 +313,63 @@ var AdvancedChart = BaseChart.inherit({
         that._scaleBreaksGroup.linkAppend();
     },
 
+    _populateMarginOptions: function() {
+        var that = this,
+            bubbleSize = estimateBubbleSize(that.getSize(), that.panes.length, that._themeManager.getOptions("maxBubbleSize"), that._isRotated()),
+            argumentMarginOptions = {};
+
+        that._valueAxes.forEach(function(valueAxis) {
+            var groupSeries = that.series.filter(function(series) {
+                    return series.getValueAxis() === valueAxis;
+                }),
+                marginOptions = {};
+
+            groupSeries.forEach(function(series) {
+                if(series.isVisible()) {
+                    var seriesMarginOptions = processBubbleMargin(series.getMarginOptions(), bubbleSize);
+
+                    marginOptions = mergeMarginOptions(marginOptions, seriesMarginOptions);
+                    argumentMarginOptions = mergeMarginOptions(argumentMarginOptions, seriesMarginOptions);
+                }
+            });
+
+            valueAxis.setMarginOptions(marginOptions);
+        });
+
+        that._argumentAxes.forEach(function(a) {
+            a.setMarginOptions(argumentMarginOptions);
+        });
+    },
+
     _populateBusinessRange: function() {
+        var that = this,
+            argRange = new rangeModule.Range();
+
+        that._argumentAxes.forEach(function(axis) {
+            argRange.addRange(axis.getRangeMargins());
+        });
+        that._setBusinessRangeBySeriesData();
+        _each(that.businessRanges, function(index, businessRange) {
+            businessRange.arg.addRange(argRange);
+            businessRange.val.addRange(that._valueAxes[index].getRangeMargins());
+        });
+    },
+
+    _setBusinessRangeBySeriesData: function() {
         var that = this,
             businessRanges = [],
             rotated = that._isRotated(),
             argAxes = that._argumentAxes,
             argRange = new rangeModule.Range({ rotated: !!rotated }),
-            argumentMarginOptions = {},
-            bubbleSize = estimateBubbleSize(that.getSize(), that.panes.length, that._themeManager.getOptions("maxBubbleSize"), that._isRotated()),
             groupsData = that._groupsData,
-            countAxesPerPane;
+            countAxesPerPane = that._valueAxes.reduce(function(prev, axis) {
+                prev[axis.pane] = (prev[axis.pane] || 0) + 1;
+                return prev;
+            }, {});
 
-        that.businessRanges = null;
-
-        _each(argAxes, function(_, axis) {
-            argRange.addRange(axis.getRangeData());
+        argAxes.forEach(function(axis) {
+            argRange.addRange(axis.getRangeOptions());
         });
-
-        countAxesPerPane = that._valueAxes.reduce(function(prev, axis) {
-            prev[axis.pane] = (prev[axis.pane] || 0) + 1;
-            return prev;
-        }, {});
 
         that._valueAxes.forEach(function(valueAxis) {
             var groupRange = new rangeModule.Range({
@@ -341,22 +377,17 @@ var AdvancedChart = BaseChart.inherit({
                     pane: valueAxis.pane,
                     axis: valueAxis.name
                 }),
-                groupAxisRange = valueAxis.getRangeData(),
                 groupSeries = that.series.filter(function(series) {
                     return series.getValueAxis() === valueAxis;
-                }),
-                marginOptions = {};
+                });
 
-            groupRange.addRange(groupAxisRange);
+            groupRange.addRange(valueAxis.getRangeOptions());
 
             groupSeries.forEach(function(series) {
-                var seriesRange = series.getRangeData(),
-                    seriesMarginOptions = processBubbleMargin(series.getMarginOptions(), bubbleSize);
+                var seriesRange = series.getRangeData();
 
                 groupRange.addRange(seriesRange.val);
                 argRange.addRange(seriesRange.arg);
-                marginOptions = mergeMarginOptions(marginOptions, seriesMarginOptions);
-                argumentMarginOptions = mergeMarginOptions(argumentMarginOptions, seriesMarginOptions);
             });
 
             if(!groupRange.isDefined()) {
@@ -369,7 +400,6 @@ var AdvancedChart = BaseChart.inherit({
 
             valueAxis.setGroupSeries(groupSeries);
             valueAxis.setBusinessRange(groupRange, countAxesPerPane[valueAxis.pane] > 1);
-            valueAxis.setMarginOptions(marginOptions);
 
             businessRanges.push({ val: groupRange, arg: argRange });
         });
@@ -382,8 +412,9 @@ var AdvancedChart = BaseChart.inherit({
 
         that._argumentAxes.forEach(function(a) {
             a.setBusinessRange(argRange);
-            a.setMarginOptions(argumentMarginOptions);
         });
+
+        that._populateMarginOptions();
 
         that.businessRanges = businessRanges;
     },

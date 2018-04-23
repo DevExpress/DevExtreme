@@ -1175,7 +1175,7 @@ var BaseChart = BaseWidget.inherit({
             i,
             seriesVisibilityChanged = function() {
                 that._specialProcessSeries();
-                that._populateBusinessRange();
+                that._setBusinessRangeBySeriesData();
                 that._renderer.stopAllAnimations(true);
                 that._updateLegend();
                 that._doRender({ force: true });

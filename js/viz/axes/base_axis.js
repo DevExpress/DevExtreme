@@ -1551,18 +1551,32 @@ Axis.prototype = {
     },
 
     getRangeData: function() {
+        return extend({}, this.getRangeOptions(), this.getRangeMargins());
+    },
+
+    getRangeOptions: function() {
+        return {
+            categories: this._options.categories,
+            dataType: this._options.dataType,
+            axisType: this._options.type,
+            base: this._options.logarithmBase,
+            invert: this._options.inverted
+        };
+    },
+
+    getRangeMargins: function() {
         var that = this,
-            options = that._options,
             minMax = that._getMinMax(),
+            zoomArgs = that._zoomArgs || {},
+            options = that._options,
+            type = options.type,
+            synchronizedValue = options.synchronizedValue,
             min = minMax.min,
             max = minMax.max,
-            zoomArgs = that._zoomArgs || {},
-            type = options.type,
             rangeMin,
             rangeMax,
             rangeMinVisible,
-            rangeMaxVisible,
-            synchronizedValue = options.synchronizedValue;
+            rangeMaxVisible;
 
         if(type === constants.logarithmic) {
             min = min <= 0 ? undefined : min;
@@ -1592,11 +1606,6 @@ Axis.prototype = {
         return {
             min: rangeMin,
             max: rangeMax,
-            categories: options.categories,
-            dataType: options.dataType,
-            axisType: type,
-            base: options.logarithmBase,
-            invert: options.inverted,
             minVisible: rangeMinVisible,
             maxVisible: rangeMaxVisible
         };
