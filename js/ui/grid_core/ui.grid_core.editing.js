@@ -568,9 +568,13 @@ var EditingController = modules.ViewController.inherit((function() {
                 dataController = that._dataController,
                 items = dataController.items(),
                 item = items[rowIndex],
-                params = { data: item.data, cancel: false },
+                params = { data: item && item.data, cancel: false },
                 oldEditRowIndex = that._getVisibleEditRowIndex(),
                 $editingCell;
+
+            if(!item) {
+                return;
+            }
 
             if(rowIndex === oldEditRowIndex) {
                 return true;
