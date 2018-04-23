@@ -22,16 +22,20 @@ var FilterBuilderView = modules.View.inherit({
     },
 
     _disposePopup: function() {
-        this._filterBuilderPopup.dispose();
-        this._filterBuilderPopup = undefined;
-        this._filterBuilder.dispose();
-        this._filterBuilder = undefined;
+        if(this._filterBuilderPopup) {
+            this._filterBuilderPopup.dispose();
+            this._filterBuilderPopup = undefined;
+        }
+        if(this._filterBuilder) {
+            this._filterBuilder.dispose();
+            this._filterBuilder = undefined;
+        }
     },
 
     _initPopup: function() {
         var that = this;
 
-        that._filterBuilderPopup && that._disposePopup();
+        that._disposePopup();
         that._filterBuilderPopup = that._createComponent(that.element(), Popup, extend({
             title: messageLocalization.format("dxDataGrid-filterBuilderPopupTitle"),
             contentTemplate: function($contentElement) {
