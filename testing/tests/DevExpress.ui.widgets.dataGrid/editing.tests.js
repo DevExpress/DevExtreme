@@ -2739,7 +2739,7 @@ QUnit.module('Editing with real dataController', {
             }
         };
 
-        setupDataGridModules(this, ['data', 'columns', 'rows', 'gridView', 'masterDetail', 'editing', 'editorFactory', 'selection', 'headerPanel', 'columnFixing', 'validating'], {
+        setupDataGridModules(this, ['data', 'columns', 'rows', 'gridView', 'masterDetail', 'editing', 'editorFactory', 'selection', 'headerPanel', 'columnFixing', 'validating', 'search'], {
             initViews: true
         });
 
@@ -6016,6 +6016,45 @@ QUnit.test("EditorPreparing and EditorPrepared events should have correct parame
     });
 });
 
+// T624036
+QUnit.test("Edit row should not throw an exception after change edit mode", function(assert) {
+    // arrange
+    fx.off = true;
+
+    var $testElement = $("#container");
+
+    this.$element = function() {
+        return $testElement;
+    };
+    this.options.searchPanel = {
+        text: "Zikerman"
+    };
+    this.dataController.init();
+    this.rowsView.render($testElement);
+
+    // assert
+    assert.strictEqual(this.dataController.items().length, 1, "item count");
+
+    this.options.loadingTimeout = 30;
+    this.options.editing = {
+        mode: "popup"
+    };
+
+    try {
+        // act
+        this.columnsController.optionChanged({ name: "editing", fullName: "editing" });
+        this.editRow(0);
+
+        // assert
+        assert.strictEqual(this.dataController.items().length, 1, "item count");
+        assert.ok(this.editingController._editPopup.option("visible"), "edit popup is visible");
+    } catch(e) {
+        // assert
+        assert.ok(false, "exception");
+    } finally {
+        fx.off = false;
+    }
+});
 
 if(device.ios || device.android) {
     // T322738
