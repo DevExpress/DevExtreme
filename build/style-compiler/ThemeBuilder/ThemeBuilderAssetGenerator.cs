@@ -15,6 +15,7 @@ namespace StyleCompiler.ThemeBuilder
 
         const string BOOTSTRAP_VARIABLES_FILENAME = "variables.less";
         const string BOOTSTRAP_METADATA_FILENAME = "bootstrap-metadata.json";
+        const string BOOTSTRAP4_METADATA_FILENAME = "bootstrap4-metadata.json";
         const string VARIABLES_MIGRATION_METADATA_FILENAME = "variables-migration-metadata.json";
         const string ADDITIONAL_MIGRATION_METADATA_FILENAME = "additional-migration-metadata.json";
 
@@ -109,11 +110,19 @@ namespace StyleCompiler.ThemeBuilder
             GenerateCombinedDataForWidgetsPreview();
 
             string bootstrapMetadataContent = File.ReadAllText(Path.Combine(_pathToBootstrapVariableFolder, BOOTSTRAP_METADATA_FILENAME));
+            string bootstrap4MetadataContent = File.ReadAllText(Path.Combine(_pathToBootstrapVariableFolder, BOOTSTRAP4_METADATA_FILENAME));
             StringBuilder content = new StringBuilder();
             content.Append(String.Concat(
                     "ThemeBuilder.__bootstrap_metadata",
                     " = function() { return ",
                     bootstrapMetadataContent,
+                    ";};\n"
+                    ));
+
+            content.Append(String.Concat(
+                    "ThemeBuilder.__bootstrap4_metadata",
+                    " = function() { return ",
+                    bootstrap4MetadataContent,
                     ";};\n"
                     ));
 
