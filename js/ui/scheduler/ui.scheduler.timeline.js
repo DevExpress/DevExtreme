@@ -127,10 +127,10 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
 
     _getWorkSpaceHeight: function() {
         if(this.option("crossScrollingEnabled")) {
-            return this._$dateTable.outerHeight();
+            return this._$dateTable.get(0).getBoundingClientRect().height;
         }
 
-        return this.$element().outerHeight();
+        return this.$element().get(0).getBoundingClientRect().height;
     },
 
     _dateTableScrollableConfig: function() {
@@ -227,13 +227,13 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
 
         if(this.option("groupOrientation") === "vertical") {
             $indicator = this._createIndicator($container);
-            $indicator.height($container.outerHeight());
+            $indicator.height($container.get(0).getBoundingClientRect().height);
             $indicator.css("left", rtlOffset ? rtlOffset - width : width);
         } else {
             for(var i = 0; i < groupCount; i++) {
                 var offset = this._getCellCount() * this.getCellWidth() * i;
                 $indicator = this._createIndicator($container);
-                $indicator.height($container.outerHeight());
+                $indicator.height($container.get(0).getBoundingClientRect().height);
 
                 $indicator.css("left", rtlOffset ? rtlOffset - width - offset : width + offset);
             }

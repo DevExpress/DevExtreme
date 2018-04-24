@@ -90,7 +90,7 @@ var HorizontalGroupedStrategy = GroupedStrategy.inherit({
     },
 
     getAllDayTableHeight: function() {
-        return this._workSpace._$allDayTable.outerHeight() || 0;
+        return this._workSpace._$allDayTable.get(0).getBoundingClientRect().height || 0;
     },
 
     getGroupCountAttr: function(groupRowCount, groupRows) {
@@ -143,7 +143,7 @@ var HorizontalGroupedStrategy = GroupedStrategy.inherit({
     },
 
     getShaderMaxHeight: function() {
-        return this._workSpace._dateTableScrollable.$content().outerHeight();
+        return this._workSpace._dateTableScrollable.$content().get(0).getBoundingClientRect().height;
     },
 
     getShaderWidth: function(i) {

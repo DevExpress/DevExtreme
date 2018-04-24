@@ -125,7 +125,7 @@ var VerticalGroupedStrategy = GroupedStrategy.inherit({
             startOffset = $cells.eq(0).offset().left,
             endOffset = $cells.eq(cellCount - 1).offset().left + cellWidth,
             dayHeight = (this._workSpace._calculateDayDuration() / this._workSpace.option("hoursInterval")) * this._workSpace.getCellHeight(),
-            topOffset = groupIndex * dayHeight + this._workSpace._$thead.outerHeight() + this._workSpace.invoke("getHeaderHeight") + DATE_HEADER_OFFSET;
+            topOffset = groupIndex * dayHeight + this._workSpace._$thead.get(0).getBoundingClientRect().height + this._workSpace.invoke("getHeaderHeight") + DATE_HEADER_OFFSET;
 
         if(this._workSpace.option("showAllDayPanel") && this._workSpace.supportAllDayRow()) {
             topOffset += this._workSpace.getCellHeight();

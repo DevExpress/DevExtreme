@@ -2083,11 +2083,11 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     getCellHeight: function() {
-        return this._getCells().first().outerHeight();
+        return this._getCells().first().get(0) && this._getCells().first().get(0).getBoundingClientRect().height;
     },
 
     getAllDayHeight: function() {
-        return this.option("showAllDayPanel") ? this._getCells(true).first().outerHeight() || 0 : 0;
+        return this.option("showAllDayPanel") ? this._getCells(true).first().get(0) && this._getCells(true).first().get(0).getBoundingClientRect().height || 0 : 0;
     },
 
     getAllDayOffset: function() {
@@ -2130,7 +2130,7 @@ var SchedulerWorkSpace = Widget.inherit({
                 .find("tr:nth-child(" + rows + "n)")
                 .each(function(_, row) {
 
-                    var maxPosition = $(row).position().top + $(row).outerHeight();
+                    var maxPosition = $(row).position().top + $(row).get(0).getBoundingClientRect().height;
 
                     that._maxAllowedVerticalPosition.push(Math.round(maxPosition));
                 });
@@ -2312,7 +2312,7 @@ var SchedulerWorkSpace = Widget.inherit({
                     return true;
                 }
 
-                result += $(this).outerWidth();
+                result += $(this).get(0).getBoundingClientRect().width;
             });
 
         return result;
