@@ -364,7 +364,7 @@ var Toast = Overlay.inherit({
                     /**
                     * @name dxToastOptions_animation
                     * @publicName animation
-                    * @default {show: {type: 'slide', duration: 200, from: { position: {my: 'top', at: 'bottom', of: window}}}, hide: { type: 'slide', duration: 200, to: { position: {my: 'top', at: 'bottom', of: window}}}} @for Material
+                    * @default {show: {type: 'slide', duration: 250, easing: 'cubic-bezier(0.4, 0, 1, 1)' from: { position: {my: 'top', at: 'bottom', of: window}}}, hide: { type: 'slide', duration: 250, easing: 'cubic-bezier(0.4, 0, 1, 1)' to: { position: {my: 'top', at: 'bottom', of: window}}}} @for Material
                     * @inheritdoc
                     */
                     animation: {
