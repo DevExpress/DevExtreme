@@ -605,11 +605,11 @@ var checkTwoGroups = function(assert, series) {
         assert.equal(series.getOptions().mainSeriesColor.callCount, 6);
 
         checkMainSeriesColor(assert, series, 0, "arg1", 0);
-        checkMainSeriesColor(assert, series, 1, "arg2", 1);
-        checkMainSeriesColor(assert, series, 2, "arg3", 2);
-        checkMainSeriesColor(assert, series, 3, "arg2", 3);
-        checkMainSeriesColor(assert, series, 4, "arg2", 4);
-        checkMainSeriesColor(assert, series, 5, "arg3", 5);
+        checkMainSeriesColor(assert, series, 1, "arg2", 0);
+        checkMainSeriesColor(assert, series, 2, "arg3", 0);
+        checkMainSeriesColor(assert, series, 3, "arg2", 1);
+        checkMainSeriesColor(assert, series, 4, "arg2", 2);
+        checkMainSeriesColor(assert, series, 5, "arg3", 1);
     });
 
     QUnit.test("mainSeriesColor, update", function(assert) {
@@ -627,11 +627,11 @@ var checkTwoGroups = function(assert, series) {
         assert.equal(series.getOptions().mainSeriesColor.callCount, 6);
 
         checkMainSeriesColor(assert, series, 0, "arg1", 0);
-        checkMainSeriesColor(assert, series, 1, "arg2", 1);
-        checkMainSeriesColor(assert, series, 2, "arg3", 2);
-        checkMainSeriesColor(assert, series, 3, "arg2", 3);
-        checkMainSeriesColor(assert, series, 4, "arg2", 4);
-        checkMainSeriesColor(assert, series, 5, "arg3", 5);
+        checkMainSeriesColor(assert, series, 1, "arg2", 0);
+        checkMainSeriesColor(assert, series, 2, "arg3", 0);
+        checkMainSeriesColor(assert, series, 3, "arg2", 1);
+        checkMainSeriesColor(assert, series, 4, "arg2", 2);
+        checkMainSeriesColor(assert, series, 5, "arg3", 1);
     });
 
     // T607678
@@ -643,11 +643,11 @@ var checkTwoGroups = function(assert, series) {
         series2.updateData(data);
 
         checkMainSeriesColor(assert, series1, 0, "arg1", 0);
-        checkMainSeriesColor(assert, series1, 1, "arg2", 1);
-        checkMainSeriesColor(assert, series1, 2, "arg3", 2);
+        checkMainSeriesColor(assert, series1, 1, "arg2", 0);
+        checkMainSeriesColor(assert, series1, 2, "arg3", 0);
 
         checkMainSeriesColor(assert, series2, 0, "arg1", 0);
-        checkMainSeriesColor(assert, series2, 1, "arg3", 2);
+        checkMainSeriesColor(assert, series2, 1, "arg3", 0);
     });
 
     QUnit.test("mainSeriesColor, several series, data is missing from some data, customizePoint is set", function(assert) {
@@ -658,11 +658,11 @@ var checkTwoGroups = function(assert, series) {
         series2.updateData(data);
 
         checkMainSeriesColor(assert, series1, 1, "arg1", 0);
-        checkMainSeriesColor(assert, series1, 3, "arg2", 1);
-        checkMainSeriesColor(assert, series1, 5, "arg3", 2);
+        checkMainSeriesColor(assert, series1, 3, "arg2", 0);
+        checkMainSeriesColor(assert, series1, 5, "arg3", 0);
 
         checkMainSeriesColor(assert, series2, 1, "arg1", 0);
-        checkMainSeriesColor(assert, series2, 3, "arg3", 2);
+        checkMainSeriesColor(assert, series2, 3, "arg3", 0);
     });
 
     QUnit.test("without borders", function(assert) {
