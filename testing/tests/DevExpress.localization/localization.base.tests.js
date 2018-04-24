@@ -249,37 +249,37 @@ QUnit.test("format", function(assert) {
         data = $.makeArray(data);
 
         $.each(data, function(_, data) {
-            var localizedDate = dateLocalization.format(data.date, format);
+            var localizedDate = localization.formatDate(data.date, format);
             assert.equal(typeof (localizedDate), "string");
             assert.equal(localizedDate, data.expected, data.date + " in " + format + " format");
         });
     });
 
-    assert.equal(dateLocalization.format(new Date(2015, 2, 2, 3, 4, 5, 6)), String(new Date(2015, 2, 2, 3, 4, 5)), "without format");
-    assert.notOk(dateLocalization.format(), "without date");
+    assert.equal(localization.formatDate(new Date(2015, 2, 2, 3, 4, 5, 6)), String(new Date(2015, 2, 2, 3, 4, 5)), "without format");
+    assert.notOk(localization.formatDate(), "without date");
 });
 
 QUnit.test("object syntax", function(assert) {
-    assert.equal(dateLocalization.format(new Date(2015, 2, 2, 3, 4, 5, 6), { type: "longdate" }), "Monday, March 2, 2015");
+    assert.equal(localization.formatDate(new Date(2015, 2, 2, 3, 4, 5, 6), { type: "longdate" }), "Monday, March 2, 2015");
 });
 
 QUnit.test("format with LDML pattern", function(assert) {
-    assert.equal(dateLocalization.format(new Date(2015, 2, 2, 3, 4, 5, 6), "dd/MM/yyyy HH:mm:ss"), "02/03/2015 03:04:05");
-    assert.equal(dateLocalization.format(new Date(2015, 2, 2, 3, 4, 5, 6), "d MMMM yyyy"), "2 March 2015");
+    assert.equal(localization.formatDate(new Date(2015, 2, 2, 3, 4, 5, 6), "dd/MM/yyyy HH:mm:ss"), "02/03/2015 03:04:05");
+    assert.equal(localization.formatDate(new Date(2015, 2, 2, 3, 4, 5, 6), "d MMMM yyyy"), "2 March 2015");
 });
 
 QUnit.test("parse with LDML pattern", function(assert) {
-    assert.deepEqual(dateLocalization.parse("02/03/2015 03:04:05", "dd/MM/yyyy HH:mm:ss"), new Date(2015, 2, 2, 3, 4, 5));
-    assert.deepEqual(dateLocalization.parse("2 March 2015", "d MMMM yyyy"), new Date(2015, 2, 2));
+    assert.deepEqual(localization.parseDate("02/03/2015 03:04:05", "dd/MM/yyyy HH:mm:ss"), new Date(2015, 2, 2, 3, 4, 5));
+    assert.deepEqual(localization.parseDate("2 March 2015", "d MMMM yyyy"), new Date(2015, 2, 2));
 });
 
 QUnit.test("parse with custom format", function(assert) {
-    assert.deepEqual(dateLocalization.parse("02/03/2015 03:04:05", function(value) {
-        return dateLocalization.format(value, "dd/MM/yyyy HH:mm:ss");
+    assert.deepEqual(localization.parseDate("02/03/2015 03:04:05", function(value) {
+        return localization.formatDate(value, "dd/MM/yyyy HH:mm:ss");
     }), new Date(2015, 2, 2, 3, 4, 5));
-    assert.deepEqual(dateLocalization.parse("2 March 2015", {
+    assert.deepEqual(localization.parseDate("2 March 2015", {
         formatter: function(value) {
-            return dateLocalization.format(value, "d MMMM yyyy");
+            return localization.formatDate(value, "d MMMM yyyy");
         }
     }), new Date(2015, 2, 2));
 });
@@ -434,15 +434,15 @@ QUnit.test("parse", function(assert) {
 
             $.each(data, function(_, data) {
                 var expected = data.expectedConfig && generateExpectedDate(data.expectedConfig) || data.expected;
-                assert.equal(dateLocalization.parse(data.text, format), expected && String(expected), format + " format");
+                assert.equal(localization.parseDate(data.text, format), expected && String(expected), format + " format");
             });
         });
 
-        assert.equal(dateLocalization.parse("550", "millisecond").getMilliseconds(), 550, "millisecond format");
-        assert.equal(dateLocalization.parse("550", "SSS").getMilliseconds(), 550, "millisecond format");
+        assert.equal(localization.parseDate("550", "millisecond").getMilliseconds(), 550, "millisecond format");
+        assert.equal(localization.parseDate("550", "SSS").getMilliseconds(), 550, "millisecond format");
 
-        assert.equal(dateLocalization.parse(dateLocalization.format(new Date(), "shortdate")), String(generateExpectedDate({ hours: 0 })), "without format");
-        assert.notOk(dateLocalization.parse(), "without date");
+        assert.equal(localization.parseDate(localization.formatDate(new Date(), "shortdate")), String(generateExpectedDate({ hours: 0 })), "without format");
+        assert.notOk(localization.parseDate(), "without date");
     } finally {
         assert.equal(warnLog.length, 0);
         logger.warn = originalLoggerWarn;
@@ -450,16 +450,16 @@ QUnit.test("parse", function(assert) {
 });
 
 QUnit.test("parse with shortDate format (T478962, T511282)", function(assert) {
-    assert.equal(dateLocalization.parse("2/20/2015", "shortDate"), String(new Date(2015, 1, 20)));
-    assert.equal(dateLocalization.parse("02/20/2015", "shortDate"), String(new Date(2015, 1, 20)));
-    assert.equal(dateLocalization.parse("02/02/2015", "shortDate"), String(new Date(2015, 1, 2)));
-    assert.equal(dateLocalization.parse("2/2/2015", "shortDate"), String(new Date(2015, 1, 2)));
-    assert.equal(dateLocalization.parse("1/1/99", "shortDate"), String(new Date(new Date(99, 0, 1).setFullYear(99))));
-    assert.equal(dateLocalization.parse("2/20/1", "shortDate"), String(new Date(new Date(1, 1, 20).setFullYear(1))));
+    assert.equal(localization.parseDate("2/20/2015", "shortDate"), String(new Date(2015, 1, 20)));
+    assert.equal(localization.parseDate("02/20/2015", "shortDate"), String(new Date(2015, 1, 20)));
+    assert.equal(localization.parseDate("02/02/2015", "shortDate"), String(new Date(2015, 1, 2)));
+    assert.equal(localization.parseDate("2/2/2015", "shortDate"), String(new Date(2015, 1, 2)));
+    assert.equal(localization.parseDate("1/1/99", "shortDate"), String(new Date(new Date(99, 0, 1).setFullYear(99))));
+    assert.equal(localization.parseDate("2/20/1", "shortDate"), String(new Date(new Date(1, 1, 20).setFullYear(1))));
 
-    assert.equal(dateLocalization.parse("22/20/2015", "shortDate"), undefined);
-    assert.equal(dateLocalization.parse("2/120/2015", "shortDate"), undefined);
-    assert.equal(dateLocalization.parse("2/20/", "shortDate"), undefined);
+    assert.equal(localization.parseDate("22/20/2015", "shortDate"), undefined);
+    assert.equal(localization.parseDate("2/120/2015", "shortDate"), undefined);
+    assert.equal(localization.parseDate("2/20/", "shortDate"), undefined);
 });
 
 QUnit.test("firstDayOfWeekIndex", function(assert) {
@@ -492,7 +492,7 @@ QUnit.test("set custom localizablePrefix", function(assert) {
 });
 
 QUnit.test("format", function(assert) {
-    assert.equal(messageLocalization.format("addedKey"), "testValue");
+    assert.equal(localization.formatMessage("addedKey"), "testValue");
 
     try {
         localization.loadMessages({ "en": {
@@ -500,7 +500,7 @@ QUnit.test("format", function(assert) {
         } });
         localization.locale("ru");
 
-        assert.equal(messageLocalization.format("fallBackTestKey"), "fallBackTestMessage");
+        assert.equal(localization.formatMessage("fallBackTestKey"), "fallBackTestMessage");
     } finally {
         localization.locale("en");
     }
@@ -519,8 +519,24 @@ QUnit.test("format using parent locales", function(assert) {
         });
         localization.locale("pt-AO");
 
-        assert.equal(messageLocalization.format("ptTestKey"), "ptTestValue");
-        assert.equal(messageLocalization.format("ptPtTestKey"), "ptPtTestValue");
+        assert.equal(localization.formatMessage("ptTestKey"), "ptTestValue");
+        assert.equal(localization.formatMessage("ptPtTestKey"), "ptPtTestValue");
+    } finally {
+        localization.locale("en");
+    }
+});
+
+QUnit.test("format with placeholders", function(assert) {
+    assert.equal(localization.formatMessage("hello", ["Ivan", "Ivanov"]), "Hello, Ivan Ivanov");
+    assert.equal(localization.formatMessage("hello", "Ivan", "Ivanov"), "Hello, Ivan Ivanov");
+
+    try {
+        localization.loadMessages({ "en": {
+            fallBackTestKey: "fallBackTestMessage {0}"
+        } });
+        localization.locale("ru");
+
+        assert.equal(localization.formatMessage("fallBackTestKey", "1"), "fallBackTestMessage 1");
     } finally {
         localization.locale("en");
     }
@@ -655,39 +671,39 @@ QUnit.test("input attr 'type' was not localized (Q588810)", function(assert) {
 QUnit.module("Localization number");
 
 QUnit.test("parse different positive and negative parts", function(assert) {
-    assert.equal(numberLocalization.parse("(10)", "#0;(#0)"), -10);
-    assert.equal(numberLocalization.parse("-10"), -10);
-    assert.equal(numberLocalization.parse("-10", "#0;(#0)"), -10);
+    assert.equal(localization.parseNumber("(10)", "#0;(#0)"), -10);
+    assert.equal(localization.parseNumber("-10"), -10);
+    assert.equal(localization.parseNumber("-10", "#0;(#0)"), -10);
 });
 
 QUnit.test("parse different positive and negative parts with groups", function(assert) {
-    assert.equal(numberLocalization.parse("12,345", "#,##0.##;(#,##0.##)"), 12345, "positive");
-    assert.equal(numberLocalization.parse("(12,345)", "#,##0.##;(#,##0.##)"), -12345, "negative");
-    assert.equal(numberLocalization.parse("12,34", "#,##0.##;(#,##0.##)"), 1234, "positive after removing one char");
-    assert.equal(numberLocalization.parse("(12,34)", "#,##0.##;(#,##0.##)"), -1234, "negative after removing one char");
-    assert.equal(numberLocalization.parse("(01)", "#,##0.##;(#,##0.##)"), -1, "negative with leading zero");
-    assert.equal(numberLocalization.parse("(12,34.56)", "#,##0.##;(#,##0.##)"), -1234.56, "negative with removed digit and decimal part");
+    assert.equal(localization.parseNumber("12,345", "#,##0.##;(#,##0.##)"), 12345, "positive");
+    assert.equal(localization.parseNumber("(12,345)", "#,##0.##;(#,##0.##)"), -12345, "negative");
+    assert.equal(localization.parseNumber("12,34", "#,##0.##;(#,##0.##)"), 1234, "positive after removing one char");
+    assert.equal(localization.parseNumber("(12,34)", "#,##0.##;(#,##0.##)"), -1234, "negative after removing one char");
+    assert.equal(localization.parseNumber("(01)", "#,##0.##;(#,##0.##)"), -1, "negative with leading zero");
+    assert.equal(localization.parseNumber("(12,34.56)", "#,##0.##;(#,##0.##)"), -1234.56, "negative with removed digit and decimal part");
 });
 
 QUnit.test("format: base", function(assert) {
-    assert.equal(numberLocalization.format(12), "12");
-    assert.equal(numberLocalization.format(1, { type: "decimal", precision: 2 }), "01");
-    assert.equal(numberLocalization.format(1, { type: "decimal", precision: 3 }), "001");
-    assert.equal(numberLocalization.format(1.23456, { type: "decimal" }), "1.23456");
+    assert.equal(localization.formatNumber(12), "12");
+    assert.equal(localization.formatNumber(1, { type: "decimal", precision: 2 }), "01");
+    assert.equal(localization.formatNumber(1, { type: "decimal", precision: 3 }), "001");
+    assert.equal(localization.formatNumber(1.23456, { type: "decimal" }), "1.23456");
 });
 
 QUnit.test("format: precision", function(assert) {
-    assert.equal(numberLocalization.format(2, { type: "decimal", precision: 2 }), "02");
-    assert.equal(numberLocalization.format(12, { type: "decimal", precision: 2 }), "12");
-    assert.equal(numberLocalization.format(2, { type: "decimal", precision: 3 }), "002");
-    assert.equal(numberLocalization.format(12, { type: "decimal", precision: 3 }), "012");
-    assert.equal(numberLocalization.format(123, { type: "decimal", precision: 3 }), "123");
+    assert.equal(localization.formatNumber(2, { type: "decimal", precision: 2 }), "02");
+    assert.equal(localization.formatNumber(12, { type: "decimal", precision: 2 }), "12");
+    assert.equal(localization.formatNumber(2, { type: "decimal", precision: 3 }), "002");
+    assert.equal(localization.formatNumber(12, { type: "decimal", precision: 3 }), "012");
+    assert.equal(localization.formatNumber(123, { type: "decimal", precision: 3 }), "123");
 });
 
 QUnit.test("parse: base", function(assert) {
-    assert.equal(numberLocalization.parse("1.2"), 1.2);
-    assert.equal(numberLocalization.parse(".2", "#0.#"), 0.2);
-    assert.equal(numberLocalization.parse("12,000"), 12000);
+    assert.equal(localization.parseNumber("1.2"), 1.2);
+    assert.equal(localization.parseNumber(".2", "#0.#"), 0.2);
+    assert.equal(localization.parseNumber("12,000"), 12000);
 });
 
 QUnit.test("parse with custom separators", function(assert) {
@@ -702,9 +718,9 @@ QUnit.test("parse with custom separators", function(assert) {
     localization.locale("de");
 
     try {
-        assert.equal(numberLocalization.parse("1,2"), 1.2);
-        assert.equal(numberLocalization.parse("1.2"), 12);
-        assert.equal(numberLocalization.parse("12.000"), 12000);
+        assert.equal(localization.parseNumber("1,2"), 1.2);
+        assert.equal(localization.parseNumber("1.2"), 12);
+        assert.equal(localization.parseNumber("12.000"), 12000);
     } finally {
         config({
             decimalSeparator: oldDecimalSeparator,
@@ -715,56 +731,56 @@ QUnit.test("parse with custom separators", function(assert) {
 });
 
 QUnit.test("parse: test starts with not digit symbols", function(assert) {
-    assert.equal(numberLocalization.parse("$ 1.2"), 1.2);
-    assert.equal(numberLocalization.parse("1.2 руб."), 1.2);
+    assert.equal(localization.parseNumber("$ 1.2"), 1.2);
+    assert.equal(localization.parseNumber("1.2 руб."), 1.2);
 });
 
 QUnit.test("parse: test different negative format", function(assert) {
-    assert.equal(numberLocalization.parse("<<1.0>>", "#0.00;<<#0.00>>"), -1);
+    assert.equal(localization.parseNumber("<<1.0>>", "#0.00;<<#0.00>>"), -1);
 });
 
 QUnit.test('Fixed point numeric formats', function(assert) {
-    assert.equal(numberLocalization.format(23.04059872, { type: "fIxedPoint", precision: 4 }), '23.0406');
-    assert.equal(numberLocalization.format(23.04059872, "fIxedPoint"), "23");
-    assert.equal(numberLocalization.format(123.99, "fIxedPoint largeNumber"), "124");
-    assert.equal(numberLocalization.format(-123.99, "fIxedPoint largeNumber"), "-124");
+    assert.equal(localization.formatNumber(23.04059872, { type: "fIxedPoint", precision: 4 }), '23.0406');
+    assert.equal(localization.formatNumber(23.04059872, "fIxedPoint"), "23");
+    assert.equal(localization.formatNumber(123.99, "fIxedPoint largeNumber"), "124");
+    assert.equal(localization.formatNumber(-123.99, "fIxedPoint largeNumber"), "-124");
 });
 
 QUnit.test("format fixedPoint with precision", function(assert) {
-    assert.equal(numberLocalization.format(1, { type: "fixedPoint", precision: 2 }), "1.00");
-    assert.equal(numberLocalization.format(1.1, { type: "fixedPoint", precision: 2 }), "1.10");
-    assert.equal(numberLocalization.format(1.1, { type: "fixedPoint" }), "1");
-    assert.equal(numberLocalization.format(1, { type: "fixedPoint", precision: null }), "1");
-    assert.equal(numberLocalization.format(1.2, { type: "fixedPoint", precision: null }), "1.2");
-    assert.equal(numberLocalization.format(1.22, { type: "fixedPoint", precision: null }), "1.22");
-    assert.equal(numberLocalization.format(1.222, { type: "fixedPoint", precision: null }), "1.222");
-    assert.equal(numberLocalization.format(1.2222, { type: "fixedPoint", precision: null }), "1.2222");
-    assert.equal(numberLocalization.format(1.2225, { type: "fixedPoint", precision: null }), "1.2225");
-    assert.equal(numberLocalization.format(1.22222228, { type: "fixedPoint", precision: null }), "1.22222228");
+    assert.equal(localization.formatNumber(1, { type: "fixedPoint", precision: 2 }), "1.00");
+    assert.equal(localization.formatNumber(1.1, { type: "fixedPoint", precision: 2 }), "1.10");
+    assert.equal(localization.formatNumber(1.1, { type: "fixedPoint" }), "1");
+    assert.equal(localization.formatNumber(1, { type: "fixedPoint", precision: null }), "1");
+    assert.equal(localization.formatNumber(1.2, { type: "fixedPoint", precision: null }), "1.2");
+    assert.equal(localization.formatNumber(1.22, { type: "fixedPoint", precision: null }), "1.22");
+    assert.equal(localization.formatNumber(1.222, { type: "fixedPoint", precision: null }), "1.222");
+    assert.equal(localization.formatNumber(1.2222, { type: "fixedPoint", precision: null }), "1.2222");
+    assert.equal(localization.formatNumber(1.2225, { type: "fixedPoint", precision: null }), "1.2225");
+    assert.equal(localization.formatNumber(1.22222228, { type: "fixedPoint", precision: null }), "1.22222228");
 });
 
 QUnit.test('large number format powers', function(assert) {
-    assert.strictEqual(numberLocalization.format(4119626293, 'largeNumber'), '4B');
-    assert.strictEqual(numberLocalization.format(41196, 'thousands'), '41K');
-    assert.strictEqual(numberLocalization.format(4119626293, 'miLLions'), '4,120M');
-    assert.strictEqual(numberLocalization.format(4119626293, 'biLLions'), '4B');
-    assert.strictEqual(numberLocalization.format(4119626293234, 'triLLions'), '4T');
+    assert.strictEqual(localization.formatNumber(4119626293, 'largeNumber'), '4B');
+    assert.strictEqual(localization.formatNumber(41196, 'thousands'), '41K');
+    assert.strictEqual(localization.formatNumber(4119626293, 'miLLions'), '4,120M');
+    assert.strictEqual(localization.formatNumber(4119626293, 'biLLions'), '4B');
+    assert.strictEqual(localization.formatNumber(4119626293234, 'triLLions'), '4T');
 });
 
 QUnit.test('Percent numeric formats', function(assert) {
-    assert.equal(numberLocalization.format(0.45, { type: "peRcent" }), '45%');
-    assert.equal(numberLocalization.format(0.45, { type: "peRcent", precision: 2 }), '45.00%');
+    assert.equal(localization.formatNumber(0.45, { type: "peRcent" }), '45%');
+    assert.equal(localization.formatNumber(0.45, { type: "peRcent", precision: 2 }), '45.00%');
 });
 
 QUnit.test('Decimal numeric formats', function(assert) {
-    assert.equal(numberLocalization.format(437, { type: "decimAl" }), '437');
-    assert.equal(numberLocalization.format(437, { type: "deCimal", precision: 5 }), '00437');
-    assert.equal(numberLocalization.format(-437, { type: "decimal", precision: 0 }), '-437');
+    assert.equal(localization.formatNumber(437, { type: "decimAl" }), '437');
+    assert.equal(localization.formatNumber(437, { type: "deCimal", precision: 5 }), '00437');
+    assert.equal(localization.formatNumber(-437, { type: "decimal", precision: 0 }), '-437');
 });
 
 QUnit.test('format as function', function(assert) {
-    assert.equal(numberLocalization.format(437, function(value) { return "!" + value; }), '!437');
-    assert.equal(numberLocalization.format(437, { formatter: function(value) { return "!" + value; } }), '!437');
+    assert.equal(localization.formatNumber(437, function(value) { return "!" + value; }), '!437');
+    assert.equal(localization.formatNumber(437, { formatter: function(value) { return "!" + value; } }), '!437');
 });
 
 QUnit.test("custom group and decimal separators", function(assert) {
@@ -779,9 +795,9 @@ QUnit.test("custom group and decimal separators", function(assert) {
     localization.locale("de");
 
     try {
-        assert.equal(numberLocalization.format(1.1, { type: "fixedPoint", precision: 2 }), "1,10");
-        assert.equal(numberLocalization.format(1234567, "fixedPoint"), "1.234.567");
-        assert.equal(numberLocalization.format(1234567.89, { type: "fixedPoint", precision: 2 }), "1.234.567,89");
+        assert.equal(localization.formatNumber(1.1, { type: "fixedPoint", precision: 2 }), "1,10");
+        assert.equal(localization.formatNumber(1234567, "fixedPoint"), "1.234.567");
+        assert.equal(localization.formatNumber(1234567.89, { type: "fixedPoint", precision: 2 }), "1.234.567,89");
     } finally {
         config({
             decimalSeparator: oldDecimalSeparator,
@@ -792,8 +808,8 @@ QUnit.test("custom group and decimal separators", function(assert) {
 });
 
 QUnit.test('format as LDML pattern', function(assert) {
-    assert.equal(numberLocalization.format(12345.67, "#,##0.00 РУБ"), '12,345.67 РУБ');
-    assert.equal(numberLocalization.format(-12345.67, "#.#;(#.#)"), '(12345.7)');
+    assert.equal(localization.formatNumber(12345.67, "#,##0.00 РУБ"), '12,345.67 РУБ');
+    assert.equal(localization.formatNumber(-12345.67, "#.#;(#.#)"), '(12345.7)');
 });
 
 QUnit.test("format as LDML pattern with custom separators", function(assert) {
@@ -808,8 +824,8 @@ QUnit.test("format as LDML pattern with custom separators", function(assert) {
     localization.locale("ru");
 
     try {
-        assert.equal(numberLocalization.format(12345.67, "#,##0.00 РУБ"), '12\xa0345,67 РУБ');
-        assert.equal(numberLocalization.format(-12345.67, "#.#;(#.#)"), '(12345,7)');
+        assert.equal(localization.formatNumber(12345.67, "#,##0.00 РУБ"), '12\xa0345,67 РУБ');
+        assert.equal(localization.formatNumber(-12345.67, "#.#;(#.#)"), '(12345,7)');
         assert.equal(numberLocalization.getDecimalSeparator(), ",");
         assert.equal(numberLocalization.getThousandsSeparator(), "\xa0");
     } finally {
@@ -824,10 +840,10 @@ QUnit.test("format as LDML pattern with custom separators", function(assert) {
 QUnit.module("Localization currency");
 
 QUnit.test("format: base", function(assert) {
-    assert.equal(numberLocalization.format(12, { type: "currency" }), "$12");
-    assert.equal(numberLocalization.format(1, { type: "currency", precision: 2 }), "$1.00");
-    assert.equal(numberLocalization.format(1, { type: "currency", precision: 2, currency: "USD" }), "$1.00");
-    var negativeCurrency = numberLocalization.format(-1, { type: "currency", precision: 2 }),
+    assert.equal(localization.formatNumber(12, { type: "currency" }), "$12");
+    assert.equal(localization.formatNumber(1, { type: "currency", precision: 2 }), "$1.00");
+    assert.equal(localization.formatNumber(1, { type: "currency", precision: 2, currency: "USD" }), "$1.00");
+    var negativeCurrency = localization.formatNumber(-1, { type: "currency", precision: 2 }),
         normalStyle = "-$1.00",
         // NOTE: We use accounting style for currencies in Globalize by default
         accountingStyle = "($1.00)";
@@ -835,7 +851,7 @@ QUnit.test("format: base", function(assert) {
     assert.ok(negativeCurrency === normalStyle || negativeCurrency === accountingStyle);
 });
 QUnit.test("format: several words", function(assert) {
-    assert.equal(numberLocalization.format(0, { type: "currency thousands", currency: undefined, precision: 0 }), "$0K");
+    assert.equal(localization.formatNumber(0, { type: "currency thousands", currency: undefined, precision: 0 }), "$0K");
 });
 QUnit.test("getOpenXmlCurrencyFormat", function(assert) {
     assert.equal(numberLocalization.getOpenXmlCurrencyFormat(), "$#,##0{0}_);\\($#,##0{0}\\)");
@@ -853,9 +869,9 @@ QUnit.test("number", function(assert) {
         }
     };
 
-    assert.equal(numberLocalization.format(2, format), "two");
-    assert.equal(numberLocalization.format(2, format.formatter), "two");
-    assert.equal(numberLocalization.parse("two", format), 2);
+    assert.equal(localization.formatNumber(2, format), "two");
+    assert.equal(localization.formatNumber(2, format.formatter), "two");
+    assert.equal(localization.parseNumber("two", format), 2);
 });
 
 QUnit.test("date", function(assert) {
@@ -869,9 +885,9 @@ QUnit.test("date", function(assert) {
     };
     var someDate = new Date(1999, 1, 1);
 
-    assert.equal(dateLocalization.format(someDate, format), "Шел 1999 год.");
-    assert.equal(dateLocalization.format(someDate, format.formatter), "Шел 1999 год.");
-    assert.equal(dateLocalization.parse("Шел 2000 год.", format).getFullYear(), 2000);
+    assert.equal(localization.formatDate(someDate, format), "Шел 1999 год.");
+    assert.equal(localization.formatDate(someDate, format.formatter), "Шел 1999 год.");
+    assert.equal(localization.parseDate("Шел 2000 год.", format).getFullYear(), 2000);
 });
 
 QUnit.test("'no parser' errors", function(assert) {
@@ -892,13 +908,13 @@ QUnit.test("'no parser' errors", function(assert) {
     };
 
     try {
-        numberLocalization.parse("01", numberFormatter);
-        numberLocalization.parse("01", { formatter: numberFormatter });
-        dateLocalization.parse("01", dateFormatter);
-        dateLocalization.parse("01", { formatter: dateFormatter });
-        dateLocalization.parse("01", { day: 'numeric' });
-        numberLocalization.parse("01");
-        dateLocalization.parse("01");
+        localization.parseNumber("01", numberFormatter);
+        localization.parseNumber("01", { formatter: numberFormatter });
+        localization.parseDate("01", dateFormatter);
+        localization.parseDate("01", { formatter: dateFormatter });
+        localization.parseDate("01", { day: 'numeric' });
+        localization.parseNumber("01");
+        localization.parseDate("01");
 
         assert.equal(warnLog.length, 5);
 
@@ -921,12 +937,12 @@ QUnit.test('formatter has higher priority than a type', function(assert) {
     };
     var someDate = new Date(1999, 1, 1);
 
-    assert.equal(dateLocalization.format(someDate, format), "Y 1999");
+    assert.equal(localization.formatDate(someDate, format), "Y 1999");
 });
 
 QUnit.test("string format without a parser should not rise a warning", function(assert) {
     var errorHandler = sinon.spy(errors, "log");
-    numberLocalization.parse("1", "#0");
+    localization.parseNumber("1", "#0");
 
     assert.equal(errorHandler.callCount, 0, "warning was not rised");
 });

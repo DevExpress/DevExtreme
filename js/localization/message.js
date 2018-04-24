@@ -146,8 +146,9 @@ var messageLocalization = dependencyInjector({
 
     format: function(key) {
         var formatter = this.getFormatter(key);
+        var values = Array.prototype.slice.call(arguments, 1);
 
-        return formatter && formatter() || "";
+        return formatter && formatter.apply(this, values) || "";
     }
 });
 
