@@ -93,6 +93,27 @@
         .box-shadow(0 1px 3px 0px rgba(0, 0, 0, 0.1));
         padding: 5px 8px;
         margin-bottom: 4px;
+
+        .dx-fileuploader-button-container + .dx-fileuploader-button-container {
+            .dx-button {
+                margin-right: 15px;
+
+                .dx-rtl & {
+                    margin-left: 15px;
+                    margin-right: 0;
+                }
+            }
+        }
+
+        .dx-button {
+            height: 36px;
+            margin-right: 5px;
+
+            .dx-rtl & {
+                margin-left: 5px;
+                margin-right: 0;
+            }
+        }
     }
 }
 
