@@ -955,16 +955,6 @@
             getRangeData: function() {
                 return this._options.mockRange || {};
             },
-            getRangeMargins: function() { return this.getRangeData(); },
-            getRangeOptions: function() {
-                var rangeOptions = $.extend(true, {}, this.getRangeData());
-                delete rangeOptions["min"];
-                delete rangeOptions["max"];
-                delete rangeOptions["minVisible"];
-                delete rangeOptions["maxVisible"];
-
-                return rangeOptions;
-            },
             resetMock: function() {
                 delete this.range;
                 delete this.wasDrawn;

@@ -341,21 +341,7 @@ var AdvancedChart = BaseChart.inherit({
         });
     },
 
-    _populateBusinessRange: function() {
-        var that = this,
-            argRange = new rangeModule.Range();
-
-        that._argumentAxes.forEach(function(axis) {
-            argRange.addRange(axis.getRangeMargins());
-        });
-        that._setBusinessRangeBySeriesData();
-        _each(that.businessRanges, function(index, businessRange) {
-            businessRange.arg.addRange(argRange);
-            businessRange.val.addRange(that._valueAxes[index].getRangeMargins());
-        });
-    },
-
-    _setBusinessRangeBySeriesData: function() {
+    _populateBusinessRange: function(useZoom) {
         var that = this,
             businessRanges = [],
             rotated = that._isRotated(),
@@ -368,7 +354,7 @@ var AdvancedChart = BaseChart.inherit({
             }, {});
 
         argAxes.forEach(function(axis) {
-            argRange.addRange(axis.getRangeOptions());
+            argRange.addRange(axis.getRangeData(useZoom));
         });
 
         that._valueAxes.forEach(function(valueAxis) {
@@ -381,7 +367,7 @@ var AdvancedChart = BaseChart.inherit({
                     return series.getValueAxis() === valueAxis;
                 });
 
-            groupRange.addRange(valueAxis.getRangeOptions());
+            groupRange.addRange(valueAxis.getRangeData(useZoom));
 
             groupSeries.forEach(function(series) {
                 var seriesRange = series.getRangeData();

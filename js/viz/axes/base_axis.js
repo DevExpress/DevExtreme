@@ -1550,21 +1550,7 @@ Axis.prototype = {
         }
     },
 
-    getRangeData: function() {
-        return extend({}, this.getRangeOptions(), this.getRangeMargins());
-    },
-
-    getRangeOptions: function() {
-        return {
-            categories: this._options.categories,
-            dataType: this._options.dataType,
-            axisType: this._options.type,
-            base: this._options.logarithmBase,
-            invert: this._options.inverted
-        };
-    },
-
-    getRangeMargins: function() {
+    getRangeData: function(useZoom) {
         var that = this,
             minMax = that._getMinMax(),
             zoomArgs = that._zoomArgs || {},
@@ -1590,8 +1576,8 @@ Axis.prototype = {
                 rangeMin = min < max ? min : max;
                 rangeMax = max > min ? max : min;
             }
-            rangeMinVisible = isDefined(zoomArgs.min) ? zoomArgs.min : rangeMin;
-            rangeMaxVisible = isDefined(zoomArgs.max) ? zoomArgs.max : rangeMax;
+            rangeMinVisible = isDefined(zoomArgs.min) && useZoom ? zoomArgs.min : rangeMin;
+            rangeMaxVisible = isDefined(zoomArgs.max) && useZoom ? zoomArgs.max : rangeMax;
 
             if(isDefined(synchronizedValue)) {
                 rangeMin = isDefined(rangeMin) && (rangeMin < synchronizedValue) ? rangeMin : synchronizedValue;
@@ -1599,11 +1585,16 @@ Axis.prototype = {
             }
 
         } else {
-            rangeMinVisible = isDefined(zoomArgs.min) ? zoomArgs.min : min;
-            rangeMaxVisible = isDefined(zoomArgs.max) ? zoomArgs.max : max;
+            rangeMinVisible = isDefined(zoomArgs.min) && useZoom ? zoomArgs.min : min;
+            rangeMaxVisible = isDefined(zoomArgs.max) && useZoom ? zoomArgs.max : max;
         }
 
         return {
+            categories: options.categories,
+            dataType: options.dataType,
+            axisType: type,
+            base: options.logarithmBase,
+            invert: options.inverted,
             min: rangeMin,
             max: rangeMax,
             minVisible: rangeMinVisible,
