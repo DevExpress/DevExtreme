@@ -97,6 +97,15 @@ var TreeList = Widget.inherit({
                      */
                     headerFilter: {
                         height: 315
+                    },
+                    /**
+                     * @name GridBaseOptions_editing_useIcons
+                     * @publicName useIcons
+                     * @type boolean
+                     * @default true @for Material
+                     */
+                    editing: {
+                        useIcons: true
                     }
                 }
             }
