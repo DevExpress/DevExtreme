@@ -2056,7 +2056,7 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     getCellWidth: function() {
-        return this._getCells().first().outerWidth();
+        return this._getCells().first().get(0) && this._getCells().first().get(0).getBoundingClientRect().width;
     },
 
     getRoundedCellWidth: function(groupIndex, startIndex, cellCount) {
