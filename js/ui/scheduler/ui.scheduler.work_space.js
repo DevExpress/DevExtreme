@@ -2056,7 +2056,9 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     getCellWidth: function() {
-        return this._getCells().first().get(0) && this._getCells().first().get(0).getBoundingClientRect().width;
+        var cell = this._getCells().first().get(0);
+
+        return cell && cell.getBoundingClientRect().width;
     },
 
     getRoundedCellWidth: function(groupIndex, startIndex, cellCount) {
@@ -2083,11 +2085,15 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     getCellHeight: function() {
-        return this._getCells().first().get(0) && this._getCells().first().get(0).getBoundingClientRect().height;
+        var cell = this._getCells().first().get(0);
+
+        return cell && cell.getBoundingClientRect().height;
     },
 
     getAllDayHeight: function() {
-        return this.option("showAllDayPanel") ? this._getCells(true).first().get(0) && this._getCells(true).first().get(0).getBoundingClientRect().height || 0 : 0;
+        var cell = this._getCells(true).first().get(0);
+
+        return this.option("showAllDayPanel") ? cell && cell.getBoundingClientRect().height || 0 : 0;
     },
 
     getAllDayOffset: function() {
