@@ -55,11 +55,57 @@ registerTheme({
         }
     },
 
+    pie: {
+        title: {
+            horizontalAlignment: "center",
+            subtitle: {
+                horizontalAlignment: "center"
+            }
+        }
+    },
+
+    polar: {
+        title: {
+            horizontalAlignment: "center",
+            subtitle: {
+                horizontalAlignment: "center"
+            }
+        }
+    },
+
+    funnel: {
+        title: {
+            horizontalAlignment: "center",
+            subtitle: {
+                horizontalAlignment: "center"
+            }
+        }
+    },
+
+    gauge: {
+        title: {
+            horizontalAlignment: "center",
+            subtitle: {
+                horizontalAlignment: "center"
+            }
+        }
+    },
+
     rangeSelector: {
         sliderHandle: {
             opacity: 0.5
         }
     },
+
+    treeMap: {
+        group: {
+            label: {
+                font: {
+                    weight: 500
+                }
+            }
+        }
+    }
 }, "generic.light");
 
 registerTheme({
@@ -89,13 +135,30 @@ registerTheme({
         font: {
             color: "#fff"
         }
+    },
+
+    chart: {
+        scrollBar: {
+            color: "#bfbfbf",
+            opacity: 0.7
+        }
+    },
+
+    gauge: {
+        rangeContainer: {
+            backgroundColor: "rgba(0,0,0,0.2)"
+        }
+    },
+
+    barGauge: {
+        backgroundColor: "#efefef"
     }
 }, "material");
 
 function registerMaterialColorScheme(accentName, themeName, accentColor) {
     registerTheme({
         name: "material." + accentName + "." + themeName,
-    
+
         rangeSelector: {
             selectedRangeColor: accentColor,
             sliderMarker: {
@@ -105,7 +168,7 @@ function registerMaterialColorScheme(accentName, themeName, accentColor) {
                 color: accentColor
             }
         },
-    
+
         map: {
             "layer:marker:dot": {
                 color: accentColor
@@ -117,11 +180,11 @@ function registerMaterialColorScheme(accentName, themeName, accentColor) {
                 markerColor: accentColor
             }
         },
-    
+
         bullet: {
             color: accentColor
         }
-    }, "material." + themeName);    
+    }, "material." + themeName);
 }
 
 registerMaterialColorScheme("blue", "light", "#03A9F4");
