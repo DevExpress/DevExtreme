@@ -1,10 +1,6 @@
 @MATERIAL_POPOVER_TOOLBAR_PADDING: 15px;
 
 .dx-popover-wrapper {
-    &.dx-position-bottom .dx-popover-arrow:after {
-        background: @popover-arrow-bg;
-    }
-
     .dx-popup-title {
         margin: 0;
 
@@ -13,9 +9,8 @@
         }
     }
 
-    .dx-popover-arrow:after,
-    &.dx-popover-without-title .dx-popover-arrow:after {
-        background: @overlay-content-bg;
+    .dx-popover-arrow {
+        display: none;
     }
 }
 
