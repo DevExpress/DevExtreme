@@ -11190,8 +11190,10 @@ QUnit.test("getCellElement when form with custom items", function(assert) {
     // assert
     $editorElements = $testElement.find(".dx-datagrid-edit-form-item");
     assert.equal($editorElements.length, 2, "count editor of the form");
-    assert.deepEqual($(that.getCellElement(0, 0))[0], $editorElements[1], "second editor");
+    assert.deepEqual($(that.getCellElement(0, 0))[0], $editorElements[0], "first editor");
     assert.deepEqual($(that.getCellElement(0, "age"))[0], $editorElements[0], "first editor");
+    assert.deepEqual($(that.getCellElement(0, 1))[0], $editorElements[1], "second editor");
+    assert.deepEqual($(that.getCellElement(0, "name"))[0], $editorElements[1], "second editor");
 });
 
 // T435429
@@ -11347,8 +11349,36 @@ QUnit.test("getCellElement returns correct editor with form editing and enabled 
     $editorElements = $testElement.find(".dx-datagrid-edit-form-item");
 
     // assert
-    assert.deepEqual($(that.getCellElement(1, 1))[0], $editorElements[0], "first editor");
+    assert.deepEqual($(that.getCellElement(1, 0))[0], $editorElements[0], "first editor");
+    assert.deepEqual($(that.getCellElement(1, "name"))[0], $editorElements[0], "first editor");
+    assert.deepEqual($(that.getCellElement(1, 1))[0], $editorElements[1], "second editor");
     assert.deepEqual($(that.getCellElement(1, "age"))[0], $editorElements[1], "second editor");
+});
+
+// T627688
+QUnit.test("getCellElement for a hidden column", function(assert) {
+    // arrange
+    var $editorElements,
+        $testElement = $('#container');
+
+    this.options.editing = {
+        mode: "form",
+        allowUpdating: true
+    };
+    this.options.columns[3] = { dataField: 'phone', formItem: { visible: false } };
+    this.options.columns[4] = { dataField: "room", visible: false };
+
+    this.setupModules(this);
+    this.rowsView.render($testElement);
+
+    // act
+    this.editRow(0);
+
+    // assert
+    $editorElements = $testElement.find(".dx-datagrid-edit-form-item");
+    assert.equal($editorElements.length, 4, "count editor of the form");
+    assert.deepEqual($(this.getCellElement(0, 3))[0], $editorElements[3], "editor of a hidden column");
+    assert.deepEqual($(this.getCellElement(0, "room"))[0], $editorElements[3], "editor of a hidden column");
 });
 
 

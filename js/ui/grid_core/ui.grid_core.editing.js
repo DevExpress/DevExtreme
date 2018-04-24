@@ -2053,23 +2053,26 @@ module.exports = {
                 },
                 _getVisibleColumnIndex: function($cells, rowIndex, columnIdentifier) {
                     var item,
-                        visibleIndex = this.callBase($cells, rowIndex, columnIdentifier),
+                        column,
+                        visibleIndex,
                         editFormRowIndex = this._editingController.getEditFormRowIndex();
 
-                    if(editFormRowIndex === rowIndex) {
-                        var visibleColumn = this._columnsController.getVisibleColumns()[visibleIndex];
+                    if(editFormRowIndex === rowIndex && typeUtils.isString(columnIdentifier)) {
+                        column = this._columnsController.columnOption(columnIdentifier);
 
                         each($cells, function(index, cellElement) {
                             item = $(cellElement).find(".dx-field-item-content").data("dx-form-item");
 
-                            if(item && item.column && visibleColumn && item.column.index === visibleColumn.index) {
+                            if(item && item.column && column && item.column.index === column.index) {
                                 visibleIndex = index;
                                 return false;
                             }
                         });
+
+                        return visibleIndex;
                     }
 
-                    return visibleIndex;
+                    return this.callBase.apply(this, arguments);
                 },
                 publicMethods: function() {
                     return this.callBase().concat(["cellValue"]);
