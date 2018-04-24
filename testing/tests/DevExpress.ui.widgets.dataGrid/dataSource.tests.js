@@ -2487,7 +2487,7 @@ QUnit.test("change filter after collapse second level group", function(assert) {
     }]);
     assert.equal(loadArgs.length, 3);
     assert.deepEqual(loadArgs[0].filter, [["field1", "=", 1], "and", ["field2", "=", 2], "and", ["field1", ">=", 1]]);
-    assert.deepEqual(loadArgs[1].filter, [[["field1", "<", 1], "or", [["field1", "=", 1], "and", ["field2", "<", 2]]], "and", ["field1", ">=", 1]]);
+    assert.deepEqual(loadArgs[1].filter, [[[["field1", "<", 1], "or", ["field1", "=", null]], "or", [["field1", "=", 1], "and", [["field2", "<", 2], "or", ["field2", "=", null]]]], "and", ["field1", ">=", 1]]);
     assert.deepEqual(loadArgs[2].filter, [[["field1", "<>", 1], "or", [["field1", "=", 1], "and", ["field2", "<>", 2]]], "and", ["field1", ">=", 1]]);
 });
 
@@ -3160,7 +3160,7 @@ QUnit.test("Reload dataSource when one expanded group and two group levels exist
     assert.strictEqual(loadingChanged.getCall(0).args[0].take, 1, "take for group count request");
 
     assert.deepEqual(loadingChanged.getCall(1).args[0].group, ["field1"], "group for group offset request"); // T452323, T477410
-    assert.deepEqual(loadingChanged.getCall(1).args[0].filter, ["field1", "<", 1], "filter for group offset request");
+    assert.deepEqual(loadingChanged.getCall(1).args[0].filter, [["field1", "<", 1], "or", ["field1", "=", null]], "filter for group offset request");
     assert.strictEqual(loadingChanged.getCall(1).args[0].requireTotalCount, false, "require total count is not passed for group offset request");
     assert.strictEqual(loadingChanged.getCall(1).args[0].requireGroupCount, true, "require group count is passed for group offset request");
     assert.strictEqual(loadingChanged.getCall(1).args[0].skip, 0, "skip for group offset request");
@@ -3219,7 +3219,7 @@ QUnit.test("Reload dataSource when one expanded group and one group level exist"
     assert.strictEqual(loadingChanged.getCall(0).args[0].take, 1, "take for group count request");
 
     assert.deepEqual(loadingChanged.getCall(1).args[0].group, ["field1"], "group for group offset request"); // T452323, T477410
-    assert.deepEqual(loadingChanged.getCall(1).args[0].filter, ["field1", "<", 1], "filter for group offset request");
+    assert.deepEqual(loadingChanged.getCall(1).args[0].filter, [["field1", "<", 1], "or", ["field1", "=", null]], "filter for group offset request");
     assert.strictEqual(loadingChanged.getCall(1).args[0].requireTotalCount, false, "require total count is not passed for group offset request");
     assert.strictEqual(loadingChanged.getCall(1).args[0].requireGroupCount, true, "require group count is passed for group offset request");
     assert.strictEqual(loadingChanged.getCall(1).args[0].skip, 0, "skip for group offset request");
