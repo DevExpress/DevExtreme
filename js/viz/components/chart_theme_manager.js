@@ -124,7 +124,8 @@ var ThemeManager = BaseThemeManager.inherit((function() {
                 userCommonSettings = that._userOptions.commonSeriesSettings || {},
                 themeCommonSettings = theme.commonSeriesSettings,
                 widgetType = that._themeSection.split(".").slice(-1)[0],
-                type = _normalizeEnum(userOptions.type || userCommonSettings.type || themeCommonSettings.type || (widgetType === "pie" && theme.type)), // userCommonSettings.type && themeCommonSettings.type deprecated in 15.2 in pie
+                type = _normalizeEnum(userOptions.type || userCommonSettings.type || themeCommonSettings.type || (widgetType === "pie" && theme.type)), // userCommonSettings.type && themeCommonSettings.type depre
+                ed in 15.2 in pie
                 settings,
                 palette = that.palette,
                 isBar = ~type.indexOf("bar"),
@@ -152,7 +153,7 @@ var ThemeManager = BaseThemeManager.inherit((function() {
                 mainSeriesColor = settings.color || palette.getNextColor();
             } else {
                 mainSeriesColor = function(argument, index) {
-                    var cat = "" + argument + "-" + index;
+                    var cat = argument + "-" + index;
 
                     if(!that._multiPieColors[cat]) {
                         that._multiPieColors[cat] = palette.getNextColor();
