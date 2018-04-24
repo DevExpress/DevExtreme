@@ -152,7 +152,8 @@ var ThemeManager = BaseThemeManager.inherit((function() {
                 mainSeriesColor = settings.color || palette.getNextColor();
             } else {
                 mainSeriesColor = function(argument, index) {
-                    var cat = argument + index;
+                    var cat = argument + "-" + index;
+
                     if(!that._multiPieColors[cat]) {
                         that._multiPieColors[cat] = palette.getNextColor();
                     }

@@ -1371,6 +1371,19 @@ function createThemeManager(options, themeGroupName) {
         assert.strictEqual(seriesSettings.mainSeriesColor("c", 3), "#af8a53");
     });
 
+    QUnit.test('series options for pie. mainSeriesColor. Pass series count to palette.getNextColor. numeric argument', function(assert) {
+        // arrange
+        var themeManager = createThemeManager({
+            palette: ["red", "green"],
+        }, "pie");
+        themeManager.setTheme({});
+        var seriesSettings = themeManager.getOptions("series", { type: "pie" });
+
+        // assert pie theme
+        assert.strictEqual(seriesSettings.mainSeriesColor(0, 1, 3), "red");
+        assert.strictEqual(seriesSettings.mainSeriesColor(1, 0, 3), "green");
+    });
+
     QUnit.module("Theme Manager - life cycle");
 
     QUnit.test('Disposing', function(assert) {
