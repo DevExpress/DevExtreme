@@ -647,7 +647,11 @@
         padding: @MATERIAL_GRID_BASE_HEADER_PANEL_PADDING;
 
         .dx-apply-button {
-            .dx-button-flat-styling(@button-success-color);
+            .dx-button-flat-color-styling(@button-success-color);
+        }
+
+        .dx-toolbar-text-auto-hide .dx-button.dx-button-has-icon {
+            .border-radius(50%);
         }
     }
 
@@ -920,7 +924,6 @@
                 padding-left: 27px;
             }
         }
-
 
         .dx-data-row.dx-state-hover {
             &:not(.dx-selection):not(.dx-row-inserted):not(.dx-row-removed):not(.dx-edit-row) {

@@ -342,7 +342,7 @@
             }
 
             .dx-button {
-                .dx-button-flat-styling(@scheduler-appointment-tooltip-icon-color);
+                .dx-button-flat-color-styling(@scheduler-appointment-tooltip-icon-color);
                 .dx-button-content {
                     .dx-icon {
                         font-size: @MATERIAL_BASE_ICON_SIZE;
@@ -410,7 +410,7 @@
     padding: (@MATERIAL_SCHEDULER_HEADER_HEIGHT - @MATERIAL_SCHEDULER_NAVIGATOR_HEIGHT) * 0.5;
 
     .dx-button {
-        .dx-button-flat-styling(@button-default-bg);
+        .dx-button-flat-color-styling(@button-default-bg);
         .dx-button-text {
             text-transform: none;
         }
@@ -485,7 +485,8 @@
         display: none;
     }
     margin-top: (@MATERIAL_SCHEDULER_HEADER_HEIGHT - @MATERIAL_SCHEDULER_NAVIGATOR_HEIGHT) * 0.5 - 1px;
-    .dx-button-flat-styling(@base-icon-color);
+    .dx-button-flat-color-styling(@base-icon-color);
+
     z-index: 1;
 }
 
@@ -893,7 +894,7 @@
     .dx-button {
         min-width: auto;
         padding: 0;
-        .dx-button-flat-styling(@button-default-bg);
+        .dx-button-flat-color-styling(@button-default-bg);
         .dx-icon {
             .dx-icon-sizing(@MATERIAL_BASE_ICON_SIZE);
         }

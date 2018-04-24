@@ -23,7 +23,6 @@ var $ = require("../../core/renderer"),
     devices = require("../../core/devices"),
     Form = require("../form"),
     holdEvent = require("../../events/hold"),
-    themes = require("../themes"),
     deferredUtils = require("../../core/utils/deferred"),
     when = deferredUtils.when,
     Deferred = deferredUtils.Deferred;
@@ -1677,7 +1676,7 @@ var EditingController = modules.ViewController.inherit((function() {
                         onClick: function() {
                             that[methodName]();
                         },
-                        text: themes.isMaterial() ? "" : hintText,
+                        text: hintText,
                         hint: hintText
                     },
                     showText: "inMenu",
