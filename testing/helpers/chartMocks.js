@@ -1010,6 +1010,13 @@ var MockSeriesFamily = Class.inherit({
     },
     adjustSeriesValues: function() {
         this.adjustedValues = true;
+
+        this.allSeriesHavePoints = (this.addedSeries || [])
+            .reduce(function(r, s) { return r.concat(s); }, [])
+            .reduce(function(r, s) {
+
+                return r && (s.getAllPoints ? !!s.getAllPoints().length : true);
+            }, true);
     },
     adjustSeriesDimensions: function() {
         this.adjustedDimensions = true;
