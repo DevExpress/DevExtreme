@@ -550,6 +550,9 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
 
             refresh: function() {
                 return $.Deferred().resolve();
+            },
+
+            isAllDataTypesDefined: function() {
             }
         };
     };
