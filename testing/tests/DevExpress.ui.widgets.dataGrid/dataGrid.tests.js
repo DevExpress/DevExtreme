@@ -8626,6 +8626,40 @@ QUnit.test("Change page index when virtual scrolling is enabled", function(asser
     assert.equal(dataGrid.pageIndex(), 3, "page index");
 });
 
+// T548906
+QUnit.test("Filtering on load when virtual scrolling", function(assert) {
+    // arrange
+    var generateDataSource = function(count) {
+            var result = [], i;
+            for(i = 0; i < count; ++i) {
+                result.push({ firstName: "name_" + i, lastName: "lastName_" + i });
+            }
+            return result;
+        },
+        dataGrid = createDataGrid({
+            loadingTimeout: undefined,
+            height: 50,
+            dataSource: generateDataSource(10),
+            scrolling: {
+                mode: "virtual"
+            },
+            paging: {
+                pageSize: 2
+            },
+            columns: [
+                { dataField: "firstName", filterValue: "name_5" },
+                "lastName"
+            ]
+        });
+
+    var items = dataGrid.getDataSource().items();
+
+    // assert
+    assert.equal(items.length, 1, "1 item in dataSource");
+    assert.equal(items[0].firstName, "name_5", "filtered row 'firstName' field value");
+    assert.equal(items[0].lastName, "lastName_5", "filtered row 'lastName' field value");
+});
+
 // T558189
 QUnit.test("Band columns should be displayed correctly after state is reset", function(assert) {
     // arrange
