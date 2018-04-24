@@ -187,8 +187,8 @@ function registerMaterialColorScheme(accentName, themeName, accentColor) {
     }, "material." + themeName);
 }
 
-registerMaterialColorScheme("blue", "light", "#03A9F4");
-registerMaterialColorScheme("lime", "light", "#CDDC39");
-registerMaterialColorScheme("orange", "light", "#FF5722");
-registerMaterialColorScheme("purple", "light", "#9C27B0");
+registerMaterialColorScheme("blue", "light", "#03a9f4");
+registerMaterialColorScheme("lime", "light", "#cddc39");
+registerMaterialColorScheme("orange", "light", "#ff5722");
+registerMaterialColorScheme("purple", "light", "#9c27b0");
 registerMaterialColorScheme("teal", "light", "#009688");
