@@ -476,7 +476,7 @@ var ListBase = CollectionWidget.inherit({
             },
             {
                 device: function() {
-                    return /(android5|material)/.test(themes.current());
+                    return /android5/.test(themes.current());
                 },
                 options: {
                     useInkRipple: true
@@ -489,6 +489,45 @@ var ListBase = CollectionWidget.inherit({
 
                 options: {
                     bounceEnabled: false
+                }
+            },
+            {
+                device: function() {
+                    return themes.isMaterial();
+                },
+                options: {
+                    /**
+                    * @name dxListOptions_pullingDownText
+                    * @publicName pullingDownText
+                    * @type string
+                    * @default "Pull down to refresh..."
+                    */
+                    pullingDownText: "",
+
+                    /**
+                    * @name dxListOptions_pulledDownText
+                    * @publicName pulledDownText
+                    * @type string
+                    * @default "Release to refresh..."
+                    */
+                    pulledDownText: "",
+
+                    /**
+                    * @name dxListOptions_refreshingText
+                    * @publicName refreshingText
+                    * @type string
+                    * @default "Refreshing..."
+                    */
+                    refreshingText: "",
+
+                    /**
+                    * @name dxListOptions_pageLoadingText
+                    * @publicName pageLoadingText
+                    * @type string
+                    * @default "Loading..."
+                    */
+                    pageLoadingText: "",
+                    useInkRipple: true
                 }
             }
         ]);

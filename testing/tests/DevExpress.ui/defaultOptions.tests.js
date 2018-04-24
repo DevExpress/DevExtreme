@@ -1162,7 +1162,11 @@ testComponentDefaults(List,
 testComponentDefaults(List,
     { platform: devices.current().platform },
     {
-        useInkRipple: true
+        useInkRipple: true,
+        pullingDownText: "",
+        pulledDownText: "",
+        refreshingText: "",
+        pageLoadingText: ""
     },
     function() {
         this.originalCurrentTheme = themes.current();
