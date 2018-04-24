@@ -7,7 +7,8 @@ var $ = require("../core/renderer"),
     extend = require("../core/utils/extend").extend,
     LoadIndicator = require("./load_indicator"),
     Overlay = require("./overlay"),
-    Deferred = require("../core/utils/deferred").Deferred;
+    Deferred = require("../core/utils/deferred").Deferred,
+    themes = require("./themes");
 
 var LOADPANEL_CLASS = "dx-loadpanel",
     LOADPANEL_WRAPPER_CLASS = "dx-loadpanel-wrapper",
@@ -193,6 +194,36 @@ var LoadPanel = Overlay.inherit({
                 device: { platform: "generic" },
                 options: {
                     shadingColor: "transparent"
+                }
+            },
+            {
+                device: function() {
+                    return themes.isMaterial();
+                },
+                options: {
+                    /**
+                    * @name dxLoadPanelOptions_message
+                    * @publicName message
+                    * @type string
+                    * @default "" @for Material
+                    */
+                    message: "",
+
+                    /**
+                    * @name dxLoadPanelOptions_width
+                    * @publicName width
+                    * @type number
+                    * @default 60 @for Material
+                    */
+                    width: 60,
+
+                    /**
+                    * @name dxLoadPanelOptions_height
+                    * @publicName height
+                    * @type number
+                    * @default 60 @for Material
+                    */
+                    height: 60
                 }
             }
         ]);
