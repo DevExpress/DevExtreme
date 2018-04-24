@@ -426,7 +426,7 @@ QUnit.test("Check min/max when zoom args are defined", function(assert) {
     this.updateOptions();
     this.axis.zoom(10, 50);
 
-    var rangeData = this.axis.getRangeData();
+    var rangeData = this.axis.getRangeData(true);
 
     assert.strictEqual(rangeData.min, 0, "Min should be correct");
     assert.strictEqual(rangeData.max, 100, "Max should be correct");

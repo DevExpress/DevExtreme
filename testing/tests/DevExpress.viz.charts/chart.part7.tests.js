@@ -141,12 +141,7 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
 
     QUnit.test("dxChart with two Series request default type visibilityChanged", function(assert) {
         // arrange
-        var stubSeries1 = new MockSeries({
-                range: {
-                    arg: { min: "First", max: "Last", minVisible: "First", maxVisible: "Last", axisType: "discrete" },
-                    val: { min: 1, max: 5, axisType: "continuous" }
-                }
-            }),
+        var stubSeries1 = new MockSeries({}),
             stubSeries2 = new MockSeries({});
         chartMocks.seriesMockData.series.push(stubSeries1);
         chartMocks.seriesMockData.series.push(stubSeries2);
@@ -156,12 +151,7 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
                     categories: (categories.slice(0).push("additionalVal"))
                 },
                 argumentAxis: {
-                    categories: categories,
-                    mockRange: {
-                        categories: ["First", "1", "2", "3", "4", "Last"],
-                        minVisible: "2",
-                        maxVisible: "4"
-                    }
+                    categories: categories
                 },
                 dataSource: [{ arg: "First", val: 1 }, { arg: "2", val: 2 }, { arg: "3", val: 3 }, { arg: "4", val: 4 }, { arg: "Last", val: 5 }],
                 series: [{
@@ -169,7 +159,7 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
                 }]
             }),
             processSeriesFamilySpy = sinon.spy(chart, "_processSeriesFamilies"),
-            populateBusinessRangeSpy = sinon.spy(chart, "_setBusinessRangeBySeriesData"),
+            populateBusinessRangeSpy = sinon.spy(chart, "_populateBusinessRange"),
             renderSpy = sinon.spy(chart, "_doRender");
         chart._renderer.stopAllAnimations.reset();
 
@@ -180,8 +170,6 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
         chartMocks.seriesMockData.args[0][1].visibilityChanged();
         assert.ok(processSeriesFamilySpy.calledOnce);
         assert.ok(populateBusinessRangeSpy.calledOnce);
-        assert.equal(chart.businessRanges[0].arg.minVisible, "First");
-        assert.equal(chart.businessRanges[0].arg.maxVisible, "Last");
         assert.ok(renderSpy.calledOnce);
         assert.deepEqual(renderSpy.lastCall.args[0], { force: true });
         assert.ok(renderSpy.calledAfter(populateBusinessRangeSpy));
