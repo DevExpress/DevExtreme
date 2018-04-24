@@ -28,6 +28,7 @@ exports.createOffsetFilter = function(path, storeLoadOptions) {
         j,
         filterElement,
         selector,
+        currentFilter,
         filter = [];
 
     for(i = 0; i < path.length; i++) {
@@ -44,7 +45,12 @@ exports.createOffsetFilter = function(path, storeLoadOptions) {
                     filterElement.push([selector, "=", null]);
                 }
             } else {
-                filterElement.push([selector, i === j ? (groups[j].desc ? ">" : "<") : "=", path[j]]);
+                currentFilter = [selector, i === j ? (groups[j].desc ? ">" : "<") : "=", path[j]];
+                if(currentFilter[1] === "<") {
+                    filterElement.push([currentFilter, "or", [selector, "=", null]]);
+                } else {
+                    filterElement.push(currentFilter);
+                }
             }
         }
         filter.push(gridCore.combineFilters(filterElement));
