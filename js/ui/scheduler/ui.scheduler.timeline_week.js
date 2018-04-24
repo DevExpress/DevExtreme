@@ -70,7 +70,7 @@ var SchedulerTimelineWeek = SchedulerTimeline.inherit({
     },
 
     _getHeaderPanelCellWidth: function($headerRow) {
-        return $headerRow.children().first().outerWidth();
+        return $headerRow.children().first().get(0).getBoundingClientRect().width;
     },
 
     _getWeekDuration: function() {

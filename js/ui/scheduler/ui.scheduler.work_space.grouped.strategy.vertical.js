@@ -92,7 +92,7 @@ var VerticalGroupedStrategy = GroupedStrategy.inherit({
 
     getWorkSpaceMinWidth: function() {
         var minWidth = this._workSpace._getWorkSpaceWidth(),
-            workspaceContainerWidth = this._workSpace.$element().outerWidth() - this._workSpace.getTimePanelWidth() - this._workSpace.getGroupTableWidth();
+            workspaceContainerWidth = this._workSpace.$element().get(0).getBoundingClientRect().width - this._workSpace.getTimePanelWidth() - this._workSpace.getGroupTableWidth();
 
         if(minWidth < workspaceContainerWidth) {
             minWidth = workspaceContainerWidth;
@@ -125,7 +125,7 @@ var VerticalGroupedStrategy = GroupedStrategy.inherit({
             startOffset = $cells.eq(0).offset().left,
             endOffset = $cells.eq(cellCount - 1).offset().left + cellWidth,
             dayHeight = (this._workSpace._calculateDayDuration() / this._workSpace.option("hoursInterval")) * this._workSpace.getCellHeight(),
-            topOffset = groupIndex * dayHeight + this._workSpace._$thead.outerHeight() + this._workSpace.invoke("getHeaderHeight") + DATE_HEADER_OFFSET;
+            topOffset = groupIndex * dayHeight + this._workSpace._$thead.get(0).getBoundingClientRect().height + this._workSpace.invoke("getHeaderHeight") + DATE_HEADER_OFFSET;
 
         if(this._workSpace.option("showAllDayPanel") && this._workSpace.supportAllDayRow()) {
             topOffset += this._workSpace.getCellHeight();
@@ -156,7 +156,7 @@ var VerticalGroupedStrategy = GroupedStrategy.inherit({
 
     getShaderOffset: function(i, width) {
         var offset = this._workSpace.getGroupTableWidth();
-        return this._workSpace.option("rtlEnabled") ? this._$container.outerWidth() - offset - this._workSpace.getWorkSpaceLeftOffset() - width : offset;
+        return this._workSpace.option("rtlEnabled") ? this._$container.get(0).getBoundingClientRect().width - offset - this._workSpace.getWorkSpaceLeftOffset() - width : offset;
     },
 
     getShaderTopOffset: function(i) {

@@ -17,8 +17,8 @@ var currentTimeShader = Class.inherit({
         this._renderShader();
 
         if(this._$shader && this._workspace.option("crossScrollingEnabled")) {
-            this._$shader.css("marginTop", -this._$container.outerHeight());
-            this._$shader.css("height", this._$container.outerHeight());
+            this._$shader.css("marginTop", -this._$container.get(0).getBoundingClientRect().height);
+            this._$shader.css("height", this._$container.get(0).getBoundingClientRect().height);
         }
 
         this._shader.forEach((shader, index) => {

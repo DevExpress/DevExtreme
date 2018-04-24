@@ -1694,11 +1694,11 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     getTimePanelWidth: function() {
-        return this._$timePanel.outerWidth();
+        return this._$timePanel && this._$timePanel.get(0).getBoundingClientRect().width;
     },
 
     getGroupTableWidth: function() {
-        return this._$groupTable.outerWidth();
+        return this._$groupTable && this._$groupTable.get(0).getBoundingClientRect().width;
     },
 
     getWorkSpaceLeftOffset: function() {
@@ -1795,10 +1795,10 @@ var SchedulerWorkSpace = Widget.inherit({
 
     _getWorkSpaceWidth: function() {
         if(this.option("crossScrollingEnabled")) {
-            return this._$dateTable.outerWidth();
+            return this._$dateTable.get(0).getBoundingClientRect().width;
         }
 
-        return this.$element().outerWidth() - this.getTimePanelWidth();
+        return this.$element().get(0).getBoundingClientRect().width - this.getTimePanelWidth();
     },
 
     _getCellPositionByIndex: function(index, groupIndex, inAllDayRow) {
@@ -1821,7 +1821,7 @@ var SchedulerWorkSpace = Widget.inherit({
             position = $cell.position();
 
         if(isRtl) {
-            position.left += $cell.outerWidth();
+            position.left += $cell.get(0).getBoundingClientRect().width;
         }
         return position;
     },
@@ -2056,7 +2056,9 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     getCellWidth: function() {
-        return this._getCells().first().outerWidth();
+        var cell = this._getCells().first().get(0);
+
+        return cell && cell.getBoundingClientRect().width;
     },
 
     getRoundedCellWidth: function(groupIndex, startIndex, cellCount) {
@@ -2076,18 +2078,22 @@ var SchedulerWorkSpace = Widget.inherit({
         }
 
         for(var i = startIndex; i < totalCellCount + cellCount; i++) {
-            width = width + $($cells).eq(i).outerWidth();
+            width = width + $($cells).eq(i).get(0).getBoundingClientRect().width;
         }
 
         return width / (totalCellCount + cellCount - startIndex);
     },
 
     getCellHeight: function() {
-        return this._getCells().first().outerHeight();
+        var cell = this._getCells().first().get(0);
+
+        return cell && cell.getBoundingClientRect().height;
     },
 
     getAllDayHeight: function() {
-        return this.option("showAllDayPanel") ? this._getCells(true).first().outerHeight() || 0 : 0;
+        var cell = this._getCells(true).first().get(0);
+
+        return this.option("showAllDayPanel") ? cell && cell.getBoundingClientRect().height || 0 : 0;
     },
 
     getAllDayOffset: function() {
@@ -2110,7 +2116,7 @@ var SchedulerWorkSpace = Widget.inherit({
                     var maxPosition = $(cell).position().left;
 
                     if(!isRtl) {
-                        maxPosition += $(cell).outerWidth();
+                        maxPosition += $(cell).get(0).getBoundingClientRect().width;
                     }
 
                     that._maxAllowedPosition.push(Math.round(maxPosition));
@@ -2130,7 +2136,7 @@ var SchedulerWorkSpace = Widget.inherit({
                 .find("tr:nth-child(" + rows + "n)")
                 .each(function(_, row) {
 
-                    var maxPosition = $(row).position().top + $(row).outerHeight();
+                    var maxPosition = $(row).position().top + $(row).get(0).getBoundingClientRect().height;
 
                     that._maxAllowedVerticalPosition.push(Math.round(maxPosition));
                 });
@@ -2312,7 +2318,7 @@ var SchedulerWorkSpace = Widget.inherit({
                     return true;
                 }
 
-                result += $(this).outerWidth();
+                result += $(this).get(0).getBoundingClientRect().width;
             });
 
         return result;
