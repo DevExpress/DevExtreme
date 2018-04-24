@@ -153,7 +153,8 @@ var ThemeManager = BaseThemeManager.inherit((function() {
             } else {
 
                 mainSeriesColor = function(argument, index, count) {
-                    var cat = argument + index;
+                    const cat = `${argument}-${index}`;
+
                     if(!that._multiPieColors[cat]) {
                         that._multiPieColors[cat] = palette.getNextColor(count);
                     }

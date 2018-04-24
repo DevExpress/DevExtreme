@@ -636,51 +636,57 @@ var checkTwoGroups = function(assert, series) {
     QUnit.test("mainSeriesColor", function(assert) {
         var series = createSeries();
         series.setMaxPointsCount(6);
-        series.updateData([{ arg: "arg1", val: "val1" },
+        series.updateData([
+            { arg: "arg1", val: "val1" },
             { arg: "arg2", val: "val2" },
             { arg: "arg3", val: "val3" },
             { arg: "arg2", val: "val4" },
             { arg: "arg2", val: "val5" },
-            { arg: "arg3", val: "val6" }]);
+            { arg: "arg3", val: "val6" }
+        ]);
         series.createPoints();
 
         assert.equal(series.getOptions().mainSeriesColor.callCount, 6);
 
         checkMainSeriesColor(assert, series, 0, "arg1", 0, 6);
-        checkMainSeriesColor(assert, series, 1, "arg2", 1, 6);
-        checkMainSeriesColor(assert, series, 2, "arg3", 2, 6);
-        checkMainSeriesColor(assert, series, 3, "arg2", 3, 6);
-        checkMainSeriesColor(assert, series, 4, "arg2", 4, 6);
-        checkMainSeriesColor(assert, series, 5, "arg3", 5, 6);
+        checkMainSeriesColor(assert, series, 1, "arg2", 0, 6);
+        checkMainSeriesColor(assert, series, 2, "arg3", 0, 6);
+        checkMainSeriesColor(assert, series, 3, "arg2", 1, 6);
+        checkMainSeriesColor(assert, series, 4, "arg2", 2, 6);
+        checkMainSeriesColor(assert, series, 5, "arg3", 1, 6);
     });
 
     QUnit.test("mainSeriesColor. data with undefined values", function(assert) {
         var series = createSeries();
         series.setMaxPointsCount(6);
-        series.updateData([{ arg: "arg1", val: undefined },
+        series.updateData([
+            { arg: "arg1", val: undefined },
             { arg: "arg2", val: "val2" },
             { arg: "arg3", val: "val3" },
             { arg: "arg4", val: undefined },
             { arg: "arg5", val: "val5" },
-            { arg: "arg6", val: "val6" }]);
+            { arg: "arg6", val: "val6" }
+        ]);
         series.createPoints();
 
         assert.equal(series.getOptions().mainSeriesColor.callCount, 4);
 
-        checkMainSeriesColor(assert, series, 0, "arg2", 1, 6);
-        checkMainSeriesColor(assert, series, 1, "arg3", 2, 6);
-        checkMainSeriesColor(assert, series, 2, "arg5", 4, 6);
-        checkMainSeriesColor(assert, series, 3, "arg6", 5, 6);
+        checkMainSeriesColor(assert, series, 0, "arg2", 0, 6);
+        checkMainSeriesColor(assert, series, 1, "arg3", 0, 6);
+        checkMainSeriesColor(assert, series, 2, "arg5", 0, 6);
+        checkMainSeriesColor(assert, series, 3, "arg6", 0, 6);
     });
 
     QUnit.test("mainSeriesColor, update", function(assert) {
         var series = createSeries(),
-            data = [{ arg: "arg1", val: "val1" },
-            { arg: "arg2", val: "val2" },
-            { arg: "arg3", val: "val3" },
-            { arg: "arg2", val: "val4" },
-            { arg: "arg2", val: "val5" },
-            { arg: "arg3", val: "val6" }];
+            data = [
+                { arg: "arg1", val: "val1" },
+                { arg: "arg2", val: "val2" },
+                { arg: "arg3", val: "val3" },
+                { arg: "arg2", val: "val4" },
+                { arg: "arg2", val: "val5" },
+                { arg: "arg3", val: "val6" }
+            ];
         series.setMaxPointsCount(data.length);
         series.updateData(data);
         series.createPoints();
@@ -691,18 +697,23 @@ var checkTwoGroups = function(assert, series) {
         assert.equal(series.getOptions().mainSeriesColor.callCount, 6);
 
         checkMainSeriesColor(assert, series, 0, "arg1", 0, 6);
-        checkMainSeriesColor(assert, series, 1, "arg2", 1, 6);
-        checkMainSeriesColor(assert, series, 2, "arg3", 2, 6);
-        checkMainSeriesColor(assert, series, 3, "arg2", 3, 6);
-        checkMainSeriesColor(assert, series, 4, "arg2", 4, 6);
-        checkMainSeriesColor(assert, series, 5, "arg3", 5, 6);
+        checkMainSeriesColor(assert, series, 1, "arg2", 0, 6);
+        checkMainSeriesColor(assert, series, 2, "arg3", 0, 6);
+        checkMainSeriesColor(assert, series, 3, "arg2", 1, 6);
+        checkMainSeriesColor(assert, series, 4, "arg2", 2, 6);
+        checkMainSeriesColor(assert, series, 5, "arg3", 1, 6);
     });
 
     // T607678
     QUnit.test("mainSeriesColor, several series, data is missing from some data", function(assert) {
-        var data = [{ arg: "arg1", val1: 1, val2: 2 }, { arg: "arg2", val1: 3 }, { arg: "arg3", val1: 5, val2: 6 }],
+        var data = [
+                { arg: "arg1", val1: 1, val2: 2 },
+                { arg: "arg2", val1: 3 },
+                { arg: "arg3", val1: 5, val2: 6 }
+            ],
             series1 = createSeries({ valueField: "val1" }),
             series2 = createSeries({ valueField: "val2" });
+
         series1.setMaxPointsCount(data.length);
         series2.setMaxPointsCount(data.length);
         series1.updateData(data);
@@ -711,11 +722,11 @@ var checkTwoGroups = function(assert, series) {
         series2.createPoints();
 
         checkMainSeriesColor(assert, series1, 0, "arg1", 0, 3);
-        checkMainSeriesColor(assert, series1, 1, "arg2", 1, 3);
-        checkMainSeriesColor(assert, series1, 2, "arg3", 2, 3);
+        checkMainSeriesColor(assert, series1, 1, "arg2", 0, 3);
+        checkMainSeriesColor(assert, series1, 2, "arg3", 0, 3);
 
         checkMainSeriesColor(assert, series2, 0, "arg1", 0, 3);
-        checkMainSeriesColor(assert, series2, 1, "arg3", 2, 3);
+        checkMainSeriesColor(assert, series2, 1, "arg3", 0, 3);
     });
 
     QUnit.test("mainSeriesColor, several series, data is missing from some data, customizePoint is set", function(assert) {
@@ -730,11 +741,11 @@ var checkTwoGroups = function(assert, series) {
         series2.createPoints();
 
         checkMainSeriesColor(assert, series1, 1, "arg1", 0, 3);
-        checkMainSeriesColor(assert, series1, 3, "arg2", 1, 3);
-        checkMainSeriesColor(assert, series1, 5, "arg3", 2, 3);
+        checkMainSeriesColor(assert, series1, 3, "arg2", 0, 3);
+        checkMainSeriesColor(assert, series1, 5, "arg3", 0, 3);
 
         checkMainSeriesColor(assert, series2, 1, "arg1", 0, 3);
-        checkMainSeriesColor(assert, series2, 3, "arg3", 2, 3);
+        checkMainSeriesColor(assert, series2, 3, "arg3", 0, 3);
     });
 
     QUnit.test("getPointsCount", function(assert) {
