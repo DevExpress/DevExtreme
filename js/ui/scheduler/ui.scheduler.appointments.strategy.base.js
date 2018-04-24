@@ -8,6 +8,8 @@ var noop = require("../../core/utils/common").noop,
     isNumeric = require("../../core/utils/type").isNumeric,
     themes = require("../themes");
 
+var toMs = dateUtils.dateToMilliseconds;
+
 var abstract = Class.abstract;
 
 var APPOINTMENT_MIN_SIZE = 2,
@@ -451,6 +453,8 @@ var BaseRenderingStrategy = Class.inherit({
             var recurrencePartStartDate = position ? position.startDate : realStartDate,
                 fullDuration = endDate.getTime() - realStartDate.getTime();
 
+            fullDuration = this._adjustDurationByDaylightDiff(fullDuration, realStartDate, endDate);
+
             endDate = new Date((viewStartDate.getTime() >= recurrencePartStartDate.getTime() ? recurrencePartStartDate.getTime() : viewStartDate.getTime()) + fullDuration);
 
             if(!dateUtils.sameDate(realStartDate, endDate) && recurrencePartStartDate.getTime() < viewStartDate.getTime()) {
@@ -471,6 +475,16 @@ var BaseRenderingStrategy = Class.inherit({
         }
 
         return endDate;
+    },
+
+    _adjustDurationByDaylightDiff: function(duration, startDate, endDate) {
+        var daylightDiff = this.instance.fire("getDaylightOffset", startDate, endDate);
+
+        if(daylightDiff !== 0) {
+            duration += daylightDiff * toMs("minute");
+        }
+
+        return duration;
     },
 
     _checkWrongEndDate: function(appointment, startDate, endDate) {
