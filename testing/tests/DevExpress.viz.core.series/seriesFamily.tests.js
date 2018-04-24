@@ -6,7 +6,7 @@ import pointModule from "viz/series/points/base_point";
 import { MockTranslator, MockSeries, MockPoint } from "../../helpers/chartMocks.js";
 import { SeriesFamily } from "viz/core/series_family";
 
-var ZERO = 0;
+const ZERO = 0;
 
 document.title = "Series Family " + document.title;
 var createPoint = function(value) {
@@ -668,6 +668,17 @@ QUnit.test("Set single series, bar width is specify", function(assert) {
     createSeriesFamily("bar", [series], { equalBarWidth: true });
 
     checkSeries(assert, series, expectedWidth, 0);
+});
+
+QUnit.test("Set single series, bar width is specify", function(assert) {
+    const series = createSeries({ points: pointsForStacking.points1() });
+    sinon.spy(series, "getPointsByArg");
+
+    createSeriesFamily("bar", [series], { equalBarWidth: true });
+
+    series.getPointsByArg.getCalls().forEach(call => {
+        assert.strictEqual(call.args[1], true);
+    });
 });
 
 QUnit.test("Set two series", function(assert) {

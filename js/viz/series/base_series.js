@@ -1022,12 +1022,12 @@ Series.prototype = {
         }
     },
 
-    getPointsByArg: function(arg) {
+    getPointsByArg: function(arg, skipPointsCreation) {
         var that = this,
             argValue = arg.valueOf(),
             points = that.pointsByArgument[argValue];
 
-        if(!points && that._createAllAggregatedPoints()) {
+        if(!points && !skipPointsCreation && that._createAllAggregatedPoints()) {
             points = that.pointsByArgument[argValue];
         }
         return points || [];

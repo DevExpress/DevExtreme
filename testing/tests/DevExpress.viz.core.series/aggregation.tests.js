@@ -507,6 +507,42 @@ QUnit.test("Create points called twice (getAllPoints raises createPoints)", func
     assert.ok(customMethod.calledTwice);
 });
 
+QUnit.test("getPointsByArg should create all points if there are not point on argument", function(assert) {
+    const customMethod = sinon.spy();
+    const series = this.createSeries("custom", "line", {
+        aggregation: {
+            calculate: customMethod
+        }
+    });
+
+    series.updateData(this.data);
+    series.createPoints();
+
+    customMethod.reset();
+
+    series.getPointsByArg(100);
+
+    assert.ok(customMethod.calledOnce);
+});
+
+QUnit.test("getPointsByArg should not create all points if there are not point on argument and passed parameter to skip points creation", function(assert) {
+    const customMethod = sinon.spy();
+    const series = this.createSeries("custom", "line", {
+        aggregation: {
+            calculate: customMethod
+        }
+    });
+
+    series.updateData(this.data);
+    series.createPoints();
+
+    customMethod.reset();
+
+    series.getPointsByArg(100, true);
+
+    assert.ok(!customMethod.called);
+});
+
 QUnit.test("Create points called once (getAllPoints not raises createPoints if all points exists)", function(assert) {
     var customMethod = sinon.spy();
     this.aggregateData("custom", this.data, "line", {

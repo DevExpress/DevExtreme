@@ -24,7 +24,7 @@ function validateBarGroupPadding(barGroupPadding) {
 
 function isStackExist(series, arg, equalBarWidth) {
     return series.some(function(s) {
-        return (equalBarWidth && !s.getOptions().ignoreEmptyPoints) || s.getPointsByArg(arg).some(function(point) {
+        return (equalBarWidth && !s.getOptions().ignoreEmptyPoints) || s.getPointsByArg(arg, true).some(function(point) {
             return point.hasValue();
         });
     });
@@ -33,7 +33,7 @@ function isStackExist(series, arg, equalBarWidth) {
 function correctStackCoordinates(series, currentStacks, arg, stack, parameters, barsArea, seriesStackIndexCallback) {
     series.forEach(function(series) {
         var stackIndex = seriesStackIndexCallback(currentStacks.indexOf(stack), currentStacks.length),
-            points = series.getPointsByArg(arg),
+            points = series.getPointsByArg(arg, true),
             barPadding = validateBarPadding(series.getOptions().barPadding),
             barWidth = series.getOptions().barWidth,
             offset = getOffset(stackIndex, parameters),
