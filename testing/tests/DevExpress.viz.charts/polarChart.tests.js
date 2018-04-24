@@ -314,7 +314,7 @@ QUnit.test("pass legendcallback to series draw", function(assert) {
 QUnit.test("create series with visibility changed", function(assert) {
     var chart = this.createSimplePolarChart(),
         processSeriesFamilySpy = sinon.spy(chart, "_processSeriesFamilies"),
-        populateBusinessRangeSpy = sinon.spy(chart, "_setBusinessRangeBySeriesData"),
+        populateBusinessRangeSpy = sinon.spy(chart, "_populateBusinessRange"),
         renderSpy = sinon.spy(chart, "_doRender");
     chart._renderer.stopAllAnimations = sinon.stub();
 

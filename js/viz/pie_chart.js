@@ -117,8 +117,6 @@ var dxPieChart = BaseChart.inherit({
         });
     },
 
-    _setBusinessRangeBySeriesData: function() { return this._populateBusinessRange(); },
-
     _specialProcessSeries: function() {
         _each(this.series, function(_, singleSeries) {
             singleSeries.arrangePoints();
