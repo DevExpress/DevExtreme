@@ -343,7 +343,7 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
         var dateTable = this._getDateTable(),
             dateTableRowSelector = "." + this._getDateTableRowClass();
 
-        return (dateTable.outerHeight() / dateTable.find(dateTableRowSelector).length) - DATE_TABLE_CELL_BORDER * 2;
+        return (dateTable.get(0).getBoundingClientRect().height / dateTable.find(dateTableRowSelector).length) - DATE_TABLE_CELL_BORDER * 2;
     },
 
     _getCellCoordinatesByIndex: function(index) {
@@ -503,7 +503,7 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
     scrollToTime: function(hours, minutes, date) {
         var coordinates = this._getScrollCoordinates(hours, minutes, date),
             scrollable = this.getScrollable(),
-            offset = this.option("rtlEnabled") ? this.getScrollableContainer().outerWidth() : 0;
+            offset = this.option("rtlEnabled") ? this.getScrollableContainer().get(0).getBoundingClientRect().width : 0;
 
         scrollable.scrollBy({ left: coordinates.left - scrollable.scrollLeft() - offset, top: 0 });
     }

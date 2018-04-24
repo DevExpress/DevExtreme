@@ -24,8 +24,8 @@ var VerticalCurrentTimeShader = Shader.inherit({
             var groupCount = this._workspace._getGroupCount() || 1;
 
             if(renderSolidShader) {
-                this._renderTopShader(this._$shader, shaderHeight, this._$container.outerWidth(), 0);
-                this._renderAllDayShader(this._$container.outerWidth(), 0);
+                this._renderTopShader(this._$shader, shaderHeight, this._$container.get(0).getBoundingClientRect().width, 0);
+                this._renderAllDayShader(this._$container.get(0).getBoundingClientRect().width, 0);
             } else {
                 for(var i = 0; i < groupCount; i++) {
                     var shaderWidth = this._getShaderWidth(i);

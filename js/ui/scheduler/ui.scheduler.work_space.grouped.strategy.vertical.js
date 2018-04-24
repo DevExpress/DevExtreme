@@ -92,7 +92,7 @@ var VerticalGroupedStrategy = GroupedStrategy.inherit({
 
     getWorkSpaceMinWidth: function() {
         var minWidth = this._workSpace._getWorkSpaceWidth(),
-            workspaceContainerWidth = this._workSpace.$element().outerWidth() - this._workSpace.getTimePanelWidth() - this._workSpace.getGroupTableWidth();
+            workspaceContainerWidth = this._workSpace.$element().get(0).getBoundingClientRect().width - this._workSpace.getTimePanelWidth() - this._workSpace.getGroupTableWidth();
 
         if(minWidth < workspaceContainerWidth) {
             minWidth = workspaceContainerWidth;
@@ -156,7 +156,7 @@ var VerticalGroupedStrategy = GroupedStrategy.inherit({
 
     getShaderOffset: function(i, width) {
         var offset = this._workSpace.getGroupTableWidth();
-        return this._workSpace.option("rtlEnabled") ? this._$container.outerWidth() - offset - this._workSpace.getWorkSpaceLeftOffset() - width : offset;
+        return this._workSpace.option("rtlEnabled") ? this._$container.get(0).getBoundingClientRect().width - offset - this._workSpace.getWorkSpaceLeftOffset() - width : offset;
     },
 
     getShaderTopOffset: function(i) {

@@ -1694,11 +1694,11 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     getTimePanelWidth: function() {
-        return this._$timePanel.outerWidth();
+        return this._$timePanel && this._$timePanel.get(0).getBoundingClientRect().width;
     },
 
     getGroupTableWidth: function() {
-        return this._$groupTable.outerWidth();
+        return this._$groupTable && this._$groupTable.get(0).getBoundingClientRect().width;
     },
 
     getWorkSpaceLeftOffset: function() {
@@ -1795,10 +1795,10 @@ var SchedulerWorkSpace = Widget.inherit({
 
     _getWorkSpaceWidth: function() {
         if(this.option("crossScrollingEnabled")) {
-            return this._$dateTable.outerWidth();
+            return this._$dateTable.get(0).getBoundingClientRect().width;
         }
 
-        return this.$element().outerWidth() - this.getTimePanelWidth();
+        return this.$element().get(0).getBoundingClientRect().width - this.getTimePanelWidth();
     },
 
     _getCellPositionByIndex: function(index, groupIndex, inAllDayRow) {
