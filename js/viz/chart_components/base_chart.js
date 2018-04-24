@@ -970,7 +970,7 @@ var BaseChart = BaseWidget.inherit({
 
     _change_REFRESH_SERIES_FAMILIES: function() {
         this._processSeriesFamilies();
-        this._populateBusinessRange();
+        this._populateBusinessRange(true);
         this._processRefreshData(FORCE_RENDER_REFRESH_ACTION);
     },
 
@@ -1060,7 +1060,7 @@ var BaseChart = BaseWidget.inherit({
         that.series = that.series || that._populateSeries();
         that._repopulateSeries();
         that._seriesPopulatedHandlerCore();
-        that._populateBusinessRange();
+        that._populateBusinessRange(true);
         that._tracker.updateSeries(that.series);
         that._updateLegend();
         needRedraw && that._forceRender();
@@ -1177,7 +1177,7 @@ var BaseChart = BaseWidget.inherit({
             i,
             seriesVisibilityChanged = function() {
                 that._specialProcessSeries();
-                that._setBusinessRangeBySeriesData();
+                that._populateBusinessRange(false);
                 that._renderer.stopAllAnimations(true);
                 that._updateLegend();
                 that._doRender({ force: true });
