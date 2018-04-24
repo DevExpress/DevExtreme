@@ -1821,7 +1821,7 @@ var SchedulerWorkSpace = Widget.inherit({
             position = $cell.position();
 
         if(isRtl) {
-            position.left += $cell.outerWidth();
+            position.left += $cell.get(0).getBoundingClientRect().width;
         }
         return position;
     },
@@ -2076,7 +2076,7 @@ var SchedulerWorkSpace = Widget.inherit({
         }
 
         for(var i = startIndex; i < totalCellCount + cellCount; i++) {
-            width = width + $($cells).eq(i).outerWidth();
+            width = width + $($cells).eq(i).get(0).getBoundingClientRect().width;
         }
 
         return width / (totalCellCount + cellCount - startIndex);
@@ -2110,7 +2110,7 @@ var SchedulerWorkSpace = Widget.inherit({
                     var maxPosition = $(cell).position().left;
 
                     if(!isRtl) {
-                        maxPosition += $(cell).outerWidth();
+                        maxPosition += $(cell).get(0).getBoundingClientRect().width;
                     }
 
                     that._maxAllowedPosition.push(Math.round(maxPosition));
