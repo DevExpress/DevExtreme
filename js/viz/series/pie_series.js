@@ -106,21 +106,24 @@ exports.pie = _extend({}, barSeries, {
         that._markersGroup.attr({ "class": "dxc-markers" });
     },
 
-    _getMainColor: function(data, dataIndex) {
-        return this._options.mainSeriesColor(data.argument, dataIndex, this._pointsCount);
+    _getMainColor(data, point) {
+        const pointsByArg = this.getPointsByArg(data.argument);
+        const argumentIndex = point ? pointsByArg.indexOf(point) : pointsByArg.length;
+
+        return this._options.mainSeriesColor(data.argument, argumentIndex, this._pointsCount);
     },
 
-    _getPointOptions: function(data, dataIndex) {
-        return this._parsePointOptions(this._preparePointOptions(), this._options.label, data, dataIndex);
+    _getPointOptions: function(data) {
+        return this._parsePointOptions(this._preparePointOptions(), this._options.label, data);
     },
 
     _getRangeData: function() {
         return this._rangeData;
     },
 
-    _createPointStyles: function(pointOptions, data, dataIndex) {
+    _createPointStyles: function(pointOptions, data, point) {
         var that = this,
-            mainColor = pointOptions.color || that._getMainColor(data, dataIndex);
+            mainColor = pointOptions.color || that._getMainColor(data, point);
 
         return {
             normal: that._parsePointStyle(pointOptions, mainColor, mainColor),
