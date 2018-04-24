@@ -125,23 +125,6 @@
     .dx-@{widgetName} {
         line-height: inherit;
 
-        .dx-@{widgetName}-filter-row {
-            .dx-menu {
-                background-color: transparent;
-                height: 100%;
-
-                .dx-menu-item {
-                    .dx-menu-item-content {
-                        padding: @GENERIC_GRID_BASE_MENU_ITEM_PADDING;
-
-                        .dx-icon {
-                            margin: 0px 3px;
-                        }
-                    }
-                }
-            }
-        }
-
         .dx-row-alt {
             & > td {
                 background-color: ~"@{@{widgetName}-row-alternation-bg}";
@@ -546,6 +529,18 @@
     }
 
     &.dx-filter-menu {
+        &.dx-menu {
+            background-color: transparent;
+            height: 100%;
+            .dx-menu-item {
+                .dx-menu-item-content {
+                    padding: @GENERIC_GRID_BASE_MENU_ITEM_PADDING;
+                    .dx-icon {
+                        margin: 0px 3px;
+                    }
+                }
+            }
+        }
         .dx-menu-item-content {
             .dx-icon.dx-icon-filter-operation-default {
                 margin-top: 2px;
