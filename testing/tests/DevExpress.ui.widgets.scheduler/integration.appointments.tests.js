@@ -4330,37 +4330,6 @@ QUnit.test("Appointment should be rendered correctly when appointment timezone a
     assert.equal($appointment.find(".dx-scheduler-appointment-content-date").eq(2).text(), dateLocalization.format(new Date(endDate.getTime() + deltaTz), "shorttime"), "End Date is correct on init");
 });
 
-QUnit.test("Appointment wich started in DST & ended in std time should be rendered correctly when scheduler timezone was set", function(assert) {
-    var startDate = 1541311200000,
-        endDate = 1541319000000;
-
-    this.createInstance({
-        currentDate: new Date(2018, 10, 4),
-        views: ["week"],
-        currentView: "week",
-        dataSource: [{
-            text: "DST",
-            startDate: startDate,
-            endDate: endDate
-        }],
-        timeZone: "America/Chicago"
-    });
-
-    startDate = new Date(startDate);
-    endDate = new Date(endDate);
-
-    var $appointment = $(this.instance.$element()).find("." + APPOINTMENT_CLASS).eq(0),
-        deltaTzStart = getDeltaTz(-5, startDate),
-        deltaTzEnd = getDeltaTz(-6, endDate),
-        startDateByTz = new Date(startDate.setHours(startDate.getHours() + deltaTzStart / 3600000)),
-        endDateByTz = new Date(endDate.setHours(endDate.getHours() + deltaTzEnd / 3600000));
-
-    assert.equal($appointment.find(".dx-scheduler-appointment-content div").eq(0).text(), "DST", "Text is correct on init");
-
-    assert.equal($appointment.find(".dx-scheduler-appointment-content-date").eq(0).text(), dateLocalization.format(startDateByTz, "shorttime"), "Start Date is correct on init");
-    assert.equal($appointment.find(".dx-scheduler-appointment-content-date").eq(2).text(), dateLocalization.format(endDateByTz, "shorttime"), "End Date is correct on init");
-});
-
 QUnit.test("All-day Appointment should be rendered correctly when custom timezone was set", function(assert) {
     var timezone = 5,
         timezoneDifference = getDeltaTz(timezone, new Date(2016, 4, 4)),

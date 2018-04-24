@@ -653,6 +653,10 @@ var subscribes = {
         return date;
     },
 
+    getDaylightOffset: function(startDate, endDate) {
+        return startDate.getTimezoneOffset() - endDate.getTimezoneOffset();
+    },
+
     getTimezonesDisplayName: function() {
         return SchedulerTimezones.getTimezonesDisplayName();
     },
@@ -691,12 +695,7 @@ var subscribes = {
         var startDate = options.startDate,
             endDate = options.endDate,
             allDay = options.allDay,
-            appointmentDuration = endDate.getTime() - startDate.getTime(),
-            daylightDiff = startDate.getTimezoneOffset() - endDate.getTimezoneOffset();
-
-        if(daylightDiff !== 0) {
-            appointmentDuration += daylightDiff * toMs("minute");
-        }
+            appointmentDuration = endDate.getTime() - startDate.getTime();
 
         var dayDuration = toMs("day"),
             visibleDayDuration = this._getDayDuration() * toMs("hour"),
