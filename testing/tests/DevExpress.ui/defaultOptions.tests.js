@@ -1108,6 +1108,8 @@ testComponentDefaults(LoadPanel,
     {
         width: 60,
         height: 60,
+        maxWidth: 60,
+        maxHeight: 60,
         message: ""
     },
     function() {
