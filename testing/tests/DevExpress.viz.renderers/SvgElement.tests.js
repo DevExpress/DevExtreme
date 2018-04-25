@@ -5568,6 +5568,22 @@ function checkDashStyle(assert, elem, result, style, value) {
         ], { x: 0, y: 0 }, { stroke: "black", "stroke-width": 3, "stroke-opacity": 1 });
     });
 
+    // T629325
+    QUnit.test("Apply ellipsis. Multiline. There is single white space in second line", function(assert) {
+        var text = this.createText().append(this.svg).attr({ x: 0, y: 0, text: "Line one<br/>Line two <b>with</b> <i>single</i> white space" });
+
+        this.prepareRenderBeforeEllipsis();
+        text.applyEllipsis(130);
+
+        this.checkTspans(assert, text, [
+            { x: 0, y: 0, text: "Line one" },
+            { x: 0, dy: 12, text: "Line two " },
+            { text: "with" },
+            { text: " " },
+            { text: "si..." }
+        ], { x: 0, y: 0 });
+    });
+
     QUnit.test("Apply ellipsis. Multiline. With encode html", function(assert) {
         this.renderer.encodeHtml = true;
         var text = this.createText().append(this.svg).attr({ x: 0, y: 0, text: "There is test\ntext for checking<br/>ellipsis with single\nline" });
