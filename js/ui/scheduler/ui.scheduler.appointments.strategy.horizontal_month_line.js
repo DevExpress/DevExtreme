@@ -44,6 +44,10 @@ var HorizontalMonthLineRenderingStrategy = HorizontalAppointmentsStrategy.inheri
         }
 
         return result;
+    },
+
+    needCorrectAppointmentDates: function() {
+        return false;
     }
 });
 

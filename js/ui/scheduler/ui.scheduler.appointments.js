@@ -613,14 +613,14 @@ var SchedulerAppointments = CollectionWidget.inherit({
     _getDateRange: function(e, startDate, endDate) {
         var itemData = this._getItemData(e.element),
             deltaTime = this.invoke("getDeltaTime", e, this._initialSize, itemData),
-            renderingStrategy = this.invoke("getRenderingStrategy"),
+            renderingStrategyDirection = this.invoke("getRenderingStrategyDirection"),
             cond = false,
             isAllDay = this.invoke("isAllDay", itemData),
-            needCorrectDates = renderingStrategy !== "horizontalMonth" && !isAllDay,
+            needCorrectDates = this.invoke("needCorrectAppointmentDates") && !isAllDay,
             startTime,
             endTime;
 
-        if(renderingStrategy !== "vertical" || isAllDay) {
+        if(renderingStrategyDirection !== "vertical" || isAllDay) {
             cond = this.option("rtlEnabled") ? e.handles.right : e.handles.left;
         } else {
             cond = e.handles.top;

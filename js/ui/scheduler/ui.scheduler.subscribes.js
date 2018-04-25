@@ -262,6 +262,14 @@ var subscribes = {
         return this._getAppointmentsRenderingStrategy();
     },
 
+    needCorrectAppointmentDates: function() {
+        return this.getRenderingStrategyInstance().needCorrectAppointmentDates();
+    },
+
+    getRenderingStrategyDirection: function() {
+        return this.getRenderingStrategyInstance().getDirection();
+    },
+
     correctAppointmentCoordinates: function(options) {
         var isAllDay = options.allDay,
             containerSign = options.isFixedContainer ? -1 : 1;
