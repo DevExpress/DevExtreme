@@ -1659,6 +1659,43 @@ QUnit.test("showEvent set as string", function(assert) {
     assert.ok(instance.option("visible"), "Popover was shown");
 });
 
+QUnit.test("popover should be hidden after change the showEvent option", function(assert) {
+    var instance = new Popover($("#what"), {
+        target: "#where",
+        showEvent: "dxclick",
+        visible: true
+    });
+
+    instance.option("showEvent", "mouseenter");
+    assert.notOk(instance.option("visible"), "popover is hidden");
+});
+
+QUnit.test("popover should be hidden after change the hideEvent option", function(assert) {
+    var instance = new Popover($("#what"), {
+        target: "#where",
+        hideEvent: "dxclick",
+        visible: true
+    });
+
+    instance.option("hideEvent", "mouseenter");
+    assert.notOk(instance.option("visible"), "popover is hidden");
+});
+
+QUnit.test("clear the showEvent on runtime", function(assert) {
+    var shownStub = sinon.stub(),
+        instance = new Popover($("#what"), {
+            target: "#where",
+            showEvent: { name: "mouseenter", delay: 500 },
+            onShown: shownStub
+        });
+
+    instance.option("showEvent", undefined);
+    $("#where").trigger("mouseenter");
+    this.clock.tick(500);
+
+    assert.equal(shownStub.callCount, 0, "Popover wasn't shown");
+});
+
 QUnit.test("showEvent set as string with several events", function(assert) {
     var instance = new Popover($("#what"), {
         target: "#where",
