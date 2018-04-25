@@ -59,6 +59,11 @@ var ContextMenuController = modules.ViewController.inherit({
                     column: rowOptions && rowOptions.cells[columnIndex].column
                 };
 
+                if(options.row && options.row.rowType === "detailAdaptive") {
+                    view = that.getView("columnHeadersView");
+                    let formItem = $(options.targetElement).closest("label").next().data("dx-form-item");
+                    options.column = formItem ? formItem.column : options.column;
+                }
                 options.items = view.getContextMenuItems && view.getContextMenuItems(options);
 
                 that.executeAction("onContextMenuPreparing", options);
