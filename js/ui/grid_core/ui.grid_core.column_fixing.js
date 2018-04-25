@@ -312,7 +312,7 @@ var baseFixedColumns = {
             }
             this.callBase(widths, this._fixedTableElement, columns, true);
         }
-        if(widths && widths.length) {
+        if(widths && widths.length && isDefined(this._columnsController.getVisibleColumns()[0].visibleWidth)) {
             this.synchronizeRows();
         }
     },

@@ -318,7 +318,8 @@ var KeyboardNavigationController = core.ViewController.inherit({
     },
 
     _hasSkipRow: function($row) {
-        return $row && ($row.css("display") === "none" || $row.hasClass(this.addWidgetPrefix(GROUP_FOOTER_CLASS)) || (isDetailRow($row) && !$row.hasClass(this.addWidgetPrefix(EDIT_FORM_CLASS))));
+        var row = $row && $row.get(0);
+        return row && (row.style.display === "none" || $row.hasClass(this.addWidgetPrefix(GROUP_FOOTER_CLASS)) || (isDetailRow($row) && !$row.hasClass(this.addWidgetPrefix(EDIT_FORM_CLASS))));
     },
 
     _enterKeyHandler: function(eventArgs, isEditing) {
