@@ -1743,6 +1743,37 @@ QUnit.test("updateAppointment method should be called when task was resized", fu
     }
 });
 
+QUnit.test("updateAppointment method should be called with right args when task was resized, timelineMonth view", function(assert) {
+    var data = [{
+        text: "Task 1",
+        startDate: new Date(2015, 1, 2, 1),
+        endDate: new Date(2015, 1, 2, 2)
+    }];
+
+    this.createInstance({ currentDate: new Date(2015, 1, 9), dataSource: data, editing: true, views: ["timelineMonth"], currentView: "timelineMonth" });
+
+    this.clock.tick();
+
+    var updateAppointment = this.instance._updateAppointment,
+        spy = sinon.spy(noop),
+        oldItem = data[0];
+
+    this.instance._updateAppointment = spy;
+
+    var cellWidth = this.instance.$element().find("." + DATE_TABLE_CELL_CLASS).eq(0).outerWidth();
+
+    try {
+        var pointer = pointerMock(this.instance.$element().find(".dx-resizable-handle-right").eq(0)).start();
+        pointer.dragStart().drag(cellWidth, 0).dragEnd();
+
+        assert.ok(spy.calledOnce, "Update method is called");
+        assert.deepEqual(spy.getCall(0).args[0], oldItem, "Target item is correct");
+        assert.deepEqual(spy.getCall(0).args[1], $.extend(true, oldItem, { endDate: new Date(2015, 1, 3, 2, 0) }), "New data is correct");
+    } finally {
+        this.instance._updateAppointment = updateAppointment;
+    }
+});
+
 QUnit.test("Non-grid-aligned appointments should be resized correctly", function(assert) {
     this.createInstance({
         currentDate: new Date(2015, 1, 9),

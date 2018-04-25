@@ -132,6 +132,10 @@ var HorizontalMonthRenderingStrategy = HorizontalMonthLineAppointmentsStrategy.i
         return this.getDefaultCellWidth() - offset;
     },
 
+    needCorrectAppointmentDates: function() {
+        return false;
+    },
+
     _needVerticalGroupBounds: function() {
         return false;
     },

@@ -276,6 +276,14 @@ var subscribes = {
         return this._getAppointmentsRenderingStrategy();
     },
 
+    needCorrectAppointmentDates: function() {
+        return this.getRenderingStrategyInstance().needCorrectAppointmentDates();
+    },
+
+    getRenderingStrategyDirection: function() {
+        return this.getRenderingStrategyInstance().getDirection();
+    },
+
     getWorkSpaceDateTableOffset: function() {
         return this.getWorkSpaceDateTableOffset();
     },
