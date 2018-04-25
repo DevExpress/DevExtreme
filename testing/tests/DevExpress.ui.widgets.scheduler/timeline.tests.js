@@ -251,9 +251,10 @@ QUnit.test("Group table cells should have correct height", function(assert) {
     var $groupTable = $element.find(".dx-scheduler-sidebar-scrollable .dx-scheduler-group-table"),
         $groupRows = $groupTable.find(".dx-scheduler-group-row"),
         $groupHeader = $groupRows.eq(1).find(".dx-scheduler-group-header").eq(0),
-        dateTableCellHeight = $element.find(".dx-scheduler-date-table-cell").eq(0).outerHeight();
+        dateTableCellHeight = $element.find(".dx-scheduler-date-table-cell").get(0).getBoundingClientRect().height,
+        groupHeaderHeight = $groupHeader.get(0).getBoundingClientRect().height;
 
-    assert.roughEqual(dateTableCellHeight, $groupHeader.height(), 1.1, "Cell height is OK");
+    assert.roughEqual(dateTableCellHeight, groupHeaderHeight, 1.1, "Cell height is OK");
 });
 
 QUnit.test("Group table should contain right rows and cells count", function(assert) {
