@@ -101,9 +101,6 @@ var getMonthCaption = function(date) {
     if(this.option("intervalCount") > 1) {
         var firstDate = new Date(date);
 
-        if(firstDate.getDate() !== 1) {
-            firstDate.setMonth(firstDate.getMonth() + 1);
-        }
         var lastDate = new Date(firstDate);
         lastDate.setMonth(lastDate.getMonth() + this.option("intervalCount") - 1);
 

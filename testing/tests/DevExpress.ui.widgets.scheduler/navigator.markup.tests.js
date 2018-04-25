@@ -167,7 +167,7 @@ QUnit.module("Navigator markup", moduleConfig, () => {
         var $element = this.instance.$element(),
             button = $element.find(".dx-scheduler-navigator-caption").dxButton("instance"),
             date = new Date(2017, 4, 25),
-            caption = "Jun-Jul 2017";
+            caption = "May-Jun 2017";
 
         this.instance.option("date", date);
         this.instance.option("intervalCount", 2);
@@ -180,7 +180,7 @@ QUnit.module("Navigator markup", moduleConfig, () => {
         var $element = this.instance.$element(),
             button = $element.find(".dx-scheduler-navigator-caption").dxButton("instance"),
             date = new Date(2017, 10, 25),
-            caption = "Dec 2017-Feb 2018";
+            caption = "Nov 2017-Jan 2018";
 
         this.instance.option("date", date);
         this.instance.option("intervalCount", 3);
