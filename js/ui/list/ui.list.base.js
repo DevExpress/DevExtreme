@@ -500,7 +500,7 @@ var ListBase = CollectionWidget.inherit({
                     * @name dxListOptions_pullingDownText
                     * @publicName pullingDownText
                     * @type string
-                    * @default "Pull down to refresh..."
+                    * @default ""
                     */
                     pullingDownText: "",
 
@@ -508,7 +508,7 @@ var ListBase = CollectionWidget.inherit({
                     * @name dxListOptions_pulledDownText
                     * @publicName pulledDownText
                     * @type string
-                    * @default "Release to refresh..."
+                    * @default ""
                     */
                     pulledDownText: "",
 
@@ -516,7 +516,7 @@ var ListBase = CollectionWidget.inherit({
                     * @name dxListOptions_refreshingText
                     * @publicName refreshingText
                     * @type string
-                    * @default "Refreshing..."
+                    * @default ""
                     */
                     refreshingText: "",
 
@@ -524,7 +524,7 @@ var ListBase = CollectionWidget.inherit({
                     * @name dxListOptions_pageLoadingText
                     * @publicName pageLoadingText
                     * @type string
-                    * @default "Loading..."
+                    * @default ""
                     */
                     pageLoadingText: "",
                     useInkRipple: true
