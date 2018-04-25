@@ -500,7 +500,7 @@ var ListBase = CollectionWidget.inherit({
                     * @name dxListOptions_pullingDownText
                     * @publicName pullingDownText
                     * @type string
-                    * @default ""
+                    * @default "" @for Material
                     */
                     pullingDownText: "",
 
@@ -508,7 +508,7 @@ var ListBase = CollectionWidget.inherit({
                     * @name dxListOptions_pulledDownText
                     * @publicName pulledDownText
                     * @type string
-                    * @default ""
+                    * @default "" @for Material
                     */
                     pulledDownText: "",
 
@@ -516,7 +516,7 @@ var ListBase = CollectionWidget.inherit({
                     * @name dxListOptions_refreshingText
                     * @publicName refreshingText
                     * @type string
-                    * @default ""
+                    * @default "" @for Material
                     */
                     refreshingText: "",
 
@@ -524,7 +524,7 @@ var ListBase = CollectionWidget.inherit({
                     * @name dxListOptions_pageLoadingText
                     * @publicName pageLoadingText
                     * @type string
-                    * @default ""
+                    * @default "" @for Material
                     */
                     pageLoadingText: "",
                     useInkRipple: true
