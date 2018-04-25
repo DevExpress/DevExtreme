@@ -522,6 +522,26 @@ QUnit.test("selectedItems should not be cleaned after reordering if store key sp
     assert.equal(listInstance.option("selectedItems")[0], items[0], "first item is selected");
 });
 
+QUnit.test("reorderItem method should return a Promise", function(assert) {
+    var listInstance = $("#list").dxList({
+        dataSource: [1, 2, 3]
+    }).dxList("instance");
+
+    listInstance.selectItem(0);
+
+    var promise = listInstance.reorderItem(0, 1),
+        $items = $("#list").find(toSelector(LIST_ITEM_CLASS)),
+        firstItemText = $items.eq(0).text(),
+        secondItemText = $items.eq(1).text();
+
+    promise.then(function() {
+        assert.ok(true, "promise resolved");
+    });
+
+    assert.equal(firstItemText, "2");
+    assert.equal(secondItemText, "1");
+});
+
 // T525081
 QUnit.test("selection works well after clean all selected items and selectAllMode is 'allPages'", function(assert) {
     var items = [1, 2, 3],
