@@ -37,7 +37,8 @@ var ContextMenuController = modules.ViewController.inherit({
             $element,
             $targetRowElement,
             $targetCellElement,
-            menuItems;
+            menuItems,
+            formItem;
 
         each(VIEW_NAMES, function() {
             view = that.getView(this);
@@ -61,7 +62,7 @@ var ContextMenuController = modules.ViewController.inherit({
 
                 if(options.row && options.row.rowType === "detailAdaptive") {
                     view = that.getView("columnHeadersView");
-                    let formItem = $(options.targetElement).closest("label").next().data("dx-form-item");
+                    formItem = $(options.targetElement).closest("label").next().data("dx-form-item");
                     options.column = formItem ? formItem.column : options.column;
                 }
                 options.items = view.getContextMenuItems && view.getContextMenuItems(options);
