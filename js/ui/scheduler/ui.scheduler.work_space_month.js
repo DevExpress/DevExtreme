@@ -91,6 +91,22 @@ var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
         };
     },
 
+    _createWorkSpaceElements: function() {
+        if(this._isVerticalGroupedWorkSpace()) {
+            this._createWorkSpaceScrollableElements();
+        } else {
+            this._createWorkSpaceStaticElements();
+        }
+    },
+
+    _toggleHorizontalScrollClass: function() {
+        this.$element().toggleClass("dx-scheduler-work-space-both-scrollbar", this.option("crossScrollingEnabled") || this._isVerticalGroupedWorkSpace());
+    },
+
+    _needRecalculateTableSizes: function() {
+        return this.option("crossScrollingEnabled") || this._isVerticalGroupedWorkSpace();
+    },
+
     _renderTimePanel: noop,
     _renderAllDayPanel: noop,
     _getTableAllDay: noop,
@@ -271,7 +287,7 @@ var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
     scrollToTime: noop,
 
     _setHorizontalGroupHeaderCellsHeight: function() {
-        if(this.option("crossScrollingEnabled")) {
+        if(this._needRecalculateTableSizes()) {
             this.callBase();
         } else {
             return;

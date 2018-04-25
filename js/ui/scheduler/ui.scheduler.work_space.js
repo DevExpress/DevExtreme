@@ -799,7 +799,7 @@ var SchedulerWorkSpace = Widget.inherit({
             this._setHorizontalGroupHeaderCellsHeight();
         }
 
-        if(visible && this.option("crossScrollingEnabled")) {
+        if(visible && this._needRecalculateTableSizes()) {
             this._setTableSizes();
         }
     },
@@ -859,13 +859,17 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _dimensionChanged: function() {
-        if(this.option("crossScrollingEnabled")) {
+        if(this._needRecalculateTableSizes()) {
             this._setTableSizes();
         }
 
         this.headerPanelOffsetRecalculate();
         this._cleanCellDataCache();
         this._cleanAllowedPositions();
+    },
+
+    _needRecalculateTableSizes: function() {
+        return this.option("crossScrollingEnabled");
     },
 
     _getElementClass: noop,
@@ -1798,7 +1802,7 @@ var SchedulerWorkSpace = Widget.inherit({
             return this._$dateTable.get(0).getBoundingClientRect().width;
         }
 
-        return this.$element().get(0).getBoundingClientRect().width - this.getTimePanelWidth();
+        return this.$element().get(0).getBoundingClientRect().width - this.getTimePanelWidth() - this.getGroupTableWidth();
     },
 
     _getCellPositionByIndex: function(index, groupIndex, inAllDayRow) {
@@ -1844,7 +1848,7 @@ var SchedulerWorkSpace = Widget.inherit({
     _setHorizontalGroupHeaderCellsHeight: function() {
         var cellHeight = this.getCellHeight(),
             allDayRowHeight = this.option("showAllDayPanel") && this.supportAllDayRow() ? this.getAllDayHeight() : 0,
-            dateTableHeight = cellHeight * this._getRowCount() - DATE_TABLE_CELL_BORDER * 2;
+            dateTableHeight = cellHeight * this._getRowCount() - DATE_TABLE_CELL_BORDER;
 
         this._getGroupHeaderCellsContent().css("height", dateTableHeight + allDayRowHeight);
     },
