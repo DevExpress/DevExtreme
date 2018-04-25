@@ -611,7 +611,7 @@ QUnit.test("Check grouping context menu operability", function(assert) {
 });
 
 QUnit.test("Show contextMenu for hidden adaptive columns", function(assert) {
-    const clock = sinon.useFakeTimers(),
+    var clock = sinon.useFakeTimers(),
         dataGrid = $("#dataGrid").dxDataGrid({
             loadingTimeout: undefined,
             grouping: {
@@ -634,7 +634,7 @@ QUnit.test("Show contextMenu for hidden adaptive columns", function(assert) {
         .eq(0)
         .trigger("dxcontextmenu");
 
-    const items = $(".dx-datagrid .dx-menu-item");
+    var items = $(".dx-datagrid .dx-menu-item");
     assert.equal(items.length, 5, "context menu is generated");
 
     items.eq(3).trigger("dxclick");
