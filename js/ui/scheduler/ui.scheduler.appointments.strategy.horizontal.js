@@ -23,6 +23,8 @@ var HorizontalRenderingStrategy = BaseAppointmentsStrategy.inherit({
             endDate = this._endDate(appointment, position),
             appointmentDuration = this._getAppointmentDurationInMs(startDate, endDate, allDay);
 
+        appointmentDuration = this._adjustDurationByDaylightDiff(appointmentDuration, startDate, endDate);
+
         var cellDuration = this.instance.getAppointmentDurationInMinutes() * toMs("minute"),
             durationInCells = appointmentDuration / cellDuration;
 
@@ -33,6 +35,16 @@ var HorizontalRenderingStrategy = BaseAppointmentsStrategy.inherit({
         }
 
         return width;
+    },
+
+    _adjustDurationByDaylightDiff: function(duration, startDate, endDate) {
+        var daylightDiff = this.instance.fire("getDaylightOffset", startDate, endDate);
+
+        if(daylightDiff < 0) {
+            duration += daylightDiff;
+        }
+
+        return duration;
     },
 
     getAppointmentGeometry: function(coordinates) {
