@@ -610,6 +610,41 @@ QUnit.test("Check grouping context menu operability", function(assert) {
     clock.restore();
 });
 
+QUnit.test("Show contextMenu for hidden adaptive columns", function(assert) {
+    var clock = sinon.useFakeTimers(),
+        dataGrid = $("#dataGrid").dxDataGrid({
+            loadingTimeout: undefined,
+            grouping: {
+                contextMenuEnabled: true
+            },
+            columnHidingEnabled: true,
+            width: 200,
+            dataSource: [
+                { field1: "1", field2: "2", field3: "3", field4: "4" },
+                { field1: "1", field2: "4", field3: "3", field4: "5" }
+            ]
+        }).dxDataGrid("instance");
+
+    $(".dx-datagrid .dx-datagrid-adaptive-more")
+        .eq(0)
+        .trigger("dxclick");
+
+    $(".dx-datagrid .dx-adaptive-detail-row")
+        .find(".dx-field-item-label-text")
+        .eq(0)
+        .trigger("dxcontextmenu");
+
+    var items = $(".dx-datagrid .dx-menu-item");
+    assert.equal(items.length, 5, "context menu is generated");
+
+    items.eq(3).trigger("dxclick");
+
+    assert.deepEqual(dataGrid.getController("data")._dataSource.group(), [{ selector: "field3", desc: false, isExpanded: true }], "datasource grouping is up to date");
+    assert.equal(dataGrid.columnOption("field3", "groupIndex"), 0, "Group by field3");
+
+    clock.restore();
+});
+
 // T315857
 QUnit.test("Editing should work with classes as data objects", function(assert) {
     // arrange

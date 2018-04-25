@@ -633,7 +633,7 @@ var columnHeadersViewExtender = (function() {
                 contextMenuEnabled = that.option("grouping.contextMenuEnabled"),
                 items = that.callBase(options);
 
-            if(contextMenuEnabled && options.row && options.row.rowType === "header") {
+            if(contextMenuEnabled && options.row && (options.row.rowType === "header" || options.row.rowType === "detailAdaptive")) {
                 var column = options.column;
 
                 if(!column.command && (!typeUtils.isDefined(column.allowGrouping) || column.allowGrouping)) {

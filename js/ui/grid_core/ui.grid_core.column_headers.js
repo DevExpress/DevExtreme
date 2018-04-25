@@ -428,7 +428,7 @@ module.exports = {
                         onItemClick,
                         sortingOptions;
 
-                    if(options.row && options.row.rowType === "header") {
+                    if(options.row && (options.row.rowType === "header" || options.row.rowType === "detailAdaptive")) {
                         sortingOptions = that.option("sorting");
 
                         if(sortingOptions && sortingOptions.mode !== "none" && column && column.allowSorting) {

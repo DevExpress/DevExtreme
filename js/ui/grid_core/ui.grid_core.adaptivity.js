@@ -727,6 +727,17 @@ module.exports = {
                     }
                 },
 
+                getContextMenuItems: function(options) {
+                    if(options.row && options.row.rowType === "detailAdaptive") {
+                        var view = this.component.getView("columnHeadersView"),
+                            formItem = $(options.targetElement).closest(".dx-field-item-label").next().data("dx-form-item");
+
+                        options.column = formItem ? formItem.column : options.column;
+                        return view.getContextMenuItems && view.getContextMenuItems(options);
+                    }
+                    return this.callBase(options);
+                },
+
                 isClickableElement: function($target) {
                     var isClickable = this.callBase ? this.callBase($target) : false;
 
