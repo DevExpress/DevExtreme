@@ -146,10 +146,10 @@
         "dxDataGrid-ariaSearchInGrid": "Sök i datarutnätet",
         "dxDataGrid-ariaSelectAll": "Välj allt",
         "dxDataGrid-ariaSelectRow": "Välj rad",
-        "dxDataGrid-filterBuilderPopupTitle": "!TODO",
-        "dxDataGrid-filterPanelCreateFilter": "!TODO",
-        "dxDataGrid-filterPanelClearFilter": "!TODO",
-        "dxDataGrid-filterPanelFilterEnabledHint": "!TODO",
+        "dxDataGrid-filterBuilderPopupTitle": "Filterverktyg",
+        "dxDataGrid-filterPanelCreateFilter": "Skapa filter",
+        "dxDataGrid-filterPanelClearFilter": "Rensa",
+        "dxDataGrid-filterPanelFilterEnabledHint": "Aktivera filter",
 
         "dxTreeList-ariaTreeList": "Trädlista",
         "dxTreeList-editingAddRowToNode": "Lägg till",
@@ -264,7 +264,7 @@
         "dxFilterBuilder-filterOperationEndsWith": "Slutar med",
         "dxFilterBuilder-filterOperationIsBlank": "Är tom",
         "dxFilterBuilder-filterOperationIsNotBlank": "Är inte tom",
-        "dxFilterBuilder-filterOperationAnyOf": "!TODO",
-        "dxFilterBuilder-filterOperationNoneOf": "!TODO"
+        "dxFilterBuilder-filterOperationAnyOf": "Någon av",
+        "dxFilterBuilder-filterOperationNoneOf": "Ingen av"
     }
 }
