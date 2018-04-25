@@ -15,6 +15,7 @@ var $ = require("../../core/renderer"),
     Scrollable = require("../scroll_view/ui.scrollable"),
     removeEvent = require("../../core/remove_event"),
     messageLocalization = require("../../localization/message"),
+    browser = require("../../core/utils/browser"),
     isDefined = typeUtils.isDefined;
 
 var ROWS_VIEW_CLASS = "rowsview",
@@ -958,6 +959,10 @@ module.exports = {
                     });
                 },
 
+                _getDevicePixelRatio: function() {
+                    return window.devicePixelRatio;
+                },
+
                 renderNoDataText: gridCoreUtils.renderNoDataText,
 
                 getCellOptions: function(rowIndex, columnIdentifier) {
@@ -1036,7 +1041,8 @@ module.exports = {
                                         rowsHeight = that._getRowsHeight(contentElement.children().first()),
                                         $tableElement = $table || that.getTableElements(),
                                         borderTopWidth = Math.ceil(parseFloat($tableElement.css("borderTopWidth"))),
-                                        resultHeight = elementHeightWithoutScrollbar - rowsHeight - borderTopWidth;
+                                        heightCorrection = browser.webkit && that._getDevicePixelRatio() >= 2 ? 1 : 0, // T606935
+                                        resultHeight = elementHeightWithoutScrollbar - rowsHeight - borderTopWidth - heightCorrection;
 
                                     if(showFreeSpaceRow) {
                                         commonUtils.deferRender(function() {
