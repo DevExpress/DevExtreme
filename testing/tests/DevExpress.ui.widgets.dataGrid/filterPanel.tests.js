@@ -187,10 +187,10 @@ QUnit.module("Filter Panel", {
         });
 
         // act
-        var result = this.filterPanelView.getFilterText(filter, []);
-
-        // assert
-        assert.deepEqual(result, "[Field] Equals '1'");
+        assert.expect(1);
+        this.filterPanelView.getFilterText(filter, []).done(function(result) {
+            assert.deepEqual(result, "[Field] Equals '1'");
+        });
     });
 
     QUnit.test("from custom operation", function(assert) {
@@ -201,79 +201,121 @@ QUnit.module("Filter Panel", {
         });
 
         // act
-        var result = this.filterPanelView.getFilterText(filter, [{ name: "anyof", caption: "Any of" }]);
+        assert.expect(1);
+        this.filterPanelView.getFilterText(filter, [{ name: "anyof", caption: "Any of" }]).done(function(result) {
+            assert.deepEqual(result, "[Field] Any of('1', '2')");
+        });
+    });
+
+    QUnit.test("from custom operation with value = array", function(assert) {
+        // arrange
+        var filter = [
+            ["field", "anyof", [200]]
+        ];
+        this.initFilterPanelView({
+            filterValue: filter,
+            columns: [{ dataField: "field", dataType: "number" }]
+        });
+
+        // act
+        assert.expect(1);
+        this.filterPanelView.getFilterText(filter, [{
+            name: "anyof",
+            caption: "Any of",
+            customizeText: function(fieldInfo) { return "CustomText"; }
+        }]).done(function(result) {
+            // assert
+            assert.deepEqual(result, "[Field] Any of(CustomText)");
+        });
+    });
+
+    QUnit.test("from custom operation with async customizeText", function(assert) {
+        // arrange
+        var deferred = $.Deferred(),
+            filter = [
+                ["field", "customOperation", [200]]
+            ];
+        this.initFilterPanelView({
+            filterValue: filter,
+            filterBuilder: {
+                groupOperationDescriptions: { and: "And" },
+                customOperations: [{
+                    name: "customOperation",
+                    caption: "Custom",
+                    calculateFilterExpression: function() { return null; },
+                    customizeText: function(fieldInfo) {
+                        return deferred.promise();
+                    }
+                }]
+            }
+        });
 
         // assert
-        assert.deepEqual(result, "[Field] Any of('1', '2')");
+        assert.equal(this.filterPanelView.element().find("." + FILTER_PANEL_TEXT_CLASS).text(), "");
+        deferred.resolve(["Two hundred"]);
+        assert.equal(this.filterPanelView.element().find("." + FILTER_PANEL_TEXT_CLASS).text(), "[Field] Custom(Two hundred)");
     });
 
     QUnit.test("from between", function(assert) {
-        // arrange
         var filter = ["field", "between", [1, 2]];
         this.initFilterPanelView({
             filterValue: filter
         });
 
-        // act
-        var result = this.filterPanelView.getFilterText(filter, []);
-
-        // assert
-        assert.deepEqual(result, "[Field] Between('1', '2')");
+        assert.expect(1);
+        this.filterPanelView.getFilterText(filter, []).done(function(result) {
+            assert.equal(result, "[Field] Between('1', '2')");
+        });
     });
 
     QUnit.test("from isBlank / isNotBlank", function(assert) {
-        // arrange
         var filter = [["field", "=", null], "and", ["field", "<>", null]];
 
         this.initFilterPanelView({
             filterValue: filter
         });
 
-        // act, assert
-        assert.deepEqual(this.filterPanelView.getFilterText(filter, [], []), "[Field] Is Blank And [Field] Is Not Blank");
+        assert.expect(1);
+        this.filterPanelView.getFilterText(filter, []).done(function(result) {
+            assert.equal(result, "[Field] Is Blank And [Field] Is Not Blank");
+        });
     });
 
     QUnit.test("from group", function(assert) {
-        // arrange
         var filter = [["field", "=", "1"], "and", ["field", "=", "2"]];
         this.initFilterPanelView({
             filterValue: filter
         });
 
-        // act
-        var result = this.filterPanelView.getFilterText(filter, []);
-
-        // assert
-        assert.deepEqual(result, "[Field] Equals '1' And [Field] Equals '2'");
+        assert.expect(1);
+        this.filterPanelView.getFilterText(filter, []).done(function(result) {
+            assert.equal(result, "[Field] Equals '1' And [Field] Equals '2'");
+        });
     });
 
     QUnit.test("from group with inner group", function(assert) {
-        // arrange
         var filter = [["field", "=", "1"], "and", ["field", "=", "2"], "and", [["field", "=", "3"], "or", ["field", "=", "4"]]];
         this.initFilterPanelView({
             filterValue: filter
         });
 
-        // act
-        var result = this.filterPanelView.getFilterText(filter, []);
-
-        // assert
-        assert.deepEqual(result, "[Field] Equals '1' And [Field] Equals '2' And ([Field] Equals '3' Or [Field] Equals '4')");
+        assert.expect(1);
+        this.filterPanelView.getFilterText(filter, []).done(function(result) {
+            assert.equal(result, "[Field] Equals '1' And [Field] Equals '2' And ([Field] Equals '3' Or [Field] Equals '4')");
+        });
     });
 
     QUnit.test("from group with inner group with Not", function(assert) {
-        // arrange
         var filter = ["!", [["field", "=", "1"], "and", ["field", "=", "2"]]];
 
         this.initFilterPanelView({
             filterValue: filter
         });
 
-        // act
-        var result = this.filterPanelView.getFilterText(filter, []);
-
-        // assert
-        assert.deepEqual(result, "Not ([Field] Equals '1' And [Field] Equals '2')");
+        assert.expect(1);
+        this.filterPanelView.getFilterText(filter, []).done(function(result) {
+            assert.deepEqual(result, "Not ([Field] Equals '1' And [Field] Equals '2')");
+        });
     });
 
     QUnit.test("filterBuilder customOperation", function(assert) {

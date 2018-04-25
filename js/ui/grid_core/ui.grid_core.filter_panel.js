@@ -9,6 +9,9 @@ var $ = require("../../core/renderer"),
     messageLocalization = require("../../localization/message"),
     CheckBox = require("../check_box"),
     utils = require("../filter_builder/utils"),
+    deferredUtils = require("../../core/utils/deferred"),
+    when = deferredUtils.when,
+    Deferred = deferredUtils.Deferred,
     inflector = require("../../core/utils/inflector");
 
 var FILTER_PANEL_CLASS = "filter-panel",
@@ -77,25 +80,27 @@ var FilterPanelView = modules.View.inherit({
             filterText,
             filterValue = that.option("filterValue");
         if(filterValue) {
-            filterText = that.getFilterText(filterValue, that.getController("filterSync").getCustomFilterOperations());
-            var customizeText = that.option("filterPanel.customizeText");
-            if(customizeText) {
-                var customText = customizeText({
-                    component: that.component,
-                    filterValue: filterValue,
-                    text: filterText
-                });
-                if(typeof customText === "string") {
-                    filterText = customText;
+            when(that.getFilterText(filterValue, that.getController("filterSync").getCustomFilterOperations())).done(function(filterText) {
+                var customizeText = that.option("filterPanel.customizeText");
+                if(customizeText) {
+                    var customText = customizeText({
+                        component: that.component,
+                        filterValue: filterValue,
+                        text: filterText
+                    });
+                    if(typeof customText === "string") {
+                        filterText = customText;
+                    }
                 }
-            }
+                $textElement.text(filterText);
+            });
         } else {
             filterText = that.option("filterPanel.texts.createFilter");
+            $textElement.text(filterText);
         }
         eventsEngine.on($textElement, "click", function() {
             that.option("filterBuilderPopup.visible", true);
         });
-        $textElement.text(filterText);
         return $textElement;
     },
 
@@ -126,14 +131,23 @@ var FilterPanelView = modules.View.inherit({
         }
     },
 
+    _getConditionText: function(fieldText, operationText, value, text) {
+        var result = `[${fieldText}] ${operationText}`;
+        if(isDefined(value)) {
+            result += Array.isArray(value) ? `(${text})` : ` '${text}'`;
+        }
+        return result;
+    },
+
     getConditionText: function(filterValue, options) {
-        var operation = filterValue[1],
+        var that = this,
+            operation = filterValue[1],
+            result = new Deferred(),
             customOperation = utils.getCustomOperation(options.customOperations, operation),
             operationText,
             field = utils.getField(filterValue[0], options.columns),
             fieldText = field.caption,
-            value = filterValue[2],
-            valueText = "";
+            value = filterValue[2];
 
         if(customOperation) {
             operationText = customOperation.caption || inflector.captionize(customOperation.name);
@@ -143,35 +157,51 @@ var FilterPanelView = modules.View.inherit({
             operationText = utils.getCaptionByOperation(operation, options.filterOperationDescriptions);
         }
 
-        if(Array.isArray(value)) {
-            valueText = `('${value.join("', '")}')`;
+        if(customOperation && customOperation.customizeText) {
+            when(utils.getCurrentValueText(field, value, customOperation)).done(function(text) {
+                result.resolve(that._getConditionText(fieldText, operationText, value, text));
+            });
+        } else if(Array.isArray(value)) {
+            result.resolve(that._getConditionText(fieldText, operationText, value, `'${value.join("', '")}'`));
         } else if(isDefined(value)) {
-            var displayValue = gridUtils.getDisplayValue(field, value);
-            valueText = ` '${(utils.getCurrentValueText)(field, displayValue, customOperation)}'`;
+            let displayValue = gridUtils.getDisplayValue(field, value);
+            when(utils.getCurrentValueText(field, displayValue, customOperation)).done(function(text) {
+                result.resolve(that._getConditionText(fieldText, operationText, value, text));
+            });
+        } else {
+            result.resolve(that._getConditionText(fieldText, operationText));
         }
-
-        return `[${fieldText}] ${operationText}${valueText}`;
+        return result;
     },
 
-    getGroupText: function(filterValue, options) {
+    getGroupText: function(filterValue, options, isInnerGroup) {
         var that = this,
-            result = [],
+            result = new Deferred(),
+            textParts = [],
             groupValue = utils.getGroupValue(filterValue);
 
         filterValue.forEach(function(item) {
             if(utils.isCondition(item)) {
-                result.push(that.getConditionText(item, options));
+                textParts.push(that.getConditionText(item, options));
             } else if(utils.isGroup(item)) {
-                result.push(`(${that.getGroupText(item, options)})`);
+                textParts.push(that.getGroupText(item, options, true));
             }
         });
 
-        if(groupValue[0] === "!") {
-            var groupText = options.groupOperationDescriptions["not" + groupValue.substring(1, 2).toUpperCase() + groupValue.substring(2)].split(" ");
-            return `${groupText[0]} ${result}`;
-        }
-
-        return result.join(` ${options.groupOperationDescriptions[groupValue]} `);
+        when.apply(this, textParts).done(function() {
+            let text;
+            if(groupValue[0] === "!") {
+                var groupText = options.groupOperationDescriptions["not" + groupValue.substring(1, 2).toUpperCase() + groupValue.substring(2)].split(" ");
+                text = `${groupText[0]} ${arguments[0]}`;
+            } else {
+                text = Array.from(arguments).join(` ${options.groupOperationDescriptions[groupValue]} `);
+            }
+            if(isInnerGroup) {
+                text = `(${text})`;
+            }
+            result.resolve(text);
+        });
+        return result;
     },
 
     getFilterText: function(filterValue, customOperations) {
