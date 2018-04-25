@@ -1451,6 +1451,7 @@ extend(RectSvgElement.prototype, {
 // TextSvgElement
 function TextSvgElement(renderer) {
     SvgElement.call(this, renderer, "text");
+    this.css({ "white-space": "pre" });
 }
 exports.TextSvgElement = TextSvgElement;
 
