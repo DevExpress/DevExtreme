@@ -223,7 +223,25 @@ var LoadPanel = Overlay.inherit({
                     * @type number
                     * @default 60 @for Material
                     */
-                    height: 60
+                    height: 60,
+
+                    /**
+                    * @name dxLoadPanelOptions_maxHeight
+                    * @publicName maxHeight
+                    * @type number
+                    * @inheritdoc
+                    * @default 60 @for Material
+                    */
+                    maxHeight: 60,
+
+                    /**
+                    * @name dxLoadPanelOptions_maxWidth
+                    * @publicName maxHeight
+                    * @type number
+                    * @inheritdoc
+                    * @default 60 @for Material
+                    */
+                    maxWidth: 60
                 }
             }
         ]);
