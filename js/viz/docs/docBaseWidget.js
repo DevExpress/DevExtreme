@@ -201,7 +201,7 @@ var BaseWidget = {
     * @publicName theme
     * @type string
     * @default 'generic.light'
-    * @acceptValues 'generic.light'|'generic.dark'|'generic.contrast'|'generic.carmine'|'generic.darkmoon'|'generic.softblue'|'generic.darkviolet'|'generic.greenmist'|'android5.light'|'ios7.default'
+    * @acceptValues 'generic.light'|'generic.dark'|'generic.contrast'|'generic.carmine'|'generic.darkmoon'|'generic.softblue'|'generic.darkviolet'|'generic.greenmist'|'android5.light'|'ios7.default'|'material.blue.light'|'material.lime.light'|'material.orange.light'|'material.purple.light'|'material.teal.light'
     * @deprecatedAcceptValues 'win8.black'|'win8.white'|'win10.black'|'win10.white'
     */
     theme: 'generic.light',
