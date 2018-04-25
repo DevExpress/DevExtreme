@@ -20,6 +20,8 @@ var FILTER_PANEL_CLASS = "filter-panel",
     FILTER_PANEL_CLEAR_FILTER_CLASS = FILTER_PANEL_CLASS + "-clear-filter",
     FILTER_PANEL_LEFT_CONTAINER = FILTER_PANEL_CLASS + "-left";
 
+var FILTER_PANEL_TARGET = "filterPanel";
+
 var FilterPanelView = modules.View.inherit({
     _renderCore: function() {
         if(this.option("filterPanel.visible")) {
@@ -158,14 +160,14 @@ var FilterPanelView = modules.View.inherit({
         }
 
         if(customOperation && customOperation.customizeText) {
-            when(utils.getCurrentValueText(field, value, customOperation)).done(function(text) {
+            when(utils.getCurrentValueText(field, value, customOperation, FILTER_PANEL_TARGET)).done(function(text) {
                 result.resolve(that._getConditionText(fieldText, operationText, value, text));
             });
         } else if(Array.isArray(value)) {
             result.resolve(that._getConditionText(fieldText, operationText, value, `'${value.join("', '")}'`));
         } else if(isDefined(value)) {
             let displayValue = gridUtils.getDisplayValue(field, value);
-            when(utils.getCurrentValueText(field, displayValue, customOperation)).done(function(text) {
+            when(utils.getCurrentValueText(field, displayValue, customOperation, FILTER_PANEL_TARGET)).done(function(text) {
                 result.resolve(that._getConditionText(fieldText, operationText, value, text));
             });
         } else {

@@ -467,7 +467,7 @@ function getCurrentLookupValueText(field, value, handler) {
     });
 }
 
-function getCurrentValueText(field, value, customOperation) {
+function getCurrentValueText(field, value, customOperation, target = "filterBuilder") {
     var valueText;
     if(value === true) {
         valueText = field.trueText || messageLocalization.format("dxDataGrid-trueText");
@@ -480,13 +480,14 @@ function getCurrentValueText(field, value, customOperation) {
         valueText = customOperation.customizeText.call(customOperation, {
             value: value,
             valueText: valueText,
-            field: field
+            field: field,
+            target: target
         });
     } else if(field.customizeText) {
         valueText = field.customizeText.call(field, {
             value: value,
             valueText: valueText,
-            target: "filterBuilder"
+            target: target
         });
     }
     return valueText;

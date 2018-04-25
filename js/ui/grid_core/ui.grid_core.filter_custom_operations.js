@@ -43,8 +43,10 @@ function baseOperation(grid) {
     };
 
     var headerFilterController = grid && grid.getController("headerFilter"),
-        formatCustomizeTextResult = function(texts) {
-            return texts.length > 0 ? `'${texts.join("', '")}'` : "";
+        formatCustomizeTextResult = function(texts, target) {
+            return texts.length > 0
+                ? target === "filterPanel" ? `'${texts.join("', '")}'` : texts.join(", ")
+                : "";
         },
         customizeText = function(fieldInfo) {
             var values = fieldInfo.value || [],
@@ -61,7 +63,7 @@ function baseOperation(grid) {
 
                 dataSource.load().done(function(items) {
                     texts = getSelectedItemsTexts(items);
-                    result.resolve(formatCustomizeTextResult(texts));
+                    result.resolve(formatCustomizeTextResult(texts, fieldInfo.target));
                 });
                 return result;
             } else {
@@ -70,7 +72,7 @@ function baseOperation(grid) {
                     return text;
                 });
 
-                return formatCustomizeTextResult(texts);
+                return formatCustomizeTextResult(texts, fieldInfo.target);
             }
         };
     return {

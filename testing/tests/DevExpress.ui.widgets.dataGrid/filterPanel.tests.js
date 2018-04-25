@@ -203,7 +203,7 @@ QUnit.module("Filter Panel", {
         // act
         assert.expect(1);
         this.filterPanelView.getFilterText(filter, [{ name: "anyof", caption: "Any of" }]).done(function(result) {
-            assert.deepEqual(result, "[Field] Any of('1', '2')");
+            assert.equal(result, "[Field] Any of('1', '2')");
         });
     });
 
@@ -225,7 +225,7 @@ QUnit.module("Filter Panel", {
             customizeText: function(fieldInfo) { return "CustomText"; }
         }]).done(function(result) {
             // assert
-            assert.deepEqual(result, "[Field] Any of(CustomText)");
+            assert.equal(result, "[Field] Any of(CustomText)");
         });
     });
 
@@ -254,6 +254,26 @@ QUnit.module("Filter Panel", {
         assert.equal(this.filterPanelView.element().find("." + FILTER_PANEL_TEXT_CLASS).text(), "");
         deferred.resolve(["Two hundred"]);
         assert.equal(this.filterPanelView.element().find("." + FILTER_PANEL_TEXT_CLASS).text(), "[Field] Custom(Two hundred)");
+    });
+
+    QUnit.test("custom operation target = 'filterPanel'", function(assert) {
+        // arrange
+        var filter = ["field", "customOperation", 2];
+        this.initFilterPanelView();
+
+        // act
+        assert.expect(2);
+        this.filterPanelView.getFilterText(filter, [{
+            name: "customOperation",
+            caption: "Custom",
+            calculateFilterExpression: function() { return null; },
+            customizeText: function(fieldInfo) {
+                assert.equal(fieldInfo.target, "filterPanel");
+                return "two";
+            }
+        }]).done(function(result) {
+            assert.equal(result, "[Field] Custom 'two'");
+        });
     });
 
     QUnit.test("from between", function(assert) {
