@@ -6524,7 +6524,7 @@ QUnit.test("Get width of horizontal scrollbar when both scrollbars are shown", f
 // T606944
 QUnit.test("The vertical scrollbar should not be shown when there is a horizontal scrollbar", function(assert) {
     // arrange
-    var rows = [{ field1: "test1", field2: "test2", field3: "test3", field4: "test4" }],
+    var rows = [{ values: ["test1", "test2", "test3", "test4"] }],
         columns = [{ dataField: "field1", width: 300 }, { dataField: "field2", width: 300 }, { dataField: "field3", width: 300 }, { dataField: "field4", width: 300 } ],
         rowsView = this.createRowsView(rows, null, columns, null, { scrolling: { useNative: true } }),
         $testElement = $('#container').width(600);
@@ -6537,6 +6537,30 @@ QUnit.test("The vertical scrollbar should not be shown when there is a horizonta
     // assert
     assert.strictEqual(rowsView.getScrollbarWidth(), 0, "There is no vertical scrollbar");
 });
+
+if(browser.webkit) {
+    // T606935
+    QUnit.test("The vertical scrollbar should not be shown on 200 dpi screens", function(assert) {
+        // arrange
+        var rows = [{ values: ["test1", "test2", "test3", "test4"], rowType: "data" }],
+            columns = ["field1", "field2", "field3", "field4"],
+            rowsView = this.createRowsView(rows, null, columns, null, { scrolling: { useNative: true } }),
+            $testElement = $('#container').css("zoom", 2);
+
+        $testElement.parent().wrap($("<div/>").addClass("dx-widget"));
+        rowsView._getDevicePixelRatio = function() {
+            return 2;
+        };
+
+        // act
+        rowsView.render($testElement);
+        rowsView.height(700);
+        rowsView.resize();
+
+        // assert
+        assert.strictEqual(rowsView.getScrollbarWidth(), 0, "There is no vertical scrollbar");
+    });
+}
 
 QUnit.module('No data text', {
     beforeEach: function() {
