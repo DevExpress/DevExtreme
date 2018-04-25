@@ -213,6 +213,10 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
         return height;
     },
 
+    getDirection: function() {
+        return "vertical";
+    },
+
     _sortCondition: function(a, b) {
         var allDayCondition = a.allDay - b.allDay,
             result = allDayCondition ? allDayCondition : this._rowCondition(a, b);

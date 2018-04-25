@@ -38,6 +38,14 @@ var BaseRenderingStrategy = Class.inherit({
         return coordinates;
     },
 
+    needCorrectAppointmentDates: function() {
+        return true;
+    },
+
+    getDirection: function() {
+        return "horizontal";
+    },
+
     createTaskPositionMap: function(items) {
         delete this._maxAppointmentCountPerCell;
 
