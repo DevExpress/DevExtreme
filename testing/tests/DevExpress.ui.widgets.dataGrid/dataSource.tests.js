@@ -2518,6 +2518,11 @@ function createDataSourceWithRemoteGrouping(options, remoteGroupPaging, brokeOpt
             };
 
             options.executeAsync(function() {
+                if(brokeOptions.errorOnFirstLoad) {
+                    brokeOptions.errorOnFirstLoad = false;
+                    d.reject("Error");
+                    return;
+                }
                 arrayStore.load(loadOptions).done(function(data) {
                     var groupCount = gridCore.normalizeSortingInfo(loadOptions.group).length;
 
@@ -3178,6 +3183,35 @@ QUnit.test("Reload dataSource when one expanded group and two group levels exist
     assert.strictEqual(loadingChanged.getCall(3).args[0].requireGroupCount, true, "require group count should not be passed on second loading");
     assert.strictEqual(loadingChanged.getCall(3).args[0].skip, 0, "skip for second level");
     assert.strictEqual(loadingChanged.getCall(3).args[0].take, 2, "take for second level");
+});
+
+QUnit.test("Error on change grouping when one expanded group and two group levels exist", function(assert) {
+    var brokeOptions = {},
+        dataSource = this.createDataSource({
+            group: ["field1"],
+            pageSize: 3
+        }, brokeOptions),
+        changed = sinon.stub(),
+        loadError = sinon.stub();
+
+    dataSource.load();
+
+    dataSource.changeRowExpand([1]);
+    dataSource.load();
+
+    dataSource.changed.add(changed);
+    dataSource.loadError.add(loadError);
+
+    // act
+    brokeOptions.errorOnFirstLoad = true;
+    dataSource.group(["field1", "field2"]);
+    dataSource.load();
+
+    // assert
+    assert.strictEqual(changed.callCount, 1, "changed call count");
+    assert.strictEqual(loadError.callCount, 1, "last error call count");
+    assert.strictEqual(changed.lastCall.args[0].changeType, "loadError", "last change is error");
+    assert.strictEqual(loadError.lastCall.args[0].message, "Error", "last error message");
 });
 
 // T477410
