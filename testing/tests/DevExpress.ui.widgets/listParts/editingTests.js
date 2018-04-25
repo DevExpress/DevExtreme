@@ -522,7 +522,7 @@ QUnit.test("selectedItems should not be cleaned after reordering if store key sp
     assert.equal(listInstance.option("selectedItems")[0], items[0], "first item is selected");
 });
 
-QUnit.test("selectedItems should not be cleaned after reordering if store key specified", function(assert) {
+QUnit.test("reorderItem method should return a Promise", function(assert) {
     var listInstance = $("#list").dxList({
         dataSource: [1, 2, 3]
     }).dxList("instance");
