@@ -1106,6 +1106,24 @@ testComponentDefaults(LoadIndicator,
 testComponentDefaults(LoadPanel,
     {},
     {
+        width: 60,
+        height: 60,
+        maxWidth: 60,
+        maxHeight: 60,
+        message: ""
+    },
+    function() {
+        this.originalCurrentTheme = themes.current();
+        themes.current("material.blue.light");
+    },
+    function() {
+        themes.current(this.originalCurrentTheme);
+    }
+);
+
+testComponentDefaults(LoadPanel,
+    {},
+    {
         focusStateEnabled: false
     }
 );
