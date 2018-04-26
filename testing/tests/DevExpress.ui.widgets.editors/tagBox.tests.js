@@ -714,6 +714,19 @@ QUnit.test("tagBox should display multiple tags after value was changed", functi
     assert.deepEqual(this.getTexts($tag), ["1", "2"], "tags have correct text");
 });
 
+QUnit.test("multi tag should work with data expressions", function(assert) {
+    var $tagBox = $("#tagBox").dxTagBox({
+        items: [{ id: 1, name: "item 1" }, { id: 2, name: "item 2" }, { id: 3, name: "item 3" }],
+        value: [1, 2, 3],
+        displayExpr: "name",
+        valueExpr: "id",
+        maxDisplayedTags: 2
+    });
+
+    var $tag = $tagBox.find("." + TAGBOX_TAG_CLASS);
+    assert.deepEqual(this.getTexts($tag), ["3 selected"], "multi tag works");
+});
+
 QUnit.test("tagBox should deselect all items after multi tag removed", function(assert) {
     var $tagBox = $("#tagBox").dxTagBox({
             items: [1, 2, 3, 4],
