@@ -60,6 +60,7 @@ QUnit.test("getFormat", function(assert) {
         }
     });
     checkFormat("yyyy 'm'. MMMM d");
+    checkFormat("MMM dd, yyyy [h:mm aaa]");
 });
 
 
