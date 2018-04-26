@@ -916,7 +916,6 @@ QUnit.test("'no parser' errors", function(assert) {
         localization.parseNumber("01");
         localization.parseDate("01");
 
-
         assert.equal(warnLog.length, 5);
 
         assert.equal(warnLog[0].substr(warningIdPrefixLength, numberWarning.length), numberWarning);
