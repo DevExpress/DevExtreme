@@ -6,7 +6,8 @@ var $ = require("jquery"),
     fx = require("animation/fx"),
     pointerMock = require("../../../helpers/pointerMock.js"),
     dragEvents = require("events/drag"),
-    DataSource = require("data/data_source/data_source").DataSource;
+    DataSource = require("data/data_source/data_source").DataSource,
+    subscribes = require("ui/scheduler/ui.scheduler.subscribes");
 
 require("ui/scheduler/ui.scheduler");
 
@@ -1028,4 +1029,60 @@ QUnit.test("Reduced reccuring appt should have right left position in first colu
 
     assert.roughEqual($reducedAppointment.eq(1).position().left, cellWidth * 7, 1.001, "first appt in 2d group has right left position");
     assert.notOk($appointment.eq(7).hasClass(compactClass), "appt isn't compact");
+});
+
+QUnit.test("Recurrence exception should be adjusted by scheduler timezone", function(assert) {
+    var tzOffsetStub = sinon.stub(subscribes, "getClientTimezoneOffset").returns(-39600000);
+    try {
+        this.createInstance({
+            dataSource: [{
+                text: "a",
+                startDate: new Date(2018, 2, 26, 10),
+                endDate: new Date(2018, 2, 26, 11),
+                recurrenceRule: "FREQ=DAILY",
+                recurrenceException: "20180327T100000, 20180330T100000"
+            }],
+            views: ["month"],
+            currentView: "month",
+            currentDate: new Date(2018, 2, 30),
+            timeZone: "Australia/Sydney",
+            height: 600
+        });
+
+        var $appointments = this.instance.element().find(".dx-scheduler-appointment");
+
+        assert.equal($appointments.length, 11, "correct number of the appointments");
+    } finally {
+        tzOffsetStub.restore();
+    }
+});
+
+QUnit.test("Recurrence exception should not be rendered if exception goes after DS adjusting", function(assert) {
+    var tzOffsetStub = sinon.stub(subscribes, "getClientTimezoneOffset").returns(-39600000);
+    try {
+        this.createInstance({
+            dataSource: [{
+                text: "Recruiting students",
+                startDate: new Date(2018, 2, 30, 10, 0),
+                endDate: new Date(2018, 2, 30, 11, 0),
+                recurrenceRule: "FREQ=DAILY",
+                recurrenceException: "20180401T100000"
+            }],
+            views: ["month"],
+            currentView: "month",
+            currentDate: new Date(2018, 2, 30),
+            timeZone: "Australia/Sydney",
+            height: 600
+        });
+
+        var $appointments = this.instance.element().find(".dx-scheduler-appointment");
+
+        assert.equal($appointments.length, 8, "correct number of the events");
+
+        this.instance.option("currentView", "day");
+        this.instance.option("currentDate", new Date(2018, 3, 1));
+        assert.notOk(this.instance.element().find(".dx-scheduler-appointment").length, "event is an exception");
+    } finally {
+        tzOffsetStub.restore();
+    }
 });

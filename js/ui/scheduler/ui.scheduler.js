@@ -15,7 +15,6 @@ var $ = require("../../core/renderer"),
     config = require("../../core/config"),
     registerComponent = require("../../core/component_registrator"),
     messageLocalization = require("../../localization/message"),
-    dateSerialization = require("../../core/utils/date_serialization"),
     Widget = require("../widget/ui.widget"),
     subscribes = require("./ui.scheduler.subscribes"),
     FunctionTemplate = require("../widget/function_template"),
@@ -2140,7 +2139,7 @@ var Scheduler = Widget.inherit({
             this.addAppointment(singleAppointment);
         }
 
-        var recurrenceException = this._getRecurrenceException(exceptionDate, targetAppointment),
+        var recurrenceException = this._makeDateAsRecurrenceException(exceptionDate, targetAppointment),
             updatedAppointment = extend({}, targetAppointment, { recurrenceException: recurrenceException });
 
         if(isPopupEditing) {
@@ -2156,7 +2155,7 @@ var Scheduler = Widget.inherit({
         }
     },
 
-    _getRecurrenceException: function(exceptionDate, targetAppointment) {
+    _makeDateAsRecurrenceException: function(exceptionDate, targetAppointment) {
         var startDate = this._getStartDate(targetAppointment, true),
             exceptionByDate = this._getRecurrenceExceptionDate(exceptionDate, startDate),
             recurrenceException = this.fire("getField", "recurrenceException", targetAppointment);
@@ -2479,6 +2478,28 @@ var Scheduler = Widget.inherit({
             });
         }
         return endDate;
+    },
+
+    _getRecurrenceException: function(appointmentData) {
+        var recurrenceException = this.fire("getField", "recurrenceException", appointmentData);
+
+        if(recurrenceException) {
+            var startDate = this.fire("getField", "startDate", appointmentData),
+                exceptions = recurrenceException.split(","),
+                startDateTimeZone = this.fire("getField", "startDateTimeZone", appointmentData),
+                exceptionByStartDate = this.fire("convertDateByTimezone", startDate, startDateTimeZone);
+
+            exceptions.forEach(function(item, i) {
+                exceptions[i] = item.replace(/\s/g, "");
+                exceptions[i] = dateSerialization.deserializeDate(exceptions[i]);
+                exceptions[i].setHours(exceptionByStartDate.getHours());
+                exceptions[i] = dateSerialization.serializeDate(exceptions[i], "yyyyMMddTHHmmss");
+            });
+
+            recurrenceException = exceptions.join();
+        }
+
+        return recurrenceException;
     },
 
     recurrenceEditorVisibilityChanged: function(visible) {
