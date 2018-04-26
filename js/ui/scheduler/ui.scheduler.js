@@ -2669,7 +2669,7 @@ var Scheduler = Widget.inherit({
                 exceptions[i] = dateSerialization.serializeDate(exceptions[i], "yyyyMMddTHHmmss");
             });
 
-            recurrenceException = exceptions.join(exceptions);
+            recurrenceException = exceptions.join();
         }
 
         return recurrenceException;
