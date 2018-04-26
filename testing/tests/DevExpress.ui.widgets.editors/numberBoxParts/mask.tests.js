@@ -1107,6 +1107,24 @@ QUnit.test("removing a stub should be prevented when it leads to revert sign", f
     assert.equal(this.input.val(), "0.00 kg", "value has been reverted");
 });
 
+QUnit.test("change event should be fired after stub removed and sign reverted", function(assert) {
+    var changeHandler = sinon.spy();
+
+    this.instance.option({
+        format: "#0.00 kg",
+        value: -5,
+        onChange: changeHandler
+    });
+
+    this.keyboard.caret(5).press("del").press("enter");
+    assert.equal(changeHandler.callCount, 1, "change event has been fired after enter pressed");
+
+    this.instance.option("value", -5);
+    this.keyboard.caret(5).press("backspace").press("enter");
+    assert.equal(changeHandler.callCount, 1, "change event has not been fired if value is not changed");
+});
+
+
 QUnit.module("format: caret boundaries", moduleConfig);
 
 QUnit.test("right arrow limitation", function(assert) {
