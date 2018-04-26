@@ -99,10 +99,6 @@ var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
         }
     },
 
-    _toggleHorizontalScrollClass: function() {
-        this.$element().toggleClass("dx-scheduler-work-space-both-scrollbar", this.option("crossScrollingEnabled") || this._isVerticalGroupedWorkSpace());
-    },
-
     _needRecalculateTableSizes: function() {
         return this.option("crossScrollingEnabled") || this._isVerticalGroupedWorkSpace();
     },
