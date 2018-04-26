@@ -1436,7 +1436,7 @@ function propname(key, obj) {
  *  @param {function} [pluralFunc] - Optional custom pluralization function
  *  @param {function[]} [formatters] - Optional custom formatting functions  */
 function MessageFormat(locale, pluralFunc, formatters) {
-  this.lc = [locale];  
+  this.lc = [locale];
   this.runtime.pluralFuncs = {};
   this.runtime.pluralFuncs[this.lc[0]] = pluralFunc;
   this.runtime.fmt = {};
