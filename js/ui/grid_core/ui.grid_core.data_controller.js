@@ -405,7 +405,6 @@ module.exports = {
                     var that = this,
                         dataSource = that._dataSource,
                         columnsController = that._columnsController,
-                        isAllDataTypesDefined = columnsController.isAllDataTypesDefined(),
                         isAsyncDataSourceApplying = false;
 
                     if(dataSource && !that._isDataSourceApplying) {
@@ -427,7 +426,7 @@ module.exports = {
 
                             that._needApplyFilter = false;
 
-                            if(needApplyFilter && additionalFilter && additionalFilter.length && !isAllDataTypesDefined) {
+                            if(needApplyFilter && additionalFilter && additionalFilter.length && !that._isAllDataTypesDefined) {
                                 errors.log("W1005", that.component.NAME);
                                 that._applyFilter();
                             } else {
@@ -442,6 +441,7 @@ module.exports = {
                         }
 
                         that._needApplyFilter = !that._columnsController.isDataSourceApplied();
+                        that._isAllDataTypesDefined = columnsController.isAllDataTypesDefined();
                     }
                 },
                 _handleLoadingChanged: function(isLoading) {
@@ -857,6 +857,7 @@ module.exports = {
                         that._fireDataSourceChanged();
                         that._isLoading = !dataSource.isLoaded();
                         that._needApplyFilter = true;
+                        that._isAllDataTypesDefined = that._columnsController.isAllDataTypesDefined();
                         dataSource.changed.add(that._dataChangedHandler);
                         dataSource.loadingChanged.add(that._loadingChangedHandler);
                         dataSource.loadError.add(that._loadErrorHandler);
