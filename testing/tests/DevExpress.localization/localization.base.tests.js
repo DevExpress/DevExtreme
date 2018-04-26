@@ -900,13 +900,17 @@ QUnit.test("'no parser' errors", function(assert) {
         numberLocalization.parse("01");
         dateLocalization.parse("01");
 
-        assert.equal(warnLog.length, 5);
+        if(window.globalizeLocalization) {
+            assert.equal(warnLog.length, 4);
+        } else {
+            assert.equal(warnLog.length, 5);
+            assert.equal(warnLog[4].substr(warningIdPrefixLength, dateWarning.length), dateWarning);
+        }
 
         assert.equal(warnLog[0].substr(warningIdPrefixLength, numberWarning.length), numberWarning);
         assert.equal(warnLog[1].substr(warningIdPrefixLength, numberWarning.length), numberWarning);
         assert.equal(warnLog[2].substr(warningIdPrefixLength, dateWarning.length), dateWarning);
         assert.equal(warnLog[3].substr(warningIdPrefixLength, dateWarning.length), dateWarning);
-        assert.equal(warnLog[4].substr(warningIdPrefixLength, dateWarning.length), dateWarning);
     } finally {
         logger.warn = originalLoggerWarn;
     }
