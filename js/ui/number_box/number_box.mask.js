@@ -11,8 +11,7 @@ var eventsEngine = require("../../events/core/events_engine"),
     getLDMLFormat = require("../../localization/ldml/number").getFormat,
     NumberBoxBase = require("./number_box.base"),
     eventUtils = require("../../events/utils"),
-    typeUtils = require("../../core/utils/type"),
-    browser = require("../../core/utils/browser");
+    typeUtils = require("../../core/utils/type");
 
 var NUMBER_FORMATTER_NAMESPACE = "dxNumberFormatter",
     MOVE_FORWARD = 1,
@@ -77,7 +76,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
         this._setTextByParsedValue();
 
         if(this._isValueDirty()) {
-            this._isInputTriggered = false;
+            this._isDirty = false;
             eventsEngine.trigger(this._input(), "change");
         }
     },
@@ -85,7 +84,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
     _isValueDirty: function() {
         // https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/15181565/
         // https://bugreport.apple.com/web/?problemID=38133794 but this bug tracker is private
-        return (browser.msie || browser.safari) && this._isInputTriggered;
+        return this._isDirty;
     },
 
     _arrowHandler: function(step, e) {
@@ -326,8 +325,14 @@ var NumberBoxMask = NumberBoxBase.inherit({
     },
 
     _setInputText: function(text) {
-        var newCaret = maskCaret.getCaretAfterFormat(this._getInputVal(), text, this._caret(), this._getFormatPattern());
-        this._input().val(number.convertDigits(text));
+        var newCaret = maskCaret.getCaretAfterFormat(this._getInputVal(), text, this._caret(), this._getFormatPattern()),
+            newValue = number.convertDigits(text);
+
+        if(this._formattedValue !== newValue) {
+            this._isDirty = true;
+        }
+
+        this._input().val(newValue);
         this._formattedValue = text;
 
         this._caret(newCaret);
@@ -480,7 +485,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
             textWithoutMinus = this._removeMinusFromText(text, caret),
             wasMinusRemoved = textWithoutMinus !== text;
 
-        this._isInputTriggered = true;
+        this._isDirty = false;
         text = textWithoutMinus;
 
         if(this._isValueIncomplete(textWithoutMinus)) {
@@ -556,7 +561,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
         delete this._formattedValue;
         delete this._lastKey;
         delete this._parsedValue;
-        delete this._isInputTriggered;
+        delete this._isDirty;
     },
 
     _clean: function() {
