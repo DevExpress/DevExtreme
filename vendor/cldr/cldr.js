@@ -177,7 +177,7 @@
 	 * 3. Then for trial in {language, language _ region, language _ script}. If
 	 * AddLikelySubtags(trial) = max, then return trial + variants.
 	 * 4. If you do not get a match, return max + variants.
-	 * 
+	 *
 	 * @maxLanguageId [Array] maxLanguageId tuple (see init.js).
 	 */
 	var coreRemoveLikelySubtags = function( Cldr, cldr, maxLanguageId ) {
@@ -238,8 +238,8 @@
 		unicodeLanguageId = locale.split( "-t-" )[ 0 ];
 
 		// unicode_language_id = "root"
-		//   | unicode_language_subtag         
-		//     (sep unicode_script_subtag)? 
+		//   | unicode_language_subtag
+		//     (sep unicode_script_subtag)?
 		//     (sep unicode_region_subtag)?
 		//     (sep unicode_variant_subtag)* ;
 		//
@@ -468,7 +468,7 @@
 	// -> { a: { b: 3, c: 2, d: 4 } }
 	//
 	// @arguments JSON's
-	// 
+	//
 	var merge = function() {
 		var destination = {},
 			sources = [].slice.call( arguments, 0 );

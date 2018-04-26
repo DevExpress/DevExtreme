@@ -35,7 +35,7 @@
 	var supplementalMain = function( cldr ) {
 
 		var prepend, supplemental;
-		
+
 		prepend = function( prepend ) {
 			return function( path ) {
 				path = alwaysArray( path );

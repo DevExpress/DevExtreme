@@ -55,7 +55,7 @@ EventEmitter = (function () {
 	// Shortcuts to improve speed and size
 	var proto = EventEmitter.prototype;
 	var exports = {};
-	
+
 
 	/**
 	 * Finds the index of the listener for the event in it's storage array.
