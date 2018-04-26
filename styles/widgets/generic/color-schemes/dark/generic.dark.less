@@ -760,6 +760,14 @@
 * @paletteColorOpacity .25
 */
 @list-item-selected-bg: lighten(@base-bg, 10%);
+
+/**
+* @name 20. Selected item state text color
+* @type color
+* @group list
+*/
+@list-item-selected-color: @list-item-color;
+
 /**
 * @name 50. Focused selected item state background color
 * @type color
@@ -776,7 +784,6 @@
 @list-focused-bg: @base-focus-color;
 @list-item-color: @base-text-color;
 @list-item-hover-color: @list-item-color;
-@list-item-selected-color: @list-item-color;
 @list-item-focus-color: @base-inverted-text-color;
 @list-item-active-color: @base-inverted-text-color;
 
