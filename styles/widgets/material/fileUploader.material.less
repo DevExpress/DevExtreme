@@ -73,7 +73,9 @@
 }
 
 .dx-fileuploader-files-container {
-    padding: 12px 3px 0;
+    .dx-fileuploader-show-file-list & {
+        padding: 14px 3px 0;
+    }
 
     .dx-fileuploader-empty & {
         padding: 0;
@@ -86,6 +88,34 @@
     .dx-fileuploader-button .dx-button-content {
         padding: 0;
     }
+
+    .dx-fileuploader-file-container {
+        .box-shadow(0 1px 3px 0px rgba(0, 0, 0, 0.1));
+        padding: 5px 8px;
+        margin-bottom: 4px;
+
+        .dx-fileuploader-button-container + .dx-fileuploader-button-container {
+            .dx-button {
+                margin-right: 15px;
+
+                .dx-rtl & {
+                    margin-left: 15px;
+                    margin-right: 0;
+                }
+            }
+        }
+
+        .dx-button {
+            height: 36px;
+            width: 36px;
+            margin-right: 5px;
+
+            .dx-rtl & {
+                margin-left: 5px;
+                margin-right: 0;
+            }
+        }
+    }
 }
 
 .dx-fileuploader-file {
@@ -96,6 +126,7 @@
 .dx-fileuploader-file-name {
     padding-bottom: @MATERIAL_FILEUPLOADER_VERTICAL_PADDING/2;
     color: @fileuploader-filename-color;
+    font-weight: 500;
 }
 
 .dx-fileuploader-file-size {

@@ -1455,6 +1455,18 @@ testComponentDefaults(FileUploader,
     }
 );
 
+testComponentDefaults(FileUploader,
+    { },
+    { _uploadButtonType: "default" },
+    function() {
+        this.originalCurrentTheme = themes.current();
+        themes.current("material.blue.light");
+    },
+    function() {
+        themes.current(this.originalCurrentTheme);
+    }
+);
+
 testComponentDefaults(Form,
     {},
     {
