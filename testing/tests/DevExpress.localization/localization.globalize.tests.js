@@ -49,12 +49,10 @@ define(function(require, exports, module) {
 
     var NBSP = String.fromCharCode(160);
 
-    window.globalizeLocalization = true;
     require("./localization.base.tests.js");
 
     QUnit.module("Localization date (ru)", {
         beforeEach: function() {
-            delete window.globalizeLocalization;
             Globalize.locale("ru");
         },
         afterEach: function() {
