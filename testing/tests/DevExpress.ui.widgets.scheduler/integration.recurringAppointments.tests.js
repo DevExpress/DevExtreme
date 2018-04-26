@@ -1041,3 +1041,24 @@ QUnit.test("Reduced reccuring appt should have right left position in first colu
     assert.roughEqual($reducedAppointment.eq(1).position().left, cellWidth * 7, 1.001, "first appt in 2d group has right left position");
     assert.notOk($appointment.eq(7).hasClass(compactClass), "appt isn't compact");
 });
+
+QUnit.test("Recurrence exception should be adjusted by scheduler timezone", function(assert) {
+    this.createInstance({
+        dataSource: [{
+            text: "a",
+            startDate: new Date(2018, 2, 26, 10),
+            endDate: new Date(2018, 2, 26, 11),
+            recurrenceRule: "FREQ=DAILY",
+            recurrenceException: "20180327T100000, 20180330T100000"
+        }],
+        views: ["month"],
+        currentView: "month",
+        currentDate: new Date(2018, 2, 30),
+        timeZone: "Australia/Sydney",
+        height: 600
+    });
+
+    var $appointments = this.instance.$element().find(".dx-scheduler-appointment");
+
+    assert.equal($appointments.length, 11, "correct number of the appointments");
+});
