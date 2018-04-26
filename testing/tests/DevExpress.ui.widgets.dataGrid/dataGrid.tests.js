@@ -435,6 +435,53 @@ QUnit.test("Row expand state should not be changed on row click when scrolling m
     assert.ok(dataGrid.isRowExpanded(["1"]), "first group row is expanded");
 });
 
+// T625249
+QUnit.test("Fix group footer presents at the end of virtual pages (T618080)", function(assert) {
+    // arrange
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        columns: ["C0", "C1", "C2"],
+        loadingTimeout: undefined,
+        dataSource: {
+            store: [
+                { C0: 10, C1: 11, C2: 12 }, { C0: 10, C1: 11, C2: 12 },
+                { C0: 10, C1: 12, C2: 12 }
+            ],
+            group: ["C0", "C1"]
+        },
+        paging: {
+            pageSize: 2
+        },
+        scrolling: {
+            mode: "infinite"
+        },
+        summary: {
+            groupItems: [
+                {
+                    column: "C2",
+                    summaryType: "count",
+                    showInGroupFooter: true
+                }
+            ]
+        },
+    }).dxDataGrid("instance");
+
+    // arrange, assert
+    var $tables = dataGrid.$element().find(".dx-datagrid-table tbody");
+    $tables.each(function() {
+        var $children = $(this).children();
+        $children.each(function(index) {
+            if($(this).hasClass("dx-datagrid-group-footer")) {
+                var $nextChild = $($children[index + 1]);
+                assert.ok($nextChild.length === 0 ||
+                        $nextChild.hasClass("dx-group-row") ||
+                        $nextChild.hasClass("dx-freespace-row") ||
+                        $nextChild.hasClass("dx-datagrid-group-footer"), "");
+            }
+        });
+    });
+    assert.equal($(dataGrid.$element()).find(".dx-datagrid-group-footer").length, 3, "group footers count");
+});
+
 // T601360
 QUnit.test("Update cell after infinit scrolling and editing must processing after all pages has been loaded", function(assert) {
     // arrange
