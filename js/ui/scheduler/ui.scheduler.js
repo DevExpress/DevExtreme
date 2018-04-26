@@ -2423,7 +2423,7 @@ var Scheduler = Widget.inherit({
             this.addAppointment(singleAppointment);
         }
 
-        var recurrenceException = this._setRecurrenceException(exceptionDate, targetAppointment),
+        var recurrenceException = this._makeDateAsRecurrenceException(exceptionDate, targetAppointment),
             updatedAppointment = extend({}, targetAppointment, { recurrenceException: recurrenceException });
 
         if(isPopupEditing) {
@@ -2439,7 +2439,7 @@ var Scheduler = Widget.inherit({
         }
     },
 
-    _setRecurrenceException: function(exceptionDate, targetAppointment) {
+    _makeDateAsRecurrenceException: function(exceptionDate, targetAppointment) {
         var startDate = this._getStartDate(targetAppointment, true),
             exceptionByDate = this._getRecurrenceExceptionDate(exceptionDate, startDate),
             recurrenceException = this.fire("getField", "recurrenceException", targetAppointment);
