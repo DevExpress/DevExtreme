@@ -20,6 +20,7 @@ var $ = require("../core/renderer"),
     caret = require("./text_box/utils.caret"),
     browser = require("../core/utils/browser"),
     deferredUtils = require("../core/utils/deferred"),
+    compileSetter = require("../core/utils/data").compileSetter,
     when = deferredUtils.when,
     Deferred = deferredUtils.Deferred,
     BindableTemplate = require("./widget/bindable_template"),
@@ -495,6 +496,16 @@ var TagBox = SelectBox.inherit({
         });
     },
 
+    _compileDisplaySetter: function() {
+        var displayGetterExpr = this._displayGetterExpr();
+        this._displaySetter = displayGetterExpr && compileSetter(displayGetterExpr);
+    },
+
+    _initDataExpressions: function() {
+        this.callBase();
+        this._compileDisplaySetter();
+    },
+
     _multiTagPreparingHandler: function(args) {
         var selectedCount = this._getValue().length;
 
@@ -758,7 +769,8 @@ var TagBox = SelectBox.inherit({
     },
 
     _renderMultiTag: function($input) {
-        var $tag = $("<div>")
+        var item,
+            $tag = $("<div>")
                 .addClass(TAGBOX_TAG_CLASS)
                 .addClass(TAGBOX_MULTI_TAG_CLASS);
 
@@ -776,8 +788,13 @@ var TagBox = SelectBox.inherit({
         $tag.data(TAGBOX_TAG_DATA_KEY, args.text);
         $tag.insertBefore($input);
 
+        if(this._displaySetter) {
+            item = {};
+            this._displaySetter(item, args.text);
+        }
+
         this._tagTemplate.render({
-            model: args.text,
+            model: item || args.text,
             container: getPublicElement($tag)
         });
 
@@ -1279,6 +1296,7 @@ var TagBox = SelectBox.inherit({
             case "displayExpr":
                 this.callBase(args);
                 this._initTemplates();
+                this._compileDisplaySetter();
                 this._invalidate();
                 break;
             case "tagTemplate":
