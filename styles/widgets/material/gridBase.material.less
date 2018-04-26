@@ -1004,4 +1004,10 @@
         width: @MATERIAL_GRID_BASE_CELL_LAST_COLUMN_PADDING + @MATERIAL_GRID_BASE_CELL_HORIZONTAL_PADDING + @MATERIAL_BASE_ICON_SIZE;
         min-width: @MATERIAL_GRID_BASE_CELL_LAST_COLUMN_PADDING + @MATERIAL_GRID_BASE_CELL_HORIZONTAL_PADDING + @MATERIAL_BASE_ICON_SIZE;
     }
+
+    .dx-@{widgetName}-filter-panel {
+        .dx-icon-filter, .dx-@{widgetName}-filter-panel-text {
+            color: ~"@{@{widgetName}-filter-panel-color}";
+        }
+    }
 }
