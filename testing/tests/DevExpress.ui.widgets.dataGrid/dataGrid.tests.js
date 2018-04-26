@@ -435,8 +435,8 @@ QUnit.test("Row expand state should not be changed on row click when scrolling m
     assert.ok(dataGrid.isRowExpanded(["1"]), "first group row is expanded");
 });
 
-// T625249
-QUnit.test("Fix group footer presents at the end of virtual pages (T618080)", function(assert) {
+// T618080
+QUnit.test("Fix group footer presents at the end of virtual pages", function(assert) {
     // arrange
     var dataGrid = $("#dataGrid").dxDataGrid({
         columns: ["C0", "C1", "C2"],
@@ -466,20 +466,16 @@ QUnit.test("Fix group footer presents at the end of virtual pages (T618080)", fu
     }).dxDataGrid("instance");
 
     // arrange, assert
-    var $tables = dataGrid.$element().find(".dx-datagrid-table tbody");
-    $tables.each(function() {
-        var $children = $(this).children();
-        $children.each(function(index) {
-            if($(this).hasClass("dx-datagrid-group-footer")) {
-                var $nextChild = $($children[index + 1]);
-                assert.ok($nextChild.length === 0 ||
-                        $nextChild.hasClass("dx-group-row") ||
-                        $nextChild.hasClass("dx-freespace-row") ||
-                        $nextChild.hasClass("dx-datagrid-group-footer"), "");
-            }
-        });
-    });
-    assert.equal($(dataGrid.$element()).find(".dx-datagrid-group-footer").length, 3, "group footers count");
+    var visibleRows = dataGrid.getVisibleRows();
+    assert.equal(visibleRows.length, 9, "visible rows count");
+    assert.equal(visibleRows.filter(function(item) { return item.rowType === "groupFooter"; }).length, 3, "group footers count");
+    assert.equal(visibleRows[1].rowType, "group", "group row");
+    assert.equal(visibleRows[3].rowType, "data", "data row");
+    assert.equal(visibleRows[4].rowType, "groupFooter", "group footer row");
+    assert.equal(visibleRows[5].rowType, "group", "group row");
+    assert.equal(visibleRows[6].rowType, "data", "data row");
+    assert.equal(visibleRows[7].rowType, "groupFooter", "group footer row");
+    assert.equal(visibleRows[8].rowType, "groupFooter", "group footer row");
 });
 
 // T601360
