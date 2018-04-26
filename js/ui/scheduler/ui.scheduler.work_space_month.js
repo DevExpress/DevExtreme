@@ -264,6 +264,10 @@ var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
         return new Date(startDateCopy.setHours(this.option("endDayHour")));
     },
 
+    getWorkSpaceLeftOffset: function() {
+        return 0;
+    },
+
     _getCellPositionByIndex: function(index, groupIndex) {
         var position = this.callBase(index, groupIndex),
             rowIndex = this._getCellCoordinatesByIndex(index).rowIndex,
