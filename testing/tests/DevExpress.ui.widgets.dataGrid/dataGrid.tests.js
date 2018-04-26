@@ -180,12 +180,16 @@ QUnit.test("Correct start scroll position when RTL", function(assert) {
 });
 
 QUnit.test("Base accessibility structure", function(assert) {
+    var clock = sinon.useFakeTimers();
+
     createDataGrid({
-        columns: [{ dataField: "field1", width: 100 }, { dataField: "field2", width: 100 }],
+        columns: ["field1", "field2"],
         dataSource: {
             store: [{ field1: "1", field2: "2" }]
         }
     });
+
+    clock.tick();
 
     assert.equal($(".dx-widget").attr("role"), "presentation");
     assert.equal($(".dx-datagrid").attr("role"), "grid");
@@ -193,6 +197,20 @@ QUnit.test("Base accessibility structure", function(assert) {
     assert.equal($(".dx-datagrid-scroll-container").attr("role"), "presentation");
     assert.equal($(".dx-datagrid-table").eq(0).attr("role"), "presentation");
     assert.equal($(".dx-datagrid-table").eq(1).attr("role"), "presentation");
+
+    clock.restore();
+});
+
+QUnit.test("Command column accessibility structure", function(assert) {
+    // arrange
+    createDataGrid({
+        columns: ["field1", "field2" ],
+        editing: { mode: "row", allowAdding: true }
+    });
+
+    // assert
+    assert.equal($(".dx-header-row .dx-command-edit").eq(0).attr("role"), "columnheader");
+    assert.notOk($(".dx-header-row .dx-command-edit").eq(0).attr("aria-colindex"));
 });
 
 // T388508

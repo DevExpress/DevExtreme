@@ -465,7 +465,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
         $cell = that._createCell(cellOptions);
 
-        if(cellOptions.rowType !== "freeSpace") {
+        if(cellOptions.rowType !== "freeSpace" && cellOptions.rowType !== "header") {
             that.setAria("role", "gridcell", $cell);
             that.setAria("colindex", options.columnIndex + 1, $cell);
             that.setAria("selected", false, $cell);

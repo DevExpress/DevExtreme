@@ -142,8 +142,9 @@ module.exports = {
                     if(options.row.rowType === "header") {
                         $cell.addClass(CELL_FOCUS_DISABLED_CLASS);
 
+                        this.setAria("role", "columnheader", $cell);
+                        this.setAria("selected", false, $cell);
                         if(!isDefined(options.column.command)) {
-                            this.setAria("role", "columnheader", $cell);
                             this.setAria("colindex", options.column.index + 1, $cell);
                         }
                     }
