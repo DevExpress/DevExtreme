@@ -17,7 +17,6 @@ var $ = require("jquery"),
     config = require("core/config"),
     isRenderer = require("core/utils/type").isRenderer,
     browser = require("core/utils/browser"),
-    dateSerialization = require("core/utils/date_serialization"),
     dataUtils = require("core/element_data"),
     dateLocalization = require("localization/date");
 
@@ -2325,6 +2324,16 @@ QUnit.test("disabledDates argument contains correct component parameter", functi
 
     var component = stub.lastCall.args[0].component;
     assert.equal(component.NAME, "dxCalendar", "Correct component");
+});
+
+QUnit.test("current day is moved to a next day while it is less a max date when all days are disabled", function(assert) {
+    this.reinit({
+        max: new Date(2018, 0, 10),
+        value: new Date(2018, 0, 2),
+        disabledDates: function() { return true; }
+    });
+
+    assert.ok(this.calendar.option("currentDate") <= this.calendar.option("max"));
 });
 
 
