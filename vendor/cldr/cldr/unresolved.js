@@ -106,7 +106,7 @@
 		// Check raw data
 		value = resourceGet( Cldr._raw, normalizedPath );
 
-		if ( !value ) {
+		if ( value === undefined ) {
 			// Or, lookup at parent locale
 			parent = bundleParentLookup( Cldr, locale );
 			value = lookup( Cldr, parent, path, jsonMerge( attributes, { bundle: parent }), locale );
