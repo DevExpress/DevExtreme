@@ -1137,14 +1137,23 @@ QUnit.testStart(function() {
     QUnit.test("Group table content should have right height", function(assert) {
         var $groupHeaderContents = this.instance.$element().find(".dx-scheduler-group-header-content");
 
-        assert.roughEqual($groupHeaderContents.eq(0).outerHeight(), 144, 5, "Group header content height is OK");
-        assert.roughEqual($groupHeaderContents.eq(1).outerHeight(), 144, 5, "Group header content height is OK");
+        assert.roughEqual($groupHeaderContents.eq(0).outerHeight(), 149, 5, "Group header content height is OK");
+        assert.roughEqual($groupHeaderContents.eq(1).outerHeight(), 149, 5, "Group header content height is OK");
     });
 
     QUnit.test("Group width calculation", function(assert) {
         sinon.stub(this.instance, "getCellWidth").returns(50);
 
         assert.equal(this.instance.getGroupWidth(), 350, "Group width is OK");
+    });
+
+    QUnit.test("Tables should not be rerendered if dimension was changed and horizontal scrolling is disabled", function(assert) {
+        this.instance.option("crossScrollingEnabled", false);
+        var stub = sinon.stub(this.instance, "_setTableSizes");
+
+        resizeCallbacks.fire();
+
+        assert.notOk(stub.calledOnce, "Tables weren't updated");
     });
 
 })("Work Space Month");
