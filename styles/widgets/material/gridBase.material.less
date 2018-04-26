@@ -1006,8 +1006,20 @@
     }
 
     .dx-@{widgetName}-filter-panel {
-        .dx-icon-filter, .dx-@{widgetName}-filter-panel-text {
+        padding: 15px @MATERIAL_GRID_BASE_CELL_LAST_COLUMN_PADDING 15px @MATERIAL_GRID_BASE_CELL_FIRST_COLUMN_PADDING;
+        .dx-@{widgetName}-filter-panel-text,
+        .dx-@{widgetName}-filter-panel-clear-filter {
             color: ~"@{@{widgetName}-filter-panel-color}";
+            font-size: @MATERIAL_GRID_BASE_CELL_FONT_SIZE;
+            line-height: @MATERIAL_GRID_BASE_CHECKBOX_SIZE;
+        }
+
+        .dx-icon-filter {
+            color: ~"@{@{widgetName}-filter-panel-color}";
+        }
+
+        + .dx-pager {
+            border-top: 1px solid @MATERIAL_GRID_BASE_BORDER_COLOR;
         }
     }
 }
