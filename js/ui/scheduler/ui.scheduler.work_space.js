@@ -859,7 +859,7 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _dimensionChanged: function() {
-        if(this._needRecalculateTableSizes()) {
+        if(this.option("crossScrollingEnabled")) {
             this._setTableSizes();
         }
 
