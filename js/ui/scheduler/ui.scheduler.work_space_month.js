@@ -268,6 +268,10 @@ var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
         return 0;
     },
 
+    _getDateTableBorderOffset: function() {
+        return this._getDateTableBorder();
+    },
+
     _getCellPositionByIndex: function(index, groupIndex) {
         var position = this.callBase(index, groupIndex),
             rowIndex = this._getCellCoordinatesByIndex(index).rowIndex,

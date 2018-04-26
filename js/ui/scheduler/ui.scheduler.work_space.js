@@ -1848,9 +1848,17 @@ var SchedulerWorkSpace = Widget.inherit({
     _setHorizontalGroupHeaderCellsHeight: function() {
         var cellHeight = this.getCellHeight(),
             allDayRowHeight = this.option("showAllDayPanel") && this.supportAllDayRow() ? this.getAllDayHeight() : 0,
-            dateTableHeight = cellHeight * this._getRowCount() - DATE_TABLE_CELL_BORDER;
+            dateTableHeight = cellHeight * this._getRowCount() - this._getDateTableBorderOffset();
 
         this._getGroupHeaderCellsContent().css("height", dateTableHeight + allDayRowHeight);
+    },
+
+    _getDateTableBorder: function() {
+        return DATE_TABLE_CELL_BORDER;
+    },
+
+    _getDateTableBorderOffset: function() {
+        return this._getDateTableBorder() * 2;
     },
 
     _getGroupHeaderCellsContent: function() {
