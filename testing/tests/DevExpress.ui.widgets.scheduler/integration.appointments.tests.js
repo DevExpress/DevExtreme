@@ -5872,8 +5872,8 @@ QUnit.test("Long appt parts should have correct coordinates if duration > week i
     var $firstPart = $(this.instance.$element()).find("." + APPOINTMENT_CLASS).eq(0),
         $secondPart = $(this.instance.$element()).find("." + APPOINTMENT_CLASS).eq(1);
 
-    assert.equal($firstPart.position().left, 0, 'correct left position');
-    assert.equal($secondPart.position().left, 0, 'correct left position');
+    assert.roughEqual($firstPart.position().left, 0, 1.1, 'correct left position');
+    assert.roughEqual($secondPart.position().left, 0, 1.1, 'correct left position');
 });
 
 QUnit.test("Long appt parts should have correct coordinates after drag to the last row cell in vertical grouped workspace Month", function(assert) {
@@ -5989,7 +5989,7 @@ QUnit.test("Appointment should be resized correctly to left side in horizontal g
 
     var $appointment = $element.find("." + APPOINTMENT_CLASS).eq(0);
 
-    assert.equal($appointment.position().left, 0, "Left coordinate is correct");
+    assert.roughEqual($appointment.position().left, 0, 1.1, "Left coordinate is correct");
 });
 
 QUnit.test("Appt shouldn't be resized to the group border in horizontal grouped workspace Day", function(assert) {
