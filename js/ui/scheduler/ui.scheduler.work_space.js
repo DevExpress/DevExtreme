@@ -657,7 +657,7 @@ var SchedulerWorkSpace = Widget.inherit({
             updateManually: true,
             pushBackValue: 0
         };
-        if(this.option("crossScrollingEnabled")) {
+        if(this._needCreateCrossScrolling()) {
             config = extend(config, this._createCrossScrollingConfig());
         }
 
@@ -799,7 +799,7 @@ var SchedulerWorkSpace = Widget.inherit({
             this._setHorizontalGroupHeaderCellsHeight();
         }
 
-        if(visible && this._needRecalculateTableSizes()) {
+        if(visible && this._needCreateCrossScrolling()) {
             this._setTableSizes();
         }
     },
@@ -868,7 +868,7 @@ var SchedulerWorkSpace = Widget.inherit({
         this._cleanAllowedPositions();
     },
 
-    _needRecalculateTableSizes: function() {
+    _needCreateCrossScrolling: function() {
         return this.option("crossScrollingEnabled");
     },
 

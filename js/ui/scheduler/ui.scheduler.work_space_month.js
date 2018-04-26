@@ -99,7 +99,7 @@ var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
         }
     },
 
-    _needRecalculateTableSizes: function() {
+    _needCreateCrossScrolling: function() {
         return this.option("crossScrollingEnabled") || this._isVerticalGroupedWorkSpace();
     },
 
@@ -291,7 +291,7 @@ var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
     scrollToTime: noop,
 
     _setHorizontalGroupHeaderCellsHeight: function() {
-        if(this._needRecalculateTableSizes()) {
+        if(this._needCreateCrossScrolling()) {
             this.callBase();
         } else {
             return;
