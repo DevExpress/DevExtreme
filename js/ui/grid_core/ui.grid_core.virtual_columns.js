@@ -1,6 +1,7 @@
 "use strict";
 
 var windowUtils = require("../../core/utils/window");
+var virtualColumnsCore = require("./ui.grid_core.virtual_columns_core");
 
 var DEFAULT_COLUMN_WIDTH = 50;
 
@@ -46,6 +47,11 @@ var ColumnsControllerExtender = (function() {
             that._beginPageIndex = 0;
             that._endPageIndex = 0;
             that._position = 0;
+            that._virtualVisibleColumns = {};
+        },
+        resetColumnsCache: function() {
+            this.callBase();
+            this._virtualVisibleColumns = {};
         },
         getBeginPageIndex: function(position) {
             var visibleColumns = this.getVisibleColumns(undefined, true),
@@ -110,7 +116,7 @@ var ColumnsControllerExtender = (function() {
             }
         },
         isVirtualMode: function() {
-            return windowUtils.hasWindow() && this.option("scrolling.columnRenderingMode") === "virtual" && this.getRowCount() <= 1;
+            return windowUtils.hasWindow() && this.option("scrolling.columnRenderingMode") === "virtual";
         },
         _setScrollPositionCore: function(position) {
             var that = this;
@@ -127,37 +133,71 @@ var ColumnsControllerExtender = (function() {
                 that._position = position;
             }
         },
-        getVisibleColumns: function(rowIndex, isBase) {
-            var visibleColumns = this.callBase(rowIndex);
-
-            if(isBase || !this.isVirtualMode()) {
-                return visibleColumns;
+        getFixedColumns: function(rowIndex, isBase) {
+            var fixedColumns = this.callBase(rowIndex);
+            if(this.isVirtualMode() && !isBase && fixedColumns.length) {
+                var transparentColumnIndex = fixedColumns.map(c => c.command).indexOf("transparent");
+                fixedColumns[transparentColumnIndex].colspan = this.getVisibleColumns().length - this.callBase().length + 1;
+                return fixedColumns;
             }
 
-            var fixedColumns = this.getFixedColumns();
-            var transparentColumnIndex = fixedColumns.map(c => c.command).indexOf("transparent");
-            var beginFixedColumnCount = fixedColumns.length ? transparentColumnIndex : 0;
-            var endFixedColumnCount = fixedColumns.length ? fixedColumns.length - transparentColumnIndex - 1 : 0;
-
-            var pageSize = this.getColumnPageSize();
+            return fixedColumns;
+        },
+        getVisibleColumns: function(rowIndex, isBase) {
+            if(isBase || !this.isVirtualMode()) {
+                return this.callBase(rowIndex);
+            }
 
             if(!this._beginPageIndex && !this._endPageIndex) {
                 this._beginPageIndex = this.getBeginPageIndex(this._position);
                 this._endPageIndex = this.getEndPageIndex(this._position);
             }
 
-            var beginPageIndex = this._beginPageIndex;
-            var endPageIndex = this._endPageIndex;
+            var beginPageIndex = this._beginPageIndex,
+                endPageIndex = this._endPageIndex,
+                visibleColumnsHash = rowIndex + "-" + beginPageIndex + "-" + endPageIndex;
 
+            if(this._virtualVisibleColumns[visibleColumnsHash]) {
+                return this._virtualVisibleColumns[visibleColumnsHash];
+            }
+
+            var visibleColumns = this.callBase(),
+                rowCount = this.getRowCount(),
+                pageSize = this.getColumnPageSize(),
+                startIndex = beginPageIndex * pageSize,
+                endIndex = endPageIndex * pageSize,
+                fixedColumns = this.getFixedColumns(undefined, true),
+                transparentColumnIndex = fixedColumns.map(c => c.command).indexOf("transparent");
+
+            var beginFixedColumnCount = fixedColumns.length ? transparentColumnIndex : 0;
             var beginFixedColumns = visibleColumns.slice(0, beginFixedColumnCount);
-            var beginColumns = visibleColumns.slice(beginFixedColumnCount, beginPageIndex * pageSize);
+            var beginColumns = visibleColumns.slice(beginFixedColumnCount, startIndex);
             var beginWidth = getWidths(beginColumns).reduce((a, b) => a + b, 0);
 
+            if(!beginWidth) {
+                startIndex = 0;
+            }
+
+            var endFixedColumnCount = fixedColumns.length ? fixedColumns.length - transparentColumnIndex - 1 : 0;
             var endFixedColumns = visibleColumns.slice(visibleColumns.length - endFixedColumnCount);
-            var endColumns = visibleColumns.slice(endPageIndex * pageSize, visibleColumns.length - endFixedColumnCount);
+            var endColumns = visibleColumns.slice(endIndex, visibleColumns.length - endFixedColumnCount);
             var endWidth = getWidths(endColumns).reduce((a, b) => a + b, 0);
 
-            visibleColumns = visibleColumns.slice(beginPageIndex * pageSize, endPageIndex * pageSize);
+            if(!endWidth) {
+                endIndex = visibleColumns.length;
+            }
+
+            if(rowCount > 1 && typeof rowIndex === "number") {
+                var columnsInfo = [];
+                for(var i = 0; i < rowCount; i++) {
+                    columnsInfo.push(this.callBase(i));
+                }
+                beginFixedColumns = virtualColumnsCore.createColumnsInfo(columnsInfo, 0, beginFixedColumns.length)[rowIndex] || [];
+                endFixedColumns = virtualColumnsCore.createColumnsInfo(columnsInfo, visibleColumns.length - endFixedColumns.length, visibleColumns.length)[rowIndex] || [];
+                visibleColumns = virtualColumnsCore.createColumnsInfo(columnsInfo, startIndex, endIndex)[rowIndex] || [];
+            } else {
+                visibleColumns = visibleColumns.slice(startIndex, endIndex);
+            }
 
             if(beginWidth) {
                 visibleColumns.unshift({ command: "virtual", width: beginWidth });
@@ -168,6 +208,8 @@ var ColumnsControllerExtender = (function() {
                 visibleColumns.push({ command: "virtual", width: endWidth });
                 visibleColumns = visibleColumns.concat(endFixedColumns);
             }
+
+            this._virtualVisibleColumns[visibleColumnsHash] = visibleColumns;
 
             return visibleColumns;
         }

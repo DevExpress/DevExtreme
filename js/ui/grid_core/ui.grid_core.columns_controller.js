@@ -1116,10 +1116,7 @@ module.exports = {
             };
 
             var resetColumnsCache = function(that) {
-                that._visibleColumns = undefined;
-                that._fixedColumns = undefined;
-                that._rowCount = undefined;
-                that._bandColumnsCache = undefined;
+                that.resetColumnsCache();
             };
 
             var assignColumns = function(that, columns) {
@@ -1577,6 +1574,13 @@ module.exports = {
                     this._dataSourceApplied = false;
                     this._dataSourceColumnsCount = undefined;
                     this.reinit();
+                },
+                resetColumnsCache: function() {
+                    var that = this;
+                    that._visibleColumns = undefined;
+                    that._fixedColumns = undefined;
+                    that._rowCount = undefined;
+                    that._bandColumnsCache = undefined;
                 },
                 reinit: function() {
                     this._columnsUserState = this.getUserState();
