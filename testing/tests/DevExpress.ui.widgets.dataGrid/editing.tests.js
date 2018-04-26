@@ -9941,7 +9941,7 @@ QUnit.module('Editing with scrolling', {
         };
 
         this.setupDataGrid = function() {
-            setupDataGridModules(this, ['data', 'columns', 'rows', 'pager', 'editing', 'editorFactory', 'virtualScrolling', 'validating', 'grouping', 'masterDetail', 'adaptivity'], {
+            setupDataGridModules(this, ['data', 'columns', 'rows', 'pager', 'editing', 'editorFactory', 'virtualScrolling', 'errorHandling', 'validating', 'grouping', 'masterDetail', 'adaptivity'], {
                 initViews: true
             });
         };
@@ -10147,6 +10147,58 @@ QUnit.test("Edit row after the virtual scrolling when there is inserted row", fu
     // assert
     assert.equal(testElement.find("input").length, 1, "has input");
     assert.equal(testElement.find("input").val(), "Item51", "text edit cell");
+});
+
+// T626571
+QUnit.test("Validation show only one message for editing cell in virtual mode", function(assert) {
+    // arrange
+    var testElement = $("#container");
+
+    this.options.scrolling = {
+        mode: "virtual",
+        useNative: false
+    };
+
+    this.options.errorRowEnabled = true;
+
+    this.options.onRowValidating = function(e) {
+        e.isValid = false;
+        e.errorText = "Test";
+    };
+
+    this.options.dataSource = generateDataSource(6, 2);
+    this.options.paging.pageSize = 2;
+    this.options.editing = {
+        mode: "cell",
+        allowUpdating: true,
+    };
+
+    this.setupDataGrid();
+    this.rowsView.render(testElement);
+    this.rowsView.height(10);
+    this.rowsView.resize();
+
+    // assert
+    assert.equal(this.dataController.pageIndex(), 0, "page index");
+
+    // arrange
+    this.rowsView.scrollTo({ y: 150 });
+
+    // assert
+    assert.equal(this.dataController.pageIndex(), 2, "page index");
+
+    // act
+    this.editCell(5, 0);
+    testElement.find("input").val("test");
+    testElement.find("input").trigger("change");
+    this.saveEditData();
+
+    // assert
+    assert.equal(testElement.find(".dx-error-row").length, 1);
+    // act
+    this.saveEditData();
+    // assert
+    assert.equal(testElement.find(".dx-error-row").length, 1);
 });
 
 // T538954
