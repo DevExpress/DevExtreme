@@ -1,15 +1,15 @@
 /**
- * CLDR JavaScript Library v0.4.4
+ * CLDR JavaScript Library v0.5.0
  * http://jquery.com/
  *
  * Copyright 2013 Rafael Xavier de Souza
  * Released under the MIT license
  * http://jquery.org/license
  *
- * Date: 2016-01-18T12:25Z
+ * Date: 2017-08-11T11:52Z
  */
 /*!
- * CLDR JavaScript Library v0.4.4 2016-01-18T12:25Z MIT license © Rafael Xavier
+ * CLDR JavaScript Library v0.5.0 2017-08-11T11:52Z MIT license © Rafael Xavier
  * http://git.io/h4lmVg
  */
 (function( root, factory ) {
@@ -124,12 +124,12 @@
 			script = subtags[ 1 ],
 			sep = Cldr.localeSep,
 			territory = subtags[ 2 ],
-			variantsAndUnicodeLocaleExtensions = subtags.slice( 3, 4 );
+			variants = subtags.slice( 3, 4 );
 		options = options || {};
 
 		// Skip if (language, script, territory) is not empty [3.3]
 		if ( language !== "und" && script !== "Zzzz" && territory !== "ZZ" ) {
-			return [ language, script, territory ].concat( variantsAndUnicodeLocaleExtensions );
+			return [ language, script, territory ].concat( variants );
 		}
 
 		// Skip if no supplemental likelySubtags data is present
@@ -156,9 +156,7 @@
 				language !== "und" ? language : match[ 0 ],
 				script !== "Zzzz" ? script : match[ 1 ],
 				territory !== "ZZ" ? territory : match[ 2 ]
-			].concat(
-				variantsAndUnicodeLocaleExtensions
-			);
+			].concat( variants );
 		} else if ( options.force ) {
 			// [3.1.2]
 			return cldr.get( "supplemental/likelySubtags/und" ).split( sep );
@@ -179,7 +177,7 @@
 	 * 3. Then for trial in {language, language _ region, language _ script}. If
 	 * AddLikelySubtags(trial) = max, then return trial + variants.
 	 * 4. If you do not get a match, return max + variants.
-	 * 
+	 *
 	 * @maxLanguageId [Array] maxLanguageId tuple (see init.js).
 	 */
 	var coreRemoveLikelySubtags = function( Cldr, cldr, maxLanguageId ) {
@@ -240,8 +238,8 @@
 		unicodeLanguageId = locale.split( "-t-" )[ 0 ];
 
 		// unicode_language_id = "root"
-		//   | unicode_language_subtag         
-		//     (sep unicode_script_subtag)? 
+		//   | unicode_language_subtag
+		//     (sep unicode_script_subtag)?
 		//     (sep unicode_region_subtag)?
 		//     (sep unicode_variant_subtag)* ;
 		//
@@ -470,7 +468,7 @@
 	// -> { a: { b: 3, c: 2, d: 4 } }
 	//
 	// @arguments JSON's
-	// 
+	//
 	var merge = function() {
 		var destination = {},
 			sources = [].slice.call( arguments, 0 );
@@ -583,14 +581,22 @@
 	 */
 	Cldr.prototype.init = function( locale ) {
 		var attributes, language, maxLanguageId, minLanguageId, script, subtags, territory, unicodeLocaleExtensions, variant,
-			sep = Cldr.localeSep;
+			sep = Cldr.localeSep,
+			unicodeLocaleExtensionsRaw = "";
 
 		validatePresence( locale, "locale" );
 		validateTypeString( locale, "locale" );
 
 		subtags = coreSubtags( locale );
 
-		unicodeLocaleExtensions = subtags[ 4 ];
+		if ( subtags.length === 5 ) {
+			unicodeLocaleExtensions = subtags.pop();
+			unicodeLocaleExtensionsRaw = sep + "u" + sep + unicodeLocaleExtensions;
+			// Remove trailing null when there is unicodeLocaleExtensions but no variants.
+			if ( !subtags[ 3 ] ) {
+				subtags.pop();
+			}
+		}
 		variant = subtags[ 3 ];
 
 		// Normalize locale code.
@@ -614,8 +620,8 @@
 			bundle: bundleLookup( Cldr, this, minLanguageId ),
 
 			// Unicode Language Id
-			minlanguageId: minLanguageId,
-			maxLanguageId: maxLanguageId.join( sep ),
+			minLanguageId: minLanguageId + unicodeLocaleExtensionsRaw,
+			maxLanguageId: maxLanguageId.join( sep ) + unicodeLocaleExtensionsRaw,
 
 			// Unicode Language Id Subtabs
 			language: language,

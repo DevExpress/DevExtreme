@@ -62,7 +62,7 @@ if(Globalize && Globalize.formatMessage) {
             var currentCldr = locale ? new Globalize(locale).cldr : Globalize.locale(),
                 value = currentCldr.get(["globalize-messages/{bundle}", key]);
 
-            return value !== undefined;
+            return !!value;
         },
 
         _loadSingle: function(key, value, locale) {
