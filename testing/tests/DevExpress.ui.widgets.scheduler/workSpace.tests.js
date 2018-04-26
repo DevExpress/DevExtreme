@@ -1147,6 +1147,15 @@ QUnit.testStart(function() {
         assert.equal(this.instance.getGroupWidth(), 350, "Group width is OK");
     });
 
+    QUnit.test("Tables should not be rerendered if dimension was changed and horizontal scrolling is disabled", function(assert) {
+        this.instance.option("crossScrollingEnabled", false);
+        var stub = sinon.stub(this.instance, "_setTableSizes");
+
+        resizeCallbacks.fire();
+
+        assert.notOk(stub.calledOnce, "Tables weren't updated");
+    });
+
 })("Work Space Month");
 
 (function() {
