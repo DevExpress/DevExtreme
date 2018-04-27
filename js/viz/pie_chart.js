@@ -149,14 +149,14 @@ var dxPieChart = BaseChart.inherit({
             items = [];
 
         that.series.forEach(function(series) {
-            _each(series.pointsByArgument, function(argument, points) {
-                points.forEach(function(point, index) {
-                    var key = argument.valueOf().toString() + index;
-                    itemsByArgument[key] = itemsByArgument[key] || [];
-                    var argumentCount = itemsByArgument[key].push(point);
-                    point.index = itemsByArgument[key][argumentCount - 2] ? itemsByArgument[key][argumentCount - 2].index : Object.keys(itemsByArgument).length - 1;
-                    point.argumentIndex = index;
-                });
+            series.getPoints().forEach(function(point) {
+                var argument = point.argument.valueOf();
+                var index = series.getPointsByArg(argument).indexOf(point);
+                var key = argument.valueOf().toString() + index;
+                itemsByArgument[key] = itemsByArgument[key] || [];
+                var argumentCount = itemsByArgument[key].push(point);
+                point.index = itemsByArgument[key][argumentCount - 2] ? itemsByArgument[key][argumentCount - 2].index : Object.keys(itemsByArgument).length - 1;
+                point.argumentIndex = index;
             });
         });
 
