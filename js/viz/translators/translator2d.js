@@ -157,8 +157,8 @@ function isEqualRange(range) {
     }
 
     if(range && businessRange.axisType === "logarithmic") {
-        comparingRange.min = comparingRange.min && vizUtils.getLog(comparingRange.min, businessRange.base);
-        comparingRange.max = comparingRange.max && vizUtils.getLog(comparingRange.max, businessRange.base);
+        comparingRange.min = comparingRange.min && getLog(comparingRange.min, businessRange.base);
+        comparingRange.max = comparingRange.max && getLog(comparingRange.max, businessRange.base);
     }
 
     return range && (!isDefined(comparingRange.min) || _abs(comparingRange.min - canvasOptions.rangeMin) <= correctionPrecision) &&
