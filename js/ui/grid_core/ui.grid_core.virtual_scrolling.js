@@ -924,7 +924,8 @@ module.exports = {
             resizing: {
                 resize: function() {
                     var that = this,
-                        callBase = that.callBase;
+                        callBase = that.callBase,
+                        result;
 
                     if(!that.option("legacyRendering") && (isVirtualMode(that) || isVirtualRowRendering(that))) {
                         clearTimeout(that._resizeTimeout);
@@ -932,21 +933,23 @@ module.exports = {
                         var updateTimeout = that.option("scrolling.updateTimeout");
 
                         if(that._lastTime && diff < updateTimeout) {
+                            result = new Deferred();
                             that._resizeTimeout = setTimeout(function() {
-                                callBase.apply(that);
+                                callBase.apply(that).done(result.resolve).fail(result.reject);
                                 that._lastTime = new Date();
                             }, updateTimeout);
                             that._lastTime = new Date();
                         } else {
-                            callBase.apply(that);
+                            result = callBase.apply(that);
                             if(that._dataController.isLoaded()) {
                                 that._lastTime = new Date();
                             }
                         }
 
                     } else {
-                        return callBase.apply(that);
+                        result = callBase.apply(that);
                     }
+                    return result;
                 },
                 dispose: function() {
                     this.callBase.apply(this, arguments);

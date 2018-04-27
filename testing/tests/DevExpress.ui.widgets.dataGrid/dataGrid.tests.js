@@ -7203,7 +7203,7 @@ QUnit.test("loading count after refresh when scrolling mode virtual", function(a
         }
     });
 
-    this.clock.tick();
+    this.clock.tick(301);
 
     assert.equal(loadingCount, 2, "virtual scrolling load 2 pages");
     assert.equal(contentReadyCount, 1, "contentReady is called once");
@@ -7218,6 +7218,67 @@ QUnit.test("loading count after refresh when scrolling mode virtual", function(a
     // assert
     assert.equal(loadingCount, 2, "virtual scrolling load 2 pages");
     assert.equal(contentReadyCount, 1, "contentReady is called once");
+});
+
+QUnit.test("column headers should be shown if scrolling mode virtual", function(assert) {
+    // arrange, act
+    var dataGrid = createDataGrid({
+        height: 100,
+        dataSource: [{ id: 1 }],
+        loadPanel: {
+            enabled: true
+        },
+        onContentReady: function(e) {
+            e.component.option("loadPanel.enabled", false);
+        },
+        scrolling: {
+            mode: "virtual"
+        },
+        editing: {
+            allowUpdating: true
+        },
+    });
+
+    this.clock.tick();
+
+    assert.equal(dataGrid.$element().find(".dx-header-row").length, 1, "header row is rendered");
+});
+
+QUnit.test("contentReady should be fired asynchronously if scrolling mode is virtual", function(assert) {
+    var contentReadyCount = 0;
+    var array = [];
+    for(var i = 0; i < 50; i++) {
+        array.push({ test: i });
+    }
+    // arrange, act
+    var dataGrid = createDataGrid({
+        height: 100,
+        dataSource: array,
+        scrolling: {
+            mode: "virtual"
+        },
+        paging: {
+            pageSize: 5
+        }
+    });
+
+    this.clock.tick();
+
+    dataGrid.on("contentReady", function() {
+        contentReadyCount++;
+    });
+
+    // act
+    dataGrid.getScrollable().scrollTo({ left: 0, top: 1000 });
+
+    // assert
+    assert.equal(contentReadyCount, 0, "contentReady is not fired");
+
+    // act
+    this.clock.tick(301);
+
+    // assert
+    assert.equal(contentReadyCount, 1, "contentReady is fired asynchronously");
 });
 
 QUnit.test("synchronous render and asynchronous updateDimensions during paging if virtual scrolling is enabled", function(assert) {
@@ -7257,16 +7318,17 @@ QUnit.test("synchronous render and asynchronous updateDimensions during paging i
     dataGrid.pageIndex(5);
 
     // assert
-    assert.equal(contentReadyCount, 1, "contentReady is called without timeout");
     assert.equal(dataGrid.getVisibleRows().length, 10, "row count");
     assert.equal(dataGrid.getVisibleRows()[0].data.test, 25, "top visible row");
     assert.equal(resizingController.updateDimensions.callCount, 0, "updateDimensions is not called");
+    assert.equal(contentReadyCount, 0, "contentReady is called not called");
 
     // act
     this.clock.tick(300);
 
     // assert
     assert.equal(resizingController.updateDimensions.callCount, 1, "updateDimensions is called with timeout");
+    assert.equal(contentReadyCount, 1, "contentReady is called with timeout");
 });
 
 // T551304
