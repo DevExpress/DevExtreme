@@ -161,6 +161,8 @@ var SchedulerHeader = Widget.inherit({
     _renderViewSwitcherTabs: function($element) {
         var that = this;
 
+        $element.addClass(Tabs.getTabsExpandedClass);
+
         this._viewSwitcher = this._createComponent($element, Tabs, {
             selectionRequired: true,
             scrollingEnabled: true,
