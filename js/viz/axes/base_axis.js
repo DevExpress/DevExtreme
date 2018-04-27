@@ -1533,6 +1533,10 @@ Axis.prototype = {
         this._zoomArgs = null;
     },
 
+    isZoomed: function() {
+        return isDefined(this._zoomArgs) && (isDefined(this._zoomArgs.min) || isDefined(this._zoomArgs.max));
+    },
+
     getViewport: function() {
         var that = this,
             minOpt = that._options.min,
