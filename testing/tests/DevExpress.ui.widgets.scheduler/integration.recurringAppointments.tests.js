@@ -19,7 +19,8 @@ var $ = require("jquery"),
     fx = require("animation/fx"),
     pointerMock = require("../../helpers/pointerMock.js"),
     dragEvents = require("events/drag"),
-    DataSource = require("data/data_source/data_source").DataSource;
+    DataSource = require("data/data_source/data_source").DataSource,
+    subscribes = require("ui/scheduler/ui.scheduler.subscribes");
 
 require("ui/scheduler/ui.scheduler");
 
@@ -1043,22 +1044,27 @@ QUnit.test("Reduced reccuring appt should have right left position in first colu
 });
 
 QUnit.test("Recurrence exception should be adjusted by scheduler timezone", function(assert) {
-    this.createInstance({
-        dataSource: [{
-            text: "a",
-            startDate: new Date(2018, 2, 26, 10),
-            endDate: new Date(2018, 2, 26, 11),
-            recurrenceRule: "FREQ=DAILY",
-            recurrenceException: "20180327T100000, 20180330T100000"
-        }],
-        views: ["month"],
-        currentView: "month",
-        currentDate: new Date(2018, 2, 30),
-        timeZone: "Australia/Sydney",
-        height: 600
-    });
+    var tzOffsetStub = sinon.stub(subscribes, "getClientTimezoneOffset").returns(-39600000);
+    try {
+        this.createInstance({
+            dataSource: [{
+                text: "a",
+                startDate: new Date(2018, 2, 26, 10),
+                endDate: new Date(2018, 2, 26, 11),
+                recurrenceRule: "FREQ=DAILY",
+                recurrenceException: "20180327T100000, 20180330T100000"
+            }],
+            views: ["month"],
+            currentView: "month",
+            currentDate: new Date(2018, 2, 30),
+            timeZone: "Australia/Sydney",
+            height: 600
+        });
 
-    var $appointments = this.instance.$element().find(".dx-scheduler-appointment");
+        var $appointments = this.instance.$element().find(".dx-scheduler-appointment");
 
-    assert.equal($appointments.length, 11, "correct number of the appointments");
+        assert.equal($appointments.length, 11, "correct number of the appointments");
+    } finally {
+        tzOffsetStub.restore();
+    }
 });
