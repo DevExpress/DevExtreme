@@ -367,9 +367,10 @@ var Calendar = Editor.inherit({
     },
 
     _moveCurrentDate: function(offset, baseDate) {
-        var currentDate = baseDate || new Date(this.option("currentDate"));
-        var newDate = new Date(currentDate);
-        var zoomLevel = this.option("zoomLevel");
+        var currentDate = baseDate || new Date(this.option("currentDate")),
+            newDate = new Date(currentDate),
+            maxDate = this.option("max"),
+            zoomLevel = this.option("zoomLevel");
 
         switch(zoomLevel) {
             case "month":
@@ -397,7 +398,7 @@ var Calendar = Editor.inherit({
             }
         }
 
-        if(this._view.isDateDisabled(newDate)) {
+        if(this._view.isDateDisabled(newDate) && newDate <= new Date(maxDate)) {
             this._moveCurrentDate(offset, newDate);
             return;
         }
