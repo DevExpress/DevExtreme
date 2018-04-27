@@ -99,7 +99,7 @@ QUnit.performanceTest("updateDimensions with columnFixing", function(assert) {
 
     var measureFunction = createDataGridMeasureFunction("updateDimensions");
 
-    assert.measureStyleRecalculation(measureFunction, 5);
+    assert.measureStyleRecalculation(measureFunction, 3);
 });
 
 QUnit.performanceTest("updateDimensions with virtual scrolling", function(assert) {
@@ -146,7 +146,7 @@ QUnit.performanceTest("refresh with columnFixing", function(assert) {
 
     var measureFunction = createDataGridMeasureFunction("refresh");
 
-    assert.measureStyleRecalculation(measureFunction, 7);
+    assert.measureStyleRecalculation(measureFunction, 5);
 });
 
 QUnit.performanceTest("refresh with virtual scrolling", function(assert) {
