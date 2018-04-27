@@ -408,7 +408,10 @@ exports.MockTranslator = function(data) {
         checkMinBarSize: function() {
             return Math.abs(arguments[0]) < arguments[1] ? arguments[0] >= 0 ? arguments[1] : -arguments[1] : arguments[0];
         },
-        reinit: commonUtils.noop
+        reinit: commonUtils.noop,
+        isEqualRange: function() {
+            return true;
+        }
     };
 };
 
@@ -983,6 +986,9 @@ var MockAxis = exports.MockAxis = function(renderOptions) {
                 interval: null,
                 ticks: []
             };
+        },
+        isZoomed: function() {
+            return true;
         }
     };
 };

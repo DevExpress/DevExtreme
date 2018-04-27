@@ -9,6 +9,7 @@ var extend = require("../../core/utils/extend").extend,
     logarithmicTranslator = require("./logarithmic_translator"),
     vizUtils = require("../core/utils"),
     typeUtils = require("../../core/utils/type"),
+    rangeModule = require("./range"),
     getLog = vizUtils.getLog,
     getPower = vizUtils.getPower,
     isDefined = typeUtils.isDefined,
@@ -149,9 +150,19 @@ function isEqualRange(range) {
     const businessRange = that.getBusinessRange();
     const canvasOptions = getCanvasBounds(businessRange);
     const correctionPrecision = getEqualityCorrection(businessRange) / 100;
+    const comparingRange = new rangeModule.Range(range);
 
-    return range && _abs(range.min - canvasOptions.rangeMin) <= correctionPrecision &&
-        _abs(range.max - canvasOptions.rangeMax) <= correctionPrecision;
+    if(businessRange.axisType === "discrete") {
+        return false;
+    }
+
+    if(range && businessRange.axisType === "logarithmic") {
+        comparingRange.min = comparingRange.min && getLog(comparingRange.min, businessRange.base);
+        comparingRange.max = comparingRange.max && getLog(comparingRange.max, businessRange.base);
+    }
+
+    return range && (!isDefined(comparingRange.min) || _abs(comparingRange.min - canvasOptions.rangeMin) <= correctionPrecision) &&
+        (!isDefined(comparingRange.max) || _abs(comparingRange.max - canvasOptions.rangeMax) <= correctionPrecision);
 }
 
 function checkGestureEventsForScaleEdges(scrollThreshold, scale, scroll, touches, zoomArgs) {
