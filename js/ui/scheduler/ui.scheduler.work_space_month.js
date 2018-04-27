@@ -19,7 +19,7 @@ var DAYS_IN_WEEK = 7,
 
 var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
     _toggleFixedScrollableClass: function() {
-        this._dateTableScrollable.$content().toggleClass(DATE_TABLE_SCROLLABLE_FIXED_CLASS, !this._isWorkSpaceWithCount());
+        this._dateTableScrollable.$content().toggleClass(DATE_TABLE_SCROLLABLE_FIXED_CLASS, !this._isWorkSpaceWithCount() && !this._isVerticalGroupedWorkSpace());
     },
 
     _getElementClass: function() {
@@ -95,7 +95,7 @@ var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
         if(this._isVerticalGroupedWorkSpace()) {
             this._createWorkSpaceScrollableElements();
         } else {
-            this._createWorkSpaceStaticElements();
+            this.callBase();
         }
     },
 
