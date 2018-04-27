@@ -1,5 +1,5 @@
 /**
- * Globalize v1.1.1
+ * Globalize v1.3.0
  *
  * http://github.com/jquery/globalize
  *
@@ -7,10 +7,10 @@
  * Released under the MIT license
  * http://jquery.org/license
  *
- * Date: 2016-02-04T12:01Z
+ * Date: 2017-07-03T21:37Z
  */
 /*!
- * Globalize v1.1.1 2016-02-04T12:01Z Released under the MIT license
+ * Globalize v1.3.0 2017-07-03T21:37Z Released under the MIT license
  * http://git.io/TrdQbw
  */
 (function( root, factory ) {
@@ -157,7 +157,7 @@ var runtimeBind = function( args, cldr, fn, runtimeArgs ) {
 		fnName = functionName( fn ),
 		locale = cldr.locale;
 
-	// If name of the function is not available, this is most likely due uglification,
+	// If name of the function is not available, this is most likely due to uglification,
 	// which most likely means we are in production, and runtimeBind here is not necessary.
 	if ( !fnName ) {
 		return fn;

@@ -726,6 +726,10 @@ if(Globalize && Globalize.formatDate) {
                     formatter = formattersCache[formatCacheKey] = Globalize.dateFormatter(format);
                 }
             } else {
+                if(!this._isAcceptableFormat(format)) {
+                    return;
+                }
+
                 formatter = Globalize.dateFormatter(format);
             }
 
