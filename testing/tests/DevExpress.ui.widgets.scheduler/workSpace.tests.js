@@ -1137,8 +1137,8 @@ QUnit.testStart(function() {
     QUnit.test("Group table content should have right height", function(assert) {
         var $groupHeaderContents = this.instance.$element().find(".dx-scheduler-group-header-content");
 
-        assert.roughEqual($groupHeaderContents.eq(0).outerHeight(), 149, 5, "Group header content height is OK");
-        assert.roughEqual($groupHeaderContents.eq(1).outerHeight(), 149, 5, "Group header content height is OK");
+        assert.roughEqual($groupHeaderContents.eq(0).outerHeight(), 449, 5, "Group header content height is OK");
+        assert.roughEqual($groupHeaderContents.eq(1).outerHeight(), 449, 5, "Group header content height is OK");
     });
 
     QUnit.test("Group width calculation", function(assert) {
