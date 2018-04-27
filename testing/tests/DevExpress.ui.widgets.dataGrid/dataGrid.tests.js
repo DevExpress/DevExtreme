@@ -420,6 +420,49 @@ QUnit.test("Row expand state should not be changed on row click when scrolling m
     assert.ok(dataGrid.isRowExpanded(["1"]), "first group row is expanded");
 });
 
+// T618080
+QUnit.test("Fix group footer presents at the end of virtual pages", function(assert) {
+    // arrange
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        columns: ["C0", "C1", "C2"],
+        loadingTimeout: undefined,
+        dataSource: {
+            store: [
+                { C0: 10, C1: 11, C2: 12 }, { C0: 10, C1: 11, C2: 12 },
+                { C0: 10, C1: 12, C2: 12 }
+            ],
+            group: ["C0", "C1"]
+        },
+        paging: {
+            pageSize: 2
+        },
+        scrolling: {
+            mode: "infinite"
+        },
+        summary: {
+            groupItems: [
+                {
+                    column: "C2",
+                    summaryType: "count",
+                    showInGroupFooter: true
+                }
+            ]
+        },
+    }).dxDataGrid("instance");
+
+    // arrange, assert
+    var visibleRows = dataGrid.getVisibleRows();
+    assert.equal(visibleRows.length, 9, "visible rows count");
+    assert.equal(visibleRows.filter(function(item) { return item.rowType === "groupFooter"; }).length, 3, "group footers count");
+    assert.equal(visibleRows[1].rowType, "group", "group row");
+    assert.equal(visibleRows[3].rowType, "data", "data row");
+    assert.equal(visibleRows[4].rowType, "groupFooter", "group footer row");
+    assert.equal(visibleRows[5].rowType, "group", "group row");
+    assert.equal(visibleRows[6].rowType, "data", "data row");
+    assert.equal(visibleRows[7].rowType, "groupFooter", "group footer row");
+    assert.equal(visibleRows[8].rowType, "groupFooter", "group footer row");
+});
+
 // T601360
 QUnit.test("Update cell after infinit scrolling and editing must processing after all pages has been loaded", function(assert) {
     // arrange
