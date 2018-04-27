@@ -518,6 +518,17 @@ QUnit.test("navigator caption is correct after fast left short swipe", function(
     assert.equal(navigatorText, expectedText, "navigator caption is correct");
 });
 
+QUnit.test("navigator buttons should displays correctly on short min/max range", function(assert) {
+    this.reinit({
+        min: new Date(1522454400000),
+        max: new Date(1523923200000),
+        value: new Date(1522454400000)
+    });
+
+    assert.notOk(this.$navigatorNext.hasClass(CALENDAR_DISABLED_NAVIGATOR_LINK_CLASS), "The next navigator button is enabled");
+    assert.ok(this.$navigatorPrev.hasClass(CALENDAR_DISABLED_NAVIGATOR_LINK_CLASS), "The prev navigator button is disabled");
+});
+
 
 QUnit.module("Views initial positions", {
     beforeEach: function() {

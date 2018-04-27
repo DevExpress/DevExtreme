@@ -638,6 +638,8 @@ var Calendar = Editor.inherit({
         this._beforeView = this._isViewAvailable(beforeDate) ? this._renderSpecificView(beforeDate) : null;
 
         var afterDate = this._getDateByOffset(1, currentDate);
+        afterDate.setDate(1);
+
         this._afterView = this._isViewAvailable(afterDate) ? this._renderSpecificView(afterDate) : null;
 
         this._translateViews();
