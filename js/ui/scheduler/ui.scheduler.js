@@ -2448,7 +2448,8 @@ var Scheduler = Widget.inherit({
     },
 
     _getRecurrenceExceptionDate: function(exceptionDate, targetStartDate) {
-        exceptionDate.setHours(targetStartDate.getHours(), targetStartDate.getMinutes(), targetStartDate.getSeconds(), targetStartDate.getMilliseconds());
+        var startDate = this.fire("convertDateByTimezoneBack", targetStartDate);
+        exceptionDate.setHours(startDate.getHours(), startDate.getMinutes(), startDate.getSeconds(), startDate.getMilliseconds());
 
         return dateSerialization.serializeDate(exceptionDate, "yyyyMMddTHHmmss");
     },
