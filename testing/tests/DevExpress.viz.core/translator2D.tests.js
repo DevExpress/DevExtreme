@@ -648,7 +648,6 @@ QUnit.test('Compare numeric business range', function(assert) {
     var canvas = $.extend({}, canvasTemplate),
         translator = new translator2DModule.Translator2D($.extend({}, numericRange), canvas, optionsHorizontal);
 
-
     assert.ok(translator.constructor.prototype.isEqualRange.call(translator, { min: 0, max: 100 }));
     assert.ok(!translator.constructor.prototype.isEqualRange.call(translator, { min: 10 }));
     assert.ok(!translator.constructor.prototype.isEqualRange.call(translator, { min: 0, max: 90 }));
@@ -660,7 +659,6 @@ QUnit.test('Compare numeric business range', function(assert) {
 QUnit.test('Compare logarithmic business range', function(assert) {
     var canvas = $.extend({}, canvasTemplate),
         translator = new translator2DModule.Translator2D($.extend({}, logarithmicRange), canvas, optionsHorizontal);
-
 
     assert.ok(translator.constructor.prototype.isEqualRange.call(translator, { min: 10, max: 10000 }));
     assert.ok(!translator.constructor.prototype.isEqualRange.call(translator, { min: 100, max: 10000 }));
@@ -674,7 +672,6 @@ QUnit.test('Compare datetime business range', function(assert) {
     var canvas = $.extend({}, canvasTemplate),
         translator = new translator2DModule.Translator2D($.extend({}, datetimeRange), canvas, optionsHorizontal);
 
-
     assert.ok(translator.constructor.prototype.isEqualRange.call(translator, { min: new Date(2012, 9, 1), max: new Date(2012, 9, 2) }));
     assert.ok(!translator.constructor.prototype.isEqualRange.call(translator, { min: new Date(2012, 9, 1, 13), max: new Date(2012, 9, 2) }));
     assert.ok(!translator.constructor.prototype.isEqualRange.call(translator, { min: new Date(2012, 9, 1), max: new Date(2012, 9, 1, 13) }));
@@ -686,7 +683,6 @@ QUnit.test('Compare datetime business range', function(assert) {
 QUnit.test('Compare discrete business range', function(assert) {
     var canvas = $.extend({}, canvasTemplate),
         translator = new translator2DModule.Translator2D($.extend({}, discreteRange), canvas, optionsHorizontal);
-
 
     assert.ok(!translator.constructor.prototype.isEqualRange.call(translator, { min: "First", max: "Fourth" }));
     assert.ok(!translator.constructor.prototype.isEqualRange.call(translator, { min: "Second", max: "Fourth" }));
