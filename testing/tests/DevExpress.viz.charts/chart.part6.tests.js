@@ -1230,6 +1230,10 @@ QUnit.test("adjustOnZoom option", function(assert) {
         valAxis = chart._valueAxes[0],
         argAxis = chart._argumentAxes[0];
     this.themeManager.getOptions.withArgs("adjustOnZoom").returns(true);
+    argAxis.getViewport.returns({
+        min: chart._zoomMinArg,
+        max: chart._zoomMaxArg
+    });
 
     // act
     chart.option({
@@ -1244,6 +1248,71 @@ QUnit.test("adjustOnZoom option", function(assert) {
     assert.ok(series === chart.getAllSeries()[0], "Series should not be recreated");
     assert.ok(valAxis === chart._valueAxes[0], "Val axis should not be recreated");
     assert.ok(argAxis === chart._argumentAxes[0], "Arg axis should not be recreated");
+});
+
+QUnit.test("adjustOnZoom with min/max options", function(assert) {
+    var stubSeries1 = new MockSeries({});
+    seriesMockData.series.push(stubSeries1);
+
+    stubSeries1.getViewport.returns({
+        min: 10,
+        max: 15
+    });
+
+    var chart = this.createChart({
+        series: [{
+            type: "line"
+        }]
+    });
+
+    var valAxis = chart._valueAxes[0],
+        argAxis = chart._argumentAxes[0];
+    this.themeManager.getOptions.withArgs("adjustOnZoom").returns(true);
+    argAxis.getViewport.returns(stubSeries1.getViewport());
+
+    valAxis.zoom.reset();
+
+    // act
+    chart.option({
+        adjustOnZoom: true
+    });
+
+    // assert
+    assert.strictEqual(stubSeries1.getValueAxis().zoom.callCount, 1);
+    assert.deepEqual(stubSeries1.getValueAxis().zoom.lastCall.args, [10, 15], "zoom args");
+});
+
+QUnit.test("adjustOnZoom disabled with min/max options (no rerender)", function(assert) {
+    var stubSeries1 = new MockSeries({});
+    seriesMockData.series.push(stubSeries1);
+
+    stubSeries1.getViewport.returns({
+        min: 10,
+        max: 15
+    });
+
+    var chart = this.createChart({
+        series: [{
+            type: "line"
+        }]
+    });
+
+    var valAxis = chart._valueAxes[0],
+        argAxis = chart._argumentAxes[0];
+    this.themeManager.getOptions.withArgs("adjustOnZoom").returns(true);
+    argAxis.getViewport.returns(stubSeries1.getViewport());
+    argAxis.isZoomed = function() { return false; };
+    valAxis.isZoomed = function() { return true; };
+
+    valAxis.zoom.reset();
+
+    // act
+    chart.option({
+        adjustOnZoom: true
+    });
+
+    // assert
+    assert.strictEqual(stubSeries1.getValueAxis().zoom.callCount, 0);
 });
 
 QUnit.module("Change options - recreate series but not axes", commons.environment);

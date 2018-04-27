@@ -553,7 +553,11 @@ var dxChart = AdvancedChart.inherit({
             useAggregation = that._options.useAggregation,
             canvas = that._canvas,
             series = that._getVisibleSeries(),
-            canvasLength = that._isRotated() ? canvas.height - canvas.top - canvas.bottom : canvas.width - canvas.left - canvas.right;
+            canvasLength = that._isRotated() ? canvas.height - canvas.top - canvas.bottom : canvas.width - canvas.left - canvas.right,
+            argumentAxis = that._getArgumentAxis(),
+            argumentViewport = argumentAxis.getViewport(),
+            minMaxDefined = argumentViewport && (_isDefined(argumentViewport.min) || _isDefined(argumentViewport.max)),
+            isArgumentAxisZoomed = argumentAxis.isZoomed();
 
         that._createPanesBackground();
         that._appendAxesGroups();
@@ -568,8 +572,11 @@ var dxChart = AdvancedChart.inherit({
             });
         }
 
-        if((useAggregation || _isDefined(that._zoomMinArg) || _isDefined(that._zoomMaxArg)) && that._themeManager.getOptions("adjustOnZoom")) {
+        if((useAggregation || minMaxDefined) && that._themeManager.getOptions("adjustOnZoom")) {
             that._valueAxes.forEach(function(axis) {
+                if(!isArgumentAxisZoomed && axis.isZoomed()) {
+                    return;
+                }
                 var viewport = series.filter(function(s) {
                     return s.getValueAxis() === axis;
                 }).reduce(function(range, s) {

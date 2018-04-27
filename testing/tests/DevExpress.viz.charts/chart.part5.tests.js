@@ -46,6 +46,10 @@ QUnit.test("chart pass common series viewport to value axis on zoom", function(a
     var chart = this.createChart({
         series: [{ type: "line" }, { type: "line" }]
     });
+    chart._argumentAxes[0].getViewport.returns({
+        min: 10,
+        max: 50
+    });
     // act
 
     chart.zoomArgument(10, 50);
@@ -153,7 +157,10 @@ QUnit.test("No reset zooming on series changed", function(assert) {
             type: "line"
         }]
     });
-
+    chart._argumentAxes[0].getViewport.returns({
+        min: 10,
+        max: 50
+    });
 
     chart.zoomArgument(10, 50);
 
@@ -203,6 +210,10 @@ QUnit.test("showZero has affect to value axis on zoom", function(assert) {
     var chart = this.createChart({
         series: [{ type: "line" }]
     });
+    chart._argumentAxes[0].getViewport.returns({
+        min: 10,
+        max: 50
+    });
     // act
 
     chart.zoomArgument(10, 50);
@@ -241,6 +252,10 @@ QUnit.test("MultiAxis chart", function(assert) {
             { name: "axis1" },
             { name: "axis1" }
         ]
+    });
+    chart._argumentAxes[0].getViewport.returns({
+        min: 10,
+        max: 50
     });
     // act
     chart.zoomArgument(10, 50);
@@ -281,6 +296,10 @@ QUnit.test("Zoom all argument axis", function(assert) {
             name: "p2"
         }]
     });
+    chart._argumentAxes[0].getViewport.returns({
+        min: 10,
+        max: 50
+    });
     // act
     chart.zoomArgument(10, 50);
     // assert
@@ -313,6 +332,10 @@ QUnit.test("Zoom argument axis, two series, one of them is not visible", functio
         }, {
             type: "line"
         }]
+    });
+    chart._argumentAxes[0].getViewport.returns({
+        min: 10,
+        max: 50
     });
     // act
     chart.zoomArgument(10, 50);
