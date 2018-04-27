@@ -9,7 +9,6 @@ gulp.task('vendor', function() {
     return merge(
         gulp.src([
             './node_modules/angular/angular?(.min).js',
-            './vendor/angular-route/*',
             './vendor/cldr/**',
             './vendor/globalize/**',
             './vendor/jquery/*',
