@@ -1101,13 +1101,13 @@ QUnit.test("Recurrence exception should be adjusted by scheduler timezone after 
         timeZone: "Australia/Sydney",
     });
 
-    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(0).trigger("dxclick");
+    this.instance.element().find(".dx-scheduler-appointment").eq(0).trigger("dxclick");
     this.clock.tick(300);
 
     $(".dx-scheduler-appointment-tooltip-buttons .dx-button").eq(0).trigger("dxclick");
     $(".dx-dialog-buttons .dx-button").eq(1).trigger("dxclick");
 
-    var $appointment = this.instance.$element().find(".dx-scheduler-appointment");
+    var $appointment = this.instance.element().find(".dx-scheduler-appointment");
 
     assert.notOk($appointment.length, "appt is deleted");
 });
