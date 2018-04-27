@@ -715,6 +715,9 @@ registerTheme({
         innerRadius: 0.5,
         minDiameter: 0.5,
         type: "pie",
+        dataPrepareSettings: {
+            _skipArgumentSorting: true
+        },
         commonSeriesSettings: {
             pie: {
                 border: {

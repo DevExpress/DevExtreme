@@ -9,7 +9,7 @@ var $ = require("jquery"),
     dxPieChart = require("viz/pie_chart"),
     chartMocks = require("../../helpers/chartMocks.js"),
     MockSeries = chartMocks.MockSeries,
-    MockPoint = chartMocks.MockSeries,
+    MockPoint = chartMocks.MockPoint,
     insertMockFactory = chartMocks.insertMockFactory,
     resetMockFactory = chartMocks.resetMockFactory;
 
