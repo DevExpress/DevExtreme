@@ -95,7 +95,7 @@ var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
         if(this._isVerticalGroupedWorkSpace()) {
             this._createWorkSpaceScrollableElements();
         } else {
-            this._createWorkSpaceStaticElements();
+            this.callBase();
         }
     },
 
