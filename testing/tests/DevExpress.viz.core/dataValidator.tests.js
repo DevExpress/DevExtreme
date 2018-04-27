@@ -1756,14 +1756,12 @@ QUnit.test("merge. series has more than one the same arguments", function(assert
             argumentAxisType: "discrete",
             valueType: "numeric",
             type: "pie"
-        }), null, { sortingMethod: false });
+        }), null, { sortingMethod: false, _skipArgumentSorting: true });
 
     checkParsedData(parsedData, {
         "arg": {
-            arg: ["oranges", "oranges", "apples", "kiwi", "kiwi", "bananas"],
-            "originalarg": ["oranges", "oranges", "apples", "kiwi", "kiwi", "bananas"],
-            val: [22, 45, 11, 18, 2, 29],
-            "originalval": [22, 45, 11, 18, 2, 29]
+            arg: ["oranges", "apples", "oranges", "kiwi", "bananas", "kiwi"],
+            val: [22, 11, 45, 18, 29, 2]
         }
     }, { assert: assert });
 });

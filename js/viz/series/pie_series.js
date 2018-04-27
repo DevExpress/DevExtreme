@@ -288,7 +288,7 @@ exports.pie = _extend({}, barSeries, {
 
     getPointsByKeys: function(arg, argumentIndex) {
         var pointsByArg = this.getPointsByArg(arg);
-        return pointsByArg[argumentIndex] && [pointsByArg[argumentIndex]] || pointsByArg;
+        return pointsByArg[argumentIndex] && [pointsByArg[argumentIndex]] || [];
     }
 });
 

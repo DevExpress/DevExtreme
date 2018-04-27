@@ -1196,8 +1196,8 @@ var environment = {
         seriesPoints = series[1].getPoints();
         assert.equal(seriesPoints[0].index, 0);
         assert.equal(seriesPoints[1].index, 4);
-        assert.equal(seriesPoints[2].index, 6);
-        assert.equal(seriesPoints[3].index, 5);
+        assert.equal(seriesPoints[2].index, 5);
+        assert.equal(seriesPoints[3].index, 6);
     });
 
     QUnit.test("argument indecies in the legend data of points with the same arguments", function(assert) {
@@ -1247,11 +1247,11 @@ var environment = {
         assert.equal(legendData[4].argumentIndex, 0);
         assert.equal(legendData[4].argument, "Fourth");
 
-        assert.equal(legendData[5].argumentIndex, 1);
-        assert.equal(legendData[5].argument, "Fourth");
+        assert.equal(legendData[5].argumentIndex, 0);
+        assert.equal(legendData[5].argument, "Fifth");
 
-        assert.equal(legendData[6].argumentIndex, 0);
-        assert.equal(legendData[6].argument, "Fifth");
+        assert.equal(legendData[6].argumentIndex, 1);
+        assert.equal(legendData[6].argument, "Fourth");
     });
 
     QUnit.test("pass legendCallback to series", function(assert) {
