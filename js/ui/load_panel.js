@@ -46,7 +46,7 @@ var LoadPanel = Overlay.inherit({
             /**
             * @name dxLoadPanelOptions_width
             * @publicName width
-            * @type number
+            * @inheritdoc
             * @default 222
             */
             width: 222,
@@ -54,7 +54,7 @@ var LoadPanel = Overlay.inherit({
             /**
             * @name dxLoadPanelOptions_height
             * @publicName height
-            * @type number
+            * @inheritdoc
             * @default 90
             */
             height: 90,
@@ -204,7 +204,6 @@ var LoadPanel = Overlay.inherit({
                     /**
                     * @name dxLoadPanelOptions_message
                     * @publicName message
-                    * @type string
                     * @default "" @for Material
                     */
                     message: "",
@@ -212,7 +211,7 @@ var LoadPanel = Overlay.inherit({
                     /**
                     * @name dxLoadPanelOptions_width
                     * @publicName width
-                    * @type number
+                    * @inheritdoc
                     * @default 60 @for Material
                     */
                     width: 60,
@@ -220,7 +219,7 @@ var LoadPanel = Overlay.inherit({
                     /**
                     * @name dxLoadPanelOptions_height
                     * @publicName height
-                    * @type number
+                    * @inheritdoc
                     * @default 60 @for Material
                     */
                     height: 60,
