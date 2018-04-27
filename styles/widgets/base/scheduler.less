@@ -382,6 +382,18 @@
         }
 
         &.dx-scheduler-work-space-month {
+            .dx-scheduler-sidebar-scrollable {
+                width: @size;
+            }
+
+            .dx-scheduler-date-table-scrollable {
+                margin-left: @size;
+            }
+            
+            .dx-scheduler-header-scrollable.dx-scrollable {
+                margin: 0 0 0 @size;
+            }
+
             .dx-scheduler-date-table {
                 margin-left: 0;
 
@@ -2417,15 +2429,6 @@
             .dx-scheduler-sidebar-scrollable {
                 display: block;
                 float: left;
-                width: @SCHEDULER_LEFT_COLUMN_WIDTH;
-            }
-
-            .dx-scheduler-date-table-scrollable {
-                margin-left: @SCHEDULER_LEFT_COLUMN_WIDTH;
-            }
-
-            .dx-scheduler-header-scrollable.dx-scrollable {
-                margin: 0 0 0 @SCHEDULER_LEFT_COLUMN_WIDTH;
             }
 
             .dx-scheduler-header-panel .dx-scheduler-header-row:before {
@@ -2483,21 +2486,6 @@
                 .dx-scheduler-sidebar-scrollable {
                     padding-bottom: @SCHEDULER_HEADER_PANEL_OFFSET;
                     margin-bottom: -@SCHEDULER_HEADER_PANEL_OFFSET;
-                }
-            }
-
-            &.dx-scheduler-work-space-month {
-                .dx-scheduler-sidebar-scrollable {
-                    display: block;
-                    width: @SCHEDULER_LEFT_COLUMN_WIDTH;
-                }
-
-                .dx-scheduler-date-table-scrollable {
-                    margin-left: @SCHEDULER_LEFT_COLUMN_WIDTH;
-                }
-
-                .dx-scheduler-header-scrollable.dx-scrollable {
-                    margin: 0 0 0 @SCHEDULER_LEFT_COLUMN_WIDTH;
                 }
             }
         }
