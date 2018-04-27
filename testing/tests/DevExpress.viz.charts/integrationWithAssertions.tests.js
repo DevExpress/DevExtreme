@@ -1111,6 +1111,23 @@ QUnit.test("Pie chart groups and classes", function(assert) {
     assert.equal($container.find(".dxc-legend").length, 1, "There is one legend group");
 });
 
+QUnit.test("Pie chart. Show point in order in dataSource", function(assert) {
+    var pie = this.createPieChart({
+        series: {},
+        dataSource: [
+            { arg: "A", val: 11.10 },
+            { arg: "B", val: 12.57 },
+            { arg: "A", val: 13.51 }
+        ]
+    });
+
+    var pointArguments = pie.getAllSeries()[0].getAllPoints().map(function(p) {
+        return p.argument;
+    });
+
+    assert.deepEqual(pointArguments, ["A", "B", "A"]);
+});
+
 // T412270
 QUnit.test("select point after dataSource updating", function(assert) {
     // arrange
