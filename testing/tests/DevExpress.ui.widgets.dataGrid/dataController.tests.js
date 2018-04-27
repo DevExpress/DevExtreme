@@ -2257,7 +2257,7 @@ var setupVirtualRenderingModule = function() {
         dataSource: array
     };
 
-    setupDataGridModules(this, ['data', 'virtualScrolling', 'columns', 'filterRow', 'search', 'editing', 'grouping', 'headerFilter'], {
+    setupDataGridModules(this, ['data', 'virtualScrolling', 'columns', 'filterRow', 'search', 'editing', 'grouping', 'headerFilter', 'masterDetail'], {
         initDefaultOptions: true,
         options: options
     });
@@ -2423,6 +2423,36 @@ QUnit.test("enabled row render virtualization and disabled scrolling mode virtua
         changeType: "append",
         items: this.dataController.items().slice(10, 15)
     }]);
+});
+
+QUnit.test("scroll to to the next page after expand", function(assert) {
+    this.options.scrolling.rowRenderingMode = "standard";
+    this.dataController.optionChanged({ name: "scrolling" });
+    this.dataController.viewportItemSize(10);
+    this.dataController.viewportSize(9);
+    this.clock.tick();
+
+    this.dataController.expandRow(1);
+    this.dataController.expandRow(19);
+    this.dataController.expandRow(20);
+
+    this.dataController.setViewportPosition(200);
+    this.clock.tick();
+
+    // act
+    this.changedArgs = [];
+    this.dataController.setViewportPosition(400);
+    this.clock.tick();
+
+    // assert
+    assert.strictEqual(this.dataController.items().length, 61);
+    assert.strictEqual(this.dataController.items()[0].key, 20);
+    assert.strictEqual(this.dataController.getContentOffset("begin"), 200);
+    assert.strictEqual(this.dataController.getContentOffset("end"), 200);
+    assert.deepEqual(this.changedArgs.length, 1);
+    assert.deepEqual(this.changedArgs[0].changeType, "append");
+    assert.deepEqual(this.changedArgs[0].items.length, 20);
+    assert.deepEqual(this.changedArgs[0].removeCount, 22, "remove count should include expanded rows");
 });
 
 // =================================
