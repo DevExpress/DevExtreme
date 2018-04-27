@@ -150,18 +150,18 @@ function isEqualRange(range) {
     const businessRange = that.getBusinessRange();
     const canvasOptions = getCanvasBounds(businessRange);
     const correctionPrecision = getEqualityCorrection(businessRange) / 100;
-    const comparingRange = range && new rangeModule.Range(range);
+    const comparingRange = new rangeModule.Range(range);
 
     if(businessRange.axisType === "discrete") {
         return false;
     }
 
-    if(comparingRange && businessRange.axisType === "logarithmic") {
-        comparingRange.min = comparingRange.min && vizUtils.getLog(comparingRange.min, businessRange.base);
-        comparingRange.max = comparingRange.max && vizUtils.getLog(comparingRange.max, businessRange.base);
+    if(range && businessRange.axisType === "logarithmic") {
+        comparingRange.min = comparingRange.min && getLog(comparingRange.min, businessRange.base);
+        comparingRange.max = comparingRange.max && getLog(comparingRange.max, businessRange.base);
     }
 
-    return comparingRange && (!isDefined(comparingRange.min) || _abs(comparingRange.min - canvasOptions.rangeMin) <= correctionPrecision) &&
+    return range && (!isDefined(comparingRange.min) || _abs(comparingRange.min - canvasOptions.rangeMin) <= correctionPrecision) &&
         (!isDefined(comparingRange.max) || _abs(comparingRange.max - canvasOptions.rangeMax) <= correctionPrecision);
 }
 
