@@ -836,6 +836,27 @@ QUnit.module("Form", () => {
         assert.equal($editors.eq(0).dxNumberBox("option", "validationBoundary"), undefined);
         assert.equal($editors.eq(1).dxTextBox("option", "validationBoundary"), undefined);
     });
+
+    test("button item should have a Form's validation group by default", (assert) => {
+        // arrange, act
+        let $testContainer = $("#form"),
+            form = $testContainer.dxForm({
+                items: [{
+                    itemType: "button"
+                }, {
+                    itemType: "button",
+                    buttonOptions: { validationGroup: "test" }
+                }]
+            }).dxForm("instance"),
+            $buttons = $testContainer.find(".dx-button"),
+            defaultValidationGroup = form._getValidationGroup(),
+            firstButtonValidationGroup = $buttons.first().dxButton("option", "validationGroup"),
+            secondButtonValidationGroup = $buttons.last().dxButton("option", "validationGroup");
+
+        // assert
+        assert.deepEqual(firstButtonValidationGroup, defaultValidationGroup, "default validation group");
+        assert.equal(secondButtonValidationGroup, "test", "Custom validation group");
+    });
 });
 
 
