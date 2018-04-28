@@ -44,7 +44,8 @@ QUnit.test('Export method. Defined options', function(assert) {
         widget = this.createWidget({
             "export": {
                 backgroundColor: "#ff0000",
-                proxyUrl: "testProxy"
+                proxyUrl: "testProxy",
+                margin: 40
             },
             onExporting: exportingStub,
             onExported: exportedStub,
@@ -71,6 +72,7 @@ QUnit.test('Export method. Defined options', function(assert) {
     assert.equal(firstExportCall.args[1].fileName, "testName", "fileName");
     assert.equal(firstExportCall.args[1].format, "JPEG", "format");
     assert.equal(firstExportCall.args[1].proxyUrl, "testProxy", "proxyUrl");
+    assert.equal(firstExportCall.args[1].margin, 40, "margin");
 
     assert.equal(exportingStub.callCount, 1, "exporting event");
     assert.equal(exportedStub.callCount, 1, "exported event");

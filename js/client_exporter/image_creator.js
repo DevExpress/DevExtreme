@@ -29,10 +29,6 @@ var $ = require("../core/renderer"),
 
     IMAGE_QUALITY = 1,
     TEXT_DECORATION_LINE_WIDTH_COEFF = 0.05,
-    DEFAULT_MARGIN_SIZE = {
-        x: 30,
-        y: 20
-    },
     DEFAULT_FONT_SIZE = "10px",
     DEFAULT_FONT_FAMILY = "sans-serif",
     DEFAULT_TEXT_COLOR = "#000",
@@ -42,11 +38,11 @@ var $ = require("../core/renderer"),
     patterns,
     filters;
 
-function createCanvas(width, height, withoutMargins) {
+function createCanvas(width, height, margin) {
     var canvas = $("<canvas>")[0];
 
-    canvas.width = width + (withoutMargins ? 0 : DEFAULT_MARGIN_SIZE.x * 2);
-    canvas.height = height + (withoutMargins ? 0 : DEFAULT_MARGIN_SIZE.y * 2);
+    canvas.width = width + margin * 2;
+    canvas.height = height + margin * 2;
 
     return canvas;
 }
@@ -569,7 +565,7 @@ function strokeElement(context, options, isText) {
 function getPattern(context, fill) {
     var pattern = patterns[parseUrl(fill)],
         options = getElementOptions(pattern),
-        patternCanvas = createCanvas(options.width, options.height, true),
+        patternCanvas = createCanvas(options.width, options.height, 0),
         patternContext = patternCanvas.getContext("2d");
 
     drawCanvasElements(pattern.childNodes, patternContext, options);
@@ -602,19 +598,19 @@ var parseAttributes = function(attributes) {
     return newAttributes;
 };
 
-function drawBackground(context, width, height, backgroundColor) {
+function drawBackground(context, width, height, backgroundColor, margin) {
     context.fillStyle = backgroundColor || "#ffffff";
-    context.fillRect(-DEFAULT_MARGIN_SIZE.x, -DEFAULT_MARGIN_SIZE.y, width + DEFAULT_MARGIN_SIZE.x * 2, height + DEFAULT_MARGIN_SIZE.y * 2);
+    context.fillRect(-margin, -margin, width + margin * 2, height + margin * 2);
 }
 
-function getCanvasFromSvg(markup, width, height, backgroundColor) {
-    var canvas = createCanvas(width, height),
+function getCanvasFromSvg(markup, width, height, backgroundColor, margin) {
+    var canvas = createCanvas(width, height, margin),
         context = canvas.getContext("2d"),
         parser = new window.DOMParser(),
         elem = parser.parseFromString(markup, "image/svg+xml"),
         svgElem = elem.childNodes[0];
 
-    context.translate(DEFAULT_MARGIN_SIZE.x, DEFAULT_MARGIN_SIZE.y);
+    context.translate(margin, margin);
 
     imageDeferreds = [];
     domAdapter.getBody().appendChild(canvas); // for rtl mode
@@ -622,7 +618,7 @@ function getCanvasFromSvg(markup, width, height, backgroundColor) {
         canvas.dir = svgElem.attributes.direction.textContent;
     }
 
-    drawBackground(context, width, height, backgroundColor);
+    drawBackground(context, width, height, backgroundColor, margin);
     drawCanvasElements(svgElem.childNodes, context, {});
 
     domAdapter.getBody().removeChild(canvas);
@@ -649,7 +645,7 @@ exports.imageCreator = {
             parseAttributes = options.__parseAttributesFn;
         }
 
-        resolveString(string, getCanvasFromSvg(markup, width, height, backgroundColor), mimeType);
+        resolveString(string, getCanvasFromSvg(markup, width, height, backgroundColor, options.margin), mimeType);
 
         return string;
     },
