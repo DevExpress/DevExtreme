@@ -1080,7 +1080,7 @@ QUnit.test("Recurrence exception should be adjusted by scheduler timezone after 
         views: ["day"],
         currentView: "day",
         currentDate: new Date(2018, 2, 27),
-        timeZone: "Australia/Sydney",
+        timeZone: "Australia/Sydney"
     });
 
 
