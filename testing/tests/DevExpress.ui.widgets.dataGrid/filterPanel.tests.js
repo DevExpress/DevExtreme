@@ -225,7 +225,7 @@ QUnit.module("Filter Panel", {
             customizeText: function(fieldInfo) { return "CustomText"; }
         }]).done(function(result) {
             // assert
-            assert.equal(result, "[Field] Any of(CustomText)");
+            assert.equal(result, "[Field] Any of('CustomText')");
         });
     });
 
@@ -252,8 +252,8 @@ QUnit.module("Filter Panel", {
 
         // assert
         assert.equal(this.filterPanelView.element().find("." + FILTER_PANEL_TEXT_CLASS).text(), "");
-        deferred.resolve(["Two hundred"]);
-        assert.equal(this.filterPanelView.element().find("." + FILTER_PANEL_TEXT_CLASS).text(), "[Field] Custom(Two hundred)");
+        deferred.resolve("Two hundred");
+        assert.equal(this.filterPanelView.element().find("." + FILTER_PANEL_TEXT_CLASS).text(), "[Field] Custom('Two hundred')");
     });
 
     QUnit.test("custom operation target = 'filterPanel'", function(assert) {
@@ -285,6 +285,19 @@ QUnit.module("Filter Panel", {
         assert.expect(1);
         this.filterPanelView.getFilterText(filter, []).done(function(result) {
             assert.equal(result, "[Field] Between('1', '2')");
+        });
+    });
+
+    QUnit.test("from between with dates", function(assert) {
+        var filter = ["field", "between", [new Date(2012, 10, 12), new Date(2013, 2, 23)]];
+        this.initFilterPanelView({
+            columns: [{ dataField: "field", dataType: "date", format: "MM/dd/yyyy" }],
+            filterValue: filter
+        });
+
+        assert.expect(1);
+        this.filterPanelView.getFilterText(filter, []).done(function(result) {
+            assert.equal(result, "[Field] Between('11/12/2012', '03/23/2013')");
         });
     });
 

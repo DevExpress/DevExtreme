@@ -965,12 +965,12 @@ QUnit.module("Custom operations texts", {
 
         // act
         result = anyOfOperation.customizeText({
-            value: ["100", "200"],
+            value: "100",
             field: field
         });
 
         // assert
-        assert.equal(result, "100, 200");
+        assert.equal(result, "100");
     });
 
     QUnit.test("date value", function(assert) {
@@ -984,12 +984,12 @@ QUnit.module("Custom operations texts", {
 
         // act
         result = anyOfOperation.customizeText({
-            value: ["2014/1/1", "2014/2/4"],
+            value: "2014/1/1",
             field: field
         });
 
         // assert
-        assert.equal(result, "2014/1/1, 2014/2/4");
+        assert.equal(result, "2014/1/1");
     });
 
     QUnit.test("date value and custom item", function(assert) {
@@ -1015,14 +1015,14 @@ QUnit.module("Custom operations texts", {
 
         // act
         anyOfOperation.customizeText({
-            value: ["2014/1/1", "2014/2/4", "weekends"],
+            value: "2014/1/1",
             field: field
         }).done(function(data) {
             result = data;
         });
 
         // assert
-        assert.equal(result, "2014/January/1, 2014/February/4, Weekends");
+        assert.equal(result, "2014/January/1");
     });
 
     QUnit.test("lookup", function(assert) {
@@ -1052,14 +1052,14 @@ QUnit.module("Custom operations texts", {
 
         // act
         anyOfOperation.customizeText({
-            value: ["Nevada", "Colorado"],
+            value: "Nevada",
             field: field
         }).done(function(data) {
             result = data;
         });
 
         // assert
-        assert.equal(result, "Nevada Text, Colorado Text");
+        assert.equal(result, "Nevada Text");
     });
 
     QUnit.test("data source as a function", function(assert) {
@@ -1084,7 +1084,7 @@ QUnit.module("Custom operations texts", {
 
         // act
         anyOfOperation.customizeText({
-            value: ["weekends"],
+            value: "weekends",
             field: field
         }).done(function(data) {
             result = data;
@@ -1117,14 +1117,14 @@ QUnit.module("Custom operations texts", {
 
         // act
         anyOfOperation.customizeText({
-            value: [dataSourceOptions[0].value, dataSourceOptions[1].value],
+            value: dataSourceOptions[0].value,
             field: field
         }).done(function(data) {
             result = data;
         });
 
         // assert
-        assert.equal(result, dataSourceOptions[0].text + ", " + dataSourceOptions[1].text);
+        assert.equal(result, dataSourceOptions[0].text);
     });
 
     QUnit.test("groupInterval", function(assert) {
@@ -1141,11 +1141,11 @@ QUnit.module("Custom operations texts", {
 
         // act
         result = anyOfOperation.customizeText({
-            value: [100, 200],
+            value: 100,
             field: field
         });
 
         // assert
-        assert.equal(result, "100 - 200, 200 - 300");
+        assert.equal(result, "100 - 200");
     });
 });

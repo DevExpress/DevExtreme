@@ -1,9 +1,6 @@
 "use strict";
 
-var formatUtils = require("./format_utils"),
-    isDefined = require("../../core/utils/type").isDefined,
-    messageLocalization = require("../../localization/message"),
-    $ = require("../../core/renderer"),
+var $ = require("../../core/renderer"),
     extend = require("../../core/utils/extend").extend;
 
 var FILTER_BUILDER_RANGE_CLASS = "dx-filterbuilder-range",
@@ -46,26 +43,14 @@ function editorTemplate(conditionInfo, container) {
     }));
 }
 
-function customizeText(conditionInfo) {
-    var startValue = conditionInfo.value[0],
-        endValue = conditionInfo.value[1];
-
-    if(!isDefined(startValue) && !isDefined(endValue)) {
-        return messageLocalization.format("dxFilterBuilder-enterValueText");
-    }
-
-    return (isDefined(startValue) ? formatUtils.getFormattedValueText(conditionInfo.field, startValue) : "?") + " - "
-                + (isDefined(endValue) ? formatUtils.getFormattedValueText(conditionInfo.field, endValue) : "?");
-}
-
 function getConfig(caption) {
     return {
         name: "between",
         caption: caption,
         icon: "range",
+        valueSeparator: " - ",
         dataTypes: ["number", "date", "datetime"],
-        editorTemplate: editorTemplate,
-        customizeText: customizeText
+        editorTemplate: editorTemplate
     };
 }
 

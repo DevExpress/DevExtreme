@@ -1,13 +1,15 @@
 "use strict";
 
+import { Deferred, when } from "../../core/utils/deferred";
+
 var dataErrors = require("../../data/errors").errors,
     domAdapter = require("../../core/dom_adapter"),
     errors = require("../widget/ui.errors"),
     filterUtils = require("../shared/filtering"),
+    formatHelper = require("../../format_helper"),
     extend = require("../../core/utils/extend").extend,
     inflector = require("../../core/utils/inflector"),
     between = require("./between"),
-    formatUtils = require("./format_utils"),
     messageLocalization = require("../../localization/message"),
     DataSource = require("../../data/data_source/data_source").DataSource,
     filterOperationsDictionary = require("./ui.filter_operations_dictionary");
@@ -25,6 +27,10 @@ var DEFAULT_DATA_TYPE = "string",
         "boolean": ["=", "<>", "isblank", "isnotblank"],
         "object": ["isblank", "isnotblank"]
     },
+    DEFAULT_FORMAT = {
+        "date": "shortDate",
+        "datetime": "shortDateShortTime"
+    },
     LOOKUP_OPERATIONS = ["=", "<>", "isblank", "isnotblank"],
     AVAILABLE_FIELD_PROPERTIES = [
         "caption",
@@ -40,6 +46,11 @@ var DEFAULT_DATA_TYPE = "string",
         "trueText",
         "calculateFilterExpression"
     ];
+
+function getFormattedValueText(field, value) {
+    var fieldFormat = field.format || DEFAULT_FORMAT[field.dataType];
+    return formatHelper.format(value, fieldFormat);
+}
 
 function isNegationGroup(group) {
     return group
@@ -467,14 +478,21 @@ function getCurrentLookupValueText(field, value, handler) {
     });
 }
 
-function getCurrentValueText(field, value, customOperation, target = "filterBuilder") {
+function getPrimitiveValueText(field, value, customOperation, target) {
     var valueText;
     if(value === true) {
         valueText = field.trueText || messageLocalization.format("dxDataGrid-trueText");
     } else if(value === false) {
         valueText = field.falseText || messageLocalization.format("dxDataGrid-falseText");
     } else {
-        valueText = formatUtils.getFormattedValueText(field, value);
+        valueText = getFormattedValueText(field, value);
+    }
+    if(field.customizeText) {
+        valueText = field.customizeText.call(field, {
+            value: value,
+            valueText: valueText,
+            target: target
+        });
     }
     if(customOperation && customOperation.customizeText) {
         valueText = customOperation.customizeText.call(customOperation, {
@@ -483,14 +501,40 @@ function getCurrentValueText(field, value, customOperation, target = "filterBuil
             field: field,
             target: target
         });
-    } else if(field.customizeText) {
-        valueText = field.customizeText.call(field, {
-            value: value,
-            valueText: valueText,
-            target: target
-        });
     }
     return valueText;
+}
+
+function getArrayValueText(field, value, customOperation, target) {
+    return value.map(v => getPrimitiveValueText(field, v, customOperation, target));
+}
+
+function formatTextForSpecificTarget(text, target) {
+    return target !== "filterBuilder" && text ? `'${text}'` : text;
+}
+
+function checkDefaultValue(value) {
+    return value === "" || value === null;
+}
+
+function getCurrentValueText(field, value, customOperation, target = "filterBuilder") {
+    if(checkDefaultValue(value)) {
+        return "";
+    }
+
+    if(Array.isArray(value)) {
+        let result = new Deferred();
+        when.apply(this, getArrayValueText(field, value, customOperation, target)).done((...args) => {
+            let separator = (customOperation && customOperation.valueSeparator) || ", ",
+                text = args.some(item => !checkDefaultValue(item))
+                    ? args.map(item => !checkDefaultValue(item) ? item : "?").join(formatTextForSpecificTarget(separator, target))
+                    : "";
+            result.resolve(formatTextForSpecificTarget(text, target));
+        });
+        return result;
+    } else {
+        return getPrimitiveValueText(field, value, customOperation, target);
+    }
 }
 
 function itemExists(plainItems, parentId) {
@@ -612,7 +656,8 @@ function getOperationValue(condition) {
 }
 
 function isValidCondition(condition, field) {
-    if(field.dataType && field.dataType !== "string") {
+    if((field.dataType && field.dataType !== "string")
+        || (condition.length > 2 && typeof filterOperationsDictionary.getNameByFilterOperation(condition[1]) === 'undefined')) {
         return condition[2] !== "";
     }
     return true;

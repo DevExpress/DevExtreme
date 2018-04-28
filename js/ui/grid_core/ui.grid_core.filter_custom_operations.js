@@ -43,36 +43,26 @@ function baseOperation(grid) {
     };
 
     var headerFilterController = grid && grid.getController("headerFilter"),
-        formatCustomizeTextResult = function(texts, target) {
-            return texts.length > 0
-                ? target === "filterPanel" ? `'${texts.join("', '")}'` : texts.join(", ")
-                : "";
-        },
         customizeText = function(fieldInfo) {
-            var values = fieldInfo.value || [],
+            var value = fieldInfo.value,
                 column = grid.columnOption(fieldInfo.field.dataField),
                 headerFilter = column && column.headerFilter,
                 lookup = column && column.lookup;
 
             if((headerFilter && headerFilter.dataSource) || (lookup && lookup.dataSource)) {
-                column = extend({}, column, { filterType: "include", filterValues: values });
+                column = extend({}, column, { filterType: "include", filterValues: [value] });
                 var dataSourceOptions = headerFilterController.getDataSource(column);
                 dataSourceOptions.paginate = false;
                 var dataSource = new DataSourceModule.DataSource(dataSourceOptions),
                     result = new deferredUtils.Deferred();
 
-                dataSource.load().done(function(items) {
-                    texts = getSelectedItemsTexts(items);
-                    result.resolve(formatCustomizeTextResult(texts, fieldInfo.target));
+                dataSource.load().done(items => {
+                    result.resolve(getSelectedItemsTexts(items)[0]);
                 });
                 return result;
             } else {
-                var texts = values.map(function(value) {
-                    var text = headerFilterController.getHeaderItemText(value, column, 0, grid.option("headerFilter"));
-                    return text;
-                });
-
-                return formatCustomizeTextResult(texts, fieldInfo.target);
+                var text = headerFilterController.getHeaderItemText(value, column, 0, grid.option("headerFilter"));
+                return text;
             }
         };
     return {

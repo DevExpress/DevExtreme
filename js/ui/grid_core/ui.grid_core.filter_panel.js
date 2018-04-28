@@ -159,15 +159,9 @@ var FilterPanelView = modules.View.inherit({
             operationText = utils.getCaptionByOperation(operation, options.filterOperationDescriptions);
         }
 
-        if(customOperation && customOperation.customizeText) {
-            when(utils.getCurrentValueText(field, value, customOperation, FILTER_PANEL_TARGET)).done(function(text) {
-                result.resolve(that._getConditionText(fieldText, operationText, value, text));
-            });
-        } else if(Array.isArray(value)) {
-            result.resolve(that._getConditionText(fieldText, operationText, value, `'${value.join("', '")}'`));
-        } else if(isDefined(value)) {
+        if(isDefined(value) || (customOperation && customOperation.customizeText)) {
             let displayValue = gridUtils.getDisplayValue(field, value);
-            when(utils.getCurrentValueText(field, displayValue, customOperation, FILTER_PANEL_TARGET)).done(function(text) {
+            when(utils.getCurrentValueText(field, displayValue, customOperation, FILTER_PANEL_TARGET)).done(text => {
                 result.resolve(that._getConditionText(fieldText, operationText, value, text));
             });
         } else {
@@ -182,7 +176,7 @@ var FilterPanelView = modules.View.inherit({
             textParts = [],
             groupValue = utils.getGroupValue(filterValue);
 
-        filterValue.forEach(function(item) {
+        filterValue.forEach(item => {
             if(utils.isCondition(item)) {
                 textParts.push(that.getConditionText(item, options));
             } else if(utils.isGroup(item)) {
@@ -190,13 +184,13 @@ var FilterPanelView = modules.View.inherit({
             }
         });
 
-        when.apply(this, textParts).done(function() {
+        when.apply(this, textParts).done((...args) => {
             let text;
             if(groupValue[0] === "!") {
                 var groupText = options.groupOperationDescriptions["not" + groupValue.substring(1, 2).toUpperCase() + groupValue.substring(2)].split(" ");
-                text = `${groupText[0]} ${arguments[0]}`;
+                text = `${groupText[0]} ${args[0]}`;
             } else {
-                text = Array.from(arguments).join(` ${options.groupOperationDescriptions[groupValue]} `);
+                text = args.join(` ${options.groupOperationDescriptions[groupValue]} `);
             }
             if(isInnerGroup) {
                 text = `(${text})`;
