@@ -857,6 +857,23 @@ QUnit.module("Form", () => {
         assert.deepEqual(firstButtonValidationGroup, defaultValidationGroup, "default validation group");
         assert.equal(secondButtonValidationGroup, "test", "Custom validation group");
     });
+
+    test("button item should catch a custom validation group from Form", (assert) => {
+        // arrange, act
+        let $testContainer = $("#form");
+
+        $testContainer.dxForm({
+            validationGroup: "test",
+            items: [{
+                itemType: "button"
+            }]
+        });
+
+        let buttonValidationGroup = $testContainer.find(".dx-button").dxButton("option", "validationGroup");
+
+        // assert
+        assert.equal(buttonValidationGroup, "test", "Button validationGroup is OK");
+    });
 });
 
 
