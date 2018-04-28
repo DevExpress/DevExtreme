@@ -1384,6 +1384,23 @@ QUnit.test("Timepanel rows count should be OK for long appointment", function(as
     assert.equal($element.find(".dx-scheduler-time-panel-row").length, 4, "Time panel rows are OK");
 });
 
+QUnit.test("Timepanel rows count should be OK for long recurrence appointment", function(assert) {
+    this.createInstance({
+        views: ["agenda"],
+        currentView: "agenda",
+        currentDate: new Date(2016, 1, 24),
+        startDateExpr: "Start",
+        recurrenceRuleExpr: "Recurrence",
+        dataSource: [
+            { Start: new Date(2016, 1, 24, 22), endDate: new Date(2016, 1, 25, 10), text: "a", Recurrence: "FREQ=DAILY;COUNT=2" }
+        ]
+    });
+
+    var $element = this.instance.$element();
+
+    assert.equal($element.find(".dx-scheduler-time-panel-row").length, 3, "Time panel rows are OK");
+});
+
 QUnit.test("Long appointment should have a correct template", function(assert) {
     this.createInstance({
         views: ["agenda", "month"],
