@@ -284,7 +284,7 @@ function teardownCanvasStub() {
 }
 
 function getData(markup, isFullMode) {
-    return imageCreator.getData(markup, { width: 500, height: 250, format: "png" }, isFullMode !== undefined ? isFullMode : true);
+    return imageCreator.getData(markup, { width: 500, height: 250, format: "png", margin: 10 }, isFullMode !== undefined ? isFullMode : true);
 }
 
 QUnit.module("Svg to image to canvas", {
@@ -355,6 +355,7 @@ QUnit.test("Defined background", function(assert) {
             {
                 width: 560,
                 height: 290,
+                margin: 10,
                 format: "png",
                 backgroundColor: "#ff0000"
             });
@@ -366,10 +367,10 @@ QUnit.test("Defined background", function(assert) {
 
             assert.equal(backgroundElem.type, "fillRect", "Fill rect");
             assert.deepEqual(backgroundElem.args, {
-                x: -30,
-                y: -20,
-                width: 620,
-                height: 330
+                x: -10,
+                y: -10,
+                width: 580,
+                height: 310
             }, "Background args");
             assert.deepEqual(backgroundElem.style, {
                 fillStyle: "#ff0000",
@@ -641,7 +642,7 @@ QUnit.test("Image margins", function(assert) {
     $.when(imageBlob).done(function(blob) {
         try {
             assert.equal(context.translate.callCount, 2, "translate was called two times");
-            assert.deepEqual(context.translate.getCall(0).args, [30, 20], "Canvas translated to margin offset");
+            assert.deepEqual(context.translate.getCall(0).args, [10, 10], "Canvas translated to margin offset");
         } finally {
             done();
         }
@@ -1531,7 +1532,7 @@ QUnit.test("Defined background color", function(assert) {
     var that = this,
         done = assert.async(),
         markup = testingMarkupStart + '<rect x="50" y="50" width="200" height="200" fill="#00FF00" visibility="visible"></rect>' + testingMarkupEnd,
-        imageBlob = imageCreator.getData(markup, { width: 500, height: 250, format: "png", backgroundColor: "#ff0000" }, true);
+        imageBlob = imageCreator.getData(markup, { width: 500, height: 250, format: "png", backgroundColor: "#ff0000", margin: 10 }, true);
 
     assert.expect(4);
     $.when(imageBlob).done(function(blob) {
@@ -1539,10 +1540,10 @@ QUnit.test("Defined background color", function(assert) {
             assert.equal(that.drawnElements.length, 3, "Canvas elements count");
             assert.equal(that.drawnElements[0].type, "fillRect", "Fill rect");
             assert.deepEqual(that.drawnElements[0].args, {
-                x: -30,
-                y: -20,
-                width: 560,
-                height: 290
+                x: -10,
+                y: -10,
+                width: 520,
+                height: 270
             }, "Background args");
             assert.deepEqual(that.drawnElements[0].style, {
                 fillStyle: "#ff0000",
