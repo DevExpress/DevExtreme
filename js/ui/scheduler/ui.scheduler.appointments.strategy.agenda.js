@@ -196,9 +196,10 @@ var AgendaRenderingStrategy = BaseAppointmentsStrategy.inherit({
 
                 for(var j = 0; j < appointmentCount; j++) {
                     var appointmentData = currentAppointments[j].settings || currentAppointments[j],
-                        appointmentIsLong = this.instance.fire("appointmentTakesSeveralDays", currentAppointments[j]);
+                        appointmentIsLong = this.instance.fire("appointmentTakesSeveralDays", currentAppointments[j]),
+                        appointmentIsRecurrence = this.instance.fire("getField", "recurrenceRule", currentAppointments[j]);
 
-                    if(this.instance.fire("dayHasAppointment", day, appointmentData, true) || (appointmentIsLong && this.instance.fire("dayHasAppointment", day, currentAppointments[j], true))) {
+                    if(this.instance.fire("dayHasAppointment", day, appointmentData, true) || (!appointmentIsRecurrence && appointmentIsLong && this.instance.fire("dayHasAppointment", day, currentAppointments[j], true))) {
                         groupResult[i] += 1;
                     }
                 }
