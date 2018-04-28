@@ -133,10 +133,10 @@ var FilterPanelView = modules.View.inherit({
         }
     },
 
-    _getConditionText: function(fieldText, operationText, value, text) {
+    _getConditionText: function(fieldText, operationText, valueText) {
         var result = `[${fieldText}] ${operationText}`;
-        if(isDefined(value)) {
-            result += Array.isArray(value) ? `(${text})` : ` '${text}'`;
+        if(isDefined(valueText)) {
+            result += valueText;
         }
         return result;
     },
@@ -144,7 +144,7 @@ var FilterPanelView = modules.View.inherit({
     getConditionText: function(filterValue, options) {
         var that = this,
             operation = filterValue[1],
-            result = new Deferred(),
+            deferred = new Deferred(),
             customOperation = utils.getCustomOperation(options.customOperations, operation),
             operationText,
             field = utils.getField(filterValue[0], options.columns),
@@ -161,13 +161,14 @@ var FilterPanelView = modules.View.inherit({
 
         if(isDefined(value) || (customOperation && customOperation.customizeText)) {
             let displayValue = gridUtils.getDisplayValue(field, value);
-            when(utils.getCurrentValueText(field, displayValue, customOperation, FILTER_PANEL_TARGET)).done(text => {
-                result.resolve(that._getConditionText(fieldText, operationText, value, text));
+            when(utils.getCurrentValueText(field, displayValue, customOperation, FILTER_PANEL_TARGET)).done(data => {
+                let valueText = Array.isArray(data) ? `('${data.join("', '")}')` : ` '${data}'`;
+                deferred.resolve(that._getConditionText(fieldText, operationText, valueText));
             });
         } else {
-            result.resolve(that._getConditionText(fieldText, operationText));
+            deferred.resolve(that._getConditionText(fieldText, operationText));
         }
-        return result;
+        return deferred;
     },
 
     getGroupText: function(filterValue, options, isInnerGroup) {

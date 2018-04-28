@@ -509,10 +509,6 @@ function getArrayValueText(field, value, customOperation, target) {
     return value.map(v => getPrimitiveValueText(field, v, customOperation, target));
 }
 
-function formatTextForSpecificTarget(text, target) {
-    return target !== "filterBuilder" && text ? `'${text}'` : text;
-}
-
 function checkDefaultValue(value) {
     return value === "" || value === null;
 }
@@ -525,11 +521,10 @@ function getCurrentValueText(field, value, customOperation, target = "filterBuil
     if(Array.isArray(value)) {
         let result = new Deferred();
         when.apply(this, getArrayValueText(field, value, customOperation, target)).done((...args) => {
-            let separator = (customOperation && customOperation.valueSeparator) || ", ",
-                text = args.some(item => !checkDefaultValue(item))
-                    ? args.map(item => !checkDefaultValue(item) ? item : "?").join(formatTextForSpecificTarget(separator, target))
+            let text = args.some(item => !checkDefaultValue(item))
+                    ? args.map(item => !checkDefaultValue(item) ? item : "?")
                     : "";
-            result.resolve(formatTextForSpecificTarget(text, target));
+            result.resolve(text);
         });
         return result;
     } else {

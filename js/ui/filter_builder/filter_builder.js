@@ -25,6 +25,9 @@ var FILTER_BUILDER_CLASS = "dx-filterbuilder",
     FILTER_BUILDER_IMAGE_ADD_CLASS = "dx-icon-plus",
     FILTER_BUILDER_IMAGE_REMOVE_CLASS = "dx-icon-remove",
     FILTER_BUILDER_ITEM_TEXT_CLASS = FILTER_BUILDER_CLASS + "-text",
+    FILTER_BUILDER_ITEM_TEXT_PART_CLASS = FILTER_BUILDER_ITEM_TEXT_CLASS + "-part",
+    FILTER_BUILDER_ITEM_TEXT_SEPARATOR_CLASS = FILTER_BUILDER_ITEM_TEXT_CLASS + "-separator",
+    FILTER_BUILDER_ITEM_TEXT_SEPARATOR_EMPTY_CLASS = FILTER_BUILDER_ITEM_TEXT_SEPARATOR_CLASS + "-empty",
     FILTER_BUILDER_ITEM_FIELD_CLASS = FILTER_BUILDER_CLASS + "-item-field",
     FILTER_BUILDER_ITEM_OPERATION_CLASS = FILTER_BUILDER_CLASS + "-item-operation",
     FILTER_BUILDER_ITEM_VALUE_CLASS = FILTER_BUILDER_CLASS + "-item-value",
@@ -932,19 +935,39 @@ var FilterBuilder = Widget.inherit({
                 .addClass(FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS)
                 .attr("tabindex", 0)
                 .appendTo($container),
-            value = item[2],
-            setText = function(valueText) {
-                $text.text(valueText || messageLocalization.format("dxFilterBuilder-enterValueText"));
-            };
+            value = item[2];
 
         var customOperation = utils.getCustomOperation(that._customOperations, item[1]);
         if(!customOperation && field.lookup) {
             utils.getCurrentLookupValueText(field, value, function(valueText) {
-                setText(valueText);
+                $text.text(valueText || messageLocalization.format("dxFilterBuilder-enterValueText"));
             });
         } else {
-            deferredUtils.when(utils.getCurrentValueText(field, value, customOperation)).done(function(valueText) {
-                setText(valueText);
+            deferredUtils.when(utils.getCurrentValueText(field, value, customOperation)).done(result => {
+                if(Array.isArray(result)) {
+                    let lastItemIndex = result.length - 1;
+                    $text.empty();
+                    result.forEach((t, i) => {
+                        $("<span>")
+                            .addClass(FILTER_BUILDER_ITEM_TEXT_PART_CLASS)
+                            .text(t)
+                            .appendTo($text);
+                        if(i !== lastItemIndex) {
+                            let separator = $("<span>")
+                                .addClass(FILTER_BUILDER_ITEM_TEXT_SEPARATOR_CLASS);
+                            if(customOperation.valueSeparator) {
+                                separator.html(customOperation.valueSeparator);
+                            } else {
+                                separator.text("|").addClass(FILTER_BUILDER_ITEM_TEXT_SEPARATOR_EMPTY_CLASS);
+                            }
+                            separator.appendTo($text);
+                        }
+                    });
+                } else if(result) {
+                    $text.text(result);
+                } else {
+                    $text.text(messageLocalization.format("dxFilterBuilder-enterValueText"));
+                }
             });
         }
 

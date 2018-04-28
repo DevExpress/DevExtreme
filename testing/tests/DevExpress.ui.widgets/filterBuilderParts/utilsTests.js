@@ -1523,21 +1523,21 @@ QUnit.module("Between operation", function() {
 
         assert.equal(text, "", "empty text is correct");
 
-        text = utils.getCurrentValueText(field, [null, null], betweenOperation).done(text => {
-            assert.equal(text, "", "empty text is correct");
+        text = utils.getCurrentValueText(field, [null, null], betweenOperation).done(result => {
+            assert.equal(result, "", "empty text is correct");
         });
 
-        text = utils.getCurrentValueText(field, [0, null], betweenOperation).done(text => {
-            assert.equal(text, "0 - ?", "text without endValue");
+        text = utils.getCurrentValueText(field, [0, null], betweenOperation).done(result => {
+            assert.deepEqual(result, ["0", "?"], "text without endValue");
         });
 
-        text = utils.getCurrentValueText(field, [null, 0], betweenOperation).done(text => {
-            assert.equal(text, "? - 0", "text without startValue");
+        text = utils.getCurrentValueText(field, [null, 1], betweenOperation).done(result => {
+            assert.deepEqual(result, ["?", "1"], "text without startValue");
         });
 
         // act
-        text = utils.getCurrentValueText(field, [0, 1], betweenOperation).done(text => {
-            assert.equal(text, "0 - 1", "text with startValue & endValue");
+        text = utils.getCurrentValueText(field, [0, 1], betweenOperation).done(result => {
+            assert.deepEqual(result, ["0", "1"], "text with startValue & endValue");
         });
     });
 });

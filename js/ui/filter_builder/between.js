@@ -20,7 +20,7 @@ function editorTemplate(conditionInfo, container) {
         };
 
     container.append($editorStart);
-    container.append($("<span>").addClass(FILTER_BUILDER_RANGE_SEPARATOR_CLASS).text("-"));
+    container.append($("<span>").addClass(FILTER_BUILDER_RANGE_SEPARATOR_CLASS).html("&ndash;"));
     container.append($editorEnd);
     container.addClass(FILTER_BUILDER_RANGE_CLASS);
 
@@ -48,7 +48,7 @@ function getConfig(caption) {
         name: "between",
         caption: caption,
         icon: "range",
-        valueSeparator: " - ",
+        valueSeparator: "&ndash;",
         dataTypes: ["number", "date", "datetime"],
         editorTemplate: editorTemplate
     };
