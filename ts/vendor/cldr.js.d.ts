@@ -1,9 +1,13 @@
 // Type definitions for Cldr.js 0.4.4
 // Project: https://github.com/rxaviers/cldrjs
-// Definitions by: Raman But-Husaim <https://github.com/RamanBut-Husaim>, Grégoire Castre <https://github.com/gcastre/>
+// Definitions by: Raman But-Husaim <https://github.com/RamanBut-Husaim>, Grégoire Castre <https://github.com/gcastre>
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
+export = self;
+export as namespace Cldr;
 
-declare namespace cldr {
+declare var self: self.CldrFactory;
+
+declare namespace self {
     /**
      * @name Attributes
      * @memberof cldr
@@ -128,7 +132,7 @@ declare namespace cldr {
          *
          * @returns {any} The cldr member.
          */
-        get(path: string): any;
+        get(path: string) : any;
 
         /**
          * @name get
@@ -249,11 +253,18 @@ declare namespace cldr {
          * According to http://unicode.org/cldr/trac/ticket/6786 its usage must be consistent throughout the data set.
          */
         localeSep: "-" | "_";
-}
-}
+    }
 
-declare module "cldr" {
-    export = cldr;
-}
+    interface CldrStatic {
+        on(event:string, listener:(path:string, value:any) => void): void;
+        once(event:string, listener:(path:string, value:any) => void): void;
+        off(event:string, listener:(path:string, value:any) => void): void;
+    }
 
-declare var Cldr: cldr.CldrFactory;
+    interface CldrFactory {
+        on(event:string, listener:(path:string, value:any) => void): void;
+        once(event:string, listener:(path:string, value:any) => void): void;
+        off(event:string, listener:(path:string, value:any) => void): void;
+    }
+
+}
