@@ -264,6 +264,7 @@
         "dxFilterBuilder-filterOperationEndsWith": "Slutar med",
         "dxFilterBuilder-filterOperationIsBlank": "Är tom",
         "dxFilterBuilder-filterOperationIsNotBlank": "Är inte tom",
+        "dxFilterBuilder-filterOperationBetween": "Mellan",
         "dxFilterBuilder-filterOperationAnyOf": "Någon av",
         "dxFilterBuilder-filterOperationNoneOf": "Ingen av"
     }

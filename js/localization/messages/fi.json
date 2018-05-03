@@ -264,6 +264,7 @@
         "dxFilterBuilder-filterOperationEndsWith": "Loppuu merkillä",
         "dxFilterBuilder-filterOperationIsBlank": "On tyhjä",
         "dxFilterBuilder-filterOperationIsNotBlank": "Ei ole tyhjä",
+        "dxFilterBuilder-filterOperationBetween": "Välillä",
         "dxFilterBuilder-filterOperationAnyOf": "Joku näistä",
         "dxFilterBuilder-filterOperationNoneOf": "Ei mikään näistä"
     }

@@ -232,6 +232,7 @@
         "dxFilterBuilder-filterOperationEndsWith": "指定の値で終わる",
         "dxFilterBuilder-filterOperationIsBlank": "空白である",
         "dxFilterBuilder-filterOperationIsNotBlank": "空白ではない",
+        "dxFilterBuilder-filterOperationBetween": "～から～の間",
         "dxFilterBuilder-filterOperationAnyOf": "どちらかを含む",
         "dxFilterBuilder-filterOperationNoneOf": "すべて含まない"
     }

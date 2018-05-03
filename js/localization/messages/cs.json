@@ -264,6 +264,7 @@
         "dxFilterBuilder-filterOperationEndsWith": "Končí na",
         "dxFilterBuilder-filterOperationIsBlank": "Je prázdné",
         "dxFilterBuilder-filterOperationIsNotBlank": "Není prázdné",
+        "dxFilterBuilder-filterOperationBetween": "Mezi",
         "dxFilterBuilder-filterOperationAnyOf": "!TODO",
         "dxFilterBuilder-filterOperationNoneOf": "!TODO"
     }
