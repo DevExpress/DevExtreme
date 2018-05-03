@@ -63,7 +63,7 @@ var ACTIONS = [{
 
 var EditorFactory = Class.inherit(EditorFactoryMixin);
 
-var createValueText = function($container, value, customOperation) {
+var createValueButtonText = function($container, value, customOperation) {
     if(Array.isArray(value)) {
         let lastItemIndex = value.length - 1;
         $container.empty();
@@ -963,11 +963,11 @@ var FilterBuilder = Widget.inherit({
         var customOperation = utils.getCustomOperation(that._customOperations, item[1]);
         if(!customOperation && field.lookup) {
             utils.getCurrentLookupValueText(field, value, function(result) {
-                createValueText($text, result, customOperation);
+                createValueButtonText($text, result);
             });
         } else {
             deferredUtils.when(utils.getCurrentValueText(field, value, customOperation)).done(result => {
-                createValueText($text, result, customOperation);
+                createValueButtonText($text, result, customOperation);
             });
         }
 
@@ -1128,6 +1128,6 @@ var FilterBuilder = Widget.inherit({
 
 registerComponent("dxFilterBuilder", FilterBuilder);
 
-module.exports.createValueText = createValueText;
+module.exports.createValueButtonText = createValueButtonText;
 
 module.exports = FilterBuilder;
