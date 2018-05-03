@@ -105,7 +105,7 @@ QUnit.module("Rendering", function() {
 
         var $customItems = $(".dx-treeview").find("." + FILTER_BUILDER_MENU_CUSTOM_OPERATION_CLASS);
         assert.equal($customItems.length, 1, "one custom");
-        assert.equal($customItems.text(), "Between", "between is custom");
+        assert.equal($customItems.text(), "Is between", "between is custom");
     });
 
     QUnit.test("value and operations depend on selected field", function(assert) {
@@ -242,7 +242,7 @@ QUnit.module("Rendering", function() {
         assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS).length, 1);
 
         $operationButton.trigger("dxclick");
-        assert.equal(getSelectedMenuText(), "Greater than");
+        assert.equal(getSelectedMenuText(), "Is greater than");
     });
 
     // T588221

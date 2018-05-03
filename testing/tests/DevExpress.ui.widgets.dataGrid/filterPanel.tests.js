@@ -29,17 +29,15 @@ QUnit.module("Filter Panel", {
                 filterPanel: {
                     visible: true
                 },
-                filterRow: {
-                    operationDescriptions: {
+                filterValue: ["field", "=", "1"],
+                filterBuilder: {
+                    groupOperationDescriptions: { and: "And", notAnd: "Not And", or: "Or" },
+                    filterOperationDescriptions: {
                         equal: "Equals",
                         isBlank: "Is Blank",
                         isNotBlank: "Is Not Blank",
-                        between: "Between"
+                        between: "Is between"
                     }
-                },
-                filterValue: ["field", "=", "1"],
-                filterBuilder: {
-                    groupOperationDescriptions: { and: "And", notAnd: "Not And", or: "Or" }
                 },
                 dataSource: [],
                 columns: [{ dataField: "field", caption: "Field" }]
@@ -218,7 +216,7 @@ QUnit.module("Filter Panel", {
         var result = this.filterPanelView.getFilterText(filter, []);
 
         // assert
-        assert.deepEqual(result, "[Field] Between('1', '2')");
+        assert.deepEqual(result, "[Field] Is between('1', '2')");
     });
 
     QUnit.test("from isBlank / isNotBlank", function(assert) {
