@@ -2,10 +2,10 @@
 // Project: https://github.com/rxaviers/cldrjs
 // Definitions by: Raman But-Husaim <https://github.com/RamanBut-Husaim>
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
-
 // The definition file for supplemental module.
+import * as cldr from "cldrjs";
 
-declare namespace cldr {
+declare module "cldrjs" {
     interface TimeDataStatic {
         allowed(): string;
         preferred(): string;
@@ -19,8 +19,8 @@ declare namespace cldr {
     interface SupplementalStatic {
         timeData: TimeDataStatic;
         weekData: WeekDataStatic;
-        (path: string): any;
-        (paths: string[]): any;
+        (path:string): any;
+        (paths:string[]): any;
     }
 
     interface CldrStatic {
