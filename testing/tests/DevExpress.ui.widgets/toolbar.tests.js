@@ -1110,6 +1110,25 @@ QUnit.test("hidden overflow items should be rendered in menu", function(assert) 
     dropDown.open();
 });
 
+QUnit.test("toolbar button with icon and inMenu text has forceIconButtonAppearance option", function(assert) {
+    var $element = $("#widget").dxToolbar({
+        items: [
+            { location: "before", template: function() { return $("<div>").width(100); } },
+            { locateInMenu: "auto", widget: "dxButton", options: { icon: "check", text: "test" }, showText: "inMenu" }
+        ]
+    });
+
+    var button = $element.find(".dx-button").dxButton("instance");
+
+    assert.equal(button.option("_forceIconButtonAppearance"), true, "toolbar button with icon and inMenu text has forceIconButtonAppearance option in toolbar");
+
+    $element.dxToolbar("option", "width", 110);
+
+    button = $("." + DROP_DOWN_MENU_CLASS).dxButton("instance");
+
+    assert.equal(button.option("_forceIconButtonAppearance"), false, "toolbar button with icon and inMenu text has no forceIconButtonAppearance option in menu");
+});
+
 QUnit.test("items with locateInMenu == 'always' should be rendered in menu if there is free space for them", function(assert) {
     var $item = $("<div>").width(100);
     var $element = $("#widget").dxToolbar({

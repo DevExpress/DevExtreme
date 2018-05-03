@@ -12,6 +12,7 @@ var $ = require("../core/renderer"),
     ListBottomStrategy = require("./toolbar/ui.toolbar.strategy.list_bottom"),
     ListTopStrategy = require("./toolbar/ui.toolbar.strategy.list_top"),
     ToolbarBase = require("./toolbar/ui.toolbar.base"),
+    Button = require("./button"),
     ChildDefaultTemplate = require("./widget/child_default_template");
 
 var STRATEGIES = {
@@ -249,6 +250,19 @@ var Toolbar = ToolbarBase.inherit({
         return itemElement;
     },
 
+    _setIconButtonAppearanceConfig: function(buttons, value) {
+        iteratorUtils.each(buttons, function(index, buttonItem) {
+            Button.getInstance(buttonItem).option("_forceIconButtonAppearance", value);
+        });
+    },
+
+    _updateUseIconButtonStrategy: function() {
+        var container = this.$element();
+
+        this._setIconButtonAppearanceConfig($(container).find("." + TOOLBAR_AUTO_HIDE_TEXT_CLASS + " .dx-button"), true);
+        this._setIconButtonAppearanceConfig($(container).find("." + TOOLBAR_HIDDEN_ITEM + " .dx-button"), false);
+    },
+
     _hideOverflowItems: function(elementWidth) {
         var overflowItems = this.$element().find("." + TOOLBAR_AUTO_HIDE_ITEM_CLASS);
 
@@ -306,6 +320,7 @@ var Toolbar = ToolbarBase.inherit({
 
     _getToolbarItems: function() {
         var that = this;
+
         return grep(this.option("items") || [], function(item) {
             return !that._isMenuItem(item);
         });

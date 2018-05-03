@@ -140,8 +140,8 @@ var Button = Widget.inherit({
             * @default false
             */
             useSubmitBehavior: false,
-
-            useInkRipple: false
+            useInkRipple: false,
+            _forceIconButtonAppearance: false
             /**
             * @name dxButtonDefaultTemplate
             * @publicName dxButtonDefaultTemplate
@@ -222,7 +222,7 @@ var Button = Widget.inherit({
     },
 
     _renderInkRipple: function() {
-        var isOnlyIconButton = (!this.option("text") && this.option("icon")) || (this.option("type") === "back"),
+        var isOnlyIconButton = (!this.option("text") && this.option("icon")) || (this.option("type") === "back") || this.option("_forceIconButtonAppearance"),
             config = {};
 
         if(isOnlyIconButton) {
@@ -405,6 +405,7 @@ var Button = Widget.inherit({
                 this._updateContent();
                 break;
             case "useInkRipple":
+            case "_forceIconButtonAppearance":
                 this._invalidate();
                 break;
             case "useSubmitBehavior":
