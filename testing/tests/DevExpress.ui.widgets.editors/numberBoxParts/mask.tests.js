@@ -103,6 +103,18 @@ QUnit.test("api value changing should hide a placeholder", function(assert) {
     assert.notOk($placeholder.is(":visible"), "placeholder is hidden");
 });
 
+QUnit.test("text option should be changed after format option change", function(assert) {
+    this.instance.option({
+        format: "#0.00",
+        value: 1.23
+    });
+
+    assert.equal(this.instance.option("text"), "1.23", "text is correct");
+
+    this.instance.option("format", "#0");
+    assert.equal(this.instance.option("text"), "1", "text has been changed");
+});
+
 
 QUnit.module("format: sign and minus button", moduleConfig);
 
