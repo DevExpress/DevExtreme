@@ -213,87 +213,87 @@ function runRawLoadWithKey(pendingDeferred, store, key) {
  * @type object
  */
 /**
- * @name LoadOptions_filter
+ * @name LoadOptions.filter
  * @publicName filter
  * @type object
  */
  /**
- * @name LoadOptions_sort
+ * @name LoadOptions.sort
  * @publicName sort
  * @type object
  */
  /**
- * @name LoadOptions_select
+ * @name LoadOptions.select
  * @publicName select
  * @type object
  */
 /**
- * @name LoadOptions_group
+ * @name LoadOptions.group
  * @publicName group
  * @type object
  */
  /**
- * @name LoadOptions_skip
+ * @name LoadOptions.skip
  * @publicName skip
  * @type number
  */
  /**
- * @name LoadOptions_skip
+ * @name LoadOptions.skip
  * @publicName skip
  * @type number
  */
  /**
- * @name LoadOptions_take
+ * @name LoadOptions.take
  * @publicName take
  * @type number
  */
  /**
- * @name LoadOptions_userData
+ * @name LoadOptions.userData
  * @publicName userData
  * @type object
  */
  /**
- * @name LoadOptions_expand
+ * @name LoadOptions.expand
  * @publicName expand
  * @type object
  */
  /**
- * @name LoadOptions_requireTotalCount
+ * @name LoadOptions.requireTotalCount
  * @publicName requireTotalCount
  * @type boolean
  */
  /**
- * @name LoadOptions_searchValue
+ * @name LoadOptions.searchValue
  * @publicName searchValue
  * @type any
  */
  /**
- * @name LoadOptions_searchOperation
+ * @name LoadOptions.searchOperation
  * @publicName searchOperation
  * @type string
  */
  /**
- * @name LoadOptions_searchExpr
+ * @name LoadOptions.searchExpr
  * @publicName searchExpr
  * @type getter|Array<getter>
  */
  /**
- * @name LoadOptions_customQueryParams
+ * @name LoadOptions.customQueryParams
  * @publicName customQueryParams
  * @type Object
  */
  /**
- * @name LoadOptions_totalSummary
+ * @name LoadOptions.totalSummary
  * @publicName totalSummary
  * @type Object
  */
  /**
- * @name LoadOptions_groupSummary
+ * @name LoadOptions.groupSummary
  * @publicName groupSummary
  * @type Object
  */
  /**
- * @name LoadOptions_requireGroupCount
+ * @name LoadOptions.requireGroupCount
  * @publicName requireGroupCount
  * @type boolean
  */
@@ -313,7 +313,7 @@ var CustomStore = Store.inherit({
         this.callBase(options);
 
         /**
-         * @name CustomStoreOptions_useDefaultSearch
+         * @name CustomStoreOptions.useDefaultSearch
          * @publicName useDefaultSearch
          * @type boolean
          * @default undefined
@@ -321,7 +321,7 @@ var CustomStore = Store.inherit({
         this._useDefaultSearch = !!options.useDefaultSearch || options.loadMode === "raw";
 
         /**
-         * @name CustomStoreOptions_loadMode
+         * @name CustomStoreOptions.loadMode
          * @publicName loadMode
          * @type string
          * @default 'processed'
@@ -330,7 +330,7 @@ var CustomStore = Store.inherit({
         this._loadMode = options.loadMode;
 
         /**
-         * @name CustomStoreOptions_cacheRawData
+         * @name CustomStoreOptions.cacheRawData
          * @publicName cacheRawData
          * @type boolean
          * @default true
@@ -338,7 +338,7 @@ var CustomStore = Store.inherit({
         this._cacheRawData = options.cacheRawData !== false;
 
         /**
-         * @name CustomStoreOptions_load
+         * @name CustomStoreOptions.load
          * @publicName load
          * @type function
          * @type_function_param1 options:LoadOptions
@@ -347,7 +347,7 @@ var CustomStore = Store.inherit({
         this._loadFunc = options[LOAD];
 
         /**
-         * @name CustomStoreOptions_totalCount
+         * @name CustomStoreOptions.totalCount
          * @publicName totalCount
          * @type function
          * @type_function_param1 loadOptions:object
@@ -358,7 +358,7 @@ var CustomStore = Store.inherit({
         this._totalCountFunc = options[TOTAL_COUNT];
 
         /**
-         * @name CustomStoreOptions_byKey
+         * @name CustomStoreOptions.byKey
          * @publicName byKey
          * @type function
          * @type_function_param1 key:object|string|number
@@ -367,7 +367,7 @@ var CustomStore = Store.inherit({
         this._byKeyFunc = options[BY_KEY];
 
         /**
-         * @name CustomStoreOptions_insert
+         * @name CustomStoreOptions.insert
          * @publicName insert
          * @type function
          * @type_function_param1 values:object
@@ -376,7 +376,7 @@ var CustomStore = Store.inherit({
         this._insertFunc = options[INSERT];
 
         /**
-         * @name CustomStoreOptions_update
+         * @name CustomStoreOptions.update
          * @publicName update
          * @type function
          * @type_function_param1 key:object|string|number
@@ -386,7 +386,7 @@ var CustomStore = Store.inherit({
         this._updateFunc = options[UPDATE];
 
         /**
-         * @name CustomStoreOptions_remove
+         * @name CustomStoreOptions.remove
          * @publicName remove
          * @type function
          * @type_function_param1 key:object|string|number
@@ -400,7 +400,7 @@ var CustomStore = Store.inherit({
     },
 
     /**
-    * @name CustomStoreMethods_clearRawDataCache
+    * @name CustomStoreMethods.clearRawDataCache
     * @publicName clearRawDataCache()
     */
     clearRawDataCache: function() {

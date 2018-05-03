@@ -26,14 +26,14 @@ module.exports = {
     defaultOptions: function() {
         return {
             /**
-             * @name GridBaseOptions_showColumnHeaders
+             * @name GridBaseOptions.showColumnHeaders
              * @publicName showColumnHeaders
              * @type boolean
              * @default true
              */
             showColumnHeaders: true,
             /**
-            * @name GridBaseOptions_cellHintEnabled
+            * @name GridBaseOptions.cellHintEnabled
             * @publicName cellHintEnabled
             * @type boolean
             * @default true

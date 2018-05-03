@@ -58,7 +58,7 @@ var TileView = CollectionWidget.inherit({
             items: null,
 
             /**
-            * @name dxTileViewOptions_direction
+            * @name dxTileViewOptions.direction
             * @publicName direction
             * @type Enums.Orientation
             * @default 'horizontal'
@@ -66,7 +66,7 @@ var TileView = CollectionWidget.inherit({
             direction: "horizontal",
 
             /**
-             * @name dxTileViewOptions_hoverStateEnabled
+             * @name dxTileViewOptions.hoverStateEnabled
              * @publicName hoverStateEnabled
              * @type boolean
              * @default true
@@ -75,7 +75,7 @@ var TileView = CollectionWidget.inherit({
             hoverStateEnabled: true,
 
             /**
-            * @name dxTileViewOptions_showScrollbar
+            * @name dxTileViewOptions.showScrollbar
             * @publicName showScrollbar
             * @type boolean
             * @default false
@@ -83,7 +83,7 @@ var TileView = CollectionWidget.inherit({
             showScrollbar: false,
 
             /**
-            * @name dxTileViewOptions_height
+            * @name dxTileViewOptions.height
             * @publicName height
             * @type number|string
             * @default 500
@@ -91,7 +91,7 @@ var TileView = CollectionWidget.inherit({
             height: 500,
 
             /**
-            * @name dxTileViewOptions_baseItemwidth
+            * @name dxTileViewOptions.baseItemwidth
             * @publicName baseItemWidth
             * @type number
             * @default 100
@@ -99,7 +99,7 @@ var TileView = CollectionWidget.inherit({
             baseItemWidth: 100,
 
             /**
-            * @name dxTileViewOptions_baseItemHeight
+            * @name dxTileViewOptions.baseItemHeight
             * @publicName baseItemHeight
             * @type number
             * @default 100
@@ -107,7 +107,7 @@ var TileView = CollectionWidget.inherit({
             baseItemHeight: 100,
 
             /**
-            * @name dxTileViewOptions_itemMargin
+            * @name dxTileViewOptions.itemMargin
             * @publicName itemMargin
             * @type number
             * @default 20
@@ -115,7 +115,7 @@ var TileView = CollectionWidget.inherit({
             itemMargin: 20,
 
             /**
-             * @name dxTileViewOptions_activeStateEnabled
+             * @name dxTileViewOptions.activeStateEnabled
              * @publicName activeStateEnabled
              * @type boolean
              * @default true
@@ -132,21 +132,21 @@ var TileView = CollectionWidget.inherit({
             */
 
             /**
-            * @name dxTileViewItemTemplate_widthRatio
+            * @name dxTileViewItemTemplate.widthRatio
             * @publicName widthRatio
             * @type number
             * @default 1
             */
 
             /**
-            * @name dxTileViewItemTemplate_heightRatio
+            * @name dxTileViewItemTemplate.heightRatio
             * @publicName heightRatio
             * @type number
             * @default 1
             */
 
             /**
-            * @name dxTileViewOptions_height
+            * @name dxTileViewOptions.height
             * @publicName height
             * @type number|string|function
             * @default 500
@@ -154,42 +154,42 @@ var TileView = CollectionWidget.inherit({
             */
 
             /**
-            * @name dxTileViewOptions_selectedIndex
+            * @name dxTileViewOptions.selectedIndex
             * @publicName selectedIndex
             * @hidden
             * @inheritdoc
             */
 
             /**
-            * @name dxTileViewOptions_selectedItem
+            * @name dxTileViewOptions.selectedItem
             * @publicName selectedItem
             * @hidden
             * @inheritdoc
             */
 
             /**
-            * @name dxTileViewOptions_selectedItems
+            * @name dxTileViewOptions.selectedItems
             * @publicName selectedItems
             * @hidden
             * @inheritdoc
             */
 
             /**
-            * @name dxTileViewOptions_selectedItemKeys
+            * @name dxTileViewOptions.selectedItemKeys
             * @publicName selectedItemKeys
             * @hidden
             * @inheritdoc
             */
 
             /**
-             * @name dxTileViewOptions_keyExpr
+             * @name dxTileViewOptions.keyExpr
              * @publicName keyExpr
              * @hidden
              * @inheritdoc
              */
 
             /**
-            * @name dxTileViewOptions_onSelectionChanged
+            * @name dxTileViewOptions.onSelectionChanged
             * @publicName onSelectionChanged
             * @action
             * @hidden
@@ -206,7 +206,7 @@ var TileView = CollectionWidget.inherit({
                 },
                 options: {
                     /**
-                    * @name dxTileViewOptions_focusStateEnabled
+                    * @name dxTileViewOptions.focusStateEnabled
                     * @publicName focusStateEnabled
                     * @type boolean
                     * @default true @for desktop
@@ -582,7 +582,7 @@ var TileView = CollectionWidget.inherit({
     },
 
     /**
-    * @name dxtileviewmethods_scrollPosition
+    * @name dxtileviewmethods.scrollPosition
     * @publicName scrollPosition()
     * @return numeric
     */

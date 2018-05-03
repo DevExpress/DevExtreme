@@ -56,12 +56,12 @@ var ODataStore = Store.inherit({
         this.callBase(options);
 
         /**
-         * @name ODataStoreOptions_url
+         * @name ODataStoreOptions.url
          * @publicName url
          * @type string
          */
         /**
-         * @name ODataStoreOptions_beforeSend
+         * @name ODataStoreOptions.beforeSend
          * @publicName beforeSend
          * @type function
          * @type_function_param1 options:object
@@ -74,31 +74,31 @@ var ODataStore = Store.inherit({
          * @type_function_param1_field7 headers:object
          */
         /**
-         * @name ODataStoreOptions_jsonp
+         * @name ODataStoreOptions.jsonp
          * @publicName jsonp
          * @type boolean
          * @default false
          */
         /**
-         * @name ODataStoreOptions_version
+         * @name ODataStoreOptions.version
          * @publicName version
          * @type number
          * @default 2
          * @acceptValues 2|3|4
          */
         /**
-         * @name ODataStoreOptions_withCredentials
+         * @name ODataStoreOptions.withCredentials
          * @publicName withCredentials
          * @type boolean
          * @default false
          */
         /**
-         * @name ODataStoreOptions_deserializeDates
+         * @name ODataStoreOptions.deserializeDates
          * @publicName deserializeDates
          * @type boolean
          */
         /**
-         * @name ODataStoreOptions_onLoading
+         * @name ODataStoreOptions.onLoading
          * @publicName onLoading
          * @action
          * @inheritdoc
@@ -106,7 +106,7 @@ var ODataStore = Store.inherit({
         this._extractServiceOptions(options);
 
         /**
-         * @name ODataStoreOptions_keyType
+         * @name ODataStoreOptions.keyType
          * @publicName keyType
          * @type string|object
          * @acceptValues "String"|"Int32"|"Int64"|"Guid"|"Boolean"|"Single"|"Decimal"
@@ -132,7 +132,7 @@ var ODataStore = Store.inherit({
         }
 
         /**
-         * @name ODataStoreOptions_fieldTypes
+         * @name ODataStoreOptions.fieldTypes
          * @publicName fieldTypes
          * @type object
          * @default {}
@@ -151,7 +151,7 @@ var ODataStore = Store.inherit({
     },
 
     /**
-    * @name ODataStoreMethods_load
+    * @name ODataStoreMethods.load
     * @publicName load(options)
     * @type function
     * @param1 options:LoadOptions
@@ -160,7 +160,7 @@ var ODataStore = Store.inherit({
     */
 
     /**
-    * @name ODataStoreMethods_byKey
+    * @name ODataStoreMethods.byKey
     * @publicName byKey(key, extraOptions)
     * @param1 key:object|string|number
     * @param2 extraOptions:object
@@ -180,7 +180,7 @@ var ODataStore = Store.inherit({
     },
 
     /**
-    * @name ODataStoreMethods_createQuery
+    * @name ODataStoreMethods.createQuery
     * @publicName createQuery(loadOptions)
     * @param1 loadOptions:object
     * @return object

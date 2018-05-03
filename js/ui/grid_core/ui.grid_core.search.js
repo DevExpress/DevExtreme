@@ -32,48 +32,48 @@ module.exports = {
     defaultOptions: function() {
         return {
          /**
-         * @name GridBaseOptions_searchPanel
+         * @name GridBaseOptions.searchPanel
          * @publicName searchPanel
          * @type object
          */
             searchPanel: {
                 /**
-                 * @name GridBaseOptions_searchPanel_visible
+                 * @name GridBaseOptions.searchPanel.visible
                  * @publicName visible
                  * @type boolean
                  * @default false
                  */
                 visible: false,
                 /**
-                 * @name GridBaseOptions_searchPanel_width
+                 * @name GridBaseOptions.searchPanel.width
                  * @publicName width
                  * @type number
                  * @default 160
                  */
                 width: 160,
                 /**
-                 * @name GridBaseOptions_searchPanel_placeholder
+                 * @name GridBaseOptions.searchPanel.placeholder
                  * @publicName placeholder
                  * @type string
                  * @default "Search..."
                  */
                 placeholder: messageLocalization.format("dxDataGrid-searchPanelPlaceholder"),
                 /**
-                 * @name GridBaseOptions_searchPanel_highlightSearchText
+                 * @name GridBaseOptions.searchPanel.highlightSearchText
                  * @publicName highlightSearchText
                  * @type boolean
                  * @default true
                  */
                 highlightSearchText: true,
                 /**
-                 * @name GridBaseOptions_searchPanel_highlightCaseSensitive
+                 * @name GridBaseOptions.searchPanel.highlightCaseSensitive
                  * @publicName highlightCaseSensitive
                  * @type boolean
                  * @default false
                  */
                 highlightCaseSensitive: false,
                 /**
-                 * @name GridBaseOptions_searchPanel_text
+                 * @name GridBaseOptions.searchPanel.text
                  * @publicName text
                  * @type string
                  * @default ""
@@ -81,7 +81,7 @@ module.exports = {
                  */
                 text: "",
                 /**
-                 * @name GridBaseOptions_searchPanel_searchVisibleColumnsOnly
+                 * @name GridBaseOptions.searchPanel.searchVisibleColumnsOnly
                  * @publicName searchVisibleColumnsOnly
                  * @type boolean
                  * @default false
@@ -149,7 +149,7 @@ module.exports = {
                     },
 
                     /**
-                     * @name GridBaseMethods_searchByText
+                     * @name GridBaseMethods.searchByText
                      * @publicName searchByText(text)
                      * @param1 text:string
                      */

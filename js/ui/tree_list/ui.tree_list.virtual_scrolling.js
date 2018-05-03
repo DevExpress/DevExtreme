@@ -22,7 +22,7 @@ gridCore.registerModule("virtualScrolling", extend({}, virtualScrollingModule, {
         return extend(true, oldDefaultOptions(), {
             scrolling: {
                 /**
-                 * @name dxTreeListOptions_scrolling_mode
+                 * @name dxTreeListOptions.scrolling.mode
                  * @publicName mode
                  * @type Enums.TreeListScrollingMode
                  * @default "virtual"

@@ -7,54 +7,54 @@
 */
 var dxRangeSelector = {
     /**
-    * @name dxrangeselector_options
+    * @name dxrangeselector.options
     * @publicName Options
     * @namespace DevExpress.viz.rangeSelector
     * @hidden
     */
     /**
-    * @name dxrangeselectoroptions_scale
+    * @name dxrangeselectoroptions.scale
     * @publicName scale
     * @type object
     */
     scale: {
         /**
-        * @name dxrangeselectoroptions_scale_valueType
+        * @name dxrangeselectoroptions.scale.valueType
         * @publicName valueType
         * @type Enums.ChartDataType
         * @default undefined
         */
         valueType: undefined,
         /**
-        * @name dxrangeselectoroptions_scale_type
+        * @name dxrangeselectoroptions.scale.type
         * @publicName type
         * @type Enums.RangeSelectorAxisScaleType
         * @default undefined
         */
         type: 'continuous',
         /**
-        * @name dxrangeselectoroptions_scale_logarithmbase
+        * @name dxrangeselectoroptions.scale.logarithmbase
         * @publicName logarithmBase
         * @type number
         * @default 10
         */
         logarithmBase: 10,
         /**
-        * @name dxrangeselectoroptions_scale_minorTickCount
+        * @name dxrangeselectoroptions.scale.minorTickCount
         * @publicName minorTickCount
         * @type number
         * @default undefined
         */
         minorTickCount: undefined,
         /**
-        * @name dxrangeselectoroptions_scale_showBoundaryTicks
+        * @name dxrangeselectoroptions.scale.showBoundaryTicks
         * @publicName showCustomBoundaryTicks
         * @type boolean
         * @default true
         */
         showCustomBoundaryTicks: true,
         /**
-        * @name dxrangeselectoroptions_scale_startvalue
+        * @name dxrangeselectoroptions.scale.startvalue
         * @publicName startValue
         * @type number|date|string
         * @default undefined
@@ -62,7 +62,7 @@ var dxRangeSelector = {
         */
         startValue: undefined,
         /**
-        * @name dxrangeselectoroptions_scale_endvalue
+        * @name dxrangeselectoroptions.scale.endvalue
         * @publicName endValue
         * @type number|date|string
         * @default undefined
@@ -70,22 +70,22 @@ var dxRangeSelector = {
         */
         endValue: undefined,
         /**
-        * @name dxrangeselectoroptions_scale_showminorticks
+        * @name dxrangeselectoroptions.scale.showminorticks
         * @publicName showMinorTicks
         * @type boolean
         * @default true
-        * @deprecated dxrangeselectoroptions_scale_minortick_visible
+        * @deprecated dxrangeselectoroptions.scale.minortick.visible
         */
         showMinorTicks: true,
         /**
-        * @name dxrangeselectoroptions_scale_minortickinterval
+        * @name dxrangeselectoroptions.scale.minortickinterval
         * @publicName minorTickInterval
         * @extends VizTimeIntervalEnum
         * @inherits VizTimeInterval
         */
         minorTickInterval: {},
         /**
-        * @name dxrangeselectoroptions_scale_breaks
+        * @name dxrangeselectoroptions.scale.breaks
         * @publicName breaks
         * @type Array<ScaleBreak>
         * @inherits ScaleBreak
@@ -94,55 +94,55 @@ var dxRangeSelector = {
         */
         breaks: undefined,
         /**
-        * @name dxrangeselectoroptions_scale_workdaysonly
+        * @name dxrangeselectoroptions.scale.workdaysonly
         * @publicName workdaysOnly
         * @type boolean
         * @default false
         */
         workdaysOnly: false,
         /**
-        * @name dxrangeselectoroptions_scale_workweek
+        * @name dxrangeselectoroptions.scale.workweek
         * @publicName workWeek
         * @type Array<number>
         * @default [1, 2, 3, 4, 5]
         */
         workWeek: [1, 2, 3, 4, 5],
         /**
-        * @name dxrangeselectoroptions_scale_holidays
+        * @name dxrangeselectoroptions.scale.holidays
         * @publicName holidays
         * @type Array<Date, string>| Array<number>
         * @default undefined
         */
         holidays: undefined,
         /**
-        * @name dxrangeselectoroptions_scale_singleworkdays
+        * @name dxrangeselectoroptions.scale.singleworkdays
         * @publicName singleWorkdays
         * @type Array<Date, string> | Array<number>
         * @default undefined
         */
         singleWorkdays: undefined,
         /**
-        * @name dxrangeselectoroptions_scale_breakStyle
+        * @name dxrangeselectoroptions.scale.breakStyle
         * @publicName breakStyle
         * @type object
         */
         breakStyle: {
             /**
-            * @name dxrangeselectoroptions_scale_breakStyle_width
+            * @name dxrangeselectoroptions.scale.breakStyle.width
             * @publicName width
             * @type number
             * @default 5
             */
             width: 5,
             /**
-            * @name dxrangeselectoroptions_scale_breakStyle_color
+            * @name dxrangeselectoroptions.scale.breakStyle.color
             * @publicName color
             * @type string
             * @default "#ababab"
             */
             color: "#ababab",
             /**
-            * @name dxrangeselectoroptions_scale_breakStyle_line
+            * @name dxrangeselectoroptions.scale.breakStyle.line
             * @publicName line
             * @type Enums.ScaleBreakLineStyle
             * @default "waved"
@@ -150,80 +150,80 @@ var dxRangeSelector = {
             line: "waved"
         },
         /**
-        * @name dxrangeselectoroptions_scale_majortickinterval
+        * @name dxrangeselectoroptions.scale.majortickinterval
         * @publicName majorTickInterval
         * @type number|object|Enums.VizTimeInterval
         * @default undefined
-        * @deprecated dxrangeselectoroptions_scale_tickinterval
+        * @deprecated dxrangeselectoroptions.scale.tickinterval
         */
         majorTickInterval: {
             /**
-            * @name dxrangeselectoroptions_scale_majortickinterval_years
+            * @name dxrangeselectoroptions.scale.majortickinterval.years
             * @publicName years
             * @type number
-            * @deprecated dxrangeselectoroptions_scale_tickinterval
+            * @deprecated dxrangeselectoroptions.scale.tickinterval
             */
             years: undefined,
             /**
-            * @name dxrangeselectoroptions_scale_majortickinterval_months
+            * @name dxrangeselectoroptions.scale.majortickinterval.months
             * @publicName months
             * @type number
-            * @deprecated dxrangeselectoroptions_scale_tickinterval
+            * @deprecated dxrangeselectoroptions.scale.tickinterval
             */
             months: undefined,
             /**
-            * @name dxrangeselectoroptions_scale_majortickinterval_days
+            * @name dxrangeselectoroptions.scale.majortickinterval.days
             * @publicName days
             * @type number
-            * @deprecated dxrangeselectoroptions_scale_tickinterval
+            * @deprecated dxrangeselectoroptions.scale.tickinterval
             */
             days: undefined,
             /**
-            * @name dxrangeselectoroptions_scale_majortickinterval_hours
+            * @name dxrangeselectoroptions.scale.majortickinterval.hours
             * @publicName hours
             * @type number
-            * @deprecated dxrangeselectoroptions_scale_tickinterval
+            * @deprecated dxrangeselectoroptions.scale.tickinterval
             */
             hours: undefined,
             /**
-            * @name dxrangeselectoroptions_scale_majortickinterval_minutes
+            * @name dxrangeselectoroptions.scale.majortickinterval.minutes
             * @publicName minutes
             * @type number
-            * @deprecated dxrangeselectoroptions_scale_tickinterval
+            * @deprecated dxrangeselectoroptions.scale.tickinterval
             */
             minutes: undefined,
             /**
-            * @name dxrangeselectoroptions_scale_majortickinterval_seconds
+            * @name dxrangeselectoroptions.scale.majortickinterval.seconds
             * @publicName seconds
             * @type number
-            * @deprecated dxrangeselectoroptions_scale_tickinterval
+            * @deprecated dxrangeselectoroptions.scale.tickinterval
             */
             seconds: undefined,
             /**
-            * @name dxrangeselectoroptions_scale_majortickinterval_milliseconds
+            * @name dxrangeselectoroptions.scale.majortickinterval.milliseconds
             * @publicName milliseconds
             * @type number
-            * @deprecated dxrangeselectoroptions_scale_tickinterval
+            * @deprecated dxrangeselectoroptions.scale.tickinterval
             */
             milliseconds: undefined
         },
         /**
-        * @name dxrangeselectoroptions_scale_tickinterval
+        * @name dxrangeselectoroptions.scale.tickinterval
         * @publicName tickInterval
         * @extends VizTimeIntervalEnum
         * @inherits VizTimeInterval
         */
         tickInterval: {},
         /**
-        * @name dxrangeselectoroptions_scale_useticksautoarrangement
+        * @name dxrangeselectoroptions.scale.useticksautoarrangement
         * @publicName useTicksAutoArrangement
         * @type boolean
         * @default true
-        * @deprecated dxrangeselectoroptions_scale_label_overlappingbehavior
+        * @deprecated dxrangeselectoroptions.scale.label.overlappingbehavior
         */
         useTicksAutoArrangement: true,
         /**
-        * @name dxrangeselectoroptions_scale_setticksatunitbeginning
+        * @name dxrangeselectoroptions.scale.setticksatunitbeginning
         * @publicName setTicksAtUnitBeginning
         * @type boolean
         * @default true
@@ -231,53 +231,53 @@ var dxRangeSelector = {
         */
         setTicksAtUnitBeginning: true,
         /**
-        * @name dxrangeselectoroptions_scale_placeholderheight
+        * @name dxrangeselectoroptions.scale.placeholderheight
         * @publicName placeholderHeight
         * @type number
         * @default undefined
         */
         placeholderHeight: undefined,
         /**
-        * @name dxrangeselectoroptions_scale_minrange
+        * @name dxrangeselectoroptions.scale.minrange
         * @publicName minRange
         * @extends VizTimeIntervalEnum
         * @inherits VizTimeInterval
         */
         minRange: {},
         /**
-        * @name dxrangeselectoroptions_scale_maxrange
+        * @name dxrangeselectoroptions.scale.maxrange
         * @publicName maxRange
         * @extends VizTimeIntervalEnum
         * @inherits VizTimeInterval
         */
         maxRange: {},
         /**
-        * @name dxrangeselectoroptions_scale_label
+        * @name dxrangeselectoroptions.scale.label
         * @publicName label
         * @type object
         */
         label: {
             /**
-           * @name dxrangeselectoroptions_scale_label_visible
+           * @name dxrangeselectoroptions.scale.label.visible
            * @publicName visible
            * @type boolean
            * @default true
            */
             visible: true,
             /**
-            * @name dxrangeselectoroptions_scale_label_format
+            * @name dxrangeselectoroptions.scale.label.format
             * @publicName format
             * @extends CommonVizFormat
             */
             format: undefined,
             /**
-            * @name dxrangeselectoroptions_scale_label_precision
+            * @name dxrangeselectoroptions.scale.label.precision
             * @publicName precision
             * @extends CommonVizPrecision
             */
             precision: undefined,
             /**
-            * @name dxrangeselectoroptions_scale_label_customizetext
+            * @name dxrangeselectoroptions.scale.label.customizetext
             * @publicName customizeText
             * @type function(scaleValue)
             * @type_function_param1 scaleValue:object
@@ -288,48 +288,48 @@ var dxRangeSelector = {
             */
             customizeText: undefined,
             /**
-            * @name dxrangeselectoroptions_scale_label_topindent
+            * @name dxrangeselectoroptions.scale.label.topindent
             * @publicName topIndent
             * @type number
             * @default 7
             */
             topIndent: 7,
             /**
-            * @name dxrangeselectoroptions_scale_label_font
+            * @name dxrangeselectoroptions.scale.label.font
             * @publicName font
             * @type object
             */
             font: {
                 /**
-                * @name dxrangeselectoroptions_scale_label_font_color
+                * @name dxrangeselectoroptions.scale.label.font.color
                 * @publicName color
                 * @type string
                 * @default '#767676'
                 */
                 color: '#767676',
                 /**
-                * @name dxrangeselectoroptions_scale_label_font_size
+                * @name dxrangeselectoroptions.scale.label.font.size
                 * @publicName size
                 * @type number|string
                 * @default 11
                 */
                 size: 11,
                 /**
-                * @name dxrangeselectoroptions_scale_label_font_family
+                * @name dxrangeselectoroptions.scale.label.font.family
                 * @publicName family
                 * @type string
                 * @default "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana"
                 */
                 family: "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
                 /**
-                * @name dxrangeselectoroptions_scale_label_font_weight
+                * @name dxrangeselectoroptions.scale.label.font.weight
                 * @publicName weight
                 * @type number
                 * @default 400
                 */
                 weight: 400,
                 /**
-                * @name dxrangeselectoroptions_scale_label_font_opacity
+                * @name dxrangeselectoroptions.scale.label.font.opacity
                 * @publicName opacity
                 * @type number
                 * @default undefined
@@ -337,7 +337,7 @@ var dxRangeSelector = {
                 opacity: undefined
             },
             /**
-            * @name dxrangeselectoroptions_scale_label_overlappingbehavior
+            * @name dxrangeselectoroptions.scale.label.overlappingbehavior
             * @publicName overlappingBehavior
             * @type Enums.ScaleLabelOverlappingBehavior
             * @default "hide"
@@ -345,27 +345,27 @@ var dxRangeSelector = {
             overlappingBehavior: "hide"
         },
         /**
-        * @name dxrangeselectoroptions_scale_tick
+        * @name dxrangeselectoroptions.scale.tick
         * @publicName tick
         * @type object
         */
         tick: {
             /**
-            * @name dxrangeselectoroptions_scale_tick_width
+            * @name dxrangeselectoroptions.scale.tick.width
             * @publicName width
             * @type number
             * @default 1
             */
             width: 1,
             /**
-            * @name dxrangeselectoroptions_scale_tick_color
+            * @name dxrangeselectoroptions.scale.tick.color
             * @publicName color
             * @type string
             * @default '#000000'
             */
             color: '#000000',
             /**
-            * @name dxrangeselectoroptions_scale_tick_opacity
+            * @name dxrangeselectoroptions.scale.tick.opacity
             * @publicName opacity
             * @type number
             * @default 0.1
@@ -373,34 +373,34 @@ var dxRangeSelector = {
             opacity: 0.1
         },
         /**
-        * @name dxrangeselectoroptions_scale_minortick
+        * @name dxrangeselectoroptions.scale.minortick
         * @publicName minorTick
         * @type object
         */
         minorTick: {
             /**
-            * @name dxrangeselectoroptions_scale_minortick_width
+            * @name dxrangeselectoroptions.scale.minortick.width
             * @publicName width
             * @type number
             * @default 1
             */
             width: 1,
             /**
-            * @name dxrangeselectoroptions_scale_minortick_color
+            * @name dxrangeselectoroptions.scale.minortick.color
             * @publicName color
             * @type string
             * @default '#000000'
             */
             color: '#000000',
             /**
-            * @name dxrangeselectoroptions_scale_minortick_opacity
+            * @name dxrangeselectoroptions.scale.minortick.opacity
             * @publicName opacity
             * @type number
             * @default 0.06
             */
             opacity: 0.06,
             /**
-            * @name dxrangeselectoroptions_scale_minortick_visible
+            * @name dxrangeselectoroptions.scale.minortick.visible
             * @publicName visible
             * @type boolean
             * @default true
@@ -408,60 +408,60 @@ var dxRangeSelector = {
             visible: true
         },
         /**
-        * @name dxrangeselectoroptions_scale_marker
+        * @name dxrangeselectoroptions.scale.marker
         * @publicName marker
         * @type object
         */
         marker: {
             /**
-            * @name dxrangeselectoroptions_scale_marker_visible
+            * @name dxrangeselectoroptions.scale.marker.visible
             * @publicName visible
             * @type boolean
             * @default true
             */
             visible: true,
             /**
-            * @name dxrangeselectoroptions_scale_marker_separatorheight
+            * @name dxrangeselectoroptions.scale.marker.separatorheight
             * @publicName separatorHeight
             * @type number
             * @default 33
             */
             separatorHeight: 33,
             /**
-            * @name dxrangeselectoroptions_scale_marker_topindent
+            * @name dxrangeselectoroptions.scale.marker.topindent
             * @publicName topIndent
             * @type number
             * @default 10
             */
             topIndent: 10,
             /**
-            * @name dxrangeselectoroptions_scale_marker_textleftindent
+            * @name dxrangeselectoroptions.scale.marker.textleftindent
             * @publicName textLeftIndent
             * @type number
             * @default 7
             */
             textLeftIndent: 7,
             /**
-            * @name dxrangeselectoroptions_scale_marker_texttopindent
+            * @name dxrangeselectoroptions.scale.marker.texttopindent
             * @publicName textTopIndent
             * @type number
             * @default 11
             */
             textTopIndent: 11,
             /**
-            * @name dxrangeselectoroptions_scale_marker_label
+            * @name dxrangeselectoroptions.scale.marker.label
             * @publicName label
             * @type object
             */
             label: {
                 /**
-                * @name dxrangeselectoroptions_scale_marker_label_format
+                * @name dxrangeselectoroptions.scale.marker.label.format
                 * @publicName format
                 * @extends CommonVizFormat
                 */
                 format: '',
                 /**
-                * @name dxrangeselectoroptions_scale_marker_label_customizeText
+                * @name dxrangeselectoroptions.scale.marker.label.customizeText
                 * @publicName customizeText
                 * @type function(markerValue)
                 * @type_function_param1 markerValue:object
@@ -474,34 +474,34 @@ var dxRangeSelector = {
             }
         },
         /**
-        * @name dxrangeselectoroptions_scale_categories
+        * @name dxrangeselectoroptions.scale.categories
         * @publicName categories
         * @type Array<number,string,Date>
         */
         categories: [],
         /**
-        * @name dxrangeselectoroptions_scale_allowdecimals
+        * @name dxrangeselectoroptions.scale.allowdecimals
         * @publicName allowDecimals
         * @type boolean
         * @default undefined
         */
         allowDecimals: undefined,
         /**
-        * @name dxrangeselectoroptions_scale_endontick
+        * @name dxrangeselectoroptions.scale.endontick
         * @publicName endOnTick
         * @type boolean
         * @default false
         */
         endOnTick: false,
         /**
-        * @name dxrangeselectoroptions_scale_aggregationGroupWidth
+        * @name dxrangeselectoroptions.scale.aggregationGroupWidth
         * @publicName aggregationGroupWidth
         * @type number
         * @default undefined
         */
         aggregationGroupWidth: 10,
         /**
-        * @name dxrangeselectoroptions_scale_aggregationInterval
+        * @name dxrangeselectoroptions.scale.aggregationInterval
         * @publicName aggregationInterval
         * @extends VizTimeIntervalEnum
         * @inherits VizTimeInterval
@@ -509,32 +509,32 @@ var dxRangeSelector = {
         aggregationInterval: undefined,
     },
     /**
-    * @name dxrangeselectoroptions_slidermarker
+    * @name dxrangeselectoroptions.slidermarker
     * @publicName sliderMarker
     * @type object
     */
     sliderMarker: {
         /**
-        * @name dxrangeselectoroptions_slidermarker_visible
+        * @name dxrangeselectoroptions.slidermarker.visible
         * @publicName visible
         * @type boolean
         * @default true
         */
         visible: true,
         /**
-        * @name dxrangeselectoroptions_slidermarker_format
+        * @name dxrangeselectoroptions.slidermarker.format
         * @publicName format
         * @extends CommonVizFormat
         */
         format: undefined,
         /**
-        * @name dxrangeselectoroptions_slidermarker_precision
+        * @name dxrangeselectoroptions.slidermarker.precision
         * @publicName precision
         * @extends CommonVizPrecision
         */
         precision: undefined,
         /**
-        * @name dxrangeselectoroptions_slidermarker_customizetext
+        * @name dxrangeselectoroptions.slidermarker.customizetext
         * @publicName customizeText
         * @type function(scaleValue)
         * @type_function_param1 scaleValue:object
@@ -545,7 +545,7 @@ var dxRangeSelector = {
         */
         customizeText: undefined,
         /**
-        * @name dxrangeselectoroptions_slidermarker_padding
+        * @name dxrangeselectoroptions.slidermarker.padding
         * @publicName padding
         * @type number
         * @default 6
@@ -553,35 +553,35 @@ var dxRangeSelector = {
         */
         padding: 6,
         /**
-        * @name dxrangeselectoroptions_slidermarker_paddingtopbottom
+        * @name dxrangeselectoroptions.slidermarker.paddingtopbottom
         * @publicName paddingTopBottom
         * @type number
         * @default 2
         */
         paddingTopBottom: 2,
         /**
-        * @name dxrangeselectoroptions_slidermarker_paddingleftright
+        * @name dxrangeselectoroptions.slidermarker.paddingleftright
         * @publicName paddingLeftRight
         * @type number
         * @default 4
         */
         paddingLeftRight: 4,
         /**
-        * @name dxrangeselectoroptions_slidermarker_color
+        * @name dxrangeselectoroptions.slidermarker.color
         * @publicName color
         * @type string
         * @default '#9B9B9B'
         */
         color: '#9B9B9B',
         /**
-        * @name dxrangeselectoroptions_slidermarker_invalidrangecolor
+        * @name dxrangeselectoroptions.slidermarker.invalidrangecolor
         * @publicName invalidRangeColor
         * @type string
         * @default 'red'
         */
         invalidRangeColor: 'red',
         /**
-        * @name dxrangeselectoroptions_slidermarker_placeholdersize
+        * @name dxrangeselectoroptions.slidermarker.placeholdersize
         * @publicName placeholderSize
         * @type number|object
         * @default undefined
@@ -589,21 +589,21 @@ var dxRangeSelector = {
         */
         placeholderSize: {
             /**
-            * @name dxrangeselectoroptions_slidermarker_placeholdersize_width
+            * @name dxrangeselectoroptions.slidermarker.placeholdersize.width
             * @publicName width
             * @type number|object
             * @default undefined
             */
             width: {
                 /**
-                * @name dxrangeselectoroptions_slidermarker_placeholdersize_width_left
+                * @name dxrangeselectoroptions.slidermarker.placeholdersize.width.left
                 * @publicName left
                 * @type number
                 * @default undefined
                 */
                 left: undefined,
                 /**
-                * @name dxrangeselectoroptions_slidermarker_placeholdersize_width_right
+                * @name dxrangeselectoroptions.slidermarker.placeholdersize.width.right
                 * @publicName right
                 * @type number
                 * @default undefined
@@ -611,7 +611,7 @@ var dxRangeSelector = {
                 right: undefined
             },
             /**
-            * @name dxrangeselectoroptions_slidermarker_placeholdersize_height
+            * @name dxrangeselectoroptions.slidermarker.placeholdersize.height
             * @publicName height
             * @type number
             * @default undefined
@@ -619,7 +619,7 @@ var dxRangeSelector = {
             height: undefined
         },
         /**
-        * @name dxrangeselectoroptions_slidermarker_placeholderHeight
+        * @name dxrangeselectoroptions.slidermarker.placeholderHeight
         * @publicName placeholderHeight
         * @type number
         * @default undefined
@@ -627,41 +627,41 @@ var dxRangeSelector = {
         */
         placeholderHeight: undefined,
         /**
-        * @name dxrangeselectoroptions_slidermarker_font
+        * @name dxrangeselectoroptions.slidermarker.font
         * @publicName font
         * @type object
         */
         font: {
             /**
-            * @name dxrangeselectoroptions_slidermarker_font_color
+            * @name dxrangeselectoroptions.slidermarker.font.color
             * @publicName color
             * @type string
             * @default 'white'
             */
             color: 'white',
             /**
-            * @name dxrangeselectoroptions_slidermarker_font_size
+            * @name dxrangeselectoroptions.slidermarker.font.size
             * @publicName size
             * @type number|string
             * @default 14
             */
             size: 14,
             /**
-            * @name dxrangeselectoroptions_slidermarker_font_family
+            * @name dxrangeselectoroptions.slidermarker.font.family
             * @publicName family
             * @type string
             * @default "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana"
             */
             family: "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
             /**
-            * @name dxrangeselectoroptions_slidermarker_font_weight
+            * @name dxrangeselectoroptions.slidermarker.font.weight
             * @publicName weight
             * @type number
             * @default 400
             */
             weight: 400,
             /**
-            * @name dxrangeselectoroptions_slidermarker_font_opacity
+            * @name dxrangeselectoroptions.slidermarker.font.opacity
             * @publicName opacity
             * @type number
             * @default undefined
@@ -670,27 +670,27 @@ var dxRangeSelector = {
         }
     },
     /**
-    * @name dxrangeselectoroptions_sliderhandle
+    * @name dxrangeselectoroptions.sliderhandle
     * @publicName sliderHandle
     * @type object
     */
     sliderHandle: {
         /**
-        * @name dxrangeselectoroptions_sliderhandle_color
+        * @name dxrangeselectoroptions.sliderhandle.color
         * @publicName color
         * @type string
         * @default '#000000'
         */
         color: '#000000',
         /**
-        * @name dxrangeselectoroptions_sliderhandle_width
+        * @name dxrangeselectoroptions.sliderhandle.width
         * @publicName width
         * @type number
         * @default 1
         */
         width: 1,
         /**
-        * @name dxrangeselectoroptions_sliderhandle_opacity
+        * @name dxrangeselectoroptions.sliderhandle.opacity
         * @publicName opacity
         * @type number
         * @default 0.2
@@ -698,20 +698,20 @@ var dxRangeSelector = {
         opacity: 0.2
     },
     /**
-    * @name dxrangeselectoroptions_shutter
+    * @name dxrangeselectoroptions.shutter
     * @publicName shutter
     * @type object
     */
     shutter: {
         /**
-        * @name dxrangeselectoroptions_shutter_color
+        * @name dxrangeselectoroptions.shutter.color
         * @publicName color
         * @type string
         * @default undefined
         */
         color: undefined,
         /**
-        * @name dxrangeselectoroptions_shutter_opacity
+        * @name dxrangeselectoroptions.shutter.opacity
         * @publicName opacity
         * @type number
         * @default 0.75
@@ -719,21 +719,21 @@ var dxRangeSelector = {
         opacity: 0.75
     },
     /**
-    * @name dxrangeselectoroptions_selectedrange
+    * @name dxrangeselectoroptions.selectedrange
     * @publicName selectedRange
     * @type object
-    * @deprecated dxrangeselectoroptions_value
+    * @deprecated dxrangeselectoroptions.value
     */
     selectedRange: {
         /**
-        * @name dxrangeselectoroptions_selectedrange_startvalue
+        * @name dxrangeselectoroptions.selectedrange.startvalue
         * @publicName startValue
         * @type number|date|string
         * @notUsedInTheme
         */
         startValue: undefined,
         /**
-        * @name dxrangeselectoroptions_selectedrange_endvalue
+        * @name dxrangeselectoroptions.selectedrange.endvalue
         * @publicName endValue
         * @type number|date|string
         * @notUsedInTheme
@@ -741,7 +741,7 @@ var dxRangeSelector = {
         endValue: undefined
     },
     /**
-    *@name dxrangeselectoroptions_value
+    *@name dxrangeselectoroptions.value
     * @publicName value
     * @type Array<number,string,Date>
     * @fires dxrangeselectoroptions_onvaluechanged
@@ -749,20 +749,20 @@ var dxRangeSelector = {
     */
     value: [undefined, undefined],
     /**
-    * @name dxrangeselectoroptions_selectedrangecolor
+    * @name dxrangeselectoroptions.selectedrangecolor
     * @publicName selectedRangeColor
     * @type string
     * @default "#606060"
     */
     selectedRangeColor: "#606060",
     /**
-    * @name dxrangeselectoroptions_indent
+    * @name dxrangeselectoroptions.indent
     * @publicName indent
     * @type object
     */
     indent: {
         /**
-        * @name dxrangeselectoroptions_indent_left
+        * @name dxrangeselectoroptions.indent.left
         * @publicName left
         * @type number
         * @default undefined
@@ -770,7 +770,7 @@ var dxRangeSelector = {
         */
         left: undefined,
         /**
-        * @name dxrangeselectoroptions_indent_right
+        * @name dxrangeselectoroptions.indent.right
         * @publicName right
         * @type number
         * @default undefined
@@ -779,56 +779,56 @@ var dxRangeSelector = {
         right: undefined
     },
     /**
-    * @name dxrangeselectoroptions_behavior
+    * @name dxrangeselectoroptions.behavior
     * @publicName behavior
     * @type object
     */
     behavior: {
         /**
-        * @name dxrangeselectoroptions_behavior_animationenabled
+        * @name dxrangeselectoroptions.behavior.animationenabled
         * @publicName animationEnabled
         * @type boolean
         * @default true
         */
         animationEnabled: true,
         /**
-        * @name dxrangeselectoroptions_behavior_snaptoticks
+        * @name dxrangeselectoroptions.behavior.snaptoticks
         * @publicName snapToTicks
         * @type boolean
         * @default true
         */
         snapToTicks: true,
         /**
-        * @name dxrangeselectoroptions_behavior_moveselectedrangebyclick
+        * @name dxrangeselectoroptions.behavior.moveselectedrangebyclick
         * @publicName moveSelectedRangeByClick
         * @type boolean
         * @default true
         */
         moveSelectedRangeByClick: true,
         /**
-        * @name dxrangeselectoroptions_behavior_manualrangeselectionenabled
+        * @name dxrangeselectoroptions.behavior.manualrangeselectionenabled
         * @publicName manualRangeSelectionEnabled
         * @type boolean
         * @default true
         */
         manualRangeSelectionEnabled: true,
         /**
-        * @name dxrangeselectoroptions_behavior_allowslidersswap
+        * @name dxrangeselectoroptions.behavior.allowslidersswap
         * @publicName allowSlidersSwap
         * @type boolean
         * @default true
         */
         allowSlidersSwap: true,
         /**
-        * @name dxrangeselectoroptions_behavior_callselectedrangechanged
+        * @name dxrangeselectoroptions.behavior.callselectedrangechanged
         * @publicName callSelectedRangeChanged
         * @type Enums.ValueChangedCallMode
         * @default 'onMovingComplete'
-        * @deprecated dxrangeselectoroptions_behavior_callvaluechanged
+        * @deprecated dxrangeselectoroptions.behavior.callvaluechanged
         */
         callSelectedRangeChanged: "onMovingComplete",
         /**
-        * @name dxrangeselectoroptions_behavior_callvaluechanged
+        * @name dxrangeselectoroptions.behavior.callvaluechanged
         * @publicName callValueChanged
         * @type Enums.ValueChangedCallMode
         * @default 'onMovingComplete'
@@ -836,40 +836,40 @@ var dxRangeSelector = {
         callValueChanged: "onMovingComplete"
     },
     /**
-    * @name dxrangeselectoroptions_background
+    * @name dxrangeselectoroptions.background
     * @publicName background
     * @type object
     */
     background: {
         /**
-        * @name dxrangeselectoroptions_background_visible
+        * @name dxrangeselectoroptions.background.visible
         * @publicName visible
         * @type boolean
         * @default true
         */
         visible: true,
         /**
-        * @name dxrangeselectoroptions_background_color
+        * @name dxrangeselectoroptions.background.color
         * @publicName color
         * @type string
         * @default '#C0BAE1'
         */
         color: "#C0BAE1",
         /**
-        * @name dxrangeselectoroptions_background_image
+        * @name dxrangeselectoroptions.background.image
         * @publicName image
         * @type object
         */
         image: {
             /**
-            * @name dxrangeselectoroptions_background_image_url
+            * @name dxrangeselectoroptions.background.image.url
             * @publicName url
             * @type string
             * @default undefined
             */
             url: undefined,
             /**
-            * @name dxrangeselectoroptions_background_image_location
+            * @name dxrangeselectoroptions.background.image.location
             * @publicName location
             * @type Enums.BackgroundImageLocation
             * @default 'full'
@@ -878,60 +878,60 @@ var dxRangeSelector = {
         }
     },
     /**
-    * @name dxrangeselectoroptions_tooltip
+    * @name dxrangeselectoroptions.tooltip
     * @publicName tooltip
     * @hidden
     * @inheritdoc
     */
     tooltip: undefined,
     /**
-    * @name dxrangeselectoroptions_chart
+    * @name dxrangeselectoroptions.chart
     * @publicName chart
     * @type object
     */
     chart: {
         /**
-        * @name dxrangeselectoroptions_chart_commonseriessettings
+        * @name dxrangeselectoroptions.chart.commonseriessettings
         * @publicName commonSeriesSettings
-        * @type dxChartOptions_commonSeriesSettings
+        * @type dxChartOptions.commonSeriesSettings
         */
         commonSeriesSettings: undefined,
         /**
-        * @name dxrangeselectoroptions_chart_bottomindent
+        * @name dxrangeselectoroptions.chart.bottomindent
         * @publicName bottomIndent
         * @type number
         * @default 0
         */
         bottomIndent: 0,
         /**
-        * @name dxrangeselectoroptions_chart_topindent
+        * @name dxrangeselectoroptions.chart.topindent
         * @publicName topIndent
         * @type number
         * @default 0.1
         */
         topIndent: 0.1,
         /**
-        * @name dxrangeselectoroptions_chart_dataPrepareSettings
+        * @name dxrangeselectoroptions.chart.dataPrepareSettings
         * @publicName dataPrepareSettings
         * @type object
         */
         dataPrepareSettings: {
             /**
-            * @name dxrangeselectoroptions_chart_dataPrepareSettings_checkTypeForAllData
+            * @name dxrangeselectoroptions.chart.dataPrepareSettings.checkTypeForAllData
             * @publicName checkTypeForAllData
             * @type boolean
             * @default false
             */
             checkTypeForAllData: false,
             /**
-            * @name dxrangeselectoroptions_chart_dataPrepareSettings_convertToAxisDataType
+            * @name dxrangeselectoroptions.chart.dataPrepareSettings.convertToAxisDataType
             * @publicName convertToAxisDataType
             * @type boolean
             * @default true
             */
             convertToAxisDataType: true,
             /**
-            * @name dxrangeselectoroptions_chart_dataPrepareSettings_sortingMethod
+            * @name dxrangeselectoroptions.chart.dataPrepareSettings.sortingMethod
             * @publicName sortingMethod
             * @type Boolean|function(a,b)
             * @type_function_param1 a:object
@@ -946,55 +946,55 @@ var dxRangeSelector = {
             sortingMethod: true
         },
         /**
-        * @name dxrangeselectoroptions_chart_useAggregation
+        * @name dxrangeselectoroptions.chart.useAggregation
         * @publicName useAggregation
         * @type boolean
-        * @deprecated dxChartSeriesTypes_CommonSeries_aggregation_enabled
+        * @deprecated dxChartSeriesTypes.CommonSeries.aggregation.enabled
         */
         useAggregation: false,
         /**
-        * @name dxrangeselectoroptions_chart_valueaxis
+        * @name dxrangeselectoroptions.chart.valueaxis
         * @publicName valueAxis
         * @type object
         */
         valueAxis: {
             /**
-            * @name dxrangeselectoroptions_chart_valueaxis_min
+            * @name dxrangeselectoroptions.chart.valueaxis.min
             * @publicName min
             * @type number
             * @default undefined
             */
             min: undefined,
             /**
-            * @name dxrangeselectoroptions_chart_valueaxis_max
+            * @name dxrangeselectoroptions.chart.valueaxis.max
             * @publicName max
             * @type number
             * @default undefined
             */
             max: undefined,
             /**
-            * @name dxrangeselectoroptions_chart_valueaxis_inverted
+            * @name dxrangeselectoroptions.chart.valueaxis.inverted
             * @publicName inverted
             * @type boolean
             * @default false
             */
             inverted: false,
             /**
-            * @name dxrangeselectoroptions_chart_valueaxis_valuetype
+            * @name dxrangeselectoroptions.chart.valueaxis.valuetype
             * @publicName valueType
             * @type Enums.ChartDataType
             * @default undefined
             */
             valueType: undefined,
             /**
-            * @name dxrangeselectoroptions_chart_valueaxis_type
+            * @name dxrangeselectoroptions.chart.valueaxis.type
             * @publicName type
             * @type Enums.RangeSelectorChartAxisScaleType
             * @default undefined
             */
             type: 'continuous',
             /**
-            * @name dxrangeselectoroptions_chart_valueaxis_logarithmbase
+            * @name dxrangeselectoroptions.chart.valueaxis.logarithmbase
             * @publicName logarithmBase
             * @type number
             * @default 10
@@ -1002,81 +1002,81 @@ var dxRangeSelector = {
             logarithmBase: 10,
         },
         /**
-        * @name dxrangeselectoroptions_chart_series
+        * @name dxrangeselectoroptions.chart.series
         * @publicName series
-        * @type dxChartOptions_series|Array<dxChartOptions_series>
+        * @type dxChartOptions.series|Array<dxChartOptions.series>
         * @default undefined
         * @notUsedInTheme
         */
         series: undefined,
         /**
-        * @name dxrangeselectoroptions_chart_seriestemplate
+        * @name dxrangeselectoroptions.chart.seriestemplate
         * @publicName seriesTemplate
         * @type object
         * @default undefined
         */
         seriesTemplate: {
             /**
-            * @name dxrangeselectoroptions_chart_seriestemplate_nameField
+            * @name dxrangeselectoroptions.chart.seriestemplate.nameField
             * @publicName nameField
             * @type string
             * @default 'series'
             */
             nameField: 'series',
             /**
-            * @name dxrangeselectoroptions_chart_seriestemplate_customizeSeries
+            * @name dxrangeselectoroptions.chart.seriestemplate.customizeSeries
             * @publicName customizeSeries
             * @type function(seriesName)
             * @type_function_param1 seriesName:any
-            * @type_function_return dxChartOptions_series
+            * @type_function_return dxChartOptions.series
             */
             customizeSeries: function() { }
         },
         /**
-        * @name dxrangeselectoroptions_chart_equalbarwidth
+        * @name dxrangeselectoroptions.chart.equalbarwidth
         * @publicName equalBarWidth
         * @type boolean
-        * @deprecated dxChartSeriesTypes_CommonSeries_ignoreEmptyPoints
+        * @deprecated dxChartSeriesTypes.CommonSeries.ignoreEmptyPoints
         */
         equalBarWidth: true,
         /**
-        * @name dxrangeselectoroptions_chart_barwidth
+        * @name dxrangeselectoroptions.chart.barwidth
         * @publicName barWidth
         * @type number
-        * @deprecated dxChartSeriesTypes_CommonSeries_barPadding
+        * @deprecated dxChartSeriesTypes.CommonSeries.barPadding
         */
         barWidth: undefined,
         /**
-        * @name dxrangeselectoroptions_chart_bargrouppadding
+        * @name dxrangeselectoroptions.chart.bargrouppadding
         * @publicName barGroupPadding
         * @type number
         * @default 0.3
-        * @propertyOf dxChartSeriesTypes_BarSeries,dxChartSeriesTypes_StackedBarSeries,dxChartSeriesTypes_FullStackedBarSeries,dxChartSeriesTypes_RangeBarSeriesSeries
+        * @propertyOf dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.RangeBarSeriesSeries
         */
         barGroupPadding: 0.3,
         /**
-        * @name dxrangeselectoroptions_chart_bargroupwidth
+        * @name dxrangeselectoroptions.chart.bargroupwidth
         * @publicName barGroupWidth
         * @type number
         * @default undefined
-        * @propertyOf dxChartSeriesTypes_BarSeries,dxChartSeriesTypes_StackedBarSeries,dxChartSeriesTypes_FullStackedBarSeries,dxChartSeriesTypes_RangeBarSeriesSeries
+        * @propertyOf dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.RangeBarSeriesSeries
         */
         barGroupWidth: undefined,
         /**
-        * @name dxrangeselectoroptions_chart_negativesaszeroes
+        * @name dxrangeselectoroptions.chart.negativesaszeroes
         * @publicName negativesAsZeroes
         * @type boolean
         * @default false
         */
         negativesAsZeroes: false,
         /**
-        * @name dxrangeselectoroptions_chart_palette
+        * @name dxrangeselectoroptions.chart.palette
         * @publicName palette
         * @extends CommonVizPalette
         */
         palette: [],
         /**
-        * @name dxrangeselectoroptions_chart_paletteextensionmode
+        * @name dxrangeselectoroptions.chart.paletteextensionmode
         * @publicName paletteExtensionMode
         * @type Enums.VizPaletteExtensionMode
         * @default 'blend'
@@ -1084,20 +1084,20 @@ var dxRangeSelector = {
         paletteExtensionMode: 'blend'
     },
     /**
-    * @name dxrangeselectoroptions_datasource
+    * @name dxrangeselectoroptions.datasource
     * @publicName dataSource
     * @extends CommonVizDataSource
     */
     dataSource: undefined,
     /**
-    * @name dxrangeselectoroptions_datasourcefield
+    * @name dxrangeselectoroptions.datasourcefield
     * @publicName dataSourceField
     * @type string
     * @default 'arg'
     */
     dataSourceField: undefined,
     /**
-    * @name dxrangeselectoroptions_onselectedrangechanged
+    * @name dxrangeselectoroptions.onselectedrangechanged
     * @publicName onSelectedRangeChanged
     * @extends Action
     * @type function(e)
@@ -1105,13 +1105,13 @@ var dxRangeSelector = {
     * @type_function_param1_field4 startValue:Date|Number
     * @type_function_param1_field5 endValue:Date|Number
     * @default null
-    * @deprecated dxrangeselectoroptions_onvaluechanged
+    * @deprecated dxrangeselectoroptions.onvaluechanged
     * @notUsedInTheme
     * @action
     */
     onSelectedRangeChanged: null,
     /**
-    * @name dxrangeselectoroptions_onvaluechanged
+    * @name dxrangeselectoroptions.onvaluechanged
     * @publicName onValueChanged
     * @extends Action
     * @type function(e)
@@ -1124,48 +1124,48 @@ var dxRangeSelector = {
     */
     onValueChanged: null,
     /**
-    * @name dxrangeselectoroptions_containerbackgroundcolor
+    * @name dxrangeselectoroptions.containerbackgroundcolor
     * @publicName containerBackgroundColor
     * @type string
     * @default '#FFFFFF'
     */
     containerBackgroundColor: '#FFFFFF',
     /**
-    * @name dxrangeselectormethods_getSelectedRange
+    * @name dxrangeselectormethods.getSelectedRange
     * @publicName getSelectedRange()
     * @return object
-    * @deprecated dxrangeselectormethods_getValue
+    * @deprecated dxrangeselectormethods.getValue
     */
     getSelectedRange: function() { },
     /**
-    * @name dxrangeselectormethods_setSelectedRange
+    * @name dxrangeselectormethods.setSelectedRange
     * @publicName setSelectedRange(selectedRange)
     * @param1 selectedRange:object
     * @param1_field1 startValue:Date|Number|String
     * @param1_field2 endValue:Date|Number|String
-    * @deprecated dxrangeselectormethods_setValue
+    * @deprecated dxrangeselectormethods.setValue
     */
     setSelectedRange: function() { },
     /**
-    * @name dxrangeselectormethods_setValue
+    * @name dxrangeselectormethods.setValue
     * @publicName setValue(value)
     * @param1 value:Array<number,string,Date>
     */
     setValue: function() { },
     /**
-    * @name dxrangeselectormethods_getValue
+    * @name dxrangeselectormethods.getValue
     * @publicName getValue()
     * @return Array<number,string,Date>
     */
     getValue: function() { },
     /**
-    * @name dxrangeselectormethods_render
+    * @name dxrangeselectormethods.render
     * @publicName render(skipChartAnimation)
     * @param1 skipChartAnimation:boolean
     */
     render: function(skipChartAnimation) { },
     /**
-    * @name dxrangeselectormethods_getdatasource
+    * @name dxrangeselectormethods.getdatasource
     * @publicName getDataSource()
     * @return DataSource
     */

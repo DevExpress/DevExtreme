@@ -47,9 +47,9 @@ var Command = DOMComponent.inherit({
 
         extend(this._deprecatedOptions, {
             /**
-            * @name dxCommandOptions_iconSrc
+            * @name dxCommandOptions.iconSrc
             * @publicName iconSrc
-            * @deprecated dxCommandOptions_icon
+            * @deprecated dxCommandOptions.icon
             * @inheritdoc
             */
             "iconSrc": { since: "15.1", alias: "icon" }
@@ -59,49 +59,49 @@ var Command = DOMComponent.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             /**
-            * @name dxCommandOptions_onExecute
+            * @name dxCommandOptions.onExecute
             * @publicName onExecute
             * @type function|string|object
             * @extends Action
             */
             onExecute: null,
             /**
-            * @name dxCommandOptions_id
+            * @name dxCommandOptions.id
             * @publicName id
             * @type string
             * @default null
             */
             id: null,
             /**
-            * @name dxCommandOptions_title
+            * @name dxCommandOptions.title
             * @publicName title
             * @type string
             * @default ""
             */
             title: "",
             /**
-            * @name dxCommandOptions_icon
+            * @name dxCommandOptions.icon
             * @publicName icon
             * @type string
             * @default ""
             */
             icon: "",
             /**
-            * @name dxCommandOptions_visible
+            * @name dxCommandOptions.visible
             * @publicName visible
             * @type bool
             * @default true
             */
             visible: true,
             /**
-            * @name dxCommandOptions_disabled
+            * @name dxCommandOptions.disabled
             * @publicName disabled
             * @type bool
             * @default false
             */
             disabled: false,
             /**
-            * @name dxCommandOptions_renderStage
+            * @name dxCommandOptions.renderStage
             * @publicName renderStage
             * @type string
             * @acceptValues 'onViewShown'|'onViewRendering'
@@ -109,7 +109,7 @@ var Command = DOMComponent.inherit({
             */
             renderStage: "onViewShown"
             /**
-            * @name dxCommandOptions_type
+            * @name dxCommandOptions.type
             * @publicName type
             * @type string
             * @default undefined
@@ -118,7 +118,7 @@ var Command = DOMComponent.inherit({
         });
     },
     /**
-    * @name dxcommandmethods_execute
+    * @name dxcommandmethods.execute
     * @publicName execute()
     */
     execute: function() {

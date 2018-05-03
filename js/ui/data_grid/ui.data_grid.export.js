@@ -548,7 +548,7 @@ exports.ExportController = dataGridCore.ViewController.inherit({}).include(expor
         return new exports.DataProvider(this);
     },
     /**
-    * @name dxDataGridMethods_exportToExcel
+    * @name dxDataGridMethods.exportToExcel
     * @publicName exportToExcel(selectionOnly)
     * @param1 selectionOnly:boolean
     */
@@ -588,82 +588,82 @@ dataGridCore.registerModule("export", {
     defaultOptions: function() {
         return {
             /**
-            * @name dxDataGridOptions_export
+            * @name dxDataGridOptions.export
             * @publicName export
             * @type object
             */
             "export": {
                 /**
-                 * @name dxDataGridOptions_export_enabled
+                 * @name dxDataGridOptions.export.enabled
                  * @publicName enabled
                  * @type boolean
                  * @default false
                  */
                 enabled: false,
                 /**
-                 * @name dxDataGridOptions_export_fileName
+                 * @name dxDataGridOptions.export.fileName
                  * @publicName fileName
                  * @type string
                  * @default "DataGrid"
                  */
                 fileName: "DataGrid",
                 /**
-                 * @name dxDataGridOptions_export_excelFilterEnabled
+                 * @name dxDataGridOptions.export.excelFilterEnabled
                  * @publicName excelFilterEnabled
                  * @type boolean
                  * @default false
                  */
                 excelFilterEnabled: false,
                 /**
-                 * @name dxDataGridOptions_export_excelWrapTextEnabled
+                 * @name dxDataGridOptions.export.excelWrapTextEnabled
                  * @publicName excelWrapTextEnabled
                  * @type boolean
                  * @default undefined
                  */
                 excelWrapTextEnabled: undefined,
                 /**
-                 * @name dxDataGridOptions_export_proxyUrl
+                 * @name dxDataGridOptions.export.proxyUrl
                  * @publicName proxyUrl
                  * @type string
                  * @default undefined
                  */
                 proxyUrl: undefined,
                 /**
-                 * @name dxDataGridOptions_export_allowExportSelectedData
+                 * @name dxDataGridOptions.export.allowExportSelectedData
                  * @publicName allowExportSelectedData
                  * @type boolean
                  * @default false
                  */
                 allowExportSelectedData: false,
                 /**
-                * @name dxDataGridOptions_export_ignoreExcelErrors
+                * @name dxDataGridOptions.export.ignoreExcelErrors
                 * @publicName ignoreExcelErrors
                 * @type boolean
                 * @default true
                 */
                 ignoreExcelErrors: true,
                 /**
-                 * @name dxDataGridOptions_export_texts
+                 * @name dxDataGridOptions.export.texts
                  * @publicName texts
                  * @type object
                  */
                 texts: {
                     /**
-                     * @name dxDataGridOptions_export_texts_exportTo
+                     * @name dxDataGridOptions.export.texts.exportTo
                      * @publicName exportTo
                      * @type string
                      * @default "Export"
                      */
                     exportTo: messageLocalization.format("dxDataGrid-exportTo"),
                     /**
-                     * @name dxDataGridOptions_export_texts_exportAll
+                     * @name dxDataGridOptions.export.texts.exportAll
                      * @publicName exportAll
                      * @type string
                      * @default "Export all data"
                      */
                     exportAll: messageLocalization.format("dxDataGrid-exportAll"),
                     /**
-                     * @name dxDataGridOptions_export_texts_exportSelectedRows
+                     * @name dxDataGridOptions.export.texts.exportSelectedRows
                      * @publicName exportSelectedRows
                      * @type string
                      * @default "Export selected rows"
@@ -672,7 +672,7 @@ dataGridCore.registerModule("export", {
                 }
             }
             /**
-             * @name dxDataGridOptions_onExporting
+             * @name dxDataGridOptions.onExporting
              * @publicName onExporting
              * @type function(e)
              * @type_function_param1 e:object
@@ -682,7 +682,7 @@ dataGridCore.registerModule("export", {
              * @action
              */
             /**
-            @name dxDataGridOptions_onFileSaving
+            @name dxDataGridOptions.onFileSaving
             * @publicName onFileSaving
             * @type function(e)
             * @type_function_param1 e:object
@@ -694,13 +694,13 @@ dataGridCore.registerModule("export", {
             * @action
             */
             /**
-             * @name dxDataGridOptions_onExported
+             * @name dxDataGridOptions.onExported
              * @publicName onExported
              * @extends Action
              * @action
              */
             /**
-             * @name dxDataGridOptions_customizeExportData
+             * @name dxDataGridOptions.customizeExportData
              * @publicName customizeExportData
              * @type function(columns, rows)
              * @type_function_param1 columns:Array<dxDataGridColumn>

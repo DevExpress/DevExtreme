@@ -57,13 +57,13 @@ var Menu = MenuBase.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             /**
-            * @name dxMenuOptions_items
+            * @name dxMenuOptions.items
             * @publicName items
             * @type Array<dxMenuItemTemplate>
             * @inheritdoc
             */
             /**
-            * @name dxMenuOptions_orientation
+            * @name dxMenuOptions.orientation
             * @publicName orientation
             * @type Enums.Orientation
             * @default "horizontal"
@@ -71,7 +71,7 @@ var Menu = MenuBase.inherit({
             orientation: "horizontal",
 
             /**
-            * @name dxMenuOptions_submenuDirection
+            * @name dxMenuOptions.submenuDirection
             * @publicName submenuDirection
             * @type Enums.SubmenuDirection
             * @default "auto"
@@ -79,14 +79,14 @@ var Menu = MenuBase.inherit({
             submenuDirection: "auto",
 
             /**
-            * @name dxMenuOptions_showFirstSubmenuMode
+            * @name dxMenuOptions.showFirstSubmenuMode
             * @publicName showFirstSubmenuMode
             * @type Object|Enums.ShowSubmenuMode
             * @default { name: "onClick", delay: { show: 50, hide: 300 } }
             */
             showFirstSubmenuMode: {
                 /**
-                * @name dxMenuOptions_showFirstSubmenuMode_name
+                * @name dxMenuOptions.showFirstSubmenuMode.name
                 * @publicName name
                 * @type Enums.ShowSubmenuMode
                 * @default "onClick"
@@ -94,14 +94,14 @@ var Menu = MenuBase.inherit({
                 name: "onClick",
 
                 /**
-                * @name dxMenuOptions_showFirstSubmenuMode_delay
+                * @name dxMenuOptions.showFirstSubmenuMode.delay
                 * @publicName delay
                 * @type Object|number
                 * @default { show: 50, hide: 300 }
                 */
                 delay: {
                     /**
-                    * @name dxMenuOptions_showFirstSubmenuMode_delay_show
+                    * @name dxMenuOptions.showFirstSubmenuMode.delay.show
                     * @publicName show
                     * @type number
                     * @default 50
@@ -109,7 +109,7 @@ var Menu = MenuBase.inherit({
                     show: 50,
 
                     /**
-                    * @name dxMenuOptions_showFirstSubmenuMode_delay_hide
+                    * @name dxMenuOptions.showFirstSubmenuMode.delay.hide
                     * @publicName hide
                     * @type number
                     * @default 300
@@ -119,7 +119,7 @@ var Menu = MenuBase.inherit({
             },
 
             /**
-            * @name dxMenuOptions_hideSubmenuOnMouseLeave
+            * @name dxMenuOptions.hideSubmenuOnMouseLeave
             * @publicName hideSubmenuOnMouseLeave
             * @type boolean
             * @default false
@@ -127,7 +127,7 @@ var Menu = MenuBase.inherit({
             hideSubmenuOnMouseLeave: false,
 
             /**
-            * @name dxMenuOptions_onSubmenuShowing
+            * @name dxMenuOptions.onSubmenuShowing
             * @publicName onSubmenuShowing
             * @extends Action
             * @type function(e)
@@ -138,7 +138,7 @@ var Menu = MenuBase.inherit({
             onSubmenuShowing: null,
 
             /**
-            * @name dxMenuOptions_onSubmenuShown
+            * @name dxMenuOptions.onSubmenuShown
             * @publicName onSubmenuShown
             * @extends Action
             * @type function(e)
@@ -149,7 +149,7 @@ var Menu = MenuBase.inherit({
             onSubmenuShown: null,
 
             /**
-            * @name dxMenuOptions_onSubmenuHiding
+            * @name dxMenuOptions.onSubmenuHiding
             * @publicName onSubmenuHiding
             * @extends Action
             * @type function(e)
@@ -161,7 +161,7 @@ var Menu = MenuBase.inherit({
             onSubmenuHiding: null,
 
             /**
-            * @name dxMenuOptions_onSubmenuHidden
+            * @name dxMenuOptions.onSubmenuHidden
             * @publicName onSubmenuHidden
             * @extends Action
             * @type function(e)
@@ -172,7 +172,7 @@ var Menu = MenuBase.inherit({
             onSubmenuHidden: null,
 
             /**
-            * @name dxMenuOptions_adaptivityEnabled
+            * @name dxMenuOptions.adaptivityEnabled
             * @publicName adaptivityEnabled
             * @type boolean
             * @default false
@@ -180,14 +180,14 @@ var Menu = MenuBase.inherit({
             adaptivityEnabled: false
 
             /**
-            * @name dxMenuOptions_selectedItems
+            * @name dxMenuOptions.selectedItems
             * @publicName selectedItems
             * @hidden
             * @inheritdoc
             */
 
             /**
-            * @name dxMenuOptions_onSelectionChange
+            * @name dxMenuOptions.onSelectionChange
             * @publicName onSelectionChange
             * @hidden
             * @action
@@ -195,7 +195,7 @@ var Menu = MenuBase.inherit({
             */
 
             /**
-            * @name dxMenuOptions_onItemReordered
+            * @name dxMenuOptions.onItemReordered
             * @publicName onItemReordered
             * @hidden
             * @inheritdoc
@@ -208,7 +208,7 @@ var Menu = MenuBase.inherit({
             * @inheritdoc
             */
             /**
-            * @name dxMenuItemTemplate_items
+            * @name dxMenuItemTemplate.items
             * @publicName items
             * @type Array<dxMenuItemTemplate>
             * @inheritdoc

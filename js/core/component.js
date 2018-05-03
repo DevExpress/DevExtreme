@@ -49,7 +49,7 @@ var Component = Class.inherit({
     _getDefaultOptions: function() {
         return {
             /**
-            * @name componentOptions_onInitialized
+            * @name componentOptions.onInitialized
             * @publicName onInitialized
             * @type function
             * @type_function_param1 e:object
@@ -60,7 +60,7 @@ var Component = Class.inherit({
             */
             onInitialized: null,
             /**
-            * @name componentOptions_onOptionChanged
+            * @name componentOptions.onOptionChanged
             * @publicName onOptionChanged
             * @type function
             * @type_function_param1 e:object
@@ -73,7 +73,7 @@ var Component = Class.inherit({
             */
             onOptionChanged: null,
             /**
-            * @name componentOptions_onDisposing
+            * @name componentOptions.onDisposing
             * @publicName onDisposing
             * @type function
             * @type_function_param1 e:object
@@ -159,7 +159,7 @@ var Component = Class.inherit({
         return this._optionsByReference;
     },
     /**
-    * @name ComponentMethods_ctor
+    * @name ComponentMethods.ctor
     * @publicName ctor(options)
     * @param1 options:ComponentOptions|undefined
     * @hidden
@@ -260,7 +260,7 @@ var Component = Class.inherit({
     },
 
     /**
-     * @name componentmethods_instance
+     * @name componentmethods.instance
      * @publicName instance()
      * @return Component
      */
@@ -269,7 +269,7 @@ var Component = Class.inherit({
     },
 
     /**
-     * @name componentmethods_beginupdate
+     * @name componentmethods.beginupdate
      * @publicName beginUpdate()
      */
     beginUpdate: function() {
@@ -277,7 +277,7 @@ var Component = Class.inherit({
     },
 
     /**
-     * @name componentmethods_endupdate
+     * @name componentmethods.endupdate
      * @publicName endUpdate()
      */
     endUpdate: function() {
@@ -470,24 +470,24 @@ var Component = Class.inherit({
     },
 
     /**
-     * @name componentmethods_option
+     * @name componentmethods.option
      * @publicName option()
      * @return object
      */
     /**
-     * @name componentmethods_option
+     * @name componentmethods.option
      * @publicName option(optionName)
      * @param1 optionName:string
      * @return any
      */
     /**
-     * @name componentmethods_option
+     * @name componentmethods.option
      * @publicName option(optionName, optionValue)
      * @param1 optionName:string
      * @param2 optionValue:any
      */
     /**
-     * @name componentmethods_option
+     * @name componentmethods.option
      * @publicName option(options)
      * @param1 options:object
      */

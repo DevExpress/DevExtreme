@@ -39,7 +39,7 @@ var Toolbar = ToolbarBase.inherit({
         return extend(this.callBase(), {
 
             /**
-            * @name dxToolbarOptions_menuItemTemplate
+            * @name dxToolbarOptions.menuItemTemplate
             * @publicName menuItemTemplate
             * @type template|function
             * @default "menuItem"
@@ -51,7 +51,7 @@ var Toolbar = ToolbarBase.inherit({
             menuItemTemplate: "menuItem",
 
             /**
-            * @name dxToolbarOptions_submenuType
+            * @name dxToolbarOptions.submenuType
             * @publicName submenuType
             * @type string
             * @default 'dropDownMenu'
@@ -61,42 +61,42 @@ var Toolbar = ToolbarBase.inherit({
             submenuType: "dropDownMenu"
 
             /**
-            * @name dxToolbarItemTemplate_location
+            * @name dxToolbarItemTemplate.location
             * @publicName location
             * @type Enums.ToolbarItemLocation
             * @default 'center'
             */
 
             /**
-            * @name dxToolbarItemTemplate_locateInMenu
+            * @name dxToolbarItemTemplate.locateInMenu
             * @publicName locateInMenu
             * @type Enums.ToolbarItemLocateInMenuMode
             * @default 'never'
             */
 
             /**
-            * @name dxToolbarItemTemplate_showText
+            * @name dxToolbarItemTemplate.showText
             * @publicName showText
             * @type Enums.ToolbarItemShowTextMode
             * @default 'always'
             */
 
             /**
-            * @name dxToolbarItemTemplate_menuItemTemplate
+            * @name dxToolbarItemTemplate.menuItemTemplate
             * @publicName menuItemTemplate
             * @type template|function
             * @type_function_return string|Node|jQuery
             */
 
             /**
-            * @name dxToolbarOptions_renderAs
+            * @name dxToolbarOptions.renderAs
             * @publicName renderAs
             * @type Enums.ToolbarRenderMode
             * @default 'topToolbar'
             */
 
             /**
-            * @name dxToolbarOptions_selectedIndex
+            * @name dxToolbarOptions.selectedIndex
             * @publicName selectedIndex
             * @type number
             * @default -1
@@ -104,63 +104,63 @@ var Toolbar = ToolbarBase.inherit({
             */
 
             /**
-            * @name dxToolbarOptions_activeStateEnabled
+            * @name dxToolbarOptions.activeStateEnabled
             * @publicName activeStateEnabled
             * @hidden
             * @inheritdoc
             */
 
             /**
-            * @name dxToolbarOptions_focusStateEnabled
+            * @name dxToolbarOptions.focusStateEnabled
             * @publicName focusStateEnabled
             * @hidden
             * @inheritdoc
             */
 
             /**
-            * @name dxToolbarOptions_accessKey
+            * @name dxToolbarOptions.accessKey
             * @publicName accessKey
             * @hidden
             * @inheritdoc
             */
 
             /**
-            * @name dxToolbarOptions_tabIndex
+            * @name dxToolbarOptions.tabIndex
             * @publicName tabIndex
             * @hidden
             * @inheritdoc
             */
 
             /**
-            * @name dxToolbarOptions_selectedItems
+            * @name dxToolbarOptions.selectedItems
             * @publicName selectedItems
             * @hidden
             * @inheritdoc
             */
 
             /**
-            * @name dxToolbarOptions_selectedItemKeys
+            * @name dxToolbarOptions.selectedItemKeys
             * @publicName selectedItemKeys
             * @hidden
             * @inheritdoc
             */
 
             /**
-            * @name dxToolbarOptions_keyExpr
+            * @name dxToolbarOptions.keyExpr
             * @publicName keyExpr
             * @hidden
             * @inheritdoc
             */
 
             /**
-            * @name dxToolbarOptions_selectedItem
+            * @name dxToolbarOptions.selectedItem
             * @publicName selectedItem
             * @hidden
             * @inheritdoc
             */
 
             /**
-            * @name dxToolbarOptions_onSelectionChanged
+            * @name dxToolbarOptions.onSelectionChanged
             * @publicName onSelectionChanged
             * @action
             * @hidden
@@ -420,14 +420,14 @@ var Toolbar = ToolbarBase.inherit({
     }
 
     /**
-    * @name dxToolbarMethods_registerKeyHandler
+    * @name dxToolbarMethods.registerKeyHandler
     * @publicName registerKeyHandler(key, handler)
     * @hidden
     * @inheritdoc
     */
 
     /**
-    * @name dxToolbarMethods_focus
+    * @name dxToolbarMethods.focus
     * @publicName focus()
     * @hidden
     * @inheritdoc

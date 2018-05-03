@@ -21,21 +21,21 @@ module.exports = {
         return {
             loadingTimeout: 0,
             /**
-             * @name GridBaseOptions_dataSource
+             * @name GridBaseOptions.dataSource
              * @publicName dataSource
              * @type string|Array<Object>|DataSource|DataSourceOptions
              * @default null
              */
             dataSource: null,
             /**
-             * @name GridBaseOptions_cacheEnabled
+             * @name GridBaseOptions.cacheEnabled
              * @publicName cacheEnabled
              * @type boolean
              * @default true
              */
             cacheEnabled: true,
             /**
-             * @name GridBaseOptions_onDataErrorOccurred
+             * @name GridBaseOptions.onDataErrorOccurred
              * @publicName onDataErrorOccurred
              * @extends Action
              * @type function(e)
@@ -45,85 +45,85 @@ module.exports = {
             */
             onDataErrorOccurred: null,
             /**
-             * @name dxDataGridOptions_remoteOperations
+             * @name dxDataGridOptions.remoteOperations
              * @publicName remoteOperations
              * @type boolean|object
              */
             /**
-             * @name dxTreeListOptions_remoteOperations
+             * @name dxTreeListOptions.remoteOperations
              * @publicName remoteOperations
              * @type object
              */
             remoteOperations: "auto",
             /**
-             * @name dxDataGridOptions_remoteOperations_sorting
+             * @name dxDataGridOptions.remoteOperations.sorting
              * @publicName sorting
              * @type boolean
              * @default false
              */
             /**
-             * @name dxDataGridOptions_remoteOperations_filtering
+             * @name dxDataGridOptions.remoteOperations.filtering
              * @publicName filtering
              * @type boolean
              * @default false
              */
             /**
-             * @name dxDataGridOptions_remoteOperations_paging
+             * @name dxDataGridOptions.remoteOperations.paging
              * @publicName paging
              * @type boolean
              * @default false
              */
             /**
-             * @name dxDataGridOptions_remoteOperations_grouping
+             * @name dxDataGridOptions.remoteOperations.grouping
              * @publicName grouping
              * @type boolean
              * @default false
              */
             /**
-             * @name dxDataGridOptions_remoteOperations_groupPaging
+             * @name dxDataGridOptions.remoteOperations.groupPaging
              * @publicName groupPaging
              * @type boolean
              * @default false
              */
             /**
-             * @name dxDataGridOptions_remoteOperations_summary
+             * @name dxDataGridOptions.remoteOperations.summary
              * @publicName summary
              * @type boolean
              * @default false
              */
             /**
-             * @name dxTreeListOptions_remoteOperations_sorting
+             * @name dxTreeListOptions.remoteOperations.sorting
              * @publicName sorting
              * @type boolean
              * @default false
              */
             /**
-             * @name dxTreeListOptions_remoteOperations_filtering
+             * @name dxTreeListOptions.remoteOperations.filtering
              * @publicName filtering
              * @type boolean
              * @default false
              */
             /**
-             * @name dxTreeListOptions_remoteOperations_grouping
+             * @name dxTreeListOptions.remoteOperations.grouping
              * @publicName grouping
              * @type boolean
              * @default false
              */
             /**
-             * @name GridBaseOptions_paging
+             * @name GridBaseOptions.paging
              * @publicName paging
              * @type object
              */
             paging: {
                 /**
-                 * @name GridBaseOptions_paging_enabled
+                 * @name GridBaseOptions.paging.enabled
                  * @publicName enabled
                  * @type boolean
                  * @default true
                  */
                 enabled: true,
                 /**
-                 * @name GridBaseOptions_paging_pageSize
+                 * @name GridBaseOptions.paging.pageSize
                  * @publicName pageSize
                  * @type number
                  * @default 20
@@ -131,7 +131,7 @@ module.exports = {
                  */
                 pageSize: undefined,
                 /**
-                 * @name GridBaseOptions_paging_pageIndex
+                 * @name GridBaseOptions.paging.pageIndex
                  * @publicName pageIndex
                  * @type number
                  * @default 0
@@ -140,7 +140,7 @@ module.exports = {
                 pageIndex: undefined
             }
             /**
-             * @name GridBaseOptions_onRowExpanding
+             * @name GridBaseOptions.onRowExpanding
              * @publicName onRowExpanding
              * @type function(e)
              * @type_function_param1 e:object
@@ -150,7 +150,7 @@ module.exports = {
              * @action
              */
             /**
-             * @name GridBaseOptions_onRowExpanded
+             * @name GridBaseOptions.onRowExpanded
              * @publicName onRowExpanded
              * @type function(e)
              * @type_function_param1 e:object
@@ -159,7 +159,7 @@ module.exports = {
              * @action
              */
             /**
-             * @name GridBaseOptions_onRowCollapsing
+             * @name GridBaseOptions.onRowCollapsing
              * @publicName onRowCollapsing
              * @type function(e)
              * @type_function_param1 e:object
@@ -169,7 +169,7 @@ module.exports = {
              * @action
              */
             /**
-             * @name GridBaseOptions_onRowCollapsed
+             * @name GridBaseOptions.onRowCollapsed
              * @publicName onRowCollapsed
              * @type function(e)
              * @type_function_param1 e:object
@@ -313,12 +313,12 @@ module.exports = {
                     return this._dataSource && this._dataSource._dataSource;
                 },
                 /**
-                 * @name GridBaseMethods_getCombinedFilter
+                 * @name GridBaseMethods.getCombinedFilter
                  * @publicName getCombinedFilter()
                  * @return any
                  */
                 /**
-                 * @name GridBaseMethods_getCombinedFilter
+                 * @name GridBaseMethods.getCombinedFilter
                  * @publicName getCombinedFilter(returnDataField)
                  * @param1 returnDataField:boolean
                  * @return any
@@ -759,12 +759,12 @@ module.exports = {
                     }
                 },
                 /**
-                 * @name GridBaseMethods_filter
+                 * @name GridBaseMethods.filter
                  * @publicName filter(filterExpr)
                  * @param1 filterExpr:any
                  */
                 /**
-                 * @name GridBaseMethods_filter
+                 * @name GridBaseMethods.filter
                  * @publicName filter()
                  * @return any
                  */
@@ -787,11 +787,11 @@ module.exports = {
                     this._applyFilter();
                 },
                 /**
-                * @name GridBaseMethods_clearFilter
+                * @name GridBaseMethods.clearFilter
                 * @publicName clearFilter()
                 */
                 /**
-                 * @name GridBaseMethods_clearFilter
+                 * @name GridBaseMethods.clearFilter
                  * @publicName clearFilter(filterName)
                  * @param1 filterName:string
                  */
@@ -913,7 +913,7 @@ module.exports = {
                     return !this.items().length;
                 },
                 /**
-                 * @name GridBaseMethods_pageCount
+                 * @name GridBaseMethods.pageCount
                  * @publicName pageCount()
                  * @return numeric
                  */
@@ -967,7 +967,7 @@ module.exports = {
                     return d;
                 },
                 /**
-                * @name GridBaseMethods_getKeyByRowIndex
+                * @name GridBaseMethods.getKeyByRowIndex
                 * @publicName getKeyByRowIndex(rowIndex)
                 * @param1 rowIndex:numeric
                 * @return any
@@ -979,7 +979,7 @@ module.exports = {
                     }
                 },
                 /**
-                * @name GridBaseMethods_getRowIndexByKey
+                * @name GridBaseMethods.getRowIndexByKey
                 * @publicName getRowIndexByKey(key)
                 * @param1 key:object|string|number
                 * @return numeric
@@ -988,7 +988,7 @@ module.exports = {
                     return gridCoreUtils.getIndexByKey(key, this.items());
                 },
                 /**
-                * @name GridBaseMethods_keyOf
+                * @name GridBaseMethods.keyOf
                 * @publicName keyOf(obj)
                 * @param1 obj:object
                 * @return any
@@ -1000,7 +1000,7 @@ module.exports = {
                     }
                 },
                 /**
-                * @name GridBaseMethods_byKey
+                * @name GridBaseMethods.byKey
                 * @publicName byKey(key)
                 * @param1 key:object|string|number
                 * @return Promise<Object>
@@ -1047,12 +1047,12 @@ module.exports = {
                     return result;
                 },
                 /**
-                * @name GridBaseMethods_pageIndex
+                * @name GridBaseMethods.pageIndex
                 * @publicName pageIndex()
                 * @return numeric
                 */
                 /**
-                * @name GridBaseMethods_pageIndex
+                * @name GridBaseMethods.pageIndex
                 * @publicName pageIndex(newIndex)
                 * @param1 newIndex:numeric
                 * @return Promise<void>
@@ -1061,12 +1061,12 @@ module.exports = {
                     return changePaging(this, "pageIndex", value);
                 },
                 /**
-                * @name GridBaseMethods_pageSize
+                * @name GridBaseMethods.pageSize
                 * @publicName pageSize()
                 * @return numeric
                 */
                 /**
-                * @name GridBaseMethods_pageSize
+                * @name GridBaseMethods.pageSize
                 * @publicName pageSize(value)
                 * @param1 value:numeric
                 */
@@ -1074,7 +1074,7 @@ module.exports = {
                     return changePaging(this, "pageSize", value);
                 },
                 /**
-                 * @name GridBaseMethods_beginCustomLoading
+                 * @name GridBaseMethods.beginCustomLoading
                  * @publicName beginCustomLoading(messageText)
                  * @param1 messageText:string
                  */
@@ -1084,7 +1084,7 @@ module.exports = {
                     this._fireLoadingChanged();
                 },
                 /**
-                 * @name GridBaseMethods_endCustomLoading
+                 * @name GridBaseMethods.endCustomLoading
                  * @publicName endCustomLoading()
                  */
                 endCustomLoading: function() {
@@ -1093,7 +1093,7 @@ module.exports = {
                     this._fireLoadingChanged();
                 },
                 /**
-                 * @name GridBaseMethods_refresh
+                 * @name GridBaseMethods.refresh
                  * @publicName refresh()
                  * @return Promise<void>
                  */
@@ -1107,12 +1107,12 @@ module.exports = {
                     return d;
                 },
                 /**
-                 * @name dxDataGridMethods_getVisibleRows
+                 * @name dxDataGridMethods.getVisibleRows
                  * @publicName getVisibleRows()
                  * @return Array<dxDataGridRowObject>
                  */
                 /**
-                 * @name dxTreeListMethods_getVisibleRows
+                 * @name dxTreeListMethods.getVisibleRows
                  * @publicName getVisibleRows()
                  * @return Array<dxTreeListRowObject>
                  */
@@ -1124,7 +1124,7 @@ module.exports = {
                 },
 
                 /**
-                * @name GridBaseMethods_repaintRows
+                * @name GridBaseMethods.repaintRows
                 * @publicName repaintRows(rowIndexes)
                 * @param1 rowIndexes:Array<number>
                 */
@@ -1156,7 +1156,7 @@ module.exports = {
             gridCoreUtils.proxyMethod(members, "hasKnownLastPage", true);
             gridCoreUtils.proxyMethod(members, "isLoaded", true);
             /**
-            * @name dxDataGridMethods_totalCount
+            * @name dxDataGridMethods.totalCount
             * @publicName totalCount()
             * @return numeric
             */

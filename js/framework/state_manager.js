@@ -28,7 +28,7 @@ var MemoryKeyValueStorage = Class.inherit({
 */
 var StateManager = Class.inherit({
     /**
-    * @name StateManageroptions_storage
+    * @name StateManageroptions.storage
     * @publicName storage
     * @type object
     */
@@ -38,7 +38,7 @@ var StateManager = Class.inherit({
         this.stateSources = options.stateSources || [];
     },
     /**
-    * @name StateManagerMethods_addStateSource
+    * @name StateManagerMethods.addStateSource
     * @publicName addStateSource(stateSource)
     * @type method
     * @param1 stateSource:object
@@ -47,7 +47,7 @@ var StateManager = Class.inherit({
         this.stateSources.push(stateSource);
     },
     /**
-    * @name StateManagerMethods_removeStateSource
+    * @name StateManagerMethods.removeStateSource
     * @publicName removeStateSource(stateSource)
     * @type method
     * @param1 stateSource:object
@@ -60,7 +60,7 @@ var StateManager = Class.inherit({
         }
     },
     /**
-    * @name StateManagerMethods_saveState
+    * @name StateManagerMethods.saveState
     * @publicName saveState()
     * @type method
     */
@@ -71,7 +71,7 @@ var StateManager = Class.inherit({
         });
     },
     /**
-    * @name StateManagerMethods_restoreState
+    * @name StateManagerMethods.restoreState
     * @publicName restoreState()
     * @type method
     */
@@ -82,7 +82,7 @@ var StateManager = Class.inherit({
         });
     },
     /**
-    * @name StateManagerMethods_clearState
+    * @name StateManagerMethods.clearState
     * @publicName clearState()
     * @type method
     */

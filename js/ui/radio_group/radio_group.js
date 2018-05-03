@@ -68,7 +68,7 @@ var RadioGroup = Editor.inherit({
         return extend(this.callBase(), extend(DataExpressionMixin._dataExpressionDefaultOptions(), {
 
             /**
-             * @name dxRadioGroupOptions_hoverStateEnabled
+             * @name dxRadioGroupOptions.hoverStateEnabled
              * @publicName hoverStateEnabled
              * @type boolean
              * @default true
@@ -77,7 +77,7 @@ var RadioGroup = Editor.inherit({
             hoverStateEnabled: true,
 
             /**
-            * @name dxRadioGroupOptions_activeStateEnabled
+            * @name dxRadioGroupOptions.activeStateEnabled
             * @publicName activeStateEnabled
             * @type boolean
             * @default true
@@ -86,7 +86,7 @@ var RadioGroup = Editor.inherit({
             activeStateEnabled: true,
 
             /**
-            * @name dxRadioGroupOptions_layout
+            * @name dxRadioGroupOptions.layout
             * @publicName layout
             * @type Enums.Orientation
             * @default "vertical"
@@ -96,14 +96,14 @@ var RadioGroup = Editor.inherit({
             useInkRipple: false
 
             /**
-            * @name dxRadioGroupOptions_value
+            * @name dxRadioGroupOptions.value
             * @publicName value
             * @ref
             * @inheritdoc
             */
 
             /**
-            * @name dxRadioGroupOptions_name
+            * @name dxRadioGroupOptions.name
             * @publicName name
             * @type string
             * @hidden false
@@ -118,7 +118,7 @@ var RadioGroup = Editor.inherit({
                 device: { tablet: true },
                 options: {
                     /**
-                     * @name dxRadioGroupOptions_layout
+                     * @name dxRadioGroupOptions.layout
                      * @publicName layout
                      * @default 'horizontal' @for tablets
                      */
@@ -131,7 +131,7 @@ var RadioGroup = Editor.inherit({
                 },
                 options: {
                     /**
-                    * @name dxRadioGroupOptions_focusStateEnabled
+                    * @name dxRadioGroupOptions.focusStateEnabled
                     * @publicName focusStateEnabled
                     * @type boolean
                     * @default true @for desktop

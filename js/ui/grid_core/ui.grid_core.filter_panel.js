@@ -190,14 +190,14 @@ module.exports = {
     defaultOptions: function() {
         return {
             /**
-             * @name GridBaseOptions_filterPanel
+             * @name GridBaseOptions.filterPanel
              * @publicName filterPanel
              * @type object
              * @default {}
              */
             filterPanel: {
                 /**
-                 * @name GridBaseOptions_filterPanel_visible
+                 * @name GridBaseOptions.filterPanel.visible
                  * @publicName visible
                  * @type boolean
                  * @default false
@@ -205,7 +205,7 @@ module.exports = {
                 visible: false,
 
                 /**
-                 * @name GridBaseOptions_filterPanel_filterEnabled
+                 * @name GridBaseOptions.filterPanel.filterEnabled
                  * @publicName filterEnabled
                  * @type boolean
                  * @default true
@@ -213,7 +213,7 @@ module.exports = {
                 filterEnabled: true,
 
                 /**
-                 * @name GridBaseOptions_filterPanel_customizeText
+                 * @name GridBaseOptions.filterPanel.customizeText
                  * @publicName customizeText
                  * @type function
                  * @type_function_param1 e:object
@@ -224,14 +224,14 @@ module.exports = {
                  */
 
                 /**
-                 * @name GridBaseOptions_filterPanel_texts
+                 * @name GridBaseOptions.filterPanel.texts
                  * @publicName texts
                  * @type object
                  * @default {}
                  */
                 texts: {
                     /**
-                     * @name GridBaseOptions_filterPanel_texts_createFilter
+                     * @name GridBaseOptions.filterPanel.texts.createFilter
                      * @publicName createFilter
                      * @type string
                      * @default "Create Filter"
@@ -239,7 +239,7 @@ module.exports = {
                     createFilter: messageLocalization.format("dxDataGrid-filterPanelCreateFilter"),
 
                     /**
-                     * @name GridBaseOptions_filterPanel_texts_clearFilter
+                     * @name GridBaseOptions.filterPanel.texts.clearFilter
                      * @publicName clearFilter
                      * @type string
                      * @default "Clear"
@@ -247,7 +247,7 @@ module.exports = {
                     clearFilter: messageLocalization.format("dxDataGrid-filterPanelClearFilter"),
 
                     /**
-                     * @name GridBaseOptions_filterPanel_texts_filterEnabledHint
+                     * @name GridBaseOptions.filterPanel.texts.filterEnabledHint
                      * @publicName filterEnabledHint
                      * @type string
                      * @default "Enable the filter"

@@ -60,7 +60,7 @@ var HoldEmitter = Emitter.inherit({
 });
 
 /**
-  * @name ui events_dxhold
+  * @name ui events.dxhold
   * @publicName dxhold
   * @type eventType
   * @type_function_param1 event:event

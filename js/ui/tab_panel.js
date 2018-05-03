@@ -30,7 +30,7 @@ var TabPanel = MultiView.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             /**
-            * @name dxTabPanelOptions_itemTitleTemplate
+            * @name dxTabPanelOptions.itemTitleTemplate
             * @publicName itemTitleTemplate
             * @type template|function
             * @default "title"
@@ -42,7 +42,7 @@ var TabPanel = MultiView.inherit({
             itemTitleTemplate: "title",
 
             /**
-             * @name dxTabPanelOptions_hoverStateEnabled
+             * @name dxTabPanelOptions.hoverStateEnabled
              * @publicName hoverStateEnabled
              * @type boolean
              * @default true
@@ -51,7 +51,7 @@ var TabPanel = MultiView.inherit({
             hoverStateEnabled: true,
 
             /**
-            * @name dxTabPanelOptions_showNavButtons
+            * @name dxTabPanelOptions.showNavButtons
             * @publicName showNavButtons
             * @type boolean
             * @default false
@@ -59,7 +59,7 @@ var TabPanel = MultiView.inherit({
             showNavButtons: false,
 
             /**
-            * @name dxTabPanelOptions_scrollByContent
+            * @name dxTabPanelOptions.scrollByContent
             * @publicName scrollByContent
             * @type boolean
             * @default true
@@ -67,7 +67,7 @@ var TabPanel = MultiView.inherit({
             scrollByContent: true,
 
             /**
-            * @name dxTabPanelOptions_scrollingEnabled
+            * @name dxTabPanelOptions.scrollingEnabled
             * @publicName scrollingEnabled
             * @type boolean
             * @default true
@@ -75,7 +75,7 @@ var TabPanel = MultiView.inherit({
             scrollingEnabled: true,
 
             /**
-            * @name dxTabPanelOptions_onTitleClick
+            * @name dxTabPanelOptions.onTitleClick
             * @publicName onTitleClick
             * @extends Action
             * @type function(e)|string
@@ -87,7 +87,7 @@ var TabPanel = MultiView.inherit({
             onTitleClick: null,
 
             /**
-            * @name dxTabPanelOptions_onTitleHold
+            * @name dxTabPanelOptions.onTitleHold
             * @publicName onTitleHold
             * @extends Action
             * @type function(e)
@@ -99,7 +99,7 @@ var TabPanel = MultiView.inherit({
             onTitleHold: null,
 
             /**
-            * @name dxTabPanelOptions_onTitleRendered
+            * @name dxTabPanelOptions.onTitleRendered
             * @publicName onTitleRendered
             * @extends Action
             * @type function(e)
@@ -117,30 +117,30 @@ var TabPanel = MultiView.inherit({
             * @type object
             */
             /**
-            * @name dxTabPanelItemTemplate_tabtemplate
+            * @name dxTabPanelItemTemplate.tabtemplate
             * @publicName tabTemplate
             * @type template|function
             * @type_function_return string|Node|jQuery
             */
 
             /**
-            * @name dxTabPanelItemTemplate_visible
+            * @name dxTabPanelItemTemplate.visible
             * @publicName visible
             * @hidden
             * @inheritdoc
             */
             /**
-            * @name dxTabPanelItemTemplate_title
+            * @name dxTabPanelItemTemplate.title
             * @publicName title
             * @type String
             */
             /**
-            * @name dxTabPanelItemTemplate_icon
+            * @name dxTabPanelItemTemplate.icon
             * @publicName icon
             * @type String
             */
             /**
-            * @name dxTabPanelItemTemplate_badge
+            * @name dxTabPanelItemTemplate.badge
             * @publicName badge
             * @type String
             */
@@ -155,7 +155,7 @@ var TabPanel = MultiView.inherit({
                 },
                 options: {
                     /**
-                    * @name dxTabPanelOptions_focusStateEnabled
+                    * @name dxTabPanelOptions.focusStateEnabled
                     * @publicName focusStateEnabled
                     * @type boolean
                     * @default true @for desktop
@@ -170,7 +170,7 @@ var TabPanel = MultiView.inherit({
                 },
                 options: {
                     /**
-                    * @name dxTabPanelOptions_swipeEnabled
+                    * @name dxTabPanelOptions.swipeEnabled
                     * @publicName swipeEnabled
                     * @type boolean
                     * @default false @for non-touch_devices
@@ -183,7 +183,7 @@ var TabPanel = MultiView.inherit({
                 device: { platform: "generic" },
                 options: {
                     /**
-                    * @name dxTabPanelOptions_animationEnabled
+                    * @name dxTabPanelOptions.animationEnabled
                     * @publicName animationEnabled
                     * @type boolean
                     * @default false

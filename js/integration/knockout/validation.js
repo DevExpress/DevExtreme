@@ -56,7 +56,7 @@ ko.extenders.dxValidator = function(target, option) {
 // TODO: MODULARITY: Move this to another place?
 
 /**
-* @name validationEngineMethods_registerModelForValidation
+* @name validationEngineMethods.registerModelForValidation
 * @publicName registerModelForValidation(model)
 * @param1 model:object
 * @static
@@ -70,7 +70,7 @@ ValidationEngine.registerModelForValidation = function(model) {
 };
 
 /**
-* @name validationEngineMethods_unregisterModelForValidation
+* @name validationEngineMethods.unregisterModelForValidation
 * @publicName unregisterModelForValidation(model)
 * @param1 model:object
 * @static
@@ -84,7 +84,7 @@ ValidationEngine.unregisterModelForValidation = function(model) {
 };
 
 /**
-* @name validationEngineMethods_validateModel
+* @name validationEngineMethods.validateModel
 * @publicName validateModel(model)
 * @param1 model:object
 * @return object

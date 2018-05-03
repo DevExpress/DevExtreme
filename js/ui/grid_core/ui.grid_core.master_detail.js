@@ -16,27 +16,27 @@ module.exports = {
     defaultOptions: function() {
         return {
             /**
-             * @name dxDataGridOptions_masterDetail
+             * @name dxDataGridOptions.masterDetail
              * @publicName masterDetail
              * @type object
              */
             masterDetail: {
                 /**
-                 * @name dxDataGridOptions_masterDetail_enabled
+                 * @name dxDataGridOptions.masterDetail.enabled
                  * @publicName enabled
                  * @type boolean
                  * @default false
                  */
                 enabled: false,
                 /**
-                 * @name dxDataGridOptions_masterDetail_autoExpandAll
+                 * @name dxDataGridOptions.masterDetail.autoExpandAll
                  * @publicName autoExpandAll
                  * @type boolean
                  * @default false
                  */
                 autoExpandAll: false,
                 /**
-                 * @name dxDataGridOptions_masterDetail_template
+                 * @name dxDataGridOptions.masterDetail.template
                  * @publicName template
                  * @type template|function
                  * @type_function_param1 detailElement:dxElement

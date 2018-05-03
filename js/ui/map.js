@@ -46,14 +46,14 @@ var Map = Widget.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             /**
-            * @name dxMapOptions_bounds
+            * @name dxMapOptions.bounds
             * @publicName bounds
             * @type object
             * @hidden
             */
             bounds: {
                 /**
-                * @name dxMapOptions_bounds_northEast
+                * @name dxMapOptions.bounds.northEast
                 * @publicName northEast
                 * @type object|string|Array<object>
                 * @default null
@@ -61,14 +61,14 @@ var Map = Widget.inherit({
                 */
 
                 /**
-                * @name dxMapOptions_bounds_northEast_lat
+                * @name dxMapOptions.bounds.northEast.lat
                 * @publicName lat
                 * @type number
                 * @hidden
                 */
 
                 /**
-                * @name dxMapOptions_bounds_northEast_lng
+                * @name dxMapOptions.bounds.northEast.lng
                 * @publicName lng
                 * @type number
                 * @hidden
@@ -76,7 +76,7 @@ var Map = Widget.inherit({
                 northEast: null,
 
                 /**
-                * @name dxMapOptions_bounds_southWest
+                * @name dxMapOptions.bounds.southWest
                 * @publicName southWest
                 * @type object|string|Array<object>
                 * @default null
@@ -84,14 +84,14 @@ var Map = Widget.inherit({
                 */
 
                 /**
-                * @name dxMapOptions_bounds_southWest_lat
+                * @name dxMapOptions.bounds.southWest.lat
                 * @publicName lat
                 * @type number
                 * @hidden
                 */
 
                 /**
-                * @name dxMapOptions_bounds_southWest_lng
+                * @name dxMapOptions.bounds.southWest.lng
                 * @publicName lng
                 * @type number
                 * @hidden
@@ -109,19 +109,19 @@ var Map = Widget.inherit({
             * @hidden
             */
             /**
-            * @name MapLocation_lat
+            * @name MapLocation.lat
             * @publicName lat
             * @type number
             * @default 0
             */
             /**
-            * @name MapLocation_lng
+            * @name MapLocation.lng
             * @publicName lng
             * @type number
             * @default 0
             */
             /**
-            * @name dxMapOptions_center
+            * @name dxMapOptions.center
             * @publicName center
             * @extends MapLocationType
             * @inherits MapLocation
@@ -132,7 +132,7 @@ var Map = Widget.inherit({
             },
 
             /**
-            * @name dxMapOptions_zoom
+            * @name dxMapOptions.zoom
             * @publicName zoom
             * @type number
             * @default 1
@@ -140,7 +140,7 @@ var Map = Widget.inherit({
             zoom: 1,
 
             /**
-            * @name dxMapOptions_width
+            * @name dxMapOptions.width
             * @publicName width
             * @inheritdoc
             * @default 300
@@ -148,7 +148,7 @@ var Map = Widget.inherit({
             width: 300,
 
             /**
-            * @name dxMapOptions_height
+            * @name dxMapOptions.height
             * @publicName height
             * @inheritdoc
             * @default 300
@@ -156,7 +156,7 @@ var Map = Widget.inherit({
             height: 300,
 
             /**
-            * @name dxMapOptions_type
+            * @name dxMapOptions.type
             * @publicName type
             * @type Enums.GeoMapType
             * @default "roadmap"
@@ -164,7 +164,7 @@ var Map = Widget.inherit({
             type: "roadmap",
 
             /**
-            * @name dxMapOptions_provider
+            * @name dxMapOptions.provider
             * @publicName provider
             * @type Enums.GeoMapProvider
             * @default "google"
@@ -172,7 +172,7 @@ var Map = Widget.inherit({
             provider: "google",
 
             /**
-            * @name dxMapOptions_autoAdjust
+            * @name dxMapOptions.autoAdjust
             * @publicName autoAdjust
             * @type boolean
             * @default true
@@ -180,53 +180,53 @@ var Map = Widget.inherit({
             autoAdjust: true,
 
             /**
-            * @name dxMapOptions_markers
+            * @name dxMapOptions.markers
             * @publicName markers
             * @type Array<Object>
             */
             /**
-            * @name dxMapOptions_markers_location
+            * @name dxMapOptions.markers.location
             * @publicName location
             * @extends MapLocationType
             * @inherits MapLocation
             */
             /**
-            * @name dxMapOptions_markers_tooltip
+            * @name dxMapOptions.markers.tooltip
             * @publicName tooltip
             * @type string|object
             */
             /**
-            * @name dxMapOptions_markers_tooltip_text
+            * @name dxMapOptions.markers.tooltip.text
             * @publicName text
             * @type string
             */
             /**
-            * @name dxMapOptions_markers_tooltip_isShown
+            * @name dxMapOptions.markers.tooltip.isShown
             * @publicName isShown
             * @type boolean
             * @default false
             */
             /**
-            * @name dxMapOptions_markers_onClick
+            * @name dxMapOptions.markers.onClick
             * @publicName onClick
             * @type function
             */
             /**
-            * @name dxMapOptions_markers_iconSrc
+            * @name dxMapOptions.markers.iconSrc
             * @publicName iconSrc
             * @type string
             */
             markers: [],
 
             /**
-            * @name dxMapOptions_markerIconSrc
+            * @name dxMapOptions.markerIconSrc
             * @publicName markerIconSrc
             * @type string
             */
             markerIconSrc: null,
 
             /**
-            * @name dxMapOptions_onMarkerAdded
+            * @name dxMapOptions.onMarkerAdded
             * @publicName onMarkerAdded
             * @extends Action
             * @type function(e)
@@ -238,7 +238,7 @@ var Map = Widget.inherit({
             onMarkerAdded: null,
 
             /**
-            * @name dxMapOptions_onMarkerRemoved
+            * @name dxMapOptions.onMarkerRemoved
             * @publicName onMarkerRemoved
             * @extends Action
             * @type function(e)
@@ -249,37 +249,37 @@ var Map = Widget.inherit({
             onMarkerRemoved: null,
 
             /**
-            * @name dxMapOptions_routes
+            * @name dxMapOptions.routes
             * @publicName routes
             * @type Array<Object>
             */
             /**
-            * @name dxMapOptions_routes_locations
+            * @name dxMapOptions.routes.locations
             * @publicName locations
             * @extends MapLocationType
             * @inherits MapLocation
             * @type Array<Object>
             */
             /**
-            * @name dxMapOptions_routes_mode
+            * @name dxMapOptions.routes.mode
             * @publicName mode
             * @type Enums.GeoMapRouteMode
             * @default 'driving'
             */
             /**
-            * @name dxMapOptions_routes_color
+            * @name dxMapOptions.routes.color
             * @publicName color
             * @type string
             * @default '#0000FF'
             */
             /**
-            * @name dxMapOptions_routes_weight
+            * @name dxMapOptions.routes.weight
             * @publicName weight
             * @type number
             * @default 5
             */
             /**
-            * @name dxMapOptions_routes_opacity
+            * @name dxMapOptions.routes.opacity
             * @publicName opacity
             * @type number
             * @default 0.5
@@ -287,7 +287,7 @@ var Map = Widget.inherit({
             routes: [],
 
             /**
-            * @name dxMapOptions_onRouteAdded
+            * @name dxMapOptions.onRouteAdded
             * @publicName onRouteAdded
             * @extends Action
             * @type function(e)
@@ -299,7 +299,7 @@ var Map = Widget.inherit({
             onRouteAdded: null,
 
             /**
-            * @name dxMapOptions_onRouteRemoved
+            * @name dxMapOptions.onRouteRemoved
             * @publicName onRouteRemoved
             * @extends Action
             * @type function(e)
@@ -310,14 +310,14 @@ var Map = Widget.inherit({
             onRouteRemoved: null,
 
             /**
-            * @name dxMapOptions_key
+            * @name dxMapOptions.key
             * @publicName key
             * @type string|object
             * @default ""
             */
             key: {
                 /**
-                * @name dxMapOptions_key_bing
+                * @name dxMapOptions.key.bing
                 * @publicName bing
                 * @type string
                 * @default ""
@@ -325,7 +325,7 @@ var Map = Widget.inherit({
                 bing: "",
 
                 /**
-                * @name dxMapOptions_key_google
+                * @name dxMapOptions.key.google
                 * @publicName google
                 * @type string
                 * @default ""
@@ -333,7 +333,7 @@ var Map = Widget.inherit({
                 google: "",
 
                 /**
-                * @name dxMapOptions_key_googleStatic
+                * @name dxMapOptions.key.googleStatic
                 * @publicName googleStatic
                 * @type string
                 * @default ""
@@ -342,7 +342,7 @@ var Map = Widget.inherit({
             },
 
             /**
-            * @name dxMapOptions_controls
+            * @name dxMapOptions.controls
             * @publicName controls
             * @default false
             * @type boolean
@@ -350,7 +350,7 @@ var Map = Widget.inherit({
             controls: false,
 
             /**
-            * @name dxMapOptions_onReady
+            * @name dxMapOptions.onReady
             * @publicName onReady
             * @extends Action
             * @type function(e)
@@ -362,7 +362,7 @@ var Map = Widget.inherit({
 
 
             /**
-            * @name dxMapOptions_onContentReady
+            * @name dxMapOptions.onContentReady
             * @publicName onContentReady
             * @hidden true
             * @action
@@ -372,7 +372,7 @@ var Map = Widget.inherit({
             onUpdated: null,
 
             /**
-            * @name dxMapOptions_onClick
+            * @name dxMapOptions.onClick
             * @publicName onClick
             * @type function(e)|string
             * @extends Action
@@ -394,7 +394,7 @@ var Map = Widget.inherit({
                 },
                 options: {
                     /**
-                    * @name dxMapOptions_focusStateEnabled
+                    * @name dxMapOptions.focusStateEnabled
                     * @publicName focusStateEnabled
                     * @type boolean
                     * @default true @for desktop
@@ -633,7 +633,7 @@ var Map = Widget.inherit({
     },
 
     /**
-    * @name dxmapmethods_addmarker
+    * @name dxmapmethods.addmarker
     * @publicName addMarker(markerOptions)
     * @param1 markerOptions:Object|Array<Object>
     * @return Promise<Object>
@@ -643,7 +643,7 @@ var Map = Widget.inherit({
     },
 
     /**
-    * @name dxmapmethods_removemarker
+    * @name dxmapmethods.removemarker
     * @publicName removeMarker(marker)
     * @param1 marker:Object|number|Array<Object>
     * @return Promise<void>
@@ -653,7 +653,7 @@ var Map = Widget.inherit({
     },
 
     /**
-    * @name dxmapmethods_addroute
+    * @name dxmapmethods.addroute
     * @publicName addRoute(routeOptions)
     * @param1 options:object|Array<Object>
     * @return Promise<Object>
@@ -663,7 +663,7 @@ var Map = Widget.inherit({
     },
 
     /**
-    * @name dxmapmethods_removeroute
+    * @name dxmapmethods.removeroute
     * @publicName removeRoute(route)
     * @param1 route:object|number|Array<Object>
     * @return Promise<void>

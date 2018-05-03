@@ -73,25 +73,25 @@ var ContextMenu = MenuBase.inherit((function() {
         _getDefaultOptions: function() {
             return extend(this.callBase(), {
                 /**
-                * @name dxContextMenuOptions_items
+                * @name dxContextMenuOptions.items
                 * @publicName items
                 * @type Array<dxContextMenuItemTemplate>
                 * @inheritdoc
                 */
                 /**
-                * @name dxContextMenuOptions_showEvent
+                * @name dxContextMenuOptions.showEvent
                 * @publicName showEvent
                 * @type Object|string
                 * @default "dxcontextmenu"
                 */
                 /**
-                * @name dxContextMenuOptions_showEvent_name
+                * @name dxContextMenuOptions.showEvent.name
                 * @publicName name
                 * @type string
                 * @default undefined
                 */
                 /**
-                * @name dxContextMenuOptions_showEvent_delay
+                * @name dxContextMenuOptions.showEvent.delay
                 * @publicName delay
                 * @type number
                 * @default undefined
@@ -99,7 +99,7 @@ var ContextMenu = MenuBase.inherit((function() {
                 showEvent: DEFAULT_SHOW_EVENT,
 
                 /**
-                * @name dxContextMenuOptions_closeOnOutsideClick
+                * @name dxContextMenuOptions.closeOnOutsideClick
                 * @publicName closeOnOutsideClick
                 * @type boolean|function
                 * @default true
@@ -109,7 +109,7 @@ var ContextMenu = MenuBase.inherit((function() {
                 closeOnOutsideClick: true,
 
                 /**
-                * @name dxContextMenuOptions_position
+                * @name dxContextMenuOptions.position
                 * @publicName position
                 * @type positionConfig
                 * @default { my: 'top left', at: 'top left' }
@@ -121,7 +121,7 @@ var ContextMenu = MenuBase.inherit((function() {
                 },
 
                 /**
-                * @name dxContextMenuOptions_onShowing
+                * @name dxContextMenuOptions.onShowing
                 * @publicName onShowing
                 * @extends Action
                 * @type function(e)
@@ -132,7 +132,7 @@ var ContextMenu = MenuBase.inherit((function() {
                 onShowing: null,
 
                 /**
-                * @name dxContextMenuOptions_onShown
+                * @name dxContextMenuOptions.onShown
                 * @publicName onShown
                 * @extends Action
                 * @action
@@ -142,7 +142,7 @@ var ContextMenu = MenuBase.inherit((function() {
                 onSubmenuCreated: null,
 
                 /**
-                * @name dxContextMenuOptions_onHiding
+                * @name dxContextMenuOptions.onHiding
                 * @publicName onHiding
                 * @extends Action
                 * @type function(e)
@@ -153,7 +153,7 @@ var ContextMenu = MenuBase.inherit((function() {
                 onHiding: null,
 
                 /**
-                * @name dxContextMenuOptions_onHidden
+                * @name dxContextMenuOptions.onHidden
                 * @publicName onHidden
                 * @extends Action
                 * @action
@@ -161,7 +161,7 @@ var ContextMenu = MenuBase.inherit((function() {
                 onHidden: null,
 
                 /**
-                * @name dxContextMenuOptions_onPositioning
+                * @name dxContextMenuOptions.onPositioning
                 * @publicName onPositioning
                 * @extends Action
                 * @type function(e)
@@ -174,7 +174,7 @@ var ContextMenu = MenuBase.inherit((function() {
                 onPositioning: null,
 
                 /**
-                * @name dxContextMenuOptions_submenuDirection
+                * @name dxContextMenuOptions.submenuDirection
                 * @publicName submenuDirection
                 * @type Enums.ContextMenuSubmenuDirection
                 * @default "auto"
@@ -182,7 +182,7 @@ var ContextMenu = MenuBase.inherit((function() {
                 submenuDirection: "auto",
 
                 /**
-                * @name dxContextMenuOptions_visible
+                * @name dxContextMenuOptions.visible
                 * @publicName visible
                 * @type boolean
                 * @default false
@@ -192,7 +192,7 @@ var ContextMenu = MenuBase.inherit((function() {
                 visible: false,
 
                 /**
-                * @name dxContextMenuOptions_target
+                * @name dxContextMenuOptions.target
                 * @publicName target
                 * @type string|Node|jQuery
                 * @default undefined
@@ -200,21 +200,21 @@ var ContextMenu = MenuBase.inherit((function() {
                 target: undefined,
 
                 /**
-                * @name dxContextMenuOptions_itemHoldAction
+                * @name dxContextMenuOptions.itemHoldAction
                 * @publicName itemHoldAction
                 * @hidden
                 * @inheritdoc
                 */
 
                 /**
-                * @name dxContextMenuOptions_onItemReordered
+                * @name dxContextMenuOptions.onItemReordered
                 * @publicName onItemReordered
                 * @hidden
                 * @inheritdoc
                 */
 
                 /**
-                * @name dxContextMenuOptions_selectedItems
+                * @name dxContextMenuOptions.selectedItems
                 * @publicName selectedItems
                 * @hidden
                 * @inheritdoc
@@ -227,7 +227,7 @@ var ContextMenu = MenuBase.inherit((function() {
                 * @inheritdoc
                 */
                 /**
-                * @name dxContextMenuItemTemplate_items
+                * @name dxContextMenuItemTemplate.items
                 * @publicName items
                 * @type Array<dxContextMenuItemTemplate>
                 * @inheritdoc
@@ -1033,7 +1033,7 @@ var ContextMenu = MenuBase.inherit((function() {
         },
 
         /**
-        * @name dxContextMenuMethods_toggle
+        * @name dxContextMenuMethods.toggle
         * @publicName toggle(showing)
         * @param1 showing:boolean
         * @return Promise<void>
@@ -1047,7 +1047,7 @@ var ContextMenu = MenuBase.inherit((function() {
         },
 
         /**
-        * @name dxContextMenuMethods_show
+        * @name dxContextMenuMethods.show
         * @publicName show()
         * @return Promise<void>
         */
@@ -1056,7 +1056,7 @@ var ContextMenu = MenuBase.inherit((function() {
         },
 
         /**
-        * @name dxContextMenuMethods_hide
+        * @name dxContextMenuMethods.hide
         * @publicName hide()
         * @return Promise<void>
         */

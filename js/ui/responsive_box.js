@@ -33,30 +33,30 @@ var ResponsiveBox = CollectionWidget.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             /**
-            * @name dxResponsiveBoxOptions_rows
+            * @name dxResponsiveBoxOptions.rows
             * @publicName rows
             * @type Array<Object>
             */
             /**
-            * @name dxResponsiveBoxOptions_rows_baseSize
+            * @name dxResponsiveBoxOptions.rows.baseSize
             * @publicName baseSize
             * @type number | Enums.Mode
             * @default 0
             */
             /**
-            * @name dxResponsiveBoxOptions_rows_shrink
+            * @name dxResponsiveBoxOptions.rows.shrink
             * @publicName shrink
             * @type number
             * @default 1
             */
             /**
-            * @name dxResponsiveBoxOptions_rows_ratio
+            * @name dxResponsiveBoxOptions.rows.ratio
             * @publicName ratio
             * @type number
             * @default 1
             */
             /**
-            * @name dxResponsiveBoxOptions_rows_screen
+            * @name dxResponsiveBoxOptions.rows.screen
             * @publicName screen
             * @type string
             * @default undefined
@@ -64,30 +64,30 @@ var ResponsiveBox = CollectionWidget.inherit({
             rows: [],
 
             /**
-            * @name dxResponsiveBoxOptions_cols
+            * @name dxResponsiveBoxOptions.cols
             * @publicName cols
             * @type Array<Object>
             */
             /**
-            * @name dxResponsiveBoxOptions_cols_baseSize
+            * @name dxResponsiveBoxOptions.cols.baseSize
             * @publicName baseSize
             * @type number | Enums.Mode
             * @default 0
             */
             /**
-            * @name dxResponsiveBoxOptions_cols_shrink
+            * @name dxResponsiveBoxOptions.cols.shrink
             * @publicName shrink
             * @type number
             * @default 1
             */
             /**
-            * @name dxResponsiveBoxOptions_cols_ratio
+            * @name dxResponsiveBoxOptions.cols.ratio
             * @publicName ratio
             * @type number
             * @default 1
             */
             /**
-            * @name dxResponsiveBoxOptions_cols_screen
+            * @name dxResponsiveBoxOptions.cols.screen
             * @publicName screen
             * @type string
             * @default undefined
@@ -95,7 +95,7 @@ var ResponsiveBox = CollectionWidget.inherit({
             cols: [],
 
             /**
-            * @name dxResponsiveBoxOptions_screenByWidth
+            * @name dxResponsiveBoxOptions.screenByWidth
             * @publicName screenByWidth
             * @type function
             * @default null
@@ -103,7 +103,7 @@ var ResponsiveBox = CollectionWidget.inherit({
             screenByWidth: null,
 
             /**
-            * @name dxResponsiveBoxOptions_singleColumnScreen
+            * @name dxResponsiveBoxOptions.singleColumnScreen
             * @publicName singleColumnScreen
             * @type string
             * @default ""
@@ -111,7 +111,7 @@ var ResponsiveBox = CollectionWidget.inherit({
             singleColumnScreen: "",
 
             /**
-            * @name dxResponsiveBoxOptions_height
+            * @name dxResponsiveBoxOptions.height
             * @publicName height
             * @default '100%'
             * @inheritdoc
@@ -119,7 +119,7 @@ var ResponsiveBox = CollectionWidget.inherit({
             height: "100%",
 
             /**
-            * @name dxResponsiveBoxOptions_width
+            * @name dxResponsiveBoxOptions.width
             * @publicName width
             * @default '100%'
             * @inheritdoc
@@ -127,7 +127,7 @@ var ResponsiveBox = CollectionWidget.inherit({
             width: "100%",
 
             /**
-            * @name dxResponsiveBoxOptions_activeStateEnabled
+            * @name dxResponsiveBoxOptions.activeStateEnabled
             * @publicName activeStateEnabled
             * @hidden
             * @inheritdoc
@@ -135,7 +135,7 @@ var ResponsiveBox = CollectionWidget.inherit({
             activeStateEnabled: false,
 
             /**
-            * @name dxResponsiveBoxOptions_focusStateEnabled
+            * @name dxResponsiveBoxOptions.focusStateEnabled
             * @publicName focusStateEnabled
             * @hidden
             * @inheritdoc
@@ -145,62 +145,62 @@ var ResponsiveBox = CollectionWidget.inherit({
             onItemStateChanged: undefined,
 
             /**
-            * @name dxResponsiveBoxOptions_accessKey
+            * @name dxResponsiveBoxOptions.accessKey
             * @publicName accessKey
             * @hidden
             * @inheritdoc
             */
 
             /**
-            * @name dxResponsiveBoxOptions_hint
+            * @name dxResponsiveBoxOptions.hint
             * @publicName hint
             * @hidden
             * @inheritdoc
             */
             /**
-            * @name dxResponsiveBoxOptions_noDataText
+            * @name dxResponsiveBoxOptions.noDataText
             * @publicName noDataText
             * @hidden
             * @inheritdoc
             */
             /**
-            * @name dxResponsiveBoxOptions_onSelectionChanged
+            * @name dxResponsiveBoxOptions.onSelectionChanged
             * @publicName onSelectionChanged
             * @hidden
             * @inheritdoc
             */
             /**
-            * @name dxResponsiveBoxOptions_selectedIndex
+            * @name dxResponsiveBoxOptions.selectedIndex
             * @publicName selectedIndex
             * @hidden
             * @inheritdoc
             */
             /**
-            * @name dxResponsiveBoxOptions_selectedItem
+            * @name dxResponsiveBoxOptions.selectedItem
             * @publicName selectedItem
             * @hidden
             * @inheritdoc
             */
             /**
-            * @name dxResponsiveBoxOptions_selectedItems
+            * @name dxResponsiveBoxOptions.selectedItems
             * @publicName selectedItems
             * @hidden
             * @inheritdoc
             */
             /**
-            * @name dxResponsiveBoxOptions_selectedItemKeys
+            * @name dxResponsiveBoxOptions.selectedItemKeys
             * @publicName selectedItemKeys
             * @hidden
             * @inheritdoc
             */
             /**
-            * @name dxResponsiveBoxOptions_keyExpr
+            * @name dxResponsiveBoxOptions.keyExpr
             * @publicName keyExpr
             * @hidden
             * @inheritdoc
             */
             /**
-            * @name dxResponsiveBoxOptions_tabIndex
+            * @name dxResponsiveBoxOptions.tabIndex
             * @publicName tabIndex
             * @hidden
             * @inheritdoc
@@ -716,14 +716,14 @@ var ResponsiveBox = CollectionWidget.inherit({
     }
 
     /**
-    * @name dxResponsiveBoxMethods_registerKeyHandler
+    * @name dxResponsiveBoxMethods.registerKeyHandler
     * @publicName registerKeyHandler(key, handler)
     * @hidden
     * @inheritdoc
     */
 
     /**
-    * @name dxResponsiveBoxMethods_focus
+    * @name dxResponsiveBoxMethods.focus
     * @publicName focus()
     * @hidden
     * @inheritdoc
@@ -736,34 +736,34 @@ var ResponsiveBox = CollectionWidget.inherit({
 * @type object
 */
 /**
-* @name dxResponsiveBoxItemTemplate_location
+* @name dxResponsiveBoxItemTemplate.location
 * @publicName location
 * @type Object|Array<Object>
 */
 /**
-* @name dxResponsiveBoxItemTemplate_location_row
+* @name dxResponsiveBoxItemTemplate.location.row
 * @publicName row
 * @type number
 */
 /**
-* @name dxResponsiveBoxItemTemplate_location_col
+* @name dxResponsiveBoxItemTemplate.location.col
 * @publicName col
 * @type number
 */
 /**
-* @name dxResponsiveBoxItemTemplate_location_rowspan
+* @name dxResponsiveBoxItemTemplate.location.rowspan
 * @publicName rowspan
 * @type number
 * @default undefined
 */
 /**
-* @name dxResponsiveBoxItemTemplate_location_colspan
+* @name dxResponsiveBoxItemTemplate.location.colspan
 * @publicName colspan
 * @type number
 * @default undefined
 */
 /**
-* @name dxResponsiveBoxItemTemplate_location_screen
+* @name dxResponsiveBoxItemTemplate.location.screen
 * @publicName screen
 * @type string
 * @default undefined

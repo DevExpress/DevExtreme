@@ -102,7 +102,7 @@ var CollectionWidget = Widget.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             /**
-            * @name CollectionWidgetOptions_selectOnFocus
+            * @name CollectionWidgetOptions.selectOnFocus
             * @publicName selectOnFocus
             * @type boolean
             * @hidden
@@ -110,7 +110,7 @@ var CollectionWidget = Widget.inherit({
             selectOnFocus: false,
 
             /**
-            * @name CollectionWidgetOptions_loopItemFocus
+            * @name CollectionWidgetOptions.loopItemFocus
             * @publicName loopItemFocus
             * @type boolean
             * @hidden
@@ -118,7 +118,7 @@ var CollectionWidget = Widget.inherit({
             loopItemFocus: true,
 
             /**
-            * @name CollectionWidgetOptions_items
+            * @name CollectionWidgetOptions.items
             * @publicName items
             * @type Array<string, object>
             * @fires CollectionWidgetOptions_onOptionChanged
@@ -126,7 +126,7 @@ var CollectionWidget = Widget.inherit({
             items: [],
 
             /**
-            * @name CollectionWidgetOptions_itemTemplate
+            * @name CollectionWidgetOptions.itemTemplate
             * @publicName itemTemplate
             * @type template|function
             * @default "item"
@@ -138,7 +138,7 @@ var CollectionWidget = Widget.inherit({
             itemTemplate: "item",
 
             /**
-            * @name CollectionWidgetOptions_onItemRendered
+            * @name CollectionWidgetOptions.onItemRendered
             * @publicName onItemRendered
             * @extends Action
             * @type function(e)
@@ -151,7 +151,7 @@ var CollectionWidget = Widget.inherit({
             onItemRendered: null,
 
             /**
-            * @name CollectionWidgetOptions_onItemClick
+            * @name CollectionWidgetOptions.onItemClick
             * @publicName onItemClick
             * @type function(e)|string
             * @extends Action
@@ -166,7 +166,7 @@ var CollectionWidget = Widget.inherit({
             onItemClick: null,
 
             /**
-            * @name CollectionWidgetOptions_onItemHold
+            * @name CollectionWidgetOptions.onItemHold
             * @publicName onItemHold
             * @extends Action
             * @type function(e)
@@ -179,7 +179,7 @@ var CollectionWidget = Widget.inherit({
             onItemHold: null,
 
             /**
-            * @name CollectionWidgetOptions_itemHoldTimeout
+            * @name CollectionWidgetOptions.itemHoldTimeout
             * @publicName itemHoldTimeout
             * @type number
             * @default 750
@@ -187,7 +187,7 @@ var CollectionWidget = Widget.inherit({
             itemHoldTimeout: 750,
 
             /**
-            * @name CollectionWidgetOptions_onItemContextMenu
+            * @name CollectionWidgetOptions.onItemContextMenu
             * @publicName onItemContextMenu
             * @extends Action
             * @type function(e)
@@ -204,7 +204,7 @@ var CollectionWidget = Widget.inherit({
             onFocusedItemChanged: null,
 
             /**
-            * @name CollectionWidgetOptions_noDataText
+            * @name CollectionWidgetOptions.noDataText
             * @publicName noDataText
             * @type string
             * @default "No data to display"
@@ -212,7 +212,7 @@ var CollectionWidget = Widget.inherit({
             noDataText: messageLocalization.format("dxCollectionWidget-noDataText"),
 
             /**
-            * @name CollectionWidgetOptions_datasource
+            * @name CollectionWidgetOptions.datasource
             * @publicName dataSource
             * @type string|Array<string,CollectionWidgetItemTemplate>|DataSource|DataSourceOptions
             * @default null
@@ -224,7 +224,7 @@ var CollectionWidget = Widget.inherit({
             * @type object
             */
             /**
-            * @name CollectionWidgetItemTemplate_template
+            * @name CollectionWidgetItemTemplate.template
             * @publicName template
             * @type template|function
             * @type_function_return string|Node|jQuery
@@ -234,7 +234,7 @@ var CollectionWidget = Widget.inherit({
             itemTemplateProperty: "template",
             focusOnSelectedItem: true,
             /**
-            * @name CollectionWidgetOptions_focusedElement
+            * @name CollectionWidgetOptions.focusedElement
             * @publicName focusedElement
             * @type dxElement
             * @default null
@@ -247,23 +247,23 @@ var CollectionWidget = Widget.inherit({
             visibleExpr: function(data) { return data ? data.visible : undefined; }
 
             /**
-            * @name CollectionWidgetItemTemplate_html
+            * @name CollectionWidgetItemTemplate.html
             * @publicName html
             * @type String
             */
             /**
-            * @name CollectionWidgetItemTemplate_text
+            * @name CollectionWidgetItemTemplate.text
             * @publicName text
             * @type String
             */
             /**
-            * @name CollectionWidgetItemTemplate_disabled
+            * @name CollectionWidgetItemTemplate.disabled
             * @publicName disabled
             * @type boolean
             * @default false
             */
             /**
-            * @name CollectionWidgetItemTemplate_visible
+            * @name CollectionWidgetItemTemplate.visible
             * @publicName visible
             * @type boolean
             * @default true
@@ -1102,7 +1102,7 @@ var CollectionWidget = Widget.inherit({
     },
 
     /**
-    * @name CollectionWidgetmethods_getFocusedItemId
+    * @name CollectionWidgetmethods.getFocusedItemId
     * @publicName getFocusedItemId()
     * @return string
     * @hidden
@@ -1116,7 +1116,7 @@ var CollectionWidget = Widget.inherit({
     },
 
     /**
-    * @name CollectionWidgetmethods_itemElements
+    * @name CollectionWidgetmethods.itemElements
     * @publicName itemElements()
     * @return Array<Node>
     * @hidden
@@ -1126,7 +1126,7 @@ var CollectionWidget = Widget.inherit({
     },
 
     /**
-    * @name CollectionWidgetmethods_itemsContainer
+    * @name CollectionWidgetmethods.itemsContainer
     * @publicName itemsContainer()
     * @return Node
     * @hidden

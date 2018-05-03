@@ -6,7 +6,7 @@
 */
 var polarSeriesObject = {
     /**
-    * @name polarChartSeriesObjectFields_axis
+    * @name polarChartSeriesObjectFields.axis
     * @publicName axis
     * @type string
     * @hidden
@@ -22,7 +22,7 @@ var polarSeriesObject = {
 */
 var polarPointObject = {
     /**
-    * @name polarPointObjectmethods_getboundingrect
+    * @name polarPointObjectmethods.getboundingrect
     * @publicName getBoundingRect()
     * @hidden
     * @inheritdoc

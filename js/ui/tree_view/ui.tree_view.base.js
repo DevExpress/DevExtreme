@@ -135,13 +135,13 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             /**
-            * @name dxTreeViewOptions_items
+            * @name dxTreeViewOptions.items
             * @publicName items
             * @type Array<dxTreeViewItemTemplate>
             * @inheritdoc
             */
             /**
-            * @name dxTreeViewOptions_animationEnabled
+            * @name dxTreeViewOptions.animationEnabled
             * @publicName animationEnabled
             * @type boolean
             * @default true
@@ -149,7 +149,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             animationEnabled: true,
 
             /**
-            * @name dxTreeViewOptions_dataStructure
+            * @name dxTreeViewOptions.dataStructure
             * @publicName dataStructure
             * @type Enums.TreeViewDataStructure
             * @default 'tree'
@@ -157,7 +157,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             dataStructure: "tree",
 
             /**
-            * @name dxTreeViewOptions_expandAllEnabled
+            * @name dxTreeViewOptions.expandAllEnabled
             * @publicName expandAllEnabled
             * @type boolean
             * @default false
@@ -165,7 +165,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             expandAllEnabled: false,
 
             /**
-            * @name dxTreeViewOptions_hasItemsExpr
+            * @name dxTreeViewOptions.hasItemsExpr
             * @publicName hasItemsExpr
             * @type string|function
             * @default 'hasItems'
@@ -173,7 +173,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             hasItemsExpr: "hasItems",
 
             /**
-             * @name dxTreeViewOptions_selectNodesRecursive
+             * @name dxTreeViewOptions.selectNodesRecursive
              * @publicName selectNodesRecursive
              * @type boolean
              * @default true
@@ -181,7 +181,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             selectNodesRecursive: true,
 
             /**
-             * @name dxTreeViewOptions_expandNodesRecursive
+             * @name dxTreeViewOptions.expandNodesRecursive
              * @publicName expandNodesRecursive
              * @type boolean
              * @default true
@@ -189,7 +189,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             expandNodesRecursive: true,
 
             /**
-             * @name dxTreeViewOptions_showCheckBoxesMode
+             * @name dxTreeViewOptions.showCheckBoxesMode
              * @publicName showCheckBoxesMode
              * @type Enums.TreeViewCheckBoxMode
              * @default 'none'
@@ -197,7 +197,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             showCheckBoxesMode: "none",
 
             /**
-             * @name dxTreeViewOptions_selectAllText
+             * @name dxTreeViewOptions.selectAllText
              * @publicName selectAllText
              * @type string
              * @default "Select All"
@@ -205,7 +205,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             selectAllText: messageLocalization.format("dxList-selectAll"),
 
             /**
-            * @name dxTreeViewOptions_onItemSelectionChanged
+            * @name dxTreeViewOptions.onItemSelectionChanged
             * @publicName onItemSelectionChanged
             * @extends Action
             * @type function(e)
@@ -217,7 +217,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             onItemSelectionChanged: null,
 
             /**
-            * @name dxTreeViewOptions_onItemClick
+            * @name dxTreeViewOptions.onItemClick
             * @publicName onItemClick
             * @extends Action
             * @type function(e)
@@ -228,7 +228,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             */
 
             /**
-            * @name dxTreeViewOptions_onItemContextMenu
+            * @name dxTreeViewOptions.onItemContextMenu
             * @publicName onItemContextMenu
             * @extends Action
             * @type function(e)
@@ -239,7 +239,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             */
 
             /**
-            * @name dxTreeViewOptions_onItemRendered
+            * @name dxTreeViewOptions.onItemRendered
             * @publicName onItemRendered
             * @extends Action
             * @type function(e)
@@ -250,7 +250,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             */
 
             /**
-            * @name dxTreeViewOptions_onItemHold
+            * @name dxTreeViewOptions.onItemHold
             * @publicName onItemHold
             * @extends Action
             * @type function(e)
@@ -261,7 +261,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             */
 
             /**
-            * @name dxTreeViewOptions_onItemExpanded
+            * @name dxTreeViewOptions.onItemExpanded
             * @publicName onItemExpanded
             * @extends Action
             * @type function(e)
@@ -277,7 +277,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             onItemExpanded: null,
 
             /**
-            * @name dxTreeViewOptions_onItemCollapsed
+            * @name dxTreeViewOptions.onItemCollapsed
             * @publicName onItemCollapsed
             * @extends Action
             * @type function(e)
@@ -293,7 +293,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             onItemCollapsed: null,
 
             /**
-            * @name dxTreeViewOptions_scrollDirection
+            * @name dxTreeViewOptions.scrollDirection
             * @publicName scrollDirection
             * @type Enums.ScrollDirection
             * @default "vertical"
@@ -301,7 +301,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             scrollDirection: "vertical",
 
             /**
-            * @name dxTreeViewOptions_virtualModeEnabled
+            * @name dxTreeViewOptions.virtualModeEnabled
             * @publicName virtualModeEnabled
             * @type boolean
             * @default false
@@ -309,7 +309,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             virtualModeEnabled: false,
 
             /**
-            * @name dxTreeViewOptions_rootValue
+            * @name dxTreeViewOptions.rootValue
             * @type Object
             * @publicName rootValue
             * @default 0
@@ -319,7 +319,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             focusStateEnabled: false,
 
             /**
-             * @name dxTreeViewOptions_selectionMode
+             * @name dxTreeViewOptions.selectionMode
              * @publicName selectionMode
              * @type Enums.NavSelectionMode
              * @default "multiple"
@@ -329,7 +329,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             expandEvent: 'dblclick',
 
             /**
-            * @name dxTreeViewOptions_selectByClick
+            * @name dxTreeViewOptions.selectByClick
             * @publicName selectByClick
             * @type boolean
             * @default false
@@ -337,7 +337,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             selectByClick: false,
 
             /**
-            * @name dxTreeViewOptions_createChildren
+            * @name dxTreeViewOptions.createChildren
             * @publicName createChildren
             * @type function
             * @type_function_param1 parentNode:dxTreeViewNode
@@ -346,14 +346,14 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             createChildren: null
 
             /**
-             * @name dxTreeViewOptions_onSelectionChanged
+             * @name dxTreeViewOptions.onSelectionChanged
              * @publicName onSelectionChanged
              * @extends Action
              * @action
              */
 
             /**
-            * @name dxTreeViewOptions_parentIdExpr
+            * @name dxTreeViewOptions.parentIdExpr
             * @publicName parentIdExpr
             * @type string|function
             * @default 'parentId'
@@ -361,7 +361,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             */
 
             /**
-            * @name dxTreeViewOptions_expandedExpr
+            * @name dxTreeViewOptions.expandedExpr
             * @publicName expandedExpr
             * @type string|function
             * @default 'expanded'
@@ -369,28 +369,28 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             */
 
             /**
-            * @name dxTreeViewOptions_selectedItem
+            * @name dxTreeViewOptions.selectedItem
             * @publicName selectedItem
             * @hidden
             * @inheritdoc
             */
 
             /**
-            * @name dxTreeViewOptions_selectedItems
+            * @name dxTreeViewOptions.selectedItems
             * @publicName selectedItems
             * @hidden
             * @inheritdoc
             */
 
             /**
-            * @name dxTreeViewOptions_selectedItemKeys
+            * @name dxTreeViewOptions.selectedItemKeys
             * @publicName selectedItemKeys
             * @hidden
             * @inheritdoc
             */
 
             /**
-            * @name dxTreeViewOptions_selectedIndex
+            * @name dxTreeViewOptions.selectedIndex
             * @publicName selectedIndex
             * @hidden
             * @inheritdoc
@@ -402,35 +402,35 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             * @type object
             */
             /**
-            * @name dxTreeViewItemTemplate_selected
+            * @name dxTreeViewItemTemplate.selected
             * @publicName selected
             * @type boolean
             * @default false
             */
             /**
-            * @name dxTreeViewItemTemplate_expanded
+            * @name dxTreeViewItemTemplate.expanded
             * @publicName expanded
             * @type boolean
             * @default false
             */
             /**
-            * @name dxTreeViewItemTemplate_icon
+            * @name dxTreeViewItemTemplate.icon
             * @publicName icon
             * @type String
             */
             /**
-            * @name dxTreeViewItemTemplate_items
+            * @name dxTreeViewItemTemplate.items
             * @publicName items
             * @type Array<dxTreeViewItemTemplate>
             */
             /**
-            * @name dxTreeViewItemTemplate_parentId
+            * @name dxTreeViewItemTemplate.parentId
             * @publicName parentId
             * @type number|string
             * @default undefined
             */
             /**
-            * @name dxTreeViewItemTemplate_hasItems
+            * @name dxTreeViewItemTemplate.hasItems
             * @publicName hasItems
             * @type boolean
             * @default undefined
@@ -1631,7 +1631,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     /**
-    * @name dxTreeViewMethods_updateDimensions
+    * @name dxTreeViewMethods.updateDimensions
     * @publicName updateDimensions()
     * @return Promise<void>
     */
@@ -1651,17 +1651,17 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     /**
-    * @name dxTreeViewMethods_selectItem
+    * @name dxTreeViewMethods.selectItem
     * @publicName selectItem(itemElement)
     * @param1 itemElement:Node
     */
     /**
-    * @name dxTreeViewMethods_selectItem
+    * @name dxTreeViewMethods.selectItem
     * @publicName selectItem(itemData)
     * @param1 itemData:Object
     */
     /**
-    * @name dxTreeViewMethods_selectItem
+    * @name dxTreeViewMethods.selectItem
     * @publicName selectItem(key)
     * @param1 key:any
     */
@@ -1670,17 +1670,17 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     /**
-    * @name dxTreeViewMethods_unselectItem
+    * @name dxTreeViewMethods.unselectItem
     * @publicName unselectItem(itemElement)
     * @param1 itemElement:Node
     */
     /**
-    * @name dxTreeViewMethods_unselectItem
+    * @name dxTreeViewMethods.unselectItem
     * @publicName unselectItem(itemData)
     * @param1 itemData:Object
     */
     /**
-    * @name dxTreeViewMethods_unselectItem
+    * @name dxTreeViewMethods.unselectItem
     * @publicName unselectItem(key)
     * @param1 key:any
     */
@@ -1689,17 +1689,17 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     /**
-    * @name dxTreeViewMethods_expandItem
+    * @name dxTreeViewMethods.expandItem
     * @publicName expandItem(itemElement)
     * @param1 itemElement:Node
     */
     /**
-    * @name dxTreeViewMethods_expandItem
+    * @name dxTreeViewMethods.expandItem
     * @publicName expandItem(itemData)
     * @param1 itemData:Object
     */
     /**
-    * @name dxTreeViewMethods_expandItem
+    * @name dxTreeViewMethods.expandItem
     * @publicName expandItem(key)
     * @param1 key:any
     */
@@ -1708,17 +1708,17 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     /**
-    * @name dxTreeViewMethods_collapseItem
+    * @name dxTreeViewMethods.collapseItem
     * @publicName collapseItem(itemElement)
     * @param1 itemElement:Node
     */
     /**
-    * @name dxTreeViewMethods_collapseItem
+    * @name dxTreeViewMethods.collapseItem
     * @publicName collapseItem(itemData)
     * @param1 itemData:Object
     */
     /**
-    * @name dxTreeViewMethods_collapseItem
+    * @name dxTreeViewMethods.collapseItem
     * @publicName collapseItem(key)
     * @param1 key:any
     */
@@ -1727,7 +1727,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     /**
-    * @name dxTreeViewMethods_getNodes
+    * @name dxTreeViewMethods.getNodes
     * @publicName getNodes()
     * @return Array<dxTreeViewNode>
     */
@@ -1737,49 +1737,49 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
          * @type object
          */
          /**
-         * @name dxTreeViewNode_children
+         * @name dxTreeViewNode.children
          * @publicName children
          * @type Array<dxTreeViewNode>
          */
 
          /**
-         * @name dxTreeViewNode_disabled
+         * @name dxTreeViewNode.disabled
          * @publicName disabled
          * @type boolean
          */
 
          /**
-         * @name dxTreeViewNode_expanded
+         * @name dxTreeViewNode.expanded
          * @publicName expanded
          * @type boolean
          */
 
          /**
-         * @name dxTreeViewNode_itemData
+         * @name dxTreeViewNode.itemData
          * @publicName itemData
          * @type object
          */
 
          /**
-         * @name dxTreeViewNode_key
+         * @name dxTreeViewNode.key
          * @publicName key
          * @type any
          */
 
          /**
-         * @name dxTreeViewNode_parent
+         * @name dxTreeViewNode.parent
          * @publicName parent
          * @type dxTreeViewNode
          */
 
          /**
-         * @name dxTreeViewNode_selected
+         * @name dxTreeViewNode.selected
          * @publicName selected
          * @type boolean
          */
 
          /**
-         * @name dxTreeViewNode_text
+         * @name dxTreeViewNode.text
          * @publicName text
          * @type string
          */
@@ -1793,7 +1793,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     /**
-    * @name dxTreeViewMethods_selectAll
+    * @name dxTreeViewMethods.selectAll
     * @publicName selectAll()
     */
     selectAll: function() {
@@ -1805,7 +1805,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     /**
-    * @name dxTreeViewMethods_unselectAll
+    * @name dxTreeViewMethods.unselectAll
     * @publicName unselectAll()
     */
     unselectAll: function() {

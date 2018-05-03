@@ -46,7 +46,7 @@ var Accordion = CollectionWidget.inherit({
         return extend(this.callBase(), {
 
             /**
-             * @name dxAccordionOptions_hoverStateEnabled
+             * @name dxAccordionOptions.hoverStateEnabled
              * @publicName hoverStateEnabled
              * @type boolean
              * @default true
@@ -55,7 +55,7 @@ var Accordion = CollectionWidget.inherit({
             hoverStateEnabled: true,
 
             /**
-            * @name dxAccordionOptions_height
+            * @name dxAccordionOptions.height
             * @publicName height
             * @type number|string|function
             * @default undefined
@@ -64,7 +64,7 @@ var Accordion = CollectionWidget.inherit({
             height: undefined,
 
             /**
-            * @name dxAccordionOptions_itemTitleTemplate
+            * @name dxAccordionOptions.itemTitleTemplate
             * @publicName itemTitleTemplate
             * @type template|function
             * @default "title"
@@ -76,7 +76,7 @@ var Accordion = CollectionWidget.inherit({
             itemTitleTemplate: "title",
 
             /**
-            * @name dxAccordionOptions_onItemTitleClick
+            * @name dxAccordionOptions.onItemTitleClick
             * @publicName onItemTitleClick
             * @type function(e)|string
             * @extends Action
@@ -89,7 +89,7 @@ var Accordion = CollectionWidget.inherit({
             onItemTitleClick: null,
 
             /**
-            * @name dxAccordionOptions_selectedIndex
+            * @name dxAccordionOptions.selectedIndex
             * @publicName selectedIndex
             * @type number
             * @default 0
@@ -97,7 +97,7 @@ var Accordion = CollectionWidget.inherit({
             selectedIndex: 0,
 
             /**
-            * @name dxAccordionOptions_collapsible
+            * @name dxAccordionOptions.collapsible
             * @publicName collapsible
             * @type boolean
             * @default false
@@ -105,7 +105,7 @@ var Accordion = CollectionWidget.inherit({
             collapsible: false,
 
             /**
-            * @name dxAccordionOptions_multiple
+            * @name dxAccordionOptions.multiple
             * @publicName multiple
             * @type boolean
             * @default false
@@ -113,7 +113,7 @@ var Accordion = CollectionWidget.inherit({
             multiple: false,
 
             /**
-            * @name dxAccordionOptions_animationDuration
+            * @name dxAccordionOptions.animationDuration
             * @publicName animationDuration
             * @type number
             * @default 300
@@ -121,7 +121,7 @@ var Accordion = CollectionWidget.inherit({
             animationDuration: 300,
 
             /**
-            * @name dxAccordionOptions_deferRendering
+            * @name dxAccordionOptions.deferRendering
             * @publicName deferRendering
             * @type boolean
             * @default true
@@ -129,7 +129,7 @@ var Accordion = CollectionWidget.inherit({
             deferRendering: true,
 
             /**
-            * @name dxAccordionOptions_itemTemplate
+            * @name dxAccordionOptions.itemTemplate
             * @publicName itemTemplate
             * @type template|function
             * @default "item"
@@ -154,7 +154,7 @@ var Accordion = CollectionWidget.inherit({
                 },
                 options: {
                     /**
-                    * @name dxAccordionOptions_focusStateEnabled
+                    * @name dxAccordionOptions.focusStateEnabled
                     * @publicName focusStateEnabled
                     * @type boolean
                     * @default true @for desktop
@@ -174,7 +174,7 @@ var Accordion = CollectionWidget.inherit({
                             .addClass(ACCORDION_ITEM_TITLE_CAPTION_CLASS);
                     },
                      /**
-                    * @name dxAccordionOptions_animationDuration
+                    * @name dxAccordionOptions.animationDuration
                     * @publicName animationDuration
                     * @type number
                     * @default 200 @for Material
@@ -212,12 +212,12 @@ var Accordion = CollectionWidget.inherit({
         * @type object
         */
         /**
-        * @name dxAccordionItemTemplate_title
+        * @name dxAccordionItemTemplate.title
         * @publicName title
         * @type String
         */
         /**
-        * @name dxAccordionItemTemplate_icon
+        * @name dxAccordionItemTemplate.icon
         * @publicName icon
         * @type String
         */
@@ -486,7 +486,7 @@ var Accordion = CollectionWidget.inherit({
     },
 
     /**
-    * @name dxAccordionMethods_expandItem
+    * @name dxAccordionMethods.expandItem
     * @publicName expandItem(index)
     * @param1 index:numeric
     * @return Promise<void>
@@ -500,7 +500,7 @@ var Accordion = CollectionWidget.inherit({
     },
 
     /**
-    * @name dxAccordionMethods_collapseItem
+    * @name dxAccordionMethods.collapseItem
     * @publicName collapseItem(index)
     * @param1 index:numeric
     * @return Promise<void>
@@ -514,7 +514,7 @@ var Accordion = CollectionWidget.inherit({
     },
 
     /**
-    * @name dxAccordionMethods_updateDimensions
+    * @name dxAccordionMethods.updateDimensions
     * @publicName updateDimensions()
     * @return Promise<void>
     */

@@ -97,7 +97,7 @@ var FieldChooser = BaseFieldChooser.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             /**
-            * @name dxPivotGridFieldChooserOptions_height
+            * @name dxPivotGridFieldChooserOptions.height
             * @publicName height
             * @type number|string|function
             * @default 400
@@ -105,14 +105,14 @@ var FieldChooser = BaseFieldChooser.inherit({
             */
             height: 400,
             /**
-             * @name dxPivotGridFieldChooserOptions_layout
+             * @name dxPivotGridFieldChooserOptions.layout
              * @publicName layout
              * @type Enums.PivotGridFieldChooserLayout
              * @default 0
              */
             layout: 0,
             /**
-             * @name dxPivotGridFieldChooserOptions_dataSource
+             * @name dxPivotGridFieldChooserOptions.dataSource
              * @publicName dataSource
              * @type PivotGridDataSource
              * @default null
@@ -120,13 +120,13 @@ var FieldChooser = BaseFieldChooser.inherit({
              */
             dataSource: null,
             /**
-            * @name dxPivotGridFieldChooserOptions_onContextMenuPreparing
+            * @name dxPivotGridFieldChooserOptions.onContextMenuPreparing
             * @publicName onContextMenuPreparing
             * @type function(e)
             * @type_function_param1 e:object
             * @type_function_param1_field4 items:Array<Object>
             * @type_function_param1_field5 area:string
-            * @type_function_param1_field6 field:PivotGridDataSourceOptions_fields
+            * @type_function_param1_field6 field:PivotGridDataSourceOptions.fields
             * @type_function_param1_field7 jQueryEvent:jQuery.Event:deprecated(event)
             * @type_function_param1_field8 event:event
             * @extends Action
@@ -134,48 +134,48 @@ var FieldChooser = BaseFieldChooser.inherit({
             */
             onContextMenuPreparing: null,
             /**
-            * @name dxPivotGridFieldChooserOptions_allowSearch
+            * @name dxPivotGridFieldChooserOptions.allowSearch
             * @publicName allowSearch
             * @type boolean
             * @default false
             */
             allowSearch: false,
             /**
-             * @name dxPivotGridFieldChooserOptions_texts
+             * @name dxPivotGridFieldChooserOptions.texts
              * @publicName texts
              * @type object
              */
             texts: {
                 /**
-                 * @name dxPivotGridFieldChooserOptions_texts_columnFields
+                 * @name dxPivotGridFieldChooserOptions.texts.columnFields
                  * @publicName columnFields
                  * @type string
                  * @default 'Column Fields'
                  */
                 columnFields: messageLocalization.format("dxPivotGrid-columnFields"),
                 /**
-                 * @name dxPivotGridFieldChooserOptions_texts_rowFields
+                 * @name dxPivotGridFieldChooserOptions.texts.rowFields
                  * @publicName rowFields
                  * @type string
                  * @default 'Row Fields'
                  */
                 rowFields: messageLocalization.format("dxPivotGrid-rowFields"),
                 /**
-                 * @name dxPivotGridFieldChooserOptions_texts_dataFields
+                 * @name dxPivotGridFieldChooserOptions.texts.dataFields
                  * @publicName dataFields
                  * @type string
                  * @default 'Data Fields'
                  */
                 dataFields: messageLocalization.format("dxPivotGrid-dataFields"),
                 /**
-                 * @name dxPivotGridFieldChooserOptions_texts_filterFields
+                 * @name dxPivotGridFieldChooserOptions.texts.filterFields
                  * @publicName filterFields
                  * @type string
                  * @default 'Filter Fields'
                  */
                 filterFields: messageLocalization.format("dxPivotGrid-filterFields"),
                 /**
-                 * @name dxPivotGridFieldChooserOptions_texts_allFields
+                 * @name dxPivotGridFieldChooserOptions.texts.allFields
                  * @publicName allFields
                  * @type string
                  * @default 'All Fields'
@@ -183,59 +183,59 @@ var FieldChooser = BaseFieldChooser.inherit({
                 allFields: messageLocalization.format("dxPivotGrid-allFields")
             },
             /**
-            * @name dxPivotGridFieldChooserOptions_applyChangesMode
+            * @name dxPivotGridFieldChooserOptions.applyChangesMode
             * @publicName applyChangesMode
             * @type Enums.ApplyChangesMode
             * @default "instantly"
             */
            /**
-            * @name dxPivotGridFieldChooserOptions_state
+            * @name dxPivotGridFieldChooserOptions.state
             * @publicName state
             * @type object
             * @default null
             */
             /**
-             * @name dxPivotGridFieldChooserOptions_headerFilter
+             * @name dxPivotGridFieldChooserOptions.headerFilter
              * @publicName headerFilter
              * @type object
              */
             /**
-             * @name dxPivotGridFieldChooserOptions_headerFilter_width
+             * @name dxPivotGridFieldChooserOptions.headerFilter.width
              * @publicName width
              * @type number
              * @default 252
              */
             /**
-             * @name dxPivotGridFieldChooserOptions_headerFilter_height
+             * @name dxPivotGridFieldChooserOptions.headerFilter.height
              * @publicName height
              * @type number
              * @default 325
              */
             /**
-             * @name dxPivotGridFieldChooserOptions_headerFilter_allowSearch
+             * @name dxPivotGridFieldChooserOptions.headerFilter.allowSearch
              * @publicName allowSearch
              * @type boolean
              * @default undefined
              */
             /**
-             * @name dxPivotGridFieldChooserOptions_headerFilter_texts
+             * @name dxPivotGridFieldChooserOptions.headerFilter.texts
              * @publicName texts
              * @type object
              */
             /**
-             * @name dxPivotGridFieldChooserOptions_headerFilter_texts_emptyValue
+             * @name dxPivotGridFieldChooserOptions.headerFilter.texts.emptyValue
              * @publicName emptyValue
              * @type string
              * @default "(Blanks)"
              */
             /**
-             * @name dxPivotGridFieldChooserOptions_headerFilter_texts_ok
+             * @name dxPivotGridFieldChooserOptions.headerFilter.texts.ok
              * @publicName ok
              * @type string
              * @default "Ok"
              */
             /**
-             * @name dxPivotGridFieldChooserOptions_headerFilter_texts_cancel
+             * @name dxPivotGridFieldChooserOptions.headerFilter.texts.cancel
              * @publicName cancel
              * @type string
              * @default "Cancel"
@@ -682,7 +682,7 @@ var FieldChooser = BaseFieldChooser.inherit({
     },
 
     /**
-    * @name dxPivotGridFieldChooserMethods_applyChanges
+    * @name dxPivotGridFieldChooserMethods.applyChanges
     * @publicName applyChanges()
     */
     applyChanges: function() {
@@ -694,7 +694,7 @@ var FieldChooser = BaseFieldChooser.inherit({
     },
 
     /**
-    * @name dxPivotGridFieldChooserMethods_cancelChanges
+    * @name dxPivotGridFieldChooserMethods.cancelChanges
     * @publicName cancelChanges()
     */
     cancelChanges: function() {
@@ -702,7 +702,7 @@ var FieldChooser = BaseFieldChooser.inherit({
     },
 
     /**
-    * @name dxPivotGridFieldChooserMethods_getDataSource
+    * @name dxPivotGridFieldChooserMethods.getDataSource
     * @publicName getDataSource()
     * @return PivotGridDataSource
     */
@@ -711,7 +711,7 @@ var FieldChooser = BaseFieldChooser.inherit({
     },
 
     /**
-    * @name dxPivotGridFieldChooserMethods_updateDimensions
+    * @name dxPivotGridFieldChooserMethods.updateDimensions
     * @publicName updateDimensions()
     */
     updateDimensions: function() {

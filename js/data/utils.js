@@ -250,7 +250,7 @@ var utils = {
     isUnaryOperation: isUnaryOperation,
 
     /**
-    * @name Utils_base64encode
+    * @name Utils.base64encode
     * @publicName base64_encode(input)
     * @param1 input:string|Array<number>
     * @return string

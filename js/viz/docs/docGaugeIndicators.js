@@ -7,13 +7,13 @@
 */
 var commonIndicator = {
     /**
-    * @name commonIndicator_color
+    * @name commonIndicator.color
     * @publicName color
     * @type string
     */
     color: undefined,
     /**
-    * @name commonIndicator_baseValue
+    * @name commonIndicator.baseValue
     * @publicName baseValue
     * @type number
     * @default undefined
@@ -22,7 +22,7 @@ var commonIndicator = {
     */
     baseValue: undefined,
     /**
-    * @name commonIndicator_size
+    * @name commonIndicator.size
     * @publicName size
     * @type number
     * @default 10
@@ -30,7 +30,7 @@ var commonIndicator = {
     */
     size: 10,
     /**
-    * @name commonIndicator_backgroundColor
+    * @name commonIndicator.backgroundColor
     * @publicName backgroundColor
     * @type string
     * @default 'none'
@@ -38,14 +38,14 @@ var commonIndicator = {
     */
     backgroundColor: 'none',
     /**
-    * @name commonIndicator_text
+    * @name commonIndicator.text
     * @publicName text
     * @type object
     * @propertyOf circularRangeBar,linearRangeBar,circularTextCloud,linearTextCloud
     */
     text: {
         /**
-        * @name commonIndicator_text_indent
+        * @name commonIndicator.text.indent
         * @publicName indent
         * @type number
         * @default 0
@@ -53,21 +53,21 @@ var commonIndicator = {
         */
         indent: 0,
         /**
-        * @name commonIndicator_text_format
+        * @name commonIndicator.text.format
         * @publicName format
         * @extends CommonVizFormat
         * @propertyOf circularRangeBar,linearRangeBar,circularTextCloud,linearTextCloud
         */
         format: undefined,
         /**
-        * @name commonIndicator_text_precision
+        * @name commonIndicator.text.precision
         * @publicName precision
         * @extends CommonVizPrecision
         * @propertyOf circularRangeBar,linearRangeBar,circularTextCloud,linearTextCloud
         */
         precision: undefined,
         /**
-        * @name commonIndicator_text_customizeText
+        * @name commonIndicator.text.customizeText
         * @publicName customizeText
         * @type function(indicatedValue)
         * @type_function_param1 indicatedValue:object
@@ -80,14 +80,14 @@ var commonIndicator = {
         */
         customizeText: undefined,
         /**
-        * @name commonIndicator_text_font
+        * @name commonIndicator.text.font
         * @publicName font
         * @type object
         * @propertyOf circularRangeBar,linearRangeBar,circularTextCloud,linearTextCloud
         */
         font: {
             /**
-            * @name commonIndicator_text_font_color
+            * @name commonIndicator.text.font.color
             * @publicName color
             * @type string
             * @default null
@@ -95,7 +95,7 @@ var commonIndicator = {
             */
             color: null,
             /**
-            * @name commonIndicator_text_font_size
+            * @name commonIndicator.text.font.size
             * @publicName size
             * @type number|string
             * @default 14
@@ -103,7 +103,7 @@ var commonIndicator = {
             */
             size: 14,
             /**
-            * @name commonIndicator_text_font_family
+            * @name commonIndicator.text.font.family
             * @publicName family
             * @type string
             * @default "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana"
@@ -111,7 +111,7 @@ var commonIndicator = {
             */
             family: "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
             /**
-            * @name commonIndicator_text_font_weight
+            * @name commonIndicator.text.font.weight
             * @publicName weight
             * @type number
             * @default 400
@@ -119,7 +119,7 @@ var commonIndicator = {
             */
             weight: 400,
             /**
-            * @name commonIndicator_text_font_opacity
+            * @name commonIndicator.text.font.opacity
             * @publicName opacity
             * @type number
             * @default 1
@@ -129,7 +129,7 @@ var commonIndicator = {
         }
     },
     /**
-    * @name commonIndicator_length
+    * @name commonIndicator.length
     * @publicName length
     * @type number
     * @default 15
@@ -137,7 +137,7 @@ var commonIndicator = {
     */
     length: 15,
     /**
-    * @name commonIndicator_width
+    * @name commonIndicator.width
     * @publicName width
     * @type number
     * @default 2
@@ -145,7 +145,7 @@ var commonIndicator = {
     */
     width: 2,
     /**
-    * @name commonIndicator_arrowLength
+    * @name commonIndicator.arrowLength
     * @publicName arrowLength
     * @type number
     * @default 5
@@ -153,19 +153,19 @@ var commonIndicator = {
     */
     arrowLength: 5,
     /**
-    * @name commonIndicator_palette
+    * @name commonIndicator.palette
     * @publicName palette
     * @extends CommonVizPalette
     */
     palette: undefined,
     /**
-    * @name commonIndicator_offset
+    * @name commonIndicator.offset
     * @publicName offset
     * @type number
     */
     offset: undefined,
     /**
-    * @name commonIndicator_indentFromCenter
+    * @name commonIndicator.indentFromCenter
     * @publicName indentFromCenter
     * @type number
     * @default 0
@@ -173,7 +173,7 @@ var commonIndicator = {
     */
     indentFromCenter: 0,
     /**
-    * @name commonIndicator_beginAdaptingAtRadius
+    * @name commonIndicator.beginAdaptingAtRadius
     * @publicName beginAdaptingAtRadius
     * @type number
     * @default 50
@@ -181,7 +181,7 @@ var commonIndicator = {
     */
     beginAdaptingAtRadius: 50,
     /**
-    * @name commonIndicator_secondColor
+    * @name commonIndicator.secondColor
     * @publicName secondColor
     * @type string
     * @default '#E18E92'
@@ -189,7 +189,7 @@ var commonIndicator = {
     */
     secondColor: '#E18E92',
     /**
-    * @name commonIndicator_secondFraction
+    * @name commonIndicator.secondFraction
     * @publicName secondFraction
     * @type number
     * @default 0.4
@@ -197,7 +197,7 @@ var commonIndicator = {
     */
     secondFraction: 0.4,
     /**
-    * @name commonIndicator_spindleSize
+    * @name commonIndicator.spindleSize
     * @publicName spindleSize
     * @type number
     * @default 14
@@ -205,7 +205,7 @@ var commonIndicator = {
     */
     spindleSize: 14,
     /**
-    * @name commonIndicator_spindleGapSize
+    * @name commonIndicator.spindleGapSize
     * @publicName spindleGapSize
     * @type number
     * @default 10
@@ -213,7 +213,7 @@ var commonIndicator = {
     */
     spindleGapSize: 10,
     /**
-    * @name commonIndicator_horizontalOrientation
+    * @name commonIndicator.horizontalOrientation
     * @publicName horizontalOrientation
     * @type Enums.HorizontalEdge
     * @default 'right' @for value_indicators
@@ -222,7 +222,7 @@ var commonIndicator = {
     */
     horizontalOrientation: 'right',
     /**
-    * @name commonIndicator_verticalOrientation
+    * @name commonIndicator.verticalOrientation
     * @publicName verticalOrientation
     * @type Enums.VerticalEdge
     * @default 'bottom' @for value_indicators
@@ -243,7 +243,7 @@ var commonIndicator = {
 */
 var circularRectangleNeedle = {
     /**
-    * @name circularRectangleNeedle_color
+    * @name circularRectangleNeedle.color
     * @publicName color
     * @type string
     * @inheritdoc
@@ -261,7 +261,7 @@ var circularRectangleNeedle = {
 */
 var circularTriangleNeedle = {
     /**
-    * @name circularTriangleNeedle_color
+    * @name circularTriangleNeedle.color
     * @publicName color
     * @type string
     * @inheritdoc
@@ -279,7 +279,7 @@ var circularTriangleNeedle = {
 */
 var circularTwoColorNeedle = {
     /**
-    * @name circularTwoColorNeedle_color
+    * @name circularTwoColorNeedle.color
     * @publicName color
     * @type string
     * @inheritdoc
@@ -297,7 +297,7 @@ var circularTwoColorNeedle = {
 */
 var circularRangeBar = {
     /**
-    * @name circularRangeBar_color
+    * @name circularRangeBar.color
     * @publicName color
     * @type string
     * @inheritdoc
@@ -305,7 +305,7 @@ var circularRangeBar = {
     */
     color: '#CBC5CF',
     /**
-    * @name circularRangeBar_offset
+    * @name circularRangeBar.offset
     * @publicName offset
     * @type number
     * @default 30
@@ -323,7 +323,7 @@ var circularRangeBar = {
 */
 var circularTriangleMarker = {
     /**
-    * @name circularTriangleMarker_color
+    * @name circularTriangleMarker.color
     * @publicName color
     * @type string
     * @inheritdoc
@@ -331,7 +331,7 @@ var circularTriangleMarker = {
     */
     color: '#8798A5',
     /**
-    * @name circularTriangleMarker_width
+    * @name circularTriangleMarker.width
     * @publicName width
     * @type number
     * @default 13
@@ -339,7 +339,7 @@ var circularTriangleMarker = {
     */
     width: 13,
     /**
-    * @name circularTriangleMarker_length
+    * @name circularTriangleMarker.length
     * @publicName length
     * @type number
     * @default 14
@@ -347,7 +347,7 @@ var circularTriangleMarker = {
     */
     length: 14,
     /**
-     * @name circularTriangleMarker_offset
+     * @name circularTriangleMarker.offset
      * @publicName offset
      * @type number
      * @default 6
@@ -365,7 +365,7 @@ var circularTriangleMarker = {
 */
 var circularTextCloud = {
     /**
-    * @name circularTextCloud_color
+    * @name circularTextCloud.color
     * @publicName color
     * @type string
     * @inheritdoc
@@ -373,21 +373,21 @@ var circularTextCloud = {
     */
     color: '#679EC5',
     /**
-    * @name circularTextCloud_text
+    * @name circularTextCloud.text
     * @publicName text
     * @type object
     * @inheritdoc
     */
     text: {
         /**
-        * @name circularTextCloud_text_font
+        * @name circularTextCloud.text.font
         * @publicName font
         * @type object
         * @inheritdoc
         */
         font: {
             /**
-            * @name circularTextCloud_text_font_color
+            * @name circularTextCloud.text.font.color
             * @publicName color
             * @type string
             * @default '#FFFFFF'
@@ -395,7 +395,7 @@ var circularTextCloud = {
             */
             color: '#FFFFFF',
             /**
-            * @name circularTextCloud_text_font_size
+            * @name circularTextCloud.text.font.size
             * @publicName size
             * @type number|string
             * @default 18
@@ -405,7 +405,7 @@ var circularTextCloud = {
         }
     },
     /**
-     * @name circularTextCloud_offset
+     * @name circularTextCloud.offset
      * @publicName offset
      * @type number
      * @default -6
@@ -424,7 +424,7 @@ var circularTextCloud = {
 */
 var linearRectangle = {
     /**
-    * @name linearRectangle_color
+    * @name linearRectangle.color
     * @publicName color
     * @type string
     * @inheritdoc
@@ -432,7 +432,7 @@ var linearRectangle = {
     */
     color: '#C2C2C2',
     /**
-    * @name linearRectangle_width
+    * @name linearRectangle.width
     * @publicName width
     * @type number
     * @default 15
@@ -440,7 +440,7 @@ var linearRectangle = {
     */
     width: 15,
     /**
-    * @name linearRectangle_offset
+    * @name linearRectangle.offset
     * @publicName offset
   * @type number
     * @default 2.5
@@ -458,7 +458,7 @@ var linearRectangle = {
 */
 var linearCircle = {
     /**
-    * @name linearCircle_color
+    * @name linearCircle.color
     * @publicName color
     * @type string
     * @inheritdoc
@@ -466,7 +466,7 @@ var linearCircle = {
     */
     color: '#C2C2C2',
     /**
-    * @name linearCircle_offset
+    * @name linearCircle.offset
     * @publicName offset
   * @type number
     * @default 2.5
@@ -484,7 +484,7 @@ var linearCircle = {
 */
 var linearRhombus = {
     /**
-    * @name linearRhombus_color
+    * @name linearRhombus.color
     * @publicName color
     * @type string
     * @inheritdoc
@@ -492,7 +492,7 @@ var linearRhombus = {
     */
     color: '#C2C2C2',
     /**
-    * @name linearRhombus_width
+    * @name linearRhombus.width
     * @publicName width
     * @type number
     * @default 15
@@ -500,7 +500,7 @@ var linearRhombus = {
     */
     width: 15,
     /**
-    * @name linearRhombus_offset
+    * @name linearRhombus.offset
     * @publicName offset
   * @type number
     * @default 2.5
@@ -518,7 +518,7 @@ var linearRhombus = {
 */
 var linearRangeBar = {
     /**
-    * @name linearRangeBar_color
+    * @name linearRangeBar.color
     * @publicName color
     * @type string
     * @default '#CBC5CF'
@@ -526,7 +526,7 @@ var linearRangeBar = {
     */
     color: '#CBC5CF',
     /**
-    * @name linearRangeBar_offset
+    * @name linearRangeBar.offset
     * @publicName offset
   * @type number
     * @default 10
@@ -544,7 +544,7 @@ var linearRangeBar = {
 */
 var linearTriangleMarker = {
     /**
-    * @name linearTriangleMarker_color
+    * @name linearTriangleMarker.color
     * @publicName color
     * @type string
     * @inheritdoc
@@ -552,7 +552,7 @@ var linearTriangleMarker = {
     */
     color: '#8798A5',
     /**
-    * @name linearTriangleMarker_width
+    * @name linearTriangleMarker.width
     * @publicName width
     * @type number
     * @default 13
@@ -560,7 +560,7 @@ var linearTriangleMarker = {
     */
     width: 13,
     /**
-    * @name linearTriangleMarker_length
+    * @name linearTriangleMarker.length
     * @publicName length
     * @type number
     * @default 14
@@ -568,7 +568,7 @@ var linearTriangleMarker = {
     */
     length: 14,
     /**
-    * @name linearTriangleMarker_offset
+    * @name linearTriangleMarker.offset
     * @publicName offset
   * @type number
     * @default 10
@@ -586,7 +586,7 @@ var linearTriangleMarker = {
 */
 var linearTextCloud = {
     /**
-    * @name linearTextCloud_color
+    * @name linearTextCloud.color
     * @publicName color
     * @type string
     * @inheritdoc
@@ -594,21 +594,21 @@ var linearTextCloud = {
     */
     color: '#679EC5',
     /**
-    * @name linearTextCloud_text
+    * @name linearTextCloud.text
     * @publicName text
     * @type object
     * @inheritdoc
     */
     text: {
         /**
-        * @name linearTextCloud_text_font
+        * @name linearTextCloud.text.font
         * @publicName font
         * @type object
         * @inheritdoc
         */
         font: {
             /**
-            * @name linearTextCloud_text_font_color
+            * @name linearTextCloud.text.font.color
             * @publicName color
             * @type string
             * @default '#FFFFFF'
@@ -616,7 +616,7 @@ var linearTextCloud = {
             */
         color: '#FFFFFF',
             /**
-            * @name linearTextCloud_text_font_size
+            * @name linearTextCloud.text.font.size
             * @publicName size
             * @type number|string
             * @default 18
@@ -626,7 +626,7 @@ var linearTextCloud = {
     }
     },
     /**
-    * @name linearTextCloud_offset
+    * @name linearTextCloud.offset
     * @publicName offset
   * @type number
     * @default -1

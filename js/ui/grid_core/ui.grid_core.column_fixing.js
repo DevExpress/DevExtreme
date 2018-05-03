@@ -747,47 +747,47 @@ module.exports = {
     defaultOptions: function() {
         return {
             /**
-             * @name GridBaseOptions_columnFixing
+             * @name GridBaseOptions.columnFixing
              * @publicName columnFixing
              * @type object
              */
             columnFixing: {
                 /**
-                * @name GridBaseOptions_columnFixing_enabled
+                * @name GridBaseOptions.columnFixing.enabled
                 * @publicName enabled
                 * @type boolean
                 * @default false
                 */
                 enabled: false,
                 /**
-                 * @name GridBaseOptions_columnFixing_texts
+                 * @name GridBaseOptions.columnFixing.texts
                  * @publicName texts
                  * @type object
                  */
                 texts: {
                     /**
-                     * @name GridBaseOptions_columnFixing_texts_fix
+                     * @name GridBaseOptions.columnFixing.texts.fix
                      * @publicName fix
                      * @type string
                      * @default "Fix"
                      */
                     fix: messageLocalization.format("dxDataGrid-columnFixingFix"),
                     /**
-                     * @name GridBaseOptions_columnFixing_texts_unfix
+                     * @name GridBaseOptions.columnFixing.texts.unfix
                      * @publicName unfix
                      * @type string
                      * @default "Unfix"
                      */
                     unfix: messageLocalization.format("dxDataGrid-columnFixingUnfix"),
                     /**
-                     * @name GridBaseOptions_columnFixing_texts_leftPosition
+                     * @name GridBaseOptions.columnFixing.texts.leftPosition
                      * @publicName leftPosition
                      * @type string
                      * @default "To the left"
                      */
                     leftPosition: messageLocalization.format("dxDataGrid-columnFixingLeftPosition"),
                     /**
-                     * @name GridBaseOptions_columnFixing_texts_rightPosition
+                     * @name GridBaseOptions.columnFixing.texts.rightPosition
                      * @publicName rightPosition
                      * @type string
                      * @default "To the right"

@@ -32,7 +32,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
             useMaskBehavior: true,
 
             /**
-             * @name dxNumberBoxOptions_format
+             * @name dxNumberBoxOptions.format
              * @publicName format
              * @type format
              * @default ""

@@ -166,7 +166,7 @@ var SwipeEmitter = GestureEmitter.inherit({
 });
 
 /**
- * @name ui events_dxswipestart
+ * @name ui events.dxswipestart
  * @publicName dxswipestart
  * @type eventType
  * @type_function_param1 event:event
@@ -174,7 +174,7 @@ var SwipeEmitter = GestureEmitter.inherit({
  * @module events/swipe
 */
 /**
-  * @name ui events_dxswipe
+  * @name ui events.dxswipe
   * @publicName dxswipe
   * @type eventType
   * @type_function_param1 event:event
@@ -183,7 +183,7 @@ var SwipeEmitter = GestureEmitter.inherit({
   * @module events/swipe
 */
 /**
-  * @name ui events_dxswipeend
+  * @name ui events.dxswipeend
   * @publicName dxswipeend
   * @type eventType
   * @type_function_param1 event:event

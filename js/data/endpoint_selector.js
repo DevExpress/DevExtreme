@@ -21,7 +21,7 @@ function isLocalHostName(url) {
 * @export default
 */
 /**
-* @name EndpointSelectorMethods_ctor
+* @name EndpointSelectorMethods.ctor
 * @publicName ctor(options)
 * @param1 options:Object
 * @hidden
@@ -34,7 +34,7 @@ var EndpointSelector = function(config) {
 
 EndpointSelector.prototype = {
     /**
-    * @name EndpointSelectorMethods_urlFor
+    * @name EndpointSelectorMethods.urlFor
     * @publicName urlFor(key)
     * @param1 key:string
     * @type method

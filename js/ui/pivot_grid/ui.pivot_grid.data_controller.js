@@ -78,7 +78,7 @@ exports.DataController = Class.inherit((function() {
             */
             var infoItem = {
                 /**
-                * @name dxPivotGridPivotGridCell_type
+                * @name dxPivotGridPivotGridCell.type
                 * @publicName type
                 * @acceptValues "D" | "T" | "GT"
                 * @type string
@@ -89,7 +89,7 @@ exports.DataController = Class.inherit((function() {
 
             if(headerItem.path) {
                 /**
-                * @name dxPivotGridPivotGridCell_path
+                * @name dxPivotGridPivotGridCell.path
                 * @publicName path
                 * @type Array<string, number, Date>
                 */
@@ -113,7 +113,7 @@ exports.DataController = Class.inherit((function() {
             }
             if(typeUtils.isDefined(headerItem.expanded)) {
                 /**
-                * @name dxPivotGridPivotGridCell_expanded
+                * @name dxPivotGridPivotGridCell.expanded
                 * @publicName expanded
                 * @type boolean
                 */
@@ -503,13 +503,13 @@ exports.DataController = Class.inherit((function() {
 
                     row[columnIndex] = {
                         /**
-                        * @name dxPivotGridPivotGridCell_text
+                        * @name dxPivotGridPivotGridCell.text
                         * @publicName text
                         * @type string
                         */
                         text: formatCellValue(cellValue, dataField, errorText),
                        /**
-                       * @name dxPivotGridPivotGridCell_value
+                       * @name dxPivotGridPivotGridCell.value
                        * @publicName value
                        */
                         value: cellValue,
@@ -518,7 +518,7 @@ exports.DataController = Class.inherit((function() {
                         dataType: dataField.dataType,
 
                         /**
-                        * @name dxPivotGridPivotGridCell_columnType
+                        * @name dxPivotGridPivotGridCell.columnType
                         * @publicName columnType
                         * @acceptValues "D" | "T" | "GT"
                         * @type string
@@ -526,26 +526,26 @@ exports.DataController = Class.inherit((function() {
                         columnType: columnInfo.type,
 
                         /**
-                        * @name dxPivotGridPivotGridCell_rowType
+                        * @name dxPivotGridPivotGridCell.rowType
                         * @publicName rowType
                         * @acceptValues "D" | "T" | "GT"
                         * @type string
                         */
                         rowType: rowInfo.type,
                         /**
-                       * @name dxPivotGridPivotGridCell_rowPath
+                       * @name dxPivotGridPivotGridCell.rowPath
                        * @publicName rowPath
                        * @type Array<string, number, Date>
                        */
                         rowPath: rowInfo.path || [],
                         /**
-                        * @name dxPivotGridPivotGridCell_columnPath
+                        * @name dxPivotGridPivotGridCell.columnPath
                         * @publicName columnPath
                         * @type Array<string, number, Date>
                         */
                         columnPath: columnInfo.path || [],
                         /**
-                        * @name dxPivotGridPivotGridCell_dataIndex
+                        * @name dxPivotGridPivotGridCell.dataIndex
                         * @publicName dataIndex
                         * @type number
                         */

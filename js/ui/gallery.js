@@ -100,7 +100,7 @@ var Gallery = CollectionWidget.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             /**
-            * @name dxGalleryOptions_activeStateEnabled
+            * @name dxGalleryOptions.activeStateEnabled
             * @publicName activeStateEnabled
             * @type boolean
             * @default false
@@ -108,7 +108,7 @@ var Gallery = CollectionWidget.inherit({
             activeStateEnabled: false,
 
             /**
-            * @name dxGalleryOptions_animationDuration
+            * @name dxGalleryOptions.animationDuration
             * @publicName animationDuration
             * @type number
             * @default 400
@@ -116,7 +116,7 @@ var Gallery = CollectionWidget.inherit({
             animationDuration: 400,
 
             /**
-            * @name dxGalleryOptions_animationEnabled
+            * @name dxGalleryOptions.animationEnabled
             * @publicName animationEnabled
             * @type boolean
             * @default true
@@ -124,7 +124,7 @@ var Gallery = CollectionWidget.inherit({
             animationEnabled: true,
 
             /**
-            * @name dxGalleryOptions_loop
+            * @name dxGalleryOptions.loop
             * @publicName loop
             * @type boolean
             * @default false
@@ -132,7 +132,7 @@ var Gallery = CollectionWidget.inherit({
             loop: false,
 
             /**
-            * @name dxGalleryOptions_swipeEnabled
+            * @name dxGalleryOptions.swipeEnabled
             * @publicName swipeEnabled
             * @type boolean
             * @default true
@@ -140,7 +140,7 @@ var Gallery = CollectionWidget.inherit({
             swipeEnabled: true,
 
             /**
-            * @name dxGalleryOptions_indicatorEnabled
+            * @name dxGalleryOptions.indicatorEnabled
             * @publicName indicatorEnabled
             * @type boolean
             * @default true
@@ -148,7 +148,7 @@ var Gallery = CollectionWidget.inherit({
             indicatorEnabled: true,
 
             /**
-            * @name dxGalleryOptions_showIndicator
+            * @name dxGalleryOptions.showIndicator
             * @publicName showIndicator
             * @type boolean
             * @default true
@@ -156,7 +156,7 @@ var Gallery = CollectionWidget.inherit({
             showIndicator: true,
 
             /**
-            * @name dxGalleryOptions_selectedindex
+            * @name dxGalleryOptions.selectedindex
             * @publicName selectedIndex
             * @type number
             * @default 0
@@ -164,7 +164,7 @@ var Gallery = CollectionWidget.inherit({
             selectedIndex: 0,
 
             /**
-            * @name dxGalleryOptions_slideshowdelay
+            * @name dxGalleryOptions.slideshowdelay
             * @publicName slideshowDelay
             * @type number
             * @default 0
@@ -172,7 +172,7 @@ var Gallery = CollectionWidget.inherit({
             slideshowDelay: 0,
 
             /**
-            * @name dxGalleryOptions_showNavButtons
+            * @name dxGalleryOptions.showNavButtons
             * @publicName showNavButtons
             * @type boolean
             * @default false
@@ -180,7 +180,7 @@ var Gallery = CollectionWidget.inherit({
             showNavButtons: false,
 
             /**
-            * @name dxGalleryOptions_wrapAround
+            * @name dxGalleryOptions.wrapAround
             * @publicName wrapAround
             * @type boolean
             * @default false
@@ -188,7 +188,7 @@ var Gallery = CollectionWidget.inherit({
             wrapAround: false,
 
             /**
-            * @name dxGalleryOptions_initialItemWidth
+            * @name dxGalleryOptions.initialItemWidth
             * @publicName initialItemWidth
             * @type number
             * @default undefined
@@ -196,7 +196,7 @@ var Gallery = CollectionWidget.inherit({
             initialItemWidth: undefined,
 
             /**
-            * @name dxGalleryOptions_stretchImages
+            * @name dxGalleryOptions.stretchImages
             * @publicName stretchImages
             * @type boolean
             * @default false
@@ -204,34 +204,34 @@ var Gallery = CollectionWidget.inherit({
             stretchImages: false,
 
             /**
-            * @name dxGalleryOptions_activeStateEnabled
+            * @name dxGalleryOptions.activeStateEnabled
             * @publicName activeStateEnabled
             * @hidden
             */
 
             /**
-            * @name dxGalleryOptions_noDataText
+            * @name dxGalleryOptions.noDataText
             * @publicName noDataText
             * @hidden
             * @inheritdoc
             */
 
             /**
-            * @name dxGalleryOptions_selectedItems
+            * @name dxGalleryOptions.selectedItems
             * @publicName selectedItems
             * @hidden
             * @inheritdoc
             */
 
             /**
-            * @name dxGalleryOptions_selectedItemKeys
+            * @name dxGalleryOptions.selectedItemKeys
             * @publicName selectedItemKeys
             * @hidden
             * @inheritdoc
             */
 
             /**
-            * @name dxGalleryOptions_keyExpr
+            * @name dxGalleryOptions.keyExpr
             * @publicName keyExpr
             * @hidden
             * @inheritdoc
@@ -254,7 +254,7 @@ var Gallery = CollectionWidget.inherit({
                 },
                 options: {
                     /**
-                    * @name dxGalleryOptions_focusStateEnabled
+                    * @name dxGalleryOptions.focusStateEnabled
                     * @publicName focusStateEnabled
                     * @type boolean
                     * @default true @for desktop
@@ -281,17 +281,17 @@ var Gallery = CollectionWidget.inherit({
         * @type object
         */
         /**
-        * @name dxGalleryItemTemplate_imageSrc
+        * @name dxGalleryItemTemplate.imageSrc
         * @publicName imageSrc
         * @type String
         */
         /**
-        * @name dxGalleryItemTemplate_imageAlt
+        * @name dxGalleryItemTemplate.imageAlt
         * @publicName imageAlt
         * @type String
         */
         /**
-        * @name dxGalleryItemTemplate_visible
+        * @name dxGalleryItemTemplate.visible
         * @publicName visible
         * @hidden
         * @inheritdoc
@@ -1199,7 +1199,7 @@ var Gallery = CollectionWidget.inherit({
     },
 
     /**
-    * @name dxgallerymethods_goToItem
+    * @name dxgallerymethods.goToItem
     * @publicName goToItem(itemIndex, animation)
     * @param1 itemIndex:numeric
     * @param2 animation:boolean
@@ -1226,7 +1226,7 @@ var Gallery = CollectionWidget.inherit({
     },
 
     /**
-    * @name dxgallerymethods_prevItem
+    * @name dxgallerymethods.prevItem
     * @publicName prevItem(animation)
     * @param1 animation:boolean
     * @return Promise<void>
@@ -1236,7 +1236,7 @@ var Gallery = CollectionWidget.inherit({
     },
 
     /**
-    * @name dxgallerymethods_nextItem
+    * @name dxgallerymethods.nextItem
     * @publicName nextItem(animation)
     * @param1 animation:boolean
     * @return Promise<void>

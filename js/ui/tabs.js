@@ -59,7 +59,7 @@ var Tabs = CollectionWidget.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             /**
-             * @name dxTabsOptions_hoverStateEnabled
+             * @name dxTabsOptions.hoverStateEnabled
              * @publicName hoverStateEnabled
              * @type boolean
              * @default true
@@ -68,7 +68,7 @@ var Tabs = CollectionWidget.inherit({
             hoverStateEnabled: true,
 
             /**
-            * @name dxTabsOptions_showNavButtons
+            * @name dxTabsOptions.showNavButtons
             * @publicName showNavButtons
             * @type boolean
             * @default true
@@ -76,7 +76,7 @@ var Tabs = CollectionWidget.inherit({
             showNavButtons: true,
 
             /**
-            * @name dxTabsOptions_scrollByContent
+            * @name dxTabsOptions.scrollByContent
             * @publicName scrollByContent
             * @type boolean
             * @default true
@@ -84,7 +84,7 @@ var Tabs = CollectionWidget.inherit({
             scrollByContent: true,
 
             /**
-            * @name dxTabsOptions_scrollingEnabled
+            * @name dxTabsOptions.scrollingEnabled
             * @publicName scrollingEnabled
             * @type boolean
             * @default true
@@ -92,7 +92,7 @@ var Tabs = CollectionWidget.inherit({
             scrollingEnabled: true,
 
             /**
-            * @name dxTabsOptions_selectionMode
+            * @name dxTabsOptions.selectionMode
             * @publicName selectionMode
             * @type Enums.NavSelectionMode
             * @default 'single'
@@ -100,27 +100,27 @@ var Tabs = CollectionWidget.inherit({
             selectionMode: "single",
 
             /**
-            * @name dxTabsOptions_activeStateEnabled
+            * @name dxTabsOptions.activeStateEnabled
             * @publicName activeStateEnabled
             * @hidden
             * @inheritdoc
             */
 
             /**
-            * @name dxTabsOptions_noDataText
+            * @name dxTabsOptions.noDataText
             * @publicName noDataText
             * @hidden
             * @inheritdoc
             */
 
             /**
-            * @name dxTabsOptions_selectedItems
+            * @name dxTabsOptions.selectedItems
             * @publicName selectedItems
             * @type Array<string,number,Object>
             */
 
             /**
-             * @name dxTabsOptions_activeStateEnabled
+             * @name dxTabsOptions.activeStateEnabled
              * @publicName activeStateEnabled
              * @default true
              * @inheritdoc
@@ -139,12 +139,12 @@ var Tabs = CollectionWidget.inherit({
             * @type object
             */
             /**
-            * @name dxTabsItemTemplate_icon
+            * @name dxTabsItemTemplate.icon
             * @publicName icon
             * @type String
             */
             /**
-            * @name dxTabsItemTemplate_badge
+            * @name dxTabsItemTemplate.badge
             * @publicName badge
             * @type String
             */
@@ -159,7 +159,7 @@ var Tabs = CollectionWidget.inherit({
                 },
                 options: {
                     /**
-                    * @name dxTabsOptions_showNavButtons
+                    * @name dxTabsOptions.showNavButtons
                     * @publicName showNavButtons
                     * @default false @for mobile_devices
                     */
@@ -170,7 +170,7 @@ var Tabs = CollectionWidget.inherit({
                 device: { platform: "generic" },
                 options: {
                     /**
-                    * @name dxTabsOptions_scrollByContent
+                    * @name dxTabsOptions.scrollByContent
                     * @publicName scrollByContent
                     * @default false @for desktop
                     */
@@ -183,7 +183,7 @@ var Tabs = CollectionWidget.inherit({
                 },
                 options: {
                     /**
-                    * @name dxTabsOptions_focusStateEnabled
+                    * @name dxTabsOptions.focusStateEnabled
                     * @publicName focusStateEnabled
                     * @type boolean
                     * @default true @for desktop

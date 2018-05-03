@@ -19,37 +19,37 @@ var View = MarkupComponent.inherit({
 
         this.option({
             /**
-            * @name dxviewoptions_name
+            * @name dxviewoptions.name
             * @publicName name
             * @type string
             * @default null
             */
             name: null,
             /**
-            * @name dxviewoptions_title
+            * @name dxviewoptions.title
             * @publicName title
             * @type string
             * @default null
             */
             title: null
             /**
-            * @name dxviewoptions_disableCache
+            * @name dxviewoptions.disableCache
             * @publicName disableCache
             * @type Boolean
             */
             /**
-            * @name dxviewoptions_modal
+            * @name dxviewoptions.modal
             * @publicName modal
             * @type Boolean
             */
             /**
-            * @name dxviewoptions_orientation
+            * @name dxviewoptions.orientation
             * @publicName orientation
             * @type string
             * @acceptValues 'portrait'|'landscape'
             */
             /**
-             * @name dxviewoptions_pane
+             * @name dxviewoptions.pane
              * @publicName pane
              * @type string
              * @default 'detail'
@@ -86,7 +86,7 @@ var Layout = MarkupComponent.inherit({
 
         this.option({
             /**
-            * @name dxlayoutoptions_name
+            * @name dxlayoutoptions.name
             * @publicName name
             * @type string
             * @default null
@@ -114,7 +114,7 @@ var ViewPlaceholder = MarkupComponent.inherit({
 
         this.option({
             /**
-            * @name dxviewPlaceholderoptions_viewName
+            * @name dxviewPlaceholderoptions.viewName
             * @publicName viewName
             * @type string
             * @default null
@@ -159,14 +159,14 @@ var Transition = MarkupComponent.inherit({
 
         this.option({
             /**
-            * @name dxtransitionoptions_name
+            * @name dxtransitionoptions.name
             * @publicName name
             * @type string
             * @default null
             */
             name: null,
             /**
-            * @name dxtransitionoptions_type
+            * @name dxtransitionoptions.type
             * @publicName type
             * @type string
             * @default undefined
@@ -175,7 +175,7 @@ var Transition = MarkupComponent.inherit({
             */
             type: undefined,
             /**
-            * @name dxtransitionoptions_animation
+            * @name dxtransitionoptions.animation
             * @publicName animation
             * @type string
             * @default "slide"
@@ -215,14 +215,14 @@ var ContentPlaceholder = MarkupComponent.inherit({
 
         this.option({
             /**
-            * @name dxcontentplaceholderoptions_name
+            * @name dxcontentplaceholderoptions.name
             * @publicName name
             * @type string
             * @default null
             */
             name: null,
             /**
-            * @name dxcontentplaceholderoptions_transition
+            * @name dxcontentplaceholderoptions.transition
             * @publicName transition
             * @type string
             * @default undefined
@@ -231,14 +231,14 @@ var ContentPlaceholder = MarkupComponent.inherit({
             */
             transition: undefined,
             /**
-            * @name dxcontentplaceholderoptions_animation
+            * @name dxcontentplaceholderoptions.animation
             * @publicName animation
             * @type string
             * @default "slide"
             */
             animation: "none",
             /**
-            * @name dxcontentplaceholderoptions_contentCssPosition
+            * @name dxcontentplaceholderoptions.contentCssPosition
             * @publicName contentCssPosition
             * @type string
             * @default 'absolute'
@@ -274,7 +274,7 @@ var Content = MarkupComponent.inherit({
 
         this.option({
             /**
-            * @name dxcontentoptions_targetPlaceholder
+            * @name dxcontentoptions.targetPlaceholder
             * @publicName targetPlaceholder
             * @type string
             * @default null

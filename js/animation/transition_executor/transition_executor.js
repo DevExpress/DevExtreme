@@ -130,7 +130,7 @@ var TransitionExecutor = Class.inherit({
     },
 
     /**
-    * @name TransitionExecutorMethods_reset
+    * @name TransitionExecutorMethods.reset
     * @publicName reset()
     */
     reset: function() {
@@ -141,7 +141,7 @@ var TransitionExecutor = Class.inherit({
         this._completePromise = this._completeDeferred.promise();
     },
     /**
-    * @name TransitionExecutorMethods_enter
+    * @name TransitionExecutorMethods.enter
     * @publicName enter(elements, animation)
     * @param1 elements:jQuery
     * @param2 animation:animationConfig|string
@@ -151,7 +151,7 @@ var TransitionExecutor = Class.inherit({
         this._animations.push.apply(this._animations, animations);
     },
     /**
-    * @name TransitionExecutorMethods_leave
+    * @name TransitionExecutorMethods.leave
     * @publicName leave(elements, animation)
     * @param1 elements:jQuery
     * @param2 animation:animationConfig|string
@@ -161,7 +161,7 @@ var TransitionExecutor = Class.inherit({
         this._animations.push.apply(this._animations, animations);
     },
     /**
-    * @name TransitionExecutorMethods_start
+    * @name TransitionExecutorMethods.start
     * @publicName start()
     * @return Promise<void>
     */
@@ -197,7 +197,7 @@ var TransitionExecutor = Class.inherit({
         return result;
     },
     /**
-    * @name TransitionExecutorMethods_stop
+    * @name TransitionExecutorMethods.stop
     * @publicName stop()
     */
     stop: function(jumpToEnd) {

@@ -85,7 +85,7 @@ var Pivot = CollectionWidget.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             /**
-            * @name dxPivotOptions_selectedIndex
+            * @name dxPivotOptions.selectedIndex
             * @publicName selectedIndex
             * @type number
             * @default 0
@@ -93,7 +93,7 @@ var Pivot = CollectionWidget.inherit({
             selectedIndex: 0,
 
             /**
-            * @name dxPivotOptions_swipeEnabled
+            * @name dxPivotOptions.swipeEnabled
             * @publicName swipeEnabled
             * @type boolean
             * @default true
@@ -101,7 +101,7 @@ var Pivot = CollectionWidget.inherit({
             swipeEnabled: true,
 
             /**
-            * @name dxPivotOptions_itemTitleTemplate
+            * @name dxPivotOptions.itemTitleTemplate
             * @publicName itemTitleTemplate
             * @type template|function
             * @default "title"
@@ -113,7 +113,7 @@ var Pivot = CollectionWidget.inherit({
             itemTitleTemplate: "title",
 
             /**
-            * @name dxPivotOptions_contentTemplate
+            * @name dxPivotOptions.contentTemplate
             * @publicName contentTemplate
             * @type template|function
             * @default "content"
@@ -123,7 +123,7 @@ var Pivot = CollectionWidget.inherit({
             contentTemplate: "content",
 
             /**
-             * @name dxPivotOptions_focusStateEnabled
+             * @name dxPivotOptions.focusStateEnabled
              * @publicName focusStateEnabled
              * @type boolean
              * @default false
@@ -136,42 +136,42 @@ var Pivot = CollectionWidget.inherit({
             selectionByClick: false
 
             /**
-            * @name dxPivotOptions_noDataText
+            * @name dxPivotOptions.noDataText
             * @publicName noDataText
             * @hidden
             * @inheritdoc
             */
 
             /**
-            * @name dxPivotOptions_selectedItems
+            * @name dxPivotOptions.selectedItems
             * @publicName selectedItems
             * @hidden
             * @inheritdoc
             */
 
             /**
-            * @name dxPivotOptions_selectedItemKeys
+            * @name dxPivotOptions.selectedItemKeys
             * @publicName selectedItemKeys
             * @hidden
             * @inheritdoc
             */
 
             /**
-            * @name dxPivotOptions_keyExpr
+            * @name dxPivotOptions.keyExpr
             * @publicName keyExpr
             * @hidden
             * @inheritdoc
             */
 
             /**
-            * @name dxPivotOptions_accessKey
+            * @name dxPivotOptions.accessKey
             * @publicName accessKey
             * @hidden
             * @inheritdoc
             */
 
             /**
-            * @name dxPivotOptions_tabIndex
+            * @name dxPivotOptions.tabIndex
             * @publicName tabIndex
             * @hidden
             * @inheritdoc
@@ -226,19 +226,19 @@ var Pivot = CollectionWidget.inherit({
         * @type object
         */
         /**
-        * @name dxPivotItemTemplate_titleTemplate
+        * @name dxPivotItemTemplate.titleTemplate
         * @publicName titleTemplate
         * @type template|function
         * @type_function_return string|Node|jQuery
         */
         /**
-        * @name dxPivotItemTemplate_visible
+        * @name dxPivotItemTemplate.visible
         * @publicName visible
         * @hidden
         * @inheritdoc
         */
         /**
-        * @name dxPivotItemTemplate_title
+        * @name dxPivotItemTemplate.title
         * @publicName title
         * @type String
         */
@@ -547,14 +547,14 @@ var Pivot = CollectionWidget.inherit({
     }
 
     /**
-    * @name dxPivotMethods_registerKeyHandler
+    * @name dxPivotMethods.registerKeyHandler
     * @publicName registerKeyHandler(key, handler)
     * @hidden
     * @inheritdoc
     */
 
     /**
-    * @name dxPivotMethods_focus
+    * @name dxPivotMethods.focus
     * @publicName focus()
     * @hidden
     * @inheritdoc

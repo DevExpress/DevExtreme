@@ -37,63 +37,63 @@ var RELATIVE_VALUE_REGEX = /^([+-])=(.*)/i,
 * @type object
 */
 /**
-* @name animationConfig_start
+* @name animationConfig.start
 * @publicName start
 * @type function
 * @type_function_param1 $element:dxElement
 * @type_function_param2 config:object
 */
 /**
-* @name animationConfig_complete
+* @name animationConfig.complete
 * @publicName complete
 * @type function
 * @type_function_param1 $element:dxElement
 * @type_function_param2 config:object
 */
 /**
-* @name animationConfig_delay
+* @name animationConfig.delay
 * @publicName delay
 * @type number
 * @default 0
 */
 /**
-* @name animationConfig_staggerDelay
+* @name animationConfig.staggerDelay
 * @publicName staggerDelay
 * @type number
 * @default undefined
 */
 /**
-* @name animationConfig_duration
+* @name animationConfig.duration
 * @publicName duration
 * @type number
 * @default 400
 */
 /**
-* @name animationConfig_easing
+* @name animationConfig.easing
 * @publicName easing
 * @type string
 * @default 'ease'
 */
 /**
-* @name animationConfig_type
+* @name animationConfig.type
 * @publicName type
 * @type Enums.AnimationType
 * @default 'custom'
 */
 /**
-* @name animationConfig_direction
+* @name animationConfig.direction
 * @publicName direction
 * @type Enums.Direction
 * @default undefined
 */
 /**
-* @name animationConfig_from
+* @name animationConfig.from
 * @publicName from
 * @type number|string|object
 * @default {}
 */
 /**
-* @name animationConfig_to
+* @name animationConfig.to
 * @publicName to
 * @type number|string|object
 * @default {}
@@ -891,7 +891,7 @@ var fx = {
     off: false,
     animationTypes: animationConfigurators,
     /**
-    * @name fxmethods_animate
+    * @name fxmethods.animate
     * @publicName animate(element, config)
     * @param1 element:Node
     * @param2 config:animationConfig
@@ -901,7 +901,7 @@ var fx = {
     animate: animate,
     createAnimation: createAnimation,
     /**
-    * @name fxmethods_isAnimating
+    * @name fxmethods.isAnimating
     * @publicName isAnimating(element)
     * @param1 element:Node
     * @return boolean
@@ -909,7 +909,7 @@ var fx = {
     */
     isAnimating: isAnimating,
     /**
-    * @name fxmethods_stop
+    * @name fxmethods.stop
     * @publicName stop(element, jumpToEnd)
     * @param1 element:Node
     * @param2 jumpToEnd:boolean

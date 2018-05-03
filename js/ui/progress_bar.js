@@ -26,7 +26,7 @@ var ProgressBar = TrackBar.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             /**
-            * @name dxProgressBarOptions_value
+            * @name dxProgressBarOptions.value
             * @publicName value
             * @type number
             * @default 0
@@ -34,7 +34,7 @@ var ProgressBar = TrackBar.inherit({
             value: 0,
 
             /**
-            * @name dxProgressBarOptions_statusFormat
+            * @name dxProgressBarOptions.statusFormat
             * @publicName statusFormat
             * @type string|function
             * @default function(ratio, value) { return "Progress: " + Math.round(ratio * 100) + "%" }
@@ -47,7 +47,7 @@ var ProgressBar = TrackBar.inherit({
             },
 
             /**
-            * @name dxProgressBarOptions_showStatus
+            * @name dxProgressBarOptions.showStatus
             * @publicName showStatus
             * @type boolean
             * @default true
@@ -55,7 +55,7 @@ var ProgressBar = TrackBar.inherit({
             showStatus: true,
 
             /**
-            * @name dxProgressBarOptions_onComplete
+            * @name dxProgressBarOptions.onComplete
             * @publicName onComplete
             * @extends Action
             * @type function(e)
@@ -67,7 +67,7 @@ var ProgressBar = TrackBar.inherit({
             onComplete: null,
 
             /**
-            * @name dxProgressBarOptions_activeStateEnabled
+            * @name dxProgressBarOptions.activeStateEnabled
             * @publicName activeStateEnabled
             * @hidden
             * @inheritdoc
@@ -79,21 +79,21 @@ var ProgressBar = TrackBar.inherit({
             _animatingSegmentCount: 0
 
             /**
-            * @name dxProgressBarOptions_focusStateEnabled
+            * @name dxProgressBarOptions.focusStateEnabled
             * @publicName focusStateEnabled
             * @hidden
             * @inheritdoc
             */
 
             /**
-            * @name dxProgressBarOptions_accessKey
+            * @name dxProgressBarOptions.accessKey
             * @publicName accessKey
             * @hidden
             * @inheritdoc
             */
 
             /**
-            * @name dxProgressBarOptions_tabIndex
+            * @name dxProgressBarOptions.tabIndex
             * @publicName tabIndex
             * @hidden
             * @inheritdoc
@@ -274,14 +274,14 @@ var ProgressBar = TrackBar.inherit({
     }
 
     /**
-    * @name dxProgressBarMethods_registerKeyHandler
+    * @name dxProgressBarMethods.registerKeyHandler
     * @publicName registerKeyHandler(key, handler)
     * @hidden
     * @inheritdoc
     */
 
     /**
-    * @name dxProgressBarMethods_focus
+    * @name dxProgressBarMethods.focus
     * @publicName focus()
     * @hidden
     * @inheritdoc

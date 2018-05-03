@@ -89,7 +89,7 @@ exports.DataController = dataControllerModule.controllers.data.inherit((function
         },
 
         /**
-         * @name dxTreeListMethods_isRowExpanded
+         * @name dxTreeListMethods.isRowExpanded
          * @publicName isRowExpanded(key)
          * @param1 key:any
          * @return boolean
@@ -99,7 +99,7 @@ exports.DataController = dataControllerModule.controllers.data.inherit((function
         },
 
         /**
-         * @name dxTreeListMethods_expandRow
+         * @name dxTreeListMethods.expandRow
          * @publicName expandRow(key)
          * @param1 key:any
          * @return Promise<void>
@@ -112,7 +112,7 @@ exports.DataController = dataControllerModule.controllers.data.inherit((function
         },
 
         /**
-         * @name dxTreeListMethods_collapseRow
+         * @name dxTreeListMethods.collapseRow
          * @publicName collapseRow(key)
          * @param1 key:any
          * @return Promise<void>
@@ -125,7 +125,7 @@ exports.DataController = dataControllerModule.controllers.data.inherit((function
         },
 
         /**
-         * @name dxTreeListMethods_getRootNode
+         * @name dxTreeListMethods.getRootNode
          * @publicName getRootNode()
          * @return dxTreeListNode
          */
@@ -164,7 +164,7 @@ exports.DataController = dataControllerModule.controllers.data.inherit((function
         },
 
         /**
-         * @name dxTreeListMethods_getNodeByKey
+         * @name dxTreeListMethods.getNodeByKey
          * @publicName getNodeByKey(key)
          * @param1 key:object|string|number
          * @return dxTreeListNode
@@ -186,18 +186,18 @@ exports.DataController = dataControllerModule.controllers.data.inherit((function
         },
 
         /**
-         * @name dxTreeListMethods_loadDescendants
+         * @name dxTreeListMethods.loadDescendants
          * @publicName loadDescendants()
          * @return Promise<void>
          */
         /**
-         * @name dxTreeListMethods_loadDescendants
+         * @name dxTreeListMethods.loadDescendants
          * @publicName loadDescendants(keys)
          * @param1 keys:Array<any>
          * @return Promise<void>
          */
         /**
-         * @name dxTreeListMethods_loadDescendants
+         * @name dxTreeListMethods.loadDescendants
          * @publicName loadDescendants(keys, childrenOnly)
          * @param1 keys:Array<any>
          * @param2 childrenOnly:boolean
@@ -212,13 +212,13 @@ exports.DataController = dataControllerModule.controllers.data.inherit((function
         },
 
         /**
-         * @name dxTreeListMethods_forEachNode
+         * @name dxTreeListMethods.forEachNode
          * @publicName forEachNode(nodes, callback)
          * @param1 nodes:Array<dxTreeListNode>
          * @param2 callback:function
          */
         /**
-         * @name dxTreeListMethods_forEachNode
+         * @name dxTreeListMethods.forEachNode
          * @publicName forEachNode(callback)
          * @param1 callback:function
          */
@@ -232,46 +232,46 @@ treeListCore.registerModule("data", {
     defaultOptions: function() {
         return extend({}, dataControllerModule.defaultOptions(), {
             /**
-            * @name dxTreeListOptions_itemsExpr
+            * @name dxTreeListOptions.itemsExpr
             * @publicName itemsExpr
             * @type string|function
             * @default "items"
             */
             itemsExpr: "items",
             /**
-            * @name dxTreeListOptions_keyExpr
+            * @name dxTreeListOptions.keyExpr
             * @publicName keyExpr
             * @type string|function
             * @default "id"
             */
             /**
-            * @name dxTreeListOptions_hasItemsExpr
+            * @name dxTreeListOptions.hasItemsExpr
             * @publicName hasItemsExpr
             * @type string|function
             */
             /**
-            * @name dxTreeListOptions_parentIdExpr
+            * @name dxTreeListOptions.parentIdExpr
             * @publicName parentIdExpr
             * @type string|function
             * @default "parentId"
             */
             parentIdExpr: "parentId",
             /**
-            * @name dxTreeListOptions_rootValue
+            * @name dxTreeListOptions.rootValue
             * @type Object
             * @publicName rootValue
             * @default 0
             */
             rootValue: 0,
             /**
-            * @name dxTreeListOptions_dataStructure
+            * @name dxTreeListOptions.dataStructure
             * @publicName dataStructure
             * @type Enums.TreeListDataStructure
             * @default "plain"
             */
             dataStructure: "plain",
             /**
-            * @name dxTreeListOptions_expandedRowKeys
+            * @name dxTreeListOptions.expandedRowKeys
             * @publicName expandedRowKeys
             * @type Array<any>
             * @default []
@@ -280,14 +280,14 @@ treeListCore.registerModule("data", {
             expandedRowKeys: [],
             filterMode: "extended",
             /**
-            * @name dxTreeListOptions_expandNodesOnFiltering
+            * @name dxTreeListOptions.expandNodesOnFiltering
             * @publicName expandNodesOnFiltering
             * @type boolean
             * @default true
             */
             expandNodesOnFiltering: true,
             /**
-            * @name dxTreeListOptions_autoExpandAll
+            * @name dxTreeListOptions.autoExpandAll
             * @publicName autoExpandAll
             * @type boolean
             * @default false
@@ -295,7 +295,7 @@ treeListCore.registerModule("data", {
             autoExpandAll: false,
 
             /**
-            * @name dxTreeListOptions_onNodesInitialized
+            * @name dxTreeListOptions.onNodesInitialized
             * @publicName onNodesInitialized
             * @type function(e)
             * @type_function_param1 e:object
@@ -306,13 +306,13 @@ treeListCore.registerModule("data", {
             onNodesInitialized: null,
             maxFilterLengthInRequest: 1500,
             /**
-             * @name dxTreeListOptions_paging
+             * @name dxTreeListOptions.paging
              * @publicName paging
              * @type object
              */
             paging: {
                 /**
-                 * @name dxTreeListOptions_paging_enabled
+                 * @name dxTreeListOptions.paging.enabled
                  * @publicName enabled
                  * @type boolean
                  * @default false
@@ -332,37 +332,37 @@ treeListCore.registerModule("data", {
  * @type object
  */
 /**
- * @name dxTreeListNode_key
+ * @name dxTreeListNode.key
  * @publicName key
  * @type any
  */
 /**
- * @name dxTreeListNode_data
+ * @name dxTreeListNode.data
  * @publicName data
  * @type object
  */
 /**
- * @name dxTreeListNode_parent
+ * @name dxTreeListNode.parent
  * @publicName parent
  * @type dxTreeListNode
  */
 /**
- * @name dxTreeListNode_children
+ * @name dxTreeListNode.children
  * @publicName children
  * @type Array<dxTreeListNode>
  */
 /**
- * @name dxTreeListNode_hasChildren
+ * @name dxTreeListNode.hasChildren
  * @publicName hasChildren
  * @type boolean
  */
 /**
- * @name dxTreeListNode_visible
+ * @name dxTreeListNode.visible
  * @publicName visible
  * @type boolean
  */
 /**
- * @name dxTreeListNode_level
+ * @name dxTreeListNode.level
  * @publicName level
  * @type number
  */

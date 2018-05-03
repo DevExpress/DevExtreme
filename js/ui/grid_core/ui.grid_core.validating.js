@@ -253,7 +253,7 @@ module.exports = {
     defaultOptions: function() {
         return {
             /**
-            * @name GridBaseOptions_onRowValidating
+            * @name GridBaseOptions.onRowValidating
             * @publicName onRowValidating
             * @type function(e)
             * @type_function_param1 e:object
@@ -269,7 +269,7 @@ module.exports = {
             editing: {
                 texts: {
                     /**
-                     * @name GridBaseOptions_editing_texts_validationCancelChanges
+                     * @name GridBaseOptions.editing.texts.validationCancelChanges
                      * @publicName validationCancelChanges
                      * @type string
                      * @default "Cancel changes"

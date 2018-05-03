@@ -1,7 +1,7 @@
 "use strict";
 
 /**
-* @name Utils_compileGetter
+* @name Utils.compileGetter
 * @publicName compileGetter(expr)
 * @param1 expr:string|Array<string>
 * @return function
@@ -11,7 +11,7 @@
 */
 exports.compileGetter = require("./core/utils/data").compileGetter;
 /**
-* @name Utils_compileSetter
+* @name Utils.compileSetter
 * @publicName compileSetter(expr)
 * @param1 expr:string|Array<string>
 * @return function

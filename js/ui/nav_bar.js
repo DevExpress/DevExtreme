@@ -21,7 +21,7 @@ var NavBar = Tabs.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             /**
-            * @name dxNavBarOptions_scrollingEnabled
+            * @name dxNavBarOptions.scrollingEnabled
             * @publicName scrollingEnabled
             * @type boolean
             * @default false
@@ -30,14 +30,14 @@ var NavBar = Tabs.inherit({
             scrollingEnabled: false
 
             /**
-            * @name dxNavBarOptions_showNavButtons
+            * @name dxNavBarOptions.showNavButtons
             * @publicName showNavButtons
             * @hidden
             * @inheritdoc
             */
 
             /**
-            * @name dxNavBarOptions_scrollByContent
+            * @name dxNavBarOptions.scrollByContent
             * @publicName scrollByContent
             * @inheritdoc
             */
@@ -72,7 +72,7 @@ var NavBar = Tabs.inherit({
 * @type object
 */
 /**
-* @name dxNavBarItemTemplate_badge
+* @name dxNavBarItemTemplate.badge
 * @publicName badge
 * @type String
 */

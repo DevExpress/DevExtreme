@@ -247,7 +247,7 @@ var GroupingDataControllerExtender = (function() {
             return this.callBase().concat(["collapseAll", "expandAll", "isRowExpanded", "expandRow", "collapseRow"]);
         },
         /**
-         * @name dxDataGridMethods_collapseAll
+         * @name dxDataGridMethods.collapseAll
          * @publicName collapseAll(groupIndex)
          * @param1 groupIndex:number | undefined
          */
@@ -259,7 +259,7 @@ var GroupingDataControllerExtender = (function() {
             }
         },
         /**
-         * @name dxDataGridMethods_expandAll
+         * @name dxDataGridMethods.expandAll
          * @publicName expandAll(groupIndex)
          * @param1 groupIndex:number | undefined
          */
@@ -304,7 +304,7 @@ var GroupingDataControllerExtender = (function() {
             return d;
         },
         /**
-         * @name dxDataGridMethods_isRowExpanded
+         * @name dxDataGridMethods.isRowExpanded
          * @publicName isRowExpanded(key)
          * @param1 key:any
          * @return boolean
@@ -315,7 +315,7 @@ var GroupingDataControllerExtender = (function() {
             return dataSource && dataSource.isRowExpanded(key);
         },
         /**
-         * @name dxDataGridMethods_expandRow
+         * @name dxDataGridMethods.expandRow
          * @publicName expandRow(key)
          * @param1 key:any
          * @return Promise<void>
@@ -327,7 +327,7 @@ var GroupingDataControllerExtender = (function() {
             return new Deferred().resolve();
         },
         /**
-         * @name dxDataGridMethods_collapseRow
+         * @name dxDataGridMethods.collapseRow
          * @publicName collapseRow(key)
          * @param1 key:any
          * @return Promise<void>
@@ -630,75 +630,75 @@ gridCore.registerModule("grouping", {
     defaultOptions: function() {
         return {
             /**
-             * @name dxDataGridOptions_grouping
+             * @name dxDataGridOptions.grouping
              * @publicName grouping
              * @type object
              */
             grouping: {
                 /**
-                 * @name dxDataGridOptions_grouping_autoExpandAll
+                 * @name dxDataGridOptions.grouping.autoExpandAll
                  * @publicName autoExpandAll
                  * @type boolean
                  * @default true
                  */
                 autoExpandAll: true,
                 /**
-                 * @name dxDataGridOptions_grouping_allowCollapsing
+                 * @name dxDataGridOptions.grouping.allowCollapsing
                  * @publicName allowCollapsing
                  * @type boolean
                  * @default true
                  */
                 allowCollapsing: true,
                 /**
-                 * @name dxDataGridOptions_grouping_contextMenuEnabled
+                 * @name dxDataGridOptions.grouping.contextMenuEnabled
                  * @publicName contextMenuEnabled
                  * @type boolean
                  * @default false
                  */
                 contextMenuEnabled: false,
                 /**
-                 * @name dxDataGridOptions_grouping_expandMode
+                 * @name dxDataGridOptions.grouping.expandMode
                  * @publicName expandMode
                  * @type Enums.GridGroupingExpandMode
                  * @default "buttonClick"
                  */
                 expandMode: "buttonClick",
                 /**
-                 * @name dxDataGridOptions_grouping_texts
+                 * @name dxDataGridOptions.grouping.texts
                  * @publicName texts
                  * @type object
                  */
                 texts: {
                     /**
-                    * @name dxDataGridOptions_grouping_texts_groupContinuesMessage
+                    * @name dxDataGridOptions.grouping.texts.groupContinuesMessage
                     * @publicName groupContinuesMessage
                     * @type string
                     * @default "Continues on the next page"
                     */
                     groupContinuesMessage: messageLocalization.format("dxDataGrid-groupContinuesMessage"),
                     /**
-                     * @name dxDataGridOptions_grouping_texts_groupContinuedMessage
+                     * @name dxDataGridOptions.grouping.texts.groupContinuedMessage
                      * @publicName groupContinuedMessage
                      * @type string
                      * @default "Continued from the previous page"
                      */
                     groupContinuedMessage: messageLocalization.format("dxDataGrid-groupContinuedMessage"),
                     /**
-                    * @name dxDataGridOptions_grouping_texts_groupByThisColumn
+                    * @name dxDataGridOptions.grouping.texts.groupByThisColumn
                     * @publicName groupByThisColumn
                     * @type string
                     * @default "Group by This Column"
                     */
                     groupByThisColumn: messageLocalization.format("dxDataGrid-groupHeaderText"),
                     /**
-                    * @name dxDataGridOptions_grouping_texts_ungroup
+                    * @name dxDataGridOptions.grouping.texts.ungroup
                     * @publicName ungroup
                     * @type string
                     * @default "Ungroup"
                     */
                     ungroup: messageLocalization.format("dxDataGrid-ungroupHeaderText"),
                     /**
-                    * @name dxDataGridOptions_grouping_texts_ungroupAll
+                    * @name dxDataGridOptions.grouping.texts.ungroupAll
                     * @publicName ungroupAll
                     * @type string
                     * @default "Ungroup All"
@@ -707,27 +707,27 @@ gridCore.registerModule("grouping", {
                 }
             },
             /**
-            * @name dxDataGridOptions_groupPanel
+            * @name dxDataGridOptions.groupPanel
             * @publicName groupPanel
             * @type object
             */
             groupPanel: {
                 /**
-                 * @name dxDataGridOptions_groupPanel_visible
+                 * @name dxDataGridOptions.groupPanel.visible
                  * @publicName visible
                  * @type boolean|Enums.Mode
                  * @default false
                  */
                 visible: false,
                 /**
-                 * @name dxDataGridOptions_groupPanel_emptyPanelText
+                 * @name dxDataGridOptions.groupPanel.emptyPanelText
                  * @publicName emptyPanelText
                  * @type string
                  * @default "Drag a column header here to group by that column"
                  */
                 emptyPanelText: messageLocalization.format("dxDataGrid-groupPanelEmptyText"),
                 /**
-                 * @name dxDataGridOptions_groupPanel_allowColumnDragging
+                 * @name dxDataGridOptions.groupPanel.allowColumnDragging
                  * @publicName allowColumnDragging
                  * @type boolean
                  * @default true

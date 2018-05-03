@@ -29,7 +29,7 @@ var CommandContainer = MarkupComponent.inherit({
 
         this.option({
             /**
-            * @name dxCommandContaineroptions_id
+            * @name dxCommandContaineroptions.id
             * @publicName id
             * @type string
             * @default null

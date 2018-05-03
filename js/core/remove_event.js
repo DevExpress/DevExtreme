@@ -9,7 +9,7 @@ var eventName = "dxremove";
 var eventPropName = "dxRemoveEvent";
 
 /**
-  * @name ui events_dxremove
+  * @name ui events.dxremove
   * @publicName dxremove
   * @type eventType
   * @type_function_param1 event:event

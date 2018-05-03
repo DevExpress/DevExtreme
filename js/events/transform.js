@@ -170,7 +170,7 @@ var TransformEmitter = Emitter.inherit({
 
 
 /**
- * @name ui events_dxtransformstart
+ * @name ui events.dxtransformstart
  * @publicName dxtransformstart
  * @type eventType
  * @type_function_param1 event:event
@@ -178,7 +178,7 @@ var TransformEmitter = Emitter.inherit({
  * @module events/transform
 */
 /**
-  * @name ui events_dxtransform
+  * @name ui events.dxtransform
   * @publicName dxtransform
   * @type eventType
   * @type_function_param1 event:event
@@ -192,7 +192,7 @@ var TransformEmitter = Emitter.inherit({
   * @module events/transform
 */
 /**
-  * @name ui events_dxtransformend
+  * @name ui events.dxtransformend
   * @publicName dxtransformend
   * @type eventType
   * @type_function_param1 event:event
@@ -207,7 +207,7 @@ var TransformEmitter = Emitter.inherit({
 */
 
 /**
- * @name ui events_dxtranslatestart
+ * @name ui events.dxtranslatestart
  * @publicName dxtranslatestart
  * @type eventType
  * @type_function_param1 event:event
@@ -215,7 +215,7 @@ var TransformEmitter = Emitter.inherit({
  * @module events/transform
 */
 /**
-  * @name ui events_dxtranslate
+  * @name ui events.dxtranslate
   * @publicName dxtranslate
   * @type eventType
   * @type_function_param1 event:event
@@ -225,7 +225,7 @@ var TransformEmitter = Emitter.inherit({
   * @module events/transform
 */
 /**
-  * @name ui events_dxtranslateend
+  * @name ui events.dxtranslateend
   * @publicName dxtranslateend
   * @type eventType
   * @type_function_param1 event:event
@@ -236,19 +236,19 @@ var TransformEmitter = Emitter.inherit({
 */
 
 /**
- * @name ui events_dxzoomstart
+ * @name ui events.dxzoomstart
  * @publicName dxzoomstart
  * @type eventType
- * @deprecated ui events_dxpinchstart
+ * @deprecated ui events.dxpinchstart
  * @type_function_param1 event:event
  * @type_function_param1_field1 cancel:boolean
  * @module events/transform
 */
 /**
-  * @name ui events_dxzoom
+  * @name ui events.dxzoom
   * @publicName dxzoom
   * @type eventType
-  * @deprecated ui events_dxpinch
+  * @deprecated ui events.dxpinch
   * @type_function_param1 event:event
   * @type_function_param1_field1 scale:number
   * @type_function_param1_field2 deltaScale:number
@@ -256,10 +256,10 @@ var TransformEmitter = Emitter.inherit({
   * @module events/transform
 */
 /**
-  * @name ui events_dxzoomend
+  * @name ui events.dxzoomend
   * @publicName dxzoomend
   * @type eventType
-  * @deprecated ui events_dxpinchend
+  * @deprecated ui events.dxpinchend
   * @type_function_param1 event:event
   * @type_function_param1_field1 scale:number
   * @type_function_param1_field2 deltaScale:number
@@ -268,7 +268,7 @@ var TransformEmitter = Emitter.inherit({
 */
 
 /**
-* @name ui events_dxpinchstart
+* @name ui events.dxpinchstart
 * @publicName dxpinchstart
 * @type eventType
 * @type_function_param1 event:event
@@ -276,7 +276,7 @@ var TransformEmitter = Emitter.inherit({
 * @module events/transform
    */
 /**
-  * @name ui events_dxpinch
+  * @name ui events.dxpinch
   * @publicName dxpinch
   * @type eventType
   * @type_function_param1 event:event
@@ -286,7 +286,7 @@ var TransformEmitter = Emitter.inherit({
   * @module events/transform
 */
 /**
-  * @name ui events_dxpinchend
+  * @name ui events.dxpinchend
   * @publicName dxpinchend
   * @type eventType
   * @type_function_param1 event:event
@@ -297,7 +297,7 @@ var TransformEmitter = Emitter.inherit({
 */
 
 /**
- * @name ui events_dxrotatestart
+ * @name ui events.dxrotatestart
  * @publicName dxrotatestart
  * @type eventType
  * @type_function_param1 event:event
@@ -305,7 +305,7 @@ var TransformEmitter = Emitter.inherit({
  * @module events/transform
 */
 /**
-  * @name ui events_dxrotate
+  * @name ui events.dxrotate
   * @publicName dxrotate
   * @type eventType
   * @type_function_param1 event:event
@@ -315,7 +315,7 @@ var TransformEmitter = Emitter.inherit({
   * @module events/transform
 */
 /**
-  * @name ui events_dxrotateend
+  * @name ui events.dxrotateend
   * @publicName dxrotateend
   * @type eventType
   * @type_function_param1 event:event

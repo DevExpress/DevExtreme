@@ -53,7 +53,7 @@ var Calendar = Editor.inherit({
         return extend(this.callBase(), {
 
             /**
-            * @name dxCalendarOptions_hoverStateEnabled
+            * @name dxCalendarOptions.hoverStateEnabled
             * @publicName hoverStateEnabled
             * @type boolean
             * @default true
@@ -62,7 +62,7 @@ var Calendar = Editor.inherit({
             hoverStateEnabled: true,
 
             /**
-            * @name dxCalendarOptions_activeStateEnabled
+            * @name dxCalendarOptions.activeStateEnabled
             * @publicName activeStateEnabled
             * @type boolean
             * @default true
@@ -71,7 +71,7 @@ var Calendar = Editor.inherit({
             activeStateEnabled: true,
 
             /**
-            * @name dxCalendarOptions_currentDate
+            * @name dxCalendarOptions.currentDate
             * @publicName currentDate
             * @type Date
             * @hidden
@@ -80,7 +80,7 @@ var Calendar = Editor.inherit({
             currentDate: new Date(),
 
             /**
-            * @name dxCalendarOptions_value
+            * @name dxCalendarOptions.value
             * @publicName value
             * @type Date|number|string
             * @default null
@@ -88,7 +88,7 @@ var Calendar = Editor.inherit({
             value: null,
 
             /**
-            * @name dxCalendarOptions_dateSerializationFormat
+            * @name dxCalendarOptions.dateSerializationFormat
             * @publicName dateSerializationFormat
             * @type string
             * @default undefined
@@ -96,7 +96,7 @@ var Calendar = Editor.inherit({
             dateSerializationFormat: undefined,
 
             /**
-            * @name dxCalendarOptions_min
+            * @name dxCalendarOptions.min
             * @publicName min
             * @type Date|number|string
             * @default new Date(1000, 0)
@@ -104,7 +104,7 @@ var Calendar = Editor.inherit({
             min: new Date(1000, 0),
 
             /**
-            * @name dxCalendarOptions_max
+            * @name dxCalendarOptions.max
             * @publicName max
             * @type Date|number|string
             * @default new Date(3000, 0)
@@ -112,7 +112,7 @@ var Calendar = Editor.inherit({
             max: new Date(3000, 0),
 
             /**
-            * @name dxCalendarOptions_firstDayOfWeek
+            * @name dxCalendarOptions.firstDayOfWeek
             * @publicName firstDayOfWeek
             * @type Enums.FirstDayOfWeek
             * @default undefined
@@ -120,7 +120,7 @@ var Calendar = Editor.inherit({
             firstDayOfWeek: undefined,
 
             /**
-            * @name dxCalendarOptions_zoomLevel
+            * @name dxCalendarOptions.zoomLevel
             * @publicName zoomLevel
             * @type Enums.CalendarZoomLevel
             * @default 'month'
@@ -128,7 +128,7 @@ var Calendar = Editor.inherit({
             zoomLevel: "month",
 
             /**
-            * @name dxCalendarOptions_maxZoomLevel
+            * @name dxCalendarOptions.maxZoomLevel
             * @publicName maxZoomLevel
             * @type Enums.CalendarZoomLevel
             * @default 'month'
@@ -136,7 +136,7 @@ var Calendar = Editor.inherit({
             maxZoomLevel: "month",
 
             /**
-            * @name dxCalendarOptions_minZoomLevel
+            * @name dxCalendarOptions.minZoomLevel
             * @publicName minZoomLevel
             * @type Enums.CalendarZoomLevel
             * @default 'century'
@@ -144,7 +144,7 @@ var Calendar = Editor.inherit({
             minZoomLevel: "century",
 
             /**
-            * @name dxCalendarOptions_showTodayButton
+            * @name dxCalendarOptions.showTodayButton
             * @publicName showTodayButton
             * @type boolean
             * @default false
@@ -152,7 +152,7 @@ var Calendar = Editor.inherit({
             showTodayButton: false,
 
             /**
-            * @name dxCalendarOptions_cellTemplate
+            * @name dxCalendarOptions.cellTemplate
             * @publicName cellTemplate
             * @type template|function
             * @default "cell"
@@ -167,7 +167,7 @@ var Calendar = Editor.inherit({
             cellTemplate: "cell",
 
             /**
-             * @name dxCalendarOptions_disabledDates
+             * @name dxCalendarOptions.disabledDates
              * @publicName disabledDates
              * @type Array<Date>|function(data)
              * @default null
@@ -186,7 +186,7 @@ var Calendar = Editor.inherit({
             }
 
             /**
-            * @name dxCalendarOptions_name
+            * @name dxCalendarOptions.name
             * @publicName name
             * @type string
             * @hidden false
@@ -194,7 +194,7 @@ var Calendar = Editor.inherit({
             */
 
             /**
-            * @name dxCalendarOptions_onContentReady
+            * @name dxCalendarOptions.onContentReady
             * @publicName onContentReady
             * @hidden true
             * @action
@@ -206,17 +206,17 @@ var Calendar = Editor.inherit({
             * @type object
             */
             /**
-            * @name dxCalendarCellTemplate_text
+            * @name dxCalendarCellTemplate.text
             * @publicName text
             * @type String
             */
             /**
-            * @name dxCalendarCellTemplate_date
+            * @name dxCalendarCellTemplate.date
             * @publicName date
             * @type Date
             */
             /**
-            * @name dxCalendarCellTemplate_view
+            * @name dxCalendarCellTemplate.view
             * @publicName view
             * @type String
             * @acceptValues 'month'|'year'|'decade'|'century'
@@ -232,7 +232,7 @@ var Calendar = Editor.inherit({
                 },
                 options: {
                     /**
-                    * @name dxCalendarOptions_focusStateEnabled
+                    * @name dxCalendarOptions.focusStateEnabled
                     * @publicName focusStateEnabled
                     * @type boolean
                     * @default true @for desktop

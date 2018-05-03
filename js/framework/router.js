@@ -226,7 +226,7 @@ var Router = Class.inherit({
     },
 
     /**
-    * @name RouterMethods_register
+    * @name RouterMethods.register
     * @publicName register(pattern, defaults, constraints)
     * @type method
     * @param1 pattern:string
@@ -249,7 +249,7 @@ var Router = Class.inherit({
     },
 
     /**
-    * @name RouterMethods_parse
+    * @name RouterMethods.parse
     * @publicName parse(uri)
     * @type method
     * @param1 uri:string
@@ -277,7 +277,7 @@ var Router = Class.inherit({
     },
 
     /**
-    * @name RouterMethods_format
+    * @name RouterMethods.format
     * @publicName format(obj)
     * @type method
     * @param1 obj:object

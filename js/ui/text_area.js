@@ -24,21 +24,21 @@ var TextArea = TextBox.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             /**
-            * @name dxTextAreaOptions_mode
+            * @name dxTextAreaOptions.mode
             * @publicName mode
             * @hidden
             * @inheritdoc
             */
 
             /**
-            * @name dxTextAreaOptions_showClearButton
+            * @name dxTextAreaOptions.showClearButton
             * @publicName showClearButton
             * @hidden
             * @inheritdoc
             */
 
             /**
-            * @name dxTextAreaOptions_spellcheck
+            * @name dxTextAreaOptions.spellcheck
             * @publicName spellcheck
             * @type boolean
             * @default true
@@ -46,7 +46,7 @@ var TextArea = TextBox.inherit({
             spellcheck: true,
 
             /**
-            * @name dxTextAreaOptions_minHeight
+            * @name dxTextAreaOptions.minHeight
             * @publicName minHeight
             * @type numeric|string
             * @default undefined
@@ -54,7 +54,7 @@ var TextArea = TextBox.inherit({
             minHeight: undefined,
 
             /**
-            * @name dxTextAreaOptions_maxHeight
+            * @name dxTextAreaOptions.maxHeight
             * @publicName maxHeight
             * @type numeric|string
             * @default undefined
@@ -62,7 +62,7 @@ var TextArea = TextBox.inherit({
             maxHeight: undefined,
 
             /**
-            * @name dxTextAreaOptions_autoResizeEnabled
+            * @name dxTextAreaOptions.autoResizeEnabled
             * @publicName autoResizeEnabled
             * @type boolean
             * @default false
@@ -70,42 +70,42 @@ var TextArea = TextBox.inherit({
             autoResizeEnabled: false
 
             /**
-            * @name dxTextAreaOptions_mask
+            * @name dxTextAreaOptions.mask
             * @publicName mask
             * @hidden
             * @inheritdoc
             */
 
             /**
-            * @name dxTextAreaOptions_maskChar
+            * @name dxTextAreaOptions.maskChar
             * @publicName maskChar
             * @hidden
             * @inheritdoc
             */
 
             /**
-            * @name dxTextAreaOptions_maskRules
+            * @name dxTextAreaOptions.maskRules
             * @publicName maskRules
             * @hidden
             * @inheritdoc
             */
 
             /**
-            * @name dxTextAreaOptions_maskInvalidMessage
+            * @name dxTextAreaOptions.maskInvalidMessage
             * @publicName maskInvalidMessage
             * @hidden
             * @inheritdoc
             */
 
             /**
-            * @name dxTextAreaOptions_useMaskedValue
+            * @name dxTextAreaOptions.useMaskedValue
             * @publicName useMaskedValue
             * @hidden
             * @inheritdoc
             */
 
             /**
-             * @name dxTextAreaOptions_showMaskMode
+             * @name dxTextAreaOptions.showMaskMode
              * @publicName showMaskMode
              * @hidden
              * @inheritdoc

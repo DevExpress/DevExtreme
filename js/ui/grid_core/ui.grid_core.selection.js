@@ -314,13 +314,13 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
         },
 
         /**
-         * @name GridBaseMethods_isRowSelected(key)
+         * @name GridBaseMethods.isRowSelected(key)
          * @publicName isRowSelected(key)
          * @param1 key:any
          * @return boolean
          */
         /**
-         * @name dxDataGridMethods_isRowSelected(data)
+         * @name dxDataGridMethods.isRowSelected(data)
          * @publicName isRowSelected(data)
          * @param1 data:any
          * @return boolean
@@ -342,7 +342,7 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
         },
 
         /**
-         * @name GridBaseMethods_selectAll
+         * @name GridBaseMethods.selectAll
          * @publicName selectAll()
          * @return Promise<void>
          */
@@ -355,7 +355,7 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
         },
 
         /**
-         * @name GridBaseMethods_deselectAll
+         * @name GridBaseMethods.deselectAll
          * @publicName deselectAll()
          * @return Promise<void>
          */
@@ -364,7 +364,7 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
         },
 
         /**
-         * @name GridBaseMethods_clearSelection
+         * @name GridBaseMethods.clearSelection
          * @publicName clearSelection()
          */
         clearSelection: function() {
@@ -386,12 +386,12 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
         },
 
         /**
-         * @name dxDataGridMethods_getSelectedRowKeys
+         * @name dxDataGridMethods.getSelectedRowKeys
          * @publicName getSelectedRowKeys()
          * @return Array<any> | Promise<any>
          */
         /**
-         * @name dxTreeListMethods_getSelectedRowKeys
+         * @name dxTreeListMethods.getSelectedRowKeys
          * @publicName getSelectedRowKeys()
          * @return Array<any>
          */
@@ -400,7 +400,7 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
         },
 
         /**
-         * @name GridBaseMethods_selectRows
+         * @name GridBaseMethods.selectRows
          * @publicName selectRows(keys, preserve)
          * @param1 keys:Array<any>
          * @param2 preserve:boolean
@@ -410,7 +410,7 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
             return this.selectedItemKeys(keys, preserve);
         },
         /**
-        * @name GridBaseMethods_deselectRows
+        * @name GridBaseMethods.deselectRows
         * @publicName deselectRows(keys)
         * @param1 keys:Array<any>
         * @return Promise<any>
@@ -420,7 +420,7 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
         },
 
         /**
-         * @name GridBaseMethods_selectRowsByIndexes
+         * @name GridBaseMethods.selectRowsByIndexes
          * @publicName selectRowsByIndexes(indexes)
          * @param1 indexes:Array<number>
          * @return Promise<any>
@@ -443,12 +443,12 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
         },
 
         /**
-         * @name dxDataGridMethods_getSelectedRowsData
+         * @name dxDataGridMethods.getSelectedRowsData
          * @publicName getSelectedRowsData()
          * @return Array<any> | Promise<any>
          */
         /**
-         * @name dxTreeListMethods_getSelectedRowsData
+         * @name dxTreeListMethods.getSelectedRowsData
          * @publicName getSelectedRowsData()
          * @return Array<any>
          */
@@ -479,7 +479,7 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
         },
 
         /**
-         * @name GridBaseMethods_startSelectionWithCheckboxes
+         * @name GridBaseMethods.startSelectionWithCheckboxes
          * @publicName startSelectionWithCheckboxes()
          * @hidden
          * @return boolean
@@ -496,7 +496,7 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
         },
 
         /**
-         * @name GridBaseMethods_stopSelectionWithCheckboxes
+         * @name GridBaseMethods.stopSelectionWithCheckboxes
          * @publicName stopSelectionWithCheckboxes()
          * @hidden
          * @return boolean
@@ -518,44 +518,44 @@ module.exports = {
     defaultOptions: function() {
         return {
         /**
-         * @name GridBaseOptions_selection
+         * @name GridBaseOptions.selection
          * @publicName selection
          * @type object
          */
         /**
-         * @name dxDataGridOptions_selection
+         * @name dxDataGridOptions.selection
          * @publicName selection
          * @type object
          */
         /**
-         * @name dxTreeListOptions_selection
+         * @name dxTreeListOptions.selection
          * @publicName selection
          * @type object
          */
             selection: {
                 /**
-                 * @name GridBaseOptions_selection_mode
+                 * @name GridBaseOptions.selection.mode
                  * @publicName mode
                  * @type Enums.SelectionMode
                  * @default "none"
                  */
                 mode: "none", // "single", "multiple"
                 /**
-                 * @name  dxDataGridOptions_selection_showCheckBoxesMode
+                 * @name dxDataGridOptions.selection.showCheckBoxesMode
                  * @publicName showCheckBoxesMode
                  * @type Enums.GridSelectionShowCheckBoxesMode
                  * @default "onClick"
                  */
                 showCheckBoxesMode: "onClick", // "onLongTap", "always", "none"
                 /**
-                 * @name GridBaseOptions_selection_allowSelectAll
+                 * @name GridBaseOptions.selection.allowSelectAll
                  * @publicName allowSelectAll
                  * @type boolean
                  * @default true
                  */
                 allowSelectAll: true,
                 /**
-                 * @name dxDataGridOptions_selection_selectAllMode
+                 * @name dxDataGridOptions.selection.selectAllMode
                  * @publicName selectAllMode
                  * @type Enums.SelectAllMode
                  * @default "allPages"
@@ -563,7 +563,7 @@ module.exports = {
                 selectAllMode: "allPages",
 
                  /**
-                 * @name dxDataGridOptions_selection_maxFilterLengthInRequest
+                 * @name dxDataGridOptions.selection.maxFilterLengthInRequest
                  * @publicName maxFilterLengthInRequest
                  * @type number
                  * @hidden
@@ -571,7 +571,7 @@ module.exports = {
                  */
                 maxFilterLengthInRequest: 1500,
                  /**
-                 * @name dxDataGridOptions_selection_deferred
+                 * @name dxDataGridOptions.selection.deferred
                  * @publicName deferred
                  * @type boolean
                  * @default false
@@ -579,7 +579,7 @@ module.exports = {
                 deferred: false
             },
             /**
-            * @name dxDataGridOptions_selectionFilter
+            * @name dxDataGridOptions.selectionFilter
             * @publicName selectionFilter
             * @type Filter expression
             * @default []
@@ -587,7 +587,7 @@ module.exports = {
             */
             selectionFilter: [],
             /**
-             * @name GridBaseOptions_onSelectionChanged
+             * @name GridBaseOptions.onSelectionChanged
              * @publicName onSelectionChanged
              * @type function(e)
              * @type_function_param1 e:object
@@ -599,7 +599,7 @@ module.exports = {
              * @action
              */
             /**
-             * @name GridBaseOptions_selectedRowKeys
+             * @name GridBaseOptions.selectedRowKeys
              * @publicName selectedRowKeys
              * @type Array<any>
              * @fires GridBaseOptions_onSelectionChanged

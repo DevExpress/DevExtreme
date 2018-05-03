@@ -69,7 +69,7 @@ var DropDownList = DropDownEditor.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), extend(DataExpressionMixin._dataExpressionDefaultOptions(), {
             /**
-            * @name dxDropDownListOptions_displayValue
+            * @name dxDropDownListOptions.displayValue
             * @publicName displayValue
             * @type string
             * @readonly
@@ -79,7 +79,7 @@ var DropDownList = DropDownEditor.inherit({
             displayValue: undefined,
 
             /**
-            * @name dxDropDownListOptions_searchEnabled
+            * @name dxDropDownListOptions.searchEnabled
             * @publicName searchEnabled
             * @type boolean
             * @default false
@@ -87,7 +87,7 @@ var DropDownList = DropDownEditor.inherit({
             searchEnabled: false,
 
             /**
-            * @name dxDropDownListOptions_searchMode
+            * @name dxDropDownListOptions.searchMode
             * @publicName searchMode
             * @type Enums.DropDownSearchMode
             * @default "contains"
@@ -95,7 +95,7 @@ var DropDownList = DropDownEditor.inherit({
             searchMode: "contains",
 
             /**
-            * @name dxDropDownListOptions_searchTimeout
+            * @name dxDropDownListOptions.searchTimeout
             * @publicName searchTimeout
             * @type number
             * @default 500
@@ -103,7 +103,7 @@ var DropDownList = DropDownEditor.inherit({
             searchTimeout: 500,
 
             /**
-            * @name dxDropDownListOptions_minSearchLength
+            * @name dxDropDownListOptions.minSearchLength
             * @publicName minSearchLength
             * @type number
             * @default 0
@@ -111,7 +111,7 @@ var DropDownList = DropDownEditor.inherit({
             minSearchLength: 0,
 
             /**
-            * @name dxDropDownListOptions_searchExpr
+            * @name dxDropDownListOptions.searchExpr
             * @publicName searchExpr
             * @type getter|Array<getter>
             * @default null
@@ -119,7 +119,7 @@ var DropDownList = DropDownEditor.inherit({
             searchExpr: null,
 
             /**
-            * @name dxDropDownListOptions_valueChangeEvent
+            * @name dxDropDownListOptions.valueChangeEvent
             * @publicName valueChangeEvent
             * @type string
             * @default "input change keyup"
@@ -127,7 +127,7 @@ var DropDownList = DropDownEditor.inherit({
             valueChangeEvent: "input change keyup",
 
             /**
-            * @name dxDropDownListOptions_selectedItem
+            * @name dxDropDownListOptions.selectedItem
             * @publicName selectedItem
             * @type any
             * @readonly
@@ -137,7 +137,7 @@ var DropDownList = DropDownEditor.inherit({
             selectedItem: null,
 
             /**
-            * @name dxDropDownListOptions_noDataText
+            * @name dxDropDownListOptions.noDataText
             * @publicName noDataText
             * @type string
             * @default "No data to display"
@@ -145,7 +145,7 @@ var DropDownList = DropDownEditor.inherit({
             noDataText: messageLocalization.format("dxCollectionWidget-noDataText"),
 
             /**
-            * @name dxDropDownListOptions_onSelectionChanged
+            * @name dxDropDownListOptions.onSelectionChanged
             * @publicName onSelectionChanged
             * @extends Action
             * @type function(e)
@@ -156,7 +156,7 @@ var DropDownList = DropDownEditor.inherit({
             onSelectionChanged: null,
 
             /**
-            * @name dxDropDownListOptions_onItemClick
+            * @name dxDropDownListOptions.onItemClick
             * @publicName onItemClick
             * @extends Action
             * @type function(e)
@@ -169,7 +169,7 @@ var DropDownList = DropDownEditor.inherit({
             onItemClick: commonUtils.noop,
 
             /**
-            * @name dxDropDownListOptions_showDataBeforeSearch
+            * @name dxDropDownListOptions.showDataBeforeSearch
             * @publicName showDataBeforeSearch
             * @type boolean
             * @default false
@@ -177,7 +177,7 @@ var DropDownList = DropDownEditor.inherit({
             showDataBeforeSearch: false,
 
             /**
-            * @name dxDropDownListOptions_grouped
+            * @name dxDropDownListOptions.grouped
             * @publicName grouped
             * @type boolean
             * @default false
@@ -185,7 +185,7 @@ var DropDownList = DropDownEditor.inherit({
             grouped: false,
 
             /**
-            * @name dxDropDownListOptions_groupTemplate
+            * @name dxDropDownListOptions.groupTemplate
             * @publicName groupTemplate
             * @type template|function
             * @default "group"
@@ -204,7 +204,7 @@ var DropDownList = DropDownEditor.inherit({
             },
 
             /**
-            * @name dxDropDownListOptions_onValueChanged
+            * @name dxDropDownListOptions.onValueChanged
             * @publicName onValueChanged
             * @extends Action
             * @type function(e)
@@ -217,31 +217,31 @@ var DropDownList = DropDownEditor.inherit({
             */
 
             /**
-            * @name dxDropDownListOptions_fieldTemplate
+            * @name dxDropDownListOptions.fieldTemplate
             * @publicName fieldTemplate
             * @hidden
             * @inheritdoc
             */
             /**
-            * @name dxDropDownListOptions_fieldRender
+            * @name dxDropDownListOptions.fieldRender
             * @publicName fieldRender
             * @hidden
             * @inheritdoc
             */
             /**
-            * @name dxDropDownListOptions_contentTemplate
+            * @name dxDropDownListOptions.contentTemplate
             * @publicName contentTemplate
             * @hidden
             * @inheritdoc
             */
             /**
-            * @name dxDropDownListOptions_contentRender
+            * @name dxDropDownListOptions.contentRender
             * @publicName contentRender
             * @hidden
             * @inheritdoc
             */
             /**
-            * @name dxDropDownListOptions_applyValueMode
+            * @name dxDropDownListOptions.applyValueMode
             * @publicName applyValueMode
             * @hidden
             * @inheritdoc
@@ -289,7 +289,7 @@ var DropDownList = DropDownEditor.inherit({
 
         extend(this._optionsByReference, {
             /**
-            * @name dxDropDownListOptions_value
+            * @name dxDropDownListOptions.value
             * @publicName value
             * @ref
             * @inheritdoc

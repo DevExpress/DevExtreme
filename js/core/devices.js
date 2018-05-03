@@ -44,63 +44,63 @@ var KNOWN_UA_TABLE = {
 */
 var DEFAULT_DEVICE = {
     /**
-    * @name device_devicetype
+    * @name device.devicetype
     * @publicName deviceType
     * @type string
     * @acceptValues 'phone'|'tablet'|'desktop'
     */
     deviceType: "desktop",
     /**
-    * @name device_platform
+    * @name device.platform
     * @publicName platform
     * @type string
     * @acceptValues 'android'|'ios'|'win'|'generic'
     */
     platform: "generic",
     /**
-    * @name device_version
+    * @name device.version
     * @publicName version
     * @type Array<number>
     */
     version: [],
     /**
-    * @name device_phone
+    * @name device.phone
     * @publicName phone
     * @type boolean
     */
     phone: false,
     /**
-    * @name device_tablet
+    * @name device.tablet
     * @publicName tablet
     * @type boolean
     */
     tablet: false,
     /**
-    * @name device_android
+    * @name device.android
     * @publicName android
     * @type boolean
     */
     android: false,
      /**
-    * @name device_ios
+    * @name device.ios
     * @publicName ios
     * @type boolean
     */
     ios: false,
     /**
-    * @name device_win
+    * @name device.win
     * @publicName win
     * @type boolean
     */
     win: false,
     /**
-    * @name device_generic
+    * @name device.generic
     * @publicName generic
     * @type boolean
     */
     generic: true,
     /**
-    * @name device_grade
+    * @name device.grade
     * @publicName grade
     * @type string
     * @acceptValues 'A'|'B'|'C'
@@ -187,14 +187,14 @@ var uaParsers = {
  */
 var Devices = Class.inherit({
     /**
-    * @name DevicesObjectevents_orientationChanged
+    * @name DevicesObjectevents.orientationChanged
     * @publicName orientationChanged
     * @type classEventType
     * @type_function_param1 e:object
     * @type_function_param1_field1 orientation:String
     */
     /**
-    * @name DevicesObjectMethods_ctor
+    * @name DevicesObjectMethods.ctor
     * @publicName ctor(options)
     * @param1 options:object
     * @param1_field1 window:Window
@@ -214,12 +214,12 @@ var Devices = Class.inherit({
         }
     },
     /**
-    * @name DevicesObjectmethods_current
+    * @name DevicesObjectmethods.current
     * @publicName current()
     * @return Device
     */
     /**
-    * @name DevicesObjectmethods_current
+    * @name DevicesObjectmethods.current
     * @publicName current(deviceName)
     * @param1 deviceName:string|Device
     */
@@ -261,7 +261,7 @@ var Devices = Class.inherit({
     },
 
     /**
-    * @name DevicesObjectmethods_real
+    * @name DevicesObjectmethods.real
     * @publicName real()
     * @return Device
     */
@@ -277,7 +277,7 @@ var Devices = Class.inherit({
     },
 
     /**
-     * @name DevicesObjectmethods_orientation
+     * @name DevicesObjectmethods.orientation
      * @publicName orientation()
      * @return String
      */

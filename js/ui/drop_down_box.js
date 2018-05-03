@@ -55,14 +55,14 @@ var DropDownBox = DropDownEditor.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             /**
-             * @name dxDropDownBoxOptions_attr
+             * @name dxDropDownBoxOptions.attr
              * @publicName attr
              * @inheritdoc
              * @hidden
              */
 
             /**
-             * @name dxDropDownBoxOptions_acceptCustomValue
+             * @name dxDropDownBoxOptions.acceptCustomValue
              * @publicName acceptCustomValue
              * @type boolean
              * @default false
@@ -70,7 +70,7 @@ var DropDownBox = DropDownEditor.inherit({
             acceptCustomValue: false,
 
             /**
-             * @name dxDropDownBoxOptions_contentTemplate
+             * @name dxDropDownBoxOptions.contentTemplate
              * @publicName contentTemplate
              * @type template|function
              * @default null
@@ -83,7 +83,7 @@ var DropDownBox = DropDownEditor.inherit({
             contentTemplate: null,
 
             /**
-             * @name dxDropDownBoxOptions_dropDownOptions
+             * @name dxDropDownBoxOptions.dropDownOptions
              * @publicName dropDownOptions
              * @type dxPopupOptions
              * @default {}
@@ -91,7 +91,7 @@ var DropDownBox = DropDownEditor.inherit({
             dropDownOptions: {},
 
             /**
-             * @name dxDropDownBoxOptions_fieldTemplate
+             * @name dxDropDownBoxOptions.fieldTemplate
              * @publicName fieldTemplate
              * @type template|function
              * @default null
@@ -101,7 +101,7 @@ var DropDownBox = DropDownEditor.inherit({
              */
 
             /**
-             * @name dxDropDownBoxOptions_maxLength
+             * @name dxDropDownBoxOptions.maxLength
              * @publicName maxLength
              * @type string|number
              * @default null
@@ -109,14 +109,14 @@ var DropDownBox = DropDownEditor.inherit({
              */
 
             /**
-            * @name dxDropDownBoxOptions_onContentReady
+            * @name dxDropDownBoxOptions.onContentReady
             * @publicName onContentReady
             * @hidden true
             * @action
             */
 
             /**
-             * @name dxDropDownBoxOptions_spellcheck
+             * @name dxDropDownBoxOptions.spellcheck
              * @publicName spellcheck
              * @type boolean
              * @default false
@@ -124,7 +124,7 @@ var DropDownBox = DropDownEditor.inherit({
              */
 
             /**
-             * @name dxDropDownBoxOptions_applyValueMode
+             * @name dxDropDownBoxOptions.applyValueMode
              * @publicName applyValueMode
              * @type string
              * @default "instantly"
@@ -133,7 +133,7 @@ var DropDownBox = DropDownEditor.inherit({
              */
 
             /**
-             * @name dxDropDownBoxOptions_itemTemplate
+             * @name dxDropDownBoxOptions.itemTemplate
              * @publicName itemTemplate
              * @type template
              * @default "item"
@@ -144,7 +144,7 @@ var DropDownBox = DropDownEditor.inherit({
             openOnFieldClick: true,
 
             /**
-             * @name dxDropDownBoxOptions_valueChangeEvent
+             * @name dxDropDownBoxOptions.valueChangeEvent
              * @publicName valueChangeEvent
              * @type string
              * @default "change"

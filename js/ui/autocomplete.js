@@ -59,14 +59,14 @@ var Autocomplete = DropDownList.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             /**
-            * @name dxAutocompleteOptions_value
+            * @name dxAutocompleteOptions.value
             * @publicName value
             * @type string
             * @default null
             */
 
             /**
-            * @name dxAutocompleteOptions_minSearchLength
+            * @name dxAutocompleteOptions.minSearchLength
             * @publicName minSearchLength
             * @type number
             * @default 1
@@ -74,7 +74,7 @@ var Autocomplete = DropDownList.inherit({
             minSearchLength: 1,
 
             /**
-            * @name dxAutocompleteOptions_maxItemCount
+            * @name dxAutocompleteOptions.maxItemCount
             * @publicName maxItemCount
             * @type number
             * @default 10
@@ -82,7 +82,7 @@ var Autocomplete = DropDownList.inherit({
             maxItemCount: 10,
 
             /**
-            * @name dxAutocompleteOptions_noDataText
+            * @name dxAutocompleteOptions.noDataText
             * @publicName noDataText
             * @type string
             * @default ""
@@ -94,27 +94,27 @@ var Autocomplete = DropDownList.inherit({
             searchEnabled: true
 
             /**
-            * @name dxAutocompleteOptions_displayExpr
+            * @name dxAutocompleteOptions.displayExpr
             * @publicName displayExpr
             * @hidden
             */
 
             /**
-            * @name dxAutocompleteOptions_acceptCustomValue
+            * @name dxAutocompleteOptions.acceptCustomValue
             * @publicName acceptCustomValue
             * @hidden
             * @inheritdoc
             */
 
             /**
-            * @name dxAutocompleteOptions_searchEnabled
+            * @name dxAutocompleteOptions.searchEnabled
             * @publicName searchEnabled
             * @hidden
             * @inheritdoc
             */
 
             /**
-            * @name dxAutocompleteOptions_showDataBeforeSearch
+            * @name dxAutocompleteOptions.showDataBeforeSearch
             * @publicName showDataBeforeSearch
             * @hidden
             * @inheritdoc
@@ -141,12 +141,12 @@ var Autocomplete = DropDownList.inherit({
     },
 
     /**
-    * @name dxAutocompletemethods_open
+    * @name dxAutocompletemethods.open
     * @publicName open()
     * @hidden
     */
     /**
-    * @name dxAutocompletemethods_close
+    * @name dxAutocompletemethods.close
     * @publicName close()
     * @hidden
     */

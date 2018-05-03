@@ -33,12 +33,12 @@ var ToolbarBase = CollectionWidget.inherit({
     * @type object
     */
     /**
-    * @name dxToolbarItemTemplate_widget
+    * @name dxToolbarItemTemplate.widget
     * @publicName widget
     * @type Enums.ToolbarItemWidget
     */
     /**
-    * @name dxToolbarItemTemplate_options
+    * @name dxToolbarItemTemplate.options
     * @publicName options
     * @type object
     */
@@ -355,14 +355,14 @@ var ToolbarBase = CollectionWidget.inherit({
     }
 
     /**
-    * @name dxToolbarMethods_registerKeyHandler
+    * @name dxToolbarMethods.registerKeyHandler
     * @publicName registerKeyHandler(key, handler)
     * @hidden
     * @inheritdoc
     */
 
     /**
-    * @name dxToolbarMethods_focus
+    * @name dxToolbarMethods.focus
     * @publicName focus()
     * @hidden
     * @inheritdoc

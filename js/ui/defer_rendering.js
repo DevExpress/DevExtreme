@@ -44,42 +44,42 @@ var DeferRendering = Widget.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             /**
-            * @name dxDeferRenderingOptions_showLoadIndicator
+            * @name dxDeferRenderingOptions.showLoadIndicator
             * @publicName showLoadIndicator
             * @type bool
             * @default false
             */
             showLoadIndicator: false,
             /**
-            * @name dxDeferRenderingOptions_renderWhen
+            * @name dxDeferRenderingOptions.renderWhen
             * @publicName renderWhen
             * @type Promise<void> | bool
             * @default undefined
             */
             renderWhen: undefined,
             /**
-            * @name dxDeferRenderingOptions_animation
+            * @name dxDeferRenderingOptions.animation
             * @publicName animation
             * @type animationConfig
             * @default undefined
             */
             animation: undefined,
             /**
-            * @name dxDeferRenderingOptions_staggerItemSelector
+            * @name dxDeferRenderingOptions.staggerItemSelector
             * @publicName staggerItemSelector
             * @type string
             * @default undefined
             */
             staggerItemSelector: undefined,
             /**
-            * @name dxDeferRenderingOptions_onRendered
+            * @name dxDeferRenderingOptions.onRendered
             * @publicName onRendered
             * @extends Action
             * @action
             */
             onRendered: null,
             /**
-            * @name dxDeferRenderingOptions_onShown
+            * @name dxDeferRenderingOptions.onShown
             * @publicName onShown
             * @extends Action
             * @action
