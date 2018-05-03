@@ -65,11 +65,13 @@ var NumberBoxMask = NumberBoxBase.inherit({
     },
 
     _focusOutHandler: function(e) {
+        this._focusOutOccurs = true;
         if(this._useMaskBehavior()) {
             this._updateFormattedValue();
         }
 
         this.callBase(e);
+        this._focusOutOccurs = false;
     },
 
     _updateFormattedValue: function() {
@@ -336,7 +338,9 @@ var NumberBoxMask = NumberBoxBase.inherit({
         this._input().val(newValue);
         this._formattedValue = text;
 
-        this._caret(newCaret);
+        if(!this._focusOutOccurs) {
+            this._caret(newCaret);
+        }
     },
 
     _useMaskBehavior: function() {
@@ -566,6 +570,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
         delete this._lastKey;
         delete this._parsedValue;
         delete this._isDirty;
+        delete this._focusOutOccurs;
     },
 
     _clean: function() {
