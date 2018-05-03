@@ -282,7 +282,7 @@ QUnit.module("Filter Panel", {
 
         assert.expect(1);
         this.filterPanelView.getFilterText(filter, []).done(function(result) {
-            assert.equal(result, "[Field] Between('1', '2')");
+            assert.equal(result, "[Field] Is between('1', '2')");
         });
     });
 
@@ -295,7 +295,7 @@ QUnit.module("Filter Panel", {
 
         assert.expect(1);
         this.filterPanelView.getFilterText(filter, []).done(function(result) {
-            assert.equal(result, "[Field] Between('11/12/2012', '03/23/2013')");
+            assert.equal(result, "[Field] Is between('11/12/2012', '03/23/2013')");
         });
     });
 
