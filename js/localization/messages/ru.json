@@ -232,6 +232,7 @@
         "dxFilterBuilder-filterOperationEndsWith": "Заканчивается на",
         "dxFilterBuilder-filterOperationIsBlank": "Пусто",
         "dxFilterBuilder-filterOperationIsNotBlank": "Не пусто",
+        "dxFilterBuilder-filterOperationBetween": "В диапазоне",
         "dxFilterBuilder-filterOperationAnyOf": "Любой из",
         "dxFilterBuilder-filterOperationNoneOf": "Ни один из"
     }

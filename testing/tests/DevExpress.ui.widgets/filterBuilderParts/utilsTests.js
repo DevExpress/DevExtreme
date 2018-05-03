@@ -26,10 +26,10 @@ var groupOperations = [{
     filterOperationsDescriptions = {
         equal: "Equals",
         notEqual: "Does not equal",
-        lessThan: "Less than",
-        lessThanOrEqual: "Less than or equal to",
-        greaterThan: "Greater than",
-        greaterThanOrEqual: "Greater than or equal to",
+        lessThan: "Is less than",
+        lessThanOrEqual: "Is less than or equal to",
+        greaterThan: "Is greater than",
+        greaterThanOrEqual: "Is greater than or equal to",
         startsWith: "Starts with",
         contains: "Contains",
         notContains: "Does not contain",
@@ -900,19 +900,19 @@ QUnit.module("getAvailableOperations", {
         assert.strictEqual(operations[1].value, "<>");
         assert.strictEqual(operations[1].icon, "notequal");
 
-        assert.strictEqual(operations[2].text, "Less than");
+        assert.strictEqual(operations[2].text, "Is less than");
         assert.strictEqual(operations[2].value, "<");
         assert.strictEqual(operations[2].icon, "less");
 
-        assert.strictEqual(operations[3].text, "Greater than");
+        assert.strictEqual(operations[3].text, "Is greater than");
         assert.strictEqual(operations[3].value, ">");
         assert.strictEqual(operations[3].icon, "greater");
 
-        assert.strictEqual(operations[4].text, "Less than or equal to");
+        assert.strictEqual(operations[4].text, "Is less than or equal to");
         assert.strictEqual(operations[4].value, "<=");
         assert.strictEqual(operations[4].icon, "lessorequal");
 
-        assert.strictEqual(operations[5].text, "Greater than or equal to");
+        assert.strictEqual(operations[5].text, "Is greater than or equal to");
         assert.strictEqual(operations[5].value, ">=");
         assert.strictEqual(operations[5].icon, "greaterorequal");
     });

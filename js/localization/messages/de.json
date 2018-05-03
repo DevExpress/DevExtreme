@@ -232,6 +232,7 @@
         "dxFilterBuilder-filterOperationEndsWith": "Endet mit",
         "dxFilterBuilder-filterOperationIsBlank": "Ist leer",
         "dxFilterBuilder-filterOperationIsNotBlank": "Ist nicht leer",
+        "dxFilterBuilder-filterOperationBetween": "Zwischen",
         "dxFilterBuilder-filterOperationAnyOf": "Ist enthalten in",
         "dxFilterBuilder-filterOperationNoneOf": "Ist nicht enthalten in"
     }

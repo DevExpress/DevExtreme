@@ -206,7 +206,7 @@ var FilterPanelView = modules.View.inherit({
             options = {
                 customOperations: customOperations,
                 columns: that.getController("columns").getColumns(),
-                filterOperationDescriptions: that.option("filterRow.operationDescriptions"),
+                filterOperationDescriptions: that.option("filterBuilder.filterOperationDescriptions"),
                 groupOperationDescriptions: that.option("filterBuilder.groupOperationDescriptions")
             };
         return utils.isCondition(filterValue) ? that.getConditionText(filterValue, options) : that.getGroupText(filterValue, options);

@@ -264,6 +264,7 @@
     "dxFilterBuilder-filterOperationEndsWith": "结束于",
     "dxFilterBuilder-filterOperationIsBlank": "空",
     "dxFilterBuilder-filterOperationIsNotBlank": "不为空",
+    "dxFilterBuilder-filterOperationBetween": "之间",
     "dxFilterBuilder-filterOperationAnyOf": "任何一个",
     "dxFilterBuilder-filterOperationNoneOf": "任何一个都不"
   }
