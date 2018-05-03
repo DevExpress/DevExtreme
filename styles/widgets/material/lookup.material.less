@@ -1,5 +1,7 @@
 .dx-size-default() {
     @MATERIAL_LOOKUP_HEIGHT: 36px;
+    @MATERIAL_LOOKUP_FONT_SIZE: 16px;
+    @MATERIAL_LOOKUP_FIELD_HORIZONTAL_PADDING: 0;
     @MATERIAL_LOOKUP_POPUP_CONTENT_TOP: 49px;
     @MATERIAL_LOOKUP_POPUP_CONTENT_PADDING: 20px;
     @MATERIAL_LOOKUP_LIST_TOP: 70px;
@@ -32,25 +34,23 @@
 }
 @MATERIAL_LOOKUP_FIELD_PADDING:
     @MATERIAL_BASE_INLINE_BORDEREDWIDGET_TOP_PADDING
-    @MATERIAL_BASE_INLINE_BORDEREDWIDGET_INNER_SIZE
-    @MATERIAL_BASE_INLINE_BORDEREDWIDGET_BOTTOM_PADDING
-    @MATERIAL_BASE_INLINE_BORDEREDWIDGET_HORIZONTAL_PADDING;
+    @MATERIAL_LOOKUP_FIELD_HORIZONTAL_PADDING
+    @MATERIAL_BASE_INLINE_BORDEREDWIDGET_BOTTOM_PADDING;
 @MATERIAL_LOOKUP_FIELD_PADDING_RTL:
     @MATERIAL_BASE_INLINE_BORDEREDWIDGET_TOP_PADDING
-    @MATERIAL_BASE_INLINE_BORDEREDWIDGET_HORIZONTAL_PADDING
-    @MATERIAL_BASE_INLINE_BORDEREDWIDGET_BOTTOM_PADDING
-    @MATERIAL_BASE_INLINE_BORDEREDWIDGET_INNER_SIZE;
+    @MATERIAL_LOOKUP_FIELD_HORIZONTAL_PADDING
+    @MATERIAL_BASE_INLINE_BORDEREDWIDGET_BOTTOM_PADDING;
 
 
 .dx-lookup {
     height: @MATERIAL_LOOKUP_HEIGHT;
-    border: 1px solid @texteditor-border-color;
+    border-bottom: 1px solid @texteditor-border-color;
     background: @texteditor-bg;
 }
 
 .dx-lookup-field {
     padding: @MATERIAL_LOOKUP_FIELD_PADDING;
-    font-size: 1em;
+    font-size: @MATERIAL_LOOKUP_FONT_SIZE;
 
     .dx-rtl & {
         padding: @MATERIAL_LOOKUP_FIELD_PADDING_RTL;
@@ -58,7 +58,7 @@
 }
 
 .dx-lookup-arrow {
-    .dx-icon-spinnext;
+    .dx-icon-spindown;
     width: @MATERIAL_BASE_INLINE_BORDEREDWIDGET_INNER_SIZE;
     color: @lookup-icon-color;
     .dx-icon-font-centered-sizing(@MATERIAL_BASE_ICON_SIZE);
@@ -98,15 +98,8 @@
     }
 }
 
-.dx-invalid.dx-lookup .dx-lookup-field:after {
-    right: @MATERIAL_DROPDOWNEDITOR_INVALID_BADGE_OFFSET;
-    .dx-invalid-material-badge();
-
-    .dx-rtl &,
-    .dx-rtl& {
-        right: auto;
-        left: @MATERIAL_DROPDOWNEDITOR_INVALID_BADGE_OFFSET;
-    }
+.dx-invalid.dx-lookup {
+    border-bottom-color: @base-invalid-faded-border-color;
 }
 
 .dx-lookup-validation-message {
