@@ -8,6 +8,8 @@ var FILTER_BUILDER_RANGE_CLASS = "dx-filterbuilder-range",
     FILTER_BUILDER_RANGE_END_CLASS = FILTER_BUILDER_RANGE_CLASS + "-end",
     FILTER_BUILDER_RANGE_SEPARATOR_CLASS = FILTER_BUILDER_RANGE_CLASS + "-separator";
 
+var SEPARATOR = "\u2013";
+
 function editorTemplate(conditionInfo, container) {
     var $editorStart = $("<div>").addClass(FILTER_BUILDER_RANGE_START_CLASS),
         $editorEnd = $("<div>").addClass(FILTER_BUILDER_RANGE_END_CLASS),
@@ -20,7 +22,7 @@ function editorTemplate(conditionInfo, container) {
         };
 
     container.append($editorStart);
-    container.append($("<span>").addClass(FILTER_BUILDER_RANGE_SEPARATOR_CLASS).html("&ndash;"));
+    container.append($("<span>").addClass(FILTER_BUILDER_RANGE_SEPARATOR_CLASS).text(SEPARATOR));
     container.append($editorEnd);
     container.addClass(FILTER_BUILDER_RANGE_CLASS);
 
@@ -48,7 +50,7 @@ function getConfig(caption) {
         name: "between",
         caption: caption,
         icon: "range",
-        valueSeparator: "&ndash;",
+        valueSeparator: SEPARATOR,
         dataTypes: ["number", "date", "datetime"],
         editorTemplate: editorTemplate
     };

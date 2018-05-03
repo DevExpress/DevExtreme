@@ -651,8 +651,9 @@ function getOperationValue(condition) {
 }
 
 function isValidCondition(condition, field) {
+    var isCustomOperation = condition.length > 2 && filterOperationsDictionary.getNameByFilterOperation(condition[1]);
     if((field.dataType && field.dataType !== "string")
-        || (condition.length > 2 && typeof filterOperationsDictionary.getNameByFilterOperation(condition[1]) === 'undefined')) {
+        || isCustomOperation) {
         return condition[2] !== "";
     }
     return true;

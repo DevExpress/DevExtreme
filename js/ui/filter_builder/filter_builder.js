@@ -63,25 +63,27 @@ var ACTIONS = [{
 
 var EditorFactory = Class.inherit(EditorFactoryMixin);
 
-var createArrayValueText = function($container, value, customOperation) {
-    let lastItemIndex = value.length - 1;
-    $container.empty();
-    value.forEach((t, i) => {
-        $("<span>")
-            .addClass(FILTER_BUILDER_ITEM_TEXT_PART_CLASS)
-            .text(t)
-            .appendTo($container);
-        if(i !== lastItemIndex) {
-            let separator = $("<span>")
-                .addClass(FILTER_BUILDER_ITEM_TEXT_SEPARATOR_CLASS);
-            if(customOperation && customOperation.valueSeparator) {
-                separator.html(customOperation.valueSeparator);
-            } else {
-                separator.text("|").addClass(FILTER_BUILDER_ITEM_TEXT_SEPARATOR_EMPTY_CLASS);
+var createValueText = function($container, value, customOperation) {
+    if(Array.isArray(value)) {
+        let lastItemIndex = value.length - 1;
+        $container.empty();
+        value.forEach((t, i) => {
+            $("<span>")
+                .addClass(FILTER_BUILDER_ITEM_TEXT_PART_CLASS)
+                .text(t)
+                .appendTo($container);
+            if(i !== lastItemIndex) {
+                $("<span>")
+                    .addClass(FILTER_BUILDER_ITEM_TEXT_SEPARATOR_CLASS)
+                    .text(customOperation && customOperation.valueSeparator ? customOperation.valueSeparator : "|")
+                    .addClass(FILTER_BUILDER_ITEM_TEXT_SEPARATOR_EMPTY_CLASS).appendTo($container);
             }
-            separator.appendTo($container);
-        }
-    });
+        });
+    } else if(value) {
+        $container.text(value);
+    } else {
+        $container.text(messageLocalization.format("dxFilterBuilder-enterValueText"));
+    }
 };
 
 var FilterBuilder = Widget.inherit({
@@ -961,17 +963,11 @@ var FilterBuilder = Widget.inherit({
         var customOperation = utils.getCustomOperation(that._customOperations, item[1]);
         if(!customOperation && field.lookup) {
             utils.getCurrentLookupValueText(field, value, function(valueText) {
-                $text.text(valueText || messageLocalization.format("dxFilterBuilder-enterValueText"));
+                createValueText(valueText, value, customOperation);
             });
         } else {
             deferredUtils.when(utils.getCurrentValueText(field, value, customOperation)).done(result => {
-                if(Array.isArray(result)) {
-                    createArrayValueText($text, result, customOperation);
-                } else if(result) {
-                    $text.text(result);
-                } else {
-                    $text.text(messageLocalization.format("dxFilterBuilder-enterValueText"));
-                }
+                createValueText(result, value, customOperation);
             });
         }
 
@@ -1074,7 +1070,7 @@ var FilterBuilder = Widget.inherit({
         return $valueButton;
     },
 
-    _createValueEditor: function($container, field, options, $content) {
+    _createValueEditor: function($container, field, options) {
         var $editor = $("<div>").attr("tabindex", 0).appendTo($container),
             customOperation = utils.getCustomOperation(this._customOperations, options.filterOperation),
             editorTemplate = customOperation && customOperation.editorTemplate ? customOperation.editorTemplate : field.editorTemplate;
@@ -1132,6 +1128,6 @@ var FilterBuilder = Widget.inherit({
 
 registerComponent("dxFilterBuilder", FilterBuilder);
 
-module.exports.createArrayValueText = createArrayValueText;
+module.exports.createValueText = createValueText;
 
 module.exports = FilterBuilder;
