@@ -511,6 +511,7 @@ const dayWithGroupingModuleConfig = {
     beforeEach: () => {
         this.instance = $("#scheduler-work-space-grouped").dxSchedulerWorkSpaceDay({
             groupOrientation: "vertical",
+            showCurrentTimeIndicator: false,
             startDayHour: 8,
             showAllDayPanel: false,
             endDayHour: 20

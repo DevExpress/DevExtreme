@@ -426,10 +426,9 @@ var SchedulerWorkSpace = Widget.inherit({
                 this._cleanWorkSpace();
                 break;
             case "groups":
-                if(this._isVerticalGroupedWorkSpace()) {
-                    this._createAllDayPanelElements();
-                }
-                this._cleanWorkSpace();
+                this._cleanView();
+                this._initGrouping();
+                this.repaint();
                 break;
             case "groupOrientation":
                 this._initGroupedStrategy();
@@ -438,7 +437,9 @@ var SchedulerWorkSpace = Widget.inherit({
                 break;
             case "showAllDayPanel":
                 if(this._isVerticalGroupedWorkSpace()) {
-                    this._cleanWorkSpace();
+                    this._cleanView();
+                    this._initGrouping();
+                    this.repaint();
                 } else {
                     this._toggleAllDayVisibility();
                 }
@@ -491,23 +492,20 @@ var SchedulerWorkSpace = Widget.inherit({
     _init: function() {
         this.callBase();
 
-        this._initGroupedStrategy();
-
+        this._initGrouping();
         this._toggleHorizontalScrollClass();
         this._toggleWorkSpaceCountClass();
         this._toggleWorkSpaceWithOddCells();
         this._toggleWorkSpaceOverlappingClass();
-        this._toggleGroupingDirectionClass();
 
         this.$element()
             .addClass(COMPONENT_CLASS)
             .addClass(this._getElementClass());
+    },
 
-        this._initWorkSpaceUnits();
-
-        this._initDateTableScrollable();
-
-        this._createWorkSpaceElements();
+    _initGrouping: function() {
+        this._initGroupedStrategy();
+        this._toggleGroupingDirectionClass();
     },
 
     _initGroupedStrategy: function() {
@@ -882,6 +880,12 @@ var SchedulerWorkSpace = Widget.inherit({
     _getCellCount: noop,
 
     _initMarkup: function() {
+        this._initWorkSpaceUnits();
+
+        this._initDateTableScrollable();
+
+        this._createWorkSpaceElements();
+
         this.callBase();
 
         if(!this.option("crossScrollingEnabled")) {
@@ -1662,7 +1666,8 @@ var SchedulerWorkSpace = Widget.inherit({
         this._$dateTable.empty();
         this._shader && this._shader.clean();
         this._$timePanel.empty();
-        this._$allDayTable && this._$allDayTable.empty();
+        this._$allDayTable && this._$allDayTable.remove();
+        this._$allDayTitle && this._$allDayTitle.remove();
         this._$groupTable.empty();
         delete this._hiddenInterval;
         delete this._interval;
