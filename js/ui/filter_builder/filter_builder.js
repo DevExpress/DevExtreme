@@ -962,12 +962,12 @@ var FilterBuilder = Widget.inherit({
 
         var customOperation = utils.getCustomOperation(that._customOperations, item[1]);
         if(!customOperation && field.lookup) {
-            utils.getCurrentLookupValueText(field, value, function(valueText) {
-                createValueText(valueText, value, customOperation);
+            utils.getCurrentLookupValueText(field, value, function(result) {
+                createValueText($text, result, customOperation);
             });
         } else {
             deferredUtils.when(utils.getCurrentValueText(field, value, customOperation)).done(result => {
-                createValueText(result, value, customOperation);
+                createValueText($text, result, customOperation);
             });
         }
 
