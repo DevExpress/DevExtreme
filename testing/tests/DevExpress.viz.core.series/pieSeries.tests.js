@@ -1795,9 +1795,9 @@ var checkTwoGroups = function(assert, series) {
         series.updateData([{ arg: "arg1", val: 1 }, { arg: "arg1", val: 2 }, { arg: "arg2", val: 3 }, { arg: "arg1", val: 4 }]);
         series.createPoints();
 
-        var points0 = series.getPointsByKeys("arg1", 15);
+        var points = series.getPointsByKeys("arg1", 15);
 
-        assert.strictEqual(points0.length, 3);
+        assert.strictEqual(points.length, 0);
     });
 
     QUnit.test("notify series. hover argument", function(assert) {

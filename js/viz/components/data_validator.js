@@ -318,11 +318,12 @@ function getSortByCategories(categories) {
     };
 }
 
-function sortData(data, groupsData, sortingMethodOption, uniqueArgumentFields) {
+function sortData(data, groupsData, options, uniqueArgumentFields) {
     var dataByArguments = {},
         isDiscrete = groupsData.argumentAxisType === DISCRETE,
         userCategories = isDiscrete && groupsData.argumentOptions && groupsData.argumentOptions.categories,
         sortFunction = function(data) { return data; },
+        sortingMethodOption = options.sortingMethod,
         reSortCategories;
 
     if(!userCategories && _isFunction(sortingMethodOption)) {
@@ -332,7 +333,7 @@ function sortData(data, groupsData, sortingMethodOption, uniqueArgumentFields) {
         groupsData.categories = getCategories(data, uniqueArgumentFields, userCategories);
     }
 
-    if(userCategories || (!_isFunction(sortingMethodOption) && groupsData.argumentType === STRING)) {
+    if(userCategories || (!_isFunction(sortingMethodOption) && groupsData.argumentType === STRING && !options._skipArgumentSorting)) {
         sortFunction = getSortByCategories(groupsData.categories);
     } else if(sortingMethodOption === true && groupsData.argumentType !== STRING) {
         sortFunction = sortByArgument;
@@ -502,7 +503,7 @@ function validateData(data, groupsData, incidentOccurred, options) {
     }
     groupPieData(data, groupsData);
 
-    dataByArgumentFields = sortData(data, groupsData, options.sortingMethod, getUniqueArgumentFields(groupsData));
+    dataByArgumentFields = sortData(data, groupsData, options, getUniqueArgumentFields(groupsData));
 
     for(field in skipFields) {
         if(skipFields[field] === data.length) {

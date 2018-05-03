@@ -17,7 +17,8 @@ var $ = require("../core/renderer"),
     devices = require("../core/devices"),
     eventUtils = require("../events/utils"),
     clickEvent = require("../events/click"),
-    messageLocalization = require("../localization/message");
+    messageLocalization = require("../localization/message"),
+    themes = require("./themes");
 
 var FILEUPLOADER_CLASS = "dx-fileuploader",
     FILEUPLOADER_EMPTY_CLASS = "dx-fileuploader-empty",
@@ -331,7 +332,8 @@ var FileUploader = Editor.inherit({
 
             useNativeInputClick: false,
             useDragOver: true,
-            nativeDropSupported: true
+            nativeDropSupported: true,
+            _uploadButtonType: "normal"
         });
     },
 
@@ -396,6 +398,14 @@ var FileUploader = Editor.inherit({
                 },
                 options: {
                     nativeDropSupported: false
+                }
+            },
+            {
+                device: function() {
+                    return themes.isMaterial();
+                },
+                options: {
+                    _uploadButtonType: "default"
                 }
             }
         ]);
@@ -653,7 +663,7 @@ var FileUploader = Editor.inherit({
     _updateFileNameMaxWidth: function() {
         var cancelButtonsCount = this.option("allowCanceling") && this.option("uploadMode") !== "useForm" ? 1 : 0,
             uploadButtonsCount = this.option("uploadMode") === "useButtons" ? 1 : 0,
-            filesContainerWidth = this._$filesContainer.width(),
+            filesContainerWidth = this._$filesContainer.find("." + FILEUPLOADER_FILE_CONTAINER_CLASS).first().width() || this._$filesContainer.width(),
             $buttonContainer = this._$filesContainer.find("." + FILEUPLOADER_BUTTON_CONTAINER_CLASS).eq(0),
             buttonsWidth = $buttonContainer.width() * (cancelButtonsCount + uploadButtonsCount),
             $fileSize = this._$filesContainer.find("." + FILEUPLOADER_FILE_SIZE_CLASS).eq(0);
@@ -807,6 +817,7 @@ var FileUploader = Editor.inherit({
         this._uploadButton = this._createComponent($uploadButton, Button, {
             text: this.option("uploadButtonText"),
             onClick: this._uploadButtonClickHandler.bind(this),
+            type: this.option("_uploadButtonType"),
             integrationOptions: {}
         });
     },
@@ -1306,6 +1317,9 @@ var FileUploader = Editor.inherit({
                 break;
             case "uploadButtonText":
                 this._uploadButton && this._uploadButton.option("text", value);
+                break;
+            case "_uploadButtonType":
+                this._uploadButton && this._uploadButton.option("type", value);
                 break;
             case "readyToUploadMessage":
             case "uploadedMessage":

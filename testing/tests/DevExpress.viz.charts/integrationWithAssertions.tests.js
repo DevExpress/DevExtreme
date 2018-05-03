@@ -1126,6 +1126,23 @@ QUnit.test("select point after dataSource updating", function(assert) {
     assert.strictEqual(chart.getAllSeries()[0].getAllPoints()[1].isSelected(), true);
 });
 
+QUnit.test("Pie chart. Show point in order in dataSource", function(assert) {
+    var pie = this.createPieChart({
+        series: {},
+        dataSource: [
+            { arg: "A", val: 11.10 },
+            { arg: "B", val: 12.57 },
+            { arg: "A", val: 13.51 }
+        ]
+    });
+
+    var pointArguments = pie.getAllSeries()[0].getAllPoints().map(function(p) {
+        return p.argument;
+    });
+
+    assert.deepEqual(pointArguments, ["A", "B", "A"]);
+});
+
 QUnit.test("getAllPoints with enabled aggregation", function(assert) {
     var chart = this.createChart({
         dataSource: [{

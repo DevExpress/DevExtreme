@@ -11,7 +11,6 @@ var $ = require("../../core/renderer"),
     each = require("../../core/utils/iterator").each,
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
-    dateSerialization = require("../../core/utils/date_serialization"),
     noop = require("../../core/utils/common").noop,
     typeUtils = require("../../core/utils/type"),
     devices = require("../../core/devices"),
@@ -2424,7 +2423,7 @@ var Scheduler = Widget.inherit({
             this.addAppointment(singleAppointment);
         }
 
-        var recurrenceException = this._getRecurrenceException(exceptionDate, targetAppointment),
+        var recurrenceException = this._makeDateAsRecurrenceException(exceptionDate, targetAppointment),
             updatedAppointment = extend({}, targetAppointment, { recurrenceException: recurrenceException });
 
         if(isPopupEditing) {
@@ -2440,7 +2439,7 @@ var Scheduler = Widget.inherit({
         }
     },
 
-    _getRecurrenceException: function(exceptionDate, targetAppointment) {
+    _makeDateAsRecurrenceException: function(exceptionDate, targetAppointment) {
         var startDate = this._getStartDate(targetAppointment, true),
             exceptionByDate = this._getRecurrenceExceptionDate(exceptionDate, startDate),
             recurrenceException = this.fire("getField", "recurrenceException", targetAppointment);
@@ -2449,7 +2448,8 @@ var Scheduler = Widget.inherit({
     },
 
     _getRecurrenceExceptionDate: function(exceptionDate, targetStartDate) {
-        exceptionDate.setHours(targetStartDate.getHours(), targetStartDate.getMinutes(), targetStartDate.getSeconds(), targetStartDate.getMilliseconds());
+        var startDate = this.fire("convertDateByTimezoneBack", targetStartDate);
+        exceptionDate.setHours(startDate.getHours(), startDate.getMinutes(), startDate.getSeconds(), startDate.getMilliseconds());
 
         return dateSerialization.serializeDate(exceptionDate, "yyyyMMddTHHmmss");
     },
@@ -2760,6 +2760,28 @@ var Scheduler = Widget.inherit({
             });
         }
         return endDate;
+    },
+
+    _getRecurrenceException: function(appointmentData) {
+        var recurrenceException = this.fire("getField", "recurrenceException", appointmentData);
+
+        if(recurrenceException) {
+            var startDate = this.fire("getField", "startDate", appointmentData),
+                exceptions = recurrenceException.split(","),
+                startDateTimeZone = this.fire("getField", "startDateTimeZone", appointmentData),
+                exceptionByStartDate = this.fire("convertDateByTimezone", startDate, startDateTimeZone);
+
+            exceptions.forEach(function(item, i) {
+                exceptions[i] = item.replace(/\s/g, "");
+                exceptions[i] = dateSerialization.deserializeDate(exceptions[i]);
+                exceptions[i].setHours(exceptionByStartDate.getHours());
+                exceptions[i] = dateSerialization.serializeDate(exceptions[i], "yyyyMMddTHHmmss");
+            });
+
+            recurrenceException = exceptions.join();
+        }
+
+        return recurrenceException;
     },
 
     recurrenceEditorVisibilityChanged: function(visible) {

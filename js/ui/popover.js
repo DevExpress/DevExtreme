@@ -55,6 +55,9 @@ var POPOVER_CLASS = "dx-popover",
     getEventName = function(that, optionName) {
         var optionValue = that.option(optionName);
 
+        return getEventNameByOption(optionValue);
+    },
+    getEventNameByOption = function(optionValue) {
         return typeUtils.isObject(optionValue) ? optionValue.name : optionValue;
     },
     getEventDelay = function(that, optionName) {
@@ -99,15 +102,14 @@ var POPOVER_CLASS = "dx-popover",
             eventsEngine.on(domAdapter.getDocument(), eventName, target, handler);
         }
     },
-    detachEvent = function(that, target, name) {
-        var eventName,
-            event = getEventName(that, name + "Event");
+    detachEvent = function(that, target, name, event) {
+        var eventName = event || getEventName(that, name + "Event");
 
-        if(!event) {
+        if(!eventName) {
             return;
         }
 
-        eventName = eventUtils.addNamespace(event, that.NAME);
+        eventName = eventUtils.addNamespace(eventName, that.NAME);
 
         if(that["_" + name + "EventHandler"]) {
             eventsEngine.off(domAdapter.getDocument(), eventName, target, that["_" + name + "EventHandler"]);
@@ -649,7 +651,12 @@ var Popover = Popup.inherit({
                 break;
             case "showEvent":
             case "hideEvent":
-                this._invalidate();
+                var name = args.name.substring(0, 4),
+                    event = getEventNameByOption(args.previousValue);
+
+                this.hide();
+                detachEvent(this, this.option("target"), name, event);
+                attachEvent(this, name);
                 break;
             case "visible":
                 this._clearEventTimeout(args.value);

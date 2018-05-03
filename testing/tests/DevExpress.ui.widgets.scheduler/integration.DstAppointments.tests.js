@@ -12,7 +12,8 @@ require("generic_light.css!");
 
 var $ = require("jquery"),
     dateLocalization = require("localization/date"),
-    fx = require("animation/fx");
+    fx = require("animation/fx"),
+    subscribes = require("ui/scheduler/ui.scheduler.subscribes");
 
 require("ui/scheduler/ui.scheduler");
 
@@ -183,4 +184,35 @@ QUnit.test("Second recurring appointment should have right width if previous app
         duration = (endDate - startDate) / 3600000;
 
     assert.roughEqual($secondRecAppointment.outerWidth(), cellWidth * duration, 2.001, "Appt width is correct after the day of the time ajusting");
+});
+
+QUnit.test("Recurrence exception should not be rendered if exception goes after DS adjusting", function(assert) {
+    var tzOffsetStub = sinon.stub(subscribes, "getClientTimezoneOffset").returns(-39600000);
+    try {
+        this.createInstance({
+            dataSource: [{
+                text: "Recruiting students",
+                startDate: new Date(2018, 2, 30, 10, 0),
+                endDate: new Date(2018, 2, 30, 11, 0),
+                recurrenceRule: "FREQ=DAILY",
+                recurrenceException: "20180401T100000"
+            }],
+            views: ["month"],
+            currentView: "month",
+            currentDate: new Date(2018, 2, 30),
+            timeZone: "Australia/Sydney",
+            height: 600
+        });
+
+        var $appointments = $(this.instance.$element()).find("." + APPOINTMENT_CLASS);
+
+        assert.equal($appointments.length, 8, "correct number of the events");
+
+        this.instance.option("currentView", "day");
+        this.instance.option("currentDate", new Date(2018, 3, 1));
+
+        assert.notOk($(this.instance.$element()).find("." + APPOINTMENT_CLASS).length, "event is an exception");
+    } finally {
+        tzOffsetStub.restore();
+    }
 });

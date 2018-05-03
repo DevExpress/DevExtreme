@@ -19,7 +19,8 @@ var $ = require("jquery"),
     fx = require("animation/fx"),
     pointerMock = require("../../helpers/pointerMock.js"),
     dragEvents = require("events/drag"),
-    DataSource = require("data/data_source/data_source").DataSource;
+    DataSource = require("data/data_source/data_source").DataSource,
+    subscribes = require("ui/scheduler/ui.scheduler.subscribes");
 
 require("ui/scheduler/ui.scheduler");
 
@@ -1040,4 +1041,56 @@ QUnit.test("Reduced reccuring appt should have right left position in first colu
 
     assert.roughEqual($reducedAppointment.eq(1).position().left, cellWidth * 7, 1.001, "first appt in 2d group has right left position");
     assert.notOk($appointment.eq(7).hasClass(compactClass), "appt isn't compact");
+});
+
+QUnit.test("Recurrence exception should be adjusted by scheduler timezone", function(assert) {
+    var tzOffsetStub = sinon.stub(subscribes, "getClientTimezoneOffset").returns(-39600000);
+    try {
+        this.createInstance({
+            dataSource: [{
+                text: "a",
+                startDate: new Date(2018, 2, 26, 10),
+                endDate: new Date(2018, 2, 26, 11),
+                recurrenceRule: "FREQ=DAILY",
+                recurrenceException: "20180327T100000, 20180330T100000"
+            }],
+            views: ["month"],
+            currentView: "month",
+            currentDate: new Date(2018, 2, 30),
+            timeZone: "Australia/Sydney",
+            height: 600
+        });
+
+        var $appointments = this.instance.$element().find(".dx-scheduler-appointment");
+
+        assert.equal($appointments.length, 11, "correct number of the appointments");
+    } finally {
+        tzOffsetStub.restore();
+    }
+});
+
+QUnit.test("Recurrence exception should be adjusted by scheduler timezone after deleting of the single appt", function(assert) {
+    this.createInstance({
+        dataSource: [{
+            text: "Recruiting students",
+            startDate: new Date(2018, 2, 26, 10, 0),
+            endDate: new Date(2018, 2, 26, 11, 0),
+            recurrenceRule: "FREQ=DAILY"
+        }],
+        views: ["day"],
+        currentView: "day",
+        currentDate: new Date(2018, 2, 27),
+        timeZone: "Australia/Sydney"
+    });
+
+
+    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(0).trigger("dxclick");
+    this.clock.tick(300);
+
+    $(".dx-scheduler-appointment-tooltip-buttons .dx-button").eq(0).trigger("dxclick");
+    $(".dx-dialog-buttons .dx-button").eq(1).trigger("dxclick");
+
+    var $appointment = this.instance.$element().find(".dx-scheduler-appointment");
+
+    assert.notOk($appointment.length, "appt is deleted");
 });

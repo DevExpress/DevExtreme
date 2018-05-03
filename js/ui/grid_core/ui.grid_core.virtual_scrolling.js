@@ -812,6 +812,40 @@ module.exports = {
                             }
                         }
                     },
+                    _applyChange: function(change) {
+                        var that = this,
+                            items = change.items,
+                            changeType = change.changeType,
+                            removeCount = change.removeCount;
+
+                        if(removeCount) {
+                            for(var i = 0; i < removeCount + 1; i++) {
+                                var item = that._items[changeType === "prepend" ? that._items.length - 1 - i : i];
+                                if(item && item.rowType !== "data" && item.rowType !== "group") {
+                                    removeCount++;
+                                }
+                            }
+                            change.removeCount = removeCount;
+                        }
+
+                        switch(changeType) {
+                            case "prepend":
+                                that._items.unshift.apply(that._items, items);
+                                if(removeCount) {
+                                    that._items.splice(-removeCount);
+                                }
+                                break;
+                            case "append":
+                                that._items.push.apply(that._items, items);
+                                if(removeCount) {
+                                    that._items.splice(0, removeCount);
+                                }
+                                break;
+                            default:
+                                that.callBase(change);
+                                break;
+                        }
+                    },
                     items: function() {
                         return this._visibleItems || this._items;
                     },

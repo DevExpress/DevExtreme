@@ -57,6 +57,7 @@ registerTheme({
     },
     "export": {
         backgroundColor: WHITE,
+        margin: 10,
         font: {
             size: 14,
             color: PRIMARY_TITLE_COLOR,
@@ -715,6 +716,9 @@ registerTheme({
         innerRadius: 0.5,
         minDiameter: 0.5,
         type: "pie",
+        dataPrepareSettings: {
+            _skipArgumentSorting: true
+        },
         commonSeriesSettings: {
             pie: {
                 border: {

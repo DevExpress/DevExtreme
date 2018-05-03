@@ -1180,7 +1180,11 @@ testComponentDefaults(List,
 testComponentDefaults(List,
     { platform: devices.current().platform },
     {
-        useInkRipple: true
+        useInkRipple: true,
+        pullingDownText: "",
+        pulledDownText: "",
+        refreshingText: "",
+        pageLoadingText: ""
     },
     function() {
         this.originalCurrentTheme = themes.current();
@@ -1448,6 +1452,18 @@ testComponentDefaults(FileUploader,
     function() {
         browser.msie = this._origMSIE;
         browser.version = this._origMSIEVersion;
+    }
+);
+
+testComponentDefaults(FileUploader,
+    { },
+    { _uploadButtonType: "default" },
+    function() {
+        this.originalCurrentTheme = themes.current();
+        themes.current("material.blue.light");
+    },
+    function() {
+        themes.current(this.originalCurrentTheme);
     }
 );
 

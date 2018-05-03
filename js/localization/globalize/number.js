@@ -258,7 +258,13 @@ if(Globalize && Globalize.formatNumber) {
                 errors.log("W0011");
             }
 
-            return Globalize.parseNumber(text);
+            var result = Globalize.parseNumber(text);
+
+            if(isNaN(result)) {
+                result = this.callBase.apply(this, arguments);
+            }
+
+            return result;
         }
     };
 

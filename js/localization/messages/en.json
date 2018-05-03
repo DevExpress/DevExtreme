@@ -264,7 +264,7 @@
         "dxFilterBuilder-filterOperationEndsWith": "Ends with",
         "dxFilterBuilder-filterOperationIsBlank": "Is blank",
         "dxFilterBuilder-filterOperationIsNotBlank": "Is not blank",
-        "dxFilterBuilder-filterOperationAnyOf": "Any of",
-        "dxFilterBuilder-filterOperationNoneOf": "None of"
+        "dxFilterBuilder-filterOperationAnyOf": "Is any of",
+        "dxFilterBuilder-filterOperationNoneOf": "Is none of"
     }
 }

@@ -15,7 +15,6 @@ var $ = require("jquery"),
     keyboardMock = require("../../helpers/keyboardMock.js"),
     config = require("core/config"),
     browser = require("core/utils/browser"),
-    dateSerialization = require("core/utils/date_serialization"),
     dataUtils = require("core/element_data"),
     dateLocalization = require("localization/date");
 
@@ -432,6 +431,17 @@ QUnit.test("navigator caption is correct after fast left short swipe", function(
         expectedText = "July 2015";
 
     assert.equal(navigatorText, expectedText, "navigator caption is correct");
+});
+
+QUnit.test("navigator buttons should displays correctly on short min/max range", function(assert) {
+    this.reinit({
+        min: new Date(1522454400000),
+        max: new Date(1523923200000),
+        value: new Date(1522454400000)
+    });
+
+    assert.notOk(this.$navigatorNext.hasClass(CALENDAR_DISABLED_NAVIGATOR_LINK_CLASS), "The next navigator button is enabled");
+    assert.ok(this.$navigatorPrev.hasClass(CALENDAR_DISABLED_NAVIGATOR_LINK_CLASS), "The prev navigator button is disabled");
 });
 
 
@@ -2162,6 +2172,16 @@ QUnit.test("disabledDates argument contains correct component parameter", functi
 
     var component = stub.lastCall.args[0].component;
     assert.equal(component.NAME, "dxCalendar", "Correct component");
+});
+
+QUnit.test("current day is moved to a next day while it is less a max date when all days are disabled", function(assert) {
+    this.reinit({
+        max: new Date(2018, 0, 10),
+        value: new Date(2018, 0, 2),
+        disabledDates: function() { return true; }
+    });
+
+    assert.ok(this.calendar.option("currentDate") <= this.calendar.option("max"));
 });
 
 

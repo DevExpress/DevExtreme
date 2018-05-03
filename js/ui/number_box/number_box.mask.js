@@ -11,8 +11,7 @@ var eventsEngine = require("../../events/core/events_engine"),
     getLDMLFormat = require("../../localization/ldml/number").getFormat,
     NumberBoxBase = require("./number_box.base"),
     eventUtils = require("../../events/utils"),
-    typeUtils = require("../../core/utils/type"),
-    browser = require("../../core/utils/browser");
+    typeUtils = require("../../core/utils/type");
 
 var NUMBER_FORMATTER_NAMESPACE = "dxNumberFormatter",
     MOVE_FORWARD = 1,
@@ -74,10 +73,11 @@ var NumberBoxMask = NumberBoxBase.inherit({
     },
 
     _updateFormattedValue: function() {
+        this._adjustParsedValue();
         this._setTextByParsedValue();
 
         if(this._isValueDirty()) {
-            this._isInputTriggered = false;
+            this._isDirty = false;
             eventsEngine.trigger(this._input(), "change");
         }
     },
@@ -85,7 +85,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
     _isValueDirty: function() {
         // https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/15181565/
         // https://bugreport.apple.com/web/?problemID=38133794 but this bug tracker is private
-        return (browser.msie || browser.safari) && this._isInputTriggered;
+        return this._isDirty;
     },
 
     _arrowHandler: function(step, e) {
@@ -326,8 +326,14 @@ var NumberBoxMask = NumberBoxBase.inherit({
     },
 
     _setInputText: function(text) {
-        var newCaret = maskCaret.getCaretAfterFormat(this._getInputVal(), text, this._caret(), this._getFormatPattern());
-        this._input().val(number.convertDigits(text));
+        var newCaret = maskCaret.getCaretAfterFormat(this._getInputVal(), text, this._caret(), this._getFormatPattern()),
+            newValue = number.convertDigits(text);
+
+        if(this._formattedValue !== newValue) {
+            this._isDirty = true;
+        }
+
+        this._input().val(newValue);
         this._formattedValue = text;
 
         this._caret(newCaret);
@@ -421,12 +427,6 @@ var NumberBoxMask = NumberBoxBase.inherit({
             return this.callBase(text);
         }
 
-        if(!isNumeric(this._parsedValue)) {
-            return this._parsedValue;
-        }
-
-        this._parsedValue = fitIntoRange(this._parsedValue, this.option("min"), this.option("max"));
-
         return this._parsedValue;
     },
 
@@ -480,7 +480,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
             textWithoutMinus = this._removeMinusFromText(text, caret),
             wasMinusRemoved = textWithoutMinus !== text;
 
-        this._isInputTriggered = true;
+        this._isDirty = false;
         text = textWithoutMinus;
 
         if(this._isValueIncomplete(textWithoutMinus)) {
@@ -519,6 +519,18 @@ var NumberBoxMask = NumberBoxBase.inherit({
         this.callBase();
     },
 
+    _adjustParsedValue: function() {
+        var clearedText = this._removeStubs(this._getInputVal()),
+            parsedValue = clearedText ? this._parseValue() : null;
+
+        if(!isNumeric(parsedValue)) {
+            this._parsedValue = parsedValue;
+            return;
+        }
+
+        this._parsedValue = fitIntoRange(parsedValue, this.option("min"), this.option("max"));
+    },
+
     _valueChangeEventHandler: function(e) {
         if(!this._useMaskBehavior()) {
             return this.callBase(e);
@@ -526,10 +538,8 @@ var NumberBoxMask = NumberBoxBase.inherit({
 
         this._lastKey = null;
 
-        var clearedText = this._removeStubs(this._getInputVal());
-
-        var parsedValue = clearedText ? this._parseValue() : null;
-        this.option("value", parsedValue);
+        this._adjustParsedValue();
+        this.option("value", this._parsedValue);
     },
 
     _optionChanged: function(args) {
@@ -556,7 +566,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
         delete this._formattedValue;
         delete this._lastKey;
         delete this._parsedValue;
-        delete this._isInputTriggered;
+        delete this._isDirty;
     },
 
     _clean: function() {

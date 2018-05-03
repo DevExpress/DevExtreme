@@ -511,3 +511,4 @@ Tabs.ItemClass = TabsItem;
 registerComponent("dxTabs", Tabs);
 
 module.exports = Tabs;
+module.exports.getTabsExpandedClass = TABS_EXPANDED_CLASS;

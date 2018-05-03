@@ -19,7 +19,7 @@ var DAYS_IN_WEEK = 7,
 
 var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
     _toggleFixedScrollableClass: function() {
-        this._dateTableScrollable.$content().toggleClass(DATE_TABLE_SCROLLABLE_FIXED_CLASS, !this._isWorkSpaceWithCount());
+        this._dateTableScrollable.$content().toggleClass(DATE_TABLE_SCROLLABLE_FIXED_CLASS, !this._isWorkSpaceWithCount() && !this._isVerticalGroupedWorkSpace());
     },
 
     _getElementClass: function() {
@@ -89,6 +89,18 @@ var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
             rowIndex: rowIndex,
             cellIndex: cellIndex
         };
+    },
+
+    _createWorkSpaceElements: function() {
+        if(this._isVerticalGroupedWorkSpace()) {
+            this._createWorkSpaceScrollableElements();
+        } else {
+            this.callBase();
+        }
+    },
+
+    _needCreateCrossScrolling: function() {
+        return this.option("crossScrollingEnabled") || this._isVerticalGroupedWorkSpace();
     },
 
     _renderTimePanel: noop,
@@ -252,6 +264,14 @@ var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
         return new Date(startDateCopy.setHours(this.option("endDayHour")));
     },
 
+    getWorkSpaceLeftOffset: function() {
+        return 0;
+    },
+
+    _getDateTableBorderOffset: function() {
+        return this._getDateTableBorder();
+    },
+
     _getCellPositionByIndex: function(index, groupIndex) {
         var position = this.callBase(index, groupIndex),
             rowIndex = this._getCellCoordinatesByIndex(index).rowIndex,
@@ -271,7 +291,7 @@ var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
     scrollToTime: noop,
 
     _setHorizontalGroupHeaderCellsHeight: function() {
-        if(this.option("crossScrollingEnabled")) {
+        if(this._needCreateCrossScrolling()) {
             this.callBase();
         } else {
             return;

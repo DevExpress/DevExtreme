@@ -577,8 +577,10 @@ exports.GroupingHelper = groupingCore.GroupingHelper.inherit((function() {
             }
         },
 
-        _processTakes: function(items, skips, takes, groupCount) {
+        _processTakes: function(items, skips, takes, groupCount, parents) {
             if(!groupCount || !items) return;
+
+            parents = parents || [];
 
             var lastItem = items[items.length - 1],
                 children = lastItem && lastItem.items,
@@ -590,12 +592,16 @@ exports.GroupingHelper = groupingCore.GroupingHelper.inherit((function() {
 
                 if(take !== undefined && maxTakeCount > take) {
                     lastItem.isContinuationOnNextPage = true;
+                    parents.forEach(function(parent) {
+                        parent.isContinuationOnNextPage = true;
+                    });
                     if(children) {
                         children = children.slice(0, take);
                         lastItem.items = children;
                     }
                 }
-                this._processTakes(children, skips.slice(1), takes.slice(1), groupCount - 1);
+                parents.push(lastItem);
+                this._processTakes(children, skips.slice(1), takes.slice(1), groupCount - 1, parents);
             }
         },
 

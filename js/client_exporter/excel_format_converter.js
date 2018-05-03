@@ -31,6 +31,8 @@ var PERIOD_REGEXP = /a+/g,
     STANDALONE_MONTH_REGEXP = /L/g,
     HOUR_REGEXP = /h/g,
     SLASH_REGEXP = /\//g,
+    SQUARE_OPEN_BRACKET_REGEXP = /\[/g,
+    SQUARE_CLOSE_BRACKET_REGEXP = /]/g,
     ANY_REGEXP = /./g;
 
 require("../localization/currency");
@@ -75,7 +77,9 @@ var excelFormatConverter = module.exports = {
                     .replace(DO_REGEXP, "d")
                     .replace(DAY_REGEXP, "d")
                     .replace(STANDALONE_MONTH_REGEXP, "M")
-                    .replace(HOUR_REGEXP, "H");
+                    .replace(HOUR_REGEXP, "H")
+                    .replace(SQUARE_OPEN_BRACKET_REGEXP, "\\[")
+                    .replace(SQUARE_CLOSE_BRACKET_REGEXP, "\\]");
             } if(datePart) {
                 return datePart.replace(ANY_REGEXP, "\\$&");
             }

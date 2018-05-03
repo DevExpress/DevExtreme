@@ -433,7 +433,6 @@ module.exports = {
                     var that = this,
                         dataSource = that._dataSource,
                         columnsController = that._columnsController,
-                        isAllDataTypesDefined = columnsController.isAllDataTypesDefined(),
                         isAsyncDataSourceApplying = false;
 
                     if(dataSource && !that._isDataSourceApplying) {
@@ -455,7 +454,7 @@ module.exports = {
 
                             that._needApplyFilter = false;
 
-                            if(needApplyFilter && additionalFilter && additionalFilter.length && !isAllDataTypesDefined) {
+                            if(needApplyFilter && additionalFilter && additionalFilter.length && !that._isAllDataTypesDefined) {
                                 errors.log("W1005", that.component.NAME);
                                 that._applyFilter();
                             } else {
@@ -470,6 +469,7 @@ module.exports = {
                         }
 
                         that._needApplyFilter = !that._columnsController.isDataSourceApplied();
+                        that._isAllDataTypesDefined = columnsController.isAllDataTypesDefined();
                     }
                 },
                 _handleLoadingChanged: function(isLoading) {
@@ -606,11 +606,98 @@ module.exports = {
                     }
                     return values;
                 },
+                _applyChangeUpdate: function(change) {
+                    var that = this,
+                        items = change.items,
+                        rowIndices = change.rowIndices.slice(0),
+                        rowIndexDelta = that.getRowIndexDelta(),
+                        prevIndex = -1,
+                        rowIndexCorrection = 0,
+                        changeType;
+
+                    rowIndices.sort(function(a, b) { return a - b; });
+
+                    for(var i = 0; i < rowIndices.length; i++) {
+                        if(rowIndices[i] < 0) {
+                            rowIndices.splice(i, 1);
+                            i--;
+                        }
+                    }
+
+                    change.items = [];
+                    change.rowIndices = [];
+                    change.changeTypes = [];
+
+                    var equalItems = function(item1, item2, strict) {
+                        var result = item1 && item2 && equalKeys(item1.key, item2.key);
+                        if(result && strict) {
+                            result = item1.rowType === item2.rowType && (item2.rowType !== "detail" || item1.isEditing === item2.isEditing);
+                        }
+                        return result;
+                    };
+
+                    each(rowIndices, function(index, rowIndex) {
+                        var oldItem,
+                            newItem,
+                            oldNextItem,
+                            newNextItem,
+                            strict;
+
+                        rowIndex += rowIndexCorrection + rowIndexDelta;
+
+                        if(prevIndex === rowIndex) return;
+
+                        prevIndex = rowIndex;
+                        oldItem = that._items[rowIndex];
+                        oldNextItem = that._items[rowIndex + 1];
+                        newItem = items[rowIndex];
+                        newNextItem = items[rowIndex + 1];
+
+                        strict = equalItems(oldItem, oldNextItem) || equalItems(newItem, newNextItem);
+
+                        if(newItem) {
+                            change.items.push(newItem);
+                        }
+
+                        if(oldItem && newItem && equalItems(oldItem, newItem, strict)) {
+                            changeType = "update";
+                            that._items[rowIndex] = newItem;
+                            if(oldItem.visible !== newItem.visible) {
+                                change.items.splice(-1, 1, { visible: newItem.visible });
+                            }
+                        } else if(newItem && !oldItem || (newNextItem && equalItems(oldItem, newNextItem, strict))) {
+                            changeType = "insert";
+                            that._items.splice(rowIndex, 0, newItem);
+                            rowIndexCorrection++;
+                        } else if(oldItem && !newItem || (oldNextItem && equalItems(newItem, oldNextItem, strict))) {
+                            changeType = "remove";
+                            that._items.splice(rowIndex, 1);
+                            rowIndexCorrection--;
+                            prevIndex = -1;
+                        } else if(newItem) {
+                            changeType = "update";
+                            that._items[rowIndex] = newItem;
+                        } else {
+                            return;
+                        }
+
+                        change.rowIndices.push(rowIndex - rowIndexDelta);
+                        change.changeTypes.push(changeType);
+                    });
+                },
+                _applyChange: function(change) {
+                    var that = this;
+
+                    if(change.changeType === "update") {
+                        that._applyChangeUpdate(change);
+                    } else {
+                        that._items = change.items.slice(0);
+                    }
+                },
                 _updateItemsCore: function(change) {
                     var that = this,
                         items,
                         dataSource = that._dataSource,
-                        rowIndexDelta = that.getRowIndexDelta(),
                         changeType = change.changeType || "refresh";
 
                     change.changeType = changeType;
@@ -622,98 +709,8 @@ module.exports = {
 
                         change.items = items;
 
-                        switch(changeType) {
-                            case "prepend":
-                                that._items.unshift.apply(that._items, items);
-                                if(change.removeCount) {
-                                    that._items.splice(-change.removeCount);
-                                }
-                                break;
-                            case "append":
-                                that._items.push.apply(that._items, items);
-                                if(change.removeCount) {
-                                    that._items.splice(0, change.removeCount);
-                                }
-                                break;
-                            case "update":
-                                var prevIndex = -1,
-                                    rowIndices = change.rowIndices.slice(0),
-                                    rowIndexCorrection = 0;
+                        that._applyChange(change);
 
-                                rowIndices.sort(function(a, b) { return a - b; });
-
-                                for(var i = 0; i < rowIndices.length; i++) {
-                                    if(rowIndices[i] < 0) {
-                                        rowIndices.splice(i, 1);
-                                        i--;
-                                    }
-                                }
-
-                                change.items = [];
-                                change.rowIndices = [];
-                                change.changeTypes = [];
-
-                                var equalItems = function(item1, item2, strict) {
-                                    var result = item1 && item2 && equalKeys(item1.key, item2.key);
-                                    if(result && strict) {
-                                        result = item1.rowType === item2.rowType && (item2.rowType !== "detail" || item1.isEditing === item2.isEditing);
-                                    }
-                                    return result;
-                                };
-
-                                each(rowIndices, function(index, rowIndex) {
-                                    var oldItem,
-                                        newItem,
-                                        oldNextItem,
-                                        newNextItem,
-                                        strict;
-
-                                    rowIndex += rowIndexCorrection + rowIndexDelta;
-
-                                    if(prevIndex === rowIndex) return;
-
-                                    prevIndex = rowIndex;
-                                    oldItem = that._items[rowIndex];
-                                    oldNextItem = that._items[rowIndex + 1];
-                                    newItem = items[rowIndex];
-                                    newNextItem = items[rowIndex + 1];
-
-                                    strict = equalItems(oldItem, oldNextItem) || equalItems(newItem, newNextItem);
-
-                                    if(newItem) {
-                                        change.items.push(newItem);
-                                    }
-
-                                    if(oldItem && newItem && equalItems(oldItem, newItem, strict)) {
-                                        changeType = "update";
-                                        that._items[rowIndex] = newItem;
-                                        if(oldItem.visible !== newItem.visible) {
-                                            change.items.splice(-1, 1, { visible: newItem.visible });
-                                        }
-                                    } else if(newItem && !oldItem || (newNextItem && equalItems(oldItem, newNextItem, strict))) {
-                                        changeType = "insert";
-                                        that._items.splice(rowIndex, 0, newItem);
-                                        rowIndexCorrection++;
-                                    } else if(oldItem && !newItem || (oldNextItem && equalItems(newItem, oldNextItem, strict))) {
-                                        changeType = "remove";
-                                        that._items.splice(rowIndex, 1);
-                                        rowIndexCorrection--;
-                                        prevIndex = -1;
-                                    } else if(newItem) {
-                                        changeType = "update";
-                                        that._items[rowIndex] = newItem;
-                                    } else {
-                                        return;
-                                    }
-
-                                    change.rowIndices.push(rowIndex - rowIndexDelta);
-                                    change.changeTypes.push(changeType);
-                                });
-                                break;
-                            default:
-                                that._items = items.slice(0);
-                                break;
-                        }
                         each(that._items, function(index, item) {
                             item.rowIndex = index;
                         });
@@ -902,6 +899,7 @@ module.exports = {
                         that._fireDataSourceChanged();
                         that._isLoading = !dataSource.isLoaded();
                         that._needApplyFilter = true;
+                        that._isAllDataTypesDefined = that._columnsController.isAllDataTypesDefined();
                         dataSource.changed.add(that._dataChangedHandler);
                         dataSource.loadingChanged.add(that._loadingChangedHandler);
                         dataSource.loadError.add(that._loadErrorHandler);

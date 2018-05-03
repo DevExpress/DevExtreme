@@ -40,6 +40,15 @@
  */
 
 /**
+ * @typedef {string} Enums.VizTheme
+ * @enum {'android5.light'|'generic.dark'|'generic.light'|'generic.contrast'|'ios7.default'|'win10.black'|'win10.white'|'win8.black'|'win8.white'|'generic.carmine'|'generic.darkmoon'|'generic.darkviolet'|'generic.greenmist'|'generic.softblue'|'material.blue.light'|'material.lime.light'|'material.orange.light'|'material.purple.light'|'material.teal.light'}
+ * @member 'win8.black' @deprecated 'generic.dark'
+ * @member 'win8.white' @deprecated 'generic.light'
+ * @member 'win10.black' @deprecated 'generic.dark'
+ * @member 'win10.white' @deprecated 'generic.light'
+ */
+
+/**
  * @typedef {string} Enums.VizPalette
  * @enum {'Bright'|'Default'|'Harmony Light'|'Ocean'|'Pastel'|'Soft'|'Soft Pastel'|'Vintage'|'Violet'|'Carmine'|'Dark Moon'|'Dark Violet'|'Green Mist'|'Soft Blue'|'Material'|'Office'}
  * @member 'Default' @deprecated 'Material'

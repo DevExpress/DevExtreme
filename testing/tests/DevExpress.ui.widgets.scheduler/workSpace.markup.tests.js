@@ -6,6 +6,7 @@ import SchedulerWorkSpaceHorizontalStrategy from "ui/scheduler/ui.scheduler.work
 import SchedulerWorkSpaceVerticalStrategy from "ui/scheduler/ui.scheduler.work_space.grouped.strategy.vertical";
 import SchedulerResourcesManager from "ui/scheduler/ui.scheduler.resource_manager";
 import dateLocalization from "localization/date";
+import devices from "core/devices";
 import "ui/scheduler/ui.scheduler";
 
 QUnit.testStart(() => {
@@ -1319,6 +1320,48 @@ QUnit.module("Workspace Month markup with vertical grouping", monthWithGroupingM
         const $element = this.instance.$element();
 
         assert.ok($element.hasClass("dx-scheduler-work-space-vertical-grouped"), "Workspace has 'dx-scheduler-work-space-vertical-grouped' css class");
+    });
+
+    QUnit.test("Workspace Month markup should contain three scrollable elements", (assert) => {
+        var $dateTableScrollable = this.instance.$element().find(".dx-scheduler-date-table-scrollable"),
+            $sidebarScrollable = this.instance.$element().find(".dx-scheduler-sidebar-scrollable"),
+            $headerScrollable = this.instance.$element().find(".dx-scheduler-header-scrollable");
+
+        assert.equal($dateTableScrollable.length, 1, "Date table scrollable was rendered");
+        assert.ok($dateTableScrollable.data("dxScrollable"), "Date table scrollable is instance of dxScrollable");
+
+        assert.equal($sidebarScrollable.length, 1, "Time panel scrollable was rendered");
+        assert.ok($sidebarScrollable.data("dxScrollable"), "Time panel scrollable is instance of dxScrollable");
+
+        assert.equal($headerScrollable.length, 1, "Header scrollable was rendered");
+        assert.ok($headerScrollable.data("dxScrollable"), "Header scrollable is instance of dxScrollable");
+    });
+
+    QUnit.test("Date table scrollable should have right config with vertical grouping", (assert) => {
+        var dateTableScrollable = this.instance.$element().find(".dx-scheduler-date-table-scrollable").dxScrollable("instance"),
+            device = devices.current(),
+            expectedShowScrollbarOption = "onHover";
+
+        if(device.phone || device.tablet) {
+            expectedShowScrollbarOption = "onScroll";
+        }
+
+        assert.equal(dateTableScrollable.option("direction"), "both", "Direction is OK");
+        assert.equal(dateTableScrollable.option("showScrollbar"), expectedShowScrollbarOption, "showScrollbar is OK");
+        assert.strictEqual(dateTableScrollable.option("bounceEnabled"), false, "bounceEnabled is OK");
+        assert.strictEqual(dateTableScrollable.option("updateManually"), true, "updateManually is OK");
+    });
+
+    QUnit.test("Scheduler workspace month scrollable content should not have fixed-content class with vertical grouping", (assert) => {
+        const $scrollableContent = this.instance.getScrollable().$content();
+
+        assert.notOk($scrollableContent.hasClass("dx-scheduler-scrollable-fixed-content"), "Scrollable content hasn't 'dx-scheduler-scrollable-fixed-content' css class");
+    });
+
+    QUnit.test("Sidebar scrollable should contain group table", (assert) => {
+        var $sidebarScrollable = this.instance.$element().find(".dx-scheduler-sidebar-scrollable");
+
+        assert.equal($sidebarScrollable.find(".dx-scheduler-group-header").length, 2, "Group header cells count is ok");
     });
 
     QUnit.test("Scheduler workspace month should have correct rows and cells count", (assert) => {

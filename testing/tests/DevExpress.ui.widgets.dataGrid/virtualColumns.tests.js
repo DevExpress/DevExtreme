@@ -39,6 +39,10 @@ var setupModule = function() {
     this.getColumns = function(parameterNames) {
         return this.columnsController.getColumns();
     };
+
+    this.getFixedColumns = function(parameterNames) {
+        return this.columnsController.getFixedColumns();
+    };
 };
 
 var teardownModule = function() {
@@ -107,8 +111,8 @@ QUnit.test("getVisibleColumns should return all visible columns if second argume
     assert.strictEqual(this.getVisibleColumns(0, true).length, 50, "all visible column count");
 });
 
-QUnit.test("Virtual column rendering should be ignored if band columns are exists", function(assert) {
-    this.columns.push({
+QUnit.test("Virtual column rendering if band columns are exists", function(assert) {
+    this.columns.unshift({
         caption: "Band",
         columns: ["bandField1", "bandField2"]
     });
@@ -116,7 +120,116 @@ QUnit.test("Virtual column rendering should be ignored if band columns are exist
     this.setupVirtualColumns();
 
     assert.strictEqual(this.getColumns().length, 53, "column count");
-    assert.strictEqual(this.getVisibleColumns().length, 52, "visible column count");
+    assert.strictEqual(this.getVisibleColumns().length, 11, "visible column count");
+    assert.strictEqual(this.getVisibleColumns(0).length, 10, "first header row column count");
+    assert.strictEqual(this.getVisibleColumns(0)[9].command, "virtual", "first header row last column");
+    assert.strictEqual(this.getVisibleColumns(1).length, 3, "second header row column count");
+    assert.strictEqual(this.getVisibleColumns(1)[2].command, "virtual", "second header row last column");
+    assert.strictEqual(this.getVisibleColumns(0)[0].colspan, 2, "band colspan");
+    assert.strictEqual(this.getVisibleColumns(0)[1].rowspan, 2, "non-band rowspan");
+    assert.strictEqual(this.getVisibleColumns(1)[0].colspan, undefined, "band child colspan");
+    assert.strictEqual(this.getVisibleColumns(1)[0].rowspan, undefined, "band child rowspan");
+});
+
+QUnit.test("Virtual column rendering if band columns and fixed columns at left are exists", function(assert) {
+    this.columns.unshift({
+        caption: "Band",
+        fixed: true,
+        columns: ["bandField1", "bandField2"]
+    });
+
+    this.setupVirtualColumns();
+
+    assert.strictEqual(this.getColumns().length, 53, "column count");
+    assert.deepEqual(this.getFixedColumns().map(function(column) {
+        return column.dataField || column.command;
+    }), ["bandField1", "bandField2", "transparent"], "fixed columns");
+    assert.strictEqual(this.getFixedColumns()[2].colspan, 9, "transparent column colspan");
+    assert.strictEqual(this.getVisibleColumns().length, 11, "visible column count");
+
+    assert.deepEqual(this.getVisibleColumns(0).map(function(column) {
+        return column.caption || column.command;
+    }), ["Band", "Field 1", "Field 2", "Field 3", "Field 4", "Field 5", "Field 6", "Field 7", "Field 8", "virtual"], "first header row columns");
+
+    assert.deepEqual(this.getVisibleColumns(0).map(function(column) {
+        return column.colspan;
+    }), [2, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined], "first header row colspans");
+
+    assert.deepEqual(this.getVisibleColumns(0).map(function(column) {
+        return column.rowspan;
+    }), [undefined, 2, 2, 2, 2, 2, 2, 2, 2, undefined], "first header row rowspans");
+
+    assert.deepEqual(this.getVisibleColumns(1).map(function(column) {
+        return column.caption || column.command;
+    }), ["Band Field 1", "Band Field 2", "virtual"], "second header row columns");
+});
+
+QUnit.test("Virtual column rendering if band columns and fixed columns at left are exists and scroll position at middle", function(assert) {
+    this.columns.unshift({
+        caption: "Band",
+        fixed: true,
+        columns: ["bandField1", "bandField2"]
+    });
+
+    this.setupVirtualColumns();
+    this.columnsController.setScrollPosition(50 * 25 - 400 / 2);
+
+    assert.strictEqual(this.getColumns().length, 53, "column count");
+    assert.deepEqual(this.getFixedColumns().map(function(column) {
+        return column.caption || column.command;
+    }), ["Band Field 1", "Band Field 2", "transparent"], "fixed columns");
+    assert.strictEqual(this.getFixedColumns()[2].colspan, 12, "transparent column colspan");
+    assert.strictEqual(this.getVisibleColumns().length, 14, "visible column count");
+
+    assert.deepEqual(this.getVisibleColumns(0).map(function(column) {
+        return column.caption || column.command;
+    }), ["Band", "virtual", "Field 19", "Field 20", "Field 21", "Field 22", "Field 23", "Field 24", "Field 25", "Field 26", "Field 27", "Field 28", "virtual"], "first header row columns");
+
+    assert.deepEqual(this.getVisibleColumns(0).map(function(column) {
+        return column.colspan;
+    }), [2, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined], "first header row colspans");
+
+    assert.deepEqual(this.getVisibleColumns(0).map(function(column) {
+        return column.rowspan;
+    }), [undefined, undefined, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, undefined], "first header row rowspans");
+
+    assert.deepEqual(this.getVisibleColumns(1).map(function(column) {
+        return column.caption || column.command;
+    }), ["Band Field 1", "Band Field 2", "virtual", "virtual"], "second header row columns");
+});
+
+QUnit.test("Virtual column rendering if band columns and fixed columns at right are exists", function(assert) {
+    this.columns.unshift({
+        caption: "Band",
+        fixed: true,
+        fixedPosition: "right",
+        columns: ["bandField1", "bandField2"]
+    });
+
+    this.setupVirtualColumns();
+
+    assert.strictEqual(this.getColumns().length, 53, "column count");
+    assert.deepEqual(this.getFixedColumns().map(function(column) {
+        return column.dataField || column.command;
+    }), ["transparent", "bandField1", "bandField2"], "fixed columns");
+    assert.strictEqual(this.getFixedColumns()[0].colspan, 11, "transparent column colspan");
+    assert.strictEqual(this.getVisibleColumns().length, 13, "visible column count");
+
+    assert.deepEqual(this.getVisibleColumns(0).map(function(column) {
+        return column.caption || column.command;
+    }), ["Field 1", "Field 2", "Field 3", "Field 4", "Field 5", "Field 6", "Field 7", "Field 8", "Field 9", "Field 10", "virtual", "Band"], "first header row columns");
+
+    assert.deepEqual(this.getVisibleColumns(0).map(function(column) {
+        return column.colspan;
+    }), [undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, 2], "first header row colspans");
+
+    assert.deepEqual(this.getVisibleColumns(0).map(function(column) {
+        return column.rowspan;
+    }), [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, undefined, undefined], "first header row rowspans");
+
+    assert.deepEqual(this.getVisibleColumns(1).map(function(column) {
+        return column.caption || column.command;
+    }), ["virtual", "Band Field 1", "Band Field 2"], "second header row columns");
 });
 
 QUnit.test("virtual column is not exists if columns count are small", function(assert) {
@@ -260,8 +373,8 @@ QUnit.test("columnsChanged event should be fired during scrolling to right", fun
 
     for(pos = 0; pos < 1000; pos += 10) {
         this.columnsController.setScrollPosition(pos);
-        var firstColumn = this.columnsController.getVisibleColumns().shift();
-        var lastColumn = this.columnsController.getVisibleColumns().pop();
+        var firstColumn = this.columnsController.getVisibleColumns().slice().shift();
+        var lastColumn = this.columnsController.getVisibleColumns().slice().pop();
         assert.ok(pos ? firstColumn.width : 0 <= pos, "left virtual column is outside viewport for position " + pos);
         assert.ok(lastColumn.width <= 50 * 50 - pos + 420, "last virtual column is outside viewport for position " + pos);
     }
@@ -286,8 +399,8 @@ QUnit.test("columnsChanged event should be fired during scrolling to left", func
 
     for(; pos >= 0; pos -= 10) {
         this.columnsController.setScrollPosition(pos);
-        var firstColumn = this.columnsController.getVisibleColumns().shift();
-        var lastColumn = this.columnsController.getVisibleColumns().pop();
+        var firstColumn = this.columnsController.getVisibleColumns().slice().shift();
+        var lastColumn = this.columnsController.getVisibleColumns().slice().pop();
         assert.ok(pos ? firstColumn.width : 0 <= pos, "left virtual column is outside viewport for position " + pos);
         assert.ok(lastColumn.width <= 50 * 50 - pos + 420, "last virtual column is outside viewport for position " + pos);
     }

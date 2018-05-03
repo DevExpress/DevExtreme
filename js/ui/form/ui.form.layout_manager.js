@@ -522,13 +522,16 @@ var LayoutManager = Widget.inherit({
     },
 
     _renderButtonItem: function(item, $container) {
-        var $button = $("<div>").appendTo($container);
+        var $button = $("<div>").appendTo($container),
+            defaultOptions = {
+                validationGroup: this.option("validationGroup")
+            };
 
         $container
             .addClass(FIELD_BUTTON_ITEM_CLASS)
             .css("textAlign", item.alignment ? item.alignment : "right");
 
-        this._createComponent($button, "dxButton", item.buttonOptions);
+        this._createComponent($button, "dxButton", extend(defaultOptions, item.buttonOptions));
         this._addItemClasses($container, item.col);
 
         return $button;

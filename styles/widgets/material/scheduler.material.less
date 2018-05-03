@@ -66,6 +66,10 @@
 
 .scheduler-mixin(65px);
 
+.dx-scheduler-scrollable-fixed-content {
+    height: auto;
+}
+
 .dx-scheduler-time-panel-cell {
     height: @MATERIAL_SCHEDULER_WORKSPACE_DATE_TABLE_CELL_HEIGHT;
 
@@ -766,6 +770,13 @@
     }
 }
 
+.dx-scheduler-work-space-vertical-grouped {
+    &.dx-scheduler-work-space-month {
+        .dx-scheduler-date-table-scrollable {
+            border-top:  @SCHEDULER_BASE_BORDER;
+        }
+    }
+}
 .dx-scheduler-work-space {
     &.dx-scheduler-timeline-week,
     &.dx-scheduler-timeline,

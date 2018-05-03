@@ -76,13 +76,13 @@ var ErrorHandlingController = modules.ViewController.inherit({
 
         each($tableElements, function(_, tableElement) {
             $errorMessageElement = that._createErrorRow(message, $tableElements);
-            rowElements = $(tableElement).children("tbody").children("tr");
 
             if(rowIndex >= 0) {
                 $row = viewElement._getRowElements($(tableElement)).eq(rowIndex);
-                that.removeErrorRow(rowElements.eq(($row.index() + 1)));
+                that.removeErrorRow($row.next());
                 $errorMessageElement.insertAfter($row);
             } else {
+                rowElements = $(tableElement).children("tbody").children("tr");
                 that.removeErrorRow(rowElements.last());
                 $(tableElement).append($errorMessageElement);
             }

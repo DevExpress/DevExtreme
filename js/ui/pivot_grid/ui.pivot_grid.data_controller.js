@@ -12,6 +12,7 @@ var Callbacks = require("../../core/utils/callbacks"),
     commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
     virtualScrolling = require("../grid_core/ui.grid_core.virtual_scrolling_core"),
+    virtualColumnsCore = require("../grid_core/ui.grid_core.virtual_columns_core"),
     stateStoring = require("../grid_core/ui.grid_core.state_storing_core"),
     PivotGridDataSource = require("./data_source"),
     pivotGridUtils = require("./ui.pivot_grid.utils"),
@@ -477,49 +478,6 @@ exports.DataController = Class.inherit((function() {
         }
     }
 
-    function foreachColumnInfo(info, callback, rowIndex, offsets, columnCount, lastProcessedIndexes) {
-        rowIndex = rowIndex || 0;
-        offsets = offsets || [];
-        lastProcessedIndexes = lastProcessedIndexes || [];
-        offsets[rowIndex] = offsets[rowIndex] || 0;
-
-        var row = info[rowIndex],
-            startIndex = lastProcessedIndexes[rowIndex] + 1 || 0,
-            processedColumnCount = 0;
-
-        if(!row) {
-            return;
-        }
-
-        for(var colIndex = startIndex; colIndex < row.length; colIndex++) {
-            var cell = row[colIndex],
-                visibleIndex = colIndex + offsets[rowIndex],
-                colspan = cell.colspan || 1;
-
-            foreachColumnInfo(info, callback, rowIndex + (cell.rowspan || 1), offsets, colspan, lastProcessedIndexes);
-
-            offsets[rowIndex] += colspan - 1;
-
-            processedColumnCount += colspan;
-
-            if(cell.rowspan) {
-                for(var i = rowIndex + 1; i < rowIndex + cell.rowspan; i++) {
-                    offsets[i] = offsets[i] || 0;
-                    offsets[i] += (cell.colspan || 1);
-                }
-            }
-
-            if(callback(cell, visibleIndex, rowIndex, colIndex) === false) {
-                break;
-            }
-            if(columnCount !== undefined && processedColumnCount >= columnCount) {
-                break;
-            }
-        }
-
-        lastProcessedIndexes[rowIndex] = colIndex;
-    }
-
     function createCellsInfo(rowsInfo, columnsInfo, data, dataFields, dataFieldArea, errorText) {
         var info = [],
             dataFieldAreaInRows = dataFieldArea === "row",
@@ -529,7 +487,7 @@ exports.DataController = Class.inherit((function() {
             var row = info[rowIndex] = [],
                 dataRow = dataSourceCells[rowInfo.dataSourceIndex >= 0 ? rowInfo.dataSourceIndex : data.grandTotalRowIndex] || [];
 
-            rowInfo.isLast && foreachColumnInfo(columnsInfo, function(columnInfo, columnIndex) {
+            rowInfo.isLast && virtualColumnsCore.foreachColumnInfo(columnsInfo, function(columnInfo, columnIndex) {
                 var dataIndex = (dataFieldAreaInRows ? rowInfo.dataIndex : columnInfo.dataIndex) || 0,
                     dataField = dataFields[dataIndex];
 
@@ -1074,47 +1032,9 @@ exports.DataController = Class.inherit((function() {
 
             if(scrollController && !getAllData) {
                 var startIndex = scrollController.beginPageIndex() * that.columnPageSize(),
-                    endIndex = scrollController.endPageIndex() * that.columnPageSize() + that.columnPageSize(),
-                    newInfo = [];
+                    endIndex = scrollController.endPageIndex() * that.columnPageSize() + that.columnPageSize();
 
-                foreachColumnInfo(info, function(columnInfo, visibleIndex, rowIndex) {
-                    var cell = columnInfo,
-                        colspan,
-                        cellColspan = cell.colspan || 1,
-                        isVisible = visibleIndex + cellColspan - 1 >= startIndex && visibleIndex < endIndex;
-
-                    newInfo[rowIndex] = newInfo[rowIndex] || [];
-
-                    if(isVisible) {
-                        if(visibleIndex < startIndex) {
-                            colspan = cellColspan - (startIndex - visibleIndex);
-                            visibleIndex = startIndex;
-                        } else {
-                            colspan = cellColspan;
-                        }
-
-                        if(visibleIndex + colspan > endIndex) {
-                            colspan = endIndex - visibleIndex;
-                        }
-
-                        if(colspan !== cellColspan) {
-                            cell = extend({}, cell, {
-                                colspan: colspan
-                            });
-                        }
-
-                        newInfo[rowIndex].push(cell);
-
-                    } else if(visibleIndex > endIndex) {
-                        return false;
-                    }
-                });
-
-                for(var i = 0; i < newInfo.length; i++) {
-                    newInfo[i] = newInfo[i] || [];
-                }
-
-                info = newInfo;
+                info = virtualColumnsCore.createColumnsInfo(info, startIndex, endIndex);
             }
 
             return info;

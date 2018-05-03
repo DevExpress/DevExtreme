@@ -331,6 +331,21 @@ QUnit.test("removed digits should not be replaced to 0 when they are not require
 
 QUnit.module("format: minimum and maximum", moduleConfig);
 
+QUnit.test("value should be fitted into min and max range on change", function(assert) {
+    this.instance.option({
+        format: "#0.0",
+        min: 10,
+        max: 20,
+        value: 10
+    });
+
+    this.keyboard.caret(2).type("5");
+    assert.equal(this.input.val(), "105.0", "value is not fitted before the change event");
+
+    this.keyboard.change();
+    assert.equal(this.input.val(), "20.0", "value is fitted after the change event");
+});
+
 QUnit.test("invert sign should be prevented if minimum is larger than 0", function(assert) {
     this.instance.option({
         min: 0,
@@ -1106,6 +1121,24 @@ QUnit.test("removing a stub should be prevented when it leads to revert sign", f
     this.keyboard.caret(5).press("del");
     assert.equal(this.input.val(), "0.00 kg", "value has been reverted");
 });
+
+QUnit.test("change event should be fired after stub removed and sign reverted", function(assert) {
+    var changeHandler = sinon.spy();
+
+    this.instance.option({
+        format: "#0.00 kg",
+        value: -5,
+        onChange: changeHandler
+    });
+
+    this.keyboard.caret(5).press("del").press("enter");
+    assert.equal(changeHandler.callCount, 1, "change event has been fired after enter pressed");
+
+    this.instance.option("value", -5);
+    this.keyboard.caret(5).press("backspace").press("enter");
+    assert.equal(changeHandler.callCount, 1, "change event has not been fired if value is not changed");
+});
+
 
 QUnit.module("format: caret boundaries", moduleConfig);
 

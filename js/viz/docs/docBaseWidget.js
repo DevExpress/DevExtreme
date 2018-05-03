@@ -199,10 +199,8 @@ var BaseWidget = {
     /**
     * @name BaseWidgetOptions_theme
     * @publicName theme
-    * @type string
+    * @type Enums.VizTheme
     * @default 'generic.light'
-    * @acceptValues 'generic.light'|'generic.dark'|'generic.contrast'|'generic.carmine'|'generic.darkmoon'|'generic.softblue'|'generic.darkviolet'|'generic.greenmist'|'android5.light'|'ios7.default'|'material.blue.light'|'material.lime.light'|'material.orange.light'|'material.purple.light'|'material.teal.light'
-    * @deprecatedAcceptValues 'win8.black'|'win8.white'|'win10.black'|'win10.white'
     */
     theme: 'generic.light',
     /**
@@ -421,7 +419,14 @@ var BaseWidget = {
         * @type string
         * @default '#ffffff'
         */
-        backgroundColor: '#ffffff'
+        backgroundColor: '#ffffff',
+        /**
+        * @name BaseWidgetOptions_export_margin
+        * @publicName margin
+        * @type number
+        * @default 10
+        */
+        margin: 10
     },
     /**
     * @name BaseWidgetOptions_onexporting

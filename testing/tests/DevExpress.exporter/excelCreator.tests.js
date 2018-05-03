@@ -53,6 +53,14 @@ QUnit.test("Date format converting when format is custom", function(assert) {
     assert.strictEqual(excelFormat, "[$-9]dd\\/MMM\\/yyyy", "excel format for custom date format");
 });
 
+QUnit.test("Date format converting when format with square brackets", function(assert) {
+    // act
+    var excelFormat = excelCreator.formatConverter.convertFormat('[h:mm aaa]', null, "date");
+
+    // assert
+    assert.strictEqual(excelFormat, "[$-9]\\[H:mm AM/PM\\]", "excel format with square brackets");
+});
+
 // T476869
 QUnit.test("Number format converting when format is not string", function(assert) {
     var format = function(x) { return x + " $"; };

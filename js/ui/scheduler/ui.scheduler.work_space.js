@@ -657,7 +657,7 @@ var SchedulerWorkSpace = Widget.inherit({
             updateManually: true,
             pushBackValue: 0
         };
-        if(this.option("crossScrollingEnabled")) {
+        if(this._needCreateCrossScrolling()) {
             config = extend(config, this._createCrossScrollingConfig());
         }
 
@@ -799,7 +799,7 @@ var SchedulerWorkSpace = Widget.inherit({
             this._setHorizontalGroupHeaderCellsHeight();
         }
 
-        if(visible && this.option("crossScrollingEnabled")) {
+        if(visible && this._needCreateCrossScrolling()) {
             this._setTableSizes();
         }
     },
@@ -866,6 +866,10 @@ var SchedulerWorkSpace = Widget.inherit({
         this.headerPanelOffsetRecalculate();
         this._cleanCellDataCache();
         this._cleanAllowedPositions();
+    },
+
+    _needCreateCrossScrolling: function() {
+        return this.option("crossScrollingEnabled");
     },
 
     _getElementClass: noop,
@@ -1794,7 +1798,7 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _getWorkSpaceWidth: function() {
-        if(this.option("crossScrollingEnabled")) {
+        if(this._needCreateCrossScrolling()) {
             return this._$dateTable.get(0).getBoundingClientRect().width;
         }
 
@@ -1844,9 +1848,17 @@ var SchedulerWorkSpace = Widget.inherit({
     _setHorizontalGroupHeaderCellsHeight: function() {
         var cellHeight = this.getCellHeight(),
             allDayRowHeight = this.option("showAllDayPanel") && this.supportAllDayRow() ? this.getAllDayHeight() : 0,
-            dateTableHeight = cellHeight * this._getRowCount() - DATE_TABLE_CELL_BORDER * 2;
+            dateTableHeight = cellHeight * this._getRowCount() - this._getDateTableBorderOffset();
 
         this._getGroupHeaderCellsContent().css("height", dateTableHeight + allDayRowHeight);
+    },
+
+    _getDateTableBorder: function() {
+        return DATE_TABLE_CELL_BORDER;
+    },
+
+    _getDateTableBorderOffset: function() {
+        return this._getDateTableBorder() * 2;
     },
 
     _getGroupHeaderCellsContent: function() {

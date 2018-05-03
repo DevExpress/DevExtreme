@@ -505,6 +505,7 @@ function getExportOptions(widget, exportOptions, fileName, format) {
         backgroundColor: exportOptions.backgroundColor,
         width: widget._canvas.width,
         height: widget._canvas.height,
+        margin: exportOptions.margin,
         exportingAction: widget._createActionByOption("onExporting"),
         exportedAction: widget._createActionByOption("onExported"),
         fileSavingAction: widget._createActionByOption("onFileSaving")

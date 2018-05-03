@@ -919,8 +919,7 @@
 * @type color
 * @group progressbars
 */
-@progressbar-bg:  darken(@base-bg, 13.5%);
-@progressbar-border-color: @base-border-color;
+@progressbar-bg:  fade(@base-accent, 30%);
 
 /**
 * @name 20. Selected range background color
@@ -929,10 +928,17 @@
 * @paletteColorOpacity 1
 */
 @progressbar-range-bg: @base-accent;
-@progressbar-range-border-color: @base-accent;
 
 @progressbar-range-disabled-bg: fade(@base-accent, 60%);
 @progressbar-range-indeterminate-color: @base-accent;
+
+/**
+* @name 30. Label color
+* @type color
+* @group progressbars
+* @paletteColorOpacity 1
+*/
+@progressbar-label-color: @base-accent;
 
 
 // Switch
@@ -1239,6 +1245,13 @@
 @datagrid-active-header-filter-icon-color: @base-accent;
 @datagrid-text-stub-background-image-path: url(images/widgets/material/color-schemes/light/grid/text-stub.png);
 
+/**
+* @name 200. Filter panel text color
+* @type color
+* @group datagrid
+*/
+@datagrid-filter-panel-color: @base-accent;
+
 //TreeList
 /**
 * @name 10. Text color
@@ -1385,6 +1398,13 @@
 * @group treelist
 */
 @treelist-row-error-bg: mix(@base-invalid-color, @treelist-base-background-color, 60%);
+
+/**
+* @name 200. Filter panel text color
+* @type color
+* @group treelist
+*/
+@treelist-filter-panel-color: @base-accent;
 
 /**
 * @name 40. Link color
