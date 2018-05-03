@@ -1,15 +1,14 @@
 "use strict";
 
-var formatUtils = require("./format_utils"),
-    isDefined = require("../../core/utils/type").isDefined,
-    messageLocalization = require("../../localization/message"),
-    $ = require("../../core/renderer"),
+var $ = require("../../core/renderer"),
     extend = require("../../core/utils/extend").extend;
 
 var FILTER_BUILDER_RANGE_CLASS = "dx-filterbuilder-range",
     FILTER_BUILDER_RANGE_START_CLASS = FILTER_BUILDER_RANGE_CLASS + "-start",
     FILTER_BUILDER_RANGE_END_CLASS = FILTER_BUILDER_RANGE_CLASS + "-end",
     FILTER_BUILDER_RANGE_SEPARATOR_CLASS = FILTER_BUILDER_RANGE_CLASS + "-separator";
+
+var SEPARATOR = "\u2013";
 
 function editorTemplate(conditionInfo, container) {
     var $editorStart = $("<div>").addClass(FILTER_BUILDER_RANGE_START_CLASS),
@@ -23,7 +22,7 @@ function editorTemplate(conditionInfo, container) {
         };
 
     container.append($editorStart);
-    container.append($("<span>").addClass(FILTER_BUILDER_RANGE_SEPARATOR_CLASS).text("-"));
+    container.append($("<span>").addClass(FILTER_BUILDER_RANGE_SEPARATOR_CLASS).text(SEPARATOR));
     container.append($editorEnd);
     container.addClass(FILTER_BUILDER_RANGE_CLASS);
 
@@ -46,26 +45,14 @@ function editorTemplate(conditionInfo, container) {
     }));
 }
 
-function customizeText(conditionInfo) {
-    var startValue = conditionInfo.value[0],
-        endValue = conditionInfo.value[1];
-
-    if(!isDefined(startValue) && !isDefined(endValue)) {
-        return messageLocalization.format("dxFilterBuilder-enterValueText");
-    }
-
-    return (isDefined(startValue) ? formatUtils.getFormattedValueText(conditionInfo.field, startValue) : "?") + " - "
-                + (isDefined(endValue) ? formatUtils.getFormattedValueText(conditionInfo.field, endValue) : "?");
-}
-
 function getConfig(caption) {
     return {
         name: "between",
         caption: caption,
         icon: "range",
+        valueSeparator: SEPARATOR,
         dataTypes: ["number", "date", "datetime"],
-        editorTemplate: editorTemplate,
-        customizeText: customizeText
+        editorTemplate: editorTemplate
     };
 }
 

@@ -25,12 +25,6 @@
         }
     }
 
-    .dx-filterbuilder-range {
-        .dx-filterbuilder-range-separator {
-            margin: 0 3px;
-        }
-    }
-
     .dx-filterbuilder-group {
         .dx-filterbuilder-group-item {
             display: inline-block;
@@ -40,6 +34,12 @@
                 display: inline-block;
                 cursor: pointer;
                 white-space: pre;
+
+                .dx-filterbuilder-text-separator,
+                .dx-filterbuilder-range-separator {
+                    margin: 0 7px;
+                    opacity: 0.3;
+                }
 
                 &.dx-filterbuilder-group-operation,
                 &.dx-filterbuilder-item-field,
