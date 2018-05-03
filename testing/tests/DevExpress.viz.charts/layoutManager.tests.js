@@ -621,6 +621,76 @@ QUnit.test("3 series, labels one of the series have inside position, not fit in 
     });
 });
 
+QUnit.test("correctPieLabelRadius", function(assert) {
+    var CFPWSL = createFakePointsWithStubLabels,
+        points1 = [CFPWSL({ x: 400, y: 300, width: 15, height: 10 }, true, true)],
+        points2 = [CFPWSL({ x: 400, y: 300, width: 10, height: 10 }, true, true)],
+        series = getNStubSeries('pie', null, [points1, points2]),
+        layoutManager = createLayoutManager({});
+
+    layoutManager.correctPieLabelRadius(series, { radiusOuter: 129, centerX: 500 }, canvas);
+
+    assert.equal(series[0].correctLabelRadius.callCount, 1);
+    assert.equal(series[0].correctLabelRadius.args[0][0], 159);
+    assert.equal(series[0].setVisibleArea.callCount, 1);
+    assert.deepEqual(series[0].setVisibleArea.args[0][0], {
+        bottom: 20,
+        height: 400,
+        left: 326,
+        right: 326,
+        top: 10,
+        width: 1000
+    });
+
+    assert.equal(series[1].correctLabelRadius.callCount, 1);
+    assert.equal(series[1].correctLabelRadius.args[0][0], 174);
+    assert.equal(series[1].setVisibleArea.callCount, 1);
+    assert.deepEqual(series[1].setVisibleArea.args[0][0], {
+        bottom: 20,
+        height: 400,
+        left: 306,
+        right: 306,
+        top: 10,
+        width: 1000
+    });
+});
+
+QUnit.test("correctPieLabelRadius when labels are not fit in canvas", function(assert) {
+    var CFPWSL = createFakePointsWithStubLabels,
+        points1 = [CFPWSL({ x: 400, y: 300, width: 30, height: 10 }, true, true)],
+        points2 = [CFPWSL({ x: 400, y: 300, width: 35, height: 10 }, true, true)],
+        series = getNStubSeries('pie', null, [points1, points2]),
+        layoutManager = createLayoutManager({});
+
+    canvas.width = 300;
+
+    layoutManager.correctPieLabelRadius(series, { radiusOuter: 80, centerX: 150 }, canvas);
+
+    assert.equal(series[0].correctLabelRadius.callCount, 1);
+    assert.equal(series[0].correctLabelRadius.args[0][0], 110);
+    assert.equal(series[0].setVisibleArea.callCount, 1);
+    assert.deepEqual(series[0].setVisibleArea.args[0][0], {
+        bottom: 20,
+        height: 400,
+        left: 35,
+        right: 35,
+        top: 10,
+        width: 300
+    });
+
+    assert.equal(series[1].correctLabelRadius.callCount, 1);
+    assert.equal(series[1].correctLabelRadius.args[0][0], 115);
+    assert.equal(series[1].setVisibleArea.callCount, 1);
+    assert.deepEqual(series[1].setVisibleArea.args[0][0], {
+        bottom: 20,
+        height: 400,
+        left: 30,
+        right: 30,
+        top: 10,
+        width: 300
+    });
+});
+
 QUnit.module("Layout for equal pie charts", {
     beforeEach: setupCanvas
 });

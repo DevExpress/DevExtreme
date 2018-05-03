@@ -201,7 +201,11 @@ var dxPieChart = BaseChart.inherit({
 
         series.forEach(function(s) {
             s.correctPosition(layout, canvas);
+            s.drawLabelsWOPoints();
         });
+
+        this.layoutManager.correctPieLabelRadius(series, layout, canvas);
+
         return layout;
     },
 
@@ -222,8 +226,11 @@ var dxPieChart = BaseChart.inherit({
 
             that._setCenter({ x: layout.centerX, y: layout.centerY });
 
-            _each(visibleSeries, function(_, singleSeries) {
-                singleSeries.correctRadius({ radiusInner: innerRad, radiusOuter: innerRad + delta });
+            visibleSeries.forEach(function(singleSeries) {
+                singleSeries.correctRadius({
+                    radiusInner: innerRad,
+                    radiusOuter: innerRad + delta
+                });
                 innerRad += delta + seriesSpacing;
             });
         }
