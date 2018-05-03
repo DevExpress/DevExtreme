@@ -1,6 +1,6 @@
 "use strict";
 
-import { createValueButtonText } from "../filter_builder/filter_builder";
+import { renderValueText } from "../filter_builder/filter_builder";
 
 var $ = require("../../core/renderer"),
     messageLocalization = require("../../localization/message"),
@@ -76,7 +76,7 @@ function baseOperation(grid) {
                     .appendTo(container),
                 column = extend(true, {}, grid.columnOption(conditionInfo.field.dataField));
 
-            createValueButtonText(div, conditionInfo.value);
+            renderValueText(div, conditionInfo.value);
 
             var setValue = function(value) {
                 conditionInfo.setValue(value);
