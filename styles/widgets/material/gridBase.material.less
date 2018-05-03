@@ -21,10 +21,11 @@
     @MATERIAL_GRID_BASE_HEADER_PANEL_PADDING: 0 14px 0 24px;
 
     @MATERIAL_GRID_BASE_COMMAND_EDIT_COLUMN_WIDTH: 115px;
+    @MATERIAL_GRID_BASE_COMMAND_EDIT_COLUMN_WITH_ICONS_WIDTH: 93px;
     @MATERIAL_GRID_BASE_ADAPTIVE_COLUMN_HEIGHT: 40px;
     @MATERIAL_GRID_BASE_TREEVIEW_SEARCH_MARGIN: 10px;
     @MATERIAL_COMMAND_EDIT_ICON_SIZE: 18px;
-    @MATERIAL_COMMAND_EDIT_ICON_MARGIN: 5px;
+    @MATERIAL_COMMAND_EDIT_ICON_MARGIN: 2px;
 }
 
 .dx-size-compact() {
@@ -265,6 +266,16 @@
                 &.dx-command-edit {
                     width: @MATERIAL_GRID_BASE_COMMAND_EDIT_COLUMN_WIDTH;
                     min-width: @MATERIAL_GRID_BASE_COMMAND_EDIT_COLUMN_WIDTH;
+
+                    &.dx-command-edit-with-icons {
+                        width: @MATERIAL_GRID_BASE_COMMAND_EDIT_COLUMN_WITH_ICONS_WIDTH;
+                        min-width: @MATERIAL_GRID_BASE_COMMAND_EDIT_COLUMN_WITH_ICONS_WIDTH;
+                        .dx-link {
+                            .dx-icon-sizing(@MATERIAL_COMMAND_EDIT_ICON_SIZE);
+                            margin: 0 @MATERIAL_COMMAND_EDIT_ICON_MARGIN;
+                            vertical-align: middle;
+                        }
+                    }
                 }
 
                 &.dx-command-expand, .dx-@{widgetName}-group-space {
@@ -273,12 +284,6 @@
                     padding: 0 4px 0 8px;
                     line-height: 0;
                 }
-            }
-
-            .dx-command-edit-with-icons .dx-link {
-                .dx-icon-sizing(@MATERIAL_COMMAND_EDIT_ICON_SIZE);
-                margin: 0 @MATERIAL_COMMAND_EDIT_ICON_MARGIN;
-                vertical-align: middle;
             }
         }
 
