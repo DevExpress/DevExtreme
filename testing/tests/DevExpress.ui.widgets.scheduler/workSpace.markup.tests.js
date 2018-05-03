@@ -1352,6 +1352,12 @@ QUnit.module("Workspace Month markup with vertical grouping", monthWithGroupingM
         assert.strictEqual(dateTableScrollable.option("updateManually"), true, "updateManually is OK");
     });
 
+    QUnit.test("Scheduler workspace month scrollable content should not have fixed-content class with vertical grouping", (assert) => {
+        const $scrollableContent = this.instance.getScrollable().$content();
+
+        assert.notOk($scrollableContent.hasClass("dx-scheduler-scrollable-fixed-content"), "Scrollable content hasn't 'dx-scheduler-scrollable-fixed-content' css class");
+    });
+
     QUnit.test("Sidebar scrollable should contain group table", (assert) => {
         var $sidebarScrollable = this.instance.$element().find(".dx-scheduler-sidebar-scrollable");
 

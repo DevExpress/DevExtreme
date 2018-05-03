@@ -331,6 +331,21 @@ QUnit.test("removed digits should not be replaced to 0 when they are not require
 
 QUnit.module("format: minimum and maximum", moduleConfig);
 
+QUnit.test("value should be fitted into min and max range on change", function(assert) {
+    this.instance.option({
+        format: "#0.0",
+        min: 10,
+        max: 20,
+        value: 10
+    });
+
+    this.keyboard.caret(2).type("5");
+    assert.equal(this.input.val(), "105.0", "value is not fitted before the change event");
+
+    this.keyboard.change();
+    assert.equal(this.input.val(), "20.0", "value is fitted after the change event");
+});
+
 QUnit.test("invert sign should be prevented if minimum is larger than 0", function(assert) {
     this.instance.option({
         min: 0,

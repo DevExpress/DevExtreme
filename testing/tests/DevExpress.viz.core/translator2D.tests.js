@@ -645,6 +645,54 @@ QUnit.test('Get canvas visible area', function(assert) {
     assert.deepEqual(visibleArea, { min: 70, max: 580 });
 });
 
+QUnit.test('Compare numeric business range', function(assert) {
+    var canvas = $.extend({}, canvasTemplate),
+        translator = new translator2DModule.Translator2D($.extend({}, numericRange), canvas, optionsHorizontal);
+
+    assert.ok(translator.constructor.prototype.isEqualRange.call(translator, { min: 0, max: 100 }));
+    assert.ok(!translator.constructor.prototype.isEqualRange.call(translator, { min: 10 }));
+    assert.ok(!translator.constructor.prototype.isEqualRange.call(translator, { min: 0, max: 90 }));
+    assert.ok(!translator.constructor.prototype.isEqualRange.call(translator, { min: 50, max: 70 }));
+    assert.ok(translator.constructor.prototype.isEqualRange.call(translator, {}));
+    assert.ok(!translator.constructor.prototype.isEqualRange.call(translator, null));
+});
+
+QUnit.test('Compare logarithmic business range', function(assert) {
+    var canvas = $.extend({}, canvasTemplate),
+        translator = new translator2DModule.Translator2D($.extend({}, logarithmicRange), canvas, optionsHorizontal);
+
+    assert.ok(translator.constructor.prototype.isEqualRange.call(translator, { min: 10, max: 10000 }));
+    assert.ok(!translator.constructor.prototype.isEqualRange.call(translator, { min: 100, max: 10000 }));
+    assert.ok(!translator.constructor.prototype.isEqualRange.call(translator, { max: 9000 }));
+    assert.ok(!translator.constructor.prototype.isEqualRange.call(translator, { min: 500, max: 7000 }));
+    assert.ok(translator.constructor.prototype.isEqualRange.call(translator, {}));
+    assert.ok(!translator.constructor.prototype.isEqualRange.call(translator, null));
+});
+
+QUnit.test('Compare datetime business range', function(assert) {
+    var canvas = $.extend({}, canvasTemplate),
+        translator = new translator2DModule.Translator2D($.extend({}, datetimeRange), canvas, optionsHorizontal);
+
+    assert.ok(translator.constructor.prototype.isEqualRange.call(translator, { min: new Date(2012, 9, 1), max: new Date(2012, 9, 2) }));
+    assert.ok(!translator.constructor.prototype.isEqualRange.call(translator, { min: new Date(2012, 9, 1, 13), max: new Date(2012, 9, 2) }));
+    assert.ok(!translator.constructor.prototype.isEqualRange.call(translator, { min: new Date(2012, 9, 1), max: new Date(2012, 9, 1, 13) }));
+    assert.ok(!translator.constructor.prototype.isEqualRange.call(translator, { min: new Date(2012, 9, 1, 10), max: new Date(2012, 9, 1, 22) }));
+    assert.ok(translator.constructor.prototype.isEqualRange.call(translator, {}));
+    assert.ok(!translator.constructor.prototype.isEqualRange.call(translator, null));
+});
+
+QUnit.test('Compare discrete business range', function(assert) {
+    var canvas = $.extend({}, canvasTemplate),
+        translator = new translator2DModule.Translator2D($.extend({}, discreteRange), canvas, optionsHorizontal);
+
+    assert.ok(!translator.constructor.prototype.isEqualRange.call(translator, { min: "First", max: "Fourth" }));
+    assert.ok(!translator.constructor.prototype.isEqualRange.call(translator, { min: "Second", max: "Fourth" }));
+    assert.ok(!translator.constructor.prototype.isEqualRange.call(translator, { min: "First", max: "Third" }));
+    assert.ok(!translator.constructor.prototype.isEqualRange.call(translator, { min: "Second", max: "Third" }));
+    assert.ok(!translator.constructor.prototype.isEqualRange.call(translator, {}));
+    assert.ok(!translator.constructor.prototype.isEqualRange.call(translator, null));
+});
+
 QUnit.module('Numeric translator', environment);
 
 QUnit.test('Translate. Positive values. Invert = false', function(assert) {

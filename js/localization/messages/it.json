@@ -146,10 +146,10 @@
         "dxDataGrid-ariaSearchInGrid": "Cerca nella griglia",
         "dxDataGrid-ariaSelectAll": "Seleziona tutti",
         "dxDataGrid-ariaSelectRow": "Seleziona riga",
-        "dxDataGrid-filterBuilderPopupTitle": "!TODO",
-        "dxDataGrid-filterPanelCreateFilter": "!TODO",
-        "dxDataGrid-filterPanelClearFilter": "!TODO",
-        "dxDataGrid-filterPanelFilterEnabledHint": "!TODO",
+        "dxDataGrid-filterBuilderPopupTitle": "Composizione filtro",
+        "dxDataGrid-filterPanelCreateFilter": "Nuovo filtro",
+        "dxDataGrid-filterPanelClearFilter": "Cancella",
+        "dxDataGrid-filterPanelFilterEnabledHint": "Attiva il filtro",
 
         "dxTreeList-ariaTreeList": "Albero",
         "dxTreeList-editingAddRowToNode": "Aggiungi",
@@ -252,8 +252,8 @@
         "dxFilterBuilder-addCondition": "Aggiungi condizione",
         "dxFilterBuilder-addGroup": "Aggiungi gruppo",
         "dxFilterBuilder-enterValueText": "<inserire un valore>",
-        "dxFilterBuilder-filterOperationEquals": "Uguale",
-        "dxFilterBuilder-filterOperationNotEquals": "Diverso",
+        "dxFilterBuilder-filterOperationEquals": "Uguale a",
+        "dxFilterBuilder-filterOperationNotEquals": "Diverso da",
         "dxFilterBuilder-filterOperationLess": "Minore di",
         "dxFilterBuilder-filterOperationLessOrEquals": "Minore o uguale a",
         "dxFilterBuilder-filterOperationGreater": "Maggiore di",
@@ -264,7 +264,7 @@
         "dxFilterBuilder-filterOperationEndsWith": "Termina con",
         "dxFilterBuilder-filterOperationIsBlank": "È vuoto",
         "dxFilterBuilder-filterOperationIsNotBlank": "Non è vuoto",
-        "dxFilterBuilder-filterOperationAnyOf": "!TODO",
-        "dxFilterBuilder-filterOperationNoneOf": "!TODO"
+        "dxFilterBuilder-filterOperationAnyOf": "Include",
+        "dxFilterBuilder-filterOperationNoneOf": "Non include"
     }
 }

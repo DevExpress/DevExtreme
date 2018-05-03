@@ -146,10 +146,10 @@
         "dxDataGrid-ariaSearchInGrid": "Rechercher dans la grille",
         "dxDataGrid-ariaSelectAll": "Sélectionner tout",
         "dxDataGrid-ariaSelectRow": "Sélectionner ligne",
-        "dxDataGrid-filterBuilderPopupTitle": "!TODO",
-        "dxDataGrid-filterPanelCreateFilter": "!TODO",
-        "dxDataGrid-filterPanelClearFilter": "!TODO",
-        "dxDataGrid-filterPanelFilterEnabledHint": "!TODO",
+        "dxDataGrid-filterBuilderPopupTitle": "Création de filtre",
+        "dxDataGrid-filterPanelCreateFilter": "Créer un filtre",
+        "dxDataGrid-filterPanelClearFilter": "Supprimer",
+        "dxDataGrid-filterPanelFilterEnabledHint": "Activer le filtre",
 
         "dxTreeList-ariaTreeList": "Liste arborescente",
         "dxTreeList-editingAddRowToNode": "Ajouter",
@@ -264,7 +264,7 @@
         "dxFilterBuilder-filterOperationEndsWith": "Finit par",
         "dxFilterBuilder-filterOperationIsBlank": "Est vide",
         "dxFilterBuilder-filterOperationIsNotBlank": "N'est pas vide",
-        "dxFilterBuilder-filterOperationAnyOf": "!TODO",
-        "dxFilterBuilder-filterOperationNoneOf": "!TODO"
+        "dxFilterBuilder-filterOperationAnyOf": "Est parmi",
+        "dxFilterBuilder-filterOperationNoneOf": "N'est pas parmi"
     }
 }

@@ -419,7 +419,14 @@ var BaseWidget = {
         * @type string
         * @default '#ffffff'
         */
-        backgroundColor: '#ffffff'
+        backgroundColor: '#ffffff',
+        /**
+        * @name BaseWidgetOptions_export_margin
+        * @publicName margin
+        * @type number
+        * @default 10
+        */
+        margin: 10
     },
     /**
     * @name BaseWidgetOptions_onexporting

@@ -563,17 +563,23 @@ var dxChart = AdvancedChart.inherit({
     },
 
     _adjustViewport() {
-        const that = this,
-            series = that._getVisibleSeries(),
-            useAggregation = series.some(s => s.useAggregation()),
-            zoomArgsDefined = _isDefined(that._zoomMinArg) || _isDefined(that._zoomMaxArg),
-            adjustOnZoom = that._themeManager.getOptions("adjustOnZoom");
+        const that = this;
+        const series = that._getVisibleSeries();
+        const argumentAxis = that._getArgumentAxis();
+        const argumentViewport = argumentAxis.getViewport();
+        const minMaxDefined = argumentViewport && (_isDefined(argumentViewport.min) || _isDefined(argumentViewport.max));
+        const useAggregation = series.some(s => s.useAggregation());
+        const adjustOnZoom = that._themeManager.getOptions("adjustOnZoom");
 
-        if(!useAggregation && !(zoomArgsDefined && adjustOnZoom)) {
+        if(!useAggregation && !(minMaxDefined && adjustOnZoom)) {
             return;
         }
 
+        const isArgumentAxisZoomed = argumentAxis.isZoomed();
         that._valueAxes.forEach(function(axis) {
+            if(!isArgumentAxisZoomed && axis.isZoomed()) {
+                return;
+            }
             const viewport = series.filter(s => {
                 return s.getValueAxis() === axis;
             }).reduce((range, s) => {

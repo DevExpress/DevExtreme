@@ -73,6 +73,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
     },
 
     _updateFormattedValue: function() {
+        this._adjustParsedValue();
         this._setTextByParsedValue();
 
         if(this._isValueDirty()) {
@@ -426,12 +427,6 @@ var NumberBoxMask = NumberBoxBase.inherit({
             return this.callBase(text);
         }
 
-        if(!isNumeric(this._parsedValue)) {
-            return this._parsedValue;
-        }
-
-        this._parsedValue = fitIntoRange(this._parsedValue, this.option("min"), this.option("max"));
-
         return this._parsedValue;
     },
 
@@ -524,6 +519,18 @@ var NumberBoxMask = NumberBoxBase.inherit({
         this.callBase();
     },
 
+    _adjustParsedValue: function() {
+        var clearedText = this._removeStubs(this._getInputVal()),
+            parsedValue = clearedText ? this._parseValue() : null;
+
+        if(!isNumeric(parsedValue)) {
+            this._parsedValue = parsedValue;
+            return;
+        }
+
+        this._parsedValue = fitIntoRange(parsedValue, this.option("min"), this.option("max"));
+    },
+
     _valueChangeEventHandler: function(e) {
         if(!this._useMaskBehavior()) {
             return this.callBase(e);
@@ -531,10 +538,8 @@ var NumberBoxMask = NumberBoxBase.inherit({
 
         this._lastKey = null;
 
-        var clearedText = this._removeStubs(this._getInputVal());
-
-        var parsedValue = clearedText ? this._parseValue() : null;
-        this.option("value", parsedValue);
+        this._adjustParsedValue();
+        this.option("value", this._parsedValue);
     },
 
     _optionChanged: function(args) {

@@ -435,6 +435,49 @@ QUnit.test("Row expand state should not be changed on row click when scrolling m
     assert.ok(dataGrid.isRowExpanded(["1"]), "first group row is expanded");
 });
 
+// T618080
+QUnit.test("Fix group footer presents at the end of virtual pages", function(assert) {
+    // arrange
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        columns: ["C0", "C1", "C2"],
+        loadingTimeout: undefined,
+        dataSource: {
+            store: [
+                { C0: 10, C1: 11, C2: 12 }, { C0: 10, C1: 11, C2: 12 },
+                { C0: 10, C1: 12, C2: 12 }
+            ],
+            group: ["C0", "C1"]
+        },
+        paging: {
+            pageSize: 2
+        },
+        scrolling: {
+            mode: "infinite"
+        },
+        summary: {
+            groupItems: [
+                {
+                    column: "C2",
+                    summaryType: "count",
+                    showInGroupFooter: true
+                }
+            ]
+        },
+    }).dxDataGrid("instance");
+
+    // arrange, assert
+    var visibleRows = dataGrid.getVisibleRows();
+    assert.equal(visibleRows.length, 9, "visible rows count");
+    assert.equal(visibleRows.filter(function(item) { return item.rowType === "groupFooter"; }).length, 3, "group footers count");
+    assert.equal(visibleRows[1].rowType, "group", "group row");
+    assert.equal(visibleRows[3].rowType, "data", "data row");
+    assert.equal(visibleRows[4].rowType, "groupFooter", "group footer row");
+    assert.equal(visibleRows[5].rowType, "group", "group row");
+    assert.equal(visibleRows[6].rowType, "data", "data row");
+    assert.equal(visibleRows[7].rowType, "groupFooter", "group footer row");
+    assert.equal(visibleRows[8].rowType, "groupFooter", "group footer row");
+});
+
 // T601360
 QUnit.test("Update cell after infinit scrolling and editing must processing after all pages has been loaded", function(assert) {
     // arrange
@@ -8659,6 +8702,40 @@ QUnit.test("Change page index when virtual scrolling is enabled", function(asser
 
     // assert
     assert.equal(dataGrid.pageIndex(), 3, "page index");
+});
+
+// T548906
+QUnit.test("Filtering on load when virtual scrolling", function(assert) {
+    // arrange
+    var generateDataSource = function(count) {
+            var result = [], i;
+            for(i = 0; i < count; ++i) {
+                result.push({ firstName: "name_" + i, lastName: "lastName_" + i });
+            }
+            return result;
+        },
+        dataGrid = createDataGrid({
+            loadingTimeout: undefined,
+            height: 50,
+            dataSource: generateDataSource(10),
+            scrolling: {
+                mode: "virtual"
+            },
+            paging: {
+                pageSize: 2
+            },
+            columns: [
+                { dataField: "firstName", filterValue: "name_5" },
+                "lastName"
+            ]
+        });
+
+    var items = dataGrid.getDataSource().items();
+
+    // assert
+    assert.equal(items.length, 1, "1 item in dataSource");
+    assert.equal(items[0].firstName, "name_5", "filtered row 'firstName' field value");
+    assert.equal(items[0].lastName, "lastName_5", "filtered row 'lastName' field value");
 });
 
 // T558189

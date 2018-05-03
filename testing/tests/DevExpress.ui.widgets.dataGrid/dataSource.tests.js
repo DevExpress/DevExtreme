@@ -4194,16 +4194,14 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
         source.load();
 
         assert.equal(source.totalItemsCount(), 8);
-        assert.deepEqual(this.processItems(source.items()), [{
-            key: 2, items: null
-        }, {
-            key: 1, items: [
-                { key: 2, items: null },
-                {
-                    key: 3, items: [{ field1: 1, field2: 3, field3: 5 }], isContinuationOnNextPage: true
-                }
-            ]
-        }]);
+        assert.deepEqual(this.processItems(source.items()),
+            [{ key: 2, items: null }, {
+                key: 1, items: [
+                    { key: 2, items: null },
+                    { key: 3, items: [{ field1: 1, field2: 3, field3: 5 }], isContinuationOnNextPage: true }
+                ],
+                isContinuationOnNextPage: true
+            }]);
     });
 
     QUnit.test("grouping without paginate", function(assert) {
@@ -4383,7 +4381,8 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
 
         assert.equal(source.totalItemsCount(), 6);
         assert.deepEqual(this.processItems(source.items()), [{
-            key: 1, items: [{
+            key: 1,
+            items: [{
                 key: 2, items: null
             }, {
                 key: 3, items: [
@@ -4472,14 +4471,16 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
 
         assert.equal(source.totalItemsCount(), 6);
         assert.deepEqual(this.processItems(source.items()), [{
-            key: 1, items: [{
-                key: 2, items: null
-            }, {
-                key: 3, items: [
-                    { field1: 1, field2: 3, field3: 5 },
-                    { field1: 1, field2: 3, field3: 6 }
-                ]
-            }]
+            key: 1,
+            items: [
+                { key: 2, items: null },
+                {
+                    key: 3,
+                    items: [
+                        { field1: 1, field2: 3, field3: 5 },
+                        { field1: 1, field2: 3, field3: 6 }
+                    ]
+                }]
         }]);
     });
 
@@ -4497,7 +4498,11 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
         assert.deepEqual(this.processItems(source.items()), [{
             key: 1, isContinuationOnNextPage: true, items:
             [
-                    { key: 2, isContinuationOnNextPage: true, items: [{ field1: 1, field2: 2, field3: 3 }] }
+                {
+                    key: 2,
+                    isContinuationOnNextPage: true,
+                    items: [{ field1: 1, field2: 2, field3: 3 }]
+                }
             ]
         }]);
     });
@@ -4520,11 +4525,16 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
 
         assert.equal(source.totalItemsCount(), 11);
         assert.deepEqual(this.processItems(source.items()), [{
-            key: 1, items:
-            [
-                    { key: 2, items: null },
-                    { key: 3, isContinuationOnNextPage: true, items: [] }
-            ]
+            key: 1,
+            items: [
+                { key: 2, items: null },
+                {
+                    key: 3,
+                    isContinuationOnNextPage: true,
+                    items: []
+                }
+            ],
+            isContinuationOnNextPage: true
         }]);
     });
 
@@ -4714,13 +4724,15 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
         assert.equal(source.totalItemsCount(), 18);
         assert.equal(source.itemsCount(), 5);
         assert.deepEqual(this.processItems(source.items()), [{
-            key: 1, items:
-            [
+            key: 1,
+            items: [
                 {
-                    key: 2, isContinuationOnNextPage: true,
+                    key: 2,
+                    isContinuationOnNextPage: true,
                     items: [array[0], array[1], array[2]]
                 }
-            ]
+            ],
+            isContinuationOnNextPage: true
         }]);
     });
 
@@ -4803,7 +4815,7 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
         assert.deepEqual(this.processItems(source.items()), [{
             key: 1,
             isContinuation: true,
-            // isContinuationOnNextPage: true,
+            isContinuationOnNextPage: true,
             items: [{
                 key: 2,
                 isContinuation: true,
@@ -4840,7 +4852,7 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
         assert.deepEqual(this.processItems(source.items()), [{
             key: 1,
             isContinuation: true,
-            // isContinuationOnNextPage: true,
+            isContinuationOnNextPage: true,
             items: [{
                 key: 2,
                 isContinuation: true,
@@ -4921,7 +4933,7 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
         assert.deepEqual(this.processItems(source.items()), [{
             key: 1,
             isContinuation: true,
-            // isContinuationOnNextPage: true,
+            isContinuationOnNextPage: true,
             items: [{
                 key: 2,
                 isContinuation: true,
@@ -5010,6 +5022,7 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
         assert.deepEqual(this.processItems(source.items()), [{
             key: 1,
             isContinuation: true,
+            isContinuationOnNextPage: true,
             items: [{
                 key: 2,
                 isContinuation: true,
@@ -5058,6 +5071,7 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
             }]
         }, {
             key: 2,
+            isContinuationOnNextPage: true,
             items: [{
                 key: 3,
                 isContinuationOnNextPage: true,
@@ -5074,6 +5088,7 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
         assert.deepEqual(this.processItems(source.items()), [{
             key: 2,
             isContinuation: true,
+            isContinuationOnNextPage: true,
             items: [{
                 key: 3,
                 isContinuation: true,
@@ -5134,6 +5149,7 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
         assert.deepEqual(this.processItems(source.items()), [{
             key: 2,
             isContinuation: true,
+            isContinuationOnNextPage: true,
             items: [{
                 key: 3,
                 isContinuationOnNextPage: true,

@@ -9,11 +9,12 @@ gulp.task('vendor', function() {
     return merge(
         gulp.src([
             './node_modules/angular/angular?(.min).js',
-            './vendor/angular-route/*',
             './vendor/cldr/**',
             './vendor/globalize/**',
             './vendor/jquery/*',
             './vendor/jszip/*',
+            './node_modules/knockout/build/output/knockout-latest?(.debug).js',
+            // TODO: remove
             './vendor/knockout/*'
         ]).pipe(gulp.dest('artifacts/js'))
     );
