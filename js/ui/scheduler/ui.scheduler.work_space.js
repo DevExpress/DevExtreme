@@ -511,7 +511,7 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _initGroupedStrategy: function() {
-        var Strategy = this.option("groupOrientation") === "vertical" ? VerticalGroupedStrategy : HorizontalGroupedStrategy;
+        var Strategy = this._isVerticalGroupedWorkSpace() ? VerticalGroupedStrategy : HorizontalGroupedStrategy;
         this._groupedStrategy = new Strategy(this);
     },
 
@@ -544,13 +544,16 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _toggleGroupingDirectionClass: function() {
-        this.$element().toggleClass(VERTICAL_GROUPED_WORKSPACE_CLASS, this._isVerticalGroupedWorkSpace() && this.option("groups"));
+        this.$element().toggleClass(VERTICAL_GROUPED_WORKSPACE_CLASS, this._isVerticalGroupedWorkSpace());
     },
 
     _isVerticalGroupedWorkSpace: function() {
-        return this.option("groupOrientation") === "vertical";
+        return !!this.option("groups").length && this.option("groupOrientation") === "vertical";
     },
 
+    _getRealGroupOrientation: function() {
+        return this._isVerticalGroupedWorkSpace() ? "vertical" : "horizontal";
+    },
     _getTimePanelClass: function() {
         return TIME_PANEL_CLASS;
     },
@@ -1206,7 +1209,7 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _makeGroupRows: function(groups) {
-        var tableCreatorStrategy = this.option("groupOrientation") === "vertical" ? tableCreator.VERTICAL : tableCreator.HORIZONTAL;
+        var tableCreatorStrategy = this._isVerticalGroupedWorkSpace() ? tableCreator.VERTICAL : tableCreator.HORIZONTAL;
         return tableCreator.makeGroupedTable(tableCreatorStrategy,
             groups, {
                 groupRowClass: this._getGroupRowClass(),

@@ -222,7 +222,7 @@ var subscribes = {
                 };
             }
 
-            if(this.getLayoutManager().getRenderingStrategyInstance()._needVerticalGroupBounds(allDay) && this._getCurrentViewOption("groupOrientation") === "vertical") {
+            if(this.getLayoutManager().getRenderingStrategyInstance()._needVerticalGroupBounds(allDay) && this._workSpace._isVerticalGroupedWorkSpace()) {
                 var verticalGroupBounds = this._workSpace.getGroupBounds(options.coordinates);
                 area = {
                     left: 0,
