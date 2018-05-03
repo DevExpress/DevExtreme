@@ -259,8 +259,8 @@ var Toolbar = ToolbarBase.inherit({
     _updateUseIconButtonStrategy: function() {
         var container = this.$element();
 
-        this._setIconButtonAppearanceConfig($(container).find("." + TOOLBAR_AUTO_HIDE_TEXT_CLASS + " .dx-button"), true);
-        this._setIconButtonAppearanceConfig($(container).find("." + TOOLBAR_HIDDEN_ITEM + " .dx-button"), false);
+        this._setIconButtonAppearanceConfig(container.find("." + TOOLBAR_AUTO_HIDE_TEXT_CLASS + " .dx-button"), true);
+        this._setIconButtonAppearanceConfig(container.find("." + TOOLBAR_HIDDEN_ITEM + " .dx-button"), false);
     },
 
     _hideOverflowItems: function(elementWidth) {
