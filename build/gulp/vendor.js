@@ -13,9 +13,7 @@ gulp.task('vendor', function() {
             './vendor/globalize/**',
             './vendor/jquery/*',
             './vendor/jszip/*',
-            './node_modules/knockout/build/output/knockout-latest?(.debug).js',
-            // TODO: remove
-            './vendor/knockout/*'
+            './node_modules/knockout/build/output/knockout-latest?(.debug).js'
         ]).pipe(gulp.dest('artifacts/js'))
     );
 });
