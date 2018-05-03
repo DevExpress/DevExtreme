@@ -63,6 +63,27 @@ var ACTIONS = [{
 
 var EditorFactory = Class.inherit(EditorFactoryMixin);
 
+var createArrayValueText = function($container, value, customOperation) {
+    let lastItemIndex = value.length - 1;
+    $container.empty();
+    value.forEach((t, i) => {
+        $("<span>")
+            .addClass(FILTER_BUILDER_ITEM_TEXT_PART_CLASS)
+            .text(t)
+            .appendTo($container);
+        if(i !== lastItemIndex) {
+            let separator = $("<span>")
+                .addClass(FILTER_BUILDER_ITEM_TEXT_SEPARATOR_CLASS);
+            if(customOperation && customOperation.valueSeparator) {
+                separator.html(customOperation.valueSeparator);
+            } else {
+                separator.text("|").addClass(FILTER_BUILDER_ITEM_TEXT_SEPARATOR_EMPTY_CLASS);
+            }
+            separator.appendTo($container);
+        }
+    });
+};
+
 var FilterBuilder = Widget.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
@@ -945,24 +966,7 @@ var FilterBuilder = Widget.inherit({
         } else {
             deferredUtils.when(utils.getCurrentValueText(field, value, customOperation)).done(result => {
                 if(Array.isArray(result)) {
-                    let lastItemIndex = result.length - 1;
-                    $text.empty();
-                    result.forEach((t, i) => {
-                        $("<span>")
-                            .addClass(FILTER_BUILDER_ITEM_TEXT_PART_CLASS)
-                            .text(t)
-                            .appendTo($text);
-                        if(i !== lastItemIndex) {
-                            let separator = $("<span>")
-                                .addClass(FILTER_BUILDER_ITEM_TEXT_SEPARATOR_CLASS);
-                            if(customOperation.valueSeparator) {
-                                separator.html(customOperation.valueSeparator);
-                            } else {
-                                separator.text("|").addClass(FILTER_BUILDER_ITEM_TEXT_SEPARATOR_EMPTY_CLASS);
-                            }
-                            separator.appendTo($text);
-                        }
-                    });
+                    createArrayValueText($text, result, customOperation);
                 } else if(result) {
                     $text.text(result);
                 } else {
@@ -1070,7 +1074,7 @@ var FilterBuilder = Widget.inherit({
         return $valueButton;
     },
 
-    _createValueEditor: function($container, field, options) {
+    _createValueEditor: function($container, field, options, $content) {
         var $editor = $("<div>").attr("tabindex", 0).appendTo($container),
             customOperation = utils.getCustomOperation(this._customOperations, options.filterOperation),
             editorTemplate = customOperation && customOperation.editorTemplate ? customOperation.editorTemplate : field.editorTemplate;
@@ -1127,5 +1131,7 @@ var FilterBuilder = Widget.inherit({
 });
 
 registerComponent("dxFilterBuilder", FilterBuilder);
+
+module.exports.createArrayValueText = createArrayValueText;
 
 module.exports = FilterBuilder;

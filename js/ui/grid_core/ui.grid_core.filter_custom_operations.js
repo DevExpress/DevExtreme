@@ -1,5 +1,7 @@
 "use strict";
 
+import { createArrayValueText } from "../filter_builder/filter_builder";
+
 var $ = require("../../core/renderer"),
     messageLocalization = require("../../localization/message"),
     extend = require("../../core/utils/extend").extend,
@@ -71,9 +73,10 @@ function baseOperation(grid) {
         editorTemplate: function(conditionInfo, container) {
             var div = $("<div>")
                     .addClass("dx-filterbuilder-item-value-text")
-                    .text(conditionInfo.text)
                     .appendTo(container),
                 column = extend(true, {}, grid.columnOption(conditionInfo.field.dataField));
+
+            createArrayValueText(div, conditionInfo.value);
 
             var setValue = function(value) {
                 conditionInfo.setValue(value);
