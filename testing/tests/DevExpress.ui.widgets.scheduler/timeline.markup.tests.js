@@ -1008,7 +1008,8 @@ timelineMonthModuleConfig = {
     beforeEach: () =>{
         this.createInstance = function(options) {
             this.instance = $("#scheduler-timeline").dxSchedulerTimelineMonth({
-                groupOrientation: "horizontal"
+                groupOrientation: "horizontal",
+                currentDate: new Date(2018, 3, 2)
             }).dxSchedulerTimelineMonth("instance");
             stubInvokeMethod(this.instance, options);
 
