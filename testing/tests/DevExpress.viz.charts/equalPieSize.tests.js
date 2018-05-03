@@ -162,10 +162,16 @@ QUnit.test("Create pies with group. Get common layout", function(assert) {
         return function(e) {
             var series = e.component.series[0];
 
-            assert.equal(series.drawLabelsWOPoints.callCount, 1);
+            assert.equal(series.drawLabelsWOPoints.callCount, 2);
             checkCorrectPosition(assert, series.correctPosition.lastCall.args, x, y, rOuter, rInner, e.component.DEBUG_canvas);
+            assert.ok(series.drawLabelsWOPoints.lastCall.calledAfter(series.correctPosition.lastCall));
             assert.equal(series.correctRadius.lastCall.args[0].radiusOuter, rOuter, "correction radiusOuter");
             assert.equal(series.correctRadius.lastCall.args[0].radiusInner, rInner, "correction radiusInner");
+            assert.deepEqual(e.component.layoutManager.correctPieLabelRadius.lastCall.args, [
+                e.component.series,
+                e.component.layoutManager.applyEqualPieChartLayout.lastCall.returnValue,
+                e.component.DEBUG_canvas
+            ]);
             assert.equal(series.draw.callCount, 1);
             done();
         };
