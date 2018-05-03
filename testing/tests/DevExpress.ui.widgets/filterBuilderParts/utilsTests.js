@@ -418,6 +418,7 @@ QUnit.module("Utils", function() {
         assert.ok(utils.isValidCondition(["ZipCode", "=", null], fields[3]));
         assert.notOk(utils.isValidCondition(["ZipCode", "=", ""], fields[3]));
         assert.ok(utils.isValidCondition(["Field", "=", ""], { dataField: "Field" }));
+        assert.notOk(utils.isValidCondition(["Field", "customOperation", ""], { dataField: "Field" }));
     });
 
     QUnit.test("getField test", function(assert) {
@@ -1316,7 +1317,30 @@ QUnit.module("Formatting", function() {
                     return conditionInfo.valueText + "CustomOperation";
                 }
             };
-        assert.equal(utils.getCurrentValueText(field, value, customOperation), "MyValueCustomOperation");
+        assert.equal(utils.getCurrentValueText(field, value, customOperation), "MyValueTestCustomOperation");
+    });
+
+    QUnit.test("customOperation.customizeText for array", function(assert) {
+        var field = { dataType: "string" };
+
+        var customOperation = { customizeText: (fieldInfo) => "(Blanks)" },
+            text = utils.getCurrentValueText(field, "", customOperation);
+
+        assert.equal(text, "");
+
+        text = utils.getCurrentValueText(field, [null], customOperation).done(text => {
+            assert.equal(text, "(Blanks)");
+        });
+
+        var field2 = { dataType: "number" };
+
+        text = utils.getCurrentValueText(field2, null, customOperation);
+
+        assert.equal(text, "");
+
+        text = utils.getCurrentValueText(field, [null], customOperation).done(text => {
+            assert.equal(text, "(Blanks)");
+        });
     });
 
     QUnit.test("default format for date", function(assert) {
@@ -1491,42 +1515,30 @@ QUnit.module("Between operation", function() {
     });
 
     QUnit.test("between.customizeText", function(assert) {
-        // arrange
         var customOperations = [],
             field = { dataType: "number" };
 
-        // act
         var betweenOperation = utils.getMergedOperations(customOperations)[0],
-            text = betweenOperation.customizeText({
-                field: field,
-                value: ""
-            });
-        // assert
-        assert.equal(text, "<enter a value>", "empty text is correct");
+            text = utils.getCurrentValueText(field, null, betweenOperation);
+
+        assert.equal(text, "", "empty text is correct");
+
+        text = utils.getCurrentValueText(field, [null, null], betweenOperation).done(result => {
+            assert.equal(result, "", "empty text is correct");
+        });
+
+        text = utils.getCurrentValueText(field, [0, null], betweenOperation).done(result => {
+            assert.deepEqual(result, ["0", "?"], "text without endValue");
+        });
+
+        text = utils.getCurrentValueText(field, [null, 1], betweenOperation).done(result => {
+            assert.deepEqual(result, ["?", "1"], "text without startValue");
+        });
 
         // act
-        text = betweenOperation.customizeText({
-            field: field,
-            value: [0]
+        text = utils.getCurrentValueText(field, [0, 1], betweenOperation).done(result => {
+            assert.deepEqual(result, ["0", "1"], "text with startValue & endValue");
         });
-        // assert
-        assert.equal(text, "0 - ?", "text without endValue");
-
-        // act
-        text = betweenOperation.customizeText({
-            field: field,
-            value: [null, 0]
-        });
-        // assert
-        assert.equal(text, "? - 0", "text without startValue");
-
-        // act
-        text = betweenOperation.customizeText({
-            field: field,
-            value: [0, 1]
-        });
-        // assert
-        assert.equal(text, "0 - 1", "text with startValue & endValue");
     });
 });
 

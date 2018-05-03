@@ -547,8 +547,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
             case "format":
             case "useMaskBehavior":
                 this._renderFormatter();
-                this._parsedValue = this.option("value");
-                this._setTextByParsedValue();
+                this._renderValue();
                 break;
             default:
                 this.callBase(args);

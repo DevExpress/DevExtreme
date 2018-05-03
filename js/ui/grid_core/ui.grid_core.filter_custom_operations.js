@@ -1,5 +1,7 @@
 "use strict";
 
+import { renderValueText } from "../filter_builder/filter_builder";
+
 var $ = require("../../core/renderer"),
     messageLocalization = require("../../localization/message"),
     extend = require("../../core/utils/extend").extend,
@@ -44,30 +46,25 @@ function baseOperation(grid) {
 
     var headerFilterController = grid && grid.getController("headerFilter"),
         customizeText = function(fieldInfo) {
-            var values = fieldInfo.value || [],
+            var value = fieldInfo.value,
                 column = grid.columnOption(fieldInfo.field.dataField),
                 headerFilter = column && column.headerFilter,
                 lookup = column && column.lookup;
 
             if((headerFilter && headerFilter.dataSource) || (lookup && lookup.dataSource)) {
-                column = extend({}, column, { filterType: "include", filterValues: values });
+                column = extend({}, column, { filterType: "include", filterValues: [value] });
                 var dataSourceOptions = headerFilterController.getDataSource(column);
                 dataSourceOptions.paginate = false;
                 var dataSource = new DataSourceModule.DataSource(dataSourceOptions),
                     result = new deferredUtils.Deferred();
 
-                dataSource.load().done(function(items) {
-                    texts = getSelectedItemsTexts(items);
-                    result.resolve(texts.join(", "));
+                dataSource.load().done(items => {
+                    result.resolve(getSelectedItemsTexts(items)[0]);
                 });
                 return result;
             } else {
-                var texts = values.map(function(value) {
-                    var text = headerFilterController.getHeaderItemText(value, column, 0, grid.option("headerFilter"));
-                    return text;
-                });
-
-                return texts.join(", ");
+                var text = headerFilterController.getHeaderItemText(value, column, 0, grid.option("headerFilter"));
+                return text;
             }
         };
     return {
@@ -76,9 +73,10 @@ function baseOperation(grid) {
         editorTemplate: function(conditionInfo, container) {
             var div = $("<div>")
                     .addClass("dx-filterbuilder-item-value-text")
-                    .text(conditionInfo.text)
                     .appendTo(container),
                 column = extend(true, {}, grid.columnOption(conditionInfo.field.dataField));
+
+            renderValueText(div, conditionInfo.value);
 
             var setValue = function(value) {
                 conditionInfo.setValue(value);
