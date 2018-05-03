@@ -12,7 +12,7 @@ gulp.task('vendor', function() {
             './vendor/cldr/**',
             './vendor/globalize/**',
             './vendor/jquery/*',
-            './vendor/jszip/*',
+            './node_modules/jszip/dist/jszip?(.min).js',
             './node_modules/knockout/build/output/knockout-latest?(.debug).js'
         ]).pipe(gulp.dest('artifacts/js'))
     );
