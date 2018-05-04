@@ -930,7 +930,7 @@ var Lookup = DropDownList.inherit({
         this.callBase();
 
         if(this.option("_scrollToSelectedItemEnabled")) {
-            translator.resetPosition(this._popup.element().find(".dx-overlay-content"));
+            translator.resetPosition($(this._popup.element()).find(".dx-overlay-content"));
         }
     },
 
