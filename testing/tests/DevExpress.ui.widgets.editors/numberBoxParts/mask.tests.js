@@ -602,6 +602,25 @@ QUnit.test("valueChanged event fires on value apply", function(assert) {
     assert.ok(valueChangedSpy.calledOnce, "valueChanged event called once");
 });
 
+QUnit.testInActiveWindow("caret position is not changed when the focus out event has occurred", function(assert) {
+    var _caret = this.instance._caret,
+        caretIsUpdatedOnFocusOut,
+        $input = $(this.instance.element()).find(".dx-texteditor-input");
+
+    this.instance._caret = (function(newCaret) {
+        var result = _caret.apply(this.instance, newCaret);
+        if(!$input.is(":focus") && newCaret) {
+            caretIsUpdatedOnFocusOut = true;
+        }
+        return result;
+    }).bind(this);
+    this.keyboard.type(".").blur();
+
+    this.instance._caret = _caret;
+
+    assert.notOk(caretIsUpdatedOnFocusOut);
+});
+
 
 QUnit.module("format: incomplete value", moduleConfig);
 
