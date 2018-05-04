@@ -1,8 +1,8 @@
 "use strict";
 
-var utils = require("ui/filter_builder/utils"),
-    between = require("ui/filter_builder/between"),
-    fields = require("../../../helpers/filterBuilderTestData.js");
+import utils from "ui/filter_builder/utils";
+import between from "ui/filter_builder/between";
+import fields from "../../../helpers/filterBuilderTestData.js";
 
 var condition1 = ["CompanyName", "=", "Super Mart of the West"],
     condition2 = ["CompanyName", "=", "and"],
