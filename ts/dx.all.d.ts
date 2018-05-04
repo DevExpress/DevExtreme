@@ -1175,7 +1175,7 @@ declare module DevExpress.data {
         /** Specifies the type of the key property or properties. */
         keyType?: string | any;
         /** A handler for the loading event. */
-        onLoading?: any;
+        onLoading?: ((loadOptions: LoadOptions) => any);
         /** Specifies the URL of the OData entity to access. */
         url?: string;
         /** Specifies the version of the OData protocol used to interact with the data service. */
@@ -1715,7 +1715,7 @@ declare module DevExpress.ui {
     }
     export interface dxAutocompleteOptions extends dxDropDownListOptions {
         /** @deprecated Use the valueExpr option instead. */
-        displayExpr?: any;
+        displayExpr?: string | Function;
         /** Specifies the maximum count of items displayed by the widget. */
         maxItemCount?: number;
         /** The minimum number of characters that must be entered into the text box to begin a search. */
@@ -2813,7 +2813,7 @@ declare module DevExpress.ui {
         /** The text displayed in the load panel. */
         message?: string;
         /** Specifies the shading color. */
-        shadingColor?: any;
+        shadingColor?: string;
         /** A Boolean value specifying whether or not to show a load indicator. */
         showIndicator?: boolean;
         /** A Boolean value specifying whether or not to show the pane behind the load indicator. */
@@ -2877,7 +2877,7 @@ declare module DevExpress.ui {
         /** Specifies whether the next page is loaded when a user scrolls the widget to the bottom or when the "next" button is clicked. */
         pageLoadMode?: string;
         /** @deprecated Use the DataSource.paginate option instead. */
-        pagingEnabled?: any;
+        pagingEnabled?: boolean;
         /** The text displayed by the widget when nothing is selected. */
         placeholder?: string;
         /** Specifies the popup element's height. Applies only if fullScreen is false. */
@@ -2932,7 +2932,7 @@ declare module DevExpress.ui {
         /** Specifies whether the widget can be focused using keyboard navigation. */
         focusStateEnabled?: boolean;
         /** Specifies the widget's height. */
-        height?: any;
+        height?: number | string | (() => number | string);
         /** A key used to authenticate the application within the required map provider. */
         key?: string | { bing?: string, google?: string, googleStatic?: string };
         /** A URL pointing to the custom icon to be used for map markers. */
@@ -2958,7 +2958,7 @@ declare module DevExpress.ui {
         /** The type of a map to display. */
         type?: string;
         /** Specifies the widget's width. */
-        width?: any;
+        width?: number | string | (() => number | string);
         /** The zoom level of the map. */
         zoom?: number;
     }
@@ -3032,7 +3032,7 @@ declare module DevExpress.ui {
     }
     export interface dxNavBarOptions extends dxTabsOptions {
         /** Specifies whether or not an end-user can scroll tabs by swiping. */
-        scrollByContent?: any;
+        scrollByContent?: boolean;
     }
     /** The NavBar is a widget that navigates the application views. */
     export class dxNavBar extends dxTabs {
@@ -3281,7 +3281,7 @@ declare module DevExpress.ui {
         /** Configures widget visibility animations. This object contains two fields: show and hide. */
         animation?: dxPopoverAnimation;
         /** A Boolean value specifying whether or not the widget is closed if a user clicks outside of the popover window and outside the target element. */
-        closeOnOutsideClick?: any;
+        closeOnOutsideClick?: boolean | ((event: event) => boolean);
         /** Specifies the widget's height. */
         height?: number | string | (() => number | string);
         /** Specifies options of popover hiding. */
@@ -3317,7 +3317,7 @@ declare module DevExpress.ui {
     }
     export interface dxPopupOptions extends dxOverlayOptions {
         /** Configures widget visibility animations. This object contains two fields: show and hide. */
-        animation?: any;
+        animation?: dxPopupAnimation;
         /** @deprecated Use the toolbarItems option instead. */
         buttons?: Array<any>;
         /** Specifies whether or not to allow a user to drag the popup window. */
@@ -3350,9 +3350,9 @@ declare module DevExpress.ui {
     /** Configures widget visibility animations. This object contains two fields: show and hide. */
     export interface dxPopupAnimation extends dxOverlayAnimation {
         /** An object that defines the animation options used when the widget is being hidden. */
-        hide?: any;
+        hide?: animationConfig;
         /** An object that defines the animation options used when the widget is being shown. */
-        show?: any;
+        show?: animationConfig;
     }
     /** Specifies items displayed on the top or bottom toolbar of the popup window. */
     export interface dxPopupToolbarItem {
@@ -3464,7 +3464,7 @@ declare module DevExpress.ui {
         /** Specifies the collection of columns for the grid used to position layout elements. */
         cols?: Array<{ baseSize?: number | string, shrink?: number, ratio?: number, screen?: string }>;
         /** Specifies the widget's height. */
-        height?: any;
+        height?: number | string | (() => number | string);
         /** Specifies the collection of rows for the grid used to position layout elements. */
         rows?: Array<{ baseSize?: number | string, shrink?: number, ratio?: number, screen?: string }>;
         /** Specifies the function returning the size qualifier depending on the screen's width. */
@@ -3472,7 +3472,7 @@ declare module DevExpress.ui {
         /** Specifies on which screens all layout elements should be arranged in a single column. Accepts a single or several size qualifiers separated by a space. */
         singleColumnScreen?: string;
         /** Specifies the widget's width. */
-        width?: any;
+        width?: number | string | (() => number | string);
     }
     /** The ResponsiveBox widget allows you to create an application or a website with a layout adapted to different screen sizes. */
     export class dxResponsiveBox extends CollectionWidget {
@@ -3937,13 +3937,13 @@ declare module DevExpress.ui {
         /** A Boolean value specifying whether or not the toast is closed if a user clicks it. */
         closeOnClick?: boolean;
         /** Specifies whether to close the widget if a user clicks outside it. */
-        closeOnOutsideClick?: any;
+        closeOnOutsideClick?: boolean | ((event: event) => boolean);
         /** A Boolean value specifying whether or not the toast is closed if a user swipes it out of the screen boundaries. */
         closeOnSwipe?: boolean;
         /** The time span in milliseconds during which the Toast widget is visible. */
         displayTime?: number;
         /** Specifies the widget's height in pixels. */
-        height?: any;
+        height?: number | string | (() => number | string);
         /** The Toast message text. */
         message?: string;
         /** Positions the widget. */
@@ -3953,7 +3953,7 @@ declare module DevExpress.ui {
         /** Specifies the Toast widget type. */
         type?: string;
         /** Specifies the widget's width in pixels. */
-        width?: any;
+        width?: number | string | (() => number | string);
     }
     /** Configures widget visibility animations. This object contains two fields: show and hide. */
     export interface dxToastAnimation extends dxOverlayAnimation {
@@ -5091,7 +5091,7 @@ declare module DevExpress.ui {
         /** Specifies whether or not the widget changes its state when interacting with a user. */
         activeStateEnabled?: boolean;
         /** Specifies whether the widget can be focused using keyboard navigation. */
-        focusStateEnabled?: any;
+        focusStateEnabled?: boolean;
         /** Specifies whether the widget changes its state when a user pauses on it. */
         hoverStateEnabled?: boolean;
         /** Specifies the step by which a handle moves when a user presses Page Up or Page Down. */
@@ -8139,7 +8139,7 @@ declare module DevExpress.viz.gauges {
         /** Specifies a set of subvalues to be designated by the subvalue indicators. */
         subvalues?: Array<number>;
         /** Configures the widget's title. */
-        title?: any;
+        title?: BaseGaugeTitle | string;
         /** Configures tooltips. */
         tooltip?: BaseGaugeTooltip;
         /** Specifies the main value on a gauge. */
@@ -8367,7 +8367,7 @@ declare module DevExpress.viz.gauges {
         /** @deprecated Use the title.subtitle option instead. */
         subtitle?: any | string;
         /** Configures the widget's title. */
-        title?: any;
+        title?: dxBarGaugeTitle | string;
         /** Configures tooltips. */
         tooltip?: dxBarGaugeTooltip;
         /** Specifies the array of values to be indicated on a bar gauge. */
