@@ -7298,7 +7298,8 @@ QUnit.test("contentReady should be fired asynchronously if scrolling mode is vir
         height: 100,
         dataSource: array,
         scrolling: {
-            mode: "virtual"
+            mode: "virtual",
+            useNative: false
         },
         paging: {
             pageSize: 5
