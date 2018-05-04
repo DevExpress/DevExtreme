@@ -643,7 +643,6 @@ var Lookup = DropDownList.inherit({
                     * @type boolean
                     * @default false @for Material
                     */
-
                     usePopover: false,
 
                     /**
@@ -653,11 +652,9 @@ var Lookup = DropDownList.inherit({
                     * @default true @for Material
                     * @type_function_return boolean
                     */
-
                     closeOnOutsideClick: true,
 
                     popupWidth: (function() { return this.$element().outerWidth(); }).bind(this),
-
                     popupHeight: (function() { return this._getPopupHeight(MATERIAL_LOOKUP_LIST_ITEMS_COUNT); }).bind(this),
 
                     /**
@@ -666,7 +663,6 @@ var Lookup = DropDownList.inherit({
                     * @type boolean
                     * @default false @for Material
                     */
-
                     searchEnabled: false,
 
                     /**
@@ -675,7 +671,6 @@ var Lookup = DropDownList.inherit({
                     * @type boolean
                     * @default false @for Material
                     */
-
                     showCancelButton: false,
 
                     /**
@@ -684,7 +679,6 @@ var Lookup = DropDownList.inherit({
                     * @type boolean
                     * @default false @for Material
                     */
-
                     showPopupTitle: false,
 
                     /**
@@ -693,7 +687,6 @@ var Lookup = DropDownList.inherit({
                     * @type positionConfig
                     * @default { my: 'left top', at: 'left top', of: lookupContainer } @for Material
                     */
-
                     position: {
                         my: "left top",
                         at: "left top",
@@ -938,7 +931,7 @@ var Lookup = DropDownList.inherit({
         this.callBase();
 
         if(this.option("_scrollToSelectedItemEnabled")) {
-            translator.resetPosition(this._popup.$element().find(".dx-overlay-content"));
+            translator.resetPosition(this._popup.element().find(".dx-overlay-content"));
         }
     },
 
