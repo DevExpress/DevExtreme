@@ -346,7 +346,7 @@ var ColumnChooserView = columnsView.ColumnsView.inherit({
     },
 
     /**
-     * @name GridBaseMethods_showColumnChooser
+     * @name GridBaseMethods.showColumnChooser
      * @publicName showColumnChooser()
      */
     showColumnChooser: function() {
@@ -366,7 +366,7 @@ var ColumnChooserView = columnsView.ColumnsView.inherit({
     },
 
     /**
-     * @name GridBaseMethods_hideColumnChooser
+     * @name GridBaseMethods.hideColumnChooser
      * @publicName hideColumnChooser()
      */
     hideColumnChooser: function() {
@@ -394,55 +394,55 @@ module.exports = {
     defaultOptions: function() {
         return {
             /**
-             * @name GridBaseOptions_columnChooser
+             * @name GridBaseOptions.columnChooser
              * @publicName columnChooser
              * @type object
              */
             columnChooser: {
                 /**
-                 * @name GridBaseOptions_columnChooser_enabled
+                 * @name GridBaseOptions.columnChooser.enabled
                  * @publicName enabled
                  * @type boolean
                  * @default false
                  */
                 enabled: false,
                 /**
-                 * @name GridBaseOptions_columnChooser_allowSearch
+                 * @name GridBaseOptions.columnChooser.allowSearch
                  * @publicName allowSearch
                  * @type boolean
                  * @default false
                  */
                 allowSearch: false,
                 /**
-                 * @name GridBaseOptions_columnChooser_mode
+                 * @name GridBaseOptions.columnChooser.mode
                  * @publicName mode
                  * @type Enums.GridColumnChooserMode
                  * @default "dragAndDrop"
                  */
                 mode: "dragAndDrop",
                 /**
-                 * @name GridBaseOptions_columnChooser_width
+                 * @name GridBaseOptions.columnChooser.width
                  * @publicName width
                  * @type number
                  * @default 250
                  */
                 width: 250,
                 /**
-                 * @name GridBaseOptions_columnChooser_height
+                 * @name GridBaseOptions.columnChooser.height
                  * @publicName height
                  * @type number
                  * @default 260
                  */
                 height: 260,
                 /**
-                 * @name GridBaseOptions_columnChooser_title
+                 * @name GridBaseOptions.columnChooser.title
                  * @publicName title
                  * @type string
                  * @default "Column Chooser"
                  */
                 title: messageLocalization.format("dxDataGrid-columnChooserTitle"),
                 /**
-                 * @name GridBaseOptions_columnChooser_emptyPanelText
+                 * @name GridBaseOptions.columnChooser.emptyPanelText
                  * @publicName emptyPanelText
                  * @type string
                  * @default "Drag a column here to hide it"

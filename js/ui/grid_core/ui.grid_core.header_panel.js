@@ -131,7 +131,7 @@ module.exports = {
     defaultOptions: function() {
         return {
             /**
-             * @name GridBaseOptions_onToolbarPreparing
+             * @name GridBaseOptions.onToolbarPreparing
              * @publicName onToolbarPreparing
              * @type function(e)
              * @type_function_param1 e:object

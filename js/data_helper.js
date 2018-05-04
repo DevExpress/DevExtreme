@@ -144,7 +144,7 @@ var DataHelperMixin = {
     },
 
     /**
-    * @name DataHelperMixinMethods_getDataSource
+    * @name DataHelperMixinMethods.getDataSource
     * @publicName getDataSource()
     * @return DataSource
     */

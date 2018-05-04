@@ -44,7 +44,7 @@ var CheckBox = Editor.inherit({
         return extend(this.callBase(), {
 
             /**
-             * @name dxCheckBoxOptions_hoverStateEnabled
+             * @name dxCheckBoxOptions.hoverStateEnabled
              * @publicName hoverStateEnabled
              * @type boolean
              * @default true
@@ -53,7 +53,7 @@ var CheckBox = Editor.inherit({
             hoverStateEnabled: true,
 
             /**
-             * @name dxCheckBoxOptions_activeStateEnabled
+             * @name dxCheckBoxOptions.activeStateEnabled
              * @publicName activeStateEnabled
              * @type boolean
              * @default true
@@ -62,7 +62,7 @@ var CheckBox = Editor.inherit({
             activeStateEnabled: true,
 
             /**
-             * @name dxCheckBoxOptions_value
+             * @name dxCheckBoxOptions.value
              * @publicName value
              * @type boolean
              * @default false
@@ -70,7 +70,7 @@ var CheckBox = Editor.inherit({
             value: false,
 
             /**
-             * @name dxCheckBoxOptions_text
+             * @name dxCheckBoxOptions.text
              * @publicName text
              * @type string
              * @default ""
@@ -80,7 +80,7 @@ var CheckBox = Editor.inherit({
             useInkRipple: false
 
             /**
-            * @name dxCheckBoxOptions_name
+            * @name dxCheckBoxOptions.name
             * @publicName name
             * @type string
             * @hidden false
@@ -97,7 +97,7 @@ var CheckBox = Editor.inherit({
                 },
                 options: {
                     /**
-                    * @name dxCheckBoxOptions_focusStateEnabled
+                    * @name dxCheckBoxOptions.focusStateEnabled
                     * @publicName focusStateEnabled
                     * @type boolean
                     * @default true @for desktop

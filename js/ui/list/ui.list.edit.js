@@ -106,7 +106,7 @@ var ListEdit = ListBase.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             /**
-            * @name dxListOptions_showSelectionControls
+            * @name dxListOptions.showSelectionControls
             * @publicName showSelectionControls
             * @type boolean
             * @default false
@@ -114,7 +114,7 @@ var ListEdit = ListBase.inherit({
             showSelectionControls: false,
 
             /**
-            * @name dxListOptions_selectionMode
+            * @name dxListOptions.selectionMode
             * @publicName selectionMode
             * @type Enums.ListSelectionMode
             * @default 'none'
@@ -122,7 +122,7 @@ var ListEdit = ListBase.inherit({
             selectionMode: 'none',
 
             /**
-             * @name dxListOptions_selectAllMode
+             * @name dxListOptions.selectAllMode
              * @publicName selectAllMode
              * @type Enums.SelectAllMode
              * @default 'page'
@@ -130,7 +130,7 @@ var ListEdit = ListBase.inherit({
             selectAllMode: 'page',
 
             /**
-            * @name dxListOptions_onSelectAllValueChanged
+            * @name dxListOptions.onSelectAllValueChanged
             * @publicName onSelectAllValueChanged
             * @extends Action
             * @type function(e)
@@ -141,7 +141,7 @@ var ListEdit = ListBase.inherit({
             onSelectAllValueChanged: null,
 
             /**
-            * @name dxListOptions_selectAllText
+            * @name dxListOptions.selectAllText
             * @publicName selectAllText
             * @type string
             * @default "Select All"
@@ -150,18 +150,18 @@ var ListEdit = ListBase.inherit({
             selectAllText: messageLocalization.format("dxList-selectAll"),
 
             /**
-            * @name dxListOptions_menuItems
+            * @name dxListOptions.menuItems
             * @publicName menuItems
             * @type Array<Object>
             * @default []
             */
             /**
-            * @name dxListOptions_menuItems_text
+            * @name dxListOptions.menuItems.text
             * @publicName text
             * @type string
             */
             /**
-            * @name dxListOptions_menuItems_action
+            * @name dxListOptions.menuItems.action
             * @publicName action
             * @type function
             * @type_function_param1 itemElement:dxElement
@@ -170,7 +170,7 @@ var ListEdit = ListBase.inherit({
             menuItems: [],
 
             /**
-            * @name dxListOptions_menuMode
+            * @name dxListOptions.menuMode
             * @publicName menuMode
             * @type Enums.ListMenuMode
             * @default 'context'
@@ -178,7 +178,7 @@ var ListEdit = ListBase.inherit({
             menuMode: "context",
 
             /**
-            * @name dxListOptions_allowItemDeleting
+            * @name dxListOptions.allowItemDeleting
             * @publicName allowItemDeleting
             * @type boolean
             * @default false
@@ -186,7 +186,7 @@ var ListEdit = ListBase.inherit({
             allowItemDeleting: false,
 
             /**
-            * @name dxListOptions_itemDeleteMode
+            * @name dxListOptions.itemDeleteMode
             * @publicName itemDeleteMode
             * @type Enums.ListItemDeleteMode
              * @default 'static'
@@ -194,7 +194,7 @@ var ListEdit = ListBase.inherit({
             itemDeleteMode: "static",
 
             /**
-            * @name dxListOptions_allowItemReordering
+            * @name dxListOptions.allowItemReordering
             * @publicName allowItemReordering
             * @type boolean
             * @default false
@@ -202,7 +202,7 @@ var ListEdit = ListBase.inherit({
             allowItemReordering: false
 
             /**
-            * @name dxListOptions_onItemDeleting
+            * @name dxListOptions.onItemDeleting
             * @publicName onItemDeleting
             * @extends Action
             * @type function(e)
@@ -217,7 +217,7 @@ var ListEdit = ListBase.inherit({
             */
 
             /**
-            * @name dxListOptions_onItemDeleted
+            * @name dxListOptions.onItemDeleted
             * @publicName onItemDeleted
             * @extends Action
             * @type function(e)
@@ -230,7 +230,7 @@ var ListEdit = ListBase.inherit({
             */
 
             /**
-            * @name dxListOptions_onItemReordered
+            * @name dxListOptions.onItemReordered
             * @publicName onItemReordered
             * @extends Action
             * @type function(e)
@@ -254,14 +254,14 @@ var ListEdit = ListBase.inherit({
                 },
                 options: {
                     /**
-                    * @name dxListOptions_menuMode
+                    * @name dxListOptions.menuMode
                     * @publicName menuMode
                     * @default 'slide' @for iOS
                     */
                     menuMode: "slide",
 
                     /**
-                    * @name dxListOptions_itemDeleteMode
+                    * @name dxListOptions.itemDeleteMode
                     * @publicName itemDeleteMode
                     * @default 'slideItem' @for iOS
                     */
@@ -272,7 +272,7 @@ var ListEdit = ListBase.inherit({
                 device: { platform: "android" },
                 options: {
                     /**
-                    * @name dxListOptions_itemDeleteMode
+                    * @name dxListOptions.itemDeleteMode
                     * @publicName itemDeleteMode
                     * @default 'swipe' @for Android
                     */
@@ -283,7 +283,7 @@ var ListEdit = ListBase.inherit({
                 device: { platform: "win" },
                 options: {
                     /**
-                    * @name dxListOptions_itemDeleteMode
+                    * @name dxListOptions.itemDeleteMode
                     * @publicName itemDeleteMode
                     * @default 'context' @for Windows_Mobile
                     */
@@ -448,7 +448,7 @@ var ListEdit = ListBase.inherit({
     },
 
     /**
-    * @name dxListMethods_selectAll
+    * @name dxListMethods.selectAll
     * @publicName selectAll()
     */
     selectAll: function() {
@@ -456,7 +456,7 @@ var ListEdit = ListBase.inherit({
     },
 
     /**
-    * @name dxListMethods_unselectAll
+    * @name dxListMethods.unselectAll
     * @publicName unselectAll()
     */
     unselectAll: function() {
@@ -468,7 +468,7 @@ var ListEdit = ListBase.inherit({
     },
 
     /**
-    * @name dxListMethods_getFlatIndexByItemElement
+    * @name dxListMethods.getFlatIndexByItemElement
     * @publicName getFlatIndexByItemElement(itemElement)
     * @param1 itemElement:Node
     * @return object
@@ -479,7 +479,7 @@ var ListEdit = ListBase.inherit({
     },
 
     /**
-    * @name dxListMethods_getItemElementByFlatIndex
+    * @name dxListMethods.getItemElementByFlatIndex
     * @publicName getItemElementByFlatIndex(flatIndex)
     * @param1 flatIndex:Number
     * @return Node
@@ -496,7 +496,7 @@ var ListEdit = ListBase.inherit({
     },
 
     /**
-    * @name dxListMethods_getItemByIndex
+    * @name dxListMethods.getItemByIndex
     * @publicName getItemByIndex(index)
     * @param1 index:Number
     * @return object
@@ -508,62 +508,62 @@ var ListEdit = ListBase.inherit({
     }
 
     /**
-    * @name dxListMethods_deleteItem
+    * @name dxListMethods.deleteItem
     * @publicName deleteItem(itemElement)
     * @param1 itemElement:Node
     * @return Promise<void>
     */
     /**
-    * @name dxListMethods_deleteItem
+    * @name dxListMethods.deleteItem
     * @publicName deleteItem(itemIndex)
     * @param1 itemIndex:Number|Object
     * @return Promise<void>
     */
 
     /**
-    * @name dxListMethods_isItemSelected
+    * @name dxListMethods.isItemSelected
     * @publicName isItemSelected(itemElement)
     * @param1 itemElement:Node
     * @return boolean
     */
     /**
-    * @name dxListMethods_isItemSelected
+    * @name dxListMethods.isItemSelected
     * @publicName isItemSelected(itemIndex)
     * @param1 itemIndex:Number|Object
     * @return boolean
     */
 
     /**
-    * @name dxListMethods_selectItem
+    * @name dxListMethods.selectItem
     * @publicName selectItem(itemElement)
     * @param1 itemElement:Node
     */
     /**
-    * @name dxListMethods_selectItem
+    * @name dxListMethods.selectItem
     * @publicName selectItem(itemIndex)
     * @param1 itemIndex:Number|Object
     */
 
     /**
-    * @name dxListMethods_unselectItem
+    * @name dxListMethods.unselectItem
     * @publicName unselectItem(itemElement)
     * @param1 itemElement:Node
     */
     /**
-    * @name dxListMethods_unselectItem
+    * @name dxListMethods.unselectItem
     * @publicName unselectItem(itemIndex)
     * @param1 itemIndex:Number|Object
     */
 
     /**
-    * @name dxListMethods_reorderItem
+    * @name dxListMethods.reorderItem
     * @publicName reorderItem(itemElement, toItemElement)
     * @param1 itemElement:Node
     * @param2 toItemElement:Node
     * @return Promise<void>
     */
     /**
-    * @name dxListMethods_reorderItem
+    * @name dxListMethods.reorderItem
     * @publicName reorderItem(itemIndex, toItemIndex)
     * @param1 itemIndex:Number|Object
     * @param2 toItemIndex:Number|Object

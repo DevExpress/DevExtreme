@@ -92,7 +92,7 @@ var Widget = DOMComponent.inherit({
         return extend(this.callBase(), {
 
             /**
-             * @name WidgetOptions_disabled
+             * @name WidgetOptions.disabled
              * @publicName disabled
              * @type boolean
              * @default false
@@ -100,7 +100,7 @@ var Widget = DOMComponent.inherit({
             disabled: false,
 
             /**
-             * @name WidgetOptions_visible
+             * @name WidgetOptions.visible
              * @publicName visible
              * @type boolean
              * @default true
@@ -108,7 +108,7 @@ var Widget = DOMComponent.inherit({
             visible: true,
 
             /**
-             * @name WidgetOptions_hint
+             * @name WidgetOptions.hint
              * @publicName hint
              * @type string
              * @default undefined
@@ -116,7 +116,7 @@ var Widget = DOMComponent.inherit({
             hint: undefined,
 
             /**
-             * @name WidgetOptions_activeStateEnabled
+             * @name WidgetOptions.activeStateEnabled
              * @publicName activeStateEnabled
              * @type boolean
              * @default false
@@ -124,7 +124,7 @@ var Widget = DOMComponent.inherit({
             activeStateEnabled: false,
 
             /**
-            * @name WidgetOptions_onContentReady
+            * @name WidgetOptions.onContentReady
             * @publicName onContentReady
             * @extends Action
             * @action
@@ -132,7 +132,7 @@ var Widget = DOMComponent.inherit({
             onContentReady: null,
 
             /**
-             * @name WidgetOptions_hoverStateEnabled
+             * @name WidgetOptions.hoverStateEnabled
              * @publicName hoverStateEnabled
              * @type boolean
              * @default false
@@ -140,7 +140,7 @@ var Widget = DOMComponent.inherit({
             hoverStateEnabled: false,
 
             /**
-             * @name WidgetOptions_focusStateEnabled
+             * @name WidgetOptions.focusStateEnabled
              * @publicName focusStateEnabled
              * @type boolean
              * @default false
@@ -148,7 +148,7 @@ var Widget = DOMComponent.inherit({
             focusStateEnabled: false,
 
             /**
-             * @name WidgetOptions_tabIndex
+             * @name WidgetOptions.tabIndex
              * @publicName tabIndex
              * @type number
              * @default 0
@@ -156,7 +156,7 @@ var Widget = DOMComponent.inherit({
             tabIndex: 0,
 
             /**
-             * @name WidgetOptions_accessKey
+             * @name WidgetOptions.accessKey
              * @publicName accessKey
              * @type string
              * @default null
@@ -164,7 +164,7 @@ var Widget = DOMComponent.inherit({
             accessKey: null,
 
             /**
-            * @name WidgetOptions_onFocusIn
+            * @name WidgetOptions.onFocusIn
             * @publicName onFocusIn
             * @extends Action
             * @action
@@ -173,7 +173,7 @@ var Widget = DOMComponent.inherit({
             onFocusIn: null,
 
             /**
-            * @name WidgetOptions_onFocusOut
+            * @name WidgetOptions.onFocusOut
             * @publicName onFocusOut
             * @extends Action
             * @action
@@ -215,29 +215,29 @@ var Widget = DOMComponent.inherit({
             * @section Common
             */
             /**
-            * @name format_type
+            * @name format.type
             * @publicName type
             * @type Enums.Format
             */
             /**
-            * @name format_precision
+            * @name format.precision
             * @publicName precision
             * @type number
             */
             /**
-            * @name format_currency
+            * @name format.currency
             * @publicName currency
             * @type String
             */
             /**
-            * @name format_formatter
+            * @name format.formatter
             * @publicName formatter
             * @type function
             * @type_function_param1 value:number|date
             * @type_function_return string
             */
             /**
-            * @name format_parser
+            * @name format.parser
             * @publicName parser
             * @type function
             * @type_function_param1 value:string
@@ -936,7 +936,7 @@ var Widget = DOMComponent.inherit({
     },
 
     /**
-    * @name WidgetMethods_repaint
+    * @name WidgetMethods.repaint
     * @publicName repaint()
     */
     repaint: function() {
@@ -944,7 +944,7 @@ var Widget = DOMComponent.inherit({
     },
 
     /**
-    * @name WidgetMethods_focus
+    * @name WidgetMethods.focus
     * @publicName focus()
     */
     focus: function() {
@@ -952,7 +952,7 @@ var Widget = DOMComponent.inherit({
     },
 
     /**
-    * @name WidgetMethods_registerKeyHandler
+    * @name WidgetMethods.registerKeyHandler
     * @publicName registerKeyHandler(key, handler)
     * @param1 key:string
     * @param2 handler:function

@@ -33,14 +33,14 @@ var TextBox = TextEditor.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             /**
-            * @name dxTextBoxOptions_value
+            * @name dxTextBoxOptions.value
             * @publicName value
             * @type string
             * @default ""
             */
             value: "",
             /**
-            * @name dxTextBoxOptions_mode
+            * @name dxTextBoxOptions.mode
             * @publicName mode
             * @type Enums.TextBoxMode
             * @default "text"
@@ -48,7 +48,7 @@ var TextBox = TextEditor.inherit({
             mode: "text",
 
             /**
-            * @name dxTextBoxOptions_maxlength
+            * @name dxTextBoxOptions.maxlength
             * @publicName maxLength
             * @type string|number
             * @default null

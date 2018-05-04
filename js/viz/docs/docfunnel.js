@@ -7,33 +7,33 @@
 */
 var dxFunnel = {
     /**
-    * @name dxFunnel_options
+    * @name dxFunnel.options
     * @publicName Options
     * @namespace DevExpress.viz.funnel
     * @hidden
     */
     /**
-    * @name dxFunneloptions_adaptivelayout
+    * @name dxFunneloptions.adaptivelayout
     * @publicName adaptiveLayout
     * @type object
     */
     adaptiveLayout: {
         /**
-        * @name dxFunneloptions_adaptivelayout_width
+        * @name dxFunneloptions.adaptivelayout.width
         * @publicName width
         * @type number
         * @default 80
         */
         width: 80,
         /**
-        * @name dxFunneloptions_adaptivelayout_height
+        * @name dxFunneloptions.adaptivelayout.height
         * @publicName height
         * @type number
         * @default 80
         */
         height: 80,
         /**
-        * @name dxFunneloptions_adaptivelayout_keeplabels
+        * @name dxFunneloptions.adaptivelayout.keeplabels
         * @publicName keepLabels
         * @type boolean
         * @default true
@@ -41,122 +41,122 @@ var dxFunnel = {
         keepLabels: true
     },
     /**
-    * @name dxFunneloptions_datasource
+    * @name dxFunneloptions.datasource
     * @publicName dataSource
     * @extends CommonVizDataSource
     */
     dataSource: undefined,
     /**
-    * @name dxFunneloptions_valuefield
+    * @name dxFunneloptions.valuefield
     * @publicName valueField
     * @type string
     * @default 'val'
     */
     valueField: "val",
     /**
-    * @name dxFunneloptions_argumentfield
+    * @name dxFunneloptions.argumentfield
     * @publicName argumentField
     * @type string
     * @default 'arg'
     */
     argumentField: "arg",
     /**
-    * @name dxFunneloptions_colorfield
+    * @name dxFunneloptions.colorfield
     * @publicName colorField
     * @type string
     * @default 'color'
     */
     colorField: "color",
     /**
-    * @name dxFunneloptions_palette
+    * @name dxFunneloptions.palette
     * @publicName palette
     * @extends CommonVizPalette
     */
     palette: [],
     /**
-    * @name dxFunneloptions_paletteextensionmode
+    * @name dxFunneloptions.paletteextensionmode
     * @publicName paletteExtensionMode
     * @type Enums.VizPaletteExtensionMode
     * @default 'blend'
     */
     paletteExtensionMode: 'blend',
     /**
-    * @name dxFunneloptions_hoverenabled
+    * @name dxFunneloptions.hoverenabled
     * @publicName hoverEnabled
     * @type boolean
     * @default true
     */
     hoverEnabled: true,
     /**
-    * @name dxFunneloptions_selectionmode
+    * @name dxFunneloptions.selectionmode
     * @publicName selectionMode
     * @type Enums.SelectionMode
     * @default 'single'
     */
     selectionMode: 'single',
     /**
-    * @name dxFunneloptions_algorithm
+    * @name dxFunneloptions.algorithm
     * @publicName algorithm
     * @type Enums.FunnelAlgorithm
     * @default 'dynamicSlope'
     */
     algorithm: "dynamicSlope",
     /**
-    * @name dxFunneloptions_neckheight
+    * @name dxFunneloptions.neckheight
     * @publicName neckHeight
     * @type number
     * @default 0
     */
     neckHeight: 0,
     /**
-    * @name dxFunneloptions_neckwidth
+    * @name dxFunneloptions.neckwidth
     * @publicName neckWidth
     * @type number
     * @default 0
     */
     neckWidth: 0,
     /**
-    * @name dxFunneloptions_inverted
+    * @name dxFunneloptions.inverted
     * @publicName inverted
     * @type boolean
     * @default false
     */
     inverted: false,
     /**
-    * @name dxFunneloptions_sortdata
+    * @name dxFunneloptions.sortdata
     * @publicName sortData
     * @type boolean
     * @default true
     */
     sortData: true,
     /**
-    * @name dxFunneloptions_item
+    * @name dxFunneloptions.item
     * @publicName item
     * @type object
     */
     item: {
         /**
-        * @name dxFunneloptions_item_border
+        * @name dxFunneloptions.item.border
         * @publicName border
         * @type object
         */
         border: {
             /**
-            * @name dxFunneloptions_item_border_visible
+            * @name dxFunneloptions.item.border.visible
             * @publicName visible
             * @type boolean
             * @default false
             */
             visible: false,
             /**
-            * @name dxFunneloptions_item_border_width
+            * @name dxFunneloptions.item.border.width
             * @publicName width
             * @type number
             * @default 2
             */
             width: 2,
             /**
-            * @name dxFunneloptions_item_border_color
+            * @name dxFunneloptions.item.border.color
             * @publicName color
             * @type string
             * @default #ffffff
@@ -164,33 +164,33 @@ var dxFunnel = {
             color: "#ffffff"
         },
         /**
-        * @name dxFunneloptions_item_hoverstyle
+        * @name dxFunneloptions.item.hoverstyle
         * @publicName hoverStyle
         * @type object
         */
         hoverStyle: {
             /**
-            * @name dxFunneloptions_item_hoverstyle_border
+            * @name dxFunneloptions.item.hoverstyle.border
             * @publicName border
             * @type object
             */
             border: {
                 /**
-                * @name dxFunneloptions_item_hoverstyle_border_visible
+                * @name dxFunneloptions.item.hoverstyle.border.visible
                 * @publicName visible
                 * @type boolean
                 * @default undefined
                 */
                 visible: undefined,
                 /**
-                * @name dxFunneloptions_item_hoverstyle_border_width
+                * @name dxFunneloptions.item.hoverstyle.border.width
                 * @publicName width
                 * @type number
                 * @default undefined
                 */
                 width: undefined,
                 /**
-                * @name dxFunneloptions_item_hoverstyle_border_color
+                * @name dxFunneloptions.item.hoverstyle.border.color
                 * @publicName color
                 * @type string
                 * @default undefined
@@ -198,34 +198,34 @@ var dxFunnel = {
                 color: undefined
             },
             /**
-            * @name dxFunneloptions_item_hoverstyle_hatching
+            * @name dxFunneloptions.item.hoverstyle.hatching
             * @publicName hatching
             * @type object
             */
             hatching: {
                 /**
-                * @name dxFunneloptions_item_hoverstyle_hatching_direction
+                * @name dxFunneloptions.item.hoverstyle.hatching.direction
                 * @publicName direction
                 * @type Enums.HatchingDirection
                 * @default 'right'
                 */
                 direction: "right",
                 /**
-                * @name dxFunneloptions_item_hoverstyle_hatching_opacity
+                * @name dxFunneloptions.item.hoverstyle.hatching.opacity
                 * @publicName opacity
                 * @type number
                 * @default 0.75
                 */
                 opacity: 0.75,
                 /**
-                * @name dxFunneloptions_item_hoverstyle_hatching_step
+                * @name dxFunneloptions.item.hoverstyle.hatching.step
                 * @publicName step
                 * @type number
                 * @default 6
                 */
                 step: 6,
                 /**
-                * @name dxFunneloptions_item_hoverstyle_hatching_width
+                * @name dxFunneloptions.item.hoverstyle.hatching.width
                 * @publicName width
                 * @type number
                 * @default 2
@@ -235,33 +235,33 @@ var dxFunnel = {
         },
 
         /**
-        * @name dxFunneloptions_item_selectionstyle
+        * @name dxFunneloptions.item.selectionstyle
         * @publicName selectionStyle
         * @type object
         */
         selectionStyle: {
             /**
-            * @name dxFunneloptions_item_selectionstyle_border
+            * @name dxFunneloptions.item.selectionstyle.border
             * @publicName border
             * @type object
             */
             border: {
                 /**
-                * @name dxFunneloptions_item_selectionstyle_border_visible
+                * @name dxFunneloptions.item.selectionstyle.border.visible
                 * @publicName visible
                 * @type boolean
                 * @default undefined
                 */
                 visible: undefined,
                 /**
-                * @name dxFunneloptions_item_selectionstyle_border_width
+                * @name dxFunneloptions.item.selectionstyle.border.width
                 * @publicName width
                 * @type number
                 * @default undefined
                 */
                 width: undefined,
                 /**
-                * @name dxFunneloptions_item_selectionstyle_border_color
+                * @name dxFunneloptions.item.selectionstyle.border.color
                 * @publicName color
                 * @type string
                 * @default undefined
@@ -269,34 +269,34 @@ var dxFunnel = {
                 color: undefined
             },
             /**
-            * @name dxFunneloptions_item_selectionstyle_hatching
+            * @name dxFunneloptions.item.selectionstyle.hatching
             * @publicName hatching
             * @type object
             */
             hatching: {
                 /**
-                * @name dxFunneloptions_item_selectionstyle_hatching_opacity
+                * @name dxFunneloptions.item.selectionstyle.hatching.opacity
                 * @publicName opacity
                 * @type number
                 * @default 0.5
                 */
                 opacity: 0.5,
                 /**
-                * @name dxFunneloptions_item_selectionstyle_hatching_step
+                * @name dxFunneloptions.item.selectionstyle.hatching.step
                 * @publicName step
                 * @type number
                 * @default 6
                 */
                 step: 6,
                 /**
-                * @name dxFunneloptions_item_selectionstyle_hatching_width
+                * @name dxFunneloptions.item.selectionstyle.hatching.width
                 * @publicName width
                 * @type number
                 * @default 2
                 */
                 width: 2,
                 /**
-                * @name dxFunneloptions_item_selectionstyle_hatching_direction
+                * @name dxFunneloptions.item.selectionstyle.hatching.direction
                 * @publicName direction
                 * @type Enums.HatchingDirection
                 * @default "right"
@@ -307,47 +307,47 @@ var dxFunnel = {
     },
 
     /**
-    * @name dxFunneloptions_label
+    * @name dxFunneloptions.label
     * @publicName label
     * @type object
     */
     label: {
         /**
-        * @name dxFunneloptions_label_font
+        * @name dxFunneloptions.label.font
         * @publicName font
         * @type object
         */
         font: {
             /**
-            * @name dxFunneloptions_label_font_color
+            * @name dxFunneloptions.label.font.color
             * @publicName color
             * @type string
             * @default '#767676'
             */
             color: '#767676',
             /**
-            * @name dxFunneloptions_label_font_family
+            * @name dxFunneloptions.label.font.family
             * @publicName family
             * @type string
             * @default undefined
             */
             family: undefined,
             /**
-            * @name dxFunneloptions_label_font_weight
+            * @name dxFunneloptions.label.font.weight
             * @publicName weight
             * @type number
             * @default undefined
             */
             weight: undefined,
             /**
-            * @name dxFunneloptions_label_font_size
+            * @name dxFunneloptions.label.font.size
             * @publicName size
             * @type number|string
             * @default undefined
             */
             size: undefined,
             /**
-            * @name dxFunneloptions_label_font_opacity
+            * @name dxFunneloptions.label.font.opacity
             * @publicName opacity
             * @type number
             * @default undefined
@@ -355,61 +355,61 @@ var dxFunnel = {
             opacity: undefined
         },
         /**
-        * @name dxFunneloptions_label_position
+        * @name dxFunneloptions.label.position
         * @publicName position
         * @type Enums.FunnelLabelPosition
         * @default 'columns'
         */
         position: "columns",
         /**
-        * @name dxFunneloptions_label_horizontaloffset
+        * @name dxFunneloptions.label.horizontaloffset
         * @publicName horizontalOffset
         * @type number
         * @default 0
         */
         horizontalOffset: 0,
         /**
-        * @name dxFunneloptions_label_horizontalalignment
+        * @name dxFunneloptions.label.horizontalalignment
         * @publicName horizontalAlignment
         * @type Enums.HorizontalEdge
         * @default 'right'
         */
         horizontalAlignment: "right",
         /**
-        * @name dxFunneloptions_label_format
+        * @name dxFunneloptions.label.format
         * @publicName format
         * @extends CommonVizFormat
         */
         format: '',
         /**
-        * @name dxFunneloptions_label_connector
+        * @name dxFunneloptions.label.connector
         * @publicName connector
         * @type object
         */
         connector: {
             /**
-            * @name dxFunneloptions_label_connector_visible
+            * @name dxFunneloptions.label.connector.visible
             * @publicName visible
             * @type boolean
             * @default true
             */
             visible: true,
             /**
-            * @name dxFunneloptions_label_connector_width
+            * @name dxFunneloptions.label.connector.width
             * @publicName width
             * @type number
             * @default 1
             */
             width: 1,
             /**
-            * @name dxFunneloptions_label_connector_color
+            * @name dxFunneloptions.label.connector.color
             * @publicName color
             * @type string
             * @default undefined
             */
             color: undefined,
             /**
-            * @name dxFunneloptions_label_connector_opacity
+            * @name dxFunneloptions.label.connector.opacity
             * @publicName opacity
             * @type number
             * @default 0.5
@@ -418,40 +418,40 @@ var dxFunnel = {
         },
 
         /**
-        * @name  dxFunneloptions_label_backgroundcolor
+        * @name dxFunneloptions.label.backgroundcolor
         * @publicName backgroundColor
         * @type string
         */
         backgroundColor: undefined,
         /**
-        * @name  dxFunneloptions_label_border
+        * @name dxFunneloptions.label.border
         * @publicName border
         * @type object
         */
         border: {
             /**
-            * @name  dxFunneloptions_label_border_visible
+            * @name dxFunneloptions.label.border.visible
             * @publicName visible
             * @type boolean
             * @default false
             */
             visible: false,
             /**
-            * @name  dxFunneloptions_label_border_width
+            * @name dxFunneloptions.label.border.width
             * @publicName width
             * @type number
             * @default 1
             */
             width: 1,
             /**
-            * @name  dxFunneloptions_label_border_color
+            * @name dxFunneloptions.label.border.color
             * @publicName color
             * @type string
             * @default  '#d3d3d3'
             */
             color: '#d3d3d3',
             /**
-            * @name  dxFunneloptions_label_border_dashstyle
+            * @name dxFunneloptions.label.border.dashstyle
             * @publicName dashStyle
             * @type Enums.DashStyle
             * @default 'solid'
@@ -459,21 +459,21 @@ var dxFunnel = {
             dashStyle: 'solid'
         },
         /**
-        * @name dxFunneloptions_label_visible
+        * @name dxFunneloptions.label.visible
         * @publicName visible
         * @type boolean
         * @default true
         */
         visible: true,
         /**
-        * @name dxFunneloptions_label_showforzerovalues
+        * @name dxFunneloptions.label.showforzerovalues
         * @publicName showForZeroValues
         * @type boolean
         * @default false
         */
         showForZeroValues: false,
         /**
-        * @name dxFunneloptions_label_customizetext
+        * @name dxFunneloptions.label.customizetext
         * @publicName customizeText
         * @type function(itemInfo)
         * @type_function_param1 itemInfo:object
@@ -488,82 +488,82 @@ var dxFunnel = {
         customizeText: undefined
     },
     /**
-    * @name dxFunneloptions_legend
+    * @name dxFunneloptions.legend
     * @publicName legend
     * @type object
     */
     legend: {
         /**
-        * @name dxFunneloptions_legend_verticalalignment
+        * @name dxFunneloptions.legend.verticalalignment
         * @publicName verticalAlignment
         * @type Enums.VerticalEdge
         * @default 'top'
         */
         verticalAlignment: 'top',
         /**
-        * @name dxFunneloptions_legend_horizontalalignment
+        * @name dxFunneloptions.legend.horizontalalignment
         * @publicName horizontalAlignment
         * @type Enums.HorizontalAlignment
         * @default 'right'
         */
         horizontalAlignment: 'right',
         /**
-        * @name dxFunneloptions_legend_orientation
+        * @name dxFunneloptions.legend.orientation
         * @publicName orientation
         * @type Enums.Orientation
         * @default undefined
         */
         orientation: undefined,
         /**
-        * @name dxFunneloptions_legend_itemtextposition
+        * @name dxFunneloptions.legend.itemtextposition
         * @publicName itemTextPosition
         * @type Enums.Position
         * @default undefined
         */
         itemTextPosition: undefined,
         /**
-        * @name dxFunneloptions_legend_itemsalignment
+        * @name dxFunneloptions.legend.itemsalignment
         * @publicName itemsAlignment
         * @type Enums.HorizontalAlignment
         * @default undefined
         */
         itemsAlignment: undefined,
         /**
-        * @name dxFunneloptions_legend_font
+        * @name dxFunneloptions.legend.font
         * @publicName font
         * @type object
         */
         font: {
             /**
-            * @name dxFunneloptions_legend_font_color
+            * @name dxFunneloptions.legend.font.color
             * @publicName color
             * @type string
             * @default '#767676'
             */
             color: '#767676',
             /**
-            * @name dxFunneloptions_legend_font_family
+            * @name dxFunneloptions.legend.font.family
             * @publicName family
             * @type string
             * @default undefined
             */
             family: undefined,
             /**
-            * @name dxFunneloptions_legend_font_weight
+            * @name dxFunneloptions.legend.font.weight
             * @publicName weight
             * @type number
             * @default undefined
             */
             weight: undefined,
             /**
-            * @name dxFunneloptions_legend_font_size
+            * @name dxFunneloptions.legend.font.size
             * @publicName size
             * @type number|string
             * @default undefined
             */
             size: undefined,
             /**
-            * @name dxFunneloptions_legend_font_opacity
+            * @name dxFunneloptions.legend.font.opacity
             * @publicName opacity
             * @type number
             * @default undefined
@@ -571,42 +571,42 @@ var dxFunnel = {
             opacity: undefined
         },
         /**
-        * @name dxFunneloptions_legend_visible
+        * @name dxFunneloptions.legend.visible
         * @publicName visible
         * @type boolean
         * @default false
         */
         visible: false,
         /**
-        * @name dxFunneloptions_legend_margin
+        * @name dxFunneloptions.legend.margin
         * @publicName margin
         * @type number | object
         * @default 10
         */
         margin: {
             /**
-            * @name dxFunneloptions_legend_margin_top
+            * @name dxFunneloptions.legend.margin.top
             * @publicName top
             * @type number
             * @default 10
             */
             top: 10,
             /**
-            * @name dxFunneloptions_legend_margin_bottom
+            * @name dxFunneloptions.legend.margin.bottom
             * @publicName bottom
             * @type number
             * @default 10
             */
             bottom: 10,
             /**
-            * @name dxFunneloptions_legend_margin_left
+            * @name dxFunneloptions.legend.margin.left
             * @publicName left
             * @type number
             * @default 10
             */
             left: 10,
             /**
-            * @name dxFunneloptions_legend_margin_right
+            * @name dxFunneloptions.legend.margin.right
             * @publicName right
             * @type number
             * @default 10
@@ -614,62 +614,62 @@ var dxFunnel = {
             right: 10
         },
         /**
-        * @name dxFunneloptions_legend_markersize
+        * @name dxFunneloptions.legend.markersize
         * @publicName markerSize
         * @type number
         * @default 20
         */
         markerSize: 20,
         /**
-        * @name dxFunneloptions_legend_backgroundcolor
+        * @name dxFunneloptions.legend.backgroundcolor
         * @publicName backgroundColor
         * @type string
         * @default undefined
         */
         backgroundColor: undefined,
         /**
-        * @name dxFunneloptions_legend_border
+        * @name dxFunneloptions.legend.border
         * @publicName border
         * @type object
         */
         border: {
             /**
-            * @name dxFunneloptions_legend_border_visible
+            * @name dxFunneloptions.legend.border.visible
             * @publicName visible
             * @type boolean
             * @default false
             */
             visible: false,
             /**
-            * @name dxFunneloptions_legend_border_width
+            * @name dxFunneloptions.legend.border.width
             * @publicName width
             * @type number
             * @default 1
             */
             width: 1,
             /**
-            * @name dxFunneloptions_legend_border_color
+            * @name dxFunneloptions.legend.border.color
             * @publicName color
             * @type string
             * @default '#d3d3d3'
             */
             color: '#d3d3d3',
             /**
-            * @name dxFunneloptions_legend_border_cornerradius
+            * @name dxFunneloptions.legend.border.cornerradius
             * @publicName cornerRadius
             * @type number
             * @default 0
             */
             cornerRadius: 0,
             /**
-            * @name dxFunneloptions_legend_border_opacity
+            * @name dxFunneloptions.legend.border.opacity
             * @publicName opacity
             * @type number
             * @default undefined
             */
             opacity: undefined,
             /**
-            * @name dxFunneloptions_legend_border_dashstyle
+            * @name dxFunneloptions.legend.border.dashstyle
             * @publicName dashStyle
             * @type Enums.DashStyle
             * @default 'solid'
@@ -677,49 +677,49 @@ var dxFunnel = {
             dashStyle: 'solid'
         },
         /**
-        * @name dxFunneloptions_legend_paddingleftright
+        * @name dxFunneloptions.legend.paddingleftright
         * @publicName paddingLeftRight
         * @type number
         * @default 10
         */
         paddingLeftRight: 10,
         /**
-        * @name dxFunneloptions_legend_paddingtopbottom
+        * @name dxFunneloptions.legend.paddingtopbottom
         * @publicName paddingTopBottom
         * @type number
         * @default 10
         */
         paddingTopBottom: 10,
         /**
-        * @name dxFunneloptions_legend_columncount
+        * @name dxFunneloptions.legend.columncount
         * @publicName columnCount
         * @type number
         * @default 0
         */
         columnsCount: 0,
         /**
-        * @name dxFunneloptions_legend_rowcount
+        * @name dxFunneloptions.legend.rowcount
         * @publicName rowCount
         * @type number
         * @default 0
         */
         rowsCount: 0,
         /**
-        * @name dxFunneloptions_legend_columnitemspacing
+        * @name dxFunneloptions.legend.columnitemspacing
         * @publicName columnItemSpacing
         * @type number
         * @default 20
         */
         columnItemSpacing: 20,
         /**
-        * @name dxFunneloptions_legend_rowitemspacing
+        * @name dxFunneloptions.legend.rowitemspacing
         * @publicName rowItemSpacing
         * @type number
         * @default 8
         */
         rowItemSpacing: 8,
         /**
-        * @name dxFunneloptions_legend_customizetext
+        * @name dxFunneloptions.legend.customizetext
         * @publicName customizeText
         * @type function(itemInfo)
         * @type_function_param1 itemInfo:object
@@ -730,7 +730,7 @@ var dxFunnel = {
         */
         customizeText: undefined,
         /**
-        * @name dxFunneloptions_legend_customizehint
+        * @name dxFunneloptions.legend.customizehint
         * @publicName customizeHint
         * @type function(itemInfo)
         * @type_function_param1 itemInfo:object
@@ -741,14 +741,14 @@ var dxFunnel = {
         customizeHint: undefined,
     },
    /**
-    * @name dxFunneloptions_tooltip
+    * @name dxFunneloptions.tooltip
     * @publicName tooltip
     * @type object
     * @inheritdoc
     */
     tooltip: {
         /**
-        * @name  dxFunneloptions_tooltip_customizetooltip
+        * @name dxFunneloptions.tooltip.customizetooltip
         * @publicName customizeTooltip
         * @default undefined
         * @type function(info)
@@ -763,7 +763,7 @@ var dxFunnel = {
         customizeTooltip: undefined
     },
     /**
-    * @name dxFunneloptions_onitemclick
+    * @name dxFunneloptions.onitemclick
     * @publicName onItemClick
     * @extends Action
     * @type function|string
@@ -776,7 +776,7 @@ var dxFunnel = {
     */
     onItemClick: function() { },
     /**
-    * @name dxFunneloptions_onlegendclick
+    * @name dxFunneloptions.onlegendclick
     * @publicName onLegendClick
     * @extends Action
     * @type function|string
@@ -789,7 +789,7 @@ var dxFunnel = {
     */
     onLegendClick: function() { },
     /**
-    * @name dxFunneloptions_onhoverchanged
+    * @name dxFunneloptions.onhoverchanged
     * @publicName onHoverChanged
     * @extends Action
     * @type function
@@ -800,7 +800,7 @@ var dxFunnel = {
     */
     onHoverChanged: function() { },
     /**
-    * @name dxFunneloptions_onselectionchanged
+    * @name dxFunneloptions.onselectionchanged
     * @publicName onSelectionChanged
     * @extends Action
     * @type function
@@ -811,23 +811,23 @@ var dxFunnel = {
     */
     onSelectionChanged: function() { },
     /**
-    * @name dxFunnelmethods_clearselection
+    * @name dxFunnelmethods.clearselection
     * @publicName clearSelection()
     */
     clearSelection: function () { },
     /**
-    * @name dxFunnelmethods_getallitems
+    * @name dxFunnelmethods.getallitems
     * @publicName getAllItems()
     * @return Array<dxFunnelItem>
     */
     getAllItems: function () { },
     /**
-    * @name dxFunnelmethods_hidetooltip
+    * @name dxFunnelmethods.hidetooltip
     * @publicName hideTooltip()
     */
     hideTooltip: function() { },
     /**
-    * @name dxFunnelmethods_getdatasource
+    * @name dxFunnelmethods.getdatasource
     * @publicName getDataSource()
     * @return DataSource
     */

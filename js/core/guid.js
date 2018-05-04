@@ -13,11 +13,11 @@ var Class = require("./class");
 var Guid = Class.inherit({
 
     /**
-    * @name Guidmethods_ctor
+    * @name Guidmethods.ctor
     * @publicName ctor()
     */
     /**
-    * @name Guidmethods_ctor
+    * @name Guidmethods.ctor
     * @publicName ctor(value)
     * @param1 value:string
     */
@@ -51,7 +51,7 @@ var Guid = Class.inherit({
     },
 
     /**
-    * @name Guidmethods_toString
+    * @name Guidmethods.toString
     * @publicName toString()
     * @return string
     */
@@ -60,7 +60,7 @@ var Guid = Class.inherit({
     },
 
     /**
-    * @name Guidmethods_valueOf
+    * @name Guidmethods.valueOf
     * @publicName valueOf()
     * @return string
     */

@@ -24,7 +24,7 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
             selection: {
                 showCheckBoxesMode: "always",
                 /**
-                 * @name dxTreeListOptions_selection_recursive
+                 * @name dxTreeListOptions.selection.recursive
                  * @publicName recursive
                  * @type boolean
                  * @default false
@@ -447,7 +447,7 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
                 },
 
                 /**
-                * @name dxTreeListMethods_getSelectedRowKeys
+                * @name dxTreeListMethods.getSelectedRowKeys
                 * @publicName getSelectedRowKeys(leavesOnly)
                 * @param1 leavesOnly:boolean
                 * @return Array<any>
@@ -455,7 +455,7 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
                 */
 
                 /**
-                * @name dxTreeListMethods_getSelectedRowKeys
+                * @name dxTreeListMethods.getSelectedRowKeys
                 * @publicName getSelectedRowKeys(mode)
                 * @param1 mode:string
                 * @return Array<any>

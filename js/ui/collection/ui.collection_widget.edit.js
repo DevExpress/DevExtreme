@@ -36,7 +36,7 @@ var CollectionWidget = BaseCollectionWidget.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             /**
-            * @name CollectionWidgetOptions_selectionMode
+            * @name CollectionWidgetOptions.selectionMode
             * @publicName selectionMode
             * @type string
             * @default 'none'
@@ -46,7 +46,7 @@ var CollectionWidget = BaseCollectionWidget.inherit({
             selectionMode: 'none',
 
             /**
-            * @name CollectionWidgetOptions_selectionRequired
+            * @name CollectionWidgetOptions.selectionRequired
             * @publicName selectionRequired
             * @type boolean
             * @default false
@@ -55,7 +55,7 @@ var CollectionWidget = BaseCollectionWidget.inherit({
             selectionRequired: false,
 
             /**
-            * @name CollectionWidgetOptions_selectionByClick
+            * @name CollectionWidgetOptions.selectionByClick
             * @publicName selectionByClick
             * @type boolean
             * @default true
@@ -64,25 +64,25 @@ var CollectionWidget = BaseCollectionWidget.inherit({
             selectionByClick: true,
 
             /**
-            * @name CollectionWidgetOptions_selectedItems
+            * @name CollectionWidgetOptions.selectedItems
             * @publicName selectedItems
             * @type Array<any>
-            * @fires CollectionWidgetOptions_onSelectionChanged
+            * @fires CollectionWidgetOptions.onSelectionChanged
             */
             selectedItems: [],
 
             /**
-             * @name CollectionWidgetOptions_selectedItemKeys
+             * @name CollectionWidgetOptions.selectedItemKeys
              * @publicName selectedItemKeys
              * @type Array<any>
-             * @fires CollectionWidgetOptions_onSelectionChanged
+             * @fires CollectionWidgetOptions.onSelectionChanged
              */
             selectedItemKeys: [],
 
             maxFilterLengthInRequest: 1500,
 
             /**
-             * @name CollectionWidgetOptions_keyExpr
+             * @name CollectionWidgetOptions.keyExpr
              * @publicName keyExpr
              * @type string|function
              * @default null
@@ -90,26 +90,26 @@ var CollectionWidget = BaseCollectionWidget.inherit({
             keyExpr: null,
 
             /**
-            * @name CollectionWidgetOptions_selectedIndex
+            * @name CollectionWidgetOptions.selectedIndex
             * @publicName selectedIndex
             * @type number
             * @default -1
-            * @fires CollectionWidgetOptions_onSelectionChanged
+            * @fires CollectionWidgetOptions.onSelectionChanged
             */
             selectedIndex: NOT_EXISTING_INDEX,
 
             /**
-            * @name CollectionWidgetOptions_selectedItem
+            * @name CollectionWidgetOptions.selectedItem
             * @publicName selectedItem
             * @type object
             * @default null
-            * @fires CollectionWidgetOptions_onSelectionChanged
+            * @fires CollectionWidgetOptions.onSelectionChanged
             * @ref
             */
             selectedItem: null,
 
             /**
-            * @name CollectionWidgetOptions_onSelectionChanged
+            * @name CollectionWidgetOptions.onSelectionChanged
             * @publicName onSelectionChanged
             * @extends Action
             * @type function(e)
@@ -121,7 +121,7 @@ var CollectionWidget = BaseCollectionWidget.inherit({
             onSelectionChanged: null,
 
             /**
-            * @name CollectionWidgetOptions_onItemReordered
+            * @name CollectionWidgetOptions.onItemReordered
             * @publicName onItemReordered
             * @extends Action
             * @type function(e)
@@ -137,7 +137,7 @@ var CollectionWidget = BaseCollectionWidget.inherit({
             onItemReordered: null,
 
             /**
-            * @name CollectionWidgetOptions_onItemDeleting
+            * @name CollectionWidgetOptions.onItemDeleting
             * @publicName onItemDeleting
             * @extends Action
             * @type function(e)
@@ -152,7 +152,7 @@ var CollectionWidget = BaseCollectionWidget.inherit({
             onItemDeleting: null,
 
             /**
-            * @name CollectionWidgetOptions_onItemDeleted
+            * @name CollectionWidgetOptions.onItemDeleted
             * @publicName onItemDeleted
             * @extends Action
             * @type function(e)
@@ -747,7 +747,7 @@ var CollectionWidget = BaseCollectionWidget.inherit({
     },
 
     /**
-    * @name CollectionWidgetMethods_isItemSelected
+    * @name CollectionWidgetMethods.isItemSelected
     * @publicName isItemSelected(itemElement)
     * @param1 itemElement:Node
     * @return boolean
@@ -758,7 +758,7 @@ var CollectionWidget = BaseCollectionWidget.inherit({
     },
 
     /**
-    * @name CollectionWidgetMethods_selectItem
+    * @name CollectionWidgetMethods.selectItem
     * @publicName selectItem(itemElement)
     * @param1 itemElement:Node
     * @hidden
@@ -787,7 +787,7 @@ var CollectionWidget = BaseCollectionWidget.inherit({
     },
 
     /**
-    * @name CollectionWidgetMethods_unselectItem
+    * @name CollectionWidgetMethods.unselectItem
     * @publicName unselectItem(itemElement)
     * @param1 itemElement:Node
     * @hidden
@@ -814,7 +814,7 @@ var CollectionWidget = BaseCollectionWidget.inherit({
     },
 
     /**
-    * @name CollectionWidgetMethods_deleteItem
+    * @name CollectionWidgetMethods.deleteItem
     * @publicName deleteItem(itemElement)
     * @param1 itemElement:Node
     * @return Promise<void>
@@ -863,7 +863,7 @@ var CollectionWidget = BaseCollectionWidget.inherit({
     },
 
     /**
-    * @name CollectionWidgetMethods_reorderItem
+    * @name CollectionWidgetMethods.reorderItem
     * @publicName reorderItem(itemElement, toItemElement)
     * @param1 itemElement:Node
     * @param2 toItemElement:Node

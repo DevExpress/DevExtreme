@@ -642,21 +642,21 @@ module.exports = {
                 removeInvisiblePages: true,
                 rowPageSize: 5,
                 /**
-                 * @name dxDataGridOptions_scrolling_mode
+                 * @name dxDataGridOptions.scrolling.mode
                  * @publicName mode
                  * @type Enums.GridScrollingMode
                  * @default "standard"
                  */
                 mode: "standard",
                 /**
-                 * @name GridBaseOptions_scrolling_preloadEnabled
+                 * @name GridBaseOptions.scrolling.preloadEnabled
                  * @publicName preloadEnabled
                  * @type boolean
                  * @default false
                  */
                 preloadEnabled: false,
                 /**
-                 * @name GridBaseOptions_scrolling_rowRenderingMode
+                 * @name GridBaseOptions.scrolling.rowRenderingMode
                  * @publicName rowRenderingMode
                  * @type Enums.GridRowRenderingMode
                  * @default "standard"

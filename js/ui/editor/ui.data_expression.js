@@ -25,14 +25,14 @@ var DataExpressionMixin = extend(DataHelperMixin, {
     _dataExpressionDefaultOptions: function() {
         return {
             /**
-            * @name DataExpressionMixinOptions_items
+            * @name DataExpressionMixinOptions.items
             * @publicName items
             * @type Array<any>
             */
             items: [],
 
             /**
-            * @name DataExpressionMixinOptions_dataSource
+            * @name DataExpressionMixinOptions.dataSource
             * @publicName dataSource
             * @type string|Array<any>|DataSource|DataSourceOptions
             * @default null
@@ -40,7 +40,7 @@ var DataExpressionMixin = extend(DataHelperMixin, {
             dataSource: null,
 
             /**
-            * @name DataExpressionMixinOptions_itemTemplate
+            * @name DataExpressionMixinOptions.itemTemplate
             * @publicName itemTemplate
             * @type template|function
             * @default "item"
@@ -52,7 +52,7 @@ var DataExpressionMixin = extend(DataHelperMixin, {
             itemTemplate: "item",
 
             /**
-            * @name DataExpressionMixinOptions_value
+            * @name DataExpressionMixinOptions.value
             * @publicName value
             * @type any
             * @default null
@@ -60,7 +60,7 @@ var DataExpressionMixin = extend(DataHelperMixin, {
             value: null,
 
             /**
-            * @name DataExpressionMixinOptions_valueExpr
+            * @name DataExpressionMixinOptions.valueExpr
             * @publicName valueExpr
             * @type string|function
             * @default "this"
@@ -68,7 +68,7 @@ var DataExpressionMixin = extend(DataHelperMixin, {
             valueExpr: "this",
 
             /**
-            * @name DataExpressionMixinOptions_displayExpr
+            * @name DataExpressionMixinOptions.displayExpr
             * @publicName displayExpr
             * @type string|function
             * @default undefined
@@ -254,30 +254,30 @@ var DataExpressionMixin = extend(DataHelperMixin, {
 * @type object
 */
 /**
-* @name DataExpressionMixinItemTemplate_disabled
+* @name DataExpressionMixinItemTemplate.disabled
 * @publicName disabled
 * @type boolean
 * @default false
 */
 /**
-* @name DataExpressionMixinItemTemplate_visible
+* @name DataExpressionMixinItemTemplate.visible
 * @publicName visible
 * @type boolean
 * @default true
 */
 /**
-* @name DataExpressionMixinItemTemplate_template
+* @name DataExpressionMixinItemTemplate.template
 * @publicName template
 * @type template
 */
 
 /**
-* @name DataExpressionMixinItemTemplate_html
+* @name DataExpressionMixinItemTemplate.html
 * @publicName html
 * @type String
 */
 /**
-* @name DataExpressionMixinItemTemplate_text
+* @name DataExpressionMixinItemTemplate.text
 * @publicName text
 * @type String
 */

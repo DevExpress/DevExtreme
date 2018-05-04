@@ -7,33 +7,33 @@
 */
 var dxVectorMap = {
     /**
-    * @name dxvectormap_options
+    * @name dxvectormap.options
     * @publicName Options
     * @namespace DevExpress.viz.map
     * @hidden
     */
     /**
-    * @name dxvectormapoptions_margin
+    * @name dxvectormapoptions.margin
     * @publicName margin
     * @hidden
     * @inheritdoc
     */
     margin: undefined,
     /**
-    * @name dxvectormapoptions_background
+    * @name dxvectormapoptions.background
     * @publicName background
     * @type object
     */
     background: {
         /**
-        * @name dxvectormapoptions_background_borderColor
+        * @name dxvectormapoptions.background.borderColor
         * @publicName borderColor
         * @type string
         * @default '#cacaca'
         */
         borderColor: '#cacaca',
         /**
-        * @name dxvectormapoptions_background_color
+        * @name dxvectormapoptions.background.color
         * @publicName color
         * @type string
         * @default '#ffffff'
@@ -41,7 +41,7 @@ var dxVectorMap = {
         color: '#ffffff'
     },
     /**
-    * @name dxvectormapoptions_layers
+    * @name dxvectormapoptions.layers
     * @publicName layers
     * @type Array<Object>|Object
     * @default undefined
@@ -49,196 +49,196 @@ var dxVectorMap = {
     */
     layers: [{
         /**
-        * @name dxvectormapoptions_layers_name
+        * @name dxvectormapoptions.layers.name
         * @publicName name
         * @type string
         * @notUsedInTheme
         */
         name: undefined,
         /**
-        * @name dxvectormapoptions_layers_dataSource
+        * @name dxvectormapoptions.layers.dataSource
         * @publicName dataSource
         * @type object|DataSource|DataSourceOptions|string
         * @extends CommonVizDataSource
         */
         dataSource: undefined,
         /**
-        * @name dxvectormapoptions_layers_data
+        * @name dxvectormapoptions.layers.data
         * @publicName data
         * @type object|DataSource|DataSourceOptions
-        * @deprecated dxvectormapoptions_layers_dataSource
+        * @deprecated dxvectormapoptions.layers.dataSource
         * @notUsedInTheme
         */
         data: undefined,
         /**
-        * @name dxvectormapoptions_layers_type
+        * @name dxvectormapoptions.layers.type
         * @publicName type
         * @type Enums.VectorMapLayerType
         * @notUsedInTheme
         */
         type: undefined,
         /**
-        * @name dxvectormapoptions_layers_elementType
+        * @name dxvectormapoptions.layers.elementType
         * @publicName elementType
         * @type Enums.VectorMapMarkerType
         * @notUsedInTheme
         */
         elementType: undefined,
         /**
-        * @name dxvectormapoptions_layers_borderWidth
+        * @name dxvectormapoptions.layers.borderWidth
         * @publicName borderWidth
         * @type number
         * @default 1
         */
         borderWidth: 1,
         /**
-        * @name dxvectormapoptions_layers_borderColor
+        * @name dxvectormapoptions.layers.borderColor
         * @publicName borderColor
         * @type string
         * @default '#9d9d9d'
         */
         borderColor: '#9d9d9d',
         /**
-        * @name dxvectormapoptions_layers_color
+        * @name dxvectormapoptions.layers.color
         * @publicName color
         * @type string
         * @default '#d2d2d2'
         */
         color: '#d2d2d2',
         /**
-        * @name dxvectormapoptions_layers_hoveredBorderWidth
+        * @name dxvectormapoptions.layers.hoveredBorderWidth
         * @publicName hoveredBorderWidth
         * @type number
         * @default 1
         */
         hoveredBorderWidth: 1,
         /**
-        * @name dxvectormapoptions_layers_hoveredBorderColor
+        * @name dxvectormapoptions.layers.hoveredBorderColor
         * @publicName hoveredBorderColor
         * @type string
         * @default '#303030'
         */
         hoveredBorderColor: '#303030',
         /**
-        * @name dxvectormapoptions_layers_hoveredColor
+        * @name dxvectormapoptions.layers.hoveredColor
         * @publicName hoveredColor
         * @type string
         * @default '#d2d2d2'
         */
         hoveredColor: '#d2d2d2',
         /**
-        * @name dxvectormapoptions_layers_selectedBorderWidth
+        * @name dxvectormapoptions.layers.selectedBorderWidth
         * @publicName selectedBorderWidth
         * @type number
         * @default 2
         */
         selectedBorderWidth: 2,
         /**
-        * @name dxvectormapoptions_layers_selectedBorderColor
+        * @name dxvectormapoptions.layers.selectedBorderColor
         * @publicName selectedBorderColor
         * @type string
         * @default '#303030'
         */
         selectedBorderColor: '#303030',
         /**
-        * @name dxvectormapoptions_layers_selectedColor
+        * @name dxvectormapoptions.layers.selectedColor
         * @publicName selectedColor
         * @type string
         * @default '#d2d2d2'
         */
         selectedColor: '#d2d2d2',
         /**
-        * @name dxvectormapoptions_layers_opacity
+        * @name dxvectormapoptions.layers.opacity
         * @publicName opacity
         * @type number
         * @default 1
         */
         opacity: 1,
         /**
-        * @name dxvectormapoptions_layers_size
+        * @name dxvectormapoptions.layers.size
         * @publicName size
         * @type number
         * @default 8
         */
         size: 8,
         /**
-        * @name dxvectormapoptions_layers_minSize
+        * @name dxvectormapoptions.layers.minSize
         * @publicName minSize
         * @type number
         * @default 20
         */
         minSize: 20,
         /**
-        * @name dxvectormapoptions_layers_maxSize
+        * @name dxvectormapoptions.layers.maxSize
         * @publicName maxSize
         * @type number
         * @default 50
         */
         maxSize: 50,
         /**
-        * @name dxvectormapoptions_layers_hoverEnabled
+        * @name dxvectormapoptions.layers.hoverEnabled
         * @publicName hoverEnabled
         * @type boolean
         * @default true
         */
         hoverEnabled: true,
         /**
-        * @name dxvectormapoptions_layers_selectionMode
+        * @name dxvectormapoptions.layers.selectionMode
         * @publicName selectionMode
         * @type Enums.SelectionMode
         * @default 'single'
         */
         selectionMode: 'single',
         /**
-        * @name dxvectormapoptions_layers_palette
+        * @name dxvectormapoptions.layers.palette
         * @publicName palette
         * @extends CommonVizPalette
         */
         palette: 'default',
         /**
-        * @name dxvectormapoptions_layers_paletteSize
+        * @name dxvectormapoptions.layers.paletteSize
         * @publicName paletteSize
         * @type number
         * @default 0
         */
         paletteSize: 0,
         /**
-        * @name dxvectormapoptions_layers_colorGroups
+        * @name dxvectormapoptions.layers.colorGroups
         * @publicName colorGroups
         * @type Array<number>
         * @default undefined
         */
         colorGroups: undefined,
         /**
-        * @name dxvectormapoptions_layers_colorGroupingField
+        * @name dxvectormapoptions.layers.colorGroupingField
         * @publicName colorGroupingField
         * @type string
         * @default undefined
         */
         colorGroupingField: undefined,
         /**
-        * @name dxvectormapoptions_layers_sizeGroups
+        * @name dxvectormapoptions.layers.sizeGroups
         * @publicName sizeGroups
         * @type Array<number>
         * @default undefined
         */
         sizeGroups: undefined,
         /**
-        * @name dxvectormapoptions_layers_sizeGroupingField
+        * @name dxvectormapoptions.layers.sizeGroupingField
         * @publicName sizeGroupingField
         * @type string
         * @default undefined
         */
         sizeGroupingField: undefined,
         /**
-        * @name dxvectormapoptions_layers_dataField
+        * @name dxvectormapoptions.layers.dataField
         * @publicName dataField
         * @type string
         * @default undefined
         */
         dataField: undefined,
         /**
-        * @name dxvectormapoptions_layers_customize
+        * @name dxvectormapoptions.layers.customize
         * @publicName customize
         * @type function(elements)
         * @type_function_param1 elements:Array<MapLayerElement>
@@ -246,60 +246,60 @@ var dxVectorMap = {
         */
         customize: function() { },
         /**
-        * @name dxvectormapoptions_layers_label
+        * @name dxvectormapoptions.layers.label
         * @publicName label
         * @type object
         */
         label: {
             /**
-            * @name dxvectormapoptions_layers_label_enabled
+            * @name dxvectormapoptions.layers.label.enabled
             * @publicName enabled
             * @type boolean
             * @default <i>true</i> for markers; <i>false</i> for areas
             */
             enabled: false,
             /**
-            * @name dxvectormapoptions_layers_label_dataField
+            * @name dxvectormapoptions.layers.label.dataField
             * @publicName dataField
             * @type string
             */
             dataField: undefined,
             /**
-            * @name dxvectormapoptions_layers_label_font
+            * @name dxvectormapoptions.layers.label.font
             * @publicName font
             * @type object
             */
             font: {
                 /**
-                * @name dxvectormapoptions_layers_label_font_family
+                * @name dxvectormapoptions.layers.label.font.family
                 * @publicName family
                 * @type string
                 * @default "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana"
                 */
                 family: "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
                 /**
-                * @name dxvectormapoptions_layers_label_font_weight
+                * @name dxvectormapoptions.layers.label.font.weight
                 * @publicName weight
                 * @type number
                 * @default 400
                 */
                 weight: 400,
                 /**
-                * @name dxvectormapoptions_layers_label_font_color
+                * @name dxvectormapoptions.layers.label.font.color
                 * @publicName color
                 * @type string
                 * @default '#2b2b2b'
                 */
                 color: '#2b2b2b',
                 /**
-                * @name dxvectormapoptions_layers_label_font_size
+                * @name dxvectormapoptions.layers.label.font.size
                 * @publicName size
                 * @type number|string
                 * @default 12
                 */
                 size: 12,
                 /**
-                * @name dxvectormapoptions_layers_label_font_opacity
+                * @name dxvectormapoptions.layers.label.font.opacity
                 * @publicName opacity
                 * @type number
                 * @default undefined
@@ -309,266 +309,266 @@ var dxVectorMap = {
         }
     }],
     /**
-    * @name dxvectormapoptions_mapData
+    * @name dxvectormapoptions.mapData
     * @publicName mapData
     * @type Array<string>|string
     * @default undefined
-    * @deprecated dxvectormapoptions_layers_dataSource
+    * @deprecated dxvectormapoptions.layers.dataSource
     * @notUsedInTheme
     */
     mapData: undefined,
     /**
-    * @name dxvectormapoptions_areaSettings
+    * @name dxvectormapoptions.areaSettings
     * @publicName areaSettings
     * @type object
-    * @deprecated dxvectormapoptions_layers
+    * @deprecated dxvectormapoptions.layers
     */
     areaSettings: {
         /**
-        * @name dxvectormapoptions_areaSettings_borderWidth
+        * @name dxvectormapoptions.areaSettings.borderWidth
         * @publicName borderWidth
         * @type number
         * @default 1
-        * @deprecated dxvectormapoptions_layers_borderWidth
+        * @deprecated dxvectormapoptions.layers.borderWidth
         */
         borderWidth: 1,
         /**
-        * @name dxvectormapoptions_areaSettings_borderColor
+        * @name dxvectormapoptions.areaSettings.borderColor
         * @publicName borderColor
         * @type string
         * @default '#9d9d9d'
-        * @deprecated dxvectormapoptions_layers_borderColor
+        * @deprecated dxvectormapoptions.layers.borderColor
         */
         borderColor: '#9d9d9d',
         /**
-        * @name dxvectormapoptions_areaSettings_color
+        * @name dxvectormapoptions.areaSettings.color
         * @publicName color
         * @type string
         * @default '#d2d2d2'
-        * @deprecated dxvectormapoptions_layers_color
+        * @deprecated dxvectormapoptions.layers.color
         */
         color: '#d2d2d2',
         /**
-        * @name dxvectormapoptions_areaSettings_hoveredBorderWidth
+        * @name dxvectormapoptions.areaSettings.hoveredBorderWidth
         * @publicName hoveredBorderWidth
         * @type number
         * @default 1
-        * @deprecated dxvectormapoptions_layers_hoveredBorderWidth
+        * @deprecated dxvectormapoptions.layers.hoveredBorderWidth
         */
         hoveredBorderWidth: 1,
         /**
-        * @name dxvectormapoptions_areaSettings_hoveredBorderColor
+        * @name dxvectormapoptions.areaSettings.hoveredBorderColor
         * @publicName hoveredBorderColor
         * @type string
         * @default '#303030'
-        * @deprecated dxvectormapoptions_layers_hoveredBorderColor
+        * @deprecated dxvectormapoptions.layers.hoveredBorderColor
         */
         hoveredBorderColor: '#303030',
         /**
-        * @name dxvectormapoptions_areaSettings_hoveredColor
+        * @name dxvectormapoptions.areaSettings.hoveredColor
         * @publicName hoveredColor
         * @type string
         * @default '#d2d2d2'
-        * @deprecated dxvectormapoptions_layers_hoveredColor
+        * @deprecated dxvectormapoptions.layers.hoveredColor
         */
         hoveredColor: '#d2d2d2',
         /**
-        * @name dxvectormapoptions_areaSettings_selectedBorderWidth
+        * @name dxvectormapoptions.areaSettings.selectedBorderWidth
         * @publicName selectedBorderWidth
         * @type number
         * @default 2
-        * @deprecated dxvectormapoptions_layers_selectedBorderWidth
+        * @deprecated dxvectormapoptions.layers.selectedBorderWidth
         */
         selectedBorderWidth: 2,
         /**
-        * @name dxvectormapoptions_areaSettings_selectedBorderColor
+        * @name dxvectormapoptions.areaSettings.selectedBorderColor
         * @publicName selectedBorderColor
         * @type string
         * @default '#303030'
-        * @deprecated dxvectormapoptions_layers_selectedBorderColor
+        * @deprecated dxvectormapoptions.layers.selectedBorderColor
         */
         selectedBorderColor: '#303030',
         /**
-        * @name dxvectormapoptions_areaSettings_selectedColor
+        * @name dxvectormapoptions.areaSettings.selectedColor
         * @publicName selectedColor
         * @type string
         * @default '#d2d2d2'
-        * @deprecated dxvectormapoptions_layers_selectedColor
+        * @deprecated dxvectormapoptions.layers.selectedColor
         */
         selectedColor: '#d2d2d2',
         /**
-        * @name dxvectormapoptions_areaSettings_hoverEnabled
+        * @name dxvectormapoptions.areaSettings.hoverEnabled
         * @publicName hoverEnabled
         * @type boolean
         * @default true
-        * @deprecated dxvectormapoptions_layers_hoverEnabled
+        * @deprecated dxvectormapoptions.layers.hoverEnabled
         */
         hoverEnabled: true,
         /**
-        * @name dxvectormapoptions_areaSettings_selectionMode
+        * @name dxvectormapoptions.areaSettings.selectionMode
         * @publicName selectionMode
         * @type Enums.SelectionMode
         * @default 'single'
-        * @deprecated dxvectormapoptions_layers_selectionMode
+        * @deprecated dxvectormapoptions.layers.selectionMode
         */
         selectionMode: 'single',
         /**
-        * @name dxvectormapoptions_areaSettings_palette
+        * @name dxvectormapoptions.areaSettings.palette
         * @publicName palette
         * @extends CommonVizPalette
-        * @deprecated dxvectormapoptions_layers_palette
+        * @deprecated dxvectormapoptions.layers.palette
         */
         palette: 'default',
         /**
-        * @name dxvectormapoptions_areaSettings_paletteSize
+        * @name dxvectormapoptions.areaSettings.paletteSize
         * @publicName paletteSize
         * @type number
         * @default 0
-        * @deprecated dxvectormapoptions_layers_paletteSize
+        * @deprecated dxvectormapoptions.layers.paletteSize
         */
         paletteSize: 0,
         /**
-        * @name dxvectormapoptions_areaSettings_colorGroups
+        * @name dxvectormapoptions.areaSettings.colorGroups
         * @publicName colorGroups
         * @type Array<number>
         * @default undefined
-        * @deprecated dxvectormapoptions_layers_colorGroups
+        * @deprecated dxvectormapoptions.layers.colorGroups
         */
         colorGroups: undefined,
         /**
-        * @name dxvectormapoptions_areaSettings_colorGroupingField
+        * @name dxvectormapoptions.areaSettings.colorGroupingField
         * @publicName colorGroupingField
         * @type string
         * @default undefined
-        * @deprecated dxvectormapoptions_layers_colorGroupingField
+        * @deprecated dxvectormapoptions.layers.colorGroupingField
         */
         colorGroupingField: undefined,
         /**
-        * @name dxvectormapoptions_areaSettings_label
+        * @name dxvectormapoptions.areaSettings.label
         * @publicName label
         * @type object
-        * @deprecated dxvectormapoptions_layers_label
+        * @deprecated dxvectormapoptions.layers.label
         */
         label: {
             /**
-            * @name dxvectormapoptions_areaSettings_label_enabled
+            * @name dxvectormapoptions.areaSettings.label.enabled
             * @publicName enabled
             * @type boolean
-            * @deprecated dxvectormapoptions_layers_label_enabled
+            * @deprecated dxvectormapoptions.layers.label.enabled
             */
             enabled: false,
             /**
-            * @name dxvectormapoptions_areaSettings_label_dataField
+            * @name dxvectormapoptions.areaSettings.label.dataField
             * @publicName dataField
             * @type string
-            * @deprecated dxvectormapoptions_layers_label_dataField
+            * @deprecated dxvectormapoptions.layers.label.dataField
             */
             dataField: undefined,
             /**
-            * @name dxvectormapoptions_areaSettings_label_font
+            * @name dxvectormapoptions.areaSettings.label.font
             * @publicName font
             * @type object
-            * @deprecated dxvectormapoptions_layers_label_font
+            * @deprecated dxvectormapoptions.layers.label.font
             */
             font: {
                 /**
-                * @name dxvectormapoptions_areaSettings_label_font_family
+                * @name dxvectormapoptions.areaSettings.label.font.family
                 * @publicName family
                 * @type string
                 * @default "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana"
-                * @deprecated dxvectormapoptions_layers_label_font_family
+                * @deprecated dxvectormapoptions.layers.label.font.family
                 */
                 family: "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
                 /**
-                * @name dxvectormapoptions_areaSettings_label_font_weight
+                * @name dxvectormapoptions.areaSettings.label.font.weight
                 * @publicName weight
                 * @type number
                 * @default 400
-                * @deprecated dxvectormapoptions_layers_label_font_weight
+                * @deprecated dxvectormapoptions.layers.label.font.weight
                 */
                 weight: 400,
                 /**
-                * @name dxvectormapoptions_areaSettings_label_font_color
+                * @name dxvectormapoptions.areaSettings.label.font.color
                 * @publicName color
                 * @type string
                 * @default '#2b2b2b'
-                * @deprecated dxvectormapoptions_layers_label_font_color
+                * @deprecated dxvectormapoptions.layers.label.font.color
                 */
                 color: '#2b2b2b',
                 /**
-                * @name dxvectormapoptions_areaSettings_label_font_size
+                * @name dxvectormapoptions.areaSettings.label.font.size
                 * @publicName size
                 * @type number|string
                 * @default 12
-                * @deprecated dxvectormapoptions_layers_label_font_size
+                * @deprecated dxvectormapoptions.layers.label.font.size
                 */
                 size: 12,
                 /**
-                * @name dxvectormapoptions_areaSettings_label_font_opacity
+                * @name dxvectormapoptions.areaSettings.label.font.opacity
                 * @publicName opacity
                 * @type number
                 * @default undefined
-                * @deprecated dxvectormapoptions_layers_label_font_opacity
+                * @deprecated dxvectormapoptions.layers.label.font.opacity
                 */
                 opacity: undefined
             }
         },
         /**
-        * @name dxvectormapoptions_areaSettings_customize
+        * @name dxvectormapoptions.areaSettings.customize
         * @publicName customize
         * @type function(area)
         * @type_function_param1 area:areaObjects
-        * @type_function_return dxVectorMapOptions_areaSettings
-        * @deprecated dxvectormapoptions_layers_customize
+        * @type_function_return dxVectorMapOptions.areaSettings
+        * @deprecated dxvectormapoptions.layers.customize
         * @notUsedInTheme
         */
         customize: function() { }
     },
     /**
-    * @name dxvectormapoptions_markers
+    * @name dxvectormapoptions.markers
     * @publicName markers
     * @type Array<Object>|string
     * @default undefined
-    * @deprecated dxvectormapoptions_layers_dataSource
+    * @deprecated dxvectormapoptions.layers.dataSource
     * @notUsedInTheme
     */
     /**
-    * @name dxvectormapoptions_markers_coordinates
+    * @name dxvectormapoptions.markers.coordinates
     * @publicName coordinates
     * @type Array<number>
     * @default undefined
     * @deprecated
     */
     /**
-    * @name dxvectormapoptions_markers_attributes
+    * @name dxvectormapoptions.markers.attributes
     * @publicName attributes
     * @type object
     * @default undefined
     * @deprecated
     */
     /**
-    * @name dxvectormapoptions_markers_text
+    * @name dxvectormapoptions.markers.text
     * @publicName text
     * @type string
     * @default undefined
     * @deprecated
     */
     /**
-    * @name dxvectormapoptions_markers_value
+    * @name dxvectormapoptions.markers.value
     * @publicName value
     * @type number
     * @default undefined
     * @deprecated
     */
     /**
-    * @name dxvectormapoptions_markers_values
+    * @name dxvectormapoptions.markers.values
     * @publicName values
     * @type Array<number>
     * @default undefined
     * @deprecated
     */
     /**
-    * @name dxvectormapoptions_markers_url
+    * @name dxvectormapoptions.markers.url
     * @publicName url
     * @type string
     * @default undefined
@@ -576,304 +576,304 @@ var dxVectorMap = {
     */
     markers: undefined,
     /**
-    * @name dxvectormapoptions_markerSettings
+    * @name dxvectormapoptions.markerSettings
     * @publicName markerSettings
     * @type object
-    * @deprecated dxvectormapoptions_layers
+    * @deprecated dxvectormapoptions.layers
     */
     markerSettings: {
         /**
-        * @name dxvectormapoptions_markerSettings_type
+        * @name dxvectormapoptions.markerSettings.type
         * @publicName type
         * @type Enums.VectorMapMarkerType
         * @default 'dot'
-        * @deprecated dxvectormapoptions_layers_elementType
+        * @deprecated dxvectormapoptions.layers.elementType
         */
         type: 'dot',
         /**
-        * @name dxvectormapoptions_markerSettings_size
+        * @name dxvectormapoptions.markerSettings.size
         * @publicName size
         * @type number
         * @default 8
-        * @deprecated dxvectormapoptions_layers_size
+        * @deprecated dxvectormapoptions.layers.size
         */
         size: 8,
         /**
-        * @name dxvectormapoptions_markerSettings_minSize
+        * @name dxvectormapoptions.markerSettings.minSize
         * @publicName minSize
         * @type number
         * @default 20
-        * @deprecated dxvectormapoptions_layers_minSize
+        * @deprecated dxvectormapoptions.layers.minSize
         */
         minSize: 20,
         /**
-        * @name dxvectormapoptions_markerSettings_maxSize
+        * @name dxvectormapoptions.markerSettings.maxSize
         * @publicName maxSize
         * @type number
         * @default 50
-        * @deprecated dxvectormapoptions_layers_maxSize
+        * @deprecated dxvectormapoptions.layers.maxSize
         */
         maxSize: 50,
         /**
-        * @name dxvectormapoptions_markerSettings_borderWidth
+        * @name dxvectormapoptions.markerSettings.borderWidth
         * @publicName borderWidth
         * @type number
         * @default 2
-        * @deprecated dxvectormapoptions_layers_borderWidth
+        * @deprecated dxvectormapoptions.layers.borderWidth
         */
         borderWidth: 2,
         /**
-        * @name dxvectormapoptions_markerSettings_borderColor
+        * @name dxvectormapoptions.markerSettings.borderColor
         * @publicName borderColor
         * @type string
         * @default '#ffffff'
-        * @deprecated dxvectormapoptions_layers_borderColor
+        * @deprecated dxvectormapoptions.layers.borderColor
         */
         borderColor: '#ffffff',
         /**
-        * @name dxvectormapoptions_markerSettings_color
+        * @name dxvectormapoptions.markerSettings.color
         * @publicName color
         * @type string
         * @default '#ba4d51'
-        * @deprecated dxvectormapoptions_layers_color
+        * @deprecated dxvectormapoptions.layers.color
         */
         color: '#ba4d51',
         /**
-        * @name dxvectormapoptions_markerSettings_hoveredBorderWidth
+        * @name dxvectormapoptions.markerSettings.hoveredBorderWidth
         * @publicName hoveredBorderWidth
         * @type number
         * @default 2
-        * @deprecated dxvectormapoptions_layers_hoveredBorderWidth
+        * @deprecated dxvectormapoptions.layers.hoveredBorderWidth
         */
         hoveredBorderWidth: 2,
         /**
-        * @name dxvectormapoptions_markerSettings_hoveredBorderColor
+        * @name dxvectormapoptions.markerSettings.hoveredBorderColor
         * @publicName hoveredBorderColor
         * @type string
         * @default '#ffffff'
-        * @deprecated dxvectormapoptions_layers_hoveredBorderColor
+        * @deprecated dxvectormapoptions.layers.hoveredBorderColor
         */
         hoveredBorderColor: '#ffffff',
         /**
-        * @name dxvectormapoptions_markerSettings_hoveredColor
+        * @name dxvectormapoptions.markerSettings.hoveredColor
         * @publicName hoveredColor
         * @type string
         * @default '#ba4d51'
-        * @deprecated dxvectormapoptions_layers_hoveredColor
+        * @deprecated dxvectormapoptions.layers.hoveredColor
         */
         hoveredColor: '#ba4d51',
         /**
-        * @name dxvectormapoptions_markerSettings_selectedBorderWidth
+        * @name dxvectormapoptions.markerSettings.selectedBorderWidth
         * @publicName selectedBorderWidth
         * @type number
         * @default 2
-        * @deprecated dxvectormapoptions_layers_selectedBorderWidth
+        * @deprecated dxvectormapoptions.layers.selectedBorderWidth
         */
         selectedBorderWidth: 2,
         /**
-        * @name dxvectormapoptions_markerSettings_selectedBorderColor
+        * @name dxvectormapoptions.markerSettings.selectedBorderColor
         * @publicName selectedBorderColor
         * @type string
         * @default '#ffffff'
-        * @deprecated dxvectormapoptions_layers_selectedBorderColor
+        * @deprecated dxvectormapoptions.layers.selectedBorderColor
         */
         selectedBorderColor: '#ffffff',
         /**
-        * @name dxvectormapoptions_markerSettings_selectedColor
+        * @name dxvectormapoptions.markerSettings.selectedColor
         * @publicName selectedColor
         * @type string
         * @default '#ba4d51'
-        * @deprecated dxvectormapoptions_layers_selectedColor
+        * @deprecated dxvectormapoptions.layers.selectedColor
         */
         selectedColor: '#ba4d51',
         /**
-        * @name dxvectormapoptions_markerSettings_opacity
+        * @name dxvectormapoptions.markerSettings.opacity
         * @publicName opacity
         * @type number
         * @default 1
-        * @deprecated dxvectormapoptions_layers_opacity
+        * @deprecated dxvectormapoptions.layers.opacity
         */
         opacity: 1,
         /**
-        * @name dxvectormapoptions_markerSettings_palette
+        * @name dxvectormapoptions.markerSettings.palette
         * @publicName palette
         * @extends CommonVizPalette
-        * @deprecated dxvectormapoptions_layers_palette
+        * @deprecated dxvectormapoptions.layers.palette
         */
         palette: 'default',
         /**
-        * @name dxvectormapoptions_markerSettings_colorGroups
+        * @name dxvectormapoptions.markerSettings.colorGroups
         * @publicName colorGroups
         * @type Array<number>
         * @default undefined
-        * @deprecated dxvectormapoptions_layers_colorGroups
+        * @deprecated dxvectormapoptions.layers.colorGroups
         */
         colorGroups: undefined,
         /**
-        * @name dxvectormapoptions_markerSettings_colorGroupingField
+        * @name dxvectormapoptions.markerSettings.colorGroupingField
         * @publicName colorGroupingField
         * @type string
         * @default undefined
-        * @deprecated dxvectormapoptions_layers_colorGroupingField
+        * @deprecated dxvectormapoptions.layers.colorGroupingField
         */
         colorGroupingField: undefined,
         /**
-        * @name dxvectormapoptions_markerSettings_sizeGroups
+        * @name dxvectormapoptions.markerSettings.sizeGroups
         * @publicName sizeGroups
         * @type Array<number>
         * @default undefined
-        * @deprecated dxvectormapoptions_layers_sizeGroups
+        * @deprecated dxvectormapoptions.layers.sizeGroups
         */
         sizeGroups: undefined,
         /**
-        * @name dxvectormapoptions_markerSettings_sizeGroupingField
+        * @name dxvectormapoptions.markerSettings.sizeGroupingField
         * @publicName sizeGroupingField
         * @type string
         * @default undefined
-        * @deprecated dxvectormapoptions_layers_sizeGroupingField
+        * @deprecated dxvectormapoptions.layers.sizeGroupingField
         */
         sizeGroupingField: undefined,
         /**
-        * @name dxvectormapoptions_markerSettings_label
+        * @name dxvectormapoptions.markerSettings.label
         * @publicName label
         * @type object
-        * @deprecated dxvectormapoptions_layers_label
+        * @deprecated dxvectormapoptions.layers.label
         */
         label: {
             /**
-            * @name dxvectormapoptions_markerSettings_label_enabled
+            * @name dxvectormapoptions.markerSettings.label.enabled
             * @publicName enabled
             * @type boolean
             * @default true
-            * @deprecated dxvectormapoptions_layers_label_enabled
+            * @deprecated dxvectormapoptions.layers.label.enabled
             */
             enabled: true,
             /**
-            * @name dxvectormapoptions_markerSettings_label_font
+            * @name dxvectormapoptions.markerSettings.label.font
             * @publicName font
             * @type object
-            * @deprecated dxvectormapoptions_layers_label_font
+            * @deprecated dxvectormapoptions.layers.label.font
             */
             font: {
                 /**
-                * @name dxvectormapoptions_markerSettings_label_font_family
+                * @name dxvectormapoptions.markerSettings.label.font.family
                 * @publicName family
                 * @type string
                 * @default "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana"
-                * @deprecated dxvectormapoptions_layers_label_font_family
+                * @deprecated dxvectormapoptions.layers.label.font.family
                 */
                 family: "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
                 /**
-                * @name dxvectormapoptions_markerSettings_label_font_weight
+                * @name dxvectormapoptions.markerSettings.label.font.weight
                 * @publicName weight
                 * @type number
                 * @default 400
-                * @deprecated dxvectormapoptions_layers_label_font_weight
+                * @deprecated dxvectormapoptions.layers.label.font.weight
                 */
                 weight: 400,
                 /**
-                * @name dxvectormapoptions_markerSettings_label_font_color
+                * @name dxvectormapoptions.markerSettings.label.font.color
                 * @publicName color
                 * @type string
                 * @default '#2b2b2b'
-                * @deprecated dxvectormapoptions_layers_label_font_color
+                * @deprecated dxvectormapoptions.layers.label.font.color
                 */
                 color: '#2b2b2b',
                 /**
-                * @name dxvectormapoptions_markerSettings_label_font_size
+                * @name dxvectormapoptions.markerSettings.label.font.size
                 * @publicName size
                 * @type number|string
                 * @default 12
-                * @deprecated dxvectormapoptions_layers_label_font_size
+                * @deprecated dxvectormapoptions.layers.label.font.size
                 */
                 size: 12,
                 /**
-                * @name dxvectormapoptions_markerSettings_label_font_opacity
+                * @name dxvectormapoptions.markerSettings.label.font.opacity
                 * @publicName opacity
                 * @type number
                 * @default undefined
-                * @deprecated dxvectormapoptions_layers_label_font_opacity
+                * @deprecated dxvectormapoptions.layers.label.font.opacity
                 */
                 opacity: undefined
             }
         },
         /**
-        * @name dxvectormapoptions_markerSettings_hoverEnabled
+        * @name dxvectormapoptions.markerSettings.hoverEnabled
         * @publicName hoverEnabled
         * @type boolean
         * @default true
-        * @deprecated dxvectormapoptions_layers_hoverEnabled
+        * @deprecated dxvectormapoptions.layers.hoverEnabled
         */
         hoverEnabled: true,
         /**
-        * @name dxvectormapoptions_markerSettings_selectionMode
+        * @name dxvectormapoptions.markerSettings.selectionMode
         * @publicName selectionMode
         * @type Enums.SelectionMode
         * @default 'single'
-        * @deprecated dxvectormapoptions_layers_selectionMode
+        * @deprecated dxvectormapoptions.layers.selectionMode
         */
         selectionMode: 'single',
         /**
-        * @name dxvectormapoptions_markerSettings_customize
+        * @name dxvectormapoptions.markerSettings.customize
         * @publicName customize
         * @type function(marker)
         * @type_function_param1 marker:markerObjects
-        * @type_function_return dxVectorMapOptions_markerSettings
-        * @deprecated dxvectormapoptions_layers_customize
+        * @type_function_return dxVectorMapOptions.markerSettings
+        * @deprecated dxvectormapoptions.layers.customize
         * @notUsedInTheme
         */
         customize: function() { }
     },
     /**
-    * @name dxvectormapoptions_controlbar
+    * @name dxvectormapoptions.controlbar
     * @publicName controlBar
     * @type object
     */
     controlBar: {
         /**
-        * @name dxvectormapoptions_controlbar_enabled
+        * @name dxvectormapoptions.controlbar.enabled
         * @publicName enabled
         * @type boolean
         * @default true
         */
         enabled: true,
         /**
-        * @name dxvectormapoptions_controlbar_borderColor
+        * @name dxvectormapoptions.controlbar.borderColor
         * @publicName borderColor
         * @type string
         * @default '#5d5d5d'
         */
         borderColor: '#5d5d5d',
         /**
-        * @name dxvectormapoptions_controlbar_color
+        * @name dxvectormapoptions.controlbar.color
         * @publicName color
         * @type string
         * @default '#ffffff'
         */
         color: '#ffffff',
         /**
-        * @name dxvectormapoptions_controlbar_margin
+        * @name dxvectormapoptions.controlbar.margin
         * @publicName margin
         * @type number
         * @default 20
         */
         margin: 20,
         /**
-        * @name dxvectormapoptions_controlbar_horizontalAlignment
+        * @name dxvectormapoptions.controlbar.horizontalAlignment
         * @publicName horizontalAlignment
         * @type Enums.HorizontalAlignment
         * @default 'left'
         */
         horizontalAlignment: 'left',
         /**
-        * @name dxvectormapoptions_controlbar_verticalAlignment
+        * @name dxvectormapoptions.controlbar.verticalAlignment
         * @publicName verticalAlignment
         * @type Enums.VerticalEdge
         * @default 'top'
         */
         verticalAlignment: 'top',
         /**
-        * @name dxvectormapoptions_controlbar_opacity
+        * @name dxvectormapoptions.controlbar.opacity
         * @publicName opacity
         * @type number
         * @default 0.3
@@ -881,13 +881,13 @@ var dxVectorMap = {
         opacity: 0.3
     },
     /**
-    * @name dxvectormapoptions_tooltip
+    * @name dxvectormapoptions.tooltip
     * @publicName tooltip
     * @type object
     */
     tooltip: {
         /**
-        * @name dxvectormapoptions_tooltip_customizetooltip
+        * @name dxvectormapoptions.tooltip.customizetooltip
         * @publicName customizeTooltip
         * @type function(info)
         * @type_function_param1 info:areaObjects|markerObjects
@@ -897,14 +897,14 @@ var dxVectorMap = {
         */
         customizeTooltip: undefined,
         /**
-        * @name dxvectormapoptions_tooltip_format
+        * @name dxvectormapoptions.tooltip.format
         * @publicName format
         * @hidden
         * @inheritdoc
         */
         format: undefined,
         /**
-        * @name dxvectormapoptions_tooltip_precision
+        * @name dxvectormapoptions.tooltip.precision
         * @publicName precision
         * @hidden
         * @inheritdoc
@@ -912,7 +912,7 @@ var dxVectorMap = {
         precision: undefined
     },
     /**
-    * @name dxvectormapoptions_ontooltipshown
+    * @name dxvectormapoptions.ontooltipshown
     * @publicName onTooltipShown
     * @extends Action
     * @type function(e)
@@ -923,7 +923,7 @@ var dxVectorMap = {
     */
     onTooltipShown: function() { },
     /**
-    * @name dxvectormapoptions_ontooltiphidden
+    * @name dxvectormapoptions.ontooltiphidden
     * @publicName onTooltipHidden
     * @extends Action
     * @type function(e)
@@ -934,28 +934,28 @@ var dxVectorMap = {
     */
     onTooltipHidden: function() { },
     /**
-    * @name dxvectormapoptions_legends
+    * @name dxvectormapoptions.legends
     * @publicName legends
     * @type Array<Object>
     * @default undefined
     */
     legends: [{
         /**
-        * @name dxvectormapoptions_legends_source
+        * @name dxvectormapoptions.legends.source
         * @publicName source
         * @type object
         * @notUsedInTheme
         */
         source: {
             /**
-            * @name dxvectormapoptions_legends_source_layer
+            * @name dxvectormapoptions.legends.source.layer
             * @publicName layer
             * @type string
             * @notUsedInTheme
             */
             layer: undefined,
             /**
-            * @name dxvectormapoptions_legends_source_grouping
+            * @name dxvectormapoptions.legends.source.grouping
             * @publicName grouping
             * @type string
             * @notUsedInTheme
@@ -963,7 +963,7 @@ var dxVectorMap = {
             grouping: undefined
         },
         /**
-        * @name dxvectormapoptions_legends_customizetext
+        * @name dxvectormapoptions.legends.customizetext
         * @publicName customizeText
         * @type function(itemInfo)
         * @type_function_param1 itemInfo:object
@@ -977,7 +977,7 @@ var dxVectorMap = {
         */
         customizeText: undefined,
         /**
-        * @name dxvectormapoptions_legends_customizehint
+        * @name dxvectormapoptions.legends.customizehint
         * @publicName customizeHint
         * @type function(itemInfo)
         * @type_function_param1 itemInfo:object
@@ -991,76 +991,76 @@ var dxVectorMap = {
         */
         customizeHint: undefined,
         /**
-        * @name dxvectormapoptions_legends_verticalalignment
+        * @name dxvectormapoptions.legends.verticalalignment
         * @publicName verticalAlignment
         * @type Enums.VerticalEdge
         * @default 'bottom'
         */
         verticalAlignment: 'bottom',
         /**
-        * @name dxvectormapoptions_legends_horizontalalignment
+        * @name dxvectormapoptions.legends.horizontalalignment
         * @publicName horizontalAlignment
         * @type Enums.HorizontalAlignment
         * @default 'right'
         */
         horizontalAlignment: 'right',
         /**
-        * @name dxvectormapoptions_legends_orientation
+        * @name dxvectormapoptions.legends.orientation
         * @publicName orientation
         * @type Enums.Orientation
         * @default undefined
         */
         orientation: undefined,
         /**
-        * @name dxvectormapoptions_legends_itemtextposition
+        * @name dxvectormapoptions.legends.itemtextposition
         * @publicName itemTextPosition
         * @type Enums.Position
         * @default undefined
         */
         itemTextPosition: undefined,
         /**
-        * @name dxvectormapoptions_legends_itemsalignment
+        * @name dxvectormapoptions.legends.itemsalignment
         * @publicName itemsAlignment
         * @type Enums.HorizontalAlignment
         * @default undefined
         */
         itemsAlignment: undefined,
         /**
-        * @name dxvectormapoptions_legends_font
+        * @name dxvectormapoptions.legends.font
         * @publicName font
         * @type object
         */
         font: {
             /**
-            * @name dxvectormapoptions_legends_font_color
+            * @name dxvectormapoptions.legends.font.color
             * @publicName color
             * @type string
             * @default '#2b2b2b'
             */
             color: '#2b2b2b',
             /**
-            * @name dxvectormapoptions_legends_font_family
+            * @name dxvectormapoptions.legends.font.family
             * @publicName family
             * @type string
             * @default undefined
             */
             family: undefined,
             /**
-            * @name dxvectormapoptions_legends_font_weight
+            * @name dxvectormapoptions.legends.font.weight
             * @publicName weight
             * @type number
             * @default undefined
             */
             weight: undefined,
             /**
-            * @name dxvectormapoptions_legends_font_size
+            * @name dxvectormapoptions.legends.font.size
             * @publicName size
             * @type number|string
             * @default 12
             */
             size: 12,
             /**
-            * @name dxvectormapoptions_legends_font_opacity
+            * @name dxvectormapoptions.legends.font.opacity
             * @publicName opacity
             * @type number
             * @default undefined
@@ -1068,42 +1068,42 @@ var dxVectorMap = {
             opacity: undefined
         },
         /**
-        * @name dxvectormapoptions_legends_visible
+        * @name dxvectormapoptions.legends.visible
         * @publicName visible
         * @type boolean
         * @default true
         */
         visible: true,
         /**
-        * @name dxvectormapoptions_legends_margin
+        * @name dxvectormapoptions.legends.margin
         * @publicName margin
         * @type number|object
         * @default 10
         */
         margin: {
             /**
-            * @name dxvectormapoptions_legends_margin_top
+            * @name dxvectormapoptions.legends.margin.top
             * @publicName top
             * @type number
             * @default 10
             */
             top: 10,
             /**
-            * @name dxvectormapoptions_legends_margin_bottom
+            * @name dxvectormapoptions.legends.margin.bottom
             * @publicName bottom
             * @type number
             * @default 10
             */
             bottom: 10,
             /**
-            * @name dxvectormapoptions_legends_margin_left
+            * @name dxvectormapoptions.legends.margin.left
             * @publicName left
             * @type number
             * @default 10
             */
             left: 10,
             /**
-            * @name dxvectormapoptions_legends_margin_right
+            * @name dxvectormapoptions.legends.margin.right
             * @publicName right
             * @type number
             * @default 10
@@ -1111,76 +1111,76 @@ var dxVectorMap = {
             right: 10
         },
         /**
-        * @name dxvectormapoptions_legends_markerSize
+        * @name dxvectormapoptions.legends.markerSize
         * @publicName markerSize
         * @type number
         * @default 12
         */
         markerSize: 12,
         /**
-        * @name dxvectormapoptions_legends_markerColor
+        * @name dxvectormapoptions.legends.markerColor
         * @publicName markerColor
         * @type string
         * @default "#ba4d51"
         */
         markerColor: "#ba4d51",
         /**
-        * @name dxvectormapoptions_legends_markerShape
+        * @name dxvectormapoptions.legends.markerShape
         * @publicName markerShape
         * @type Enums.VectorMapMarkerShape
         * @default "square"
         */
         markerShape: "square",
         /**
-        * @name dxvectormapoptions_legends_backgroundcolor
+        * @name dxvectormapoptions.legends.backgroundcolor
         * @publicName backgroundColor
         * @type string
         * @default undefined
         */
         backgroundColor: undefined,
         /**
-        * @name dxvectormapoptions_legends_border
+        * @name dxvectormapoptions.legends.border
         * @publicName border
         * @type object
         */
         border: {
             /**
-            * @name dxvectormapoptions_legends_border_visible
+            * @name dxvectormapoptions.legends.border.visible
             * @publicName visible
             * @type boolean
             * @default false
             */
             visible: false,
             /**
-            * @name dxvectormapoptions_legends_border_width
+            * @name dxvectormapoptions.legends.border.width
             * @publicName width
             * @type number
             * @default 1
             */
             width: 1,
             /**
-            * @name dxvectormapoptions_legends_border_color
+            * @name dxvectormapoptions.legends.border.color
             * @publicName color
             * @type string
             * @default '#d3d3d3'
             */
             color: '#d3d3d3',
             /**
-            * @name dxvectormapoptions_legends_border_cornerradius
+            * @name dxvectormapoptions.legends.border.cornerradius
             * @publicName cornerRadius
             * @type number
             * @default 0
             */
             cornerRadius: 0,
             /**
-            * @name dxvectormapoptions_legends_border_opacity
+            * @name dxvectormapoptions.legends.border.opacity
             * @publicName opacity
             * @type number
             * @default undefined
             */
             opacity: undefined,
             /**
-            * @name dxvectormapoptions_legends_border_dashstyle
+            * @name dxvectormapoptions.legends.border.dashstyle
             * @publicName dashStyle
             * @type Enums.DashStyle
             * @default 'solid'
@@ -1188,42 +1188,42 @@ var dxVectorMap = {
             dashStyle: 'solid'
         },
         /**
-        * @name dxvectormapoptions_legends_paddingleftright
+        * @name dxvectormapoptions.legends.paddingleftright
         * @publicName paddingLeftRight
         * @type number
         * @default 10
         */
         paddingLeftRight: 10,
         /**
-        * @name dxvectormapoptions_legends_paddingtopbottom
+        * @name dxvectormapoptions.legends.paddingtopbottom
         * @publicName paddingTopBottom
         * @type number
         * @default 10
         */
         paddingTopBottom: 10,
         /**
-        * @name dxvectormapoptions_legends_columncount
+        * @name dxvectormapoptions.legends.columncount
         * @publicName columnCount
         * @type number
         * @default 0
         */
         columnsCount: 0,
         /**
-        * @name dxvectormapoptions_legends_rowcount
+        * @name dxvectormapoptions.legends.rowcount
         * @publicName rowCount
         * @type number
         * @default 0
         */
         rowsCount: 0,
         /**
-        * @name dxvectormapoptions_legends_columnitemspacing
+        * @name dxvectormapoptions.legends.columnitemspacing
         * @publicName columnItemSpacing
         * @type number
         * @default 20
         */
         columnItemSpacing: 20,
         /**
-        * @name dxvectormapoptions_legends_rowitemspacing
+        * @name dxvectormapoptions.legends.rowitemspacing
         * @publicName rowItemSpacing
         * @type number
         * @default 8
@@ -1231,7 +1231,7 @@ var dxVectorMap = {
         rowItemSpacing: 8
     }],
     /**
-    * @name dxvectormapoptions_projection
+    * @name dxvectormapoptions.projection
     * @publicName projection
     * @type object
     * @default undefined
@@ -1239,7 +1239,7 @@ var dxVectorMap = {
     */
     projection: undefined,
     /**
-    * @name dxvectormapoptions_bounds
+    * @name dxvectormapoptions.bounds
     * @publicName bounds
     * @type Array<number>
     * @default undefined
@@ -1247,35 +1247,35 @@ var dxVectorMap = {
     */
     bounds: undefined,
     /**
-    * @name dxvectormapoptions_touchEnabled
+    * @name dxvectormapoptions.touchEnabled
     * @publicName touchEnabled
     * @type boolean
     * @default true
     */
     touchEnabled: true,
     /**
-    * @name dxvectormapoptions_wheelEnabled
+    * @name dxvectormapoptions.wheelEnabled
     * @publicName wheelEnabled
     * @type boolean
     * @default true
     */
     wheelEnabled: true,
     /**
-    * @name dxvectormapoptions_panningEnabled
+    * @name dxvectormapoptions.panningEnabled
     * @publicName panningEnabled
     * @type boolean
     * @default true
     */
     panningEnabled: true,
     /**
-    * @name dxvectormapoptions_zoomingEnabled
+    * @name dxvectormapoptions.zoomingEnabled
     * @publicName zoomingEnabled
     * @type boolean
     * @default true
     */
     zoomingEnabled: true,
     /**
-    * @name dxvectormapoptions_center
+    * @name dxvectormapoptions.center
     * @publicName center
     * @type Array<number>
     * @default [0, 0]
@@ -1283,7 +1283,7 @@ var dxVectorMap = {
     */
     center: [0, 0],
     /**
-    * @name dxvectormapoptions_zoomFactor
+    * @name dxvectormapoptions.zoomFactor
     * @publicName zoomFactor
     * @type number
     * @default 1
@@ -1291,7 +1291,7 @@ var dxVectorMap = {
     */
     zoomFactor: 1,
     /**
-    * @name dxvectormapoptions_maxZoomFactor
+    * @name dxvectormapoptions.maxZoomFactor
     * @publicName maxZoomFactor
     * @type number
     * @default 256
@@ -1299,7 +1299,7 @@ var dxVectorMap = {
     */
     maxZoomFactor: 256,
     /**
-    * @name dxvectormapoptions_onClick
+    * @name dxvectormapoptions.onClick
     * @publicName onClick
     * @extends Action
     * @type function|string
@@ -1312,7 +1312,7 @@ var dxVectorMap = {
     */
     onClick: function() { },
     /**
-    * @name dxvectormapoptions_onCenterChanged
+    * @name dxvectormapoptions.onCenterChanged
     * @publicName onCenterChanged
     * @extends Action
     * @type function
@@ -1323,7 +1323,7 @@ var dxVectorMap = {
     */
     onCenterChanged: function() { },
     /**
-    * @name dxvectormapoptions_onZoomFactorChanged
+    * @name dxvectormapoptions.onZoomFactorChanged
     * @publicName onZoomFactorChanged
     * @extends Action
     * @type function
@@ -1334,7 +1334,7 @@ var dxVectorMap = {
     */
     onZoomFactorChanged: function() { },
     /**
-    * @name dxvectormapoptions_onSelectionChanged
+    * @name dxvectormapoptions.onSelectionChanged
     * @publicName onSelectionChanged
     * @extends Action
     * @type function
@@ -1345,7 +1345,7 @@ var dxVectorMap = {
     */
     onSelectionChanged: function() { },
     /**
-    * @name dxvectormapoptions_onAreaClick
+    * @name dxvectormapoptions.onAreaClick
     * @publicName onAreaClick
     * @extends Action
     * @type function|string
@@ -1354,24 +1354,24 @@ var dxVectorMap = {
     * @type_function_param1_field5 event:event
     * @type_function_param1_field6 target:areaObjects
     * @notUsedInTheme
-    * @deprecated dxvectormapoptions_onClick
+    * @deprecated dxvectormapoptions.onClick
     * @action
     */
     onAreaClick: function() { },
     /**
-    * @name dxvectormapoptions_onAreaSelectionChanged
+    * @name dxvectormapoptions.onAreaSelectionChanged
     * @publicName onAreaSelectionChanged
     * @extends Action
     * @type function
     * @type_function_param1 e:object
     * @type_function_param1_field4 target:areaObjects
     * @notUsedInTheme
-    * @deprecated dxvectormapoptions_onSelectionChanged
+    * @deprecated dxvectormapoptions.onSelectionChanged
     * @action
     */
     onAreaSelectionChanged: function() { },
     /**
-    * @name dxvectormapoptions_onMarkerClick
+    * @name dxvectormapoptions.onMarkerClick
     * @publicName onMarkerClick
     * @extends Action
     * @type function|string
@@ -1380,111 +1380,111 @@ var dxVectorMap = {
     * @type_function_param1_field5 event:event
     * @type_function_param1_field6 target:markerObjects
     * @notUsedInTheme
-    * @deprecated dxvectormapoptions_onClick
+    * @deprecated dxvectormapoptions.onClick
     * @action
     */
     onMarkerClick: function() { },
     /**
-    * @name dxvectormapoptions_onMarkerSelectionChanged
+    * @name dxvectormapoptions.onMarkerSelectionChanged
     * @publicName onMarkerSelectionChanged
     * @extends Action
     * @type function
     * @type_function_param1 e:object
     * @type_function_param1_field4 target:markerObjects
     * @notUsedInTheme
-    * @deprecated dxvectormapoptions_onSelectionChanged
+    * @deprecated dxvectormapoptions.onSelectionChanged
     * @action
     */
     onMarkerSelectionChanged: function() { },
     /**
-    * @name dxvectormapmethods_getLayers
+    * @name dxvectormapmethods.getLayers
     * @publicName getLayers()
     * @return Array<MapLayer>
     */
     getLayers: function() { },
     /**
-    * @name dxvectormapmethods_getLayerByIndex
+    * @name dxvectormapmethods.getLayerByIndex
     * @publicName getLayerByIndex(index)
     * @return MapLayer
     * @param1 index:number
     */
     getLayerByIndex: function() { },
     /**
-    * @name dxvectormapmethods_getLayerByName
+    * @name dxvectormapmethods.getLayerByName
     * @publicName getLayerByName(name)
     * @return MapLayer
     * @param1 name:string
     */
     getLayerByName: function() { },
     /**
-    * @name dxvectormapmethods_getAreas
+    * @name dxvectormapmethods.getAreas
     * @publicName getAreas()
     * @return Array<areaObjects>
-    * @deprecated dxvectormapmethods_getLayers
+    * @deprecated dxvectormapmethods.getLayers
     */
     getAreas: function() { },
     /**
-    * @name dxvectormapmethods_getMarkers
+    * @name dxvectormapmethods.getMarkers
     * @publicName getMarkers()
     * @return Array<markerObjects>
-    * @deprecated dxvectormapmethods_getLayers
+    * @deprecated dxvectormapmethods.getLayers
     */
     getMarkers: function() { },
     /**
-    * @name dxvectormapmethods_clearAreaSelection
+    * @name dxvectormapmethods.clearAreaSelection
     * @publicName clearAreaSelection()
-    * @deprecated dxvectormapmethods_clearSelection
+    * @deprecated dxvectormapmethods.clearSelection
     */
     clearAreaSelection: function() { },
     /**
-    * @name dxvectormapmethods_clearMarkerSelection
+    * @name dxvectormapmethods.clearMarkerSelection
     * @publicName clearMarkerSelection()
-    * @deprecated dxvectormapmethods_clearSelection
+    * @deprecated dxvectormapmethods.clearSelection
     */
     clearMarkerSelection: function() { },
     /**
-    * @name dxvectormapmethods_clearSelection
+    * @name dxvectormapmethods.clearSelection
     * @publicName clearSelection()
     */
     clearSelection: function() { },
     /**
-    * @name dxvectormapmethods_center
+    * @name dxvectormapmethods.center
     * @publicName center()
     * @return Array<number>
     */
     center: function() { },
     /**
-    * @name dxvectormapmethods_center
+    * @name dxvectormapmethods.center
     * @publicName center(centerCoordinates)
     * @param1 centerCoordinates:Array<number>
     */
     center: function() { },
     /**
-    * @name dxvectormapmethods_zoomFactor
+    * @name dxvectormapmethods.zoomFactor
     * @publicName zoomFactor()
     * @return number
     */
     zoomFactor: function() { },
     /**
-    * @name dxvectormapmethods_zoomFactor
+    * @name dxvectormapmethods.zoomFactor
     * @publicName zoomFactor(zoomFactor)
     * @param1 zoomFactor:number
     */
     zoomFactor: function() { },
     /**
-    * @name dxvectormapmethods_viewport
+    * @name dxvectormapmethods.viewport
     * @publicName viewport()
     * @return Array<number>
     */
     viewport: function() { },
     /**
-    * @name dxvectormapmethods_viewport
+    * @name dxvectormapmethods.viewport
     * @publicName viewport(viewportCoordinates)
     * @param1 viewportCoordinates:Array<number>
     */
     viewport: function() { },
     /**
-    * @name dxvectormapmethods_convertCoordinates
+    * @name dxvectormapmethods.convertCoordinates
     * @publicName convertCoordinates(x, y)
     * @param1 x:number
     * @param2 y:number

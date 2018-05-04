@@ -26,12 +26,12 @@ var ODataContext = Class.inherit({
         var that = this;
 
         /**
-         * @name ODataContextOptions_url
+         * @name ODataContextOptions.url
          * @publicName url
          * @type string
          */
         /**
-         * @name ODataContextOptions_beforeSend
+         * @name ODataContextOptions.beforeSend
          * @publicName beforeSend
          * @type function
          * @type_function_param1 options:object
@@ -44,40 +44,40 @@ var ODataContext = Class.inherit({
          * @type_function_param1_field7 headers:object
          */
         /**
-         * @name ODataContextOptions_jsonp
+         * @name ODataContextOptions.jsonp
          * @publicName jsonp
          * @type boolean
          * @default false
          */
         /**
-         * @name ODataContextOptions_version
+         * @name ODataContextOptions.version
          * @publicName version
          * @type number
          * @default 2
          * @acceptValues 2|3|4
          */
         /**
-         * @name ODataContextOptions_withCredentials
+         * @name ODataContextOptions.withCredentials
          * @publicName withCredentials
          * @type boolean
          * @default false
          */
         /**
-         * @name ODataContextOptions_deserializeDates
+         * @name ODataContextOptions.deserializeDates
          * @publicName deserializeDates
          * @type boolean
          */
         that._extractServiceOptions(options);
 
         /**
-         * @name ODataContextOptions_errorHandler
+         * @name ODataContextOptions.errorHandler
          * @publicName errorHandler
          * @type function
          */
         that._errorHandler = options.errorHandler;
 
         /**
-         * @name ODataContextOptions_entities
+         * @name ODataContextOptions.entities
          * @publicName entities
          * @type object
          */
@@ -94,7 +94,7 @@ var ODataContext = Class.inherit({
     },
 
     /**
-     * @name ODataContextmethods_get
+     * @name ODataContextmethods.get
      * @publicName get(operationName, params)
      * @param1 operationName:string
      * @param2 params:object
@@ -105,7 +105,7 @@ var ODataContext = Class.inherit({
     },
 
     /**
-     * @name ODataContextmethods_invoke
+     * @name ODataContextmethods.invoke
      * @publicName invoke(operationName, params, httpMethod)
      * @param1 operationName:string
      * @param2 params:object
@@ -145,7 +145,7 @@ var ODataContext = Class.inherit({
     },
 
     /**
-     * @name ODataContextmethods_objectLink
+     * @name ODataContextmethods.objectLink
      * @publicName objectLink(entityAlias, key)
      * @param1 entityAlias:string
      * @param2 key:object|string|number

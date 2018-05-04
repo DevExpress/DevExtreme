@@ -677,117 +677,117 @@ module.exports = {
     defaultOptions: function() {
         return {
             /**
-         * @name GridBaseOptions_filterRow
+         * @name GridBaseOptions.filterRow
          * @publicName filterRow
          * @type object
          */
             filterRow: {
                 /**
-                 * @name GridBaseOptions_filterRow_visible
+                 * @name GridBaseOptions.filterRow.visible
                  * @publicName visible
                  * @type boolean
                  * @default false
                  */
                 visible: false,
                 /**
-                 * @name GridBaseOptions_filterRow_showOperationChooser
+                 * @name GridBaseOptions.filterRow.showOperationChooser
                  * @publicName showOperationChooser
                  * @type boolean
                  * @default true
                  */
                 showOperationChooser: true,
                 /**
-                * @name GridBaseOptions_filterRow_showAllText
+                * @name GridBaseOptions.filterRow.showAllText
                 * @publicName showAllText
                 * @type string
                 * @default "(All)"
                 */
                 showAllText: messageLocalization.format("dxDataGrid-filterRowShowAllText"),
                 /**
-                * @name GridBaseOptions_filterRow_resetOperationText
+                * @name GridBaseOptions.filterRow.resetOperationText
                 * @publicName resetOperationText
                 * @type string
                 * @default "Reset"
                 */
                 resetOperationText: messageLocalization.format("dxDataGrid-filterRowResetOperationText"),
                 /**
-                 * @name GridBaseOptions_filterRow_applyFilter
+                 * @name GridBaseOptions.filterRow.applyFilter
                  * @publicName applyFilter
                  * @type Enums.GridApplyFilterMode
                  * @default "auto"
                  */
                 applyFilter: "auto",
                 /**
-                 * @name GridBaseOptions_filterRow_applyFilterText
+                 * @name GridBaseOptions.filterRow.applyFilterText
                  * @publicName applyFilterText
                  * @type string
                  * @default "Apply filter"
                  */
                 applyFilterText: messageLocalization.format("dxDataGrid-applyFilterText"),
                 /**
-                 * @name GridBaseOptions_filterRow_operationDescriptions
+                 * @name GridBaseOptions.filterRow.operationDescriptions
                  * @publicName operationDescriptions
                  * @type object
                  */
                 operationDescriptions: {
                     /**
-                     * @name GridBaseOptions_filterRow_operationDescriptions_equal
+                     * @name GridBaseOptions.filterRow.operationDescriptions.equal
                      * @publicName equal
                      * @type string
                      * @default "Equals"
                      */
                     equal: messageLocalization.format("dxDataGrid-filterRowOperationEquals"),
                     /**
-                     * @name GridBaseOptions_filterRow_operationDescriptions_notEqual
+                     * @name GridBaseOptions.filterRow.operationDescriptions.notEqual
                      * @publicName notEqual
                      * @type string
                      * @default "Does not equal"
                      */
                     notEqual: messageLocalization.format("dxDataGrid-filterRowOperationNotEquals"),
                     /**
-                     * @name GridBaseOptions_filterRow_operationDescriptions_lessThan
+                     * @name GridBaseOptions.filterRow.operationDescriptions.lessThan
                      * @publicName lessThan
                      * @type string
                      * @default "Less than"
                      */
                     lessThan: messageLocalization.format("dxDataGrid-filterRowOperationLess"),
                     /**
-                     * @name GridBaseOptions_filterRow_operationDescriptions_lessThanOrEqual
+                     * @name GridBaseOptions.filterRow.operationDescriptions.lessThanOrEqual
                      * @publicName lessThanOrEqual
                      * @type string
                      * @default "Less than or equal to"
                      */
                     lessThanOrEqual: messageLocalization.format("dxDataGrid-filterRowOperationLessOrEquals"),
                     /**
-                     * @name GridBaseOptions_filterRow_operationDescriptions_greaterThan
+                     * @name GridBaseOptions.filterRow.operationDescriptions.greaterThan
                      * @publicName greaterThan
                      * @type string
                      * @default "Greater than"
                      */
                     greaterThan: messageLocalization.format("dxDataGrid-filterRowOperationGreater"),
                     /**
-                     * @name GridBaseOptions_filterRow_operationDescriptions_greaterThanOrEqual
+                     * @name GridBaseOptions.filterRow.operationDescriptions.greaterThanOrEqual
                      * @publicName greaterThanOrEqual
                      * @type string
                      * @default "Greater than or equal to"
                      */
                     greaterThanOrEqual: messageLocalization.format("dxDataGrid-filterRowOperationGreaterOrEquals"),
                     /**
-                     * @name GridBaseOptions_filterRow_operationDescriptions_startsWith
+                     * @name GridBaseOptions.filterRow.operationDescriptions.startsWith
                      * @publicName startsWith
                      * @type string
                      * @default "Starts with"
                      */
                     startsWith: messageLocalization.format("dxDataGrid-filterRowOperationStartsWith"),
                     /**
-                     * @name GridBaseOptions_filterRow_operationDescriptions_contains
+                     * @name GridBaseOptions.filterRow.operationDescriptions.contains
                      * @publicName contains
                      * @type string
                      * @default "Contains"
                      */
                     contains: messageLocalization.format("dxDataGrid-filterRowOperationContains"),
                     /**
-                     * @name GridBaseOptions_filterRow_operationDescriptions_notContains
+                     * @name GridBaseOptions.filterRow.operationDescriptions.notContains
                      * @publicName notContains
                      * @type string
                      * @default "Does not contain"
@@ -795,14 +795,14 @@ module.exports = {
                     notContains: messageLocalization.format("dxDataGrid-filterRowOperationNotContains"),
 
                     /**
-                     * @name GridBaseOptions_filterRow_operationDescriptions_endsWith
+                     * @name GridBaseOptions.filterRow.operationDescriptions.endsWith
                      * @publicName endsWith
                      * @type string
                      * @default "Ends with"
                      */
                     endsWith: messageLocalization.format("dxDataGrid-filterRowOperationEndsWith"),
                     /**
-                     * @name GridBaseOptions_filterRow_operationDescriptions_between
+                     * @name GridBaseOptions.filterRow.operationDescriptions.between
                      * @publicName between
                      * @type string
                      * @default "Between"
@@ -812,14 +812,14 @@ module.exports = {
                     isNotBlank: messageLocalization.format("dxFilterBuilder-filterOperationIsNotBlank")
                 },
                 /**
-                 * @name GridBaseOptions_filterRow_betweenStartText
+                 * @name GridBaseOptions.filterRow.betweenStartText
                  * @publicName betweenStartText
                  * @type string
                  * @default "Start"
                  */
                 betweenStartText: messageLocalization.format("dxDataGrid-filterRowOperationBetweenStartText"),
                 /**
-                 * @name GridBaseOptions_filterRow_betweenEndText
+                 * @name GridBaseOptions.filterRow.betweenEndText
                  * @publicName betweenEndText
                  * @type string
                  * @default "End"

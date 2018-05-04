@@ -101,7 +101,7 @@ var LocalStore = ArrayStore.inherit({
 
     ctor: function(options) {
         /**
-         * @name LocalStoreOptions_name
+         * @name LocalStoreOptions.name
          * @publicName name
          * @type string
          */
@@ -114,13 +114,13 @@ var LocalStore = ArrayStore.inherit({
         this.callBase(options);
 
         /**
-         * @name LocalStoreOptions_immediate
+         * @name LocalStoreOptions.immediate
          * @publicName immediate
          * @type boolean
          * @default false
          */
         /**
-         * @name LocalStoreOptions_flushInterval
+         * @name LocalStoreOptions.flushInterval
          * @publicName flushInterval
          * @type number
          * @default 10000
@@ -130,7 +130,7 @@ var LocalStore = ArrayStore.inherit({
     },
 
     /**
-    * @name LocalStoreMethods_clear
+    * @name LocalStoreMethods.clear
     * @publicName clear()
     */
     clear: function() {

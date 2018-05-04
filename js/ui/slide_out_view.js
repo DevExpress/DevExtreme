@@ -57,7 +57,7 @@ var SlideOutView = Widget.inherit({
         return extend(this.callBase(), {
 
             /**
-            * @name dxSlideOutViewOptions_menuPosition
+            * @name dxSlideOutViewOptions.menuPosition
             * @publicName menuPosition
             * @type Enums.SlideOutMenuPosition
             * @default "normal"
@@ -65,7 +65,7 @@ var SlideOutView = Widget.inherit({
             menuPosition: "normal",
 
             /**
-            * @name dxSlideOutViewOptions_menuVisible
+            * @name dxSlideOutViewOptions.menuVisible
             * @publicName menuVisible
             * @type boolean
             * @default false
@@ -73,7 +73,7 @@ var SlideOutView = Widget.inherit({
             menuVisible: false,
 
             /**
-            * @name dxSlideOutViewOptions_swipeEnabled
+            * @name dxSlideOutViewOptions.swipeEnabled
             * @publicName swipeEnabled
             * @type boolean
             * @default true
@@ -81,7 +81,7 @@ var SlideOutView = Widget.inherit({
             swipeEnabled: true,
 
             /**
-            * @name dxSlideOutViewOptions_menuTemplate
+            * @name dxSlideOutViewOptions.menuTemplate
             * @publicName menuTemplate
             * @type_function_param1 menuElement:dxElement
             * @type template|function
@@ -90,7 +90,7 @@ var SlideOutView = Widget.inherit({
             menuTemplate: "menu",
 
             /**
-            * @name dxSlideOutViewOptions_contentTemplate
+            * @name dxSlideOutViewOptions.contentTemplate
             * @publicName contentTemplate
             * @type_function_param1 contentElement:dxElement
             * @type template|function
@@ -99,7 +99,7 @@ var SlideOutView = Widget.inherit({
             contentTemplate: "content",
 
             /**
-            * @name dxSlideOutViewOptions_contentOffset
+            * @name dxSlideOutViewOptions.contentOffset
             * @publicName contentOffset
             * @hidden
             * @inheritdoc
@@ -107,28 +107,28 @@ var SlideOutView = Widget.inherit({
             contentOffset: 45
 
             /**
-            * @name dxSlideOutViewOptions_onContentReady
+            * @name dxSlideOutViewOptions.onContentReady
             * @publicName onContentReady
             * @hidden true
             * @action
             */
 
             /**
-            * @name dxSlideOutViewOptions_focusStateEnabled
+            * @name dxSlideOutViewOptions.focusStateEnabled
             * @publicName focusStateEnabled
             * @hidden
             * @inheritdoc
             */
 
             /**
-            * @name dxSlideOutViewOptions_accessKey
+            * @name dxSlideOutViewOptions.accessKey
             * @publicName accessKey
             * @hidden
             * @inheritdoc
             */
 
             /**
-            * @name dxSlideOutViewOptions_tabIndex
+            * @name dxSlideOutViewOptions.tabIndex
             * @publicName tabIndex
             * @hidden
             * @inheritdoc
@@ -397,7 +397,7 @@ var SlideOutView = Widget.inherit({
     },
 
     /**
-    * @name dxSlideOutViewMethods_menuContent
+    * @name dxSlideOutViewMethods.menuContent
     * @publicName menuContent()
     * @return dxElement
     */
@@ -406,7 +406,7 @@ var SlideOutView = Widget.inherit({
     },
 
     /**
-    * @name dxSlideOutViewMethods_content
+    * @name dxSlideOutViewMethods.content
     * @publicName content()
     * @return dxElement
     */
@@ -415,7 +415,7 @@ var SlideOutView = Widget.inherit({
     },
 
     /**
-    * @name dxSlideOutViewMethods_showMenu
+    * @name dxSlideOutViewMethods.showMenu
     * @publicName showMenu()
     * @return Promise<void>
     */
@@ -424,7 +424,7 @@ var SlideOutView = Widget.inherit({
     },
 
     /**
-    * @name dxSlideOutViewMethods_hideMenu
+    * @name dxSlideOutViewMethods.hideMenu
     * @publicName hideMenu()
     * @return Promise<void>
     */
@@ -433,7 +433,7 @@ var SlideOutView = Widget.inherit({
     },
 
     /**
-    * @name dxSlideOutViewMethods_toggleMenuVisibility
+    * @name dxSlideOutViewMethods.toggleMenuVisibility
     * @publicName toggleMenuVisibility()
     * @return Promise<void>
     */
@@ -447,14 +447,14 @@ var SlideOutView = Widget.inherit({
     }
 
     /**
-    * @name dxSlideOutViewMethods_registerKeyHandler
+    * @name dxSlideOutViewMethods.registerKeyHandler
     * @publicName registerKeyHandler(key, handler)
     * @hidden
     * @inheritdoc
     */
 
     /**
-    * @name dxSlideOutViewMethods_focus
+    * @name dxSlideOutViewMethods.focus
     * @publicName focus()
     * @hidden
     * @inheritdoc

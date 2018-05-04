@@ -12,7 +12,7 @@ require("./localization/currency");
 */
 
 /**
-* @name localization_locale
+* @name localization.locale
 * @publicName locale()
 * @return string
 * @static
@@ -21,7 +21,7 @@ require("./localization/currency");
 */
 
 /**
-* @name localization_locale
+* @name localization.locale
 * @publicName locale(locale)
 * @param1 locale:string
 * @static
@@ -31,7 +31,7 @@ require("./localization/currency");
 exports.locale = core.locale.bind(core);
 
 /**
-* @name localization_loadMessages
+* @name localization.loadMessages
 * @publicName loadMessages(messages)
 * @param1 messages:object
 * @static
@@ -40,7 +40,7 @@ exports.locale = core.locale.bind(core);
 */
 exports.loadMessages = message.load.bind(message);
 /**
-* @name localization_formatMessage
+* @name localization.formatMessage
 * @publicName formatMessage(key, value)
 * @param1 key:string
 * @param2 value:string|Array<string>
@@ -52,7 +52,7 @@ exports.loadMessages = message.load.bind(message);
 exports.formatMessage = message.format.bind(message);
 
 /**
-* @name localization_formatNumber
+* @name localization.formatNumber
 * @publicName formatNumber(value, format)
 * @param1 value:number
 * @param2 format:format
@@ -63,7 +63,7 @@ exports.formatMessage = message.format.bind(message);
 */
 exports.formatNumber = number.format.bind(number);
 /**
-* @name localization_parseNumber
+* @name localization.parseNumber
 * @publicName parseNumber(text, format)
 * @param1 text:string
 * @param2 format:format
@@ -75,7 +75,7 @@ exports.formatNumber = number.format.bind(number);
 exports.parseNumber = number.parse.bind(number);
 
 /**
-* @name localization_formatDate
+* @name localization.formatDate
 * @publicName formatDate(value, format)
 * @param1 value:date
 * @param2 format:format
@@ -86,7 +86,7 @@ exports.parseNumber = number.parse.bind(number);
 */
 exports.formatDate = date.format.bind(date);
 /**
-* @name localization_parseDate
+* @name localization.parseDate
 * @publicName parseDate(text, format)
 * @param1 text:string
 * @param2 format:format

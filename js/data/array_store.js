@@ -58,7 +58,7 @@ var ArrayStore = Store.inherit({
         }
 
         /**
-         * @name ArrayStoreOptions_data
+         * @name ArrayStoreOptions.data
          * @publicName data
          * @type Array<any>
          */
@@ -66,7 +66,7 @@ var ArrayStore = Store.inherit({
     },
 
     /**
-    * @name ArrayStoreMethods_createQuery
+    * @name ArrayStoreMethods.createQuery
     * @publicName createQuery()
     * @return object
     */
@@ -161,7 +161,7 @@ var ArrayStore = Store.inherit({
     },
 
     /**
-    * @name ArrayStoreMethods_clear
+    * @name ArrayStoreMethods.clear
     * @publicName clear()
     */
     clear: function() {

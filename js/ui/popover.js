@@ -130,14 +130,14 @@ var Popover = Popup.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             /**
-            * @name dxPopoverOptions_target
+            * @name dxPopoverOptions.target
             * @publicName target
             * @type string|Node|jQuery
             */
             target: window,
 
             /**
-            * @name dxPopoverOptions_shading
+            * @name dxPopoverOptions.shading
             * @type boolean
             * @publicName shading
             * @default false
@@ -146,7 +146,7 @@ var Popover = Popup.inherit({
             shading: false,
 
             /**
-            * @name dxPopoverOptions_position
+            * @name dxPopoverOptions.position
             * @publicName position
             * @type Enums.Position|positionConfig
             * @default 'bottom'
@@ -154,7 +154,7 @@ var Popover = Popup.inherit({
             position: 'bottom',
 
             /**
-            * @name dxPopoverOptions_closeOnOutsideClick
+            * @name dxPopoverOptions.closeOnOutsideClick
             * @publicName closeOnOutsideClick
             * @default true
             * @inheritdoc
@@ -162,14 +162,14 @@ var Popover = Popup.inherit({
             closeOnOutsideClick: true,
 
             /**
-            * @name dxPopoverOptions_animation
+            * @name dxPopoverOptions.animation
             * @publicName animation
             * @type object
             * @default { show: { type: "fade", from: 0, to: 1 }, hide: { type: "fade", to: 0 } }
             */
             animation: {
                 /**
-                * @name dxPopoverOptions_animation_show
+                * @name dxPopoverOptions.animation.show
                 * @publicName show
                 * @type animationConfig
                 * @default { type: "fade", from: 0, to: 1 }
@@ -180,7 +180,7 @@ var Popover = Popup.inherit({
                     to: 1
                 },
                 /**
-                * @name dxPopoverOptions_animation_hide
+                * @name dxPopoverOptions.animation.hide
                 * @publicName hide
                 * @type animationConfig
                 * @default { type: "fade", to: 0 }
@@ -192,7 +192,7 @@ var Popover = Popup.inherit({
             },
 
             /**
-            * @name dxPopoverOptions_showtitle
+            * @name dxPopoverOptions.showtitle
             * @publicName showTitle
             * @type boolean
             * @default false
@@ -200,7 +200,7 @@ var Popover = Popup.inherit({
             showTitle: false,
 
             /**
-             * @name dxPopoverOptions_width
+             * @name dxPopoverOptions.width
              * @publicName width
              * @type number|string|function
              * @default "auto"
@@ -209,7 +209,7 @@ var Popover = Popup.inherit({
             width: "auto",
 
             /**
-             * @name dxPopoverOptions_height
+             * @name dxPopoverOptions.height
              * @publicName height
              * @type number|string|function
              * @default "auto"
@@ -218,7 +218,7 @@ var Popover = Popup.inherit({
             height: "auto",
 
             /**
-             * @name dxPopoverOptions_dragEnabled
+             * @name dxPopoverOptions.dragEnabled
              * @publicName dragEnabled
              * @hidden
              * @inheritdoc
@@ -226,7 +226,7 @@ var Popover = Popup.inherit({
             dragEnabled: false,
 
             /**
-            * @name dxPopoverOptions_resizeEnabled
+            * @name dxPopoverOptions.resizeEnabled
             * @publicName resizeEnabled
             * @hidden
             * @inheritdoc
@@ -234,7 +234,7 @@ var Popover = Popup.inherit({
             resizeEnabled: false,
 
             /**
-            * @name dxPopoverOptions_onResizeStart
+            * @name dxPopoverOptions.onResizeStart
             * @publicName onResizeStart
             * @extends Action
             * @action
@@ -243,7 +243,7 @@ var Popover = Popup.inherit({
             */
 
             /**
-            * @name dxPopoverOptions_onResize
+            * @name dxPopoverOptions.onResize
             * @publicName onResize
             * @extends Action
             * @action
@@ -252,7 +252,7 @@ var Popover = Popup.inherit({
             */
 
             /**
-            * @name dxPopoverOptions_onResizeEnd
+            * @name dxPopoverOptions.onResizeEnd
             * @publicName onResizeEnd
             * @extends Action
             * @action
@@ -261,45 +261,45 @@ var Popover = Popup.inherit({
             */
 
             /**
-            * @name dxPopoverOptions_fullScreen
+            * @name dxPopoverOptions.fullScreen
             * @publicName fullScreen
             * @hidden
             * @inheritdoc
             */
 
             /**
-            * @name dxPopoverOptions_showEvent
+            * @name dxPopoverOptions.showEvent
             * @publicName showEvent
             * @type Object|string
             * @default undefined
             */
             /**
-            * @name dxPopoverOptions_showEvent_name
+            * @name dxPopoverOptions.showEvent.name
             * @publicName name
             * @type string
             * @default undefined
             */
             /**
-            * @name dxPopoverOptions_showEvent_delay
+            * @name dxPopoverOptions.showEvent.delay
             * @publicName delay
             * @type number
             * @default undefined
             */
 
             /**
-            * @name dxPopoverOptions_hideEvent
+            * @name dxPopoverOptions.hideEvent
             * @publicName hideEvent
             * @type Object|string
             * @default undefined
             */
             /**
-            * @name dxPopoverOptions_hideEvent_name
+            * @name dxPopoverOptions.hideEvent.name
             * @publicName name
             * @type string
             * @default undefined
             */
             /**
-            * @name dxPopoverOptions_hideEvent_delay
+            * @name dxPopoverOptions.hideEvent.delay
             * @publicName delay
             * @type number
             * @default undefined
@@ -312,21 +312,21 @@ var Popover = Popup.inherit({
             boundaryOffset: { h: 10, v: 10 }
 
             /**
-            * @name dxPopoverOptions_focusStateEnabled
+            * @name dxPopoverOptions.focusStateEnabled
             * @publicName focusStateEnabled
             * @hidden
             * @inheritdoc
             */
 
             /**
-            * @name dxPopoverOptions_accessKey
+            * @name dxPopoverOptions.accessKey
             * @publicName accessKey
             * @hidden
             * @inheritdoc
             */
 
             /**
-            * @name dxPopoverOptions_tabIndex
+            * @name dxPopoverOptions.tabIndex
             * @publicName tabIndex
             * @hidden
             * @inheritdoc
@@ -668,7 +668,7 @@ var Popover = Popup.inherit({
     },
 
     /**
-    * @name dxPopoverMethods_show
+    * @name dxPopoverMethods.show
     * @publicName show(target)
     * @param1 target:string|Node|jQuery
     * @return Promise<void>
@@ -682,14 +682,14 @@ var Popover = Popup.inherit({
     }
 
     /**
-    * @name dxPopoverMethods_registerKeyHandler
+    * @name dxPopoverMethods.registerKeyHandler
     * @publicName registerKeyHandler(key, handler)
     * @hidden
     * @inheritdoc
     */
 
     /**
-    * @name dxPopoverMethods_focus
+    * @name dxPopoverMethods.focus
     * @publicName focus()
     * @hidden
     * @inheritdoc

@@ -59,14 +59,14 @@ var DropDownMenu = Widget.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             /**
-            * @name dxDropDownMenuOptions_items
+            * @name dxDropDownMenuOptions.items
             * @publicName items
             * @type Array<Object>
             */
             items: [],
 
             /**
-            * @name dxDropDownMenuOptions_onItemClick
+            * @name dxDropDownMenuOptions.onItemClick
             * @publicName onItemClick
             * @type function(e)|string
             * @extends Action
@@ -79,7 +79,7 @@ var DropDownMenu = Widget.inherit({
             onItemClick: null,
 
             /**
-            * @name dxDropDownMenuOptions_dataSource
+            * @name dxDropDownMenuOptions.dataSource
             * @publicName dataSource
             * @type string|Array<Object>|DataSource|DataSourceOptions
             * @default null
@@ -87,7 +87,7 @@ var DropDownMenu = Widget.inherit({
             dataSource: null,
 
             /**
-            * @name dxDropDownMenuOptions_itemTemplate
+            * @name dxDropDownMenuOptions.itemTemplate
             * @publicName itemTemplate
             * @type template|function
             * @default "item"
@@ -99,7 +99,7 @@ var DropDownMenu = Widget.inherit({
             itemTemplate: "item",
 
             /**
-            * @name dxDropDownMenuOptions_buttontext
+            * @name dxDropDownMenuOptions.buttontext
             * @publicName buttonText
             * @type string
             * @default ""
@@ -107,7 +107,7 @@ var DropDownMenu = Widget.inherit({
             buttonText: "",
 
             /**
-            * @name dxDropDownMenuOptions_buttonIcon
+            * @name dxDropDownMenuOptions.buttonIcon
             * @publicName buttonIcon
             * @type string
             * @default "overflow"
@@ -119,7 +119,7 @@ var DropDownMenu = Widget.inherit({
             buttonTemplate: "content",
 
             /**
-            * @name dxDropDownMenuOptions_onButtonClick
+            * @name dxDropDownMenuOptions.onButtonClick
             * @publicName onButtonClick
             * @type function(e)|string
             * @extends Action
@@ -131,7 +131,7 @@ var DropDownMenu = Widget.inherit({
             onButtonClick: null,
 
             /**
-            * @name dxDropDownMenuOptions_usePopover
+            * @name dxDropDownMenuOptions.usePopover
             * @publicName usePopover
             * @type boolean
             * @default false
@@ -139,7 +139,7 @@ var DropDownMenu = Widget.inherit({
             usePopover: false,
 
             /**
-             * @name dxDropDownMenuOptions_popupWidth
+             * @name dxDropDownMenuOptions.popupWidth
              * @publicName popupWidth
              * @type number|string|function
              * @default auto
@@ -147,7 +147,7 @@ var DropDownMenu = Widget.inherit({
             popupWidth: "auto",
 
             /**
-             * @name dxDropDownMenuOptions_popupHeight
+             * @name dxDropDownMenuOptions.popupHeight
              * @publicName popupHeight
              * @type number|string|function
              * @default auto
@@ -155,7 +155,7 @@ var DropDownMenu = Widget.inherit({
             popupHeight: "auto",
 
             /**
-             * @name dxDropDownMenuOptions_activeStateEnabled
+             * @name dxDropDownMenuOptions.activeStateEnabled
              * @publicName activeStateEnabled
              * @type boolean
              * @default true
@@ -164,7 +164,7 @@ var DropDownMenu = Widget.inherit({
             activeStateEnabled: true,
 
             /**
-             * @name dxDropDownMenuOptions_hoverStateEnabled
+             * @name dxDropDownMenuOptions.hoverStateEnabled
              * @publicName hoverStateEnabled
              * @type boolean
              * @default true
@@ -173,7 +173,7 @@ var DropDownMenu = Widget.inherit({
             hoverStateEnabled: true,
 
             /**
-            * @name dxDropDownMenuOptions_opened
+            * @name dxDropDownMenuOptions.opened
             * @publicName opened
             * @type boolean
             * @default false
@@ -539,7 +539,7 @@ var DropDownMenu = Widget.inherit({
     },
 
     /**
-    * @name dxDropDownMenuMethods_open
+    * @name dxDropDownMenuMethods.open
     * @publicName open()
     */
     open: function() {
@@ -547,7 +547,7 @@ var DropDownMenu = Widget.inherit({
     },
 
     /**
-    * @name dxDropDownMenuMethods_close
+    * @name dxDropDownMenuMethods.close
     * @publicName close()
     */
     close: function() {

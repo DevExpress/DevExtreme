@@ -292,7 +292,7 @@ function removeBinding(chart) {
 
 module.exports = {
     /**
-    * @name dxPivotGridMethods_bindChart
+    * @name dxPivotGridMethods.bindChart
     * @publicName bindChart(chart, integrationOptions)
     * @param1 chart:string|jQuery|object
     * @param2 integrationOptions:object

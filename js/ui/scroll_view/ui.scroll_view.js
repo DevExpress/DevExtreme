@@ -55,7 +55,7 @@ var ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             /**
-            * @name dxScrollViewOptions_pullingDownText
+            * @name dxScrollViewOptions.pullingDownText
             * @publicName pullingDownText
             * @type string
             * @default "Pull down to refresh..."
@@ -63,7 +63,7 @@ var ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
             pullingDownText: messageLocalization.format("dxScrollView-pullingDownText"),
 
             /**
-            * @name dxScrollViewOptions_pulledDownText
+            * @name dxScrollViewOptions.pulledDownText
             * @publicName pulledDownText
             * @type string
             * @default "Release to refresh..."
@@ -71,7 +71,7 @@ var ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
             pulledDownText: messageLocalization.format("dxScrollView-pulledDownText"),
 
             /**
-            * @name dxScrollViewOptions_refreshingText
+            * @name dxScrollViewOptions.refreshingText
             * @publicName refreshingText
             * @type string
             * @default "Refreshing..."
@@ -79,7 +79,7 @@ var ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
             refreshingText: messageLocalization.format("dxScrollView-refreshingText"),
 
             /**
-            * @name dxScrollViewOptions_reachBottomText
+            * @name dxScrollViewOptions.reachBottomText
             * @publicName reachBottomText
             * @type string
             * @default "Loading..."
@@ -87,7 +87,7 @@ var ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
             reachBottomText: messageLocalization.format("dxScrollView-reachBottomText"),
 
             /**
-            * @name dxScrollViewOptions_onPullDown
+            * @name dxScrollViewOptions.onPullDown
             * @publicName onPullDown
             * @extends Action
             * @action
@@ -95,7 +95,7 @@ var ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
             onPullDown: null,
 
             /**
-            * @name dxScrollViewOptions_onReachBottom
+            * @name dxScrollViewOptions.onReachBottom
             * @publicName onReachBottom
             * @extends Action
             * @action
@@ -131,7 +131,7 @@ var ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
                 },
                 options: {
                     /**
-                    * @name dxScrollViewOptions_pullingDownText
+                    * @name dxScrollViewOptions.pullingDownText
                     * @publicName pullingDownText
                     * @type string
                     * @default "" @for Material
@@ -139,7 +139,7 @@ var ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
                     pullingDownText: "",
 
                     /**
-                     * @name dxScrollViewOptions_pulledDownText
+                     * @name dxScrollViewOptions.pulledDownText
                      * @publicName pulledDownText
                      * @type string
                      * @default "" @for Material
@@ -147,7 +147,7 @@ var ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
                     pulledDownText: "",
 
                     /**
-                     * @name dxScrollViewOptions_refreshingText
+                     * @name dxScrollViewOptions.refreshingText
                      * @publicName refreshingText
                      * @type string
                      * @default "" @for Material
@@ -155,7 +155,7 @@ var ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
                     refreshingText: "",
 
                     /**
-                     * @name dxScrollViewOptions_reachBottomText
+                     * @name dxScrollViewOptions.reachBottomText
                      * @publicName reachBottomText
                      * @type string
                      * @default "" @for Material
@@ -344,7 +344,7 @@ var ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
     },
 
     /**
-    * @name dxscrollviewmethods_release
+    * @name dxscrollviewmethods.release
     * @publicName release(preventScrollBottom)
     * @param1 preventScrollBottom:boolean
     * @return Promise<void>
@@ -357,7 +357,7 @@ var ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
     },
 
     /**
-    * @name dxscrollviewmethods_toggleLoading
+    * @name dxscrollviewmethods.toggleLoading
     * @publicName toggleLoading(showOrHide)
     * @param1 showOrHide:boolean
     * @hidden
@@ -367,7 +367,7 @@ var ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
     },
 
     /**
-    * @name dxscrollviewmethods_isFull
+    * @name dxscrollviewmethods.isFull
     * @publicName isFull()
     * @return boolean
     * @hidden
@@ -377,7 +377,7 @@ var ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
     },
 
     /**
-    * @name dxscrollviewmethods_refresh
+    * @name dxscrollviewmethods.refresh
     * @publicName refresh()
     */
     refresh: function() {

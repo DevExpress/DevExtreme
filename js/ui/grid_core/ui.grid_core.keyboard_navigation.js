@@ -885,7 +885,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
     },
 
     /**
-    * @name GridBaseMethods_focus
+    * @name GridBaseMethods.focus
     * @publicName focus(element)
     * @param1 element:Node|jQuery
     */
@@ -977,7 +977,7 @@ module.exports = {
         return {
             useKeyboard: true
             /**
-             * @name GridBaseOptions_onKeyDown
+             * @name GridBaseOptions.onKeyDown
              * @publicName onKeyDown
              * @type function(e)
              * @type_function_param1 e:object

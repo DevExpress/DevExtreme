@@ -48,14 +48,14 @@ module.exports = {
                 allowEditing: true,
                 encodeHtml: true,
                 /**
-                 * @name GridBaseColumn_trueText
+                 * @name GridBaseColumn.trueText
                  * @publicName trueText
                  * @type string
                  * @default "true"
                  */
                 trueText: messageLocalization.format("dxDataGrid-trueText"),
                 /**
-                 * @name GridBaseColumn_falseText
+                 * @name GridBaseColumn.falseText
                  * @publicName falseText
                  * @type string
                  * @default "false"
@@ -63,35 +63,35 @@ module.exports = {
                 falseText: messageLocalization.format("dxDataGrid-falseText")
             },
             /**
-             * @name GridBaseOptions_allowColumnReordering
+             * @name GridBaseOptions.allowColumnReordering
              * @publicName allowColumnReordering
              * @type boolean
              * @default false
              */
             allowColumnReordering: false,
             /**
-             * @name GridBaseOptions_allowColumnResizing
+             * @name GridBaseOptions.allowColumnResizing
              * @publicName allowColumnResizing
              * @type boolean
              * @default false
              */
             allowColumnResizing: false,
             /**
-             * @name GridBaseOptions_columnResizingMode
+             * @name GridBaseOptions.columnResizingMode
              * @publicName columnResizingMode
              * @type Enums.ColumnResizingMode
              * @default "nextColumn"
              */
             columnResizingMode: "nextColumn",
             /**
-             * @name GridBaseOptions_columnMinWidth
+             * @name GridBaseOptions.columnMinWidth
              * @publicName columnMinWidth
              * @type number
              * @default undefined
              */
             columnMinWidth: undefined,
             /**
-             * @name GridBaseOptions_columnWidth
+             * @name GridBaseOptions.columnWidth
              * @publicName columnWidth
              * @type number
              * @default undefined
@@ -99,20 +99,20 @@ module.exports = {
             columnWidth: undefined,
             adaptColumnWidthByRatio: true,
             /**
-             * @name GridBaseOptions_columns
+             * @name GridBaseOptions.columns
              * @publicName columns
              * @type Array<GridBaseColumn>
-             * @fires GridBaseOptions_onOptionChanged
+             * @fires GridBaseOptions.onOptionChanged
              * @default undefined
              */
             /**
-             * @name dxDataGridOptions_columns
+             * @name dxDataGridOptions.columns
              * @publicName columns
              * @type Array<dxDataGridColumn>
              * @default undefined
              */
             /**
-             * @name dxTreeListOptions_columns
+             * @name dxTreeListOptions.columns
              * @publicName columns
              * @type Array<dxTreeListColumn>
              * @default undefined
@@ -137,93 +137,93 @@ module.exports = {
              */
             columns: undefined,
             /**
-             * @name GridBaseColumn_visible
+             * @name GridBaseColumn.visible
              * @publicName visible
              * @type boolean
              * @default true
-             * @fires GridBase_onOptionChanged
+             * @fires GridBase.onOptionChanged
              */
             /**
-             * @name GridBaseColumn_hidingPriority
+             * @name GridBaseColumn.hidingPriority
              * @publicName hidingPriority
              * @type number
              * @default undefined
              */
             /**
-             * @name GridBaseColumn_fixed
+             * @name GridBaseColumn.fixed
              * @publicName fixed
              * @type boolean
              * @default false
              */
             /**
-             * @name dxDataGridColumn_columns
+             * @name dxDataGridColumn.columns
              * @publicName columns
              * @type Array<dxDataGridColumn>
              * @default undefined
              */
             /**
-             * @name dxTreeListColumn_columns
+             * @name dxTreeListColumn.columns
              * @publicName columns
              * @type Array<dxTreeListColumn>
              * @default undefined
              */
             /**
-             * @name GridBaseColumn_ownerBand
+             * @name GridBaseColumn.ownerBand
              * @publicName ownerBand
              * @type number
              * @default undefined
              */
             /**
-             * @name GridBaseColumn_isBand
+             * @name GridBaseColumn.isBand
              * @publicName isBand
              * @type boolean
              * @default undefined
              */
             /**
-             * @name GridBaseColumn_fixedPosition
+             * @name GridBaseColumn.fixedPosition
              * @publicName fixedPosition
              * @type Enums.HorizontalEdge
              * @default undefined
              */
             /**
-             * @name GridBaseColumn_visibleIndex
+             * @name GridBaseColumn.visibleIndex
              * @publicName visibleIndex
              * @type number
              * @default undefined
-             * @fires GridBase_onOptionChanged
+             * @fires GridBase.onOptionChanged
              */
             /**
-             * @name GridBaseColumn_showInColumnChooser
+             * @name GridBaseColumn.showInColumnChooser
              * @publicName showInColumnChooser
              * @type boolean
              * @default true
              */
             /**
-             * @name GridBaseColumn_dataField
+             * @name GridBaseColumn.dataField
              * @publicName dataField
              * @type string
              * @default undefined
              */
             /**
-             * @name GridBaseColumn_dataType
+             * @name GridBaseColumn.dataType
              * @publicName dataType
              * @type Enums.GridColumnDataType
              * @default undefined
              */
             /**
-             * @name GridBaseColumn_validationRules
+             * @name GridBaseColumn.validationRules
              * @publicName validationRules
              * @type Array<RequiredRule,NumericRule,RangeRule,StringLengthRule,CustomRule,CompareRule,PatternRule,EmailRule>
              */
             /**
-             * @name GridBaseColumn_calculateCellValue
+             * @name GridBaseColumn.calculateCellValue
              * @publicName calculateCellValue
              * @type function(rowData)
              * @type_function_param1 rowData:object
              * @type_function_return any
              */
             /**
-             * @name GridBaseColumn_setCellValue
+             * @name GridBaseColumn.setCellValue
              * @publicName setCellValue
              * @type function(newData, value, currentRowData)
              * @type_function_param1 newData:object
@@ -231,28 +231,28 @@ module.exports = {
              * @type_function_param3 currentRowData:object
              */
             /**
-             * @name GridBaseColumn_calculateDisplayValue
+             * @name GridBaseColumn.calculateDisplayValue
              * @publicName calculateDisplayValue
              * @type string|function(rowData)
              * @type_function_param1 rowData:object
              * @type_function_return any
              */
             /**
-             * @name dxDataGridColumn_calculateGroupValue
+             * @name dxDataGridColumn.calculateGroupValue
              * @publicName calculateGroupValue
              * @type string|function(rowData)
              * @type_function_param1 rowData:object
              * @type_function_return any
              */
             /**
-             * @name GridBaseColumn_calculateSortValue
+             * @name GridBaseColumn.calculateSortValue
              * @publicName calculateSortValue
              * @type string|function(rowData)
              * @type_function_param1 rowData:object
              * @type_function_return any
              */
             /**
-             * @name GridBaseColumn_sortingMethod
+             * @name GridBaseColumn.sortingMethod
              * @publicName sortingMethod
              * @type function(value1, value2)
              * @type_function_param1 value1:any
@@ -261,13 +261,13 @@ module.exports = {
              * @default undefined
              */
             /**
-             * @name dxDataGridColumn_showWhenGrouped
+             * @name dxDataGridColumn.showWhenGrouped
              * @publicName showWhenGrouped
              * @type boolean
              * @default false
              */
             /**
-             * @name GridBaseColumn_calculateFilterExpression
+             * @name GridBaseColumn.calculateFilterExpression
              * @publicName calculateFilterExpression
              * @type function(filterValue, selectedFilterOperation, target)
              * @type_function_param1 filterValue:any
@@ -276,71 +276,71 @@ module.exports = {
              * @type_function_return Filter expression
              */
             /**
-             * @name GridBaseColumn_name
+             * @name GridBaseColumn.name
              * @publicName name
              * @type string
              * @default undefined
              */
             /**
-             * @name GridBaseColumn_caption
+             * @name GridBaseColumn.caption
              * @publicName caption
              * @type string
              * @default undefined
              */
             /**
-             * @name GridBaseColumn_width
+             * @name GridBaseColumn.width
              * @publicName width
              * @type number|string
              * @default undefined
              */
             /**
-             * @name GridBaseColumn_minWidth
+             * @name GridBaseColumn.minWidth
              * @publicName minWidth
              * @type number
              * @default undefined
              */
             /**
-             * @name GridBaseColumn_cssClass
+             * @name GridBaseColumn.cssClass
              * @publicName cssClass
              * @type string
              * @default undefined
              */
             /**
-             * @name GridBaseColumn_sortOrder
+             * @name GridBaseColumn.sortOrder
              * @publicName sortOrder
              * @type Enums.SortOrder
              * @default undefined
              * @acceptValues undefined
-             * @fires GridBase_onOptionChanged
+             * @fires GridBase.onOptionChanged
              */
             /**
-             * @name GridBaseColumn_sortIndex
+             * @name GridBaseColumn.sortIndex
              * @publicName sortIndex
              * @type number
              * @default undefined
-             * @fires GridBase_onOptionChanged
+             * @fires GridBase.onOptionChanged
              */
             /**
-             * @name GridBaseColumn_showEditorAlways
+             * @name GridBaseColumn.showEditorAlways
              * @publicName showEditorAlways
              * @type boolean
              * @default false
              */
             /**
-             * @name GridBaseColumn_alignment
+             * @name GridBaseColumn.alignment
              * @publicName alignment
              * @type Enums.HorizontalAlignment
              * @default undefined
              * @acceptValues undefined
              */
             /**
-             * @name GridBaseColumn_format
+             * @name GridBaseColumn.format
              * @publicName format
              * @type format
              * @default ""
              */
             /**
-             * @name GridBaseColumn_customizeText
+             * @name GridBaseColumn.customizeText
              * @publicName customizeText
              * @type function(cellInfo)
              * @type_function_param1 cellInfo:object
@@ -351,175 +351,175 @@ module.exports = {
              * @type_function_return string
              */
             /**
-             * @name dxDataGridColumn_precision
+             * @name dxDataGridColumn.precision
              * @publicName precision
              * @type number
              * @default undefined
              * @deprecated
              */
             /**
-             * @name GridBaseColumn_filterOperations
+             * @name GridBaseColumn.filterOperations
              * @publicName filterOperations
              * @type Array<string>
              * @acceptValues "=" | "<>" | "<" | "<=" | ">" | ">=" | "notcontains" | "contains" | "startswith" | "endswith" | "between"
              * @default undefined
              */
             /**
-             * @name GridBaseColumn_selectedFilterOperation
+             * @name GridBaseColumn.selectedFilterOperation
              * @publicName selectedFilterOperation
              * @type Enums.FilterOperations
              * @default undefined
-             * @fires GridBase_onOptionChanged
+             * @fires GridBase.onOptionChanged
              */
             /**
-             * @name GridBaseColumn_filterValue
+             * @name GridBaseColumn.filterValue
              * @publicName filterValue
              * @type any
              * @default undefined
-             * @fires GridBase_onOptionChanged
+             * @fires GridBase.onOptionChanged
              */
             /**
-             * @name GridBaseColumn_filterValues
+             * @name GridBaseColumn.filterValues
              * @publicName filterValues
              * @type Array<any>
              * @default undefined
-             * @fires GridBase_onOptionChanged
+             * @fires GridBase.onOptionChanged
             */
             /**
-             * @name GridBaseColumn_filterType
+             * @name GridBaseColumn.filterType
              * @publicName filterType
              * @type Enums.FilterType
              * @default "include"
             */
             /**
-             * @name GridBaseColumn_cellTemplate
+             * @name GridBaseColumn.cellTemplate
              * @publicName cellTemplate
              * @type template|function
              * @type_function_param1 cellElement:dxElement
              * @type_function_param2 cellInfo:object
              */
             /**
-             * @name GridBaseColumn_headerCellTemplate
+             * @name GridBaseColumn.headerCellTemplate
              * @publicName headerCellTemplate
              * @type template|function
              * @type_function_param1 columnHeader:dxElement
              * @type_function_param2 headerInfo:object
              */
             /**
-             * @name GridBaseColumn_editCellTemplate
+             * @name GridBaseColumn.editCellTemplate
              * @publicName editCellTemplate
              * @type template|function
              * @type_function_param1 cellElement:dxElement
              * @type_function_param2 cellInfo:object
              */
             /**
-             * @name dxDataGridColumn_groupCellTemplate
+             * @name dxDataGridColumn.groupCellTemplate
              * @publicName groupCellTemplate
              * @type template|function
              * @type_function_param1 cellElement:dxElement
              * @type_function_param2 cellInfo:object
              */
             /**
-             * @name dxDataGridColumn_groupIndex
+             * @name dxDataGridColumn.groupIndex
              * @publicName groupIndex
              * @type number
              * @default undefined
-             * @fires dxDataGrid_onOptionChanged
+             * @fires dxDataGrid.onOptionChanged
              */
             /**
-             * @name dxDataGridColumn_grouped
+             * @name dxDataGridColumn.grouped
              * @publicName grouped
              * @type boolean
              * @hidden
              * @default false
              */
             /**
-             * @name GridBaseColumn_allowHiding
+             * @name GridBaseColumn.allowHiding
              * @publicName allowHiding
              * @type boolean
              * @default true
              */
             /**
-             * @name GridBaseColumn_allowReordering
+             * @name GridBaseColumn.allowReordering
              * @publicName allowReordering
              * @type boolean
              * @default true
              */
             /**
-             * @name GridBaseColumn_allowResizing
+             * @name GridBaseColumn.allowResizing
              * @publicName allowResizing
              * @type boolean
              * @default true
              */
             /**
-             * @name GridBaseColumn_allowFiltering
+             * @name GridBaseColumn.allowFiltering
              * @publicName allowFiltering
              * @type boolean
              * @default true
              */
             /**
-             * @name GridBaseColumn_allowHeaderFiltering
+             * @name GridBaseColumn.allowHeaderFiltering
              * @publicName allowHeaderFiltering
              * @type boolean
              * @default true
              */
             /**
-             * @name GridBaseColumn_allowSearch
+             * @name GridBaseColumn.allowSearch
              * @publicName allowSearch
              * @type boolean
              * @default true
              */
             /**
-             * @name GridBaseColumn_allowEditing
+             * @name GridBaseColumn.allowEditing
              * @publicName allowEditing
              * @type boolean
              * @default true
              */
             /**
-             * @name dxDataGridColumn_allowGrouping
+             * @name dxDataGridColumn.allowGrouping
              * @publicName allowGrouping
              * @type boolean
              * @default true
              */
             /**
-             * @name GridBaseColumn_allowFixing
+             * @name GridBaseColumn.allowFixing
              * @publicName allowFixing
              * @type boolean
              * @default true
              */
             /**
-             * @name dxDataGridColumn_autoExpandGroup
+             * @name dxDataGridColumn.autoExpandGroup
              * @publicName autoExpandGroup
              * @type boolean
              * @default true
              */
             /**
-             * @name GridBaseColumn_allowSorting
+             * @name GridBaseColumn.allowSorting
              * @publicName allowSorting
              * @type boolean
              * @default true
              */
             /**
-             * @name GridBaseColumn_encodeHtml
+             * @name GridBaseColumn.encodeHtml
              * @publicName encodeHtml
              * @type boolean
              * @default true
              */
             /**
-             * @name dxDataGridColumn_resized
+             * @name dxDataGridColumn.resized
              * @publicName resized
              * @type function
              * @hidden
              * @default undefined
              */
             /**
-             * @name GridBaseColumn_lookup
+             * @name GridBaseColumn.lookup
              * @publicName lookup
              * @type object
              * @default undefined
              */
             /**
-             * @name GridBaseColumn_lookup_dataSource
+             * @name GridBaseColumn.lookup.dataSource
              * @publicName dataSource
              * @type Array<any>|DataSourceOptions|function(options)
              * @type_function_param1 options:object
@@ -529,39 +529,39 @@ module.exports = {
              * @default undefined
              */
             /**
-             * @name GridBaseColumn_lookup_valueExpr
+             * @name GridBaseColumn.lookup.valueExpr
              * @publicName valueExpr
              * @type string
              * @default undefined
              */
             /**
-             * @name GridBaseColumn_lookup_displayExpr
+             * @name GridBaseColumn.lookup.displayExpr
              * @publicName displayExpr
              * @type string|function(data)
              * @type_function_param1 data:object
              * @default undefined
              */
             /**
-             * @name GridBaseColumn_lookup_allowClearing
+             * @name GridBaseColumn.lookup.allowClearing
              * @publicName allowClearing
              * @type boolean
              * @default false
              */
             /**
-             * @name dxDataGridOptions_regenerateColumnsByVisibleItems
+             * @name dxDataGridOptions.regenerateColumnsByVisibleItems
              * @publicName regenerateColumnsByVisibleItems
              * @type boolean
              * @hidden
              * @default false
              */
             /**
-             * @name GridBaseColumn_headerFilter
+             * @name GridBaseColumn.headerFilter
              * @publicName headerFilter
              * @type object
              * @default undefined
              */
             /**
-             * @name GridBaseColumn_headerFilter_dataSource
+             * @name GridBaseColumn.headerFilter.dataSource
              * @publicName dataSource
              * @type Array<any>|function(options)|DataSourceOptions
              * @type_function_param1 options:object
@@ -570,55 +570,55 @@ module.exports = {
              * @default undefined
              */
             /**
-             * @name GridBaseColumn_headerFilter_groupInterval
+             * @name GridBaseColumn.headerFilter.groupInterval
              * @publicName groupInterval
              * @type Enums.HeaderFilterGroupInterval|number
              * @default undefined
              */
             /**
-             * @name GridBaseColumn_headerFilter_allowSearch
+             * @name GridBaseColumn.headerFilter.allowSearch
              * @publicName allowSearch
              * @type boolean
              * @default false
              */
             /**
-             * @name GridBaseColumn_headerFilter_width
+             * @name GridBaseColumn.headerFilter.width
              * @publicName width
              * @type number
              * @default undefined
              */
             /**
-             * @name GridBaseColumn_headerFilter_height
+             * @name GridBaseColumn.headerFilter.height
              * @publicName height
              * @type number
              * @default undefined
              */
             /**
-             * @name GridBaseColumn_editorOptions
+             * @name GridBaseColumn.editorOptions
              * @publicName editorOptions
              * @type object
              */
             /**
-             * @name GridBaseColumn_formItem
+             * @name GridBaseColumn.formItem
              * @publicName formItem
              * @type dxFormSimpleItem
              */
             regenerateColumnsByVisibleItems: false,
             /**
-             * @name dxDataGridOptions_customizeColumns
+             * @name dxDataGridOptions.customizeColumns
              * @publicName customizeColumns
              * @type function(columns)
              * @type_function_param1 columns:Array<dxDataGridColumn>
              */
             /**
-             * @name dxTreeListOptions_customizeColumns
+             * @name dxTreeListOptions.customizeColumns
              * @publicName customizeColumns
              * @type function(columns)
              * @type_function_param1 columns:Array<dxTreeListColumn>
              */
             customizeColumns: null,
             /**
-             * @name GridBaseOptions_dateSerializationFormat
+             * @name GridBaseOptions.dateSerializationFormat
              * @publicName dateSerializationFormat
              * @type string
              */
@@ -1656,24 +1656,24 @@ module.exports = {
                 },
 
                 /**
-                 * @name dxDataGridMethods_getVisibleColumns
+                 * @name dxDataGridMethods.getVisibleColumns
                  * @publicName getVisibleColumns(headerLevel)
                  * @param1 headerLevel:number
                  * @return Array<dxDataGridColumn>
                  */
                 /**
-                 * @name dxTreeListMethods_getVisibleColumns
+                 * @name dxTreeListMethods.getVisibleColumns
                  * @publicName getVisibleColumns(headerLevel)
                  * @param1 headerLevel:number
                  * @return Array<dxTreeListColumn>
                  */
                 /**
-                 * @name dxDataGridMethods_getVisibleColumns
+                 * @name dxDataGridMethods.getVisibleColumns
                  * @publicName getVisibleColumns()
                  * @return Array<dxDataGridColumn>
                  */
                 /**
-                 * @name dxTreeListMethods_getVisibleColumns
+                 * @name dxTreeListMethods.getVisibleColumns
                  * @publicName getVisibleColumns()
                  * @return Array<dxTreeListColumn>
                  */
@@ -2440,7 +2440,7 @@ module.exports = {
                     return filter;
                 },
                 /**
-                 * @name GridBaseMethods_columnCount
+                 * @name GridBaseMethods.columnCount
                  * @publicName columnCount()
                  * @return number
                  */
@@ -2448,27 +2448,27 @@ module.exports = {
                     return this._columns ? this._columns.length : 0;
                 },
                 /**
-                 * @name GridBaseMethods_columnOption
+                 * @name GridBaseMethods.columnOption
                  * @publicName columnOption(id)
                  * @param1 id:number|string
                  * @return object
                  */
                 /**
-                 * @name GridBaseMethods_columnOption
+                 * @name GridBaseMethods.columnOption
                  * @publicName columnOption(id, optionName)
                  * @param1 id:number|string
                  * @param2 optionName:string
                  * @return any
                  */
                 /**
-                 * @name GridBaseMethods_columnOption
+                 * @name GridBaseMethods.columnOption
                  * @publicName columnOption(id, optionName, optionValue)
                  * @param1 id:number|string
                  * @param2 optionName:string
                  * @param3 optionValue:any
                  */
                 /**
-                 * @name GridBaseMethods_columnOption
+                 * @name GridBaseMethods.columnOption
                  * @publicName columnOption(id, options)
                  * @param1 id:number|string
                  * @param2 options:object
@@ -2526,7 +2526,7 @@ module.exports = {
                     }
                 },
                 /**
-                 * @name GridBaseMethods_clearSorting
+                 * @name GridBaseMethods.clearSorting
                  * @publicName clearSorting()
                  */
                 clearSorting: function() {
@@ -2542,7 +2542,7 @@ module.exports = {
                     that.endUpdate();
                 },
                 /**
-                 * @name dxDataGridMethods_clearGrouping
+                 * @name dxDataGridMethods.clearGrouping
                  * @publicName clearGrouping()
                  */
                 clearGrouping: function() {
@@ -2570,12 +2570,12 @@ module.exports = {
                     return -1;
                 },
                 /**
-                 * @name dxDataGridMethods_addColumn
+                 * @name dxDataGridMethods.addColumn
                  * @publicName addColumn(columnOptions)
                  * @param1 columnOptions:object|string
                  */
                 /**
-                 * @name dxTreeListMethods_addColumn
+                 * @name dxTreeListMethods.addColumn
                  * @publicName addColumn(columnOptions)
                  * @param1 columnOptions:object|string
                  */
@@ -2596,7 +2596,7 @@ module.exports = {
                     that.updateColumns(that._dataSource);
                 },
                 /**
-                 * @name GridBaseMethods_deleteColumn
+                 * @name GridBaseMethods.deleteColumn
                  * @publicName deleteColumn(id)
                  * @param1 id:number|string
                  */

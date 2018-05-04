@@ -35,14 +35,14 @@ module.exports = {
     },
 
     /**
-     * @name EventsMixinMethods_on
+     * @name EventsMixinMethods.on
      * @publicName on(eventName, eventHandler)
      * @param1 eventName:string
      * @param2 eventHandler:function
      * @return object
      */
     /**
-     * @name EventsMixinMethods_on
+     * @name EventsMixinMethods.on
      * @publicName on(events)
      * @param1 events:object
      * @return object
@@ -58,13 +58,13 @@ module.exports = {
     },
 
     /**
-     * @name EventsMixinMethods_off
+     * @name EventsMixinMethods.off
      * @publicName off(eventName)
      * @param1 eventName:string
      * @return object
      */
     /**
-     * @name EventsMixinMethods_off
+     * @name EventsMixinMethods.off
      * @publicName off(eventName, eventHandler)
      * @param1 eventName:string
      * @param2 eventHandler:function

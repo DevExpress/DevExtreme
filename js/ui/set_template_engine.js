@@ -7,7 +7,7 @@
 */
 
 /**
-* @name ui_setTemplateEngine
+* @name ui.setTemplateEngine
 * @publicName setTemplateEngine(name)
 * @param1 templateEngineName:string
 * @static
@@ -15,7 +15,7 @@
 * @export default
 */
 /**
-* @name ui_setTemplateEngine
+* @name ui.setTemplateEngine
 * @publicName setTemplateEngine(options)
 * @param1 templateEngineOptions:object
 * @param1_field1 compile:function(html, $element)

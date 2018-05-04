@@ -35,7 +35,7 @@ var ActionSheet = CollectionWidget.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             /**
-            * @name dxActionSheetOptions_usePopover
+            * @name dxActionSheetOptions.usePopover
             * @publicName usePopover
             * @type boolean
             * @default false
@@ -43,14 +43,14 @@ var ActionSheet = CollectionWidget.inherit({
             usePopover: false,
 
             /**
-            * @name dxActionSheetOptions_target
+            * @name dxActionSheetOptions.target
             * @publicName target
             * @type string|Node|jQuery
             */
             target: null,
 
             /**
-            * @name dxActionSheetOptions_title
+            * @name dxActionSheetOptions.title
             * @publicName title
             * @type string
             * @default ""
@@ -58,7 +58,7 @@ var ActionSheet = CollectionWidget.inherit({
             title: "",
 
             /**
-            * @name dxActionSheetOptions_showTitle
+            * @name dxActionSheetOptions.showTitle
             * @publicName showTitle
             * @type boolean
             * @default true
@@ -66,7 +66,7 @@ var ActionSheet = CollectionWidget.inherit({
             showTitle: true,
 
             /**
-            * @name dxActionSheetOptions_showCancelButton
+            * @name dxActionSheetOptions.showCancelButton
             * @publicName showCancelButton
             * @type boolean
             * @default true
@@ -74,7 +74,7 @@ var ActionSheet = CollectionWidget.inherit({
             showCancelButton: true,
 
             /**
-            * @name dxActionSheetOptions_cancelText
+            * @name dxActionSheetOptions.cancelText
             * @publicName cancelText
             * @type string
             * @default "Cancel"
@@ -82,7 +82,7 @@ var ActionSheet = CollectionWidget.inherit({
             cancelText: messageLocalization.format("Cancel"),
 
             /**
-            * @name dxActionSheetOptions_onCancelClick
+            * @name dxActionSheetOptions.onCancelClick
             * @publicName onCancelClick
             * @type function(e)|string
             * @extends Action
@@ -93,7 +93,7 @@ var ActionSheet = CollectionWidget.inherit({
             onCancelClick: null,
 
             /**
-            * @name dxActionSheetOptions_visible
+            * @name dxActionSheetOptions.visible
             * @publicName visible
             * @type boolean
             * @default false
@@ -101,7 +101,7 @@ var ActionSheet = CollectionWidget.inherit({
             visible: false,
 
             /**
-            * @name dxActionSheetOptions_noDataText
+            * @name dxActionSheetOptions.noDataText
             * @publicName noDataText
             * @hidden
             * @inheritdoc
@@ -109,28 +109,28 @@ var ActionSheet = CollectionWidget.inherit({
             noDataText: "",
 
             /**
-            * @name dxActionSheetOptions_activeStateEnabled
+            * @name dxActionSheetOptions.activeStateEnabled
             * @publicName activeStateEnabled
             * @hidden
             * @inheritdoc
             */
 
             /**
-            * @name dxActionSheetOptions_selectedIndex
+            * @name dxActionSheetOptions.selectedIndex
             * @publicName selectedIndex
             * @hidden
             * @inheritdoc
             */
 
             /**
-            * @name dxActionSheetOptions_selectedItem
+            * @name dxActionSheetOptions.selectedItem
             * @publicName selectedItem
             * @hidden
             * @inheritdoc
             */
 
             /**
-            * @name dxActionSheetOptions_onSelectionChanged
+            * @name dxActionSheetOptions.onSelectionChanged
             * @publicName onSelectionChanged
             * @action
             * @hidden
@@ -138,42 +138,42 @@ var ActionSheet = CollectionWidget.inherit({
             */
 
             /**
-            * @name dxActionSheetOptions_selectedItems
+            * @name dxActionSheetOptions.selectedItems
             * @publicName selectedItems
             * @hidden
             * @inheritdoc
             */
 
             /**
-            * @name dxActionSheetOptions_selectedItemKeys
+            * @name dxActionSheetOptions.selectedItemKeys
             * @publicName selectedItemKeys
             * @hidden
             * @inheritdoc
             */
 
             /**
-            * @name dxActionSheetOptions_keyExpr
+            * @name dxActionSheetOptions.keyExpr
             * @publicName keyExpr
             * @hidden
             * @inheritdoc
             */
 
             /**
-            * @name dxActionSheetOptions_accessKey
+            * @name dxActionSheetOptions.accessKey
             * @publicName accessKey
             * @hidden
             * @inheritdoc
             */
 
             /**
-            * @name dxActionSheetOptions_tabIndex
+            * @name dxActionSheetOptions.tabIndex
             * @publicName tabIndex
             * @hidden
             * @inheritdoc
             */
 
             /**
-             * @name dxActionSheetOptions_focusStateEnabled
+             * @name dxActionSheetOptions.focusStateEnabled
              * @publicName focusStateEnabled
              * @type boolean
              * @default false
@@ -190,7 +190,7 @@ var ActionSheet = CollectionWidget.inherit({
             device: { platform: "ios", tablet: true },
             options: {
                 /**
-                * @name dxActionSheetOptions_usePopover
+                * @name dxActionSheetOptions.usePopover
                 * @publicName usePopover
                 * @default true @for iPad
                 */
@@ -208,13 +208,13 @@ var ActionSheet = CollectionWidget.inherit({
         * @type object
         */
         /**
-        * @name dxActionSheetItemTemplate_type
+        * @name dxActionSheetItemTemplate.type
         * @publicName type
         * @type Enums.ButtonType
         * @default 'normal'
         */
         /**
-        * @name dxActionSheetItemTemplate_onClick
+        * @name dxActionSheetItemTemplate.onClick
         * @publicName onClick
         * @type function(e)|string
         * @extends Action
@@ -223,19 +223,19 @@ var ActionSheet = CollectionWidget.inherit({
         * @type_function_param1_field5 event:event
         */
         /**
-        * @name dxActionSheetItemTemplate_icon
+        * @name dxActionSheetItemTemplate.icon
         * @publicName icon
         * @type String
         */
         /**
-        * @name dxActionSheetItemTemplate_visible
+        * @name dxActionSheetItemTemplate.visible
         * @publicName visible
         * @type boolean
         * @default true
         * @hidden
         */
         /**
-        * @name dxActionSheetItemTemplate_html
+        * @name dxActionSheetItemTemplate.html
         * @publicName html
         * @type String
         * @hidden
@@ -477,7 +477,7 @@ var ActionSheet = CollectionWidget.inherit({
     },
 
     /**
-    * @name dxactionsheetmethods_toggle
+    * @name dxactionsheetmethods.toggle
     * @publicName toggle(showing)
     * @param1 showing:boolean
     * @return Promise<void>
@@ -495,7 +495,7 @@ var ActionSheet = CollectionWidget.inherit({
     },
 
     /**
-    * @name dxactionsheetmethods_show
+    * @name dxactionsheetmethods.show
     * @publicName show()
     * @return Promise<void>
     */
@@ -504,7 +504,7 @@ var ActionSheet = CollectionWidget.inherit({
     },
 
     /**
-    * @name dxactionsheetmethods_hide
+    * @name dxactionsheetmethods.hide
     * @publicName hide()
     * @return Promise<void>
     */
@@ -513,14 +513,14 @@ var ActionSheet = CollectionWidget.inherit({
     }
 
     /**
-    * @name dxactionsheetmethods_registerKeyHandler
+    * @name dxactionsheetmethods.registerKeyHandler
     * @publicName registerKeyHandler(key, handler)
     * @hidden
     * @inheritdoc
     */
 
     /**
-    * @name dxactionsheetmethods_focus
+    * @name dxactionsheetmethods.focus
     * @publicName focus()
     * @hidden
     * @inheritdoc

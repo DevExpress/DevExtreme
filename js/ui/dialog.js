@@ -85,13 +85,13 @@ exports.FakeDialogComponent = FakeDialogComponent;
 exports.title = "";
 
 /**
- * @name ui_dialog
+ * @name ui.dialog
  * @publicName dialog
  * @namespace DevExpress.ui
  */
 
 /**
- * @name ui_dialogmethods_custom
+ * @name ui.dialogmethods.custom
  * @publicName custom(options)
  * @return Object
  * @param1 options:object
@@ -237,7 +237,7 @@ exports.custom = function(options) {
 
 
 /**
- * @name ui_dialogmethods_alert
+ * @name ui.dialogmethods.alert
  * @publicName alert(message,title)
  * @param1 message:string
  * @param2 title:string
@@ -259,7 +259,7 @@ exports.alert = function(message, title, showTitle) {
 };
 
 /**
- * @name ui_dialogmethods_confirm
+ * @name ui.dialogmethods.confirm
  * @publicName confirm(message,title)
  * @param1 message:string
  * @param2 title:string

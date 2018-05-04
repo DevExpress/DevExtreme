@@ -625,7 +625,7 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
     },
 
     /**
-     * @name GridBaseMethods_isAdaptiveDetailRowExpanded
+     * @name GridBaseMethods.isAdaptiveDetailRowExpanded
      * @publicName isAdaptiveDetailRowExpanded(key)
      * @param1 key:any
      */
@@ -634,7 +634,7 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
     },
 
     /**
-    * @name GridBaseMethods_expandAdaptiveDetailRow
+    * @name GridBaseMethods.expandAdaptiveDetailRow
     * @publicName expandAdaptiveDetailRow(key)
     * @param1 key:any
     */
@@ -645,7 +645,7 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
     },
 
      /**
-    * @name GridBaseMethods_collapseAdaptiveDetailRow
+    * @name GridBaseMethods.collapseAdaptiveDetailRow
     * @publicName collapseAdaptiveDetailRow()
     */
     collapseAdaptiveDetailRow: function() {
@@ -659,14 +659,14 @@ module.exports = {
     defaultOptions: function() {
         return {
             /**
-            * @name GridBaseOptions_columnHidingEnabled
+            * @name GridBaseOptions.columnHidingEnabled
             * @publicName columnHidingEnabled
             * @type boolean
             * @default false
             */
             columnHidingEnabled: false,
             /**
-            * @name GridBaseOptions_onAdaptiveDetailRowPreparing
+            * @name GridBaseOptions.onAdaptiveDetailRowPreparing
             * @publicName onAdaptiveDetailRowPreparing
             * @extends Action
             * @type function(e)

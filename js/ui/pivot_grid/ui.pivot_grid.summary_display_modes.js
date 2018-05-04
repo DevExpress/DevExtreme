@@ -187,7 +187,7 @@ SummaryCell.prototype = extend(SummaryCell.prototype, {
     },
 
     /**
-    * @name dxPivotGridSummaryCell_parent
+    * @name dxPivotGridSummaryCell.parent
     * @publicName parent(direction)
     * @param1 direction:string
     * @return dxPivotGridSummaryCell
@@ -205,7 +205,7 @@ SummaryCell.prototype = extend(SummaryCell.prototype, {
     },
 
     /**
-    * @name dxPivotGridSummaryCell_children
+    * @name dxPivotGridSummaryCell.children
     * @publicName children(direction)
     * @param1 direction:string
     * @return Array<dxPivotGridSummaryCell>
@@ -226,14 +226,14 @@ SummaryCell.prototype = extend(SummaryCell.prototype, {
         return result;
     },
     /**
-    * @name dxPivotGridSummaryCell_grandTotal
+    * @name dxPivotGridSummaryCell.grandTotal
     * @publicName grandTotal(direction)
     * @param1 direction:string
     * @return dxPivotGridSummaryCell
     */
 
     /**
-   * @name dxPivotGridSummaryCell_grandTotal
+   * @name dxPivotGridSummaryCell.grandTotal
    * @publicName grandTotal()
    * @return dxPivotGridSummaryCell
    */
@@ -254,14 +254,14 @@ SummaryCell.prototype = extend(SummaryCell.prototype, {
     },
 
     /**
-    * @name dxPivotGridSummaryCell_next
+    * @name dxPivotGridSummaryCell.next
     * @publicName next(direction)
     * @param1 direction:string
     * @return dxPivotGridSummaryCell
     */
 
     /**
-    * @name dxPivotGridSummaryCell_next
+    * @name dxPivotGridSummaryCell.next
     * @publicName next(direction, allowCrossGroup)
     * @param1 direction:string
     * @param2 allowCrossGroup:bool
@@ -298,14 +298,14 @@ SummaryCell.prototype = extend(SummaryCell.prototype, {
     },
 
     /**
-    * @name dxPivotGridSummaryCell_prev
+    * @name dxPivotGridSummaryCell.prev
     * @publicName prev(direction)
     * @param1 direction:string
     * @return dxPivotGridSummaryCell
     */
 
     /**
-    * @name dxPivotGridSummaryCell_prev
+    * @name dxPivotGridSummaryCell.prev
     * @publicName prev(direction, allowCrossGroup)
     * @param1 direction:string
     * @param2 allowCrossGroup:bool
@@ -346,10 +346,10 @@ SummaryCell.prototype = extend(SummaryCell.prototype, {
     },
 
     /**
-    * @name dxPivotGridSummaryCell_field
+    * @name dxPivotGridSummaryCell.field
     * @publicName field(area)
     * @param1 area:string
-    * @return PivotGridDataSourceOptions_fields
+    * @return PivotGridDataSourceOptions.fields
     */
 
     field: function(area) {
@@ -361,7 +361,7 @@ SummaryCell.prototype = extend(SummaryCell.prototype, {
     },
 
     /**
-    * @name dxPivotGridSummaryCell_child
+    * @name dxPivotGridSummaryCell.child
     * @publicName child(direction, fieldValue)
     * @param1 direction:string
     * @param2 fieldValue:number|string
@@ -381,9 +381,9 @@ SummaryCell.prototype = extend(SummaryCell.prototype, {
 
 
     /**
-   * @name dxPivotGridSummaryCell_slice
+   * @name dxPivotGridSummaryCell.slice
    * @publicName slice(field, value)
-   * @param1 field:PivotGridDataSourceOptions_fields
+   * @param1 field:PivotGridDataSourceOptions.fields
    * @param2 value:number|string
    * @return dxPivotGridSummaryCell
    */
@@ -433,26 +433,26 @@ SummaryCell.prototype = extend(SummaryCell.prototype, {
     },
 
    /**
-   * @name dxPivotGridSummaryCell_value
+   * @name dxPivotGridSummaryCell.value
    * @publicName value()
    * @return any
    */
     /**
-  * @name dxPivotGridSummaryCell_value
+  * @name dxPivotGridSummaryCell.value
   * @publicName value(isCalculatedValue)
   * @param1 isCalculatedValue:boolean
   * @return any
   */
     /**
-   * @name dxPivotGridSummaryCell_value
+   * @name dxPivotGridSummaryCell.value
    * @publicName value(field)
-   * @param1 field:PivotGridDataSourceOptions_fields
+   * @param1 field:PivotGridDataSourceOptions.fields
    * @return any
    */
     /**
-  * @name dxPivotGridSummaryCell_value
+  * @name dxPivotGridSummaryCell.value
   * @publicName value(field, isCalculatedValue)
-  * @param1 field:PivotGridDataSourceOptions_fields
+  * @param1 field:PivotGridDataSourceOptions.fields
   * @param2 isCalculatedValue:boolean
   * @return any
   */

@@ -73,7 +73,7 @@ var dropTargetRegistration = {
 };
 
 /**
-* @name ui events_dxdragenter
+* @name ui events.dxdragenter
 * @publicName dxdragenter
 * @type eventType
 * @type_function_param1 event:event
@@ -81,7 +81,7 @@ var dropTargetRegistration = {
 * @module events/drag
 */
 /**
-* @name ui events_dxdrop
+* @name ui events.dxdrop
 * @publicName dxdrop
 * @type eventType
 * @type_function_param1 event:event
@@ -89,7 +89,7 @@ var dropTargetRegistration = {
 * @module events/drag
 */
 /**
-* @name ui events_dxdragleave
+* @name ui events.dxdragleave
 * @publicName dxdragleave
 * @type eventType
 * @type_function_param1 event:event
@@ -308,7 +308,7 @@ var DragEmitter = GestureEmitter.inherit({
 });
 
 /**
- * @name ui events_dxdragstart
+ * @name ui events.dxdragstart
  * @publicName dxdragstart
  * @type eventType
  * @type_function_param1 event:event
@@ -316,7 +316,7 @@ var DragEmitter = GestureEmitter.inherit({
  * @module events/drag
 */
 /**
-  * @name ui events_dxdrag
+  * @name ui events.dxdrag
   * @publicName dxdrag
   * @type eventType
   * @type_function_param1 event:event
@@ -325,7 +325,7 @@ var DragEmitter = GestureEmitter.inherit({
   * @module events/drag
 */
 /**
-  * @name ui events_dxdragend
+  * @name ui events.dxdragend
   * @publicName dxdragend
   * @type eventType
   * @type_function_param1 event:event

@@ -1,7 +1,7 @@
 "use strict";
 
 /**
- * @name utils_initMobileViewport
+ * @name utils.initMobileViewport
  * @publicName initMobileViewport(options)
  * @param1 options:object
  * @param1_field1 allowZoom:Boolean

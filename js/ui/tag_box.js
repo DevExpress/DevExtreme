@@ -259,7 +259,7 @@ var TagBox = SelectBox.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             /**
-            * @name dxTagBoxOptions_value
+            * @name dxTagBoxOptions.value
             * @publicName value
             * @type Array<string,number,Object>
             */
@@ -270,7 +270,7 @@ var TagBox = SelectBox.inherit({
             maxFilterLength: 1500,
 
             /**
-            * @name dxTagBoxOptions_tagTemplate
+            * @name dxTagBoxOptions.tagTemplate
             * @publicName tagTemplate
             * @type template|function
             * @default "tag"
@@ -283,7 +283,7 @@ var TagBox = SelectBox.inherit({
             selectAllText: messageLocalization.format("dxList-selectAll"),
 
             /**
-            * @name dxTagBoxOptions_hideSelectedItems
+            * @name dxTagBoxOptions.hideSelectedItems
             * @publicName hideSelectedItems
             * @type boolean
             * @default false
@@ -291,7 +291,7 @@ var TagBox = SelectBox.inherit({
             hideSelectedItems: false,
 
             /**
-            * @name dxTagBoxOptions_selectedItems
+            * @name dxTagBoxOptions.selectedItems
             * @publicName selectedItems
             * @type Array<string,number,Object>
             * @readonly
@@ -299,7 +299,7 @@ var TagBox = SelectBox.inherit({
             selectedItems: [],
 
             /**
-             * @name  dxTagBoxOptions_selectAllMode
+             * @name dxTagBoxOptions.selectAllMode
              * @publicName selectAllMode
              * @type Enums.SelectAllMode
              * @default 'page'
@@ -307,7 +307,7 @@ var TagBox = SelectBox.inherit({
             selectAllMode: 'page',
 
             /**
-            * @name dxTagBoxOptions_onSelectAllValueChanged
+            * @name dxTagBoxOptions.onSelectAllValueChanged
             * @publicName onSelectAllValueChanged
             * @extends Action
             * @type function(e)
@@ -318,7 +318,7 @@ var TagBox = SelectBox.inherit({
             onSelectAllValueChanged: null,
 
             /**
-             * @name dxTagBoxOptions_maxDisplayedTags
+             * @name dxTagBoxOptions.maxDisplayedTags
              * @publicName maxDisplayedTags
              * @type number
              * @default undefined
@@ -326,7 +326,7 @@ var TagBox = SelectBox.inherit({
             maxDisplayedTags: undefined,
 
             /**
-             * @name dxTagBoxOptions_showMultiTagOnly
+             * @name dxTagBoxOptions.showMultiTagOnly
              * @publicName showMultiTagOnly
              * @type boolean
              * @default true
@@ -334,7 +334,7 @@ var TagBox = SelectBox.inherit({
             showMultiTagOnly: true,
 
             /**
-            * @name dxTagBoxOptions_onMultiTagPreparing
+            * @name dxTagBoxOptions.onMultiTagPreparing
             * @publicName onMultiTagPreparing
             * @extends Action
             * @type function(e)
@@ -348,7 +348,7 @@ var TagBox = SelectBox.inherit({
             onMultiTagPreparing: null,
 
             /**
-            * @name dxTagBoxOptions_multiline
+            * @name dxTagBoxOptions.multiline
             * @publicName multiline
             * @type boolean
             * @default true
@@ -356,7 +356,7 @@ var TagBox = SelectBox.inherit({
             multiline: true,
 
             /**
-             * @name dxTagBoxOptions_useSubmitBehavior
+             * @name dxTagBoxOptions.useSubmitBehavior
              * @publicName useSubmitBehavior
              * @type boolean
              * @default true
@@ -365,14 +365,14 @@ var TagBox = SelectBox.inherit({
             useSubmitBehavior: true,
 
             /**
-            * @name dxTagBoxOptions_applyValueMode
+            * @name dxTagBoxOptions.applyValueMode
             * @publicName applyValueMode
             * @type Enums.EditorApplyValueMode
             * @default "instantly"
             */
 
             /**
-            * @name dxTagBoxOptions_onSelectionChanged
+            * @name dxTagBoxOptions.onSelectionChanged
             * @publicName onSelectionChanged
             * @extends Action
             * @type function(e)
@@ -383,91 +383,91 @@ var TagBox = SelectBox.inherit({
             */
 
             /**
-            * @name dxTagBoxOptions_closeAction
+            * @name dxTagBoxOptions.closeAction
             * @publicName closeAction
             * @hidden
             * @inheritdoc
             */
 
             /**
-            * @name dxTagBoxOptions_hiddenAction
+            * @name dxTagBoxOptions.hiddenAction
             * @publicName hiddenAction
             * @hidden
             * @inheritdoc
             */
 
             /**
-            * @name dxTagBoxOptions_itemRender
+            * @name dxTagBoxOptions.itemRender
             * @publicName itemRender
             * @hidden
             * @inheritdoc
             */
 
             /**
-            * @name dxTagBoxOptions_openAction
+            * @name dxTagBoxOptions.openAction
             * @publicName openAction
             * @hidden
             * @inheritdoc
             */
 
             /**
-            * @name dxTagBoxOptions_shownAction
+            * @name dxTagBoxOptions.shownAction
             * @publicName shownAction
             * @hidden
             * @inheritdoc
             */
 
             /**
-            * @name dxTagBoxOptions_valueChangeEvent
+            * @name dxTagBoxOptions.valueChangeEvent
             * @publicName valueChangeEvent
             * @hidden
             * @inheritdoc
             */
 
             /**
-            * @name dxTagBoxOptions_maxLength
+            * @name dxTagBoxOptions.maxLength
             * @publicName maxLength
             * @hidden
             * @inheritdoc
             */
 
             /**
-            * @name dxTagBoxOptions_onCopy
+            * @name dxTagBoxOptions.onCopy
             * @publicName onCopy
             * @hidden
             * @inheritdoc
             */
 
             /**
-            * @name dxTagBoxOptions_onCut
+            * @name dxTagBoxOptions.onCut
             * @publicName onCut
             * @hidden
             * @inheritdoc
             */
 
             /**
-            * @name dxTagBoxOptions_onPaste
+            * @name dxTagBoxOptions.onPaste
             * @publicName onPaste
             * @hidden
             * @inheritdoc
             */
 
             /**
-            * @name dxTagBoxOptions_spellcheck
+            * @name dxTagBoxOptions.spellcheck
             * @publicName spellcheck
             * @hidden
             * @inheritdoc
             */
 
             /**
-            * @name dxTagBoxOptions_displayValue
+            * @name dxTagBoxOptions.displayValue
             * @publicName displayValue
             * @hidden
             * @inheritdoc
             */
 
             /**
-            * @name dxTagBoxOptions_selectedItem
+            * @name dxTagBoxOptions.selectedItem
             * @publicName selectedItem
             * @hidden
             * @inheritdoc

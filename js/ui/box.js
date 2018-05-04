@@ -458,7 +458,7 @@ var Box = CollectionWidget.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             /**
-            * @name dxBoxOptions_direction
+            * @name dxBoxOptions.direction
             * @publicName direction
             * @type Enums.BoxDirection
             * @default 'row'
@@ -466,7 +466,7 @@ var Box = CollectionWidget.inherit({
             direction: "row",
 
             /**
-            * @name dxBoxOptions_align
+            * @name dxBoxOptions.align
             * @publicName align
             * @type Enums.BoxAlign
             * @default 'start'
@@ -474,7 +474,7 @@ var Box = CollectionWidget.inherit({
             align: "start",
 
             /**
-            * @name dxBoxOptions_crossAlign
+            * @name dxBoxOptions.crossAlign
             * @publicName crossAlign
             * @type Enums.BoxCrossAlign
             * @default 'start'
@@ -482,7 +482,7 @@ var Box = CollectionWidget.inherit({
             crossAlign: "stretch",
 
             /**
-            * @name dxBoxOptions_activeStateEnabled
+            * @name dxBoxOptions.activeStateEnabled
             * @publicName activeStateEnabled
             * @hidden
             * @inheritdoc
@@ -490,7 +490,7 @@ var Box = CollectionWidget.inherit({
             activeStateEnabled: false,
 
             /**
-            * @name dxBoxOptions_focusStateEnabled
+            * @name dxBoxOptions.focusStateEnabled
             * @publicName focusStateEnabled
             * @hidden
             * @inheritdoc
@@ -504,61 +504,61 @@ var Box = CollectionWidget.inherit({
             _queue: undefined
 
             /**
-            * @name dxBoxOptions_hint
+            * @name dxBoxOptions.hint
             * @publicName hint
             * @hidden
             * @inheritdoc
             */
             /**
-            * @name dxBoxOptions_noDataText
+            * @name dxBoxOptions.noDataText
             * @publicName noDataText
             * @hidden
             * @inheritdoc
             */
             /**
-            * @name dxBoxOptions_onSelectionChanged
+            * @name dxBoxOptions.onSelectionChanged
             * @publicName onSelectionChanged
             * @hidden
             * @inheritdoc
             */
             /**
-            * @name dxBoxOptions_selectedIndex
+            * @name dxBoxOptions.selectedIndex
             * @publicName selectedIndex
             * @hidden
             * @inheritdoc
             */
             /**
-            * @name dxBoxOptions_selectedItem
+            * @name dxBoxOptions.selectedItem
             * @publicName selectedItem
             * @hidden
             * @inheritdoc
             */
             /**
-            * @name dxBoxOptions_selectedItems
+            * @name dxBoxOptions.selectedItems
             * @publicName selectedItems
             * @hidden
             * @inheritdoc
             */
             /**
-            * @name dxBoxOptions_selectedItemKeys
+            * @name dxBoxOptions.selectedItemKeys
             * @publicName selectedItemKeys
             * @hidden
             * @inheritdoc
             */
             /**
-            * @name dxBoxOptions_keyExpr
+            * @name dxBoxOptions.keyExpr
             * @publicName keyExpr
             * @hidden
             * @inheritdoc
             */
             /**
-            * @name dxBoxOptions_tabIndex
+            * @name dxBoxOptions.tabIndex
             * @publicName tabIndex
             * @hidden
             * @inheritdoc
             */
             /**
-            * @name dxBoxOptions_accessKey
+            * @name dxBoxOptions.accessKey
             * @publicName accessKey
             * @hidden
             * @inheritdoc
@@ -761,14 +761,14 @@ var Box = CollectionWidget.inherit({
     }
 
     /**
-    * @name dxBoxMethods_registerKeyHandler
+    * @name dxBoxMethods.registerKeyHandler
     * @publicName registerKeyHandler(key, handler)
     * @hidden
     * @inheritdoc
     */
 
     /**
-    * @name dxBoxMethods_focus
+    * @name dxBoxMethods.focus
     * @publicName focus()
     * @hidden
     * @inheritdoc
@@ -781,25 +781,25 @@ var Box = CollectionWidget.inherit({
 * @type object
 */
 /**
-* @name dxBoxItemTemplate_ratio
+* @name dxBoxItemTemplate.ratio
 * @publicName ratio
 * @type number
 * @default 0
 */
 /**
-* @name dxBoxItemTemplate_baseSize
+* @name dxBoxItemTemplate.baseSize
 * @publicName baseSize
 * @type number | Enums.Mode
 * @default 0
 */
 /**
-* @name dxBoxItemTemplate_shrink
+* @name dxBoxItemTemplate.shrink
 * @publicName shrink
 * @type number
 * @default 1
 */
 /**
-* @name dxBoxItemTemplate_box
+* @name dxBoxItemTemplate.box
 * @publicName box
 * @type dxBoxOptions
 * @default undefined

@@ -108,7 +108,7 @@ module.exports = {
     defaultOptions: function() {
         return {
             /**
-             * @name dxDataGridOptions_onContextMenuPreparing
+             * @name dxDataGridOptions.onContextMenuPreparing
              * @publicName onContextMenuPreparing
              * @type function(e)
              * @type_function_param1 e:Object
@@ -123,7 +123,7 @@ module.exports = {
              * @action
              */
             /**
-             * @name dxTreeListOptions_onContextMenuPreparing
+             * @name dxTreeListOptions.onContextMenuPreparing
              * @publicName onContextMenuPreparing
              * @type function(e)
              * @type_function_param1 e:Object

@@ -261,7 +261,7 @@ module.exports = {
     defaultOptions: function() {
         return {
             /**
-             * @name GridBaseOptions_filterValue
+             * @name GridBaseOptions.filterValue
              * @publicName filterValue
              * @type Filter expression
              * @default null
@@ -269,7 +269,7 @@ module.exports = {
             filterValue: null,
 
             /**
-             * @name GridBaseOptions_filterSyncEnabled
+             * @name GridBaseOptions.filterSyncEnabled
              * @publicName filterSyncEnabled
              * @type boolean
              */

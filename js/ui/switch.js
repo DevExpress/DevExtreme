@@ -61,7 +61,7 @@ var Switch = Editor.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             /**
-            * @name dxSwitchOptions_hoverStateEnabled
+            * @name dxSwitchOptions.hoverStateEnabled
             * @publicName hoverStateEnabled
             * @type boolean
             * @default true
@@ -70,7 +70,7 @@ var Switch = Editor.inherit({
             hoverStateEnabled: true,
 
             /**
-            * @name dxSwitchOptions_activeStateEnabled
+            * @name dxSwitchOptions.activeStateEnabled
             * @publicName activeStateEnabled
             * @type boolean
             * @default true
@@ -79,7 +79,7 @@ var Switch = Editor.inherit({
             activeStateEnabled: true,
 
             /**
-            * @name dxSwitchOptions_onText
+            * @name dxSwitchOptions.onText
             * @publicName onText
             * @type string
             * @default "ON"
@@ -87,7 +87,7 @@ var Switch = Editor.inherit({
             onText: messageLocalization.format("dxSwitch-onText"),
 
             /**
-            * @name dxSwitchOptions_offText
+            * @name dxSwitchOptions.offText
             * @publicName offText
             * @type string
             * @default "OFF"
@@ -95,7 +95,7 @@ var Switch = Editor.inherit({
             offText: messageLocalization.format("dxSwitch-offText"),
 
             /**
-            * @name dxSwitchOptions_value
+            * @name dxSwitchOptions.value
             * @publicName value
             * @type boolean
             * @default false
@@ -105,7 +105,7 @@ var Switch = Editor.inherit({
             useInkRipple: false
 
             /**
-            * @name dxSwitchOptions_name
+            * @name dxSwitchOptions.name
             * @publicName name
             * @type string
             * @hidden false
@@ -122,7 +122,7 @@ var Switch = Editor.inherit({
                 },
                 options: {
                     /**
-                    * @name dxSwitchOptions_focusStateEnabled
+                    * @name dxSwitchOptions.focusStateEnabled
                     * @publicName focusStateEnabled
                     * @type boolean
                     * @default true @for desktop

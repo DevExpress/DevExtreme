@@ -76,21 +76,21 @@ var TreeList = Widget.inherit({
                 },
                 options: {
                     /**
-                    * @name GridBaseOptions_showRowLines
+                    * @name GridBaseOptions.showRowLines
                     * @publicName showRowLines
                     * @type boolean
                     * @default true @for Material
                     */
                     showRowLines: true,
                     /**
-                    * @name GridBaseOptions_showColumnLines
+                    * @name GridBaseOptions.showColumnLines
                     * @publicName showColumnLines
                     * @type boolean
                     * @default false @for Material
                     */
                     showColumnLines: false,
                     /**
-                     * @name GridBaseOptions_headerFilter_height
+                     * @name GridBaseOptions.headerFilter.height
                      * @publicName height
                      * @type number
                      * @default 315 @for Material
@@ -99,7 +99,7 @@ var TreeList = Widget.inherit({
                         height: 315
                     },
                     /**
-                     * @name GridBaseOptions_editing_useIcons
+                     * @name GridBaseOptions.editing.useIcons
                      * @publicName useIcons
                      * @type boolean
                      * @default true @for Material

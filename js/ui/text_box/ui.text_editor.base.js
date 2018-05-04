@@ -80,7 +80,7 @@ var TextEditorBase = Editor.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             /**
-            * @name dxTextEditorOptions_value
+            * @name dxTextEditorOptions.value
             * @publicName value
             * @type any
             * @default ""
@@ -88,7 +88,7 @@ var TextEditorBase = Editor.inherit({
             value: "",
 
             /**
-            * @name dxTextEditorOptions_spellcheck
+            * @name dxTextEditorOptions.spellcheck
             * @publicName spellcheck
             * @type boolean
             * @default false
@@ -96,7 +96,7 @@ var TextEditorBase = Editor.inherit({
             spellcheck: false,
 
             /**
-            * @name dxTextEditorOptions_showClearButton
+            * @name dxTextEditorOptions.showClearButton
             * @publicName showClearButton
             * @type boolean
             * @default false
@@ -104,7 +104,7 @@ var TextEditorBase = Editor.inherit({
             showClearButton: false,
 
             /**
-            * @name dxTextEditorOptions_valueChangeEvent
+            * @name dxTextEditorOptions.valueChangeEvent
             * @publicName valueChangeEvent
             * @type string
             * @default "change"
@@ -112,7 +112,7 @@ var TextEditorBase = Editor.inherit({
             valueChangeEvent: "change",
 
             /**
-            * @name dxTextEditorOptions_placeholder
+            * @name dxTextEditorOptions.placeholder
             * @publicName placeholder
             * @type string
             * @default ""
@@ -120,7 +120,7 @@ var TextEditorBase = Editor.inherit({
             placeholder: "",
 
             /**
-            * @name dxTextEditorOptions_inputAttr
+            * @name dxTextEditorOptions.inputAttr
             * @publicName inputAttr
             * @type object
             * @default {}
@@ -128,7 +128,7 @@ var TextEditorBase = Editor.inherit({
             inputAttr: {},
 
             /**
-            * @name dxTextEditorOptions_onFocusIn
+            * @name dxTextEditorOptions.onFocusIn
             * @publicName onFocusIn
             * @extends Action
             * @type function(e)
@@ -140,7 +140,7 @@ var TextEditorBase = Editor.inherit({
             onFocusIn: null,
 
             /**
-            * @name dxTextEditorOptions_onFocusOut
+            * @name dxTextEditorOptions.onFocusOut
             * @publicName onFocusOut
             * @extends Action
             * @type function(e)
@@ -152,7 +152,7 @@ var TextEditorBase = Editor.inherit({
             onFocusOut: null,
 
             /**
-            * @name dxTextEditorOptions_onKeyDown
+            * @name dxTextEditorOptions.onKeyDown
             * @publicName onKeyDown
             * @extends Action
             * @type function(e)
@@ -165,7 +165,7 @@ var TextEditorBase = Editor.inherit({
             onKeyDown: null,
 
             /**
-            * @name dxTextEditorOptions_onKeyPress
+            * @name dxTextEditorOptions.onKeyPress
             * @publicName onKeyPress
             * @extends Action
             * @type function(e)
@@ -177,7 +177,7 @@ var TextEditorBase = Editor.inherit({
             onKeyPress: null,
 
             /**
-            * @name dxTextEditorOptions_onKeyUp
+            * @name dxTextEditorOptions.onKeyUp
             * @publicName onKeyUp
             * @extends Action
             * @type function(e)
@@ -189,7 +189,7 @@ var TextEditorBase = Editor.inherit({
             onKeyUp: null,
 
             /**
-            * @name dxTextEditorOptions_onChange
+            * @name dxTextEditorOptions.onChange
             * @publicName onChange
             * @extends Action
             * @type function(e)
@@ -201,7 +201,7 @@ var TextEditorBase = Editor.inherit({
             onChange: null,
 
             /**
-            * @name dxTextEditorOptions_onInput
+            * @name dxTextEditorOptions.onInput
             * @publicName onInput
             * @extends Action
             * @type function(e)
@@ -213,7 +213,7 @@ var TextEditorBase = Editor.inherit({
             onInput: null,
 
             /**
-            * @name dxTextEditorOptions_onCut
+            * @name dxTextEditorOptions.onCut
             * @publicName onCut
             * @extends Action
             * @type function(e)
@@ -225,7 +225,7 @@ var TextEditorBase = Editor.inherit({
             onCut: null,
 
             /**
-            * @name dxTextEditorOptions_onCopy
+            * @name dxTextEditorOptions.onCopy
             * @publicName onCopy
             * @extends Action
             * @type function(e)
@@ -237,7 +237,7 @@ var TextEditorBase = Editor.inherit({
             onCopy: null,
 
             /**
-            * @name dxTextEditorOptions_onPaste
+            * @name dxTextEditorOptions.onPaste
             * @publicName onPaste
             * @extends Action
             * @type function(e)
@@ -249,7 +249,7 @@ var TextEditorBase = Editor.inherit({
             onPaste: null,
 
             /**
-            * @name dxTextEditorOptions_onEnterKey
+            * @name dxTextEditorOptions.onEnterKey
             * @publicName onEnterKey
             * @extends Action
             * @type function(e)
@@ -263,7 +263,7 @@ var TextEditorBase = Editor.inherit({
             mode: "text",
 
             /**
-             * @name dxTextEditorOptions_hoverStateEnabled
+             * @name dxTextEditorOptions.hoverStateEnabled
              * @publicName hoverStateEnabled
              * @type boolean
              * @default true
@@ -272,7 +272,7 @@ var TextEditorBase = Editor.inherit({
             hoverStateEnabled: true,
 
             /**
-             * @name dxTextEditorOptions_focusStateEnabled
+             * @name dxTextEditorOptions.focusStateEnabled
              * @publicName focusStateEnabled
              * @type boolean
              * @default true
@@ -281,7 +281,7 @@ var TextEditorBase = Editor.inherit({
             focusStateEnabled: true,
 
             /**
-            * @name dxTextEditorOptions_text
+            * @name dxTextEditorOptions.text
             * @publicName text
             * @type string
             * @readonly
@@ -293,7 +293,7 @@ var TextEditorBase = Editor.inherit({
             }
 
             /**
-            * @name dxTextEditorOptions_name
+            * @name dxTextEditorOptions.name
             * @publicName name
             * @type string
             * @hidden false
@@ -774,7 +774,7 @@ var TextEditorBase = Editor.inherit({
     },
 
     /**
-    * @name dxTextEditorMethods_focus
+    * @name dxTextEditorMethods.focus
     * @publicName focus()
     */
     focus: function() {
@@ -782,7 +782,7 @@ var TextEditorBase = Editor.inherit({
     },
 
     /**
-    * @name dxTextEditorMethods_blur
+    * @name dxTextEditorMethods.blur
     * @publicName blur()
     */
     blur: function() {

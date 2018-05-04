@@ -68,27 +68,27 @@ module.exports = {
     defaultOptions: function() {
         return {
             /**
-         * @name GridBaseOptions_stateStoring
+         * @name GridBaseOptions.stateStoring
          * @publicName stateStoring
          * @type object
          */
             stateStoring: {
                 /**
-                 * @name GridBaseOptions_stateStoring_enabled
+                 * @name GridBaseOptions.stateStoring.enabled
                  * @publicName enabled
                  * @type boolean
                  * @default false
                  */
                 enabled: false,
                 /**
-                 * @name GridBaseOptions_stateStoring_storageKey
+                 * @name GridBaseOptions.stateStoring.storageKey
                  * @publicName storageKey
                  * @type string
                  * @default null
                  */
                 storageKey: null,
                 /**
-                 * @name GridBaseOptions_stateStoring_type
+                 * @name GridBaseOptions.stateStoring.type
                  * @publicName type
                  * @type Enums.StateStoringType
                  * @default "localStorage"
@@ -96,7 +96,7 @@ module.exports = {
                 type: "localStorage",
 
                 /**
-                 * @name GridBaseOptions_stateStoring_customLoad
+                 * @name GridBaseOptions.stateStoring.customLoad
                  * @publicName customLoad
                  * @type function()
                  * @type_function_return Promise<Object>
@@ -104,7 +104,7 @@ module.exports = {
                 customLoad: null,
 
                 /**
-                 * @name GridBaseOptions_stateStoring_customSave
+                 * @name GridBaseOptions.stateStoring.customSave
                  * @publicName customSave
                  * @type function(gridState)
                  * @type_function_param1 gridState:object
@@ -112,7 +112,7 @@ module.exports = {
                 customSave: null,
 
                 /**
-                 * @name GridBaseOptions_stateStoring_savingTimeout
+                 * @name GridBaseOptions.stateStoring.savingTimeout
                  * @publicName savingTimeout
                  * @type number
                  * @default 2000
@@ -149,12 +149,12 @@ module.exports = {
                     processLoadState(this);
                 },
                 /**
-                 * @name GridBaseMethods_state
+                 * @name GridBaseMethods.state
                  * @publicName state()
                  * @return object
                  */
                 /**
-                 * @name GridBaseMethods_state
+                 * @name GridBaseMethods.state
                  * @publicName state(state)
                  * @param1 state:object
                  */

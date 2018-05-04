@@ -124,7 +124,7 @@ module.exports = {
     defaultOptions: function() {
         return {
             /**
-             * @name GridBaseOptions_filterBuilder
+             * @name GridBaseOptions.filterBuilder
              * @publicName filterBuilder
              * @type dxFilterBuilderOptions
              * @default {}
@@ -154,7 +154,7 @@ module.exports = {
             },
 
             /**
-             * @name GridBaseOptions_filterBuilderPopup
+             * @name GridBaseOptions.filterBuilderPopup
              * @publicName filterBuilderPopup
              * @type dxPopupOptions
              * @default {}

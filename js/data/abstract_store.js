@@ -31,7 +31,7 @@ var Store = Class.inherit({
         each(
             [
                 /**
-                 * @name StoreOptions_onLoaded
+                 * @name StoreOptions.onLoaded
                  * @publicName onLoaded
                  * @type function
                  * @type_function_param1 result:Array<any>
@@ -40,7 +40,7 @@ var Store = Class.inherit({
                 "onLoaded",
 
                 /**
-                 * @name StoreOptions_onLoading
+                 * @name StoreOptions.onLoading
                  * @publicName onLoading
                  * @type function
                  * @type_function_param1 loadOptions:LoadOptions
@@ -49,7 +49,7 @@ var Store = Class.inherit({
                 "onLoading",
 
                 /**
-                 * @name StoreOptions_onInserted
+                 * @name StoreOptions.onInserted
                  * @publicName onInserted
                  * @type function
                  * @type_function_param1 values:object
@@ -59,7 +59,7 @@ var Store = Class.inherit({
                 "onInserted",
 
                 /**
-                 * @name StoreOptions_onInserting
+                 * @name StoreOptions.onInserting
                  * @publicName onInserting
                  * @type function
                  * @type_function_param1 values:object
@@ -68,7 +68,7 @@ var Store = Class.inherit({
                 "onInserting",
 
                 /**
-                 * @name StoreOptions_onUpdated
+                 * @name StoreOptions.onUpdated
                  * @publicName onUpdated
                  * @type function
                  * @type_function_param1 key:object|string|number
@@ -78,7 +78,7 @@ var Store = Class.inherit({
                 "onUpdated",
 
                 /**
-                 * @name StoreOptions_onUpdating
+                 * @name StoreOptions.onUpdating
                  * @publicName onUpdating
                  * @type function
                  * @type_function_param1 key:object|string|number
@@ -88,7 +88,7 @@ var Store = Class.inherit({
                 "onUpdating",
 
                 /**
-                 * @name StoreOptions_onRemoved
+                 * @name StoreOptions.onRemoved
                  * @publicName onRemoved
                  * @type function
                  * @type_function_param1 key:object|string|number
@@ -97,7 +97,7 @@ var Store = Class.inherit({
                 "onRemoved",
 
                 /**
-                 * @name StoreOptions_onRemoving
+                 * @name StoreOptions.onRemoving
                  * @publicName onRemoving
                  * @type function
                  * @type_function_param1 key:object|string|number
@@ -106,7 +106,7 @@ var Store = Class.inherit({
                 "onRemoving",
 
                 /**
-                 * @name StoreOptions_onModified
+                 * @name StoreOptions.onModified
                  * @publicName onModified
                  * @type function
                  * @action
@@ -114,7 +114,7 @@ var Store = Class.inherit({
                 "onModified",
 
                 /**
-                 * @name StoreOptions_onModifying
+                 * @name StoreOptions.onModifying
                  * @publicName onModifying
                  * @type function
                  * @action
@@ -128,14 +128,14 @@ var Store = Class.inherit({
             });
 
         /**
-         * @name StoreOptions_key
+         * @name StoreOptions.key
          * @publicName key
          * @type string|Array<string>
          */
         this._key = options.key;
 
         /**
-         * @name StoreOptions_errorHandler
+         * @name StoreOptions.errorHandler
          * @publicName errorHandler
          * @type function
          */
@@ -149,7 +149,7 @@ var Store = Class.inherit({
     },
 
     /**
-    * @name StoreMethods_key
+    * @name StoreMethods.key
     * @publicName key()
     * @return any
     */
@@ -158,7 +158,7 @@ var Store = Class.inherit({
     },
 
     /**
-    * @name StoreMethods_keyOf
+    * @name StoreMethods.keyOf
     * @publicName keyOf(obj)
     * @param1 obj:object
     * @return any
@@ -177,12 +177,12 @@ var Store = Class.inherit({
         }
     },
     /**
-    * @name StoreMethods_load
+    * @name StoreMethods.load
     * @publicName load()
     * @return Promise<any>
     */
     /**
-    * @name StoreMethods_load
+    * @name StoreMethods.load
     * @publicName load(options)
     * @param1 options:LoadOptions
     * @return Promise<any>
@@ -226,7 +226,7 @@ var Store = Class.inherit({
     createQuery: abstract,
 
     /**
-    * @name StoreMethods_totalCount
+    * @name StoreMethods.totalCount
     * @publicName totalCount(options)
     * @param1 obj:object
     * @param1_field1 filter:object
@@ -242,7 +242,7 @@ var Store = Class.inherit({
     },
 
     /**
-    * @name StoreMethods_byKey
+    * @name StoreMethods.byKey
     * @publicName byKey(key)
     * @param1 key:object|string|number
     * @return Promise<any>
@@ -254,7 +254,7 @@ var Store = Class.inherit({
     _byKeyImpl: abstract,
 
     /**
-    * @name StoreMethods_insert
+    * @name StoreMethods.insert
     * @publicName insert(values)
     * @param1 values:object
     * @return Promise<any>
@@ -274,7 +274,7 @@ var Store = Class.inherit({
     _insertImpl: abstract,
 
     /**
-    * @name StoreMethods_update
+    * @name StoreMethods.update
     * @publicName update(key, values)
     * @param1 key:object|string|number
     * @param2 values:object
@@ -295,7 +295,7 @@ var Store = Class.inherit({
     _updateImpl: abstract,
 
     /**
-    * @name StoreMethods_remove
+    * @name StoreMethods.remove
     * @publicName remove(key)
     * @param1 key:object|string|number
     * @return Promise<void>

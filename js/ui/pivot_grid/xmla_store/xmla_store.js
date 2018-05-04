@@ -813,25 +813,25 @@ exports.XmlaStore = Class.inherit((function() {
             this._options = options;
 
         /**
-        * @name XmlaStoreOptions_url
+        * @name XmlaStoreOptions.url
         * @publicName url
         * @type string
         */
 
         /**
-        * @name XmlaStoreOptions_catalog
+        * @name XmlaStoreOptions.catalog
         * @publicName catalog
         * @type string
         */
 
         /**
-        * @name XmlaStoreOptions_cube
+        * @name XmlaStoreOptions.cube
         * @publicName cube
         * @type string
         */
 
         /**
-         * @name XmlaStoreOptions_beforeSend
+         * @name XmlaStoreOptions.beforeSend
          * @publicName beforeSend
          * @type function
          * @type_function_param1 options:object

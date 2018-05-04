@@ -38,18 +38,18 @@ var RequiredRuleValidator = BaseRuleValidator.inherit({
     NAME: "required",
 
     /**
-     * @name requiredRule_type
+     * @name requiredRule.type
      * @publicName type
      * @type Enums.ValidationRuleType
      */
     /**
-     * @name requiredRule_trim
+     * @name requiredRule.trim
      * @publicName trim
      * @type boolean
      * @default true
      */
     /**
-     * @name requiredRule_message
+     * @name requiredRule.message
      * @publicName message
      * @type string
      * @default 'Required'
@@ -72,12 +72,12 @@ var NumericRuleValidator = BaseRuleValidator.inherit({
     NAME: "numeric",
 
     /**
-     * @name numericRule_type
+     * @name numericRule.type
      * @publicName type
      * @type Enums.ValidationRuleType
      */
     /**
-     * @name numericRule_message
+     * @name numericRule.message
      * @publicName message
      * @type string
      * @default 'Value should be a number'
@@ -99,28 +99,28 @@ var RangeRuleValidator = BaseRuleValidator.inherit({
     NAME: "range",
 
     /**
-     * @name rangeRule_type
+     * @name rangeRule.type
      * @publicName type
      * @type Enums.ValidationRuleType
      */
     /**
-     * @name rangeRule_min
+     * @name rangeRule.min
      * @publicName min
      * @type datetime|number
      */
     /**
-     * @name rangeRule_max
+     * @name rangeRule.max
      * @publicName max
      * @type datetime|number
      */
     /**
-     * @name rangeRule_message
+     * @name rangeRule.message
      * @publicName message
      * @type string
      * @default 'Value is out of range'
      */
     /**
-     * @name rangeRule_reevaluate
+     * @name rangeRule.reevaluate
      * @publicName reevaluate
      * @type boolean
      * @default false
@@ -160,28 +160,28 @@ var StringLengthRuleValidator = BaseRuleValidator.inherit({
     NAME: "stringLength",
 
     /**
-     * @name stringLengthRule_type
+     * @name stringLengthRule.type
      * @publicName type
      * @type Enums.ValidationRuleType
      */
     /**
-     * @name stringLengthRule_min
+     * @name stringLengthRule.min
      * @publicName min
      * @type number
      */
     /**
-     * @name stringLengthRule_max
+     * @name stringLengthRule.max
      * @publicName max
      * @type number
      */
     /**
-     * @name stringLengthRule_trim
+     * @name stringLengthRule.trim
      * @publicName trim
      * @type boolean
      * @default true
      */
     /**
-     * @name stringLengthRule_message
+     * @name stringLengthRule.message
      * @publicName message
      * @type string
      * @default 'The length of the value is not correct'
@@ -201,12 +201,12 @@ var CustomRuleValidator = BaseRuleValidator.inherit({
     NAME: "custom",
 
     /**
-     * @name customRule_type
+     * @name customRule.type
      * @publicName type
      * @type Enums.ValidationRuleType
      */
     /**
-     * @name customRule_validationCallback
+     * @name customRule.validationCallback
      * @publicName validationCallback
      * @type function
      * @type_function_return boolean
@@ -217,13 +217,13 @@ var CustomRuleValidator = BaseRuleValidator.inherit({
      * @type_function_param1_field4 data:object
      */
     /**
-     * @name customRule_message
+     * @name customRule.message
      * @publicName message
      * @type string
      * @default 'Value is invalid'
      */
     /**
-     * @name customRule_reevaluate
+     * @name customRule.reevaluate
      * @publicName reevaluate
      * @type boolean
      * @default false
@@ -250,30 +250,30 @@ var CompareRuleValidator = BaseRuleValidator.inherit({
     NAME: "compare",
 
     /**
-     * @name compareRule_type
+     * @name compareRule.type
      * @publicName type
      * @type Enums.ValidationRuleType
      */
     /**
-     * @name compareRule_comparisonTarget
+     * @name compareRule.comparisonTarget
      * @publicName comparisonTarget
      * @type function
      * @type_function_return object
      */
     /**
-     * @name compareRule_comparisonType
+     * @name compareRule.comparisonType
      * @publicName comparisonType
      * @type Enums.ComparisonOperator
      * @default '=='
      */
     /**
-     * @name compareRule_message
+     * @name compareRule.message
      * @publicName message
      * @type string
      * @default 'Values do not match'
      */
     /**
-     * @name compareRule_reevaluate
+     * @name compareRule.reevaluate
      * @publicName reevaluate
      * @type boolean
      * @default true
@@ -314,17 +314,17 @@ var PatternRuleValidator = BaseRuleValidator.inherit({
     NAME: "pattern",
 
     /**
-     * @name patternRule_type
+     * @name patternRule.type
      * @publicName type
      * @type Enums.ValidationRuleType
      */
     /**
-     * @name patternRule_pattern
+     * @name patternRule.pattern
      * @publicName pattern
      * @type regexp|string
      */
     /**
-     * @name patternRule_message
+     * @name patternRule.message
      * @publicName message
      * @type string
      * @default 'Value does not match pattern'
@@ -345,12 +345,12 @@ var EmailRuleValidator = BaseRuleValidator.inherit({
     NAME: "email",
 
     /**
-     * @name emailRule_type
+     * @name emailRule.type
      * @publicName type
      * @type Enums.ValidationRuleType
      */
     /**
-     * @name emailRule_message
+     * @name emailRule.message
      * @publicName message
      * @type string
      * @default 'Email is invalid'
@@ -448,19 +448,19 @@ var GroupConfig = Class.inherit({
          */
         var result = {
             /**
-             * @name dxValidationGroupResult_isValid
+             * @name dxValidationGroupResult.isValid
              * @publicName isValid
              * @type boolean
              */
             isValid: true,
             /**
-             * @name dxValidationGroupResult_brokenRules
+             * @name dxValidationGroupResult.brokenRules
              * @publicName brokenRules
              * @type Array<RequiredRule,NumericRule,RangeRule,StringLengthRule,CustomRule,CompareRule,PatternRule,EmailRule>
              */
             brokenRules: [],
             /**
-             * @name dxValidationGroupResult_validators
+             * @name dxValidationGroupResult.validators
              * @publicName validators
              * @type Array<Object>
              */
@@ -505,7 +505,7 @@ var ValidationEngine = {
     groups: [],
 
     /**
-    * @name validationEngineMethods_getGroupConfig
+    * @name validationEngineMethods.getGroupConfig
     * @section Core
     * @publicName getGroupConfig(group)
     * @param1 group:string|object
@@ -513,7 +513,7 @@ var ValidationEngine = {
     * @static
     */
     /**
-    * @name validationEngineMethods_getGroupConfig
+    * @name validationEngineMethods.getGroupConfig
     * @section Core
     * @publicName getGroupConfig()
     * @return object
@@ -576,25 +576,25 @@ var ValidationEngine = {
         var result = {
                 name: name,
                 /**
-                 * @name dxValidatorResult_value
+                 * @name dxValidatorResult.value
                  * @publicName value
                  * @type any
                  */
                 value: value,
                 /**
-                 * @name dxValidatorResult_brokenRule
+                 * @name dxValidatorResult.brokenRule
                  * @publicName brokenRule
                  * @type RequiredRule|NumericRule|RangeRule|StringLengthRule|CustomRule|CompareRule|PatternRule|EmailRule
                  */
                 brokenRule: null,
                 /**
-                 * @name dxValidatorResult_isValid
+                 * @name dxValidatorResult.isValid
                  * @publicName isValid
                  * @type boolean
                  */
                 isValid: true,
                 /**
-                 * @name dxValidatorResult_validationRules
+                 * @name dxValidatorResult.validationRules
                  * @publicName validationRules
                  * @type Array<RequiredRule,NumericRule,RangeRule,StringLengthRule,CustomRule,CompareRule,PatternRule,EmailRule>
                  */
@@ -668,7 +668,7 @@ var ValidationEngine = {
     },
 
     /**
-    * @name validationEngineMethods_validateGroup
+    * @name validationEngineMethods.validateGroup
     * @section Core
     * @publicName validateGroup(group)
     * @param1 group:string|object
@@ -676,7 +676,7 @@ var ValidationEngine = {
     * @static
     */
     /**
-    * @name validationEngineMethods_validateGroup
+    * @name validationEngineMethods.validateGroup
     * @section Core
     * @publicName validateGroup()
     * @return dxValidationGroupResult
@@ -693,14 +693,14 @@ var ValidationEngine = {
     },
 
     /**
-    * @name validationEngineMethods_resetGroup
+    * @name validationEngineMethods.resetGroup
     * @section Core
     * @publicName resetGroup(group)
     * @param1 group:string|object
     * @static
     */
     /**
-    * @name validationEngineMethods_resetGroup
+    * @name validationEngineMethods.resetGroup
     * @section Core
     * @publicName resetGroup()
     * @static

@@ -175,25 +175,25 @@ function mapDataRespectingGrouping(items, mapper, groupInfo) {
 
 var DataSource = Class.inherit({
     /**
-    * @name DataSourceMethods_ctor
+    * @name DataSourceMethods.ctor
     * @publicName ctor(url)
     * @param1 url:string
     * @hidden
     */
     /**
-    * @name DataSourceMethods_ctor
+    * @name DataSourceMethods.ctor
     * @publicName ctor(data)
     * @param1 data:Array<any>
     * @hidden
     */
     /**
-    * @name DataSourceMethods_ctor
+    * @name DataSourceMethods.ctor
     * @publicName ctor(store)
     * @param1 store:Store
     * @hidden
     */
     /**
-    * @name DataSourceMethods_ctor
+    * @name DataSourceMethods.ctor
     * @publicName ctor(options)
     * @param1 options:CustomStoreOptions|DataSourceOptions
     * @hidden
@@ -203,63 +203,63 @@ var DataSource = Class.inherit({
         options = normalizeDataSourceOptions(options);
 
         /**
-        * @name DataSourceOptions_store_type
+        * @name DataSourceOptions.store.type
         * @publicName type
         * @type Enums.DataSourceStoreType
         */
 
         /**
-        * @name DataSourceOptions_store
+        * @name DataSourceOptions.store
         * @publicName store
         * @type Store|StoreOptions|Array<any>|any
         */
         this._store = options.store;
 
         /**
-        * @name DataSourceOptions_sort
+        * @name DataSourceOptions.sort
         * @publicName sort
         * @type Sort expression
         */
 
         /**
-        * @name DataSourceOptions_filter
+        * @name DataSourceOptions.filter
         * @publicName filter
         * @type Filter expression
         */
 
         /**
-        * @name DataSourceOptions_group
+        * @name DataSourceOptions.group
         * @publicName group
         * @type Group expression
         */
 
         /**
-        * @name DataSourceOptions_select
+        * @name DataSourceOptions.select
         * @publicName select
         * @type Select expression
         */
 
         /**
-        * @name DataSourceOptions_expand
+        * @name DataSourceOptions.expand
         * @publicName expand
         * @type Array<string>|string
         */
 
         /**
-        * @name DataSourceOptions_customQueryParams
+        * @name DataSourceOptions.customQueryParams
         * @publicName customQueryParams
         * @type Object
         */
 
         /**
-        * @name DataSourceOptions_requireTotalCount
+        * @name DataSourceOptions.requireTotalCount
         * @publicName requireTotalCount
         * @type Boolean
         */
         this._storeLoadOptions = this._extractLoadOptions(options);
 
         /**
-        * @name DataSourceOptions_map
+        * @name DataSourceOptions.map
         * @publicName map
         * @type function
         * @type_function_param1 dataItem:object
@@ -268,7 +268,7 @@ var DataSource = Class.inherit({
         this._mapFunc = options.map;
 
         /**
-        * @name DataSourceOptions_postProcess
+        * @name DataSourceOptions.postProcess
         * @publicName postProcess
         * @type function
         * @type_function_param1 data:Array<any>
@@ -279,7 +279,7 @@ var DataSource = Class.inherit({
         this._pageIndex = (options.pageIndex !== undefined) ? options.pageIndex : 0;
 
         /**
-        * @name DataSourceOptions_pageSize
+        * @name DataSourceOptions.pageSize
         * @publicName pageSize
         * @type number
         * @default 20
@@ -290,7 +290,7 @@ var DataSource = Class.inherit({
         this._loadQueue = this._createLoadQueue();
 
         /**
-        * @name DataSourceOptions_searchValue
+        * @name DataSourceOptions.searchValue
         * @publicName searchValue
         * @type any
         * @default null
@@ -298,7 +298,7 @@ var DataSource = Class.inherit({
         this._searchValue = ("searchValue" in options) ? options.searchValue : null;
 
         /**
-        * @name DataSourceOptions_searchOperation
+        * @name DataSourceOptions.searchOperation
         * @publicName searchOperation
         * @type string
         * @default "contains"
@@ -306,14 +306,14 @@ var DataSource = Class.inherit({
         this._searchOperation = options.searchOperation || "contains";
 
         /**
-        * @name DataSourceOptions_searchExpr
+        * @name DataSourceOptions.searchExpr
         * @publicName searchExpr
         * @type getter|Array<getter>
         */
         this._searchExpr = options.searchExpr;
 
         /**
-        * @name DataSourceOptions_paginate
+        * @name DataSourceOptions.paginate
         * @publicName paginate
         * @type Boolean
         * @default undefined
@@ -323,7 +323,7 @@ var DataSource = Class.inherit({
         iteratorUtils.each(
             [
                 /**
-                 * @name DataSourceOptions_onChanged
+                 * @name DataSourceOptions.onChanged
                  * @publicName onChanged
                  * @type function
                  * @action
@@ -331,7 +331,7 @@ var DataSource = Class.inherit({
                 "onChanged",
 
                 /**
-                 * @name DataSourceOptions_onLoadError
+                 * @name DataSourceOptions.onLoadError
                  * @publicName onLoadError
                  * @type function
                  * @type_function_param1 error:Object
@@ -341,7 +341,7 @@ var DataSource = Class.inherit({
                 "onLoadError",
 
                 /**
-                 * @name DataSourceOptions_onLoadingChanged
+                 * @name DataSourceOptions.onLoadingChanged
                  * @publicName onLoadingChanged
                  * @type function
                  * @type_function_param1 isLoading:boolean
@@ -376,7 +376,7 @@ var DataSource = Class.inherit({
     },
 
     /**
-    * @name DataSourceMethods_dispose
+    * @name DataSourceMethods.dispose
     * @publicName dispose()
     */
     dispose: function() {
@@ -409,7 +409,7 @@ var DataSource = Class.inherit({
     },
 
     /**
-    * @name DataSourceMethods_loadOptions
+    * @name DataSourceMethods.loadOptions
     * @publicName loadOptions()
     * @return object
     */
@@ -418,7 +418,7 @@ var DataSource = Class.inherit({
     },
 
     /**
-    * @name DataSourceMethods_items
+    * @name DataSourceMethods.items
     * @publicName items()
     * @return Array<any>
     */
@@ -427,12 +427,12 @@ var DataSource = Class.inherit({
     },
 
     /**
-    * @name DataSourceMethods_pageIndex
+    * @name DataSourceMethods.pageIndex
     * @publicName pageIndex()
     * @return numeric
     */
     /**
-    * @name DataSourceMethods_pageIndex
+    * @name DataSourceMethods.pageIndex
     * @publicName pageIndex(newIndex)
     * @param1 newIndex:numeric
     */
@@ -446,12 +446,12 @@ var DataSource = Class.inherit({
     },
 
     /**
-    * @name DataSourceMethods_paginate
+    * @name DataSourceMethods.paginate
     * @publicName paginate()
     * @return Boolean
     */
     /**
-    * @name DataSourceMethods_paginate
+    * @name DataSourceMethods.paginate
     * @publicName paginate(value)
     * @param1 value:Boolean
     */
@@ -467,12 +467,12 @@ var DataSource = Class.inherit({
     },
 
     /**
-    * @name DataSourceMethods_pageSize
+    * @name DataSourceMethods.pageSize
     * @publicName pageSize()
     * @return numeric
     */
     /**
-    * @name DataSourceMethods_pageSize
+    * @name DataSourceMethods.pageSize
     * @publicName pageSize(value)
     * @param1 value:numeric
     */
@@ -485,7 +485,7 @@ var DataSource = Class.inherit({
     },
 
     /**
-    * @name DataSourceMethods_isLastPage
+    * @name DataSourceMethods.isLastPage
     * @publicName isLastPage()
     * @return boolean
     */
@@ -494,24 +494,24 @@ var DataSource = Class.inherit({
     },
 
     /**
-    * @name DataSourceMethods_sort
+    * @name DataSourceMethods.sort
     * @publicName sort()
     * @return any
     */
     /**
-    * @name DataSourceMethods_sort
+    * @name DataSourceMethods.sort
     * @publicName sort(sortExpr)
     * @param1 sortExpr:any
     */
     sort: generateStoreLoadOptionAccessor("sort"),
 
     /**
-    * @name DataSourceMethods_filter
+    * @name DataSourceMethods.filter
     * @publicName filter()
     * @return object
     */
     /**
-    * @name DataSourceMethods_filter
+    * @name DataSourceMethods.filter
     * @publicName filter(filterExpr)
     * @param1 filterExpr:object
     */
@@ -526,36 +526,36 @@ var DataSource = Class.inherit({
     },
 
     /**
-    * @name DataSourceMethods_group
+    * @name DataSourceMethods.group
     * @publicName group()
     * @return object
     */
     /**
-    * @name DataSourceMethods_group
+    * @name DataSourceMethods.group
     * @publicName group(groupExpr)
     * @param1 groupExpr:object
     */
     group: generateStoreLoadOptionAccessor("group"),
 
     /**
-    * @name DataSourceMethods_select
+    * @name DataSourceMethods.select
     * @publicName select()
     * @return any
     */
     /**
-    * @name DataSourceMethods_select
+    * @name DataSourceMethods.select
     * @publicName select(expr)
     * @param1 expr:any
     */
     select: generateStoreLoadOptionAccessor("select"),
 
     /**
-    * @name DataSourceMethods_requireTotalCount
+    * @name DataSourceMethods.requireTotalCount
     * @publicName requireTotalCount()
     * @return boolean
     */
     /**
-    * @name DataSourceMethods_requireTotalCount
+    * @name DataSourceMethods.requireTotalCount
     * @publicName requireTotalCount(value)
     * @param1 value:boolean
     */
@@ -568,12 +568,12 @@ var DataSource = Class.inherit({
     },
 
     /**
-    * @name DataSourceMethods_searchValue
+    * @name DataSourceMethods.searchValue
     * @publicName searchValue()
     * @return any
     */
     /**
-    * @name DataSourceMethods_searchValue
+    * @name DataSourceMethods.searchValue
     * @publicName searchValue(value)
     * @param1 value:any
     */
@@ -587,12 +587,12 @@ var DataSource = Class.inherit({
     },
 
     /**
-    * @name DataSourceMethods_searchOperation
+    * @name DataSourceMethods.searchOperation
     * @publicName searchOperation()
     * @return string
     */
     /**
-    * @name DataSourceMethods_searchOperation
+    * @name DataSourceMethods.searchOperation
     * @publicName searchOperation(op)
     * @param1 op:string
     */
@@ -606,12 +606,12 @@ var DataSource = Class.inherit({
     },
 
     /**
-    * @name DataSourceMethods_searchExpr
+    * @name DataSourceMethods.searchExpr
     * @publicName searchExpr()
     * @return getter|Array<getter>
     */
     /**
-    * @name DataSourceMethods_searchExpr
+    * @name DataSourceMethods.searchExpr
     * @publicName searchExpr(expr)
     * @param1 expr:getter|Array<getter>
     */
@@ -631,7 +631,7 @@ var DataSource = Class.inherit({
     },
 
     /**
-    * @name DataSourceMethods_store
+    * @name DataSourceMethods.store
     * @publicName store()
     * @return object
     */
@@ -640,7 +640,7 @@ var DataSource = Class.inherit({
     },
 
     /**
-    * @name DataSourceMethods_key
+    * @name DataSourceMethods.key
     * @publicName key()
     * @return object|string|number
     */
@@ -649,7 +649,7 @@ var DataSource = Class.inherit({
     },
 
     /**
-    * @name DataSourceMethods_totalCount
+    * @name DataSourceMethods.totalCount
     * @publicName totalCount()
     * @return numeric
     */
@@ -658,7 +658,7 @@ var DataSource = Class.inherit({
     },
 
     /**
-    * @name DataSourceMethods_isLoaded
+    * @name DataSourceMethods.isLoaded
     * @publicName isLoaded()
     * @return boolean
     */
@@ -667,7 +667,7 @@ var DataSource = Class.inherit({
     },
 
     /**
-    * @name DataSourceMethods_isLoading
+    * @name DataSourceMethods.isLoading
     * @publicName isLoading()
     * @return boolean
     */
@@ -784,7 +784,7 @@ var DataSource = Class.inherit({
     },
 
     /**
-    * @name DataSourceMethods_load
+    * @name DataSourceMethods.load
     * @publicName load()
     * @return Promise<any>
     */
@@ -842,7 +842,7 @@ var DataSource = Class.inherit({
     },
 
     /**
-     * @name DataSourceMethods_reload
+     * @name DataSourceMethods.reload
      * @publicName reload()
      * @return Promise<any>
      */
@@ -857,7 +857,7 @@ var DataSource = Class.inherit({
     },
 
     /**
-     * @name DataSourceMethods_cancel
+     * @name DataSourceMethods.cancel
      * @publicName cancel(operationId)
      * @return boolean
      */

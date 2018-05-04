@@ -47,7 +47,7 @@ var NumberBoxBase = TextEditor.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             /**
-             * @name dxNumberBoxOptions_value
+             * @name dxNumberBoxOptions.value
              * @publicName value
              * @type number
              * @default 0
@@ -55,7 +55,7 @@ var NumberBoxBase = TextEditor.inherit({
             value: 0,
 
             /**
-             * @name dxNumberBoxOptions_min
+             * @name dxNumberBoxOptions.min
              * @publicName min
              * @type number
              * @default undefined
@@ -63,7 +63,7 @@ var NumberBoxBase = TextEditor.inherit({
             min: undefined,
 
             /**
-             * @name dxNumberBoxOptions_max
+             * @name dxNumberBoxOptions.max
              * @publicName max
              * @type number
              * @default undefined
@@ -71,7 +71,7 @@ var NumberBoxBase = TextEditor.inherit({
             max: undefined,
 
             /**
-             * @name dxNumberBoxOptions_step
+             * @name dxNumberBoxOptions.step
              * @publicName step
              * @type number
              * @default 1
@@ -79,7 +79,7 @@ var NumberBoxBase = TextEditor.inherit({
             step: 1,
 
             /**
-             * @name dxNumberBoxOptions_showSpinButtons
+             * @name dxNumberBoxOptions.showSpinButtons
              * @publicName showSpinButtons
              * @type boolean
              * @default false
@@ -87,7 +87,7 @@ var NumberBoxBase = TextEditor.inherit({
             showSpinButtons: false,
 
             /**
-             * @name dxNumberBoxOptions_useLargeSpinButtons
+             * @name dxNumberBoxOptions.useLargeSpinButtons
              * @publicName useLargeSpinButtons
              * @type boolean
              * @default true
@@ -96,7 +96,7 @@ var NumberBoxBase = TextEditor.inherit({
             useLargeSpinButtons: true,
 
             /**
-             * @name dxNumberBoxOptions_mode
+             * @name dxNumberBoxOptions.mode
              * @publicName mode
              * @type Enums.NumberBoxMode
              * @default "text"
@@ -104,7 +104,7 @@ var NumberBoxBase = TextEditor.inherit({
             mode: "text",
 
             /**
-             * @name dxNumberBoxOptions_invalidValueMessage
+             * @name dxNumberBoxOptions.invalidValueMessage
              * @publicName invalidValueMessage
              * @type string
              * @default "Value must be a number"
@@ -112,49 +112,49 @@ var NumberBoxBase = TextEditor.inherit({
             invalidValueMessage: messageLocalization.format("dxNumberBox-invalidValueMessage")
 
             /**
-             * @name dxNumberBoxOptions_mask
+             * @name dxNumberBoxOptions.mask
              * @publicName mask
              * @hidden
              * @inheritdoc
              */
 
             /**
-             * @name dxNumberBoxOptions_maskChar
+             * @name dxNumberBoxOptions.maskChar
              * @publicName maskChar
              * @hidden
              * @inheritdoc
              */
 
             /**
-             * @name dxNumberBoxOptions_maskRules
+             * @name dxNumberBoxOptions.maskRules
              * @publicName maskRules
              * @hidden
              * @inheritdoc
              */
 
             /**
-             * @name dxNumberBoxOptions_maskInvalidMessage
+             * @name dxNumberBoxOptions.maskInvalidMessage
              * @publicName maskInvalidMessage
              * @hidden
              * @inheritdoc
              */
 
             /**
-             * @name dxNumberBoxOptions_useMaskedValue
+             * @name dxNumberBoxOptions.useMaskedValue
              * @publicName useMaskedValue
              * @hidden
              * @inheritdoc
              */
 
             /**
-             * @name dxNumberBoxOptions_showMaskMode
+             * @name dxNumberBoxOptions.showMaskMode
              * @publicName showMaskMode
              * @hidden
              * @inheritdoc
              */
 
             /**
-             * @name dxNumberBoxOptions_spellcheck
+             * @name dxNumberBoxOptions.spellcheck
              * @publicName spellcheck
              * @hidden
              * @inheritdoc
@@ -178,7 +178,7 @@ var NumberBoxBase = TextEditor.inherit({
                 },
                 options: {
                     /**
-                     * @name dxNumberBoxOptions_mode
+                     * @name dxNumberBoxOptions.mode
                      * @publicName mode
                      * @default 'number' @for mobile_devices
                      */

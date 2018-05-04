@@ -352,20 +352,20 @@ devices.changed.add(function() {
 });
 
 /**
- * @name ui_themes
+ * @name ui.themes
  * @publicName themes
  * @namespace DevExpress.ui
  * @module ui/themes
  * @export default
  */
 /**
- * @name ui_themesmethods_current
+ * @name ui.themesmethods.current
  * @publicName current()
  * @static
  * @return string
  */
 /**
- * @name ui_themesmethods_current
+ * @name ui.themesmethods.current
  * @publicName current(themeName)
  * @param1 themeName:string
  * @static
@@ -373,7 +373,7 @@ devices.changed.add(function() {
 exports.current = current;
 
 /**
- * @name ui_themesmethods_ready
+ * @name ui.themesmethods.ready
  * @publicName ready(callback)
  * @param1 callback:function
  * @static
