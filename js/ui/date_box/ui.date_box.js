@@ -107,7 +107,7 @@ var DateBox = DropDownEditor.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             /**
-            * @name dxDateBoxOptions_type
+            * @name dxDateBoxOptions.type
             * @publicName type
             * @type Enums.DateBoxType
             * @default "date"
@@ -115,7 +115,7 @@ var DateBox = DropDownEditor.inherit({
             type: "date",
 
             /**
-             * @name dxDateBoxOptions_showAnalogClock
+             * @name dxDateBoxOptions.showAnalogClock
              * @publicName showAnalogClock
              * @type boolean
              * @default true
@@ -123,7 +123,7 @@ var DateBox = DropDownEditor.inherit({
             showAnalogClock: true,
 
             /**
-            * @name dxDateBoxOptions_value
+            * @name dxDateBoxOptions.value
             * @publicName value
             * @type Date|number|string
             * @default null
@@ -131,7 +131,7 @@ var DateBox = DropDownEditor.inherit({
             value: null,
 
             /**
-            * @name dxDateBoxOptions_dateSerializationFormat
+            * @name dxDateBoxOptions.dateSerializationFormat
             * @publicName dateSerializationFormat
             * @type string
             * @default undefined
@@ -139,7 +139,7 @@ var DateBox = DropDownEditor.inherit({
             dateSerializationFormat: undefined,
 
             /**
-            * @name dxDateBoxOptions_min
+            * @name dxDateBoxOptions.min
             * @publicName min
             * @type Date|number|string
             * @default undefined
@@ -147,7 +147,7 @@ var DateBox = DropDownEditor.inherit({
             min: undefined,
 
             /**
-            * @name dxDateBoxOptions_max
+            * @name dxDateBoxOptions.max
             * @publicName max
             * @type Date|number|string
             * @default undefined
@@ -155,14 +155,14 @@ var DateBox = DropDownEditor.inherit({
             max: undefined,
 
             /**
-            * @name dxDateBoxOptions_placeholder
+            * @name dxDateBoxOptions.placeholder
             * @publicName placeholder
             * @type string
             * @default ""
             */
 
             /**
-            * @name dxDateBoxOptions_displayFormat
+            * @name dxDateBoxOptions.displayFormat
             * @publicName displayFormat
             * @type format
             * @default null
@@ -170,7 +170,7 @@ var DateBox = DropDownEditor.inherit({
             displayFormat: null,
 
             /**
-            * @name dxDateBoxOptions_interval
+            * @name dxDateBoxOptions.interval
             * @publicName interval
             * @type number
             * @default 30
@@ -178,7 +178,7 @@ var DateBox = DropDownEditor.inherit({
             interval: 30,
 
             /**
-            * @name dxDateBoxOptions_disabledDates
+            * @name dxDateBoxOptions.disabledDates
             * @publicName disabledDates
             * @type Array<Date>|function(data)
             * @default null
@@ -191,25 +191,25 @@ var DateBox = DropDownEditor.inherit({
             disabledDates: null,
 
             /**
-            * @name dxDateBoxOptions_maxZoomLevel
+            * @name dxDateBoxOptions.maxZoomLevel
             * @publicName maxZoomLevel
             * @type Enums.CalendarZoomLevel
             * @default 'month'
-            * @deprecated dxDateBoxOptions_calendarOptions
+            * @deprecated dxDateBoxOptions.calendarOptions
             */
             maxZoomLevel: "month",
 
            /**
-           * @name dxDateBoxOptions_minZoomLevel
+           * @name dxDateBoxOptions.minZoomLevel
            * @publicName minZoomLevel
            * @type Enums.CalendarZoomLevel
            * @default 'century'
-           * @deprecated dxDateBoxOptions_calendarOptions
+           * @deprecated dxDateBoxOptions.calendarOptions
            */
             minZoomLevel: "century",
 
             /**
-            * @name dxDateBoxOptions_pickerType
+            * @name dxDateBoxOptions.pickerType
             * @publicName pickerType
             * @type Enums.DateBoxPickerType
             * @default 'calendar'
@@ -217,7 +217,7 @@ var DateBox = DropDownEditor.inherit({
             pickerType: PICKER_TYPE["calendar"],
 
             /**
-            * @name dxDateBoxOptions_invalidDateMessage
+            * @name dxDateBoxOptions.invalidDateMessage
             * @publicName invalidDateMessage
             * @type string
             * @default "Value must be a date or time"
@@ -225,7 +225,7 @@ var DateBox = DropDownEditor.inherit({
             invalidDateMessage: messageLocalization.format("dxDateBox-validation-datetime"),
 
             /**
-            * @name dxDateBoxOptions_dateOutOfRangeMessage
+            * @name dxDateBoxOptions.dateOutOfRangeMessage
             * @publicName dateOutOfRangeMessage
             * @type string
             * @default "Value is out of range"
@@ -233,7 +233,7 @@ var DateBox = DropDownEditor.inherit({
             dateOutOfRangeMessage: messageLocalization.format("validation-range"),
 
             /**
-           * @name dxDateBoxOptions_applyButtonText
+           * @name dxDateBoxOptions.applyButtonText
            * @publicName applyButtonText
            * @type string
            * @default "Done"
@@ -241,24 +241,24 @@ var DateBox = DropDownEditor.inherit({
             applyButtonText: messageLocalization.format("Done"),
 
             /**
-           * @name dxDateBoxOptions_cancelButtonText
+           * @name dxDateBoxOptions.cancelButtonText
            * @publicName cancelButtonText
            * @type string
            * @default "Cancel"
            */
 
             /**
-            * @name dxDateBoxMethods_open
+            * @name dxDateBoxMethods.open
             * @publicName open()
             */
 
             /**
-            * @name dxDateBoxMethods_close
+            * @name dxDateBoxMethods.close
             * @publicName close()
             */
 
             /**
-            * @name dxDateBoxOptions_adaptivityEnabled
+            * @name dxDateBoxOptions.adaptivityEnabled
             * @publicName adaptivityEnabled
             * @type boolean
             * @default false
@@ -266,7 +266,7 @@ var DateBox = DropDownEditor.inherit({
             adaptivityEnabled: false,
 
             /**
-            * @name dxDateBoxOptions_calendarOptions
+            * @name dxDateBoxOptions.calendarOptions
             * @publicName calendarOptions
             * @type dxCalendarOptions
             * @default {}
@@ -298,7 +298,7 @@ var DateBox = DropDownEditor.inherit({
                 },
                 options: {
                     /**
-                    * @name dxDateBoxOptions_pickerType
+                    * @name dxDateBoxOptions.pickerType
                     * @publicName pickerType
                     * @default 'native' @for iOS
                     * @default 'native' @for Android
@@ -332,7 +332,7 @@ var DateBox = DropDownEditor.inherit({
                 },
                 options: {
                     /**
-                    * @name dxDateBoxOptions_pickerType
+                    * @name dxDateBoxOptions.pickerType
                     * @publicName pickerType
                     * @default 'rollers' @for Android_below_version_4.4
                     * @default 'rollers' @for mobile_devices

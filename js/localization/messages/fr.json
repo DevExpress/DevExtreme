@@ -264,6 +264,7 @@
         "dxFilterBuilder-filterOperationEndsWith": "Finit par",
         "dxFilterBuilder-filterOperationIsBlank": "Est vide",
         "dxFilterBuilder-filterOperationIsNotBlank": "N'est pas vide",
+        "dxFilterBuilder-filterOperationBetween": "Entre",
         "dxFilterBuilder-filterOperationAnyOf": "Est parmi",
         "dxFilterBuilder-filterOperationNoneOf": "N'est pas parmi"
     }

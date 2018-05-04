@@ -68,7 +68,7 @@ var TextEditorMask = TextEditorBase.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
                 /**
-                * @name dxTextEditorOptions_mask
+                * @name dxTextEditorOptions.mask
                 * @publicName mask
                 * @type string
                 * @default ""
@@ -76,7 +76,7 @@ var TextEditorMask = TextEditorBase.inherit({
             mask: "",
 
                 /**
-                * @name dxTextEditorOptions_maskChar
+                * @name dxTextEditorOptions.maskChar
                 * @publicName maskChar
                 * @type string
                 * @default "_"
@@ -84,7 +84,7 @@ var TextEditorMask = TextEditorBase.inherit({
             maskChar: "_",
 
                 /**
-                * @name dxTextEditorOptions_maskRules
+                * @name dxTextEditorOptions.maskRules
                 * @publicName maskRules
                 * @type Object
                 * @default "{}"
@@ -92,7 +92,7 @@ var TextEditorMask = TextEditorBase.inherit({
             maskRules: {},
 
                 /**
-                * @name dxTextEditorOptions_maskInvalidMessage
+                * @name dxTextEditorOptions.maskInvalidMessage
                 * @publicName maskInvalidMessage
                 * @type string
                 * @default "Value is invalid"
@@ -100,7 +100,7 @@ var TextEditorMask = TextEditorBase.inherit({
             maskInvalidMessage: messageLocalization.format("validation-mask"),
 
                 /**
-                * @name dxTextEditorOptions_useMaskedValue
+                * @name dxTextEditorOptions.useMaskedValue
                 * @publicName useMaskedValue
                 * @type boolean
                 * @default false
@@ -108,7 +108,7 @@ var TextEditorMask = TextEditorBase.inherit({
             useMaskedValue: false,
 
             /**
-             * @name dxTextEditorOptions_showMaskMode
+             * @name dxTextEditorOptions.showMaskMode
              * @publicName showMaskMode
              * @type Enums.ShowMaskMode
              * @default "always"

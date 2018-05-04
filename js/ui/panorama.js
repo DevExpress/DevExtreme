@@ -510,7 +510,7 @@ var Panorama = CollectionWidget.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             /**
-            * @name dxPanoramaOptions_selectedIndex
+            * @name dxPanoramaOptions.selectedIndex
             * @publicName selectedIndex
             * @type number
             * @default 0
@@ -518,7 +518,7 @@ var Panorama = CollectionWidget.inherit({
             selectedIndex: 0,
 
             /**
-            * @name dxPanoramaOptions_title
+            * @name dxPanoramaOptions.title
             * @publicName title
             * @type string
             * @default "panorama"
@@ -526,13 +526,13 @@ var Panorama = CollectionWidget.inherit({
             title: "panorama",
 
             /**
-            * @name dxPanoramaOptions_backgroundImage
+            * @name dxPanoramaOptions.backgroundImage
             * @publicName backgroundImage
             * @type object
             */
             backgroundImage: {
                 /**
-                * @name dxPanoramaOptions_backgroundImage_url
+                * @name dxPanoramaOptions.backgroundImage.url
                 * @publicName url
                 * @type string
                 * @default null
@@ -540,7 +540,7 @@ var Panorama = CollectionWidget.inherit({
                 url: null,
 
                 /**
-                * @name dxPanoramaOptions_backgroundImage_width
+                * @name dxPanoramaOptions.backgroundImage.width
                 * @publicName width
                 * @type number
                 * @default 0
@@ -548,7 +548,7 @@ var Panorama = CollectionWidget.inherit({
                 width: 0,
 
                 /**
-                * @name dxPanoramaOptions_backgroundImage_height
+                * @name dxPanoramaOptions.backgroundImage.height
                 * @publicName height
                 * @type number
                 * @default 0
@@ -557,49 +557,49 @@ var Panorama = CollectionWidget.inherit({
             },
 
             /**
-            * @name dxPanoramaOptions_noDataText
+            * @name dxPanoramaOptions.noDataText
             * @publicName noDataText
             * @hidden
             * @inheritdoc
             */
 
             /**
-            * @name dxPanoramaOptions_selectedItems
+            * @name dxPanoramaOptions.selectedItems
             * @publicName selectedItems
             * @hidden
             * @inheritdoc
             */
 
             /**
-            * @name dxPanoramaOptions_selectedItemKeys
+            * @name dxPanoramaOptions.selectedItemKeys
             * @publicName selectedItemKeys
             * @hidden
             * @inheritdoc
             */
 
             /**
-            * @name dxPanoramaOptions_keyExpr
+            * @name dxPanoramaOptions.keyExpr
             * @publicName keyExpr
             * @hidden
             * @inheritdoc
             */
 
             /**
-            * @name dxPanoramaOptions_accessKey
+            * @name dxPanoramaOptions.accessKey
             * @publicName accessKey
             * @hidden
             * @inheritdoc
             */
 
             /**
-            * @name dxPanoramaOptions_tabIndex
+            * @name dxPanoramaOptions.tabIndex
             * @publicName tabIndex
             * @hidden
             * @inheritdoc
             */
 
             /**
-            * @name dxPanoramaOptions_focusStateEnabled
+            * @name dxPanoramaOptions.focusStateEnabled
             * @publicName focusStateEnabled
             * @type boolean
             * @default false
@@ -1000,14 +1000,14 @@ var Panorama = CollectionWidget.inherit({
     }
 
     /**
-    * @name dxPanoramaMethods_registerKeyHandler
+    * @name dxPanoramaMethods.registerKeyHandler
     * @publicName registerKeyHandler(key, handler)
     * @hidden
     * @inheritdoc
     */
 
     /**
-    * @name dxPanoramaMethods_focus
+    * @name dxPanoramaMethods.focus
     * @publicName focus()
     * @hidden
     * @inheritdoc
@@ -1020,12 +1020,12 @@ var Panorama = CollectionWidget.inherit({
 * @type object
 */
 /**
-* @name dxPanoramaItemTemplate_title
+* @name dxPanoramaItemTemplate.title
 * @publicName title
 * @type String
 */
 /**
-* @name dxPanoramaItemTemplate_visible
+* @name dxPanoramaItemTemplate.visible
 * @publicName visible
 * @hidden
 * @inheritdoc

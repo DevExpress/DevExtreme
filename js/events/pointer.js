@@ -11,7 +11,7 @@ var support = require("../core/utils/support"),
     MouseAndTouchStrategy = require("./pointer/mouse_and_touch");
 
 /**
-  * @name ui events_dxpointerdown
+  * @name ui events.dxpointerdown
   * @publicName dxpointerdown
   * @type eventType
   * @type_function_param1 event:event
@@ -19,7 +19,7 @@ var support = require("../core/utils/support"),
   * @module events/pointer
 */
 /**
-  * @name ui events_dxpointermove
+  * @name ui events.dxpointermove
   * @publicName dxpointermove
   * @type eventType
   * @type_function_param1 event:event
@@ -27,7 +27,7 @@ var support = require("../core/utils/support"),
   * @module events/pointer
 */
 /**
-  * @name ui events_dxpointerup
+  * @name ui events.dxpointerup
   * @publicName dxpointerup
   * @type eventType
   * @type_function_param1 event:event
@@ -35,7 +35,7 @@ var support = require("../core/utils/support"),
   * @module events/pointer
 */
 /**
-  * @name ui events_dxpointercancel
+  * @name ui events.dxpointercancel
   * @publicName dxpointercancel
   * @type eventType
   * @type_function_param1 event:event
@@ -43,7 +43,7 @@ var support = require("../core/utils/support"),
   * @module events/pointer
 */
 /**
-  * @name ui events_dxpointerover
+  * @name ui events.dxpointerover
   * @publicName dxpointerover
   * @type eventType
   * @type_function_param1 event:event
@@ -51,7 +51,7 @@ var support = require("../core/utils/support"),
   * @module events/pointer
 */
 /**
-  * @name ui events_dxpointerout
+  * @name ui events.dxpointerout
   * @publicName dxpointerout
   * @type eventType
   * @type_function_param1 event:event
@@ -59,7 +59,7 @@ var support = require("../core/utils/support"),
   * @module events/pointer
 */
 /**
-  * @name ui events_dxpointerenter
+  * @name ui events.dxpointerenter
   * @publicName dxpointerenter
   * @type eventType
   * @type_function_param1 event:event
@@ -67,7 +67,7 @@ var support = require("../core/utils/support"),
   * @module events/pointer
 */
 /**
-  * @name ui events_dxpointerleave
+  * @name ui events.dxpointerleave
   * @publicName dxpointerleave
   * @type eventType
   * @type_function_param1 event:event

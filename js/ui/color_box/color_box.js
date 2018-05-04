@@ -81,7 +81,7 @@ var ColorBox = DropDownEditor.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             /**
-            * @name dxColorBoxOptions_editAlphaChannel
+            * @name dxColorBoxOptions.editAlphaChannel
             * @publicName editAlphaChannel
             * @type boolean
             * @default false
@@ -89,28 +89,28 @@ var ColorBox = DropDownEditor.inherit({
             editAlphaChannel: false,
 
             /**
-            * @name dxColorBoxOptions_applyButtonText
+            * @name dxColorBoxOptions.applyButtonText
             * @publicName applyButtonText
             * @type string
             * @default "OK"
             */
 
             /**
-            * @name dxColorBoxOptions_onContentReady
+            * @name dxColorBoxOptions.onContentReady
             * @publicName onContentReady
             * @hidden true
             * @action
             */
 
             /**
-            * @name dxColorBoxOptions_cancelButtonText
+            * @name dxColorBoxOptions.cancelButtonText
             * @publicName cancelButtonText
             * @type string
             * @default "Cancel"
             */
 
             /**
-            * @name dxColorBoxOptions_applyValueMode
+            * @name dxColorBoxOptions.applyValueMode
             * @publicName applyValueMode
             * @type Enums.EditorApplyValueMode
             * @default "useButtons"
@@ -119,7 +119,7 @@ var ColorBox = DropDownEditor.inherit({
             applyValueMode: "useButtons",
 
             /**
-            * @name dxColorBoxOptions_keyStep
+            * @name dxColorBoxOptions.keyStep
             * @publicName keyStep
             * @type number
             * @default 1
@@ -127,7 +127,7 @@ var ColorBox = DropDownEditor.inherit({
             keyStep: 1,
 
             /**
-             * @name dxColorBoxOptions_fieldTemplate
+             * @name dxColorBoxOptions.fieldTemplate
              * @publicName fieldTemplate
              * @type template|function
              * @default null
@@ -144,35 +144,35 @@ var ColorBox = DropDownEditor.inherit({
             buttonsLocation: "bottom after"
 
             /**
-            * @name dxColorBoxOptions_value
+            * @name dxColorBoxOptions.value
             * @publicName value
             * @type string
             * @inheritdoc
             */
 
             /**
-            * @name dxColorBoxOptions_maxLength
+            * @name dxColorBoxOptions.maxLength
             * @publicName maxLength
             * @hidden
             * @inheritdoc
             */
 
             /**
-            * @name dxColorBoxOptions_showClearButton
+            * @name dxColorBoxOptions.showClearButton
             * @publicName showClearButton
             * @hidden
             * @inheritdoc
             */
 
             /**
-            * @name dxColorBoxOptions_valueChangeEvent
+            * @name dxColorBoxOptions.valueChangeEvent
             * @publicName valueChangeEvent
             * @hidden
             * @inheritdoc
             */
 
             /**
-            * @name dxColorBoxOptions_spellcheck
+            * @name dxColorBoxOptions.spellcheck
             * @publicName spellcheck
             * @hidden
             * @inheritdoc

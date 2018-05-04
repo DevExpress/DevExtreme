@@ -113,7 +113,7 @@ module.exports = {
     defaultOptions: function() {
         return {
             /**
-            * @name GridBaseOptions_errorRowEnabled
+            * @name GridBaseOptions.errorRowEnabled
             * @publicName errorRowEnabled
             * @type boolean
             * @default true

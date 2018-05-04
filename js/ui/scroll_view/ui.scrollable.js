@@ -39,7 +39,7 @@ var deviceDependentOptions = function() {
         },
         options: {
             /**
-            * @name dxScrollableOptions_useNative
+            * @name dxScrollableOptions.useNative
             * @publicName useNative
             * @default false @for desktop
             * @default true @for Mac
@@ -52,28 +52,28 @@ var deviceDependentOptions = function() {
         },
         options: {
             /**
-            * @name dxScrollableOptions_bounceEnabled
+            * @name dxScrollableOptions.bounceEnabled
             * @publicName bounceEnabled
             * @default false @for desktop
             */
             bounceEnabled: false,
 
             /**
-            * @name dxScrollableOptions_scrollByThumb
+            * @name dxScrollableOptions.scrollByThumb
             * @publicName scrollByThumb
             * @default true @for desktop
             */
             scrollByThumb: true,
 
             /**
-            * @name dxScrollableOptions_scrollByContent
+            * @name dxScrollableOptions.scrollByContent
             * @publicName scrollByContent
             * @default false @for non-touch_devices
             */
             scrollByContent: support.touch,
 
             /**
-            * @name dxScrollableOptions_showScrollbar
+            * @name dxScrollableOptions.showScrollbar
             * @publicName showScrollbar
             * @default 'onHover' @for desktop
             */
@@ -95,14 +95,14 @@ var Scrollable = DOMComponent.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             /**
-            * @name dxScrollableOptions_disabled
+            * @name dxScrollableOptions.disabled
             * @publicName disabled
             * @type boolean
             * @default false
             */
             disabled: false,
             /**
-            * @name dxScrollableOptions_onScroll
+            * @name dxScrollableOptions.onScroll
             * @publicName onScroll
             * @extends Action
             * @type function(e)
@@ -119,7 +119,7 @@ var Scrollable = DOMComponent.inherit({
             onScroll: null,
 
             /**
-            * @name dxScrollableOptions_direction
+            * @name dxScrollableOptions.direction
             * @publicName direction
             * @type Enums.ScrollDirection
             * @default "vertical"
@@ -127,7 +127,7 @@ var Scrollable = DOMComponent.inherit({
             direction: VERTICAL,
 
             /**
-            * @name dxScrollableOptions_showScrollbar
+            * @name dxScrollableOptions.showScrollbar
             * @publicName showScrollbar
             * @type string
             * @acceptValues 'onScroll'|'onHover'|'always'|'never'
@@ -136,7 +136,7 @@ var Scrollable = DOMComponent.inherit({
             showScrollbar: "onScroll",
 
             /**
-            * @name dxScrollableOptions_useNative
+            * @name dxScrollableOptions.useNative
             * @publicName useNative
             * @type boolean
             * @default true
@@ -144,7 +144,7 @@ var Scrollable = DOMComponent.inherit({
             useNative: true,
 
             /**
-            * @name dxScrollableOptions_bounceEnabled
+            * @name dxScrollableOptions.bounceEnabled
             * @publicName bounceEnabled
             * @type boolean
             * @default true
@@ -152,7 +152,7 @@ var Scrollable = DOMComponent.inherit({
             bounceEnabled: true,
 
             /**
-            * @name dxScrollableOptions_scrollByContent
+            * @name dxScrollableOptions.scrollByContent
             * @publicName scrollByContent
             * @type boolean
             * @default true
@@ -160,7 +160,7 @@ var Scrollable = DOMComponent.inherit({
             scrollByContent: true,
 
             /**
-            * @name dxScrollableOptions_scrollByThumb
+            * @name dxScrollableOptions.scrollByThumb
             * @publicName scrollByThumb
             * @type boolean
             * @default false
@@ -168,7 +168,7 @@ var Scrollable = DOMComponent.inherit({
             scrollByThumb: false,
 
             /**
-            * @name dxScrollableOptions_onUpdated
+            * @name dxScrollableOptions.onUpdated
             * @publicName onUpdated
             * @extends Action
             * @type function(e)
@@ -527,7 +527,7 @@ var Scrollable = DOMComponent.inherit({
     },
 
     /**
-    * @name dxScrollablemethods_content
+    * @name dxScrollablemethods.content
     * @publicName content()
     * @return dxElement
     */
@@ -536,7 +536,7 @@ var Scrollable = DOMComponent.inherit({
     },
 
     /**
-    * @name dxScrollablemethods_scrollOffset
+    * @name dxScrollablemethods.scrollOffset
     * @publicName scrollOffset()
     * @return object
     */
@@ -549,7 +549,7 @@ var Scrollable = DOMComponent.inherit({
     },
 
     /**
-    * @name dxScrollablemethods_scrollTop
+    * @name dxScrollablemethods.scrollTop
     * @publicName scrollTop()
     * @return numeric
     */
@@ -558,7 +558,7 @@ var Scrollable = DOMComponent.inherit({
     },
 
     /**
-    * @name dxScrollablemethods_scrollLeft
+    * @name dxScrollablemethods.scrollLeft
     * @publicName scrollLeft()
     * @return numeric
     */
@@ -567,7 +567,7 @@ var Scrollable = DOMComponent.inherit({
     },
 
     /**
-    * @name dxScrollablemethods_clientHeight
+    * @name dxScrollablemethods.clientHeight
     * @publicName clientHeight()
     * @return numeric
     */
@@ -576,7 +576,7 @@ var Scrollable = DOMComponent.inherit({
     },
 
     /**
-    * @name dxScrollablemethods_scrollHeight
+    * @name dxScrollablemethods.scrollHeight
     * @publicName scrollHeight()
     * @return numeric
     */
@@ -585,7 +585,7 @@ var Scrollable = DOMComponent.inherit({
     },
 
     /**
-    * @name dxScrollablemethods_clientWidth
+    * @name dxScrollablemethods.clientWidth
     * @publicName clientWidth()
     * @return numeric
     */
@@ -594,7 +594,7 @@ var Scrollable = DOMComponent.inherit({
     },
 
     /**
-    * @name dxScrollablemethods_scrollWidth
+    * @name dxScrollablemethods.scrollWidth
     * @publicName scrollWidth()
     * @return numeric
     */
@@ -603,7 +603,7 @@ var Scrollable = DOMComponent.inherit({
     },
 
     /**
-    * @name dxScrollablemethods_update
+    * @name dxScrollablemethods.update
     * @publicName update()
     * @return Promise<void>
     */
@@ -617,12 +617,12 @@ var Scrollable = DOMComponent.inherit({
     },
 
     /**
-    * @name dxScrollablemethods_scrollBy
+    * @name dxScrollablemethods.scrollBy
     * @publicName scrollBy(distance)
     * @param1 distance:numeric
     */
     /**
-    * @name dxScrollablemethods_scrollBy
+    * @name dxScrollablemethods.scrollBy
     * @publicName scrollBy(distanceObject)
     * @param1 distanceObject:object
     */
@@ -638,12 +638,12 @@ var Scrollable = DOMComponent.inherit({
     },
 
     /**
-    * @name dxScrollablemethods_scrollTo
+    * @name dxScrollablemethods.scrollTo
     * @publicName scrollTo(targetLocation)
     * @param1 targetLocation:numeric
     */
     /**
-    * @name dxScrollablemethods_scrollTo
+    * @name dxScrollablemethods.scrollTo
     * @publicName scrollTo(targetLocationObject)
     * @param1 targetLocation:object
     */
@@ -667,7 +667,7 @@ var Scrollable = DOMComponent.inherit({
     },
 
     /**
-    * @name dxScrollablemethods_scrollToElement
+    * @name dxScrollablemethods.scrollToElement
     * @publicName scrollToElement(targetLocation)
     * @param1 element:Node|jQuery
     */

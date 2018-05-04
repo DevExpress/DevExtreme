@@ -29,17 +29,15 @@ QUnit.module("Filter Panel", {
                 filterPanel: {
                     visible: true
                 },
-                filterRow: {
-                    operationDescriptions: {
+                filterValue: ["field", "=", "1"],
+                filterBuilder: {
+                    groupOperationDescriptions: { and: "And", notAnd: "Not And", or: "Or" },
+                    filterOperationDescriptions: {
                         equal: "Equals",
                         isBlank: "Is Blank",
                         isNotBlank: "Is Not Blank",
-                        between: "Between"
+                        between: "Is between"
                     }
-                },
-                filterValue: ["field", "=", "1"],
-                filterBuilder: {
-                    groupOperationDescriptions: { and: "And", notAnd: "Not And", or: "Or" }
                 },
                 dataSource: [],
                 columns: [{ dataField: "field", caption: "Field" }]
@@ -284,7 +282,7 @@ QUnit.module("Filter Panel", {
 
         assert.expect(1);
         this.filterPanelView.getFilterText(filter, []).done(function(result) {
-            assert.equal(result, "[Field] Between('1', '2')");
+            assert.equal(result, "[Field] Is between('1', '2')");
         });
     });
 
@@ -297,7 +295,7 @@ QUnit.module("Filter Panel", {
 
         assert.expect(1);
         this.filterPanelView.getFilterText(filter, []).done(function(result) {
-            assert.equal(result, "[Field] Between('11/12/2012', '03/23/2013')");
+            assert.equal(result, "[Field] Is between('11/12/2012', '03/23/2013')");
         });
     });
 

@@ -404,7 +404,6 @@ Series.prototype = {
 
     _createPoints: function() {
         var that = this,
-            allPoints = that._allPoints = (that._points || []).slice(),
             oldPointsByArgument = that.pointsByArgument || {},
             data = that._getData(),
             points;
@@ -419,37 +418,14 @@ Series.prototype = {
                 const oldPoint = that._getOldPoint(pointDataItem, oldPointsByArgument, pointIndex);
                 const point = that._createPoint(pointDataItem, pointIndex, oldPoint);
 
-                if(!oldPoint) {
-                    allPoints.push(point);
-                }
                 points.push(point);
             }
             return points;
         }, []);
 
-        that._oldPoints = Object.keys(oldPointsByArgument).reduce(function(points, key) {
-            var argPoints = oldPointsByArgument[key];
-            if(argPoints.length) {
-                points.push.apply(points, argPoints);
-            }
-            return points;
-        }, []);
+        Object.keys(oldPointsByArgument).forEach((key) => that._disposePoints(oldPointsByArgument[key]));
 
         that._points = points;
-        that._pointsToDraw = null;
-    },
-
-    prepareToDrawing: function(animationEnabled) {
-        var that = this,
-            points = that._points || [],
-            allPoints = that._allPoints || [];
-
-        if(animationEnabled && !that._firstDrawing) {
-            that._pointsToDraw = allPoints;
-            that._drawElements(true, false);
-        } else {
-            that._pointsToDraw = points;
-        }
     },
 
     _removeOldSegments: function() {
@@ -466,15 +442,14 @@ Series.prototype = {
         }
     },
 
-    _drawElements: function(animationEnabled, firstDrawing) {
+    _drawElements: function(animationEnabled, firstDrawing, translateAllPoints) {
         var that = this,
-            points = that._pointsToDraw || [],
+            points = that._points || [],
             closeSegment = points[0] && points[0].hasValue() && that._options.closed,
             groupForPoint = {
                 markers: that._markersGroup,
                 errorBars: that._errorBarGroup
             },
-
             segments;
 
         that._drawnPoints = [];
@@ -483,14 +458,17 @@ Series.prototype = {
 
         segments = points.reduce(function(segments, p) {
             var segment = segments[segments.length - 1];
-            p.translate();
-            if(p.hasValue() && p.hasCoords()) {
-                that._drawPoint({ point: p, groups: groupForPoint, hasAnimation: animationEnabled, firstDrawing: firstDrawing });
+
+            if(!p.translated || translateAllPoints) {
+                p.translate();
+                !translateAllPoints && p.setDefaultCoords();
+            }
+            const pointHasCoords = p.hasCoords();
+            if(p.hasValue() && pointHasCoords) {
+                translateAllPoints && that._drawPoint({ point: p, groups: groupForPoint, hasAnimation: animationEnabled, firstDrawing });
                 segment.push(p);
             } else {
-                if(!p.hasCoords()) {
-                    p.setInvisibility();
-                }
+                !pointHasCoords && p.setInvisibility();
                 segment.length && segments.push([]);
             }
 
@@ -510,24 +488,11 @@ Series.prototype = {
         animationEnabled && that._animate(firstDrawing);
     },
 
-    _drawComplete() {
-        const that = this;
-        that._disposePoints(that._oldPoints);
-        that._drawnPoints = that._drawnPoints.filter(point => point.series !== null);
-        that._oldPoints = null;
-        that._pointsToDraw = null;
-        that._allPoints = that._points;
-    },
-
     draw: function(animationEnabled, hideLayoutLabels, legendCallback) {
         var that = this,
             firstDrawing = that._firstDrawing;
 
         that._legendCallback = legendCallback || that._legendCallback;
-
-        if(!that._pointsToDraw) {
-            that.prepareToDrawing(false);
-        }
 
         if(!that._visible) {
             animationEnabled = false;
@@ -540,7 +505,8 @@ Series.prototype = {
         that._applyVisibleArea();
         that._setGroupsSettings(animationEnabled, firstDrawing);
 
-        that._drawElements(animationEnabled, firstDrawing);
+        !firstDrawing && that._drawElements(false, firstDrawing, false);
+        that._drawElements(animationEnabled, firstDrawing, true);
 
         hideLayoutLabels && that.hideLabels();
 
@@ -549,8 +515,6 @@ Series.prototype = {
         } else if(that.isHovered()) {
             that._changeStyle(that.lastHoverMode, undefined, true);
         }
-
-        this._drawComplete();
     },
 
     _setLabelGroupSettings: function(animationEnabled) {
@@ -1126,9 +1090,8 @@ Series.prototype = {
 
     _deletePoints: function() {
         var that = this;
-        that._disposePoints(that._oldPoints);
         that._disposePoints(that._points);
-        that._points = that._oldPoints = that._drawnPoints = null;
+        that._points = that._drawnPoints = null;
     },
 
     _deleteTrackers: function() {

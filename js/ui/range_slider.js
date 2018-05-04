@@ -109,7 +109,7 @@ var RangeSlider = Slider.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             /**
-            * @name dxRangeSliderOptions_start
+            * @name dxRangeSliderOptions.start
             * @publicName start
             * @type number
             * @default 40
@@ -117,7 +117,7 @@ var RangeSlider = Slider.inherit({
             start: 40,
 
             /**
-            * @name dxRangeSliderOptions_end
+            * @name dxRangeSliderOptions.end
             * @publicName end
             * @type number
             * @default 60
@@ -125,7 +125,7 @@ var RangeSlider = Slider.inherit({
             end: 60,
 
             /**
-            * @name dxRangeSliderOptions_value
+            * @name dxRangeSliderOptions.value
             * @type Array<number>
             * @publicName value
             * @default [40, 60]
@@ -134,7 +134,7 @@ var RangeSlider = Slider.inherit({
             value: [40, 60],
 
             /**
-            * @name dxRangeSliderOptions_startName
+            * @name dxRangeSliderOptions.startName
             * @publicName startName
             * @type string
             * @default ""
@@ -142,7 +142,7 @@ var RangeSlider = Slider.inherit({
             startName: "",
 
             /**
-            * @name dxRangeSliderOptions_endName
+            * @name dxRangeSliderOptions.endName
             * @publicName endName
             * @type string
             * @default ""
@@ -150,7 +150,7 @@ var RangeSlider = Slider.inherit({
             endName: ""
 
             /**
-            * @name dxRangeSliderOptions_onValueChanged
+            * @name dxRangeSliderOptions.onValueChanged
             * @publicName onValueChanged
             * @action
             * @extends Action
@@ -161,7 +161,7 @@ var RangeSlider = Slider.inherit({
             */
 
             /**
-            * @name dxRangeSliderOptions_name
+            * @name dxRangeSliderOptions.name
             * @publicName name
             * @hidden
             * @inheritdoc
@@ -353,7 +353,7 @@ var RangeSlider = Slider.inherit({
     },
 
     /**
-     * @name dxRangeSliderMethods_reset
+     * @name dxRangeSliderMethods.reset
      * @publicName reset()
      */
     reset: function() {

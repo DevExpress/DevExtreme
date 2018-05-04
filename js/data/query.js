@@ -9,7 +9,7 @@ var queryImpl = {
 };
 
 /**
-* @name Utils_query
+* @name Utils.query
 * @publicName query(array)
 * @param1 array:Array<any>
 * @return Query
@@ -18,7 +18,7 @@ var queryImpl = {
 * @export default
 */
 /**
-* @name Utils_query
+* @name Utils.query
 * @publicName query(url, queryOptions)
 * @param1 url:string
 * @param2 queryOptions:object
@@ -38,25 +38,25 @@ var query = function() {
 */
 
 /**
-* @name QueryMethods_enumerate
+* @name QueryMethods.enumerate
 * @publicName enumerate()
 * @return Promise<any>
 */
 
 /**
-* @name QueryMethods_toArray
+* @name QueryMethods.toArray
 * @publicName toArray()
 * @return Array<any>
 */
 
 /**
-* @name QueryMethods_sortBy
+* @name QueryMethods.sortBy
 * @publicName sortBy(getter)
 * @param1 getter:object
 * @return Query
 */
 /**
-* @name QueryMethods_sortBy
+* @name QueryMethods.sortBy
 * @publicName sortBy(getter, desc)
 * @param1 getter:object
 * @param2 desc:boolean
@@ -64,13 +64,13 @@ var query = function() {
 */
 
 /**
-* @name QueryMethods_thenBy
+* @name QueryMethods.thenBy
 * @publicName thenBy(getter)
 * @param1 getter:object
 * @return Query
 */
 /**
-* @name QueryMethods_thenBy
+* @name QueryMethods.thenBy
 * @publicName thenBy(getter, desc)
 * @param1 getter:object
 * @param2 desc:boolean
@@ -78,20 +78,20 @@ var query = function() {
 */
 
 /**
-* @name QueryMethods_filter
+* @name QueryMethods.filter
 * @publicName filter(criteria)
 * @param1 criteria:Array<any>
 * @return Query
 */
 /**
-* @name QueryMethods_filter
+* @name QueryMethods.filter
 * @publicName filter(predicate)
 * @param1 predicate:function
 * @return Query
 */
 
 /**
-* @name QueryMethods_slice
+* @name QueryMethods.slice
 * @publicName slice(skip, take)
 * @param1 skip:number
 * @param2 take:number|undefined
@@ -99,21 +99,21 @@ var query = function() {
 */
 
 /**
-* @name QueryMethods_select
+* @name QueryMethods.select
 * @publicName select(getter)
 * @param1 getter:object
 * @return Query
 */
 
 /**
-* @name QueryMethods_groupBy
+* @name QueryMethods.groupBy
 * @publicName groupBy(getter)
 * @param1 getter:object
 * @return Query
 */
 
 /**
-* @name QueryMethods_aggregate
+* @name QueryMethods.aggregate
 * @publicName aggregate(seed, step, finalize)
 * @param1 seed:object
 * @param2 step:function
@@ -121,61 +121,61 @@ var query = function() {
 * @return Promise<any>
 */
 /**
-* @name QueryMethods_aggregate
+* @name QueryMethods.aggregate
 * @publicName aggregate(step)
 * @param1 step:function
 * @return Promise<any>
 */
 
 /**
-* @name QueryMethods_count
+* @name QueryMethods.count
 * @publicName count()
 * @return Promise<number>
 */
 
 /**
-* @name QueryMethods_sum
+* @name QueryMethods.sum
 * @publicName sum()
 * @return Promise<number>
 */
 /**
-* @name QueryMethods_sum
+* @name QueryMethods.sum
 * @publicName sum(getter)
 * @param1 getter:object
 * @return Promise<number>
 */
 
 /**
-* @name QueryMethods_min
+* @name QueryMethods.min
 * @publicName min()
 * @return Promise<number,Date>
 */
 /**
-* @name QueryMethods_min
+* @name QueryMethods.min
 * @publicName min(getter)
 * @param1 getter:object
 * @return Promise<number,Date>
 */
 
 /**
-* @name QueryMethods_max
+* @name QueryMethods.max
 * @publicName max()
 * @return Promise<number,Date>
 */
 /**
-* @name QueryMethods_max
+* @name QueryMethods.max
 * @publicName max(getter)
 * @param1 getter:object
 * @return Promise<number,Date>
 */
 
 /**
-* @name QueryMethods_avg
+* @name QueryMethods.avg
 * @publicName avg()
 * @return Promise<number>
 */
 /**
-* @name QueryMethods_avg
+* @name QueryMethods.avg
 * @publicName avg(getter)
 * @param1 getter:object
 * @return Promise<number>

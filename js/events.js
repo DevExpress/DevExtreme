@@ -18,7 +18,7 @@ var eventsEngine = require("./events/core/events_engine");
 */
 
 /**
-* @name eventsMethods_on
+* @name eventsMethods.on
 * @publicName on(element, eventName, selector, data, handler)
 * @namespace DevExpress.events
 * @param1 element:Node|Array<Node>
@@ -33,7 +33,7 @@ var eventsEngine = require("./events/core/events_engine");
 exports.on = eventsEngine.on;
 
 /**
-* @name eventsMethods_one
+* @name eventsMethods.one
 * @publicName one(element, eventName, selector, data, handler)
 * @namespace DevExpress.events
 * @param1 element:Node|Array<Node>
@@ -48,7 +48,7 @@ exports.on = eventsEngine.on;
 exports.one = eventsEngine.one;
 
 /**
-* @name eventsMethods_off
+* @name eventsMethods.off
 * @publicName off(element, eventName, selector, handler)
 * @namespace DevExpress.events
 * @param1 element:Node|Array<Node>
@@ -62,7 +62,7 @@ exports.one = eventsEngine.one;
 exports.off = eventsEngine.off;
 
 /**
-* @name eventsMethods_trigger
+* @name eventsMethods.trigger
 * @publicName trigger(element, event, extraParameters)
 * @namespace DevExpress.events
 * @param1 element:Node|Array<Node>
@@ -75,7 +75,7 @@ exports.off = eventsEngine.off;
 exports.trigger = eventsEngine.trigger;
 
 /**
-* @name eventsMethods_triggerHandler
+* @name eventsMethods.triggerHandler
 * @publicName triggerHandler(element, event, extraParameters)
 * @namespace DevExpress.events
 * @param1 element:Node|Array<Node>
@@ -95,64 +95,64 @@ exports.triggerHandler = eventsEngine.triggerHandler;
 */
 
 /**
-* @name dxEventMethods_isPropagationStopped
+* @name dxEventMethods.isPropagationStopped
 * @publicName isPropagationStopped()
 * @type function
 * @return boolean
 */
 
 /**
-* @name dxEventMethods_stopPropagation
+* @name dxEventMethods.stopPropagation
 * @publicName stopPropagation()
 * @type function
 */
 
 /**
-* @name dxEventMethods_isImmediatePropagationStopped
+* @name dxEventMethods.isImmediatePropagationStopped
 * @publicName isImmediatePropagationStopped()
 * @type function
 * @return boolean
 */
 
 /**
-* @name dxEventMethods_stopImmediatePropagation
+* @name dxEventMethods.stopImmediatePropagation
 * @publicName stopImmediatePropagation()
 * @type function
 */
 
 /**
-* @name dxEventMethods_isDefaultPrevented
+* @name dxEventMethods.isDefaultPrevented
 * @publicName isDefaultPrevented()
 * @type function
 * @return boolean
 */
 
 /**
-* @name dxEventMethods_preventDefault
+* @name dxEventMethods.preventDefault
 * @publicName preventDefault()
 * @type function
 */
 
 /**
-* @name dxEventFields_target
+* @name dxEventFields.target
 * @publicName target
 * @type Node
 */
 
 /**
-* @name dxEventFields_currentTarget
+* @name dxEventFields.currentTarget
 * @publicName currentTarget
 * @type Node
 */
 
 /**
-* @name dxEventFields_delegateTarget
+* @name dxEventFields.delegateTarget
 * @publicName delegateTarget
 * @type Node
 */
 
 /**
-* @name dxEventFields_data
+* @name dxEventFields.data
 * @publicName data
 * @type object
 */
@@ -165,7 +165,7 @@ exports.triggerHandler = eventsEngine.triggerHandler;
 */
 
 /**
-* @name events_Event
+* @name events.Event
 * @publicName Event
 * @type function
 * @param1 source:string|event

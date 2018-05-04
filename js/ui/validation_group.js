@@ -20,26 +20,26 @@ var ValidationGroup = DOMComponent.inherit({
         return this.callBase();
 
         /**
-        * @name dxValidationGroupOptions_rtlEnabled
+        * @name dxValidationGroupOptions.rtlEnabled
         * @publicName rtlEnabled
         * @hidden
         * @inheritdoc
         */
 
         /**
-        * @name dxValidationGroupMethods_beginUpdate
+        * @name dxValidationGroupMethods.beginUpdate
         * @publicName beginUpdate()
         * @hidden
         * @inheritdoc
         */
         /**
-        * @name dxValidationGroupMethods_defaultOptions
+        * @name dxValidationGroupMethods.defaultOptions
         * @publicName defaultOptions(rule)
         * @hidden
         * @inheritdoc
         */
         /**
-        * @name dxValidationGroupMethods_endUpdate
+        * @name dxValidationGroupMethods.endUpdate
         * @publicName endUpdate()
         * @hidden
         * @inheritdoc
@@ -67,7 +67,7 @@ var ValidationGroup = DOMComponent.inherit({
     },
 
     /**
-     * @name dxValidationGroupMethods_validate
+     * @name dxValidationGroupMethods.validate
      * @publicName validate()
      * @return dxValidationGroupResult
      */
@@ -76,7 +76,7 @@ var ValidationGroup = DOMComponent.inherit({
     },
 
     /**
-     * @name dxValidationGroupMethods_reset
+     * @name dxValidationGroupMethods.reset
      * @publicName reset()
      */
     reset: function() {

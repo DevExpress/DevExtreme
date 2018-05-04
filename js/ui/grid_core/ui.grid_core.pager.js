@@ -148,44 +148,44 @@ module.exports = {
     defaultOptions: function() {
         return {
             /**
-             * @name GridBaseOptions_pager
+             * @name GridBaseOptions.pager
              * @publicName pager
              * @type object
              */
             pager: {
                 /**
-                 * @name GridBaseOptions_pager_visible
+                 * @name GridBaseOptions.pager.visible
                  * @publicName visible
                  * @type boolean
                  */
                 visible: "auto",
                 /**
-                 * @name GridBaseOptions_pager_showPageSizeSelector
+                 * @name GridBaseOptions.pager.showPageSizeSelector
                  * @publicName showPageSizeSelector
                  * @type boolean
                  * @default false
                 */
                 showPageSizeSelector: false,
                 /**
-                 * @name GridBaseOptions_pager_allowedPageSizes
+                 * @name GridBaseOptions.pager.allowedPageSizes
                  * @publicName allowedPageSizes
                  * @type Array<number>
                 */
                 allowedPageSizes: "auto"
                 /**
-                 * @name GridBaseOptions_pager_showNavigationButtons
+                 * @name GridBaseOptions.pager.showNavigationButtons
                  * @publicName showNavigationButtons
                  * @type boolean
                  * @default false
                  */
                 /**
-                 * @name GridBaseOptions_pager_showInfo
+                 * @name GridBaseOptions.pager.showInfo
                  * @publicName showInfo
                  * @type boolean
                  * @default false
                  */
                 /**
-                 * @name GridBaseOptions_pager_infoText
+                 * @name GridBaseOptions.pager.infoText
                  * @publicName infoText
                  * @type string
                  * @default "Page {0} of {1} ({2} items)"

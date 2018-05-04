@@ -20,7 +20,7 @@ var Class = require("../../core/class"),
 
 exports.ExportMixin = extend({}, exportMixin, {
     /**
-    * @name dxPivotGridMethods_exportToExcel
+    * @name dxPivotGridMethods.exportToExcel
     * @publicName exportToExcel()
     */
     exportToExcel: function() {

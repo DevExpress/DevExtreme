@@ -18,7 +18,7 @@ var renderedCallbacks = Callbacks();
  */
 
 /**
- * @name dxTemplateOptions_name
+ * @name dxTemplateOptions.name
  * @publicName name
  * @type string
  */

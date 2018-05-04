@@ -313,7 +313,10 @@ Point.prototype = {
     },
 
     translate: function() {
-        this.hasValue() && this._translate();
+        if(this.hasValue()) {
+            this._translate();
+            this.translated = true;
+        }
     },
 
     _checkCustomize: function(oldOptions, newOptions) {
@@ -380,6 +383,13 @@ Point.prototype = {
     getDefaultCoords: function() {
         var that = this;
         return !that._options.rotated ? { x: that.x, y: that.defaultY } : { x: that.defaultX, y: that.y };
+    },
+
+    setDefaultCoords() {
+        const coords = this.getDefaultCoords();
+
+        this.x = coords.x;
+        this.y = coords.y;
     },
 
     _getVisibleArea: function() {

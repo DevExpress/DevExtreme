@@ -58,7 +58,7 @@ var setAnimationFrameMethods = callOnce(function() {
 });
 
 /**
- * @name utils_requestAnimationFrame
+ * @name utils.requestAnimationFrame
  * @publicName requestAnimationFrame(callback)
  * @type method
  * @param1 callback:function
@@ -73,7 +73,7 @@ exports.requestAnimationFrame = function() {
 };
 
 /**
- * @name utils_cancelAnimationFrame
+ * @name utils.cancelAnimationFrame
  * @publicName cancelAnimationFrame(requestID)
  * @type method
  * @param1 requestID:number

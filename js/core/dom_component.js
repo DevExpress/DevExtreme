@@ -36,7 +36,7 @@ var DOMComponent = Component.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             /**
-            * @name domcomponentoptions_onOptionChanged
+            * @name domcomponentoptions.onOptionChanged
             * @publicName onOptionChanged
             * @type function
             * @type_function_param1 e:object
@@ -48,7 +48,7 @@ var DOMComponent = Component.inherit({
             * @inheritdoc
             */
             /**
-            * @name domcomponentoptions_onDisposing
+            * @name domcomponentoptions.onDisposing
             * @publicName onDisposing
             * @action
             * @extends Action
@@ -56,7 +56,7 @@ var DOMComponent = Component.inherit({
             */
 
             /**
-            * @name domcomponentoptions_width
+            * @name domcomponentoptions.width
             * @publicName width
             * @type number|string|function
             * @default undefined
@@ -65,7 +65,7 @@ var DOMComponent = Component.inherit({
             width: undefined,
 
             /**
-            * @name domcomponentoptions_height
+            * @name domcomponentoptions.height
             * @publicName height
             * @type number|string|function
             * @default undefined
@@ -74,7 +74,7 @@ var DOMComponent = Component.inherit({
             height: undefined,
 
             /**
-            * @name domcomponentoptions_rtlEnabled
+            * @name domcomponentoptions.rtlEnabled
             * @publicName rtlEnabled
             * @type boolean
             * @default false
@@ -82,7 +82,7 @@ var DOMComponent = Component.inherit({
             rtlEnabled: config().rtlEnabled,
 
             /**
-             * @name domcomponentoptions_elementAttr
+             * @name domcomponentoptions.elementAttr
              * @publicName elementAttr
              * @type object
              * @default {}
@@ -95,7 +95,7 @@ var DOMComponent = Component.inherit({
         });
     },
     /**
-    * @name DOMComponentMethods_ctor
+    * @name DOMComponentMethods.ctor
     * @publicName ctor(element,options)
     * @param1 element:Node|JQuery
     * @param2 options:DOMComponentOptions|undefined
@@ -423,7 +423,7 @@ var DOMComponent = Component.inherit({
     },
 
     /**
-    * @name domcomponentmethods_element
+    * @name domcomponentmethods.element
     * @publicName element()
     * @return dxElement
     */
@@ -432,7 +432,7 @@ var DOMComponent = Component.inherit({
     },
 
     /**
-    * @name domcomponentmethods_dispose
+    * @name domcomponentmethods.dispose
     * @publicName dispose()
     */
     dispose: function() {
@@ -446,7 +446,7 @@ var DOMComponent = Component.inherit({
 });
 
 /**
-* @name domcomponentmethods_getInstance
+* @name domcomponentmethods.getInstance
 * @static
 * @section uiWidgets
 * @publicName getInstance(element)
@@ -458,7 +458,7 @@ DOMComponent.getInstance = function(element) {
 };
 
 /**
-* @name domcomponentmethods_defaultOptions
+* @name domcomponentmethods.defaultOptions
 * @static
 * @section uiWidgets
 * @publicName defaultOptions(rule)

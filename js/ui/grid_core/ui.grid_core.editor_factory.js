@@ -228,7 +228,7 @@ module.exports = {
     defaultOptions: function() {
         return {
             /**
-              * @name dxDataGridOptions_onEditorPreparing
+              * @name dxDataGridOptions.onEditorPreparing
               * @publicName onEditorPreparing
               * @type function(e)
               * @type_function_param1 e:object
@@ -251,7 +251,7 @@ module.exports = {
              */
 
             /**
-              * @name dxTreeListOptions_onEditorPreparing
+              * @name dxTreeListOptions.onEditorPreparing
               * @publicName onEditorPreparing
               * @type function(e)
               * @type_function_param1 e:object
@@ -274,7 +274,7 @@ module.exports = {
              */
 
             /**
-              * @name dxDataGridOptions_onEditorPrepared
+              * @name dxDataGridOptions.onEditorPrepared
               * @publicName onEditorPrepared
               * @type function(options)
               * @type_function_param1 options:object
@@ -294,7 +294,7 @@ module.exports = {
              */
 
             /**
-              * @name dxTreeListOptions_onEditorPrepared
+              * @name dxTreeListOptions.onEditorPrepared
               * @publicName onEditorPrepared
               * @type function(options)
               * @type_function_param1 options:object

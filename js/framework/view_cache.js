@@ -15,7 +15,7 @@ var inArray = require("../core/utils/array").inArray,
 */
 var ViewCache = Class.inherit({
     /**
-     * @name ViewCacheevents_viewRemoved
+     * @name ViewCacheevents.viewRemoved
      * @publicName viewRemoved
      * @type classEventType
      * @type_function_param1 e:object
@@ -26,7 +26,7 @@ var ViewCache = Class.inherit({
     },
 
     /**
-    * @name ViewCachemethods_setView
+    * @name ViewCachemethods.setView
     * @publicName setView(key, viewInfo)
     * @param1 key:string
     * @param2 viewInfo:object
@@ -36,7 +36,7 @@ var ViewCache = Class.inherit({
     },
 
     /**
-    * @name ViewCachemethods_getView
+    * @name ViewCachemethods.getView
     * @publicName getView(key)
     * @param1 key:string
     * @return object
@@ -46,7 +46,7 @@ var ViewCache = Class.inherit({
     },
 
     /**
-    * @name ViewCachemethods_removeView
+    * @name ViewCachemethods.removeView
     * @publicName removeView(key)
     * @param1 key:string
     * @return object
@@ -62,7 +62,7 @@ var ViewCache = Class.inherit({
     },
 
     /**
-    * @name ViewCachemethods_clear
+    * @name ViewCachemethods.clear
     * @publicName clear()
     */
     clear: function() {
@@ -74,7 +74,7 @@ var ViewCache = Class.inherit({
     },
 
     /**
-    * @name ViewCachemethods_hasView
+    * @name ViewCachemethods.hasView
     * @publicName hasView(key)
     * @param1 key:string
     * @return boolean

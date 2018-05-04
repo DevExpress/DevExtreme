@@ -426,7 +426,7 @@ var ResizingController = modules.ViewController.inherit({
     },
 
     /**
-    * @name GridBaseMethods_updateDimensions
+    * @name GridBaseMethods.updateDimensions
     * @publicName updateDimensions()
     */
     updateDimensions: function(checkSize) {
@@ -677,7 +677,7 @@ module.exports = {
     defaultOptions: function() {
         return {
             /**
-             * @name GridBaseOptions_showBorders
+             * @name GridBaseOptions.showBorders
              * @publicName showBorders
              * @type boolean
              * @default false

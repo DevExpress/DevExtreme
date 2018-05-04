@@ -41,7 +41,7 @@ module.exports = {
         return {
             hoverStateEnabled: false,
             /**
-            * @name dxDataGridOptions_onCellHoverChanged
+            * @name dxDataGridOptions.onCellHoverChanged
             * @publicName onCellHoverChanged
             * @type function(e)
             * @type_function_param1 e:object
@@ -61,7 +61,7 @@ module.exports = {
             * @action
             */
             /**
-            * @name dxTreeListOptions_onCellHoverChanged
+            * @name dxTreeListOptions.onCellHoverChanged
             * @publicName onCellHoverChanged
             * @type function(e)
             * @type_function_param1 e:object
@@ -82,41 +82,41 @@ module.exports = {
             */
 
             /**
-             * @name GridBaseOptions_scrolling
+             * @name GridBaseOptions.scrolling
              * @publicName scrolling
              * @type object
              */
             /**
-             * @name dxDataGridOptions_scrolling
+             * @name dxDataGridOptions.scrolling
              * @publicName scrolling
              * @type object
              */
             /**
-             * @name dxTreeListOptions_scrolling
+             * @name dxTreeListOptions.scrolling
              * @publicName scrolling
              * @type object
              */
             scrolling: {
                 /**
-                 * @name GridBaseOptions_scrolling_useNative
+                 * @name GridBaseOptions.scrolling.useNative
                  * @publicName useNative
                  * @type boolean
                  */
                 useNative: "auto"
                 /**
-                * @name GridBaseOptions_scrolling_showScrollbar
+                * @name GridBaseOptions.scrolling.showScrollbar
                 * @publicName showScrollbar
                 * @type Enums.ShowScrollbarMode
                 * @default 'onScroll'
                 */
                 /**
-                * @name GridBaseOptions_scrolling_scrollByContent
+                * @name GridBaseOptions.scrolling.scrollByContent
                 * @publicName scrollByContent
                 * @type boolean
                 * @default true
                 */
                 /**
-                * @name GridBaseOptions_scrolling_scrollByThumb
+                * @name GridBaseOptions.scrolling.scrollByThumb
                 * @publicName scrollByThumb
                 * @type boolean
                 * @default false
@@ -124,40 +124,40 @@ module.exports = {
             },
 
             /**
-             * @name GridBaseOptions_loadPanel
+             * @name GridBaseOptions.loadPanel
              * @publicName loadPanel
              * @type object
              */
             loadPanel: {
                 /**
-                 * @name GridBaseOptions_loadPanel_enabled
+                 * @name GridBaseOptions.loadPanel.enabled
                  * @publicName enabled
                  * @type boolean
                  */
                 enabled: "auto",
                 /**
-                 * @name GridBaseOptions_loadPanel_text
+                 * @name GridBaseOptions.loadPanel.text
                  * @publicName text
                  * @type string
                  * @default "Loading..."
                  */
                 text: messageLocalization.format("Loading"),
                 /**
-                 * @name GridBaseOptions_loadPanel_width
+                 * @name GridBaseOptions.loadPanel.width
                  * @publicName width
                  * @type number
                  * @default 200
                  */
                 width: 200,
                 /**
-                 * @name GridBaseOptions_loadPanel_height
+                 * @name GridBaseOptions.loadPanel.height
                  * @publicName height
                  * @type number
                  * @default 90
                  */
                 height: 90,
                 /**
-                * @name GridBaseOptions_loadPanel_showIndicator
+                * @name GridBaseOptions.loadPanel.showIndicator
                 * @publicName showIndicator
                 * @type boolean
                 * @default true
@@ -165,7 +165,7 @@ module.exports = {
                 showIndicator: true,
 
                 /**
-                * @name GridBaseOptions_loadPanel_indicatorSrc
+                * @name GridBaseOptions.loadPanel.indicatorSrc
                 * @publicName indicatorSrc
                 * @type string
                 * @default ""
@@ -173,7 +173,7 @@ module.exports = {
                 indicatorSrc: "",
 
                 /**
-                * @name GridBaseOptions_loadPanel_showPane
+                * @name GridBaseOptions.loadPanel.showPane
                 * @publicName showPane
                 * @type boolean
                 * @default true
@@ -181,7 +181,7 @@ module.exports = {
                 showPane: true
             },
             /**
-            * @name dxDataGridOptions_onRowClick
+            * @name dxDataGridOptions.onRowClick
             * @publicName onRowClick
             * @type function(e)|string
             * @type_function_param1 e:object
@@ -202,7 +202,7 @@ module.exports = {
             * @action
             */
             /**
-            * @name dxTreeListOptions_onRowClick
+            * @name dxTreeListOptions.onRowClick
             * @publicName onRowClick
             * @type function(e)|string
             * @type_function_param1 e:object
@@ -222,7 +222,7 @@ module.exports = {
             * @action
             */
             /**
-            * @name dxDataGridOptions_onCellClick
+            * @name dxDataGridOptions.onCellClick
             * @publicName onCellClick
             * @type function(e)|string
             * @type_function_param1 e:object
@@ -243,7 +243,7 @@ module.exports = {
             * @action
             */
             /**
-            * @name dxTreeListOptions_onCellClick
+            * @name dxTreeListOptions.onCellClick
             * @publicName onCellClick
             * @type function(e)|string
             * @type_function_param1 e:object
@@ -264,7 +264,7 @@ module.exports = {
             * @action
             */
             /**
-             * @name dxDataGridOptions_rowTemplate
+             * @name dxDataGridOptions.rowTemplate
              * @publicName rowTemplate
              * @type template|function
              * @type_function_param1 rowElement:dxElement
@@ -272,49 +272,49 @@ module.exports = {
              */
             rowTemplate: null,
             /**
-             * @name GridBaseOptions_columnAutoWidth
+             * @name GridBaseOptions.columnAutoWidth
              * @publicName columnAutoWidth
              * @type boolean
              * @default false
              */
             columnAutoWidth: false,
             /**
-             * @name GridBaseOptions_noDataText
+             * @name GridBaseOptions.noDataText
              * @publicName noDataText
              * @type string
              * @default "No data"
              */
             noDataText: messageLocalization.format("dxDataGrid-noDataText"),
             /**
-             * @name GridBaseOptions_wordWrapEnabled
+             * @name GridBaseOptions.wordWrapEnabled
              * @publicName wordWrapEnabled
              * @type boolean
              * @default false
              */
             wordWrapEnabled: false,
             /**
-             * @name GridBaseOptions_showColumnLines
+             * @name GridBaseOptions.showColumnLines
              * @publicName showColumnLines
              * @type boolean
              * @default true
              */
             showColumnLines: true,
             /**
-             * @name GridBaseOptions_showRowLines
+             * @name GridBaseOptions.showRowLines
              * @publicName showRowLines
              * @type boolean
              * @default false
              */
             showRowLines: false,
             /**
-             * @name GridBaseOptions_rowAlternationEnabled
+             * @name GridBaseOptions.rowAlternationEnabled
              * @publicName rowAlternationEnabled
              * @type boolean
              * @default false
              */
             rowAlternationEnabled: false,
             /**
-             * @name dxDataGridOptions_onCellPrepared
+             * @name dxDataGridOptions.onCellPrepared
              * @publicName onCellPrepared
              * @type function(e)
              * @type_function_param1 e:object
@@ -335,7 +335,7 @@ module.exports = {
              * @action
              */
             /**
-             * @name dxTreeListOptions_onCellPrepared
+             * @name dxTreeListOptions.onCellPrepared
              * @publicName onCellPrepared
              * @type function(e)
              * @type_function_param1 e:object
@@ -356,7 +356,7 @@ module.exports = {
              * @action
              */
             /**
-             * @name dxDataGridOptions_onRowPrepared
+             * @name dxDataGridOptions.onRowPrepared
              * @publicName onRowPrepared
              * @type function(e)
              * @type_function_param1 e:object
@@ -374,7 +374,7 @@ module.exports = {
              * @action
              */
             /**
-             * @name dxTreeListOptions_onRowPrepared
+             * @name dxTreeListOptions.onRowPrepared
              * @publicName onRowPrepared
              * @type function(e)
              * @type_function_param1 e:object
@@ -392,7 +392,7 @@ module.exports = {
              */
             activeStateEnabled: false,
             /**
-             * @name GridBaseOptions_twoWayBindingEnabled
+             * @name GridBaseOptions.twoWayBindingEnabled
              * @publicName twoWayBindingEnabled
              * @type boolean
              * @default true
@@ -1108,7 +1108,7 @@ module.exports = {
                 },
 
                 /**
-                 * @name GridBaseMethods_getScrollable
+                 * @name GridBaseMethods.getScrollable
                  * @publicName getScrollable()
                  * @return dxScrollable
                  */
@@ -1411,102 +1411,102 @@ module.exports = {
  * @type object
  */
 /**
- * @name dxDataGridRowObject_data
+ * @name dxDataGridRowObject.data
  * @publicName data
  * @type object
  */
 
 /**
- * @name dxTreeListRowObject_node
+ * @name dxTreeListRowObject.node
  * @publicName node
  * @type dxTreeListNode
  */
 
 /**
- * @name dxTreeListRowObject_level
+ * @name dxTreeListRowObject.level
  * @publicName level
  * @type number
  */
 
 /**
- * @name dxDataGridRowObject_key
+ * @name dxDataGridRowObject.key
  * @publicName key
  * @type any
  */
 /**
- * @name dxTreeListRowObject_key
+ * @name dxTreeListRowObject.key
  * @publicName key
  * @type any
  */
 
 /**
- * @name dxDataGridRowObject_rowIndex
+ * @name dxDataGridRowObject.rowIndex
  * @publicName rowIndex
  * @type number
  */
 /**
- * @name dxTreeListRowObject_rowIndex
+ * @name dxTreeListRowObject.rowIndex
  * @publicName rowIndex
  * @type number
  */
 
 /**
- * @name dxDataGridRowObject_rowType
+ * @name dxDataGridRowObject.rowType
  * @publicName rowType
  * @type string
  */
 /**
- * @name dxTreeListRowObject_rowType
+ * @name dxTreeListRowObject.rowType
  * @publicName rowType
  * @type string
  */
 
 /**
- * @name dxDataGridRowObject_groupIndex
+ * @name dxDataGridRowObject.groupIndex
  * @publicName groupIndex
  * @type number
  */
 
 /**
- * @name dxDataGridRowObject_isExpanded
+ * @name dxDataGridRowObject.isExpanded
  * @publicName isExpanded
  * @type boolean
  */
 /**
- * @name dxTreeListRowObject_isExpanded
+ * @name dxTreeListRowObject.isExpanded
  * @publicName isExpanded
  * @type boolean
  */
 
 /**
- * @name dxDataGridRowObject_isSelected
+ * @name dxDataGridRowObject.isSelected
  * @publicName isSelected
  * @type boolean
  */
 /**
- * @name dxTreeListRowObject_isSelected
+ * @name dxTreeListRowObject.isSelected
  * @publicName isSelected
  * @type boolean
  */
 
 /**
- * @name dxDataGridRowObject_values
+ * @name dxDataGridRowObject.values
  * @publicName values
  * @type Array<any>
  */
 /**
- * @name dxTreeListRowObject_values
+ * @name dxTreeListRowObject.values
  * @publicName values
  * @type Array<any>
  */
 
 /**
- * @name dxDataGridRowObject_isEditing
+ * @name dxDataGridRowObject.isEditing
  * @publicName isEditing
  * @type boolean
  */
 /**
- * @name dxTreeListRowObject_isEditing
+ * @name dxTreeListRowObject.isEditing
  * @publicName isEditing
  * @type boolean
  */

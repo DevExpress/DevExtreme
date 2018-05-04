@@ -8,7 +8,7 @@ gridCore.registerModule("columns", {
     defaultOptions: function() {
         return extend(true, {}, columnsControllerModule.defaultOptions(), {
             /**
-            * @name dxDataGridColumn_allowExporting
+            * @name dxDataGridColumn.allowExporting
             * @publicName allowExporting
             * @type boolean
             * @default true

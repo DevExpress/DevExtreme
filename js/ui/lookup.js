@@ -68,7 +68,7 @@ var Lookup = DropDownList.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             /**
-            * @name dxLookupOptions_title
+            * @name dxLookupOptions.title
             * @publicName title
             * @type string
             * @default ""
@@ -76,7 +76,7 @@ var Lookup = DropDownList.inherit({
             title: "",
 
             /**
-            * @name dxLookupOptions_titleTemplate
+            * @name dxLookupOptions.titleTemplate
             * @publicName titleTemplate
             * @type template|function
             * @default "title"
@@ -86,7 +86,7 @@ var Lookup = DropDownList.inherit({
             titleTemplate: "title",
 
             /**
-            * @name dxLookupOptions_onTitleRendered
+            * @name dxLookupOptions.onTitleRendered
             * @publicName onTitleRendered
             * @extends Action
             * @type function(e)
@@ -97,7 +97,7 @@ var Lookup = DropDownList.inherit({
             onTitleRendered: null,
 
             /**
-            * @name dxLookupOptions_placeholder
+            * @name dxLookupOptions.placeholder
             * @publicName placeholder
             * @type string
             * @default "Select"
@@ -105,7 +105,7 @@ var Lookup = DropDownList.inherit({
             placeholder: messageLocalization.format("Select"),
 
             /**
-            * @name dxLookupOptions_searchPlaceholder
+            * @name dxLookupOptions.searchPlaceholder
             * @publicName searchPlaceholder
             * @type string
             * @default "Search"
@@ -113,7 +113,7 @@ var Lookup = DropDownList.inherit({
             searchPlaceholder: messageLocalization.format("Search"),
 
             /**
-            * @name dxLookupOptions_searchEnabled
+            * @name dxLookupOptions.searchEnabled
             * @publicName searchEnabled
             * @type boolean
             * @default true
@@ -121,7 +121,7 @@ var Lookup = DropDownList.inherit({
             searchEnabled: true,
 
             /**
-            * @name dxLookupOptions_cleanSearchOnOpening
+            * @name dxLookupOptions.cleanSearchOnOpening
             * @publicName cleanSearchOnOpening
             * @type boolean
             * @default true
@@ -129,7 +129,7 @@ var Lookup = DropDownList.inherit({
             cleanSearchOnOpening: true,
 
             /**
-            * @name dxLookupOptions_fullScreen
+            * @name dxLookupOptions.fullScreen
             * @publicName fullScreen
             * @type boolean
             * @default false
@@ -137,7 +137,7 @@ var Lookup = DropDownList.inherit({
             fullScreen: false,
 
             /**
-            * @name dxLookupOptions_showCancelButton
+            * @name dxLookupOptions.showCancelButton
             * @publicName showCancelButton
             * @type boolean
             * @default true
@@ -145,14 +145,14 @@ var Lookup = DropDownList.inherit({
             showCancelButton: true,
 
             /**
-            * @name dxLookupOptions_cancelButtonText
+            * @name dxLookupOptions.cancelButtonText
             * @publicName cancelButtonText
             * @type string
             * @default "Cancel"
             */
 
             /**
-            * @name dxLookupOptions_showClearButton
+            * @name dxLookupOptions.showClearButton
             * @publicName showClearButton
             * @type boolean
             * @default false
@@ -160,7 +160,7 @@ var Lookup = DropDownList.inherit({
             showClearButton: false,
 
             /**
-            * @name dxLookupOptions_clearButtonText
+            * @name dxLookupOptions.clearButtonText
             * @publicName clearButtonText
             * @type string
             * @default "Clear"
@@ -168,7 +168,7 @@ var Lookup = DropDownList.inherit({
             clearButtonText: messageLocalization.format("Clear"),
 
             /**
-            * @name dxLookupOptions_applyButtonText
+            * @name dxLookupOptions.applyButtonText
             * @publicName applyButtonText
             * @type string
             * @default "Done"
@@ -176,7 +176,7 @@ var Lookup = DropDownList.inherit({
             applyButtonText: messageLocalization.format("Done"),
 
             /**
-             * @name dxLookupOptions_popupWidth
+             * @name dxLookupOptions.popupWidth
              * @publicName popupWidth
              * @type number|string|function
              * @default function() {return $(window).width() * 0.8 }
@@ -185,7 +185,7 @@ var Lookup = DropDownList.inherit({
             popupWidth: function() { return $(window).width() * 0.8; },
 
             /**
-             * @name dxLookupOptions_popupHeight
+             * @name dxLookupOptions.popupHeight
              * @publicName popupHeight
              * @type number|string|function
              * @default function() { return $(window).height() * 0.8 }
@@ -194,7 +194,7 @@ var Lookup = DropDownList.inherit({
             popupHeight: function() { return $(window).height() * 0.8; },
 
             /**
-            * @name dxLookupOptions_shading
+            * @name dxLookupOptions.shading
             * @publicName shading
             * @type boolean
             * @default true
@@ -202,7 +202,7 @@ var Lookup = DropDownList.inherit({
             shading: true,
 
             /**
-            * @name dxLookupOptions_closeOnOutsideClick
+            * @name dxLookupOptions.closeOnOutsideClick
             * @publicName closeOnOutsideClick
             * @type boolean|function
             * @default false
@@ -211,7 +211,7 @@ var Lookup = DropDownList.inherit({
             closeOnOutsideClick: false,
 
             /**
-            * @name dxLookupOptions_position
+            * @name dxLookupOptions.position
             * @publicName position
             * @type positionConfig
             * @default undefined
@@ -219,20 +219,20 @@ var Lookup = DropDownList.inherit({
             position: undefined,
 
             /**
-            * @name dxLookupOptions_animation
+            * @name dxLookupOptions.animation
             * @publicName animation
             * @type object
             * @default undefined
             */
             animation: {
                 /**
-                * @name dxLookupOptions_animation_show
+                * @name dxLookupOptions.animation.show
                 * @publicName show
                 * @type animationConfig
                 * @default undefined
                 */
                 /**
-                * @name dxLookupOptions_animation_hide
+                * @name dxLookupOptions.animation.hide
                 * @publicName hide
                 * @type animationConfig
                 * @default undefined
@@ -240,7 +240,7 @@ var Lookup = DropDownList.inherit({
             },
 
             /**
-            * @name dxLookupOptions_pullRefreshEnabled
+            * @name dxLookupOptions.pullRefreshEnabled
             * @publicName pullRefreshEnabled
             * @type boolean
             * @default false
@@ -248,7 +248,7 @@ var Lookup = DropDownList.inherit({
             pullRefreshEnabled: false,
 
             /**
-            * @name dxLookupOptions_useNativeScrolling
+            * @name dxLookupOptions.useNativeScrolling
             * @publicName useNativeScrolling
             * @type boolean
             * @default true
@@ -256,7 +256,7 @@ var Lookup = DropDownList.inherit({
             useNativeScrolling: true,
 
             /**
-            * @name dxLookupOptions_pullingDownText
+            * @name dxLookupOptions.pullingDownText
             * @publicName pullingDownText
             * @type string
             * @default "Pull down to refresh..."
@@ -264,7 +264,7 @@ var Lookup = DropDownList.inherit({
             pullingDownText: messageLocalization.format("dxList-pullingDownText"),
 
             /**
-            * @name dxLookupOptions_pulledDownText
+            * @name dxLookupOptions.pulledDownText
             * @publicName pulledDownText
             * @type string
             * @default "Release to refresh..."
@@ -272,7 +272,7 @@ var Lookup = DropDownList.inherit({
             pulledDownText: messageLocalization.format("dxList-pulledDownText"),
 
             /**
-            * @name dxLookupOptions_refreshingText
+            * @name dxLookupOptions.refreshingText
             * @publicName refreshingText
             * @type string
             * @default "Refreshing..."
@@ -280,7 +280,7 @@ var Lookup = DropDownList.inherit({
             refreshingText: messageLocalization.format("dxList-refreshingText"),
 
             /**
-            * @name dxLookupOptions_pageLoadingText
+            * @name dxLookupOptions.pageLoadingText
             * @publicName pageLoadingText
             * @type string
             * @default "Loading..."
@@ -288,7 +288,7 @@ var Lookup = DropDownList.inherit({
             pageLoadingText: messageLocalization.format("dxList-pageLoadingText"),
 
             /**
-            * @name dxLookupOptions_onScroll
+            * @name dxLookupOptions.onScroll
             * @publicName onScroll
             * @extends Action
             * @type function(e)
@@ -305,7 +305,7 @@ var Lookup = DropDownList.inherit({
             onScroll: null,
 
             /**
-            * @name dxLookupOptions_onPullRefresh
+            * @name dxLookupOptions.onPullRefresh
             * @publicName onPullRefresh
             * @extends Action
             * @action
@@ -313,7 +313,7 @@ var Lookup = DropDownList.inherit({
             onPullRefresh: null,
 
             /**
-            * @name dxLookupOptions_onPageLoading
+            * @name dxLookupOptions.onPageLoading
             * @publicName onPageLoading
             * @extends Action
             * @action
@@ -321,7 +321,7 @@ var Lookup = DropDownList.inherit({
             onPageLoading: null,
 
             /**
-            * @name dxLookupOptions_pageLoadMode
+            * @name dxLookupOptions.pageLoadMode
             * @publicName pageLoadMode
             * @type Enums.ListPageLoadMode
             * @default "scrollBottom"
@@ -329,7 +329,7 @@ var Lookup = DropDownList.inherit({
             pageLoadMode: "scrollBottom",
 
             /**
-            * @name dxLookupOptions_nextButtonText
+            * @name dxLookupOptions.nextButtonText
             * @publicName nextButtonText
             * @type string
             * @default "More"
@@ -337,7 +337,7 @@ var Lookup = DropDownList.inherit({
             nextButtonText: messageLocalization.format("dxList-nextButtonText"),
 
             /**
-            * @name dxLookupOptions_grouped
+            * @name dxLookupOptions.grouped
             * @publicName grouped
             * @type boolean
             * @default false
@@ -345,7 +345,7 @@ var Lookup = DropDownList.inherit({
             grouped: false,
 
             /**
-            * @name dxLookupOptions_groupTemplate
+            * @name dxLookupOptions.groupTemplate
             * @publicName groupTemplate
             * @type template|function
             * @default "group"
@@ -357,7 +357,7 @@ var Lookup = DropDownList.inherit({
             groupTemplate: "group",
 
             /**
-            * @name dxLookupOptions_usePopover
+            * @name dxLookupOptions.usePopover
             * @publicName usePopover
             * @type boolean
             * @default false
@@ -368,7 +368,7 @@ var Lookup = DropDownList.inherit({
             showDropDownButton: false,
 
             /**
-            * @name dxLookupOptions_showPopupTitle
+            * @name dxLookupOptions.showPopupTitle
             * @publicName showPopupTitle
             * @type boolean
             * @default true
@@ -376,7 +376,7 @@ var Lookup = DropDownList.inherit({
             showPopupTitle: true,
 
             /**
-            * @name dxLookupOptions_focusStateEnabled
+            * @name dxLookupOptions.focusStateEnabled
             * @publicName focusStateEnabled
             * @type boolean
             * @default false
@@ -385,7 +385,7 @@ var Lookup = DropDownList.inherit({
             focusStateEnabled: false,
 
             /**
-            * @name dxLookupOptions_onValueChanged
+            * @name dxLookupOptions.onValueChanged
             * @publicName onValueChanged
             * @extends Action
             * @type function(e)
@@ -398,7 +398,7 @@ var Lookup = DropDownList.inherit({
             */
 
             /**
-            * @name dxLookupOptions_fieldTemplate
+            * @name dxLookupOptions.fieldTemplate
             * @publicName fieldTemplate
             * @type template|function
             * @default null
@@ -408,109 +408,109 @@ var Lookup = DropDownList.inherit({
             */
 
             /**
-            * @name dxLookupOptions_acceptCustomValue
+            * @name dxLookupOptions.acceptCustomValue
             * @publicName acceptCustomValue
             * @hidden
             * @inheritdoc
             */
             /**
-            * @name dxLookupOptions_readOnly
+            * @name dxLookupOptions.readOnly
             * @publicName readOnly
             * @hidden
             * @inheritdoc
             */
             /**
-            * @name dxLookupOptions_onFocusIn
+            * @name dxLookupOptions.onFocusIn
             * @publicName onFocusIn
             * @hidden
             * @action
             * @inheritdoc
             */
             /**
-            * @name dxLookupOptions_onFocusOut
+            * @name dxLookupOptions.onFocusOut
             * @publicName onFocusOut
             * @hidden
             * @action
             * @inheritdoc
             */
             /**
-            * @name dxLookupOptions_onKeyDown
+            * @name dxLookupOptions.onKeyDown
             * @publicName onKeyDown
             * @hidden
             * @action
             * @inheritdoc
             */
             /**
-            * @name dxLookupOptions_onKeyPress
+            * @name dxLookupOptions.onKeyPress
             * @publicName onKeyPress
             * @hidden
             * @action
             * @inheritdoc
             */
             /**
-            * @name dxLookupOptions_onKeyUp
+            * @name dxLookupOptions.onKeyUp
             * @publicName onKeyUp
             * @hidden
             * @action
             * @inheritdoc
             */
             /**
-            * @name dxLookupOptions_onChange
+            * @name dxLookupOptions.onChange
             * @publicName onChange
             * @action
             * @hidden
             * @inheritdoc
             */
             /**
-            * @name dxLookupOptions_onInput
+            * @name dxLookupOptions.onInput
             * @publicName onInput
             * @hidden
             * @action
             * @inheritdoc
             */
             /**
-            * @name dxLookupOptions_onCut
+            * @name dxLookupOptions.onCut
             * @publicName onCut
             * @hidden
             * @action
             * @inheritdoc
             */
             /**
-            * @name dxLookupOptions_onCopy
+            * @name dxLookupOptions.onCopy
             * @publicName onCopy
             * @hidden
             * @action
             * @inheritdoc
             */
             /**
-            * @name dxLookupOptions_onPaste
+            * @name dxLookupOptions.onPaste
             * @publicName onPaste
             * @hidden
             * @action
             * @inheritdoc
             */
             /**
-            * @name dxLookupOptions_onEnterKey
+            * @name dxLookupOptions.onEnterKey
             * @publicName onEnterKey
             * @hidden
             * @action
             * @inheritdoc
             */
             /**
-            * @name dxLookupOptions_maxlength
+            * @name dxLookupOptions.maxlength
             * @publicName maxLength
             * @hidden
             * @inheritdoc
             */
             /**
-            * @name dxLookupOptions_spellcheck
+            * @name dxLookupOptions.spellcheck
             * @publicName spellcheck
             * @hidden
             * @inheritdoc
             */
 
             /**
-            * @name dxLookupOptions_applyValueMode
+            * @name dxLookupOptions.applyValueMode
             * @publicName applyValueMode
             * @type Enums.EditorApplyValueMode
             * @hidden false
@@ -529,7 +529,7 @@ var Lookup = DropDownList.inherit({
                 },
                 options: {
                     /**
-                    * @name dxLookupOptions_useNativeScrolling
+                    * @name dxLookupOptions.useNativeScrolling
                     * @publicName useNativeScrolling
                     * @default false @for desktop
                     * @default true @for Mac
@@ -543,13 +543,13 @@ var Lookup = DropDownList.inherit({
                 },
                 options: {
                     /**
-                    * @name dxLookupOptions_usePopover
+                    * @name dxLookupOptions.usePopover
                     * @publicName usePopover
                     * @default true @for desktop|iOS
                     */
                     usePopover: true,
                     /**
-                    * @name dxLookupOptions_popupHeight
+                    * @name dxLookupOptions.popupHeight
                     * @publicName popupHeight
                     * @default 'auto' @for desktop|iPad
                     */
@@ -562,12 +562,12 @@ var Lookup = DropDownList.inherit({
                 },
                 options: {
                     /**
-                    * @name dxLookupOptions_showCancelButton
+                    * @name dxLookupOptions.showCancelButton
                     * @publicName showCancelButton
                     */
                     showCancelButton: false,
                     /**
-                    * @name dxLookupOptions_fullScreen
+                    * @name dxLookupOptions.fullScreen
                     * @publicName fullScreen
                     */
                     fullScreen: true
@@ -585,7 +585,7 @@ var Lookup = DropDownList.inherit({
                 device: { platform: "ios", phone: true },
                 options: {
                     /**
-                    * @name dxLookupOptions_fullScreen
+                    * @name dxLookupOptions.fullScreen
                     * @publicName fullScreen
                     * @default true @for iPhone
                     */
@@ -596,7 +596,7 @@ var Lookup = DropDownList.inherit({
                 device: { platform: "ios", tablet: true },
                 options: {
                     /**
-                    * @name dxLookupOptions_popupWidth
+                    * @name dxLookupOptions.popupWidth
                     * @publicName popupWidth
                     * @default function() { return Math.min($(window).width(), $(window).height()) * 0.4; } @for iPad
                     */
@@ -614,7 +614,7 @@ var Lookup = DropDownList.inherit({
                 },
                 options: {
                     /**
-                    * @name dxLookupOptions_focusStateEnabled
+                    * @name dxLookupOptions.focusStateEnabled
                     * @publicName focusStateEnabled
                     * @type boolean
                     * @default true @for desktop

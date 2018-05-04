@@ -24,61 +24,61 @@ var Validator = DOMComponent.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             /**
-            * @name dxValidatorOptions_validationRules
+            * @name dxValidatorOptions.validationRules
             * @publicName validationRules
             * @type Array<RequiredRule,NumericRule,RangeRule,StringLengthRule,CustomRule,CompareRule,PatternRule,EmailRule>
             */
             validationRules: []
             /**
-            * @name dxValidatorOptions_validationGroup
+            * @name dxValidatorOptions.validationGroup
             * @publicName validationGroup
             * @type string
             * @ref
             */
             /**
-            * @name dxValidatorOptions_name
+            * @name dxValidatorOptions.name
             * @publicName name
             * @type string
             */
 
             /**
-            * @name dxValidatorOptions_adapter
+            * @name dxValidatorOptions.adapter
             * @publicName adapter
             * @type Object
             */
             /**
-            * @name dxValidatorOptions_adapter_getValue
+            * @name dxValidatorOptions.adapter.getValue
             * @publicName getValue
             * @type function
             */
             /**
-            * @name dxValidatorOptions_adapter_validationRequestsCallbacks
+            * @name dxValidatorOptions.adapter.validationRequestsCallbacks
             * @publicName validationRequestsCallbacks
             * @type Array<function> | jquery.callbacks
             */
             /**
-            * @name dxValidatorOptions_adapter_applyValidationResults
+            * @name dxValidatorOptions.adapter.applyValidationResults
             * @publicName applyValidationResults
             * @type function
             */
             /**
-            * @name dxValidatorOptions_adapter_reset
+            * @name dxValidatorOptions.adapter.reset
             * @publicName reset
             * @type function
             */
             /**
-            * @name dxValidatorOptions_adapter_focus
+            * @name dxValidatorOptions.adapter.focus
             * @publicName focus
             * @type function
             */
             /**
-            * @name dxValidatorOptions_adapter_bypass
+            * @name dxValidatorOptions.adapter.bypass
             * @publicName bypass
             * @type function
             */
 
             /**
-            * @name dxValidatorOptions_onValidated
+            * @name dxValidatorOptions.onValidated
             * @publicName onValidated
             * @type function(validatedInfo)
             * @type_function_param1 validatedInfo:Object
@@ -91,26 +91,26 @@ var Validator = DOMComponent.inherit({
             */
 
             /**
-            * @name dxValidatorOptions_rtlEnabled
+            * @name dxValidatorOptions.rtlEnabled
             * @publicName rtlEnabled
             * @hidden
             * @inheritdoc
             */
 
             /**
-            * @name dxValidatorMethods_beginUpdate
+            * @name dxValidatorMethods.beginUpdate
             * @publicName beginUpdate()
             * @hidden
             * @inheritdoc
             */
             /**
-            * @name dxValidatorMethods_defaultOptions
+            * @name dxValidatorMethods.defaultOptions
             * @publicName defaultOptions(rule)
             * @hidden
             * @inheritdoc
             */
             /**
-            * @name dxValidatorMethods_endUpdate
+            * @name dxValidatorMethods.endUpdate
             * @publicName endUpdate()
             * @hidden
             * @inheritdoc
@@ -219,7 +219,7 @@ var Validator = DOMComponent.inherit({
 
 
     /**
-    * @name dxValidatorMethods_validate
+    * @name dxValidatorMethods.validate
     * @publicName validate()
     * @return dxValidatorResult
     */
@@ -254,7 +254,7 @@ var Validator = DOMComponent.inherit({
 
 
     /**
-    * @name dxValidatorMethods_reset
+    * @name dxValidatorMethods.reset
     * @publicName reset()
     */
     reset: function() {
@@ -281,7 +281,7 @@ var Validator = DOMComponent.inherit({
         validatedAction(result);
     },
     /**
-    * @name dxValidatorMethods_focus
+    * @name dxValidatorMethods.focus
     * @publicName focus()
     */
     focus: function() {

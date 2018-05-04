@@ -8,98 +8,98 @@
 */
 
 /**
-* @name positionConfig_my
+* @name positionConfig.my
 * @publicName my
 * @type Enums.PositionAlignment|object
 */
 /**
-* @name positionConfig_my_x
+* @name positionConfig.my.x
 * @publicName x
 * @type Enums.HorizontalAlignment
 */
 /**
-* @name positionConfig_my_y
+* @name positionConfig.my.y
 * @publicName y
 * @type Enums.VerticalAlignment
 */
 
 /**
-* @name positionConfig_at
+* @name positionConfig.at
 * @publicName at
 * @type Enums.PositionAlignment|object
 */
 /**
-* @name positionConfig_at_x
+* @name positionConfig.at.x
 * @publicName x
 * @type Enums.HorizontalAlignment
 */
 /**
-* @name positionConfig_at_y
+* @name positionConfig.at.y
 * @publicName y
 * @type Enums.VerticalAlignment
 */
 
 /**
-* @name positionConfig_of
+* @name positionConfig.of
 * @publicName of
 * @type string|Node|jQuery|window
 */
 
 /**
-* @name positionConfig_offset
+* @name positionConfig.offset
 * @publicName offset
 * @type string|object
 */
 /**
-* @name positionConfig_offset_x
+* @name positionConfig.offset.x
 * @publicName x
 * @type number
 * @default 0
 */
 /**
-* @name positionConfig_offset_y
+* @name positionConfig.offset.y
 * @publicName y
 * @type number
 * @default 0
 */
 
 /**
-* @name positionConfig_collision
+* @name positionConfig.collision
 * @publicName collision
 * @type Enums.PositionResolveCollisionXY|object
 */
 /**
-* @name positionConfig_collision_x
+* @name positionConfig.collision.x
 * @publicName x
 * @type Enums.PositionResolveCollision
 * @default 'none'
 */
 /**
-* @name positionConfig_collision_y
+* @name positionConfig.collision.y
 * @publicName y
 * @type Enums.PositionResolveCollision
 * @default 'none'
 */
 
 /**
-* @name positionConfig_boundary
+* @name positionConfig.boundary
 * @publicName boundary
 * @type string|Node|jQuery|window
 */
 
 /**
-* @name positionConfig_boundaryOffset
+* @name positionConfig.boundaryOffset
 * @publicName boundaryOffset
 * @type string|object
 */
 /**
-* @name positionConfig_boundaryOffset_x
+* @name positionConfig.boundaryOffset.x
 * @publicName x
 * @type number
 * @default 0
 */
 /**
-* @name positionConfig_boundaryOffset_y
+* @name positionConfig.boundaryOffset.y
 * @publicName y
 * @default 0
 * @type number

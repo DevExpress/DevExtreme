@@ -5,7 +5,7 @@
 */
 var staticMethods = {
     /**
-    * @name vizmethods_currentTheme
+    * @name vizmethods.currentTheme
     * @publicName currentTheme(theme)
     * @param1 theme:string
     * @static
@@ -13,7 +13,7 @@ var staticMethods = {
     * @export currentTheme
     */
     /**
-    * @name vizmethods_currentTheme
+    * @name vizmethods.currentTheme
     * @publicName currentTheme(platform, colorScheme)
     * @param1 platform:string
     * @param2 colorScheme:string
@@ -22,7 +22,7 @@ var staticMethods = {
     * @export currentTheme
     */
     /**
-    * @name vizmethods_currentTheme
+    * @name vizmethods.currentTheme
     * @publicName currentTheme()
     * @return string
     * @static
@@ -31,7 +31,7 @@ var staticMethods = {
     */
     currentTheme: function() { },
     /**
-    * @name vizmethods_registerTheme
+    * @name vizmethods.registerTheme
     * @publicName registerTheme(customTheme, baseTheme)
     * @param1 customTheme:object
     * @param2 baseTheme:string
@@ -41,7 +41,7 @@ var staticMethods = {
     */
     registerTheme: function() { },
     /**
-    * @name vizmethods_refreshTheme
+    * @name vizmethods.refreshTheme
     * @publicName refreshTheme()
     * @static
     * @module viz/themes
@@ -49,7 +49,7 @@ var staticMethods = {
     */
     refreshTheme: function() { },
     /**
-    * @name vizmethods_getTheme 
+    * @name vizmethods.getTheme 
     * @publicName getTheme(theme)
     * @param1 theme:string
     * @return object
@@ -59,7 +59,7 @@ var staticMethods = {
     */
     getTheme: function() { },
     /**
-    * @name vizmethods_exportFromMarkup
+    * @name vizmethods.exportFromMarkup
     * @publicName exportFromMarkup(markup, options)
     * @param1 markup:string
     * @param2 options:object
@@ -78,7 +78,7 @@ var staticMethods = {
     */
     exportFromMarkup: function() { },
     /**
-    * @name vizmethods_getMarkup
+    * @name vizmethods.getMarkup
     * @publicName getMarkup(widgetInstances)
     * @param1 widgetInstances:Array<DOMComponent>
     * @return string
@@ -88,7 +88,7 @@ var staticMethods = {
     */
     getMarkup: function() { },
     /**
-    * @name vizmethods_currentPalette
+    * @name vizmethods.currentPalette
     * @publicName currentPalette(paletteName)
     * @param1 paletteName:string
     * @static
@@ -97,7 +97,7 @@ var staticMethods = {
     */
     currentPalette: function() { },
     /**
-    * @name vizmethods_getPalette
+    * @name vizmethods.getPalette
     * @publicName getPalette(paletteName)
     * @param1 paletteName:string
     * @return object
@@ -107,7 +107,7 @@ var staticMethods = {
     */
     getPalette: function() { },
     /**
-    * @name vizmethods_registerPalette
+    * @name vizmethods.registerPalette
     * @publicName registerPalette(paletteName, palette)
     * @param1 paletteName:string
     * @param2 palette:object
@@ -117,7 +117,7 @@ var staticMethods = {
     */
     registerPalette: function() { },
     /**
-    * @name vizmethods_refreshPaths
+    * @name vizmethods.refreshPaths
     * @publicName refreshPaths()
     * @static
     * @module viz/utils
@@ -125,7 +125,7 @@ var staticMethods = {
     */
     refreshPaths: function() { },
     /**
-    * @name viz_core
+    * @name viz.core
     * @publicName core
     * @deprecated viz
     * @namespace DevExpress.viz
@@ -133,65 +133,65 @@ var staticMethods = {
     */
     core: {
         /**
-        * @name viz_coremethods_currentTheme
+        * @name viz.coremethods.currentTheme
         * @publicName currentTheme(theme)
         * @param1 theme:string
-        * @deprecated vizmethods_currentTheme
+        * @deprecated vizmethods.currentTheme
         * @static
         */
         /**
-        * @name viz_coremethods_currentTheme
+        * @name viz.coremethods.currentTheme
         * @publicName currentTheme(platform, colorScheme)
         * @param1 platform:string
         * @param2 colorScheme:string
-        * @deprecated vizmethods_currentTheme
+        * @deprecated vizmethods.currentTheme
         * @static
         */
         currentTheme: function() { },
         /**
-        * @name viz_coremethods_registerTheme
+        * @name viz.coremethods.registerTheme
         * @publicName registerTheme(customTheme, baseTheme)
         * @param1 customTheme:object
         * @param2 baseTheme:string
-        * @deprecated vizmethods_registerTheme
+        * @deprecated vizmethods.registerTheme
         * @static
         */
         registerTheme: function() { },
         /**
-        * @name viz_coremethods_currentPalette
+        * @name viz.coremethods.currentPalette
         * @publicName currentPalette(paletteName)
         * @param1 paletteName:string
-        * @deprecated vizmethods_currentPalette
+        * @deprecated vizmethods.currentPalette
         * @static
         */
         currentPalette: function() { },
         /**
-        * @name viz_coremethods_getPalette
+        * @name viz.coremethods.getPalette
         * @publicName getPalette(paletteName)
         * @param1 paletteName:string
         * @return object
-        * @deprecated vizmethods_getPalette
+        * @deprecated vizmethods.getPalette
         * @static
         */
         getPalette: function() { },
         /**
-        * @name viz_coremethods_registerPalette
+        * @name viz.coremethods.registerPalette
         * @publicName registerPalette(paletteName, palette)
         * @param1 paletteName:string
         * @param2 palette:object
-        * @deprecated vizmethods_registerPalette
+        * @deprecated vizmethods.registerPalette
         * @static
         */
         registerPalette: function() { }
     },
     /**
-    * @name viz_map
+    * @name viz.map
     * @publicName map
     * @static
     */
     map: {
         /**
-        * @name viz_mapmethods_projection
+        * @name viz.mapmethods.projection
         * @publicName projection(data)
         * @param1 data:object
         * @param1_field1 to:function(coordinates)
@@ -204,7 +204,7 @@ var staticMethods = {
         * @export projection
         */
         /**
-        * @name viz_mapmethods_projection_get
+        * @name viz.mapmethods.projection.get
         * @publicName get(name)
         * @param1 name:string
         * @return object
@@ -212,7 +212,7 @@ var staticMethods = {
         * @static
         */
         /**
-        * @name viz_mapmethods_projection_add
+        * @name viz.mapmethods.projection.add
         * @publicName add(name, projection)
         * @param1 name:string
         * @param2 projection:object

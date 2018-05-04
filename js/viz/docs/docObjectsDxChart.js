@@ -6,13 +6,13 @@
 */
 var chartSeriesObject = {
     /**
-    * @name chartSeriesObjectFields_axis
+    * @name chartSeriesObjectFields.axis
     * @publicName axis
     * @type string
     */
     axis: null,
     /**
-    * @name chartSeriesObjectFields_pane
+    * @name chartSeriesObjectFields.pane
     * @publicName pane
     * @type string
     */
@@ -26,25 +26,25 @@ var chartSeriesObject = {
 */
 var chartPointAggregationInfoObject = {
     /**
-    * @name chartPointAggregationInfoObject_data
+    * @name chartPointAggregationInfoObject.data
     * @publicName data
     * @type Array<any>
     */
     data: null,
     /**
-    * @name chartPointAggregationInfoObject_aggregationInterval
+    * @name chartPointAggregationInfoObject.aggregationInterval
     * @publicName aggregationInterval
     * @type any
     */
     aggregationInterval: null,
     /**
-    * @name chartPointAggregationInfoObject_intervalStart
+    * @name chartPointAggregationInfoObject.intervalStart
     * @publicName intervalStart
     * @type any
     */
     intervalStart: null,
     /**
-    * @name chartPointAggregationInfoObject_intervalEnd
+    * @name chartPointAggregationInfoObject.intervalEnd
     * @publicName intervalEnd
     * @type any
     */
@@ -59,49 +59,49 @@ var chartPointAggregationInfoObject = {
 */
 var chartPointObject = {
     /**
-    * @name chartPointObjectFields_aggregationInfo
+    * @name chartPointObjectFields.aggregationInfo
     * @publicName aggregationInfo
     * @type chartPointAggregationInfoObject
     */
     aggregationInfo: null,
     /**
-    * @name chartPointObjectFields_originalMinValue
+    * @name chartPointObjectFields.originalMinValue
     * @publicName originalMinValue
     * @type string|number|date
     */
     originalMinValue: null,
     /**
-    * @name chartPointObjectFields_originalOpenValue
+    * @name chartPointObjectFields.originalOpenValue
     * @publicName originalOpenValue
     * @type number|string
     */
     originalOpenValue: null,
     /**
-    * @name chartPointObjectFields_originalCloseValue
+    * @name chartPointObjectFields.originalCloseValue
     * @publicName originalCloseValue
     * @type number|string
     */
     originalCloseValue: null,
     /**
-    * @name chartPointObjectFields_originalLowValue
+    * @name chartPointObjectFields.originalLowValue
     * @publicName originalLowValue
     * @type number|string
     */
     originalLowValue: null,
     /**
-    * @name chartPointObjectFields_originalHighValue
+    * @name chartPointObjectFields.originalHighValue
     * @publicName originalHighValue
     * @type number|string
     */
     originalHighValue: null,
     /**
-    * @name chartPointObjectFields_size
+    * @name chartPointObjectFields.size
     * @publicName size
     * @type number|string
     */
     size: null,
     /**
-    * @name chartPointObjectmethods_getboundingrect
+    * @name chartPointObjectmethods.getboundingrect
     * @publicName getBoundingRect()
     * @return object
     */

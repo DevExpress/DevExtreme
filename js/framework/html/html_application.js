@@ -42,62 +42,62 @@ var VIEW_PORT_CLASSNAME = "dx-viewport",
 var HtmlApplication = Application.inherit({
 
     /**
-    * @name HtmlApplicationoptions_namespace
+    * @name HtmlApplicationoptions.namespace
     * @publicName namespace
     * @type object
     */
     /**
-    * @name HtmlApplicationOptions_router
+    * @name HtmlApplicationOptions.router
     * @publicName router
     * @type object
     */
     /**
-    * @name HtmlApplicationOptions_stateManager
+    * @name HtmlApplicationOptions.stateManager
     * @publicName stateManager
     * @type object
     */
     /**
-    * @name HtmlApplicationOptions_stateStorage
+    * @name HtmlApplicationOptions.stateStorage
     * @publicName stateStorage
     * @type object
     */
     /**
-    * @name HtmlApplicationoptions_navigation
+    * @name HtmlApplicationoptions.navigation
     * @publicName navigation
     * @type Array<dxCommand,dxCommandOptions>
     */
     /**
-    * @name HtmlApplicationoptions_mode
+    * @name HtmlApplicationoptions.mode
     * @publicName mode
     * @type string
     * @default "mobileApp"
     * @acceptValues 'mobileApp'|'webSite'
     */
     /**
-    * @name HtmlApplicationoptions_layoutSet
+    * @name HtmlApplicationoptions.layoutSet
     * @publicName layoutSet
     * @type string|Array<Object>
     * @default undefined
     */
     /**
-    * @name HtmlApplicationoptions_animationSet
+    * @name HtmlApplicationoptions.animationSet
     * @publicName animationSet
     * @type object
     * @default undefined
     */
     /**
-    * @name HtmlApplicationoptions_disableViewCache
+    * @name HtmlApplicationoptions.disableViewCache
     * @publicName disableViewCache
     * @type boolean
     */
     /**
-    * @name HtmlApplicationoptions_useViewTitleAsBackText
+    * @name HtmlApplicationoptions.useViewTitleAsBackText
     * @publicName useViewTitleAsBackText
     * @type boolean
     * @default false
     */
     /**
-    * @name HtmlApplicationoptions_viewPort
+    * @name HtmlApplicationoptions.viewPort
     * @publicName viewPort
     * @type object
     * @type_object_field1 allowZoom:Boolean
@@ -105,31 +105,31 @@ var HtmlApplication = Application.inherit({
     * @type_object_field3 allowSelection:Boolean
     */
     /**
-    * @name HtmlApplicationoptions_navigateToRootViewMode
+    * @name HtmlApplicationoptions.navigateToRootViewMode
     * @publicName navigateToRootViewMode
     * @type string
     * @default "resetHistory"
     * @acceptValues 'keepHistory'|'resetHistory'
     */
     /**
-    * @name HtmlApplicationoptions_commandMapping
+    * @name HtmlApplicationoptions.commandMapping
     * @publicName commandMapping
     * @type object
     * @default DevExpress.framework.CommandMapping.defaultMapping
     */
     /**
-    * @name HtmlApplicationoptions_viewCache
+    * @name HtmlApplicationoptions.viewCache
     * @publicName viewCache
     * @type object
     */
     /**
-    * @name HtmlApplicationoptions_viewCacheSize
+    * @name HtmlApplicationoptions.viewCacheSize
     * @publicName viewCacheSize
     * @type Number
     * @default 5
     */
     /**
-    * @name HtmlApplicationoptions_templatesVersion
+    * @name HtmlApplicationoptions.templatesVersion
     * @publicName templatesVersion
     * @type String
     * @default undefined
@@ -238,17 +238,17 @@ var HtmlApplication = Application.inherit({
 
 
     /**
-    * @name HtmlApplicationmethods_createNavigation
+    * @name HtmlApplicationmethods.createNavigation
     * @publicName createNavigation(navigationConfig)
     * @param1 navigationConfig:Array<Object>
     */
     /**
-    * @name HtmlApplicationmethods_navigate
+    * @name HtmlApplicationmethods.navigate
     * @publicName navigate(uri)
     * @param1 uri:string|object|undefined
     */
     /**
-    * @name HtmlApplicationmethods_navigate
+    * @name HtmlApplicationmethods.navigate
     * @publicName navigate(uri, options)
     * @param1 uri:string|object
     * @param2 options:object
@@ -258,33 +258,33 @@ var HtmlApplication = Application.inherit({
     * @param2_field5 modal:Boolean
      */
     /**
-    * @name HtmlApplicationmethods_canBack
+    * @name HtmlApplicationmethods.canBack
     * @publicName canBack()
     * @return boolean
     */
     /**
-    * @name HtmlApplicationmethods_back
+    * @name HtmlApplicationmethods.back
     * @publicName back()
     */
     /**
-    * @name HtmlApplicationmethods_saveState
+    * @name HtmlApplicationmethods.saveState
     * @publicName saveState()
     */
     /**
-    * @name HtmlApplicationmethods_restoreState
+    * @name HtmlApplicationmethods.restoreState
     * @publicName restoreState()
     */
     /**
-    * @name HtmlApplicationmethods_clearState
+    * @name HtmlApplicationmethods.clearState
     * @publicName clearState()
     */
     /**
-    * @name HtmlApplicationevents_initialized
+    * @name HtmlApplicationevents.initialized
     * @publicName initialized
     * @type classEventType
     */
     /**
-    * @name HtmlApplicationevents_navigatingBack
+    * @name HtmlApplicationevents.navigatingBack
     * @publicName navigatingBack
     * @type classEventType
     * @type_function_param1 e:object
@@ -292,7 +292,7 @@ var HtmlApplication = Application.inherit({
     * @type_function_param1_field2 isHardwareButton:Boolean
     */
     /**
-    * @name HtmlApplicationevents_navigating
+    * @name HtmlApplicationevents.navigating
     * @publicName navigating
     * @type classEventType
     * @type_function_param1 e:object
@@ -302,28 +302,28 @@ var HtmlApplication = Application.inherit({
     * @type_function_param1_field4 options:object
     */
     /**
-    * @name HtmlApplicationevents_beforeViewSetup
+    * @name HtmlApplicationevents.beforeViewSetup
     * @publicName beforeViewSetup
     * @type classEventType
     * @type_function_param1 e:object
     * @type_function_param1_field1 viewInfo:object
     */
     /**
-    * @name HtmlApplicationevents_afterViewSetup
+    * @name HtmlApplicationevents.afterViewSetup
     * @publicName afterViewSetup
     * @type classEventType
     * @type_function_param1 e:object
     * @type_function_param1_field1 viewInfo:object
     */
     /**
-    * @name HtmlApplicationevents_viewRendered
+    * @name HtmlApplicationevents.viewRendered
     * @publicName viewRendered
     * @type classEventType
     * @type_function_param1 e:object
     * @type_function_param1_field1 viewInfo:object
     */
     /**
-    * @name HtmlApplicationevents_viewShowing
+    * @name HtmlApplicationevents.viewShowing
     * @publicName viewShowing
     * @type classEventType
     * @type_function_param1 e:object
@@ -331,7 +331,7 @@ var HtmlApplication = Application.inherit({
     * @type_function_param1_field2 direction:string
     */
     /**
-    * @name HtmlApplicationevents_viewShown
+    * @name HtmlApplicationevents.viewShown
     * @publicName viewShown
     * @type classEventType
     * @type_function_param1 e:object
@@ -339,28 +339,28 @@ var HtmlApplication = Application.inherit({
     * @type_function_param1_field2 direction:string
     */
     /**
-    * @name HtmlApplicationevents_viewHidden
+    * @name HtmlApplicationevents.viewHidden
     * @publicName viewHidden
     * @type classEventType
     * @type_function_param1 e:object
     * @type_function_param1_field1 viewInfo:object
     */
     /**
-    * @name HtmlApplicationevents_viewDisposing
+    * @name HtmlApplicationevents.viewDisposing
     * @publicName viewDisposing
     * @type classEventType
     * @type_function_param1 e:object
     * @type_function_param1_field1 viewInfo:object
     */
     /**
-    * @name HtmlApplicationevents_viewDisposed
+    * @name HtmlApplicationevents.viewDisposed
     * @publicName viewDisposed
     * @type classEventType
     * @type_function_param1 e:object
     * @type_function_param1_field1 viewInfo:object
     */
     /**
-    * @name HtmlApplicationevents_resolveLayoutController
+    * @name HtmlApplicationevents.resolveLayoutController
     * @publicName resolveLayoutController
     * @type classEventType
     * @type_function_param1 e:object
@@ -369,7 +369,7 @@ var HtmlApplication = Application.inherit({
     * @type_function_param1_field3 availableLayoutControllers:Array<Object>
     */
     /**
-    * @name HtmlApplicationevents_resolveViewCacheKey
+    * @name HtmlApplicationevents.resolveViewCacheKey
     * @publicName resolveViewCacheKey
     * @type classEventType
     * @type_function_param1 e:object
@@ -378,22 +378,22 @@ var HtmlApplication = Application.inherit({
     * @type_function_param1_field3 routeData:object
     */
     /**
-     * @name HtmlApplicationfields_viewCache
+     * @name HtmlApplicationfields.viewCache
      * @publicName viewCache
      * @type object
      */
     /**
-     * @name HtmlApplicationFields_router
+     * @name HtmlApplicationFields.router
      * @publicName router
      * @type object
      */
     /**
-     * @name HtmlApplicationfields_navigation
+     * @name HtmlApplicationfields.navigation
      * @publicName navigation
      * @type Array<dxCommand>
      */
     /**
-     * @name HtmlApplicationFields_stateManager
+     * @name HtmlApplicationFields.stateManager
      * @publicName stateManager
      * @type object
      */
@@ -689,7 +689,7 @@ var HtmlApplication = Application.inherit({
     },
 
     /**
-    * @name HtmlApplicationmethods_renderNavigation
+    * @name HtmlApplicationmethods.renderNavigation
     * @publicName renderNavigation()
     */
     renderNavigation: function() {
@@ -704,7 +704,7 @@ var HtmlApplication = Application.inherit({
     },
 
     /**
-    * @name HtmlApplicationmethods_getViewTemplate
+    * @name HtmlApplicationmethods.getViewTemplate
     * @publicName getViewTemplate(viewName)
     * @param1 viewName:string
     * @return jQuery
@@ -714,7 +714,7 @@ var HtmlApplication = Application.inherit({
     },
 
     /**
-    * @name HtmlApplicationmethods_getViewTemplateInfo
+    * @name HtmlApplicationmethods.getViewTemplateInfo
     * @publicName getViewTemplateInfo(viewName)
     * @param1 viewName:string
     * @return object
@@ -726,7 +726,7 @@ var HtmlApplication = Application.inherit({
     },
 
     /**
-    * @name HtmlApplicationmethods_loadTemplates
+    * @name HtmlApplicationmethods.loadTemplates
     * @publicName loadTemplates(source)
     * @param1 source:string|jQuery
     * @return Promise<void>
@@ -736,7 +736,7 @@ var HtmlApplication = Application.inherit({
     },
 
     /**
-    * @name HtmlApplicationmethods_templateContext
+    * @name HtmlApplicationmethods.templateContext
     * @publicName templateContext()
     * @return Object
     */

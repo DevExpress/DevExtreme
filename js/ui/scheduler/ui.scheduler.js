@@ -190,7 +190,7 @@ var Scheduler = Widget.inherit({
                 */
 
                 /**
-                * @name dxSchedulerOptions_views
+                * @name dxSchedulerOptions.views
                 * @publicName views
                 * @type Array<string>
                 * @default ['day', 'week']
@@ -199,235 +199,235 @@ var Scheduler = Widget.inherit({
             views: ["day", "week"],
 
                 /**
-                * @name dxSchedulerOptions_views_type
+                * @name dxSchedulerOptions.views.type
                 * @publicName type
                 * @type Enums.SchedulerViewType
                 * @default undefined
                 */
 
                 /**
-                * @name dxSchedulerOptions_views_name
+                * @name dxSchedulerOptions.views.name
                 * @publicName name
                 * @type string
                 * @default undefined
                 */
 
                 /**
-                * @name dxSchedulerOptions_views_maxAppointmentsPerCell
+                * @name dxSchedulerOptions.views.maxAppointmentsPerCell
                 * @publicName maxAppointmentsPerCell
                 * @type number|Enums.MaxAppointmentsPerCell
                 * @default "auto"
                 */
 
                 /**
-                * @name dxSchedulerOptions_views_intervalCount
+                * @name dxSchedulerOptions.views.intervalCount
                 * @publicName intervalCount
                 * @type number
                 * @default 1
                 */
 
                 /**
-                * @name dxSchedulerOptions_views_startDate
+                * @name dxSchedulerOptions.views.startDate
                 * @publicName startDate
                 * @type Date|number|string
                 * @default undefined
                 */
 
                 /**
-                * @name dxSchedulerOptions_views_startDayHour
+                * @name dxSchedulerOptions.views.startDayHour
                 * @publicName startDayHour
                 * @extends StartDayHour
                 */
 
                 /**
-                * @name dxSchedulerOptions_views_endDayHour
+                * @name dxSchedulerOptions.views.endDayHour
                 * @publicName endDayHour
                 * @extends EndDayHour
                 */
 
                 /**
-                * @name dxSchedulerOptions_views_groups
+                * @name dxSchedulerOptions.views.groups
                 * @publicName groups
                 * @extends Groups
                 */
 
                 /**
-                * @name dxSchedulerOptions_views_firstDayOfWeek
+                * @name dxSchedulerOptions.views.firstDayOfWeek
                 * @publicName firstDayOfWeek
                 * @extends FirstDayOfWeek
                 */
 
                 /**
-                * @name dxSchedulerOptions_views_cellDuration
+                * @name dxSchedulerOptions.views.cellDuration
                 * @publicName cellDuration
                 * @extends CellDuration
                 */
 
                 /**
-                * @name dxSchedulerOptions_views_appointmentTemplate
+                * @name dxSchedulerOptions.views.appointmentTemplate
                 * @publicName appointmentTemplate
                 * @extends AppointmentTemplate
                 */
 
                 /**
-                * @name dxSchedulerOptions_views_dropDownAppointmentTemplate
+                * @name dxSchedulerOptions.views.dropDownAppointmentTemplate
                 * @publicName dropDownAppointmentTemplate
                 * @default "dropDownAppointment"
                 * @extends AppointmentTemplate
                 */
 
                 /**
-                * @name dxSchedulerOptions_views_appointmentTooltipTemplate
+                * @name dxSchedulerOptions.views.appointmentTooltipTemplate
                 * @publicName appointmentTooltipTemplate
                 * @extends AppointmentTooltipTemplate
                 */
 
                 /**
-                * @name dxSchedulerOptions_views_dateCellTemplate
+                * @name dxSchedulerOptions.views.dateCellTemplate
                 * @publicName dateCellTemplate
                 * @extends DateCellTemplate
                 */
 
                 /**
-                * @name dxSchedulerOptions_views_timeCellTemplate
+                * @name dxSchedulerOptions.views.timeCellTemplate
                 * @publicName timeCellTemplate
                 * @extends TimeCellTemplate
                 */
 
                 /**
-                * @name dxSchedulerOptions_views_dataCellTemplate
+                * @name dxSchedulerOptions.views.dataCellTemplate
                 * @publicName dataCellTemplate
                 * @extends DataCellTemplate
                 */
 
                 /**
-                * @name dxSchedulerOptions_views_resourceCellTemplate
+                * @name dxSchedulerOptions.views.resourceCellTemplate
                 * @publicName resourceCellTemplate
                 * @extends ResourceCellTemplate
                 */
 
                 /**
-                * @name dxSchedulerOptions_views_agendaDuration
+                * @name dxSchedulerOptions.views.agendaDuration
                 * @publicName agendaDuration
                 * @type number
                 * @default 7
                 */
 
                 /**
-                * @name dxSchedulerOptions_views_groupOrientation
+                * @name dxSchedulerOptions.views.groupOrientation
                 * @publicName groupOrientation
                 * @type Enums.Orientation
                 */
 
                 /**
-                * @name dxSchedulerOptions_currentView
+                * @name dxSchedulerOptions.currentView
                 * @publicName currentView
                 * @type Enums.SchedulerViewType
                 * @default "day"
-                * @fires dxSchedulerOptions_onOptionChanged
+                * @fires dxSchedulerOptions.onOptionChanged
                 */
             currentView: "day", // TODO: should we calculate currentView if views array contains only one item, for example 'month'?
                 /**
-                * @name dxSchedulerOptions_currentDate
+                * @name dxSchedulerOptions.currentDate
                 * @publicName currentDate
                 * @type Date|number|string
                 * @default new Date()
-                * @fires dxSchedulerOptions_onOptionChanged
+                * @fires dxSchedulerOptions.onOptionChanged
                 */
             currentDate: dateUtils.trimTime(new Date()),
                 /**
-                * @name dxSchedulerOptions_min
+                * @name dxSchedulerOptions.min
                 * @publicName min
                 * @type Date|number|string
                 * @default undefined
                 */
             min: undefined,
                 /**
-                * @name dxSchedulerOptions_max
+                * @name dxSchedulerOptions.max
                 * @publicName max
                 * @type Date|number|string
                 * @default undefined
                 */
             max: undefined,
                 /**
-                * @name dxSchedulerOptions_dateSerializationFormat
+                * @name dxSchedulerOptions.dateSerializationFormat
                 * @publicName dateSerializationFormat
                 * @type string
                 * @default undefined
                 */
             dateSerializationFormat: undefined,
                 /**
-                * @name dxSchedulerOptions_firstDayOfWeek
+                * @name dxSchedulerOptions.firstDayOfWeek
                 * @publicName firstDayOfWeek
                 * @extends FirstDayOfWeek
                 */
             firstDayOfWeek: undefined,
 
                 /**
-                * @name dxSchedulerOptions_groups
+                * @name dxSchedulerOptions.groups
                 * @publicName groups
                 * @extends Groups
                 */
             groups: [],
 
                 /**
-                * @name dxSchedulerOptions_resources
+                * @name dxSchedulerOptions.resources
                 * @publicName resources
                 * @type Array<Object>
                 * @default []
                 */
             resources: [
                     /**
-                    * @name dxSchedulerOptions_resources_fieldExpr
+                    * @name dxSchedulerOptions.resources.fieldExpr
                     * @publicName fieldExpr
                     * @type String
                     * @default ""
                     */
 
                     /**
-                    * @name dxSchedulerOptions_resources_colorExpr
+                    * @name dxSchedulerOptions.resources.colorExpr
                     * @publicName colorExpr
                     * @type String
                     * @default "color"
                     */
 
                     /**
-                    * @name dxSchedulerOptions_resources_label
+                    * @name dxSchedulerOptions.resources.label
                     * @publicName label
                     * @type String
                     * @default ""
                     */
 
                     /**
-                    * @name dxSchedulerOptions_resources_allowMultiple
+                    * @name dxSchedulerOptions.resources.allowMultiple
                     * @publicName allowMultiple
                     * @type Boolean
                     * @default false
                     */
 
                     /**
-                    * @name dxSchedulerOptions_resources_useColorAsDefault
+                    * @name dxSchedulerOptions.resources.useColorAsDefault
                     * @publicName useColorAsDefault
                     * @type Boolean
                     * @default false
                     */
 
                     /**
-                    * @name dxSchedulerOptions_resources_valueExpr
+                    * @name dxSchedulerOptions.resources.valueExpr
                     * @publicName valueExpr
                     * @type string|function
                     * @default 'id'
                     */
 
                     /**
-                    * @name dxSchedulerOptions_resources_displayExpr
+                    * @name dxSchedulerOptions.resources.displayExpr
                     * @publicName displayExpr
                     * @type string|function
                     * @default 'text'
                     */
 
                     /**
-                    * @name dxSchedulerOptions_resources_dataSource
+                    * @name dxSchedulerOptions.resources.dataSource
                     * @publicName dataSource
                     * @type string|Array<Object>|DataSource|DataSourceOptions
                     * @default null
@@ -435,7 +435,7 @@ var Scheduler = Widget.inherit({
             ],
 
                 /**
-                * @name dxSchedulerOptions_dataSource
+                * @name dxSchedulerOptions.dataSource
                 * @publicName dataSource
                 * @type string|Array<dxSchedulerAppointmentTemplate>|DataSource|DataSourceOptions
                 * @default null
@@ -443,14 +443,14 @@ var Scheduler = Widget.inherit({
             dataSource: null,
 
                 /**
-                * @name dxSchedulerOptions_appointmentTemplate
+                * @name dxSchedulerOptions.appointmentTemplate
                 * @publicName appointmentTemplate
                 * @extends AppointmentTemplate
                 */
             appointmentTemplate: "item",
 
             /**
-                * @name dxSchedulerOptions_dropDownAppointmentTemplate
+                * @name dxSchedulerOptions.dropDownAppointmentTemplate
                 * @publicName dropDownAppointmentTemplate
                 * @default "dropDownAppointment"
                 * @extends AppointmentTemplate
@@ -458,49 +458,49 @@ var Scheduler = Widget.inherit({
             dropDownAppointmentTemplate: "dropDownAppointment",
 
                 /**
-                * @name dxSchedulerOptions_dataCellTemplate
+                * @name dxSchedulerOptions.dataCellTemplate
                 * @publicName dataCellTemplate
                 * @extends DataCellTemplate
                 */
             dataCellTemplate: null,
 
                 /**
-                * @name dxSchedulerOptions_timeCellTemplate
+                * @name dxSchedulerOptions.timeCellTemplate
                 * @publicName timeCellTemplate
                 * @extends TimeCellTemplate
                 */
             timeCellTemplate: null,
 
                 /**
-                * @name dxSchedulerOptions_resourceCellTemplate
+                * @name dxSchedulerOptions.resourceCellTemplate
                 * @publicName resourceCellTemplate
                 * @extends ResourceCellTemplate
                 */
             resourceCellTemplate: null,
 
                 /**
-                * @name dxSchedulerOptions_dateCellTemplate
+                * @name dxSchedulerOptions.dateCellTemplate
                 * @publicName dateCellTemplate
                 * @extends DateCellTemplate
                 */
             dateCellTemplate: null,
 
                 /**
-                * @name dxSchedulerOptions_startDayHour
+                * @name dxSchedulerOptions.startDayHour
                 * @publicName startDayHour
                 * @extends StartDayHour
                 */
             startDayHour: 0,
 
                 /**
-                * @name dxSchedulerOptions_endDayHour
+                * @name dxSchedulerOptions.endDayHour
                 * @publicName endDayHour
                 * @extends EndDayHour
                 */
             endDayHour: 24,
 
                 /**
-                * @name dxSchedulerOptions_editing
+                * @name dxSchedulerOptions.editing
                 * @publicName editing
                 * @type boolean|object
                 * @default true
@@ -514,38 +514,38 @@ var Scheduler = Widget.inherit({
             },
 
                 /**
-                * @name dxSchedulerOptions_editing_allowAdding
+                * @name dxSchedulerOptions.editing.allowAdding
                 * @publicName allowAdding
                 * @type boolean
                 * @default true
                 */
                 /**
-                * @name dxSchedulerOptions_editing_allowUpdating
+                * @name dxSchedulerOptions.editing.allowUpdating
                 * @publicName allowUpdating
                 * @type boolean
                 * @default true
                 */
                 /**
-                * @name dxSchedulerOptions_editing_allowDeleting
+                * @name dxSchedulerOptions.editing.allowDeleting
                 * @publicName allowDeleting
                 * @type boolean
                 * @default true
                 */
                 /**
-                * @name dxSchedulerOptions_editing_allowResizing
+                * @name dxSchedulerOptions.editing.allowResizing
                 * @publicName allowResizing
                 * @type boolean
                 * @default true
                 */
                 /**
-                * @name dxSchedulerOptions_editing_allowDragging
+                * @name dxSchedulerOptions.editing.allowDragging
                 * @publicName allowDragging
                 * @type boolean
                 * @default true
                 */
 
                 /**
-                * @name dxSchedulerOptions_showAllDayPanel
+                * @name dxSchedulerOptions.showAllDayPanel
                 * @publicName showAllDayPanel
                 * @type boolean
                 * @default true
@@ -553,7 +553,7 @@ var Scheduler = Widget.inherit({
             showAllDayPanel: true,
 
                 /**
-                * @name dxSchedulerOptions_showCurrentTimeIndicator
+                * @name dxSchedulerOptions.showCurrentTimeIndicator
                 * @publicName showCurrentTimeIndicator
                 * @type boolean
                 * @default true
@@ -561,7 +561,7 @@ var Scheduler = Widget.inherit({
             showCurrentTimeIndicator: true,
 
                 /**
-                * @name dxSchedulerOptions_shadeUntilCurrentTime
+                * @name dxSchedulerOptions.shadeUntilCurrentTime
                 * @publicName shadeUntilCurrentTime
                 * @type boolean
                 * @default false
@@ -569,7 +569,7 @@ var Scheduler = Widget.inherit({
             shadeUntilCurrentTime: false,
 
                 /**
-                * @name dxSchedulerOptions_indicatorUpdateInterval
+                * @name dxSchedulerOptions.indicatorUpdateInterval
                 * @publicName indicatorUpdateInterval
                 * @type number
                 * @default 300000
@@ -578,7 +578,7 @@ var Scheduler = Widget.inherit({
 
                 /**
                 * @hidden
-                * @name dxSchedulerOptions_indicatorTime
+                * @name dxSchedulerOptions.indicatorTime
                 * @publicName indicatorTime
                 * @type Date
                 * @default undefined
@@ -586,7 +586,7 @@ var Scheduler = Widget.inherit({
             indicatorTime: undefined,
 
                 /**
-                * @name dxSchedulerOptions_recurrenceEditMode
+                * @name dxSchedulerOptions.recurrenceEditMode
                 * @publicName recurrenceEditMode
                 * @type Enums.SchedulerRecurrenceEditMode
                 * @default "dialog"
@@ -594,14 +594,14 @@ var Scheduler = Widget.inherit({
             recurrenceEditMode: "dialog",
 
                 /**
-                * @name dxSchedulerOptions_cellDuration
+                * @name dxSchedulerOptions.cellDuration
                 * @publicName cellDuration
                 * @extends CellDuration
                 */
             cellDuration: 30,
 
                  /**
-                * @name dxSchedulerOptions_maxAppointmentsPerCell
+                * @name dxSchedulerOptions.maxAppointmentsPerCell
                 * @publicName maxAppointmentsPerCell
                 * @type number|Enums.MaxAppointmentsPerCell
                 * @default "auto"
@@ -609,7 +609,7 @@ var Scheduler = Widget.inherit({
             maxAppointmentsPerCell: "auto",
 
                 /**
-                * @name dxSchedulerOptions_selectedCellData
+                * @name dxSchedulerOptions.selectedCellData
                 * @publicName selectedCellData
                 * @readonly
                 * @type Array<any>
@@ -618,7 +618,7 @@ var Scheduler = Widget.inherit({
             selectedCellData: [],
 
                 /**
-                * @name dxSchedulerOptions_onAppointmentRendered
+                * @name dxSchedulerOptions.onAppointmentRendered
                 * @publicName onAppointmentRendered
                 * @extends Action
                 * @type function(e)
@@ -631,7 +631,7 @@ var Scheduler = Widget.inherit({
             onAppointmentRendered: null,
 
                 /**
-                * @name dxSchedulerOptions_onAppointmentClick
+                * @name dxSchedulerOptions.onAppointmentClick
                 * @publicName onAppointmentClick
                 * @type function(e)|string
                 * @extends Action
@@ -647,7 +647,7 @@ var Scheduler = Widget.inherit({
             onAppointmentClick: null,
 
                 /**
-                * @name dxSchedulerOptions_onAppointmentDblClick
+                * @name dxSchedulerOptions.onAppointmentDblClick
                 * @publicName onAppointmentDblClick
                 * @type function(e)|string
                 * @extends Action
@@ -663,7 +663,7 @@ var Scheduler = Widget.inherit({
             onAppointmentDblClick: null,
 
             /**
-                * @name dxSchedulerOptions_onAppointmentContextMenu
+                * @name dxSchedulerOptions.onAppointmentContextMenu
                 * @publicName onAppointmentContextMenu
                 * @type function(e)|string
                 * @extends Action
@@ -678,7 +678,7 @@ var Scheduler = Widget.inherit({
             onAppointmentContextMenu: null,
 
                 /**
-                * @name dxSchedulerOptions_onCellClick
+                * @name dxSchedulerOptions.onCellClick
                 * @publicName onCellClick
                 * @type function(e)|string
                 * @extends Action
@@ -693,7 +693,7 @@ var Scheduler = Widget.inherit({
             onCellClick: null,
 
             /**
-                * @name dxSchedulerOptions_onCellContextMenu
+                * @name dxSchedulerOptions.onCellContextMenu
                 * @publicName onCellContextMenu
                 * @type function(e)|string
                 * @extends Action
@@ -707,7 +707,7 @@ var Scheduler = Widget.inherit({
             onCellContextMenu: null,
 
                 /**
-                * @name dxSchedulerOptions_onAppointmentAdding
+                * @name dxSchedulerOptions.onAppointmentAdding
                 * @publicName onAppointmentAdding
                 * @extends Action
                 * @type function(e)
@@ -719,7 +719,7 @@ var Scheduler = Widget.inherit({
             onAppointmentAdding: null,
 
                 /**
-                * @name dxSchedulerOptions_onAppointmentAdded
+                * @name dxSchedulerOptions.onAppointmentAdded
                 * @publicName onAppointmentAdded
                 * @extends Action
                 * @type function(e)
@@ -731,7 +731,7 @@ var Scheduler = Widget.inherit({
             onAppointmentAdded: null,
 
                 /**
-                * @name dxSchedulerOptions_onAppointmentUpdating
+                * @name dxSchedulerOptions.onAppointmentUpdating
                 * @publicName onAppointmentUpdating
                 * @extends Action
                 * @type function(e)
@@ -744,7 +744,7 @@ var Scheduler = Widget.inherit({
             onAppointmentUpdating: null,
 
                 /**
-                * @name dxSchedulerOptions_onAppointmentUpdated
+                * @name dxSchedulerOptions.onAppointmentUpdated
                 * @publicName onAppointmentUpdated
                 * @extends Action
                 * @type function(e)
@@ -756,7 +756,7 @@ var Scheduler = Widget.inherit({
             onAppointmentUpdated: null,
 
                 /**
-                * @name dxSchedulerOptions_onAppointmentDeleting
+                * @name dxSchedulerOptions.onAppointmentDeleting
                 * @publicName onAppointmentDeleting
                 * @extends Action
                 * @type function(e)
@@ -768,7 +768,7 @@ var Scheduler = Widget.inherit({
             onAppointmentDeleting: null,
 
                 /**
-                * @name dxSchedulerOptions_onAppointmentDeleted
+                * @name dxSchedulerOptions.onAppointmentDeleted
                 * @publicName onAppointmentDeleted
                 * @extends Action
                 * @type function(e)
@@ -780,7 +780,7 @@ var Scheduler = Widget.inherit({
             onAppointmentDeleted: null,
 
                 /**
-                * @name dxSchedulerOptions_onAppointmentFormCreated
+                * @name dxSchedulerOptions.onAppointmentFormCreated
                 * @publicName onAppointmentFormCreated
                 * @extends Action
                 * @type function(e)
@@ -792,7 +792,7 @@ var Scheduler = Widget.inherit({
             onAppointmentFormCreated: null,
 
                 /**
-                * @name dxSchedulerOptions_appointmentTooltipTemplate
+                * @name dxSchedulerOptions.appointmentTooltipTemplate
                 * @publicName appointmentTooltipTemplate
                 * @extends AppointmentTooltipTemplate
                 */
@@ -800,7 +800,7 @@ var Scheduler = Widget.inherit({
 
                 /**
                 * @hidden
-                * @name dxSchedulerOptions_appointmentPopupTemplate
+                * @name dxSchedulerOptions.appointmentPopupTemplate
                 * @publicName appointmentPopupTemplate
                 * @type template|function
                 * @default "appointmentPopup"
@@ -811,7 +811,7 @@ var Scheduler = Widget.inherit({
             appointmentPopupTemplate: "appointmentPopup",
 
                 /**
-                * @name dxSchedulerOptions_crossScrollingEnabled
+                * @name dxSchedulerOptions.crossScrollingEnabled
                 * @publicName crossScrollingEnabled
                 * @type boolean
                 * @default false
@@ -819,7 +819,7 @@ var Scheduler = Widget.inherit({
             crossScrollingEnabled: false,
 
                 /**
-                * @name dxSchedulerOptions_useDropDownViewSwitcher
+                * @name dxSchedulerOptions.useDropDownViewSwitcher
                 * @publicName useDropDownViewSwitcher
                 * @type boolean
                 * @default false
@@ -827,7 +827,7 @@ var Scheduler = Widget.inherit({
             useDropDownViewSwitcher: false,
 
                 /**
-                * @name dxSchedulerOptions_startDateExpr
+                * @name dxSchedulerOptions.startDateExpr
                 * @publicName startDateExpr
                 * @type string
                 * @default 'startDate'
@@ -835,7 +835,7 @@ var Scheduler = Widget.inherit({
             startDateExpr: "startDate",
 
                 /**
-                * @name dxSchedulerOptions_endDateExpr
+                * @name dxSchedulerOptions.endDateExpr
                 * @publicName endDateExpr
                 * @type string
                 * @default 'endDate'
@@ -843,7 +843,7 @@ var Scheduler = Widget.inherit({
             endDateExpr: "endDate",
 
                 /**
-                * @name dxSchedulerOptions_textExpr
+                * @name dxSchedulerOptions.textExpr
                 * @publicName textExpr
                 * @type string
                 * @default 'text'
@@ -851,7 +851,7 @@ var Scheduler = Widget.inherit({
             textExpr: "text",
 
                 /**
-                * @name dxSchedulerOptions_descriptionExpr
+                * @name dxSchedulerOptions.descriptionExpr
                 * @publicName descriptionExpr
                 * @type string
                 * @default 'description'
@@ -859,7 +859,7 @@ var Scheduler = Widget.inherit({
             descriptionExpr: "description",
 
                 /**
-                * @name dxSchedulerOptions_allDayExpr
+                * @name dxSchedulerOptions.allDayExpr
                 * @publicName allDayExpr
                 * @type string
                 * @default 'allDay'
@@ -867,7 +867,7 @@ var Scheduler = Widget.inherit({
             allDayExpr: "allDay",
 
                 /**
-                * @name dxSchedulerOptions_recurrenceRuleExpr
+                * @name dxSchedulerOptions.recurrenceRuleExpr
                 * @publicName recurrenceRuleExpr
                 * @type string
                 * @default 'recurrenceRule'
@@ -875,7 +875,7 @@ var Scheduler = Widget.inherit({
             recurrenceRuleExpr: "recurrenceRule",
 
                 /**
-                * @name dxSchedulerOptions_recurrenceExceptionExpr
+                * @name dxSchedulerOptions.recurrenceExceptionExpr
                 * @publicName recurrenceExceptionExpr
                 * @type string
                 * @default 'recurrenceException'
@@ -883,7 +883,7 @@ var Scheduler = Widget.inherit({
             recurrenceExceptionExpr: "recurrenceException",
 
                 /**
-                * @name dxSchedulerOptions_remoteFiltering
+                * @name dxSchedulerOptions.remoteFiltering
                 * @publicName remoteFiltering
                 * @type boolean
                 * @default false
@@ -891,7 +891,7 @@ var Scheduler = Widget.inherit({
             remoteFiltering: false,
 
                 /**
-                * @name dxSchedulerOptions_timeZone
+                * @name dxSchedulerOptions.timeZone
                 * @publicName timeZone
                 * @type string
                 * @default ""
@@ -899,7 +899,7 @@ var Scheduler = Widget.inherit({
             timeZone: "",
 
                 /**
-                * @name dxSchedulerOptions_startDateTimeZoneExpr
+                * @name dxSchedulerOptions.startDateTimeZoneExpr
                 * @publicName startDateTimeZoneExpr
                 * @type string
                 * @default 'startDateTimeZone'
@@ -907,7 +907,7 @@ var Scheduler = Widget.inherit({
             startDateTimeZoneExpr: "startDateTimeZone",
 
                 /**
-                * @name dxSchedulerOptions_endDateTimeZoneExpr
+                * @name dxSchedulerOptions.endDateTimeZoneExpr
                 * @publicName endDateTimeZoneExpr
                 * @type string
                 * @default 'endDateTimeZone'
@@ -915,7 +915,7 @@ var Scheduler = Widget.inherit({
             endDateTimeZoneExpr: "endDateTimeZone",
 
                 /**
-                * @name dxSchedulerOptions_noDataText
+                * @name dxSchedulerOptions.noDataText
                 * @publicName noDataText
                 * @type string
                 * @default "No data to display"
@@ -935,14 +935,14 @@ var Scheduler = Widget.inherit({
             _appointmentOffset: 26
 
                 /**
-                * @name dxSchedulerOptions_activeStateEnabled
+                * @name dxSchedulerOptions.activeStateEnabled
                 * @publicName activeStateEnabled
                 * @hidden
                 * @inheritdoc
                 */
 
                 /**
-                * @name dxSchedulerOptions_hoverStateEnabled
+                * @name dxSchedulerOptions.hoverStateEnabled
                 * @publicName hoverStateEnabled
                 * @hidden
                 * @inheritdoc
@@ -954,69 +954,69 @@ var Scheduler = Widget.inherit({
                 * @type object
                 */
                 /**
-                * @name dxSchedulerAppointmentTemplate_html
+                * @name dxSchedulerAppointmentTemplate.html
                 * @publicName html
                 * @type String
                 */
                 /**
-                * @name dxSchedulerAppointmentTemplate_disabled
+                * @name dxSchedulerAppointmentTemplate.disabled
                 * @publicName disabled
                 * @type boolean
                 * @default false
                 */
                 /**
-                * @name dxSchedulerAppointmentTemplate_visible
+                * @name dxSchedulerAppointmentTemplate.visible
                 * @publicName visible
                 * @type boolean
                 * @default true
                 */
                 /**
-                * @name dxSchedulerAppointmentTemplate_template
+                * @name dxSchedulerAppointmentTemplate.template
                 * @publicName template
                 * @type template
                 */
                 /**
-                * @name dxSchedulerAppointmentTemplate_text
+                * @name dxSchedulerAppointmentTemplate.text
                 * @publicName text
                 * @type String
                 */
                 /**
-                * @name dxSchedulerAppointmentTemplate_startDate
+                * @name dxSchedulerAppointmentTemplate.startDate
                 * @publicName startDate
                 * @type Date
                 */
                 /**
-                * @name dxSchedulerAppointmentTemplate_endDate
+                * @name dxSchedulerAppointmentTemplate.endDate
                 * @publicName endDate
                 * @type Date
                 */
                 /**
-                * @name dxSchedulerAppointmentTemplate_description
+                * @name dxSchedulerAppointmentTemplate.description
                 * @publicName description
                 * @type String
                 */
                 /**
-                * @name dxSchedulerAppointmentTemplate_recurrenceRule
+                * @name dxSchedulerAppointmentTemplate.recurrenceRule
                 * @publicName recurrenceRule
                 * @type String
                 */
                 /**
-                * @name dxSchedulerAppointmentTemplate_recurrenceException
+                * @name dxSchedulerAppointmentTemplate.recurrenceException
                 * @publicName recurrenceException
                 * @type String
                 */
                 /**
-                * @name dxSchedulerAppointmentTemplate_allDay
+                * @name dxSchedulerAppointmentTemplate.allDay
                 * @publicName allDay
                 * @type Boolean
                 */
                 /**
-                * @name dxSchedulerAppointmentTemplate_startDateTimeZone
+                * @name dxSchedulerAppointmentTemplate.startDateTimeZone
                 * @publicName startDateTimeZone
                 * @type String
                 */
                 /**
-                * @name dxSchedulerAppointmentTemplate_endDateTimeZone
+                * @name dxSchedulerAppointmentTemplate.endDateTimeZone
                 * @publicName endDateTimeZone
                 * @type String
                 */
@@ -1026,47 +1026,47 @@ var Scheduler = Widget.inherit({
                 * @type object
                 */
                 /**
-                * @name dxSchedulerAppointmentTooltipTemplate_text
+                * @name dxSchedulerAppointmentTooltipTemplate.text
                 * @publicName text
                 * @type String
                 */
                 /**
-                * @name dxSchedulerAppointmentTooltipTemplate_startDate
+                * @name dxSchedulerAppointmentTooltipTemplate.startDate
                 * @publicName startDate
                 * @type Date
                 */
                 /**
-                * @name dxSchedulerAppointmentTooltipTemplate_endDate
+                * @name dxSchedulerAppointmentTooltipTemplate.endDate
                 * @publicName endDate
                 * @type Date
                 */
                 /**
-                * @name dxSchedulerAppointmentTooltipTemplate_description
+                * @name dxSchedulerAppointmentTooltipTemplate.description
                 * @publicName description
                 * @type String
                 */
                 /**
-                * @name dxSchedulerAppointmentTooltipTemplate_recurrenceRule
+                * @name dxSchedulerAppointmentTooltipTemplate.recurrenceRule
                 * @publicName recurrenceRule
                 * @type String
                 */
                 /**
-                * @name dxSchedulerAppointmentTooltipTemplate_recurrenceException
+                * @name dxSchedulerAppointmentTooltipTemplate.recurrenceException
                 * @publicName recurrenceException
                 * @type String
                 */
                 /**
-                * @name dxSchedulerAppointmentTooltipTemplate_allDay
+                * @name dxSchedulerAppointmentTooltipTemplate.allDay
                 * @publicName allDay
                 * @type Boolean
                 */
                 /**
-                * @name dxSchedulerAppointmentTooltipTemplate_startDateTimeZone
+                * @name dxSchedulerAppointmentTooltipTemplate.startDateTimeZone
                 * @publicName startDateTimeZone
                 * @type String
                 */
                 /**
-                * @name dxSchedulerAppointmentTooltipTemplate_endDateTimeZone
+                * @name dxSchedulerAppointmentTooltipTemplate.endDateTimeZone
                 * @publicName endDateTimeZone
                 * @type String
                 */
@@ -1081,7 +1081,7 @@ var Scheduler = Widget.inherit({
                 },
                 options: {
                         /**
-                        * @name dxSchedulerOptions_focusStateEnabled
+                        * @name dxSchedulerOptions.focusStateEnabled
                         * @publicName focusStateEnabled
                         * @type boolean
                         * @default true @for desktop
@@ -1096,20 +1096,20 @@ var Scheduler = Widget.inherit({
                 },
                 options: {
                         /**
-                       * @name dxSchedulerOptions_useDropDownViewSwitcher
+                       * @name dxSchedulerOptions.useDropDownViewSwitcher
                        * @publicName useDropDownViewSwitcher
                        * @default true @for Android|iOS|Windows_Mobile
                        */
                     useDropDownViewSwitcher: true,
 
                         /**
-                       * @name dxSchedulerOptions_editing_allowResizing
+                       * @name dxSchedulerOptions.editing.allowResizing
                        * @publicName allowResizing
                        * @default false @for Android|iOS|Windows_Mobile
                        */
 
                         /**
-                       * @name dxSchedulerOptions_editing_allowDragging
+                       * @name dxSchedulerOptions.editing.allowDragging
                        * @publicName allowDragging
                        * @default false @for Android|iOS|Windows_Mobile
                        */
@@ -1125,7 +1125,7 @@ var Scheduler = Widget.inherit({
                 },
                 options: {
                         /**
-                         * @name dxSchedulerOptions_useDropDownViewSwitcher
+                         * @name dxSchedulerOptions.useDropDownViewSwitcher
                          * @publicName useDropDownViewSwitcher
                          * @default true @for Material
                          */
@@ -2855,7 +2855,7 @@ var Scheduler = Widget.inherit({
     },
 
         /**
-        * @name dxSchedulerMethods_getStartViewDate
+        * @name dxSchedulerMethods.getStartViewDate
         * @publicName getStartViewDate()
         * @return Date
         */
@@ -2864,7 +2864,7 @@ var Scheduler = Widget.inherit({
     },
 
         /**
-        * @name dxSchedulerMethods_getEndViewDate
+        * @name dxSchedulerMethods.getEndViewDate
         * @publicName getEndViewDate()
         * @return Date
         */
@@ -2873,7 +2873,7 @@ var Scheduler = Widget.inherit({
     },
 
         /**
-        * @name dxSchedulerMethods_showAppointmentPopup
+        * @name dxSchedulerMethods.showAppointmentPopup
         * @publicName showAppointmentPopup(appointmentData, createNewAppointment, currentAppointmentData)
         * @param1 appointmentData:Object
         * @param2 createNewAppointment:Boolean|undefined
@@ -2906,7 +2906,7 @@ var Scheduler = Widget.inherit({
     },
 
         /**
-        * @name dxSchedulerMethods_hideAppointmentPopup
+        * @name dxSchedulerMethods.hideAppointmentPopup
         * @publicName hideAppointmentPopup(saveChanges)
         * @param1 saveChanges:Boolean|undefined
         */
@@ -2923,7 +2923,7 @@ var Scheduler = Widget.inherit({
     },
 
         /**
-        * @name dxSchedulerMethods_showAppointmentTooltip
+        * @name dxSchedulerMethods.showAppointmentTooltip
         * @publicName showAppointmentTooltip(appointmentData, target, currentAppointmentData)
         * @param1 appointmentData:Object
         * @param2 target:string|Node|jQuery
@@ -2938,7 +2938,7 @@ var Scheduler = Widget.inherit({
     },
 
         /**
-        * @name dxSchedulerMethods_hideAppointmentTooltip
+        * @name dxSchedulerMethods.hideAppointmentTooltip
         * @publicName hideAppointmentTooltip()
         */
     hideAppointmentTooltip: function() {
@@ -2946,7 +2946,7 @@ var Scheduler = Widget.inherit({
     },
 
         /**
-        * @name dxSchedulerMethods_scrollToTime
+        * @name dxSchedulerMethods.scrollToTime
         * @publicName scrollToTime(hours, minutes, date)
         * @param1 hours:Number
         * @param2 minutes:Number
@@ -2957,7 +2957,7 @@ var Scheduler = Widget.inherit({
     },
 
         /**
-        * @name dxSchedulerMethods_addAppointment
+        * @name dxSchedulerMethods.addAppointment
         * @publicName addAppointment(appointment)
         * @param1 appointment:Object
         */
@@ -2989,7 +2989,7 @@ var Scheduler = Widget.inherit({
     },
 
         /**
-        * @name dxSchedulerMethods_updateAppointment
+        * @name dxSchedulerMethods.updateAppointment
         * @publicName updateAppointment(target, appointment)
         * @param1 target:Object
         * @param2 appointment:Object
@@ -2999,7 +2999,7 @@ var Scheduler = Widget.inherit({
     },
 
         /**
-        * @name dxSchedulerMethods_deleteAppointment
+        * @name dxSchedulerMethods.deleteAppointment
         * @publicName deleteAppointment(appointment)
         * @param1 appointment:Object
         */
@@ -3029,7 +3029,7 @@ var Scheduler = Widget.inherit({
     }
 
         /**
-        * @name dxSchedulerMethods_registerKeyHandler
+        * @name dxSchedulerMethods.registerKeyHandler
         * @publicName registerKeyHandler(key, handler)
         * hidden
         * @inheritdoc

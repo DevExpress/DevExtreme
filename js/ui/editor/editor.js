@@ -46,16 +46,16 @@ var Editor = Widget.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             /**
-            * @name EditorOptions_value
+            * @name EditorOptions.value
             * @publicName value
             * @type any
             * @default null
-            * @fires EditorOptions_onValueChanged
+            * @fires EditorOptions.onValueChanged
             */
             value: null,
 
             /**
-            * @name EditorOptions_name
+            * @name EditorOptions.name
             * @publicName name
             * @type string
             * @default ""
@@ -64,7 +64,7 @@ var Editor = Widget.inherit({
             name: "",
 
             /**
-            * @name EditorOptions_onValueChanged
+            * @name EditorOptions.onValueChanged
             * @publicName onValueChanged
             * @extends Action
             * @type function(e)
@@ -78,7 +78,7 @@ var Editor = Widget.inherit({
             onValueChanged: null,
 
             /**
-             * @name EditorOptions_readOnly
+             * @name EditorOptions.readOnly
              * @publicName readOnly
              * @type boolean
              * @default false
@@ -86,7 +86,7 @@ var Editor = Widget.inherit({
             readOnly: false,
 
             /**
-            * @name EditorOptions_isValid
+            * @name EditorOptions.isValid
             * @publicName isValid
             * @type boolean
             * @default true
@@ -94,7 +94,7 @@ var Editor = Widget.inherit({
             isValid: true,
 
             /**
-            * @name EditorOptions_validationError
+            * @name EditorOptions.validationError
             * @publicName validationError
             * @type object
             * @ref
@@ -103,7 +103,7 @@ var Editor = Widget.inherit({
             validationError: null,
 
             /**
-             * @name EditorOptions_validationMessageMode
+             * @name EditorOptions.validationMessageMode
              * @publicName validationMessageMode
              * @type Enums.ValidationMessageMode
              * @default "auto"
@@ -333,7 +333,7 @@ var Editor = Widget.inherit({
     },
 
     /**
-    * @name EditorMethods_reset
+    * @name EditorMethods.reset
     * @publicName reset()
     */
     reset: function() {

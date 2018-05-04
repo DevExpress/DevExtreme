@@ -1,7 +1,7 @@
 "use strict";
 
 /**
-  * @name ui events_dxdblclick
+  * @name ui events.dxdblclick
   * @publicName dxdblclick
   * @type eventType
   * @type_function_param1 event:event

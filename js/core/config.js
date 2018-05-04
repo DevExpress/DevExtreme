@@ -14,14 +14,14 @@ var extendUtils = require("./utils/extend");
 */
 var config = {
     /**
-    * @name globalConfig_rtlEnabled
+    * @name globalConfig.rtlEnabled
     * @publicName rtlEnabled
     * @type boolean
     * @default false
     */
     rtlEnabled: false,
     /**
-    * @name globalConfig_defaultCurrency
+    * @name globalConfig.defaultCurrency
     * @publicName defaultCurrency
     * @default "USD"
     * @type string
@@ -29,28 +29,28 @@ var config = {
     defaultCurrency: "USD",
     designMode: false,
     /**
-    * @name globalConfig_serverDecimalSeparator
+    * @name globalConfig.serverDecimalSeparator
     * @publicName serverDecimalSeparator
     * @type string
     * @default "."
     */
     serverDecimalSeparator: ".",
     /**
-    * @name globalConfig_decimalSeparator
+    * @name globalConfig.decimalSeparator
     * @publicName decimalSeparator
     * @type string
     * @default "."
     */
     decimalSeparator: ".",
     /**
-    * @name globalConfig_thousandsSeparator
+    * @name globalConfig.thousandsSeparator
     * @publicName thousandsSeparator
     * @type string
     * @default ","
     */
     thousandsSeparator: ",",
     /**
-    * @name globalConfig_forceIsoDateParsing
+    * @name globalConfig.forceIsoDateParsing
     * @publicName forceIsoDateParsing
     * @type boolean
     * @default true
@@ -58,7 +58,7 @@ var config = {
     forceIsoDateParsing: true,
     wrapActionsBeforeExecute: true,
     /**
-    * @name globalConfig_useJQuery
+    * @name globalConfig.useJQuery
     * @publicName useJQuery
     * @type boolean
     * @hidden

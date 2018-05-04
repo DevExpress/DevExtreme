@@ -18,7 +18,7 @@ module.exports = {
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             /**
-            * @name SearchBoxMixinOptions_searchMode
+            * @name SearchBoxMixinOptions.searchMode
             * @publicName searchMode
             * @type Enums.CollectionSearchMode
             * @default 'contains'
@@ -26,7 +26,7 @@ module.exports = {
             searchMode: "",
 
             /**
-            * @name SearchBoxMixinOptions_searchExpr
+            * @name SearchBoxMixinOptions.searchExpr
             * @publicName searchExpr
             * @type getter|Array<getter>
             * @default null
@@ -34,7 +34,7 @@ module.exports = {
             searchExpr: null,
 
             /**
-            * @name SearchBoxMixinOptions_searchValue
+            * @name SearchBoxMixinOptions.searchValue
             * @type String
             * @publicName searchValue
             * @default ""
@@ -42,7 +42,7 @@ module.exports = {
             searchValue: "",
 
             /**
-            * @name SearchBoxMixinOptions_searchEnabled
+            * @name SearchBoxMixinOptions.searchEnabled
             * @publicName searchEnabled
             * @type boolean
             * @default false
@@ -50,7 +50,7 @@ module.exports = {
             searchEnabled: false,
 
             /**
-             * @name SearchBoxMixinOptions_searchEditorOptions
+             * @name SearchBoxMixinOptions.searchEditorOptions
              * @publicName searchEditorOptions
              * @type dxTextBoxOptions
              * @default {}
@@ -58,7 +58,7 @@ module.exports = {
             searchEditorOptions: {},
 
             /**
-            * @name SearchBoxMixinOptions_searchTimeout
+            * @name SearchBoxMixinOptions.searchTimeout
             * @publicName searchTimeout
             * @type number
             * @default undefined

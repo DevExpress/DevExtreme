@@ -32,7 +32,7 @@ var notify = function(message, /* optional */ type, displayTime) {
 };
 
 /**
- * @name ui_notify
+ * @name ui.notify
  * @static
  * @publicName notify(message,type,displayTime)
  * @param1 message:string
@@ -42,7 +42,7 @@ var notify = function(message, /* optional */ type, displayTime) {
  * @export default
  */
 /**
- * @name ui_notify
+ * @name ui.notify
  * @static
  * @publicName notify(options,type,displayTime)
  * @param1 options:object

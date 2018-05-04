@@ -7,28 +7,28 @@
 */
 var dxExporter = {
     /**
-    * @name dxexporteroptions_sourceContainer
+    * @name dxexporteroptions.sourceContainer
     * @publicName sourceContainer
     * @type string
     * @default undefined
     */
     sourceContainer: undefined,
     /**
-    * @name dxexporteroptions_fileName
+    * @name dxexporteroptions.fileName
     * @publicName fileName
     * @type string
     * @default 'file'
     */
     fileName: 'file',
     /**
-    * @name dxexporteroptions_serverUrl
+    * @name dxexporteroptions.serverUrl
     * @publicName serverUrl
     * @type string
     * @default undefined
     */
     serverUrl: undefined,
     /**
-    * @name dxexporteroptions_exportFormat
+    * @name dxexporteroptions.exportFormat
     * @publicName exportFormat
     * @type Array<string>
     * @default ['PDF', 'PNG', 'SVG']
@@ -36,26 +36,26 @@ var dxExporter = {
     */
     exportFormat: ['PDF', 'PNG', 'SVG'],
     /**
-    * @name dxexporteroptions_printingEnabled
+    * @name dxexporteroptions.printingEnabled
     * @publicName printingEnabled
     * @type boolean
     * @default true
     */
     printingEnabled: true,
     /**
-    * @name dxexporteroptions_showMenu
+    * @name dxexporteroptions.showMenu
     * @publicName showMenu
     * @type boolean
     * @default true
     */
     showMenu: true,
     /**
-    * @name dxexportermethods_print
+    * @name dxexportermethods.print
     * @publicName print()
     */
     print: function() { },
     /**
-    * @name dxexportermethods_exportTo
+    * @name dxexportermethods.exportTo
     * @publicName exportTo(fileName, format)
     * @param1 fileName:string
     * @param2 format:string

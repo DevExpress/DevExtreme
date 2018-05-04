@@ -6,24 +6,24 @@
 */
 var piePointObject = {
     /**
-    * @name piePointObjectFields_percent
+    * @name piePointObjectFields.percent
     * @publicName percent
     * @type string|number|date
     */
     percent: null,
     /**
-    * @name piePointObjectmethods_isvisible
+    * @name piePointObjectmethods.isvisible
     * @publicName isVisible()
     * @return boolean
     */
     isVisible: function() { },
     /**
-   * @name piePointObjectmethods_show
+   * @name piePointObjectmethods.show
    * @publicName show()
    */
     show: function() { },
     /**
-  * @name piePointObjectmethods_hide
+  * @name piePointObjectmethods.hide
   * @publicName hide()
   */
     hide: function() { }
@@ -37,19 +37,19 @@ var piePointObject = {
 */
 var pieChartSeriesObject = {
     /**
-    * @name pieChartSeriesObjectmethods_hover
+    * @name pieChartSeriesObjectmethods.hover
     * @publicName hover()
     * @hidden
     */
     hover: function () { },
     /**
-    * @name pieChartSeriesObjectmethods_clearHover
+    * @name pieChartSeriesObjectmethods.clearHover
     * @publicName clearHover()
     * @hidden
     */
     clearHover: function () { },
     /**
-    * @name pieChartSeriesObjectmethods_isHovered
+    * @name pieChartSeriesObjectmethods.isHovered
     * @publicName isHovered()
     * @hidden
     */

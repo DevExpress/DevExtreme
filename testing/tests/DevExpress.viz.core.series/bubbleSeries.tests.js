@@ -4,7 +4,7 @@ import $ from "jquery";
 import * as vizMocks from "../../helpers/vizMocks.js";
 import pointModule from "viz/series/points/base_point";
 import { Series } from "viz/series/base_series";
-import { MockAxis, insertMockFactory } from "../../helpers/chartMocks.js";
+import { MockAxis, insertMockFactory, restoreMockFactory } from "../../helpers/chartMocks.js";
 
 var createSeries = function(options, renderSettings) {
     renderSettings = renderSettings || {};
@@ -76,6 +76,7 @@ var environment = {
     },
     afterEach: function() {
         this.createPoint.restore();
+        restoreMockFactory();
     }
 };
 

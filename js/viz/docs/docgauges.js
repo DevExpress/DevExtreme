@@ -7,26 +7,26 @@
 */
 var baseGauge = {
     /**
-    * @name basegauge_options
+    * @name basegauge.options
     * @publicName Options
     * @namespace DevExpress.viz.gauges
     * @hidden
     */
     /**
-    * @name basegaugeoptions_containerBackgroundColor
+    * @name basegaugeoptions.containerBackgroundColor
     * @publicName containerBackgroundColor
     * @type string
     * @default 'none'
     */
     containerBackgroundColor: 'none',
     /**
-    * @name basegaugeoptions_title
+    * @name basegaugeoptions.title
     * @publicName title
     * @inheritdoc
     */
     title: {
         /**
-        * @name basegaugeoptions_title_position
+        * @name basegaugeoptions.title.position
         * @publicName position
         * @type Enums.GaugeTitlePosition
         * @default 'top-center'
@@ -35,27 +35,27 @@ var baseGauge = {
         position: undefined
     },
     /**
-    * @name basegaugeoptions_animation
+    * @name basegaugeoptions.animation
     * @publicName animation
     * @type object
     */
     animation: {
         /**
-        * @name basegaugeoptions_animation_enabled
+        * @name basegaugeoptions.animation.enabled
         * @publicName enabled
         * @type boolean
         * @default true
         */
         enabled: true,
         /**
-        * @name basegaugeoptions_animation_duration
+        * @name basegaugeoptions.animation.duration
         * @publicName duration
         * @type number
         * @default 1000
         */
         duration: 1000,
         /**
-        * @name basegaugeoptions_animation_easing
+        * @name basegaugeoptions.animation.easing
         * @publicName easing
         * @type Enums.VizAnimationEasing
         * @default 'easeOutCubic'
@@ -63,77 +63,77 @@ var baseGauge = {
         easing: 'easeOutCubic'
     },
     /**
-    * @name basegaugeoptions_subtitle
+    * @name basegaugeoptions.subtitle
     * @publicName subtitle
     * @type object|string
-    * @deprecated BaseWidgetOptions_title_subtitle
+    * @deprecated BaseWidgetOptions.title.subtitle
     */
     subtitle: {
         /**
-        * @name basegaugeoptions_subtitle_text
+        * @name basegaugeoptions.subtitle.text
         * @publicName text
         * @type string
         * @default undefined
-        * @deprecated BaseWidgetOptions_title_subtitle_text
+        * @deprecated BaseWidgetOptions.title.subtitle.text
         */
         text: undefined,
         /**
-        * @name basegaugeoptions_subtitle_font
+        * @name basegaugeoptions.subtitle.font
         * @publicName font
         * @type object
-        * @deprecated BaseWidgetOptions_title_subtitle_font
+        * @deprecated BaseWidgetOptions.title.subtitle.font
         */
         font: {
             /**
-            * @name basegaugeoptions_subtitle_font_family
+            * @name basegaugeoptions.subtitle.font.family
             * @publicName family
             * @type string
             * @default "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana"
-            * @deprecated BaseWidgetOptions_title_subtitle_font_family
+            * @deprecated BaseWidgetOptions.title.subtitle.font.family
             */
             family: "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
             /**
-            * @name basegaugeoptions_subtitle_font_weight
+            * @name basegaugeoptions.subtitle.font.weight
             * @publicName weight
             * @type number
             * @default 200
-            * @deprecated BaseWidgetOptions_title_subtitle_font_weight
+            * @deprecated BaseWidgetOptions.title.subtitle.font.weight
             */
             weight: 200,
             /**
-            * @name basegaugeoptions_subtitle_font_color
+            * @name basegaugeoptions.subtitle.font.color
             * @publicName color
             * @type string
             * @default '#232323'
-            * @deprecated BaseWidgetOptions_title_subtitle_font_color
+            * @deprecated BaseWidgetOptions.title.subtitle.font.color
             */
             color: '#232323',
             /**
-            * @name basegaugeoptions_subtitle_font_size
+            * @name basegaugeoptions.subtitle.font.size
             * @publicName size
             * @type number|string
             * @default 16
-            * @deprecated BaseWidgetOptions_title_subtitle_font_size
+            * @deprecated BaseWidgetOptions.title.subtitle.font.size
             */
             size: 16,
             /**
-            * @name basegaugeoptions_subtitle_font_opacity
+            * @name basegaugeoptions.subtitle.font.opacity
             * @publicName opacity
             * @type number
             * @default 1
-            * @deprecated BaseWidgetOptions_title_subtitle_font_opacity
+            * @deprecated BaseWidgetOptions.title.subtitle.font.opacity
             */
             opacity: 1
         }
     },
     /**
-    * @name basegaugeoptions_scale
+    * @name basegaugeoptions.scale
     * @publicName scale
     * @type object
     */
     scale: {
         /**
-        * @name basegaugeoptions_scale_startValue
+        * @name basegaugeoptions.scale.startValue
         * @publicName startValue
         * @type number
         * @default 0
@@ -141,7 +141,7 @@ var baseGauge = {
         */
         startValue: 0,
         /**
-        * @name basegaugeoptions_scale_endValue
+        * @name basegaugeoptions.scale.endValue
         * @publicName endValue
         * @type number
         * @default 100
@@ -149,53 +149,53 @@ var baseGauge = {
         */
         endValue: 100,
         /**
-        * @name basegaugeoptions_scale_hideFirstTick
+        * @name basegaugeoptions.scale.hideFirstTick
         * @publicName hideFirstTick
         * @type boolean
         * @default false
-        * @deprecated dxcirculargaugeoptions_scale_label_hideFirstOrLast
+        * @deprecated dxcirculargaugeoptions.scale.label.hideFirstOrLast
         */
         hideFirstTick: undefined,
         /**
-        * @name basegaugeoptions_scale_hideLastTick
+        * @name basegaugeoptions.scale.hideLastTick
         * @publicName hideLastTick
         * @type boolean
         * @default false
-        * @deprecated dxcirculargaugeoptions_scale_label_hideFirstOrLast
+        * @deprecated dxcirculargaugeoptions.scale.label.hideFirstOrLast
         */
         hideLastTick: undefined,
         /**
-        * @name basegaugeoptions_scale_hideFirstLabel
+        * @name basegaugeoptions.scale.hideFirstLabel
         * @publicName hideFirstLabel
         * @type boolean
         * @default false
-        * @deprecated dxcirculargaugeoptions_scale_label_hideFirstOrLast
+        * @deprecated dxcirculargaugeoptions.scale.label.hideFirstOrLast
         */
         hideFirstLabel: undefined,
         /**
-        * @name basegaugeoptions_scale_hideLastLabel
+        * @name basegaugeoptions.scale.hideLastLabel
         * @publicName hideLastLabel
         * @type boolean
         * @default false
-        * @deprecated dxcirculargaugeoptions_scale_label_hideFirstOrLast
+        * @deprecated dxcirculargaugeoptions.scale.label.hideFirstOrLast
         */
         hideLastLabel: undefined,
         /**
-        * @name basegaugeoptions_scale_tickInterval
+        * @name basegaugeoptions.scale.tickInterval
         * @publicName tickInterval
         * @type number
         * @default undefined
         */
         tickInterval: undefined,
         /**
-        * @name basegaugeoptions_scale_minorTickInterval
+        * @name basegaugeoptions.scale.minorTickInterval
         * @publicName minorTickInterval
         * @type number
         * @default undefined
         */
         minorTickInterval: undefined,
         /**
-        * @name basegaugeoptions_scale_customTicks
+        * @name basegaugeoptions.scale.customTicks
         * @publicName customTicks
         * @type Array<number>
         * @default undefined
@@ -203,7 +203,7 @@ var baseGauge = {
         */
         customTicks: undefined,
         /**
-        * @name basegaugeoptions_scale_customMinorTicks
+        * @name basegaugeoptions.scale.customMinorTicks
         * @publicName customMinorTicks
         * @type Array<number>
         * @default undefined
@@ -211,41 +211,41 @@ var baseGauge = {
         */
         customMinorTicks: undefined,
         /**
-        * @name basegaugeoptions_scale_tick
+        * @name basegaugeoptions.scale.tick
         * @publicName tick
         * @type object
         */
         tick: {
             /**
-            * @name basegaugeoptions_scale_tick_color
+            * @name basegaugeoptions.scale.tick.color
             * @publicName color
             * @type string
             * @default '#FFFFFF'
             */
             color: '#FFFFFF',
             /**
-            * @name basegaugeoptions_scale_tick_length
+            * @name basegaugeoptions.scale.tick.length
             * @publicName length
             * @type number
             * @default 5
             */
             length: 5,
             /**
-            * @name basegaugeoptions_scale_tick_width
+            * @name basegaugeoptions.scale.tick.width
             * @publicName width
             * @type number
             * @default 2
             */
             width: 2,
             /**
-            * @name basegaugeoptions_scale_tick_opacity
+            * @name basegaugeoptions.scale.tick.opacity
             * @publicName opacity
             * @type number
             * @default 1
             */
             opacity: 1,
             /**
-            * @name basegaugeoptions_scale_tick_visible
+            * @name basegaugeoptions.scale.tick.visible
             * @publicName visible
             * @type boolean
             * @default true
@@ -253,63 +253,63 @@ var baseGauge = {
             visible: true
         },
         /**
-        * @name basegaugeoptions_scale_majorTick
+        * @name basegaugeoptions.scale.majorTick
         * @publicName majorTick
         * @type object
-        * @deprecated basegaugeoptions_scale_tick
+        * @deprecated basegaugeoptions.scale.tick
         */
         majorTick: {
             /**
-            * @name basegaugeoptions_scale_majorTick_color
+            * @name basegaugeoptions.scale.majorTick.color
             * @publicName color
             * @type string
             * @default '#FFFFFF'
-            * @deprecated basegaugeoptions_scale_tick_color
+            * @deprecated basegaugeoptions.scale.tick.color
             */
             color: '#FFFFFF',
             /**
-            * @name basegaugeoptions_scale_majorTick_length
+            * @name basegaugeoptions.scale.majorTick.length
             * @publicName length
             * @type number
             * @default 5
-            * @deprecated basegaugeoptions_scale_tick_length
+            * @deprecated basegaugeoptions.scale.tick.length
             */
             length: 5,
             /**
-            * @name basegaugeoptions_scale_majorTick_width
+            * @name basegaugeoptions.scale.majorTick.width
             * @publicName width
             * @type number
             * @default 2
-            * @deprecated basegaugeoptions_scale_tick_width
+            * @deprecated basegaugeoptions.scale.tick.width
             */
             width: 2,
             /**
-            * @name basegaugeoptions_scale_majorTick_customTickValues
+            * @name basegaugeoptions.scale.majorTick.customTickValues
             * @publicName customTickValues
             * @type Array<number>
             * @default []
-            * @deprecated basegaugeoptions_scale_customTicks
+            * @deprecated basegaugeoptions.scale.customTicks
             * @notUsedInTheme
             */
             customTickValues: [],
             /**
-            * @name basegaugeoptions_scale_majorTick_useTicksAutoArrangement
+            * @name basegaugeoptions.scale.majorTick.useTicksAutoArrangement
             * @publicName useTicksAutoArrangement
             * @type boolean
             * @default true
-            * @deprecated basegaugeoptions_scale_label_overlappingBehavior
+            * @deprecated basegaugeoptions.scale.label.overlappingBehavior
             */
             useTicksAutoArrangement: true,
             /**
-            * @name basegaugeoptions_scale_majorTick_tickInterval
+            * @name basegaugeoptions.scale.majorTick.tickInterval
             * @publicName tickInterval
             * @type number
             * @default undefined
-            * @deprecated basegaugeoptions_scale_tickInterval
+            * @deprecated basegaugeoptions.scale.tickInterval
             */
             tickInterval: undefined,
             /**
-            * @name basegaugeoptions_scale_majorTick_showCalculatedTicks
+            * @name basegaugeoptions.scale.majorTick.showCalculatedTicks
             * @publicName showCalculatedTicks
             * @type boolean
             * @default true
@@ -317,57 +317,57 @@ var baseGauge = {
             */
             showCalculatedTicks: true,
             /**
-            * @name basegaugeoptions_scale_majorTick_visible
+            * @name basegaugeoptions.scale.majorTick.visible
             * @publicName visible
             * @type boolean
             * @default true
-            * @deprecated basegaugeoptions_scale_tick_visible
+            * @deprecated basegaugeoptions.scale.tick.visible
             */
             visible: true
         },
         /**
-        * @name basegaugeoptions_scale_minorTick
+        * @name basegaugeoptions.scale.minorTick
         * @publicName minorTick
         * @type object
         */
         minorTick: {
             /**
-            * @name basegaugeoptions_scale_minorTick_color
+            * @name basegaugeoptions.scale.minorTick.color
             * @publicName color
             * @type string
             * @default '#FFFFFF'
             */
             color: '#FFFFFF',
             /**
-            * @name basegaugeoptions_scale_minorTick_opacity
+            * @name basegaugeoptions.scale.minorTick.opacity
             * @publicName opacity
             * @type number
             * @default 1
             */
             opacity: 1,
             /**
-            * @name basegaugeoptions_scale_minorTick_length
+            * @name basegaugeoptions.scale.minorTick.length
             * @publicName length
             * @type number
             * @default 3
             */
             length: 3,
             /**
-            * @name basegaugeoptions_scale_minorTick_width
+            * @name basegaugeoptions.scale.minorTick.width
             * @publicName width
             * @type number
             * @default 1
             */
             width: 1,
             /**
-            * @name basegaugeoptions_scale_minorTick_visible
+            * @name basegaugeoptions.scale.minorTick.visible
             * @publicName visible
             * @type boolean
             * @default false
             */
             visible: false,
             /**
-            * @name basegaugeoptions_scale_minorTick_showCalculatedTicks
+            * @name basegaugeoptions.scale.minorTick.showCalculatedTicks
             * @publicName showCalculatedTicks
             * @type boolean
             * @default true
@@ -375,38 +375,38 @@ var baseGauge = {
             */
             showCalculatedTicks: true,
             /**
-            * @name basegaugeoptions_scale_minorTick_customTickValues
+            * @name basegaugeoptions.scale.minorTick.customTickValues
             * @publicName customTickValues
             * @type Array<number>
             * @default []
-            * @deprecated basegaugeoptions_scale_customMinorTicks
+            * @deprecated basegaugeoptions.scale.customMinorTicks
             * @notUsedInTheme
             */
             customTickValues: [],
             /**
-            * @name basegaugeoptions_scale_minorTick_tickInterval
+            * @name basegaugeoptions.scale.minorTick.tickInterval
             * @publicName tickInterval
             * @type number
             * @default undefined
-            * @deprecated basegaugeoptions_scale_minorTickInterval
+            * @deprecated basegaugeoptions.scale.minorTickInterval
             */
             tickInterval: undefined,
         },
         /**
-        * @name basegaugeoptions_scale_label
+        * @name basegaugeoptions.scale.label
         * @publicName label
         * @type object
         */
         label: {
             /**
-            * @name basegaugeoptions_scale_label_useRangeColors
+            * @name basegaugeoptions.scale.label.useRangeColors
             * @publicName useRangeColors
             * @type boolean
             * @default false
             */
             useRangeColors: false,
             /**
-            * @name basegaugeoptions_scale_label_overlappingBehavior
+            * @name basegaugeoptions.scale.label.overlappingBehavior
             * @publicName overlappingBehavior
             * @type string|object
             * @default 'hide'
@@ -414,28 +414,28 @@ var baseGauge = {
             */
             overlappingBehavior: {
                 /**
-                * @name basegaugeoptions_scale_label_overlappingBehavior_useAutoArrangement
+                * @name basegaugeoptions.scale.label.overlappingBehavior.useAutoArrangement
                 * @publicName useAutoArrangement
                 * @type boolean
                 * @default true
-                * @deprecated basegaugeoptions_scale_label_overlappingBehavior
+                * @deprecated basegaugeoptions.scale.label.overlappingBehavior
                 */
                 useAutoArrangement: true
             },
             /**
-            * @name basegaugeoptions_scale_label_format
+            * @name basegaugeoptions.scale.label.format
             * @publicName format
             * @extends CommonVizFormat
             */
             format: '',
             /**
-            * @name basegaugeoptions_scale_label_precision
+            * @name basegaugeoptions.scale.label.precision
             * @publicName precision
             * @extends CommonVizPrecision
             */
             precision: 2,
             /**
-            * @name basegaugeoptions_scale_label_customizeText
+            * @name basegaugeoptions.scale.label.customizeText
             * @publicName customizeText
             * @type function(scaleValue)
             * @type_function_param1 scaleValue:object
@@ -446,48 +446,48 @@ var baseGauge = {
             */
             customizeText: undefined,
             /**
-            * @name basegaugeoptions_scale_label_visible
+            * @name basegaugeoptions.scale.label.visible
             * @publicName visible
             * @type boolean
             * @default true
             */
             visible: true,
             /**
-            * @name basegaugeoptions_scale_label_font
+            * @name basegaugeoptions.scale.label.font
             * @publicName font
             * @type object
             */
             font: {
                 /**
-                * @name basegaugeoptions_scale_label_font_color
+                * @name basegaugeoptions.scale.label.font.color
                 * @publicName color
                 * @type string
                 * @default '#767676'
                 */
                 color: '#767676',
                 /**
-                * @name basegaugeoptions_scale_label_font_size
+                * @name basegaugeoptions.scale.label.font.size
                 * @publicName size
                 * @type number|string
                 * @default 12
                 */
                 size: 12,
                 /**
-                * @name basegaugeoptions_scale_label_font_family
+                * @name basegaugeoptions.scale.label.font.family
                 * @publicName family
                 * @type string
                 * @default "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana"
                 */
                 family: "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
                 /**
-                * @name basegaugeoptions_scale_label_font_weight
+                * @name basegaugeoptions.scale.label.font.weight
                 * @publicName weight
                 * @type number
                 * @default 400
                 */
                 weight: 400,
                 /**
-                * @name basegaugeoptions_scale_label_font_opacity
+                * @name basegaugeoptions.scale.label.font.opacity
                 * @publicName opacity
                 * @type number
                 * @default 1
@@ -496,7 +496,7 @@ var baseGauge = {
             }
         },
         /**
-        * @name basegaugeoptions_scale_allowdecimals
+        * @name basegaugeoptions.scale.allowdecimals
         * @publicName allowDecimals
         * @type boolean
         * @default undefined
@@ -504,40 +504,40 @@ var baseGauge = {
         allowDecimals: undefined
     },
     /**
-    * @name basegaugeoptions_rangeContainer
+    * @name basegaugeoptions.rangeContainer
     * @publicName rangeContainer
     * @type object
     */
     rangeContainer: {
         /**
-        * @name basegaugeoptions_rangeContainer_offset
+        * @name basegaugeoptions.rangeContainer.offset
         * @publicName offset
         * @type number
         * @default 0
         */
         offset: 0,
         /**
-        * @name basegaugeoptions_rangeContainer_backgroundColor
+        * @name basegaugeoptions.rangeContainer.backgroundColor
         * @publicName backgroundColor
         * @type string
         * @default '#808080'
         */
         backgroundColor: '#808080',
         /**
-        * @name basegaugeoptions_rangeContainer_palette
+        * @name basegaugeoptions.rangeContainer.palette
         * @publicName palette
         * @extends CommonVizPalette
         */
         palette: 'default',
         /**
-        * @name basegaugeoptions_rangeContainer_paletteextensionmode
+        * @name basegaugeoptions.rangeContainer.paletteextensionmode
         * @publicName paletteExtensionMode
         * @type Enums.VizPaletteExtensionMode
         * @default 'blend'
         */
         paletteExtensionMode: 'blend',
         /**
-        * @name basegaugeoptions_rangeContainer_ranges
+        * @name basegaugeoptions.rangeContainer.ranges
         * @publicName ranges
         * @type Array<Object>
         * @default []
@@ -545,19 +545,19 @@ var baseGauge = {
         */
         ranges: [{
             /**
-            * @name basegaugeoptions_rangeContainer_ranges_startValue
+            * @name basegaugeoptions.rangeContainer.ranges.startValue
             * @publicName startValue
             * @type number
             */
             startValue: 0,
             /**
-            * @name basegaugeoptions_rangeContainer_ranges_endValue
+            * @name basegaugeoptions.rangeContainer.ranges.endValue
             * @publicName endValue
             * @type number
             */
             endValue: 20,
             /**
-            * @name basegaugeoptions_rangeContainer_ranges_color
+            * @name basegaugeoptions.rangeContainer.ranges.color
             * @publicName color
             * @type string
             */
@@ -565,13 +565,13 @@ var baseGauge = {
         }]
     },
     /**
-    * @name basegaugeoptions_tooltip
+    * @name basegaugeoptions.tooltip
     * @publicName tooltip
     * @type object
     */
     tooltip: {
         /**
-        * @name basegaugeoptions_tooltip_customizetooltip
+        * @name basegaugeoptions.tooltip.customizetooltip
         * @publicName customizeTooltip
         * @default undefined
         * @type function(scaleValue)
@@ -583,7 +583,7 @@ var baseGauge = {
         customizeTooltip: undefined
     },
     /**
-    * @name basegaugeoptions_ontooltipshown
+    * @name basegaugeoptions.ontooltipshown
     * @publicName onTooltipShown
     * @extends Action
     * @type function(e)
@@ -594,7 +594,7 @@ var baseGauge = {
     */
     onTooltipShown: function() { },
     /**
-    * @name basegaugeoptions_ontooltiphidden
+    * @name basegaugeoptions.ontooltiphidden
     * @publicName onTooltipHidden
     * @extends Action
     * @type function(e)
@@ -605,7 +605,7 @@ var baseGauge = {
     */
     onTooltipHidden: function() { },
     /**
-    * @name basegaugeoptions_value
+    * @name basegaugeoptions.value
     * @publicName value
     * @type number
     * @default undefined
@@ -613,7 +613,7 @@ var baseGauge = {
     */
     value: undefined,
     /**
-    * @name basegaugeoptions_subvalues
+    * @name basegaugeoptions.subvalues
     * @publicName subvalues
     * @type Array<number>
     * @default undefined
@@ -621,25 +621,25 @@ var baseGauge = {
     */
     subvalues: undefined,
     /**
-    * @name basegaugemethods_value
+    * @name basegaugemethods.value
     * @publicName value()
     * @return number
     */
     value: function() { },
     /**
-    * @name basegaugemethods_value
+    * @name basegaugemethods.value
     * @publicName value(value)
     * @param1 value:number
     */
     value: function() { },
     /**
-    * @name basegaugemethods_subvalues
+    * @name basegaugemethods.subvalues
     * @publicName subvalues()
     * @return Array<number>
     */
     subvalues: function() { },
     /**
-    * @name basegaugemethods_subvalues
+    * @name basegaugemethods.subvalues
     * @publicName subvalues(subvalues)
     * @param1 subvalues:Array<number>
     */
@@ -655,26 +655,26 @@ var baseGauge = {
 */
 var dxCircularGauge = {
     /**
-    * @name dxcirculargauge_options
+    * @name dxcirculargauge.options
     * @publicName Options
     * @namespace DevExpress.viz.gauges
     * @hidden
     */
     /**
-    * @name dxcirculargaugeoptions_geometry
+    * @name dxcirculargaugeoptions.geometry
     * @publicName geometry
     * @type object
     */
     geometry: {
         /**
-        * @name dxcirculargaugeoptions_geometry_startAngle
+        * @name dxcirculargaugeoptions.geometry.startAngle
         * @publicName startAngle
         * @type number
         * @default 225
         */
         startAngle: 225,
         /**
-        * @name dxcirculargaugeoptions_geometry_endAngle
+        * @name dxcirculargaugeoptions.geometry.endAngle
         * @publicName endAngle
         * @type number
         * @default 315
@@ -682,71 +682,71 @@ var dxCircularGauge = {
         endAngle: 315
     },
     /**
-    * @name dxcirculargaugeoptions_scale
+    * @name dxcirculargaugeoptions.scale
     * @publicName scale
     * @type object
     */
     scale: {
         /**
-        * @name dxcirculargaugeoptions_scale_orientation
+        * @name dxcirculargaugeoptions.scale.orientation
         * @publicName orientation
         * @type Enums.CircularGaugeElementOrientation
         * @default 'outside'
         */
         orientation: 'outside',
         /**
-        * @name dxcirculargaugeoptions_scale_label
+        * @name dxcirculargaugeoptions.scale.label
         * @publicName label
         * @type object
         */
         label: {
             /**
-            * @name dxcirculargaugeoptions_scale_label_indentFromTick
+            * @name dxcirculargaugeoptions.scale.label.indentFromTick
             * @publicName indentFromTick
             * @type number
             * @default 10
             */
             indentFromTick: 10,
             /**
-            * @name dxcirculargaugeoptions_scale_label_hideFirstOrLast
+            * @name dxcirculargaugeoptions.scale.label.hideFirstOrLast
             * @publicName hideFirstOrLast
             * @type Enums.GaugeOverlappingBehavior
             * @default 'last'
             */
             hideFirstOrLast: "last",
             /**
-            * @name dxcirculargaugeoptions_scale_label_overlappingBehavior
+            * @name dxcirculargaugeoptions.scale.label.overlappingBehavior
             * @publicName overlappingBehavior
             * @type Enums.ScaleLabelOverlappingBehavior|object
             * @inheritdoc
             */
             overlappingBehavior: {
                 /**
-                * @name dxcirculargaugeoptions_scale_label_overlappingBehavior_hideFirstOrLast
+                * @name dxcirculargaugeoptions.scale.label.overlappingBehavior.hideFirstOrLast
                 * @publicName hideFirstOrLast
                 * @type Enums.GaugeOverlappingBehavior
                 * @default "last"
-                * @deprecated dxcirculargaugeoptions_scale_label_hideFirstOrLast
+                * @deprecated dxcirculargaugeoptions.scale.label.hideFirstOrLast
                 */
                 hideFirstOrLast: "last"
             }
         }
     },
     /**
-    * @name dxcirculargaugeoptions_rangeContainer
+    * @name dxcirculargaugeoptions.rangeContainer
     * @publicName rangeContainer
     * @type object
     */
     rangeContainer: {
         /**
-        * @name dxcirculargaugeoptions_rangeContainer_width
+        * @name dxcirculargaugeoptions.rangeContainer.width
         * @publicName width
         * @type number
         * @default 5
         */
         width: 5,
         /**
-        * @name dxcirculargaugeoptions_rangeContainer_orientation
+        * @name dxcirculargaugeoptions.rangeContainer.orientation
         * @publicName orientation
         * @type Enums.CircularGaugeElementOrientation
         * @default 'outside'
@@ -754,7 +754,7 @@ var dxCircularGauge = {
         orientation: 'outside'
     },
     /**
-    * @name dxcirculargaugeoptions_valueIndicator
+    * @name dxcirculargaugeoptions.valueIndicator
     * @publicName valueIndicator
     * @inherits CommonIndicator
     * @type object
@@ -762,7 +762,7 @@ var dxCircularGauge = {
     */
     valueIndicator: {
         /**
-        * @name dxcirculargaugeoptions_valueIndicator_type
+        * @name dxcirculargaugeoptions.valueIndicator.type
         * @publicName type
         * @type string
         * @default 'rectangleNeedle'
@@ -771,7 +771,7 @@ var dxCircularGauge = {
         type: 'rectangleNeedle'
     },
     /**
-    * @name dxcirculargaugeoptions_subvalueIndicator
+    * @name dxcirculargaugeoptions.subvalueIndicator
     * @publicName subvalueIndicator
     * @inherits CommonIndicator
     * @type object
@@ -779,7 +779,7 @@ var dxCircularGauge = {
     */
     subvalueIndicator: {
         /**
-        * @name dxcirculargaugeoptions_subvalueIndicator_type
+        * @name dxcirculargaugeoptions.subvalueIndicator.type
         * @publicName type
         * @type string
         * @default 'triangleMarker'
@@ -798,19 +798,19 @@ var dxCircularGauge = {
 */
 var dxLinearGauge = {
     /**
-    * @name dxlineargauge_options
+    * @name dxlineargauge.options
     * @publicName Options
     * @namespace DevExpress.viz.gauges
     * @hidden
     */
     /**
-    * @name dxlineargaugeoptions_geometry
+    * @name dxlineargaugeoptions.geometry
     * @publicName geometry
     * @type object
     */
     geometry: {
         /**
-        * @name dxlineargaugeoptions_geometry_orientation
+        * @name dxlineargaugeoptions.geometry.orientation
         * @publicName orientation
         * @type Enums.Orientation
         * @default 'horizontal'
@@ -818,47 +818,47 @@ var dxLinearGauge = {
         orientation: 'horizontal'
     },
     /**
-    * @name dxlineargaugeoptions_scale
+    * @name dxlineargaugeoptions.scale
     * @publicName scale
     * @type object
     */
     scale: {
         /**
-        * @name dxlineargaugeoptions_scale_verticalOrientation
+        * @name dxlineargaugeoptions.scale.verticalOrientation
         * @publicName verticalOrientation
         * @type Enums.VerticalAlignment
         * @default 'bottom'
         */
         verticalOrientation: 'bottom',
         /**
-        * @name dxlineargaugeoptions_scale_horizontalOrientation
+        * @name dxlineargaugeoptions.scale.horizontalOrientation
         * @publicName horizontalOrientation
         * @type Enums.HorizontalAlignment
         * @default 'right'
         */
         horizontalOrientation: 'right',
         /**
-        * @name dxlineargaugeoptions_scale_label
+        * @name dxlineargaugeoptions.scale.label
         * @publicName label
         * @type object
         */
         label: {
             /**
-            * @name dxlineargaugeoptions_scale_label_indentFromTick
+            * @name dxlineargaugeoptions.scale.label.indentFromTick
             * @publicName indentFromTick
             * @type number
             * @default -10
             */
             indentFromTick: -10,
             /**
-            * @name dxlineargaugeoptions_scale_label_overlappingBehavior
+            * @name dxlineargaugeoptions.scale.label.overlappingBehavior
             * @publicName overlappingBehavior
             * @type Enums.ScaleLabelOverlappingBehavior|object
             * @inheritdoc
             */
             overlappingBehavior: {
                 /**
-                * @name dxlineargaugeoptions_scale_label_overlappingBehavior_hideFirstOrLast
+                * @name dxlineargaugeoptions.scale.label.overlappingBehavior.hideFirstOrLast
                 * @publicName hideFirstOrLast
                 * @type Enums.GaugeOverlappingBehavior
                 * @default "last"
@@ -869,19 +869,19 @@ var dxLinearGauge = {
         }
     },
     /**
-    * @name dxlineargaugeoptions_rangeContainer
+    * @name dxlineargaugeoptions.rangeContainer
     * @publicName rangeContainer
     * @type object
     */
     rangeContainer: {
         /**
-        * @name dxlineargaugeoptions_rangeContainer_width
+        * @name dxlineargaugeoptions.rangeContainer.width
         * @publicName width
         * @type object|number
         */
         width: {
             /**
-            * @name dxlineargaugeoptions_rangeContainer_width_start
+            * @name dxlineargaugeoptions.rangeContainer.width.start
             * @publicName start
             * @type number
             * @default 5
@@ -889,7 +889,7 @@ var dxLinearGauge = {
             start: 5,
 
             /**
-            * @name dxlineargaugeoptions_rangeContainer_width_end
+            * @name dxlineargaugeoptions.rangeContainer.width.end
             * @publicName end
             * @type number
             * @default 5
@@ -897,14 +897,14 @@ var dxLinearGauge = {
             end: 5
         },
         /**
-        * @name dxlineargaugeoptions_rangeContainer_verticalOrientation
+        * @name dxlineargaugeoptions.rangeContainer.verticalOrientation
         * @publicName verticalOrientation
         * @type Enums.VerticalAlignment
         * @default 'bottom'
         */
         verticalOrientation: 'bottom',
         /**
-        * @name dxlineargaugeoptions_rangeContainer_horizontalOrientation
+        * @name dxlineargaugeoptions.rangeContainer.horizontalOrientation
         * @publicName horizontalOrientation
         * @type Enums.HorizontalAlignment
         * @default 'right'
@@ -912,7 +912,7 @@ var dxLinearGauge = {
         horizontalOrientation: 'right'
     },
     /**
-    * @name dxlineargaugeoptions_valueIndicator
+    * @name dxlineargaugeoptions.valueIndicator
     * @publicName valueIndicator
     * @inherits CommonIndicator
     * @type object
@@ -920,7 +920,7 @@ var dxLinearGauge = {
     */
     valueIndicator: {
         /**
-        * @name dxlineargaugeoptions_valueIndicator_type
+        * @name dxlineargaugeoptions.valueIndicator.type
         * @publicName type
         * @type string
         * @default 'rangeBar'
@@ -929,7 +929,7 @@ var dxLinearGauge = {
         type: 'rangeBar'
     },
     /**
-    * @name dxlineargaugeoptions_subvalueIndicator
+    * @name dxlineargaugeoptions.subvalueIndicator
     * @publicName subvalueIndicator
     * @inherits CommonIndicator
     * @type object
@@ -937,7 +937,7 @@ var dxLinearGauge = {
     */
     subvalueIndicator: {
         /**
-        * @name dxlineargaugeoptions_subvalueIndicator_type
+        * @name dxlineargaugeoptions.subvalueIndicator.type
         * @publicName type
         * @type string
         * @default 'triangleMarker'
@@ -956,26 +956,26 @@ var dxLinearGauge = {
 */
 var dxBarGauge = {
     /**
-    * @name dxbargauge_options
+    * @name dxbargauge.options
     * @publicName Options
     * @namespace DevExpress.viz.gauges
     * @hidden
     */
     /**
-    * @name dxbargaugeoptions_animation
+    * @name dxbargaugeoptions.animation
     * @publicName animation
     * @type object
-    * @inherits basegaugeoptions_animation
+    * @inherits basegaugeoptions.animation
     */
     animation: {},
     /**
-    * @name dxbargaugeoptions_title
+    * @name dxbargaugeoptions.title
     * @publicName title
     * @inheritdoc
     */
     title: {
         /**
-        * @name dxbargaugeoptions_title_position
+        * @name dxbargaugeoptions.title.position
         * @publicName position
         * @type Enums.GaugeTitlePosition
         * @default 'top-center'
@@ -984,21 +984,21 @@ var dxBarGauge = {
         position: undefined
     },
     /**
-    * @name dxbargaugeoptions_subtitle
+    * @name dxbargaugeoptions.subtitle
     * @publicName subtitle
     * @type object|string
-    * @inherits basegaugeoptions_subtitle
-    * @deprecated BaseWidgetOptions_title_subtitle
+    * @inherits basegaugeoptions.subtitle
+    * @deprecated BaseWidgetOptions.title.subtitle
     */
     subtitle: {},
     /**
-    * @name dxbargaugeoptions_tooltip
+    * @name dxbargaugeoptions.tooltip
     * @publicName tooltip
     * @type object
     */
     tooltip: {
         /**
-        * @name dxbargaugeoptions_tooltip_customizetooltip
+        * @name dxbargaugeoptions.tooltip.customizetooltip
         * @publicName customizeTooltip
         * @default undefined
         * @type function(scaleValue)
@@ -1011,20 +1011,20 @@ var dxBarGauge = {
         customizeTooltip: undefined
     },
     /**
-    * @name dxbargaugeoptions_geometry
+    * @name dxbargaugeoptions.geometry
     * @publicName geometry
     * @type object
     */
     geometry: {
         /**
-        * @name dxbargaugeoptions_geometry_startAngle
+        * @name dxbargaugeoptions.geometry.startAngle
         * @publicName startAngle
         * @type number
         * @default 225
         */
         startAngle: 225,
         /**
-        * @name dxbargaugeoptions_geometry_endAngle
+        * @name dxbargaugeoptions.geometry.endAngle
         * @publicName endAngle
         * @type number
         * @default 315
@@ -1032,87 +1032,87 @@ var dxBarGauge = {
         endAngle: 315
     },
     /**
-    * @name dxbargaugeoptions_palette
+    * @name dxbargaugeoptions.palette
     * @publicName palette
     * @extends CommonVizPalette
     */
     palette: 'Default',
     /**
-    * @name dxbargaugeoptions_paletteextensionmode
+    * @name dxbargaugeoptions.paletteextensionmode
     * @publicName paletteExtensionMode
     * @default 'blend'
     * @type Enums.VizPaletteExtensionMode
     */
     paletteExtensionMode: 'blend',
     /**
-    * @name dxbargaugeoptions_backgroundColor
+    * @name dxbargaugeoptions.backgroundColor
     * @publicName backgroundColor
     * @type string
     * @default '#e0e0e0'
     */
     backgroundColor: '#e0e0e0',
     /**
-    * @name dxbargaugeoptions_barSpacing
+    * @name dxbargaugeoptions.barSpacing
     * @publicName barSpacing
     * @type number
     * @default 4
     */
     barSpacing: 4,
     /**
-    * @name dxbargaugeoptions_relativeInnerRadius
+    * @name dxbargaugeoptions.relativeInnerRadius
     * @publicName relativeInnerRadius
     * @type number
     * @default 0.3
     */
     relativeInnerRadius: 0.3,
     /**
-    * @name dxbargaugeoptions_label
+    * @name dxbargaugeoptions.label
     * @publicName label
     * @type object
     */
     label: {
         /**
-        * @name dxbargaugeoptions_label_visible
+        * @name dxbargaugeoptions.label.visible
         * @publicName visible
         * @type boolean
         * @default true
         */
         visible: true,
         /**
-        * @name dxbargaugeoptions_label_indent
+        * @name dxbargaugeoptions.label.indent
         * @publicName indent
         * @type number
         * @default 20
         */
         indent: 20,
         /**
-        * @name dxbargaugeoptions_label_connectorWidth
+        * @name dxbargaugeoptions.label.connectorWidth
         * @publicName connectorWidth
         * @type number
         * @default 2
         */
         connectorWidth: 2,
         /**
-        * @name dxbargaugeoptions_label_connectorColor
+        * @name dxbargaugeoptions.label.connectorColor
         * @publicName connectorColor
         * @type string
         * @default undefined
         */
         connectorColor: undefined,
         /**
-        * @name dxbargaugeoptions_label_format
+        * @name dxbargaugeoptions.label.format
         * @publicName format
         * @extends CommonVizFormat
         */
         format: undefined,
         /**
-        * @name dxbargaugeoptions_label_precision
+        * @name dxbargaugeoptions.label.precision
         * @publicName precision
         * @extends CommonVizPrecision
         */
         precision: undefined,
         /**
-        * @name dxbargaugeoptions_label_customizeText
+        * @name dxbargaugeoptions.label.customizeText
         * @publicName customizeText
         * @type function(barValue)
         * @type_function_param1 barValue:object
@@ -1123,41 +1123,41 @@ var dxBarGauge = {
         */
         customizeText: undefined,
         /**
-        * @name dxbargaugeoptions_label_font
+        * @name dxbargaugeoptions.label.font
         * @publicName font
         * @type object
         */
         font: {
             /**
-            * @name dxbargaugeoptions_label_font_color
+            * @name dxbargaugeoptions.label.font.color
             * @publicName color
             * @type string
             * @default undefined
             */
             color: undefined,
             /**
-            * @name dxbargaugeoptions_label_font_size
+            * @name dxbargaugeoptions.label.font.size
             * @publicName size
             * @type number|string
             * @default 16
             */
             size: 16,
             /**
-            * @name dxbargaugeoptions_label_font_family
+            * @name dxbargaugeoptions.label.font.family
             * @publicName family
             * @type string
             * @default "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana"
             */
             family: "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
             /**
-            * @name dxbargaugeoptions_label_font_weight
+            * @name dxbargaugeoptions.label.font.weight
             * @publicName weight
             * @type number
             * @default 400
             */
             weight: 400,
             /**
-            * @name dxbargaugeoptions_label_font_opacity
+            * @name dxbargaugeoptions.label.font.opacity
             * @publicName opacity
             * @type number
             * @default 1
@@ -1166,7 +1166,7 @@ var dxBarGauge = {
         }
     },
     /**
-    * @name dxbargaugeoptions_startValue
+    * @name dxbargaugeoptions.startValue
     * @publicName startValue
     * @type number
     * @default 0
@@ -1174,7 +1174,7 @@ var dxBarGauge = {
     */
     startValue: 0,
     /**
-    * @name dxbargaugeoptions_endValue
+    * @name dxbargaugeoptions.endValue
     * @publicName endValue
     * @type number
     * @default 100
@@ -1182,7 +1182,7 @@ var dxBarGauge = {
     */
     endValue: 100,
     /**
-    * @name dxbargaugeoptions_baseValue
+    * @name dxbargaugeoptions.baseValue
     * @publicName baseValue
     * @type number
     * @default 0
@@ -1190,7 +1190,7 @@ var dxBarGauge = {
     */
     baseValue: 0,
     /**
-    * @name dxbargaugeoptions_values
+    * @name dxbargaugeoptions.values
     * @publicName values
     * @type Array<number>
     * @default []
@@ -1198,19 +1198,19 @@ var dxBarGauge = {
     */
     values: [],
     /**
-    * @name dxbargaugemethods_values
+    * @name dxbargaugemethods.values
     * @publicName values()
     * @return Array<number>
     */
     values: function() { },
     /**
-    * @name dxbargaugemethods_values
+    * @name dxbargaugemethods.values
     * @publicName values(newValues)
     * @param1 values:Array<number>
     */
     values: function() { },
     /**
-    * @name dxbargaugeoptions_ontooltipshown
+    * @name dxbargaugeoptions.ontooltipshown
     * @publicName onTooltipShown
     * @extends Action
     * @type function(e)
@@ -1221,7 +1221,7 @@ var dxBarGauge = {
     */
     onTooltipShown: function() { },
     /**
-    * @name dxbargaugeoptions_ontooltiphidden
+    * @name dxbargaugeoptions.ontooltiphidden
     * @publicName onTooltipHidden
     * @extends Action
     * @type function(e)

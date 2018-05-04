@@ -22,7 +22,7 @@ var TrackBar = Editor.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             /**
-            * @name dxTrackBarOptions_min
+            * @name dxTrackBarOptions.min
             * @publicName min
             * @type number
             * @default 0
@@ -30,7 +30,7 @@ var TrackBar = Editor.inherit({
             min: 0,
 
             /**
-            * @name dxTrackBarOptions_max
+            * @name dxTrackBarOptions.max
             * @publicName max
             * @type number
             * @default 100

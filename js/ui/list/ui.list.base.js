@@ -121,7 +121,7 @@ var ListBase = CollectionWidget.inherit({
         return extend(this.callBase(), {
 
             /**
-             * @name dxListOptions_hoverStateEnabled
+             * @name dxListOptions.hoverStateEnabled
              * @publicName hoverStateEnabled
              * @type boolean
              * @default true
@@ -130,7 +130,7 @@ var ListBase = CollectionWidget.inherit({
             hoverStateEnabled: true,
 
             /**
-            * @name dxListOptions_pullRefreshEnabled
+            * @name dxListOptions.pullRefreshEnabled
             * @publicName pullRefreshEnabled
             * @type boolean
             * @default false
@@ -138,7 +138,7 @@ var ListBase = CollectionWidget.inherit({
             pullRefreshEnabled: false,
 
             /**
-            * @name dxListOptions_scrollingEnabled
+            * @name dxListOptions.scrollingEnabled
             * @publicName scrollingEnabled
             * @type boolean
             * @default true
@@ -146,7 +146,7 @@ var ListBase = CollectionWidget.inherit({
             scrollingEnabled: true,
 
             /**
-            * @name dxListOptions_showScrollbar
+            * @name dxListOptions.showScrollbar
             * @publicName showScrollbar
             * @type Enums.ShowScrollbarMode
             * @default 'onScroll'
@@ -157,7 +157,7 @@ var ListBase = CollectionWidget.inherit({
             useNativeScrolling: true,
 
             /**
-            * @name dxListOptions_bounceEnabled
+            * @name dxListOptions.bounceEnabled
             * @publicName bounceEnabled
             * @type boolean
             * @default true
@@ -166,7 +166,7 @@ var ListBase = CollectionWidget.inherit({
             bounceEnabled: true,
 
             /**
-            * @name dxListOptions_scrollByContent
+            * @name dxListOptions.scrollByContent
             * @publicName scrollByContent
             * @type boolean
             * @default true
@@ -175,7 +175,7 @@ var ListBase = CollectionWidget.inherit({
             scrollByContent: true,
 
             /**
-            * @name dxListOptions_scrollByThumb
+            * @name dxListOptions.scrollByThumb
             * @publicName scrollByThumb
             * @type boolean
             * @default false
@@ -184,7 +184,7 @@ var ListBase = CollectionWidget.inherit({
             scrollByThumb: false,
 
             /**
-            * @name dxListOptions_pullingDownText
+            * @name dxListOptions.pullingDownText
             * @publicName pullingDownText
             * @type string
             * @default "Pull down to refresh..."
@@ -192,7 +192,7 @@ var ListBase = CollectionWidget.inherit({
             pullingDownText: messageLocalization.format("dxList-pullingDownText"),
 
             /**
-            * @name dxListOptions_pulledDownText
+            * @name dxListOptions.pulledDownText
             * @publicName pulledDownText
             * @type string
             * @default "Release to refresh..."
@@ -200,7 +200,7 @@ var ListBase = CollectionWidget.inherit({
             pulledDownText: messageLocalization.format("dxList-pulledDownText"),
 
             /**
-            * @name dxListOptions_refreshingText
+            * @name dxListOptions.refreshingText
             * @publicName refreshingText
             * @type string
             * @default "Refreshing..."
@@ -208,7 +208,7 @@ var ListBase = CollectionWidget.inherit({
             refreshingText: messageLocalization.format("dxList-refreshingText"),
 
             /**
-            * @name dxListOptions_pageLoadingText
+            * @name dxListOptions.pageLoadingText
             * @publicName pageLoadingText
             * @type string
             * @default "Loading..."
@@ -216,7 +216,7 @@ var ListBase = CollectionWidget.inherit({
             pageLoadingText: messageLocalization.format("dxList-pageLoadingText"),
 
             /**
-            * @name dxListOptions_onScroll
+            * @name dxListOptions.onScroll
             * @publicName onScroll
             * @extends Action
             * @type function(e)
@@ -233,7 +233,7 @@ var ListBase = CollectionWidget.inherit({
             onScroll: null,
 
             /**
-            * @name dxListOptions_onPullRefresh
+            * @name dxListOptions.onPullRefresh
             * @publicName onPullRefresh
             * @extends Action
             * @action
@@ -241,7 +241,7 @@ var ListBase = CollectionWidget.inherit({
             onPullRefresh: null,
 
             /**
-            * @name dxListOptions_onPageLoading
+            * @name dxListOptions.onPageLoading
             * @publicName onPageLoading
             * @extends Action
             * @action
@@ -249,7 +249,7 @@ var ListBase = CollectionWidget.inherit({
             onPageLoading: null,
 
             /**
-            * @name dxListOptions_pageLoadMode
+            * @name dxListOptions.pageLoadMode
             * @publicName pageLoadMode
             * @type Enums.ListPageLoadMode
             * @default "scrollBottom"
@@ -257,7 +257,7 @@ var ListBase = CollectionWidget.inherit({
             pageLoadMode: "scrollBottom",
 
             /**
-            * @name dxListOptions_nextButtonText
+            * @name dxListOptions.nextButtonText
             * @publicName nextButtonText
             * @type string
             * @default "More"
@@ -265,7 +265,7 @@ var ListBase = CollectionWidget.inherit({
             nextButtonText: messageLocalization.format("dxList-nextButtonText"),
 
             /**
-            * @name dxListOptions_onItemSwipe
+            * @name dxListOptions.onItemSwipe
             * @publicName onItemSwipe
             * @extends Action
             * @type function(e)
@@ -281,7 +281,7 @@ var ListBase = CollectionWidget.inherit({
             onItemSwipe: null,
 
             /**
-            * @name dxListOptions_grouped
+            * @name dxListOptions.grouped
             * @publicName grouped
             * @type boolean
             * @default false
@@ -289,7 +289,7 @@ var ListBase = CollectionWidget.inherit({
             grouped: false,
 
             /**
-            * @name dxListOptions_onGroupRendered
+            * @name dxListOptions.onGroupRendered
             * @publicName onGroupRendered
             * @extends Action
             * @type function(e)
@@ -302,7 +302,7 @@ var ListBase = CollectionWidget.inherit({
             onGroupRendered: null,
 
             /**
-            * @name dxListOptions_collapsibleGroups
+            * @name dxListOptions.collapsibleGroups
             * @publicName collapsibleGroups
             * @type boolean
             * @default false
@@ -310,7 +310,7 @@ var ListBase = CollectionWidget.inherit({
             collapsibleGroups: false,
 
             /**
-            * @name dxListOptions_groupTemplate
+            * @name dxListOptions.groupTemplate
             * @publicName groupTemplate
             * @type template|function
             * @default "group"
@@ -322,7 +322,7 @@ var ListBase = CollectionWidget.inherit({
             groupTemplate: "group",
 
             /**
-            * @name dxListOptions_indicateLoading
+            * @name dxListOptions.indicateLoading
             * @publicName indicateLoading
             * @type boolean
             * @default true
@@ -330,7 +330,7 @@ var ListBase = CollectionWidget.inherit({
             indicateLoading: true,
 
             /**
-            * @name dxListOptions_selectedIndex
+            * @name dxListOptions.selectedIndex
             * @publicName selectedIndex
             * @type number
             * @default -1
@@ -338,14 +338,14 @@ var ListBase = CollectionWidget.inherit({
             */
 
             /**
-            * @name dxListOptions_selectedItem
+            * @name dxListOptions.selectedItem
             * @publicName selectedItem
             * @hidden
             * @inheritdoc
             */
 
             /**
-             * @name dxListOptions_activeStateEnabled
+             * @name dxListOptions.activeStateEnabled
              * @publicName activeStateEnabled
              * @type boolean
              * @default true
@@ -358,7 +358,7 @@ var ListBase = CollectionWidget.inherit({
             useInkRipple: false,
 
             /**
-            * @name dxListOptions_onItemClick
+            * @name dxListOptions.onItemClick
             * @publicName onItemClick
             * @type function(e)|string
             * @extends Action
@@ -370,7 +370,7 @@ var ListBase = CollectionWidget.inherit({
             */
 
             /**
-            * @name dxListOptions_onItemContextMenu
+            * @name dxListOptions.onItemContextMenu
             * @publicName onItemContextMenu
             * @extends Action
             * @type function(e)
@@ -381,7 +381,7 @@ var ListBase = CollectionWidget.inherit({
             */
 
             /**
-            * @name dxListOptions_onItemHold
+            * @name dxListOptions.onItemHold
             * @publicName onItemHold
             * @extends Action
             * @type function(e)
@@ -400,17 +400,17 @@ var ListBase = CollectionWidget.inherit({
             * @type object
             */
             /**
-            * @name dxListItemTemplate_badge
+            * @name dxListItemTemplate.badge
             * @publicName badge
             * @type String
             */
             /**
-            * @name dxListItemTemplate_showChevron
+            * @name dxListItemTemplate.showChevron
             * @publicName showChevron
             * @type boolean
             */
             /**
-            * @name dxListItemTemplate_key
+            * @name dxListItemTemplate.key
             * @publicName key
             * @type String
             */
@@ -419,7 +419,7 @@ var ListBase = CollectionWidget.inherit({
 
     _defaultOptionsRules: function() {
         /**
-        * @name dxListOptions_useNativeScrolling
+        * @name dxListOptions.useNativeScrolling
         * @publicName useNativeScrolling
         * @default false @for desktop
         * @default true @for Mac
@@ -431,7 +431,7 @@ var ListBase = CollectionWidget.inherit({
                 },
                 options: {
                     /**
-                    * @name dxListOptions_useNativeScrolling
+                    * @name dxListOptions.useNativeScrolling
                     * @publicName useNativeScrolling
                     * @type boolean
                     * @default true
@@ -445,14 +445,14 @@ var ListBase = CollectionWidget.inherit({
                 },
                 options: {
                     /**
-                    * @name dxListOptions_showScrollbar
+                    * @name dxListOptions.showScrollbar
                     * @publicName showScrollbar
                     * @default 'onHover' @for desktop
                     */
                     showScrollbar: "onHover",
 
                     /**
-                    * @name dxListOptions_pageLoadMode
+                    * @name dxListOptions.pageLoadMode
                     * @publicName pageLoadMode
                     * @default 'nextButton' @for desktop
                     */
@@ -465,7 +465,7 @@ var ListBase = CollectionWidget.inherit({
                 },
                 options: {
                     /**
-                    * @name dxListOptions_focusStateEnabled
+                    * @name dxListOptions.focusStateEnabled
                     * @publicName focusStateEnabled
                     * @type boolean
                     * @default true @for desktop
@@ -497,7 +497,7 @@ var ListBase = CollectionWidget.inherit({
                 },
                 options: {
                     /**
-                    * @name dxListOptions_pullingDownText
+                    * @name dxListOptions.pullingDownText
                     * @publicName pullingDownText
                     * @type string
                     * @default "" @for Material
@@ -505,7 +505,7 @@ var ListBase = CollectionWidget.inherit({
                     pullingDownText: "",
 
                     /**
-                    * @name dxListOptions_pulledDownText
+                    * @name dxListOptions.pulledDownText
                     * @publicName pulledDownText
                     * @type string
                     * @default "" @for Material
@@ -513,7 +513,7 @@ var ListBase = CollectionWidget.inherit({
                     pulledDownText: "",
 
                     /**
-                    * @name dxListOptions_refreshingText
+                    * @name dxListOptions.refreshingText
                     * @publicName refreshingText
                     * @type string
                     * @default "" @for Material
@@ -521,7 +521,7 @@ var ListBase = CollectionWidget.inherit({
                     refreshingText: "",
 
                     /**
-                    * @name dxListOptions_pageLoadingText
+                    * @name dxListOptions.pageLoadingText
                     * @publicName pageLoadingText
                     * @type string
                     * @default "" @for Material
@@ -1145,7 +1145,7 @@ var ListBase = CollectionWidget.inherit({
     },
 
     /**
-    * @name dxListMethods_expandGroup
+    * @name dxListMethods.expandGroup
     * @publicName expandGroup(groupIndex)
     * @param1 groupIndex:Number
     * @return Promise<void>
@@ -1162,7 +1162,7 @@ var ListBase = CollectionWidget.inherit({
     },
 
     /**
-    * @name dxListMethods_collapseGroup
+    * @name dxListMethods.collapseGroup
     * @publicName collapseGroup(groupIndex)
     * @param1 groupIndex:Number
     * @return Promise<void>
@@ -1179,7 +1179,7 @@ var ListBase = CollectionWidget.inherit({
     },
 
     /**
-    * @name dxListMethods_updateDimensions
+    * @name dxListMethods.updateDimensions
     * @publicName updateDimensions()
     * @return Promise<void>
     */
@@ -1200,7 +1200,7 @@ var ListBase = CollectionWidget.inherit({
     },
 
     /**
-    * @name dxListMethods_reload
+    * @name dxListMethods.reload
     * @publicName reload()
     */
     reload: function() {
@@ -1214,7 +1214,7 @@ var ListBase = CollectionWidget.inherit({
     },
 
     /**
-    * @name dxListMethods_scrollTop
+    * @name dxListMethods.scrollTop
     * @publicName scrollTop()
     * @return numeric
     */
@@ -1223,7 +1223,7 @@ var ListBase = CollectionWidget.inherit({
     },
 
     /**
-    * @name dxListMethods_clientHeight
+    * @name dxListMethods.clientHeight
     * @publicName clientHeight()
     * @return numeric
     */
@@ -1232,7 +1232,7 @@ var ListBase = CollectionWidget.inherit({
     },
 
     /**
-    * @name dxListMethods_scrollHeight
+    * @name dxListMethods.scrollHeight
     * @publicName scrollHeight()
     * @return numeric
     */
@@ -1241,7 +1241,7 @@ var ListBase = CollectionWidget.inherit({
     },
 
     /**
-    * @name dxListMethods_scrollBy
+    * @name dxListMethods.scrollBy
     * @publicName scrollBy(distance)
     * @param1 distance:numeric
     */
@@ -1250,7 +1250,7 @@ var ListBase = CollectionWidget.inherit({
     },
 
     /**
-    * @name dxListMethods_scrollTo
+    * @name dxListMethods.scrollTo
     * @publicName scrollTo(location)
     * @param1 location:numeric
     */
@@ -1259,12 +1259,12 @@ var ListBase = CollectionWidget.inherit({
     },
 
     /**
-    * @name dxListMethods_scrollToItem
+    * @name dxListMethods.scrollToItem
     * @publicName scrollToItem(itemElement)
     * @param1 itemElement:Node
     */
     /**
-    * @name dxListMethods_scrollToItem
+    * @name dxListMethods.scrollToItem
     * @publicName scrollToItem(itemIndex)
     * @param1 itemIndex:Number|Object
     */

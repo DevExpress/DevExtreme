@@ -28,6 +28,7 @@ var $ = require("jquery"),
     MockPoint = chartMocks.MockSeries,
     insertMockFactory = chartMocks.insertMockFactory,
     resetMockFactory = chartMocks.resetMockFactory,
+    restoreMockFactory = chartMocks.restoreMockFactory,
     setupSeriesFamily = chartMocks.setupSeriesFamily;
 
 $('<div id="chartContainer">').appendTo("#qunit-fixture");
@@ -196,8 +197,8 @@ var environment = {
         });
     },
     afterEach: function() {
-
         resetMockFactory();
+        restoreMockFactory();
 
         validateData.reset();
         validateData.restore();
@@ -1539,7 +1540,6 @@ var environment = {
             series: { type: "line" }
         });
         // assert
-        assert.equal(chart.series[0].prepareToDrawing.lastCall.args[0], true);
         assert.ok(chart.series[0].wasAnimated, "Series should be animated");
     });
 
@@ -1563,7 +1563,6 @@ var environment = {
 
         chart.option({ dataSource: [] });
         // assert
-        assert.equal(chart.series[0].prepareToDrawing.lastCall.args[0], false);
         assert.ok(!chart.series[0].wasAnimated, "Series should be not animated");
     });
 
@@ -1579,7 +1578,6 @@ var environment = {
             series: { type: "line" }
         });
         // assert
-        assert.equal(chart.series[0].prepareToDrawing.lastCall.args[0], false);
         assert.ok(!chart.series[0].wasAnimated, "Series should not be animated as point animation limit is exceeded");
     });
 
