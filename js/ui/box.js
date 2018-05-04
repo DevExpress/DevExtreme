@@ -146,7 +146,8 @@ var FlexLayoutStrategy = Class.inherit({
                 $(itemContent).css({
                     width: "auto",
                     height: "auto",
-                    display: styleUtils.stylePropPrefix("flexDirection") + "flex"
+                    display: styleUtils.stylePropPrefix("flexDirection") + "flex",
+                    flexBasis: 0
                 });
 
                 setFlexProp(itemContent, "flexGrow", 1);
