@@ -1131,8 +1131,7 @@ testComponentDefaults(LoadPanel,
 testComponentDefaults(Button,
     { platform: devices.current().platform },
     {
-        useInkRipple: true,
-        _forceIconButtonAppearance: false
+        useInkRipple: true
     },
     function() {
         this.originalCurrentTheme = themes.current();

@@ -12,7 +12,6 @@ var $ = require("../core/renderer"),
     ListBottomStrategy = require("./toolbar/ui.toolbar.strategy.list_bottom"),
     ListTopStrategy = require("./toolbar/ui.toolbar.strategy.list_top"),
     ToolbarBase = require("./toolbar/ui.toolbar.base"),
-    Button = require("./button"),
     ChildDefaultTemplate = require("./widget/child_default_template");
 
 var STRATEGIES = {
@@ -248,19 +247,6 @@ var Toolbar = ToolbarBase.inherit({
         }
 
         return itemElement;
-    },
-
-    _setIconButtonAppearanceConfig: function(buttons, value) {
-        iteratorUtils.each(buttons, function(index, buttonItem) {
-            Button.getInstance(buttonItem).option("_forceIconButtonAppearance", value);
-        });
-    },
-
-    _updateUseIconButtonStrategy: function() {
-        var container = this.$element();
-
-        this._setIconButtonAppearanceConfig(container.find("." + TOOLBAR_AUTO_HIDE_TEXT_CLASS + " .dx-button"), true);
-        this._setIconButtonAppearanceConfig(container.find("." + TOOLBAR_HIDDEN_ITEM + " .dx-button"), false);
     },
 
     _hideOverflowItems: function(elementWidth) {

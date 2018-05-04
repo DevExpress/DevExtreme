@@ -113,8 +113,6 @@ var ToolbarStrategy = Class.inherit({
 
     renderMenuItems: function() {
         this._menu && this._menu.option("items", this._getMenuItems());
-
-        this._toolbar._updateUseIconButtonStrategy();
     },
 
     toggleMenuVisibility: function(visible, animate) {

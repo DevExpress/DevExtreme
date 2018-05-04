@@ -3,7 +3,6 @@
 var $ = require("jquery"),
     ValidationEngine = require("ui/validation_engine"),
     Validator = require("ui/validator"),
-    pointerMock = require("../../helpers/pointerMock.js"),
     keyboardMock = require("../../helpers/keyboardMock.js");
 
 require("ui/button");
@@ -162,9 +161,6 @@ QUnit.test("T355000 - the 'onContentReady' action should be fired after widget i
 
 QUnit.module("inkRipple");
 
-var INKRIPPLE_WAVE_SHOWING_CLASS = "dx-inkripple-showing",
-    INKRIPPLE_WAVE_CLASS = "dx-inkripple-wave";
-
 QUnit.test("inkRipple should be removed when widget is removed", function(assert) {
     $("#inkButton").dxButton({
         useInkRipple: true,
@@ -176,41 +172,6 @@ QUnit.test("inkRipple should be removed when widget is removed", function(assert
         }
     });
     $("#inkButton").trigger("dxclick");
-});
-
-QUnit.test("text button inkRipple is centered with _forceIconButtonAppearance", function(assert) {
-    var clock = sinon.useFakeTimers(),
-        elementWidth = 64,
-        elementHeight = 32,
-        waveSize = parseInt(Math.sqrt(elementHeight * elementHeight + elementWidth * elementWidth)),
-        waveSizeCoefficient = 1,
-        rippleSize = waveSize * waveSizeCoefficient,
-        elementSelector = "#inkButton";
-
-    $(elementSelector).dxButton({
-        useInkRipple: true,
-        icon: "check",
-        _forceIconButtonAppearance: true,
-        text: "test",
-        width: elementWidth,
-        height: elementHeight
-    });
-
-    var $element = $(elementSelector);
-
-    pointerMock($element).start("touch").down();
-
-    clock.tick(100);
-    assert.equal($element.find("." + INKRIPPLE_WAVE_SHOWING_CLASS).length, 1, "has one inkRipple element");
-
-    var $wave = $element.find("." + INKRIPPLE_WAVE_CLASS),
-        expectedLeft = Math.round((elementWidth - rippleSize) / 2),
-        expectedTop = Math.round((elementHeight - rippleSize) / 2);
-
-    assert.equal(parseInt($wave.css("left")), expectedLeft, "horizontal centering is correct");
-    assert.equal(parseInt($wave.css("top")), expectedTop, "vertical centering is correct");
-
-    clock.restore();
 });
 
 QUnit.module("widget sizing render");
