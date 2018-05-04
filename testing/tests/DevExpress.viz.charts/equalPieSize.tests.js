@@ -11,6 +11,7 @@ var $ = require("jquery"),
     MockSeries = chartMocks.MockSeries,
     MockPoint = chartMocks.MockPoint,
     insertMockFactory = chartMocks.insertMockFactory,
+    restoreMockFactory = chartMocks.restoreMockFactory,
     resetMockFactory = chartMocks.resetMockFactory;
 
 function getContainer() {
@@ -85,6 +86,7 @@ var environment = {
 
         commons.resetModules();
         resetMockFactory();
+        restoreMockFactory();
     },
     createPieChart: function(options, layout, minLayout) {
         this._pieCounter = this._pieCounter || 0;

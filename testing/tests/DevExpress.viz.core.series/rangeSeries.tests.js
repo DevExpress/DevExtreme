@@ -4,7 +4,7 @@ import $ from "jquery";
 import * as vizMocks from "../../helpers/vizMocks.js";
 import pointModule from "viz/series/points/base_point";
 import { Series } from "viz/series/base_series";
-import { MockAxis, insertMockFactory } from "../../helpers/chartMocks.js";
+import { MockAxis, insertMockFactory, restoreMockFactory } from "../../helpers/chartMocks.js";
 import { noop } from "core/utils/common";
 
 const originalPoint = pointModule.Point;
@@ -59,9 +59,7 @@ var environment = {
         this.areaPoints = this.points.concat([[4, 0], [3, 0], [2, 0], [1, 0]]);
     },
 
-    afterEach: function() {
-
-    }
+    afterEach: restoreMockFactory
 };
 
 var createPoint = function() {
@@ -95,9 +93,7 @@ var environmentWithSinonStubPoint = {
             return stub;
         });
     },
-    afterEach: function() {
-        pointModule.Point.restore();
-    }
+    afterEach: environment.afterEach
 };
 
 (function RangeSeries() {
@@ -134,8 +130,9 @@ var environmentWithSinonStubPoint = {
                 return stub;
             });
         },
-        afterEach: function() {
-            pointModule.Point.restore();
+        afterEach() {
+            this.createPoint.restore();
+            environment.afterEach.call(this);
         }
     });
 
@@ -293,6 +290,7 @@ var environmentWithSinonStubPoint = {
             });
         },
         afterEach: function() {
+            environment.afterEach.call(this);
             this.createPoint.restore();
         }
     });
@@ -778,88 +776,3 @@ var environmentWithSinonStubPoint = {
     });
 })();
 
-QUnit.module("Range Area. Update Animation", {
-    beforeEach: function() {
-        environmentWithSinonStubPoint.beforeEach.call(this);
-        this.series = createSeries({
-            type: "rangearea",
-            border: {
-                visible: true
-            },
-            point: { visible: false }
-        }, {
-            renderer: this.renderer,
-            argumentAxis: new MockAxis({ renderer: this.renderer }),
-            valueAxis: new MockAxis({ renderer: this.renderer })
-        });
-    },
-    afterEach: function() {
-        environmentWithSinonStubPoint.afterEach.call(this);
-    }
-});
-
-function checkElementPoints(assert, elementPoints, expectedPoints, defaultCoord, comment) {
-    assert.ok(elementPoints, comment);
-    assert.equal(elementPoints.length, expectedPoints.length, comment + "- point length");
-    $.each(elementPoints, function(i, p) {
-        if(defaultCoord) {
-            assert.ok(p.defaultCoords, comment + " point" + i + " default value");
-        } else {
-            assert.equal(p.y.toFixed(2), expectedPoints[i][1], comment + " point.y " + i);
-        }
-        assert.equal(p.x.toFixed(2), expectedPoints[i][0], comment + " point.x " + i);
-    });
-}
-
-QUnit.test("Draw old and new points in the right order", function(assert) {
-    this.series.updateData([{ arg: 1, val1: 10, val2: 20 }, { arg: 2, val1: 20, val2: 40 }]);
-    this.series.createPoints();
-    this.series.draw();
-
-    this.series.updateData([{ arg: -1, val1: 20, val2: 50 }, { arg: 1, val1: 20, val2: 20 }]);
-    this.series.createPoints();
-    this.series.prepareToDrawing(true);
-
-    var borderPoints = this.renderer.stub("path").firstCall.returnValue.animate.lastCall.args[0].points;
-    checkElementPoints(assert, borderPoints, [[-1, 50], [1, 20], [2, 40]], false, "border points");
-
-    var minBorderPoints = this.renderer.stub("path").thirdCall.returnValue.animate.lastCall.args[0].points;
-    checkElementPoints(assert, minBorderPoints, [[-1, 20], [1, 10], [2, 20]], false, "border min points");
-
-    var segmentPoints = this.renderer.stub("path").secondCall.returnValue.animate.lastCall.args[0].points;
-    checkElementPoints(assert, segmentPoints, [[-1, 50], [1, 20], [2, 40], [2, 20], [1, 10], [-1, 20]], false, "drawn points");
-});
-
-QUnit.test("Apply only new points after animation", function(assert) {
-    this.series.updateData([{ arg: 1, val1: 10, val2: 30 }, { arg: 2, val1: 20, val2: 30 }]);
-    this.series.createPoints();
-
-    this.series.draw();
-
-    this.series.getAllPoints().forEach(function(p) {
-        p.update = function(data) {
-            p.index = data.index;
-        };
-    });
-
-    this.series.updateData([{ arg: -1, val1: 20, val2: 30 }, { arg: 1, val1: 20, val2: 30 }]);
-    this.series.createPoints();
-    this.series.prepareToDrawing(true);
-    var path = this.renderer.stub("path").secondCall.returnValue;
-    path.attr.reset();
-    this.renderer.stub("path").firstCall.returnValue.attr.reset();
-    this.renderer.stub("path").thirdCall.returnValue.attr.reset();
-    this.series.draw(true);
-
-    var complete = path.animate.lastCall.args[2];
-    complete();
-
-    var borderPoints = this.renderer.stub("path").firstCall.returnValue.attr.lastCall.args[0].points;
-    checkElementPoints(assert, borderPoints, [[-1, 30], [1, 30]], false, "drawn border points");
-
-    var segmentPoints = this.renderer.stub("path").secondCall.returnValue.attr.lastCall.args[0].points;
-    checkElementPoints(assert, segmentPoints, [[-1, 30], [1, 30], [1, 10], [-1, 20]], false, "drawn area points");
-
-    var minBorderPoints = this.renderer.stub("path").thirdCall.returnValue.attr.lastCall.args[0].points;
-    checkElementPoints(assert, minBorderPoints, [[-1, 20], [1, 10]], false, "drawn border points");
-});

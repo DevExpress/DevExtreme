@@ -6,7 +6,7 @@ import { noop } from "core/utils/common";
 import pointModule from "viz/series/points/base_point";
 import labelModule from "viz/series/points/label";
 import { Series } from "viz/series/base_series";
-import { insertMockFactory, MockAxis, MockTranslator } from "../../helpers/chartMocks.js";
+import { insertMockFactory, MockAxis, MockTranslator, restoreMockFactory } from "../../helpers/chartMocks.js";
 
 var createSeries = function(options, renderSettings) {
     renderSettings = renderSettings || {};
@@ -92,6 +92,7 @@ var environment = {
     },
     afterEach: function() {
         this.createPoint.restore();
+        restoreMockFactory();
     }
 };
 

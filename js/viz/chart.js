@@ -665,17 +665,6 @@ var dxChart = AdvancedChart.inherit({
         that.callBase();
     },
 
-    _seriesPopulatedHandlerCore: function() {
-        var that = this,
-            animationMaxPointSupported = that._getAnimationOptions().maxPointCountSupported,
-            animationEnabled = that._renderer.animationEnabled();
-
-        this.callBase();
-        this.series.forEach(function(s) {
-            s.prepareToDrawing(s.getPoints().length <= animationMaxPointSupported && animationEnabled);
-        });
-    },
-
     _isLegendInside: function() {
         return this._legend && this._legend.getPosition() === "inside";
     },

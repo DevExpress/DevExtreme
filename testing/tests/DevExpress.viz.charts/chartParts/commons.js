@@ -26,7 +26,8 @@ var $ = require("jquery"),
     dataValidatorModule = require("viz/components/data_validator"),
     chartMocks = require("../../../helpers/chartMocks.js"),
     insertMockFactory = chartMocks.insertMockFactory,
-    resetMockFactory = chartMocks.resetMockFactory;
+    resetMockFactory = chartMocks.resetMockFactory,
+    restoreMockFactory = chartMocks.restoreMockFactory;
 
 exports.LabelCtor = LabelCtor;
 exports.rendererModule = rendererModule;
@@ -229,6 +230,7 @@ exports.environment = {
     },
     afterEach: function() {
         this.$container.remove();
+        restoreMockFactory();
         resetMockFactory();
         this.createThemeManager.reset();
         this.createThemeManager.restore();

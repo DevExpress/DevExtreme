@@ -1354,7 +1354,29 @@ QUnit.module("API", {
             getColor: function() { return "blue"; },
             isFullStackedSeries: function() { return false; },
             getLabelVisibility: function() { return true; },
-            customizePoint: sinon.stub()
+            customizePoint: sinon.stub(),
+            getVisibleArea: function() { return { minX: 0, maxX: 700, minY: 0, maxY: 700 }; },
+            getValueAxis: function() {
+                return {
+                    getTranslator: function() {
+                        return new MockTranslator({
+                            translate: {
+                                5: 100,
+                                "canvas_position_default": "default_position"
+                            }
+                        });
+                    }
+                };
+            },
+            getArgumentAxis: function() {
+                return {
+                    getTranslator: function() {
+                        return new MockTranslator({
+                            translate: { 5: 50 }
+                        });
+                    }
+                };
+            }
         };
         sinon.spy(labelModule, "Label");
     },
@@ -1465,6 +1487,35 @@ QUnit.test("getLabel", function(assert) {
     var point = createPoint(this.series, this.data, this.options);
 
     assert.equal(point.getLabel(), labelModule.Label.returnValues[0]);
+});
+
+QUnit.test("Point translation", function(assert) {
+    let point = createPoint(this.series, this.data, this.options);
+
+    point.translate();
+
+    assert.strictEqual(point.translated, true);
+});
+
+QUnit.test("Set default coords", function(assert) {
+    let point = createPoint(this.series, this.data, this.options);
+
+    point.translate();
+    point.setDefaultCoords();
+
+    assert.strictEqual(point.y, "default_position", "Y");
+    assert.strictEqual(point.x, 50, "X");
+});
+
+QUnit.test("Set default coords. Rotated", function(assert) {
+    this.options.rotated = true;
+    let point = createPoint(this.series, this.data, this.options);
+
+    point.translate();
+    point.setDefaultCoords();
+
+    assert.strictEqual(point.x, "default_position", "X");
+    assert.strictEqual(point.y, 50, "Y");
 });
 
 QUnit.module("getBoundingRect", {});
