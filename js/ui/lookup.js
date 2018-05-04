@@ -362,7 +362,6 @@ var Lookup = DropDownList.inherit({
             * @type boolean
             * @default false
             */
-
             usePopover: false,
 
             showDropDownButton: false,
@@ -955,7 +954,6 @@ var Lookup = DropDownList.inherit({
 
         delete result.animation;
         delete result.position;
-
 
         result.maxHeight = function() { return $(window).height(); };
 

@@ -3007,7 +3007,7 @@ QUnit.test("Check default popupWidth, popupHeight, position.of for Material them
         assert.equal(lookup.option("popupWidth")(), $lookup.outerWidth(), "popup width match with lookup field width");
         assert.equal(lookup.option("position").of, lookup.$element(), "popup position of lookup field");
 
-        lookup.field().trigger("dxclick");
+        $(lookup.field()).trigger("dxclick");
 
         assert.equal(lookup.option("popupHeight")(), $(".dx-list-item").height() * 4, "popup height contains 4 list items");
 
@@ -3015,7 +3015,7 @@ QUnit.test("Check default popupWidth, popupHeight, position.of for Material them
         lookup.option("popupWidth", 200);
         lookup.option("popupHeight", 300);
 
-        lookup.field().trigger("dxclick");
+        $(lookup.field()).trigger("dxclick");
 
         assert.equal(lookup.option("popupHeight"), 300, "popup height changed if change popupHeight option value");
         assert.equal(lookup.option("popupWidth"), 200, "popup width changed if change popupWidth option value");
@@ -3038,7 +3038,7 @@ QUnit.test("Check popup position offset for Material theme", function(assert) {
 
         var lookup = $lookup.dxLookup({ dataSource: ["blue", "orange", "lime", "purple"], value: "blue" }).dxLookup("instance");
 
-        lookup.field().trigger("dxclick");
+        $(lookup.field()).trigger("dxclick");
 
         var $popup = $(".dx-popup-wrapper");
 
@@ -3048,7 +3048,7 @@ QUnit.test("Check popup position offset for Material theme", function(assert) {
 
         lookup.option("value", "purple");
 
-        lookup.field().trigger("dxclick");
+        $(lookup.field()).trigger("dxclick");
 
         assert.roughEqual($popup.find(".dx-overlay-content").position().top, -2.5, 1, "offset of the lookup if last item is selected");
 
@@ -3056,7 +3056,7 @@ QUnit.test("Check popup position offset for Material theme", function(assert) {
 
         lookup.option("dataSource", []);
 
-        lookup.field().trigger("dxclick");
+        $(lookup.field()).trigger("dxclick");
 
         assert.roughEqual($popup.find(".dx-overlay-content").position().top, 0, 1, "offset of the lookup if not selected item");
     } finally {
