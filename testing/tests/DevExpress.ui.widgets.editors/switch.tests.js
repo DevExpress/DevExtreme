@@ -241,11 +241,6 @@ QUnit.test("the position of handle for invisible and visible switch should be eq
     var $visibleElement = $("#switch").dxSwitch(),
         $invisibleElement = $("#invisibleSwitch").dxSwitch();
 
-    if($visibleElement.dxSwitch("option", "useOldRendering")) {
-        assert.ok(true, "not supported");
-        return;
-    }
-
     $invisibleElement.css("display", "block");
     assert.equal($visibleElement.find("." + HANDLE_CLASS).position().left, $invisibleElement.find("." + HANDLE_CLASS).position().left);
 });
