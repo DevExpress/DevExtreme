@@ -50,7 +50,7 @@ var Editor = Widget.inherit({
             * @publicName value
             * @type any
             * @default null
-            * @fires EditorOptions_onValueChanged
+            * @fires EditorOptions.onValueChanged
             */
             value: null,
 

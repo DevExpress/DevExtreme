@@ -583,7 +583,7 @@ module.exports = {
             * @publicName selectionFilter
             * @type Filter expression
             * @default []
-            * @fires dxDataGridOptions_onOptionChanged
+            * @fires dxDataGridOptions.onOptionChanged
             */
             selectionFilter: [],
             /**
@@ -602,7 +602,7 @@ module.exports = {
              * @name GridBaseOptions.selectedRowKeys
              * @publicName selectedRowKeys
              * @type Array<any>
-             * @fires GridBaseOptions_onSelectionChanged
+             * @fires GridBaseOptions.onSelectionChanged
              */
             selectedRowKeys: []
         };

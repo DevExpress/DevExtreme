@@ -121,7 +121,7 @@ var CollectionWidget = Widget.inherit({
             * @name CollectionWidgetOptions.items
             * @publicName items
             * @type Array<string, object>
-            * @fires CollectionWidgetOptions_onOptionChanged
+            * @fires CollectionWidgetOptions.onOptionChanged
             */
             items: [],
 

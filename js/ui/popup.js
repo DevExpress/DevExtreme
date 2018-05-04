@@ -190,14 +190,14 @@ var Popup = Overlay.inherit({
             /**
              * @name dxPopupOptions.width
              * @publicName width
-             * @fires dxPopupOptions_onResize
+             * @fires dxPopupOptions.onResize
              * @inheritdoc
              */
 
             /**
              * @name dxPopupOptions.height
              * @publicName height
-             * @fires dxPopupOptions_onResize
+             * @fires dxPopupOptions.onResize
              * @inheritdoc
              */
 

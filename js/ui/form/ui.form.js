@@ -69,7 +69,7 @@ var Form = Widget.inherit({
              * @publicName formData
              * @type object
              * @default {}
-             * @fires dxFormOptions_onFieldDataChanged
+             * @fires dxFormOptions.onFieldDataChanged
              */
             formData: {},
             /**

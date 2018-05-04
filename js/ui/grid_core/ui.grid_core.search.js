@@ -77,7 +77,7 @@ module.exports = {
                  * @publicName text
                  * @type string
                  * @default ""
-                 * @fires GridBaseOptions_onOptionChanged
+                 * @fires GridBaseOptions.onOptionChanged
                  */
                 text: "",
                 /**

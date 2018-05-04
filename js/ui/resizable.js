@@ -151,13 +151,13 @@ var Resizable = DOMComponent.inherit({
             /**
              * @name dxResizableOptions.width
              * @publicName width
-             * @fires dxResizableOptions_onResize
+             * @fires dxResizableOptions.onResize
              * @inheritdoc
              */
             /**
              * @name dxResizableOptions.height
              * @publicName height
-             * @fires dxResizableOptions_onResize
+             * @fires dxResizableOptions.onResize
              * @inheritdoc
              */
         });

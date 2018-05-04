@@ -186,8 +186,8 @@ var ContextMenu = MenuBase.inherit((function() {
                 * @publicName visible
                 * @type boolean
                 * @default false
-                * @fires dxContextMenuOptions_onShowing
-                * @fires dxContextMenuOptions_onHiding
+                * @fires dxContextMenuOptions.onShowing
+                * @fires dxContextMenuOptions.onHiding
                 */
                 visible: false,
 

@@ -275,7 +275,7 @@ treeListCore.registerModule("data", {
             * @publicName expandedRowKeys
             * @type Array<any>
             * @default []
-            * @fires dxTreeListOptions_onOptionChanged
+            * @fires dxTreeListOptions.onOptionChanged
             */
             expandedRowKeys: [],
             filterMode: "extended",

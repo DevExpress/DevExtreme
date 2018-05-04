@@ -162,8 +162,8 @@ var Overlay = Widget.inherit({
             * @publicName visible
             * @type Boolean
             * @default false
-            * @fires dxOverlayOptions_onShowing
-            * @fires dxOverlayOptions_onHiding
+            * @fires dxOverlayOptions.onShowing
+            * @fires dxOverlayOptions.onHiding
             */
             visible: false,
 

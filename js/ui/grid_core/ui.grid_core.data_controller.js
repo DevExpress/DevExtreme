@@ -127,7 +127,7 @@ module.exports = {
                  * @publicName pageSize
                  * @type number
                  * @default 20
-                 * @fires GridBaseOptions_onOptionChanged
+                 * @fires GridBaseOptions.onOptionChanged
                  */
                 pageSize: undefined,
                 /**
@@ -135,7 +135,7 @@ module.exports = {
                  * @publicName pageIndex
                  * @type number
                  * @default 0
-                 * @fires GridBaseOptions_onOptionChanged
+                 * @fires GridBaseOptions.onOptionChanged
                  */
                 pageIndex: undefined
             }

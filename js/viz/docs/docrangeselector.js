@@ -744,7 +744,7 @@ var dxRangeSelector = {
     *@name dxrangeselectoroptions.value
     * @publicName value
     * @type Array<number,string,Date>
-    * @fires dxrangeselectoroptions_onvaluechanged
+    * @fires dxrangeselectoroptions.onvaluechanged
     * @notUsedInTheme
     */
     value: [undefined, undefined],
