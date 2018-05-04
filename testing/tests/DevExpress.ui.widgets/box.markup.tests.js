@@ -56,7 +56,8 @@ QUnit.module("render", () => {
 
     QUnit.test("render the box item content with flexBasis equal zero pixel", (assert) => {
         const $box = $("#box").dxBox({
-            items: [1]
+            items: [1],
+            _layoutStrategy: "flex"
         });
 
         assert.equal($box.find("." + BOX_ITEM_CLASS + "-content").css("flexBasis"), "0px");
