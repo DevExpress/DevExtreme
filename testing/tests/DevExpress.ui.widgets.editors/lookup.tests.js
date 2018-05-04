@@ -3050,7 +3050,7 @@ QUnit.test("Check popup position offset for Material theme", function(assert) {
 
         lookup.field().trigger("dxclick");
 
-        assert.roughEqual($popup.find(".dx-overlay-content").position().top, -5, 1, "offset of the lookup if last item is selected");
+        assert.roughEqual($popup.find(".dx-overlay-content").position().top, -2.5, 1, "offset of the lookup if last item is selected");
 
         lookup.close();
 
@@ -3058,7 +3058,7 @@ QUnit.test("Check popup position offset for Material theme", function(assert) {
 
         lookup.field().trigger("dxclick");
 
-        assert.roughEqual($popup.find(".dx-overlay-content").position().top, -5, 1, "offset of the lookup if not selected item");
+        assert.roughEqual($popup.find(".dx-overlay-content").position().top, 0, 1, "offset of the lookup if not selected item");
     } finally {
         $lookup.remove();
         themes.isMaterial = origIsMaterial;

@@ -362,6 +362,7 @@ var Lookup = DropDownList.inherit({
             * @type boolean
             * @default false
             */
+
             usePopover: false,
 
             showDropDownButton: false,
