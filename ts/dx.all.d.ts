@@ -5785,7 +5785,7 @@ declare module DevExpress.viz {
     interface dxChartSeriesTypesCommonSeriesLabel {
         /** Aligns point labels in relation to their points. */
         alignment?: string;
-        /** Formats the point argument before it will be displayed in the point label. */
+        /** Formats the point argument before it is displayed in the point label. To format the point value, use the format option. */
         argumentFormat?: DevExpress.ui.format;
         /** @deprecated Use the series.label.argumentFormat.precision instead. */
         argumentPrecision?: number;
@@ -6853,7 +6853,7 @@ declare module DevExpress.viz {
     }
     /** An object defining the label configuration options. */
     export interface dxPolarChartSeriesTypesCommonPolarChartSeriesLabel {
-        /** Specifies a format for arguments displayed by point labels. */
+        /** Formats the point argument before it is displayed in the point label. To format the point value, use the format option. */
         argumentFormat?: DevExpress.ui.format;
         /** @deprecated Use the series.label.argumentFormat.precision instead. */
         argumentPrecision?: number;
@@ -8059,7 +8059,7 @@ declare module DevExpress.viz.charts {
     }
     /** Configures tooltips. */
     interface BaseChartTooltip extends BaseWidgetTooltip {
-        /** Specifies a format for arguments of the chart's series points. */
+        /** Formats the point argument before it is displayed in the tooltip. To format the point value, use the format option. */
         argumentFormat?: DevExpress.ui.format;
         /** @deprecated Use the tooltip.argumentFormat.precision option instead. */
         argumentPrecision?: number;
