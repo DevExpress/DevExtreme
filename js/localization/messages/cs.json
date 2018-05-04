@@ -146,10 +146,10 @@
         "dxDataGrid-ariaSearchInGrid": "Hledat v datové mřížce",
         "dxDataGrid-ariaSelectAll": "Vybrat vše",
         "dxDataGrid-ariaSelectRow": "Vybrat řádek",
-        "dxDataGrid-filterBuilderPopupTitle": "!TODO",
-        "dxDataGrid-filterPanelCreateFilter": "!TODO",
-        "dxDataGrid-filterPanelClearFilter": "!TODO",
-        "dxDataGrid-filterPanelFilterEnabledHint": "!TODO",
+        "dxDataGrid-filterBuilderPopupTitle": "Tvorba Filtru",
+        "dxDataGrid-filterPanelCreateFilter": "Vytvořit Filtr",
+        "dxDataGrid-filterPanelClearFilter": "Smazat",
+        "dxDataGrid-filterPanelFilterEnabledHint": "Povolit Filtr",
 
         "dxTreeList-ariaTreeList": "Tree list",
         "dxTreeList-editingAddRowToNode": "Přidat",
@@ -265,7 +265,7 @@
         "dxFilterBuilder-filterOperationIsBlank": "Je prázdné",
         "dxFilterBuilder-filterOperationIsNotBlank": "Není prázdné",
         "dxFilterBuilder-filterOperationBetween": "Mezi",
-        "dxFilterBuilder-filterOperationAnyOf": "!TODO",
-        "dxFilterBuilder-filterOperationNoneOf": "!TODO"
+        "dxFilterBuilder-filterOperationAnyOf": "Libovolný z",
+        "dxFilterBuilder-filterOperationNoneOf": "Žádný z"
     }
 }
