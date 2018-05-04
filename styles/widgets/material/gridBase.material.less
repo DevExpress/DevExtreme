@@ -889,48 +889,17 @@
             box-shadow: none;
             min-width: inherit;
 
+            &.dx-button-has-icon:not(.dx-button-has-text) {
+                .border-radius(2px);
+            }
+
             &.dx-state-hover {
                 box-shadow: none;
             }
         }
     }
 
-    .dx-toolbar-menu-section {
-        .dx-@{widgetName}-checkbox-size {
-            width: 100%;
-
-            .dx-checkbox-container {
-                padding: 14px;
-            }
-
-            .dx-checkbox-text {
-                padding-left: 34px;
-            }
-        }
-
-        .dx-toolbar-hidden-button {
-            background-color: transparent;
-            .dx-toolbar-item-auto-hide {
-                padding: 0;
-                .dx-@{widgetName}-toolbar-button {
-                    padding: 0;
-                    height: auto;
-                    .dx-button-content {
-                        padding: 10px 20px;
-                    }
-                }
-            }
-        }
-    }
-
     .dx-rtl {
-        .dx-toolbar-menu-section {
-            .dx-checkbox-text {
-                padding-right: 34px;
-                padding-left: 27px;
-            }
-        }
-
         .dx-data-row.dx-state-hover {
             &:not(.dx-selection):not(.dx-row-inserted):not(.dx-row-removed):not(.dx-edit-row) {
                 & > td:not(.dx-focused) {

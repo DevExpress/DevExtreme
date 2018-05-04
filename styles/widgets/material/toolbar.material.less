@@ -146,6 +146,10 @@
     border-bottom: 1px solid @base-border-color;
 
     .dx-toolbar-hidden-button {
+        .dx-toolbar-item-auto-hide {
+            padding: 0;
+        }
+
         .dx-button {
             height: @MATERIAL_LIST_ITEM_HEIGHT;
             padding: 0;
@@ -161,12 +165,24 @@
     }
 
     .dx-toolbar-item-auto-hide {
-        padding: @MATERIAL_TOOLBAR_ITEM_SPACING @MATERIAL_TOOLBAR_ITEM_SPACING * 2;
+        padding: 0 @MATERIAL_LIST_ITEM_HORIZONTAL_PADDING;
+
+        .dx-checkbox {
+            padding: (@MATERIAL_LIST_ITEM_HEIGHT - @MATERIAL_CHECKBOX_SIZE) / 2 0;
+        }
     }
 }
 
 .dx-toolbar-text-auto-hide .dx-button {
     .dx-button-onlyicon-sizing();
+
+    &.dx-button-has-icon.dx-button-has-text {
+        .border-radius(50%);
+    }
+}
+
+.dx-toolbar-menu-action .dx-button.dx-button-has-icon:not(.dx-button-has-text) {
+    .border-radius(0);
 }
 
 .dx-toolbar .dx-tab {
