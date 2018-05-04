@@ -6,7 +6,7 @@ import { noop } from "core/utils/common";
 import vizUtils from "viz/core/utils";
 import pointModule from "viz/series/points/base_point";
 import { Series } from "viz/series/base_series";
-import { insertMockFactory, MockAxis } from "../../helpers/chartMocks.js";
+import { insertMockFactory, MockAxis, restoreMockFactory } from "../../helpers/chartMocks.js";
 
 var createSeries = function(options, renderSettings) {
     renderSettings = renderSettings || {};
@@ -76,9 +76,7 @@ var environment = {
         this.areaPoints = this.points.concat([[4, 0], [3, 0], [2, 0], [1, 0]]);
     },
 
-    afterEach: function() {
-
-    }
+    afterEach: restoreMockFactory
 };
 var createPoint = function() {
     var stub = sinon.createStubInstance(pointModule.Point);
@@ -116,6 +114,7 @@ var environmentWithSinonStubPoint = {
     },
     afterEach: function() {
         pointModule.Point.restore();
+        environment.afterEach.call(this);
     }
 };
 
@@ -480,10 +479,10 @@ function setDiscreteType(series) {
         assert.equal(this.renderer.stub("path").getCall(0).args[1], "line");
         assert.equal(this.renderer.stub("path").getCall(1).args[1], "area");
 
-        checkElementPoints(assert, this.renderer.stub("path").getCall(2).args[0], [[3.5, 40], [4.5, 40]], true, "second line element on creating");
+        checkElementPoints(assert, this.renderer.stub("path").getCall(2).args[0], [[3.5, 40], [4.5, 40]], false, "second line element on creating");
         assert.equal(this.renderer.stub("path").getCall(2).args[1], "line");
 
-        checkElementPoints(assert, this.renderer.stub("path").getCall(3).args[0], [[3.5, 40], [4.5, 40], [4.5, 0], [3.5, 0]], true, "second area element on creating");
+        checkElementPoints(assert, this.renderer.stub("path").getCall(3).args[0], [[3.5, 40], [4.5, 40], [4.5, 0], [3.5, 0]], false, "second area element on creating");
         assert.equal(this.renderer.stub("path").getCall(3).args[1], "area");
 
         var element = this.renderer.stub("path").getCall(0).returnValue,
@@ -587,72 +586,6 @@ function setDiscreteType(series) {
         checkGroups(assert, series);
     });
 
-    QUnit.module("Area. Update Animation", {
-        beforeEach: function() {
-            environmentWithSinonStubPoint.beforeEach.call(this);
-            this.series = createSeries({
-                type: seriesType,
-                border: {
-                    visible: true
-                },
-                point: { visible: false }
-            }, {
-                renderer: this.renderer,
-                argumentAxis: new MockAxis({ renderer: this.renderer }),
-                valueAxis: new MockAxis({ renderer: this.renderer })
-            });
-        },
-        afterEach: function() {
-            environmentWithSinonStubPoint.afterEach.call(this);
-        }
-    });
-
-    QUnit.test("Draw old and new points in the right order", function(assert) {
-        this.series.updateData([{ arg: 1, val: 10 }, { arg: 2, val: 20 }]);
-        this.series.createPoints();
-        this.series.draw();
-
-        this.series.updateData([{ arg: -1, val: 20 }, { arg: 1, val: 20 }]);
-        this.series.createPoints();
-        this.series.prepareToDrawing(true);
-
-        var borderPoints = this.renderer.stub("path").firstCall.returnValue.animate.lastCall.args[0].points;
-        checkElementPoints(assert, borderPoints, [[-1, 20], [1, 10], [2, 20]], false, "drawn points");
-
-        var segmentPoints = this.renderer.stub("path").lastCall.returnValue.animate.lastCall.args[0].points;
-        checkElementPoints(assert, segmentPoints, [[-1, 20], [1, 10], [2, 20], [0, 0], [0, 0], [0, 0]], false, "drawn points");
-    });
-
-    QUnit.test("Apply only new points after animation", function(assert) {
-        this.series.updateData([{ arg: 1, val: 10 }, { arg: 2, val: 20 }]);
-        this.series.createPoints();
-
-        this.series.draw();
-
-        this.series.getAllPoints().forEach(function(p) {
-            p.update = function(data) {
-                p.index = data.index;
-            };
-        });
-
-        this.series.updateData([{ arg: -1, val: 20 }, { arg: 1, val: 20 }]);
-        this.series.createPoints();
-        this.series.prepareToDrawing(true);
-        var path = this.renderer.stub("path").lastCall.returnValue;
-        path.attr.reset();
-        this.series.draw(true);
-
-        var complete = path.animate.lastCall.args[2];
-
-        complete();
-
-        var borderPoints = this.renderer.stub("path").firstCall.returnValue.attr.lastCall.args[0].points;
-        checkElementPoints(assert, borderPoints, [[-1, 20], [1, 10]], false, "drawn points");
-
-        var segmentPoints = this.renderer.stub("path").lastCall.returnValue.attr.lastCall.args[0].points;
-        checkElementPoints(assert, segmentPoints, [[-1, 20], [1, 10], [0, 0], [0, 0]], false, "drawn points");
-    });
-
     QUnit.module("Area. Trackers", environment);
 
     QUnit.test("draw tracker.", function(assert) {
@@ -727,7 +660,8 @@ function setDiscreteType(series) {
                 valueAxis: new MockAxis({ renderer: this.renderer })
             });
             this.series._updateElement = sinon.stub();
-        }
+        },
+        afterEach: environment.afterEach
     });
 
     QUnit.test("Draw without animation", function(assert) {
@@ -1384,10 +1318,10 @@ function setDiscreteType(series) {
         assert.equal(this.renderer.stub("path").getCall(0).args[1], "line");
         assert.equal(this.renderer.stub("path").getCall(1).args[1], "area");
 
-        checkElementPoints(assert, this.renderer.stub("path").getCall(2).args[0], [[4, 40], [5, 40]], true, "second line element on creating");
+        checkElementPoints(assert, this.renderer.stub("path").getCall(2).args[0], [[4, 40], [5, 40]], false, "second line element on creating");
         assert.equal(this.renderer.stub("path").getCall(2).args[1], "line");
 
-        checkElementPoints(assert, this.renderer.stub("path").getCall(3).args[0], [[4, 40], [5, 40], [5, 0], [4, 0]], true, "second area element on creating");
+        checkElementPoints(assert, this.renderer.stub("path").getCall(3).args[0], [[4, 40], [5, 40], [5, 0], [4, 0]], false, "second area element on creating");
         assert.equal(this.renderer.stub("path").getCall(3).args[1], "area");
 
         var element = this.renderer.stub("path").getCall(0).returnValue,
@@ -1607,47 +1541,6 @@ function setDiscreteType(series) {
         assert.equal(this.renderer.stub("path").callCount, 2);
         assert.equal(this.renderer.stub("path").getCall(0).args[1], "line");
         assert.equal(this.renderer.stub("path").getCall(1).args[1], "area");
-    });
-
-    QUnit.module("StepArea. Update Animation", {
-        beforeEach: function() {
-            environmentWithSinonStubPoint.beforeEach.call(this);
-            this.series = createSeries({
-                type: seriesType,
-                point: { visible: false }
-            }, {
-                renderer: this.renderer,
-                argumentAxis: new MockAxis({ renderer: this.renderer }),
-                valueAxis: new MockAxis({ renderer: this.renderer })
-            });
-        },
-        afterEach: function() {
-            environmentWithSinonStubPoint.afterEach.call(this);
-        }
-    });
-
-    QUnit.test("Draw old and new points in the right order", function(assert) {
-        this.series.updateData([{ arg: 1, val: 10 }, { arg: 2, val: 20 }]);
-        this.series.createPoints();
-        this.series.draw();
-
-        this.series.updateData([{ arg: -1, val: 20 }, { arg: 1, val: 20 }]);
-        this.series.createPoints();
-        this.series.prepareToDrawing(true);
-
-        var segmentPoints = this.renderer.stub("path").lastCall.returnValue.animate.lastCall.args[0].points;
-        checkElementPoints(assert, segmentPoints, [
-            [-1, 20],
-            [1, 10],
-            [1, 10],
-            [2, 20],
-            [2, 20],
-            [0, 0],
-            [0, 0],
-            [0, 0],
-            [0, 0],
-            [0, 0]
-        ], false, "drawn points");
     });
 })();
 
@@ -1900,10 +1793,10 @@ function setDiscreteType(series) {
         assert.equal(this.renderer.stub("path").getCall(0).args[1], "bezier");
         assert.equal(this.renderer.stub("path").getCall(1).args[1], "bezierarea");
 
-        checkElementPoints(assert, this.renderer.stub("path").getCall(2).args[0], [[9, 5], [9, 5], [12, 5], [12, 5]], true, "second line element on creating");
+        checkElementPoints(assert, this.renderer.stub("path").getCall(2).args[0], [[9, 20], [9, 20], [12, 10], [12, 10]], false, "second line element on creating");
         assert.equal(this.renderer.stub("path").getCall(2).args[1], "bezier");
 
-        checkElementPoints(assert, this.renderer.stub("path").getCall(3).args[0], [[9, 5], [9, 5], [12, 5], [12, 5], [12, 5], [12, 5], [12, 5], [12, 5], [9, 5], [9, 5]], true, "second area element on creating");
+        checkElementPoints(assert, this.renderer.stub("path").getCall(3).args[0], [[9, 20], [9, 20], [12, 10], [12, 10], [12, 10], [12, 5], [12, 5], [12, 5], [9, 5], [9, 5]], false, "second area element on creating");
         assert.equal(this.renderer.stub("path").getCall(3).args[1], "bezierarea");
 
         var element = this.renderer.stub("path").getCall(0).returnValue,
@@ -2106,9 +1999,7 @@ function setDiscreteType(series) {
             this.points = [[0, 10], [0, 10], [1.5, 20], [3, 20], [4.5, 20], [4.5, 10], [6, 10], [7.5, 10], [7.5, 20], [9, 20], [10.5, 20], [12, 10], [12, 10]];
             this.areaPoints = this.points.concat([[12, 10], [12, 5], [12, 5], [12, 5], [10.5, 5], [9, 5], [7.5, 5], [7.5, 5], [6, 5], [4.5, 5], [4.5, 5], [3, 5], [1.5, 5], [0, 5], [0, 5]]);
         },
-        afterEach: function() {
-            environment.afterEach.call(this);
-        }
+        afterEach: environment.afterEach
     });
 
     QUnit.test("draw tracker.", function(assert) {
@@ -2293,7 +2184,8 @@ function setDiscreteType(series) {
                 valueAxis: new MockAxis({ renderer: this.renderer })
             });
             this.series._updateElement = sinon.stub();
-        }
+        },
+        afterEach: environment.afterEach
     });
 
     QUnit.test("Draw without animation", function(assert) {
@@ -2349,53 +2241,6 @@ function setDiscreteType(series) {
         series._updateElement.secondCall.args[3]();
         assert.strictEqual(series._labelsGroup.stub("animate").lastCall.args[0].opacity, 1);
         assert.strictEqual(series._markersGroup.stub("animate").lastCall.args[0].opacity, 1);
-    });
-
-    QUnit.module("SplineArea. Update Animation", {
-        beforeEach: function() {
-            environmentWithSinonStubPoint.beforeEach.call(this);
-            this.series = createSeries({
-                type: seriesType,
-                point: { visible: false }
-            }, {
-                renderer: this.renderer,
-                argumentAxis: new MockAxis({ renderer: this.renderer }),
-                valueAxis: new MockAxis({ renderer: this.renderer })
-            });
-        },
-        afterEach: function() {
-            environmentWithSinonStubPoint.afterEach.call(this);
-        }
-    });
-
-    QUnit.test("Draw old and new points in the right order", function(assert) {
-        this.series.updateData([{ arg: 1, val: 10 }, { arg: 2, val: 20 }]);
-        this.series.createPoints();
-        this.series.draw();
-
-        this.series.updateData([{ arg: -1, val: 20 }, { arg: 1, val: 20 }]);
-        this.series.createPoints();
-        this.series.prepareToDrawing(true);
-
-        var segmentPoints = this.renderer.stub("path").lastCall.returnValue.animate.lastCall.args[0].points;
-        checkElementPoints(assert, segmentPoints, [
-            [-1, 20],
-            [-1, 20],
-            [1, 10],
-            [1, 10],
-            [1, 10],
-            [2, 20],
-            [2, 20],
-            [2, 20],
-            [0, 0],
-            [0, 0],
-            [0, 0],
-            [0, 0],
-            [0, 0],
-            [0, 0],
-            [0, 0],
-            [0, 0]
-        ], false, "drawn points");
     });
 })();
 
@@ -3029,45 +2874,7 @@ function setDiscreteType(series) {
         assert.equal(seriesGroup.children.length, 1);
         assert.equal(seriesGroup.children[0].toBackground.callCount, 1);
     });
-
-
-    QUnit.module("Area. Update Animation", {
-        beforeEach: function() {
-            environmentWithSinonStubPoint.beforeEach.call(this);
-            this.series = createSeries({
-                type: seriesType,
-                border: {
-                    visible: true
-                },
-                point: { visible: false }
-            }, {
-                renderer: this.renderer,
-                argumentAxis: new MockAxis({ renderer: this.renderer }),
-                valueAxis: new MockAxis({ renderer: this.renderer })
-            });
-        },
-        afterEach: function() {
-            environmentWithSinonStubPoint.afterEach.call(this);
-        }
-    });
-
-    QUnit.test("Draw old and new points in the right order", function(assert) {
-        this.series.updateData([{ arg: 1, val: 10 }, { arg: 2, val: 20 }]);
-        this.series.createPoints();
-        this.series.draw();
-
-        this.series.updateData([{ arg: -1, val: 20 }, { arg: 1, val: 20 }]);
-        this.series.createPoints();
-        this.series.prepareToDrawing(true);
-
-        var borderPoints = this.renderer.stub("path").firstCall.returnValue.animate.lastCall.args[0].points;
-        checkElementPoints(assert, borderPoints, [[-1, 20], [1, 10], [2, 20]], false, "drawn points");
-
-        var segmentPoints = this.renderer.stub("path").lastCall.returnValue.animate.lastCall.args[0].points;
-        checkElementPoints(assert, segmentPoints, [[-1, 20], [1, 10], [2, 20], [0, 0], [0, 0], [0, 0]], false, "drawn points");
-    });
 })();
-
 
 (function PolarSeries() {
     QUnit.module("Polar Series", {

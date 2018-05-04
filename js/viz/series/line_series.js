@@ -75,11 +75,8 @@ var lineMethods = {
         };
     },
 
-    _prepareSegment: function(points, orderedPoints) {
-        return {
-            line: points,
-            orderedLine: orderedPoints
-        };
+    _prepareSegment: function(points) {
+        return { line: points };
     },
 
     _parseLineOptions: function(options, defaultColor) {
@@ -111,20 +108,15 @@ var lineMethods = {
     },
 
     _updateElement: function(element, segment, animate, animationComplete) {
-        var params = { points: segment.orderedLine ? segment.orderedLine : segment.line },
+        var params = { points: segment.line },
             lineElement = element.line;
 
-        animate ? lineElement.animate(params, {}, function() {
-            if(segment.orderedLine) {
-                lineElement.attr({ points: segment.line });
-            }
-            animationComplete && animationComplete();
-        }) : lineElement.attr(params);
+        animate ? lineElement.animate(params, {}, animationComplete) : lineElement.attr(params);
     },
 
     _animateComplete: function() {
         var that = this;
-        chartScatterSeries._animateComplete.call(this);
+        chartScatterSeries._animateComplete.call(that);
         that._markersGroup && that._markersGroup.animate({ opacity: 1 }, { duration: that._defaultDuration });
     },
 
@@ -158,47 +150,11 @@ var lineMethods = {
         });
     },
 
-    _forceDefaultSegmentDrawing: function(points) {
-        var result = false,
-            alternatePointCount = 0,
-            oldPoints = this._oldPoints,
-            state = oldPoints.indexOf(points[0]) === -1;
-
-        for(var i = 1; i < points.length; i++) {
-            var s = oldPoints.indexOf(points[i]) === -1;
-            if(s !== state) {
-                alternatePointCount++;
-            }
-            if(alternatePointCount > 1) {
-                result = true;
-                break;
-            }
-            state = s;
-        }
-        return result;
-    },
-
     _drawSegment: function(points, animationEnabled, segmentCount, lastSegment) {
         var that = this,
             rotated = that._options.rotated,
-            orderedPoints,
             forceDefaultSegment = false,
-            segment;
-
-        if(animationEnabled && that._oldPoints) {
-            orderedPoints = that._sortPoints(points.slice(), rotated);
-            forceDefaultSegment = this._forceDefaultSegmentDrawing(orderedPoints);
-            if(forceDefaultSegment) {
-                orderedPoints = null;
-            }
-            points = points.filter(function(p) {
-                return that._oldPoints.indexOf(p) === -1;
-            }).sort(function(p1, p2) {
-                return p1.index - p2.index;
-            });
-        }
-
-        segment = that._prepareSegment(points, orderedPoints, rotated, lastSegment);
+            segment = that._prepareSegment(points, rotated, lastSegment);
 
         that._segments.push(segment);
         if(!that._graphics[segmentCount]) {
@@ -260,8 +216,8 @@ exports.chart["stepline"] = _extend({}, lineSeries, {
         return segment;
     },
 
-    _prepareSegment: function(points, orderedPoints) {
-        return lineSeries._prepareSegment(this._calculateStepLinePoints(points), orderedPoints && this._calculateStepLinePoints(orderedPoints));
+    _prepareSegment: function(points) {
+        return lineSeries._prepareSegment(this._calculateStepLinePoints(points));
     }
 });
 
@@ -371,8 +327,8 @@ exports.chart["spline"] = _extend({}, lineSeries, {
         return bezierPoints;
     },
 
-    _prepareSegment: function(points, orderedPoints, rotated) {
-        return lineSeries._prepareSegment(this._calculateBezierPoints(points, rotated), orderedPoints && this._calculateBezierPoints(orderedPoints, rotated));
+    _prepareSegment: function(points, rotated) {
+        return lineSeries._prepareSegment(this._calculateBezierPoints(points, rotated));
     },
 
     _createMainElement: function(points, settings) {
@@ -385,7 +341,7 @@ exports.polar.line = _extend({}, polarScatterSeries, lineMethods, {
         return points;
     },
 
-    _prepareSegment: function(points, orderedPoints, rotated, lastSegment) {
+    _prepareSegment: function(points, rotated, lastSegment) {
         var preparedPoints = [],
             centerPoint = this.getValueAxis().getCenter(),
             i;

@@ -110,18 +110,14 @@ exports.chart["rangearea"] = _extend({}, areaSeries, {
         }
     },
 
-    _prepareSegment: function(points, orderedPoints, rotated) {
+    _prepareSegment: function(points, rotated) {
         var processedPoints = this._processSinglePointsAreaSegment(points, rotated),
-            processedMinPointsCoords = _map(processedPoints, function(pt) { return pt.getCoords(true); }),
-            orderedMinPoints = orderedPoints && orderedPoints.map(function(p) { return p.getCoords(true); });
+            processedMinPointsCoords = _map(processedPoints, function(pt) { return pt.getCoords(true); });
 
         return {
             line: processedPoints,
-            orderedLine: orderedPoints,
             bottomLine: processedMinPointsCoords,
-            orderedBottomLine: orderedMinPoints,
             area: _map(processedPoints, function(pt) { return pt.getCoords(); }).concat(processedMinPointsCoords.slice().reverse()),
-            orderedArea: orderedPoints && orderedPoints.map(function(pt) { return pt.getCoords(); }).concat(orderedMinPoints.slice().reverse()),
             singlePointSegment: processedPoints !== points
         };
     },
@@ -159,13 +155,10 @@ exports.chart["rangearea"] = _extend({}, areaSeries, {
     },
 
     _updateElement: function(element, segment, animate, complete) {
-        var bottomLineParams = segment.orderedBottomLine ? { points: segment.orderedBottomLine } : { points: segment.bottomLine },
+        var bottomLineParams = { points: segment.bottomLine },
             bottomBorderElement = element.bottomLine;
 
-        areaSeries._updateElement.call(this, element, segment, animate, function() {
-            bottomBorderElement && bottomBorderElement.attr({ points: segment.bottomLine });
-            complete && complete();
-        });
+        areaSeries._updateElement.apply(this, arguments);
 
         if(bottomBorderElement) {
             animate ? bottomBorderElement.animate(bottomLineParams) : bottomBorderElement.attr(bottomLineParams);

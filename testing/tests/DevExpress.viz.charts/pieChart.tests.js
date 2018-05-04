@@ -20,7 +20,8 @@ var $ = require("jquery"),
     MockSeries = chartMocks.MockSeries,
     MockPoint = chartMocks.MockPoint,
     resetMockFactory = chartMocks.resetMockFactory,
-    insertMockFactory = chartMocks.insertMockFactory;
+    insertMockFactory = chartMocks.insertMockFactory,
+    restoreMockFactory = chartMocks.restoreMockFactory;
 
 $('<div id="chartContainer">').appendTo("#qunit-fixture");
 
@@ -164,6 +165,7 @@ var environment = {
 
             commons.resetModules();
             resetMockFactory();
+            restoreMockFactory();
         }
     },
     overlappingEnvironment = $.extend({}, environment, {

@@ -1,40 +1,31 @@
 "use strict";
 
 /* global currentAssert */
-var $ = require("jquery"),
-    Class = require("core/class"),
-    commonUtils = require("core/utils/common"),
-    typeUtils = require("core/utils/type"),
-    loadingIndicatorModule = require("viz/core/loading_indicator"),
-    axisModule = require("viz/axes/base_axis"),
-    pointModule = require("viz/series/points/base_point"),
-    translator2DModule = require("viz/translators/translator2d"),
-    seriesFamilyModule = require("viz/core/series_family"),
-    seriesModule = require("viz/series/base_series"),
-    vizMocks = require("./vizMocks.js");
+import $ from "jquery";
+import Class from "core/class";
+import commonUtils from "core/utils/common";
+import typeUtils from "core/utils/type";
+import loadingIndicatorModule from "viz/core/loading_indicator";
+import axisModule from "viz/axes/base_axis";
+import pointModule from "viz/series/points/base_point";
+import translator2DModule from "viz/translators/translator2d";
+import seriesFamilyModule from "viz/core/series_family";
+import seriesModule from "viz/series/base_series";
+import vizMocks from "./vizMocks.js";
 
-var seriesMockData;
-var pointsMockData;
-var firstCategory = "First";
-var secondCategory = "Second";
-var thirdCategory = "Third";
-var fourthCategory = "Fourth";
+let pointsMockData;
+const firstCategory = "First";
+const secondCategory = "Second";
+const thirdCategory = "Third";
+const fourthCategory = "Fourth";
+const sourceItemsToMocking = {};
 
-exports.categories = [firstCategory, secondCategory, thirdCategory, fourthCategory];
-var renderer;
+export const categories = [firstCategory, secondCategory, thirdCategory, fourthCategory];
+let renderer;
 
-Object.defineProperty(exports, "renderer", {
-    get: function() {
-        return renderer;
-    }
-});
-Object.defineProperty(exports, "seriesMockData", {
-    get: function() {
-        return seriesMockData;
-    }
-});
+export let seriesMockData = {};
 
-var canvas = {
+const canvas = {
     width: 610,
     height: 400,
     left: 70,
@@ -43,21 +34,21 @@ var canvas = {
     bottom: 60
 };
 
-exports.horizontalStart = canvas.left;
-exports.horizontalDelta = 100;
-exports.horizontalEnd = exports.horizontalStart + exports.horizontalDelta * 5;
-exports.verticalStart = 0;
-exports.verticalDelta = 85;
-exports.verticalEnd = exports.verticalStart + exports.verticalDelta * 5;
-exports.horizontalContinuousXData = {
-    "0": exports.horizontalStart,
-    "20": exports.horizontalStart + exports.horizontalDelta,
-    "40": exports.horizontalStart + exports.horizontalDelta * 2,
-    "60": exports.horizontalStart + exports.horizontalDelta * 3,
-    "80": exports.horizontalStart + exports.horizontalDelta * 4,
-    '100': exports.horizontalStart + exports.horizontalDelta * 5
+export const horizontalStart = canvas.left;
+export const horizontalDelta = 100;
+export const horizontalEnd = horizontalStart + horizontalDelta * 5;
+export const verticalStart = 0;
+export const verticalDelta = 85;
+export const verticalEnd = verticalStart + verticalDelta * 5;
+export const horizontalContinuousXData = {
+    "0": horizontalStart,
+    "20": horizontalStart + horizontalDelta,
+    "40": horizontalStart + horizontalDelta * 2,
+    "60": horizontalStart + horizontalDelta * 3,
+    "80": horizontalStart + horizontalDelta * 4,
+    '100': horizontalStart + horizontalDelta * 5
 };
-exports.horizontalContinuousXDataUntranslate = {
+export const horizontalContinuousXDataUntranslate = {
     "70": 0,
     "170": 20,
     "270": 40,
@@ -65,100 +56,100 @@ exports.horizontalContinuousXDataUntranslate = {
     "470": 80,
     "570": 100,
 };
-exports.horizontalContinuousXDataSpecialCases = {
-    'canvas_position_start': exports.horizontalStart,
-    'canvas_position_end': exports.horizontalEnd,
-    'canvas_position_default': exports.horizontalStart,
-    'canvas_position_left': exports.horizontalStart,
-    'canvas_position_center': exports.horizontalStart + exports.horizontalDelta * 2.5,
-    'canvas_position_right': exports.horizontalEnd
+export const horizontalContinuousXDataSpecialCases = {
+    'canvas_position_start': horizontalStart,
+    'canvas_position_end': horizontalEnd,
+    'canvas_position_default': horizontalStart,
+    'canvas_position_left': horizontalStart,
+    'canvas_position_center': horizontalStart + horizontalDelta * 2.5,
+    'canvas_position_right': horizontalEnd
 };
-exports.horizontalContinuousYData = {
-    '0': exports.verticalStart,
-    '20': exports.verticalStart + exports.verticalDelta,
-    '40': exports.verticalStart + exports.verticalDelta * 2,
-    '60': exports.verticalStart + exports.verticalDelta * 3,
-    '80': exports.verticalStart + exports.verticalDelta * 4,
-    '100': exports.verticalStart + exports.verticalDelta * 5
+export const horizontalContinuousYData = {
+    '0': verticalStart,
+    '20': verticalStart + verticalDelta,
+    '40': verticalStart + verticalDelta * 2,
+    '60': verticalStart + verticalDelta * 3,
+    '80': verticalStart + verticalDelta * 4,
+    '100': verticalStart + verticalDelta * 5
 };
-exports.horizontalContinuousYDataSpecialCases = {
-    'canvas_position_start': exports.verticalEnd,
-    'canvas_position_end': exports.verticalStart,
-    'canvas_position_default': exports.verticalStart,
-    'canvas_position_bottom': exports.verticalStart,
-    'canvas_position_center': exports.verticalStart + exports.verticalDelta * 2.5,
-    'canvas_position_top': exports.verticalEnd
+export const horizontalContinuousYDataSpecialCases = {
+    'canvas_position_start': verticalEnd,
+    'canvas_position_end': verticalStart,
+    'canvas_position_default': verticalStart,
+    'canvas_position_bottom': verticalStart,
+    'canvas_position_center': verticalStart + verticalDelta * 2.5,
+    'canvas_position_top': verticalEnd
 };
-exports.horizontalCategoryDelta = 125;
-exports.horizontalCategoryStart = canvas.left + exports.horizontalCategoryDelta / 2;
-exports.horizontalCategoryEnd = exports.horizontalCategoryStart + exports.horizontalDelta * 3;
-exports.horizontalCategoryTick = exports.horizontalCategoryDelta / 2;
-exports.verticalCategoryDelta = 85;
-exports.verticalCategoryStart = 0 + exports.verticalCategoryDelta / 2;
-exports.verticalCategoryEnd = exports.verticalStart + exports.verticalDelta * 3;
-exports.verticalCategoryTick = exports.verticalCategoryDelta / 2;
-exports.continuousTranslatorDataX = {
-    translate: exports.horizontalContinuousXData,
-    specialCases: exports.horizontalContinuousXDataSpecialCases,
-    untranslate: exports.horizontalContinuousXDataUntranslate,
+export const horizontalCategoryDelta = 125;
+export const horizontalCategoryStart = canvas.left + horizontalCategoryDelta / 2;
+export const horizontalCategoryEnd = horizontalCategoryStart + horizontalDelta * 3;
+export const horizontalCategoryTick = horizontalCategoryDelta / 2;
+export const verticalCategoryDelta = 85;
+export const verticalCategoryStart = verticalCategoryDelta / 2;
+export const verticalCategoryEnd = verticalStart + verticalDelta * 3;
+export const verticalCategoryTick = verticalCategoryDelta / 2;
+export const continuousTranslatorDataX = {
+    translate: horizontalContinuousXData,
+    specialCases: horizontalContinuousXDataSpecialCases,
+    untranslate: horizontalContinuousXDataUntranslate,
     interval: 20
 };
-exports.continuousTranslatorDataY = {
-    translate: exports.horizontalContinuousYData,
-    specialCases: exports.horizontalContinuousYDataSpecialCases
+export const continuousTranslatorDataY = {
+    translate: horizontalContinuousYData,
+    specialCases: horizontalContinuousYDataSpecialCases
 };
-exports.horizontalCategoryXData = {
-    'First': exports.horizontalCategoryStart,
-    'Second': exports.horizontalCategoryStart + exports.horizontalCategoryDelta,
-    'Third': exports.horizontalCategoryStart + exports.horizontalCategoryDelta * 2,
-    'Fourth': exports.horizontalCategoryStart + exports.horizontalCategoryDelta * 3
+export const horizontalCategoryXData = {
+    'First': horizontalCategoryStart,
+    'Second': horizontalCategoryStart + horizontalCategoryDelta,
+    'Third': horizontalCategoryStart + horizontalCategoryDelta * 2,
+    'Fourth': horizontalCategoryStart + horizontalCategoryDelta * 3
 };
-exports.horizontalCategoryXDataUntranslate = {
+export const horizontalCategoryXDataUntranslate = {
     70: 'First',
     170: 'Second',
     270: 'Third',
     370: 'Fourth'
 };
-exports.horizontalCategoryXDataSpecialCases = {
-    'canvas_position_start': exports.horizontalStart,
-    'canvas_position_end': exports.horizontalEnd,
-    'canvas_position_default': exports.horizontalStart,
-    'canvas_position_left': exports.horizontalStart,
-    'canvas_position_center': exports.horizontalStart + exports.horizontalDelta * 2.5,
-    'canvas_position_right': exports.horizontalEnd
+export const horizontalCategoryXDataSpecialCases = {
+    'canvas_position_start': horizontalStart,
+    'canvas_position_end': horizontalEnd,
+    'canvas_position_default': horizontalStart,
+    'canvas_position_left': horizontalStart,
+    'canvas_position_center': horizontalStart + horizontalDelta * 2.5,
+    'canvas_position_right': horizontalEnd
 };
-exports.horizontalCategoryYData = {
-    'First': exports.verticalCategoryStart,
-    'Second': exports.verticalCategoryStart + exports.verticalCategoryDelta,
-    'Third': exports.verticalCategoryStart + exports.verticalCategoryDelta * 2,
-    'Fourth': exports.verticalCategoryStart + exports.verticalCategoryDelta * 3
+export const horizontalCategoryYData = {
+    'First': verticalCategoryStart,
+    'Second': verticalCategoryStart + verticalCategoryDelta,
+    'Third': verticalCategoryStart + verticalCategoryDelta * 2,
+    'Fourth': verticalCategoryStart + verticalCategoryDelta * 3
 };
-exports.horizontalCategoryYDataSpecialCases = {
-    'canvas_position_start': exports.verticalStart,
-    'canvas_position_end': exports.verticalEnd,
-    'canvas_position_default': exports.verticalStart,
-    'canvas_position_bottom': exports.verticalStart,
-    'canvas_position_center': exports.verticalStart + exports.verticalDelta * 2.5,
-    'canvas_position_top': exports.verticalEnd
+export const horizontalCategoryYDataSpecialCases = {
+    'canvas_position_start': verticalStart,
+    'canvas_position_end': verticalEnd,
+    'canvas_position_default': verticalStart,
+    'canvas_position_bottom': verticalStart,
+    'canvas_position_center': verticalStart + verticalDelta * 2.5,
+    'canvas_position_top': verticalEnd
 };
-exports.categoriesHorizontalTranslatorDataX = {
-    translate: exports.horizontalCategoryXData,
-    specialCases: exports.horizontalCategoryXDataSpecialCases,
-    interval: exports.horizontalCategoryDelta,
-    untranslate: exports.horizontalCategoryXDataUntranslate
+export const categoriesHorizontalTranslatorDataX = {
+    translate: horizontalCategoryXData,
+    specialCases: horizontalCategoryXDataSpecialCases,
+    interval: horizontalCategoryDelta,
+    untranslate: horizontalCategoryXDataUntranslate
 };
-exports.categoriesHorizontalTranslatorDataY = {
-    translate: exports.horizontalContinuousYData,
-    specialCases: exports.horizontalContinuousYDataSpecialCases
+export const categoriesHorizontalTranslatorDataY = {
+    translate: horizontalContinuousYData,
+    specialCases: horizontalContinuousYDataSpecialCases
 };
-exports.categoriesVerticalTranslatorDataX = {
-    translate: exports.horizontalContinuousXData,
-    specialCases: exports.horizontalContinuousXDataSpecialCases
+export const categoriesVerticalTranslatorDataX = {
+    translate: horizontalContinuousXData,
+    specialCases: horizontalContinuousXDataSpecialCases
 };
-exports.categoriesVerticalTranslatorDataY = {
-    translate: exports.horizontalCategoryYData,
-    specialCases: exports.horizontalCategoryYDataSpecialCases,
-    interval: exports.verticalCategoryDelta
+export const categoriesVerticalTranslatorDataY = {
+    translate: horizontalCategoryYData,
+    specialCases: horizontalCategoryYDataSpecialCases,
+    interval: verticalCategoryDelta
 };
 
 var defaultAxisXOptions = $.extend(true, {}, {
@@ -232,10 +223,10 @@ var defaultAxisYOptions = $.extend(true, {}, {
     drawingType: "normal"
 });
 
-exports.createHorizontalAxis = function createHorizontalAxis(translatorData, orthogonalTranslatorData, allOptions) {
+export const createHorizontalAxis = function createHorizontalAxis(translatorData, orthogonalTranslatorData, allOptions) {
     return createAxis(translatorData, orthogonalTranslatorData, $.extend(true, {}, defaultAxisXOptions, { incidentOccurred: vizMocks.incidentOccurred() }, allOptions), true);
 };
-exports.createVerticalAxis = function createVerticalAxis(translatorData, orthogonalTranslatorData, allOptions) {
+export const createVerticalAxis = function createVerticalAxis(translatorData, orthogonalTranslatorData, allOptions) {
     return createAxis(translatorData, orthogonalTranslatorData, $.extend(true, {}, defaultAxisYOptions, { incidentOccurred: vizMocks.incidentOccurred() }, allOptions));
 };
 
@@ -251,7 +242,7 @@ function createAxis(translatorData, orthogonalTranslatorData, allOptions, isHori
         if(useOriginalTranslator) {
             return new translator2DModule.Translator2D(data || {}, canvas, isHorizontal ? { direction: 'horizontal' } : {});
         } else {
-            return new exports.MockTranslator(data || {});
+            return new MockTranslator(data || {});
         }
     }
 
@@ -284,7 +275,20 @@ function createAxis(translatorData, orthogonalTranslatorData, allOptions, isHori
     return axis;
 }
 
-exports.insertMockFactory = function insertMockFactory() {
+function mockItem(itemKey, moduleName, mock) {
+    if(sourceItemsToMocking[itemKey]) {
+        throw "Item " + itemKey + " already mocked";
+    }
+    sourceItemsToMocking[itemKey] = moduleName[itemKey];
+    moduleName[itemKey] = mock;
+}
+
+function restoreItem(itemKey, moduleName) {
+    moduleName[itemKey] = sourceItemsToMocking[itemKey];
+    sourceItemsToMocking[itemKey] = null;
+}
+
+export const insertMockFactory = function insertMockFactory() {
     seriesMockData = {
         series: [],
         args: [],
@@ -296,13 +300,13 @@ exports.insertMockFactory = function insertMockFactory() {
         args: []
     };
 
-    pointModule.Point = function(series, data, options) {
+    mockItem("Point", pointModule, function(series, data, options) {
         var opt = $.extend(true, {}, data, options);
         opt.series = series;
-        return new exports.MockPoint(opt);
-    };
+        return new MockPoint(opt);
+    });
 
-    seriesModule.Series = function(renderSettings, options) {
+    mockItem("Series", seriesModule, function(renderSettings, options) {
         seriesMockData.args.push(arguments);
         if(seriesMockData.series.length > seriesMockData.currentSeries) {
             var series = seriesMockData.series[seriesMockData.currentSeries++];
@@ -326,34 +330,39 @@ exports.insertMockFactory = function insertMockFactory() {
         }
         currentAssert().ok(false, "Unexpected series request (request #" + seriesMockData.currentSeries + ")");
         throw "Unexpected series request";
-    };
+    });
 
-
-    loadingIndicatorModule.LoadingIndicator = function(parameters) {
+    mockItem("LoadingIndicator", loadingIndicatorModule, function(parameters) {
         return new vizMocks.LoadingIndicator(parameters);
-    };
+    });
 
-    axisModule && (axisModule.Axis = function(parameters) {
+    axisModule && mockItem("Axis", axisModule, function(parameters) {
         var axis = new MockAxis(parameters);
         axis.draw = sinon.spy(axis.draw);
         return axis;
     });
 };
 
-exports.resetMockFactory = function resetMockFactory() {
+export const restoreMockFactory = function() {
+    restoreItem("Point", pointModule);
+    restoreItem("Series", seriesModule);
+    restoreItem("LoadingIndicator", loadingIndicatorModule);
+    axisModule && restoreItem("Axis", axisModule);
+};
+
+export const resetMockFactory = function resetMockFactory() {
     seriesMockData = null;
     pointsMockData = null;
 };
 
-exports.setupSeriesFamily = function() {
+export const setupSeriesFamily = function() {
     seriesFamilyModule.SeriesFamily = function(options) {
         return new MockSeriesFamily(options);
     };
 };
 //  Translator
 
-
-exports.MockTranslator = function(data) {
+export const MockTranslator = function(data) {
     var innerData = data,
         failOnWrongData = data && data.failOnWrongData;
     return {
@@ -415,7 +424,7 @@ exports.MockTranslator = function(data) {
     };
 };
 
-exports.MockAngularTranslator = function(data) {
+export const MockAngularTranslator = function(data) {
     var innerData = data;
     return {
         translate: function(index) {
@@ -430,7 +439,7 @@ exports.MockAngularTranslator = function(data) {
 };
 
 // Mock series
-exports.MockSeries = function MockSeries(options) {
+export const MockSeries = function MockSeries(options) {
     options = options || {};
     return {
         dispose: function() {
@@ -478,7 +487,6 @@ exports.MockSeries = function MockSeries(options) {
         getArgumentAxis: function() {
             return this._argumentAxis;
         },
-        prepareToDrawing: sinon.spy(),
         draw: sinon.spy(function(animationEnabled, hideLayoutLabels, legendCallback) {
             this.wasDrawn = true;
             this.hideLayoutLabels = hideLayoutLabels;
@@ -617,8 +625,7 @@ exports.MockSeries = function MockSeries(options) {
     };
 };
 
-
-exports.MockPoint = Class.inherit(
+export const MockPoint = Class.inherit(
     {
         ctor: function(options) {
             this.update(options);
@@ -842,11 +849,11 @@ exports.MockPoint = Class.inherit(
         },
         setHole: function() { },
         resetHoles: function() { },
-        setInvisibility: sinon.spy()
+        setInvisibility: sinon.spy(),
+        setDefaultCoords: sinon.spy()
     });
 
-
-var MockAxis = exports.MockAxis = function(renderOptions) {
+export const MockAxis = function(renderOptions) {
     var renderer = renderOptions.renderer,
         axisElementsGroup = renderer.g();
     return {
@@ -948,7 +955,7 @@ var MockAxis = exports.MockAxis = function(renderOptions) {
             var businessRange = this.setBusinessRange.lastCall && this.setBusinessRange.lastCall.args[0] || {};
             businessRange.minVisible = businessRange.minVisible || businessRange.min;
             businessRange.maxVisible = businessRange.maxVisible || businessRange.max;
-            return this._options && this._options.mockTranslator || new exports.MockTranslator(businessRange);
+            return this._options && this._options.mockTranslator || new MockTranslator(businessRange);
         },
         _isHorizontal: renderOptions.isHorizontal,
         _incidentOccurred: renderOptions.incidentOccurred,
@@ -1032,7 +1039,7 @@ var MockSeriesFamily = Class.inherit({
     }
 });
 
-exports.checkTextSpecial = function(i, text, x, y, attr) {
+export const checkTextSpecial = function(i, text, x, y, attr) {
     var assert = currentAssert();
     assert.strictEqual(renderer.text.getCall(i).args[0], text, "Text for text " + i);
     assert.equal(renderer.text.getCall(i).args[1], x, "X for text " + i);
@@ -1045,7 +1052,7 @@ exports.checkTextSpecial = function(i, text, x, y, attr) {
     }
 };
 
-exports.commonMethodsForTests = {
+export const commonMethodsForTests = {
     checkTranslatorsCount: function(assert, translators, panesCount, axesCount) {
         var i = 0;
         $.each(translators, function(pane, axes) {

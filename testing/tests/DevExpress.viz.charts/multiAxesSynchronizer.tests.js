@@ -7,7 +7,8 @@ var $ = require("jquery"),
     multiAxesSynchronizer = require("viz/chart_components/multi_axes_synchronizer"),
     chartMocks = require("../../helpers/chartMocks.js"),
     MockAxis = chartMocks.MockAxis,
-    insertMockFactory = chartMocks.insertMockFactory;
+    insertMockFactory = chartMocks.insertMockFactory,
+    restoreMockFactory = chartMocks.restoreMockFactory;
 
 require("viz/chart");
 
@@ -21,7 +22,6 @@ QUnit.testStart(function() {
 function setupMocks() {
     insertMockFactory();
 }
-
 
 function checkAxesSynchronization(assert, options) {
     var axes,
@@ -136,7 +136,9 @@ function checkAxesSynchronization(assert, options) {
     }
 }
 
-QUnit.module('MultiAxis Synchronization', { beforeEach: setupMocks });
+var environment = { beforeEach: setupMocks, afterEach: restoreMockFactory };
+
+QUnit.module('MultiAxis Synchronization', environment);
 
 QUnit.test('No synchronization for 1 axis', function(assert) {
     checkAxesSynchronization(assert, {
@@ -1604,7 +1606,7 @@ QUnit.test('Synchronization for 3 axis with different small ticks. T570230. #2 a
     });
 });
 
-QUnit.module('MultiAxis LogarithmicAxis Synchronization', { beforeEach: setupMocks });
+QUnit.module('MultiAxis LogarithmicAxis Synchronization', environment);
 
 QUnit.test('Synchronization two logarithmic Axis. Small values', function(assert) {
     var tickValues1 = [0.000001, 0.00001, 0.0001],

@@ -78,8 +78,8 @@ function preparePointsForStackedAreaSegment(points) {
 }
 
 exports.chart["stackedarea"] = _extend({}, chartAreaSeries, baseStackedSeries, {
-    _prepareSegment: function(points, orderedPoints, rotated) {
-        return chartAreaSeries._prepareSegment.call(this, preparePointsForStackedAreaSegment(points), orderedPoints, rotated);
+    _prepareSegment: function(points, rotated) {
+        return chartAreaSeries._prepareSegment.call(this, preparePointsForStackedAreaSegment(points), rotated);
     },
     _appendInGroup: function() {
         this._group.append(this._extGroups.seriesGroup).toBackground();
@@ -96,18 +96,14 @@ function getPointsByArgFromPrevSeries(prevSeries, argument) {
 }
 
 exports.chart["stackedsplinearea"] = _extend({}, areaSeries["splinearea"], baseStackedSeries, {
-    prepareToDrawing: function(animationEnabled) {
-        this._pointsToDraw = this._points || [];
-    },
-
-    _prepareSegment: function(points, orderedPoints, rotated) {
+    _prepareSegment: function(points, rotated) {
         var that = this,
             areaSegment;
         points = preparePointsForStackedAreaSegment(points);
         if(!this._prevSeries || points.length === 1) {
-            areaSegment = areaSeries["splinearea"]._prepareSegment.call(this, points, undefined, rotated);
+            areaSegment = areaSeries["splinearea"]._prepareSegment.call(this, points, rotated);
         } else {
-            var forwardPoints = lineSeries["spline"]._calculateBezierPoints(points, rotated),
+            var forwardPoints = lineSeries.spline._calculateBezierPoints(points, rotated),
                 backwardPoints = vizUtils.map(points, function(p) {
                     var point = p.getCoords(true);
                     point.argument = p.argument;
@@ -134,7 +130,7 @@ exports.chart["stackedsplinearea"] = _extend({}, areaSeries["splinearea"], baseS
                 }
             });
             that._prevSeries._segmentByArg = pointByArg;
-            backwardPoints = lineSeries["spline"]._calculateBezierPoints(backwardPoints, rotated);
+            backwardPoints = lineSeries.spline._calculateBezierPoints(backwardPoints, rotated);
             each(backwardPoints, function(i, p) {
                 var argument = p.argument.valueOf(),
                     prevSeriesPoints;

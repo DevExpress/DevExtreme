@@ -6,7 +6,7 @@ import commonUtils from "core/utils/common";
 import typeUtils from "core/utils/type";
 import pointModule from "viz/series/points/base_point";
 import { Series, mixins } from "viz/series/base_series";
-import { insertMockFactory, MockTranslator, MockPoint, MockAxis } from "../../helpers/chartMocks.js";
+import { insertMockFactory, MockTranslator, MockAxis, restoreMockFactory } from "../../helpers/chartMocks.js";
 
 const originalPoint = pointModule.Point;
 const chartSeriesNS = mixins.chart;
@@ -159,6 +159,7 @@ var environment = {
     },
     afterEach: function() {
         pointModule.Point = this.realCreatePoint;
+        restoreMockFactory();
     }
 };
 
@@ -210,6 +211,7 @@ var environmentWithSinonStubPoint = {
     },
     afterEach: function() {
         this.createPoint.restore();
+        environment.afterEach.call(this);
     }
 };
 
@@ -987,7 +989,8 @@ QUnit.module("Drawing", {
             })
         });
         this.renderer = this.series._renderer;
-    }
+    },
+    afterEach: environment.afterEach
 });
 
 QUnit.test("Draw without data", function(assert) {
@@ -1463,7 +1466,8 @@ QUnit.module("Disposing", {
             valueAxis: new MockAxis({ renderer: this.renderer })
         });
         _this.renderer = _this.series._renderer;
-    }
+    },
+    afterEach: environment.afterEach
 });
 
 QUnit.test("Fields disposing", function(assert) {
@@ -1544,7 +1548,6 @@ QUnit.test("Groups disposing when tracker drawn", function(assert) {
 
 QUnit.test("Arrays disposing", function(assert) {
     var series = this.series,
-        oldPoint = new MockPoint({}),
         trackerElement = this.renderer.g();
 
     series.updateData([{ arg: 1, val: 1 }]);
@@ -1554,7 +1557,6 @@ QUnit.test("Arrays disposing", function(assert) {
 
     var point = series.getAllPoints()[0];
 
-    series._oldPoints = [oldPoint];
     series._trackers = [trackerElement];
 
     series.dispose();
@@ -1562,11 +1564,9 @@ QUnit.test("Arrays disposing", function(assert) {
     assert.strictEqual(series._points, null, "points");
     assert.strictEqual(series._trackers, null, "trackers");
     assert.strictEqual(series._graphics, null, "graphics");
-    assert.strictEqual(series._oldPoints, null, "oldPoints");
 
     assert.ok(point.disposed, "point");
     assert.ok(trackerElement.stub("remove").called, "tracker");
-    assert.ok(oldPoint.disposed, "oldPoint");
 });
 
 QUnit.module("Apply clipping", {
@@ -4106,7 +4106,7 @@ QUnit.test("hide labels", function(assert) {
     series.draw(false);
     series.hideLabels();
 
-    $.each(series._points, function(_, point) {
+    $.each(series.getAllPoints(), function(_, point) {
         assert.deepEqual(point._label.draw.lastCall.args, [false]);
     });
 });
