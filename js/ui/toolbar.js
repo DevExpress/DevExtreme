@@ -306,7 +306,6 @@ var Toolbar = ToolbarBase.inherit({
 
     _getToolbarItems: function() {
         var that = this;
-
         return grep(this.option("items") || [], function(item) {
             return !that._isMenuItem(item);
         });
