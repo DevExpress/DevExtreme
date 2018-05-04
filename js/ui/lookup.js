@@ -878,10 +878,7 @@ var Lookup = DropDownList.inherit({
     },
 
     _getPopupHeight: function(listItemsCount) {
-        var listItemHeight = this._list ? this._list.itemElements().height() : 0,
-            popupHeight = listItemHeight * listItemsCount;
-
-        return popupHeight;
+        return (this._list && this._list.itemElements()) ? (this._list.itemElements().height() * listItemsCount) : "auto";
     },
 
     _renderPopup: function() {
