@@ -615,15 +615,10 @@ testComponentDefaults(Lookup,
     {},
     {
         usePopover: false,
-
         closeOnOutsideClick: true,
-
         searchEnabled: false,
-
         showCancelButton: false,
-
         showPopupTitle: false,
-
         position: {
             my: "left top",
             at: "left top"
