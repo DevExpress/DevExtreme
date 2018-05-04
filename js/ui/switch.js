@@ -102,9 +102,7 @@ var Switch = Editor.inherit({
             */
             value: false,
 
-            useInkRipple: false,
-
-            useOldRendering: false
+            useInkRipple: false
 
             /**
             * @name dxSwitchOptions_name
@@ -140,15 +138,6 @@ var Switch = Editor.inherit({
                 options: {
                     useInkRipple: true
                 }
-            },
-            {
-                device: function() {
-                    var device = devices.real();
-                    return (device.platform === "android") && (device.version[0] < 4 || (device.version[0] === 4 && device.version[1] < 4));
-                },
-                options: {
-                    useOldRendering: true
-                }
             }
         ]);
     },
@@ -180,7 +169,6 @@ var Switch = Editor.inherit({
         this._renderLabels();
 
         this._renderHandleWidth();
-        this._getHandleOffset = this.option("useOldRendering") ? this._getPixelOffset : this._getCalcOffset;
         this._renderValue();
 
         this.callBase();
@@ -316,7 +304,7 @@ var Switch = Editor.inherit({
         var marginDirection = this._marginDirection(),
             resetMarginDirection = marginDirection === "Left" ? "Right" : "Left";
 
-        this._$switchInner.css("margin" + marginDirection, this._getHandleOffset(state, swipeOffset));
+        this._$switchInner.css("margin" + marginDirection, this._getCalcOffset(state, swipeOffset));
         this._$switchInner.css("margin" + resetMarginDirection, 0);
     },
 
@@ -367,8 +355,8 @@ var Switch = Editor.inherit({
             toConfig = {};
 
         this._$switchInner.css("margin" + resetMarginDirection, 0);
-        fromConfig["margin" + marginDirection] = this._getHandleOffset(startValue, 0);
-        toConfig["margin" + marginDirection] = this._getHandleOffset(endValue, 0);
+        fromConfig["margin" + marginDirection] = this._getCalcOffset(startValue, 0);
+        toConfig["margin" + marginDirection] = this._getCalcOffset(endValue, 0);
 
         fx.animate(this._$switchInner, {
             from: fromConfig,
@@ -405,7 +393,7 @@ var Switch = Editor.inherit({
             offsetDirection = this._offsetDirection(),
             toConfig = {};
 
-        toConfig["margin" + this._marginDirection()] = this._getHandleOffset(that.option("value"), offsetDirection * e.event.targetOffset);
+        toConfig["margin" + this._marginDirection()] = this._getCalcOffset(that.option("value"), offsetDirection * e.event.targetOffset);
 
         fx.animate(this._$switchInner, {
             to: toConfig,
@@ -447,7 +435,6 @@ var Switch = Editor.inherit({
 
     _optionChanged: function(args) {
         switch(args.name) {
-            case "useOldRendering":
             case "useInkRipple":
                 this._invalidate();
                 break;
