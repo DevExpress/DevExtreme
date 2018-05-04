@@ -1,5 +1,11 @@
 
 /**
+ * @name Enums
+ * @publicName Enums
+ * @type Object
+ */
+
+/**
  * @typedef {string} Enums.ButtonType
  * @enum {'back'|'danger'|'default'|'normal'|'success'}
  */
