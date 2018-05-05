@@ -41,6 +41,8 @@ var POPUP_OPTION_MAP = {
 };
 
 
+var LIST_ITEM_SELECTED_CLASS = "dx-list-item-selected";
+
 var MATERIAL_LOOKUP_LIST_ITEMS_COUNT = 4;
 
 
@@ -653,7 +655,7 @@ var Lookup = DropDownList.inherit({
                     */
                     closeOnOutsideClick: true,
 
-                    popupWidth: (function() { return this.$element().outerWidth(); }).bind(this),
+                    popupWidth: (function() { return $(this.element()).outerWidth(); }).bind(this),
                     popupHeight: (function() { return this._getPopupHeight(MATERIAL_LOOKUP_LIST_ITEMS_COUNT); }).bind(this),
 
                     /**
@@ -689,7 +691,7 @@ var Lookup = DropDownList.inherit({
                     position: {
                         my: "left top",
                         at: "left top",
-                        of: this.$element()
+                        of: this.element()
                     },
 
                     _scrollToSelectedItemEnabled: true
@@ -859,14 +861,14 @@ var Lookup = DropDownList.inherit({
 
     _setPopupPosition: function() {
         var selectedIndex = this._list.option("selectedIndex"),
-            selectedListItem = this._list.$element().find(".dx-list-item-selected"),
-            differenceOfHeights = (selectedListItem.height() - this.$element().height()) / 2,
+            selectedListItem = $(this._list.element()).find("." + LIST_ITEM_SELECTED_CLASS),
+            differenceOfHeights = (selectedListItem.height() - $(this.element()).height()) / 2,
             popupOffsetY = 0;
 
         if(selectedIndex !== -1) {
-            var differenceOfOffsets = selectedListItem.offset().top - this._popup.$content().offset().top;
+            var differenceOfOffsets = selectedListItem.offset().top - $(this._popup.content()).parent().offset().top;
 
-            if(this.$element().offset().top > differenceOfOffsets) {
+            if($(this.element()).offset().top > differenceOfOffsets) {
                 popupOffsetY = differenceOfOffsets + differenceOfHeights;
             } else {
                 popupOffsetY = differenceOfHeights;
@@ -927,7 +929,7 @@ var Lookup = DropDownList.inherit({
         this.callBase();
 
         if(this.option("_scrollToSelectedItemEnabled")) {
-            translator.resetPosition($(this._popup.element()).find(".dx-overlay-content"));
+            translator.resetPosition($(this._popup.content()).parent());
         }
     },
 
