@@ -3005,7 +3005,7 @@ QUnit.test("Check default popupWidth, popupHeight, position.of for Material them
         var lookup = $lookup.dxLookup({ dataSource: ["blue", "orange", "lime", "purple"] }).dxLookup("instance");
 
         assert.equal(lookup.option("popupWidth")(), $lookup.outerWidth(), "popup width match with lookup field width");
-        assert.equal(lookup.option("position").of, lookup.$element(), "popup position of lookup field");
+        assert.equal(lookup.option("position").of, lookup.element(), "popup position of lookup field");
 
         $(lookup.field()).trigger("dxclick");
 
