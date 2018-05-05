@@ -637,7 +637,7 @@ var Lookup = DropDownList.inherit({
                 options: {
 
                     /**
-                    * @name dxLookupOptions_usePopover
+                    * @name dxLookupOptions.usePopover
                     * @publicName usePopover
                     * @type boolean
                     * @default false @for Material
@@ -645,7 +645,7 @@ var Lookup = DropDownList.inherit({
                     usePopover: false,
 
                     /**
-                    * @name dxLookupOptions_closeOnOutsideClick
+                    * @name dxLookupOptions.closeOnOutsideClick
                     * @publicName closeOnOutsideClick
                     * @type boolean|function
                     * @default true @for Material
@@ -657,7 +657,7 @@ var Lookup = DropDownList.inherit({
                     popupHeight: (function() { return this._getPopupHeight(MATERIAL_LOOKUP_LIST_ITEMS_COUNT); }).bind(this),
 
                     /**
-                    * @name dxLookupOptions_searchEnabled
+                    * @name dxLookupOptions.searchEnabled
                     * @publicName searchEnabled
                     * @type boolean
                     * @default false @for Material
@@ -665,7 +665,7 @@ var Lookup = DropDownList.inherit({
                     searchEnabled: false,
 
                     /**
-                    * @name dxLookupOptions_showCancelButton
+                    * @name dxLookupOptions.showCancelButton
                     * @publicName showCancelButton
                     * @type boolean
                     * @default false @for Material
@@ -673,7 +673,7 @@ var Lookup = DropDownList.inherit({
                     showCancelButton: false,
 
                     /**
-                    * @name dxLookupOptions_showPopupTitle
+                    * @name dxLookupOptions.showPopupTitle
                     * @publicName showPopupTitle
                     * @type boolean
                     * @default false @for Material
@@ -681,7 +681,7 @@ var Lookup = DropDownList.inherit({
                     showPopupTitle: false,
 
                     /**
-                    * @name dxLookupOptions_position
+                    * @name dxLookupOptions.position
                     * @publicName position
                     * @type positionConfig
                     * @default { my: 'left top', at: 'left top', of: lookupContainer } @for Material
