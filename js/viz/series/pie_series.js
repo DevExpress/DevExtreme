@@ -251,13 +251,13 @@ exports.pie = _extend({}, barSeries, {
     },
 
     correctRadius: function(correction) {
-        _each(this._points, function(_, point) {
+        this._points.forEach(function(point) {
             point.correctRadius(correction);
         });
     },
 
     correctLabelRadius: function(labelRadius) {
-        _each(this._points, function(_, point) {
+        this._points.forEach(function(point) {
             point.correctLabelRadius(labelRadius);
         });
     },
