@@ -806,6 +806,40 @@ QUnit.testStart(function() {
         });
     });
 
+    QUnit.test("Scheduler should work correctly when groupOrientation is set without groups", function(assert) {
+        assert.expect(1);
+
+        this.createInstance({
+            dataSource: [],
+            resources: [{
+                fieldExpr: "owner.id",
+                allowMultiple: true,
+                dataSource: [
+                    {
+                        id: 1,
+                        text: "A"
+                    }, {
+                        id: 2,
+                        text: "B"
+                    }
+                ]
+            }],
+            views: [
+                {
+                    type: "week",
+                    name: "VWEEK",
+                    groupOrientation: "vertical"
+                }
+            ],
+            currentView: "VWEEK",
+            height: 500
+        });
+
+        const $workSpace = this.instance.getWorkSpace().$element();
+
+        assert.notOk($workSpace.hasClass("dx-scheduler-work-space-vertical-grouped"), "Workspace hasn't 'dx-scheduler-work-space-vertical-grouped' css class");
+    });
+
     QUnit.test("getWorkSpaceScrollableScrollTop should return right value for allDay appointments depending on the group orientation", function(assert) {
         assert.expect(4);
 
