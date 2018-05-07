@@ -512,13 +512,9 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _initGroupedStrategy: function() {
-        var Strategy;
+        var strategyName = this.option("groups").length ? this.option("groupOrientation") : this._getDefaultGroupStrategy();
 
-        if(this.option("groups").length) {
-            Strategy = this.option("groupOrientation") === "vertical" ? VerticalGroupedStrategy : HorizontalGroupedStrategy;
-        } else {
-            Strategy = this._getDefaultGroupStrategy() === "vertical" ? VerticalGroupedStrategy : HorizontalGroupedStrategy;
-        }
+        var Strategy = strategyName === "vertical" ? VerticalGroupedStrategy : HorizontalGroupedStrategy;
 
         this._groupedStrategy = new Strategy(this);
     },
