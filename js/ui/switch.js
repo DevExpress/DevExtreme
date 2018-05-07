@@ -162,34 +162,35 @@ var Switch = Editor.inherit({
         this._renderSwipeable();
 
         this.callBase();
-    },
 
-    _render: function() {
         this._renderSwitchInner();
         this._renderLabels();
-
-        this._renderHandleWidth();
         this._renderValue();
-
-        this.callBase();
     },
 
+
     _renderHandleWidth: function() {
-        this._handleWidth = parseFloat(window.getComputedStyle(this._$handle.get(0)).width);
+        this._handleWidth = this._$handle.get(0).clientWidth || parseFloat(window.getComputedStyle(this._$handle.get(0)).width);
+
     },
 
     _getCalcOffset: function(value, offset) {
-        var ratio = offset - Number(!value);
-        return "calc(" + 100 * ratio + "% + " + -this._getHandleWidth() * ratio + "px)";
+        var ratio = (offset - Number(!value)) / 2;
+        return "calc(" + 100 * ratio + "%)";
+    },
+
+    _getHandleOffset: function(value, offset) {
+        if(value) {
+            var calcValue = -100 + 100 * (-offset);
+            return "calc(" + calcValue + "%)";
+        } else {
+            return "calc(" + 100 * (-offset) + "%)";
+        }
     },
 
     _getHandleWidth: function() {
         !this._handleWidth && this._renderHandleWidth();
         return this._handleWidth;
-    },
-
-    _getPixelOffset: function(value, offset) {
-        return this._getMarginBound() * (offset - Number(!value));
     },
 
     _renderSwitchInner: function() {
@@ -230,8 +231,12 @@ var Switch = Editor.inherit({
             onStart: this._swipeStartHandler.bind(this),
             onUpdated: this._swipeUpdateHandler.bind(this),
             onEnd: this._swipeEndHandler.bind(this),
-            itemSizeFunc: this._getMarginBound.bind(this)
+            itemSizeFunc: this._getItemSizeFunc.bind(this)
         });
+    },
+
+    _getItemSizeFunc: function() {
+        return this._$switchContainer.outerWidth(true) - parseFloat(window.getComputedStyle(this._$handle.get(0)).width);
     },
 
     _renderSubmitElement: function() {
@@ -281,31 +286,26 @@ var Switch = Editor.inherit({
         this._renderInkWave(this._$handle, e, value, 1);
     },
 
-    _getMarginBound: function() {
-        if(!this._marginBound) {
-            this._marginBound = this._$switchContainer.outerWidth(true) - this._getHandleWidth();
-        }
-        return this._marginBound;
-    },
-
-    _marginDirection: function() {
-        return this.option("rtlEnabled") ? "Right" : "Left";
-    },
-
     _offsetDirection: function() {
         return this.option("rtlEnabled") ? -1 : 1;
     },
 
-    _renderPosition: function(state, swipeOffset) {
-        if(!windowUtils.hasWindow()) {
-            return;
+    _renderPosition: function(state, swipeOffset, isSwipe) {
+        if(isSwipe) {
+            var innerOffset = this._getCalcOffset(state, swipeOffset),
+                handleOffset = this._getHandleOffset(state, swipeOffset);
+
+            this._$switchInner.css("transform", " translateX(" + innerOffset + ")");
+            this._$handle.css("transform", " translateX(" + handleOffset + ")");
+        } else {
+            if(state) {
+                this._$handle.css("transform", " translateX(-100%");
+
+            } else {
+                this._$switchInner.css("transform", " translateX(-50%");
+                this._$handle.css("transform", " translateX(0");
+            }
         }
-
-        var marginDirection = this._marginDirection(),
-            resetMarginDirection = marginDirection === "Left" ? "Right" : "Left";
-
-        this._$switchInner.css("margin" + marginDirection, this._getCalcOffset(state, swipeOffset));
-        this._$switchInner.css("margin" + resetMarginDirection, 0);
     },
 
     _validateValue: function() {
@@ -348,15 +348,15 @@ var Switch = Editor.inherit({
 
         this._animating = true;
 
+        var fromOffset = this._getCalcOffset(startValue, 0),
+            toOffset = this._getCalcOffset(endValue, 0);
+
         var that = this,
-            marginDirection = this._marginDirection(),
-            resetMarginDirection = marginDirection === "Left" ? "Right" : "Left",
             fromConfig = {},
             toConfig = {};
 
-        this._$switchInner.css("margin" + resetMarginDirection, 0);
-        fromConfig["margin" + marginDirection] = this._getCalcOffset(startValue, 0);
-        toConfig["margin" + marginDirection] = this._getCalcOffset(endValue, 0);
+        fromConfig["transform"] = " translateX(" + fromOffset + ")";
+        toConfig["transform"] = " translateX(" + toOffset + ")";
 
         fx.animate(this._$switchInner, {
             from: fromConfig,
@@ -385,7 +385,7 @@ var Switch = Editor.inherit({
     },
 
     _swipeUpdateHandler: function(e) {
-        this._renderPosition(this.option("value"), this._offsetDirection() * e.event.offset);
+        this._renderPosition(this.option("value"), this._offsetDirection() * e.event.offset, true);
     },
 
     _swipeEndHandler: function(e) {
@@ -393,7 +393,9 @@ var Switch = Editor.inherit({
             offsetDirection = this._offsetDirection(),
             toConfig = {};
 
-        toConfig["margin" + this._marginDirection()] = this._getCalcOffset(that.option("value"), offsetDirection * e.event.targetOffset);
+        var offset = this._getCalcOffset(that.option("value"), offsetDirection * e.event.targetOffset);
+
+        toConfig["transform"] = " translateX(" + offset + ")";
 
         fx.animate(this._$switchInner, {
             to: toConfig,

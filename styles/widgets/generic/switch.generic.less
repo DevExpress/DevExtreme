@@ -91,6 +91,7 @@
 .dx-switch-on,
 .dx-switch-off {
     float: left;
+    flex-shrink: 0;
     width: 50%;
     padding-right: @GENERIC_SWITCH_HANDLE_WIDTH + @GENERIC_SWITCH_ON_OFF_ADDING_PADDING;
     line-height: @GENERIC_SWITCH_INNER_SIZE;
@@ -113,10 +114,11 @@
 .dx-switch-handle {
     position: relative;
     float: left;
+    flex-basis: @GENERIC_SWITCH_HANDLE_WIDTH;
+    flex-shrink: 0;
     width: @GENERIC_SWITCH_HANDLE_WIDTH;
     height: @GENERIC_SWITCH_INNER_SIZE - @GENERIC_SWITCH_HANDLE_OFFSET*2;
     margin-top: @GENERIC_SWITCH_HANDLE_OFFSET;
-    margin-left: -@GENERIC_SWITCH_HANDLE_WIDTH;
     .box-sizing();
 
     &:before {
