@@ -44,6 +44,7 @@ var POPUP_OPTION_MAP = {
 var LIST_ITEM_SELECTED_CLASS = "dx-list-item-selected";
 
 var MATERIAL_LOOKUP_LIST_ITEMS_COUNT = 4;
+var MATERIAL_LOOKUP_LIST_PADDING = 8;
 
 
 /**
@@ -860,27 +861,32 @@ var Lookup = DropDownList.inherit({
     },
 
     _setPopupPosition: function() {
-        var selectedIndex = this._list.option("selectedIndex"),
-            selectedListItem = $(this._list.element()).find("." + LIST_ITEM_SELECTED_CLASS),
+        var selectedIndex = this._list.option("selectedIndex");
+        if(selectedIndex === -1) return;
+
+        var selectedListItem = $(this._list.element()).find("." + LIST_ITEM_SELECTED_CLASS),
             differenceOfHeights = (selectedListItem.height() - $(this.element()).height()) / 2,
-            popupOffsetY = 0;
+            popupContentParent = $(this._popup.content()).parent(),
+            differenceOfOffsets = selectedListItem.offset().top - popupContentParent.offset().top,
+            lookupTop = $(this.element()).offset().top,
+            popupOffsetY = differenceOfHeights;
 
-        if(selectedIndex !== -1) {
-            var differenceOfOffsets = selectedListItem.offset().top - $(this._popup.content()).parent().offset().top;
-
-            if($(this.element()).offset().top > differenceOfOffsets) {
-                popupOffsetY = differenceOfOffsets + differenceOfHeights;
-            } else {
-                popupOffsetY = differenceOfHeights;
-                this._scrollToSelectedItem();
-            }
-
-            this._popup._changePosition({ left: 0, top: -popupOffsetY });
+        if(lookupTop > differenceOfOffsets) {
+            popupOffsetY += differenceOfOffsets;
+        } else {
+            this._scrollToSelectedItem();
         }
+
+        var position = translator.locate(popupContentParent);
+
+        translator.move(popupContentParent, {
+            left: 0,
+            top: position.top - popupOffsetY
+        });
     },
 
     _getPopupHeight: function(listItemsCount) {
-        return (this._list && this._list.itemElements()) ? (this._list.itemElements().height() * listItemsCount) : "auto";
+        return (this._list && this._list.itemElements()) ? (this._list.itemElements().height() * listItemsCount) + MATERIAL_LOOKUP_LIST_PADDING * 2 : "auto";
     },
 
     _renderPopup: function() {

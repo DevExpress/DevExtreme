@@ -3009,7 +3009,7 @@ QUnit.test("Check default popupWidth, popupHeight, position.of for Material them
 
         $(lookup.field()).trigger("dxclick");
 
-        assert.equal(lookup.option("popupHeight")(), $(".dx-list-item").height() * 4, "popup height contains 4 list items");
+        assert.equal(lookup.option("popupHeight")(), $(".dx-list-item").height() * 4 + 16, "popup height contains 4 list items and 2 paddings (8px)");
 
         lookup.close();
         lookup.option("popupWidth", 200);
