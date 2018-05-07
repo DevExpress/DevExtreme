@@ -50,7 +50,7 @@ exports.pie = _extend({}, barSeries, {
         (this._points || []).forEach(function(point) {
             if(point._label.isVisible()) {
                 point.setLabelTrackerData();
-                point.setLabelEllipsis();
+                point.setLabelEllipsis(moveLabelsFromCenter);
                 point.updateLabelCoord(moveLabelsFromCenter);
             }
         });

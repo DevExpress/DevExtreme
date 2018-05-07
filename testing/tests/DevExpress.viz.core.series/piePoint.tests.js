@@ -1091,6 +1091,14 @@ QUnit.test("Outside, move from center but with connector - correct x coordinate 
     assert.equal(point4._label.shift.args[0][0], 260);
 });
 
+QUnit.test("T626329. Outside, move from center. Shrink big label with half canvas width", function(assert) {
+    this.options.label.position = "outside";
+    var point = createPointWithStubLabel.call(this, { 0: 55, 10: 45, 20: 35 }, { x: 110, y: 10, width: 410, height: 10 });
+
+    point.setLabelEllipsis(true);
+    assert.equal(point._label.fit.args[0][0], 300);
+});
+
 QUnit.test("Inside - do not correct coordinates even if 'move from center'", function(assert) {
     this.options.label.position = "inside";
     var point1 = createPointWithStubLabel.call(this, { 0: 55, 10: 45, 20: 35 }, { x: 295, y: 10, width: 10, height: 10 }),
