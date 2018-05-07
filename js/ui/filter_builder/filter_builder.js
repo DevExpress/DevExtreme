@@ -1128,6 +1128,5 @@ var FilterBuilder = Widget.inherit({
 
 registerComponent("dxFilterBuilder", FilterBuilder);
 
-module.exports.renderValueText = renderValueText;
-
 module.exports = FilterBuilder;
+module.exports.renderValueText = renderValueText;

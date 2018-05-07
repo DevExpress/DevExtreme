@@ -943,7 +943,7 @@ QUnit.module("Real dataGrid", {
     });
 });
 
-QUnit.module("Custom operations texts", {
+QUnit.module("Custom operations", {
     beforeEach: function() {
         this.getAnyOfOperation = function(field, dataSource) {
             var dataGrid = $("#container").dxDataGrid({
@@ -1147,5 +1147,24 @@ QUnit.module("Custom operations texts", {
 
         // assert
         assert.equal(result, "100 - 200");
+    });
+
+    QUnit.test("anyof editor", function(assert) {
+        // arrange
+        var result,
+            $container = $("<div>"),
+            field = {
+                dataField: "field",
+            },
+            anyOfOperation = this.getAnyOfOperation(field);
+
+        // act
+        result = anyOfOperation.editorTemplate({
+            value: [1],
+            field: field
+        }, $container);
+
+        // assert
+        assert.equal($container.text(), "1");
     });
 });
