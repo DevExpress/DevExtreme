@@ -427,17 +427,20 @@ var SchedulerWorkSpace = Widget.inherit({
                 break;
             case "groups":
                 this._cleanView();
+                this._removeAllDayElements();
                 this._initGrouping();
                 this.repaint();
                 break;
             case "groupOrientation":
                 this._initGroupedStrategy();
                 this._createAllDayPanelElements();
+                this._removeAllDayElements();
                 this._cleanWorkSpace();
                 break;
             case "showAllDayPanel":
                 if(this._isVerticalGroupedWorkSpace()) {
                     this._cleanView();
+                    this._removeAllDayElements();
                     this._initGrouping();
                     this.repaint();
                 } else {
@@ -1659,6 +1662,11 @@ var SchedulerWorkSpace = Widget.inherit({
         return result;
     },
 
+    _removeAllDayElements: function() {
+        this._$allDayTable && this._$allDayTable.remove();
+        this._$allDayTitle && this._$allDayTitle.remove();
+    },
+
     _cleanView: function() {
         this._cleanCellDataCache();
         this._cleanAllowedPositions();
@@ -1666,8 +1674,8 @@ var SchedulerWorkSpace = Widget.inherit({
         this._$dateTable.empty();
         this._shader && this._shader.clean();
         this._$timePanel.empty();
-        this._$allDayTable && this._$allDayTable.remove();
-        this._$allDayTitle && this._$allDayTitle.remove();
+        this._$allDayTable && this._$allDayTable.empty();
+        this._$allDayTitle && this._$allDayTitle.empty();
         this._$groupTable.empty();
         delete this._hiddenInterval;
         delete this._interval;
