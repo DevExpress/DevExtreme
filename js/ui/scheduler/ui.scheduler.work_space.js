@@ -512,8 +512,23 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _initGroupedStrategy: function() {
-        var Strategy = this._isVerticalGroupedWorkSpace() ? VerticalGroupedStrategy : HorizontalGroupedStrategy;
+        var Strategy;
+
+        if(this.option("groups").length) {
+            Strategy = this.option("groupOrientation") === "vertical" ? VerticalGroupedStrategy : HorizontalGroupedStrategy;
+        } else {
+            Strategy = this._getDefaultGroupStrategy() === "vertical" ? VerticalGroupedStrategy : HorizontalGroupedStrategy;
+        }
+
         this._groupedStrategy = new Strategy(this);
+    },
+
+    _getDefaultGroupStrategy: function() {
+        return "horizontal";
+    },
+
+    _isVerticalGroupedWorkSpace: function() {
+        return !!this.option("groups").length && this.option("groupOrientation") === "vertical";
     },
 
     _toggleHorizontalScrollClass: function() {
@@ -548,13 +563,10 @@ var SchedulerWorkSpace = Widget.inherit({
         this.$element().toggleClass(VERTICAL_GROUPED_WORKSPACE_CLASS, this._isVerticalGroupedWorkSpace());
     },
 
-    _isVerticalGroupedWorkSpace: function() {
-        return !!this.option("groups").length && this.option("groupOrientation") === "vertical";
-    },
-
     _getRealGroupOrientation: function() {
         return this._isVerticalGroupedWorkSpace() ? "vertical" : "horizontal";
     },
+
     _getTimePanelClass: function() {
         return TIME_PANEL_CLASS;
     },
