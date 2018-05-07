@@ -143,6 +143,7 @@ var VerticalGroupedStrategy = GroupedStrategy.inherit({
 
     shiftIndicator: function($indicator, height, rtlOffset, i) {
         var offset = this._workSpace.getIndicatorOffset(0),
+            tableOffset = this._workSpace.option("crossScrollingEnabled") ? 0 : this._workSpace.getGroupTableWidth(),
             horizontalOffset = rtlOffset ? rtlOffset - offset : offset,
             verticalOffset = this._workSpace._getRowCount() * this._workSpace.getCellHeight() * i;
 
@@ -150,12 +151,12 @@ var VerticalGroupedStrategy = GroupedStrategy.inherit({
             verticalOffset += this._workSpace.getCellHeight() * (i + 1);
         }
 
-        $indicator.css("left", horizontalOffset + this._workSpace.getGroupTableWidth());
+        $indicator.css("left", horizontalOffset + tableOffset);
         $indicator.css("top", height + verticalOffset);
     },
 
     getShaderOffset: function(i, width) {
-        var offset = this._workSpace.getGroupTableWidth();
+        var offset = this._workSpace.option("crossScrollingEnabled") ? 0 : this._workSpace.getGroupTableWidth();
         return this._workSpace.option("rtlEnabled") ? this._$container.get(0).getBoundingClientRect().width - offset - this._workSpace.getWorkSpaceLeftOffset() - width : offset;
     },
 

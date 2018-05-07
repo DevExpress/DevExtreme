@@ -1242,7 +1242,6 @@ var Scheduler = Widget.inherit({
                 break;
             case "groups":
                 this._loadResources().done((function(resources) {
-                    this._workSpace.option(name, resources);
                     this._refreshWorkSpace(resources);
                     this._filterAppointmentsByDate();
                     this._reloadDataSource();
@@ -1252,7 +1251,7 @@ var Scheduler = Widget.inherit({
                 this._resourcesManager.setResources(this.option("resources"));
                 this._appointmentModel.setDataAccessors(this._combineDataAccessors());
                 this._loadResources().done((function(resources) {
-                    this._workSpace.option("groups", resources);
+                    this._refreshWorkSpace(resources);
                     this._filterAppointmentsByDate();
                     this._reloadDataSource();
                 }).bind(this));

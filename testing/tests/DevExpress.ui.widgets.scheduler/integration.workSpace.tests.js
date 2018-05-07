@@ -338,6 +338,7 @@ QUnit.test("WorkSpace should have a correct 'groups' option", function(assert) {
 
     this.instance.option("groups", ["resource2"]);
 
+    workSpace = this.instance.$element().find(".dx-scheduler-work-space").dxSchedulerWorkSpaceDay("instance");
     assert.deepEqual(workSpace.option("groups"),
         [
             {

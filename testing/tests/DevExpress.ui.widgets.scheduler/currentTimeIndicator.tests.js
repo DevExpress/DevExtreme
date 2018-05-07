@@ -489,14 +489,14 @@ var stubInvokeMethod = function(instance, options) {
         assert.equal($indicators.eq(1).position().top, 23.5 * cellHeight);
     });
 
-    QUnit.test("AllDay Shader should not be wrapped by allDay panel", function(assert) {
+    QUnit.test("AllDay Shader should be wrapped by allDay panel", function(assert) {
         this.instance.option({
             indicatorTime: new Date(2017, 8, 5, 12, 45),
             showAllDayPanel: true
         });
         var $element = this.instance.$element();
 
-        assert.notOk($element.find("." + SCHEDULER_DATE_TIME_SHADER_ALL_DAY_CLASS).parent().hasClass("dx-scheduler-all-day-panel"), "AllDay panel contains time indicator");
+        assert.ok($element.find("." + SCHEDULER_DATE_TIME_SHADER_ALL_DAY_CLASS).parent().hasClass("dx-scheduler-all-day-panel"), "AllDay panel contains shader");
     });
 
     QUnit.test("Shader should be rendered correctly, Day view with groups", function(assert) {
