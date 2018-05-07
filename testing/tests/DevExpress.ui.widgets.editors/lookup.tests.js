@@ -16,7 +16,8 @@ var $ = require("jquery"),
     fx = require("animation/fx"),
     dataUtils = require("core/element_data"),
     isRenderer = require("core/utils/type").isRenderer,
-    config = require("core/config");
+    config = require("core/config"),
+    themes = require("ui/themes");
 
 require("common.css!");
 require("generic_light.css!");
@@ -2990,6 +2991,77 @@ QUnit.module("default options", {
     },
     afterEach: function() {
         fx.off = false;
+    }
+});
+
+QUnit.test("Check default popupWidth, popupHeight, position.of for Material theme", function(assert) {
+    var origIsMaterial = themes.isMaterial;
+    themes.isMaterial = function() { return true; };
+
+    var $lookup = $("<div>").prependTo("body");
+
+    try {
+
+        var lookup = $lookup.dxLookup({ dataSource: ["blue", "orange", "lime", "purple"] }).dxLookup("instance");
+
+        assert.equal(lookup.option("popupWidth")(), $lookup.outerWidth(), "popup width match with lookup field width");
+        assert.equal(lookup.option("position").of, lookup.element(), "popup position of lookup field");
+
+        $(lookup.field()).trigger("dxclick");
+
+        assert.equal(lookup.option("popupHeight")(), $(".dx-list-item").height() * 4 + 16, "popup height contains 4 list items and 2 paddings (8px)");
+
+        lookup.close();
+        lookup.option("popupWidth", 200);
+        lookup.option("popupHeight", 300);
+
+        $(lookup.field()).trigger("dxclick");
+
+        assert.equal(lookup.option("popupHeight"), 300, "popup height changed if change popupHeight option value");
+        assert.equal(lookup.option("popupWidth"), 200, "popup width changed if change popupWidth option value");
+
+        lookup.close();
+
+    } finally {
+        $lookup.remove();
+        themes.isMaterial = origIsMaterial;
+    }
+});
+
+QUnit.test("Check popup position offset for Material theme", function(assert) {
+    var origIsMaterial = themes.isMaterial;
+    themes.isMaterial = function() { return true; };
+
+    var $lookup = $("<div>").prependTo("body");
+
+    try {
+
+        var lookup = $lookup.dxLookup({ dataSource: ["blue", "orange", "lime", "purple"], value: "blue" }).dxLookup("instance");
+
+        $(lookup.field()).trigger("dxclick");
+
+        var $popup = $(".dx-popup-wrapper");
+
+        assert.roughEqual($popup.find(".dx-overlay-content").position().top, -3.5, 1, "offset of the lookup if first item is selected");
+
+        lookup.close();
+
+        lookup.option("value", "purple");
+
+        $(lookup.field()).trigger("dxclick");
+
+        assert.roughEqual($popup.find(".dx-overlay-content").position().top, -2.5, 1, "offset of the lookup if last item is selected");
+
+        lookup.close();
+
+        lookup.option("dataSource", []);
+
+        $(lookup.field()).trigger("dxclick");
+
+        assert.roughEqual($popup.find(".dx-overlay-content").position().top, 0, 1, "offset of the lookup if not selected item");
+    } finally {
+        $lookup.remove();
+        themes.isMaterial = origIsMaterial;
     }
 });
 
