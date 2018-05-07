@@ -6672,7 +6672,7 @@ QUnit.module('Editing with validation', {
             return renderer(".dx-datagrid");
         };
 
-        setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'rows', 'editing', 'masterDetail', 'grouping', 'editorFactory', 'errorHandling', 'validating', 'filterRow', 'adaptivity'], {
+        setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'rows', 'editing', 'masterDetail', 'gridView', 'grouping', 'editorFactory', 'errorHandling', 'validating', 'filterRow', 'adaptivity'], {
             initViews: true
         });
 
@@ -7272,6 +7272,45 @@ QUnit.test("Focused cell with validation when edit mode batch", function(assert)
     that.editCell(0, 1); // edit cell
     that.editorFactoryController.focus(testElement.find("td").eq(1).children()); // focus cell
     that.clock.tick();
+});
+
+// T629168
+QUnit.test("Cell's height is increasing on resize if validation applied and batch edit mode", function(assert) {
+    // arrange
+    var that = this,
+        rowsView = this.rowsView,
+        testElement = $('#container');
+
+    rowsView.render(testElement);
+
+    that.applyOptions({
+        dataSource: [{ Test: "a" }],
+        showColumnHeaders: false,
+        editing: {
+            mode: "batch",
+            allowUpdating: true
+        },
+        columns: [{
+            dataField: "Test",
+            allowEditing: true,
+            validationRules: [{ type: "required" }]
+        }]
+    });
+
+    // act
+    that.editCell(0, 0);
+    testElement.find("input").val("").trigger("change");
+    that.closeEditCell();
+    that.clock.tick();
+
+    that.editorFactoryController.focus(this.rowsView.element().find("td").eq(0));
+    that.clock.tick();
+
+    that.resize();
+    that.clock.tick();
+
+    // assert
+    assert.equal(testElement.find(".dx-invalid-message.dx-widget").length, 1, "validation tooltip count = 1");
 });
 
 QUnit.test("Edit row when set validate in column", function(assert) {
