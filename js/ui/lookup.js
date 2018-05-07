@@ -510,7 +510,6 @@ var Lookup = DropDownList.inherit({
             * @hidden
             * @inheritdoc
             */
-
             /**
             * @name dxLookupOptions.applyValueMode
             * @publicName applyValueMode
@@ -768,7 +767,6 @@ var Lookup = DropDownList.inherit({
     },
 
     _toggleOpenState: function() {
-
         this.callBase();
 
         if(this.option("_scrollToSelectedItemEnabled")) {
