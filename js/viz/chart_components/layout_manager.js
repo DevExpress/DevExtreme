@@ -69,10 +69,9 @@ function getSizeLabels(series) {
     }, { sizes: [], common: 0, outerLabelsCount: 0 });
 }
 
-function correctLabelRadius(sizes, radius, series, canvas, averageWidthLabels) {
+function correctLabelRadius(sizes, radius, series, canvas, averageWidthLabels, centerX) {
     var curRadius,
         i,
-        centerX = (canvas.width - canvas.left - canvas.right) / 2 + canvas.left,
         runningWidth = 0;
 
     for(i = 0; i < series.length; i++) {
@@ -156,18 +155,26 @@ function toLayoutElementCoords(canvas) {
     });
 }
 
+function getAverageLabelWidth(centerX, radius, canvas, sizeLabels) {
+    return (centerX - radius - RADIAL_LABEL_INDENT - canvas.left) / sizeLabels.outerLabelsCount;
+}
+
+function getFullRadiusWithLabels(centerX, canvas, sizeLabels) {
+    return centerX - canvas.left - (sizeLabels.outerLabelsCount > 0 ? sizeLabels.common + RADIAL_LABEL_INDENT : 0);
+}
+
 function correctAvailableRadius(availableRadius, canvas, series, minR, paneCenterX, paneCenterY) {
     var sizeLabels = getSizeLabels(series),
         averageWidthLabels,
-        fullRadiusWithLabels = paneCenterX - canvas.left - (sizeLabels.outerLabelsCount > 0 ? sizeLabels.common + RADIAL_LABEL_INDENT : 0);
+        fullRadiusWithLabels = getFullRadiusWithLabels(paneCenterX, canvas, sizeLabels);
 
     if(fullRadiusWithLabels < minR) {
         availableRadius = minR;
-        averageWidthLabels = (paneCenterX - availableRadius - RADIAL_LABEL_INDENT - canvas.left) / sizeLabels.outerLabelsCount;
+        averageWidthLabels = getAverageLabelWidth(paneCenterX, availableRadius, canvas, sizeLabels);
     } else {
         availableRadius = _min(getPieRadius(series, paneCenterX, paneCenterY, availableRadius, minR), fullRadiusWithLabels);
     }
-    correctLabelRadius(sizeLabels.sizes, availableRadius + RADIAL_LABEL_INDENT, series, canvas, averageWidthLabels);
+    correctLabelRadius(sizeLabels.sizes, availableRadius + RADIAL_LABEL_INDENT, series, canvas, averageWidthLabels, paneCenterX);
 
     return availableRadius;
 }
@@ -215,6 +222,18 @@ LayoutManager.prototype = {
             radiusInner: _floor(radius * getInnerRadius(series[0])),
             radiusOuter: _floor(radius)
         };
+    },
+
+    correctPieLabelRadius: function(series, layout, canvas) {
+        var sizeLabels = getSizeLabels(series);
+        var averageWidthLabels;
+        var radius = layout.radiusOuter + RADIAL_LABEL_INDENT;
+        var availableLabelWidth = layout.centerX - canvas.left - radius;
+
+        if(sizeLabels.common + RADIAL_LABEL_INDENT > availableLabelWidth) {
+            averageWidthLabels = getAverageLabelWidth(layout.centerX, layout.radiusOuter, canvas, sizeLabels);
+        }
+        correctLabelRadius(sizeLabels.sizes, radius, series, canvas, averageWidthLabels, layout.centerX);
     },
 
     needMoreSpaceForPanesCanvas: function(panes, rotated) {
