@@ -631,7 +631,9 @@ module.exports = {
                 },
 
                 _getTooltipsSelector: function() {
-                    return ".dx-editor-cell ." + this.addWidgetPrefix(REVERT_TOOLTIP_CLASS) + ", .dx-editor-cell ." + this.addWidgetPrefix(WIDGET_INVALID_MESSAGE_CLASS);
+                    var invalidMessageClass = this.addWidgetPrefix(WIDGET_INVALID_MESSAGE_CLASS),
+                        revertTooltipClass = this.addWidgetPrefix(REVERT_TOOLTIP_CLASS);
+                    return ".dx-editor-cell ." + revertTooltipClass + ", .dx-editor-cell ." + invalidMessageClass + ", .dx-cell-modified ." + invalidMessageClass;
                 },
 
                 init: function() {
