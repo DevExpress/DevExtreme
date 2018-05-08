@@ -1251,6 +1251,7 @@ var Scheduler = Widget.inherit({
                 this._resourcesManager.setResources(this.option("resources"));
                 this._appointmentModel.setDataAccessors(this._combineDataAccessors());
                 this._loadResources().done((function(resources) {
+                    this._appointments.option("items", []);
                     this._refreshWorkSpace(resources);
                     this._filterAppointmentsByDate();
                     this._reloadDataSource();
