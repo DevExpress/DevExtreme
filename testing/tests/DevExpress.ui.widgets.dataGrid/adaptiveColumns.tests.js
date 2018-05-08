@@ -3674,7 +3674,7 @@ QUnit.module("Validation", {
 
     QUnit.testInActiveWindow("Tooltips selector for the revert button", function(assert) {
         setupDataGrid(this);
-        var expected = ".dx-editor-cell .dx-datagrid-revert-tooltip, .dx-editor-cell .dx-datagrid-invalid-message, .dx-field-item-content .dx-datagrid-revert-tooltip";
+        var expected = ".dx-editor-cell .dx-datagrid-revert-tooltip, .dx-editor-cell .dx-datagrid-invalid-message, .dx-cell-modified .dx-datagrid-invalid-message, .dx-field-item-content .dx-datagrid-revert-tooltip";
         assert.equal(this.editorFactoryController._getTooltipsSelector(), expected, "tooltips selector");
     });
 
