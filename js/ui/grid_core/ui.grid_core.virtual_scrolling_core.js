@@ -328,6 +328,7 @@ exports.VirtualScrollController = Class.inherit((function() {
 
         _setViewportPositionCore: function(position, isNear) {
             var that = this,
+                result = new Deferred(),
                 scrollingTimeout = Math.min(that.option("scrolling.timeout") || 0, that._dataSource.changingDuration());
 
             if(scrollingTimeout < that.option("scrolling.renderingThreshold")) {
@@ -341,11 +342,13 @@ exports.VirtualScrollController = Class.inherit((function() {
             if(scrollingTimeout > 0) {
                 that._scrollTimeoutID = setTimeout(function() {
                     that.setViewportItemIndex(position);
+                    result.resolve();
                 }, scrollingTimeout);
             } else {
                 that.setViewportItemIndex(position);
+                result.resolve();
             }
-
+            return result.promise();
         },
 
         getViewportPosition: function() {
@@ -370,9 +373,9 @@ exports.VirtualScrollController = Class.inherit((function() {
                     itemOffset += offset < position ? 1 : (position - offset + itemSize) / itemSize;
                 } while(offset < position);
 
-                that._setViewportPositionCore(virtualItemsCount.begin + itemOffset, true);
+                return that._setViewportPositionCore(virtualItemsCount.begin + itemOffset, true);
             } else {
-                that._setViewportPositionCore(position / defaultItemSize);
+                return that._setViewportPositionCore(position / defaultItemSize);
             }
         },
         setContentSize: function(size) {

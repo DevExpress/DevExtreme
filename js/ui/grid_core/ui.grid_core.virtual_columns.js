@@ -110,7 +110,7 @@ var ColumnsControllerExtender = (function() {
 
                 that._changedTimeout = setTimeout(function() {
                     that._setScrollPositionCore(position);
-                }, Math.max(renderingThreshold, 100 || that.option("scrolling.timeout")));
+                }, that.option("scrolling.timeout"));
             } else {
                 that._setScrollPositionCore(position);
             }
@@ -230,7 +230,7 @@ module.exports = {
                  */
                 columnRenderingMode: "standard",
                 columnPageSize: 5,
-                columnRenderingThreshold: 500
+                columnRenderingThreshold: 300
             }
         };
     },
