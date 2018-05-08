@@ -2238,6 +2238,10 @@ var SchedulerWorkSpace = Widget.inherit({
         return result;
     },
 
+    needRecalculateResizableArea: function() {
+        return this._isVerticalGroupedWorkSpace() && this.getScrollable().scrollTop() !== 0;
+    },
+
     getCellDataByCoordinates: function(coordinates, allDay) {
         var key = JSON.stringify({ top: coordinates.top, left: coordinates.left }),
             data = this.getCellDataCache(key);
