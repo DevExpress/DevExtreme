@@ -523,6 +523,30 @@ QUnit.test("Aria accessibility", function(assert) {
     assert.equal($dataRows.eq(2).attr("aria-level"), "0", "third data row - value of 'aria-level' attribute");
 });
 
+// T632028
+QUnit.test("Display context menu", function(assert) {
+    // arrange, act
+    var contextMenuItems = [{ text: "test" }],
+        treeList = createTreeList({
+            dataSource: [
+                { id: 1 }
+            ],
+            onContextMenuPreparing: function($event) {
+                $event.items = contextMenuItems;
+            }
+        });
+
+    this.clock.tick();
+
+    var $cellElement = $(treeList.getCellElement(0, 0));
+    $cellElement.trigger("contextmenu");
+    var contextMenuInstance = treeList.getView("contextMenuView").element().dxContextMenu("instance");
+
+    // assert
+    assert.ok(contextMenuInstance);
+    assert.deepEqual(contextMenuInstance.option("items"), contextMenuItems);
+});
+
 QUnit.test("filterSyncEnabled is working in TreeList", function(assert) {
     // act
     var treeList = createTreeList({
