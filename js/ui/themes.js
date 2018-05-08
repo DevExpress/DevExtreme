@@ -240,6 +240,8 @@ function current(options) {
 
     isMaterialTheme = /material/.test(currentThemeName || readThemeMarker());
 
+    checkThemeDeprecation();
+
     attachCssClasses(viewPortUtils.originalViewPort(), currentThemeName);
 }
 
@@ -317,6 +319,22 @@ function themeReady(callback) {
 
 function isMaterial() {
     return isMaterialTheme;
+}
+
+function checkThemeDeprecation() {
+    var name = currentThemeName || readThemeMarker();
+
+    if(/win8/.test(name)) {
+        errors.log("W0010", "The 'win8' theme", "16.1", "Use the 'generic' theme instead.");
+    }
+
+    if(/win10/.test(name)) {
+        errors.log("W0010", "The 'win10' theme", "17.2", "Use the 'generic' theme instead.");
+    }
+
+    if(/android/.test(name)) {
+        errors.log("W0010", "The 'android5' theme", "18.1", "Use the 'material' theme instead.");
+    }
 }
 
 var initDeferred = new Deferred();
