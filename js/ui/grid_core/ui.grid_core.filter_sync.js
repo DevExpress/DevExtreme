@@ -222,10 +222,7 @@ var DataControllerFilterSyncExtender = {
 
     _parseColumnInfo: function(fullName) {
         var matched = fullName.match(/columns\[([0-9]*)\]\.(.*)/);
-        return {
-            index: matched[1],
-            changedField: matched[2]
-        };
+        return matched ? { index: matched[1], changedField: matched[2] } : null;
     },
 
     optionChanged: function(args) {
@@ -243,7 +240,7 @@ var DataControllerFilterSyncExtender = {
                     let columnInfo = this._parseColumnInfo(args.fullName),
                         column,
                         filterSyncController = this.getController("filterSync");
-                    if(!filterSyncController._skipSyncColumnOptions) {
+                    if(columnInfo && !filterSyncController._skipSyncColumnOptions) {
                         filterSyncController._skipSyncColumnOptions = true;
                         if(["filterValues", "filterType"].indexOf(columnInfo.changedField) !== -1) {
                             column = this.getController("columns").getColumns()[columnInfo.index];

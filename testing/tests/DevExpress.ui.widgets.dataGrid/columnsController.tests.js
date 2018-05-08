@@ -8043,7 +8043,7 @@ QUnit.test("isBandColumnsUsed should return false when bandcolumns are not set",
 
 QUnit.module("onOptionChanged", {
     beforeEach: function() {
-        setupModule.apply(this);
+        setupModule.apply(this, ["adaptivity"]);
         sinon.spy(this, "_notifyOptionChanged");
     },
     afterEach: function() {
@@ -8129,6 +8129,18 @@ QUnit.module("onOptionChanged", {
         this.columnOption("field1", "bestFitWidth", 80);
 
         // assert
+        assert.strictEqual(this._notifyOptionChanged.callCount, 0, "onOptionChanged is not fired");
+    });
+
+    // T630149
+    QUnit.test("optionChanged should not be fired for the command:adaptive column", function(assert) {
+        // arrange
+        this.applyOptions({
+            columns: [{ dataField: "field1" }],
+            columnHidingEnabled: true
+        });
+        this.columnOption("command:adaptive", "adaptiveHidden", false, true);
+
         assert.strictEqual(this._notifyOptionChanged.callCount, 0, "onOptionChanged is not fired");
     });
 });
