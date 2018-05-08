@@ -136,11 +136,12 @@ exports.VirtualScrollController = Class.inherit((function() {
 
             var virtualItemsCount = that.virtualItemsCount();
             var totalItemsCount = that._dataSource.totalItemsCount();
+            var defaultItemSize = that.getItemSize();
 
             for(var itemIndex = virtualItemsCount.begin; itemIndex < totalItemsCount; itemIndex++) {
                 if(offset >= position + viewportSize) break;
 
-                var itemSize = that._itemSizes[itemIndex] || that._viewportItemSize;
+                var itemSize = that._itemSizes[itemIndex] || defaultItemSize;
                 offset += itemSize;
                 if(offset >= position) {
                     realViewportSize++;
@@ -354,8 +355,7 @@ exports.VirtualScrollController = Class.inherit((function() {
         setViewportPosition: function(position) {
             var that = this,
                 virtualItemsCount = that.virtualItemsCount(),
-                sizeRatio = that._sizeRatio || 1,
-                viewportItemSize = that._viewportItemSize,
+                defaultItemSize = that.getItemSize(),
                 offset = that.getContentOffset();
 
             that._position = position;
@@ -365,22 +365,20 @@ exports.VirtualScrollController = Class.inherit((function() {
                     itemSize;
 
                 do {
-                    itemSize = that._itemSizes[virtualItemsCount.begin + itemOffset] || viewportItemSize;
+                    itemSize = that._itemSizes[virtualItemsCount.begin + itemOffset] || defaultItemSize;
                     offset += itemSize;
                     itemOffset += offset < position ? 1 : (position - offset + itemSize) / itemSize;
                 } while(offset < position);
 
                 that._setViewportPositionCore(virtualItemsCount.begin + itemOffset, true);
             } else {
-                that._setViewportPositionCore(position / (viewportItemSize * sizeRatio));
+                that._setViewportPositionCore(position / defaultItemSize);
             }
         },
-        setContentSize: function(size, delta) {
+        setContentSize: function(size) {
             var that = this,
                 sizes = Array.isArray(size) && size,
                 virtualItemsCount = that.virtualItemsCount();
-
-            delta = delta || 0;
 
             if(sizes) {
                 size = sizes.reduce((a, b) => a + b, 0);
@@ -391,7 +389,7 @@ exports.VirtualScrollController = Class.inherit((function() {
             if(virtualItemsCount) {
                 if(sizes) {
                     sizes.forEach((size, index) => {
-                        that._itemSizes[virtualItemsCount.begin - delta + index] = size;
+                        that._itemSizes[virtualItemsCount.begin + index] = size;
                     });
                 }
                 var virtualContentSize = (virtualItemsCount.begin + virtualItemsCount.end + that.itemsCount()) * that._viewportItemSize;
@@ -402,6 +400,9 @@ exports.VirtualScrollController = Class.inherit((function() {
                     that._sizeRatio = 1;
                 }
             }
+        },
+        getItemSize: function() {
+            return this._viewportItemSize * this._sizeRatio;
         },
         getContentOffset: function(type) {
             var that = this,

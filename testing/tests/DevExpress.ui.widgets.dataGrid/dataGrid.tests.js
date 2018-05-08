@@ -7375,6 +7375,82 @@ QUnit.test("synchronous render and asynchronous updateDimensions during paging i
     assert.equal(contentReadyCount, 1, "contentReady is called with timeout");
 });
 
+
+var createLargeDataSource = function() {
+    return {
+        load: function(options) {
+            var items = [];
+            for(var i = options.skip; i < options.skip + options.take && i < 1000000; i++) {
+                items.push({ id: i + 1 });
+            }
+            return $.Deferred().resolve({ data: items, totalCount: 1000000 });
+        }
+    };
+};
+
+
+QUnit.test("scroll position should not be changed after change sorting if row count is large", function(assert) {
+    // arrange, act
+    var dataGrid = createDataGrid({
+        dataSource: createLargeDataSource(),
+        remoteOperations: true,
+        height: 500,
+        onRowPrepared: function(e) {
+            $(e.rowElement).css("height", 50);
+        },
+        scrolling: {
+            mode: "virtual",
+            rowRenderingMode: "virtual",
+            useNative: false
+        }
+    });
+
+    this.clock.tick(300);
+
+    dataGrid.pageIndex(1000);
+    this.clock.tick(300);
+    var scrollTop = dataGrid.getScrollable().scrollTop();
+
+    // act
+    dataGrid.columnOption("id", "sortOrder", "desc");
+    this.clock.tick(300);
+
+    // assert
+    assert.equal(dataGrid.getVisibleRows()[0].data.id, 20 * 1000 + 1, "first visible row is correct");
+    assert.equal(dataGrid.getScrollable().scrollTop(), scrollTop, "scroll top is not changed");
+});
+
+QUnit.test("scroll to next page several times should works correctly", function(assert) {
+    // arrange, act
+    var dataGrid = createDataGrid({
+        dataSource: createLargeDataSource(),
+        remoteOperations: true,
+        showColumnHeaders: false,
+        height: 500,
+        onRowPrepared: function(e) {
+            $(e.rowElement).css("height", 50);
+        },
+        scrolling: {
+            mode: "virtual",
+            rowRenderingMode: "virtual",
+            useNative: false
+        }
+    });
+
+    this.clock.tick(300);
+
+    var scrollable = dataGrid.getScrollable();
+
+    for(var pos = 101; pos <= 2501; pos += 100) {
+        scrollable.scrollTo(pos);
+        this.clock.tick(300);
+    }
+
+    // assert
+    assert.equal(dataGrid.getVisibleRows()[0].data.id, 51, "first visible row is correct");
+    assert.equal(dataGrid.getVisibleRows().length, 20, "visible rows");
+});
+
 // T551304
 QUnit.test("row should rendered after editing if scrolling mode is virtual", function(assert) {
     // arrange, act
