@@ -176,6 +176,62 @@ QUnit.test("'needCoordinates' should return workSpace date table scrollable", fu
     });
 });
 
+QUnit.test("'needRecalculateResizableArea' should return false for horizontal grouped workspace", function(assert) {
+    this.createInstance({
+        currentView: "workWeek",
+        views: [{
+            type: "workWeek",
+            groupOrientation: "horizontal"
+        }],
+        height: 500,
+        groups: ["priorityId"],
+        resources: [{
+            field: "typeId",
+            dataSource: [{ id: 1, color: "red" }]
+        },
+        {
+            field: "priorityId",
+            dataSource: [{ id: 1, color: "black" }]
+        }
+        ]
+    });
+
+    var scrollable = this.instance.getWorkSpace().getScrollable();
+    scrollable.scrollTo({ left: 0, top: 400 });
+
+    var needRecalculate = this.instance.fire("needRecalculateResizableArea");
+
+    assert.notOk(needRecalculate, "Resizable area should not be recalculated");
+});
+
+QUnit.test("'needRecalculateResizableArea' should return true for vertical grouped workspace", function(assert) {
+    this.createInstance({
+        currentView: "workWeek",
+        views: [{
+            type: "workWeek",
+            groupOrientation: "vertical"
+        }],
+        height: 500,
+        groups: ["priorityId"],
+        resources: [{
+            field: "typeId",
+            dataSource: [{ id: 1, color: "red" }]
+        },
+        {
+            field: "priorityId",
+            dataSource: [{ id: 1, color: "black" }]
+        }
+        ]
+    });
+
+    var scrollable = this.instance.getWorkSpace().getScrollable();
+    scrollable.scrollTo({ left: 0, top: 400 });
+
+    var needRecalculate = this.instance.fire("needRecalculateResizableArea");
+
+    assert.ok(needRecalculate, "Resizable area should be recalculated");
+});
+
 QUnit.test("'needCoordinates' should return correct count of coordinates for allDay recurrence appointment", function(assert) {
     this.createInstance();
     this.instance.option({
