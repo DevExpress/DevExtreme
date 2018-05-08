@@ -229,14 +229,6 @@ var Devices = Class.inherit({
             this._forced = true;
             this.changed.fire();
 
-            if(this._currentDevice.platform === "win") {
-                if(this._currentDevice.version[0] === 8) {
-                    errors.log("W0010", "The 'win8' theme", "16.1", "Use the 'generic' theme instead.");
-                } else {
-                    errors.log("W0010", "The 'win10' theme", "17.2", "Use the 'generic' theme instead.");
-                }
-            }
-
             return;
         }
 
