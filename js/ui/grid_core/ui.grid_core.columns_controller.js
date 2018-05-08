@@ -764,7 +764,7 @@ module.exports = {
                     },
                     columns = that._columns.filter(callbackFilter);
 
-                while(columns.length) {
+                while(columns.length && columns.indexOf(column) !== -1) {
                     result.unshift("columns[" + columns.indexOf(column) + "]");
 
                     column = bandColumnsCache.columnParentByIndex[column.index];
@@ -1248,7 +1248,8 @@ module.exports = {
                     optionSetter = dataCoreUtils.compileSetter(optionName);
                     optionSetter(column, value, { functionsAsIs: true });
                     fullOptionName = getColumnFullPath(that, column);
-                    fireOptionChanged(that, {
+                    fullOptionName = getColumnFullPath(that, column);
+                    fullOptionName && fireOptionChanged(that, {
                         fullOptionName: fullOptionName,
                         optionName: optionName,
                         value: value,
