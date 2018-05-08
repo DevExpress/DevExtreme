@@ -293,7 +293,11 @@ var VirtualScrollingRowsViewExtender = (function() {
             if(dataSource && e) {
                 var itemCount = e.items ? e.items.length : 20;
                 var viewportSize = that._dataController.viewportSize() || 20;
-                dataSource._renderTime = (new Date() - startRenderDate) * viewportSize / itemCount;
+                if(isVirtualRowRendering(that)) {
+                    dataSource._renderTime = (new Date() - startRenderDate) * viewportSize / itemCount;
+                } else {
+                    dataSource._renderTime = (new Date() - startRenderDate);
+                }
             }
         },
 
@@ -890,8 +894,9 @@ module.exports = {
                             dataSource = this._dataSource;
 
                         if(rowsScrollController) {
-                            rowsScrollController.setViewportPosition.apply(rowsScrollController, arguments);
-                            dataSource && dataSource.setViewportItemIndex(rowsScrollController.getViewportItemIndex());
+                            rowsScrollController.setViewportPosition.apply(rowsScrollController, arguments).done(function() {
+                                dataSource && dataSource.setViewportItemIndex(rowsScrollController.getViewportItemIndex());
+                            });
                         } else {
                             dataSource && dataSource.setViewportPosition.apply(dataSource, arguments);
                         }
