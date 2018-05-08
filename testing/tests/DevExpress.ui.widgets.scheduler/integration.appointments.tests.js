@@ -6033,6 +6033,52 @@ QUnit.test("Appt shouldn't be resized to the group border in horizontal grouped 
     assert.equal($appointment.position().top + $appointment.outerHeight(), cellHeight * 8, "Correct bottom coordinate");
 });
 
+QUnit.test("Appt shouldn't be resized to the group border after scrolling in horizontal grouped workspace Day", function(assert) {
+    this.createInstance({
+        dataSource: [{
+            text: "a",
+            startDate: new Date(2018, 2, 16, 14),
+            endDate: new Date(2018, 2, 16, 15),
+            id: 2
+        }],
+        currentDate: new Date(2018, 2, 16),
+        views: [{
+            type: "day",
+            groupOrientation: "vertical"
+        }],
+        currentView: "day",
+        groups: ["id"],
+        resources: [
+            {
+                field: "id",
+                dataSource: [
+                    { id: 1, text: "one" },
+                    { id: 2, text: "two" }
+                ]
+            }
+        ],
+        editing: true,
+        startDayHour: 12,
+        endDayHour: 16,
+        showAllDayPanel: true,
+        height: 500
+    });
+
+    var scrollable = this.instance.getWorkSpace().getScrollable();
+    scrollable.scrollTo({ left: 0, top: 400 });
+
+    var $element = $(this.instance.$element()),
+        cellHeight = $(this.instance.$element()).find("." + DATE_TABLE_CELL_CLASS).eq(0).outerHeight(),
+        pointer = pointerMock($element.find(".dx-resizable-handle-top").eq(0)).start();
+
+    pointer.dragStart().drag(0, -cellHeight * 5).dragEnd();
+
+    var $appointment = $element.find("." + APPOINTMENT_CLASS).eq(0);
+
+    assert.equal($appointment.position().top, 500, "Correct top coordinate");
+    assert.equal($appointment.outerHeight(), cellHeight * 6, "Correct height");
+});
+
 QUnit.test("Appointment inside vertical grouped view should have a right resizable area in Day view", function(assert) {
     this.createInstance({
         dataSource: [{

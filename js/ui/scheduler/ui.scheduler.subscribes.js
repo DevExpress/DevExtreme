@@ -236,6 +236,10 @@ var subscribes = {
         options.callback(area);
     },
 
+    needRecalculateResizableArea: function() {
+        return this.getWorkSpace().needRecalculateResizableArea();
+    },
+
     getDraggableAppointmentArea: function(options) {
         options.callback(this.getWorkSpaceScrollableContainer());
     },
