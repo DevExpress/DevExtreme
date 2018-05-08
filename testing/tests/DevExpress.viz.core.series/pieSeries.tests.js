@@ -1803,6 +1803,7 @@ var checkTwoGroups = function(assert, series) {
         // assert
         $.each(series.getPoints(), function(i, point) {
             assert.ok(point.setLabelEllipsis.called, "label ellipsis, point " + i);
+            assert.deepEqual(point.setLabelEllipsis.lastCall.args, [true], "move labels from center");
             assert.ok(point.setLabelTrackerData.called, "label tracker data, point " + i);
             assert.ok(point.updateLabelCoord.called, "label coords, point " + i);
             assert.deepEqual(point.updateLabelCoord.lastCall.args, [true], "move labels from center");
