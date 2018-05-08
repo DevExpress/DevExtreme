@@ -6075,7 +6075,7 @@ QUnit.test("Appt shouldn't be resized to the group border after scrolling in hor
 
     var $appointment = $element.find("." + APPOINTMENT_CLASS).eq(0);
 
-    assert.equal($appointment.position().top, 500, "Correct top coordinate");
+    assert.roughEqual($appointment.position().top, 500, 1.1, "Correct top coordinate");
     assert.equal($appointment.outerHeight(), cellHeight * 6, "Correct height");
 });
 
