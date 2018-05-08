@@ -344,13 +344,41 @@ QUnit.module("API", {
     }
 });
 
-QUnit.test("exportFromMarkup method", function(assert) {
+QUnit.test("exportFromMarkup method. Defaults", function(assert) {
+    // arrange
+    var options = {
+            width: 600,
+            height: 400
+        },
+        markup = "testMarkup";
+
+    // act
+    exportModule.exportFromMarkup(markup, options);
+
+    // assert
+    assert.equal(clientExporter.export.callCount, 1, "Export was called");
+    assert.deepEqual(clientExporter.export.getCall(0).args[0], "testMarkup", "Export data");
+    assert.deepEqual(clientExporter.export.getCall(0).args[1], {
+        format: "PNG",
+        fileName: "file",
+        width: 600,
+        height: 400,
+        margin: 10,
+        fileSavingAction: undefined,
+        exportingAction: undefined,
+        exportedAction: undefined
+    }, "Export options");
+});
+
+QUnit.test("exportFromMarkup method. Set options", function(assert) {
     // arrange
     var options = {
             format: "jpeg",
+            fileName: "file1",
             proxyUrl: "testUrl",
             width: 600,
             height: 400,
+            margin: 0,
             backgroundColor: "#00ff00",
             onFileSaving: "file saving callback",
             onExporting: "exporting callback",
@@ -366,10 +394,11 @@ QUnit.test("exportFromMarkup method", function(assert) {
     assert.deepEqual(clientExporter.export.getCall(0).args[0], "testMarkup", "Export data");
     assert.deepEqual(clientExporter.export.getCall(0).args[1], {
         format: "JPEG",
-        fileName: "file",
+        fileName: "file1",
         proxyUrl: "testUrl",
         width: 600,
         height: 400,
+        margin: 0,
         backgroundColor: "#00ff00",
         onFileSaving: "file saving callback",
         onExporting: "exporting callback",

@@ -49,7 +49,7 @@ var staticMethods = {
     */
     refreshTheme: function() { },
     /**
-    * @name vizmethods.getTheme 
+    * @name vizmethods.getTheme
     * @publicName getTheme(theme)
     * @param1 theme:string
     * @return object
@@ -72,6 +72,7 @@ var staticMethods = {
     * @param2_field7 onExporting:function(e)
     * @param2_field8 onExported:function
     * @param2_field9 onFileSaving:function(e)
+    * @param2_field5 margin:number
     * @static
     * @module viz/export
     * @export exportFromMarkup
