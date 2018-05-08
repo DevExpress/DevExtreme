@@ -11,6 +11,7 @@ var extend = require("../../core/utils/extend").extend,
     imageExporter = clientExporter.image,
     svgExporter = clientExporter.svg,
     pdfExporter = clientExporter.pdf,
+    isDefined = require("../../core/utils/type").isDefined,
 
     hoverEvent = require("../../events/hover"),
     pointerEvents = require("../../events/pointer"),
@@ -202,6 +203,7 @@ exports.exportFromMarkup = function(markup, options) {
     options.exportingAction = options.onExporting;
     options.exportedAction = options.onExported;
     options.fileSavingAction = options.onFileSaving;
+    options.margin = isDefined(options.margin) ? options.margin : MARGIN;
 
     clientExporter.export(markup, options, getCreatorFunc(options.format));
 };
