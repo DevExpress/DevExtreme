@@ -735,7 +735,7 @@ module.exports = {
                         options.column = formItem ? formItem.column : options.column;
                         return view.getContextMenuItems && view.getContextMenuItems(options);
                     }
-                    return this.callBase(options);
+                    return this.callBase && this.callBase(options);
                 },
 
                 isClickableElement: function($target) {
