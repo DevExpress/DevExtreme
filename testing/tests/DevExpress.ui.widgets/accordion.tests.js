@@ -211,6 +211,7 @@ QUnit.test("Special title template in Material theme", function(assert) {
 
     var titleCaption = this.$element.find(".dx-accordion-item-title-caption");
     assert.equal(titleCaption.length, this.items.length, "title has caption elements");
+    assert.equal(titleCaption.first().text(), "Title 1", "title has right text");
 
     themes.isMaterial = origIsMaterial;
 });

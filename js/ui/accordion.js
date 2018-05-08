@@ -170,7 +170,7 @@ var Accordion = CollectionWidget.inherit({
                 options: {
                     itemTitleTemplate: function(data) {
                         return $("<div>")
-                            .text(data.text)
+                            .text(data.title)
                             .addClass(ACCORDION_ITEM_TITLE_CAPTION_CLASS);
                     },
                      /**
