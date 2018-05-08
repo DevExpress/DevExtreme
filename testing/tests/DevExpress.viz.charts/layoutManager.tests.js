@@ -385,20 +385,20 @@ QUnit.test("2 series, labels are fit in canvas", function(assert) {
     assert.deepEqual(series[0].setVisibleArea.args[0][0], {
         bottom: 20,
         height: 400,
-        left: 320.5,
-        right: 330.5,
+        left: 320,
+        right: 330,
         top: 10,
         width: 1000
     });
 
     assert.equal(series[1].correctLabelRadius.callCount, 1);
-    assert.equal(series[1].correctLabelRadius.args[0][0], 174);
+    assert.equal(series[1].correctLabelRadius.args[0][0], 184);
     assert.equal(series[1].setVisibleArea.callCount, 1);
     assert.deepEqual(series[1].setVisibleArea.args[0][0], {
         bottom: 20,
         height: 400,
-        left: 300.5,
-        right: 310.5,
+        left: 300,
+        right: 310,
         top: 10,
         width: 1000
     });
@@ -422,8 +422,8 @@ QUnit.test("2 series, labels are not fit in canvas", function(assert) {
     assert.deepEqual(series[0].setVisibleArea.args[0][0], {
         bottom: 20,
         height: 400,
-        left: 32.25,
-        right: 42.25,
+        left: 32,
+        right: 42,
         top: 10,
         width: 300
     });
@@ -534,8 +534,8 @@ QUnit.test("2 series, first series has lables inside", function(assert) {
     assert.deepEqual(series[1].setVisibleArea.args[0][0], {
         bottom: 20,
         height: 400,
-        left: 325.5,
-        right: 335.5,
+        left: 325,
+        right: 335,
         top: 10,
         width: 1000
     });
@@ -558,8 +558,8 @@ QUnit.test("3 series, labels one of the series have inside position", function(a
     assert.deepEqual(series[0].setVisibleArea.args[0][0], {
         bottom: 20,
         height: 400,
-        left: 325.5,
-        right: 335.5,
+        left: 325,
+        right: 335,
         top: 10,
         width: 1000
     });
@@ -568,13 +568,13 @@ QUnit.test("3 series, labels one of the series have inside position", function(a
     assert.equal(series[1].setVisibleArea.callCount, 0);
 
     assert.equal(series[2].correctLabelRadius.callCount, 1);
-    assert.equal(series[2].correctLabelRadius.args[0][0], 169);
+    assert.equal(series[2].correctLabelRadius.args[0][0], 179);
     assert.equal(series[2].setVisibleArea.callCount, 1);
     assert.deepEqual(series[2].setVisibleArea.args[0][0], {
         bottom: 20,
         height: 400,
-        left: 305.5,
-        right: 315.5,
+        left: 305,
+        right: 315,
         top: 10,
         width: 1000
     });
@@ -599,8 +599,8 @@ QUnit.test("3 series, labels one of the series have inside position, not fit in 
     assert.deepEqual(series[0].setVisibleArea.args[0][0], {
         bottom: 20,
         height: 400,
-        left: 32.25,
-        right: 42.25,
+        left: 32,
+        right: 42,
         top: 10,
         width: 300
     });
@@ -643,7 +643,7 @@ QUnit.test("correctPieLabelRadius", function(assert) {
     });
 
     assert.equal(series[1].correctLabelRadius.callCount, 1);
-    assert.equal(series[1].correctLabelRadius.args[0][0], 174);
+    assert.equal(series[1].correctLabelRadius.args[0][0], 184);
     assert.equal(series[1].setVisibleArea.callCount, 1);
     assert.deepEqual(series[1].setVisibleArea.args[0][0], {
         bottom: 20,

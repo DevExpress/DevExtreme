@@ -199,7 +199,7 @@ module.exports = _extend({}, symbolPoint, {
         return { x: x, y: y };
     },
 
-    setLabelEllipsis: function() {
+    setLabelEllipsis: function(moveLabelsFromCenter) {
         var that = this,
             label = that._label,
             box = label.getBoundingRect(),
@@ -214,7 +214,9 @@ module.exports = _extend({}, symbolPoint, {
                 width = visibleArea.maxX - visibleArea.minX;
             }
         } else {
-            if(box.x + width > visibleArea.maxX) {
+            if(moveLabelsFromCenter && box.x < that.centerX && box.width + box.x > that.centerX) {
+                width = Math.floor((visibleArea.maxX - visibleArea.minX) / 2);
+            } else if(box.x + width > visibleArea.maxX) {
                 width = visibleArea.maxX - box.x;
             } else if(box.x < visibleArea.minX) {
                 width = box.x + width - visibleArea.minX;
