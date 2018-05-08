@@ -56,6 +56,17 @@ var FilterSyncController = modules.Controller.inherit((function() {
         };
     };
 
+    var getConditionFromFilterRow = function(column) {
+        var value = column.filterValue;
+        if(isDefined(value)) {
+            let operation = column.selectedFilterOperation || column.defaultFilterOperation || utils.getDefaultOperation(column),
+                filter = [column.dataField, operation, column.filterValue];
+            return filter;
+        } else {
+            return null;
+        }
+    };
+
     var getConditionFromHeaderFilter = function(column) {
         var selectedOperation,
             value,
@@ -123,10 +134,8 @@ var FilterSyncController = modules.Controller.inherit((function() {
         },
 
         _getSyncFilterRow: function(filterValue, column) {
-            var value = column.filterValue;
-            if(isDefined(value)) {
-                var operation = column.selectedFilterOperation || column.defaultFilterOperation || utils.getDefaultOperation(column),
-                    filter = [column.dataField, operation, value];
+            var filter = getConditionFromFilterRow(column);
+            if(isDefined(filter)) {
                 return utils.syncFilters(filterValue, filter);
             } else {
                 return utils.removeFieldConditionsFromFilter(filterValue, column.dataField);
@@ -140,6 +149,24 @@ var FilterSyncController = modules.Controller.inherit((function() {
             } else {
                 return utils.removeFieldConditionsFromFilter(filterValue, column.dataField);
             }
+        },
+
+        getFilterValueFromState: function(state) {
+            if(state.filterValue || !this.option("filterSyncEnabled")) {
+                return state.filterValue || null;
+            }
+
+            var filterValue = ["and"],
+                columns = state.columns;
+
+            columns && columns.forEach(column => {
+                let headerFilter = getConditionFromHeaderFilter(column),
+                    filterRow = getConditionFromFilterRow(column);
+
+                headerFilter && utils.addItem(headerFilter, filterValue);
+                filterRow && utils.addItem(filterRow, filterValue);
+            });
+            return utils.getNormalizedFilter(filterValue, columns);
         },
 
         syncFilterRow: function(column, value) {

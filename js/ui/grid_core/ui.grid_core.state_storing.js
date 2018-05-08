@@ -176,6 +176,7 @@ module.exports = {
                         selectionFilter = state.selectionFilter,
                         exportController = that.getController("export"),
                         columnsController = that.getController("columns"),
+                        filterSyncController = that.getController("filterSync"),
                         scrollingMode = that.option("scrolling.mode");
 
                     that.component.beginUpdate();
@@ -200,7 +201,7 @@ module.exports = {
 
                     that.option("searchPanel.text", searchText || "");
 
-                    that.option("filterValue", state.filterValue || null);
+                    that.option("filterValue", filterSyncController ? filterSyncController.getFilterValueFromState(state) : state.filterValue || null);
 
                     that.option("filterPanel.filterEnabled", state.filterPanel ? state.filterPanel.filterEnabled : true);
 
