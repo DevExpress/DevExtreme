@@ -1337,3 +1337,14 @@ QUnit.test("caret should not move out of the boundaries when non-available digit
 
     assert.equal(this.keyboard.caret().start, 4, "caret should not move");
 });
+
+QUnit.testInActiveWindow("caret should be at start boundary on focusin", function(assert) {
+    this.instance.option({
+        format: "$ #0",
+        value: 1.23
+    });
+
+    this.input.focus();
+
+    assert.deepEqual(this.keyboard.caret(), { start: 2, end: 2 }, "caret is right");
+});
