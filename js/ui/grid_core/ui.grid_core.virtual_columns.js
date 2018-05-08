@@ -8,12 +8,13 @@ var DEFAULT_COLUMN_WIDTH = 50;
 var VirtualScrollingRowsViewExtender = {
     _handleScroll: function(e) {
         var that = this,
+            scrollable = this.getScrollable(),
             left = e.scrollOffset.left;
 
         that.callBase.apply(that, arguments);
 
-        if(that.option("rtlEnabled")) {
-            left = e.component.$content().width() - e.component.$element().width() - left;
+        if(that.option("rtlEnabled") && scrollable) {
+            left = scrollable.$content().width() - scrollable.$element().width() - left;
         }
 
         that._columnsController.setScrollPosition(left);

@@ -5251,6 +5251,28 @@ QUnit.test("rtlEnabled change", function(assert) {
     assert.ok($(dataGrid.$element()).hasClass("dx-rtl"), "dx-rtl class added");
 });
 
+// T628787
+QUnit.test("rtlEnabled change after scroll", function(assert) {
+    // arrange, act
+    var dataGrid = createDataGrid({
+        dataSource: [{}, {}, {}, {}],
+        columns: ["test"],
+        height: 50,
+        loadingTimeout: undefined,
+        scrolling: {
+            useNative: false
+        }
+    });
+
+    dataGrid.getScrollable().scrollTo(10);
+
+    // act
+    dataGrid.option("rtlEnabled", true);
+
+    // assert
+    assert.ok($(dataGrid.$element()).hasClass("dx-rtl"), "dx-rtl class added");
+});
+
 // T288385
 QUnit.test("disabled change", function(assert) {
     // arrange, act
