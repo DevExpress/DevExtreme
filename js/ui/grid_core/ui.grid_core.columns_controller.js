@@ -1248,7 +1248,6 @@ module.exports = {
                     optionSetter = dataCoreUtils.compileSetter(optionName);
                     optionSetter(column, value, { functionsAsIs: true });
                     fullOptionName = getColumnFullPath(that, column);
-                    fullOptionName = getColumnFullPath(that, column);
                     fullOptionName && fireOptionChanged(that, {
                         fullOptionName: fullOptionName,
                         optionName: optionName,
