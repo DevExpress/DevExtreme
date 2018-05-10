@@ -50,7 +50,6 @@ Tracker.prototype = {
                 isRootDown = false;
             } else {
                 if(parameters.getData(e) !== undefined) {
-                    e.preventDefault();
                     isRootDown = true;
                 }
                 moveHandler(e);
