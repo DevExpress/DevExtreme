@@ -393,14 +393,22 @@ var Switch = Editor.inherit({
     _swipeEndHandler: function(e) {
         var that = this,
             offsetDirection = this._offsetDirection(),
-            toConfig = {};
+            toInnerConfig = {},
+            toHandleConfig = {};
 
-        var offset = this._getCalcOffset(that.option("value"), e.event.targetOffset);
+        var innerOffset = this._getCalcOffset(that.option("value"), e.event.targetOffset),
+            handleOffset = this._getHandleOffset(that.option("value"), e.event.targetOffset);
 
-        toConfig["transform"] = " translateX(" + offset + ")";
+        toInnerConfig["transform"] = " translateX(" + innerOffset + ")";
+        toHandleConfig["transform"] = " translateX(" + handleOffset + ")";
+
+        fx.animate(this._$handle, {
+            to: toHandleConfig,
+            duration: 0,
+        });
 
         fx.animate(this._$switchInner, {
-            to: toConfig,
+            to: toInnerConfig,
             duration: SWITCH_ANIMATION_DURATION,
             complete: function() {
                 that._swiping = false;
