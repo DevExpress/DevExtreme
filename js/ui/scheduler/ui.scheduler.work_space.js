@@ -982,7 +982,7 @@ var SchedulerWorkSpace = Widget.inherit({
     _getGroupIndexByResourceId: function(id) {
         var groups = this.option("groups"),
             groupKey = Object.keys(id)[0],
-            groupValue = Object.values(id)[0],
+            groupValue = id[groupKey],
             tree = this.invoke("createResourcesTree", groups),
             index = 0;
 
