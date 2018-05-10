@@ -36,8 +36,43 @@
     }
 }
 
+.dx-switch-inner {
+    transform: translateX(calc(-50%));
+}
+
+.dx-switch-handle {
+    transform: translateX(calc(0%));
+}
+
+.dx-switch-on-value {
+    .dx-switch-inner {
+        transform: translateX(calc(0%));
+    }
+
+    .dx-switch-handle {
+        transform: translateX(calc(-100%));
+    }
+}
 .dx-rtl {
     &.dx-switch-wrapper, .dx-switch-wrapper {
         text-align: right;
+    }
+
+    .dx-switch-inner {
+        transform: translateX(calc(50%));
+    }
+
+    .dx-switch-handle {
+        transform: translateX(calc(-100%));
+    }
+
+    &.dx-switch-on-value {
+        .dx-switch-inner {
+            transform: translateX(calc(0%));
+        }
+
+        .dx-switch-handle {
+            transform: translateX(calc(0%));
+        }
     }
 }
