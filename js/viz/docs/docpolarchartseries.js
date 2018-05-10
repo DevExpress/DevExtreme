@@ -738,7 +738,7 @@ var CommonPolarChartSeries = {
         highValueField: undefined,
         /**
         * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.valueErrorBar.type
-        * @type Enums.valueErrorBarType
+        * @type Enums.ValueErrorBarType
         * @default undefined
         */
         type: undefined,

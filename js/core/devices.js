@@ -249,7 +249,7 @@ var Devices = Class.inherit({
     },
 
     /**
-    * @name DevicesObjectmethods.real
+    * @name DevicesObjectMethods.real
     * @publicName real()
     * @return Device
     */
@@ -265,7 +265,7 @@ var Devices = Class.inherit({
     },
 
     /**
-     * @name DevicesObjectmethods.orientation
+     * @name DevicesObjectMethods.orientation
      * @publicName orientation()
      * @return String
      */
@@ -460,7 +460,7 @@ if(!devices.isForced() && devices.current().platform === "win") {
 }
 
 /**
- * @name Devices
+ * @name devices
  * @type DevicesObject
  * @namespace DevExpress
  * @hidden
