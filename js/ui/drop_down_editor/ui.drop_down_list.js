@@ -25,6 +25,7 @@ var LIST_ITEM_SELECTOR = ".dx-list-item",
     DROPDOWNLIST_POPUP_WRAPPER_CLASS = "dx-dropdownlist-popup-wrapper",
 
     SKIP_GESTURE_EVENT_CLASS = "dx-skip-gesture-event",
+    SEARCH_EVENT = "input",
 
     SEARCH_MODES = ["startswith", "contains", "endwith", "notcontains"];
 
@@ -336,11 +337,6 @@ var DropDownList = DropDownEditor.inherit({
         this.callBase();
 
         this._defaultTemplates["item"] = new ChildDefaultTemplate("item", this);
-    },
-
-    _renderField: function() {
-        this.callBase();
-        eventsEngine.on(this._input(), "input", this._setFocusPolicy.bind(this));
     },
 
     _saveFocusOnWidget: function(e) {
@@ -672,11 +668,12 @@ var DropDownList = DropDownEditor.inherit({
     },
 
     _getSearchEvent: function() {
-        return eventUtils.addNamespace("keyup", this.NAME + "Search");
+        return eventUtils.addNamespace(SEARCH_EVENT, this.NAME + "Search");
     },
 
     _renderEvents: function() {
         this.callBase();
+        eventsEngine.on(this._input(), "input", this._setFocusPolicy.bind(this));
 
         if(this._shouldRenderSearchEvent()) {
             eventsEngine.on(this._input(), this._getSearchEvent(), this._searchHandler.bind(this));

@@ -563,6 +563,22 @@ QUnit.test("searchTimeout should be refreshed after next symbol entered", functi
     assert.equal(loadHandler.callCount, 2, "dataSource loaded when full time is over after last input character");
 });
 
+QUnit.test("dropDownList should search for a pasted value", function(assert) {
+    var $element = $("#dropDownList").dxDropDownList({
+            searchEnabled: true,
+            dataSource: ["1", "2", "3"]
+        }),
+        instance = $element.dxDropDownList("instance"),
+        searchSpy = sinon.spy(instance, "_searchDataSource"),
+        $input = $element.find("input"),
+        kb = keyboardMock($input);
+
+    kb.input("2");
+    this.clock.tick(600);
+
+    assert.equal(searchSpy.callCount, 1, "widget searched for a suitable values");
+});
+
 QUnit.test("valueExpr should not be passed to the list if it is 'this'", function(assert) {
     // note: selection can not work with this and function as keyExpr.
     // Allowing of this breaks the case when store key is specified and deferred datasource is used
