@@ -694,9 +694,13 @@ var DropDownList = DropDownEditor.inherit({
         return eventUtils.addNamespace(SEARCH_EVENT, this.NAME + "Search");
     },
 
+    _getSetFocusPolicyEvent: function() {
+        return eventUtils.addNamespace("input", this.NAME + "FocusPolicy");
+    },
+
     _renderEvents: function() {
         this.callBase();
-        eventsEngine.on(this._input(), "input", this._setFocusPolicy.bind(this));
+        eventsEngine.on(this._input(), this._getSetFocusPolicyEvent(), this._setFocusPolicy.bind(this));
 
         if(this._shouldRenderSearchEvent()) {
             eventsEngine.on(this._input(), this._getSearchEvent(), this._searchHandler.bind(this));
@@ -709,6 +713,8 @@ var DropDownList = DropDownEditor.inherit({
 
     _refreshEvents: function() {
         eventsEngine.off(this._input(), this._getSearchEvent());
+        eventsEngine.off(this._input(), this._getSetFocusPolicyEvent());
+
         this.callBase();
     },
 
