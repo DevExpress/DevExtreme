@@ -933,16 +933,16 @@ QUnit.test("getAggregationInfo. Do not generate aggregation ticks in breaks", fu
         argumentType: "numeric",
         type: "continuous",
         aggregationInterval: 2,
-        breaks: [{ startValue: 2, endValue: 8 }]
+        breaks: [{ startValue: -6, endValue: -2 }, { startValue: 2, endValue: 8 }, { startValue: 14, endValue: 18 }]
     });
 
-    this.axis.setBusinessRange({ minVisible: 1, maxVisible: 10 });
+    this.axis.setBusinessRange({ min: -40, max: 40, minVisible: 1, maxVisible: 10 });
     this.axis.createTicks(canvas(1000));
     // act
     const aggregationInfo = this.axis.getAggregationInfo(undefined, {});
 
     assert.strictEqual(aggregationInfo.interval, 2);
-    assert.deepEqual(aggregationInfo.ticks, [-8, -6, -4, -2, 0, 2, 8, 10, 12, 14, 16, 18, 20]);
+    assert.deepEqual(aggregationInfo.ticks, [-8, -6, -2, 0, 2, 8, 10, 12, 14, 18, 20]);
 });
 
 QUnit.test("getAggregationInfo. Ticks was generated with endOnTick", function(assert) {
