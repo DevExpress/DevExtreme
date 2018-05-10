@@ -1094,3 +1094,31 @@ QUnit.test("Recurrence exception should be adjusted by scheduler timezone after 
 
     assert.notOk($appointment.length, "appt is deleted");
 });
+
+QUnit.test("Recurrence exception should be adjusted by appointment timezone after deleting of the single appt", function(assert) {
+    this.createInstance({
+        dataSource: [{
+            text: "Recruiting students",
+            startDate: new Date(2018, 2, 26, 10, 0),
+            endDate: new Date(2018, 2, 26, 11, 0),
+            recurrenceRule: "FREQ=DAILY",
+            startDateTimeZone: "Australia/Canberra",
+            endDateTimeZone: "Australia/Canberra"
+        }],
+        views: ["day"],
+        currentView: "day",
+        currentDate: new Date(2018, 3, 1)
+    });
+
+
+    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(0).trigger("dxclick");
+    this.clock.tick(300);
+
+    $(".dx-scheduler-appointment-tooltip-buttons .dx-button").eq(0).trigger("dxclick");
+    $(".dx-dialog-buttons .dx-button").eq(1).trigger("dxclick");
+
+    var $appointment = this.instance.$element().find(".dx-scheduler-appointment");
+
+    assert.notOk($appointment.length, "appt is deleted");
+    assert.equal(this.instance.option("dataSource")[0].recurrenceException, "20180401T100000", "exception is correct");
+});
