@@ -1288,7 +1288,7 @@ Axis.prototype = {
             if(workWeek !== businessInterval && weekend < businessInterval) {
                 weekendsCount = Math.ceil(businessInterval / dateIntervals.week);
                 businessInterval = weekend >= businessInterval ? dateIntervals.day : businessInterval - (weekend * weekendsCount);
-            } else if(weekend >= businessInterval) {
+            } else if(weekend >= businessInterval && businessInterval > dateIntervals.day) {
                 businessInterval = dateIntervals.day;
             }
         }
