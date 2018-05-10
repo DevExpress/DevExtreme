@@ -34,8 +34,6 @@ var SWITCH_CLASS = "dx-switch",
 
     LABEL_ON_CLASS = "dx-switch-on",
     LABEL_OFF_CLASS = "dx-switch-off",
-    LABEL_ON_SELECTOR = "." + LABEL_ON_CLASS,
-    LABEL_OFF_SELECTOR = "." + LABEL_OFF_CLASS,
 
     INNER_TRANSFORM_RANGE = {
         left: "translateX(calc(-50%))",
@@ -113,33 +111,6 @@ QUnit.test("onContentReady fired after the widget is fully ready", function(asse
     });
 });
 
-QUnit.test("default labels", function(assert) {
-    var element = $("#switch").dxSwitch();
-
-    var inner = element.find(INNER_SELECTOR);
-
-    var labelOnEl = inner.find(LABEL_ON_SELECTOR);
-    assert.equal($.trim(labelOnEl.text()), "ON");
-
-    var labelOffEl = inner.find(LABEL_OFF_SELECTOR);
-    assert.equal($.trim(labelOffEl.text()), "OFF");
-});
-
-QUnit.test("onText/offText on init", function(assert) {
-    var element = $("#switch").dxSwitch({
-        onText: "customOn",
-        offText: "customOff"
-    });
-
-    var inner = element.find(INNER_SELECTOR);
-
-    var textOnEl = inner.find(LABEL_ON_SELECTOR);
-    assert.equal($.trim(textOnEl.text()), "customOn");
-
-    var textOffEl = inner.find(LABEL_OFF_SELECTOR);
-    assert.equal($.trim(textOffEl.text()), "customOff");
-});
-
 QUnit.test("onText/offText options changing", function(assert) {
     var $element = $("#switch").dxSwitch({}),
         instance = $element.dxSwitch("instance");
@@ -153,28 +124,6 @@ QUnit.test("onText/offText options changing", function(assert) {
     assert.equal($element.find("." + LABEL_OFF_CLASS).text(), "0");
     instance.option("offText", "00");
     assert.equal($element.find("." + LABEL_OFF_CLASS).text(), "00");
-});
-
-QUnit.test("default ui state", function(assert) {
-    var element = $("#switch").dxSwitch();
-
-    var inner = element.find(INNER_SELECTOR),
-        handle = element.find(HANDLE_SELECTOR);
-
-    assert.strictEqual(UIState(inner, handle), false, "Default UI state is right");
-});
-
-QUnit.test("ui state with options", function(assert) {
-    var element = $("#switch").dxSwitch({
-        onText: "customOn",
-        offText: "customOff",
-        value: true
-    });
-
-    var inner = element.find(INNER_SELECTOR),
-        handle = element.find(HANDLE_SELECTOR);
-
-    assert.strictEqual(UIState(inner, handle), true, "UI state with options is right");
 });
 
 QUnit.test("onValueChanged option", function(assert) {
@@ -265,24 +214,6 @@ QUnit.test("the position of handle for invisible and visible switch should be eq
 });
 
 QUnit.module("hidden input");
-
-QUnit.test("input should be able to get the 'true' value", function(assert) {
-    var $element = $("#switch").dxSwitch({
-            value: true
-        }),
-        $input = $element.find("input");
-
-    assert.equal($input.val(), "true", "the input value is 'true'");
-});
-
-QUnit.test("input should be able to get the 'false' value", function(assert) {
-    var $element = $("#switch").dxSwitch({
-            value: false
-        }),
-        $input = $element.find("input");
-
-    assert.equal($input.val(), "false", "the input value is 'false'");
-});
 
 QUnit.test("the hidden input should change its value on widget value change", function(assert) {
     var $element = $("#switch").dxSwitch({
@@ -590,20 +521,3 @@ QUnit.test("state changes on right and left key press correctly in rtl mode", fu
     assert.equal(instance.option("value"), false, "value has been change");
 });
 
-QUnit.module("aria accessibility");
-
-QUnit.test("aria properties", function(assert) {
-    var $element = $("#switch").dxSwitch({
-            onText: 'on test',
-            offText: 'off test',
-            value: true
-        }),
-        instance = $element.dxSwitch("instance");
-
-    assert.equal($element.attr("aria-label"), "on test", "aria 'on state' label is correct");
-    assert.equal($element.attr("aria-pressed"), "true", "aria 'on state' pressed attribute is correct");
-
-    instance.option("value", false);
-    assert.equal($element.attr("aria-label"), "off test", "aria 'off state' label is correct");
-    assert.equal($element.attr("aria-pressed"), "false", "aria 'off state' pressed attribute is correct");
-});
