@@ -1252,6 +1252,108 @@ QUnit.test("margins calculation. Range interval with tickInterval + tickInterval
     });
 });
 
+QUnit.test("margins calculation. Work week calculation: interval > work week", function(assert) {
+    var getTickGeneratorReturns = function(tickInterval) {
+        return {
+            ticks: [],
+            minorTicks: [],
+            tickInterval: tickInterval || 10
+        };
+    };
+
+    this.tickGeneratorSpy = sinon.stub();
+    this.tickGeneratorSpy.returns(getTickGeneratorReturns({ weeks: 1 }));
+
+    var axis = this.createAxis(true, {
+        valueMarginsEnabled: true,
+        dataType: "datetime",
+        workdaysOnly: true,
+        workWeek: [1, 2, 3, 4, 5]
+    });
+
+    axis.setBusinessRange({
+        min: new Date(2018, 2, 27),
+        max: new Date(2018, 3, 27)
+    });
+    axis.updateCanvas(this.canvas);
+
+    axis.setMarginOptions({
+        checkInterval: true
+    });
+
+    axis.createTicks(this.canvas);
+
+    assert.equal(this.translator.stub("updateBusinessRange").lastCall.args[0].interval, 5 * 1000 * 3600 * 24, "interval");
+});
+
+QUnit.test("margins calculation. Work week calculation: work week === interval ", function(assert) {
+    var getTickGeneratorReturns = function(tickInterval) {
+        return {
+            ticks: [],
+            minorTicks: [],
+            tickInterval: tickInterval || 10
+        };
+    };
+
+    this.tickGeneratorSpy = sinon.stub();
+    this.tickGeneratorSpy.returns(getTickGeneratorReturns({ days: 4 }));
+
+    var axis = this.createAxis(true, {
+        valueMarginsEnabled: true,
+        dataType: "datetime",
+        workdaysOnly: true,
+        workWeek: [1, 2, 3, 4]
+    });
+
+    axis.setBusinessRange({
+        min: new Date(2018, 2, 27),
+        max: new Date(2018, 3, 27)
+    });
+    axis.updateCanvas(this.canvas);
+
+    axis.setMarginOptions({
+        checkInterval: true
+    });
+
+    axis.createTicks(this.canvas);
+
+    assert.equal(this.translator.stub("updateBusinessRange").lastCall.args[0].interval, 4 * 1000 * 3600 * 24, "interval");
+});
+
+QUnit.test("margins calculation. Work week calculation: weekend >= interval ", function(assert) {
+    var getTickGeneratorReturns = function(tickInterval) {
+        return {
+            ticks: [],
+            minorTicks: [],
+            tickInterval: tickInterval || 10
+        };
+    };
+
+    this.tickGeneratorSpy = sinon.stub();
+    this.tickGeneratorSpy.returns(getTickGeneratorReturns({ days: 2 }));
+
+    var axis = this.createAxis(true, {
+        valueMarginsEnabled: true,
+        dataType: "datetime",
+        workdaysOnly: true,
+        workWeek: [1, 2, 3, 4, 5]
+    });
+
+    axis.setBusinessRange({
+        min: new Date(2018, 2, 27),
+        max: new Date(2018, 3, 27)
+    });
+    axis.updateCanvas(this.canvas);
+
+    axis.setMarginOptions({
+        checkInterval: true
+    });
+
+    axis.createTicks(this.canvas);
+
+    assert.equal(this.translator.stub("updateBusinessRange").lastCall.args[0].interval, 1 * 1000 * 3600 * 24, "interval");
+});
+
 QUnit.test("marginOptions.checkInterval on valueAxis - ignore interval", function(assert) {
     this.testMargins(assert, {
         options: {

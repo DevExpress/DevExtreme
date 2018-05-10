@@ -42,7 +42,12 @@ var vizUtils = require("../core/utils"),
     DEFAULT_AXIS_DIVISION_FACTOR = 50,
     DEFAULT_MINOR_AXIS_DIVISION_FACTOR = 15,
 
-    Axis;
+    Axis,
+
+    dateIntervals = {
+        day: 86400000,
+        week: 604800000
+    };
 
 function getTickGenerator(options, incidentOccurred, skipTickGeneration) {
     return tickGeneratorModule.tickGenerator({
@@ -1269,7 +1274,25 @@ Axis.prototype = {
         addToArgs(this._estimatedTickInterval);
         isDefined(interval) && minArgs.push(interval);
 
-        return _min.apply(this, minArgs);
+        return this._calculateWorkWeekInterval(_min.apply(this, minArgs));
+    },
+
+    _calculateWorkWeekInterval: function(businessInterval) {
+        var options = this._options,
+            workWeek,
+            weekend,
+            weekendsCount;
+        if(options.dataType === "datetime" && options.workdaysOnly && businessInterval) {
+            workWeek = options.workWeek.length * dateIntervals.day;
+            weekend = dateIntervals.week - workWeek;
+            if(workWeek !== businessInterval && weekend < businessInterval) {
+                weekendsCount = Math.ceil(businessInterval / dateIntervals.week);
+                businessInterval = weekend >= businessInterval ? dateIntervals.day : businessInterval - (weekend * weekendsCount);
+            } else if(weekend >= businessInterval) {
+                businessInterval = dateIntervals.day;
+            }
+        }
+        return businessInterval;
     },
 
     _applyMargins: function(range) {
