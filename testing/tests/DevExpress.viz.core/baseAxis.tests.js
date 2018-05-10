@@ -1382,6 +1382,40 @@ QUnit.test("margins calculation. Work week calculation: work week === interval "
     assert.equal(this.translator.stub("updateBusinessRange").lastCall.args[0].interval, 4 * 1000 * 3600 * 24, "interval");
 });
 
+QUnit.test("margins calculation. Work week calculation: interval < day ", function(assert) {
+    const getTickGeneratorReturns = (tickInterval) => {
+        return {
+            ticks: [],
+            minorTicks: [],
+            tickInterval: tickInterval || 10
+        };
+    };
+
+    this.tickGeneratorSpy = sinon.stub();
+    this.tickGeneratorSpy.returns(getTickGeneratorReturns({ hours: 4 }));
+
+    const axis = this.createAxis(true, {
+        valueMarginsEnabled: true,
+        dataType: "datetime",
+        workdaysOnly: true,
+        workWeek: [1, 2, 3, 4]
+    });
+
+    axis.setBusinessRange({
+        min: new Date(2018, 2, 27),
+        max: new Date(2018, 3, 27)
+    });
+    axis.updateCanvas(this.canvas);
+
+    axis.setMarginOptions({
+        checkInterval: true
+    });
+
+    axis.createTicks(this.canvas);
+
+    assert.equal(this.translator.stub("updateBusinessRange").lastCall.args[0].interval, 4 * 1000 * 3600, "interval");
+});
+
 QUnit.test("margins calculation. Work week calculation: weekend >= interval ", function(assert) {
     const getTickGeneratorReturns = (tickInterval) => {
         return {
