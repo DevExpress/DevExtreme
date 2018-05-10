@@ -326,7 +326,7 @@ function drawTextElement(childNodes, context, options) {
             }
 
             if(elementOptions.dy !== undefined) {
-                offset += Number(elementOptions.dy);
+                offset += parseFloat(elementOptions.dy);
             }
 
             line.elements.push(element);
