@@ -84,7 +84,7 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
 
     var selectionHeaderTemplate = (container, options) => {
         var column = options.column,
-            $cellElement = $(container).parent(),
+            $cellElement = $(container),
             columnHeadersView = options.component.getView("columnHeadersView");
 
         $cellElement.addClass(EDITOR_CELL_CLASS);
@@ -755,7 +755,7 @@ module.exports = {
                         var event = e.event;
 
                         if(!$(event.target).closest("." + SELECT_CHECKBOX_CLASS).length) {
-                            eventsEngine.trigger($(event.currentTarget).children(), clickEvent.name);
+                            eventsEngine.trigger($(event.currentTarget).children("." + SELECT_CHECKBOX_CLASS), clickEvent.name);
                         }
                         event.preventDefault();
                     }));
