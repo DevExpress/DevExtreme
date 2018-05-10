@@ -30,44 +30,59 @@ var SWITCH_CLASS = "dx-switch",
     DISABLED_CLASS = "dx-state-disabled",
 
     INNER_SELECTOR = "." + INNER_CLASS,
+    HANDLE_SELECTOR = "." + HANDLE_CLASS,
 
     LABEL_ON_CLASS = "dx-switch-on",
     LABEL_OFF_CLASS = "dx-switch-off",
     LABEL_ON_SELECTOR = "." + LABEL_ON_CLASS,
     LABEL_OFF_SELECTOR = "." + LABEL_OFF_CLASS,
 
-    MARGIN_RANGE = {
-        left: "-24px",
-        right: "0px"
+    INNER_TRANSFORM_RANGE = {
+        left: "translateX(calc(-50%))",
+        right: "translateX(calc(0%))"
+    },
+
+    HANDLE_TRANSFORM_RANGE = {
+        left: "translateX(calc(0%))",
+        right: "translateX(calc(-100%))"
     };
 
-var UIState = function(element) {
-    if(element.hasClass(SWITCH_CLASS)) {
-        element = element.find(INNER_SELECTOR);
+var UIState = function(inner, handle) {
+    if(inner.hasClass(SWITCH_CLASS)) {
+        inner = inner.find(INNER_SELECTOR),
+        handle = inner.find(HANDLE_SELECTOR);
     }
 
-    var marginLeft = element.css("marginLeft");
-    if(marginLeft === MARGIN_RANGE.right) {
-        return true;
-    }
-    if(marginLeft === MARGIN_RANGE.left) {
+    var innerTransform = inner.get(0).style.transform,
+        handleTransform = handle.get(0).style.transform;
+
+    if(innerTransform === INNER_TRANSFORM_RANGE.left && handleTransform === HANDLE_TRANSFORM_RANGE.left) {
         return false;
+    } else if(innerTransform === INNER_TRANSFORM_RANGE.right && handleTransform === HANDLE_TRANSFORM_RANGE.right) {
+        return true;
+    } else {
+        return undefined;
     }
 };
 
 var UIStateWithRTL = function(element) {
-    var marginDirection = (element.dxSwitch("instance").option("rtlEnabled")) ? "Right" : "Left";
+    var inner,
+        handle;
 
     if(element.hasClass(SWITCH_CLASS)) {
-        element = element.find(INNER_SELECTOR);
+        inner = element.find(INNER_SELECTOR),
+        handle = element.find(HANDLE_SELECTOR);
     }
-    var margin = element.css("margin" + marginDirection);
 
-    if(margin === MARGIN_RANGE.right) {
+    var innerTransform = inner.get(0).style.transform,
+        handleTransform = handle.get(0).style.transform;
+
+    if(innerTransform === INNER_TRANSFORM_RANGE.right && handleTransform === HANDLE_TRANSFORM_RANGE.left) {
         return true;
-    }
-    if(margin === MARGIN_RANGE.left) {
+    } else if(innerTransform === INNER_TRANSFORM_RANGE.right && handleTransform === HANDLE_TRANSFORM_RANGE.right) {
         return false;
+    } else {
+        return undefined;
     }
 };
 
@@ -143,8 +158,10 @@ QUnit.test("onText/offText options changing", function(assert) {
 QUnit.test("default ui state", function(assert) {
     var element = $("#switch").dxSwitch();
 
-    var inner = element.find(INNER_SELECTOR);
-    assert.ok(!UIState(inner));
+    var inner = element.find(INNER_SELECTOR),
+        handle = element.find(HANDLE_SELECTOR);
+
+    assert.strictEqual(UIState(inner, handle), false, "Default UI state is right");
 });
 
 QUnit.test("ui state with options", function(assert) {
@@ -154,8 +171,10 @@ QUnit.test("ui state with options", function(assert) {
         value: true
     });
 
-    var inner = element.find(INNER_SELECTOR);
-    assert.equal(UIState(inner), true);
+    var inner = element.find(INNER_SELECTOR),
+        handle = element.find(HANDLE_SELECTOR);
+
+    assert.strictEqual(UIState(inner, handle), true, "UI state with options is right");
 });
 
 QUnit.test("onValueChanged option", function(assert) {
@@ -305,21 +324,21 @@ QUnit.module("interaction", {
 
 QUnit.test("click switches state", function(assert) {
     this.element.trigger("dxclick");
-    assert.equal(UIState(this.element), false);
+    assert.strictEqual(UIState(this.element), false);
     assert.equal(this.element.dxSwitch("option", "value"), false);
 
     this.element.trigger("dxclick");
-    assert.equal(UIState(this.element), true);
+    assert.strictEqual(UIState(this.element), true);
     assert.equal(this.element.dxSwitch("option", "value"), true);
 });
 
 QUnit.test("swipe switches state", function(assert) {
     this.mouse.start().swipeStart().swipeEnd(-1);
-    assert.equal(UIState(this.element), false);
+    assert.strictEqual(UIState(this.element), false);
     assert.equal(this.element.dxSwitch("option", "value"), false);
 
     this.mouse.start().swipeStart().swipeEnd(1);
-    assert.equal(UIState(this.element), true);
+    assert.strictEqual(UIState(this.element), true);
     assert.equal(this.element.dxSwitch("option", "value"), true);
 });
 
@@ -430,12 +449,17 @@ QUnit.test("handle follow of mouse during swipe", function(assert) {
     $element.dxSwitch("option", { value: false });
 
     var $container = $element.find(".dx-switch-container");
-    var $handler = $element.find(".dx-switch-handle");
+    var $handle = $element.find(".dx-switch-handle");
     var $innerWrapper = $element.find(".dx-switch-inner");
-    var halfMargin = ($container.outerWidth(true) - $handler.outerWidth()) / 2;
+    var offset = ($container.outerWidth(true) - $handle.outerWidth()) / 2;
 
-    pointer.start().down().move(halfMargin, 0);
-    assert.roughEqual(parseInt($innerWrapper.css("marginLeft")), -halfMargin, 1.01, "switch was swipe on half width");
+    pointer.start().down().move(offset, 0);
+
+    var innerTransform = $innerWrapper.get(0).style.transform,
+        handleTransform = $handle.get(0).style.transform;
+
+    assert.equal(innerTransform, "translateX(calc(-25%))", "Inner position is right");
+    assert.equal(handleTransform, "translateX(calc(-50%))", "Handle position is right");
 });
 
 QUnit.test("click on disabled switch has no effect", function(assert) {
@@ -446,10 +470,10 @@ QUnit.test("click on disabled switch has no effect", function(assert) {
     instance.option("disabled", true);
 
     element.trigger("dxclick");
-    assert.ok(!UIState(element));
+    assert.strictEqual(UIState(element), false);
 
     this.mouse.start().swipeStart().swipeEnd(-1);
-    assert.ok(!UIState(element));
+    assert.strictEqual(UIState(element), false);
 });
 
 
@@ -473,7 +497,7 @@ QUnit.test("click switches state", function(assert) {
     assert.equal(instance.option("value"), false);
 
     $element.trigger("dxclick");
-    assert.equal(UIStateWithRTL($element), true);
+    assert.strictEqual(UIStateWithRTL($element), true);
     assert.equal(instance.option("value"), true);
 });
 
@@ -485,7 +509,7 @@ QUnit.test("swipe switches state", function(assert) {
     assert.equal(instance.option("value"), false);
 
     this.mouse.start().swipeStart().swipeEnd(-1);
-    assert.equal(UIStateWithRTL($element), true);
+    assert.strictEqual(UIStateWithRTL($element), true);
     assert.equal(instance.option("value"), true);
 });
 

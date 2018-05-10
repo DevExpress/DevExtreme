@@ -169,16 +169,27 @@ var Switch = Editor.inherit({
     },
 
     _getCalcOffset: function(value, offset) {
-        var ratio = (offset - Number(!value)) / 2;
+        var ratio = (offset - this._offsetDirection() * Number(!value)) / 2;
         return "calc(" + 100 * ratio + "%)";
     },
 
     _getHandleOffset: function(value, offset) {
-        if(value) {
-            var calcValue = -100 + 100 * (-offset);
-            return "calc(" + calcValue + "%)";
+        var calcValue;
+
+        if(this.option("rtlEnabled")) {
+            if(!value) {
+                calcValue = -100 + 100 * (-offset);
+                return "calc(" + calcValue + "%)";
+            } else {
+                return "calc(" + 100 * (-offset) + "%)";
+            }
         } else {
-            return "calc(" + 100 * (-offset) + "%)";
+            if(value) {
+                calcValue = -100 + 100 * (-offset);
+                return "calc(" + calcValue + "%)";
+            } else {
+                return "calc(" + 100 * (-offset) + "%)";
+            }
         }
     },
 
@@ -376,7 +387,7 @@ var Switch = Editor.inherit({
     },
 
     _swipeUpdateHandler: function(e) {
-        this._renderPosition(this.option("value"), this._offsetDirection() * e.event.offset);
+        this._renderPosition(this.option("value"), e.event.offset);
     },
 
     _swipeEndHandler: function(e) {
@@ -384,7 +395,7 @@ var Switch = Editor.inherit({
             offsetDirection = this._offsetDirection(),
             toConfig = {};
 
-        var offset = this._getCalcOffset(that.option("value"), offsetDirection * e.event.targetOffset);
+        var offset = this._getCalcOffset(that.option("value"), e.event.targetOffset);
 
         toConfig["transform"] = " translateX(" + offset + ")";
 
