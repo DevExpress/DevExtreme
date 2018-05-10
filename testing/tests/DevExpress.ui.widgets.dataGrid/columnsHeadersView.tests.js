@@ -81,7 +81,7 @@ QUnit.module('Headers', {
 
         this.defaultSelectionHeaderTemplate = function(container, options) {
             var column = options.column,
-                $cellElement = $(container).parent();
+                $cellElement = $(container);
 
             $cellElement.addClass("dx-editor-cell");
             this.columnHeadersView._renderSelectAllCheckBox($cellElement, column);
