@@ -168,12 +168,6 @@ var Switch = Editor.inherit({
         this._renderValue();
     },
 
-
-    _renderHandleWidth: function() {
-        this._handleWidth = this._$handle.get(0).clientWidth || parseFloat(window.getComputedStyle(this._$handle.get(0)).width);
-
-    },
-
     _getCalcOffset: function(value, offset) {
         var ratio = (offset - Number(!value)) / 2;
         return "calc(" + 100 * ratio + "%)";
@@ -186,11 +180,6 @@ var Switch = Editor.inherit({
         } else {
             return "calc(" + 100 * (-offset) + "%)";
         }
-    },
-
-    _getHandleWidth: function() {
-        !this._handleWidth && this._renderHandleWidth();
-        return this._handleWidth;
     },
 
     _renderSwitchInner: function() {
@@ -290,22 +279,12 @@ var Switch = Editor.inherit({
         return this.option("rtlEnabled") ? -1 : 1;
     },
 
-    _renderPosition: function(state, swipeOffset, isSwipe) {
-        if(isSwipe) {
-            var innerOffset = this._getCalcOffset(state, swipeOffset),
-                handleOffset = this._getHandleOffset(state, swipeOffset);
+    _renderPosition: function(state, swipeOffset) {
+        var innerOffset = this._getCalcOffset(state, swipeOffset),
+            handleOffset = this._getHandleOffset(state, swipeOffset);
 
-            this._$switchInner.css("transform", " translateX(" + innerOffset + ")");
-            this._$handle.css("transform", " translateX(" + handleOffset + ")");
-        } else {
-            if(state) {
-                this._$handle.css("transform", " translateX(-100%");
-
-            } else {
-                this._$switchInner.css("transform", " translateX(-50%");
-                this._$handle.css("transform", " translateX(0");
-            }
-        }
+        this._$switchInner.css("transform", " translateX(" + innerOffset + ")");
+        this._$handle.css("transform", " translateX(" + handleOffset + ")");
     },
 
     _validateValue: function() {
@@ -348,19 +327,31 @@ var Switch = Editor.inherit({
 
         this._animating = true;
 
-        var fromOffset = this._getCalcOffset(startValue, 0),
-            toOffset = this._getCalcOffset(endValue, 0);
+        var fromInnerOffset = this._getCalcOffset(startValue, 0),
+            toInnerOffset = this._getCalcOffset(endValue, 0),
+            fromHandleOffset = this._getHandleOffset(startValue, 0),
+            toHandleOffset = this._getHandleOffset(endValue, 0);
 
         var that = this,
-            fromConfig = {},
-            toConfig = {};
+            fromInnerConfig = {},
+            toInnerConfig = {},
+            fromHandleConfig = {},
+            toHandlerConfig = {};
 
-        fromConfig["transform"] = " translateX(" + fromOffset + ")";
-        toConfig["transform"] = " translateX(" + toOffset + ")";
+        fromInnerConfig["transform"] = " translateX(" + fromInnerOffset + ")";
+        toInnerConfig["transform"] = " translateX(" + toInnerOffset + ")";
+        fromHandleConfig["transform"] = " translateX(" + fromHandleOffset + ")";
+        toHandlerConfig["transform"] = " translateX(" + toHandleOffset + ")";
+
+        fx.animate(this._$handle, {
+            from: fromHandleConfig,
+            to: toHandlerConfig,
+            duration: 0,
+        });
 
         fx.animate(this._$switchInner, {
-            from: fromConfig,
-            to: toConfig,
+            from: fromInnerConfig,
+            to: toInnerConfig,
             duration: SWITCH_ANIMATION_DURATION,
             complete: function() {
                 that._animating = false;
@@ -385,7 +376,7 @@ var Switch = Editor.inherit({
     },
 
     _swipeUpdateHandler: function(e) {
-        this._renderPosition(this.option("value"), this._offsetDirection() * e.event.offset, true);
+        this._renderPosition(this.option("value"), this._offsetDirection() * e.event.offset);
     },
 
     _swipeEndHandler: function(e) {
