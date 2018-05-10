@@ -37,6 +37,11 @@ const CENTER = constants.center;
 const DEFAULT_AXIS_DIVISION_FACTOR = 50;
 const DEFAULT_MINOR_AXIS_DIVISION_FACTOR = 15;
 
+const dateIntervals = {
+    day: 86400000,
+    week: 604800000
+};
+
 function getTickGenerator(options, incidentOccurred, skipTickGeneration) {
     return tickGeneratorModule.tickGenerator({
         axisType: options.type,
@@ -241,7 +246,7 @@ function correctMarginExtremum(value, margins, maxMinDistance, roundingMethod) {
     return adjust(roundingMethod(adjust(value / maxDivider)) * maxDivider);
 }
 
-function configureGenerator(options, axisDivisionFactor, viewPort, screenDelta, minTickInterval, breaks) {
+function configureGenerator(options, axisDivisionFactor, viewPort, screenDelta, minTickInterval) {
     var tickGeneratorOptions = extend({}, options, {
         endOnTick: true,
         axisDivisionFactor,
@@ -250,7 +255,7 @@ function configureGenerator(options, axisDivisionFactor, viewPort, screenDelta, 
         minTickInterval
     });
 
-    return function(tickInterval, skipTickGeneration, min, max) {
+    return function(tickInterval, skipTickGeneration, min, max, breaks) {
         return getTickGenerator(tickGeneratorOptions, _noop, skipTickGeneration)(
             {
                 min: min,
@@ -1197,8 +1202,8 @@ Axis.prototype = {
 
         const minInterval = !options.aggregationGroupWidth && !aggregationInterval && range.interval;
 
-        const generateTicks = configureGenerator(options, aggregationGroupWidth, viewPort, that._getScreenDelta(), minInterval, that._breaks);
-        let tickInterval = generateTicks(aggregationInterval, true, minVisible, maxVisible).tickInterval;
+        const generateTicks = configureGenerator(options, aggregationGroupWidth, viewPort, that._getScreenDelta(), minInterval);
+        let tickInterval = generateTicks(aggregationInterval, true, minVisible, maxVisible, that._breaks).tickInterval;
 
         if(options.type !== constants.discrete) {
             const min = useAllAggregatedPoints ? viewPort.min : minVisible;
@@ -1219,7 +1224,11 @@ Axis.prototype = {
                 }
                 start = start < viewPort.min ? viewPort.min : start;
                 end = end > viewPort.max ? viewPort.max : end;
-                ticks = generateTicks(tickInterval, false, start, end).ticks;
+                const breaks = that._getScaleBreaks(options, {
+                    minVisible: start,
+                    maxVisible: end
+                }, that._series, that.isArgumentAxis);
+                ticks = generateTicks(tickInterval, false, start, end, breaks).ticks;
             }
         }
 
@@ -1355,7 +1364,22 @@ Axis.prototype = {
         isDefined(interval) && minArgs.push(interval);
         addToArgs(this._aggregationInterval);
 
-        return _min.apply(this, minArgs);
+        return this._calculateWorkWeekInterval(_min.apply(this, minArgs));
+    },
+
+    _calculateWorkWeekInterval(businessInterval) {
+        const options = this._options;
+        if(options.dataType === "datetime" && options.workdaysOnly && businessInterval) {
+            const workWeek = options.workWeek.length * dateIntervals.day;
+            const weekend = dateIntervals.week - workWeek;
+            if(workWeek !== businessInterval && weekend < businessInterval) {
+                const weekendsCount = Math.ceil(businessInterval / dateIntervals.week);
+                businessInterval = weekend >= businessInterval ? dateIntervals.day : businessInterval - (weekend * weekendsCount);
+            } else if(weekend >= businessInterval) {
+                businessInterval = dateIntervals.day;
+            }
+        }
+        return businessInterval;
     },
 
     _applyMargins: function(range) {
