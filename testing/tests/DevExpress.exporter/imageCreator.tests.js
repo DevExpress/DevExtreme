@@ -1045,7 +1045,7 @@ QUnit.test("Multiline text", function(assert) {
 
             '<tspan x="10" y="30">World </tspan>' +
             '<tspan x="10" dy="28">Populationby</tspan>' +
-            '<tspan x="10" dy="28"> Decade</tspan>' +
+            '<tspan x="10" dy="28px"> Decade</tspan>' +
 
             '</text > ' +
 
